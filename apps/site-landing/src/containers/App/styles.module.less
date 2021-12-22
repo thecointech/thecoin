@@ -1,31 +1,31 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
-#app {
-  max-width: @maxContentWidth;
-  margin: auto;
+// Separate out the column declaration to allow re-use throughout the app
+#landing {
 
-  > div:nth-child(1) {
-    border-bottom: 1px solid @linkColor;
-    box-shadow: 0px 5px grey;
-    width: 100%;
+  display: grid;
+  grid-gap: 0px;
+  grid-template-rows: .scalable(80, 90)[@result] 1fr 451px;
+  grid-template-columns: auto @pageGridContent auto;
+  grid-template-areas:
+    "lgap lefth header righth rgap"
+    "lgap main  main   main   rgap"
+    "lgap leftf footer rightf rgap";
 
-    -webkit-box-shadow: 3px 0px 17px 10px rgba(161,161,161,0.68);
-    -moz-box-shadow: 3px 0px 17px 10px rgba(161,161,161,0.68);
-    box-shadow: 3px 0px 17px 10px rgba(161,161,161,0.68);
-  }
+  .smallScreen({
+    grid-template-rows: 80px 1fr 630px;
+    grid-template-columns: 15px 1fr 10px;
+    grid-template-areas:
+      "lefth header righth"
+      "main  main   main"
+      "lgap footer rgap"
+  });
 
-  .appContainer{
-    margin: 0;
-    width: 100%;
-  }
+  .contentContainer {
+    grid-area: main;
 
-  .pageMainInner {
-    min-height: 250px;
-    padding: 0em;
-  }
-
-  .pageMainInner > div {
-    width: inherit;
-    height: inherit;
+    // Explicitly define a min-height to prevent our content
+    // resizer from collapsing down if our content is too small
+    min-height: 450px;
   }
 }

@@ -1,62 +1,59 @@
 import React from 'react';
-
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Grid, StrictGridColumnProps } from 'semantic-ui-react';
-
 import facebook from './images/facebook.svg';
 import twitter from './images/twitter.svg';
 import instagram from './images/instagram.svg';
-import { useWindowDimensions } from '@thecointech/shared/components/WindowDimensions';
-import { breakpointsValues } from '@thecointech/shared/components/ResponsiveTool';
+import styles from './styles.module.less';
 
-const translate = defineMessages({ 
-    registered : { 
-      defaultMessage:"The Coin Collaborative Canada is a registered non-profit",
-      description:"base.footer.registered: Registered Non profit phrase in footer"},
-    copyright : { 
-      defaultMessage:"Copyright 2020. TheCoin. All Right Reserved.",
-      description:"base.footer.copyright: Copyright phrase in footer"}});
-
-export const FooterShared = () => {
-
-  const windowDimension = useWindowDimensions();
-  const breakpointTablet = breakpointsValues.tablet;
-  const registeredContent = <FormattedMessage {...translate.registered} />;
-  const socialLinksContent = <><a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank"><img src={facebook} /></a><img src={twitter} /><img src={instagram} /></>;
-  const copyrightContent = <>&#169; &nbsp;<FormattedMessage {...translate.copyright} /></>;
-
-  let alignForLeftColumn = "left" ;
-  let alignForCenterColumn = "center";
-  let alignForRightColumn = "right";
-  let leftColumn = registeredContent;
-  let centerColumn = socialLinksContent;
-  let rightColumn = copyrightContent;
-
-  // If Small Screen / Mobile
-  if (windowDimension.width <= breakpointTablet){
-    alignForLeftColumn = "center";
-    alignForCenterColumn = "center";
-    alignForRightColumn = "center";
-    leftColumn = socialLinksContent;
-    centerColumn = registeredContent;
-    rightColumn = copyrightContent;
+const translate = defineMessages({
+  registered1: {
+    defaultMessage: "The Coin Collaborative Canada",
+    description: "Registered Non profit phrase in footer part 1"
+  },
+  registered2: {
+    defaultMessage: " is a registered non-profit",
+    description: "Registered Non profit phrase in footer part 2"
+  },
+  copyright1: {
+    defaultMessage: "© Copyright 2020. TheCoin.",
+    description: "Copyright phrase in footer part1"
+  },
+  copyright2: {
+    defaultMessage: " All Rights Reserved.",
+    description: "Copyright phrase in footer part2"
   }
+});
 
-  return (
-    <>
-      <Grid columns='equal' centered verticalAlign='top' stackable className={ `x0spaceBefore` }>
-        <Grid.Row>
-          <Grid.Column textAlign={alignForLeftColumn as StrictGridColumnProps["textAlign"]}>
-            {leftColumn}
-          </Grid.Column>
-          <Grid.Column textAlign={alignForCenterColumn as StrictGridColumnProps["textAlign"]}>
-            {centerColumn}
-          </Grid.Column>
-          <Grid.Column textAlign={alignForRightColumn as StrictGridColumnProps["textAlign"]}>
-            {rightColumn}
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </>
-  );
+type Props = {
+  background?: string;
+  id?: string;
 }
+export const FooterShared: React.FC<Props> = ({ children, background, id }) => (
+  <>
+    <div className={`${styles.background} ${background ?? ''}`} />
+    <div className={styles.footerContainer}>
+      {children}
+      <div id={id} className={styles.footerContent}>
+        <div className={`${styles.textPortion} ${styles.registered}`}>
+          <FormattedMessage tagName="span" {...translate.registered1} />
+          <FormattedMessage tagName="span" {...translate.registered2} />
+        </div>
+        <div className={styles.links}>
+          <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
+            <img src={facebook} />
+          </a>
+          <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
+            <img src={twitter} />
+          </a>
+          <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
+            <img src={instagram} />
+          </a>
+        </div>
+        <div className={`${styles.textPortion} ${styles.copyright}`}>
+          <FormattedMessage tagName="span" {...translate.copyright1} />
+          <FormattedMessage tagName="span" {...translate.copyright2} />
+        </div>
+      </div>
+    </div>
+  </>
+);

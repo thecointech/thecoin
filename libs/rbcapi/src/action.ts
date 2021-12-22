@@ -54,7 +54,7 @@ export class ApiAction {
   }
 
   page!: Page;
-  navigationPromise!: Promise<puppeteer.HTTPResponse|null>;
+  navigationPromise!: Promise<puppeteer.HTTPResponse | null>;
   outCache?: string;
   step: number = 0;
 
@@ -88,11 +88,13 @@ export class ApiAction {
   public async login() {
     // Enter user name and passwords
     log.debug("Beginning Login");
-    await this.page.type('#K1', ApiAction.Credentials.cardNo, { delay: 20 });
-    await this.page.type('#QQ', ApiAction.Credentials.password, { delay: 20 });
-    await this.writeStep('Entered Sign-in details');
+    await this.page.waitForSelector("#userName");
+    await this.page.type('#userName', ApiAction.Credentials.cardNo, { delay: 20 });
+    await this.clickAndNavigate('#signinNext', 'Entered Card Number', { waitUntil: "networkidle0" })
 
-    await this.clickAndNavigate('#rbunxcgi > fieldset > div.formBlock.formBlock_mainSignIn > div > button', 'Logged In', { waitUntil: "networkidle0"})
+    await this.page.waitForSelector("#password");
+    await this.page.type('#password', ApiAction.Credentials.password, { delay: 20 });
+    await this.clickAndNavigate('#signinNext', 'Entered Pwd', { waitUntil: "networkidle0" })
 
     // If we hit PVQ, this is where that happens
     await this.maybeEnterPVQ();
@@ -110,7 +112,7 @@ export class ApiAction {
 
       const pvq = ApiAction.Credentials.pvq.find(pvq => pvq.question == pvQuestion);
       if (pvq == null) {
-        log.error({pvq: pvQuestion}, "Cannot match PVQ {pvq} with existing questions");
+        log.error({ pvq: pvQuestion }, "Cannot match PVQ {pvq} with existing questions");
         return;
       }
 
@@ -130,7 +132,7 @@ export class ApiAction {
       return null;
     }
     const pvq: string = await this.page.evaluate(el => el.innerText, pvqQuestion[0]);
-    log.debug({pvq}, "Found question: {pvq}")
+    log.debug({ pvq }, "Found question: {pvq}")
     return pvq;
   }
 

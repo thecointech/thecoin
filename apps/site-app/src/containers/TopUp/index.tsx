@@ -6,8 +6,6 @@ import { Tab } from 'semantic-ui-react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Purchase } from 'containers/TopUp/Purchase';
 import { PageHeader } from 'components/PageHeader';
-import { ColumnRightTop } from 'containers/ColumnRight/Top';
-import { ColumnRightBottom } from 'containers/ColumnRight/Bottom';
 
 const translations = defineMessages({
   title : {
@@ -32,7 +30,6 @@ export const Topup = () => {
   ]
   return (
     <React.Fragment>
-      <ColumnRightTop />
       <PageHeader
           illustration={illustration}
           title={translations.title}
@@ -42,7 +39,6 @@ export const Topup = () => {
       <AppContainerWithShadow>
         <RecentTransactions />
       </AppContainerWithShadow>
-      <ColumnRightBottom />
     </React.Fragment>
   );
 }

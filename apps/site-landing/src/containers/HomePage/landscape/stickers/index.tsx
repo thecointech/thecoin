@@ -1,13 +1,9 @@
 import * as React from 'react';
-import { Grid, Header } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import styles from './styles.module.less';
 import { LearnMoreLink } from 'components/LearnMoreLink';
-
-export type Props = {
-    Mobile: boolean;
-}
 
 const translations = defineMessages({
     titleLeft : {
@@ -27,36 +23,28 @@ const translations = defineMessages({
       description: 'site.homepage.landscape.stickers.right.description: Description for sticker for the homepage landscape right sticker'},
   });
 
-export const Stickers = (props: Props) => {
-
-    let classForSticker = styles.cardContainer;
-    if (props.Mobile === true) {
-        classForSticker = styles.cardContainerMobile;
-    }
+export const Stickers = () => {
 
   return (
-        <Grid stackable columns={2} id={styles.stickers} className={classForSticker}>
-            <Grid.Row columns={3}>
-                <Grid.Column className={ `${styles.card} x6spaceLeft` }>
-                <Header as='h4'>
-                    <FormattedMessage {...translations.titleLeft} />
-                </Header>
-                <p>
-                    <FormattedMessage {...translations.descriptionLeft} />
-                </p>
-
-                <LearnMoreLink to="/compare"><FormattedMessage {...translations.learnMore} /></LearnMoreLink>
-                </Grid.Column>
-                <Grid.Column className={ `${styles.card} x6spaceLeft` }>
-                    <Header as='h4'>
-                        <FormattedMessage {...translations.titleRight} />
-                    </Header>
-                    <p>
-                        <FormattedMessage {...translations.descriptionRight} />
-                    </p>
-                    <LearnMoreLink to="/wedomore"><FormattedMessage {...translations.learnMore} /></LearnMoreLink>
-                </Grid.Column>
-            </Grid.Row>
-        </Grid>
-    );
+    <div className={styles.stickers}>
+      <div className={styles.card}>
+        <Header as='h4'>
+          <FormattedMessage {...translations.titleLeft} />
+        </Header>
+        <p>
+          <FormattedMessage {...translations.descriptionLeft} />
+        </p>
+        <LearnMoreLink to="/compare"><FormattedMessage {...translations.learnMore} /></LearnMoreLink>
+      </div>
+      <div className={styles.card}>
+        <Header as='h4'>
+          <FormattedMessage {...translations.titleRight} />
+        </Header>
+        <p>
+          <FormattedMessage {...translations.descriptionRight} />
+        </p>
+        <LearnMoreLink to="/wedomore"><FormattedMessage {...translations.learnMore} /></LearnMoreLink>
+      </div>
+    </div>
+  );
 }

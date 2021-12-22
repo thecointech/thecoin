@@ -7,9 +7,10 @@
 .ui.sidebar{
   border-radius: @absoluteBorderRadius !important;
   height: auto !important;
-  margin-top: 80px !important;
   position: relative;
-  z-index: 100;
+  opacity: 0;
+  transition: opacity @duration @easing, transform @duration @easing !important;
+
 
   &.menu .item{
     color: @theCoinPaletteGray1;
@@ -36,6 +37,10 @@
   }
 }
 
+.ui.push.sidebar {
+  z-index: 0;
+}
+
 .ui.vertical.menu .item > i.icon{
   float: left;
   margin-right: 10px;
@@ -47,9 +52,5 @@
 
 .ui.left.visible.sidebar, .ui.right.visible.sidebar{
   box-shadow: @subtleShadow;
-}
-
-.pushable{
-  height: auto;
-  margin: 20px;
+  opacity: 100%;
 }

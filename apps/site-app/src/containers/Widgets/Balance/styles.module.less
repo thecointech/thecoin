@@ -1,0 +1,77 @@
+@import "~@thecointech/site-semantic-theme/variables.less";
+
+.balanceAndProfit {
+  padding    : 15px;
+  height : 100%;
+  color      : @theCoinPaletteGreen5;
+  font-size  : @fontSizeVeryBig;
+  font-family: @headerFont;
+  text-align : center;
+
+  background-image: url('./images/illust_balance.svg');
+  background-repeat: no-repeat;
+  background-position: center 45px;
+
+  .balanceZone {
+    border-bottom: 1px solid @theCoinPaletteGreen4Faded30;
+    padding-bottom: 8px;
+
+    .cadBalance {
+      // Allow space for the background image
+      padding-top: 75px;
+      line-height : 24px;
+    }
+    .cadBalanceCurrency {
+      padding-top: 4px;
+      font-size  : @fontSizeSmall;
+      color      : @theCoinPaletteGray1;
+      font-family: @pageFont;
+      font-weight: bold;
+    }
+  }
+  .profitZone {
+    padding-top: 8px;
+  }
+
+  h5 {
+    text-align: left;
+    margin    : 0 !important;
+  }
+
+  hr {
+    color: @theCoinPalettePaleGreen2;
+  }
+
+  .smallScreen({
+    text-align         : left;
+    background-image   : url('./images/mob_illust_balance.svg');
+    background-position: right bottom;
+    display: flex;
+    > * {
+      flex-grow: 1;
+    }
+    h5 {
+      text-align: left;
+    }
+
+    .balanceZone {
+
+      text-align   : center;
+      border-right : 1px solid @theCoinPaletteGreen4Faded30;
+      border-bottom: 0px solid transparent;
+
+      .cadBalance {
+        padding-top: 8px;
+      }
+    }
+
+    .profitZone {
+      padding-top: 0px;
+      padding-left: 16px;
+      > div {
+        padding-top: 8px;
+        line-height: 24px;
+      }
+    }
+  });
+}

@@ -3,6 +3,10 @@
     "defaultMessage": "We help to restore the planet’s ecosystem",
     "description": "site.wedomore.tree.description: Description for the tree photo for the We Do More page"
   },
+  "0+B/LI": {
+    "defaultMessage": "You can become CO2-neutral with TheCoin",
+    "description": "site.homepage.underwater.description: Description for the homepage underwater part1"
+  },
   "0FXCvv": {
     "defaultMessage": "Maximum Growth",
     "description": "site.homepage.wealthier.growth.title: The title for the growth for the homepage wealthier"
@@ -39,6 +43,14 @@
     "defaultMessage": "Your chequing account will be with you longer than your retirement savings will. This is what that could look like.",
     "description": "site.compare.description: Main description for the How much will you make? graph page"
   },
+  "3vm1hM": {
+    "defaultMessage": "Subscribe to our newsletter:",
+    "description": "Footer CTA Part2"
+  },
+  "4+OlAD": {
+    "defaultMessage": "Save, invest and spend money with TheCoin,",
+    "description": "home page tagline part1"
+  },
   "43E4EL": {
     "defaultMessage": "We fund clean energy projects to replace dirty coal power",
     "description": "site.wedomore.energy.description: Title for the energy photo for the We Do More page"
@@ -50,10 +62,6 @@
   "4MHk2t": {
     "defaultMessage": "We Do More",
     "description": "site.wedomore.title: Title for the We Do More page"
-  },
-  "4N/YNr": {
-    "defaultMessage": "The future is better because of you & us. Subscribe to our newsletter",
-    "description": "site.subscribe.description: The future is better because of you & us. Subscribe to our newsletter"
   },
   "4fyTGb": {
     "defaultMessage": "Add $250000 to your retirement - with no money down.",
@@ -67,10 +75,6 @@
     "defaultMessage": "Please enter a valid email",
     "description": "site.subscribe.email.invalid: Message we give a user when the subscription failed"
   },
-  "8WNRbJ": {
-    "defaultMessage": "You can become CO2-neutral with TheCoin as we work to offset our clients’ emissions.",
-    "description": "site.homepage.underwater.description: Description for the homepage underwater part"
-  },
   "8rHqL+": {
     "defaultMessage": "Every dollar earns every day. As a non-profit, we want you to keep that benefit.",
     "description": "site.homepage.wealthier.profits.description: The description for the profits for the homepage wealthier"
@@ -82,6 +86,10 @@
   "B7gcLo": {
     "defaultMessage": "Better Farming",
     "description": "site.wedomore.smallPlant.title: Title for the smallPlant photo for the We Do More page"
+  },
+  "D7Hm8s": {
+    "defaultMessage": "The future is better because of you & us.",
+    "description": "Footer CTA Part1"
   },
   "FAWgn/": {
     "defaultMessage": "Show me the Potential!"
@@ -151,10 +159,6 @@
     "defaultMessage": "Scientifically Verified",
     "description": "site.homepage.underwater.science.title: Title for the homepage underwater science subpart"
   },
-  "RceNpc": {
-    "defaultMessage": "Save, invest and spend money with TheCoin, get 100% of benefits and save our Planet.",
-    "description": "site.homepage.landscape.description: The description for the homepage"
-  },
   "RldC0Y": {
     "defaultMessage": "Go back",
     "description": "site.blog.backLink: Link to go back from article"
@@ -177,6 +181,10 @@
   },
   "V0XJgr": {
     "defaultMessage": "Average value after"
+  },
+  "VA10q2": {
+    "defaultMessage": "get 100% of benefits and save our Planet.",
+    "description": "home page tagline part2"
   },
   "W8cvxr": {
     "defaultMessage": "We Do More",
@@ -321,6 +329,10 @@
   },
   "site.subscribe.confirmation.button": {
     "defaultMessage": "Update Details!"
+  },
+  "t92bBR": {
+    "defaultMessage": "as we work to offset our clients’ emissions.",
+    "description": "site.homepage.underwater.description: Description for the homepage underwater part2"
   },
   "tFFMkF": {
     "defaultMessage": "Pause"

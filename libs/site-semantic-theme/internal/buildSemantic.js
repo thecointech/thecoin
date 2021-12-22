@@ -3,17 +3,20 @@ const path = require('path');
 const fs = require('fs');
 const glob = require('glob');
 
-const {paths, modifyVars} = require('./vars');
+const options = require('./vars');
 
 const f = async () => {
   const projectRoot = path.join(__dirname, "..")
   const semanticRoot = path.join(projectRoot, "node_modules", "semantic-ui-less");
   const semanticLess = path.join(semanticRoot, "semantic.less");
 
-  const outputFolder = modifyVars.siteFolder.replace(/"/g, '');
-  var outputFilename = path.join(outputFolder, "semantic.css")
+  const siteRoot = path.join(process.cwd(), "src");
+  const outputFolder = path.join(siteRoot, "semantic");
+  const outputFilename = path.join(outputFolder, "semantic.css");
+
 
   try {
+    const {paths, modifyVars} = options('');
     const content = fs.readFileSync(semanticLess).toString();
     const {css} = await less.render(content, {
       filename: path.resolve(semanticLess),

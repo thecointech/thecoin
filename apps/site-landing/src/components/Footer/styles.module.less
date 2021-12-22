@@ -1,8 +1,34 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
-#footerContainer{
-  padding: 50px;
+.background {
   background-image: url("./images/footer_background.svg");
+  background-repeat: no-repeat;
+  background-position: center bottom;
+
+  .smallScreen({
+    background-size: cover;
+    background-position: top right;
+  })
+}
+
+#footerOverrides {
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1rem;
+  max-width: 800px;
+
+  a, img {
+    height: 32px;
+  }
+
+  .smallScreen({
+    width: 80%;
+  })
+}
+
+#footerContainer{
+  grid-area: footer;
+  padding: 50px;
   width: 100%;
   color: @white;
   font-weight: @light;

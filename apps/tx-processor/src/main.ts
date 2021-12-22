@@ -31,9 +31,8 @@ async function ProcessETransfers(contract: TheCoin, bank: RbcApi) {
 async function ProcessBillPayments(contract: TheCoin, bank: RbcApi) {
   log.debug("Processing Bill Payments");
   const billPayments = await processUnsettledBillPayments(contract, bank);
-  log.debug(`Processed ${billPayments.length} eTransfers`);
+  log.debug(`Processed ${billPayments.length} bill payments`);
 }
-
 
 async function Process() {
   const contract = await initialize();
