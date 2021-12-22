@@ -123,30 +123,22 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
       </div>
     </div>
   </div>
-  <div
-    class="ui stackable padded grid"
-  >
-    <div
-      class="three column row"
-    >
-      <div
-        class="column"
+  <div />
+  <div>
+    <div>
+      <h2
+        class="ui header"
       >
-        <h2
-          class="ui header"
+        You’re Wealthier
+        <div
+          class="sub header x5spaceBefore"
         >
-          You’re Wealthier
-          <div
-            class="sub header x5spaceBefore"
-          >
-            Enjoy the benefits of investment growth on every dollar with our online spending account.
-          </div>
-        </h2>
-      </div>
-      <div
-        class="column"
-        columns="3"
-      >
+          Enjoy the benefits of investment growth on every dollar with our online spending account.
+        </div>
+      </h2>
+    </div>
+    <div>
+      <div>
         <img
           src="[object Object]"
         />
@@ -158,6 +150,8 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
         <p>
           The most important ingredient is time. You’re young - maximize your benefit!
         </p>
+      </div>
+      <div>
         <a
           href="/blog/start-now"
         >
@@ -167,10 +161,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
           />
         </a>
       </div>
-      <div
-        class="column"
-        columns="3"
-      >
+    </div>
+    <div>
+      <div>
         <img
           src="[object Object]"
         />
@@ -182,6 +175,8 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
         <p>
           Why settle? Our time-tested strategy has the best long-term results.
         </p>
+      </div>
+      <div>
         <a
           href="/compare"
         >
@@ -192,32 +187,13 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
         </a>
       </div>
     </div>
-    <div
-      class="three column row"
-    >
-      <div
-        class="column"
-        columns="3"
-      >
-        <div
-          class="fresnel-container fresnel-greaterThan-mobile ui segment"
-        >
-          <img
-            src="[object Object]"
-          />
-        </div>
-        <div
-          class="fresnel-container fresnel-at-mobile ui segment"
-        >
-          <img
-            src="[object Object]"
-          />
-        </div>
-      </div>
-      <div
-        class="column"
-        columns="3"
-      >
+    <div>
+      <img
+        src="[object Object]"
+      />
+    </div>
+    <div>
+      <div>
         <img
           src="[object Object]"
         />
@@ -229,6 +205,8 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
         <p>
           Add $250000 to your retirement - with no money down.
         </p>
+      </div>
+      <div>
         <a
           href="/compare"
         >
@@ -238,10 +216,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
           />
         </a>
       </div>
-      <div
-        class="column"
-        columns="3"
-      >
+    </div>
+    <div>
+      <div>
         <img
           src="[object Object]"
         />
@@ -253,6 +230,8 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
         <p>
           Every dollar earns every day. As a non-profit, we want you to keep that benefit.
         </p>
+      </div>
+      <div>
         <a
           href="/compare"
         >
@@ -264,144 +243,122 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
       </div>
     </div>
   </div>
-  <div
-    class="ui padded center aligned middle aligned grid undefined"
-  >
-    <div
-      class="row"
+  <div>
+    <h3
+      class="ui header"
     >
-      <div
-        class="column"
+      TheCoin is a revolutionary new kind of account.
+    </h3>
+    <div>
+      <a
+        class="ui red large button"
+        href="http://localhost:3001/#/addAccount"
+        role="button"
       >
-        <h3
-          class="ui header"
-        >
-          TheCoin is a revolutionary new kind of account.
-        </h3>
-      </div>
-    </div>
-    <div
-      class="row"
-    >
-      <div
-        class="column"
-      >
-        <a
-          class="ui red large button"
-          href="http://localhost:3001/#/addAccount"
-          role="button"
-        >
-          Create Account
-        </a>
-      </div>
+        Create Account
+      </a>
     </div>
   </div>
   <div>
-    <img
-      src="[object Object]"
-    />
-  </div>
-  <div>
-    <div
-      class="undefined x22spaceBefore x8spaceAfter"
-    >
+    <div>
+      <img
+        src="[object Object]"
+      />
+    </div>
+    <div>
       <h2
         class="ui header"
-        id="x32spaceBefore"
       >
         Earths’ Healthier
         <div
           class="sub header x5spaceBefore"
         >
-          You can become CO2-neutral with TheCoin as we work to offset our clients’ emissions.
+          <span>
+            You can become CO2-neutral with TheCoin
+          </span>
+          <span>
+            as we work to offset our clients’ emissions.
+          </span>
         </div>
       </h2>
-    </div>
-    <div
-      class="ui doubling stackable padded grid"
-    >
-      <div
-        class="three column row"
-      >
-        <div
-          class="column"
-        >
-          <img
-            src="[object Object]"
-          />
-          <h4
-            class="ui header"
-          >
-            Make a Difference
-          </h4>
-          <p>
-            Offsetting CO2 is effective. Extremely effective!
-          </p>
-          <a
-            href="/healthier"
-          >
-            Compare Outcomes
-            <div
-              class="undefined x2spaceBefore"
+      <div>
+        <div>
+          <div>
+            <img
+              src="[object Object]"
             />
-          </a>
+            <h4
+              class="ui header"
+            >
+              Make a Difference
+            </h4>
+            <p>
+              Offsetting CO2 is effective. Extremely effective!
+            </p>
+          </div>
+          <div>
+            <a
+              href="/healthier"
+            >
+              Compare Outcomes
+              <div
+                class="undefined x2spaceBefore"
+              />
+            </a>
+          </div>
         </div>
-        <div
-          class="column"
-          columns="3"
-        >
-          <img
-            src="[object Object]"
-          />
-          <h4
-            class="ui header"
-          >
-            Scientifically Verified
-          </h4>
-          <p>
-            Prove it? We’d love to!
-          </p>
-          <a
-            href="/healthier"
-          >
-            Why We Can Be So Confident
-            <div
-              class="undefined x2spaceBefore"
+        <div>
+          <div>
+            <img
+              src="[object Object]"
             />
-          </a>
+            <h4
+              class="ui header"
+            >
+              Scientifically Verified
+            </h4>
+            <p>
+              Prove it? We’d love to!
+            </p>
+          </div>
+          <div>
+            <a
+              href="/healthier"
+            >
+              Why We Can Be So Confident
+              <div
+                class="undefined x2spaceBefore"
+              />
+            </a>
+          </div>
         </div>
-        <div
-          class="column"
-          columns="3"
-        >
-          <img
-            src="[object Object]"
-          />
-          <h4
-            class="ui header"
-          >
-            We Do More
-          </h4>
-          <p>
-            It’s not just CO2. The projects we fund are vital to restoring our ecosystem.
-          </p>
-          <a
-            href="/healthier"
-          >
-            What We Do
-            <div
-              class="undefined x2spaceBefore"
+        <div>
+          <div>
+            <img
+              src="[object Object]"
             />
-          </a>
+            <h4
+              class="ui header"
+            >
+              We Do More
+            </h4>
+            <p>
+              It’s not just CO2. The projects we fund are vital to restoring our ecosystem.
+            </p>
+          </div>
+          <div>
+            <a
+              href="/healthier"
+            >
+              What We Do
+              <div
+                class="undefined x2spaceBefore"
+              />
+            </a>
+          </div>
         </div>
       </div>
     </div>
-    <img
-      src="[object Object]"
-    />
-    <img
-      src="[object Object]"
-    />
   </div>
   <div
     class="ui stackable center aligned middle aligned equal width grid undefined  x20spaceBefore"
