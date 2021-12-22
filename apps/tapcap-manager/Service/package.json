@@ -16,7 +16,6 @@
     "@thecointech/utilities": "*",
     "cors": "^2.8.4",
     "eslint": "^5.6.1",
-    "esm": "^3.0.84",
     "js-yaml": "^3.3.0"
   }
 }
