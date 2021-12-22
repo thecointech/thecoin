@@ -35,7 +35,8 @@ export const Mint = () => {
     setStatus(MintStatus.PROCESSING);
     try {
       const { contract } = account;
-      const tx = await contract!.mintCoins(toMint, DateTime.now().toSeconds());
+      const brokerAddress = process.env.WALLET_BrokerCAD_ADDRESS!;
+      const tx = await contract!.mintCoins(toMint, brokerAddress, DateTime.now().toSeconds());
       setTxHash(tx.hash);
       await tx.wait();
       accountApi.updateBalance();
