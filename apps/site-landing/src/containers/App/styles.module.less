@@ -16,9 +16,9 @@
     grid-template-rows: 80px 1fr 630px;
     grid-template-columns: 15px 1fr 10px;
     grid-template-areas:
-    "lgap header        rgap"
-    "lgap main          rgap"
-    "lgap footer        rgap"
+      "lefth header righth"
+      "main  main   main"
+      "leftf footer rightf"
   });
 
   .contentContainer {
@@ -27,15 +27,5 @@
     // Explicitly define a min-height to prevent our content
     // resizer from collapsing down if our content is too small
     min-height: 450px;
-  }
-
-  .pageMainInner {
-    min-height: 250px;
-    padding: 0em;
-  }
-
-  .pageMainInner > div {
-    width: inherit;
-    height: inherit;
   }
 }

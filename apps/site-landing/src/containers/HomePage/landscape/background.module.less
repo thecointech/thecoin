@@ -1,0 +1,44 @@
+@import "~@thecointech/site-semantic-theme/variables.less";
+
+.background {
+
+  // Cover entire landscape area
+  grid-area: landscape;
+  grid-column-start: left;
+  grid-column-end: right;
+  z-index: -10;
+  height: 711px;
+  max-width: 1440px;
+
+  // Try to keep the girl in-frame as we scale down
+  background-position-x: 48%;
+
+  background-image:
+    url('./images/landscape.svg'),
+    url('./images/sun.svg'),
+    url('./images/sunAura.svg'),
+    url('./images/birds.svg'),
+    url('./images/cloudsLeft.svg'),
+    url('./images/cloudsRight.svg'),
+    url('./images/cloudsBackgroundHigh.svg'),
+    url('./images/sky.svg');
+
+  background-blend-mode:
+    normal,
+    normal,
+    screen,
+    normal,
+    normal,
+    normal,
+    normal,
+    normal;
+
+  background-repeat: no-repeat;
+
+  .smallScreen({
+    background-image: url('./images/mobile.svg');
+    height: 1165px;
+    background-position-x: 48%;
+    background-repeat: no-repeat;
+  })
+}

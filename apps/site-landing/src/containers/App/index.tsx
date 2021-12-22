@@ -33,7 +33,7 @@ export const App = () => {
 
         <div className={styles.contentContainer}>
           <MainPageTransition>
-            <section id={styles.mainContent} className={styles.pageMainInner}>
+            <section>
               <Routes />
             </section>
           </MainPageTransition>
