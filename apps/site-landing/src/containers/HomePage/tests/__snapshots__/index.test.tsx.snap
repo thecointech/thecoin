@@ -361,39 +361,20 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
     </div>
   </div>
   <div
-    class="ui stackable center aligned middle aligned equal width grid undefined  x20spaceBefore"
+    class="undefined undefined "
   >
-    <div
-      class="row"
+    <h3
+      class="ui header"
     >
-      <div
-        class="column"
-      >
-        <h3
-          class="ui header"
-        >
-          The benefits of a chequing, savings, and investing account all in one!
-        </h3>
-        <a
-          class="ui red large button"
-          href="http://localhost:3001/#/addAccount"
-          role="button"
-        >
-          Create Account
-        </a>
-      </div>
-    </div>
-    <div
-      class="row"
+      The benefits of a chequing, savings, and investing account all in one!
+    </h3>
+    <a
+      class="ui red large button"
+      href="http://localhost:3001/#/addAccount"
+      role="button"
     >
-      <div
-        class="left aligned column"
-      >
-        <img
-          src="[object Object]"
-        />
-      </div>
-    </div>
+      Create Account
+    </a>
   </div>
 </div>
 `;
