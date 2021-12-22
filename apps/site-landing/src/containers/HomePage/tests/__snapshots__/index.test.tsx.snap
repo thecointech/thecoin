@@ -2,52 +2,32 @@
 
 exports[`<HomePage /> should render and match the snapshot 1`] = `
 <div>
+  <div />
   <div>
-    <img
-      src="[object Object]"
-    />
-    <img
-      src="[object Object]"
-    />
-    <img
-      src="[object Object]"
-    />
-    <img
-      src="[object Object]"
-    />
-    <img
-      src="[object Object]"
-    />
-    <img
-      src="[object Object]"
-    />
-    <img
-      src="[object Object]"
-    />
-    <img
-      src="[object Object]"
-    />
-  </div>
-  <div>
-    <h1
-      class="ui header"
-    >
-      The future is brighter
-      <div
-        class="sub header"
+    <div>
+      <h1
+        class="ui header"
       >
-        Save, invest and spend money with TheCoin,
-        <br />
-        get 100% of benefits and save our Planet.
-      </div>
-    </h1>
-    <a
-      class="ui red large button"
-      href="http://localhost:3001"
-      role="button"
-    >
-      Start Now
-    </a>
+        The future is brighter
+        <div
+          class="sub header"
+        >
+          <span>
+            Save, invest and spend money with TheCoin,
+          </span>
+          <span>
+            get 100% of benefits and save our Planet.
+          </span>
+        </div>
+      </h1>
+      <a
+        class="ui red large button"
+        href="http://localhost:3001"
+        role="button"
+      >
+        Start Now
+      </a>
+    </div>
     <div>
       <div>
         <h4
@@ -87,9 +67,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
       </div>
     </div>
   </div>
-  <div
-    class="x2spaceBefore"
-  >
+  <div>
     <div
       class="ui stackable center aligned middle aligned equal width grid"
     >
