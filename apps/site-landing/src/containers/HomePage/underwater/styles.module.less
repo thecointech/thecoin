@@ -11,6 +11,7 @@
   grid-area        : healthier;
   grid-column-start: left;
   grid-column-end  : right;
+  padding-top: 40px;
 
   .headerImage {
     max-height: 258px;
@@ -25,7 +26,7 @@
 
   .body {
     margin-top    : -8px;
-    padding-top   : .scalable(20, 150)[@result];
+    padding-top   : .scalable-clamped-bp(50, 124, @mobileWidth, @midWidth, px)[@result];
     padding-bottom: 150px;
     padding-left  : 30px;
     padding-right : 30px;

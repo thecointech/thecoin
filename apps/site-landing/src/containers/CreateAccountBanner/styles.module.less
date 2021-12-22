@@ -1,3 +1,29 @@
-#createAccountBanner.content{
+@import "~@thecointech/site-semantic-theme/variables.less";
+
+.content {
+  margin-top: 120px;
+  padding-bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h3.title {
+    max-width: 70%;
     text-align: center;
+    margin-bottom: 40px;
+  }
+
+  background-repeat: no-repeat;
+  background-position: left bottom;
+
+  .smallScreen({
+    padding-bottom: 200px
+  })
+}
+
+.withPeople {
+  background-image: url('./images/illust_people.svg');
+}
+.withPlants {
+  background-image: url('./images/illust_plants.svg');
 }

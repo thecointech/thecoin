@@ -15,16 +15,14 @@ import { Healthier } from './underwater';
 import { CreateAccountBanner, TypeCreateAccountBanner } from '../CreateAccountBanner';
 import  styles from './styles.module.less';
 
-export const HomePage = () => {
-  return (
-    <div className={styles.pageContainer}>
-      <Landscape />
-      <Advantages />
-      <Wealthier />
-      <CreateAccountSmall />
-      <Healthier />
-      <CreateAccountBanner className={styles.benefits} Type={TypeCreateAccountBanner.Plants} />
-    </div>
-  );
-}
+export const HomePage = () => (
+  <div className={styles.pageContainer}>
+    <Landscape />
+    <Advantages />
+    <Wealthier />
+    <CreateAccountSmall />
+    <Healthier />
+    <CreateAccountBanner className={styles.benefits} Type={TypeCreateAccountBanner.Plants} />
+  </div>
+);
 

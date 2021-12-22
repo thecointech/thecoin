@@ -40,21 +40,18 @@
 @maxContentWidth: 1440px;
 
 // Scalable settings run from small to big depending on screen size
-.scalable-unit-bp(@small, @big, @bp, @unit) {
-  @result: calc(unit(@small, @unit) + (@big - @small) * ((100vw - unit(@bp, @unit)) / (@desktopWidth - @bp)))
+.scalable-unit-bp(@small, @big, @smallbp, @bigbp, @unit) {
+  @result: calc(unit(@small, @unit) + (@big - @small) * ((100vw - unit(@smallbp, @unit)) / (@bigbp - @smallbp)))
 }
 
-.scalable-clamped-bp(@small, @big, @unit, @bp) {
+.scalable-clamped-bp(@small, @big, @smallbp, @bigbp, @unit) {
   @result: clamp(unit(@small, @unit),
-    .scalable-unit(@small, @big, @bp, @unit)[@result],
+    .scalable-unit-bp(@small, @big, @smallbp, @bigbp, @unit)[@result],
     unit(@big, @unit)
   );
 }
 .scalable-clamped(@small, @big, @unit) {
-  @result: clamp(unit(@small, @unit),
-    .scalable-unit-bp(@small, @big, @midWidth, @unit)[@result],
-    unit(@big, @unit)
-  );
+  .scalable-clamped-bp(@small, @big, @midWidth, @desktopWidth, @unit)
 }
 .scalable(@small, @big) {
   .scalable-clamped(@small, @big, px)

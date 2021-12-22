@@ -3,6 +3,10 @@
     "defaultMessage": "We help to restore the planet’s ecosystem",
     "description": "site.wedomore.tree.description: Description for the tree photo for the We Do More page"
   },
+  "0+B/LI": {
+    "defaultMessage": "You can become CO2-neutral with TheCoin",
+    "description": "site.homepage.underwater.description: Description for the homepage underwater part1"
+  },
   "0FXCvv": {
     "defaultMessage": "Maximum Growth",
     "description": "site.homepage.wealthier.growth.title: The title for the growth for the homepage wealthier"
@@ -70,10 +74,6 @@
   "81qKOv": {
     "defaultMessage": "Please enter a valid email",
     "description": "site.subscribe.email.invalid: Message we give a user when the subscription failed"
-  },
-  "8WNRbJ": {
-    "defaultMessage": "You can become CO2-neutral with TheCoin as we work to offset our clients’ emissions.",
-    "description": "site.homepage.underwater.description: Description for the homepage underwater part"
   },
   "8rHqL+": {
     "defaultMessage": "Every dollar earns every day. As a non-profit, we want you to keep that benefit.",
@@ -158,10 +158,6 @@
   "RSzn+F": {
     "defaultMessage": "Scientifically Verified",
     "description": "site.homepage.underwater.science.title: Title for the homepage underwater science subpart"
-  },
-  "RceNpc": {
-    "defaultMessage": "Save, invest and spend money with TheCoin, get 100% of benefits and save our Planet.",
-    "description": "site.homepage.landscape.description: The description for the homepage"
   },
   "RldC0Y": {
     "defaultMessage": "Go back",
@@ -333,6 +329,10 @@
   },
   "site.subscribe.confirmation.button": {
     "defaultMessage": "Update Details!"
+  },
+  "t92bBR": {
+    "defaultMessage": "as we work to offset our clients’ emissions.",
+    "description": "site.homepage.underwater.description: Description for the homepage underwater part2"
   },
   "tFFMkF": {
     "defaultMessage": "Pause"
