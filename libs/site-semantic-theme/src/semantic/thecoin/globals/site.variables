@@ -11,12 +11,14 @@
 @tabletWidth                 : 768;
 @desktopWidth                : 1440;
 @mobileBreakpoint            : unit(415, px);
-@tabletBreakpoint            : unit(768, px);
+@tabletBreakpoint            : unit(570, px);
 @largeMonitorBreakpoint      : unit(1440, px);
 
 // We switch to mobile just slightly below tablet.
 // This is the smallest area we could cram our landing header into
 @midBreakpoint: 750px;
+@largestMobileScreen: @midBreakpoint;
+
 .smallScreen(@rules) { @media only screen and (max-width: (@midBreakpoint - 1px)) { @rules(); } }
 .bigScreen(@rules) { @media only screen and (min-width: @midBreakpoint) { @rules(); } }
 
