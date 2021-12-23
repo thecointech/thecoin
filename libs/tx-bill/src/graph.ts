@@ -48,6 +48,8 @@ export const graph : StateGraph<States, "Bill"> = {
     onError: transitionTo<States>(core.requestManual, "error"),
     next: transitionTo<States>(core.markComplete, "complete"),
   },
-  error: null,
+  error: {
+    next: core.manualOverride,
+  },
   complete: null
 }
