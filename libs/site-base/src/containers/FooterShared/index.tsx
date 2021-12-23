@@ -42,10 +42,10 @@ export const FooterShared: React.FC<Props> = ({ children, background, id }) => (
           <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
             <img src={facebook} />
           </a>
-          <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
+          <a href="https://twitter.com/The_Green_NFT/" target="_blank">
             <img src={twitter} />
           </a>
-          <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
+          <a href="https://www.instagram.com/thecoincollaborativecanada/" target="_blank">
             <img src={instagram} />
           </a>
         </div>

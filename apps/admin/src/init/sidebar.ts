@@ -14,6 +14,7 @@ const messages = defineMessages({
 
   eTransfer: { defaultMessage: "Complete e-Transfer", description: "Title for the Complete e-Transfer entry in the menu" },
   billing: { defaultMessage: "Bill Payments", description: "Title for the Bill Payments entry in the menu" },
+  incomplete: { defaultMessage: "Incomplete", description: "Menu Entry: List of incomplete transactions" },
   verify: { defaultMessage: "Verify", description: "Title for the Verify entry in the menu" },
   autoPurchase: { defaultMessage: "AutoPurchase", description: "Title for the AutoPurchase entry in the menu" },
   clients: { defaultMessage: "Clients", description: "Title for the Clients entry in the menu" },

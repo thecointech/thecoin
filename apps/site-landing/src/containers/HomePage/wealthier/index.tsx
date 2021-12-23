@@ -78,7 +78,7 @@ const items = {
   },
   profits: {
     img: profits,
-    to: '/compare',
+    to: '/healthier',
     text: defineMessages({
       title: {
         defaultMessage: 'Keep Your Profits',

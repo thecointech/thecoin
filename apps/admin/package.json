@@ -41,7 +41,8 @@
     "@vercel/webpack-asset-relocator-loader": "1.6.0",
     "electron": "13.1.8",
     "electron-devtools-installer": "^3.2.0",
-    "node-loader": "^2.0.0"
+    "node-loader": "^2.0.0",
+    "esm": "3.2.25"
   },
   "dependencies": {
     "@thecointech/contract-core": "^0.2.56",

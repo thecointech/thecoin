@@ -25,7 +25,7 @@ export async function initialAccounts() {
   return {
     active: null,
     map: {
-      ...(await buildMapEntry("TheCoin")),
+      // ...(await buildMapEntry("TheCoin")),
       ...(await buildMapEntry("BrokerCAD")),
     }
   }

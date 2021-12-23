@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { ActionDataTypes, ActionType, AnyAction, AnyActionData, storeTransition } from '@thecointech/broker-db';
-import { graph } from '@thecointech/tx-etransfer';
-import { etransfer, manual } from '@thecointech/tx-deposit';
 import { Button, Select } from 'semantic-ui-react';
 import { log } from '@thecointech/logging';
 import { manualOverrideTransition } from '@thecointech/tx-statemachine/transitions';
+import { graph as sellgraph } from '@thecointech/tx-etransfer';
+import { graph as billgraph } from '@thecointech/tx-bill';
+import { etransfer as etransfergraph, manual as manualgraph } from '@thecointech/tx-deposit';
 
 export const ManualOverride = (props: AnyAction) => {
   const [newState, setNewState] = useState<MaybeString>()
@@ -25,14 +26,20 @@ export const ManualOverride = (props: AnyAction) => {
 function buildOptions(type: ActionType, data: AnyActionData) {
   // What states can we go to?
   // We may need to consider a cleaner view than the raw to-any-state
-  const stategraph = type == "Sell"
-      ? graph
-      : (data as ActionDataTypes["Buy"]).initial.type ==  "etransfer"
-        ? etransfer
-        : manual
+  const stategraph = getStateGraph(type, data);
   return Object
     .keys(stategraph)
     .map(state => ({ key: state, value: state, text: state }))
+}
+
+function getStateGraph(type: ActionType, data: AnyActionData) {
+  switch(type) {
+    case "Sell": return sellgraph;
+    case "Bill": return billgraph;
+    case "Buy": return (data as ActionDataTypes["Buy"]).initial.type ==  "etransfer"
+      ? etransfergraph
+      : manualgraph;
+  }
 }
 
 function overrideCurrentState(action: AnyAction, newState: MaybeString) {

@@ -12,13 +12,13 @@ export const ClientTransaction = (props: AnyAction) => {
   // TODO: move data creation into tx-reconciliation
   const { history } = props;
   const final = history[history.length - 1];
-  const fiat = history.find(r => r.fiat)?.fiat;
-  const coin = history.find(r => r.coin)?.coin;
+  const fiat = history.find(r => r.fiat)?.fiat ?? "NO FIAT";
+  const coin = history.find(r => r.coin)?.coin ?? "NO COIN";
 
   return (
     <List.Item key={props.data.initialId}>
       <TransactionIcon type={final.type} />
-      {`${date.toISODate()} ${final.type} - ${fiat?.toNumber()} : ${coin?.toNumber()}`}
+      {`${date.toISODate()} ${final.type} - ${fiat} : ${coin}`}
       {final.type == "markComplete"
         ? undefined
         : <RefundButton action={props} />
