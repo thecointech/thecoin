@@ -76,7 +76,7 @@ const RightMenuItems = () => {
 
   return (
     <Menu text>
-    <HeaderLink to={process.env.URL_SITE_APP ?? "/AppLogin"}>
+    <HeaderLink<React.HTMLProps<HTMLAnchorElement>> as="a" href={process.env.URL_SITE_APP ?? "/AppLogin"} target="_blank">
       <FormattedMessage {...loginLink} />
     </HeaderLink>
     <Menu.Item className={`${styles.createButton} onlyBigScreen`}>
