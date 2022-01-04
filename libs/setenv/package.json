@@ -20,7 +20,8 @@
     "clean": "rimraf ./build"
   },
   "exports": "./build/index.js",
-  "devDependencies": {
-    "jest": "*"
+  "types": "./build/index.d.ts",
+  "dependencies": {
+    "dotenv": "^10.0.0"
   }
 }
