@@ -1,4 +1,4 @@
-const { getEnvVars } = require('./setenv');
+const { getEnvVars } = require('@thecointech/setenv');
 const  netstat = require('node-netstat');
 
 const config = getEnvVars('devlive');

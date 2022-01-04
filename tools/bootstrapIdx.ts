@@ -1,4 +1,4 @@
-import './setenv';
+import '@thecointech/setenv';
 import { join } from 'path';
 import { promises } from "fs";
 import { CeramicClient } from '@ceramicnetwork/http-client'

@@ -1,4 +1,4 @@
-import { getEnvVars } from '../../../tools/setenv';
+import { getEnvVars } from '@thecointech/setenv';
 import { loadHardware } from './fromHardware';
 import { describe, IsManualRun} from '@thecointech/jestutils';
 

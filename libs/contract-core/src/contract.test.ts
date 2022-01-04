@@ -1,7 +1,7 @@
 
 import {GetContract} from './contract';
 import { describe, IsManualRun } from '@thecointech/jestutils';
-import { getEnvVars } from '../../../tools/setenv';
+import { getEnvVars } from "@thecointech/setenv";
 import { NormalizeAddress } from '@thecointech/utilities';
 
 const prodVars = getEnvVars('prodtest');
