@@ -2,25 +2,25 @@
 	"folders": [
     {
       "name": "contract-core",
-      "path": "libs/contract-core"
+      "path": "../libs/contract-core"
     },
     {
       "name": "contract-nft",
-      "path": "libs/contract-nft"
+      "path": "../libs/contract-nft"
     },
     {
       "name": "contract-base",
-      "path": "libs/contract-base"
+      "path": "../libs/contract-base"
     },
     {
       "name": "contract-tools",
-      "path": "libs/contract-tools"
+      "path": "../libs/contract-tools"
     },
     {
-      "path": "libs/signers"
+      "path": "../libs/signers"
     },
     {
-      "path": "libs/truffle-ethers-provider"
+      "path": "../libs/truffle-ethers-provider"
     }
   ],
 	"settings": {
