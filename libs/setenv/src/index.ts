@@ -1,17 +1,17 @@
-const { basename, join } = require('path');
-const { existsSync, readFileSync } = require('fs');
-const de = require('dotenv')
+import { basename, join } from 'path';
+import { existsSync, readFileSync } from 'fs';
+import de from 'dotenv';
 
 const projectRoot = process.cwd();
 const LOG_NAME = basename(projectRoot);
 
-function getEnvFiles(cfgName, onlyPublic) {
+function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
   const envName = cfgName || process.env.CONFIG_NAME || (
     process.env.NODE_ENV == "production"
       ? "prod"
       : "development"
   );
-  const files = [];
+  const files: string[] = [];
   // Does the user have files on the system
   if (!onlyPublic && process.env.THECOIN_ENVIRONMENTS) {
     const systemFolder = process.env.THECOIN_ENVIRONMENTS;
@@ -36,7 +36,7 @@ function getEnvFiles(cfgName, onlyPublic) {
   return files;
 }
 
-function getEnvVars(cfgName, onlyPublic) {
+function getEnvVars(cfgName?: string, onlyPublic?: boolean) {
   const files = getEnvFiles(cfgName, onlyPublic);
   return files
     .map(file => readFileSync(file))
@@ -48,7 +48,7 @@ function getEnvVars(cfgName, onlyPublic) {
   });
 }
 
-function loadEnvVars(cfgName) {
+function loadEnvVars(cfgName?: string) {
   // Load all environment files.
   const files = getEnvFiles(cfgName);
   files.forEach(path => de.config({path}))
