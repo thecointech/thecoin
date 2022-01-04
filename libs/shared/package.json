@@ -32,7 +32,6 @@
   "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
-    "./translations/*": "./build/translations/*",
     "./*": [
       "./build/*.js",
       "./build/*/index.js"
@@ -44,7 +43,6 @@
       "build/index.d.ts": [
         "build/index.d.ts"
       ],
-      "translations/*.json": ["./build/translations/*.json"],
       "*": [
         "build/*.d.ts",
         "build/*/index.d.ts"
