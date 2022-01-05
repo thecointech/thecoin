@@ -91,11 +91,11 @@ export class ApiAction {
 
     // It seems we can hit 1 of 2 sign-in pages, depending on whether we
     // are depositing an e-transfer or signing into the regular bank ac.
-    const k1 = await this.page.waitForSelector("#K1", { timeout: 5000 });
-    if (k1) {
+    try {
+      await this.page.waitForSelector("#K1", { timeout: 5000 });
       await this.loginOld()
     }
-    else {
+    catch {
       await this.loginNew();
     }
 
