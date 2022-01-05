@@ -1,4 +1,4 @@
-import { getEnvVars } from "./setenv";
+import { getEnvVars } from "@thecointech/setenv";
 import { exit } from "process";
 import { readFileSync, writeFileSync } from "fs";
 import { join } from 'path';

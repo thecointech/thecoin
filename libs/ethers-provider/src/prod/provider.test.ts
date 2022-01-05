@@ -1,4 +1,4 @@
-import { getEnvVars } from '../../../../tools/setenv';
+import { getEnvVars } from '@thecointech/setenv';
 import { Erc20Provider } from './provider';
 import { describe, IsManualRun } from '@thecointech/jestutils'
 

@@ -1,5 +1,5 @@
 import { MigrationStep } from './step';
-import "../../../tools/setenv";
+import "@thecointech/setenv";
 import { storeContractAddress } from '@thecointech/contract-tools/migrations';
 import { deployProxy } from '@openzeppelin/truffle-upgrades';
 import { getSigner } from '@thecointech/signers';

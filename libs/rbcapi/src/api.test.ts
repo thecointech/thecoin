@@ -4,7 +4,7 @@ import PouchDB from 'pouchdb';
 import { ApiAction, closeBrowser, initBrowser } from './action';
 import { ConfigStore } from '@thecointech/store';
 import { describe, IsManualRun } from '@thecointech/jestutils';
-import { getEnvVars } from '../../../tools/setenv';
+import { getEnvVars } from '@thecointech/setenv';
 
 PouchDB.plugin(require('pouchdb-adapter-memory'));
 const env = getEnvVars("prod");

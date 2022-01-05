@@ -1,4 +1,4 @@
-import { getEnvVars } from '../../../tools/setenv';
+import { getEnvVars } from '@thecointech/setenv';
 import { loadFromDisk } from './fromDisk';
 import { describe, IsManualRun} from '@thecointech/jestutils';
 
