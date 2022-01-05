@@ -68,6 +68,18 @@ export function transitionTo<States extends string, Type extends ActionType=Acti
 
     // ensure that our transition matches the one being replayed.
     if (replay && transition.name != replay.type) {
+      // If this is an override, let it run through
+      if (replay.type == "manualOverride") {
+        log.info("Allowing Manual Override");
+        return {
+          name: replay.meta! as States,
+          delta: replay,
+          data: {
+            ...currentState.data,
+            ...replay,
+          }
+        }
+      }
       throw new Error(`Replay event ${replay.type} does not match next transition ${transition.name}`);
     }
     const delta = replay ?? await runAndStoreTransition<Type>(container, transition);
