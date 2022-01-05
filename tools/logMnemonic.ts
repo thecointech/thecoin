@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import { Wallet } from 'ethers';
 import { GetContract } from '@thecointech/contract-core'
 process.env.CONFIG_NAME='prodtest';
-import './setenv';
+import '@thecointech/setenv';
 
 // Used to read back the mnemonic so we can deploy nicely.
 // Only used for truffle to create it's provider

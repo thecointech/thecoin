@@ -1,4 +1,4 @@
-require("../../../../tools/setenv");
+import "@thecointech/setenv";
 import { getAllUsers, getAllActions } from "@thecointech/broker-db";
 import { init } from "@thecointech/firestore";
 import { writeFileSync } from 'fs';

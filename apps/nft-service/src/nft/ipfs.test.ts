@@ -4,7 +4,7 @@ import { readFileSync } from 'fs';
 describe('Pinata IPFS integration', () => {
 
   process.env.CONFIG_NAME = "prod";
-  require('../../../../tools/setenv.js');
+  require('@thecointech/setenv');
 
 
   it('uploads correctly', async () => {

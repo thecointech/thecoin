@@ -11,9 +11,11 @@
   "author": "Stephen Taylor",
   "license": "MIT",
   "scripts": {
+    "prebuild": "yarn build:i18n",
     "build": "run-p build:src build:link",
     "build:src": "yarn ttsc -b \"tsconfig.build.json\"",
     "build:link": "node ../../tools/link-assets.mjs",
+    "build:i18n": "run-s extract compile",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
@@ -74,6 +76,7 @@
     "@types/react-transition-group": "^4.2.3",
     "@types/zxcvbn": "^4.4.0",
     "minimist": "^1.2.3",
-    "nocache": "^2.1.0"
+    "nocache": "^2.1.0",
+    "dotenv-webpack": "^7.0.3"
   }
 }
