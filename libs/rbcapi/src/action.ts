@@ -88,6 +88,28 @@ export class ApiAction {
   public async login() {
     // Enter user name and passwords
     log.debug("Beginning Login");
+
+    // It seems we can hit 1 of 2 sign-in pages, depending on whether we
+    // are depositing an e-transfer or signing into the regular bank ac.
+    const k1 = await this.page.waitForSelector("#K1", { timeout: 5000 });
+    if (k1) {
+      await this.loginOld()
+    }
+    else {
+      await this.loginNew();
+    }
+
+    // If we hit PVQ, this is where that happens
+    await this.maybeEnterPVQ();
+  }
+
+  private async loginOld() {
+    await this.page.type('#K1', ApiAction.Credentials.cardNo, { delay: 20 });
+    await this.page.type('#QQ', ApiAction.Credentials.password, { delay: 20 });
+    await this.clickAndNavigate("div.formBlock.formBlock_mainSignIn > div > button", "Logged In", { waitUntil: "networkidle0" });
+  }
+
+  private async loginNew() {
     await this.page.waitForSelector("#userName");
     await this.page.type('#userName', ApiAction.Credentials.cardNo, { delay: 20 });
     await this.clickAndNavigate('#signinNext', 'Entered Card Number', { waitUntil: "networkidle0" })
@@ -95,9 +117,6 @@ export class ApiAction {
     await this.page.waitForSelector("#password");
     await this.page.type('#password', ApiAction.Credentials.password, { delay: 20 });
     await this.clickAndNavigate('#signinNext', 'Entered Pwd', { waitUntil: "networkidle0" })
-
-    // If we hit PVQ, this is where that happens
-    await this.maybeEnterPVQ();
   }
 
   public async maybeEnterPVQ() {
