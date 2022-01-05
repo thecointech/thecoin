@@ -22,7 +22,7 @@
   "1jWSoJ": {
     "defaultMessage": "Ou, vous pouvez créer un tout nouveau compte !",
     "description": "app.account.connect.create.createTransfer"
-  },  
+  },
   "1jxvsD": {
     "defaultMessage": "Vous pouvez également vous connecter à votre compte TheCoin en utilisant un compte Ethereum existant.",
     "description": "app.account.create.ethereum: link redirect people to connect their existing eth account"
@@ -86,6 +86,10 @@
   "EmDoJa": {
     "defaultMessage": "Nous préparons votre compte flambant neuf : {percentComplete} % fini.",
     "description": "app.account.create.whileCreatingHeader"
+  },
+  "gYBaQo": {
+    "defaultMessage": "Ajouter un compte",
+    "description": "Title for the Add an Account in the menu"
   },
   "H0iu0v": {
     "defaultMessage": "Le code de parrainage saisi n'est pas reconnu",
@@ -178,7 +182,7 @@
   "S+5i+u": {
     "defaultMessage": "Le navigateur Opera que vous utilisez est livré avec un compte intégré compatible avec TheCoin. Souhaitez-vous vous y connecter ?",
     "description": "app.account.connect.create.checkMessageOpera"
-  },  
+  },
   "S3XtB5": {
     "defaultMessage": "Comptes dans votre Google Drive",
     "description": "The main title for the restore account page"
@@ -407,5 +411,5 @@
   "zmnLDK": {
     "defaultMessage": "Vous n'avez pas de compte ?",
     "description": "app.account.connect.create.explanation: The text before the button to redirect to the create an account page for the restore your account page"
-  }  
+  }
 }

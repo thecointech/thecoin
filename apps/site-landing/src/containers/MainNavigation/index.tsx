@@ -27,7 +27,7 @@ const menuItems = defineMessages({
   help: {
     defaultMessage: 'Help',
     description: 'site.MainNavigation.faq: Help Link',
-    icon: "question mark"
+    icon: "question"
   },
 });
 

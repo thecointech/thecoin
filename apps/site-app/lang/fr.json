@@ -327,10 +327,6 @@
     "defaultMessage": "Croissance",
     "description": "app.historygraph.profit: HistoryGraph tooltip - Profit"
   },
-  "anIZrC": {
-    "defaultMessage": "Ajouter un compte",
-    "description": "app.accountSwitcher.addAccount: Title for the Add an Account in the menu"
-  },
   "cQy1PG": {
     "defaultMessage": "Message reçu. Vous devriez recevoir une réponse dans 1-2 jours ouvrables.",
     "description": "app.contactus.successMessage: Success Message for the contact us page"
