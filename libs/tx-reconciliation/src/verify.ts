@@ -2,10 +2,11 @@ import { findBank } from "./matchBank";
 import { builtInAccounts, knownIssues } from './data/manual.json';
 import { NormalizeAddress } from "@thecointech/utilities/Address";
 import { Reconciliations, AllData, ReconciledRecord } from "./types";
+import { getFiat } from './fxrates';
 
 export async function verify(r: Reconciliations, data: AllData) {
   for (const user of r) {
-    user.transactions.sort((l, r) => r.action.data.date.toMillis() - l.action.data.date.toMillis());
+    user.transactions.sort((l, r) => r.data.initiated.toMillis() - l.data.initiated.toMillis());
   }
 
   await printUnmatched(r);
@@ -28,11 +29,11 @@ function matchLooseEmails(_r: Reconciliations, data: AllData) {
 }
 
 export const isComplete = (tx: ReconciledRecord) =>
-  knownIssues.find(ki => tx.action.history.find(tr => tr.hash === ki.hash)) ||
+  knownIssues.find(ki => tx.database?.history.find(tr => tr.hash === ki.hash)) ||
   !(
-    (tx.action.type === "Buy" && tx.email === null) ||
-    (tx.refund === null && tx.bank.length % 2 === 0) ||
-    tx.blockchain === null
+    (tx.data.type === "Buy" && tx.email === null) ||
+    tx.bank.includes(null) ||
+    tx.blockchain.includes(null)
   )
 
 async function printUnmatched(r: Reconciliations) {
@@ -48,13 +49,13 @@ async function printUnmatched(r: Reconciliations) {
 
   for (const um of unMatched) {
     for (const umtx of um.transactions) {
-      const email = umtx.email || umtx.action.type !== "Buy" ? "" : " Email";
+      const email = umtx.email || umtx.data.type !== "Buy" ? "" : " Email";
       const blockchain = umtx.blockchain ? "" : " blockchain";
       const bank = umtx.bank.length % 2 === 1 ? "" : " bank";
       const db = umtx.database ? "" : " db";
 
-      const fiat = "FIGURE THIS OUT TOO"; //await getFiat(umtx);
-      console.log(`${umtx.action.data.date.toSQLDate()} ${umtx.action} ${um.names} - ${fiat}, missing ${email}${blockchain}${bank}${db}`);
+      const fiat = await getFiat(umtx);
+      console.log(`${umtx.data.initiated.toSQLDate()} ${umtx.data.type} ${um.names} - ${fiat}, missing ${email}${blockchain}${bank}${db}`);
     }
   }
 }

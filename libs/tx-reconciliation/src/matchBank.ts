@@ -1,34 +1,27 @@
 import { filterCandidates } from "./utils";
-import { ActionType } from "@thecointech/broker-db";
+import { ActionType, TransitionDelta } from "@thecointech/broker-db";
 import { DateTime } from "luxon";
-import { AllData, User, ReconciledRecord, BankRecord } from "types";
+import { AllData, User, BankRecord } from "types";
 import Decimal from 'decimal.js-light';
 
 type BankFilter = ReturnType<typeof getFilter>;
 
 // Next, the tx hash should match blockchain
-export function spliceBank(data: AllData, user: User, record: ReconciledRecord, maxDays: number) {
+export function spliceBank(data: AllData, user: User, delta: TransitionDelta, type: ActionType, maxDays: number) {
 
-  const r = record.bank;
-  if (r.length % 2 !== 1) {
+  // Find TX
+  const amount = delta.fiat!;
+  const names = type === "Buy" ? user.names : undefined;
 
-    // Find TX
-    const transition = record.action.history.filter(ts => ts.fiat !== undefined);
-    transition.forEach(tr => {
-      const amount = tr.fiat!;
-      const names = record.action.type === "Buy" ? user.names : undefined;
-
-      // Find most recent completion attempt
-      const filter = getFilter(record.action.type);
-      const tx = findBank(data, maxDays, amount, tr.date, filter, names);
-      if (tx) {
-        data.bank.splice(data.bank.indexOf(tx), 1);
-        r.push(tx);
-      }
-    })
+  // Find most recent completion attempt
+  const filter = getFilter(type); // TODO: Filter by meta too
+  const tx = findBank(data, maxDays, amount, delta.date, filter, names);
+  if (tx) {
+    data.bank.splice(data.bank.indexOf(tx), 1);
   }
-  return r;
+  return tx;
 }
+
 
 export const getFilter = (action: ActionType): (tx: BankRecord) => boolean => {
   switch (action) {

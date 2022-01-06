@@ -8,7 +8,8 @@ import { getOrCreateUser } from "./utils";
 import { NormalizeAddress } from "@thecointech/utilities";
 import { builtInAccounts } from './data/manual.json';
 import { Transaction } from "@thecointech/tx-blockchain/";
-import { AllData, Reconciliations, ReconciledRecord, BankRecord } from "types";
+import { AllData, Reconciliations, ReconciledRecord } from "types";
+import { getFiat } from './fxrates';
 
 export function reconcileExternal(data: AllData) {
 
@@ -18,8 +19,6 @@ export function reconcileExternal(data: AllData) {
 }
 
 async function reconcileBlockchain(data: AllData) {
-  throw new Error('Project not updated: complete work to update to new DB format');
-
   const users : Reconciliations= [];
   const skipAccounts = builtInAccounts.map(pair => NormalizeAddress(pair[1]));
   for (const bc of data.blockchain)
@@ -31,10 +30,16 @@ async function reconcileBlockchain(data: AllData) {
 
     // TODO
     // What was this transactions value in CAD
-    //record.data.fiatDisbursed = await getFiat(record);
+    //record.data.fiatDisbursed =
 
     // is there any bank transaction that matches this amount?
-    record.bank = spliceBank(data, user, record, 5)
+    const transition = {
+      type: "temporary",
+      created: bc.date,
+      date: bc.date,
+      fiat: await getFiat(record)
+    }
+    record.bank = [spliceBank(data, user, transition, record.data.type, 5)];
     record.email = spliceEmail(data, user, record, 30);
   };
   return users;
@@ -47,41 +52,19 @@ export function buildNewUserRecord(users: Reconciliations, bc: Transaction) {
   // However, our blockchain transactions can include transactions where
   // the user directly transfers coin directly to us.  In these cases,
   // the date is the date of the transfer, not when it can be processed
-  // TODO: All of this!
-  const action: any = {
-    address: user.address,
+  const data = {
     type,
-    data: {
-      initial: {} as any,
-      initialId: "",
-      timestamp: bc.date,
-    }
+    id: bc.txHash,
+    initiated: bc.date,
+    coin: bc.value,
   };
   const record: ReconciledRecord = {
-    action,
-    blockchain: bc,
-    bank: [] as BankRecord[],
+    data,
+    blockchain: [bc],
+    bank: [null],
     database: null,
     email: null,
-  } as ReconciledRecord;
+  };
   user.transactions.push(record);
   return { user, record };
 }
-
-// const buildTransfer = (action: ActionType, bc: Transaction) =>
-//   action === "Buy"
-//     ? buildBuyXfer(bc)
-//     : buildSellXfer(bc);
-
-// const buildBuyXfer = (bc: Transaction) => ({
-//   value: -bc.change,
-// })
-
-// const buildSellXfer = (bc: Transaction) : CertifiedTransferRequest => ({
-//   fee: 0,
-//   from: bc.counterPartyAddress,
-//   to: theCoin,  // We assume all sell xFers are being sold to us.
-//   signature: "",
-//   value: bc.change,
-//   timestamp: bc.date.toMillis(),
-// })

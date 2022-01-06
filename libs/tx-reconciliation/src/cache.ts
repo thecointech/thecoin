@@ -1,6 +1,5 @@
-import { Timestamp } from "@thecointech/firestore";
 import Decimal from "decimal.js-light";
-import { writeFileSync, mkdirSync, existsSync, readFileSync } from "fs";
+import { writeFileSync, mkdirSync, existsSync, readFileSync, statSync } from "fs";
 import { DateTime } from "luxon";
 import { join } from "path";
 import { AllData, Reconciliations } from "./types";
@@ -12,7 +11,6 @@ export const cacheFullPath = (path?: string) =>
   path ?? process.env["USERDATA_CACHE_PATH"] ?? "/temp/UserData/Cache";
 const DATA_CACHE_NAME = 'data.cache.json';
 const RECONCILED_CACHE_NAME = 'reconciled.cache.json';
-
 
 export const writeDataCache = (data: AllData, cacheName?: string, path?: string) =>
   writeCache(data, cacheName ?? DATA_CACHE_NAME, path);
@@ -33,57 +31,50 @@ function writeCache(data: AllData|Reconciliations, cacheName: string, path?: str
 
 /////////////////////////////////////////////////////////
 
-export const readDataCache = (cacheName?: string, path?: string) =>
-  readCache(convertDataFromJson, cacheName ?? DATA_CACHE_NAME, path);
-export const readReconciledCache = (cacheName?: string, path?: string) =>
-  readCache(convertReconciledFromJson, cacheName ?? RECONCILED_CACHE_NAME, path);
+export const isDataCacheValid = () => isCacheValid(DATA_CACHE_NAME)
+export const isReconciledCacheValid = () => isCacheValid(RECONCILED_CACHE_NAME)
+export const isCacheValid = (cacheName: string, path?: string) => {
+  const cachePath = cacheFullPath(path);
+  const filePath = join(cachePath, cacheName);
+  try {
+    const stat = statSync(filePath);
+    if (stat.mtime.toDateString() == new Date().toDateString())
+      return true;
+  }
+  catch (err) { }
+  return false;
+}
 
-function readCache<T>(conversion: (json: any) => T, cacheName: string, path?: string) {
+/////////////////////////////////////////////////////////
+export const readDataCache = (cacheName?: string, path?: string) =>
+  readCache<AllData>(cacheName ?? DATA_CACHE_NAME, path);
+export const readReconciledCache = (cacheName?: string, path?: string) =>
+  readCache<Reconciliations>(cacheName ?? RECONCILED_CACHE_NAME, path);
+
+function readCache<T>(cacheName: string, path?: string): T|null {
   const cachePath = cacheFullPath(path);
   const filePath = join(cachePath, cacheName);
   if (existsSync(filePath)) {
     const asText = readFileSync(filePath, 'utf8');
-    const asJson = JSON.parse(asText);
+    const asJson = JSON.parse(asText, converter);
     log.debug(`Read cache from ${filePath}`);
-    return conversion(asJson)
+    return asJson as T;
   }
   log.debug(`Cache not found at: ${filePath}`);
   return null;
 }
 
-export function convertDataFromJson(asJson: any) {
-  const asData = asJson as AllData;
-  asData.eTransfers.forEach(convertETransfer)
-  asData.bank.forEach(convertBank)
-  asData.blockchain.forEach(convertBlockchain)
+// export function convertDataFromJson(asJson: any) {
+//   const asData = asJson as AllData;
+//   convertData(asData);
+//   return asData;
+// }
 
-  const convertAction = (col: any) =>
-    Object.values(col).forEach(
-      (txs: any) => txs.forEach(convertTimestamps)
-    );
-
-  convertAction(asData.dbs.Buy);
-  convertAction(asData.dbs.Sell);
-  convertAction(asData.dbs.Bill);
-
-  return asData;
-}
-
-export function convertReconciledFromJson(asJson: any) {
-  const asReconciled = asJson as Reconciliations;
-  for (const user of asReconciled) {
-    for (const tx of user.transactions) {
-      convertTimestamps(tx.action);
-      convertTimestamps(tx.database);
-      convertETransfer(tx.email);
-      tx.bank.forEach(convertBank);
-      convertBlockchain(tx.blockchain)
-      convertBlockchain(tx.refund);
-      throw new Error("NOTE: We don't use timestamps any more (use DateTime instead)");
-    }
-  }
-  return asReconciled;
-}
+// export function convertReconciledFromJson(asJson: any) {
+//   const asReconciled = asJson as Reconciliations;
+//   convertData(asReconciled);
+//   return asReconciled;
+// }
 
 /////////////////////////////////////////////////////////
 
@@ -101,35 +92,14 @@ const mkCachePath = (path?: string) => {
   return cachePath;
 }
 
-const convertTimestamp = (obj: any, prefix = "") =>
-  obj
-    ? Timestamp.fromMillis(obj[`${prefix}seconds`] * 1000 + obj[`${prefix}nanoseconds`]  / 100000)
-    : undefined;
-const convertTimestamps = (tx: any) => {
-  if (tx) {
-    Object.entries(tx).forEach(([s, v]) => {
-      const maybeTs : any = v;
-      if (!!maybeTs?._seconds)
-        tx[s] = convertTimestamp(maybeTs, "_")
-      else if (!!maybeTs?.seconds)
-        tx[s] = convertTimestamp(maybeTs)
-    })
+const isNumeric = (str: string) => /^\d+(\.\d+)?$/.test(str)
+const converter = (_key: string, value: string) => {
+  if (typeof value == "string") {
+    if (isNumeric(value))
+      return new Decimal(value);
+    const d = DateTime.fromISO(value);
+    if (d.isValid)
+      return d;
   }
-}
-
-const convertETransfer = (et: any) => {
-  if (et) {
-    et.cad = new Decimal(et.cad);
-    et.recieved = DateTime.fromISO(et.recieved);
-  }
-}
-const convertBank = (tx: any) => {
-  if (tx)
-    tx.Date = DateTime.fromISO(tx.Date);
-}
-const convertBlockchain = (tx: any) => {
-  if (tx) {
-    tx.date = DateTime.fromISO(tx.date);
-    tx.completed = tx.completed ? DateTime.fromISO(tx.completed) : undefined;
-  }
+  return value;
 }

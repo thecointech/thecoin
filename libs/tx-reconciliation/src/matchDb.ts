@@ -3,7 +3,7 @@ import { findNames, spliceEmail } from "./matchEmails";
 import { spliceBank } from "./matchBank";
 import { addReconciled } from "./utils";
 import { AllData, Reconciliations, ReconciledRecord } from "types";
-import { ActionType } from "@thecointech/broker-db";
+import { ActionType, AnyAction } from "@thecointech/broker-db";
 
 
 // Match all DB entries with raw data
@@ -29,12 +29,12 @@ export function matchDB(data: AllData) {
   return r;
 }
 
-export function convertBaseTransactions(data: AllData, action: ActionType) {
-  const deposits = Object.entries(data.dbs[action]).map(([address, deposits]) => {
-
+export function convertBaseTransactions(data: AllData, type: ActionType) {
+  const allOfType = data.dbs[type];
+  const converted = Object.entries(allOfType).map(([address, actions]: [string, AnyAction[]]) => {
     // find the bank record that matches this purchase
     const names = findNames(data, address);
-    const records = deposits.map((d: any)=> convertBaseTransactionRecord(d, action));
+    const records = actions.map(d => convertBaseTransactionRecord(d, type));
     // find the bank record that matches this purchase
     return {
       names,
@@ -42,7 +42,7 @@ export function convertBaseTransactions(data: AllData, action: ActionType) {
       transactions: records,
     }
   });
-  return deposits;
+  return converted;
 }
 
 
@@ -50,26 +50,30 @@ function matchTransactions(data: AllData, reconciled: Reconciliations, maxDays: 
   for (const user of reconciled) {
 
     for (const record of user.transactions) {
-
+      const database = record.database!;
       record.email = record.email ?? spliceEmail(data, user, record, maxDays);
-      record.blockchain = record.blockchain ?? spliceBlockchain(data, user, record, "TODO");
-      record.bank = spliceBank(data, user, record, maxDays);
-
-      // if (record.data.hashRefund && !record.refund)
-      //   record.refund = spliceBlockchain(data, user, record, "TODO") ?? undefined;
+      record.bank = database.history
+        .filter(h => h.fiat)
+        .map(h => spliceBank(data, user, h, database.type, maxDays))
+      record.blockchain = database.history
+        .filter(h => h.hash)
+        .map(h => spliceBlockchain(data, user, h.coin!, h.hash))
     }
   }
 }
 
-const convertBaseTransactionRecord = (record: any, type: ActionType) : ReconciledRecord => ({
-  database: record,
-  action: {
+const convertBaseTransactionRecord = (record: AnyAction, type: ActionType) : ReconciledRecord => ({
+  // Basic/core data
+  data: {
     type,
-    ...record,
-    hash: record.hash.trim(),
+    id: record.data.initialId,
+    initiated: record.data.date,
+    fiat: record.history.find(h => h.fiat?.gt(0))?.fiat,
+    coin: record.history.find(h => h.coin?.gt(0))?.coin,
   },
 
+  database: record,
   email: null,
   bank: [],
-  blockchain: null,
+  blockchain: [],
 });

@@ -45,8 +45,8 @@ export function addReconciled(data: Reconciliations, more: Reconciliations) {
     const src = data.find(d => d.address === record.address);
     if (!src) data.push(record);
     else {
-      const srcIds = src.transactions.map(tx => tx.action.data.initialId);
-      const unique = record.transactions.filter(tx => !srcIds.includes(tx.action.data.initialId));
+      const srcIds = src.transactions.map(tx => tx.data.id);
+      const unique = record.transactions.filter(tx => !srcIds.includes(tx.data.id));
       src.transactions.push(...unique);
     }
   }
