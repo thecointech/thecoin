@@ -2,26 +2,28 @@ import { spliceBlockchain } from "./matchBlockchain";
 import { findNames, spliceEmail } from "./matchEmails";
 import { spliceBank } from "./matchBank";
 import { addReconciled } from "./utils";
-import { AllData, Reconciliations, ReconciledRecord } from "types";
+import { AllData, Reconciliations, ReconciledRecord, ReconciledHistory, UserReconciled } from "types";
 import { ActionType, AnyAction } from "@thecointech/broker-db";
-
+import { DateTime } from 'luxon';
 
 // Match all DB entries with raw data
 export function matchDB(data: AllData) {
 
   // First, initialize with database records
-  const r: Reconciliations = convertBaseTransactions(data, "Buy");
+  const buys: Reconciliations = convertBaseTransactions(data, "Buy");
   const bills = convertBaseTransactions(data, "Bill");
   const sales = convertBaseTransactions(data, "Sell");
+
+  let r: Reconciliations = [];
+  addReconciled(r, buys);
   addReconciled(r, bills);
   addReconciled(r, sales);
-
-  throw new Error("Yes, fix this too");
-  // matchManual(r, data);
 
   for (let i = 0; i < 30; i++) {
     matchTransactions(data, r, i);
   }
+  // Catch those few far-flung early
+  matchTransactions(data, r, 60);
 
   // Pure debugging purpose fn's
   //matchTransactions(data, unMatched, 100);
@@ -45,19 +47,42 @@ export function convertBaseTransactions(data: AllData, type: ActionType) {
   return converted;
 }
 
+const bankActions = [
+  "sendETransfer",
+  "payBill",
+  "depositFiat"
+]
+
+function fillBank(entry: ReconciledHistory, data: AllData, user: UserReconciled, initiated: DateTime, type: ActionType, maxDays: number) {
+  if (entry.bank) return;
+  if (bankActions.includes(entry.delta.type)) {
+    const transferred = entry.state.fiat ?? entry.delta.fiat;
+    if (!transferred) throw new Error("No Fiat found");
+    entry.bank = spliceBank(data, user, transferred, initiated, maxDays, type);
+  };
+}
+
+function fillBlockchain(entry: ReconciledHistory, data: AllData) {
+  if (entry.blockchain) return;
+  if (entry.delta.type == "waitCoin") {
+    const hash = entry.state.hash;
+    if (!hash) throw new Error("Missing Hash on wait");
+    entry.blockchain = spliceBlockchain(data, hash);
+  }
+}
 
 function matchTransactions(data: AllData, reconciled: Reconciliations, maxDays: number) {
   for (const user of reconciled) {
-
     for (const record of user.transactions) {
-      const database = record.database!;
+
+      const reconciled = record.data!;
       record.email = record.email ?? spliceEmail(data, user, record, maxDays);
-      record.bank = database.history
-        .filter(h => h.fiat)
-        .map(h => spliceBank(data, user, h, database.type, maxDays))
-      record.blockchain = database.history
-        .filter(h => h.hash)
-        .map(h => spliceBlockchain(data, user, h.coin!, h.hash))
+
+      for (const h of reconciled.history) {
+        if (h.delta.error) continue;
+        fillBank(h, data, user, record.data.initiated, record.data.type, maxDays);
+        fillBlockchain(h, data);
+      }
     }
   }
 }
@@ -70,10 +95,18 @@ const convertBaseTransactionRecord = (record: AnyAction, type: ActionType) : Rec
     initiated: record.data.date,
     fiat: record.history.find(h => h.fiat?.gt(0))?.fiat,
     coin: record.history.find(h => h.coin?.gt(0))?.coin,
+    history: record.history.reduce((acc, h, idx) => {
+      acc.push({
+        state: {
+          ...acc[idx - 1]?.state ?? {},
+          ...acc[idx - 1]?.delta ?? {},
+        },
+        delta: h,
+      });
+      return acc;
+    }, [] as ReconciledHistory[])
   },
 
   database: record,
   email: null,
-  bank: [],
-  blockchain: [],
 });

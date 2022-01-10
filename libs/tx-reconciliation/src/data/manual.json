@@ -51,6 +51,32 @@
     "bank": [
       {
         "action": "Sell",
+        "initialId": "0x2e05e28f9dc0137372e28a32e1e7782e9911224af73cc370fd1f8fcd0de6b8886f70b23ce9840da3d3f4179fd18c6961ee476414a50b00f5c2826b5b236520691b",
+        "amount": 400,
+        "date": 1608184800000,
+        "index": 5,
+        "notes": "modifications during system port changed value slightly"
+      },
+      {
+        "action": "Sell",
+        "initialId": "0x9892b4e9b13be8adcd4ded744fd64fad86fcf29292303ea47be174f68b5ed5e4228438e3921b7820abe6f8e4c31e85485a7eaa55977b9274faa39b1bcaa550ef1b",
+        "amount": 5,
+        "date": 1641845735582,
+        "index": 5,
+        "notes": "4982: easiest way to fix borked transfer"
+      }
+    ],
+    "bank_old": [
+      {
+        "action": "Buy",
+        "initialId": "0xa4169b8bff9688434e7e0f6fc658b03b0db4ce5aa9471855af5da1239aa4268776fbde47844952639cd5ac86ff357cc5563fb692652c4bbf211505d6dc9b7f3e1c",
+        "amount": 2000,
+        "date": "2019-09-29T23:00:00.000-05:00",
+        "historyIdx": 3,
+        "notes": "e-Transfers were completed without a working admin app, so amount was guestimated and does not match src"
+      },
+      {
+        "action": "Sell",
         "hash": "0xe80fb91de5c5693765bd3b0fa953892ff237d036a68a83a1950b0dfc28080221",
         "amount": 3000,
         "date": "2019-09-29T23:00:00.000-05:00",
@@ -105,16 +131,6 @@
       }
     ]
   },
-  "builtInAccounts": [
-    ["TestAccNoAc", "445758e37f47b44e05e74ee4799f3469de62a2cb"],
-    ["Old TestAcc", "0x0C327B7FCC6FF94F606B3D31D534F25B5604A0D1"],
-    ["Old TestAcc", "0xD0C3C0E7E94969B78EFF6BD531DBD6D0E90769F0"],
-
-    ["BrokerTransferAsst", "51e1153ee05efcf473d581c15b3f7b760ca5ddb3"],
-    ["Old BrokerCAD", "0x38DE1B6515663DBE145CC54179ADDCB963BB606A"],
-    ["BrokerCAD", "2fe3cbf59a777e8f4be4e712945ffefc6612d46f"],
-    ["The Coin", "4f107b6633a4b3385c9e20945144c59ce4ff2def"]
-  ],
   "knownIssues": [
     {
       "hash": "0x2cf020d5ff600f484942c02dc6baf16313bb1dd2228dc348239c432dae87ce8b",

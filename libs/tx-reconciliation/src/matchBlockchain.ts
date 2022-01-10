@@ -3,20 +3,16 @@ import { AllData, User } from "types";
 import { Decimal } from "decimal.js-light";
 
 // Next, the tx hash should match blockchain
-export function spliceBlockchain(data: AllData, user: User, amount: Decimal, hash?: string) {
-  const bc = findBlockchain(data.blockchain, user, amount, hash);
+export function spliceBlockchain(data: AllData, hash: string) {
+  const bc = data.blockchain.find(bc => bc.txHash === hash);
   return (bc)
     ? data.blockchain.splice(data.blockchain.indexOf(bc), 1)[0]
     : null;
 }
 
-function findBlockchain(blockchain: Transaction[], user: User,  amount: Decimal, hash?: string) {
-  const bc = blockchain.find(bc => bc.txHash === hash)
-  if (bc || hash?.startsWith('0x'))
-    return bc;
-
-  // Some blockchain transactions were recorded without hash!
-  let candidates = blockchain.filter(bc => bc.counterPartyAddress === user.address);
+// Kept for posterity.  DB is required to record hash
+export function findBlockchain(blockchain: Transaction[], user: User, amount: Decimal) {
+  let candidates = blockchain.filter(bc => [bc.to, bc.from].includes(user.address));
   candidates = candidates.filter(bc => amount.eq(bc.value));
 
   if (candidates.length === 1)

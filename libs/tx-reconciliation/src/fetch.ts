@@ -41,8 +41,8 @@ async function fetchAndCleanCoinHistory() {
   const coinHistory = await fetchCoinHistory();
   return coinHistory.map(et => ({
     ...et,
-    counterPartyAddress: NormalizeAddress(et.counterPartyAddress)
-
+    from: NormalizeAddress(et.from),
+    to: NormalizeAddress(et.to),
   }))
 }
 

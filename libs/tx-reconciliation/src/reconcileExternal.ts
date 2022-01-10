@@ -1,18 +1,16 @@
 //
 // Reconcile transactions from external sources.
 //
-import { spliceBank } from "./matchBank";
 import { ActionType } from "@thecointech/broker-db";
 import { spliceEmail } from "./matchEmails";
 import { getOrCreateUser } from "./utils";
-import { NormalizeAddress } from "@thecointech/utilities";
-import { builtInAccounts } from './data/manual.json';
 import { Transaction } from "@thecointech/tx-blockchain/";
 import { AllData, Reconciliations, ReconciledRecord } from "types";
-import { getFiat } from './fxrates';
+import { fetchFiat } from './fxrates';
+import { skipAccounts } from './accounts';
+import { DateTime } from 'luxon';
 
 export function reconcileExternal(data: AllData) {
-
   // First, we review blockchain transactions to see if we can match any to email/bank
   const newEntries = reconcileBlockchain(data);
   return newEntries;
@@ -20,32 +18,27 @@ export function reconcileExternal(data: AllData) {
 
 async function reconcileBlockchain(data: AllData) {
   const users : Reconciliations= [];
-  const skipAccounts = builtInAccounts.map(pair => NormalizeAddress(pair[1]));
+
+
   for (const bc of data.blockchain)
   {
-    if (skipAccounts.includes(bc.counterPartyAddress))
+    const skipFrom = skipAccounts.includes(bc.from);
+    const skipTo = skipAccounts.includes(bc.to)
+    // XOR skip from/to.  Skip purely internal & purely external txs
+    if (skipFrom && skipTo || !(skipFrom && skipTo))
       continue;
 
-    const { user, record } = buildNewUserRecord(users, bc);
-
-    // TODO
-    // What was this transactions value in CAD
-    //record.data.fiatDisbursed =
+    const { user, record } = await buildNewUserRecord(users, bc);
 
     // is there any bank transaction that matches this amount?
-    const transition = {
-      type: "temporary",
-      created: bc.date,
-      date: bc.date,
-      fiat: await getFiat(record)
-    }
-    record.bank = [spliceBank(data, user, transition, record.data.type, 5)];
+    // record.bank = [spliceBank(data, user, record.data.fiat!, record.data.initiated, 5)];
+    throw new Error("Any missed transactions should be fixed!")
     record.email = spliceEmail(data, user, record, 30);
   };
   return users;
 }
 
-export function buildNewUserRecord(users: Reconciliations, bc: Transaction) {
+export async function buildNewUserRecord(users: Reconciliations, bc: Transaction) {
   const user = getOrCreateUser(users, bc.counterPartyAddress);
   const type: ActionType = bc.change > 0 ? "Sell" : "Buy";
   // Normally, our transactions are sent at the date of processing.
@@ -57,11 +50,23 @@ export function buildNewUserRecord(users: Reconciliations, bc: Transaction) {
     id: bc.txHash,
     initiated: bc.date,
     coin: bc.value,
+    fiat: await fetchFiat(bc.value, type, bc.date),
+    history: [{
+      delta: {
+        type: "unknown",
+        coin: bc.value,
+        created: DateTime.now()
+      },
+      state: {
+        type: "initial",
+        created: DateTime.now()
+      },
+      blockchain: bc,
+      bank: undefined,
+    }]
   };
   const record: ReconciledRecord = {
     data,
-    blockchain: [bc],
-    bank: [null],
     database: null,
     email: null,
   };

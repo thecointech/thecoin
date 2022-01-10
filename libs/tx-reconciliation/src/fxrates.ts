@@ -24,7 +24,7 @@ const updateRate = async (date: DateTime) => {
   }
 }
 
-async function fetchFiat(coin: Decimal, action: string, date: DateTime) {
+export async function fetchFiat(coin: Decimal, action: string, date: DateTime) {
   await updateRate(date);
   return new Decimal(
     toHuman(coin.toNumber() * (
