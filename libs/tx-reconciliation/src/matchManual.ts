@@ -3,9 +3,18 @@ import { DateTime } from "luxon";
 import { Decimal } from 'decimal.js-light';
 import { spliceBank } from "./matchBank";
 import { Reconciliations, AllData } from './types';
+import { ActionType } from '@thecointech/broker-db';
 
+
+type ConnectBankEntry = {
+  action: ActionType,
+  initialId: string,
+  amount: number,
+  date: number,
+  index: number,
+  notes: string,
+}
 // type InsertEntry = typeof manual["insert"][0];
-type ConnectBankEntry = typeof manual["connect"]["bank"][0];
 // type ConnectBlockchainEntry = typeof manual["connect"]["blockchain"][0];
 
 export function matchManual(r: Reconciliations, data: AllData) {

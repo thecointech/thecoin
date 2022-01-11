@@ -5,6 +5,7 @@
 
 import type { DateTime } from "luxon";
 import type { Decimal } from "decimal.js-light"
+import { NormalizeAddress } from '@thecointech/utilities';
 
 export type Transaction = {
   txHash: string;
@@ -23,3 +24,12 @@ export type Transaction = {
   change: number;
   counterPartyAddress: string;
 }
+
+const systemAddresses = [
+  "0x0000000000000000000000000000000000000000",
+  NormalizeAddress(process.env.WALLET_BrokerTransferAssistant_ADDRESS!),
+  NormalizeAddress(process.env.WALLET_BrokerCAD_ADDRESS!),
+  NormalizeAddress(process.env.WALLET_TheCoin_ADDRESS!),
+  NormalizeAddress(process.env.WALLET_Minter_ADDRESS!),
+];
+export const isInternalAddress = (address: string) => systemAddresses.includes(NormalizeAddress(address));

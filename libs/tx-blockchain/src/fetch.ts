@@ -1,4 +1,4 @@
-import { Transaction } from "./types";
+import { isInternalAddress, Transaction } from "./types";
 import { TheCoin } from '@thecointech/contract-core';
 import { BigNumber } from "@ethersproject/bignumber";
 import { DateTime } from "luxon";
@@ -16,7 +16,7 @@ export function mergeTransactions(history: Transaction[], moreHistory: Transacti
 
 function toDecimal(v: BigNumber) : Decimal;
 function toDecimal(v?: BigNumber) { return v ? new Decimal(v.toString()) : undefined; }
-const toTransaction = (tx: ERC20Response, fees: Record<string, ERC20Response>): Transaction => ({
+const toTransaction = (tx: ERC20Response): Transaction => ({
   txHash: tx.hash,
   balance: 0,
   change: tx.value.toNumber(),
@@ -24,7 +24,6 @@ const toTransaction = (tx: ERC20Response, fees: Record<string, ERC20Response>): 
   date: DateTime.fromSeconds(tx.timestamp),
   from: NormalizeAddress(tx.from),
   to: NormalizeAddress(tx.to),
-  fee: toDecimal(fees[tx.hash]?.value),
   value: toDecimal(tx.value),
 })
 
@@ -36,13 +35,26 @@ export async function loadAndMergeHistory(fromBlock: number, contract: TheCoin, 
     const allTxs = await provider.getERC20History({address, contractAddress, startBlock: fromBlock});
 
     // Fee's are listed separately here, but treated as a single TX in the rest of TheCoin
-    const xferAssist = NormalizeAddress(process.env.WALLET_BrokerTransferAssistant_ADDRESS!);
-    const fees = allTxs
-      .filter(tx => NormalizeAddress(tx.to) == xferAssist)
-      .reduce((acc, tx) => { acc[tx.hash] = tx; return acc }, {} as Record<string, ERC20Response>);
-    const history = allTxs
-      .filter(tx => NormalizeAddress(tx.to) != xferAssist)
-      .map(tx => toTransaction(tx, fees));
+    //const xferAssist = NormalizeAddress(process.env.WALLET_BrokerTransferAssistant_ADDRESS!);
+    // const fees = allTxs
+    //   .filter(tx => NormalizeAddress(tx.to) == xferAssist)
+    //   .reduce((acc, tx) => { acc[tx.hash] = tx; return acc }, {} as Record<string, ERC20Response>);
+    // const history = allTxs
+    //   .filter(tx => NormalizeAddress(tx.to) != xferAssist)
+    //   .map(tx => toTransaction(tx, fees));
+
+    const converted: Record<string, Transaction> = {};
+    for (const tx of allTxs) {
+      if (!converted[tx.hash])
+        converted[tx.hash] = toTransaction(tx);
+      else if (isInternalAddress(tx.to)) {
+        // Check assumption.  This might fail when plugins are integrated
+        if (converted[tx.hash].fee) throw new Error("Multiple potential fee's found for transaction");
+        // When a second transaction is incurred, it implies the second transaction is a fee
+        converted[tx.hash].fee = toDecimal(tx.value);
+      }
+    }
+    const history = Object.values(converted).sort((a, b) => a.date.toMillis() - b.date.toMillis());
 
     let exact = await fetchExactTimestamps(contract, fromBlock, address);
     for (const tx of history) {

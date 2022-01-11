@@ -58,7 +58,8 @@ function fillBank(entry: ReconciledHistory, data: AllData, user: UserReconciled,
   if (bankActions.includes(entry.delta.type)) {
     const transferred = entry.state.fiat ?? entry.delta.fiat;
     if (!transferred) throw new Error("No Fiat found");
-    entry.bank = spliceBank(data, user, transferred, initiated, maxDays, type);
+    const date = entry.delta.date ?? initiated;
+    entry.bank = spliceBank(data, user, transferred, date, maxDays, type);
   };
 }
 
