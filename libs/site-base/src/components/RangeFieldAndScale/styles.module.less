@@ -1,53 +1,35 @@
-.variablesLabelContainer{
-  font-weight: bold;
-  text-align: left;
-  margin-left: 15%;
-}
+.container {
+  display: flex;
+  flex-direction: column;
 
-.variablesLabelValueContainer{
-  font-weight: bold;
-  text-align: right;
-  padding-right: 10%;
-}
+  .label {
+    font-weight: bold;
+    text-align: right;
+    margin-left: 15%;
+  }
 
-input[type=range]{
-    max-width: 350px;
-    min-width: 250px;
-}
+  .slider input[type="range"] {
+    width: 100%;
+    -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+    background: transparent; /* Otherwise white in Chrome */
+    border: none;
+    padding-left: 0px;
+    padding-right: 0px;
 
-.variablesScaleContainer{
-    font-size: 10px;
-    margin-top: -20px;
-}
+    &:hover {
+      box-shadow: none;
+    }
+  }
 
-// TODO - make this consistent with CSS modules
-
-label[for*="range"], label[htmlfor*="range"]
-{
-    display: block;
-}
-
-.ui.input > input[type=range]{
-  border: none;
-}
-
-input[type=range] {
-  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
-  width: 100%; /* Specific width is required for Firefox. */
-  background: transparent !important; /* Otherwise white in Chrome */
+  .scales {
+    font-size : 10px;
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
-}
-
-
-input[type=range] {
-  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
-}
-
-input[type=range]:focus {
-  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
 }
 
 input[type=range]::-ms-track {

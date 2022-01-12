@@ -1,69 +1,48 @@
 import * as React from 'react';
-import { Form, Grid, InputOnChangeData } from 'semantic-ui-react';
+import { Input, Grid, InputOnChangeData } from 'semantic-ui-react';
 import { useState } from 'react';
 import styles from './styles.module.less';
 import { FormattedNumber } from 'react-intl';
 
 
 export type Props = {
- labelValue: string;
- labelValueCurrency: string;
  scaleType?: "decimal" | "percent" | "currency" | "unit" | undefined;
- minRange: number;
- maxRange: number;
- stepRange: number;
- minRangeScale: number;
- medRangeScale: number;
- maxRangeScale: number;
+ initial?: number;
+ minimum: number;
+ maximum: number;
+ step?: number;
+ onChange?: (value: number) => void;
 }
 
 export const RangeFieldAndScale = (props: Props) => {
 
-    const [starting, setStarting] = useState(0);
+    const [value, setValue] = useState(props.initial ?? 0);
 
     const handleChange = (_event: React.SyntheticEvent<HTMLElement, Event>, data: InputOnChangeData) => {
-      setStarting(parseInt(data.value));
+      setValue(parseInt(data.value));
+      props.onChange?.(value);
     };
 
     return (
-      <>
-       <div className={ `${styles.variablesLabelContainer} x10spaceBefore x6spaceAfter` }>{props.labelValue}</div>
-        <Grid columns='equal' textAlign='center'  className={styles.variablesValueContainer}>
-          <Grid.Row>
-            <Grid.Column>
-            </Grid.Column>
-            <Grid.Column>
-            </Grid.Column>
-            <Grid.Column className={styles.variablesLabelValueContainer}>
-              <FormattedNumber value={starting} localeMatcher="best fit" unitDisplay="narrow" style={props.scaleType} currency={ props.labelValueCurrency } />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-
-        <Form.Input id="rangeStarting"
-            min={props.minRange}
-            max={props.maxRange}
-            name='starting'
-            onChange={handleChange}
-            step={props.stepRange}
-            type='range'
-            value={starting}
-          />
-        <div className={`${styles.variablesScaleContainer} x6spaceAfter`}>
-            <Grid columns='equal' textAlign='center'>
-              <Grid.Row>
-                <Grid.Column>
-                  {props.minRangeScale}
-                </Grid.Column>
-                <Grid.Column>
-                  {props.medRangeScale}
-                </Grid.Column>
-                <Grid.Column>
-                  {props.maxRangeScale}
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
+      <div className={styles.container}>
+        <div className={styles.label}>
+          <FormattedNumber value={value} localeMatcher="best fit" unitDisplay="narrow" style={props.scaleType} />
         </div>
-      </>
+        <Input
+          className={styles.slider}
+          min={props.minimum}
+          max={props.maximum}
+          name='starting'
+          onChange={handleChange}
+          step={props.step}
+          type='range'
+          value={value}
+        />
+        <div className={styles.scales}>
+          <span>{props.minimum}</span>
+          <span>{(props.minimum + props.maximum) / 2}</span>
+          <span>{props.maximum}</span>
+        </div>
+      </div>
     );
 };
