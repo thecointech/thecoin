@@ -23,20 +23,26 @@ const translations = defineMessages({
 
 export const FormCompare = () => {
 
+  // TODO: Connect all o' dis
+  const onChange = () => {};
+
   return (
     <div id={styles.variablesContainer}>
 
       <RangeFieldAndScale
         label={translations.startingValue}
         scaleType="currency"
+        currency="CAD"
         maximum={1000}
         step={1}
+        onChange={onChange}
       />
 
       <RangeFieldAndScale
         label={translations.rangeDuration}
         scaleType="unit"
         maximum={60}
+        onChange={onChange}
       />
 
       <Button secondary className={`${styles.buttonContainer} x16spaceBefore`}>
