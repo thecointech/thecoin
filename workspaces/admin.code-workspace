@@ -2,46 +2,46 @@
 	"folders": [
     {
       "name": "admin",
-      "path": "apps/admin"
+      "path": "../apps/admin"
     },
     {
       "name": "tx-etransfer",
-      "path": "libs/tx-etransfer"
+      "path": "../libs/tx-etransfer"
     },
     {
       "name": "shared",
-      "path": "libs/shared"
+      "path": "../libs/shared"
     },
     {
       "name": "tx-reconciliation",
-      "path": "libs/tx-reconciliation"
+      "path": "../libs/tx-reconciliation"
     },
     {
       "name": "tx-gmail",
-      "path": "libs/tx-gmail"
+      "path": "../libs/tx-gmail"
     },
     {
       "name": "broker-db",
-      "path": "libs/broker-db"
+      "path": "../libs/broker-db"
     },
     {
       "name": "utils-ts",
-      "path": "libs/utils-ts"
+      "path": "../libs/utils-ts"
     },
     {
       "name": "store",
-      "path": "libs/store"
+      "path": "../libs/store"
     },
     {
       "name": "logging",
-      "path": "libs/logging"
+      "path": "../libs/logging"
     },
     {
       "name": "contract",
-      "path": "libs/contract"
+      "path": "../libs/contract"
     },
     {
-      "path": "libs/signers"
+      "path": "../libs/signers"
     }
   ],
   "settings": {
@@ -54,8 +54,8 @@
       ".eslintignore": "ignore",
       ".flowconfig": "ignore"
     },
-    "jest.pathToJest": "./node_modules/.bin/jest",
-    "jestrunner.jestPath": "${workspaceFolder}/../../node_modules/jest/bin/jest.js",
+    "jest.pathToJe../st": "./node_modules/.bin/jest",
+    "jestrunner.jestPath": "../${workspaceFolder}/../../node_modules/jest/bin/jest.js",
     "npm.packageManager": "yarn",
     "files.exclude": {
       "**/build": true,

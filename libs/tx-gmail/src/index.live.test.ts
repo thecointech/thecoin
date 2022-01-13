@@ -1,6 +1,6 @@
 // reset env
 process.env.CONFIG_NAME='prod';
-import { getEnvVars } from "../../../tools/setenv";
+import { getEnvVars } from "@thecointech/setenv";
 import { queryETransfers, queryNewDepositEmails } from './query'
 import { ConfigStore } from '@thecointech/store';
 import { IsValidAddress } from '@thecointech/utilities';

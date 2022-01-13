@@ -8,20 +8,20 @@ import { useHistory } from 'react-router';
 
 import illustration from "./images/illust_flowers.svg";
 
-
 const translate = defineMessages({
-      aboveTheTitle : {
-        id: "shared.account.uploadWallet.aboveTheTitle",
-        defaultMessage:"Restore Account",
-        description:"shared.account.uploadWallet.aboveTheTitle: The above the title title for the upload your account page"},
-      title : {
-        id: "shared.account.uploadWallet.title",
-        defaultMessage:"Load an Account",
-        description:"shared.account.uploadWallet.title: Title for the upload your account page"},
-      dropZone : {
-        id: "shared.account.uploadWallet.dropZone",
-        defaultMessage:"Drag 'n' drop a wallet file here, or click to browse",
-        description:"shared.account.uploadWallet.dropZone: The title for the drop zone on the upload your account page"}});
+  aboveTheTitle: {
+    defaultMessage: "Restore Account",
+    description: "shared.account.uploadWallet.aboveTheTitle: The above the title title for the upload your account page"
+  },
+  title: {
+    defaultMessage: "Load an Account",
+    description: "shared.account.uploadWallet.title: Title for the upload your account page"
+  },
+  dropZone: {
+    defaultMessage: "Drag 'n' drop a wallet file here, or click to browse",
+    description: "shared.account.uploadWallet.dropZone: The title for the drop zone on the upload your account page"
+  }
+});
 
 export type ReadFileData = {
   wallet: string;

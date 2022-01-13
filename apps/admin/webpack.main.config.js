@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const { getEnvVars } = require('../../tools/setenv')
+const { getEnvVars } = require('@thecointech/setenv')
 const { merge } = require("webpack-merge")
 const mockOptions = require('./webpack.mocks');
 

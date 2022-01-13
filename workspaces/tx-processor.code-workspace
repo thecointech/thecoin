@@ -2,51 +2,51 @@
 	"folders": [
 		{
 			"name": "tx-processor",
-			"path": "apps/tx-processor"
+			"path": "../apps/tx-processor"
 		},
 		{
 			"name": "tx-bill",
-			"path": "libs/tx-bill"
+			"path": "../libs/tx-bill"
 		},
 		{
 			"name": "tx-etransfer",
-			"path": "libs/tx-etransfer"
+			"path": "../libs/tx-etransfer"
 		},
 		{
 			"name": "tx-deposit",
-			"path": "libs/tx-deposit"
+			"path": "../libs/tx-deposit"
 		},
 		{
 			"name": "tx-statemachine",
-			"path": "libs/tx-statemachine"
+			"path": "../libs/tx-statemachine"
 		},
 		{
 			"name": "broker-db",
-			"path": "libs/broker-db"
+			"path": "../libs/broker-db"
 		},
 		{
 			"name": "tx-gmail",
-			"path": "libs/tx-gmail"
+			"path": "../libs/tx-gmail"
 		},
 		{
 			"name": "rbcapi",
-			"path": "libs/rbcapi"
+			"path": "../libs/rbcapi"
 		},
 		{
 			"name": "utils-ts",
-			"path": "libs/utils-ts"
+			"path": "../libs/utils-ts"
 		},
 		{
 			"name": "store",
-			"path": "libs/store"
+			"path": "../libs/store"
 		},
 		{
 			"name": "logging",
-			"path": "libs/logging"
+			"path": "../libs/logging"
 		},
 		{
 			"name": "contract",
-			"path": "libs/contract"
+			"path": "../libs/contract"
 		}
 	],
 	"settings": {

@@ -1,5 +1,5 @@
 
-import  { getEnvVars } from "../../../../tools/setenv";
+import  { getEnvVars } from "@thecointech/setenv";
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { prepareBillPayee } from '.';
 import * as manage from './managePayees';

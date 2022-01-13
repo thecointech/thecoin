@@ -1,5 +1,5 @@
 
-import  { getEnvVars } from "../../../../tools/setenv";
+import  { getEnvVars } from "@thecointech/setenv";
 import { deletePayee, addPayee } from './managePayees';
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { getPayeeOptions, openBillPaymentPage } from '.';

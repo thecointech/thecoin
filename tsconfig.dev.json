@@ -2,7 +2,7 @@
   "extends": "./tsconfig.base.json",
   "ts-node": {
     "require": [
-      "./tools/setenv",
+      "@thecointech/setenv",
       "./__mocks__/mock_node",
     ]
   },

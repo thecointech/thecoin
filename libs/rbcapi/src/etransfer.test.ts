@@ -1,5 +1,5 @@
 process.env.CONFIG_NAME = "prod";
-require("../../../tools/setenv");
+require("@thecointech/setenv");
 
 import { RbcStore } from './store';
 import { ApiAction, initBrowser } from './action';
