@@ -1,9 +1,9 @@
 import React from 'react';
-import { Story, Meta } from '@storybook/react';
+import { Story } from '@storybook/react';
+import type { NumberFormatOptionsStyle } from '@formatjs/ecma402-abstract';
+import { RangeFieldAndScale } from '.';
 
-import { RangeFieldAndScale, Props } from '.';
-
-export default {
+const meta = {
   title: 'Landing/RangeFieldAndScale',
   component: RangeFieldAndScale,
   parameters: {
@@ -14,14 +14,21 @@ export default {
       ],
     },
   },
+  argTypes: { onChange: { action: 'onChange' } },
   args: {
     label: "Label",
-    currency: "CAD",
-    scaleType: "currency",
+    currency: "CAD" as "CAD",
+    scaleType: "currency" as NumberFormatOptionsStyle,
     minimum: 0,
     maximum: 100,
     step: 1,
   }
-} as Meta;
+};
 
-export const Slider: Story<Props> = (props) => <RangeFieldAndScale {...props} />
+export default meta;
+export const Slider: Story<typeof meta["args"]> = ({label, ...rest}) => (
+  <RangeFieldAndScale
+    {...rest}
+    label={{id: 1, defaultMessage: label}}
+  />
+)
