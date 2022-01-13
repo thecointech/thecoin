@@ -6,6 +6,7 @@ import { IsValidAddress, getAddressShortCode } from "@thecointech/utilities";
 import Decimal from "decimal.js-light";
 import { BuyActionContainer, getCurrentState } from "@thecointech/tx-statemachine";
 import { verifyPreTransfer } from "@thecointech/tx-statemachine/transitions";
+import { DateTime } from 'luxon';
 
 //
 // Deposit an eTransfer and update fiat balance
@@ -36,7 +37,8 @@ async function doDeposit(container: BuyActionContainer) {
   // Return new balance of transaction
   return {
     fiat: new Decimal(etransfer.cad),
-    meta: result.confirmation.toString()
+    meta: result.confirmation.toString(),
+    date: DateTime.now(),
   }
 }
 
