@@ -4,12 +4,20 @@ import { Story, Meta } from '@storybook/react';
 import { RangeFieldAndScale, Props } from '.';
 
 export default {
-  title: 'Base/RangeFieldAndScale',
+  title: 'Landing/RangeFieldAndScale',
   component: RangeFieldAndScale,
+  parameters: {
+    backgrounds: {
+      default: 'graphColor',
+      values: [
+        { name: 'graphColor', value: '#138175' },
+      ],
+    },
+  },
   args: {
-    labelValue: "Label",
-    labelValueCurrency: "$",
-    scaleType: "decimal",
+    label: "Label",
+    currency: "CAD",
+    scaleType: "currency",
     minimum: 0,
     maximum: 100,
     step: 1,
