@@ -13,12 +13,10 @@ export async function waitCoin(container: AnyActionContainer) {
   const hash = currentState.delta.hash;
   if (!hash) return { error: "Cannot await transaction, no hash present"};
   const receipt = await waitTransaction(container.contract, hash);
-  // get the value transferred
-  container.contract.interface.parseLog(receipt.logs[0]);
   return receipt
     ? {
         meta: `status: ${receipt.status}`,
-        coin: getCoinBalance(container, receipt),
+        coin: updateCoinBalance(container, receipt),
       }
     // Our tx has not yet been mined.  While not critical, it is concerning.
     // We have warned, but now return null to allow back-off-and-retry.
@@ -34,7 +32,7 @@ function parseLog(contract: TheCoin, log: TransactionReceipt["logs"][0]) {
     return null;
   }
 }
-export function getCoinBalance(container: AnyActionContainer, receipt: TransactionReceipt) {
+export function updateCoinBalance(container: AnyActionContainer, receipt: TransactionReceipt) {
 
   const parsed = receipt.logs.map(l => parseLog(container.contract, l))
   // We use ExactTransfer instead of Transfer because we know there
