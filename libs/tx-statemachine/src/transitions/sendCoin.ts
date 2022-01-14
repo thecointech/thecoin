@@ -27,7 +27,6 @@ const doSendCoin: TransitionCallback = async (container) => {
   // If completion is required add 'waitCoin' transition.
   return {
     hash,
-    coin: new Decimal(0),
   };
 }
 

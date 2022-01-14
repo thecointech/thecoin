@@ -35,7 +35,6 @@ const doDepositCoin: TransitionCallback<BSActionTypes> = async (container) => {
   return (tx.hash)
     ? {
         hash: tx.hash,
-        coin: new Decimal(value),
         meta: tx.confirmations.toString()
       }
     : {
