@@ -1,4 +1,3 @@
-import { Decimal } from "decimal.js-light";
 import { getCurrentState, TransitionCallback, TypedActionContainer } from "../types";
 import { verifyPreTransfer } from "./verifyPreTransfer";
 import { TransactionResponse } from '@ethersproject/providers';
