@@ -1,5 +1,5 @@
 
-import { getCoinBalance } from "./waitCoin";
+import { updateCoinBalance } from "./waitCoin";
 import { getEnvVars } from "@thecointech/setenv";
 import { GetContract } from '@thecointech/contract-core/contract';
 import { InfuraProvider } from "@ethersproject/providers";
@@ -29,7 +29,7 @@ describe("Blockchain check operations", () => {
     const container = getContainer("0x0b8343eecf572c81bcaba8e27285e40a55496e5d");
     const receipt = await container.contract.provider.waitForTransaction(hash, 0);
 
-    const balance = getCoinBalance(container, receipt)
+    const balance = updateCoinBalance(container, receipt)
     expect(balance.eq(446826763)).toBeTruthy();
   })
 
@@ -40,7 +40,7 @@ describe("Blockchain check operations", () => {
     const hash = "0x34d1bd18bfda8f79e8f790fef4103a8bc73852ecf285e486264cb50004e57f3f";
     const container = getContainer("0x4d397e03e28b6041d8bc559debdc1742d33f59ad", new Decimal(475961968));
     const receipt = await container.contract.provider.waitForTransaction(hash, 0);
-    const balance = getCoinBalance(container, receipt)
+    const balance = updateCoinBalance(container, receipt)
     expect(balance.eq(0)).toBeTruthy();
   })
 

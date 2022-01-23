@@ -15,7 +15,7 @@ export async function waitCoin(container: AnyActionContainer) {
   const receipt = await waitTransaction(container.contract, hash);
   return receipt
     ? {
-        meta: `status: ${receipt.status}`,
+        meta: `confirmations: ${receipt.confirmations}`,
         coin: updateCoinBalance(container, receipt),
       }
     // Our tx has not yet been mined.  While not critical, it is concerning.
