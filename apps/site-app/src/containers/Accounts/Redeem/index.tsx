@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { defineMessages } from 'react-intl';
-import { BuildVerifiedSale } from '@thecointech/utilities/VerifiedSale';
+import { BuildVerifiedSale, isPacketValid } from '@thecointech/utilities/VerifiedSale';
 import { weBuyAt } from '@thecointech/fx-rates';
 import { GetStatusApi, GetETransferApi } from 'api'
 import { ETransferPacket } from '@thecointech/types';
@@ -63,6 +63,23 @@ export const Redeem = () => {
       log.info("Cannot submit: missing one of the required fields");
       return false;
     }
+
+    // To redeem, we construct & sign a message that
+    // that allows the broker to transfer TheCoin to itself
+    const eTransfer: ETransferPacket = {
+      email, question, answer, message
+    }
+    if (!isPacketValid(eTransfer)) {
+      // This should never hit, the pre-validation
+      // should catch all errors.  However, this runs
+      // through the same validation code that runs
+      // on the server, so it's theoretically possible it could pick
+      // something the individual validators don't
+      log.error("Packate validation failed!");
+      setErrorHidden(false)
+      return false;
+    }
+
     log.trace("Commencing eTransfer");
     setTransferMessage(translations.step1);
     setPercentComplete(0.0);
@@ -72,7 +89,7 @@ export const Redeem = () => {
     var { data } = await statusApi.status();
     // Check out if we have the right values
     if (!data.certifiedFee) {
-      setErrorHidden(false)
+      setErrorHidden(false);
       return false;
     }
 
@@ -83,11 +100,6 @@ export const Redeem = () => {
     if (!signer || !contract)
       return false;
 
-    // To redeem, we construct & sign a message that
-    // that allows the broker to transfer TheCoin to itself
-    const eTransfer: ETransferPacket = {
-      email, question, answer, message
-    }
     const command = await BuildVerifiedSale(
       eTransfer,
       signer,
