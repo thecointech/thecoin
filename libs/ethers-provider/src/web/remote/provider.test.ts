@@ -1,5 +1,5 @@
 import { getEnvVars } from '@thecointech/setenv';
-import { Erc20Provider } from './provider';
+import { Erc20Provider } from '.';
 import { describe, IsManualRun } from '@thecointech/jestutils'
 
 describe('manual test', () => {

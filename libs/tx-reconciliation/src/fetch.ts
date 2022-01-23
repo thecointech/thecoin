@@ -18,7 +18,7 @@ export async function fetchAllRecords(bankApi: IBank) : Promise<AllData>{
   const users = await getAllUsers();
   const dbs = await getAllActions(users);
   log.trace('Fetched database info');
-  const blockchain = await fetchAndCleanCoinHistory();
+  const blockchain = await fetchCoinHistory();
   log.trace('Fetched raw blockchain info');
 
   log.debug('Fetch complete');
@@ -36,13 +36,5 @@ async function fetchAndCleanETransfers() {
     ...et,
     address: NormalizeAddress(et.address)
   }));
-}
-async function fetchAndCleanCoinHistory() {
-  const coinHistory = await fetchCoinHistory();
-  return coinHistory.map(et => ({
-    ...et,
-    counterPartyAddress: NormalizeAddress(et.counterPartyAddress)
-
-  }))
 }
 

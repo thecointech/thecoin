@@ -16,6 +16,7 @@ import { RbcApi } from '@thecointech/rbcapi';
 
 jest.mock('@thecointech/utilities/Encrypt')
 const mockedEncrypt = mocked(decryptTo, false);
+jest.setTimeout(900000);
 
 it('Succesfully Processes Sell', async ()=> {
   jest.setTimeout(90000000);

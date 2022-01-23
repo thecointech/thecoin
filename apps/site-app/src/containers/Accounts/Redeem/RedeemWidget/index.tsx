@@ -47,6 +47,10 @@ const translations = defineMessages({
   entryIsRequired : {
       defaultMessage: 'This field is required',
       description: 'Error on attempted submission without completing field'},
+  entryTooShort: {
+    defaultMessage: 'This entry needs to be at least {count} letters long',
+    description: 'Error on attempted submission without completing field'},
+
   noSpecialCaractDesc : {
       defaultMessage: 'No numbers or special characters',
       description: 'app.accounts.redeem.form.noSpecialCaractDesc: Label for the form the make a payment page / etransfert tab'},
@@ -90,9 +94,17 @@ type VisualProps={
 
 };
 
-const validateChars = (re: () => RegExp) => (value: string) => {
-  if (!value?.length) {
-    return translations.entryIsRequired
+const validateChars = (re: () => RegExp, minimumLength: number) => (value: string) => {
+  if (minimumLength > 0 && !value?.length) {
+    return translations.entryIsRequired;
+  }
+  if (value.length < minimumLength) {
+    return {
+      ...translations.entryTooShort,
+      values: {
+        count: minimumLength
+      }
+    }
   }
   const match = re().exec(value);
   return match
@@ -104,8 +116,9 @@ const validateChars = (re: () => RegExp) => (value: string) => {
       }
     : null;
 }
-const validateAnswer = validateChars(invalidAnswer);
-const validateQuestion = validateChars(invalidQuestion);
+const validateAnswer = validateChars(invalidAnswer, 3);
+const validateQuestion = validateChars(invalidQuestion, 3);
+const validateMessage = validateChars(invalidQuestion, 0);
 
 export const RedeemWidget = (props: VisualProps) => {
   const commonProps = {
@@ -169,7 +182,7 @@ export const RedeemWidget = (props: VisualProps) => {
           />
         <UxInput
             className={"borderTop"}
-            onValidate={validateQuestion}
+            onValidate={validateMessage}
             intlLabel={translations.messageLabel}
             onValue={props.setMessage}
             placeholder={translations.messageDesc}

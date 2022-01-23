@@ -124,7 +124,7 @@ function AccountReducer(address: string, initialState: AccountState) {
       const oldHistory = this.state.history;
       const fromBlock = this.state.historyEndBlock || InitialCoinBlock;
       // Retrieve transactions for all time
-      const newHistory: Transaction[] = yield call(loadAndMergeHistory, address, fromBlock, contract);
+      const newHistory: Transaction[] = yield call(loadAndMergeHistory, fromBlock, contract, address);
       // Take current balance and use it plus Tx to reconstruct historical balances.
       calculateTxBalances(balance, newHistory);
       // Get the current block (save it so we know where we were up to in the future.)

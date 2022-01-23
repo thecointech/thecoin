@@ -1,22 +1,19 @@
 import { Transaction } from "@thecointech/tx-blockchain";
-import { AllData, User, ReconciledRecord } from "types";
+import { AllData, User } from "types";
+import { Decimal } from "decimal.js-light";
 
 // Next, the tx hash should match blockchain
-export function spliceBlockchain(data: AllData, user: User, record: ReconciledRecord, hash: string) {
-  const bc = findBlockchain(data.blockchain, user, record.action, hash);
+export function spliceBlockchain(data: AllData, hash: string) {
+  const bc = data.blockchain.find(bc => bc.txHash === hash);
   return (bc)
     ? data.blockchain.splice(data.blockchain.indexOf(bc), 1)[0]
     : null;
 }
 
-function findBlockchain(blockchain: Transaction[], user: User, tx: any, hash: string) {
-  const bc = blockchain.find(bc => bc.txHash === hash)
-  if (bc || tx.hash.startsWith('0x'))
-    return bc;
-
-  // Some blockchain transactions were recorded without hash!
-  let candidates = blockchain.filter(bc => bc.counterPartyAddress === user.address);
-  candidates = candidates.filter(bc => bc.change === tx.transfer.value);
+// Kept for posterity.  DB is required to record hash
+export function findBlockchain(blockchain: Transaction[], user: User, amount: Decimal) {
+  let candidates = blockchain.filter(bc => [bc.to, bc.from].includes(user.address));
+  candidates = candidates.filter(bc => amount.eq(bc.value));
 
   if (candidates.length === 1)
     return candidates[0];

@@ -1,6 +1,6 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
 
-export const deployProvider = () => {
+export const getProvider = () => {
 
   const port = process.env.DEPLOY_NETWORK_PORT;
   if (!port)

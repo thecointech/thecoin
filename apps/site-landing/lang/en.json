@@ -341,10 +341,6 @@
     "defaultMessage": "Success: check your emails",
     "description": "site.subscribe.success: Message we give a user when the subscription is a success"
   },
-  "tk3UgV": {
-    "defaultMessage": "CAD",
-    "description": "site.compare.label.rangeStartingCurrency: label for Starting Value Currency Text field in the compare page"
-  },
   "tzKdah": {
     "defaultMessage": "Start Now",
     "description": "site.homepage.wealthier.startnow.title: The title for the star now for the homepage wealthier"

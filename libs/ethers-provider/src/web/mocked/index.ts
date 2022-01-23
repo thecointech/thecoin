@@ -1,7 +1,7 @@
 import { BlockTag, Filter, BaseProvider, Log } from '@ethersproject/providers';
 import { hexZeroPad } from "@ethersproject/bytes";
 import { BigNumber } from "@ethersproject/bignumber";
-import { ERC20Response } from '../prod/erc20response';
+import { ERC20Response } from '../erc20response';
 import { log } from '@thecointech/logging';
 import transferFrom from './logs-transfer-from.json';
 import transferTo from './logs-transfer-to.json';
@@ -17,7 +17,7 @@ export class Erc20Provider extends BaseProvider {
   //
   // In devlive, we do not have access to Etherscans advanced api
   // but we can replicate using just events
-  async getERC20History(args: {address: string, contractAddress?: string, startBlock?: BlockTag, endBlock?: BlockTag}) {
+  async getERC20History(args: {address?: string, contractAddress?: string, startBlock?: BlockTag, endBlock?: BlockTag}) {
 
     const remapping: any = await getRemapping(args.address);
     const result = [...transferFrom.result, ...transferTo.result];
@@ -59,12 +59,15 @@ export class Erc20Provider extends BaseProvider {
   }
 }
 
-async function getRemapping(clientAddress: string) : Promise<Record<string, string>> {
+async function getRemapping(clientAddress?: string) : Promise<Record<string, string>> {
   // This remapping will not work in development node scripts
   // As this function currently only happens on the website that shouldn't be a problem
   if (!process.env.WALLET_BrokerCAD_ADDRESS) log.warn("Expected BrokerCAD address is missing, remapping will not work");
   return {
-    client: clientAddress,
+    // random address if none supplied
+    client: clientAddress ?? "0x383Bece786eB848e51A373B2dd96914B0ac1b04B",
     broker: process.env.WALLET_BrokerCAD_ADDRESS ?? "BROKER_ADDRESS_MISSING",
   }
 }
+
+export const getProvider = () => new Erc20Provider()

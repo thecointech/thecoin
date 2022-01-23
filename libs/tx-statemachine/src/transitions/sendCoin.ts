@@ -21,26 +21,24 @@ const doSendCoin: TransitionCallback = async (container) => {
   }
 
   const settledDate = findSettledDate(container);
-  var hash = await startTheTransfer(container.action.address, currentState.data.coin, settledDate, container.contract);
+  var tx = await startTheTransfer(container.action.address, currentState.data.coin, settledDate, container.contract);
 
   // We only start the transfer (do not wait for completion).
   // If completion is required add 'waitCoin' transition.
   return {
-    hash,
-    coin: new Decimal(0),
+    meta: tx.nonce.toString(),
+    hash: tx.hash,
   };
 }
 
 async function startTheTransfer(address: string, value: Decimal, settled: DateTime, contract: TheCoin)
 {
   log.debug({address}, `Transfering ${value.toString()} to {address}`);
-
-  const tx = await contract.exactTransfer(
+  return contract.exactTransfer(
     address,
     value.toNumber(),
     settled.toMillis(),
   );
-  return tx.hash;
 }
 
 function findSettledDate(container: AnyActionContainer) {
