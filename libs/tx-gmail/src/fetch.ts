@@ -6,7 +6,7 @@ import { isPresent } from '@thecointech/utilities';
 let __gmail: gmail_v1.Gmail | null = null;
 const getGmail = () => {
   if (!__gmail)
-    throw new Error("GMail API not initialized, please call initialiseApi");
+    throw new Error("GMail API not initialized, please call initializeApi");
   return __gmail;
 }
 

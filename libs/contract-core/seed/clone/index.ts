@@ -69,12 +69,11 @@ export class Processor {
       ])
     );
 
-    const history: Transaction[] = await loadAndMergeHistory(null as any, 22291140, contract);
+    const history: Transaction[] = await loadAndMergeHistory(22291140, contract);
     this.history = history.map(h => ({
       ...h,
       from: NormalizeAddress(h.from),
       to: NormalizeAddress(h.to),
-      counterPartyAddress: NormalizeAddress(h.counterPartyAddress),
     }));
     return true;
   }
