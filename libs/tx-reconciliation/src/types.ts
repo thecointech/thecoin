@@ -1,7 +1,8 @@
 import type { eTransferData } from "@thecointech/tx-gmail";
-import { ActionDictionary, AnyAction } from "@thecointech/broker-db";
+import { ActionDictionary, ActionType, AnyAction, TransitionDelta } from "@thecointech/broker-db";
 import { DateTime } from "luxon";
-import { Transaction } from "@thecointech/tx-blockchain/";
+import { Decimal } from "decimal.js-light";
+import { Transaction } from '@thecointech/tx-blockchain';
 
 ////////////////////////////////
 // input types
@@ -17,6 +18,7 @@ export type DbRecords = {
   Sell: ActionDictionary<"Sell">;
   Bill: ActionDictionary<"Bill">;
 }
+
 export type AllData = {
   eTransfers: eTransferData[];
   dbs: DbRecords;
@@ -27,18 +29,27 @@ export type AllData = {
 ////////////////////////////////
 // ouput type
 
+export type ReconciledHistory = {
+  state: TransitionDelta, // State prior to transition
+  delta: TransitionDelta, // Changes resulting from transition
+  // NOTE: undefined means we haven't looked for it
+  // null means we haven't found it.
+  bank?: BankRecord | null,
+  blockchain?: Transaction | null,
+}
 export type ReconciledRecord = {
-  action: AnyAction;
-  // TODO: Complete db upgrade by fixing these types back to TypedAction
-  //data: AnyAction; // final/database data.  Can be set directly to db
+  data: {
+    type: ActionType,
+    id: string;  // InitialID
+    initiated: DateTime;
+    fiat?: Decimal;
+    coin?: Decimal;
 
+    history: ReconciledHistory[],
+  },
+  // We assume all records are in our database
   database: AnyAction | null; // current database record
   email: eTransferData | null; // data from e-transfers
-  bank: BankRecord[]; // data from bank, can be multiple in case of failed e-transfers
-  blockchain: Transaction | null; // data from blockchain
-
-  refund?: Transaction; // If this tx was refunded, fill this out
-  cancelled?: BankRecord; // If this etransfer was cancelled, fill this out
 }
 
 export type User = {
