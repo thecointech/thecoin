@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.59](https://github.com/thecointech/thecoin/compare/v0.2.58...v0.2.59) (2022-01-23)
+
+
+### Bug Fixes
+
+* apps/rates-service/package.json to reduce vulnerabilities ([2298d45](https://github.com/thecointech/thecoin/commit/2298d45e609e2c791230a6cb1ad6c28ba1d7d717))
+
+
+
+
+
 ## [0.2.55](https://github.com/thecointech/thecoin/compare/v0.2.54...v0.2.55) (2021-12-11)
 
 **Note:** Version bump only for package @thecointech/rates-service
