@@ -1,7 +1,7 @@
 import { BlockTag, Filter, BaseProvider, Log } from '@ethersproject/providers';
 import { hexZeroPad } from "@ethersproject/bytes";
 import { BigNumber } from "@ethersproject/bignumber";
-import { ERC20Response } from '../prod/erc20response';
+import { ERC20Response } from '../erc20response';
 import { log } from '@thecointech/logging';
 import transferFrom from './logs-transfer-from.json';
 import transferTo from './logs-transfer-to.json';
@@ -69,3 +69,5 @@ async function getRemapping(clientAddress?: string) : Promise<Record<string, str
     broker: process.env.WALLET_BrokerCAD_ADDRESS ?? "BROKER_ADDRESS_MISSING",
   }
 }
+
+export const getProvider = () => new Erc20Provider()
