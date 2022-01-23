@@ -1,10 +1,10 @@
-import { Transaction } from "./types";
+import { isInternalAddress, Transaction } from "./types";
 import { TheCoin } from '@thecointech/contract-core';
 import { BigNumber } from "@ethersproject/bignumber";
 import { DateTime } from "luxon";
 import { Decimal } from "decimal.js-light";
 import { log } from '@thecointech/logging';
-import type { ERC20Response } from '@thecointech/ethers-provider';
+import { Erc20Provider, ERC20Response } from '@thecointech/ethers-provider';
 import {NormalizeAddress} from '@thecointech/utilities';
 
 // Load account history and merge with local
@@ -14,32 +14,58 @@ export function mergeTransactions(history: Transaction[], moreHistory: Transacti
   return mergedHistory;
 }
 
-const toTransaction = (tx: ERC20Response) : Transaction => ({
+function toDecimal(v: BigNumber) : Decimal;
+function toDecimal(v?: BigNumber) { return v ? new Decimal(v.toString()) : undefined; }
+const toTransaction = (tx: ERC20Response): Transaction => ({
   txHash: tx.hash,
   balance: 0,
   change: tx.value.toNumber(),
-  counterPartyAddress: tx.from,
+  counterPartyAddress: NormalizeAddress(tx.from),
   date: DateTime.fromSeconds(tx.timestamp),
-  from: tx.from,
-  to: tx.to,
-  value: new Decimal(tx.value.toNumber()),
+  from: NormalizeAddress(tx.from),
+  to: NormalizeAddress(tx.to),
+  value: toDecimal(tx.value),
 })
 
-export async function loadAndMergeHistory(address: string, fromBlock: number, contract: TheCoin) {
+export async function loadAndMergeHistory(fromBlock: number, contract: TheCoin, address?: string) {
 
   try {
-    const { provider } = contract;
     const contractAddress = contract.address;
+    const provider = new Erc20Provider();
     const allTxs = await provider.getERC20History({address, contractAddress, startBlock: fromBlock});
-    const history = allTxs.map(toTransaction);
 
-    const exact = await fetchExactTimestamps(contract, fromBlock, address);
-    for (const tx of history) {
-      if (exact[tx.txHash])
-        tx.date = DateTime.fromMillis(exact[tx.txHash]);
-      if (NormalizeAddress(tx.from) == address)
-        tx.change = -tx.change;
+    // Fee's are listed separately here, but treated as a single TX in the rest of TheCoin
+    //const xferAssist = NormalizeAddress(process.env.WALLET_BrokerTransferAssistant_ADDRESS!);
+    // const fees = allTxs
+    //   .filter(tx => NormalizeAddress(tx.to) == xferAssist)
+    //   .reduce((acc, tx) => { acc[tx.hash] = tx; return acc }, {} as Record<string, ERC20Response>);
+    // const history = allTxs
+    //   .filter(tx => NormalizeAddress(tx.to) != xferAssist)
+    //   .map(tx => toTransaction(tx, fees));
+
+    const converted: Record<string, Transaction> = {};
+    for (const tx of allTxs) {
+      if (!converted[tx.hash])
+        converted[tx.hash] = toTransaction(tx);
+      else if (isInternalAddress(tx.to)) {
+        // Check assumption.  This might fail when plugins are integrated
+        if (converted[tx.hash].fee) throw new Error("Multiple potential fee's found for transaction");
+        // When a second transaction is incurred, it implies the second transaction is a fee
+        converted[tx.hash].fee = toDecimal(tx.value);
+      }
     }
+    const history = Object.values(converted).sort((a, b) => a.date.toMillis() - b.date.toMillis());
+
+    let exact = await fetchExactTimestamps(contract, provider, fromBlock, address);
+    for (const tx of history) {
+      if (exact[tx.txHash]) {
+        tx.date = DateTime.fromMillis(exact[tx.txHash]);
+      }
+      if (NormalizeAddress(tx.from) == address) {
+        tx.change = -tx.change;
+      }
+    }
+
     return history;
   }
   catch (err: any) {
@@ -48,19 +74,28 @@ export async function loadAndMergeHistory(address: string, fromBlock: number, co
   return [];
 }
 
-async function fetchExactTimestamps(contract: TheCoin, fromBlock: number, address: string) {
-  const exactFrom = await filterExactTransfers(contract, fromBlock, [address, null]);
-  const exactTo = await filterExactTransfers(contract, fromBlock, [null, address]);
-  return [...exactTo, ...exactFrom].reduce((acc, item) => ({
+async function fetchExactTimestamps(contract: TheCoin, provider: Erc20Provider, fromBlock: number, address?: string) {
+  if (!address) {
+    return await filterExactTransfers(contract, provider, fromBlock, [null, null]);
+  }
+  else {
+    const exactFrom = await filterExactTransfers(contract, provider, fromBlock, [address, null]);
+    const exactTo = await filterExactTransfers(contract, provider, fromBlock, [null, address]);
+    return {
+      ...exactTo,
+      ...exactFrom
+    };
+  }
+}
+
+async function filterExactTransfers(contract: TheCoin, provider: Erc20Provider, fromBlock: number, addresses: [string|null, string|null]) {
+  const filter = contract.filters.ExactTransfer(...addresses);
+  (filter as any).startBlock = fromBlock;
+  const logs = await provider.getEtherscanLogs(filter, "and");
+  return  logs.reduce((acc, item) => ({
     ...acc,
     [item.transactionHash]: contract.interface.parseLog(item).args.timestamp.toNumber()
   }), {} as Record<string, number>);
-}
-
-async function filterExactTransfers(contract: TheCoin, fromBlock: number, addresses: [string|null, string|null]) {
-  const filter = contract.filters.ExactTransfer(...addresses);
-  (filter as any).startBlock = fromBlock;
-  return contract.provider.getEtherscanLogs(filter, "and")
 }
 
 export function calculateTxBalances(currentBalance: BigNumber, history: Transaction[]) {

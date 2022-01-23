@@ -7,6 +7,7 @@ import { sign } from "@thecointech/utilities/SignedMessages";
 import { log } from "@thecointech/logging";
 import { Decimal } from "decimal.js-light";
 import { getSigner } from '@thecointech/signers';
+import { DateTime } from 'luxon';
 
 // NOTE: server does not have private key, and will not pass this step
 const privateKeyPath = process.env.USERDATA_INSTRUCTION_PK;
@@ -52,6 +53,7 @@ const doPayBill: TransitionCallback<"Bill"> = async (container: BillActionContai
     ? {
         meta: confirmation.toString(),
         fiat: new Decimal(0),
+        date: DateTime.now(),
       }
     : { error: `Error Code: ${confirmation}`}
 }

@@ -67,8 +67,7 @@ libs/contract-core/seed/clone/prod.json
 
 libs/idx/src/config.devlive.json
 
-apps/*/src/translations/fr.json
-apps/*/src/translations/en.json
+**/src/translations/*.json
 
 apps/tx-processor/run_service.cmd
 

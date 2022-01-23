@@ -1,7 +1,7 @@
 {
   "name": "@thecointech/shared",
   "private": "true",
-  "version": "0.2.57",
+  "version": "0.2.58",
   "description": "The Coin: Shared functionality for the react website & admin app",
   "keywords": [
     "TheCoin",
@@ -18,10 +18,12 @@
   "scripts": {
     "test": "yarn jest",
     "clean": "rimraf ./build",
+    "prebuild": "yarn build:i18n",
     "build": "run-p build:src build:link",
     "build:src": "yarn ttsc -b tsconfig.build.json",
     "build:link": "node ../../tools/link-assets.mjs",
-    "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
+    "build:i18n": "run-s extract compile",
+    "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern [sha512:contenthash:base64:6]",
     "compile": "formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json"
   },
   "files": [
@@ -52,12 +54,12 @@
     "@nivo/core": "0.73.0",
     "@nivo/line": "0.73.0",
     "@nivo/tooltip": "0.73.0",
-    "@thecointech/account": "^0.2.57",
+    "@thecointech/account": "^0.2.58",
     "@thecointech/fx-rates": "^0.2.41",
     "@thecointech/logging": "^0.2.41",
     "@thecointech/site-semantic-theme": "^0.2.56",
     "@thecointech/store": "^0.2.41",
-    "@thecointech/tx-blockchain": "^0.2.57",
+    "@thecointech/tx-blockchain": "^0.2.58",
     "@thecointech/types": "^0.2.42",
     "@thecointech/utilities": "^0.2.55",
     "history": "4.9.0",
@@ -66,7 +68,8 @@
     "react-dates": "21.8.0",
     "react-input-mask": "2.0.4",
     "react-with-direction": "^1.3.1",
-    "redux-injectors": "https://github.com/FrozenKiwi/redux-injectors#6209c56b"
+    "redux-injectors": "https://github.com/FrozenKiwi/redux-injectors#6209c56b",
+    "ts-clipboard": "^1.0.17"
   },
   "devDependencies": {
     "@babel/runtime": "^7.7.7",
