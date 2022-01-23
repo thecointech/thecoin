@@ -1,7 +1,7 @@
 import { Contract } from 'ethers';
 import { TheCoin } from './types';
 import TheCoinSpec from './contracts/TheCoin.json';
-import { Erc20Provider } from '@thecointech/ethers-provider';
+import { getProvider } from '@thecointech/ethers-provider';
 //
 // Multiplier of base values to human-readable fractions (eg $ and c)
 export const COIN_EXP = 1000000;
@@ -26,7 +26,7 @@ const buildContract = () =>
   new Contract(
     getContractAddress(),
     getAbi(),
-    new Erc20Provider()
+    getProvider()
   ) as TheCoin
 
 declare module globalThis {

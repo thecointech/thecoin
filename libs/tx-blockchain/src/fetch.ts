@@ -4,7 +4,7 @@ import { BigNumber } from "@ethersproject/bignumber";
 import { DateTime } from "luxon";
 import { Decimal } from "decimal.js-light";
 import { log } from '@thecointech/logging';
-import { Erc20Provider, ERC20Response } from '@thecointech/ethers-provider';
+import { Erc20Provider, ERC20Response } from '@thecointech/ethers-provider/Erc20Provider';
 import {NormalizeAddress} from '@thecointech/utilities';
 
 // Load account history and merge with local

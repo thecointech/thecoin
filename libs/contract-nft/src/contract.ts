@@ -1,6 +1,6 @@
 import { Contract } from '@ethersproject/contracts';
 import { TheGreenNFT } from '.';
-import { Erc20Provider } from '@thecointech/ethers-provider';
+import { getProvider } from '@thecointech/ethers-provider';
 import TheGreenNFTSpec from './contracts/TheGreenNFTL2.json';
 
 const getAbi = () => {
@@ -25,7 +25,7 @@ const buildContract = () =>
   new Contract(
     getContractAddress(),
     getAbi(),
-    new Erc20Provider()
+    getProvider(),
   ) as TheGreenNFT
 
 declare module globalThis {

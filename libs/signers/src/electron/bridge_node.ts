@@ -5,7 +5,7 @@ import { loadFromDisk } from '../fromDisk';
 import { AccountName } from '../names';
 import { log } from '@thecointech/logging';
 import type { Signer } from '@ethersproject/abstract-signer';
-import { Erc20Provider } from '@thecointech/ethers-provider';
+import { getProvider } from '@thecointech/ethers-provider';
 
 //
 // This is exclusively running in node process on production environments
@@ -15,7 +15,7 @@ const getSigner = (name: AccountName) =>
     // Normally, connecting to the contract enforces the
     // right provider, but in this instance we don't have a provider
     const wallet = await loadFromDisk(name);
-    const provider = new Erc20Provider();
+    const provider = getProvider();
     return wallet.connect(provider);
   });
 
