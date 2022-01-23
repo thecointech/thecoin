@@ -4,7 +4,7 @@ import { BigNumber } from "@ethersproject/bignumber";
 import { DateTime } from "luxon";
 import { Decimal } from "decimal.js-light";
 import { log } from '@thecointech/logging';
-import type { ERC20Response } from '@thecointech/ethers-provider';
+import { Erc20Provider, ERC20Response } from '@thecointech/ethers-provider';
 import {NormalizeAddress} from '@thecointech/utilities';
 
 // Load account history and merge with local
@@ -30,8 +30,8 @@ const toTransaction = (tx: ERC20Response): Transaction => ({
 export async function loadAndMergeHistory(fromBlock: number, contract: TheCoin, address?: string) {
 
   try {
-    const { provider } = contract;
     const contractAddress = contract.address;
+    const provider = new Erc20Provider();
     const allTxs = await provider.getERC20History({address, contractAddress, startBlock: fromBlock});
 
     // Fee's are listed separately here, but treated as a single TX in the rest of TheCoin
@@ -56,7 +56,7 @@ export async function loadAndMergeHistory(fromBlock: number, contract: TheCoin, 
     }
     const history = Object.values(converted).sort((a, b) => a.date.toMillis() - b.date.toMillis());
 
-    let exact = await fetchExactTimestamps(contract, fromBlock, address);
+    let exact = await fetchExactTimestamps(contract, provider, fromBlock, address);
     for (const tx of history) {
       if (exact[tx.txHash]) {
         tx.date = DateTime.fromMillis(exact[tx.txHash]);
@@ -74,13 +74,13 @@ export async function loadAndMergeHistory(fromBlock: number, contract: TheCoin, 
   return [];
 }
 
-async function fetchExactTimestamps(contract: TheCoin, fromBlock: number, address?: string) {
+async function fetchExactTimestamps(contract: TheCoin, provider: Erc20Provider, fromBlock: number, address?: string) {
   if (!address) {
-    return await filterExactTransfers(contract, fromBlock, [null, null]);
+    return await filterExactTransfers(contract, provider, fromBlock, [null, null]);
   }
   else {
-    const exactFrom = await filterExactTransfers(contract, fromBlock, [address, null]);
-    const exactTo = await filterExactTransfers(contract, fromBlock, [null, address]);
+    const exactFrom = await filterExactTransfers(contract, provider, fromBlock, [address, null]);
+    const exactTo = await filterExactTransfers(contract, provider, fromBlock, [null, address]);
     return {
       ...exactTo,
       ...exactFrom
@@ -88,10 +88,10 @@ async function fetchExactTimestamps(contract: TheCoin, fromBlock: number, addres
   }
 }
 
-async function filterExactTransfers(contract: TheCoin, fromBlock: number, addresses: [string|null, string|null]) {
+async function filterExactTransfers(contract: TheCoin, provider: Erc20Provider, fromBlock: number, addresses: [string|null, string|null]) {
   const filter = contract.filters.ExactTransfer(...addresses);
   (filter as any).startBlock = fromBlock;
-  const logs = await contract.provider.getEtherscanLogs(filter, "and");
+  const logs = await provider.getEtherscanLogs(filter, "and");
   return  logs.reduce((acc, item) => ({
     ...acc,
     [item.transactionHash]: contract.interface.parseLog(item).args.timestamp.toNumber()

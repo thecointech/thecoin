@@ -25,11 +25,11 @@ export type Transaction = {
   counterPartyAddress: string;
 }
 
-const systemAddresses = [
+const systemAddresses = () => [
   "0x0000000000000000000000000000000000000000",
   NormalizeAddress(process.env.WALLET_BrokerTransferAssistant_ADDRESS!),
   NormalizeAddress(process.env.WALLET_BrokerCAD_ADDRESS!),
   NormalizeAddress(process.env.WALLET_TheCoin_ADDRESS!),
   NormalizeAddress(process.env.WALLET_Minter_ADDRESS!),
 ];
-export const isInternalAddress = (address: string) => systemAddresses.includes(NormalizeAddress(address));
+export const isInternalAddress = (address: string) => systemAddresses().includes(NormalizeAddress(address));

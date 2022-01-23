@@ -1,6 +1,7 @@
 import { loadAndMergeHistory } from "./fetch";
 import { GetContract, TheCoin } from '@thecointech/contract-core';
 import { describe, IsManualRun } from '@thecointech/jestutils';
+import { initAllAddresses } from './setup.test';
 
 jest.unmock('@thecointech/contract-core');
 
@@ -19,6 +20,8 @@ async function fetchAndTestBalance(contract: TheCoin) {
 // Easy-to-debug fetch of all history
 // NOTE: This is probably non-functional
 describe("Fetch live data", () => {
+
+  beforeAll(initAllAddresses);
 
   it('Can fetch transactions', async () => {
     jest.setTimeout(10 * 60 * 1000); // 10 mins to process this (todo: cache the data)
