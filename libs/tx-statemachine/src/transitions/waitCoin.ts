@@ -56,14 +56,30 @@ export function updateCoinBalance(container: AnyActionContainer, receipt: Transa
   return balance;
 }
 
+// TODO: Move this function into utilities
+function delay(ms: number) {
+  return new Promise( resolve => setTimeout(resolve, ms) );
+}
+
 //
 // Poll the provider to see if the transaction here has been mined.
-export async function waitTransaction(contract: TheCoin, hash: string, confirmations: number = 3) : Promise<TransactionReceipt> {
-  log.trace({hash}, `Awaiting transfer: {hash}`);
-  const receipt = await contract.provider.waitForTransaction(hash, confirmations);
-  if (!receipt) {
-    log.warn({hash}, `Wait timed out for transfer: {hash}`);
+export async function waitTransaction(contract: TheCoin, hash: string, confirmations: number = 3) : Promise<TransactionReceipt|null> {
+
+  // Wait up to 60 seconds for this transaction to finish
+  // Our volume is so low it's nice to complete tx's asap,
+  // and we should give them a little time to complete in one run.
+  for (let i = 0; i < 6; i++) {
+    log.trace({hash}, `Awaiting transfer: {hash}`);
+    const receipt = await contract.provider.waitForTransaction(hash, 0);
+
+    // If this tx has been successfully mined, continue
+    if (receipt?.confirmations >= confirmations) {
+      log.trace({hash}, `Transfer complete: {hash}`);
+      return receipt;
+    }
+
+    log.warn({hash}, `Waited ${i} times: tx has not been mined: {hash}`);
+    await delay(10000);
   }
-  log.trace({hash}, `Transfer complete: {hash}`);
-  return receipt
+  return null;
 }
