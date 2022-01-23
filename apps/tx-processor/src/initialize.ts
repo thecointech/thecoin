@@ -4,9 +4,7 @@ import { RbcStore, initBrowser, closeBrowser } from "@thecointech/rbcapi";
 import gmail from '@thecointech/tx-gmail';
 import { ConfigStore } from "@thecointech/store";
 import { getSigner } from '@thecointech/signers';
-import { GetContract } from '@thecointech/contract-core';
-import { deployProvider } from '@thecointech/ethers-provider';
-import { connect } from '@thecointech/contract-base/connect';
+import { ConnectContract } from '@thecointech/contract-core';
 
 export async function initialize() {
   log.debug(' --- Initializing processing --- ');
@@ -17,13 +15,10 @@ export async function initialize() {
   const signer = await getSigner('BrokerCAD');
   await getSigner('BrokerTransferAssistant');
   const address = await signer.getAddress();
-  let contract = GetContract();
+  let contract = ConnectContract(signer);
   if (!contract) {
     throw new Error("Couldn't initialize contract")
   }
-  const provider = deployProvider("POLYGON");
-  contract = contract.connect(provider);
-  contract = connect(signer, contract);
   log.debug(`Initialized contract to address: ${address}`);
 
   // Set to broker service account for Firestore Access
