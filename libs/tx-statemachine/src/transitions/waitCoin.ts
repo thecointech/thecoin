@@ -73,13 +73,15 @@ export async function waitTransaction(contract: TheCoin, hash: string, confirmat
     const receipt = await contract.provider.waitForTransaction(hash, 0);
 
     // If this tx has been successfully mined, continue
-    if (receipt?.confirmations >= confirmations) {
+    if (receipt?.status == 1 && receipt.confirmations >= confirmations) {
       log.trace({hash}, `Transfer complete: {hash}`);
       return receipt;
     }
 
-    log.warn({hash}, `Waited ${i} times: tx has not been mined: {hash}`);
+    log.trace({hash}, `Waited ${i} times: tx has not been mined. Status ${receipt?.status} : {hash}`);
     await delay(10000);
   }
+  log.warn({hash}, `Timed out - tx has not been mined: {hash}`);
+
   return null;
 }
