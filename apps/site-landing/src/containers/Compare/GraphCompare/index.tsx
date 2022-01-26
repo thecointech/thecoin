@@ -15,7 +15,15 @@ const translations = defineMessages({
     description: 'site.compare.graph.description: Graph description for the How much will you make? graph page'}
   });
 
-export const GraphCompare = () => {
+type Props = {
+  initial: number,
+  income: number,
+  creditSpend: number,
+  cashSpend: number,
+  annualSpend: number,
+  duration: number,
+}
+export const GraphCompare = (props: Props) => {
 
     return (
       <div className={styles.graphContainer}>
@@ -23,7 +31,6 @@ export const GraphCompare = () => {
             <FormattedMessage {...translations.title} />
           </Header>
           <FormattedMessage {...translations.description} />
-                  <br /> <br /> <br />
           <img src={Graph} />
       </div>
     );
