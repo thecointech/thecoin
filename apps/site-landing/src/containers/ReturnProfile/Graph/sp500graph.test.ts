@@ -1,9 +1,9 @@
 import fs from 'fs';
-import { calcPeriodReturn, getIdx, calcReturns, parseData, getAllReturns, calculateAvgAndArea } from '../history';
+import { calcPeriodReturn, getIdx, calcReturns, parseData, getAllReturns, calculateAvgAndArea } from '../data';
 import { DateTime } from 'luxon';
 import path from 'path';
 
-const sourceFilePath = path.join(__dirname, '..', '..', '..', 'sp500_monthly.csv');
+const sourceFilePath = path.join(__dirname, '..', 'data', 'sp500_monthly.csv');
 //const outputJsonPath = '.\\app\\containers\\ReturnProfile\\processed.json';
 
 // CWD == c:\src\TheCoin\site

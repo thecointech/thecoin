@@ -3,6 +3,9 @@ import { readFile, writeFile, utils, WorkSheet, WorkBook } from 'xlsx';
 import fetch from 'node-fetch';
 import { writeFileSync, unlinkSync } from 'fs';
 import { tmpdir } from 'os';
+
+const outFile = join(__dirname, "..", "..", "src", "containers", "ReturnProfile", "data", "sp500_monthly.csv")
+
 //
 // Fetch new data and strip it down ready to upload
 async function updateSnPData() {
@@ -58,7 +61,6 @@ function cleanData(workbook: WorkBook, sheet: string) {
 }
 
 function writeOutput(workbook: WorkBook, sheet: string) {
-  const outFile = join(__dirname, "..", "..", "src", "sp500_monthly.csv")
   writeFile(workbook, outFile, {
     bookType: "csv",
     sheet,
