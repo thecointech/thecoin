@@ -68,7 +68,7 @@ function writeOutput(workbook: WorkBook, sheet: string) {
 const ec = (r: number, c: number) => utils.encode_cell({ r: r, c: c })
 const delete_row = (ws: WorkSheet, index: number, count: number) => {
   let range = utils.decode_range(ws["!ref"])
-  const delr = Math.min((range.e.r - index + 1), count);
+  const delr = Math.min(1 + range.e.r - index, count);
   const maxr = range.e.r - delr;
   for (let R = index; R <= maxr; ++R) {
     for (let C = range.s.c; C <= range.e.c; ++C) {
@@ -81,7 +81,7 @@ const delete_row = (ws: WorkSheet, index: number, count: number) => {
 const delete_col = (ws: WorkSheet, index: number, count: number) => {
   let range = utils.decode_range(ws["!ref"])
 
-  const delc = Math.min(range.e.c - index, count);
+  const delc = Math.min(1 + range.e.c - index, count);
   const maxc = range.e.c - delc;
   for (let R = range.s.r; R <= range.e.r; ++R) {
     for (let C = index; C <= maxc; ++C) {
