@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Datum, Serie } from '@nivo/line'
-import { getData, getAllReturns,calculateAvgAndArea, DataFormat } from 'containers/ReturnProfile/data'
+import { getData, getAllReturns,calculateAvgAndArea, DataFormat } from 'containers/ReturnProfile/data/returns'
 import range from 'lodash/range'
 import { AreaGraph } from './Graph'
 

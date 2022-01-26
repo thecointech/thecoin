@@ -1,60 +1,6 @@
-import Papa from 'papaparse';
 import { DateTime } from 'luxon';
-
-// US abandoned gold standard in April 1933
-export const FDRNewDeal = DateTime.fromObject({year: 1933, month: 3});
-
-export interface DataFormat {
-  Date: DateTime;
-  P: number;
-  D: number;
-  E: number;
-}
-
-
-export type CoinReturns = {
-  lowerBound: number;
-  upperBound: number;
-  mean: number;
-  median: number;
-  values: number[];
-}
-
-function transformDate(value: string) {
-  // const split = value.split('.');
-  // const d = DateTime.fromObject({year: Number(split[0]), month: Number(split[1])});
-  // const d2 = DateTime.fromFormat(value, "yyyy.MM", {
-  //   zone: "America/New_York"
-  // });
-  return DateTime.fromFormat(value, "yyyy.MM", {
-    zone: "America/New_York"
-  });
-}
-
-const transformData = (value: string, name: string) =>
-  (name === 'Date') && value.length ?
-    transformDate(value) :
-    Number(value);
-
-export function parseData(data: string) {
-  // Strip leading/trailing empty strings
-
-  // Eliminate BOM data the stupid way
-  const csv = Papa.parse(data.trim(), {
-    header: true,
-    transform: transformData,
-  });
-
-  return csv.data as DataFormat[];
-}
-
-export async function getData() {
-  const data = await fetch('/sp500_monthly.csv');
-  const text = await data.text();
-  return parseData(text);
-}
-
-///////////////////////////////////
+import { getIdx } from './fetch';
+import { CoinReturns, DataFormat, FDRNewDeal } from './types';
 
 export function calcReturns(startIdx: number, endIdx: number, data: DataFormat[], _maxFee: number) {
   let shares = 1;
@@ -73,13 +19,6 @@ export function calcReturns(startIdx: number, endIdx: number, data: DataFormat[]
 
   // const regularGains = 100 * ((lastMonth.P / firstMonth.P) - 1);
   return (Math.min(lastMonth.P * shares) / firstMonth.P) - 1;
-}
-
-export function getIdx(date: DateTime, data: DataFormat[]) {
-  const initDate = data[0].Date;
-  const yearIdx = (date.year - initDate.year) * 12;
-  const monthIdx = date.month - 1;
-  return Math.min(yearIdx + monthIdx, data.length);
 }
 
 // Calculates an array of every possible period of length monthCount in between start and end

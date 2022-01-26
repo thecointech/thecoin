@@ -1,44 +1,8 @@
-import fs from 'fs';
-import { calcPeriodReturn, getIdx, calcReturns, parseData, getAllReturns, calculateAvgAndArea } from '.';
+import { calcPeriodReturn, calcReturns, getAllReturns, calculateAvgAndArea } from './returns';
 import { DateTime } from 'luxon';
-import path from 'path';
+import { getIdx } from './fetch';
+import { getData, getDate } from './fetch.test';
 
-const sourceFilePath = path.join(__dirname, 'sp500_monthly.csv');
-//const outputJsonPath = '.\\app\\containers\\ReturnProfile\\processed.json';
-
-function getData() {
-  const buffer = fs.readFileSync(sourceFilePath);
-  return parseData(buffer.toString().slice(1));
-}
-const getDate = (year: number, month: number) => DateTime.fromObject({year, month, zone: "America/New_York" })
-
-// Basic data validation - is it all there?
-it ('parsed the data correctly', () => {
-  const data = getData();
-
-  // Check it is intact & continuous
-  let lastMonth = data[0].Date.minus({month: 1});
-  // Do we have all continuous dates?
-  for (const r of data) {
-    const thisMonth = lastMonth.plus({month: 1});
-    expect(r.Date).toEqual(thisMonth);
-    lastMonth = thisMonth;
-  }
-  // test number parsing
-  expect(data[0].D + 0).toEqual(data[0].D);
-})
-
-it ('can find index by date', () => {
-  const data = getData();
-  const testDate = (year:number, month: number) => {
-    const date = getDate(year, month);
-    const idx = getIdx(date, data);
-    expect(data[idx].Date).toEqual(date);
-  }
-  testDate(1871, 1);
-  testDate(1962, 9);
-  testDate(2021, 12);
-})
 
 it('Should match basic calculation from DQYDJ', async () => {
   const data = getData();
