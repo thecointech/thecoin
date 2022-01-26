@@ -11,11 +11,10 @@ import data from './index.test.mockdb.json';
 
 // Allow mocking the decryption fn
 import { decryptTo } from '@thecointech/utilities/Encrypt';
-import { mocked } from 'ts-jest/utils';
 import { RbcApi } from '@thecointech/rbcapi';
 
 jest.mock('@thecointech/utilities/Encrypt')
-const mockedEncrypt = mocked(decryptTo, false);
+const mockedEncrypt = jest.mocked(decryptTo, false);
 jest.setTimeout(900000);
 
 it('Succesfully Processes Sell', async ()=> {

@@ -37,6 +37,7 @@ export class TheCoin implements Pick<Src.TheCoin, 'exactTransfer' | 'balanceOf' 
   provider = {
     waitForTransaction: (hash: string) => Promise.resolve({
       confirmations: confirmations++,
+      status: 1,
       logs: [{
         transactionHash: hash,
         logIndex: "0x1",
