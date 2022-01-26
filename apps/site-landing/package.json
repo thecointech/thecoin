@@ -43,7 +43,7 @@
     "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern [sha512:contenthash:base64:6]",
     "compile": "formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json",
 
-    "snp_data": "ts-node --skip-project ./internals/snpdata/fetch.ts"
+    "update_snp_data": "ts-node --skip-project ./internals/snpdata/fetch.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

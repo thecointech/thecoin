@@ -3,7 +3,6 @@ import { readFile, writeFile, utils, WorkSheet, WorkBook } from 'xlsx';
 import fetch from 'node-fetch';
 import { writeFileSync, unlinkSync } from 'fs';
 import { tmpdir } from 'os';
-
 //
 // Fetch new data and strip it down ready to upload
 async function updateSnPData() {
@@ -40,8 +39,10 @@ function cleanData(workbook: WorkBook, sheet: string) {
   if (data.A1.v != "Date") throw new Error("Woops");
 
   // Remove current month (it is incomplete) and all trailing rows.
-  let i = 1813;
-  while (data[ec(++i, 2)]) { }
+  let i = 1813; // Roughly the end of the sheet at current date (Jan 2022)
+  while (data[ec(++i, 2)]) {
+    /* do nothing, just count */
+  }
   delete_row(data, i - 1, Number.MAX_SAFE_INTEGER);
 
   // Our date strings get trimmed because the package
@@ -67,8 +68,8 @@ function writeOutput(workbook: WorkBook, sheet: string) {
 const ec = (r: number, c: number) => utils.encode_cell({ r: r, c: c })
 const delete_row = (ws: WorkSheet, index: number, count: number) => {
   let range = utils.decode_range(ws["!ref"])
-  const delr = Math.min(range.e.r - index, count);
-  const maxr = range.e.c - delr;
+  const delr = Math.min((range.e.r - index + 1), count);
+  const maxr = range.e.r - delr;
   for (let R = index; R <= maxr; ++R) {
     for (let C = range.s.c; C <= range.e.c; ++C) {
       ws[ec(R, C)] = ws[ec(R + count, C)]
