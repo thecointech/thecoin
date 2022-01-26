@@ -1,35 +1,61 @@
 import fs from 'fs';
-import { calcPeriodReturn, getIdx, calcReturns, parseData, getAllReturns, calculateAvgAndArea } from '../history';
+import { calcPeriodReturn, getIdx, calcReturns, parseData, getAllReturns, calculateAvgAndArea } from './history';
 import { DateTime } from 'luxon';
 import path from 'path';
 
-const sourceFilePath = path.join(__dirname, '..', '..', '..', 'sp500_monthly.csv');
+const sourceFilePath = path.join(__dirname, '..', '..', 'sp500_monthly.csv');
 //const outputJsonPath = '.\\app\\containers\\ReturnProfile\\processed.json';
 
-// CWD == c:\src\TheCoin\site
 function getData() {
   const buffer = fs.readFileSync(sourceFilePath);
   return parseData(buffer.toString().slice(1));
 }
+const getDate = (year: number, month: number) => DateTime.fromObject({year, month, zone: "America/New_York" })
 
-test('Should read data in properly', async () => {
+// Basic data validation - is it all there?
+it ('parsed the data correctly', () => {
   const data = getData();
-  // console.log(data);
 
-  // Ok - lets test getting % return over time
-  const start = getIdx(new Date(1919, 0), data);
-  const end = getIdx(new Date(2019, 1), data);
-  const returns = calcReturns(start, end, data, 1.85);
-  expect(returns).toBeGreaterThan(0);
+  // Check it is intact & continuous
+  let lastMonth = data[0].Date.minus({month: 1});
+  // Do we have all continuous dates?
+  for (const r of data) {
+    const thisMonth = lastMonth.plus({month: 1});
+    expect(r.Date).toEqual(thisMonth);
+    lastMonth = thisMonth;
+  }
+  // test number parsing
+  expect(data[0].D + 0).toEqual(data[0].D);
+})
+
+it ('can find index by date', () => {
+  const data = getData();
+  const testDate = (year:number, month: number) => {
+    const date = getDate(year, month);
+    const idx = getIdx(date, data);
+    expect(data[idx].Date).toEqual(date);
+  }
+  testDate(1871, 1);
+  testDate(1962, 9);
+  testDate(2021, 12);
+})
+
+it('Should match basic calculation from DQYDJ', async () => {
+  const data = getData();
+  const start = getIdx(getDate(2009, 1), data);
+  const end = getIdx(getDate(2019, 1), data);
+  const returns = calcReturns(start, end, data, 0);
+
+  // Should match output here: https://dqydj.com/sp-500-return-calculator/
+  expect(returns).toBeCloseTo(2.69943);
 });
 
-test('can build return for single period', async () => {
+it('can build return for single period', async () => {
   const data = getData();
-  // console.log(data);
 
   // Ok - lets test getting % return over time
-  const startDate = new Date(2010, 0);
-  const endDate = new Date(2011, 0);
+  const startDate = getDate(2010, 1);
+  const endDate = getDate(2011, 1);
 
   // we generate 6 month returns for a single year.
   let returns = calcPeriodReturn(data, startDate, endDate, 1, 0);
@@ -57,13 +83,13 @@ test('can build return for single period', async () => {
   expect(returns[0]).toBeCloseTo(0.16388);
 });
 
-test('Build array of all returns by all periods', async () => {
+it('Build array of all returns by all periods', async () => {
   const data = getData();
   // console.log(data);
 
   // Ok - lets test getting % return over time
-  const startDate = new Date(2000, 0);
-  const endDate = new Date(2005, 0);
+  const startDate = getDate(2000, 1);
+  const endDate = getDate(2005, 1);
 
   // we generate from 1 month through till 4 years
   const minMonths = 1;
@@ -89,8 +115,8 @@ test('Build output all return data', async () => {
 
   // We only want to count the data since FDR's "new deal"
   // US abandoned gold standard in April 1933
-  const startDate = new Date(1933, 3);
-  const endDate = new Date();
+  const startDate = getDate(1933, 3);
+  const endDate = DateTime.now();
 
   // we generate from 1 month through till 60 years
   const minMonths = 1;
@@ -107,7 +133,7 @@ test('Build output all return data', async () => {
   const tenYrReturns = allReturns[10 * 12];
   const idx = tenYrReturns.indexOf(Math.min.apply(null, tenYrReturns));
   // What is this return, and when did it happen?
-  const worstDate = DateTime.fromJSDate(startDate).plus({ months: idx })
+  const worstDate = startDate.plus({ months: idx })
   // 1999 was a terrible time to be an investor
   //console.log(`Worst return: ${tenYrReturns[idx]} from ${worstDate.toISODate()}`);
   expect(worstDate.toISODate()).toBe("1999-02-01");

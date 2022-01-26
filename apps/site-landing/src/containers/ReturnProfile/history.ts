@@ -1,20 +1,14 @@
 import Papa from 'papaparse';
+import { DateTime } from 'luxon';
 
 // US abandoned gold standard in April 1933
-export const FDRNewDeal = new Date(1933, 3);
+export const FDRNewDeal = DateTime.fromObject({year: 1933, month: 3});
 
 export interface DataFormat {
-  Date: Date;
+  Date: DateTime;
   P: number;
   D: number;
   E: number;
-  CPI: number;
-  Fraction: number;
-  RateGS10: number;
-  Price: number;
-  Dividend: number;
-  Earnings: number;
-  CAPE: string;
 }
 
 
@@ -27,19 +21,26 @@ export type CoinReturns = {
 }
 
 function transformDate(value: string) {
-  const split = value.split('.');
-  return new Date(Number(split[0]), Number(split[1]) - 1);
+  // const split = value.split('.');
+  // const d = DateTime.fromObject({year: Number(split[0]), month: Number(split[1])});
+  // const d2 = DateTime.fromFormat(value, "yyyy.MM", {
+  //   zone: "America/New_York"
+  // });
+  return DateTime.fromFormat(value, "yyyy.MM", {
+    zone: "America/New_York"
+  });
 }
 
 const transformData = (value: string, name: string) =>
   (name === 'Date') && value.length ?
     transformDate(value) :
-    value;
+    Number(value);
 
 export function parseData(data: string) {
+  // Strip leading/trailing empty strings
+
   // Eliminate BOM data the stupid way
-  const csv = Papa.parse(data, {
-    dynamicTyping: true,
+  const csv = Papa.parse(data.trim(), {
     header: true,
     transform: transformData,
   });
@@ -74,17 +75,17 @@ export function calcReturns(startIdx: number, endIdx: number, data: DataFormat[]
   return (Math.min(lastMonth.P * shares) / firstMonth.P) - 1;
 }
 
-export function getIdx(date: Date, data: any[]) {
-  const initDate: Date = data[0].Date;
-  const yearIdx = (date.getUTCFullYear() - initDate.getUTCFullYear()) * 12;
-  const monthIdx = date.getUTCMonth();
+export function getIdx(date: DateTime, data: DataFormat[]) {
+  const initDate = data[0].Date;
+  const yearIdx = (date.year - initDate.year) * 12;
+  const monthIdx = date.month - 1;
   return Math.min(yearIdx + monthIdx, data.length);
 }
 
 // Calculates an array of every possible period of length monthCount in between start and end
 // Note - start and end are inclusive, because when calculating return for month 0, we don't know
 // what it is until month 1
-export function calcPeriodReturn(data: DataFormat[], startDate: Date, endDate: Date, monthCount: number, fee: number) {
+export function calcPeriodReturn(data: DataFormat[], startDate: DateTime, endDate: DateTime, monthCount: number, fee: number) {
   const start = getIdx(startDate, data);
   let end = getIdx(endDate, data);
   // Do not read past the end of the array
@@ -112,7 +113,7 @@ export function getAllReturns(data: DataFormat[], maxMonths: number, fee: number
   // We only want to count the data since FDR's "new deal"
   const startDate = FDRNewDeal;
   // Include all the most recent data (todo: update that CSV)
-  const endDate = new Date();
+  const endDate = DateTime.now();
 
   // we generate from 1 month through till 60 years
   const minMonths = 1;
