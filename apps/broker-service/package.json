@@ -51,7 +51,7 @@
     "luxon": "1.26.0",
     "openapi-types": "^7.2.3",
     "swagger-tools": "^0.10.4",
-    "swagger-ui-express": "^4.1.6"
+    "swagger-ui-express": "^4.2.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",
