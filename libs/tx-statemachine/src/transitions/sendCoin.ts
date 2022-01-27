@@ -5,6 +5,7 @@ import { verifyPreTransfer } from "./verifyPreTransfer";
 import { TheCoin } from '@thecointech/contract-core';
 import { DateTime } from "luxon";
 import { toCoin } from "./toCoin";
+import { toDelta } from './coinUtils';
 
 //
 // Send the current balance to the client.  If successful,
@@ -25,10 +26,7 @@ const doSendCoin: TransitionCallback = async (container) => {
 
   // We only start the transfer (do not wait for completion).
   // If completion is required add 'waitCoin' transition.
-  return {
-    meta: tx.nonce.toString(),
-    hash: tx.hash,
-  };
+  return toDelta(tx)
 }
 
 async function startTheTransfer(address: string, value: Decimal, settled: DateTime, contract: TheCoin)
