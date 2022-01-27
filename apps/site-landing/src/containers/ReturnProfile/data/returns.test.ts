@@ -4,15 +4,6 @@ import { getIdx } from './fetch';
 import { getData, getDate } from './fetch.test';
 
 
-it('Should match basic calculation from DQYDJ', async () => {
-  const data = getData();
-  const start = getIdx(getDate(2009, 1), data);
-  const end = getIdx(getDate(2019, 1), data);
-  const returns = calcReturns(start, end, data, 0);
-
-  // Should match output here: https://dqydj.com/sp-500-return-calculator/
-  expect(returns).toBeCloseTo(2.69943);
-});
 
 it('can build return for single period', async () => {
   const data = getData();

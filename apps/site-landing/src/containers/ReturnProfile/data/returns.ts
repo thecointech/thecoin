@@ -1,30 +1,12 @@
 import { DateTime } from 'luxon';
 import { getIdx } from './fetch';
-import { CoinReturns, DataFormat, FDRNewDeal } from './types';
+import { CoinReturns, DataFormat } from './types';
 
-export function calcReturns(startIdx: number, endIdx: number, data: DataFormat[], _maxFee: number) {
-  let shares = 1;
-  for (let i = startIdx + 1; i <= endIdx; i++) {
-    const month = data[i];
-    // Get annualized dividend % for month
-    const monthDiv = month.D / 12;
-    // How many shares is this?
-    const newShares = shares * monthDiv / month.P;
-    // buy new shares with dividend
-    shares = shares + newShares;
-  }
-
-  const firstMonth = data[startIdx];
-  const lastMonth = data[endIdx];
-
-  // const regularGains = 100 * ((lastMonth.P / firstMonth.P) - 1);
-  return (Math.min(lastMonth.P * shares) / firstMonth.P) - 1;
-}
 
 // Calculates an array of every possible period of length monthCount in between start and end
 // Note - start and end are inclusive, because when calculating return for month 0, we don't know
 // what it is until month 1
-export function calcPeriodReturn(data: DataFormat[], startDate: DateTime, endDate: DateTime, monthCount: number, fee: number) {
+export function calcPeriodReturn(startDate: DateTime, endDate: DateTime, data: DataFormat[], params: GrowthParameters) {
   const start = getIdx(startDate, data);
   let end = getIdx(endDate, data);
   // Do not read past the end of the array
@@ -33,7 +15,7 @@ export function calcPeriodReturn(data: DataFormat[], startDate: DateTime, endDat
   // In a year, we have 12 periods of size 1.
   // (we subtract 1 from monthCount here because this actually
   // means we count from jan->jan)
-  const numDatum = end - start - (monthCount - 1);
+  const numDatum = end - start - (params.months - 1);
   if (numDatum <= 0) {
     return [];
   }
@@ -42,13 +24,12 @@ export function calcPeriodReturn(data: DataFormat[], startDate: DateTime, endDat
   const periods: number[] = Array(numDatum);
   for (let i = 0; i < numDatum; i++) {
     const s = i + start;
-    periods[i] = calcReturns(s, s + monthCount, data, fee);
+    periods[i] = calcReturns(s, data, params);
   }
   return periods;
 }
 
-export function getAllReturns(data: DataFormat[], maxMonths: number, fee: number)
-{
+export function getAllReturns(data: DataFormat[], params: GrowthParameters) {
   // We only want to count the data since FDR's "new deal"
   const startDate = FDRNewDeal;
   // Include all the most recent data (todo: update that CSV)
@@ -56,11 +37,10 @@ export function getAllReturns(data: DataFormat[], maxMonths: number, fee: number
 
   // we generate from 1 month through till 60 years
   const minMonths = 1;
-  const allReturns: number[][] = new Array(maxMonths);
+  const allReturns: number[][] = new Array(params.months);
 
-  for (let monthCount = minMonths; monthCount <= maxMonths; monthCount++)
-  {
-    const periodReturns = calcPeriodReturn(data, startDate, endDate, monthCount, fee);
+  for (let monthCount = minMonths; monthCount <= params.months; monthCount++) {
+    const periodReturns = calcPeriodReturn(data, startDate, endDate, params);
     allReturns[monthCount - 1] = periodReturns;
   }
   return allReturns.map(returns => {
@@ -68,8 +48,7 @@ export function getAllReturns(data: DataFormat[], maxMonths: number, fee: number
   });
 }
 
-export function calculateAvgAndArea(allReturns: number[][], percentile: number)
-{
+export function calculateAvgAndArea(allReturns: number[][], percentile: number) {
   return allReturns.map(returns => {
     let sum = 0;
     for (let i = 0; i < returns.length; i++) {
