@@ -1,7 +1,7 @@
 import React from 'react';
 import { Header, Loader } from 'semantic-ui-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { AreaGraph } from '../../AreaReturn';
+import { AreaGraph } from '../../AreaGraph';
 import { calcAllReturns, calculateAvgAndArea, DataFormat, SimulationParameters } from '../../ReturnProfile/data';
 import styles from './styles.module.less';
 import { isEqual } from 'lodash';
