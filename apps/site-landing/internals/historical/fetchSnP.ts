@@ -35,8 +35,6 @@ function cleanData(workbook: WorkBook, sheet: string) {
   // Remove weird headers
   delete_row(data, 0, 7);
   // Remove unnecessary data
-  // delete_col(data, 9, 100)
-  // delete_col(data, 5, 2)
   delete_col(data, 4, Number.MAX_SAFE_INTEGER)
 
   // Check we didn't screw up.

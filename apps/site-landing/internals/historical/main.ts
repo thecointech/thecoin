@@ -4,7 +4,7 @@ import { updateSnPData } from './fetchSnP';
 async function updateHistorical() {
   console.log("Updating historical data")
   const r = await Promise.all([
-    //updateFxData(),
+    updateFxData(),
     updateSnPData(),
   ])
   console.log(`Update successful: ${!r.includes(false)}`);
