@@ -7,8 +7,8 @@ const meta = {
   component: Component,
   args: {
     numPoints: 12,
+    dataToGenerate: 100,
     initial: 100,
-    dataCount: 100,
     exponentialGrowth: 1.1,
     linearGrowth: 1.5,
     medianFactor: 0.90,
@@ -22,7 +22,7 @@ export const Area: Story<Props> = (props) => <Component maxGraphPoints={props.nu
 function generateData(args: Props) {
   const data = [];
   let last = args.initial;
-  for (let i = 0; i < args.dataCount; i++) {
+  for (let i = 0; i < args.dataToGenerate; i++) {
     data.push({
       mean: last,
       median: last * args.medianFactor,
@@ -30,7 +30,7 @@ function generateData(args: Props) {
       upperBound: last * args.upperBound,
       values: [last]
     });
-    last = last * args.linearGrowth + Math.pow(last, args.exponentialGrowth)
+    last = last + args.linearGrowth + (Math.pow(last, args.exponentialGrowth / args.numPoints) - 1);
   }
   return data;
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Datum } from '@nivo/line'
-import { CustomGraphLayers } from './Graph'
+import { CustomGraphLayers } from './CustomGraphLayers'
 import range from 'lodash/range'
 
 type AreaDatum = {
@@ -26,20 +26,12 @@ export const AreaGraph = ({maxGraphPoints, data}: Props) => {
     upperBound: r.upperBound,
   }));
 
-  // We generate an initial value of 1 to prepend to our data
-  // as the data does not include time 0
-  const init :Datum = {
-    lowerBound: 1,
-    upperBound: 1,
-    x: 0,
-    y: 1,
-  }
-  // Naive approach, we just take the rough number of elements
-  const delta = Math.floor( datum.length / maxGraphPoints);
-  const filtered = range(1, maxGraphPoints + 1).map(idx => datum[(idx * delta) - 1]);
+  // Naive approach, we skip the extra elements
+  const step = (datum.length - 1) / maxGraphPoints;
+  const filtered = range(0, maxGraphPoints + 1).map(idx => datum[Math.round(idx * step)]);
   // Create a series using the filtered datum
   const serie = [{
-    data: [init, ...filtered],
+    data: filtered,
     id: "avg",
   }]
 
