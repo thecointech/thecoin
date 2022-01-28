@@ -1,71 +1,68 @@
-import { DateTime } from 'luxon';
-import { getIdx } from './fetch';
-import { CoinReturns, DataFormat } from './types';
+import { SimulationState } from '.';
+import { ReturnSimulator } from './simulator';
+import { DataFormat, SimulationParameters } from './types';
 
-
-// Calculates an array of every possible period of length monthCount in between start and end
-// Note - start and end are inclusive, because when calculating return for month 0, we don't know
-// what it is until month 1
-export function calcPeriodReturn(startDate: DateTime, endDate: DateTime, data: DataFormat[], params: GrowthParameters) {
-  const start = getIdx(startDate, data);
-  let end = getIdx(endDate, data);
-  // Do not read past the end of the array
-  end = Math.min(end, data.length - 1);
-  // The number of periods available between max-min
-  // In a year, we have 12 periods of size 1.
-  // (we subtract 1 from monthCount here because this actually
-  // means we count from jan->jan)
-  const numDatum = end - start - (params.months - 1);
-  if (numDatum <= 0) {
-    return [];
-  }
+// Run a simulation for every month in data
+// with maximum duration of maxSimulationMonths
+export function calcAllReturns(data: DataFormat[], maxSimulationMonths: number, params: SimulationParameters) {
 
   // For each period of length monthCount, find the total return
-  const periods: number[] = Array(numDatum);
-  for (let i = 0; i < numDatum; i++) {
-    const s = i + start;
-    periods[i] = calcReturns(s, data, params);
+  const simulator = new ReturnSimulator(data, params);
+  const periods = [];
+
+  let start = data[0].Date;
+  let last = data[data.length - 1].Date;
+  while (start < last) {
+    const end = start.plus({months: maxSimulationMonths});
+    const p = simulator.calcReturns(start, end);
+    periods.push(p);
+    start = start.plus({months: 1});
   }
   return periods;
 }
 
-export function getAllReturns(data: DataFormat[], params: GrowthParameters) {
-  // We only want to count the data since FDR's "new deal"
-  const startDate = FDRNewDeal;
-  // Include all the most recent data (todo: update that CSV)
-  const endDate = DateTime.now();
+// export function getAllReturns(data: DataFormat[], maxMonths: number, params: SimulationParameters) {
+//   // we generate from 1 month through till 60 years
+//   const minMonths = 1;
+//   const allReturns = [];
 
-  // we generate from 1 month through till 60 years
-  const minMonths = 1;
-  const allReturns: number[][] = new Array(params.months);
+//   for (let months = minMonths; months <= maxMonths; months++) {
+//     const periodReturns = calcPeriodReturn(data, months, params);
+//     allReturns[months - 1] = periodReturns;
+//   }
+//   // Sort each period from least return to most return
+//   // TODO: value should be in fiat (not coin)
+//   const finalValue= (a: SimulationState[]) => a[a.length - 1].coin.toNumber();
+//   return allReturns.map(returns => {
+//     return returns.sort((a, b) => finalValue(a) - finalValue(b));
+//   });
+// }
 
-  for (let monthCount = minMonths; monthCount <= params.months; monthCount++) {
-    const periodReturns = calcPeriodReturn(data, startDate, endDate, params);
-    allReturns[monthCount - 1] = periodReturns;
-  }
-  return allReturns.map(returns => {
-    return returns.sort((a, b) => a - b);
-  });
-}
+// For each duration (1 thru max simulation duration) find the average return & percentiles.
+// Data is array of simulations
+export function calculateAvgAndArea(allReturns: SimulationState[][], percentile: number) {
+  const longestReturn = allReturns[0];
+  const maxLength = longestReturn[0].date.diff(longestReturn[longestReturn.length - 1].date).months;
 
-export function calculateAvgAndArea(allReturns: number[][], percentile: number) {
-  return allReturns.map(returns => {
-    let sum = 0;
-    for (let i = 0; i < returns.length; i++) {
-      sum += returns[i];
-    }
+  const toValue = (s: SimulationState) => s.coin.toNumber();
+  const r = [];
+  for (let months = 1; months < maxLength; months++) {
+    const allResultsAtMonth = allReturns.map(r => r[months]);
+    const returns = allResultsAtMonth.map(toValue).sort();
+    const sum = returns.reduce((a,b) => a + b, 0);
+
     const midIndex = returns.length / 2;
     const lowerBoundIdx = midIndex - midIndex * percentile;
     const upperBoundIdx = midIndex - 1 + midIndex * percentile;
-    const r: CoinReturns = {
+    r.push({
       mean: sum / returns.length,
       median: returns[Math.round(midIndex)],
       lowerBound: returns[Math.round(lowerBoundIdx)],
       upperBound: returns[Math.round(upperBoundIdx)],
       values: returns
-    };
-    return r;
-  });
+    });
+  };
+  return r;
 }
 
 // // export function arrayMin(arr: number[]) {

@@ -2,7 +2,7 @@
  * Graph to compare
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Grid, Header } from 'semantic-ui-react';
 
@@ -25,13 +25,13 @@ const translations = defineMessages({
 
 export function Compare() {
 
-  const [initial, setInitial] = useState(1000);
-  const [income, setIncome] = useState(2000);
-  const [creditSpend, setCreditSpend] = useState(500);
-  const [cashSpend, setCashSpend] = useState(1000);
-  const [annualSpend, setAnnualSpend] = useState(1000);
+  // const [initial, setInitial] = useState(1000);
+  // const [income, setIncome] = useState(2000);
+  // const [creditSpend, setCreditSpend] = useState(500);
+  // const [cashSpend, setCashSpend] = useState(1000);
+  // const [annualSpend, setAnnualSpend] = useState(1000);
 
-  const [duration, setDuration] = useState(60);
+  // const [duration, setDuration] = useState(60);
 
   return (
     <>
@@ -49,7 +49,7 @@ export function Compare() {
               <FormCompare />
             </Grid.Column>
             <Grid.Column textAlign='left' width={10} floated='left' >
-              <GraphCompare />
+              <GraphCompare {...{} as any} />
             </Grid.Column>
           </Grid.Row>
         </Grid>

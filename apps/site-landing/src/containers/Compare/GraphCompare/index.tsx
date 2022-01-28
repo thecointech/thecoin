@@ -23,7 +23,7 @@ type Props = {
   annualSpend: number,
   duration: number,
 }
-export const GraphCompare = (props: Props) => {
+export const GraphCompare = (_props: Props) => {
 
     return (
       <div className={styles.graphContainer}>
