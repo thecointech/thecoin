@@ -12,7 +12,7 @@ const outFile = join(__dirname, "..", "..", "src", "containers", "ReturnProfile"
 
 //
 // Fetch new data and strip it down ready to upload
-async function updateFxData() {
+export async function updateFxData() {
   const archivedLines = getStatic();
   const liveLines = await getLive();
   // Remove duplicates
@@ -26,6 +26,7 @@ async function updateFxData() {
     ...archivedLines.slice(0, archXOverIdx),
     ...liveLines.slice(liveXOverIdx),
   ].join('\n'));
+  return true;
 }
 
 function getStatic() {
@@ -54,6 +55,3 @@ async function getLive() {
     return `${datestr},${rate}`;
   })
 }
-
-updateFxData();
-

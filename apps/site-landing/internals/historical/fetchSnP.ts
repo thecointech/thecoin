@@ -8,7 +8,7 @@ const outFile = join(__dirname, "..", "..", "src", "containers", "ReturnProfile"
 
 //
 // Fetch new data and strip it down ready to upload
-async function updateSnPData() {
+export async function updateSnPData() {
   const srcFile = await fetchData();
 
   const workbook = readFile(srcFile);
@@ -17,6 +17,7 @@ async function updateSnPData() {
   writeOutput(workbook, sheet);
 
   unlinkSync(srcFile);
+  return true;
 }
 
 async function fetchData() {
@@ -93,6 +94,3 @@ const delete_col = (ws: WorkSheet, index: number, count: number) => {
   range.e.c = range.e.c - delc;
   ws['!ref'] = utils.encode_range(range.s, range.e)
 }
-
-
-updateSnPData();
