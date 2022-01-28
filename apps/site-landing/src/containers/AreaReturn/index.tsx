@@ -16,6 +16,7 @@ type Props = {
   data: AreaDatum[];
 }
 
+
 export const AreaGraph = ({maxGraphPoints, data}: Props) => {
 
   const datum: Datum[] = data.map((r, idx): Datum => ({
