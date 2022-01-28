@@ -58,7 +58,7 @@ const layers: Layer[] = [
   'legends',
 ];
 
-export const AreaGraph = ({data}: {data: Serie[]}) => {
+export const CustomGraphLayers = ({data}: {data: Serie[]}) => {
   return <Line
     {...commonProperties}
     yScale={{
