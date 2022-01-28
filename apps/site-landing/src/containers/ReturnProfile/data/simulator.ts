@@ -227,27 +227,4 @@ export class ReturnSimulator {
     }
     return history;
   }
-
-  oldVersion(start: DateTime, to: DateTime) {
-    const startIdx = getIdx(start, this.data);
-    const endIdx = getIdx(to, this.data);
-    const state = this.getInitial(start);
-
-    const history = [state];
-    let coin = state.coin;
-    for (let i = startIdx + 1; i <= endIdx; i++) {
-      const month = this.data[i];
-      // Get annualized dividend % for month
-      const monthDiv = new Decimal(month.D).div(12);
-      // How many shares is this?
-      const newCoin = coin.mul(monthDiv).div(month.P);
-      // buy new shares with dividend
-      coin = coin.add(newCoin);
-      history.push({
-        ...state,
-        coin,
-      })
-    }
-    return history;
-  }
 }
