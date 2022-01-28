@@ -34,7 +34,7 @@ export const CustomLayers = () => {
       return;
     const calcValue = (n: number) => accountValue * (n + 1);
     const params = createParams({initialBalance: 100});
-    const periodReturns = calcAllReturns(rawData, 60, params);
+    const periodReturns = calcAllReturns(rawData, params);
     const coinReturns = calculateAvgAndArea(periodReturns, 1);
     const datum: Datum[] = coinReturns.map((r, idx): Datum => ({
       x: idx + 1,
