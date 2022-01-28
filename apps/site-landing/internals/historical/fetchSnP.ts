@@ -54,9 +54,12 @@ function cleanData(workbook: WorkBook, sheet: string) {
   let range = utils.decode_range(data["!ref"])
   for (let i = 0; i < range.e.r; i++) {
     const idx = ec(i, 0);
-    const date = data[idx].w;
-    if (date.endsWith(".1")) {
-      data[idx].w = date.toString() + "0"
+    if (data[idx].t == 'n') {
+      data[idx].t = 's'
+      data[idx].w = data[idx].w
+        .toString()
+        .padEnd(7, '0')
+        .replace('.', '-');
     }
   }
 }

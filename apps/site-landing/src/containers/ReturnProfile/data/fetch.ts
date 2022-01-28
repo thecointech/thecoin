@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import { DataFormat } from './types';
 
 function transformDate(value: string) {
-  return DateTime.fromFormat(value, "yyyy.MM", {
+  return DateTime.fromFormat(value, "yyyy-MM", {
     zone: "America/New_York"
   });
 }
