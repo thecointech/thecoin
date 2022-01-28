@@ -187,16 +187,23 @@ export class ReturnSimulator {
     return income;
   }
 
-  // Calculate returns for across all supplied data.
-  calcReturns(start: DateTime, to: DateTime) {
+  calcPeriod = (start: DateTime) => {
+    const first = this.data[0];
+    const last = this.data[this.data.length - 1];
+    return {
+      from: DateTime.max(first.Date, start),
+      to: DateTime.min(last.Date, start.plus(this.params.maxDuration)),
+    };
+  }
 
+  // Calculate returns for across all supplied data.
+  calcReturns(start: DateTime) {
+    const { from, to } = this.calcPeriod(start)
     // Keep track of how much capital has been input.
     const state = this.getInitial(start);
     const history: SimulationState[] = [state]
-
     const incr = { weeks: 1 };
-    const firstCalc = start.plus(incr);
-    for (let date = firstCalc; date <= to; date = date.plus(incr)) {
+    for (let date = from.plus(incr); date <= to; date = date.plus(incr)) {
       const month = this.getMonth(date);
 
       const income = this.calcIncome(start, date, state.coin);
@@ -218,7 +225,6 @@ export class ReturnSimulator {
 
       history.push(state);
     }
-
     return history;
   }
 

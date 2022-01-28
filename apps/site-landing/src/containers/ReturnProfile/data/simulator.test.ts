@@ -8,11 +8,13 @@ it('Should match basic calculation from DQYDJ', async () => {
   // we no longer exactly match DQYDJ.  As it's not possible to get exact numbers
   // over a time period this long, neither calculation matches reality,
   // so we are just going to ignore this and move on.
+  const params = createParams({
+    initialBalance: 100,
+  });
   const start = getDate(1959, 1);
-  const end = getDate(2019, 1);
-  const params = createParams({initialBalance: 100});
+  const end = start.plus(params.maxDuration);
   const simulator = new ReturnSimulator(data, params);
-  const returns = simulator.calcReturns(start, end);
+  const returns = simulator.calcReturns(start);
 
   // How many weeks passed?
   const elapsedWeeks = end.diff(start, "weeks").weeks;

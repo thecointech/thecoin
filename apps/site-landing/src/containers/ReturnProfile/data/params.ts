@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon';
+import { DateTime, DurationObject } from 'luxon';
 
 // US abandoned gold standard in April 1933
 export const FDRNewDeal = DateTime.fromObject({year: 1933, month: 3});
@@ -36,6 +36,7 @@ type ShockAbsorber = {
 // The data we use to calculate a clients potential returns
 export type SimulationParameters = {
   // How many months should we be calculating this for?
+  maxDuration: DurationObject;
   // start: DateTime;
   // end: DateTime;
 
@@ -107,6 +108,9 @@ type RecursivePartial<T> = {
 export const createParams = (explicit?: RecursivePartial<SimulationParameters>): SimulationParameters => ({
   // start: FDRNewDeal,
   // end: DateTime.now(),
+  maxDuration: {
+    years: 60
+  },
   adjustForInflation: false,
   maxOffsetPercentage: 0,
   initialBalance: 0,

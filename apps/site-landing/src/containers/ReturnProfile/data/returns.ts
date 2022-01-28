@@ -4,7 +4,7 @@ import { DataFormat, SimulationParameters } from './types';
 
 // Run a simulation for every month in data
 // with maximum duration of maxSimulationMonths
-export function calcAllReturns(data: DataFormat[], maxSimulationMonths: number, params: SimulationParameters) {
+export function calcAllReturns(data: DataFormat[], params: SimulationParameters) {
 
   // For each period of length monthCount, find the total return
   const simulator = new ReturnSimulator(data, params);
@@ -13,8 +13,7 @@ export function calcAllReturns(data: DataFormat[], maxSimulationMonths: number, 
   let start = data[0].Date;
   let last = data[data.length - 1].Date;
   while (start < last) {
-    const end = start.plus({months: maxSimulationMonths});
-    const p = simulator.calcReturns(start, end);
+    const p = simulator.calcReturns(start);
     periods.push(p);
     start = start.plus({months: 1});
   }
