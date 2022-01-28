@@ -9,7 +9,7 @@ function getInfuraNetwork(deployTo: "POLYGON"|"ETHERUM") {
   }
 };
 
-export const deployProvider = (deployTo: "POLYGON"|"ETHERUM") => {
+export const getProvider = (deployTo: "POLYGON"|"ETHERUM"="POLYGON") => {
   const network = getInfuraNetwork(deployTo)
   if (!network)
     throw new Error("Missing deploy network, cannot connect to blockchain");
@@ -19,5 +19,4 @@ export const deployProvider = (deployTo: "POLYGON"|"ETHERUM") => {
     throw new Error(`Missing INFURA project ID, cannot connect to ${network}`);
 
   return new InfuraProvider(network, projectId);
-
 }

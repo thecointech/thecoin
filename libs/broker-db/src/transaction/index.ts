@@ -9,13 +9,29 @@ const incompleteCollection = (type: ActionType) => getFirestore().collection(typ
 const historyCollection = (action: DocumentReference<AnyActionData>) => action.collection("History").withConverter(transitionConverter);
 const userActionCollection = <Type extends ActionType>(address: string, type: Type) => getUserDoc(address).collection(type).withConverter(actionConverters[type] as FirestoreDataConverter<ActionDataTypes[Type]>)
 
+
+async function getHistory(action: DocumentReference<AnyActionData>) {
+  const history = await historyCollection(action).get();
+  return [...history.docs]
+    .sort((a, b) => a.data().created.toMillis() - b.data().created.toMillis())
+}
+
 //
 // Get event collection of single action, ordered by timestamp
 export async function getActionHistory(action: DocumentReference<AnyActionData>) {
-  const history = await historyCollection(action).get();
-  return [...history.docs]
-    .map(doc => doc.data())
-    .sort((a, b) => a.created.toMillis() - b.created.toMillis())
+  const history = await getHistory(action);
+  return history.map(doc => doc.data());
+}
+
+// Update the i-th transition.  (Hopefully will never be used)
+type TransitionData = Omit<TransitionDelta, "created"|"type">
+export async function updateTransition(action: DocumentReference<AnyActionData>, index: number, update: TransitionData) {
+  const history = await getHistory(action);
+  // Update apparently doesn't do conversions on-the-fly
+  const converted = transitionConverter.toFirestore(update as any);
+  return await historyCollection(action)
+    .doc(history[index].id)
+    .update(converted);
 }
 
 //
@@ -24,11 +40,14 @@ export function storeTransition(action: DocumentReference<AnyActionData>, transi
   return historyCollection(action).add(transition);
 }
 
+////////////////////////////////////////////////////////////////////
+export const getActionDoc = <Type extends ActionType>(address: string, type: Type, id?: string) => userActionCollection(address, type).doc(id);
+
 //
 // Return action data for the action by type/firestore id
 export async function getAction<Type extends ActionType>(address: string, type: Type, id: string): Promise<TypedAction<Type>> {
   // get action doc
-  const doc = userActionCollection(address, type).doc(id);
+  const doc = getActionDoc(address, type, id);
   const snapshot = await doc.get();
   if (!snapshot.exists)
     throw new Error(`Action ${doc.path} does not exist`);
@@ -97,7 +116,7 @@ function assertSame<T>(data: T, initial: T) {
 // Create a new Action document and initialize with passed data.  Does not
 // create any events.  Automatically registers incomplete ref for the new action
 export async function createAction<Type extends ActionType>(address: string, type: Type, data: ActionDataTypes[Type]): Promise<TypedAction<Type>> {
-  const doc = userActionCollection(address, type).doc();
+  const doc = getActionDoc(address, type);
   // An incomplete ref is automatically created for every new action
   const incompleteRef = incompleteCollection(type).doc();
 

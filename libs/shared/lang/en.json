@@ -1,123 +1,103 @@
 {
-  "'+yCmHT'": {
+  "+yCmHT": {
     "defaultMessage": "Password",
     "description": "Default password entry label"
   },
-  "'0jq3Gk'": {
+  "0jq3Gk": {
     "defaultMessage": "weak",
     "description": "Password complexity indicator"
   },
-  "'7ACrRj'": {
+  "7ACrRj": {
     "defaultMessage": "Please enter your password",
     "description": "Popup error message if no password entered before submit"
   },
-  "'8oZBpu'": {
+  "8oZBpu": {
     "defaultMessage": "Sorry, we couldn’t find the page you are looking for",
     "description": "shared.NotFoundPage.title: Title for the 404 page"
   },
-  "'BSYPCA'": {
+  "BSYPCA": {
     "defaultMessage": "Page Not Found",
     "description": "shared.NotFoundPage.aboveTheTitle: Text above the title for the 404 page"
   },
-  "'DLnJW1'": {
+  "DLnJW1": {
     "defaultMessage": "This password requires {time} to crack",
     "description": "Password complexity tooltip feedback"
   },
-  "'DZqkDH'": {
+  "DZqkDH": {
     "defaultMessage": "An email address requires the '@' symbol",
     "description": "Default placeholder for email feild"
   },
-  "'EsoShw'": {
+  "EsoShw": {
     "defaultMessage": "Connecting to your Web3 provider",
     "description": "Message to display while waiting for user to complete Web3 connection"
   },
-  "'FN+8je'": {
+  "FN+8je": {
     "defaultMessage": "Please enter your password",
     "description": "Error when logging in without password"
   },
-  "'G5dlT+'": {
+  "G5dlT+": {
     "defaultMessage": "Copy",
     "description": "base.copyToClipboard.link: Link for the button for the copy to clipboard tool"
   },
-  "'JB5uPE'": {
+  "JB5uPE": {
     "defaultMessage": "An email address",
     "description": "Default placeholder for email feild"
   },
-  "'OFKzhW'": {
+  "OFKzhW": {
     "defaultMessage": "Show Password",
     "description": "Label for toggle showing password in input"
   },
-  "'SCn4XT'": {
+  "SCn4XT": {
     "defaultMessage": "ineffectual",
     "description": "Password complexity indicator"
   },
-  "'UOyqjB'": {
+  "UOyqjB": {
     "defaultMessage": "Drag 'n' drop a wallet file here, or click to browse",
     "description": "shared.account.uploadWallet.dropZone: The title for the drop zone on the upload your account page"
   },
-  "'YIlmBL'": {
+  "YIlmBL": {
     "defaultMessage": "Email",
     "description": "Default label for email field"
   },
-  "'YOPdSV'": {
+  "YOPdSV": {
     "defaultMessage": "Coming Soon",
     "description": "shared.widgets.availablesoon.title:Title for the Widget Available Soon in the app"
   },
-  "'cINV4p'": {
+  "cINV4p": {
     "defaultMessage": "Copied to your clipboard",
     "description": "base.copyToClipboard.messageSuccess: Success message for the button for the copy to clipboard tool"
   },
-  "'cSP1Xs'": {
+  "cSP1Xs": {
     "defaultMessage": "Address",
     "description": "Default label for ethereum address field"
   },
-  "'gqUbj6'": {
+  "gqUbj6": {
     "defaultMessage": "moderate",
     "description": "Password complexity indicator"
   },
-  "'hiKmVf'": {
+  "hiKmVf": {
     "defaultMessage": "An address is 40 characters long, and consists only of numbers and the letters A-F",
     "description": "Describe a valid format for an ethereum address"
   },
-  "'jNMJW6'": {
+  "jNMJW6": {
     "defaultMessage": "Restore Account",
     "description": "shared.account.uploadWallet.aboveTheTitle: The above the title title for the upload your account page"
   },
-  "'mZ3WoP'": {
+  "mZ3WoP": {
     "defaultMessage": "vulnerable",
     "description": "Password complexity indicator"
   },
-  "'oLtuOM'": {
+  "oLtuOM": {
     "defaultMessage": "Please enter a password of at least 'moderate' strength",
     "description": "default password entry tooltip"
   },
-  "'qSrYua'": {
+  "qSrYua": {
     "defaultMessage": "An ethereum address",
     "description": "shared.uxaddress.address.error: Error Message for the address field in make a payment / coin transfer"
   },
-  "'rMCWq0'": {
+  "rMCWq0": {
     "defaultMessage": "Home",
     "description": "shared.NotFoundPage.button: Go back to homepage button for the 404 page"
-  },
-  "'uT8hFA'": {
-    "defaultMessage": "strength",
-    "description": "Password complexity indicator"
-  },
-  "'vLxh3t'": {
-    "defaultMessage": "At least moderate strength",
-    "description": "New password entry placeholder"
-  },
-  "'wFpI1F'": {
-    "defaultMessage": "Hide Password",
-    "description": "Label for toggle hiding password in input"
-  },
-  "'y+kks9'": {
-    "defaultMessage": "strong",
-    "description": "Password complexity indicator"
-  },
-  "'ypa6Gp'": {
-    "defaultMessage": "Load an Account",
-    "description": "shared.account.uploadWallet.title: Title for the upload your account page"
   },
   "shared.balance.title": {
     "defaultMessage": "Recent Operations",
@@ -198,5 +178,25 @@
   "shared.transactionList.to": {
     "defaultMessage": "To",
     "description": "shared.transactionList.to: For description in comment section for the transaction history"
+  },
+  "uT8hFA": {
+    "defaultMessage": "strength",
+    "description": "Password complexity indicator"
+  },
+  "vLxh3t": {
+    "defaultMessage": "At least moderate strength",
+    "description": "New password entry placeholder"
+  },
+  "wFpI1F": {
+    "defaultMessage": "Hide Password",
+    "description": "Label for toggle hiding password in input"
+  },
+  "y+kks9": {
+    "defaultMessage": "strong",
+    "description": "Password complexity indicator"
+  },
+  "ypa6Gp": {
+    "defaultMessage": "Load an Account",
+    "description": "shared.account.uploadWallet.title: Title for the upload your account page"
   }
 }

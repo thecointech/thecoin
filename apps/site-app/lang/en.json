@@ -447,6 +447,10 @@
     "defaultMessage": "Coin Transfer",
     "description": "app.makepayments.tabs.anotherCoin: Title for the tabs the Make a payment page in the app"
   },
+  "pREs38": {
+    "defaultMessage": "This entry needs to be at least {count} letters long",
+    "description": "Error on attempted submission without completing field"
+  },
   "q0z7qW": {
     "defaultMessage": "Step 2 of 3: Sending bill payment to our servers...",
     "description": "app.accounts.billPayments.step2: Message for the form the make a payment page / bill payment tab"

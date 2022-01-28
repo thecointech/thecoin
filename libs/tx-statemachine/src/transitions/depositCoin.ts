@@ -1,7 +1,7 @@
-import { Decimal } from "decimal.js-light";
 import { getCurrentState, TransitionCallback, TypedActionContainer } from "../types";
 import { verifyPreTransfer } from "./verifyPreTransfer";
 import { TransactionResponse } from '@ethersproject/providers';
+import { toDelta } from './coinUtils';
 
 // this deposit can operate on both bill & sell types.
 type BSActionTypes = "Bill"|"Sell";
@@ -32,15 +32,5 @@ const doDepositCoin: TransitionCallback<BSActionTypes> = async (container) => {
     return { error: 'Insufficient funds'};
 
   const tx: TransactionResponse = await tc.certifiedTransfer(from, to, value, fee, timestamp, signature);
-  return (tx.hash)
-    ? {
-        hash: tx.hash,
-        coin: new Decimal(value),
-        meta: tx.confirmations.toString()
-      }
-    : {
-        error: 'Tx Hash returned null',
-        hash: undefined,
-        meta: `Nonce: ${tx.nonce}`,
-      }
+  return toDelta(tx);
 }

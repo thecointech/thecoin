@@ -2,7 +2,7 @@ import { BlockTag, EtherscanProvider, Filter, Formatter, Log } from '@ethersproj
 import type { Signer } from '@ethersproject/abstract-signer'
 import { getNetwork } from './networks'
 import { logger, errors } from './logger'
-import { convert } from './erc20response'
+import { convert } from '../erc20response'
 
 //
 // ATTRIBUTION:
@@ -155,3 +155,6 @@ export class Erc20Provider extends EtherscanProvider {
     throw new Error("Cannot call getSigner on an Erc20Provider");
   }
 }
+
+export const getProvider = () => new Erc20Provider();
+export type { ERC20Response } from '../erc20response';

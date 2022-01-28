@@ -18,7 +18,7 @@ import { toCoin } from './pricing';
 import { fetchRate } from '@thecointech/fx-rates';
 import { loadAndMergeHistory, Transaction } from '@thecointech/tx-blockchain';
 import { THECOIN_ROLE } from '../../src/constants';
-import { deployProvider } from '@thecointech/ethers-provider';
+import { getProvider } from '@thecointech/ethers-provider';
 
 const nullAddress = "0x0000000000000000000000000000000000000000";
 const thirtyGwei = 30 * Math.pow(10, 9);
@@ -53,7 +53,7 @@ export class Processor {
     const xferAssit = await getSigner("BrokerTransferAssistant");
     const minter = await getSigner("Minter");
 
-    const infura = deployProvider("POLYGON");
+    const infura = getProvider("POLYGON");
     this.xaAddress = NormalizeAddress(await xferAssit.getAddress());
     this.brokerAddress = NormalizeAddress(await brokerCad.getAddress());
     this.theCoinAddress = NormalizeAddress(await theCoin.getAddress());
@@ -69,12 +69,11 @@ export class Processor {
       ])
     );
 
-    const history: Transaction[] = await loadAndMergeHistory(null as any, 22291140, contract);
+    const history: Transaction[] = await loadAndMergeHistory(22291140, contract);
     this.history = history.map(h => ({
       ...h,
       from: NormalizeAddress(h.from),
       to: NormalizeAddress(h.to),
-      counterPartyAddress: NormalizeAddress(h.counterPartyAddress),
     }));
     return true;
   }
