@@ -1,9 +1,8 @@
 import React from 'react'
-import { Datum } from '@nivo/line'
-import { CustomGraphLayers } from './CustomGraphLayers'
+import { CustomGraphLayers, AreaDatum } from './CustomGraphLayers'
 import range from 'lodash/range'
 
-type AreaDatum = {
+type DataPoints = {
   mean: number;
   median: number;
   lowerBound: number;
@@ -13,14 +12,13 @@ type AreaDatum = {
 
 type Props = {
   maxGraphPoints: number,
-  data: AreaDatum[];
+  data: DataPoints[];
 }
-
 
 export const AreaGraph = ({maxGraphPoints, data}: Props) => {
 
-  const datum: Datum[] = data.map((r, idx): Datum => ({
-    x: idx + 1,
+  const datum = data.map((r, idx): AreaDatum => ({
+    x: idx,
     y: r.median,
     lowerBound: r.lowerBound,
     upperBound: r.upperBound,

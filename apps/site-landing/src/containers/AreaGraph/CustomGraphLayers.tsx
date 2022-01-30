@@ -2,6 +2,13 @@ import React from 'react'
 import { Defs } from '@nivo/core'
 import { area, curveMonotoneX } from 'd3-shape'
 import { Datum, Line, Serie, Layer, CustomLayerProps, DatumValue } from '@nivo/line'
+import { AreaGraphTooltip } from './Tooltip'
+
+// Used internally by actual renderer
+export type AreaDatum = Datum & {
+  lowerBound: number;
+  upperBound: number;
+}
 
 const commonProperties = {
   width: 900,
@@ -58,13 +65,28 @@ const layers: Layer[] = [
   'legends',
 ];
 
+const findMaxValue = (serie: Serie[]) =>
+  serie.reduce((prev, series) =>
+    series.data?.reduce((prev: number, d: Datum) => Math.max(prev, d.upperBound), prev) ?? prev,
+    1
+  )
+
+const findMinValue = (serie: Serie[]) => {
+  const r = serie.reduce((prev, series) =>
+    series.data?.reduce((prev: number, d: Datum) => Math.min(prev, d.lowerBound), prev) ?? prev,
+    0
+  )
+  return r;
+}
+
 export const CustomGraphLayers = ({data}: {data: Serie[]}) => {
   return <Line
     {...commonProperties}
     yScale={{
       type: 'linear',
       stacked: true,
-      min: 0,
+      min: findMinValue(data),
+      max: findMaxValue(data),
     }}
     data={data}
     lineWidth={3}
@@ -75,6 +97,8 @@ export const CustomGraphLayers = ({data}: {data: Serie[]}) => {
     pointColor="white"
     pointBorderWidth={2}
     pointBorderColor={{ from: 'serieColor' }}
+    tooltip={AreaGraphTooltip}
     layers={layers}
   />
 }
+

@@ -21,16 +21,17 @@ export const Area: Story<Props> = (props) => <Component maxGraphPoints={props.nu
 
 function generateData(args: Props) {
   const data = [];
-  let last = args.initial;
   for (let i = 0; i < args.dataToGenerate; i++) {
+    const val = args.initial + (i * args.linearGrowth) + Math.pow(i, args.exponentialGrowth);
+    const low = val * args.lowerBound;
+    const high = val * args.upperBound
     data.push({
-      mean: last,
-      median: last * args.medianFactor,
-      lowerBound: last * args.lowerBound,
-      upperBound: last * args.upperBound,
-      values: [last]
+      mean: val,
+      median: val * args.medianFactor,
+      lowerBound: Math.min(low, high),
+      upperBound: Math.max(low, high),
+      values: [val]
     });
-    last = last + args.linearGrowth + (Math.pow(last, args.exponentialGrowth / args.numPoints) - 1);
   }
   return data;
 }
