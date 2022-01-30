@@ -1,6 +1,6 @@
 import Papa from 'papaparse';
 import { DateTime } from 'luxon';
-import { DataFormat } from './types';
+import { MarketData } from './market';
 
 function transformDate(value: string) {
   return DateTime.fromFormat(value, "yyyy-MM", {
@@ -20,7 +20,7 @@ export function parseData(data: string) {
     transform: transformData,
   });
 
-  return csv.data as DataFormat[];
+  return csv.data as MarketData[];
 }
 
 export async function getData() {
@@ -29,9 +29,3 @@ export async function getData() {
   return parseData(text);
 }
 
-export function getIdx(date: DateTime, data: DataFormat[]) {
-  const initDate = data[0].Date;
-  const yearIdx = (date.year - initDate.year) * 12;
-  const monthIdx = date.month - 1;
-  return Math.min(yearIdx + monthIdx, data.length);
-}

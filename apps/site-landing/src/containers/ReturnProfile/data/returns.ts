@@ -1,10 +1,19 @@
-import { SimulationState } from '.';
+import { MarketData } from './market';
+import { SimulationParameters } from './params';
 import { ReturnSimulator } from './simulator';
-import { DataFormat, SimulationParameters } from './types';
+import { SimulationState } from './state';
+
+export type CoinReturns = {
+  lowerBound: number;
+  upperBound: number;
+  mean: number;
+  median: number;
+  values: number[];
+}
 
 // Run a simulation for every month in data
 // with maximum duration of maxSimulationMonths
-export function calcAllReturns(data: DataFormat[], params: SimulationParameters) {
+export function calcAllReturns(data: MarketData[], params: SimulationParameters) {
 
   // For each period of length monthCount, find the total return
   const simulator = new ReturnSimulator(data, params);

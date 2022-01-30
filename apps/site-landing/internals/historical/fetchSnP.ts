@@ -50,7 +50,7 @@ function cleanData(workbook: WorkBook, sheet: string) {
   // Our date strings get trimmed because the package
   // things it's a regular decimal.  Pad it back out
   let range = utils.decode_range(data["!ref"])
-  for (let i = 0; i < range.e.r; i++) {
+  for (let i = 0; i <= range.e.r; i++) {
     const idx = ec(i, 0);
     if (data[idx].t == 'n') {
       data[idx].t = 's'

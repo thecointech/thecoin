@@ -1,13 +1,12 @@
 import { DateTime } from 'luxon';
 import { Decimal } from 'decimal.js-light';
+import { getMarketData, MarketData } from './market';
 
 export type SimulationState = {
   // Date of snapshot
   date: DateTime;
   // How much contributed?
   principal: Decimal;
-  // What is the current total value of the account.
- // value: Decimal;
   // Current value of the account in Coin. Effectively means "Shares".
   coin: Decimal;
 
@@ -28,3 +27,5 @@ export type SimulationState = {
   // What is the maximum protected value?
   protected: Decimal;
 }
+
+export const calcFiat = (state: SimulationState, data: MarketData[]) => state.coin.mul(getMarketData(state.date, data)?.P ?? 1)
