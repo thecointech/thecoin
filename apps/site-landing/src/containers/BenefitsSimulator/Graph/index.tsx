@@ -1,8 +1,8 @@
-import React from 'react';
-import { Header, Loader } from 'semantic-ui-react';
+import React, { useEffect, useState } from 'react';
+import { Header, Loader, Progress, Segment } from 'semantic-ui-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { AreaGraph } from '../../AreaGraph';
-import { calcAllReturns, calculateAvgAndArea, MarketData, SimulationParameters } from '../../ReturnProfile/data';
+import { calcAllReturns, calculateAvgAndArea, CoinReturns, MarketData, SimulationParameters, SimulationState } from '../../ReturnProfile/data';
 import styles from './styles.module.less';
 import { isEqual } from 'lodash';
 
@@ -24,21 +24,48 @@ type Props = {
 // TODO: This component does a lot of computation, and should be memoized
 const GraphCompareLoaded = ({params, snpData}: Props) => {
 
-  // These 3 lines hide a lot of computation
-  const allReturns = calcAllReturns(snpData, params);
-  const averages = calculateAvgAndArea(allReturns, snpData, 1);
-  const maxGraphPoints = 12;
+  //const [allReturns, setAllReturns] = useState<undefined|SimulationState[][]>();
+  const [averages, setAverages] = useState<undefined|CoinReturns[]>();
+  const [progress, setProgress] = useState<number|undefined>(0);
 
+  useEffect(() => {
+    let isCancelled = false;
+    const cancellableProgress = (value: number) => {
+      setProgress(value);
+      return isCancelled;
+    }
+    const allReturns = calcAllReturns(snpData, params, cancellableProgress);
+    if (allReturns) {
+      const averages = calculateAvgAndArea(allReturns, snpData, 1);
+      setAverages(averages);
+      setProgress(undefined);
+    }
+    return () => { isCancelled = true };
+  }, [])
+
+  const maxGraphPoints = 12;
   return (
-    <div className={styles.graphContainer}>
-        <Header as="h4">
-          <FormattedMessage {...translations.title} />
-        </Header>
-        <FormattedMessage {...translations.description} />
-        <AreaGraph maxGraphPoints={maxGraphPoints} data={averages} />
-    </div>
+    <Segment className={styles.graphContainer}>
+    <Header as="h4">
+      <FormattedMessage {...translations.title} />
+    </Header>
+    <FormattedMessage {...translations.description} />
+    {progress || !averages
+      ? <GraphLoading percent={progress ?? 0.5 * 100} />
+      : <AreaGraph maxGraphPoints={maxGraphPoints} data={averages} />
+    }
+    </Segment>
   );
 };
+
+const GraphLoading = ({percent}: {percent: number}) => (
+  <>
+    <Progress percent={percent} attached='top' />
+    <Loader active inline='centered' />
+    Crunching Numbers
+    <Progress percent={percent} attached='bottom' />
+  </>
+)
 
 const MemoizedGraphCompare = React.memo(GraphCompareLoaded, (a, b) => (
   a.fxData === b.fxData &&
