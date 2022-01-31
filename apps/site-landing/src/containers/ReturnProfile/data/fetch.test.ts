@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { getIdx, parseData } from './fetch';
+import { parseData } from './fetch';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -27,14 +27,3 @@ it ('parsed the data correctly', () => {
   expect(data[0].D + 0).toEqual(data[0].D);
 })
 
-it ('can find index by date', () => {
-  const data = getData();
-  const testDate = (year:number, month: number) => {
-    const date = getDate(year, month);
-    const idx = getIdx(date, data);
-    expect(data[idx].Date).toEqual(date);
-  }
-  testDate(1871, 1);
-  testDate(1962, 9);
-  testDate(2021, 12);
-})
