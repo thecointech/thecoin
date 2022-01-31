@@ -6,8 +6,8 @@ import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Grid, Header } from 'semantic-ui-react';
 
-import { FormCompare } from './FormCompare';
-import { GraphCompare } from './GraphCompare';
+import { FormCompare } from './Form';
+import { GraphCompare } from './Graph';
 import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateAccountBanner';
 
 import styles from './styles.module.less';
