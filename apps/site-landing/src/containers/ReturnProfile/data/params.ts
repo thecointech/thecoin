@@ -1,8 +1,5 @@
 import { DateTime, DurationObject } from 'luxon';
 
-// US abandoned gold standard in April 1933
-export const FDRNewDeal = DateTime.fromObject({year: 1933, month: 3});
-
 // Holds week/month/yearly actions for income/credit/cash
 type FinancialParams = {
   weekly: number;

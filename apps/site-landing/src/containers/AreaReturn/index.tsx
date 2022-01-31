@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Datum, Serie } from '@nivo/line'
-import { getData, calculateAvgAndArea, DataFormat, createParams, calcAllReturns } from 'containers/ReturnProfile/data'
+import { getData, calculateAvgAndArea, MarketData, createParams, calcAllReturns } from 'containers/ReturnProfile/data'
 import range from 'lodash/range'
 import { AreaGraph } from './Graph'
 
 
 export const CustomLayers = () => {
 
-  const [rawData, setRawData] = useState(undefined as DataFormat[]|undefined)
+  const [rawData, setRawData] = useState(undefined as MarketData[]|undefined)
   const [allDatum, setAllDatum] = useState([] as Datum[])
   const [serie, setSerie ] = useState([{
     data: [],
@@ -35,7 +35,7 @@ export const CustomLayers = () => {
     const calcValue = (n: number) => accountValue * (n + 1);
     const params = createParams({initialBalance: 100});
     const periodReturns = calcAllReturns(rawData, params);
-    const coinReturns = calculateAvgAndArea(periodReturns, 1);
+    const coinReturns = calculateAvgAndArea(periodReturns, rawData, 1);
     const datum: Datum[] = coinReturns.map((r, idx): Datum => ({
       x: idx + 1,
       y: calcValue(r.median),

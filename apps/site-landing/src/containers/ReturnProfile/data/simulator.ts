@@ -33,12 +33,13 @@ export class ReturnSimulator {
   }
 
   getMarketData = (state: SimulationState) => getMarketData(state.date, this.data)!;
-  getInitial = (start: DateTime) => {
+  getInitial = (start: DateTime): SimulationState => {
     const balance = new Decimal(this.params.initialBalance);
     const state = {
       date: start,
       principal: balance,
       coin: zero,
+      fiat: balance,
       credit: {
         balanceDue: zero,
         current: zero,

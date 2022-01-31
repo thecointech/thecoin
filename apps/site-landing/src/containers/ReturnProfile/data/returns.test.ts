@@ -1,121 +1,47 @@
-import { calcPeriodReturn, calcReturns, getAllReturns, calculateAvgAndArea } from './returns';
-import { DateTime } from 'luxon';
-import { getIdx } from './fetch';
+import { calcAllReturns, calculateAvgAndArea } from './returns';
+import { Duration } from 'luxon';
 import { getData, getDate } from './fetch.test';
+import { getIdx } from './market';
+import { createParams } from './params';
 
 
-
-it('can build return for single period', async () => {
-  const data = getData();
-
-  // Ok - lets test getting % return over time
-  const startDate = getDate(2010, 1);
-  const endDate = getDate(2011, 1);
-
-  // we generate 6 month returns for a single year.
-  let returns = calcPeriodReturn(data, startDate, endDate, 1, 0);
-
-  expect(returns.length).toBe(12);
-  // Verify results vs a few sample numbers from https://dqydj.com/sp-500-return-calculator/
-  expect(returns[0]).toBeCloseTo(-0.029);
-  expect(returns[2]).toBeCloseTo(0.04088);
-  expect(returns[4]).toBeCloseTo(-0.03543);
-  expect(returns[9]).toBeCloseTo(0.02492);
-  expect(returns[11]).toBeCloseTo(0.03464);
-
-  // There are a total of 7 6-month periods in a year.
-  // Jan-Jul, Feb-Aug,... Jun-Dec, Jul-Jan
-  returns = calcPeriodReturn(data, startDate, endDate, 6, 0);
-  expect(returns.length).toBe(7);
-
-  expect(returns[0]).toBeCloseTo(-0.02947);  // Jan => Jul
-  expect(returns[2]).toBeCloseTo(-0.01630);
-  expect(returns[5]).toBeCloseTo(0.15724);
-  expect(returns[6]).toBeCloseTo(0.19923); // Jul => Jan
-
-  returns = calcPeriodReturn(data, startDate, endDate, 12, 0);
-  expect(returns.length).toBe(1);
-  expect(returns[0]).toBeCloseTo(0.16388);
-});
-
-it('Build array of all returns by all periods', async () => {
-  const data = getData();
+it('Runs the simulator the correct number of times', async () => {
   // console.log(data);
 
   // Ok - lets test getting % return over time
   const startDate = getDate(2000, 1);
-  const endDate = getDate(2005, 1);
-
-  // we generate from 1 month through till 4 years
-  const minMonths = 1;
-  const maxMonths = 12 * 4;
-  const totalMonthsAvailable = 5 * 12;
-
-  const allReturns = new Array(maxMonths);
-
-  for (let monthCount = minMonths; monthCount <= maxMonths; monthCount++)
-  {
-    const periodReturns = calcPeriodReturn(data, startDate, endDate, monthCount, 0);
-    expect(periodReturns.length).toBe(totalMonthsAvailable - (monthCount - 1));
-    allReturns[monthCount - 1] = periodReturns;
-  }
-
-  // Lets check a few 4yr returns
-  expect(allReturns[maxMonths - 1][0]).toBeCloseTo(-0.15766);
-  expect(allReturns[maxMonths - 1][12]).toBeCloseTo(-0.05747);
-});
-
-test('Build output all return data', async () => {
+  const endDate = getDate(2005, 7);
   const data = getData();
+  const startIdx = getIdx(startDate, data);
+  const endIdx = getIdx(endDate, data);
+  const slice = data.slice(startIdx, endIdx);
 
-  // We only want to count the data since FDR's "new deal"
-  // US abandoned gold standard in April 1933
-  const startDate = getDate(1933, 3);
-  const endDate = DateTime.now();
+  // Do we generate all possible returns?
+  const params = createParams({maxDuration: {years: 5}})
+  const periodReturns = calcAllReturns(slice, params);
+  expect(periodReturns.length).toBe(65); // 5 full-length & 60 smaller ones
 
-  // we generate from 1 month through till 60 years
-  const minMonths = 1;
-  const maxMonths = 12 * 60;
-  const allReturns = new Array(maxMonths);
-
-  for (let monthCount = minMonths; monthCount <= maxMonths; monthCount++)
-  {
-    const periodReturns = calcPeriodReturn(data, startDate, endDate, monthCount, 0);
-    allReturns[monthCount - 1] = periodReturns;
-  }
-
-  // Now, lets find the worst possible return over 10 years
-  const tenYrReturns = allReturns[10 * 12];
-  const idx = tenYrReturns.indexOf(Math.min.apply(null, tenYrReturns));
-  // What is this return, and when did it happen?
-  const worstDate = startDate.plus({ months: idx })
-  // 1999 was a terrible time to be an investor
-  //console.log(`Worst return: ${tenYrReturns[idx]} from ${worstDate.toISODate()}`);
-  expect(worstDate.toISODate()).toBe("1999-02-01");
-  // TODO: Why do we have a different number here?
-  //expect(tenYrReturns[idx]).toBeCloseTo(-0.30009);
-
-  // now, we sort all entries by size but remember their time
-  //var allReturnsSorted = allReturns.map(returns => returns.sort());
-
-  // Write these calculations out to disk
-  // Turns out that's a terrible idea: the generated file
-  // is 10mb vs the source data of 118 kb
-  //fs.writeFileSync(outputJsonPath, JSON.stringify(allReturnsSorted));
-  //console.log("all done");
+  // each subsequent period should be 1 month shorter
+  periodReturns.forEach((p, idx) => {
+    const simDuration = p[0].date.diff(p[p.length-1].date, "months");
+    const offset = Math.max(0, idx - 5);
+    const months = Math.floor(-simDuration.months);
+    expect(months).toBe(60 - offset);
+  })
 });
 
 // Test to see if we calculate a reasonable average/lower/upper
 test('Calculates average/min/max correctly', async () => {
   const data = getData();
-  const allReturns = getAllReturns(data, 12 * 60, 0);
-  // Again, the worst return of 10 years should be 1999
-  const tenYrReturns = allReturns[10 * 12];
-  const idx = tenYrReturns.indexOf(Math.min.apply(null, tenYrReturns));
-  expect(idx).toBe(0);
+  const idx = getIdx(getDate(2000, 1), data);
+  const params = createParams({initialBalance: 100, maxDuration: {years: 10}});
+  const allReturns = calcAllReturns(data.slice(idx), params);
+  // the worst return of 10 years should be 1999
+  const averageReturns = calculateAvgAndArea(allReturns, data, 1);
 
-  const averageReturns = calculateAvgAndArea(allReturns, 1);
-  const tenYrAverages = averageReturns[10 * 12];
-  expect(tenYrAverages.lowerBound).toBe(tenYrReturns[0]);
-  expect(tenYrAverages.upperBound).toBe(tenYrReturns[tenYrReturns.length - 1]);
+  const weeksIn10Yrs = Duration.fromObject({years: 10}).as("weeks");
+  const averaged10Yr = averageReturns[Math.round(weeksIn10Yrs)];
+  // When was the worst moment in history to start investing?
+  // If you bought on Aug 2000, you were ~ 13% down 10 years later.
+  expect(averaged10Yr.values[0].date.toSQLDate()).toBe('2010-07-27');
 });
