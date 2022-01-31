@@ -1,4 +1,4 @@
-import Papa from 'papaparse';
+import { parse } from 'papaparse';
 import { DateTime } from 'luxon';
 import { MarketData } from './market';
 
@@ -15,7 +15,7 @@ const transformData = (value: string, name: string) =>
 
 export function parseData(data: string) {
   // Strip leading/trailing empty strings
-  const csv = Papa.parse(data.trim(), {
+  const csv = parse(data.trim(), {
     header: true,
     transform: transformData,
   });

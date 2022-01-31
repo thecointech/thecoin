@@ -19,8 +19,8 @@ export type CoinReturns = {
 // calculate _all_ returns, including returns
 // of just 1 month.
 export function calcAllReturns(data: MarketData[], params: SimulationParameters) : SimulationState[][];
-export function calcAllReturns(data: MarketData[], params: SimulationParameters, progress?: (percent: number) => boolean) : undefined|SimulationState[][];
-export function calcAllReturns(data: MarketData[], params: SimulationParameters, progress?: (percent: number) => boolean) {
+export function calcAllReturns(data: MarketData[], params: SimulationParameters, progress?: (percent: number) => boolean|void) : undefined|SimulationState[][];
+export function calcAllReturns(data: MarketData[], params: SimulationParameters, progress?: (percent: number) => boolean|void) {
 
   // For each period of length monthCount, find the total return
   const simulator = new ReturnSimulator(data, params);

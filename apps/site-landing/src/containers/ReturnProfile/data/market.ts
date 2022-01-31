@@ -14,7 +14,7 @@ export const FDRNewDeal = DateTime.fromObject({year: 1933, month: 3});
 export function getIdx(date: DateTime, data: MarketData[]) {
   const initDate = data[0].Date;
   const yearIdx = (date.year - initDate.year) * 12;
-  const monthIdx = date.month - 1;
+  const monthIdx = date.month - initDate.month;
   return yearIdx + monthIdx;
 }
 
