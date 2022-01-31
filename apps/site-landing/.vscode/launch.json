@@ -13,11 +13,12 @@
       "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }",
     },
     {
-      "type": "node",
+      "type": "pwa-node",
       "name": "vscode-jest-tests",
       "request": "launch",
       "program": "${workspaceFolder}/../../node_modules/jest/bin/jest",
       "args": [
+        "${fileBasename}",
         "--runInBand",
         "--config",
         "jest.config.js"
@@ -25,7 +26,7 @@
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true
+      "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }"
     }
 	]
 }

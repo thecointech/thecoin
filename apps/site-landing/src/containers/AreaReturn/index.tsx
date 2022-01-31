@@ -1,70 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Defs } from '@nivo/core'
-import { area, curveMonotoneX } from 'd3-shape'
-import { Datum, Line, Serie, Layer, CustomLayerProps, DatumValue } from '@nivo/line'
-import { getData, getAllReturns,calculateAvgAndArea, DataFormat } from 'containers/ReturnProfile/Data'
+import { Datum, Serie } from '@nivo/line'
+import { getData, calculateAvgAndArea, MarketData, createParams, calcAllReturns } from 'containers/ReturnProfile/data'
 import range from 'lodash/range'
+import { AreaGraph } from './Graph'
 
-//const data: Serie[] = generateDrinkStats(18) as any;
-
-const commonProperties = {
-    width: 900,
-    height: 400,
-    margin: { top: 20, right: 20, bottom: 60, left: 80 },
-    animate: true,
-    enableSlices: 'x' as 'x',
-}
-
-const AreaLayer = (props: CustomLayerProps) => {
-  const { data, xScale, yScale } = props;
-  const innerHeight: number = props.innerHeight;
-  const areaGenerator = area<Datum>()
-    .x(d => xScale(d.x as DatumValue))
-    .y0(d => Math.min(innerHeight, yScale(d.lowerBound)))
-    .y1(d => yScale(d.upperBound))
-    .curve(curveMonotoneX)
-
-  return (
-    <>
-      <Defs
-        defs={[
-          {
-            id: 'pattern',
-            type: 'patternLines',
-            background: 'transparent',
-            color: '#3daff7',
-            lineWidth: 1,
-            spacing: 6,
-            rotation: -45,
-          },
-        ]}
-      />
-      <path
-        d={areaGenerator(data[0].data) ?? undefined}
-        fill="url(#pattern)"
-        fillOpacity={0.6}
-        stroke="#3daff7"
-        strokeWidth={2}
-      />
-    </>
-  )
-}
-
-const layers: Layer[] = [
-    'grid',
-    'markers',
-    'areas',
-    AreaLayer,
-    'lines',
-    'slices',
-    'axes',
-    'points',
-    'legends',
-  ];
 
 export const CustomLayers = () => {
 
-  const [rawData, setRawData] = useState(undefined as DataFormat[]|undefined)
+  const [rawData, setRawData] = useState(undefined as MarketData[]|undefined)
   const [allDatum, setAllDatum] = useState([] as Datum[])
   const [serie, setSerie ] = useState([{
     data: [],
@@ -90,8 +33,9 @@ export const CustomLayers = () => {
     if (!rawData)
       return;
     const calcValue = (n: number) => accountValue * (n + 1);
-    const periodReturns = getAllReturns(rawData, 12 * 60, 0);
-    const coinReturns = calculateAvgAndArea(periodReturns, 1);
+    const params = createParams({initialBalance: 100});
+    const periodReturns = calcAllReturns(rawData, params);
+    const coinReturns = calculateAvgAndArea(periodReturns, rawData, 1);
     const datum: Datum[] = coinReturns.map((r, idx): Datum => ({
       x: idx + 1,
       y: calcValue(r.median),
@@ -126,22 +70,5 @@ export const CustomLayers = () => {
     ])
   }, [allDatum, maxGraphPoints])
 
-  return <Line
-    {...commonProperties}
-    yScale={{
-      type: 'linear',
-      stacked: true,
-      min: 0,
-    }}
-    data={serie}
-    lineWidth={3}
-    curve="monotoneX"
-    colors={['#028ee6', '#774dd7']}
-    enableGridX={false}
-    pointSize={12}
-    pointColor="white"
-    pointBorderWidth={2}
-    pointBorderColor={{ from: 'serieColor' }}
-    layers={layers}
-  />
+  return <AreaGraph data={serie} />
 }
