@@ -27,9 +27,6 @@ export function calcAllReturns(data: MarketData[], params: SimulationParameters)
   let start = data[0].Date;
   let last = data[data.length - 1].Date;
   while (start < last) {
-    if (start.month == 1 && start.day == 1) {
-      console.log(`Processed ${r.length}: ${start.toSQLDate()}`);
-    }
     const p = simulator.calcReturns(start);
     r.push(p);
     start = start.plus({months: 1});
