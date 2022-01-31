@@ -17,10 +17,9 @@ import { first, last } from '@thecointech/utilities/ArrayExtns';
 
 const zero = new Decimal(0);
 const DMin = (l: Decimal, r: Decimal) => l.lt(r) ? l : r;
-const straddlesMonth = (date: DateTime) => date.weekday >= date.day;
-const straddlesYear = (start: DateTime, date: DateTime) => {
-
-  const diff = start.diff(date, ["years", "days"]);
+export const straddlesMonth = (date: DateTime) => date.day <= 7;
+export const straddlesYear = (start: DateTime, date: DateTime) => {
+  const diff = date.diff(start, ["years", "days"]);
   return diff.years > 0 && diff.days < 7;
 }
 
@@ -75,7 +74,6 @@ export class ReturnSimulator {
 
   // On any week with an outstanding balance, try to pay it immediately
   updateCreditOutstanding(state: SimulationState) {
-    const month = this.getMarketData(state);
     const { credit } = state;
     if (!credit.outstanding) return;
 
@@ -239,9 +237,8 @@ export class ReturnSimulator {
           const outCoin = spending.div(month.P);
           state.coin = state.coin.sub(outCoin)
 
-          // Calculate spending
-          this.updateCreditBalances(start, state)
           // calculate credit changes
+          this.updateCreditBalances(start, state)
 
           return state;
         })
