@@ -1,8 +1,8 @@
-import type { FXRate } from '@thecointech/pricing';
+import type { CurrencyCode, FXRate } from '@thecointech/pricing';
 
 // file deepcode ignore ComparisonObjectExpression: <Ignore complaints about comparison vs EmptyRate>
 export const EmptyRate: FXRate = {
-  target: -1,
+  target: 0 as CurrencyCode,
   buy: 0,
   sell: 0,
   fxRate: 0,
