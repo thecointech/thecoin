@@ -72,7 +72,6 @@ export class ReturnSimulator {
 
   // On any week with an outstanding balance, try to pay it immediately
   updateCreditOutstanding(state: SimulationState) {
-    const month = this.getMarketData(state);
     const { credit } = state;
     if (!credit.outstanding) return;
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Header, Loader } from 'semantic-ui-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { AreaGraph } from '../../AreaGraph';
-import { calcAllReturns, calculateAvgAndArea, DataFormat, SimulationParameters } from '../../ReturnProfile/data';
+import { calcAllReturns, calculateAvgAndArea, MarketData, SimulationParameters } from '../../ReturnProfile/data';
 import styles from './styles.module.less';
 import { isEqual } from 'lodash';
 
@@ -17,8 +17,8 @@ const translations = defineMessages({
 
 type Props = {
   params: SimulationParameters,
-  fxData: DataFormat[],
-  snpData: DataFormat[],
+  fxData: MarketData[],
+  snpData: MarketData[],
 }
 
 // TODO: This component does a lot of computation, and should be memoized
@@ -26,7 +26,7 @@ const GraphCompareLoaded = ({params, snpData}: Props) => {
 
   // These 3 lines hide a lot of computation
   const allReturns = calcAllReturns(snpData, params);
-  const averages = calculateAvgAndArea(allReturns, 1);
+  const averages = calculateAvgAndArea(allReturns, snpData, 1);
   const maxGraphPoints = 12;
 
   return (

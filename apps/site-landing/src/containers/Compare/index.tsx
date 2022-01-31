@@ -11,7 +11,7 @@ import { GraphCompare } from './GraphCompare';
 import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateAccountBanner';
 
 import styles from './styles.module.less';
-import { createParams, DataFormat, getData } from '../ReturnProfile/data';
+import { createParams, MarketData, getData } from '../ReturnProfile/data';
 
 const translations = defineMessages({
   title: {
@@ -29,8 +29,8 @@ const defaultParams = createParams({initialBalance: 1000})
 export function Compare() {
 
   const [params, setParams] = useState(defaultParams);
-  const [fxData, setFxData] = useState<DataFormat[]|undefined>();
-  const [snpData, setSnPData] = useState<DataFormat[]|undefined>();
+  const [fxData, setFxData] = useState<MarketData[]|undefined>();
+  const [snpData, setSnPData] = useState<MarketData[]|undefined>();
 
   // Fetch src data
   useEffect(() => {

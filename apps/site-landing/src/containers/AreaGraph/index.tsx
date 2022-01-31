@@ -1,18 +1,11 @@
 import React from 'react'
 import { CustomGraphLayers, AreaDatum } from './CustomGraphLayers'
 import range from 'lodash/range'
-
-type DataPoints = {
-  mean: number;
-  median: number;
-  lowerBound: number;
-  upperBound: number;
-  values: number[];
-}
+import { CoinReturns } from '../ReturnProfile/data'
 
 type Props = {
   maxGraphPoints: number,
-  data: DataPoints[];
+  data: CoinReturns[];
 }
 
 export const AreaGraph = ({maxGraphPoints, data}: Props) => {
