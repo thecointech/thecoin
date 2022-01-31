@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Header, Loader, Progress, Segment } from 'semantic-ui-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { AreaGraph } from '../../AreaGraph';
-import { calcAllReturns, calculateAvgAndArea, CoinReturns, MarketData, SimulationParameters, SimulationState } from '../../ReturnProfile/data';
+import { calcAllReturns, calculateAvgAndArea, CoinReturns, MarketData, SimulationParameters } from '../../ReturnProfile/data';
 import styles from './styles.module.less';
-import { isEqual } from 'lodash';
 
 const translations = defineMessages({
   title : {
@@ -17,22 +16,23 @@ const translations = defineMessages({
 
 type Props = {
   params: SimulationParameters,
-  fxData: MarketData[],
-  snpData: MarketData[],
+  fxData?: MarketData[],
+  snpData?: MarketData[],
 }
 
 // TODO: This component does a lot of computation, and should be memoized
-const GraphCompareLoaded = ({params, snpData}: Props) => {
+export const BenefitsGraph = ({params, snpData}: Props) => {
 
   //const [allReturns, setAllReturns] = useState<undefined|SimulationState[][]>();
   const [averages, setAverages] = useState<undefined|CoinReturns[]>();
   const [progress, setProgress] = useState<number|undefined>(0);
 
   useEffect(() => {
+    if (!snpData) return;
     let isCancelled = false;
     const cancellableProgress = (value: number) => {
       setProgress(value);
-      return isCancelled;
+      return !isCancelled;
     }
     const allReturns = calcAllReturns(snpData, params, cancellableProgress);
     if (allReturns) {
@@ -41,7 +41,7 @@ const GraphCompareLoaded = ({params, snpData}: Props) => {
       setProgress(undefined);
     }
     return () => { isCancelled = true };
-  }, [])
+  }, [snpData])
 
   const maxGraphPoints = 12;
   return (
@@ -67,13 +67,13 @@ const GraphLoading = ({percent}: {percent: number}) => (
   </>
 )
 
-const MemoizedGraphCompare = React.memo(GraphCompareLoaded, (a, b) => (
-  a.fxData === b.fxData &&
-  a.snpData === b.snpData &&
-  isEqual(a.params, b.params)
-))
+// const MemoizedGraphCompare = React.memo(GraphCompareLoaded, (a, b) => (
+//   a.fxData === b.fxData &&
+//   a.snpData === b.snpData &&
+//   isEqual(a.params, b.params)
+// ))
 
-export const GraphCompare = ({params, fxData, snpData}: Partial<Props>) =>
-  (params && snpData && fxData)
-    ? <MemoizedGraphCompare params={params} fxData={fxData} snpData={snpData} />
-    : <Loader active inline='centered' />
+// export const GraphCompare = ({params, fxData, snpData}: Partial<Props>) =>
+//   (params && snpData && fxData)
+//     ? <MemoizedGraphCompare params={params} fxData={fxData} snpData={snpData} />
+//     : <Loader active inline='centered' />
