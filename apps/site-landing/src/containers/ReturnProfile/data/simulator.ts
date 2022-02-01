@@ -213,6 +213,8 @@ export class ReturnSimulator {
       state, // always start with initial
       ...range(1, numWeeks + 1)
         .map((week) => {
+          // Note; this line is responsible for 2/3 of the execution cost
+          // of the simulator.  We should, one day, look into eliminating it
           state = {
             ...state,
             date: from.plus({ week })
