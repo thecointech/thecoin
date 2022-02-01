@@ -6,8 +6,8 @@ import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Grid, Header } from 'semantic-ui-react';
 
-import { FormCompare } from './FormCompare';
-import { GraphCompare } from './GraphCompare';
+import { FormCompare } from './Form';
+import { BenefitsGraph } from './Graph';
 import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateAccountBanner';
 
 import styles from './styles.module.less';
@@ -54,7 +54,7 @@ export function Compare() {
               <FormCompare params={params} setParams={setParams} />
             </Grid.Column>
             <Grid.Column textAlign='left' width={10} floated='left' >
-              <GraphCompare params={params} snpData={snpData} fxData={fxData} />
+              <BenefitsGraph params={params} snpData={snpData} fxData={fxData} />
             </Grid.Column>
           </Grid.Row>
         </Grid>

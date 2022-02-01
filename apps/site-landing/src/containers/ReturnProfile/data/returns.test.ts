@@ -4,6 +4,16 @@ import { getData, getDate } from './fetch.test';
 import { getIdx } from './market';
 import { createParams } from './params';
 
+it('can cancel a long-running op', async () => {
+  let counter = 0;
+  // Cancel after 5 runs
+  const canceller = () => ++counter < 5;
+  const params = createParams({maxDuration: {years: 5}})
+  const data = getData();
+  const periodReturns = calcAllReturns(data, params, canceller);
+  expect(counter).toBe(5);
+  expect(periodReturns).toBeUndefined();
+})
 
 it('Runs the simulator the correct number of times', async () => {
   // console.log(data);

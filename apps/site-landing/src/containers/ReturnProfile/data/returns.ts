@@ -18,7 +18,9 @@ export type CoinReturns = {
 // NOTE: This does NOT limit results, it will
 // calculate _all_ returns, including returns
 // of just 1 month.
-export function calcAllReturns(data: MarketData[], params: SimulationParameters) {
+export function calcAllReturns(data: MarketData[], params: SimulationParameters) : SimulationState[][];
+export function calcAllReturns(data: MarketData[], params: SimulationParameters, progress?: (percent: number) => boolean) : undefined|SimulationState[][];
+export function calcAllReturns(data: MarketData[], params: SimulationParameters, progress?: (percent: number) => boolean) {
 
   // For each period of length monthCount, find the total return
   const simulator = new ReturnSimulator(data, params);
@@ -26,10 +28,14 @@ export function calcAllReturns(data: MarketData[], params: SimulationParameters)
 
   let start = data[0].Date;
   let last = data[data.length - 1].Date;
-  while (start < last) {
-    const p = simulator.calcReturns(start);
+  const monthsOfData = last.diff(start, "months").months;
+  for (let month = 0; month < monthsOfData; month++) {
+    const p = simulator.calcReturns(start.plus({month}));
     r.push(p);
-    start = start.plus({months: 1});
+
+    // This operation is cancellable.
+    if (progress?.(month / monthsOfData) === false)
+      return undefined;
   }
   return r;
 }
@@ -44,6 +50,7 @@ function longestSimWeeks(allReturns: SimulationState[][]) {
 
 // For each duration (1 thru max simulation duration) find the average return & percentiles.
 // Data is array of simulations
+
 export function calculateAvgAndArea(allReturns: SimulationState[][], data: MarketData[], percentile: number) {
   const toFiat = (s: SimulationState) => calcFiat(s, data).toNumber();
   const maxLength = longestSimWeeks(allReturns);
