@@ -1,8 +1,7 @@
 import { range } from 'lodash';
-import { DateTime } from 'luxon';
 import { getData, getDate } from './fetch.test';
 import { createParams } from './params';
-import { ReturnSimulator, straddlesMonth, straddlesYear } from './simulator';
+import { ReturnSimulator } from './simulator';
 import { calcFiat, SimulationState } from './state';
 
 const data = getData();
@@ -16,47 +15,6 @@ const simPercent = (r: SimulationState[]) =>
   calcPercent(r[r.length - 1]);
 export const simIdxPercent = (idx: number, states: SimulationState[][]): number =>
   simPercent(states[idx]);
-
-it('correctly straddles months', () => {
-  const straddlesM = (month: number, day: number) =>
-    straddlesMonth(DateTime.fromObject({month, day}));
-  expect(straddlesM(1, 31)).toBeFalsy()
-  expect(straddlesM(2, 1)).toBeTruthy()
-  expect(straddlesM(2, 7)).toBeTruthy()
-  expect(straddlesM(2, 8)).toBeFalsy()
-  // We should have 7 * 12 days straddling months within a year
-  const jan1 = DateTime.fromObject({month: 1, day: 1});
-  const allStraddles = range(0, 365).reduce((acc, days) => {
-    const d = jan1.plus({days});
-    const s = straddlesMonth(d);
-    return s ? acc + 1 : acc;
-  }, 0);
-  expect(allStraddles).toBe(12 * 7);
-})
-
-it('correctly straddles years', () => {
-  const straddlesY = (year: number, month: number, day: number) =>
-    straddlesYear(DateTime.fromObject({year: 1981}), DateTime.fromObject({year, month, day}));
-  expect(straddlesY(1981, 1, 1)).toBeFalsy();
-  expect(straddlesY(1982, 12, 31)).toBeFalsy();
-  expect(straddlesY(1983, 1, 1)).toBeTruthy();
-  expect(straddlesY(1983, 1, 7)).toBeTruthy();
-  expect(straddlesY(1983, 1, 8)).toBeFalsy();
-  expect(straddlesY(1983, 6, 1)).toBeFalsy();
-
-  // We should have 7 * 15 days straddling years in 15 years
-  const randInt = (n: number) => Math.round(Math.random() * n);
-  const startDate = DateTime.fromObject({year: 1900 + randInt(100), month: randInt(12), day: randInt(28)});
-  const allStraddles = range(0, 365 * 15).reduce((acc, days) => {
-    const d = startDate.plus({days});
-    const s = straddlesYear(startDate, d);
-    if (d.year != startDate.year && d.month == startDate.month && d.day == startDate.day) {
-      expect(s).toBeTruthy();
-    }
-    return s ? acc + 1 : acc;
-  }, 0);
-  expect(allStraddles).toBe(14 * 7);
-})
 
 it('Should match basic calculation from DQYDJ', () => {
   // Note, because of our transition to using weekly-based calculations,

@@ -5,6 +5,7 @@ import { SimulationState } from './state';
 import { getMarketData, MarketData } from './market';
 import { range } from 'lodash';
 import { first, last } from '@thecointech/utilities/ArrayExtns';
+import { straddlesMonth, straddlesYear } from './time';
 
 //
 // ReturnSimulator
@@ -17,11 +18,6 @@ import { first, last } from '@thecointech/utilities/ArrayExtns';
 
 const zero = new Decimal(0);
 const DMin = (l: Decimal, r: Decimal) => l.lt(r) ? l : r;
-export const straddlesMonth = (date: DateTime) => date.day <= 7;
-export const straddlesYear = (start: DateTime, date: DateTime) => {
-  const diff = date.diff(start, ["years", "days"]);
-  return diff.years > 0 && diff.days < 7;
-}
 
 export class ReturnSimulator {
 
@@ -215,7 +211,7 @@ export class ReturnSimulator {
     let state = this.getInitial(from);
     return [
       state, // always start with initial
-      ...range(1, numWeeks)
+      ...range(1, numWeeks + 1)
         .map((week) => {
           state = {
             ...state,
