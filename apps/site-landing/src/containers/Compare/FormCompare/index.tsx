@@ -1,9 +1,8 @@
-import * as React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { Button } from 'semantic-ui-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-
+import { SimulationParameters } from '../../ReturnProfile/data/params';
 import { RangeFieldAndScale } from 'components/RangeFieldAndScale';
-
 import styles from './styles.module.less';
 
 const translations = defineMessages({
@@ -21,10 +20,19 @@ const translations = defineMessages({
         description: 'site.compare.button: label for the button in the compare page'}
   });
 
-export const FormCompare = () => {
+type Props = {
+  params: SimulationParameters;
+  setParams: Dispatch<SetStateAction<SimulationParameters>>;
+};
+
+export const FormCompare = ({params, setParams}: Props) => {
 
   // TODO: Connect all o' dis
-  const onChange = () => {};
+  const onChangeNamed = (name: keyof SimulationParameters) =>
+    (val: any) => setParams((prev: SimulationParameters) => ({
+      ...prev,
+      [name]: val,
+    }))
 
   return (
     <div id={styles.variablesContainer}>
@@ -35,14 +43,15 @@ export const FormCompare = () => {
         currency="CAD"
         maximum={1000}
         step={1}
-        onChange={onChange}
+        initial={params.initialBalance}
+        onChange={onChangeNamed("initialBalance")}
       />
 
       <RangeFieldAndScale
         label={translations.rangeDuration}
         scaleType="unit"
         maximum={60}
-        onChange={onChange}
+        onChange={v => onChangeNamed("maxDuration")({years: v})}
       />
 
       <Button secondary className={`${styles.buttonContainer} x16spaceBefore`}>

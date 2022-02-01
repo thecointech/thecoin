@@ -2,7 +2,7 @@
  * Graph to compare
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Grid, Header } from 'semantic-ui-react';
 
@@ -11,6 +11,7 @@ import { GraphCompare } from './GraphCompare';
 import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateAccountBanner';
 
 import styles from './styles.module.less';
+import { createParams, MarketData, getData } from '../ReturnProfile/data';
 
 const translations = defineMessages({
   title: {
@@ -23,15 +24,19 @@ const translations = defineMessages({
   }
 });
 
+const defaultParams = createParams({initialBalance: 1000})
+
 export function Compare() {
 
-  // const [initial, setInitial] = useState(1000);
-  // const [income, setIncome] = useState(2000);
-  // const [creditSpend, setCreditSpend] = useState(500);
-  // const [cashSpend, setCashSpend] = useState(1000);
-  // const [annualSpend, setAnnualSpend] = useState(1000);
+  const [params, setParams] = useState(defaultParams);
+  const [fxData, setFxData] = useState<MarketData[]|undefined>();
+  const [snpData, setSnPData] = useState<MarketData[]|undefined>();
 
-  // const [duration, setDuration] = useState(60);
+  // Fetch src data
+  useEffect(() => {
+    getData().then(setSnPData);
+    setFxData([]);
+  })
 
   return (
     <>
@@ -46,10 +51,10 @@ export function Compare() {
         <Grid columns={3} stackable>
           <Grid.Row stretched>
             <Grid.Column textAlign='center' width={5} floated='right'>
-              <FormCompare />
+              <FormCompare params={params} setParams={setParams} />
             </Grid.Column>
             <Grid.Column textAlign='left' width={10} floated='left' >
-              <GraphCompare {...{} as any} />
+              <GraphCompare params={params} snpData={snpData} fxData={fxData} />
             </Grid.Column>
           </Grid.Row>
         </Grid>

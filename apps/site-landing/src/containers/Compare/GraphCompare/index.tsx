@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { Header } from 'semantic-ui-react';
+import React from 'react';
+import { Header, Loader } from 'semantic-ui-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { AreaGraph } from '../../AreaGraph';
+import { calcAllReturns, calculateAvgAndArea, MarketData, SimulationParameters } from '../../ReturnProfile/data';
 import styles from './styles.module.less';
-
-//TODO: replace by the real graph
-import Graph from './images/Group576.svg';
+import { isEqual } from 'lodash';
 
 const translations = defineMessages({
   title : {
@@ -16,22 +16,37 @@ const translations = defineMessages({
   });
 
 type Props = {
-  initial: number,
-  income: number,
-  creditSpend: number,
-  cashSpend: number,
-  annualSpend: number,
-  duration: number,
+  params: SimulationParameters,
+  fxData: MarketData[],
+  snpData: MarketData[],
 }
-export const GraphCompare = (_props: Props) => {
 
-    return (
-      <div className={styles.graphContainer}>
-          <Header as="h4">
-            <FormattedMessage {...translations.title} />
-          </Header>
-          <FormattedMessage {...translations.description} />
-          <img src={Graph} />
-      </div>
-    );
+// TODO: This component does a lot of computation, and should be memoized
+const GraphCompareLoaded = ({params, snpData}: Props) => {
+
+  // These 3 lines hide a lot of computation
+  const allReturns = calcAllReturns(snpData, params);
+  const averages = calculateAvgAndArea(allReturns, snpData, 1);
+  const maxGraphPoints = 12;
+
+  return (
+    <div className={styles.graphContainer}>
+        <Header as="h4">
+          <FormattedMessage {...translations.title} />
+        </Header>
+        <FormattedMessage {...translations.description} />
+        <AreaGraph maxGraphPoints={maxGraphPoints} data={averages} />
+    </div>
+  );
 };
+
+const MemoizedGraphCompare = React.memo(GraphCompareLoaded, (a, b) => (
+  a.fxData === b.fxData &&
+  a.snpData === b.snpData &&
+  isEqual(a.params, b.params)
+))
+
+export const GraphCompare = ({params, fxData, snpData}: Partial<Props>) =>
+  (params && snpData && fxData)
+    ? <MemoizedGraphCompare params={params} fxData={fxData} snpData={snpData} />
+    : <Loader active inline='centered' />
