@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon';
 import { Decimal } from 'decimal.js-light';
 import { getMarketData, MarketData } from './market';
+import { zero } from './sim.decimal';
 
 export type SimulationState = {
   // Date of snapshot
@@ -36,6 +37,23 @@ export type SimulationState = {
   offsetCO2: Decimal;
 }
 
+export const zeroState = (start: DateTime) => ({
+  date: start,
+  principal: zero,
+  coin: zero,
+  credit: {
+    balanceDue: zero,
+    current: zero,
+    cashBackEarned: zero,
+    outstanding: false,
+  },
+  shockAbsorber: {
+    coinAdjustment: zero,
+    //  totalCoinOffset: zero,
+  },
+  offsetCO2: zero,
+})
+
 // Clone existing state.  Placed here so if we make any changes to state
 // we can easily update the cloning at the same time.
 export const increment = (state: SimulationState, date: DateTime) => ({
@@ -46,10 +64,8 @@ export const increment = (state: SimulationState, date: DateTime) => ({
   }
 })
 
-export const toFiat = (coin: Decimal, data: MarketData) =>
-  coin.mul(data?.P).toSignificantDigits(19)
-export const toCoin = (coin: Decimal, data: MarketData) =>
-  coin.div(data?.P)
+export const toFiat = (coin: Decimal, data: MarketData) => coin.mul(data.P)
+export const toCoin = (coin: Decimal, data: MarketData) => coin.div(data.P)
 
 export const calcFiat = (state: SimulationState, data: MarketData[]) =>
   toFiat(state.coin, getMarketData(state.date, data));

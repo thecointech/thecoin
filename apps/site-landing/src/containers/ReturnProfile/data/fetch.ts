@@ -12,7 +12,7 @@ function transformDate(value: string) {
 const transformData = (value: string, name: string) =>
   (name === 'Date') && value.length ?
     transformDate(value) :
-    new Decimal(value);
+    value ? new Decimal(value) : value;
 
 export function parseData(data: string) {
   // Strip leading/trailing empty strings

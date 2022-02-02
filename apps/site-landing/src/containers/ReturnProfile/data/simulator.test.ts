@@ -1,3 +1,4 @@
+import { last } from '@thecointech/utilities';
 import { range } from 'lodash';
 import { getData, getDate } from './fetch.test';
 import { createParams } from './params';
@@ -34,7 +35,7 @@ it('Should match basic calculation from DQYDJ', () => {
   expect(returns.length).toBe(Math.ceil(elapsedWeeks) + 1);
 
   // Should match output here: https://dqydj.com/sp-500-return-calculator/
-  const final = returns[returns.length - 1];
+  const final = last(returns);
   const finalPercent = calcPercent(final);
   expect(finalPercent / 273.28238).toBeCloseTo(1); // Src: 27328.238%
 });

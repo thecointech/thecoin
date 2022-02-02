@@ -1,11 +1,14 @@
 import { DateTime } from 'luxon';
 import { Decimal } from 'decimal.js-light';
 import { SimulationParameters } from './params';
-import { SimulationState, calcFiat, increment, toFiat, toCoin } from './state';
+import { SimulationState, calcFiat, zeroState, increment, toFiat, toCoin } from './state';
 import { getMarketData, MarketData } from './market';
 import { range } from 'lodash';
 import { first, last } from '@thecointech/utilities/ArrayExtns';
 import { straddlesMonth, straddlesYear } from './time';
+import {  } from '.';
+import { DMin, zero } from './sim.decimal';
+import { applyShockAborber } from './sim.shockAbsorber';
 
 //
 // ReturnSimulator
@@ -15,10 +18,6 @@ import { straddlesMonth, straddlesYear } from './time';
 // with starting date and recieve back an array of all
 // weeks in the simulation
 //
-
-const zero = new Decimal(0);
-const DMin = (l: Decimal, r: Decimal) => l.lt(r) ? l : r;
-
 export class ReturnSimulator {
 
   data: MarketData[]
@@ -32,25 +31,13 @@ export class ReturnSimulator {
 
   getMarketData = (state: SimulationState) => getMarketData(state.date, this.data)!;
   getInitial = (start: DateTime): SimulationState =>
-    this.balanceChange({
-        date: start,
-        principal: zero,
-        coin: zero,
-        credit: {
-          balanceDue: zero,
-          current: zero,
-          cashBackEarned: zero,
-          outstanding: false,
-        },
-        shockAbsorber: {
-          coinAdjustment: zero,
-          //  totalCoinOffset: zero,
-        },
-        offsetCO2: zero,
-      },
-      new Decimal(this.params.initialBalance)
+    this.balanceChange(
+      zeroState(start),
+      new Decimal(this.params.initialBalance),
     )
 
+  applyShockAborber = (start: DateTime, state: SimulationState) =>
+    applyShockAborber(start, this.params, state, this.getMarketData(state))
 
   calcInterest = (current: Decimal) => current
     .mul(this.params.credit.interestRate) // full years interest
@@ -191,45 +178,6 @@ export class ReturnSimulator {
     const divAccrued = adjustedDiv.mul(state.coin);
     income = income.add(divAccrued);
     return income;
-  }
-
-  // The shock absorber takes the first X% of profit on MaxProtected
-  //
-  applyShockAborber(start: DateTime, state: SimulationState) {
-    const sa = this.params.shockAbsorber;
-    if (!sa.maximumProtected) return;
-
-    // The shock absorber works by taking the first X% of profit
-    const fiatProtected = DMin(state.principal, new Decimal(sa.maximumProtected));
-    const market = this.getMarketData(state);
-    const currentFiat = toFiat(state.coin, market);
-
-    // If state is losing money, top it up from reserves
-    if (currentFiat.lt(state.principal)) {
-      // how much should we transfer to top-up the account?
-      const loss = state.principal.sub(currentFiat);
-      const lossPercent = loss.div(state.principal);
-      const absorbedPercent = DMin(lossPercent, new Decimal(sa.absorbed))
-
-      // How much do we top up fiatProtected so it does not lose anything?
-      const fiatAdjust = fiatProtected.mul(absorbedPercent);
-      const coinAdjust = toCoin(fiatAdjust, market);
-      state.coin = state.coin.add(coinAdjust);
-      state.shockAbsorber.coinAdjustment = state.shockAbsorber.coinAdjustment.sub(coinAdjust);
-    }
-    // Else, reserve  the first profits
-    else if (currentFiat.gt(state.principal)) {
-      const gain = currentFiat.sub(state.principal);
-      const gainPerc = gain.div(state.principal);
-
-      const feePerc = DMin(gainPerc, new Decimal(sa.cushionPercentage));
-      const fiatAdjust = fiatProtected.mul(feePerc);
-      const coinAdjust = toCoin(fiatAdjust, market);
-      //const reserve = coinAdjust.sub(state.shockAbsorber.coinAdjustment);
-
-      state.coin = state.coin.sub(coinAdjust);
-      state.shockAbsorber.coinAdjustment = state.shockAbsorber.coinAdjustment.add(coinAdjust);
-    }
   }
 
   calcPeriod = (start: DateTime) => {
