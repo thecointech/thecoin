@@ -74,7 +74,7 @@ export type SimulationParameters = {
     // For a cash-back credit card, how much cash-back can we earn.
     // This amount is accumulated throughout the year and paid
     // on the first week of the following year.
-    cashBackPercentage: number;
+    cashBackRate: number;
 
     // There may be weeks/months where we cannot cover
     // the entire credit outstanding.  In those cases,
@@ -123,9 +123,9 @@ export const createParams = (explicit?: RecursivePartial<SimulationParameters>):
   },
   credit: {
     ...basicPeriods,
-    billingCycle: 0,
-    graceWeeks: 0,
-    cashBackPercentage: 0,
+    billingCycle: 4,
+    graceWeeks: 3,
+    cashBackRate: 0,
     interestRate: 0,
     ...explicit?.credit,
   },

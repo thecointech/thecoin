@@ -28,4 +28,14 @@ export type SimulationState = {
   protected: Decimal;
 }
 
+// Clone existing state.  Placed here so if we make any changes to state
+// we can easily update the cloning at the same time.
+export const increment = (state: SimulationState, date: DateTime) => ({
+  ...state,
+  date,
+  credit: {
+    ...state.credit
+  }
+})
+
 export const calcFiat = (state: SimulationState, data: MarketData[]) => state.coin.mul(getMarketData(state.date, data)?.P ?? 1)
