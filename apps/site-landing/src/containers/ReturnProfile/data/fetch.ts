@@ -1,6 +1,7 @@
 import { parse } from 'papaparse';
 import { DateTime } from 'luxon';
 import { MarketData } from './market';
+import { Decimal } from 'decimal.js-light';
 
 function transformDate(value: string) {
   return DateTime.fromFormat(value, "yyyy-MM", {
@@ -11,7 +12,7 @@ function transformDate(value: string) {
 const transformData = (value: string, name: string) =>
   (name === 'Date') && value.length ?
     transformDate(value) :
-    Number(value);
+    new Decimal(value);
 
 export function parseData(data: string) {
   // Strip leading/trailing empty strings

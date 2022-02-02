@@ -102,7 +102,8 @@ type RecursivePartial<T> = {
   T[P] extends Array<infer U> ? Array<Value<U>> : Value<T[P]>;
 };
 
-export const createParams = (explicit?: RecursivePartial<SimulationParameters>): SimulationParameters => ({
+export type MergeSimParamaters = RecursivePartial<SimulationParameters>;
+export const createParams = (explicit?: MergeSimParamaters): SimulationParameters => ({
   // start: FDRNewDeal,
   // end: DateTime.now(),
   maxDuration: {

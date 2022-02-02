@@ -24,6 +24,6 @@ it ('parsed the data correctly', () => {
     lastMonth = thisMonth;
   }
   // test number parsing
-  expect(data[0].D + 0).toEqual(data[0].D);
+  expect(data[0].D.mul).toBeDefined();
 })
 

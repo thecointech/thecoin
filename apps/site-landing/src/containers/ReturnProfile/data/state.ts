@@ -20,12 +20,20 @@ export type SimulationState = {
     outstanding: boolean;
     // running total of how much cashback we've earned
     cashBackEarned: Decimal;
+  },
+
+  // The shock absorber protects principal from
+  // market downturns.
+  shockAbsorber: {
+    // How `coin` has already been adjusted (up or down)
+    coinAdjustment: Decimal;
+    // How much offset we have *already* applied to the
+    // current coin balance.
+    //principalBaseline: Decimal;
   }
 
+  // total spent on CO2 offsets
   offsetCO2: Decimal;
-
-  // What is the maximum protected value?
-  protected: Decimal;
 }
 
 // Clone existing state.  Placed here so if we make any changes to state
@@ -38,4 +46,11 @@ export const increment = (state: SimulationState, date: DateTime) => ({
   }
 })
 
-export const calcFiat = (state: SimulationState, data: MarketData[]) => state.coin.mul(getMarketData(state.date, data)?.P ?? 1)
+export const toFiat = (coin: Decimal, data: MarketData) =>
+  coin.mul(data?.P).toSignificantDigits(19)
+export const toCoin = (coin: Decimal, data: MarketData) =>
+  coin.div(data?.P)
+
+export const calcFiat = (state: SimulationState, data: MarketData[]) =>
+  toFiat(state.coin, getMarketData(state.date, data));
+
