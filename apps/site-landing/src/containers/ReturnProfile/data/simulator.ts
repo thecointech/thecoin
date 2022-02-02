@@ -3,6 +3,9 @@ import { Decimal } from 'decimal.js-light';
 import { SimulationParameters } from './params';
 import { SimulationState } from './state';
 import { getMarketData, MarketData } from './market';
+import { range } from 'lodash';
+import { first, last } from '@thecointech/utilities/ArrayExtns';
+import { straddlesMonth, straddlesYear } from './time';
 
 //
 // ReturnSimulator
@@ -15,11 +18,6 @@ import { getMarketData, MarketData } from './market';
 
 const zero = new Decimal(0);
 const DMin = (l: Decimal, r: Decimal) => l.lt(r) ? l : r;
-const straddlesMonth = (date: DateTime) => date.weekday >= date.day;
-const straddlesYear = (start: DateTime, date: DateTime) => {
-  const diff = start.diff(date, ["years", "days"]);
-  return diff.years > 0 && diff.days < 7;
-}
 
 export class ReturnSimulator {
 
@@ -197,53 +195,51 @@ export class ReturnSimulator {
   }
 
   calcPeriod = (start: DateTime) => {
-    const first = this.data[0];
-    const last = this.data[this.data.length - 1];
+    const f = first(this.data).Date;
+    const l = last(this.data).Date;
     return {
-      from: DateTime.max(first.Date, start),
-      to: DateTime.min(last.Date, start.plus(this.params.maxDuration)),
+      from: DateTime.max(f, start),
+      to: DateTime.min(l, start.plus(this.params.maxDuration)),
     };
   }
 
   // Calculate returns for across all supplied data.
   calcReturns(start: DateTime) {
-    const { from, to } = this.calcPeriod(start)
+    let { from, to } = this.calcPeriod(start)
+    const numWeeks = to.diff(from, "weeks").weeks;
     // Keep track of how much capital has been input.
     let state = this.getInitial(from);
-    const history: SimulationState[] = [state]
-    const incr = { weeks: 1 };
-    // After 20-odd years of searching, I have -finally-
-    // found a place where the do/while loop is actually
-    // the best conditional...
-    do {
-      // Actually, this might be better expressed as a map operation
-      state = {
-        ...state,
-        date: state.date.plus(incr)
-      };
+    return [
+      state, // always start with initial
+      ...range(1, numWeeks + 1)
+        .map((week) => {
+          // Note; this line is responsible for 2/3 of the execution cost
+          // of the simulator.  We should, one day, look into eliminating it
+          state = {
+            ...state,
+            date: from.plus({ week })
+          };
 
-      const month = this.getMarketData(state);
+          const month = this.getMarketData(state);
 
-      const income = this.calcIncome(start, state);
-      const inCoin = income.div(month.P);
-      state.coin = state.coin.add(inCoin);
+          const income = this.calcIncome(start, state);
+          const inCoin = income.div(month.P);
+          state.coin = state.coin.add(inCoin);
 
-      // Accumulate our cashback.  Do this before calculating credit just in case
-      // we need to use the cashbadk to pay off a balanceOwing
-      this.updateCreditCashback(start, state);
+          // Accumulate our cashback.  Do this before calculating credit just in case
+          // we need to use the cashbadk to pay off a balanceOwing
+          this.updateCreditCashback(start, state);
 
-      // subtract cash spending.  We assume the credit card will pick up any slack
-      const spending = this.calcSpending(start, state);
-      const outCoin = spending.div(month.P);
-      state.coin = state.coin.sub(outCoin)
+          // subtract cash spending.  We assume the credit card will pick up any slack
+          const spending = this.calcSpending(start, state);
+          const outCoin = spending.div(month.P);
+          state.coin = state.coin.sub(outCoin)
 
-      // Calculate spending
-      this.updateCreditBalances(start, state)
-      // calculate credit changes
+          // calculate credit changes
+          this.updateCreditBalances(start, state)
 
-      history.push(state);
-    } while (state.date < to);
-
-    return history;
+          return state;
+        })
+    ];
   }
 }
