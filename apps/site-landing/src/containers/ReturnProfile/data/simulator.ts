@@ -157,27 +157,32 @@ export class ReturnSimulator {
 
   // Calculate how much fiat income comes in this week
   calcIncome(start: DateTime, state: SimulationState) {
-    const { params } = this;
-    const month = this.getMarketData(state);
-
     // regular income
-    let income = new Decimal(params.income.weekly);
-    if (straddlesMonth(state.date)) income = income.add(this.params.income.monthly);
-    if (straddlesYear(start, state.date)) income = income.add(this.params.income.yearly);
+    const {weekly, monthly, yearly} = this.params.income;
+    let income = new Decimal(weekly);
+    if (straddlesMonth(state.date)) income = income.add(monthly);
+    if (straddlesYear(start, state.date)) income = income.add(yearly);
+    return income;
+  }
+
+  updateDividends(state: SimulationState) {
+    const month = this.getMarketData(state);
 
     // Calculate the div from 1 share
     const monthDiv = new Decimal(month.D).div(12);
     const weekDiv = monthDiv.div(state.date.daysInMonth).mul(7);
-    // Subtract CO2 offsets
-    const maxWeekOffsetPercent = new Decimal(params.maxOffsetPercentage).div(52.17857);
+
+    // How much of each shares div is allocated to CO2 offsets?
+    const maxWeekOffsetPercent = new Decimal(this.params.maxOffsetPercentage).div(52.17857);
     let adjustedDiv = weekDiv.sub(toFiat(maxWeekOffsetPercent, month));
     if (adjustedDiv.lt(0)) adjustedDiv = zero;
-    state.offsetCO2 = state.offsetCO2.add(weekDiv.sub(adjustedDiv));
 
-    // How much income comes in?
-    const divAccrued = adjustedDiv.mul(state.coin);
-    income = income.add(divAccrued);
-    return income;
+    // Mult by shares to get totals
+    const retainedDiv = adjustedDiv.mul(state.coin);
+    const newCoin = retainedDiv.div(month.P);
+    const newOffsets = weekDiv.sub(retainedDiv).mul(state.coin);
+    state.coin = state.coin.add(newCoin);
+    state.offsetCO2 = state.offsetCO2.add(newOffsets);
   }
 
   calcPeriod = (start: DateTime) => {
@@ -206,6 +211,9 @@ export class ReturnSimulator {
 
           const income = this.calcIncome(start, state);
           this.balanceChange(state, income);
+
+          // add/apply dividends
+          this.updateDividends(state);
 
           // Adjust our coin balance to
           // absorbe any shocks.
