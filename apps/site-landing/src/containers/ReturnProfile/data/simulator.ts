@@ -194,6 +194,30 @@ export class ReturnSimulator {
     };
   }
 
+  calcSingleState(start: DateTime, state: SimulationState) {
+    const income = this.calcIncome(start, state);
+    this.balanceChange(state, income);
+
+    // add/apply dividends
+    this.updateDividends(state);
+
+    // Adjust our coin balance to
+    // absorbe any shocks.
+    this.applyShockAborber(start, state);
+
+    // Pay out the CB.  Do this before calculating credit just in case
+    // we use the cashback to pay off a balanceOwing
+    this.payOutCashback(start, state);
+
+    // subtract cash spending.  We assume the credit card will pick up any slack
+    const spending = this.calcCashSpending(start, state);
+    this.balanceChange(state, spending.neg());
+
+    // calculate credit changes
+    this.updateCreditBalances(start, state);
+    return state;
+  }
+
   // Calculate returns for across all supplied data.
   calcReturns(start: DateTime) {
     let { from, to } = this.calcPeriod(start)
@@ -208,29 +232,7 @@ export class ReturnSimulator {
           // Note; this line is responsible for 2/3 of the execution cost
           // of the simulator.  We should, one day, look into eliminating it
           state = increment(state, from.plus({ weeks }));
-
-          const income = this.calcIncome(start, state);
-          this.balanceChange(state, income);
-
-          // add/apply dividends
-          this.updateDividends(state);
-
-          // Adjust our coin balance to
-          // absorbe any shocks.
-          this.applyShockAborber(start, state);
-
-          // Pay out the CB.  Do this before calculating credit just in case
-          // we use the cashback to pay off a balanceOwing
-          this.payOutCashback(start, state);
-
-          // subtract cash spending.  We assume the credit card will pick up any slack
-          const spending = this.calcCashSpending(start, state);
-          this.balanceChange(state, spending.neg());
-
-          // calculate credit changes
-          this.updateCreditBalances(start, state)
-
-          return state;
+          return this.calcSingleState(start, state);
         })
     ];
   }

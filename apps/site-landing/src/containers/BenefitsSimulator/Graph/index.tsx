@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Header, Loader, Progress, Segment } from 'semantic-ui-react';
+import { Header, Loader } from 'semantic-ui-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { AreaGraph } from '../../AreaGraph';
-import { calcAllReturns, calculateAvgAndArea, CoinReturns, MarketData, SimulationParameters } from '../../ReturnProfile/data';
+import { calcAllResults, CoinReturns, MarketData, SimulationParameters } from '../../ReturnProfile/data';
 import styles from './styles.module.less';
+import { log } from '@thecointech/logging';
 
 const translations = defineMessages({
   title : {
@@ -24,46 +25,51 @@ type Props = {
 export const BenefitsGraph = ({params, snpData}: Props) => {
 
   //const [allReturns, setAllReturns] = useState<undefined|SimulationState[][]>();
-  const [averages, setAverages] = useState<undefined|CoinReturns[]>();
-  const [progress, setProgress] = useState<number|undefined>(0);
+  const [results, setResults] = useState<CoinReturns[]>([]);
+  // const [progress, setProgress] = useState<number|undefined>(0);
 
   useEffect(() => {
     if (!snpData) return;
+    const simResults = calcAllResults({
+      data: snpData,
+      params,
+    });
+
+    // Run the update asynchronously to give ourselves a chance to update
     let isCancelled = false;
-    const cancellableProgress = (value: number) => {
-      setProgress(value);
-      return !isCancelled;
-    }
-    const allReturns = calcAllReturns(snpData, params, cancellableProgress);
-    if (allReturns) {
-      const averages = calculateAvgAndArea(allReturns, snpData, 1);
-      setAverages(averages);
-      setProgress(undefined);
-    }
+    setResults([]);
+    (async () => {
+      for (let r = simResults.next(); !r.done; r = simResults.next()) {
+        const {value} = r;
+        if (value) setResults(prev => [...prev, value]);
+        await delay(1);
+      }
+    })();
+
     return () => { isCancelled = true };
   }, [snpData])
 
   const maxGraphPoints = 12;
+  const isLoading = results.length < 12;
+  log.trace(`Rendering results: ${results.length}`);
   return (
-    <Segment className={styles.graphContainer}>
-    <Header as="h4">
-      <FormattedMessage {...translations.title} />
-    </Header>
-    <FormattedMessage {...translations.description} />
-    {progress || !averages
-      ? <GraphLoading percent={progress ?? 0.5 * 100} />
-      : <AreaGraph maxGraphPoints={maxGraphPoints} data={averages} />
-    }
-    </Segment>
+    <div className={styles.graphContainer}>
+      <Header as="h4">
+        <FormattedMessage {...translations.title} />
+      </Header>
+      <FormattedMessage {...translations.description} />
+      {isLoading
+        ? <GraphLoading />
+        : <AreaGraph maxGraphPoints={maxGraphPoints} data={results} />
+      }
+    </div>
   );
 };
 
-const GraphLoading = ({percent}: {percent: number}) => (
+const GraphLoading = () => (
   <>
-    <Progress percent={percent} attached='top' />
-    <Loader active inline='centered' />
+    <Loader active inline='centered' indeterminate={true} />
     Crunching Numbers
-    <Progress percent={percent} attached='bottom' />
   </>
 )
 

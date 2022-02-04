@@ -4,10 +4,10 @@ import { createParams } from './params';
 import { ReturnSimulator } from './simulator';
 import { calcFiat, SimulationState } from './state';
 import { Decimal } from 'decimal.js-light';
+
 //
 // Test the article: "Hacking your income with TheCoin"
 // https://docs.google.com/spreadsheets/d/1GhlA6xDz43AojNR8x2eiJgS9AIaTikvkqhzacdtl-RE/edit#gid=0
-//
 const data = generateData(9, 0, 70, 0);
 
 it ('Matches the article with no ShockAbsorber', () => {
