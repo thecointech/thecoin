@@ -1,4 +1,4 @@
-import { sleep } from '@thecointech/utilities/thread'
+import { sleep } from '@thecointech/async'
 
 ////////////////////////////////////////////////////////////////////
 // We are triggered by a cron job on Google App Engine, but

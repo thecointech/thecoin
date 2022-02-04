@@ -8,7 +8,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { hexlify, joinSignature } from '@ethersproject/bytes';
 import { resolveProperties, defineReadOnly } from '@ethersproject/properties';
 import { UnsignedTransaction, serialize } from '@ethersproject/transactions';
-import { sleep } from '@thecointech/utilities/thread';
+import { sleep } from '@thecointech/async';
 
 import Transport from "@ledgerhq/hw-transport-node-hid";
 import Eth from "@ledgerhq/hw-app-eth";

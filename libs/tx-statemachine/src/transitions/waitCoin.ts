@@ -4,6 +4,7 @@ import { AnyActionContainer, getCurrentState } from "../types";
 import { TransactionReceipt } from '@ethersproject/providers'
 import { Decimal } from 'decimal.js-light';
 import { NormalizeAddress } from '@thecointech/utilities';
+import { sleep } from '@thecointech/async';
 
 //
 // Wait for a transfer to complete
@@ -74,7 +75,7 @@ export async function waitTransaction(contract: TheCoin, hash: string, confirmat
     }
 
     log.trace({hash}, `Waited ${i} times: tx has not been mined. Status ${receipt?.status} : {hash}`);
-    await delay(10000);
+    await sleep(10000);
   }
   log.warn({hash}, `Timed out - tx has not been mined: {hash}`);
 

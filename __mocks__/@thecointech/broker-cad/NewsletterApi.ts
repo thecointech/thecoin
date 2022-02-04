@@ -1,6 +1,7 @@
 import { NewsletterApi as SrcApi, SubscriptionDetails } from "@thecointech/broker-cad";
 import { Dictionary } from 'lodash';
-import { buildResponse, delay } from '../axios-utils';
+import { buildResponse } from '../axios-utils';
+import { sleep } from '@thecointech/async';
 
 const subscriptions = {} as Dictionary<SubscriptionDetails>;
 const randomId = () => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString();
@@ -15,7 +16,7 @@ export class NewsletterApi implements Pick<SrcApi, keyof SrcApi> {
    * @memberof NewsletterApi
    */
   async newsletterUpdate(id: string, details: SubscriptionDetails, _options?: any) {
-    await delay(250);
+    await sleep(250);
     subscriptions[id] = details;
     return buildResponse(details);
   }
@@ -28,7 +29,7 @@ export class NewsletterApi implements Pick<SrcApi, keyof SrcApi> {
    * @memberof NewsletterApi
    */
   async newsletterDetails(id: string, _options?: any) {
-    await delay(250);
+    await sleep(250);
     return buildResponse(subscriptions[id]);
   }
   /**
@@ -45,7 +46,7 @@ export class NewsletterApi implements Pick<SrcApi, keyof SrcApi> {
       email,
       registerDate: Date.now()
     };
-    await delay(250);
+    await sleep(250);
     setTimeout(() => {
       alert('Simulating redirection to confirmation page');
       // Redirect to confirm page normally send via email
@@ -66,7 +67,7 @@ export class NewsletterApi implements Pick<SrcApi, keyof SrcApi> {
    */
   async newsletterUnsubscribe(id: string, _options?: any) {
     delete subscriptions[id];
-    await delay(250);
+    await sleep(250);
     return buildResponse({
       success: true
     });

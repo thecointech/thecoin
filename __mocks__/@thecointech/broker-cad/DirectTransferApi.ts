@@ -2,12 +2,13 @@ import { CertifiedTransfer, CertifiedTransferRequest, CertifiedTransferResponse,
 import { AxiosResponse } from 'axios';
 import { buildResponse, delay } from '../axios-utils';
 import { GetContract } from '@thecointech/contract-core';
+import { sleep } from '@thecointech/async';
 
 export class DirectTransferApi implements Pick<SrcApi, keyof SrcApi> {
   async transfer(request: CertifiedTransferRequest, options?: any): Promise<AxiosResponse<CertifiedTransferResponse>> {
     const contract = GetContract();
     const xfer = await contract.certifiedTransfer("", request.to, request.value, 5000, 1230, request.signature);
-    await delay(250);
+    await sleep(250);
     return buildResponse({
       message: "Success",
       state: "uh?",
