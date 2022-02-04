@@ -5,6 +5,7 @@ import { AreaGraph } from '../../AreaGraph';
 import { calcAllResults, CoinReturns, MarketData, SimulationParameters } from '../../ReturnProfile/data';
 import styles from './styles.module.less';
 import { log } from '@thecointech/logging';
+import { sleep } from '@thecointech/async';
 
 const translations = defineMessages({
   title : {
@@ -40,9 +41,10 @@ export const BenefitsGraph = ({params, snpData}: Props) => {
     setResults([]);
     (async () => {
       for (let r = simResults.next(); !r.done; r = simResults.next()) {
+        if (isCancelled) break;
         const {value} = r;
         if (value) setResults(prev => [...prev, value]);
-        await delay(1);
+        await sleep(1);
       }
     })();
 
@@ -51,7 +53,6 @@ export const BenefitsGraph = ({params, snpData}: Props) => {
 
   const maxGraphPoints = 12;
   const isLoading = results.length < 12;
-  log.trace(`Rendering results: ${results.length}`);
   return (
     <div className={styles.graphContainer}>
       <Header as="h4">
