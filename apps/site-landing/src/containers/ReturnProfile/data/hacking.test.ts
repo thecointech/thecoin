@@ -43,5 +43,5 @@ it ('Matches article with ShockAbsorber', () => {
 
   const toProfit = (s: SimulationState) => calcFiat(s, data).sub(s.credit.current).sub(s.credit.balanceDue).toNumber();
   const profits1 = run1.map(toProfit);
-  expect(last(profits1)).toBeCloseTo(142000);
+  expect(last(profits1)).toBeCloseTo(122574.72);
 })
