@@ -19,38 +19,38 @@ const commonProperties = {
 }
 
 const AreaLayer = (props: CustomLayerProps) => {
-const { data, xScale, yScale } = props;
-const innerHeight: number = props.innerHeight;
-const areaGenerator = area<Datum>()
-  .x(d => xScale(d.x as DatumValue))
-  .y0(d => Math.min(innerHeight, yScale(d.lowerBound)))
-  .y1(d => yScale(d.upperBound))
-  .curve(curveMonotoneX)
+  const { data, xScale, yScale } = props;
+  const innerHeight: number = props.innerHeight;
+  const areaGenerator = area<Datum>()
+    .x(d => xScale(d.x as DatumValue))
+    .y0(d => Math.min(innerHeight, yScale(d.lowerBound)))
+    .y1(d => yScale(d.upperBound))
+    .curve(curveMonotoneX)
 
-return (
-  <>
-    <Defs
-      defs={[
-        {
-          id: 'pattern',
-          type: 'patternLines',
-          background: 'transparent',
-          color: '#3daff7',
-          lineWidth: 1,
-          spacing: 6,
-          rotation: -45,
-        },
-      ]}
-    />
-    <path
-      d={areaGenerator(data[0].data) ?? undefined}
-      fill="url(#pattern)"
-      fillOpacity={0.6}
-      stroke="#3daff7"
-      strokeWidth={2}
-    />
-  </>
-)
+  return (
+    <>
+      <Defs
+        defs={[
+          {
+            id: 'pattern',
+            type: 'patternLines',
+            background: 'transparent',
+            color: '#3daff7',
+            lineWidth: 1,
+            spacing: 6,
+            rotation: -45,
+          },
+        ]}
+      />
+      <path
+        d={areaGenerator(data[0].data) ?? undefined}
+        fill="url(#pattern)"
+        fillOpacity={0.6}
+        stroke="#3daff7"
+        strokeWidth={2}
+      />
+    </>
+  )
 }
 
 const layers: Layer[] = [
@@ -79,7 +79,7 @@ const findMinValue = (serie: Serie[]) => {
   return r;
 }
 
-export const CustomGraphLayers = ({data}: {data: Serie[]}) => {
+export const CustomGraphLayers = ({ data, xlegend }: { data: Serie[], xlegend: string }) => {
   return <Line
     {...commonProperties}
     yScale={{
@@ -87,6 +87,9 @@ export const CustomGraphLayers = ({data}: {data: Serie[]}) => {
       stacked: true,
       min: findMinValue(data),
       max: findMaxValue(data),
+    }}
+    axisBottom={{
+      legend: xlegend
     }}
     data={data}
     lineWidth={3}

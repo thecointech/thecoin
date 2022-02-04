@@ -69,7 +69,7 @@ export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
     return () => { isCancelled = true };
   }, [simulator, years]);
 
-  const maxGraphPoints = 12;
+  const maxGraphPoints = 15;
   const isLoading = animate
     ? results.length < 12
     : progress < 1;
