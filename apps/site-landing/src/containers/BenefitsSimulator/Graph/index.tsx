@@ -4,7 +4,6 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { AreaGraph } from '../../AreaGraph';
 import { calcAllResults, CoinReturns, MarketData, SimulationParameters } from '../../ReturnProfile/data';
 import styles from './styles.module.less';
-import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
 
 const translations = defineMessages({
@@ -20,39 +19,59 @@ type Props = {
   params: SimulationParameters,
   fxData?: MarketData[],
   snpData?: MarketData[],
+  animate?: boolean,
 }
 
 // TODO: This component does a lot of computation, and should be memoized
-export const BenefitsGraph = ({params, snpData}: Props) => {
+export const BenefitsGraph = ({params, snpData, animate}: Props) => {
 
-  //const [allReturns, setAllReturns] = useState<undefined|SimulationState[][]>();
   const [results, setResults] = useState<CoinReturns[]>([]);
-  // const [progress, setProgress] = useState<number|undefined>(0);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (!snpData) return;
     const simResults = calcAllResults({
       data: snpData,
       params,
+      increment: 6,
     });
 
     // Run the update asynchronously to give ourselves a chance to update
     let isCancelled = false;
     setResults([]);
+    setProgress(0);
+
     (async () => {
-      for (let r = simResults.next(); !r.done; r = simResults.next()) {
+      let lastRender = Date.now();
+      const maxWeeks = (params.maxDuration.years ?? 60) * 52.142;
+      console.time('Calculating')
+
+      for (let w = 0; w < maxWeeks; w++) {
         if (isCancelled) break;
+        const r = simResults.next()
         const {value} = r;
         if (value) setResults(prev => [...prev, value]);
-        await sleep(1);
+        setProgress(w / maxWeeks);
+
+        // How often do we update?  Once per second?
+        const now = Date.now();
+        if (now - lastRender > 250) {
+          await sleep(1);
+          lastRender = now;
+        }
       }
+      setProgress(1);
+      console.timeEnd('Calculating')
+
     })();
 
     return () => { isCancelled = true };
   }, [snpData])
 
   const maxGraphPoints = 12;
-  const isLoading = results.length < 12;
+  const isLoading = animate
+    ? results.length < 12
+    : progress < 1;
   return (
     <div className={styles.graphContainer}>
       <Header as="h4">
@@ -60,17 +79,17 @@ export const BenefitsGraph = ({params, snpData}: Props) => {
       </Header>
       <FormattedMessage {...translations.description} />
       {isLoading
-        ? <GraphLoading />
+        ? <GraphLoading progress={progress} />
         : <AreaGraph maxGraphPoints={maxGraphPoints} data={results} />
       }
     </div>
   );
 };
 
-const GraphLoading = () => (
+const GraphLoading = ({progress}: { progress: number}) => (
   <>
     <Loader active inline='centered' indeterminate={true} />
-    Crunching Numbers
+    Crunching: {(progress * 100).toPrecision(2)}%
   </>
 )
 
