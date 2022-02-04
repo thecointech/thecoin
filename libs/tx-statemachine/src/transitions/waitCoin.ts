@@ -56,11 +56,6 @@ export function updateCoinBalance(container: AnyActionContainer, receipt: Transa
   return balance;
 }
 
-// TODO: Move this function into utilities
-function delay(ms: number) {
-  return new Promise( resolve => setTimeout(resolve, ms) );
-}
-
 //
 // Poll the provider to see if the transaction here has been mined.
 export async function waitTransaction(contract: TheCoin, hash: string, confirmations: number = 3) : Promise<TransactionReceipt|null> {
