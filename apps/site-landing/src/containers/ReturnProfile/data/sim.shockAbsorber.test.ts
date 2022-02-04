@@ -4,7 +4,7 @@ import { toFiat, zeroState } from './state';
 import { applyShockAborber } from './sim.shockAbsorber';
 import { SimulationState } from '.';
 import { Decimal } from 'decimal.js-light';
-import { DateTime, DurationObject } from 'luxon';
+import { DateObject, DateTime, DurationObject } from 'luxon';
 import { zero } from './sim.decimal';
 
 const start = DateTime.fromObject({ year: 2020 });
@@ -19,16 +19,19 @@ const params = createParams({
   }
 });
 
-const runAbsorber = (state: SimulationState, price: number, expectedFiat: number, date: DurationObject={year: 2020}) => {
+const runAbsorber = (state: SimulationState, price: number, expectedFiat: number, date: DateObject={year: 2020}) => {
+  const d = DateTime.fromObject(date)
+  state.date = d;
   const data = {
-    Date: DateTime.fromObject(date),
+    Date: d,
     P: new Decimal(price),
     D: zero,
     E: zero,
   }
+
   applyShockAborber(start, params, state, data);
   const currentFiat = toFiat(state.coin, data);
-  expect(currentFiat.todp(2).eq(expectedFiat)).toBeTruthy();
+  expect(currentFiat.todp(2).toNumber()).toEqual(expectedFiat);
 }
 
 it('cushions correctly when entire principal is protected', () => {
@@ -106,8 +109,14 @@ it ('grows the cushion over time', () => {
   runAbsorber(state, 104, 10000, { year: 2020, month: 3 });
   runAbsorber(state, 108, 10200, { year: 2020, month: 6 });
 
-  runAbsorber(state, 110, 10200, { year: 2021, month: 1 });
-  runAbsorber(state, 112, 10200, { year: 2021, month: 3 });
-  runAbsorber(state, 114, 10400, { year: 2021, month: 6 });
-
+  // Note, because the principal is capped at 10K, some of the
+  // account keeps growing even as the 10K is capped.
+  // also, it no longer matches $1 gain == 1% gain because
+  // it is now compounded from 108
+  runAbsorber(state, 108, 10200, { year: 2021, month: 1 });
+  runAbsorber(state, 112, 10207.41, { year: 2021, month: 3 });
+  // 6% up means cushion capped & 6% of 200 profit
+  runAbsorber(state, 114.48, 10212, { year: 2021, month: 3 });
+  // 8% up means cushion capped & 2% of 10000 & 8% of 200 profit
+  runAbsorber(state, 116.64, 10416, { year: 2021, month: 6 });
 })

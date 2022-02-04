@@ -1,7 +1,8 @@
 globalThis.it = ((msg: string, cb: ()=> void) => cb()) as any;
-(globalThis as any).expect = (condition: any) => ({
-  toBeTruthy: () => {
-    if (!condition) {
+(globalThis as any).expect = (src: any) => ({
+  toEqual: (comp: any) => {
+    if (src != comp) {
+      console.log(`Test Failed: ${src} == ${comp}`);
       debugger;
       throw new Error('Something');
     }

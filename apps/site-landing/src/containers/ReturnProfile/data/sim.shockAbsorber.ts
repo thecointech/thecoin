@@ -12,15 +12,13 @@ export function applyShockAborber(start: DateTime, params: SimulationParameters,
   const sa = params.shockAbsorber;
   if (!sa.maximumProtected || state.coin.eq(0)) return;
 
-  // If state is losing money, top it up from reserves
-  applyCushion(params, state, market);
-
-  // Once a year has passed, we update our protected state
+  // On the anniversary, lock in any cushion & profit
   if (straddlesYear(start, state.date)) {
     updateCushion(params, state, market);
-    // We re-calculate the cushion
-    applyCushion(params, state, market)
   }
+
+  // If state is losing money, top it up from reserves
+  applyCushion(params, state, market);
 }
 
 function applyCushion(params: SimulationParameters, state: SimulationState,  market: MarketData) {
