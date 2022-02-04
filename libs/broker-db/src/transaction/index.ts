@@ -41,7 +41,10 @@ export function storeTransition(action: DocumentReference<AnyActionData>, transi
 }
 
 ////////////////////////////////////////////////////////////////////
-export const getActionDoc = <Type extends ActionType>(address: string, type: Type, id?: string) => userActionCollection(address, type).doc(id);
+export const getActionDoc = <Type extends ActionType>(address: string, type: Type, id?: string) =>
+  id
+    ? userActionCollection(address, type).doc(id)
+    : userActionCollection(address, type).doc();
 
 //
 // Return action data for the action by type/firestore id
