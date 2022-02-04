@@ -1,5 +1,5 @@
 import { first, last } from '@thecointech/utilities';
-import { basicParams, generateData } from './data.test';
+import { basicParams, generateData } from '../../../../internals/historical/simulation';
 import { createParams } from './params';
 import { ReturnSimulator } from './simulator';
 import { calcFiat, SimulationState } from './state';

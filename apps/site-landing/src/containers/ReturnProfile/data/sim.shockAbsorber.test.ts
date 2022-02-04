@@ -1,10 +1,10 @@
-import { basicParams } from './data.test'
+import { basicParams } from '../../../../internals/historical/simulation'
 import { createParams } from './params';
 import { toFiat, zeroState } from './state';
 import { applyShockAborber } from './sim.shockAbsorber';
 import { SimulationState } from '.';
 import { Decimal } from 'decimal.js-light';
-import { DateObject, DateTime, DurationObject } from 'luxon';
+import { DateObject, DateTime } from 'luxon';
 import { zero } from './sim.decimal';
 
 const start = DateTime.fromObject({ year: 2020 });

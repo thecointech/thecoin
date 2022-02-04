@@ -1,7 +1,7 @@
 import { range } from 'lodash';
 import { DateTime } from 'luxon';
-import { MarketData } from './market';
-import { MergeSimParamaters } from './params';
+import { MarketData } from '../../src/containers/ReturnProfile/data/market';
+import { MergeSimParamaters } from '../../src/containers/ReturnProfile/data/params';
 import { Decimal } from 'decimal.js-light';
 
 export function generateData(CAGR = 10, LGR=0, yearsToSimulate = 10, noise = 0.1): MarketData[] {
@@ -43,5 +43,3 @@ export const basicParams: MergeSimParamaters = {
     weekly: 100,
   }
 };
-
-it.skip('isnt a test, just a place to fetch data from', () => {});
