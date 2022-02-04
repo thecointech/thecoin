@@ -1,12 +1,10 @@
 import * as Src from '.';
 import { BigNumber, ContractTransaction } from 'ethers'
+import { sleep } from '@thecointech/utilities/thread'
 
 export const COIN_EXP = 1000000;
 
 const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
-function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 let nonce = 12;
 let confirmations = 1;
 export class TheCoin implements Pick<Src.TheCoin, 'exactTransfer' | 'balanceOf' | 'certifiedTransfer'>{

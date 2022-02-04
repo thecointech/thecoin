@@ -8,17 +8,11 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { hexlify, joinSignature } from '@ethersproject/bytes';
 import { resolveProperties, defineReadOnly } from '@ethersproject/properties';
 import { UnsignedTransaction, serialize } from '@ethersproject/transactions';
-
+import { sleep } from '@thecointech/utilities/thread';
 
 import Transport from "@ledgerhq/hw-transport-node-hid";
 import Eth from "@ledgerhq/hw-app-eth";
 const defaultPath = "m/44'/60'/0'/0/0";
-
-function waiter(duration: number): Promise<void> {
-  return new Promise((resolve) => {
-    setTimeout(resolve, duration);
-  });
-}
 
 export class LedgerSigner extends Signer {
 
@@ -68,7 +62,7 @@ export class LedgerSigner extends Signer {
             return reject(error);
           }
         }
-        await waiter(100);
+        await sleep(100);
       }
 
       return reject(new Error("timeout"));
