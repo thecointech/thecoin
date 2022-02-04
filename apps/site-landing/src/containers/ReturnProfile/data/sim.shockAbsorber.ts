@@ -111,7 +111,7 @@ function roundOffAdjustments(state: SimulationState) {
 //
 // Updating the cushion is the process of incorporating profit into
 // principal and resetting the cushion
-function updateCushion(params: SimulationParameters, state: SimulationState, market: MarketData) {
+function updateCushion(_params: SimulationParameters, state: SimulationState, market: MarketData) {
   const sa = state.shockAbsorber
   // If we are currently absorbing a loss, skip this years adjustment
   if (sa.coinAdjustment.gte(0))
