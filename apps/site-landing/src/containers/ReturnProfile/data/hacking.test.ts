@@ -3,7 +3,7 @@ import { basicParams, generateData } from './data.test';
 import { createParams } from './params';
 import { ReturnSimulator } from './simulator';
 import { calcFiat, SimulationState } from './state';
-
+import { Decimal } from 'decimal.js-light';
 //
 // Test the article: "Hacking your income with TheCoin"
 // https://docs.google.com/spreadsheets/d/1GhlA6xDz43AojNR8x2eiJgS9AIaTikvkqhzacdtl-RE/edit#gid=0
@@ -30,11 +30,11 @@ it ('Matches article with ShockAbsorber', () => {
     ...basicParams,
     shockAbsorber: {
       // We protect up to $500
-      maximumProtected: 500,
+      maximumProtected: new Decimal(500),
       // for a max drop of 50%
-      absorbed: 0.50,
+      absorbed: new Decimal(0.50),
       // Using up to 6% of profit
-      cushionPercentage: 0.06,
+      cushionPercentage: new Decimal(0.06),
     }
   });
 

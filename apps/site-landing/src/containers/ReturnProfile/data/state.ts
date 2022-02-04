@@ -27,10 +27,13 @@ export type SimulationState = {
   // market downturns.
   shockAbsorber: {
     // How `coin` has already been adjusted (up or down)
+    // Positive values mean we added to `coin` to cushion drop,
+    // negative values mean we subbed from `coin` to cushion jump
     coinAdjustment: Decimal;
-    // How much offset we have *already* applied to the
-    // current coin balance.
-    //principalBaseline: Decimal;
+
+    // The total amount of cushioning previously absorbed.
+    // This is only ever negative (we do not reset during a drop)
+    historicalAdjustment: Decimal;
   }
 
   // total spent on CO2 offsets
@@ -49,7 +52,7 @@ export const zeroState = (start: DateTime) => ({
   },
   shockAbsorber: {
     coinAdjustment: zero,
-    //  totalCoinOffset: zero,
+    historicalAdjustment: zero,
   },
   offsetCO2: zero,
 })
@@ -61,6 +64,9 @@ export const increment = (state: SimulationState, date: DateTime) => ({
   date,
   credit: {
     ...state.credit
+  },
+  shockAbsorber: {
+    ...state.shockAbsorber
   }
 })
 

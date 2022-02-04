@@ -1,4 +1,6 @@
 import { DateTime, DurationObject } from 'luxon';
+import { Decimal } from 'decimal.js-light';
+import { zero } from './sim.decimal';
 
 // Holds week/month/yearly actions for income/credit/cash
 type FinancialParams = {
@@ -9,16 +11,16 @@ type FinancialParams = {
 
 type ShockAbsorber = {
   // The percentage drop absorbed
-  absorbed: number;
+  absorbed: Decimal;
   // What percentage yearly gains go towards
   // building the cushion?
-  cushionPercentage: number;
+  cushionPercentage: Decimal;
   // After what period do profits
   // gain protection?
-  trailingMonths: number;
+  trailingMonths: Decimal;
 
   // Maximum value we can afford to protect.
-  maximumProtected: number;
+  maximumProtected: Decimal;
 
   // growth optimization, reduce
   // shock-absorber maximum by
@@ -27,7 +29,7 @@ type ShockAbsorber = {
   // with $10 of profit/20% shock absorber could
   // automatically reduce the shockAbsorber to 10%
   // (with an accompanied reduction of fees)
-  profitPercentageToReduceDampening: number;
+  profitPercentageToReduceDampening: Decimal;
 }
 
 // The data we use to calculate a clients potential returns
@@ -95,7 +97,7 @@ const basicPeriods = {
 };
 
 
-type AllowedPrimitives = boolean | string | number | DateTime /* add any types than should be considered as a value, say, DateTimeOffset */;
+type AllowedPrimitives = boolean | string | number | DateTime | Decimal; /* add any types than should be considered as a value, say, DateTimeOffset */;
 type Value<T> = T extends AllowedPrimitives ? T : RecursivePartial<T>;
 type RecursivePartial<T> = {
   [P in keyof T]?:
@@ -132,11 +134,11 @@ export const createParams = (explicit?: MergeSimParamaters): SimulationParameter
   },
 
   shockAbsorber: {
-    absorbed: 0,
-    cushionPercentage: 0,
-    trailingMonths: 0,
-    maximumProtected: 0,
-    profitPercentageToReduceDampening: 0,
+    absorbed: zero,
+    cushionPercentage: zero,
+    trailingMonths: zero,
+    maximumProtected: zero,
+    profitPercentageToReduceDampening: zero,
     ...explicit?.shockAbsorber
   }
 });
