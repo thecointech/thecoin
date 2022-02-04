@@ -1,6 +1,6 @@
 import { CertifiedTransfer, CertifiedTransferRequest, CertifiedTransferResponse, DirectTransferApi as SrcApi } from "@thecointech/broker-cad";
 import { AxiosResponse } from 'axios';
-import { buildResponse, delay } from '../axios-utils';
+import { buildResponse } from '../axios-utils';
 import { GetContract } from '@thecointech/contract-core';
 import { sleep } from '@thecointech/async';
 
