@@ -1,6 +1,6 @@
 import * as Src from '.';
 import { BigNumber, ContractTransaction } from 'ethers'
-import { sleep } from '@thecointech/utilities/thread'
+import { sleep } from '@thecointech/async'
 
 export const COIN_EXP = 1000000;
 
@@ -54,7 +54,7 @@ export class TheCoin implements Pick<Src.TheCoin, 'exactTransfer' | 'balanceOf' 
     }),
     getLogs: () => Promise.resolve([]),
     getBlockNumber: () => Promise.resolve(12345),
-    getTransaction: () => Promise.resolve({ wait: () => delay(2000) }),
+    getTransaction: () => Promise.resolve({ wait: () => sleep(2000) }),
     getTransactionReceipt: () => Promise.resolve({ blockNumber: 123, blockHash: "0x45678" })
   }
   estimate = {

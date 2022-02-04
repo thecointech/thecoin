@@ -67,6 +67,7 @@
     "@openzeppelin/contracts-upgradeable": "^4.3.2",
     "@openzeppelin/truffle-upgrades": "^1.11.0",
     "@thecointech/contract-tools": "^0.2.58",
+    "@thecointech/async": "*",
     "jest": "*"
   },
   "dependencies": {
