@@ -20,16 +20,20 @@ const translations = defineMessages({
         description: 'site.compare.button: label for the button in the compare page'}
   });
 
+type TimedSimulationParams = {
+  years: number,
+} & SimulationParameters;
+
 type Props = {
-  params: SimulationParameters;
-  setParams: Dispatch<SetStateAction<SimulationParameters>>;
+  params: TimedSimulationParams;
+  setParams: Dispatch<SetStateAction<TimedSimulationParams>>;
 };
 
 export const FormCompare = ({params, setParams}: Props) => {
 
   // TODO: Connect all o' dis
-  const onChangeNamed = (name: keyof SimulationParameters) =>
-    (val: any) => setParams((prev: SimulationParameters) => ({
+  const onChangeNamed = (name: keyof TimedSimulationParams) =>
+    (val: any) => setParams((prev: TimedSimulationParams) => ({
       ...prev,
       [name]: val,
     }))
@@ -50,8 +54,9 @@ export const FormCompare = ({params, setParams}: Props) => {
       <RangeFieldAndScale
         label={translations.rangeDuration}
         scaleType="unit"
+        unit="year"
         maximum={60}
-        onChange={v => onChangeNamed("maxDuration")({years: v})}
+        onChange={v => onChangeNamed("years")({years: v})}
       />
 
       <Button secondary className={`${styles.buttonContainer} x16spaceBefore`}>

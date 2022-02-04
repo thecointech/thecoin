@@ -5,13 +5,11 @@
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Grid, Header } from 'semantic-ui-react';
-
 import { FormCompare } from './Form';
 import { BenefitsGraph } from './Graph';
 import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateAccountBanner';
-
-import styles from './styles.module.less';
 import { createParams, MarketData, getData } from '../ReturnProfile/data';
+import styles from './styles.module.less';
 
 const translations = defineMessages({
   title: {
@@ -24,7 +22,10 @@ const translations = defineMessages({
   }
 });
 
-const defaultParams = createParams({initialBalance: 1000})
+const defaultParams = {
+  ...createParams({initialBalance: 1000}),
+  years: 10,
+}
 
 export function Compare() {
 
@@ -36,7 +37,9 @@ export function Compare() {
   useEffect(() => {
     getData().then(setSnPData);
     setFxData([]);
-  })
+  }, [])
+
+  const {years, ...simParams} = params;
 
   return (
     <>
@@ -54,7 +57,9 @@ export function Compare() {
               <FormCompare params={params} setParams={setParams} />
             </Grid.Column>
             <Grid.Column textAlign='left' width={10} floated='left' >
-              <BenefitsGraph params={params} snpData={snpData} fxData={fxData} />
+              <div className={styles.graphContainer}>
+                <BenefitsGraph years={years} params={simParams} snpData={snpData} fxData={fxData} />
+              </div>
             </Grid.Column>
           </Grid.Row>
         </Grid>

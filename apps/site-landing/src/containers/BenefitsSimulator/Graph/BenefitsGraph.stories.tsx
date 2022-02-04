@@ -11,6 +11,7 @@ const meta: Meta = {
   args: {
     loadingDelay: 2, // simulated delay of loading data.
     growthPercent: 9,
+    yearsToDisplay: 10,
     yearsToSimulate: 60,
     noise: 0.1,
   }
@@ -30,5 +31,5 @@ export const Graph: Story<Props> = (props) => {
     }, 1000 * props?.delay ?? 0)
   }, [props?.yearsToSimulate, props?.noise, props?.growthPercent])
 
-  return <Component snpData={data} params={params} />;
+  return <Component snpData={data} years={props?.yearsToDisplay ?? 10} params={params} />;
 }

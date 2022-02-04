@@ -1,10 +1,8 @@
 import { DateTime } from 'luxon';
 import { Decimal } from 'decimal.js-light';
 import { SimulationParameters } from './params';
-import { SimulationState, calcFiat, zeroState, increment, toFiat, toCoin } from './state';
+import { SimulationState, calcFiat, zeroState, toFiat, toCoin } from './state';
 import { getMarketData, MarketData } from './market';
-import { range } from 'lodash';
-import { first, last } from '@thecointech/utilities/ArrayExtns';
 import { straddlesMonth, straddlesYear } from './time';
 import {  } from '.';
 import { DMin, zero } from './sim.decimal';
@@ -185,15 +183,6 @@ export class ReturnSimulator {
     state.offsetCO2 = state.offsetCO2.add(newOffsets);
   }
 
-  calcPeriod = (start: DateTime) => {
-    const f = first(this.data).Date;
-    const l = last(this.data).Date;
-    return {
-      from: DateTime.max(f, start),
-      to: DateTime.min(l, start.plus(this.params.maxDuration)),
-    };
-  }
-
   calcSingleState(start: DateTime, state: SimulationState) {
     const income = this.calcIncome(start, state);
     this.balanceChange(state, income);
@@ -218,22 +207,31 @@ export class ReturnSimulator {
     return state;
   }
 
+  // calcPeriod = (start: DateTime) => {
+  //   const f = first(this.data).Date;
+  //   const l = last(this.data).Date;
+  //   return {
+  //     from: DateTime.max(f, start),
+  //     to: DateTime.min(l, start.plus(this.params.maxDuration)),
+  //   };
+  // }
+
   // Calculate returns for across all supplied data.
-  calcReturns(start: DateTime) {
-    let { from, to } = this.calcPeriod(start)
-    const numWeeks = to.diff(from, "weeks").weeks;
-    // Keep track of how much capital has been input.
-    const initial = this.getInitial(from);
-    let state = initial;
-    return [
-      initial, // always start with initial
-      ...range(1, numWeeks + 1)
-        .map((weeks) => {
-          // Note; this line is responsible for 2/3 of the execution cost
-          // of the simulator.  We should, one day, look into eliminating it
-          state = increment(state, from.plus({ weeks }));
-          return this.calcSingleState(start, state);
-        })
-    ];
-  }
+  // calcReturns(start: DateTime) {
+  //   let { from, to } = this.calcPeriod(start)
+  //   const numWeeks = to.diff(from, "weeks").weeks;
+  //   // Keep track of how much capital has been input.
+  //   const initial = this.getInitial(from);
+  //   let state = initial;
+  //   return [
+  //     initial, // always start with initial
+  //     ...range(1, numWeeks + 1)
+  //       .map((weeks) => {
+  //         // Note; this line is responsible for 2/3 of the execution cost
+  //         // of the simulator.  We should, one day, look into eliminating it
+  //         state = increment(state, from.plus({ weeks }));
+  //         return this.calcSingleState(start, state);
+  //       })
+  //   ];
+  // }
 }

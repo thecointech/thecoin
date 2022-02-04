@@ -74,13 +74,12 @@ export function calcAllResultsImmediate(fullParams: AllParams) {
 function* runSimAt(start: DateTime, simulator: ReturnSimulator) {
   let state = simulator.getInitial(start);
   yield state;
-  const {from, to} = simulator.calcPeriod(start);
-  const weeks = to.diff(from, "weeks").weeks;
-  for (let i = 1; i <= weeks; i++) {
-    state.date = start.plus({weeks: i});
+  const lastDate = last(simulator.data).Date;
+  while (true) {
+    state.date = state.date.plus({weeks: 1});
+    if (state.date > lastDate) return null;
     yield simulator.calcSingleState(start, state);
   }
-  return null;
 }
 
 function longestSimWeeks(allReturns: SimulationState[][]) {

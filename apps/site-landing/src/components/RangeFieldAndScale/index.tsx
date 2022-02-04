@@ -8,9 +8,10 @@ import { Range, getTrackBackground } from "react-range";
 import { LessVars } from "@thecointech/site-semantic-theme/variables";
 
 export type Props = {
- scaleType?: NumberFormatOptionsStyle;
- currency?: "CAD",
  label: MessageDescriptor,
+ scaleType?: NumberFormatOptionsStyle;
+ unit?: string,
+ currency?: "CAD",
  initial?: number;
  maximum: number;
  minimum?: number;
@@ -40,6 +41,7 @@ export const RangeFieldAndScale = (props: Props) => {
             currency={props.currency}
             currencyDisplay={"narrowSymbol"}
             style={props.scaleType}
+            unit={props.unit}
             minimumFractionDigits={0}
             maximumFractionDigits={0}
            />

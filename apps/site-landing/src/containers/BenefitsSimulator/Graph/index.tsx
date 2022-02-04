@@ -1,54 +1,56 @@
 import React, { useEffect, useState } from 'react';
-import { Header, Loader } from 'semantic-ui-react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { Loader } from 'semantic-ui-react';
 import { AreaGraph } from '../../AreaGraph';
 import { calcAllResults, CoinReturns, MarketData, SimulationParameters } from '../../ReturnProfile/data';
-import styles from './styles.module.less';
 import { sleep } from '@thecointech/async';
-
-const translations = defineMessages({
-  title : {
-      defaultMessage: 'Your possible benefits',
-      description: 'site.compare.graph.title: Graph title for the How much will you make? graph page'},
-  description : {
-    defaultMessage: 'Your chequing account will be with you longer than your retirement savings will. This is what that could look like.',
-    description: 'site.compare.graph.description: Graph description for the How much will you make? graph page'}
-  });
 
 type Props = {
   params: SimulationParameters,
+  years: number,
   fxData?: MarketData[],
   snpData?: MarketData[],
   animate?: boolean,
 }
 
+type SimGenerator = ReturnType<typeof calcAllResults>;
 // TODO: This component does a lot of computation, and should be memoized
-export const BenefitsGraph = ({params, snpData, animate}: Props) => {
+export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
 
   const [results, setResults] = useState<CoinReturns[]>([]);
   const [progress, setProgress] = useState(0);
+  const [simulator, setSimulator] = useState<undefined|SimGenerator>()
 
+  // how many weeks to we need to calculate?
+  const currentWeek = results.length;
+  const maxWeeks = 1 + (years * 52.142);
+
+  // If core details change, restart the sim
   useEffect(() => {
     if (!snpData) return;
-    const simResults = calcAllResults({
+    const sim = calcAllResults({
       data: snpData,
       params,
       increment: 6,
     });
-
-    // Run the update asynchronously to give ourselves a chance to update
-    let isCancelled = false;
     setResults([]);
     setProgress(0);
+    setSimulator(sim);
+  }, [snpData]);
 
+  //
+  // We can change the length of time being displayed
+  useEffect(() => {
+    if (!simulator) return;
+    // Run the update asynchronously to give ourselves a chance to re-render
+    let isCancelled = false;
     (async () => {
       let lastRender = Date.now();
-      const maxWeeks = (params.maxDuration.years ?? 60) * 52.142;
       console.time('Calculating')
 
-      for (let w = 0; w < maxWeeks; w++) {
+      // Iterate only the number of times required
+      for (let w = currentWeek; w < maxWeeks; w++) {
         if (isCancelled) break;
-        const r = simResults.next()
+        const r = simulator.next()
         const {value} = r;
         if (value) setResults(prev => [...prev, value]);
         setProgress(w / maxWeeks);
@@ -61,29 +63,21 @@ export const BenefitsGraph = ({params, snpData, animate}: Props) => {
         }
       }
       setProgress(1);
-      console.timeEnd('Calculating')
+      console.timeEnd('Calculating');
 
     })();
-
     return () => { isCancelled = true };
-  }, [snpData])
+  }, [simulator, years]);
 
   const maxGraphPoints = 12;
   const isLoading = animate
     ? results.length < 12
     : progress < 1;
-  return (
-    <div className={styles.graphContainer}>
-      <Header as="h4">
-        <FormattedMessage {...translations.title} />
-      </Header>
-      <FormattedMessage {...translations.description} />
-      {isLoading
+  const displayData = results.slice(0, maxWeeks)
+
+  return isLoading
         ? <GraphLoading progress={progress} />
-        : <AreaGraph maxGraphPoints={maxGraphPoints} data={results} />
-      }
-    </div>
-  );
+        : <AreaGraph maxGraphPoints={maxGraphPoints} data={displayData} />
 };
 
 const GraphLoading = ({progress}: { progress: number}) => (
