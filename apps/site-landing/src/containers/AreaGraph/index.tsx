@@ -44,18 +44,22 @@ const getTimeScaler = (numWeeks: number) => {
   return yearRoundedScaler;
 }
 
+const MinimumGraphPoints = 5;
 // The number of graph points we use oscillate between
 // 5 and 15
 const calcNumGraphPoints = (max: number, weeks: number, scale: number) => {
   const maxEntries = Math.floor(weeks / scale);
-  if (maxEntries >= 5 && maxEntries <= max) return Math.floor(maxEntries);
+  if (maxEntries <= max) return Math.floor(maxEntries);
   // Do we have any round divisors?  If so, use 'em
-  for (let i = max; i >= 5; i--)
+  for (let i = max; i >= MinimumGraphPoints; i--)
     if (maxEntries % i == 0) return i;
   return max;
 }
 
 export const AreaGraph = ({maxGraphPoints, data}: Props) => {
+
+  // If we have no data, we have no graph
+  if (data.length < MinimumGraphPoints) return null;
 
   const {legend, scale, scaler} = getTimeScaler(data.length)
 

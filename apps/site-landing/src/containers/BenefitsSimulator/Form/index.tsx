@@ -4,6 +4,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { SimulationParameters } from '../../ReturnProfile/data/params';
 import { RangeFieldAndScale } from 'components/RangeFieldAndScale';
 import styles from './styles.module.less';
+import { debounce } from 'lodash';
 
 const translations = defineMessages({
     startingValue : {
@@ -20,23 +21,23 @@ const translations = defineMessages({
         description: 'site.compare.button: label for the button in the compare page'}
   });
 
-type TimedSimulationParams = {
-  years: number,
-} & SimulationParameters;
-
 type Props = {
-  params: TimedSimulationParams;
-  setParams: Dispatch<SetStateAction<TimedSimulationParams>>;
+  params: SimulationParameters;
+  setParams: Dispatch<SetStateAction<SimulationParameters>>;
+  years: number,
+  setYears: Dispatch<SetStateAction<number>>;
 };
 
-export const FormCompare = ({params, setParams}: Props) => {
+export const FormCompare = ({params, setParams, years, setYears}: Props) => {
 
-  // TODO: Connect all o' dis
-  const onChangeNamed = (name: keyof TimedSimulationParams) =>
-    (val: any) => setParams((prev: TimedSimulationParams) => ({
+  const debounceInterval = 250;
+  const dbOnChangeNamed = (name: keyof SimulationParameters) =>
+    debounce((val: any) => setParams((prev: SimulationParameters) => ({
       ...prev,
       [name]: val,
-    }))
+    })), debounceInterval);
+
+  const dbOnSetYears = debounce(v => setYears(Math.max(1, v)), debounceInterval);
 
   return (
     <div id={styles.variablesContainer}>
@@ -48,7 +49,7 @@ export const FormCompare = ({params, setParams}: Props) => {
         maximum={1000}
         step={1}
         initial={params.initialBalance}
-        onChange={onChangeNamed("initialBalance")}
+        onChange={dbOnChangeNamed("initialBalance")}
       />
 
       <RangeFieldAndScale
@@ -56,7 +57,8 @@ export const FormCompare = ({params, setParams}: Props) => {
         scaleType="unit"
         unit="year"
         maximum={60}
-        onChange={v => onChangeNamed("years")({years: v})}
+        initial={years}
+        onChange={dbOnSetYears}
       />
 
       <Button secondary className={`${styles.buttonContainer} x16spaceBefore`}>

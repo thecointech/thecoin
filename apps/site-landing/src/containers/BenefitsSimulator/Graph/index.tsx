@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Loader } from 'semantic-ui-react';
+import { Dimmer, Loader, Segment } from 'semantic-ui-react';
 import { AreaGraph } from '../../AreaGraph';
 import { calcAllResults, CoinReturns, MarketData, SimulationParameters } from '../../ReturnProfile/data';
 import { sleep } from '@thecointech/async';
+import { log } from '@thecointech/logging';
 
 type Props = {
   params: SimulationParameters,
@@ -27,44 +28,63 @@ export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
   // If core details change, restart the sim
   useEffect(() => {
     if (!snpData) return;
+    log.trace("(Re)Initializing simulation");
     const sim = calcAllResults({
       data: snpData,
       params,
       increment: 6,
     });
-    setResults([]);
-    setProgress(0);
     setSimulator(sim);
-  }, [snpData]);
+    setResults([]);
+
+  }, [snpData, params]);
 
   //
-  // We can change the length of time being displayed
+  // Run the simulation for the length of time requested.
+  // This is both cancellable and resumable
   useEffect(() => {
     if (!simulator) return;
     // Run the update asynchronously to give ourselves a chance to re-render
     let isCancelled = false;
     (async () => {
-      let lastRender = Date.now();
-      console.time('Calculating')
+      const updateEveryMs= 2500; // every 2.5 seconds, update
+      log.trace('Begin Sim');
+
+      // Spamming the set* hooks are killing the update speed
+      // Cache values for a period then let the UI update
+      const started = Date.now();
+      let lastUpdate = started;
+      let values: CoinReturns[] = [];
+      setProgress(0);
 
       // Iterate only the number of times required
       for (let w = currentWeek; w < maxWeeks; w++) {
-        if (isCancelled) break;
-        const r = simulator.next()
-        const {value} = r;
-        if (value) setResults(prev => [...prev, value]);
-        setProgress(w / maxWeeks);
+        if (isCancelled) return;
 
-        // How often do we update?  Once per second?
+        const {value} = simulator.next()
+        if (value) values.push(value);
+
+        // Update
         const now = Date.now();
-        if (now - lastRender > 250) {
+        if (now - lastUpdate > updateEveryMs) {
+          lastUpdate = now;
+        }
+        // Yield back to the page every once in a while
+        if (w % 50 == 0) {
+          setProgress(w / maxWeeks);
           await sleep(1);
-          lastRender = now;
+        }
+        if (w % 100 > 90) {
+          if (w % 100 == 91) {
+            setResults(v => v.concat(values));
+            values = [];
+          }
+          await sleep(1);
         }
       }
+      setResults(v => v.concat(values))
       setProgress(1);
-      console.timeEnd('Calculating');
-
+      log.trace(`End Sim: ${((started - Date.now())/1000).toPrecision(3)}s`);
     })();
     return () => { isCancelled = true };
   }, [simulator, years]);
@@ -75,17 +95,24 @@ export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
     : progress < 1;
   const displayData = results.slice(0, maxWeeks)
 
-  return isLoading
-        ? <GraphLoading progress={progress} />
-        : <AreaGraph maxGraphPoints={maxGraphPoints} data={displayData} />
+  return (
+    <Segment>
+      <Dimmer active={isLoading}>
+        <GraphLoading progress={progress} />
+      </Dimmer>
+      <AreaGraph maxGraphPoints={maxGraphPoints} data={displayData} />
+    </Segment>
+  )
+  // return isLoading
+  //       ? <GraphLoading progress={progress} />
+  //       : <AreaGraph maxGraphPoints={maxGraphPoints} data={displayData} />
 };
 
-const GraphLoading = ({progress}: { progress: number}) => (
-  <>
-    <Loader active inline='centered' indeterminate={true} />
-    Crunching: {(progress * 100).toPrecision(2)}%
-  </>
-)
+const GraphLoading = ({progress}: { progress: number}) =>
+    <Loader active inline='centered' indeterminate={true}
+      content={`Crunching: ${(progress * 100).toPrecision(2)}%`}
+    />
+
 
 // const MemoizedGraphCompare = React.memo(GraphCompareLoaded, (a, b) => (
 //   a.fxData === b.fxData &&

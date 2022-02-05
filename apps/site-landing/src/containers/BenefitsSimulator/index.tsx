@@ -21,15 +21,12 @@ const translations = defineMessages({
     description: 'site.compare.description: Main description for the How much will you make? graph page'
   }
 });
-
-const defaultParams = {
-  ...createParams({initialBalance: 1000}),
-  years: 10,
-}
+const defaultParams = createParams({initialBalance: 1000});
 
 export function Compare() {
 
   const [params, setParams] = useState(defaultParams);
+  const [years, setYears] = useState(10);
   const [fxData, setFxData] = useState<MarketData[]|undefined>();
   const [snpData, setSnPData] = useState<MarketData[]|undefined>();
 
@@ -38,8 +35,6 @@ export function Compare() {
     getData().then(setSnPData);
     setFxData([]);
   }, [])
-
-  const {years, ...simParams} = params;
 
   return (
     <>
@@ -54,11 +49,21 @@ export function Compare() {
         <Grid columns={3} stackable>
           <Grid.Row stretched>
             <Grid.Column textAlign='center' width={5} floated='right'>
-              <FormCompare params={params} setParams={setParams} />
+              <FormCompare
+                params={params}
+                setParams={setParams}
+                years={years}
+                setYears={setYears}
+              />
             </Grid.Column>
             <Grid.Column textAlign='left' width={10} floated='left' >
               <div className={styles.graphContainer}>
-                <BenefitsGraph years={years} params={simParams} snpData={snpData} fxData={fxData} />
+                <BenefitsGraph
+                  years={years}
+                  params={params}
+                  snpData={snpData}
+                  fxData={fxData}
+                />
               </div>
             </Grid.Column>
           </Grid.Row>

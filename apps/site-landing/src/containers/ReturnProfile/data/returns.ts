@@ -6,6 +6,7 @@ import { ReturnSimulator } from './simulator';
 import { SimulationState, calcFiat } from './state';
 
 export type CoinReturns = {
+  week: number;
   lowerBound: number;
   upperBound: number;
   mean: number;
@@ -43,8 +44,7 @@ export function* calcAllResults(fullParams: AllParams) {
   // Start a simulation at each starting date.
   const startOffsets = [...Array(numSims).keys()].map((_, idx) => idx * increment);
   const sims = startOffsets.map(month => runSimAt(s.plus({month}), simulator));
-
-  while (true) {
+  for (let week = 0; ; week++) {
     // Cacl
     const nthWeekResults = sims.map(gen => {
       const { value, done } = gen.next();
@@ -55,7 +55,10 @@ export function* calcAllResults(fullParams: AllParams) {
     if (filtered.length < cutoff) break;
 
     const avg = calculateAvgAndArea(filtered, data, percentile);
-    yield avg;
+    yield {
+      week,
+      ...avg
+    };
   }
 }
 
@@ -115,9 +118,12 @@ export function calculateAvgAndArea(allAtTimePassed: SimulationState[], data: Ma
 export function calculateAvgAndAreaForAll(allReturns: SimulationState[][], data: MarketData[], percentile: number) {
   const maxLength = longestSimWeeks(allReturns);
   const r: CoinReturns[] = [];
-  for (let weeks = 1; weeks < maxLength; weeks++) {
-    const allAtWeek = allReturns.map(r => r[weeks]).filter(isPresent);
-    r.push(calculateAvgAndArea(allAtWeek, data, percentile));
+  for (let week = 1; week < maxLength; week++) {
+    const allAtWeek = allReturns.map(r => r[week]).filter(isPresent);
+    r.push({
+      week,
+      ...calculateAvgAndArea(allAtWeek, data, percentile)
+    });
   };
   return r;
 }

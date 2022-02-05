@@ -4,6 +4,7 @@ import { BenefitsGraph as Component } from '.';
 import { createParams, MarketData } from '../../ReturnProfile/data';
 //@ts-ignore
 import { generateData } from '../../../../internals/historical/simulation';
+import styles from '../styles.module.less';
 
 const meta: Meta = {
   title: 'Landing/Benefits/Graph',
@@ -31,5 +32,9 @@ export const Graph: Story<Props> = (props) => {
     }, 1000 * props?.delay ?? 0)
   }, [props?.yearsToSimulate, props?.noise, props?.growthPercent])
 
-  return <Component snpData={data} years={props?.yearsToDisplay ?? 10} params={params} />;
+  return (
+    <div className={styles.graphContainer}>
+      <Component snpData={data} years={props?.yearsToDisplay ?? 10} params={params} />
+    </div>
+  );
 }

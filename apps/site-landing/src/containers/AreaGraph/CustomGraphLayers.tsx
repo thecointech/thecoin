@@ -1,7 +1,7 @@
 import React from 'react'
 import { Defs } from '@nivo/core'
 import { area, curveMonotoneX } from 'd3-shape'
-import { Datum, Line, Serie, Layer, CustomLayerProps, DatumValue } from '@nivo/line'
+import { Datum, ResponsiveLine, Serie, Layer, CustomLayerProps, DatumValue } from '@nivo/line'
 import { AreaGraphTooltip } from './Tooltip'
 
 // Used internally by actual renderer
@@ -11,8 +11,6 @@ export type AreaDatum = Datum & {
 }
 
 const commonProperties = {
-  width: 900,
-  height: 400,
   margin: { top: 20, right: 20, bottom: 60, left: 80 },
   animate: true,
   enableSlices: 'x' as 'x',
@@ -80,7 +78,7 @@ const findMinValue = (serie: Serie[]) => {
 }
 
 export const CustomGraphLayers = ({ data, xlegend }: { data: Serie[], xlegend: string }) => {
-  return <Line
+  return <ResponsiveLine
     {...commonProperties}
     yScale={{
       type: 'linear',
