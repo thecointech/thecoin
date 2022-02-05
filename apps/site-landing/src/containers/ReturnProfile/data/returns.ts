@@ -62,11 +62,11 @@ export function* calcAllResults(fullParams: AllParams) {
   }
 }
 
-export function calcAllResultsImmediate(fullParams: AllParams) {
+export function calcAllResultsImmediate(fullParams: AllParams, numWeeks: number) {
 
   const all = calcAllResults(fullParams);
   const r: CoinReturns[] = [];
-  while(true) {
+  for (let i = 0; i < numWeeks; i++) {
     const { value, done } = all.next();
     if (done || !value) break;
     r.push(value);

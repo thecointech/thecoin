@@ -207,31 +207,13 @@ export class ReturnSimulator {
     return state;
   }
 
-  // calcPeriod = (start: DateTime) => {
-  //   const f = first(this.data).Date;
-  //   const l = last(this.data).Date;
-  //   return {
-  //     from: DateTime.max(f, start),
-  //     to: DateTime.min(l, start.plus(this.params.maxDuration)),
-  //   };
-  // }
-
-  // Calculate returns for across all supplied data.
-  // calcReturns(start: DateTime) {
-  //   let { from, to } = this.calcPeriod(start)
-  //   const numWeeks = to.diff(from, "weeks").weeks;
-  //   // Keep track of how much capital has been input.
-  //   const initial = this.getInitial(from);
-  //   let state = initial;
-  //   return [
-  //     initial, // always start with initial
-  //     ...range(1, numWeeks + 1)
-  //       .map((weeks) => {
-  //         // Note; this line is responsible for 2/3 of the execution cost
-  //         // of the simulator.  We should, one day, look into eliminating it
-  //         state = increment(state, from.plus({ weeks }));
-  //         return this.calcSingleState(start, state);
-  //       })
-  //   ];
-  // }
+  // Utility function, mostly for testing.  Take a state and run simulator
+  // until it reaches "end" date
+  calcStateUntil(state: SimulationState, start: DateTime, end: DateTime): SimulationState {
+    while (state.date <= end) {
+      state.date = state.date.plus({ week: 1 });
+      state = this.calcSingleState(start, state);
+    }
+    return state;
+  }
 }
