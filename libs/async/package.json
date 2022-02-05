@@ -1,0 +1,24 @@
+{
+  "name": "@thecointech/async",
+  "version": "0.2.58",
+  "description": "TheCoin: utility functions for async control",
+  "keywords": [
+    "TheCoin",
+    "ethereum"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/async"
+  },
+  "scripts": {
+    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "build": "yarn tsc",
+    "clean": "rimraf ./build"
+  },
+  "exports": "./build/index.js",
+  "types": "./build/index.d.ts"
+}

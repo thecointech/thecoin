@@ -1,3 +1,5 @@
+import { sleep } from '@thecointech/async'
+
 ////////////////////////////////////////////////////////////////////
 // We are triggered by a cron job on Google App Engine, but
 // we only have minute-level precision.  We set the trigger
@@ -9,10 +11,6 @@
 // How many seconds should we wait after the minute is completed
 // so our data provider has the data ready for us?
 export const BufferMs = 5 * 1000;
-
-export function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 // milliseconds until the nearest minute.  If we have just passed
 // a minute boundary, it will be negative as the nearest minute
