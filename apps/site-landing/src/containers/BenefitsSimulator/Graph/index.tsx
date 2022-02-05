@@ -12,9 +12,8 @@ type Props = {
   snpData?: MarketData[],
   animate?: boolean,
 }
-
 type SimGenerator = ReturnType<typeof calcAllResults>;
-// TODO: This component does a lot of computation, and should be memoized
+
 export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
 
   const [results, setResults] = useState<CoinReturns[]>([]);
@@ -103,24 +102,10 @@ export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
       <AreaGraph maxGraphPoints={maxGraphPoints} data={displayData} />
     </Segment>
   )
-  // return isLoading
-  //       ? <GraphLoading progress={progress} />
-  //       : <AreaGraph maxGraphPoints={maxGraphPoints} data={displayData} />
 };
 
-const GraphLoading = ({progress}: { progress: number}) =>
-    <Loader active inline='centered' indeterminate={true}
-      content={`Crunching: ${(progress * 100).toPrecision(2)}%`}
-    />
+const GraphLoading = ({ progress }: { progress: number }) =>
+  <Loader active inline='centered' indeterminate={true}
+    content={`Simulating: ${(progress * 100).toPrecision(2)}%`}
+  />
 
-
-// const MemoizedGraphCompare = React.memo(GraphCompareLoaded, (a, b) => (
-//   a.fxData === b.fxData &&
-//   a.snpData === b.snpData &&
-//   isEqual(a.params, b.params)
-// ))
-
-// export const GraphCompare = ({params, fxData, snpData}: Partial<Props>) =>
-//   (params && snpData && fxData)
-//     ? <MemoizedGraphCompare params={params} fxData={fxData} snpData={snpData} />
-//     : <Loader active inline='centered' />

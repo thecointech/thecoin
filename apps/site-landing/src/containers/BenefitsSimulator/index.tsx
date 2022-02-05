@@ -5,7 +5,7 @@
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Grid, Header } from 'semantic-ui-react';
-import { FormCompare } from './Form';
+import { Form } from './Form';
 import { BenefitsGraph } from './Graph';
 import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateAccountBanner';
 import { createParams, MarketData, getData } from '../ReturnProfile/data';
@@ -49,7 +49,7 @@ export function Compare() {
         <Grid columns={3} stackable>
           <Grid.Row stretched>
             <Grid.Column textAlign='center' width={5} floated='right'>
-              <FormCompare
+              <Form
                 params={params}
                 setParams={setParams}
                 years={years}
