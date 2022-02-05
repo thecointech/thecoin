@@ -1,11 +1,14 @@
 import { DateTime } from 'luxon';
 import { Decimal } from 'decimal.js-light';
 import { SimulationParameters } from './params';
-import { SimulationState } from './state';
+import { SimulationState, calcFiat, zeroState, increment, toFiat, toCoin } from './state';
 import { getMarketData, MarketData } from './market';
 import { range } from 'lodash';
 import { first, last } from '@thecointech/utilities/ArrayExtns';
 import { straddlesMonth, straddlesYear } from './time';
+import {  } from '.';
+import { DMin, zero } from './sim.decimal';
+import { applyShockAborber } from './sim.shockAbsorber';
 
 //
 // ReturnSimulator
@@ -15,10 +18,6 @@ import { straddlesMonth, straddlesYear } from './time';
 // with starting date and recieve back an array of all
 // weeks in the simulation
 //
-
-const zero = new Decimal(0);
-const DMin = (l: Decimal, r: Decimal) => l.lt(r) ? l : r;
-
 export class ReturnSimulator {
 
   data: MarketData[]
@@ -31,31 +30,27 @@ export class ReturnSimulator {
   }
 
   getMarketData = (state: SimulationState) => getMarketData(state.date, this.data)!;
-  getInitial = (start: DateTime): SimulationState => {
-    const balance = new Decimal(this.params.initialBalance);
-    const state = {
-      date: start,
-      principal: balance,
-      coin: zero,
-      fiat: balance,
-      credit: {
-        balanceDue: zero,
-        current: zero,
-        cashBackEarned: zero,
-        outstanding: false,
-      },
-      offsetCO2: zero,
-      // TODO: Shock absorber
-      protected: zero
-    }
-    const firstMonth = this.getMarketData(state);
-    state.coin = balance.div(firstMonth.P)
-    return state;
-  }
+  getInitial = (start: DateTime): SimulationState =>
+    this.balanceChange(
+      zeroState(start),
+      new Decimal(this.params.initialBalance),
+    )
+
+  applyShockAborber = (start: DateTime, state: SimulationState) =>
+    applyShockAborber(start, this.params, state, this.getMarketData(state))
 
   calcInterest = (current: Decimal) => current
     .mul(this.params.credit.interestRate) // full years interest
     .div(52.1429) // 1 weeks interest
+
+
+  balanceChange = (state: SimulationState, fiatChange: Decimal) => {
+    const month = this.getMarketData(state);
+    const coinChange = toCoin(fiatChange, month);
+    state.coin = state.coin.add(coinChange);
+    state.principal = state.principal.add(fiatChange);
+    return state;
+  }
 
   // Add the current weeks spending to current
   updateCreditSpending(start: DateTime, {credit, date}: SimulationState) {
@@ -65,6 +60,7 @@ export class ReturnSimulator {
     if (straddlesMonth(date)) spending = spending.add(params.monthly);
     // If this day straddled an end-of-year, add annual spending
     if (straddlesYear(start, date)) spending = spending.add(params.yearly);
+    credit.cashBackEarned = credit.cashBackEarned.plus(spending.mul(params.cashBackRate));
     credit.current = credit.current.add(spending);
   }
 
@@ -84,10 +80,9 @@ export class ReturnSimulator {
   }
 
   payBalanceDue(state: SimulationState) {
-    const month = this.getMarketData(state);
-    const paid = DMin(state.credit.balanceDue, state.coin.mul(month.P));
-    const paidCoin = paid.div(month.P);
-    state.coin = state.coin.sub(paidCoin);
+    const currentFiat = calcFiat(state, this.data);
+    const paid = DMin(state.credit.balanceDue, currentFiat);
+    this.balanceChange(state, paid.neg());
     state.credit.balanceDue = state.credit.balanceDue.sub(paid);
   }
 
@@ -127,7 +122,7 @@ export class ReturnSimulator {
 
   updateCreditBalances = (start: DateTime, state: SimulationState) => {
     const params = this.params.credit;
-    const currentWeek = start.diff(state.date, "weeks").weeks;
+    const currentWeek = state.date.diff(start, "weeks").weeks;
     const creditWeek = currentWeek % params.billingCycle;
 
     // Always update spending
@@ -145,25 +140,15 @@ export class ReturnSimulator {
     }
   }
 
-  updateCreditCashback(start: DateTime, state: SimulationState) {
-    const params = this.params.credit;
-    const { credit } = state;
-    const cashBackEarned = credit.cashBackEarned.add(params.weekly * params.cashBackPercentage);
-
+  payOutCashback(start: DateTime, state: SimulationState) {
     // If this past week contained the anniversary, we transfer cashback to TheCoin
     if (straddlesYear(start, state.date)) {
-      const month = this.getMarketData(state);
-      const newCoin = cashBackEarned.div(month.P);
-      state.coin = state.coin.add(newCoin);
+      this.balanceChange(state, state.credit.cashBackEarned);
       state.credit.cashBackEarned = zero;
-    }
-    else {
-      // just accumulate cashback
-      state.credit.cashBackEarned = cashBackEarned;
     }
   }
 
-  calcSpending(start: DateTime, {date}: SimulationState) {
+  calcCashSpending(start: DateTime, {date}: SimulationState) {
     let spending = new Decimal(this.params.cash.weekly);
     if (straddlesMonth(date)) spending = spending.add(this.params.cash.monthly);
     if (straddlesYear(start, date)) spending = spending.add(this.params.cash.yearly);
@@ -172,26 +157,32 @@ export class ReturnSimulator {
 
   // Calculate how much fiat income comes in this week
   calcIncome(start: DateTime, state: SimulationState) {
-    const { params } = this;
+    // regular income
+    const {weekly, monthly, yearly} = this.params.income;
+    let income = new Decimal(weekly);
+    if (straddlesMonth(state.date)) income = income.add(monthly);
+    if (straddlesYear(start, state.date)) income = income.add(yearly);
+    return income;
+  }
+
+  updateDividends(state: SimulationState) {
     const month = this.getMarketData(state);
 
-    // regular income
-    let income = new Decimal(params.income.weekly);
-    if (straddlesMonth(state.date)) income = income.add(this.params.income.monthly);
-    if (straddlesYear(start, state.date)) income = income.add(this.params.income.yearly);
-
-    // Calculate dividend effect
+    // Calculate the div from 1 share
     const monthDiv = new Decimal(month.D).div(12);
     const weekDiv = monthDiv.div(state.date.daysInMonth).mul(7);
-    // Subtract CO2 offsets
-    const maxWeekOffsetPercent = new Decimal(params.maxOffsetPercentage).div(365.25);
-    let adjustedDiv = weekDiv.sub(maxWeekOffsetPercent);
+
+    // How much of each shares div is allocated to CO2 offsets?
+    const maxWeekOffsetPercent = new Decimal(this.params.maxOffsetPercentage).div(52.17857);
+    let adjustedDiv = weekDiv.sub(toFiat(maxWeekOffsetPercent, month));
     if (adjustedDiv.lt(0)) adjustedDiv = zero;
 
-    // How much income comes in?
-    const divAccrued = adjustedDiv.mul(state.coin);
-    income = income.add(divAccrued);
-    return income;
+    // Mult by shares to get totals
+    const retainedDiv = adjustedDiv.mul(state.coin);
+    const newCoin = retainedDiv.div(month.P);
+    const newOffsets = weekDiv.sub(retainedDiv).mul(state.coin);
+    state.coin = state.coin.add(newCoin);
+    state.offsetCO2 = state.offsetCO2.add(newOffsets);
   }
 
   calcPeriod = (start: DateTime) => {
@@ -208,32 +199,33 @@ export class ReturnSimulator {
     let { from, to } = this.calcPeriod(start)
     const numWeeks = to.diff(from, "weeks").weeks;
     // Keep track of how much capital has been input.
-    let state = this.getInitial(from);
+    const initial = this.getInitial(from);
+    let state = initial;
     return [
-      state, // always start with initial
+      initial, // always start with initial
       ...range(1, numWeeks + 1)
-        .map((week) => {
+        .map((weeks) => {
           // Note; this line is responsible for 2/3 of the execution cost
           // of the simulator.  We should, one day, look into eliminating it
-          state = {
-            ...state,
-            date: from.plus({ week })
-          };
-
-          const month = this.getMarketData(state);
+          state = increment(state, from.plus({ weeks }));
 
           const income = this.calcIncome(start, state);
-          const inCoin = income.div(month.P);
-          state.coin = state.coin.add(inCoin);
+          this.balanceChange(state, income);
 
-          // Accumulate our cashback.  Do this before calculating credit just in case
-          // we need to use the cashbadk to pay off a balanceOwing
-          this.updateCreditCashback(start, state);
+          // add/apply dividends
+          this.updateDividends(state);
+
+          // Adjust our coin balance to
+          // absorbe any shocks.
+          this.applyShockAborber(start, state);
+
+          // Pay out the CB.  Do this before calculating credit just in case
+          // we use the cashback to pay off a balanceOwing
+          this.payOutCashback(start, state);
 
           // subtract cash spending.  We assume the credit card will pick up any slack
-          const spending = this.calcSpending(start, state);
-          const outCoin = spending.div(month.P);
-          state.coin = state.coin.sub(outCoin)
+          const spending = this.calcCashSpending(start, state);
+          this.balanceChange(state, spending.neg());
 
           // calculate credit changes
           this.updateCreditBalances(start, state)
