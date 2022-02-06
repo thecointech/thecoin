@@ -213,10 +213,6 @@
     "defaultMessage": "What We Do",
     "description": "site.homepage.underwater.trees.link: Link for the homepage underwater trees subpart"
   },
-  "bx4TI0": {
-    "defaultMessage": "Your chequing account will be with you longer than your retirement savings will. This is what that could look like.",
-    "description": "site.compare.graph.description: Graph description for the How much will you make? graph page"
-  },
   "cdFqR/": {
     "defaultMessage": "Create Account",
     "description": "site.MainNavigation.button,createAccount: Button to create account in app"
@@ -263,10 +259,6 @@
   "jJ1YVo": {
     "defaultMessage": "The Best Investment",
     "description": "site.homepage.wealthier.investment.title: The title for the investment for the homepage wealthier"
-  },
-  "jK5Jc0": {
-    "defaultMessage": "Your possible benefits",
-    "description": "site.compare.graph.title: Graph title for the How much will you make? graph page"
   },
   "jTYRs0": {
     "defaultMessage": "Compare Us",
