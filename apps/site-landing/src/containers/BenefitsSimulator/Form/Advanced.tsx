@@ -1,16 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RangeFieldAndScale } from '../../../components/RangeFieldAndScale';
-import { defineMessages } from 'react-intl';
+import { defineMessages, FormattedMessage, MessageDescriptor } from 'react-intl';
 import { Props } from './types';
 import { debounce } from 'lodash';
 import { PeriodicalParams, SimulationParameters } from '../../ReturnProfile/data/params';
 import styles from './styles.module.less';
-import { Accordion } from 'semantic-ui-react';
+import { Accordion, Icon } from 'semantic-ui-react';
+import { basic } from './Basic';
 
 const translations = defineMessages({
-  startingValue : {
-    defaultMessage: 'Initial Balance:',
-    description: 'Simulator: Initial Balance'},
 
   // Labels for period groups
   income: {
@@ -40,166 +38,159 @@ const translations = defineMessages({
     description: 'Simulator: Weekly Income'
   },
 
-
-  rangeDuration : {
-    defaultMessage: 'Duration:',
-    description: 'site.compare.label.rangeDuration: label for range duration in the compare page'},
+  // Labels for additional credit parameters
+  cashBackRate: {
+    defaultMessage: 'Cashback Rate:',
+    description: 'Simulator: How much cashback is earned on this credit card'
+  },
+  interestRate: {
+    defaultMessage: 'Interest Rate:',
+    description: 'Simulator: How much interest is charged on credit vard if we do not pay total due'
+  }
 });
 
-const panels = [
-  {
-    key: 'what-is-dog',
-    title: 'What is a dog?',
-    content: [
-      'A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome',
-      'guest in many households across the world.',
-    ].join(' '),
-  },
-  {
-    key: 'kinds-of-dogs',
-    title: 'What kinds of dogs are there?',
-    content: [
-      'There are many breeds of dogs. Each breed varies in size and temperament. Owners often select a breed of dog',
-      'that they find to be compatible with their own lifestyle and desires from a companion.',
-    ].join(' '),
-  },
-  {
-    key: 'acquire-dog',
-    title: 'How do you acquire a dog?',
-    content: {
-      content: (
-        <div>
-          <p>
-            Three common ways for a prospective owner to acquire a dog is from
-            pet shops, private owners, or shelters.
-          </p>
-          <p>
-            A pet shop may be the most convenient way to buy a dog. Buying a dog
-            from a private owner allows you to assess the pedigree and
-            upbringing of your dog before choosing to take it home. Lastly,
-            finding your dog from a shelter, helps give a good home to a dog who
-            may not find one so readily.
-          </p>
-        </div>
-      ),
-    },
-  },
-]
+const UseStateWrapper = () => useState<number>(0)
+type UseNumberState = ReturnType<typeof UseStateWrapper>;
 
-const AccordionExampleStandardShorthand = () => (
-  <Accordion defaultActiveIndex={0} panels={panels} />
-)
+const debounceInterval = 250;
 
 export const Advanced = ({ params, setParams, years, setYears }: Props) => {
 
-  const debounceInterval = 250;
-  const dbOnChangeNamed = (name: keyof SimulationParameters) =>
+  const onChangedInObj = (name: keyof SimulationParameters) =>
     debounce((val: any) => setParams((prev: SimulationParameters) => ({
       ...prev,
       [name]: val,
     })), debounceInterval);
 
-
+  const activeIdxState = useState(-1);
   const dbOnSetYears = debounce(v => setYears(Math.max(1, v)), debounceInterval);
 
-  const panels = [
-    {
-      key: 'what-is-dog',
-      title: 'What is a dog?',
-      content: [
-        'A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome',
-        'guest in many households across the world.',
-      ].join(' '),
-    },
+  return (
+    <div className={styles.formPane} >
+      <RangeFieldAndScale
+        label={basic.startingValue}
+        scaleType="currency"
+        currency="CAD"
+        maximum={1000}
+        step={1}
+        initial={params.initialBalance}
+        onChange={onChangedInObj("initialBalance")}
+      />
+      <RangeFieldAndScale
+        label={basic.rangeDuration}
+        scaleType="unit"
+        unit="year"
+        maximum={60}
+        initial={years}
+        onChange={dbOnSetYears}
+      />
+      <Accordion>
+        <PeriodicalGroup
+          title={translations.income}
+          index={0}
+          activeIndexState={activeIdxState}
+          params={params.income}
+          setParams={onChangedInObj("income")}
+        />
+        <PeriodicalGroup
+          title={translations.credit}
+          index={1}
+          activeIndexState={activeIdxState}
+          params={params.credit}
+          setParams={onChangedInObj("credit")}
+        >
+          <RangeFieldAndScale
+            label={translations.cashBackRate}
+            scaleType="percent"
+            maximum={0.05}
+            step={0.01}
+            initial={params.credit.cashBackRate}
+            onChange={v => onChangedInObj("credit")({ ...params.credit, cashBackRate: v })}
+          />
+          <RangeFieldAndScale
+            label={translations.interestRate}
+            scaleType="percent"
+            maximum={1}
+            step={0.01}
+            initial={params.credit.interestRate}
+            onChange={v => onChangedInObj("credit")({ ...params.credit, interestRate: v })}
+          />
 
-    // {
-    //   key: 'income-periods',
-    //   title: 'Income',
-    //   content: <Group params={params.income} setParams={dbOnChangeNamed("income")} />,
-    // },
-    // {
-    //   key: 'cash-periods',
-    //   title: 'Cash',
-    //   content: <Group params={params.cash} setParams={dbOnChangeNamed("cash")} />,
-    // },
-    // {
-    //   key: 'credit-periods',
-    //   title: 'Credit',
-    //   content: <Group params={params.credit} setParams={dbOnChangeNamed("credit")} />,
-    // },
-  ]
-
-  return <AccordionExampleStandardShorthand />
-
-  // return (
-  //   <div className={styles.formPane} >
-  //     <RangeFieldAndScale
-  //       label={translations.startingValue}
-  //       scaleType="currency"
-  //       currency="CAD"
-  //       maximum={1000}
-  //       step={1}
-  //       initial={params.initialBalance}
-  //       onChange={dbOnChangeNamed("initialBalance")}
-  //     />
-  //     <RangeFieldAndScale
-  //       label={translations.rangeDuration}
-  //       scaleType="unit"
-  //       unit="year"
-  //       maximum={60}
-  //       initial={years}
-  //       onChange={dbOnSetYears}
-  //     />
-  //     <div>
-  //       <AccordionExampleStandardShorthand />
-  //     </div>
-  //   </div>
-  // )
+        </PeriodicalGroup>
+        <PeriodicalGroup
+          title={translations.cash}
+          index={2}
+          activeIndexState={activeIdxState}
+          params={params.cash}
+          setParams={onChangedInObj("cash")}
+        />
+      </Accordion>
+    </div>
+  )
 }
 
-
-type GroupParams = {
-  params: PeriodicalParams,
-  setParams: (v: PeriodicalParams) => void
+type GroupProps = {
+  title: MessageDescriptor;
+  index: number;
+  activeIndexState: UseNumberState;
+  params: PeriodicalParams;
+  setParams: (v: PeriodicalParams) => void;
 }
-const Group = ({params, setParams}: GroupParams) => {
+
+const PeriodicalGroup: React.FC<GroupProps> = ({ title, index, params, setParams, activeIndexState, children }) => {
 
   const setNamedValue = (name: keyof PeriodicalParams) =>
     (val: any) => setParams({
       ...params,
       [name]: val,
     }
+    )
+  const active = activeIndexState[0] === index;
+  const toggleActive = () => activeIndexState[1](
+    activeIndexState[0] == index
+      ? -1
+      : index
   )
   return (
     <>
-      <RangeFieldAndScale
-        label={translations.weekly}
-        scaleType="currency"
-        currency="CAD"
-        maximum={1000}
-        step={1}
-        initial={params.weekly}
-        onChange={setNamedValue("weekly")}
-      />
-      <RangeFieldAndScale
-        label={translations.monthly}
-        scaleType="currency"
-        currency="CAD"
-        maximum={1000}
-        step={1}
-        initial={params.monthly}
-        onChange={setNamedValue("monthly")}
-      />
-      <RangeFieldAndScale
-        label={translations.yearly}
-        scaleType="currency"
-        currency="CAD"
-        maximum={1000}
-        step={1}
-        initial={params.yearly}
-        onChange={setNamedValue("yearly")}
-      />
+      <Accordion.Title
+        active={activeIndexState[0] === index}
+        index={0}
+        onClick={toggleActive}
+      >
+        <Icon name='dropdown' />
+        <FormattedMessage {...title} />
+      </Accordion.Title>
+      <Accordion.Content active={active} >
+        <RangeFieldAndScale
+          label={translations.weekly}
+          scaleType="currency"
+          currency="CAD"
+          maximum={1000}
+          step={1}
+          initial={params.weekly}
+          onChange={setNamedValue("weekly")}
+        />
+        <RangeFieldAndScale
+          label={translations.monthly}
+          scaleType="currency"
+          currency="CAD"
+          maximum={1000}
+          step={1}
+          initial={params.monthly}
+          onChange={setNamedValue("monthly")}
+        />
+        <RangeFieldAndScale
+          label={translations.yearly}
+          scaleType="currency"
+          currency="CAD"
+          maximum={1000}
+          step={1}
+          initial={params.yearly}
+          onChange={setNamedValue("yearly")}
+        />
+        {children}
+      </Accordion.Content>
     </>
   )
 }
-

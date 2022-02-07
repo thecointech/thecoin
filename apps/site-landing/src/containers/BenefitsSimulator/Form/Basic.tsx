@@ -6,7 +6,7 @@ import { createParams } from '../../ReturnProfile/data/params';
 import { Props } from './types';
 import styles from './styles.module.less';
 
-const translations = defineMessages({
+export const basic = defineMessages({
   startingValue: {
     defaultMessage: 'Starting value:',
     description: 'site.compare.label.rangeStarting: label for Starting Value in the compare page',
@@ -17,7 +17,7 @@ const translations = defineMessages({
   },
 });
 
-export const FormCompare = ({
+export const Basic = ({
   params, setParams, years, setYears,
 }: Props) => {
   const debounceInterval = 250;
@@ -34,7 +34,7 @@ export const FormCompare = ({
     <div className={styles.formPane} >
 
       <RangeFieldAndScale
-        label={translations.startingValue}
+        label={basic.startingValue}
         className="x6spaceBefore"
         scaleType="currency"
         currency="CAD"
@@ -45,7 +45,7 @@ export const FormCompare = ({
       />
 
       <RangeFieldAndScale
-        label={translations.rangeDuration}
+        label={basic.rangeDuration}
         className="x6spaceBefore"
         scaleType="unit"
         unit="year"

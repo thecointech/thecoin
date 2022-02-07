@@ -119,8 +119,8 @@ export const createParams = (explicit?: MergeSimParamaters): SimulationParameter
     ...basicPeriods,
     billingCycle: 4,
     graceWeeks: 3,
-    cashBackRate: 0,
-    interestRate: 0,
+    cashBackRate: 0.01,
+    interestRate: 0.25,
     ...explicit?.credit,
   },
 
