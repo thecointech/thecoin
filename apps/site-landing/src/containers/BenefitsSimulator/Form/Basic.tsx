@@ -1,22 +1,25 @@
 import React from 'react';
-import { RangeFieldAndScale } from '../../../components/RangeFieldAndScale';
 import { defineMessages } from 'react-intl';
-import { Props } from './types';
+import { RangeFieldAndScale } from 'components/RangeFieldAndScale';
 import { debounce } from 'lodash';
 import { createParams } from '../../ReturnProfile/data/params';
+import { Props } from './types';
 import styles from './styles.module.less';
 
 const translations = defineMessages({
-  startingValue : {
+  startingValue: {
     defaultMessage: 'Starting value:',
-    description: 'site.compare.label.rangeStarting: label for Starting Value in the compare page'},
-  rangeDuration : {
+    description: 'site.compare.label.rangeStarting: label for Starting Value in the compare page',
+  },
+  rangeDuration: {
     defaultMessage: 'Duration:',
-    description: 'site.compare.label.rangeDuration: label for range duration in the compare page'},
+    description: 'site.compare.label.rangeDuration: label for range duration in the compare page',
+  },
 });
 
-
-export const Basic = ({ params, setParams, years, setYears }: Props) => {
+export const FormCompare = ({
+  params, setParams, years, setYears,
+}: Props) => {
   const debounceInterval = 250;
   const dbOnInitialChange = debounce(
     (val: number) => setParams(createParams({initialBalance: val})),
@@ -29,8 +32,10 @@ export const Basic = ({ params, setParams, years, setYears }: Props) => {
 
   return (
     <div className={styles.formPane} >
+
       <RangeFieldAndScale
         label={translations.startingValue}
+        className="x6spaceBefore"
         scaleType="currency"
         currency="CAD"
         maximum={1000}
@@ -41,13 +46,14 @@ export const Basic = ({ params, setParams, years, setYears }: Props) => {
 
       <RangeFieldAndScale
         label={translations.rangeDuration}
+        className="x6spaceBefore"
         scaleType="unit"
         unit="year"
         maximum={60}
         initial={years}
         onChange={dbOnSetYears}
       />
-    </div>
-  )
-}
 
+    </div>
+  );
+}
