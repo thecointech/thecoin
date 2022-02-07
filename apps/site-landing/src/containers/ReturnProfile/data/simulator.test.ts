@@ -3,12 +3,12 @@ import { DateTime } from 'luxon';
 import { getData, getDate } from './fetch.test';
 import { createParams } from './params';
 import { ReturnSimulator } from './simulator';
-import { calcFiat, SimulationState } from './state';
+import { grossFiat, SimulationState } from './state';
 
 const data = getData();
 
 const calcPercent = (state: SimulationState): number =>
-  calcFiat(state, data)
+  grossFiat(state, data)
     .sub(state.principal) // remove principal to leave profit
     .div(state.principal)
     .toNumber();

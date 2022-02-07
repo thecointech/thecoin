@@ -1,10 +1,10 @@
 import { DateTime } from 'luxon';
 import { Decimal } from 'decimal.js-light';
 import { SimulationParameters } from './params';
-import { SimulationState, calcFiat, zeroState, toFiat, toCoin } from './state';
+import { SimulationState, zeroState, toFiat, toCoin } from './state';
 import { getMarketData, MarketData } from './market';
 import { straddlesMonth, straddlesYear } from './time';
-import {  } from '.';
+import { grossFiat } from '.';
 import { DMin, zero } from './sim.decimal';
 import { applyShockAborber } from './sim.shockAbsorber';
 
@@ -78,7 +78,7 @@ export class ReturnSimulator {
   }
 
   payBalanceDue(state: SimulationState) {
-    const currentFiat = calcFiat(state, this.data);
+    const currentFiat = grossFiat(state, this.data);
     const paid = DMin(state.credit.balanceDue, currentFiat);
     this.balanceChange(state, paid.neg());
     state.credit.balanceDue = state.credit.balanceDue.sub(paid);

@@ -2,7 +2,7 @@ import { first } from '@thecointech/utilities';
 import { basicParams, generateData } from '../../../../internals/historical/simulation';
 import { createParams, SimulationParameters } from './params';
 import { ReturnSimulator } from './simulator';
-import { calcFiat } from './state';
+import { netFiat } from './state';
 import { Decimal } from 'decimal.js-light';
 
 //
@@ -16,7 +16,7 @@ const runSim = (params: SimulationParameters) => {
   const end = start.plus({years: 60});
   const initial = simulator.getInitial(start);
   const final = simulator.calcStateUntil(initial, start, end);
-  return calcFiat(final, data).sub(final.credit.current).sub(final.credit.balanceDue);
+  return netFiat(final, data);
 }
 
 it ('Matches the article with no ShockAbsorber', () => {
@@ -27,7 +27,7 @@ it ('Matches the article with no ShockAbsorber', () => {
   // This is a fairly large discrepancy, but it seems to stem from the fact
   // that our simulation is much more accurate (it operates on a per-week
   // level, rather than the yearly level the spreadsheet runs at)
-  expect(profit.toNumber()).toBeCloseTo(180095.109);
+  expect(profit).toBeCloseTo(180095.109);
 })
 
 it ('Matches article with ShockAbsorber', () => {
@@ -45,5 +45,5 @@ it ('Matches article with ShockAbsorber', () => {
   });
 
   const profit = runSim(params);
-  expect(profit.toNumber()).toBeCloseTo(122574.72);
+  expect(profit).toBeCloseTo(122574.72);
 })
