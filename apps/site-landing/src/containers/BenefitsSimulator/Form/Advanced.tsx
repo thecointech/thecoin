@@ -55,12 +55,12 @@ const translations = defineMessages({
     description: 'Parameters for simulating the balance protection feature'
   },
   cushion: {
-    defaultMessage: 'Protection Level:',
+    defaultMessage: 'Drop Protect:',
     description: 'How much of a market drop would this account be protected from',
   },
   maximumProtected: {
-    defaultMessage: 'Maximum Balance Protected:',
-    description: 'The maximum balance of the account to protect',
+    defaultMessage: 'Balance Protect:',
+    description: 'The maximum balance to protect with shock absorber',
   }
 });
 
