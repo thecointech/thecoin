@@ -12,9 +12,9 @@ const params = createParams({
   ...basicParams,
   shockAbsorber: {
     // for a max drop of 50%
-    absorbed: new Decimal(0.50),
+    cushionDown: new Decimal(0.50),
     // Using up to 6% of profit
-    cushionPercentage: new Decimal(0.06),
+    cushionUp: new Decimal(0.06),
   }
 });
 

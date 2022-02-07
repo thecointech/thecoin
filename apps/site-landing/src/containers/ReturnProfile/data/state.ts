@@ -31,7 +31,7 @@ export type SimulationState = {
     // negative values mean we subbed from `coin` to cushion jump
     coinAdjustment: Decimal;
 
-    // The total amount of cushioning previously absorbed.
+    // The total amount of cushioning previously cushionDown.
     // This is only ever negative (we do not reset during a drop)
     historicalAdjustment: Decimal;
   }

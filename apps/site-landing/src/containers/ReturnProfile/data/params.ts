@@ -9,12 +9,12 @@ export type PeriodicalParams = {
   yearly: number;
 }
 
-type ShockAbsorber = {
-  // The percentage drop absorbed
-  absorbed: Decimal;
+export type ShockAbsorber = {
+  // The percentage drop cushionDown
+  cushionDown: Decimal;
   // What percentage yearly gains go towards
   // building the cushion?
-  cushionPercentage: Decimal;
+  cushionUp: Decimal;
   // After what period do profits
   // gain protection?
   trailingMonths: Decimal;
@@ -125,8 +125,8 @@ export const createParams = (explicit?: MergeSimParamaters): SimulationParameter
   },
 
   shockAbsorber: {
-    absorbed: zero,
-    cushionPercentage: zero,
+    cushionDown: zero,
+    cushionUp: zero,
     trailingMonths: zero,
     maximumProtected: zero,
     profitPercentageToReduceDampening: zero,

@@ -40,7 +40,7 @@ function applyCushion(params: SimulationParameters, state: SimulationState,  mar
 // Cushion the account when it's value goes down.
 function cushionDown(currentFiat: Decimal, params: SimulationParameters, state: SimulationState, market: MarketData) {
   const sa = params.shockAbsorber;
-  // What is the drop to be absorbed?
+  // What is the drop to be cushionDown?
   const fiatProtected = DMin(state.principal, sa.maximumProtected);
   // what ratio of principal is protected
   const ratio = fiatProtected.div(state.principal);
@@ -50,17 +50,17 @@ function cushionDown(currentFiat: Decimal, params: SimulationParameters, state: 
   const coinPrincipalProtected = coinPrincipal.mul(ratio);
 
   // What is the total percentage loss are we absorbing?
-  // This loss ignores anything previously absorbed
+  // This loss ignores anything previously cushionDown
   const fiatAdjustment = toFiat(state.shockAbsorber.coinAdjustment, market);
   const loss = fiatProtected
     //.sub(toFiat(state.shockAbsorber.coinAdjustment, market))
     .sub(currentFiat.sub(fiatAdjustment).mul(ratio));
   const lossPercent = loss.div(fiatProtected);
-  const absorbedPercent = DMin(lossPercent, sa.absorbed);
+  const cushionDownPercent = DMin(lossPercent, sa.cushionDown);
 
   // We adjust the principal protected to still have the same total value
-  // after absorbedPercent decline in multiplier value
-  const principalMultipler = one.sub(absorbedPercent);
+  // after cushionDownPercent decline in multiplier value
+  const principalMultipler = one.sub(cushionDownPercent);
   // aCP is the final value we want our protected coin to have
   const adjustCoinPrincipal = coinPrincipalProtected.div(principalMultipler);
   const adjustCoin = adjustCoinPrincipal.sub(coinPrincipalProtected.add(state.shockAbsorber.coinAdjustment));
@@ -83,13 +83,13 @@ function cushionUp(currentFiat: Decimal, params: SimulationParameters, state: Si
   }
 
   if (state.shockAbsorber.coinAdjustment.lte(0)) {
-    const alreadyAbsorbed = toFiat(state.shockAbsorber.coinAdjustment, market);
+    const alreadycushionDown = toFiat(state.shockAbsorber.coinAdjustment, market);
 
-    const gain = currentFiat.sub(state.principal).sub(alreadyAbsorbed);
+    const gain = currentFiat.sub(state.principal).sub(alreadycushionDown);
     const fiatCovered = DMin(state.principal, new Decimal(sa.maximumProtected));
     const ratio = fiatCovered.div(state.principal);
 
-    const maxFiatToAbsorb = fiatCovered.mul(sa.cushionPercentage);
+    const maxFiatToAbsorb = fiatCovered.mul(sa.cushionUp);
     const toAbsorb = DMin(gain.mul(ratio), maxFiatToAbsorb);
     const coinAdjust = toCoin(toAbsorb, market).add(state.shockAbsorber.coinAdjustment);
 

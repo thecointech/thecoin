@@ -3,10 +3,11 @@ import { RangeFieldAndScale } from '../../../components/RangeFieldAndScale';
 import { defineMessages, FormattedMessage, MessageDescriptor } from 'react-intl';
 import { Props } from './types';
 import { debounce } from 'lodash';
-import { PeriodicalParams, SimulationParameters } from '../../ReturnProfile/data/params';
+import { PeriodicalParams, ShockAbsorber, SimulationParameters } from '../../ReturnProfile/data/params';
 import styles from './styles.module.less';
 import { Accordion, Icon } from 'semantic-ui-react';
 import { basic } from './Basic';
+import { Decimal } from 'decimal.js-light';
 
 const translations = defineMessages({
 
@@ -46,13 +47,27 @@ const translations = defineMessages({
   interestRate: {
     defaultMessage: 'Interest Rate:',
     description: 'Simulator: How much interest is charged on credit vard if we do not pay total due'
+  },
+
+  // Parameters for ShockAbsorber
+  shockAbsorber: {
+    defaultMessage: 'Shock Absorber:',
+    description: 'Parameters for simulating the balance protection feature'
+  },
+  cushion: {
+    defaultMessage: 'Protection Level:',
+    description: 'How much of a market drop would this account be protected from',
+  },
+  maximumProtected: {
+    defaultMessage: 'Maximum Balance Protected:',
+    description: 'The maximum balance of the account to protect',
   }
 });
 
 const UseStateWrapper = () => useState<number>(0)
 type UseNumberState = ReturnType<typeof UseStateWrapper>;
 
-const debounceInterval = 250;
+const debounceInterval = 500;
 
 export const Advanced = ({ params, setParams, years, setYears }: Props) => {
 
@@ -124,20 +139,27 @@ export const Advanced = ({ params, setParams, years, setYears }: Props) => {
           params={params.cash}
           setParams={onChangedInObj("cash")}
         />
+        <ShockAbsorberGroup
+          title={translations.cash}
+          index={3}
+          activeIndexState={activeIdxState}
+          params={params.shockAbsorber}
+          setParams={onChangedInObj("shockAbsorber")}
+        />
       </Accordion>
     </div>
   )
 }
 
-type GroupProps = {
+type GroupProps<T> = {
   title: MessageDescriptor;
   index: number;
   activeIndexState: UseNumberState;
-  params: PeriodicalParams;
-  setParams: (v: PeriodicalParams) => void;
+  params: T;
+  setParams: (v: T) => void;
 }
 
-const PeriodicalGroup: React.FC<GroupProps> = ({ title, index, params, setParams, activeIndexState, children }) => {
+const PeriodicalGroup: React.FC<GroupProps<PeriodicalParams>> = ({ title, index, params, setParams, activeIndexState, children }) => {
 
   const setNamedValue = (name: keyof PeriodicalParams) =>
     (val: any) => setParams({
@@ -190,6 +212,64 @@ const PeriodicalGroup: React.FC<GroupProps> = ({ title, index, params, setParams
           onChange={setNamedValue("yearly")}
         />
         {children}
+      </Accordion.Content>
+    </>
+  )
+}
+
+
+
+const ShockAbsorberGroup: React.FC<GroupProps<ShockAbsorber>> = ({ index, params, setParams, activeIndexState }) => {
+
+  const setNamedValue = (name: keyof ShockAbsorber) =>
+    (val: any) => setParams({
+      ...params,
+      [name]: new Decimal(val),
+    }
+    )
+  const active = activeIndexState[0] === index;
+  const toggleActive = () => activeIndexState[1](
+    activeIndexState[0] == index
+      ? -1
+      : index
+  )
+
+  const onSetCushion = (v: number) => {
+    const d = new Decimal(v);
+    setParams({
+      ...params,
+      cushionDown: d,
+      cushionUp: d.div(9).add(0.01),
+    })
+  }
+  return (
+    <>
+      <Accordion.Title
+        active={activeIndexState[0] === index}
+        index={0}
+        onClick={toggleActive}
+      >
+        <Icon name='dropdown' />
+        <FormattedMessage {...translations.shockAbsorber} />
+      </Accordion.Title>
+      <Accordion.Content active={active} >
+        <RangeFieldAndScale
+          label={translations.cushion}
+          scaleType="percent"
+          maximum={0.5}
+          step={0.1}
+          initial={params.cushionDown.toNumber()}
+          onChange={onSetCushion}
+        />
+        <RangeFieldAndScale
+          label={translations.maximumProtected}
+          scaleType="currency"
+          currency="CAD"
+          maximum={5000}
+          step={100}
+          initial={params.maximumProtected.toNumber()}
+          onChange={setNamedValue('maximumProtected')}
+        />
       </Accordion.Content>
     </>
   )

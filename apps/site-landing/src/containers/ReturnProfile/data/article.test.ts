@@ -38,9 +38,9 @@ it ('Matches article with ShockAbsorber', () => {
       // We protect up to $500
       maximumProtected: new Decimal(500),
       // for a max drop of 50%
-      absorbed: new Decimal(0.50),
+      cushionDown: new Decimal(0.50),
       // Using up to 6% of profit
-      cushionPercentage: new Decimal(0.06),
+      cushionUp: new Decimal(0.06),
     }
   });
 
