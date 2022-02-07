@@ -1,6 +1,6 @@
 import { parse } from 'papaparse';
 import { DateTime } from 'luxon';
-import { MarketData } from './market';
+import { FDRNewDeal, getIdx, MarketData } from './market';
 import { Decimal } from 'decimal.js-light';
 
 function transformDate(value: string) {
@@ -27,6 +27,9 @@ export function parseData(data: string) {
 export async function getData() {
   const data = await fetch('/sp500_monthly.csv');
   const text = await data.text();
-  return parseData(text);
+  const r = parseData(text);
+  // Only return history since New Deal.
+  // Sim takes forever otherwise.
+  return r.slice(getIdx(FDRNewDeal, r));
 }
 

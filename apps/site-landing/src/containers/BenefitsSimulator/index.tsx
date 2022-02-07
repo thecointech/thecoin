@@ -5,13 +5,11 @@
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Grid, Header } from 'semantic-ui-react';
-
 import { FormCompare } from './Form';
 import { BenefitsGraph } from './Graph';
 import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateAccountBanner';
-
-import styles from './styles.module.less';
 import { createParams, MarketData, getData } from '../ReturnProfile/data';
+import styles from './styles.module.less';
 
 const translations = defineMessages({
   title: {
@@ -23,12 +21,12 @@ const translations = defineMessages({
     description: 'site.compare.description: Main description for the How much will you make? graph page'
   }
 });
-
-const defaultParams = createParams({initialBalance: 1000})
+const defaultParams = createParams({initialBalance: 1000});
 
 export function Compare() {
 
   const [params, setParams] = useState(defaultParams);
+  const [years, setYears] = useState(10);
   const [fxData, setFxData] = useState<MarketData[]|undefined>();
   const [snpData, setSnPData] = useState<MarketData[]|undefined>();
 
@@ -36,7 +34,7 @@ export function Compare() {
   useEffect(() => {
     getData().then(setSnPData);
     setFxData([]);
-  })
+  }, [])
 
   return (
     <>
@@ -51,10 +49,22 @@ export function Compare() {
         <Grid columns={3} stackable>
           <Grid.Row stretched>
             <Grid.Column textAlign='center' width={5} floated='right'>
-              <FormCompare params={params} setParams={setParams} />
+              <FormCompare
+                params={params}
+                setParams={setParams}
+                years={years}
+                setYears={setYears}
+              />
             </Grid.Column>
             <Grid.Column textAlign='left' width={10} floated='left' >
-              <BenefitsGraph params={params} snpData={snpData} fxData={fxData} />
+              <div className={styles.graphContainer}>
+                <BenefitsGraph
+                  years={years}
+                  params={params}
+                  snpData={snpData}
+                  fxData={fxData}
+                />
+              </div>
             </Grid.Column>
           </Grid.Row>
         </Grid>

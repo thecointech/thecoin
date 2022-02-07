@@ -1,4 +1,4 @@
-import { DateTime, DurationObject } from 'luxon';
+import { DateTime } from 'luxon';
 import { Decimal } from 'decimal.js-light';
 import { zero } from './sim.decimal';
 
@@ -35,7 +35,7 @@ type ShockAbsorber = {
 // The data we use to calculate a clients potential returns
 export type SimulationParameters = {
   // How many months should we be calculating this for?
-  maxDuration: DurationObject;
+  //maxDuration: DurationObject;
   // start: DateTime;
   // end: DateTime;
 
@@ -106,11 +106,6 @@ type RecursivePartial<T> = {
 
 export type MergeSimParamaters = RecursivePartial<SimulationParameters>;
 export const createParams = (explicit?: MergeSimParamaters): SimulationParameters => ({
-  // start: FDRNewDeal,
-  // end: DateTime.now(),
-  maxDuration: {
-    years: 60
-  },
   adjustForInflation: false,
   maxOffsetPercentage: 0,
   initialBalance: 0,

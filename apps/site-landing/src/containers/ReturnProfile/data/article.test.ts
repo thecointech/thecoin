@@ -1,27 +1,33 @@
-import { first, last } from '@thecointech/utilities';
+import { first } from '@thecointech/utilities';
 import { basicParams, generateData } from '../../../../internals/historical/simulation';
-import { createParams } from './params';
+import { createParams, SimulationParameters } from './params';
 import { ReturnSimulator } from './simulator';
-import { calcFiat, SimulationState } from './state';
+import { calcFiat } from './state';
 import { Decimal } from 'decimal.js-light';
+
 //
 // Test the article: "Hacking your income with TheCoin"
 // https://docs.google.com/spreadsheets/d/1GhlA6xDz43AojNR8x2eiJgS9AIaTikvkqhzacdtl-RE/edit#gid=0
-//
 const data = generateData(9, 0, 70, 0);
+
+const runSim = (params: SimulationParameters) => {
+  const simulator = new ReturnSimulator(data, params);
+  const start = first(data).Date;
+  const end = start.plus({years: 60});
+  const initial = simulator.getInitial(start);
+  const final = simulator.calcStateUntil(initial, start, end);
+  return calcFiat(final, data).sub(final.credit.current).sub(final.credit.balanceDue);
+}
 
 it ('Matches the article with no ShockAbsorber', () => {
   const params = createParams(basicParams);
-  const simulator = new ReturnSimulator(data, params);
-  const run1 = simulator.calcReturns(first(data).Date);
+  const profit = runSim(params);
 
   // The spreadsheet version of this runs to about 188645 at 60 years.
   // This is a fairly large discrepancy, but it seems to stem from the fact
   // that our simulation is much more accurate (it operates on a per-week
   // level, rather than the yearly level the spreadsheet runs at)
-  const toProfit = (s: SimulationState) => calcFiat(s, data).sub(s.credit.current).sub(s.credit.balanceDue).toNumber();
-  const profits1 = run1.map(toProfit);
-  expect(last(profits1)).toBeCloseTo(180095.109);
+  expect(profit.toNumber()).toBeCloseTo(180095.109);
 })
 
 it ('Matches article with ShockAbsorber', () => {
@@ -38,10 +44,6 @@ it ('Matches article with ShockAbsorber', () => {
     }
   });
 
-  const simulator = new ReturnSimulator(data, params);
-  const run1 = simulator.calcReturns(first(data).Date);
-
-  const toProfit = (s: SimulationState) => calcFiat(s, data).sub(s.credit.current).sub(s.credit.balanceDue).toNumber();
-  const profits1 = run1.map(toProfit);
-  expect(last(profits1)).toBeCloseTo(122574.72);
+  const profit = runSim(params);
+  expect(profit.toNumber()).toBeCloseTo(122574.72);
 })

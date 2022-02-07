@@ -10,7 +10,6 @@ import { zero } from './sim.decimal';
 const start = DateTime.fromObject({ year: 2020 });
 const params = createParams({
   ...basicParams,
-  maxDuration: { years: 10 },
   shockAbsorber: {
     // for a max drop of 50%
     absorbed: new Decimal(0.50),

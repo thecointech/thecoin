@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Meta, Story } from '@storybook/react';
 import { BenefitsGraph as Component } from '.';
 import { createParams, MarketData } from '../../ReturnProfile/data';
+//@ts-ignore
 import { generateData } from '../../../../internals/historical/simulation';
+import styles from '../styles.module.less';
 
 const meta: Meta = {
   title: 'Landing/Benefits/Graph',
@@ -10,6 +12,7 @@ const meta: Meta = {
   args: {
     loadingDelay: 2, // simulated delay of loading data.
     growthPercent: 9,
+    yearsToDisplay: 10,
     yearsToSimulate: 60,
     noise: 0.1,
   }
@@ -29,5 +32,9 @@ export const Graph: Story<Props> = (props) => {
     }, 1000 * props?.delay ?? 0)
   }, [props?.yearsToSimulate, props?.noise, props?.growthPercent])
 
-  return <Component snpData={data} params={params} />;
+  return (
+    <div className={styles.graphContainer}>
+      <Component snpData={data} years={props?.yearsToDisplay ?? 10} params={params} />
+    </div>
+  );
 }

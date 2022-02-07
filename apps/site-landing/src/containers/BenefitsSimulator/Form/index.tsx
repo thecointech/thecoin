@@ -4,6 +4,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { SimulationParameters } from '../../ReturnProfile/data/params';
 import { RangeFieldAndScale } from 'components/RangeFieldAndScale';
 import styles from './styles.module.less';
+import { debounce } from 'lodash';
 
 const translations = defineMessages({
     startingValue : {
@@ -23,16 +24,20 @@ const translations = defineMessages({
 type Props = {
   params: SimulationParameters;
   setParams: Dispatch<SetStateAction<SimulationParameters>>;
+  years: number,
+  setYears: Dispatch<SetStateAction<number>>;
 };
 
-export const FormCompare = ({params, setParams}: Props) => {
+export const FormCompare = ({params, setParams, years, setYears}: Props) => {
 
-  // TODO: Connect all o' dis
-  const onChangeNamed = (name: keyof SimulationParameters) =>
-    (val: any) => setParams((prev: SimulationParameters) => ({
+  const debounceInterval = 250;
+  const dbOnChangeNamed = (name: keyof SimulationParameters) =>
+    debounce((val: any) => setParams((prev: SimulationParameters) => ({
       ...prev,
       [name]: val,
-    }))
+    })), debounceInterval);
+
+  const dbOnSetYears = debounce(v => setYears(Math.max(1, v)), debounceInterval);
 
   return (
     <div id={styles.variablesContainer}>
@@ -44,14 +49,16 @@ export const FormCompare = ({params, setParams}: Props) => {
         maximum={1000}
         step={1}
         initial={params.initialBalance}
-        onChange={onChangeNamed("initialBalance")}
+        onChange={dbOnChangeNamed("initialBalance")}
       />
 
       <RangeFieldAndScale
         label={translations.rangeDuration}
         scaleType="unit"
+        unit="year"
         maximum={60}
-        onChange={v => onChangeNamed("maxDuration")({years: v})}
+        initial={years}
+        onChange={dbOnSetYears}
       />
 
       <Button secondary className={`${styles.buttonContainer} x16spaceBefore`}>

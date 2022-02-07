@@ -1,7 +1,7 @@
 import React from 'react'
 import { Defs } from '@nivo/core'
 import { area, curveMonotoneX } from 'd3-shape'
-import { Datum, Line, Serie, Layer, CustomLayerProps, DatumValue } from '@nivo/line'
+import { Datum, ResponsiveLine, Serie, Layer, CustomLayerProps, DatumValue } from '@nivo/line'
 import { AreaGraphTooltip } from './Tooltip'
 
 // Used internally by actual renderer
@@ -11,46 +11,44 @@ export type AreaDatum = Datum & {
 }
 
 const commonProperties = {
-  width: 900,
-  height: 400,
   margin: { top: 20, right: 20, bottom: 60, left: 80 },
   animate: true,
   enableSlices: 'x' as 'x',
 }
 
 const AreaLayer = (props: CustomLayerProps) => {
-const { data, xScale, yScale } = props;
-const innerHeight: number = props.innerHeight;
-const areaGenerator = area<Datum>()
-  .x(d => xScale(d.x as DatumValue))
-  .y0(d => Math.min(innerHeight, yScale(d.lowerBound)))
-  .y1(d => yScale(d.upperBound))
-  .curve(curveMonotoneX)
+  const { data, xScale, yScale } = props;
+  const innerHeight: number = props.innerHeight;
+  const areaGenerator = area<Datum>()
+    .x(d => xScale(d.x as DatumValue))
+    .y0(d => Math.min(innerHeight, yScale(d.lowerBound)))
+    .y1(d => yScale(d.upperBound))
+    .curve(curveMonotoneX)
 
-return (
-  <>
-    <Defs
-      defs={[
-        {
-          id: 'pattern',
-          type: 'patternLines',
-          background: 'transparent',
-          color: '#3daff7',
-          lineWidth: 1,
-          spacing: 6,
-          rotation: -45,
-        },
-      ]}
-    />
-    <path
-      d={areaGenerator(data[0].data) ?? undefined}
-      fill="url(#pattern)"
-      fillOpacity={0.6}
-      stroke="#3daff7"
-      strokeWidth={2}
-    />
-  </>
-)
+  return (
+    <>
+      <Defs
+        defs={[
+          {
+            id: 'pattern',
+            type: 'patternLines',
+            background: 'transparent',
+            color: '#3daff7',
+            lineWidth: 1,
+            spacing: 6,
+            rotation: -45,
+          },
+        ]}
+      />
+      <path
+        d={areaGenerator(data[0].data) ?? undefined}
+        fill="url(#pattern)"
+        fillOpacity={0.6}
+        stroke="#3daff7"
+        strokeWidth={2}
+      />
+    </>
+  )
 }
 
 const layers: Layer[] = [
@@ -79,14 +77,17 @@ const findMinValue = (serie: Serie[]) => {
   return r;
 }
 
-export const CustomGraphLayers = ({data}: {data: Serie[]}) => {
-  return <Line
+export const CustomGraphLayers = ({ data, xlegend }: { data: Serie[], xlegend: string }) => {
+  return <ResponsiveLine
     {...commonProperties}
     yScale={{
       type: 'linear',
       stacked: true,
       min: findMinValue(data),
       max: findMaxValue(data),
+    }}
+    axisBottom={{
+      legend: xlegend
     }}
     data={data}
     lineWidth={3}
