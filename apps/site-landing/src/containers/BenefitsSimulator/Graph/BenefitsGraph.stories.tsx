@@ -8,12 +8,11 @@ import styles from '../styles.module.less';
 
 const meta: Meta = {
   title: 'Landing/Benefits/Graph',
-  component: Component,
   args: {
     loadingDelay: 2, // simulated delay of loading data.
     growthPercent: 9,
-    yearsToDisplay: 10,
-    yearsToSimulate: 60,
+    yearsToDisplay: 3,
+    yearsToSimulate: 20,
     noise: 0.1,
   }
 }
@@ -27,13 +26,13 @@ export const Graph: Story<Props> = (props) => {
   // Simulate market data
   useEffect(() => {
     setTimeout(() => {
-      const data = generateData(props?.growthPercent, 0, props?.yearsToSimulate, props?.nois);
+      const data = generateData(props?.growthPercent, 0, props?.yearsToSimulate, props?.noise);
       setData(data);
     }, 1000 * props?.delay ?? 0)
   }, [props?.yearsToSimulate, props?.noise, props?.growthPercent])
 
   return (
-    <div className={styles.graphContainer}>
+    <div className={styles.graphContainer} style={{width: "600px", height: "400px"}}>
       <Component snpData={data} years={props?.yearsToDisplay ?? 10} params={params} />
     </div>
   );
