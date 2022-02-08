@@ -162,6 +162,10 @@ export class ReturnSimulator {
     return income;
   }
 
+  // Convert dividends earned to income/offsets.
+  // NOTE: This entire function is calculated in USD because
+  // offsets are priced in USD.  This means don't use
+  // the standard conversion fn's (toCoin/toFiat)
   updateDividends(state: SimulationState) {
 
     // Calculate the div from 1 share
@@ -170,7 +174,7 @@ export class ReturnSimulator {
 
     // How much of each shares div is allocated to CO2 offsets?
     const maxWeekOffsetPercent = new Decimal(this.params.maxOffsetPercentage).div(52.17857);
-    let adjustedDiv = weekDiv.sub(toFiat(maxWeekOffsetPercent, state.market));
+    let adjustedDiv = weekDiv.sub(maxWeekOffsetPercent.mul(state.market.P));
     if (adjustedDiv.lt(0)) adjustedDiv = zero;
 
     // Mult by shares to get totals
