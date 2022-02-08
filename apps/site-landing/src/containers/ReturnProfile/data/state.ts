@@ -86,8 +86,8 @@ export const increment = (state: SimulationState, data: MarketData[]) => {
   }
 }
 
-export const toFiat = (coin: Decimal, data: MarketData) => coin.mul(data.P)
-export const toCoin = (coin: Decimal, data: MarketData) => coin.div(data.P)
+export const toFiat = (coin: Decimal, data: MarketData) => coin.mul(data.P).mul(data.Fx)
+export const toCoin = (coin: Decimal, data: MarketData) => coin.div(data.P.mul(data.Fx))
 
 export const grossFiat = (state: SimulationState) =>
   toFiat(state.coin, state.market);

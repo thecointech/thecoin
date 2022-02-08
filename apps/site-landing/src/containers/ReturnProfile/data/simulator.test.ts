@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 import { fetchMarketData } from '.';
 import { getDate } from './fetch.test';
 import { createParams } from './params';
+import { one } from './sim.decimal';
 import { ReturnSimulator } from './simulator';
 import { grossFiat, SimulationState } from './state';
 
@@ -12,12 +13,21 @@ const calcPercent = (state: SimulationState): number =>
     .div(state.principal)
     .toNumber();
 
-export const simIdxPercent = (idx: number, states: SimulationState[]): number =>
+const simIdxPercent = (idx: number, states: SimulationState[]): number =>
   calcPercent(states[idx]);
 
 const runSim = (sim: ReturnSimulator, start: DateTime, end: DateTime) => {
   let state = sim.getInitial(start);
   return sim.calcStateUntil(state, start, end);
+}
+
+// For comparison vs DQYDJ, we can't include Fx changes
+const fetchMarketDataNoFx = async () => {
+  const data = await fetchMarketData();
+  return data.map(d => ({
+    ...d,
+    Fx: one,
+  }))
 }
 
 const params = createParams({
@@ -30,7 +40,7 @@ it('Should match basic calculation from DQYDJ', async () => {
   // we no longer exactly match DQYDJ.  As it's not possible to get exact numbers
   // over a time period this long, neither calculation matches reality,
   // so we are just going to ignore this and move on.
-  const data = await fetchMarketData();
+  const data = await fetchMarketDataNoFx();
   const start = getDate(1959, 1);
   const end = start.plus({ years: 60 });
   const sim = new ReturnSimulator(data, params);
@@ -43,7 +53,7 @@ it('Should match basic calculation from DQYDJ', async () => {
 
 it('accurately calculates for a single month', async () => {
   // Ok - lets test getting % return over time
-  const data = await fetchMarketData();
+  const data = await fetchMarketDataNoFx();
   const startDate = getDate(2010, 1);
   const sim = new ReturnSimulator(data, params);
   const returns = range(0, 12).map(
@@ -61,7 +71,7 @@ it('accurately calculates for a single month', async () => {
 it('accurately caclulates for a 6 month period', async () => {
   // There are a total of 7 6-month periods in a year.
   // Jan-Jul, Feb-Aug,... Jun-Dec, Jul-Jan
-  const data = await fetchMarketData();
+  const data = await fetchMarketDataNoFx();
   const startDate = getDate(2010, 1);
   const sim = new ReturnSimulator(data, params);
   const states = range(0, 7).map(
