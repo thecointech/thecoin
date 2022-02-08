@@ -5,6 +5,7 @@ import { CoinReturns } from '../ReturnProfile/data';
 export type BenefitsState = {
   readonly results: CoinReturns[];
   readonly hovered?: AreaDatum;
+  readonly percentile: number;
 }
 export interface IActions {
   setHovered(hovered?: AreaDatum): void;

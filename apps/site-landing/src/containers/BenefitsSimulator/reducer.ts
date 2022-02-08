@@ -6,7 +6,10 @@ import { CoinReturns } from '../ReturnProfile/data';
 import { AreaDatum } from '../AreaGraph/types';
 
 const HOVERED_KEY: keyof ApplicationRootState = "hovered";
-const initialState = { hovered: undefined, results: [] };
+const initialState = {
+  percentile: 0.95,
+  results: []
+};
 
 export class BenefitsReducer extends BaseReducer<IActions, BenefitsState>(HOVERED_KEY, initialState)
   implements IActions {

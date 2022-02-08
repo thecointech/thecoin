@@ -1,5 +1,5 @@
 import React from 'react';
-import { first, last } from '@thecointech/utilities';
+import { last } from '@thecointech/utilities';
 import { BenefitsReducer } from './reducer';
 import { netFiat, SimulationState } from '../ReturnProfile/data';
 import { Table } from 'semantic-ui-react'
@@ -9,10 +9,10 @@ import styles from './styles.module.less';
 export const StatsArea = () => {
 
   BenefitsReducer.useStore();
-  const {hovered, results} = BenefitsReducer.useData();
+  const { hovered, results, percentile } = BenefitsReducer.useData();
   const selected = hovered ?? last(results);
 
-  const data = getTableData(selected?.values);
+  const data = getTableData(selected?.values, percentile);
   const maybeFiat = (s?: SimulationState) => s ? netFiat(s) : null;
 
   return (
@@ -41,15 +41,19 @@ export const StatsArea = () => {
   );
 }
 
-const getTableData = (values: SimulationState[]) => {
+const getTableData = (values: SimulationState[], percentile: number) => {
   if (!values || values.length < 1)
     return undefined;
+
+  const midIndex = values.length / 2;
+  const lowerBoundIdx = Math.floor(midIndex - midIndex * percentile);
+  const upperBoundIdx = Math.floor(midIndex - 1 + midIndex * percentile);
 
   const principal = values
     .reduce((p, curr) => p.add(curr.principal), zero)
     .div(values.length);
-  const worst = first(values);
-  const best = last(values);
+  const worst = values[lowerBoundIdx];
+  const best = values[upperBoundIdx];
   return { principal, worst, best };
 }
 
