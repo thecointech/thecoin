@@ -3,8 +3,6 @@ import { Defs } from '@nivo/core'
 import { area, curveMonotoneX } from 'd3-shape'
 import { Datum, ResponsiveLine, Serie, Layer, CustomLayerProps, DatumValue, PointMouseHandler } from '@nivo/line'
 import { Tooltip } from './Tooltip'
-import { GraphHoverReducer } from './reducer'
-import { AreaDatum } from './types'
 
 const AreaLayer = (props: CustomLayerProps) => {
   const { data, xScale, yScale } = props;
@@ -62,20 +60,13 @@ const findMinValue = (serie: Serie[]) => {
   return r;
 }
 
-const useOnClickCallback = () : PointMouseHandler => {
-  const actions = GraphHoverReducer.useApi();
-  return (p, _m) => {
-    // We could potentially use the mouse event here
-    // to figure out where on the graph was clicked,
-    // to figure out exactly what ratio (probability)
-    // each section would have, but I doubt anyone
-    // other than me would care
-    actions.setHovered(p.data as any as AreaDatum);
-  };
+type Props =  {
+  onClick: PointMouseHandler,
+  data: Serie[],
+  xlegend: string,
 }
 
-export const CustomGraphLayers = ({ data, xlegend }: { data: Serie[], xlegend: string }) => {
-  const onClick = useOnClickCallback();
+export const CustomGraphLayers = ({ onClick, data, xlegend }: Props) => {
 
   return <ResponsiveLine
     margin={{ top: 20, right: 20, bottom: 60, left: 80 }}
@@ -99,6 +90,7 @@ export const CustomGraphLayers = ({ data, xlegend }: { data: Serie[], xlegend: s
     curve="monotoneX"
     colors={['#028ee6', '#774dd7']}
     enableGridX={false}
+    pointLabelYOffset={0}
     pointSize={12}
     pointColor="white"
     pointBorderWidth={2}
