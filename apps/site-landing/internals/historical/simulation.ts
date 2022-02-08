@@ -29,6 +29,7 @@ export function generateData(CAGR = 10, LGR=0, yearsToSimulate = 10, noise = 0.1
       P: new Decimal(value),
       E: new Decimal(0),
       D: new Decimal(dividend),
+      Fx: new Decimal(1),
     }
   })
 }

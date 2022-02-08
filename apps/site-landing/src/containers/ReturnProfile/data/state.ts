@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { Decimal } from 'decimal.js-light';
 import { getMarketData, MarketData } from './market';
-import { zero } from './sim.decimal';
+import { one, zero } from './sim.decimal';
 
 export type SimulationState = {
   // Date of snapshot
@@ -54,6 +54,7 @@ export const zeroState = (start: DateTime, market?: MarketData[]) => ({
         D: zero,
         P: zero,
         E: zero,
+        Fx: one,
       },
   credit: {
     balanceDue: zero,

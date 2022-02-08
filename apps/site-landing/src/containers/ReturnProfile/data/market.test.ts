@@ -1,8 +1,9 @@
-import { getData, getDate } from './fetch.test';
+import { fetchMarketData } from './fetch';
+import { getDate } from './fetch.test';
 import { getIdx } from './market';
 
-it ('can find index by date', () => {
-  const data = getData();
+it ('can find index by date', async () => {
+  const data = await fetchMarketData();
   const testDate = (year:number, month: number) => {
     const date = getDate(year, month);
     const idx = getIdx(date, data);
