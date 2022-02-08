@@ -9,7 +9,7 @@ it ('can find index by date', async () => {
     const idx = getIdx(date, data);
     expect(data[idx].Date).toEqual(date);
   }
-  testDate(1871, 1);
+  testDate(1933, 3);
   testDate(1962, 9);
   testDate(2021, 12);
 })
