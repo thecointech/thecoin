@@ -2,8 +2,7 @@ import React from 'react'
 import { Defs } from '@nivo/core'
 import { area, curveMonotoneX } from 'd3-shape'
 import { Datum, ResponsiveLine, Serie, Layer, CustomLayerProps, DatumValue } from '@nivo/line'
-import { OnHoverCallback } from './types'
-import { getTooltip } from './Tooltip'
+import { AreaTooltip } from './Tooltip'
 
 
 const commonProperties = {
@@ -73,7 +72,7 @@ const findMinValue = (serie: Serie[]) => {
   return r;
 }
 
-export const CustomGraphLayers = ({ data, xlegend, cb }: { data: Serie[], xlegend: string, cb?: OnHoverCallback }) => {
+export const CustomGraphLayers = ({ data, xlegend }: { data: Serie[], xlegend: string }) => {
   return <ResponsiveLine
     {...commonProperties}
     yScale={{
@@ -95,7 +94,7 @@ export const CustomGraphLayers = ({ data, xlegend, cb }: { data: Serie[], xlegen
     pointBorderWidth={2}
     pointBorderColor={{ from: 'serieColor' }}
 
-    sliceTooltip={getTooltip(cb)}
+    sliceTooltip={AreaTooltip}
     layers={layers}
   />
 }

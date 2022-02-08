@@ -2,12 +2,13 @@ import React from 'react'
 import { CustomGraphLayers } from './CustomGraphLayers'
 import range from 'lodash/range'
 import { CoinReturns } from '../ReturnProfile/data'
-import { AreaDatum, OnHoverCallback } from './types'
+import { AreaDatum } from './types'
+export * from './types';
+export * from './reducer';
 
 type Props = {
   maxGraphPoints: number,
   data: CoinReturns[];
-  onHover?: OnHoverCallback;
 }
 
 const weekScaler = {
@@ -58,7 +59,7 @@ const calcNumGraphPoints = (max: number, weeks: number, scale: number) => {
   return max;
 }
 
-export const AreaGraph = ({maxGraphPoints, data, onHover}: Props) => {
+export const AreaGraph = ({maxGraphPoints, data }: Props) => {
 
   // If we have no data, we have no graph
   if (data.length < MinimumGraphPoints) return null;
@@ -81,5 +82,5 @@ export const AreaGraph = ({maxGraphPoints, data, onHover}: Props) => {
     id: "avg",
   }]
 
-  return <CustomGraphLayers data={serie} xlegend={legend} cb={onHover} />
+  return <CustomGraphLayers data={serie} xlegend={legend}  />
 }

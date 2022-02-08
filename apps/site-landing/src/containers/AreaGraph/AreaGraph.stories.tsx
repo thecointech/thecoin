@@ -2,8 +2,6 @@ import React from 'react';
 import { Story } from '@storybook/react';
 import { AreaGraph as Component } from '.';
 import { CoinReturns } from '../ReturnProfile/data';
-import { AreaDatum } from './types';
-import { action } from '@storybook/addon-actions';
 
 const meta = {
   title: 'Landing/Graph/Area',
@@ -20,13 +18,11 @@ const meta = {
   },
 }
 type Props = typeof meta.args;
-const hoverAction = action("on-hover")
 
-export const Area: Story<Props> = (props) => (
+export const Area: Story<Props> = (props) =>
   <div style={{ width: "600px", height: "400px" }}>
-    <Component maxGraphPoints={props.numPoints} data={generateData(props)} onHover={hoverAction} />
+    <Component maxGraphPoints={props.numPoints} data={generateData(props)} />
   </div>
-);
 
 function generateData(args: Props) {
   const data: CoinReturns[] = [];

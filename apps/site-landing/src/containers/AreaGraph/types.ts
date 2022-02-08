@@ -4,5 +4,10 @@ import type { CoinReturns } from '../ReturnProfile/data'
 // Used internally by actual renderer
 export type AreaDatum = Datum & CoinReturns;
 
-// Callback to allow display of additional info from hovered area of the graph
-export type OnHoverCallback = (data: AreaDatum) => void;
+/* --- Reducer --- */
+export type HoveredState = {
+  readonly hovered?: AreaDatum;
+}
+export interface IActions {
+  setHovered(hovered?: AreaDatum): void;
+}
