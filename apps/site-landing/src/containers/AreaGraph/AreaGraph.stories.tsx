@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Story } from '@storybook/react';
-import { AreaGraph as Component } from '.';
+import { AreaGraph as Component, GraphHoverReducer } from '.';
 import { CoinReturns } from '../ReturnProfile/data';
+import { withReducer, withStore } from '@thecointech/storybookutils';
+import { action } from '@storybook/addon-actions';
 
 const meta = {
-  title: 'Landing/Graph/Area',
+  title: 'Landing/Benefits/Area',
   component: Component,
   args: {
     numPoints: 12,
@@ -16,13 +18,25 @@ const meta = {
     lowerBound: 0.50,
     upperBound: 1.3,
   },
+  decorators: [
+    withReducer(GraphHoverReducer),
+    withStore(),
+  ]
 }
 type Props = typeof meta.args;
+const onClick = action("on-click");
+export const Area: Story<Props> = (props) => {
+  const clicked = GraphHoverReducer.useData();
+  useEffect(() => {
+    onClick(clicked)
+  }, [clicked]);
 
-export const Area: Story<Props> = (props) =>
-  <div style={{ width: "600px", height: "400px" }}>
-    <Component maxGraphPoints={props.numPoints} data={generateData(props)} />
-  </div>
+  return (
+    <div style={{ width: "600px", height: "400px" }}>
+      <Component maxGraphPoints={props.numPoints} data={generateData(props)} />
+    </div>
+  )
+}
 
 function generateData(args: Props) {
   const data: CoinReturns[] = [];

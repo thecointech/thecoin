@@ -1,15 +1,10 @@
 import React from 'react'
 import { Defs } from '@nivo/core'
 import { area, curveMonotoneX } from 'd3-shape'
-import { Datum, ResponsiveLine, Serie, Layer, CustomLayerProps, DatumValue } from '@nivo/line'
-import { AreaTooltip } from './Tooltip'
-
-
-const commonProperties = {
-  margin: { top: 20, right: 20, bottom: 60, left: 80 },
-  animate: true,
-  enableSlices: 'x' as 'x',
-}
+import { Datum, ResponsiveLine, Serie, Layer, CustomLayerProps, DatumValue, PointMouseHandler } from '@nivo/line'
+import { Tooltip } from './Tooltip'
+import { GraphHoverReducer } from './reducer'
+import { AreaDatum } from './types'
 
 const AreaLayer = (props: CustomLayerProps) => {
   const { data, xScale, yScale } = props;
@@ -47,16 +42,11 @@ const AreaLayer = (props: CustomLayerProps) => {
 }
 
 const layers: Layer[] = [
-  'grid',
-  'markers',
-  'areas',
+
+  'grid', 'markers', 'axes', 'areas',
   AreaLayer,
-  'lines',
-  'slices',
-  'axes',
-  'points',
-  'legends',
-];
+  'crosshair', 'lines', 'points', 'slices', 'mesh', 'legends',
+]
 
 const findMaxValue = (serie: Serie[]) =>
   serie.reduce((prev, series) =>
@@ -72,9 +62,24 @@ const findMinValue = (serie: Serie[]) => {
   return r;
 }
 
+const useOnClickCallback = () : PointMouseHandler => {
+  const actions = GraphHoverReducer.useApi();
+  return (p, _m) => {
+    // We could potentially use the mouse event here
+    // to figure out where on the graph was clicked,
+    // to figure out exactly what ratio (probability)
+    // each section would have, but I doubt anyone
+    // other than me would care
+    actions.setHovered(p.data as any as AreaDatum);
+  };
+}
+
 export const CustomGraphLayers = ({ data, xlegend }: { data: Serie[], xlegend: string }) => {
+  const onClick = useOnClickCallback();
+
   return <ResponsiveLine
-    {...commonProperties}
+    margin={{ top: 20, right: 20, bottom: 60, left: 80 }}
+    animate={true}
     yScale={{
       type: 'linear',
       stacked: true,
@@ -82,7 +87,12 @@ export const CustomGraphLayers = ({ data, xlegend }: { data: Serie[], xlegend: s
       max: findMaxValue(data),
     }}
     axisBottom={{
-      legend: xlegend
+      legend: xlegend,
+      legendPosition: 'middle',
+      legendOffset: 30,
+    }}
+    axisLeft={{
+      format: (v) => `$${v}`
     }}
     data={data}
     lineWidth={3}
@@ -94,7 +104,9 @@ export const CustomGraphLayers = ({ data, xlegend }: { data: Serie[], xlegend: s
     pointBorderWidth={2}
     pointBorderColor={{ from: 'serieColor' }}
 
-    sliceTooltip={AreaTooltip}
+    onClick={onClick}
+    useMesh={true}
+    tooltip={Tooltip}
     layers={layers}
   />
 }

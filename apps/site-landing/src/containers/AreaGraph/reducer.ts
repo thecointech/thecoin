@@ -13,4 +13,3 @@ implements IActions {
     this.draftState.hovered = hovered;
   }
 }
-
