@@ -14,8 +14,6 @@ export const StatsArea = (_props: HoverAreaProps) => {
   if (!hovered) return null;
   const worst = first(hovered.values)
   const best = last(hovered.values)
-  const asFiat = hovered.values.map(netFiat);
-  console.log(asFiat.length);
   return (
     <div>
       <div>Average: ${hovered.median.toFixed(2)}</div>
