@@ -7,7 +7,7 @@ import { createParams } from './params';
 test('Calculates average/min/max correctly', async () => {
   const data = getData();
   const idx = getIdx(getDate(2000, 1), data);
-  const params = createParams({initialBalance: 100});
+  const params = createParams({initialBalance: 100, maxOffsetPercentage: 0});
   const averageReturns = calcAllResultsImmediate({data: data.slice(idx), params}, 521);
 
   // the worst return of 10 years should be 1999

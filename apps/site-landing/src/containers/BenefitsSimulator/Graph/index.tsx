@@ -14,6 +14,8 @@ type Props = {
 }
 type SimGenerator = ReturnType<typeof calcAllResults>;
 
+const percentile = 0.95;
+
 export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
 
   const [results, setResults] = useState<CoinReturns[]>([]);
@@ -32,7 +34,7 @@ export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
       data: snpData,
       params,
       increment: 6,
-      percentile: 0.95
+      percentile,
     });
     setSimulator(sim);
     setResults([]);
