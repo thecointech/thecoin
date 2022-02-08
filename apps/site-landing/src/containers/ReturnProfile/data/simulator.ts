@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { Decimal } from 'decimal.js-light';
 import { SimulationParameters } from './params';
-import { SimulationState, zeroState, toFiat, toCoin, increment } from './state';
+import { SimulationState, zeroState, toCoin, increment } from './state';
 import { getMarketData, MarketData } from './market';
 import { straddlesMonth, straddlesYear } from './time';
 import { grossFiat } from '.';
