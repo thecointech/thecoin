@@ -7,7 +7,7 @@ import { DateTime } from 'luxon';
 type HoverAreaProps = {
   market?: MarketData[],
 }
-export const StatsArea = () => {
+export const StatsArea = (_props: HoverAreaProps) => {
 
   GraphHoverReducer.useStore();
   const {hovered} = GraphHoverReducer.useData();

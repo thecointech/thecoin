@@ -45,7 +45,8 @@ export function* calcAllResults(fullParams: AllParams) {
   const startOffsets = [...Array(numSims).keys()].map((_, idx) => idx * increment);
   const sims = startOffsets.map(month => runSimAt(s.plus({month}), simulator));
   for (let week = 0; ; week++) {
-    // Cacl
+
+    // Step the simulation
     const nthWeekResults = sims.map(gen => {
       const { value, done } = gen.next();
       return done ? null : value;
@@ -76,13 +77,11 @@ export function calcAllResultsImmediate(fullParams: AllParams, numWeeks: number)
 
 function* runSimAt(start: DateTime, simulator: ReturnSimulator) {
   let state = simulator.getInitial(start);
-  yield state;
   const lastDate = last(simulator.data).Date;
-  while (true) {
-    state.date = state.date.plus({weeks: 1});
-    if (state.date > lastDate) return null;
-    yield simulator.calcSingleState(start, state);
-  }
+  do {
+    yield state;
+    state = simulator.increment(start, state);
+  } while(state.date <= lastDate);
 }
 
 function longestSimWeeks(allReturns: SimulationState[][]) {

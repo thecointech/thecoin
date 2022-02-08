@@ -68,18 +68,22 @@ export const zeroState = (start: DateTime, market?: MarketData[]) => ({
   offsetCO2: zero,
 })
 
-// Clone existing state.  Placed here so if we make any changes to state
+// Increment state.  Placed here so if we make any changes to state
 // we can easily update the cloning at the same time.
-export const increment = (state: SimulationState, date: DateTime) => ({
-  ...state,
-  date,
-  credit: {
-    ...state.credit
-  },
-  shockAbsorber: {
-    ...state.shockAbsorber
+export const increment = (state: SimulationState, data: MarketData[]) => {
+  const date = state.date.plus({week: 1});
+  return {
+    ...state,
+    date,
+    market: getMarketData(date, data),
+    credit: {
+      ...state.credit
+    },
+    shockAbsorber: {
+      ...state.shockAbsorber
+    }
   }
-})
+}
 
 export const toFiat = (coin: Decimal, data: MarketData) => coin.mul(data.P)
 export const toCoin = (coin: Decimal, data: MarketData) => coin.div(data.P)

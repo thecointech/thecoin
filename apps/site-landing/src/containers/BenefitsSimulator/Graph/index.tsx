@@ -93,7 +93,7 @@ export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
   const isLoading = animate
     ? results.length < 12
     : progress < 1;
-  const displayData = results.slice(0, maxWeeks)
+  const displayData = results.slice(0, maxWeeks);
 
   return (
     <Segment>

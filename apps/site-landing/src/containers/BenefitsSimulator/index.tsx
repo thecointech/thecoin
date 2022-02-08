@@ -69,7 +69,7 @@ export function Compare() {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <StatsArea />
+        <StatsArea market={snpData} />
       </div>
 
       <CreateAccountBanner Type={TypeCreateAccountBanner.People} />

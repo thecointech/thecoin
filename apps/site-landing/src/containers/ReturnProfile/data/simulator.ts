@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { Decimal } from 'decimal.js-light';
 import { SimulationParameters } from './params';
-import { SimulationState, zeroState, toFiat, toCoin } from './state';
+import { SimulationState, zeroState, toFiat, toCoin, increment } from './state';
 import { getMarketData, MarketData } from './market';
 import { straddlesMonth, straddlesYear } from './time';
 import { grossFiat } from '.';
@@ -50,7 +50,7 @@ export class ReturnSimulator {
   }
 
   // Add the current weeks spending to current
-  updateCreditSpending(start: DateTime, {credit, date}: SimulationState) {
+  updateCreditSpending(start: DateTime, { credit, date }: SimulationState) {
     const params = this.params.credit;
     let spending = new Decimal(params.weekly);
     // If this week straddled a month ending, add month spending
@@ -145,7 +145,7 @@ export class ReturnSimulator {
     }
   }
 
-  calcCashSpending(start: DateTime, {date}: SimulationState) {
+  calcCashSpending(start: DateTime, { date }: SimulationState) {
     let spending = new Decimal(this.params.cash.weekly);
     if (straddlesMonth(date)) spending = spending.add(this.params.cash.monthly);
     if (straddlesYear(start, date)) spending = spending.add(this.params.cash.yearly);
@@ -155,7 +155,7 @@ export class ReturnSimulator {
   // Calculate how much fiat income comes in this week
   calcIncome(start: DateTime, state: SimulationState) {
     // regular income
-    const {weekly, monthly, yearly} = this.params.income;
+    const { weekly, monthly, yearly } = this.params.income;
     let income = new Decimal(weekly);
     if (straddlesMonth(state.date)) income = income.add(monthly);
     if (straddlesYear(start, state.date)) income = income.add(yearly);
@@ -181,9 +181,9 @@ export class ReturnSimulator {
     state.offsetCO2 = state.offsetCO2.add(newOffsets);
   }
 
-  calcSingleState(start: DateTime, state: SimulationState) {
-    // First, update the state's market conditions
-    state.market = getMarketData(state.date, this.data);
+  increment(start: DateTime, lastState: SimulationState) {
+    // First, increment the state's date/market
+    const state = increment(lastState, this.data);
 
     const income = this.calcIncome(start, state);
     this.balanceChange(state, income);
@@ -205,15 +205,15 @@ export class ReturnSimulator {
 
     // calculate credit changes
     this.updateCreditBalances(start, state);
-    return state;
+    // Now sim for state is complete, prevent it from changing
+    return Object.freeze(state);
   }
 
   // Utility function, mostly for testing.  Take a state and run simulator
   // until it reaches "end" date
   calcStateUntil(state: SimulationState, start: DateTime, end: DateTime): SimulationState {
     while (state.date <= end) {
-      state.date = state.date.plus({ week: 1 });
-      state = this.calcSingleState(start, state);
+      state = this.increment(start, state);
     }
     return state;
   }
