@@ -3,18 +3,18 @@ import { Decimal } from 'decimal.js-light';
 import { zero } from './sim.decimal';
 
 // Holds week/month/yearly actions for income/credit/cash
-type FinancialParams = {
+export type PeriodicalParams = {
   weekly: number;
   monthly: number;
   yearly: number;
 }
 
-type ShockAbsorber = {
-  // The percentage drop absorbed
-  absorbed: Decimal;
+export type ShockAbsorber = {
+  // The percentage drop cushionDown
+  cushionDown: Decimal;
   // What percentage yearly gains go towards
   // building the cushion?
-  cushionPercentage: Decimal;
+  cushionUp: Decimal;
   // After what period do profits
   // gain protection?
   trailingMonths: Decimal;
@@ -34,10 +34,6 @@ type ShockAbsorber = {
 
 // The data we use to calculate a clients potential returns
 export type SimulationParameters = {
-  // How many months should we be calculating this for?
-  //maxDuration: DurationObject;
-  // start: DateTime;
-  // end: DateTime;
 
   // We'll get to this soon, he says hopefully...
   adjustForInflation: boolean;
@@ -51,7 +47,7 @@ export type SimulationParameters = {
   // How much money flows in each week
   // any monthly income (eg rent, child benefits)
   // Any yearly income (eg bonus's, etc)
-  income: FinancialParams;
+  income: PeriodicalParams;
 
   // Cash spending
   // The amount spent in an *average* week in cash.  This is
@@ -60,13 +56,13 @@ export type SimulationParameters = {
   // This is primarily large non-elastic bills like rent,
   // electricity etc that cannot be put on the credit card.
   // This amount will be subtaracted at the *end* of the month
-  cash: FinancialParams;
+  cash: PeriodicalParams;
 
   // The amount spent in an *average* week on a credit card.
   // Annual - Simulate 1-off annual expenses like vacations etc.
   // This amount is added to the credit card at the start of
   // the last 12-month period
-  credit: FinancialParams & {
+  credit: PeriodicalParams & {
 
     // how long is the billing cycle?
     billingCycle: number;
@@ -123,14 +119,14 @@ export const createParams = (explicit?: MergeSimParamaters): SimulationParameter
     ...basicPeriods,
     billingCycle: 4,
     graceWeeks: 3,
-    cashBackRate: 0,
-    interestRate: 0,
+    cashBackRate: 0.01,
+    interestRate: 0.25,
     ...explicit?.credit,
   },
 
   shockAbsorber: {
-    absorbed: zero,
-    cushionPercentage: zero,
+    cushionDown: zero,
+    cushionUp: zero,
     trailingMonths: zero,
     maximumProtected: zero,
     profitPercentageToReduceDampening: zero,

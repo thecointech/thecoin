@@ -10,6 +10,7 @@ import styles from './styles.module.less';
 export type Props = {
  label: MessageDescriptor,
  scaleType?: NumberFormatOptionsStyle;
+ className?: string;
  unit?: string,
  currency?: 'CAD',
  initial?: number;
@@ -32,7 +33,7 @@ export const RangeFieldAndScale = (props: Props) => {
   };
 
   return (
-    <div className={`${styles.container} x6spaceBefore`}>
+    <div className={`${styles.container} ${props.className ?? ''}`}>
       <div className={styles.label}>
         <FormattedMessage {...props.label} tagName="span" />
         <FormattedNumber

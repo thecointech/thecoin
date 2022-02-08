@@ -31,7 +31,7 @@ export type SimulationState = {
     // negative values mean we subbed from `coin` to cushion jump
     coinAdjustment: Decimal;
 
-    // The total amount of cushioning previously absorbed.
+    // The total amount of cushioning previously cushionDown.
     // This is only ever negative (we do not reset during a drop)
     historicalAdjustment: Decimal;
   }
@@ -73,6 +73,10 @@ export const increment = (state: SimulationState, date: DateTime) => ({
 export const toFiat = (coin: Decimal, data: MarketData) => coin.mul(data.P)
 export const toCoin = (coin: Decimal, data: MarketData) => coin.div(data.P)
 
-export const calcFiat = (state: SimulationState, data: MarketData[]) =>
+export const grossFiat = (state: SimulationState, data: MarketData[]) =>
   toFiat(state.coin, getMarketData(state.date, data));
-
+export const netFiat = (s: SimulationState, data: MarketData[]) =>
+  grossFiat(s, data)
+    .sub(s.credit.current)
+    .sub(s.credit.balanceDue)
+    .toNumber()

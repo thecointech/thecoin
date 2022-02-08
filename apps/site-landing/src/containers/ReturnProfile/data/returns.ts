@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import { MarketData } from './market';
 import { SimulationParameters } from './params';
 import { ReturnSimulator } from './simulator';
-import { SimulationState, calcFiat } from './state';
+import { SimulationState, netFiat } from './state';
 
 export type CoinReturns = {
   week: number;
@@ -95,10 +95,9 @@ function longestSimWeeks(allReturns: SimulationState[][]) {
 // For each duration (1 thru max simulation duration) find the average return & percentiles.
 // Data is array of simulations
 export function calculateAvgAndArea(allAtTimePassed: SimulationState[], data: MarketData[], percentile: number) {
-  const toFiat = (s: SimulationState) => calcFiat(s, data).toNumber();
 
-  allAtTimePassed.sort((a, b) => toFiat(a) - toFiat(b));
-  const fiatValue = allAtTimePassed.map(toFiat);
+  allAtTimePassed.sort((a, b) => netFiat(a, data) - netFiat(b, data));
+  const fiatValue = allAtTimePassed.map(s => netFiat(s, data));
 
   const sum = fiatValue.reduce((acc,val) => acc + val, 0);
   const midIndex = fiatValue.length / 2;
