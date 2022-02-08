@@ -16,7 +16,7 @@ const runSim = (params: SimulationParameters) => {
   const end = start.plus({years: 60});
   const initial = simulator.getInitial(start);
   const final = simulator.calcStateUntil(initial, start, end);
-  return netFiat(final, data);
+  return netFiat(final);
 }
 
 it ('Matches the article with no ShockAbsorber', () => {

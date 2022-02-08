@@ -54,7 +54,7 @@ export function* calcAllResults(fullParams: AllParams) {
     const filtered = nthWeekResults.filter(isPresent);
     if (filtered.length < cutoff) break;
 
-    const avg = calculateAvgAndArea(filtered, data, percentile);
+    const avg = calculateAvgAndArea(filtered, percentile);
     yield {
       week,
       ...avg
@@ -94,10 +94,10 @@ function longestSimWeeks(allReturns: SimulationState[][]) {
 
 // For each duration (1 thru max simulation duration) find the average return & percentiles.
 // Data is array of simulations
-export function calculateAvgAndArea(allAtTimePassed: SimulationState[], data: MarketData[], percentile: number) {
+export function calculateAvgAndArea(allAtTimePassed: SimulationState[], percentile: number) {
 
-  allAtTimePassed.sort((a, b) => netFiat(a, data) - netFiat(b, data));
-  const fiatValue = allAtTimePassed.map(s => netFiat(s, data));
+  allAtTimePassed.sort((a, b) => netFiat(a) - netFiat(b));
+  const fiatValue = allAtTimePassed.map(netFiat);
 
   const sum = fiatValue.reduce((acc,val) => acc + val, 0);
   const midIndex = fiatValue.length / 2;
@@ -114,14 +114,14 @@ export function calculateAvgAndArea(allAtTimePassed: SimulationState[], data: Ma
 
 // For each duration (1 thru max simulation duration) find the average return & percentiles.
 // Data is array of simulations
-export function calculateAvgAndAreaForAll(allReturns: SimulationState[][], data: MarketData[], percentile: number) {
+export function calculateAvgAndAreaForAll(allReturns: SimulationState[][], percentile: number) {
   const maxLength = longestSimWeeks(allReturns);
   const r: CoinReturns[] = [];
   for (let week = 1; week < maxLength; week++) {
     const allAtWeek = allReturns.map(r => r[week]).filter(isPresent);
     r.push({
       week,
-      ...calculateAvgAndArea(allAtWeek, data, percentile)
+      ...calculateAvgAndArea(allAtWeek, percentile)
     });
   };
   return r;

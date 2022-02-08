@@ -30,12 +30,12 @@ export class ReturnSimulator {
   getMarketData = (state: SimulationState) => getMarketData(state.date, this.data)!;
   getInitial = (start: DateTime): SimulationState =>
     this.balanceChange(
-      zeroState(start),
+      zeroState(start, this.data),
       new Decimal(this.params.initialBalance),
     )
 
   applyShockAborber = (start: DateTime, state: SimulationState) =>
-    applyShockAborber(start, this.params, state, this.getMarketData(state))
+    applyShockAborber(start, this.params, state)
 
   calcInterest = (current: Decimal) => current
     .mul(this.params.credit.interestRate) // full years interest
@@ -43,8 +43,7 @@ export class ReturnSimulator {
 
 
   balanceChange = (state: SimulationState, fiatChange: Decimal) => {
-    const month = this.getMarketData(state);
-    const coinChange = toCoin(fiatChange, month);
+    const coinChange = toCoin(fiatChange, state.market);
     state.coin = state.coin.add(coinChange);
     state.principal = state.principal.add(fiatChange);
     return state;
@@ -78,7 +77,7 @@ export class ReturnSimulator {
   }
 
   payBalanceDue(state: SimulationState) {
-    const currentFiat = grossFiat(state, this.data);
+    const currentFiat = grossFiat(state);
     const paid = DMin(state.credit.balanceDue, currentFiat);
     this.balanceChange(state, paid.neg());
     state.credit.balanceDue = state.credit.balanceDue.sub(paid);
@@ -164,26 +163,28 @@ export class ReturnSimulator {
   }
 
   updateDividends(state: SimulationState) {
-    const month = this.getMarketData(state);
 
     // Calculate the div from 1 share
-    const monthDiv = new Decimal(month.D).div(12);
+    const monthDiv = new Decimal(state.market.D).div(12);
     const weekDiv = monthDiv.div(state.date.daysInMonth).mul(7);
 
     // How much of each shares div is allocated to CO2 offsets?
     const maxWeekOffsetPercent = new Decimal(this.params.maxOffsetPercentage).div(52.17857);
-    let adjustedDiv = weekDiv.sub(toFiat(maxWeekOffsetPercent, month));
+    let adjustedDiv = weekDiv.sub(toFiat(maxWeekOffsetPercent, state.market));
     if (adjustedDiv.lt(0)) adjustedDiv = zero;
 
     // Mult by shares to get totals
     const retainedDiv = adjustedDiv.mul(state.coin);
-    const newCoin = retainedDiv.div(month.P);
+    const newCoin = retainedDiv.div(state.market.P);
     const newOffsets = weekDiv.sub(retainedDiv).mul(state.coin);
     state.coin = state.coin.add(newCoin);
     state.offsetCO2 = state.offsetCO2.add(newOffsets);
   }
 
   calcSingleState(start: DateTime, state: SimulationState) {
+    // First, update the state's market conditions
+    state.market = getMarketData(state.date, this.data);
+
     const income = this.calcIncome(start, state);
     this.balanceChange(state, income);
 

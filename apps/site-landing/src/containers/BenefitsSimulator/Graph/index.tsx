@@ -18,7 +18,7 @@ export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
 
   const [results, setResults] = useState<CoinReturns[]>([]);
   const [progress, setProgress] = useState(0);
-  const [simulator, setSimulator] = useState<undefined|SimGenerator>()
+  const [simulator, setSimulator] = useState<undefined|SimGenerator>();
 
   // how many weeks to we need to calculate?
   const currentWeek = results.length;
@@ -32,6 +32,7 @@ export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
       data: snpData,
       params,
       increment: 6,
+      percentile: 0.95
     });
     setSimulator(sim);
     setResults([]);
@@ -108,4 +109,3 @@ const GraphLoading = ({ progress }: { progress: number }) =>
   <Loader active inline='centered' indeterminate={true}
     content={`Simulating: ${(progress * 100).toPrecision(2)}%`}
   />
-

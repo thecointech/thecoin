@@ -8,7 +8,7 @@ import { grossFiat, SimulationState } from './state';
 const data = getData();
 
 const calcPercent = (state: SimulationState): number =>
-  grossFiat(state, data)
+  grossFiat(state)
     .sub(state.principal) // remove principal to leave profit
     .div(state.principal)
     .toNumber();

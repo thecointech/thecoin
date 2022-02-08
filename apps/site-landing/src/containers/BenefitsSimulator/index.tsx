@@ -10,6 +10,7 @@ import { BenefitsGraph } from './Graph';
 import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateAccountBanner';
 import { createParams, MarketData, getData } from '../ReturnProfile/data';
 import styles from './styles.module.less';
+import { StatsArea } from './StatsArea';
 
 const translations = defineMessages({
   title: {
@@ -68,6 +69,7 @@ export function Compare() {
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <StatsArea />
       </div>
 
       <CreateAccountBanner Type={TypeCreateAccountBanner.People} />
