@@ -99,7 +99,7 @@ export const Advanced = ({ params, setParams, years, setYears }: Props) => {
         initial={years}
         onChange={dbOnSetYears}
       />
-      <Accordion>
+      <Accordion className={styles.accordion}>
         <PeriodicalGroup
           title={translations.income}
           index={0}
@@ -179,6 +179,7 @@ const PeriodicalGroup: React.FC<GroupProps<PeriodicalParams>> = ({ title, index,
         active={activeIndexState[0] === index}
         index={0}
         onClick={toggleActive}
+        className="ui"
       >
         <Icon name='dropdown' />
         <FormattedMessage {...title} />
@@ -248,6 +249,7 @@ const ShockAbsorberGroup: React.FC<GroupProps<ShockAbsorber>> = ({ index, params
         active={activeIndexState[0] === index}
         index={0}
         onClick={toggleActive}
+        className="ui"
       >
         <Icon name='dropdown' />
         <FormattedMessage {...translations.shockAbsorber} />

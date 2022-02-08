@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Dimmer, Loader, Segment } from 'semantic-ui-react';
-import { AreaGraph } from '../../AreaGraph';
+import { AreaDatum, AreaGraph, OnClickHandler } from '../../AreaGraph';
 import { calcAllResults, CoinReturns, MarketData, SimulationParameters } from '../../ReturnProfile/data';
 import { sleep } from '@thecointech/async';
 import { log } from '@thecointech/logging';
+import { BenefitsReducer } from '../reducer';
 
 type Props = {
   params: SimulationParameters,
@@ -18,13 +19,25 @@ const percentile = 0.95;
 
 export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
 
-  const [results, setResults] = useState<CoinReturns[]>([]);
+  // const [results, setResults] = useState<CoinReturns[]>([]);
   const [progress, setProgress] = useState(0);
   const [simulator, setSimulator] = useState<undefined|SimGenerator>();
+
+  const api = BenefitsReducer.useApi();
+  const {results} = BenefitsReducer.useData();
 
   // how many weeks to we need to calculate?
   const currentWeek = results.length;
   const maxWeeks = 1 + (years * 52.142);
+
+  const onClick : OnClickHandler = (p, _m) => {
+    // We could potentially use the mouse event here
+    // to figure out where on the graph was clicked,
+    // to figure out exactly what ratio (probability)
+    // each section would have, but I doubt anyone
+    // other than me would care
+    api.setHovered(p.data as any as AreaDatum);
+  };
 
   // If core details change, restart the sim
   useEffect(() => {
@@ -37,7 +50,8 @@ export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
       percentile,
     });
     setSimulator(sim);
-    setResults([]);
+    // setResults([]);
+    api.reset();
 
   }, [snpData, params]);
 
@@ -78,13 +92,13 @@ export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
         }
         if (w % 100 > 90) {
           if (w % 100 == 91) {
-            setResults(v => v.concat(values));
+            api.addResults(values);
             values = [];
           }
           await sleep(1);
         }
       }
-      setResults(v => v.concat(values))
+      api.addResults(values);
       setProgress(1);
       log.trace(`End Sim: ${((started - Date.now())/1000).toPrecision(3)}s`);
     })();
@@ -102,7 +116,7 @@ export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
       <Dimmer active={isLoading}>
         <GraphLoading progress={progress} />
       </Dimmer>
-      <AreaGraph maxGraphPoints={maxGraphPoints} data={displayData} />
+      <AreaGraph maxGraphPoints={maxGraphPoints} data={displayData} onClick={onClick} />
     </Segment>
   )
 };

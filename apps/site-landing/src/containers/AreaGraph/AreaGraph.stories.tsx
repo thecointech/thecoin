@@ -2,9 +2,10 @@ import React from 'react';
 import { Story } from '@storybook/react';
 import { AreaGraph as Component } from '.';
 import { CoinReturns } from '../ReturnProfile/data';
+import { action } from '@storybook/addon-actions';
 
 const meta = {
-  title: 'Landing/Graph/Area',
+  title: 'Landing/Benefits/Area',
   component: Component,
   args: {
     numPoints: 12,
@@ -18,11 +19,14 @@ const meta = {
   },
 }
 type Props = typeof meta.args;
-
-export const Area: Story<Props> = (props) =>
-  <div style={{ width: "600px", height: "400px" }}>
-    <Component maxGraphPoints={props.numPoints} data={generateData(props)} />
-  </div>
+const onClick = action("on-click");
+export const Area: Story<Props> = (props) => {
+  return (
+    <div style={{ width: "600px", height: "400px" }}>
+      <Component maxGraphPoints={props.numPoints} data={generateData(props)} onClick={onClick} />
+    </div>
+  )
+}
 
 function generateData(args: Props) {
   const data: CoinReturns[] = [];
