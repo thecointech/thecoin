@@ -11,7 +11,7 @@ export const basic = defineMessages({
     description: 'site.compare.label.rangeStarting: label for Starting Value in the compare page',
   },
   startingValueTooltip: {
-    defaultMessage: 'The amount transfered to TheCoin when opening an account',
+    defaultMessage: 'The value of the initial deposit when opening an account',
     description: 'sim form StartingValue tooltip ',
   },
   rangeDuration: {

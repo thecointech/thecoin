@@ -80,12 +80,14 @@ const tooltips = {
   }),
   cash: defineMessages({
     weekly: {
-      defaultMessage: 'Any weekly spending that cannot be put on the credit card, eg babysitters or drugs',
-      description: 'Simulator Tooltip: Weekly Cash'
+      defaultMessage: 'Any weekly spending that cannot{br}be put on the credit card, eg babysitters or drugs',
+      description: 'Simulator Tooltip: Weekly Cash',
+      values: {br: "\n"},
     },
     monthly: {
-      defaultMessage: 'Any monthly expenses that cannot be put on a credit card, eg rent or bills',
-      description: 'Simulator Tooltip: Monthly Cash'
+      defaultMessage: 'Any monthly expenses that cannot{br}be put on a credit card, eg rent or bills',
+      description: 'Simulator Tooltip: Monthly Cash',
+      values: {br: "\n"},
     },
     yearly: {
       defaultMessage: 'Once-a-year expenses that cannot be put on a credit card',
@@ -94,12 +96,14 @@ const tooltips = {
   }),
   credit: defineMessages({
     weekly: {
-      defaultMessage: 'Any weekly spending that can be put on the credit card, eg groceries and gas',
-      description: 'Simulator Tooltip: Weekly Cash'
+      defaultMessage: 'Any weekly spending that can be put{br}on the credit card, eg groceries and gas',
+      description: 'Simulator Tooltip: Weekly Cash',
+      values: {br: "\n"},
     },
     monthly: {
-      defaultMessage: 'Any monthly expenses that can be put on a credit card, eg gym memberships',
-      description: 'Simulator Tooltip: Monthly Cash'
+      defaultMessage: 'Any monthly expenses that can be{br}put on a credit card, eg gym memberships',
+      description: 'Simulator Tooltip: Monthly Cash',
+      values: {br: "\n"},
     },
     yearly: {
       defaultMessage: 'Once-a-year expenses that can be put on a credit card, eg vactions',
@@ -108,12 +112,14 @@ const tooltips = {
   }),
   shockAbsorber: defineMessages({
     cushion: {
-      defaultMessage: 'How big of a drop in the market will be absorbed before you lose any money',
-      description: 'Simulator Tooltip: shockabsorber cushion'
+      defaultMessage: 'How big of a drop in the market will{br}be absorbed before you lose any money',
+      description: 'Simulator Tooltip: shockabsorber cushion',
+      values: {br: "\n"},
     },
     maximumProtected: {
-      defaultMessage: 'The maximum amount protected by the shock-absorber.\nThe smaller this is, the faster your account grows on average, but the worse it will do in during down periods',
-      description: 'Simulator Tooltip: shockabsorber cushion'
+      defaultMessage: 'The maximum amount protected by the shock-absorber.{br}The smaller this is, the faster your account grows on average,{br}but the worse it will do in during down periods',
+      description: 'Simulator Tooltip: shockabsorber cushion',
+      values: {br: "\n"},
     }
   }),
   ...defineMessages({
@@ -122,8 +128,9 @@ const tooltips = {
       description: 'Simulator Tooltip: cashback'
     },
     interestRate: {
-      defaultMessage: 'How much interest is charged on any overdue amounts by the credit card.',
-      description: 'Simulator Tooltip: cashback'
+      defaultMessage: 'How much interest is charged on{br}any overdue amounts by the credit card.',
+      description: 'Simulator Tooltip: cashback',
+      values: {br: "\n"},
     }
   })
 };

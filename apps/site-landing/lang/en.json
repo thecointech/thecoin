@@ -11,6 +11,10 @@
     "defaultMessage": "You can become CO2-neutral with TheCoin",
     "description": "site.homepage.underwater.description: Description for the homepage underwater part1"
   },
+  "06pBO/": {
+    "defaultMessage": "How many years to run the simulation for",
+    "description": "sim form rangeDuration tooltip "
+  },
   "0FXCvv": {
     "defaultMessage": "Maximum Growth",
     "description": "site.homepage.wealthier.growth.title: The title for the growth for the homepage wealthier"
@@ -51,6 +55,10 @@
     "defaultMessage": "Your chequing account will be with you longer than your retirement savings will. This is what that could look like.",
     "description": "site.compare.description: Main description for the How much will you make? graph page"
   },
+  "3cIwdb": {
+    "defaultMessage": "Any income paid monthly, eg benefits or rent collected",
+    "description": "Simulator Tooltip: Monthly Income"
+  },
   "3vm1hM": {
     "defaultMessage": "Subscribe to our newsletter:",
     "description": "Footer CTA Part2"
@@ -75,9 +83,9 @@
     "defaultMessage": "Add $250000 to your retirement - with no money down.",
     "description": "site.homepage.wealthier.growth.description: The title for the growth for the homepage wealthier"
   },
-  "62mmKL": {
-    "defaultMessage": "Yearly:",
-    "description": "Simulator: Weekly Income"
+  "746Zaq": {
+    "defaultMessage": "The maximum amount protected by the shock-absorber.{br}The smaller this is, the faster your account grows on average,{br}but the worse it will do in during down periods",
+    "description": "Simulator Tooltip: shockabsorber cushion"
   },
   "81qKOv": {
     "defaultMessage": "Please enter a valid email",
@@ -98,6 +106,14 @@
   "B7gcLo": {
     "defaultMessage": "Better Farming",
     "description": "site.wedomore.smallPlant.title: Title for the smallPlant photo for the We Do More page"
+  },
+  "CLRpml": {
+    "defaultMessage": "Any weekly spending that can be put{br}on the credit card, eg groceries and gas",
+    "description": "Simulator Tooltip: Weekly Cash"
+  },
+  "CTUhFX": {
+    "defaultMessage": "Once-a-year expenses that cannot be put on a credit card",
+    "description": "Simulator Tooltip: Yearly Cash"
   },
   "D7Hm8s": {
     "defaultMessage": "The future is better because of you & us.",
@@ -149,6 +165,10 @@
   "JsOO1l": {
     "defaultMessage": "If you opened an account at a random date any time in the past 80 years, the bottom axis shows the possible account values and the vertical axis is the probablility you would get that return"
   },
+  "KQk9xI": {
+    "defaultMessage": "How much interest is charged on{br}any overdue amounts by the credit card.",
+    "description": "Simulator Tooltip: cashback"
+  },
   "Kn2j7O": {
     "defaultMessage": "Clean Water",
     "description": "site.wedomore.water.title: Title for the water photo for the We Do More page"
@@ -175,6 +195,10 @@
   "NwufPh": {
     "defaultMessage": "Start Now",
     "description": "site.homepage.landscape.button: Button label for the landscape"
+  },
+  "P6DpYX": {
+    "defaultMessage": "Any monthly expenses that cannot{br}be put on a credit card, eg rent or bills",
+    "description": "Simulator Tooltip: Monthly Cash"
   },
   "P82KCx": {
     "defaultMessage": "Earth’s Healthier",
@@ -206,6 +230,10 @@
   "UJsE5n": {
     "defaultMessage": "Weekly:",
     "description": "Simulator: Weekly Income"
+  },
+  "UOSrjB": {
+    "defaultMessage": "What percentage of spending does the credit card earn as cashback.",
+    "description": "Simulator Tooltip: cashback"
   },
   "UTXdBk": {
     "defaultMessage": "Given Name",
@@ -273,6 +301,10 @@
     "defaultMessage": "The remaining 1/10th is used to pay off our carbon debt",
     "description": "site.healthier.carbon: text for the carbon debt part for the Earth’s Healthier page"
   },
+  "f4Mh5E": {
+    "defaultMessage": "Any income that arrives only once a year, eg bonuses",
+    "description": "Simulator Tooltip: Yearly Income"
+  },
   "fajUfc": {
     "defaultMessage": "We do more",
     "description": "site.MainNavigation.wedomore: Title for the We do more entry in the menu"
@@ -280,9 +312,17 @@
   "feSg9K": {
     "defaultMessage": "Your Age"
   },
+  "h7Uwzm": {
+    "defaultMessage": "The value of the initial deposit when opening an account",
+    "description": "sim form StartingValue tooltip "
+  },
   "hB3xnP": {
     "defaultMessage": "Be part of the solution. We offset our clients’ CO2.",
     "description": "site.homepage.landscape.stickers.right.description: Description for sticker for the homepage landscape right sticker"
+  },
+  "hZATaO": {
+    "defaultMessage": "Yearly:",
+    "description": "Simulator: Yearly Income"
   },
   "hfXNxT": {
     "defaultMessage": "We would love to get to know you better! Would you mind letting us know your details?",
@@ -311,6 +351,10 @@
     "defaultMessage": "Thank you for subscribing!",
     "description": "site.subscribe.confirmation.title: Title for the 'Thank you for subscribing!' page"
   },
+  "kxASOR": {
+    "defaultMessage": "Any weekly spending that cannot{br}be put on the credit card, eg babysitters or drugs",
+    "description": "Simulator Tooltip: Weekly Cash"
+  },
   "lrlibv": {
     "defaultMessage": "Offsetting CO2 is effective. Extremely effective!",
     "description": "site.homepage.underwater.difference.description: Description for the homepage underwater difference subpart"
@@ -319,9 +363,17 @@
     "defaultMessage": "Help",
     "description": "site.MainNavigation.faq: Help Link"
   },
+  "mmRoRq": {
+    "defaultMessage": "Regular weekly earnings, eg paycheques",
+    "description": "Simulator Tooltip: Weekly Income"
+  },
   "n0wGb/": {
     "defaultMessage": "Enjoy the benefits of investment growth on every dollar with our online spending account.",
     "description": "site.homepage.wealthier.description: The description for the homepage wealthier"
+  },
+  "nm9dX4": {
+    "defaultMessage": "Once-a-year expenses that can be put on a credit card, eg vactions",
+    "description": "Simulator Tooltip: Yearly Cash"
   },
   "p695DK": {
     "defaultMessage": "The future is brighter",
@@ -421,8 +473,16 @@
     "defaultMessage": "Cash Spending:",
     "description": "Simulator: parameters for cash-based spending"
   },
+  "zVv9Y7": {
+    "defaultMessage": "How big of a drop in the market will{br}be absorbed before you lose any money",
+    "description": "Simulator Tooltip: shockabsorber cushion"
+  },
   "zj5EI2": {
     "defaultMessage": "LOG IN",
     "description": "site.MainNavigation.loginLink: Button to log in in app"
+  },
+  "zoVNqc": {
+    "defaultMessage": "Any monthly expenses that can be{br}put on a credit card, eg gym memberships",
+    "description": "Simulator Tooltip: Monthly Cash"
   }
 }
