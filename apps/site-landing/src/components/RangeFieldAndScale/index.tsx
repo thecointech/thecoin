@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { defineMessage, FormattedMessage, FormattedNumber, MessageDescriptor } from 'react-intl';
+import { FormattedMessage, MessageDescriptor } from 'react-intl';
 import type { NumberFormatOptionsStyle } from '@formatjs/ecma402-abstract';
 
 import { Range, getTrackBackground } from 'react-range';
@@ -21,12 +21,6 @@ export type Props = {
  step?: number;
  onChange: (value: number) => void;
 }
-
-const errTooLow = defineMessage({
-  defaultMessage: "Must be larger than {min}",
-  description: "UxNumeric error value too low",
-  values: {min: 100}
-});
 
 export const RangeFieldAndScale = (props: Props) => {
   const [value, setValue] = useState(props.initial ?? 0);

@@ -3,6 +3,10 @@ import { defineMessage } from 'react-intl';
 import { UxInput } from '../Input';
 import { BaseProps, ValidateCB } from '../types';
 
+const errNotANum = defineMessage({
+  defaultMessage: "Please enter a valid number",
+  description: "UxNumeric error value too low"
+});
 const errTooLow = defineMessage({
   defaultMessage: "Must be larger than {min}",
   description: "UxNumeric error value too low"
@@ -25,6 +29,7 @@ export const UxNumeric = (props: Props) => {
     const num = value === ""
       ? undefined
       : Number(value);
+    if (Number.isNaN(num)) return errNotANum;
     if (num) {
       if (min !== undefined && num < min) return {...errTooLow, values: {min}};
       if (max !== undefined && num > max) return {...errTooHigh, values: {max}};
@@ -38,7 +43,6 @@ export const UxNumeric = (props: Props) => {
       onValidate={toNumValidate}
       onValue={toNumValue}
       defaultValue={defaultValue?.toString()}
-      type="number"
       {...rest}
     />
   );
