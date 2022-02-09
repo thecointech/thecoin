@@ -7,6 +7,10 @@
     "defaultMessage": "weak",
     "description": "Password complexity indicator"
   },
+  "1zKoXW": {
+    "defaultMessage": "Must be less than {max}",
+    "description": "UxNumeric error value too high"
+  },
   "7ACrRj": {
     "defaultMessage": "Please enter your password",
     "description": "Popup error message if no password entered before submit"
@@ -198,5 +202,9 @@
   "ypa6Gp": {
     "defaultMessage": "Load an Account",
     "description": "shared.account.uploadWallet.title: Title for the upload your account page"
+  },
+  "zlzBIp": {
+    "defaultMessage": "Must be larger than {min}",
+    "description": "UxNumeric error value too low"
   }
 }
