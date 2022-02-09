@@ -39,5 +39,5 @@ export type BaseProps<T=string> = {
   forceValidate?: boolean;
   readOnly?: boolean;
 
-  intlLabel: MessageDescriptor|JSX.Element;
+  intlLabel?: MessageDescriptor|JSX.Element;
 } & StrictInputProps;

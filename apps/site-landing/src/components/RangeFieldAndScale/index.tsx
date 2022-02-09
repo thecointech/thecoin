@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { FormattedMessage, FormattedNumber, MessageDescriptor } from 'react-intl';
+import { defineMessage, FormattedMessage, FormattedNumber, MessageDescriptor } from 'react-intl';
 import type { NumberFormatOptionsStyle } from '@formatjs/ecma402-abstract';
 
 import { Range, getTrackBackground } from 'react-range';
 import { LessVars } from '@thecointech/site-semantic-theme/variables';
 import styles from './styles.module.less';
+import { UxNumeric } from '@thecointech/shared';
 
 export type Props = {
  label: MessageDescriptor,
+ tooltip: MessageDescriptor,
  scaleType?: NumberFormatOptionsStyle;
  className?: string;
  unit?: string,
@@ -20,6 +22,12 @@ export type Props = {
  onChange: (value: number) => void;
 }
 
+const errTooLow = defineMessage({
+  defaultMessage: "Must be larger than {min}",
+  description: "UxNumeric error value too low",
+  values: {min: 100}
+});
+
 export const RangeFieldAndScale = (props: Props) => {
   const [value, setValue] = useState(props.initial ?? 0);
 
@@ -27,7 +35,7 @@ export const RangeFieldAndScale = (props: Props) => {
   const { maximum } = props;
   const step = props.step ?? 1;
 
-  const onChange = ([value]: number[]) => {
+  const onChange = (value: number) => {
     setValue(value);
     props.onChange(value);
   };
@@ -36,7 +44,23 @@ export const RangeFieldAndScale = (props: Props) => {
     <div className={`${styles.container} ${props.className ?? ''}`}>
       <div className={styles.label}>
         <FormattedMessage {...props.label} tagName="span" />
-        <FormattedNumber
+        <UxNumeric
+          defaultValue={value}
+          onValue={v => onChange(v ?? props.initial ?? 0)}
+          onValidate={() => null}
+          tooltip={props.tooltip}
+          placeholder={props.label}
+
+          min={minimum}
+          //max={maximum}
+          // currency={props.currency}
+          // currencyDisplay="narrowSymbol"
+          // style={props.scaleType}
+          // unit={props.unit}
+          // minimumFractionDigits={0}
+          // maximumFractionDigits={0}
+        />
+        {/* <FormattedNumber
           value={value}
           currency={props.currency}
           currencyDisplay="narrowSymbol"
@@ -44,14 +68,14 @@ export const RangeFieldAndScale = (props: Props) => {
           unit={props.unit}
           minimumFractionDigits={0}
           maximumFractionDigits={0}
-        />
+        /> */}
       </div>
       <Range
         step={step}
         min={minimum}
         max={maximum}
         values={[value]}
-        onChange={onChange}
+        onChange={([value]) => onChange(value)}
         renderTrack={props => (
           <SliderTrack
             value={value}
