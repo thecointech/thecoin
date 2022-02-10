@@ -1,15 +1,17 @@
 import React from 'react';
 import { BasicTooltip } from '@nivo/tooltip';
 import { PointTooltip } from '@nivo/line';
+import type { AreaDatum } from './types';
 
-export const AreaGraphTooltip: PointTooltip = (props) => {
-  // const dayStr = dayjs(props.data.month).format('ll');
+export const Tooltip: PointTooltip = (props) => {
+  const {point} = props;
+  const data: AreaDatum = point.data as any;
   return (
-      <BasicTooltip
-          id={props.point.id}
-          value={"Shixxle"}
-          // color={props.color}
-          enableChip
-      />
+    <BasicTooltip
+      id="avg"
+      value={`$${data.median.toFixed(2)}`}
+      color={point.color}
+      enableChip
+    />
   );
 };

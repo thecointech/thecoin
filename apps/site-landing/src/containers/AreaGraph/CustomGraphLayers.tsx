@@ -1,20 +1,8 @@
 import React from 'react'
 import { Defs } from '@nivo/core'
 import { area, curveMonotoneX } from 'd3-shape'
-import { Datum, ResponsiveLine, Serie, Layer, CustomLayerProps, DatumValue } from '@nivo/line'
-import { AreaGraphTooltip } from './Tooltip'
-
-// Used internally by actual renderer
-export type AreaDatum = Datum & {
-  lowerBound: number;
-  upperBound: number;
-}
-
-const commonProperties = {
-  margin: { top: 20, right: 20, bottom: 60, left: 80 },
-  animate: true,
-  enableSlices: 'x' as 'x',
-}
+import { Datum, ResponsiveLine, Serie, Layer, CustomLayerProps, DatumValue, PointMouseHandler } from '@nivo/line'
+import { Tooltip } from './Tooltip'
 
 const AreaLayer = (props: CustomLayerProps) => {
   const { data, xScale, yScale } = props;
@@ -52,16 +40,11 @@ const AreaLayer = (props: CustomLayerProps) => {
 }
 
 const layers: Layer[] = [
-  'grid',
-  'markers',
-  'areas',
+
+  'grid', 'markers', 'axes', 'areas',
   AreaLayer,
-  'lines',
-  'slices',
-  'axes',
-  'points',
-  'legends',
-];
+  'crosshair', 'lines', 'points', 'slices', 'mesh', 'legends',
+]
 
 const findMaxValue = (serie: Serie[]) =>
   serie.reduce((prev, series) =>
@@ -77,9 +60,17 @@ const findMinValue = (serie: Serie[]) => {
   return r;
 }
 
-export const CustomGraphLayers = ({ data, xlegend }: { data: Serie[], xlegend: string }) => {
+type Props =  {
+  onClick: PointMouseHandler,
+  data: Serie[],
+  xlegend: string,
+}
+
+export const CustomGraphLayers = ({ onClick, data, xlegend }: Props) => {
+
   return <ResponsiveLine
-    {...commonProperties}
+    margin={{ top: 20, right: 20, bottom: 60, left: 80 }}
+    animate={true}
     yScale={{
       type: 'linear',
       stacked: true,
@@ -87,18 +78,27 @@ export const CustomGraphLayers = ({ data, xlegend }: { data: Serie[], xlegend: s
       max: findMaxValue(data),
     }}
     axisBottom={{
-      legend: xlegend
+      legend: xlegend,
+      legendPosition: 'middle',
+      legendOffset: 30,
+    }}
+    axisLeft={{
+      format: (v) => `$${v}`
     }}
     data={data}
     lineWidth={3}
     curve="monotoneX"
     colors={['#028ee6', '#774dd7']}
     enableGridX={false}
+    pointLabelYOffset={0}
     pointSize={12}
     pointColor="white"
     pointBorderWidth={2}
     pointBorderColor={{ from: 'serieColor' }}
-    tooltip={AreaGraphTooltip}
+
+    onClick={onClick}
+    useMesh={true}
+    tooltip={Tooltip}
     layers={layers}
   />
 }

@@ -1,44 +1,43 @@
 import { Decimal } from 'decimal.js-light';
 import { DateTime } from 'luxon';
-import { MarketData } from './market';
 import { SimulationParameters } from './params';
-import { SimulationState, toCoin, toFiat } from './state';
+import { grossFiat, SimulationState, toCoin, toFiat } from './state';
 import { DMin, one, zero } from './sim.decimal';
 import { straddlesYear } from './time';
 
 //
 //
-export function applyShockAborber(start: DateTime, params: SimulationParameters, state: SimulationState, market: MarketData) {
+export function applyShockAborber(start: DateTime, params: SimulationParameters, state: SimulationState) {
   const sa = params.shockAbsorber;
   if (!sa.maximumProtected || state.coin.eq(0)) return;
 
   // On the anniversary, lock in any cushion & profit
   if (straddlesYear(start, state.date)) {
-    updateCushion(params, state, market);
+    updateCushion(params, state);
   }
 
   // If state is losing money, top it up from reserves
-  applyCushion(params, state, market);
+  applyCushion(params, state);
 }
 
-function applyCushion(params: SimulationParameters, state: SimulationState,  market: MarketData) {
+function applyCushion(params: SimulationParameters, state: SimulationState) {
   // The shock absorber works by taking the first X% of profit
   //const fiatProtected = DMin(state.principal, new Decimal(sa.maximumProtected));
-  const currentFiat = toFiat(state.coin, market);
+  const currentFiat = grossFiat(state);
 
   if (currentFiat.lt(state.principal)) {
-    cushionDown(currentFiat, params, state, market);
+    cushionDown(currentFiat, params, state);
   }
 
   // Else, reserve  the first profits
   else if (currentFiat.gt(state.principal)) {
-    cushionUp(currentFiat, params, state, market);
+    cushionUp(currentFiat, params, state);
   }
 }
 
 //
 // Cushion the account when it's value goes down.
-function cushionDown(currentFiat: Decimal, params: SimulationParameters, state: SimulationState, market: MarketData) {
+function cushionDown(currentFiat: Decimal, params: SimulationParameters, state: SimulationState) {
   const sa = params.shockAbsorber;
   // What is the drop to be cushionDown?
   const fiatProtected = DMin(state.principal, sa.maximumProtected);
@@ -51,7 +50,7 @@ function cushionDown(currentFiat: Decimal, params: SimulationParameters, state: 
 
   // What is the total percentage loss are we absorbing?
   // This loss ignores anything previously cushionDown
-  const fiatAdjustment = toFiat(state.shockAbsorber.coinAdjustment, market);
+  const fiatAdjustment = toFiat(state.shockAbsorber.coinAdjustment, state.market);
   const loss = fiatProtected
     //.sub(toFiat(state.shockAbsorber.coinAdjustment, market))
     .sub(currentFiat.sub(fiatAdjustment).mul(ratio));
@@ -72,18 +71,18 @@ function cushionDown(currentFiat: Decimal, params: SimulationParameters, state: 
 
 //
 // Cushion going (more akin to inflating the cushion than anything)
-function cushionUp(currentFiat: Decimal, params: SimulationParameters, state: SimulationState, market: MarketData) {
+function cushionUp(currentFiat: Decimal, params: SimulationParameters, state: SimulationState) {
   const sa = params.shockAbsorber;
 
   // first, unwind any existing adjustments.
   if (state.shockAbsorber.coinAdjustment.gt(0)) {
 
-    cushionDown(currentFiat, params, state, market);
-    currentFiat = toFiat(state.coin, market);
+    cushionDown(currentFiat, params, state);
+    currentFiat = grossFiat(state);
   }
 
   if (state.shockAbsorber.coinAdjustment.lte(0)) {
-    const alreadycushionDown = toFiat(state.shockAbsorber.coinAdjustment, market);
+    const alreadycushionDown = toFiat(state.shockAbsorber.coinAdjustment, state.market);
 
     const gain = currentFiat.sub(state.principal).sub(alreadycushionDown);
     const fiatCovered = DMin(state.principal, new Decimal(sa.maximumProtected));
@@ -91,7 +90,7 @@ function cushionUp(currentFiat: Decimal, params: SimulationParameters, state: Si
 
     const maxFiatToAbsorb = fiatCovered.mul(sa.cushionUp);
     const toAbsorb = DMin(gain.mul(ratio), maxFiatToAbsorb);
-    const coinAdjust = toCoin(toAbsorb, market).add(state.shockAbsorber.coinAdjustment);
+    const coinAdjust = toCoin(toAbsorb, state.market).add(state.shockAbsorber.coinAdjustment);
 
     state.coin = state.coin.sub(coinAdjust);
     state.shockAbsorber.coinAdjustment = state.shockAbsorber.coinAdjustment.sub(coinAdjust);
@@ -111,7 +110,7 @@ function roundOffAdjustments(state: SimulationState) {
 //
 // Updating the cushion is the process of incorporating profit into
 // principal and resetting the cushion
-function updateCushion(_params: SimulationParameters, state: SimulationState, market: MarketData) {
+function updateCushion(_params: SimulationParameters, state: SimulationState) {
   const sa = state.shockAbsorber
   // If we are currently absorbing a loss, skip this years adjustment
   if (sa.coinAdjustment.gte(0))
@@ -122,7 +121,7 @@ function updateCushion(_params: SimulationParameters, state: SimulationState, ma
   sa.coinAdjustment = zero;
 
   // And move any profit below 'max covered' into principal so it is now covered.
-  const currentFiat = toFiat(state.coin, market);
+  const currentFiat = grossFiat(state);
   const profit = currentFiat.sub(state.principal);
   // limit profit to a max 10% gain each year
   const maxPrincipalAdj = state.principal.mul(0.1);

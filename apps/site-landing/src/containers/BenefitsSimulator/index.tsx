@@ -10,6 +10,8 @@ import { BenefitsGraph } from './Graph';
 import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateAccountBanner';
 import { createParams, MarketData, getData } from '../ReturnProfile/data';
 import styles from './styles.module.less';
+import { StatsArea } from './StatsArea';
+import { BenefitsReducer } from './reducer';
 
 const translations = defineMessages({
   title: {
@@ -29,6 +31,8 @@ export function Compare() {
   const [years, setYears] = useState(10);
   const [fxData, setFxData] = useState<MarketData[]|undefined>();
   const [snpData, setSnPData] = useState<MarketData[]|undefined>();
+
+  BenefitsReducer.useStore();
 
   // Fetch src data
   useEffect(() => {
@@ -68,6 +72,7 @@ export function Compare() {
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <StatsArea />
       </div>
 
       <CreateAccountBanner Type={TypeCreateAccountBanner.People} />

@@ -1,6 +1,6 @@
 import { basicParams } from '../../../../internals/historical/simulation'
 import { createParams } from './params';
-import { toFiat, zeroState } from './state';
+import { grossFiat, zeroState } from './state';
 import { applyShockAborber } from './sim.shockAbsorber';
 import { SimulationState } from '.';
 import { Decimal } from 'decimal.js-light';
@@ -21,15 +21,15 @@ const params = createParams({
 const runAbsorber = (state: SimulationState, price: number, expectedFiat: number, date: DateObject={year: 2020}) => {
   const d = DateTime.fromObject(date)
   state.date = d;
-  const data = {
+  state.market = {
     Date: d,
     P: new Decimal(price),
     D: zero,
     E: zero,
   }
 
-  applyShockAborber(start, params, state, data);
-  const currentFiat = toFiat(state.coin, data);
+  applyShockAborber(start, params, state);
+  const currentFiat = grossFiat(state);
   expect(currentFiat.todp(2).toNumber()).toEqual(expectedFiat);
 }
 

@@ -9,7 +9,10 @@ export type SimulationState = {
   // How much contributed?
   principal: Decimal;
   // Current value of the account in Coin. Effectively means "Shares".
+  // This is all coin held, including adjustments from shockAbsorber
   coin: Decimal;
+  // market data for month
+  market: MarketData;
 
   credit: {
     // Current balance owing (the amount we need to pay at next due date
@@ -40,10 +43,18 @@ export type SimulationState = {
   offsetCO2: Decimal;
 }
 
-export const zeroState = (start: DateTime) => ({
+export const zeroState = (start: DateTime, market?: MarketData[]) => ({
   date: start,
   principal: zero,
   coin: zero,
+  market: market
+    ? getMarketData(start, market)
+    : {
+        Date: start,
+        D: zero,
+        P: zero,
+        E: zero,
+      },
   credit: {
     balanceDue: zero,
     current: zero,
@@ -57,26 +68,30 @@ export const zeroState = (start: DateTime) => ({
   offsetCO2: zero,
 })
 
-// Clone existing state.  Placed here so if we make any changes to state
+// Increment state.  Placed here so if we make any changes to state
 // we can easily update the cloning at the same time.
-export const increment = (state: SimulationState, date: DateTime) => ({
-  ...state,
-  date,
-  credit: {
-    ...state.credit
-  },
-  shockAbsorber: {
-    ...state.shockAbsorber
+export const increment = (state: SimulationState, data: MarketData[]) => {
+  const date = state.date.plus({week: 1});
+  return {
+    ...state,
+    date,
+    market: getMarketData(date, data),
+    credit: {
+      ...state.credit
+    },
+    shockAbsorber: {
+      ...state.shockAbsorber
+    }
   }
-})
+}
 
 export const toFiat = (coin: Decimal, data: MarketData) => coin.mul(data.P)
 export const toCoin = (coin: Decimal, data: MarketData) => coin.div(data.P)
 
-export const grossFiat = (state: SimulationState, data: MarketData[]) =>
-  toFiat(state.coin, getMarketData(state.date, data));
-export const netFiat = (s: SimulationState, data: MarketData[]) =>
-  grossFiat(s, data)
+export const grossFiat = (state: SimulationState) =>
+  toFiat(state.coin, state.market);
+export const netFiat = (s: SimulationState) =>
+  grossFiat(s)
     .sub(s.credit.current)
     .sub(s.credit.balanceDue)
     .toNumber()

@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { Decimal } from 'decimal.js-light';
 import { SimulationParameters } from './params';
-import { SimulationState, zeroState, toFiat, toCoin } from './state';
+import { SimulationState, zeroState, toFiat, toCoin, increment } from './state';
 import { getMarketData, MarketData } from './market';
 import { straddlesMonth, straddlesYear } from './time';
 import { grossFiat } from '.';
@@ -30,12 +30,12 @@ export class ReturnSimulator {
   getMarketData = (state: SimulationState) => getMarketData(state.date, this.data)!;
   getInitial = (start: DateTime): SimulationState =>
     this.balanceChange(
-      zeroState(start),
+      zeroState(start, this.data),
       new Decimal(this.params.initialBalance),
     )
 
   applyShockAborber = (start: DateTime, state: SimulationState) =>
-    applyShockAborber(start, this.params, state, this.getMarketData(state))
+    applyShockAborber(start, this.params, state)
 
   calcInterest = (current: Decimal) => current
     .mul(this.params.credit.interestRate) // full years interest
@@ -43,15 +43,14 @@ export class ReturnSimulator {
 
 
   balanceChange = (state: SimulationState, fiatChange: Decimal) => {
-    const month = this.getMarketData(state);
-    const coinChange = toCoin(fiatChange, month);
+    const coinChange = toCoin(fiatChange, state.market);
     state.coin = state.coin.add(coinChange);
     state.principal = state.principal.add(fiatChange);
     return state;
   }
 
   // Add the current weeks spending to current
-  updateCreditSpending(start: DateTime, {credit, date}: SimulationState) {
+  updateCreditSpending(start: DateTime, { credit, date }: SimulationState) {
     const params = this.params.credit;
     let spending = new Decimal(params.weekly);
     // If this week straddled a month ending, add month spending
@@ -78,7 +77,7 @@ export class ReturnSimulator {
   }
 
   payBalanceDue(state: SimulationState) {
-    const currentFiat = grossFiat(state, this.data);
+    const currentFiat = grossFiat(state);
     const paid = DMin(state.credit.balanceDue, currentFiat);
     this.balanceChange(state, paid.neg());
     state.credit.balanceDue = state.credit.balanceDue.sub(paid);
@@ -146,7 +145,7 @@ export class ReturnSimulator {
     }
   }
 
-  calcCashSpending(start: DateTime, {date}: SimulationState) {
+  calcCashSpending(start: DateTime, { date }: SimulationState) {
     let spending = new Decimal(this.params.cash.weekly);
     if (straddlesMonth(date)) spending = spending.add(this.params.cash.monthly);
     if (straddlesYear(start, date)) spending = spending.add(this.params.cash.yearly);
@@ -156,7 +155,7 @@ export class ReturnSimulator {
   // Calculate how much fiat income comes in this week
   calcIncome(start: DateTime, state: SimulationState) {
     // regular income
-    const {weekly, monthly, yearly} = this.params.income;
+    const { weekly, monthly, yearly } = this.params.income;
     let income = new Decimal(weekly);
     if (straddlesMonth(state.date)) income = income.add(monthly);
     if (straddlesYear(start, state.date)) income = income.add(yearly);
@@ -164,26 +163,28 @@ export class ReturnSimulator {
   }
 
   updateDividends(state: SimulationState) {
-    const month = this.getMarketData(state);
 
     // Calculate the div from 1 share
-    const monthDiv = new Decimal(month.D).div(12);
+    const monthDiv = new Decimal(state.market.D).div(12);
     const weekDiv = monthDiv.div(state.date.daysInMonth).mul(7);
 
     // How much of each shares div is allocated to CO2 offsets?
     const maxWeekOffsetPercent = new Decimal(this.params.maxOffsetPercentage).div(52.17857);
-    let adjustedDiv = weekDiv.sub(toFiat(maxWeekOffsetPercent, month));
+    let adjustedDiv = weekDiv.sub(toFiat(maxWeekOffsetPercent, state.market));
     if (adjustedDiv.lt(0)) adjustedDiv = zero;
 
     // Mult by shares to get totals
     const retainedDiv = adjustedDiv.mul(state.coin);
-    const newCoin = retainedDiv.div(month.P);
+    const newCoin = retainedDiv.div(state.market.P);
     const newOffsets = weekDiv.sub(retainedDiv).mul(state.coin);
     state.coin = state.coin.add(newCoin);
     state.offsetCO2 = state.offsetCO2.add(newOffsets);
   }
 
-  calcSingleState(start: DateTime, state: SimulationState) {
+  increment(start: DateTime, lastState: SimulationState) {
+    // First, increment the state's date/market
+    const state = increment(lastState, this.data);
+
     const income = this.calcIncome(start, state);
     this.balanceChange(state, income);
 
@@ -204,15 +205,15 @@ export class ReturnSimulator {
 
     // calculate credit changes
     this.updateCreditBalances(start, state);
-    return state;
+    // Now sim for state is complete, prevent it from changing
+    return Object.freeze(state);
   }
 
   // Utility function, mostly for testing.  Take a state and run simulator
   // until it reaches "end" date
   calcStateUntil(state: SimulationState, start: DateTime, end: DateTime): SimulationState {
     while (state.date <= end) {
-      state.date = state.date.plus({ week: 1 });
-      state = this.calcSingleState(start, state);
+      state = this.increment(start, state);
     }
     return state;
   }

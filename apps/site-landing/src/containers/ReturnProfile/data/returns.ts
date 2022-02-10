@@ -45,7 +45,8 @@ export function* calcAllResults(fullParams: AllParams) {
   const startOffsets = [...Array(numSims).keys()].map((_, idx) => idx * increment);
   const sims = startOffsets.map(month => runSimAt(s.plus({month}), simulator));
   for (let week = 0; ; week++) {
-    // Cacl
+
+    // Step the simulation
     const nthWeekResults = sims.map(gen => {
       const { value, done } = gen.next();
       return done ? null : value;
@@ -54,7 +55,7 @@ export function* calcAllResults(fullParams: AllParams) {
     const filtered = nthWeekResults.filter(isPresent);
     if (filtered.length < cutoff) break;
 
-    const avg = calculateAvgAndArea(filtered, data, percentile);
+    const avg = calculateAvgAndArea(filtered, percentile);
     yield {
       week,
       ...avg
@@ -76,13 +77,11 @@ export function calcAllResultsImmediate(fullParams: AllParams, numWeeks: number)
 
 function* runSimAt(start: DateTime, simulator: ReturnSimulator) {
   let state = simulator.getInitial(start);
-  yield state;
   const lastDate = last(simulator.data).Date;
-  while (true) {
-    state.date = state.date.plus({weeks: 1});
-    if (state.date > lastDate) return null;
-    yield simulator.calcSingleState(start, state);
-  }
+  do {
+    yield state;
+    state = simulator.increment(start, state);
+  } while(state.date <= lastDate);
 }
 
 function longestSimWeeks(allReturns: SimulationState[][]) {
@@ -94,10 +93,10 @@ function longestSimWeeks(allReturns: SimulationState[][]) {
 
 // For each duration (1 thru max simulation duration) find the average return & percentiles.
 // Data is array of simulations
-export function calculateAvgAndArea(allAtTimePassed: SimulationState[], data: MarketData[], percentile: number) {
+export function calculateAvgAndArea(allAtTimePassed: SimulationState[], percentile: number) {
 
-  allAtTimePassed.sort((a, b) => netFiat(a, data) - netFiat(b, data));
-  const fiatValue = allAtTimePassed.map(s => netFiat(s, data));
+  allAtTimePassed.sort((a, b) => netFiat(a) - netFiat(b));
+  const fiatValue = allAtTimePassed.map(netFiat);
 
   const sum = fiatValue.reduce((acc,val) => acc + val, 0);
   const midIndex = fiatValue.length / 2;
@@ -114,14 +113,14 @@ export function calculateAvgAndArea(allAtTimePassed: SimulationState[], data: Ma
 
 // For each duration (1 thru max simulation duration) find the average return & percentiles.
 // Data is array of simulations
-export function calculateAvgAndAreaForAll(allReturns: SimulationState[][], data: MarketData[], percentile: number) {
+export function calculateAvgAndAreaForAll(allReturns: SimulationState[][], percentile: number) {
   const maxLength = longestSimWeeks(allReturns);
   const r: CoinReturns[] = [];
   for (let week = 1; week < maxLength; week++) {
     const allAtWeek = allReturns.map(r => r[week]).filter(isPresent);
     r.push({
       week,
-      ...calculateAvgAndArea(allAtWeek, data, percentile)
+      ...calculateAvgAndArea(allAtWeek, percentile)
     });
   };
   return r;

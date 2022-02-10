@@ -5,6 +5,8 @@ import { createParams, MarketData } from '../../ReturnProfile/data';
 //@ts-ignore
 import { generateData } from '../../../../internals/historical/simulation';
 import styles from '../styles.module.less';
+import { withReducer, withStore } from '@thecointech/storybookutils';
+import { BenefitsReducer } from '../reducer';
 
 const meta: Meta = {
   title: 'Landing/Benefits/Graph',
@@ -14,7 +16,11 @@ const meta: Meta = {
     yearsToDisplay: 3,
     yearsToSimulate: 20,
     noise: 0.1,
-  }
+  },
+  decorators: [
+    withReducer(BenefitsReducer),
+    withStore(),
+  ]
 }
 export default meta;
 type Props = typeof meta.args;
