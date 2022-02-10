@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.59](https://github.com/thecointech/thecoin/compare/v0.2.58...v0.2.59) (2022-01-23)
+
+**Note:** Version bump only for package @thecointech/site-semantic-theme
+
+
+
+
+
 ## [0.2.56](https://github.com/thecointech/thecoin/compare/v0.2.55...v0.2.56) (2021-12-22)
 
 **Note:** Version bump only for package @thecointech/site-semantic-theme
