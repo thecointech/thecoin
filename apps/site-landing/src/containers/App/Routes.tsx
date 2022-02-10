@@ -5,7 +5,7 @@ import { HomePage } from 'containers/HomePage/index';
 import { NotFoundPage } from '@thecointech/shared/containers/NotFoundPage';
 import { Healthier } from 'containers/Healthier';
 import { WeDoMore } from 'containers/WeDoMore';
-import { Compare } from 'containers/Compare';
+import { Compare } from 'containers/BenefitsSimulator';
 import { Confirm } from 'containers/Subscribe/Confirm';
 import { Learn } from 'containers/Learn';
 import { HelpDocs } from 'containers/HelpDocs';
@@ -21,6 +21,7 @@ export const Routes = () =>
     <Route path="/healthier" component={Healthier} />
     <Route path="/wedomore" component={WeDoMore} />
     <Route path="/compare" component={Compare} />
+    <Route path="/help" component={HelpDocs} />
     <Route path="/blog" component={Blog} />
     <Route path="/faq/:category?" component={HelpDocs} />
     <Route path="/tos" component={TOS} />

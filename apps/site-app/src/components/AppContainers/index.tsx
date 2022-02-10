@@ -13,7 +13,7 @@ export const AppContainerWithShadow : React.FC<AppContainerProps> = (props) =>
   <div id={ `${props.id}` } className={ `${styles.appContainer} ${styles.appContainerPadding} ${styles.appShadow} ${props.className}` }>{props.children}</div>;
 
 export const AppContainerWithShadowWithoutPadding : React.FC<AppContainerProps> = (props) =>
-  <div id={ `${props.id}` } className={ `${styles.appContainer} ${styles.appShadow}` }>{props.children}</div>;
+  <div id={ `${props.id}` } className={ `${styles.appContainer} ${styles.appShadow} ${props.className ?? ''}` }>{props.children}</div>;
 
 export const AppContainerForTabs : React.FC<AppContainerProps> = (props) =>
   <div id={ `${props.id}` } className={ `${styles.appContainer} ${styles.appContainerPadding} ${styles.topRightFlat}` }>{props.children}</div>;

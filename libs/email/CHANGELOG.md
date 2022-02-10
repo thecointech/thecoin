@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.59](https://github.com/thecointech/thecoin/compare/v0.2.58...v0.2.59) (2022-01-23)
+
+
+### Bug Fixes
+
+* libs/email/package.json to reduce vulnerabilities ([7c61597](https://github.com/thecointech/thecoin/commit/7c61597b8306db0bea6a98b16f24d3e6f216ef33))
+
+
+
+
+
 ## [0.2.41](https://github.com/thecointech/thecoin/compare/v0.2.40...v0.2.41) (2021-09-22)
 
 **Note:** Version bump only for package @thecointech/email

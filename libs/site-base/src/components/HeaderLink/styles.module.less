@@ -1,0 +1,17 @@
+@import "~@thecointech/site-semantic-theme/variables.less";
+
+.headerLink {
+  color: @grey;
+  font-weight: 700;
+  font-size: 12px;
+
+  transition: color @pageTransitionDuration @defaultEasing !important;
+
+  &:hover {
+    color: @primaryColor2 !important;
+  }
+
+  :global(.active) {
+    color: @black;
+  }
+}

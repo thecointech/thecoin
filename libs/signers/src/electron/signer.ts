@@ -6,7 +6,7 @@ import type { Deferrable } from "@ethersproject/properties";
 import type { AccountName } from '../names';
 import { Signer } from '@ethersproject/abstract-signer'
 import { SIGNER_CHANNEL } from './types';
-import { InfuraProvider } from "@ethersproject/providers";
+import { getProvider } from '@thecointech/ethers-provider';
 
 export class ElectronSigner extends Signer {
   static _ipc: IpcRenderer;
@@ -18,7 +18,7 @@ export class ElectronSigner extends Signer {
     super();
     this._ident = ident;
     // Default provider
-    this.provider = new InfuraProvider(process.env.DEPLOY_NETWORK, process.env.INFURA_PROJECT_ID);
+    this.provider = getProvider();
   }
 
   invoke(fn: string, ...args: any[]) : Promise<any> {

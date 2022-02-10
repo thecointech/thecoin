@@ -3,9 +3,10 @@ import { Story, Meta } from '@storybook/react';
 import { GraphTxHistory, Theme } from '.';
 import { Transaction } from '@thecointech/tx-blockchain';
 import { DateTime } from 'luxon';
-import { withStore } from '@thecointech/storybookutils';
-import { FXRate } from 'containers/FxRate';
+import { withStore, withReducer } from '@thecointech/storybookutils';
+import { FXRate, FxRateReducer } from 'containers/FxRate';
 import { toCoin } from '@thecointech/utilities'
+import { Decimal } from 'decimal.js-light';
 
 export default {
   title: 'Shared/GraphTxHistory',
@@ -15,6 +16,10 @@ export default {
     from: { control: 'date' },
     to: { control: 'date' }
   },
+  decorators: [
+    withReducer(FxRateReducer),
+    withStore(),
+  ]
 } as Meta;
 
 const days = 24 * 60 * 60 * 1000;
@@ -40,6 +45,7 @@ const template: Story<typeof defaultArgs> = (args) => {
     ],
     dotColor: "#138175"
   }
+
   const GraphWrapper = () => (
     <GraphTxHistory
       height={350}
@@ -67,8 +73,11 @@ const genTxs = ({from, to, txFrequency}: typeof defaultArgs) => {
     r.push({
       balance: toCoin(balance),
       change: toCoin(change),
+      value: new Decimal(toCoin(change)),
       date: DateTime.fromMillis(date),
-      logEntry: "Transaction",
+      from: "0x12345",
+      to: "0x456789",
+      txHash: "0x1234567890",
       counterPartyAddress: "0x12345",
     })
     balance += change;

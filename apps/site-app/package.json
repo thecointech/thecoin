@@ -2,7 +2,7 @@
   "name": "@thecointech/site-app",
   "productName": "THECoin: Website - App",
   "private": true,
-  "version": "0.2.53",
+  "version": "0.2.59",
   "description": "THECoin: Future-proof currency",
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "dev:tunnel": "yarn cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
+    "prod:beta": "cross-env CONFIG_NAME=prodbeta yarn dev",
     "start": "yarn test && yarn build && yarn start:server",
     "start:server": "yarn cross-env NODE_ENV=production node ./internals/server",
     "generate": "plop --plopfile internals/generators/index.js",
@@ -53,9 +54,9 @@
   },
   "dependencies": {
     "@artsy/fresnel": "^1.2.2",
-    "@thecointech/shared": "^0.2.53",
-    "@thecointech/site-base": "^0.2.53",
-    "@thecointech/utilities": "^0.2.52",
+    "@thecointech/shared": "^0.2.59",
+    "@thecointech/site-base": "^0.2.59",
+    "@thecointech/utilities": "^0.2.59",
     "card-validator": "^6.2.0",
     "compression": "1.7.4",
     "connected-react-router": "^6.6.1",
@@ -70,10 +71,8 @@
     "react-helmet": "6.0.0-beta",
     "react-measure": "^2.3.0",
     "react-semantic-ui-range": "^0.7.0",
-    "react-transition-group": "^4.3.0",
     "reselect": "4.0.0",
-    "sanitize.css": "10.0.0",
-    "ts-clipboard": "^1.0.17"
+    "sanitize.css": "10.0.0"
   },
   "devDependencies": {
     "@octokit/rest": "16.33.1",
@@ -85,10 +84,8 @@
     "@types/react-helmet": "5.0.9",
     "@types/react-measure": "^2.0.5",
     "@types/react-test-renderer": "^16.9.0",
-    "@types/react-transition-group": "^4.2.3",
     "@types/systemjs": "0.20.6",
     "coveralls": "3.0.4",
-    "esm": "3.2.25",
     "jest": "*",
     "ngrok": "3.2.1",
     "node-plop": "0.19.0",

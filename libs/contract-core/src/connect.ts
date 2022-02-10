@@ -1,4 +1,4 @@
-import { TheCoin } from "./types/TheCoin";
+import { TheCoin } from "./types";
 import { GetContract } from "./contract";
 import { connect } from '@thecointech/contract-base/connect';
 import type { Signer } from "@ethersproject/abstract-signer";

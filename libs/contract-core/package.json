@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-core",
-  "version": "0.2.53",
+  "version": "0.2.59",
   "description": "The Coin: Solidity contract for TheCoin currency",
   "keywords": [
     "TheCoin",
@@ -20,7 +20,7 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "run-s build:contracts build:types build:src",
-    "build:contracts": "contract-build",
+    "build:contracts": "truffle compile",
     "build:types": "yarn contract-gen-types",
     "build:src": "run-p build:src:*",
     "build:src:cjs": "yarn tsc --project tsconfig.build.cjs.json",
@@ -30,19 +30,25 @@
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts",
     "clean:types": "rimraf ./src/types && rimraf ./migrations/types",
+    "test": "yarn jest",
     "test:contract": "truffle test",
-    "prod:test": "cross-env CONFIG_NAME=prodtest yarn deploy",
-    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn deploy:polygon",
+    "prod:test": "cross-env CONFIG_NAME=prodtest yarn _deploy",
+    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn _deploy:polygon",
+    "prod": "cross-env CONFIG_NAME=prod yarn _deploy:polygon",
     "_deploy": "run-s _deploy:*",
-    "_deploy:polygon": "truffle migrate --network polygon",
-    "_deploy:ethereum": "truffle migrate --network polygon",
-    "warmup": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register ./migrations/warmup_contract/main.ts"
+    "_deploy:polygon": "truffle migrate --network polygon && yarn seed",
+    "_deploy:ethereum": "truffle migrate --network ethereum",
+    "seed": "yarn run-script ./seed/main.ts",
+    "seed:fetch": "cross-env CONFIG_NAME=prodbeta yarn run-script ./seed/clone/fetch.ts",
+    "verify": "yarn run-script ./internal/verify.ts",
+    "run-script": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register "
   },
   "files": [
     "build/**/*"
   ],
   "main": "./build/index.js",
   "exports": {
+    "./contract": "./build/cjs/index.js",
     ".": {
       "development": "./build/cjs/index_mocked.js",
       "electron": "./build/mjs/index.js",
@@ -50,13 +56,22 @@
     }
   },
   "types": "./build/cjs/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "build/cjs/index.d.ts"
+      ]
+    }
+  },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.3.2",
     "@openzeppelin/truffle-upgrades": "^1.11.0",
+    "@thecointech/contract-tools": "^0.2.59",
+    "@thecointech/async": "*",
     "jest": "*"
   },
   "dependencies": {
-    "@thecointech/contract-base": "^0.2.52"
+    "@thecointech/contract-base": "^0.2.59"
   },
-  "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
+  "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

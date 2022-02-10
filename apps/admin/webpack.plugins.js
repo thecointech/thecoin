@@ -2,7 +2,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
 
-const { getEnvVars } = require('../../tools/setenv')
+const { getEnvVars } = require('@thecointech/setenv')
 const packageFile = path.join(__dirname, 'package.json');
 
 const env = getEnvVars();

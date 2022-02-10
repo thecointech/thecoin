@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "../apps\\rates-service"
+		},
+		{
+			"path": "../libs\\utils-ts"
+		}
+	],
+	"settings": {
+		"jest.showCoverageOnLoad": true,
+		"files.exclude": {
+			"**/.vscode": true,
+			"**/build": true,
+			"**/coverage": true,
+			"**/node_modules": true
+		}
+	}
+}

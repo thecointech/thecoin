@@ -5,9 +5,6 @@ import { BaseProps } from '../types';
 import { LessVars } from "@thecointech/site-semantic-theme/variables";
 import { MessageWithValues } from '../../../types';
 
-const isMessage = (messageOrComponent: BaseProps["intlLabel"]): messageOrComponent is MessageDescriptor =>
-  messageOrComponent.hasOwnProperty("defaultMessage")
-
 export const UxInput = (props: BaseProps) => {
 
   const {
@@ -59,7 +56,6 @@ export const UxInput = (props: BaseProps) => {
   const showingError = doShowState && !isValid;
 
   const intl = useIntl();
-  const label = isMessage(props.intlLabel) ? <FormattedMessage {...props.intlLabel} /> : props.intlLabel;
   const tooltip = showingError
     ? undefined
     : intl.formatMessage(props.tooltip, props.tooltip.values);
@@ -75,7 +71,7 @@ export const UxInput = (props: BaseProps) => {
 
   return (
     <Form.Field className={`${formClassName} ${props.className}`} >
-      <Label>{label}</Label>
+      <MaybeLabel label={props.intlLabel} />
       <Popup
         context={contextRef}
         position='top right'
@@ -97,3 +93,16 @@ export const UxInput = (props: BaseProps) => {
     </Form.Field>
   );
 }
+
+type LabelProps =  BaseProps["intlLabel"];
+const isMessage = (messageOrComponent: LabelProps): messageOrComponent is MessageDescriptor =>
+  messageOrComponent?.hasOwnProperty("defaultMessage") ?? false
+const MaybeLabel = ({label}: {label?: LabelProps}) =>
+  label
+    ? <Label>
+        {isMessage(label)
+          ? <FormattedMessage {...label} />
+          : label
+        }
+      </Label>
+    : null

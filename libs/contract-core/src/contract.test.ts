@@ -1,10 +1,10 @@
 
 import {GetContract} from './contract';
-import { ChainProvider } from '@thecointech/ethers-provider';
 import { describe, IsManualRun } from '@thecointech/jestutils';
-
-import { getEnvVars } from '../../../tools/setenv';
+import { getEnvVars } from "@thecointech/setenv";
 import { NormalizeAddress } from '@thecointech/utilities';
+import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
+
 const prodVars = getEnvVars('prodtest');
 jest.setTimeout(1200000);
 
@@ -16,7 +16,7 @@ describe('Testing provider', () => {
     process.env.POLYGONSCAN_API_KEY = prodVars.POLYGONSCAN_API_KEY;
 
     const contract = GetContract();
-    const provider = new ChainProvider();
+    const provider = new Erc20Provider();
 
     const address = NormalizeAddress(prodVars.WALLET_BrokerCAD_ADDRESS);
     const contractAddress = contract.address;
@@ -35,7 +35,7 @@ describe('Testing provider', () => {
 
   it ('fetches ERC20 txs', async () => {
     process.env.DEPLOY_POLYGON_NETWORK = 'polygon-testnet';
-    const provider = new ChainProvider();
+    const provider = new Erc20Provider();
     // const  h1 = await provider.getHistory('3043a245dc9f1a9574635e7ff1dea6ccffab8b92');
 
     const address = "0x123b38e9a9b3f75a8e16a4987eb5d7a524da6e56";

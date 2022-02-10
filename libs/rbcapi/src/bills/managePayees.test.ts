@@ -1,5 +1,5 @@
 
-import  { getEnvVars } from "../../../../tools/setenv";
+import  { getEnvVars } from "@thecointech/setenv";
 import { deletePayee, addPayee } from './managePayees';
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { getPayeeOptions, openBillPaymentPage } from '.';
@@ -7,7 +7,6 @@ import { ApiAction, initBrowser, closeBrowser } from '../action';
 import { log } from '@thecointech/logging';
 
 const vars = getEnvVars("prod");
-
 jest.setTimeout(5 * 60 * 1000);
 
 // We run this test on the live website to catch any changes to RBC website.

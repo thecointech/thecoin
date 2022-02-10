@@ -6,19 +6,16 @@ import { withAccounts, withLanguageProvider, withMediaContext } from '@thecointe
 import styles from '../App/styles.module.less';
 
 export default {
-  title: 'NFT/Header',
+  title: 'NFT/Navigation',
   component: MainNavigation,
   decorators: [
     withMediaContext,
     withLanguageProvider,
-    withAccounts({
-      active: null,
-      map: {}
-    }),
+    withAccounts(),
   ]
 } as Meta;
 
-export const Header = () => (
+export const Navigation = () => (
   <div id={styles.app}>
     <MainNavigation />
   </div>

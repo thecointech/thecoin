@@ -3,7 +3,7 @@ import {Wallet} from "ethers";
 import { writeFileSync, existsSync, mkdirSync } from 'fs';
 import {resolve} from 'path';
 
-const password = "random";
+const password = "0nC927z!Vkka";
 
 (async () => {
   console.log("Generating a random wallet with password 'random'");
@@ -13,4 +13,5 @@ const password = "random";
   const filename = `random.json`;
   const filepath = resolve(__dirname, filename);
   writeFileSync(filepath, encrypted);
+  console.log(`PK: ${wallet.privateKey}`);
 })();

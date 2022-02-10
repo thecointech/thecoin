@@ -1,4 +1,12 @@
-.content{
-    padding-top: 50px;
-    padding-bottom: 50px;
+@import "~@thecointech/site-semantic-theme/variables.less";
+
+.content {
+  grid-area     : ctaSmall;
+  padding-top   : .scalable(40, 70)[@result];
+
+  text-align : center;
+
+  .button {
+    padding-top: .scalable(30, 50)[@result];
+  }
 }

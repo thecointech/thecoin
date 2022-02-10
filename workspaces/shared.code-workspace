@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "../libs\\shared"
+		},
+		{
+			"path": "../libs\\utils-ts"
+		},
+		{
+			"path": "../libs\\types"
+		},
+		{
+			"path": "../libs\\contract"
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/build": true,
+			"**/coverage": true,
+			"**/node_modules": true
+		}
+	}
+}

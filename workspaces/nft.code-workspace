@@ -1,0 +1,25 @@
+{
+	"folders": [
+    {
+      "name": "site-nft",
+      "path": "../apps\\site-nft"
+    },
+    {
+      "name": "site-base",
+      "path": "../libs\\site-base"
+    },
+    {
+      "name": "site-semantic-theme",
+      "path": "../libs\\site-semantic-theme"
+    },
+    {
+      "name": "nft-service",
+      "path": "../apps\\nft-service"
+    },
+    {
+      "name": "contract-nft",
+      "path": "../libs\\contract-nft"
+    }
+  ],
+	"settings": {}
+}

@@ -1,64 +1,93 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
-#underwaterPart{
-  h2, h2.ui.header{
-    margin-bottom: 0px;
-    padding-bottom: 0px;
-  }
-  a{
-    color: @theCoinPaletteDarkBlue2;
-    border-color: @theCoinPaletteRed2;
-    &:hover{
-      color: @theCoinPaletteDarkBlue1;
-    }
-    &:active{
-      color: @theCoinPaletteDarkBlue3;
-    }
-  }
+.background {
+  grid-row-start   : healthier;
+  grid-row-end     : healthier;
+  grid-column-start: left;
+  grid-column-end  : right;
 }
 
-.illustration{
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  width: 50%;
-  margin-bottom: -240px;
-  z-index: 3;
-}
-.content{
-  z-index: 10;
-  padding-top: 120px;
-  div{
-    margin: auto;
-    max-width: 950px;
-  }
-}
+.content {
+  grid-area        : healthier;
+  grid-column-start: left;
+  grid-column-end  : right;
+  padding-top: 40px;
 
-.landscape{
-  padding-top: 80px;
-  .water{
-    position: relative;
-    z-index: -1;
-    margin-top: -520px;
-  }
-  .header{
+  .headerImage {
+    max-height: 258px;
     text-align: center;
-    z-index: 10;
-  }
-}
 
-.illustrationDeco{
-  position: absolute;
-  right: 20px;
-}
-/* Chrome for the coral decoration specifically. May need another solution */
-@media all and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
-  .illustrationDeco{
-    margin-top: -200px;
+    >img {
+      max-width : 100%;
+      max-height: 100%;
+      margin    : auto;
+    }
   }
-}
-@-moz-document url-prefix() {
-  .illustrationDeco{
-    margin-top: 0px;
+
+  .body {
+    margin-top    : -8px;
+    padding-top   : .scalable-clamped-bp(50, 124, @mobileWidth, @midWidth, px)[@result];
+    padding-bottom: 150px;
+    padding-left  : 30px;
+    padding-right : 30px;
+
+    background-image   : url('./images/smallillustration_right.svg'), url('./images/full_background.svg'), linear-gradient(#C5DFFE, #C5DFFE);
+    background-repeat  : no-repeat;
+    background-position: right 94px bottom 20px, center bottom, center top;
+
+    .title {
+      text-align: center;
+
+      span {
+        display: block;
+      }
+    }
+
+    .items {
+      display        : flex;
+      margin         : auto;
+      margin-top     : 2.5rem;
+      max-width      : 80%;
+      justify-content: space-between;
+
+      >div {
+        width: 30%;
+
+        a {
+          color: @theCoinPaletteDarkBlue2;
+
+          &:hover {
+            color: @theCoinPaletteDarkBlue1;
+          }
+
+          &:active {
+            color: @theCoinPaletteDarkBlue3;
+          }
+        }
+      }
+    }
+
+    .mobileScreen({
+      .title span {
+        display: unset;
+        &::after {
+          content: ' '
+        }
+      }
+      .items {
+        margin-bottom : 50px;
+        flex-direction: column;
+        text-align    : center;
+        align-items   : center;
+
+        > div {
+          width: 100%;
+
+          a > div {
+            margin: auto;
+          }
+        }
+      }
+    });
   }
 }

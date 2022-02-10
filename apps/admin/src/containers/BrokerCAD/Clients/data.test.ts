@@ -5,8 +5,8 @@ import { getAllUserData } from './data';
 describe('Live data fetches', () => {
   it('fetches data appropriately' , async () => {
     jest.setTimeout(10 * 60 * 1000);
-    const users = await getAllUserData([], {
-      contract: await GetContract(),
+    const users = await getAllUserData({
+      contract: GetContract(),
       history: [],
     } as any);
     expect(users).toBeTruthy();

@@ -1,3 +1,3 @@
-export type { TheCoin } from './types/TheCoin';
+export * from './types';
 export * from './connect';
 export * from './contract';

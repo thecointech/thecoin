@@ -10,6 +10,7 @@ import { FormattedMessage } from 'react-intl';
 export type Props = {
   inverted?: boolean;
   width?: 'very thin' | 'thin' | 'wide' | 'very wide';
+  direction?: "left" | "top" | "right" | "bottom";
 }
 
 export const PageSidebar: React.FC<Props> = (props) => {
@@ -20,7 +21,7 @@ export const PageSidebar: React.FC<Props> = (props) => {
     <Sidebar
       as={Menu}
       animation="push"
-      direction="left"
+      direction={props.direction}
       vertical
       visible={state.visible}
       className={styles.mainPageSidebar}

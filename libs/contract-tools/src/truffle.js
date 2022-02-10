@@ -1,21 +1,15 @@
 'use strict';
 // Load environment for the network we are deploying to
-require('../../../tools/setenv');
+require('@thecointech/setenv');
 require('../../../__mocks__/mock_node');
 
 var path = require('path');
-const HDWalletProvider = require("@truffle/hdwallet-provider");
-const { AccountId, getSigner } = require('@thecointech/signers');
+const { getSigner } = require('@thecointech/signers');
+const { TruffleEthersProvider } = require("@thecointech/truffle-ethers-provider");
+const { getProvider } = require("@thecointech/ethers-provider");
 
 // Allow using typescript in deployments
 loadTypescript();
-
-const numBuiltIn = AccountId.BrokerCAD + 1;
-const testAccounts = [];
-if (process.env.CONFIG_NAME !== 'devlive') {
-  // devlive accounts are hosted on our local blockchain, so already available
-  loadAccounts(numBuiltIn).then(v => testAccounts.push(...v)).catch(console.error);
-}
 
 // Dev networks run on local net
 function getDevNetworks() {
@@ -36,31 +30,27 @@ function getDevNetworks() {
 }
 
 function getLiveNetworks() {
+
   return {
     // remote environments (both test & mainnet)
     networks: {
       polygon: {
-      provider: () => {
-          return new HDWalletProvider(
-            testAccounts,
-            `https://${process.env.DEPLOY_POLYGON_NETWORK}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
-            0,
-            numBuiltIn
-          );
-        },
+        provider: () => new TruffleEthersProvider(
+          { [process.env.WALLET_Owner_ADDRESS]: () => getSigner("Owner") },
+          getProvider("POLYGON"),
+        ),
         network_id: process.env.DEPLOY_POLYGON_NETWORK_ID, // eslint-disable-line camelcase
         confirmations: 2,
-        skipDryRun: true
+        skipDryRun: true,
+        // Set an insanely long timeout to allow entering
+        // in the pin on a hw wallet
+        networkCheckTimeout: 10 * 60 * 1000,
       },
       ethereum: {
-        provider: () => {
-          return new HDWalletProvider(
-            testAccounts,
-            `https://${process.env.DEPLOY_ETHEREUM_NETWORK}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
-            0,
-            numBuiltIn
-          );
-        },
+        provider: () => new TruffleEthersProvider(
+          { [process.env.WALLET_Owner_ADDRESS]: () => getSigner("Owner") },
+          getProvider("ETHEREUM"),
+        ),
         network_id: process.env.DEPLOY_ETHEREUM_NETWORK_ID, // eslint-disable-line camelcase
         skipDryRun: true
       },
@@ -75,17 +65,6 @@ function getLiveNetworks() {
   }
 }
 
-async function loadAccounts(maxIdx) {
-  const testAccountKeys = [];
-  for (let i = 0; i < maxIdx; i++) {
-    const wallet = await getSigner(AccountId[i]);
-    if (!wallet)
-      throw new Error(`Cannot deploy: missing account ${AccountId[i]}`);
-    testAccountKeys.push(wallet.privateKey.slice(2));
-  }
-  return testAccountKeys;
-}
-
 function loadTypescript() {
   require("ts-node").register({
     dir: process.cwd(),
@@ -98,8 +77,8 @@ function loadTypescript() {
 
 const cwd = process.cwd();
 const configs = process.env.CONFIG_NAME === "devlive"
-? getDevNetworks()
-: getLiveNetworks()
+  ? getDevNetworks()
+  : getLiveNetworks()
 
 module.exports = {
 
@@ -117,7 +96,7 @@ module.exports = {
 
   compilers: {
     solc: {
-      version: "^0.8.0",  // ex:  "0.4.20". (Default: Truffle's installed solc)
+      version: "^0.8.0",
       docker: false,
       settings: {
         optimizer: {

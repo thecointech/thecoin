@@ -7,7 +7,7 @@
 pragma solidity ^0.8.0;
 
 import "./TheCoin.sol";
-import "./IChildToken.sol";
+import "./interfaces/IChildToken.sol";
 
 //
 // Polygon compatibility.

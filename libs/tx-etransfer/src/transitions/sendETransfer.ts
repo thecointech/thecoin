@@ -1,10 +1,11 @@
 import { log } from "@thecointech/logging";
 import { decryptTo } from "@thecointech/utilities/Encrypt";
-import { invalidQuestion, invalidAnswer } from '@thecointech/utilities/VerifiedSale';
+import { isPacketValid } from '@thecointech/utilities/VerifiedSale';
 import { readFileSync } from "fs";
 import { getCurrentState, TypedActionContainer } from "@thecointech/tx-statemachine";
 import { EncryptedPacket, ETransferPacket } from "@thecointech/types";
 import { Decimal } from "decimal.js-light";
+import { DateTime } from 'luxon';
 
 // NOTE: server does not have private key, and will not pass this step
 const privateKeyPath = process.env.USERDATA_INSTRUCTION_PK;
@@ -31,7 +32,7 @@ export async function sendETransfer(container: TypedActionContainer<"Sell">) {
   if (!container.instructions) {
       // Get sending instructions
     const decrypted = decryptInstructions(container.action.data.initial.instructionPacket);
-    if (!isValid(decrypted))
+    if (!isPacketValid(decrypted))
       return { error: "e-Transfer packet is invalid" };
     // Keep track of decrypted instructions
     // (mostly for manual verification in the admin app)
@@ -51,6 +52,7 @@ export async function sendETransfer(container: TypedActionContainer<"Sell">) {
     ? {
         meta: confirmation.toString(),
         fiat: new Decimal(0),
+        date: DateTime.now(),
       }
     : { error: `Error Code: ${confirmation}`}
 }
@@ -67,19 +69,5 @@ function decryptInstructions(packet: EncryptedPacket) {
     return null;
   }
   return decryptTo<ETransferPacket>(privateKey, packet);
-}
-
-//
-// Checks eTransfer for minimum viability
-function isValid(packet: ETransferPacket|null) {
-  // Invalid characters: < or >, { or }, [ or ], %, &, #, \ or "
-  return packet &&
-    packet.question?.length >= 2 &&
-    !packet.question?.match(invalidQuestion) &&
-    packet.answer?.length >= 3 &&
-    !packet.answer.match(invalidAnswer) &&
-    packet.email?.length >= 3 &&
-    packet.email?.includes("@") &&
-    !packet.message?.match(invalidQuestion)
 }
 

@@ -13,6 +13,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Run start date
+      run: echo "Started at $(date +'%Y-%m-%dT%H:%M:%S')"
     - uses: actions/checkout@v2
       # Java required for OpenAPI client generation
     - uses: actions/setup-java@v2
@@ -34,6 +36,8 @@ jobs:
          # Fix OOM in build admin
         NODE_OPTIONS: "--max-old-space-size=6144"
       run: yarn build
+    - name: Build Completed
+      run: echo "Build done at $(date +'%Y-%m-%dT%H:%M:%S')"
     #- name: Check no build outputs changing in git
     #  run: yarn check-changes <-- this fails in CI, but we don't know why
     - name: Test all

@@ -1,4 +1,4 @@
-import './setenv';
+import '@thecointech/setenv';
 import { CollectionReference, DocumentReference, DocumentSnapshot, getFirestore, init } from '@thecointech/firestore';
 import { writeFileSync } from 'fs';
 

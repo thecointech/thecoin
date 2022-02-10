@@ -1,13 +1,9 @@
 import * as React from 'react';
-import { Grid, Header } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import styles from './styles.module.less';
-import { Link } from 'react-router-dom';
-
-export type Props = {
-    Mobile: boolean;
-}
+import { LearnMoreLink } from 'components/LearnMoreLink';
 
 const translations = defineMessages({
     titleLeft : {
@@ -16,7 +12,7 @@ const translations = defineMessages({
     descriptionLeft : {
       defaultMessage: 'Your money is always earning. Make it earn for you.',
       description: 'site.homepage.landscape.stickers.left.description: Description for sticker for the homepage landscape left sticker'},
-    linkLeft : {
+    learnMore : {
       defaultMessage: 'Learn More',
       description: 'site.homepage.landscape.stickers.left.link: Link name for sticker for the homepage landscape left sticker'},
     titleRight : {
@@ -25,41 +21,30 @@ const translations = defineMessages({
     descriptionRight : {
       defaultMessage: 'Be part of the solution. We offset our clients’ CO2.',
       description: 'site.homepage.landscape.stickers.right.description: Description for sticker for the homepage landscape right sticker'},
-    linkRight : {
-      defaultMessage: 'Learn More',
-      description: 'site.homepage.landscape.stickers.right.link: Link name for sticker for the homepage landscape right sticker'}
   });
 
-export const Stickers = (props: Props) => {
-
-    let classForSticker = styles.cardContainer;
-    if (props.Mobile === true) {
-        classForSticker = styles.cardContainerMobile;
-    }
+export const Stickers = () => {
 
   return (
-        <Grid stackable columns={2} id={styles.stickers} className={classForSticker}>
-            <Grid.Row columns={3}>
-                <Grid.Column className={ `${styles.card} x6spaceLeft` }>
-                <Header as='h4'>
-                    <FormattedMessage {...translations.titleLeft} />
-                </Header>
-                <p>
-                    <FormattedMessage {...translations.descriptionLeft} />
-                </p>
-
-                <Link to="/compare"><FormattedMessage {...translations.linkLeft} /></Link>
-                </Grid.Column>
-                <Grid.Column className={ `${styles.card} x6spaceLeft` }>
-                    <Header as='h4'>
-                        <FormattedMessage {...translations.titleRight} />
-                    </Header>
-                    <p>
-                        <FormattedMessage {...translations.descriptionRight} />
-                    </p>
-                    <Link to="/wedomore"><FormattedMessage {...translations.linkRight} /></Link>
-                </Grid.Column>
-            </Grid.Row>
-        </Grid>
-    );
+    <div className={styles.stickers}>
+      <div className={styles.card}>
+        <Header as='h4'>
+          <FormattedMessage {...translations.titleLeft} />
+        </Header>
+        <p>
+          <FormattedMessage {...translations.descriptionLeft} />
+        </p>
+        <LearnMoreLink to="/compare"><FormattedMessage {...translations.learnMore} /></LearnMoreLink>
+      </div>
+      <div className={styles.card}>
+        <Header as='h4'>
+          <FormattedMessage {...translations.titleRight} />
+        </Header>
+        <p>
+          <FormattedMessage {...translations.descriptionRight} />
+        </p>
+        <LearnMoreLink to="/wedomore"><FormattedMessage {...translations.learnMore} /></LearnMoreLink>
+      </div>
+    </div>
+  );
 }
