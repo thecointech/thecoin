@@ -5,6 +5,7 @@ import { calcAllResults, CoinReturns, MarketData, SimulationParameters } from '.
 import { sleep } from '@thecointech/async';
 import { log } from '@thecointech/logging';
 import { BenefitsReducer } from '../reducer';
+import { debounce } from 'lodash';
 
 type Props = {
   params: SimulationParameters,
@@ -14,6 +15,7 @@ type Props = {
   animate?: boolean,
 }
 type SimGenerator = ReturnType<typeof calcAllResults>;
+const debounceInterval = 1000;
 
 export const BenefitsGraph = ({ params, snpData, animate, years }: Props) => {
 
@@ -48,7 +50,6 @@ export const BenefitsGraph = ({ params, snpData, animate, years }: Props) => {
       percentile,
     });
     setSimulator(sim);
-    // setResults([]);
     api.reset();
 
   }, [snpData, params]);
@@ -60,7 +61,7 @@ export const BenefitsGraph = ({ params, snpData, animate, years }: Props) => {
     if (!simulator) return;
     // Run the update asynchronously to give ourselves a chance to re-render
     let isCancelled = false;
-    (async () => {
+    const runSim = debounce(async () => {
       const updateEveryMs = 2500; // every 2.5 seconds, update
       log.trace('Begin Sim');
 
@@ -99,8 +100,13 @@ export const BenefitsGraph = ({ params, snpData, animate, years }: Props) => {
       api.addResults(values);
       setProgress(1);
       log.trace(`End Sim: ${((started - Date.now()) / 1000).toPrecision(3)}s`);
-    })();
-    return () => { isCancelled = true };
+    }, debounceInterval, {leading: false, trailing: true});
+
+    runSim();
+    return () => {
+      isCancelled = true;
+      runSim.cancel();
+    };
   }, [simulator, years]);
 
   const maxGraphPoints = 15;

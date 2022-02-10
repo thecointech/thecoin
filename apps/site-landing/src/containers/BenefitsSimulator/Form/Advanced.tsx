@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { RangeFieldAndScale } from '../../../components/RangeFieldAndScale';
 import { defineMessages, FormattedMessage, MessageDescriptor } from 'react-intl';
 import { Props } from './types';
-import { debounce } from 'lodash';
 import { PeriodicalParams, ShockAbsorber, SimulationParameters } from '../../ReturnProfile/data/params';
 import styles from './styles.module.less';
 import { Accordion, Icon } from 'semantic-ui-react';
@@ -36,7 +35,7 @@ const translations = defineMessages({
   },
   yearly: {
     defaultMessage: 'Yearly:',
-    description: 'Simulator: Weekly Income'
+    description: 'Simulator: Yearly Income'
   },
 
   // Labels for additional credit parameters
@@ -64,26 +63,96 @@ const translations = defineMessages({
   }
 });
 
+const tooltips = {
+  income: defineMessages({
+    weekly: {
+      defaultMessage: 'Regular weekly earnings, eg paycheques',
+      description: 'Simulator Tooltip: Weekly Income'
+    },
+    monthly: {
+      defaultMessage: 'Any income paid monthly, eg benefits or rent collected',
+      description: 'Simulator Tooltip: Monthly Income'
+    },
+    yearly: {
+      defaultMessage: 'Any income that arrives only once a year, eg bonuses',
+      description: 'Simulator Tooltip: Yearly Income'
+    },
+  }),
+  cash: defineMessages({
+    weekly: {
+      defaultMessage: 'Any weekly spending that cannot{br}be put on the credit card, eg babysitters or drugs',
+      description: 'Simulator Tooltip: Weekly Cash',
+      values: {br: "\n"},
+    },
+    monthly: {
+      defaultMessage: 'Any monthly expenses that cannot{br}be put on a credit card, eg rent or bills',
+      description: 'Simulator Tooltip: Monthly Cash',
+      values: {br: "\n"},
+    },
+    yearly: {
+      defaultMessage: 'Once-a-year expenses that cannot be put on a credit card',
+      description: 'Simulator Tooltip: Yearly Cash'
+    },
+  }),
+  credit: defineMessages({
+    weekly: {
+      defaultMessage: 'Any weekly spending that can be put{br}on the credit card, eg groceries and gas',
+      description: 'Simulator Tooltip: Weekly Cash',
+      values: {br: "\n"},
+    },
+    monthly: {
+      defaultMessage: 'Any monthly expenses that can be{br}put on a credit card, eg gym memberships',
+      description: 'Simulator Tooltip: Monthly Cash',
+      values: {br: "\n"},
+    },
+    yearly: {
+      defaultMessage: 'Once-a-year expenses that can be put on a credit card, eg vactions',
+      description: 'Simulator Tooltip: Yearly Cash'
+    },
+  }),
+  shockAbsorber: defineMessages({
+    cushion: {
+      defaultMessage: 'How big of a drop in the market will{br}be absorbed before you lose any money',
+      description: 'Simulator Tooltip: shockabsorber cushion',
+      values: {br: "\n"},
+    },
+    maximumProtected: {
+      defaultMessage: 'The maximum amount protected by the shock-absorber.{br}The smaller this is, the faster your account grows on average,{br}but the worse it will do in during down periods',
+      description: 'Simulator Tooltip: shockabsorber cushion',
+      values: {br: "\n"},
+    }
+  }),
+  ...defineMessages({
+    cashBackRate: {
+      defaultMessage: 'What percentage of spending does the credit card earn as cashback.',
+      description: 'Simulator Tooltip: cashback'
+    },
+    interestRate: {
+      defaultMessage: 'How much interest is charged on{br}any overdue amounts by the credit card.',
+      description: 'Simulator Tooltip: cashback',
+      values: {br: "\n"},
+    }
+  })
+};
+
 const UseStateWrapper = () => useState<number>(0)
 type UseNumberState = ReturnType<typeof UseStateWrapper>;
-
-const debounceInterval = 500;
 
 export const Advanced = ({ params, setParams, years, setYears }: Props) => {
 
   const onChangedInObj = (name: keyof SimulationParameters) =>
-    debounce((val: any) => setParams((prev: SimulationParameters) => ({
+    (val: any) => setParams((prev: SimulationParameters) => ({
       ...prev,
       [name]: val,
-    })), debounceInterval);
+    }));
 
   const activeIdxState = useState(-1);
-  const dbOnSetYears = debounce(v => setYears(Math.max(1, v)), debounceInterval);
 
   return (
     <div className={styles.formPane} >
       <RangeFieldAndScale
         label={basic.startingValue}
+        tooltip={basic.startingValueTooltip}
         scaleType="currency"
         currency="CAD"
         maximum={1000}
@@ -93,15 +162,17 @@ export const Advanced = ({ params, setParams, years, setYears }: Props) => {
       />
       <RangeFieldAndScale
         label={basic.rangeDuration}
+        tooltip={basic.rangeDurationTooltip}
         scaleType="unit"
         unit="year"
         maximum={60}
         initial={years}
-        onChange={dbOnSetYears}
+        onChange={v => setYears(Math.max(1, v))}
       />
       <Accordion className={styles.accordion}>
         <PeriodicalGroup
           title={translations.income}
+          tooltips={tooltips.income}
           index={0}
           activeIndexState={activeIdxState}
           params={params.income}
@@ -109,6 +180,7 @@ export const Advanced = ({ params, setParams, years, setYears }: Props) => {
         />
         <PeriodicalGroup
           title={translations.credit}
+          tooltips={tooltips.credit}
           index={1}
           activeIndexState={activeIdxState}
           params={params.credit}
@@ -116,6 +188,7 @@ export const Advanced = ({ params, setParams, years, setYears }: Props) => {
         >
           <RangeFieldAndScale
             label={translations.cashBackRate}
+            tooltip={tooltips.cashBackRate}
             scaleType="percent"
             maximum={0.05}
             step={0.01}
@@ -124,6 +197,7 @@ export const Advanced = ({ params, setParams, years, setYears }: Props) => {
           />
           <RangeFieldAndScale
             label={translations.interestRate}
+            tooltip={tooltips.interestRate}
             scaleType="percent"
             maximum={1}
             step={0.01}
@@ -134,6 +208,7 @@ export const Advanced = ({ params, setParams, years, setYears }: Props) => {
         </PeriodicalGroup>
         <PeriodicalGroup
           title={translations.cash}
+          tooltips={tooltips.cash}
           index={2}
           activeIndexState={activeIdxState}
           params={params.cash}
@@ -159,7 +234,10 @@ type GroupProps<T> = {
   setParams: (v: T) => void;
 }
 
-const PeriodicalGroup: React.FC<GroupProps<PeriodicalParams>> = ({ title, index, params, setParams, activeIndexState, children }) => {
+type PeriodicalProps = GroupProps<PeriodicalParams> & {
+  tooltips: typeof tooltips["income"],
+}
+const PeriodicalGroup: React.FC<PeriodicalProps> = ({ tooltips, title, index, params, setParams, activeIndexState, children }) => {
 
   const setNamedValue = (name: keyof PeriodicalParams) =>
     (val: any) => setParams({
@@ -187,6 +265,7 @@ const PeriodicalGroup: React.FC<GroupProps<PeriodicalParams>> = ({ title, index,
       <Accordion.Content active={active} >
         <RangeFieldAndScale
           label={translations.weekly}
+          tooltip={tooltips.weekly}
           scaleType="currency"
           currency="CAD"
           maximum={1000}
@@ -196,6 +275,7 @@ const PeriodicalGroup: React.FC<GroupProps<PeriodicalParams>> = ({ title, index,
         />
         <RangeFieldAndScale
           label={translations.monthly}
+          tooltip={tooltips.monthly}
           scaleType="currency"
           currency="CAD"
           maximum={1000}
@@ -205,6 +285,7 @@ const PeriodicalGroup: React.FC<GroupProps<PeriodicalParams>> = ({ title, index,
         />
         <RangeFieldAndScale
           label={translations.yearly}
+          tooltip={tooltips.yearly}
           scaleType="currency"
           currency="CAD"
           maximum={1000}
@@ -257,6 +338,7 @@ const ShockAbsorberGroup: React.FC<GroupProps<ShockAbsorber>> = ({ index, params
       <Accordion.Content active={active} >
         <RangeFieldAndScale
           label={translations.cushion}
+          tooltip={tooltips.shockAbsorber.cushion}
           scaleType="percent"
           maximum={0.5}
           step={0.1}
@@ -265,6 +347,7 @@ const ShockAbsorberGroup: React.FC<GroupProps<ShockAbsorber>> = ({ index, params
         />
         <RangeFieldAndScale
           label={translations.maximumProtected}
+          tooltip={tooltips.shockAbsorber.maximumProtected}
           scaleType="currency"
           currency="CAD"
           maximum={5000}
