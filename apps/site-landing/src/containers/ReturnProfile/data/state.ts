@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { Decimal } from 'decimal.js-light';
 import { getMarketData, MarketData } from './market';
-import { zero } from './sim.decimal';
+import { one, zero } from './sim.decimal';
 
 export type SimulationState = {
   // Date of snapshot
@@ -54,6 +54,7 @@ export const zeroState = (start: DateTime, market?: MarketData[]) => ({
         D: zero,
         P: zero,
         E: zero,
+        Fx: one,
       },
   credit: {
     balanceDue: zero,
@@ -85,8 +86,8 @@ export const increment = (state: SimulationState, data: MarketData[]) => {
   }
 }
 
-export const toFiat = (coin: Decimal, data: MarketData) => coin.mul(data.P)
-export const toCoin = (coin: Decimal, data: MarketData) => coin.div(data.P)
+export const toFiat = (coin: Decimal, data: MarketData) => coin.mul(data.P).mul(data.Fx)
+export const toCoin = (coin: Decimal, data: MarketData) => coin.div(data.P.mul(data.Fx))
 
 export const grossFiat = (state: SimulationState) =>
   toFiat(state.coin, state.market);

@@ -15,20 +15,20 @@ type Props = {
 }
 type SimGenerator = ReturnType<typeof calcAllResults>;
 
-export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
+export const BenefitsGraph = ({ params, snpData, animate, years }: Props) => {
 
   // const [results, setResults] = useState<CoinReturns[]>([]);
   const [progress, setProgress] = useState(0);
-  const [simulator, setSimulator] = useState<undefined|SimGenerator>();
+  const [simulator, setSimulator] = useState<undefined | SimGenerator>();
 
   const api = BenefitsReducer.useApi();
-  const {results} = BenefitsReducer.useData();
+  const { results, percentile } = BenefitsReducer.useData();
 
   // how many weeks to we need to calculate?
   const currentWeek = results.length;
   const maxWeeks = 1 + (years * 52.142);
 
-  const onClick : OnClickHandler = (p, _m) => {
+  const onClick: OnClickHandler = (p, _m) => {
     // We could potentially use the mouse event here
     // to figure out where on the graph was clicked,
     // to figure out exactly what ratio (probability)
@@ -45,7 +45,7 @@ export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
       data: snpData,
       params,
       increment: 6,
-      percentile: 0.95
+      percentile,
     });
     setSimulator(sim);
     // setResults([]);
@@ -61,7 +61,7 @@ export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
     // Run the update asynchronously to give ourselves a chance to re-render
     let isCancelled = false;
     (async () => {
-      const updateEveryMs= 2500; // every 2.5 seconds, update
+      const updateEveryMs = 2500; // every 2.5 seconds, update
       log.trace('Begin Sim');
 
       // Spamming the set* hooks are killing the update speed
@@ -75,7 +75,7 @@ export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
       for (let w = currentWeek; w < maxWeeks; w++) {
         if (isCancelled) return;
 
-        const {value} = simulator.next()
+        const { value } = simulator.next()
         if (value) values.push(value);
 
         // Update
@@ -98,7 +98,7 @@ export const BenefitsGraph = ({params, snpData, animate, years}: Props) => {
       }
       api.addResults(values);
       setProgress(1);
-      log.trace(`End Sim: ${((started - Date.now())/1000).toPrecision(3)}s`);
+      log.trace(`End Sim: ${((started - Date.now()) / 1000).toPrecision(3)}s`);
     })();
     return () => { isCancelled = true };
   }, [simulator, years]);

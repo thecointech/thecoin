@@ -5,11 +5,12 @@ import { applyShockAborber } from './sim.shockAbsorber';
 import { SimulationState } from '.';
 import { Decimal } from 'decimal.js-light';
 import { DateObject, DateTime } from 'luxon';
-import { zero } from './sim.decimal';
+import { one, zero } from './sim.decimal';
 
 const start = DateTime.fromObject({ year: 2020 });
 const params = createParams({
   ...basicParams,
+  maxOffsetPercentage: 0,
   shockAbsorber: {
     // for a max drop of 50%
     cushionDown: new Decimal(0.50),
@@ -26,6 +27,7 @@ const runAbsorber = (state: SimulationState, price: number, expectedFiat: number
     P: new Decimal(price),
     D: zero,
     E: zero,
+    Fx: one,
   }
 
   applyShockAborber(start, params, state);

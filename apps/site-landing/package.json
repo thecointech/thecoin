@@ -17,6 +17,7 @@
     "build": "yarn webpack --config ../../libs/site-base/internal/webpack/webpack.prod.mjs --progress",
     "build:semantic": "node ./internals/buildSemantic",
     "build:i18n": "run-s extract compile",
+    "build:copy": "cpx \"./src/containers/ReturnProfile/data/*.csv\" ./build/",
     "clean": "run-p clean:*",
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",

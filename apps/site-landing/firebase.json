@@ -9,6 +9,10 @@
     ],
     "rewrites": [
       {
+        "source": "/*.csv",
+        "destination": "/*.csv"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

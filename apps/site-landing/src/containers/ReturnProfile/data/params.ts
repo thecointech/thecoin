@@ -10,7 +10,7 @@ export type PeriodicalParams = {
 }
 
 export type ShockAbsorber = {
-  // The percentage drop cushionDown
+  // The percentage drop absorbed
   cushionDown: Decimal;
   // What percentage yearly gains go towards
   // building the cushion?
@@ -103,7 +103,7 @@ type RecursivePartial<T> = {
 export type MergeSimParamaters = RecursivePartial<SimulationParameters>;
 export const createParams = (explicit?: MergeSimParamaters): SimulationParameters => ({
   adjustForInflation: false,
-  maxOffsetPercentage: 0,
+  maxOffsetPercentage: 0.0175,
   initialBalance: 0,
   ...explicit,
 
