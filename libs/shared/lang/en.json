@@ -43,6 +43,10 @@
     "defaultMessage": "Copy",
     "description": "base.copyToClipboard.link: Link for the button for the copy to clipboard tool"
   },
+  "J1aGsC": {
+    "defaultMessage": "Please enter a valid number",
+    "description": "UxNumeric error value too low"
+  },
   "JB5uPE": {
     "defaultMessage": "An email address",
     "description": "Default placeholder for email feild"
