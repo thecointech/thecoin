@@ -5,12 +5,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [0.2.60](https://github.com/thecointech/thecoin/compare/v0.2.59...v0.2.60) (2022-02-11)
 
-**Note:** Version bump only for package @thecointech/setenv
-
-
-
-
-
-## [0.2.58](https://github.com/thecointech/thecoin/compare/v0.2.57...v0.2.58) (2022-01-13)
-
-**Note:** Version bump only for package @thecointech/setenv
+**Note:** Version bump only for package @thecointech/async
