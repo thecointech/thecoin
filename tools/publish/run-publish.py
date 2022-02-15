@@ -15,6 +15,7 @@ base = Path('/') / 'TheCoin-deploys' / config_name
 deploy = base / 'current'
 old_deploy = base / 'old'
 new_deploy = base / 'new'
+temp_deploy = base / 'temp'
 
 if not os.environ.get('THECOIN_ENVIRONMENTS'):
     tc_env = home / 'thecoin' / 'env'
@@ -113,9 +114,30 @@ def renameAndComplete():
   keep_trying(remove_current);
   keep_trying(move_new);
 
+#
+# On complete, merge the newly published branch back into dev
+def mergeBackIntoDev():
+    # check no existing checkout
+  if temp_deploy.exists():
+      print("Cannot merge back into dev: temp folder already exists")
+      return
+
+  # First, create a new checkout,
+  new_deploy.mkdir(parents=True, exist_ok=True)
+  os.chdir(new_deploy)
+  os.system('git clone https://github.com/thecointech/thecoin.git .') # Cloning
+
+  # Merge in publishing changes
+  success = os.system('git merge origin/publish/{config_name} --no-ff')
+  # push changes back
+  os.system('git push')
+  # cleanup
+  shutil.rmtree(old_deploy, onerror=remove_readonly)
 
 checkout()
 buildAndDeploy()
 renameAndComplete()
+# do this last, as it isn't particularily important if it fails
+mergeBackIntoDev()
 
 print('COMPLETE')
