@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.62](https://github.com/thecointech/thecoin/compare/v0.2.61...v0.2.62) (2022-02-14)
+
+**Note:** Version bump only for package @thecointech/nft-service
+
+
+
+
+
+## [0.2.61](https://github.com/thecointech/thecoin/compare/v0.2.60...v0.2.61) (2022-02-14)
+
+**Note:** Version bump only for package @thecointech/nft-service
+
+
+
+
+
+## [0.2.60](https://github.com/thecointech/thecoin/compare/v0.2.59...v0.2.60) (2022-02-11)
+
+
+### Bug Fixes
+
+* apps/nft-service/package.json to reduce vulnerabilities ([6815994](https://github.com/thecointech/thecoin/commit/6815994c91dce1512f22281cc7177dcd0eeb6c7b))
+
+
+
+
+
 ## [0.2.59](https://github.com/thecointech/thecoin/compare/v0.2.58...v0.2.59) (2022-01-23)
 
 

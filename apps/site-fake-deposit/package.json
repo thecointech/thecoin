@@ -2,7 +2,7 @@
   "name": "@thecointech/site-test-deposit",
   "productName": "THECoin: Website - Test Deposit",
   "private": true,
-  "version": "0.2.59",
+  "version": "0.2.62",
   "description": "THECoin: simple email generator to trigger deposits on testnet",
   "repository": {
     "type": "git",
@@ -25,6 +25,6 @@
     "compile": "formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json"
   },
   "dependencies": {
-    "@thecointech/site-base": "^0.2.59"
+    "@thecointech/site-base": "^0.2.62"
   }
 }
