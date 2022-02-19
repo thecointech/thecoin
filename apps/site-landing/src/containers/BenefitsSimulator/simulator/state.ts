@@ -47,7 +47,7 @@ export type SimulationState = {
   }
 
   // total spent on CO2 offsets
-  offsetCO2: Decimal;
+  usdForCo2Offsets: Decimal;
 }
 
 export const zeroState = (start: DateTime, market?: MarketData[]) : SimulationState => ({
@@ -74,7 +74,7 @@ export const zeroState = (start: DateTime, market?: MarketData[]) : SimulationSt
     principalAdjustment: zero,
     totalCushionGathered: zero,
   },
-  offsetCO2: zero,
+  usdForCo2Offsets: zero,
 })
 
 // Increment state.  Placed here so if we make any changes to state
