@@ -1,9 +1,9 @@
 import React from 'react';
 import { last } from '@thecointech/utilities';
 import { BenefitsReducer } from './reducer';
-import { netFiat, SimulationState } from '../ReturnProfile/data';
+import { netFiat, SimulationState } from './simulator';
 import { Table } from 'semantic-ui-react'
-import { zero } from '../ReturnProfile/data/sim.decimal';
+import { zero } from './simulator/sim.decimal';
 import styles from './styles.module.less';
 
 export const StatsArea = () => {

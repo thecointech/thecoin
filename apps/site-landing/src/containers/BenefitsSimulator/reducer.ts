@@ -2,7 +2,7 @@
 import type { ApplicationRootState } from 'types'
 import { BaseReducer } from '@thecointech/shared/store/immerReducer';
 import { BenefitsState, IActions } from './types';
-import { CoinReturns } from '../ReturnProfile/data';
+import { CoinReturns } from './simulator';
 import { AreaDatum } from '../AreaGraph/types';
 
 const HOVERED_KEY: keyof ApplicationRootState = "hovered";

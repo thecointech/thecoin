@@ -1,7 +1,7 @@
 import React from 'react'
 import { CustomGraphLayers } from './CustomGraphLayers'
 import range from 'lodash/range'
-import { CoinReturns } from '../ReturnProfile/data'
+import { CoinReturns } from '../BenefitsSimulator/simulator'
 import { AreaDatum, OnClickHandler } from './types'
 export * from './types';
 
