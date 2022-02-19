@@ -29,21 +29,28 @@ export type SimulationState = {
   // The shock absorber protects principal from
   // market downturns.
   shockAbsorber: {
-    // How `coin` has already been adjusted (up or down)
+    // How `coin` is currently adjusted (up or down)
     // Positive values mean we added to `coin` to cushion drop,
     // negative values mean we subbed from `coin` to cushion jump
     coinAdjustment: Decimal;
 
-    // The total amount of cushioning previously cushionDown.
-    // This is only ever negative (we do not reset during a drop)
-    historicalAdjustment: Decimal;
+    // Over time, we may also cushion profits (as well as principal)
+    // We store the adjustment here in order to keep an accurate
+    // record of principal
+    principalAdjustment: Decimal;
+
+    // The amount of cushion gathered.  This is the sum of each
+    // years coinAdjustment (just prior to reset).  This is not
+    // used in the simulation, and is only ever negative
+    // (we do not reset during a drop)
+    totalCushionGathered: Decimal;
   }
 
   // total spent on CO2 offsets
   offsetCO2: Decimal;
 }
 
-export const zeroState = (start: DateTime, market?: MarketData[]) => ({
+export const zeroState = (start: DateTime, market?: MarketData[]) : SimulationState => ({
   date: start,
   principal: zero,
   coin: zero,
@@ -64,7 +71,8 @@ export const zeroState = (start: DateTime, market?: MarketData[]) => ({
   },
   shockAbsorber: {
     coinAdjustment: zero,
-    historicalAdjustment: zero,
+    principalAdjustment: zero,
+    totalCushionGathered: zero,
   },
   offsetCO2: zero,
 })
