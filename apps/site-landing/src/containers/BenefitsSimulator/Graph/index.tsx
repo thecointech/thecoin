@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Dimmer, Loader, Segment } from 'semantic-ui-react';
 import { AreaDatum, AreaGraph, OnClickHandler } from '../../AreaGraph';
-import { calcAllResults, CoinReturns, MarketData, SimulationParameters } from '../../ReturnProfile/data';
+import { calcAllResults, CoinReturns, MarketData, SimulationParameters } from '../simulator';
 import { sleep } from '@thecointech/async';
 import { log } from '@thecointech/logging';
 import { BenefitsReducer } from '../reducer';

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Meta, Story } from '@storybook/react';
 import { BenefitsGraph as Component } from '.';
-import { createParams, MarketData } from '../../ReturnProfile/data';
+import { createParams, MarketData } from '../simulator';
 //@ts-ignore
 import { generateData } from '../../../../internals/historical/simulation';
 import styles from '../styles.module.less';

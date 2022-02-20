@@ -177,12 +177,16 @@ export class ReturnSimulator {
     let adjustedDiv = weekDiv.sub(maxWeekOffsetPercent.mul(state.market.P));
     if (adjustedDiv.lt(0)) adjustedDiv = zero;
 
-    // Mult by shares to get totals
+    // Retained dividends are those that are not
+    // used to purchase offsets.  We re-invest these
     const retainedDiv = adjustedDiv.mul(state.coin);
     const newCoin = retainedDiv.div(state.market.P);
-    const newOffsets = weekDiv.sub(retainedDiv).mul(state.coin);
     state.coin = state.coin.add(newCoin);
-    state.offsetCO2 = state.offsetCO2.add(newOffsets);
+
+    // Store the total cash amount of dividends that
+    // that are used to purchase CO2 offsets
+    const newOffsets = weekDiv.sub(adjustedDiv).mul(state.coin);
+    state.usdForCo2Offsets = state.usdForCo2Offsets.add(newOffsets);
   }
 
   increment(start: DateTime, lastState: SimulationState) {

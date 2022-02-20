@@ -1,7 +1,7 @@
 import React from 'react';
 import { defineMessages } from 'react-intl';
 import { RangeFieldAndScale } from 'components/RangeFieldAndScale';
-import { createParams } from '../../ReturnProfile/data/params';
+import { createParams } from '../simulator/params';
 import { Props } from './types';
 import styles from './styles.module.less';
 

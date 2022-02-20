@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Story } from '@storybook/react';
 import { Form as Component } from '.';
-import { createParams } from '../../ReturnProfile/data';
+import { createParams } from '../simulator';
 import { action } from '@storybook/addon-actions';
 import { Props } from './types';
 
