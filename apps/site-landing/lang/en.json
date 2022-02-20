@@ -453,6 +453,10 @@
     "defaultMessage": "In-depth",
     "description": "site.MainNavigation.indepth: Title for the In-depth entry in the menu"
   },
+  "x3GLcd": {
+    "defaultMessage": "Shareable Link",
+    "description": "site.compare.description: Link to share with whoever:"
+  },
   "xWWo6h": {
     "defaultMessage": "Blog",
     "description": "site.blog.title: Title for the In-depth blog page"

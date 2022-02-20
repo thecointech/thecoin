@@ -29,7 +29,8 @@ export type ShockAbsorber = {
   // with $10 of profit/20% shock absorber could
   // automatically reduce the shockAbsorber to 10%
   // (with an accompanied reduction of fees)
-  profitPercentageToReduceDampening: Decimal;
+  // NOT YET IMPLEMENTED
+  //profitPercentageToReduceDampening: Decimal;
 }
 
 // The data we use to calculate a clients potential returns
@@ -129,7 +130,7 @@ export const createParams = (explicit?: MergeSimParamaters): SimulationParameter
     cushionUp: zero,
     trailingMonths: zero,
     maximumProtected: zero,
-    profitPercentageToReduceDampening: zero,
+    //profitPercentageToReduceDampening: zero,
     ...explicit?.shockAbsorber
   }
 });
