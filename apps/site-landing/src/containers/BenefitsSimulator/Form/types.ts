@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { SimulationParameters } from '../../ReturnProfile/data/params';
+import { SimulationParameters } from '../simulator/params';
 
 export type Props = {
   params: SimulationParameters;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { RangeFieldAndScale } from '../../../components/RangeFieldAndScale';
 import { defineMessages, FormattedMessage, MessageDescriptor } from 'react-intl';
 import { Props } from './types';
-import { PeriodicalParams, ShockAbsorber, SimulationParameters } from '../../ReturnProfile/data/params';
+import { PeriodicalParams, ShockAbsorber, SimulationParameters } from '../simulator/params';
 import styles from './styles.module.less';
 import { Accordion, Icon } from 'semantic-ui-react';
 import { basic } from './Basic';

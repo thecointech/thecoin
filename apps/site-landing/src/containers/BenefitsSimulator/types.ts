@@ -1,5 +1,5 @@
 import { AreaDatum } from '../AreaGraph/types';
-import { CoinReturns } from '../ReturnProfile/data';
+import { CoinReturns } from './simulator';
 
 /* --- Reducer --- */
 export type BenefitsState = {

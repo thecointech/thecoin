@@ -8,7 +8,7 @@ import { Grid, Header } from 'semantic-ui-react';
 import { Form } from './Form';
 import { BenefitsGraph } from './Graph';
 import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateAccountBanner';
-import { createParams, MarketData, fetchMarketData } from '../ReturnProfile/data';
+import { createParams, MarketData, fetchMarketData } from './simulator';
 import styles from './styles.module.less';
 import { StatsArea } from './StatsArea';
 import { BenefitsReducer } from './reducer';

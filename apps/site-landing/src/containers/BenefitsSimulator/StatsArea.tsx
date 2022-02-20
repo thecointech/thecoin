@@ -1,9 +1,9 @@
 import React from 'react';
 import { last } from '@thecointech/utilities';
 import { BenefitsReducer } from './reducer';
-import { netFiat, SimulationState } from '../ReturnProfile/data';
+import { netFiat, SimulationState } from './simulator';
 import { Table } from 'semantic-ui-react'
-import { zero } from '../ReturnProfile/data/sim.decimal';
+import { zero } from './simulator/sim.decimal';
 import styles from './styles.module.less';
 
 export const StatsArea = () => {
@@ -21,7 +21,8 @@ export const StatsArea = () => {
         <Table.Row>
           <Table.HeaderCell>{tc("Avg", selected?.median, "$")}</Table.HeaderCell>
           <Table.HeaderCell>{tc("Weeks", selected?.week)}</Table.HeaderCell>
-          <Table.HeaderCell>{tc("Principal", data?.principal)}</Table.HeaderCell>
+          <Table.HeaderCell>{tc("Principal", data?.principal, "$")}</Table.HeaderCell>
+          <Table.HeaderCell>{tc("CO₂ Offset", data?.offset.div(11))}</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
 
@@ -30,11 +31,13 @@ export const StatsArea = () => {
           <Table.Cell>{tc("Best", maybeFiat(data?.best), "$")}</Table.Cell>
           <Table.Cell>{tc("From", data?.best.date.minus({ week: selected.week }))}</Table.Cell>
           <Table.Cell>{tc("To", data?.best.date)}</Table.Cell>
+          <Table.Cell>{tc("CO₂ Offset", data?.best.usdForCo2Offsets.div(11))}</Table.Cell>
         </Table.Row>
         <Table.Row negative>
           <Table.Cell>{tc("Worst", maybeFiat(data?.worst), "$")}</Table.Cell>
           <Table.Cell>{tc("From", data?.worst.date.minus({ week: selected.week }))}</Table.Cell>
           <Table.Cell>{tc("To", data?.worst.date)}</Table.Cell>
+          <Table.Cell>{tc("CO₂ Offset", data?.worst.usdForCo2Offsets.div(11))}</Table.Cell>
         </Table.Row>
       </Table.Body>
     </Table>
@@ -52,16 +55,20 @@ const getTableData = (values: SimulationState[], percentile: number) => {
   const principal = values
     .reduce((p, curr) => p.add(curr.principal), zero)
     .div(values.length);
+  const offset = values
+    .reduce((p, curr) => p.add(curr.usdForCo2Offsets), zero)
+    .div(values.length);
   const worst = values[lowerBoundIdx];
   const best = values[upperBoundIdx];
-  return { principal, worst, best };
+  return { principal, offset, worst, best };
 }
 
 
 
-const tc = (intro: string, text?: any, symbol?: string) =>
+const tc = (intro: string, num?: any, symbol?: string) =>
   <>
     <b>{intro}: </b>
-    {symbol ?? ''}
-    {text?.toFixed?.(2) ?? text?.toSQLDate?.() ?? text ?? ''}
+    {symbol
+      ? `${symbol}${num?.toFixed?.(2) ?? ''}`
+      : num?.toSQLDate?.() ?? num?.toDecimalPlaces?.(1).toString() ?? num ?? ''}
   </>

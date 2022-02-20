@@ -6,7 +6,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const datapath = join(__dirname, '..', 'src', 'containers', 'ReturnProfile', 'data');
+const datapath = join(__dirname, '..', 'src', 'containers', 'BenefitsSimulator', 'simulator');
 const snpDataPath = join(datapath, 'sp500_monthly.csv');
 const fxDataPath = join(datapath, 'fx_monthly.csv');
 

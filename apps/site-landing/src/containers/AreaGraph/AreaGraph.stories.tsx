@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story } from '@storybook/react';
 import { AreaGraph as Component } from '.';
-import { CoinReturns } from '../ReturnProfile/data';
+import { CoinReturns } from '../BenefitsSimulator/simulator';
 import { action } from '@storybook/addon-actions';
 
 const meta = {
