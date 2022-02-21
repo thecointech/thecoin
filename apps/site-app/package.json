@@ -29,7 +29,7 @@
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
     "prod:beta": "cross-env CONFIG_NAME=prodbeta yarn dev",
     "start": "yarn test && yarn build && yarn start:server",
-    "start:server": "yarn cross-env NODE_ENV=production node ./internals/server",
+    "start:server": "yarn cross-env NODE_ENV=production node ./internals/server.mjs",
     "generate": "plop --plopfile internals/generators/index.js",
     "lint": "yarn lint:src && yarn lint:css",
     "lint:css": "stylelint './src/**/*.{js,ts}'",
