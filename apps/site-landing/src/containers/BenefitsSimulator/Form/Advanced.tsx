@@ -80,7 +80,7 @@ const tooltips = {
   }),
   cash: defineMessages({
     weekly: {
-      defaultMessage: 'Any weekly spending that cannot{br}be put on the credit card, eg babysitters or drugs',
+      defaultMessage: 'Any weekly spending that cannot{br}be put on a credit card, eg babysitter',
       description: 'Simulator Tooltip: Weekly Cash',
       values: {br: "\n"},
     },

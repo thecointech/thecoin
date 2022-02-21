@@ -16,6 +16,7 @@ export const UxInput = (props: BaseProps) => {
     forceValidate,
 
     placeholder,
+    tooltip,
     type
   } = props;
 
@@ -56,9 +57,9 @@ export const UxInput = (props: BaseProps) => {
   const showingError = doShowState && !isValid;
 
   const intl = useIntl();
-  const tooltip = showingError
+  const tt = showingError || !tooltip
     ? undefined
-    : intl.formatMessage(props.tooltip, props.tooltip.values);
+    : intl.formatMessage(tooltip, tooltip.values);
   const formClassName = doShowState
     ? isValid ? 'success' : 'error'
     : ''
@@ -86,7 +87,7 @@ export const UxInput = (props: BaseProps) => {
           value={value}
           placeholder={intl.formatMessage(placeholder)}
           type={type}
-          data-tooltip={tooltip}
+          data-tooltip={tt}
           readOnly={props.readOnly}
         />
       </span>
