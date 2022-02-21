@@ -107,10 +107,6 @@
     "defaultMessage": "Better Farming",
     "description": "site.wedomore.smallPlant.title: Title for the smallPlant photo for the We Do More page"
   },
-  "CLRpml": {
-    "defaultMessage": "Any weekly spending that can be put{br}on the credit card, eg groceries and gas",
-    "description": "Simulator Tooltip: Weekly Cash"
-  },
   "CTUhFX": {
     "defaultMessage": "Once-a-year expenses that cannot be put on a credit card",
     "description": "Simulator Tooltip: Yearly Cash"
@@ -203,6 +199,10 @@
   "P82KCx": {
     "defaultMessage": "Earth’s Healthier",
     "description": "site.homepage.landscape.stickers.right.title: The title for the homepage landscape right sticker"
+  },
+  "QwwJrJ": {
+    "defaultMessage": "Any weekly spending that can be put{br}on a credit card, eg groceries and gas",
+    "description": "Simulator Tooltip: Weekly Cash"
   },
   "RR4faR": {
     "defaultMessage": "{years} years"

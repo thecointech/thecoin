@@ -96,7 +96,7 @@ const tooltips = {
   }),
   credit: defineMessages({
     weekly: {
-      defaultMessage: 'Any weekly spending that can be put{br}on the credit card, eg groceries and gas',
+      defaultMessage: 'Any weekly spending that can be put{br}on a credit card, eg groceries and gas',
       description: 'Simulator Tooltip: Weekly Cash',
       values: {br: "\n"},
     },
