@@ -56,12 +56,12 @@ export const UxNumeric = (props: Props) => {
 }
 
 const convertIn = (value: number|undefined, mult: number) =>
-  value
+  value !== undefined
     ? (value * mult).toString()
     : undefined
 
 const convertOut = (value: string | undefined, mult: number) =>
-  value
+  value !== undefined
     ? Number(value) / mult
     : undefined;
 
