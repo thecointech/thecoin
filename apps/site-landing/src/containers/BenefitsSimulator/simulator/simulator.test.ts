@@ -6,6 +6,7 @@ import { createParams } from './params';
 import { one } from './sim.decimal';
 import { ReturnSimulator } from './simulator';
 import { grossFiat, SimulationState } from './state';
+import { Decimal } from 'decimal.js-light';
 
 const calcPercent = (state: SimulationState): number =>
   grossFiat(state)
@@ -85,4 +86,24 @@ it('accurately caclulates for a 6 month period', async () => {
 
   const r = runSim(sim, startDate, startDate.plus({ year: 1 }));
   expect(calcPercent(r)).toBeCloseTo(0.16388);
+})
+
+// Manual validate: do the results from a worst-10-year period work?
+it('makes sense', async () => {
+  const data = await fetchMarketData();
+  const start = DateTime.fromSQL('2001-03-01');
+  const params = createParams({
+    credit: { weekly: 100, cashBackRate: 0 },
+    income: { weekly: 100 },
+    shockAbsorber: {
+      maximumProtected: new Decimal(500),
+      cushionDown: new Decimal(0.5),
+      cushionUp: new Decimal(0.066),
+      trailingMonths: new Decimal(12),
+    }
+  });
+  const sim = new ReturnSimulator(data, params);
+  // run for 10 years.
+  const returns = runSim(sim, start, start.plus({ year: 10 }));
+  expect(returns.coin.gt(0)).toBeTruthy();
 })

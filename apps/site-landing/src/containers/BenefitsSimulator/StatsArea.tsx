@@ -53,7 +53,9 @@ const getTableData = (values: SimulationState[], percentile: number) => {
   const upperBoundIdx = Math.floor(midIndex - 1 + midIndex * percentile);
 
   const principal = values
-    .reduce((p, curr) => p.add(curr.principal), zero)
+    .reduce((p, curr) => p.add(curr.principal)
+                          .sub(curr.credit.current)
+                          .sub(curr.credit.balanceDue), zero)
     .div(values.length);
   const offset = values
     .reduce((p, curr) => p.add(curr.usdForCo2Offsets), zero)
