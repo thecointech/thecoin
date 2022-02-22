@@ -8,16 +8,12 @@ import { Grid, Header } from 'semantic-ui-react';
 import { Form } from './Form';
 import { BenefitsGraph } from './Graph';
 import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateAccountBanner';
-import { createParams, MarketData, fetchMarketData, SimulationParameters } from './simulator';
+import { MarketData, fetchMarketData, SimulationParameters } from './simulator';
 import styles from './styles.module.less';
 import { StatsArea } from './StatsArea';
 import { BenefitsReducer } from './reducer';
 import { CopyToClipboard } from '@thecointech/shared/components/CopyToClipboard';
-import { useLocation } from 'react-router';
-import { Location } from 'history';
-import queryString from 'query-string';
-import { log } from '@thecointech/logging';
-import { Decimal } from 'decimal.js-light';
+import { getInitParams } from './init';
 
 const translations = defineMessages({
   title: {
@@ -34,28 +30,22 @@ const translations = defineMessages({
   }
 });
 
-const defaultParams = createParams({initialBalance: 1000});
-
-type QueryProps = { sim: any };
+// Put this outside the React component so it
+// evaluates first (and only once)
+const init = getInitParams();
 
 export function Compare() {
 
-  const [params, setParams] = useState(defaultParams);
-  const [years, setYears] = useState(10);
+  const [params, setParams] = useState(init.params);
+  const [years, setYears] = useState(init.years);
   const [fxData, setFxData] = useState<MarketData[]|undefined>();
   const [snpData, setSnPData] = useState<MarketData[]|undefined>();
 
   BenefitsReducer.useStore();
 
   // Fetch src data
-  const location = useLocation<QueryProps>();
   useEffect(() => {
-    // First, update our params if there is anything in the query string
-    const queryParams = getQueryParams(location);
-    if (queryParams) {
-      if (queryParams.years) setYears(queryParams.years);
-      if (queryParams.params) setParams(queryParams.params);
-    }
+
 
     fetchMarketData().then(setSnPData);
     setFxData([]);
@@ -121,65 +111,3 @@ function getLink(params: SimulationParameters, years: number) {
 
   return `${window.location.origin}/#/compare?sim=${encodeURIComponent(JSON.stringify(sanitized))}`;
 }
-
-// Clean the incoming data and convert to appropriate types
-function parseDecimals(def: any, src: any): any {
-  const dest = {} as any;
-  for (const key in def) {
-    // If present in query, use that value
-    dest[key] = (src[key] !== undefined)
-      ? new Decimal(src[key])
-      : def[key]
-  }
-  return dest;
-}
-
-function parseData(def: any, src: any) {
-  if (!def) return;
-  const dest = {} as any;
-  for (const key in def) {
-    // If present in query, use that value
-    if (src[key] !== undefined) {
-
-      switch(key) {
-        case 'adjustForInflation':  dest[key] = !!src[key]; break;
-        case 'shockAbsorber':  dest[key] = parseDecimals(def[key], src[key]); break;
-        case 'income':
-        case 'cash':
-        case 'credit':
-          dest[key] = parseData(def[key], src[key]);
-          break;
-        default:
-          dest[key] = parseFloat(src[key].toString());
-          break;
-      }
-    }
-    // else, just use the default
-    else {
-      dest[key] = def[key];
-    }
-  }
-  return dest;
-}
-
-function getQueryParams(location: Location<QueryProps>) {
-
-  try {
-    const { sim } = queryString.parse(location.search);
-    if (sim) {
-      const { years, ...rest } = JSON.parse(sim?.toString());
-      const params = parseData(defaultParams, rest);
-      return {
-        years: years ? parseInt(years.toString()) : undefined,
-        params,
-      }
-    }
-  }
-  catch (e) {
-    // We don't really care.
-    log.info(`Could not parse sim query params: ${e.message}`);
-  }
-  return null;
-}
-
-

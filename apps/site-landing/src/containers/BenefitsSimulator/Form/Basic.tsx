@@ -7,7 +7,7 @@ import styles from './styles.module.less';
 
 export const basic = defineMessages({
   startingValue: {
-    defaultMessage: 'Starting value:',
+    defaultMessage: 'Initial Deposit:',
     description: 'site.compare.label.rangeStarting: label for Starting Value in the compare page',
   },
   startingValueTooltip: {
@@ -32,7 +32,6 @@ export const Basic = ({params, setParams, years, setYears}: Props) =>
       tooltip={basic.startingValueTooltip}
       className="x6spaceBefore"
       scaleType="currency"
-      currency="CAD"
       maximum={1000}
       step={1}
       initial={params.initialBalance}
@@ -43,8 +42,7 @@ export const Basic = ({params, setParams, years, setYears}: Props) =>
       label={basic.rangeDuration}
       tooltip={basic.rangeDurationTooltip}
       className="x6spaceBefore"
-      scaleType="unit"
-      unit="year"
+      scaleType="years"
       maximum={60}
       initial={years}
       onChange={v => setYears(Math.max(1, v))}
