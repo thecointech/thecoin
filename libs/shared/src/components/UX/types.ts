@@ -31,7 +31,7 @@ export type BaseProps<T=string> = {
   onValidate: ValidateCB<T>;
 
   tooltip?: MessageWithValues;
-  placeholder: MessageDescriptor;
+  placeholder?: MessageDescriptor;
 
   defaultValue?: T;
   resetToDefault?: number;

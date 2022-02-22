@@ -1,0 +1,43 @@
+@import "~@thecointech/site-semantic-theme/variables.less";
+
+.numeric {
+  :global(.ui.input)>input {
+    text-align: right;
+
+    /* Chrome, Safari, Edge, Opera */
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    }
+
+    /* Firefox */
+    &[type=number] {
+      -moz-appearance: textfield !important;
+    }
+  }
+
+  &.symbol {
+    span {
+      position: relative;
+      :global(.ui.input)>input {
+        padding-right: 24px;
+      }
+      &::after {
+        position: absolute;
+        font-size: .75rem;
+        line-height: .75rem;
+        bottom: 50%;
+        transform: translate(-20px, 6px);
+      }
+    }
+  }
+  &.percent span::after {
+    content: '%'
+  }
+  &.currency span::after {
+    content: '$'
+  }
+  &.years span::after {
+    content: 'yrs';
+  }
+}

@@ -85,7 +85,7 @@ export const UxInput = (props: BaseProps) => {
           onChange={(_, { value }) => localChange(value)}
           onBlur={onBlur}
           value={value}
-          placeholder={intl.formatMessage(placeholder)}
+          placeholder={placeholder ? intl.formatMessage(placeholder) : ''}
           type={type}
           data-tooltip={tt}
           readOnly={props.readOnly}
