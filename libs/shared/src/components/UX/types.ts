@@ -30,8 +30,8 @@ export type BaseProps<T=string> = {
   // Called each keystroke to validate current data
   onValidate: ValidateCB<T>;
 
-  tooltip: MessageWithValues;
-  placeholder: MessageDescriptor;
+  tooltip?: MessageWithValues;
+  placeholder?: MessageDescriptor;
 
   defaultValue?: T;
   resetToDefault?: number;

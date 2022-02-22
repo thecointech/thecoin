@@ -107,10 +107,6 @@
     "defaultMessage": "Better Farming",
     "description": "site.wedomore.smallPlant.title: Title for the smallPlant photo for the We Do More page"
   },
-  "CLRpml": {
-    "defaultMessage": "Any weekly spending that can be put{br}on the credit card, eg groceries and gas",
-    "description": "Simulator Tooltip: Weekly Cash"
-  },
   "CTUhFX": {
     "defaultMessage": "Once-a-year expenses that cannot be put on a credit card",
     "description": "Simulator Tooltip: Yearly Cash"
@@ -203,6 +199,10 @@
   "P82KCx": {
     "defaultMessage": "Earth’s Healthier",
     "description": "site.homepage.landscape.stickers.right.title: The title for the homepage landscape right sticker"
+  },
+  "QwwJrJ": {
+    "defaultMessage": "Any weekly spending that can be put{br}on a credit card, eg groceries and gas",
+    "description": "Simulator Tooltip: Weekly Cash"
   },
   "RR4faR": {
     "defaultMessage": "{years} years"
@@ -351,10 +351,6 @@
     "defaultMessage": "Thank you for subscribing!",
     "description": "site.subscribe.confirmation.title: Title for the 'Thank you for subscribing!' page"
   },
-  "kxASOR": {
-    "defaultMessage": "Any weekly spending that cannot{br}be put on the credit card, eg babysitters or drugs",
-    "description": "Simulator Tooltip: Weekly Cash"
-  },
   "lrlibv": {
     "defaultMessage": "Offsetting CO2 is effective. Extremely effective!",
     "description": "site.homepage.underwater.difference.description: Description for the homepage underwater difference subpart"
@@ -366,6 +362,10 @@
   "mmRoRq": {
     "defaultMessage": "Regular weekly earnings, eg paycheques",
     "description": "Simulator Tooltip: Weekly Income"
+  },
+  "msagVQ": {
+    "defaultMessage": "Any weekly spending that cannot{br}be put on a credit card, eg babysitter",
+    "description": "Simulator Tooltip: Weekly Cash"
   },
   "n0wGb/": {
     "defaultMessage": "Enjoy the benefits of investment growth on every dollar with our online spending account.",

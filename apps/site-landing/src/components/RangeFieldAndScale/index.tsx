@@ -1,20 +1,19 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { FormattedMessage, MessageDescriptor } from 'react-intl';
-import type { NumberFormatOptionsStyle } from '@formatjs/ecma402-abstract';
+import { FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 
 import { Range, getTrackBackground } from 'react-range';
 import { LessVars } from '@thecointech/site-semantic-theme/variables';
 import styles from './styles.module.less';
-import { UxNumeric } from '@thecointech/shared';
+import { UxNumeric, UxNumericType } from '@thecointech/shared';
+import { MessageWithValues } from '@thecointech/shared/types';
 
 export type Props = {
  label: MessageDescriptor,
- tooltip: MessageDescriptor,
- scaleType?: NumberFormatOptionsStyle;
+ tooltip: MessageWithValues,
+ scaleType?: UxNumericType;
  className?: string;
  unit?: string,
- currency?: 'CAD',
  initial?: number;
  maximum: number;
  minimum?: number;
@@ -25,6 +24,7 @@ export type Props = {
 export const RangeFieldAndScale = (props: Props) => {
   const [value, setValue] = useState(props.initial ?? 0);
 
+  const tooltip = useIntl().formatMessage(props.tooltip, props.tooltip.values)
   const minimum = props.minimum ?? 0;
   const { maximum } = props;
   const step = props.step ?? 1;
@@ -35,34 +35,18 @@ export const RangeFieldAndScale = (props: Props) => {
   };
 
   return (
-    <div className={`${styles.container} ${props.className ?? ''}`}>
+    <div className={`${styles.container} ${props.className ?? ''}`} data-tooltip={tooltip}>
       <div className={styles.label}>
         <FormattedMessage {...props.label} tagName="span" />
         <UxNumeric
           defaultValue={value}
           onValue={v => onChange(v ?? props.initial ?? 0)}
           onValidate={() => null}
-          tooltip={props.tooltip}
-          placeholder={props.label}
 
           min={minimum}
           //max={maximum}
-          // currency={props.currency}
-          // currencyDisplay="narrowSymbol"
-          // style={props.scaleType}
-          // unit={props.unit}
-          // minimumFractionDigits={0}
-          // maximumFractionDigits={0}
+          type={props.scaleType}
         />
-        {/* <FormattedNumber
-          value={value}
-          currency={props.currency}
-          currencyDisplay="narrowSymbol"
-          style={props.scaleType}
-          unit={props.unit}
-          minimumFractionDigits={0}
-          maximumFractionDigits={0}
-        /> */}
       </div>
       <Range
         step={step}

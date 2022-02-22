@@ -104,3 +104,10 @@ export const netFiat = (s: SimulationState) =>
     .sub(s.credit.current)
     .sub(s.credit.balanceDue)
     .toNumber()
+
+export const balanceChange = (state: SimulationState, fiatChange: Decimal) => {
+  const coinChange = toCoin(fiatChange, state.market);
+  state.coin = state.coin.add(coinChange);
+  state.principal = state.principal.add(fiatChange);
+  return state;
+}

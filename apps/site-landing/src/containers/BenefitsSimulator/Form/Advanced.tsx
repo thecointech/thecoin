@@ -80,7 +80,7 @@ const tooltips = {
   }),
   cash: defineMessages({
     weekly: {
-      defaultMessage: 'Any weekly spending that cannot{br}be put on the credit card, eg babysitters or drugs',
+      defaultMessage: 'Any weekly spending that cannot{br}be put on a credit card, eg babysitter',
       description: 'Simulator Tooltip: Weekly Cash',
       values: {br: "\n"},
     },
@@ -96,7 +96,7 @@ const tooltips = {
   }),
   credit: defineMessages({
     weekly: {
-      defaultMessage: 'Any weekly spending that can be put{br}on the credit card, eg groceries and gas',
+      defaultMessage: 'Any weekly spending that can be put{br}on a credit card, eg groceries and gas',
       description: 'Simulator Tooltip: Weekly Cash',
       values: {br: "\n"},
     },
@@ -154,7 +154,6 @@ export const Advanced = ({ params, setParams, years, setYears }: Props) => {
         label={basic.startingValue}
         tooltip={basic.startingValueTooltip}
         scaleType="currency"
-        currency="CAD"
         maximum={1000}
         step={1}
         initial={params.initialBalance}
@@ -163,8 +162,7 @@ export const Advanced = ({ params, setParams, years, setYears }: Props) => {
       <RangeFieldAndScale
         label={basic.rangeDuration}
         tooltip={basic.rangeDurationTooltip}
-        scaleType="unit"
-        unit="year"
+        scaleType="years"
         maximum={60}
         initial={years}
         onChange={v => setYears(Math.max(1, v))}
@@ -267,7 +265,6 @@ const PeriodicalGroup: React.FC<PeriodicalProps> = ({ tooltips, title, index, pa
           label={translations.weekly}
           tooltip={tooltips.weekly}
           scaleType="currency"
-          currency="CAD"
           maximum={1000}
           step={1}
           initial={params.weekly}
@@ -277,7 +274,6 @@ const PeriodicalGroup: React.FC<PeriodicalProps> = ({ tooltips, title, index, pa
           label={translations.monthly}
           tooltip={tooltips.monthly}
           scaleType="currency"
-          currency="CAD"
           maximum={1000}
           step={1}
           initial={params.monthly}
@@ -287,7 +283,6 @@ const PeriodicalGroup: React.FC<PeriodicalProps> = ({ tooltips, title, index, pa
           label={translations.yearly}
           tooltip={tooltips.yearly}
           scaleType="currency"
-          currency="CAD"
           maximum={1000}
           step={1}
           initial={params.yearly}
@@ -349,7 +344,6 @@ const ShockAbsorberGroup: React.FC<GroupProps<ShockAbsorber>> = ({ index, params
           label={translations.maximumProtected}
           tooltip={tooltips.shockAbsorber.maximumProtected}
           scaleType="currency"
-          currency="CAD"
           maximum={5000}
           step={100}
           initial={params.maximumProtected.toNumber()}

@@ -9,7 +9,16 @@ export default {
   args: {
     min: 0,
     max: 100,
-  }
+    type: "percent",
+  },
+  argTypes: {
+    type: {
+      control: {
+        type: 'radio',
+        options: ["percent","number","currency","years"]
+      },
+    },
+  },
 } as Meta;
 
 const makeIntl = (el: string) => ({ id: el, defaultMessage: el })
@@ -20,7 +29,7 @@ export const Numeric: Story = (args) => {
     return n && n % 2 ? makeIntl(`${n} is not even`) : null;
   }
   return (
-    <Form style={{ paddingTop: 50 }}>
+    <Form style={{ paddingTop: 50, width: 300 }}>
       <UxNumeric
         {...args}
         tooltip={makeIntl("Must be an even number")}
