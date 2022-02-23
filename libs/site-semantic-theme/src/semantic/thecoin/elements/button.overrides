@@ -16,5 +16,5 @@
     }
 }
 .ui.teal.buttons .button, .ui.teal.button{
-        color: @@theCoinPaletteGreen5 !important;
+        color: @theCoinPaletteGreen5 !important;
 }
