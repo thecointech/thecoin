@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.67](https://github.com/thecointech/thecoin/compare/v0.2.66...v0.2.67) (2022-02-23)
+
+**Note:** Version bump only for package @thecointech/rates-service
+
+
+
+
+
+## [0.2.66](https://github.com/thecointech/thecoin/compare/v0.2.65...v0.2.66) (2022-02-23)
+
+**Note:** Version bump only for package @thecointech/rates-service
+
+
+
+
+
+## [0.2.65](https://github.com/thecointech/thecoin/compare/v0.2.64...v0.2.65) (2022-02-23)
+
+**Note:** Version bump only for package @thecointech/rates-service
+
+
+
+
+
+## [0.2.64](https://github.com/thecointech/thecoin/compare/v0.2.63...v0.2.64) (2022-02-22)
+
+**Note:** Version bump only for package @thecointech/rates-service
+
+
+
+
+
 ## [0.2.63](https://github.com/thecointech/thecoin/compare/v0.2.62...v0.2.63) (2022-02-20)
 
 **Note:** Version bump only for package @thecointech/rates-service

@@ -328,6 +328,10 @@
     "defaultMessage": "We would love to get to know you better! Would you mind letting us know your details?",
     "description": "site.subscribe.confirmation.description: Descriton for the 'Thank you for subscribing!' page"
   },
+  "iAWuxx": {
+    "defaultMessage": "Initial Deposit:",
+    "description": "site.compare.label.rangeStarting: label for Starting Value in the compare page"
+  },
   "iCleoo": {
     "defaultMessage": "Prevent soil damage and erosion and improve peoples lives",
     "description": "site.wedomore.smallPlant.description: Title for the smallPlant photo for the We Do More page"
@@ -464,10 +468,6 @@
   "xoodDX": {
     "defaultMessage": "FAQ",
     "description": "site.helpDocs.title: title for the FAQ page"
-  },
-  "yZZmtI": {
-    "defaultMessage": "Starting value:",
-    "description": "site.compare.label.rangeStarting: label for Starting Value in the compare page"
   },
   "yqcj84": {
     "defaultMessage": "How Anyone Can Get Rich Slow",
