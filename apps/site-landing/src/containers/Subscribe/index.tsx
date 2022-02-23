@@ -10,9 +10,6 @@ const translations = defineMessages({
   description2 : {
       defaultMessage: 'Subscribe to our newsletter:',
       description: 'Footer CTA Part2'},
-  button : {
-    defaultMessage: 'Subscribe',
-    description: 'site.subscribe.button: Button for the bottom subscription part for the site'}
 });
 
 export const Subscribe = () => {

@@ -6,7 +6,6 @@ import { NotFoundPage } from '@thecointech/shared/containers/NotFoundPage';
 import { Healthier } from 'containers/Healthier';
 import { WeDoMore } from 'containers/WeDoMore';
 import { Compare } from 'containers/BenefitsSimulator';
-import { Confirm } from 'containers/Subscribe/Confirm';
 import { Learn } from 'containers/Learn';
 import { HelpDocs } from 'containers/HelpDocs';
 import { Blog } from 'containers/Blog';
@@ -16,7 +15,6 @@ import { Privacy } from 'containers/Privacy';
 export const Routes = () =>
   <Switch>
     <Route path="/" exact component={HomePage} />
-    <Route path="/newsletter/confirm" exact component={Confirm} />
     <Route path="/learn" component={Learn} />
     <Route path="/healthier" component={Healthier} />
     <Route path="/wedomore" component={WeDoMore} />
