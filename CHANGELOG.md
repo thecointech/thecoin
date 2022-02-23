@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.65](https://github.com/thecointech/thecoin/compare/v0.2.64...v0.2.65) (2022-02-23)
+
+**Note:** Version bump only for package the-coin
+
+
+
+
+
 ## [0.2.64](https://github.com/thecointech/thecoin/compare/v0.2.63...v0.2.64) (2022-02-22)
 
 **Note:** Version bump only for package the-coin

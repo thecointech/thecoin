@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/account",
-  "version": "0.2.64",
+  "version": "0.2.65",
   "description": "TheCoin: Account definition & storage",
   "keywords": [
     "TheCoin",
@@ -48,13 +48,13 @@
     }
   },
   "dependencies": {
-    "@thecointech/contract-core": "^0.2.64",
-    "@thecointech/fx-rates": "^0.2.64",
-    "@thecointech/idx": "^0.2.64",
-    "@thecointech/logging": "^0.2.64",
-    "@thecointech/signers": "^0.2.64",
-    "@thecointech/tx-blockchain": "^0.2.64",
-    "@thecointech/utilities": "^0.2.64"
+    "@thecointech/contract-core": "^0.2.65",
+    "@thecointech/fx-rates": "^0.2.65",
+    "@thecointech/idx": "^0.2.65",
+    "@thecointech/logging": "^0.2.65",
+    "@thecointech/signers": "^0.2.65",
+    "@thecointech/tx-blockchain": "^0.2.65",
+    "@thecointech/utilities": "^0.2.65"
   },
   "devDependencies": {
     "jest": "*"

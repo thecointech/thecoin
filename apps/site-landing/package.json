@@ -2,7 +2,7 @@
   "name": "@thecointech/site-landing",
   "productName": "THECoin: Website - Landing",
   "private": true,
-  "version": "0.2.64",
+  "version": "0.2.65",
   "description": "THECoin: Future-proof currency",
   "repository": {
     "type": "git",
@@ -57,9 +57,9 @@
   },
   "dependencies": {
     "@prismicio/client": "^5.1.0",
-    "@thecointech/shared": "^0.2.64",
-    "@thecointech/site-base": "^0.2.64",
-    "@thecointech/utilities": "^0.2.64",
+    "@thecointech/shared": "^0.2.65",
+    "@thecointech/site-base": "^0.2.65",
+    "@thecointech/utilities": "^0.2.65",
     "connected-react-router": "^6.6.1",
     "papaparse": "^5.1.1",
     "prismic-reactjs": "^1.3.4",
