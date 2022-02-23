@@ -1,0 +1,105 @@
+<style>
+  #container {
+    display: flex;
+    justify-content: center;
+    line-height: normal;
+    text-align: left;
+    background-color: transparent;
+    box-shadow: none;
+    height: auto;
+    font-family: Montserrat, Verdana, sans-serif;
+  }
+  #container * {
+    box-sizing: border-box;
+  }
+  #container .w-preview-fields-content-row {
+    padding-right: 0 !important;
+  }
+  #container .w-preview-fields-content-cell {
+    padding-right: 20px
+  }
+  #container .strinput{
+    font-size: 14px;
+    height: 40px;
+    padding-left: 17px;
+    border-radius: 0.625rem;
+    border: 1px solid rgba(97, 193, 184, 0.5);
+    box-shadow: 0em 0em 0em 0em transparent inset;
+    color: #2B5250;
+    font-weight: 700;
+    width: 100%;
+  }
+
+  #container .strinput:hover {
+    box-shadow: 0px 0px 2px #61C1B8 !important;
+  }
+
+  #container .strinput:focus-visible {
+    outline: none;
+    border-color: #138175;
+    box-shadow: 0px 0em 0em 0em rgba(34, 36, 38, 0.35) inset;
+  }
+
+  #container input[type=checkbox] {
+    color: red;
+  }
+
+  #container .mj-form-button {
+    margin: auto;
+    width: 235px;
+    border-radius: 10px;
+    font-size: 12px;
+    line-height: 12px;
+    text-align: center;
+    color: white;
+    background-color: #20B58D;
+    box-shadow: 1px 1px 4px 0px #00000040;
+    padding: 14px 0px;
+  }
+
+  #container .w-preview-consent {
+    color: white;
+    text-align: center;
+    padding: 10px 0px 30px;
+  }
+</style>
+
+<div class="mj-embedded mj-horizontal" id="container">
+  <div class="mj-embedded-content">
+    <div class="mj-embedded-footer">
+      <div class="mj-form" style="display: table; width: 100%;">
+        <div class="w-preview-field-table" style=" display: block; width: 100%;">
+          <div class="w-preview-fields-content-row" style=" display: flex; flex-direction: row;">
+            <div class="w-preview-fields-content-cell">
+              <input class="w-preview-fields-content-cell-field-email strinput" type="email" placeholder="Email Address"
+                name="w-field-field-185618-1149821-928975-email" required="required" />
+            </div>
+            <div class="w-preview-fields-content-cell">
+              <input class="w-preview-fields-content-cell-field-246703 strinput" type="text" placeholder="firstname"
+                name="w-field-field-185618-1149821-928975-246703">
+            </div>
+            <div class="w-preview-fields-content-cell">
+              <input class="w-preview-fields-content-cell-field-308177 strinput" type="text" placeholder="lastname"
+                name="w-field-field-185618-1149821-928975-308177">
+            </div>
+
+          </div>
+        </div>
+        <div class="w-preview-consent">
+          <input id="w-preview-consent-checkbox" type="checkbox" name="w-preview-consent-checkbox" required="required"
+            placeholder="">
+          <div id="w-preview-consent-checkbox-label"
+            style="padding-left: 5px; font-size: 12px; display: inline-block;">I
+            agree to receive this newsletter and know that I can easily unsubscribe at any time.</div>
+        </div>
+        <div class="mj-form-button">
+          <div class="mj-subscribe-button">
+            <div class="mj-subscribe-button-content">
+              <b>SUBSCRIBE</b>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
