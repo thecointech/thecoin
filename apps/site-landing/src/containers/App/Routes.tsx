@@ -11,6 +11,7 @@ import { HelpDocs } from 'containers/HelpDocs';
 import { Blog } from 'containers/Blog';
 import { TOS } from 'containers/TOS';
 import { Privacy } from 'containers/Privacy';
+import { ApplyBeta } from '../ApplyBeta';
 
 export const Routes = () =>
   <Switch>
@@ -23,6 +24,7 @@ export const Routes = () =>
     <Route path="/blog" component={Blog} />
     <Route path="/faq/:category?" component={HelpDocs} />
     <Route path="/tos" component={TOS} />
+    <Route path="/applyBeta" component={ApplyBeta} />
     <Route path="/privacy" component={Privacy} />
     <Route component={NotFoundPage} />
   </Switch>

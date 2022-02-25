@@ -11,5 +11,5 @@
       {}
     ]
   },
-  "include": ["src/**/*", "src/**/*.json"]
+  "include": ["src/**/*", "src/**/*.json", "../../apps/site-landing/src/containers/RequestReferral"]
 }
