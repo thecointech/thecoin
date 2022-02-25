@@ -57,6 +57,7 @@ body {
   writing-mode: vertical-rl;
   text-orientation: upright;
 }
+
 /////////////////////////////////////////////////////////////
 // Borders
 .border-top-green4{
@@ -68,24 +69,6 @@ body {
   border-bottom: 1px solid @theCoinPaletteGreen4Faded;
   padding-bottom: 20px;
 }
-
-/////////////////////////////////////////////////////////////
-// Links
-
-/*
-a{
-    font-size: 12px;
-    font-weight: @bold;
-    text-transform: uppercase;
-    padding-bottom: 5px;
-    border-bottom: 2px solid @primaryColor;
-}
-.left.menu{
-  a {
-    border-bottom: none;
-  }
-}
-*/
 
 /////////////////////////////////////////////////////////////
 // Sets header container sizing.  TODO: Will be refactored out when
