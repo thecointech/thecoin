@@ -1,30 +1,34 @@
-.content{
-    text-align: center;
-  
-    .illustration{
-        img{
-            text-align: left;
-            float: left;
-        }
-    }
-	.container {
-		display: flex;
-		flex-direction: column;
-	}
-	
-	.icon {
-		min-width: 190px;
-	}
-	
-	#dropzone {
-		padding: 60px;
-		margin-bottom: 20px;
-		align-items: center;
-		border-radius: 2px !important;
-		border: 2px dashed ;
-		outline: none;
-		transition: border .24s ease-in-out;
-		display: block;
-	}
-}
+@import "~@thecointech/site-semantic-theme/variables.less";
 
+.content {
+  text-align: center;
+
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+  .icon {
+    min-width: 190px;
+  }
+  .dropzone {
+    padding: 60px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    align-items: center;
+    border-radius: 10px;
+    border: 2px dashed;
+    outline: none;
+    transition: border .24s ease-in-out;
+    display: block;
+    cursor: pointer;
+
+    &:hover {
+      border-color: @theCoinSecondaryGreenDark;
+    }
+  }
+  .active {
+    border-color: @theCoinSecondaryGreenDark;
+  }
+}
