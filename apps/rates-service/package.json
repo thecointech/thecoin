@@ -38,6 +38,7 @@
   "main": "./build/main.js",
   "dependencies": {
     "@google-cloud/firestore": "4.12.3",
+    "@thecointech/async": "^0.2.67",
     "@thecointech/email": "^0.2.67",
     "@thecointech/firestore": "^0.2.67",
     "@thecointech/fx-rates": "^0.2.67",
