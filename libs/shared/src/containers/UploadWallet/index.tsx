@@ -66,7 +66,6 @@ export const UploadWallet = (props: Props) => {
   }, [acceptedFiles])
 
   const className = `font-label ${styles.dropzone} ${isDragActive ? styles.active : ''}`;
-  console.log(className);
 
   return (
     <Container className={styles.content}>
