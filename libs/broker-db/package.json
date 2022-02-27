@@ -31,7 +31,6 @@
   "exports": {
     ".": "./build/index.js",
     "./transaction": "./build/transaction/index.js",
-    "./newsletter": "./build/newsletter/index.js",
     "./*": [
       "./build/*.js"
     ]

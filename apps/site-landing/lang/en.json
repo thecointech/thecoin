@@ -39,10 +39,6 @@
     "defaultMessage": "Earths’ Healthier",
     "description": "site.homepage.underwater.title: Title for that homepage underwater part"
   },
-  "2+ZDlf": {
-    "defaultMessage": "Country",
-    "description": "site.subscribe.confirmation.form.country: label for last name field"
-  },
   "2E2eVK": {
     "defaultMessage": "Keep Your Profits",
     "description": "site.homepage.wealthier.profits.title: The title for the profits for the homepage wealthier"
@@ -86,10 +82,6 @@
   "746Zaq": {
     "defaultMessage": "The maximum amount protected by the shock-absorber.{br}The smaller this is, the faster your account grows on average,{br}but the worse it will do in during down periods",
     "description": "Simulator Tooltip: shockabsorber cushion"
-  },
-  "81qKOv": {
-    "defaultMessage": "Please enter a valid email",
-    "description": "site.subscribe.email.invalid: Message we give a user when the subscription failed"
   },
   "8rHqL+": {
     "defaultMessage": "Every dollar earns every day. As a non-profit, we want you to keep that benefit.",
@@ -215,10 +207,6 @@
     "defaultMessage": "Go back",
     "description": "site.blog.backLink: Link to go back from article"
   },
-  "S/Lh3i": {
-    "defaultMessage": "Family Name",
-    "description": "site.subscribe.confirmation.form.lastname: label for last name field"
-  },
   "Th2OVj": {
     "defaultMessage": "Read More",
     "description": "site.blog.articleLink: Link to access article page in blog"
@@ -235,10 +223,6 @@
     "defaultMessage": "What percentage of spending does the credit card earn as cashback.",
     "description": "Simulator Tooltip: cashback"
   },
-  "UTXdBk": {
-    "defaultMessage": "Given Name",
-    "description": "site.subscribe.confirmation.form.firstname: label for first name field"
-  },
   "V0XJgr": {
     "defaultMessage": "Average value after"
   },
@@ -252,10 +236,6 @@
   },
   "Ycz6kB": {
     "defaultMessage": "This graph shows how The Coin account values will probably grow after"
-  },
-  "YpYP+S": {
-    "defaultMessage": "SUBSCRIPTION",
-    "description": "site.subscribe.confirmation.aboveTheTitle: Text above the title for the 'Thank you for subscribing!' page"
   },
   "YwCHN1": {
     "defaultMessage": "Why We Can Be So Confident",
@@ -324,10 +304,6 @@
     "defaultMessage": "Yearly:",
     "description": "Simulator: Yearly Income"
   },
-  "hfXNxT": {
-    "defaultMessage": "We would love to get to know you better! Would you mind letting us know your details?",
-    "description": "site.subscribe.confirmation.description: Descriton for the 'Thank you for subscribing!' page"
-  },
   "iAWuxx": {
     "defaultMessage": "Initial Deposit:",
     "description": "site.compare.label.rangeStarting: label for Starting Value in the compare page"
@@ -350,10 +326,6 @@
   "kEiX9n": {
     "defaultMessage": "The benefits of a chequing, savings, and investing account all in one!",
     "description": "site.createAccountBanner.title: The benefits of a chequing, savings, and investing account all in one!"
-  },
-  "kWd+Qa": {
-    "defaultMessage": "Thank you for subscribing!",
-    "description": "site.subscribe.confirmation.title: Title for the 'Thank you for subscribing!' page"
   },
   "lrlibv": {
     "defaultMessage": "Offsetting CO2 is effective. Extremely effective!",
@@ -383,10 +355,6 @@
     "defaultMessage": "The future is brighter",
     "description": "site.homepage.landscape.title: The title for the homepage"
   },
-  "pQMOTC": {
-    "defaultMessage": "Subscribe",
-    "description": "site.subscribe.button: Button for the bottom subscription part for the site"
-  },
   "pRmrf0": {
     "defaultMessage": "Make a Difference",
     "description": "site.homepage.underwater.difference.title: Title for the homepage underwater difference subpart"
@@ -403,13 +371,6 @@
     "defaultMessage": "Who Wins?",
     "description": "site.homepage.wealthier.profits.link: The link for the profits for the homepage wealthier"
   },
-  "quX+ke": {
-    "defaultMessage": "I want to receive the newsletter",
-    "description": "site.subscribe.confirmation.form.subcheckbox: label for subcheckbox field"
-  },
-  "site.subscribe.confirmation.button": {
-    "defaultMessage": "Update Details!"
-  },
   "t92bBR": {
     "defaultMessage": "as we work to offset our clients’ emissions.",
     "description": "site.homepage.underwater.description: Description for the homepage underwater part2"
@@ -417,17 +378,9 @@
   "tFFMkF": {
     "defaultMessage": "Pause"
   },
-  "tKAFVB": {
-    "defaultMessage": "Success: check your emails",
-    "description": "site.subscribe.success: Message we give a user when the subscription is a success"
-  },
   "tzKdah": {
     "defaultMessage": "Start Now",
     "description": "site.homepage.wealthier.startnow.title: The title for the star now for the homepage wealthier"
-  },
-  "u1YH39": {
-    "defaultMessage": "City",
-    "description": "site.subscribe.confirmation.form.city: label for city field"
   },
   "uGt+BZ": {
     "defaultMessage": "Safe drinking water without boiling protects people and forests",
@@ -436,14 +389,6 @@
   "vLjur9": {
     "defaultMessage": "You’re Wealthier",
     "description": "site.homepage.landscape.stickers.left.title: The title for the homepage landscape left sticker"
-  },
-  "vMhtx9": {
-    "defaultMessage": "Email",
-    "description": "site.subscribe.confirmation.form.email: label for email field"
-  },
-  "w9xyw0": {
-    "defaultMessage": "Signup failed: please contact support@thecoin.io",
-    "description": "site.subscribe.error: Message we give a user when the subscription failed (already subscribed or server)"
   },
   "wLTPa8": {
     "defaultMessage": "How much will you make?",
