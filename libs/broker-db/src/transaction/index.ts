@@ -49,7 +49,7 @@ export async function getActionFromInitial<Type extends ActionType>(address: str
     case 1:
       const action = await toAction(address, type, query.docs[0]);
       // Assert equivalency
-      assertSame(action.data.date, initial.date);
+      //assertSame(action.data.date, initial.date);
       assertSame(action.data.initial, initial.initial);
       return action;
     default:

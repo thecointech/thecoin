@@ -1,8 +1,7 @@
-import { getSigner } from "@thecointech/signers";
 import { log } from "@thecointech/logging";
 import { DepositResult, ETransferErrorCode, RbcApi } from "@thecointech/rbcapi";
 import type { eTransferData } from "@thecointech/tx-gmail";
-import { IsValidAddress, getAddressShortCode } from "@thecointech/utilities";
+import { IsValidAddress } from "@thecointech/utilities";
 import Decimal from "decimal.js-light";
 import { BuyActionContainer, getCurrentState } from "@thecointech/tx-statemachine";
 import { verifyPreTransfer } from "@thecointech/tx-statemachine/transitions";
@@ -60,8 +59,9 @@ async function depositInBank(etransfer: eTransferData, rbcApi: RbcApi, progressC
     }
   }
 
-  const bta = await getSigner("BrokerTransferAssistant");
-  const code = await getAddressShortCode(address, bta);
+  // const bta = await getSigner("BrokerTransferAssistant");
+  // const code = await getAddressShortCode(address, bta);
+  const code = "sdf";
   const prefix = `${name}/${recieved.toSQLDate()}`;
   const result = await rbcApi.depositETransfer(prefix, depositUrl, code, progressCb);
   log.debug(`Deposit result: ${ETransferErrorCode[result.code]}`);

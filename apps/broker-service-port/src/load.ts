@@ -50,7 +50,7 @@ export function convertReconciledFromJson(asJson: any) {
 
 const convertTimestamp = (obj: any, prefix = "") =>
   obj
-    ? Timestamp.fromMillis(obj[`${prefix}seconds`] * 1000 + obj[`${prefix}nanoseconds`] / 100000)
+    ? Timestamp.fromMillis(obj[`${prefix}seconds`] * 1000 + obj[`${prefix}nanoseconds`] / 1000000)
     : undefined;
 const convertTimestamps = (tx: any) => {
   if (tx) {

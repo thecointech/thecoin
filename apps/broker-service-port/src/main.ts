@@ -26,6 +26,10 @@ const builtInAccounts = [
   "0x0C327B7FCC6FF94F606B3D31D534F25B5604A0D1",
   "0xD0C3C0E7E94969B78EFF6BD531DBD6D0E90769F0",
 
+  // Not built-in, but ignore anyway
+  "0x1198AACEF87B53CA5610C68FD83DF9577D54CC0C", // Manual transfer closed out account
+  "0xD86C97292B9BE3A91BD8279F114752248B80E8C5", // Manual transfer closed out account
+
   "51e1153ee05efcf473d581c15b3f7b760ca5ddb3",
   "0x38DE1B6515663DBE145CC54179ADDCB963BB606A",
   "2fe3cbf59a777e8f4be4e712945ffefc6612d46f",
@@ -38,7 +42,7 @@ async function updateFirestore() {
 
   await initialize();
   // Do we have a unique ID for every purchase?
-  for (let i = 21; i < cache.length; i++) {
+  for (let i = 0; i < cache.length; i++) {
     const client = cache[i];
     if (builtInAccounts.includes(NormalizeAddress(client.address)))
       continue;
@@ -57,6 +61,9 @@ async function updateFirestore() {
     console.log(`-- Processing [${i} of ${cache.length}]: ${client.address} --`)
     for (let t = 0; t < client.transactions.length; t++) {
       const tx = client.transactions[t];
+      if (!tx.database) {
+        continue;
+      }
       switch(tx.action) {
         case "Buy": {
           await updateDeposit(tx);

@@ -8,9 +8,11 @@
   },
   "scripts": {
     "dev": "yarn cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node --inspect=9234 -r ts-node/register ./src/main.ts",
+    "current": "yarn cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node --inspect=9234 -r ts-node/register ./src/current/main.ts",
     "devlive": "cross-env CONFIG_NAME=devlive yarn dev",
     "prodtest": "cross-env CONFIG_NAME=prodtest yarn dev",
-    "start": "node -r dotenv/config ./build/index.js",
+    "prodbeta": "cross-env CONFIG_NAME=prodbeta yarn dev",
+    "fetch": "cross-env CONFIG_NAME=prod cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register ./src/current/fetch.ts",
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build"
   },
