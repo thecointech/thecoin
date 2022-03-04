@@ -2,7 +2,7 @@ import { spliceBlockchain } from "./matchBlockchain";
 import { findNames, spliceEmail } from "./matchEmails";
 import { spliceBank } from "./matchBank";
 import { addReconciled } from "./utils";
-import { AllData, Reconciliations, ReconciledRecord, ReconciledHistory, UserReconciled } from "types";
+import { AllData, Reconciliations, ReconciledRecord, ReconciledHistory, UserReconciled } from "./types";
 import { ActionType, AnyAction } from "@thecointech/broker-db";
 import { DateTime } from 'luxon';
 
@@ -50,7 +50,8 @@ export function convertBaseTransactions(data: AllData, type: ActionType) {
 const bankActions = [
   "sendETransfer",
   "payBill",
-  "depositFiat"
+  "depositFiat",
+  "depositFiatManual",
 ]
 
 function fillBank(entry: ReconciledHistory, data: AllData, user: UserReconciled, initiated: DateTime, type: ActionType, maxDays: number) {

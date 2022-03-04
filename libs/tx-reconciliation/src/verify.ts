@@ -31,7 +31,7 @@ function verifyBlockchain(data: AllData) {
   const external = data.blockchain.filter(isExternal)
   const verified = external.length == 0;
   console.log(verified ? "Blockchain Verified" : "Unmatched blockchain transfers found");
-  return true;
+  return verified;
 }
 
 function verifyBank(data: AllData) {
@@ -49,7 +49,8 @@ function verifyBank(data: AllData) {
 
 export const isComplete = (tx: ReconciledRecord) =>
   !(
-    tx.data.history.find(h => h.bank === null || h.blockchain === null)
+    tx.data.history.find(h => h.bank === null || h.blockchain === null) ||
+    tx.database == null
   )
 
 async function verifyReconciled(r: Reconciliations) {
