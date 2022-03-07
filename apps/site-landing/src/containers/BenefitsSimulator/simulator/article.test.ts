@@ -27,7 +27,7 @@ it ('Matches the article with no ShockAbsorber', () => {
   // This is a fairly large discrepancy, but it seems to stem from the fact
   // that our simulation is much more accurate (it operates on a per-week
   // level, rather than the yearly level the spreadsheet runs at)
-  expect(profit).toBeCloseTo(180095.109);
+  expect(profit).toBeCloseTo(180754.639);
 })
 
 it ('Matches article with ShockAbsorber', () => {
@@ -45,5 +45,5 @@ it ('Matches article with ShockAbsorber', () => {
   });
 
   const profit = runSim(params);
-  expect(profit).toBeCloseTo(122574.72);
+  expect(profit).toBeCloseTo(123214.27);
 })
