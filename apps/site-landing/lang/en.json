@@ -79,6 +79,10 @@
     "defaultMessage": "Add $250000 to your retirement - with no money down.",
     "description": "site.homepage.wealthier.growth.description: The title for the growth for the homepage wealthier"
   },
+  "6JMQSM": {
+    "defaultMessage": "What to expect from the beta.",
+    "description": "Title on request access page"
+  },
   "746Zaq": {
     "defaultMessage": "The maximum amount protected by the shock-absorber.{br}The smaller this is, the faster your account grows on average,{br}but the worse it will do in during down periods",
     "description": "Simulator Tooltip: shockabsorber cushion"
@@ -94,6 +98,10 @@
   "A74bw1": {
     "defaultMessage": "Monthly:",
     "description": "Simulator: Monthly Income"
+  },
+  "Awrp+t": {
+    "defaultMessage": "While TheCoin is fully functional, there may be superficial issues, occasional bugs, and changes in functionality.",
+    "description": "Title on request access page"
   },
   "B7gcLo": {
     "defaultMessage": "Better Farming",
@@ -171,6 +179,10 @@
   "M+yWKJ": {
     "defaultMessage": "Compare Outcomes",
     "description": "site.homepage.underwater.difference.link: Link for the homepage underwater difference subpart"
+  },
+  "NNfXRH": {
+    "defaultMessage": "TheCoin is currently in a closed beta.{br} Apply for early access and help us build the best possible product",
+    "description": "Title on request access page"
   },
   "NtaMxG": {
     "defaultMessage": "Your money is always earning. Make it earn for you.",
@@ -351,6 +363,10 @@
     "defaultMessage": "Once-a-year expenses that can be put on a credit card, eg vactions",
     "description": "Simulator Tooltip: Yearly Cash"
   },
+  "nuzKA2": {
+    "defaultMessage": "Thank you for your interest!",
+    "description": "Super-title on apply beta"
+  },
   "p695DK": {
     "defaultMessage": "The future is brighter",
     "description": "site.homepage.landscape.title: The title for the homepage"
@@ -389,6 +405,10 @@
   "vLjur9": {
     "defaultMessage": "You’re Wealthier",
     "description": "site.homepage.landscape.stickers.left.title: The title for the homepage landscape left sticker"
+  },
+  "wKg5cX": {
+    "defaultMessage": "Apply to join",
+    "description": "Title on request access page"
   },
   "wLTPa8": {
     "defaultMessage": "How much will you make?",

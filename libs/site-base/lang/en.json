@@ -235,10 +235,6 @@
     "defaultMessage": "Create Account",
     "description": "app.account.create.form.buttonCreate: Button for the create account form page"
   },
-  "bIBRtw": {
-    "defaultMessage": "Join our Beta",
-    "description": "Super-title on request access page"
-  },
   "c+odgw": {
     "defaultMessage": "A referrer ID should be 6 characters long.",
     "description": "app.addaccount.newbaseclass.referralinput.errorReferrerNumChars"
@@ -413,10 +409,6 @@
   "waJ54C": {
     "defaultMessage": "Select which account to upload",
     "description": "The main title for the restore account page"
-  },
-  "waoMPL": {
-    "defaultMessage": "Request to join",
-    "description": "Title on request access page"
   },
   "xo8dT5": {
     "defaultMessage": "Create a New Account",
