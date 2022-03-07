@@ -1,4 +1,4 @@
-import {keccak256} from '@ethersproject/solidity';
+import { keccak256 } from '@ethersproject/solidity';
 import { BigNumber } from '@ethersproject/bignumber';
 
 // Duplicate of roles defined in solidity files.

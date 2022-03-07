@@ -1,5 +1,6 @@
 import type { ReferralsApi as SrcApi, ReferralCreateBody } from "@thecointech/broker-cad";
-import { buildResponse, delay } from "../axios-utils";
+import { buildResponse } from "../axios-utils";
+import { sleep } from '@thecointech/async';
 
 export class ReferralsApi implements Pick<SrcApi, keyof SrcApi>
 {
@@ -13,7 +14,7 @@ export class ReferralsApi implements Pick<SrcApi, keyof SrcApi>
      */
     async referralCreate(_referral: ReferralCreateBody, _options?: any)
     {
-      await delay(250);
+      await sleep(250);
       return buildResponse({
         success: true
       });
@@ -28,7 +29,7 @@ export class ReferralsApi implements Pick<SrcApi, keyof SrcApi>
      */
     async referrerValid(_referrer: string, _options?: any)
     {
-      await delay(250);
+      await sleep(250);
       return buildResponse({
         success: _referrer.length === 6
       });

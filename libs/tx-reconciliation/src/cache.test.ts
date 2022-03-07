@@ -1,9 +1,8 @@
 import { readDataCache, writeDataCache } from './cache';
-import { mocked } from 'ts-jest/utils';
 import fs from 'fs';
 // No going to disk
 jest.mock('fs');
-const mockedFs = mocked(fs);
+const mockedFs = jest.mocked(fs);
 
 it("should be able to read/write the cached data", async () => {
   const emptyData = {

@@ -1,12 +1,10 @@
 import * as Src from '.';
 import { BigNumber, ContractTransaction } from 'ethers'
+import { sleep } from '@thecointech/async'
 
 export const COIN_EXP = 1000000;
 
 const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
-function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 let nonce = 12;
 let confirmations = 1;
 export class TheCoin implements Pick<Src.TheCoin, 'exactTransfer' | 'balanceOf' | 'certifiedTransfer'>{
@@ -37,6 +35,7 @@ export class TheCoin implements Pick<Src.TheCoin, 'exactTransfer' | 'balanceOf' 
   provider = {
     waitForTransaction: (hash: string) => Promise.resolve({
       confirmations: confirmations++,
+      status: 1,
       logs: [{
         transactionHash: hash,
         logIndex: "0x1",
@@ -55,7 +54,7 @@ export class TheCoin implements Pick<Src.TheCoin, 'exactTransfer' | 'balanceOf' 
     }),
     getLogs: () => Promise.resolve([]),
     getBlockNumber: () => Promise.resolve(12345),
-    getTransaction: () => Promise.resolve({ wait: () => delay(2000) }),
+    getTransaction: () => Promise.resolve({ wait: () => sleep(2000) }),
     getTransactionReceipt: () => Promise.resolve({ blockNumber: 123, blockHash: "0x45678" })
   }
   estimate = {

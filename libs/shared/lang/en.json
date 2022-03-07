@@ -7,6 +7,10 @@
     "defaultMessage": "weak",
     "description": "Password complexity indicator"
   },
+  "1zKoXW": {
+    "defaultMessage": "Must be less than {max}",
+    "description": "UxNumeric error value too high"
+  },
   "7ACrRj": {
     "defaultMessage": "Please enter your password",
     "description": "Popup error message if no password entered before submit"
@@ -38,6 +42,10 @@
   "G5dlT+": {
     "defaultMessage": "Copy",
     "description": "base.copyToClipboard.link: Link for the button for the copy to clipboard tool"
+  },
+  "J1aGsC": {
+    "defaultMessage": "Please enter a valid number",
+    "description": "UxNumeric error value too low"
   },
   "JB5uPE": {
     "defaultMessage": "An email address",
@@ -198,5 +206,9 @@
   "ypa6Gp": {
     "defaultMessage": "Load an Account",
     "description": "shared.account.uploadWallet.title: Title for the upload your account page"
+  },
+  "zlzBIp": {
+    "defaultMessage": "Must be larger than {min}",
+    "description": "UxNumeric error value too low"
   }
 }

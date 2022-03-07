@@ -12,8 +12,13 @@
     "lgap main  main   main   rgap"
     "lgap leftf footer rightf rgap";
 
+  // Custom selector because iframe does not use our breakpoints
+  @media only screen and (max-width: 837px) {
+    grid-template-rows: .scalable(80, 90)[@result] 1fr 600px;
+  }
+
   .smallScreen({
-    grid-template-rows: 80px 1fr 630px;
+    grid-template-rows: 80px 1fr 730px;
     grid-template-columns: 15px 1fr 10px;
     grid-template-areas:
       "lefth header righth"

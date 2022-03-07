@@ -1,16 +1,19 @@
 import * as React from 'react';
 import { useState } from 'react';
-import styles from './styles.module.less';
-import { FormattedMessage, FormattedNumber, MessageDescriptor } from 'react-intl';
-import type { NumberFormatOptionsStyle } from '@formatjs/ecma402-abstract';
+import { FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 
-import { Range, getTrackBackground } from "react-range";
-import { LessVars } from "@thecointech/site-semantic-theme/variables";
+import { Range, getTrackBackground } from 'react-range';
+import { LessVars } from '@thecointech/site-semantic-theme/variables';
+import styles from './styles.module.less';
+import { UxNumeric, UxNumericType } from '@thecointech/shared';
+import { MessageWithValues } from '@thecointech/shared/types';
 
 export type Props = {
- scaleType?: NumberFormatOptionsStyle;
- currency?: "CAD",
  label: MessageDescriptor,
+ tooltip: MessageWithValues,
+ scaleType?: UxNumericType;
+ className?: string;
+ unit?: string,
  initial?: number;
  maximum: number;
  minimum?: number;
@@ -19,51 +22,53 @@ export type Props = {
 }
 
 export const RangeFieldAndScale = (props: Props) => {
+  const [value, setValue] = useState(props.initial ?? 0);
 
-    const [value, setValue] = useState(props.initial ?? 0);
+  const tooltip = useIntl().formatMessage(props.tooltip, props.tooltip.values)
+  const minimum = props.minimum ?? 0;
+  const { maximum } = props;
+  const step = props.step ?? 1;
 
-    const minimum = props.minimum ?? 0;
-    const maximum = props.maximum;
-    const step = props.step ?? 1;
+  const onChange = (value: number) => {
+    setValue(value);
+    props.onChange(value);
+  };
 
-    const onChange = ([value]: number[]) => {
-      setValue(value);
-      props.onChange(value);
-    }
+  return (
+    <div className={`${styles.container} ${props.className ?? ''}`} data-tooltip={tooltip}>
+      <div className={styles.label}>
+        <FormattedMessage {...props.label} tagName="span" />
+        <UxNumeric
+          defaultValue={value}
+          onValue={v => onChange(v ?? props.initial ?? 0)}
+          onValidate={() => null}
 
-    return (
-      <div className={styles.container}>
-        <div className={styles.label}>
-          <FormattedMessage {...props.label} tagName="span" />
-          <FormattedNumber
-            value={value}
-            currency={props.currency}
-            currencyDisplay={"narrowSymbol"}
-            style={props.scaleType}
-            minimumFractionDigits={0}
-            maximumFractionDigits={0}
-           />
-        </div>
-        <Range
-          step={step}
           min={minimum}
-          max={maximum}
-          values={[value]}
-          onChange={onChange}
-          renderTrack={(props) => (
-            <SliderTrack
-              value={value}
-              max={maximum}
-              min={minimum}
-              {...props}
-            />)}
-          renderThumb={SliderThumb}
+          //max={maximum}
+          type={props.scaleType}
         />
-        <div className={styles.scales}>
-          <span>{minimum}</span>
-          <span>{(minimum + maximum) / 2}</span>
-          <span>{maximum}</span>
-        </div>
+      </div>
+      <Range
+        step={step}
+        min={minimum}
+        max={maximum}
+        values={[value]}
+        onChange={([value]) => onChange(value)}
+        renderTrack={props => (
+          <SliderTrack
+            value={value}
+            max={maximum}
+            min={minimum}
+            {...props}
+          />
+        )}
+        renderThumb={SliderThumb}
+      />
+      <div className={styles.scales}>
+        <span>{minimum}</span>
+        <span>{(minimum + maximum) / 2}</span>
+        <span>{maximum}</span>
+      </div>
     </div>
   );
 };
@@ -74,7 +79,9 @@ type TrackProps = {
   min: number,
   props: any,
 }
-const SliderTrack: React.FC<TrackProps> = ({ props, value, max, min, children }) => (
+const SliderTrack: React.FC<TrackProps> = ({
+  props, value, max, min, children,
+}) => (
   <div
     onMouseDown={props.onMouseDown}
     onTouchStart={props.onTouchStart}
@@ -89,7 +96,7 @@ const SliderTrack: React.FC<TrackProps> = ({ props, value, max, min, children })
       style={{
         background: getTrackBackground({
           values: [value],
-          colors: [LessVars.theCoinPaletteGreen3, "#FFFFFF1A"],
+          colors: [LessVars.theCoinPaletteGreen3, '#FFFFFF1A'],
           min,
           max,
         }),
@@ -98,11 +105,11 @@ const SliderTrack: React.FC<TrackProps> = ({ props, value, max, min, children })
       {children}
     </div>
   </div>
-)
+);
 
 const SliderThumb: React.FC<{ props: any }> = ({ props }) => (
   <div
     {...props}
     className={styles.thumb}
   />
-)
+);

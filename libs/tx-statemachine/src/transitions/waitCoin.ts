@@ -4,6 +4,7 @@ import { AnyActionContainer, getCurrentState } from "../types";
 import { TransactionReceipt } from '@ethersproject/providers'
 import { Decimal } from 'decimal.js-light';
 import { NormalizeAddress } from '@thecointech/utilities';
+import { sleep } from '@thecointech/async';
 
 //
 // Wait for a transfer to complete
@@ -56,11 +57,6 @@ export function updateCoinBalance(container: AnyActionContainer, receipt: Transa
   return balance;
 }
 
-// TODO: Move this function into utilities
-function delay(ms: number) {
-  return new Promise( resolve => setTimeout(resolve, ms) );
-}
-
 //
 // Poll the provider to see if the transaction here has been mined.
 export async function waitTransaction(contract: TheCoin, hash: string, confirmations: number = 3) : Promise<TransactionReceipt|null> {
@@ -73,13 +69,15 @@ export async function waitTransaction(contract: TheCoin, hash: string, confirmat
     const receipt = await contract.provider.waitForTransaction(hash, 0);
 
     // If this tx has been successfully mined, continue
-    if (receipt?.confirmations >= confirmations) {
+    if (receipt?.status == 1 && receipt.confirmations >= confirmations) {
       log.trace({hash}, `Transfer complete: {hash}`);
       return receipt;
     }
 
-    log.warn({hash}, `Waited ${i} times: tx has not been mined: {hash}`);
-    await delay(10000);
+    log.trace({hash}, `Waited ${i} times: tx has not been mined. Status ${receipt?.status} : {hash}`);
+    await sleep(10000);
   }
+  log.warn({hash}, `Timed out - tx has not been mined: {hash}`);
+
   return null;
 }

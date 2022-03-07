@@ -10,7 +10,26 @@ rules.push(
   // Default CSS processing (anything not named *.module.css)
   {
     test: /(?<!module)\.css$/,
-    use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+    use: [
+      { loader: 'style-loader' },
+      {
+        loader: 'css-loader',
+        options: {
+          url: {
+            filter: (url, resourcePath) => {
+              // resourcePath - path to css file
+
+              // Don't handle `data:` urls
+              if (url.startsWith('data:')) {
+                return false;
+              }
+
+              return true;
+            },
+          },
+        }
+      }
+    ],
   },
   // Explicitly process Semantics Less files.
   less_loaders.semantic_less_loader,

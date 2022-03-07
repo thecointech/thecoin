@@ -1,7 +1,7 @@
 import { SecureApi as SrcApi, GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult, GoogleWalletItem } from "@thecointech/broker-cad";
-import { buildResponse, delay } from "../axios-utils";
+import { buildResponse } from "../axios-utils";
 import { wallets } from '../../wallets';
-
+import { sleep } from '@thecointech/async';
 
 const MockedCode = "MockedCode";
 const checkCode = ({token}: GoogleToken) => {
@@ -25,7 +25,7 @@ export class SecureApi  implements Pick<SrcApi, keyof SrcApi> {
    */
   async googleAuthUrl(_clientUri: string, _options?: any)
   {
-    await delay(1500);
+    await sleep(1500);
 
     return buildResponse<GoogleAuthUrl>({
       url: `${window.location.origin}/#/gauth?code=${MockedCode}`
@@ -41,7 +41,7 @@ export class SecureApi  implements Pick<SrcApi, keyof SrcApi> {
    */
   async googleList(_clientUri: string, token: GoogleToken, _options?: any) {
     checkCode(token);
-    await delay(250);
+    await sleep(250);
     return buildResponse<GoogleListResult>({
       wallets
     });
@@ -57,7 +57,7 @@ export class SecureApi  implements Pick<SrcApi, keyof SrcApi> {
   async googlePut(_clientUri: string, uploadPacket: GoogleStoreAccount, _options?: any) {
     checkCode(uploadPacket.token);
 
-    await delay(2500);
+    await sleep(2500);
     wallets.push({
       id: wallets.length.toString(),
       originalFilename: `${uploadPacket.walletName}.wallet`,
@@ -77,7 +77,7 @@ export class SecureApi  implements Pick<SrcApi, keyof SrcApi> {
    */
   async googleRetrieve(_clientUri: string, token: GoogleToken, _options?: any) {
     checkCode(token);
-    await delay(250);
+    await sleep(250);
     const results: GoogleWalletItem[] = wallets.map((w) => ({
       wallet: w.wallet,
       id: {

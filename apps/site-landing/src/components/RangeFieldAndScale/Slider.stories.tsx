@@ -1,7 +1,8 @@
 import React from 'react';
 import { Story } from '@storybook/react';
-import type { NumberFormatOptionsStyle } from '@formatjs/ecma402-abstract';
 import { RangeFieldAndScale } from '.';
+import { action } from '@storybook/addon-actions';
+import { UxNumericType } from '@thecointech/shared';
 
 const meta = {
   title: 'Landing/RangeFieldAndScale',
@@ -17,8 +18,7 @@ const meta = {
   argTypes: { onChange: { action: 'onChange' } },
   args: {
     label: "Label",
-    currency: "CAD" as "CAD",
-    scaleType: "currency" as NumberFormatOptionsStyle,
+    scaleType: "currency" as UxNumericType,
     minimum: 0,
     maximum: 100,
     step: 1,
@@ -26,9 +26,14 @@ const meta = {
 };
 
 export default meta;
-export const Slider: Story<typeof meta["args"]> = ({label, ...rest}) => (
-  <RangeFieldAndScale
-    {...rest}
-    label={{id: 1, defaultMessage: label}}
-  />
+const onChange = action("on-change");
+export const Slider: Story<typeof meta["args"]> = ({ label, ...rest }) => (
+  <div style={{ width: '500px' }}>
+    <RangeFieldAndScale
+      {...rest}
+      onChange={onChange}
+      label={{ id: 1, defaultMessage: label }}
+      tooltip={{ id: 2, defaultMessage: "I'm a tooltip" }}
+    />
+  </div>
 )

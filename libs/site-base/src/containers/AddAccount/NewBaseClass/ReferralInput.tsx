@@ -3,6 +3,7 @@ import { UxInput } from "@thecointech/shared/components/UX/Input";
 import { GetReferrersApi } from "../../../api";
 import { IsValidShortCode } from "@thecointech/utilities";
 import { defineMessages, FormattedMessage } from "react-intl";
+import styles from './styles.module.less';
 
 const translations = defineMessages({
   placeholder : {
@@ -25,7 +26,13 @@ const translations = defineMessages({
       description: 'app.addaccount.newbaseclass.referralinput.errorReferrerInvalidCharacters'},
   errorReferrerUnknown : {
       defaultMessage: 'The entered referrer ID is not recognized',
-      description: 'app.addaccount.newbaseclass.referralinput.errorReferrerUnknown'}
+      description: 'app.addaccount.newbaseclass.referralinput.errorReferrerUnknown'},
+  referralRequest1: {
+    defaultMessage: 'No referral code?',
+    description: 'Create account link to request referral code'},
+  referralRequest2: {
+      defaultMessage: 'Request one here',
+      description: 'Create account link to request referral code'},
 });
 
 type Props = {
@@ -38,14 +45,22 @@ export const ReferralInput = (props: Props) => {
 
   const { setReferral, ...rest} = props;
   return (
-    <UxInput
-      onValue={props.setReferral}
-      onValidate={validateReferral}
-      intlLabel={translations.labelReferrer}
-      tooltip={translations.tooltip}
-      placeholder={translations.placeholder}
-      {...rest}
-    />
+    <>
+      <UxInput
+        onValue={props.setReferral}
+        onValidate={validateReferral}
+        intlLabel={translations.labelReferrer}
+        tooltip={translations.tooltip}
+        placeholder={translations.placeholder}
+        {...rest}
+      />
+      <div className={styles.request}>
+        <FormattedMessage {...translations.referralRequest1} />&nbsp;
+        <a href={`${process.env.URL_SITE_LANDING}/#/applyBeta`}>
+          <FormattedMessage {...translations.referralRequest2} />
+        </a>
+      </div>
+    </>
   );
 }
 

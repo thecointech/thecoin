@@ -28,10 +28,6 @@ try {
       initArgs: [acTheCoin]
     });
 
-    function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
     it('should create a proxy for the EVM package', async function () {
       const proxy = await buildContract(this.project);
       const result = await proxy.methods.totalSupply().call();

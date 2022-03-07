@@ -7,22 +7,30 @@ import shutil
 import stat
 import time
 
-config_name = "prodtest"
+config_name = "prod"
 os.environ["CONFIG_NAME"] = config_name
 
-home = Path.home()
-base = Path('/') / 'TheCoin-deploys' / config_name
+curr_path = Path(__file__).resolve()
+base = curr_path.parent
+
+# Check our path matches deployment
+if (config_name != base.name):
+    print("Mismatched config: " + config_name + " != " + base.name)
+    exit(1)
+
 deploy = base / 'current'
 old_deploy = base / 'old'
 new_deploy = base / 'new'
+temp_deploy = base / 'temp'
 
 if not os.environ.get('THECOIN_ENVIRONMENTS'):
+    home = Path.home()
     tc_env = home / 'thecoin' / 'env'
     print(f"Setting default evironment location: {tc_env}")
     os.putenv('THECOIN_ENVIRONMENTS', tc_env)
 
 #
-#
+# Check out new deploy and merge in latest dev
 def checkout():
   print(f"Deploying to {new_deploy}")
 
@@ -59,7 +67,7 @@ def buildAndDeploy():
   if success != 0: raise RuntimeError("Couldn't build")
 
   # First, deploy the libraries
-  success = os.system('yarn _deploy:lib')
+  success = os.system('yarn _deploy:lib --force-publish')
   if success != 0: raise RuntimeError("Couldn't deploy libraries")
 
   # Rebuild apps so we get the right versions
@@ -87,20 +95,21 @@ def keep_trying(action):
       action()
       return True
     except PermissionError as error:
-      time.sleep(2 * 60)
+      print(error)
+      time.sleep(attempt * 2 * 60)
   print("Could not complete action")
   exit(1)
+
 #
-#  Cleanup stage
+#  Replace current with new, and remove old
 def renameAndComplete():
   # Try to run a publish
-
   def remove_old():
     if Path(old_deploy).exists():
         print("delete old deploy");
         shutil.rmtree(old_deploy, onerror=remove_readonly)
 
-  def remove_current():
+  def move_current():
     if Path(deploy).exists():
       print("move current to old");
       os.rename(deploy, old_deploy)
@@ -109,13 +118,38 @@ def renameAndComplete():
     print("move new to current")
     os.rename(new_deploy, deploy)
 
-  keep_trying(remove_old);
-  keep_trying(remove_current);
-  keep_trying(move_new);
+  os.chdir(base)
+  keep_trying(remove_old)
+  keep_trying(move_current)
+  keep_trying(move_new)
 
+#
+# On complete, create temp checkout to  merge
+# the newly published branch back into dev
+def mergeBackIntoDev():
+    # check no existing checkout
+  if temp_deploy.exists():
+      print("Cannot merge back into dev: temp folder already exists")
+      return
 
+  # First, create a new checkout in dev
+  temp_deploy.mkdir(parents=True, exist_ok=True)
+  os.chdir(temp_deploy)
+  os.system('git clone https://github.com/thecointech/thecoin.git .') # Cloning
+
+  # Merge in publishing changes
+  success = os.system(f'git merge origin/publish/{config_name} --no-ff')
+  # push changes back
+  os.system('git push')
+  # cleanup
+  os.chdir(base)
+  shutil.rmtree(temp_deploy, onerror=remove_readonly)
+
+print("Ready...")
 checkout()
 buildAndDeploy()
 renameAndComplete()
+# do this last, as it isn't particularily important if it fails
+mergeBackIntoDev()
 
 print('COMPLETE')
