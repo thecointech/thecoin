@@ -12,13 +12,14 @@ export const ClientTransaction = (props: AnyAction) => {
   // TODO: move data creation into tx-reconciliation
   const { history } = props;
   const final = history[history.length - 1];
-  const fiat = history.find(r => r.fiat)?.fiat;
-  const coin = history.find(r => r.coin)?.coin;
+  const fiat = history.find(r => r.fiat)?.fiat ?? "NO FIAT";
+  const coin = history.find(r => r.coin)?.coin ?? "NO COIN";
 
   return (
     <List.Item key={props.data.initialId}>
       <TransactionIcon type={final.type} />
-      {`${date.toISODate()} ${final.type} - ${fiat?.toNumber()} : ${coin?.toNumber()}`}
+      {`${date.toISODate()} ${final.type} - ${fiat} : ${coin}`}
+      <TransactionPath {...props.doc} />
       {final.type == "markComplete"
         ? undefined
         : <RefundButton action={props} />
@@ -37,5 +38,27 @@ const TransactionIcon = ({ type }: { type: string }) => {
   }
 }
 
+const TransactionPath = (props: AnyAction['doc']) => <div>{props.path}</div>
+
 const TransactionEntry = (props: TransitionDelta) =>
-  <li key={props.created.toMillis()}>{`${props.created.toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS)} - ${props.type}`}</li>
+  <li key={props.created.toMillis()}>
+    {`${props.created.toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS)} - ${props.type}`}<br />
+    <TransactionEntryHash delta={props} />
+    <TransactionEntryItem delta={props} item="date" />
+    <TransactionEntryItem delta={props} item="meta" />
+  </li>
+
+const TransactionEntryHash = ({delta}: {delta: TransitionDelta}) => (
+  delta.hash
+    ? <div>
+        &nbsp;&nbsp;&nbsp; - hash:
+        <a target="_blank" href={`https://polygonscan.com/tx/${delta.hash}`}>{delta.hash}</a>
+      </div>
+    : null
+)
+
+const TransactionEntryItem = ({delta, item}: {delta: TransitionDelta, item: keyof TransitionDelta}) => (
+  delta[item]
+    ? <div>&nbsp;&nbsp;&nbsp;{` - ${item}: ${delta[item]?.toString()}`}</div>
+    : null
+)

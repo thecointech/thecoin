@@ -12,22 +12,31 @@
 
 #mainMenu {
   grid-area: header;
-}
 
-#logoLink{
-  border-bottom: none;
-  #logo{
-      width: 150px;
+  .logoLink{
+    cursor: pointer;
+    height: 30px;
+    .logo{
+        transition        : opacity @pageTransitionDuration @defaultEasing;
+        -moz-transition   : opacity @pageTransitionDuration @defaultEasing;
+        -webkit-transition: opacity @pageTransitionDuration @defaultEasing;
+
+        &:hover {
+          opacity: 0.7;
+        }
+    }
+  }
+
+  .burgerMenu {
+    font-size: 16px;
+    padding-right: 16px;
+
+    i {
+      font-size: 20px;
+    }
+    :global(.menu) {
       padding-left: 10px;
-      margin-right: 10px;
-      opacity: 0.8;
-      transition: opacity .25s ease-in-out;
-      -moz-transition: opacity .25s ease-in-out;
-      -webkit-transition: opacity .25s ease-in-out;
-
-      &:hover{
-          opacity: 1;
-      }
+      padding-right: 6px;
+    }
   }
 }
-

@@ -4,15 +4,17 @@ import { BillPayments } from './BillPayments';
 import { Purchase } from '../Purchase';
 import { ETransfers } from './ETransfers';
 import { Gmail } from '../gmail';
-import { ClientSelect } from './Clients/ClientSelect';
+import { AllClients } from './Clients';
+import { Incomplete } from './Incomplete';
 
 export const BrokerCADRoutes = {
   balance: Balance,
   purchase: Purchase,
   eTransfer: ETransfers,
   billing: BillPayments,
+  incomplete: Incomplete,
   verify: VerifyAccount,
   autoPurchase: Gmail,
-  clients: ClientSelect
+  clients: AllClients,
 }
 

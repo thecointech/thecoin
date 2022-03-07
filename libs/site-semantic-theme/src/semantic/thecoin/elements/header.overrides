@@ -23,7 +23,7 @@ h4.ui.header {
   margin-top: 20px;
 }
 
-@media only screen and (max-width: 768px) {
+.smallScreen({
   h1.ui.header {
     font-size: @h1Mobile;
   }
@@ -33,7 +33,7 @@ h4.ui.header {
   h3, h3.ui.header {
     font-size: @h3Mobile;
   }
-}
+});
 
 h5.ui.header{
   font-family: @pageFont;

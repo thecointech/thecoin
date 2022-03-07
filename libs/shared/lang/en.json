@@ -1,35 +1,19 @@
 {
-  "+yDOnO": {
-    "defaultMessage": "We don't have any transactions matching your query.",
-    "description": "app.transactionList.notransactions: For when we have no transactions to display for the transaction history"
-  },
-  "024I2T": {
-    "defaultMessage": "Balance",
-    "description": "shared.widgets.balanceandprofit.balance: Title for widget Balance and profit"
-  },
-  "0zfmOG": {
-    "defaultMessage": "Cancel",
-    "description": "shared.modalOperation.cancel: Text for the cancel button for the modal tool"
-  },
-  "2Rp4o1": {
+  "+yCmHT": {
     "defaultMessage": "Password",
-    "description": "shared.login.passwordLabel"
+    "description": "Default password entry label"
   },
-  "4mI50N": {
-    "defaultMessage": "Climate Impact",
-    "description": "shared.widgets.climateimpact.title: Title for the Widget Climate impact in the app"
+  "0jq3Gk": {
+    "defaultMessage": "weak",
+    "description": "Password complexity indicator"
   },
-  "53+jpb": {
-    "defaultMessage": "Unlock failed: Please check your password and try again.",
-    "description": "shared.login.decryptIncorrectPwd"
+  "1zKoXW": {
+    "defaultMessage": "Must be less than {max}",
+    "description": "UxNumeric error value too high"
   },
-  "6ch8JH": {
-    "defaultMessage": "were planted thanks to you",
-    "description": "shared.widgets.climateimpact.farmText: Text for the Widget Climate impact in the app"
-  },
-  "7E/ktj": {
-    "defaultMessage": "Account",
-    "description": "shared.uxaddress.address.label: Label for the address field in make a payment / coin transfer"
+  "7ACrRj": {
+    "defaultMessage": "Please enter your password",
+    "description": "Popup error message if no password entered before submit"
   },
   "8oZBpu": {
     "defaultMessage": "Sorry, we couldn’t find the page you are looking for",
@@ -39,144 +23,192 @@
     "defaultMessage": "Page Not Found",
     "description": "shared.NotFoundPage.aboveTheTitle: Text above the title for the 404 page"
   },
-  "DBPJIB": {
-    "defaultMessage": "litres",
-    "description": "shared.widgets.climateimpact.waterUnity: Text for the Widget Climate impact in the app"
+  "DLnJW1": {
+    "defaultMessage": "This password requires {time} to crack",
+    "description": "Password complexity tooltip feedback"
   },
-  "DR7wHb": {
-    "defaultMessage": "tonnes",
-    "description": "shared.widgets.climateimpact.windUnity: Text for the Widget Climate impact in the app"
+  "DZqkDH": {
+    "defaultMessage": "An email address requires the '@' symbol",
+    "description": "Default placeholder for email feild"
   },
-  "E+Cwnl": {
-    "defaultMessage": "Ok",
-    "description": "shared.modalOperation.ok: Text for the ok button for the modal tool"
+  "EsoShw": {
+    "defaultMessage": "Connecting to your Web3 provider",
+    "description": "Message to display while waiting for user to complete Web3 connection"
   },
-  "EMxzDE": {
-    "defaultMessage": "were planted thanks to you",
-    "description": "shared.widgets.climateimpact.treesText: Text for the Widget Climate impact in the app"
+  "FN+8je": {
+    "defaultMessage": "Please enter your password",
+    "description": "Error when logging in without password"
   },
-  "FSygB8": {
-    "defaultMessage": "Logging into your account.",
-    "description": "shared.login.decryptHeader"
+  "G5dlT+": {
+    "defaultMessage": "Copy",
+    "description": "base.copyToClipboard.link: Link for the button for the copy to clipboard tool"
   },
-  "HBuFPg": {
-    "defaultMessage": "Or select a different account from the account switcher. You can find it at the top menu.",
-    "description": "shared.login.textAtTheBottom: Text at the bottom for the login page before the account name"
+  "J1aGsC": {
+    "defaultMessage": "Please enter a valid number",
+    "description": "UxNumeric error value too low"
   },
-  "HOPoKy": {
-    "defaultMessage": "trees",
-    "description": "shared.widgets.climateimpact.farmUnity: Text for the Widget Climate impact in the app"
+  "JB5uPE": {
+    "defaultMessage": "An email address",
+    "description": "Default placeholder for email feild"
   },
-  "HPpZfH": {
-    "defaultMessage": "Please wait, We are {percentComplete}% done opening your account.",
-    "description": "shared.login.decryptInProgress"
+  "OFKzhW": {
+    "defaultMessage": "Show Password",
+    "description": "Label for toggle showing password in input"
   },
-  "Munucn": {
-    "defaultMessage": "of CO2 offseted thanks to you",
-    "description": "shared.widgets.climateimpact.windText: Text for the Widget Climate impact in the app"
-  },
-  "NOGO9X": {
-    "defaultMessage": "$CAD",
-    "description": "shared.widgets.balanceandprofit.cad: Title for widget Balance and profit"
-  },
-  "QdopU+": {
-    "defaultMessage": "WELCOME BACK TO THE COIN",
-    "description": "shared.login.aboveTheTitle: Title above the main Title for the create account form page"
-  },
-  "QoJgfV": {
-    "defaultMessage": "Log In",
-    "description": "shared.login.button: Text of the button for the login page"
-  },
-  "T4t7Q/": {
-    "defaultMessage": "of water was cleaned thanks to you",
-    "description": "shared.widgets.climateimpact.waterText: Text for the Widget Climate impact in the app"
+  "SCn4XT": {
+    "defaultMessage": "ineffectual",
+    "description": "Password complexity indicator"
   },
   "UOyqjB": {
     "defaultMessage": "Drag 'n' drop a wallet file here, or click to browse",
     "description": "shared.account.uploadWallet.dropZone: The title for the drop zone on the upload your account page"
   },
-  "Xc4r1i": {
-    "defaultMessage": "trees",
-    "description": "shared.widgets.climateimpact.treesUnity: Text for the Widget Climate impact in the app"
+  "YIlmBL": {
+    "defaultMessage": "Email",
+    "description": "Default label for email field"
   },
   "YOPdSV": {
     "defaultMessage": "Coming Soon",
     "description": "shared.widgets.availablesoon.title:Title for the Widget Available Soon in the app"
   },
-  "bi1h2T": {
-    "defaultMessage": "From",
-    "description": "shared.transactionList.from: For description in comment section for the transaction history"
+  "cINV4p": {
+    "defaultMessage": "Copied to your clipboard",
+    "description": "base.copyToClipboard.messageSuccess: Success message for the button for the copy to clipboard tool"
   },
-  "c4Q+vA": {
-    "defaultMessage": "Sent",
-    "description": "shared.transactionList.sent: For title in comment section for the transaction history"
+  "cSP1Xs": {
+    "defaultMessage": "Address",
+    "description": "Default label for ethereum address field"
   },
-  "dzKhla": {
-    "defaultMessage": "Connecting to your Web3 provider",
-    "description": "shared.account.account.waitingForWeb3: Message to display while waiting for user to complete Web3 connection"
+  "gqUbj6": {
+    "defaultMessage": "moderate",
+    "description": "Password complexity indicator"
   },
-  "f5vm4G": {
-    "defaultMessage": "Loading...",
-    "description": "shared.transactionList.loading: For loading in comment section for the transaction history"
-  },
-  "hP2Jyj": {
-    "defaultMessage": "Received",
-    "description": "shared.transactionList.received: For title in comment section for the transaction history"
-  },
-  "iAyWom": {
-    "defaultMessage": "Log into",
-    "description": "shared.login.title: Title for the create account form page"
+  "hiKmVf": {
+    "defaultMessage": "An address is 40 characters long, and consists only of numbers and the letters A-F",
+    "description": "Describe a valid format for an ethereum address"
   },
   "jNMJW6": {
     "defaultMessage": "Restore Account",
     "description": "shared.account.uploadWallet.aboveTheTitle: The above the title title for the upload your account page"
   },
-  "k5hxGk": {
-    "defaultMessage": "To",
-    "description": "shared.transactionList.to: For description in comment section for the transaction history"
+  "mZ3WoP": {
+    "defaultMessage": "vulnerable",
+    "description": "Password complexity indicator"
   },
-  "kMr8B/": {
-    "defaultMessage": "Profit",
-    "description": "shared.widgets.balanceandprofit.profit: Title for widget Balance and profit"
+  "oLtuOM": {
+    "defaultMessage": "Please enter a password of at least 'moderate' strength",
+    "description": "default password entry tooltip"
   },
-  "p3YhGG": {
-    "defaultMessage": "This address is not the right format",
+  "qSrYua": {
+    "defaultMessage": "An ethereum address",
     "description": "shared.uxaddress.address.error: Error Message for the address field in make a payment / coin transfer"
-  },
-  "qWP9Ej": {
-    "defaultMessage": "This field is required",
-    "description": "shared.uxinput.required.tooltip: Tooltip for the required uxinput"
-  },
-  "r8PHp4": {
-    "defaultMessage": "Recent Operations",
-    "description": "shared.balance.title: Title for the congratulations page"
   },
   "rMCWq0": {
     "defaultMessage": "Home",
     "description": "shared.NotFoundPage.button: Go back to homepage button for the 404 page"
   },
-  "tnlU5d": {
-    "defaultMessage": "of CO2 offseted thanks to you",
-    "description": "shared.widgets.climateimpact.earthText: Text for the Widget Climate impact in the app"
+  "shared.balance.title": {
+    "defaultMessage": "Recent Operations",
+    "description": "shared.balance.title: Title for the congratulations page"
   },
-  "v1EAX6": {
+  "shared.login.aboveTheTitle": {
+    "defaultMessage": "WELCOME BACK TO THE COIN",
+    "description": "shared.login.aboveTheTitle: Title above the main Title for the create account form page"
+  },
+  "shared.login.button": {
+    "defaultMessage": "Log In",
+    "description": "shared.login.button: Text of the button for the login page"
+  },
+  "shared.login.decryptHeader": {
+    "defaultMessage": "Logging into your account.",
+    "description": "shared.login.decryptHeader"
+  },
+  "shared.login.decryptInProgress": {
+    "defaultMessage": "Please wait, We are {percentComplete}% done opening your account.",
+    "description": "shared.login.decryptInProgress"
+  },
+  "shared.login.decryptIncorrectPwd": {
+    "defaultMessage": "Unlock failed: Please check your password and try again.",
+    "description": "shared.login.decryptIncorrectPwd"
+  },
+  "shared.login.passwordLabel": {
+    "defaultMessage": "Password",
+    "description": "shared.login.passwordLabel"
+  },
+  "shared.login.placeholder.wallet": {
+    "defaultMessage": "Wallet Password",
+    "description": "shared.login.placeholder.wallet: PLaceholder for the Passford field in the create account form"
+  },
+  "shared.login.textAtTheBottom": {
+    "defaultMessage": "Or select a different account from the account switcher. You can find it at the top menu.",
+    "description": "shared.login.textAtTheBottom: Text at the bottom for the login page before the account name"
+  },
+  "shared.login.title": {
+    "defaultMessage": "Log into",
+    "description": "shared.login.title: Title for the create account form page"
+  },
+  "shared.modalOperation.cancel": {
+    "defaultMessage": "Cancel",
+    "description": "shared.modalOperation.cancel: Text for the cancel button for the modal tool"
+  },
+  "shared.modalOperation.ok": {
+    "defaultMessage": "Ok",
+    "description": "shared.modalOperation.ok: Text for the ok button for the modal tool"
+  },
+  "shared.transactionList.filters.hide": {
+    "defaultMessage": "Hide filters",
+    "description": "shared.transactionList.filters.hide: Label for the filter show / hide system"
+  },
+  "shared.transactionList.filters.show": {
     "defaultMessage": "Show filters",
     "description": "shared.transactionList.filters.show: Label for the filter show / hide system"
   },
-  "veRB0m": {
-    "defaultMessage": "Hide filters",
-    "description": "shared.transactionList.filters.hide: Label for the filter show / hide system"
+  "shared.transactionList.from": {
+    "defaultMessage": "From",
+    "description": "shared.transactionList.from: For description in comment section for the transaction history"
+  },
+  "shared.transactionList.loading": {
+    "defaultMessage": "Loading...",
+    "description": "shared.transactionList.loading: For loading in comment section for the transaction history"
+  },
+  "shared.transactionList.notransactions": {
+    "defaultMessage": "We don't have any transactions matching your query.",
+    "description": "app.transactionList.notransactions: For when we have no transactions to display for the transaction history"
+  },
+  "shared.transactionList.received": {
+    "defaultMessage": "Received",
+    "description": "shared.transactionList.received: For title in comment section for the transaction history"
+  },
+  "shared.transactionList.sent": {
+    "defaultMessage": "Sent",
+    "description": "shared.transactionList.sent: For title in comment section for the transaction history"
+  },
+  "shared.transactionList.to": {
+    "defaultMessage": "To",
+    "description": "shared.transactionList.to: For description in comment section for the transaction history"
+  },
+  "uT8hFA": {
+    "defaultMessage": "strength",
+    "description": "Password complexity indicator"
+  },
+  "vLxh3t": {
+    "defaultMessage": "At least moderate strength",
+    "description": "New password entry placeholder"
+  },
+  "wFpI1F": {
+    "defaultMessage": "Hide Password",
+    "description": "Label for toggle hiding password in input"
+  },
+  "y+kks9": {
+    "defaultMessage": "strong",
+    "description": "Password complexity indicator"
   },
   "ypa6Gp": {
     "defaultMessage": "Load an Account",
     "description": "shared.account.uploadWallet.title: Title for the upload your account page"
   },
-  "yrJmTB": {
-    "defaultMessage": "Wallet Password",
-    "description": "shared.login.placeholder.wallet: PLaceholder for the Passford field in the create account form"
-  },
-  "yyDRED": {
-    "defaultMessage": "tonns",
-    "description": "shared.widgets.climateimpact.earthUnity: Text for the Widget Climate impact in the app"
+  "zlzBIp": {
+    "defaultMessage": "Must be larger than {min}",
+    "description": "UxNumeric error value too low"
   }
 }

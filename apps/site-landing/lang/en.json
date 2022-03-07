@@ -3,6 +3,18 @@
     "defaultMessage": "We help to restore the planet’s ecosystem",
     "description": "site.wedomore.tree.description: Description for the tree photo for the We Do More page"
   },
+  "/VjwdC": {
+    "defaultMessage": "Income:",
+    "description": "Simulator: Parameters for sim income"
+  },
+  "0+B/LI": {
+    "defaultMessage": "You can become CO2-neutral with TheCoin",
+    "description": "site.homepage.underwater.description: Description for the homepage underwater part1"
+  },
+  "06pBO/": {
+    "defaultMessage": "How many years to run the simulation for",
+    "description": "sim form rangeDuration tooltip "
+  },
   "0FXCvv": {
     "defaultMessage": "Maximum Growth",
     "description": "site.homepage.wealthier.growth.title: The title for the growth for the homepage wealthier"
@@ -27,17 +39,29 @@
     "defaultMessage": "Earths’ Healthier",
     "description": "site.homepage.underwater.title: Title for that homepage underwater part"
   },
-  "2+ZDlf": {
-    "defaultMessage": "Country",
-    "description": "site.subscribe.confirmation.form.country: label for last name field"
-  },
   "2E2eVK": {
     "defaultMessage": "Keep Your Profits",
     "description": "site.homepage.wealthier.profits.title: The title for the profits for the homepage wealthier"
   },
+  "2e2bPv": {
+    "defaultMessage": "Credit Spending:",
+    "description": "Simulator: parameters for credit-based spending"
+  },
   "2yk0Rt": {
     "defaultMessage": "Your chequing account will be with you longer than your retirement savings will. This is what that could look like.",
     "description": "site.compare.description: Main description for the How much will you make? graph page"
+  },
+  "3cIwdb": {
+    "defaultMessage": "Any income paid monthly, eg benefits or rent collected",
+    "description": "Simulator Tooltip: Monthly Income"
+  },
+  "3vm1hM": {
+    "defaultMessage": "Subscribe to our newsletter:",
+    "description": "Footer CTA Part2"
+  },
+  "4+OlAD": {
+    "defaultMessage": "Save, invest and spend money with TheCoin,",
+    "description": "home page tagline part1"
   },
   "43E4EL": {
     "defaultMessage": "We fund clean energy projects to replace dirty coal power",
@@ -51,25 +75,13 @@
     "defaultMessage": "We Do More",
     "description": "site.wedomore.title: Title for the We Do More page"
   },
-  "4N/YNr": {
-    "defaultMessage": "The future is better because of you & us. Subscribe to our newsletter",
-    "description": "site.subscribe.description: The future is better because of you & us. Subscribe to our newsletter"
-  },
   "4fyTGb": {
     "defaultMessage": "Add $250000 to your retirement - with no money down.",
     "description": "site.homepage.wealthier.growth.description: The title for the growth for the homepage wealthier"
   },
-  "7bpwYe": {
-    "defaultMessage": "Years",
-    "description": "site.compare.label.rangeDurationYear: label for range Duration Year field in the compare page"
-  },
-  "81qKOv": {
-    "defaultMessage": "Please enter a valid email",
-    "description": "site.subscribe.email.invalid: Message we give a user when the subscription failed"
-  },
-  "8WNRbJ": {
-    "defaultMessage": "You can become CO2-neutral with TheCoin as we work to offset our clients’ emissions.",
-    "description": "site.homepage.underwater.description: Description for the homepage underwater part"
+  "746Zaq": {
+    "defaultMessage": "The maximum amount protected by the shock-absorber.{br}The smaller this is, the faster your account grows on average,{br}but the worse it will do in during down periods",
+    "description": "Simulator Tooltip: shockabsorber cushion"
   },
   "8rHqL+": {
     "defaultMessage": "Every dollar earns every day. As a non-profit, we want you to keep that benefit.",
@@ -79,9 +91,29 @@
     "defaultMessage": "Our non-profits mission is to fully use a neglected resource to fight climate change - your bank account.",
     "description": "site.healthier.description: Description underneath the title for the Earth’s Healthier page"
   },
+  "A74bw1": {
+    "defaultMessage": "Monthly:",
+    "description": "Simulator: Monthly Income"
+  },
   "B7gcLo": {
     "defaultMessage": "Better Farming",
     "description": "site.wedomore.smallPlant.title: Title for the smallPlant photo for the We Do More page"
+  },
+  "CTUhFX": {
+    "defaultMessage": "Once-a-year expenses that cannot be put on a credit card",
+    "description": "Simulator Tooltip: Yearly Cash"
+  },
+  "D7Hm8s": {
+    "defaultMessage": "The future is better because of you & us.",
+    "description": "Footer CTA Part1"
+  },
+  "DT1eLE": {
+    "defaultMessage": "Cashback Rate:",
+    "description": "Simulator: How much cashback is earned on this credit card"
+  },
+  "DbK95Q": {
+    "defaultMessage": "Drop Protect:",
+    "description": "How much of a market drop would this account be protected from"
   },
   "FAWgn/": {
     "defaultMessage": "Show me the Potential!"
@@ -98,6 +130,10 @@
   },
   "Gv2G2+": {
     "defaultMessage": "Starting Amount"
+  },
+  "HOyoZo": {
+    "defaultMessage": "Interest Rate:",
+    "description": "Simulator: How much interest is charged on credit vard if we do not pay total due"
   },
   "IJP8Tt": {
     "defaultMessage": "TheCoin is a revolutionary new kind of account.",
@@ -116,6 +152,10 @@
   },
   "JsOO1l": {
     "defaultMessage": "If you opened an account at a random date any time in the past 80 years, the bottom axis shows the possible account values and the vertical axis is the probablility you would get that return"
+  },
+  "KQk9xI": {
+    "defaultMessage": "How much interest is charged on{br}any overdue amounts by the credit card.",
+    "description": "Simulator Tooltip: cashback"
   },
   "Kn2j7O": {
     "defaultMessage": "Clean Water",
@@ -136,13 +176,25 @@
     "defaultMessage": "Your money is always earning. Make it earn for you.",
     "description": "site.homepage.landscape.stickers.left.description: Description for sticker for the homepage landscape left sticker"
   },
+  "Nv5L4g": {
+    "defaultMessage": "Shock Absorber:",
+    "description": "Parameters for simulating the balance protection feature"
+  },
   "NwufPh": {
     "defaultMessage": "Start Now",
     "description": "site.homepage.landscape.button: Button label for the landscape"
   },
+  "P6DpYX": {
+    "defaultMessage": "Any monthly expenses that cannot{br}be put on a credit card, eg rent or bills",
+    "description": "Simulator Tooltip: Monthly Cash"
+  },
   "P82KCx": {
     "defaultMessage": "Earth’s Healthier",
     "description": "site.homepage.landscape.stickers.right.title: The title for the homepage landscape right sticker"
+  },
+  "QwwJrJ": {
+    "defaultMessage": "Any weekly spending that can be put{br}on a credit card, eg groceries and gas",
+    "description": "Simulator Tooltip: Weekly Cash"
   },
   "RR4faR": {
     "defaultMessage": "{years} years"
@@ -151,17 +203,9 @@
     "defaultMessage": "Scientifically Verified",
     "description": "site.homepage.underwater.science.title: Title for the homepage underwater science subpart"
   },
-  "RceNpc": {
-    "defaultMessage": "Save, invest and spend money with TheCoin, get 100% of benefits and save our Planet.",
-    "description": "site.homepage.landscape.description: The description for the homepage"
-  },
   "RldC0Y": {
     "defaultMessage": "Go back",
     "description": "site.blog.backLink: Link to go back from article"
-  },
-  "S/Lh3i": {
-    "defaultMessage": "Family Name",
-    "description": "site.subscribe.confirmation.form.lastname: label for last name field"
   },
   "Th2OVj": {
     "defaultMessage": "Read More",
@@ -171,12 +215,20 @@
     "defaultMessage": "Your benefits",
     "description": "site.MainNavigation.yourbenefits: Title for the Your benefits entry in the menu"
   },
-  "UTXdBk": {
-    "defaultMessage": "Given Name",
-    "description": "site.subscribe.confirmation.form.firstname: label for first name field"
+  "UJsE5n": {
+    "defaultMessage": "Weekly:",
+    "description": "Simulator: Weekly Income"
+  },
+  "UOSrjB": {
+    "defaultMessage": "What percentage of spending does the credit card earn as cashback.",
+    "description": "Simulator Tooltip: cashback"
   },
   "V0XJgr": {
     "defaultMessage": "Average value after"
+  },
+  "VA10q2": {
+    "defaultMessage": "get 100% of benefits and save our Planet.",
+    "description": "home page tagline part2"
   },
   "W8cvxr": {
     "defaultMessage": "We Do More",
@@ -185,13 +237,13 @@
   "Ycz6kB": {
     "defaultMessage": "This graph shows how The Coin account values will probably grow after"
   },
-  "YpYP+S": {
-    "defaultMessage": "SUBSCRIPTION",
-    "description": "site.subscribe.confirmation.aboveTheTitle: Text above the title for the 'Thank you for subscribing!' page"
-  },
   "YwCHN1": {
     "defaultMessage": "Why We Can Be So Confident",
     "description": "site.homepage.underwater.science.link: Link for the homepage underwater science subpart"
+  },
+  "ZG7KeL": {
+    "defaultMessage": "Balance Protect:",
+    "description": "The maximum balance to protect with shock absorber"
   },
   "ZiBD6K": {
     "defaultMessage": "Monthly Fees",
@@ -204,10 +256,6 @@
   "b8wQuI": {
     "defaultMessage": "What We Do",
     "description": "site.homepage.underwater.trees.link: Link for the homepage underwater trees subpart"
-  },
-  "bx4TI0": {
-    "defaultMessage": "Your chequing account will be with you longer than your retirement savings will. This is what that could look like.",
-    "description": "site.compare.graph.description: Graph description for the How much will you make? graph page"
   },
   "cdFqR/": {
     "defaultMessage": "Create Account",
@@ -233,6 +281,10 @@
     "defaultMessage": "The remaining 1/10th is used to pay off our carbon debt",
     "description": "site.healthier.carbon: text for the carbon debt part for the Earth’s Healthier page"
   },
+  "f4Mh5E": {
+    "defaultMessage": "Any income that arrives only once a year, eg bonuses",
+    "description": "Simulator Tooltip: Yearly Income"
+  },
   "fajUfc": {
     "defaultMessage": "We do more",
     "description": "site.MainNavigation.wedomore: Title for the We do more entry in the menu"
@@ -240,13 +292,21 @@
   "feSg9K": {
     "defaultMessage": "Your Age"
   },
+  "h7Uwzm": {
+    "defaultMessage": "The value of the initial deposit when opening an account",
+    "description": "sim form StartingValue tooltip "
+  },
   "hB3xnP": {
     "defaultMessage": "Be part of the solution. We offset our clients’ CO2.",
     "description": "site.homepage.landscape.stickers.right.description: Description for sticker for the homepage landscape right sticker"
   },
-  "hfXNxT": {
-    "defaultMessage": "We would love to get to know you better! Would you mind letting us know your details?",
-    "description": "site.subscribe.confirmation.description: Descriton for the 'Thank you for subscribing!' page"
+  "hZATaO": {
+    "defaultMessage": "Yearly:",
+    "description": "Simulator: Yearly Income"
+  },
+  "iAWuxx": {
+    "defaultMessage": "Initial Deposit:",
+    "description": "site.compare.label.rangeStarting: label for Starting Value in the compare page"
   },
   "iCleoo": {
     "defaultMessage": "Prevent soil damage and erosion and improve peoples lives",
@@ -255,10 +315,6 @@
   "jJ1YVo": {
     "defaultMessage": "The Best Investment",
     "description": "site.homepage.wealthier.investment.title: The title for the investment for the homepage wealthier"
-  },
-  "jK5Jc0": {
-    "defaultMessage": "Your possible benefits",
-    "description": "site.compare.graph.title: Graph title for the How much will you make? graph page"
   },
   "jTYRs0": {
     "defaultMessage": "Compare Us",
@@ -271,10 +327,6 @@
     "defaultMessage": "The benefits of a chequing, savings, and investing account all in one!",
     "description": "site.createAccountBanner.title: The benefits of a chequing, savings, and investing account all in one!"
   },
-  "kWd+Qa": {
-    "defaultMessage": "Thank you for subscribing!",
-    "description": "site.subscribe.confirmation.title: Title for the 'Thank you for subscribing!' page"
-  },
   "lrlibv": {
     "defaultMessage": "Offsetting CO2 is effective. Extremely effective!",
     "description": "site.homepage.underwater.difference.description: Description for the homepage underwater difference subpart"
@@ -283,17 +335,25 @@
     "defaultMessage": "Help",
     "description": "site.MainNavigation.faq: Help Link"
   },
+  "mmRoRq": {
+    "defaultMessage": "Regular weekly earnings, eg paycheques",
+    "description": "Simulator Tooltip: Weekly Income"
+  },
+  "msagVQ": {
+    "defaultMessage": "Any weekly spending that cannot{br}be put on a credit card, eg babysitter",
+    "description": "Simulator Tooltip: Weekly Cash"
+  },
   "n0wGb/": {
     "defaultMessage": "Enjoy the benefits of investment growth on every dollar with our online spending account.",
     "description": "site.homepage.wealthier.description: The description for the homepage wealthier"
   },
+  "nm9dX4": {
+    "defaultMessage": "Once-a-year expenses that can be put on a credit card, eg vactions",
+    "description": "Simulator Tooltip: Yearly Cash"
+  },
   "p695DK": {
     "defaultMessage": "The future is brighter",
     "description": "site.homepage.landscape.title: The title for the homepage"
-  },
-  "pQMOTC": {
-    "defaultMessage": "Subscribe",
-    "description": "site.subscribe.button: Button for the bottom subscription part for the site"
   },
   "pRmrf0": {
     "defaultMessage": "Make a Difference",
@@ -311,35 +371,16 @@
     "defaultMessage": "Who Wins?",
     "description": "site.homepage.wealthier.profits.link: The link for the profits for the homepage wealthier"
   },
-  "quX+ke": {
-    "defaultMessage": "I want to receive the newsletter",
-    "description": "site.subscribe.confirmation.form.subcheckbox: label for subcheckbox field"
-  },
-  "rplP0T": {
-    "defaultMessage": "Show Me",
-    "description": "site.compare.button: label for the button in the compare page"
-  },
-  "site.subscribe.confirmation.button": {
-    "defaultMessage": "Update Details!"
+  "t92bBR": {
+    "defaultMessage": "as we work to offset our clients’ emissions.",
+    "description": "site.homepage.underwater.description: Description for the homepage underwater part2"
   },
   "tFFMkF": {
     "defaultMessage": "Pause"
   },
-  "tKAFVB": {
-    "defaultMessage": "Success: check your emails",
-    "description": "site.subscribe.success: Message we give a user when the subscription is a success"
-  },
-  "tk3UgV": {
-    "defaultMessage": "CAD",
-    "description": "site.compare.label.rangeStartingCurrency: label for Starting Value Currency Text field in the compare page"
-  },
   "tzKdah": {
     "defaultMessage": "Start Now",
     "description": "site.homepage.wealthier.startnow.title: The title for the star now for the homepage wealthier"
-  },
-  "u1YH39": {
-    "defaultMessage": "City",
-    "description": "site.subscribe.confirmation.form.city: label for city field"
   },
   "uGt+BZ": {
     "defaultMessage": "Safe drinking water without boiling protects people and forests",
@@ -348,14 +389,6 @@
   "vLjur9": {
     "defaultMessage": "You’re Wealthier",
     "description": "site.homepage.landscape.stickers.left.title: The title for the homepage landscape left sticker"
-  },
-  "vMhtx9": {
-    "defaultMessage": "Email",
-    "description": "site.subscribe.confirmation.form.email: label for email field"
-  },
-  "w9xyw0": {
-    "defaultMessage": "Signup failed: please contact support@thecoin.io",
-    "description": "site.subscribe.error: Message we give a user when the subscription failed (already subscribed or server)"
   },
   "wLTPa8": {
     "defaultMessage": "How much will you make?",
@@ -369,6 +402,10 @@
     "defaultMessage": "In-depth",
     "description": "site.MainNavigation.indepth: Title for the In-depth entry in the menu"
   },
+  "x3GLcd": {
+    "defaultMessage": "Shareable Link",
+    "description": "site.compare.description: Link to share with whoever:"
+  },
   "xWWo6h": {
     "defaultMessage": "Blog",
     "description": "site.blog.title: Title for the In-depth blog page"
@@ -377,16 +414,24 @@
     "defaultMessage": "FAQ",
     "description": "site.helpDocs.title: title for the FAQ page"
   },
-  "yZZmtI": {
-    "defaultMessage": "Starting value:",
-    "description": "site.compare.label.rangeStarting: label for Starting Value in the compare page"
-  },
   "yqcj84": {
     "defaultMessage": "How Anyone Can Get Rich Slow",
     "description": "site.homepage.wealthier.growth.link: The link for the growth for the homepage wealthier"
   },
+  "yxXPBo": {
+    "defaultMessage": "Cash Spending:",
+    "description": "Simulator: parameters for cash-based spending"
+  },
+  "zVv9Y7": {
+    "defaultMessage": "How big of a drop in the market will{br}be absorbed before you lose any money",
+    "description": "Simulator Tooltip: shockabsorber cushion"
+  },
   "zj5EI2": {
     "defaultMessage": "LOG IN",
     "description": "site.MainNavigation.loginLink: Button to log in in app"
+  },
+  "zoVNqc": {
+    "defaultMessage": "Any monthly expenses that can be{br}put on a credit card, eg gym memberships",
+    "description": "Simulator Tooltip: Monthly Cash"
   }
 }

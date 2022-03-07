@@ -1,23 +1,15 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-
-import { Underwater } from './UnderwaterGreaterThanMobile';
-import { UnderwaterMobile } from './UnderwaterMobile';
-
-import { ProviderProps } from 'react-redux';
-import { AnyAction } from 'redux';
+import { Healthier as Component } from '.';
+import styles from '../styles.module.less';
 
 export default {
-  title: 'Landing/Homepage/Underwater',
-  component: Underwater,
-  argTypes: {}
+  title: 'Landing/Homepage/Healthier',
+  component: Component,
 } as Meta;
 
-const Template = () => <Underwater />;
-const TemplateMobile = () => <UnderwaterMobile />;
-
-export const Desktop: Story<ProviderProps<AnyAction>> = Template.bind({});
-Desktop.args = {};
-
-export const Mobile: Story<ProviderProps<AnyAction>> = TemplateMobile.bind({});
-Mobile.args = {};
+export const Healthier: Story = () => (
+  <div className={styles.pageContainer}>
+    <Component />
+  </div>
+);

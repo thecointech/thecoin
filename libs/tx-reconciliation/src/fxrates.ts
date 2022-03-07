@@ -1,39 +1,40 @@
-export {}
-// import { fetchRate, FXRate, weBuyAt, weSellAt } from "@thecointech/shared/containers/FxRate";
-// import { toHuman } from "@thecointech/utilities";
-// import { NextOpenTimestamp } from "@thecointech/utilities/MarketStatus";
-// import { DateTime } from 'luxon';
-// import { ReconciledRecord } from "types";
+import { fetchRate, FXRate, weBuyAt, weSellAt } from "@thecointech/fx-rates";
+import { toHuman } from "@thecointech/utilities";
+import { nextOpenTimestamp } from "@thecointech/market-status";
+import { DateTime } from 'luxon';
+import { ReconciledRecord } from "types";
+import { Decimal } from 'decimal.js-light';
 
-// const getSettlementDate = async (r: ReconciledRecord) =>
-//   r.action.processedTimestamp?.toDate() ??
-//   DateTime.fromMillis(await NextOpenTimestamp(r.action.data.date.toJSDate()));
+const getSettlementDate = async (r: ReconciledRecord) =>
+  DateTime.fromMillis(await nextOpenTimestamp(r.data.initiated));
 
-// const rates: FXRate[] = [];
+const rates: FXRate[] = [];
 
-// function haveRateFor(ts: number): boolean {
-//   return rates.find(r => r.validFrom <= ts && r.validTill > ts) != null;
-// }
+function haveRateFor(ts: number): boolean {
+  return rates.find(r => r.validFrom <= ts && r.validTill > ts) != null;
+}
 
-// const updateRate = async (date: Date) => {
-//   if (!haveRateFor(date.getTime())) {
-//     const newRate = await fetchRate(date);
-//     if (!newRate)
-//       throw new Error('uhoh');
-//     rates.push(newRate);
-//     rates.sort((a, b) => a.validFrom - b.validFrom)
-//   }
-// }
+const updateRate = async (date: DateTime) => {
+  if (!haveRateFor(date.toMillis())) {
+    const newRate = await fetchRate(date.toJSDate());
+    if (!newRate)
+      throw new Error('uhoh');
+    rates.push(newRate);
+    rates.sort((a, b) => a.validFrom - b.validFrom)
+  }
+}
 
-// async function fetchFiat(coin: number, action: string, date: Date) {
-//   await updateRate(date);
-//   return toHuman(coin * (
-//     action === "Buy"
-//       ? weSellAt(rates, date)
-//       : weBuyAt(rates, date)
-//     )
-//   , true)
-// }
-// export const getFiat = async (r: ReconciledRecord) =>
-//   r.data.fiatDisbursed || fetchFiat(r.data.transfer.value, r.action, await getSettlementDate(r));
+export async function fetchFiat(coin: Decimal, action: string, date: DateTime) {
+  await updateRate(date);
+  return new Decimal(
+    toHuman(coin.toNumber() * (
+      action === "Buy"
+        ? weSellAt(rates, date.toJSDate())
+        : weBuyAt(rates, date.toJSDate())
+      )
+    , true)
+  )
+}
+export const getFiat = async (r: ReconciledRecord) =>
+  r.data.fiat || fetchFiat(r.data.coin!, r.data.type, await getSettlementDate(r));
 

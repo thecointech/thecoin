@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/ethers-provider",
-  "version": "0.2.55",
+  "version": "0.2.67",
   "description": "TheCoin: A custom ethers.js provider with access to Polygon and improved Etherscan support",
   "keywords": [
     "ethereum",
@@ -27,15 +27,32 @@
   ],
   "exports": {
     ".": {
-      "development": "./build/development/index.js",
-      "devlive": "./build/devlive/index.js",
-      "default": "./build/prod/index.js"
+      "node": {
+        "development": "./build/node/mocked.js",
+        "devlive": "./build/node/local.js",
+        "default": "./build/node/remote.js"
+      },
+      "development": "./build/web/mocked/index.js",
+      "devlive": "./build/web/local/index.js",
+      "default": "./build/web/remote/index.js"
+    },
+    "./Erc20Provider": {
+      "development": "./build/web/mocked/index.js",
+      "devlive": "./build/web/local/index.js",
+      "default": "./build/web/remote/index.js"
     }
   },
-  "types": "./build/prod/index.d.ts",
+  "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "Erc20Provider": [
+        "build/web/remote/index.d.ts"
+      ]
+    }
+  },
   "dependencies": {
     "@ethersproject/providers": "^5.5.1",
-    "@thecointech/logging": "*"
+    "@thecointech/logging": "^0.2.67"
   },
   "devDependencies": {
     "jest": "*"

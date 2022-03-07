@@ -1,0 +1,68 @@
+{
+	"folders": [
+    {
+      "name": "site-landing",
+      "path": "../apps/site-landing"
+    },
+    {
+      "name": "site-app",
+      "path": "../apps/site-app"
+    },
+    {
+      "name": "site-base",
+      "path": "../libs/site-base"
+    },
+    {
+      "name": "shared",
+      "path": "../libs/shared"
+    },
+    {
+      "name": "site-semantic-theme",
+      "path": "../libs/site-semantic-theme"
+    },
+    {
+      "name": "utils-ts",
+      "path": "../libs/utils-ts"
+    },
+    {
+      "name": "tx-blockchain",
+      "path": "../libs/tx-blockchain"
+    },
+    {
+      "name": "contract",
+      "path": "../libs/contract"
+    }
+  ],
+  "settings": {
+    "deepcode.review.results.hideInformationIssues": false,
+    "typescript.tsdk": "../node_modules/typescript/lib",
+    "typescript.tsserver.pluginPaths": [
+      "typescript-plugin-css-modules"
+    ],
+    "jest.pathToJest": "${workspaceFolder:shared}/../../node_modules/.bin/jest",
+    "jest.debugMode": true,
+    "files.exclude": {
+      ".firebase/": true,
+      ".vscode/": true,
+      "build/": true,
+      "node_modules/": true
+    }
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Storybook: Launch Chrome",
+        "request": "launch",
+        "type": "pwa-chrome",
+        "url": "http://localhost:6006",
+        "webRoot": "${workspaceFolder:shared}/../..",
+        "sourceMaps": true,
+        "outFiles": [
+          "**/build/**/*.js",
+          "!**/node_modules/**"
+        ]
+      }
+    ]
+  }
+}

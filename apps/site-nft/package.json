@@ -2,7 +2,7 @@
   "name": "@thecointech/site-nft",
   "productName": "THECoin: NFT",
   "private": true,
-  "version": "0.2.55",
+  "version": "0.2.67",
   "description": "THECoin NFT: some neat tagline",
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn start:server",
     "start": "yarn test && yarn build && yarn start:server",
-    "start:server": "yarn cross-env NODE_ENV=production node ./internals/server --port=3003",
+    "start:server": "yarn cross-env NODE_ENV=production node ./internals/server.mjs --port=3003",
     "generate": "plop --plopfile internals/generators/index.js",
     "lint": "yarn lint:src && yarn lint:css",
     "lint:css": "stylelint './src/**/*.{js,ts}'",
@@ -51,10 +51,10 @@
     ]
   },
   "dependencies": {
-    "@thecointech/contract-nft": "^0.2.55",
-    "@thecointech/nft": "^0.2.41",
-    "@thecointech/shared": "^0.2.55",
-    "@thecointech/site-base": "^0.2.55",
+    "@thecointech/contract-nft": "^0.2.67",
+    "@thecointech/nft": "^0.2.67",
+    "@thecointech/shared": "^0.2.67",
+    "@thecointech/site-base": "^0.2.67",
     "@toast-ui/react-image-editor": "3.14.2",
     "exif-library": "https://github.com/FrozenKiwi/exif-library#1db15506"
   },

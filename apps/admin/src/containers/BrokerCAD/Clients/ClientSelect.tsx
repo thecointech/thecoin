@@ -1,22 +1,25 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { DropdownProps, Select } from "semantic-ui-react";
 import { Client } from "./Client";
-import { useFxRates } from "@thecointech/shared/containers/FxRate";
-import { UserData, getAllUserData } from "./data";
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { FXRate, useFxRates } from "@thecointech/shared/containers/FxRate";
+import { UserData } from "./data";
+import { toCAD } from './toCAD';
 
-export const ClientSelect = () => {
+type Props = {
+  fetchData: () => Promise<UserData[]>;
+}
+
+export const ClientSelect = ({fetchData} : Props) => {
 
   const [users, setUsers] = useState<UserData[]>([]);
   const [address, setAddress] = useState(undefined as string | undefined);
   const [loading, setLoading] = useState(false);
   const fxRates = useFxRates();
-  const account = AccountMap.useActive();
 
   // Fetch all users with balance
   useEffect(() => {
     setLoading(true);
-    getAllUserData(fxRates.rates, account!)
+    fetchData()
       .then(setUsers)
       .then(() => setLoading(false))
       .catch(alert)
@@ -36,7 +39,7 @@ export const ClientSelect = () => {
         selection
         onChange={onChange}
         loading={loading}
-        options={buildOptions(users)}
+        options={buildOptions(users, fxRates.rates)}
       />
       {
         active
@@ -48,11 +51,11 @@ export const ClientSelect = () => {
   );
 }
 
-const buildOptions = (users: UserData[]) =>
+const buildOptions = (users: UserData[], rates: FXRate[]) =>
   users.map(user => ({
     key: user.address,
     value: user.address,
     icon: 'attention',
-    text: `${user.name} ${user.balanceCad}`,
+    text: `${user.name} ${toCAD(user.balanceCoin, rates)}`,
     data: user
   }))

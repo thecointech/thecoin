@@ -3,10 +3,6 @@
  *
  * This is the first thing users see of our App, at the '/' route
  *
- * NOTE: while this component should technically be a stateless functional
- * component (SFC), hot reloading does not currently support SFCs. If hot
- * reloading is not a necessity for you then you can refactor it and remove
- * the linting exception.
  */
 
 import * as React from 'react';
@@ -15,39 +11,18 @@ import { Landscape } from './landscape';
 import { Advantages } from './advantages';
 import { Wealthier } from './wealthier';
 import { CreateAccountSmall } from './createAccountSmall';
-import { Underwater } from './underwater/UnderwaterGreaterThanMobile';
-import { UnderwaterMobile } from './underwater/UnderwaterMobile';
-import { GreaterThanMobileSegment, MobileSegment } from '@thecointech/shared/components/ResponsiveTool';
+import { Healthier } from './underwater';
 import { CreateAccountBanner, TypeCreateAccountBanner } from '../CreateAccountBanner';
+import  styles from './styles.module.less';
 
-export const HomePage = () => {
-
-  return (
-    <React.Fragment>
-
-      <GreaterThanMobileSegment>
-        <div>
-          <Landscape />
-          <Advantages />
-          <Wealthier />
-          <CreateAccountSmall />
-          <Underwater />
-          <CreateAccountBanner Type={ TypeCreateAccountBanner.Plants } />
-        </div>
-      </GreaterThanMobileSegment>
-
-      <MobileSegment>
-        <div id="mobile">
-          <Landscape />
-          <Advantages />
-          <Wealthier />
-          <CreateAccountSmall />
-          <UnderwaterMobile />
-          <CreateAccountBanner Type={ TypeCreateAccountBanner.Plants } />
-        </div>
-      </MobileSegment>
-
-    </React.Fragment>
-  );
-}
+export const HomePage = () => (
+  <div className={styles.pageContainer}>
+    <Landscape />
+    <Advantages />
+    <Wealthier />
+    <CreateAccountSmall />
+    <Healthier />
+    <CreateAccountBanner className={styles.benefits} Type={TypeCreateAccountBanner.Plants} />
+  </div>
+);
 

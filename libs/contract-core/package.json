@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-core",
-  "version": "0.2.55",
+  "version": "0.2.67",
   "description": "The Coin: Solidity contract for TheCoin currency",
   "keywords": [
     "TheCoin",
@@ -48,21 +48,30 @@
   ],
   "main": "./build/index.js",
   "exports": {
+    "./contract": "./build/cjs/index.js",
     ".": {
-      "electron": "./build/mjs/index.js",
       "development": "./build/cjs/index_mocked.js",
+      "electron": "./build/mjs/index.js",
       "default": "./build/cjs/index.js"
     }
   },
   "types": "./build/cjs/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "build/cjs/index.d.ts"
+      ]
+    }
+  },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.3.2",
     "@openzeppelin/truffle-upgrades": "^1.11.0",
-    "@thecointech/contract-tools": "^0.2.55",
+    "@thecointech/async": "^0.2.67",
+    "@thecointech/contract-tools": "^0.2.67",
     "jest": "*"
   },
   "dependencies": {
-    "@thecointech/contract-base": "^0.2.55"
+    "@thecointech/contract-base": "^0.2.67"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

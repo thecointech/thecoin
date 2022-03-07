@@ -3,6 +3,114 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.67](https://github.com/thecointech/thecoin/compare/v0.2.66...v0.2.67) (2022-02-23)
+
+**Note:** Version bump only for package the-coin
+
+
+
+
+
+## [0.2.66](https://github.com/thecointech/thecoin/compare/v0.2.65...v0.2.66) (2022-02-23)
+
+**Note:** Version bump only for package the-coin
+
+
+
+
+
+## [0.2.65](https://github.com/thecointech/thecoin/compare/v0.2.64...v0.2.65) (2022-02-23)
+
+**Note:** Version bump only for package the-coin
+
+
+
+
+
+## [0.2.64](https://github.com/thecointech/thecoin/compare/v0.2.63...v0.2.64) (2022-02-22)
+
+**Note:** Version bump only for package the-coin
+
+
+
+
+
+## [0.2.63](https://github.com/thecointech/thecoin/compare/v0.2.62...v0.2.63) (2022-02-20)
+
+**Note:** Version bump only for package the-coin
+
+
+
+
+
+## [0.2.62](https://github.com/thecointech/thecoin/compare/v0.2.61...v0.2.62) (2022-02-14)
+
+**Note:** Version bump only for package the-coin
+
+
+
+
+
+## [0.2.61](https://github.com/thecointech/thecoin/compare/v0.2.60...v0.2.61) (2022-02-14)
+
+**Note:** Version bump only for package the-coin
+
+
+
+
+
+## [0.2.60](https://github.com/thecointech/thecoin/compare/v0.2.59...v0.2.60) (2022-02-11)
+
+
+### Bug Fixes
+
+* apps/broker-service/package.json to reduce vulnerabilities ([e79d59b](https://github.com/thecointech/thecoin/commit/e79d59bcf6f0d28d1539a72fd2aa789ddb0462ab))
+* apps/nft-service/package.json to reduce vulnerabilities ([6815994](https://github.com/thecointech/thecoin/commit/6815994c91dce1512f22281cc7177dcd0eeb6c7b))
+* apps/rates-service/package.json to reduce vulnerabilities ([6cc3d37](https://github.com/thecointech/thecoin/commit/6cc3d377e5e2559bfdd37cafefb1f3d9f2ff2351))
+* libs/rbcapi/package.json to reduce vulnerabilities ([201ed0f](https://github.com/thecointech/thecoin/commit/201ed0f313326a42a023b9a1a84e714f4754b0df))
+* package.json to reduce vulnerabilities ([028aee5](https://github.com/thecointech/thecoin/commit/028aee5afcc3c7064574018fbe070bfb00aab035))
+
+
+
+
+
+## [0.2.59](https://github.com/thecointech/thecoin/compare/v0.2.58...v0.2.59) (2022-01-23)
+
+
+### Bug Fixes
+
+* apps/nft-service/package.json to reduce vulnerabilities ([e1ea143](https://github.com/thecointech/thecoin/commit/e1ea14301105e6ae9f0c2c477281b817a3276e80))
+* apps/rates-service/package.json to reduce vulnerabilities ([2298d45](https://github.com/thecointech/thecoin/commit/2298d45e609e2c791230a6cb1ad6c28ba1d7d717))
+* libs/email/package.json to reduce vulnerabilities ([7c61597](https://github.com/thecointech/thecoin/commit/7c61597b8306db0bea6a98b16f24d3e6f216ef33))
+
+
+
+
+
+## [0.2.58](https://github.com/thecointech/thecoin/compare/v0.2.57...v0.2.58) (2022-01-13)
+
+**Note:** Version bump only for package the-coin
+
+
+
+
+
+## [0.2.57](https://github.com/thecointech/thecoin/compare/v0.2.56...v0.2.57) (2021-12-23)
+
+**Note:** Version bump only for package the-coin
+
+
+
+
+
+## [0.2.56](https://github.com/thecointech/thecoin/compare/v0.2.55...v0.2.56) (2021-12-22)
+
+**Note:** Version bump only for package the-coin
+
+
+
+
+
 ## [0.2.55](https://github.com/thecointech/thecoin/compare/v0.2.54...v0.2.55) (2021-12-11)
 
 **Note:** Version bump only for package the-coin

@@ -10,11 +10,6 @@ export function buildResponse<T>(data: T): AxiosResponse<T> {
   }
 }
 
-// Delay function fakes a network request
-export function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 function deepCopy(obj: any): any {
   var copy;
 

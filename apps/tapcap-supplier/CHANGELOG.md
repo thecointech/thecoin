@@ -3,6 +3,62 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.67](https://github.com/thecointech/thecoin/compare/v0.2.66...v0.2.67) (2022-02-23)
+
+**Note:** Version bump only for package @thecointech/service-tapcap-supplier
+
+
+
+
+
+## [0.2.66](https://github.com/thecointech/thecoin/compare/v0.2.65...v0.2.66) (2022-02-23)
+
+**Note:** Version bump only for package @thecointech/service-tapcap-supplier
+
+
+
+
+
+## [0.2.65](https://github.com/thecointech/thecoin/compare/v0.2.64...v0.2.65) (2022-02-23)
+
+**Note:** Version bump only for package @thecointech/service-tapcap-supplier
+
+
+
+
+
+## [0.2.64](https://github.com/thecointech/thecoin/compare/v0.2.63...v0.2.64) (2022-02-22)
+
+**Note:** Version bump only for package @thecointech/service-tapcap-supplier
+
+
+
+
+
+## [0.2.63](https://github.com/thecointech/thecoin/compare/v0.2.62...v0.2.63) (2022-02-20)
+
+**Note:** Version bump only for package @thecointech/service-tapcap-supplier
+
+
+
+
+
+## [0.2.62](https://github.com/thecointech/thecoin/compare/v0.2.61...v0.2.62) (2022-02-14)
+
+**Note:** Version bump only for package @thecointech/service-tapcap-supplier
+
+
+
+
+
+## [0.2.61](https://github.com/thecointech/thecoin/compare/v0.2.60...v0.2.61) (2022-02-14)
+
+**Note:** Version bump only for package @thecointech/service-tapcap-supplier
+
+
+
+
+
 ## [0.2.41](https://github.com/thecointech/thecoin/compare/v0.2.40...v0.2.41) (2021-09-22)
 
 **Note:** Version bump only for package @thecointech/service-tapcap-supplier

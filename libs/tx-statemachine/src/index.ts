@@ -21,7 +21,7 @@ async function runAndStoreTransition<Type extends ActionType>(container: TypedAc
   }
   catch (error) {
     // For any exception, we transition to an error state and await a manual fix.
-    log.error({ transition: transition.name, initialId: container.action.data, error},
+    log.error({ transition: transition.name, initialId: container.action.data.initialId, error},
       "Error running {transition} on {initialId}: {error}");
     delta = { error: error.message }
   }
@@ -68,6 +68,18 @@ export function transitionTo<States extends string, Type extends ActionType=Acti
 
     // ensure that our transition matches the one being replayed.
     if (replay && transition.name != replay.type) {
+      // If this is an override, let it run through
+      if (replay.type == "manualOverride") {
+        log.info("Allowing Manual Override");
+        return {
+          name: replay.meta! as States,
+          delta: replay,
+          data: {
+            ...currentState.data,
+            ...replay,
+          }
+        }
+      }
       throw new Error(`Replay event ${replay.type} does not match next transition ${transition.name}`);
     }
     const delta = replay ?? await runAndStoreTransition<Type>(container, transition);

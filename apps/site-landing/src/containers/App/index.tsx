@@ -8,8 +8,6 @@
  */
 
 import * as React from 'react';
-import { Container } from 'semantic-ui-react';
-
 import {MainNavigation} from 'containers/MainNavigation';
 import {Footer} from 'components/Footer';
 import { MainPageTransition } from '@thecointech/site-base/components/MainPageTransition';
@@ -28,20 +26,21 @@ export const App = () => {
   Prismic.useStore();
 
   return (
-    <div id={styles.app}>
-      <MediaContextProvider>
-        <style>{mediaStyles}</style>
+    <MediaContextProvider>
+      <style>{mediaStyles}</style>
+      <div id={styles.landing} >
         <MainNavigation />
 
-        <Container className={styles.appContainer}>
+        <div className={styles.contentContainer}>
           <MainPageTransition>
-            <section id={styles.mainContent} className={styles.pageMainInner}>
+            <section>
               <Routes />
             </section>
           </MainPageTransition>
-        </Container>
+        </div>
+
         <Footer />
-      </MediaContextProvider>
-    </div>
+      </div>
+    </MediaContextProvider>
   );
 }

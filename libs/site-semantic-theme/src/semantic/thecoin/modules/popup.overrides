@@ -1,3 +1,7 @@
 /*******************************
         User Overrides
 *******************************/
+
+[data-tooltip]:after {
+  white-space: pre;
+}

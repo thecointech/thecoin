@@ -1,0 +1,62 @@
+{
+	"folders": [
+    {
+      "name": "tx-reconciliation",
+      "path": "../libs/tx-reconciliation"
+    },
+    {
+      "name": "tx-gmail",
+      "path": "../libs/tx-gmail"
+    },
+    {
+      "name": "tx-blockchain",
+      "path": "../libs/tx-blockchain"
+    },
+    {
+      "name": "rbcapi",
+      "path": "../libs/rbcapi"
+    }
+  ],
+  "settings": {
+    "jest.pathToJest": "./node_modules/.bin/jest",
+    "jestrunner.jestPath": "${workspaceFolder}/../../node_modules/jest/bin/jest.js",
+    "npm.packageManager": "yarn",
+    "files.exclude": {
+      "**/build": true,
+      "**/node_modules": true
+    },
+  },
+  "launch": {
+    "configurations": [
+      {
+        "type": "pwa-node",
+        "name": "vscode-jest-tests",
+        "request": "launch",
+        "preLaunchTask": "npm: build",
+        "program": "./node_modules/jest/bin/jest",
+        "args": [
+          "--runInBand",
+          "--config",
+          "jest.config.js",
+          "--",
+          "${file}"
+        ],
+        "console": "integratedTerminal",
+        "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }"
+      }
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "type": "npm",
+        "script": "build",
+        "problemMatcher": [
+          "$tsc"
+        ],
+        "group": "build"
+      }
+    ]
+  }
+}

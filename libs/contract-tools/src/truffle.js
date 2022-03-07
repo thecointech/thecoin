@@ -1,12 +1,12 @@
 'use strict';
 // Load environment for the network we are deploying to
-require('../../../tools/setenv');
+require('@thecointech/setenv');
 require('../../../__mocks__/mock_node');
 
 var path = require('path');
 const { getSigner } = require('@thecointech/signers');
 const { TruffleEthersProvider } = require("@thecointech/truffle-ethers-provider");
-const { deployProvider } = require("@thecointech/ethers-provider");
+const { getProvider } = require("@thecointech/ethers-provider");
 
 // Allow using typescript in deployments
 loadTypescript();
@@ -37,7 +37,7 @@ function getLiveNetworks() {
       polygon: {
         provider: () => new TruffleEthersProvider(
           { [process.env.WALLET_Owner_ADDRESS]: () => getSigner("Owner") },
-          deployProvider("POLYGON"),
+          getProvider("POLYGON"),
         ),
         network_id: process.env.DEPLOY_POLYGON_NETWORK_ID, // eslint-disable-line camelcase
         confirmations: 2,
@@ -49,7 +49,7 @@ function getLiveNetworks() {
       ethereum: {
         provider: () => new TruffleEthersProvider(
           { [process.env.WALLET_Owner_ADDRESS]: () => getSigner("Owner") },
-          deployProvider("ETHEREUM"),
+          getProvider("ETHEREUM"),
         ),
         network_id: process.env.DEPLOY_ETHEREUM_NETWORK_ID, // eslint-disable-line camelcase
         skipDryRun: true

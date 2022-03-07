@@ -8,7 +8,7 @@ import { LanguageProviderReducer } from '@thecointech/shared/containers/Language
 import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
 import { getAllAccounts, getInitialAddress } from '@thecointech/account/store';
 
-export function withStore(initialState?: Partial<ApplicationBaseState>) {
+export function withStore<T extends ApplicationBaseState>(initialState?: Partial<T>) {
   const createReducer = (injectedReducers?: ReducersMapObject) =>
     injectedReducers
       ? combineReducers({...injectedReducers})
@@ -34,11 +34,16 @@ export function withAccounts(initialState?: AccountMapState) {
   return (Story: React.ElementType) => <Provider store={store}><Story /></Provider>
 }
 
-// Simple decorators that are used in a few places
-export const withLanguageProvider = (Story: React.ElementType) => {
-  LanguageProviderReducer.useStore();
-  return <Story />
+// Generic reducer decorator
+export function withReducer(reducer: { useStore: () => any }) {
+  return (Story: React.ElementType) => {
+    reducer.useStore();
+    return <Story />
+  }
 }
+
+// Dedicated LP decorator is used in a few places
+export const withLanguageProvider = withReducer(LanguageProviderReducer);
 
 export const withMediaContext = (Story: React.ElementType) =>
   <MediaContextProvider>

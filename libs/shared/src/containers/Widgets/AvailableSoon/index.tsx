@@ -8,10 +8,10 @@ const title = defineMessage({
       description: "shared.widgets.availablesoon.title:Title for the Widget Available Soon in the app",
 });
 
-export const AvailableSoon: React.FC = (props) => {
+export const AvailableSoon: React.FC<{fill?: boolean}> = ({fill, children}) => {
   return (
-    <div className={styles.availableSoonContainer}>
-      {props.children}
+    <div className={`${styles.availableSoonContainer} ${fill ? styles.fill : ''}`}>
+      {children}
       <Header as="h5" className={styles.soon}>
         <FormattedMessage {...title} />
       </Header>

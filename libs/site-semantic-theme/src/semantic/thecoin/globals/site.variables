@@ -11,14 +11,25 @@
 @tabletWidth                 : 768;
 @desktopWidth                : 1440;
 @mobileBreakpoint            : unit(415, px);
-@tabletBreakpoint            : unit(768, px);
+@tabletBreakpoint            : unit(570, px);
 @largeMonitorBreakpoint      : unit(1440, px);
 
 // We switch to mobile just slightly below tablet.
 // This is the smallest area we could cram our landing header into
-@midBreakpoint: 750px;
+@midWidth: 750;
+@midBreakpoint: unit(@midWidth, px);
+@largestMobileScreen: @midBreakpoint;
+
+// For use in 2-layout settings. Small & big - self-explanatory
 .smallScreen(@rules) { @media only screen and (max-width: (@midBreakpoint - 1px)) { @rules(); } }
 .bigScreen(@rules) { @media only screen and (min-width: @midBreakpoint) { @rules(); } }
+
+// For use in those edge cases where we need a 3-layout setting.
+// Mobile/Tablet/Desktop - Tablet overlaps both small & big screens above
+.tabletScreen(@rules) { @media only screen and (min-width: @tabletBreakpoint) and (max-width: (@largestTabletScreen - 1px))  { @rules(); } }
+.mobileScreen(@rules) { @media only screen                                    and (max-width: (@tabletBreakpoint - 1px)) { @rules(); } }
+.desktopScreen(@rules) { @media only screen and (min-width: @tabletBreakpoint) { @rules(); } }
+
 
 .smallerThanDesktop(@rules) { @media only screen and (max-width: @tabletBreakpoint) { @rules(); } }
 .biggerThanSmallComputer(@rules) { @media only screen and (min-width: @computerBreakpoint) { @rules(); } }
@@ -27,6 +38,24 @@
 
 @pageBackground: @white;
 @maxContentWidth: 1440px;
+
+// Scalable settings run from small to big depending on screen size
+.scalable-unit-bp(@small, @big, @smallbp, @bigbp, @unit) {
+  @result: calc(unit(@small, @unit) + (@big - @small) * ((100vw - unit(@smallbp, @unit)) / (@bigbp - @smallbp)))
+}
+
+.scalable-clamped-bp(@small, @big, @smallbp, @bigbp, @unit) {
+  @result: clamp(unit(@small, @unit),
+    .scalable-unit-bp(@small, @big, @smallbp, @bigbp, @unit)[@result],
+    unit(@big, @unit)
+  );
+}
+.scalable-clamped(@small, @big, @unit) {
+  .scalable-clamped-bp(@small, @big, @midWidth, @desktopWidth, @unit)
+}
+.scalable(@small, @big) {
+  .scalable-clamped(@small, @big, px)
+}
 
 /*-------------------
        Fonts

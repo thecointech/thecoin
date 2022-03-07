@@ -4,8 +4,8 @@ import { getAndCacheSigner } from '../cache'
 import { loadFromDisk } from '../fromDisk';
 import { AccountName } from '../names';
 import { log } from '@thecointech/logging';
-import { InfuraProvider } from "@ethersproject/providers";
 import type { Signer } from '@ethersproject/abstract-signer';
+import { getProvider } from '@thecointech/ethers-provider';
 
 //
 // This is exclusively running in node process on production environments
@@ -15,7 +15,7 @@ const getSigner = (name: AccountName) =>
     // Normally, connecting to the contract enforces the
     // right provider, but in this instance we don't have a provider
     const wallet = await loadFromDisk(name);
-    const provider = new InfuraProvider(process.env.DEPLOY_NETWORK, process.env.INFURA_PROJECT_ID);
+    const provider = getProvider();
     return wallet.connect(provider);
   });
 

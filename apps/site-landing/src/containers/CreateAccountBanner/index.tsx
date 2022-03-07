@@ -1,9 +1,6 @@
 import * as React from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { Grid, Header } from 'semantic-ui-react';
-import illustrationPeople from './images/illust_grow.svg';
-import illustrationPlant from './images/illust_flowers.svg';
-
+import { defineMessage, FormattedMessage } from 'react-intl';
+import { Header } from 'semantic-ui-react';
 import styles from './styles.module.less';
 import { CreateAccountButton } from '../../components/AppLinks/CreateAccount';
 
@@ -12,37 +9,26 @@ export enum TypeCreateAccountBanner {
     Plants
 }
 
+const bgStyles = {
+  [TypeCreateAccountBanner.People]: styles.withPeople,
+  [TypeCreateAccountBanner.Plants]: styles.withPlants,
+}
+
 export type Props = {
-    Type: TypeCreateAccountBanner;
+  Type: TypeCreateAccountBanner;
+  className?: string;
 }
 
-const translations = defineMessages({
-    title : {
-        defaultMessage: 'The benefits of a chequing, savings, and investing account all in one!',
-        description: 'site.createAccountBanner.title: The benefits of a chequing, savings, and investing account all in one!'}
-    });
+const title = defineMessage({
+  defaultMessage: 'The benefits of a chequing, savings, and investing account all in one!',
+  description: 'site.createAccountBanner.title: The benefits of a chequing, savings, and investing account all in one!'
+});
 
-export const CreateAccountBanner = (props: Props) => {
-
-    let illustration = illustrationPlant;
-    if (props.Type === 0) {
-        illustration = illustrationPeople;
-    }
-   return (
-        <Grid className={ `${styles.content} x20spaceBefore` } id={styles.createAccountBanner} columns='equal' textAlign='center' verticalAlign='middle' stackable>
-            <Grid.Row>
-                <Grid.Column>
-                    <Header as='h3'>
-                        <FormattedMessage {...translations.title} />
-                    </Header>
-                    <CreateAccountButton size='large' />
-                </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-                <Grid.Column textAlign='left'>
-                    <img src={ illustration } />
-                </Grid.Column>
-            </Grid.Row>
-        </Grid>
-    );
-}
+export const CreateAccountBanner = (props: Props) => (
+  <div className={`${styles.content} ${bgStyles[props.Type]} ${props.className ?? ''}`} >
+    <Header as='h3' className={styles.title}>
+      <FormattedMessage {...title} />
+    </Header>
+    <CreateAccountButton size='large' />
+  </div>
+);

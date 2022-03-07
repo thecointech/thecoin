@@ -1,47 +1,34 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
-#mainContent{
-  padding: 10px;
-  padding-left: 66px;
-  margin: auto;
-  width: 62%;
-  padding-top: 70px;
-}
+#app {
+  display: grid;
+  grid-gap: 30px;
+  grid-template-columns: auto 201px minmax(auto, 837px) 175px auto;
+  grid-template-rows: 60px 269px 1fr 32px;
+  grid-template-areas:
+    "lgap header header header        rgap"
+    "lgap left   main   widget-top     rgap"
+    "lgap left   main   widget-bottom  rgap"
+    "lgap footer footer footer        rgap";
 
-.contentContainer{
-  max-width: 1300px;
-  margin: auto;
-}
+  .smallScreen({
+    grid-gap: 0px;
+    row-gap: 15px;
+    grid-template-rows: 80px 125px 1fr 115px 250px;
+    grid-template-columns: 15px 1fr 10px;
+    grid-template-areas:
+    "lgap header        rgap"
+    "lgap widget-top    rgap"
+    "lgap main          rgap"
+    "lgap widget-bottom rgap"
+    "lgap footer        rgap"
+  });
 
-.pageMainInner {
-  min-height: 450px;
-  padding: 0em;
-}
+  .contentContainer {
+    grid-area: main;
 
-#headerDecoration{
-  border-bottom: 1px solid @theCoinPalettePaleGreen2Faded50;
-  width: 100%;
-  background-color: @white;
-  box-shadow: @subtleShadow;
-  
-  position: fixed;
-  z-index: 200;
-}
-
-.smallerThanDesktop({
-  #mainContent{
-    padding-left: 0;
-    padding-right: 0;
-    width: 100%;
-    margin: auto;
+    // Explicitly define a min-height to prevent our content
+    // resizer from collapsing down if our content is too small
+    min-height: 450px;
   }
-});
-
-.biggerThanSmallComputer({
-  #mainContent{
-    width: 65%;
-    padding-right: 22px;
-    margin-top: 50px;
-    padding-top: 20px;
-  }
-});
+}

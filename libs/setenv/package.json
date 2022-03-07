@@ -1,0 +1,27 @@
+{
+  "name": "@thecointech/setenv",
+  "private": "true",
+  "version": "0.2.67",
+  "description": "TheCoin: Environment setup library",
+  "keywords": [
+    "TheCoin",
+    "ethereum"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/setenv"
+  },
+  "scripts": {
+    "build": "yarn tsc",
+    "clean": "rimraf ./build"
+  },
+  "exports": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "dependencies": {
+    "dotenv": "^10.0.0"
+  }
+}

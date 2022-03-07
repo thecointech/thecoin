@@ -68,7 +68,11 @@ Apps:
 
 
 
-## .npmrc
+## Authentication
+
+https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages
+
+To upload to Github Packages, add your GH PAT token to your global .npmrc file
 
 The GAE apps need an .npmrc file co-located with the app to allow installing from GitHub packages (from GAE).  To ease maintenance, we store a single .npmrc file with no secret in /tools/.npmrc.  The deployer should fill this in with their deployment key.  This file is then copied to the deploying folder, and the secret injected into the file prior to publishing.
 
@@ -78,7 +82,7 @@ These files are then ignored, so we do not have any files committed into Git tha
 
 -All- configuration information is stored in env files. The location of the .env files is under a folder specified in the environment variable THECOIN_ENVIRONMENTS.  We also store example (spec) .env files under the folder `<root>/environments`.  When loading a .env file, we first query the external location, then the git folder for the file.  It should (may) be possible to do some actions (eg - build and test vs published data) by loading the git folder, but for publishing the engineer will need to fill in all the approriate keys etc.
 
-To select which config to use, we set the environment variable CONFIG_NAME.  Each build step (webpack, deploy etc) calls `tools/setenv.js` to load the appropriate config from this variable, and ensures that the deployment goes to the correct app engine etc.
+To select which config to use, we set the environment variable CONFIG_NAME.  Each build step (webpack, deploy etc) calls `@thecointech/setenv` to load the appropriate config from this variable, and ensures that the deployment goes to the correct app engine etc.
 
 The script `<root>/tools/predeploy.ts` contains some useful actions that are used to deploy to GAE.
 
