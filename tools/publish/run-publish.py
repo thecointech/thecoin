@@ -7,18 +7,24 @@ import shutil
 import stat
 import time
 
-config_name = "prodtest"
+config_name = "prod"
 os.environ["CONFIG_NAME"] = config_name
 
-home = Path.home()
-base = Path('/') / 'TheCoin-deploys' / config_name
+curr_path = Path(__file__).resolve()
+base = curr_path.parent
+
+# Check our path matches deployment
+if (config_name != base.name):
+    print("Mismatched config: " + config_name + " != " + base.name)
+    exit(1)
+
 deploy = base / 'current'
 old_deploy = base / 'old'
 new_deploy = base / 'new'
 temp_deploy = base / 'temp'
 
-
 if not os.environ.get('THECOIN_ENVIRONMENTS'):
+    home = Path.home()
     tc_env = home / 'thecoin' / 'env'
     print(f"Setting default evironment location: {tc_env}")
     os.putenv('THECOIN_ENVIRONMENTS', tc_env)
@@ -139,6 +145,7 @@ def mergeBackIntoDev():
   os.chdir(base)
   shutil.rmtree(temp_deploy, onerror=remove_readonly)
 
+print("Ready...")
 checkout()
 buildAndDeploy()
 renameAndComplete()
