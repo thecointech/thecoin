@@ -5826,15 +5826,15 @@
     find-up "^4.1.0"
     fs-extra "^8.1.0"
 
-"@openzeppelin/contracts-upgradeable@^4.3.2":
-  version "4.3.2"
-  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-4.3.2.tgz#92df481362e366c388fc02133cf793029c744cea"
-  integrity sha512-i/pOaOtcqDk4UqsrOv735uYyTbn6dvfiuVu5hstsgV6c4ZKUtu88/31zT2BzkCg+3JfcwOfgg2TtRKVKKZIGkQ==
+"@openzeppelin/contracts-upgradeable@^4.5.2":
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-4.5.2.tgz#90d9e47bacfd8693bfad0ac8a394645575528d05"
+  integrity sha512-xgWZYaPlrEOQo3cBj97Ufiuv79SPd8Brh4GcFYhPgb6WvAq4ppz8dWKL6h+jLAK01rUqMRp/TS9AdXgAeNvCLA==
 
-"@openzeppelin/contracts@^4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.1.0.tgz#baec89a7f5f73e3d8ea582a78f1980134b605375"
-  integrity sha512-TihZitscnaHNcZgXGj9zDLDyCqjziytB4tMCwXq0XimfWkAjBYyk5/pOsDbbwcavhlc79HhpTEpQcrMnPVa1mw==
+"@openzeppelin/contracts@^4.5.0":
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.5.0.tgz#3fd75d57de172b3743cdfc1206883f56430409cc"
+  integrity sha512-fdkzKPYMjrRiPK6K4y64e6GzULR7R7RwxSigHS8DDp7aWDeoReqsQI+cxHV1UuhAqX69L1lAaWDxenfP+xiqzA==
 
 "@openzeppelin/test-environment@^0.1.9":
   version "0.1.9"
@@ -5855,24 +5855,25 @@
     try-require "^1.2.1"
     web3 "^1.3.0"
 
-"@openzeppelin/truffle-upgrades@^1.11.0":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@openzeppelin/truffle-upgrades/-/truffle-upgrades-1.11.0.tgz#9b0bfe75dbb98f5c7dcf5e4480de7349d21d5a73"
-  integrity sha512-ee9QWWbpbi3wS6FWpgFjgcj0oUUQ0iUmv81jNrKB73R2WHtP+2ChHpFd/0qsLfQWa7bMAeLCkGhLcEy/WoQLjw==
+"@openzeppelin/truffle-upgrades@^1.14.0":
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/truffle-upgrades/-/truffle-upgrades-1.14.0.tgz#cada3919961ab9d7723b0923770e5d7c74599e21"
+  integrity sha512-1Sw+gHss5CuaFEqPlyLIohAPmLsuwr3WTPaqqBFvvyT5AfiztBYwj+w2voAMvQ3Sr6r19iZUl5JdCC+ZpFmRaA==
   dependencies:
-    "@openzeppelin/upgrades-core" "^1.10.0"
+    "@openzeppelin/upgrades-core" "^1.13.1"
     "@truffle/contract" "^4.3.26"
+    chalk "^4.1.0"
     solidity-ast "^0.4.15"
 
-"@openzeppelin/upgrades-core@^1.10.0":
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/@openzeppelin/upgrades-core/-/upgrades-core-1.10.0.tgz#d3aa72b7a23827e0e6daff08ddfb8dcd75171abb"
-  integrity sha512-N20t1i1wlHrVmu3etVZLiaRxT6XLkCrO9gIo4mUZNpsaVftl8V+WBu8o940AjoYXvzTEqj7O0re2DSFzjpkRBw==
+"@openzeppelin/upgrades-core@^1.13.1":
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/upgrades-core/-/upgrades-core-1.13.1.tgz#6e31a88bf846df841886041e46bba79ff1156664"
+  integrity sha512-xqrNQ65BG0pW8Tb8RVI73gHf3mBuuMuduiKQ8PxpFnmMq/CAuwVNbkPRAif7q1USVkXsIdrMKGki1eaZX1xh8g==
   dependencies:
     bn.js "^5.1.2"
     cbor "^8.0.0"
     chalk "^4.1.0"
-    compare-versions "^3.6.0"
+    compare-versions "^4.0.0"
     debug "^4.1.1"
     ethereumjs-util "^7.0.3"
     proper-lockfile "^4.1.1"
@@ -14080,10 +14081,15 @@ compare-version@^0.1.2:
   resolved "https://registry.yarnpkg.com/compare-version/-/compare-version-0.1.2.tgz#0162ec2d9351f5ddd59a9202cba935366a725080"
   integrity sha1-AWLsLZNR9d3VmpICy6k1NmpyUIA=
 
-compare-versions@3.6.0, compare-versions@^3.6.0:
+compare-versions@3.6.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/compare-versions/-/compare-versions-3.6.0.tgz#1a5689913685e5a87637b8d3ffca75514ec41d62"
   integrity sha512-W6Af2Iw1z4CB7q4uU4hv646dW9GQuBM+YpC0UvUCWSD8w90SJjp+ujJuXaEMtAXBtSqGfMPuFOVn4/+FlaqfBA==
+
+compare-versions@^4.0.0:
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/compare-versions/-/compare-versions-4.1.3.tgz#8f7b8966aef7dc4282b45dfa6be98434fc18a1a4"
+  integrity sha512-WQfnbDcrYnGr55UwbxKiQKASnTtNnaAWVi8jZyy8NTpVAXWACSne8lMD1iaIo9AiU6mnuLvSVshCzewVuWxHUg==
 
 component-bind@1.0.0:
   version "1.0.0"
