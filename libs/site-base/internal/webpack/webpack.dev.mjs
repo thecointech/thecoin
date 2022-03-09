@@ -42,12 +42,6 @@ const devOptions = {
         enforce: 'pre',
         use: ['source-map-loader'],
       },
-      //
-      {
-        test: /\.mjs$/,
-        include: /node_modules/,
-        type: "javascript/auto"
-      },
     ],
   },
   // Add development plugins
