@@ -7,7 +7,7 @@ import webpack from 'webpack';
 import { merge } from "webpack-merge";
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
-import ErrorOverlayPlugin from 'error-overlay-webpack-plugin';
+import ErrorOverlayPlugin from './error-overlay-shim.js';
 
 import baseOptions from './webpack.base.mjs';
 import signerOptions from './webpack.signers.mjs';
@@ -41,6 +41,12 @@ const devOptions = {
         test: /\.js$/,
         enforce: 'pre',
         use: ['source-map-loader'],
+      },
+      //
+      {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: "javascript/auto"
       },
     ],
   },
