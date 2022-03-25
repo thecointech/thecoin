@@ -1,9 +1,11 @@
 import React from "react";
 import { Container } from "semantic-ui-react";
 import { ButtonPrimary } from '../../../components/Buttons';
-import { UploadWallet, ReadFileData } from "@thecointech/shared";
+import { UploadWallet, UploadData } from "@thecointech/shared";
 import { defineMessages, FormattedMessage } from "react-intl";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import styles from './styles.module.less';
 
 const translations = defineMessages({
   explanation : {
@@ -14,29 +16,24 @@ const translations = defineMessages({
       description: 'app.account.restore.createAccount.button: The button to redirect to the create an account page for the restore your account page'}
 });
 
-function readFile(file: File): Promise<ReadFileData> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const target = e.target;
-      resolve({
-        wallet: target?.result as string,
-        name: undefined
-      });
-    };
-    reader.onerror = reject;
-    reader.readAsText(file);
-  });
-}
+export const FromJson = () => {
+  const accountsApi = AccountMap.useApi();
+  const history = useHistory();
 
-export const FromJson = () =>
-  <Container>
-    <UploadWallet readFile={readFile} />
-    <div>
-      <FormattedMessage {...translations.explanation} />
-          &nbsp;&nbsp;&nbsp;&nbsp;
-      <ButtonPrimary as={Link} to="/addAccount" size='medium' >
-        <FormattedMessage {...translations.buttonCreate} />
-      </ButtonPrimary>
-    </div>
-  </Container>
+  const onUpload = (data: UploadData) => {
+    accountsApi.addAccount(data.name, data.wallet.address, data.wallet);
+    history.push("/accounts");
+  }
+
+  return (
+    <Container>
+      <UploadWallet onUpload={onUpload} />
+      <div className={styles.footer}>
+        <FormattedMessage {...translations.explanation} />
+        <ButtonPrimary as={Link} className={styles.button} to="/addAccount" size='medium' >
+          <FormattedMessage {...translations.buttonCreate} />
+        </ButtonPrimary>
+      </div>
+    </Container>
+  )
+}
