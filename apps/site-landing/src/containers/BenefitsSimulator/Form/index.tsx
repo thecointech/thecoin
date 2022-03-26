@@ -11,7 +11,7 @@ const {initialBalance, ...defaultBasic} = createParams();
 
 export const Form = (props: Props) => {
 
-  const [active, setActive] = React.useState(0);
+  const [active, setActive] = React.useState(-1);
   const panes = [
     { menuItem: 'Basic', render: () => <Basic {...props} /> },
     { menuItem: 'Advanced', render: () => <Advanced {...props} /> },
@@ -20,8 +20,10 @@ export const Form = (props: Props) => {
   // If there are any non-default values, switch to advanced
   useEffect(() => {
     const { initialBalance, ...proprest} = props.params;
-    if (!isEqual(proprest, defaultBasic))
-      setActive(1);
+    const formIdx = isEqual(proprest, defaultBasic)
+      ? 0
+      : 1;
+    setActive(formIdx);
   }, [])
 
   return <Tab

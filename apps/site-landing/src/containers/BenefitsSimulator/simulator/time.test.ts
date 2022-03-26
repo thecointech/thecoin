@@ -35,20 +35,26 @@ it('correctly straddles years', () => {
 
   {
     // We should have 7 * 15 days straddling years in 15 years
-    const randInt = (n: number) => Math.round(Math.random() * n);
+    const randInt = (n: number) => 1 + Math.floor(Math.random() * n);
     const start = DateTime.fromObject({ year: 1900 + randInt(100), month: randInt(12), day: randInt(28) });
-    const end = start.plus({years: 25});
-    const numDays = end.diff(start, "day").days;
-    const allStraddles = range(0, numDays).reduce((acc, days) => {
-      const d = start.plus({ days });
-      const s = straddlesYear(start, d);
+    try {
+      const end = start.plus({years: 25});
+      const numDays = end.diff(start, "day").days;
+      const allStraddles = range(0, numDays).reduce((acc, days) => {
+        const d = start.plus({ days });
+        const s = straddlesYear(start, d);
 
-      // Double check using Luxon
-      const diff = d.diff(start, ["years", "days"]);
-      const luxonOp = diff.years > 0 && diff.days < 7;
-      expect(luxonOp).toEqual(s);
-      return s ? acc + 1 : acc;
-    }, 0);
-    expect(allStraddles).toBe(24 * 7);
+        // Double check using Luxon
+        const diff = d.diff(start, ["years", "days"]);
+        const luxonOp = diff.years > 0 && diff.days < 7;
+        expect(luxonOp).toEqual(s);
+        return s ? acc + 1 : acc;
+      }, 0);
+      expect(allStraddles).toBe(24 * 7);
+    }
+    catch(err) {
+      console.log(`Error thrown on start: ${start}`);
+      throw err;
+    }
   }
 })
