@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.70](https://github.com/thecointech/thecoin/compare/v0.2.69...v0.2.70) (2022-03-26)
+
+**Note:** Version bump only for package @thecointech/tx-deposit
+
+
+
+
+
 ## [0.2.69](https://github.com/thecointech/thecoin/compare/v0.2.68...v0.2.69) (2022-03-07)
 
 **Note:** Version bump only for package @thecointech/tx-deposit

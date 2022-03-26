@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-core",
-  "version": "0.2.69",
+  "version": "0.2.70",
   "description": "The Coin: Solidity contract for TheCoin currency",
   "keywords": [
     "TheCoin",
@@ -66,12 +66,12 @@
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
     "@openzeppelin/truffle-upgrades": "^1.14.0",
-    "@thecointech/async": "^0.2.69",
-    "@thecointech/contract-tools": "^0.2.69",
+    "@thecointech/async": "^0.2.70",
+    "@thecointech/contract-tools": "^0.2.70",
     "jest": "*"
   },
   "dependencies": {
-    "@thecointech/contract-base": "^0.2.69"
+    "@thecointech/contract-base": "^0.2.70"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }
