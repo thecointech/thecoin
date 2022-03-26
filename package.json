@@ -55,7 +55,9 @@
     "storybook": "start-storybook -p 6006",
     "dedup": "yarn yarn-deduplicate -s fewer",
     "dump-firestore": "cross-env CONFIG_NAME=devlive ts-node --project ./tsconfig.dev.json ./tools/dumpFirestore.ts",
-    "check-changes": "git diff-index --patch-with-stat HEAD && git diff-index --quiet HEAD -- "
+    "check-changes": "git diff-index --patch-with-stat HEAD && git diff-index --quiet HEAD -- ",
+
+    "cancel-tx": "cross-env CONFIG_NAME=prod ts-node --project ./tsconfig.dev.json ./tools/transactions/cancelTx.ts"
   },
   "dependencies": {
     "axios": "0.21.4",
