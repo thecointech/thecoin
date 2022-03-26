@@ -60,7 +60,7 @@ const items = {
   },
   growth: {
     img: growth,
-    to: '/compare',
+    to: '/blog/think-investing-is-only-for-the-wealthy--think-again',
     text: defineMessages({
       title: {
         defaultMessage: 'Maximum Growth',
