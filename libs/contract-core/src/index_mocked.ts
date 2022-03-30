@@ -1,7 +1,6 @@
 import * as Src from '.';
-import { BigNumber, ContractTransaction } from 'ethers'
+import { BigNumber, ContractTransaction, Signer } from 'ethers'
 import { sleep } from '@thecointech/async'
-
 export const COIN_EXP = 1000000;
 
 const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
@@ -9,6 +8,10 @@ let nonce = 12;
 let confirmations = 1;
 export class TheCoin implements Pick<Src.TheCoin, 'exactTransfer' | 'balanceOf' | 'certifiedTransfer'>{
 
+  signer?: Signer;
+  constructor(signer?: Signer) {
+    this.signer = signer;
+  }
   // prefix is (e) for exactTransfer and (c) for certifiedTransfer, and (0) for other
   // We embed this in the identifier so we can tell through the rest of the mock
   // what kind of transaction it represented
@@ -29,8 +32,6 @@ export class TheCoin implements Pick<Src.TheCoin, 'exactTransfer' | 'balanceOf' 
   certifiedTransfer = () => this.genReceipt('c', { confirmations: 1 })
   // Run during testing.  Remove once deployement is secure.
   runCloneTransfer = () => this.genReceipt();
-
-
 
   provider = {
     waitForTransaction: (hash: string) => Promise.resolve({
@@ -55,7 +56,13 @@ export class TheCoin implements Pick<Src.TheCoin, 'exactTransfer' | 'balanceOf' 
     getLogs: () => Promise.resolve([]),
     getBlockNumber: () => Promise.resolve(12345),
     getTransaction: () => Promise.resolve({ wait: () => sleep(2000) }),
-    getTransactionReceipt: () => Promise.resolve({ blockNumber: 123, blockHash: "0x45678" })
+    getTransactionReceipt: () => Promise.resolve({ blockNumber: 123, blockHash: "0x45678" }),
+    getTransactionCount: () => Promise.resolve(1),
+    getFeeData: () => Promise.resolve({
+      maxFeePerGas: BigNumber.from(1000),
+      maxPriorityFeePerGas: BigNumber.from(1000),
+      gasPrice: BigNumber.from(1000)
+    })
   }
   estimate = {
     certifiedTransfer: () => Promise.resolve(1000)
@@ -84,5 +91,5 @@ export class TheCoin implements Pick<Src.TheCoin, 'exactTransfer' | 'balanceOf' 
 }
 
 export const GetContract: typeof Src.GetContract = () => new TheCoin() as any;
-export const ConnectContract: typeof Src.ConnectContract = () => new TheCoin() as any;
+export const ConnectContract: typeof Src.ConnectContract = (signer: Signer) => new TheCoin(signer) as any;
 export const InitialCoinBlock = 0;

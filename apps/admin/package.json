@@ -8,7 +8,7 @@
       "**/electron-devtools-installer/**"
     ]
   },
-  "version": "0.2.69",
+  "version": "0.2.71",
   "description": "Admin: audit TheCoin system ops",
   "main": ".webpack/main",
   "scripts": {
@@ -45,7 +45,7 @@
     "node-loader": "^2.0.0"
   },
   "dependencies": {
-    "@thecointech/contract-core": "^0.2.69",
+    "@thecointech/contract-core": "^0.2.71",
     "electron-squirrel-startup": "^1.0.0",
     "semantic-ui-css": "^2.4.1"
   }
