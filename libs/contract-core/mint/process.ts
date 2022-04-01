@@ -31,36 +31,26 @@ export async function processItems(items: MintData[]){
 
 async function processItem({fiat, date, originator, currency}: MintData) {
 
-  log.trace(`Minting ${fiat} at ${date.toSQLDate()}`);
+  log.trace(`Minting ${fiat} at ${date.toString()}`);
 
   // First; convert from fiat to token
-  const nextOpen = await nextOpenTimestamp(date);
-  const rate = await fetchRate(new Date(nextOpen));
+  const rate = await fetchRate(date.toJSDate());
   if (!rate) throw new Error("Kerplewey");
   const coin = await toCoin(rate, fiat, currency);
-
-  // We adjust our date to be aligned with the rate fetched.
-  // This is to be compatible with dates calculated in 2018
-  if (rate.validFrom > nextOpen || rate.validTill < nextOpen) {
-    log.error("WRRRRTTTTFFFFFF?????");
-    debugger;
-    throw new Error("give up and go home");
-  }
-  const mintDate = DateTime.fromMillis(nextOpen);
 
   const to = fixAddress(originator);
   const theCoinAddress = fixAddress("TheCoin");
   if (coin.gt(0)) {
-    await mintCoins(coin, to, mintDate);
+    await mintCoins(coin, to, date);
     // If not intended for Core, forward this onto final recipient
-    await runCloneTransfer(theCoinAddress, to, coin.toNumber(), 0, mintDate);
+    await runCloneTransfer(theCoinAddress, to, coin.toNumber(), 0, date);
 
   } else {
     const abs = coin.abs();
     // Transfer back to broker for burning
-    await runCloneTransfer(to, theCoinAddress, abs.toNumber(), 0, mintDate);
+    await runCloneTransfer(to, theCoinAddress, abs.toNumber(), 0, date);
     // Burn coins
-    await burnCoins(abs, mintDate);
+    await burnCoins(abs, date);
   }
 }
 

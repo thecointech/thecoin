@@ -8,7 +8,7 @@ import { getContract } from './contract';
 import { log } from '@thecointech/logging';
 
 Settings.throwOnInvalid = true;
-Settings.defaultLocale = "America/New_York";
+Settings.defaultZoneName = "America/New_York";
 
 export async function ensureAddresses() {
   for (const account of ["BrokerCAD", "TheCoin", "BrokerTransferAssistant", "Minter"]) {
@@ -43,7 +43,7 @@ async function ensureBalance() {
 
   processItems(data.map(d => ({
     originator: NormalizeAddress(d.originator),
-    date: DateTime.fromSQL(d.date, ),
+    date: DateTime.fromISO(d.date),
     fiat: new Decimal(d.fiat),
     currency: d.currency as "USD"|"CAD",
   })));
