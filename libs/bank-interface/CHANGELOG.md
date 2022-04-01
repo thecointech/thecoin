@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.72](https://github.com/thecointech/thecoin/compare/v0.2.71...v0.2.72) (2022-04-01)
+
+**Note:** Version bump only for package @thecointech/bank-interface
+
+
+
+
+
 ## [0.2.71](https://github.com/thecointech/thecoin/compare/v0.2.70...v0.2.71) (2022-03-26)
 
 **Note:** Version bump only for package @thecointech/bank-interface
