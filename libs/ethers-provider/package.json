@@ -55,7 +55,9 @@
     "@thecointech/logging": "^0.2.71"
   },
   "devDependencies": {
-    "jest": "*"
+    "jest": "*",
+    "@thecointech/setenv": "*",
+    "@thecointech/jestutils": "*"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }
