@@ -2,7 +2,7 @@
   "name": "@thecointech/site-base",
   "productName": "THECoin: Website - Base",
   "private": true,
-  "version": "0.2.71",
+  "version": "0.2.73",
   "description": "THECoin: Future-proof currency",
   "repository": {
     "type": "git",
@@ -55,9 +55,9 @@
   },
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.4.1",
-    "@thecointech/shared": "^0.2.71",
-    "@thecointech/site-semantic-theme": "^0.2.71",
-    "@thecointech/utilities": "^0.2.71",
+    "@thecointech/shared": "^0.2.73",
+    "@thecointech/site-semantic-theme": "^0.2.73",
+    "@thecointech/utilities": "^0.2.73",
     "connected-react-router": "^6.6.1",
     "intl": "^1.2.5",
     "react-animate-height": "^2.0.18",
