@@ -43,7 +43,7 @@ async function processItem({fiat, date, originator, currency}: MintData) {
   if (coin.gt(0)) {
     await mintCoins(coin, to, date);
     // If not intended for Core, forward this onto final recipient
-    await runCloneTransfer(theCoinAddress, to, coin.toNumber(), 0, date);
+    //await runCloneTransfer(theCoinAddress, to, coin.toNumber(), 0, date);
 
   } else {
     const abs = coin.abs();
