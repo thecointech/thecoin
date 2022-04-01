@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { Label, Container, Header, Grid } from 'semantic-ui-react';
+import { Container, Header } from 'semantic-ui-react';
 import { IsValidAddress } from '@thecointech/utilities';
 import styles from './styles.module.less';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { AccountMap } from '../AccountMap';
-import { useHistory } from 'react-router';
-
-import illustration from "./images/illust_flowers.svg";
+import {useDropzone, FileRejection} from 'react-dropzone';
+import { log } from '@thecointech/logging';
+import { Wallet } from '@ethersproject/wallet';
 
 const translate = defineMessages({
   aboveTheTitle: {
@@ -23,37 +22,50 @@ const translate = defineMessages({
   }
 });
 
-export type ReadFileData = {
-  wallet: string;
-  name: string|undefined;
+export type UploadData = {
+  wallet: Wallet;
+  name: string;
 }
-type ReadFileCallback = (path: File) => Promise<ReadFileData>;
-type ValidateCallback = (address: string) => boolean;
+type UploadCallback = (data: UploadData) => void;
+type ValidateCallback = (data: UploadData) => boolean;
 
-interface Props {
-  readFile: ReadFileCallback;
-  validate?: ValidateCallback;
+type Props = {
+  onUpload?: UploadCallback;
+  onValidate?: ValidateCallback;
 }
-
-// Random ID to connect input & label
-const id = '__upload26453312f';
 
 export const UploadWallet = (props: Props) => {
 
-  const history = useHistory();
-  const accountsApi = AccountMap.useApi();
+  const {
+    acceptedFiles,
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    fileRejections,
+  } = useDropzone({accept: '.json'});
 
-  const onRecieveFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { wallet, name } = await ReadFile(e, props.readFile);
-    const isValid = await ValidateFile(wallet, props.validate);
-
-    if (isValid) {
-      accountsApi.addAccount(name, wallet.address, wallet);
-      history.push("/accounts");
-    } else {
-      alert('Bad Wallet');
-    }
+  // Alert if drag 'n drop has new invalid file
+  const [rejected, setRejected] = React.useState<FileRejection[]>([]);
+  if (fileRejections.length && fileRejections != rejected) {
+    alert(fileRejections[0].errors[0]?.message ?? "Invalid file");
+    setRejected(fileRejections);
   }
+
+  // On valid file, report to owner
+  React.useEffect(() => {
+    if (acceptedFiles.length == 0) return;
+    (async () => {
+      const data = await readFile(acceptedFiles[0]);
+      const isValid =  props.onValidate?.(data) ?? IsValidAddress(data.wallet.address)
+      if (isValid) {
+        props.onUpload?.(data)
+      } else {
+        alert('File is not a valid wallet');
+      }
+    })();
+  }, [acceptedFiles])
+
+  const className = `font-label ${styles.dropzone} ${isDragActive ? styles.active : ''}`;
 
   return (
     <Container className={styles.content}>
@@ -63,38 +75,37 @@ export const UploadWallet = (props: Props) => {
       <Header as="h2" className={`x12spaceAfter`}>
           <FormattedMessage {...translate.title} />
       </Header>
-      <Label width="4" as="label" htmlFor={id} size="huge" id={styles.dropzone} className={`x10spaceAfter`} >
-        <Grid>
-          <Grid.Row columns={1}>
-            <Grid.Column verticalAlign="middle">
-              <p>
-                <FormattedMessage {...translate.dropZone} />
-              </p>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Label>
-      <input id={id} hidden type="file" accept=".json" onChange={onRecieveFile} />
-
-      <div className={styles.illustration} >
-          <img src={illustration} />
+      <div {...getRootProps({className})}>
+        <input {...getInputProps()} />
+        <p>
+          <FormattedMessage {...translate.dropZone} />
+        </p>
       </div>
     </Container>
   );
 }
 
-const ReadFile = async (e: React.ChangeEvent<HTMLInputElement>, cb: ReadFileCallback) => {
-  const { files } = e.target;
-  if (!files) throw 'Empty or Missing FileList';
-
-  const file = files[0];
-  let { wallet, name } = await cb(file);
-  const asJson = JSON.parse(wallet.trim());
-  const asName = name ?? file.name.split('.')[0];
-  return { wallet: asJson, name: asName };
-}
-
-const ValidateFile = async (jsonWallet: any, validate?: ValidateCallback) => {
-  const { address } = jsonWallet;
-  return validate ? validate(address) : IsValidAddress(address);
+function readFile(file: File): Promise<UploadData> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = ({target}) => {
+      try {
+        const raw = target?.result?.toString();
+        if (raw) {
+          const asJson = JSON.parse(raw.trim());
+          const asName = file.name.split('.')[0];
+          resolve({
+            wallet: asJson,
+            name: asName
+          });
+        }
+      }
+      catch(e: any) {
+        log.error(e, "Cannot load file");
+      }
+      reject("Invalid file");
+    };
+    reader.onerror = reject;
+    reader.readAsText(file);
+  });
 }

@@ -306,6 +306,10 @@
     "defaultMessage": "Use a unique password.",
     "description": "app.account.generate.passwordTextUnique: The text for the create your password text"
   },
+  "jq6Ba8": {
+    "defaultMessage": "No referral code?",
+    "description": "Create account link to request referral code"
+  },
   "k7l1oT": {
     "defaultMessage": "I already have an Account",
     "description": "app.account.create.button.account: Button redirect people to connect their existing account on the let's get started page"
@@ -369,6 +373,10 @@
   "rBQOlU": {
     "defaultMessage": "Congratulations!",
     "description": "app.account.create.congratulations.title: Title for the congratulations page"
+  },
+  "rvFjQe": {
+    "defaultMessage": "Request one here",
+    "description": "Create account link to request referral code"
   },
   "rwJdid": {
     "defaultMessage": "No accounts found",

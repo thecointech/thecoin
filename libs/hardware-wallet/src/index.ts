@@ -97,9 +97,12 @@ export class LedgerSigner extends Signer {
       data: (tx.data || undefined),
       gasLimit: (tx.gasLimit || undefined),
       gasPrice: (tx.gasPrice || undefined),
+      maxFeePerGas: (tx.maxFeePerGas || undefined),
+      maxPriorityFeePerGas: (tx.maxPriorityFeePerGas || undefined),
       nonce: (tx.nonce ? BigNumber.from(tx.nonce).toNumber() : undefined),
       to: (tx.to || undefined),
       value: (tx.value || undefined),
+      type: (tx.type || undefined),
     };
 
     const unsignedTx = serialize(baseTx).substring(2);
