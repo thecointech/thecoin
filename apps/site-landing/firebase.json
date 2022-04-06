@@ -17,6 +17,11 @@
         "destination": "/index.html"
       }
     ],
+    "redirects": [ {
+      "source": "/accounts/gauth",
+      "destination": "https://the-broker-cad.web.app/accounts/gauth",
+      "type": 302
+    } ],
     "headers": [
       {
         "source": "/index.html",
@@ -28,5 +33,11 @@
         ]
       }
     ]
+  },
+  "emulators": {
+    "hosting": {
+      "port": 3000,
+      "host": "0.0.0.0"
+    }
   }
 }
