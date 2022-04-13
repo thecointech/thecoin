@@ -23,7 +23,7 @@ const doSendCoin: TransitionCallback = async (container) => {
     return { error: 'Cannot send coin, state has no value' }
   }
 
-  const overrides = await calculateOverrides(container, toCoin);
+  const overrides = await calculateOverrides(container, sendCoin);
   const settledDate = findSettledDate(container);
   var tx = await startTheTransfer(container.action.address, currentState.data.coin, settledDate, container.contract, overrides);
 
