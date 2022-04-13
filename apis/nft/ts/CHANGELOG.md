@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.75](https://github.com/thecointech/thecoin/compare/v0.2.74...v0.2.75) (2022-04-13)
+
+**Note:** Version bump only for package @thecointech/nft
+
+
+
+
+
+## [0.2.74](https://github.com/thecointech/thecoin/compare/v0.2.73...v0.2.74) (2022-04-06)
+
+**Note:** Version bump only for package @thecointech/nft
+
+
+
+
+
+## [0.2.73](https://github.com/thecointech/thecoin/compare/v0.2.72...v0.2.73) (2022-04-01)
+
+**Note:** Version bump only for package @thecointech/nft
+
+
+
+
+
+## [0.2.72](https://github.com/thecointech/thecoin/compare/v0.2.71...v0.2.72) (2022-04-01)
+
+**Note:** Version bump only for package @thecointech/nft
+
+
+
+
+
+## [0.2.71](https://github.com/thecointech/thecoin/compare/v0.2.70...v0.2.71) (2022-03-26)
+
+**Note:** Version bump only for package @thecointech/nft
+
+
+
+
+
 ## [0.2.70](https://github.com/thecointech/thecoin/compare/v0.2.69...v0.2.70) (2022-03-26)
 
 **Note:** Version bump only for package @thecointech/nft

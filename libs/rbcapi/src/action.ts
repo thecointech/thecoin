@@ -61,7 +61,8 @@ export class ApiAction {
   private constructor(identifier: string) {
     if (process.env.TC_LOG_FOLDER) {
       const base = process.env.TC_LOG_FOLDER;
-      const ident = identifier.replace('/', '_');
+      const illegalRe = /[\/\?<>\\:\*\|":]/g;
+      const ident = identifier.replace(illegalRe, '_');
       this.outCache = `${base}/rbcapi/Screenshots/${ident}`;
       fs.mkdirSync(this.outCache, { recursive: true });
     }
