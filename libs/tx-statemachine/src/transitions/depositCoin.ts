@@ -1,7 +1,8 @@
 import { getCurrentState, TransitionCallback, TypedActionContainer } from "../types";
 import { verifyPreTransfer } from "./verifyPreTransfer";
 import { TransactionResponse } from '@ethersproject/providers';
-import { toDelta } from './coinUtils';
+import { calculateOverrides, convertBN, toDelta } from './coinUtils';
+import { log } from '@thecointech/logging';
 
 // this deposit can operate on both bill & sell types.
 type BSActionTypes = "Bill"|"Sell";
@@ -31,6 +32,9 @@ const doDepositCoin: TransitionCallback<BSActionTypes> = async (container) => {
   if (balance.lte(fee + value))
     return { error: 'Insufficient funds'};
 
-  const tx: TransactionResponse = await tc.certifiedTransfer(from, to, value, fee, timestamp, signature);
+
+  const overrides = await calculateOverrides(container, depositCoin);
+  log.debug({address: from}, `CertTransfer of ${value.toString()} from {address} with overrides ${JSON.stringify(overrides, convertBN)}`);
+  const tx: TransactionResponse = await tc.certifiedTransfer(from, to, value, fee, timestamp, signature, overrides);
   return toDelta(tx);
 }

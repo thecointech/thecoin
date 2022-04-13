@@ -5,11 +5,10 @@ import { MergeSimParamaters } from '../../src/containers/BenefitsSimulator/simul
 import { Decimal } from 'decimal.js-light';
 
 export function generateData(CAGR = 10, LGR=0, yearsToSimulate = 10, noise = 0.1): MarketData[] {
-  const monthStart = DateTime.now().set({
+  const monthStart = DateTime.fromObject({
+    year: 2010,
+    month: 1,
     day: 1,
-    hour: 0,
-    second: 0,
-    millisecond: 0,
   })
   const totalMonths = yearsToSimulate * 12;
   const startingVal = 100;
@@ -21,7 +20,7 @@ export function generateData(CAGR = 10, LGR=0, yearsToSimulate = 10, noise = 0.1
     // Add some random noise
     value = value * (Math.random() * noise + (1 - (noise / 2)));
     value = Math.round(value * 100) / 100;
-    const Date = monthStart.minus({ month: totalMonths - idx })
+    const Date = monthStart.plus({ month: idx })
     let dividend = (value * 0.02) * (12 * Date.daysInMonth / Date.daysInYear);
     dividend = Math.round(dividend * 10000) / 10000;
     return {

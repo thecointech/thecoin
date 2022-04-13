@@ -13,10 +13,10 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
           class="sub header"
         >
           <span>
-            Save, invest and spend money with TheCoin,
+            If reducing CO2 was profitable,
           </span>
           <span>
-            get 100% of benefits and save our Planet.
+            Would the climate crisis still be a crisis?
           </span>
         </div>
       </h1>
@@ -208,7 +208,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
       </div>
       <div>
         <a
-          href="/compare"
+          href="/blog/think-investing-is-only-for-the-wealthy--think-again"
         >
           How Anyone Can Get Rich Slow
           <div
