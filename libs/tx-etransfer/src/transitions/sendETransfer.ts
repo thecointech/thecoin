@@ -43,9 +43,9 @@ export async function sendETransfer(container: TypedActionContainer<"Sell">) {
 
 
   // Send the transfer
-  const {address} = container.action;
+  const prefix = getPrefix(container);
   const toName = container.instructions.email.split('@')[0];
-  const confirmation = await bank.sendETransfer(address, fiat.toNumber(), toName, container.instructions, progressCb);
+  const confirmation = await bank.sendETransfer(prefix, fiat.toNumber(), toName, container.instructions, progressCb);
 
   // If we have confirmation code, return success
   return (confirmation > 0)
@@ -59,6 +59,13 @@ export async function sendETransfer(container: TypedActionContainer<"Sell">) {
 
 function progressCb(msg: string) {
   log.trace(msg);
+}
+
+function getPrefix(container: TypedActionContainer<"Sell">) {
+  const now = DateTime.now().toSQL({includeOffset: false, includeZone: false});
+  const id = container.action.data.initialId.substring(0, 32);
+  const {address} = container.action;
+  return `${now} - ${address} - ${id}`;
 }
 
 //
