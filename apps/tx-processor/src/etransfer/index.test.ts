@@ -3,7 +3,7 @@
 process.env.USERDATA_INSTRUCTION_PK = __filename;
 import { processUnsettledETransfers } from '.'
 import { init } from '@thecointech/firestore';
-import { GetContract } from '@thecointech/contract-core';
+import { ConnectContract } from '@thecointech/contract-core';
 import { getCurrentState } from '@thecointech/tx-statemachine';
 import { DateTime } from 'luxon';
 import { getFirestore } from '@thecointech/firestore';
@@ -12,6 +12,7 @@ import data from './index.test.mockdb.json';
 // Allow mocking the decryption fn
 import { decryptTo } from '@thecointech/utilities/Encrypt';
 import { RbcApi } from '@thecointech/rbcapi';
+import { getSigner } from '@thecointech/signers';
 
 jest.mock('@thecointech/utilities/Encrypt')
 const mockedEncrypt = jest.mocked(decryptTo, false);
@@ -32,7 +33,8 @@ it('Succesfully Processes Sell', async ()=> {
     return ev.decrypted
   });
 
-  const contract = await GetContract();
+  const signer = await getSigner("BrokerTransferAssistant")
+  const contract = ConnectContract(signer);
   const bank = new RbcApi();
   const eTransfers = await processUnsettledETransfers(contract, bank);
 
