@@ -3,8 +3,10 @@ import { mkdirSync } from 'fs';
 
 export const getFileStream = (name: string, folder: string, rotate: boolean) : Stream => {
 
-  mkdirSync(folder, { recursive: true });
-  const filepath = `${folder}/${name}.log`
+  const logfolder = `${folder}/${name}`
+  mkdirSync(logfolder, { recursive: true });
+  const time = new Date().toISOString().replace(/:/g, "-");
+  const filepath = `${logfolder}/${time}.log`
 
   return {
     level: 'trace',

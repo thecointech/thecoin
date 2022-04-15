@@ -11,11 +11,11 @@ const title = defineMessage({
   description: 'site.homepage.landscape.title: The title for the homepage'
 });
 const description1 = defineMessage({
-  defaultMessage: 'Save, invest and spend money with TheCoin,',
+  defaultMessage: 'If reducing CO2 was profitable,',
   description: 'home page tagline part1'
 });
 const description2 = defineMessage({
-  defaultMessage: 'get 100% of benefits and save our Planet.',
+  defaultMessage: 'Would the climate crisis still be a crisis?',
   description: 'home page tagline part2'
 });
 const button = defineMessage({

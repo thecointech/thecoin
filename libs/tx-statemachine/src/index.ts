@@ -58,8 +58,8 @@ export function transitionTo<States extends string, Type extends ActionType=Acti
 
   return async (container, currentState, replay?) => {
     if (replay) {
-      log.trace({ initialId: container.action.data.initialId, state: nextState, transition: transition.name, replay: true },
-        `(replay: {replay}): {initialId} transitioning via {transition} to state {state}`);
+      //log.trace({ initialId: container.action.data.initialId, state: nextState, transition: transition.name, replay: true },
+      //  `(replay: {replay}): {initialId} transitioning via {transition} to state {state}`);
     }
     else {
       log.debug({ initialId: container.action.data.initialId, state: nextState, transition: transition.name },
