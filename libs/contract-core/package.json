@@ -38,6 +38,7 @@
     "_deploy": "run-s _deploy:*",
     "_deploy:polygon": "truffle migrate --network polygon && yarn seed",
     "_deploy:ethereum": "truffle migrate --network ethereum",
+    "mint": "yarn run-script ./mint/main.ts",
     "seed": "yarn run-script ./seed/main.ts",
     "seed:fetch": "cross-env CONFIG_NAME=prodbeta yarn run-script ./seed/clone/fetch.ts",
     "verify": "yarn run-script ./internal/verify.ts",
