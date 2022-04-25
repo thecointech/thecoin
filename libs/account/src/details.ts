@@ -15,14 +15,17 @@ export type AccountDetails = {
   // of data is signed by TheCoin to prove we
   // verified it: signatures are individual to
   // allow a user to update them separately.
-  // Each signature is salted with account
-  // ethereum address to enforce uniqueness
 
-  // First & Last name of client
+  // First, Last, date-of-birth of client
   family_name?: string;
   given_name?: string;
-  // TheCoin's signature that `{ethAddress given_name family_name}` is legit;
-  nameDOBSig?: string;
+  DOB?: string;
+
+  // Our UniqueID: hash(toLower(given + family + DOB)).
+  // This is a uniqueness value used for proving individuality.
+  // A copy is stored (and signed) on the TC servers
+  uniqueId?: string;
+  uniqueIdSig?: string; // Signed by TC to prove authenticity
 
   // home address
   address?: {
@@ -32,13 +35,8 @@ export type AccountDetails = {
     city?: string,
     address?: string;
   };
-  // TheCoin's signature that `{ethAddress country postalCode state city address}` is legit;
+  // TheCoin's signature that `{country postalCode state city address}` is legit;
   addressSig?: string;
-
-  // date of birth
-  DOB?: string;
-  // TheCoins's sig that `{ethAddress DOB}` is legit
-  DOBSig?: string;
 
   // phone number
   phone?: {
@@ -47,11 +45,15 @@ export type AccountDetails = {
     phoneNumber?: string,
     number?: string,
   };
-  // TheCoins's sig that `{ethAddress phoneNumber}` is legit
+  phoneVerified?: boolean;
+  // TheCoins's sig that `{phoneNumber}` is legit
   phoneSig?: string;
 
   //----------------------------------------------
   // unsigned (not-legally-important) details
+
+  // Status of KYC
+  status?: "initiated"|"submitted"|"verified"|"invalid";
 
   // email of client
   email?: string;
@@ -63,7 +65,7 @@ export type AccountDetails = {
   storedOnOneDrive?: boolean,
 
   // Which currency to display by default
-  displayCurrency: CurrencyCode;
+  displayCurrency?: CurrencyCode;
 
   // Display language
   language?: string;
