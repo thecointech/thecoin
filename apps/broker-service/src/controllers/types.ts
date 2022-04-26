@@ -57,7 +57,7 @@ export type BlockpassPayload = {
 export type BlockpassData = {
   status: string; //StatusType,
   refId: string,
-  isArchived: false,
+  isArchived: boolean,
   blockPassID: string,
   inreviewDate: string,
   waitingDate: string,
