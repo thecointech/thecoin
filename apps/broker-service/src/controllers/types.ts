@@ -54,8 +54,11 @@ export type BlockpassPayload = {
   env: "prod",
 }
 
+// Basic type for the data returned from blockpass.
+// Sample from: https://docs.blockpass.org/docs/connect/KYCC-Dashboard-API-RefId#response-1
+// TODO: this has not yet been verified with live data
 export type BlockpassData = {
-  status: string; //StatusType,
+  status: StatusType,
   refId: string,
   isArchived: boolean,
   blockPassID: string,

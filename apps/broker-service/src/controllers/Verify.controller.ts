@@ -1,4 +1,4 @@
-import { Controller, Route, Post, Response, Tags, BodyProp, Get, Query, Delete } from '@tsoa/runtime';
+import { Controller, Route, Post, Response, Tags, Body, Get, Query, Delete, Request  } from '@tsoa/runtime';
 import { BlockpassData, BlockpassPayload } from './types';
 import { IsValidAddress } from '@thecointech/utilities';
 import { log } from '@thecointech/logging';
@@ -6,21 +6,12 @@ import { getUserData } from '@thecointech/broker-db/user';
 import { getSigner } from '../signedTimestamp';
 import { StatusType } from '@thecointech/broker-db/user.types';
 import { deleteRawData, updateUserVerification } from '../verify';
+import * as express from "express";
+import { checkHeader } from '../verify/checkHeader';
 
 @Route('verify')
 @Tags('UserVerification')
 export class VerifyController extends Controller {
-
-  /**
-  * Returns the current status for address
-  **/
-  @Get('/status')
-  @Response('200', 'Verify Status')
-  async userVerifyStatus(@Query() ts: string, @Query() sig: string) : Promise<StatusType|null> {
-    const address = getSigner({message: ts, signature: sig});
-    const user = await getUserData(address);
-    return user?.status ?? null;
-  }
 
   /**
    * Pull the users data from our local servers
@@ -29,12 +20,27 @@ export class VerifyController extends Controller {
    * @returns BlockpassData
    */
   @Get('/data')
-  @Response('200', 'Verify Data')
-  @Response('400', 'Invalid or Not Found')
+  @Response<BlockpassData| null>('200', 'User Data')
   async userPullData(@Query() ts: string, @Query() sig: string) : Promise<BlockpassData|null> {
     const address = getSigner({message: ts, signature: sig});
     const user = await getUserData(address);
-    return user?.raw ?? null;
+    if (user?.raw) {
+      return user.raw;
+    }
+    // Else, this was a failure
+    this.setStatus(400);
+    return null;
+  }
+
+  /**
+  * Returns the current status for address
+  **/
+  @Get('/status')
+  @Response<StatusType | null>('200', 'Verify Status')
+  async userVerifyStatus(@Query() ts: string, @Query() sig: string) {
+    const address = getSigner({ message: ts, signature: sig });
+    const user = await getUserData(address);
+    return user?.status ?? null;
   }
 
   /**
@@ -44,7 +50,7 @@ export class VerifyController extends Controller {
    * @param sig User signature of timestamp
    */
   @Delete()
-  @Response('200', 'Raw Deleted')
+  @Response<void>('200', 'Raw Deleted')
   @Response('500', 'Server Error')
   async userDeleteRaw(@Query() ts: string, @Query() sig: string) {
     const address = getSigner({message: ts, signature: sig});
@@ -55,12 +61,24 @@ export class VerifyController extends Controller {
   * Webhook called by Blockpass to update verification status
   **/
   @Post()
-  @Response('200', 'Verification Webhook')
+  @Response<void>('200', 'Verification Webhook')
   @Response('500', 'Server Error')
-  async updateStatus(@BodyProp() payload: BlockpassPayload) {
-    log.debug({address: payload.refId, status: payload.status},
-      `Recieved KYC status update {status} for address {address}`);
+  async updateStatus(
+    @Body() payload: BlockpassPayload,
+    @Request() request: express.Request & { rawBody: Buffer})
+  {
+    const header = this.getHeader("X-Hub-Signature") as string;
+    const r = request.rawBody;
 
+    log.debug({address: payload.refId, status: payload.status},
+      `Recieved KYC status update {status} for address {address} with header: ${header}`);
+
+    log.debug(`Header: ${header} - Body: ${r}`);
+    if (!checkHeader(header, r)) {
+      log.error(`HMAC Validation failed: ${header} - ${r}`);
+      // this.setStatus(500);
+      // return;
+    }
     if (!IsValidAddress(payload.refId)) {
       log.error({payload}, `Invalid refId passed: ${payload.refId} - {payload}`)
       this.setStatus(400);

@@ -6,6 +6,7 @@
 // need to figure out how we can manage verified details
 
 import { CurrencyCode } from "@thecointech/fx-rates";
+import { StatusType } from "@thecointech/broker-cad";
 
 // However, we will need to validate this data against
 export type AccountDetails = {
@@ -24,8 +25,11 @@ export type AccountDetails = {
   // Our UniqueID: hash(toLower(given + family + DOB)).
   // This is a uniqueness value used for proving individuality.
   // A copy is stored (and signed) on the TC servers
-  uniqueId?: string;
-  uniqueIdSig?: string; // Signed by TC to prove authenticity
+  // uniqueId?: string;
+  // uniqueIdSig?: string; // Signed by TC to prove authenticity
+  // We do not store the uniqueId.  The hash can be computed
+  // by our data, which when combined with sig on-server proves
+  // our identity data is legit.
 
   // home address
   address?: {
@@ -52,8 +56,10 @@ export type AccountDetails = {
   //----------------------------------------------
   // unsigned (not-legally-important) details
 
+  referralCode?: string;
+
   // Status of KYC
-  status?: "initiated"|"submitted"|"verified"|"invalid";
+  status?: StatusType;
 
   // email of client
   email?: string;

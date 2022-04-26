@@ -2,7 +2,13 @@
 import { buildConverter, convertDates } from './converter';
 import { DateTime } from 'luxon';
 
-export type StatusType = "incomplete"|"waiting"|"approved"|"inreview"|"rejected";
+export type StatusType =
+  "incomplete"| // Submission started, but not finished
+  "waiting"| // Submission uploaded to BP
+  "approved"| // Approved within BP
+  "inreview"|
+  "rejected"|
+  "completed"; // Data pulled into users IDX DB & removed from local
 
 export type UserVerifiedInfo = {
   // The UniqueID of the individual.  For now, this is
