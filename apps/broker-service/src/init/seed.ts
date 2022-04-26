@@ -29,7 +29,10 @@ async function setVerified(clientAddress: string) {
   const signature = await sign(address, brokerCad);
   // Account created 1 year, 1 day ago.
   const ts = DateTime.now().minus({years: 1, days: 1});
-  await setUserVerified(signature, address, ts);
+  await setUserVerified(address, {
+    status: "approved",
+    statusUpdated: ts,
+  });
   const code = await createReferrer(signature, address);
   console.log(`Seeded valid: ${code} from ${address}`);
   return code;

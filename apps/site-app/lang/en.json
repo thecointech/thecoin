@@ -3,10 +3,6 @@
     "defaultMessage": "Your account id should only contain numbers",
     "description": "Invalid characters entered for bill payee"
   },
-  "+w7KFz": {
-    "defaultMessage": "Your account is verified.",
-    "description": "app.settings.verified.descriptionVerified: Description for the verfified section in the setting page in the app"
-  },
   "+zTlGZ": {
     "defaultMessage": "Make payments",
     "description": "app.accounts.sidebar.makepayments: Title for the Make payments entry in the menu"
@@ -251,6 +247,10 @@
     "defaultMessage": "Order received. You should receive the e-Transfer in 1-2 business days.",
     "description": "app.accounts.redeem.successMessage: Success Message for the make a payment page / etransfer tab"
   },
+  "Qrvv8Q": {
+    "defaultMessage": "Account not verified",
+    "description": "app.settings.verified.titleNotVerified: message if account has not been verified"
+  },
   "RJKG2v": {
     "defaultMessage": "Week",
     "description": "app.historyGraph.Week: button for Duration of 1 week"
@@ -303,10 +303,6 @@
     "defaultMessage": "Should not include the security answer",
     "description": "tooltip for optional message to be included in e-transfer"
   },
-  "X/fgLk": {
-    "defaultMessage": "Account not verified",
-    "description": "app.settings.verified.titleNotVerified: Title for the verfified section in the setting page in the app"
-  },
   "XEmqRg": {
     "defaultMessage": "No Account Loaded",
     "description": "app.accounts.sidebar.profile: Default account name to show in sidebar when no accounts loaded"
@@ -346,6 +342,10 @@
   "aY5nL9": {
     "defaultMessage": "Growth",
     "description": "app.historygraph.profit: HistoryGraph tooltip - Profit"
+  },
+  "bGtD3a": {
+    "defaultMessage": "Your account is verified.",
+    "description": "app.settings.verified.descriptionVerified: message shown if account has been verified"
   },
   "cQy1PG": {
     "defaultMessage": "Message received. You should receive an answer in 1-2 business days.",
@@ -387,6 +387,10 @@
     "defaultMessage": "Your details",
     "description": "app.accounts.purchase.haveTransferCodeHeader"
   },
+  "hJNTxi": {
+    "defaultMessage": "Verification in process",
+    "description": "app.settings.verified.titleVerified: Title for the verfified section in the setting page in the app"
+  },
   "hv6CwE": {
     "defaultMessage": "Please select payee and enter account number",
     "description": "Bill payment error message when missing payee or account"
@@ -410,6 +414,10 @@
   "knRmks": {
     "defaultMessage": "You can email money to anyone with an interac e-Transfer, pay your bills or transfer directly to another account.",
     "description": "app.makepayments.description: Description for the Make a payment page in the app"
+  },
+  "l+7a0X": {
+    "defaultMessage": "Your submission in being processed.",
+    "description": "app.settings.verified.descriptionVerified: message shown if account has been verified"
   },
   "lLRGM3": {
     "defaultMessage": "Step 3 of 3: Waiting for the order to be accepted (check progress {link})...",
