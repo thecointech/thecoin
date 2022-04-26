@@ -25,8 +25,8 @@ export class StatusController extends Controller {
   * get a valid timestamp/signature combo, even if their clock is out
   **/
   @Get('/ts')
-  @Response<number>(200, "Here ya go")
-  async timestamp(): Promise<number> {
+  @Response(200, "Here ya go")
+  async timestamp() {
     return DateTime.now().toMillis();
   }
 }

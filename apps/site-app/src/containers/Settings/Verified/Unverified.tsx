@@ -7,6 +7,7 @@ import { defineMessage, FormattedMessage } from 'react-intl';
 import { AccountVerifyDisplay } from './Display';
 import { PropsVerified } from './types';
 import notverifiedImg from './images/verified_not_icon.svg';
+import { StatusType } from '@thecointech/broker-cad';
 
 const unverified = {
   icon: notverifiedImg,
@@ -47,21 +48,21 @@ export const Unverified = ({address, details}: PropsVerified) => {
       })
 
     blockpass.startKYCConnect();
-    blockpass.on('KYCConnectSuccess', (...args: any[]) => {
-      //add code that will trigger when data have been sent.
-      console.log(args);
-      log.trace({address}, '{address} finished kyc');
-      details.status = "submitted";
-      accountApi.setDetails(details);
-    })
-    blockpass.on('KYCConnectClose', () => {
-      //add code that will trigger when the workflow is finished. ex:
-      log.trace({address}, '{address} closed kyc');
-    })
-    blockpass.on('KYCConnectCancel', () => {
-      // There isn't much we can do if the user cancelled, (but it would be nice to know?)
-      log.trace({address}, '{address} cancelled kyc');
-    })
+    // blockpass.on('KYCConnectSuccess', (...args: any[]) => {
+    //   //add code that will trigger when data have been sent.
+    //   console.log(args);
+    //   log.trace({address}, '{address} finished kyc');
+    //   details.status = "submitted";
+    //   accountApi.setDetails(details);
+    // })
+    // blockpass.on('KYCConnectClose', () => {
+    //   //add code that will trigger when the workflow is finished. ex:
+    //   log.trace({address}, '{address} closed kyc');
+    // })
+    // blockpass.on('KYCConnectCancel', () => {
+    //   // There isn't much we can do if the user cancelled, (but it would be nice to know?)
+    //   log.trace({address}, '{address} cancelled kyc');
+    // })
   }, [state])
 
   return (
@@ -73,7 +74,8 @@ export const Unverified = ({address, details}: PropsVerified) => {
             id="blockpass-kyc-connect"
             loading={state == "loading"}
             onClick={() => {
-              details.status = "initiated"
+              log.debug("Opening KYC Dialog");
+              details.status = StatusType.Incomplete;
               accountApi.setDetails(details);
             }}
           >

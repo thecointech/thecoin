@@ -15,17 +15,14 @@ export class VerifyController extends Controller {
 
   /**
    * Pull the users data from our local servers
-   * @param ts ServerTimestamp
-   * @param sig ts signed by user
-   * @returns BlockpassData
    */
   @Get('/data')
-  @Response<BlockpassData| null>('200', 'User Data')
-  async userPullData(@Query() ts: string, @Query() sig: string) : Promise<BlockpassData|null> {
+  @Response('200', 'User Data')
+  async userPullData(@Query() ts: string, @Query() sig: string) {
     const address = getSigner({message: ts, signature: sig});
     const user = await getUserData(address);
     if (user?.raw) {
-      return user.raw;
+      return user.raw as BlockpassData;
     }
     // Else, this was a failure
     this.setStatus(400);
@@ -36,7 +33,7 @@ export class VerifyController extends Controller {
   * Returns the current status for address
   **/
   @Get('/status')
-  @Response<StatusType | null>('200', 'Verify Status')
+  @Response<StatusType|null>('200', 'Verify Status')
   async userVerifyStatus(@Query() ts: string, @Query() sig: string) {
     const address = getSigner({ message: ts, signature: sig });
     const user = await getUserData(address);
@@ -50,8 +47,7 @@ export class VerifyController extends Controller {
    * @param sig User signature of timestamp
    */
   @Delete()
-  @Response<void>('200', 'Raw Deleted')
-  @Response('500', 'Server Error')
+  @Response('200', 'Raw Deleted')
   async userDeleteRaw(@Query() ts: string, @Query() sig: string) {
     const address = getSigner({message: ts, signature: sig});
     await deleteRawData(address);
@@ -61,8 +57,7 @@ export class VerifyController extends Controller {
   * Webhook called by Blockpass to update verification status
   **/
   @Post()
-  @Response<void>('200', 'Verification Webhook')
-  @Response('500', 'Server Error')
+  @Response('200', 'Verification Webhook')
   async updateStatus(
     @Body() payload: BlockpassPayload,
     @Request() request: express.Request & { rawBody: Buffer})

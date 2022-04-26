@@ -26,7 +26,7 @@ export type AccountDetails = {
   // This is a uniqueness value used for proving individuality.
   // A copy is stored (and signed) on the TC servers
   // uniqueId?: string;
-  // uniqueIdSig?: string; // Signed by TC to prove authenticity
+  uniqueIdSig?: string; // Signed by TC to prove authenticity
   // We do not store the uniqueId.  The hash can be computed
   // by our data, which when combined with sig on-server proves
   // our identity data is legit.
