@@ -20,6 +20,13 @@ export type UserVerifiedInfo = {
   statusUpdated: DateTime;
   // external user ID, can be used to view the user within blockpass (recordId)
   externalId: string;
+
+  // raw data.  We will temporarily store user data on our servers to ensure
+  // the user can reliably pull the data.  Because there is a 4-hop trip, it
+  // is too risky to pull the data from BlockPass with no certainty it'll arrive
+  // where it's meant to be.
+  raw: any;
+
 	// verified: string,
 	// verifiedDate: DateTime,
 }
