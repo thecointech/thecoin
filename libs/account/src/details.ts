@@ -60,6 +60,7 @@ export type AccountDetails = {
 
   // Status of KYC
   status?: StatusType;
+  statusUpdated?: number;
 
   // email of client
   email?: string;

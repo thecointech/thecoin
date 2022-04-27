@@ -41,7 +41,7 @@ export type BlockpassPayload = {
   // ID to share with the Blockpass support to find specific users
   blockPassID: string,
   // Takes 1 if profile is archived in the KYC dashboard. 0 otherwise.
-  isArchived: boolean,
+  isArchived?: boolean,
   // Timestamp of last review of the profile
   inreviewDate?: string,
   // Timestamp of last profile submission
@@ -52,6 +52,11 @@ export type BlockpassPayload = {
   isPing: boolean,
   // should be 'prod'
   env: "prod",
+}
+
+type TypedData = {
+  type: string;
+  value: string;
 }
 
 // Basic type for the data returned from blockpass.
@@ -68,47 +73,27 @@ export type BlockpassData = {
     RiskLevel: string, // "Low"
   },
   identities: {
-    address: {
-      type: string; // "string",
-      value: string; //"{\"postalCode\":\"62576-6471\",\"city\":\"Luettgenchester\",\"address\":\"4611 Zieme Knoll\",\"extraInfo\":\"extra\",\"country\":\"VNM\",\"state\":\"\"}"
-    },
-    dob: {
-      type: string; //"string",
-      value: string; // "12/31/2016"
-    },
-    email: {
-      type: string; //"string",
-      value: string; //"52777-50830-Alexandre42@yahoo.com"
-    },
-    family_name: {
-      type: string; //"string",
-      value: string; //"StromanBot"
-    },
-    given_name: {
-      type: string; //"string",
-      value: string; //"Helmer"
-    },
-    phone: {
-      type: string; //"string",
-      value: string; //"{\"countryCode\":\"VNM\",\"countryCode2\":\"vn\",\"phoneNumber\":\"+84987543212\",\"number\":\"987543212\"}"
-    },
-    selfie_national_id?: {
-      type: string; //"base64",
-      value: string; //"/9j/4AAQSkZJRgABAQEASABIAAD/<...>"
-    },
-    proof_of_address?: {
-      type: string; //"base64",
-      value: string; //"/9j/4AAQSkZJRgABAQEASABI<...>"
-    },
-    selfie: {
-      type: string; //"base64",
-      value: string; //"/9j/4AAQSkZJRgABAQEA<...>"
-    },
-    passport?: {
-      type: string; //"base64",
-      value: string; //"/9j/4AAQSkZJ<...>"
-    }
-  },
+    // "{\"postalCode\":\"62576-6471\",\"city\":\"Luettgenchester\",\"address\":\"4611 Zieme Knoll\",\"extraInfo\":\"extra\",\"country\":\"VNM\",\"state\":\"\"}"
+    address?: TypedData;
+    // "12/31/2016"
+    dob: TypedData;
+    // "52777-50830-Alexandre42@yahoo.com"
+    email?: TypedData;
+    // "StromanBot"
+    family_name: TypedData,
+    // "Helmer"
+    given_name: TypedData,
+    // "{\"countryCode\":\"VNM\",\"countryCode2\":\"vn\",\"phoneNumber\":\"+84987543212\",\"number\":\"987543212\"}"
+    phone?: TypedData,
+    // "/9j/4AAQSkZJRgABAQEASABIAAD/<...>"
+    selfie_national_id?: TypedData,
+    // "/9j/4AAQSkZJRgABAQEASABI<...>"
+    proof_of_address?: TypedData,
+    // "/9j/4AAQSkZJRgABAQEA<...>"
+    selfie?: TypedData,
+    // "/9j/4AAQSkZJ<...>"
+    passport?: TypedData,
+  }
   // Issuer => JSON-as-string mapping
   certs: any
 }

@@ -3,6 +3,7 @@ import { buildConverter, convertDates } from './converter';
 import { DateTime } from 'luxon';
 
 export type StatusType =
+  "started"| // Button clicked in UI.  Starts polling
   "incomplete"| // Submission started, but not finished
   "waiting"| // Submission uploaded to BP
   "approved"| // Approved within BP

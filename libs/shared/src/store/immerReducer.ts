@@ -20,7 +20,7 @@ export interface ImmerActionCreator<ActionTypeType, Payload extends any[]> {
   };
 }
 
-type ActionsType<Interface> = {
+export type ActionsType<Interface> = {
   [K in keyof Interface] : ImmerActionCreator<K, ArgumentsType<Interface[K]>>
 }
 

@@ -12,7 +12,7 @@ const verified = {
     defaultMessage: 'Verification in process',
     description: 'app.settings.verified.titleVerified: Title for the verfified section in the setting page in the app'}),
   description: defineMessage({
-    defaultMessage: 'Your submission in being processed.',
+    defaultMessage: 'Your submission is being processed.',
     description: 'app.settings.verified.descriptionVerified: message shown if account has been verified'}),
 }
 
