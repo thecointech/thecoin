@@ -21,6 +21,11 @@ CERAMIC_URL=https://ceramic-clay.3boxlabs.com
 CERAMIC_SEED=<SemiPermanentSeed>
 
 #
+# API Key to pull user data into local DB
+BLOCKPASS_API_KEY=<GetKeyFromBlockpass>
+BLOCKPASS_WEBHOOK_SECRET=<SetASecretToBePassed>
+
+#
 # Wallets used by testing environment
 # If you want to regenerate these for any reason,
 # Generate wallets with  - ../tools/createWallets.ts

@@ -1,36 +1,38 @@
 import manual from './data/manual.json';
-import { DateTime } from "luxon";
-import { Decimal } from 'decimal.js-light';
-import { spliceBank } from "./matchBank";
-import { Reconciliations, AllData } from './types';
-import { ActionType } from '@thecointech/broker-db';
+// import { DateTime } from "luxon";
+// import { Decimal } from 'decimal.js-light';
+// import { spliceBank } from "./matchBank";
+import { AllData } from './types';
+// import { ActionType } from '@thecointech/broker-db';
 
 
-type ConnectBankEntry = {
-  action: ActionType,
-  initialId: string,
-  amount: number,
-  date: number,
-  index: number,
-  notes: string,
-}
+// type ConnectBankEntry = {
+//   action: ActionType,
+//   initialId: string,
+//   amount: number,
+//   date: number,
+//   index: number,
+//   notes: string,
+// }
+type DeleteEntry = typeof manual["database"]["delete"][0];
 // type InsertEntry = typeof manual["insert"][0];
 // type ConnectBlockchainEntry = typeof manual["connect"]["blockchain"][0];
 
-export function matchManual(r: Reconciliations, data: AllData) {
-  manual.connect.bank.forEach(entry => doConnectBank(entry, data, r));
+export function matchManual(data: AllData) {
+  //manual.connect.bank.forEach(entry => doConnectBank(entry, data, r));
   // manual.connect.blockchain.forEach(entry => doConnectBlockchain(entry, data, r));
   // manual.insert.forEach(entry => doInsert(entry, r));
+  manual.database.delete.forEach(entry => doDeleteDb(entry, data));
 }
 
-function findRecord(r: Reconciliations, id: string) {
-  for (const user of r)
-    for (const record of user.transactions)
-      if (record.data.id == id)
-        return { user, record };
+// function findRecord(r: Reconciliations, id: string) {
+//   for (const user of r)
+//     for (const record of user.transactions)
+//       if (record.data.id == id)
+//         return { user, record };
 
-  throw new Error(`Cannot find entry: ${id}`);
-}
+//   throw new Error(`Cannot find entry: ${id}`);
+// }
 
 // function doInsert(entry: InsertEntry, r: Reconciliations) {
 //   const dt = DateTime.fromISO(entry.date)
@@ -92,13 +94,13 @@ function findRecord(r: Reconciliations, id: string) {
 //   }
 // }
 
-function doConnectBank(entry: ConnectBankEntry, data: AllData, r: Reconciliations) {
-  // Force connecting to a given record
-  const { user, record } = findRecord(r, entry.initialId!);
-  if (record.data.history[entry.index].bank) throw new Error("Cannot connect manual: already exists");
-  record.data.history[entry.index].bank = spliceBank(data, user, new Decimal(entry.amount), DateTime.fromMillis(entry.date), 1);
-  record.data.history[entry.index].delta.meta = entry.notes;
-}
+// function doConnectBank(entry: ConnectBankEntry, data: AllData, r: Reconciliations) {
+//   // Force connecting to a given record
+//   const { user, record } = findRecord(r, entry.initialId!);
+//   if (record.data.history[entry.index].bank) throw new Error("Cannot connect manual: already exists");
+//   record.data.history[entry.index].bank = spliceBank(data, user, new Decimal(entry.amount), DateTime.fromMillis(entry.date), 1);
+//   record.data.history[entry.index].delta.meta = entry.notes;
+// }
 
 // function doConnectBlockchain(entry: ConnectBlockchainEntry, data: AllData, r: Reconciliations) {
 //   // Force connecting to a given record
@@ -106,3 +108,13 @@ function doConnectBank(entry: ConnectBankEntry, data: AllData, r: Reconciliation
 //   record.refund = spliceBlockchain(data, user, record, entry.refund) ?? undefined;
 //   record.data.hashRefund = entry.refund;
 // }
+
+function doDeleteDb(entry: DeleteEntry, data: AllData) {
+  const txs = data.dbs[entry.type as "Buy"][entry.address];
+  const filtered = txs.filter(tx => tx.data.initialId.startsWith(entry.initialId));
+  if (filtered.length == 0) debugger;
+  const remaining = txs.filter(tx => !tx.data.initialId.startsWith(entry.initialId));
+  data.dbs[entry.type as "Buy"][entry.address] = remaining;
+
+  // We don't need to remove blockchain entries for these, they are ignored...
+}

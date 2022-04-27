@@ -25,7 +25,7 @@ describe('Live DB fetching', () => {
 
   it('converts to Timestamp in DB', async () => {
     const dt = DateTime.now();
-    await setUserVerified(address, address, dt);
+    await setUserVerified(address, { statusUpdated: dt});
     expect(spyTo).toBeCalledTimes(1);
     // Double check - do we have timestamp in the DB?
     const doc = await getFirestore().doc(`User/${address}`).get();
@@ -35,10 +35,10 @@ describe('Live DB fetching', () => {
 
   it('converts to DateTime from DB', async () => {
     const dt = DateTime.now();
-    await setUserVerified(address, address, dt);
+    await setUserVerified(address, { statusUpdated: dt});
     const data = await getUserData(address);
     expect(spyFrom).toBeCalledTimes(1);
-    expect(data?.verifiedDate).toEqual(dt);
+    expect(data?.statusUpdated).toEqual(dt);
   })
 
   it('round-trips decimals appropriately', async () => {

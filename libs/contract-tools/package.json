@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-tools",
-  "version": "0.2.73",
+  "version": "0.2.76",
   "private": "true",
   "description": "TheCoin: Build & deploy tools for our smart contracts",
   "keywords": [
@@ -38,8 +38,8 @@
     }
   },
   "dependencies": {
-    "@thecointech/signers": "^0.2.73",
-    "@thecointech/truffle-ethers-provider": "^0.2.73",
+    "@thecointech/signers": "^0.2.76",
+    "@thecointech/truffle-ethers-provider": "^0.2.76",
     "@typechain/ethers-v5": "^8.0.0",
     "@typechain/truffle-v5": "^6.0.0",
     "truffle": "^5.5.3",

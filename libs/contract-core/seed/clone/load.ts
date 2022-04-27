@@ -32,7 +32,6 @@ function convertCommon(action: any) {
   }
 }
 
-
 export function loadCurrent() {
   if (!existsSync(cacheFile))
     return null;
@@ -58,8 +57,6 @@ export function loadCurrent() {
   }
   return json as AllActions;
 }
-
-
 
 export type MintData = {
   originator: string,

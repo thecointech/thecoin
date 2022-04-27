@@ -1,12 +1,12 @@
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import * as React from 'react';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { AccountVerified } from '../Verified';
+import { AccountVerify } from '../Verified';
 import { Avatars } from '@thecointech/shared/components/Avatars';
 import { Grid } from 'semantic-ui-react';
-import styles from './styles.module.less';
 import { CopyToClipboard } from '@thecointech/shared/components/CopyToClipboard';
-import { AvailableSoon } from '@thecointech/shared/containers/Widgets/AvailableSoon';
+import { DefaultAccountValues } from '@thecointech/account';
+import styles from './styles.module.less';
 
 const translations = defineMessages({
   accountName : {
@@ -24,7 +24,7 @@ const translations = defineMessages({
 });
 
 export const UserDetails = () => {
-  const activeAccount = AccountMap.useActive();
+  const { address, details, name} = AccountMap.useActive() ?? DefaultAccountValues;
   return (
     <React.Fragment>
         <Grid className={ `${styles.userDetailHeader} x2spaceAfter` } stackable >
@@ -34,14 +34,14 @@ export const UserDetails = () => {
             </Grid.Column>
             <Grid.Column width={12} verticalAlign="middle">
               <div className={"font-label x4spaceBefore x4spaceAfter"}><FormattedMessage {...translations.accountName}/></div>
-              <div className={"font-big x4spaceAfter"}>{activeAccount?.name}</div>
+              <div className={"font-big x4spaceAfter"}>{name}</div>
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <AvailableSoon><AccountVerified verified={false} /></AvailableSoon>
+        <AccountVerify details={details} address={address} />
         <div className={"font-label border-top-green4 x4spaceBefore x4spaceAfter"} ><FormattedMessage {...translations.address}/></div>
         <div className={"font-big x4spaceAfter"}>
-          {activeAccount?.address} <CopyToClipboard payload={activeAccount?.address!} />
+          {address} <CopyToClipboard payload={address!} />
         </div>
         <div className={"font-label border-top-green4 x4spaceBefore x4spaceAfter"} ><FormattedMessage {...translations.code}/></div>
         <div className={"x4spaceAfter"}><FormattedMessage {...translations.codeInfos}/></div>

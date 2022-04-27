@@ -1,7 +1,6 @@
 import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
 import { getFirestore, CollectionReference, DocumentReference } from '@thecointech/firestore';
 import { AllUserData, userDataConverter, UserVerifiedInfo } from "./user.types";
-import { DateTime } from "luxon";
 
 //
 // Collection of all users
@@ -30,17 +29,13 @@ export async function getUserData(address: string) : Promise<AllUserData|undefin
 //
 // Declare that the user address passed in here
 // is a valid, unique person on authority of signature owner
-export async function setUserVerified(signature: string, address: string, date: DateTime) {
+export async function setUserVerified(address: string, data: Partial<UserVerifiedInfo>) {
 	const userDoc = getUserDoc(address)
-	const data: UserVerifiedInfo = {
-		verified: signature,
-		verifiedDate: date
-	}
 	// We store the verified signature
 	await userDoc.set(data, { merge: true });
 }
 
 export async function getUserVerified(address: string) {
 	const userData = await getUserData(address);
-	return userData?.verified;
+	return userData?.status == "approved";
 }
