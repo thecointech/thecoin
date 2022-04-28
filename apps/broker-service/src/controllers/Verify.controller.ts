@@ -67,7 +67,8 @@ export class VerifyController extends Controller {
     log.debug({address: payload.refId, status: payload.status},
       `Recieved KYC status update {status} for address {address} with header: ${header}`);
 
-    log.debug(`Header: ${header} - Body: ${r}`);
+    const headers = this.getHeaders();
+    log.debug(`Headers: ${JSON.stringify(headers)} - Body: ${r}`);
     if (!checkHeader(header, r)) {
       log.error(`HMAC Validation failed: ${header} - ${r}`);
       // this.setStatus(500);

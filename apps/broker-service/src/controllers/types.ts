@@ -37,9 +37,9 @@ export type BlockpassPayload = {
   // This should be the users eth address
   refId: string,
   // Number of times the user submitted the profile to the KYC dashboard
-  submitCount: number,
+  submitCount?: number,
   // ID to share with the Blockpass support to find specific users
-  blockPassID: string,
+  blockPassID?: string,
   // Takes 1 if profile is archived in the KYC dashboard. 0 otherwise.
   isArchived?: boolean,
   // Timestamp of last review of the profile
@@ -49,9 +49,9 @@ export type BlockpassPayload = {
   // Timestamp of the last approval of the profile
   approvedDate?: string,
   // Used to debug a newly created webhook, can be ignored.
-  isPing: boolean,
+  isPing?: boolean,
   // should be 'prod'
-  env: "prod",
+  env?: "prod",
 }
 
 type TypedData = {
@@ -89,6 +89,13 @@ export type BlockpassData = {
     selfie_national_id?: TypedData,
     // "/9j/4AAQSkZJRgABAQEASABI<...>"
     proof_of_address?: TypedData,
+    // "/9j/4AAQSkZJRgABAQEA<...>"
+    driving_license?: TypedData,
+    driving_license_dob?: TypedData,
+    driving_license_expiration?: TypedData,
+    driving_license_issuing_country?: TypedData,
+    driving_license_number?: TypedData,
+
     // "/9j/4AAQSkZJRgABAQEA<...>"
     selfie?: TypedData,
     // "/9j/4AAQSkZJ<...>"

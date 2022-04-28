@@ -1,5 +1,6 @@
 import { keccak256 } from '@ethersproject/solidity';
 import { setUserVerified } from '@thecointech/broker-db/user';
+import { log } from '@thecointech/logging';
 import { getSigner } from '@thecointech/signers';
 import { sign } from '@thecointech/utilities/SignedMessages';
 import { DateTime } from 'luxon';
@@ -38,6 +39,13 @@ export async function uploadUserData(data: BlockpassData) {
   const signer = await getSigner("BrokerTransferAssistant");
   const uniqueId = buildUniqueId(data);
   const signature = await sign(uniqueId, signer);
+
+  // Strip images
+  delete data.identities.proof_of_address;
+  delete data.identities.selfie;
+  delete data.identities.selfie_national_id;
+  delete data.identities.driving_license;
+  log.debug(JSON.stringify(data));
 
   // what data do we want to have here?
   setUserVerified(data.refId, {
