@@ -16,14 +16,8 @@ export class SecureController extends Controller {
   @Response('200', 'Google authorization URL')
   @Response('400', 'Bad request')
   async googleAuthUrl(@Query() clientUri: string): Promise<GoogleAuthUrl> {
-    try {
-      const url = getAuthUrl(clientUri);
-      return { url };
-    }
-    catch (err) {
-      console.error(err);
-      throw new Error("Server Error")
-    }
+    const url = getAuthUrl(clientUri);
+    return { url };
   }
 
   /**
@@ -36,14 +30,8 @@ export class SecureController extends Controller {
   @Response('200', 'Account successfully listed')
   @Response('405', 'Permission Denied')
   async googleList(@Query() clientUri: string, @Body() token: GoogleToken): Promise<GoogleListResult> {
-    try {
-      const wallets = await listWallets(clientUri, token);
-      return { wallets };
-    }
-    catch (err) {
-      console.error(err);
-      throw new Error("Server Error")
-    }
+    const wallets = await listWallets(clientUri, token);
+    return { wallets };
   }
 
   /**
@@ -56,18 +44,10 @@ export class SecureController extends Controller {
   @Response('200', 'Account successfully stored')
   @Response('405', 'Permission Denied')
   async googlePut(@Query() clientUri: string, @Body() account: GoogleStoreAccount): Promise<BoolResponse> {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const result = await storeOnGoogle(clientUri, account);
-        resolve({
-          success: result
-        });
-      }
-      catch (err) {
-        console.error(err);
-        reject("Server Error");
-      }
-    })
+    const result = await storeOnGoogle(clientUri, account);
+    return {
+      success: result
+    };
   }
 
   /**
@@ -78,13 +58,7 @@ export class SecureController extends Controller {
    **/
   @Put("google/get")
   async googleRetrieve(@Query() clientUri: string, @Body() request: GoogleToken): Promise<GoogleGetResult> {
-    try {
-      const wallets = await fetchWallets(clientUri, request);
-      return { wallets };
-    }
-    catch (err) {
-      console.error(err);
-      throw new Error("Server Error")
-    }
+    const wallets = await fetchWallets(clientUri, request);
+    return { wallets };
   }
 }

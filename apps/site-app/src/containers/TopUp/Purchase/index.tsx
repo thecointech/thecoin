@@ -45,7 +45,7 @@ export const Purchase = () => {
 
     // Build our request
     const { signer, address } = account;
-    const ts = `${Date.now()}`;
+    const ts = Date.now().toString();
     const request = await GetSignedMessage(ts, signer);
     const api = GetETransferApi();
     const response = await api.eTransferInCode(request);

@@ -3,9 +3,7 @@ import { defineMessage, FormattedMessage } from 'react-intl';
 import { Form, Header, Button, List, Message } from 'semantic-ui-react';
 import { UxAddress } from '@thecointech/shared/components/UX/Address';
 import { getShortCode, NormalizeAddress } from '@thecointech/utilities';
-import { setUserVerified } from '@thecointech/broker-db/user';
 import { createReferrer, getReferrersCollection, VerifiedReferrer } from '@thecointech/broker-db/referrals';
-import { DateTime } from 'luxon';
 import { getSigner } from '@thecointech/signers';
 import { usePromiseSubscription } from '@thecointech/shared';
 
@@ -94,7 +92,7 @@ async function verifyAccount(address: string) {
   const naddress = NormalizeAddress(address);
   const signature = await signer.signMessage(naddress)
 
-  await setUserVerified(signature, address, DateTime.now());
+  // await setUserVerified(signature, address, DateTime.now());
   const code = await createReferrer(signature, address);
   alert('Done');
   return code;

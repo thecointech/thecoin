@@ -1,5 +1,6 @@
 import { current } from '../status';
 import { Controller, Get, Route, Response, Tags } from '@tsoa/runtime';
+import { DateTime } from 'luxon';
 
 @Route('status')
 @Tags('Status')
@@ -17,5 +18,15 @@ export class StatusController extends Controller {
       certifiedFee: status.certifiedFee,
       address: status.BrokerCAD,
     }
+  }
+
+  /**
+  * Get server-side timestamp.  Used to ensure a client can always
+  * get a valid timestamp/signature combo, even if their clock is out
+  **/
+  @Get('/ts')
+  @Response(200, "Here ya go")
+  async timestamp() {
+    return DateTime.now().toMillis();
   }
 }
