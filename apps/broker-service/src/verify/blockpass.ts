@@ -2,7 +2,7 @@ import { log } from '@thecointech/logging';
 import axios from 'axios';
 import { BlockpassData } from '../controllers/types';
 
-const getUrl = (address: string) => `'https://kyc.blockpass.org/kyc/1.0/connect/${process.env.BLOCKPASS_CLIENT_ID}/refId/${address}`
+const getUrl = (address: string) => `https://kyc.blockpass.org/kyc/1.0/connect/${process.env.BLOCKPASS_CLIENT_ID}/refId/${address}`
 
 export async function fetchUser(address: string) {
   log.trace({address}, 'Fetching user data for {address}');

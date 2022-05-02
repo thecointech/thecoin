@@ -77,7 +77,7 @@ export function* checkCurrentStatus(actions: AccountActions, state: AccountState
   if (status == 'completed') {
     // Complete means deleting server-side record
     log.info(`KYC completed, removing ss data`);
-    yield call(onCompleted, actions, state)
+    yield call(onCompleted, actions, state);
   }
   else if (status != state.details.status) {
     log.trace(`Updating with new status: ${status}`)
@@ -103,5 +103,5 @@ function* onApproved(actions: AccountActions, state: AccountState) : SagaIterato
 // On approval, our data is sitting on TC servers
 function* onCompleted(actions: AccountActions, state: AccountState) : SagaIterator<void> {
   yield call(clearDetails, state.signer)
-  yield call(actions.setDetails, {status: StatusType.Completed});
+  yield setDetails(actions, {status: StatusType.Completed});
 }

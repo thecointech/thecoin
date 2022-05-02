@@ -112,6 +112,8 @@ function AccountReducer(address: string, initialState: AccountState) {
         })
       }
       while (1) {
+        // Trigger Check Saga.  This is an async call
+        // and we cannot receive the return value here
         yield this.sendValues(this.actions.checkKycStatus);
         // Delay polling time then trime again
         yield delay(KycPollingInterval);
