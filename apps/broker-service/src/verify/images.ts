@@ -14,12 +14,13 @@ const imageKeys : IdentityKeys[] = [
 export async function uploadAndStripImages({identities, refId}: BlockpassData) {
 
   log.debug({address: refId}, "Uploading KYC images for {address}")
+  const now = DateTime.now();
   for (const key of imageKeys) {
     const imageData = identities[key];
     if (imageData) {
       log.debug({address: refId}, `Have KYC image: ${key} for {address}`)
 
-      const upload = await uploadImage(key, refId, imageData);
+      const upload = await uploadImage(key, refId, now, imageData);
       // If successful, strip the image from the DB data
       if (upload) {
         imageData.value = upload;
@@ -32,7 +33,7 @@ export async function uploadAndStripImages({identities, refId}: BlockpassData) {
 }
 
 
-export async function uploadImage(name: string, address: string, image: TypedData) {
+export async function uploadImage(name: string, address: string, now: DateTime, image: TypedData) {
   // assume valid encoding
   let encoding = image.type as BufferEncoding;
   // Just in case it's not
@@ -43,15 +44,14 @@ export async function uploadImage(name: string, address: string, image: TypedDat
   }
 
   const bucket = storage.bucket(BucketName);
-  const file = bucket.file(`${address}/${name}`);
+  const file = bucket.file(`${address}/${now.toString()}/${name}.png`);
 
   const buffer = Buffer.from(image.value, encoding);
   await file.save(buffer, {
     gzip: true,
-    private: true,
     resumable: false,
     // contentType: ?"image/png" ??
   })
 
-  return `Uploaded: ${DateTime.now().toString()}`;
+  return `Uploaded: ${now.toString()}`;
 }

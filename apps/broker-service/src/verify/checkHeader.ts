@@ -1,5 +1,4 @@
 import { createHmac } from 'crypto';
-import { log } from '@thecointech/logging';
 
 const secret = process.env.BLOCKPASS_WEBHOOK_SECRET ?? "secret";
 
@@ -16,6 +15,5 @@ export function checkHeader(header: string, body: Buffer) {
     .update(body)
     .digest('hex');
 
-  log.debug(`Calculated HMAC hash ${hash}`);
   return hash == header;
 }

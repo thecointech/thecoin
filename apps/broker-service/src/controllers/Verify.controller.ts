@@ -1,4 +1,4 @@
-import { Controller, Route, Post, Response, Tags, Body, Get, Query, Delete, Request, Header  } from '@tsoa/runtime';
+import { Controller, Route, Post, Response, Tags, Body, Get, Query, Delete, Request, Header, Hidden  } from '@tsoa/runtime';
 import { BlockpassData, BlockpassPayload } from './types';
 import { IsValidAddress } from '@thecointech/utilities';
 import { log } from '@thecointech/logging';
@@ -55,25 +55,22 @@ export class VerifyController extends Controller {
   * Webhook called by Blockpass to update verification status
   **/
   @Post()
-  // @Hidden()
+  @Hidden()
   @Response('200', 'Verification Webhook')
   async updateStatus(
     @Body() payload: BlockpassPayload,
     @Header('X-Hub-Signature') signature: string,
     @Request() request: express.Request & { rawBody: Buffer})
   {
-    const header = this.getHeader("X-Hub-Signature") as string;
     const r = request.rawBody;
 
     log.debug({address: payload.refId, status: payload.status},
-      `Recieved KYC status update {status} for address {address} with header: ${header}`);
+      `Recieved KYC status update {status} for address {address} with sginature: ${signature}`);
 
-    const headers = this.getHeaders();
-    log.debug(`Headers: ${JSON.stringify(headers)} - Body: ${r}`);
     if (!checkHeader(signature, r)) {
-      log.error(`HMAC Validation failed: ${header} - ${r}`);
-      // this.setStatus(500);
-      // return;
+      log.error(`HMAC Validation failed: ${signature} - ${r}`);
+      this.setStatus(500);
+      return;
     }
     if (!IsValidAddress(payload.refId)) {
       log.error({payload}, `Invalid refId passed: ${payload.refId} - {payload}`)
