@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-statemachine",
-  "version": "0.2.77",
+  "version": "0.2.78",
   "description": "The Coin: The execution statemachine for processing coin transactions",
   "keywords": [
     "THECoin"
@@ -44,18 +44,18 @@
     }
   },
   "dependencies": {
-    "@thecointech/async": "^0.2.77",
-    "@thecointech/broker-db": "^0.2.77",
-    "@thecointech/contract-core": "^0.2.77",
-    "@thecointech/email": "^0.2.77",
-    "@thecointech/fx-rates": "^0.2.77",
-    "@thecointech/logging": "^0.2.77",
-    "@thecointech/market-status": "^0.2.77",
-    "@thecointech/utilities": "^0.2.77"
+    "@thecointech/async": "^0.2.78",
+    "@thecointech/broker-db": "^0.2.78",
+    "@thecointech/contract-core": "^0.2.78",
+    "@thecointech/email": "^0.2.78",
+    "@thecointech/fx-rates": "^0.2.78",
+    "@thecointech/logging": "^0.2.78",
+    "@thecointech/market-status": "^0.2.78",
+    "@thecointech/utilities": "^0.2.78"
   },
   "devDependencies": {
-    "@thecointech/bank-interface": "^0.2.77",
-    "@thecointech/tx-gmail": "^0.2.77",
+    "@thecointech/bank-interface": "^0.2.78",
+    "@thecointech/tx-gmail": "^0.2.78",
     "jest": "*"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
