@@ -54,7 +54,7 @@ export type BlockpassPayload = {
   env?: "prod",
 }
 
-type TypedData = {
+export type TypedData = {
   type: string;
   value: string;
 }

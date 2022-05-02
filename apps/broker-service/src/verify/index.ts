@@ -1,4 +1,3 @@
-import { keccak256 } from '@ethersproject/solidity';
 import { setUserVerified } from '@thecointech/broker-db/user';
 import { log } from '@thecointech/logging';
 import { getSigner } from '@thecointech/signers';
@@ -6,6 +5,8 @@ import { sign } from '@thecointech/utilities/SignedMessages';
 import { DateTime } from 'luxon';
 import { BlockpassData, BlockpassPayload } from '../controllers/types';
 import { fetchUser } from './blockpass';
+import { buildUniqueId } from '@thecointech/utilities/Verify';
+import { uploadAndStripImages } from './images';
 
 //
 // Called for every status update, allows us to pull user data from BP and store it locally
@@ -37,14 +38,16 @@ export function deleteRawData(address: string) {
 export async function uploadUserData(data: BlockpassData) {
   // What is the users uniqueID?
   const signer = await getSigner("BrokerTransferAssistant");
-  const uniqueId = buildUniqueId(data);
+  const uniqueId = buildUniqueId({
+    given_name: data.identities.given_name.value,
+    family_name: data.identities.family_name.value,
+    dob: data.identities.dob.value,
+  });
   const signature = await sign(uniqueId, signer);
 
-  // Strip images
-  delete data.identities.proof_of_address;
-  delete data.identities.selfie;
-  delete data.identities.selfie_national_id;
-  delete data.identities.driving_license;
+  // We store the selfie/
+  await uploadAndStripImages(data)
+
   log.debug(JSON.stringify(data));
 
   // what data do we want to have here?
@@ -57,10 +60,3 @@ export async function uploadUserData(data: BlockpassData) {
   })
   return true;
 }
-
-
-const buildUniqueId = ({identities}: BlockpassData) =>
-  keccak256(
-    ["string", "string", "string"],
-    [identities.given_name, identities.family_name, identities.dob]
-  );

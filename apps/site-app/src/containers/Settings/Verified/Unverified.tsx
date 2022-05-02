@@ -41,9 +41,12 @@ export const Unverified = ({address, details}: PropsVerified) => {
     const blockpass = new window.BlockpassKYCConnect(
       process.env.BLOCKPASS_CLIENT_ID,
       {
-        // env: process.env.BLOCKPASS_ENV, // This apparently does not work?
         refId: address,
         email: details.email,
+      })
+
+      blockpass.on('KYCConnectClose', () => {
+        accountApi.checkKycStatus();
       })
 
     blockpass.startKYCConnect();

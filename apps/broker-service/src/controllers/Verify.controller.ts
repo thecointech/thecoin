@@ -1,4 +1,4 @@
-import { Controller, Route, Post, Response, Tags, Body, Get, Query, Delete, Request  } from '@tsoa/runtime';
+import { Controller, Route, Post, Response, Tags, Body, Get, Query, Delete, Request, Header  } from '@tsoa/runtime';
 import { BlockpassData, BlockpassPayload } from './types';
 import { IsValidAddress } from '@thecointech/utilities';
 import { log } from '@thecointech/logging';
@@ -59,6 +59,7 @@ export class VerifyController extends Controller {
   @Response('200', 'Verification Webhook')
   async updateStatus(
     @Body() payload: BlockpassPayload,
+    @Header('X-Hub-Signature') signature: string,
     @Request() request: express.Request & { rawBody: Buffer})
   {
     const header = this.getHeader("X-Hub-Signature") as string;
@@ -69,7 +70,7 @@ export class VerifyController extends Controller {
 
     const headers = this.getHeaders();
     log.debug(`Headers: ${JSON.stringify(headers)} - Body: ${r}`);
-    if (!checkHeader(header, r)) {
+    if (!checkHeader(signature, r)) {
       log.error(`HMAC Validation failed: ${header} - ${r}`);
       // this.setStatus(500);
       // return;

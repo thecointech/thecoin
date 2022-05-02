@@ -35,6 +35,7 @@
   ],
   "main": "./build/main.js",
   "dependencies": {
+    "@google-cloud/storage": "^5.19.4",
     "@google-cloud/firestore": "4.12.3",
     "@thecointech/contract-core": "^0.2.77",
     "@thecointech/email": "^0.2.77",
