@@ -1,12 +1,11 @@
 //
 // In dev:live, we need basic setup for our
 //
-import { NormalizeAddress } from "@thecointech/utilities";
+import { getAddressShortCodeSig, NormalizeAddress } from "@thecointech/utilities";
 import { createReferree, createReferrer } from "@thecointech/broker-db/referrals";
 import { getUserVerified } from "@thecointech/broker-db/user";
 import { getSigner } from "@thecointech/signers";
 import { DateTime } from "luxon";
-import { sign } from "@thecointech/utilities/SignedMessages";
 import { uploadUserData } from '../verify'
 //
 // When we seed the DB, we initialize the DB with 1 verified client, and 1 referred
@@ -26,10 +25,8 @@ export async function seed() {
 async function setVerified(clientAddress: string) {
   const address = NormalizeAddress(clientAddress);
   // First, supply verified details
-  await uploadUserData({
+  await uploadUserData(clientAddress, {
     status:  "approved",
-    refId: address,
-
     identities: {
       given_name: { value: "Test" },
       family_name: { value: "Account" },
@@ -37,11 +34,11 @@ async function setVerified(clientAddress: string) {
     }
   } as any)
   // Next, create referral code
-  const brokerCad = await getSigner("BrokerCAD");
-  const signature = await sign(address, brokerCad);
-  const code = await createReferrer(signature, address);
+  const signer = await getSigner("BrokerCAD");
+  const sig = await getAddressShortCodeSig(address, signer);
+  const code = await createReferrer(sig, address);
   console.log(`Seeded valid: ${code} from ${address}`);
-  return code;
+  return code!;
 }
 
 //

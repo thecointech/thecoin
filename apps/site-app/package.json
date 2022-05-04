@@ -54,6 +54,7 @@
   },
   "dependencies": {
     "@artsy/fresnel": "^1.2.2",
+    "@thecointech/blockpass": "^0.2.78",
     "@thecointech/shared": "^0.2.78",
     "@thecointech/site-base": "^0.2.78",
     "@thecointech/utilities": "^0.2.78",

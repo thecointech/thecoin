@@ -16,10 +16,19 @@ export type UserVerifiedInfo = {
   // hash(given name, family name, DOB).  This should be
   // sufficient for detecting duplicate accounts for
   // quite a while.
-  uniqueId?: string;
-  // When setting the uniqueID, we also sign it with
-  // BrokerTransferAssistant.  This info is also stored
-  // by the user in
+  // WE CANNOT STORE THIS
+  // If we assume this DB will leak eventually, this is basically
+  // the same as connecting everyones public address with names etc
+  //uniqueId?: string;
+
+  // Seed: on the off chance a duplciate uniqueIdSig/referralCode is recorded,
+  // we could use this seed as a de-duplifier
+  // NOTE: This is not implemented yet!
+  seed?: string;
+
+  // To keep a record of uniqueness online, we keep a signed(uniqueId)
+  // This keeps uniqueness while preserving privacy even if the DB leaks
+  // This is probably sufficient as BrokerTransferAssist is (very) well guarded
   uniqueIdSig?: string;
   // The current status of the user.
   status: StatusType;
@@ -27,6 +36,11 @@ export type UserVerifiedInfo = {
   statusUpdated: DateTime;
   // external user ID, can be used to view the user within blockpass (recordId)
   externalId: string;
+
+  // Record the referral code for easy reference by the client
+  // When first validated, this value is set to 'null' for easy
+  // querying of all accounts that need to codes
+  referralCode?: string|null;
 
   // raw data.  We will temporarily store user data on our servers to ensure
   // the user can reliably pull the data.  Because there is a 4-hop trip, it

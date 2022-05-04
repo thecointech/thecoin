@@ -2,7 +2,7 @@ import * as React from 'react';
 import { defineMessages } from 'react-intl';
 import { BuildVerifiedSale, isPacketValid } from '@thecointech/utilities/VerifiedSale';
 import { weBuyAt } from '@thecointech/fx-rates';
-import { GetStatusApi, GetETransferApi } from 'api'
+import { GetStatusApi, GetETransferApi } from '@thecointech/apis/broker'
 import { ETransferPacket } from '@thecointech/types';
 import { useState } from 'react';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';

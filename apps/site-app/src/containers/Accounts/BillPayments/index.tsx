@@ -7,7 +7,7 @@ import { weBuyAt } from '@thecointech/fx-rates';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { payees, validate } from './payees';
 import { BillPayeePacket } from '@thecointech/types';
-import { GetStatusApi, GetBillPaymentsApi } from 'api';
+import { GetStatusApi, GetBillPaymentsApi } from '@thecointech/apis/broker';
 import { UxInput } from '@thecointech/shared/components/UX/Input';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { FilterPayee } from './FilterPayee';

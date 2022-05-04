@@ -104,3 +104,10 @@ export type BlockpassData = {
   // Issuer => JSON-as-string mapping
   certs: any
 }
+
+
+export type UserVerifyData ={
+  status?: StatusType,
+  referralCode?: string,
+  raw: BlockpassData,
+}

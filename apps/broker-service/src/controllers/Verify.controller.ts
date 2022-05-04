@@ -1,12 +1,11 @@
-import { Controller, Route, Post, Response, Tags, Body, Get, Query, Delete, Request, Header, Hidden  } from '@tsoa/runtime';
-import { BlockpassData, BlockpassPayload } from './types';
+import { Controller, Route, Post, Response, Tags, Body, Get, Query, Delete, Request, Header  } from '@tsoa/runtime';
+import { BlockpassPayload, UserVerifyData } from './types';
 import { IsValidAddress } from '@thecointech/utilities';
 import { log } from '@thecointech/logging';
 import { getUserData } from '@thecointech/broker-db/user';
 import { getSigner } from '../signedTimestamp';
-import { StatusType } from '@thecointech/broker-db/user.types';
 import { deleteRawData, updateUserVerification } from '../verify';
-import * as express from "express";
+import { Request as ExpressRequest} from "express";
 import { checkHeader } from '../verify/checkHeader';
 
 @Route('verify')
@@ -18,25 +17,30 @@ export class VerifyController extends Controller {
    */
   @Get('/data')
   @Response('200', 'User Data')
-  async userPullData(@Query() ts: string, @Query() sig: string) {
+  async userGetData(@Query() ts: string, @Query() sig: string) : Promise<UserVerifyData> {
     const address = await getSigner({message: ts, signature: sig});
     const user = await getUserData(address);
-    if (user?.raw) {
-      return user.raw as BlockpassData;
+
+    return {
+      status: user?.status,
+      referralCode: user?.referralCode ?? undefined,
+      raw: user?.raw,
     }
-    return null;
   }
 
   /**
   * Returns the current status for address
   **/
-  @Get('/status')
-  @Response<StatusType|null>('200', 'Verify Status')
-  async userVerifyStatus(@Query() ts: string, @Query() sig: string) {
-    const address = await getSigner({ message: ts, signature: sig });
-    const user = await getUserData(address);
-    return user?.status ?? null;
-  }
+  // @Get('/status')
+  // @Response('200', 'Verify Status')
+  // async userVerifyStatus(@Query() ts: string, @Query() sig: string): Promise<UserVerifyStatus> {
+  //   const address = await getSigner({ message: ts, signature: sig });
+  //   const user = await getUserData(address);
+  //   return {
+  //     status: user?.status,
+  //     referralCode: user?.referralCode,
+  //   }
+  // }
 
   /**
    * Delete raw data.  Called by the user once the raw data is safely
@@ -55,12 +59,12 @@ export class VerifyController extends Controller {
   * Webhook called by Blockpass to update verification status
   **/
   @Post()
-  @Hidden()
+  // @Hidden() // Allow visibility to make mocking this easier
   @Response('200', 'Verification Webhook')
   async updateStatus(
     @Body() payload: BlockpassPayload,
     @Header('X-Hub-Signature') signature: string,
-    @Request() request: express.Request & { rawBody: Buffer})
+    @Request() request: ExpressRequest & { rawBody: Buffer})
   {
     const r = request.rawBody;
 

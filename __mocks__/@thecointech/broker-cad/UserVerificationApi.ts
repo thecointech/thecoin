@@ -50,7 +50,10 @@ export class UserVerificationApi implements Pick<SrcApi, keyof SrcApi> {
       incrementStatus();
     }
     return Promise.resolve(
-      buildResponse(status)
+      buildResponse({
+        status,
+        referralCode: undefined
+      })
     );
   }
 

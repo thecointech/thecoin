@@ -64,7 +64,7 @@ switch (process.env.CONFIG_NAME) {
     // Dev live is internally connected, but all external connections are mocked
     //
     console.warn('--- Injecting external TC mocks ---');
-    useSomeMocks(["googleapis", "google-auth-library"]);
+    useSomeMocks(["googleapis", "google-auth-library", "axios"]);
     break;
   default:
     //

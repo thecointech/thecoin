@@ -4,7 +4,7 @@ import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
 
 const storage = new Storage();
-const BucketName = process.env.GCLOUD_IMAGE_STORAGE_BUCKET ?? "NOGOOD";
+const BucketName = process.env.GCLOUD_IMAGE_STORAGE_BUCKET;
 
 type IdentityKeys = keyof BlockpassData["identities"];
 const imageKeys : IdentityKeys[] = [
@@ -43,15 +43,18 @@ export async function uploadImage(name: string, address: string, now: DateTime, 
     encoding = "utf8"
   }
 
-  const bucket = storage.bucket(BucketName);
-  const file = bucket.file(`${address}/${now.toString()}/${name}.png`);
+  if (BucketName) {
+    const bucket = storage.bucket(BucketName);
+    const file = bucket.file(`${address}/${now.toString()}/${name}.png`);
 
-  const buffer = Buffer.from(image.value, encoding);
-  await file.save(buffer, {
-    gzip: true,
-    resumable: false,
-    // contentType: ?"image/png" ??
-  })
+    const buffer = Buffer.from(image.value, encoding);
+    await file.save(buffer, {
+      gzip: true,
+      resumable: false,
+      // contentType: ?"image/png" ??
+    })
+    return `Uploaded: ${now.toString()}`;
+  }
 
-  return `Uploaded: ${now.toString()}`;
+  return `Dropped from ${process.env.CONFIG_NAME}`;
 }

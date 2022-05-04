@@ -17,7 +17,13 @@ class EthereumProvider extends EventEmitter {
     callback: (err: Error | null | undefined, res?: unknown) => void
   ) {
     if (request.method === 'eth_chainId') {
-      callback(null, { result: '1' })
+      // NOTE!  This should not return '1', it should return
+      // process.env.DEPLOY_POLYGON_NETWORK_ID
+      // Although - why on earth would it matter if we aren't
+      // putting information on the chain?
+      this.signer.getChainId().then(chainId => {
+        callback(null, { result: chainId.toString() })
+      })
     } else if (request.method === 'personal_sign') {
       let message = request.params[0] as string
       if (message.startsWith('0x')) {

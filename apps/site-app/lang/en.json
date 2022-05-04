@@ -19,6 +19,10 @@
     "defaultMessage": "Balance",
     "description": "shared.widgets.balanceandprofit.balance: Title for widget Balance and profit"
   },
+  "08DHMh": {
+    "defaultMessage": "Your submission is being processed.",
+    "description": "app.settings.verified.descriptionVerified: message shown if account has been verified"
+  },
   "09nd3/": {
     "defaultMessage": "Step 1 of 3: Checking transfer availability...",
     "description": "app.accounts.transfer.step1: Message for step1 for the make a payment page / transfer tab"
@@ -279,6 +283,10 @@
     "defaultMessage": "Topup balance",
     "description": "app.topup.title: Main title for the topup page in the app"
   },
+  "TaZ62j": {
+    "defaultMessage": "We are generating your code, please check back in a few hours",
+    "description": "app.settings.userDetails.codeInfos: Label for the info for the tab User details in the setting page in the app"
+  },
   "TbRPO0": {
     "defaultMessage": "Your can choose the currency you want us to display:",
     "description": "app.settings.personaldetails.descriptionCurrency: Description for the page setting / tab personal details in the app"
@@ -414,10 +422,6 @@
   "knRmks": {
     "defaultMessage": "You can email money to anyone with an interac e-Transfer, pay your bills or transfer directly to another account.",
     "description": "app.makepayments.description: Description for the Make a payment page in the app"
-  },
-  "l+7a0X": {
-    "defaultMessage": "Your submission in being processed.",
-    "description": "app.settings.verified.descriptionVerified: message shown if account has been verified"
   },
   "lLRGM3": {
     "defaultMessage": "Step 3 of 3: Waiting for the order to be accepted (check progress {link})...",
