@@ -29,20 +29,6 @@ export class VerifyController extends Controller {
   }
 
   /**
-  * Returns the current status for address
-  **/
-  // @Get('/status')
-  // @Response('200', 'Verify Status')
-  // async userVerifyStatus(@Query() ts: string, @Query() sig: string): Promise<UserVerifyStatus> {
-  //   const address = await getSigner({ message: ts, signature: sig });
-  //   const user = await getUserData(address);
-  //   return {
-  //     status: user?.status,
-  //     referralCode: user?.referralCode,
-  //   }
-  // }
-
-  /**
    * Delete raw data.  Called by the user once the raw data is safely
    * uploaded to 3DX
    * @param ts Timestamp
