@@ -54,6 +54,8 @@ export const DefaultAccountValues = {
 
  details: {
    displayCurrency: CurrencyCode.CAD,
+   referralCode: undefined,
+   status: undefined,
  }
 };
 

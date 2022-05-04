@@ -4,7 +4,7 @@ import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
 
 const storage = new Storage();
-const BucketName = process.env.GCLOUD_IMAGE_STORAGE_BUCKET ?? "NOGOOD";
+const BucketName = process.env.GCLOUD_IMAGE_STORAGE_BUCKET;
 
 type IdentityKeys = keyof BlockpassData["identities"];
 const imageKeys : IdentityKeys[] = [
@@ -14,12 +14,13 @@ const imageKeys : IdentityKeys[] = [
 export async function uploadAndStripImages({identities, refId}: BlockpassData) {
 
   log.debug({address: refId}, "Uploading KYC images for {address}")
+  const now = DateTime.now();
   for (const key of imageKeys) {
     const imageData = identities[key];
     if (imageData) {
       log.debug({address: refId}, `Have KYC image: ${key} for {address}`)
 
-      const upload = await uploadImage(key, refId, imageData);
+      const upload = await uploadImage(key, refId, now, imageData);
       // If successful, strip the image from the DB data
       if (upload) {
         imageData.value = upload;
@@ -32,7 +33,7 @@ export async function uploadAndStripImages({identities, refId}: BlockpassData) {
 }
 
 
-export async function uploadImage(name: string, address: string, image: TypedData) {
+export async function uploadImage(name: string, address: string, now: DateTime, image: TypedData) {
   // assume valid encoding
   let encoding = image.type as BufferEncoding;
   // Just in case it's not
@@ -42,16 +43,18 @@ export async function uploadImage(name: string, address: string, image: TypedDat
     encoding = "utf8"
   }
 
-  const bucket = storage.bucket(BucketName);
-  const file = bucket.file(`${address}/${name}`);
+  if (BucketName) {
+    const bucket = storage.bucket(BucketName);
+    const file = bucket.file(`${address}/${now.toString()}/${name}.png`);
 
-  const buffer = Buffer.from(image.value, encoding);
-  await file.save(buffer, {
-    gzip: true,
-    private: true,
-    resumable: false,
-    // contentType: ?"image/png" ??
-  })
+    const buffer = Buffer.from(image.value, encoding);
+    await file.save(buffer, {
+      gzip: true,
+      resumable: false,
+      // contentType: ?"image/png" ??
+    })
+    return `Uploaded: ${now.toString()}`;
+  }
 
-  return `Uploaded: ${DateTime.now().toString()}`;
+  return `Dropped from ${process.env.CONFIG_NAME}`;
 }

@@ -56,6 +56,8 @@ export type AccountDetails = {
   //----------------------------------------------
   // unsigned (not-legally-important) details
 
+  // Store our referral code here.  It's just more convenient than
+  // pinging the server every time we want to view it.
   referralCode?: string;
 
   // Status of KYC

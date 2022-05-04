@@ -1,8 +1,8 @@
-import { log } from '@thecointech/logging';
-import { Account } from '@thecointech/shared/containers/Account/reducer';
-import { useScript } from '@thecointech/shared/useScript';
-import { ButtonSecondary } from '@thecointech/site-base/components/Buttons';
 import React from 'react';
+import { log } from '@thecointech/logging';
+import { useBlockpass } from '@thecointech/blockpass';
+import { Account } from '@thecointech/shared/containers/Account/reducer';
+import { ButtonSecondary } from '@thecointech/site-base/components/Buttons';
 import { defineMessage, FormattedMessage } from 'react-intl';
 import { AccountVerifyDisplay } from './Display';
 import { PropsVerified } from './types';
@@ -21,36 +21,12 @@ const button = defineMessage({
   defaultMessage: 'Verify',
   description: 'app.settings.verified.buttonNotVerified: Button for the verfified section in the setting page in the app'});
 
-
-
-declare global {
-  interface Window {
-    BlockpassKYCConnect: any;
-  }
-}
 //
 // Component to show if the account is needs verification
 export const Unverified = ({address, details}: PropsVerified) => {
 
   const accountApi = Account(address).useApi();
-  const state = useScript('https://cdn.blockpass.org/widget/scripts/release/3.0.2/blockpass-kyc-connect.prod.js');
-  React.useEffect(() => {
-    if (state != "ready") return;
-    // The first render, this will be null and we'll need to skip
-    if (!window.BlockpassKYCConnect) return;
-    const blockpass = new window.BlockpassKYCConnect(
-      process.env.BLOCKPASS_CLIENT_ID,
-      {
-        refId: address,
-        email: details.email,
-      })
-
-      blockpass.on('KYCConnectClose', () => {
-        accountApi.checkKycStatus();
-      })
-
-    blockpass.startKYCConnect();
-  }, [state])
+  const state = useBlockpass(address, details.email, accountApi.checkKycStatus);
 
   return (
     <>

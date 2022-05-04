@@ -13,5 +13,5 @@
   },
   "include": [
     "./src/**/*.*"
-  ]
+, "../tx-processor/src/referrals/referrals.ts"  ]
 }

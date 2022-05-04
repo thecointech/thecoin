@@ -1,12 +1,11 @@
 import { Controller, Route, Post, Response, Tags, Body, Get, Query, Delete, Request, Header  } from '@tsoa/runtime';
-import { BlockpassData, BlockpassPayload } from './types';
+import { BlockpassPayload, UserVerifyData } from './types';
 import { IsValidAddress } from '@thecointech/utilities';
 import { log } from '@thecointech/logging';
 import { getUserData } from '@thecointech/broker-db/user';
 import { getSigner } from '../signedTimestamp';
-import { StatusType } from '@thecointech/broker-db/user.types';
 import { deleteRawData, updateUserVerification } from '../verify';
-import * as express from "express";
+import { Request as ExpressRequest} from "express";
 import { checkHeader } from '../verify/checkHeader';
 
 @Route('verify')
@@ -18,24 +17,15 @@ export class VerifyController extends Controller {
    */
   @Get('/data')
   @Response('200', 'User Data')
-  async userPullData(@Query() ts: string, @Query() sig: string) {
+  async userGetData(@Query() ts: string, @Query() sig: string) : Promise<UserVerifyData> {
     const address = await getSigner({message: ts, signature: sig});
     const user = await getUserData(address);
-    if (user?.raw) {
-      return user.raw as BlockpassData;
-    }
-    return null;
-  }
 
-  /**
-  * Returns the current status for address
-  **/
-  @Get('/status')
-  @Response<StatusType|null>('200', 'Verify Status')
-  async userVerifyStatus(@Query() ts: string, @Query() sig: string) {
-    const address = await getSigner({ message: ts, signature: sig });
-    const user = await getUserData(address);
-    return user?.status ?? null;
+    return {
+      status: user?.status,
+      referralCode: user?.referralCode ?? undefined,
+      raw: user?.raw,
+    }
   }
 
   /**
@@ -55,25 +45,22 @@ export class VerifyController extends Controller {
   * Webhook called by Blockpass to update verification status
   **/
   @Post()
-  // @Hidden()
+  // @Hidden() // Allow visibility to make mocking this easier
   @Response('200', 'Verification Webhook')
   async updateStatus(
     @Body() payload: BlockpassPayload,
     @Header('X-Hub-Signature') signature: string,
-    @Request() request: express.Request & { rawBody: Buffer})
+    @Request() request: ExpressRequest & { rawBody: Buffer})
   {
-    const header = this.getHeader("X-Hub-Signature") as string;
     const r = request.rawBody;
 
     log.debug({address: payload.refId, status: payload.status},
-      `Recieved KYC status update {status} for address {address} with header: ${header}`);
+      `Recieved KYC status update {status} for address {address} with sginature: ${signature}`);
 
-    const headers = this.getHeaders();
-    log.debug(`Headers: ${JSON.stringify(headers)} - Body: ${r}`);
     if (!checkHeader(signature, r)) {
-      log.error(`HMAC Validation failed: ${header} - ${r}`);
-      // this.setStatus(500);
-      // return;
+      log.error(`HMAC Validation failed: ${signature} - ${r}`);
+      this.setStatus(500);
+      return;
     }
     if (!IsValidAddress(payload.refId)) {
       log.error({payload}, `Invalid refId passed: ${payload.refId} - {payload}`)
