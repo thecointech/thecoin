@@ -53,7 +53,7 @@ function convertRawDetails(user: UserVerifyData) : AccountDetails|null {
 
 export function* checkCurrentStatus(actions: AccountActions, state: AccountState) : SagaIterator<string> {
   // If completed, there is nothing left to do
-  if (state.details.status === "completed")
+  if (state.details.status === "completed" && state.details.referralCode)
     return state.details.status;
 
   let user = yield call(getUserData, state.signer);

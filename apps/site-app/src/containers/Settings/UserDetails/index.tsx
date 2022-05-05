@@ -24,7 +24,8 @@ export const UserDetails = () => {
   const accountApi = Account(address).useApi();
   // Should we check for latest?
   React.useEffect(() => {
-    if (details.status && details.status != 'completed') {
+    // Keep checking until the referral code turns up.
+    if (details.status && !details.referralCode) {
       accountApi.checkKycStatus();
     }
   }, [])
