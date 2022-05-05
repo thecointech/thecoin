@@ -19,7 +19,7 @@ it("Can create referrer", async () => {
   const referralCode = await createReferrer(validAddress, validAddress);
 
   // First, do we get valid referrer address for valid referrer ID
-  let referrerData = await getReferrerData(referralCode);
+  let referrerData = await getReferrerData(referralCode!);
   expect(referrerData).not.toBeNull();
   referrerData = referrerData!;
   expect(referrerData.address).toMatch(validAddress);
@@ -28,7 +28,7 @@ it("Can create referrer", async () => {
 
 it('is referrer code is case insensitive', async () => {
   const referralCode = await createReferrer(validAddress, validAddress);
-  const validIdUC = referralCode.toUpperCase();
+  const validIdUC = referralCode!.toUpperCase();
   const verifyUC = await getReferrerData(validIdUC);
   expect(verifyUC!.address).toEqual(validAddress);
 })
@@ -45,7 +45,7 @@ it('throws with invalid referral code', async () => {
 it("Can refer new user.", async () => {
   const newAddress = `0x123456789012345678901234567${Date.now()}`;
   const referralCode = await createReferrer(validAddress, validAddress);
-  await createReferree(referralCode, newAddress, DateTime.now());
+  await createReferree(referralCode!, newAddress, DateTime.now());
 
   // test data store properly
   const referrer = await getUsersReferrer(newAddress);
@@ -53,5 +53,5 @@ it("Can refer new user.", async () => {
   expect(referrer?.referredBy).toMatch(validAddress);
 
   // Test re-create fails
-  expect(createReferree(referralCode, newAddress, DateTime.now())).rejects.toThrow("User already exists");
+  expect(createReferree(referralCode!, newAddress, DateTime.now())).rejects.toThrow("User already exists");
 });
