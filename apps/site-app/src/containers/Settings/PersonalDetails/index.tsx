@@ -228,7 +228,7 @@ export const PersonalDetails = () => {
           onValidate={noValidation}
           placeholder={translations.postalcode}
           tooltip={translations.postalcode}
-          defaultValue={details.address?.postalcode}
+          defaultValue={details.address?.postalCode}
           name="country"
           readOnly={!postalcodeEdit}
         />
