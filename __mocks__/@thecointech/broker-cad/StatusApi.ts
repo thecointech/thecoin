@@ -7,7 +7,7 @@ export class StatusApi implements Pick<SrcApi, keyof SrcApi> {
     return Promise.resolve(
       buildResponse({
         address: "0x1234567890123456789012345678901234567890",
-        certifiedFee: 5000,
+        certifiedFee: 0,
       })
     );
   }
