@@ -118,7 +118,7 @@ function AccountReducer(address: string, initialState: AccountState) {
         // Delay polling time then trime again
         yield delay(KycPollingInterval);
         const current = yield select(AccountReducer.selector);
-        log.trace(`Polled KYC - current status: ${current.details.status}`);
+        log.trace({address: this.state.address}, `{address} polled KYC - current status: ${current.details.status}`);
         if (current.details.status == StatusType.Completed)
           break;
       }

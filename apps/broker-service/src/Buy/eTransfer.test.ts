@@ -1,16 +1,12 @@
 import { GetWallet } from "../exchange/Wallet";
-import { GetHash, GenerateCode } from './eTransfer'
-import { sign } from "@thecointech/utilities/SignedMessages";
+import { GenerateCode } from './eTransfer'
+import { GetSignedMessage } from "@thecointech/utilities/SignedMessages";
 
 async function getCode(ts: number)
 {
 	const wallet = await GetWallet();
-  const _ts = `${ts}`;
-  const signature = await sign(GetHash(_ts), wallet);
-	const code = await GenerateCode({
-		message: _ts,
-		signature
-  });
+  const message = await GetSignedMessage(ts.toString(), wallet);
+	const code = await GenerateCode(message);
   return code;
 }
 
