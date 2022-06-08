@@ -23,7 +23,7 @@ test("rejects old eTransfer key", async () => {
       try {
         return await getCode(Date.now() - (10 * 60 * 1000));
       }
-      catch (e) {
+      catch (e: any) {
         throw new Error(e.message);
       }
   }

@@ -64,7 +64,7 @@ async function SendTemplate(to: string, template: number, variables: object)
     const body = response.body as Email.PostResponseData;
     return body.Messages.every(m => m.Status === 'success')
   }
-  catch (e)
+  catch (e: any)
   {
     // TODO: Proper logging here!
     log.error(e, "Failed sending email");

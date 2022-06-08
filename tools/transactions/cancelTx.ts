@@ -33,7 +33,7 @@ async function cancelXfer() {
       console.log(`Tx sent: ${tx.hash}`);
       await tx.wait(2);
     }
-    catch (e) {
+    catch (e: any) {
       console.error(`Error happened: ${e.message}`);
     }
   }
