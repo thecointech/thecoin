@@ -9,6 +9,8 @@ import { log } from '@thecointech/logging';
 const vars = getEnvVars("prod");
 jest.setTimeout(5 * 60 * 1000);
 
+const shouldRun = !!vars.RBCAPI_CREDENTIALS_PATH && !process.env.JEST_CI;
+
 // We run this test on the live website to catch any changes to RBC website.
 describe("Testing Payee Management", () => {
 
@@ -65,5 +67,5 @@ describe("Testing Payee Management", () => {
     expect(payees.find(payee => payee.text === fakeVisaName)).toBeFalsy();
   });
 
-}, !!vars.RBCAPI_CREDENTIALS_PATH)
+}, shouldRun)
 

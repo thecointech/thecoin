@@ -51,7 +51,7 @@
     "clean:apis": "git clean -qfdx ./apis",
     "clean:storybook": "rimraf ./storybook-static",
     "test": "lerna run test",
-    "test:ci": "lerna run test -- --ci --forceExit",
+    "test:ci": "cross-env JEST_CI=true lerna run test -- --ci --forceExit",
     "storybook": "start-storybook -p 6006",
     "dedup": "yarn yarn-deduplicate -s fewer",
     "dump-firestore": "cross-env CONFIG_NAME=devlive ts-node --project ./tsconfig.dev.json ./tools/dumpFirestore.ts",

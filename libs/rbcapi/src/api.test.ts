@@ -10,6 +10,10 @@ PouchDB.plugin(require('pouchdb-adapter-memory'));
 const env = getEnvVars("prod");
 let api: RbcApi; // Intialized below
 
+const shouldRun = !!env.RBCAPI_CREDENTIALS_PATH && !process.env.JEST_CI;
+
+console.log(shouldRun);
+
 // This test-suite checks that using Puppeteer allows us to complete
 // the requested actions.
 describe('Rbc Puppeteer-based API', () => {
@@ -52,7 +56,7 @@ describe('Rbc Puppeteer-based API', () => {
     expect(txscad.every(tx => typeof tx.CAD === 'number')).toBeTruthy();
   });
 
-}, !!env.RBCAPI_CREDENTIALS_PATH)
+}, shouldRun)
 
 async function initialize() {
 
