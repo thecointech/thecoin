@@ -140,8 +140,8 @@ function AccountReducer(address: string, initialState: AccountState) {
       try {
         const balance = yield call(contract.balanceOf, address);
         yield this.storeValues({ balance: balance.toNumber() });
-      } catch (err) {
-        console.error(err);
+      } catch (err: any) {
+        log.error(err, "Update balance failed")
       }
     }
 

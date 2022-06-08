@@ -117,7 +117,7 @@ async function maybeInsert(ts: number, lastExpired: number, rates: CombinedRates
         return rate.validTill;
       }
     }
-    catch (e) {
+    catch (e: any) {
       log.error(e, "Error fetching {Timestamp}", ts);
     }
   }

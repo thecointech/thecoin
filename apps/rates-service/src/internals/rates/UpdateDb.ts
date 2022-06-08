@@ -121,7 +121,7 @@ export async function update() {
       ]);
       return true;
     }
-    catch (err) {
+    catch (err: any) {
         console.error(err);
     }
     return false;

@@ -30,10 +30,10 @@ export const toDelta = (tx: TransactionResponse) => {
       hash: tx.hash,
       meta: JSON.stringify(tx, convertBN),
     }
-  } catch(e) {
+  } catch(e: any) {
     log.error(e, `Error converting {hash}`, {hash: tx.hash});
     return {
-      error: e.error,
+      error: e.message ?? e.toString(),
       hash: undefined,
     }
   }

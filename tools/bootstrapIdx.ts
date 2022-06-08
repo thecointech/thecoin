@@ -19,11 +19,13 @@ async function publish(manager: ModelManager) {
   const schema = await readFile(`${idxFolder}/schemaJWE.json`, 'utf8');
   const SchemaJWE = JSON.parse(schema);
   const schemaId =  await manager.createSchema("jwe", SchemaJWE);
+  const schemaUrl = manager.getSchemaURL(schemaId);
+  if (!schemaUrl) throw new Error("Cannot publish schema: missing URL");
 
   const privateDetails = await manager.createDefinition("AccountDetails", {
     name: 'AccountDetails',
     description: 'Verified account details',
-    schema: manager.getSchemaURL(schemaId),
+    schema: schemaUrl,
   })
   return privateDetails;
 }
@@ -32,7 +34,7 @@ async function publish(manager: ModelManager) {
 // Connect to the Ceramic node
 async function connect() {
   // Create and authenticate the DID
-  const seed = fromString(process.env.CERAMIC_SEED, 'base16')
+  const seed = fromString(process.env.CERAMIC_SEED!, 'base16')
   const did = new DID({
     provider: new Ed25519Provider(seed),
     resolver: getResolver(),
