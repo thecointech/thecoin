@@ -9,6 +9,7 @@ const { merge } = require("webpack-merge")
 module.exports = {
   features: {
     previewCsfV3: true,
+    storyStoreV7: true,
   },
   stories: [
     "../stories/**/*.stories.mdx",
