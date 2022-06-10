@@ -4,7 +4,6 @@ require('@thecointech/setenv');
 require('../../../__mocks__/mock_node');
 
 var path = require('path');
-const { getSigner } = require('@thecointech/signers');
 const { TruffleEthersProvider } = require("@thecointech/truffle-ethers-provider");
 const { getProvider } = require("@thecointech/ethers-provider");
 
@@ -36,7 +35,7 @@ function getLiveNetworks() {
     networks: {
       polygon: {
         provider: () => new TruffleEthersProvider(
-          { [process.env.WALLET_Owner_ADDRESS]: () => getSigner("Owner") },
+          { [process.env.WALLET_Owner_ADDRESS]: getOwner },
           getProvider("POLYGON"),
         ),
         network_id: process.env.DEPLOY_POLYGON_NETWORK_ID, // eslint-disable-line camelcase
@@ -48,7 +47,7 @@ function getLiveNetworks() {
       },
       ethereum: {
         provider: () => new TruffleEthersProvider(
-          { [process.env.WALLET_Owner_ADDRESS]: () => getSigner("Owner") },
+          { [process.env.WALLET_Owner_ADDRESS]: getOwner },
           getProvider("ETHEREUM"),
         ),
         network_id: process.env.DEPLOY_ETHEREUM_NETWORK_ID, // eslint-disable-line camelcase
@@ -63,6 +62,16 @@ function getLiveNetworks() {
       polygonscan: process.env.POLYGONSCAN_API_KEY
     }
   }
+}
+
+// NOTE: Not Tested!
+// This function was implemented to allow us to convert
+// signers to an ESM module.  It should work exactly the
+// same as prior implementation, but has not been tested.
+async function getOwner() {
+  const d = await import('thecointech/signers');
+  const signer = await d.getSigner("Owner");
+  return signer;
 }
 
 function loadTypescript() {

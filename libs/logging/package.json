@@ -19,7 +19,9 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc --project tsconfig.build.json",
+    "build": "run-p build:*",
+    "build:cjs": "yarn tsc --project tsconfig.build.cjs.json",
+    "build:mjs": "yarn tsc --project tsconfig.build.mjs.json",
     "clean": "rimraf ./build && rimraf ./coverage"
   },
   "files": [
@@ -27,11 +29,17 @@
   ],
   "exports": {
     ".": {
-      "node": "./build/log_node.js",
-      "default": "./build/log_browser.js"
+      "require": {
+        "node": "./build/cjs/log_node.js",
+        "default": "./build/cjs/log_browser.js"
+      },
+      "import": {
+        "node": "./build/mjs/log_node.js",
+        "default": "./build/mjs/log_browser.js"
+      }
     }
   },
-  "types": "./build/log_browser.d.ts",
+  "types": "./build/mjs/log_browser.d.ts",
   "dependencies": {
     "browser-bunyan": "^1.6.3",
     "bunyan": "^1.8.13",

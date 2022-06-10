@@ -23,7 +23,7 @@
     "build:contracts": "truffle compile",
     "build:types": "yarn contract-gen-types",
     "build:src": "run-p build:src:*",
-    "build:src:cjs": "yarn tsc --project tsconfig.build.cjs.json",
+    "_build:src:cjs": "yarn tsc --project tsconfig.build.cjs.json",
     "build:src:mjs": "yarn tsc --project tsconfig.build.mjs.json",
     "build:src:copy": "cpx \"./src/deployed/**\" ./build/cjs/deployed && cpx \"./src/deployed/**\" ./build/mjs/deployed",
     "clean": "run-p clean:*",
@@ -49,18 +49,18 @@
   ],
   "main": "./build/index.js",
   "exports": {
-    "./contract": "./build/cjs/index.js",
+    "./contract": "./build/mjs/index.js",
     ".": {
-      "development": "./build/cjs/index_mocked.js",
+      "development": "./build/mjs/index_mocked.js",
       "electron": "./build/mjs/index.js",
-      "default": "./build/cjs/index.js"
+      "default": "./build/mjs/index.js"
     }
   },
-  "types": "./build/cjs/index.d.ts",
+  "types": "./build/mjs/index.d.ts",
   "typesVersions": {
     "*": {
       "*": [
-        "build/cjs/index.d.ts"
+        "build/mjs/index.d.ts"
       ]
     }
   },
