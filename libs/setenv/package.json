@@ -3,6 +3,7 @@
   "private": "true",
   "version": "0.2.81",
   "description": "TheCoin: Environment setup library",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "ethereum"
@@ -15,12 +16,11 @@
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/setenv"
   },
-  "scripts": {
-    "build": "yarn tsc",
-    "clean": "rimraf ./build"
+  "bin": {
+    "run-env": "./src/run-env.mjs"
   },
-  "exports": "./build/index.js",
-  "types": "./build/index.d.ts",
+  "exports": "./src/index.mjs",
+  "types": "./src/index.d.ts",
   "dependencies": {
     "dotenv": "^10.0.0"
   }

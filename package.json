@@ -103,7 +103,7 @@
     "@types/less": "^3.0.1",
     "@types/lodash": "^4.14.170",
     "@types/luxon": "1.26.2",
-    "@types/node": "12.12.38",
+    "@types/node": "16.11.39",
     "@types/pouchdb": "^6.4.0",
     "@types/pouchdb-upsert": "^2.2.6",
     "@types/prop-types": "15.7.1",
