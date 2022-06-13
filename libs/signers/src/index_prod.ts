@@ -1,13 +1,13 @@
-import { AccountName } from './names';
-import { getAndCacheSigner } from './cache'
-import { loadFromDisk } from './fromDisk';
-import { loadHardware } from './fromHardware';
+import { getAndCacheSigner } from './cache.js'
+import { loadFromDisk } from './fromDisk.js';
+import { loadHardware } from './fromHardware.js';
+import type { AccountName } from './names';
 
 //
 // NodeJS (?) environments running locally.
 // Should not excute on GAE instances.  Load from disk
 // allows restricting access based on account running.
-export * from './names';
+export * from './names.js';
 export const getSigner = (name: AccountName) =>
   getAndCacheSigner(name, () => {
     switch(name) {

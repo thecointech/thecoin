@@ -2,6 +2,8 @@
 
 import { getEnvVars } from "./vars.mjs";
 import { spawn } from "child_process";
+import { existsSync } from 'fs';
+import { fileURLToPath } from "url";
 
 function sliceArgs(args, name, def) {
   const arg = args.find(a => a.startsWith(`${name}=`));
@@ -13,26 +15,37 @@ function sliceArgs(args, name, def) {
   return def;
 }
 
-const args = process.argv.slice(2);
+let args = process.argv.slice(2);
 const config = sliceArgs(args, "cfg", process.env.CONFIG_NAME ?? "development");
-const executable = sliceArgs(args, "exec", "node");
-
-console.log("Running Config: " + config);
+let executable = sliceArgs(args, "exec", "node");
 
 // Now, run node with ncr
 // TODO: Support ts-node?
-const ncr_path = new URL("ncr.mjs", import.meta.url);
-
 const env = {
   ...process.env,
   ...getEnvVars(config),
 }
+
+// Always attach experimental loader
+const ncr_path = new URL("ncr.mjs", import.meta.url);
+env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --experimental-loader=${ncr_path}`;
+
+// If this is yarn script?
+if (executable != "node") {
+  // Is this a command in .bin folder (ie - is it webpack?)
+  const binUrl = new URL(`../../../node_modules/.bin/${executable}`, import.meta.url);
+  if (existsSync(binUrl)) {
+    executable = fileURLToPath(binUrl);
+    if (process.platform == "win32") {
+      // On windows we target the .cmd version
+      executable = executable + ".cmd";
+    }
+  }
+}
+
 const proc = spawn(
   executable,
-  [
-    `--experimental-loader=${ncr_path.toString()}`,
-    ...args,
-  ],
+  args,
   { stdio: 'inherit', cwd: process.cwd(), env }
 )
 

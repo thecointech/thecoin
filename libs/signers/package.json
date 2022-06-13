@@ -2,6 +2,7 @@
   "name": "@thecointech/signers",
   "version": "0.2.81",
   "description": "The Coin: centralized access for built-in signers.  Not for external use",
+  "type": "module",
   "keywords": [
     "TheCoin"
   ],

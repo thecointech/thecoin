@@ -5,7 +5,7 @@ import type { Bytes } from "@ethersproject/bytes";
 import type { Deferrable } from "@ethersproject/properties";
 import type { AccountName } from '../names';
 import { Signer } from '@ethersproject/abstract-signer'
-import { SIGNER_CHANNEL } from './types';
+import { SIGNER_CHANNEL } from './types.js';
 import { getProvider } from '@thecointech/ethers-provider';
 
 export class ElectronSigner extends Signer {

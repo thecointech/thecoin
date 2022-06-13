@@ -1,10 +1,7 @@
 /**
  * COMMON WEBPACK CONFIGURATION
  */
-// IMPORTANT: Run this import step first to ensure env vars are set prior to calling getSigner
-import { createRequire } from "module"; // Bring in the ability to create the 'require' method
-const require = createRequire(import.meta.url); // construct the require method
-const { getEnvFiles } = require('@thecointech/setenv');
+import { getEnvFiles } from '@thecointech/setenv';
 
 import { join, resolve as _resolve } from 'path';
 import webpack from 'webpack';
@@ -12,8 +9,10 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import webpack_less from '@thecointech/site-semantic-theme/webpack.less';
 import Dotenv from 'dotenv-webpack';
 
-const configName = process.env.CONFIG_NAME;
+import { createRequire } from "module"; // Bring in the ability to create the 'require' method
+const require = createRequire(import.meta.url); // construct the require method
 
+const configName = process.env.CONFIG_NAME;
 const projectRoot = process.cwd();
 const configFile = join(projectRoot, 'tsconfig.build.json');
 const packageFile = join(projectRoot, 'package.json');
