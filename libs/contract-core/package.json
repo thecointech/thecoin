@@ -20,7 +20,7 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "run-s build:contracts build:types build:src",
-    "build:contracts": "truffle compile",
+    "build:contracts": "run-env exec=truffle compile",
     "build:types": "yarn contract-gen-types",
     "build:src": "run-p build:src:*",
     "_build:src:cjs": "yarn tsc --project tsconfig.build.cjs.json",
@@ -36,13 +36,12 @@
     "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn _deploy:polygon",
     "prod": "cross-env CONFIG_NAME=prod yarn _deploy:polygon",
     "_deploy": "run-s _deploy:*",
-    "_deploy:polygon": "truffle migrate --network polygon && yarn seed",
-    "_deploy:ethereum": "truffle migrate --network ethereum",
-    "mint": "yarn run-script ./mint/main.ts",
-    "seed": "yarn run-script ./seed/main.ts",
-    "seed:fetch": "cross-env CONFIG_NAME=prodbeta yarn run-script ./seed/clone/fetch.ts",
-    "verify": "yarn run-script ./internal/verify.ts",
-    "run-script": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register "
+    "_deploy:polygon": "run-env exec=truffle migrate --network polygon && yarn seed",
+    "_deploy:ethereum": "run-env exec=truffle migrate --network ethereum",
+    "mint": "run-env ./mint/main.ts",
+    "seed": "run-env ./seed/main.ts",
+    "seed:fetch": "cross-env CONFIG_NAME=prodbeta yarn run-env ./seed/clone/fetch.ts",
+    "verify": "run-env ./internal/verify.ts"
   },
   "files": [
     "build/**/*"

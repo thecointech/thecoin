@@ -2,6 +2,7 @@
   "name": "@thecointech/hardware-wallet",
   "version": "0.2.81",
   "description": "TheCoin: An Ethers.js signer implemented for Ledger",
+  "type": "module",
   "keywords": [
     "ethereum",
     "etherjs",

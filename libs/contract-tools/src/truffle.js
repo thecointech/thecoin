@@ -1,7 +1,4 @@
 'use strict';
-// Load environment for the network we are deploying to
-// require('@thecointech/setenv');
-// require('../../../__mocks__/mock_node');
 
 var path = require('path');
 const { TruffleEthersProvider } = require("@thecointech/truffle-ethers-provider");
