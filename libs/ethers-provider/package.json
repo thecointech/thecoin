@@ -21,7 +21,9 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "run-p build:*",
-    "build:cjs": "yarn tsc --project tsconfig.build.cjs.json && yarn rename_cjs",
+    "prebuild:cjs": "rimraf ./build/cjs/**.cjs",
+    "build:cjs": "yarn tsc --project tsconfig.build.cjs.json",
+    "postbuild:cjs": "yarn rename_cjs",
     "build:mjs": "yarn tsc --project tsconfig.build.mjs.json",
     "rename_cjs": "renamer -s --find .js --replace .cjs \"./build/cjs/**\"",
     "clean": "rimraf ./build"

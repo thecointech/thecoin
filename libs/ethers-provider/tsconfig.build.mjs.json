@@ -3,7 +3,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./build/mjs",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "tsBuildInfoFile": "./build/.buildinfo.mjs",
   },
   "include": ["./src/**/*", "./src/**/*.json"],
   "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"],
