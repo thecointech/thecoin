@@ -1,15 +1,14 @@
-import { FXRate } from "@thecointech/pricing";
-import { Transaction } from "@thecointech/tx-blockchain";
 import { toHuman } from "@thecointech/utilities";
 import { fiatChange } from "../../containers/Account/profit.js";
-import { IFxRates } from "../../containers/FxRate.js";
 import { DateTime } from "luxon";
-import { GraphHistoryProps } from ".";
-import { TxDatum } from "./types.js";
 import { weSellAt } from '@thecointech/fx-rates';
+import type { FXRate } from "@thecointech/pricing";
+import type { Transaction } from "@thecointech/tx-blockchain";
+import type { IFxRates } from "../../containers/FxRate";
+import type { GraphHistoryProps } from ".";
+import type { TxDatum } from "./types";
 
 export const MarketTZ = "America/New_York";
-
 
 export const getDateVals = ({ txs, from, to }: Pick<GraphHistoryProps, "txs"|"from"|"to">) => {
   to = to ?? DateTime.local();

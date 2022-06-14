@@ -44,6 +44,12 @@ export default {
         },
       },
       {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false,
+        },
+      },
+      {
         // Default CSS processing (anything not named *.module.css)
         test: /(?<!module)\.css$/,
         use: ['style-loader', 'css-loader'],

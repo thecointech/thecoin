@@ -3,7 +3,7 @@
  */
 import { BaseReducer } from '../../store/immerReducer.js';
 import { LanguageProviderState, DEFAULT_LOCALE, IActions, Locale } from './types.js';
-import { ApplicationBaseState } from '../../types.js';
+import type { ApplicationBaseState } from '../../types';
 
 export const initialState: LanguageProviderState = {
   locale: DEFAULT_LOCALE as Locale,

@@ -7,7 +7,7 @@ import { AuthOptions } from './types.js';
 import { getTransactions, fetchLatestTransactions } from './transactions.js';
 import { depositETransfer } from './deposit.js';
 import { send } from './etransfer.js';
-import { payBill } from './bills.js';
+import { payBill } from './bills';
 
 export class RbcApi implements IBank {
 

@@ -2,7 +2,6 @@ import { InitialCoinBlock, ConnectContract, TheCoin } from '@thecointech/contrac
 import { Signer, Wallet } from 'ethers';
 import { call, delay, select, StrictEffect } from 'redux-saga/effects';
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
-import { DecryptCallback, IActions } from './types.js';
 import { buildSagas } from './actions.js';
 import { FxRateReducer } from '../../containers/FxRate/reducer.js';
 import { SagaReducer } from '../../store/immerReducer.js';
@@ -10,14 +9,15 @@ import { isLocal } from '@thecointech/signers';
 import { loadAndMergeHistory, calculateTxBalances, mergeTransactions, Transaction } from '@thecointech/tx-blockchain';
 import { connectIDX } from '@thecointech/idx';
 import { AccountDetails, AccountState, DefaultAccountValues } from '@thecointech/account';
-import { loadDetails, setDetails } from '../AccountDetails.js';
+import { loadDetails, setDetails } from '../AccountDetails';
 import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
 import { SagaIterator } from 'redux-saga';
-import { Dictionary } from 'lodash';
-import { AccountMapStore } from '../AccountMap.js';
 import { checkCurrentStatus } from './BlockpassKYC.js';
 import { StatusType } from '@thecointech/broker-cad';
+import type { AccountMapStore } from '../AccountMap';
+import type { DecryptCallback, IActions } from './types';
+import type { Dictionary } from 'lodash';
 
 const KycPollingInterval = (process.env.NODE_ENV === 'production')
   ? 5 * 60 * 1000 // 5 minutes

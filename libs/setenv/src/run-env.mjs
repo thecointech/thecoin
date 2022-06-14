@@ -28,7 +28,7 @@ const env = {
 
 // Always attach experimental loader
 const ncr_path = new URL("ncr.mjs", import.meta.url);
-env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --experimental-loader=${ncr_path}`;
+env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --experimental-loader=${ncr_path} --es-module-specifier-resolution=node`;
 if (args.find(arg => arg.endsWith(".ts"))) {
   // env.TS_NODE_PROJECT = fileURLToPath(new URL("../../../tsconfig.dev.json", import.meta.url));
   args.unshift("-r ts-node/register");

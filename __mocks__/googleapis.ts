@@ -1,1 +1,1 @@
-export * from './googleapis/index';
+export * from './googleapis/index.js';

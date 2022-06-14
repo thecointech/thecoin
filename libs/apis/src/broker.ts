@@ -3,7 +3,9 @@ import {
   BillPaymentsApi,
   DirectTransferApi,
   ETransferApi,
-  UserVerificationApi
+  UserVerificationApi,
+  SecureApi,
+  ReferralsApi
 } from '@thecointech/broker-cad';
 
 export { StatusType, EventType } from '@thecointech/broker-cad';
@@ -15,3 +17,6 @@ export const GetStatusApi = () => new StatusApi(undefined, BrokerCADAddress);
 export const GetBillPaymentsApi = () => new BillPaymentsApi(undefined, BrokerCADAddress);
 export const GetDirectTransferApi = () => new DirectTransferApi(undefined, BrokerCADAddress);
 export const GetETransferApi = () => new ETransferApi(undefined, BrokerCADAddress);
+
+export const GetSecureApi = () => new SecureApi(undefined, BrokerCADAddress);
+export const GetReferrersApi = () => new ReferralsApi(undefined, BrokerCADAddress);

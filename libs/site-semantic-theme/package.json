@@ -21,18 +21,14 @@
     "./webpack.less": "./internal/webpack.less.js",
     "./variables.less": "./src/variables.less",
     "./semantic.less": "./src/semantic.less",
-    "./*": "./build/*.js"
+    "./variables": "./src/variables.js"
   },
   "typesVersions": {
     "*": {
       "*": [
-        "build/*"
+        "src/*"
       ]
     }
-  },
-  "scripts": {
-    "build": "node ../../tools/link-assets.mjs \"./**/*.!(module.css.d.ts|css.d.ts|ts|tsx|jsx)\"",
-    "clean": "rimraf ./build"
   },
   "dependencies": {
     "fontsource-abril-fatface": "3.1.5",

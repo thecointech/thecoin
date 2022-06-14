@@ -1,6 +1,4 @@
 // We can't type this, you just have to look it up in source!
-const LessVars = require('!../internal/less-var-loader.js?resolveVariables!./semantic/thecoin/globals/site.variables');
+import vars from '!../internal/less-var-loader.cjs?resolveVariables!./semantic/thecoin/globals/site.variables';
 
-module.exports = {
-  LessVars: LessVars
-}
+export const LessVars = vars.default;

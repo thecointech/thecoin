@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import { Form, Label } from 'semantic-ui-react';
 import InputMask from "react-input-mask";
-import { MaskedUxProps } from '../types';
+import type { MaskedUxProps } from '../types';
 
 export const UxCanadianPC = (props:MaskedUxProps) => {
 
@@ -13,12 +13,12 @@ export const UxCanadianPC = (props:MaskedUxProps) => {
     return (
       <Form.Field className={props.className}>
         <Label>{props.label}</Label>
-          <InputMask name={props.name} 
+          <InputMask name={props.name}
                       mask="a9a 9a9"
-                      alwaysShowMask 
-                      onChange={onChange} 
+                      alwaysShowMask
+                      onChange={onChange}
                       readOnly={props.readOnly} />
-        
+
       </Form.Field>
     );
 }

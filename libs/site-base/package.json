@@ -56,6 +56,7 @@
   },
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.4.1",
+    "@thecointech/apis": "^0.2.81",
     "@thecointech/shared": "^0.2.81",
     "@thecointech/site-semantic-theme": "^0.2.81",
     "@thecointech/utilities": "^0.2.81",
