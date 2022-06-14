@@ -2,7 +2,7 @@ import { Decimal } from "decimal.js-light";
 import { writeFileSync, mkdirSync, existsSync, readFileSync, statSync } from "fs";
 import { DateTime } from "luxon";
 import { join } from "path";
-import { AllData, Reconciliations } from "./types";
+import { AllData, Reconciliations } from "./types.js";
 import {log} from '@thecointech/logging';
 
 // file deepcode ignore no-any: JSON processing is basically all 'any'

@@ -2,7 +2,7 @@ import { fetchRate, FXRate, weBuyAt, weSellAt } from "@thecointech/fx-rates";
 import { toHuman } from "@thecointech/utilities";
 import { nextOpenTimestamp } from "@thecointech/market-status";
 import { DateTime } from 'luxon';
-import { ReconciledRecord } from "./types";
+import { ReconciledRecord } from "./types.js";
 import { Decimal } from 'decimal.js-light';
 
 const getSettlementDate = async (r: ReconciledRecord) =>

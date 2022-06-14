@@ -1,5 +1,5 @@
 import { Signer } from "@ethersproject/abstract-signer"
-import { getContract } from "./contract";
+import { getContract } from "./contract.js";
 import { connect } from '@thecointech/contract-base/connect';
 import type { TheGreenNFT } from ".";
 

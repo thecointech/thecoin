@@ -1,8 +1,8 @@
 import { ProgressCallback } from '@thecointech/bank-interface';
 import { Page } from 'puppeteer';
-import { ApiAction } from '../action';
+import { ApiAction } from '../action.js';
 import { Decimal } from 'decimal.js-light';
-import { addPayee } from './managePayees';
+import { addPayee } from './managePayees.js';
 import { log } from '@thecointech/logging';
 
 //

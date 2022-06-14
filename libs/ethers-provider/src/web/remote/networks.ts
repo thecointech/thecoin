@@ -1,7 +1,7 @@
 // Mostly taken from https://github.com/talentlessguy/chain-provider
 
 import type { Networkish, Network } from '@ethersproject/providers'
-import { logger } from './logger'
+import { logger } from './logger.js'
 
 
 

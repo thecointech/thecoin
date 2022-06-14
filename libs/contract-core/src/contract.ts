@@ -1,5 +1,5 @@
 import { Contract } from 'ethers';
-import { TheCoin } from './types';
+import { TheCoin } from './types.js';
 import TheCoinSpec from './contracts/TheCoin.json';
 import { getProvider } from '@thecointech/ethers-provider';
 //

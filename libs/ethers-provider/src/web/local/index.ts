@@ -2,7 +2,7 @@ import { BlockTag, Filter, JsonRpcProvider, Log } from '@ethersproject/providers
 import { hexZeroPad, hexStripZeros } from "@ethersproject/bytes";
 import { id } from "@ethersproject/hash";
 import { BigNumber } from "@ethersproject/bignumber";
-import { ERC20Response } from '../erc20response';
+import { ERC20Response } from '../erc20response.js';
 
 export class Erc20Provider extends JsonRpcProvider {
 

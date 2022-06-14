@@ -1,5 +1,5 @@
 import { createSelector, createStructuredSelector } from 'reselect';
-import { SiteBaseStore } from '../../SiteBaseStore';
+import { SiteBaseStore } from '../../SiteBaseStore.js';
 import { Location } from 'history';
 
 

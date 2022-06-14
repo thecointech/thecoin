@@ -1,7 +1,7 @@
 
 import { BaseReducer } from '@thecointech/shared/store/immerReducer'
-import { ContentState, IActions } from './types';
-import { SiteBaseStore } from '../../SiteBaseStore';
+import { ContentState, IActions } from './types.js';
+import { SiteBaseStore } from '../../SiteBaseStore.js';
 
 const CONTENT_KEY: keyof SiteBaseStore = "content";
 

@@ -1,8 +1,8 @@
 import { log } from "@thecointech/logging";
 import { isPresent } from "@thecointech/utilities";
-import { fetchEmailIds, fetchEmails } from "./fetch";
-import { toDepositData } from "./convert";
-import { eTransferData } from "./types";
+import { fetchEmailIds, fetchEmails } from "./fetch.js";
+import { toDepositData } from "./convert.js";
+import { eTransferData } from "./types.js";
 
 export async function queryETransfers(query?: string): Promise<eTransferData[]> {
 

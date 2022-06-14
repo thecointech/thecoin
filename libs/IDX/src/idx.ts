@@ -1,7 +1,7 @@
 import { ConnectNetwork, SelfID } from '@self.id/web';
 import { log } from '@thecointech/logging';
 import type { Signer } from '@ethersproject/abstract-signer';
-import { createAuthProvider } from './authProvider';
+import { createAuthProvider } from './authProvider.js';
 
 const CERAMIC_URL = process.env.CERAMIC_URL || 'http://localhost:7007'
 

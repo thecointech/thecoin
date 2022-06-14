@@ -1,8 +1,8 @@
 import testWallet from './testAccount1.json';
 import { Wallet } from 'ethers';
 import { ConnectContract } from '@thecointech/contract-core';
-import { AccountMap } from '../map';
-import { AccountState, buildNewAccount } from '../state';
+import { AccountMap } from '../map.js';
+import { AccountState, buildNewAccount } from '../state.js';
 import { SelfID } from '@thecointech/idx';
 
 let _devAccounts: AccountMap = {};

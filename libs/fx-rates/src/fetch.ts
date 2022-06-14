@@ -1,5 +1,5 @@
 import { log } from '@thecointech/logging';
-import { CurrencyCode } from './CurrencyCodes';
+import { CurrencyCode } from './CurrencyCodes.js';
 import { FXRate, RatesApi } from '@thecointech/pricing';
 
 export async function fetchRate(date?: Date): Promise<FXRate | null> {

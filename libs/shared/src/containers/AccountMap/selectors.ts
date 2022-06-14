@@ -1,5 +1,5 @@
 import { AccountState } from '@thecointech/account';
-import { AccountMapStore } from './types';
+import { AccountMapStore } from './types.js';
 
 // Select array of all accounts
 export const selectAccountArray = (state: AccountMapStore) =>

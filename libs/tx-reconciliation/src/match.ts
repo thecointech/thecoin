@@ -1,6 +1,6 @@
-import { matchDB } from "./matchDb";
-import { AllData } from "./types";
-import { matchManual } from './matchManual';
+import { matchDB } from "./matchDb.js";
+import { AllData } from "./types.js";
+import { matchManual } from './matchManual.js';
 
 export async function matchAll(data: AllData) {
   // Finally, add any overrides (still) necessary;

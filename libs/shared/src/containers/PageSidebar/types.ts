@@ -1,7 +1,7 @@
 import { RUrl } from '@thecointech/utilities/RUrl';
 import { MessageDescriptor } from 'react-intl';
 import { SemanticICONS } from 'semantic-ui-react';
-import { SidebarHeader } from './SidebarHeader';
+import { SidebarHeader } from './SidebarHeader.js';
 
 /* --- STATE --- */
 export type SidebarHeader = {

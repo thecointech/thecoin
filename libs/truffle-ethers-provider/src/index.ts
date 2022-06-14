@@ -16,7 +16,7 @@ import type {
   JSONRPCRequestPayload,
   JSONRPCResponsePayload
 } from "ethereum-protocol";
-import { EthersSubprovider, SignerBuilders } from './EthersSubprovider';
+import { EthersSubprovider, SignerBuilders } from './EthersSubprovider.js';
 import type { JsonRpcProvider } from '@ethersproject/providers';
 
 // This line shares nonce state across multiple provider instances. Necessary

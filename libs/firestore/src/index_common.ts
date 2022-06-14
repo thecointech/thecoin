@@ -2,9 +2,9 @@
 // defines the common interface to be implemented
 // by the platform-specific implementations
 
-import { BrowserInit } from './index_browser';
-import { EmulatorInit } from './index_emulator';
-import { MockedInit } from './index_mocked';
+import { BrowserInit } from './index_browser.js';
+import { EmulatorInit } from './index_emulator.js';
+import { MockedInit } from './index_mocked.js';
 
 export * from './types';
 export * from './store';

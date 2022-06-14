@@ -2,21 +2,21 @@ import { InitialCoinBlock, ConnectContract, TheCoin } from '@thecointech/contrac
 import { Signer, Wallet } from 'ethers';
 import { call, delay, select, StrictEffect } from 'redux-saga/effects';
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
-import { DecryptCallback, IActions } from './types';
-import { buildSagas } from './actions';
-import { FxRateReducer } from '../../containers/FxRate/reducer';
-import { SagaReducer } from '../../store/immerReducer';
+import { DecryptCallback, IActions } from './types.js';
+import { buildSagas } from './actions.js';
+import { FxRateReducer } from '../../containers/FxRate/reducer.js';
+import { SagaReducer } from '../../store/immerReducer.js';
 import { isLocal } from '@thecointech/signers';
 import { loadAndMergeHistory, calculateTxBalances, mergeTransactions, Transaction } from '@thecointech/tx-blockchain';
 import { connectIDX } from '@thecointech/idx';
 import { AccountDetails, AccountState, DefaultAccountValues } from '@thecointech/account';
-import { loadDetails, setDetails } from '../AccountDetails';
+import { loadDetails, setDetails } from '../AccountDetails.js';
 import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
 import { SagaIterator } from 'redux-saga';
 import { Dictionary } from 'lodash';
-import { AccountMapStore } from '../AccountMap';
-import { checkCurrentStatus } from './BlockpassKYC';
+import { AccountMapStore } from '../AccountMap.js';
+import { checkCurrentStatus } from './BlockpassKYC.js';
 import { StatusType } from '@thecointech/broker-cad';
 
 const KycPollingInterval = (process.env.NODE_ENV === 'production')

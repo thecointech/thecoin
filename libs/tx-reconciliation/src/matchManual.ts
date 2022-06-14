@@ -1,8 +1,8 @@
 import manual from './data/manual.json';
 // import { DateTime } from "luxon";
 // import { Decimal } from 'decimal.js-light';
-// import { spliceBank } from "./matchBank";
-import { AllData } from './types';
+// import { spliceBank } from "./matchBank.js";
+import { AllData } from './types.js';
 // import { ActionType } from '@thecointech/broker-db';
 
 

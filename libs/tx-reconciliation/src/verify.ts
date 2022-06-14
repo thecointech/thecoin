@@ -1,5 +1,5 @@
-import { Reconciliations, AllData, ReconciledRecord } from "./types";
-import { getFiat } from './fxrates';
+import { Reconciliations, AllData, ReconciledRecord } from "./types.js";
+import { getFiat } from './fxrates.js';
 import { Transaction, isInternalAddress } from '@thecointech/tx-blockchain';
 
 //

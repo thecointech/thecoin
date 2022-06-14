@@ -1,13 +1,13 @@
 import { log } from '@thecointech/logging';
 import { IBank, ProgressCallback} from '@thecointech/bank-interface';
 import { ETransferPacket } from '@thecointech/types';
-import { RbcStore } from './store';
-import { ApiAction } from './action';
-import { AuthOptions } from './types';
-import { getTransactions, fetchLatestTransactions } from './transactions';
-import { depositETransfer } from './deposit';
-import { send } from './etransfer';
-import { payBill } from './bills';
+import { RbcStore } from './store.js';
+import { ApiAction } from './action.js';
+import { AuthOptions } from './types.js';
+import { getTransactions, fetchLatestTransactions } from './transactions.js';
+import { depositETransfer } from './deposit.js';
+import { send } from './etransfer.js';
+import { payBill } from './bills.js';
 
 export class RbcApi implements IBank {
 

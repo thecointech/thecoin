@@ -1,4 +1,4 @@
-import { AnyActionContainer } from "../types";
+import { AnyActionContainer } from "../types.js";
 import { removeIncomplete } from '@thecointech/broker-db';
 import { getCurrentState } from '..';
 import { log } from '@thecointech/logging';

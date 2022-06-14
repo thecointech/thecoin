@@ -1,5 +1,5 @@
 import { StateMachineProcessor } from "@thecointech/tx-statemachine";
-import { graph } from "./graph";
+import { graph } from "./graph.js";
 import type { TheCoin } from '@thecointech/contract-core';
 import type { IBank } from '@thecointech/bank-interface';
 import { CertifiedTransfer } from '@thecointech/types';

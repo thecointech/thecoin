@@ -1,6 +1,6 @@
 import { log } from '@thecointech/logging';
 import { useEffect, useState } from 'react';
-import { doSetup, onInitiateLogin, setupCallback } from './googleUtils';
+import { doSetup, onInitiateLogin, setupCallback } from './googleUtils.js';
 
 type OnTokenCB = (token: string) => Promise<void>|void;
 export const useGoogle = () : [boolean, (onToken: OnTokenCB) => void] => {

@@ -1,8 +1,8 @@
 import { BlockTag, EtherscanProvider, Filter, Formatter, Log } from '@ethersproject/providers'
 import type { Signer } from '@ethersproject/abstract-signer'
-import { getNetwork } from './networks'
-import { logger, errors } from './logger'
-import { convert } from '../erc20response'
+import { getNetwork } from './networks.js'
+import { logger, errors } from './logger.js'
+import { convert } from '../erc20response.js'
 
 //
 // ATTRIBUTION:

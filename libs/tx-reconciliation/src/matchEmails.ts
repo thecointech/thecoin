@@ -1,6 +1,6 @@
-import { filterCandidates } from "./utils";
+import { filterCandidates } from "./utils.js";
 import { BuyAction } from "@thecointech/broker-db";
-import { AllData, User, ReconciledRecord } from "./types";
+import { AllData, User, ReconciledRecord } from "./types.js";
 
 // Find the most common name associated with an
 export function findNames(data: AllData, address: string) {

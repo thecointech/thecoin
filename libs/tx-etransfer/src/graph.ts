@@ -1,6 +1,6 @@
 import { transitionTo, StateGraph } from "@thecointech/tx-statemachine";
 import * as core from '@thecointech/tx-statemachine/transitions';
-import * as eTransfer from './transitions';
+import * as eTransfer from './transitions.js';
 
 type States =
   "initial" |

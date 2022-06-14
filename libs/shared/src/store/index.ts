@@ -5,9 +5,9 @@
 import { routerMiddleware } from 'connected-react-router';
 import { createInjectorsEnhancer, forceReducerReload } from 'redux-injectors';
 import createSagaMiddleware from 'redux-saga';
-import { history } from './history';
+import { history } from './history.js';
 import { createStore, compose, applyMiddleware, ReducersMapObject, Reducer } from 'redux';
-import { ApplicationBaseState } from '../types';
+import { ApplicationBaseState } from '../types.js';
 export { history };
 
 type reducerFn = (injectedReducers?: ReducersMapObject) => Reducer;

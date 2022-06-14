@@ -1,5 +1,5 @@
-import { buildConverter, convertDecimal, convertDates, serverTimestamp } from "../converter";
-import { ActionDataTypes, TransitionDelta, IncompleteRef } from "./types";
+import { buildConverter, convertDecimal, convertDates, serverTimestamp } from "../converter.js";
+import { ActionDataTypes, TransitionDelta, IncompleteRef } from "./types.js";
 
 export const incompleteConverter = buildConverter<IncompleteRef>();
 export const transitionConverter = buildConverter<TransitionDelta>(

@@ -1,5 +1,5 @@
-import { AnyActionContainer, getCurrentState } from "../types";
-import { preTransfer } from './pretransfer';
+import { AnyActionContainer, getCurrentState } from "../types.js";
+import { preTransfer } from './pretransfer.js';
 
 //
 // When running a transfer, we need to be able to handle problems caused by

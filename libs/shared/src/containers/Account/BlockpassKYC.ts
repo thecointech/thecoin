@@ -3,8 +3,8 @@ import { AccountState, AccountDetails } from '@thecointech/account';
 import { GetStatusApi, StatusType, GetUserVerificationApi, UserVerifyData } from '@thecointech/apis/broker';
 import { SagaIterator } from 'redux-saga';
 import { call, put } from 'redux-saga/effects';
-import { ActionsType, BaseSagaInterface } from '../../store/immerReducer';
-import { IActions } from '../Account/types';
+import { ActionsType, BaseSagaInterface } from '../../store/immerReducer.js';
+import { IActions } from '../Account/types.js';
 import { GetSignedMessage } from '@thecointech/utilities/SignedMessages';
 import { log } from '@thecointech/logging';
 

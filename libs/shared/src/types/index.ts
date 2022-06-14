@@ -1,8 +1,8 @@
 import { Store, Reducer } from 'redux';
-import { SidebarState } from '../containers/PageSidebar/types';
-import { FxRatesState } from '../containers/FxRate/types';
+import { SidebarState } from '../containers/PageSidebar/types.js';
+import { FxRatesState } from '../containers/FxRate/types.js';
 import { Saga, Task } from 'redux-saga';
-import { LanguageProviderState } from '../containers/LanguageProvider/types';
+import { LanguageProviderState } from '../containers/LanguageProvider/types.js';
 import { MessageDescriptor } from 'react-intl';
 
 // Your root reducer type, which is your redux state types also

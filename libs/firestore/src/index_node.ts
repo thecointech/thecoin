@@ -1,5 +1,5 @@
 import { Firestore  } from '@google-cloud/firestore';
-import { setFirestore } from './store';
+import { setFirestore } from './store.js';
 import { log } from '@thecointech/logging';
 
 export * from './store';

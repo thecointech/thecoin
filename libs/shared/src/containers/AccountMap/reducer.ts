@@ -1,13 +1,13 @@
 import { ReducersMapObject } from "redux";
-import { AccountMapState, IAccountStoreAPI, initialState } from "./types";
+import { AccountMapState, IAccountStoreAPI, initialState } from "./types.js";
 import { AccountState, buildNewAccount } from "@thecointech/account";
 import { deleteAccount, storeAccount } from "@thecointech/account/store";
 import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
 import { isLocal } from "@thecointech/signers";
-import { BaseReducer } from "../../store/immerReducer";
-import { mappedReducer, splitAccountFromRest } from "./mappedReducer";
+import { BaseReducer } from "../../store/immerReducer.js";
+import { mappedReducer, splitAccountFromRest } from "./mappedReducer.js";
 import { useSelector } from 'react-redux';
-import { activeAccountSelector, selectAccountArray } from './selectors';
+import { activeAccountSelector, selectAccountArray } from './selectors.js';
 import { log } from '@thecointech/logging';
 import type { Signer } from '@ethersproject/abstract-signer';
 

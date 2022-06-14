@@ -1,5 +1,5 @@
 import { log } from "@thecointech/logging";
-import { clientUri, GetSecureApi } from '../../../../api';
+import { clientUri, GetSecureApi } from '../../../../api.js';
 import { getStoredAccountData } from '@thecointech/account/store';
 import { isLocal } from '@thecointech/signers';
 

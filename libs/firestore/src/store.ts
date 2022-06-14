@@ -1,4 +1,4 @@
-import { Firestore } from "./types";
+import { Firestore } from "./types.js";
 
 type TheCoinGlobals = {
   firestore: Firestore|null;

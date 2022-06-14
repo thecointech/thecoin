@@ -1,8 +1,8 @@
 import { call, fork, take, delay, takeEvery, Effect } from 'redux-saga/effects';
-import { ApplicationBaseState } from '../../types';
-import { SagaReducer, buildSaga, SagaBuilder } from '../../store/immerReducer';
-import { FxRatesState, IFxRates } from './types';
-import { sendValues } from '../../store/sagas';
+import { ApplicationBaseState } from '../../types.js';
+import { SagaReducer, buildSaga, SagaBuilder } from '../../store/immerReducer.js';
+import { FxRatesState, IFxRates } from './types.js';
+import { sendValues } from '../../store/sagas.js';
 import { fetchRate, FXRate } from '@thecointech/fx-rates';
 
 const FXRATES_KEY: keyof ApplicationBaseState = "fxRates";

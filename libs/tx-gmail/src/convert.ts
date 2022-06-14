@@ -1,5 +1,5 @@
 import { gmail_v1 } from 'googleapis';
-import { eTransferData } from './types';
+import { eTransferData } from './types.js';
 import { Base64 } from 'js-base64';
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';

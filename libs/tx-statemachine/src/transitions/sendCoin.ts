@@ -1,10 +1,10 @@
 import { log } from "@thecointech/logging";
 import { Decimal } from "decimal.js-light";
-import { AnyActionContainer, getCurrentState, TransitionCallback } from "../types";
-import { verifyPreTransfer } from "./verifyPreTransfer";
+import { AnyActionContainer, getCurrentState, TransitionCallback } from "../types.js";
+import { verifyPreTransfer } from "./verifyPreTransfer.js";
 import { DateTime } from "luxon";
-import { toCoin } from "./toCoin";
-import { calculateOverrides, convertBN, toDelta } from './coinUtils';
+import { toCoin } from "./toCoin.js";
+import { calculateOverrides, convertBN, toDelta } from './coinUtils.js';
 import { last } from '@thecointech/utilities';
 import type { TheCoin } from '@thecointech/contract-core';
 import type { Overrides } from '@ethersproject/contracts';

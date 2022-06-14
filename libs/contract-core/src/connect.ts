@@ -1,5 +1,5 @@
-import { TheCoin } from "./types";
-import { GetContract } from "./contract";
+import { TheCoin } from "./types.js";
+import { GetContract } from "./contract.js";
 import { connect } from '@thecointech/contract-base/connect';
 import type { Signer } from "@ethersproject/abstract-signer";
 

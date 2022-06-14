@@ -1,8 +1,8 @@
-import { getAuthClient, isValid } from './auth';
-import { initializeApi, setETransferLabel } from './fetch';
-import { functions } from './index_common';
-import { queryETransfers, queryNewDepositEmails } from './query';
-import { getNewTokens } from './token';
+import { getAuthClient, isValid } from './auth.js';
+import { initializeApi, setETransferLabel } from './fetch.js';
+import { functions } from './index_common.js';
+import { queryETransfers, queryNewDepositEmails } from './query.js';
+import { getNewTokens } from './token.js';
 import { log } from '@thecointech/logging';
 import type { IpcMain } from './electron_types';
 

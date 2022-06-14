@@ -1,6 +1,6 @@
 
-import { functions, messages } from './index_common';
-import { IpcRenderer } from './electron_types';
+import { functions, messages } from './index_common.js';
+import { IpcRenderer } from './electron_types.js';
 import { log } from '@thecointech/logging';
 
 //

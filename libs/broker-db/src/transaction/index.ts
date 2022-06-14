@@ -1,9 +1,9 @@
 import { getFirestore, DocumentReference, DocumentSnapshot, FirestoreDataConverter } from "@thecointech/firestore";
 import { log } from "@thecointech/logging";
-import { ActionType, ActionDataTypes, TransitionDelta, TypedAction, AnyActionData, ActionDictionary } from "./types";
-import { getUserDoc } from "../user";
+import { ActionType, ActionDataTypes, TransitionDelta, TypedAction, AnyActionData, ActionDictionary } from "./types.js";
+import { getUserDoc } from "../user.js";
 import equal from "fast-deep-equal/es6";
-import { actionConverters, incompleteConverter, transitionConverter } from "./converters";
+import { actionConverters, incompleteConverter, transitionConverter } from "./converters.js";
 
 const incompleteCollection = (type: ActionType) => getFirestore().collection(type).withConverter(incompleteConverter);
 const historyCollection = (action: DocumentReference<AnyActionData>) => action.collection("History").withConverter(transitionConverter);
