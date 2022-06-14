@@ -2,6 +2,7 @@
   "name": "@thecointech/bank-interface",
   "version": "0.2.81",
   "description": "The Coin: Generic banking interface.  Contains no implementation.",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "Bank",

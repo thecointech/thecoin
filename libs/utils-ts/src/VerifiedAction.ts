@@ -1,8 +1,8 @@
 import { BillPayeePacket, ETransferPacket, CertifiedTransfer } from "@thecointech/types";
 import { Signer, ethers } from "ethers";
-import { BuildVerifiedXfer } from "./VerifiedTransfer";
-import { encrypt, GetHash } from "./Encrypt";
-import { sign } from "./SignedMessages";
+import { BuildVerifiedXfer } from "./VerifiedTransfer.js";
+import { encrypt, GetHash } from "./Encrypt.js";
+import { sign } from "./SignedMessages.js";
 
 // TODO: Propage this throught code base (not yet done)
 export type InstructionPacket = BillPayeePacket|ETransferPacket;

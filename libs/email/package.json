@@ -2,6 +2,7 @@
   "name": "@thecointech/email",
   "version": "0.2.81",
   "description": "The Coin: auto-mailing library.  Not for external user really",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "email"

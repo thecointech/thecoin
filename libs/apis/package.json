@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.2.81",
   "description": "TheCoin: Simple wrappers for swagger-generated APIs ensures correct URL",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "Blockpass"

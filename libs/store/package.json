@@ -2,6 +2,7 @@
   "name": "@thecointech/store",
   "version": "0.2.81",
   "description": "The Coin: Base storage mechanisms",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "ethereum"

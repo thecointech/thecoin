@@ -4,6 +4,7 @@
   "private": true,
   "version": "0.2.81",
   "description": "THECoin: Future-proof currency",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git://github.com/thecointech/thecoin.git"

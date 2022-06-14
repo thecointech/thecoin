@@ -1,6 +1,6 @@
 import { Wallet } from "ethers";
-import { BuildVerifiedSale } from "./VerifiedSale";
-import { getSigner } from "./VerifiedAction";
+import { BuildVerifiedSale } from "./VerifiedSale.js";
+import { getSigner } from "./VerifiedAction.js";
 import { ETransferPacket } from "@thecointech/types";
 
 it('Can build verified sale', async () => {

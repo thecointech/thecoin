@@ -6,7 +6,7 @@ import { getEnvFiles } from '@thecointech/setenv';
 import { join, resolve as _resolve } from 'path';
 import webpack from 'webpack';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import webpack_less from '@thecointech/site-semantic-theme/webpack.less';
+import { semantic_less_loader, css_module_loader } from '@thecointech/site-semantic-theme/webpack.less';
 import Dotenv from 'dotenv-webpack';
 
 import { createRequire } from "module"; // Bring in the ability to create the 'require' method
@@ -48,8 +48,8 @@ export default {
         test: /(?<!module)\.css$/,
         use: ['style-loader', 'css-loader'],
       },
-      webpack_less.semantic_less_loader,
-      webpack_less.css_module_loader,
+      semantic_less_loader,
+      css_module_loader,
       ////////////////////////////////////////////////////////////////
       {
         test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2|mp4|webm)$/i,

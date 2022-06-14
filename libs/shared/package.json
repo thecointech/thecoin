@@ -3,6 +3,7 @@
   "private": "true",
   "version": "0.2.81",
   "description": "The Coin: Shared functionality for the react website & admin app",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "ethereum"

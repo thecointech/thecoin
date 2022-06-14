@@ -3,60 +3,57 @@
 // This file defines the LESS loaders common to our site build and
 // to our storybook webpack based at the root
 //
-const options = require('./vars.js');
+import vars from './vars.cjs';
 
 // In dev mode, leave the modules classnames intact so we can debug easier
 const modules = process.env.NODE_ENV !== 'production'
   ? { localIdentName: "[name]__[local]--[hash:base64:5]" }
   : true;
 
-module.exports = {
-
-  css_module_loader: {
-    // CSS/LESS module matching
-    test: /.*\.module\.(le|c)ss$/,
-    use: [
-      {
-        loader: 'style-loader',
+export const css_module_loader = {
+  // CSS/LESS module matching
+  test: /.*\.module\.(le|c)ss$/,
+  use: [
+    {
+      loader: 'style-loader',
+    },
+    {
+      loader: 'css-loader',
+      options: {
+        importLoaders: 1,
+        sourceMap: true,
+        modules,
       },
-      {
-        loader: 'css-loader',
-        options: {
-          importLoaders: 1,
-          sourceMap: true,
-          modules,
-        },
+    },
+    {
+      loader: 'less-loader',
+      options: {
+        sourceMap: true,
+        lessOptions: (loaderContext) => vars(loaderContext.resourcePath),
       },
-      {
-        loader: 'less-loader',
-        options: {
-          sourceMap: true,
-          lessOptions: (loaderContext) => options(loaderContext.resourcePath),
-        },
+    },
+  ],
+};
+export const semantic_less_loader = {
+  // Explicitly process Semantics LESS files
+  test: /semantic\.less$/,
+  use: [
+    {
+      loader: 'style-loader',
+    },
+    {
+      loader: 'css-loader',
+      options: {
+        importLoaders: 1,
+        sourceMap: true,
       },
-    ],
-  },
-  semantic_less_loader: {
-    // Explicitly process Semantics LESS files
-    test: /semantic\.less$/,
-    use: [
-      {
-        loader: 'style-loader',
+    },
+    {
+      loader: 'less-loader',
+      options: {
+        sourceMap: true,
+        lessOptions: (loaderContext) => vars(loaderContext.resourcePath),
       },
-      {
-        loader: 'css-loader',
-        options: {
-          importLoaders: 1,
-          sourceMap: true,
-        },
-      },
-      {
-        loader: 'less-loader',
-        options: {
-          sourceMap: true,
-          lessOptions: (loaderContext) => options(loaderContext.resourcePath),
-        },
-      },
-    ],
-  }
-}
+    },
+  ],
+};

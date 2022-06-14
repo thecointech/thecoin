@@ -3,6 +3,7 @@
   "private": "true",
   "version": "0.2.81",
   "description": "The Coin: common storybook decorators",
+  "type": "module",
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
   "license": "MIT",

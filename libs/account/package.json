@@ -2,6 +2,7 @@
   "name": "@thecointech/account",
   "version": "0.2.81",
   "description": "TheCoin: Account definition & storage",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "S&P500"

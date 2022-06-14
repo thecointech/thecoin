@@ -1,5 +1,5 @@
-export * from './Conversion';
+export * from './Conversion.js';
 
-export * from './Address';
+export * from './Address.js';
 
-export * from './ArrayExtns';
+export * from './ArrayExtns.js';

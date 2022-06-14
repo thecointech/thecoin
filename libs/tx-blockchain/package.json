@@ -3,6 +3,7 @@
   "private": "true",
   "version": "0.2.81",
   "description": "The Coin: high-level interactions with the ethereum contract",
+  "type": "module",
   "keywords": [
     "THECoin"
   ],

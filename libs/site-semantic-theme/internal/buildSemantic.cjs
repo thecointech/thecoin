@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const glob = require('glob');
 
-const options = require('./vars');
+const options = require('./vars.cjs');
 
 const f = async () => {
   const projectRoot = path.join(__dirname, "..")

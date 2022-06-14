@@ -2,6 +2,7 @@
   "name": "@thecointech/fx-rates",
   "version": "0.2.81",
   "description": "TheCoin: Client library for fetching fx-rates",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "S&P500"

@@ -21,11 +21,11 @@
   },
   "scripts": {
     "build": "yarn tsc",
-    "emulator": "truffle develop --config=./src/truffle.js",
+    "emulator": "truffle develop --config=./src/truffle.cjs",
     "prod:console": "cross-env CONFIG_NAME=prodtest truffle console --network prodtest"
   },
   "exports": {
-    "./truffle": "./src/truffle.js",
+    "./truffle": "./src/truffle.cjs",
     "./migrations": "./build/migrations.js",
     "./verify": "./build/verify.js",
     "./jest.config": "./src/jest.config.js"

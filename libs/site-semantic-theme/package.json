@@ -2,6 +2,7 @@
   "name": "@thecointech/site-semantic-theme",
   "productName": "THECoin: Website - Semantic THeme",
   "private": true,
+  "type": "module",
   "workspaces": {
     "nohoist": [
       "semantic-ui-less"
@@ -16,7 +17,7 @@
   "author": "Stephen Taylor",
   "license": "MIT",
   "exports": {
-    "./build": "./internal/buildSemantic.js",
+    "./build": "./internal/buildSemantic.cjs",
     "./webpack.less": "./internal/webpack.less.js",
     "./variables.less": "./src/variables.less",
     "./semantic.less": "./src/semantic.less",
