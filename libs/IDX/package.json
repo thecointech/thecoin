@@ -23,7 +23,8 @@
     "build": "yarn tsc --project tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "jest --coverage",
-    "test:summary": "jest --coverage > ./coverage/summary.txt"
+    "test:summary": "jest --coverage > ./coverage/summary.txt",
+    "bootstrap": "yarn run-env ./tools/bootstrap.ts"
   },
   "files": [
     "build/**/*"

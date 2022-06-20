@@ -1,5 +1,3 @@
-import '@thecointech/setenv';
-import { join } from 'path';
 import { promises } from "fs";
 import { CeramicClient } from '@ceramicnetwork/http-client'
 import { ModelManager } from '@glazed/devtools'
@@ -8,15 +6,15 @@ import { fromString } from 'uint8arrays';
 import { getResolver } from 'key-did-resolver'
 import { DID } from 'dids';
 
-const idxFolder = join(__dirname, '..', 'libs', 'IDX', 'src');
-const schemaPath = `${idxFolder}/config.${process.env.CONFIG_NAME}.json`;
+const idxFolder = new URL('../src/', import.meta.url);
+const schemaPath = new URL(`config.${process.env.CONFIG_NAME}.json`, idxFolder);
 const { writeFile, readFile } = promises;
 
 //
 // Publish our schema to the node (must happen once per deploy)
 async function publish(manager: ModelManager) {
   // Publish the two schemas
-  const schema = await readFile(`${idxFolder}/schemaJWE.json`, 'utf8');
+  const schema = await readFile(new URL('schemaJWE.json', idxFolder), 'utf8');
   const SchemaJWE = JSON.parse(schema);
   const schemaId =  await manager.createSchema("jwe", SchemaJWE);
   const schemaUrl = manager.getSchemaURL(schemaId);

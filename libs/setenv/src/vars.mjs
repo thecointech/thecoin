@@ -14,7 +14,7 @@ export function getEnvFiles(cfgName/*?: string*/, onlyPublic/*?: boolean*/) {
   );
   const files /*: URL[]*/ = [];
   // Does the user have files on the system
-  const systemFolder = process.env.THECOIN_ENVIRONMENTS;
+  const systemFolder = `${process.env.THECOIN_ENVIRONMENTS}/`;
   if (!onlyPublic && systemFolder) {
     const systemFile = new URL(`${envName}.private.env`, `file://${systemFolder}`)
     if (existsSync(systemFile)) files.push(systemFile);

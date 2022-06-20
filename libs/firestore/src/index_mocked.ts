@@ -1,9 +1,12 @@
-import { register } from '@thecointech/jestutils/shim';
-register.on() // If running in node, add to global namespace while importing firestore
-import mocks from 'firestore-jest-mock';
-register.off()
+import shim from '@thecointech/jestutils/shim';
 import { setFirestore } from './store.js';
 import { log } from '@thecointech/logging';
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url); // construct the require method
+shim.register.on() // If running in node, add to global namespace while importing firestore
+const mocks = require('firestore-jest-mock');
+shim.register.off()
 
 export * from './store';
 export const Timestamp = mocks.FakeFirestore.Timestamp
