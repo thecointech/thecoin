@@ -2,6 +2,7 @@
   "name": "@thecointech/logging",
   "version": "0.2.81",
   "description": "The Coin: Common logging setup",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "logging"
@@ -20,7 +21,7 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "run-p build:*",
-    "build:cjs": "yarn tsc --project tsconfig.build.cjs.json",
+    "_build:cjs": "yarn tsc --project tsconfig.build.cjs.json",
     "build:mjs": "yarn tsc --project tsconfig.build.mjs.json",
     "clean": "rimraf ./build && rimraf ./coverage"
   },
@@ -29,14 +30,8 @@
   ],
   "exports": {
     ".": {
-      "require": {
-        "node": "./build/cjs/log_node.js",
-        "default": "./build/cjs/log_browser.js"
-      },
-      "import": {
-        "node": "./build/mjs/log_node.js",
-        "default": "./build/mjs/log_browser.js"
-      }
+      "node": "./build/mjs/log_node.js",
+      "default": "./build/mjs/log_browser.js"
     }
   },
   "types": "./build/mjs/log_browser.d.ts",

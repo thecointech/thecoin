@@ -27,12 +27,25 @@ const env = {
 }
 
 // Always attach experimental loader
-const ncr_path = new URL("ncr.mjs", import.meta.url);
-env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --experimental-loader=${ncr_path} --es-module-specifier-resolution=node`;
-if (args.find(arg => arg.endsWith(".ts"))) {
-  // env.TS_NODE_PROJECT = fileURLToPath(new URL("../../../tsconfig.dev.json", import.meta.url));
-  args.unshift("-r ts-node/register");
-}
+const registerTypescript = args.find(arg => arg.endsWith(".ts"))
+env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --loader=${
+  new URL(
+    registerTypescript
+      ? "ncr_ts.mjs"
+      : "ncr.mjs",
+    import.meta.url
+  )} --es-module-specifier-resolution=node`;
+// if () {
+//   // env.TS_NODE_PROJECT = fileURLToPath(new URL("../../../tsconfig.dev.json", import.meta.url));
+//   args.unshift(ncr_path);
+//   args.unshift("--loader");
+//   // args.unshift("ts-node/esm");
+//   // args.unshift("--loader");
+//   // executable = "ts-node-esm";
+//   // const node_options = args.filter(arg => arg.startsWith("--"));
+//   // env.NODE_OPTIONS = `${env.NODE_OPTIONS} ${node_options.join(' ')}`;
+//   // args = args.filter(arg => !node_options.includes(arg));
+// }
 
 // If this is yarn script?
 if (executable != "node") {

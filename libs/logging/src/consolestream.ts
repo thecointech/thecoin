@@ -1,8 +1,8 @@
 import { Stream } from 'bunyan';
-import { join } from 'path';
 import debug_stream from 'bunyan-debug-stream';
+import { fileURLToPath } from 'url';
 
-const basepath = join(__dirname, "..", "..", "..");
+const basepath = fileURLToPath(new URL("../../..", import.meta.url));
 
 export const getConsoleStream = (level?: number) : Stream => (
   {

@@ -38,7 +38,7 @@ export function errorHandler(
   if (err instanceof Error) {
     log.error(err, `Internal Error`);
     SendMail(`ERROR: Rates Service - ${process.env.CONFIG_NAME}`,
-    `${req.url}\n\n${err.message}\n\n${err.stack}`
+      `${req.url}\n\n${err.message}\n\n${err.stack}`
     );
     return res.status(500).json({
       message: "Internal Server Error",
