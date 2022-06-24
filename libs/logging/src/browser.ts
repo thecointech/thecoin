@@ -1,6 +1,6 @@
 import { createLogger, TRACE, INFO, DEBUG, stdSerializers } from 'browser-bunyan';
 import { ConsoleFormattedStream } from '@browser-bunyan/console-formatted-stream';
-import { BunyanLogger } from './logger.js';
+import { BunyanLogger } from './logger';
 
 export function init_browser(name: string): BunyanLogger {
   return createLogger({

@@ -1,7 +1,7 @@
-import { getCurrentState, TransitionCallback, TypedActionContainer } from "../types.js";
-import { verifyPreTransfer } from "./verifyPreTransfer.js";
+import { getCurrentState, TransitionCallback, TypedActionContainer } from "../types";
+import { verifyPreTransfer } from "./verifyPreTransfer";
 import { TransactionResponse } from '@ethersproject/providers';
-import { calculateOverrides, convertBN, toDelta } from './coinUtils.js';
+import { calculateOverrides, convertBN, toDelta } from './coinUtils';
 import { log } from '@thecointech/logging';
 
 // this deposit can operate on both bill & sell types.

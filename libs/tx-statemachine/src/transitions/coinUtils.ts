@@ -1,7 +1,7 @@
 import { TransactionResponse } from "@ethersproject/abstract-provider";
 import { BigNumber } from '@ethersproject/bignumber';
 import { log } from '@thecointech/logging';
-import { AnyActionContainer } from '../types.js';
+import { AnyActionContainer } from '../types';
 import { last } from '@thecointech/utilities';
 import type { Overrides } from '@ethersproject/contracts';
 import type { Transaction } from '@ethersproject/transactions';

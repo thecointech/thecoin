@@ -1,7 +1,7 @@
 
 import { Signer, utils } from 'ethers';
 import base32 from 'base32';
-import { sign } from "./SignedMessages.js";
+import { sign } from "./SignedMessages";
 
 export function IsValidAddress(address: string) {
 	return /^(0x)?[a-fA-F0-9]{40}$/.test(address);

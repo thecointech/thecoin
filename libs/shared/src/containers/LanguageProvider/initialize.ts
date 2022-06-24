@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 
-import { DEFAULT_LOCALE, Languages, Locale, Messages } from "./types.js";
+import { DEFAULT_LOCALE, Languages, Locale, Messages } from "./types";
 
 if (!Intl.PluralRules) {
   require('@formatjs/intl-pluralrules/polyfill');

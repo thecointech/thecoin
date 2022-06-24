@@ -1,6 +1,6 @@
 import bunyan from "bunyan";
-import { getConsoleStream } from "./consolestream.js";
-import { getFileStream } from "./filestream.js";
+import { getConsoleStream } from "./consolestream";
+import { getFileStream } from "./filestream";
 
 const getStreams = (name: string, level?: number) => {
   const streams = [getConsoleStream(level)];

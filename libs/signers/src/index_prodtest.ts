@@ -1,5 +1,5 @@
 import { Wallet } from '@ethersproject/wallet';
-import { getAndCacheSigner } from './cache.js';
+import { getAndCacheSigner } from './cache';
 import type { AccountName } from "./names";
 
 function loadFromPK(name: AccountName) {
@@ -11,6 +11,6 @@ function loadFromPK(name: AccountName) {
 
 //
 // Prodtest should use private keys defined in .env file.
-export * from './names.js';
+export * from './names';
 export const getSigner = (name: AccountName) =>
   getAndCacheSigner(name, () => loadFromPK(name));

@@ -1,6 +1,6 @@
 import { Timestamp } from "@thecointech/firestore";
 import { DateTime } from "luxon"
-import { Reconciliations } from "./types.js";
+import { Reconciliations } from "./types";
 
 export const compareByDate = <K extends PropertyKey>(key: K) =>
   (l: Record<K, DateTime>, r: Record<K, DateTime>) => l[key].toMillis() - r[key].toMillis();

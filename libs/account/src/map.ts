@@ -1,4 +1,4 @@
-import { AccountState } from './state.js';
+import { AccountState } from './state';
 import { Dictionary } from 'lodash';
 
 export type AccountMap = Dictionary<AccountState>;

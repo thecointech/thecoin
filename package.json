@@ -1,7 +1,6 @@
 {
   "name": "@thecointech/the-coin",
   "private": true,
-  "type": "module",
   "workspaces": {
     "packages": [
       "libs/*",

@@ -1,6 +1,6 @@
 // import { IDX } from '@ceramicstudio/idx';
 import { SelfID } from '@self.id/web'
-import { IdxAlias } from './types.js';
+import { IdxAlias } from './types';
 
 export interface EncryptedPayload<T> {
   // It is legal for the data to be null

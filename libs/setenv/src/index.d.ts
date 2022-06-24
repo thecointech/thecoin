@@ -1,2 +1,2 @@
-export * from './vars.js';
+export * from './vars';
 //# sourceMappingURL=index.d.ts.map

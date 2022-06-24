@@ -5,7 +5,7 @@
 import { routerMiddleware } from 'connected-react-router';
 import { createInjectorsEnhancer } from 'redux-injectors';
 import createSagaMiddleware from 'redux-saga';
-import { history } from './history.js';
+import { history } from './history';
 import { createStore, compose, applyMiddleware, ReducersMapObject, Reducer } from 'redux';
 import { ApplicationBaseState } from '../types';
 export { history };

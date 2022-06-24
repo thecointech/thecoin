@@ -1,6 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
-import { setFirestore } from './store.js';
+import { setFirestore } from './store';
 import { isEmulatorAvailable } from '@thecointech/jestutils/emulator'
 import { log } from '@thecointech/logging';
 

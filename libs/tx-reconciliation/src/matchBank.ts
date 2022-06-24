@@ -1,7 +1,7 @@
-import { filterCandidates } from "./utils.js";
+import { filterCandidates } from "./utils";
 import { ActionType } from "@thecointech/broker-db";
 import { DateTime } from "luxon";
-import { AllData, User, BankRecord } from "./types.js";
+import { AllData, User, BankRecord } from "./types";
 import Decimal from 'decimal.js-light';
 import { distance } from 'fastest-levenshtein';
 

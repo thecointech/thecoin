@@ -1,8 +1,8 @@
-import { spliceBlockchain } from "./matchBlockchain.js";
-import { findNames, spliceEmail } from "./matchEmails.js";
-import { spliceBank } from "./matchBank.js";
-import { addReconciled } from "./utils.js";
-import { AllData, Reconciliations, ReconciledRecord, ReconciledHistory, UserReconciled } from "./types.js";
+import { spliceBlockchain } from "./matchBlockchain";
+import { findNames, spliceEmail } from "./matchEmails";
+import { spliceBank } from "./matchBank";
+import { addReconciled } from "./utils";
+import { AllData, Reconciliations, ReconciledRecord, ReconciledHistory, UserReconciled } from "./types";
 import { ActionType, AnyAction } from "@thecointech/broker-db";
 import { DateTime } from 'luxon';
 

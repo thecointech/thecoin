@@ -3,7 +3,7 @@
 import { ActionType } from '@thecointech/broker-db'
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
-import { Transition } from '../types.js'
+import { Transition } from '../types';
 
 export const manualOverride: Transition<any, ActionType> = async (container, currentState, replay?) => {
   // A manual transition cannot be run automatically.  It can

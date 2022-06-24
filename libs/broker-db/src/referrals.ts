@@ -4,7 +4,7 @@ import { log } from '@thecointech/logging';
 import { DateTime } from "luxon";
 import { referrerConverter, VerifiedReferrer } from "./referrals.types";
 import { ReferralData } from "./user.types";
-import { getUserDoc, getUserData, setUserVerified } from "./user.js";
+import { getUserDoc, getUserData, setUserVerified } from "./user";
 
 export type { VerifiedReferrer } from './referrals.types';
 

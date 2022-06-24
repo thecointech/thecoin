@@ -1,6 +1,6 @@
 import { transitionTo, StateGraph } from "@thecointech/tx-statemachine";
 import * as core from '@thecointech/tx-statemachine/transitions';
-import { makeDeposit, Deposit } from './transitions/depositFiatManual.js';
+import { makeDeposit, Deposit } from './transitions/depositFiatManual';
 
 type States =
   "initial" |

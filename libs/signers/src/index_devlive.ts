@@ -1,9 +1,9 @@
 
 import { Erc20Provider } from "@thecointech/ethers-provider/Erc20Provider";
-import { getAndCacheSigner } from './cache.js';
-import { AccountId, AccountName } from './names.js';
+import { getAndCacheSigner } from './cache';
+import { AccountId, AccountName } from './names';
 
-export * from './names.js';
+export * from './names';
 
 // In dev:live environment, pull signers from
 // local emulator for our system accounts

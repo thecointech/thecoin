@@ -1,4 +1,4 @@
-import { BaseStore } from './base.js';
+import { BaseStore } from './base';
 
 type DocType = {
     value: string

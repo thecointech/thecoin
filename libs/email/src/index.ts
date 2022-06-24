@@ -3,7 +3,7 @@
  */
 
 import { DateTime } from 'luxon';
-import { SendMail, SendTemplate } from './AutoMailer.js';
+import { SendMail, SendTemplate } from './AutoMailer';
 
 export type DepositConfirmationVariables = {
   tx: string,

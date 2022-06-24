@@ -1,5 +1,5 @@
 import { takeLatest, debounce, takeEvery } from 'redux-saga/effects'
-import { SagaBuilder, buildSaga } from '../../store/immerReducer.js';
+import { SagaBuilder, buildSaga } from '../../store/immerReducer';
 import type { IActions, AccountState } from './types';
 
 export const buildSagas : SagaBuilder<IActions, AccountState> = (sagaReducer) => {

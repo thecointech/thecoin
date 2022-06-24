@@ -1,4 +1,4 @@
-import { AnyActionContainer } from "../types.js";
+import { AnyActionContainer } from "../types";
 import { SendMail } from '@thecointech/email';
 //import { removeIncomplete } from '@thecointech/broker-db'
 

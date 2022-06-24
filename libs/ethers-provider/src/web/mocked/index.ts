@@ -1,7 +1,7 @@
 import { BlockTag, Filter, BaseProvider, Log } from '@ethersproject/providers';
 import { hexZeroPad } from "@ethersproject/bytes";
 import { BigNumber } from "@ethersproject/bignumber";
-import { ERC20Response } from '../erc20response.js';
+import { ERC20Response } from '../erc20response';
 import { log } from '@thecointech/logging';
 import transferFrom from './logs-transfer-from.json';
 import transferTo from './logs-transfer-to.json';

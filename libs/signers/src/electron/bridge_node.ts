@@ -1,7 +1,7 @@
-import { SIGNER_CHANNEL } from './types.js';
-import { getAndCacheSigner } from '../cache.js';
-import { loadFromDisk } from '../fromDisk.js';
-import { AccountName } from '../names.js';
+import { SIGNER_CHANNEL } from './types';
+import { getAndCacheSigner } from '../cache';
+import { loadFromDisk } from '../fromDisk';
+import { AccountName } from '../names';
 import { log } from '@thecointech/logging';
 import { getProvider } from '@thecointech/ethers-provider';
 import type { IpcMain } from './electron_types';

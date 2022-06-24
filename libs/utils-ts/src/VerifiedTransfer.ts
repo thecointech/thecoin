@@ -1,6 +1,6 @@
 import { ethers, Signer } from "ethers";
 import { CertifiedTransferRequest } from "@thecointech/types";
-import { sign } from "./SignedMessages.js";
+import { sign } from "./SignedMessages";
 
 
 function GetHash(

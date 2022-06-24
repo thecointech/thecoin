@@ -1,5 +1,5 @@
 import { toHuman } from "@thecointech/utilities";
-import { fiatChange } from "../../containers/Account/profit.js";
+import { fiatChange } from "../../containers/Account/profit";
 import { DateTime } from "luxon";
 import { weSellAt } from '@thecointech/fx-rates';
 import type { FXRate } from "@thecointech/pricing";

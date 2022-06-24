@@ -1,4 +1,4 @@
-import { AnyActionContainer } from "../types.js";
+import { AnyActionContainer } from "../types";
 
 //
 // A no-op transition moves us into a new state without changing any data

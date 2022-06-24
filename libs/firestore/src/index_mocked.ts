@@ -1,5 +1,5 @@
 import shim from '@thecointech/jestutils/shim';
-import { setFirestore } from './store.js';
+import { setFirestore } from './store';
 import { log } from '@thecointech/logging';
 import { createRequire } from "module";
 

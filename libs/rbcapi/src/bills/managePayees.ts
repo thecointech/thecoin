@@ -1,6 +1,6 @@
 import { log } from '@thecointech/logging';
-import { ApiAction } from '../action.js';
-import { openBillPaymentPage } from './index.js';
+import { ApiAction } from '../action';
+import { openBillPaymentPage } from './index';
 
 const Errors = {
   MissingAccountIdent: "MISSING-ACCOUNT-IDENTIFIER",

@@ -1,5 +1,5 @@
 
-import { buildConverter, convertDates } from './converter.js';
+import { buildConverter, convertDates } from './converter';
 import { DateTime } from 'luxon';
 
 export type StatusType =

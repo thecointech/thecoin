@@ -2,9 +2,9 @@ import gmail from '@thecointech/tx-gmail';
 import { getAllActions, getAllUsers } from "@thecointech/broker-db";
 import { IBank } from '@thecointech/bank-interface';
 import { fetchCoinHistory } from '@thecointech/tx-blockchain/thecoin';
-import { fetchBankTransactions } from './bank.js';
+import { fetchBankTransactions } from './bank';
 import { NormalizeAddress } from '@thecointech/utilities';
-import { AllData } from './types.js';
+import { AllData } from './types';
 import { log } from '@thecointech/logging';
 
 export async function fetchAllRecords(bankApi: IBank) : Promise<AllData>{

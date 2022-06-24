@@ -1,5 +1,5 @@
 import { DepositResult, ETransferErrorCode } from "@thecointech/bank-interface";
-import { ApiAction } from "./action.js";
+import { ApiAction } from "./action";
 import { Page } from "puppeteer";
 
 export async function depositETransfer(prefix: string, url: string, code: string, progressCb: (v: string) => void): Promise < DepositResult > {

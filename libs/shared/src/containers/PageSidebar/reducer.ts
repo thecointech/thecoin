@@ -1,5 +1,5 @@
-import { BaseReducer } from '../../store/immerReducer.js';
-import type { SidebarState, IActions, SidebarGenerator, SidebarHeader } from './types.js';
+import { BaseReducer } from '../../store/immerReducer';
+import type { SidebarState, IActions, SidebarGenerator, SidebarHeader } from './types';
 import type { ApplicationBaseState } from '../../types';
 
 const SIDEBAR_KEY : keyof ApplicationBaseState = "sidebar";

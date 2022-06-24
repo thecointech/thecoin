@@ -1,3 +1,3 @@
-export * from './types.js';
-export * from './fetch.js';
-export * from './thecoin.js';
+export * from './types';
+export * from './fetch';
+export * from './thecoin';

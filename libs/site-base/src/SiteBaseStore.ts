@@ -1,5 +1,5 @@
 import { RouterState } from 'connected-react-router';
-import { ContentState } from './components/ContentHeightMeasure/types.js';
+import { ContentState } from './components/ContentHeightMeasure/types';
 
 // Your root reducer type, which is your redux state types also
 export interface SiteBaseStore {

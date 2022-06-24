@@ -3,8 +3,8 @@ import { ConnectContract } from '@thecointech/contract-core';
 // import { connectIDX } from '@thecointech/idx';
 import { getSigner, AccountName } from '@thecointech/signers';
 import { NormalizeAddress } from '@thecointech/utilities/Address';
-import { AccountState, buildNewAccount } from '../state.js';
-import * as Browser from '../store.js';
+import { AccountState, buildNewAccount } from '../state';
+import * as Browser from '../store';
 
 const _devWallets = Browser.getAllAccounts();
 let _initial = null as string|null;

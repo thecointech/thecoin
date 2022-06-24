@@ -1,4 +1,4 @@
-import { getUserCollection } from "./user.js";
+import { getUserCollection } from "./user";
 
 //
 // List all users.  This may not be 100% reliable on client apps

@@ -1,4 +1,4 @@
-import { isInternalAddress, Transaction } from "./types.js";
+import { isInternalAddress, Transaction } from "./types";
 import { TheCoin } from '@thecointech/contract-core';
 import { BigNumber } from "@ethersproject/bignumber";
 import { DateTime } from "luxon";

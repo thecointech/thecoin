@@ -1,8 +1,8 @@
 /*
  * LanguageProvider reducer
  */
-import { BaseReducer } from '../../store/immerReducer.js';
-import { LanguageProviderState, DEFAULT_LOCALE, IActions, Locale } from './types.js';
+import { BaseReducer } from '../../store/immerReducer';
+import { LanguageProviderState, DEFAULT_LOCALE, IActions, Locale } from './types';
 import type { ApplicationBaseState } from '../../types';
 
 export const initialState: LanguageProviderState = {

@@ -1,5 +1,5 @@
 import { GetContract } from "@thecointech/contract-core";
-import { loadAndMergeHistory } from "./fetch.js";
+import { loadAndMergeHistory } from "./fetch";
 
 export async function fetchCoinHistory() {
   const tc = GetContract();

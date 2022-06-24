@@ -1,5 +1,5 @@
-import { AccountState, DefaultAccountValues } from './state.js';
-import { AccountMap } from './map.js';
+import { AccountState, DefaultAccountValues } from './state';
+import { AccountMap } from './map';
 import { isRemote } from '@thecointech/signers';
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities/Address';
 

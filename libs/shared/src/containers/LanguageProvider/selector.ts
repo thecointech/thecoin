@@ -1,5 +1,5 @@
 import type { ApplicationBaseState } from '../../types';
-import { initialState } from './reducer.js';
+import { initialState } from './reducer';
 
 /**
  * Direct selector to the languageToggle state domain

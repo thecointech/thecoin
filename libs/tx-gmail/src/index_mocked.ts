@@ -1,8 +1,8 @@
 
-import { functions } from './index_common.js';
-import { queryETransfers, queryNewDepositEmails } from './query.js';
-import { initializeApi, setETransferLabel } from './fetch.js';
-import { getAuthClient } from './auth.js';
+import { functions } from './index_common';
+import { queryETransfers, queryNewDepositEmails } from './query';
+import { initializeApi, setETransferLabel } from './fetch';
+import { getAuthClient } from './auth';
 //
 // Mocked electron fns.  We run the node code on the assumption
 // that googleapi's has been mocked (so this should run in the browser happily)

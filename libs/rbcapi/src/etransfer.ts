@@ -1,4 +1,4 @@
-import { ApiAction } from "./action.js";
+import { ApiAction } from "./action";
 import { log } from "@thecointech/logging";
 import { ETransferPacket } from "@thecointech/types";
 var any = require('promise.any');

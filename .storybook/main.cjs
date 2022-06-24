@@ -1,5 +1,4 @@
 const path = require('path');
-const shared_loaders = require('@thecointech/site-semantic-theme/webpack.less');
 const rootFolder = path.join(__dirname, '..');
 const mocksFolder = path.join(rootFolder, '__mocks__');
 const { DefinePlugin } = require('webpack');
@@ -35,12 +34,20 @@ module.exports = {
     ]
   }),
   webpackFinal: async (config) => {
+    const shared_loaders = await import('@thecointech/site-semantic-theme/webpack.less');
+
     const r = merge(
       {
         module: {
           rules: [
             shared_loaders.semantic_less_loader,
             shared_loaders.css_module_loader,
+            {
+              test: /\.m?js/,
+              resolve: {
+                fullySpecified: false,
+              },
+            },
           ]
         },
         plugins: [
