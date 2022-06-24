@@ -13,7 +13,6 @@ import { getIfMocked } from './mocking.mjs';
  */
 export async function resolve(specifier, context, defaultResolve)
 {
-  console.log("Resolving: " + specifier);
   const specOrMocked = getIfMocked(specifier) ?? specifier;
   // Always add our config to import conditions
   return resolve_ts(specOrMocked, {

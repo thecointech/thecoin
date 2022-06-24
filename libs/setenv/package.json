@@ -19,8 +19,15 @@
   "bin": {
     "run-env": "./src/run-env.mjs"
   },
-  "exports": "./src/index.mjs",
-  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.mjs"
+    },
+    "./webpack": {
+      "development": "./src/webpack.mjs"
+    }
+  },
   "dependencies": {
     "dotenv": "^10.0.0"
   }

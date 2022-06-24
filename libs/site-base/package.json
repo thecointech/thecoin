@@ -14,7 +14,7 @@
   "scripts": {
     "prebuild": "yarn build:i18n",
     "build": "run-p build:src build:link",
-    "build:src": "yarn ttsc -b \"tsconfig.build.json\"",
+    "build:src": "yarn tsc -b \"tsconfig.build.json\"",
     "build:link": "node ../../tools/link-assets.mjs",
     "build:i18n": "run-s extract compile",
     "clean": "run-p clean:*",
@@ -62,7 +62,7 @@
     "@thecointech/utilities": "^0.2.81",
     "connected-react-router": "^6.6.1",
     "intl": "^1.2.5",
-    "react-animate-height": "^2.0.18",
+    "react-animate-height": "^3.0.4",
     "react-ga": "^2.7.0",
     "react-measure": "^2.3.0",
     "react-transition-group": "^4.3.0",

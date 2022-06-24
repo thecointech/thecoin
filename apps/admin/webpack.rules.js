@@ -24,7 +24,6 @@ module.exports = [
         transpileOnly: true,
         experimentalWatchApi: true,
         projectReferences: true,
-        compiler: 'ttypescript',
       }
     }
   },

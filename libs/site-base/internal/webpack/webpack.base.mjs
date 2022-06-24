@@ -39,7 +39,6 @@ export default {
             transpileOnly: true,
             experimentalWatchApi: true,
             projectReferences: true,
-            compiler: 'ttypescript',
           },
         },
       },
@@ -87,8 +86,14 @@ export default {
     }),
   ],
   resolve: {
+    alias: {
+      // Manually override import paths because the package that imports
+      // these modules is commonjs but @babel/runtime supports ESM
+      "@babel/runtime/helpers/interopRequireDefault" : join(projectRoot, "../../node_modules/@babel/runtime/helpers/interopRequireDefault.js"),
+      "@babel/runtime/helpers/interopRequireWildcard" : join(projectRoot, "../../node_modules/@babel/runtime/helpers/interopRequireWildcard.js")
+    },
     modules: ['node_modules', 'src'],
-    conditionNames: [configName, "browser", "webpack", "require", "default"],
+    conditionNames: [configName, "browser", "webpack", "import", "default"],
     extensions: ['.js', '.jsx', '.react.js', '.ts', '.tsx'],
     fallback: {
       "crypto": require.resolve("crypto-browserify"),

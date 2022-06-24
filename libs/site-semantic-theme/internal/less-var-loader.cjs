@@ -50,5 +50,5 @@ module.exports = function(source) {
     return prev;
   }, {});
 
-  return `module.exports = ${JSON.stringify(cleanedVars, true, 2)};\n`;
+  return `module.exports = ${JSON.stringify(cleanedVars, null, 2)};\n`;
 };

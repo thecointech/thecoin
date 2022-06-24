@@ -3,7 +3,7 @@
  */
 
 import { routerMiddleware } from 'connected-react-router';
-import { createInjectorsEnhancer, forceReducerReload } from 'redux-injectors';
+import { createInjectorsEnhancer } from 'redux-injectors';
 import createSagaMiddleware from 'redux-saga';
 import { history } from './history.js';
 import { createStore, compose, applyMiddleware, ReducersMapObject, Reducer } from 'redux';
@@ -39,11 +39,11 @@ export function configureStore(createReducer: reducerFn, initialState?: Applicat
 
   // Make reducers hot reloadable, see http://mxs.is/googmo
   /* istanbul ignore next */
-  if (module.hot) {
-    module.hot.accept('./reducers', () => {
-      forceReducerReload(store);
-    });
-  }
+  // if (module.hot) {
+  //   module.hot.accept('./reducers', () => {
+  //     forceReducerReload(store);
+  //   });
+  // }
 
   return store;
 }
