@@ -6,13 +6,13 @@ import de from 'dotenv';
 const projectRoot = process.cwd();
 const LOG_NAME = basename(projectRoot);
 
-export function getEnvFiles(cfgName/*?: string*/, onlyPublic/*?: boolean*/) {
+export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
   const envName = cfgName || process.env.CONFIG_NAME || (
     process.env.NODE_ENV == "production"
       ? "prod"
       : "development"
   );
-  const files /*: URL[]*/ = [];
+  const files : URL[] = [];
   // Does the user have files on the system
   const systemFolder = `${process.env.THECOIN_ENVIRONMENTS}/`;
   if (!onlyPublic && systemFolder) {
@@ -39,7 +39,7 @@ export function getEnvFiles(cfgName/*?: string*/, onlyPublic/*?: boolean*/) {
   return files;
 }
 
-export function getEnvVars(cfgName/*?: string*/, onlyPublic/*?: boolean*/) /*: Record<string, string>*/ {
+export function getEnvVars(cfgName?: string, onlyPublic?: boolean) : Record<string, string> {
   const files = getEnvFiles(cfgName, onlyPublic);
   return files
     .map(file => readFileSync(file))
@@ -51,7 +51,7 @@ export function getEnvVars(cfgName/*?: string*/, onlyPublic/*?: boolean*/) /*: R
   });
 }
 
-export function loadEnvVars(cfgName/*?: string*/) {
+export function loadEnvVars(cfgName?: string) {
   // Load all environment files.
   const files = getEnvFiles(cfgName);
   files.forEach(path => de.config({path: fileURLToPath(path)}))
@@ -61,6 +61,3 @@ export function loadEnvVars(cfgName/*?: string*/) {
     process.env.LOG_NAME = LOG_NAME;
   }
 }
-
-// By default, load envVars with private variables.
-// loadEnvVars();

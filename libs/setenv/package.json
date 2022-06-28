@@ -17,15 +17,19 @@
     "directory": "libs/setenv"
   },
   "bin": {
-    "run-env": "./src/run-env.mjs"
+    "run-env": "./bin/run-env.mjs"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf ./build && rimraf ./coverage"
   },
   "exports": {
     ".": {
-      "types": "./src/index.d.ts",
-      "default": "./src/index.mjs"
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
     },
     "./webpack": {
-      "development": "./src/webpack.mjs"
+      "development": "./webpack/webpack.env.mjs"
     }
   },
   "dependencies": {

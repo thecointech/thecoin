@@ -2,6 +2,7 @@
   "name": "@thecointech/tx-processor",
   "version": "0.2.81",
   "private": "true",
+  "type": "module",
   "description": "The Coin: A command-line app for completing transactions",
   "keywords": [
     "THECoin"
@@ -12,7 +13,7 @@
   "scripts": {
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "dev": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register ./src/main.ts",
+    "dev": "run-env ./src/main.ts",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
     "prod": "cross-env CONFIG_NAME=prod yarn start",

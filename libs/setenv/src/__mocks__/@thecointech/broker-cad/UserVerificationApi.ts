@@ -1,4 +1,4 @@
-import { UserVerifyData, UserVerificationApi as SrcApi } from "@thecointech/broker-cad";
+import { UserVerifyData, UserVerificationApi as SrcApi, BlockpassPayload } from "@thecointech/broker-cad";
 import { AxiosResponse } from 'axios';
 import { buildResponse } from "../axios-utils";
 
@@ -26,6 +26,12 @@ let status = StatusType.Started;
 const incrementStatus = () => status = statii[statii.indexOf(status) + 1 % statii.length];
 
 export class UserVerificationApi implements Pick<SrcApi, keyof SrcApi> {
+  updateStatus(xHubSignature: string, payload: BlockpassPayload, options?: any): Promise<AxiosResponse<void>> {
+    status = payload.status;
+    return Promise.resolve(
+      buildResponse(undefined as any) // not technically void, but meh
+    );
+  }
   userDeleteRaw(ts: string, sig: string, options?: any): Promise<AxiosResponse<void>> {
     status = StatusType.Completed;
     return Promise.resolve(

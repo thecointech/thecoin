@@ -2,6 +2,7 @@
   "name": "@thecointech/broker-service",
   "version": "0.2.81",
   "private": true,
+  "type": "module",
   "description": "TheCoin simple broker services.  This sample API is an example of how to setup the simplest low-volume exchange, when combined with the included server code, without external dependencies",
   "keywords": [
     "TheCoin",
@@ -17,7 +18,7 @@
   },
   "scripts": {
     "start": "node ./build/main.js",
-    "dev": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node --inspect=9232 -r ts-node/register -r ./src/main.ts",
+    "dev": "yarn run-env --inspect=9232 ./src/main.ts",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
     "deploy": "ts-node --skip-project deploy",
