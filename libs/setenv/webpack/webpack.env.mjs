@@ -11,7 +11,7 @@ const compileMocks = {
   rules: [
     // Allow ts-loader to parse mocks
     {
-      test: /\.ts(x?)$/,
+      test: /__mocks__\/.*\.ts(x?)$/,
       include: __dirname,
       use: {
         loader: 'ts-loader',

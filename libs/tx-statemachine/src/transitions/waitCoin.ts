@@ -2,7 +2,7 @@ import { TheCoin } from "@thecointech/contract-core";
 import { log } from "@thecointech/logging";
 import { AnyActionContainer, getCurrentState } from "../types";
 import { TransactionReceipt } from '@ethersproject/providers'
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import { NormalizeAddress } from '@thecointech/utilities';
 import { sleep } from '@thecointech/async';
 

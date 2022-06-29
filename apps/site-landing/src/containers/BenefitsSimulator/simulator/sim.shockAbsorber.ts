@@ -1,4 +1,4 @@
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
 import { SimulationParameters } from './params';
 import { grossFiat, SimulationState, toCoin, toFiat } from './state';

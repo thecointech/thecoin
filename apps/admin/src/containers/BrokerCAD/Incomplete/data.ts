@@ -1,6 +1,6 @@
 import { ActionType, getIncompleteActions } from '@thecointech/broker-db';
 import { UserData } from '../Clients/data';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import { GetContract } from '@thecointech/contract-core';
 
 export async function fetchIncomplete() {

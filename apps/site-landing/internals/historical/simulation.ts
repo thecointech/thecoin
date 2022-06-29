@@ -2,7 +2,7 @@ import { range } from 'lodash';
 import { DateTime } from 'luxon';
 import { MarketData } from '../../src/containers/BenefitsSimulator/simulator/market';
 import { MergeSimParamaters } from '../../src/containers/BenefitsSimulator/simulator/params';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 
 export function generateData(CAGR = 10, LGR=0, yearsToSimulate = 10, noise = 0.1): MarketData[] {
   const monthStart = DateTime.fromObject({

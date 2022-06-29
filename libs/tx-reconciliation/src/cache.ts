@@ -1,4 +1,4 @@
-import { Decimal } from "decimal.js-light";
+import Decimal from 'decimal.js-light';;
 import { writeFileSync, mkdirSync, existsSync, readFileSync, statSync } from "fs";
 import { DateTime } from "luxon";
 import { join } from "path";

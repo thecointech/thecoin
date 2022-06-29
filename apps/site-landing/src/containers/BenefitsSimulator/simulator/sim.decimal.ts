@@ -1,4 +1,4 @@
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 
 export const zero = new Decimal(0);
 export const one = new Decimal(1);

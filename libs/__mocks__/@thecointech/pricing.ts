@@ -1,4 +1,4 @@
-import { FXRate, RatesApi as IRatesApi  } from "@thecointech/pricing";
+import type { FXRate, RatesApi as IRatesApi  } from "@thecointech/pricing";
 import { AxiosResponse } from "axios";
 import { DateTime } from "luxon";
 export class RatesApi implements Pick<IRatesApi, keyof IRatesApi> {

@@ -1,7 +1,7 @@
 import { parse } from 'papaparse';
 import { DateTime } from 'luxon';
 import { FDRNewDeal, FxData, getIdx, MarketData, SnPData } from './market';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 
 function transformDate(value: string) {
   return DateTime.fromFormat(value, "yyyy-MM", {

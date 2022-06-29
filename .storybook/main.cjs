@@ -1,6 +1,6 @@
 const path = require('path');
 const rootFolder = path.join(__dirname, '..');
-const mocksFolder = path.join(rootFolder, '__mocks__');
+const mocksFolder = path.join(rootFolder, 'libs', '__mocks__');
 const { DefinePlugin } = require('webpack');
 const { AbsolutePathRemapper } = require('@thecointech/storybook-abs-paths');
 const { merge } = require("webpack-merge")

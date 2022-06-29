@@ -1,7 +1,7 @@
 import { AccountState } from '@thecointech/account';
 import { BillAction, BuyAction, getAllActions, getAllUsers, SellAction } from '@thecointech/broker-db';
 import gmail, { eTransferData } from '@thecointech/tx-gmail';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 
 export type UserData = {
   address: string,

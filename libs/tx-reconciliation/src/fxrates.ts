@@ -3,7 +3,7 @@ import { toHuman } from "@thecointech/utilities";
 import { nextOpenTimestamp } from "@thecointech/market-status";
 import { DateTime } from 'luxon';
 import { ReconciledRecord } from "./types";
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 
 const getSettlementDate = async (r: ReconciledRecord) =>
   DateTime.fromMillis(await nextOpenTimestamp(r.data.initiated));

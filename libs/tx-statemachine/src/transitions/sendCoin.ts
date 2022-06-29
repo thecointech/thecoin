@@ -1,5 +1,5 @@
 import { log } from "@thecointech/logging";
-import { Decimal } from "decimal.js-light";
+import Decimal from 'decimal.js-light';;
 import { AnyActionContainer, getCurrentState, TransitionCallback } from "../types";
 import { verifyPreTransfer } from "./verifyPreTransfer";
 import { DateTime } from "luxon";
