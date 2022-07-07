@@ -27,20 +27,25 @@ function getIsMockedFn() {
 
 const isMocked = getIsMockedFn();
 
-export function getIfMocked(specifier) {
-  if (!specifier.startsWith("file://") && isMocked(specifier)) {
-    // iterate over all the mocks in folder & create thingy for it.
-    const mockRoot = new URL('../../__mocks__/', import.meta.url);
-    const mockFolder = new URL(`./${specifier}/`, mockRoot);
-    if (existsSync(mockFolder)) {
-      // assume path
-      return new URL('./index.ts', mockFolder).toString();
-    }
-    const mockFile = new URL(`./${specifier}.ts`, mockRoot);
-    if (existsSync(mockFile)) {
-      // assume path
-      return mockFile;
-    }
+export function getIfMocked(specifier, parentUrl) {
+  // Do not re-direct explicit imports or relative ones
+  if (specifier.startsWith("file://") || specifier.startsWith("."))
+    return null;
+
+  if (!isMocked(specifier))
+    return null;
+
+  // iterate over all the mocks in folder & create thingy for it.
+  const mockRoot = new URL('../../__mocks__/', import.meta.url);
+  const mockFolder = new URL(`./${specifier}/`, mockRoot);
+  if (existsSync(mockFolder)) {
+    // assume path
+    return new URL('./index.ts', mockFolder);
+  }
+  const mockFile = new URL(`./${specifier}.ts`, mockRoot);
+  if (existsSync(mockFile)) {
+    // assume path
+    return mockFile;
   }
   return null;
 }
