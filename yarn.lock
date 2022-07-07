@@ -7615,28 +7615,46 @@
   resolved "https://registry.yarnpkg.com/@tsconfig/node16/-/node16-1.0.2.tgz#423c77877d0569db20e1fc80885ac4118314010e"
   integrity sha512-eZxlbI8GZscaGS7kkc/trHTT5xgrjH3/1n2JDwusC9iahPKWMRvRjJSAN5mCXviuTGQ/lHnhvv8Q1YTpnfz9gA==
 
-"@tsoa/cli@^3.8.0":
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/@tsoa/cli/-/cli-3.8.0.tgz#5a5fae9fd5967156d48c9ca747baa5d32094c222"
-  integrity sha512-L5qvCPNtrAoCYSLyVtgGgLkzsAglV8IPKi4FeUiPTWuZgTBJXOZihcSjuMpJpDmG51qrE5oaIglHDZ5zwxhi2A==
+"@tsoa/cli@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@tsoa/cli/-/cli-4.1.0.tgz#1bc55a2ecde140011199650b4f2cfff0e6f30ea4"
+  integrity sha512-GKed8JjzfAeQEpKYugOlsKDl/TjbjOmi9Q3Vg8d13NLL1muK0fRJIsfJCHN1UDpy3QRpB5Q4o3kxHbGpVDvDVA==
   dependencies:
-    "@tsoa/runtime" "^3.8.0"
+    "@tsoa/runtime" "^4.1.0"
     deepmerge "^4.2.2"
     fs-extra "^8.1.0"
     glob "^7.1.6"
-    handlebars "^4.7.6"
+    handlebars "^4.7.7"
     merge "^2.1.0"
     minimatch "^3.0.4"
-    typescript "^4.1.2"
+    typescript "^4.5.4"
     validator "^13.6.0"
     yamljs "^0.3.0"
-    yargs "^14.0.0"
+    yargs "^15.4.1"
 
-"@tsoa/runtime@^3.8.0":
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/@tsoa/runtime/-/runtime-3.8.0.tgz#41bff8682f019371e7945259d98c6944adab22aa"
-  integrity sha512-/T+hJiSdI5uVvdlGstAIAzZiFqsMODsRwy6DTefKmc3s4K7DxrXtNltjtru9nR0LSPHLiGFt2UhFsRArDWWDqA==
+"@tsoa/cli@https://gitpkg.now.sh/thecointech/tsoa/packages/cli?staylor/withArtifacts":
+  version "4.1.0"
+  resolved "https://gitpkg.now.sh/thecointech/tsoa/packages/cli?staylor/withArtifacts#e43ec8fa03e43222177370962ea96da26a0b41a9"
   dependencies:
+    "@tsoa/runtime" "^4.1.0"
+    deepmerge "^4.2.2"
+    fs-extra "^8.1.0"
+    glob "^7.1.6"
+    handlebars "^4.7.7"
+    merge "^2.1.0"
+    minimatch "^3.0.4"
+    typescript "^4.5.4"
+    validator "^13.6.0"
+    yamljs "^0.3.0"
+    yargs "^15.4.1"
+
+"@tsoa/runtime@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@tsoa/runtime/-/runtime-4.1.0.tgz#ec6ffdfe69e8f9b9dc948ffe982839a42f8ced01"
+  integrity sha512-TdSsbGYOnWNrZd6FG4DMYZNQkuplXVsYFmQOHvuFlzCe1SJhi0HxpsVG6iUjSB3kUteiKGPZc8mm2RjNAWVEPA==
+  dependencies:
+    promise.any "^2.0.2"
+    reflect-metadata "^0.1.13"
     validator "^13.6.0"
 
 "@typechain/ethers-v5@^8.0.0":
@@ -19741,7 +19759,7 @@ handle-thing@^2.0.0:
   resolved "https://registry.yarnpkg.com/handle-thing/-/handle-thing-2.0.0.tgz#0e039695ff50c93fc288557d696f3c1dc6776754"
   integrity sha512-d4sze1JNC454Wdo2fkuyzCr6aHcbL6PGGuFAz0Li/NcOm1tCHGnWDRmJP85dh9IhQErTc2svWFEX5xHIOo//kQ==
 
-handlebars@^4.1.2, handlebars@^4.4.0, handlebars@^4.7.6, handlebars@^4.7.7:
+handlebars@^4.1.2, handlebars@^4.4.0, handlebars@^4.7.7:
   version "4.7.7"
   resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.7.7.tgz#9ce33416aad02dbd6c8fafa8240d5d98004945a1"
   integrity sha512-aAcXm5OAfE/8IXkcZvCepKU3VzW1/39Fb5ZuqMtgI/hT8X2YgoMvBY5dLhq/cpOvw7Lk1nK/UF71aLG/ZnVYRA==
@@ -30108,7 +30126,7 @@ promise.allsettled@1.0.2, promise.allsettled@^1.0.0:
     function-bind "^1.1.1"
     iterate-value "^1.0.0"
 
-promise.any@^2.0.4:
+promise.any@^2.0.2, promise.any@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/promise.any/-/promise.any-2.0.4.tgz#beef570a04db537d022b395d776af2aef9b64f00"
   integrity sha512-Yyl7jstFInFv/eIjm8Sj+pyyzHKZJPMr6yOdxxls1xdVatc3kVyVOvMPmqDaKC5kzxjwuMCkn41isweIUf8DPw==
@@ -35205,13 +35223,13 @@ tslib@^1.10.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.13.0.tgz#c881e13cc7015894ed914862d276436fa9a47043"
   integrity sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==
 
-tsoa@^3.8.0:
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/tsoa/-/tsoa-3.8.0.tgz#f66b943ddaa665bb6d7d801aa51a32936a158946"
-  integrity sha512-CfvQhAzChqEtqP5A7hAm0Oh8iwusubm7YLLt1k3gCzufcb/qVvMS0HDxJS5GGCw4bI6Bi5WX5eVL8u34bhmWfA==
+tsoa@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/tsoa/-/tsoa-4.1.0.tgz#2cce436862cfb420bf9a632ddab3a0a274fbe335"
+  integrity sha512-ozJQqgoIbgfkgi44w9wvzk2dcO7tcVFUaKs+agNyMl/VnC9YiGEfvstusG3aWIJEdKcLVlcVvZ4Un+4iKdcFnw==
   dependencies:
-    "@tsoa/cli" "^3.8.0"
-    "@tsoa/runtime" "^3.8.0"
+    "@tsoa/cli" "^4.1.0"
+    "@tsoa/runtime" "^4.1.0"
 
 tsutils@^3.21.0:
   version "3.21.0"
@@ -35452,7 +35470,12 @@ typescript-tuple@^2.2.1:
   dependencies:
     typescript-compare "^0.0.2"
 
-typescript@^4.1.2, typescript@^4.7.3:
+typescript@^4.5.4:
+  version "4.7.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.7.4.tgz#1a88596d1cf47d59507a1bcdfb5b9dfe4d488235"
+  integrity sha512-C0WQT0gezHuw6AdY1M2jxUO83Rjf0HP7Sk1DtXj6j1EwkQNZrHAg2XPWlq62oqEhYvONq5pkC2Y9oPljWToLmQ==
+
+typescript@^4.7.3:
   version "4.7.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.7.3.tgz#8364b502d5257b540f9de4c40be84c98e23a129d"
   integrity sha512-WOkT3XYvrpXx4vMMqlD+8R8R37fZkjyLGlxavMc4iB8lrl8L0DeTcHbYgw/v0N/z9wAFsgBhcsF0ruoySS22mA==
@@ -38010,7 +38033,7 @@ yargs@13.3.2:
     y18n "^4.0.0"
     yargs-parser "^13.1.2"
 
-yargs@^14.0.0, yargs@^14.2.2, yargs@^14.2.3:
+yargs@^14.2.2, yargs@^14.2.3:
   version "14.2.3"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-14.2.3.tgz#1a1c3edced1afb2a2fea33604bc6d1d8d688a414"
   integrity sha512-ZbotRWhF+lkjijC/VhmOT9wSgyBQ7+zr13+YLkhfsSiTriYsMzkTUFP18pFhWwBeMa5gUc1MzbhrO6/VB7c9Xg==
@@ -38027,7 +38050,7 @@ yargs@^14.0.0, yargs@^14.2.2, yargs@^14.2.3:
     y18n "^4.0.0"
     yargs-parser "^15.0.1"
 
-yargs@^15.0.1:
+yargs@^15.0.1, yargs@^15.4.1:
   version "15.4.1"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-15.4.1.tgz#0d87a16de01aee9d8bec2bfbf74f67851730f4f8"
   integrity sha512-aePbxDmcYW++PaqBsJ+HYUFwCdv4LVvdnhBy78E57PIor8/OVvhMrADFFEDh8DHDFRv/O9i3lPhsENjO7QX0+A==

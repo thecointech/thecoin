@@ -11,6 +11,7 @@
     "experimentalDecorators": true,
     "alwaysStrict": false,
     "noImplicitUseStrict": true,
+    "esModuleInterop": false, /* required for multer `import *` in TSOA generated code */
   },
   "include": [
     "./src/**/*.*", "./types/*.*",
