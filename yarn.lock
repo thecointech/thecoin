@@ -7615,26 +7615,9 @@
   resolved "https://registry.yarnpkg.com/@tsconfig/node16/-/node16-1.0.2.tgz#423c77877d0569db20e1fc80885ac4118314010e"
   integrity sha512-eZxlbI8GZscaGS7kkc/trHTT5xgrjH3/1n2JDwusC9iahPKWMRvRjJSAN5mCXviuTGQ/lHnhvv8Q1YTpnfz9gA==
 
-"@tsoa/cli@^4.1.0":
+"@tsoa/cli@https://gitpkg.now.sh/thecointech/tsoa/packages/cli?77b3946":
   version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@tsoa/cli/-/cli-4.1.0.tgz#1bc55a2ecde140011199650b4f2cfff0e6f30ea4"
-  integrity sha512-GKed8JjzfAeQEpKYugOlsKDl/TjbjOmi9Q3Vg8d13NLL1muK0fRJIsfJCHN1UDpy3QRpB5Q4o3kxHbGpVDvDVA==
-  dependencies:
-    "@tsoa/runtime" "^4.1.0"
-    deepmerge "^4.2.2"
-    fs-extra "^8.1.0"
-    glob "^7.1.6"
-    handlebars "^4.7.7"
-    merge "^2.1.0"
-    minimatch "^3.0.4"
-    typescript "^4.5.4"
-    validator "^13.6.0"
-    yamljs "^0.3.0"
-    yargs "^15.4.1"
-
-"@tsoa/cli@https://gitpkg.now.sh/thecointech/tsoa/packages/cli?staylor/withArtifacts":
-  version "4.1.0"
-  resolved "https://gitpkg.now.sh/thecointech/tsoa/packages/cli?staylor/withArtifacts#e43ec8fa03e43222177370962ea96da26a0b41a9"
+  resolved "https://gitpkg.now.sh/thecointech/tsoa/packages/cli?77b3946#701d9a7645abc9cf7603d20a0ba8f5e1515dcb4b"
   dependencies:
     "@tsoa/runtime" "^4.1.0"
     deepmerge "^4.2.2"
@@ -35222,14 +35205,6 @@ tslib@^1.10.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   version "1.13.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.13.0.tgz#c881e13cc7015894ed914862d276436fa9a47043"
   integrity sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==
-
-tsoa@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/tsoa/-/tsoa-4.1.0.tgz#2cce436862cfb420bf9a632ddab3a0a274fbe335"
-  integrity sha512-ozJQqgoIbgfkgi44w9wvzk2dcO7tcVFUaKs+agNyMl/VnC9YiGEfvstusG3aWIJEdKcLVlcVvZ4Un+4iKdcFnw==
-  dependencies:
-    "@tsoa/cli" "^4.1.0"
-    "@tsoa/runtime" "^4.1.0"
 
 tsutils@^3.21.0:
   version "3.21.0"

@@ -6,12 +6,10 @@
     "rootDir": "./src",                         /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
     "tsBuildInfoFile": "./build/.buildinfo",          /* Specify file to store incremental compilation information */
     "lib": ["ES2019"],
-    "allowSyntheticDefaultImports": true,
     /* Required for TSOA */
     "experimentalDecorators": true,
     "alwaysStrict": false,
     "noImplicitUseStrict": true,
-    "esModuleInterop": false, /* required for multer `import *` in TSOA generated code */
   },
   "include": [
     "./src/**/*.*", "./types/*.*",
