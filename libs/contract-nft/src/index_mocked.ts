@@ -2,6 +2,9 @@ import { ContractTransaction } from 'ethers';
 import { BigNumber, BigNumberish } from 'ethers';
 import type { TheGreenNFT } from '.';
 
+export * from "./gassless";
+export * from "./tokenCodes";
+
 class MockNFT implements Pick<TheGreenNFT, "balanceOf"|"claimToken"> {
   tokens: string[] = [];
 

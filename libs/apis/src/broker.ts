@@ -8,7 +8,7 @@ import {
   ReferralsApi
 } from '@thecointech/broker-cad';
 
-export { StatusType, EventType } from '@thecointech/broker-cad';
+export { StatusType /*, EventType*/ } from '@thecointech/broker-cad';
 export type { UserVerifyData } from '@thecointech/broker-cad';
 
 const BrokerCADAddress = process.env.URL_SERVICE_BROKER;
