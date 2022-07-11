@@ -1,22 +1,22 @@
-import { join, dirname, resolve as _resolve } from 'path';
 import { fileURLToPath } from "url";
+
 //
 // Mocking packages for webpack (used by sites & admin)
 //
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const mocksUrl = new URL('../../__mocks__/', import.meta.url);
+const mocksFolder = fileURLToPath(mocksUrl);
 
 // Typescript compilation on __mocks__ folder
 const compileMocks = {
   rules: [
     // Allow ts-loader to parse mocks
     {
-      test: /__mocks__\/.*\.ts(x?)$/,
-      include: __dirname,
+      test: /.*\.ts(x?)$/,
+      include: mocksFolder,
       use: {
         loader: 'ts-loader',
         options: {
-          configFile: join(__dirname, '..', 'tsconfig.base.json'),
+          configFile: fileURLToPath(new URL('./tsconfig.json', mocksUrl)),
           transpileOnly: true,
           experimentalWatchApi: true,
         },
@@ -28,7 +28,7 @@ const compileMocks = {
 const allMocks = {
   // Expose all mocks
   resolve: {
-    modules: [__dirname]
+    modules: [mocksFolder]
   }
 }
 
@@ -36,7 +36,7 @@ const liveMocks = {
   // Only expose limited mocks
   resolve: {
     alias: {
-      "googleapis": _resolve(__dirname, "googleapis.ts"),
+      "googleapis": new URL( "googleapis.ts", mocksUrl),
     }
   }
 }
