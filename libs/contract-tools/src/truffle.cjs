@@ -4,9 +4,6 @@ var path = require('path');
 const { TruffleEthersProvider } = require("@thecointech/truffle-ethers-provider");
 const { getProvider } = require("@thecointech/ethers-provider");
 
-// Allow using typescript in deployments
-loadTypescript();
-
 // Dev networks run on local net
 function getDevNetworks() {
   return {
@@ -69,16 +66,6 @@ async function getOwner() {
   const d = await import('thecointech/signers');
   const signer = await d.getSigner("Owner");
   return signer;
-}
-
-function loadTypescript() {
-  require("ts-node").register({
-    dir: process.cwd(),
-    files: true,
-    compilerOptions: {
-      typeRoots: ["./migrations/types"]
-    }
-  });
 }
 
 const cwd = process.cwd();
