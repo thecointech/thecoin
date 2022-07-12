@@ -28,9 +28,7 @@
       "types": "./build/index.d.ts",
       "default": "./build/index.js"
     },
-    "./webpack": {
-      "development": "./webpack/webpack.env.mjs"
-    }
+    "./webpack": "./webpack/webpack.env.mjs"
   },
   "dependencies": {
     "dotenv": "^10.0.0"

@@ -14,11 +14,17 @@ import { getIfMocked } from './mocking.mjs';
 export async function resolve(specifier, context, defaultResolve)
 {
   const specOrMocked = getIfMocked(specifier, context.parentURL)?.toString() ?? specifier;
-  // Always add our config to import conditions
-  return resolve_ts(specOrMocked, {
-    ...context,
-    conditions: [...context.conditions, process.env.CONFIG_NAME || process.env.NODE_ENV],
-  }, defaultResolve);
+
+  const res = (specifier.includes("thecointech") || specifier.startsWith("."))
+    // For our files we need to use the ts-node transpiler
+    ? await resolve_ts(specOrMocked, {
+      ...context,
+      conditions: [process.env.CONFIG_NAME || process.env.NODE_ENV, ...context.conditions],
+    }, defaultResolve)
+    // for everything else, just use the default
+    : await defaultResolve(specifier, context, defaultResolve);
+
+  return res;
 }
 
 export async function load(resolvedUrl, context, next) {

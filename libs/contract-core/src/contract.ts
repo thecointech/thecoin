@@ -11,15 +11,16 @@ export const COIN_EXP = 1000000;
 // (used in fetching history to prevent searching too far back!)
 export const InitialCoinBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0", 10);
 
+const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME;
+const deployment = await import(`./deployed/${config_env}-polygon.json`);
+
 const getAbi = () => TheCoinSpec.abi;
 
 const getContractAddress = () => {
-  const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME;
-  const deployment = require(`./deployed/${config_env}-polygon.json`);
   if (!deployment) {
     throw new Error('Cannot create contract: missing deployment');
   }
-  return deployment.contract;
+  return deployment.default.contract;
 }
 
 const buildContract = () =>

@@ -36,7 +36,7 @@ const liveMocks = {
   // Only expose limited mocks
   resolve: {
     alias: {
-      "googleapis": new URL( "googleapis.ts", mocksUrl),
+      "googleapis": fileURLToPath(new URL( "googleapis.ts", mocksUrl)),
     }
   }
 }

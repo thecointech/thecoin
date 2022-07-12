@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.json",
+  "ts-node": {  "files": true },
+  "compilerOptions": {
+    "module": "commonjs",
+    "typeRoots": ["./types"]
+  },
+  "include": ["**/*.ts"],
+}

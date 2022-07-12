@@ -20,6 +20,7 @@
     "contract-gen-types": "./src/contract-gen-types.js"
   },
   "scripts": {
+    "clean": "rimraf ./build",
     "build": "yarn tsc",
     "emulator": "truffle develop --config=./src/truffle.cjs",
     "prod:console": "cross-env CONFIG_NAME=prodtest truffle console --network prodtest"
