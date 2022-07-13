@@ -11,8 +11,7 @@ import ErrorOverlayPlugin from './error-overlay-shim.cjs';
 
 import baseOptions from './webpack.base.mjs';
 import signerOptions from './webpack.signers.mjs';
-// Import options for mocking external modules
-import mockOptions from "@thecointech/setenv/webpack";
+import getMocks from "@thecointech/setenv/webpack";
 
 const devOptions = {
   mode: 'development',
@@ -77,7 +76,7 @@ if (process.env.SETTINGS !== 'live') {
 }
 
 export default merge(
-  mockOptions,
+  getMocks(process.env),
   devOptions,
   signerOptions,
   baseOptions,

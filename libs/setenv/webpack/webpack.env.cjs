@@ -40,8 +40,8 @@ const liveMocks = {
   }
 }
 
-function getMocks() {
-  switch (process.env.CONFIG_NAME) {
+function getMocks(cfgName) {
+  switch (cfgName) {
     case 'development': {
       console.log(" *** Injecting all webpack mocks");
       return allMocks;
@@ -57,7 +57,11 @@ function getMocks() {
   }
 }
 
-module.exports = {
-  module: compileMocks,
-  ...getMocks(),
+module.exports = function({CONFIG_NAME, NODE_ENV}) {
+  return (NODE_ENV === 'production')
+    ? {}
+    : {
+        module: compileMocks,
+        ...getMocks(CONFIG_NAME),
+      }
 }

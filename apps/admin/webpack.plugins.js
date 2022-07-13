@@ -6,12 +6,6 @@ const { getEnvVars } = require('@thecointech/setenv')
 const packageFile = path.join(__dirname, 'package.json');
 
 const env = getEnvVars();
-const keys = Object.keys(env)
-
-const envObj = keys.reduce((prev, key) => ({
-  ...prev,
-  [key]: JSON.stringify(env[key])
-}), {});
 
 module.exports = [
   new ForkTsCheckerWebpackPlugin(),
@@ -19,10 +13,7 @@ module.exports = [
     __VERSION__: JSON.stringify(require(packageFile).version),
     "process.env.LOG_LEVEL": process.env.LOG_LEVEL,
   }),
-  // new webpack.DefinePlugin({
-  //   "process.env": envObj,
-  // }),
-  new webpack.EnvironmentPlugin(envObj),
+  new webpack.EnvironmentPlugin(env),
   new webpack.ProvidePlugin({
     process: 'process/browser',
   }),

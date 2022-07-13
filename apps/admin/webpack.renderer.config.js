@@ -1,10 +1,10 @@
-const rules = require('./webpack.rules');
-const plugins = require('./webpack.plugins');
-const mockOptions = require('./webpack.mocks');
-const less_loaders = require('@thecointech/site-semantic-theme/webpack.less');
-const path = require('path');
 const { merge } = require("webpack-merge")
 const { getEnvVars } = require('@thecointech/setenv');
+const rules = require('./webpack.rules');
+const plugins = require('./webpack.plugins');
+const getMocks = require('@thecointech/setenv/webpack');
+const less_loaders = require('@thecointech/site-semantic-theme/webpack.less');
+const path = require('path');
 
 const env = getEnvVars();
 
@@ -50,7 +50,7 @@ const baseOptions = {
   },
   plugins,
   resolve: {
-    conditionNames: [env.CONFIG_NAME, "electron", "browser", "import", "default"],
+    conditionNames: [env.CONFIG_NAME, "electron", "browser", "require", "default"],
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
     fallback: {
@@ -62,12 +62,12 @@ const baseOptions = {
       "fs": false,
       "vm": false,
       // Loading google-auth-library
-      "zlib": false,
-      "os": false,
-      "child_process": false,
-      "http2": false,
-      "net": false,
-      "tls": false,
+      // "zlib": false,
+      // "os": false,
+      // "child_process": false,
+      // "http2": false,
+      // "net": false,
+      // "tls": false,
 
     }
   },
@@ -77,4 +77,4 @@ const baseOptions = {
   performance: { hints: false }
 }
 
-module.exports = merge(mockOptions, baseOptions);
+module.exports = merge(getMocks(env), baseOptions);
