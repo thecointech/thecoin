@@ -1,10 +1,9 @@
-import { fileURLToPath } from "url";
+const { resolve } = require('path');
 
 //
 // Mocking packages for webpack (used by sites & admin)
 //
-const mocksUrl = new URL('../../__mocks__/', import.meta.url);
-const mocksFolder = fileURLToPath(mocksUrl);
+const mocksFolder = resolve(__dirname, '../../__mocks__/');
 
 // Typescript compilation on __mocks__ folder
 const compileMocks = {
@@ -16,7 +15,7 @@ const compileMocks = {
       use: {
         loader: 'ts-loader',
         options: {
-          configFile: fileURLToPath(new URL('./tsconfig.json', mocksUrl)),
+          configFile: resolve(mocksFolder, './tsconfig.json'),
           transpileOnly: true,
           experimentalWatchApi: true,
         },
@@ -36,7 +35,7 @@ const liveMocks = {
   // Only expose limited mocks
   resolve: {
     alias: {
-      "googleapis": fileURLToPath(new URL( "googleapis.ts", mocksUrl)),
+      "googleapis": resolve(mocksFolder, "googleapis.ts"),
     }
   }
 }
@@ -58,7 +57,7 @@ function getMocks() {
   }
 }
 
-export default {
+module.exports = {
   module: compileMocks,
   ...getMocks(),
 }

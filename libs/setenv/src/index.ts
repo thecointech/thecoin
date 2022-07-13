@@ -1,5 +1,6 @@
 import { basename } from 'path';
 import { existsSync, readFileSync } from 'fs';
+import { projectUrl } from '@thecointech/setenv/projectUrl';
 import { fileURLToPath } from 'url';
 import de from 'dotenv';
 
@@ -21,7 +22,7 @@ export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
   }
 
   // If none found, is there any in the local repo folder?
-  const repoUrl = new URL(`../../../environments/${envName}.public.env`, import.meta.url);
+  const repoUrl = new URL(`environments/${envName}.public.env`, projectUrl());
   if (existsSync(repoUrl)) {
     files.push(repoUrl);
   }

@@ -4,9 +4,7 @@
     "outDir": "./build/",
     "tsBuildInfoFile": "./build/.buildinfo",
     "rootDir": "./src/",
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitAny": false,
   },
-  "include": ["src/**/*", "src/**/*.json", "webpack/webpack.mjs"],
+  "include": ["src/**/*"],
 }
+, "projectUrl/projectUrl.ts"

@@ -22,7 +22,7 @@ export async function resolve(specifier, context, defaultResolve)
       conditions: [process.env.CONFIG_NAME || process.env.NODE_ENV, ...context.conditions],
     }, defaultResolve)
     // for everything else, just use the default
-    : await defaultResolve(specifier, context, defaultResolve);
+    : await defaultResolve(specOrMocked, context, defaultResolve);
 
   return res;
 }
