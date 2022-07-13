@@ -74,7 +74,8 @@ const baseOptions = {
   experiments: {
     topLevelAwait: true,
   },
-  performance: { hints: false }
+  performance: { hints: false },
+  ignoreWarnings: [/require function is used in a way in which/],
 }
 
 module.exports = merge(getMocks(env), baseOptions);
