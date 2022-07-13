@@ -5,6 +5,12 @@ module.exports = [
     use: 'node-loader',
   },
   {
+    test: /\.m?js/,
+    resolve: {
+      fullySpecified: false,
+    },
+  },
+  {
     test: /\.(m?js|node)$/,
     parser: { amd: false },
     use: {

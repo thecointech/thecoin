@@ -1,10 +1,12 @@
 const rules = require('./webpack.rules');
 const plugins = require('./webpack.plugins');
 const mockOptions = require('./webpack.mocks');
-const less_loaders = require('@thecointech/site-semantic-theme/webpack.less')
-const { merge } = require("webpack-merge")
+const less_loaders = require('@thecointech/site-semantic-theme/webpack.less');
 const path = require('path');
+const { merge } = require("webpack-merge")
+const { getEnvVars } = require('@thecointech/setenv');
 
+const env = getEnvVars();
 
 rules.push(
   // Default CSS processing (anything not named *.module.css)
@@ -42,30 +44,30 @@ rules.push(
 );
 
 const baseOptions = {
-  mode: process.env.NODE_ENV,
+  mode: env.NODE_ENV,
   module: {
     rules,
   },
   plugins,
   resolve: {
-    conditionNames: [process.env.CONFIG_NAME, "electron", "browser", "require", "default"],
+    conditionNames: [env.CONFIG_NAME, "electron", "browser", "import", "default"],
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
     fallback: {
       "crypto": require.resolve("crypto-browserify"),
       // "http": require.resolve("stream-http"),
       // "https": require.resolve("https-browserify"),
-      // "zlib": require.resolve("browserify-zlib"),
       "stream": require.resolve("stream-browserify"),
       "path": require.resolve("path-browserify"),
-      // "os": false,
       "fs": false,
       "vm": false,
       // Loading google-auth-library
-      // "child_process": false,
-      // "http2": require.resolve("http2-browserify"),
-      // "net": false,
-      // "tls": false,
+      "zlib": false,
+      "os": false,
+      "child_process": false,
+      "http2": false,
+      "net": false,
+      "tls": false,
 
     }
   },

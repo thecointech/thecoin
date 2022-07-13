@@ -1,27 +1,27 @@
 const webpack = require('webpack');
-const { getEnvVars } = require('@thecointech/setenv')
 const { merge } = require("webpack-merge")
 const mockOptions = require('./webpack.mocks');
+const rules = require('./webpack.rules');
+const { getEnvVars } = require('@thecointech/setenv');
 
+const vars = getEnvVars();
 const baseOptions = {
   /**
    * This is the main entry point for your application, it's the first file
    * that runs in the main process.
    */
-  mode: process.env.NODE_ENV,
+  mode: vars.NODE_ENV,
   entry: './src/index.ts',
   // Put your normal webpack config below here
-  module: {
-    rules: require('./webpack.rules'),
-  },
+  module: { rules},
   resolve: {
     mainFields: ["main"],
-    conditionNames: [process.env.CONFIG_NAME, "node", "require", "default"],
+    conditionNames: [vars.CONFIG_NAME, "node", "import", "default"],
     modules: ['node_modules'],
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json']
   },
   plugins: [
-    new webpack.EnvironmentPlugin(Object.keys(getEnvVars())),
+    new webpack.EnvironmentPlugin(vars),
   ],
   performance: { hints: false }
 };

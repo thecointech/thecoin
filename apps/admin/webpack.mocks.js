@@ -1,8 +1,6 @@
-require = require("esm")(module/*, options*/)
-
 // In development mode, we mock most external libraries
 const mockOptions = process.env.NODE_ENV !== 'production'
-  ? require('../../libs/__mocks__/mock_webpack.mjs').default
+  ? require('@thecointech/setenv/webpack')
   : {};
 
 module.exports = mockOptions
