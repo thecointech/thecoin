@@ -18,7 +18,7 @@
   "license": "MIT",
   "exports": {
     "./build": "./internal/buildSemantic.cjs",
-    "./webpack.less": "./internal/webpack.less.js",
+    "./webpack.less": "./internal/webpack.less.cjs",
     "./variables.less": "./src/variables.less",
     "./semantic.less": "./src/semantic.less",
     "./variables": "./src/variables.js"

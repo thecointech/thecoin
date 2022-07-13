@@ -33,15 +33,15 @@
   ],
   "exports": {
     ".": {
-      "require": {
-        "development": "./build/cjs/node/mocked.cjs",
-        "devlive": "./build/cjs/node/local.cjs",
-        "default": "./build/cjs/node/remote.cjs"
-      },
       "node": {
         "development": "./build/mjs/node/mocked.js",
         "devlive": "./build/mjs/node/local.js",
         "default": "./build/mjs/node/remote.js"
+      },
+      "require": {
+        "development": "./build/cjs/node/mocked.cjs",
+        "devlive": "./build/cjs/node/local.cjs",
+        "default": "./build/cjs/node/remote.cjs"
       },
       "development": "./build/mjs/web/mocked/index.js",
       "devlive": "./build/mjs/web/local/index.js",
