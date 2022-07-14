@@ -23,7 +23,7 @@
     "build": "run-p build:*",
     "build:cjs": "yarn tsc --project tsconfig.build.cjs.json",
     "build:mjs": "yarn tsc --project tsconfig.build.mjs.json",
-    "postbuild:cjs": "renamer -s --find .js --replace .cjs \"./build/cjs/**\"",
+    "postbuild:cjs": "node ./postbuild.cjs",
     "clean": "rimraf ./build && rimraf ./coverage"
   },
   "exports": {
