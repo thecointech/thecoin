@@ -26,6 +26,7 @@
   ],
   "exports": {
     ".": "./build/index.js",
+    "./config": "./utils/base.config.js",
     "./*": "./build/*.js"
   },
   "typesVersions": {
