@@ -30,7 +30,7 @@
     ".": {
       "types": "./build/mjs/index.d.ts",
       "import": "./build/mjs/index.js",
-      "require": "./build/cjs/index.cjs"
+      "require": "./build/cjs/index.js"
     },
     "./projectUrl": {
       "types": "./projectUrl/index.d.ts",
