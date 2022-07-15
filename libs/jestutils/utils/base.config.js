@@ -14,23 +14,25 @@ const getRoots = () => [
 ]
 
 module.exports = {
-  preset: 'ts-jest',
+  preset: 'ts-jest/presets/default-esm',
   verbose: true,
-  transform: {
-    "^.+\\.tsx?$": "ts-jest",
-    // transform our built files to be CJS
-    ".*build.*\\.m?jsx?$": "jest-esm-transformer",
-    // Our components are compiled to modules, which are not yet compatible with jest.
-    // until we update to support ESM, re-process the builds of these two projects.
-    "libs.shared.build.+\\.jsx?$": "ts-jest",
-    "libs.site-base.build.+\\.jsx?$": "ts-jest",
-  },
+  // transform: {
+  //   "^.+\\.tsx?$": "ts-jest",
+  //   // transform our built files to be CJS
+  //   // ".*build.*\\.m?jsx?$": "jest-esm-transformer",
+  //   // Our components are compiled to modules, which are not yet compatible with jest.
+  //   // until we update to support ESM, re-process the builds of these two projects.
+  //   "libs.shared.build.+\\.jsx?$": "ts-jest",
+  //   "libs.site-base.build.+\\.jsx?$": "ts-jest",
+  // },
+  extensionsToTreatAsEsm: ['.ts'],
   globals: {
     'ts-jest': {
+      useESM: true,
       tsconfig: {
         ...compilerOptions,
         // compile as module
-        module: "CommonJS",
+        // module: "CommonJS",
         // Relax ts restrictions
         allowJs: true,
         noUnusedLocals: false,

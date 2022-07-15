@@ -1,12 +1,14 @@
-// temporary workaround while we wait for https://github.com/facebook/jest/issues/9771
-const resolver = require('enhanced-resolve').create.sync({
-  conditionNames: ['development', 'node', 'require', 'default'],
-  extensions: ['.js', '.json', '.node', '.ts', '.tsx']
-})
-
 module.exports = function (request, options) {
-  if (request === 'fs') {
-    return options.defaultResolver(request, options);
-  }
-  return resolver(options.basedir, request)
+  // When preferring "import" some CJS modules
+  // end up requiring "MJS".
+  // Ex: Must use import to load ES Module: C:\src\TheCoin\node_modules\pouchdb\node_modules\uuid\wrapper.mjs
+  const conditions = options.conditions
+    ? ["development", ...options.conditions]
+    : undefined;
+  console.log(`${request} - ${conditions}`)
+
+  return options.defaultResolver(request, {
+    ...options,
+    conditions,
+  })
 }
