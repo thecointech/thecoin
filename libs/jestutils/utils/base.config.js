@@ -18,6 +18,8 @@ module.exports = {
   verbose: true,
   transform: {
     "^.+\\.tsx?$": "ts-jest",
+    // transform our built files to be CJS
+    ".*build.*\\.m?jsx?$": "jest-esm-transformer",
     // Our components are compiled to modules, which are not yet compatible with jest.
     // until we update to support ESM, re-process the builds of these two projects.
     "libs.shared.build.+\\.jsx?$": "ts-jest",

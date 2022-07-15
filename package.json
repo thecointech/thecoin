@@ -145,6 +145,7 @@
     "imports-loader": "3.0.0",
     "install": "^0.13.0",
     "jest": "^27.4.7",
+    "jest-esm-transformer": "^1.0.0",
     "lerna": "^3.20.2",
     "less": "^3.10.3",
     "less-loader": "^9.1.0",
