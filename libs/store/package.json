@@ -23,7 +23,7 @@
     "build": "yarn tsc --project tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules yarn jest",
-    "test:summary": "jest --coverage > ./coverage/summary.txt"
+    "test:summary": "yarn test --coverage > ./coverage/summary.txt"
   },
   "files": [
     "build/**/*"

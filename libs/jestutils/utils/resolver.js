@@ -5,10 +5,17 @@ module.exports = function (request, options) {
   const conditions = options.conditions
     ? ["development", ...options.conditions]
     : undefined;
-  console.log(`${request} - ${conditions}`)
 
-  return options.defaultResolver(request, {
-    ...options,
-    conditions,
-  })
+  try {
+    const r = options.defaultResolver(request, {
+      ...options,
+      conditions,
+    })
+    console.log(`${request}\t -> ${r}`);
+    return r;
+  }
+  catch (err) {
+    console.log(err);
+    throw err;
+  }
 }

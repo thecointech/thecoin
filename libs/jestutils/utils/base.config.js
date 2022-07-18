@@ -65,18 +65,18 @@ module.exports = {
   // temporary workaround while we wait for https://github.com/facebook/jest/issues/9771
   resolver: getTool('resolver.js'),
 
-  testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(j|t)sx?$",
-  modulePathIgnorePatterns: ["build"],
+  // testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(j|t)sx?$",
+  // modulePathIgnorePatterns: ["build"],
   // By default, we add the 'src' folder to jest
   moduleDirectories: ['node_modules', 'src', mocks],
-  moduleFileExtensions: [
-    "ts",
-    "tsx",
-    "js",
-    "jsx",
-    "json",
-    "node"
-  ],
+  // moduleFileExtensions: [
+  //   "ts",
+  //   "tsx",
+  //   "js",
+  //   "jsx",
+  //   "json",
+  //   "node"
+  // ],
   // Global setup detects presence of firestore emulator
   globalSetup: getTool('globalSetup.js'),
   // local setup initializes logging etc
