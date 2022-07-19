@@ -7,7 +7,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
-    "module": "esnext",
+    "module": "ESNext",
     "target": "ES2017",
     "lib": ["dom", "es2017"],
     "types": ["jest", "node"],

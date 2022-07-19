@@ -31,7 +31,7 @@
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts",
     "clean:types": "rimraf ./src/types && rimraf ./migrations/types",
-    "test": "yarn jest",
+    "test": "yarn run-jest",
     "test:contract": "yarn _truffle test",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn _deploy",
     "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn _deploy:polygon",

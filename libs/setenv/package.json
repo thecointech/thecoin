@@ -39,6 +39,7 @@
     },
     "./webpack": "./webpack/webpack.env.cjs"
   },
+  "types": "./build/mjs/index.d.ts",
   "dependencies": {
     "dotenv": "^10.0.0"
   }

@@ -1,4 +1,4 @@
-import { Provider } from '@ethersproject/providers';
+import type { Provider } from '@ethersproject/providers';
 
 // Declare a prototype that matches the getProvider implementation in each wassname provider
 // If no deploy target is specified it defaults to "POLYGON";

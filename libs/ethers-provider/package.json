@@ -54,12 +54,16 @@
       "development": "./build/mjs/web/mocked/index.js",
       "devlive": "./build/mjs/web/local/index.js",
       "default": "./build/mjs/web/remote/index.js"
-    }
+    },
+    "./Erc20Provider/web": "./build/mjs/web/remote/index.js"
   },
   "types": "./build/mjs/index.d.ts",
   "typesVersions": {
     "*": {
       "Erc20Provider": [
+        "build/mjs/web/remote/index.d.ts"
+      ],
+      "Erc20Provider/web": [
         "build/mjs/web/remote/index.d.ts"
       ]
     }
