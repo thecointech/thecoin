@@ -43,7 +43,7 @@ module.exports = {
         // Disable incremental (as our tests aren't built anyway)
         incremental: false,
         // Point rootDir to root to allow compiling (__mocks__ folder)
-        //rootDir: __dirname,
+        rootDir: rootFolder,
         // do not write files during testing
         noEmit: true,
       },

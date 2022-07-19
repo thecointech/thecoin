@@ -16,7 +16,7 @@ describe('Testing provider', () => {
 
   it ('can fetch logs', async () => {
 
-    const contract = await GetContract('prodtest');
+    const contract = await GetContract();
     const provider = new Erc20Provider();
 
     const address = NormalizeAddress(prodVars.WALLET_BrokerCAD_ADDRESS);
