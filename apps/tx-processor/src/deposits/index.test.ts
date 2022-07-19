@@ -16,7 +16,7 @@ it("Can complete deposits", async () => {
   const error = jest.spyOn(log, 'error').mockImplementation();
 
   const brokerCad = await getSigner("BrokerCAD");
-  const theContract = ConnectContract(brokerCad);
+  const theContract = await ConnectContract(brokerCad);
   const bank = new RbcApi();
 
   // We have 5 deposits, and

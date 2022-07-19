@@ -34,7 +34,7 @@ const newUserData = async (address: string) => ({
 })
 
 async function getBalance(address: string) {
-  const contract = GetContract();
+  const contract = await GetContract();
   const balance = await contract.balanceOf(address);
   return new Decimal(balance.toString());
 }

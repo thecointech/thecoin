@@ -34,7 +34,7 @@ it('Succesfully Processes Sell', async ()=> {
   });
 
   const signer = await getSigner("BrokerTransferAssistant")
-  const contract = ConnectContract(signer);
+  const contract = await ConnectContract(signer);
   const bank = new RbcApi();
   const eTransfers = await processUnsettledETransfers(contract, bank);
 

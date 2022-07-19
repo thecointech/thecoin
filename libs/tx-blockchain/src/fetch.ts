@@ -1,5 +1,5 @@
 import { isInternalAddress, Transaction } from "./types";
-import { TheCoin } from '@thecointech/contract-core';
+import type { TheCoin } from '@thecointech/contract-core';
 import { BigNumber } from "@ethersproject/bignumber";
 import { DateTime } from "luxon";
 import Decimal from 'decimal.js-light';;

@@ -25,7 +25,7 @@ describe("Fetch live data", () => {
 
   it('Can fetch transactions', async () => {
     jest.setTimeout(10 * 60 * 1000); // 10 mins to process this (todo: cache the data)
-    const contract = GetContract();
+    const contract = await GetContract();
     console.log("Loading out txs");
     await fetchAndTestBalance(contract);
   })

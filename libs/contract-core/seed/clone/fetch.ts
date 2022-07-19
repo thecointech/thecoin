@@ -16,7 +16,7 @@ export async function fetchDB() {
   writeFileSync(cacheFile, JSON.stringify(actions, undefined, 2))
 }
 
-const contract = GetContract();
+const contract = await GetContract();
 const provider = new EtherscanProvider("ropsten", process.env.ETHERSCAN_API_KEY);
 
 async function buildTransaction(resp:  TransactionResponse) {

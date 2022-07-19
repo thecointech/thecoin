@@ -13,7 +13,7 @@ declare let window: Window & {
 
 async function buildMapEntry(name: AccountName) {
   const signer = await getSigner(name);
-  const contract = ConnectContract(signer);
+  const contract = await ConnectContract(signer);
   const address =  NormalizeAddress(await signer.getAddress());
   const account = buildNewAccount(name, address, signer);
   account.contract = contract;
