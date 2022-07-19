@@ -28,8 +28,7 @@
   "exports": {
     "./truffle": "./src/truffle.cjs",
     "./migrations": "./build/migrations.js",
-    "./verify": "./build/verify.js",
-    "./jest.config": "./src/jest.config.js"
+    "./verify": "./build/verify.js"
   },
   "typesVersions": {
     "*": {
