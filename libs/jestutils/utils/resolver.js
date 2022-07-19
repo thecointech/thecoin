@@ -11,11 +11,11 @@ module.exports = function (request, options) {
       ...options,
       conditions,
     })
-    console.log(`${request}\t -> ${r}`);
+    // console.log(`${request}\t -> ${r}`);
     return r;
   }
   catch (err) {
-    console.log(err);
+    // console.log(err);
     throw err;
   }
 }

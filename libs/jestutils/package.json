@@ -15,6 +15,9 @@
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/jestutils"
   },
+  "bin": {
+    "run-jest": "./bin/run-jest.cjs"
+  },
   "scripts": {
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
