@@ -1,15 +1,16 @@
-
+import { getEnvVars } from "@thecointech/setenv";
 import { DateTime } from 'luxon';
 import { SendMail, SendDepositConfirmation } from '.'
 import { describe, IsManualRun } from '@thecointech/jestutils';
-import { join } from 'path';
+
+const prodVars = getEnvVars('prodtest');
 
 // I don't want to spam myself, so only run this test if manually requested
 describe('Manual-Only: We can send emails', () => {
 
-  // Pull release env vars (should contain mailjet key)
-  const prodEnv = join(__dirname, "../../../environments/prod.env");
-  require('dotenv').config({path: prodEnv})
+  const OLD_ENV = process.env;
+  beforeEach(() => process.env = prodVars);
+  afterAll(() => process.env = OLD_ENV);
 
   it("Can send an email", async () => {
     const r = await SendMail("This is a test mail", "You should be seeing this!");
@@ -37,4 +38,4 @@ describe('Manual-Only: We can send emails', () => {
     expect(confirmation).toBeTruthy();
   })
 
-}, IsManualRun);
+}, IsManualRun && prodVars.MAILJET_API_KEY !== undefined);

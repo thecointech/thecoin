@@ -14,7 +14,7 @@ type MailjetResponse = {
   Messages: [ { Status: "success"|"error" } ]
 }
 
-async function SendMail(subject: string, message: string, toEmail?: string) {
+export async function SendMail(subject: string, message: string, toEmail?: string) {
 	const options = {
 		Messages: [
 			{
@@ -40,7 +40,7 @@ async function SendMail(subject: string, message: string, toEmail?: string) {
 	return response.body.Messages.every(m => m.Status == "success");
 }
 
-async function SendTemplate(to: string, template: number, variables: object)
+export async function SendTemplate(to: string, template: number, variables: object)
 {
   const options = {
 		Messages: [
@@ -76,5 +76,3 @@ async function SendTemplate(to: string, template: number, variables: object)
   }
   return false;
 }
-
-export { SendMail, SendTemplate }
