@@ -9,7 +9,7 @@
     "moduleResolution": "node",
     "module": "ESNext",
     "target": "ES2017",
-    "lib": ["dom", "es2017"],
+    "lib": ["dom", "es2017", "ES2021.Promise"],
     "types": ["jest", "node"],
     "build": true,
 
