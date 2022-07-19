@@ -22,7 +22,7 @@
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc --project tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "jest --coverage",
+    "test": "yarn run-jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
     "bootstrap": "yarn run-env ./tools/bootstrap.ts"
   },

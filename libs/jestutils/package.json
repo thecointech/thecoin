@@ -21,7 +21,7 @@
   "scripts": {
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "jest --coverage",
+    "test": "yarn run-jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [
