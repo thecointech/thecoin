@@ -25,6 +25,7 @@
     "build:cjs": "yarn tsc --project tsconfig.build.cjs.json",
     "postbuild:cjs": "node ./postbuild.cjs",
     "build:mjs": "yarn tsc --project tsconfig.build.mjs.json",
+    "test": "yarn run-jest",
     "clean": "rimraf ./build"
   },
   "files": [
