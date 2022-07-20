@@ -1,4 +1,4 @@
-const defaults = require('../../jest.config');
+const defaults = require('@thecointech/jestutils/config');
 
 module.exports = {
   ...defaults,
