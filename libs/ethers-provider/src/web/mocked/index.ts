@@ -11,7 +11,7 @@ import exactTo from './logs-exact-to.json'
 export class Erc20Provider extends BaseProvider {
 
   constructor() {
-    super('any')
+    super('unspecified')
   }
 
   //

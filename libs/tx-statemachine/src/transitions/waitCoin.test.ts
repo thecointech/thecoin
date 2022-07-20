@@ -1,14 +1,19 @@
-
 import { updateCoinBalance } from "./waitCoin";
 import { getEnvVars } from "@thecointech/setenv";
-import { GetContract } from '@thecointech/contract-core/contract';
 import { InfuraProvider } from "@ethersproject/providers";
 import { NormalizeAddress } from '@thecointech/utilities';
 import { AnyActionContainer } from '..';
-import { Decimal } from "decimal.js-light";
+import Decimal from "decimal.js-light";
 import { describe } from '@thecointech/jestutils'
 
 const vars = getEnvVars("prodtest");
+process.env = {
+  ...process.env,
+  ...vars,
+}
+
+const { GetContract } = await import('@thecointech/contract-core/contract');
+
 const getContainer = async (addr: string, coin?: Decimal) => ({
   history: [{
     data: { coin }
