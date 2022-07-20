@@ -1,9 +1,8 @@
+import { jest } from '@jest/globals';
 import { loadAndMergeHistory } from "./fetch";
 import { GetContract, TheCoin } from '@thecointech/contract-core';
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { initAllAddresses } from './setup.test';
-
-jest.unmock('@thecointech/contract-core');
 
 async function fetchAndTestBalance(contract: TheCoin) {
   const history = await loadAndMergeHistory(0, contract);
