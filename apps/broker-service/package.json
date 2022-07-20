@@ -25,7 +25,7 @@
     "build": "yarn tsc -b tsconfig.build.json",
     "gen:swagger": "yarn tsoa spec-and-routes",
     "clean": "rimraf ./build && rimraf ./src/api",
-    "test": "yarn jest",
+    "test": "yarn run-jest",
     "test:coverage": "yarn test --coverage"
   },
   "engines": {

@@ -35,6 +35,11 @@ const globalSetup = async () => {
   // Set a global variable indicating whether or not our blockchain emulator is running
   if (await portInUse(BlockchainPort))
     process.env.DEPLOY_NETWORK_PORT = BlockchainPort;
+
+  process.env = {
+    ...process.env,
+    ...config,
+  };
 }
 
 module.exports = globalSetup;
