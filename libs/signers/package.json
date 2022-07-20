@@ -20,7 +20,8 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc --project tsconfig.build.json",
-    "clean": "rimraf ./build && rimraf ./coverage"
+    "clean": "rimraf ./build && rimraf ./coverage",
+    "test": "yarn run-jest"
   },
   "files": [
     "build/**/*"
