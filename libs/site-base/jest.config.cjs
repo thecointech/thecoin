@@ -1,6 +1,6 @@
-const defaults = require('../../jest.config');
+const defaults = require('@thecointech/jestutils/config');
 
-const styleMock = '<rootDir>/../../tools/jestStyleMock.js';
+const styleMock = '@thecointech/jestutils/styleMock'; //<rootDir>/../../tools/jestStyleMock.js';
 module.exports = {
   ...defaults,
   testEnvironment: 'jsdom',
