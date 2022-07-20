@@ -3,8 +3,19 @@
 const jest = require("jest");
 const { exit, cwd } = require("process");
 
+const last = process.argv[process.argv.length - 1];
+const testMatch = (
+  process.argv.length > 2 &&
+  !last.startsWith("--")
+)
+  ? [`**/${last}`]
+  : undefined;
+
 const options = {
-  projects: [cwd()]
+  projects: [cwd()],
+  runInBand: process.argv.includes("--runInBand"),
+  forceExit: process.argv.includes("--forceExit"),
+  testMatch,
 };
 
 jest

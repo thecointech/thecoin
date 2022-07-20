@@ -1,13 +1,9 @@
 import { FXRate } from "@thecointech/pricing"
 import { Transaction } from "@thecointech/tx-blockchain";
 import { DateTime } from "luxon";
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 
-// file deepcode ignore DateMonthIndex%2Ftest: <please specify a reason of ignoring this>
-
-const broker = process.env.WALLET_BrokerCAD_ADDRESS!;
-const assist = process.env.WALLET_BrokerTransferAssistant_ADDRESS!;
-export const ExampleTransactions: Transaction[] = [
+export const getExampleTransactions = (broker: string, assist: string) : Transaction[] => [
   {
     "txHash": "0xc6ae1c594780a475c15f21413a9417e84a1b1bedbe93e3a528a1f9b04b80da07",
     "date": DateTime.fromISO("2019-08-29T14:01:15.000Z"),
@@ -92,7 +88,7 @@ export const ExampleRates: FXRate[] = [
 
 
 
-export const SimpleTransactions: Transaction[] = [
+export const getSimpleTransactions = (broker: string): Transaction[] => [
   {
     date: DateTime.fromObject({ year: 2018, month: 2 }),
     change: 50000,

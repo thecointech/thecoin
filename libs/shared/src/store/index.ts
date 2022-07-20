@@ -4,15 +4,21 @@
 
 import { routerMiddleware } from 'connected-react-router';
 import { createInjectorsEnhancer } from 'redux-injectors';
-import createSagaMiddleware from 'redux-saga';
+import reduxSaga from '@redux-saga/core';
 import { history } from './history';
 import { createStore, compose, applyMiddleware, ReducersMapObject, Reducer } from 'redux';
 import { ApplicationBaseState } from '../types';
 export { history };
 
+//@ts-ignore weird-o hack to get jest to run this file with no complaints.
+// unfortunately jest resolves the CJS version of this file, and somehow
+// ts ends up importing the old icky method, despite esModuleInterop being set.
+const createSagaMiddleware: typeof reduxSaga = reduxSaga.default ?? reduxSaga;
+
 type reducerFn = (injectedReducers?: ReducersMapObject) => Reducer;
 export function configureStore(createReducer: reducerFn, initialState?: ApplicationBaseState) {
   const reduxSagaMonitorOptions = {};
+
 
   const sagaMiddleware = createSagaMiddleware(reduxSagaMonitorOptions);
   const { run: runSaga } = sagaMiddleware;

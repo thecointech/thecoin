@@ -25,7 +25,7 @@ module.exports = {
   //   "libs.shared.build.+\\.jsx?$": "ts-jest",
   //   "libs.site-base.build.+\\.jsx?$": "ts-jest",
   // },
-  extensionsToTreatAsEsm: ['.ts'],
+  // extensionsToTreatAsEsm: ['.ts', ".tsx"],
   globals: {
     'ts-jest': {
       useESM: true,
