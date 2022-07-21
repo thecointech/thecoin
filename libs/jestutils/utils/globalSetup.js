@@ -1,9 +1,10 @@
 const { getEnvVars } = require('@thecointech/setenv');
 const  netstat = require('node-netstat');
 
-const config = getEnvVars('devlive');
-const FirestorePort = config.FIRESTORE_EMULATOR_PORT;
-const BlockchainPort = config.DEPLOY_NETWORK_PORT;
+const config = getEnvVars('development');
+const devlive = getEnvVars('devlive');
+const FirestorePort = devlive.FIRESTORE_EMULATOR_PORT;
+const BlockchainPort = devlive.DEPLOY_NETWORK_PORT;
 
 async function portInUse(port) {
   return new Promise((resolve, reject) => {

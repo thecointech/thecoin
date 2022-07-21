@@ -83,5 +83,6 @@ module.exports = {
   setupFiles: [
     getTool('testSetup.js'),
     getTool('mockLocalStorage.js'),
+    getTool('setupLuxon.js'),
   ]
 };

@@ -1,11 +1,10 @@
 
+import { jest } from '@jest/globals';
 import { init } from "@thecointech/firestore";
 import { CoinRate } from "./types";
 import { updateLatest } from "./latest";
 import { getCombinedRates } from '.';
 import { log } from '@thecointech/logging';
-
-jest.mock('../FinnHub');
 
 // Start 5 mins into the mocked data
 var mockStart = 1593696900000;
