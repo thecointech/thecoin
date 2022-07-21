@@ -1,4 +1,4 @@
-import { parse } from 'papaparse';
+import papaparse from 'papaparse';
 import { DateTime } from 'luxon';
 import { FDRNewDeal, FxData, getIdx, MarketData, SnPData } from './market';
 import Decimal from 'decimal.js-light';
@@ -16,7 +16,7 @@ const transformData = (value: string, name: string) =>
 
 export function parseData<T>(data: string) {
   // Strip leading/trailing empty strings
-  const csv = parse(data.trim(), {
+  const csv = papaparse.parse(data.trim(), {
     header: true,
     transform: transformData,
   });

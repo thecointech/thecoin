@@ -1,10 +1,10 @@
 import { basicParams } from '../../../../internals/historical/simulation';
 import { createParams } from './params';
 import { DateTime } from 'luxon';
-import { Decimal } from 'decimal.js-light';
 import { zeroState } from './state';
 import { updateCreditBalances } from './credit';
 import { one, zero } from './sim.decimal';
+import Decimal from 'decimal.js-light';
 
 // static data
 const start = DateTime.fromObject({ year: 2020 });
