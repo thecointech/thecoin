@@ -6216,12 +6216,48 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.9.2.tgz#adea7b6953cbb34651766b0548468e743c6a2353"
   integrity sha512-VZMYa7+fXHdwIq1TDhSXoVmSPEGM/aa+6Aiq3nVVJ9bXr24zScr+NlKFKC3iPljA7ho/GAZr+d2jOf5GIRC30Q==
 
-"@prismicio/client@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@prismicio/client/-/client-5.1.0.tgz#f236d7fca09535d61e599872e7c38afda62b8b3c"
-  integrity sha512-LCb+arVVxJOoPM+8qfLCC/Dqse7mh+Q1k3oo5W5Uzu7vVO+vtc7CUYHxgCDkvekakYHc9407kwWu65ErZw+CPQ==
+"@prismicio/client@^6.6.2":
+  version "6.6.2"
+  resolved "https://registry.yarnpkg.com/@prismicio/client/-/client-6.6.2.tgz#031275aebbe791bc83d2a821eb3944b16a5f82e0"
+  integrity sha512-VVI7/frKmnO4UGIi67gYp2t3aTe6nFOY527wn8nfL0TjPrYbDxdPEcC7Rfhbio7F5hfk0ABbqq1Qd0rXskKuNA==
   dependencies:
-    cross-fetch "^3.0.6"
+    "@prismicio/helpers" "^2.3.1"
+    "@prismicio/types" "^0.1.29"
+
+"@prismicio/helpers@^2.3.1":
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/@prismicio/helpers/-/helpers-2.3.2.tgz#602e3f2ab432ecbc91b2485e2b9743ebc94fee48"
+  integrity sha512-7FyvybtzvqSvFrDL/Dhb91ADrgwhWaNBA8svX/xs3BrARpGicdNBLiy8WBMM3+pD13tLFi8AxOr5563ORO+siw==
+  dependencies:
+    "@prismicio/richtext" "^2.1.0"
+    "@prismicio/types" "^0.2.0"
+    escape-html "^1.0.3"
+    imgix-url-builder "^0.0.3"
+
+"@prismicio/react@^2.4.3":
+  version "2.4.3"
+  resolved "https://registry.yarnpkg.com/@prismicio/react/-/react-2.4.3.tgz#d8ddbd26053a18fbab04ba685ad63fc64281e537"
+  integrity sha512-HedWPdxchfjYhiHQxsBbN++hsjXk0t3LJ58K7ISIkogv09MdOC2q26d4XFoEyew8EL/EJ4h/fT7FaekFv0Azfg==
+  dependencies:
+    "@prismicio/helpers" "^2.3.1"
+    "@prismicio/richtext" "^2.0.1"
+
+"@prismicio/richtext@^2.0.1", "@prismicio/richtext@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@prismicio/richtext/-/richtext-2.1.0.tgz#b17a5ea0eccb9ac0ac9229416462da78a986ca53"
+  integrity sha512-uxJaR3soPr356stoLEIcgn+68lfolwxRmlDLTF4gYDcF30rB0YFLPcdRJmhtkU6LGZXIhwUUmwMWXkhT+DV3hA==
+  dependencies:
+    "@prismicio/types" "^0.1.22"
+
+"@prismicio/types@^0.1.22", "@prismicio/types@^0.1.29":
+  version "0.1.29"
+  resolved "https://registry.yarnpkg.com/@prismicio/types/-/types-0.1.29.tgz#52914a5ba304c8b75fdcf398e5014ac4364fdffb"
+  integrity sha512-wp7DHqMK0FDMcFQfJbqTAzWNBkM6/rRq71jMw6x9m07nWCUqytJQQKg6/15uduIeSqPXmyfJW21drsmChGaxsQ==
+
+"@prismicio/types@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@prismicio/types/-/types-0.2.0.tgz#100f147bb6f63eb8721d972c9381d2774fc37f55"
+  integrity sha512-xxBSbRzKOYoqjRp+wcaA7aMp0yLp6GQ5QH5hwvLXL0ftVvX8A1pHR3mE6B8kgKgouCC2Ma8XsDRqf+AcfQDbdA==
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -14712,7 +14748,7 @@ cross-fetch@^2.1.0, cross-fetch@^2.1.1:
     node-fetch "2.1.2"
     whatwg-fetch "2.0.4"
 
-cross-fetch@^3.0.6, cross-fetch@^3.1.4:
+cross-fetch@^3.1.4:
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.4.tgz#9723f3a3a247bf8b89039f3a380a9244e8fa2f39"
   integrity sha512-1eAtFWdIubi6T4XPy6ei9iUFoKpUkIF971QLN8lIvvvwueI65+Nw5haMNKUwfJxabqlIIDODJKGrQ66gxC0PbQ==
@@ -17086,7 +17122,7 @@ escape-goat@^2.0.0:
   resolved "https://registry.yarnpkg.com/escape-goat/-/escape-goat-2.1.1.tgz#1b2dc77003676c457ec760b2dc68edb648188675"
   integrity sha512-8/uIhbG12Csjy2JEW7D9pHbreaVaS/OpN3ycnyvElTdwM5n6GY6W6e2IPemfvGZeUMqZ9A/3GqIZMgKnBhAw/Q==
 
-escape-html@1.0.3, escape-html@~1.0.3:
+escape-html@1.0.3, escape-html@^1.0.3, escape-html@~1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/escape-html/-/escape-html-1.0.3.tgz#0258eae4d3d0c0974de1c169188ef0051d1d1988"
   integrity sha1-Aljq5NPQwJdN4cFpGI7wBR0dGYg=
@@ -21371,6 +21407,11 @@ imagemin@^7.0.1:
     make-dir "^3.0.0"
     p-pipe "^3.0.0"
     replace-ext "^1.0.0"
+
+imgix-url-builder@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/imgix-url-builder/-/imgix-url-builder-0.0.3.tgz#9f386de64cdd1363d352a7f6313fd7dacd8fb282"
+  integrity sha512-8Oc2Cn4+jF06sEfJcVPlWYfD2F6RjrwIMbk1xEzux8unoB5LsvFc/GL1BQ47HPaeE12ReX2nMUcjUslGYWLxHA==
 
 immediate@3.0.6, immediate@~3.0.5:
   version "3.0.6"
@@ -30782,28 +30823,6 @@ printj@~1.3.0:
   resolved "https://registry.yarnpkg.com/printj/-/printj-1.3.0.tgz#9018a918a790e43707f10625d6e10187a367cff6"
   integrity sha512-017o8YIaz8gLhaNxRB9eBv2mWXI2CtzhPJALnQTP+OPpuUfP0RMWqr/mHCzqVeu1AQxfzSfAtAq66vKB8y7Lzg==
 
-prismic-helpers@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/prismic-helpers/-/prismic-helpers-1.0.3.tgz#cc1aa184f8791ed6b0a1775a9eb68a74a83f741e"
-  integrity sha512-eGCSflFwsWeXe7BdqWWGjjoaq1SPr61Y55xIUkgYumKFmfJsK9TVcSkRp0rdwW0hGnnDSRvjJwIo2kkDwG7KxA==
-
-prismic-reactjs@^1.3.4:
-  version "1.3.4"
-  resolved "https://registry.yarnpkg.com/prismic-reactjs/-/prismic-reactjs-1.3.4.tgz#8d58f46b7818f04d34d80fcb4916a1fda4f9c63a"
-  integrity sha512-f2k8VOC5p8F9QOS1DIfXgU9HBRQgoj3vpPIzbUlKo6PvEW+jbcJIN2MOCscuvgh7JDB2npUS3nHe4lhjbSRofA==
-  dependencies:
-    prismic-helpers "^1.0.3"
-    prismic-richtext "^1.0.3"
-    prop-types "^15.7.2"
-
-prismic-richtext@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/prismic-richtext/-/prismic-richtext-1.0.3.tgz#ce8c8c18d65b01f1036f222b993ad2de700199fe"
-  integrity sha512-ZM45dVPL713+oDpt8ysWRY2pw3esBxRrqBlUO+q/T0WK0SNVSq29tQYhVdIALd8hRfF7X1lfpW0Q0YymEdh0AA==
-  dependencies:
-    ramda "^0.26.1"
-    uuid "^3.3.2"
-
 prismjs@^1.27.0, prismjs@~1.27.0:
   version "1.27.0"
   resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.27.0.tgz#bb6ee3138a0b438a3653dd4d6ce0cc6510a45057"
@@ -31396,11 +31415,6 @@ ramda@^0.21.0:
   version "0.21.0"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.21.0.tgz#a001abedb3ff61077d4ff1d577d44de77e8d0a35"
   integrity sha1-oAGr7bP/YQd9T/HVd9RN536NCjU=
-
-ramda@^0.26.1:
-  version "0.26.1"
-  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.26.1.tgz#8d41351eb8111c55353617fc3bbffad8e4d35d06"
-  integrity sha512-hLWjpy7EnsDBb0p+Z3B7rPi3GDeRG5ZtiI33kJhTt+ORCd38AbAIjB/9zRIUoeTbE/AVX5ZkU7m6bznsvrf8eQ==
 
 randomatic@^3.0.0:
   version "3.1.1"

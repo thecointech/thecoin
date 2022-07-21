@@ -1,5 +1,5 @@
 import { Store, Reducer } from 'redux';
-import { Saga, Task } from 'redux-saga';
+import type { Saga, Task } from '@redux-saga/core';
 import type { MessageDescriptor } from 'react-intl';
 import type { SidebarState } from '../containers/PageSidebar/types';
 import type { FxRatesState } from '../containers/FxRate/types';

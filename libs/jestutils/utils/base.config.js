@@ -64,10 +64,10 @@ module.exports = {
 
   // modulePathIgnorePatterns: ["build"],
   // By default, we add the 'src' folder to jest
-  moduleDirectories: ['node_modules', 'src', mocks],
+  moduleDirectories: [mocks, 'node_modules', 'src'],
   // Mock styling (easier than parsing them)
   moduleNameMapper: {
-    "@thecointech/site-semantic-theme/variables": getTool('styleMock'),
+    "@thecointech/site-semantic-theme/variables": getTool('mockLessVars.mjs'),
     '\\.(css|less|svg)$': getTool('styleMock'),
   },
 
@@ -82,6 +82,6 @@ module.exports = {
   setupFiles: [
     getTool('testSetup.js'),
     getTool('mockLocalStorage.js'),
-    getTool('setupLuxon.js'),
+    getTool('setupLuxon.mjs'),
   ]
 };

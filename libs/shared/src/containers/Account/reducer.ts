@@ -1,6 +1,6 @@
 import { InitialCoinBlock, ConnectContract, TheCoin } from '@thecointech/contract-core';
 import { Signer, Wallet } from 'ethers';
-import { call, delay, select, StrictEffect } from 'redux-saga/effects';
+import { call, delay, select, StrictEffect } from "@redux-saga/core/effects";
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
 import { buildSagas } from './actions';
 import { FxRateReducer } from '../../containers/FxRate/reducer';
@@ -12,9 +12,9 @@ import { AccountDetails, AccountState, DefaultAccountValues } from '@thecointech
 import { loadDetails, setDetails } from '../AccountDetails';
 import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
-import { SagaIterator } from 'redux-saga';
 import { checkCurrentStatus } from './BlockpassKYC';
 import { StatusType } from '@thecointech/broker-cad';
+import type { SagaIterator } from '@redux-saga/core';
 import type { AccountMapStore } from '../AccountMap';
 import type { DecryptCallback, IActions } from './types';
 import type { Dictionary } from 'lodash';

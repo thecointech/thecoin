@@ -1,4 +1,4 @@
-import { takeLatest, debounce, takeEvery } from 'redux-saga/effects'
+import { takeLatest, debounce, takeEvery } from "@redux-saga/core/effects";
 import { SagaBuilder, buildSaga } from '../../store/immerReducer';
 import type { IActions, AccountState } from './types';
 

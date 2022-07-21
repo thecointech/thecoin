@@ -1,24 +1,16 @@
-import ApiSearchResponse from '@prismicio/client/types/ApiSearchResponse';
-import type {Client} from "@prismicio/client/types/client";
-import { Document } from '@prismicio/client/types/documents';
-import { RequestCallback } from '@prismicio/client/types/request';
-import { QueryOptions } from '@prismicio/client/types/ResolvedApi';
+import type {BuildQueryURLArgs, Client} from "@prismicio/client";
 import data from './data.json';
+import { PrismicDocument, Query } from '@prismicio/types';
 
-class MockClient implements Pick<Client, "query"|"getByUID"> {
-  query(q: string | string[], optionsOrCallback?: QueryOptions | RequestCallback<ApiSearchResponse>, cb?: RequestCallback<ApiSearchResponse>): Promise<ApiSearchResponse> {
-    // requires manual type override bc prismic types are wrong.
+class MockClient implements Pick<Client<PrismicDocument>, "query"|"getByUID"> {
+  query<TDocument extends PrismicDocument<Record<string, any>, string, string>>(predicates: string | string[], params?: (Partial<Omit<BuildQueryURLArgs, 'predicates'>> & { signal?: { aborted: any; addEventListener: any; removeEventListener: any; dispatchEvent: any; onabort: any; } | undefined; }) | undefined): Promise<Query<TDocument>> {
     return Promise.resolve(data as any)
   }
-  getByUID(type: string, uid: string, options: QueryOptions, cb: RequestCallback<Document>): Promise<Document> {
+  getByUID<TDocument extends PrismicDocument<Record<string, any>, string, string>, TDocumentType extends TDocument['type'] = TDocument['type']>(documentType: TDocumentType, uid: string, params?: (Partial<BuildQueryURLArgs> & { signal?: { aborted: any; addEventListener: any; removeEventListener: any; dispatchEvent: any; onabort: any; } | undefined; }) | undefined): Promise<Extract<TDocument, { type: TDocumentType; }> extends never ? TDocument : Extract<TDocument, { type: TDocumentType; }>> {
     return Promise.resolve(
       data.results.find(r => r.uid === uid) as any
     );
   }
 }
 
-export default class {
-  static client() {
-    return new MockClient();
-  }
-}
+export const createClient = () => new MockClient();

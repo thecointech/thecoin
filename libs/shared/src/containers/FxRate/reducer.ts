@@ -1,4 +1,4 @@
-import { call, fork, take, delay, takeEvery, Effect } from 'redux-saga/effects';
+import { call, fork, take, delay, takeEvery, Effect } from "@redux-saga/core/effects";
 import { SagaReducer, buildSaga, SagaBuilder } from '../../store/immerReducer';
 import { sendValues } from '../../store/sagas';
 import { fetchRate, FXRate } from '@thecointech/fx-rates';
