@@ -1,10 +1,9 @@
-import stock from './fetch.test.stock.json';
-import fx from './fetch.test.fx.json';
-import kyc from './fetch.test.kyc.json';
+import stock from './fetch.test.stock.json' assert {type: "json"};
+import fx from './fetch.test.fx.json' assert {type: "json"};
+import kyc from './fetch.test.kyc.json' assert {type: "json"};
 
 import axios from '../../../node_modules/axios';
 
-// NOTE: This axios mock has not been used/tested outside of FinnHub/index.test.ts
 export default {
   get: (url: string, ...args: any[]) => {
     // In production environments (which happens in some jest tests)

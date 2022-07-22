@@ -1,5 +1,7 @@
 import {
   StatusApi,
+  StatusType as StatusType_Import,
+  // EventType as EventType_Import,
   BillPaymentsApi,
   DirectTransferApi,
   ETransferApi,
@@ -8,7 +10,8 @@ import {
   ReferralsApi
 } from '@thecointech/broker-cad';
 
-export { StatusType /*, EventType*/ } from '@thecointech/broker-cad';
+export const StatusType = StatusType_Import;
+// export const EventType = EventType_Import;
 export type { UserVerifyData } from '@thecointech/broker-cad';
 
 const BrokerCADAddress = process.env.URL_SERVICE_BROKER;

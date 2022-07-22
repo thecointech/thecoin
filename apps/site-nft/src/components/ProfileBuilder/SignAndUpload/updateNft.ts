@@ -30,7 +30,7 @@ export async function uploadMetadata(tokenId: number, imageUri: string, signer: 
 export async function updateNft(tokenId: number, metadataUri: string, signer: Signer) {
   log.trace(`Updating NFT`);
   const split = splitIpfsUri(metadataUri);
-  const nft = getContract();
+  const nft = await getContract();
   const lastUpdate = await nft.lastUpdate(tokenId);
   const gasslessUpdate = await signGasslessUpdate(signer, tokenId, lastUpdate, split.prefix, split.digest);
   const r = await GetNftApi().updateNftUri(gasslessUpdate);

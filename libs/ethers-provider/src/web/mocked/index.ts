@@ -5,8 +5,8 @@ import { ERC20Response } from '../erc20response';
 import { log } from '@thecointech/logging';
 import transferFrom from './logs-transfer-from.json';
 import transferTo from './logs-transfer-to.json';
-import exactFrom from './logs-exact-from.json'
-import exactTo from './logs-exact-to.json'
+import exactFrom from './logs-exact-from.json';
+import exactTo from './logs-exact-to.json';
 
 export class Erc20Provider extends BaseProvider {
 

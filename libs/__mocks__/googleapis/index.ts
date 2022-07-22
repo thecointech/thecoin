@@ -1,8 +1,7 @@
-import emaillist from './emails.list.json';
-import emailget from './emails.get.json';
+import emaillist from './emails.list.json' assert {type: "json"};
+import emailget from './emails.get.json' assert {type: "json"};
 import { gmail_v1, drive_v3 } from "googleapis";
-
-import {wallets } from '../wallets';
+import { wallets } from '../wallets';
 
 // file deepcode ignore no-namespace: <comment the reason here>
 export namespace google {
@@ -83,12 +82,12 @@ export namespace google {
       list: () => ({ data: { files: wallets }}),
       get: ({fileId}: drive_v3.Params$Resource$Files$Get) => {
         const src = wallets.find(f => f.id === fileId);
-        if (!src || wallets[fileId!] == null) {
+        if (!src) {
           return { status: 400 };
         }
         return {
           status: 200,
-          data: wallets[fileId!].wallet
+          data: src.wallet
         }
       },
       create: (p: drive_v3.Params$Resource$Files$Create) => {

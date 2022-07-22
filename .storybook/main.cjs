@@ -24,6 +24,7 @@ module.exports = {
     ...options,
     plugins: [
       ...options.plugins,
+      "@babel/plugin-syntax-import-assertions",
       [
         "formatjs",
         {
@@ -54,7 +55,7 @@ module.exports = {
           new DefinePlugin({ // Log Everything
             "process.env.LOG_NAME": JSON.stringify("Storybook"),
             "process.env.LOG_LEVEL": 0,
-          })
+          }),
         ],
         experiments: {
           topLevelAwait: true,

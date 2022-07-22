@@ -22,6 +22,7 @@ let executable = sliceArgs(args, "exec", "node");
 // Now, run node with ncr
 // TODO: Support ts-node?
 const env = {
+  NODE_NO_WARNINGS: 1,
   ...process.env,
   ...getEnvVars(config),
 }

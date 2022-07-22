@@ -35,6 +35,7 @@ const liveMocks = {
   // Only expose limited mocks
   resolve: {
     alias: {
+      "@prismicio/client": resolve(mocksFolder, "@prismicio/client.ts"),
       "googleapis": resolve(mocksFolder, "googleapis.ts"),
     }
   }

@@ -5,7 +5,7 @@ import { ConnectContract } from '@thecointech/contract-core';
 import { getCurrentState } from '@thecointech/tx-statemachine';
 import { DateTime } from 'luxon';
 import { getFirestore } from '@thecointech/firestore';
-import data from './index.test.mockdb.json';
+import data from './index.test.mockdb.json' assert {type: "json"};
 import { fileURLToPath } from 'url';
 import { RbcApi } from '@thecointech/rbcapi';
 import { getSigner } from '@thecointech/signers';

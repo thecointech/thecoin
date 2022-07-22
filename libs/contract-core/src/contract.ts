@@ -1,6 +1,6 @@
 import { Contract } from '@ethersproject/contracts';
 import { TheCoin } from './types';
-import TheCoinSpec from './contracts/TheCoin.json';
+import TheCoinSpec from './contracts/TheCoin.json' assert {type: "json"};
 import { getProvider } from '@thecointech/ethers-provider';
 //
 // Multiplier of base values to human-readable fractions (eg $ and c)

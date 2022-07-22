@@ -11,7 +11,7 @@ import chalk from "chalk";
 import { NormalizeAddress } from "@thecointech/utilities";
 import { nextOpenTimestamp } from '@thecointech/market-status';
 
-import blockchain from './blockchain.json';
+import blockchain from './blockchain.json' assert {type: "json"};
 const bcHistory = blockchain.history.filter(h => !isRefund(h.hash))
 import { DateTime } from 'luxon';
 import { toCoin } from './pricing';

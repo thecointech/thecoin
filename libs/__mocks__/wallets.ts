@@ -1,6 +1,6 @@
-import wallet0 from './wallet0.json';
-import wallet1 from './wallet1.json';
-import wallet2 from './wallet2.json';
+import wallet0 from './wallet0.json' assert {type: "json"};
+import wallet1 from './wallet1.json' assert {type: "json"};
+import wallet2 from './wallet2.json' assert {type: "json"};
 
 // Wallets returned by GDrive (either mocked googleapis or broker-service directly)
 export const wallets = [
