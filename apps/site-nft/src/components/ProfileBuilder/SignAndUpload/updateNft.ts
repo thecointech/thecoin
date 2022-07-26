@@ -1,7 +1,7 @@
 import { log } from '@thecointech/logging';
 import { getContract, signGasslessUpdate, splitIpfsUri } from '@thecointech/contract-nft';
 import { Signer } from 'ethers';
-import { GetNftApi } from '../../../api';
+import { GetNftApi } from '@thecointech/apis/nft';
 import { sign } from "@thecointech/utilities/SignedMessages";
 
 export async function uploadAvatar(image: Blob, signer: Signer) {

@@ -35,7 +35,7 @@
   "types": "build/index.d.ts",
   "dependencies": {
     "@thecointech/logging": "^0.2.81",
-    "@thecointech/pricing": "^0.2.81"
+    "@thecointech/apis": "*"
   },
   "devDependencies": {
     "jest": "*"

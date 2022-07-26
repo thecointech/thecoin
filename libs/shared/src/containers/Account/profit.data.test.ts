@@ -1,4 +1,4 @@
-import { FXRate } from "@thecointech/pricing"
+import type { FXRate } from "@thecointech/pricing"
 import { Transaction } from "@thecointech/tx-blockchain";
 import { DateTime } from "luxon";
 import Decimal from 'decimal.js-light';

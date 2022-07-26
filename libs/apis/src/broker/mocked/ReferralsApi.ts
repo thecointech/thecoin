@@ -1,5 +1,5 @@
 import type { ReferralsApi as SrcApi, ReferralCreateBody } from "@thecointech/broker-cad";
-import { buildResponse } from "../axios-utils";
+import { buildResponse } from "../../axios-utils";
 import { sleep } from '@thecointech/async';
 
 export class ReferralsApi implements Pick<SrcApi, keyof SrcApi>

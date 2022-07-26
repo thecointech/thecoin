@@ -1,5 +1,5 @@
 import type { NFTApi as SrcApi, GasslessUpdateRequest, NftClaim} from "@thecointech/nft";
-import { buildResponse } from "./axios-utils";
+import { buildResponse } from "../axios-utils";
 import { AxiosResponse } from 'axios';
 import { sleep } from '@thecointech/async';
 
@@ -24,3 +24,5 @@ export class NFTApi  implements Pick<SrcApi, keyof SrcApi> {
     return buildResponse(`Qm${genRandBase(44, 58)}`);
   }
 }
+
+export const GetNftApi = () => new NFTApi();

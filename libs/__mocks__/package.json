@@ -1,15 +1,9 @@
 {
-  "name": "@thecointech/mocks",
+  "name": "@thecointech/--mocks--",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "yarn tsc"
-  },
-  "devDependencies": {
-    "@thecointech/async": "*",
-    "@thecointech/broker-cad": "*",
-    "@thecointech/contract-core": "*",
-    "@thecointech/contract-nft": "*"
   }
 }

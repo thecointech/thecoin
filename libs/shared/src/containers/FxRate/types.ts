@@ -1,4 +1,4 @@
-import { FXRate } from '@thecointech/pricing'
+import type { FXRate } from '@thecointech/pricing'
 
 /* --- STATE --- */
 export type FxRatesState = {

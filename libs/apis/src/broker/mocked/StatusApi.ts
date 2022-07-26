@@ -1,6 +1,6 @@
-import { type InlineResponse200, StatusApi as SrcApi } from "@thecointech/broker-cad";
+import type { InlineResponse200, StatusApi as SrcApi } from "@thecointech/broker-cad";
 import { AxiosResponse } from 'axios';
-import { buildResponse } from "../axios-utils";
+import { buildResponse } from "../../axios-utils";
 
 export class StatusApi implements Pick<SrcApi, keyof SrcApi> {
 

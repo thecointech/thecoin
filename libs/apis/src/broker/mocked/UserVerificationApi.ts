@@ -1,8 +1,18 @@
-import { UserVerifyData, StatusType, UserVerificationApi as SrcApi, BlockpassPayload } from "@thecointech/broker-cad";
+import type { UserVerifyData, UserVerificationApi as SrcApi, BlockpassPayload } from "@thecointech/broker-cad";
 import { AxiosResponse } from 'axios';
-import { buildResponse } from "../axios-utils";
-export { StatusType };
+import { buildResponse } from "../../axios-utils";
 
+
+export enum StatusType // Should match SrcType exactly
+{
+  Started = "started",
+  Incomplete = "incomplete",
+  Waiting = "waiting",
+  Approved = "approved",
+  Inreview = "inreview",
+  Rejected = "rejected",
+  Completed = "completed"
+}
 const statii = [
   StatusType.Started,
   StatusType.Incomplete,
@@ -12,6 +22,7 @@ const statii = [
   StatusType.Completed,
 ]
 let status = StatusType.Started;
+
 const incrementStatus = () => status = statii[statii.indexOf(status) + 1 % statii.length];
 
 export class UserVerificationApi implements Pick<SrcApi, keyof SrcApi> {

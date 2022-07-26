@@ -36,7 +36,7 @@ const liveMocks = {
   resolve: {
     alias: {
       "@prismicio/client": resolve(mocksFolder, "@prismicio/client.ts"),
-      "googleapis": resolve(mocksFolder, "googleapis.ts"),
+      "googleapis": resolve(mocksFolder, "googleapis", "index.ts"),
     }
   }
 }
