@@ -21,13 +21,13 @@ const statii = [
   StatusType.Approved,
   StatusType.Completed,
 ]
-let status = StatusType.Started;
+let status: StatusType = StatusType.Started;
 
 const incrementStatus = () => status = statii[statii.indexOf(status) + 1 % statii.length];
 
 export class UserVerificationApi implements Pick<SrcApi, keyof SrcApi> {
   updateStatus(xHubSignature: string, payload: BlockpassPayload, options?: any): Promise<AxiosResponse<void>> {
-    status = payload.status;
+    status = statii.find(s => s == payload.status)!;
     return Promise.resolve(
       buildResponse(undefined as any) // not technically void, but meh
     );

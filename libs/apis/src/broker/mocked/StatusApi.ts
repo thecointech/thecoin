@@ -1,10 +1,9 @@
-import type { InlineResponse200, StatusApi as SrcApi } from "@thecointech/broker-cad";
-import { AxiosResponse } from 'axios';
+import type { StatusApi as SrcApi } from "@thecointech/broker-cad";
 import { buildResponse } from "../../axios-utils";
 
 export class StatusApi implements Pick<SrcApi, keyof SrcApi> {
 
-  status(): Promise<AxiosResponse<InlineResponse200>> {
+  status() {
     return Promise.resolve(
       buildResponse({
         address: "0x1234567890123456789012345678901234567890",
@@ -12,7 +11,7 @@ export class StatusApi implements Pick<SrcApi, keyof SrcApi> {
       })
     );
   }
-  timestamp(): Promise<AxiosResponse<number>> {
+  timestamp() {
     return Promise.resolve(
       buildResponse(Date.now())
     );
