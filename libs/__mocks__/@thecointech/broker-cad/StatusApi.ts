@@ -1,4 +1,4 @@
-import { InlineResponse200, StatusApi as SrcApi } from "@thecointech/broker-cad";
+import { type InlineResponse200, StatusApi as SrcApi } from "@thecointech/broker-cad";
 import { AxiosResponse } from 'axios';
 import { buildResponse } from "../axios-utils";
 
