@@ -1,4 +1,4 @@
-#!/usr/bin/node --experimental-vm-modules --no-warnings
+#!/usr/bin/env -S node --experimental-vm-modules --no-warnings
 
 const jest = require("jest");
 const { exit, cwd } = require("process");
