@@ -1,4 +1,4 @@
-import type StreamID from '@ceramicnetwork/streamid';
+import type { StreamID } from '@ceramicnetwork/streamid';
 import type { SelfID as SrcApi } from '@self.id/web';
 
 //

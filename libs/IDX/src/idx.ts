@@ -9,12 +9,12 @@ export async function connectIDX(signer: Signer) : Promise<SelfID> {
   log.trace("IDX: Initiating connection...");
 
   const configEnv = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME;
-  const config = await import(`./config.${configEnv}.json`);
+  const config = await import(`./config.${configEnv}.json`, { assert: { type: 'json' } });
   const self = await SelfID.authenticate({
     authProvider: await createAuthProvider(signer),
     ceramic: CERAMIC_URL,
     connectNetwork: process.env.THREEID_NETWORK as ConnectNetwork|undefined,
-    model: config,
+    aliases: config.default,
   });
 
   log.trace(`IDX: connected ${!!self?.id}...`);

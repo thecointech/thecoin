@@ -51,13 +51,13 @@ async function run() {
   // Connect to local node
   const ceramic = await connect();
   // Create a manager for the model
-  const manager = new ModelManager(ceramic)
+  const manager = new ModelManager({ceramic})
 
   // prepare schema for publishing
   await publish(manager);
 
   // Publish and store details
-  const model = await manager.toPublished()
+  const model = await manager.deploy();
 
   // Write details to path
   const config = JSON.stringify(model, null, 2)

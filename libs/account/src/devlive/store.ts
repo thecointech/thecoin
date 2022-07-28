@@ -1,6 +1,6 @@
 import { StatusType } from '@thecointech/broker-cad';
 import { ConnectContract } from '@thecointech/contract-core';
-// import { connectIDX } from '@thecointech/idx';
+import { connectIDX } from '@thecointech/idx';
 import { getSigner, AccountName } from '@thecointech/signers';
 import { NormalizeAddress } from '@thecointech/utilities/Address';
 import { AccountState, buildNewAccount } from '../state';
@@ -20,9 +20,8 @@ const addRemoteAccount = async (name: AccountName, active: boolean) => {
   if (active) {
     _initial = address;
     _devWallets[address].details.status = StatusType.Incomplete;
+    _devWallets[address].idx = await connectIDX(signer);
   }
-
-  // _devWallets[address].idx = await connectIDX(signer);
 }
 
 // Add remote wallets.
