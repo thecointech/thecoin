@@ -15,7 +15,7 @@ const addRemoteAccount = async (name: AccountName, active: boolean) => {
   const address = NormalizeAddress(await signer.getAddress());
 
   _devWallets[address] = buildNewAccount(name, address, signer);
-  _devWallets[address].contract = ConnectContract(signer);
+  _devWallets[address].contract = await ConnectContract(signer);
   console.log('Loaded remote account: ' + address);
   if (active) {
     _initial = address;

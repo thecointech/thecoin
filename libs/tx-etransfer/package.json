@@ -2,6 +2,7 @@
   "name": "@thecointech/tx-etransfer",
   "version": "0.2.81",
   "description": "The Coin: A library for processing eTransfer withdrawals",
+  "type": "module",
   "keywords": [
     "THECoin"
   ],

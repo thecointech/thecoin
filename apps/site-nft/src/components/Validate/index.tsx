@@ -67,7 +67,7 @@ async function isValid(blob: Blob): Promise<boolean> {
     return false;
 
   // Does the signature owner own any tokens?
-  const nft = getContract();
+  const nft = await getContract();
   const owner = utils.verifyMessage(hash, meta.signature);
   const balance = await nft.balanceOf(owner);
   if (balance.isZero())

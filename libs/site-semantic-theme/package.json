@@ -2,6 +2,7 @@
   "name": "@thecointech/site-semantic-theme",
   "productName": "THECoin: Website - Semantic THeme",
   "private": true,
+  "type": "module",
   "workspaces": {
     "nohoist": [
       "semantic-ui-less"
@@ -16,22 +17,18 @@
   "author": "Stephen Taylor",
   "license": "MIT",
   "exports": {
-    "./build": "./internal/buildSemantic.js",
-    "./webpack.less": "./internal/webpack.less.js",
+    "./build": "./internal/buildSemantic.cjs",
+    "./webpack.less": "./internal/webpack.less.cjs",
     "./variables.less": "./src/variables.less",
     "./semantic.less": "./src/semantic.less",
-    "./*": "./build/*.js"
+    "./variables": "./src/variables.js"
   },
   "typesVersions": {
     "*": {
       "*": [
-        "build/*"
+        "src/*"
       ]
     }
-  },
-  "scripts": {
-    "build": "node ../../tools/link-assets.mjs \"./**/*.!(module.css.d.ts|css.d.ts|ts|tsx|jsx)\"",
-    "clean": "rimraf ./build"
   },
   "dependencies": {
     "fontsource-abril-fatface": "3.1.5",

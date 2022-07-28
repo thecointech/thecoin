@@ -1,5 +1,6 @@
 
-import  { getEnvVars } from "@thecointech/setenv";
+import { jest } from "@jest/globals";
+import { getEnvVars } from "@thecointech/setenv";
 import { deletePayee, addPayee } from './managePayees';
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { getPayeeOptions, openBillPaymentPage } from '.';
@@ -23,7 +24,7 @@ describe("Testing Payee Management", () => {
     ApiAction.initCredentials();
     await initBrowser({headless: !IsManualRun});
     // Disable logging in this file
-    log.level(100);
+    log.level(0);
   })
   afterAll(async () => {
     await closeBrowser();

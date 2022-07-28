@@ -12,7 +12,7 @@
   "description": "Admin: audit TheCoin system ops",
   "main": ".webpack/main",
   "scripts": {
-    "dev": "electron-forge start",
+    "dev": "yarn electron-forge start",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
     "prod:beta": "cross-env CONFIG_NAME=prod yarn dev",

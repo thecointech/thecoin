@@ -1,5 +1,5 @@
-
-import  { getEnvVars } from "@thecointech/setenv";
+import { jest } from "@jest/globals";
+import { getEnvVars } from "@thecointech/setenv";
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { prepareBillPayee } from '.';
 import * as manage from './managePayees';
@@ -7,7 +7,9 @@ import { ApiAction, closeBrowser, initBrowser } from '../action';
 
 const vars = getEnvVars("prod");
 jest.setTimeout(5 * 60 * 1000);
-const shouldRun = !!vars.RBCAPI_CREDENTIALS_PATH && !process.env.JEST_CI;
+// Disable until Jest supports spyOn cleanly
+// https://github.com/facebook/jest/issues/9430
+const shouldRun = false && !!vars.RBCAPI_CREDENTIALS_PATH && !process.env.JEST_CI;
 
 // We run this test on the live website to catch any changes to RBC website.
 describe("Testing Pay Bills", () => {

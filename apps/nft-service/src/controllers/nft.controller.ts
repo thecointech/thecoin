@@ -1,8 +1,8 @@
-import { Controller, Post, Body, Route, SuccessResponse, Response, FormField, UploadedFile, File, Tags } from '@tsoa/runtime';
+import { Controller, Post, Body, Route, SuccessResponse, Response, FormField, UploadedFile, type File, Tags } from '@tsoa/runtime';
 import { gasslessUpdate } from '../nft/gassless';
-import type { GasslessUpdateRequest, MetadataJson } from '@thecointech/contract-nft';
 import { uploadAvatar, uploadMetadata } from '../nft/ipfs';
-import { claimNft, NftClaim } from '../nft/claim';
+import { claimNft, type NftClaim } from '../nft/claim';
+import type { GasslessUpdateRequest, MetadataJson } from '@thecointech/contract-nft';
 
 type UpdateRequest = {
   signature: string

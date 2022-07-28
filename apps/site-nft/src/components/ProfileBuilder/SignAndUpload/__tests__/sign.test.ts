@@ -1,5 +1,5 @@
-import { createCanvas, loadImage } from 'canvas'
-import { join } from 'path';
+import cvs from 'canvas'
+import { fileURLToPath } from 'url';
 import { getHash, updateExif } from '../sign';
 
 it('Can hash the image', async() => {
@@ -16,8 +16,9 @@ it ('reads & write EXIF', async() => {
 });
 
 async function loadCanvas() {
-  const img = await loadImage(join(__dirname, 'test.jpg'));
-  const canvas = createCanvas(img.width, img.height);
+  const imgfile = new URL('test.jpg', import.meta.url);
+  const img = await cvs.loadImage(fileURLToPath(imgfile));
+  const canvas = cvs.createCanvas(img.width, img.height);
   const ctx = canvas.getContext('2d');
   ctx.drawImage(img, 0, 0);
   return canvas as unknown as HTMLCanvasElement;

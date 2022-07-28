@@ -1,11 +1,11 @@
-import { IpcMain } from './electron_types';
 import { SIGNER_CHANNEL } from './types';
-import { getAndCacheSigner } from '../cache'
+import { getAndCacheSigner } from '../cache';
 import { loadFromDisk } from '../fromDisk';
 import { AccountName } from '../names';
 import { log } from '@thecointech/logging';
-import type { Signer } from '@ethersproject/abstract-signer';
 import { getProvider } from '@thecointech/ethers-provider';
+import type { IpcMain } from './electron_types';
+import type { Signer } from '@ethersproject/abstract-signer';
 
 //
 // This is exclusively running in node process on production environments

@@ -2,6 +2,7 @@
   "name": "@thecointech/rbcapi",
   "version": "0.2.81",
   "description": "The Coin: A puppeteer-based API for Royal Bank of Canada",
+  "type": "module",
   "keywords": [
     "THECoin",
     "RBC",
@@ -24,7 +25,7 @@
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "jest --runInBand --forceExit",
+    "test": "yarn run-jest --runInBand --forceExit",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [

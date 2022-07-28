@@ -1,6 +1,6 @@
-import { AccountName } from '../names';
-import { getAndCacheSigner } from '../cache'
+import { getAndCacheSigner } from '../cache';
 import { ElectronSigner } from './signer';
+import type { AccountName } from '../names';
 
 //
 // Running in browser on GAE

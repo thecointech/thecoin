@@ -3,6 +3,7 @@
   "private": "true",
   "version": "0.2.81",
   "description": "TheCoin: Environment setup library",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "ethereum"
@@ -15,12 +16,30 @@
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/setenv"
   },
-  "scripts": {
-    "build": "yarn tsc",
-    "clean": "rimraf ./build"
+  "bin": {
+    "run-env": "./bin/run-env.mjs"
   },
-  "exports": "./build/index.js",
-  "types": "./build/index.d.ts",
+  "scripts": {
+    "build": "run-p build:*",
+    "build:cjs": "yarn tsc --project tsconfig.build.cjs.json",
+    "build:mjs": "yarn tsc --project tsconfig.build.mjs.json",
+    "postbuild:cjs": "node ./postbuild.cjs",
+    "clean": "rimraf ./build && rimraf ./coverage"
+  },
+  "exports": {
+    ".": {
+      "types": "./build/mjs/index.d.ts",
+      "import": "./build/mjs/index.js",
+      "require": "./build/cjs/index.js"
+    },
+    "./projectUrl": {
+      "types": "./projectUrl/index.d.ts",
+      "import": "./projectUrl/index.mjs",
+      "require": "./projectUrl/index.cjs"
+    },
+    "./webpack": "./webpack/webpack.env.cjs"
+  },
+  "types": "./build/mjs/index.d.ts",
   "dependencies": {
     "dotenv": "^10.0.0"
   }

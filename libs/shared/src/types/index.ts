@@ -1,9 +1,9 @@
 import { Store, Reducer } from 'redux';
-import { SidebarState } from '../containers/PageSidebar/types';
-import { FxRatesState } from '../containers/FxRate/types';
-import { Saga, Task } from 'redux-saga';
-import { LanguageProviderState } from '../containers/LanguageProvider/types';
-import { MessageDescriptor } from 'react-intl';
+import type { Saga, Task } from '@redux-saga/core';
+import type { MessageDescriptor } from 'react-intl';
+import type { SidebarState } from '../containers/PageSidebar/types';
+import type { FxRatesState } from '../containers/FxRate/types';
+import type { LanguageProviderState } from '../containers/LanguageProvider/types';
 
 // Your root reducer type, which is your redux state types also
 // TODO: Rename to SharedBaseStore (more accurate name)

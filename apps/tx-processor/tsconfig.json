@@ -4,8 +4,7 @@
     "outDir": "./build/",
     "tsBuildInfoFile": "./build/.buildinfo",
     "rootDir": "./src/",
-    "baseUrl": "./src/",
-    "module": "commonjs"
+    "baseUrl": "./src/"
   },
   "include": ["src/**/*"]
 }
