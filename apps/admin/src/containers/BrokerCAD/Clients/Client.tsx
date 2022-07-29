@@ -18,11 +18,15 @@ export const Client = (props: Props) => {
   return (
     <>
     <Header as='h4'>
-      {props.name} - {toCAD(props.balanceCoin, rates.rates)}
+      {props.details.given_name} - {toCAD(props.balanceCoin, rates.rates)}
       <Header.Subheader>
         {props.address}
       </Header.Subheader>
     </Header>
+    <hr />
+      <div>DOB: {props.details.DOB}</div>
+      <div>email: {props.details.email}</div>
+      <div>status: {props.details.status}</div>
     <hr />
     <List>
       {transactions.map(ClientTransaction)}

@@ -1,19 +1,25 @@
-import { AccountState } from '@thecointech/account';
+import { type SelfID } from '@thecointech/idx';
+import { AccountDetails, AccountState } from '@thecointech/account';
 import { BillAction, BuyAction, getAllActions, getAllUsers, SellAction } from '@thecointech/broker-db';
 import gmail, { eTransferData } from '@thecointech/tx-gmail';
 import Decimal from 'decimal.js-light';
+import { Caip10Link } from '@ceramicnetwork/stream-caip10-link'
+import { AccountId } from 'caip';
 
 export type UserData = {
   address: string,
-  name: string,
+  details: AccountDetails;
+
   Buy: BuyAction[],
   Sell: SellAction[],
   Bill: BillAction[],
   balanceCoin: Decimal;
 };
 
-function findName(address: string, etransfers: eTransferData[]) {
-  return etransfers.find(et => et.address === address)?.name
+function detailsFromEtransfer(address: string, etransfers: eTransferData[]) {
+  return {
+    given_name: etransfers.find(et => et.address === address)?.name
+  }
 }
 
 async function getUsers(emails: eTransferData[], account: AccountState) {
@@ -40,18 +46,50 @@ export async function getAllUserData(account: AccountState) {
   const contract = account.contract!;
   const data = await getAllActions(users);
   const balances = await Promise.all(users.map(user => contract.balanceOf(user)));
+  const details = await Promise.all(users.map(async (user) =>
+    await loadDetails(user, account.idx!) ??
+    detailsFromEtransfer(user, etransfers))
+  );
 
   return users.reduce((acc, user, idx) => ([
     ...acc,
     {
       address: user,
-      name: findName(user, etransfers) ?? user,
       Buy: data.Buy[user],
       Sell: data.Sell[user],
       Bill: data.Bill[user],
       balanceCoin: new Decimal(balances[idx].toNumber()),
+      details: details[idx] ?? {},
     }
   ]), [] as UserData[])
 }
 
 
+const chainId = process.env.DEPLOY_POLYGON_NETWORK_ID ?? "1";
+const getLink = (address: string, idx: SelfID) => Caip10Link.fromAccount(
+  idx.client.ceramic,
+  new AccountId({
+    address,
+    chainId: {
+      namespace: "eip155",
+      reference: chainId,
+    }
+  })
+);
+
+async function loadDetails(address: string, idx: SelfID) {
+  try {
+    const link = await getLink(address, idx);
+    if (link.did) {
+      const detailsJWE: any = await idx.client.get("AccountDetails", link.did);
+      if (detailsJWE) {
+        const decrypted = await idx.did.decryptDagJWE(detailsJWE);
+        return decrypted.data;
+      }
+    }
+  }
+  catch (e) {
+    console.error(e);
+  }
+  return null;
+}

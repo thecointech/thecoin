@@ -25,12 +25,12 @@ async function fetchIncompleteType(type: ActionType, users: UserData[]) {
 
 const newUserData = async (address: string) => ({
   address,
-  name: "Fixme",
   Buy: [],
   Sell: [],
   Bill: [],
   transactions: [],
   balanceCoin: await getBalance(address),
+  details: {},
 })
 
 async function getBalance(address: string) {

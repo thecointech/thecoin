@@ -11,7 +11,7 @@ const baseOptions = {
    * This is the main entry point for your application, it's the first file
    * that runs in the main process.
    */
-  mode: env.NODE_ENV,
+  mode: process.env.NODE_ENV ?? env.NODE_ENV,
   entry: './src/index.ts',
   // Put your normal webpack config below here
   module: { rules},

@@ -18,6 +18,11 @@ export class SelfID implements Pick<SrcApi, "get" | "set"> {
     return Promise.resolve({} as StreamID);
   }
   records: Map<string | number | symbol, string> = new Map();
+
+  // mock client to allow Admin to use the IDX API
+  client = {
+    get: () => null,
+  };
 }
 
 export const connectIDX = () => Promise.resolve(new SelfID)
