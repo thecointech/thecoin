@@ -1,21 +1,22 @@
 import type { StreamID } from '@ceramicnetwork/streamid';
 import type { SelfID as SrcApi } from '@self.id/web';
-
+import { ConfigType } from './types';
+import { sleep } from '@thecointech/async';
 //
 // An in-memory IDX mock for development/testing
-export class SelfID implements Pick<SrcApi, "get" | "set"> {
-  get<Key extends string | number | symbol, ContentType = any>(key: Key): Promise<ContentType | null> {
+export class SelfID implements Pick<SrcApi<ConfigType>, "get" | "set"> {
+  async get<Key extends string | number | symbol, ContentType = any>(key: Key): Promise<ContentType | null> {
     const r = this.records.get(key);
-    return Promise.resolve(
-      r
-        ? JSON.parse(r)
-        : null
-    );
+    await sleep(500);
+    return r
+      ? JSON.parse(r)
+      : null
   }
-  set<Key extends string | number | symbol, ContentType = any>(key: Key, content: ContentType): Promise<StreamID> {
+  async set<Key extends string | number | symbol, ContentType = any>(key: Key, content: ContentType): Promise<StreamID> {
     if (!content) this.records.delete(key);
     else this.records.set(key, JSON.stringify(content));
-    return Promise.resolve({} as StreamID);
+    await sleep(500);
+    return {} as StreamID;
   }
   records: Map<string | number | symbol, string> = new Map();
 
