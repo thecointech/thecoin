@@ -56,6 +56,6 @@ const buildOptions = (users: UserData[], rates: FXRate[]) =>
     key: user.address,
     value: user.address,
     icon: 'attention',
-    text: `${user.details.given_name ?? "UNVERIFIED"} ${toCAD(user.balanceCoin, rates)}`,
+    text: `${user.address} ${toCAD(user.balanceCoin, rates)}`,
     data: user
   }))

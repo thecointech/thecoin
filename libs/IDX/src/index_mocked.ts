@@ -29,3 +29,5 @@ export class SelfID implements Pick<SrcApi<ConfigType>, "get" | "set"> {
 export const connectIDX = () => Promise.resolve(new SelfID)
 export const setEncrypted = (idx: SelfID, definition: string, data: any | null) => idx.set(definition, data);
 export const loadEncrypted = (idx: SelfID, definition: string) => idx.get(definition);
+
+export const getLink = () => {}
