@@ -28,7 +28,8 @@
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
-    "test": "run-jest"
+    "test": "yarn run-jest",
+    "test:ci": "yarn run-jest-nix"
   },
   "engines": {
     "node": "16.x.x"

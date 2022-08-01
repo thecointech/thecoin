@@ -1,4 +1,3 @@
-// import { IDX } from '@ceramicstudio/idx';
 import { SelfID } from '@self.id/web'
 import { IdxAlias } from './types';
 
@@ -17,7 +16,7 @@ export const setEncrypted = async <T>(self: SelfID, definition: IdxAlias, data: 
   const did = self.client.ceramic.did!;
   // Remember who has access to this record
   const payload: EncryptedPayload<T> = {
-    data,
+    data: cleanUndefined(data),
     recipients,
   }
   const encrypted = await did.createDagJWE(payload, [...owners])
@@ -39,3 +38,14 @@ export const loadEncrypted = async <T>(self: SelfID, definition: IdxAlias) : Pro
   }
   return null;
 }
+
+const cleanUndefined = (obj: any) =>
+  typeof(obj) === 'object'
+    ? Object.keys(obj).reduce((acc, key) => (
+        obj[key] === undefined
+          ? acc
+          : { ...acc, [key]: obj[key] }
+      ), {} as any)
+    : obj;
+
+

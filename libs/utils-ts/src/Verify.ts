@@ -3,11 +3,13 @@ import { keccak256 } from '@ethersproject/solidity';
 type IDData = {
   given_name: string,
   family_name: string,
-  dob: string,
+  DOB: string,
 }
-export function buildUniqueId({given_name, family_name, dob}: IDData ) {
+
+// Build a unique (mostly) ID for a user by hashing their unique info
+export function buildUniqueId({given_name, family_name, DOB}: IDData ) {
   return keccak256(
     ["string", "string", "string"],
-    [given_name.toLowerCase(), family_name.toLowerCase(), dob.toLowerCase()]
+    [given_name.toLowerCase(), family_name.toLowerCase(), DOB.toLowerCase()]
   )
 }

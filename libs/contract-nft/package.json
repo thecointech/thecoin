@@ -33,6 +33,7 @@
     "clean:types": "rimraf ./src/types && rimraf ./migrations/types",
     "test:contract": "yarn _truffle test",
     "test": "yarn run-jest",
+    "test:ci": "yarn run-jest-nix",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn _deploy",
     "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn _deploy:polygon",
     "_truffle": "run-env exec=truffle --config ./truffle-config.cjs",

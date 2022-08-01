@@ -24,7 +24,7 @@
     "clean:analyze": "rimraf stats.json",
     "deploy:rebuild": "yarn build",
     "deploy": "ts-node --skip-project predeploy",
-    "dev": "yarn run-env internals/server.mjs",
+    "dev": "cross-env NODE_ENV=development run-env internals/server.mjs",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
     "prod:beta": "cross-env CONFIG_NAME=prodbeta yarn dev",
@@ -36,7 +36,8 @@
     "lint:src:fix": "eslint --fix",
     "typecheck": "tsc --noEmit",
     "pretest": "yarn clean:test",
-    "test": "run-jest",
+    "test": "yarn run-jest",
+    "test:ci": "yarn run-jest-nix",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern [sha512:contenthash:base64:6]",
@@ -73,7 +74,6 @@
     "sanitize.css": "10.0.0"
   },
   "devDependencies": {
-    "@octokit/rest": "16.33.1",
     "@types/card-validator": "^4.1.0",
     "@types/expect": "1.20.4",
     "@types/file-saver": "^2.0.1",

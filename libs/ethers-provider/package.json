@@ -26,6 +26,7 @@
     "postbuild:cjs": "node ./postbuild.cjs",
     "build:mjs": "yarn tsc --project tsconfig.build.mjs.json",
     "test": "yarn run-jest",
+    "test:ci": "yarn run-jest-nix",
     "clean": "rimraf ./build"
   },
   "files": [
@@ -70,7 +71,7 @@
     }
   },
   "dependencies": {
-    "@ethersproject/providers": "^5.5.1",
+    "@ethersproject/providers": "^5.6.2",
     "@thecointech/logging": "^0.2.81"
   },
   "devDependencies": {

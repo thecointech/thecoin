@@ -21,7 +21,8 @@
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc --project tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "yarn run-jest"
+    "test": "yarn run-jest",
+    "test:ci": "yarn run-jest-nix"
   },
   "files": [
     "build/**/*"
@@ -62,7 +63,7 @@
     "@thecointech/ethers-provider": "^0.2.81",
     "@thecointech/hardware-wallet": "^0.2.81",
     "@thecointech/logging": "^0.2.81",
-    "ethers": "^5.5.1"
+    "@ethersproject/wallet": "5.6.2"
   },
   "devDependencies": {
     "jest": "*"
