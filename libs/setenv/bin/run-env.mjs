@@ -23,8 +23,8 @@ let executable = sliceArgs(args, "exec", "node");
 // TODO: Support ts-node?
 const env = {
   NODE_NO_WARNINGS: 1,
-  ...process.env,
   ...getEnvVars(config),
+  ...process.env,
 }
 
 // Always attach experimental loader

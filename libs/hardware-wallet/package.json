@@ -30,7 +30,7 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@ethersproject/abstract-signer": "^5.5.0",
+    "@ethersproject/abstract-signer": "^5.6.2",
     "@ledgerhq/hw-app-eth": "^6.18.0",
     "@ledgerhq/hw-transport-node-hid": "^6.11.2",
     "@thecointech/async": "^0.2.81"

@@ -3,7 +3,7 @@ import { Wallet } from 'ethers';
 import { ConnectContract } from '@thecointech/contract-core';
 import { AccountMap } from '../map';
 import { AccountState, buildNewAccount } from '../state';
-import { SelfID } from '@thecointech/idx';
+import { connectIDX } from '@thecointech/idx';
 
 let _devAccounts: AccountMap = {};
 let _initial: null|string = null;
@@ -21,7 +21,7 @@ async function initDevWallets() {
   const randomAccount = buildNewAccount("Random Test", randomWallet.address, randomWallet);
   // connect to mocked services - normally this is done by "connect" call
   randomAccount.contract = await ConnectContract(randomAccount.signer);
-  randomAccount.idx = new SelfID({} as any);
+  randomAccount.idx = await connectIDX(randomAccount.signer);
 
   _devAccounts[randomAccount.address] = randomAccount
   _initial = randomAccount.address;

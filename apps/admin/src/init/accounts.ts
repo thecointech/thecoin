@@ -5,6 +5,7 @@ import { ConnectContract } from '@thecointech/contract-core';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { log } from '@thecointech/logging';
 import { bridge } from '@thecointech/signers/electron';
+import { connectIDX } from '@thecointech/idx';
 import type { IpcRenderer } from 'electron';
 
 declare let window: Window & {
@@ -13,10 +14,10 @@ declare let window: Window & {
 
 async function buildMapEntry(name: AccountName) {
   const signer = await getSigner(name);
-  const contract = await ConnectContract(signer);
-  const address =  NormalizeAddress(await signer.getAddress());
+  const address = NormalizeAddress(await signer.getAddress());
   const account = buildNewAccount(name, address, signer);
-  account.contract = contract;
+  account.contract = await ConnectContract(signer);
+  account.idx = await connectIDX(signer);
   return { [address]: account };
 }
 

@@ -44,13 +44,13 @@ rules.push(
 );
 
 const baseOptions = {
-  mode: env.NODE_ENV,
+  mode: process.env.NODE_ENV ?? env.NODE_ENV,
   module: {
     rules,
   },
   plugins,
   resolve: {
-    conditionNames: [env.CONFIG_NAME, "electron", "browser", "require", "default"],
+    conditionNames: [env.CONFIG_NAME, "electron", "browser", "webpack", "import", "default"],
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
     fallback: {
@@ -69,6 +69,13 @@ const baseOptions = {
       // "net": false,
       // "tls": false,
 
+    },
+
+    // For reasons I don't understand, the babel interop helpers import
+    // the ESM version even when required.
+    alias: {
+      "@babel/runtime/helpers/interopRequireDefault": "/src/TheCoin-Mirror/node_modules/@babel/runtime/helpers/interopRequireDefault.js",
+      "@babel/runtime/helpers/interopRequireWildcard": "/src/TheCoin-Mirror/node_modules/@babel/runtime/helpers/interopRequireWildcard.js"
     }
   },
   experiments: {

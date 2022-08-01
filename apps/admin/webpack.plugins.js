@@ -11,7 +11,6 @@ module.exports = [
   new ForkTsCheckerWebpackPlugin(),
   new webpack.DefinePlugin({
     __VERSION__: JSON.stringify(require(packageFile).version),
-    "process.env.LOG_LEVEL": process.env.LOG_LEVEL,
   }),
   new webpack.EnvironmentPlugin(env),
   new webpack.ProvidePlugin({
