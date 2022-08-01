@@ -61,22 +61,3 @@ export async function getAllUserData(account: AccountState) {
     }
   ]), [] as UserData[])
 }
-
-// async function loadDetails(address: string, idx: SelfID) {
-//   try {
-//     const link = await getLink(address, idx);
-//     if (link.did) {
-
-//       const detailsJWE: any = await idx.client.get("AccountDetails", link.did);
-//       idx.client.ceramic.loadStreamCommits
-//       if (detailsJWE) {
-//         const decrypted = await idx.did.decryptDagJWE(detailsJWE);
-//         return decrypted.data;
-//       }
-//     }
-//   }
-//   catch (e) {
-//     console.error(e);
-//   }
-//   return null;
-// }

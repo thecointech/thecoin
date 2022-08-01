@@ -3,7 +3,7 @@ import { Signer } from '@ethersproject/abstract-signer'
 import { EventEmitter } from 'events'
 import { fromString, toString } from 'uint8arrays';
 import { sign } from "@thecointech/utilities/SignedMessages";
-
+import { getChainId } from './config';
 
 class EthereumProvider extends EventEmitter {
   signer: Signer
@@ -19,13 +19,7 @@ class EthereumProvider extends EventEmitter {
   ) {
     switch(request.method) {
       case "eth_chainId":
-        // NOTE!  This should not return '1', it should return
-        // process.env.DEPLOY_POLYGON_NETWORK_ID
-        // Although - why on earth would it matter if we aren't
-        // putting information on the chain?
-        const chainId = parseInt(process.env.DEPLOY_POLYGON_NETWORK_ID ?? "1").toString(16);
-
-        callback(null, { result: `0x${chainId}` });
+        callback(null, { result: `0x${getChainId().toString(16)}` });
         break;
       case "personal_sign":
         let message = request.params[0] as string

@@ -4,6 +4,7 @@ import type { SelfID } from './types'
 import type { EthereumAuthProvider } from '@self.id/web';
 import { AccountId } from 'caip';
 import { CeramicApi } from '@ceramicnetwork/common';
+import { getChainId } from './config';
 
 // Create a new link to the account to allow discoverability
 export async function createLink(idx: SelfID, authProvider: EthereumAuthProvider) {
@@ -27,7 +28,6 @@ export async function createLink(idx: SelfID, authProvider: EthereumAuthProvider
 }
 
 // Get the account link for the given eth address
-const chainId = process.env.DEPLOY_POLYGON_NETWORK_ID ?? "1";
 export async function getLink(address: string, ceramic: CeramicApi) {
   return Caip10Link.fromAccount(
     ceramic,
@@ -35,7 +35,7 @@ export async function getLink(address: string, ceramic: CeramicApi) {
       address,
       chainId: {
         namespace: "eip155",
-        reference: chainId,
+        reference: getChainId().toString(),
       }
     })
   );

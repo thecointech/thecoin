@@ -13,17 +13,10 @@ type CeramicCommon = {
   dataStore: DIDDataStore<ConfigType>
 };
 
-// Discovered through trial-and-error
-// enum CommitType {
-//   INDEX,  // First commit in a stream, so probably an index
-//   CAIP10_LINK, // Throws an error on load
-//   TILE, // What's left
-// }
-
 export async function getHistory(address: string, { ceramic, dataModel, dataStore }: CeramicCommon) : Promise<JWE[]|null>{
 
   const link = await getLink(address, ceramic);
-  const did = link.did; //await core.getAccountDID(link.id);
+  const did = link.did;
   if (!did) {
     log.debug("No DID found for account");
     return null;
@@ -39,17 +32,9 @@ export async function getHistory(address: string, { ceramic, dataModel, dataStor
 
   const stream = await TileDocument.load(ceramic, streamId);
   const ids = stream.allCommitIds;
-  // const ids = stream.state.log
-  //   .map(l => new CommitID(l.type, l.cid))
-  //   .filter(c => c.type === TILE_TYPE_ID);
-
-  const allCommits = await ceramic.loadStreamCommits(streamId);
-  console.log(allCommits);
-  // return allCommits as any;
 
   log.trace(`Found ${ids.length} commits`);
-  const commits = await Promise.all(ids.map(id => ceramic.loadDocument(id)));
+  // TODO: do this with a multi-query instead
+  const commits = await Promise.all(ids.map(id => ceramic.loadStream(id)));
   return commits.map(c => c.content as JWE);
-
-  // return Promise.all(ids.map(id => TileDocument.load<JWE>(ceramic, id)));
 }
