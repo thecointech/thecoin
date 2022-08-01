@@ -5,8 +5,8 @@ import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Form, Header, Icon } from 'semantic-ui-react';
 import { UxDate } from '@thecointech/shared/components/MaskedInputs/UxDate';
-import styles from './styles.module.less';
 import { UxInput, UxEmail } from '@thecointech/shared/components/UX';
+import styles from './styles.module.less';
 
 const translations = defineMessages({
   title : {

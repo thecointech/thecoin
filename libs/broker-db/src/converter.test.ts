@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import { getFirestore, init, Timestamp } from '@thecointech/firestore';
 import { describe, filterByEmulator } from '@thecointech/jestutils';
 import { getUserData, setUserVerified } from './user';
@@ -21,7 +22,6 @@ describe('Live DB fetching', () => {
   const address = `0x123456789012345678901234567${Date.now()}`;
   const spyTo = jest.spyOn(userDataConverter, "toFirestore");
   const spyFrom = jest.spyOn(userDataConverter, "fromFirestore");
-
 
   it('converts to Timestamp in DB', async () => {
     const dt = DateTime.now();

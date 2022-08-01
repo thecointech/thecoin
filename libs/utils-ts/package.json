@@ -2,6 +2,7 @@
   "name": "@thecointech/utilities",
   "version": "0.2.81",
   "description": "The Coin: Utilities shared amongst typescript-based projects",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "ethereum"
@@ -21,7 +22,7 @@
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "jest --coverage",
+    "test": "run-jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [

@@ -1,20 +1,24 @@
+// import { type SelfID, getLink } from '@thecointech/idx';
 import { AccountState } from '@thecointech/account';
 import { BillAction, BuyAction, getAllActions, getAllUsers, SellAction } from '@thecointech/broker-db';
 import gmail, { eTransferData } from '@thecointech/tx-gmail';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 
 export type UserData = {
   address: string,
-  name: string,
+  // details: AccountDetails;
+
   Buy: BuyAction[],
   Sell: SellAction[],
   Bill: BillAction[],
   balanceCoin: Decimal;
 };
 
-function findName(address: string, etransfers: eTransferData[]) {
-  return etransfers.find(et => et.address === address)?.name
-}
+// function detailsFromEtransfer(address: string, etransfers: eTransferData[]) {
+//   return {
+//     given_name: etransfers.find(et => et.address === address)?.name
+//   }
+// }
 
 async function getUsers(emails: eTransferData[], account: AccountState) {
   // Get users from DB
@@ -40,18 +44,20 @@ export async function getAllUserData(account: AccountState) {
   const contract = account.contract!;
   const data = await getAllActions(users);
   const balances = await Promise.all(users.map(user => contract.balanceOf(user)));
+  // const details = await Promise.all(users.map(async (user) =>
+  //   await loadDetails(user, account.idx!) ??
+  //   detailsFromEtransfer(user, etransfers))
+  // );
 
   return users.reduce((acc, user, idx) => ([
     ...acc,
     {
       address: user,
-      name: findName(user, etransfers) ?? user,
       Buy: data.Buy[user],
       Sell: data.Sell[user],
       Bill: data.Bill[user],
       balanceCoin: new Decimal(balances[idx].toNumber()),
+      // details: details[idx] ?? {},
     }
   ]), [] as UserData[])
 }
-
-

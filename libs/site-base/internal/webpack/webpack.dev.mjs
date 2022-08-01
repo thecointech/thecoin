@@ -7,12 +7,11 @@ import webpack from 'webpack';
 import { merge } from "webpack-merge";
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
-import ErrorOverlayPlugin from './error-overlay-shim.js';
+import ErrorOverlayPlugin from './error-overlay-shim.cjs';
 
 import baseOptions from './webpack.base.mjs';
 import signerOptions from './webpack.signers.mjs';
-// Import options for mocking external modules
-import mockOptions from "../../../../__mocks__/mock_webpack.mjs";
+import getMocks from "@thecointech/setenv/webpack";
 
 const devOptions = {
   mode: 'development',
@@ -77,7 +76,7 @@ if (process.env.SETTINGS !== 'live') {
 }
 
 export default merge(
-  mockOptions,
+  getMocks(process.env),
   devOptions,
   signerOptions,
   baseOptions,

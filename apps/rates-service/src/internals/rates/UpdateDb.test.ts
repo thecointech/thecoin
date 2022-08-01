@@ -1,12 +1,11 @@
 
+import { jest } from '@jest/globals';
 import { update, ensureLatestCoinRate, ensureLatestFxRate } from "./UpdateDb";
 import { validFor } from "@thecointech/fx-rates";
 import { init } from "@thecointech/firestore";
 import { CoinRate, CoinUpdateInterval } from "./types";
 import { updateLatest, getLatest } from "./latest";
 import { getLatestStored, getRate } from "./db";
-
-jest.mock('../FinnHub');
 
 // Start 5 mins into the mocked data
 var now = 1593696900000;

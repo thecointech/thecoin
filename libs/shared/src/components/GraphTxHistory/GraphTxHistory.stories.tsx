@@ -6,7 +6,7 @@ import { DateTime } from 'luxon';
 import { withStore, withReducer } from '@thecointech/storybookutils';
 import { FXRate, FxRateReducer } from 'containers/FxRate';
 import { toCoin } from '@thecointech/utilities'
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 
 export default {
   title: 'Shared/GraphTxHistory',

@@ -1,14 +1,12 @@
-// reset env
-process.env.CONFIG_NAME='prod';
+import { jest } from '@jest/globals';
 import { getEnvVars } from "@thecointech/setenv";
 import { queryETransfers, queryNewDepositEmails } from './query'
 import { ConfigStore } from '@thecointech/store';
 import { IsValidAddress } from '@thecointech/utilities';
 import { describe, IsManualRun } from '@thecointech/jestutils';
 
-jest.unmock("googleapis")
-jest.disableAutomock()
-
+//
+// NOTE: Will not work until we figure out how to disable mocked API's
 describe("Live service queries for gmail", () => {
 
   beforeAll(async () => {

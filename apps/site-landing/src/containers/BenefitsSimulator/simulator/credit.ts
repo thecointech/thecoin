@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import { balanceChange, SimulationState } from './state';
 import { straddlesMonth, straddlesYear } from './time';
 import { grossFiat, SimulationParameters } from '.';

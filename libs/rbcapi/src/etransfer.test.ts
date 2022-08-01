@@ -1,11 +1,11 @@
-process.env.CONFIG_NAME = "prod";
-require("@thecointech/setenv");
-
+import { jest } from "@jest/globals";
+import { getEnvVars } from "@thecointech/setenv";
 import { RbcStore } from './store';
 import { ApiAction, initBrowser } from './action';
 import { send } from './etransfer';
 import { describe, IsManualRun } from '@thecointech/jestutils';
 
+const vars = getEnvVars("prod");
 
 // Note, this test will send real money from a real account.
 // So ya probably want to leave it disabled except for manual runs.
@@ -15,6 +15,7 @@ describe("Live tests on live account", () => {
     // Will init mocked store
     ApiAction.initCredentials();
     RbcStore.initialize();
+    process.env = vars;
   });
 
   afterAll(() => {

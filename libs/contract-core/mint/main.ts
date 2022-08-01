@@ -1,6 +1,6 @@
-import data from './mint.json'
+import data from './mint.json' assert {type: "json"};
 import { DateTime, Settings } from 'luxon';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import { processItems } from './process';
 import { NormalizeAddress } from '@thecointech/utilities';
 import { AccountName, getSigner } from '@thecointech/signers';

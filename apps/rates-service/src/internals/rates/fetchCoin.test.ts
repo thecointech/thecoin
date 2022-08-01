@@ -1,13 +1,10 @@
 import { fetchCoinRate } from "./fetchCoin";
-import { CoinUpdateInterval } from "./types";
-
-// Don't go to the server for this
-jest.mock('../FinnHub')
 
 it('should find a valid rate', async () => {
-  // Thu Jul 02 2020 08:35:10 GMT-0500 (Central Daylight Time)
-  const lastValid = 1593696917000;
-  var now = lastValid + (23 * 60 * 60 * 1000);
+  // Fri Jul 02 2021 15:51:00 GMT-0500 (Central Daylight Saving Time)
+  const lastValid = 1625259060000;
+  // Our data starts Fri, extends over the weekend until Monday 12pm
+  var now = lastValid + (70 * 60 * 60 * 1000);
   const rates = await fetchCoinRate(lastValid, now);
   expect(rates.length).toEqual(3);
   const firstRate = rates[0];
@@ -16,9 +13,8 @@ it('should find a valid rate', async () => {
   for (let i = 0; i < rates.length; i++)
   {
     expect(rates[i].validTill).toBeLessThan(now)
-    expect(rates[i].validTill - rates[i].validFrom).toBeLessThanOrEqual(CoinUpdateInterval)
   }
-  // validTill: Thu Jul 02 2020 14:31:30 GMT-0500 (Central Daylight Time) {}
+  // validTill: Mon Jul 05 2021 14:31:30 GMT-0500 (Central Daylight Saving Time)
   expect(lastRate.validTill).toBeGreaterThan(now);
 })
 

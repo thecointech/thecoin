@@ -2,7 +2,7 @@ import { getActionFromInitial, PurchaseType } from "@thecointech/broker-db";
 import { StateMachineProcessor } from "@thecointech/tx-statemachine";
 import { etransfer } from "./graph.etransfer";
 import { manual, Deposit } from "./graph.manual";
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
 
 import type { TheCoin } from '@thecointech/contract-core';

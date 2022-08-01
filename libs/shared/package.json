@@ -3,6 +3,7 @@
   "private": "true",
   "version": "0.2.81",
   "description": "The Coin: Shared functionality for the react website & admin app",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "ethereum"
@@ -16,11 +17,11 @@
     "directory": "libs/shared"
   },
   "scripts": {
-    "test": "yarn jest",
+    "test": "yarn run-jest",
     "clean": "rimraf ./build",
     "prebuild": "yarn build:i18n",
     "build": "run-p build:src build:link",
-    "build:src": "yarn ttsc -b tsconfig.build.json",
+    "build:src": "yarn tsc -b tsconfig.build.json",
     "build:link": "node ../../tools/link-assets.mjs",
     "build:i18n": "run-s extract compile",
     "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern [sha512:contenthash:base64:6]",

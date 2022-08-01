@@ -1,7 +1,9 @@
 import { sleep } from '@thecointech/async';
 import { useEffect } from 'react';
 import { log } from '@thecointech/logging'
-import { EventType, StatusType, GetUserVerificationApi } from '@thecointech/apis/broker';
+import { StatusType, GetUserVerificationApi } from '@thecointech/apis/broker';
+// For reasons I don't understand, EventType will not import from apis/broker (in Storybook)
+import { EventType } from '@thecointech/broker-cad';
 
 //
 // In DevLive, we just exercise our code (so ignore blockpass itself)

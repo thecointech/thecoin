@@ -9,7 +9,7 @@ import { StepLineLayer } from "./StepLineLayer";
 import { getAccountSerie } from "./data";
 import { Placeholder } from "semantic-ui-react";
 import { useFxRates, FxRateReducer } from "../../containers/FxRate";
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import styles from './styles.module.less';
 
 // Easy access to theme definition

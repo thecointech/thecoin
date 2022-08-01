@@ -2,6 +2,7 @@
   "name": "@thecointech/signers",
   "version": "0.2.81",
   "description": "The Coin: centralized access for built-in signers.  Not for external use",
+  "type": "module",
   "keywords": [
     "TheCoin"
   ],
@@ -19,7 +20,8 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc --project tsconfig.build.json",
-    "clean": "rimraf ./build && rimraf ./coverage"
+    "clean": "rimraf ./build && rimraf ./coverage",
+    "test": "yarn run-jest"
   },
   "files": [
     "build/**/*"
@@ -60,7 +62,7 @@
     "@thecointech/ethers-provider": "^0.2.81",
     "@thecointech/hardware-wallet": "^0.2.81",
     "@thecointech/logging": "^0.2.81",
-    "ethers": "^5.5.1"
+    "@ethersproject/wallet": "5.6.2"
   },
   "devDependencies": {
     "jest": "*"

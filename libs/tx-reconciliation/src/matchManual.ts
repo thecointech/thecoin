@@ -1,6 +1,6 @@
-import manual from './data/manual.json';
+import manual from './data/manual.json' assert {type: "json"};
 // import { DateTime } from "luxon";
-// import { Decimal } from 'decimal.js-light';
+// import Decimal from 'decimal.js-light';
 // import { spliceBank } from "./matchBank";
 import { AllData } from './types';
 // import { ActionType } from '@thecointech/broker-db';

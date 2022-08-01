@@ -1,8 +1,8 @@
 import { ImmerReducer } from 'immer-reducer';
 import { DateTime } from 'luxon';
-import { SagaIterator } from 'redux-saga';
 import { AccountState, AccountDetails } from '@thecointech/account';
 import { Signer } from '@ethersproject/abstract-signer';
+import type { SagaIterator } from '@redux-saga/core';
 
 export type { AccountState };
 

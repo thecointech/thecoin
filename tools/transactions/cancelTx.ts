@@ -4,7 +4,6 @@ import { DateTime } from 'luxon';
 import { getProvider } from '@thecointech/ethers-provider';
 import { toCoin } from '@thecointech/utilities';
 import { getSigner } from '@thecointech/signers';
-import '@thecointech/setenv';
 import { connect } from '@thecointech/contract-base/connect';
 
 async function cancelXfer() {

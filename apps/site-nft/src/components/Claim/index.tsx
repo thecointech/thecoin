@@ -3,7 +3,7 @@ import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Button, Form } from 'semantic-ui-react';
-import { GetNftApi } from '../../api';
+import { GetNftApi } from '@thecointech/apis/nft';
 import { AppContainer } from '../AppContainers';
 import { PageHeader } from '../PageHeader';
 import icon from './images/icon_topup_big.svg';

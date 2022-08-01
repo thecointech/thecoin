@@ -1,5 +1,5 @@
 import { CurrencyKey, FXRate } from "@thecointech/fx-rates";
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import { COIN_EXP } from '@thecointech/contract-core';
 import { getProvider } from '@thecointech/ethers-provider';
 
