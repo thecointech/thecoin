@@ -1,5 +1,5 @@
 import { TransitionCallback } from '@thecointech/tx-statemachine'
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
 
 export type Deposit = {

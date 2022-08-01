@@ -1,5 +1,7 @@
-import { basename, join } from 'path';
+import { basename } from 'path';
 import { existsSync, readFileSync } from 'fs';
+import { projectUrl } from '@thecointech/setenv/projectUrl';
+import { fileURLToPath } from 'url';
 import de from 'dotenv';
 
 const projectRoot = process.cwd();
@@ -11,21 +13,23 @@ export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
       ? "prod"
       : "development"
   );
-  const files: string[] = [];
+  const files : URL[] = [];
   // Does the user have files on the system
-  if (!onlyPublic && process.env.THECOIN_ENVIRONMENTS) {
-    const systemFolder = process.env.THECOIN_ENVIRONMENTS;
-    const systemFile = join(systemFolder, `${envName}.private.env`);
+  const systemFolder = `${process.env.THECOIN_ENVIRONMENTS}/`;
+  if (!onlyPublic && systemFolder) {
+    const systemFile = new URL(`${envName}.private.env`, `file://${systemFolder}`)
     if (existsSync(systemFile)) files.push(systemFile);
   }
 
   // If none found, is there any in the local repo folder?
-  const repoFile = join(__dirname, '..', '..', '..', 'environments', `${envName}.public.env`);
-  if (existsSync(repoFile)) files.push(repoFile);
+  const repoUrl = new URL(`environments/${envName}.public.env`, projectUrl());
+  if (existsSync(repoUrl)) {
+    files.push(repoUrl);
+  }
 
   // None found, throw
   if (files.length == 0) {
-    throw new Error(`Missing cfg files for: ${cfgName} (${repoFile})`);
+    throw new Error(`Missing cfg files for: ${cfgName} (${repoUrl})`);
   }
 
   // Beta versions share a lot with non-beta environments, so we merge them together
@@ -36,7 +40,7 @@ export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
   return files;
 }
 
-export function getEnvVars(cfgName?: string, onlyPublic?: boolean): Record<string, string> {
+export function getEnvVars(cfgName?: string, onlyPublic?: boolean) : Record<string, string> {
   const files = getEnvFiles(cfgName, onlyPublic);
   return files
     .map(file => readFileSync(file))
@@ -51,13 +55,10 @@ export function getEnvVars(cfgName?: string, onlyPublic?: boolean): Record<strin
 export function loadEnvVars(cfgName?: string) {
   // Load all environment files.
   const files = getEnvFiles(cfgName);
-  files.forEach(path => de.config({path}))
+  files.forEach(path => de.config({path: fileURLToPath(path)}))
 
     //  Set default name for logging
   if (!process.env.LOG_NAME) {
     process.env.LOG_NAME = LOG_NAME;
   }
 }
-
-// By default, load envVars with private variables.
-loadEnvVars();

@@ -1,5 +1,5 @@
 import { getIncompleteActions } from '@thecointech/broker-db';
-import { TheCoin } from '@thecointech/contract-core';
+import type { TheCoin } from '@thecointech/contract-core';
 import gmail from '@thecointech/tx-gmail';
 import { eTransferProcessor, getBuyETransferAction } from '@thecointech/tx-deposit';
 import { TypedActionContainer } from '@thecointech/tx-statemachine';

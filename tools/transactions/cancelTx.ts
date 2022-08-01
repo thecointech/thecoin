@@ -4,7 +4,6 @@ import { DateTime } from 'luxon';
 import { getProvider } from '@thecointech/ethers-provider';
 import { toCoin } from '@thecointech/utilities';
 import { getSigner } from '@thecointech/signers';
-import '@thecointech/setenv';
 import { connect } from '@thecointech/contract-base/connect';
 
 async function cancelXfer() {
@@ -33,7 +32,7 @@ async function cancelXfer() {
       console.log(`Tx sent: ${tx.hash}`);
       await tx.wait(2);
     }
-    catch (e) {
+    catch (e: any) {
       console.error(`Error happened: ${e.message}`);
     }
   }

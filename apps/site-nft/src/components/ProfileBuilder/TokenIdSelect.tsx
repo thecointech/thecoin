@@ -23,29 +23,31 @@ export const TokenIdSelect = ({ tokenIds, setTokenIds }: Props) => {
       return undefined;
 
     setLoading(true);
-    const nft = connectNFT(account.signer);
-    nft.balanceOf(address)
-      .then(balance => {
+    (async () => {
+      try {
+        const nft = await connectNFT(account.signer);
+        const balance = await nft.balanceOf(address);
         log.trace(`User has ${balance.toString()} tokens`);
-        return cancelled
-          ? []
-          : Promise.all(
-              Array.from(
-                { length: balance.toNumber() },
-                (_, idx) => nft.tokenOfOwnerByIndex(address, idx)
-              )
-            )
-      }).then(ids => {
-        if (!cancelled) {
-          const ownedIds = ids.map(ids => ids.toNumber())
-          log.trace(`Tokens available: ${JSON.stringify(ownedIds)}`);
-          setTokenIds(ownedIds);
-          setLoading(false);
-        }
-      }).catch(err => {
-        log.error(err, "Cannot load tokens for {address}");
-        throw err;
-      })
+        if (cancelled) return;
+        // Get all tokens
+        const ids = await Promise.all(
+          Array.from(
+            { length: balance.toNumber() },
+            (_, idx) => nft.tokenOfOwnerByIndex(address, idx)
+          )
+        )
+        if (cancelled) return;
+        const ownedIds = ids.map(ids => ids.toNumber())
+        log.trace(`Tokens available: ${JSON.stringify(ownedIds)}`);
+        setTokenIds(ownedIds);
+      }
+      catch (e: any) {
+        log.error(e, "failed to load tokens");
+      }
+      finally {
+        setLoading(false);
+      }
+    })()
     return () => { cancelled = true; }
   }, [account?.signer])
 

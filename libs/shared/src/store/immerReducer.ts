@@ -1,10 +1,9 @@
 import { ImmerReducer, createReducerFunction, createActionCreators, ImmerReducerClass, ImmerReducerState } from "immer-reducer";
-import { put, select, SelectEffect, takeLatest } from "redux-saga/effects";
+import { put, select, SelectEffect, takeLatest } from "@redux-saga/core/effects";
 import { Action, bindActionCreators, Reducer } from "redux";
 import { useDispatch, useSelector } from 'react-redux';
 import { useInjectReducer, useInjectSaga } from 'redux-injectors';
-import { Saga } from 'redux-saga';
-
+import type { Saga } from '@redux-saga/core';
 
 //
 // Duplicating the ActionsType from ImmerReducer.  This
@@ -20,7 +19,7 @@ export interface ImmerActionCreator<ActionTypeType, Payload extends any[]> {
   };
 }
 
-type ActionsType<Interface> = {
+export type ActionsType<Interface> = {
   [K in keyof Interface] : ImmerActionCreator<K, ArgumentsType<Interface[K]>>
 }
 

@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import { Form, Label } from 'semantic-ui-react';
 import InputMask, { InputState } from "react-input-mask";
-import { MaskedUxProps } from '../types';
+import type { MaskedUxProps } from '../types';
 
 function beforeMaskedValueChange(state: InputState) {
   let { value } = state;
@@ -23,7 +23,7 @@ function beforeMaskedValueChange(state: InputState) {
 
 
 export const UxDate = (props:MaskedUxProps) => {
-  
+
 
   function onChange(event: ChangeEvent<HTMLInputElement>) {
     if (props.uxChange)
@@ -33,15 +33,15 @@ export const UxDate = (props:MaskedUxProps) => {
     return (
       <Form.Field className={props.className}>
         <Label>{props.label}</Label>
-          <InputMask name={props.name} 
+          <InputMask name={props.name}
                       mask="9999-99-99"
                       defaultValue={props.value}
                       value={props.value}
                       beforeMaskedValueChange={beforeMaskedValueChange}
-                      alwaysShowMask 
+                      alwaysShowMask
                       onChange={onChange}
                       readOnly={props.readOnly} />
-        
+
       </Form.Field>
     );
-} 
+}

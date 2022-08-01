@@ -1,15 +1,15 @@
 
-import prismicApi from '@prismicio/client'
+import { createClient } from '@prismicio/client'
 import { SagaReducer } from '@thecointech/shared/store/immerReducer'
 import { ArticleDocument, FAQDocument, IActions, PrismicState } from './types'
-import { call } from 'redux-saga/effects'
+import { call } from "@redux-saga/core/effects";
 import { log } from '@thecointech/logging'
 import type { ApplicationRootState } from 'types'
-import type { Document } from '@prismicio/client/types/documents'
-import { Locale } from '@thecointech/shared/containers/LanguageProvider'
+import type { PrismicDocument } from '@prismicio/types'
+import type { Locale } from '@thecointech/shared/containers/LanguageProvider'
 
 const apiEndpoint = process.env.PRISMIC_API_ENDPOINT as string;
-const client = prismicApi.client(apiEndpoint);
+const client = createClient(apiEndpoint);
 
 const DOCUMENTS_KEY: keyof ApplicationRootState = "documents";
 
@@ -42,7 +42,7 @@ export class Prismic extends SagaReducer<IActions, PrismicState>(DOCUMENTS_KEY, 
       return;
 
     log.trace(`Fetching Single Prismic Doc: ${uid}`);
-    const result = (yield call(getByUId, uid, locale)) as Document;
+    const result = (yield call(getByUId, uid, locale)) as ArticleDocument;
     log.trace(`Fetched: ${!!result}`);
     if (result) {
       yield this.storeValues({
@@ -61,7 +61,7 @@ export class Prismic extends SagaReducer<IActions, PrismicState>(DOCUMENTS_KEY, 
       return;
     }
     log.trace(`Fetching Prismic docs for locale: ${locale}`);
-    const results = (yield call(fetchData, locale)) as Document[];
+    const results = (yield call(fetchData, locale)) as PrismicDocument[];
     log.trace(`Fetched: ${!!results}`);
     if (results) {
       const newState = {
@@ -71,10 +71,10 @@ export class Prismic extends SagaReducer<IActions, PrismicState>(DOCUMENTS_KEY, 
       }
       results
         .filter(item => item.type === 'faq')
-        .forEach(item => newState.faqs.set(item.uid!, item))
+        .forEach(item => newState.faqs.set(item.uid!, item as FAQDocument));
       results
         .filter(item => item.type === 'article')
-        .forEach(item => newState.articles.set(item.uid!, item))
+        .forEach(item => newState.articles.set(item.uid!, item as ArticleDocument))
       yield this.storeValues({
         [locale]: newState
       })

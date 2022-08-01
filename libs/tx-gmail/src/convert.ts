@@ -3,7 +3,7 @@ import { eTransferData } from './types';
 import { Base64 } from 'js-base64';
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
 import currency from 'currency.js';
 

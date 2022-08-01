@@ -1,7 +1,7 @@
 {
   "name": "@thecointech/jestutils",
   "private": "true",
-  "version": "0.2.76",
+  "version": "0.2.81",
   "description": "The Coin: Simple jest extentions",
   "keywords": [
     "TheCoin",
@@ -15,10 +15,15 @@
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/jestutils"
   },
+  "bin": {
+    "run-jest": "./bin/run-jest.cjs",
+    "run-jest-nix": "./bin/run-jest-nix.cjs"
+  },
   "scripts": {
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "jest --coverage",
+    "test": "yarn run-jest",
+    "test:ci": "yarn run-jest-nix",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [
@@ -26,6 +31,8 @@
   ],
   "exports": {
     ".": "./build/index.js",
+    "./config": "./utils/base.config.js",
+    "./styleMock": "./utils/styleMock.js",
     "./*": "./build/*.js"
   },
   "typesVersions": {

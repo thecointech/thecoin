@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import { getMarketData, MarketData } from './market';
 import { one, zero } from './sim.decimal';
 

@@ -1,9 +1,8 @@
 import { writeFileSync } from 'fs';
 import { MigrationStep } from './step';
-import { getSigner } from '@thecointech/signers';
-import { getTokenClaimCode } from '../src/tokenCodes';
 import { join } from 'path';
 import { getContract } from './deploy';
+import { dynamicImport, getSigner } from './signers';
 
 const step: MigrationStep = () =>
   async (deployer, network, _accounts) => {
@@ -32,6 +31,7 @@ const step: MigrationStep = () =>
     }
 
     // Now build 9 codes to be used.
+    const { getTokenClaimCode } = await dynamicImport('../src/tokenCodes');
     const codes = await Promise.all(ids.map(id => getTokenClaimCode(id, minter)));
     // now, write these out into an appropriate file
     const asJson = codes.reduce((obj, val, idx) => { obj[ids[idx]] = val; return obj }, {} as any);

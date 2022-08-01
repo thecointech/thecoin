@@ -1,4 +1,4 @@
-import { IpcMain, IpcRenderer } from './electron_types';
+import type { IpcMain, IpcRenderer } from './electron_types';
 import { ElectronSigner } from './signer';
 
 export function bridge(ipc: IpcRenderer|IpcMain) {

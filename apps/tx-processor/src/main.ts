@@ -1,6 +1,6 @@
 import { log } from "@thecointech/logging";
 import { RbcApi } from "@thecointech/rbcapi";
-import { TheCoin } from '@thecointech/contract-core';
+import type { TheCoin } from '@thecointech/contract-core';
 import { processUnsettledDeposits } from './deposits';
 import { processUnsettledETransfers } from './etransfer';
 import { processUnsettledBillPayments } from './bills';
@@ -8,6 +8,7 @@ import { SendMail } from '@thecointech/email';
 import { initialize, release } from './initialize';
 
 import { exit } from 'process';
+import { processReferrals } from './referrals';
 
 //
 // Process deposits: Make 'em Rain!!!
@@ -40,6 +41,8 @@ async function Process() {
   await ProcessDeposits(contract, bank);
   await ProcessETransfers(contract, bank);
   await ProcessBillPayments(contract, bank);
+
+  await processReferrals();
 
   log.debug(`Completed processing`);
 }
