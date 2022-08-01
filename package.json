@@ -65,7 +65,7 @@
     "firebase": "^8.10.1",
     "invariant": "2.2.4",
     "lodash": "^4.17.21",
-    "moment": "^2.26.0",
+    "moment": "^2.29.4",
     "pouchdb": "^7.2.1",
     "pouchdb-upsert": "^2.2.0",
     "prop-types": "^15.7.2",
