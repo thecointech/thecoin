@@ -5,20 +5,22 @@ import { ApiAction, closeBrowser, initBrowser } from './action';
 import { ConfigStore } from '@thecointech/store';
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { getEnvVars } from '@thecointech/setenv';
+import adapter from 'pouchdb-adapter-memory';
 
-PouchDB.plugin(require('pouchdb-adapter-memory'));
 const env = getEnvVars("prod");
 let api: RbcApi; // Intialized below
 
 const shouldRun = !!env.RBCAPI_CREDENTIALS_PATH && !process.env.JEST_CI;
 
-console.log(shouldRun);
-
 // This test-suite checks that using Puppeteer allows us to complete
 // the requested actions.
 describe('Rbc Puppeteer-based API', () => {
 
-  jest.setTimeout(500000);
+  beforeAll(() => {
+    jest.setTimeout(500000);
+    PouchDB.plugin(adapter);
+  });
+
   beforeEach(initialize)
   afterEach(release)
 
