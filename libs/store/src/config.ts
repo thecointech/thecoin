@@ -14,7 +14,7 @@ export class ConfigStore extends BaseStore<DocType>("config_data") {
       const {value} = await ConfigStore.db.get(key);
       return value;
     }
-    catch (e) {
+    catch (e: any) {
       if (e.status == 404)
         return undefined;
       throw e;

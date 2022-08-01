@@ -25,8 +25,13 @@ export async function getNewTokens(oAuth2Client: OAuth2Client) {
 
 /** Get code to be swapped for token */
 export function getCode(url: string) {
-  log.debug('Begin OAuth process');
-  open(url);
+  log.debug(`Begin OAuth process: ${url}`);
+  try {
+    open(url);
+  }
+  catch {
+    log.debug(`Please go to:\n${url}`);
+  }
   return new Promise<string>((resolve, reject) => {
     const server = http.createServer(async (req, res) => {
       if (!req.url)

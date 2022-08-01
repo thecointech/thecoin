@@ -1,5 +1,5 @@
 import { getSigner } from '@thecointech/signers';
-import constant from './constant.json';
+import constant from './constant.json' assert {type: "json"};
 
 type Status = {
   certifiedFee: number,

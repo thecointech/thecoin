@@ -1,8 +1,9 @@
 {
   "name": "@thecointech/tx-reconciliation",
   "private": "true",
-  "version": "0.2.80",
+  "version": "0.2.81",
   "description": "The Coin: Process reconciliation between bank, blockchain, database and emails to ensure all transactions are completed appropriately",
+  "type": "module",
   "keywords": [
     "THECoin"
   ],
@@ -12,7 +13,8 @@
   "scripts": {
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "jest --coverage",
+    "test": "yarn run-jest",
+    "test:ci": "yarn run-jest-nix",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [
@@ -36,12 +38,12 @@
     }
   },
   "dependencies": {
-    "@thecointech/bank-interface": "^0.2.80",
-    "@thecointech/broker-db": "^0.2.80",
-    "@thecointech/shared": "^0.2.80",
-    "@thecointech/tx-blockchain": "^0.2.80",
-    "@thecointech/tx-gmail": "^0.2.80",
-    "@thecointech/utilities": "^0.2.80",
+    "@thecointech/bank-interface": "^0.2.81",
+    "@thecointech/broker-db": "^0.2.81",
+    "@thecointech/shared": "^0.2.81",
+    "@thecointech/tx-blockchain": "^0.2.81",
+    "@thecointech/tx-gmail": "^0.2.81",
+    "@thecointech/utilities": "^0.2.81",
     "fastest-levenshtein": "^1.0.12"
   },
   "devDependencies": {

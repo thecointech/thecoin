@@ -1,7 +1,7 @@
 import { Controller, Get, Route, Query, Post, Response, Tags, BodyProp } from '@tsoa/runtime';
 import { getReferrerData, createReferree } from '@thecointech/broker-db/referrals';
-import { BoolResponse } from '../types';
 import { DateTime } from 'luxon';
+import type { BoolResponse } from '../types';
 
 @Route('referrals')
 @Tags('Referrals')

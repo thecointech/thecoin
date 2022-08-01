@@ -1,8 +1,9 @@
 import { ConfigStore } from './config';
 import PouchDB from 'pouchdb';
+import adapter from 'pouchdb-adapter-memory';
 
 beforeAll(() => {
-  PouchDB.plugin(require('pouchdb-adapter-memory'));
+  PouchDB.plugin(adapter);
 });
 
 it("Can store KV pairs in Config", async () => {

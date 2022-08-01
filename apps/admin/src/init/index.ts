@@ -24,7 +24,7 @@ export async function initialize() {
     log.trace("Initialization complete");
     return configureAdminStore();
   }
-  catch (e) {
+  catch (e: any) {
     log.fatal(e, "Couldn't complete initialization");
     alert(e.message);
     throw e;

@@ -1,7 +1,8 @@
 {
   "name": "@thecointech/broker-service",
-  "version": "0.2.80",
+  "version": "0.2.81",
   "private": true,
+  "type": "module",
   "description": "TheCoin simple broker services.  This sample API is an example of how to setup the simplest low-volume exchange, when combined with the included server code, without external dependencies",
   "keywords": [
     "TheCoin",
@@ -17,18 +18,19 @@
   },
   "scripts": {
     "start": "node ./build/main.js",
-    "dev": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node --inspect=9232 -r ts-node/register -r ./src/main.ts",
+    "dev": "yarn run-env --inspect=9232 ./src/main.ts",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
     "deploy": "ts-node --skip-project deploy",
     "build": "yarn tsc -b tsconfig.build.json",
     "gen:swagger": "yarn tsoa spec-and-routes",
     "clean": "rimraf ./build && rimraf ./src/api",
-    "test": "yarn jest",
+    "test": "yarn run-jest",
+    "test:ci": "yarn run-jest-nix",
     "test:coverage": "yarn test --coverage"
   },
   "engines": {
-    "node": "14.x.x"
+    "node": "16.x.x"
   },
   "files": [
     "build/**/*"
@@ -37,15 +39,15 @@
   "dependencies": {
     "@google-cloud/firestore": "4.12.3",
     "@google-cloud/storage": "^5.19.4",
-    "@thecointech/contract-core": "^0.2.80",
-    "@thecointech/email": "^0.2.80",
-    "@thecointech/logging": "^0.2.80",
-    "@thecointech/pricing": "^0.2.80",
-    "@thecointech/signers": "^0.2.80",
-    "@thecointech/tx-bill": "^0.2.80",
-    "@thecointech/tx-etransfer": "^0.2.80",
-    "@thecointech/utilities": "^0.2.80",
-    "@tsoa/runtime": "^3.8.0",
+    "@thecointech/contract-core": "^0.2.81",
+    "@thecointech/email": "^0.2.81",
+    "@thecointech/logging": "^0.2.81",
+    "@thecointech/pricing": "^0.2.81",
+    "@thecointech/signers": "^0.2.81",
+    "@thecointech/tx-bill": "^0.2.81",
+    "@thecointech/tx-etransfer": "^0.2.81",
+    "@thecointech/utilities": "^0.2.81",
+    "@tsoa/runtime": "^4.1.0",
     "axios": "0.21.4",
     "cors": "^2.8.5",
     "express": "^4.17.1",
@@ -58,7 +60,6 @@
   "devDependencies": {
     "@types/cors": "^2.8.10",
     "@types/swagger-ui-express": "^4.1.1",
-    "jest": "*",
-    "tsoa": "^3.8.0"
+    "jest": "*"
   }
 }

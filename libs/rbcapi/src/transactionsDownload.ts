@@ -21,4 +21,3 @@ export async function downloadTxCsv(page: Page) {
   return csv
 }
 
-module.exports = { downloadTxCsv };

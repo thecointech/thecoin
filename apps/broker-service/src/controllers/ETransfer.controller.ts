@@ -1,8 +1,8 @@
 import { Controller, Body, Route, Post, Put, Response, Tags } from '@tsoa/runtime';
 import { ProcessSale } from "../exchange/VerifiedSale";
 import { GenerateCode } from "../Buy/eTransfer";
-import { CertifiedTransfer, SignedMessage } from '@thecointech/types';
-import { CertifiedTransferResponse, ETransferCodeResponse } from './types';
+import type { CertifiedTransfer, SignedMessage } from '@thecointech/types';
+import type { CertifiedTransferResponse, ETransferCodeResponse } from './types';
 
 @Route('etransfer')
 @Tags('ETransfer')

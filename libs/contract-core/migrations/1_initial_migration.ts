@@ -1,8 +1,6 @@
-import { MigrationStep } from './step';
-import "@thecointech/setenv";
 import { storeContractAddress } from '@thecointech/contract-tools/migrations';
 import { deployProxy } from '@openzeppelin/truffle-upgrades';
-import { getSigner } from '@thecointech/signers';
+import { MigrationStep } from './step';
 
 const step: MigrationStep =  (artifacts) =>
   async (deployer, network) => {
@@ -24,10 +22,19 @@ const getName = (network: string) =>
 // In some environments the address must be set
 // statically (to support multiple hardware wallets)
 // whereas in devlive the address is dynamically generated
-const getTheCoinAddress = async () => (
-  process.env.WALLET_TheCoin_ADDRESS ??
-  (await getSigner("TheCoin")).getAddress()
-)
+const getTheCoinAddress = async () => {
+  if (process.env.WALLET_TheCoin_ADDRESS !== undefined) {
+    return process.env.WALLET_TheCoin_ADDRESS;
+  }
+  // Prevent ts-node from compiling this import to require
+  // https://github.com/TypeStrong/ts-node/discussions/1290
+  const dynamicImport = new Function('specifier', 'return import(specifier)');
+  const { getSigner } = await dynamicImport('@thecointech/signers');
+  const signer = await getSigner("TheCoin");
+  const address = await signer.getAddress();
+  console.log(`TheCoin address: ${address}`);
+  return address;
+}
 
 async function getArguments(network: String) {
   return [

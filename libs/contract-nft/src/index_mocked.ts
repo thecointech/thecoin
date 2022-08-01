@@ -2,6 +2,9 @@ import { ContractTransaction } from 'ethers';
 import { BigNumber, BigNumberish } from 'ethers';
 import type { TheGreenNFT } from '.';
 
+export * from "./gassless";
+export * from "./tokenCodes";
+
 class MockNFT implements Pick<TheGreenNFT, "balanceOf"|"claimToken"> {
   tokens: string[] = [];
 
@@ -20,11 +23,11 @@ class MockNFT implements Pick<TheGreenNFT, "balanceOf"|"claimToken"> {
   }
 }
 
-export function getContract(): TheGreenNFT {
-  return new MockNFT() as unknown as TheGreenNFT;
+export function getContract() {
+  return Promise.resolve(new MockNFT());
 }
 
 
-export function connectNFT(): TheGreenNFT {
-  return new MockNFT() as unknown as TheGreenNFT;
+export function connectNFT() {
+  return Promise.resolve(new MockNFT());
 }

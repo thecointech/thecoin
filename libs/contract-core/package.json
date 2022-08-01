@@ -1,7 +1,8 @@
 {
   "name": "@thecointech/contract-core",
-  "version": "0.2.80",
+  "version": "0.2.81",
   "description": "The Coin: Solidity contract for TheCoin currency",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "ethereum"
@@ -20,59 +21,60 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "run-s build:contracts build:types build:src",
-    "build:contracts": "truffle compile",
+    "build:contracts": "yarn _truffle compile",
     "build:types": "yarn contract-gen-types",
     "build:src": "run-p build:src:*",
-    "build:src:cjs": "yarn tsc --project tsconfig.build.cjs.json",
+    "_build:src:cjs": "yarn tsc --project tsconfig.build.cjs.json",
     "build:src:mjs": "yarn tsc --project tsconfig.build.mjs.json",
     "build:src:copy": "cpx \"./src/deployed/**\" ./build/cjs/deployed && cpx \"./src/deployed/**\" ./build/mjs/deployed",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts",
     "clean:types": "rimraf ./src/types && rimraf ./migrations/types",
-    "test": "yarn jest",
-    "test:contract": "truffle test",
+    "test": "yarn run-jest",
+    "test:ci": "yarn run-jest-nix",
+    "test:contract": "yarn _truffle test",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn _deploy",
     "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn _deploy:polygon",
     "prod": "cross-env CONFIG_NAME=prod yarn _deploy:polygon",
+    "_truffle": "run-env exec=truffle --config ./truffle-config.cjs",
     "_deploy": "run-s _deploy:*",
-    "_deploy:polygon": "truffle migrate --network polygon && yarn seed",
-    "_deploy:ethereum": "truffle migrate --network ethereum",
-    "mint": "yarn run-script ./mint/main.ts",
-    "seed": "yarn run-script ./seed/main.ts",
-    "seed:fetch": "cross-env CONFIG_NAME=prodbeta yarn run-script ./seed/clone/fetch.ts",
-    "verify": "yarn run-script ./internal/verify.ts",
-    "run-script": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register "
+    "_deploy:polygon": "yarn _truffle migrate --network polygon && yarn seed",
+    "_deploy:ethereum": "yarn _truffle migrate --network ethereum",
+    "mint": "run-env ./mint/main.ts",
+    "seed": "run-env ./seed/main.ts",
+    "seed:fetch": "cross-env CONFIG_NAME=prodbeta yarn run-env ./seed/clone/fetch.ts",
+    "verify": "run-env ./internal/verify.ts"
   },
   "files": [
     "build/**/*"
   ],
   "main": "./build/index.js",
   "exports": {
-    "./contract": "./build/cjs/index.js",
+    "./contract": "./build/mjs/index.js",
     ".": {
-      "development": "./build/cjs/index_mocked.js",
+      "development": "./build/mjs/index_mocked.js",
       "electron": "./build/mjs/index.js",
-      "default": "./build/cjs/index.js"
+      "default": "./build/mjs/index.js"
     }
   },
-  "types": "./build/cjs/index.d.ts",
+  "types": "./build/mjs/index.d.ts",
   "typesVersions": {
     "*": {
       "*": [
-        "build/cjs/index.d.ts"
+        "build/mjs/index.d.ts"
       ]
     }
   },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
     "@openzeppelin/truffle-upgrades": "^1.14.0",
-    "@thecointech/async": "^0.2.80",
-    "@thecointech/contract-tools": "^0.2.80",
+    "@thecointech/async": "^0.2.81",
+    "@thecointech/contract-tools": "^0.2.81",
     "jest": "*"
   },
   "dependencies": {
-    "@thecointech/contract-base": "^0.2.80"
+    "@thecointech/contract-base": "^0.2.81"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

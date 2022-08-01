@@ -2,7 +2,7 @@
   "name": "@thecointech/site-nft",
   "productName": "THECoin: NFT",
   "private": true,
-  "version": "0.2.80",
+  "version": "0.2.81",
   "description": "THECoin NFT: some neat tagline",
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
     "preanalyze": "yarn clean:analyze",
     "analyze": "node ./internals/scripts/analyze.js",
     "prebuild": "run-p build:semantic build:i18l",
-    "build": "yarn webpack --config ../../libs/site-base/internal/webpack/webpack.prod.mjs --progress",
+    "build": "yarn run-env exec=webpack --config ../../libs/site-base/internal/webpack/webpack.prod.mjs --progress",
     "build:semantic": "node ./internals/buildSemantic",
     "build:i18l": "run-s extract compile",
     "clean": "run-p clean:*",
@@ -24,22 +24,22 @@
     "clean:analyze": "rimraf stats.json",
     "deploy:rebuild": "yarn build",
     "deploy": "ts-node --skip-project predeploy",
-    "dev": "yarn cross-env NODE_ENV=development node internals/server.mjs --port=3003",
+    "dev": "yarn run-env internals/server.mjs --port=3003",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn start:server",
     "start": "yarn test && yarn build && yarn start:server",
-    "start:server": "yarn cross-env NODE_ENV=production node ./internals/server.mjs --port=3003",
-    "generate": "plop --plopfile internals/generators/index.js",
+    "start:server": "run-env cfg=prod ./internals/server.mjs --port=3003",
     "lint": "yarn lint:src && yarn lint:css",
     "lint:css": "stylelint './src/**/*.{js,ts}'",
     "lint:src": "eslint . --ext .js,.ts,.jsx,.tsx",
     "lint:src:fix": "eslint --fix",
     "pretest": "yarn clean:test",
-    "test": "cross-env NODE_ENV=test jest --coverage",
+    "test": "yarn run-jest",
+    "test:ci": "yarn run-jest-nix",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern [sha512:contenthash:base64:6]",
-    "compile": "formatjs compile lang/en.json --out-file src/translations/en.json --format ../../tools/format-intl.js && formatjs compile lang/fr.json --out-file src/translations/fr.json --format ../../tools/format-intl.js"
+    "compile": "formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -51,10 +51,10 @@
     ]
   },
   "dependencies": {
-    "@thecointech/contract-nft": "^0.2.80",
-    "@thecointech/nft": "^0.2.80",
-    "@thecointech/shared": "^0.2.80",
-    "@thecointech/site-base": "^0.2.80",
+    "@thecointech/contract-nft": "^0.2.81",
+    "@thecointech/nft": "^0.2.81",
+    "@thecointech/shared": "^0.2.81",
+    "@thecointech/site-base": "^0.2.81",
     "@toast-ui/react-image-editor": "3.14.2",
     "exif-library": "https://github.com/FrozenKiwi/exif-library#1db15506"
   },

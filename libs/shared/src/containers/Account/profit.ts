@@ -4,7 +4,7 @@ import { weSellAt, weBuyAt, FXRate } from "@thecointech/fx-rates";
 
 // What is the CAD value of the money coming into the account?
 // If it is a purchase, it is valued at our sell rate, otherwise at our buy rate.
-export const isPurchase = (tx: Transaction) => tx.from== process.env.WALLET_BrokerCAD_ADDRESS;
+export const isPurchase = (tx: Transaction) => tx.from == process.env.WALLET_BrokerCAD_ADDRESS;
 export const isNotFee = (tx: Transaction) => tx.to != process.env.WALLET_BrokerTransferAssistant_ADDRESS;
 
 // What was the value of this transaction in fiat?

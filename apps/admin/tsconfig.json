@@ -2,8 +2,6 @@
   "extends": "../tsconfig.apps.json",
   "compilerOptions": {
     "tsBuildInfoFile": "./build/.buildinfo",
-    "module": "ESNext",
-    "target": "ES2019",
     "outDir": "./build/",
     "rootDir": "./src/",
     "baseUrl": "./src/",

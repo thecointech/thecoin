@@ -1,12 +1,12 @@
-import { Signer } from '@ethersproject/abstract-signer';
-import { AccountState, AccountDetails } from '@thecointech/account';
 import { GetStatusApi, StatusType, GetUserVerificationApi, UserVerifyData } from '@thecointech/apis/broker';
-import { SagaIterator } from 'redux-saga';
-import { call, put } from 'redux-saga/effects';
+import { call, put } from "@redux-saga/core/effects";
 import { ActionsType, BaseSagaInterface } from '../../store/immerReducer';
-import { IActions } from '../Account/types';
 import { GetSignedMessage } from '@thecointech/utilities/SignedMessages';
 import { log } from '@thecointech/logging';
+import type { SagaIterator } from '@redux-saga/core';
+import type { Signer } from '@ethersproject/abstract-signer';
+import type { IActions } from '../Account/types';
+import type { AccountState, AccountDetails } from '@thecointech/account';
 
 type AccountActions = ActionsType<IActions & BaseSagaInterface<AccountState>>;
 
@@ -53,7 +53,7 @@ function convertRawDetails(user: UserVerifyData) : AccountDetails|null {
 
 export function* checkCurrentStatus(actions: AccountActions, state: AccountState) : SagaIterator<string> {
   // If completed, there is nothing left to do
-  if (state.details.status === "completed")
+  if (state.details.status === "completed" && state.details.referralCode)
     return state.details.status;
 
   let user = yield call(getUserData, state.signer);

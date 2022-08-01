@@ -1,8 +1,9 @@
 {
   "name": "@thecointech/apis",
   "private": true,
-  "version": "0.2.80",
+  "version": "0.2.81",
   "description": "TheCoin: Simple wrappers for swagger-generated APIs ensures correct URL",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "Blockpass"
@@ -26,16 +27,36 @@
     "build/**/*"
   ],
   "exports": {
-    "./*": [
-      "./build/*.js"
-    ]
+    "./broker": {
+      "development": "./build/broker/mocked/index.js",
+      "default": "./build/broker/live.js"
+    },
+    "./pricing": {
+      "development": "./build/pricing/mocked.js",
+      "default": "./build/pricing/live.js"
+    },
+    "./nft": {
+      "development": "./build/nft/mocked.js",
+      "default": "./build/nft/live.js"
+    }
   },
-  "types": "./build/index.d.ts",
   "typesVersions": {
     "*": {
-      "*": [
-        "build/*.d.ts"
+      "broker": [
+        "./build/broker/live.d.ts"
+      ],
+      "pricing": [
+        "./build/pricing/live.d.ts"
+      ],
+      "nft": [
+        "./build/nft/live.d.ts"
       ]
     }
+  },
+  "devDependencies": {
+    "@thecointech/async": "*",
+    "@thecointech/broker-cad": "*",
+    "@thecointech/contract-core": "*",
+    "@thecointech/contract-nft": "*"
   }
 }

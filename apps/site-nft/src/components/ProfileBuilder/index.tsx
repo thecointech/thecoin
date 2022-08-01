@@ -59,7 +59,7 @@ export const ProfileBuilder = () => {
 
 async function getYears(tokenIds: number[]): Promise<[number, number] | undefined> {
   if (tokenIds.length == 0) return undefined;
-  const nft = getContract();
+  const nft = await getContract();
   const validBN = await Promise.all(
     tokenIds.map(id => nft.validity(id))
   );

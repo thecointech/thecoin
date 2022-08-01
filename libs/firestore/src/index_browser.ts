@@ -6,7 +6,6 @@ import firebase from 'firebase/app';
 import "firebase/auth";
 import "firebase/firestore";
 import { setFirestore } from './store';
-// import firebaseConfig from "./password.config.json";
 import { log } from '@thecointech/logging';
 
 export * from './store';
