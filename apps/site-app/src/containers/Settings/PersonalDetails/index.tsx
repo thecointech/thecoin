@@ -7,6 +7,7 @@ import { Form, Header, Icon } from 'semantic-ui-react';
 import { UxDate } from '@thecointech/shared/components/MaskedInputs/UxDate';
 import { UxInput, UxEmail } from '@thecointech/shared/components/UX';
 import styles from './styles.module.less';
+import { DetailsInput } from './DetailsInput';
 
 const translations = defineMessages({
   title : {
@@ -49,12 +50,12 @@ export const PersonalDetails = () => {
   const account = AccountMap.useActive()!;
   const accountApi = Account(account.address).useApi();
   const [details, setDetails] = useState(account.details);
-  const [givenNameEdit, setGivenNameEdit] = useState(false);
-  const [familyNameEdit, setFamilyNameEdit] = useState(false);
-  const [dobEdit, setDobEdit] = useState(false);
-  const [addressEdit, setAddressEdit] = useState(false);
-  const [emailEdit, setEmailEdit] = useState(false);
-  const [phoneEdit, setPhoneEdit] = useState(false);
+  // const [givenNameEdit, setGivenNameEdit] = useState(false);
+  // const [familyNameEdit, setFamilyNameEdit] = useState(false);
+  // const [dobEdit, setDobEdit] = useState(false);
+  // const [addressEdit, setAddressEdit] = useState(false);
+  // const [emailEdit, setEmailEdit] = useState(false);
+  // const [phoneEdit, setPhoneEdit] = useState(false);
 
   const onDetailsChange = (value?: string, name?: string) => {
     setDetails({
@@ -62,15 +63,15 @@ export const PersonalDetails = () => {
       [name as string]: value,
     });
   }
-  const noValidation = () => null;
+  // const noValidation = () => null;
 
   const onSetDetails = () => {
-    setGivenNameEdit(false);
-    setFamilyNameEdit(false);
-    setDobEdit(false);
-    setAddressEdit(false);
-    setEmailEdit(false);
-    setPhoneEdit(false);
+    // setGivenNameEdit(false);
+    // setFamilyNameEdit(false);
+    // setDobEdit(false);
+    // setAddressEdit(false);
+    // setEmailEdit(false);
+    // setPhoneEdit(false);
     accountApi.setDetails({...details});
   }
 
@@ -81,8 +82,48 @@ export const PersonalDetails = () => {
       </Header>
       <Form id={styles.personalInfo}>
 
-        <UxInput
-            className={"half left"}
+        <DetailsInput
+          Input={UxInput}
+          className={"half left"}
+          editting="given_name"
+          onValue={onDetailsChange}
+          translation={translations.name}
+        />
+
+        <DetailsInput
+          Input={UxInput}
+          className={"half right"}
+          editting="family_name"
+          onValue={onDetailsChange}
+          translation={translations.familyname}
+        />
+
+        <DetailsInput
+          Input={UxInput}
+          className={"half right"}
+          editting="family_name"
+          onValue={onDetailsChange}
+          translation={translations.familyname}
+        />
+
+        <DetailsInput
+          Input={UxDate}
+          className={"half left"}
+          editting="DOB"
+          onValue={onDetailsChange}
+          translation={translations.dob}
+        />
+
+        <DetailsInput
+          Input={UxInput}
+          className={"borderTop borderBottom"}
+          onValue={onDetailsChange}
+          translation={translations.address}
+          tooltip={translations.address}
+          defaultValue={details.address?.address}
+          name="address" readOnly={!addressEdit} />
+
+        {/* <UxInput
             intlLabel={<div>
                         <FormattedMessage {...translations.name} />
                         <span onClick={()=>setGivenNameEdit(!givenNameEdit)} className={styles.edit}>
@@ -96,9 +137,9 @@ export const PersonalDetails = () => {
             defaultValue={details.given_name}
             name="given_name"
             readOnly={!givenNameEdit}
-          />
+          /> */}
 
-        <UxInput
+        {/* <UxInput
           className={"half right"}
           intlLabel={<div>
                     <FormattedMessage {...translations.familyname} />
@@ -112,7 +153,7 @@ export const PersonalDetails = () => {
           placeholder={translations.familyname}
           tooltip={translations.familyname}
           name="family_name"
-          readOnly={!familyNameEdit} />
+          readOnly={!familyNameEdit} /> 
 
         <UxDate
           className={"half left"}
@@ -124,7 +165,7 @@ export const PersonalDetails = () => {
                   </div>}
           uxChange={onDetailsChange}
           defaultValue={details.DOB}
-          name="DOB" readOnly={!dobEdit} />
+          name="DOB" readOnly={!dobEdit} />*/}
 
         <UxInput
           className={"borderTop borderBottom"}
