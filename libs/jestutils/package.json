@@ -16,7 +16,8 @@
     "directory": "libs/jestutils"
   },
   "bin": {
-    "run-jest": "./bin/run-jest.cjs"
+    "run-jest": "./bin/run-jest.cjs",
+    "run-jest-nix": "./bin/run-jest-nix.cjs"
   },
   "scripts": {
     "build": "yarn tsc -b tsconfig.build.json",
