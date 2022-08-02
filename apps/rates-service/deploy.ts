@@ -3,7 +3,7 @@ import { SetGCloudConfig, copyEnvVarsLocal, copyNpmTokenHere, gCloudDeploy, Shel
 (async () => {
   await SetGCloudConfig("GCLOUD_RATES_CONFIG");
   await copyEnvVarsLocal("app.secrets.yaml");
-  await copyNpmTokenHere(__dirname);
+  await copyNpmTokenHere(new URL(import.meta.url));
   await gCloudDeploy();
   // Clean-up after
   await removeOldAppVersions();

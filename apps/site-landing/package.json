@@ -22,7 +22,7 @@
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
     "clean:analyze": "rimraf stats.json",
-    "deploy": "ts-node --skip-project predeploy",
+    "deploy": "yarn run-env ./deploy.ts",
     "deploy:rebuild": "yarn build",
     "dev": "run-env internals/server.mjs --port=3000",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",

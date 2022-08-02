@@ -1,6 +1,5 @@
 {
   "name": "@thecointech/setenv",
-  "private": "true",
   "version": "0.2.81",
   "description": "TheCoin: Environment setup library",
   "type": "module",
@@ -15,6 +14,9 @@
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/setenv"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
   "bin": {
     "run-env": "./bin/run-env.mjs"

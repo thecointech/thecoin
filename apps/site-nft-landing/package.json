@@ -10,7 +10,7 @@
     "pre_build": "rimraf ./build",
     "_build": "webpack --mode production",
     "pre_deploy": "yarn _build",
-    "_deploy": "ts-node --skip-project deploy",
+    "_deploy": "yarn run-env ./deploy.ts",
     "watch": "webpack --watch --mode=development",
     "serve": "firebase emulators:start --only hosting",
     "dev": "run-p watch serve"
