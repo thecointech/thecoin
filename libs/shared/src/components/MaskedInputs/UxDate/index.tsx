@@ -24,24 +24,23 @@ function beforeMaskedValueChange(state: InputState) {
 
 export const UxDate = (props:MaskedUxProps) => {
 
-
   function onChange(event: ChangeEvent<HTMLInputElement>) {
     if (props.uxChange)
       props.uxChange(event.currentTarget.value);
   }
 
-    return (
-      <Form.Field className={props.className}>
-        <Label>{props.label}</Label>
-          <InputMask name={props.name}
-                      mask="9999-99-99"
-                      defaultValue={props.value}
-                      value={props.value}
-                      beforeMaskedValueChange={beforeMaskedValueChange}
-                      alwaysShowMask
-                      onChange={onChange}
-                      readOnly={props.readOnly} />
+  return (
+    <Form.Field className={props.className}>
+      <Label>{props.intlLabel}</Label>
+      <InputMask name={props.name}
+        mask="9999-99-99"
+        defaultValue={props.value}
+        value={props.value}
+        beforeMaskedValueChange={beforeMaskedValueChange}
+        alwaysShowMask
+        onChange={onChange}
+        readOnly={props.readOnly} />
 
-      </Form.Field>
-    );
+    </Form.Field>
+  );
 }

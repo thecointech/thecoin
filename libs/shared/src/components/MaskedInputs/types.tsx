@@ -1,7 +1,7 @@
 import { AccountDetails } from '@thecointech/account';
 
 export type MaskedUxProps ={
-    label: JSX.Element,
+    intlLabel: JSX.Element,
     value?: string,
     defaultValue?: string,
     className?: string,

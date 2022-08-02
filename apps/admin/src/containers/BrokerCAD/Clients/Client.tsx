@@ -15,6 +15,7 @@ export const Client = (props: Props) => {
 
   const [allDetails, setAllDetails] = useState<AccountDetails[]>([]);
   const [loading, setLoading] = useState(false);
+  const [percent, setPercent] = useState(0);
   const [detailIdx, setDetailIdx] = useState(0);
   const rates = useFxRates();
   const account = AccountMap.useActive();
@@ -25,10 +26,11 @@ export const Client = (props: Props) => {
       return;
 
     setAllDetails([]);
+    setPercent(0);
     let isCancelled = false;
     const cancel = () => { isCancelled = true; }
     setLoading(true);
-    loadDetails(props.address, idx, setAllDetails, () => isCancelled)
+    loadDetails(props.address, idx, setAllDetails, setPercent, () => isCancelled)
       .then(() => setLoading(false));
 
     return cancel;
@@ -43,9 +45,9 @@ export const Client = (props: Props) => {
 
   const details = allDetails[detailIdx];
   const name = (!details && loading)
-    ? "Loading..."
-    : details
-      ? `${details.given_name} ${details.family_name}`
+    ? `Loading... ${(percent * 100).toFixed(1)}%`
+    : details?.user
+      ? `${details.user.given_name} ${details.user.family_name}`
       : "UNVERIFIED";
 
   return (
@@ -63,8 +65,8 @@ export const Client = (props: Props) => {
         onChange={(_event, data) => setDetailIdx(Number(data.value))}
       /> {` of ${allDetails.length}`}
       <div>{name}</div>
-      <div>DOB: {details?.DOB}</div>
-      <div>email: {details?.email}</div>
+      <div>DOB: {details?.user?.DOB}</div>
+      <div>email: {details?.user?.email}</div>
       <div>status: {details?.status}</div>
       <div>verified: {getIsVerified(details).toString()}</div>
       <hr />
@@ -76,8 +78,8 @@ export const Client = (props: Props) => {
 }
 
 type SetDetailsState = (setter: (acc: AccountDetails[]) => AccountDetails[]) => void;
-async function loadDetails(address: string, idx: SelfID, setAllDetails: SetDetailsState, isCancelled: () => boolean) {
-  const history = await getHistory(address, idx.client);
+async function loadDetails(address: string, idx: SelfID, setAllDetails: SetDetailsState, setPercent: (n: number)=> void, isCancelled: () => boolean) {
+  const history = await getHistory(address, idx.client, setPercent);
   if (!history) return;
 
   for (const raw of history) {
@@ -90,14 +92,14 @@ async function loadDetails(address: string, idx: SelfID, setAllDetails: SetDetai
   }
 }
 
-function getIsVerified(details: AccountDetails) {
-  if (!details)
+function getIsVerified(details?: AccountDetails) {
+  if (!details?.user)
     return false;
 
-  const {given_name, family_name, DOB, uniqueIdSig} = details;
-  if (!given_name || !family_name || !DOB || !uniqueIdSig)
+  const {given_name, family_name, DOB } = details.user;
+  if (!given_name || !family_name || !DOB || !details.uniqueIdSig)
     return false;
 
-  return verifyMessage(buildUniqueId({given_name, family_name, DOB}), uniqueIdSig) == process.env.WALLET_BrokerTransferAssistant_ADDRESS;
+  return verifyMessage(buildUniqueId({given_name, family_name, DOB}), details.uniqueIdSig) == process.env.WALLET_BrokerTransferAssistant_ADDRESS;
 }
 

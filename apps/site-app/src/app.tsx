@@ -56,9 +56,7 @@ declare const module: any;
 if (module.hot) {
   module.hot.accept(['./i18n', './containers/App'], () => {
     ReactDOM.unmountComponentAtNode(MOUNT_NODE);
-    // tslint:disable-next-line:max-line-length
-    const refresh = require('./containers/App').default; // https://github.com/webpack/webpack-dev-server/issues/100
-    render(translations, refresh);
+    import('./containers/App').then(({ App }) => render(translations, App));
   });
 }
 

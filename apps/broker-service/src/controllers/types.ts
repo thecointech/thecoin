@@ -105,9 +105,10 @@ export type BlockpassData = {
   certs: any
 }
 
-
+// A small sub-set of the data stored on firestore (UserVerifyInfo)
 export type UserVerifyData ={
   status?: StatusType,
   referralCode?: string,
-  raw: BlockpassData,
+  raw?: BlockpassData,
+  uniqueIdSig?: string,
 }

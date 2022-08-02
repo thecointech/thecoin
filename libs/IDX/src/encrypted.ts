@@ -14,9 +14,13 @@ export const setEncrypted = async <T>(self: SelfID, definition: IdxAlias, data: 
 
   const owners = new Set([self.id, ...recipients]) // always make ourselves a recipient
   const did = self.client.ceramic.did!;
+  // remove any undefined values from the data
+  const clean = cleanUndefined(data);
+  if (!clean) { return }
+
   // Remember who has access to this record
   const payload: EncryptedPayload<T> = {
-    data: cleanUndefined(data),
+    data: clean,
     recipients,
   }
   const encrypted = await did.createDagJWE(payload, [...owners])
@@ -39,13 +43,20 @@ export const loadEncrypted = async <T>(self: SelfID, definition: IdxAlias) : Pro
   return null;
 }
 
-const cleanUndefined = (obj: any) =>
-  typeof(obj) === 'object'
-    ? Object.keys(obj).reduce((acc, key) => (
-        obj[key] === undefined
-          ? acc
-          : { ...acc, [key]: obj[key] }
-      ), {} as any)
-    : obj;
+const cleanUndefined = <T>(obj: T) : T|undefined => {
+  if (obj && typeof obj === 'object') {
+    const r = Object.fromEntries(
+      Object
+        .entries(obj)
+        .map(([key, value]) => [key, cleanUndefined(value)])
+        .filter(([_key, value]) => value !== undefined && value !== null)
+    );
+    // remove empty objects
+    return (Object.keys(r).length === 0)
+      ? undefined
+      : r;
+  }
+  return obj;
+}
 
 
