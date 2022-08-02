@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.81](https://github.com/thecointech/thecoin/compare/v0.2.80...v0.2.81) (2022-05-05)
+
+**Note:** Version bump only for package @thecointech/tx-blockchain
+
+
+
+
+
+## [0.2.80](https://github.com/thecointech/thecoin/compare/v0.2.79...v0.2.80) (2022-05-05)
+
+**Note:** Version bump only for package @thecointech/tx-blockchain
+
+
+
+
+
+## [0.2.79](https://github.com/thecointech/thecoin/compare/v0.2.78...v0.2.79) (2022-05-04)
+
+**Note:** Version bump only for package @thecointech/tx-blockchain
+
+
+
+
+
+## [0.2.78](https://github.com/thecointech/thecoin/compare/v0.2.77...v0.2.78) (2022-05-02)
+
+**Note:** Version bump only for package @thecointech/tx-blockchain
+
+
+
+
+
+## [0.2.77](https://github.com/thecointech/thecoin/compare/v0.2.76...v0.2.77) (2022-04-27)
+
+**Note:** Version bump only for package @thecointech/tx-blockchain
+
+
+
+
+
 ## [0.2.76](https://github.com/thecointech/thecoin/compare/v0.2.75...v0.2.76) (2022-04-13)
 
 **Note:** Version bump only for package @thecointech/tx-blockchain

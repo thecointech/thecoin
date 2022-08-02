@@ -2,11 +2,8 @@ import React, { useState } from 'react';
 import { defineMessage, FormattedMessage } from 'react-intl';
 import { Form, Header, Button, List, Message } from 'semantic-ui-react';
 import { UxAddress } from '@thecointech/shared/components/UX/Address';
-import { getShortCode, NormalizeAddress } from '@thecointech/utilities';
-import { setUserVerified } from '@thecointech/broker-db/user';
-import { createReferrer, getReferrersCollection, VerifiedReferrer } from '@thecointech/broker-db/referrals';
-import { DateTime } from 'luxon';
-import { getSigner } from '@thecointech/signers';
+import { getShortCode } from '@thecointech/utilities';
+import { getReferrersCollection, VerifiedReferrer } from '@thecointech/broker-db/referrals';
 import { usePromiseSubscription } from '@thecointech/shared';
 
 const header = defineMessage({defaultMessage: 'Verify an Account', description: "Title message on Verify page"});
@@ -90,12 +87,13 @@ async function verifyAccount(address: string) {
     return false;
 
   // We sign this address to show we approve of it
-  const signer = await getSigner("BrokerCAD")
-  const naddress = NormalizeAddress(address);
-  const signature = await signer.signMessage(naddress)
+  // const signer = await getSigner("BrokerCAD")
+  // const naddress = NormalizeAddress(address);
+  // const signature = await signer.signMessage(naddress)
 
-  await setUserVerified(signature, address, DateTime.now());
-  const code = await createReferrer(signature, address);
-  alert('Done');
-  return code;
+  // // await setUserVerified(signature, address, DateTime.now());
+  // // const code = await createReferrer(signature, address);
+  // return code;
+
+  throw new Error('NO LONGER IMPLEMENTED');
 }

@@ -1,12 +1,13 @@
+import { jest } from '@jest/globals';
 import { DateTime } from 'luxon';
 import { readFileSync } from 'fs';
-import { join } from 'path';
 import { fetchMarketData } from './fetch';
 
+const rootUrl = import.meta.url;
 globalThis.fetch = jest.fn((name: string) =>
   Promise.resolve({
     text: () => {
-      const buffer = readFileSync(join(__dirname, name));
+      const buffer = readFileSync(new URL(`.${name}`, rootUrl));
       return Promise.resolve(buffer.toString());
     }
   }),

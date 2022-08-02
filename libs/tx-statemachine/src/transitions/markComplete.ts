@@ -1,6 +1,6 @@
 import { AnyActionContainer } from "../types";
 import { removeIncomplete } from '@thecointech/broker-db';
-import { getCurrentState } from '..';
+import { getCurrentState } from '../types';
 import { log } from '@thecointech/logging';
 
 //

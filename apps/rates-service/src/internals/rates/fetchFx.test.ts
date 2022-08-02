@@ -1,9 +1,6 @@
 import { fetchFxRate } from './fetchFx';
 import { CurrencyCode } from '@thecointech/fx-rates';
 
-// Don't go to the server for this
-jest.mock('../FinnHub')
-
 it('should find a valid fx rate', async () => {
 
   // query time doesn't matter

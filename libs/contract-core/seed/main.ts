@@ -10,7 +10,7 @@ import {assignRoles} from './assignRoles';
 // and both TheCoin & Owner will be hardware in prod
 (async () => {
   const method = process.env.DEPLOY_CONTRACT_INIT;
-  const contract = GetContract();
+  const contract = await GetContract();
   log.info(`Initializing ${contract.address}: method: ${method}`);
   switch (method) {
     case 'clone': {

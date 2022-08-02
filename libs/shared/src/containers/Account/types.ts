@@ -1,8 +1,8 @@
 import { ImmerReducer } from 'immer-reducer';
 import { DateTime } from 'luxon';
-import { SagaIterator } from 'redux-saga';
 import { AccountState, AccountDetails } from '@thecointech/account';
 import { Signer } from '@ethersproject/abstract-signer';
+import type { SagaIterator } from '@redux-saga/core';
 
 export type { AccountState };
 
@@ -27,6 +27,10 @@ export interface IActions extends ImmerReducer<AccountState> {
   // Save/load private details
   loadDetails(): SagaIterator;
   setDetails(newDetails: Partial<AccountDetails>): SagaIterator;
+
+  // KYC management
+  initKycProcess(): SagaIterator; // Called to start process
+  checkKycStatus(): SagaIterator; // Automatically polled
 
   // Get the balance of the account in Coin
   updateBalance(newBalance?: number): SagaIterator;

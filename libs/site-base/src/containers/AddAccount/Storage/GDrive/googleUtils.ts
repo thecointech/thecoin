@@ -1,5 +1,5 @@
 import { log } from "@thecointech/logging";
-import { clientUri, GetSecureApi } from '../../../../api';
+import { GetSecureApi } from '@thecointech/apis/broker';
 import { getStoredAccountData } from '@thecointech/account/store';
 import { isLocal } from '@thecointech/signers';
 
@@ -11,6 +11,8 @@ export enum UploadState {
   Failed,
   Complete,
 }
+
+export const clientUri = `${window.location.origin}/gauth`;
 
 export async function fetchGAuthUrl() {
   try {

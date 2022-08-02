@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getUrlParameterByName } from '../../../../utils/localState'
 import { GoogleWalletItem } from '@thecointech/types';
-import { clientUri, GetSecureApi } from '../../../../api';
+import { GetSecureApi } from '@thecointech/apis/broker';
 import { log } from '@thecointech/logging';
 import { ButtonProps, List } from 'semantic-ui-react';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
@@ -10,9 +10,10 @@ import { isPresent, NormalizeAddress } from '@thecointech/utilities';
 import { Wallet } from 'ethers';
 import { defineMessage, FormattedMessage } from 'react-intl';
 import { Redirect } from 'react-router-dom';
-import styles from './styles.module.less';
 import { PageHeader } from '../../../../components/PageHeader';
 import { ButtonPrimary } from '../../../../components/Buttons';
+import { clientUri } from './googleUtils';
+import styles from './styles.module.less';
 
 type LoadingWallet = {
   wallet: Wallet;
@@ -45,7 +46,7 @@ export const RestoreList = ({url}: Props) => {
       const api = GetSecureApi();
       api.googleRetrieve(clientUri, { token })
         .then(({data}) => setWallets(data.wallets))
-        .catch(err => log.error(err, `Error fetching wallets: ${err.message}`))
+        .catch((err: Error) => log.error(err, `Error fetching wallets: ${err.message}`))
     }
   }, [token]);
 

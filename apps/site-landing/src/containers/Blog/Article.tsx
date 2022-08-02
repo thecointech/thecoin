@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styles from "./styles.module.less";
-import { RichText, RichTextBlock } from 'prismic-reactjs';
+import { PrismicText, PrismicRichText } from '@prismicio/react';
 import { useSelector } from "react-redux";
 import { Prismic } from "components/Prismic";
 import { Header, Icon } from "semantic-ui-react";
@@ -40,9 +40,11 @@ export const Article = (props: RouteComponentProps<{articleId: string}>) => {
         <div className={styles.containerArticle} key={articleData.id}>
           <div className={` ${styles.backLink} x6spaceBefore`}><a onClick={() => history.goBack()}><Icon name="arrow left" /><FormattedMessage {...translations.backLink} /></a></div>
           { articleData.data.image_before_title.url ? <img src={articleData.data.image_before_title.url} alt={articleData.data.image_before_title.alt} /> : undefined }
-          <Header as={"h2"} className="x6spaceBefore">{articleData.data.title ? articleData.data.title[0].text : ""}</Header>
+          <Header as={"h2"} className="x6spaceBefore">
+            <PrismicText field={articleData.data.title} />
+          </Header>
           <p>{DateTime.fromFormat(articleData.data.publication_date, "yyyy-mm-dd", {}).setLocale(locale).toLocaleString(DateTime.DATE_HUGE)}</p>
-          { RichText.render(articleData.data.content as unknown as RichTextBlock[])}
+          <PrismicRichText field={articleData.data.content} />
         </div>
       </>
     : <NotFoundPage />

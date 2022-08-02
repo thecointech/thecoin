@@ -19,7 +19,7 @@ async function runAndStoreTransition<Type extends ActionType>(container: TypedAc
     if (!delta)
       return null;
   }
-  catch (error) {
+  catch (error: any) {
     // For any exception, we transition to an error state and await a manual fix.
     log.error({ transition: transition.name, initialId: container.action.data.initialId, error},
       "Error running {transition} on {initialId}: {error}");

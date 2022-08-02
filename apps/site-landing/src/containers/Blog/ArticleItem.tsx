@@ -1,10 +1,10 @@
 import React from "react";
-import { ArticleDocument } from "components/Prismic/types";
 import { Grid, Header } from "semantic-ui-react";
-import styles from "./styles.module.less";
 import { Link } from "react-router-dom";
 import { defineMessages, FormattedMessage } from "react-intl";
-import { RichText } from "prismic-reactjs";
+import { PrismicRichText, PrismicText } from "@prismicio/react";
+import type { PrismicDocument } from '@prismicio/types';
+import styles from "./styles.module.less";
 
 const translations = defineMessages({
   link : {
@@ -12,7 +12,7 @@ const translations = defineMessages({
       description: 'site.blog.articleLink: Link to access article page in blog'}
   });
 
-export const ArticleItem = ({ uid, data }: ArticleDocument) => {
+export const ArticleItem = ({ uid, data }: PrismicDocument) => {
   const url = `/blog/${uid}`;
   return (
     <div className={`${styles.articleLine} x6spaceBefore x6spaceAfter`} >
@@ -24,9 +24,9 @@ export const ArticleItem = ({ uid, data }: ArticleDocument) => {
           <Grid.Column>
             <div className={`${styles.text}`}>
               <Header as={"h4"}>
-              { RichText.asText(data.title) }
+                <PrismicText field={data.title} />
               </Header>
-              { RichText.render(data.short_content) }
+              <PrismicRichText field={data.content} />
             </div>
             <Link to={url}><FormattedMessage {...translations.link} /></Link>
           </Grid.Column>

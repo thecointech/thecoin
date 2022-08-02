@@ -1,7 +1,7 @@
 import type { ProgressCallback } from '@ethersproject/json-wallets';
 import { Wallet } from "@ethersproject/wallet";
 import { existsSync, readFileSync } from 'fs';
-import { AccountName } from './names';
+import type { AccountName } from './names';
 
 export async function loadFromDisk(name: AccountName, callback?: ProgressCallback) {
   const encrypted = loadEncrypted(name);

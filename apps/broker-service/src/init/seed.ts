@@ -1,13 +1,12 @@
 //
 // In dev:live, we need basic setup for our
 //
-import { NormalizeAddress } from "@thecointech/utilities";
+import { getAddressShortCodeSig, NormalizeAddress } from "@thecointech/utilities";
 import { createReferree, createReferrer } from "@thecointech/broker-db/referrals";
-import { setUserVerified, getUserVerified } from "@thecointech/broker-db/user";
+import { getUserVerified } from "@thecointech/broker-db/user";
 import { getSigner } from "@thecointech/signers";
 import { DateTime } from "luxon";
-import { sign } from "@thecointech/utilities/SignedMessages";
-
+import { uploadUserData } from '../verify'
 //
 // When we seed the DB, we initialize the DB with 1 verified client, and 1 referred
 export async function seed() {
@@ -24,15 +23,22 @@ export async function seed() {
 //
 // Set the first account as verified, this allows it to refer other accounts
 async function setVerified(clientAddress: string) {
-  const brokerCad = await getSigner("BrokerCAD");
   const address = NormalizeAddress(clientAddress);
-  const signature = await sign(address, brokerCad);
-  // Account created 1 year, 1 day ago.
-  const ts = DateTime.now().minus({years: 1, days: 1});
-  await setUserVerified(signature, address, ts);
-  const code = await createReferrer(signature, address);
+  // First, supply verified details
+  await uploadUserData(clientAddress, {
+    status:  "approved",
+    identities: {
+      given_name: { value: "Test" },
+      family_name: { value: "Account" },
+      dob: { value: "12/31/2016" },
+    }
+  } as any)
+  // Next, create referral code
+  const signer = await getSigner("BrokerCAD");
+  const sig = await getAddressShortCodeSig(address, signer);
+  const code = await createReferrer(sig, address);
   console.log(`Seeded valid: ${code} from ${address}`);
-  return code;
+  return code!;
 }
 
 //

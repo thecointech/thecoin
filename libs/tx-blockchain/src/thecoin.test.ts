@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import { fetchCoinHistory } from "./thecoin";
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { initAllAddresses } from './setup.test';

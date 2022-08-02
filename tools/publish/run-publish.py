@@ -117,6 +117,9 @@ def renameAndComplete():
   def move_new():
     print("move new to current")
     os.rename(new_deploy, deploy)
+    # Re-run yarn so windows updates the soft-links
+    os.chdir(deploy)
+    os.system('yarn');
 
   os.chdir(base)
   keep_trying(remove_old)

@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import { zero } from './sim.decimal';
 
 // Holds week/month/yearly actions for income/credit/cash

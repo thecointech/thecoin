@@ -1,7 +1,7 @@
 import type { eTransferData } from "@thecointech/tx-gmail";
 import { ActionDictionary, ActionType, AnyAction, TransitionDelta } from "@thecointech/broker-db";
 import { DateTime } from "luxon";
-import { Decimal } from "decimal.js-light";
+import Decimal from 'decimal.js-light';;
 import { Transaction } from '@thecointech/tx-blockchain';
 
 ////////////////////////////////

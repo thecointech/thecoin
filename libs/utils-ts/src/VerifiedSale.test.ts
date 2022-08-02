@@ -5,8 +5,6 @@ import { ETransferPacket } from "@thecointech/types";
 
 it('Can build verified sale', async () => {
 
-  jest.setTimeout(30000);
-
 	const eTransfer: ETransferPacket = {
     email: "address@email.com",
     question: "question",

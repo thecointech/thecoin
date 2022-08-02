@@ -4,7 +4,7 @@ import { isPacketValid } from '@thecointech/utilities/VerifiedSale';
 import { readFileSync } from "fs";
 import { getCurrentState, TypedActionContainer } from "@thecointech/tx-statemachine";
 import { EncryptedPacket, ETransferPacket } from "@thecointech/types";
-import { Decimal } from "decimal.js-light";
+import Decimal from 'decimal.js-light';;
 import { DateTime } from 'luxon';
 
 // NOTE: server does not have private key, and will not pass this step

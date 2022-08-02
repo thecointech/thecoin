@@ -1,5 +1,5 @@
-import { AccountName } from './names';
-import { getAndCacheSigner } from './cache'
+import type { AccountName } from './names';
+import { getAndCacheSigner } from './cache';
 import { loadFromGoogle } from './fromGoogle';
 
 //

@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import { fetchNewCoinRates, fetchNewFxRates } from "./index";
 
 beforeAll(async () => {

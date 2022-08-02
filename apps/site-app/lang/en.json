@@ -3,10 +3,6 @@
     "defaultMessage": "Your account id should only contain numbers",
     "description": "Invalid characters entered for bill payee"
   },
-  "+w7KFz": {
-    "defaultMessage": "Your account is verified.",
-    "description": "app.settings.verified.descriptionVerified: Description for the verfified section in the setting page in the app"
-  },
   "+zTlGZ": {
     "defaultMessage": "Make payments",
     "description": "app.accounts.sidebar.makepayments: Title for the Make payments entry in the menu"
@@ -23,6 +19,10 @@
     "defaultMessage": "Balance",
     "description": "shared.widgets.balanceandprofit.balance: Title for widget Balance and profit"
   },
+  "08DHMh": {
+    "defaultMessage": "Your submission is being processed.",
+    "description": "app.settings.verified.descriptionVerified: message shown if account has been verified"
+  },
   "09nd3/": {
     "defaultMessage": "Step 1 of 3: Checking transfer availability...",
     "description": "app.accounts.transfer.step1: Message for step1 for the make a payment page / transfer tab"
@@ -34,6 +34,10 @@
   "0vNzso": {
     "defaultMessage": "User Settings",
     "description": "app.settings.tabs.main: Title for the tabs the setting page in the app"
+  },
+  "0vf3sT": {
+    "defaultMessage": "Address",
+    "description": "app.settings.personaldetails.address: Address field for the page setting / tab personal details in the app"
   },
   "0wqDQX": {
     "defaultMessage": "Generate",
@@ -54,6 +58,10 @@
   "3gMrt1": {
     "defaultMessage": "Please wait, we are sending your order to our servers...",
     "description": "app.accounts.billPayments.transferOutProgress: Message for the form the make a payment page / bill payment tab"
+  },
+  "4Qov/+": {
+    "defaultMessage": "Country",
+    "description": "app.settings.personaldetails.country: Country Adress field for the page setting / tab personal details in the app"
   },
   "4mI50N": {
     "defaultMessage": "Climate Impact",
@@ -99,6 +107,10 @@
     "defaultMessage": "Order received. You should receive the transfer in 1-2 business days.",
     "description": "app.accounts.transfer.successMessage: Success Message for the make a payment page / etransfer tab"
   },
+  "ACdNla": {
+    "defaultMessage": "Suite/Appt/Box #",
+    "description": "app.settings.personaldetails.address: Address field for the page setting / tab personal details in the app"
+  },
   "ATYl3e": {
     "defaultMessage": "Contact Us",
     "description": "app.MainNavigation.contact: Title for the contact us entry in the menu"
@@ -138,6 +150,10 @@
   "GL/pX/": {
     "defaultMessage": "We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
     "description": "app.accounts.transfer.errorMessage: Error Message for the make a payment page / etransfer tab"
+  },
+  "GnQEdK": {
+    "defaultMessage": "City",
+    "description": "app.settings.personaldetails.city: City Address field for the page setting / tab personal details in the app"
   },
   "H+LMwK": {
     "defaultMessage": "Templates",
@@ -182,6 +198,10 @@
   "JHN0Qb": {
     "defaultMessage": "Transfer funds from your Canadian bank to your account.",
     "description": "app.topup.description: Description for the topup page in the app"
+  },
+  "JhnxYB": {
+    "defaultMessage": "Postal Code",
+    "description": "app.settings.personaldetails.postalcode: Postal Code Address field for the page setting / tab personal details in the app"
   },
   "KID9KZ": {
     "defaultMessage": "Email",
@@ -239,6 +259,10 @@
     "defaultMessage": "Account name",
     "description": "app.settings.userDetails.name: Label for the info for the tab User details in the setting page in the app"
   },
+  "Q+m04R": {
+    "defaultMessage": "Save",
+    "description": "app.settings.personaldetails.save: Edit zone for the page setting / tab personal details in the app"
+  },
   "QRAezj": {
     "defaultMessage": "Payee Account Number",
     "description": "app.accounts.billPayments.form.accNumber: Label for the form the make a payment page / bill payment tab"
@@ -250,6 +274,10 @@
   "Qpm5Pd": {
     "defaultMessage": "Order received. You should receive the e-Transfer in 1-2 business days.",
     "description": "app.accounts.redeem.successMessage: Success Message for the make a payment page / etransfer tab"
+  },
+  "Qrvv8Q": {
+    "defaultMessage": "Account not verified",
+    "description": "app.settings.verified.titleNotVerified: message if account has not been verified"
   },
   "RJKG2v": {
     "defaultMessage": "Week",
@@ -279,6 +307,10 @@
     "defaultMessage": "Topup balance",
     "description": "app.topup.title: Main title for the topup page in the app"
   },
+  "TaZ62j": {
+    "defaultMessage": "We are generating your code, please check back in a few hours",
+    "description": "app.settings.userDetails.codeInfos: Label for the info for the tab User details in the setting page in the app"
+  },
   "TbRPO0": {
     "defaultMessage": "Your can choose the currency you want us to display:",
     "description": "app.settings.personaldetails.descriptionCurrency: Description for the page setting / tab personal details in the app"
@@ -303,10 +335,6 @@
     "defaultMessage": "Should not include the security answer",
     "description": "tooltip for optional message to be included in e-transfer"
   },
-  "X/fgLk": {
-    "defaultMessage": "Account not verified",
-    "description": "app.settings.verified.titleNotVerified: Title for the verfified section in the setting page in the app"
-  },
   "XEmqRg": {
     "defaultMessage": "No Account Loaded",
     "description": "app.accounts.sidebar.profile: Default account name to show in sidebar when no accounts loaded"
@@ -322,10 +350,6 @@
   "Y67lRV": {
     "defaultMessage": "All categories",
     "description": "app.accounts.billPayments.filterPayee.all: Label for the filter payee for the form the make a payment page / bill payment tab"
-  },
-  "YKiHC3": {
-    "defaultMessage": "Full Address",
-    "description": "app.settings.personaldetails.address: Full Address field for the page setting / tab personal details in the app"
   },
   "YjiT63": {
     "defaultMessage": "You can download the account file, or print it as a QR code.",
@@ -346,6 +370,14 @@
   "aY5nL9": {
     "defaultMessage": "Growth",
     "description": "app.historygraph.profit: HistoryGraph tooltip - Profit"
+  },
+  "abj6qK": {
+    "defaultMessage": "State",
+    "description": "app.settings.personaldetails.state: State field for the page setting / tab personal details in the app"
+  },
+  "bGtD3a": {
+    "defaultMessage": "Your account is verified.",
+    "description": "app.settings.verified.descriptionVerified: message shown if account has been verified"
   },
   "cQy1PG": {
     "defaultMessage": "Message received. You should receive an answer in 1-2 business days.",
@@ -386,6 +418,10 @@
   "hANbK3": {
     "defaultMessage": "Your details",
     "description": "app.accounts.purchase.haveTransferCodeHeader"
+  },
+  "hJNTxi": {
+    "defaultMessage": "Verification in process",
+    "description": "app.settings.verified.titleVerified: Title for the verfified section in the setting page in the app"
   },
   "hv6CwE": {
     "defaultMessage": "Please select payee and enter account number",

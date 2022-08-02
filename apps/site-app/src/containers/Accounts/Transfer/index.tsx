@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { defineMessages } from 'react-intl';
 import { BuildVerifiedXfer } from '@thecointech/utilities/VerifiedTransfer';
-import { GetStatusApi, GetDirectTransferApi } from 'api';
+import { GetStatusApi, GetDirectTransferApi } from '@thecointech/apis/broker';
 import { weBuyAt } from '@thecointech/fx-rates';
 import { useState } from 'react';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';

@@ -15,7 +15,7 @@ export async function initialize() {
   const signer = await getSigner('BrokerCAD');
   await getSigner('BrokerTransferAssistant');
   const address = await signer.getAddress();
-  const contract = ConnectContract(signer);
+  const contract = await ConnectContract(signer);
   if (!contract) {
     throw new Error("Couldn't initialize contract")
   }

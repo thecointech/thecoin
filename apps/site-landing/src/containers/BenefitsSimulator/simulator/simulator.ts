@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import { SimulationParameters } from './params';
 import { SimulationState, zeroState, increment, balanceChange } from './state';
 import { getMarketData, MarketData } from './market';

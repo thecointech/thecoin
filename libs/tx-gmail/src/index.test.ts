@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import fns from './index_mocked';
 import { queryNewDepositEmails } from './query'
 

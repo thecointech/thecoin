@@ -3,9 +3,9 @@ import { createParams } from './params';
 import { grossFiat, zeroState } from './state';
 import { applyShockAborber } from './sim.shockAbsorber';
 import { SimulationState } from '.';
-import { Decimal } from 'decimal.js-light';
 import { DateObject, DateTime } from 'luxon';
 import { one, zero } from './sim.decimal';
+import Decimal from 'decimal.js-light';
 
 const start = DateTime.fromObject({ year: 2020 });
 const params = createParams({
