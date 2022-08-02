@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.82](https://github.com/thecointech/thecoin/compare/v0.2.81...v0.2.82) (2022-08-02)
+
+
+### Bug Fixes
+
+* libs/rbcapi/package.json to reduce vulnerabilities ([751dabf](https://github.com/thecointech/thecoin/commit/751dabf9f670380dd08079f648fe9f99572314ca))
+
+
+
+
+
 ## [0.2.81](https://github.com/thecointech/thecoin/compare/v0.2.80...v0.2.81) (2022-05-05)
 
 **Note:** Version bump only for package @thecointech/rbcapi

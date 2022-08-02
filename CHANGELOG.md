@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.82](https://github.com/thecointech/thecoin/compare/v0.2.81...v0.2.82) (2022-08-02)
+
+
+### Bug Fixes
+
+* apps/mobile/TheApp/TheApp.csproj to reduce vulnerabilities ([81cb08d](https://github.com/thecointech/thecoin/commit/81cb08dd24bc1d71cae2c0228cdce19c10e769c8))
+* apps/nft-service/package.json to reduce vulnerabilities ([e2e4a14](https://github.com/thecointech/thecoin/commit/e2e4a1417b698b2692bf60f445cb30aaa0b334f9))
+* libs/rbcapi/package.json to reduce vulnerabilities ([751dabf](https://github.com/thecointech/thecoin/commit/751dabf9f670380dd08079f648fe9f99572314ca))
+* libs/utils-cs/TheUtils.csproj to reduce vulnerabilities ([0a4b1a9](https://github.com/thecointech/thecoin/commit/0a4b1a90f6439eae0dd11266e58fd99723c93d65))
+* package.json to reduce vulnerabilities ([31b3317](https://github.com/thecointech/thecoin/commit/31b3317f927266ee749918b9e1bceda594c81202))
+* package.json to reduce vulnerabilities ([daabe74](https://github.com/thecointech/thecoin/commit/daabe74424a420e18f3a82b75796520110c83d76))
+
+
+
+
+
 ## [0.2.81](https://github.com/thecointech/thecoin/compare/v0.2.80...v0.2.81) (2022-05-05)
 
 **Note:** Version bump only for package the-coin
