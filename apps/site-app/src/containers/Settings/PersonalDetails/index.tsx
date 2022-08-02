@@ -47,7 +47,7 @@ export const PersonalDetails = () => {
   const accountApi = Account(account.address).useApi();
   const [details, setDetails] = useState(account.details);
 
-  const onDetailsChange = (value?: string, name?: string) => {
+  const onDetailsChange = (value: Record<string, string>, name: string) => {
     setDetails({
       ...details,
       [name as string]: value,

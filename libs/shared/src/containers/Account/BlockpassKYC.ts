@@ -44,7 +44,7 @@ function convertRawDetails(user: UserVerifyData) : AccountDetails|null {
     user: {
       given_name: raw.identities.given_name.value,
       family_name: raw.identities.family_name.value,
-      DOB: raw.identities.family_name.value,
+      DOB: raw.identities.dob.value,
     }
   }
   if (raw.identities.email?.value) data.user!.email = raw.identities.email?.value;

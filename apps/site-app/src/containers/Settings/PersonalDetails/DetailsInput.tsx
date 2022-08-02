@@ -6,7 +6,7 @@ import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import styles from './styles.module.less';
 import { detailStrings } from './translations';
 
-type Props<T extends "user"|"address"|"phone"> = {
+type Props<T extends "user"|"address"|"phone"> = Partial<Omit<BaseProps, "onValue">> & {
 
   dataType: T;
   property: keyof typeof detailStrings;
@@ -14,10 +14,11 @@ type Props<T extends "user"|"address"|"phone"> = {
   // defaultValue?: string;
   // details: AccountKYC;
   onValidate?: ValidateCB,
+  onValue: (value: Record<string, string>, name:string) => void;
 
   // translation: MessageDescriptor;
   InputType?: React.FC<any>;
-} & Partial<BaseProps>;
+};
 
 const noValidation = () => null;
 
@@ -27,7 +28,7 @@ const editString = defineMessage({
 })
 
 export const DetailsInput = <T extends "user"|"address"|"phone">(
-  { dataType, property, onValidate, InputType=UxInput, ...rest }: Props<T>
+  { dataType, property, onValidate, onValue, InputType=UxInput, ...rest }: Props<T>
 ) => {
   const [readOnly, setReadOnly] = useState(true);
   const account = AccountMap.useActive()!;
@@ -38,8 +39,18 @@ export const DetailsInput = <T extends "user"|"address"|"phone">(
   }, [account.details]);
 
   const translation = detailStrings[property];
-  const kyc = account.details[dataType];
-  const defaultValue = (kyc as any)?.[property];
+  const data = account.details[dataType];
+  const defaultValue = (data as any)?.[property];
+
+  const onValuePassthrough = (value: string, name: string) => {
+    const newValue = {
+      ...data,
+      [name]: value,
+    }
+    onValue(newValue, dataType);
+  }
+
+
   return (
     <InputType
       intlLabel={< div >
@@ -54,6 +65,7 @@ export const DetailsInput = <T extends "user"|"address"|"phone">(
       defaultValue={defaultValue}
       name={property}
       readOnly={readOnly}
+      onValue={onValuePassthrough}
       {...rest}
     />
   );

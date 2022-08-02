@@ -28,7 +28,7 @@ export const UserDetails = () => {
     if (details.status && !details.referralCode) {
       accountApi.checkKycStatus();
     }
-  }, [])
+  }, [details.status, details.referralCode]);
 
 
   return (
