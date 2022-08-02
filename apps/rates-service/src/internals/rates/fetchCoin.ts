@@ -39,8 +39,8 @@ export function findRateFor(lastExpired: number, data: FinnhubData): CoinRate {
 
   const response = (idx: number) => ({
     // Our buy/sell price should now be equal
-    buy: (data.l[idx] + data.l[idx]) / 2000,
-    sell: (data.l[idx] + data.l[idx]) / 2000,
+    buy: (data.l[idx] + data.h[idx]) / 2000,
+    sell: (data.l[idx] + data.h[idx]) / 2000,
     validFrom: lastExpired,
     validTill: 0
   })
