@@ -35,6 +35,10 @@
     "defaultMessage": "User Settings",
     "description": "app.settings.tabs.main: Title for the tabs the setting page in the app"
   },
+  "0vf3sT": {
+    "defaultMessage": "Address",
+    "description": "app.settings.personaldetails.address: Address field for the page setting / tab personal details in the app"
+  },
   "0wqDQX": {
     "defaultMessage": "Generate",
     "description": "app.purchase.button: Name for the button Generate in the purchase list explanation page in the app"
@@ -54,6 +58,10 @@
   "3gMrt1": {
     "defaultMessage": "Please wait, we are sending your order to our servers...",
     "description": "app.accounts.billPayments.transferOutProgress: Message for the form the make a payment page / bill payment tab"
+  },
+  "4Qov/+": {
+    "defaultMessage": "Country",
+    "description": "app.settings.personaldetails.country: Country Adress field for the page setting / tab personal details in the app"
   },
   "4mI50N": {
     "defaultMessage": "Climate Impact",
@@ -99,6 +107,10 @@
     "defaultMessage": "Order received. You should receive the transfer in 1-2 business days.",
     "description": "app.accounts.transfer.successMessage: Success Message for the make a payment page / etransfer tab"
   },
+  "ACdNla": {
+    "defaultMessage": "Suite/Appt/Box #",
+    "description": "app.settings.personaldetails.address: Address field for the page setting / tab personal details in the app"
+  },
   "ATYl3e": {
     "defaultMessage": "Contact Us",
     "description": "app.MainNavigation.contact: Title for the contact us entry in the menu"
@@ -138,6 +150,10 @@
   "GL/pX/": {
     "defaultMessage": "We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
     "description": "app.accounts.transfer.errorMessage: Error Message for the make a payment page / etransfer tab"
+  },
+  "GnQEdK": {
+    "defaultMessage": "City",
+    "description": "app.settings.personaldetails.city: City Address field for the page setting / tab personal details in the app"
   },
   "H+LMwK": {
     "defaultMessage": "Templates",
@@ -182,6 +198,10 @@
   "JHN0Qb": {
     "defaultMessage": "Transfer funds from your Canadian bank to your account.",
     "description": "app.topup.description: Description for the topup page in the app"
+  },
+  "JhnxYB": {
+    "defaultMessage": "Postal Code",
+    "description": "app.settings.personaldetails.postalcode: Postal Code Address field for the page setting / tab personal details in the app"
   },
   "KID9KZ": {
     "defaultMessage": "Email",
@@ -238,6 +258,10 @@
   "Pxq9ZY": {
     "defaultMessage": "Account name",
     "description": "app.settings.userDetails.name: Label for the info for the tab User details in the setting page in the app"
+  },
+  "Q+m04R": {
+    "defaultMessage": "Save",
+    "description": "app.settings.personaldetails.save: Edit zone for the page setting / tab personal details in the app"
   },
   "QRAezj": {
     "defaultMessage": "Payee Account Number",
@@ -327,10 +351,6 @@
     "defaultMessage": "All categories",
     "description": "app.accounts.billPayments.filterPayee.all: Label for the filter payee for the form the make a payment page / bill payment tab"
   },
-  "YKiHC3": {
-    "defaultMessage": "Full Address",
-    "description": "app.settings.personaldetails.address: Full Address field for the page setting / tab personal details in the app"
-  },
   "YjiT63": {
     "defaultMessage": "You can download the account file, or print it as a QR code.",
     "description": "Label for the info for the tab Storage options in the setting page in the app"
@@ -350,6 +370,10 @@
   "aY5nL9": {
     "defaultMessage": "Growth",
     "description": "app.historygraph.profit: HistoryGraph tooltip - Profit"
+  },
+  "abj6qK": {
+    "defaultMessage": "State",
+    "description": "app.settings.personaldetails.state: State field for the page setting / tab personal details in the app"
   },
   "bGtD3a": {
     "defaultMessage": "Your account is verified.",

@@ -1,8 +1,7 @@
-import path from 'path';
 import fs from 'fs';
 
-let translationFR = path.join(__dirname, `./fr.json`);
-let translationEN = path.join(__dirname, `./en.json`);
+let translationFR = new URL(`./fr.json`, import.meta.url);
+let translationEN = new URL(`./en.json`, import.meta.url);
 
 test("Check that the translation file FR is here", async () => {
     expect(fs.existsSync(translationFR)).toBe(true);

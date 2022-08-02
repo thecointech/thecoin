@@ -12,7 +12,6 @@ beforeEach(async () => {
 
 it("can process a bill payment", async () => {
 
-  jest.setTimeout(900000);
   const wallet = Wallet.createRandom();
 
   const payee: BillPayeePacket = {

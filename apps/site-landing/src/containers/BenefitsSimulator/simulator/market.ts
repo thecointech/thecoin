@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 import { doThrow } from '@thecointech/utilities/IsDebug';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 
 
 export type SnPData = {

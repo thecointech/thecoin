@@ -26,36 +26,33 @@ export async function updateUserVerification(payload: BlockpassPayload) {
   }
 }
 
-// Clear cached data from server
-export function deleteRawData(_address: string) {
-  // do not do this until we have verified readability
-  // of the data on the users account
-  // return setUserVerified(address, {
-  //   status: "completed",
-  //   raw: null
-  // });
+// Clear raw data from server.
+export async function deleteRawData(address: string) {
+  log.trace({user: address}, "Deleting raw data for {user}");
+  return setUserVerified(address, {
+    status: "completed",
+    raw: null
+  });
 }
 
 export async function uploadUserData(address:string, data: BlockpassData) {
+  log.trace({user: address}, "Uploading raw data for {user}");
   // What is the users uniqueID?
   const signer = await getSigner("BrokerTransferAssistant");
   const uniqueId = buildUniqueId({
     given_name: data.identities.given_name.value,
     family_name: data.identities.family_name.value,
-    dob: data.identities.dob.value,
+    DOB: data.identities.dob.value,
   });
   const signature = await sign(uniqueId, signer);
 
   // We store the selfie/
   await uploadAndStripImages(data)
 
-  // todo: test with different ID's and ensure all data is captured
-  log.debug(JSON.stringify(data));
-
   // what data do we want to have here?
   await setUserVerified(address, {
     raw: data,
-    // uniqueId,
+    externalId: data.blockPassID,
     referralCode: null,
     uniqueIdSig: signature,
     status: data.status,

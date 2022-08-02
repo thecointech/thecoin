@@ -46,6 +46,7 @@ export async function createReferrer(signature: string, address: string) {
     // Does this address already have a code?
     if (existing.data()?.address == address) {
       log.debug({address, code}, "Found existing code for {address} - {code}");
+      await setUserVerified(address, {referralCode: code });
       return code;
     }
     // else, if it's a free slot, pop it in.

@@ -1,5 +1,5 @@
 import { FinnhubData, FinnhubRates, hasError } from "./types";
-import Axios, { AxiosResponse } from 'axios';
+import Axios, { type AxiosResponse } from 'axios';
 import { log } from '@thecointech/logging';
 import { exit } from "process";
 

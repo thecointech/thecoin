@@ -1,6 +1,6 @@
 import React from "react";
 import { UxInput } from "@thecointech/shared/components/UX/Input";
-import { GetReferrersApi } from "../../../api";
+import { GetReferrersApi } from "@thecointech/apis/broker";
 import { IsValidShortCode } from "@thecointech/utilities";
 import { defineMessages, FormattedMessage } from "react-intl";
 import styles from './styles.module.less';

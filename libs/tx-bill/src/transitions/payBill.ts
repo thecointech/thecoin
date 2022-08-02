@@ -5,7 +5,7 @@ import { readFileSync } from 'fs';
 import { decryptTo } from "@thecointech/utilities/Encrypt";
 import { sign } from "@thecointech/utilities/SignedMessages";
 import { log } from "@thecointech/logging";
-import { Decimal } from "decimal.js-light";
+import Decimal from 'decimal.js-light';;
 import { getSigner } from '@thecointech/signers';
 import { DateTime } from 'luxon';
 

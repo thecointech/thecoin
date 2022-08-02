@@ -1,16 +1,22 @@
-import { getSigner } from '@thecointech/signers';
+import { getSigner } from '../signers';
 import { TheGreenNFTL1Instance, TheGreenNFTL2Instance } from '../types/index';
 import { getContractL1 } from './deploy_L1'
 import { getContractL2 } from './deploy_L2'
 
-let deployed: TheGreenNFTL2Instance | TheGreenNFTL1Instance | undefined = undefined;
+declare global {
+  var deployed: TheGreenNFTL2Instance | TheGreenNFTL1Instance | undefined;
+}
+
 export async function getContract(deployer: Truffle.Deployer, network: String) {
-  if (!deployed) {
+  if (!globalThis.deployed) {
     const minter = await getSigner("NFTMinter");
     const minterAddress = await minter.getAddress();
-    deployed = network === 'polygon'
+    const contract = network === 'polygon'
       ? await getContractL2(deployer, minterAddress)
       : await getContractL1(deployer, minterAddress);
+
+
+      globalThis.deployed = contract;
   }
-  return deployed!;
+  return globalThis.deployed!;
 }

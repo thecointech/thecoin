@@ -1,14 +1,30 @@
+import { jest } from '@jest/globals';
 import { ActionType, BuyAction } from '@thecointech/broker-db';
-import * as Transactions from '@thecointech/broker-db/transaction';
 import { GetContract } from '@thecointech/contract-core';
 import { getFirestore } from "@thecointech/firestore";
 import { init } from '@thecointech/firestore';
-import { log } from '@thecointech/logging';
 import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
-import * as FSM from '.';
 import { AnyActionContainer, getCurrentState, StateGraph } from './types';
 import { manualOverride } from './transitions/manualOverride';
+import * as brokerDbTxs from '@thecointech/broker-db/transaction';
+
+jest.unstable_mockModule('@thecointech/broker-db/transaction', () => {
+  // const module = await import('@thecointech/broker-db/transaction');
+  return Object.keys(brokerDbTxs).reduce((acc, key) => ({ ...acc, [key]: jest.fn() }), {});
+});
+jest.unstable_mockModule('@thecointech/logging', () => ({
+  log: {
+    debug: jest.fn(),
+    info: jest.fn(),
+    trace: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+  }
+}));
+const { log } = await import('@thecointech/logging');
+const Transactions = await import('@thecointech/broker-db/transaction');
+const FSM = await import('.');
 
 const transitionBase = (type: string) =>({
   timestamp: DateTime.now(),
@@ -51,11 +67,8 @@ const graph : StateGraph<States, ActionType> = {
 
 it("Pauses and resumes running a processing graph on an action", async () => {
 
-  const spyOnRunTransitions = jest.spyOn(Transactions, 'storeTransition');
-  const spyOnLogError = jest.spyOn(log, 'error');
-
-  // Log nothing
-  log.level(100);
+  // const spyOnRunTransitions = jest.spyOn(Transactions, 'storeTransition');
+  // const spyOnLogError = jest.spyOn(log, 'error');
   init({})
   const contract = await GetContract();
   const processor = new FSM.StateMachineProcessor(graph, contract, null);
@@ -87,8 +100,8 @@ it("Pauses and resumes running a processing graph on an action", async () => {
 
       // On first run, we should stop on withCoin (it has no transitions)
     // This should result in 2 transitions.
-    expect(spyOnRunTransitions).toHaveBeenCalledTimes(executedTransitions);
-    expect(spyOnLogError).toHaveBeenCalledTimes(numErrors);
+    expect(Transactions.storeTransition).toHaveBeenCalledTimes(executedTransitions);
+    expect(log.error).toHaveBeenCalledTimes(numErrors);
 
     const result1 = getCurrentState(container);
     expect(result1.name).toEqual(expectedState);

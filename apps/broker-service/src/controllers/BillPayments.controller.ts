@@ -1,8 +1,8 @@
-import { CertifiedTransfer } from '@thecointech/types';
 import { Controller, Body, Route, Post, Response, Tags } from '@tsoa/runtime';
 import { ProcessBillPayment } from '../exchange/VerifiedBillPayments';
-import { ServerError, ValidateErrorJSON } from '../types';
-import { CertifiedTransferResponse } from './types';
+import type { ServerError, ValidateErrorJSON } from '../types';
+import type { CertifiedTransfer } from '@thecointech/types';
+import type { CertifiedTransferResponse } from './types';
 
 
 @Route('bills')

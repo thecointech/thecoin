@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.2.81",
   "description": "TheCoin: Wrapper for blockpass for web",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "Blockpass"
@@ -20,9 +21,7 @@
   },
   "scripts": {
     "build": "yarn tsc --project tsconfig.build.json",
-    "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "jest --coverage",
-    "test:summary": "jest --coverage > ./coverage/summary.txt"
+    "clean": "rimraf ./build && rimraf ./coverage"
   },
   "files": [
     "build/**/*"

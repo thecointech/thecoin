@@ -38,7 +38,7 @@ async function queryCalendar(url: string) {
       return r.data;
     }
     log.error(r.statusText);
-  } catch (err) {
+  } catch (err: any) {
     log.error(err, `Calendar query failed`);
   }
   return null;

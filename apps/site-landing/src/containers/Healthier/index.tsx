@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import { CreateAccountBanner, TypeCreateAccountBanner } from '../CreateAccountBanner';
 import { GreaterThanMobileSegment, MobileSegment, breakpointsValues } from '@thecointech/shared/components/ResponsiveTool';
@@ -52,8 +52,8 @@ export function Healthier() {
   const windowDimension = useWindowDimensions();
   const breakpointTablet = breakpointsValues.tablet;
 
-  let cssForSeparatorRight = undefined;
-  let cssForSeparatorLeft = undefined;
+  let cssForSeparatorRight: React.CSSProperties|undefined = undefined;
+  let cssForSeparatorLeft: React.CSSProperties|undefined = undefined;
   let textAligntValueRight = "left";
   let textAligntValueLeft = "left";
 

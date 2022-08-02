@@ -1,5 +1,5 @@
 import { ActionDictionary } from "@thecointech/broker-db";
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
 import { existsSync, readFileSync } from 'fs';
 import Papa from 'papaparse';

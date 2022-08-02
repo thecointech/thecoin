@@ -1,12 +1,12 @@
-import { Signer } from '@ethersproject/abstract-signer';
-import { AccountState, AccountDetails } from '@thecointech/account';
 import { GetStatusApi, StatusType, GetUserVerificationApi, UserVerifyData } from '@thecointech/apis/broker';
-import { SagaIterator } from 'redux-saga';
-import { call, put } from 'redux-saga/effects';
+import { call, put } from "@redux-saga/core/effects";
 import { ActionsType, BaseSagaInterface } from '../../store/immerReducer';
-import { IActions } from '../Account/types';
 import { GetSignedMessage } from '@thecointech/utilities/SignedMessages';
 import { log } from '@thecointech/logging';
+import type { SagaIterator } from '@redux-saga/core';
+import type { Signer } from '@ethersproject/abstract-signer';
+import type { IActions } from '../Account/types';
+import type { AccountState, AccountDetails } from '@thecointech/account';
 
 type AccountActions = ActionsType<IActions & BaseSagaInterface<AccountState>>;
 
@@ -41,13 +41,18 @@ function convertRawDetails(user: UserVerifyData) : AccountDetails|null {
     referralCode,
     statusUpdated: Date.now(),
     status: user.status,
-    given_name: raw.identities.given_name.value,
-    family_name: raw.identities.family_name.value,
-    DOB: raw.identities.family_name.value,
+    user: {
+      given_name: raw.identities.given_name.value,
+      family_name: raw.identities.family_name.value,
+      DOB: raw.identities.dob.value,
+    },
+
+    certs: user.raw?.certs as Record<string, string>,
+    uniqueIdSig: user.uniqueIdSig,
   }
-  if (raw.identities.email?.value) data.email = raw.identities.email?.value;
+  if (raw.identities.email?.value) data.user!.email = raw.identities.email?.value;
   if (raw.identities.phone?.value) data.phone = JSON.parse(raw.identities.phone.value);
-  if (raw.identities.address?.value) data.phone = JSON.parse(raw.identities.address.value);
+  if (raw.identities.address?.value) data.address = JSON.parse(raw.identities.address.value);
   return data;
 }
 

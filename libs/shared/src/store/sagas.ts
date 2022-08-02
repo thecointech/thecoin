@@ -1,4 +1,4 @@
-import { select, put, SelectEffect } from "redux-saga/effects";
+import { select, put, SelectEffect } from "@redux-saga/core/effects";
 import { ImmerReducerClass } from "immer-reducer";
 
 

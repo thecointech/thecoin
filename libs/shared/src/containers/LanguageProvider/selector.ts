@@ -1,4 +1,4 @@
-import { ApplicationBaseState } from '../../types';
+import type { ApplicationBaseState } from '../../types';
 import { initialState } from './reducer';
 
 /**

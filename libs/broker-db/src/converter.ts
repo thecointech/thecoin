@@ -1,6 +1,6 @@
 import { DocumentData, FirestoreDataConverter, Timestamp, FieldValue, QueryDocumentSnapshot } from "@thecointech/firestore";
-import { Decimal } from "decimal.js-light";
-import { isPlainObject } from 'lodash';
+import Decimal from 'decimal.js-light';;
+import lodash from 'lodash';
 import { DateTime } from 'luxon';
 
 
@@ -21,7 +21,7 @@ function convertObject(obj: DocumentData, keys: string[], converter: (v: any) =>
     if (keys.includes(k)) {
       r[k] = converter(obj[k]);
     }
-    else if (isPlainObject(obj[k])) {
+    else if (lodash.isPlainObject(obj[k])) {
       r[k] = convertObject(obj[k], keys, converter);
     }
   })

@@ -1,6 +1,6 @@
 import { toDepositData } from "./convert";
 //@ts-ignore Import directly from mocks to skip auth part.
-import emails from '../../../__mocks__/googleapis/emails.get.json';
+import emails from '../../__mocks__/googleapis/emails.get.json' assert {type: "json"};
 
 it('processes emails correctly', async () => {
   for (const email of emails) {

@@ -5,7 +5,7 @@ import { getSigner } from '@thecointech/utilities/VerifiedAction'
 import { GetTransferSigner } from '@thecointech/utilities/VerifiedTransfer'
 import { ValidateError } from '@tsoa/runtime';
 import { getBrokerCADAddress } from '../status';
-import { certifiedFee } from '../status/constant.json';
+import constants from '../status/constant.json' assert { type: 'json' };
 import { GetContract } from './Wallet';
 
 // Should we check balance?
@@ -16,7 +16,7 @@ const validBalance = async (transfer: CertifiedTransferRequest) => {
 }
 
 const validDestination = (action: CertifiedTransfer, brokerCAD: string) => NormalizeAddress(action.transfer.to) === NormalizeAddress(brokerCAD);
-const validFee = (transfer: CertifiedTransferRequest) => transfer.fee === certifiedFee;
+const validFee = (transfer: CertifiedTransferRequest) => transfer.fee === constants.certifiedFee;
 const validTransferSigners = (transfer: CertifiedTransferRequest) => NormalizeAddress(GetTransferSigner(transfer)) === NormalizeAddress(transfer.from);
 const validActionSigners = (action: CertifiedTransfer) => NormalizeAddress(getSigner(action)) === NormalizeAddress(action.transfer.from);
 

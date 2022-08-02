@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import { init, Timestamp } from '@thecointech/firestore';
 import { describe, filterByEmulator } from '@thecointech/jestutils';
 import { setRate, getCoinRate, toDbType } from './db';

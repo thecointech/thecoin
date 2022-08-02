@@ -1,6 +1,5 @@
-import type { Document } from '@prismicio/client/types/documents'
+import type { RichTextField, PrismicDocument } from '@prismicio/types';
 import type { Locale } from '@thecointech/shared/containers/LanguageProvider/types'
-import { RichTextBlock } from 'prismic-reactjs'
 
 export type RenderableType = {
   type: string;
@@ -10,8 +9,8 @@ export type RenderableType = {
 }
 
 export type FAQResult = {
-  question: RichTextBlock[];
-  answer: RichTextBlock[];
+  question: RichTextField;
+  answer: RichTextField;
   category: string;
   show_on_faq_home?: boolean;
 }
@@ -32,23 +31,23 @@ export type AlternateLang = {
 export type ArticleResult = {
   thumbnail: ImageObj,
   image_before_title: ImageObj,
-  title: RichTextBlock[];
+  title: RichTextField;
   publication_date: string;
-  short_content: RichTextBlock[];
-  content: RichTextBlock[];
-  author: RichTextBlock[];
+  short_content: RichTextField;
+  content: RichTextField;
+  author: RichTextField;
   categories: { category: string }[],
   id: string
 }
 export type FAQDocument =
-  Omit<Document, "data"> &
+  Omit<PrismicDocument, "data"> &
   {
     data: FAQResult
   }
 export type FAQDocuments = Map<string, FAQDocument>;
 
 export type ArticleDocument =
-  Omit<Document, "data"> &
+  Omit<PrismicDocument, "data"> &
   {
     data: ArticleResult
   }

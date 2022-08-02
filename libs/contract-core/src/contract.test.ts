@@ -1,21 +1,22 @@
-
-import {GetContract} from './contract';
-import { describe, IsManualRun } from '@thecointech/jestutils';
+import { jest } from '@jest/globals';
+import { GetContract } from './contract';
+import { describe } from '@thecointech/jestutils';
 import { getEnvVars } from "@thecointech/setenv";
 import { NormalizeAddress } from '@thecointech/utilities';
-import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
+import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider/web';
 
 const prodVars = getEnvVars('prodtest');
-jest.setTimeout(1200000);
+jest.setTimeout(60000);
 
 describe('Testing provider', () => {
 
-  it ('can fetch logs', async () => {
-    process.env.CONFIG_ENV = 'prodtest';
-    process.env.DEPLOY_POLYGON_NETWORK = 'polygon-testnet';
-    process.env.POLYGONSCAN_API_KEY = prodVars.POLYGONSCAN_API_KEY;
+  const OLD_ENV = process.env;
+  beforeEach(() => process.env = prodVars);
+  afterAll(() => process.env = OLD_ENV);
 
-    const contract = GetContract();
+  it ('can fetch logs', async () => {
+
+    const contract = await GetContract();
     const provider = new Erc20Provider();
 
     const address = NormalizeAddress(prodVars.WALLET_BrokerCAD_ADDRESS);
@@ -33,21 +34,4 @@ describe('Testing provider', () => {
     expect(logs.length).toEqual(allTxs.length);
   })
 
-  it ('fetches ERC20 txs', async () => {
-    process.env.DEPLOY_POLYGON_NETWORK = 'polygon-testnet';
-    const provider = new Erc20Provider();
-    // const  h1 = await provider.getHistory('3043a245dc9f1a9574635e7ff1dea6ccffab8b92');
-
-    const address = "0x123b38e9a9b3f75a8e16a4987eb5d7a524da6e56";
-    const contractAddress = "0x244709f1811dec1305a2Ef50DcB12Ce6FFbef198"
-    const contractHistory = await provider.getERC20History({ contractAddress });
-    expect(contractHistory.length).toBeGreaterThan(0);
-
-    const userHistory = await provider.getERC20History({address})
-    expect(userHistory.length).toBeLessThan(contractHistory.length);
-
-    const userContractHistory = await provider.getERC20History({address, contractAddress})
-    expect(userContractHistory.length).toBeLessThan(userHistory);
-  })
-
-}, IsManualRun)
+}, prodVars.POLYGONSCAN_API_KEY != undefined);

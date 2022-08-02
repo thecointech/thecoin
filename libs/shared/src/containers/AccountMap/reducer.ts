@@ -1,4 +1,3 @@
-import { ReducersMapObject } from "redux";
 import { AccountMapState, IAccountStoreAPI, initialState } from "./types";
 import { AccountState, buildNewAccount } from "@thecointech/account";
 import { deleteAccount, storeAccount } from "@thecointech/account/store";
@@ -10,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { activeAccountSelector, selectAccountArray } from './selectors';
 import { log } from '@thecointech/logging';
 import type { Signer } from '@ethersproject/abstract-signer';
+import type { ReducersMapObject } from "redux";
 
 export class AccountMap extends BaseReducer<IAccountStoreAPI, AccountMapState>('accounts', initialState) implements IAccountStoreAPI {
 

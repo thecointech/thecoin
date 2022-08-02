@@ -1,8 +1,8 @@
 import { isInternalAddress, Transaction } from "./types";
-import { TheCoin } from '@thecointech/contract-core';
+import type { TheCoin } from '@thecointech/contract-core';
 import { BigNumber } from "@ethersproject/bignumber";
 import { DateTime } from "luxon";
-import { Decimal } from "decimal.js-light";
+import Decimal from 'decimal.js-light';;
 import { log } from '@thecointech/logging';
 import { Erc20Provider, ERC20Response } from '@thecointech/ethers-provider/Erc20Provider';
 import {NormalizeAddress} from '@thecointech/utilities';

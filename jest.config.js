@@ -2,8 +2,10 @@ const path = require('path');
 const { compilerOptions } = require('./tsconfig.base.json');
 const { cwd } = require('process');
 const getTool = (name) => path.join(__dirname, 'tools', name);
+
+const mocks = path.join(__dirname, 'libs/__mocks__');
 const getRoots = () => [
-  path.join(__dirname, '__mocks__'),
+  mocks,
   cwd().endsWith('TheCoin')
     ? './'
     : '<rootDir>/src'
@@ -58,7 +60,7 @@ module.exports = {
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(j|t)sx?$",
   modulePathIgnorePatterns: ["build"],
   // By default, we add the 'src' folder to jest
-  moduleDirectories: ['node_modules', 'src', path.join(__dirname, '__mocks__')],
+  moduleDirectories: ['node_modules', 'src', mocks],
   moduleFileExtensions: [
     "ts",
     "tsx",

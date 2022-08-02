@@ -1,12 +1,12 @@
 import { Controller, Route, Post, Response, Tags, Body, Get, Query, Delete, Request, Header  } from '@tsoa/runtime';
-import { BlockpassPayload, UserVerifyData } from './types';
 import { IsValidAddress } from '@thecointech/utilities';
 import { log } from '@thecointech/logging';
 import { getUserData } from '@thecointech/broker-db/user';
 import { getSigner } from '../signedTimestamp';
 import { deleteRawData, updateUserVerification } from '../verify';
-import { Request as ExpressRequest} from "express";
 import { checkHeader } from '../verify/checkHeader';
+import type { Request as ExpressRequest} from "express";
+import type { BlockpassPayload, UserVerifyData } from './types';
 
 @Route('verify')
 @Tags('UserVerification')
@@ -25,6 +25,7 @@ export class VerifyController extends Controller {
       status: user?.status,
       referralCode: user?.referralCode ?? undefined,
       raw: user?.raw,
+      uniqueIdSig: user?.uniqueIdSig,
     }
   }
 
