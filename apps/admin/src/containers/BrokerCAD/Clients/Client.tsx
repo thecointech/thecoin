@@ -15,6 +15,7 @@ export const Client = (props: Props) => {
 
   const [allDetails, setAllDetails] = useState<AccountDetails[]>([]);
   const [loading, setLoading] = useState(false);
+  const [percent, setPercent] = useState(0);
   const [detailIdx, setDetailIdx] = useState(0);
   const rates = useFxRates();
   const account = AccountMap.useActive();
@@ -25,10 +26,11 @@ export const Client = (props: Props) => {
       return;
 
     setAllDetails([]);
+    setPercent(0);
     let isCancelled = false;
     const cancel = () => { isCancelled = true; }
     setLoading(true);
-    loadDetails(props.address, idx, setAllDetails, () => isCancelled)
+    loadDetails(props.address, idx, setAllDetails, setPercent, () => isCancelled)
       .then(() => setLoading(false));
 
     return cancel;
@@ -43,7 +45,7 @@ export const Client = (props: Props) => {
 
   const details = allDetails[detailIdx];
   const name = (!details && loading)
-    ? "Loading..."
+    ? `Loading... ${(percent * 100).toFixed(1)}%`
     : details?.user
       ? `${details.user.given_name} ${details.user.family_name}`
       : "UNVERIFIED";
@@ -76,8 +78,8 @@ export const Client = (props: Props) => {
 }
 
 type SetDetailsState = (setter: (acc: AccountDetails[]) => AccountDetails[]) => void;
-async function loadDetails(address: string, idx: SelfID, setAllDetails: SetDetailsState, isCancelled: () => boolean) {
-  const history = await getHistory(address, idx.client);
+async function loadDetails(address: string, idx: SelfID, setAllDetails: SetDetailsState, setPercent: (n: number)=> void, isCancelled: () => boolean) {
+  const history = await getHistory(address, idx.client, setPercent);
   if (!history) return;
 
   for (const raw of history) {

@@ -13,7 +13,11 @@ type CeramicCommon = {
   dataStore: DIDDataStore<ConfigType>
 };
 
-export async function getHistory(address: string, { ceramic, dataModel, dataStore }: CeramicCommon) : Promise<JWE[]|null>{
+export async function getHistory(
+  address: string,
+  { ceramic, dataModel, dataStore }: CeramicCommon,
+  progress?: (percent: number) => void
+) : Promise<JWE[]|null>{
 
   const link = await getLink(address, ceramic);
   const did = link.did;
@@ -32,9 +36,16 @@ export async function getHistory(address: string, { ceramic, dataModel, dataStor
 
   const stream = await TileDocument.load(ceramic, streamId);
   const ids = stream.allCommitIds;
-
   log.trace(`Found ${ids.length} commits`);
+
   // TODO: do this with a multi-query instead
-  const commits = await Promise.all(ids.map(id => ceramic.loadStream(id)));
-  return commits.map(c => c.content as JWE);
+  const commits: JWE[] = [];
+  for (let i = 0; i < ids.length; i++) {
+    const commit = await ceramic.loadStream(ids[i]);
+    if (commit) {
+      commits.push(commit.content);
+    }
+    progress?.(i / ids.length);
+  }
+  return commits;
 }
