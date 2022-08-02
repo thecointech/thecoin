@@ -15,6 +15,9 @@
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/setenv"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "bin": {
     "run-env": "./bin/run-env.mjs"
   },
