@@ -45,7 +45,10 @@ function convertRawDetails(user: UserVerifyData) : AccountDetails|null {
       given_name: raw.identities.given_name.value,
       family_name: raw.identities.family_name.value,
       DOB: raw.identities.dob.value,
-    }
+    },
+
+    certs: user.raw?.certs as Record<string, string>,
+    uniqueIdSig: user.uniqueIdSig,
   }
   if (raw.identities.email?.value) data.user!.email = raw.identities.email?.value;
   if (raw.identities.phone?.value) data.phone = JSON.parse(raw.identities.phone.value);

@@ -25,6 +25,7 @@ export class VerifyController extends Controller {
       status: user?.status,
       referralCode: user?.referralCode ?? undefined,
       raw: user?.raw,
+      uniqueIdSig: user?.uniqueIdSig,
     }
   }
 
