@@ -12,7 +12,7 @@ export const UxCanadianPC = (props:MaskedUxProps) => {
 
     return (
       <Form.Field className={props.className}>
-        <Label>{props.label}</Label>
+        <Label>{props.intlLabel}</Label>
           <InputMask name={props.name}
                       mask="a9a 9a9"
                       alwaysShowMask

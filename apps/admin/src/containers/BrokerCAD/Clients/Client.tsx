@@ -44,8 +44,8 @@ export const Client = (props: Props) => {
   const details = allDetails[detailIdx];
   const name = (!details && loading)
     ? "Loading..."
-    : details
-      ? `${details.given_name} ${details.family_name}`
+    : details?.user
+      ? `${details.user.given_name} ${details.user.family_name}`
       : "UNVERIFIED";
 
   return (
@@ -63,8 +63,8 @@ export const Client = (props: Props) => {
         onChange={(_event, data) => setDetailIdx(Number(data.value))}
       /> {` of ${allDetails.length}`}
       <div>{name}</div>
-      <div>DOB: {details?.DOB}</div>
-      <div>email: {details?.email}</div>
+      <div>DOB: {details?.user?.DOB}</div>
+      <div>email: {details?.user?.email}</div>
       <div>status: {details?.status}</div>
       <div>verified: {getIsVerified(details).toString()}</div>
       <hr />
@@ -90,14 +90,14 @@ async function loadDetails(address: string, idx: SelfID, setAllDetails: SetDetai
   }
 }
 
-function getIsVerified(details: AccountDetails) {
-  if (!details)
+function getIsVerified(details?: AccountDetails) {
+  if (!details?.user)
     return false;
 
-  const {given_name, family_name, DOB, uniqueIdSig} = details;
-  if (!given_name || !family_name || !DOB || !uniqueIdSig)
+  const {given_name, family_name, DOB } = details.user;
+  if (!given_name || !family_name || !DOB || !details.uniqueIdSig)
     return false;
 
-  return verifyMessage(buildUniqueId({given_name, family_name, DOB}), uniqueIdSig) == process.env.WALLET_BrokerTransferAssistant_ADDRESS;
+  return verifyMessage(buildUniqueId({given_name, family_name, DOB}), details.uniqueIdSig) == process.env.WALLET_BrokerTransferAssistant_ADDRESS;
 }
 

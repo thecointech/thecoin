@@ -107,6 +107,10 @@
     "defaultMessage": "Order received. You should receive the transfer in 1-2 business days.",
     "description": "app.accounts.transfer.successMessage: Success Message for the make a payment page / etransfer tab"
   },
+  "ACdNla": {
+    "defaultMessage": "Suite/Appt/Box #",
+    "description": "app.settings.personaldetails.address: Address field for the page setting / tab personal details in the app"
+  },
   "ATYl3e": {
     "defaultMessage": "Contact Us",
     "description": "app.MainNavigation.contact: Title for the contact us entry in the menu"

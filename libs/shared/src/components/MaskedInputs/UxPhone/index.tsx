@@ -14,7 +14,7 @@ export const UxPhone = (props:MaskedUxProps) => {
 
     return (
       <Form.Field className={props.className}>
-        <Label>{props.label}</Label>
+        <Label>{props.intlLabel}</Label>
           <InputMask name={props.name}
                       mask="999 999 9999"
                       defaultValue={props.value}
