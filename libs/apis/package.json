@@ -1,6 +1,5 @@
 {
   "name": "@thecointech/apis",
-  "private": true,
   "version": "0.2.83",
   "description": "TheCoin: Simple wrappers for swagger-generated APIs ensures correct URL",
   "type": "module",
