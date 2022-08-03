@@ -1,6 +1,6 @@
 import { SecureApi as SrcApi, GoogleAuthUrl, GoogleToken, GoogleListResult, GoogleStoreAccount, GoogleGetResult, GoogleWalletItem } from "@thecointech/broker-cad";
 import { buildResponse } from "../../axios-utils";
-import { wallets } from '../../wallets';
+import { wallets } from './wallets';
 import { sleep } from '@thecointech/async';
 
 const MockedCode = "MockedCode";
