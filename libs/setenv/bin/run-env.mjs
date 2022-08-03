@@ -27,8 +27,12 @@ const env = {
   ...process.env,
 }
 
+const loader = args.find(arg => arg.endsWith('.ts'))
+  ? new URL("ncr-ts.mjs", import.meta.url)
+  : new URL("ncr-js.mjs", import.meta.url);
+
 // Always attach experimental loader
-env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --loader=${new URL("ncr.mjs", import.meta.url)} --es-module-specifier-resolution=node`;
+env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --loader=${loader} --es-module-specifier-resolution=node`;
 
 // If this is yarn script?
 if (executable != "node") {
