@@ -26,15 +26,9 @@
   "files": [
     "build/**/*"
   ],
-  "exports": {
-    ".": {
-      "development": "./build/index_mocked.js",
-      "default": "./build/index.js"
-    }
-  },
+  "exports": "./build/index.js",
   "types": "build/index.d.ts",
   "dependencies": {
-    "@thecointech/apis": "^0.2.85",
     "@thecointech/logging": "^0.2.85"
   },
   "devDependencies": {

@@ -55,6 +55,7 @@
   "devDependencies": {
     "@thecointech/async": "^0.2.85",
     "@thecointech/broker-cad": "^0.2.85",
+    "@thecointech/pricing": "^0.2.85",
     "@thecointech/contract-core": "^0.2.85",
     "@thecointech/contract-nft": "^0.2.85"
   }
