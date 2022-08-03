@@ -1,7 +1,9 @@
-import { ethers, Signer } from "ethers";
-import { CertifiedTransferRequest } from "@thecointech/types";
 import { sign } from "./SignedMessages";
-
+import { keccak256 } from '@ethersproject/solidity';
+import { arrayify } from '@ethersproject/bytes';
+import { verifyMessage } from '@ethersproject/wallet';
+import type { Signer } from "@ethersproject/abstract-signer";
+import type { CertifiedTransferRequest } from "@thecointech/types";
 
 function GetHash(
   from: string,
@@ -10,11 +12,11 @@ function GetHash(
   fee: number,
   timestamp: number
 ) {
-  const ethersHash = ethers.utils.solidityKeccak256(
+  const ethersHash = keccak256(
     ["address", "address", "uint256", "uint256", "uint256"],
     [from, to, value, fee, timestamp]
   );
-  return ethers.utils.arrayify(ethersHash);
+  return arrayify(ethersHash);
 }
 
 export async function SignVerifiedXfer(
@@ -34,7 +36,7 @@ export function GetTransferSigner(
 ) {
   const { from, to, value, fee, timestamp, signature } = transfer;
   const hash = GetHash(from, to, value, fee, timestamp);
-  return ethers.utils.verifyMessage(hash, signature);
+  return verifyMessage(hash, signature);
 }
 
 /// Build the structure to be passed to the coin servers

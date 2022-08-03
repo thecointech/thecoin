@@ -1,5 +1,4 @@
-
-import {Wallet} from "ethers";
+import { Wallet } from "@ethersproject/wallet";
 import { writeFileSync, existsSync, mkdirSync } from 'fs';
 import {resolve} from 'path';
 

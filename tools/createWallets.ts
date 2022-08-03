@@ -1,7 +1,7 @@
 import { AccountId } from '@thecointech/signers';
-import {Wallet} from "ethers";
+import { Wallet } from "@ethersproject/wallet";
 import { writeFileSync, existsSync, mkdirSync } from 'fs';
-import {resolve} from 'path';
+import { resolve } from 'path';
 
 const password = "0nC927z!Vkka";
 const prodtestFolder = resolve(__dirname, '..', 'environments', 'prodtest');

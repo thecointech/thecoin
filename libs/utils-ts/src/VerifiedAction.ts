@@ -1,8 +1,9 @@
-import { BillPayeePacket, ETransferPacket, CertifiedTransfer } from "@thecointech/types";
-import { Signer, ethers } from "ethers";
 import { BuildVerifiedXfer } from "./VerifiedTransfer";
 import { encrypt, GetHash } from "./Encrypt";
 import { sign } from "./SignedMessages";
+import { verifyMessage } from '@ethersproject/wallet';
+import type { Signer } from "@ethersproject/abstract-signer";
+import type { BillPayeePacket, ETransferPacket, CertifiedTransfer } from "@thecointech/types";
 
 // TODO: Propage this throught code base (not yet done)
 export type InstructionPacket = BillPayeePacket|ETransferPacket;
@@ -30,5 +31,5 @@ export async function BuildVerifiedAction(
 export function getSigner(sale: CertifiedTransfer) {
   const { transfer, instructionPacket, signature } = sale;
   const hash = GetHash(instructionPacket, transfer);
-  return ethers.utils.verifyMessage(hash, signature);
+  return verifyMessage(hash, signature);
 }
