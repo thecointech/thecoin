@@ -23,8 +23,10 @@ export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
   );
   // Does the user have files on the system
   if (!onlyPublic) {
-    const systemFile = new URL(`${envName}.private.env`, `file://${systemFolder}`)
-    if (existsSync(systemFile)) files.push(systemFile);
+    const systemFile = new URL(`${envName}.private.env`, `file://${systemFolder}/`)
+    if (existsSync(systemFile)) {
+      files.push(systemFile);
+    }
   }
 
   // If none found, is there any in the local repo folder?

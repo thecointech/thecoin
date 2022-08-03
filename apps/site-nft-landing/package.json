@@ -2,7 +2,7 @@
   "name": "@thecointech/site-nft-landing",
   "productName": "THECoin: NFT Landing  ",
   "private": true,
-  "version": "0.2.81",
+  "version": "0.2.84",
   "description": "THECoin NFT: some neat tagline",
   "author": "Stephen Taylor",
   "license": "GPL-3.0-or-later",
@@ -11,6 +11,7 @@
     "_build": "webpack --mode production",
     "pre_deploy": "yarn _build",
     "_deploy": "yarn run-env ./deploy.ts",
+    "start": "firebase emulators:start --only hosting",
     "watch": "webpack --watch --mode=development",
     "serve": "firebase emulators:start --only hosting",
     "dev": "run-p watch serve"

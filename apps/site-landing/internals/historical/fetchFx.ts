@@ -2,14 +2,14 @@ import { join } from 'path';
 import fetch from 'node-fetch';
 import { writeFileSync, readFileSync } from 'fs';
 import papaparse from 'papaparse';
-import { zip } from 'lodash';
+import lodash from 'lodash';
 import { DateTime } from 'luxon';
 import { isPresent } from '@thecointech/utilities/ArrayExtns';
 
-const staticFile = join(__dirname, "CADUSD_historical.csv");
+const staticFile = new URL("CADUSD_historical.csv", import.meta.url);
 const bocRates = "https://www.bankofcanada.ca/valet/observations/group/FX_RATES_MONTHLY/csv?start_date=2017-01-01";
 
-const outFile = join(__dirname, "..", "..", "src", "containers", "ReturnProfile", "data", "fx_monthly.csv")
+const outFile = new URL(join("..", "..", "src", "containers", "BenefitsSimulator", "simulator", "fx_monthly.csv"), import.meta.url);
 
 //
 // Fetch new data and strip it down ready to upload
@@ -38,7 +38,7 @@ function getStatic() {
 
   const dates = data[9];
   const rates = data[11];
-  return zip(dates, rates).slice(1).map(([date, rate]) => {
+  return lodash.zip(dates, rates).slice(1).map(([date, rate]) => {
     const dt = DateTime.fromFormat(date!, "MMMM yyyy");
     return `${dt.toFormat("yyyy-LL")},${rate}`;
   });
