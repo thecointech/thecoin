@@ -52,11 +52,12 @@
       ]
     }
   },
-  "devDependencies": {
-    "@thecointech/async": "^0.2.86",
+  "dependencies": {
     "@thecointech/broker-cad": "^0.2.86",
-    "@thecointech/contract-core": "^0.2.86",
-    "@thecointech/contract-nft": "^0.2.86",
-    "@thecointech/pricing": "^0.2.86"
+    "@thecointech/pricing": "^0.2.86",
+    "@thecointech/nft": "^0.2.86"
+  },
+  "devDependencies": {
+    "@thecointech/async": "^0.2.86"
   }
 }
