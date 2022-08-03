@@ -1,4 +1,4 @@
-import { Wallet } from "ethers";
+import { Wallet } from "@ethersproject/wallet";
 import { BuildVerifiedXfer, GetTransferSigner } from "./VerifiedTransfer";
 
 test("Verified signature matches", async () => {

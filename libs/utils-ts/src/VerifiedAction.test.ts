@@ -1,4 +1,4 @@
-import { Wallet } from "ethers";
+import { Wallet } from "@ethersproject/wallet";
 import { CertifiedTransferRequest, BillPayeePacket } from "@thecointech/types";
 import { BuildVerifiedAction, getSigner } from "./VerifiedAction";
 import { contract } from '@openzeppelin/test-environment';

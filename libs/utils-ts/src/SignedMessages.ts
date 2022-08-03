@@ -1,15 +1,18 @@
-import { utils, Signer, Bytes } from "ethers";
 import { SignedMessage } from "@thecointech/types";
-import type {JsonRpcSigner} from "@ethersproject/providers";
+import { arrayify, Bytes } from '@ethersproject/bytes';
+import { verifyMessage } from '@ethersproject/wallet';
+import { keccak256 } from '@ethersproject/solidity';
+import type { JsonRpcSigner } from "@ethersproject/providers";
+import type { Signer } from "@ethersproject/abstract-signer";
 
 export function GetHash(
   value: string
 ) {
-  const ethersHash = utils.solidityKeccak256(
+  const ethersHash = keccak256(
     ["string"],
     [value]
   );
-  return utils.arrayify(ethersHash);
+  return arrayify(ethersHash);
 }
 
 export async function GetSignedMessage(message: string, signer: Signer) : Promise<SignedMessage>
@@ -22,7 +25,7 @@ export async function GetSignedMessage(message: string, signer: Signer) : Promis
 
 export async function GetSigner(signedMessage: SignedMessage) {
 	const {message, signature} = signedMessage;
-	return utils.verifyMessage(GetHash(message), signature);
+	return verifyMessage(GetHash(message), signature);
 }
 
 //
