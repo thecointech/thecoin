@@ -1,5 +1,5 @@
 import { AllActions, loadCurrent, loadMinting } from './load';
-import type { TheCoin } from '../../src';
+import type { TheCoin } from '../../../src';
 import { isType, AnyAction, BuyAction, getActionFromInitial, removeIncomplete, storeTransition, TransitionDelta, TypedAction } from '@thecointech/broker-db';
 import { getSigner } from '@thecointech/signers';
 import { init } from '@thecointech/firestore';
@@ -11,13 +11,13 @@ import chalk from "chalk";
 import { NormalizeAddress } from "@thecointech/utilities";
 import { nextOpenTimestamp } from '@thecointech/market-status';
 
-import blockchain from './blockchain.json' assert {type: "json"};
+import blockchain from './blockchain.json';
 const bcHistory = blockchain.history.filter(h => !isRefund(h.hash))
 import { DateTime } from 'luxon';
 import { toCoin } from './pricing';
 import { fetchRate } from '@thecointech/fx-rates';
 import { loadAndMergeHistory, Transaction } from '@thecointech/tx-blockchain';
-import { THECOIN_ROLE } from '../../src/constants';
+import { THECOIN_ROLE } from '../../../src/constants';
 import { getProvider } from '@thecointech/ethers-provider';
 
 const nullAddress = "0x0000000000000000000000000000000000000000";

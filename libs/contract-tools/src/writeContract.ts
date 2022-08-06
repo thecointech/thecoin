@@ -2,19 +2,23 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import path from 'path';
 
 
-function writeContractFile(root: string, dest: string, network: string, address: string) {
-  const outdir = path.join(root, '..', dest, 'deployed');
+function writeContractFile(root: URL, dest: string, network: string, address: string) {
+  const outdir = new URL(`../${dest}/deployed/`, root);
   if (!existsSync(outdir))
     mkdirSync(outdir);
 
   // Our contract-specific data (eg impl address, ProxyAdmin address etc) is in ../.openzeppelin/{network}.json
-  const jsonFile = path.join(outdir, `${process.env.CONFIG_NAME}-${network}.json`);
+  const jsonFile = new URL(`${process.env.CONFIG_NAME}-${network}.json`, outdir);
   writeFileSync(jsonFile, JSON.stringify({
     contract: address,
   }))
 }
 
-export function storeContractAddress(root: string, network: string, address: string, buildConfigs?: string[]) {
+export function storeContractAddress(root: URL, network: string, address: string, buildConfigs?: string[]) {
+  // Never write artifacts in development
+  if (process.env.CONFIG_NAME === 'development')
+    return;
+
   writeContractFile(root, 'src', network, address);
   // Our build system seems to be failing to pick up
   // the changes to the address in repeated build steps.

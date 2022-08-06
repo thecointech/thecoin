@@ -53,6 +53,8 @@
 /apps/*/src/routes/routes.ts
 
 libs/*/.openzeppelin/unknown-1337.json
+libs/*/.openzeppelin/unknown-31337.json
+libs/contract-*/.hardhat/cache
 libs/contract-*/src/contracts
 libs/contract-*/src/types
 libs/contract-*/migrations/types
@@ -60,9 +62,9 @@ libs/contract-*/src/deployed/*-fork.json
 libs/contract-*/**/devlive-polygon*
 libs/contract-*/**/development-polygon*
 
-libs/contract-core/seed/clone/blockchain.json
-libs/contract-core/seed/clone/mint.csv
-libs/contract-core/seed/clone/prod.json
+libs/contract-core/**/blockchain.json
+libs/contract-core/**/mint.csv
+libs/contract-core/**/prod.json
 
 libs/idx/src/config.devlive.json
 

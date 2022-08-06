@@ -1,7 +1,7 @@
 import { accounts, contract } from '@openzeppelin/test-environment';
 import { join } from 'path';
-import { MINTER_ROLE, THECOIN_ROLE } from '../src/constants';
-import { toNamedAccounts } from '../internal/accounts';
+import { MINTER_ROLE, THECOIN_ROLE } from '../../src/constants';
+import { toNamedAccounts } from '../../internal/accounts';
 import { log } from '@thecointech/logging';
 import { assignRoles } from './assignRoles';
 

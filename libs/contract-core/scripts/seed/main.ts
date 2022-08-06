@@ -1,5 +1,5 @@
 import { log } from '@thecointech/logging';
-import { GetContract } from '../src';
+import { GetContract } from '../../src';
 import {assignRoles} from './assignRoles';
 
 //
