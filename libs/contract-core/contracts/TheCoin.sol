@@ -29,7 +29,7 @@ contract TheCoin is Pluggable {
 
     // We only setup the default role here
     _setupRole(THECOIN_ROLE, sender);
-    _setupRole(BROKER_ROLE, sender);
+    // _setupRole(BROKER_ROLE, sender);
   }
 
   function decimals() public view virtual override returns (uint8) {

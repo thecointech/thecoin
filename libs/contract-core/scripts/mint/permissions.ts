@@ -1,5 +1,5 @@
 import { log } from '@thecointech/logging';
-import { THECOIN_ROLE } from '../src';
+import { THECOIN_ROLE } from '../../src';
 import { getContract } from './contract';
 import { getGasPrice } from './pricing';
 

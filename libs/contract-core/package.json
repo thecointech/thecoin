@@ -20,7 +20,7 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-s build:contracts build:types build:src",
+    "build": "run-s build:contracts build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
     "build:src": "run-p build:src:*",
     "_build:src:cjs": "yarn tsc --project tsconfig.build.cjs.json",
@@ -42,8 +42,8 @@
     "_deploy:local": "yarn _hardhat ./scripts/deploy.ts",
     "_deploy:polygon": "yarn _hardhat ./scripts/deploy.ts --network polygon && yarn seed",
     "_deploy:ethereum": "yarn _truffle migrate --network ethereum",
-    "mint": "run-env ./mint/main.ts",
-    "seed": "run-env ./seed/main.ts",
+    "mint": "run-env ./scripts/mint/main.ts",
+    "seed": "run-env ./scripts/seed/main.ts",
     "seed:fetch": "cross-env CONFIG_NAME=prodbeta yarn run-env ./seed/clone/fetch.ts",
     "verify": "run-env ./internal/verify.ts"
   },

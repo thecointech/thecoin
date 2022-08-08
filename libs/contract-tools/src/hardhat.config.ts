@@ -22,10 +22,10 @@ const config: HardhatUserConfig = {
     outDir: "src/types"
   },
   networks: {
-    hardhat: {
-      //@ts-ignore
-      port: 9545
-    }
+    localhost: {
+      url: "http://localhost:9545",
+      chainId: 31337
+    },
   }
 }
 

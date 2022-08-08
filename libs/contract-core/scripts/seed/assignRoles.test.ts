@@ -1,29 +1,25 @@
-import { accounts, contract } from '@openzeppelin/test-environment';
-import { join } from 'path';
 import { MINTER_ROLE, THECOIN_ROLE } from '../../src/constants';
 import { toNamedAccounts } from '../../internal/accounts';
-import { log } from '@thecointech/logging';
 import { assignRoles } from './assignRoles';
+import { ethers } from "hardhat";
 
 // Global variables
 jest.setTimeout(5 * 60 * 1000);
-contract.artifactsDir = join(__dirname, "../src/contracts");
-log.level(0);
 
 //
 // Simple sanity test for a contract
 // deployed in development environment
-it.skip('has assigned roles correctly', async () => {
-  const named = toNamedAccounts(accounts);
-  const TheCoin = contract.fromArtifact("TheCoin");
-  const tcCore = await TheCoin.new();
-  await tcCore.initialize(named.TheCoin);
+it('has assigned roles correctly', async () => {
+  const signers = await ethers.getSigners();
+  const named = toNamedAccounts(signers);
+  const TheCoin = await ethers.getContractFactory("TheCoin", named.Owner);
+  const tcCore = await TheCoin.deploy();
+  await tcCore.initialize(named.TheCoin.address);
 
-  tcCore.connect = () => tcCore;
   await assignRoles(tcCore)
   // Are the roles assigned?
   const tc = await tcCore.getRoleMember(THECOIN_ROLE, 0);
   expect(tc).toEqual(named.TheCoin);
-  const isMinter = await tcCore.hasRole(MINTER_ROLE, named.Minter);
+  const isMinter = await tcCore.hasRole(MINTER_ROLE, named.Minter.address);
   expect(isMinter).toBeTruthy();
 });

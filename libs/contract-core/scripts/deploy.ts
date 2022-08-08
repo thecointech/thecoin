@@ -1,6 +1,7 @@
 import hre from 'hardhat';
 import { storeContractAddress } from '@thecointech/contract-tools/writeContract';
 import { getSigner } from '@thecointech/signers';
+import { log } from '@thecointech/logging';
 import '@nomiclabs/hardhat-ethers';
 import '@openzeppelin/hardhat-upgrades';
 
@@ -8,19 +9,20 @@ async function main() {
 
   const network = "polygon"; //hre.network.name
   const name = getName(network);
+  const owner = await getSigner("Owner");
 
   const contractArgs = await getArguments(network)
-  console.log(JSON.stringify(contractArgs, null, 2));
-  const TheCoin = await hre.ethers.getContractFactory(name);
+  const TheCoin = await hre.ethers.getContractFactory(name, owner);
   const theCoin = await hre.upgrades.deployProxy(TheCoin, contractArgs, { initializer: 'initialize(address _sender, address depositor)'});
   const proxy = await theCoin.deployed();
-  // const proxy = await deployProxy(contract, contractArgs, { deployer });
+  log.info(`Deployed ${name} at ${proxy.address}`);
+
   // Serialize our contract addresses
-  storeContractAddress(import.meta.url, network, proxy.address, ['cjs', 'mjs']);
+  storeContractAddress(new URL(import.meta.url), network, proxy.address, ['cjs', 'mjs']);
 }
 
 const getName = (network: string) =>
-  network === 'polygon' || network === 'hardhat'
+  network === 'polygon' || process.env.NODE_ENV !== 'production'
   ? "TheCoinL2" as "TheCoin"
   : "TheCoinL1" as "TheCoin";
 
