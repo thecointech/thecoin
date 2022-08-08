@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
-import { initAccounts } from '../../scripts/accounts';
-import { PLUGINMGR_ROLE, ALL_PERMISSIONS, MINTER_ROLE, BROKER_ROLE } from '../../src/constants'
+import { ALL_PERMISSIONS } from '../../src/constants'
+import { createAndInitTheCoin, initAccounts } from '../../internal/initTest';
 import type { Contract, ContractTransaction } from 'ethers';
 import hre from 'hardhat';
 
@@ -9,9 +9,9 @@ jest.setTimeout(5 * 60 * 1000);
 // Try creating core
 it('Calls appropriate methods on a plugin', async () => {
 
-  const TheCoin = await hre.ethers.getContractFactory("TheCoin");
+  const signers = initAccounts(await hre.ethers.getSigners());
+  const tcCore = await createAndInitTheCoin();
   const DebugPrint = await hre.ethers.getContractFactory("DebugPrint");
-  const tcCore = await TheCoin.deploy();
   const logger = await DebugPrint.deploy();
 
   async function expectEvent(response: ContractTransaction, ...events: string[]) {
@@ -26,11 +26,6 @@ it('Calls appropriate methods on a plugin', async () => {
     });
   }
 
-  const signers = initAccounts(await hre.ethers.getSigners());
-  await tcCore.initialize(signers.Owner.address);
-  await tcCore.grantRole(PLUGINMGR_ROLE, signers.Owner.address);
-  await tcCore.grantRole(BROKER_ROLE, signers.Owner.address);
-
   // Assign to user, grant all permissions, limit user to $100
   const tx_assign = await tcCore.pl_assignPlugin(signers.client1.address, logger.address, ALL_PERMISSIONS, "0x1234");
   await expectEvent(tx_assign, "PluginAttached", "PrintAttached");
@@ -42,8 +37,7 @@ it('Calls appropriate methods on a plugin', async () => {
 
   // Test token balance/transfer
   const balance = 10000;
-  await tcCore.grantRole(MINTER_ROLE, signers.Minter.address);
-  await tcCore.connect(signers.Minter).mintCoins(balance, signers.Owner.address, Date.now());
+  await tcCore.mintCoins(balance, signers.Owner.address, Date.now());
   const tx_deposit = await tcCore.transfer(signers.client1.address, balance);
   expectEvent(tx_deposit, "Transfer", "PrintPreDeposit");
 
