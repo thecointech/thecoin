@@ -57,8 +57,11 @@ export function gCloudDeploy() {
   return ShellCmd(deploy);
 }
 
-export async function copyEnvVarsLocal(outYamlFile: string) {
-  const env = getEnvVars();
+export async function copyEnvVarsLocal(outYamlFile: string, additionalVars: Record<string, string> = {}) {
+  const env = {
+    ...getEnvVars(),
+    ...additionalVars,
+  }
   const yamlVars = Object.entries(env)
     .filter(([key]) => !key.startsWith('#'))
     .filter(([key]) => !(key.startsWith('WALLET_') && !key.includes('_ADDRESS')))
