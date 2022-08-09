@@ -19,7 +19,7 @@ export async function resolve(specifier, context, defaultResolve)
     // For our files we need to use the ts-node transpiler
     ? await resolve_ts(specOrMocked, {
       ...context,
-      conditions: [process.env.CONFIG_NAME || process.env.NODE_ENV, ...context.conditions],
+      conditions: [process.env.RUNTIME_ENV, process.env.CONFIG_NAME || process.env.NODE_ENV, ...context.conditions],
     }, defaultResolve)
     // for everything else, just use the default
     : await defaultResolve(specOrMocked, context, defaultResolve);
