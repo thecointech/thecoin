@@ -58,6 +58,7 @@
     "@thecointech/nft": "^0.2.86"
   },
   "devDependencies": {
-    "@thecointech/async": "^0.2.86"
+    "@thecointech/async": "^0.2.86",
+    "@thecointech/contract-core": "^0.2.86"
   }
 }

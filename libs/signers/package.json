@@ -36,10 +36,10 @@
         "default": "./build/names.js"
       },
       "node": {
+        "gcloud": "./build/index_gcloud.js",
         "prodtest": "./build/index_prodtest.js",
         "prodbeta": "./build/index_prod.js",
-        "prod": "./build/index_prod.js",
-        "default": "./build/index_node.js"
+        "prod": "./build/index_prod.js"
       }
     },
     "./electron": {
