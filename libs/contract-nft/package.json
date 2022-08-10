@@ -55,7 +55,6 @@
   "types": "./build/index.d.ts",
   "devDependencies": {
     "@openzeppelin/contracts": "^4.5.0",
-    "@openzeppelin/test-environment": "^0.1.9",
     "@thecointech/contract-core": "^0.2.88",
     "@thecointech/contract-tools": "^0.2.88",
     "@thecointech/signers": "^0.2.88",

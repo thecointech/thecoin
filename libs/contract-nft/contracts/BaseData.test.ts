@@ -1,7 +1,6 @@
 import { jest } from '@jest/globals';
 import hre from 'hardhat';
 
-// Loads a compiled contract using OpenZeppelin test-environment
 jest.setTimeout(120000);
 
 it('Returns relevant validity', async () => {
