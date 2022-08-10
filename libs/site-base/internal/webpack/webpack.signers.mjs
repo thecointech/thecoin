@@ -13,6 +13,7 @@ async function getAddresses() {
   }
 }
 
+console.log("WALLET_BrokerCAD_ADDRESS: ", JSON.stringify(getEnvVars(), null, 2));
 export default {
   plugins: [
     new webpack.DefinePlugin(
