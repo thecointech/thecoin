@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/signers",
-  "version": "0.2.86",
+  "version": "0.2.88",
   "description": "The Coin: centralized access for built-in signers.  Not for external use",
   "type": "module",
   "keywords": [
@@ -36,10 +36,10 @@
         "default": "./build/names.js"
       },
       "node": {
+        "gcloud": "./build/index_gcloud.js",
         "prodtest": "./build/index_prodtest.js",
         "prodbeta": "./build/index_prod.js",
-        "prod": "./build/index_prod.js",
-        "default": "./build/index_node.js"
+        "prod": "./build/index_prod.js"
       }
     },
     "./electron": {
@@ -64,9 +64,9 @@
   "dependencies": {
     "@ethersproject/wallet": "5.6.2",
     "@google-cloud/secret-manager": "^3.5.0",
-    "@thecointech/ethers-provider": "^0.2.86",
-    "@thecointech/hardware-wallet": "^0.2.86",
-    "@thecointech/logging": "^0.2.86"
+    "@thecointech/ethers-provider": "^0.2.88",
+    "@thecointech/hardware-wallet": "^0.2.88",
+    "@thecointech/logging": "^0.2.88"
   },
   "devDependencies": {
     "jest": "*"
