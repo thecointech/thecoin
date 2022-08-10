@@ -20,5 +20,8 @@ export function getNetworks() {
         polygon: getLiveNetwork("POLYGON"),
         ethereum: getLiveNetwork("ETHEREUM"),
       }
-    : { localhost: getDevNetwork() }
+    : {
+        polygon: getDevNetwork(),
+        localhost: getDevNetwork(),
+      }
 }

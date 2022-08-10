@@ -39,7 +39,7 @@
     "deploy:ethereum": "cross-env HARDHAT_NETWORK=ethereum yarn _deploy",
     "_deploy": "run-s _deploy:deploy _deploy:seed _deploy:verify",
     "_deploy:deploy": "yarn _hardhat ./scripts/deploy.ts",
-    "_deploy:seed": "yarn _hardhat ./scripts/seed.ts",
+    "_deploy:seed": "yarn _hardhat ./scripts/seed/main.ts",
     "_deploy:verify": "yarn _hardhat ./scripts/verify.ts",
     "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
   },

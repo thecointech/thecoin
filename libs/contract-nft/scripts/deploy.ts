@@ -10,10 +10,13 @@ import '@nomiclabs/hardhat-ethers';
 async function main() {
   const network = hre.config.defaultNetwork;
   const name = getName(network);
-  const provider = getProvider(network.toUpperCase() as Network);
-  const signer = await getSigner("Owner");
-  const owner = signer.connect(provider);
   const [minter, depositor] = await getArguments(network)
+
+  let owner = await getSigner("Owner");
+  if (!owner.provider) {
+    const provider = getProvider(network.toUpperCase() as Network);
+    owner = owner.connect(provider);
+  }
 
   const TheGreenNFT = await hre.ethers.getContractFactory(name as "TheGreenNFTL2", owner);
   const theGreenNFT = await TheGreenNFT.deploy(minter, depositor);
