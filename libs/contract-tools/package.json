@@ -22,8 +22,7 @@
   "scripts": {
     "clean": "rimraf ./build",
     "build": "yarn tsc",
-    "emulator": "hardhat --config ./src/hardhat.config.ts node --port 9545",
-    "prod:console": "cross-env CONFIG_NAME=prodtest truffle console --network prodtest"
+    "emulator": "hardhat --config ./src/hardhat.config.ts node --port 9545"
   },
   "exports": {
     "./hardhat.config": "./build/hardhat.config.js",
@@ -39,7 +38,6 @@
   },
   "devDependencies": {
     "@thecointech/signers": "^0.2.86",
-    "@thecointech/truffle-ethers-provider": "^0.2.86",
     "@nomiclabs/hardhat-ethers": "^2.1.0",
     "@nomiclabs/hardhat-etherscan": "^3.1.0",
     "@openzeppelin/hardhat-upgrades": "^1.19.1",
