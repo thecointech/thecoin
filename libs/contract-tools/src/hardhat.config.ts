@@ -3,27 +3,11 @@ import "@typechain/hardhat";
 import '@nomiclabs/hardhat-ethers';
 import '@nomiclabs/hardhat-etherscan';
 import '@openzeppelin/hardhat-upgrades';
+import { getNetworks } from './hardhat.network';
 
 // Did we specify a network?
 const networkIdx = process.argv.findIndex(arg => arg === "--network");
-const network = networkIdx === -1 ? undefined : process.argv[networkIdx + 1];
-
-const networks = process.env.CONFIG_NAME?.startsWith("prod")
-  ? {
-    polygon: {
-      chainId: parseInt(process.env.DEPLOY_POLYGON_NETWORK_ID ?? "-1"),
-    },
-    ethereum: {
-      chainId: parseInt(process.env.DEPLOY_ETHEREUM_NETWORK_ID ?? "-1"),
-    }
-  }
-  : {
-    localhost: {
-      url: "http://localhost:9545",
-      chainId: 31337
-    },
-  }
-
+const defaultNetwork = networkIdx === -1 ? process.env.HARDHAT_NETWORK : process.argv[networkIdx + 1];
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -43,9 +27,10 @@ const config: HardhatUserConfig = {
   typechain: {
     outDir: "src/types"
   },
-  networks,
+  defaultNetwork,
+  networks: getNetworks(),
   etherscan: {
-    apiKey: network == "polygon"
+    apiKey: defaultNetwork == "polygon"
       ? process.env.POLYGONSCAN_API_KEY
       : process.env.ETHERSCAN_API_KEY
   },

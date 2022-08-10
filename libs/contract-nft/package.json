@@ -28,17 +28,19 @@
     "build:copy": "cpx \"./src/deployed\" ./build/",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
-    "clean:contracts": "yarn _hardhat ./scripts/clean.ts",
+    "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
     "test": "yarn run-jest",
     "test:ci": "yarn run-jest-nix",
-    "prod:test": "cross-env CONFIG_NAME=prodtest yarn _deploy",
-    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn _deploy:polygon",
-    "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env",
-    "_deploy": "runs-s _deploy:*",
-    "_deploy:polygon": "yarn _hardhat ./scripts/deploy.ts --network polygon && yarn seed",
-    "_deploy:ethereum": "yarn _truffle migrate --network ethereum && yarn verify ethereum",
-    "seed": "yarn _hardhat ./scripts/seed.ts",
-    "verify": "run-env ./internal/verify.ts"
+    "prod:test": "cross-env CONFIG_NAME=prodtest yarn deploy:both",
+    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn deploy:polygon",
+    "deploy:both": "yarn deploy:polygon && yarn deploy:ethereum",
+    "deploy:polygon": "cross-env HARDHAT_NETWORK=polygon yarn _deploy",
+    "deploy:ethereum": "cross-env HARDHAT_NETWORK=ethereum yarn _deploy",
+    "_deploy": "run-s _deploy:deploy _deploy:seed _deploy:verify",
+    "_deploy:deploy": "yarn _hardhat ./scripts/deploy.ts",
+    "_deploy:seed": "yarn _hardhat ./scripts/seed/main.ts",
+    "_deploy:verify": "yarn _hardhat ./scripts/verify.ts",
+    "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
   },
   "files": [
     "build/**/*"

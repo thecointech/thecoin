@@ -9,9 +9,14 @@ import exactFrom from './logs-exact-from.json';
 import exactTo from './logs-exact-to.json';
 
 export class Erc20Provider extends BaseProvider {
+  connection: { url: string; };
 
   constructor() {
-    super('unspecified')
+    super('unspecified');
+
+    this.connection = {
+      url: "mocked",
+    }
   }
 
   //

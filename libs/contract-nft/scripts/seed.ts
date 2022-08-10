@@ -4,9 +4,6 @@ import { connectNFT } from '../src/connect';
 import { getTokenClaimCode } from '../src/tokenCodes';
 import { writeFileSync } from 'fs';
 import { log } from '@thecointech/logging';
-import '@nomiclabs/hardhat-ethers';
-import '@openzeppelin/hardhat-upgrades';
-
 
 async function main() {
   const network = "polygon"; //hre.network.name;
