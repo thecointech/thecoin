@@ -1,7 +1,7 @@
 {
   "name": "@thecointech/tx-blockchain",
   "private": "true",
-  "version": "0.2.87",
+  "version": "0.2.88",
   "description": "The Coin: high-level interactions with the ethereum contract",
   "type": "module",
   "keywords": [
@@ -37,8 +37,8 @@
     }
   },
   "dependencies": {
-    "@thecointech/contract-core": "^0.2.87",
-    "@thecointech/utilities": "^0.2.87"
+    "@thecointech/contract-core": "^0.2.88",
+    "@thecointech/utilities": "^0.2.88"
   },
   "devDependencies": {
     "jest": "*"
