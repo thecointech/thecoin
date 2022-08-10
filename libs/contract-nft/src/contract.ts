@@ -1,7 +1,7 @@
 import { Contract } from '@ethersproject/contracts';
 import { TheGreenNFT } from '.';
 import { getProvider } from '@thecointech/ethers-provider';
-import TheGreenNFTSpec from './contracts/TheGreenNFTL2.json' assert {type: "json"};
+import TheGreenNFTSpec from './contracts/contracts/polygon/TheGreenNFTL2.sol/TheGreenNFTL2.json' assert {type: "json"};
 
 const getAbi = () => {
   return TheGreenNFTSpec.abi;

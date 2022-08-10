@@ -14,17 +14,16 @@ async function main() {
   const contractArgs = await getArguments(network)
   const TheCoin = await hre.ethers.getContractFactory(name, owner);
   const theCoin = await hre.upgrades.deployProxy(TheCoin, contractArgs, { initializer: 'initialize(address _sender, address depositor)'});
-  const proxy = await theCoin.deployed();
-  log.info(`Deployed ${name} at ${proxy.address}`);
+  log.info(`Deployed ${name} at ${theCoin.address}`);
 
   // Serialize our contract addresses
-  storeContractAddress(new URL(import.meta.url), network, proxy.address, ['cjs', 'mjs']);
+  storeContractAddress(new URL(import.meta.url), network, theCoin.address, ['cjs', 'mjs']);
 }
 
 const getName = (network: string) =>
   network === 'polygon' || process.env.NODE_ENV !== 'production'
-  ? "TheCoinL2" as "TheCoin"
-  : "TheCoinL1" as "TheCoin";
+  ? "TheCoinL2"
+  : "TheCoinL1";
 
 // In some environments the address must be set
 // statically (to support multiple hardware wallets)
