@@ -58,6 +58,9 @@ export type BillActionContainer = TypedActionContainer<"Bill">;
 export type AnyActionContainer = TypedActionContainer<ActionType>;
 
 export type TransitionCallback<Type extends ActionType=ActionType> = (container: TypedActionContainer<Type>) => Promise<Partial<TransitionDelta> | null>;
+export interface NamedTransition<Type extends ActionType=ActionType> extends TransitionCallback<Type> {
+  transitionName: string,
+}
 
 // Handy utility function to get current state (last entry in the history)
 export const getCurrentState = (container: AnyActionContainer) => container.history[container.history.length - 1];

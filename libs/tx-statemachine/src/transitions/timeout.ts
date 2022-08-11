@@ -1,4 +1,5 @@
-import { AnyActionContainer } from "../types";
+import { makeTransition  } from '../makeTransition';
 
+//
 // TODO: Implement timeout handling
-export function timeout(_deposit: AnyActionContainer) { return Promise.resolve({}) };
+export const timeout = makeTransition("timeout", () => Promise.resolve({}));

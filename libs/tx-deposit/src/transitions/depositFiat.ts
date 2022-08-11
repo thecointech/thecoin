@@ -4,15 +4,14 @@ import { DepositResult, ETransferErrorCode, IBank } from "@thecointech/bank-inte
 import type { eTransferData } from "@thecointech/tx-gmail";
 import { IsValidAddress, getAddressShortCode } from "@thecointech/utilities";
 import Decimal from "decimal.js-light";
-import { BuyActionContainer, getCurrentState } from "@thecointech/tx-statemachine";
+import { BuyActionContainer, getCurrentState, makeTransition } from "@thecointech/tx-statemachine";
 import { verifyPreTransfer } from "@thecointech/tx-statemachine/transitions";
 import { DateTime } from 'luxon';
 
-//
-// Deposit an eTransfer and update fiat balance
-export async function depositFiat(container: BuyActionContainer) {
-  return verifyPreTransfer(container) ?? await doDeposit(container);
-}
+
+export const depositFiat = makeTransition<"Buy">("depositFiat", async (container) => (
+  verifyPreTransfer(container) ?? await doDeposit(container)
+))
 
 async function doDeposit(container: BuyActionContainer) {
   const etransfer = container.instructions;

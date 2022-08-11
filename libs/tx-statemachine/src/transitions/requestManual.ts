@@ -1,11 +1,11 @@
 import { AnyActionContainer } from "../types";
 import { SendMail } from '@thecointech/email';
-//import { removeIncomplete } from '@thecointech/broker-db'
+import { makeTransition  } from '../makeTransition';
 
 //
 // Something has gone wrong, and we can't handle it automatically.
 // Send a notification email to request manual overview.
-export async function requestManual(action: AnyActionContainer) {
+export const requestManual = makeTransition("requestManual", async (action) => {
   // Send an email to request manual intervention
   await SendMail(
     `Manual attention required: ${action.action.type}`,
@@ -20,7 +20,7 @@ export async function requestManual(action: AnyActionContainer) {
   //await removeIncomplete(action.action.type, action.action.doc);
   // Make no state changes.
   return {};
-}
+});
 
 const printHistory = (action: AnyActionContainer) =>
   action.history.map(h => {
