@@ -47,6 +47,11 @@
   },
   "dependencies": {
     "@thecointech/contract-core": "^0.2.87",
+    "@thecointech/shared": "^0.2.87",
+    "@thecointech/tx-statemachine": "^0.2.87",
+    "@thecointech/tx-etransfer": "^0.2.87",
+    "@thecointech/tx-bill": "^0.2.87",
+    "@thecointech/tx-deposit": "^0.2.87",
     "electron-squirrel-startup": "^1.0.0",
     "semantic-ui-css": "^2.4.1"
   }
