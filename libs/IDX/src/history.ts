@@ -41,9 +41,14 @@ export async function getHistory(
   // TODO: do this with a multi-query instead
   const commits: JWE[] = [];
   for (let i = 0; i < ids.length; i++) {
-    const commit = await ceramic.loadStream(ids[i]);
-    if (commit) {
-      commits.push(commit.content);
+    try {
+      const commit = await ceramic.loadStream(ids[i]);
+      if (commit) {
+        commits.push(commit.content);
+      }
+    }
+    catch (e: any) {
+      log.error(`Cannot load commit: ${e.message}`);
     }
     progress?.(i / ids.length);
   }
