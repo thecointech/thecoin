@@ -1,5 +1,6 @@
 import webpack from 'webpack';
 import { getSigner } from '@thecointech/signers';
+import { getEnvVars } from '@thecointech/setenv';
 
 // Now, we can use top-level await to fetch our addresses directly
 // (this allows us to correctly inject addresses even for dynamic environments like dev:live)
@@ -12,6 +13,7 @@ async function getAddresses() {
   }
 }
 
+console.log("WALLET_BrokerCAD_ADDRESS: ", JSON.stringify(getEnvVars(), null, 2));
 export default {
   plugins: [
     new webpack.DefinePlugin(
@@ -20,7 +22,7 @@ export default {
       // the live signer and get it's address directly.
       // We can't do this every time because a production address
       // may not always exist
-      process.env.WALLET_BrokerCAD_ADDRESS
+      getEnvVars().WALLET_BrokerCAD_ADDRESS
         ? {}
         : await getAddresses()
     ),
