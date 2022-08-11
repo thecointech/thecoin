@@ -10,18 +10,15 @@ const LOG_NAME = basename(projectRoot);
 export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
   const files : URL[] = [];
 
-  // If this is not a development machine, just bail - we can't run
-  // without our environment variables.  (This is mostly to avoid
-  // looking for files when running on a production machine.)
-  const systemFolder = process.env.THECOIN_ENVIRONMENTS;
-
   const envName = cfgName || process.env.CONFIG_NAME || (
     process.env.NODE_ENV == "production"
       ? "prod"
       : "development"
   );
+
   // Does the user have files on the system
   if (!onlyPublic) {
+    const systemFolder = process.env.THECOIN_ENVIRONMENTS;
     const systemFile = new URL(`${envName}.private.env`, `file://${systemFolder}/`)
     if (existsSync(systemFile)) {
       files.push(systemFile);
