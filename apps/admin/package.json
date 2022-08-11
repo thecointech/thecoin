@@ -4,7 +4,7 @@
   "productName": "TheCoin - Admin",
   "workspaces": {
     "nohoist": [
-      "**/electron**",
+      "**/electron",
       "**/electron-devtools-installer/**"
     ]
   },
@@ -12,6 +12,7 @@
   "description": "Admin: audit TheCoin system ops",
   "main": ".webpack/main",
   "scripts": {
+    "build": "yarn make",
     "dev": "yarn electron-forge start",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
