@@ -14,7 +14,6 @@ export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
   // without our environment variables.  (This is mostly to avoid
   // looking for files when running on a production machine.)
   const systemFolder = process.env.THECOIN_ENVIRONMENTS;
-  if (!systemFolder) return files;
 
   const envName = cfgName || process.env.CONFIG_NAME || (
     process.env.NODE_ENV == "production"
@@ -36,9 +35,7 @@ export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
   }
 
   // None found, throw
-  if (files.length == 0) {
-    throw new Error(`Missing cfg files for: ${cfgName} (${repoUrl})`);
-  }
+  if (files.length == 0) return files;
 
   // Beta versions share a lot with non-beta environments, so we merge them together
   if (envName.endsWith("beta")) {
@@ -54,7 +51,7 @@ export function getEnvVars(cfgName?: string, onlyPublic?: boolean) : Record<stri
     .map(file => readFileSync(file))
     .reduce((acc, contents) => ({
     ...de.parse(contents),
-    ...acc, // later files have lower priority, do not overwrite existing balues
+    ...acc, // later files have lower priority, do not overwrite existing values
   }), {
     LOG_NAME,
   });
