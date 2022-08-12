@@ -1,9 +1,6 @@
-import { TypedActionContainer } from "@thecointech/tx-statemachine";
+import { makeTransition } from '@thecointech/tx-statemachine';
 
 //
-// Attempt to apply the fiat balance to billing details
-// If successfull will reset the fiat balance to 0
-export async function etransferCancelled(_container: TypedActionContainer<"Sell">) {
-  // TODO: this
-  return null
-}
+// Refund any fiat in this
+// TODO: this
+export const etransferCancelled = makeTransition<"Sell">("etransferCancelled", async () => null);

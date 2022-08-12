@@ -6,6 +6,7 @@ import { getCurrentState, TypedActionContainer } from "@thecointech/tx-statemach
 import { EncryptedPacket, ETransferPacket } from "@thecointech/types";
 import Decimal from 'decimal.js-light';;
 import { DateTime } from 'luxon';
+import { makeTransition } from '@thecointech/tx-statemachine';
 
 // NOTE: server does not have private key, and will not pass this step
 const privateKeyPath = process.env.USERDATA_INSTRUCTION_PK;
@@ -14,7 +15,7 @@ const privateKey = privateKeyPath ? readFileSync(privateKeyPath).toString() : nu
 //
 // Attempt to send the balance as e-Transfer.
 // If successfull will reset the fiat balance to 0
-export async function sendETransfer(container: TypedActionContainer<"Sell">) {
+export const sendETransfer = makeTransition<"Sell">("sendETransfer", async (container) => {
 
   // Can we send an eTransfer in our current state?
   const currentState = getCurrentState(container)
@@ -55,7 +56,7 @@ export async function sendETransfer(container: TypedActionContainer<"Sell">) {
         date: DateTime.now(),
       }
     : { error: `Error Code: ${confirmation}`}
-}
+});
 
 function progressCb(msg: string) {
   log.trace(msg);

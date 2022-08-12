@@ -31,3 +31,4 @@ export const setEncrypted = (idx: SelfID, definition: string, data: any | null) 
 export const loadEncrypted = (idx: SelfID, definition: string) => idx.get(definition);
 
 export const getLink = () => {}
+export const getHistory = () => Promise.resolve([])
