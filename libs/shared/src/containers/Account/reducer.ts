@@ -99,7 +99,7 @@ function AccountReducer(address: string, initialState: AccountState) {
           yield call(setDetails, this.state.idx, details);
           log.debug("IDX: account details write complete");
         }
-        catch (e) {
+        catch (e: any) {
           log.error(e, "IDX: account details write failed");
         }
         finally {
