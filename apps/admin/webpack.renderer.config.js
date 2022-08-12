@@ -7,6 +7,7 @@ const less_loaders = require('@thecointech/site-semantic-theme/webpack.less');
 const path = require('path');
 
 const env = getEnvVars();
+const rootPath = path.join(__dirname, '../..');
 
 rules.push(
   // Default CSS processing (anything not named *.module.css)
@@ -74,8 +75,8 @@ const baseOptions = {
     // For reasons I don't understand, the babel interop helpers import
     // the ESM version even when required.
     alias: {
-      "@babel/runtime/helpers/interopRequireDefault": "/src/TheCoin-Mirror/node_modules/@babel/runtime/helpers/interopRequireDefault.js",
-      "@babel/runtime/helpers/interopRequireWildcard": "/src/TheCoin-Mirror/node_modules/@babel/runtime/helpers/interopRequireWildcard.js"
+      "@babel/runtime/helpers/interopRequireDefault": `${rootPath}/node_modules/@babel/runtime/helpers/interopRequireDefault.js`,
+      "@babel/runtime/helpers/interopRequireWildcard": `${rootPath}/node_modules/@babel/runtime/helpers/interopRequireWildcard.js`
     }
   },
   experiments: {
