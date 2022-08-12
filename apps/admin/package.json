@@ -8,7 +8,7 @@
       "**/electron-devtools-installer/**"
     ]
   },
-  "version": "0.2.88",
+  "version": "0.2.89",
   "description": "Admin: audit TheCoin system ops",
   "main": ".webpack/main",
   "scripts": {
@@ -46,12 +46,12 @@
     "node-loader": "^2.0.0"
   },
   "dependencies": {
-    "@thecointech/contract-core": "^0.2.88",
-    "@thecointech/shared": "^0.2.88",
-    "@thecointech/tx-statemachine": "^0.2.88",
-    "@thecointech/tx-etransfer": "^0.2.88",
-    "@thecointech/tx-bill": "^0.2.88",
-    "@thecointech/tx-deposit": "^0.2.88",
+    "@thecointech/contract-core": "^0.2.89",
+    "@thecointech/shared": "^0.2.89",
+    "@thecointech/tx-bill": "^0.2.89",
+    "@thecointech/tx-deposit": "^0.2.89",
+    "@thecointech/tx-etransfer": "^0.2.89",
+    "@thecointech/tx-statemachine": "^0.2.89",
     "electron-squirrel-startup": "^1.0.0",
     "semantic-ui-css": "^2.4.1"
   }
