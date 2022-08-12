@@ -29,7 +29,7 @@
     "build": "cross-env CONFIG_NAME=prod yarn build:all",
     "rebuild": "cross-env CONFIG_NAME=prod yarn build:src",
     "dev:live:firestore": "yarn firebase emulators:start --only firestore --project broker-cad",
-    "dev:live:ceramic": "yarn ceramic daemon --network=inmemory",
+    "dev:live:ceramic": "yarn ceramic daemon --network=testnet-clay",
     "dev:live:blockchain": "cd libs/contract-tools && yarn emulator",
     "dev:live:projects": "yarn wait-port 9377 && yarn lerna run dev:live --stream --no-bail",
     "dev:live:bootstrap": "yarn wait-port 7007 && cross-env CONFIG_NAME=devlive yarn bootstrap",
@@ -81,7 +81,7 @@
   },
   "devDependencies": {
     "@babel/plugin-syntax-import-assertions": "^7.18.6",
-    "@ceramicnetwork/cli": "^2.4.0",
+    "@ceramicnetwork/cli": "^2.5.1",
     "@formatjs/cli": "^5.0.2",
     "@openapitools/openapi-generator-cli": "^2.5.1",
     "@storybook/addon-actions": "^6.5.8",

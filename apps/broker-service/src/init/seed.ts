@@ -27,6 +27,7 @@ async function setVerified(clientAddress: string) {
   // First, supply verified details
   await uploadUserData(clientAddress, {
     status:  "approved",
+    blockPassID: "12345",
     identities: {
       given_name: { value: "Test" },
       family_name: { value: "Account" },
