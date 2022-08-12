@@ -15,7 +15,12 @@ module.exports = {
     },
     {
       name: "@electron-forge/maker-deb",
-      config: {}
+      config: {
+        options: {
+          name: "thecoin-admin",
+          productName: "TheCoin - Admin",
+        }
+      }
     },
     {
       name: "@electron-forge/maker-rpm",
