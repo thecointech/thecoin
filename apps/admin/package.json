@@ -1,17 +1,18 @@
 {
-  "name": "@thecointech/admin",
+  "name": "thecoin-admin",
   "private": true,
-  "productName": "TheCoin - Admin",
+  "productName": "thecoin-admin",
   "workspaces": {
     "nohoist": [
-      "**/electron**",
+      "**/electron",
       "**/electron-devtools-installer/**"
     ]
   },
-  "version": "0.2.88",
+  "version": "0.2.89",
   "description": "Admin: audit TheCoin system ops",
   "main": ".webpack/main",
   "scripts": {
+    "build": "yarn make",
     "dev": "yarn electron-forge start",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
@@ -45,7 +46,12 @@
     "node-loader": "^2.0.0"
   },
   "dependencies": {
-    "@thecointech/contract-core": "^0.2.88",
+    "@thecointech/contract-core": "^0.2.89",
+    "@thecointech/shared": "^0.2.89",
+    "@thecointech/tx-bill": "^0.2.89",
+    "@thecointech/tx-deposit": "^0.2.89",
+    "@thecointech/tx-etransfer": "^0.2.89",
+    "@thecointech/tx-statemachine": "^0.2.89",
     "electron-squirrel-startup": "^1.0.0",
     "semantic-ui-css": "^2.4.1"
   }

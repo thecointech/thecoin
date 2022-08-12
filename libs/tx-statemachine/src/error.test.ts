@@ -8,6 +8,7 @@ import { getCurrentState, StateGraph } from './types';
 import { manualOverride, manualOverrideTransition } from './transitions/manualOverride';
 import type { ActionType, BuyAction } from '@thecointech/broker-db';
 import * as brokerDbTxs from '@thecointech/broker-db/transaction';
+import { makeTransition } from './makeTransition';
 
 jest.unstable_mockModule('@thecointech/broker-db/transaction', () => {
   // const module = await import('@thecointech/broker-db/transaction');
@@ -35,14 +36,14 @@ const transitionBase = (type: string) =>({
 });
 // Simple transitions just test the different kind of scenarios the FSM needs to process.
 // noop - no change to data, just transition to a new state
-const noop = async () => transitionBase('noop');
+const noop = makeTransition("noop", async () => transitionBase('noop'));
 
 // Simulate an error occuring
 let shouldError = true;
-const maybeError = async () => ({
+const maybeError = makeTransition("maybeError", async () => ({
   ...transitionBase("maybeError"),
   ...(shouldError ? {error: "An error occurs" } : {})
-})
+}));
 
 type States = "initial"|"testError"|"error"|"complete";
 

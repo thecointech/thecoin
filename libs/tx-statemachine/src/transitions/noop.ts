@@ -1,5 +1,5 @@
-import { AnyActionContainer } from "../types";
+import { makeTransition  } from '../makeTransition';
 
 //
 // A no-op transition moves us into a new state without changing any data
-export function noop(_deposit: AnyActionContainer) { return Promise.resolve({}); }
+export const noop = makeTransition("noop", () => Promise.resolve({}));

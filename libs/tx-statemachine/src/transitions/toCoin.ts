@@ -5,26 +5,27 @@ import { FXRate, RatesApi } from "@thecointech/pricing";
 import { toCoinDecimal, toHumanDecimal } from "@thecointech/utilities";
 import { log } from "@thecointech/logging";
 import { nextOpenTimestamp } from "@thecointech/market-status";
+import { makeTransition } from '../makeTransition';
 
 type Currency = "fiat" | "coin";
 type Converter = (v: Decimal, rate: FXRate) => Decimal;
 //
 // Convert fiat to coin
-export function toCoin(container: AnyActionContainer) {
-  return doConversion(container, "fiat", "coin", (val, rate) =>
+export const  toCoin = makeTransition( "toCoin", async (container) =>
+  doConversion(container, "fiat", "coin", (val, rate) =>
     toCoinDecimal(val
       .div(rate.fxRate * rate.sell) // the rate we sell at
     ))
-};
+);
 
 //
 // Convert coin to fiat
-export function toFiat(container: AnyActionContainer) {
-  return doConversion(container, "coin", "fiat", (val, rate) =>
+export const  toFiat = makeTransition( "toFiat", async (container) =>
+  doConversion(container, "coin", "fiat", (val, rate) =>
     toHumanDecimal(val
-      .mul(rate.fxRate * rate.buy)) // the rate we buy at
-    );
-}
+      .mul(rate.fxRate * rate.buy) // the rate we buy at
+    ))
+);
 
 async function doConversion(container: AnyActionContainer, from: Currency, to: Currency, multiplier: Converter) {
   const currentState = getCurrentState(container);

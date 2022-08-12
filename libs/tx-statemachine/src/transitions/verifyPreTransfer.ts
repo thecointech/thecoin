@@ -1,13 +1,13 @@
-import { AnyActionContainer, getCurrentState } from "../types";
+import { getCurrentState } from "../types";
 import { preTransfer } from './pretransfer';
+import { makeTransition } from '../makeTransition';
 
 //
 // When running a transfer, we need to be able to handle problems caused by
 // errors/sudden disconects mid-transfer.  We do this by transitioning into
 // a pre-transfer state prior to the transfer, then when actioning the state
 //
-export const verifyPreTransfer = (container: AnyActionContainer) => {
-
+export const  verifyPreTransfer = makeTransition( "verifyPreTransfer", async (container) => {
   const state = getCurrentState(container);
   // was our last state a pre-transfer?
   if (state.delta.type != preTransfer.name)
@@ -19,4 +19,4 @@ export const verifyPreTransfer = (container: AnyActionContainer) => {
     return { error: 'Timeout from pre-transfer'}
   }
   return null;
-}
+})

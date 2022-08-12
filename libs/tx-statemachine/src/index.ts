@@ -1,15 +1,15 @@
 import { TransitionDelta, storeTransition, ActionType, TypedAction } from "@thecointech/broker-db";
 import { log } from "@thecointech/logging";
 import { DateTime } from "luxon";
-import { InstructionDataTypes, StateGraph, StateSnapshot, Transition, TransitionCallback, TypedActionContainer } from "./types";
+import { InstructionDataTypes, NamedTransition, StateGraph, StateSnapshot, Transition, TypedActionContainer } from "./types";
 import type { TheCoin } from '@thecointech/contract-core';
 import type { IBank } from '@thecointech/bank-interface';
 export * from './types';
-
+export * from './makeTransition';
 //
 // Execute the transition. If we recieve a result, store it in the DB
-async function runAndStoreTransition<Type extends ActionType>(container: TypedActionContainer<Type>, transition: TransitionCallback<Type>) : Promise<TransitionDelta|null> {
-  log.trace({ transition: transition.name, initialId: container.action.data.initialId },
+async function runAndStoreTransition<Type extends ActionType>(container: TypedActionContainer<Type>, transition: NamedTransition<Type>) : Promise<TransitionDelta|null> {
+  log.trace({ transition: transition.transitionName, initialId: container.action.data.initialId },
     `Calculating transition {transition} for {initialId}`);
 
   let delta : Partial<TransitionDelta>|null = null;
@@ -21,7 +21,7 @@ async function runAndStoreTransition<Type extends ActionType>(container: TypedAc
   }
   catch (error: any) {
     // For any exception, we transition to an error state and await a manual fix.
-    log.error({ transition: transition.name, initialId: container.action.data.initialId, error},
+    log.error({ transition: transition.transitionName, initialId: container.action.data.initialId, error},
       "Error running {transition} on {initialId}: {error}");
     delta = { error: error.message }
   }
@@ -32,11 +32,11 @@ async function runAndStoreTransition<Type extends ActionType>(container: TypedAc
     // Init meta with now, but value will be
     // overwritten with server timestamp on submission
     created: DateTime.now(),
-    type: transition.name,
+    type: transition.transitionName,
     ...delta,
   }
 
-  log.trace({ delta, transition: transition.name, initialId: container.action.data.initialId },
+  log.trace({ delta, transition: transition.transitionName, initialId: container.action.data.initialId },
     `Storing delta {delta} for transition {transition} for {initialId}`);
 
   // Store the output in the cloud to allow replaying
@@ -49,25 +49,20 @@ async function runAndStoreTransition<Type extends ActionType>(container: TypedAc
 // Builds a simple reducer function.  Takes current state, and (optionally) next delta.
 // If no delta exists, run the transition to create it.  Finally, merge the delta
 // into current state and return new currentState
-export function transitionTo<States extends string, Type extends ActionType=ActionType>(transition: TransitionCallback<Type>, nextState: States) : Transition<States, Type> {
-
-  // ensure that our transition matches the one being replayed.
-  if (transition.name == '' || transition.name == 'anonymous') {
-    throw new Error('Transition must be created with name');
-  }
+export function transitionTo<States extends string, Type extends ActionType=ActionType>(transition: NamedTransition<Type>, nextState: States) : Transition<States, Type> {
 
   return async (container, currentState, replay?) => {
     if (replay) {
-      //log.trace({ initialId: container.action.data.initialId, state: nextState, transition: transition.name, replay: true },
+      //log.trace({ initialId: container.action.data.initialId, state: nextState, transition: transition.transitionName, replay: true },
       //  `(replay: {replay}): {initialId} transitioning via {transition} to state {state}`);
     }
     else {
-      log.debug({ initialId: container.action.data.initialId, state: nextState, transition: transition.name },
+      log.debug({ initialId: container.action.data.initialId, state: nextState, transition: transition.transitionName },
         `{initialId} transitioning via {transition} to state {state}`);
     }
 
     // ensure that our transition matches the one being replayed.
-    if (replay && transition.name != replay.type) {
+    if (replay && transition.transitionName != replay.type) {
       // If this is an override, let it run through
       if (replay.type == "manualOverride") {
         log.info("Allowing Manual Override");
@@ -80,7 +75,7 @@ export function transitionTo<States extends string, Type extends ActionType=Acti
           }
         }
       }
-      throw new Error(`Replay event ${replay.type} does not match next transition ${transition.name}`);
+      throw new Error(`Replay event ${replay.type} does not match next transition ${transition.transitionName}`);
     }
     const delta = replay ?? await runAndStoreTransition<Type>(container, transition);
     return delta

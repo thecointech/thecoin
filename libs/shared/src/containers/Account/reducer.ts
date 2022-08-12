@@ -74,7 +74,11 @@ function AccountReducer(address: string, initialState: AccountState) {
 
         // If our details indicate we have started KYC but not completed it,
         // run a single check to see if it was finishd in our absence
-        if (this.state.details.status && this.state.details.status != 'completed') {
+        if (details.status && details.status != 'completed') {
+          // Give storeValues a little time to complete.
+          // Otherwise our check may be run before and overwrite the new status
+          yield delay(500);
+          // Check to see if we are done
           yield this.sendValues(this.actions.checkKycStatus);
         }
       }

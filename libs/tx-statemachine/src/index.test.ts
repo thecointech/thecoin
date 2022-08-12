@@ -8,6 +8,7 @@ import { DateTime } from 'luxon';
 import { AnyActionContainer, getCurrentState, StateGraph } from './types';
 import { manualOverride } from './transitions/manualOverride';
 import * as brokerDbTxs from '@thecointech/broker-db/transaction';
+import { makeTransition } from './makeTransition';
 
 jest.unstable_mockModule('@thecointech/broker-db/transaction', () => {
   // const module = await import('@thecointech/broker-db/transaction');
@@ -35,16 +36,16 @@ const transitionBase = (type: string) =>({
 });
 // Simple transitions just test the different kind of scenarios the FSM needs to process.
 // noop - no change to data, just transition to a new state
-const noop = async () => transitionBase('noop');
+const noop = makeTransition('noop', async () => transitionBase('noop'));
 // breakHere returns null to simulate a transition that cannot complete (for reasons that are not an error)
-const breakHere = async () => null;
+const breakHere = makeTransition('breakHere', async () => null);
 // simulate adding data
-const addFiat = async () => ({ ...transitionBase('addFiat'), fiat: new Decimal(10) })
-const addCoin = async () => ({ ...transitionBase('addCoin'), coin: new Decimal(10), fiat: new Decimal(0) })
+const addFiat = makeTransition('addFiat', async () => ({ ...transitionBase('addFiat'), fiat: new Decimal(10) }));
+const addCoin = makeTransition('addCoin', async () => ({ ...transitionBase('addCoin'), coin: new Decimal(10), fiat: new Decimal(0) }));
 // Simulate an error occuring
-const makeError = async () => ({ ...transitionBase('makeError'), error: "An error occurs" })
-const logSuccess = async (cont: AnyActionContainer) => { log.trace(getCurrentState(cont).data.meta!); return transitionBase('logSuccess'); }
-const logError = async (cont: AnyActionContainer) => { log.warn(getCurrentState(cont).data.error!); return transitionBase('logError'); }
+const makeError = makeTransition('makeError', async () => ({ ...transitionBase('makeError'), error: "An error occurs" }));
+const logSuccess = makeTransition('logSuccess', async (cont) => { log.trace(getCurrentState(cont).data.meta!); return transitionBase('logSuccess'); });
+const logError = makeTransition('logError', async (cont) => { log.warn(getCurrentState(cont).data.error!); return transitionBase('logError'); });
 
 type States = "initial"|"withFiat"|"withCoin"|"finalize"|"error"|"complete";
 

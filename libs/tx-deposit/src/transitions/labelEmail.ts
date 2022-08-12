@@ -1,16 +1,17 @@
 import { log } from "@thecointech/logging";
 import gmail, { Labels } from "@thecointech/tx-gmail";
-import { BuyActionContainer } from "@thecointech/tx-statemachine";
+import { BuyActionContainer, makeTransition } from "@thecointech/tx-statemachine";
 
-export async function labelEmailETransfer(container: BuyActionContainer) {
-  return await labelEmail(container, "etransfer");
-}
-export async function labelEmailDeposited(container: BuyActionContainer) {
-  return await labelEmail(container, "deposited");
-}
-export async function labelEmailRejected(container: BuyActionContainer) {
-  return await labelEmail(container, "rejected");
-}
+export const labelEmailETransfer = makeTransition<"Buy">("labelEmailETransfer", (container) =>
+  labelEmail(container, "etransfer")
+);
+
+export const labelEmailDeposited = makeTransition<"Buy">("labelEmailDeposited", (container) =>
+  labelEmail(container, "deposited")
+);
+export const labelEmailRejected = makeTransition<"Buy">("labelEmailRejected", (container) =>
+  labelEmail(container, "rejected")
+);
 
 async function labelEmail(container: BuyActionContainer, label: Labels) {
   const id = container.instructions?.raw?.id;

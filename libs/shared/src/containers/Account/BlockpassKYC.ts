@@ -88,7 +88,7 @@ export function* checkCurrentStatus(actions: AccountActions, state: AccountState
   }
 
   else if (user.status != state.details.status) {
-    log.trace(`Updating with new status: ${status}`)
+    log.trace(`Updating with new status: ${user.status}`)
     // Just remember what our latest status is
     yield setDetails(actions, {
       status: user.status,
