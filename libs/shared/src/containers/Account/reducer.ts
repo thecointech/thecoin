@@ -95,9 +95,16 @@ function AccountReducer(address: string, initialState: AccountState) {
       yield this.storeValues({ details, idxIO: true });
       if (this.state.idx) {
         log.trace("IDX: persisting account details");
-        yield call(setDetails, this.state.idx, details);
-        log.debug("IDX: account details write complete");
-        yield this.storeValues({ idxIO: false });
+        try {
+          yield call(setDetails, this.state.idx, details);
+          log.debug("IDX: account details write complete");
+        }
+        catch (e: any) {
+          log.error(e, "IDX: account details write failed");
+        }
+        finally {
+          yield this.storeValues({ idxIO: false });
+        }
       }
       else {
         log.error("No IDX connection present, changes will not be preserved");
@@ -128,8 +135,8 @@ function AccountReducer(address: string, initialState: AccountState) {
       }
     }
 
-    *checkKycStatus(): SagaIterator {
-      const r = yield call(checkCurrentStatus, this.actions, this.state);
+    *checkKycStatus(forceVerify?: boolean): SagaIterator {
+      const r = yield call(checkCurrentStatus, this.actions, this.state, forceVerify);
       return yield r;
     }
 

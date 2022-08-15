@@ -1,13 +1,11 @@
 import { describe, filterByEmulator } from '@thecointech/jestutils';
 import { getFirestore, Timestamp, init } from './index_emulator';
-import { log } from '@thecointech/logging';
 
 //
 // Test the connection to the firestore emulator.
 describe('Our testing correctly connects to Firestore Emulator', () => {
 
   it("connects", async () => {
-    log.debug("Connecting to Firestore Emulator");
     const isValid = await init({ project: 'jest-test'});
     expect(isValid).toBeTruthy();
 

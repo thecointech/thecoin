@@ -22,11 +22,15 @@ const translations = defineMessages({
 export const UserDetails = () => {
   const { address, details, name} = AccountMap.useActive() ?? DefaultAccountValues;
   const accountApi = Account(address).useApi();
+
+  // Allow for manually forcing a re-verify of an account
+  const forceVerify = window.location.hash == "#/settings?forceVerify=true";
+
   // Should we check for latest?
   React.useEffect(() => {
     // Keep checking until the referral code turns up.
-    if (details.status && !details.referralCode) {
-      accountApi.checkKycStatus();
+    if (forceVerify || (details.status && !details.referralCode)) {
+      accountApi.checkKycStatus(forceVerify);
     }
   }, [details.status, details.referralCode]);
 
@@ -44,7 +48,7 @@ export const UserDetails = () => {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <AccountVerify details={details} address={address} />
+        <AccountVerify details={details} address={address} forceVerify={forceVerify} />
         <div className={"font-label border-top-green4 x4spaceBefore x4spaceAfter"} ><FormattedMessage {...translations.address}/></div>
         <div className={"font-big x4spaceAfter"}>
           {address} <CopyToClipboard payload={address!} />
