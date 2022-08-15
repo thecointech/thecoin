@@ -9,6 +9,7 @@ import { UserData } from './data';
 import { toCAD } from './toCAD';
 import { buildUniqueId } from '@thecointech/utilities/Verify';
 import { verifyMessage } from '@ethersproject/wallet';
+import { AddressMatches } from '@thecointech/utilities/Address';
 
 export type Props = UserData;
 export const Client = (props: Props) => {
@@ -100,6 +101,8 @@ function getIsVerified(details?: AccountDetails) {
   if (!given_name || !family_name || !DOB || !details.uniqueIdSig)
     return false;
 
-  return verifyMessage(buildUniqueId({given_name, family_name, DOB}), details.uniqueIdSig) == process.env.WALLET_BrokerTransferAssistant_ADDRESS;
+  const uniqueId = buildUniqueId({given_name, family_name, DOB});
+  const signedBy = verifyMessage(uniqueId, details.uniqueIdSig);
+  return AddressMatches(signedBy, process.env.WALLET_BrokerTransferAssistant_ADDRESS);
 }
 

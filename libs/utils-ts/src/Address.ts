@@ -13,9 +13,12 @@ export function NormalizeAddress(address: string) {
 	return address.length === 40 ? `0x${address.toUpperCase()}` : `0x${address.slice(2).toUpperCase()}`
 }
 
-export function AddressMatches(addr1: string, addr2: string) {
+export function AddressMatches(addr1?: string, addr2?: string) {
   // ignore inconsequential differ
-  return NormalizeAddress(addr1) === NormalizeAddress(addr2);
+  // If either address is undefined, no matching determination can be made
+  return (addr1 && addr2)
+    ? NormalizeAddress(addr1) === NormalizeAddress(addr2)
+    : false;
 }
 
 // Valid ID's exclude SIOL.  Defined here (rather than

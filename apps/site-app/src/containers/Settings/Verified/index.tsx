@@ -9,7 +9,7 @@ export const AccountVerify = (props: PropsVerified) => {
 
   // Sneaky override to allow re-verifying
   // (using it for testing, but could be useful elsewhere)
-  if (window.location.hash == "#/settings?forceVerify=true") {
+  if (props.forceVerify) {
     return <Unverified {...props} />
   }
 
