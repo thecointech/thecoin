@@ -30,7 +30,7 @@ export interface IActions extends ImmerReducer<AccountState> {
 
   // KYC management
   initKycProcess(): SagaIterator; // Called to start process
-  checkKycStatus(): SagaIterator; // Automatically polled
+  checkKycStatus(forceVerify?: boolean): SagaIterator; // Automatically polled
 
   // Get the balance of the account in Coin
   updateBalance(newBalance?: number): SagaIterator;

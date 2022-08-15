@@ -44,9 +44,10 @@ export async function uploadUserData(address:string, data: BlockpassData) {
     family_name: data.identities.family_name.value,
     DOB: data.identities.dob.value,
   });
-  const signature = await sign(uniqueId, signer);
+  const uniqueIdSig = await sign(uniqueId, signer);
 
-  // We store the selfie/
+  // We store the selfie/images on google cloud storage, because they
+  // are too large to store in the DB.
   await uploadAndStripImages(data)
 
   // what data do we want to have here?
@@ -54,7 +55,7 @@ export async function uploadUserData(address:string, data: BlockpassData) {
     raw: data,
     externalId: data.blockPassID,
     referralCode: null,
-    uniqueIdSig: signature,
+    uniqueIdSig,
     status: data.status,
     statusUpdated: DateTime.now(),
   })

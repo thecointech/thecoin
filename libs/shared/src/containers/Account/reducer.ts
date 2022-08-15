@@ -135,8 +135,8 @@ function AccountReducer(address: string, initialState: AccountState) {
       }
     }
 
-    *checkKycStatus(): SagaIterator {
-      const r = yield call(checkCurrentStatus, this.actions, this.state);
+    *checkKycStatus(forceVerify?: boolean): SagaIterator {
+      const r = yield call(checkCurrentStatus, this.actions, this.state, forceVerify);
       return yield r;
     }
 
