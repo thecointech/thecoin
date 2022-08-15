@@ -1,7 +1,7 @@
 import { createParams } from './simulator/params';
 import queryString from 'query-string';
 import { log } from '@thecointech/logging';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 
 const defaultParams = createParams({initialBalance: 1000});
 

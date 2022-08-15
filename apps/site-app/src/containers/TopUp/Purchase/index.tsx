@@ -2,13 +2,13 @@ import * as React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { GetSignedMessage } from '@thecointech/utilities/SignedMessages';
-import { GetETransferApi } from '../../../api';
 import { ETransferModal } from './eTransferModal';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import illustration from './images/img_interaclogo.svg';
 import styles from './styles.module.less';
 import { Grid } from 'semantic-ui-react';
 import { useState } from 'react';
+import { GetETransferApi } from '@thecointech/apis/broker';
 
 const translations = defineMessages({
   signin: {
@@ -45,7 +45,7 @@ export const Purchase = () => {
 
     // Build our request
     const { signer, address } = account;
-    const ts = `${Date.now()}`;
+    const ts = Date.now().toString();
     const request = await GetSignedMessage(ts, signer);
     const api = GetETransferApi();
     const response = await api.eTransferInCode(request);

@@ -21,7 +21,8 @@ abstract contract Mintable is ExactDateable {
   // ------------------------------------------------------------------------
 
   // The owner will periodically add new coins to match
-  // shares purchased in SPX
+  // shares purchased in SPX.
+  // NOTE: Timestamp is in millis
   function mintCoins(uint amount, address to, uint timestamp) public
     onlyMinter
   {
@@ -32,6 +33,7 @@ abstract contract Mintable is ExactDateable {
   }
 
   // Remove coins.  Only TheCoin may burn coins
+  // NOTE: Timestamp is in millis
   function burnCoins(uint amount, uint timestamp) public
     onlyTheCoin
   {

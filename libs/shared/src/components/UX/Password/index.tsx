@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { defineMessage, FormattedMessage } from 'react-intl';
 import { Container, Icon } from 'semantic-ui-react';
 import { UxInput } from '../Input';
-import { BaseProps, SomeOptional } from '../types';
+import type { BaseProps, SomeOptional } from '../types';
 import styles from './styles.module.less';
 
 const UnMasked = "text";

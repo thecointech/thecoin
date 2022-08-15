@@ -1,14 +1,31 @@
-import { ActionType, BuyAction } from '@thecointech/broker-db';
-import * as Transactions from '@thecointech/broker-db/transaction';
+import { jest } from '@jest/globals'
 import { GetContract } from '@thecointech/contract-core';
 import { getFirestore } from "@thecointech/firestore";
 import { init } from '@thecointech/firestore';
-import { log } from '@thecointech/logging';
 import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
-import * as FSM from '.';
 import { getCurrentState, StateGraph } from './types';
 import { manualOverride, manualOverrideTransition } from './transitions/manualOverride';
+import type { ActionType, BuyAction } from '@thecointech/broker-db';
+import * as brokerDbTxs from '@thecointech/broker-db/transaction';
+import { makeTransition } from './makeTransition';
+
+jest.unstable_mockModule('@thecointech/broker-db/transaction', () => {
+  // const module = await import('@thecointech/broker-db/transaction');
+  return Object.keys(brokerDbTxs).reduce((acc, key) => ({ ...acc, [key]: jest.fn() }), {});
+});
+jest.unstable_mockModule('@thecointech/logging', () => ({
+  log: {
+    debug: jest.fn(),
+    info: jest.fn(),
+    trace: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+  }
+}));
+const { log } = await import('@thecointech/logging');
+const Transactions = await import('@thecointech/broker-db/transaction');
+const FSM = await import('.');
 
 const transitionBase = (type: string) =>({
   timestamp: DateTime.now(),
@@ -19,14 +36,14 @@ const transitionBase = (type: string) =>({
 });
 // Simple transitions just test the different kind of scenarios the FSM needs to process.
 // noop - no change to data, just transition to a new state
-const noop = async () => transitionBase('noop');
+const noop = makeTransition("noop", async () => transitionBase('noop'));
 
 // Simulate an error occuring
 let shouldError = true;
-const maybeError = async () => ({
+const maybeError = makeTransition("maybeError", async () => ({
   ...transitionBase("maybeError"),
   ...(shouldError ? {error: "An error occurs" } : {})
-})
+}));
 
 type States = "initial"|"testError"|"error"|"complete";
 
@@ -44,9 +61,6 @@ const graph : StateGraph<States, ActionType> = {
 }
 
 it("Error replay is handled appropriately", async () => {
-
-  const spyOnRunTransitions = jest.spyOn(Transactions, 'storeTransition');
-  const spyOnLogError = jest.spyOn(log, 'error');
 
   init({})
   const contract = await GetContract();
@@ -74,8 +88,8 @@ it("Error replay is handled appropriately", async () => {
 
       // On first run, we should stop on withCoin (it has no transitions)
     // This should result in 2 transitions.
-    expect(spyOnRunTransitions).toHaveBeenCalledTimes(executedTransitions);
-    expect(spyOnLogError).toHaveBeenCalledTimes(numErrors);
+    expect(Transactions.storeTransition).toHaveBeenCalledTimes(executedTransitions);
+    expect(log.error).toHaveBeenCalledTimes(numErrors);
 
     const result1 = getCurrentState(container);
     expect(result1.name).toEqual(expectedState);

@@ -1,10 +1,12 @@
 import { join } from 'path';
-import { readFile, writeFile, utils, WorkSheet, WorkBook } from 'xlsx';
+import xlsx, { type WorkSheet, type WorkBook} from 'xlsx';
 import fetch from 'node-fetch';
 import { writeFileSync, unlinkSync } from 'fs';
 import { tmpdir } from 'os';
+import { fileURLToPath } from 'url';
 
-const outFile = join(__dirname, "..", "..", "src", "containers", "ReturnProfile", "data", "sp500_monthly.csv")
+const { readFile, writeFile, utils } = xlsx;
+const outFile = fileURLToPath(new URL(join("..", "..", "src", "containers", "BenefitsSimulator", "simulator", "sp500_monthly.csv"), import.meta.url));
 
 //
 // Fetch new data and strip it down ready to upload
@@ -49,7 +51,7 @@ function cleanData(workbook: WorkBook, sheet: string) {
 
   // Our date strings get trimmed because the package
   // things it's a regular decimal.  Pad it back out
-  let range = utils.decode_range(data["!ref"])
+  let range = utils.decode_range(data["!ref"]!)
   for (let i = 0; i <= range.e.r; i++) {
     const idx = ec(i, 0);
     if (data[idx].t == 'n') {
@@ -71,7 +73,7 @@ function writeOutput(workbook: WorkBook, sheet: string) {
 
 const ec = (r: number, c: number) => utils.encode_cell({ r: r, c: c })
 const delete_row = (ws: WorkSheet, index: number, count: number) => {
-  let range = utils.decode_range(ws["!ref"])
+  let range = utils.decode_range(ws["!ref"]!)
   const delr = Math.min(1 + range.e.r - index, count);
   const maxr = range.e.r - delr;
   for (let R = index; R <= maxr; ++R) {
@@ -83,7 +85,7 @@ const delete_row = (ws: WorkSheet, index: number, count: number) => {
   ws['!ref'] = utils.encode_range(range.s, range.e)
 }
 const delete_col = (ws: WorkSheet, index: number, count: number) => {
-  let range = utils.decode_range(ws["!ref"])
+  let range = utils.decode_range(ws["!ref"]!)
 
   const delc = Math.min(1 + range.e.c - index, count);
   const maxc = range.e.c - delc;

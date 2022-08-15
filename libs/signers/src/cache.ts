@@ -1,5 +1,5 @@
 import { Signer } from "@ethersproject/abstract-signer"
-import { AccountName } from "./names"
+import type { AccountName } from "./names"
 
 declare global {
   namespace globalThis {

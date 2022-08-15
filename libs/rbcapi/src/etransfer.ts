@@ -1,7 +1,6 @@
 import { ApiAction } from "./action";
 import { log } from "@thecointech/logging";
 import { ETransferPacket } from "@thecointech/types";
-var any = require('promise.any');
 
 export async function send(prefix: string, amount: number, name:string, packet: ETransferPacket)
 {
@@ -62,5 +61,5 @@ async function isAutodeposit({page}: ApiAction) {
     await page.waitForSelector('#EMT_QUESTION_ID');
     return false;
   }
-  return any([isAutodeposit(), isRegular()]);
+  return Promise.any([isAutodeposit(), isRegular()]);
 }

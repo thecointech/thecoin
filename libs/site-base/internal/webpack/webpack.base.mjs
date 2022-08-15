@@ -1,19 +1,18 @@
 /**
  * COMMON WEBPACK CONFIGURATION
  */
-// IMPORTANT: Run this import step first to ensure env vars are set prior to calling getSigner
-import { createRequire } from "module"; // Bring in the ability to create the 'require' method
-const require = createRequire(import.meta.url); // construct the require method
-const { getEnvFiles } = require('@thecointech/setenv');
+import { getEnvFiles } from '@thecointech/setenv';
 
 import { join, resolve as _resolve } from 'path';
 import webpack from 'webpack';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import webpack_less from '@thecointech/site-semantic-theme/webpack.less';
+import { semantic_less_loader, css_module_loader } from '@thecointech/site-semantic-theme/webpack.less';
 import Dotenv from 'dotenv-webpack';
 
-const configName = process.env.CONFIG_NAME;
+import { createRequire } from "module"; // Bring in the ability to create the 'require' method
+const require = createRequire(import.meta.url); // construct the require method
 
+const configName = process.env.CONFIG_NAME;
 const projectRoot = process.cwd();
 const configFile = join(projectRoot, 'tsconfig.build.json');
 const packageFile = join(projectRoot, 'package.json');
@@ -40,8 +39,13 @@ export default {
             transpileOnly: true,
             experimentalWatchApi: true,
             projectReferences: true,
-            compiler: 'ttypescript',
           },
+        },
+      },
+      {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false,
         },
       },
       {
@@ -49,8 +53,8 @@ export default {
         test: /(?<!module)\.css$/,
         use: ['style-loader', 'css-loader'],
       },
-      webpack_less.semantic_less_loader,
-      webpack_less.css_module_loader,
+      semantic_less_loader,
+      css_module_loader,
       ////////////////////////////////////////////////////////////////
       {
         test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2|mp4|webm)$/i,
@@ -82,8 +86,14 @@ export default {
     }),
   ],
   resolve: {
+    alias: {
+      // Manually override import paths because the package that imports
+      // these modules is commonjs but @babel/runtime supports ESM
+      "@babel/runtime/helpers/interopRequireDefault" : join(projectRoot, "../../node_modules/@babel/runtime/helpers/interopRequireDefault.js"),
+      "@babel/runtime/helpers/interopRequireWildcard" : join(projectRoot, "../../node_modules/@babel/runtime/helpers/interopRequireWildcard.js")
+    },
     modules: ['node_modules', 'src'],
-    conditionNames: [configName, "browser", "webpack", "require", "default"],
+    conditionNames: [configName, "browser", "webpack", "import", "default"],
     extensions: ['.js', '.jsx', '.react.js', '.ts', '.tsx'],
     fallback: {
       "crypto": require.resolve("crypto-browserify"),

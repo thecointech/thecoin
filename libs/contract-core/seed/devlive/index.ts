@@ -11,8 +11,8 @@ export async function devliveDistribution() {
   const client1 = await getSigner("client1");
   const client2 = await getSigner("client2");
 
-  const tcCore = ConnectContract(theCoin);
-  const mtCore = ConnectContract(minter);
+  const tcCore = await ConnectContract(theCoin);
+  const mtCore = await ConnectContract(minter);
 
   const tcAddr = await theCoin.getAddress();
   const tcBal = await tcCore.balanceOf(await tcAddr);

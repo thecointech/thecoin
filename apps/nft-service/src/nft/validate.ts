@@ -46,7 +46,7 @@ async function isOwned(address: string) {
 //
 // Check the binary data is a supported image type.
 async function isValidImageType(buffer: Buffer, address: string) {
-  const res = imageType(buffer);
+  const res = await imageType(buffer);
   if (res?.mime !== 'image/png' && res?.mime !== 'image/webp' && res?.mime !== 'image/jpg' && res?.mime !== 'image/jpeg') {
     log.warn({ address }, `Rejected upload from {address} because an invalid type (${res?.mime}) was detected`);
     return false;

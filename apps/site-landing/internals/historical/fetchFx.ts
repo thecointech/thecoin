@@ -1,15 +1,15 @@
 import { join } from 'path';
 import fetch from 'node-fetch';
 import { writeFileSync, readFileSync } from 'fs';
-import { parse } from 'papaparse';
-import { zip } from 'lodash';
+import papaparse from 'papaparse';
+import lodash from 'lodash';
 import { DateTime } from 'luxon';
 import { isPresent } from '@thecointech/utilities/ArrayExtns';
 
-const staticFile = join(__dirname, "CADUSD_historical.csv");
+const staticFile = new URL("CADUSD_historical.csv", import.meta.url);
 const bocRates = "https://www.bankofcanada.ca/valet/observations/group/FX_RATES_MONTHLY/csv?start_date=2017-01-01";
 
-const outFile = join(__dirname, "..", "..", "src", "containers", "ReturnProfile", "data", "fx_monthly.csv")
+const outFile = new URL(join("..", "..", "src", "containers", "BenefitsSimulator", "simulator", "fx_monthly.csv"), import.meta.url);
 
 //
 // Fetch new data and strip it down ready to upload
@@ -33,13 +33,13 @@ export async function updateFxData() {
 
 function getStatic() {
   const raw = readFileSync(staticFile, "utf8");
-  const archived = parse(raw);
+  const archived = papaparse.parse(raw);
   const data: string[][] = archived.data;
 
   const dates = data[9];
   const rates = data[11];
-  return zip(dates, rates).slice(1).map(([date, rate]) => {
-    const dt = DateTime.fromFormat(date, "MMMM yyyy");
+  return lodash.zip(dates, rates).slice(1).map(([date, rate]) => {
+    const dt = DateTime.fromFormat(date!, "MMMM yyyy");
     return `${dt.toFormat("yyyy-LL")},${rate}`;
   });
 }
@@ -47,7 +47,7 @@ function getStatic() {
 async function getLive() {
   const response = await fetch(bocRates, undefined);
   const raw = await response.text();
-  const live = parse(raw);
+  const live = papaparse.parse(raw);
   const data: string[][] = live.data;
   return data
     .slice(40)

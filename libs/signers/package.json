@@ -1,7 +1,8 @@
 {
   "name": "@thecointech/signers",
-  "version": "0.2.76",
+  "version": "0.2.91",
   "description": "The Coin: centralized access for built-in signers.  Not for external use",
+  "type": "module",
   "keywords": [
     "TheCoin"
   ],
@@ -19,7 +20,9 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc --project tsconfig.build.json",
-    "clean": "rimraf ./build && rimraf ./coverage"
+    "clean": "rimraf ./build && rimraf ./coverage",
+    "test": "yarn run-jest",
+    "test:ci": "yarn run-jest-nix"
   },
   "files": [
     "build/**/*"
@@ -33,10 +36,10 @@
         "default": "./build/names.js"
       },
       "node": {
+        "gcloud": "./build/index_gcloud.js",
         "prodtest": "./build/index_prodtest.js",
         "prodbeta": "./build/index_prod.js",
-        "prod": "./build/index_prod.js",
-        "default": "./build/index_node.js"
+        "prod": "./build/index_prod.js"
       }
     },
     "./electron": {
@@ -56,11 +59,11 @@
     }
   },
   "dependencies": {
+    "@ethersproject/wallet": "5.6.2",
     "@google-cloud/secret-manager": "^3.5.0",
-    "@thecointech/ethers-provider": "^0.2.76",
-    "@thecointech/hardware-wallet": "^0.2.76",
-    "@thecointech/logging": "^0.2.76",
-    "ethers": "^5.5.1"
+    "@thecointech/ethers-provider": "^0.2.91",
+    "@thecointech/hardware-wallet": "^0.2.91",
+    "@thecointech/logging": "^0.2.91"
   },
   "devDependencies": {
     "jest": "*"

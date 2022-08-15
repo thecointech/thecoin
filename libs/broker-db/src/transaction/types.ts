@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import { DocumentReference } from "@thecointech/firestore";
 import { CertifiedTransfer } from '@thecointech/types';
 

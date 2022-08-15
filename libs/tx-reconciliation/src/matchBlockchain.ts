@@ -1,6 +1,6 @@
 import { Transaction } from "@thecointech/tx-blockchain";
 import { AllData, User } from "types";
-import { Decimal } from "decimal.js-light";
+import Decimal from 'decimal.js-light';;
 
 // Next, the tx hash should match blockchain
 export function spliceBlockchain(data: AllData, hash: string) {

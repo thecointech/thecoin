@@ -1,9 +1,9 @@
 {
   "definitions": {
-    "AccountDetails": "kjzl6cwe1jw149gym1m5qjzzqjdlupnsxivgeef9z6xjkc14ldbkgwag1cssryr"
+    "AccountDetails": "kjzl6cwe1jw145kssbrfr5pa4d5384umymt9oqxvw3l14gim6mktmmt2qe2hrdr"
   },
   "schemas": {
-    "jwe": "ceramic://k3y52l7qbv1frxwvp66vqpcd046ju9ocvimye6htwucpg00h08nltj1fkns6p9ji8"
+    "jwe": "ceramic://k3y52l7qbv1fryfjpjds5pxi7uku8t2lizifolcujg4o58exzzre95bb9ads1aqyo"
   },
   "tiles": {}
 }

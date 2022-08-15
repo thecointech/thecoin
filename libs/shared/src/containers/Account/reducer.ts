@@ -1,8 +1,7 @@
 import { InitialCoinBlock, ConnectContract, TheCoin } from '@thecointech/contract-core';
 import { Signer, Wallet } from 'ethers';
-import { call, StrictEffect } from 'redux-saga/effects';
+import { call, delay, select, StrictEffect } from "@redux-saga/core/effects";
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
-import { DecryptCallback, IActions } from './types';
 import { buildSagas } from './actions';
 import { FxRateReducer } from '../../containers/FxRate/reducer';
 import { SagaReducer } from '../../store/immerReducer';
@@ -13,10 +12,16 @@ import { AccountDetails, AccountState, DefaultAccountValues } from '@thecointech
 import { loadDetails, setDetails } from '../AccountDetails';
 import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
-import { SagaIterator } from 'redux-saga';
-import { Dictionary } from 'lodash';
-import { AccountMapStore } from '../AccountMap';
+import { checkCurrentStatus } from './BlockpassKYC';
+import { StatusType } from '@thecointech/broker-cad';
+import type { SagaIterator } from '@redux-saga/core';
+import type { AccountMapStore } from '../AccountMap';
+import type { DecryptCallback, IActions } from './types';
+import type { Dictionary } from 'lodash';
 
+const KycPollingInterval = (process.env.NODE_ENV === 'production')
+  ? 5 * 60 * 1000 // 5 minutes
+  : 5 * 1000; // 5 seconds
 
 // The reducer for a single account state
 function AccountReducer(address: string, initialState: AccountState) {
@@ -66,6 +71,16 @@ function AccountReducer(address: string, initialState: AccountState) {
         const details = payload?.data || DefaultAccountValues.details;
         log.trace("IDX: read complete");
         yield this.storeValues({ details, idxIO: false });
+
+        // If our details indicate we have started KYC but not completed it,
+        // run a single check to see if it was finishd in our absence
+        if (details.status && details.status != 'completed') {
+          // Give storeValues a little time to complete.
+          // Otherwise our check may be run before and overwrite the new status
+          yield delay(500);
+          // Check to see if we are done
+          yield this.sendValues(this.actions.checkKycStatus);
+        }
       }
       else {
         log.warn("No IDX connection present, details may not be loaded correctly");
@@ -80,13 +95,49 @@ function AccountReducer(address: string, initialState: AccountState) {
       yield this.storeValues({ details, idxIO: true });
       if (this.state.idx) {
         log.trace("IDX: persisting account details");
-        yield call(setDetails, this.state.idx, details);
-        log.debug("IDX: account details write complete");
-        yield this.storeValues({ idxIO: false });
+        try {
+          yield call(setDetails, this.state.idx, details);
+          log.debug("IDX: account details write complete");
+        }
+        catch (e: any) {
+          log.error(e, "IDX: account details write failed");
+        }
+        finally {
+          yield this.storeValues({ idxIO: false });
+        }
       }
       else {
         log.error("No IDX connection present, changes will not be preserved");
       }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////
+    // KYC processing
+
+    *initKycProcess(): SagaIterator {
+      log.info({address: this.state.address}, "Initializing KYC for {address}");
+      if (!this.state.details.status) {
+        yield this.sendValues(this.actions.setDetails, {
+          status: StatusType.Started,
+          statusUpdated: Date.now(),
+        })
+      }
+      while (1) {
+        // Trigger Check Saga.  This is an async call
+        // and we cannot receive the return value here
+        yield this.sendValues(this.actions.checkKycStatus);
+        // Delay polling time then trime again
+        yield delay(KycPollingInterval);
+        const current = yield select(AccountReducer.selector);
+        log.trace({address: this.state.address}, `{address} polled KYC - current status: ${current.details.status}`);
+        if (current.details.status == StatusType.Completed)
+          break;
+      }
+    }
+
+    *checkKycStatus(forceVerify?: boolean): SagaIterator {
+      const r = yield call(checkCurrentStatus, this.actions, this.state, forceVerify);
+      return yield r;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
@@ -100,8 +151,8 @@ function AccountReducer(address: string, initialState: AccountState) {
       try {
         const balance = yield call(contract.balanceOf, address);
         yield this.storeValues({ balance: balance.toNumber() });
-      } catch (err) {
-        console.error(err);
+      } catch (err: any) {
+        log.error(err, "Update balance failed")
       }
     }
 

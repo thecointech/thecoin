@@ -1,13 +1,14 @@
-import { BillActionContainer, getCurrentState, TransitionCallback } from "@thecointech/tx-statemachine";
+import { getCurrentState, TransitionCallback } from "@thecointech/tx-statemachine";
 import { verifyPreTransfer } from "@thecointech/tx-statemachine/transitions";
 import { BillPayeePacket, EncryptedPacket } from '@thecointech/types';
 import { readFileSync } from 'fs';
 import { decryptTo } from "@thecointech/utilities/Encrypt";
 import { sign } from "@thecointech/utilities/SignedMessages";
 import { log } from "@thecointech/logging";
-import { Decimal } from "decimal.js-light";
+import Decimal from 'decimal.js-light';;
 import { getSigner } from '@thecointech/signers';
 import { DateTime } from 'luxon';
+import { makeTransition } from '@thecointech/tx-statemachine';
 
 // NOTE: server does not have private key, and will not pass this step
 const privateKeyPath = process.env.USERDATA_INSTRUCTION_PK;
@@ -17,10 +18,11 @@ const privateKey = privateKeyPath ? readFileSync(privateKeyPath).toString() : nu
 // Process a bill payment
 // This is virtually identical to etransfer, and perhaps could be de-duped.
 // However, we also want the actions to be completely independent
-export const payBill: TransitionCallback<"Bill"> = async (container) =>
-  verifyPreTransfer(container) ?? await doPayBill(container);
+export const payBill = makeTransition<"Bill">("payBill", async (container) =>
+  verifyPreTransfer(container) ?? await doPayBill(container)
+);
 
-const doPayBill: TransitionCallback<"Bill"> = async (container: BillActionContainer) => {
+const doPayBill: TransitionCallback<"Bill"> = async (container) => {
   // Can we pay a bill in our current state?
   const currentState = getCurrentState(container)
   const {fiat} = currentState.data;

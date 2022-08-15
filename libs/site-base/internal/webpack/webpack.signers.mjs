@@ -1,11 +1,6 @@
-import { createRequire } from "module"; // Bring in the ability to create the 'require' method
 import webpack from 'webpack';
-
-// We also need to run mock_node here to ensure we get
-// the right version of our signer (below)
-const require = createRequire(import.meta.url);
-require('../../../../__mocks__/mock_node');
-const { getSigner } = require('@thecointech/signers');
+import { getSigner } from '@thecointech/signers';
+import { getEnvVars } from '@thecointech/setenv';
 
 // Now, we can use top-level await to fetch our addresses directly
 // (this allows us to correctly inject addresses even for dynamic environments like dev:live)
@@ -26,7 +21,7 @@ export default {
       // the live signer and get it's address directly.
       // We can't do this every time because a production address
       // may not always exist
-      process.env.WALLET_BrokerCAD_ADDRESS
+      getEnvVars().WALLET_BrokerCAD_ADDRESS
         ? {}
         : await getAddresses()
     ),

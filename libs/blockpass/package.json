@@ -1,0 +1,45 @@
+{
+  "name": "@thecointech/blockpass",
+  "private": true,
+  "version": "0.2.91",
+  "description": "TheCoin: Wrapper for blockpass for web",
+  "type": "module",
+  "keywords": [
+    "TheCoin",
+    "Blockpass"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/blockpass"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "build": "yarn tsc --project tsconfig.build.json",
+    "clean": "rimraf ./build && rimraf ./coverage"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "exports": {
+    ".": {
+      "development": "./build/development/index.js",
+      "devlive": "./build/devlive/index.js",
+      "default": "./build/index.js"
+    }
+  },
+  "types": "./build/index.d.ts",
+  "dependencies": {
+    "@thecointech/shared": "^0.2.91"
+  },
+  "devDependencies": {
+    "@thecointech/async": "^0.2.91",
+    "@thecointech/broker-cad": "^0.2.91",
+    "jest": "*"
+  }
+}

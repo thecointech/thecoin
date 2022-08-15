@@ -1,7 +1,7 @@
 import { log } from '@thecointech/logging';
 import { getContract, signGasslessUpdate, splitIpfsUri } from '@thecointech/contract-nft';
 import { Signer } from 'ethers';
-import { GetNftApi } from '../../../api';
+import { GetNftApi } from '@thecointech/apis/nft';
 import { sign } from "@thecointech/utilities/SignedMessages";
 
 export async function uploadAvatar(image: Blob, signer: Signer) {
@@ -30,7 +30,7 @@ export async function uploadMetadata(tokenId: number, imageUri: string, signer: 
 export async function updateNft(tokenId: number, metadataUri: string, signer: Signer) {
   log.trace(`Updating NFT`);
   const split = splitIpfsUri(metadataUri);
-  const nft = getContract();
+  const nft = await getContract();
   const lastUpdate = await nft.lastUpdate(tokenId);
   const gasslessUpdate = await signGasslessUpdate(signer, tokenId, lastUpdate, split.prefix, split.digest);
   const r = await GetNftApi().updateNftUri(gasslessUpdate);

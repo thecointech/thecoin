@@ -1,18 +1,19 @@
 import { AnyActionContainer } from "../types";
 import { removeIncomplete } from '@thecointech/broker-db';
-import { getCurrentState } from '..';
+import { getCurrentState } from '../types';
 import { log } from '@thecointech/logging';
+import { makeTransition  } from '../makeTransition';
 
 //
 // Remove from incomplete listings.
-export async function markComplete(container: AnyActionContainer) {
+export const markComplete = makeTransition("markComplete", async (container) => {
   checkBalance(container, "coin");
   checkBalance(container, "fiat");
   // Remove from our list of active transactions
   await removeIncomplete(container.action.type, container.action.doc);
   // Make no state changes.
   return {};
-}
+});
 
 // We should not mark an action complete that has any outstanding balances
 function checkBalance(container: AnyActionContainer, type: "coin"|"fiat") {

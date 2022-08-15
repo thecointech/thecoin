@@ -1,17 +1,18 @@
-import { getCurrentState, TransitionCallback, TypedActionContainer } from "../types";
+import { getCurrentState, TransitionCallback } from "../types";
 import { verifyPreTransfer } from "./verifyPreTransfer";
 import { TransactionResponse } from '@ethersproject/providers';
 import { calculateOverrides, convertBN, toDelta } from './coinUtils';
 import { log } from '@thecointech/logging';
+import { makeTransition  } from '../makeTransition';
 
 // this deposit can operate on both bill & sell types.
 type BSActionTypes = "Bill"|"Sell";
 
 //
 // Deposit an eTransfer and update fiat balance
-export async function depositCoin(container: TypedActionContainer<BSActionTypes>) {
-  return verifyPreTransfer(container) ?? await doDepositCoin(container);
-}
+export const depositCoin = makeTransition<BSActionTypes>("depositCoin", async (container) =>
+  verifyPreTransfer(container) ?? await doDepositCoin(container)
+)
 
 // implementation
 const doDepositCoin: TransitionCallback<BSActionTypes> = async (container) => {

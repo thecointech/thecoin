@@ -1,0 +1,14 @@
+[
+  {
+    "originator": "0xe6d09f09432c3ec43f645c2d5b10f0ff5c834749",
+    "date": "2021-10-18T09:32:00.000",
+    "fiat": -11667.00,
+    "currency": "CAD"
+  },
+  {
+    "originator": "0xe6d09f09432c3ec43f645c2d5b10f0ff5c834749",
+    "date": "2021-12-30T09:32:00.000",
+    "fiat": -9716.00,
+    "currency": "CAD"
+  }
+]

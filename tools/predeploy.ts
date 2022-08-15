@@ -1,10 +1,10 @@
 import { getEnvVars } from "@thecointech/setenv";
 import { exit } from "process";
 import { readFileSync, writeFileSync } from "fs";
-import { join } from 'path';
 import { spawn } from 'child_process';
 import { promisify } from 'util';
-const exec = promisify(require('child_process').exec);
+import { exec as exec_cb } from 'child_process';
+const exec = promisify(exec_cb);
 
 console.log(`Preparing deploy env: ${process.env.CONFIG_NAME}`);
 
@@ -57,8 +57,11 @@ export function gCloudDeploy() {
   return ShellCmd(deploy);
 }
 
-export async function copyEnvVarsLocal(outYamlFile: string) {
-  const env = getEnvVars();
+export async function copyEnvVarsLocal(outYamlFile: string, additionalVars: Record<string, string> = {}) {
+  const env = {
+    ...getEnvVars(),
+    ...additionalVars,
+  }
   const yamlVars = Object.entries(env)
     .filter(([key]) => !key.startsWith('#'))
     .filter(([key]) => !(key.startsWith('WALLET_') && !key.includes('_ADDRESS')))
@@ -77,14 +80,14 @@ export async function copyEnvVarsLocal(outYamlFile: string) {
   return "Copied Env Files"
 }
 
-export async function copyNpmTokenHere(folder: string) {
+export async function copyNpmTokenHere(folder: URL) {
   // First, check we actually have a token
   const token = process.env.GITHUB_PACKAGE_TOKEN;
   if (!token) throw new Error('Cannot deploy without GH access token');
 
-  const noToken = readFileSync(join(__dirname, '.npmrc'), 'utf8');
+  const noToken = readFileSync(new URL('.npmrc', import.meta.url), 'utf8');
   const withToken = noToken.replace('<tokenhere>', token);
-  writeFileSync(join(folder, '.npmrc'), withToken);
+  writeFileSync(new URL('.npmrc', folder), withToken);
   return "NPM token copied here";
 }
 
@@ -122,7 +125,7 @@ export function ShellCmd(cmd: string, args: string[]=[]) {
         resolve();
       else {
         console.error(`Exit code: ${code}`);
-        exit(code);
+        exit(code ?? undefined);
       }
     });
   })

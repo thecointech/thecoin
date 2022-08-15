@@ -1,7 +1,7 @@
-import { AccountName } from './names';
 import { LedgerSigner } from "@thecointech/hardware-wallet";
 import { log } from "@thecointech/logging";
 import { getProvider } from "@thecointech/ethers-provider";
+import type { AccountName } from './names';
 
 export async function loadHardware(name: AccountName) {
   // Leave a trace just in case someone tries this in an unexpected situation

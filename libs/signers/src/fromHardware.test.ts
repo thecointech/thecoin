@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import { getEnvVars } from '@thecointech/setenv';
 import { loadHardware } from './fromHardware';
 import { describe, IsManualRun} from '@thecointech/jestutils';

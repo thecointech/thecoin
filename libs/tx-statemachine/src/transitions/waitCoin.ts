@@ -1,14 +1,15 @@
-import { TheCoin } from "@thecointech/contract-core";
+import type { TheCoin } from "@thecointech/contract-core";
 import { log } from "@thecointech/logging";
 import { AnyActionContainer, getCurrentState } from "../types";
 import { TransactionReceipt } from '@ethersproject/providers'
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import { NormalizeAddress } from '@thecointech/utilities';
 import { sleep } from '@thecointech/async';
+import { makeTransition } from '../makeTransition';
 
 //
 // Wait for a transfer to complete
-export async function waitCoin(container: AnyActionContainer) {
+export const  waitCoin = makeTransition("waitCoin", async (container) => {
 
   const currentState = getCurrentState(container)
   const hash = currentState.delta.hash;
@@ -22,7 +23,7 @@ export async function waitCoin(container: AnyActionContainer) {
     // Our tx has not yet been mined.  While not critical, it is concerning.
     // We have warned, but now return null to allow back-off-and-retry.
     : null
-}
+});
 
 
 function parseLog(contract: TheCoin, log: TransactionReceipt["logs"][0]) {

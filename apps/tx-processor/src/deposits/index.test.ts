@@ -1,22 +1,33 @@
-import { processUnsettledDeposits } from '.'
+import { jest } from '@jest/globals';
 import { init } from '@thecointech/firestore';
 import { ConnectContract } from '@thecointech/contract-core';
-import { getCurrentState } from '@thecointech/tx-statemachine';
 import { ETransferErrorCode, RbcApi } from '@thecointech/rbcapi';
 import gmail from '@thecointech/tx-gmail';
-import { log } from '@thecointech/logging';
 import { getSigner } from '@thecointech/signers';
 
 jest.setTimeout(900000);
+jest.unstable_mockModule('@thecointech/logging', () => ({
+  log: {
+    debug: jest.fn(),
+    info: jest.fn(),
+    trace: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+  }
+}));
+const { processUnsettledDeposits } = await import('.')
+const { log } = await import('@thecointech/logging');
+const { getCurrentState } = await import('@thecointech/tx-statemachine');
+
 
 it("Can complete deposits", async () => {
 
   init({});
   await gmail.initialize();
-  const error = jest.spyOn(log, 'error').mockImplementation();
+  // const error = jest.spyOn(log, 'error').mockImplementation();
 
   const brokerCad = await getSigner("BrokerCAD");
-  const theContract = ConnectContract(brokerCad);
+  const theContract = await ConnectContract(brokerCad);
   const bank = new RbcApi();
 
   // We have 5 deposits, and
@@ -32,7 +43,7 @@ it("Can complete deposits", async () => {
   // We have 1 success, 3 failures
   const results = deposits.map(getCurrentState);
   expect(results.map(r => r.name)).toEqual(['complete', 'error', 'error', 'error'])
-  expect(error).toBeCalledTimes(3);
+  expect(log.error).toBeCalledTimes(3);
 
   // If passed, balance is 0
   for (let i = 0; i < deposits.length; i++) {

@@ -1,8 +1,9 @@
 {
   "name": "@thecointech/types",
   "private": "true",
-  "version": "0.2.76",
+  "version": "0.2.91",
   "description": "The Coin: Typescript type information exported from swagger yaml.  This package doesn't need to be published",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "OpenAPI"

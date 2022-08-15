@@ -49,8 +49,13 @@ export const DefaultAccountValues = {
  history: [],
  idx: null,
 
+ address: '0x0',
+ name: "DEFAULT ACCOUNT NAME",
+
  details: {
    displayCurrency: CurrencyCode.CAD,
+   referralCode: undefined,
+   status: undefined,
  }
 };
 

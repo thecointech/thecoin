@@ -1,7 +1,8 @@
 {
   "name": "@thecointech/tx-processor",
-  "version": "0.2.76",
+  "version": "0.2.91",
   "private": "true",
+  "type": "module",
   "description": "The Coin: A command-line app for completing transactions",
   "keywords": [
     "THECoin"
@@ -12,12 +13,13 @@
   "scripts": {
     "build": "yarn tsc -b tsconfig.build.json",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "dev": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node -r ts-node/register ./src/main.ts",
+    "dev": "run-env ./src/main.ts",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
     "prod": "cross-env CONFIG_NAME=prod yarn start",
     "start": "node -r @thecointech/setenv -r ../../__mocks__/mock_node ./build/main.js",
-    "test": "jest --coverage",
+    "test": "yarn run-jest",
+    "test:ci": "yarn run-jest-nix",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [
@@ -28,14 +30,14 @@
     ".": "./build/index.js"
   },
   "dependencies": {
-    "@thecointech/logging": "^0.2.76",
-    "@thecointech/setenv": "^0.2.76",
-    "@thecointech/tx-deposit": "^0.2.76",
-    "@thecointech/tx-etransfer": "^0.2.76",
+    "@thecointech/logging": "^0.2.91",
+    "@thecointech/setenv": "^0.2.91",
+    "@thecointech/tx-deposit": "^0.2.91",
+    "@thecointech/tx-etransfer": "^0.2.91",
     "open": "^8.2.1"
   },
   "devDependencies": {
-    "@thecointech/site-app": "^0.2.76",
+    "@thecointech/site-app": "^0.2.91",
     "jest": "*"
   }
 }

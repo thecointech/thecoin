@@ -3,9 +3,9 @@ import { Tab } from 'semantic-ui-react';
 import { Props } from './types';
 import { Basic } from './Basic';
 import { Advanced } from './Advanced';
-import styles from './styles.module.less';
 import { createParams } from '../simulator';
-import { isEqual } from 'lodash';
+import lodash from 'lodash';
+import styles from './styles.module.less';
 
 const {initialBalance, ...defaultBasic} = createParams();
 
@@ -20,7 +20,7 @@ export const Form = (props: Props) => {
   // If there are any non-default values, switch to advanced
   useEffect(() => {
     const { initialBalance, ...proprest} = props.params;
-    const formIdx = isEqual(proprest, defaultBasic)
+    const formIdx = lodash.isEqual(proprest, defaultBasic)
       ? 0
       : 1;
     setActive(formIdx);

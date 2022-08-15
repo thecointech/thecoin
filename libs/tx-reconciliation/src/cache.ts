@@ -1,4 +1,4 @@
-import Decimal from "decimal.js-light";
+import Decimal from 'decimal.js-light';;
 import { writeFileSync, mkdirSync, existsSync, readFileSync, statSync } from "fs";
 import { DateTime } from "luxon";
 import { join } from "path";
@@ -84,8 +84,10 @@ const mkCachePath = (path?: string) => {
     try {
       mkdirSync(cachePath, { recursive: true });
     }
-    catch(err) {
-      log.error(err);
+    catch(err: unknown) {
+      if (err instanceof Error) {
+        log.error(err, `Cannot make cache path: ${path}`);
+      }
       throw err;
     }
   }

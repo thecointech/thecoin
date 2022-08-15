@@ -1,36 +1,45 @@
-process.env.WALLET_BrokerCAD_ADDRESS = "broker";
-process.env.WALLET_BrokerTransferAssistant_ADDRESS = "assist";
-
+import { beforeEach, it } from '@jest/globals'
 import { calculateProfit, fiatChange, totalCad, currentValue, isNotFee } from "./profit";
 import { toHuman } from "@thecointech/utilities";
-import { SimpleTransactions, SimpleRates, ExampleTransactions, ExampleRates } from "./profit.data.test";
+import { getSimpleTransactions, SimpleRates, getExampleTransactions, ExampleRates } from "./profit.data.test";
 
-test("Calculate simple profit correctly", () => {
-  const change = fiatChange(SimpleTransactions[0], SimpleRates);
+// hardcode broker/xferAssist address
+const broker = "broker";
+const assist = "assist";
+
+beforeEach(() => {
+  // override variables so fiatChange etc works
+  process.env.WALLET_BrokerCAD_ADDRESS = broker;
+  process.env.WALLET_BrokerTransferAssistant_ADDRESS = assist;
+})
+
+it("Calculate simple profit correctly", () => {
+  const simple = getSimpleTransactions(broker);
+  const change = fiatChange(simple[0], SimpleRates);
   const hchange = toHuman(change);
   expect(hchange).toBe(5);
 
-  const withdrawal = fiatChange(SimpleTransactions[3], SimpleRates);
+  const withdrawal = fiatChange(simple[3], SimpleRates);
   const hwithdrawal = toHuman(withdrawal);
   expect(hwithdrawal).toBe(-2.5);
 
   // What is the total CAD we have put into this account?
   // 5 + 10 - 5 - 2.5 = 7.5
-  const totalCAD = totalCad(SimpleTransactions, SimpleRates);
+  const totalCAD = totalCad(simple, SimpleRates);
   expect(totalCAD).toBe(7.5);
 
-  const currentCoin = SimpleTransactions[3].balance;
+  const currentCoin = simple[3].balance;
   const balanceCAD = currentValue(currentCoin, SimpleRates);
   expect(balanceCAD).toBe(12.5);
 
-  const profitCAD = calculateProfit(currentCoin, SimpleTransactions, SimpleRates)
+  const profitCAD = calculateProfit(currentCoin, simple, SimpleRates)
   expect(profitCAD).toBe(5);
 });
 
 const roundDecimalPlaces = (val: number) => Math.round(val * 100) / 100;
-test('calculate real profit correctly', () => {
+it('calculate real profit correctly', () => {
 
-  const txs = ExampleTransactions;
+  const txs = getExampleTransactions(broker, assist);
   const rates = ExampleRates.sort((a, b) => a.validTill - b.validTill);
 
   const {balance} = txs[0];

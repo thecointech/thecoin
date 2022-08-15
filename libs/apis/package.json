@@ -1,0 +1,64 @@
+{
+  "name": "@thecointech/apis",
+  "version": "0.2.91",
+  "description": "TheCoin: Simple wrappers for swagger-generated APIs ensures correct URL",
+  "type": "module",
+  "keywords": [
+    "TheCoin",
+    "Blockpass"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/apis"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "build": "yarn tsc --project tsconfig.json",
+    "clean": "rimraf ./build && rimraf ./coverage"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "exports": {
+    "./broker": {
+      "development": "./build/broker/mocked/index.js",
+      "default": "./build/broker/live.js"
+    },
+    "./pricing": {
+      "development": "./build/pricing/mocked.js",
+      "default": "./build/pricing/live.js"
+    },
+    "./nft": {
+      "development": "./build/nft/mocked.js",
+      "default": "./build/nft/live.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "broker": [
+        "./build/broker/live.d.ts"
+      ],
+      "pricing": [
+        "./build/pricing/live.d.ts"
+      ],
+      "nft": [
+        "./build/nft/live.d.ts"
+      ]
+    }
+  },
+  "dependencies": {
+    "@thecointech/broker-cad": "^0.2.91",
+    "@thecointech/nft": "^0.2.91",
+    "@thecointech/pricing": "^0.2.91"
+  },
+  "devDependencies": {
+    "@thecointech/async": "^0.2.91",
+    "@thecointech/contract-core": "^0.2.91"
+  }
+}

@@ -1,8 +1,8 @@
-import { CertifiedTransferRequest } from '@thecointech/types';
 import { Controller, Body, Route, Post, Response, Tags } from '@tsoa/runtime';
 import { certifiedTransfer } from '../exchange/VerifiedTransfer';
-import { ServerError, ValidateErrorJSON } from '../types';
-import { CertifiedTransferResponse } from './types';
+import type { CertifiedTransferRequest } from '@thecointech/types';
+import type { ServerError, ValidateErrorJSON } from '../types';
+import type { CertifiedTransferResponse } from './types';
 
 @Route('transfer')
 @Tags('DirectTransfer')
