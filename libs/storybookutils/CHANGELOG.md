@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.91](https://github.com/thecointech/thecoin/compare/v0.2.90...v0.2.91) (2022-08-15)
+
+**Note:** Version bump only for package @thecointech/storybookutils
+
+
+
+
+
 ## [0.2.90](https://github.com/thecointech/thecoin/compare/v0.2.89...v0.2.90) (2022-08-12)
 
 **Note:** Version bump only for package @thecointech/storybookutils
