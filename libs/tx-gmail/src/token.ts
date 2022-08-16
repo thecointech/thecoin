@@ -32,14 +32,16 @@ export function getCode(url: string) {
   catch {
     log.debug(`Please go to:\n${url}`);
   }
+
   return new Promise<string>((resolve, reject) => {
+
     const server = http.createServer(async (req, res) => {
       if (!req.url)
         return;
       const path = new URL(req.url, process.env.TX_GMAIL_CLIENT_URI);
       if (path.pathname == '/gauth') {
+        clearTimeout(serverTimeout);
         const code = path.searchParams.get('code');
-
         if (code) {
           log.debug('Auth Successful');
           res.end(
@@ -57,6 +59,13 @@ export function getCode(url: string) {
         res.end();
       }
     }).listen(Number(process.env.TX_GMAIL_CLIENT_LISTENER_PORT), "localhost", () => log.debug("Waiting for code"));
+
+    // Give a 10 minute timeout, then throw
+    const serverTimeout = setTimeout(() => {
+      server.close();
+      log.fatal("Timeout waiting for code");
+      reject();
+    }, 10 * 60 * 1000);
   })
 
 }
