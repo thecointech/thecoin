@@ -63,7 +63,7 @@ def checkout():
   os.system(f'git checkout publish/{config_name}')
 
   # Merge in latest changes
-  success = os.system('git merge origin/dev --no-ff')
+  success = os.system('git merge origin/dev --no-ff --no-edit')
   if success != 0:
       logger.error("Merge Failed")
       exit(1)
@@ -157,7 +157,11 @@ def mergeBackIntoDev():
   os.system('git clone https://github.com/thecointech/thecoin.git .') # Cloning
 
   # Merge in publishing changes
-  success = os.system(f'git merge origin/publish/{config_name} --no-ff')
+  success = os.system(f'git merge origin/publish/{config_name} --no-ff --no-edit')
+  if success != 0:
+    logger.error("Merge Failed")
+    exit(1)
+    
   # push changes back
   os.system('git push')
   # cleanup
