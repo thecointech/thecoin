@@ -6,16 +6,31 @@ import os
 import shutil
 import stat
 import time
+import logging
 
-config_name = "prod"
+config_name = "prodtest"
 os.environ["CONFIG_NAME"] = config_name
+
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+file_log_handler = logging.FileHandler('deploy.log')
+logger.addHandler(file_log_handler)
+stderr_log_handler = logging.StreamHandler()
+logger.addHandler(stderr_log_handler)
+
+# nice output format
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', '%Y-%m-%d %H:%M:%S')
+file_log_handler.setFormatter(formatter)
+stderr_log_handler.setFormatter(formatter)
+
+logger.info('Beginning publish of %s', config_name)
 
 curr_path = Path(__file__).resolve()
 base = curr_path.parent
 
 # Check our path matches deployment
 if (config_name != base.name):
-    print("Mismatched config: " + config_name + " != " + base.name)
+    logger.error("Mismatched config: " + config_name + " != " + base.name)
     exit(1)
 
 deploy = base / 'current'
@@ -26,17 +41,17 @@ temp_deploy = base / 'temp'
 if not os.environ.get('THECOIN_ENVIRONMENTS'):
     home = Path.home()
     tc_env = home / 'thecoin' / 'env'
-    print(f"Setting default evironment location: {tc_env}")
+    logger.info(f"Setting default evironment location: {tc_env}")
     os.putenv('THECOIN_ENVIRONMENTS', tc_env)
 
 #
 # Check out new deploy and merge in latest dev
 def checkout():
-  print(f"Deploying to {new_deploy}")
+  logger.info(f"Deploying to {new_deploy}")
 
   # check no existing checkout
   if new_deploy.exists():
-      print("Cannot deploy: existing installation found")
+      logger.error("Cannot deploy: existing installation found")
       exit(1)
 
   # First, create a new checkout,
@@ -50,15 +65,16 @@ def checkout():
   # Merge in latest changes
   success = os.system('git merge origin/dev --no-ff')
   if success != 0:
-      print("Merge Failed")
+      logger.error("Merge Failed")
       exit(1)
 
-  print("Checkout Complete")
+  logger.info("Checkout Complete")
   return True
 
 #
 # Build And Deploy
 def buildAndDeploy():
+  os.chdir(new_deploy)
   # Try to run a publish
   success = os.system('yarn');
   if success != 0: raise RuntimeError("Couldn't install")
@@ -72,7 +88,7 @@ def buildAndDeploy():
 
   # Rebuild apps so we get the right versions
   for attempt in range(3):
-    print(f"Rebuilding Apps attempt: {attempt}")
+    logger.info(f"Rebuilding Apps attempt: {attempt}")
     success = os.system('yarn _deploy:app:rebuild')
     if success == 0: break
   if success != 0: raise RuntimeError("Couldn't re-build")
@@ -81,7 +97,7 @@ def buildAndDeploy():
   success = os.system('yarn _deploy:app:gcloud')
   if success != 0: raise RuntimeError("Error deploying to gcloud")
 
-  print(f"Deploy Success: {success}")
+  logger.info(f"Deploy Success: {success}")
   return True
 
 # Remove read-only access error
@@ -95,9 +111,9 @@ def keep_trying(action):
       action()
       return True
     except PermissionError as error:
-      print(error)
+      logger.error(error)
       time.sleep(attempt * 2 * 60)
-  print("Could not complete action")
+  logger.error("Could not complete action")
   exit(1)
 
 #
@@ -106,16 +122,16 @@ def renameAndComplete():
   # Try to run a publish
   def remove_old():
     if Path(old_deploy).exists():
-        print("delete old deploy");
+        logger.info("delete old deploy");
         shutil.rmtree(old_deploy, onerror=remove_readonly)
 
   def move_current():
     if Path(deploy).exists():
-      print("move current to old");
+      logger.info("move current to old");
       os.rename(deploy, old_deploy)
 
   def move_new():
-    print("move new to current")
+    logger.info("move new to current")
     os.rename(new_deploy, deploy)
     # Re-run yarn so windows updates the soft-links
     os.chdir(deploy)
@@ -132,7 +148,7 @@ def renameAndComplete():
 def mergeBackIntoDev():
     # check no existing checkout
   if temp_deploy.exists():
-      print("Cannot merge back into dev: temp folder already exists")
+      logger.error("Cannot merge back into dev: temp folder already exists")
       return
 
   # First, create a new checkout in dev
@@ -148,11 +164,16 @@ def mergeBackIntoDev():
   os.chdir(base)
   shutil.rmtree(temp_deploy, onerror=remove_readonly)
 
-print("Ready...")
-checkout()
-buildAndDeploy()
-renameAndComplete()
-# do this last, as it isn't particularily important if it fails
-mergeBackIntoDev()
+try:
+  logger.info("Ready...")
+  checkout()
+  buildAndDeploy()
+  renameAndComplete()
+  # do this last, as it isn't particularily important if it fails
+  mergeBackIntoDev()
 
-print('COMPLETE')
+except BaseException as e:
+  logger.exception("Deploy Failed")
+  sys.exit(1)
+
+logger.info('COMPLETE')
