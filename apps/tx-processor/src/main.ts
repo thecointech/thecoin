@@ -53,7 +53,8 @@ async function run() {
   }
   catch(e: any) {
     log.fatal(e);
-    await SendMail("tx-processor exception", `${e.message}\n${e.stack}`);
+    const msent = await SendMail(`tx-processor ${e.message}`, `${e.message}\n${e.stack}`);
+    log.info("Email notification sent: " + msent);
   }
   finally {
     await release();
