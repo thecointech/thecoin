@@ -59,6 +59,7 @@ def checkout():
 #
 # Build And Deploy
 def buildAndDeploy():
+  os.chdir(new_deploy)
   # Try to run a publish
   success = os.system('yarn');
   if success != 0: raise RuntimeError("Couldn't install")
