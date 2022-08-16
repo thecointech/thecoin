@@ -63,8 +63,7 @@ export function getCode(url: string) {
     // Give a 10 minute timeout, then throw
     const serverTimeout = setTimeout(() => {
       server.close();
-      log.fatal("Timeout waiting for code");
-      reject();
+      reject(new Error("Timeout waiting for code"));
     }, 10 * 60 * 1000);
   })
 
