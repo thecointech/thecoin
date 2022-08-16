@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.93](https://github.com/thecointech/thecoin/compare/v0.2.92...v0.2.93) (2022-08-16)
+
+**Note:** Version bump only for package @thecointech/truffle-ethers-provider
+
+
+
+
+
 ## [0.2.92](https://github.com/thecointech/thecoin/compare/v0.2.91...v0.2.92) (2022-08-16)
 
 **Note:** Version bump only for package @thecointech/truffle-ethers-provider
