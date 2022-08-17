@@ -1,5 +1,5 @@
 import { Signer } from "@ethersproject/abstract-signer"
-import type { AccountName } from "./names"
+import type { AccountName, NamedAccounts } from "./names"
 
 declare global {
   namespace globalThis {
@@ -20,3 +20,15 @@ export async function getAndCacheSigner(name: AccountName, creator: () => Promis
     .set(name, signer)
     .get(name)!;
 }
+
+// Allow manual initialization of signers.  This allows
+// us to explicitly set signers for testing.
+export function initCache(named: NamedAccounts) {
+  Object.keys(named).forEach(key => {
+    const signer = named[key as keyof NamedAccounts];
+    if (signer) {
+      __signers.set(key, signer);
+    }
+  });
+}
+

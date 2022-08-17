@@ -5,17 +5,20 @@ module.exports = function (request, options) {
 
   const maybeMocked = getMockedIfExists(request, options);
 
+  const isOurModule = request.includes("@thecointech");
+
   const r = options.defaultResolver(maybeMocked, {
     ...options,
     conditions: getConditions(options.conditions),
     packageFilter: getPackageFilter(request),
+    moduleDirectories: getModuleDirectories(request),
   })
 
   // Jest resolver only resolves the first entry of an
   // `exports` object, so where we have multiple (site-base)
   // it always returns the first one, even when it is the second
   // that is valid
-  if (request.includes("@thecointech")) {
+  if (isOurModule) {
     if (!existsSync(r)) {
       // see if there is a folder & index.js here
       const parsed = path.parse(r);
@@ -33,6 +36,12 @@ module.exports = function (request, options) {
 | Utils
 | see: https://github.com/facebook/jest/issues/2702
 */
+
+function getModuleDirectories(options, isOurModule) {
+  return isOurModule
+    ? [...options.moduleDirectories, "src"]
+    : options.moduleDirectories;
+}
 
 // Manually check for a mocked version of the package
 function getMockedIfExists(request, options) {

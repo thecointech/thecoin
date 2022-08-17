@@ -1,4 +1,4 @@
-export type { TheCoin } from './types/TheCoin';
+export type { TheCoin } from './types/contracts/TheCoin';
 //import type { Erc20Provider } from '@thecointech/ethers-provider';;
 
 // Replace the default type for the provider, as this is always present

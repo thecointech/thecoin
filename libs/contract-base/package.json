@@ -27,6 +27,7 @@
     "build/**/*"
   ],
   "exports": {
+    ".": "./build/index.js",
     "./*": "./build/*.js"
   },
   "typesVersions": {

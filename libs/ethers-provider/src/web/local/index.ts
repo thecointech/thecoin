@@ -7,7 +7,7 @@ import { ERC20Response } from '../erc20response';
 export class Erc20Provider extends JsonRpcProvider {
 
   constructor() {
-    super(`http://localhost:${process.env.DEPLOY_NETWORK_PORT}`)
+    super(`http://localhost:${process.env.DEPLOY_NETWORK_PORT}`);
   }
 
   //

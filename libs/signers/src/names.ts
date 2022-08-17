@@ -16,6 +16,8 @@ export enum AccountId {
 };
 
 export type AccountName = keyof typeof AccountId;
+export type NamedAccounts = Record<AccountName, Signer>;
+
 
 // Better names for these functions would be isLocal/isRemote
 export const isRemote = (signer?: Signer): signer is Signer => !isLocal(signer);
