@@ -12,7 +12,6 @@ const fns: functions = {
     const auth = getAuthClient();
     const credentials = getCredentials(token) ?? await getNewTokens(auth);
     auth.setCredentials(credentials);
-
     if (!credentials || !isValid(auth)) {
       log.fatal(`Cannot run tx-gmail without auth: credentials ${JSON.stringify(credentials)}`)
       throw new Error("NoAuth");
@@ -31,12 +30,13 @@ export default fns;
 function getCredentials(token?: string) {
   if (token) {
     const credentials =  JSON.parse(token);
-    if (credentials.expiry_date > Date.now()) {
-      return credentials;
-    }
-    else {
-      log.warn("Token expired, requesting new token");
-    }
+    return credentials;
+    // if (credentials.expiry_date > Date.now()) {
+    //   return credentials;
+    // }
+    // else {
+    //   log.warn("Token expired, requesting new token");
+    // }
   }
   return null;
 }
