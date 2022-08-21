@@ -37,13 +37,13 @@ import '../interfaces/IPluggable.sol';
 struct UserData {
   // The amount of the users balance that we protect.
   // Equates (loosely) to cost basis
-  // uint32 for cents means a max value of approx $21 million
+  // int64 for cents means a max value of approx $92 trillion
   // This can be negative, if the user has gained profit then
   // withdrawn it all
-  int32 costBasis;
+  int64 costBasis;
 
   // The last time we updated the reserved amount.
-  uint96 lastUpdate;
+  uint64 lastUpdate;
 
   // How much of the users balance have we reserved for insurance?
   // This is updated once per year, and effectively locks up part
@@ -116,19 +116,19 @@ contract BalanceGuardV0 is BasePlugin, OracleClient, Ownable, PermissionUser {
   // On deposit we update the users current balance
   function preDeposit(address user, uint coin, uint timestamp) external override onlyOwner {
     // Update users ACB
-    int32 fiat = toFiat(coin, timestamp);
+    int64 fiat = toFiat(coin, timestamp);
     userFiatBalance[user].costBasis += fiat;
   }
 
   function preWithdraw(address user, uint coin, uint timestamp) external override onlyOwner {
-    int32 fiat = toFiat(coin, timestamp);
+    int64 fiat = toFiat(coin, timestamp);
     uint currentBalance = IERC20Upgradeable(theCoin).balanceOf(user);
     // We may need to transfer some coin into the users account.
     // This only is necessary if the user doesn't have coin to cover it,
     // and the total amount is between 90 & 100%
     // NOTE - this is also clearly wrong, but good enough to test plugin system
     if (coin > currentBalance) {
-      int32 ninetyPercent = userFiatBalance[user].costBasis * 90 / 100;
+      int64 ninetyPercent = userFiatBalance[user].costBasis * 90 / 100;
       if (fiat > ninetyPercent) {
         uint missingCoin = coin - currentBalance;
         theCoin.pl_transferTo(user, missingCoin);
