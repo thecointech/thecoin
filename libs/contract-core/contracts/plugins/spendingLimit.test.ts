@@ -17,29 +17,37 @@ it('Correctly limits spending', async () => {
   const SpendingLimit = await hre.ethers.getContractFactory('SpendingLimit');
   const tcCore = await createAndInitTheCoin();
 
-  await tcCore.mintCoins(10000000, signers.Owner.address, Date.now());
+  await tcCore.mintCoins(10000e6, signers.Owner.address, Date.now());
 
   // pass some $$$ to client1
-  await tcCore.transfer(signers.client1.address, 1000);
+  await tcCore.transfer(signers.client1.address, 1000e6);
 
-  // price feed init to $1
+  // price feed init to constant $1.00
   const oracle = await SpxCadOracle.deploy();
-  await oracle.initialize();
-  await oracle.update(1e8);
+  await oracle.initialize(0, 1e13, [1e8]);
 
   // Create limiter plugin
   const limiter = await SpendingLimit.deploy(oracle.address);
-  const owner = await limiter.owner();
 
   // Assign to user, grant all permissions, limit user to $100
   await tcCore.pl_assignPlugin(signers.client1.address, limiter.address, ALL_PERMISSIONS, "0x1234");
-  await limiter.setUserSpendingLimit(signers.client1.address, 100);
+  // Set the limit to $100 (10000 cents)
+  await limiter.setUserSpendingLimit(signers.client1.address, 100e2);
 
-  // Does the plugin limit as expected?
-  const coreBalance = await tcCore.balanceOf(signers.client1.address);
-  expect(coreBalance.toNumber()).toEqual(1000);
+  // Test that the limit is applied
+  const now = Math.round(Date.now() / 1000);
+  const pw = limiter.preWithdraw(signers.client1.address, 200e6, now);
+  await expect(pw).rejects.toThrowError("fiat limit exceeded");
+
+  // Does the plugin still display the full balance?
+  const tcUser = tcCore.connect(signers.client1);
+  const coreBalance = await tcUser.balanceOf(signers.client1.address);
+  expect(coreBalance.toNumber()).toEqual(1000e6);
 
   // Attempt transfer exceeding limit
-  // const shouldFail = core.transfer(signers.client2, 2000, {from: signers.client1});
-  // await expect(shouldFail).rejects.toThrow();
+  const shouldFail = tcUser.transfer(signers.client2.address, 200e6);
+  await expect(shouldFail).rejects.toThrow();
+  // Check nothing transferred
+  const c2bal = await tcUser.balanceOf(signers.client2.address);
+  expect(c2bal.toNumber()).toEqual(0);
 });
