@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./build",
+    "rootDir": "./src"
+  },
+  "include": ["./src/**/*", "./src/**/*.json"],
+  "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"],
+  "files": [],
+  "references": [
+    { "path": "../signers/tsconfig.build.json" },
+    { "path": "../contract-tools/tsconfig.json" },
+    { "path": "../contract-base/tsconfig.json" },
+  ]
+}
+
+

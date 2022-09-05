@@ -73,4 +73,4 @@ libs/idx/src/config.devlive.json
 apps/tx-processor/run_service.cmd
 
 storybook-static/
-libs/contract-core/internal/rates.json
+libs/contract-oracle/internal/rates.json

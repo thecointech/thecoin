@@ -36,11 +36,10 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable {
   // All historical offsets from then until now.
   SecondsOffset[] offsets;
 
-  function initialize(int timestamp, int blockTime, int256[] calldata initial) public initializer {
+  function initialize(int initialTimestamp, int blockTime) public initializer {
     __Ownable_init();
 
-    rates = initial;
-    INITIAL_TIMESTAMP = timestamp;
+    INITIAL_TIMESTAMP = initialTimestamp;
     BLOCK_TIME = blockTime;
   }
 
@@ -52,6 +51,7 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable {
     }
   }
 
+  //
   // Add a new rate to the end of the list.
   function update(int256 newValue) public onlyOwner() {
     int128 offset = getOffset(int(block.timestamp));
@@ -65,9 +65,17 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable {
     rates.push(newValue);
   }
 
+  //
   // update our time offset.
   function updateOffset(SecondsOffset calldata offset) public onlyOwner() {
     offsets.push(offset);
+  }
+
+  //
+  // Get the timestamp our current block is valid until
+  function validUntil() public view returns (int) {
+    int128 offset = getOffset(int(block.timestamp));
+    return offset + INITIAL_TIMESTAMP + (int(rates.length) * BLOCK_TIME);
   }
 
   // getRoundData and latestRoundData should both raise "No data present"

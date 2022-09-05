@@ -1,5 +1,5 @@
 import { getFirestore, Timestamp, CollectionReference } from "@thecointech/firestore";
-import { RateKey, RateType } from "./types";
+import { CoinRate, FxRates, RateKey, RateType } from "./types";
 import { IsDebug } from "@thecointech/utilities/IsDebug";
 import { log } from "@thecointech/logging";
 
@@ -68,8 +68,8 @@ export async function getRate(key: RateKey, ts: number) : Promise<RateType|null>
   return candidate;
 }
 
-export const getCoinRate = (ts: number) => getRate("Coin", ts);
-export const getFxRates = (ts: number) => getRate("FxRates", ts);
+export const getCoinRate = (ts: number) => getRate("Coin", ts) as Promise<CoinRate|null>;
+export const getFxRates = (ts: number) => getRate("FxRates", ts) as Promise<FxRates|null>;
 
 //
 // Set the new rate. Does no validity checking

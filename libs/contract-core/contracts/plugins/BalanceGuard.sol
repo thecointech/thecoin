@@ -17,7 +17,7 @@ import "@openzeppelin/contracts/utils/math/Math.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import './BasePlugin.sol';
-import './oracle/OracleClient.sol';
+import './OracleClient.sol';
 import '../interfaces/permissions.sol';
 import '../interfaces/IPluggable.sol';
 

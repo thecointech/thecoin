@@ -1,7 +1,7 @@
 {
-  "name": "@thecointech/contract-core",
+  "name": "@thecointech/contract-oracle",
   "version": "0.2.93",
-  "description": "The Coin: Solidity contract for TheCoin currency",
+  "description": "The Coin: Price Oracles for TheCoin",
   "type": "module",
   "keywords": [
     "TheCoin",
@@ -13,7 +13,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
-    "directory": "libs/contract"
+    "directory": "libs/contract-oracle"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
@@ -23,9 +23,8 @@
     "build": "run-s build:contracts build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
     "build:src": "run-p build:src:*",
-    "_build:src:cjs": "yarn tsc --project tsconfig.build.cjs.json",
-    "build:src:mjs": "yarn tsc --project tsconfig.build.mjs.json",
-    "build:src:copy": "cpx \"./src/deployed/**\" ./build/cjs/deployed && cpx \"./src/deployed/**\" ./build/mjs/deployed",
+    "build:src:mjs": "yarn tsc --project tsconfig.build.json",
+    "build:src:copy": "cpx \"./src/deployed/**\" ./build/deployed",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
@@ -46,32 +45,30 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
   "exports": {
-    "./contract": "./build/mjs/index.js",
+    "./contract": "./build/index.js",
+    "./AggregatorV3Interace.sol": "./contracts/AggregatorV3Interace.sol",
     ".": {
-      "development": "./build/mjs/index_mocked.js",
-      "electron": "./build/mjs/index.js",
-      "default": "./build/mjs/index.js"
+      "development": "./build/index_mocked.js",
+      "electron": "./build/index.js",
+      "default": "./build/index.js"
     }
   },
-  "types": "./build/mjs/index.d.ts",
+  "types": "./build/index.d.ts",
   "typesVersions": {
     "*": {
       "*": [
-        "build/mjs/index.d.ts"
+        "build/index.d.ts"
       ]
     }
   },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
     "@thecointech/async": "^0.2.93",
-    "@thecointech/contract-oracle": "^0.2.93",
     "@thecointech/contract-tools": "^0.2.93",
     "jest": "*"
   },
   "dependencies": {
     "@thecointech/contract-base": "^0.2.93"
-  },
-  "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
+  }
 }
