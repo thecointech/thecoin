@@ -7,11 +7,11 @@ import { makeTransition } from '../makeTransition';
 // errors/sudden disconects mid-transfer.  We do this by transitioning into
 // a pre-transfer state prior to the transfer, then when actioning the state
 //
-export const  verifyPreTransfer = makeTransition( "verifyPreTransfer", async (container) => {
+export const verifyPreTransfer = makeTransition( "verifyPreTransfer", async (container) => {
   const state = getCurrentState(container);
   // was our last state a pre-transfer?
-  if (state.delta.type != preTransfer.name)
-    return { error: 'Running transfer without matching per-transfer' };
+  if (state.delta.type != preTransfer.transitionName)
+    return { error: 'Running transfer without matching pre-transfer' };
 
   // How long ago was it registered?
   const age = state.delta.created.diffNow();
