@@ -1,7 +1,7 @@
 import { log } from '@thecointech/logging';
 import { SpxCadOracle } from './types';
 
-type RateFactory = (timestamp: number) => Promise<{rate: number, from: number, to: number}|null>;
+type RateFactory = (seconds: number) => Promise<{rate: number, from: number, to: number}|null>;
 
 const MAX_LENGTH = 1000;
 
@@ -69,9 +69,12 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
         await oracle.bulkUpdate(rates.slice(s, e));
       }
     }
+    log.trace(`Updated ${rates.length} new rates, until ${timestamp} : ${new Date(timestamp * 1000)}`)
+
     // If we have offsets, push them to the oracle
     for (const offset of offsets) {
       await oracle.updateOffset(offset);
+      log.trace(`Pushing new Offset ${offset.offset} at ${new Date(offset.from * 1000)}`)
     }
   }
   catch (err: any) {

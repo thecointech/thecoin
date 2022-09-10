@@ -1,4 +1,5 @@
 // Simple oracle supplies current-time prices only for SPX - CAD (ie, TC to Fiat)
+// It will be updated every 3 hours from now into eternity
 
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -6,13 +7,18 @@ pragma solidity ^0.8.0;
 
 import './AggregatorV3Interface.sol';
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 
 /**
  * The online pricing oracle for SPX/CAD.
  * This interface loosely matches the Chainlink AggregatorV3Interface,
  * but is primarily intended to be used with TheCoin.
 */
-contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable {
+contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessControlUpgradeable {
+
+  // OracleUpdater.  This is the only address allowed
+  // to update the oracle price.
+  bytes32 public constant UPDATER_ROLE = DEFAULT_ADMIN_ROLE;
 
   // We store a single multiplier that converts from THE => CAD (ie, TC to Fiat)
   // for each 3-hour block since inception.
@@ -36,8 +42,10 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable {
   // All historical offsets from then until now.
   SecondsOffset[] offsets;
 
-  function initialize(int initialTimestamp, int blockTime) public initializer {
+  function initialize(address updater, int initialTimestamp, int blockTime) public initializer {
     __Ownable_init();
+    __AccessControl_init();
+    _setupRole(UPDATER_ROLE, updater);
 
     INITIAL_TIMESTAMP = initialTimestamp;
     BLOCK_TIME = blockTime;
@@ -45,7 +53,7 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable {
 
   // Our initialize is limited in how many values can be sent.  This
   // is because the gas limits are too low to allow storing all prior values.
-  function bulkUpdate(int256[] calldata newValues) public onlyOwner() {
+  function bulkUpdate(int256[] calldata newValues) public onlyUpdater() {
     for (uint i = 0; i < newValues.length; i++) {
       rates.push(newValues[i]);
     }
@@ -53,7 +61,7 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable {
 
   //
   // Add a new rate to the end of the list.
-  function update(int256 newValue) public onlyOwner() {
+  function update(int256 newValue) public onlyUpdater() {
     int128 offset = getOffset(int(block.timestamp));
     // Only update the value if our current value is near expiry
     int currentExpires = offset + INITIAL_TIMESTAMP + (int(rates.length) * BLOCK_TIME);
@@ -67,7 +75,7 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable {
 
   //
   // update our time offset.
-  function updateOffset(SecondsOffset calldata offset) public onlyOwner() {
+  function updateOffset(SecondsOffset calldata offset) public onlyUpdater() {
     offsets.push(offset);
   }
 
@@ -170,5 +178,11 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable {
 
   function version() external pure override returns (uint256) {
     return 1;  // Version 0 really.
+  }
+
+  modifier onlyUpdater()
+  {
+    require(hasRole(UPDATER_ROLE, _msgSender()), "Action requires Updater role");
+    _;
   }
 }

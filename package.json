@@ -51,7 +51,7 @@
     "clean:ceramic": "rimraf ~/.ceramic && ~/.jsipfs",
     "clean:apis": "git clean -qfdx ./apis",
     "clean:storybook": "rimraf ./storybook-static",
-    "test": "lerna run test",
+    "test": "lerna run test --",
     "test:ci": "cross-env JEST_CI=true lerna run test:ci -- --ci --forceExit",
     "storybook": "start-storybook -p 6006",
     "dedup": "yarn yarn-deduplicate -s fewer",

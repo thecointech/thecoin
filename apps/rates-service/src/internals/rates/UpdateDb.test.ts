@@ -1,4 +1,3 @@
-
 import { jest } from '@jest/globals';
 import { update, ensureLatestCoinRate, ensureLatestFxRate } from "./UpdateDb";
 import { validFor } from "@thecointech/fx-rates";

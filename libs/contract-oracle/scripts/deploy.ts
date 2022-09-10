@@ -8,26 +8,18 @@ import '@openzeppelin/hardhat-upgrades';
 
 async function main() {
 
-  const network = hre.config.defaultNetwork;
-  const name = getName(network);
   const owner = await getSigner("Owner");
 
-  const contractArgs = await getArguments(network)
-  const TheCoin = await hre.ethers.getContractFactory(name, owner);
-  const theCoin = await hre.upgrades.deployProxy(TheCoin, contractArgs, { initializer: 'initialize(address _sender, address depositor)'});
-  log.info(`Deployed ${name} at ${theCoin.address}`);
+  const contractArgs = await getArguments()
+  const Oracle = await hre.ethers.getContractFactory("SpxCadOracle", owner);
+  const oracle = await hre.upgrades.deployProxy(Oracle, contractArgs);
+  log.info(`Deployed SpxCadOracle at ${oracle.address}`);
 
   // Serialize our contract addresses
-  storeContractAddress(new URL(import.meta.url), network, theCoin.address, ['cjs', 'mjs']);
+  storeContractAddress(new URL(import.meta.url), "polygon", oracle.address, ['cjs', 'mjs']);
 }
 
-const getName = (network: string) =>
-  network === 'polygon' || process.env.NODE_ENV !== 'production'
-  ? "TheCoinL2"
-  : "TheCoinL1";
-
-
 main().catch((error) => {
-  console.error(error);
+  log.error(error);
   process.exitCode = 1;
 });

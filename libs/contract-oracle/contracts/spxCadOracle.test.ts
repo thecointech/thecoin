@@ -1,15 +1,21 @@
 import { jest } from '@jest/globals';
 import { last } from '@thecointech/utilities/ArrayExtns';
+import { describe } from '@thecointech/jestutils';
 import { updateRates } from '../src/update';
 import { getContract } from '../src/index_mocked';
 import hre from 'hardhat';
 import '@nomiclabs/hardhat-ethers';
+import { existsSync } from 'fs';
 
 jest.setTimeout(5 * 60 * 1000);
 const factor = Math.pow(10, 8);
 const blockTime = 3 * 60 * 60;
+const [owner] = await hre.ethers.getSigners();
+const ratesFiles = new URL('../internal/rates.json', import.meta.url);
+const shouldRun = existsSync(ratesFiles);
 
 describe('Oracle Tests', () => {
+
 
   ////////////////////////////////////////////////////////////////////////////////////////
   // Here we duplicate the solidity functions into JS
@@ -21,7 +27,7 @@ describe('Oracle Tests', () => {
     // ignore the first live rate, since there are some issues with the first day
     const initialTimestamp = rates[0].from;
     const oracle = getContract();
-    await oracle.initialize(initialTimestamp, blockTime);
+    await oracle.initialize(owner.address, initialTimestamp, blockTime);
     await updateRates(oracle, last(rates).to, factory);
 
     // Now, test every single rates to prove it's consistent
@@ -57,7 +63,7 @@ describe('Oracle Tests', () => {
     const initialTimestamp = rates[start].from;
     const till = rates[start + 300].to;
 
-    await oracle.initialize(initialTimestamp, blockTime);
+    await oracle.initialize(owner.address, initialTimestamp, blockTime);
     await updateRates(oracle, till, factory);
 
     // Now, test every single rates to prove it's consistent
@@ -76,11 +82,11 @@ describe('Oracle Tests', () => {
       }
     }
   })
-})
+}, shouldRun)
 
 
 async function getRatesFactory() {
-  const liveRates  = await import ('../internal/rates.json', { assert: {type: "json"}});
+  const liveRates  = await import ('../internal/rates.json'/*, { assert: {type: "json"}}*/);
   const rates = liveRates.default.rates.slice(8);
   const factory = async (timestamp: number) => {
     for (let i = 0; i < rates.length; i++) {

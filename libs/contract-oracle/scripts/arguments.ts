@@ -1,26 +1,42 @@
+import { log } from '@thecointech/logging';
 import { getSigner } from '@thecointech/signers';
+import { DateTime, Duration } from 'luxon';
 
-// In some environments the address must be set
-// statically (to support multiple hardware wallets)
-// whereas in devlive the address is dynamically generated
-const getTheCoinAddress = async () => {
-  if (process.env.WALLET_TheCoin_ADDRESS !== undefined) {
-    return process.env.WALLET_TheCoin_ADDRESS;
-  }
-  const signer = await getSigner("TheCoin");
-  const address = await signer.getAddress();
-  console.log(`TheCoin address: ${address}`);
-  return address;
-}
-
-export async function getArguments(network: String) {
+async function getDevLiveArguments() {
+  // NOTE: These values have been copy-pasted from rates-service seed file
+  const updater = await getSigner("OracleUpdater");
+  const from = DateTime
+  .local()
+  .minus({ years: 1.1 })
+  .setZone("America/New_York")
+  .set({
+    hour: 9,
+    minute: 31,
+    second: 30,
+    millisecond: 0
+  });
+  const blockDuration = Duration.fromObject({ days: 1 });
   return [
-    await getTheCoinAddress(),
-    network === 'polygon'
-      // ChildChainManager calls the deposit function on the polygon chain
-      // See https://static.matic.network/network/testnet/mumbai/index.json
-      ? process.env.POLYGON_CHILDCHAIN_MANAGER
-      : process.env.POLYGON_ROOTNET_PREDICATE ??
-        "0xbaadf00dbaadf00dbaadf00dbaadf00dbaadf00d"
+    await updater.getAddress(),
+    from.toSeconds(),
+    blockDuration.as("seconds"),
   ]
 }
+
+async function getProductionArguments() {
+  if (!process.env.WALLET_OracleUpdater_ADDRESS) throw new Error("WALLET_OracleUpdater_ADDRESS must be set");
+  if (!process.env.ORACLE_INITIAL_TIMESTAMP) throw new Error("ORACLE_INITIAL_TIMESTAMP must be set");
+  if (!process.env.ORACLE_BLOCK_DURATION) throw new Error("ORACLE_BLOCK_DURATION must be set");
+
+  return [
+    process.env.WALLET_OracleUpdater_ADDRESS,
+    parseInt(process.env.ORACLE_INITIAL_TIMESTAMP),
+    parseInt(process.env.ORACLE_BLOCK_DURATION),
+  ]
+}
+
+export const getArguments = () =>
+  process.env.NODE_ENV !== "production"
+  ? getDevLiveArguments()
+  : getProductionArguments();
+
