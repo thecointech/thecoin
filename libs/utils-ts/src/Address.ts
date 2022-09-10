@@ -52,7 +52,7 @@ export async function getAddressShortCode(address: string, signer: Signer)
 
 export function getAddressShortCodeSig(address: string, signer: Signer) {
   // generate this signers secret key
-  const rhash = GetHash(NormalizeAddress(address));
+  const rhash = GetHash(NormalizeAddress(address).toLowerCase());
   return sign(rhash, signer);
 }
 
