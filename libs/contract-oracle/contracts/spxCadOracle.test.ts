@@ -82,7 +82,7 @@ describe('Oracle Tests', () => {
 async function getRatesFactory() {
   const liveRates  = await import ('../internal/rates.json', { assert: {type: "json"}});
   const rates = liveRates.default.rates.slice(8);
-  const factory = (timestamp: number) => {
+  const factory = async (timestamp: number) => {
     for (let i = 0; i < rates.length; i++) {
       if (rates[i].to > timestamp) {
         const r = {

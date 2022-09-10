@@ -1,7 +1,7 @@
 import { log } from '@thecointech/logging';
 import { SpxCadOracle } from './types';
 
-type RateFactory = (timestamp: number) => {rate: number, from: number, to: number}|null;
+type RateFactory = (timestamp: number) => Promise<{rate: number, from: number, to: number}|null>;
 
 const MAX_LENGTH = 1000;
 
@@ -16,7 +16,7 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
   const rates: number[] = [];
   const offsets: {from: number, offset: number}[] = [];
   while (timestamp < till) {
-    const r = rateFactory(timestamp);
+    const r = await rateFactory(timestamp);
     if (!r) {
       log.trace("No rate for timestamp", {timestamp});
       break;

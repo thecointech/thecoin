@@ -9,7 +9,7 @@ it('basic update functions', async () => {
   const blockTime = (await oracle.BLOCK_TIME()).toNumber();
   const factor = Math.pow(10, await oracle.decimals());
   const seconds = 365 * 24 * 60 * 60;
-  const ratesFactory = (timestamp: number) => {
+  const ratesFactory = async (timestamp: number) => {
     const idx = (timestamp - initial) / blockTime;
     const from = timestamp - (timestamp % blockTime);
     return {

@@ -11,6 +11,7 @@ import { RateKey, RateOffsetFromMarket, RateType } from "./types";
 import { waitTillBuffer } from "./delay";
 import { fetchFxRate } from "./fetchFx";
 import { log } from '@thecointech/logging';
+import { updateOracle } from '../oracle';
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -119,6 +120,9 @@ export async function update() {
         ensureLatestCoinRate(now),
         ensureLatestFxRate(now),
       ]);
+
+      // Once we have updated, do a matching update on Oracle
+      await updateOracle(now);
       return true;
     }
     catch (err: any) {
