@@ -20,6 +20,8 @@ test('basic', () => {
     expect(/^0x[A-G0-9]{40}$/.test(normAddressLong)).toBe(true);
 
     const signature = '0x909c440aad7215f4d0b7126cae0de28619d8dff559124e163cbb36959d5247491e1f1f99430e2d6c29ebfdee764791cb2a85fe92115dc17cb9981a61d369a8e01c'
+    expect(getShortCode(signature)).toEqual(getShortCode(signature.slice(2)));
+
     // generates: "j2e482nde8az9m5q29paw3f2grcxhqznb494w5hwqcv9b7aj8x4hw7rzk51gwbbc57nzvvkp8y8wpam5zu912qe1fjwtg6k1udmuhr0w"
     let offset = 0;
     expect(getShortCode(signature, offset++)).toEqual("muhr0w");
@@ -48,6 +50,7 @@ test('basic', () => {
 
     const uc = "0xCA8EEA33826F9ADA044D58CAC4869D0A6B4E90E4";
     const lc = uc.toLowerCase();
+    expect(AddressMatches(undefined, undefined)).toBeFalsy();
     expect(AddressMatches(uc, lc)).toBeTruthy();
     expect(AddressMatches(uc, '0xffe3cbf59a777e8f4be4e712945ffefc6612d46f')).toBeFalsy();
 });
