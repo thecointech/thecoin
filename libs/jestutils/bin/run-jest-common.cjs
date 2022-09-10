@@ -1,20 +1,13 @@
 const jest = require("jest");
 const { exit, cwd } = require("process");
 const { join } = require('path');
-
-const last = process.argv[process.argv.length - 1];
-const testMatch = (
-  process.argv.length > 2 &&
-  !last.startsWith("--")
-)
-  ? [`**/${last}`]
-  : undefined;
+const yargs = require('yargs/yargs')
+const { hideBin } = require('yargs/helpers')
+const argv = yargs(hideBin(process.argv)).argv
 
 const options = {
   projects: [cwd()],
-  runInBand: process.argv.includes("--runInBand"),
-  forceExit: process.argv.includes("--forceExit"),
-  testMatch,
+  ...argv,
 };
 
 // hard-code the link to the hardhat config file.
