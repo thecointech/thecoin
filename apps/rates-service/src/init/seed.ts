@@ -9,7 +9,7 @@ import { getLatestStored, setRate } from "../internals/rates/db";
 import { CoinRate, FxRates } from "../internals/rates/types";
 import { log } from "@thecointech/logging";
 import { update } from '../internals/rates/UpdateDb';
-import { initLatest, updateLatest } from '../internals/rates/latest';
+import { updateLatest } from '../internals/rates/latest';
 
 export async function seed() {
   log.trace('--- Seeding DB ---');

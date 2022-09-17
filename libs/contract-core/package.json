@@ -20,12 +20,10 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-s build:contracts build:src",
+    "build": "run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
-    "build:src": "run-p build:src:*",
-    "_build:src:cjs": "yarn tsc --project tsconfig.build.cjs.json",
-    "build:src:mjs": "yarn tsc --project tsconfig.build.mjs.json",
-    "build:src:copy": "cpx \"./src/deployed/**\" ./build/cjs/deployed && cpx \"./src/deployed/**\" ./build/mjs/deployed",
+    "build:src": "yarn tsc --project tsconfig.build.json",
+    "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
@@ -48,18 +46,18 @@
   ],
   "main": "./build/index.js",
   "exports": {
-    "./contract": "./build/mjs/index.js",
+    "./contract": "./build/index.js",
     ".": {
-      "development": "./build/mjs/index_mocked.js",
-      "electron": "./build/mjs/index.js",
-      "default": "./build/mjs/index.js"
+      "development": "./build/index_mocked.js",
+      "electron": "./build/index.js",
+      "default": "./build/index.js"
     }
   },
-  "types": "./build/mjs/index.d.ts",
+  "types": "./build/index.d.ts",
   "typesVersions": {
     "*": {
       "*": [
-        "build/mjs/index.d.ts"
+        "build/index.d.ts"
       ]
     }
   },

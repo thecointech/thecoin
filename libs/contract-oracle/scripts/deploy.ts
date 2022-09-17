@@ -16,7 +16,7 @@ async function main() {
   log.info(`Deployed SpxCadOracle at ${oracle.address}`);
 
   // Serialize our contract addresses
-  storeContractAddress(new URL(import.meta.url), "polygon", oracle.address, ['cjs', 'mjs']);
+  storeContractAddress(new URL(import.meta.url), "polygon", oracle.address);
 }
 
 main().catch((error) => {
