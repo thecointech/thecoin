@@ -140,7 +140,7 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
     external
     view
     override
-    returns (int256 answer)
+    returns (uint answer)
   {
     require(timestamp >= INITIAL_TIMESTAMP, "Timestamp before oracle inception");
     uint blockIdx = getBlockIndexFor(timestamp);

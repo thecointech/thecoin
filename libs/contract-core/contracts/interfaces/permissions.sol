@@ -34,7 +34,7 @@ contract PermissionUser {
   // to the users account.
   // Use case: Inheritance/fail-over accounts (setup a backup account that can pull
   // your funds in case of lost access to account)
-  uint constant PERMISSION_AUTO_ACCESS = 1 << 7;
+  uint constant PERMISSION_AUTO_ACCESS = 1 << 4;
 }
 
 

@@ -1,30 +1,21 @@
 import { jest } from '@jest/globals';
 import hre from 'hardhat';
-import { createAndInitTheCoin, initAccounts } from '../../internal/initTest';
+import { createAndInitOracle, createAndInitTheCoin, initAccounts } from '../../internal/initTest';
 import { ALL_PERMISSIONS } from '../../src/constants';
 
 jest.setTimeout(5 * 60 * 1000);
 
-// const SpxCadOracle = contract.fromArtifact('SpxCadOracle');
-// const SpendingLimit = contract.fromArtifact('SpendingLimit');
-// const TheCoin = contract.fromArtifact('TheCoin');
-// const named = toNamedAccounts(accounts);
-
 it('Correctly limits spending', async () => {
 
   const signers = initAccounts(await hre.ethers.getSigners());
-  const SpxCadOracle = await hre.ethers.getContractFactory('SpxCadOracle');
   const SpendingLimit = await hre.ethers.getContractFactory('SpendingLimit');
   const tcCore = await createAndInitTheCoin();
+  const oracle = await createAndInitOracle();
 
   await tcCore.mintCoins(10000e6, signers.Owner.address, Date.now());
 
   // pass some $$$ to client1
   await tcCore.transfer(signers.client1.address, 1000e6);
-
-  // price feed init to constant $1.00
-  const oracle = await SpxCadOracle.deploy();
-  await oracle.initialize(0, 1e13, [1e8]);
 
   // Create limiter plugin
   const limiter = await SpendingLimit.deploy(oracle.address);

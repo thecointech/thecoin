@@ -27,7 +27,7 @@ contract DebugPrint is BasePlugin {
     emit PrintGetPermissions();
     return 0;
   }
-  function balanceOf(address /*user*/, uint currentBalance) external pure override returns(uint) {
+  function balanceOf(address /*user*/, int currentBalance) external pure override returns(int) {
     // Cannot log in a view function unfortunately,
     // so instead just return balance / 2 to prove we were called
     // emit PrintBalanceOf(user, currentBalance);

@@ -26,7 +26,8 @@ abstract contract BasePlugin is IPlugin {
   function userDetached(address user, address) virtual external override {}
   function preDeposit(address, uint, uint) virtual external override {}
   function preWithdraw(address, uint, uint) virtual external override {}
-  function balanceOf(address, uint currentBalance) virtual external view override returns(uint)
+  function balanceOf(address, int currentBalance) virtual external view override returns(int)
   { return currentBalance; }
-
+  function modifyTransfer(address, address, uint amount, uint16 currency, uint) virtual external override returns (uint, uint16)
+  { return (amount, currency); }
 }

@@ -26,7 +26,7 @@ interface IPlugin is IERC165 {
 
   // A plugin may modify the users reported balance.
   // Requires PERMISSION_BALANCE
-  function balanceOf(address user, uint currentBalance) external view returns(uint);
+  function balanceOf(address user, int currentBalance) external view returns(int);
 
   // A plugin may take actions in response to user transfer.  Eg - it may
   // automatically top up the account, restrict the transfer, or perform
@@ -34,4 +34,7 @@ interface IPlugin is IERC165 {
   // requires PERMISSION_DEPOSIT/PERMISSION_WITHDRAWAL/PERMISSION_APPROVAL
   function preDeposit(address user, uint coin, uint timestamp) external;
   function preWithdraw(address user, uint coin, uint timestamp) external;
+
+  function modifyTransfer(address from, address to, uint amount, uint16 currency, uint timestamp) external returns (uint, uint16);
+
 }

@@ -70,8 +70,10 @@ abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
   }
 
   // Users balance as reported by plugins
-  function pl_balanceOf(address user) public view returns(uint) {
-    uint balance = balanceOf(user);
+  // This is distinct from the standard balance
+  // in that it may go negative (via UberConverter)
+  function pl_balanceOf(address user) public view returns(int) {
+    int balance = int(balanceOf(user));
     // Allow any adjustments from plugins;
     for (uint i =0; i < userPlugins[user].length; i++) {
       PluginAndPermissions memory pnp = userPlugins[user][i];
@@ -145,6 +147,58 @@ abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
       userPlugins[from][i].plugin.preWithdraw(from, amount, timestamp);
     }
   }
+
+  //-------------------------------------------------------------------------
+  // UberTransfer: A full-fledged (probably quite expensive) transfer that
+  // provides more info.  This allows far more powerful plugins.
+  //-------------------------------------------------------------------------
+  function uberTransfer(
+    address from,
+    address to,             //
+    uint256 amount,         // Amount of currency.
+    uint16 currency,          // CurrencyCode.  0 for TheCoin, 124 for CAD
+    //uint256 fee,            // The fee paid to whowever is submitting this
+    uint256 transferTime,   // When the transfer is to take place
+    uint signedTime,        // When the transfer was signed (for timestampIncreases)
+    bytes memory signature
+  ) public timestampIncreases(from, signedTime)
+  {
+    address signer = recoverUberSigner(from, to, amount, currency, transferTime, signedTime, signature);
+    require(signer == from, "Signer does not match from address");
+
+    (uint finalAmount, uint16 finalCurrency) = (amount, currency);
+    for (uint i =0; i < userPlugins[from].length; i++) {
+      (finalAmount, finalCurrency) = userPlugins[from][i].plugin.modifyTransfer(from, to, finalAmount, finalCurrency, transferTime);
+    }
+    // We have completed, and are ready to
+    lastTxTimestamp[from] = signedTime;
+
+    // If the plugins have already handled this transaction, let it be.
+    if (finalAmount == 0) return;
+
+    // Is the amount to be transferred in Coin?
+    require(finalCurrency == 0, "Cannot transfer non-Coin currencies directly");
+
+    // Seems good - do the transfer
+    _transfer(from, to, finalAmount);
+    //_transfer(from, msg.sender, fee);
+
+      emit ExactTransfer(from, to, finalAmount, transferTime);
+  }
+
+	function buildUberMessage(address from, address to, uint256 amount, uint16 currency, uint transferTime, uint signedTime) public pure returns (bytes32)
+	{
+		bytes memory packed = abi.encodePacked(from, to, amount, currency, transferTime, signedTime);
+		return keccak256(packed);
+	}
+
+ 	function recoverUberSigner(address from, address to, uint256 amount, uint16 currency, uint transferTime, uint signedTime, bytes memory signature) public pure returns (address)
+	{
+		// This recreates the message that was signed on the client.
+    bytes32 message = buildUberMessage(from, to, amount, currency, transferTime, signedTime);
+		bytes32 signedMessage = ECDSAUpgradeable.toEthSignedMessageHash(message);
+		return ECDSAUpgradeable.recover(signedMessage, signature);
+	}
 
   // ------------------------------------------------------------------------
   // Modifiers

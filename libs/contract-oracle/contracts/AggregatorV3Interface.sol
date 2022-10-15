@@ -60,5 +60,5 @@ interface AggregatorV3Interface {
   function getRoundFromTimestamp(int timestamp)
     external
     view
-    returns (int256 answer);
+    returns (uint answer);
 }

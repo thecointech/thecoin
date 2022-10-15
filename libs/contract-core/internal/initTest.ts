@@ -19,6 +19,15 @@ export async function  createAndInitTheCoin() {
   return tcCore;
 }
 
+export async function createAndInitOracle() {
+  const SpxCadOracle = await hre.ethers.getContractFactory('SpxCadOracle');
+
+  // price feed init to constant $1.00
+  const oracle = await SpxCadOracle.deploy();
+  await oracle.initialize(0, 1e13, [1e8]);
+  return oracle;
+}
+
 const notNum = /^\D+/;
 export const initAccounts = (accounts: SignerWithAddress[]) => {
   const r = Object.entries(AccountId)
