@@ -93,14 +93,15 @@ contract UberConverter is BasePlugin, OracleClient, Ownable, PermissionUser {
       // If this is scheduled to happen in the future?
       if (timestamp > block.timestamp) {
         pending[from].transfers[to][timestamp] = pending[from].transfers[to][timestamp] + amount;
-        amount = 0;
+        finalAmount = 0;
       }
       // Happening now, so convert to Coin
       else {
-        amount = toCoin(amount, timestamp);
-        currency = CurrencyCode;
+        finalAmount = toCoin(amount, timestamp);
+        finalCurrency = 0;
       }
     }
+    return (finalAmount, finalCurrency);
   }
 
   // This function can be safely made public as it can only

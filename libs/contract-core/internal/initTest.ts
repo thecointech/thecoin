@@ -1,8 +1,10 @@
+import hre from 'hardhat';
 import { PLUGINMGR_ROLE, MINTER_ROLE, BROKER_ROLE } from '../src/constants'
 import { AccountId, AccountName } from "@thecointech/signers";
 import { initCache } from "@thecointech/signers/cache";
+import { getOracleFactory } from '@thecointech/contract-oracle/contract';
+import { Signer } from '@ethersproject/abstract-signer';
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
-import hre from 'hardhat';
 
 // Basic function to create & init TheCoin contract with all roles set to address
 export async function  createAndInitTheCoin() {
@@ -19,12 +21,13 @@ export async function  createAndInitTheCoin() {
   return tcCore;
 }
 
-export async function createAndInitOracle() {
-  const SpxCadOracle = await hre.ethers.getContractFactory('SpxCadOracle');
-
-  // price feed init to constant $1.00
+export async function createAndInitOracle(signer: Signer) {
+  const SpxCadOracle = getOracleFactory(signer);
+  const owner = await signer.getAddress();
   const oracle = await SpxCadOracle.deploy();
-  await oracle.initialize(0, 1e13, [1e8]);
+  // price feed init to constant $2.00 => 1 Coin
+  await oracle.initialize(owner, 0, 1e13);
+  await oracle.update(2e8);
   return oracle;
 }
 

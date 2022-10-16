@@ -155,10 +155,10 @@ abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
   function uberTransfer(
     address from,
     address to,             //
-    uint256 amount,         // Amount of currency.
+    uint amount,         // Amount of currency in atomic unit (eg, cents)
     uint16 currency,          // CurrencyCode.  0 for TheCoin, 124 for CAD
     //uint256 fee,            // The fee paid to whowever is submitting this
-    uint256 transferTime,   // When the transfer is to take place
+    uint transferTime,   // When the transfer is to take place
     uint signedTime,        // When the transfer was signed (for timestampIncreases)
     bytes memory signature
   ) public timestampIncreases(from, signedTime)

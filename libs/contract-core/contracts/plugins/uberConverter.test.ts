@@ -2,6 +2,8 @@ import { jest } from '@jest/globals';
 import hre from 'hardhat';
 import { createAndInitOracle, createAndInitTheCoin, initAccounts } from '../../internal/initTest';
 import { ALL_PERMISSIONS } from '../../src/constants';
+import { buildUberTransfer } from '../../src/UberTransfer';
+import Decimal from 'decimal.js-light';
 
 jest.setTimeout(5 * 60 * 1000);
 
@@ -10,7 +12,7 @@ it('Correctly adjusts TheCoin', async () => {
   const signers = initAccounts(await hre.ethers.getSigners());
   const UberConverter = await hre.ethers.getContractFactory('UberConverter');
   const tcCore = await createAndInitTheCoin();
-  const oracle = await createAndInitOracle();
+  const oracle = await createAndInitOracle(signers.OracleUpdater);
 
   // pass some $$$ to client1
   await tcCore.mintCoins(10000e6, signers.Owner.address, Date.now());
@@ -23,15 +25,28 @@ it('Correctly adjusts TheCoin', async () => {
   await tcCore.pl_assignPlugin(signers.client1.address, uber.address, ALL_PERMISSIONS, "0x1234");
 
   // Transfer $100 now.
-  await tcCore.uberTransfer(
-    signers.client1.address,
+  const transfer = await buildUberTransfer(
+    signers.client1,
     signers.client2.address,
-    100e2,
+    new Decimal(100),
     124,
     Date.now(),
     Date.now(),
-    "0x1234",
+  )
+  const initBalance = await tcCore.balanceOf(signers.client1.address);
+  const r = await tcCore.uberTransfer(
+    transfer.from,
+    transfer.to,
+    transfer.amount,
+    transfer.currency,
+    transfer.transferTime,
+    transfer.transferTime,
+    transfer.signature,
   );
+  await r.wait();
+  const finalBalance = await tcCore.balanceOf(signers.client1.address);
+  // If we transferred $100, that should have equalled $200
+  expect(initBalance.toNumber() - finalBalance.toNumber()).toEqual(50e6);
   // Test that the limit is applied
   // const now = Math.round(Date.now() / 1000);
   // const pw = limiter.preWithdraw(signers.client1.address, 200e6, now);
