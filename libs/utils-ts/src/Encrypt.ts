@@ -1,6 +1,4 @@
 import Crypto from "crypto";
-import { CertifiedTransferRequest } from "@thecointech/types";
-import { keccak256 } from '@ethersproject/solidity';
 
 export type EncryptedPacket = {
   encryptedPacket: string;
@@ -19,10 +17,10 @@ LM6N3WvacmDnzLjHp2vsTzC2A8gO5xVqwY+pFH8YOX185uA5pWiR0/JTWSvwkS4D
 
 const certVersion = "1.0.1";
 
-export function encrypt(object: Object) {
+export function encrypt(object: Object, publicKey=publicCert) {
   const toEncrypt = JSON.stringify(object);
   const bufferPayee = Buffer.from(toEncrypt);
-  const encryptedPayee = Crypto.publicEncrypt(publicCert, bufferPayee);
+  const encryptedPayee = Crypto.publicEncrypt(publicKey, bufferPayee);
 
   const r: EncryptedPacket = {
     encryptedPacket: encryptedPayee.toString("base64"),
@@ -44,16 +42,3 @@ export function decryptTo<T>(privateKey: string, encrypted: EncryptedPacket): T
   return JSON.parse(asString) as T;
 }
 
-export function GetHash(
-  encryptedPayee: EncryptedPacket,
-  transfer: CertifiedTransferRequest
-) {
-  return keccak256(
-    ["string", "string", "string"],
-    [
-      transfer.signature,
-      encryptedPayee.encryptedPacket,
-      encryptedPayee.version
-    ]
-  );
-}

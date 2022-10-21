@@ -1,9 +1,10 @@
 import { BuildVerifiedXfer } from "./VerifiedTransfer";
-import { encrypt, GetHash } from "./Encrypt";
+import { encrypt } from "./Encrypt";
 import { sign } from "./SignedMessages";
 import { verifyMessage } from '@ethersproject/wallet';
+import { keccak256 } from '@ethersproject/solidity';
 import type { Signer } from "@ethersproject/abstract-signer";
-import type { BillPayeePacket, ETransferPacket, CertifiedTransfer } from "@thecointech/types";
+import type { BillPayeePacket, ETransferPacket, CertifiedTransfer, EncryptedPacket, CertifiedTransferRequest } from "@thecointech/types";
 
 // TODO: Propage this throught code base (not yet done)
 export type InstructionPacket = BillPayeePacket|ETransferPacket;
@@ -32,4 +33,19 @@ export function getSigner(sale: CertifiedTransfer) {
   const { transfer, instructionPacket, signature } = sale;
   const hash = GetHash(instructionPacket, transfer);
   return verifyMessage(hash, signature);
+}
+
+
+export function GetHash(
+  encryptedPayee: EncryptedPacket,
+  transfer: CertifiedTransferRequest
+) {
+  return keccak256(
+    ["string", "string", "string"],
+    [
+      transfer.signature,
+      encryptedPayee.encryptedPacket,
+      encryptedPayee.version
+    ]
+  );
 }

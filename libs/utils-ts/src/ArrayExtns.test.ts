@@ -4,7 +4,6 @@ it ('correctly filters arrays', () => {
 
     // TODO: Is it possible to include 'void' in an array?
     const array = [1, 0, true, false, undefined, null];
-    console.log(JSON.stringify(array.filter(isPresent)));
     expect(array.filter(isPresent)).toEqual([1, true]);
     expect(array.filter(isDefined)).toEqual([1, 0, true, false, null]);
     expect(array.filter(isFilled)).toEqual([1, 0, true, false, undefined]);
