@@ -131,8 +131,8 @@ abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
     notifyDeposit(to, amount, timestamp);
   }
   function transfer(address to, uint amount) public override(ERC20Upgradeable, IERC20Upgradeable) returns (bool) {
-    super.transfer(to, amount);
     notifyWithdraw(msg.sender, amount, block.timestamp);
+    super.transfer(to, amount);
     notifyDeposit(to, amount, block.timestamp);
     return true;
   }
@@ -143,8 +143,9 @@ abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
     }
   }
   function notifyWithdraw(address from, uint256 amount, uint256 timestamp) private {
+    uint balance = balanceOf(from);
     for (uint i =0; i < userPlugins[from].length; i++) {
-      userPlugins[from][i].plugin.preWithdraw(from, amount, timestamp);
+      balance = userPlugins[from][i].plugin.preWithdraw(from, balance, amount, timestamp);
     }
   }
 

@@ -124,18 +124,18 @@ contract BalanceGuardV0 is BasePlugin, OracleClient, Ownable, PermissionUser {
     userFiatBalance[user].costBasis += int(fiat);
   }
 
-  function preWithdraw(address user, uint coin, uint timestamp) external override onlyOwner {
+  function preWithdraw(address user, uint balance, uint coin, uint timestamp) external override onlyOwner returns(uint) {
     int fiat = toFiat(int(coin), timestamp);
-    uint currentBalance = IERC20Upgradeable(theCoin).balanceOf(user);
     // We may need to transfer some coin into the users account.
     // This only is necessary if the user doesn't have coin to cover it,
     // and the total amount is between 90 & 100%
     // NOTE - this is also clearly wrong, but good enough to test plugin system
-    if (coin > currentBalance) {
+    if (coin > balance) {
       int ninetyPercent = userFiatBalance[user].costBasis * 90 / 100;
       if (fiat > ninetyPercent) {
-        uint missingCoin = coin - currentBalance;
+        uint missingCoin = coin - balance;
         theCoin.pl_transferTo(user, missingCoin);
+        balance = coin;
       }
     }
 
@@ -144,6 +144,7 @@ contract BalanceGuardV0 is BasePlugin, OracleClient, Ownable, PermissionUser {
     // Adjust the CB.  This can go negative if the user gains profits
     // then spends more than ACB.  It is important we remember this
     userFiatBalance[user].costBasis -= int(fiat);
+    return balance;
   }
 }
 

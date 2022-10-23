@@ -20,6 +20,8 @@ import './OracleClient.sol';
 import '../interfaces/permissions.sol';
 import '../interfaces/IPluggable.sol';
 
+import "hardhat/console.sol";
+
 struct PendingTransactions {
   // The currency code of the value (eg 124 for $CAD)
   // uint8 currency;
@@ -91,8 +93,11 @@ contract UberConverter is BasePlugin, OracleClient, Ownable, PermissionUser {
     if (currency == CurrencyCode) {
 
       // If this is scheduled to happen in the future?
+      console.log("Converting Transfer at", timestamp, " in block ", block.timestamp);
+
       if (timestamp > block.timestamp) {
         pending[from].transfers[to][timestamp] = pending[from].transfers[to][timestamp] + amount;
+        pending[from].total = pending[from].total + amount;
         finalAmount = 0;
       }
       // Happening now, so convert to Coin
@@ -118,6 +123,19 @@ contract UberConverter is BasePlugin, OracleClient, Ownable, PermissionUser {
       delete user.transfers[to][timestamp];
       user.total = user.total - fiat;
     }
+  }
+  // ------------------------------------------------------------------------
+  // Pending transactions prevent withdrawals
+  // ------------------------------------------------------------------------
+  function preWithdraw(address user, uint balance, uint coin, uint timestamp) public virtual override returns(uint) {
+    uint userPending = pending[user].total;
+    if (userPending != 0) {
+      // How much does our owed amount turn into?
+      uint owed = toCoin(userPending, timestamp);
+      require((owed + coin) <= balance, "Cannot withdraw, exceeds balance");
+      return balance - owed;
+    }
+    return balance;
   }
 
   // ------------------------------------------------------------------------

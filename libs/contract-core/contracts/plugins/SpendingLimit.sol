@@ -70,7 +70,7 @@ contract SpendingLimit is BasePlugin, OracleClient, Ownable, PermissionUser {
     delete userData[exClient];
   }
 
-  function preWithdraw(address user, uint coin, uint timestamp) external override {
+  function preWithdraw(address user, uint balance, uint coin, uint timestamp) external override returns(uint){
     uint fiat = toFiat(coin, timestamp);
 
     UserData storage data = userData[user];
@@ -85,6 +85,7 @@ contract SpendingLimit is BasePlugin, OracleClient, Ownable, PermissionUser {
     // Limit spending
     require(data.fiatSpent + fiat < data.fiatLimit, "fiat limit exceeded");
     data.fiatSpent += fiat;
+    return balance;
   }
 }
 

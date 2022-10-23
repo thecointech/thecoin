@@ -4,6 +4,9 @@
 /// @dev Makes it easier to convert from TC to fiat on-chain
 
 // SPDX-License-Identifier: GPL-3.0-or-later
+
+import "hardhat/console.sol";
+
 pragma solidity ^0.8.0;
 import '@thecointech/contract-oracle/contracts/AggregatorV3Interface.sol';
 
@@ -48,7 +51,8 @@ contract OracleClient {
     * Returns the latest price
     */
   function getPrice(uint timestamp) public view returns(uint) {
-    uint price = priceFeed.getRoundFromTimestamp(int(timestamp));
+    console.log("Getting price with timestamp: ", timestamp);
+    uint price = priceFeed.getRoundFromTimestamp(timestamp);
     return price;
   }
 }

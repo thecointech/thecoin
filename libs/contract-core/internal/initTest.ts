@@ -4,7 +4,9 @@ import { AccountId, AccountName } from "@thecointech/signers";
 import { initCache } from "@thecointech/signers/cache";
 import { getOracleFactory } from '@thecointech/contract-oracle/contract';
 import { Signer } from '@ethersproject/abstract-signer';
+import { DateTime, Duration } from 'luxon';
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
+import type { SpxCadOracle } from '@thecointech/contract-oracle';
 
 // Basic function to create & init TheCoin contract with all roles set to address
 export async function  createAndInitTheCoin() {
@@ -21,14 +23,26 @@ export async function  createAndInitTheCoin() {
   return tcCore;
 }
 
-export async function createAndInitOracle(signer: Signer) {
+export async function createAndInitOracle(signer: Signer, rate = 2) {
   const SpxCadOracle = getOracleFactory(signer);
   const owner = await signer.getAddress();
   const oracle = await SpxCadOracle.deploy();
-  // price feed init to constant $2.00 => 1 Coin
-  await oracle.initialize(owner, 0, 1e13);
-  await oracle.update(2e8);
+  // We start our time 6 days ago at midnight with a day-long rate length
+  const initialTime = DateTime
+    .now()
+    .set({hour:0, minute:0, second:0, millisecond:0})
+    .minus({days: 6})
+    .toSeconds();
+  const blockTime = Duration.fromObject({day: 1}).as("seconds");
+  await oracle.initialize(owner, initialTime, blockTime);
+  // We a constant rate over the last week, expires tonight midnight
+  await setOracleValueRepeat(oracle, rate, 7);
   return oracle;
+}
+
+export async function setOracleValueRepeat(oracle: SpxCadOracle, rate: number, days: number) {
+  const tx = await oracle.bulkUpdate(new Array(days).fill(rate * 1e8));
+  return await tx.wait();
 }
 
 const notNum = /^\D+/;

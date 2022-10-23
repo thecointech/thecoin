@@ -10,7 +10,7 @@ it('Correctly limits spending', async () => {
   const signers = initAccounts(await hre.ethers.getSigners());
   const SpendingLimit = await hre.ethers.getContractFactory('SpendingLimit');
   const tcCore = await createAndInitTheCoin();
-  const oracle = await createAndInitOracle();
+  const oracle = await createAndInitOracle(signers.OracleUpdater);
 
   await tcCore.mintCoins(10000e6, signers.Owner.address, Date.now());
 

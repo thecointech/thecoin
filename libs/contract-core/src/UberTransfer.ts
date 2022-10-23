@@ -4,6 +4,7 @@ import { arrayify } from '@ethersproject/bytes';
 import { verifyMessage } from '@ethersproject/wallet';
 import type Decimal from 'decimal.js-light';
 import type { Signer } from "@ethersproject/abstract-signer";
+import { DateTime } from 'luxon';
 
 
 export type UberTransfer = {
@@ -58,13 +59,12 @@ export async function buildUberTransfer(
   to: string,
   amount: Decimal,
   currency: number,
-  transferTime: number,
-  signedTime: number,
+  transferTime: DateTime,
+  signedTime: DateTime,
 ) {
-  const timestamp = Date.now();
   const address = await from.getAddress();
-  const transferSeconds = Math.round(transferTime / 1000);
-  const signedSeconds = Math.round(signedTime / 1000);
+  const transferSeconds = Math.round(transferTime.toSeconds());
+  const signedSeconds = Math.round(signedTime.toSeconds());
   const amountAdj = amount.mul(100).toInteger().toNumber();
   const signature = await signUberTransfer(from, to, amountAdj, currency, transferSeconds, signedSeconds);
   const r: UberTransfer = {
