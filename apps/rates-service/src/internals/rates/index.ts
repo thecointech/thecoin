@@ -32,7 +32,7 @@ async function getRates<K extends RateKey>(key: K, timestamp: number) : Promise<
 
   // Finally, if something has gone really wrong with our updates, try forcing it.
   // This shouldn't happen, it is most likely an error condition.
-  console.warn("Could not find {FxKey} for {Timestamp}, forcing update",
+  log.warn("Could not find {FxKey} for {Timestamp}, forcing update",
     key, timestamp);
 
   const updated = await update();

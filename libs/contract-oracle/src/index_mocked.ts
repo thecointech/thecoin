@@ -6,7 +6,12 @@ export * from './update';
 
 export class SpxCadOracle implements Pick<Src, 'INITIAL_TIMESTAMP'|'BLOCK_TIME'|'initialize'|'update'|'bulkUpdate'|'updateOffset'|'getOffset' | 'getBlockIndexFor' | 'getRoundFromTimestamp'|'decimals'> {
 
-  initialTimestamp = DateTime.fromISO("2021-01-01T00:00:00Z").toSeconds();
+  // By default, we cover the last year
+  initialTimestamp = DateTime
+    .now()
+    .minus({ years: 1 })
+    .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
+    .toSeconds();
   blockTime = 10800;
   offsets: { from: number, offset: number}[] = [];
   rates: number[] = [];

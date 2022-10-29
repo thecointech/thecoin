@@ -50,7 +50,7 @@ export async function getRate(key: RateKey, ts: number) : Promise<RateType|null>
   const collection = getRatesCollection(key);
   const minValidity = ts ?? Date.now();
   // Get the first entry that would be valid after ts
-  let snapshot = await collection.where('validTill', '>', Timestamp.fromMillis(minValidity))
+  let snapshot = await collection.where('validTill', '>', new Date(minValidity))
     .orderBy('validTill', "asc")
     .limit(1)
     .get();

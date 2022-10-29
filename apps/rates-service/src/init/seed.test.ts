@@ -1,16 +1,15 @@
 import { getFirestore, init } from "@thecointech/firestore";
-import { DateTime, Duration } from "luxon"
+import { Duration } from "luxon"
 import { RateKey } from "../internals/rates/types";
 import { seed } from "./seed"
 
 it('seeds the DB appropriately', async () => {
 
   await init({});
-  await seed();
+  const from = await seed();
 
   const db = getFirestore();
   const now = Date.now();
-  const from = DateTime.local().minus({years: 1.1});
   const validityInterval = Duration.fromObject({days: 1});
 
   // Verify we have entry for all this history

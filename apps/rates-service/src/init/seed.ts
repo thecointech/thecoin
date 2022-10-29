@@ -38,6 +38,8 @@ export async function seed() {
   // re-enable logging
   oldLevels.forEach((lvl, idx) => log.levels(idx, lvl));
   log.trace(`Seeding complete from ${from.toLocaleString(DateTime.DATETIME_MED)}`);
+
+  return from;
 }
 
 export async function SeedWithRandomRates(from: DateTime, validityInterval: Duration) {
