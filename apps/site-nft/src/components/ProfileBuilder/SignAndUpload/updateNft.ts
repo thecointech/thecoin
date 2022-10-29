@@ -8,7 +8,12 @@ export async function uploadAvatar(image: Blob, signer: Signer) {
   log.trace('Uploading avatar');
   const contents = new Uint8Array(await image.arrayBuffer());
   const sig = await sign(contents, signer);
-  const r = await GetNftApi().uploadAvatar(image, sig);
+  alert("NOTE: This has never been tested!");
+  debugger;
+  // Our Windows build accepts 'any', but it seems the linux
+  // build is now demanding this be of type 'File' instead
+  const asfile = new File([image], sig);
+  const r = await GetNftApi().uploadAvatar(asfile, sig);
   log.trace(`Uploaded to ${r.data}`);
   return r.data;
 }

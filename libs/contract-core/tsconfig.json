@@ -2,9 +2,8 @@
   "extends": "../tsconfig.libs.json",
   "compilerOptions": {
     "outDir": "./build",
-    "isolatedModules": false,
+    "rootDir": "./src/",
     "tsBuildInfoFile": "./build/.buildinfo",
-    "noUnusedLocals": false,
   },
   "include": ["**/*.ts", "**/*.json"],
   "exclude": ["node_modules", "build", "cache"],
