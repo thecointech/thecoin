@@ -1,17 +1,16 @@
 import { getFirestore, init } from "@thecointech/firestore";
-import { DateTime, Duration } from "luxon"
+import { Duration } from "luxon"
 import { RateKey } from "../internals/rates/types";
-import { SeedWithRandomRates } from "./seed"
+import { seed } from "./seed"
 
 it('seeds the DB appropriately', async () => {
 
   await init({});
-  const db = getFirestore();
+  const from = await seed();
 
+  const db = getFirestore();
   const now = Date.now();
-  const from = DateTime.local().minus({years: 1.1});
   const validityInterval = Duration.fromObject({days: 1});
-  await SeedWithRandomRates(from, validityInterval);
 
   // Verify we have entry for all this history
   async function VerifyData(type: RateKey, numKeys: number) {
@@ -28,8 +27,8 @@ it('seeds the DB appropriately', async () => {
       expect(data!.validFrom).toBeDefined();
 
       // Uncomment once fix merged into mocked DB
-      //const data = entry.data() as any;
-      //expect(data.validTill.toMillis()).toEqual(ts);
+      // const data = entry.data() as any;
+      // expect(data!.validTill.toMillis()).toEqual(ts);
     } while (ts < now);
   }
 

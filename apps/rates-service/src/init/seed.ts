@@ -8,6 +8,8 @@ import { DateTime, Duration } from "luxon";
 import { getLatestStored, setRate } from "../internals/rates/db";
 import { CoinRate, FxRates } from "../internals/rates/types";
 import { log } from "@thecointech/logging";
+import { update } from '../internals/rates/UpdateDb';
+import { updateLatest } from '../internals/rates/latest';
 
 export async function seed() {
   log.trace('--- Seeding DB ---');
@@ -29,9 +31,15 @@ export async function seed() {
   const validityInterval = Duration.fromObject({ days: 1 });
   await SeedWithRandomRates(from, validityInterval);
 
+  // Triggering an update ensures the oracle is updated
+  // before we re-enable logging
+  await update();
+
   // re-enable logging
   oldLevels.forEach((lvl, idx) => log.levels(idx, lvl));
-  log.trace('Seeding complete');
+  log.trace(`Seeding complete from ${from.toLocaleString(DateTime.DATETIME_MED)}`);
+
+  return from;
 }
 
 export async function SeedWithRandomRates(from: DateTime, validityInterval: Duration) {
@@ -67,6 +75,9 @@ export async function SeedWithRandomRates(from: DateTime, validityInterval: Dura
     } as FxRates;
     await setRate("Coin", coin);
     await setRate("FxRates", fxRate);
+
+    updateLatest("Coin", coin);
+    updateLatest("FxRates", fxRate);
   }
 }
 

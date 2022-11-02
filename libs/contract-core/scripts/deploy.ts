@@ -18,7 +18,7 @@ async function main() {
   log.info(`Deployed ${name} at ${theCoin.address}`);
 
   // Serialize our contract addresses
-  storeContractAddress(new URL(import.meta.url), network, theCoin.address, ['cjs', 'mjs']);
+  storeContractAddress(new URL(import.meta.url), network, theCoin.address);
 }
 
 const getName = (network: string) =>

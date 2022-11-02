@@ -17,6 +17,11 @@
       "path": "../libs/contract-tools"
     },
     {
+      "name": "contract-oracle",
+      "path": "../libs/contract-oracle"
+    },
+    {
+      "name": "signers",
       "path": "../libs/signers"
     }
   ],

@@ -21,13 +21,10 @@ jest.unstable_mockModule('@thecointech/utilities/Encrypt', () => ({
   encrypt: jest.fn(),
 }));
 
-// const mockedEncrypt = jest.mocked(decryptTo, false);
-jest.setTimeout(900000);
-
 const { processUnsettledETransfers } = await import('.');
+jest.setTimeout(90000000);
 
 it('Succesfully Processes Sell', async ()=> {
-  jest.setTimeout(90000000);
   init(data);
 
   // Manually convert TS to DateTime.  Must happen after init (it clones db)

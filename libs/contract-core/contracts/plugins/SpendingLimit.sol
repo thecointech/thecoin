@@ -12,16 +12,16 @@ pragma solidity ^0.8.0;
 
 import './BasePlugin.sol';
 import '../interfaces/permissions.sol';
-import './oracle/OracleClient.sol';
+import './OracleClient.sol';
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 
 struct UserData {
   // How much are we allowed to spend?
-  uint32 fiatLimit;
+  uint64 fiatLimit;
 
   // The amount spent in fiat since this period started
-  uint32 fiatSpent;
+  uint64 fiatSpent;
 
   // The amount of the users balance that we protect.
   // Equates (loosely) to cost basis
@@ -43,7 +43,7 @@ contract SpendingLimit is BasePlugin, OracleClient, Ownable, PermissionUser {
 
   // fill-in function allows owner to set user limit.  To be replaced
   // with user-signed version of the same.
-  function setUserSpendingLimit(address user, uint32 limit) public onlyOwner {
+  function setUserSpendingLimit(address user, uint64 limit) public onlyOwner {
     UserData storage data = userData[user];
     require(data.periodStart != 0, "SpendingLimit: Cannot set limit for unused client");
     data.fiatLimit = limit;
@@ -71,7 +71,7 @@ contract SpendingLimit is BasePlugin, OracleClient, Ownable, PermissionUser {
   }
 
   function preWithdraw(address user, uint coin, uint timestamp) external override {
-    uint32 fiat = uint32(toFiat(int(coin), timestamp));
+    uint64 fiat = uint64(toFiat(int(coin), timestamp));
 
     UserData storage data = userData[user];
     if (data.periodStart + periodLength < block.timestamp) {

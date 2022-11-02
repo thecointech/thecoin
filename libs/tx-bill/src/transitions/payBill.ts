@@ -1,7 +1,6 @@
 import { getCurrentState, TransitionCallback } from "@thecointech/tx-statemachine";
 import { verifyPreTransfer } from "@thecointech/tx-statemachine/transitions";
 import { BillPayeePacket, EncryptedPacket } from '@thecointech/types';
-import { readFileSync } from 'fs';
 import { decryptTo } from "@thecointech/utilities/Encrypt";
 import { sign } from "@thecointech/utilities/SignedMessages";
 import { log } from "@thecointech/logging";
@@ -10,16 +9,12 @@ import { getSigner } from '@thecointech/signers';
 import { DateTime } from 'luxon';
 import { makeTransition } from '@thecointech/tx-statemachine';
 
-// NOTE: server does not have private key, and will not pass this step
-const privateKeyPath = process.env.USERDATA_INSTRUCTION_PK;
-const privateKey = privateKeyPath ? readFileSync(privateKeyPath).toString() : null;
-
 //
 // Process a bill payment
 // This is virtually identical to etransfer, and perhaps could be de-duped.
 // However, we also want the actions to be completely independent
 export const payBill = makeTransition<"Bill">("payBill", async (container) =>
-  verifyPreTransfer(container) ?? await doPayBill(container)
+  await verifyPreTransfer(container) ?? await doPayBill(container)
 );
 
 const doPayBill: TransitionCallback<"Bill"> = async (container) => {
@@ -38,7 +33,7 @@ const doPayBill: TransitionCallback<"Bill"> = async (container) => {
   // is interrupted; this action is atomic and the decoded actions cannot be serialized.
   if (!container.instructions) {
     // Get sending instructions
-    const decrypted = decryptInstructions(container.action.data.initial.instructionPacket);
+    const decrypted = await decryptInstructions(container.action.data.initial.instructionPacket);
     if (!isValid(decrypted))
       return { error: "bill payee packet is invalid" };
     // Keep track of decrypted instructions
@@ -62,11 +57,18 @@ const doPayBill: TransitionCallback<"Bill"> = async (container) => {
 
 //
 // Decrypt the actions' instruction packet
-function decryptInstructions(packet: EncryptedPacket) {
+async function decryptInstructions(packet: EncryptedPacket) {
+  // NOTE: server does not have private key, and will not pass this step
+  const privateKeyPath = process.env.USERDATA_INSTRUCTION_PK;
+  if (!privateKeyPath) return null;
+
+  const { readFileSync } = await import('fs');
+  const privateKey = readFileSync(privateKeyPath, 'utf8');
   if (!privateKey) {
     log.warn("Attempting to decrypt instructions, but no private key is present");
     return null;
   }
+
   return decryptTo<BillPayeePacket>(privateKey, packet);
 }
 

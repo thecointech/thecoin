@@ -103,6 +103,6 @@ function getIsVerified(details?: AccountDetails) {
 
   const uniqueId = buildUniqueId({given_name, family_name, DOB});
   const signedBy = verifyMessage(uniqueId, details.uniqueIdSig);
-  return AddressMatches(signedBy, process.env.WALLET_BrokerTransferAssistant_ADDRESS);
+  return AddressMatches(signedBy, process.env.WALLET_BrokerTransferAssistant_ADDRESS!);
 }
 

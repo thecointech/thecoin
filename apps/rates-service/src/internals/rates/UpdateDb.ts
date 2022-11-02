@@ -11,6 +11,7 @@ import { RateKey, RateOffsetFromMarket, RateType } from "./types";
 import { waitTillBuffer } from "./delay";
 import { fetchFxRate } from "./fetchFx";
 import { log } from '@thecointech/logging';
+import { updateOracle } from '../oracle';
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -34,16 +35,14 @@ function isUpdateRequired(key: RateKey, now: number, current: RateType) {
   return true;
 }
 
-function validateNewRate(key: RateKey, validator:any)
-{
-    // Does the new rate meaningfully update our existing latest rate?
-    if (!validator)
-    {
-      // We require an update, but have no new data.
-      // What should we do here?
-      console.error("{FxKey} required update, but no new rates were found", key);
-      throw new Error('NoUpdatesFetched');
-    }
+function validateNewRate(key: RateKey, validator: boolean) {
+  // Does the new rate meaningfully update our existing latest rate?
+  if (!validator) {
+    // We require an update, but have no new data.
+    // What should we do here?
+    log.error("{FxKey} required update, but no new rates were found", key);
+    throw new Error('NoUpdatesFetched');
+  }
 }
 
 //
@@ -58,11 +57,11 @@ export async function ensureLatestCoinRate(now: number)
 
   // fetch any new rates from then till now
   const newRates = await fetchCoinRate(current.validTill, now);
-  validateNewRate(key, newRates.length);
+  validateNewRate(key, !!newRates.length);
   // If we are updating on time, we should only have a single rate to insert
   if (newRates.length > 1)
   {
-    console.warn("Multiple inserts found for {FxKey} from {ValidFrom} to {ValidTill}",
+    log.warn("Multiple inserts found for {FxKey} from {ValidFrom} to {ValidTill}",
       key, current.validFrom, now);
   }
 
@@ -87,7 +86,7 @@ export async function ensureLatestFxRate(now: number) {
 
   // fetch any new rates from then till now
   const fxRates = await fetchFxRate(current.validTill, now);
-  validateNewRate(key, fxRates);
+  validateNewRate(key, !!fxRates);
 
   if (current.validTill < fxRates.validFrom)
   {
@@ -119,10 +118,13 @@ export async function update() {
         ensureLatestCoinRate(now),
         ensureLatestFxRate(now),
       ]);
+
+      // Once we have updated, do a matching update on Oracle
+      await updateOracle(now);
       return true;
     }
     catch (err: any) {
-        console.error(err);
+        log.error(err);
     }
     return false;
 }

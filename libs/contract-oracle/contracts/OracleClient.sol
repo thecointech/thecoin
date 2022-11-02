@@ -18,34 +18,26 @@ contract OracleClient {
   }
 
   // Convert to fiat with 2 decimal places (ie, floor to cent)
-  function toFiat(uint coin, uint timestamp) public view returns(int32) { return toFiat(int(coin), timestamp); }
-  function toFiat(int coin, uint timestamp) public view returns(int32) {
-    int price = getLatestPrice(timestamp);
+  function toFiat(uint coin, uint timestamp) public view returns(int64) { return toFiat(int(coin), timestamp); }
+  function toFiat(int coin, uint timestamp) public view returns(int64) {
+    int price = getPrice(timestamp);
     // coin is 6 decimal places, price is 8 decimal places
     // 1 coin at exchange of 4 would be 1*10e6 * 4*10e8
     // to be 4*10e14 / 10e12 to be 400 cents.
-    return int32(coin * price / 10e12);
+    return int64(coin * price / 1e12);
   }
 
   // convert to coin.  Fiat should be denominated in cents
-  function toCoin(uint32 fiat, uint timestamp) public view returns(int) { return toCoin(int32(fiat), timestamp); }
-  function toCoin(int32 fiat, uint timestamp) public view returns(int) {
-    int price = getLatestPrice(timestamp);
-    return int(fiat) * 10e12 / price;
+  function toCoin(int64 fiat, uint timestamp) public view returns(int) {
+    int price = getPrice(timestamp);
+    return int(fiat) * 1e12 / price;
   }
 
   /**
     * Returns the latest price
     */
-  function getLatestPrice(uint /*timestamp*/) public view returns(int) {
-    (
-        , /*roundID*/
-        int price,
-        , /*startedAt*/
-        , /*timeStamp*/
-          /*answeredInRound*/
-    ) = priceFeed.latestRoundData();
-    // This value is always positive
+  function getPrice(uint timestamp) public view returns(int) {
+    int price = priceFeed.getRoundFromTimestamp(int(timestamp));
     return price;
   }
 }

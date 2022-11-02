@@ -1,5 +1,4 @@
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
-import path from 'path';
 
 
 function writeContractFile(root: URL, dest: string, network: string, address: string) {
@@ -14,7 +13,7 @@ function writeContractFile(root: URL, dest: string, network: string, address: st
   }))
 }
 
-export function storeContractAddress(root: URL, network: string, address: string, buildConfigs?: string[]) {
+export function storeContractAddress(root: URL, network: string, address: string) {
   // Never write artifacts in development
   if (process.env.CONFIG_NAME === 'development')
     return;
@@ -24,8 +23,5 @@ export function storeContractAddress(root: URL, network: string, address: string
   // the changes to the address in repeated build steps.
   // We end-run around the problem by also writing the output
   // directly to the build folder as well.
-  const outDirs = buildConfigs?.map(c => path.join('build', c)) ?? ['build'];
-  outDirs.forEach(dir => {
-    writeContractFile(root, dir, network, address);
-  })
+  writeContractFile(root, 'build', network, address);
 }

@@ -55,4 +55,10 @@ interface AggregatorV3Interface {
       uint80 answeredInRound
     );
 
+  // Custom TC function.  Only the Oracle can convert from
+  // timestamp to roundId, so we might as well encapsulate it here.
+  function getRoundFromTimestamp(int timestamp)
+    external
+    view
+    returns (int256 answer);
 }

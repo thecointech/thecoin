@@ -10,6 +10,8 @@ export enum AccountId {
   Police,
   BrokerCAD,
   BrokerTransferAssistant,
+  // Owns & updates SpxCadOracle
+  OracleUpdater,
   // NOTE: The following accounts for testing only!
   client1,
   client2,

@@ -1,16 +1,11 @@
 import { log } from "@thecointech/logging";
 import { decryptTo } from "@thecointech/utilities/Encrypt";
 import { isPacketValid } from '@thecointech/utilities/VerifiedSale';
-import { readFileSync } from "fs";
 import { getCurrentState, TypedActionContainer } from "@thecointech/tx-statemachine";
 import { EncryptedPacket, ETransferPacket } from "@thecointech/types";
 import Decimal from 'decimal.js-light';;
 import { DateTime } from 'luxon';
 import { makeTransition } from '@thecointech/tx-statemachine';
-
-// NOTE: server does not have private key, and will not pass this step
-const privateKeyPath = process.env.USERDATA_INSTRUCTION_PK;
-const privateKey = privateKeyPath ? readFileSync(privateKeyPath).toString() : null;
 
 //
 // Attempt to send the balance as e-Transfer.
@@ -32,7 +27,7 @@ export const sendETransfer = makeTransition<"Sell">("sendETransfer", async (cont
   // is interrupted; this action is atomic and the decoded actions cannot be serialized.
   if (!container.instructions) {
       // Get sending instructions
-    const decrypted = decryptInstructions(container.action.data.initial.instructionPacket);
+    const decrypted = await decryptInstructions(container.action.data.initial.instructionPacket);
     if (!isPacketValid(decrypted))
       return { error: "e-Transfer packet is invalid" };
     // Keep track of decrypted instructions
@@ -71,11 +66,19 @@ function getPrefix(container: TypedActionContainer<"Sell">) {
 
 //
 // Decrypt the actions' instruction packet
-function decryptInstructions(packet: EncryptedPacket) {
+async function decryptInstructions(packet: EncryptedPacket) {
+
+  // NOTE: server does not have private key, and will not pass this step
+  const privateKeyPath = process.env.USERDATA_INSTRUCTION_PK;
+  if (!privateKeyPath) return null;
+
+  const { readFileSync } = await import('fs');
+  const privateKey = readFileSync(privateKeyPath, 'utf8');
   if (!privateKey) {
     log.warn("Attempting to decrypt instructions, but no private key is present");
     return null;
   }
+
   return decryptTo<ETransferPacket>(privateKey, packet);
 }
 
