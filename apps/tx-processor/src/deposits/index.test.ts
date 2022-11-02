@@ -17,7 +17,6 @@ jest.unstable_mockModule('@thecointech/logging', () => ({
   }
 }));
 const { processUnsettledDeposits } = await import('.')
-const { log } = await import('@thecointech/logging');
 const { getCurrentState } = await import('@thecointech/tx-statemachine');
 
 
