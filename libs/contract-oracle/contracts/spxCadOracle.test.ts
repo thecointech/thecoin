@@ -15,8 +15,6 @@ const ratesFiles = new URL('../internal/rates.json', import.meta.url);
 const shouldRun = existsSync(ratesFiles);
 
 describe('Oracle Tests', () => {
-
-
   ////////////////////////////////////////////////////////////////////////////////////////
   // Here we duplicate the solidity functions into JS
   // so we can run them quickly & completely.  If putting
