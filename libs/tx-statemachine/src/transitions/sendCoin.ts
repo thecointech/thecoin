@@ -14,7 +14,7 @@ import type { Overrides } from '@ethersproject/contracts';
 // Send the current balance to the client.  If successful,
 // this will reset the coin balance to 0
 export const sendCoin = makeTransition('sendCoin', async (container) =>
-  verifyPreTransfer(container) ?? await doSendCoin(container)
+  verifyPreTransfer(container) || await doSendCoin(container)
 )
 
 // implementation
@@ -45,6 +45,6 @@ async function startTheTransfer(address: string, value: Decimal, settled: DateTi
 }
 
 function findSettledDate(container: AnyActionContainer) {
-  const settlements = container.history.filter(t => t.delta.type == toCoin.name);
+  const settlements = container.history.filter(t => t.delta.type == toCoin.transitionName);
   return last(settlements)?.delta.date ?? container.action.data.date;
 }
