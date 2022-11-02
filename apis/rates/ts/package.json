@@ -18,7 +18,7 @@
   ],
   "license": "Unlicense",
   "main": "./dist/esm/index.js",
-  "typings": "./dist/index.d.ts",
+  "typings": "./dist/esm/index.d.ts",
   "sideEffects": false,
   "scripts": {
     "build": "tsc -p tsconfig.esm.json",

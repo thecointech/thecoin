@@ -40,9 +40,6 @@
   "dependencies": {
     "@thecointech/logging": "^0.2.93"
   },
-  "peerDependencies": {
-    "axios": "*"
-  },
   "devDependencies": {
     "jest": "*"
   },

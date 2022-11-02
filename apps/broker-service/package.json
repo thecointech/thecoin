@@ -50,7 +50,7 @@
     "@thecointech/tx-etransfer": "^0.2.93",
     "@thecointech/utilities": "^0.2.93",
     "@tsoa/runtime": "^4.1.0",
-    "axios": "0.21.4",
+    "axios": "0.26.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "googleapis": "49.0.0",
