@@ -19,7 +19,7 @@ const privateKey = privateKeyPath ? readFileSync(privateKeyPath).toString() : nu
 // This is virtually identical to etransfer, and perhaps could be de-duped.
 // However, we also want the actions to be completely independent
 export const payBill = makeTransition<"Bill">("payBill", async (container) =>
-  verifyPreTransfer(container) ?? await doPayBill(container)
+  await verifyPreTransfer(container) ?? await doPayBill(container)
 );
 
 const doPayBill: TransitionCallback<"Bill"> = async (container) => {

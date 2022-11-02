@@ -42,8 +42,8 @@ export default {
             124: 1,
             validFrom: Date.now() - threeHours,
             validTill: Date.now() + threeHours,
-            sell: 2,
-            buy: 2,
+            sell: 1,
+            buy: 1,
             fxRate: 1,
             target: 124
           }

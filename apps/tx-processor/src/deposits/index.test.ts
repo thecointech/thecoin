@@ -6,13 +6,14 @@ import gmail from '@thecointech/tx-gmail';
 import { getSigner } from '@thecointech/signers';
 
 jest.setTimeout(900000);
+const errors: string[] = [];
 jest.unstable_mockModule('@thecointech/logging', () => ({
   log: {
     debug: jest.fn(),
     info: jest.fn(),
     trace: jest.fn(),
     warn: jest.fn(),
-    error: jest.fn(),
+    error: jest.fn((...args) => errors.push(args[1])),
   }
 }));
 const { processUnsettledDeposits } = await import('.')
@@ -43,7 +44,11 @@ it("Can complete deposits", async () => {
   // We have 1 success, 3 failures
   const results = deposits.map(getCurrentState);
   expect(results.map(r => r.name)).toEqual(['complete', 'error', 'error', 'error'])
-  expect(log.error).toBeCalledTimes(3);
+  expect(errors).toEqual([
+    "Error occured on {state}, Already Deposited",
+    "Error occured on {state}, This transfer was cancelled",
+    "Error occured on {state}, This transfer cannot be processed",
+  ])
 
   // If passed, balance is 0
   for (let i = 0; i < deposits.length; i++) {
