@@ -11,7 +11,7 @@ type BSActionTypes = "Bill"|"Sell";
 //
 // Deposit an eTransfer and update fiat balance
 export const depositCoin = makeTransition<BSActionTypes>("depositCoin", async (container) =>
-  verifyPreTransfer(container) ?? await doDepositCoin(container)
+  await verifyPreTransfer(container) ?? await doDepositCoin(container)
 )
 
 // implementation

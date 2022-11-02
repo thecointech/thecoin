@@ -3,6 +3,12 @@
   "version": "0.2.93",
   "description": "OpenAPI client for @thecointech/pricing",
   "author": "OpenAPI-Generator Contributors",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "apis/rates/ts"
+  },
+  "type": "module",
   "keywords": [
     "axios",
     "typescript",
@@ -10,23 +16,23 @@
     "openapi-generator",
     "@thecointech/pricing"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/thecointech/thecoin.git",
-    "directory": "apis/rates/ts"
-  },
   "license": "Unlicense",
-  "main": "./dist/index.js",
+  "main": "./dist/esm/index.js",
   "typings": "./dist/index.d.ts",
+  "sideEffects": false,
   "scripts": {
-    "build": "tsc --moduleResolution node --outDir dist/",
-    "prepublishOnly": "npm run build"
+    "build": "tsc -p tsconfig.esm.json",
+    "prepare": "npm run build"
   },
   "dependencies": {
-    "axios": "0.21.4"
+    "axios": "^0.26.1"
+  },
+  "devDependencies": {
+    "@types/node": "^12.11.5",
+    "typescript": "^4.0"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com/"
   },
   "gitHead": "6748a626f205f5a4cfeadf96ece7a76633177136"
 }
