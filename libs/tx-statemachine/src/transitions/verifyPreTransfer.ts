@@ -11,7 +11,7 @@ export const  verifyPreTransfer = makeTransition( "verifyPreTransfer", async (co
   const state = getCurrentState(container);
   // was our last state a pre-transfer?
   if (state.delta.type != preTransfer.transitionName)
-    return { error: 'Running transfer without matching per-transfer' };
+    return { error: 'Running transfer without matching pre-transfer' };
 
   // How long ago was it registered?
   const age = state.delta.created.diffNow();
