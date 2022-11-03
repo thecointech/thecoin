@@ -17,7 +17,7 @@
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
     "prod": "cross-env CONFIG_NAME=prod yarn start",
-    "start": "node -r @thecointech/setenv -r ../../__mocks__/mock_node ./build/main.js",
+    "start": "cross-env CONFIG_NAME=prod yarn run-env ./build/main.js",
     "test": "yarn run-jest",
     "test:ci": "yarn run-jest-nix",
     "test:summary": "jest --coverage > ./coverage/summary.txt"

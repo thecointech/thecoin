@@ -10,7 +10,7 @@ export async function fetchUser(address: string) {
     getUrl(address),
     {
       headers: {
-        'Authorization': process.env.BLOCKPASS_API_KEY
+        'Authorization': process.env.BLOCKPASS_API_KEY!
       }
     }
   );

@@ -1,10 +1,17 @@
 import { jest } from '@jest/globals';
-import { update, ensureLatestCoinRate, ensureLatestFxRate } from "./UpdateDb";
+import { getLatestStored, getRate } from "./db";
 import { validFor } from "@thecointech/fx-rates";
 import { init } from "@thecointech/firestore";
 import { CoinRate, CoinUpdateInterval } from "./types";
 import { updateLatest, getLatest } from "./latest";
-import { getLatestStored, getRate } from "./db";
+
+// The oracle will try and update itself, and that's not really useful here.
+jest.unstable_mockModule("../oracle", () => ({
+  updateOracle: jest.fn()
+}))
+
+const { update, ensureLatestCoinRate, ensureLatestFxRate } = await import("./UpdateDb");
+
 
 // Start 5 mins into the mocked data
 var now = 1593696900000;

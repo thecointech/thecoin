@@ -50,10 +50,6 @@
     "promise.any": "^2.0.4",
     "puppeteer": "^13.3.0"
   },
-  "peerDependencies": {
-    "axios": "*",
-    "luxon": "*"
-  },
   "devDependencies": {
     "@thecointech/types": "^0.2.93",
     "@types/promise.any": "^2.0.0",

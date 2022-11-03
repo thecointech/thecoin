@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import { RbcApi } from './index';
 import { RbcStore } from './store';
 import PouchDB from 'pouchdb';
