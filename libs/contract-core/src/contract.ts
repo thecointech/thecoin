@@ -4,10 +4,6 @@ import TheCoinSpec from './contracts/contracts/TheCoin.sol/TheCoin.json' assert 
 import { getProvider } from '@thecointech/ethers-provider';
 
 //
-// Multiplier of base values to human-readable fractions (eg $ and c)
-export const COIN_EXP = 1000000;
-
-//
 // Ensure your .env specifies where this contract was deployed at
 // (used in fetching history to prevent searching too far back!)
 export const InitialCoinBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0", 10);

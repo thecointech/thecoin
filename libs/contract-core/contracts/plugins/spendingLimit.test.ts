@@ -1,6 +1,7 @@
 import { jest } from '@jest/globals';
 import hre from 'hardhat';
-import { createAndInitOracle, createAndInitTheCoin, initAccounts } from '../../internal/initTest';
+import { createAndInitOracle } from '@thecointech/contract-oracle/testHelpers.ts';
+import { createAndInitTheCoin, initAccounts } from '../../internal/testHelpers';
 import { ALL_PERMISSIONS } from '../../src/constants';
 
 jest.setTimeout(5 * 60 * 1000);
@@ -9,7 +10,7 @@ it('Correctly limits spending', async () => {
 
   const signers = initAccounts(await hre.ethers.getSigners());
   const SpendingLimit = await hre.ethers.getContractFactory('SpendingLimit');
-  const tcCore = await createAndInitTheCoin();
+  const tcCore = await createAndInitTheCoin(signers.Owner);
   const oracle = await createAndInitOracle(signers.OracleUpdater);
 
   await tcCore.mintCoins(10000e6, signers.Owner.address, Date.now());
@@ -27,7 +28,7 @@ it('Correctly limits spending', async () => {
 
   // Test that the limit is applied
   const now = Math.round(Date.now() / 1000);
-  const pw = limiter.preWithdraw(signers.client1.address, 200e6, now);
+  const pw = limiter.preWithdraw(signers.client1.address, 200e6, 200e6, now);
   await expect(pw).rejects.toThrowError("fiat limit exceeded");
 
   // Does the plugin still display the full balance?

@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals';
 import { MINTER_ROLE, THECOIN_ROLE } from '../../src/constants';
 import { assignRoles } from './assignRoles';
-import { initAccounts } from '../../internal/initTest';
+import { initAccounts } from '../../internal/testHelpers';
 import hre from 'hardhat';
 
 // Global variables
