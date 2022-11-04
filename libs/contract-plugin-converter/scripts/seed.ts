@@ -13,6 +13,9 @@ async function main() {
   const tcCore = await ConnectContract(theCoin);
   const client1Address = await client1.getAddress();
 
+  // In DevLive, we assign the converter to client1
   const converter = await getContract();
-  await tcCore.pl_assignPlugin(client1Address, converter, ALL_PERMISSIONS, "0x1234");
+  await tcCore.pl_assignPlugin(client1Address, converter.address, ALL_PERMISSIONS, "0x1234");
 }
+
+main()

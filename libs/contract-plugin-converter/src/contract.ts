@@ -1,9 +1,7 @@
-import { Contract, ContractFactory } from '@ethersproject/contracts';
+import { Contract } from '@ethersproject/contracts';
 import type { UberConverter } from './types/contracts/UberConverter';
 import OracleSpec from './contracts/contracts/UberConverter.sol/UberConverter.json' assert {type: "json"};
 import { getProvider } from '@thecointech/ethers-provider';
-import type { Signer } from '@ethersproject/abstract-signer';
-import { UberConverter__factory } from './types';
 
 const getAbi = () => OracleSpec.abi;
 const getContractAddress = async () => {
@@ -34,6 +32,3 @@ export async function getContract() : Promise<UberConverter> {
   }
   return globalThis.__oracle;
 }
-
-// Expose the factory here to allow easier testing elsewhere...
-export const getOracleFactory = (signer?: Signer) => new ContractFactory(OracleSpec.abi, OracleSpec.bytecode, signer) as UberConverter__factory;

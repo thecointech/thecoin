@@ -13,7 +13,7 @@ const getNFTMinterAddress = async () => {
   return address;
 }
 
-export async function getArguments(network: String) {
+export async function getArguments(network: String) : Promise<[string, string]> {
   return [
     await getNFTMinterAddress(),
     network === 'ethereum'

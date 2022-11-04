@@ -2,22 +2,20 @@ import hre from 'hardhat';
 import { storeContractAddress } from '@thecointech/contract-tools/writeContract';
 import { getSigner } from '@thecointech/signers';
 import { log } from '@thecointech/logging';
-import { GetContract as getCore } from "@thecointech/contract-core"
-import { getContract as getOracle } from "@thecointech/contract-oracle"
 import '@nomiclabs/hardhat-ethers';
 import '@openzeppelin/hardhat-upgrades';
+import { getArguments } from './arguments';
 
 async function main() {
 
+  // Who owns the converter?  Probably Owner?
   const owner = await getSigner("Owner");
 
-  // this contract depends on the core contract & oracle
-  const tcCore = await getCore();
-  const oracle = await getOracle();
 
+  const deployArgs = await getArguments();
   const UberConverter = await hre.ethers.getContractFactory("UberConverter", owner);
-  const uberConverter = await UberConverter.deploy(tcCore.address, oracle.address);
-  log.info(`Deployed UberConverter at ${uberConverter.address}`);
+  const uberConverter = await UberConverter.deploy(...deployArgs);
+  log.info(`Deployed UberConverter at ${uberConverter.address} with args: ${deployArgs}`);
 
   // Serialize our contract addresses
   storeContractAddress(new URL(import.meta.url), "polygon", uberConverter.address);
