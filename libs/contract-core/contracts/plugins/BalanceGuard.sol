@@ -15,8 +15,8 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
+import '@thecointech/contract-oracle/contracts/OracleClient.sol';
 import './BasePlugin.sol';
-import './OracleClient.sol';
 import '../interfaces/permissions.sol';
 import '../interfaces/IPluggable.sol';
 

@@ -8,7 +8,7 @@
 import "hardhat/console.sol";
 
 pragma solidity ^0.8.0;
-import '@thecointech/contract-oracle/contracts/AggregatorV3Interface.sol';
+import './AggregatorV3Interface.sol';
 
 contract OracleClient {
 
