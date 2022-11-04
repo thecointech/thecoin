@@ -1,6 +1,6 @@
 import { it } from "@jest/globals";
 import { sign } from './SignedMessages';
-import { getSigner } from '@thecointech/signers';
+import { Wallet } from '@ethersproject/wallet'
 import { buildUniqueId } from './Verify';
 import { verifyMessage } from '@ethersproject/wallet';
 
@@ -10,7 +10,7 @@ it ("generates appropriate tests", async () => {
     family_name: "FAMILY",
     DOB: "1/2/3456",
   };
-  const signer = await getSigner("BrokerTransferAssistant");
+  const signer = Wallet.createRandom();
   const uniqueId = buildUniqueId(data);
   const uniqueIdSig = await sign(uniqueId, signer);
   const verified = verifyMessage(uniqueId, uniqueIdSig);

@@ -1,4 +1,4 @@
-import { sign } from "@thecointech/contract-base";
+import { sign } from "@thecointech/utilities/SignedMessages";
 import { keccak256 } from '@ethersproject/solidity';
 import { arrayify } from '@ethersproject/bytes';
 import { verifyMessage } from '@ethersproject/wallet';

@@ -1,4 +1,4 @@
 
 export type Network = "POLYGON"|"ETHEREUM";
 
-export * from './sign';
+export * from './connect';
