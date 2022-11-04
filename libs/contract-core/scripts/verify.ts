@@ -1,9 +1,10 @@
 import hre from 'hardhat';
 import { GetContract } from '../src';
-import { getArguments } from './arguments';
 import { sleep } from '@thecointech/async';
 import { log } from '@thecointech/logging';
 import { exit } from 'process';
+import '@nomiclabs/hardhat-etherscan';
+import '@openzeppelin/hardhat-upgrades';
 
 // Don't run this script if we're not doing a prod-style deployment
 if (!process.env.CONFIG_NAME?.startsWith('prod'))
@@ -18,7 +19,6 @@ for (let i = 0; i < 5; i++) {
   try {
     await hre.run("verify:verify", {
       address: contract.address,
-      constructorArguments: await getArguments(hre.config.defaultNetwork),
     });
     log.info(`Verified contract: ${contract.address} on ${network}`);
     break;

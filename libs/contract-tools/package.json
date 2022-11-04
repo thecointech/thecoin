@@ -25,7 +25,6 @@
     "emulator": "hardhat --config ./src/hardhat.config.ts node --port 9545"
   },
   "exports": {
-    ".": "./build/index.js",
     "./hardhat.config": "./build/hardhat.config.js",
     "./writeContract": "./build/writeContract.js",
     "./verify": "./build/verify.js"
