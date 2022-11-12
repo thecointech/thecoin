@@ -1,12 +1,12 @@
-import hre from 'hardhat';
-import '@nomiclabs/hardhat-ethers';
 import { getSigner } from '@thecointech/signers';
 import { ConnectContract, ALL_PERMISSIONS } from '@thecointech/contract-core';
 import { getContract } from '@thecointech/contract-plugin-converter';
+import { log } from '@thecointech/logging';
 
 // Assume devlive
 if (process.env.CONFIG_NAME !== "devlive") throw new Error("Not Sufficiently Tested");
 
+log.debug("Seeding Converter");
 async function main() {
   const client1 = await getSigner("client1");
   const theCoin = await getSigner("TheCoin");

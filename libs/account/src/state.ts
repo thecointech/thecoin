@@ -19,6 +19,8 @@ export type AccountState = {
  signer: Signer;
  // Contract connected to this wallet as a signer
  contract: TheCoin | null;
+ // All the plugins currently assigned to this account
+ plugins: any[]|null;
  // Current balance in Coin
  balance: number;
  // Transaction history
@@ -45,6 +47,7 @@ export type AccountState = {
 
 export const DefaultAccountValues = {
  contract: null,
+ plugins: null,
  balance: -1,
  history: [],
  idx: null,

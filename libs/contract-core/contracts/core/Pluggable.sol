@@ -114,6 +114,10 @@ abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
     revert("Cannot find plugin for address");
   }
 
+  function getUsersPlugins(address user) public view returns(PluginAndPermissions[] memory) {
+    return userPlugins[user];
+  }
+
   // ------------------------------------------------------------------------
   // Notification. Override
   // ------------------------------------------------------------------------

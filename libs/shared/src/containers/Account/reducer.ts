@@ -8,7 +8,7 @@ import { SagaReducer } from '../../store/immerReducer';
 import { isLocal } from '@thecointech/signers';
 import { loadAndMergeHistory, calculateTxBalances, mergeTransactions, Transaction } from '@thecointech/tx-blockchain';
 import { connectIDX } from '@thecointech/idx';
-import { AccountDetails, AccountState, DefaultAccountValues } from '@thecointech/account';
+import { AccountDetails, AccountState, DefaultAccountValues, getPluginDetails } from '@thecointech/account';
 import { loadDetails, setDetails } from '../AccountDetails';
 import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
@@ -37,15 +37,16 @@ function AccountReducer(address: string, initialState: AccountState) {
       yield this.sendValues(this.actions.connect);
     }
 
-    *connect(): Generator<StrictEffect, void, TheCoin> {
+    *connect(): Generator<StrictEffect, void, TheCoin&any[]> {
       // Load details last, so it
       yield this.sendValues(this.actions.loadDetails);
 
       const { signer } = this.state;
       // Connect to the contract
       const contract = yield call(ConnectContract, signer);
+      const plugins = yield call(getPluginDetails, contract);
       // store the contract prior to trying update history.
-      yield this.storeValues({ contract });
+      yield this.storeValues({ contract, plugins });
       // Load history info by default
       yield this.sendValues(this.actions.updateHistory, [DateTime.fromMillis(0), DateTime.now()]);
     }
