@@ -1,6 +1,10 @@
 import { keccak256 } from '@ethersproject/solidity';
 import { BigNumber } from '@ethersproject/bignumber';
 
+//
+// Multiplier of base values to human-readable fractions (eg $ and c)
+export const COIN_EXP = 1000000;
+
 // Duplicate of roles defined in solidity files.
 const roleId = (id: string) => keccak256(['string'], [id]);
 export const THECOIN_ROLE   = "0x0000000000000000000000000000000000000000000000000000000000000000";

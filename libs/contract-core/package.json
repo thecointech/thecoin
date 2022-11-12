@@ -47,6 +47,7 @@
   "main": "./build/index.js",
   "exports": {
     "./contract": "./build/index.js",
+    "./testHelpers.ts": "./internal/testHelpers.ts",
     ".": {
       "development": "./build/index_mocked.js",
       "electron": "./build/index.js",
@@ -56,6 +57,7 @@
   "types": "./build/index.d.ts",
   "typesVersions": {
     "*": {
+      "testHelpers.ts": ["./internal/testHelpers.ts"],
       "*": [
         "build/index.d.ts"
       ]

@@ -27,14 +27,15 @@ contract DebugPrint is BasePlugin {
     emit PrintGetPermissions();
     return 0;
   }
-  function balanceOf(address /*user*/, uint currentBalance) external pure override returns(uint) {
+  function balanceOf(address /*user*/, int currentBalance) external pure override returns(int) {
     // Cannot log in a view function unfortunately,
     // so instead just return balance / 2 to prove we were called
     // emit PrintBalanceOf(user, currentBalance);
     return currentBalance / 2;
   }
-  function preWithdraw(address user, uint coin, uint timestamp) external override {
+  function preWithdraw(address user, uint balance, uint coin, uint timestamp) external override returns(uint) {
     emit PrintPreWithdraw(user, coin, timestamp);
+    return balance;
   }
   function preDeposit(address user, uint coin, uint timestamp) external override {
     emit PrintPreDeposit(user, coin, timestamp);

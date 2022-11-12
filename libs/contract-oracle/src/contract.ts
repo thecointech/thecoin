@@ -1,7 +1,9 @@
-import { Contract } from '@ethersproject/contracts';
+import { Contract, ContractFactory } from '@ethersproject/contracts';
 import type { SpxCadOracle } from './types/contracts/SpxCadOracle';
 import OracleSpec from './contracts/contracts/SpxCadOracle.sol/SpxCadOracle.json' assert {type: "json"};
 import { getProvider } from '@thecointech/ethers-provider';
+import type { Signer } from '@ethersproject/abstract-signer';
+import { SpxCadOracle__factory } from './types';
 
 const getAbi = () => OracleSpec.abi;
 const getContractAddress = async () => {
@@ -32,3 +34,6 @@ export async function getContract() : Promise<SpxCadOracle> {
   }
   return globalThis.__oracle;
 }
+
+// Expose the factory here to allow easier testing elsewhere...
+export const getOracleFactory = (signer?: Signer) => new ContractFactory(OracleSpec.abi, OracleSpec.bytecode, signer) as SpxCadOracle__factory;

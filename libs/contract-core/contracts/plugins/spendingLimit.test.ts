@@ -1,30 +1,22 @@
 import { jest } from '@jest/globals';
 import hre from 'hardhat';
-import { createAndInitTheCoin, initAccounts } from '../../internal/initTest';
+import { createAndInitOracle } from '@thecointech/contract-oracle/testHelpers.ts';
+import { createAndInitTheCoin, initAccounts } from '../../internal/testHelpers';
 import { ALL_PERMISSIONS } from '../../src/constants';
 
 jest.setTimeout(5 * 60 * 1000);
 
-// const SpxCadOracle = contract.fromArtifact('SpxCadOracle');
-// const SpendingLimit = contract.fromArtifact('SpendingLimit');
-// const TheCoin = contract.fromArtifact('TheCoin');
-// const named = toNamedAccounts(accounts);
-
 it('Correctly limits spending', async () => {
 
   const signers = initAccounts(await hre.ethers.getSigners());
-  const SpxCadOracle = await hre.ethers.getContractFactory('SpxCadOracle');
   const SpendingLimit = await hre.ethers.getContractFactory('SpendingLimit');
-  const tcCore = await createAndInitTheCoin();
+  const tcCore = await createAndInitTheCoin(signers.Owner);
+  const oracle = await createAndInitOracle(signers.OracleUpdater);
 
   await tcCore.mintCoins(10000e6, signers.Owner.address, Date.now());
 
   // pass some $$$ to client1
   await tcCore.transfer(signers.client1.address, 1000e6);
-
-  // price feed init to constant $1.00
-  const oracle = await SpxCadOracle.deploy();
-  await oracle.initialize(0, 1e13, [1e8]);
 
   // Create limiter plugin
   const limiter = await SpendingLimit.deploy(oracle.address);
@@ -36,7 +28,7 @@ it('Correctly limits spending', async () => {
 
   // Test that the limit is applied
   const now = Math.round(Date.now() / 1000);
-  const pw = limiter.preWithdraw(signers.client1.address, 200e6, now);
+  const pw = limiter.preWithdraw(signers.client1.address, 200e6, 200e6, now);
   await expect(pw).rejects.toThrowError("fiat limit exceeded");
 
   // Does the plugin still display the full balance?

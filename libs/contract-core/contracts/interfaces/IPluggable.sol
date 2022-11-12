@@ -27,7 +27,7 @@ interface IPluggable is IERC20Upgradeable {
   function pl_removePlugin(address user, uint index, bytes memory signature) external;
 
   // Users balance as reported by plugins
-  function pl_balanceOf(address user) external view returns(uint);
+  function pl_balanceOf(address user) external view returns(int);
 
   // A special-purpose plugin transfer fn, in case we need to restrict it later(?)
   function pl_transferTo(address user, uint amount) external;

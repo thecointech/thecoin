@@ -1,7 +1,7 @@
 import * as Src from '.';
 import { BigNumber, ContractTransaction, Signer } from 'ethers'
 import { sleep } from '@thecointech/async'
-export const COIN_EXP = 1000000;
+export * from './constants';
 
 const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
 let nonce = 12;

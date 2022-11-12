@@ -2,20 +2,18 @@ import { PLUGINMGR_ROLE, MINTER_ROLE, BROKER_ROLE } from '../src/constants'
 import { AccountId, AccountName } from "@thecointech/signers";
 import { initCache } from "@thecointech/signers/cache";
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
-import hre from 'hardhat';
+import { TheCoin__factory } from '../src/types/factories/contracts';
 
 // Basic function to create & init TheCoin contract with all roles set to address
-export async function  createAndInitTheCoin() {
+export async function createAndInitTheCoin(signer: SignerWithAddress) {
 
-  const TheCoin = await hre.ethers.getContractFactory("TheCoin");
+  const TheCoin = new TheCoin__factory(signer);
   const tcCore = await TheCoin.deploy();
 
-  const signer = tcCore.signer;
-  const address = await signer.getAddress();
-  await tcCore.initialize(address);
-  await tcCore.grantRole(MINTER_ROLE, address);
-  await tcCore.grantRole(PLUGINMGR_ROLE, address);
-  await tcCore.grantRole(BROKER_ROLE, address);
+  await tcCore.initialize(signer.address);
+  await tcCore.grantRole(MINTER_ROLE, signer.address);
+  await tcCore.grantRole(PLUGINMGR_ROLE, signer.address);
+  await tcCore.grantRole(BROKER_ROLE, signer.address);
   return tcCore;
 }
 

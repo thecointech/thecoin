@@ -5,6 +5,14 @@
       "path": "../libs/contract-core"
     },
     {
+      "name": "contract-plugin-converter",
+      "path": "../libs/contract-plugin-converter"
+    },
+    {
+      "name": "contract-oracle",
+      "path": "../libs/contract-oracle"
+    },
+    {
       "name": "contract-nft",
       "path": "../libs/contract-nft"
     },
@@ -15,10 +23,6 @@
     {
       "name": "contract-tools",
       "path": "../libs/contract-tools"
-    },
-    {
-      "name": "contract-oracle",
-      "path": "../libs/contract-oracle"
     },
     {
       "name": "signers",

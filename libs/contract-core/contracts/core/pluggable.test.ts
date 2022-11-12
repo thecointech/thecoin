@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { ALL_PERMISSIONS } from '../../src/constants'
-import { createAndInitTheCoin, initAccounts } from '../../internal/initTest';
+import { createAndInitTheCoin, initAccounts } from '../../internal/testHelpers';
 import type { Contract, ContractTransaction } from 'ethers';
 import hre from 'hardhat';
 
@@ -10,7 +10,7 @@ jest.setTimeout(5 * 60 * 1000);
 it('Calls appropriate methods on a plugin', async () => {
 
   const signers = initAccounts(await hre.ethers.getSigners());
-  const tcCore = await createAndInitTheCoin();
+  const tcCore = await createAndInitTheCoin(signers.Owner);
   const DebugPrint = await hre.ethers.getContractFactory("DebugPrint");
   const logger = await DebugPrint.deploy();
 

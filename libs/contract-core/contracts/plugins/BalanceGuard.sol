@@ -13,11 +13,10 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/math/Math.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
+import '@thecointech/contract-oracle/contracts/OracleClient.sol';
 import './BasePlugin.sol';
-import './OracleClient.sol';
 import '../interfaces/permissions.sol';
 import '../interfaces/IPluggable.sol';
 
@@ -40,15 +39,15 @@ struct UserData {
   // int64 for cents means a max value of approx $92 trillion
   // This can be negative, if the user has gained profit then
   // withdrawn it all
-  int64 costBasis;
+  int costBasis;
 
   // The last time we updated the reserved amount.
-  uint64 lastUpdate;
+  uint lastUpdate;
 
   // How much of the users balance have we reserved for insurance?
   // This is updated once per year, and effectively locks up part
   // of the users account.
-  uint128 reserved;
+  uint reserved;
 }
 
 contract BalanceGuardV0 is BasePlugin, OracleClient, Ownable, PermissionUser {
@@ -75,8 +74,9 @@ contract BalanceGuardV0 is BasePlugin, OracleClient, Ownable, PermissionUser {
     require(owner() == initiator, "only owner may attach this plugin");
     // only initialize if new user.
     if (userFiatBalance[newUser].costBasis == 0) {
-      uint currentBalance = theCoin.pl_balanceOf(newUser);
-      userFiatBalance[newUser].costBasis = toFiat(currentBalance, block.timestamp);
+      int currentBalance = theCoin.pl_balanceOf(newUser);
+      int costBasis = toFiat(currentBalance, block.timestamp);
+      userFiatBalance[newUser].costBasis = int(costBasis);
     }
   }
 
@@ -88,14 +88,16 @@ contract BalanceGuardV0 is BasePlugin, OracleClient, Ownable, PermissionUser {
   }
 
   // We automatically modify the balance to adjust for market fluctuations.
-  function balanceOf(address user, uint currentBalance) external view override returns(uint)
+  function balanceOf(address user, int currentBalance) external view override returns(int)
   {
     // We work directly in coin for this function
     int fxAdjBalance = toCoin(userFiatBalance[user].costBasis, block.timestamp);
-    if (int(currentBalance) > fxAdjBalance) {
+    if (currentBalance > fxAdjBalance) {
       // users account has grown.  Subtract up to 2% growth
       int twoPercent = fxAdjBalance / 50;
-      return Math.max(currentBalance - uint(twoPercent), uint(fxAdjBalance));
+      int adjBalance = currentBalance - twoPercent;
+      return adjBalance > fxAdjBalance ? adjBalance : fxAdjBalance;
+      // return Math.max(currentBalance - twoPercent, fxAdjBalance);
     }
 
     else if (int(currentBalance) < fxAdjBalance) {
@@ -106,8 +108,10 @@ contract BalanceGuardV0 is BasePlugin, OracleClient, Ownable, PermissionUser {
 
       // NOTE - this is clearly wrong because it does not maintain
       // state, and only accounts for this single tx[]
-      uint tenPercent = currentBalance / 9;
-      return Math.min(currentBalance + tenPercent, uint(fxAdjBalance));
+      int tenPercent = currentBalance / 9;
+      int adjBalance = currentBalance + tenPercent;
+      return adjBalance < fxAdjBalance ? adjBalance : fxAdjBalance;
+      // return Math.min(currentBalance + tenPercent, fxAdjBalance);
     }
     return currentBalance;
   }
@@ -116,22 +120,22 @@ contract BalanceGuardV0 is BasePlugin, OracleClient, Ownable, PermissionUser {
   // On deposit we update the users current balance
   function preDeposit(address user, uint coin, uint timestamp) external override onlyOwner {
     // Update users ACB
-    int64 fiat = toFiat(coin, timestamp);
-    userFiatBalance[user].costBasis += fiat;
+    uint fiat = toFiat(coin, timestamp);
+    userFiatBalance[user].costBasis += int(fiat);
   }
 
-  function preWithdraw(address user, uint coin, uint timestamp) external override onlyOwner {
-    int64 fiat = toFiat(coin, timestamp);
-    uint currentBalance = IERC20Upgradeable(theCoin).balanceOf(user);
+  function preWithdraw(address user, uint balance, uint coin, uint timestamp) external override onlyOwner returns(uint) {
+    int fiat = toFiat(int(coin), timestamp);
     // We may need to transfer some coin into the users account.
     // This only is necessary if the user doesn't have coin to cover it,
     // and the total amount is between 90 & 100%
     // NOTE - this is also clearly wrong, but good enough to test plugin system
-    if (coin > currentBalance) {
-      int64 ninetyPercent = userFiatBalance[user].costBasis * 90 / 100;
+    if (coin > balance) {
+      int ninetyPercent = userFiatBalance[user].costBasis * 90 / 100;
       if (fiat > ninetyPercent) {
-        uint missingCoin = coin - currentBalance;
+        uint missingCoin = coin - balance;
         theCoin.pl_transferTo(user, missingCoin);
+        balance = coin;
       }
     }
 
@@ -139,7 +143,8 @@ contract BalanceGuardV0 is BasePlugin, OracleClient, Ownable, PermissionUser {
 
     // Adjust the CB.  This can go negative if the user gains profits
     // then spends more than ACB.  It is important we remember this
-    userFiatBalance[user].costBasis -= fiat;
+    userFiatBalance[user].costBasis -= int(fiat);
+    return balance;
   }
 }
 
