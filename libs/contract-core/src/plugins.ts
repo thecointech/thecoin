@@ -7,7 +7,7 @@ import { COIN_EXP } from './constants';
 
 type PluginBalanceMod = (balance: Decimal, seconds: number) => Promise<number>;
 
-export async function getPluginModifier(address: string) : Promise<PluginBalanceMod|null> {
+export async function getPluginModifier(_address: string) : Promise<PluginBalanceMod|null> {
 
   // const provider = new Erc20Provider();
 
@@ -70,13 +70,13 @@ export async function getPluginModifier(address: string) : Promise<PluginBalance
   }
 }
 
-const getValue = (initialValue: Expression|null, variables: any) => {
+const getValue = (initialValue: Expression|null, variables: any) : Promise<Decimal> => {
   switch (initialValue?.type) {
     case "FunctionCall": return callFunction(initialValue, variables);
     case "BinaryOperation": return binaryOperation(initialValue, variables);
     case "TupleExpression": return tupleExpression(initialValue, variables);
     case "Identifier": return identifier(initialValue, variables);
-    default: return 0;
+    default: throw new Error("missing type");
   }
 }
 
@@ -95,7 +95,7 @@ const binaryOperation = async (initialValue: BinaryOperation, variables: any) =>
 async function tupleExpression(tuple: TupleExpression, variables: any) {
   let r = await getValue(tuple.components[0] as Expression, variables);
   for (const c in tuple.components.slice(1)) {
-    r = r + await getValue(tuple.components[c] as Expression, variables);
+    r = r.add(await getValue(tuple.components[c] as Expression, variables));
   }
   return r;
 }
@@ -120,7 +120,7 @@ const callFunction = async (fnCall: FunctionCall, variables: any) => {
       case "toCoin": return await toCoin(args);
     }
   }
-  return 0;
+  throw new Error("Missing fn implementation");
 }
 
 export const toFiat = async ([coin, timestamp]: any[]) => {
@@ -144,7 +144,7 @@ export const toCoin = async ([fiat, timestamp]: any[]) => {
 
 const isIdentifier = (node: BaseASTNode|null) : node is Identifier => node?.type === "Identifier";
 const isMemberAccess = (node: BaseASTNode|null) : node is MemberAccess => node?.type === "MemberAccess";
-const isFuncCall = (node: BaseASTNode|null) : node is FunctionCall => node?.type === "FunctionCall";
+// const isFuncCall = (node: BaseASTNode|null) : node is FunctionCall => node?.type === "FunctionCall";
 const isNumberLiteral = (node: BaseASTNode|null) : node is NumberLiteral => node?.type == "NumberLiteral";
 const isVariableDecl = (node: BaseASTNode|null) : node is VariableDeclaration => node?.type == "VariableDeclaration";
 const isVariableDeclStmt = (node: BaseASTNode) : node is VariableDeclarationStatement => node.type == "VariableDeclarationStatement";
