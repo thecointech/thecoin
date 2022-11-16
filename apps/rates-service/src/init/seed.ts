@@ -64,7 +64,7 @@ export async function SeedWithRandomRates(from: DateTime, validityInterval: Dura
     // Minimum rate
     rate = Math.max(rate, 0.5);
     const coin: CoinRate = {
-      buy: rate - 0.001,
+      buy: rate,
       sell: rate,
       ...validity,
     }

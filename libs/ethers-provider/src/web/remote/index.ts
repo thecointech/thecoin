@@ -154,6 +154,17 @@ export class Erc20Provider extends EtherscanProvider {
   getSigner(_id: number): Promise<Signer> {
     throw new Error("Cannot call getSigner on an Erc20Provider");
   }
+
+  async getSourceCode(address: string) {
+    const args: Record<string, any> = {
+      action: "getsourcecode",
+      address,
+      apikey: this.apiKey
+    }
+
+    const r = await this.fetch("contract", args);
+    return r.result;
+  }
 }
 
 export const getProvider = () => new Erc20Provider();

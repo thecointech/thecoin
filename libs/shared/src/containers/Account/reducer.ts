@@ -169,7 +169,7 @@ function AccountReducer(address: string, initialState: AccountState) {
       }
 
       // First, fetch the account balance toasty-fresh
-      const balance = yield call(contract.balanceOf, address);
+      const balance = yield call(contract.pl_balanceOf, address);
       yield this.storeValues({ balance: balance.toNumber(), historyLoading: true });
 
       log.trace(`Updating from ${from} -> ${until}`);

@@ -10,11 +10,10 @@
 pragma solidity ^0.8.0;
 
 import './BasePlugin.sol';
+import "hardhat/console.sol";
 
 contract DebugPrint is BasePlugin {
 
-  event PrintGetPermissions();
-  // event PrintBalanceOf(address user, uint currentBalance);
   event PrintPreWithdraw(address user, uint coin, uint timestamp);
   event PrintPreDeposit(address user, uint coin, uint timestamp);
   event PrintAttached(address user, address initiator);
@@ -23,14 +22,14 @@ contract DebugPrint is BasePlugin {
 
   // We modify the users balance to reflect what they can actually spend.
   // When a withdrawal occurs we may boost the
-  function getPermissions() override external returns(uint) {
-    emit PrintGetPermissions();
+  function getPermissions() override external view returns(uint) {
+    console.log("getPermissions");
     return 0;
   }
-  function balanceOf(address /*user*/, int currentBalance) external pure override returns(int) {
+  function balanceOf(address user, int currentBalance) external view override returns(int) {
     // Cannot log in a view function unfortunately,
     // so instead just return balance / 2 to prove we were called
-    // emit PrintBalanceOf(user, currentBalance);
+    console.log("balanceOf: ", user);
     return currentBalance / 2;
   }
   function preWithdraw(address user, uint balance, uint coin, uint timestamp) external override returns(uint) {

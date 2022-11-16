@@ -52,6 +52,10 @@ export class Erc20Provider extends JsonRpcProvider {
     const result = await this.getLogs(filter);
     return result;
   }
+
+  async getSourceCode(address: string) {
+    // So far, we only have source
+  }
 }
 
 export const getProvider = () => new Erc20Provider();

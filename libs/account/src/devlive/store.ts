@@ -3,6 +3,7 @@ import { ConnectContract } from '@thecointech/contract-core';
 import { connectIDX } from '@thecointech/idx';
 import { getSigner, AccountName } from '@thecointech/signers';
 import { NormalizeAddress } from '@thecointech/utilities/Address';
+import { getPluginDetails } from '../plugins';
 import { AccountState, buildNewAccount } from '../state';
 import * as Browser from '../store';
 
@@ -13,9 +14,14 @@ const addRemoteAccount = async (name: AccountName, active: boolean) => {
   console.log("Adding devlive account");
   const signer = await getSigner(name);
   const address = NormalizeAddress(await signer.getAddress());
+  const contract = await ConnectContract(signer);
+  const plugins = await getPluginDetails(contract);
 
-  _devWallets[address] = buildNewAccount(name, address, signer);
-  _devWallets[address].contract = await ConnectContract(signer);
+  _devWallets[address] = {
+    ...buildNewAccount(name, address, signer),
+    contract,
+    plugins,
+  }
   console.log('Loaded remote account: ' + address);
   if (active) {
     _initial = address;

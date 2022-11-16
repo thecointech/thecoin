@@ -16,7 +16,7 @@ interface IPlugin is IERC165 {
 
   // Get the permissions requested by this plugin over users account.
   // A user must sign these permissions and store with their account on TC.
-  function getPermissions() external returns(uint);
+  function getPermissions() external view returns(uint);
 
   // Hook called whenever a user adds a plugin to their account.
   function userAttached(address add, address initiator) external;

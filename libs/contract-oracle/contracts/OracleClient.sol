@@ -51,8 +51,8 @@ contract OracleClient {
     * Returns the latest price
     */
   function getPrice(uint timestamp) public view returns(uint) {
-    console.log("Getting price with timestamp: ", timestamp);
     uint price = priceFeed.getRoundFromTimestamp(timestamp);
+    console.log("Getting price with timestamp: ", timestamp, " = ", price);
     return price;
   }
 }
