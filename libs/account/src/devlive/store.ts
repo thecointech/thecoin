@@ -1,9 +1,8 @@
 import { StatusType } from '@thecointech/broker-cad';
-import { ConnectContract } from '@thecointech/contract-core';
+import { ConnectContract, getPluginDetails } from '@thecointech/contract-core';
 import { connectIDX } from '@thecointech/idx';
 import { getSigner, AccountName } from '@thecointech/signers';
 import { NormalizeAddress } from '@thecointech/utilities/Address';
-import { getPluginDetails } from '../plugins';
 import { AccountState, buildNewAccount } from '../state';
 import * as Browser from '../store';
 

@@ -1,4 +1,4 @@
-import { InitialCoinBlock, ConnectContract, TheCoin } from '@thecointech/contract-core';
+import { InitialCoinBlock, ConnectContract, TheCoin, getPluginDetails } from '@thecointech/contract-core';
 import { Signer, Wallet } from 'ethers';
 import { call, delay, select, StrictEffect } from "@redux-saga/core/effects";
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
@@ -8,7 +8,7 @@ import { SagaReducer } from '../../store/immerReducer';
 import { isLocal } from '@thecointech/signers';
 import { loadAndMergeHistory, calculateTxBalances, mergeTransactions, Transaction } from '@thecointech/tx-blockchain';
 import { connectIDX } from '@thecointech/idx';
-import { AccountDetails, AccountState, DefaultAccountValues, getPluginDetails } from '@thecointech/account';
+import { AccountDetails, AccountState, DefaultAccountValues } from '@thecointech/account';
 import { loadDetails, setDetails } from '../AccountDetails';
 import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
@@ -169,7 +169,7 @@ function AccountReducer(address: string, initialState: AccountState) {
       }
 
       // First, fetch the account balance toasty-fresh
-      const balance = yield call(contract.pl_balanceOf, address);
+      const balance = yield call(contract.balanceOf, address);
       yield this.storeValues({ balance: balance.toNumber(), historyLoading: true });
 
       log.trace(`Updating from ${from} -> ${until}`);

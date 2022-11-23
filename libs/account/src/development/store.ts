@@ -1,6 +1,6 @@
 import testWallet from './testAccount1.json' assert {type: "json"};
-import { Wallet } from 'ethers';
-import { ConnectContract } from '@thecointech/contract-core';
+import { Wallet } from '@ethersproject/wallet';
+import { ConnectContract, getPluginDetails } from '@thecointech/contract-core';
 import { AccountMap } from '../map';
 import { AccountState, buildNewAccount } from '../state';
 import { connectIDX } from '@thecointech/idx';
@@ -10,7 +10,6 @@ let _initial: null|string = null;
 
 // Make some wallets to test with.  There should be at
 // least 1 unlocked wallet, and the locked TestAccNoT
-// We cannot use top-level await because it breaks Storybook (v6)
 async function initDevWallets() {
   const encryptedAccount = buildNewAccount("TestAccNoT", testWallet.address, testWallet as any);
   // We always add one encrypted wallet
@@ -21,6 +20,7 @@ async function initDevWallets() {
   const randomAccount = buildNewAccount("Random Test", randomWallet.address, randomWallet);
   // connect to mocked services - normally this is done by "connect" call
   randomAccount.contract = await ConnectContract(randomAccount.signer);
+  randomAccount.plugins = await getPluginDetails(randomAccount.contract);
   randomAccount.idx = await connectIDX(randomAccount.signer);
 
   _devAccounts[randomAccount.address] = randomAccount

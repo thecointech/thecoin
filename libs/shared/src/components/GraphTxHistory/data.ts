@@ -1,7 +1,8 @@
-import { toHuman } from "@thecointech/utilities";
+import { toHuman, toHumanDecimal } from "@thecointech/utilities";
 import { fiatChange } from "../../containers/Account/profit";
 import { DateTime } from "luxon";
 import { weSellAt } from '@thecointech/fx-rates';
+import { Decimal } from 'decimal.js-light';
 import type { FXRate } from "@thecointech/pricing";
 import type { Transaction } from "@thecointech/tx-blockchain";
 import type { IFxRates } from "../../containers/FxRate";
@@ -65,10 +66,14 @@ export function getAccountSerie(data: GraphHistoryProps, rates: FXRate[], ratesA
 
     // If not already present, fetch this rate
     ratesApi?.fetchRateAtDate(eod)
+    // For each plugin, apply it's effect to the result
+    const timestamp = DateTime.fromJSDate(eod);
+    const balanceMod = data.plugins.reduce((bal, plugin) => plugin(bal, timestamp, rates), new Decimal(balance))
+
     const exRate = weSellAt(rates, eod);
     accountValuesDatum.push({
       x: date.toISODate(),
-      y: toHuman(exRate * balance),
+      y: toHumanDecimal(balanceMod.mul(exRate)).toNumber(),
       costBasis,
       txs: daysTxs,
     })

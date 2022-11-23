@@ -1,30 +1,41 @@
-import parser from '@solidity-parser/parser'
 import { getFxRate, FXRate } from '@thecointech/fx-rates';
-import type { BaseASTNode, ContractDefinition, FunctionDefinition, NumberLiteral, StateVariableDeclaration, VariableDeclarationStatement, VariableDeclaration, FunctionCall, MemberAccess, Identifier, Expression, BinaryOperation, TupleExpression, ReturnStatement } from '@solidity-parser/parser/dist/src/ast-types';
-import Decimal from 'decimal.js-light';
-import { COIN_EXP } from './constants';
+import { COIN_EXP, PERMISSION_BALANCE } from './constants';
 import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
+import { DateTime } from 'luxon';
+import Decimal from 'decimal.js-light';
+import parser from '@solidity-parser/parser'
+import type { PluginAndPermissionsStructOutput, TheCoin } from './types/contracts/TheCoin';
+import type { BaseASTNode, ContractDefinition, FunctionDefinition, NumberLiteral, StateVariableDeclaration, VariableDeclarationStatement, VariableDeclaration, FunctionCall, MemberAccess, Identifier, Expression, BinaryOperation, TupleExpression, ReturnStatement } from '@solidity-parser/parser/dist/src/ast-types';
 
-export type PluginBalanceMod = (balance: Decimal, seconds: number, rates: FXRate[]) => Promise<number>;
+export type PluginBalanceMod = (balance: Decimal, timestamp: DateTime, rates: FXRate[]) => Decimal;
+export type PluginDetails = {
+  address: string;
+  permissions: Decimal;
+  modifier: PluginBalanceMod|null,
+}
 
-export async function getPluginModifier(address: string) : Promise<PluginBalanceMod|null> {
+export async function getPluginDetails(tcCore: TheCoin) : Promise<PluginDetails[]>{
+  const user = await tcCore.signer.getAddress();
+  const plugins = await tcCore.getUsersPlugins(user);
+  const details = plugins.map(async (plugin) => ({
+    address: plugin.plugin,
+    permissions: new Decimal(plugin.permissions.toString()),
+    modifier: await getPluginModifier(plugin),
+  }))
+  return Promise.all(details)
+}
+
+async function getPluginModifier({plugin, permissions}: PluginAndPermissionsStructOutput) : Promise<PluginBalanceMod|null> {
 
   const provider = new Erc20Provider();
 
-
-  // First easy one, just call the actual contract
-  // const contract = IPlugin__factory.connect(address, provider);
-  // const permissions = await contract.getPermissions();
-
   // if this doesn't modify the balance, we don't need a modifier
-  // if (!(permissions.toNumber() & PERMISSION_BALANCE)) return null;
+  if (permissions.mask(PERMISSION_BALANCE).eq(0)) {
+    return null;
+  }
 
-  const source = await provider.getSourceCode(address);
-  //const source = ContractSource.src;
-  const token = parser.tokenize(source);
+  const source = await provider.getSourceCode(plugin);
   const parsed = parser.parse(source);
-
-  token; parsed;
 
   const contract = parsed.children.find(c => c.type == "ContractDefinition") as ContractDefinition;
   const solBalanceOf = contract.subNodes.filter(f => f.type == "FunctionDefinition")
@@ -45,10 +56,10 @@ export async function getPluginModifier(address: string) : Promise<PluginBalance
   const statements = solBalanceOf?.body?.statements;
   if (!statements?.length) return null;
 
-  return async (balance: Decimal, seconds: number, rates: FXRate[]) => {
+  return (balance: Decimal, timestamp: DateTime, rates: FXRate[]) => {
     const variables: any = {
       ...defaultVariables,
-      block: { timestamp: seconds },
+      block: { timestamp: Math.round(timestamp.toSeconds()) },
       currentBalance: balance,
       _rates: rates,
     };
@@ -57,21 +68,21 @@ export async function getPluginModifier(address: string) : Promise<PluginBalance
 
         for (const variable of statement.variables) {
           if (isVariableDecl(variable)) {
-            variables[variable.name!] = await getValue(statement.initialValue, variables);
+            variables[variable.name!] = getValue(statement.initialValue, variables);
           }
         }
       }
       else if (isReturn(statement)) {
-        variables.return = await getValue(statement.expression, variables);
+        variables.return = getValue(statement.expression, variables);
       }
     }
-    // const newBalance = await contract.balanceOf(address, balance);
+    // const newBalance = contract.balanceOf(address, balance);
     // return newBalance.toNumber();
     return variables.return;
   }
 }
 
-const getValue = (initialValue: Expression|null, variables: any) : Promise<Decimal> => {
+const getValue = (initialValue: Expression|null, variables: any) : Decimal => {
   switch (initialValue?.type) {
     case "FunctionCall": return callFunction(initialValue, variables);
     case "BinaryOperation": return binaryOperation(initialValue, variables);
@@ -81,9 +92,9 @@ const getValue = (initialValue: Expression|null, variables: any) : Promise<Decim
   }
 }
 
-const binaryOperation = async (initialValue: BinaryOperation, variables: any) => {
-  const left: Decimal = await getValue(initialValue.left, variables);
-  const right: Decimal = await getValue(initialValue.right, variables);
+const binaryOperation = (initialValue: BinaryOperation, variables: any) => {
+  const left: Decimal = getValue(initialValue.left, variables);
+  const right: Decimal = getValue(initialValue.right, variables);
 
   switch (initialValue.operator) {
     // case "+": return variables[initialValue.left.name] + variables[initialValue.right.name];
@@ -93,10 +104,10 @@ const binaryOperation = async (initialValue: BinaryOperation, variables: any) =>
     default: throw new Error("Invalid operation");
   }
 }
-async function tupleExpression(tuple: TupleExpression, variables: any) {
-  let r = await getValue(tuple.components[0] as Expression, variables);
+function tupleExpression(tuple: TupleExpression, variables: any) {
+  let r = getValue(tuple.components[0] as Expression, variables);
   for (const c in tuple.components.slice(1)) {
-    r = r.add(await getValue(tuple.components[c] as Expression, variables));
+    r = r.add(getValue(tuple.components[c] as Expression, variables));
   }
   return r;
 }
@@ -105,7 +116,7 @@ function identifier(identifier: Identifier, variables: any) {
 }
 
 
-const callFunction = async (fnCall: FunctionCall, variables: any) => {
+const callFunction = (fnCall: FunctionCall, variables: any) => {
   const args = fnCall.arguments.map(arg => {
     if (isMemberAccess(arg))
       return variables[(arg.expression as Identifier).name][arg.memberName];
@@ -117,29 +128,31 @@ const callFunction = async (fnCall: FunctionCall, variables: any) => {
 
   if (isIdentifier(fnCall.expression)) {
     switch(fnCall.expression.name) {
-      case "toFiat": return await toFiat(args, variables._rates);
-      case "toCoin": return await toCoin(args, variables._rates);
+      case "toFiat": return toFiat(args, variables._rates);
+      case "toCoin": return toCoin(args, variables._rates);
     }
   }
   throw new Error("Missing fn implementation");
 }
 
-export const toFiat = async ([coin, timestamp]: any[], rates: FXRate[]) => {
-  const rate = await getFxRate(rates, timestamp * 1000)
+const avgRate = (rate: FXRate) => ((rate.sell + rate.buy) / 2) || 1;
+
+export const toFiat = ([coin, timestamp]: any[], rates: FXRate[]) => {
+  const rate = getFxRate(rates, timestamp * 1000)
   return new Decimal(coin)
-    .mul(rate?.fxRate ?? 1)
-    .mul(rate?.sell ?? 1)
+    .mul(rate.fxRate)
+    .mul(avgRate(rate))
     .div(COIN_EXP)
     .mul(100)
     .toint();
 }
-export const toCoin = async ([fiat, timestamp]: any[], rates: FXRate[]) => {
-  const rate = await getFxRate(rates, timestamp * 1000)
+export const toCoin = ([fiat, timestamp]: any[], rates: FXRate[]) => {
+  const rate = getFxRate(rates, timestamp * 1000)
   return new Decimal(fiat)
     .div(100)
     .mul(COIN_EXP)
-    .div(rate?.sell ?? 1)
-    .div(rate?.fxRate ?? 1)
+    .div(avgRate(rate))
+    .div(rate.fxRate)
     .toint();
 }
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ResponsiveLine, PointTooltip, LineSvgProps } from '@nivo/line'
 import { Transaction } from '@thecointech/tx-blockchain';
 import { DateTime } from 'luxon';
+import { PluginBalanceMod } from '@thecointech/contract-core';
 import { TooltipWidget, TxDatum } from "./types";
 import { Theme as NivoTheme } from "@nivo/core";
 import { linearGradientDef } from "@nivo/core";
@@ -19,6 +20,7 @@ export type Theme = {
 } & NivoTheme;
 
 export type GraphHistoryProps = {
+  plugins: PluginBalanceMod[],
   txs: Transaction[],
   height: number,
   theme?: Theme,

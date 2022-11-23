@@ -1,9 +1,13 @@
+import { getPluginDetails, toCoin, toFiat } from './plugins';
+import { ConnectContract } from './index_mocked';
+import { Wallet } from '@ethersproject/wallet';
 import type { FXRate } from '@thecointech/pricing';
-import { getPluginModifier, toCoin, toFiat } from './plugins';
+import { DateTime } from 'luxon';
 
 it ('Generates a useful modifier', async () => {
-  const modifier = await getPluginModifier('test');
-  const fiat = 1999e2; // $1999
+  const signer = Wallet.createRandom()
+  var contract = await ConnectContract(signer);
+  const [details] = await getPluginDetails(contract);
   const timestamp = 0;
   const rates = [{
     buy: 2,
@@ -12,10 +16,11 @@ it ('Generates a useful modifier', async () => {
     validFrom: 0,
     validTill: Number.MIN_SAFE_INTEGER,
   } as FXRate];
-  const coin = await toCoin([fiat, timestamp], rates);
+  const fiat = 1999e2; // $1999
+  const coin = toCoin([fiat, timestamp], rates);
   // run the modifier
 
-  const rcoin = await modifier!(coin, timestamp, rates);
-  const rfiat = await toFiat([rcoin, timestamp], rates);
+  const rcoin = details.modifier!(coin, DateTime.fromSeconds(timestamp), rates);
+  const rfiat = toFiat([rcoin, timestamp], rates);
   expect(rfiat.toNumber()).toBe(1900e2);
 })
