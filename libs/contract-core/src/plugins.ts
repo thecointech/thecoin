@@ -1,11 +1,11 @@
 import parser from '@solidity-parser/parser'
-import { fetchRate } from '@thecointech/fx-rates';
+import { getFxRate, FXRate } from '@thecointech/fx-rates';
 import type { BaseASTNode, ContractDefinition, FunctionDefinition, NumberLiteral, StateVariableDeclaration, VariableDeclarationStatement, VariableDeclaration, FunctionCall, MemberAccess, Identifier, Expression, BinaryOperation, TupleExpression, ReturnStatement } from '@solidity-parser/parser/dist/src/ast-types';
 import Decimal from 'decimal.js-light';
 import { COIN_EXP } from './constants';
 import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
 
-type PluginBalanceMod = (balance: Decimal, seconds: number) => Promise<number>;
+export type PluginBalanceMod = (balance: Decimal, seconds: number, rates: FXRate[]) => Promise<number>;
 
 export async function getPluginModifier(address: string) : Promise<PluginBalanceMod|null> {
 
@@ -45,11 +45,12 @@ export async function getPluginModifier(address: string) : Promise<PluginBalance
   const statements = solBalanceOf?.body?.statements;
   if (!statements?.length) return null;
 
-  return async (balance: Decimal, seconds: number) => {
+  return async (balance: Decimal, seconds: number, rates: FXRate[]) => {
     const variables: any = {
       ...defaultVariables,
       block: { timestamp: seconds },
       currentBalance: balance,
+      _rates: rates,
     };
     for (const statement of statements) {
       if (isVariableDeclStmt(statement)) {
@@ -116,15 +117,15 @@ const callFunction = async (fnCall: FunctionCall, variables: any) => {
 
   if (isIdentifier(fnCall.expression)) {
     switch(fnCall.expression.name) {
-      case "toFiat": return await toFiat(args);
-      case "toCoin": return await toCoin(args);
+      case "toFiat": return await toFiat(args, variables._rates);
+      case "toCoin": return await toCoin(args, variables._rates);
     }
   }
   throw new Error("Missing fn implementation");
 }
 
-export const toFiat = async ([coin, timestamp]: any[]) => {
-  const rate = await fetchRate(new Date(timestamp * 1000))
+export const toFiat = async ([coin, timestamp]: any[], rates: FXRate[]) => {
+  const rate = await getFxRate(rates, timestamp * 1000)
   return new Decimal(coin)
     .mul(rate?.fxRate ?? 1)
     .mul(rate?.sell ?? 1)
@@ -132,8 +133,8 @@ export const toFiat = async ([coin, timestamp]: any[]) => {
     .mul(100)
     .toint();
 }
-export const toCoin = async ([fiat, timestamp]: any[]) => {
-  const rate = await fetchRate(new Date(timestamp * 1000))
+export const toCoin = async ([fiat, timestamp]: any[], rates: FXRate[]) => {
+  const rate = await getFxRate(rates, timestamp * 1000)
   return new Decimal(fiat)
     .div(100)
     .mul(COIN_EXP)
