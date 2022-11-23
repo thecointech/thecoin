@@ -1,15 +1,15 @@
-import ContractSource from './RoundNumber.sol.json';
 import parser from '@solidity-parser/parser'
 import { fetchRate } from '@thecointech/fx-rates';
 import type { BaseASTNode, ContractDefinition, FunctionDefinition, NumberLiteral, StateVariableDeclaration, VariableDeclarationStatement, VariableDeclaration, FunctionCall, MemberAccess, Identifier, Expression, BinaryOperation, TupleExpression, ReturnStatement } from '@solidity-parser/parser/dist/src/ast-types';
 import Decimal from 'decimal.js-light';
 import { COIN_EXP } from './constants';
+import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
 
 type PluginBalanceMod = (balance: Decimal, seconds: number) => Promise<number>;
 
-export async function getPluginModifier(_address: string) : Promise<PluginBalanceMod|null> {
+export async function getPluginModifier(address: string) : Promise<PluginBalanceMod|null> {
 
-  // const provider = new Erc20Provider();
+  const provider = new Erc20Provider();
 
 
   // First easy one, just call the actual contract
@@ -19,8 +19,8 @@ export async function getPluginModifier(_address: string) : Promise<PluginBalanc
   // if this doesn't modify the balance, we don't need a modifier
   // if (!(permissions.toNumber() & PERMISSION_BALANCE)) return null;
 
-  //const source = provider.getSourceCode(address);
-  const source = ContractSource.src;
+  const source = await provider.getSourceCode(address);
+  //const source = ContractSource.src;
   const token = parser.tokenize(source);
   const parsed = parser.parse(source);
 

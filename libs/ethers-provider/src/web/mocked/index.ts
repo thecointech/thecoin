@@ -6,6 +6,7 @@ import transferFrom from './logs-transfer-from.json';
 import transferTo from './logs-transfer-to.json';
 import exactFrom from './logs-exact-from.json';
 import exactTo from './logs-exact-to.json';
+import RoundNumber from '../RoundNumber.sol.json';
 
 export class Erc20Provider extends BaseProvider {
   connection: { url: string; };
@@ -60,6 +61,10 @@ export class Erc20Provider extends BaseProvider {
       topics: l.topics.map(t => remapping[t] ?? t),
       removed: false,
     }))
+  }
+
+  async getSourceCode(_address: string) {
+    return RoundNumber.src;
   }
 }
 
