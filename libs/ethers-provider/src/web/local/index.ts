@@ -3,7 +3,6 @@ import { hexZeroPad, hexStripZeros } from "@ethersproject/bytes";
 import { id } from "@ethersproject/hash";
 import { BigNumber } from "@ethersproject/bignumber";
 import { ERC20Response } from '../erc20response';
-import RoundNumber from '../RoundNumber.sol.json';
 
 export class Erc20Provider extends JsonRpcProvider {
 
@@ -55,7 +54,8 @@ export class Erc20Provider extends JsonRpcProvider {
   }
 
   async getSourceCode(_address: string) {
-    return RoundNumber.src;
+    const rn = await import("@thecointech/contract-core/RoundNumber.json")
+    return rn.default.src;
   }
 }
 

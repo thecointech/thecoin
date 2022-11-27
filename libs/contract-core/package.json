@@ -43,6 +43,7 @@
   ],
   "main": "./build/index.js",
   "exports": {
+    "./RoundNumber.json": "./src/RoundNumber.sol.json",
     "./contract": "./build/index.js",
     "./testHelpers.ts": "./internal/testHelpers.ts",
     ".": {
@@ -54,6 +55,7 @@
   "types": "./build/index.d.ts",
   "typesVersions": {
     "*": {
+      "RoundNumber.json": ["./src/RoundNumber.sol.json"],
       "testHelpers.ts": ["./internal/testHelpers.ts"],
       "*": [
         "build/index.d.ts"
