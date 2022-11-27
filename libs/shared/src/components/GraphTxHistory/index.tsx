@@ -12,6 +12,7 @@ import { Placeholder } from "semantic-ui-react";
 import { useFxRates, FxRateReducer } from "../../containers/FxRate";
 import Decimal from 'decimal.js-light';
 import styles from './styles.module.less';
+import { RawLineLayer } from './RawLineLayer';
 
 // Easy access to theme definition
 export type Theme = {
@@ -51,7 +52,7 @@ export const GraphTxHistory = (props: GraphHistoryProps) => {
             {...commonProperties}
             {...axisProperties(minMax, datum.length)}
             {...colorProperties(minMax)}
-            {...thingsToDisplayProperties}
+            {...thingsToDisplayProperties(props)}
           />
       }
     </div>
@@ -160,20 +161,26 @@ const colorProperties = ({min, max}: MinMax) : Partial<LineSvgProps> => ({
   fill: [{ match: '*', id: 'gradientA' }]
 })
 
-const thingsToDisplayProperties: Partial<LineSvgProps> = {
-  layers: [
-    //"grid",
-    "markers",
-    "axes",
-    "areas",
-    "crosshair",
-    "lines",
-    //"slices",
-    //"points",
-    'mesh',
-    "legends",
-    StepLineLayer,
-  ],
-  useMesh: true,
-  enableSlices: false,
+const thingsToDisplayProperties = (props: GraphHistoryProps) => {
+  const properties: Partial<LineSvgProps> = {
+    layers: [
+      //"grid",
+      "markers",
+      "axes",
+      "areas",
+      "crosshair",
+      "lines",
+      //"slices",
+      //"points",
+      'mesh',
+      "legends",
+      StepLineLayer,
+    ],
+    useMesh: true,
+    enableSlices: false,
+  };
+  if (props.plugins.length) {
+    properties.layers!.push(RawLineLayer)
+  }
+  return properties;
 }
