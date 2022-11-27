@@ -55,7 +55,7 @@ export class Erc20Provider extends JsonRpcProvider {
 
   async getSourceCode(_address: string) {
     const rn = await import("@thecointech/contract-core/RoundNumber.json")
-    return rn.default.src;
+    return rn.default.code;
   }
 }
 

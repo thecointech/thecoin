@@ -5,13 +5,18 @@ import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import parser from '@solidity-parser/parser'
 import type { PluginAndPermissionsStructOutput, TheCoin } from './types/contracts/TheCoin';
-import type { BaseASTNode, ContractDefinition, FunctionDefinition, NumberLiteral, StateVariableDeclaration, VariableDeclarationStatement, VariableDeclaration, FunctionCall, MemberAccess, Identifier, Expression, BinaryOperation, TupleExpression, ReturnStatement } from '@solidity-parser/parser/dist/src/ast-types';
+import type { BaseASTNode, ContractDefinition, FunctionDefinition, StateVariableDeclaration, VariableDeclarationStatement, VariableDeclaration, FunctionCall, MemberAccess, Identifier, Expression, BinaryOperation, TupleExpression, ReturnStatement, IndexAccess, IfStatement, NumberLiteral } from '@solidity-parser/parser/dist/src/ast-types';
 
+type ContractState = Record<string, string | Decimal | Record<string, any>>;
 export type PluginBalanceMod = (balance: Decimal, timestamp: DateTime, rates: FXRate[]) => Decimal;
+export type PluginEmulator = {
+  balanceOf: PluginBalanceMod,
+  currentState: ContractState,
+}
 export type PluginDetails = {
   address: string;
   permissions: Decimal;
-  modifier: PluginBalanceMod|null,
+  emulator: PluginEmulator | null;
 }
 
 export async function getPluginDetails(tcCore: TheCoin) : Promise<PluginDetails[]>{
@@ -20,16 +25,16 @@ export async function getPluginDetails(tcCore: TheCoin) : Promise<PluginDetails[
   const details = plugins.map(async (plugin) => ({
     address: plugin.plugin,
     permissions: new Decimal(plugin.permissions.toString()),
-    modifier: await getPluginModifier(plugin),
+    emulator: await getPluginModifier(user, plugin),
   }))
   return Promise.all(details)
 }
 
-async function getPluginModifier({plugin, permissions}: PluginAndPermissionsStructOutput) : Promise<PluginBalanceMod|null> {
+export async function getPluginModifier(user: string, {plugin, permissions}: PluginAndPermissionsStructOutput) : Promise<PluginEmulator|null> {
 
   const provider = new Erc20Provider();
 
-  // if this doesn't modify the balance, we don't need a modifier
+  // if this doesn't modify the balance, we don't need to emulate it
   if (permissions.mask(PERMISSION_BALANCE).eq(0)) {
     return null;
   }
@@ -42,65 +47,109 @@ async function getPluginModifier({plugin, permissions}: PluginAndPermissionsStru
     .map(f => f as FunctionDefinition)
     .find(f => f.name == "balanceOf");
 
-  const defaultVariables: Record<string, string|Decimal> = {};
-  const classVariables = contract.subNodes.filter(f => f.type == "StateVariableDeclaration") as StateVariableDeclaration[];
-  for (const stateVariable of classVariables) {
-    for (const variable of stateVariable.variables.filter(v => v.name)) {
-      defaultVariables[variable.name!] = (
-        isNumberLiteral(variable.expression)
-          ? new Decimal(variable.expression.number)
-          : "TODO"
-      )
-    }
-  }
   const statements = solBalanceOf?.body?.statements;
   if (!statements?.length) return null;
 
-  return (balance: Decimal, timestamp: DateTime, rates: FXRate[]) => {
+  const currentState = getInitialContractState(contract);
+
+  const balanceOf = (balance: Decimal, timestamp: DateTime, rates: FXRate[]) => {
     const variables: any = {
-      ...defaultVariables,
+      ...currentState,
+      user,
       block: { timestamp: Math.round(timestamp.toSeconds()) },
       currentBalance: balance,
       _rates: rates,
     };
-    for (const statement of statements) {
-      if (isVariableDeclStmt(statement)) {
+    let returnVal: Decimal|undefined = undefined;
+    const runStatements = (statements: BaseASTNode[]) => {
+      for (const statement of statements) {
+        // Once return is requested, no more statements will run
+        if (returnVal) return;
 
-        for (const variable of statement.variables) {
-          if (isVariableDecl(variable)) {
-            variables[variable.name!] = getValue(statement.initialValue, variables);
+        if (isVariableDeclStmt(statement)) {
+          for (const variable of statement.variables) {
+            if (isVariableDecl(variable)) {
+              variables[variable.name!] = getValue(statement.initialValue, variables);
+            }
           }
         }
-      }
-      else if (isReturn(statement)) {
-        variables.return = getValue(statement.expression, variables);
+        else if (isIfStatement(statement)) {
+          const condition = getValue(statement.condition, variables);
+          if (condition) {
+            if (statement.trueBody.type == "Block") {
+              runStatements(statement.trueBody.statements);
+            }
+            else {
+              throw new Error("Unhandled case here");
+            }
+          }
+        }
+        else if (isReturn(statement)) {
+          returnVal = getValue(statement.expression, variables);
+        }
       }
     }
-    // const newBalance = contract.balanceOf(address, balance);
-    // return newBalance.toNumber();
-    return variables.return;
+
+    runStatements(statements);
+    return returnVal!;
   }
+
+  return { balanceOf, currentState }
+}
+
+function getInitialContractState(contract: ContractDefinition) {
+  const initialState: ContractState = {};
+  const classVariables = contract.subNodes.filter(f => f.type == "StateVariableDeclaration") as StateVariableDeclaration[];
+  for (const stateVariable of classVariables) {
+    for (const variable of stateVariable.variables.filter(v => v.name)) {
+      const { name, expression } = variable;
+      if (name == null) throw new Error("Whats this?");
+      if (expression != null) {
+        initialState[name] = getValue(expression, {});
+      }
+      else {
+        switch (variable.typeName?.type) {
+          case "Mapping":
+            initialState[name] = {} as Record<string, any>;
+            break;
+          case 'UserDefinedTypeName':
+            if (variable.typeName.namePath != "IPluggable") {
+              throw new Error("Unknown Variable Type");
+            }
+            break; // We don't use this at the moment...
+          default:
+            throw new Error("Unknown Variable Type");
+        }
+      }
+    }
+  }
+  return initialState;
 }
 
 const getValue = (initialValue: Expression|null, variables: any) : Decimal => {
   switch (initialValue?.type) {
+    case "MemberAccess": return memberAccess(initialValue, variables);
     case "FunctionCall": return callFunction(initialValue, variables);
     case "BinaryOperation": return binaryOperation(initialValue, variables);
     case "TupleExpression": return tupleExpression(initialValue, variables);
     case "Identifier": return identifier(initialValue, variables);
+    case "IndexAccess": return indexAccess(initialValue, variables);
+    case "NumberLiteral": return new Decimal(initialValue.number);
     default: throw new Error("missing type");
   }
 }
 
-const binaryOperation = (initialValue: BinaryOperation, variables: any) => {
+function binaryOperation(initialValue: BinaryOperation, variables: any) : any {
   const left: Decimal = getValue(initialValue.left, variables);
   const right: Decimal = getValue(initialValue.right, variables);
 
   switch (initialValue.operator) {
-    // case "+": return variables[initialValue.left.name] + variables[initialValue.right.name];
-    // case "-": return variables[initialValue.left.name] - variables[initialValue.right.name];
+    case "+": return left.add(right);
+    case "-": return left.sub(right);
     case "*": return left.mul(right);
     case "/": return left.dividedToIntegerBy(right);
+    case '!=': return !left.eq(right);
+    case '==': return left.eq(right);
     default: throw new Error("Invalid operation");
   }
 }
@@ -116,15 +165,8 @@ function identifier(identifier: Identifier, variables: any) {
 }
 
 
-const callFunction = (fnCall: FunctionCall, variables: any) => {
-  const args = fnCall.arguments.map(arg => {
-    if (isMemberAccess(arg))
-      return variables[(arg.expression as Identifier).name][arg.memberName];
-    if (isIdentifier(arg))
-      return variables[arg.name]
-
-    return "unknown";
-  })
+function callFunction(fnCall: FunctionCall, variables: any) {
+  const args = fnCall.arguments.map(arg => getValue(arg, variables))
 
   if (isIdentifier(fnCall.expression)) {
     switch(fnCall.expression.name) {
@@ -132,7 +174,25 @@ const callFunction = (fnCall: FunctionCall, variables: any) => {
       case "toCoin": return toCoin(args, variables._rates);
     }
   }
+  else if (fnCall.expression.type == "ElementaryTypeName") {
+    switch(fnCall.expression.name) {
+      case "int": return args[0]; // Cast to int
+    }
+  }
   throw new Error("Missing fn implementation");
+}
+
+function indexAccess(accessor: IndexAccess, variables: any): Decimal {
+  const mapping = getValue(accessor.base, variables) as any;
+  const index = getValue(accessor.index, variables) as any;
+  return mapping[index] ?? null;
+}
+
+function memberAccess(memberAccess: MemberAccess, variables: any): Decimal {
+  var obj = getValue(memberAccess.expression, variables) as any;
+  return (obj !== null)
+    ? obj[memberAccess.memberName]
+    : new Decimal(0);
 }
 
 const avgRate = (rate: FXRate) => ((rate.sell + rate.buy) / 2) || 1;
@@ -157,9 +217,13 @@ export const toCoin = ([fiat, timestamp]: any[], rates: FXRate[]) => {
 }
 
 const isIdentifier = (node: BaseASTNode|null) : node is Identifier => node?.type === "Identifier";
-const isMemberAccess = (node: BaseASTNode|null) : node is MemberAccess => node?.type === "MemberAccess";
+// const isMemberAccess = (node: BaseASTNode|null) : node is MemberAccess => node?.type === "MemberAccess";
 // const isFuncCall = (node: BaseASTNode|null) : node is FunctionCall => node?.type === "FunctionCall";
-const isNumberLiteral = (node: BaseASTNode|null) : node is NumberLiteral => node?.type == "NumberLiteral";
+// const isNumberLiteral = (node: BaseASTNode|null) : node is NumberLiteral => node?.type == "NumberLiteral";
+// const isMapping = (node: BaseASTNode|null) : node is Mapping => node?.type == "Mapping";
 const isVariableDecl = (node: BaseASTNode|null) : node is VariableDeclaration => node?.type == "VariableDeclaration";
 const isVariableDeclStmt = (node: BaseASTNode) : node is VariableDeclarationStatement => node.type == "VariableDeclarationStatement";
+const isIfStatement = (node: BaseASTNode|null) : node is IfStatement => node?.type == "IfStatement";
 const isReturn = (node: BaseASTNode|null) : node is ReturnStatement => node?.type == "ReturnStatement";
+
+

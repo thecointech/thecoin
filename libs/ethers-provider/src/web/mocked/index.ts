@@ -62,9 +62,19 @@ export class Erc20Provider extends BaseProvider {
     }))
   }
 
-  async getSourceCode(_address: string) {
-    const rn = await import("@thecointech/contract-core/RoundNumber.json")
-    return rn.default.src;
+  async getSourceCode(address: string) {
+    switch (address)
+    {
+      case "RoundNumber": {
+        const rn = await import("@thecointech/contract-core/RoundNumber.json")
+        return rn.default.code;
+      }
+      case "UberConverter": {
+        const rn = await import("@thecointech/contract-plugin-converter/contract-src.json")
+        return rn.default.code;
+      }
+      default: throw new Error(`Invalid address: ${address}`)
+    }
   }
 }
 

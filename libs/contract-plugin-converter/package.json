@@ -40,8 +40,20 @@
   "files": [
     "build/**/*"
   ],
-  "exports": "./build/index.js",
+  "exports": {
+    "./contract-src.json": "./contract-src.json",
+    ".": "./build/index.js"
+  },
   "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "contract-src.json": ["./contract-src.json"],
+      "testHelpers.ts": ["./internal/testHelpers.ts"],
+      "*": [
+        "build/index.d.ts"
+      ]
+    }
+  },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
     "@thecointech/async": "^0.2.93",
