@@ -37,7 +37,7 @@ export const HistoryGraph = () => {
     : undefined;
 
   const modifiers = account?.plugins
-    .map(d => d.modifier)
+    .map(d => d.emulator?.balanceOf)
     .filter(isPresent)
     ?? [];
 

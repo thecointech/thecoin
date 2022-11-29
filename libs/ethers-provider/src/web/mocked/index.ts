@@ -66,7 +66,7 @@ export class Erc20Provider extends BaseProvider {
     switch (address)
     {
       case "RoundNumber": {
-        const rn = await import("@thecointech/contract-core/RoundNumber.json")
+        const rn = await import("@thecointech/contract-core/contract-src.json")
         return rn.default.code;
       }
       case "UberConverter": {

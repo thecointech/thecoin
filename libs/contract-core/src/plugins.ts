@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import parser from '@solidity-parser/parser'
 import type { PluginAndPermissionsStructOutput, TheCoin } from './types/contracts/TheCoin';
-import type { BaseASTNode, ContractDefinition, FunctionDefinition, StateVariableDeclaration, VariableDeclarationStatement, VariableDeclaration, FunctionCall, MemberAccess, Identifier, Expression, BinaryOperation, TupleExpression, ReturnStatement, IndexAccess, IfStatement, NumberLiteral } from '@solidity-parser/parser/dist/src/ast-types';
+import type { BaseASTNode, ContractDefinition, FunctionDefinition, StateVariableDeclaration, VariableDeclarationStatement, VariableDeclaration, FunctionCall, MemberAccess, Identifier, Expression, BinaryOperation, TupleExpression, ReturnStatement, IndexAccess, IfStatement } from '@solidity-parser/parser/dist/src/ast-types';
 
 type ContractState = Record<string, string | Decimal | Record<string, any>>;
 export type PluginBalanceMod = (balance: Decimal, timestamp: DateTime, rates: FXRate[]) => Decimal;
