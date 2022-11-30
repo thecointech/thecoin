@@ -1,34 +1,12 @@
 import { getFxRate, FXRate } from '@thecointech/fx-rates';
-import { COIN_EXP, PERMISSION_BALANCE } from './constants';
+import { COIN_EXP, PERMISSION_BALANCE } from '../constants';
 import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import parser from '@solidity-parser/parser'
-import type { PluginAndPermissionsStructOutput, TheCoin } from './types/contracts/TheCoin';
-import type { BaseASTNode, ContractDefinition, FunctionDefinition, StateVariableDeclaration, VariableDeclarationStatement, VariableDeclaration, FunctionCall, MemberAccess, Identifier, Expression, BinaryOperation, TupleExpression, ReturnStatement, IndexAccess, IfStatement } from '@solidity-parser/parser/dist/src/ast-types';
-
-type ContractState = Record<string, string | Decimal | Record<string, any>>;
-export type PluginBalanceMod = (balance: Decimal, timestamp: DateTime, rates: FXRate[]) => Decimal;
-export type PluginEmulator = {
-  balanceOf: PluginBalanceMod,
-  currentState: ContractState,
-}
-export type PluginDetails = {
-  address: string;
-  permissions: Decimal;
-  emulator: PluginEmulator | null;
-}
-
-export async function getPluginDetails(tcCore: TheCoin) : Promise<PluginDetails[]>{
-  const user = await tcCore.signer.getAddress();
-  const plugins = await tcCore.getUsersPlugins(user);
-  const details = plugins.map(async (plugin) => ({
-    address: plugin.plugin,
-    permissions: new Decimal(plugin.permissions.toString()),
-    emulator: await getPluginModifier(user, plugin),
-  }))
-  return Promise.all(details)
-}
+import type { PluginAndPermissionsStructOutput } from '../types/contracts/TheCoin';
+import type { BaseASTNode, ContractDefinition, FunctionDefinition, StateVariableDeclaration, VariableDeclarationStatement, VariableDeclaration, FunctionCall, MemberAccess, Identifier, Expression, BinaryOperation, TupleExpression, ReturnStatement, IndexAccess, IfStatement, ExpressionStatement } from '@solidity-parser/parser/dist/src/ast-types';
+import type { ContractState, PluginEmulator } from './types';
 
 export async function getPluginModifier(user: string, {plugin, permissions}: PluginAndPermissionsStructOutput) : Promise<PluginEmulator|null> {
 
@@ -84,6 +62,9 @@ export async function getPluginModifier(user: string, {plugin, permissions}: Plu
             }
           }
         }
+        else if (isExpressionStatement(statement)) {
+          evaluateExpression(statement, variables);
+        }
         else if (isReturn(statement)) {
           returnVal = getValue(statement.expression, variables);
         }
@@ -124,6 +105,18 @@ function getInitialContractState(contract: ContractDefinition) {
     }
   }
   return initialState;
+}
+
+const evaluateExpression = ({expression}: ExpressionStatement, variables: any) => {
+  switch (expression?.type) {
+    case "BinaryOperation": {
+      if (expression.operator == "=") {
+        const right = getValue(expression.right, variables);
+        const accessor = (expression.left as Identifier).name;
+        variables[accessor] = right;
+      }
+    }
+  }
 }
 
 const getValue = (initialValue: Expression|null, variables: any) : Decimal => {
@@ -185,14 +178,12 @@ function callFunction(fnCall: FunctionCall, variables: any) {
 function indexAccess(accessor: IndexAccess, variables: any): Decimal {
   const mapping = getValue(accessor.base, variables) as any;
   const index = getValue(accessor.index, variables) as any;
-  return mapping[index] ?? null;
+  return mapping[index] ?? new Decimal(0);
 }
 
 function memberAccess(memberAccess: MemberAccess, variables: any): Decimal {
   var obj = getValue(memberAccess.expression, variables) as any;
-  return (obj !== null)
-    ? obj[memberAccess.memberName]
-    : new Decimal(0);
+  return obj[memberAccess.memberName] ?? new Decimal(0);
 }
 
 const avgRate = (rate: FXRate) => ((rate.sell + rate.buy) / 2) || 1;
@@ -221,6 +212,7 @@ const isIdentifier = (node: BaseASTNode|null) : node is Identifier => node?.type
 // const isFuncCall = (node: BaseASTNode|null) : node is FunctionCall => node?.type === "FunctionCall";
 // const isNumberLiteral = (node: BaseASTNode|null) : node is NumberLiteral => node?.type == "NumberLiteral";
 // const isMapping = (node: BaseASTNode|null) : node is Mapping => node?.type == "Mapping";
+const isExpressionStatement = (node: BaseASTNode|null) : node is ExpressionStatement => node?.type == "ExpressionStatement";
 const isVariableDecl = (node: BaseASTNode|null) : node is VariableDeclaration => node?.type == "VariableDeclaration";
 const isVariableDeclStmt = (node: BaseASTNode) : node is VariableDeclarationStatement => node.type == "VariableDeclarationStatement";
 const isIfStatement = (node: BaseASTNode|null) : node is IfStatement => node?.type == "IfStatement";

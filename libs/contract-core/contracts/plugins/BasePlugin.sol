@@ -13,6 +13,8 @@ abstract contract BasePlugin is IPlugin {
   bytes4 public constant IID_PLUGIN = type(IPlugin).interfaceId;
   bytes4 public constant IID_ERC165 = type(IPlugin).interfaceId;
 
+  event ValueChanged(address indexed user, string path, int change);
+
   // suppport ERC165
   function supportsInterface(bytes4 interfaceID) override external pure returns (bool)
   {

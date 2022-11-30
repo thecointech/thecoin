@@ -23,7 +23,10 @@ contract RoundNumber is BasePlugin, OracleClient, Ownable, PermissionUser {
   }
 
   // Round to the nearest $100 (10K cents)
-  int constant ROUND_POINT = 10000;
+  int DEFAULT_ROUND_POINT = 10000;
+
+  // Users can specify their own rounding point
+  mapping(address => int) UserRounding;
 
   // We modify the users balance to reflect what they can actually spend.
   // When a withdrawal occurs we may boost the
@@ -31,10 +34,19 @@ contract RoundNumber is BasePlugin, OracleClient, Ownable, PermissionUser {
     return PERMISSION_BALANCE;
   }
 
-  function balanceOf(address /*user*/, int currentBalance) external view override returns(int){
+  function setRoundPoint(int newRoundPoint) public {
+    UserRounding[msg.sender] = newRoundPoint;
+    emit ValueChanged(msg.sender, "UserRounding[user]", newRoundPoint);
+  }
+
+  function balanceOf(address user, int currentBalance) external view override returns(int){
     // Fiat is in cents
     int fiat = toFiat(currentBalance, block.timestamp);
-    int rounded = (fiat / ROUND_POINT) * ROUND_POINT;
+    int roundPoint = UserRounding[user];
+    if(roundPoint == 0) {
+      roundPoint = DEFAULT_ROUND_POINT;
+    }
+    int rounded = (fiat / roundPoint) * roundPoint;
     return toCoin(rounded, block.timestamp);
   }
 }
