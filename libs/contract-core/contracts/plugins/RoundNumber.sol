@@ -34,9 +34,9 @@ contract RoundNumber is BasePlugin, OracleClient, Ownable, PermissionUser {
     return PERMISSION_BALANCE;
   }
 
-  function setRoundPoint(int newRoundPoint) public {
+  function setRoundPoint(int newRoundPoint, uint timestamp) public {
     UserRounding[msg.sender] = newRoundPoint;
-    emit ValueChanged(msg.sender, "UserRounding[user]", newRoundPoint);
+    emit ValueChanged(msg.sender, timestamp, "UserRounding[user]", newRoundPoint);
   }
 
   function balanceOf(address user, int currentBalance) external view override returns(int){

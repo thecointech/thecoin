@@ -36,7 +36,7 @@ export async function getPluginModifier(user: string, {plugin, permissions}: Plu
       user,
       block: { timestamp: Math.round(timestamp.toSeconds()) },
       currentBalance: balance,
-      _rates: rates,
+      __$rates: rates,
     };
     let returnVal: Decimal|undefined = undefined;
     const runStatements = (statements: BaseASTNode[]) => {
@@ -163,8 +163,8 @@ function callFunction(fnCall: FunctionCall, variables: any) {
 
   if (isIdentifier(fnCall.expression)) {
     switch(fnCall.expression.name) {
-      case "toFiat": return toFiat(args, variables._rates);
-      case "toCoin": return toCoin(args, variables._rates);
+      case "toFiat": return toFiat(args, variables.__$rates);
+      case "toCoin": return toCoin(args, variables.__$rates);
     }
   }
   else if (fnCall.expression.type == "ElementaryTypeName") {

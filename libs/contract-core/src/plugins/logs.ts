@@ -8,7 +8,7 @@ import { ContractState } from './types';
 import { last } from '@thecointech/utilities';
 
 type BaseLogs = {
-  date: DateTime,
+  timestamp: DateTime,
   user: string,
   path: string,
   amnt: Decimal
@@ -17,27 +17,22 @@ type BaseLogs = {
 export async function getPluginLogs(address: string, user: string, provider: Provider, fromBlock: number) : Promise<BaseLogs[]> {
   const contract = new Contract(address, BasePluginSpec.abi, provider) as BasePlugin;
   const filter = contract.filters.ValueChanged(user);
-  (filter as any).startBlock = fromBlock;
-  const logs = await provider.getLogs(filter);
+  const logs = await contract.queryFilter(filter, fromBlock);
 
-  const parsed = logs.map(l => contract.interface.parseLog(l));
-  const times = await Promise.all(
-    logs.map(async (l) => {
-      const block = await provider.getBlock(l.blockNumber);
-      return DateTime.fromSeconds(block.timestamp);
-    })
-  )
-  return parsed.map((log, index) => ({
-    date: times[index],
-    user: log.args[0],
-    path: log.args[1],
-    amnt: new Decimal(log.args[2].toString()),
+  return logs.map(log => ({
+    user: log.args.user,
+    timestamp: DateTime.fromSeconds(log.args.timestamp.toNumber()),
+    // user: log.args[0],
+    path: log.args.path,
+    amnt: new Decimal(log.args.change.toString()),
   }))
 }
 
-export function updateState(state: ContractState, from: DateTime, to: DateTime, logs: BaseLogs[]) {
+export function updateState(state: ContractState, to: DateTime, logs: BaseLogs[]) {
+  // We track last time this
+  state.__$lastUpdate ??= DateTime.fromSeconds(0);
   logs
-    .filter(l => l.date >= from && l.date < to)
+    .filter(l => state.__$lastUpdate <= l.timestamp && l.timestamp < to)
     .forEach(l => {
       // Special-case item "user" derefences the address
       const getAccessor = (acc: string) => acc == "user" ? l.user : acc;
@@ -54,7 +49,7 @@ export function updateState(state: ContractState, from: DateTime, to: DateTime, 
       }
       // Apply change to the last accessor in the path
       const lastAccessor = getAccessor(last(pathItems));
-      const currentValue = toModify[lastAccessor] ?? new Decimal(0);
-      toModify[lastAccessor] = currentValue.add(l.amnt);
+      toModify[lastAccessor] = l.amnt;
     });
+  state.__$lastUpdate = to;
 }
