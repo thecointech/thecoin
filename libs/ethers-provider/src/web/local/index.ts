@@ -54,7 +54,8 @@ export class Erc20Provider extends JsonRpcProvider {
   }
 
   async getSourceCode(address: string) {
-    const getContractUber = await import("@thecointech/contract-plugin-converter")
+    const thingy = "@thecointech/contract-plugin-converter";
+    const getContractUber = await import(thingy);
     const uberContract = await getContractUber.getContract();
     if (address == uberContract.address) {
       const rn = await import("@thecointech/contract-plugin-converter/contract-src.json")

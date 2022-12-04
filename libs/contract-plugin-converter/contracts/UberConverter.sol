@@ -99,7 +99,7 @@ contract UberConverter is BasePlugin, OracleClient, Ownable, PermissionUser {
         pending[from].transfers[to][timestamp] = pending[from].transfers[to][timestamp] + amount;
         pending[from].total = pending[from].total + amount;
         finalAmount = 0;
-        emit ValueChanged(from, timestamp, "pending[user].total", int(amount));
+        emit ValueChanged(from, timestamp, "pending[user].total", int(pending[from].total));
       }
       // Happening now, so convert to Coin
       else {
@@ -123,7 +123,7 @@ contract UberConverter is BasePlugin, OracleClient, Ownable, PermissionUser {
       theCoin.pl_transferFrom(from, to, coin);
       delete user.transfers[to][timestamp];
       user.total = user.total - fiat;
-      emit ItemChanged(from, "pending.total", -int(fiat));
+      emit ValueChanged(from, timestamp, "pending[user].total", int(user.total));
     }
   }
   // ------------------------------------------------------------------------

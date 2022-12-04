@@ -70,6 +70,20 @@ async function setRoundPlugin() {
 
     const assigned = await tcCore.pl_assignPlugin(clientAddr, deployed.address, PERMISSION_BALANCE, "0x1234");
     await assigned.wait();
+
+    // Set the rounding amount for several times in the past, this
+    // exercises the updating state due to logged changes
+    const amounts = [
+      100,
+      150,
+      75,
+      25,
+      125,
+    ];
+    const weeksAgoSecs = (weeks: number) => Math.round(DateTime.now().minus({weeks}).toSeconds());
+    for (let i = 0; i < amounts.length; i++) {
+      await deployed.setRoundPoint(amounts[i], weeksAgoSecs(amounts.length - i));
+    }
   }
 }
 
