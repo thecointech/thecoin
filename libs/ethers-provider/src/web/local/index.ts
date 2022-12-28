@@ -3,6 +3,7 @@ import { hexZeroPad, hexStripZeros } from "@ethersproject/bytes";
 import { id } from "@ethersproject/hash";
 import { BigNumber } from "@ethersproject/bignumber";
 import { ERC20Response } from '../erc20response';
+import plugins from '../../plugins.json';
 
 export class Erc20Provider extends JsonRpcProvider {
 
@@ -53,19 +54,9 @@ export class Erc20Provider extends JsonRpcProvider {
     return result;
   }
 
-  async getSourceCode(_address: string) {
-    // const { getContract } = await import("@thecointech/contract-plugin-converter");
-
-    // const uberContract = await getContract();
-    // if (address == uberContract.address) {
-    //   const rn = await import("@thecointech/contract-plugin-converter/contract-src.json")
-    //   return rn.default.code;
-    // }
-    // else {
-    //   const rn = await import("@thecointech/contract-core/contract-src.json")
-    //   return rn.default.code;
-    // }
-    return "";
+  async getSourceCode(address: string) {
+    const plugin = Object.values(plugins).find(p => p.address === address);
+    return plugin?.code;
   }
 }
 
