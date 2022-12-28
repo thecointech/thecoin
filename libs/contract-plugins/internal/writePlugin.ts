@@ -1,33 +1,31 @@
 import { existsSync, readFileSync, writeFileSync, readdirSync } from 'fs';
 import { storeContractAddress } from '@thecointech/contract-tools/writeContract';
+import path from 'path';
 
-const pluginCacheFile = new URL("../../ethers-provider/src/plugins.json", __dirname);
+const pluginCacheFile = new URL("../../ethers-provider/src/plugins.json", import.meta.url);
 // This gawd-awful hack is how we expose plugin address & code to
 // provider in dev:live mode.
-export function writePlugin(root: string, address: string, contractName: string) {
+export function writePlugin(address: string, contract: URL) {
   // Only write artifacts in devlive
-  if (process.env.CONFIG_NAME === 'devlive')
+  if (process.env.CONFIG_NAME !== 'devlive')
     return;
 
-  const rootUrl = new URL(root);
-  const contractFile = findFile(rootUrl, contractName);
-  if (!contractFile)
-    throw new Error(`Cannot find contract: ${contractName}`);
-  const code = readFileSync(contractFile, "utf-8");
+  const code = readFileSync(contract, "utf-8");
   const existing = existsSync(pluginCacheFile)
    ? JSON.parse(readFileSync(pluginCacheFile, "utf-8"))
    : {}
 
+  const contractPath = path.parse(contract.pathname);
   writeFileSync(pluginCacheFile, JSON.stringify({
     ...existing,
-    [contractName]: {
+    [contractPath.name]: {
       address,
       code
     }
   }));
 
   // Also write the contract address
-  storeContractAddress(rootUrl, "polygon", address);
+  storeContractAddress(contract, "polygon", address);
 }
 
 

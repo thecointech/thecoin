@@ -1,5 +1,6 @@
 import { getSigner } from '@thecointech/signers';
-import { ConnectContract, PERMISSION_BALANCE } from '@thecointech/contract-core';
+import { ConnectContract } from '@thecointech/contract-core';
+import { PERMISSION_BALANCE } from '@thecointech/contract-plugins';
 import { log } from '@thecointech/logging';
 import { getContract } from '../src/contract';
 import { DateTime } from 'luxon';

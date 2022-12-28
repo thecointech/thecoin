@@ -33,14 +33,14 @@
     "build/**/*"
   ],
   "exports": {
-    "./writePlugin": "./build/writePlugin.js",
+    "./writePlugin": "./internal/writePlugin.ts",
     ".": "./build/index.js"
   },
   "types": "./build/index.d.ts",
   "typesVersions": {
     "*": {
       "*": [
-        "build/index.d.ts"
+        "build/*.d.ts"
       ]
     }
   },
