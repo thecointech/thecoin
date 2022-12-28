@@ -15,10 +15,6 @@
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/contract-tools"
   },
-  "bin": {
-    "contract-migrate": "./src/contract-migrate.js",
-    "contract-gen-types": "./src/contract-gen-types.js"
-  },
   "scripts": {
     "clean": "rimraf ./build",
     "build": "yarn tsc",
@@ -26,8 +22,7 @@
   },
   "exports": {
     "./hardhat.config": "./build/hardhat.config.js",
-    "./writeContract": "./build/writeContract.js",
-    "./verify": "./build/verify.js"
+    "./writeContract": "./build/writeContract.js"
   },
   "typesVersions": {
     "*": {

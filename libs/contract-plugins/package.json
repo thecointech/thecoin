@@ -1,7 +1,7 @@
 {
-  "name": "@thecointech/contract-plugin-converter",
+  "name": "@thecointech/contract-plugins",
   "version": "0.2.93",
-  "description": "The Coin: Converter allows changing a transactions time and currency",
+  "description": "The Coin: Plugin functionality for contract-core",
   "type": "module",
   "keywords": [
     "TheCoin",
@@ -13,7 +13,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
-    "directory": "libs/contract-plugin-converter"
+    "directory": "libs/contract-plugins"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
@@ -24,31 +24,21 @@
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
     "build:src": "yarn tsc --project tsconfig.build.json",
     "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
-    "clean": "run-p clean:*",
-    "clean:src": "rimraf ./build",
-    "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
+    "clean": "rimraf ./build",
     "test": "yarn run-jest",
     "test:ci": "yarn run-jest-nix",
-    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive run-s _deploy _seed",
-    "prod:test": "cross-env CONFIG_NAME=prodtest run-s _deploy _seed",
-    "prod": "cross-env CONFIG_NAME=prod run-s _deploy _seed",
-    "_deploy": "yarn _hardhat ./scripts/deploy.ts",
-    "_verify": "yarn _hardhat ./scripts/verify.ts",
-    "_seed": "yarn _hardhat ./scripts/seed.ts",
     "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
   },
   "files": [
     "build/**/*"
   ],
   "exports": {
-    "./contract-src.json": "./contract-src.json",
+    "./writePlugin": "./build/writePlugin.js",
     ".": "./build/index.js"
   },
   "types": "./build/index.d.ts",
   "typesVersions": {
     "*": {
-      "contract-src.json": ["./contract-src.json"],
-      "testHelpers.ts": ["./internal/testHelpers.ts"],
       "*": [
         "build/index.d.ts"
       ]
@@ -61,7 +51,6 @@
     "jest": "*"
   },
   "dependencies": {
-    "@thecointech/contract-oracle": "^0.2.93",
-    "@thecointech/contract-plugins": "^0.2.93"
+    "@thecointech/contract-oracle": "^0.2.93"
   }
 }

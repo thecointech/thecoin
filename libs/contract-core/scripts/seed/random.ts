@@ -4,7 +4,6 @@ import { DateTime } from 'luxon';
 import { COIN_EXP, ConnectContract, GetContract, PERMISSION_BALANCE } from '../../src';
 import {assignRoles} from './assignRoles';
 
-import { RoundNumber__factory } from "../../src/types/factories/contracts/plugins";
 import { getContract } from '@thecointech/contract-oracle';
 
 const theCoin = await getSigner("TheCoin");
@@ -59,37 +58,8 @@ async function seedAccount(tcAddr: string, client: string, onlyBuy=false) {
   }
 }
 
-async function setRoundPlugin() {
-  const clientAddr = await client2.getAddress();
-  const existingPlugins = await tcCore.getUsersPlugins(clientAddr);
-  if (existingPlugins.length === 0) {
-    // Finally, assign a plugin to one of the signers (just for testing purposes)
-    const factory = new RoundNumber__factory(tcCore.signer);
-    const oracle = await getContract();
-    const deployed = await factory.deploy(oracle.address);
-
-    const assigned = await tcCore.pl_assignPlugin(clientAddr, deployed.address, PERMISSION_BALANCE, "0x1234");
-    await assigned.wait();
-
-    // Set the rounding amount for several times in the past, this
-    // exercises the updating state due to logged changes
-    const amounts = [
-      100,
-      150,
-      75,
-      25,
-      125,
-    ];
-    const weeksAgoSecs = (weeks: number) => Math.round(DateTime.now().minus({weeks}).toSeconds());
-    for (let i = 0; i < amounts.length; i++) {
-      await deployed.setRoundPoint(amounts[i], weeksAgoSecs(amounts.length - i));
-    }
-  }
-}
-
 const contract = await GetContract();
 log.info(`Initializing core: ${contract.address} with random values`);
 
 await assignRoles(contract);
 await randomDistribution();
-await setRoundPlugin();

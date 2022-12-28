@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals';
 import hre from 'hardhat';
 import { createAndInitOracle } from '@thecointech/contract-oracle/testHelpers.ts';
-import { createAndInitTheCoin, initAccounts } from '../../internal/testHelpers';
+import { createAndInitTheCoin, initAccounts } from '../internal/testHelpers';
 import { ALL_PERMISSIONS } from '../../src/constants';
 
 jest.setTimeout(5 * 60 * 1000);

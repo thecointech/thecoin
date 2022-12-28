@@ -1,9 +1,11 @@
 import Decimal from 'decimal.js-light';
 import { getPluginModifier } from './modifier';
-import type { TheCoin } from '../types/contracts/TheCoin';
 import { PluginDetails } from './types';
+import { IPluggable } from './types/contracts/IPluggable';
+export * from './constants';
+export * from './types';
 
-export async function getPluginDetails(tcCore: TheCoin) : Promise<PluginDetails[]>{
+export async function getPluginDetails(tcCore: IPluggable) : Promise<PluginDetails[]>{
   const user = await tcCore.signer.getAddress();
   const plugins = await tcCore.getUsersPlugins(user);
   const details = plugins.map(async (plugin) => ({

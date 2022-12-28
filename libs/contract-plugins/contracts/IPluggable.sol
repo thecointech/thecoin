@@ -9,6 +9,20 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
+import "./IPlugin.sol";
+
+// TODO: Pack this tightly
+struct PluginAndPermissions {
+  // Plugin address (20bytes)
+  IPlugin plugin;
+
+  // The permissions the user has granted to
+  // the plugin.  These permissions persist
+  // even if the plugin changes to request
+  // other permissions.
+  uint96 permissions;
+}
+
 
 /// @title Interface to allow plugins to interop with base contract
 /// @author TheCoin
@@ -39,4 +53,6 @@ interface IPluggable is IERC20Upgradeable {
   // either by saving local state, or by (better) passing an argument
   // through the stack that uniquely indentifies this request.
   function pl_transferFrom(address user, address to, uint amount) external;
+
+  function getUsersPlugins(address user) external view returns(PluginAndPermissions[] memory);
 }

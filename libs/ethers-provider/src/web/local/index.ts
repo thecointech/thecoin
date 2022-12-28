@@ -53,18 +53,19 @@ export class Erc20Provider extends JsonRpcProvider {
     return result;
   }
 
-  async getSourceCode(address: string) {
-    const thingy = "@thecointech/contract-plugin-converter";
-    const getContractUber = await import(thingy);
-    const uberContract = await getContractUber.getContract();
-    if (address == uberContract.address) {
-      const rn = await import("@thecointech/contract-plugin-converter/contract-src.json")
-      return rn.default.code;
-    }
-    else {
-      const rn = await import("@thecointech/contract-core/contract-src.json")
-      return rn.default.code;
-    }
+  async getSourceCode(_address: string) {
+    // const { getContract } = await import("@thecointech/contract-plugin-converter");
+
+    // const uberContract = await getContract();
+    // if (address == uberContract.address) {
+    //   const rn = await import("@thecointech/contract-plugin-converter/contract-src.json")
+    //   return rn.default.code;
+    // }
+    // else {
+    //   const rn = await import("@thecointech/contract-core/contract-src.json")
+    //   return rn.default.code;
+    // }
+    return "";
   }
 }
 

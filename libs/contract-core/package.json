@@ -72,6 +72,7 @@
   "dependencies": {
     "@solidity-parser/parser": "^0.14.5",
     "@thecointech/contract-base": "^0.2.93",
+    "@thecointech/contract-plugins": "^0.2.93",
     "@thecointech/fx-rates": "^0.2.93"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"

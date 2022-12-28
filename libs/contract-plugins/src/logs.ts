@@ -1,7 +1,7 @@
-import BasePluginSpec from '../contracts/contracts/plugins/BasePlugin.sol/BasePlugin.json' assert {type: "json"};
+import BasePluginSpec from './contracts/contracts/BasePlugin.sol/BasePlugin.json' assert {type: "json"};
+import { BasePlugin } from './types/contracts/BasePlugin';
 import { Contract } from '@ethersproject/contracts';
 import type { Provider } from '@ethersproject/providers';
-import { BasePlugin } from '../types';
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import { ContractState } from './types';

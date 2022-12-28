@@ -1,4 +1,4 @@
-import { InitialCoinBlock, ConnectContract, TheCoin, getPluginDetails } from '@thecointech/contract-core';
+import { InitialCoinBlock, ConnectContract, TheCoin } from '@thecointech/contract-core';
 import { Signer, Wallet } from 'ethers';
 import { call, delay, select, StrictEffect } from "@redux-saga/core/effects";
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
@@ -18,6 +18,7 @@ import type { SagaIterator } from '@redux-saga/core';
 import type { AccountMapStore } from '../AccountMap';
 import type { DecryptCallback, IActions } from './types';
 import type { Dictionary } from 'lodash';
+import { getPluginDetails } from '@thecointech/contract-plugins';
 
 const KycPollingInterval = (process.env.NODE_ENV === 'production')
   ? 5 * 60 * 1000 // 5 minutes

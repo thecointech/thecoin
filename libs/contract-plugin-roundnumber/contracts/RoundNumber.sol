@@ -10,8 +10,8 @@
 
 pragma solidity ^0.8.0;
 
-import './BasePlugin.sol';
-import '../interfaces/permissions.sol';
+import '@thecointech/contract-plugins/contracts/BasePlugin.sol';
+import '@thecointech/contract-plugins/contracts/permissions.sol';
 import '@thecointech/contract-oracle/contracts/OracleClient.sol';
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";

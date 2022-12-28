@@ -1,12 +1,15 @@
 import { getFxRate, FXRate } from '@thecointech/fx-rates';
-import { COIN_EXP, PERMISSION_BALANCE } from '../constants';
+import { PERMISSION_BALANCE } from './constants';
 import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import parser from '@solidity-parser/parser'
-import type { PluginAndPermissionsStructOutput } from '../types/contracts/TheCoin';
+import type { PluginAndPermissionsStructOutput } from './types/contracts/IPluggable';
 import type { BaseASTNode, ContractDefinition, FunctionDefinition, StateVariableDeclaration, VariableDeclarationStatement, VariableDeclaration, FunctionCall, MemberAccess, Identifier, Expression, BinaryOperation, TupleExpression, ReturnStatement, IndexAccess, IfStatement, ExpressionStatement } from '@solidity-parser/parser/dist/src/ast-types';
 import type { ContractState, PluginEmulator } from './types';
+
+// TODO: De-duplicate this
+const COIN_EXP = 1000000;
 
 export async function getPluginModifier(user: string, {plugin, permissions}: PluginAndPermissionsStructOutput) : Promise<PluginEmulator|null> {
 

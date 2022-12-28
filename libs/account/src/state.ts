@@ -2,10 +2,11 @@ import { CurrencyCode } from '@thecointech/fx-rates'
 import { AccountDetails } from './details';
 import { DateTime } from 'luxon';
 import { NormalizeAddress } from '@thecointech/utilities/Address';
-import type { PluginDetails, TheCoin } from '@thecointech/contract-core';
+import type { TheCoin } from '@thecointech/contract-core';
 import type { Transaction } from '@thecointech/tx-blockchain';
 import type { Signer } from '@ethersproject/abstract-signer';
 import type { SelfID } from '@thecointech/idx';
+import { PluginDetails } from '@thecointech/contract-plugins';
 
 
 // An account state holds all relevant info

@@ -7,23 +7,10 @@
 
 pragma solidity ^0.8.0;
 
-import "../interfaces/IPlugin.sol";
-import "../interfaces/IPluggable.sol";
-import "../interfaces/permissions.sol";
+import '@thecointech/contract-plugins/contracts/IPlugin.sol';
+import '@thecointech/contract-plugins/contracts/IPluggable.sol';
+import '@thecointech/contract-plugins/contracts/permissions.sol';
 import "./Freezable.sol";
-
-// TODO: Pack this tightly
-struct PluginAndPermissions {
-  // Plugin address (20bytes)
-  IPlugin plugin;
-
-  // The permissions the user has granted to
-  // the plugin.  These permissions persist
-  // even if the plugin changes to request
-  // other permissions.
-  uint96 permissions;
-}
-
 
 abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
 

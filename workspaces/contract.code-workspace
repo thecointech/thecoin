@@ -27,6 +27,9 @@
     {
       "name": "signers",
       "path": "../libs/signers"
+    },
+    {
+      "path": "../libs/contract-plugins"
     }
   ],
 	"settings": {

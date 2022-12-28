@@ -1,6 +1,7 @@
 import testWallet from './testAccount1.json' assert {type: "json"};
 import { Wallet } from '@ethersproject/wallet';
-import { ConnectContract, getPluginDetails } from '@thecointech/contract-core';
+import { ConnectContract } from '@thecointech/contract-core';
+import { getPluginDetails } from '@thecointech/contract-plugins';
 import { AccountMap } from '../map';
 import { AccountState, buildNewAccount } from '../state';
 import { connectIDX } from '@thecointech/idx';
