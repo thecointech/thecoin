@@ -173,7 +173,7 @@ function AccountReducer(address: string, initialState: AccountState) {
       const balance = yield call(contract.balanceOf, address);
       yield this.storeValues({ balance: balance.toNumber(), historyLoading: true });
 
-      log.trace(`Updating from ${from} -> ${until}`);
+      log.trace(`Updating from ${historyEnd ?? from} -> ${until}`);
       const oldHistory = this.state.history;
       const fromBlock = this.state.historyEndBlock || InitialCoinBlock;
       // Retrieve transactions for all time

@@ -58,6 +58,7 @@
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
     "@thecointech/async": "^0.2.93",
     "@thecointech/contract-tools": "^0.2.93",
+    "@thecointech/contract-core": "^0.2.93",
     "jest": "*"
   },
   "dependencies": {
