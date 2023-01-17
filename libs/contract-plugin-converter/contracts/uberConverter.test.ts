@@ -153,5 +153,5 @@ it('Appropriately delays a transfer, and converts an appropriate amount at time'
   const et = allEvents?.find((e: any) => e.name == "ExactTransfer")
   expect(et?.args?.from).toBe(transfer.from);
   expect(et?.args?.to).toBe(transfer.to);
-  expect(et?.args?.timestamp.toNumber() * 1000).toBe(transfer.transferMillis);
+  expect(et?.args?.timestamp.toNumber()).toBe(transfer.transferMillis);
 });

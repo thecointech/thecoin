@@ -9,7 +9,7 @@
 
 pragma solidity ^0.8.0;
 
-import '../BasePlugin.sol';
+import '@thecointech/contract-plugins/contracts/BasePlugin.sol';
 import "hardhat/console.sol";
 
 contract DebugPrint is BasePlugin {

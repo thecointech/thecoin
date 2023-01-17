@@ -1,7 +1,7 @@
-import { toCoin, toFiat } from './modifier';
+import { toCoin, toFiat } from '../src/modifier';
 import { DateTime } from 'luxon';
 import type { FXRate } from '@thecointech/pricing';
-import type { PluginEmulator } from './types';
+import type { PluginEmulator } from '../src/types';
 
 export function runModifier(emulator: PluginEmulator, fiat: number, timestamp: number) {
   const rates = [{

@@ -1,8 +1,9 @@
 import { jest } from '@jest/globals';
-import hre from 'hardhat';
 import { createAndInitOracle } from '@thecointech/contract-oracle/testHelpers.ts';
-import { createAndInitTheCoin, initAccounts } from '../internal/testHelpers';
+import { createAndInitTheCoin, initAccounts } from '@thecointech/contract-core/testHelpers.ts';
 import { ALL_PERMISSIONS } from '../../src/constants';
+import hre from 'hardhat';
+import '@nomiclabs/hardhat-ethers';
 
 jest.setTimeout(5 * 60 * 1000);
 
@@ -27,7 +28,7 @@ it('Correctly limits spending', async () => {
   await limiter.setUserSpendingLimit(signers.client1.address, 100e2);
 
   // Test that the limit is applied
-  const now = Math.round(Date.now() / 1000);
+  const now = Date.now();
   const pw = limiter.preWithdraw(signers.client1.address, 200e6, 200e6, now);
   await expect(pw).rejects.toThrowError("fiat limit exceeded");
 

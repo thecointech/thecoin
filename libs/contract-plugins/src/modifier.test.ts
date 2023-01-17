@@ -1,8 +1,8 @@
 import { getPluginModifier } from './modifier';
-import { ALL_PERMISSIONS } from '../index_mocked';
+import { ALL_PERMISSIONS } from './constants';
 import { BigNumber } from 'ethers';
 import Decimal from 'decimal.js-light';
-import { runModifier } from './common.test';
+import { runModifier } from '../internal/common';
 
 it ('Compiles and runs UberConverter', async () => {
   const modifier = await getModifier("UberConverter");

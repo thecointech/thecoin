@@ -1,7 +1,7 @@
 import { getPluginDetails } from './index';
-import { ConnectContract } from '../index_mocked';
+import { ConnectContract } from '@thecointech/contract-core';
 import { Wallet } from '@ethersproject/wallet';
-import { runModifier } from './common.test';
+import { runModifier } from '../internal/common';
 
 it ('Generates a useful modifier', async () => {
   const signer = Wallet.createRandom()

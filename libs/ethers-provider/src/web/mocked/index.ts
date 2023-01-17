@@ -6,6 +6,7 @@ import transferFrom from './logs-transfer-from.json' assert { type: 'json' };
 import transferTo from './logs-transfer-to.json' assert { type: 'json' };
 import exactFrom from './logs-exact-from.json' assert { type: 'json' };
 import exactTo from './logs-exact-to.json' assert { type: 'json' };
+import plugins from '../../plugins.json';
 
 export class Erc20Provider extends BaseProvider {
   connection: { url: string; };
@@ -63,18 +64,9 @@ export class Erc20Provider extends BaseProvider {
   }
 
   async getSourceCode(address: string) {
-    switch (address)
-    {
-      case "RoundNumber": {
-        const rn = await import("@thecointech/contract-core/contract-src.json")
-        return rn.default.code;
-      }
-      case "UberConverter": {
-        const rn = await import("@thecointech/contract-plugin-converter/contract-src.json")
-        return rn.default.code;
-      }
-      default: throw new Error(`Invalid address: ${address}`)
-    }
+    // When mocked, we refer to the plugin by name
+    const plugin = plugins[address as "RoundNumber"|"UberConverter"];
+    return plugin?.code;
   }
 }
 
