@@ -72,23 +72,49 @@ abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
   }
 
   // A special-purpose plugin transfer fn, in case we need to restrict it later(?)
-  function pl_transferTo(address user, uint amount) public {
+  function pl_transferTo(address user, uint amount, uint timeMillis) public {
     // We assume the plugin knows what it's doing here;
     // no need to check permissions etc
+    // (NOTE: to consider: if this does an exact transfer,
+    // we probably should lock it down a little)
+
+    // Question: do we notify other plugins about this transfer?
+    // Yes, because the ShockAbsorber needs to know if/when
+    // the UberConverter completes it's transfers (and if
+    // withdrawal is notified, then deposits need to be as well)
+    // notifyDeposit clone
+    for (uint i =0; i < userPlugins[user].length; i++) {
+      // skip the calling plugin though
+      if (address(userPlugins[user][i].plugin) == _msgSender()) {
+        continue;
+      }
+      userPlugins[user][i].plugin.preDeposit(user, amount, timeMillis);
+    }
+
     _transfer(_msgSender(), user, amount);
+    emit ExactTransfer(_msgSender(), user, amount, timeMillis);
+
   }
 
   // Allow a plugin to transfer money out of a users account.
-  // Somehow, this needs to be locked to only allow a plugin that
-  // is currently being queried to access the account of the user
-  // who is currently engaging to function.  This could be achieved
-  // either by saving local state, or by (better) passing an argument
-  // through the stack that uniquely indentifies this request.
-  function pl_transferFrom(address user, address to, uint amount) public {
+  // UberConverter uses this to delay transfers
+  function pl_transferFrom(address user, address to, uint amount, uint256 timeMillis) virtual public {
     // Has the user given permission to this plugin?
     PluginAndPermissions memory pnp = findPlugin(user, _msgSender());
     require(pnp.permissions & PERMISSION_WITHDRAWAL != 0, "Plugin not granted transferFrom permissions");
+
+    // notifyWithdrawal clone
+    uint balance = balanceOf(user);
+    for (uint i =0; i < userPlugins[user].length; i++) {
+      // skip the calling plugin though
+      if (address(userPlugins[user][i].plugin) == _msgSender()) {
+        continue;
+      }
+      balance = userPlugins[user][i].plugin.preWithdraw(user, balance, amount, timeMillis);
+    }
+
     _transfer(user, to, amount);
+    emit ExactTransfer(user, to, amount, timeMillis);
   }
 
   // Check if the plugin is assigned to user.
@@ -113,18 +139,19 @@ abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
   // not include the timestamp information.  Therefore we override
   // all transfer functions and put our hooks in beside them
   function exactTransfer(address to, uint amount, uint256 timestamp) public override {
-    super.exactTransfer(to, amount, timestamp);
+    notifyWithdraw(_msgSender(), amount, timestamp);
     notifyDeposit(to, amount, timestamp);
+    super.exactTransfer(to, amount, timestamp);
   }
   function certifiedTransfer(address from, address to, uint256 amount, uint256 fee, uint256 timestamp, bytes memory signature) public override {
-    super.certifiedTransfer(from, to, amount, fee, timestamp, signature);
     notifyWithdraw(from, amount, timestamp);
     notifyDeposit(to, amount, timestamp);
+    super.certifiedTransfer(from, to, amount, fee, timestamp, signature);
   }
   function transfer(address to, uint amount) public override(ERC20Upgradeable, IERC20Upgradeable) returns (bool) {
-    notifyWithdraw(msg.sender, amount, block.timestamp);
+    notifyWithdraw(_msgSender(), amount, block.timestamp * 1000);
+    notifyDeposit(to, amount, block.timestamp * 1000);
     super.transfer(to, amount);
-    notifyDeposit(to, amount, block.timestamp);
     return true;
   }
 

@@ -22,7 +22,7 @@
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
-    "build:src": "yarn tsc --project tsconfig.build.json",
+    "build:src": "yarn tsc -b",
     "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",

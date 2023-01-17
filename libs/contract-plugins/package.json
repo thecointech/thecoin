@@ -22,7 +22,7 @@
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
-    "build:src": "yarn tsc --project tsconfig.build.json",
+    "build:src": "yarn tsc -b",
     "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
     "clean": "rimraf ./build",
     "test": "yarn run-jest",
@@ -39,6 +39,7 @@
   "types": "./build/index.d.ts",
   "typesVersions": {
     "*": {
+      "writePlugin": ["./internal/writePlugin.ts"],
       "*": [
         "build/*.d.ts"
       ]

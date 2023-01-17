@@ -60,7 +60,7 @@ contract SpendingLimit is BasePlugin, OracleClient, Ownable, PermissionUser {
     require(owner() == initiator, "only owner may attach this plugin");
     // only initialize if new user.
     if (userData[newUser].periodStart == 0) {
-      userData[newUser].periodStart = block.timestamp;
+      userData[newUser].periodStart = block.timestamp * 1000;
     }
   }
 
@@ -74,12 +74,12 @@ contract SpendingLimit is BasePlugin, OracleClient, Ownable, PermissionUser {
     uint fiat = toFiat(coin, timestamp);
 
     UserData storage data = userData[user];
-    if (data.periodStart + periodLength < block.timestamp) {
+    if (data.periodStart + periodLength < block.timestamp * 1000) {
       // Reset spending limit
       data.fiatSpent = 0;
       // Reset to the new period start time.  Because this is a floor, it should
       // always end up with the most recent period start
-      uint periods = (block.timestamp - data.periodStart) / periodLength;
+      uint periods = ((block.timestamp * 1000) - data.periodStart) / periodLength;
       data.periodStart += periods * periodLength;
     }
     // Limit spending

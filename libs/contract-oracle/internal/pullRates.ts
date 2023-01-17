@@ -31,8 +31,8 @@ console.log('Testing Fx');
 const fxs = (await db.collection("FxRates").get()).docs.map(d => d.data());
 // validateTimes(fxs);
 
-const initTime = coins[0].validFrom.seconds;
-const blockTime = 3 * 60 * 60; // How long each
+const initTime = coins[0].validFrom.toMillis();
+const blockTime = 3 * 60 * 60 * 1000; // How long each
 // merge both data streams into one
 const rates: { from: number, to: number, rate: number }[] = [];
 let coinIdx = 0;
@@ -56,10 +56,9 @@ async function pullRates() {
   for (let i = 0; i < coins.length; i++) {
     const coin = coins[i];
     const fx = findFx(coin)
-    // const from = Math.max(coin.validFrom.seconds, fx.validFrom.seconds);
-    // const to = Math.min(coin.validTill.seconds, fx.validTill.seconds);
-    const from = coin.validFrom.seconds;
-    const to = coin.validTill.seconds;
+
+    const from = coin.validFrom.toMillis();
+    const to = coin.validTill.toMillis();
     const rate = Math.round(factor * ((coin.buy + coin.sell) / 2) * fx["124"]) / factor;
 
     // Compact any rates that haven't changed.
@@ -82,8 +81,8 @@ async function pullRates() {
       });
     }
 
-    if (coin.validTill.seconds == to) coinIdx++;
-    if (fx.validTill.seconds == to) fxIdx++;
+    if (coin.validTill.toMillis() == to) coinIdx++;
+    if (fx.validTill.toMillis() == to) fxIdx++;
   }
 
 

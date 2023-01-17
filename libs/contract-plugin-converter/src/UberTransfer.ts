@@ -12,8 +12,8 @@ export type UberTransfer = {
   to: string,
   amount: number,
   currency: number,
-  transferTime: number,
-  signedTime: number,
+  transferMillis: number,
+  signedMillis: number,
   signature: string,
 }
 
@@ -48,8 +48,8 @@ export async function signUberTransfer(
 export function getTransferSigner(
   transfer: UberTransfer
 ) {
-  const { from, to, amount, currency, transferTime, signedTime, signature } = transfer;
-  const hash = getHash(from, to, amount, currency, transferTime, signedTime);
+  const { from, to, amount, currency, transferMillis, signedMillis, signature } = transfer;
+  const hash = getHash(from, to, amount, currency, transferMillis, signedMillis);
   return verifyMessage(hash, signature);
 }
 
@@ -63,17 +63,17 @@ export async function buildUberTransfer(
   signedTime: DateTime,
 ) {
   const address = await from.getAddress();
-  const transferSeconds = Math.round(transferTime.toSeconds());
-  const signedSeconds = Math.round(signedTime.toSeconds());
+  const transferMillis = Math.round(transferTime.toMillis());
+  const signedMillis = Math.round(signedTime.toMillis());
   const amountAdj = amount.mul(100).toInteger().toNumber();
-  const signature = await signUberTransfer(from, to, amountAdj, currency, transferSeconds, signedSeconds);
+  const signature = await signUberTransfer(from, to, amountAdj, currency, transferMillis, signedMillis);
   const r: UberTransfer = {
     from: address,
     to,
     amount: amountAdj,
     currency,
-    transferTime: transferSeconds,
-    signedTime: signedSeconds,
+    transferMillis,
+    signedMillis,
     signature,
   };
   return r;

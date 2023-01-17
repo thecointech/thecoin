@@ -76,7 +76,7 @@ contract UberConverter is BasePlugin, OracleClient, Ownable, PermissionUser {
     PendingTransactions storage userPending = pending[user];
     if (userPending.total != 0) {
       // How much does our owed amount turn into?
-      uint owed = toCoin(userPending.total, block.timestamp);
+      uint owed = toCoin(userPending.total, block.timestamp * 1000);
       return currentBalance - int(owed);
     }
     return currentBalance;
@@ -93,9 +93,9 @@ contract UberConverter is BasePlugin, OracleClient, Ownable, PermissionUser {
     if (currency == CurrencyCode) {
 
       // If this is scheduled to happen in the future?
-      console.log("Converting Transfer at", timestamp, " in block ", block.timestamp);
+      console.log("Converting Transfer at", timestamp, " in block ", block.timestamp * 1000);
 
-      if (timestamp > block.timestamp) {
+      if (timestamp > (block.timestamp * 1000)) {
         pending[from].transfers[to][timestamp] = pending[from].transfers[to][timestamp] + amount;
         pending[from].total = pending[from].total + amount;
         finalAmount = 0;
@@ -114,13 +114,13 @@ contract UberConverter is BasePlugin, OracleClient, Ownable, PermissionUser {
   // process transactions that have already been registered
   function processPending(address from, address to, uint timestamp) public
   {
-    require(timestamp <= block.timestamp, "Cannot process future transactions");
+    require(timestamp <= (block.timestamp * 1000), "Cannot process future transactions");
 
     PendingTransactions storage user = pending[from];
     uint fiat = user.transfers[to][timestamp];
     if (fiat > 0) {
       uint coin = uint(toCoin(fiat, timestamp));
-      theCoin.pl_transferFrom(from, to, coin);
+      theCoin.pl_transferFrom(from, to, coin, timestamp);
       delete user.transfers[to][timestamp];
       user.total = user.total - fiat;
       emit ValueChanged(from, timestamp, "pending[user].total", int(user.total));

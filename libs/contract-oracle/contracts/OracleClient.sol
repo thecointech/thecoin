@@ -21,16 +21,16 @@ contract OracleClient {
   }
 
   // Convert to fiat with 2 decimal places (ie, floor to cent)
-  function toFiat(int coin, uint timestamp) public view returns(int) {
-    uint price = getPrice(timestamp);
+  function toFiat(int coin, uint millis) public view returns(int) {
+    uint price = getPrice(millis);
     // coin is 6 decimal places, price is 8 decimal places
     // 1 coin at exchange of 4 would be 1*10e6 * 4*10e8
     // to be 4*10e14 / 10e12 to be 400 cents.
     return (coin * int(price) / 1e12);
   }
 
-  function toFiat(uint coin, uint timestamp) public view returns(uint) {
-    uint price = getPrice(timestamp);
+  function toFiat(uint coin, uint millis) public view returns(uint) {
+    uint price = getPrice(millis);
     // coin is 6 decimal places, price is 8 decimal places
     // 1 coin at exchange of 4 would be 1*10e6 * 4*10e8
     // to be 4*10e14 / 10e12 to be 400 cents.
@@ -38,21 +38,21 @@ contract OracleClient {
   }
 
   // convert to coin.  Fiat should be denominated in cents
-  function toCoin(uint fiat, uint timestamp) public view returns(uint) {
-    uint price = getPrice(timestamp);
+  function toCoin(uint fiat, uint millis) public view returns(uint) {
+    uint price = getPrice(millis);
     return fiat * 1e12 / price;
   }
-  function toCoin(int fiat, uint timestamp) public view returns(int) {
-    uint price = getPrice(timestamp);
+  function toCoin(int fiat, uint millis) public view returns(int) {
+    uint price = getPrice(millis);
     return fiat * 1e12 / int(price);
   }
 
   /**
     * Returns the latest price
     */
-  function getPrice(uint timestamp) public view returns(uint) {
-    uint price = priceFeed.getRoundFromTimestamp(timestamp);
-    console.log("Getting price with timestamp: ", timestamp, " = ", price);
+  function getPrice(uint millis) public view returns(uint) {
+    uint price = priceFeed.getRoundFromTimestamp(millis);
+    console.log("Getting price with timestamp: ", millis, " = ", price);
     return price;
   }
 }

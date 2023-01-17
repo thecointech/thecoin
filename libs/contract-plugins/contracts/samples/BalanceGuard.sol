@@ -71,11 +71,11 @@ contract BalanceGuardV0 is BasePlugin, OracleClient, Ownable, PermissionUser {
 
     // If this is a new user, we initialize the guard to their fiat amount.
   function userAttached(address newUser, address initiator) override external onlyOwner {
-    require(owner() == initiator, "only owner may attach this plugin");
+    require(owner() == initiator, "FIXME! only tcCore should be able to call this, no?  only owner may attach this plugin");
     // only initialize if new user.
     if (userFiatBalance[newUser].costBasis == 0) {
       int currentBalance = theCoin.pl_balanceOf(newUser);
-      int costBasis = toFiat(currentBalance, block.timestamp);
+      int costBasis = toFiat(currentBalance, block.timestamp * 1000);
       userFiatBalance[newUser].costBasis = int(costBasis);
     }
   }
@@ -83,7 +83,7 @@ contract BalanceGuardV0 is BasePlugin, OracleClient, Ownable, PermissionUser {
   // When a user removes this plugin, we clear any balance owing.
   function userDetached(address exClient, address initiator) override external onlyOwner {
     require(owner() == initiator, "only owner may detach this plugin");
-    theCoin.pl_transferFrom(exClient, address(this), userFiatBalance[exClient].reserved);
+    theCoin.pl_transferFrom(exClient, address(this), userFiatBalance[exClient].reserved, block.timestamp * 1000);
     delete userFiatBalance[exClient];
   }
 
@@ -91,7 +91,7 @@ contract BalanceGuardV0 is BasePlugin, OracleClient, Ownable, PermissionUser {
   function balanceOf(address user, int currentBalance) external view override returns(int)
   {
     // We work directly in coin for this function
-    int fxAdjBalance = toCoin(userFiatBalance[user].costBasis, block.timestamp);
+    int fxAdjBalance = toCoin(userFiatBalance[user].costBasis, block.timestamp * 1000);
     if (currentBalance > fxAdjBalance) {
       // users account has grown.  Subtract up to 2% growth
       int twoPercent = fxAdjBalance / 50;
@@ -134,7 +134,7 @@ contract BalanceGuardV0 is BasePlugin, OracleClient, Ownable, PermissionUser {
       int ninetyPercent = userFiatBalance[user].costBasis * 90 / 100;
       if (fiat > ninetyPercent) {
         uint missingCoin = coin - balance;
-        theCoin.pl_transferTo(user, missingCoin);
+        theCoin.pl_transferTo(user, missingCoin, timestamp);
         balance = coin;
       }
     }

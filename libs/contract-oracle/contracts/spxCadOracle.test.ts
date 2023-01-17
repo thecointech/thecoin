@@ -9,7 +9,7 @@ import { existsSync } from 'fs';
 
 jest.setTimeout(5 * 60 * 1000);
 const factor = Math.pow(10, 8);
-const blockTime = 3 * 60 * 60;
+const blockTime = 3 * 60 * 60 * 1000;
 const [owner] = await hre.ethers.getSigners();
 const ratesFiles = new URL('../internal/rates.json', import.meta.url);
 const shouldRun = existsSync(ratesFiles);
@@ -86,9 +86,9 @@ describe('Oracle Tests', () => {
 async function getRatesFactory() {
   const liveRates  = await import ('../internal/rates.json'/*, { assert: {type: "json"}}*/);
   const rates = liveRates.default.rates.slice(8);
-  const factory = async (timestamp: number) => {
+  const factory = async (millis: number) => {
     for (let i = 0; i < rates.length; i++) {
-      if (rates[i].to > timestamp) {
+      if (rates[i].to > millis) {
         const r = {
           ...rates[i]
         }

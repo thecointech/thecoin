@@ -3,17 +3,10 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./build",
-    "isolatedModules": false,
     "tsBuildInfoFile": "./build/.buildinfo",
-    "noUnusedLocals": false,
   },
   "include": ["./src/**/*", "./src/**/*.json"],
-  "exclude": ["**/*.test.*", "**/*.stories.*"],
-  "references": [
-    { "path": "../signers/tsconfig.build.json" },
-    { "path": "../contract-tools/tsconfig.json" },
-    { "path": "../contract-base/tsconfig.json" },
-  ]
+  "exclude": ["**/*.test.*", "**/*.stories.*"]
 }
 
 

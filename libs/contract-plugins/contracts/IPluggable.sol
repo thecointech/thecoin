@@ -44,7 +44,7 @@ interface IPluggable is IERC20Upgradeable {
   function pl_balanceOf(address user) external view returns(int);
 
   // A special-purpose plugin transfer fn, in case we need to restrict it later(?)
-  function pl_transferTo(address user, uint amount) external;
+  function pl_transferTo(address user, uint amount, uint timeMillis) external;
 
   // Allow a plugin to transfer money out of a users account.
   // Somehow, this needs to be locked to only allow a plugin that
@@ -52,7 +52,7 @@ interface IPluggable is IERC20Upgradeable {
   // who is currently engaging to function.  This could be achieved
   // either by saving local state, or by (better) passing an argument
   // through the stack that uniquely indentifies this request.
-  function pl_transferFrom(address user, address to, uint amount) external;
+  function pl_transferFrom(address user, address to, uint amount, uint256 timeMillis) external;
 
   function getUsersPlugins(address user) external view returns(PluginAndPermissions[] memory);
 }
