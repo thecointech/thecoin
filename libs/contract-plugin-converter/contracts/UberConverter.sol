@@ -52,19 +52,26 @@ contract UberConverter is BasePlugin, OracleClient, Ownable, PermissionUser {
     theCoin = IPluggable(baseContract);
   }
 
+  // ------------------------------------------------------------------------
+  // TESTING FUNCTIONS - REMOVE PRIOR TO PROD PUBLISH
+  // ------------------------------------------------------------------------
+  function seedPending(address from, address to, uint amount, uint timestamp) public onlyOwner{
+    // This can only run on testing blockchains.
+    require(block.chainid == 0x13881 || block.chainid == 31337, "testing only");
+    pending[from].transfers[to][timestamp] = pending[from].transfers[to][timestamp] + amount;
+    pending[from].total = pending[from].total + amount;
+    emit ValueChanged(from, timestamp, "pending[user].total", int(pending[from].total));
+  }
+
+  // ------------------------------------------------------------------------
+  // IPlugin Implementation
+  // ------------------------------------------------------------------------
   // We modify transfers
   function getPermissions() override external pure returns(uint) {
     return PERMISSION_AUTO_ACCESS & PERMISSION_WITHDRAWAL;
   }
 
-  // If this is a new user, we initialize the guard to their fiat amount.
-  function userAttached(address newUser, address initiator) override external onlyBaseContract {
-
-  }
-
-  // When a user removes this plugin, we clear any balance owing.
-  function userDetached(address exClient, address initiator) override external onlyBaseContract {
-    require(owner() == initiator, "only owner may detach this plugin");
+  function userDetached(address exClient, address /*initiator*/) override external onlyBaseContract {
     // Total == 0 means no transfers remaining
     require(pending[exClient].total == 0, "Cannot remove plugin while a transaction is pending");
     delete pending[exClient];
@@ -126,6 +133,7 @@ contract UberConverter is BasePlugin, OracleClient, Ownable, PermissionUser {
       emit ValueChanged(from, timestamp, "pending[user].total", int(user.total));
     }
   }
+
   // ------------------------------------------------------------------------
   // Pending transactions prevent withdrawals
   // ------------------------------------------------------------------------

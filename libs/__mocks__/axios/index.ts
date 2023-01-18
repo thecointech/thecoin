@@ -34,6 +34,10 @@ export default {
     return undefined;
   },
   request: (request: any) => {
+    // dev:live environments run with localhost communications
+    if (process.env.CONFIG_NAME === 'devlive' && request.url.startsWith('http://localhost')) {
+      return axios.request(request) as any;
+    }
     switch(request.url.slice(0, 17)) {
       case '/api/v1/rates/124':
         return {

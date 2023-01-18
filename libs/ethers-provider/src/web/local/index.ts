@@ -3,7 +3,7 @@ import { hexZeroPad, hexStripZeros } from "@ethersproject/bytes";
 import { id } from "@ethersproject/hash";
 import { BigNumber } from "@ethersproject/bignumber";
 import { ERC20Response } from '../erc20response';
-import plugins from '../../plugins.json';
+import plugins from '../../plugins.json' assert { type: 'json' };
 
 export class Erc20Provider extends JsonRpcProvider {
 

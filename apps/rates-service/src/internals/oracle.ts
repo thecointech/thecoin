@@ -7,16 +7,16 @@ export async function updateOracle(timestamp: number) {
   const oracle = await connectOracle(signer);
 
   // Our oracle operates in seconds
-  await updateRates(oracle, timestamp / 1000, async (ts) => {
+  await updateRates(oracle, timestamp, async (ts) => {
     // do we have a data for this time?
-    const rates = await getCombinedRates(ts * 1000);
+    const rates = await getCombinedRates(ts);
     if (!rates) return null;
     // Calculate TC => CAD
     const rate = rates["124"] * (rates.buy + rates.sell) / 2;
     return {
       rate,
-      from: rates.validFrom / 1000,
-      to: rates.validTill / 1000,
+      from: rates.validFrom,
+      to: rates.validTill,
     }
   })
 }

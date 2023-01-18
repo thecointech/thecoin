@@ -22,7 +22,7 @@ for (let t = start; t < now; ) {
     log.warn(`Invalid Start Time`);
   }
 
-  const bc = await oracle.getRoundFromTimestamp(t.toSeconds());
+  const bc = await oracle.getRoundFromTimestamp(t.toMillis());
 
   // Are they the same?
   const buy = weBuyAt([db], t.toJSDate());

@@ -6,7 +6,7 @@ import transferFrom from './logs-transfer-from.json' assert { type: 'json' };
 import transferTo from './logs-transfer-to.json' assert { type: 'json' };
 import exactFrom from './logs-exact-from.json' assert { type: 'json' };
 import exactTo from './logs-exact-to.json' assert { type: 'json' };
-import plugins from '../../plugins.json';
+import plugins from '../../plugins.json' assert { type: 'json' };
 
 export class Erc20Provider extends BaseProvider {
   connection: { url: string; };

@@ -33,6 +33,7 @@ const addRemoteAccount = async (name: AccountName, active: boolean) => {
 // Add remote wallets.
 await addRemoteAccount('client1', true);
 await addRemoteAccount('client2', false);
+await addRemoteAccount('uberTester', false);
 
 export const getAllAccounts = () => _devWallets;
 export const getInitialAddress = () => _initial;
