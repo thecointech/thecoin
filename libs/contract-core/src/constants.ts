@@ -1,8 +1,5 @@
 import { keccak256 } from '@ethersproject/solidity';
-
-//
-// Multiplier of base values to human-readable fractions (eg $ and c)
-export const COIN_EXP = 1000000;
+export { COIN_EXP } from '@thecointech/contract-base';
 
 // Duplicate of roles defined in solidity files.
 const roleId = (id: string) => keccak256(['string'], [id]);
