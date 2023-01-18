@@ -1,7 +1,7 @@
-import { getOracleFactory } from '@thecointech/contract-oracle/contract';
 import { DateTime, Duration } from 'luxon';
+import { getOracleFactory } from '../src/contract';
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
-import type { SpxCadOracle } from '@thecointech/contract-oracle';
+import type { SpxCadOracle } from '../src';
 
 export async function createAndInitOracle(owner: SignerWithAddress, rate = 2) {
   const SpxCadOracle = getOracleFactory(owner);

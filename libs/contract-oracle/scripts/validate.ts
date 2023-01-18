@@ -1,4 +1,4 @@
-import { getContract } from '@thecointech/contract-oracle';
+import { getContract } from '../src';
 import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
 import { fetchRate, weBuyAt, weSellAt } from '@thecointech/fx-rates';

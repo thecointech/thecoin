@@ -5,7 +5,7 @@
     "outDir": "./build",
     "tsBuildInfoFile": "./build/.buildinfo",
   },
-  "include": ["./src/**/*", "./src/**/*.json"],
+  "include": ["./src/**/*.ts", "./src/**/*.json"],
   "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"]
 }
 
