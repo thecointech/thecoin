@@ -1,7 +1,7 @@
 import { log } from '@thecointech/logging';
 import { getSigner } from '@thecointech/signers';
 import { DateTime } from 'luxon';
-import { COIN_EXP, ConnectContract, GetContract, PERMISSION_BALANCE } from '../../src';
+import { COIN_EXP, ConnectContract, GetContract } from '../../src';
 import {assignRoles} from './assignRoles';
 
 import { getContract } from '@thecointech/contract-oracle';

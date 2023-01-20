@@ -13,7 +13,7 @@ export const MarketTZ = "America/New_York";
 
 export const getDateVals = ({ txs, from, to }: Pick<GraphHistoryProps, "txs"|"from"|"to">) => {
   to = to ?? DateTime.local();
-  from = from ?? txs[0].date;
+  from = from ?? txs[0]?.date ?? to;
   // We query the fxrates at 4pm (end-of-day) or now, if day is today.
   const eod = from.setZone(MarketTZ).set({
     hour: 16,

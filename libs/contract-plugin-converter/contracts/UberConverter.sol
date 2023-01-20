@@ -21,7 +21,6 @@ import '@thecointech/contract-plugins/contracts/permissions.sol';
 import '@thecointech/contract-plugins/contracts/IPluggable.sol';
 
 import "hardhat/console.sol";
-
 struct PendingTransactions {
   // The currency code of the value (eg 124 for $CAD)
   // uint8 currency;
@@ -55,12 +54,12 @@ contract UberConverter is BasePlugin, OracleClient, Ownable, PermissionUser {
   // ------------------------------------------------------------------------
   // TESTING FUNCTIONS - REMOVE PRIOR TO PROD PUBLISH
   // ------------------------------------------------------------------------
-  function seedPending(address from, address to, uint amount, uint timestamp) public onlyOwner{
+  function seedPending(address from, address to, uint amount, uint msTransferAt, uint msSignedAt) public onlyOwner{
     // This can only run on testing blockchains.
     require(block.chainid == 0x13881 || block.chainid == 31337, "testing only");
-    pending[from].transfers[to][timestamp] = pending[from].transfers[to][timestamp] + amount;
+    pending[from].transfers[to][msTransferAt] = pending[from].transfers[to][msTransferAt] + amount;
     pending[from].total = pending[from].total + amount;
-    emit ValueChanged(from, timestamp, "pending[user].total", int(pending[from].total));
+    emit ValueChanged(from, msSignedAt, "pending[user].total", int(pending[from].total));
   }
 
   // ------------------------------------------------------------------------
@@ -83,7 +82,7 @@ contract UberConverter is BasePlugin, OracleClient, Ownable, PermissionUser {
     PendingTransactions storage userPending = pending[user];
     if (userPending.total != 0) {
       // How much does our owed amount turn into?
-      uint owed = toCoin(userPending.total, block.timestamp * 1000);
+      uint owed = toCoin(userPending.total, msNow());
       return currentBalance - int(owed);
     }
     return currentBalance;
@@ -91,7 +90,7 @@ contract UberConverter is BasePlugin, OracleClient, Ownable, PermissionUser {
 
   //
   // What do we want to do about this particular transaction?
-  function modifyTransfer(address from, address to, uint amount, uint16 currency, uint timestamp)
+  function modifyTransfer(address from, address to, uint amount, uint16 currency, uint msTransferAt, uint msSignedAt)
     external override onlyBaseContract
     returns (uint finalAmount, uint16 finalCurrency)
   {
@@ -100,17 +99,16 @@ contract UberConverter is BasePlugin, OracleClient, Ownable, PermissionUser {
     if (currency == CurrencyCode) {
 
       // If this is scheduled to happen in the future?
-      console.log("Converting Transfer at", timestamp, " in block ", block.timestamp * 1000);
-
-      if (timestamp > (block.timestamp * 1000)) {
-        pending[from].transfers[to][timestamp] = pending[from].transfers[to][timestamp] + amount;
+      if (msTransferAt > msNow()) {
+        pending[from].transfers[to][msTransferAt] = pending[from].transfers[to][msTransferAt] + amount;
         pending[from].total = pending[from].total + amount;
         finalAmount = 0;
-        emit ValueChanged(from, timestamp, "pending[user].total", int(pending[from].total));
+        console.log("msSignedAt: ", msSignedAt, " msTransferAt: ", msTransferAt);
+        emit ValueChanged(from, msSignedAt, "pending[user].total", int(pending[from].total));
       }
       // Happening now, so convert to Coin
       else {
-        finalAmount = toCoin(amount, timestamp);
+        finalAmount = toCoin(amount, msTransferAt);
         finalCurrency = 0;
       }
     }
@@ -119,29 +117,29 @@ contract UberConverter is BasePlugin, OracleClient, Ownable, PermissionUser {
 
   // This function can be safely made public as it can only
   // process transactions that have already been registered
-  function processPending(address from, address to, uint timestamp) public
+  function processPending(address from, address to, uint msTime) public
   {
-    require(timestamp <= (block.timestamp * 1000), "Cannot process future transactions");
+    require(msTime <= msNow(), "Cannot process future transactions");
 
     PendingTransactions storage user = pending[from];
-    uint fiat = user.transfers[to][timestamp];
+    uint fiat = user.transfers[to][msTime];
     if (fiat > 0) {
-      uint coin = uint(toCoin(fiat, timestamp));
-      theCoin.pl_transferFrom(from, to, coin, timestamp);
-      delete user.transfers[to][timestamp];
+      uint coin = uint(toCoin(fiat, msTime));
+      theCoin.pl_transferFrom(from, to, coin, msTime);
+      delete user.transfers[to][msTime];
       user.total = user.total - fiat;
-      emit ValueChanged(from, timestamp, "pending[user].total", int(user.total));
+      emit ValueChanged(from, msTime, "pending[user].total", int(user.total));
     }
   }
 
   // ------------------------------------------------------------------------
   // Pending transactions prevent withdrawals
   // ------------------------------------------------------------------------
-  function preWithdraw(address user, uint balance, uint coin, uint timestamp) public virtual override returns(uint) {
+  function preWithdraw(address user, uint balance, uint coin, uint msTime) public virtual override returns(uint) {
     uint userPending = pending[user].total;
     if (userPending != 0) {
       // How much does our owed amount turn into?
-      uint owed = toCoin(userPending, timestamp);
+      uint owed = toCoin(userPending, msTime);
       require((owed + coin) <= balance, "Cannot withdraw, exceeds balance");
       return balance - owed;
     }

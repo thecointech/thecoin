@@ -28,7 +28,7 @@ const theme: Theme = {
 };
 
 export const HistoryGraph = () => {
-  const [duration, setDuration] = useState(31 as Duration);
+  const [duration, setDuration] = useState(Number.POSITIVE_INFINITY as Duration);
 
   const account = AccountMap.useActive();
   const txs = account?.history ?? [];
@@ -37,7 +37,7 @@ export const HistoryGraph = () => {
     : undefined;
 
   const modifiers = account?.plugins
-    .map(d => d.emulator?.balanceOf)
+    .map(d => d.emulator)
     .filter(isPresent)
     ?? [];
 

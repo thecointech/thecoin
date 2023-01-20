@@ -7,9 +7,10 @@ import Decimal from 'decimal.js-light';
 import parser from '@solidity-parser/parser'
 import type { PluginAndPermissionsStructOutput } from './types/contracts/IPluggable';
 import type { BaseASTNode, ContractDefinition, FunctionDefinition, StateVariableDeclaration, VariableDeclarationStatement, VariableDeclaration, FunctionCall, MemberAccess, Identifier, Expression, BinaryOperation, TupleExpression, ReturnStatement, IndexAccess, IfStatement, ExpressionStatement } from '@solidity-parser/parser/dist/src/ast-types';
-import type { ContractState, PluginEmulator } from './types';
+import type { ContractState, PluginBalanceMod } from './types';
+import { getPluginLogs, updateState } from './logs';
 
-export async function getPluginModifier(user: string, {plugin, permissions}: PluginAndPermissionsStructOutput) : Promise<PluginEmulator|null> {
+export async function getPluginModifier(user: string, {plugin, permissions}: PluginAndPermissionsStructOutput) : Promise<PluginBalanceMod|null> {
 
   const provider = new Erc20Provider();
 
@@ -29,16 +30,20 @@ export async function getPluginModifier(user: string, {plugin, permissions}: Plu
   const statements = solBalanceOf?.body?.statements;
   if (!statements?.length) return null;
 
-  const currentState = getInitialContractState(contract);
+  const initialState = getInitialContractState(contract);
+  const logs = await getPluginLogs(plugin, user, provider, 0);
 
+  // balanceOf, can only be called with incrementing timestamps.
+  // It references currentState which is only updated within this fn
   const balanceOf = (balance: Decimal, timestamp: DateTime, rates: FXRate[]) => {
-    const variables: any = {
-      ...currentState,
+
+    const variables = {
+      ...updateState(initialState, timestamp, logs),
       user,
       block: { timestamp: Math.round(timestamp.toSeconds()) },
       currentBalance: balance,
       __$rates: rates,
-    };
+    } as ContractState;
     let returnVal: Decimal|undefined = undefined;
     const runStatements = (statements: BaseASTNode[]) => {
       for (const statement of statements) {
@@ -76,7 +81,7 @@ export async function getPluginModifier(user: string, {plugin, permissions}: Plu
     return returnVal!;
   }
 
-  return { balanceOf, currentState }
+  return balanceOf;
 }
 
 function getInitialContractState(contract: ContractDefinition) {
@@ -166,6 +171,7 @@ function callFunction(fnCall: FunctionCall, variables: any) {
     switch(fnCall.expression.name) {
       case "toFiat": return toFiat(args, variables.__$rates);
       case "toCoin": return toCoin(args, variables.__$rates);
+      case "msNow": return new Decimal(variables.block.timestamp).mul(1000);
     }
   }
   else if (fnCall.expression.type == "ElementaryTypeName") {
@@ -173,7 +179,7 @@ function callFunction(fnCall: FunctionCall, variables: any) {
       case "int": return args[0]; // Cast to int
     }
   }
-  throw new Error("Missing fn implementation");
+  throw new Error(`Missing fn implementation: ${JSON.stringify(fnCall.expression)}`);
 }
 
 function indexAccess(accessor: IndexAccess, variables: any): Decimal {
@@ -190,7 +196,11 @@ function memberAccess(memberAccess: MemberAccess, variables: any): Decimal {
 const avgRate = (rate: FXRate) => ((rate.sell + rate.buy) / 2) || 1;
 
 export const toFiat = ([coin, timestamp]: any[], rates: FXRate[]) => {
-  const rate = getFxRate(rates, timestamp * 1000)
+  const rate = getFxRate(rates, timestamp.toNumber());
+  // If no exchange rate, return 0?
+  if (!rate.fxRate || !rate.buy) {
+    return new Decimal(0);
+  }
   return new Decimal(coin)
     .mul(rate.fxRate)
     .mul(avgRate(rate))
@@ -199,7 +209,11 @@ export const toFiat = ([coin, timestamp]: any[], rates: FXRate[]) => {
     .toint();
 }
 export const toCoin = ([fiat, timestamp]: any[], rates: FXRate[]) => {
-  const rate = getFxRate(rates, timestamp * 1000)
+  const rate = getFxRate(rates, timestamp.toNumber());
+  // If no exchange rate, return 0?
+  if (!rate.fxRate || !rate.buy) {
+    return new Decimal(0);
+  }
   return new Decimal(fiat)
     .div(100)
     .mul(COIN_EXP)

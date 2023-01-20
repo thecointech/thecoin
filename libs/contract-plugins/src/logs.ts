@@ -21,7 +21,7 @@ export async function getPluginLogs(address: string, user: string, provider: Pro
 
   return logs.map(log => ({
     user: log.args.user,
-    timestamp: DateTime.fromSeconds(log.args.timestamp.toNumber()),
+    timestamp: DateTime.fromMillis(log.args.msTime.toNumber()),
     // user: log.args[0],
     path: log.args.path,
     amnt: new Decimal(log.args.change.toString()),
@@ -29,10 +29,11 @@ export async function getPluginLogs(address: string, user: string, provider: Pro
 }
 
 export function updateState(state: ContractState, to: DateTime, logs: BaseLogs[]) {
-  // We track last time this
-  state.__$lastUpdate ??= DateTime.fromSeconds(0);
+  // remember to ensure we only apply changes since we last updated.
+  // this is (premature?) optimization.
+  //state.__$lastUpdate ??= DateTime.fromSeconds(0);
   logs
-    .filter(l => state.__$lastUpdate <= l.timestamp && l.timestamp < to)
+    .filter(l => l.timestamp < to)
     .forEach(l => {
       // Special-case item "user" derefences the address
       const getAccessor = (acc: string) => acc == "user" ? l.user : acc;
@@ -51,5 +52,9 @@ export function updateState(state: ContractState, to: DateTime, logs: BaseLogs[]
       const lastAccessor = getAccessor(last(pathItems));
       toModify[lastAccessor] = l.amnt;
     });
-  state.__$lastUpdate = to;
+  return state
+
+  // }
+  // state.__$lastUpdate = to;
+  // return state;
 }

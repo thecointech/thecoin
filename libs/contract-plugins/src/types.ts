@@ -5,12 +5,8 @@ import type { DateTime } from 'luxon';
 
 export type ContractState = Record<string, string | Decimal | Record<string, any>>;
 export type PluginBalanceMod = (balance: Decimal, timestamp: DateTime, rates: FXRate[]) => Decimal;
-export type PluginEmulator = {
-  balanceOf: PluginBalanceMod,
-  currentState: ContractState,
-}
 export type PluginDetails = {
   address: string;
   permissions: Decimal;
-  emulator: PluginEmulator | null;
+  emulator: PluginBalanceMod | null;
 }

@@ -64,10 +64,12 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
     }
   }
 
+  function msNow() public view returns(uint) { return block.timestamp * 1000; }
+
   //
   // Add a new rate to the end of the list.
   function update(uint64 newValue) public onlyUpdater() {
-    uint millis = block.timestamp * 1000;
+    uint millis = msNow();
     int offset = getOffset(millis);
     // Only update the value if our current value is near expiry
     int currentExpires = offset + INITIAL_TIMESTAMP + (int(rates.length) * BLOCK_TIME);
@@ -88,7 +90,7 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
   //
   // Get the timestamp our current block is valid until
   function validUntil() public view returns (uint) {
-    int offset = getOffset(block.timestamp * 1000);
+    int offset = getOffset(msNow());
     return uint(offset + INITIAL_TIMESTAMP + (int(rates.length) * BLOCK_TIME));
   }
 

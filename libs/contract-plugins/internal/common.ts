@@ -1,9 +1,9 @@
 import { toCoin, toFiat } from '../src/modifier';
 import { DateTime } from 'luxon';
 import type { FXRate } from '@thecointech/pricing';
-import type { PluginEmulator } from '../src/types';
+import type { PluginBalanceMod } from '../src/types';
 
-export function runModifier(emulator: PluginEmulator, fiat: number, timestamp: number) {
+export function runModifier(balanceOf: PluginBalanceMod, fiat: number, timestamp: number) {
   const rates = [{
     buy: 2,
     sell: 2,
@@ -12,8 +12,6 @@ export function runModifier(emulator: PluginEmulator, fiat: number, timestamp: n
     validTill: Number.MIN_SAFE_INTEGER,
   } as FXRate];
   const coin = toCoin([fiat, timestamp], rates);
-  const rcoin = emulator.balanceOf(coin, DateTime.fromSeconds(timestamp), rates);
+  const rcoin = balanceOf(coin, DateTime.fromMillis(timestamp), rates);
   return toFiat([rcoin, timestamp], rates);
 }
-
-it ("needs empty test to run", () => {})

@@ -47,7 +47,7 @@ async function main() {
     // Every 4 weeks, we allocate $400 to future visa bill
     if (i > 0 && i % 4 == 0) {
       const dueDate = now.plus({ weeks: 3 });
-      await ownConvert.seedPending(testAddress, tcAddress, 400e2, dueDate.toMillis());
+      await ownConvert.seedPending(testAddress, tcAddress, 400e2, dueDate.toMillis(), now.toMillis());
     }
     else if (i > 3 && i % 4 == 3) {
       await ownConvert.processPending(testAddress, tcAddress, now.toMillis());
