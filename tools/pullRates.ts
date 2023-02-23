@@ -23,21 +23,25 @@ const outFile = new URL("rates.json", outFolder);
 // We only fetch the last 14 months
 let start = DateTime.now().minus({ months: 14});
 
+let existing: any = null;
 if (!existsSync(outFolder)) {
   mkdirSync(outFolder);
 } else {
   // If this file already exists, then only update with newer data
   if (existsSync(outFile)) {
     const fileRaw = await readFileSync(outFile, 'utf8');
-    const existing = JSON.parse(fileRaw);
+    existing = JSON.parse(fileRaw);
     if (existing.rates) {
       // get the last valid timestamp
       const lastRate = existing.rates.slice(-1)[0];
       if (lastRate?.to) {
         const lastTs = DateTime.fromMillis(lastRate.to);
-        if (lastTs.isValid && lastTs.toSQLDate() == DateTime.now().toSQLDate()) {
-          log.debug(`Skipping update of cached rates`);
-          exit(0);
+        if (lastTs.isValid) {
+          const daysDiff = DateTime.now().diff(lastTs).as("days");
+          if (daysDiff < 1) {
+            log.debug(`Skipping update of cached rates`);
+            exit(0);
+          }
         }
         // Else, we only query new dates
         log.debug(`Updating from ${lastTs.toSQLDate()}`);
@@ -79,7 +83,7 @@ const fxs = fxsRaw.docs.map(d => d.data());
 const initTime = coins[0].validFrom.toMillis();
 const blockTime = 3 * 60 * 60 * 1000; // How long each
 // merge both data streams into one
-const rates: { from: number, to: number, rate: number }[] = [];
+const rates: { from: number, to: number, rate: number }[] = existing?.rates ?? [];
 let coinIdx = 0;
 let fxIdx = 0;
 const factor = Math.pow(10, 8);

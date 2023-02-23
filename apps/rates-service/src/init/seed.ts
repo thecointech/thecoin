@@ -53,7 +53,7 @@ async function seedRates(from: DateTime, validityInterval: Duration) {
   const rates = readLiveSeedRates();
   const till = await copySeedDataToDb(from, validityInterval, rates);
   // Fill up on random rates
-  await seedWithRandomRates(till, validityInterval);
+  await seedWithRandomRates(till, validityInterval, 0);
 }
 
 export function getDataDir() {
@@ -124,7 +124,7 @@ export async function copySeedDataToDb(from: DateTime, validityInterval: Duratio
   return validFrom;
 }
 
-export async function seedWithRandomRates(from: DateTime, validityInterval: Duration) {
+export async function seedWithRandomRates(from: DateTime, validityInterval: Duration, fxSpread = 0.1) {
   log.debug(`Seeding Random rates from ${from.toSQLDate()}`);
   // Check cache in case we have seeded historical data already.
   // This is because dev cannot order by, so getLatestStored returns
@@ -156,7 +156,7 @@ export async function seedWithRandomRates(from: DateTime, validityInterval: Dura
     };
 
     const fxRate = {
-      ...RandomFxRates(),
+      ...RandomFxRates(fxSpread),
       ...validity,
     } as FxRates;
     await setRate('Coin', coin);
@@ -167,11 +167,11 @@ export async function seedWithRandomRates(from: DateTime, validityInterval: Dura
   }
 }
 
-const RandomFxRates = () => Object
+const RandomFxRates = (fxSpread: number) => Object
   .keys(CurrencyCode)
   .filter((k) => /^\d+$/.test(k))
   .filter((k) => k !== '0')
-  .map((key) => [key, RandomFxRate()])
+  .map((key) => [key, RandomFxRate(fxSpread)])
   .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
 
-const RandomFxRate = () => 0.9 + (Math.random() / 10);
+const RandomFxRate = (fxSpread: number) => (1 - (fxSpread / 2)) + (Math.random() * fxSpread);
