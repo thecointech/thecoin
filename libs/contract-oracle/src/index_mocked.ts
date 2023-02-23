@@ -10,9 +10,10 @@ export class SpxCadOracle implements Pick<Src, 'INITIAL_TIMESTAMP'|'BLOCK_TIME'|
   initialTimestamp = DateTime
     .now()
     .minus({ years: 1 })
-    .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
-    .toSeconds();
-  blockTime = 10800;
+    .set({ hour: 9, minute: 31, second: 30, millisecond: 0 })
+    .toMillis();
+  // In most code, we run on 3hrs, but in here lets up that to 24 hrs.
+  blockTime = 24 * 60 * 60 * 1000;
   offsets: { from: number, offset: number}[] = [];
   rates: number[] = [];
 

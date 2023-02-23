@@ -25,7 +25,7 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
   // NOTE: This is tightly packed, but usage could be improved dramatically
   // Perhaps we should drop to an uint32 instead
   uint64[] rates;
-  // The timestamp rates[0] starts at.  Is (should be) immutable
+  // The timestamp (in millis) rates[0] starts at.  Is (should be) immutable
   int public INITIAL_TIMESTAMP;
   // Each rates entry is value for 3 hours
   int public BLOCK_TIME;
