@@ -1,13 +1,51 @@
 import { getFirestore, init } from '@thecointech/firestore';
-import { writeFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { DateTime } from 'luxon';
+import { exit } from 'process';
+import { log } from '@thecointech/logging';
 
 // This file pulls data from our Firestore
-// It is used when we need to initialize
-// an Oracle with historical data
+// It is called at the start of a devlive session
+// to optionally seed the session with accurate
+// historical data.
 
-if (!process.env.RATES_SERVICE_ACCOUNT) throw new Error('Requires rates firestore access config');
+// If we don't have access to the Firestore, fuggetaboutit
+if (!process.env.RATES_SERVICE_ACCOUNT) {
+  log.fatal('Requires rates firestore access config');
+  exit(0)
+}
 process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.RATES_SERVICE_ACCOUNT;
-const outFile = new URL("rates.json", import.meta.url);
+
+// Write our output to the 'data' folder
+const outFolder = new URL("../data/", import.meta.url);
+const outFile = new URL("rates.json", outFolder);
+
+// We only fetch the last 14 months
+let start = DateTime.now().minus({ months: 14});
+
+if (!existsSync(outFolder)) {
+  mkdirSync(outFolder);
+} else {
+  // If this file already exists, then only update with newer data
+  if (existsSync(outFile)) {
+    const fileRaw = await readFileSync(outFile, 'utf8');
+    const existing = JSON.parse(fileRaw);
+    if (existing.rates) {
+      // get the last valid timestamp
+      const lastRate = existing.rates.slice(-1)[0];
+      if (lastRate?.to) {
+        const lastTs = DateTime.fromMillis(lastRate.to);
+        if (lastTs.isValid && lastTs.toSQLDate() == DateTime.now().toSQLDate()) {
+          log.debug(`Skipping update of cached rates`);
+          exit(0);
+        }
+        // Else, we only query new dates
+        log.debug(`Updating from ${lastTs.toSQLDate()}`);
+        start = lastTs;
+      }
+    }
+  }
+}
 
 const firestore = await init();
 if (!firestore) throw new Error('Requires firestore');
@@ -17,18 +55,25 @@ function validateTimes(rates: any[]) {
   for (const r of rates) {
     if (!r.validFrom.isEqual(t)) {
       const msg = `Input Rates are not contiguous: ${r.validFrom.toDate()} != ${t.toDate()}`;
-      console.log(msg);
+      log.warn(msg);
     }
     t = r.validTill;
   }
 }
 
+
 const db = getFirestore();
-const coins = (await db.collection("Coin").get()).docs.map(d => d.data());
-console.log('Testing Coin');
+const coinsRaw = await db.collection("Coin")
+  .where("validTill", ">", start.toJSDate())
+  .get();
+const coins = coinsRaw.docs.map(d => d.data());
+log.trace('Testing Coin');
 validateTimes(coins);
-console.log('Testing Fx');
-const fxs = (await db.collection("FxRates").get()).docs.map(d => d.data());
+log.trace('Testing Fx');
+const fxsRaw = await db.collection("FxRates")
+  .where("validTill", ">", start.toJSDate())
+  .get()
+const fxs = fxsRaw.docs.map(d => d.data());
 // validateTimes(fxs);
 
 const initTime = coins[0].validFrom.toMillis();
