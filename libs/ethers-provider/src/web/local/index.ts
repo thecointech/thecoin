@@ -17,7 +17,8 @@ export class Erc20Provider extends JsonRpcProvider {
   async getERC20History(args: {address?: string, contractAddress?: string, startBlock?: BlockTag, endBlock?: BlockTag}) {
     const buildFilter = ([t1, t2]: [string|null, string|null]) => ({
       address: args.contractAddress,
-      fromBlock: 0,
+      fromBlock: args.startBlock,
+      toBlock: args.endBlock,
       topics: [
         id('Transfer(address,address,uint256)'),
         t1 ? hexZeroPad(args.address!, 32) : null,
