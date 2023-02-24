@@ -4,18 +4,8 @@ import { arrayify } from '@ethersproject/bytes';
 import { verifyMessage } from '@ethersproject/wallet';
 import type Decimal from 'decimal.js-light';
 import type { Signer } from "@ethersproject/abstract-signer";
+import type { UberTransfer } from "@thecointech/types";
 import { DateTime } from 'luxon';
-
-
-export type UberTransfer = {
-  from: string,
-  to: string,
-  amount: number,
-  currency: number,
-  transferMillis: number,
-  signedMillis: number,
-  signature: string,
-}
 
 function getHash(
   from: string,
