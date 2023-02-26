@@ -70,8 +70,6 @@ const translations = defineMessages({
   }
 });
 
-const asCoin = false;
-
 export const BillPayments = () => {
   const intl = useIntl();
   const account = AccountMap.useActive();
@@ -93,6 +91,10 @@ export const BillPayments = () => {
   const [successHidden, setSuccessHidden] = useState(true);
   const [errorHidden, setErrorHidden] = useState(true);
 
+  const asCoin = !account?.plugins?.length;
+  if (!asCoin) {
+    log.warn("WARNING: Submitting UberTransfer is experimental")
+  }
   const resetForm = () => {
     setCoinToSell(null);
     setResetDefault(Date.now());
