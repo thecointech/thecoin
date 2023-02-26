@@ -5,7 +5,6 @@ import { RbcApi } from '@thecointech/rbcapi';
 import { StateSnapshot, TypedActionContainer } from '@thecointech/tx-statemachine';
 import { States, rawGraph } from './uberGraph';
 import { DateTime } from 'luxon';
-import { TransactionReceipt } from '@ethersproject/abstract-provider';
 
 jest.setTimeout(10 * 60 * 60 * 1000);
 jest.useFakeTimers();

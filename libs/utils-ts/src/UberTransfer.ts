@@ -1,4 +1,4 @@
-import { sign } from "@thecointech/utilities/SignedMessages";
+import { sign } from "./SignedMessages";
 import { keccak256 } from '@ethersproject/solidity';
 import { arrayify } from '@ethersproject/bytes';
 import { verifyMessage } from '@ethersproject/wallet';
@@ -50,11 +50,11 @@ export async function buildUberTransfer(
   amount: Decimal,
   currency: number,
   transferTime: DateTime,
-  signedTime: DateTime,
 ) {
+  const signedTime = DateTime.now();
   const address = await from.getAddress();
-  const transferMillis = Math.round(transferTime.toMillis());
-  const signedMillis = Math.round(signedTime.toMillis());
+  const transferMillis = transferTime.toMillis();
+  const signedMillis = signedTime.toMillis();
   const amountAdj = amount.mul(100).toInteger().toNumber();
   const signature = await signUberTransfer(from, to, amountAdj, currency, transferMillis, signedMillis);
   const r: UberTransfer = {

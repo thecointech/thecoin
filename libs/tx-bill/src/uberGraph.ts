@@ -1,4 +1,4 @@
-import { transitionTo, NamedTransition } from "@thecointech/tx-statemachine";
+import { transitionTo, NamedTransition, StateGraph } from "@thecointech/tx-statemachine";
 import * as core from '@thecointech/tx-statemachine/transitions';
 import * as bills from './transitions';
 import type { ActionType } from "@thecointech/broker-db";
@@ -112,11 +112,11 @@ export const rawGraph: GraphTransitions<'Bill', States>  = {
   complete: {} as any,
 }
 
-export const compiledGraph = Object.fromEntries(Object.entries(rawGraph).map(
+export const uberGraph = Object.fromEntries(Object.entries(rawGraph).map(
   ([name, state]) => [name, {
   next: transitionTo<States, "Bill">(state.action, state.next),
   error: state.error ? transitionTo<States, "Bill">(state.error, 'error') : undefined,
-}]));
+}])) as any as  StateGraph<States, "Bill">;
 
 
 

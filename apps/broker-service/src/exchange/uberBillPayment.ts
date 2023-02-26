@@ -1,7 +1,7 @@
 import { validateUberAction } from './CertifiedActionVerify';
 import { createAction } from '@thecointech/broker-db';
 import { DateTime } from 'luxon';
-import { Processor } from "@thecointech/tx-bill";
+import { UberProcessor } from "@thecointech/tx-bill";
 import { GetContract } from './Wallet';
 import { getCurrentState } from '@thecointech/tx-statemachine';
 import { SendMail } from '@thecointech/email';
@@ -23,8 +23,8 @@ export async function  ProcessUberBillPayment(sale: UberTransferAction) {
 
   // Process the sale
   const contract = await GetContract();
-  const processor = Processor(contract);
-  const container = await processor.execute(null, action, "tcWaiting");
+  const processor = UberProcessor(contract);
+  const container = await processor.execute(null, action, "tcRegisterWaiting");
   const latestState = getCurrentState(container);
 
   // For now, keep sending the emails on every transaction.

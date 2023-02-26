@@ -3,7 +3,7 @@ import { jest } from '@jest/globals';
 import { createAndInitOracle, setOracleValueRepeat } from '@thecointech/contract-oracle/testHelpers.ts';
 import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
 import { initAccounts, createAndInitTheCoin } from '@thecointech/contract-core/testHelpers.ts';
-import { buildUberTransfer } from '../src/UberTransfer';
+import { buildUberTransfer } from '@thecointech/utilities/UberTransfer';
 import Decimal from 'decimal.js-light';
 import { DateTime, Duration } from 'luxon';
 import '@nomiclabs/hardhat-ethers';
@@ -33,7 +33,6 @@ it('converts fiat to TheCoin for current transfers', async () => {
     signers.client2.address,
     new Decimal(100),
     124,
-    DateTime.now(),
     DateTime.now(),
   )
   const initBalance = await tcCore.balanceOf(signers.client1.address);
@@ -86,7 +85,6 @@ it('Appropriately delays a transfer, and converts an appropriate amount at time'
     new Decimal(100),
     124,
     DateTime.now().plus(delay),
-    DateTime.now(),
   );
 
   const r = await tcCore.uberTransfer(
