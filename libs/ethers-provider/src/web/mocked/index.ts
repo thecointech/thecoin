@@ -68,6 +68,10 @@ export class Erc20Provider extends BaseProvider {
     const plugin = plugins[address as "RoundNumber"|"UberConverter"];
     return plugin?.code;
   }
+
+  async getLogs(): Promise<Log[]> {
+    return [];
+  }
 }
 
 async function getRemapping(clientAddress?: string) : Promise<Record<string, string>> {
