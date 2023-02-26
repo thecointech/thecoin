@@ -13,7 +13,7 @@ export const uberWaitPending = makeTransition<BSActionTypes>("uberWaitPending", 
   }
 
   // Block until time has passed transferMillis
-  if (request.transfer.transferMillis < Date.now()) {
+  if (Date.now() < request.transfer.transferMillis) {
     return null;
   }
 

@@ -40,8 +40,14 @@ export function updateCoinBalance(container: AnyActionContainer, receipt: Transa
   // We use ExactTransfer instead of Transfer because we know there
   // will always be 1 and only 1 in any transaction we initiate.
   const [transfer, ...rest] = parsed.filter(p => p?.name == "ExactTransfer");
-  if (!transfer || rest.length > 0)
-    throw new Error(`Assumption Violated: ExactTransfer not as expected`);
+  if (!transfer) {
+    if (rest.length > 0) {
+      // We have too many transfers, so we don't know what to do.
+      throw new Error(`Assumption Violated: ExactTransfer not as expected`);
+    }
+    // It is legal to have 0 transfers (with UberConverter)
+    return undefined;
+  }
 
   let balance = getCurrentState(container).data.coin ?? new Decimal(0);
   if (NormalizeAddress(transfer.args.from) == container.action.address) {

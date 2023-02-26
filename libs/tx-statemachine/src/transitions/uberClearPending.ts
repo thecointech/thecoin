@@ -1,7 +1,7 @@
 import { makeTransition  } from '../makeTransition';
 import { isCertTransfer, TransitionCallback } from '../types';
 import { verifyPreTransfer } from './verifyPreTransfer';
-import { getContract } from '@thecointech/contract-plugin-converter';
+import { connectConverter } from '@thecointech/contract-plugin-converter';
 import { getSigner } from '@thecointech/signers';
 import { calculateOverrides, convertBN, toDelta } from './coinUtils';
 import { log } from '@thecointech/logging';
@@ -15,9 +15,8 @@ export const uberClearPending = makeTransition<BSActionTypes>("uberClearPending"
 
 const doClearPending: TransitionCallback<BSActionTypes> = async (container) => {
 
-  const uberContract = await getContract();
   const signer = await getSigner("BrokerTransferAssistant");
-  const uc = uberContract.connect(signer);
+  const uc = await connectConverter(signer);
 
   const request = container.action.data.initial;
   // Certified transfer should not end up here!

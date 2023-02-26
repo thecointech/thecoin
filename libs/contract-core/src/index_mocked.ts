@@ -8,7 +8,7 @@ export * from './constants';
 const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
 let nonce = 12;
 let confirmations = 1;
-export class TheCoin implements Pick<Src.TheCoin, 'getUsersPlugins'|'exactTransfer' | 'balanceOf' | 'certifiedTransfer'>{
+export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugins'|'exactTransfer' | 'balanceOf' | 'certifiedTransfer'>{
 
   signer?: Signer;
   constructor(signer?: Signer) {
@@ -32,6 +32,7 @@ export class TheCoin implements Pick<Src.TheCoin, 'getUsersPlugins'|'exactTransf
   exactTransfer = () => this.genReceipt('e');
   balanceOf = () => Promise.resolve(BigNumber.from(995000000));
   certifiedTransfer = () => this.genReceipt('c', { confirmations: 1 })
+  uberTransfer = () => this.genReceipt('c', { confirmations: 1 })
   // Run during testing.  Remove once deployement is secure.
   runCloneTransfer = () => this.genReceipt();
   getUsersPlugins = () => Promise.resolve([{
