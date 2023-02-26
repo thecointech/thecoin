@@ -16,7 +16,9 @@ function getLiveNetwork(_type: Network) {
 function getDevNetwork() {
   return {
     url: "http://localhost:9545",
-    chainId: 31337
+    chainId: 31337,
+    // Just too much spam in the dev:live logs
+    loggingEnabled: false,
   }
 }
 export function getNetworks() {

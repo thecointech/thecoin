@@ -18,7 +18,7 @@ export const  waitCoin = makeTransition("waitCoin", async (container) => {
   return receipt
     ? {
         meta: `confirmations: ${receipt.confirmations}`,
-        coin: updateCoinBalance(container, receipt),
+        ...updateCoinBalance(container, receipt),
       }
     // Our tx has not yet been mined.  While not critical, it is concerning.
     // We have warned, but now return null to allow back-off-and-retry.
@@ -61,7 +61,7 @@ export function updateCoinBalance(container: AnyActionContainer, receipt: Transa
       "Could not find address for {initialId} in {hash}")
     throw new Error("Missing address, cannot")
   }
-  return balance;
+  return { coin: balance };
 }
 
 //
@@ -81,7 +81,7 @@ export async function waitTransaction(contract: TheCoin, hash: string, confirmat
       return receipt;
     }
 
-    log.trace({hash}, `Waited ${i} times: tx has not been mined. Status ${receipt?.status} : {hash}`);
+    log.trace({hash}, `Waited ${i} times with ${receipt?.confirmations} confirmations: tx has not been mined. Status ${receipt?.status} : {hash}`);
     await sleep(10000);
   }
   log.warn({hash}, `Timed out - tx has not been mined: {hash}`);

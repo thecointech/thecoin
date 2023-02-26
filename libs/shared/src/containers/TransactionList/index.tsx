@@ -52,7 +52,7 @@ function buildPagination(transactions: Transaction[], maxRowCount: number, curre
   const pageCount = Math.ceil(transactions.length / maxRowCount);
   currentPage = Math.min(currentPage, pageCount - 1);
   if (pageCount > 1) {
-    console.error('WARNING: Not Tested');
+    // console.error('WARNING: Not Tested');
     const startRow = currentPage * maxRowCount;
     transactions = transactions.slice(startRow, startRow + maxRowCount);
 

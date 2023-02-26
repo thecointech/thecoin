@@ -40,7 +40,7 @@ export async function getPluginModifier(user: string, {plugin, permissions}: Plu
     const variables = {
       ...updateState(initialState, timestamp, logs),
       user,
-      block: { timestamp: Math.round(timestamp.toSeconds()) },
+      block: { timestamp: new Decimal(timestamp.toSeconds()).toInteger() },
       currentBalance: balance,
       __$rates: rates,
     } as ContractState;
@@ -171,7 +171,7 @@ function callFunction(fnCall: FunctionCall, variables: any) {
     switch(fnCall.expression.name) {
       case "toFiat": return toFiat(args, variables.__$rates);
       case "toCoin": return toCoin(args, variables.__$rates);
-      case "msNow": return new Decimal(variables.block.timestamp).mul(1000);
+      case "msNow": return variables.block.timestamp.mul(1000);
     }
   }
   else if (fnCall.expression.type == "ElementaryTypeName") {
@@ -196,7 +196,7 @@ function memberAccess(memberAccess: MemberAccess, variables: any): Decimal {
 const avgRate = (rate: FXRate) => ((rate.sell + rate.buy) / 2) || 1;
 
 export const toFiat = ([coin, timestamp]: any[], rates: FXRate[]) => {
-  const rate = getFxRate(rates, timestamp.toNumber());
+  const rate = getFxRate(rates, timestamp.mul(1000).toNumber());
   // If no exchange rate, return 0?
   if (!rate.fxRate || !rate.buy) {
     return new Decimal(0);
@@ -209,7 +209,7 @@ export const toFiat = ([coin, timestamp]: any[], rates: FXRate[]) => {
     .toint();
 }
 export const toCoin = ([fiat, timestamp]: any[], rates: FXRate[]) => {
-  const rate = getFxRate(rates, timestamp.toNumber());
+  const rate = getFxRate(rates, timestamp.mul(1000).toNumber());
   // If no exchange rate, return 0?
   if (!rate.fxRate || !rate.buy) {
     return new Decimal(0);

@@ -1,4 +1,4 @@
-import { BlockTag, Filter, JsonRpcProvider, Log } from '@ethersproject/providers';
+import { BlockTag, Filter, JsonRpcProvider, Log, TransactionReceipt } from '@ethersproject/providers';
 import { hexZeroPad, hexStripZeros } from "@ethersproject/bytes";
 import { id } from "@ethersproject/hash";
 import { BigNumber } from "@ethersproject/bignumber";
@@ -9,6 +9,14 @@ export class Erc20Provider extends JsonRpcProvider {
 
   constructor() {
     super(`http://localhost:${process.env.DEPLOY_NETWORK_PORT}`);
+  }
+
+  async waitForTransaction(transactionHash: string, confirmations?: number | undefined, timeout?: number | undefined): Promise<TransactionReceipt> {
+    const r = await super.waitForTransaction(transactionHash, confirmations, timeout);
+    // Every time we wait, advance the block number
+    // to prevent deadlocking when waiting for confirmations
+    await this.send("evm_mine", []);
+    return r;
   }
 
   //
