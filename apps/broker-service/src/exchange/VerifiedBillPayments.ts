@@ -1,7 +1,7 @@
 import { validateAction } from './CertifiedActionVerify';
 import { createAction } from '@thecointech/broker-db';
 import { DateTime } from 'luxon';
-import { Processor } from "@thecointech/tx-bill";
+import { CertifiedProcessor } from "@thecointech/tx-bill";
 import { GetContract } from './Wallet';
 import { getCurrentState } from '@thecointech/tx-statemachine';
 import { SendMail } from '@thecointech/email';
@@ -23,7 +23,7 @@ export async function  ProcessBillPayment(sale: CertifiedTransfer) {
 
   // Process the sale
   const contract = await GetContract();
-  const processor = Processor(contract);
+  const processor = CertifiedProcessor(contract);
   const container = await processor.execute(null, action, "tcWaiting");
   const latestState = getCurrentState(container);
 

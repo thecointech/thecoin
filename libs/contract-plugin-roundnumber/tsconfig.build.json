@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.libs.json",
+  "compilerOptions": {
+    "outDir": "./build",
+    "rootDir": "./src",
+    "tsBuildInfoFile": "./build/.buildinfo",
+  },
+  "include": ["./src/**/*", "./src/**/*.json"],
+  "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"]
+}
+
+

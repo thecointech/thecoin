@@ -58,7 +58,6 @@
     "@thecointech/pricing": "^0.2.93"
   },
   "devDependencies": {
-    "@thecointech/async": "^0.2.93",
-    "@thecointech/contract-core": "^0.2.93"
+    "@thecointech/async": "^0.2.93"
   }
 }

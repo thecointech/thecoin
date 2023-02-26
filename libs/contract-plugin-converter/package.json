@@ -22,37 +22,41 @@
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
-    "build:src": "yarn tsc --project tsconfig.build.json",
+    "build:src": "yarn tsc -b",
     "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
     "test": "yarn run-jest",
     "test:ci": "yarn run-jest-nix",
-    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn deploy:polygon",
-    "prod:test": "cross-env CONFIG_NAME=prodtest yarn deploy:both",
-    "prod": "cross-env CONFIG_NAME=prod yarn deploy:polygon",
-    "deploy:both": "yarn deploy:polygon && yarn deploy:ethereum",
-    "deploy:polygon": "cross-env HARDHAT_NETWORK=polygon yarn _deploy",
-    "deploy:ethereum": "cross-env HARDHAT_NETWORK=ethereum yarn _deploy",
-    "_deploy": "run-s _deploy:deploy _deploy:verify",
-    "_deploy:deploy": "yarn _hardhat ./scripts/deploy.ts",
-    "_deploy:verify": "yarn _hardhat ./scripts/verify.ts",
+    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive run-s _deploy _seed",
+    "prod:test": "cross-env CONFIG_NAME=prodtest run-s _deploy _seed",
+    "prod": "cross-env CONFIG_NAME=prod run-s _deploy _seed",
+    "_deploy": "yarn _hardhat ./scripts/deploy.ts",
+    "_verify": "yarn _hardhat ./scripts/verify.ts",
+    "_seed": "yarn _hardhat ./scripts/seed.ts",
     "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
   },
   "files": [
     "build/**/*"
   ],
-  "exports": "./build/index.js",
+  "exports": {
+    ".": {
+      "development": "./build/converter_mocked.js",
+      "electron": "./build/index.js",
+      "default": "./build/index.js"
+    }
+  },
   "types": "./build/index.d.ts",
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
     "@thecointech/async": "^0.2.93",
     "@thecointech/contract-tools": "^0.2.93",
+    "@thecointech/contract-core": "^0.2.93",
     "jest": "*"
   },
   "dependencies": {
     "@thecointech/contract-oracle": "^0.2.93",
-    "@thecointech/contract-core": "^0.2.93"
+    "@thecointech/contract-plugins": "^0.2.93"
   }
 }

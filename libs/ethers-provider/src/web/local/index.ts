@@ -1,13 +1,22 @@
-import { BlockTag, Filter, JsonRpcProvider, Log } from '@ethersproject/providers';
+import { BlockTag, Filter, JsonRpcProvider, Log, TransactionReceipt } from '@ethersproject/providers';
 import { hexZeroPad, hexStripZeros } from "@ethersproject/bytes";
 import { id } from "@ethersproject/hash";
 import { BigNumber } from "@ethersproject/bignumber";
 import { ERC20Response } from '../erc20response';
+import plugins from '../../plugins.json' assert { type: 'json' };
 
 export class Erc20Provider extends JsonRpcProvider {
 
   constructor() {
     super(`http://localhost:${process.env.DEPLOY_NETWORK_PORT}`);
+  }
+
+  async waitForTransaction(transactionHash: string, confirmations?: number | undefined, timeout?: number | undefined): Promise<TransactionReceipt> {
+    const r = await super.waitForTransaction(transactionHash, confirmations, timeout);
+    // Every time we wait, advance the block number
+    // to prevent deadlocking when waiting for confirmations
+    await this.send("evm_mine", []);
+    return r;
   }
 
   //
@@ -16,7 +25,8 @@ export class Erc20Provider extends JsonRpcProvider {
   async getERC20History(args: {address?: string, contractAddress?: string, startBlock?: BlockTag, endBlock?: BlockTag}) {
     const buildFilter = ([t1, t2]: [string|null, string|null]) => ({
       address: args.contractAddress,
-      fromBlock: 0,
+      fromBlock: args.startBlock,
+      toBlock: args.endBlock,
       topics: [
         id('Transfer(address,address,uint256)'),
         t1 ? hexZeroPad(args.address!, 32) : null,
@@ -51,6 +61,11 @@ export class Erc20Provider extends JsonRpcProvider {
     filter.fromBlock = 0;
     const result = await this.getLogs(filter);
     return result;
+  }
+
+  async getSourceCode(address: string) {
+    const plugin = Object.values(plugins).find(p => p.address === address);
+    return plugin?.code;
   }
 }
 

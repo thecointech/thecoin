@@ -1,21 +1,11 @@
-import { sign } from "@thecointech/utilities/SignedMessages";
+import { sign } from "./SignedMessages";
 import { keccak256 } from '@ethersproject/solidity';
 import { arrayify } from '@ethersproject/bytes';
 import { verifyMessage } from '@ethersproject/wallet';
 import type Decimal from 'decimal.js-light';
 import type { Signer } from "@ethersproject/abstract-signer";
+import type { UberTransfer } from "@thecointech/types";
 import { DateTime } from 'luxon';
-
-
-export type UberTransfer = {
-  from: string,
-  to: string,
-  amount: number,
-  currency: number,
-  transferTime: number,
-  signedTime: number,
-  signature: string,
-}
 
 function getHash(
   from: string,
@@ -48,8 +38,8 @@ export async function signUberTransfer(
 export function getTransferSigner(
   transfer: UberTransfer
 ) {
-  const { from, to, amount, currency, transferTime, signedTime, signature } = transfer;
-  const hash = getHash(from, to, amount, currency, transferTime, signedTime);
+  const { from, to, amount, currency, transferMillis, signedMillis, signature } = transfer;
+  const hash = getHash(from, to, amount, currency, transferMillis, signedMillis);
   return verifyMessage(hash, signature);
 }
 
@@ -60,20 +50,20 @@ export async function buildUberTransfer(
   amount: Decimal,
   currency: number,
   transferTime: DateTime,
-  signedTime: DateTime,
 ) {
+  const signedTime = DateTime.now();
   const address = await from.getAddress();
-  const transferSeconds = Math.round(transferTime.toSeconds());
-  const signedSeconds = Math.round(signedTime.toSeconds());
+  const transferMillis = transferTime.toMillis();
+  const signedMillis = signedTime.toMillis();
   const amountAdj = amount.mul(100).toInteger().toNumber();
-  const signature = await signUberTransfer(from, to, amountAdj, currency, transferSeconds, signedSeconds);
+  const signature = await signUberTransfer(from, to, amountAdj, currency, transferMillis, signedMillis);
   const r: UberTransfer = {
     from: address,
     to,
     amount: amountAdj,
     currency,
-    transferTime: transferSeconds,
-    signedTime: signedSeconds,
+    transferMillis,
+    signedMillis,
     signature,
   };
   return r;

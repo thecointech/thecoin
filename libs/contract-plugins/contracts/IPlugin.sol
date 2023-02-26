@@ -16,7 +16,7 @@ interface IPlugin is IERC165 {
 
   // Get the permissions requested by this plugin over users account.
   // A user must sign these permissions and store with their account on TC.
-  function getPermissions() external returns(uint);
+  function getPermissions() external view returns(uint);
 
   // Hook called whenever a user adds a plugin to their account.
   function userAttached(address add, address initiator) external;
@@ -32,8 +32,8 @@ interface IPlugin is IERC165 {
   // automatically top up the account, restrict the transfer, or perform
   // some other kind of action.
   // requires PERMISSION_DEPOSIT/PERMISSION_WITHDRAWAL/PERMISSION_APPROVAL
-  function preDeposit(address user, uint coin, uint timestamp) external;
-  function preWithdraw(address user, uint balance, uint coin, uint timestamp) external returns(uint);
+  function preDeposit(address user, uint coin, uint msTime) external;
+  function preWithdraw(address user, uint balance, uint coin, uint msTime) external returns(uint);
 
-  function modifyTransfer(address from, address to, uint amount, uint16 currency, uint timestamp) external returns (uint, uint16);
+  function modifyTransfer(address from, address to, uint amount, uint16 currency, uint msTransferAt, uint msSignedAt) external returns (uint, uint16);
 }

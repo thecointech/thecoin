@@ -18,8 +18,8 @@ async function getDevLiveArguments() {
   const blockDuration = Duration.fromObject({ days: 1 });
   return [
     await updater.getAddress(),
-    from.toSeconds(),
-    blockDuration.as("seconds"),
+    from.toMillis(),
+    blockDuration.as("milliseconds"),
   ]
 }
 

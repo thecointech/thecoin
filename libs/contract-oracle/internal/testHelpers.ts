@@ -1,7 +1,7 @@
-import { getOracleFactory } from '@thecointech/contract-oracle/contract';
 import { DateTime, Duration } from 'luxon';
+import { getOracleFactory } from '../src/contract';
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
-import type { SpxCadOracle } from '@thecointech/contract-oracle';
+import type { SpxCadOracle } from '../src';
 
 export async function createAndInitOracle(owner: SignerWithAddress, rate = 2) {
   const SpxCadOracle = getOracleFactory(owner);
@@ -11,8 +11,8 @@ export async function createAndInitOracle(owner: SignerWithAddress, rate = 2) {
     .now()
     .set({hour:0, minute:0, second:0, millisecond:0})
     .minus({days: 6})
-    .toSeconds();
-  const blockTime = Duration.fromObject({day: 1}).as("seconds");
+    .toMillis();
+  const blockTime = Duration.fromObject({day: 1}).as("milliseconds");
   await oracle.initialize(owner.address, initialTime, blockTime);
   // We a constant rate over the last week, expires tonight midnight
   await setOracleValueRepeat(oracle, rate, 7);

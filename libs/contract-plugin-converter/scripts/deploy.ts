@@ -1,5 +1,5 @@
 import hre from 'hardhat';
-import { storeContractAddress } from '@thecointech/contract-tools/writeContract';
+import { writePlugin } from '@thecointech/contract-plugins/writePlugin';
 import { getSigner } from '@thecointech/signers';
 import { log } from '@thecointech/logging';
 import '@nomiclabs/hardhat-ethers';
@@ -18,7 +18,8 @@ async function main() {
   log.info(`Deployed UberConverter at ${uberConverter.address} with args: ${deployArgs}`);
 
   // Serialize our contract addresses
-  storeContractAddress(new URL(import.meta.url), "polygon", uberConverter.address);
+  const contractUrl = new URL('../contracts/UberConverter.sol', import.meta.url);
+  writePlugin(uberConverter.address, contractUrl);
 }
 
 main().catch((error) => {

@@ -33,6 +33,7 @@
     "emulator:blockchain": "cd libs/contract-tools && yarn emulator",
     "emulator:bootstrap": "yarn wait-port 7007 && cross-env CONFIG_NAME=devlive yarn bootstrap",
     "emulators": "yarn run-p emulator:*",
+    "dev:live:data": "cross-env CONFIG_NAME=prodtest TS_NODE_PROJECT=tsconfig.base.json run-env ./tools/pullRates.ts",
     "dev:live:projects": "yarn wait-port 9377 && yarn lerna run dev:live --stream --no-bail",
     "dev:live": "cross-env CONFIG_NAME=devlive run-p emulators dev:live:*",
     "deploy:prodtest": "cross-env CONFIG_NAME=prodtest yarn _deploy",

@@ -57,6 +57,23 @@ export interface CertifiedTransfer {
   instructionPacket: EncryptedPacket;
   signature: string;
 }
+
+export type UberTransfer = {
+  from: string,
+  to: string,
+  amount: number,
+  currency: number,
+  transferMillis: number,
+  signedMillis: number,
+  signature: string,
+}
+
+export type UberTransferAction = {
+  transfer: UberTransfer,
+  instructionPacket: EncryptedPacket,
+  signature: string,
+}
+
 export interface BrokerStatus {
   address: string;
   certifiedFee: number;

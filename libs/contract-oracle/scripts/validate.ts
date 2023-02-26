@@ -1,4 +1,4 @@
-import { getContract } from '@thecointech/contract-oracle';
+import { getContract } from '../src';
 import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
 import { fetchRate, weBuyAt, weSellAt } from '@thecointech/fx-rates';
@@ -22,7 +22,7 @@ for (let t = start; t < now; ) {
     log.warn(`Invalid Start Time`);
   }
 
-  const bc = await oracle.getRoundFromTimestamp(t.toSeconds());
+  const bc = await oracle.getRoundFromTimestamp(t.toMillis());
 
   // Are they the same?
   const buy = weBuyAt([db], t.toJSDate());

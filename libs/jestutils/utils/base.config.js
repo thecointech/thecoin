@@ -29,7 +29,7 @@ module.exports = {
   globals: {
     'ts-jest': {
       useESM: true,
-      tsconfig: {
+      tsconfig: "tsconfig.tests.json", /*{
         ...compilerOptions,
         // compile as module
         // module: "CommonJS",
@@ -46,7 +46,7 @@ module.exports = {
         rootDir: rootFolder,
         // do not write files during testing
         noEmit: true,
-      },
+      }, */
       astTransformers: {
         before: [
           {

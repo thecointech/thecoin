@@ -2,10 +2,11 @@ import { BlockTag, Filter, BaseProvider, Log } from '@ethersproject/providers';
 import { hexZeroPad } from "@ethersproject/bytes";
 import { BigNumber } from "@ethersproject/bignumber";
 import { ERC20Response } from '../erc20response';
-import transferFrom from './logs-transfer-from.json';
-import transferTo from './logs-transfer-to.json';
-import exactFrom from './logs-exact-from.json';
-import exactTo from './logs-exact-to.json';
+import transferFrom from './logs-transfer-from.json' assert { type: 'json' };
+import transferTo from './logs-transfer-to.json' assert { type: 'json' };
+import exactFrom from './logs-exact-from.json' assert { type: 'json' };
+import exactTo from './logs-exact-to.json' assert { type: 'json' };
+import plugins from '../../plugins.json' assert { type: 'json' };
 
 export class Erc20Provider extends BaseProvider {
   connection: { url: string; };
@@ -60,6 +61,16 @@ export class Erc20Provider extends BaseProvider {
       topics: l.topics.map(t => remapping[t] ?? t),
       removed: false,
     }))
+  }
+
+  async getSourceCode(address: string) {
+    // When mocked, we refer to the plugin by name
+    const plugin = plugins[address as "RoundNumber"|"UberConverter"];
+    return plugin?.code;
+  }
+
+  async getLogs(): Promise<Log[]> {
+    return [];
   }
 }
 

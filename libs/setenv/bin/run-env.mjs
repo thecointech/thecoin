@@ -23,6 +23,7 @@ let executable = sliceArgs(args, "exec", "node");
 // TODO: Support ts-node?
 const env = {
   NODE_NO_WARNINGS: 1,
+  TS_NODE_PROJECT: process.env.TS_NODE_PROJECT ?? "tsconfig.build.json",
   ...getEnvVars(config),
   ...process.env,
 }

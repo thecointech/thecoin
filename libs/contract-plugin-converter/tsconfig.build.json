@@ -1,8 +1,11 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../tsconfig.libs.json",
   "compilerOptions": {
     "outDir": "./build",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "isolatedModules": false,
+    "tsBuildInfoFile": "./build/.buildinfo",
+    "noUnusedLocals": false,
   },
   "include": ["./src/**/*", "./src/**/*.json"],
   "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"]

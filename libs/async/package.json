@@ -20,6 +20,12 @@
     "build": "yarn tsc",
     "clean": "rimraf ./build"
   },
-  "exports": "./build/index.js",
+  "exports": {
+    ".": {
+      "development": "./build/async_mocked.js",
+      "devlive": "./build/async_mocked.js",
+      "default": "./build/index.js"
+    }
+  },
   "types": "./build/index.d.ts"
 }

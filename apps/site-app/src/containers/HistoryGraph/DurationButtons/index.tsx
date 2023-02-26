@@ -19,18 +19,10 @@ const translations = defineMessages({
 });
 
 const Durations = {
-  7: {
-    ...translations.seven
-  },
-  31: {
-    ...translations.thirtyOne
-  },
-  365: {
-    ...translations.year
-  },
-  [Number.POSITIVE_INFINITY]: {
-    ...translations.all
-  }
+  7: translations.seven,
+  31: translations.thirtyOne,
+  365: translations.year,
+  [Number.POSITIVE_INFINITY]: translations.all,
 }
 export type Duration = keyof typeof Durations;
 export type GraphButtonsProps = {

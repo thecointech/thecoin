@@ -10,8 +10,8 @@
 
 pragma solidity ^0.8.0;
 
-import './BasePlugin.sol';
-import '../interfaces/permissions.sol';
+import '../BasePlugin.sol';
+import '../permissions.sol';
 import '@thecointech/contract-oracle/contracts/OracleClient.sol';
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
@@ -60,7 +60,7 @@ contract SpendingLimit is BasePlugin, OracleClient, Ownable, PermissionUser {
     require(owner() == initiator, "only owner may attach this plugin");
     // only initialize if new user.
     if (userData[newUser].periodStart == 0) {
-      userData[newUser].periodStart = block.timestamp;
+      userData[newUser].periodStart = msNow();
     }
   }
 
@@ -74,12 +74,12 @@ contract SpendingLimit is BasePlugin, OracleClient, Ownable, PermissionUser {
     uint fiat = toFiat(coin, timestamp);
 
     UserData storage data = userData[user];
-    if (data.periodStart + periodLength < block.timestamp) {
+    if (data.periodStart + periodLength < msNow()) {
       // Reset spending limit
       data.fiatSpent = 0;
       // Reset to the new period start time.  Because this is a floor, it should
       // always end up with the most recent period start
-      uint periods = (block.timestamp - data.periodStart) / periodLength;
+      uint periods = ((msNow()) - data.periodStart) / periodLength;
       data.periodStart += periods * periodLength;
     }
     // Limit spending

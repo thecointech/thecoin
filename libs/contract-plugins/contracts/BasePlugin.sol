@@ -6,12 +6,14 @@
 
 pragma solidity ^0.8.0;
 
-import "../interfaces/IPlugin.sol";
+import "./IPlugin.sol";
 
 abstract contract BasePlugin is IPlugin {
 
   bytes4 public constant IID_PLUGIN = type(IPlugin).interfaceId;
   bytes4 public constant IID_ERC165 = type(IPlugin).interfaceId;
+
+  event ValueChanged(address indexed user, uint msTime, string path, int change);
 
   // suppport ERC165
   function supportsInterface(bytes4 interfaceID) override external pure returns (bool)
@@ -21,6 +23,8 @@ abstract contract BasePlugin is IPlugin {
     );
   }
 
+  function msNow() public view returns(uint) { return block.timestamp * 1000; }
+
   // Default empty implementations allow clients to ignore fns they dont use
   function userAttached(address user, address) virtual external override {}
   function userDetached(address user, address) virtual external override {}
@@ -29,6 +33,6 @@ abstract contract BasePlugin is IPlugin {
   { return balance; }
   function balanceOf(address, int currentBalance) virtual external view override returns(int)
   { return currentBalance; }
-  function modifyTransfer(address, address, uint amount, uint16 currency, uint) virtual external override returns (uint, uint16)
+  function modifyTransfer(address, address, uint amount, uint16 currency, uint, uint) virtual external override returns (uint, uint16)
   { return (amount, currency); }
 }

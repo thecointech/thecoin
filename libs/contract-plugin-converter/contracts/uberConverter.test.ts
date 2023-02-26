@@ -1,9 +1,9 @@
 import hre from 'hardhat';
 import { jest } from '@jest/globals';
 import { createAndInitOracle, setOracleValueRepeat } from '@thecointech/contract-oracle/testHelpers.ts';
-import { ALL_PERMISSIONS } from '@thecointech/contract-core';
+import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
 import { initAccounts, createAndInitTheCoin } from '@thecointech/contract-core/testHelpers.ts';
-import { buildUberTransfer } from '../src/UberTransfer';
+import { buildUberTransfer } from '@thecointech/utilities/UberTransfer';
 import Decimal from 'decimal.js-light';
 import { DateTime, Duration } from 'luxon';
 import '@nomiclabs/hardhat-ethers';
@@ -34,7 +34,6 @@ it('converts fiat to TheCoin for current transfers', async () => {
     new Decimal(100),
     124,
     DateTime.now(),
-    DateTime.now(),
   )
   const initBalance = await tcCore.balanceOf(signers.client1.address);
   const r = await tcCore.uberTransfer(
@@ -42,8 +41,8 @@ it('converts fiat to TheCoin for current transfers', async () => {
     transfer.to,
     transfer.amount,
     transfer.currency,
-    transfer.transferTime,
-    transfer.signedTime,
+    transfer.transferMillis,
+    transfer.signedMillis,
     transfer.signature,
   );
   const receipt = await r.wait();
@@ -86,7 +85,6 @@ it('Appropriately delays a transfer, and converts an appropriate amount at time'
     new Decimal(100),
     124,
     DateTime.now().plus(delay),
-    DateTime.now(),
   );
 
   const r = await tcCore.uberTransfer(
@@ -94,8 +92,8 @@ it('Appropriately delays a transfer, and converts an appropriate amount at time'
     transfer.to,
     transfer.amount,
     transfer.currency,
-    transfer.transferTime,
-    transfer.signedTime,
+    transfer.transferMillis,
+    transfer.signedMillis,
     transfer.signature,
   );
   const receipt = await r.wait();
@@ -126,13 +124,13 @@ it('Appropriately delays a transfer, and converts an appropriate amount at time'
   // TheCoin rate is now $4
   await setOracleValueRepeat(oracle, 4, 8);
   const validTill = await oracle.validUntil();
-  expect(validTill.toNumber()).toBeGreaterThan(transfer.transferTime);
+  expect(validTill.toNumber()).toBeGreaterThan(transfer.transferMillis);
   // Assert that the pending transfer reflects the new value
   const finalBalance = await tcCore.pl_balanceOf(signers.client1.address);
   expect(initAmount - finalBalance.toNumber()).toEqual(25e6);
 
   // Process pending transactions
-  const p = await uber.processPending(transfer.from, transfer.to, transfer.transferTime);
+  const p = await uber.processPending(transfer.from, transfer.to, transfer.transferMillis);
   const preceipt = await p.wait();
 
   const final1Balance = await tcCore.pl_balanceOf(signers.client1.address);
@@ -141,8 +139,17 @@ it('Appropriately delays a transfer, and converts an appropriate amount at time'
   // client2 should now have it's transfer deposited.
   const final2Balance = await tcCore.pl_balanceOf(signers.client2.address);
   expect(final2Balance.toNumber()).toEqual(25e6);
-  // money was transferred
-  // TODO: This is a transfer event, but not named because we got it fron the wrong contract
-  // Check using tcCore events thingy
-  expect(preceipt.events?.length).toEqual(1);
+
+  // money was transferred, check all the info is correctt
+  const allEvents = preceipt.events?.map(e => e.event ? e : tcCore.interface.parseLog(e));
+  const allEventNames = allEvents?.map((e: any) => e.event ?? e.name)
+  expect(allEventNames?.length).toBe(3)
+  expect(allEventNames).toContain("ValueChanged");
+  expect(allEventNames).toContain("Transfer");
+  expect(allEventNames).toContain("ExactTransfer");
+
+  const et = allEvents?.find((e: any) => e.name == "ExactTransfer")
+  expect(et?.args?.from).toBe(transfer.from);
+  expect(et?.args?.to).toBe(transfer.to);
+  expect(et?.args?.timestamp.toNumber()).toBe(transfer.transferMillis);
 });

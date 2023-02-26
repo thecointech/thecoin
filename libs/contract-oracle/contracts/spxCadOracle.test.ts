@@ -5,13 +5,13 @@ import { updateRates } from '../src/update';
 import { getContract } from '../src/index_mocked';
 import hre from 'hardhat';
 import '@nomiclabs/hardhat-ethers';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 
 jest.setTimeout(5 * 60 * 1000);
 const factor = Math.pow(10, 8);
-const blockTime = 3 * 60 * 60;
+const blockTime = 3 * 60 * 60 * 1000;
 const [owner] = await hre.ethers.getSigners();
-const ratesFiles = new URL('../internal/rates.json', import.meta.url);
+const ratesFiles = new URL('../../../data/rates.json', import.meta.url);
 const shouldRun = existsSync(ratesFiles);
 
 describe('Oracle Tests', () => {
@@ -82,13 +82,18 @@ describe('Oracle Tests', () => {
   })
 }, shouldRun)
 
-
+type LiveRate = {
+  from: number,
+  to: number,
+  rate: number,
+}
 async function getRatesFactory() {
-  const liveRates  = await import ('../internal/rates.json'/*, { assert: {type: "json"}}*/);
-  const rates = liveRates.default.rates.slice(8);
-  const factory = async (timestamp: number) => {
+  const rawRates = readFileSync(ratesFiles, 'utf-8');
+  const liveRates  = JSON.parse(rawRates).rates as LiveRate[];
+  const rates = liveRates.slice(8);
+  const factory = async (millis: number) => {
     for (let i = 0; i < rates.length; i++) {
-      if (rates[i].to > timestamp) {
+      if (rates[i].to > millis) {
         const r = {
           ...rates[i]
         }

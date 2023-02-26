@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { ALL_PERMISSIONS } from '../../src/constants'
+import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
 import { createAndInitTheCoin, initAccounts } from '../../internal/testHelpers';
 import type { Contract, ContractTransaction } from 'ethers';
 import hre from 'hardhat';

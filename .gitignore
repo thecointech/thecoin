@@ -61,6 +61,7 @@ libs/contract-*/migrations/types
 libs/contract-*/src/deployed/*-fork.json
 libs/contract-*/**/devlive-polygon*
 libs/contract-*/**/development-polygon*
+libs/contract-*/contract-src.json
 
 libs/contract-core/**/blockchain.json
 libs/contract-core/**/mint.csv
@@ -73,3 +74,4 @@ libs/idx/src/config.devlive.json
 apps/tx-processor/run_service.cmd
 
 storybook-static/
+/data/
