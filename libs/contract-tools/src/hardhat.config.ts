@@ -11,7 +11,7 @@ const defaultNetwork = networkIdx === -1 ? process.env.HARDHAT_NETWORK : process
 
 const config: HardhatUserConfig = {
   solidity: {
-    version: "0.8.9",
+    version: "0.8.2",
     settings: {
       optimizer: {
         enabled: true,
