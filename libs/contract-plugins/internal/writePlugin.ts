@@ -7,24 +7,22 @@ const pluginCacheFile = new URL("../../ethers-provider/src/plugins.json", import
 // provider in dev:live mode.
 export function writePlugin(address: string, contract: URL) {
   // Only write artifacts in devlive
-  if (process.env.CONFIG_NAME !== 'devlive')
-    return;
+  if (process.env.CONFIG_NAME === 'devlive') {
+    const code = readFileSync(contract, "utf-8");
+    const existing = existsSync(pluginCacheFile)
+      ? JSON.parse(readFileSync(pluginCacheFile, "utf-8"))
+      : {};
 
-  const code = readFileSync(contract, "utf-8");
-  const existing = existsSync(pluginCacheFile)
-   ? JSON.parse(readFileSync(pluginCacheFile, "utf-8"))
-   : {}
-
-  const contractPath = path.parse(contract.pathname);
-  writeFileSync(pluginCacheFile, JSON.stringify({
-    ...existing,
-    [contractPath.name]: {
-      address,
-      code
-    }
-  }));
-
-  // Also write the contract address
+    const contractPath = path.parse(contract.pathname);
+    writeFileSync(pluginCacheFile, JSON.stringify({
+      ...existing,
+      [contractPath.name]: {
+        address,
+        code
+      }
+    }));
+  }
+  // Always write the contract address
   storeContractAddress(contract, "polygon", address);
 }
 
