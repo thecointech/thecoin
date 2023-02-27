@@ -9,7 +9,7 @@ import { getProvider } from '@thecointech/ethers-provider';
 export const InitialCoinBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0", 10);
 
 const getAbi = () => TheCoinSpec.abi;
-const getContractAddress = async () => {
+export const getContractAddress = async () : Promise<string> => {
 
   const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME;
   const deployment = await import(`./deployed/${config_env}-polygon.json`, { assert: { type: 'json' } });

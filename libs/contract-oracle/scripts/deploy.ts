@@ -5,11 +5,13 @@ import { log } from '@thecointech/logging';
 import { getArguments } from './arguments';
 import '@nomiclabs/hardhat-ethers';
 import '@openzeppelin/hardhat-upgrades';
+import { getProvider } from '@thecointech/ethers-provider';
 
 async function main() {
 
-  const owner = await getSigner("Owner");
-
+  const provider = getProvider();
+  const owner = (await getSigner("OracleUpdater"))
+    .connect(provider);
   const contractArgs = await getArguments()
   const Oracle = await hre.ethers.getContractFactory("SpxCadOracle", owner);
   const oracle = await hre.upgrades.deployProxy(Oracle, contractArgs);

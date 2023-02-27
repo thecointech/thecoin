@@ -49,6 +49,7 @@
     "@thecointech/pricing": "^0.2.93",
     "@thecointech/setenv": "^0.2.93",
     "@thecointech/utilities": "^0.2.93",
+    "@thecointech/signers": "^0.2.93",
     "@thecointech/contract-oracle": "^0.2.93",
     "@tsoa/runtime": "^4.1.0",
     "axios": "0.26.1",

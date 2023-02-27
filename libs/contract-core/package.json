@@ -36,6 +36,7 @@
     "_verify": "yarn _hardhat ./scripts/verify.ts",
     "_seed:random": "yarn _hardhat ./scripts/seed/random.ts",
     "_seed:clone": "yarn _hardhat ./scripts/seed/clone.ts",
+    "_update": "yarn _hardhat ./scripts/update.ts",
     "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
   },
   "files": [
