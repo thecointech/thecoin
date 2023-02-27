@@ -11,16 +11,15 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/math/Math.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/math/MathUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 
 import '@thecointech/contract-oracle/contracts/OracleClient.sol';
 import '@thecointech/contract-plugins/contracts/BasePlugin.sol';
 import '@thecointech/contract-plugins/contracts/permissions.sol';
 import '@thecointech/contract-plugins/contracts/IPluggable.sol';
 
-import "hardhat/console.sol";
 struct PendingTransactions {
   // The currency code of the value (eg 124 for $CAD)
   // uint8 currency;
@@ -33,7 +32,7 @@ struct PendingTransactions {
 }
 
 
-contract UberConverter is BasePlugin, OracleClient, Ownable, PermissionUser {
+contract UberConverter is BasePlugin, OracleClient, OwnableUpgradeable, PermissionUser {
 
   // We list "to" first, as that is the value most likely to be repeated
   // From => { To => Timestamp => Value }
@@ -45,8 +44,9 @@ contract UberConverter is BasePlugin, OracleClient, Ownable, PermissionUser {
   // The currency code this client supports.
   uint16 constant CurrencyCode = 124;
 
-  constructor(address baseContract, address oracle)
-  {
+  function initialize(address baseContract, address oracle) public initializer {
+    __Ownable_init();
+
     setFeed(oracle);
     theCoin = IPluggable(baseContract);
   }
@@ -103,7 +103,6 @@ contract UberConverter is BasePlugin, OracleClient, Ownable, PermissionUser {
         pending[from].transfers[to][msTransferAt] = pending[from].transfers[to][msTransferAt] + amount;
         pending[from].total = pending[from].total + amount;
         finalAmount = 0;
-        console.log("msSignedAt: ", msSignedAt, " msTransferAt: ", msTransferAt);
         emit ValueChanged(from, msSignedAt, "pending[user].total", int(pending[from].total));
       }
       // Happening now, so convert to Coin

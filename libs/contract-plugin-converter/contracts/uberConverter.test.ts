@@ -22,7 +22,8 @@ it('converts fiat to TheCoin for current transfers', async () => {
   await tcCore.transfer(signers.client1.address, 1000e6);
 
   // Create plugin
-  const uber = await UberConverter.deploy(tcCore.address, oracle.address);
+  const uber = await UberConverter.deploy();
+  await uber.initialize(tcCore.address, oracle.address);
 
   // Assign to user, grant all permissions
   await tcCore.pl_assignPlugin(signers.client1.address, uber.address, ALL_PERMISSIONS, "0x1234");
@@ -72,7 +73,8 @@ it('Appropriately delays a transfer, and converts an appropriate amount at time'
   await tcCore.transfer(signers.client1.address, initAmount);
 
   // Create plugin
-  const uber = await UberConverter.deploy(tcCore.address, oracle.address);
+  const uber = await UberConverter.deploy();
+  await uber.initialize(tcCore.address, oracle.address);
 
   // Assign to user, grant all permissions
   await tcCore.pl_assignPlugin(signers.client1.address, uber.address, ALL_PERMISSIONS, "0x1234");

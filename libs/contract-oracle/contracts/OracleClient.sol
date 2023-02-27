@@ -5,8 +5,6 @@
 
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-import "hardhat/console.sol";
-
 pragma solidity ^0.8.0;
 import './AggregatorV3Interface.sol';
 
@@ -52,7 +50,6 @@ contract OracleClient {
     */
   function getPrice(uint millis) public view returns(uint) {
     uint price = priceFeed.getRoundFromTimestamp(millis);
-    console.log("Getting price with timestamp: ", millis, " = ", price);
     return price;
   }
 }

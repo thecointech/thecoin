@@ -5,16 +5,21 @@ import { log } from '@thecointech/logging';
 import '@nomiclabs/hardhat-ethers';
 import '@openzeppelin/hardhat-upgrades';
 import { getArguments } from './arguments';
+import { getProvider } from '@thecointech/ethers-provider';
 
 async function main() {
 
   // Who owns the converter?  Probably Owner?
-  const owner = await getSigner("Owner");
-
+  let owner = await getSigner("Owner");
+  // If not devlive, then add a provider
+  if (hre.network.config.chainId != 31337) {
+    const provider = getProvider();
+    owner = owner.connect(provider);
+  }
 
   const deployArgs = await getArguments();
   const UberConverter = await hre.ethers.getContractFactory("UberConverter", owner);
-  const uberConverter = await UberConverter.deploy(...deployArgs);
+  const uberConverter = await hre.upgrades.deployProxy(UberConverter, deployArgs);
   log.info(`Deployed UberConverter at ${uberConverter.address} with args: ${deployArgs}`);
 
   // Serialize our contract addresses
