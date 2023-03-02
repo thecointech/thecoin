@@ -3,6 +3,7 @@ import { storeContractAddress } from '@thecointech/contract-tools/writeContract'
 import path from 'path';
 
 const pluginCacheFile = new URL("../../ethers-provider/src/plugins.json", import.meta.url);
+const pluginBuildFile = new URL("../../ethers-provider/build/mjs/plugins.json", import.meta.url);
 // This gawd-awful hack is how we expose plugin address & code to
 // provider in dev:live mode.
 export function writePlugin(address: string, contract: URL) {
@@ -14,13 +15,15 @@ export function writePlugin(address: string, contract: URL) {
       : {};
 
     const contractPath = path.parse(contract.pathname);
-    writeFileSync(pluginCacheFile, JSON.stringify({
+    const newCache = JSON.stringify({
       ...existing,
       [contractPath.name]: {
         address,
         code
       }
-    }));
+    })
+    writeFileSync(pluginCacheFile, newCache);
+    writeFileSync(pluginBuildFile, newCache);
   }
   // Always write the contract address
   storeContractAddress(contract, "polygon", address);

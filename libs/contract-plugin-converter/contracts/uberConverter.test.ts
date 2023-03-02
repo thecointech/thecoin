@@ -38,6 +38,7 @@ it('converts fiat to TheCoin for current transfers', async () => {
   )
   const initBalance = await tcCore.balanceOf(signers.client1.address);
   const r = await tcCore.uberTransfer(
+    transfer.chainId,
     transfer.from,
     transfer.to,
     transfer.amount,
@@ -90,6 +91,7 @@ it('Appropriately delays a transfer, and converts an appropriate amount at time'
   );
 
   const r = await tcCore.uberTransfer(
+    transfer.chainId,
     transfer.from,
     transfer.to,
     transfer.amount,

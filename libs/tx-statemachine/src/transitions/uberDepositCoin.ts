@@ -32,7 +32,7 @@ const doDepositCoin: TransitionCallback<BSActionTypes> = async (container) => {
 }
 
 const depositUberTransfer = async (container: TypedActionContainer<BSActionTypes>, transfer: UberTransfer) => {
-  const { from, to, amount, currency, signature, signedMillis, transferMillis } = transfer;
+  const { chainId, from, to, amount, currency, signature, signedMillis, transferMillis } = transfer;
   const tc = container.contract;
 
   // Check balance (so we don't waste gas on a clearly-won't-work tx below)
@@ -45,7 +45,7 @@ const depositUberTransfer = async (container: TypedActionContainer<BSActionTypes
 
   const overrides = await calculateOverrides(container, uberDepositCoin);
   log.debug({address: from}, `UberTransfer of ${amount.toString()} from {address} with overrides ${JSON.stringify(overrides, convertBN)}`);
-  const tx: TransactionResponse = await tc.uberTransfer(from, to, amount, currency, transferMillis, signedMillis, signature, overrides);
+  const tx: TransactionResponse = await tc.uberTransfer(chainId, from, to, amount, currency, transferMillis, signedMillis, signature, overrides);
   return toDelta(tx);
 }
 

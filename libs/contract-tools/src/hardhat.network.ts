@@ -16,7 +16,7 @@ function getLiveNetwork(_type: Network) {
 function getDevNetwork() {
   return {
     url: "http://localhost:9545",
-    chainId: 31337,
+    chainId: parseInt(process.env.DEPLOY_POLYGON_NETWORK_ID!),
     // Just too much spam in the dev:live logs
     loggingEnabled: false,
   }

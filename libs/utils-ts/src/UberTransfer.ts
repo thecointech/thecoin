@@ -8,6 +8,7 @@ import type { UberTransfer } from "@thecointech/types";
 import { DateTime } from 'luxon';
 
 function getHash(
+  chainId: number,
   from: string,
   to: string,
   amount: number,
@@ -16,13 +17,14 @@ function getHash(
   signedTime: number,
 ) {
   const ethersHash = keccak256(
-    ["address", "address", "uint", "uint16", "uint", "uint"],
-    [from, to, amount, currency, transferTime, signedTime]
+    ["uint", "address", "address", "uint", "uint16", "uint", "uint"],
+    [chainId, from, to, amount, currency, transferTime, signedTime]
   );
   return arrayify(ethersHash);
 }
 
 export async function signUberTransfer(
+  chainId: number,
   from: Signer,
   to: string,
   amount: number,
@@ -31,15 +33,15 @@ export async function signUberTransfer(
   signedTime: number,
 ) {
   const address = await from.getAddress();
-  const hash = getHash(address, to, amount, currency, transferTime, signedTime);
+  const hash = getHash(chainId, address, to, amount, currency, transferTime, signedTime);
   return await sign(hash, from);
 }
 
 export function getTransferSigner(
   transfer: UberTransfer
 ) {
-  const { from, to, amount, currency, transferMillis, signedMillis, signature } = transfer;
-  const hash = getHash(from, to, amount, currency, transferMillis, signedMillis);
+  const { chainId, from, to, amount, currency, transferMillis, signedMillis, signature } = transfer;
+  const hash = getHash(chainId, from, to, amount, currency, transferMillis, signedMillis);
   return verifyMessage(hash, signature);
 }
 
@@ -51,13 +53,16 @@ export async function buildUberTransfer(
   currency: number,
   transferTime: DateTime,
 ) {
+  // We only run on the polygon network for now...
+  const chainId = parseInt(process.env.DEPLOY_POLYGON_NETWORK_ID!);
   const signedTime = DateTime.now();
   const address = await from.getAddress();
   const transferMillis = transferTime.toMillis();
   const signedMillis = signedTime.toMillis();
   const amountAdj = amount.mul(100).toInteger().toNumber();
-  const signature = await signUberTransfer(from, to, amountAdj, currency, transferMillis, signedMillis);
+  const signature = await signUberTransfer(chainId, from, to, amountAdj, currency, transferMillis, signedMillis);
   const r: UberTransfer = {
+    chainId,
     from: address,
     to,
     amount: amountAdj,

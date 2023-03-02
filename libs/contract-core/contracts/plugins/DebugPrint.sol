@@ -10,7 +10,6 @@
 pragma solidity ^0.8.0;
 
 import '@thecointech/contract-plugins/contracts/BasePlugin.sol';
-import "hardhat/console.sol";
 
 contract DebugPrint is BasePlugin {
 
@@ -22,14 +21,12 @@ contract DebugPrint is BasePlugin {
 
   // We modify the users balance to reflect what they can actually spend.
   // When a withdrawal occurs we may boost the
-  function getPermissions() override external view returns(uint) {
-    console.log("getPermissions");
+  function getPermissions() override external pure returns(uint) {
     return 0;
   }
-  function balanceOf(address user, int currentBalance) external view override returns(int) {
+  function balanceOf(address /*user*/, int currentBalance) external pure override returns(int) {
     // Cannot log in a view function unfortunately,
     // so instead just return balance / 2 to prove we were called
-    console.log("balanceOf: ", user);
     return currentBalance / 2;
   }
   function preWithdraw(address user, uint balance, uint coin, uint timestamp) external override returns(uint) {

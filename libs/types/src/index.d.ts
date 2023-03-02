@@ -45,6 +45,7 @@ export interface EncryptedPacket {
 }
 
 export interface CertifiedTransferRequest {
+  chainId: number;
   from: string;
   to: string;
   value: number;
@@ -59,6 +60,7 @@ export interface CertifiedTransfer {
 }
 
 export type UberTransfer = {
+  chainId: number;
   from: string,
   to: string,
   amount: number,
