@@ -1,0 +1,64 @@
+{
+  "name": "@thecointech/contract-plugin-shockabsorber",
+  "version": "0.2.93",
+  "description": "The Coin: ShockAbsorber protects accounts from market moves",
+  "type": "module",
+  "keywords": [
+    "TheCoin",
+    "ethereum"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/contract-plugin-shockabsorber"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "build": "run-s build:contracts build:copy build:src",
+    "build:contracts": "yarn _hardhat ./scripts/compile.ts",
+    "build:src": "yarn tsc -b",
+    "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
+    "clean": "run-p clean:*",
+    "clean:src": "rimraf ./build",
+    "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
+    "test": "yarn run-jest",
+    "test:ci": "yarn run-jest-nix",
+    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive run-s _deploy _seed",
+    "deploy:prodtest": "cross-env CONFIG_NAME=prodtest yarn _deploy",
+    "deploy:prod": "cross-env CONFIG_NAME=prod yarn _deploy",
+    "_deploy": "run-s _deploy:deploy _deploy:verify",
+    "_deploy:deploy": "yarn _hardhat ./scripts/deploy.ts",
+    "_deploy:verify": "yarn _hardhat ./scripts/verify.ts",
+    "_seed": "yarn _hardhat ./scripts/seed.ts",
+    "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "exports": {
+    ".": {
+      "development": "./build/shockabsorber_mocked.js",
+      "electron": "./build/index.js",
+      "default": "./build/index.js"
+    }
+  },
+  "types": "./build/index.d.ts",
+  "devDependencies": {
+    "@openzeppelin/contracts-upgradeable": "^4.5.2",
+    "@thecointech/async": "^0.2.93",
+    "@thecointech/contract-tools": "^0.2.93",
+    "@thecointech/contract-core": "^0.2.93",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.8",
+    "jest": "*"
+  },
+  "dependencies": {
+    "@thecointech/contract-oracle": "^0.2.93",
+    "@thecointech/contract-plugins": "^0.2.93"
+  }
+}
