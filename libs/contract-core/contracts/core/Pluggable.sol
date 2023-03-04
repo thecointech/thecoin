@@ -65,6 +65,10 @@ abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
     for (uint i =0; i < userPlugins[user].length; i++) {
       PluginAndPermissions memory pnp = userPlugins[user][i];
       if (pnp.permissions & PERMISSION_BALANCE != 0) {
+        // If there is a plugin calling this, stop before it affects the balance
+        if (address(userPlugins[user][i].plugin) == _msgSender()) {
+          break;
+        }
         balance = pnp.plugin.balanceOf(user, balance);
       }
     }

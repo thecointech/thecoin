@@ -33,6 +33,8 @@ struct UserCushion {
 
   // When did we last adjust the cushioning?
   uint cushionLastAdjust;
+
+  // uint dateStarted;
 }
 
 
@@ -70,7 +72,7 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     // The amount of down to absorb is 50%
     maxCushionDown = (50 * FLOAT_FACTOR) / 100;
     // The cushionUp is first 1.5% of profit.
-    maxCushionUp = (15 * FLOAT_FACTOR) / 100;
+    maxCushionUp = (15 * FLOAT_FACTOR) / 1000;
   }
 
   // ------------------------------------------------------------------------
@@ -101,6 +103,8 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     // cushions[user].cushionUp = 15;
     // cushions[user].cushionDown = 500;
     cushions[user].fiatPrincipal = fiatBalance;
+    console.log("User Attached with fiat: ", uint(fiatBalance));
+    cushions[user].cushionLastAdjust = msNow();
     numClients = numClients + 1;
   }
 
@@ -116,13 +120,18 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
   // We automatically modify the balance to adjust for market fluctuations.
   function balanceOf(address user, int currentBalance) external view override returns(int)
   {
+    console.log("currentBalance: ", uint(currentBalance));
+
     int currentFiat = toFiat(currentBalance, msNow());
     int principal = cushions[user].fiatPrincipal;
     if (currentFiat < principal) {
       return cushionDown(principal, currentBalance, currentFiat);
     }
-    else {
+    else if (currentFiat > principal) {
       return cushionUp(principal, currentBalance, currentFiat);
+    }
+    else {
+      return currentBalance;
     }
   }
 
@@ -130,24 +139,26 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     console.log("currentFiat: ", uint(currentFiat));
     // how many $ loss are we looking at?
     int fiatLoss = fiatPrincipal - currentFiat;
-
     console.log("fiatLoss: ", uint(fiatLoss));
+
+    // What ratio are we protecting (we only protect maxFiatProtected)
+    int fiatProtected = fiatPrincipal;
+    if (fiatProtected > maxFiatProtected) fiatProtected = maxFiatProtected;
+      console.log("fiatProtected: ", uint(fiatProtected));
+
     // How much is this in percent?
     int percentLoss = (fiatLoss * FLOAT_FACTOR) / fiatPrincipal;
     if (percentLoss > maxCushionDown) {
       // Reduce principal (and loss) by the excess percentage
       // This limits the max coin cushion to maxCushionDown * principalInCoin
       int excess = percentLoss - maxCushionDown;
-      int principalReduction = (excess * fiatPrincipal) / (maxCushionDown);
-      console.log("principalReduction: ", uint(principalReduction));
-      fiatPrincipal = fiatPrincipal - principalReduction;
+      int excessFiatLoss = (excess * fiatPrincipal) / FLOAT_FACTOR;
+      console.log("excessFiatLoss: ", uint(excessFiatLoss));
+      fiatProtected = fiatProtected - excessFiatLoss;
       percentLoss = maxCushionDown;
     }
     console.log("percentLoss: ", uint(percentLoss));
-    // What ratio are we protecting (we only protect maxFiatProtected)
-    int fiatProtected = fiatPrincipal;
-    if (fiatProtected > maxFiatProtected) fiatProtected = maxFiatProtected;
-    console.log("fiatProtected: ", uint(fiatProtected));
+
 
     // So how much do we need to boost the fiat balance by?
     int fiatLossToProtect = (fiatProtected * percentLoss) / FLOAT_FACTOR;
@@ -163,17 +174,28 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
   function cushionUp(int fiatPrincipal, int currentCoin, int currentFiat) public view returns(int) {
     // how many $ up are we looking at?
     int fiatGain = currentFiat - fiatPrincipal;
+    console.log("fiatGain: ", uint(fiatGain));
 
     // How much is this in percent?
-    int percentGain = (fiatGain * FLOAT_FACTOR) / currentFiat;
-    if (percentGain > maxCushionUp) {
-      percentGain = maxCushionUp;
+    int percentToReserve = (fiatGain * FLOAT_FACTOR) / fiatPrincipal;
+    if (percentToReserve > maxCushionUp) {
+      percentToReserve = maxCushionUp;
+    }
+    console.log("percentToReserve: ", uint(percentToReserve));
+
+    int fiatProtected = fiatPrincipal;
+    if (fiatProtected > maxFiatProtected) {
+      fiatProtected = maxFiatProtected;
     }
 
     // How much dosh is that
-    int fiatToReserve = fiatPrincipal * percentGain / FLOAT_FACTOR;
+    int fiatToReserve = (fiatProtected * percentToReserve) / FLOAT_FACTOR;
+    console.log("fiatToReserve: ", uint(fiatToReserve));
 
-    return currentCoin - toCoin(fiatToReserve, msNow());
+    int coinToReserve = toCoin(fiatToReserve, msNow());
+    console.log("coinToReserve: ", uint(coinToReserve));
+
+    return currentCoin - coinToReserve;
   }
 
   // //
@@ -232,10 +254,11 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
   }
 
   function preDeposit(address user, uint coin, uint msTime) public virtual override  {
-
+    console.log("preDeposit: ", uint(coin));
     int fiatDeposit = toFiat(int(coin), msTime);
     // Add to users principal
     cushions[user].fiatPrincipal = cushions[user].fiatPrincipal + fiatDeposit;
+    console.log("cushions[user].fiatPrincipal: ", uint(cushions[user].fiatPrincipal));
   }
 
   // ------------------------------------------------------------------------
