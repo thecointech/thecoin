@@ -35,6 +35,8 @@ it('cushions correctly when entire principal is protected', async () => {
   // Test slowly dropping past 50%
   await runAbsorber(client1, absorber, oracle, tcCore, 51, 5000e2);
   await runAbsorber(client1, absorber, oracle, tcCore, 50, 5000e2);
+  await runAbsorber(client1, absorber, oracle, tcCore, 25, 2500e2);
+
   await runAbsorber(client1, absorber, oracle, tcCore, 49, 4900e2);
   // Market drops all the way to 40%, now we should have lost 20%
   await runAbsorber(client1, absorber, oracle, tcCore, 40, 4000e2);
