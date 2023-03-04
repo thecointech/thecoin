@@ -20,6 +20,8 @@ import '@thecointech/contract-plugins/contracts/BasePlugin.sol';
 import '@thecointech/contract-plugins/contracts/permissions.sol';
 import '@thecointech/contract-plugins/contracts/IPluggable.sol';
 
+import "hardhat/console.sol";
+
 struct UserCushion {
   // CostBasis + the profit over time becomes protected
   int fiatPrincipal;
@@ -37,9 +39,9 @@ struct UserCushion {
 contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, PermissionUser {
 
   // By default, we protect up to $5000
-  int constant maxFiatProtected = 5000;
+  int constant maxFiatProtected = 5000_00;
   // Essentially how many significant figures when doing floating point math.
-  int constant FLOAT_FACTOR = 1000000;
+  int constant FLOAT_FACTOR = 100_000_000;
   // The percentage drop absorbed
   int maxCushionDown;
 
@@ -125,52 +127,37 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
   }
 
   function cushionDown(int fiatPrincipal, int currentCoin, int currentFiat) public view returns(int) {
+    console.log("currentFiat: ", uint(currentFiat));
     // how many $ loss are we looking at?
-    int fiatLoss = currentFiat - fiatPrincipal;
+    int fiatLoss = fiatPrincipal - currentFiat;
+
+    console.log("fiatLoss: ", uint(fiatLoss));
     // How much is this in percent?
-    int percentLoss = (fiatLoss * FLOAT_FACTOR) / currentFiat;
+    int percentLoss = (fiatLoss * FLOAT_FACTOR) / fiatPrincipal;
     if (percentLoss > maxCushionDown) {
+      // Reduce principal (and loss) by the excess percentage
+      // This limits the max coin cushion to maxCushionDown * principalInCoin
+      int excess = percentLoss - maxCushionDown;
+      int principalReduction = (excess * fiatPrincipal) / (maxCushionDown);
+      console.log("principalReduction: ", uint(principalReduction));
+      fiatPrincipal = fiatPrincipal - principalReduction;
       percentLoss = maxCushionDown;
     }
-    // We only protect up to the max cushion
+    console.log("percentLoss: ", uint(percentLoss));
+    // What ratio are we protecting (we only protect maxFiatProtected)
     int fiatProtected = fiatPrincipal;
     if (fiatProtected > maxFiatProtected) fiatProtected = maxFiatProtected;
+    console.log("fiatProtected: ", uint(fiatProtected));
 
-    // what ratio of principal is protected
-    // I miss floats...
-    int ratioProtected = (fiatProtected * FLOAT_FACTOR) / fiatPrincipal;
+    // So how much do we need to boost the fiat balance by?
+    int fiatLossToProtect = (fiatProtected * percentLoss) / FLOAT_FACTOR;
+    console.log("fiatLossToProtect: ", uint(fiatLossToProtect));
 
-    // What percentage of the loss do we absorbe
-    int percentLossProtected = (percentLoss * FLOAT_FACTOR) * ratioProtected / FLOAT_FACTOR;
+    // how much is this in coin?
+    int coinLossToProtect = toCoin(fiatLossToProtect, msNow());
+    console.log("coinLossToProtect: ", uint(coinLossToProtect));
 
-    // we now gross-up the current coin by the percent loss protected
-    int cushionGross = currentCoin * percentLossProtected / FLOAT_FACTOR;
-
-    return currentCoin + cushionGross;
-
-    // // what was principal in coin?
-    // const coinPrincipal = currentCoin - cushioned[user].coinAdjustment;
-    // // how much of this was protected?
-    // const coinPrincipalProtected = coinPrincipal.mul(ratio) / 1000;
-
-    // // What is the total percentage loss are we absorbing?
-    // // This loss ignores anything previously cushionDown
-    // const fiatAdjustment = toFiat(cushioned[user].coinAdjustment, block.timestamp);
-    // const loss = fiatProtected - toFiat(state.shockAbsorber.coinAdjustment)
-    //   .sub(currentFiat.sub(fiatAdjustment).mul(ratio));
-    // const lossPercent = loss.div(fiatProtected);
-    // const cushionDownPercent = DMin(lossPercent, sa.cushionDown);
-
-    // // We adjust the principal protected to still have the same total value
-    // // after cushionDownPercent decline in multiplier value
-    // const principalMultipler = one.sub(cushionDownPercent);
-    // // aCP is the final value we want our protected coin to have
-    // const adjustCoinPrincipal = coinPrincipalProtected.div(principalMultipler);
-    // const adjustCoin = adjustCoinPrincipal.sub(coinPrincipalProtected.add(state.shockAbsorber.coinAdjustment));
-
-    // state.coin = state.coin.add(adjustCoin);
-    // state.shockAbsorber.coinAdjustment = state.shockAbsorber.coinAdjustment.add(adjustCoin);
-    // roundOffAdjustments(state);
+    return currentCoin + coinLossToProtect;
   }
 
   function cushionUp(int fiatPrincipal, int currentCoin, int currentFiat) public view returns(int) {

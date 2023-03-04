@@ -33,7 +33,8 @@ const runAbsorber = async (client1: {address: string}, absorber: ShockAbsorber, 
   // What does the client do?
   const modifiedCoin = await absorber.balanceOf(client1.address, 50e6);
   const currentFiat = await absorber['toFiat(int256,uint256)'](modifiedCoin, currentTs);
-  expect(currentFiat.toNumber()).toEqual(expectedFiat);
+  // We may be 1c off due to rounding issues using int's everywhere
+  expect(Math.abs(currentFiat.toNumber() - expectedFiat)).toBeLessThanOrEqual(1);
 }
 
 it('cushions correctly when entire principal is protected', async () => {
@@ -62,15 +63,17 @@ it('cushions correctly when entire principal is protected', async () => {
   // Test slowly dropping past 50%
   await runAbsorber(client1, absorber, oracle, 51, 5000e2);
   await runAbsorber(client1, absorber, oracle, 50, 5000e2);
-  await runAbsorber(client1, absorber, oracle, 49, 9800);
+  await runAbsorber(client1, absorber, oracle, 49, 4900e2);
   // Market drops all the way to 40%, now we should have lost 20%
-  await runAbsorber(client1, absorber, oracle, 40, 8000);
+  await runAbsorber(client1, absorber, oracle, 40, 4000e2);
   // now it jumps back up to 80%
   await runAbsorber(client1, absorber, oracle, 80, 5000e2);
 
   // Test run up
   await runAbsorber(client1, absorber, oracle, 98, 5000e2);
   await runAbsorber(client1, absorber, oracle, 100, 5000e2);
+  await runAbsorber(client1, absorber, oracle, 101, 5000e2);
+  await runAbsorber(client1, absorber, oracle, 102, 5010e2); //0.5% gain
   await runAbsorber(client1, absorber, oracle, 104, 5000e2);
   await runAbsorber(client1, absorber, oracle, 106, 5000e2);
   await runAbsorber(client1, absorber, oracle, 108, 10200);
