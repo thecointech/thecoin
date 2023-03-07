@@ -33,8 +33,6 @@ struct UserCushion {
 
   // When did we last adjust the cushioning?
   uint cushionLastAdjust;
-
-  // uint dateStarted;
 }
 
 
@@ -44,6 +42,9 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
   int constant maxFiatProtected = 5000_00;
   // Essentially how many significant figures when doing floating point math.
   int constant FLOAT_FACTOR = 100_000_000;
+  // milliseconds in a gregorian year.  Should be accurate for the next 1000 years.
+  int constant YEAR_IN_MS = 31556952_000;
+
   // The percentage drop absorbed
   int maxCushionDown;
 
@@ -59,9 +60,6 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
 
   // Link back to core contract.
   IPluggable internal theCoin;
-
-  // The currency code this client supports.
-  uint16 constant CurrencyCode = 124;
 
   function initialize(address baseContract, address oracle) public initializer {
     __Ownable_init();
@@ -100,10 +98,7 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
 
     int coinBalance = theCoin.pl_balanceOf(user);
     int fiatBalance = toFiat(coinBalance, msNow());
-    // cushions[user].cushionUp = 15;
-    // cushions[user].cushionDown = 500;
     cushions[user].fiatPrincipal = fiatBalance;
-    console.log("User Attached with fiat: ", uint(fiatBalance));
     cushions[user].cushionLastAdjust = msNow();
     numClients = numClients + 1;
   }
@@ -123,12 +118,13 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     console.log("currentBalance: ", uint(currentBalance));
 
     int currentFiat = toFiat(currentBalance, msNow());
-    int principal = cushions[user].fiatPrincipal;
-    if (currentFiat < principal) {
-      return cushionDown(principal, currentBalance, currentFiat);
+    UserCushion memory userCushion = cushions[user];
+    int fiatPrincipal = userCushion.fiatPrincipal;
+    if (currentFiat < fiatPrincipal) {
+      return cushionDown(fiatPrincipal, currentBalance, currentFiat);
     }
-    else if (currentFiat > principal) {
-      return cushionUp(principal, currentBalance, currentFiat);
+    else if (currentFiat > fiatPrincipal) {
+      return cushionUp(userCushion.cushionLastAdjust, fiatPrincipal, currentBalance, currentFiat);
     }
     else {
       return currentBalance;
@@ -174,15 +170,24 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     return currentCoin + coinLossToProtect;
   }
 
-  function cushionUp(int fiatPrincipal, int currentCoin, int currentFiat) public view returns(int) {
-    // how many $ up are we looking at?
+  function cushionUp(uint lastAdjust, int fiatPrincipal, int currentCoin, int currentFiat) public view returns(int) {
+
+    // The reserve amount applies fresh each year
+    int yearMultiplier = int(1 + int(msNow() - lastAdjust) / YEAR_IN_MS);
+    return currentCoin - calcCushionReserve(yearMultiplier, fiatPrincipal, currentCoin, currentFiat);
+  }
+
+  function calcCushionReserve(int yearMultiplier, int fiatPrincipal, int currentCoin, int currentFiat) public view returns(int) {
     int fiatGain = currentFiat - fiatPrincipal;
     console.log("fiatGain: ", uint(fiatGain));
 
+
     // How much is this in percent?
-    int percentToReserve = (fiatGain * FLOAT_FACTOR) / fiatPrincipal;
-    if (percentToReserve > maxCushionUp) {
-      percentToReserve = maxCushionUp;
+    int percentToReserve = yearMultiplier * (fiatGain * FLOAT_FACTOR) / fiatPrincipal;
+    // maxCushion grows each year too
+    int maxCushionUpForYear = maxCushionUp * yearMultiplier;
+    if (percentToReserve > maxCushionUpForYear) {
+      percentToReserve = maxCushionUpForYear;
     }
     console.log("percentToReserve: ", uint(percentToReserve));
 
@@ -191,14 +196,39 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
       fiatProtected = maxFiatProtected;
     }
 
-    // How much dosh is that
-    int fiatToReserve = (fiatProtected * percentToReserve) / FLOAT_FACTOR;
-    console.log("fiatToReserve: ", uint(fiatToReserve));
+    // We can't just calculate the cushion based on current prices
+    // because we have to figure out what the coin difference would be
+    // when the max cushion is reached.
 
-    int coinToReserve = toCoin(fiatToReserve, msNow());
+    // Lets assume $5000 fiatPrincipal, C50 coin principal, and cushionMax of 1.5%
+
+    // First, calculate what the fiat value would be when max is reached
+    // $75 = $5000 * (101.5%) - $5000.  At 1.5% profit, the $75 generated goes to the reserve
+    int fiatToReserve = ((fiatProtected * (FLOAT_FACTOR + percentToReserve)) / FLOAT_FACTOR) - fiatProtected;
+
+    // Now what percentage is that fiat of the principal?
+    // 0.014778... = $75 / ($5000 + $75)
+    int percentOfFiat = (fiatToReserve * FLOAT_FACTOR) / (fiatPrincipal + fiatToReserve);
+
+    // Next, how much coin is that of the principal?
+    // C0.7389162... = 0.014778 * C50
+    int coinToReserve = (currentCoin * percentOfFiat) / FLOAT_FACTOR;
+
+    // Assume the percent profit is still 1.5%
+    // $75 = C0.7389162... * 101.5 (the going rate)
+    // uint fiatToReserve = ((fiatProtected * (FLOAT_FACTOR + percentOfFiat)) / FLOAT_FACTOR) - fiatProtected;
+
+    // Cushion cannot be calculated based on current prices, otherwise
+    // there the price on the date of clearance would be affect how
+    // much Coin is collected.
+    // int coinToReserve = currentCoin - (currentCoin * (FLOAT_FACTOR * percentToReserve) / FLOAT_FACTOR;
+
+    // int fiatToReserve = (fiatProtected * percentToReserve) / FLOAT_FACTOR;
+    // console.log("fiatToReserve: ", uint(fiatToReserve));
+
+    // int coinToReserve = toCoin(fiatToReserve, msNow());
     console.log("coinToReserve: ", uint(coinToReserve));
-
-    return currentCoin - coinToReserve;
+    return coinToReserve;
   }
 
   // //
@@ -262,6 +292,32 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     // Add to users principal
     cushions[user].fiatPrincipal = cushions[user].fiatPrincipal + fiatDeposit;
     console.log("cushions[user].fiatPrincipal: ", uint(cushions[user].fiatPrincipal));
+  }
+
+  // ------------------------------------------------------------------------
+  // Owners functionality
+  // ------------------------------------------------------------------------
+  function drawDownCushion(address user) public {
+    UserCushion memory userCushion = cushions[user];
+    // Wait > 1 year
+    int yearsPassed =  int(msNow() - userCushion.cushionLastAdjust) / YEAR_IN_MS;
+    if (yearsPassed == 0) {
+      return;
+    }
+
+    int currentBalance = theCoin.pl_balanceOf(user);
+    int currentFiat = toFiat(currentBalance, msNow());
+    int principal = userCushion.fiatPrincipal;
+    if (currentFiat > principal) {
+      // NOTE: this calcs (up to end of) last years cushion, not the current one
+      int cushionFiat = calcCushionReserve(int(yearsPassed), principal, currentBalance, currentFiat);
+      // We n
+      int cusionPercent = (cushionFiat * FLOAT_FACTOR) / principal;
+      int cushionCoin = (cusionPercent * currentBalance) / FLOAT_FACTOR;
+      // transfer the cushion to this contract
+      theCoin.pl_transferFrom(user, address(this), uint(cushionCoin), msNow());
+      userCushion.cushionLastAdjust = userCushion.cushionLastAdjust + uint(yearsPassed * YEAR_IN_MS);
+    }
   }
 
   // ------------------------------------------------------------------------
