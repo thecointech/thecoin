@@ -20,8 +20,8 @@ const aDay = Duration.fromObject({day: 1}).as('seconds');
 
 const { absorber, client1, oracle, tcCore } = await setupTest(5_000);
 
-const maxCushionUp = 1.5 * 100_000_000_000 / 100;
-
+const maxCushionUp = 1.5 * 100_000_000_000 / 100; // 1.5%
+const maxCushionDown = 50 * 100_000_000_000 / 100; // 50%
 describe('It calculates the cushion reserve when all principal covered', () => {
 
   it.each([
@@ -101,7 +101,53 @@ describe('It correctly reserves cushion over years', () => {
   });
 })
 
+describe('It correctly cushions entire principal on a drop', () => {
+  it.each([
+    { rate: 100,   fiat: 5000e2, coin: 0 },
+    { rate: 99.9,  fiat: 5000e2, },
+    { rate: 80,    fiat: 5000e2, },
+    { rate: 50,    fiat: 5000e2, coin: 50e6},
+    // After this point, the cushion is expended
+    { rate: 49.9, coin: 50e6 },
+    { rate: 30, coin: 50e6 },
+  ])(`with %s`, async ({ rate, coin, fiat }) => {
 
+    const curr = rate * 50e2;
+    const r = await absorber.calcCushionDown(5000e2, 50e6, curr, maxCushionDown);
+    if (fiat) {
+      // Assert that the amount reserved does not take balance below reserve
+      const reserved = r.toNumber() * rate / 1e4;
+      expect(Math.round(curr + reserved)).toEqual(fiat);
+    }
+    if (coin) {
+      expect(r.toNumber()).toEqual(coin);
+    }
+  });
+})
+
+describe('It correctly cushions partial principal on a drop', () => {
+  it.each([
+    { rate: 100,   fiat: 10000e2, coin: 0 },
+    { rate: 90,    fiat: 9500e2, },
+    { rate: 50,    fiat: 7500e2, coin: 50e6},
+    // After this point, the cushion is expended
+    { rate: 49.9, coin: 50e6 },
+    { rate: 30, coin: 50e6 },
+  ])(`with %s`, async ({ rate, coin, fiat }) => {
+
+    console.log("----------- Testing: rate", rate, "coin", coin, "fiat", fiat)
+    const curr = rate * 100e2;
+    const r = await absorber.calcCushionDown(10000e2, 100e6, curr, maxCushionDown);
+    if (fiat) {
+      // Assert that the amount reserved does not take balance below reserve
+      const reserved = r.toNumber() * rate / 1e4;
+      expect(Math.round(curr + reserved)).toEqual(fiat);
+    }
+    if (coin) {
+      expect(r.toNumber()).toEqual(coin);
+    }
+  });
+})
 
 it('cushions up correctly', async function () {
   const { absorber, client1, oracle, tcCore } = await setupTest(5_000);

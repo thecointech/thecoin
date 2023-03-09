@@ -137,58 +137,74 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
   }
 
   // NOTE: The two calc* functions are declared as pure so we can test them directly in jest
-  function calcCushionDown(int fiatPrincipal, int currentCoin, int currentFiat, int _maxCushionDown) public pure returns(int) {
+  function calcCushionDown(int fiatPrincipal, int currentCoin, int currentFiat, int _maxCushionDown) public view returns(int) {
 
-    // console.log("currentFiat: ", uint(currentFiat));
+    console.log("currentFiat: ", uint(currentFiat));
+    console.log("currentFiat: ", uint(currentCoin));
     // how many $ loss are we looking at?
     int fiatLoss = fiatPrincipal - currentFiat;
-    // console.log("fiatLoss: ", uint(fiatLoss));
+    console.log("fiatLoss: ", uint(fiatLoss));
 
     // What ratio are we protecting (we only protect maxFiatProtected)
     int fiatProtected = fiatPrincipal;
-    if (fiatProtected > maxFiatProtected) fiatProtected = maxFiatProtected;
-      // console.log("fiatProtected: ", uint(fiatProtected));
+    int coinProtected = currentCoin;
+    if (fiatProtected > maxFiatProtected) {
+      fiatProtected = maxFiatProtected;
+      coinProtected = (currentCoin * maxFiatProtected) / fiatPrincipal;
+    }
+    console.log("fiatProtected: ", uint(fiatProtected));
+    console.log("coinProtected: ", uint(coinProtected));
 
     // How much is this in percent?
     int percentLoss = (fiatLoss * FLOAT_FACTOR) / fiatPrincipal;
     if (percentLoss > _maxCushionDown) {
+
+      // Ok, we just take (coin * maxCushion * percentage of coin protected
+      // So, for 50% loss on 50c, we want to return 50c.
+      int finalCoin = (coinProtected * fiatProtected * FLOAT_FACTOR) / (_maxCushionDown * fiatProtected);
+      console.log("finalCoin: ", uint(finalCoin));
+      int coinCushion = finalCoin - coinProtected;
+      console.log("coinCushion: ", uint(coinCushion));
+      return coinCushion;
       // Reduce principal (and loss) by the excess percentage
       // This limits the max coin cushion to _maxCushionDown * principalInCoin
-      int excessPercent = percentLoss - _maxCushionDown;
+      // int excessPercent = percentLoss - _maxCushionDown;
       // console.log("excessPercent: ", uint(excessPercent));
-      int principalRedectionPercent = (excessPercent * FLOAT_FACTOR) / _maxCushionDown;
+      // int principalRedectionPercent = (excessPercent * FLOAT_FACTOR) / _maxCushionDown;
       // console.log("principalRedectionPercent: ", uint(principalRedectionPercent));
-      int excessFiatLoss = (principalRedectionPercent * fiatProtected) / FLOAT_FACTOR;
+      // int excessFiatLoss = (principalRedectionPercent * fiatProtected) / FLOAT_FACTOR;
       // console.log("excessFiatLoss: ", uint(excessFiatLoss));
-      fiatProtected = fiatProtected - excessFiatLoss;
-      percentLoss = _maxCushionDown;
+      // fiatProtected = fiatProtected - excessFiatLoss;
+      // percentLoss = _maxCushionDown;
     }
-    // console.log("percentLoss: ", uint(percentLoss));
+    console.log("percentLoss: ", uint(percentLoss));
 
 
     // So how much do we need to boost the fiat balance by?
     int fiatLossToProtect = (fiatProtected * percentLoss) / FLOAT_FACTOR;
-    // console.log("fiatLossToProtect: ", uint(fiatLossToProtect));
+    console.log("fiatLossToProtect: ", uint(fiatLossToProtect));
 
-    int percentOfFiat = (fiatLossToProtect * FLOAT_FACTOR) / (fiatPrincipal - fiatLossToProtect);
+    int percentOfFiat = (fiatLossToProtect * FLOAT_FACTOR) / (fiatProtected - fiatLossToProtect);
+    console.log("percentOfFiat: ", uint(percentOfFiat));
 
     // Next, how much coin is that of the principal?
     // C0.7389162... = 0.014778 * C50
-    int coinToAdd = (currentCoin * percentOfFiat) / FLOAT_FACTOR;
+    int coinToAdd = (coinProtected * percentOfFiat) / FLOAT_FACTOR;
+    console.log("coinToAdd: ", uint(coinToAdd));
 
     return coinToAdd;
   }
 
-  function calcCushionUp(int fiatPrincipal, int currentCoin, int currentFiat, int yearCushionUp) public view returns(int) {
+  function calcCushionUp(int fiatPrincipal, int currentCoin, int currentFiat, int yearCushionUp) public pure returns(int) {
     int fiatGain = currentFiat - fiatPrincipal;
-    console.log("fiatGain: ", uint(fiatGain));
+    // console.log("fiatGain: ", uint(fiatGain));
 
     // How much is this in percent?
     int percentToReserve = (fiatGain * FLOAT_FACTOR) / fiatPrincipal;
     if (percentToReserve > yearCushionUp) {
       percentToReserve = yearCushionUp;
     }
-    console.log("percentToReserve: ", uint(percentToReserve));
+    // console.log("percentToReserve: ", uint(percentToReserve));
 
     // The reserve only applies to the portion of principal that is cushioned
     int fiatProtected = fiatPrincipal;
@@ -197,8 +213,8 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
       fiatProtected = maxFiatProtected;
       coinProtected = (currentCoin * maxFiatProtected) / fiatPrincipal;
     }
-    console.log("fiatProtected: ", uint(fiatProtected));
-    console.log("coinProtected: ", uint(coinProtected));
+    // console.log("fiatProtected: ", uint(fiatProtected));
+    // console.log("coinProtected: ", uint(coinProtected));
 
     // We can't just calculate the cushion based on current prices
     // because we have to figure out what the coin difference would be
@@ -209,17 +225,17 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     // First, calculate what the fiat value would be when max is reached
     // $75 = $5000 * (101.5%) - $5000.  At 1.5% profit, the $75 generated goes to the reserve
     int fiatToReserve = ((fiatProtected * (FLOAT_FACTOR + percentToReserve)) / FLOAT_FACTOR) - fiatProtected;
-    console.log("fiatToReserve: ", uint(fiatToReserve));
+    // console.log("fiatToReserve: ", uint(fiatToReserve));
 
     // Now what percentage is that fiat of the principal?
     // 0.014778... = $75 / ($5000 + $75)
     int percentOfFiat = (fiatToReserve * FLOAT_FACTOR) / (fiatProtected + fiatToReserve);
-    console.log("percentOfFiat: ", uint(percentOfFiat));
+    // console.log("percentOfFiat: ", uint(percentOfFiat));
 
     // Next, how much coin is that of the principal?
     // C0.7389162... = 0.014778 * C50
     int coinToReserve = (coinProtected * percentOfFiat) / FLOAT_FACTOR;
-    console.log("coinToReserve: ", uint(coinToReserve));
+    // console.log("coinToReserve: ", uint(coinToReserve));
 
     return coinToReserve;
   }
