@@ -20,21 +20,51 @@ const aDay = Duration.fromObject({day: 1}).as('seconds');
 
 const { absorber, client1, oracle, tcCore } = await setupTest(5_000);
 
-describe('It calculates the cushion reserve correctly', () => {
+const maxCushionUp = 1.5 * 100_000_000_000 / 100;
+
+describe('It calculates the cushion reserve when all principal covered', () => {
 
   it.each([
-    { rate: 100, fiat: 5000e2 },
-    { rate: 100.5, fiat: 5000e2 },
-    { rate: 101, fiat: 5000e2 },
+    { rate: 100,   fiat: 5000e2, coin: 0 },
+    { rate: 100.5, fiat: 5000e2, coin: 248756 },
+    { rate: 101,   fiat: 5000e2, coin: 495049 },
     { rate: 101.5, fiat: 5000e2, coin: 738916 },
     // After this point, the cushion is full and stops growing
     { rate: 102, coin: 738916 },
     { rate: 105, coin: 738916 },
     { rate: 115, coin: 738916 },
-  ])(`cushions up correctly for %s`, async ({ rate, coin, fiat }) => {
+  ])(`with %s`, async ({ rate, coin, fiat }) => {
 
     const curr = rate * 50e2;
-    const r = await absorber.calcCushionReserve(1, 5000e2, 50e6, curr);
+    const r = await absorber.calcCushionUp(5000e2, 50e6, curr, maxCushionUp);
+    if (fiat) {
+      // Assert that the amount reserved does not take balance below reserve
+      const reserved = r.toNumber() * rate / 1e4;
+      expect(Math.round(curr - reserved)).toEqual(fiat);
+    }
+    if (coin) {
+      expect(r.toNumber()).toEqual(coin);
+    }
+  });
+
+});
+
+describe('It calculates the cushion reserve when some principal covered', () => {
+
+  it.each([
+    { rate: 100,   fiat: 10000e2, coin: 0 },
+    { rate: 100.5, fiat: 10025e2, coin: 248756 },
+    { rate: 101,   fiat: 10050e2, coin: 495049 },
+    { rate: 101.5, fiat: 10075e2, coin: 738916 },
+    // After this point, the cushion is full and stops growing
+    { rate: 102, coin: 738916 },
+    { rate: 103, coin: 738916 },
+    { rate: 105, coin: 738916 },
+    { rate: 115, coin: 738916 },
+  ])(`with %s`, async ({ rate, coin, fiat }) => {
+
+    const curr = rate * 100e2;
+    const r = await absorber.calcCushionUp(10_000e2, 100e6, curr, maxCushionUp);
     if (fiat) {
       // Assert that the amount reserved does not take balance below reserve
       const reserved = r.toNumber() * rate / 1e4;
@@ -45,6 +75,33 @@ describe('It calculates the cushion reserve correctly', () => {
     }
   });
 })
+
+describe('It correctly reserves cushion over years', () => {
+
+  it.each([
+    { year: 1, rate: 100,   fiat: 10000e2, coin: 0 },
+    { year: 1, rate: 101.5, fiat: 10075e2, coin: 738916 },
+    // the cushion doesn't eat unprotected even over yeras
+    { year: 2, rate: 101.5, fiat: 10075e2, coin: 738916 },
+    // But it does add to cushion from prior years growth
+    { year: 1, rate: 103, fiat: 10223_89, coin: 738916 },
+    { year: 2, rate: 103, fiat: 10150e2, coin: 1456310 },
+  ])(`with %s`, async ({ year, rate, coin, fiat }) => {
+
+    const curr = rate * 100e2;
+    const r = await absorber.calcCushionUp(10_000e2, 100e6, curr, maxCushionUp * year);
+    if (fiat) {
+      // Assert that the amount reserved does not take balance below reserve
+      const reserved = r.toNumber() * rate / 1e4;
+      expect(Math.round(curr - reserved)).toEqual(fiat);
+    }
+    if (coin) {
+      expect(r.toNumber()).toEqual(coin);
+    }
+  });
+})
+
+
 
 it('cushions up correctly', async function () {
   const { absorber, client1, oracle, tcCore } = await setupTest(5_000);
@@ -191,7 +248,6 @@ it ('correctly draws down the cushion over years', async () => {
 //   // 8% up means cushion capped & 2% of 10000 & 8% of 200 profit
 //   runAbsorber(state, 116.64, 10416, { year: 2021, month: 6 });
 // })
-
 
 async function setupTest(initFiat: number) {
   const { Owner, client1, OracleUpdater } = initAccounts(await hre.ethers.getSigners());
