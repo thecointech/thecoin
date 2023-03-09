@@ -166,16 +166,6 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
       int coinCushion = finalCoin - coinProtected;
       console.log("coinCushion: ", uint(coinCushion));
       return coinCushion;
-      // Reduce principal (and loss) by the excess percentage
-      // This limits the max coin cushion to _maxCushionDown * principalInCoin
-      // int excessPercent = percentLoss - _maxCushionDown;
-      // console.log("excessPercent: ", uint(excessPercent));
-      // int principalRedectionPercent = (excessPercent * FLOAT_FACTOR) / _maxCushionDown;
-      // console.log("principalRedectionPercent: ", uint(principalRedectionPercent));
-      // int excessFiatLoss = (principalRedectionPercent * fiatProtected) / FLOAT_FACTOR;
-      // console.log("excessFiatLoss: ", uint(excessFiatLoss));
-      // fiatProtected = fiatProtected - excessFiatLoss;
-      // percentLoss = _maxCushionDown;
     }
     console.log("percentLoss: ", uint(percentLoss));
 
