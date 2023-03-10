@@ -134,8 +134,7 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
       int msPassed = int(msNow() - userCushion.cushionLastAdjust);
       console.log("msPassed: ", uint(msPassed));
       int yearMultiplier = int(1 + msPassed / YEAR_IN_MS);
-      int maxCushionUpForYear = maxCushionUp * yearMultiplier;
-      int reserve = calcCushionUp(fiatPrincipal, currentBalance, currentFiat, maxCushionUpForYear);
+      int reserve = calcCushionUp(fiatPrincipal, currentBalance, currentFiat, userCushion.coinAdjustment, yearMultiplier);
       return currentBalance - reserve;
     }
     else {
@@ -150,7 +149,7 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     console.log("percentLoss: ", uint(percentLoss));
 
     int percentCovered = (maxFiatProtected * FLOAT_FACTOR) / fiatPrincipal;
-    if (percentCovered < FLOAT_FACTOR) {
+    if (percentCovered > FLOAT_FACTOR) {
       percentCovered = FLOAT_FACTOR;
     }
     console.log("percentCovered: ", uint(percentCovered));
@@ -165,8 +164,9 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     return (percentCovered * (coinCovered - coinCurrent)) / FLOAT_FACTOR;
   }
 
-  function calcCushionUp(int fiatPrincipal, int coinPrincipal, int coinCurrent, int year) public view returns(int) {
-    int percentGrowth = (FLOAT_FACTOR * (coinCurrent - coinPrincipal)) / coinCurrent;
+  function calcCushionUp(int fiatPrincipal, int coinPrincipal, int coinCurrent, int coinAdjustement, int year) public view returns(int) {
+    int coinTotal = coinCurrent + coinAdjustement;
+    int percentGrowth = (FLOAT_FACTOR * (coinTotal - coinPrincipal)) / coinTotal;
     console.log("percentGrowth: ", uint(percentGrowth));
     if (percentGrowth > maxCushionUpPercent * year) {
       percentGrowth = maxCushionUpPercent * year;
@@ -179,7 +179,7 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     }
     console.log("percentCovered: ", uint(percentCovered));
 
-    int reserve = (coinCurrent * (percentCovered * percentGrowth / FLOAT_FACTOR)) / FLOAT_FACTOR;
+    int reserve = (coinTotal * (percentCovered * percentGrowth / FLOAT_FACTOR)) / FLOAT_FACTOR;
     return reserve;
   }
 
@@ -339,12 +339,12 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     int principal = userCushion.fiatPrincipal;
     if (currentFiat > principal) {
       // maxCushion grows each year too
-      int maxCushionUpForYear = maxCushionUp * yearsPassed;
-      int cushionCoin = calcCushionUp(principal, currentBalance, currentFiat, maxCushionUpForYear);
+      int coinCushion = calcCushionUp(principal, currentBalance, currentFiat, userCushion.coinAdjustment, yearsPassed);
       // Check positive, on the off chance that some error messes up the cushion calculation
-      if (cushionCoin > 0) {
+      if (coinCushion > 0) {
         // transfer the cushion to this contract
-        theCoin.pl_transferFrom(user, address(this), uint(cushionCoin), msNow());
+        theCoin.pl_transferFrom(user, address(this), uint(coinCushion), msNow());
+        userCushion.coinAdjustment = userCushion.coinAdjustment + coinCushion;
         userCushion.cushionLastAdjust = userCushion.cushionLastAdjust + uint(yearsPassed * YEAR_IN_MS);
         console.log("userCushion.cushionLastAdjust: ", uint(userCushion.cushionLastAdjust));
       }
