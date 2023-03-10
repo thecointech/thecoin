@@ -145,8 +145,8 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
   // NOTE: The two calc* functions are declared as pure so we can test them directly in jest
   function calcCushionDown(int fiatPrincipal, int coinPrincipal, int coinCurrent) public view returns(int) {
 
-    int percentLoss = ((coinPrincipal - coinCurrent) * FLOAT_FACTOR) / coinCurrent;
-    console.log("percentLoss: ", uint(percentLoss));
+    // int percentLoss = ((coinPrincipal - coinCurrent) * FLOAT_FACTOR) / coinCurrent;
+    // console.log("percentLoss: ", uint(percentLoss));
 
     int percentCovered = (maxFiatProtected * FLOAT_FACTOR) / fiatPrincipal;
     if (percentCovered > FLOAT_FACTOR) {
@@ -164,23 +164,39 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     return (percentCovered * (coinCovered - coinCurrent)) / FLOAT_FACTOR;
   }
 
-  function calcCushionUp(int fiatPrincipal, int coinPrincipal, int coinCurrent, int coinAdjustement, int year) public view returns(int) {
-    int coinTotal = coinCurrent + coinAdjustement;
-    int percentGrowth = (FLOAT_FACTOR * (coinTotal - coinPrincipal)) / coinTotal;
-    console.log("percentGrowth: ", uint(percentGrowth));
-    if (percentGrowth > maxCushionUpPercent * year) {
-      percentGrowth = maxCushionUpPercent * year;
-    }
-    console.log("percentGrowth: ", uint(percentGrowth));
+  function calcCushionUp(int fiatPrincipal, int coinPrincipal, int coinCurrent, int /*coinAdjustement*/, int year) public view returns(int) {
 
     int percentCovered = (FLOAT_FACTOR * maxFiatProtected) / fiatPrincipal;
     if (percentCovered > FLOAT_FACTOR) {
       percentCovered = FLOAT_FACTOR;
     }
     console.log("percentCovered: ", uint(percentCovered));
+    console.log("year: ", uint(year));
 
-    int reserve = (coinTotal * (percentCovered * percentGrowth / FLOAT_FACTOR)) / FLOAT_FACTOR;
-    return reserve;
+    int coinCushion = coinCurrent - coinPrincipal;
+    console.log("coinCushion: ", uint(coinCushion));
+    int coinMaxCushion = ((maxCushionUpPercent * year) * coinCurrent) / FLOAT_FACTOR;
+    console.log("coinMaxCushion: ", uint(coinMaxCushion));
+    if (coinCushion > coinMaxCushion) {
+      return (coinMaxCushion * percentCovered) / FLOAT_FACTOR;
+    }
+    return (coinCushion * percentCovered) / FLOAT_FACTOR;
+    // int coinTotal = coinCurrent + coinAdjustement;
+    // int percentGrowth = (FLOAT_FACTOR * (coinTotal - coinPrincipal)) / coinTotal;
+    // console.log("percentGrowth: ", uint(percentGrowth));
+    // if (percentGrowth > maxCushionUpPercent * year) {
+    //   percentGrowth = maxCushionUpPercent * year;
+    // }
+    // console.log("percentGrowth: ", uint(percentGrowth));
+
+    // int percentCovered = (FLOAT_FACTOR * maxFiatProtected) / fiatPrincipal;
+    // if (percentCovered > FLOAT_FACTOR) {
+    //   percentCovered = FLOAT_FACTOR;
+    // }
+    // console.log("percentCovered: ", uint(percentCovered));
+
+    // int reserve = (coinTotal * (percentCovered * percentGrowth / FLOAT_FACTOR)) / FLOAT_FACTOR;
+    // return reserve;
   }
 
   //   console.log("currentFiat: ", uint(currentFiat));
