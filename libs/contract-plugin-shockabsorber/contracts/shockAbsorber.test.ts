@@ -14,14 +14,188 @@ jest.setTimeout(10 * 60 * 1000);
 // beforeEach(async function () {
 //   await hre.network.provider.send("hardhat_reset")
 // })
-
 const aYear = Duration.fromObject({year: 1}).as('seconds');
 const aDay = Duration.fromObject({day: 1}).as('seconds');
+const FLOAT_FACTOR = 100_000_000_000;
+const maxCushionUp = 1.5 * FLOAT_FACTOR / 100; // 1.5%
+const maxCushionDown = 50 * FLOAT_FACTOR / 100; // 50%
+const maxPrincipalCovered = 5000e2;
+const maxCushionUpPercent = FLOAT_FACTOR - (FLOAT_FACTOR * FLOAT_FACTOR / (FLOAT_FACTOR + maxCushionUp));
+
+const cushionUp = (principalCoin: number, currentCoin: number, principalFiat, year=1) => {
+  let percentGrowth = (currentCoin - principalCoin) / currentCoin;
+  percentGrowth = Math.min(maxCushionUpPercent * year, FLOAT_FACTOR * percentGrowth);
+  let percentCovered = maxPrincipalCovered / principalFiat;
+  percentCovered = Math.min(percentCovered, 1);
+  const reserve = currentCoin * (percentCovered * percentGrowth / FLOAT_FACTOR);
+  return Math.floor(reserve);
+}
+const cushionDown = (principalCoin: number, currentCoin: number, principalFiat: number) => {
+  let percentLoss = (principalCoin - currentCoin) / currentCoin;
+  const maxCushionCoin = currentCoin / (1 - (maxCushionDown / FLOAT_FACTOR));
+  let percentCovered = maxPrincipalCovered / principalFiat;
+  percentCovered = Math.min(percentCovered, 1);
+  return percentCovered * (Math.min(maxCushionCoin, principalCoin) - currentCoin);
+}
+
+const modifier = (principalFiat: number, currentCoin: number, rate: number) => {
+
+  // toCoin
+  const Pc = principalFiat / rate;
+
+  if (Pc < currentCoin) {
+    // In Profit, run CushionUp
+    const reserveCushion = cushionUp(Pc, currentCoin, principalFiat);
+    return currentCoin - reserveCushion;
+  }
+  else if (currentCoin < Pc) {
+    // In Loss, run CushionDown
+    const addCushion = cushionDown(Pc,currentCoin, principalFiat);
+    return currentCoin + addCushion;
+  }
+  return currentCoin;
+}
+
+describe('cushionUp with principal covered', () => {
+
+  it.each([
+    { rate: 100,   fiat: 5000e2, coin: 0 },
+    { rate: 100.5, fiat: 5000e2, coin: 248756 },
+    { rate: 101,   fiat: 5000e2, coin: 495049 },
+    { rate: 101.5, fiat: 5000e2, coin: 738916 },
+    // After this point, the cushion is full and stops growing
+    { rate: 102, coin: 738916 },
+    { rate: 105, coin: 738916 },
+    { rate: 115, coin: 738916 },
+  ])(`with %s`, async ({ rate, coin, fiat }) => {
+
+    const curr = rate * 50e2;
+    const Pc = 5000 / (rate / 1e6);
+    const r = cushionUp(Pc, 50e6, 5000e2);
+    if (fiat) {
+      // Assert that the amount reserved does not take balance below reserve
+      const reserved = r * rate / 1e4;
+      expect(Math.round(curr - reserved)).toEqual(fiat);
+    }
+    if (coin) {
+      expect(r).toEqual(coin);
+    }
+  });
+});
+
+describe('cushionUp with partial principal covered', () => {
+
+  it.each([
+    { rate: 100,   fiat: 10000e2, coin: 0 },
+    { rate: 100.5, fiat: 10025e2, coin: 248756 },
+    { rate: 101,   fiat: 10050e2, coin: 495049 },
+    { rate: 101.5, fiat: 10075e2, coin: 738916 },
+    // After this point, the cushion is full and stops growing
+    { rate: 102, coin: 738916 },
+    { rate: 103, coin: 738916 },
+    { rate: 105, coin: 738916 },
+    { rate: 115, coin: 738916 },
+  ])(`with %s`, async ({ rate, coin, fiat }) => {
+
+    const curr = rate * 100e2;
+    const Pc = 10000 / (rate / 1e6);
+    const r = cushionUp(Pc, 100e6, 10000e2);
+    if (fiat) {
+      // Assert that the amount reserved does not take balance below reserve
+      const reserved = r * rate / 1e4;
+      expect(Math.round(curr - reserved)).toEqual(fiat);
+    }
+    if (coin) {
+      expect(r).toEqual(coin);
+    }
+  });
+})
+
+describe('cushionUp over years', () => {
+
+  it.each([
+    { year: 1, rate: 100,   fiat: 10000e2, coin: 0 },
+    { year: 1, rate: 101.5, fiat: 10075e2, coin: 738916 },
+    // the cushion doesn't eat unprotected even over yeras
+    { year: 2, rate: 101.5, fiat: 10075e2, coin: 738916 },
+    // But it does add to cushion from prior years growth
+    { year: 1, rate: 103, fiat: 10223_89, coin: 738916 },
+    // NOTE: Less cushion is reserved in the following year
+    // (in coin) due to the higher percentage affecting the rate.
+    // THIS IS PROBABLY NOT WHAT WE WANT.
+    // The cushion reserve should be constant
+    { year: 2, rate: 103, fiat: 10150e2, coin: 1456310 },
+  ])(`with %s`, async ({ year, rate, coin, fiat }) => {
+
+    const curr = rate * 100e2;
+    const Pc = 10000 / (rate / 1e6);
+    const r = cushionUp(Pc, 100e6, 10000e2, year);
+    if (fiat) {
+      // Assert that the amount reserved does not take balance below reserve
+      const reserved = r * rate / 1e4;
+      expect(Math.round(curr - reserved)).toEqual(fiat);
+    }
+    if (coin) {
+      expect(r).toEqual(coin);
+    }
+  });
+})
+
+describe('cushionDown with principal covered', () => {
+  it.each([
+    { rate: 100,   fiat: 5000e2, coin: 0 },
+    { rate: 99.9,  fiat: 5000e2, },
+    { rate: 80,    fiat: 5000e2, },
+    { rate: 50,    fiat: 5000e2, coin: 50e6},
+    // After this point, the cushion is expended
+    { rate: 49.9, coin: 50e6 },
+    { rate: 30, coin: 50e6 },
+  ])(`with %s`, async ({ rate, coin, fiat }) => {
+
+    const curr = rate * 50e2;
+    const Pc = 5000 / (rate / 1e6);
+    const r = cushionDown(Pc, 50e6, 5000e2);
+    if (fiat) {
+      // Assert that the amount reserved does not take balance below reserve
+      const reserved = r * rate / 1e4;
+      expect(Math.round(curr + reserved)).toEqual(fiat);
+    }
+    if (coin) {
+      expect(r).toEqual(coin);
+    }
+  });
+})
+
+describe('It correctly cushions partial principal on a drop mmm', () => {
+  it.each([
+    { rate: 100,   fiat: 10000e2, coin: 0 },
+    { rate: 90,    fiat: 9500e2, },
+    { rate: 50,    fiat: 7500e2, coin: 50e6},
+    // After this point, the cushion is expended
+    { rate: 49.9, coin: 50e6 },
+    { rate: 30, coin: 50e6 },
+  ])(`with %s`, async ({ rate, coin, fiat }) => {
+
+    console.log("----------- Testing: rate", rate, "coin", coin, "fiat", fiat)
+    const curr = rate * 100e2;
+    const Pc = 10000 / (rate / 1e6);
+    const r = cushionDown(Pc, 100e6, 10000e2);
+    if (fiat) {
+      // Assert that the amount reserved does not take balance below reserve
+      const reserved = r * rate / 1e4;
+      expect(Math.round(curr + reserved)).toEqual(fiat);
+    }
+    if (coin) {
+      expect(r).toEqual(coin);
+    }
+  });
+})
+
+//////////////////////////////////////////////////////////////////////
 
 const { absorber } = await setupAbsorber();
 
-const maxCushionUp = 1.5 * 100_000_000_000 / 100; // 1.5%
-const maxCushionDown = 50 * 100_000_000_000 / 100; // 50%
+
 describe('It calculates the cushion reserve when all principal covered', () => {
 
   it.each([
