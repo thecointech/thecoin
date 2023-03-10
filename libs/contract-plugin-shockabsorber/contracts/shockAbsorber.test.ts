@@ -80,7 +80,7 @@ class AbsorberJs  {
     // Duplicate of contract calcCushionDown for debugging purposes
     let percentCovered = maxPrincipalCovered / this.fiatPrincipal;
     percentCovered = Math.min(percentCovered, 1);
-    const maxCushionCoin = this.coinCurrent / (1 - (maxCushionDown / FLOAT_FACTOR));
+    const maxCushionCoin = this.coinCurrent / (1 - maxCushionDown);
     const coinCovered = Math.min(maxCushionCoin, coinPrincipal)
     return Math.round(percentCovered * (coinCovered - this.coinCurrent));
   }
@@ -113,13 +113,18 @@ type Results = {
   coin?:number,
   year?: number,
 }
-const testUpResult = async (tester: ReturnType<typeof createTester>, results: Results) => {
+type Tester = ReturnType<typeof createTester>;
+const testResults = async (tester: Tester, results: Results, up: boolean) => {
+  const r = up
+    ? await tester.cushionUp(results.rate, results.year)
+    : await tester.cushionDown(results.rate);
   const fiatCurrent = toFiat(tester.coinCurrent, results.rate);
-  const r = await tester.cushionUp(results.rate);
   if (results.fiat) {
     // Assert that the amount reserved does not take balance below reserve
     const reserved = toFiat(r, results.rate);
-    expect(fiatCurrent - reserved).toEqual(results.fiat);
+    expect(up
+      ? fiatCurrent - reserved
+      : fiatCurrent + reserved).toEqual(results.fiat);
   }
   if (results.coin) {
     // This odd-looking comparison allows differences of 1,
@@ -130,6 +135,8 @@ const testUpResult = async (tester: ReturnType<typeof createTester>, results: Re
     }
   }
 }
+const testUpResult = async (tester: Tester, results: Results) => testResults(tester, results, true);
+const testDownResult = async (tester: Tester, results: Results) => testResults(tester, results, false);
 
 ///////////////////////////////////////////////////////////////////////////
 // Actual tests here
@@ -181,30 +188,18 @@ describe('cushionUp over years', () => {
   ])(`with %s`, async (inputs) => testUpResult(tester, inputs));
 })
 
-// describe('cushionDown with principal covered', () => {
-//   it.each([
-//     { rate: 100,   fiat: 5000e2, coin: 0 },
-//     { rate: 99.9,  fiat: 5000e2, },
-//     { rate: 80,    fiat: 5000e2, },
-//     { rate: 50,    fiat: 5000e2, coin: 50e6},
-//     // After this point, the cushion is expended
-//     { rate: 49.9, coin: 50e6 },
-//     { rate: 30, coin: 50e6 },
-//   ])(`with %s`, async ({ rate, coin, fiat }) => {
-
-//     const curr = rate * 50e2;
-//     const coinPrincipal = toCoin(5000, rate);
-//     const r = await cushionDown(5000e2, coinPrincipal, 50e6);
-//     if (fiat) {
-//       // Assert that the amount reserved does not take balance below reserve
-//       const reserved = r.toNumber() * rate / 1e4;
-//       expect(Math.round(curr + reserved)).toEqual(fiat);
-//     }
-//     if (coin) {
-//       expect(r.toNumber()).toEqual(coin);
-//     }
-//   });
-// })
+describe('cushionDown with principal covered', () => {
+  const tester = createTester(5000);
+  it.each([
+    { rate: 100,   fiat: 5000, coin: 0 },
+    { rate: 99.9,  fiat: 5000, },
+    { rate: 80,    fiat: 5000, },
+    { rate: 50,    fiat: 5000, coin: 50e6},
+    // After this point, the cushion is expended
+    { rate: 49.9, coin: 50e6 },
+    { rate: 30, coin: 50e6 },
+  ])(`with %s`, async (inputs) => testDownResult(tester, inputs));
+})
 
 // describe('cushionDown with principal partially covered', () => {
 //   it.each([
