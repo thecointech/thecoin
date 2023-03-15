@@ -21,11 +21,12 @@ export const testResults = async (tester: Tester, results: Results) => {
   let r = (isUp)
     ? await tester.cushionUp(results.rate, results.year)
     : await tester.cushionDown(results.rate);
+  if (r == -0) r = 0;
   if (results.fiat) {
     const cushion = toFiat(r, results.rate) * (isUp ? -1 : 1);
     expect(fiatCurrent + cushion).toEqual(results.fiat);
   }
-  if (results.coin) {
+  if (results.coin !== undefined) {
     // This odd-looking comparison allows differences of 1,
     // to account for rounding in JS vs Sol, but still
     // keep a proper error message on failure
@@ -82,6 +83,7 @@ describe('cushionUp over years', () => {
     // NOTE: Less cushion is reserved in the following year
     // (in coin) due to the higher rate.
     { year: 2, rate: 103, fiat: 10150, coin: 1456311 },
+    { year: 2, rate: 104,              coin: 1456311 },
   ])(`with %s`, async (inputs) => testResults(tester, inputs));
 })
 
@@ -141,10 +143,34 @@ describe('dep & withdraw track avg principal', () => {
     { year: 0, reserved: 0 },
     { year: 1, reserved: 738916 },
     { year: 2, reserved: 1456310 },
-  ])(`draws down on year %s`, async (inputs) => {
+  ])(`draws down on whole year, fully covered %s`, async (inputs) => {
     const tester = createTester(5000);
     const r = await tester.drawDownCushion(inputs.year * yearInMs);
     expect(r).toEqual(inputs.reserved);
+  })
+
+  it.each([
+    { year: 0, reserved: 0 },
+    { year: 1, reserved: 738916 },
+    { year: 2, reserved: 1456310 },
+  ])(`draws down on whole year, partially covered %s`, async (inputs) => {
+    const tester = createTester(10000);
+    const r = await tester.drawDownCushion(inputs.year * yearInMs);
+    expect(r).toEqual(inputs.reserved);
+  })
+
+  it ('correcly calculates balance after drawDownCushion', async () => {
+    const tester = createTester(5000);
+    // This will reduce the reserved balance
+    await tester.drawDownCushion(yearInMs);
+
+    await testResults(tester, {year: 2, rate: 50,  fiat: 5000 });
+    await testResults(tester, {year: 2, rate: 100, fiat: 5000 });
+    await testResults(tester, {year: 2, rate: 101.5, fiat: 5000, coin: 0 });
+    await testResults(tester, {year: 2, rate: 103, fiat: 5000, coin: 717395 });
+    // As rate goes up, the cushion does not grow
+    await testResults(tester, {year: 2, rate: 104, coin: 717395 });
+    await testResults(tester, {year: 2, rate: 110, coin: 717395 });
   })
   // it ('draws down cushion correctly on year-end', async () => {
   //   const tester = createTester(5000);

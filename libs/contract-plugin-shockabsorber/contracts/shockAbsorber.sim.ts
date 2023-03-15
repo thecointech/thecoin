@@ -65,7 +65,7 @@ class AbsorberSol {
 class AbsorberJs  {
   fiatPrincipal = 5000;
   coinCurrent = 0;
-  coinAdjustment = 0;
+  // coinAdjustment = 0;
   lastDrawDownTime = 0;
 
   avgFiatPrincipal = 0;
@@ -79,16 +79,19 @@ class AbsorberJs  {
     this.coinCurrent = toCoin(fiatPrincipal, 100);
   }
 
+  getMaxPercentCushion = (timeMs: number) => 1 - (1 / (1 + maxCushionUp * (timeMs / yearInMs)))
+
   cushionUp = async (rate: number, year = 1) => {
     const coinPrincipal = toCoin(this.fiatPrincipal, rate);
+    const coinCushion = this.coinCurrent - coinPrincipal;
 
     let percentCovered = maxPrincipalCovered / this.fiatPrincipal;
     percentCovered = Math.min(percentCovered, 1);
-    const coinCushion = this.coinCurrent - coinPrincipal;
-    const coinMaxCushion = (maxCushionUpPercent * year) * this.coinCurrent;
-
+    // blah blah
+    const maxPercentCushion = this.getMaxPercentCushion(year * yearInMs);
+    const coinMaxCushion = maxPercentCushion * (this.coinCurrent + this.reserved) - this.reserved;
     let coinCovered = coinCushion
-    if (coinCushion> coinMaxCushion) {
+    if (coinCushion > coinMaxCushion) {
       coinCovered = coinMaxCushion;
     }
     return Math.round(coinCovered * percentCovered);
@@ -96,17 +99,16 @@ class AbsorberJs  {
 
   cushionDown = async (rate: number) => {
     const coinPrincipal = toCoin(this.fiatPrincipal, rate);
+    const coinOriginal = this.coinCurrent + this.reserved;
 
-    // Duplicate of contract calcCushionDown for debugging purposes
     let percentCovered = maxPrincipalCovered / this.fiatPrincipal;
     percentCovered = Math.min(percentCovered, 1);
-    const maxCushionCoin = this.coinCurrent / (1 - maxCushionDown);
+    const maxCushionCoin = coinOriginal / (1 - maxCushionDown);
     const coinCovered = Math.min(maxCushionCoin, coinPrincipal)
     return Math.round(percentCovered * (coinCovered - this.coinCurrent));
   }
 
   balanceOf = async (rate: number, year=1) => {
-    // toCoin
     const coinPrincipal = toCoin(this.fiatPrincipal, rate);
 
     if (coinPrincipal < this.coinCurrent) {
@@ -154,19 +156,8 @@ class AbsorberJs  {
     const avgFiatPrincipal = await this.getAvgFiatPrincipal(timeMs);
     // Prevent divide-by-zero
     if (avgCoinPrincipal == 0 || avgFiatPrincipal == 0) {
-      return
+      return 0;
     }
-
-    // let percentCovered = maxPrincipalCovered / avgFiatPrincipal;
-    // percentCovered = Math.min(percentCovered, 1);
-    // const coinCushion = this.coinCurrent - avgCoinPrincipal;
-    // const coinMaxCushion = (maxCushionUpPercent * year) * this.coinCurrent;
-
-    // let coinCovered = coinCushion
-    // if (coinCushion> coinMaxCushion) {
-    //   coinCovered = coinMaxCushion;
-    // }
-    // const toReserve = Math.round(coinCovered * percentCovered);
 
     // How can we limit this to the maxiumum of the maxCushionUpPercent?
     const covered = Math.min(maxPrincipalCovered / avgFiatPrincipal, 1);
@@ -174,7 +165,7 @@ class AbsorberJs  {
     const percentOfYear = (timeMs - this.lastDrawDownTime) / yearInMs;
     // We always reserve the maximum percent, ignoring current rates
     // CushionDown ensures that this does not take balance below principal
-    const percentCushion = 1 - (1 / (1 + maxCushionUp * percentOfYear));
+    const percentCushion = this.getMaxPercentCushion(timeMs - this.lastDrawDownTime)// 1 - (1 / (1 + maxCushionUp * percentOfYear));
     // How many coins we gonna keep now?
     const toReserve = Math.floor(covered * percentCushion * avgCoinPrincipal);
     // Transfer the reserve to this contract
