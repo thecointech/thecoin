@@ -8,15 +8,16 @@ import { ShockAbsorber } from '../src';
 import type { SpxCadOracle } from '@thecointech/contract-oracle';
 import { time } from "@nomicfoundation/hardhat-network-helpers";
 import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
-import { TheCoin } from '@thecointech/contract-core/*';
+import { TheCoin } from '@thecointech/contract-core';
 import { Duration } from 'luxon';
+import { getSigner } from '@thecointech/signers';
 
 const FLOAT_FACTOR = 100_000_000_000;
+export const yearInMs = 31556952_000;
 const maxCushionUp = 0.015; //1.5 * FLOAT_FACTOR / 100; // 1.5%
 const maxCushionDown = 0.5; //50 * FLOAT_FACTOR / 100; // 50%
 const maxPrincipalCovered = 5000;
 const maxCushionUpPercent = 1 - (1 / (1 + maxCushionUp)) //FLOAT_FACTOR - (FLOAT_FACTOR * FLOAT_FACTOR / (FLOAT_FACTOR + maxCushionUp));
-const useJsTester = true;
 
 export const toCoin = (fiat: number, rate: number) => fiat / (rate / 1e6)
 export const toFiat = (coin: number, rate: number) => Math.round(100 * coin * (rate / 1e6)) / 100
@@ -27,6 +28,7 @@ class AbsorberSol {
   fiatPrincipal = 5000;
   coinCurrent = 0;
   coinAdjustment = 0;
+  reserved = 0;
 
   constructor(fiatPrincipal: number) {
     this.fiatPrincipal = fiatPrincipal;
@@ -42,12 +44,35 @@ class AbsorberSol {
     const r = await absorber.calcCushionDown(this.fiatPrincipal * 100, Math.floor(coinPrincipal), this.coinCurrent);
     return r.toNumber();
   };
+
+  deposit = async (fiat: number, timeMs: number) => {;
+  };
+
+  withdraw = async (fiat: number, timeMs: number) => {
+  }
+
+  getAvgFiatPrincipal = async (timeMs: number) => {
+    return 0;
+  }
+
+  drawDownCushion = async (rate: number, year=1) => {
+    // TODO:
+    const client1 = await getSigner("client1")
+    await absorber.drawDownCushion(await client1.getAddress());
+  }
 }
 
 class AbsorberJs  {
   fiatPrincipal = 5000;
   coinCurrent = 0;
   coinAdjustment = 0;
+  lastDrawDownTime = 0;
+
+  avgFiatPrincipal = 0;
+  avgCoinPrincipal = 0;
+  lastAvgAdjustTime = 0;
+
+  reserved = 0;
 
   constructor(fiatPrincipal: number) {
     this.fiatPrincipal = fiatPrincipal;
@@ -95,6 +120,69 @@ class AbsorberJs  {
       return this.coinCurrent + addCushion;
     }
     return this.coinCurrent;
+  };
+
+  deposit = async (fiat: number, rate: number, timeMs: number) => {
+    this.avgFiatPrincipal += this.getAnnualizedValue(timeMs, this.fiatPrincipal);
+    this.avgCoinPrincipal += this.getAnnualizedValue(timeMs, this.coinCurrent);
+    this.fiatPrincipal += fiat;
+    this.coinCurrent += toCoin(fiat, rate);
+    this.lastAvgAdjustTime = timeMs;
+  };
+  withdraw = async (fiat: number, rate: number, timeMs: number) => {
+    this.avgFiatPrincipal += this.getAnnualizedValue(timeMs, this.fiatPrincipal);
+    this.avgCoinPrincipal += this.getAnnualizedValue(timeMs, this.coinCurrent);
+    this.fiatPrincipal -= fiat;
+    this.coinCurrent -= toCoin(fiat, rate)
+    this.lastAvgAdjustTime = timeMs;
+  }
+
+  getAnnualizedValue = (timeMs: number, value: number) => {
+    const percentOfYear = (timeMs - this.lastAvgAdjustTime) / yearInMs;
+    const annualizedAvg = value * percentOfYear;
+    return Math.max(annualizedAvg, 0);
+  }
+  getAvgFiatPrincipal = async (timeMs: number) => {
+    return this.avgFiatPrincipal + this.getAnnualizedValue(timeMs, this.fiatPrincipal);
+  }
+  getAvgCoinBalance = async (timeMs: number) => {
+    return this.avgCoinPrincipal + this.getAnnualizedValue(timeMs, this.coinCurrent);
+  }
+
+  drawDownCushion = async (timeMs: number) => {
+    const avgCoinPrincipal = await this.getAvgCoinBalance(timeMs);
+    const avgFiatPrincipal = await this.getAvgFiatPrincipal(timeMs);
+    // Prevent divide-by-zero
+    if (avgCoinPrincipal == 0 || avgFiatPrincipal == 0) {
+      return
+    }
+
+    // let percentCovered = maxPrincipalCovered / avgFiatPrincipal;
+    // percentCovered = Math.min(percentCovered, 1);
+    // const coinCushion = this.coinCurrent - avgCoinPrincipal;
+    // const coinMaxCushion = (maxCushionUpPercent * year) * this.coinCurrent;
+
+    // let coinCovered = coinCushion
+    // if (coinCushion> coinMaxCushion) {
+    //   coinCovered = coinMaxCushion;
+    // }
+    // const toReserve = Math.round(coinCovered * percentCovered);
+
+    // How can we limit this to the maxiumum of the maxCushionUpPercent?
+    const covered = Math.min(maxPrincipalCovered / avgFiatPrincipal, 1);
+    // Multiply this by... how long it's been since we last adjusted?
+    const percentOfYear = (timeMs - this.lastDrawDownTime) / yearInMs;
+    // We always reserve the maximum percent, ignoring current rates
+    // CushionDown ensures that this does not take balance below principal
+    const percentCushion = 1 - (1 / (1 + maxCushionUp * percentOfYear));
+    // How many coins we gonna keep now?
+    const toReserve = Math.floor(covered * percentCushion * avgCoinPrincipal);
+    // Transfer the reserve to this contract
+    this.reserved += toReserve;
+    this.coinCurrent -= toReserve;
+    this.lastDrawDownTime = timeMs;
+    this.lastAvgAdjustTime = timeMs;
+    return toReserve;
   }
 }
 

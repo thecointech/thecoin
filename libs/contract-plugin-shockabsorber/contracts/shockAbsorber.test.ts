@@ -1,8 +1,9 @@
 import { jest } from '@jest/globals';
-import { createTesterShim, toFiat } from './shockabsorber.sim'
+import { createTesterShim, toFiat, yearInMs } from './shockabsorber.sim'
 
 jest.setTimeout(10 * 60 * 1000);
-const useJsTester = true;
+// always use SOL tester in CI
+const useJsTester = !process.env.JEST_CI || true;
 
 const createTester = (fiatPrincipal: number) => createTesterShim(fiatPrincipal, useJsTester);
 
@@ -109,6 +110,52 @@ describe('cushionDown with principal partially covered', () => {
   ])(`with %s`, async (inputs) => testResults(tester, inputs))
 })
 
+describe('dep & withdraw track avg principal', () => {
+  it ('adjusts avg with deposits', async () => {
+    const tester = createTester(0);
+    // 5 deposits, evenly spaced through the year
+    for (let i = 0; i < 5; i++) {
+      const timeMs = i * (yearInMs / 5);
+      await tester.deposit(100, 100, timeMs);
+    }
+    expect(tester.fiatPrincipal).toEqual(500);
+    const avgFiat = await tester.getAvgFiatPrincipal(yearInMs);
+    // 100 + 100 × 0.8 + 100 × 0.6 + 100 × 0.4 + 100 × 0.2
+    expect(avgFiat).toEqual(300);
+  })
+
+  it ('adjusts avg with withdrawals', async () => {
+    const tester = createTester(500);
+    // 5 withdrawals, evenly spaced through the year
+    for (let i = 0; i < 5; i++) {
+      const timeMs = (i + 1) * (yearInMs / 5);
+      await tester.withdraw(100, 100, timeMs);
+    }
+    expect(tester.fiatPrincipal).toEqual(0);
+    const avgFiat = await tester.getAvgFiatPrincipal(yearInMs);
+    // 100 + 100 × 0.8 + 100 × 0.6 + 100 × 0.4 + 100 × 0.2
+    expect(avgFiat).toEqual(300);
+  })
+
+  it.each([
+    { year: 0, reserved: 0 },
+    { year: 1, reserved: 738916 },
+    { year: 2, reserved: 1456310 },
+  ])(`draws down on year %s`, async (inputs) => {
+    const tester = createTester(5000);
+    const r = await tester.drawDownCushion(inputs.year * yearInMs);
+    expect(r).toEqual(inputs.reserved);
+  })
+  // it ('draws down cushion correctly on year-end', async () => {
+  //   const tester = createTester(5000);
+  //   await tester.drawDownCushion(yearInMs);
+  //   expect(tester.fiatPrincipal).toEqual(0);
+  //   const avgFiat = await tester.getAvgFiatPrincipal(yearInMs);
+  //   // 100 + 100 × 0.8 + 100 × 0.6 + 100 × 0.4 + 100 × 0.2
+  //   expect(avgFiat).toEqual(300);
+  // })
+})
+
 describe('cushionUp with drawDown', () => {
   const tester = createTester(5000);
   it.each([
@@ -119,6 +166,11 @@ describe('cushionUp with drawDown', () => {
     { year: 2, rate: 101.5, fiat: 5000, coin: 738916 },
     { year: 2, rate: 103,   fiat: 5000, coin: 1456310 },
   ])(`with %s`, async (inputs) => {
+    // call drawDownCushion prior to running the test
+    const year = inputs.year - 1;
+    if (year) {
+      tester.drawDownCushion(inputs.rate, year);
+    }
     testResults(tester, inputs);
   })
 })
