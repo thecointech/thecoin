@@ -172,6 +172,21 @@ describe('dep & withdraw track avg principal', () => {
     await testResults(tester, {year: 2, rate: 104, coin: 717395 });
     await testResults(tester, {year: 2, rate: 110, coin: 717395 });
   })
+
+  it ('correcly calculates balance after drawDownCushion partial covered', async () => {
+    const tester = createTester(10000);
+    // This will reduce the reserved balance
+    await tester.drawDownCushion(yearInMs);
+
+    await testResults(tester, {year: 2, rate: 90,  fiat: 9500 });
+    await testResults(tester, {year: 2, rate: 50,  fiat: 7500 });
+    await testResults(tester, {year: 2, rate: 100, fiat: 10000 });
+    await testResults(tester, {year: 2, rate: 101.5, fiat: 10075, coin: 0 });
+    await testResults(tester, {year: 2, rate: 103, fiat: 10150, coin: 717395 });
+    // As rate goes up, the cushion does not grow
+    await testResults(tester, {year: 2, rate: 104, coin: 717395 });
+    await testResults(tester, {year: 2, rate: 110, coin: 717395 });
+  })
   // it ('draws down cushion correctly on year-end', async () => {
   //   const tester = createTester(5000);
   //   await tester.drawDownCushion(yearInMs);

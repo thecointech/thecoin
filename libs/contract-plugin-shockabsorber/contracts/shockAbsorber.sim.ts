@@ -105,7 +105,30 @@ class AbsorberJs  {
     percentCovered = Math.min(percentCovered, 1);
     const maxCushionCoin = coinOriginal / (1 - maxCushionDown);
     const coinCovered = Math.min(maxCushionCoin, coinPrincipal)
-    return Math.round(percentCovered * (coinCovered - this.coinCurrent));
+
+    const target = percentCovered * coinCovered;
+    const original = percentCovered * coinOriginal - this.reserved;
+    return Math.round(target - original);
+    // const blahblah = this.reserved + (percentCovered * (coinCovered - this.coinCurrent));
+    // return Math.round(percentCovered * (coinCovered - this.coinCurrent));
+
+    // // const coinCovered = Math.min(maxCushionCoin, percentCovered * coinPrincipal)
+    // // correct answer is:
+    // // The portion of the principal we cushion.  This should have no loss
+    // const principalCovered = percentCovered * coinPrincipal;
+    // // 100 = 50% * 200
+    // // Target is the covered target + the uncovered part of original
+    // let target = principalCovered + coinOriginal * (1 - percentCovered);
+    // const maxTarget = percentCovered * coinOriginal / (1 - maxCushionDown);
+    // if (target > maxTarget) {
+    //   target = maxTarget;
+    // }
+
+    // // Now we know the target, cushion is just what we need to reach it.
+    // const cushion = target - this.coinCurrent;
+
+    // // But not too much...
+    // return Math.min(maxTarget, cushion);
   }
 
   balanceOf = async (rate: number, year=1) => {
