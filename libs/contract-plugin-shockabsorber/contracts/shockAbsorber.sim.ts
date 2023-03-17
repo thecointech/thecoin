@@ -83,18 +83,19 @@ class AbsorberJs  {
 
   cushionUp = async (rate: number, year = 1) => {
     const coinPrincipal = toCoin(this.fiatPrincipal, rate);
-    const coinCushion = this.coinCurrent - coinPrincipal;
+    const coinOriginal = this.coinCurrent + this.reserved;
+    const coinCushion = coinOriginal - coinPrincipal;
 
     let percentCovered = maxPrincipalCovered / this.fiatPrincipal;
     percentCovered = Math.min(percentCovered, 1);
-    // blah blah
     const maxPercentCushion = this.getMaxPercentCushion(year * yearInMs);
-    const coinMaxCushion = maxPercentCushion * (this.coinCurrent + this.reserved) - this.reserved;
+    const coinMaxCushion = maxPercentCushion * coinOriginal;
+
     let coinCovered = coinCushion
     if (coinCushion > coinMaxCushion) {
       coinCovered = coinMaxCushion;
     }
-    return Math.round(coinCovered * percentCovered);
+    return Math.round(coinCovered * percentCovered) - this.reserved;
   };
 
   cushionDown = async (rate: number) => {
