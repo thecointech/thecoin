@@ -241,6 +241,16 @@ describe('Withdrawals are cushioned', () => {
     await testResults(tester, {rate: 40, fiat: 400 });
   })
 
+  it('gives a proper result after withdrawal when market up', async () => {
+    const tester = createTester(1000);
+    // Rate up 10%, withdraw 1/2.
+    // We we want to still only have $500 max cushion at 50% drop of original
+    await tester.withdraw(500, 110, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(500);
+    await tester.withdraw(100, 110, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(400);
+  })
+
   it('gives a proper result after series of withdrawals', async () => {
     const tester = createTester(1000);
     await tester.withdraw(100, 90, 100000);
@@ -265,6 +275,37 @@ describe('Withdrawals are cushioned', () => {
 
     await testResults(tester, {rate: 50, fiat: 500 });
     await testResults(tester, {rate: 40, fiat: 400 });
+  })
+
+  it('gives a proper result after series of deposits', async () => {
+    const tester = createTester(500);
+    // Market drops 10%, we deposit $500 more.
+    await tester.deposit(500, 90, 100000);
+    // This means we have $500 @ 50c cushion,
+    // and we have $500 @ 45c cushion.
+    // At 45c, we should then have $500 + ($500 - 10%)
+    expect(toFiat(tester.maxCovered, 45)).toEqual(950);
+
+    await tester.deposit(500, 110, 100000);
+    // Market up 10%, we deposit $500 more.
+    // 500 @ 50c, 500 @ 45c, 500 @ 55c,
+    // @45c = 500 + (500 * @50c * 0.9) + (500 @ 55c * 0.8181)
+    expect(toFiat(tester.maxCovered, 45)).toEqual(1359.09);
+  })
+
+  it('correctly updates on withdraw and deposit', async () => {
+    const tester = createTester(1000);
+    // Idempotent withdraw/deposit when rates are down
+    await tester.withdraw(100, 90, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(900);
+    await tester.deposit(100, 90, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(1000);
+
+    // Idempotent withdraw/deposit when rates are up
+    await tester.withdraw(100, 110, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(900);
+    await tester.deposit(100, 110, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(1000);
   })
 })
 // //////////////////////////////////////////////////////////////////////

@@ -24,7 +24,6 @@ export const toFiat = (coin: number, rate: number) => Math.round(100 * coin * (r
 
 const { absorber } = await setupAbsorber();
 
-
 class AbsorberSol {
   fiatPrincipal = 5000;
   coinCurrent = 0;
@@ -76,6 +75,7 @@ class AbsorberJs  {
 
   reserved = 0;
   maxCovered = 0;
+  maxCoverAdjust = 0;
 
   constructor(fiatPrincipal: number) {
     this.fiatPrincipal = fiatPrincipal;
@@ -134,12 +134,24 @@ class AbsorberJs  {
   };
 
   deposit = async (fiat: number, rate: number, timeMs: number) => {
+
+    const coinDeposit = toCoin(fiat, rate);
+    // let depositRatio = (coinDeposit / (this.maxCovered * maxCushionDown)) / (fiat / this.fiatPrincipal);
+
     this.avgFiatPrincipal += this.getAnnualizedValue(timeMs, this.fiatPrincipal);
     this.avgCoinPrincipal += this.getAnnualizedValue(timeMs, this.coinCurrent);
     this.fiatPrincipal += fiat;
-    const coinDeposit = toCoin(fiat, rate);
     this.coinCurrent += coinDeposit;
-    this.maxCovered += coinDeposit / (1 - maxCushionDown);
+
+    let maxCoverAdjust = coinDeposit / (1 - maxCushionDown);
+    if (this.maxCoverAdjust <= maxCoverAdjust) {
+      this.maxCovered += maxCoverAdjust - this.maxCoverAdjust;
+      this.maxCoverAdjust = 0;
+    }
+    else {
+      this.maxCoverAdjust -= maxCoverAdjust;
+    }
+    // this.maxCovered += (coinDeposit / (1 - maxCushionDown));
     this.lastAvgAdjustTime = timeMs;
   };
   withdraw = async (fiat: number, rate: number, timeMs: number) => {
@@ -165,6 +177,7 @@ class AbsorberJs  {
     this.lastAvgAdjustTime = timeMs;
     this.coinCurrent -= coinWithdraw;
 
+    this.maxCoverAdjust += (1 - withdrawRatio) * coinWithdraw / (1 - maxCushionDown);
     this.maxCovered -= withdrawRatio * coinWithdraw / (1 - maxCushionDown);
     return coinWithdraw;
   }
