@@ -87,6 +87,14 @@ describe('cushionUp over years', () => {
   ])(`with %s`, async (inputs) => testResults(tester, inputs));
 })
 
+describe('cushionDown for smaller principal', () => {
+  it('works for small principal', async () => {
+    const tester = createTester(1000);
+    const r = await tester.cushionDown(50);
+    expect(r).toEqual(10e6);
+  });
+})
+
 describe('cushionDown with principal covered', () => {
   const tester = createTester(5000);
   it.each([
@@ -187,14 +195,6 @@ describe('dep & withdraw track avg principal', () => {
     await testResults(tester, {year: 2, rate: 104, coin: 717395 });
     await testResults(tester, {year: 2, rate: 110, coin: 717395 });
   })
-  // it ('draws down cushion correctly on year-end', async () => {
-  //   const tester = createTester(5000);
-  //   await tester.drawDownCushion(yearInMs);
-  //   expect(tester.fiatPrincipal).toEqual(0);
-  //   const avgFiat = await tester.getAvgFiatPrincipal(yearInMs);
-  //   // 100 + 100 × 0.8 + 100 × 0.6 + 100 × 0.4 + 100 × 0.2
-  //   expect(avgFiat).toEqual(300);
-  // })
 })
 
 describe('cushionUp with drawDown', () => {
@@ -213,6 +213,58 @@ describe('cushionUp with drawDown', () => {
       tester.drawDownCushion(inputs.rate, year);
     }
     testResults(tester, inputs);
+  })
+})
+
+describe('Withdrawals are cushioned', () => {
+  it('works when there is enough cushion', async () => {
+    const tester = createTester(1000);
+    // When the rate drops, the withdrawal needs additional funds (from cushion)
+    const coin = await tester.withdraw(750, 50, 100000);
+    expect(coin).toEqual(15e6);
+    expect(tester.fiatPrincipal).toEqual(250);
+    expect(tester.coinCurrent).toEqual(0);
+  })
+  it('fails when there is not enough cushion', async () => {
+    const tester = createTester(1000);
+    // It's dropped too far, we can't withdraw the full amount
+    expect(tester.withdraw(1000, 45, 100000))
+      .rejects
+      .toThrow();
+  })
+
+  it('gives a proper result after withdrawal', async () => {
+    const tester = createTester(1000);
+    // Rate drops, withdraw $100
+    await tester.withdraw(500, 90, 100000);
+    await testResults(tester, {rate: 50, fiat: 500 }); // We now have $500
+    await testResults(tester, {rate: 40, fiat: 400 });
+  })
+
+  it('gives a proper result after series of withdrawals', async () => {
+    const tester = createTester(1000);
+    await tester.withdraw(100, 90, 100000);
+    await testResults(tester, {rate: 90, fiat: 900 });
+    expect(toFiat(tester.maxCovered, 50)).toEqual(900);
+
+    await tester.withdraw(100, 90, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(800);
+    await testResults(tester, {rate: 90, fiat: 800 });
+
+    await tester.withdraw(100, 90, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(700);
+    await testResults(tester, {rate: 90, fiat: 700 });
+
+    await tester.withdraw(100, 90, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(600);
+    await testResults(tester, {rate: 90, fiat: 600 });
+
+    await tester.withdraw(100, 90, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(500);
+    await testResults(tester, {rate: 90, fiat: 500 }); // We now have $500
+
+    await testResults(tester, {rate: 50, fiat: 500 });
+    await testResults(tester, {rate: 40, fiat: 400 });
   })
 })
 // //////////////////////////////////////////////////////////////////////

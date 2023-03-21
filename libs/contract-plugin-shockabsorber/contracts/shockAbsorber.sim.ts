@@ -24,10 +24,12 @@ export const toFiat = (coin: number, rate: number) => Math.round(100 * coin * (r
 
 const { absorber } = await setupAbsorber();
 
+
 class AbsorberSol {
   fiatPrincipal = 5000;
   coinCurrent = 0;
   coinAdjustment = 0;
+  maxCovered = 0;
   reserved = 0;
 
   constructor(fiatPrincipal: number) {
@@ -73,10 +75,12 @@ class AbsorberJs  {
   lastAvgAdjustTime = 0;
 
   reserved = 0;
+  maxCovered = 0;
 
   constructor(fiatPrincipal: number) {
     this.fiatPrincipal = fiatPrincipal;
     this.coinCurrent = toCoin(fiatPrincipal, 100);
+    this.maxCovered = this.coinCurrent / (1 - maxCushionDown);
   }
 
   getMaxPercentCushion = (timeMs: number) => 1 - (1 / (1 + maxCushionUp * (timeMs / yearInMs)))
@@ -84,13 +88,13 @@ class AbsorberJs  {
   cushionUp = async (rate: number, year = 1) => {
     const coinPrincipal = toCoin(this.fiatPrincipal, rate);
     const coinOriginal = this.coinCurrent + this.reserved;
-    const coinCushion = coinOriginal - coinPrincipal;
 
     let percentCovered = maxPrincipalCovered / this.fiatPrincipal;
     percentCovered = Math.min(percentCovered, 1);
     const maxPercentCushion = this.getMaxPercentCushion(year * yearInMs);
     const coinMaxCushion = maxPercentCushion * coinOriginal;
 
+    const coinCushion = coinOriginal - coinPrincipal;
     let coinCovered = coinCushion
     if (coinCushion > coinMaxCushion) {
       coinCovered = coinMaxCushion;
@@ -104,32 +108,13 @@ class AbsorberJs  {
 
     let percentCovered = maxPrincipalCovered / this.fiatPrincipal;
     percentCovered = Math.min(percentCovered, 1);
-    const maxCushionCoin = coinOriginal / (1 - maxCushionDown);
+
+    const maxCushionCoin = this.maxCovered; //coinOriginal / (1 - maxCushionDown);
     const coinCovered = Math.min(maxCushionCoin, coinPrincipal)
 
     const target = percentCovered * coinCovered;
     const original = percentCovered * coinOriginal - this.reserved;
     return Math.round(target - original);
-    // const blahblah = this.reserved + (percentCovered * (coinCovered - this.coinCurrent));
-    // return Math.round(percentCovered * (coinCovered - this.coinCurrent));
-
-    // // const coinCovered = Math.min(maxCushionCoin, percentCovered * coinPrincipal)
-    // // correct answer is:
-    // // The portion of the principal we cushion.  This should have no loss
-    // const principalCovered = percentCovered * coinPrincipal;
-    // // 100 = 50% * 200
-    // // Target is the covered target + the uncovered part of original
-    // let target = principalCovered + coinOriginal * (1 - percentCovered);
-    // const maxTarget = percentCovered * coinOriginal / (1 - maxCushionDown);
-    // if (target > maxTarget) {
-    //   target = maxTarget;
-    // }
-
-    // // Now we know the target, cushion is just what we need to reach it.
-    // const cushion = target - this.coinCurrent;
-
-    // // But not too much...
-    // return Math.min(maxTarget, cushion);
   }
 
   balanceOf = async (rate: number, year=1) => {
@@ -152,15 +137,36 @@ class AbsorberJs  {
     this.avgFiatPrincipal += this.getAnnualizedValue(timeMs, this.fiatPrincipal);
     this.avgCoinPrincipal += this.getAnnualizedValue(timeMs, this.coinCurrent);
     this.fiatPrincipal += fiat;
-    this.coinCurrent += toCoin(fiat, rate);
+    const coinDeposit = toCoin(fiat, rate);
+    this.coinCurrent += coinDeposit;
+    this.maxCovered += coinDeposit / (1 - maxCushionDown);
     this.lastAvgAdjustTime = timeMs;
   };
   withdraw = async (fiat: number, rate: number, timeMs: number) => {
+    let coinWithdraw = toCoin(fiat, rate);
+    let withdrawRatio = (fiat / this.fiatPrincipal) / (coinWithdraw / (this.maxCovered * maxCushionDown));
+
+    if (this.coinCurrent < coinWithdraw) {
+      // In Loss, run CushionDown
+      const additionalRequired = coinWithdraw - this.coinCurrent;
+      const maxCushion = await this.cushionDown(rate);
+      if (additionalRequired > maxCushion) {
+        throw new Error("Insufficient funds");
+      }
+      else {
+        // in contract, transfer additionalRequired to this users account
+        this.coinCurrent += additionalRequired;
+      }
+    }
+
     this.avgFiatPrincipal += this.getAnnualizedValue(timeMs, this.fiatPrincipal);
     this.avgCoinPrincipal += this.getAnnualizedValue(timeMs, this.coinCurrent);
     this.fiatPrincipal -= fiat;
-    this.coinCurrent -= toCoin(fiat, rate)
     this.lastAvgAdjustTime = timeMs;
+    this.coinCurrent -= coinWithdraw;
+
+    this.maxCovered -= withdrawRatio * coinWithdraw / (1 - maxCushionDown);
+    return coinWithdraw;
   }
 
   getAnnualizedValue = (timeMs: number, value: number) => {
