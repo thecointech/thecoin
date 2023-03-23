@@ -277,7 +277,7 @@ describe('Withdrawals are cushioned', () => {
     await testResults(tester, {rate: 40, fiat: 400 });
   })
 
-  it('gives a proper result after series of deposits', async () => {
+  it('gives a proper result after series of deposits down/up', async () => {
     const tester = createTester(500);
     // Market drops 10%, we deposit $500 more.
     await tester.deposit(500, 90, 100000);
@@ -293,6 +293,18 @@ describe('Withdrawals are cushioned', () => {
     expect(toFiat(tester.maxCovered, 45)).toEqual(1359.09);
   })
 
+  it('gives a proper result after series of deposits up/down', async () => {
+    // Identical to above, it should have the same result regardless of order of operations
+    const tester = createTester(500);
+    await tester.deposit(500, 110, 100000);
+    // $500 @ 50c, 500 @ 55c (validated by checking with toFiat)
+    expect(toFiat(tester.maxCovered, 50)).toEqual(954.55);
+
+    await tester.deposit(500, 90, 100000);
+    expect(toFiat(tester.maxCovered, 45)).toEqual(1359.09);
+
+  })
+
   it('correctly updates on withdraw and deposit', async () => {
     const tester = createTester(1000);
     // Idempotent withdraw/deposit when rates are down
@@ -306,8 +318,39 @@ describe('Withdrawals are cushioned', () => {
     expect(toFiat(tester.maxCovered, 50)).toEqual(900);
     await tester.deposit(100, 110, 100000);
     expect(toFiat(tester.maxCovered, 50)).toEqual(1000);
+
+    await tester.withdraw(100, 90, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(900);
+    await tester.deposit(50, 90, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(950);
+    await tester.deposit(50, 90, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(1000);
+  })
+
+  it('generally works', async () => {
+    const tester = createTester(1000);
+    // Idempotent withdraw/deposit when rates are down
+    await tester.withdraw(100, 90, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(900);
+    await tester.withdraw(100, 110, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(800);
+    await tester.withdraw(100, 80, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(700);
+
+    await tester.deposit(100, 100, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(800);
+    await tester.deposit(100, 100, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(900);
+
+    // Idempotent withdraw/deposit when rates are up
+    await tester.withdraw(100, 110, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(800);
+    await tester.deposit(100, 110, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toEqual(900);
   })
 })
+
+
 // //////////////////////////////////////////////////////////////////////
 
 // describe('It calculates the cushion reserve when all principal covered', () => {

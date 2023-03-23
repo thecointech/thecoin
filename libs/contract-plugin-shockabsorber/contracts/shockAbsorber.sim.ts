@@ -136,24 +136,45 @@ class AbsorberJs  {
   deposit = async (fiat: number, rate: number, timeMs: number) => {
 
     const coinDeposit = toCoin(fiat, rate);
-    // let depositRatio = (coinDeposit / (this.maxCovered * maxCushionDown)) / (fiat / this.fiatPrincipal);
+    let depositRatio = (fiat / this.fiatPrincipal) / (coinDeposit / (this.maxCovered * maxCushionDown));
 
     this.avgFiatPrincipal += this.getAnnualizedValue(timeMs, this.fiatPrincipal);
     this.avgCoinPrincipal += this.getAnnualizedValue(timeMs, this.coinCurrent);
     this.fiatPrincipal += fiat;
     this.coinCurrent += coinDeposit;
 
-    let maxCoverAdjust = coinDeposit / (1 - maxCushionDown);
-    if (this.maxCoverAdjust <= maxCoverAdjust) {
-      this.maxCovered += maxCoverAdjust - this.maxCoverAdjust;
+    /************ */
+    // let maxCoverAdjust = coinDeposit / (1 - maxCushionDown);
+    // if (this.maxCoverAdjust <= maxCoverAdjust) {
+    //   this.maxCovered += maxCoverAdjust - this.maxCoverAdjust;
+    //   this.maxCoverAdjust = 0;
+    // }
+    // else {
+    //   this.maxCoverAdjust -= maxCoverAdjust;
+    // }
+    // /************ */
+
+    let maxCoverAdjust = (1 - depositRatio) * coinDeposit / (1 - maxCushionDown)
+    let maxCoverForCoin = coinDeposit / (1 - maxCushionDown);
+
+    if (maxCoverAdjust < 0) {
+      // In profit, just add to whatsit
+      this.maxCovered += maxCoverForCoin - this.maxCoverAdjust;
       this.maxCoverAdjust = 0;
     }
     else {
-      this.maxCoverAdjust -= maxCoverAdjust;
+      if (maxCoverForCoin > this.maxCoverAdjust) {
+        maxCoverForCoin -= Math.min(maxCoverAdjust, this.maxCoverAdjust);
+        this.maxCoverAdjust -= Math.min(maxCoverAdjust, this.maxCoverAdjust);
+      } else {
+        this.maxCoverAdjust -= maxCoverAdjust;
+      }
+      this.maxCovered += maxCoverForCoin;
     }
-    // this.maxCovered += (coinDeposit / (1 - maxCushionDown));
+
     this.lastAvgAdjustTime = timeMs;
   };
+
   withdraw = async (fiat: number, rate: number, timeMs: number) => {
     let coinWithdraw = toCoin(fiat, rate);
     let withdrawRatio = (fiat / this.fiatPrincipal) / (coinWithdraw / (this.maxCovered * maxCushionDown));
