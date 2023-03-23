@@ -143,24 +143,27 @@ class AbsorberJs  {
     this.fiatPrincipal += fiat;
     this.coinCurrent += coinDeposit;
 
-    /************ */
-    // let maxCoverAdjust = coinDeposit / (1 - maxCushionDown);
-    // if (this.maxCoverAdjust <= maxCoverAdjust) {
-    //   this.maxCovered += maxCoverAdjust - this.maxCoverAdjust;
-    //   this.maxCoverAdjust = 0;
-    // }
-    // else {
-    //   this.maxCoverAdjust -= maxCoverAdjust;
-    // }
-    // /************ */
-
     let maxCoverAdjust = (1 - depositRatio) * coinDeposit / (1 - maxCushionDown)
     let maxCoverForCoin = coinDeposit / (1 - maxCushionDown);
 
-    if (maxCoverAdjust < 0) {
-      // In profit, just add to whatsit
-      this.maxCovered += maxCoverForCoin - this.maxCoverAdjust;
-      this.maxCoverAdjust = 0;
+    // NOTE TO SELF:
+    // I kinda wrote this in a week-long haze of fatigue, caffeine, and alcohol,
+    // and I really have no idea what it actually does.
+    // The tests all pass though, so... yay me, I guess?
+    // It's very likely it could be greatly optimized though...
+
+    // In profit
+    if (maxCoverAdjust < 0 && maxCoverForCoin > this.maxCoverAdjust) {
+      // If adjusting for a withdrawal on loss
+      if (this.maxCoverAdjust > 0) {
+        this.maxCovered += maxCoverForCoin - maxCoverAdjust;
+        this.maxCoverAdjust += maxCoverAdjust;
+      }
+      // Else eliminate adjustments for a withdrawal on profit
+      else {
+        this.maxCovered += maxCoverForCoin - this.maxCoverAdjust;
+        this.maxCoverAdjust = 0;
+      }
     }
     else {
       if (maxCoverForCoin > this.maxCoverAdjust) {

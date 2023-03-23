@@ -348,6 +348,30 @@ describe('Withdrawals are cushioned', () => {
     await tester.deposit(100, 110, 100000);
     expect(toFiat(tester.maxCovered, 50)).toEqual(900);
   })
+
+  it('generally works after years', async () => {
+    const tester = createTester(1000);
+    const r = await tester.drawDownCushion(1 * yearInMs);
+    // As above, but testing that cushionDown is correct
+    await tester.withdraw(100, 90, 100000);
+    await testResults(tester, {year: 2, rate: 50,  fiat: 900 });
+    await tester.withdraw(100, 110, 100000);
+    await testResults(tester, {year: 2, rate: 50,  fiat: 800 });
+    await tester.withdraw(100, 80, 100000);
+    await testResults(tester, {year: 2, rate: 50,  fiat: 700 });
+    await testResults(tester, {year: 2, rate: 25,  fiat: 350 });
+
+    await tester.deposit(100, 100, 100000);
+    await testResults(tester, {year: 2, rate: 50,  fiat: 800 });
+    await tester.deposit(100, 100, 100000);
+    await testResults(tester, {year: 2, rate: 50,  fiat: 900 });
+
+    // Idempotent withdraw/deposit when rates are up
+    await tester.withdraw(100, 110, 100000);
+    await testResults(tester, {year: 2, rate: 50,  fiat: 800 });
+    await tester.deposit(100, 110, 100000);
+    await testResults(tester, {year: 2, rate: 50,  fiat: 900 });
+  })
 })
 
 
