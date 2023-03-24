@@ -1,7 +1,6 @@
 import { getSigner } from '@thecointech/signers';
 import { ConnectContract } from '@thecointech/contract-core';
 import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
-import { getContract } from '@thecointech/contract-plugin-converter';
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
 import { fetchRate, weSellAt } from '@thecointech/fx-rates';

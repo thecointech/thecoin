@@ -11,6 +11,7 @@ import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
 import { TheCoin } from '@thecointech/contract-core';
 import { Duration } from 'luxon';
 import { getSigner } from '@thecointech/signers';
+import { UserCushionStruct } from '../src/types/contracts/ShockAbsorber';
 
 const FLOAT_FACTOR = 100_000_000_000;
 export const yearInMs = 31556952_000;
@@ -31,18 +32,28 @@ class AbsorberSol {
   maxCovered = 0;
   reserved = 0;
 
+  user: UserCushionStruct = {
+    fiatPrincipal: 0,
+    coinAdjustment: 0,
+    maxCovered: 0,
+    reserved: 0,
+    lastDrawDownTime: 0,
+    avgFiatPrincipal: 0,
+    avgCoinPrincipal: 0,
+    lastAvgAdjustTime: 0,
+    maxCoverAdjust: 0,
+  }
+
   constructor(fiatPrincipal: number) {
     this.fiatPrincipal = fiatPrincipal;
     this.coinCurrent = toCoin(fiatPrincipal, 100);
   }
   cushionUp = async (rate: number, year=1) => {
-    const coinPrincipal = toCoin(this.fiatPrincipal, rate);
-    const r = await absorber.calcCushionUp(this.fiatPrincipal * 100, Math.floor(coinPrincipal), this.coinCurrent, 0, year);
+    const r = await absorber.calcCushionUp(this.user, this.coinCurrent, year * yearInMs);
     return r.toNumber();
   };
   cushionDown = async (rate: number) => {
-    const coinPrincipal = toCoin(this.fiatPrincipal, rate);
-    const r = await absorber.calcCushionDown(this.fiatPrincipal * 100, Math.floor(coinPrincipal), this.coinCurrent);
+    const r = await absorber.calcCushionDown(this.user, this.coinCurrent, 0);
     return r.toNumber();
   };
 
