@@ -118,7 +118,7 @@ contract BalanceGuardV0 is BasePlugin, OracleClient, Ownable, PermissionUser {
 
   //
   // On deposit we update the users current balance
-  function preDeposit(address user, uint coin, uint timestamp) external override onlyOwner {
+  function preDeposit(address user, uint balance, uint coin, uint timestamp) external override onlyOwner {
     // Update users ACB
     uint fiat = toFiat(coin, timestamp);
     userFiatBalance[user].costBasis += int(fiat);

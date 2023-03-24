@@ -87,12 +87,13 @@ abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
     // the UberConverter completes it's transfers (and if
     // withdrawal is notified, then deposits need to be as well)
     // notifyDeposit clone
+    uint balance = balanceOf(user);
     for (uint i =0; i < userPlugins[user].length; i++) {
       // skip the calling plugin though
       if (address(userPlugins[user][i].plugin) == _msgSender()) {
         continue;
       }
-      userPlugins[user][i].plugin.preDeposit(user, amount, timeMillis);
+      userPlugins[user][i].plugin.preDeposit(user, balance, amount, timeMillis);
     }
 
     _transfer(_msgSender(), user, amount);
@@ -161,8 +162,9 @@ abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
   }
 
   function notifyDeposit(address to, uint256 amount, uint256 timestamp) private {
+    uint balance = balanceOf(to);
     for (uint i =0; i < userPlugins[to].length; i++) {
-      userPlugins[to][i].plugin.preDeposit(to, amount, timestamp);
+      userPlugins[to][i].plugin.preDeposit(to, balance, amount, timestamp);
     }
   }
   function notifyWithdraw(address from, uint256 amount, uint256 timestamp) private {

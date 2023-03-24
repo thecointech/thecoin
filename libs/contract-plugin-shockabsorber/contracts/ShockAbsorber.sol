@@ -32,7 +32,17 @@ struct UserCushion {
   int coinAdjustment;
 
   // When did we last adjust the cushioning?
-  uint cushionLastAdjust;
+  uint lastDrawDownTime;
+
+  // Averages used to calculate drawdown
+  int avgFiatPrincipal;
+  int avgCoinPrincipal;
+  uint lastAvgAdjustTime;
+
+  // Used to calculate the down cushion
+  int reserved;
+  int maxCovered;
+  int maxCoverAdjust;
 }
 
 
@@ -100,10 +110,13 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     require(cushions[user].fiatPrincipal == 0, "User is already attached");
     require(numClients < 25, "Client limit reached");
 
+    uint timeMs = msNow();
     int coinBalance = theCoin.pl_balanceOf(user);
-    int fiatBalance = toFiat(coinBalance, msNow());
+    int fiatBalance = toFiat(coinBalance, timeMs);
     cushions[user].fiatPrincipal = fiatBalance;
-    cushions[user].cushionLastAdjust = msNow();
+    cushions[user].lastAvgAdjustTime = timeMs;
+    cushions[user].lastDrawDownTime = timeMs;
+
     numClients = numClients + 1;
   }
 
@@ -122,19 +135,16 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     console.log("currentBalance: ", uint(currentBalance));
     UserCushion memory userCushion = cushions[user];
 
-    int coinPrincipal = toCoin(userCushion.fiatPrincipal, msNow());
-    int currentFiat = toFiat(currentBalance, msNow());
+    uint timeMs = msNow();
+    // int coinPrincipal = toCoin(userCushion.fiatPrincipal, timeMs);
+    int currentFiat = toFiat(currentBalance, timeMs);
     int fiatPrincipal = userCushion.fiatPrincipal;
     if (currentFiat < fiatPrincipal) {
-      int cushion = calcCushionDown(fiatPrincipal, coinPrincipal, currentBalance);
+      int cushion = calcCushionDown(userCushion, currentBalance, timeMs);
       return currentBalance + cushion;
     }
     else if (currentFiat > fiatPrincipal) {
-      // The reserve amount applies fresh each year
-      int msPassed = int(msNow() - userCushion.cushionLastAdjust);
-      console.log("msPassed: ", uint(msPassed));
-      int yearMultiplier = int(1 + msPassed / YEAR_IN_MS);
-      int reserve = calcCushionUp(fiatPrincipal, currentBalance, currentFiat, userCushion.coinAdjustment, yearMultiplier);
+      int reserve = calcCushionUp(userCushion, currentBalance, timeMs);
       return currentBalance - reserve;
     }
     else {
@@ -142,229 +152,181 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     }
   }
 
-  // NOTE: The two calc* functions are declared as pure so we can test them directly in jest
-  function calcCushionDown(int fiatPrincipal, int coinPrincipal, int coinCurrent) public view returns(int) {
+  function calcCushionUp(UserCushion memory user, int coinBalance, uint timeMs) public view returns(int) {
 
-    // int percentLoss = ((coinPrincipal - coinCurrent) * FLOAT_FACTOR) / coinCurrent;
-    // console.log("percentLoss: ", uint(percentLoss));
+    // The reserve amount applies fresh each year
+    int msPassed = int(timeMs - user.lastDrawDownTime);
+    console.log("msPassed: ", uint(msPassed));
+    int year = int(1 + msPassed / YEAR_IN_MS);
+    console.log("year: ", uint(year));
 
-    int percentCovered = (maxFiatProtected * FLOAT_FACTOR) / fiatPrincipal;
+    int coinPrincipal = toCoin(user.fiatPrincipal, timeMs);
+    int coinOriginal = coinBalance + user.reserved;
+
+    int percentCovered = (FLOAT_FACTOR * maxFiatProtected) / user.fiatPrincipal;
     if (percentCovered > FLOAT_FACTOR) {
       percentCovered = FLOAT_FACTOR;
     }
     console.log("percentCovered: ", uint(percentCovered));
 
-    int maxCushionCoin = (coinCurrent * FLOAT_FACTOR) / (FLOAT_FACTOR - maxCushionDown);
-    int coinCovered = coinPrincipal;
-    if (coinCovered > maxCushionCoin) {
-      coinCovered = maxCushionCoin;
+    int maxPercentCushion = this.getMaxPercentCushion(year * YEAR_IN_MS);
+    int coinMaxCushion = (maxPercentCushion * coinOriginal) / FLOAT_FACTOR;
+
+    int coinCushion = coinOriginal - coinPrincipal;
+    console.log("coinCushion: ", uint(coinCushion));
+    int coinCovered = coinCushion;
+    if (coinCushion > coinMaxCushion) {
+      coinCovered = coinMaxCushion;
+    }
+    int r = ((coinCovered * percentCovered) / FLOAT_FACTOR) - user.reserved;
+    console.log("r: ", uint(r));
+    return r;
+  }
+
+  function calcCushionDown(UserCushion memory user, int coinBalance, uint timeMs) public view returns(int) {
+    int coinPrincipal = toCoin(user.fiatPrincipal, timeMs);
+    int coinOriginal = coinBalance + user.reserved;
+
+    int percentCovered = (maxFiatProtected * FLOAT_FACTOR) / user.fiatPrincipal;
+    if (percentCovered > FLOAT_FACTOR) {
+      percentCovered = FLOAT_FACTOR;
+    }
+    console.log("percentCovered: ", uint(percentCovered));
+
+    int coinCovered = user.maxCovered;
+    if (coinCovered > coinPrincipal) {
+      coinCovered = coinPrincipal;
     }
     console.log("coinCovered: ", uint(coinCovered));
 
-    return (percentCovered * (coinCovered - coinCurrent)) / FLOAT_FACTOR;
+    int target = percentCovered * coinCovered;
+    console.log("target: ", uint(target / FLOAT_FACTOR));
+    int original = percentCovered * coinOriginal - user.reserved;
+    console.log("original: ", uint(original / FLOAT_FACTOR));
+
+    return (target - original) / FLOAT_FACTOR;
   }
 
-  function calcCushionUp(int fiatPrincipal, int coinPrincipal, int coinCurrent, int /*coinAdjustement*/, int year) public view returns(int) {
-
-    int percentCovered = (FLOAT_FACTOR * maxFiatProtected) / fiatPrincipal;
-    if (percentCovered > FLOAT_FACTOR) {
-      percentCovered = FLOAT_FACTOR;
-    }
-    console.log("percentCovered: ", uint(percentCovered));
-    console.log("year: ", uint(year));
-
-    int coinCushion = coinCurrent - coinPrincipal;
-    console.log("coinCushion: ", uint(coinCushion));
-    int coinMaxCushion = ((maxCushionUpPercent * year) * coinCurrent) / FLOAT_FACTOR;
-    console.log("coinMaxCushion: ", uint(coinMaxCushion));
-    if (coinCushion > coinMaxCushion) {
-      return (coinMaxCushion * percentCovered) / FLOAT_FACTOR;
-    }
-    return (coinCushion * percentCovered) / FLOAT_FACTOR;
-    // int coinTotal = coinCurrent + coinAdjustement;
-    // int percentGrowth = (FLOAT_FACTOR * (coinTotal - coinPrincipal)) / coinTotal;
-    // console.log("percentGrowth: ", uint(percentGrowth));
-    // if (percentGrowth > maxCushionUpPercent * year) {
-    //   percentGrowth = maxCushionUpPercent * year;
-    // }
-    // console.log("percentGrowth: ", uint(percentGrowth));
-
-    // int percentCovered = (FLOAT_FACTOR * maxFiatProtected) / fiatPrincipal;
-    // if (percentCovered > FLOAT_FACTOR) {
-    //   percentCovered = FLOAT_FACTOR;
-    // }
-    // console.log("percentCovered: ", uint(percentCovered));
-
-    // int reserve = (coinTotal * (percentCovered * percentGrowth / FLOAT_FACTOR)) / FLOAT_FACTOR;
-    // return reserve;
+  function getMaxPercentCushion(int timeMs) public view returns(int) {
+    return FLOAT_FACTOR - (FLOAT_FACTOR / (FLOAT_FACTOR + maxCushionUp * (timeMs / YEAR_IN_MS)));
   }
-
-  //   console.log("currentFiat: ", uint(currentFiat));
-  //   console.log("currentCoin: ", uint(currentCoin));
-  //   // how many $ loss are we looking at?
-  //   int fiatLoss = fiatPrincipal - currentFiat;
-  //   console.log("fiatLoss: ", uint(fiatLoss));
-
-  //   // What ratio are we protecting (we only protect maxFiatProtected)
-  //   int fiatProtected = fiatPrincipal;
-  //   int coinProtected = currentCoin;
-  //   if (fiatProtected > maxFiatProtected) {
-  //     fiatProtected = maxFiatProtected;
-  //     coinProtected = (currentCoin * maxFiatProtected) / fiatPrincipal;
-  //   }
-  //   console.log("fiatProtected: ", uint(fiatProtected));
-  //   console.log("coinProtected: ", uint(coinProtected));
-
-  //   // How much is this in percent?
-  //   int percentLoss = (fiatLoss * FLOAT_FACTOR) / fiatPrincipal;
-  //   if (percentLoss > _maxCushionDown) {
-
-  //     // Ok, we just take (coin * maxCushion * percentage of coin protected
-  //     // So, for 50% loss on 50c, we want to return 50c.
-  //     int finalCoin = (coinProtected * fiatProtected * FLOAT_FACTOR) / (_maxCushionDown * fiatProtected);
-  //     console.log("finalCoin: ", uint(finalCoin));
-  //     int coinCushion = finalCoin - coinProtected;
-  //     console.log("coinCushion: ", uint(coinCushion));
-  //     return coinCushion;
-  //   }
-  //   console.log("percentLoss: ", uint(percentLoss));
-
-
-  //   // So how much do we need to boost the fiat balance by?
-  //   int fiatLossToProtect = (fiatProtected * percentLoss) / FLOAT_FACTOR;
-  //   console.log("fiatLossToProtect: ", uint(fiatLossToProtect));
-
-  //   int percentOfFiat = (fiatLossToProtect * FLOAT_FACTOR) / (fiatProtected - fiatLossToProtect);
-  //   console.log("percentOfFiat: ", uint(percentOfFiat));
-
-  //   // Next, how much coin is that of the principal?
-  //   // C0.7389162... = 0.014778 * C50
-  //   int coinToAdd = (coinProtected * percentOfFiat) / FLOAT_FACTOR;
-  //   console.log("coinToAdd: ", uint(coinToAdd));
-
-  //   return coinToAdd;
-  // }
-
-  // function calcCushionUp(int fiatPrincipal, int currentCoin, int currentFiat, int yearCushionUp) public view returns(int) {
-  //   int fiatGain = currentFiat - fiatPrincipal;
-  //   console.log("fiatGain: ", uint(fiatGain));
-
-  //   // How much is this in percent?
-  //   int percentToReserve = (fiatGain * FLOAT_FACTOR) / fiatPrincipal;
-  //   if (percentToReserve > yearCushionUp) {
-  //     percentToReserve = yearCushionUp;
-  //   }
-  //   console.log("percentToReserve: ", uint(percentToReserve));
-
-  //   // The reserve only applies to the portion of principal that is cushioned
-  //   int fiatProtected = fiatPrincipal;
-  //   int coinProtected = currentCoin;
-  //   if (fiatPrincipal > maxFiatProtected) {
-  //     fiatProtected = maxFiatProtected;
-  //     coinProtected = (currentCoin * maxFiatProtected) / fiatPrincipal;
-  //   }
-  //   console.log("fiatProtected: ", uint(fiatProtected));
-  //   console.log("coinProtected: ", uint(coinProtected));
-
-  //   // We can't just calculate the cushion based on current prices
-  //   // because we have to figure out what the coin difference would be
-  //   // when the max cushion is reached.
-
-  //   // Lets assume $5000 fiatPrincipal, C50 coin principal, and cushionMax of 1.5%
-
-  //   // First, calculate what the fiat value would be when max is reached
-  //   // $75 = $5000 * (101.5%) - $5000.  At 1.5% profit, the $75 generated goes to the reserve
-  //   int fiatToReserve = ((fiatProtected * (FLOAT_FACTOR + percentToReserve)) / FLOAT_FACTOR) - fiatProtected;
-  //   console.log("fiatToReserve: ", uint(fiatToReserve));
-
-  //   // Now what percentage is that fiat of the principal?
-  //   // 0.014778... = $75 / ($5000 + $75)
-  //   int percentOfFiat = (fiatToReserve * FLOAT_FACTOR) / (fiatProtected + fiatToReserve);
-  //   console.log("percentOfFiat: ", uint(percentOfFiat));
-
-  //   // Next, how much coin is that of the principal?
-  //   // C0.7389162... = 0.014778 * C50
-  //   int coinToReserve = (coinProtected * percentOfFiat) / FLOAT_FACTOR;
-  //   console.log("coinToReserve: ", uint(coinToReserve));
-
-  //   return coinToReserve;
-  // }
-
-  // //
-  // // What do we want to do about this particular transaction?
-  // function modifyTransfer(address from, address to, uint amount, uint16 currency, uint msTransferAt, uint msSignedAt)
-  //   external override onlyBaseContract
-  //   returns (uint finalAmount, uint16 finalCurrency)
-  // {
-  //   (finalAmount, finalCurrency) = (amount, currency);
-  //   // We only care about CAD  transactions
-  //   if (currency == CurrencyCode) {
-
-  //     // If this is scheduled to happen in the future?
-  //     if (msTransferAt > msNow()) {
-  //       pending[from].transfers[to][msTransferAt] = pending[from].transfers[to][msTransferAt] + amount;
-  //       pending[from].total = pending[from].total + amount;
-  //       finalAmount = 0;
-  //       emit ValueChanged(from, msSignedAt, "pending[user].total", int(pending[from].total));
-  //     }
-  //     // Happening now, so convert to Coin
-  //     else {
-  //       finalAmount = toCoin(amount, msTransferAt);
-  //       finalCurrency = 0;
-  //     }
-  //   }
-  //   return (finalAmount, finalCurrency);
-  // }
+  function getAnnualizedValue(uint lastAvgAdjustTime, uint timeMs, int value) public pure returns(int) {
+    int percentOfYear = (FLOAT_FACTOR * int(timeMs - lastAvgAdjustTime)) / YEAR_IN_MS;
+    int annualizedAvg = value * percentOfYear;
+    if (annualizedAvg < 0) return 0;
+    return annualizedAvg / FLOAT_FACTOR;
+  }
+  function getAvgFiatPrincipal(address user, uint timeMs) public view returns(int) {
+    UserCushion memory userCushion = cushions[user];
+    return userCushion.avgFiatPrincipal + this.getAnnualizedValue(userCushion.lastAvgAdjustTime, timeMs, userCushion.fiatPrincipal);
+  }
+  function getAvgCoinBalance(address user, uint timeMs) public view returns(int) {
+    UserCushion memory userCushion = cushions[user];
+    int coinBalance = theCoin.pl_balanceOf(user);
+    return userCushion.avgCoinPrincipal + this.getAnnualizedValue(userCushion.lastAvgAdjustTime, timeMs, coinBalance);
+  }
 
   // ------------------------------------------------------------------------
   // transactions change the principal
   // ------------------------------------------------------------------------
-  function preWithdraw(address user, uint balance, uint coin, uint msTime) public virtual override returns(uint) {
 
-    int fiatWithdraw = toFiat(int(coin), msTime);
-    // Remove this withdrawal from principal
-    cushions[user].fiatPrincipal = cushions[user].fiatPrincipal - fiatWithdraw;
-    // TODO: Gross up the users account here...
-    return balance;
+  function preDeposit(address user, uint coinBalance, uint coinDeposit, uint msTime) public virtual override  {
+    int fiatDeposit = toFiat(int(coinDeposit), msTime);
+
+    UserCushion memory userCushion = cushions[user];
+    int depositRatio = (FLOAT_FACTOR * FLOAT_FACTOR * fiatDeposit / userCushion.fiatPrincipal) / (int(coinDeposit) / (userCushion.maxCovered * maxCushionDown));
+    console.log("depositRatio: ", uint(depositRatio));
+
+    userCushion.avgFiatPrincipal += this.getAnnualizedValue(userCushion.lastAvgAdjustTime, msTime, userCushion.fiatPrincipal);
+    userCushion.avgCoinPrincipal += this.getAnnualizedValue(userCushion.lastAvgAdjustTime, msTime, int(coinBalance));
+    userCushion.fiatPrincipal += fiatDeposit;
+
+    int maxCoverAdjust = (FLOAT_FACTOR - depositRatio) * int(coinDeposit) / (FLOAT_FACTOR - maxCushionDown);
+    int maxCoverForCoin = (FLOAT_FACTOR * int(coinDeposit)) / (FLOAT_FACTOR - maxCushionDown);
+
+    // In profit
+    if (maxCoverAdjust < 0 && maxCoverForCoin > userCushion.maxCoverAdjust) {
+      // If adjusting for a withdrawal on loss
+      if (userCushion.maxCoverAdjust > 0) {
+        userCushion.maxCovered += maxCoverForCoin - maxCoverAdjust;
+        userCushion.maxCoverAdjust += maxCoverAdjust;
+      }
+      // Else eliminate adjustments for a withdrawal on profit
+      else {
+        userCushion.maxCovered += maxCoverForCoin - userCushion.maxCoverAdjust;
+        userCushion.maxCoverAdjust = 0;
+      }
+    }
+    else {
+      if (maxCoverForCoin > userCushion.maxCoverAdjust) {
+        int adjust = userCushion.maxCoverAdjust;
+        if (adjust > maxCoverAdjust) {
+          adjust = maxCoverAdjust;
+        }
+        maxCoverForCoin -= adjust;
+        userCushion.maxCoverAdjust -= adjust;
+      } else {
+        userCushion.maxCoverAdjust -= maxCoverAdjust;
+      }
+      userCushion.maxCovered += maxCoverForCoin;
+    }
+    userCushion.lastAvgAdjustTime = msTime;
   }
 
-  function preDeposit(address user, uint coin, uint msTime) public virtual override  {
-    int fiatDeposit = toFiat(int(coin), msTime);
-    // Add to users principal
-    cushions[user].fiatPrincipal = cushions[user].fiatPrincipal + fiatDeposit;
-    console.log("cushions[user].fiatPrincipal: ", uint(cushions[user].fiatPrincipal));
+  function preWithdraw(address user, uint coinBalance, uint coinWithdraw, uint msTime) public virtual override returns(uint) {
+    int fiatWithdraw = toFiat(int(coinWithdraw), msTime);
+    UserCushion memory userCushion = cushions[user];
+    int withdrawRatio = (FLOAT_FACTOR * FLOAT_FACTOR * fiatWithdraw / userCushion.fiatPrincipal) / (int(coinWithdraw) / (userCushion.maxCovered * maxCushionDown));
+
+    if (coinBalance < coinWithdraw) {
+      // In Loss, run CushionDown
+      int additionalRequired = int(coinWithdraw - coinBalance);
+      int maxCushion = this.calcCushionDown(userCushion, int(coinBalance), msTime);
+      require(additionalRequired <= maxCushion, "Insufficient funds");
+      // transfer additionalRequired to this users account
+      theCoin.pl_transferTo(user, uint(additionalRequired), msTime);
+    }
+
+    userCushion.avgFiatPrincipal += this.getAnnualizedValue(userCushion.lastAvgAdjustTime, msTime, userCushion.fiatPrincipal);
+    userCushion.avgCoinPrincipal += this.getAnnualizedValue(userCushion.lastAvgAdjustTime, msTime, int(coinBalance));
+    userCushion.fiatPrincipal -= fiatWithdraw;
+    userCushion.lastAvgAdjustTime = msTime;
+
+    userCushion.maxCoverAdjust += (FLOAT_FACTOR - withdrawRatio) * int(coinWithdraw) / (FLOAT_FACTOR - maxCushionDown);
+    userCushion.maxCovered -= withdrawRatio * int(coinWithdraw) / (FLOAT_FACTOR - maxCushionDown);
+    return coinWithdraw;
   }
 
   // ------------------------------------------------------------------------
   // Owners functionality
   // ------------------------------------------------------------------------
   function drawDownCushion(address user) public {
-    UserCushion storage userCushion = cushions[user];
-    // Wait > 1 year
-    int yearsPassed =  int(msNow() - userCushion.cushionLastAdjust) / YEAR_IN_MS;
-    if (yearsPassed == 0) {
+    uint timeMs = msNow();
+    int avgCoinPrincipal = this.getAvgCoinBalance(user,timeMs);
+    int avgFiatPrincipal = this.getAvgFiatPrincipal(user, timeMs);
+
+    // Prevent divide-by-zero
+    if (avgCoinPrincipal == 0 || avgFiatPrincipal == 0) {
       return;
     }
-
-    int currentBalance = theCoin.pl_balanceOf(user);
-    // int currentFiat = toFiat(currentBalance, msNow());
-    // Ignore the current price.  We always draw down the full amount allowed
-    // If this takes the balance below the actual fiat, the cushion will still
-    // apply so the users balance will not go below the cushion
-    int currentFiat = userCushion.fiatPrincipal * (maxCushionUp * yearsPassed);
-    int principal = userCushion.fiatPrincipal;
-    if (currentFiat > principal) {
-      // maxCushion grows each year too
-      int coinCushion = calcCushionUp(principal, currentBalance, currentFiat, userCushion.coinAdjustment, yearsPassed);
-      // Check positive, on the off chance that some error messes up the cushion calculation
-      if (coinCushion > 0) {
-        // transfer the cushion to this contract
-        theCoin.pl_transferFrom(user, address(this), uint(coinCushion), msNow());
-        userCushion.coinAdjustment = userCushion.coinAdjustment + coinCushion;
-        userCushion.cushionLastAdjust = userCushion.cushionLastAdjust + uint(yearsPassed * YEAR_IN_MS);
-        console.log("userCushion.cushionLastAdjust: ", uint(userCushion.cushionLastAdjust));
-      }
+    UserCushion storage userCushion = cushions[user];
+    // How can we limit this to the maxiumum of the maxCushionUpPercent?
+    int covered = (FLOAT_FACTOR * maxFiatProtected) / avgFiatPrincipal;
+    if (covered > FLOAT_FACTOR) {
+      covered = FLOAT_FACTOR;
     }
+
+    // We always reserve the maximum percent, ignoring current rates
+    // CushionDown ensures that this does not take balance below principal
+    int percentCushion = this.getMaxPercentCushion(int(timeMs - userCushion.lastDrawDownTime));
+    // How many coins we gonna keep now?
+    int toReserve = (covered * percentCushion * avgCoinPrincipal) / (FLOAT_FACTOR * FLOAT_FACTOR);
+
+    // Transfer the reserve to this contract
+    theCoin.pl_transferFrom(user, address(this), uint(toReserve), timeMs);
+    userCushion.reserved += toReserve;
+    userCushion.lastDrawDownTime = timeMs;
+    userCushion.lastAvgAdjustTime = timeMs;
   }
 
   // ------------------------------------------------------------------------

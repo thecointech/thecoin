@@ -16,7 +16,7 @@ const FLOAT_FACTOR = 100_000_000_000;
 export const yearInMs = 31556952_000;
 const maxCushionUp = 0.015; //1.5 * FLOAT_FACTOR / 100; // 1.5%
 const maxCushionDown = 0.5; //50 * FLOAT_FACTOR / 100; // 50%
-const maxPrincipalCovered = 5000;
+const maxFiatProtected = 5000;
 const maxCushionUpPercent = 1 - (1 / (1 + maxCushionUp)) //FLOAT_FACTOR - (FLOAT_FACTOR * FLOAT_FACTOR / (FLOAT_FACTOR + maxCushionUp));
 
 export const toCoin = (fiat: number, rate: number) => fiat / (rate / 1e6)
@@ -89,7 +89,7 @@ class AbsorberJs  {
     const coinPrincipal = toCoin(this.fiatPrincipal, rate);
     const coinOriginal = this.coinCurrent + this.reserved;
 
-    let percentCovered = maxPrincipalCovered / this.fiatPrincipal;
+    let percentCovered = maxFiatProtected / this.fiatPrincipal;
     percentCovered = Math.min(percentCovered, 1);
     const maxPercentCushion = this.getMaxPercentCushion(year * yearInMs);
     const coinMaxCushion = maxPercentCushion * coinOriginal;
@@ -106,7 +106,7 @@ class AbsorberJs  {
     const coinPrincipal = toCoin(this.fiatPrincipal, rate);
     const coinOriginal = this.coinCurrent + this.reserved;
 
-    let percentCovered = maxPrincipalCovered / this.fiatPrincipal;
+    let percentCovered = maxFiatProtected / this.fiatPrincipal;
     percentCovered = Math.min(percentCovered, 1);
 
     const maxCushionCoin = this.maxCovered; //coinOriginal / (1 - maxCushionDown);
@@ -227,7 +227,7 @@ class AbsorberJs  {
     }
 
     // How can we limit this to the maxiumum of the maxCushionUpPercent?
-    const covered = Math.min(maxPrincipalCovered / avgFiatPrincipal, 1);
+    const covered = Math.min(maxFiatProtected / avgFiatPrincipal, 1);
     // Multiply this by... how long it's been since we last adjusted?
     const percentOfYear = (timeMs - this.lastDrawDownTime) / yearInMs;
     // We always reserve the maximum percent, ignoring current rates

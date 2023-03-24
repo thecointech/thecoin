@@ -28,7 +28,7 @@ abstract contract BasePlugin is IPlugin {
   // Default empty implementations allow clients to ignore fns they dont use
   function userAttached(address user, address) virtual external override {}
   function userDetached(address user, address) virtual external override {}
-  function preDeposit(address, uint, uint) virtual external override {}
+  function preDeposit(address, uint, uint, uint) virtual external override {}
   function preWithdraw(address, uint balance, uint, uint) virtual external override returns(uint)
   { return balance; }
   function balanceOf(address, int currentBalance) virtual external view override returns(int)
