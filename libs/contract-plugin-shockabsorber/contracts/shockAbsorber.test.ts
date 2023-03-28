@@ -94,91 +94,104 @@ describe('cushionUp with partial principal covered', () => {
   ])(`with %s`, async (inputs) => testResults(inst.tester, inputs));
 })
 
-// describe('cushionUp over years', async () => {
-//   const tester = await createTester(10000);
-//   it.each([
-//     { year: 1, rate: 100,   fiat: 10000, coin: 0 },
-//     { year: 1, rate: 101.5, fiat: 10075, coin: 738916 },
-//     { year: 1, rate: 103, fiat: 10223.89, coin: 738916 },
-//     // the cushion doesn't eat unprotected even over yeras
-//     { year: 2, rate: 100,   fiat: 10000, coin: 0 },
-//     { year: 2, rate: 101.5, fiat: 10075, coin: 738916 },
-//     // NOTE: Less cushion is reserved in the following year
-//     // (in coin) due to the higher rate.
-//     { year: 2, rate: 103, fiat: 10150, coin: 1456311 },
-//     { year: 2, rate: 104,              coin: 1456311 },
-//   ])(`with %s`, async (inputs) => testResults(tester, inputs));
-// })
+describe('cushionUp over years', () => {
+  const inst = createTesterSync(10000);
+  it.each([
+    { year: 1, rate: 100,   fiat: 10000, coin: 0 },
+    { year: 1, rate: 101.5, fiat: 10075, coin: 738916 },
+    { year: 1, rate: 103, fiat: 10223.89, coin: 738916 },
+    // the cushion doesn't eat unprotected even over yeras
+    { year: 2, rate: 100,   fiat: 10000, coin: 0 },
+    { year: 2, rate: 101.5, fiat: 10075, coin: 738916 },
+    // NOTE: Less cushion is reserved in the following year
+    // (in coin) due to the higher rate.
+    { year: 2, rate: 103, fiat: 10150, coin: 1456311 },
+    { year: 2, rate: 104,              coin: 1456311 },
+  ])(`with %s`, async (inputs) => testResults(inst.tester, inputs));
+})
 
-// describe('cushionDown for smaller principal', () => {
-//   it('works for small principal', async () => {
-//     const tester = await createTester(1000);
-//     const r = await tester.cushionDown(50);
-//     expect(r).toEqual(10e6);
-//   });
-// })
+describe('cushionDown for smaller principal', () => {
+  it('works for small principal', async () => {
+    const tester = await createTester(1000);
+    const r = await tester.cushionDown(50);
+    expect(r).toEqual(10e6);
+  });
+})
 
-// describe('cushionDown with principal covered', async () => {
-//   const tester = await createTester(5000);
-//   it.each([
-//     { rate: 100,   fiat: 5000, coin: 0 },
-//     { rate: 99.9,  fiat: 5000, },
-//     { rate: 80,    fiat: 5000, },
-//     { rate: 50,    fiat: 5000, coin: 50e6},
-//     // After this point, the cushion is expended
-//     { rate: 49.9, coin: 50e6 },
-//     { rate: 30, coin: 50e6 },
-//   ])(`with %s`, async (inputs) => testResults(tester, inputs));
-// })
+describe('cushionDown with principal covered', () => {
+  const inst = createTesterSync(5000);
+  it.each([
+    { rate: 100,   fiat: 5000, coin: 0 },
+    { rate: 99.9,  fiat: 5000, },
+    { rate: 80,    fiat: 5000, },
+    { rate: 50,    fiat: 5000, coin: 50e6},
+    // After this point, the cushion is expended
+    { rate: 49.9, coin: 50e6 },
+    { rate: 30, coin: 50e6 },
+  ])(`with %s`, async (inputs) => testResults(inst.tester, inputs));
+})
 
-// describe('cushionDown with principal partially covered', async () => {
-//   const tester = await createTester(10000);
-//   it.each([
-//     { rate: 100,   fiat: 10000, coin: 0 },
-//     { rate: 90,    fiat: 9500, },
-//     { rate: 50,    fiat: 7500, coin: 50e6},
-//     // After this point, the cushion is expended
-//     { rate: 49.9, coin: 50e6 },
-//     { rate: 30, coin: 50e6 },
-//   ])(`with %s`, async (inputs) => testResults(tester, inputs))
-// })
+describe('cushionDown with principal partially covered', () => {
+  const inst = createTesterSync(10000);
+  it.each([
+    { rate: 100,   fiat: 10000, coin: 0 },
+    { rate: 90,    fiat: 9500, },
+    { rate: 50,    fiat: 7500, coin: 50e6},
+    // After this point, the cushion is expended
+    { rate: 49.9, coin: 50e6 },
+    { rate: 30, coin: 50e6 },
+  ])(`with %s`, async (inputs) => testResults(inst.tester, inputs))
+})
 
-// describe('dep & withdraw track avg principal', () => {
-//   it ('adjusts avg with deposits', async () => {
-//     const tester = await createTester(0);
-//     // 5 deposits, evenly spaced through the year
-//     for (let i = 0; i < 5; i++) {
-//       const timeMs = i * (yearInMs / 5);
-//       await tester.deposit(100, 100, timeMs);
-//     }
-//     expect(tester.fiatPrincipal).toEqual(500);
-//     const avgFiat = await tester.getAvgFiatPrincipal(yearInMs);
-//     // 100 + 100 × 0.8 + 100 × 0.6 + 100 × 0.4 + 100 × 0.2
-//     expect(avgFiat).toEqual(300);
-//   })
+describe('dep & withdraw track avg principal', () => {
+  it ('adjusts avg with deposits', async () => {
+    const tester = await createTester(0);
+    // 5 deposits, evenly spaced through the year
+    for (let i = 0; i < 5; i++) {
+      const timeMs = i * (yearInMs / 5);
+      await tester.deposit(100, 100, timeMs);
+    }
+    expect(tester.fiatPrincipal).toEqual(500);
+    const avgFiat = await tester.getAvgFiatPrincipal(yearInMs);
+    // 100 + 100 × 0.8 + 100 × 0.6 + 100 × 0.4 + 100 × 0.2
+    expect(avgFiat).toEqual(300);
+  })
 
-//   it ('adjusts avg with withdrawals', async () => {
-//     const tester = await createTester(500);
-//     // 5 withdrawals, evenly spaced through the year
-//     for (let i = 0; i < 5; i++) {
-//       const timeMs = (i + 1) * (yearInMs / 5);
-//       await tester.withdraw(100, 100, timeMs);
-//     }
-//     expect(tester.fiatPrincipal).toEqual(0);
-//     const avgFiat = await tester.getAvgFiatPrincipal(yearInMs);
-//     // 100 + 100 × 0.8 + 100 × 0.6 + 100 × 0.4 + 100 × 0.2
-//     expect(avgFiat).toEqual(300);
-//   })
+  it ('adjusts avg with depositxJS', async () => {
+    const tester = await createTesterShim(0, true);
+    // 5 deposits, evenly spaced through the year
+    for (let i = 0; i < 5; i++) {
+      const timeMs = i * (yearInMs / 5);
+      await tester.deposit(100, 100, timeMs);
+    }
+    expect(tester.fiatPrincipal).toEqual(500);
+    const avgFiat = await tester.getAvgFiatPrincipal(yearInMs);
+    // 100 + 100 × 0.8 + 100 × 0.6 + 100 × 0.4 + 100 × 0.2
+    expect(avgFiat).toEqual(300);
+  })
 
-//   it.each([
-//     { year: 0, reserved: 0 },
-//     { year: 1, reserved: 738916 },
-//     { year: 2, reserved: 1456310 },
-//   ])(`draws down on whole year, fully covered %s`, async (inputs) => {
-//     const tester = await createTester(5000);
-//     const r = await tester.drawDownCushion(inputs.year * yearInMs);
-//     expect(r).toEqual(inputs.reserved);
-//   })
+  it ('adjusts avg with withdrawals', async () => {
+    const tester = await createTester(500);
+    // 5 withdrawals, evenly spaced through the year
+    for (let i = 0; i < 5; i++) {
+      const timeMs = (i + 1) * (yearInMs / 5);
+      await tester.withdraw(100, 100, timeMs);
+    }
+    expect(tester.fiatPrincipal).toEqual(0);
+    const avgFiat = await tester.getAvgFiatPrincipal(yearInMs);
+    // 100 + 100 × 0.8 + 100 × 0.6 + 100 × 0.4 + 100 × 0.2
+    expect(avgFiat).toEqual(300);
+  })
+
+  it.each([
+    { year: 0, reserved: 0 },
+    { year: 1, reserved: 738916 },
+    { year: 2, reserved: 1456310 },
+  ])(`draws down on whole year, fully covered %s`, async (inputs) => {
+    const tester = await createTester(5000);
+    const r = await tester.drawDownCushion(inputs.year * yearInMs);
+    expect(r).toEqual(inputs.reserved);
+  })
 
 //   it.each([
 //     { year: 0, reserved: 0 },
@@ -218,7 +231,7 @@ describe('cushionUp with partial principal covered', () => {
 //     await testResults(tester, {year: 2, rate: 104, coin: 717395 });
 //     await testResults(tester, {year: 2, rate: 110, coin: 717395 });
 //   })
-// })
+})
 
 // describe('cushionUp with drawDown', async () => {
 //   const tester = await createTester(5000);

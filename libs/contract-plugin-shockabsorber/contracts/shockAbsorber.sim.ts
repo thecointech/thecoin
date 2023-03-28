@@ -32,6 +32,7 @@ class AbsorberSol {
   absorber: ShockAbsorber;
   coinCurrent = 0;
   timeMs = 0;
+  initMs = 0;
 
   fiatPrincipal = 0;
   coinAdjustment = 0;
@@ -53,6 +54,10 @@ class AbsorberSol {
     this.oracle = oracle;
     this.tcCore = tcCore;
     this.tcUser = tcCore.connect(client1);
+
+    const lastBlock = await hre.ethers.provider.getBlock("latest");
+    this.initMs = lastBlock.timestamp * 1000;
+
     await this.updateUser();
   }
 
@@ -77,14 +82,14 @@ class AbsorberSol {
     const balance = await this.tcCore.balanceOf(this.user);
     this.coinCurrent = balance.toNumber();
     const lastBlock = await hre.ethers.provider.getBlock("latest");
-    this.timeMs = lastBlock.timestamp * 1000;
+    this.timeMs = (lastBlock.timestamp * 1000) - this.initMs;
   }
 
-  async setRate(rate: number) {
+  async setRate(rate: number, timeInMs: number) {
     // Compensate for any changes to time in the tests calling this
-    const lastBlock = await hre.ethers.provider.getBlock("latest");
+    const nextTime = this.initMs + Math.max(this.timeMs, timeInMs);
     const currentValid = await this.oracle.validUntil();
-    const millisBetween = (1000 * lastBlock.timestamp) - currentValid.toNumber();
+    const millisBetween = nextTime - currentValid.toNumber();
     const daysBetween = millisBetween / (1000 * 60 * 60 * 24);
     const toAdvance = Math.max(1, Math.round(daysBetween));
     // Set the new rate
@@ -98,31 +103,31 @@ class AbsorberSol {
       await time.increaseTo(currentTs.div(1000).sub(3600));
     }
     // Update cached time to match blockchain time
-    this.timeMs = currentTs.toNumber() - 3600_000;
+    this.timeMs = (currentTs.toNumber() - 3600_000) - this.initMs;
   }
 
   cushionUp = async (rate: number, year=1) => {
-    await this.setRate(rate);
+    await this.setRate(rate, (year - 1) * yearInMs);
     const r = await this.absorber.calcCushionUp(this.user, this.coinCurrent, this.timeMs);
     await this.updateUser();
     return r.toNumber();
   };
   cushionDown = async (rate: number) => {
-    await this.setRate(rate);
+    await this.setRate(rate, this.timeMs);
     const r = await this.absorber.calcCushionDown(this.user, this.coinCurrent, this.timeMs);
     await this.updateUser();
     return r.toNumber();
   };
 
   deposit = async (fiat: number, rate: number, timeMs: number) => {
-    await this.setRate(rate);
+    await this.setRate(rate, timeMs);
     const coin = toCoin(fiat, 100);
     await this.tcCore.transfer(this.user, coin);
     await this.updateUser();
   };
 
   withdraw = async (fiat: number, rate: number, timeMs: number) => {
-    await this.setRate(rate);
+    await this.setRate(rate, timeMs);
     const coin = toCoin(fiat, 100);
     await this.tcUser.transfer(this.owner, coin);
     await this.updateUser();
@@ -212,7 +217,11 @@ class AbsorberJs  {
   deposit = async (fiat: number, rate: number, timeMs: number) => {
 
     const coinDeposit = toCoin(fiat, rate);
-    let depositRatio = (fiat / this.fiatPrincipal) / (coinDeposit / (this.maxCovered * maxCushionDown));
+    let depositRatio = 1;
+    if (this.fiatPrincipal) {
+      const ratioOfExisting = coinDeposit / (this.maxCovered * maxCushionDown)
+      depositRatio = (fiat / this.fiatPrincipal) / ratioOfExisting;
+    }
 
     this.avgFiatPrincipal += this.getAnnualizedValue(timeMs, this.fiatPrincipal);
     this.avgCoinPrincipal += this.getAnnualizedValue(timeMs, this.coinCurrent);
@@ -320,7 +329,6 @@ class AbsorberJs  {
   }
 }
 
-
 async function setupAbsorber(tcCoreAddress?: string, oracleAddress?: string) {
   const ShockAbsorber = await hre.ethers.getContractFactory('ShockAbsorber');
   const absorber = await ShockAbsorber.deploy();
@@ -335,11 +343,11 @@ async function setupLive(initFiat: number) {
   const oracle = await createAndInitOracle(OracleUpdater, 100);
   const {absorber} = await setupAbsorber(tcCore.address, oracle.address);
 
-  // pass $5000
-  const initCoin = initFiat * 1e6 / 100;
-  await tcCore.mintCoins(10 * initCoin, Owner.address, Date.now());
+  // Mint a ridiculously large amount
+  await tcCore.mintCoins(10e12, Owner.address, Date.now());
 
   // Create plugin & assign user
+  const initCoin = initFiat * 1e6 / 100;
   await tcCore.pl_assignPlugin(client1.address, absorber.address, ALL_PERMISSIONS, "0x1234");
   await tcCore.transfer(client1.address, initCoin);
 

@@ -275,10 +275,14 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
 
     userCushion.avgFiatPrincipal += this.getAnnualizedValue(userCushion.lastAvgAdjustTime, msTime, userCushion.fiatPrincipal);
     userCushion.avgCoinPrincipal += this.getAnnualizedValue(userCushion.lastAvgAdjustTime, msTime, int(coinBalance));
+    console.log("userCushion.avgCoinPrincipal: ", uint(userCushion.avgCoinPrincipal));
 
     int depositRatio = FLOAT_FACTOR;
     if (userCushion.fiatPrincipal != 0) {
-      depositRatio = (FLOAT_FACTOR * FLOAT_FACTOR * fiatDeposit / userCushion.fiatPrincipal) / (int(coinDeposit) / (userCushion.maxCovered * maxCushionDown));
+      console.log("denominator: ", uint(userCushion.maxCovered * maxCushionDown));
+      int ratioOfExisting = (FLOAT_FACTOR_SQ * int(coinDeposit)) / (userCushion.maxCovered * maxCushionDown);
+      console.log("ratioOfExisting: ", uint(ratioOfExisting));
+      depositRatio = (FLOAT_FACTOR_SQ * fiatDeposit / userCushion.fiatPrincipal) / ratioOfExisting;
     }
     console.log("depositRatio: ", uint(depositRatio));
 
