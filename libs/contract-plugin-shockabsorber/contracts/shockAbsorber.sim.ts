@@ -11,7 +11,7 @@ import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
 import { TheCoin } from '@thecointech/contract-core';
 import { Duration } from 'luxon';
 import { getSigner } from '@thecointech/signers';
-import { UserCushionStruct } from '../src/types/contracts/ShockAbsorber';
+
 
 const FLOAT_FACTOR = 100_000_000_000;
 export const yearInMs = 31556952_000;
@@ -23,54 +23,119 @@ const maxCushionUpPercent = 1 - (1 / (1 + maxCushionUp)) //FLOAT_FACTOR - (FLOAT
 export const toCoin = (fiat: number, rate: number) => fiat / (rate / 1e6)
 export const toFiat = (coin: number, rate: number) => Math.round(100 * coin * (rate / 1e6)) / 100
 
-const { absorber } = await setupAbsorber();
-
 class AbsorberSol {
-  fiatPrincipal = 5000;
+  user: string;
+  owner: string;
+  oracle: SpxCadOracle;
+  tcCore: TheCoin;
+  tcUser: TheCoin;
+  absorber: ShockAbsorber;
   coinCurrent = 0;
+  timeMs = 0;
+
+  fiatPrincipal = 0;
   coinAdjustment = 0;
   maxCovered = 0;
   reserved = 0;
+  lastDrawDownTime = 0;
+  avgFiatPrincipal = 0;
+  avgCoinPrincipal = 0;
+  lastAvgAdjustTime = 0;
+  maxCoverAdjust = 0;
 
-  user: UserCushionStruct = {
-    fiatPrincipal: 0,
-    coinAdjustment: 0,
-    maxCovered: 0,
-    reserved: 0,
-    lastDrawDownTime: 0,
-    avgFiatPrincipal: 0,
-    avgCoinPrincipal: 0,
-    lastAvgAdjustTime: 0,
-    maxCoverAdjust: 0,
+  constructor() {}
+
+  async init(initFiat: number) {
+    const { tcCore, absorber, client1, Owner, oracle } = await setupLive(initFiat);
+    this.user = client1.address;
+    this.owner = Owner.address;
+    this.absorber = absorber;
+    this.oracle = oracle;
+    this.tcCore = tcCore;
+    this.tcUser = tcCore.connect(client1);
+    await this.updateUser();
   }
 
-  constructor(fiatPrincipal: number) {
-    this.fiatPrincipal = fiatPrincipal;
-    this.coinCurrent = toCoin(fiatPrincipal, 100);
+  static async create(initFiat: number) {
+    const instance = new AbsorberSol();
+    await instance.init(initFiat);
+    return instance;
   }
+
+  async updateUser() {
+    const cushion = await this.absorber.getCushion(this.user);
+    this.fiatPrincipal = cushion.fiatPrincipal.toNumber() / 100;
+    this.coinAdjustment = cushion.coinAdjustment.toNumber();
+    this.maxCovered = cushion.maxCovered.toNumber();
+    this.reserved = cushion.reserved.toNumber();
+    this.lastDrawDownTime = cushion.lastDrawDownTime.toNumber();
+    this.avgFiatPrincipal = cushion.avgFiatPrincipal.toNumber() / 100;
+    this.avgCoinPrincipal = cushion.avgCoinPrincipal.toNumber();
+    this.lastAvgAdjustTime = cushion.lastAvgAdjustTime.toNumber();
+    this.maxCoverAdjust = cushion.maxCoverAdjust.toNumber();
+
+    const balance = await this.tcCore.balanceOf(this.user);
+    this.coinCurrent = balance.toNumber();
+    const lastBlock = await hre.ethers.provider.getBlock("latest");
+    this.timeMs = lastBlock.timestamp * 1000;
+  }
+
+  async setRate(rate: number) {
+    // Compensate for any changes to time in the tests calling this
+    const lastBlock = await hre.ethers.provider.getBlock("latest");
+    const currentValid = await this.oracle.validUntil();
+    const millisBetween = (1000 * lastBlock.timestamp) - currentValid.toNumber();
+    const daysBetween = millisBetween / (1000 * 60 * 60 * 24);
+    const toAdvance = Math.max(1, Math.round(daysBetween));
+    // Set the new rate
+    await setOracleValueRepeat(this.oracle, rate, toAdvance);
+    // Ensure that the block time is within lastest oracle block validity
+    const currentBlock = await hre.ethers.provider.getBlock("latest");
+    const currentTs = await this.oracle.validUntil();
+    const diff = Duration.fromMillis(currentTs.toNumber() - (currentBlock.timestamp * 1000));
+    // If block time is not within lastest oracle block validity, wait until it is
+    if (diff.as('days') > 1) {
+      await time.increaseTo(currentTs.div(1000).sub(3600));
+    }
+    // Update cached time to match blockchain time
+    this.timeMs = currentTs.toNumber() - 3600_000;
+  }
+
   cushionUp = async (rate: number, year=1) => {
-    const r = await absorber.calcCushionUp(this.user, this.coinCurrent, year * yearInMs);
+    await this.setRate(rate);
+    const r = await this.absorber.calcCushionUp(this.user, this.coinCurrent, this.timeMs);
+    await this.updateUser();
     return r.toNumber();
   };
   cushionDown = async (rate: number) => {
-    const r = await absorber.calcCushionDown(this.user, this.coinCurrent, 0);
+    await this.setRate(rate);
+    const r = await this.absorber.calcCushionDown(this.user, this.coinCurrent, this.timeMs);
+    await this.updateUser();
     return r.toNumber();
   };
 
-  deposit = async (fiat: number, timeMs: number) => {;
+  deposit = async (fiat: number, rate: number, timeMs: number) => {
+    await this.setRate(rate);
+    const coin = toCoin(fiat, 100);
+    await this.tcCore.transfer(this.user, coin);
+    await this.updateUser();
   };
 
-  withdraw = async (fiat: number, timeMs: number) => {
+  withdraw = async (fiat: number, rate: number, timeMs: number) => {
+    await this.setRate(rate);
+    const coin = toCoin(fiat, 100);
+    await this.tcUser.transfer(this.owner, coin);
+    await this.updateUser();
   }
 
   getAvgFiatPrincipal = async (timeMs: number) => {
-    return 0;
+    const r = await this.absorber.getAvgFiatPrincipal(this.user, timeMs);
+    return r.toNumber();
   }
 
   drawDownCushion = async (rate: number, year=1) => {
     // TODO:
-    const client1 = await getSigner("client1")
-    await absorber.drawDownCushion(await client1.getAddress());
+    await this.absorber.drawDownCushion(this.user);
   }
 }
 
@@ -272,41 +337,41 @@ async function setupLive(initFiat: number) {
 
   // pass $5000
   const initCoin = initFiat * 1e6 / 100;
-  await tcCore.mintCoins(initCoin, Owner.address, Date.now());
-  await tcCore.transfer(client1.address, initCoin);
+  await tcCore.mintCoins(10 * initCoin, Owner.address, Date.now());
 
   // Create plugin & assign user
   await tcCore.pl_assignPlugin(client1.address, absorber.address, ALL_PERMISSIONS, "0x1234");
+  await tcCore.transfer(client1.address, initCoin);
 
-  return { absorber, client1, oracle, tcCore };
+  return { absorber, client1, oracle, tcCore, Owner };
 }
 
 export const createTesterShim = (fiatPrincipal: number, useJsTester: boolean) =>
   useJsTester
     ? new AbsorberJs(fiatPrincipal)
-    : new AbsorberSol(fiatPrincipal);
+    : AbsorberSol.create(fiatPrincipal);
 
-export const runAbsorber = async (client1: {address: string}, absorber: ShockAbsorber, oracle: SpxCadOracle, tcCore: TheCoin, price: number, expectedFiat: number) => {
-  console.log(`------------------ Testing Price: ${price} ------------------`);
-  // Compensate for any changes to time in the tests calling this
-  const lastBlock = await hre.ethers.provider.getBlock("latest");
-  const currentValid = await oracle.validUntil();
-  const millisBetween = (1000 * lastBlock.timestamp) - currentValid.toNumber();
-  const daysBetween = millisBetween / (1000 * 60 * 60 * 24);
-  const toAdvance = Math.max(1, Math.round(daysBetween));
-  // Set the new rate
-  await setOracleValueRepeat(oracle, price, toAdvance);
-  // Ensure that the block time is within lastest oracle block validity
-  const currentBlock = await hre.ethers.provider.getBlock("latest");
-  const currentTs = await oracle.validUntil();
-  const diff = Duration.fromMillis(currentTs.toNumber() - (currentBlock.timestamp * 1000));
-  // If block time is not within lastest oracle block validity, wait until it is
-  if (diff.as('days') > 1) {
-    await time.increaseTo(currentTs.div(1000).sub(3600));
-  }
-  // What does the client do?
-  const reportedCoin = await tcCore.pl_balanceOf(client1.address);
-  const currentFiat = await absorber['toFiat(int256,uint256)'](reportedCoin, currentTs.sub(3600_000));
-  // We may be 1c off due to rounding issues using int's everywhere
-  expect(Math.abs(currentFiat.toNumber() - expectedFiat)).toBeLessThanOrEqual(1);
-}
+// export const runAbsorber = async (client1: {address: string}, absorber: ShockAbsorber, oracle: SpxCadOracle, tcCore: TheCoin, price: number, expectedFiat: number) => {
+//   console.log(`------------------ Testing Price: ${price} ------------------`);
+//   // Compensate for any changes to time in the tests calling this
+//   const lastBlock = await hre.ethers.provider.getBlock("latest");
+//   const currentValid = await oracle.validUntil();
+//   const millisBetween = (1000 * lastBlock.timestamp) - currentValid.toNumber();
+//   const daysBetween = millisBetween / (1000 * 60 * 60 * 24);
+//   const toAdvance = Math.max(1, Math.round(daysBetween));
+//   // Set the new rate
+//   await setOracleValueRepeat(oracle, price, toAdvance);
+//   // Ensure that the block time is within lastest oracle block validity
+//   const currentBlock = await hre.ethers.provider.getBlock("latest");
+//   const currentTs = await oracle.validUntil();
+//   const diff = Duration.fromMillis(currentTs.toNumber() - (currentBlock.timestamp * 1000));
+//   // If block time is not within lastest oracle block validity, wait until it is
+//   if (diff.as('days') > 1) {
+//     await time.increaseTo(currentTs.div(1000).sub(3600));
+//   }
+//   // What does the client do?
+//   const reportedCoin = await tcCore.pl_balanceOf(client1.address);
+//   const currentFiat = await absorber['toFiat(int256,uint256)'](reportedCoin, currentTs.sub(3600_000));
+//   // We may be 1c off due to rounding issues using int's everywhere
+//   expect(Math.abs(currentFiat.toNumber() - expectedFiat)).toBeLessThanOrEqual(1);
+// }

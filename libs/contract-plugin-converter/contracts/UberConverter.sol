@@ -150,7 +150,7 @@ contract UberConverter is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
   // ------------------------------------------------------------------------
   modifier onlyBaseContract()
   {
-    require(msg.sender == address(theCoin), "Action requires Plugin Manager role");
+    require(msg.sender == address(theCoin), "Only callable from the base contract");
     _;
   }
 }

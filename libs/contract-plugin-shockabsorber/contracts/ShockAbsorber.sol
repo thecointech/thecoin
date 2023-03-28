@@ -52,6 +52,7 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
   int constant maxFiatProtected = 5000_00;
   // Essentially how many significant figures when doing floating point math.
   int constant FLOAT_FACTOR = 100_000_000_000;
+  int constant FLOAT_FACTOR_SQ = FLOAT_FACTOR * FLOAT_FACTOR;
   // milliseconds in a gregorian year.  Should be accurate for the next 1000 years.
   int constant YEAR_IN_MS = 31556952_000;
 
@@ -85,6 +86,11 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     // The cushionUp is first 1.5% of profit.
     maxCushionUp = (15 * FLOAT_FACTOR) / 1000;
     maxCushionUpPercent = FLOAT_FACTOR - (FLOAT_FACTOR * FLOAT_FACTOR / (FLOAT_FACTOR + maxCushionUp));
+  }
+
+  function getCushion(address user) public view returns(UserCushion memory) {
+    return cushions[user];
+    // return userCushion;
   }
 
   // ------------------------------------------------------------------------
@@ -133,7 +139,7 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
   function balanceOf(address user, int currentBalance) external view override returns(int)
   {
     console.log("currentBalance: ", uint(currentBalance));
-    UserCushion memory userCushion = cushions[user];
+    UserCushion storage userCushion = cushions[user];
 
     uint timeMs = msNow();
     // int coinPrincipal = toCoin(userCushion.fiatPrincipal, timeMs);
@@ -152,7 +158,16 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     }
   }
 
-  function calcCushionUp(UserCushion memory user, int coinBalance, uint timeMs) public view returns(int) {
+  // Public-access for testing
+  function calcCushionUp(address user, int coinBalance, uint timeMs) public view returns(int) {
+    UserCushion storage userCushion = cushions[user];
+    return calcCushionUp(userCushion, coinBalance, timeMs);
+  }
+
+  function calcCushionUp(UserCushion storage user, int coinBalance, uint timeMs) internal view returns(int) {
+    if (user.fiatPrincipal == 0) {
+      return 0;
+    }
 
     // The reserve amount applies fresh each year
     int msPassed = int(timeMs - user.lastDrawDownTime);
@@ -162,6 +177,8 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
 
     int coinPrincipal = toCoin(user.fiatPrincipal, timeMs);
     int coinOriginal = coinBalance + user.reserved;
+    console.log("coinOriginal: ", uint(coinOriginal));
+    console.log("coinPrincipal: ", uint(coinPrincipal));
 
     int percentCovered = (FLOAT_FACTOR * maxFiatProtected) / user.fiatPrincipal;
     if (percentCovered > FLOAT_FACTOR) {
@@ -169,8 +186,10 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     }
     console.log("percentCovered: ", uint(percentCovered));
 
-    int maxPercentCushion = this.getMaxPercentCushion(year * YEAR_IN_MS);
+    int maxPercentCushion = getMaxPercentCushion(year * YEAR_IN_MS);
+    console.log("maxPercentCushion: ", uint(maxPercentCushion));
     int coinMaxCushion = (maxPercentCushion * coinOriginal) / FLOAT_FACTOR;
+    console.log("coinMaxCushion: ", uint(coinMaxCushion));
 
     int coinCushion = coinOriginal - coinPrincipal;
     console.log("coinCushion: ", uint(coinCushion));
@@ -183,7 +202,17 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     return r;
   }
 
-  function calcCushionDown(UserCushion memory user, int coinBalance, uint timeMs) public view returns(int) {
+  // Public-access for testing
+  function calcCushionDown(address user, int coinBalance, uint timeMs) public view returns(int) {
+    UserCushion storage userCushion = cushions[user];
+    return calcCushionDown(userCushion, coinBalance, timeMs);
+  }
+
+  function calcCushionDown(UserCushion storage user, int coinBalance, uint timeMs) internal view returns(int) {
+    if (user.fiatPrincipal == 0) {
+      return 0;
+    }
+
     int coinPrincipal = toCoin(user.fiatPrincipal, timeMs);
     int coinOriginal = coinBalance + user.reserved;
 
@@ -208,7 +237,7 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
   }
 
   function getMaxPercentCushion(int timeMs) public view returns(int) {
-    return FLOAT_FACTOR - (FLOAT_FACTOR / (FLOAT_FACTOR + maxCushionUp * (timeMs / YEAR_IN_MS)));
+    return FLOAT_FACTOR - (FLOAT_FACTOR_SQ / (FLOAT_FACTOR + maxCushionUp * (timeMs / YEAR_IN_MS)));
   }
   function getAnnualizedValue(uint lastAvgAdjustTime, uint timeMs, int value) public pure returns(int) {
     int percentOfYear = (FLOAT_FACTOR * int(timeMs - lastAvgAdjustTime)) / YEAR_IN_MS;
@@ -217,11 +246,11 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     return annualizedAvg / FLOAT_FACTOR;
   }
   function getAvgFiatPrincipal(address user, uint timeMs) public view returns(int) {
-    UserCushion memory userCushion = cushions[user];
+    UserCushion storage userCushion = cushions[user];
     return userCushion.avgFiatPrincipal + this.getAnnualizedValue(userCushion.lastAvgAdjustTime, timeMs, userCushion.fiatPrincipal);
   }
   function getAvgCoinBalance(address user, uint timeMs) public view returns(int) {
-    UserCushion memory userCushion = cushions[user];
+    UserCushion storage userCushion = cushions[user];
     int coinBalance = theCoin.pl_balanceOf(user);
     return userCushion.avgCoinPrincipal + this.getAnnualizedValue(userCushion.lastAvgAdjustTime, timeMs, coinBalance);
   }
@@ -232,13 +261,27 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
 
   function preDeposit(address user, uint coinBalance, uint coinDeposit, uint msTime) public virtual override  {
     int fiatDeposit = toFiat(int(coinDeposit), msTime);
+    console.log("preDeposit: ", uint(fiatDeposit));
+    UserCushion storage userCushion = cushions[user];
 
-    UserCushion memory userCushion = cushions[user];
-    int depositRatio = (FLOAT_FACTOR * FLOAT_FACTOR * fiatDeposit / userCushion.fiatPrincipal) / (int(coinDeposit) / (userCushion.maxCovered * maxCushionDown));
-    console.log("depositRatio: ", uint(depositRatio));
+    // TODO: handle withdraw-to-zero
+    // if (userCushion.fiatPrincipal == 0 && coinBalance == 0) {
+    //   userCushion.fiatPrincipal = fiatDeposit;
+    //   userCushion.lastAvgAdjustTime = msTime;
+    //   userCushion.lastDrawDownTime = msTime;
+    //   console.log("Initializing userCushion with fiat: ", uint(userCushion.fiatPrincipal));
+    //   return;
+    // }
 
     userCushion.avgFiatPrincipal += this.getAnnualizedValue(userCushion.lastAvgAdjustTime, msTime, userCushion.fiatPrincipal);
     userCushion.avgCoinPrincipal += this.getAnnualizedValue(userCushion.lastAvgAdjustTime, msTime, int(coinBalance));
+
+    int depositRatio = FLOAT_FACTOR;
+    if (userCushion.fiatPrincipal != 0) {
+      depositRatio = (FLOAT_FACTOR * FLOAT_FACTOR * fiatDeposit / userCushion.fiatPrincipal) / (int(coinDeposit) / (userCushion.maxCovered * maxCushionDown));
+    }
+    console.log("depositRatio: ", uint(depositRatio));
+
     userCushion.fiatPrincipal += fiatDeposit;
 
     int maxCoverAdjust = (FLOAT_FACTOR - depositRatio) * int(coinDeposit) / (FLOAT_FACTOR - maxCushionDown);
@@ -275,13 +318,13 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
 
   function preWithdraw(address user, uint coinBalance, uint coinWithdraw, uint msTime) public virtual override returns(uint) {
     int fiatWithdraw = toFiat(int(coinWithdraw), msTime);
-    UserCushion memory userCushion = cushions[user];
+    UserCushion storage userCushion = cushions[user];
     int withdrawRatio = (FLOAT_FACTOR * FLOAT_FACTOR * fiatWithdraw / userCushion.fiatPrincipal) / (int(coinWithdraw) / (userCushion.maxCovered * maxCushionDown));
 
     if (coinBalance < coinWithdraw) {
       // In Loss, run CushionDown
       int additionalRequired = int(coinWithdraw - coinBalance);
-      int maxCushion = this.calcCushionDown(userCushion, int(coinBalance), msTime);
+      int maxCushion = calcCushionDown(userCushion, int(coinBalance), msTime);
       require(additionalRequired <= maxCushion, "Insufficient funds");
       // transfer additionalRequired to this users account
       theCoin.pl_transferTo(user, uint(additionalRequired), msTime);
@@ -334,7 +377,7 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
   // ------------------------------------------------------------------------
   modifier onlyBaseContract()
   {
-    require(msg.sender == address(theCoin), "Action requires Plugin Manager role");
+    require(msg.sender == address(theCoin), "Only callable from the base contract");
     _;
   }
 }
