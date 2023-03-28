@@ -145,16 +145,18 @@ describe('cushionDown with principal partially covered', () => {
 
 describe('dep & withdraw track avg principal', () => {
   it ('adjusts avg with deposits', async () => {
-    const tester = await createTester(0);
     // 5 deposits, evenly spaced through the year
-    for (let i = 0; i < 5; i++) {
+    const tester = await createTester(100);
+    for (let i = 1; i < 5; i++) {
       const timeMs = i * (yearInMs / 5);
       await tester.deposit(100, 100, timeMs);
     }
     expect(tester.fiatPrincipal).toEqual(500);
     const avgFiat = await tester.getAvgFiatPrincipal(yearInMs);
     // 100 + 100 × 0.8 + 100 × 0.6 + 100 × 0.4 + 100 × 0.2
-    expect(avgFiat).toEqual(300);
+    // We gotta round it because FP errors in SOL means the
+    // result is very slightly out.
+    expect(Math.round(avgFiat)).toEqual(300);
   })
 
   it ('adjusts avg with depositxJS', async () => {

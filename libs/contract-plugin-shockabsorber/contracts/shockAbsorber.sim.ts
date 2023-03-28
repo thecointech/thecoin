@@ -10,7 +10,6 @@ import { time } from "@nomicfoundation/hardhat-network-helpers";
 import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
 import { TheCoin } from '@thecointech/contract-core';
 import { Duration } from 'luxon';
-import { getSigner } from '@thecointech/signers';
 
 
 const FLOAT_FACTOR = 100_000_000_000;
@@ -125,7 +124,6 @@ class AbsorberSol {
     await this.tcCore.transfer(this.user, coin);
     await this.updateUser();
   };
-
   withdraw = async (fiat: number, rate: number, timeMs: number) => {
     await this.setRate(rate, timeMs);
     const coin = toCoin(fiat, 100);
@@ -134,8 +132,8 @@ class AbsorberSol {
   }
 
   getAvgFiatPrincipal = async (timeMs: number) => {
-    const r = await this.absorber.getAvgFiatPrincipal(this.user, timeMs);
-    return r.toNumber();
+    const r = await this.absorber.getAvgFiatPrincipal(this.user, timeMs + this.initMs);
+    return r.toNumber() / 100;
   }
 
   drawDownCushion = async (rate: number, year=1) => {
