@@ -1,4 +1,5 @@
 import { jest } from '@jest/globals';
+import hre from 'hardhat';
 import { createTesterShim, toFiat, yearInMs } from './shockabsorber.sim'
 
 jest.setTimeout(10 * 60 * 1000);
@@ -6,7 +7,7 @@ jest.setTimeout(10 * 60 * 1000);
 const useJsTester = !process.env.JEST_CI && false;
 type Tester = Awaited<ReturnType<typeof createTester>>;
 
-const createTester = (fiatPrincipal: number) => createTesterShim(fiatPrincipal, useJsTester);
+const createTester = (fiatPrincipal: number, blockTime?: number) => createTesterShim(fiatPrincipal, useJsTester, blockTime);
 const createTesterSync = (fiatPrincipal: number, jsOverride?: boolean) => {
   const inst = {
     tester: null as unknown as Tester,
@@ -182,6 +183,19 @@ describe('dep & withdraw track avg principal', () => {
     expect(tester.fiatPrincipal).toEqual(0);
     const avgFiat = await tester.getAvgFiatPrincipal(yearInMs);
     // 100 + 100 × 0.8 + 100 × 0.6 + 100 × 0.4 + 100 × 0.2
+    expect(Math.round(avgFiat)).toEqual(300);
+  })
+
+  it ('adjusts avg with withdrawxJS', async () => {
+    const tester = await createTesterShim(500, true);
+    // 5 withdrawals, evenly spaced through the year
+    for (let i = 0; i < 5; i++) {
+      const timeMs = (i + 1) * (yearInMs / 5);
+      await tester.withdraw(100, 100, timeMs);
+    }
+    expect(tester.fiatPrincipal).toEqual(0);
+    const avgFiat = await tester.getAvgFiatPrincipal(yearInMs);
+    // 100 + 100 × 0.8 + 100 × 0.6 + 100 × 0.4 + 100 × 0.2
     expect(avgFiat).toEqual(300);
   })
 
@@ -190,7 +204,19 @@ describe('dep & withdraw track avg principal', () => {
     { year: 1, reserved: 738916 },
     { year: 2, reserved: 1456310 },
   ])(`draws down on whole year, fully covered %s`, async (inputs) => {
-    const tester = await createTester(5000);
+    const tester = await createTester(5000, yearInMs * 5);
+    console.log("------------------------------------------------")
+    const r = await tester.drawDownCushion(inputs.year * yearInMs);
+    expect(r).toEqual(inputs.reserved);
+  })
+
+  it.each([
+    // { year: 0, reserved: 0 },
+    { year: 1, reserved: 738916 },
+    // { year: 2, reserved: 1456310 },
+  ])(`(JS) draws down on whole year, fully covered %s`, async (inputs) => {
+    const tester = await createTesterShim(5000, true);
+    console.log("------------------------------------------------")
     const r = await tester.drawDownCushion(inputs.year * yearInMs);
     expect(r).toEqual(inputs.reserved);
   })

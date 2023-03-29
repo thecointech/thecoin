@@ -25,7 +25,6 @@ export const toFiat = (coin: number, rate: number) => Math.round(100 * coin * (r
 class AbsorberSol {
   user: string;
   owner: string;
-  oracle: SpxCadOracle;
   tcCore: TheCoin;
   tcUser: TheCoin;
   absorber: ShockAbsorber;
@@ -43,27 +42,37 @@ class AbsorberSol {
   lastAvgAdjustTime = 0;
   maxCoverAdjust = 0;
 
-  constructor() {}
+  oracle: {
+    contract: SpxCadOracle;
+    rate: number;
+    validUntil: number;
+  }
 
-  async init(initFiat: number) {
-    const { tcCore, absorber, client1, Owner, oracle } = await setupLive(initFiat);
+  static async create(initFiat: number, blockTime?: number) {
+    const instance = new AbsorberSol();
+    await instance.init(initFiat, blockTime);
+    return instance;
+  }
+
+  async init(initFiat: number, blockTime?: number) {
+    // Reset network prior to any testing
+    await hre.network.provider.send("hardhat_reset")
+
+    const { tcCore, absorber, client1, Owner, oracle } = await setupLive(initFiat, blockTime);
     this.user = client1.address;
     this.owner = Owner.address;
     this.absorber = absorber;
-    this.oracle = oracle;
     this.tcCore = tcCore;
     this.tcUser = tcCore.connect(client1);
 
+    this.oracle = {
+      contract: oracle,
+      rate: 100,
+      validUntil: (await oracle.validUntil()).toNumber(),
+    }
     const lastBlock = await hre.ethers.provider.getBlock("latest");
     this.initMs = lastBlock.timestamp * 1000;
-
     await this.updateUser();
-  }
-
-  static async create(initFiat: number) {
-    const instance = new AbsorberSol();
-    await instance.init(initFiat);
-    return instance;
   }
 
   async updateUser() {
@@ -85,35 +94,37 @@ class AbsorberSol {
   }
 
   async setRate(rate: number, timeInMs: number) {
-    // Compensate for any changes to time in the tests calling this
-    const nextTime = this.initMs + Math.max(this.timeMs, timeInMs);
-    const currentValid = await this.oracle.validUntil();
-    const millisBetween = nextTime - currentValid.toNumber();
-    const daysBetween = millisBetween / (1000 * 60 * 60 * 24);
-    const toAdvance = Math.max(1, Math.round(daysBetween));
-    // Set the new rate
-    await setOracleValueRepeat(this.oracle, rate, toAdvance);
-    // Ensure that the block time is within lastest oracle block validity
-    const currentBlock = await hre.ethers.provider.getBlock("latest");
-    const currentTs = await this.oracle.validUntil();
-    const diff = Duration.fromMillis(currentTs.toNumber() - (currentBlock.timestamp * 1000));
-    // If block time is not within lastest oracle block validity, wait until it is
-    if (diff.as('days') > 1) {
-      await time.increaseTo(currentTs.div(1000).sub(3600));
+    let nextTime = this.initMs + Math.max(this.timeMs, timeInMs);
+    // Check if we actually need to push rates?
+    if (this.oracle.rate != rate || this.oracle.validUntil < nextTime) {
+      // We have to push new rates, ensure that we advance time appropriately
+      // We have to be at least 1 second past the current validity block
+      nextTime = Math.max(nextTime, this.oracle.validUntil + 1000);
+      const diff = Duration.fromMillis(nextTime - this.oracle.validUntil);
+      const toAdvance = Math.max(1, Math.round(diff.as('days')));
+      await setOracleValueRepeat(this.oracle.contract, rate, toAdvance);
+      // Update cache
+      this.oracle.rate = rate;
+      this.oracle.validUntil = (await this.oracle.contract.validUntil()).toNumber();
     }
-    // Update cached time to match blockchain time
-    this.timeMs = (currentTs.toNumber() - 3600_000) - this.initMs;
+    // Set time to match timeInMs
+    if (nextTime - this.initMs != this.timeMs) {
+      this.timeMs = nextTime - this.initMs;
+      // Ensure blockchain matches time
+      await time.increaseTo(Math.round(nextTime / 1000));
+    }
+    return nextTime;
   }
 
   cushionUp = async (rate: number, year=1) => {
-    await this.setRate(rate, (year - 1) * yearInMs);
-    const r = await this.absorber.calcCushionUp(this.user, this.coinCurrent, this.timeMs);
+    const currMs = await this.setRate(rate, (year - 1) * yearInMs);
+    const r = await this.absorber.calcCushionUp(this.user, this.coinCurrent, currMs);
     await this.updateUser();
     return r.toNumber();
   };
   cushionDown = async (rate: number) => {
-    await this.setRate(rate, this.timeMs);
-    const r = await this.absorber.calcCushionDown(this.user, this.coinCurrent, this.timeMs);
+    const currMs = await this.setRate(rate, this.timeMs);
+    const r = await this.absorber.calcCushionDown(this.user, this.coinCurrent, currMs);
     await this.updateUser();
     return r.toNumber();
   };
@@ -136,9 +147,12 @@ class AbsorberSol {
     return r.toNumber() / 100;
   }
 
-  drawDownCushion = async (rate: number, year=1) => {
-    // TODO:
+  drawDownCushion = async (timeMs: number) => {
+    await this.setRate(100, timeMs);
     await this.absorber.drawDownCushion(this.user);
+    const oldReserved = this.reserved;
+    await this.updateUser();
+    return this.reserved - oldReserved;
   }
 }
 
@@ -335,10 +349,10 @@ async function setupAbsorber(tcCoreAddress?: string, oracleAddress?: string) {
   return { absorber };
 }
 
-async function setupLive(initFiat: number) {
+async function setupLive(initFiat: number, blockTime?: number) {
   const { Owner, client1, OracleUpdater } = initAccounts(await hre.ethers.getSigners());
   const tcCore = await createAndInitTheCoin(Owner);
-  const oracle = await createAndInitOracle(OracleUpdater, 100);
+  const oracle = await createAndInitOracle(OracleUpdater, 100, blockTime);
   const {absorber} = await setupAbsorber(tcCore.address, oracle.address);
 
   // Mint a ridiculously large amount
@@ -352,10 +366,10 @@ async function setupLive(initFiat: number) {
   return { absorber, client1, oracle, tcCore, Owner };
 }
 
-export const createTesterShim = (fiatPrincipal: number, useJsTester: boolean) =>
+export const createTesterShim = (fiatPrincipal: number, useJsTester: boolean, blockTime?: number) =>
   useJsTester
     ? new AbsorberJs(fiatPrincipal)
-    : AbsorberSol.create(fiatPrincipal);
+    : AbsorberSol.create(fiatPrincipal,blockTime);
 
 // export const runAbsorber = async (client1: {address: string}, absorber: ShockAbsorber, oracle: SpxCadOracle, tcCore: TheCoin, price: number, expectedFiat: number) => {
 //   console.log(`------------------ Testing Price: ${price} ------------------`);

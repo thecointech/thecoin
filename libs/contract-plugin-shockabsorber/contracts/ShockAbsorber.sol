@@ -240,9 +240,10 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     return FLOAT_FACTOR - (FLOAT_FACTOR_SQ / (FLOAT_FACTOR + maxCushionUp * (timeMs / YEAR_IN_MS)));
   }
   function getAnnualizedValue(uint lastAvgAdjustTime, uint timeMs, int value) public pure returns(int) {
-    int percentOfYear = (FLOAT_FACTOR * int(timeMs - lastAvgAdjustTime)) / YEAR_IN_MS;
+    if (timeMs <= lastAvgAdjustTime) return 0;
+    int timeChange = FLOAT_FACTOR * int(timeMs - lastAvgAdjustTime);
+    int percentOfYear = timeChange / YEAR_IN_MS;
     int annualizedAvg = value * percentOfYear;
-    if (annualizedAvg < 0) return 0;
     return annualizedAvg / FLOAT_FACTOR;
   }
   function getAvgFiatPrincipal(address user, uint timeMs) public view returns(int) {
@@ -261,30 +262,21 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
 
   function preDeposit(address user, uint coinBalance, uint coinDeposit, uint msTime) public virtual override  {
     int fiatDeposit = toFiat(int(coinDeposit), msTime);
-    console.log("preDeposit: ", uint(fiatDeposit));
+    // console.log("preDeposit: ", uint(fiatDeposit));
     UserCushion storage userCushion = cushions[user];
-
-    // TODO: handle withdraw-to-zero
-    // if (userCushion.fiatPrincipal == 0 && coinBalance == 0) {
-    //   userCushion.fiatPrincipal = fiatDeposit;
-    //   userCushion.lastAvgAdjustTime = msTime;
-    //   userCushion.lastDrawDownTime = msTime;
-    //   console.log("Initializing userCushion with fiat: ", uint(userCushion.fiatPrincipal));
-    //   return;
-    // }
 
     userCushion.avgFiatPrincipal += this.getAnnualizedValue(userCushion.lastAvgAdjustTime, msTime, userCushion.fiatPrincipal);
     userCushion.avgCoinPrincipal += this.getAnnualizedValue(userCushion.lastAvgAdjustTime, msTime, int(coinBalance));
-    console.log("userCushion.avgCoinPrincipal: ", uint(userCushion.avgCoinPrincipal));
+    // console.log("userCushion.avgCoinPrincipal: ", uint(userCushion.avgCoinPrincipal));
 
     int depositRatio = FLOAT_FACTOR;
     if (userCushion.fiatPrincipal != 0) {
-      console.log("denominator: ", uint(userCushion.maxCovered * maxCushionDown));
+      // console.log("denominator: ", uint(userCushion.maxCovered * maxCushionDown));
       int ratioOfExisting = (FLOAT_FACTOR_SQ * int(coinDeposit)) / (userCushion.maxCovered * maxCushionDown);
-      console.log("ratioOfExisting: ", uint(ratioOfExisting));
+      // console.log("ratioOfExisting: ", uint(ratioOfExisting));
       depositRatio = (FLOAT_FACTOR_SQ * fiatDeposit / userCushion.fiatPrincipal) / ratioOfExisting;
     }
-    console.log("depositRatio: ", uint(depositRatio));
+    // console.log("depositRatio: ", uint(depositRatio));
 
     userCushion.fiatPrincipal += fiatDeposit;
 
@@ -321,14 +313,20 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
   }
 
   function preWithdraw(address user, uint coinBalance, uint coinWithdraw, uint msTime) public virtual override returns(uint) {
-    int fiatWithdraw = toFiat(int(coinWithdraw), msTime);
     UserCushion storage userCushion = cushions[user];
-    int withdrawRatio = (FLOAT_FACTOR * FLOAT_FACTOR * fiatWithdraw / userCushion.fiatPrincipal) / (int(coinWithdraw) / (userCushion.maxCovered * maxCushionDown));
+    int fiatWithdraw = toFiat(int(coinWithdraw), msTime);
+    // console.log("preWithdraw: ", uint(fiatWithdraw));
+    int ratioOfExisting = (FLOAT_FACTOR_SQ * int(coinWithdraw)) / (userCushion.maxCovered * maxCushionDown);
+    // console.log("ratioOfExisting: ", uint(ratioOfExisting));
+    int withdrawRatio = (FLOAT_FACTOR_SQ * fiatWithdraw / userCushion.fiatPrincipal) / ratioOfExisting;
+    // console.log("withdrawRatio: ", uint(withdrawRatio));
 
     if (coinBalance < coinWithdraw) {
       // In Loss, run CushionDown
       int additionalRequired = int(coinWithdraw - coinBalance);
+      // console.log("additionalRequired: ", uint(additionalRequired));
       int maxCushion = calcCushionDown(userCushion, int(coinBalance), msTime);
+      // console.log("maxCushion: ", uint(maxCushion));
       require(additionalRequired <= maxCushion, "Insufficient funds");
       // transfer additionalRequired to this users account
       theCoin.pl_transferTo(user, uint(additionalRequired), msTime);
@@ -350,7 +348,9 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
   function drawDownCushion(address user) public {
     uint timeMs = msNow();
     int avgCoinPrincipal = this.getAvgCoinBalance(user,timeMs);
+    console.log("avgCoinPrincipal: ", uint(avgCoinPrincipal));
     int avgFiatPrincipal = this.getAvgFiatPrincipal(user, timeMs);
+    console.log("avgFiatPrincipal: ", uint(avgFiatPrincipal));
 
     // Prevent divide-by-zero
     if (avgCoinPrincipal == 0 || avgFiatPrincipal == 0) {
@@ -362,12 +362,17 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     if (covered > FLOAT_FACTOR) {
       covered = FLOAT_FACTOR;
     }
+    console.log("covered: ", uint(covered));
 
     // We always reserve the maximum percent, ignoring current rates
     // CushionDown ensures that this does not take balance below principal
-    int percentCushion = this.getMaxPercentCushion(int(timeMs - userCushion.lastDrawDownTime));
+    int timeSinceLastDrawDown = int(timeMs - userCushion.lastDrawDownTime);
+    console.log("timeSinceLastDrawDown: ", uint(timeSinceLastDrawDown));
+    int percentCushion = this.getMaxPercentCushion(timeSinceLastDrawDown);
+    console.log("percentCushion: ", uint(percentCushion));
     // How many coins we gonna keep now?
     int toReserve = (covered * percentCushion * avgCoinPrincipal) / (FLOAT_FACTOR * FLOAT_FACTOR);
+    console.log("toReserve: ", uint(toReserve));
 
     // Transfer the reserve to this contract
     theCoin.pl_transferFrom(user, address(this), uint(toReserve), timeMs);
