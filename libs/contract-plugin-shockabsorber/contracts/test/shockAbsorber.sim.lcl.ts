@@ -29,13 +29,13 @@ export class AbsorberJs  {
 
   getMaxPercentCushion = (timeMs: number) => 1 - (1 / (1 + maxCushionUp * (timeMs / yearInMs)))
 
-  cushionUp = async (rate: number, year = 1) => {
+  cushionUp = async (rate: number, year = 0) => {
     const coinPrincipal = toCoin(this.fiatPrincipal, rate);
     const coinOriginal = this.coinCurrent + this.reserved;
 
     let percentCovered = maxFiatProtected / this.fiatPrincipal;
     percentCovered = Math.min(percentCovered, 1);
-    const maxPercentCushion = this.getMaxPercentCushion(year * yearInMs);
+    const maxPercentCushion = this.getMaxPercentCushion((1 + year) * yearInMs);
     const coinMaxCushion = maxPercentCushion * coinOriginal;
 
     const coinCushion = coinOriginal - coinPrincipal;
@@ -61,7 +61,7 @@ export class AbsorberJs  {
     return Math.round(target - original);
   }
 
-  balanceOf = async (rate: number, year=1) => {
+  balanceOf = async (rate: number, year=0) => {
     const coinPrincipal = toCoin(this.fiatPrincipal, rate);
 
     if (coinPrincipal < this.coinCurrent) {

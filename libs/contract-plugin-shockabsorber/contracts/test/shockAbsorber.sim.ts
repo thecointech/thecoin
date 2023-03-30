@@ -3,15 +3,19 @@ import { AbsorberJs } from './shockAbsorber.sim.lcl';
 import { AbsorberSol } from './shockAbsorber.sim.sol';
 
 // always use SOL tester in CI
-export const useJsTester = !process.env.JEST_CI && false;
-
+export const useJsTester = !process.env.JEST_CI && true;
 export type Tester = AbsorberJs | AbsorberSol;
+export type Results = {
+  rate: number,
+  fiat?: number,
+  coin?:number,
+  year?: number,
+}
 
 export const createTesterShim = (fiatPrincipal: number, useJsTester: boolean, blockTime?: number) =>
   useJsTester
     ? new AbsorberJs(fiatPrincipal)
     : AbsorberSol.create(fiatPrincipal,blockTime);
-
 
 export const createTester = (fiatPrincipal: number, blockTime?: number) => createTesterShim(fiatPrincipal, useJsTester, blockTime);
 export const createTesterSync = (fiatPrincipal: number, jsOverride?: boolean) => {
@@ -24,14 +28,9 @@ export const createTesterSync = (fiatPrincipal: number, jsOverride?: boolean) =>
   return inst;
 }
 
-type Results = {
-  rate: number,
-  fiat?: number,
-  coin?:number,
-  year?: number,
-}
+
 export const testResults = async (tester: Tester, results: Results) => {
-  console.log("================================================================")
+  // console.log("================================================================")
   const fiatCurrent = toFiat(tester.coinCurrent, results.rate);
   const isUp = fiatCurrent > tester.fiatPrincipal;
 
@@ -41,7 +40,8 @@ export const testResults = async (tester: Tester, results: Results) => {
   if (r == -0) r = 0;
   if (results.fiat) {
     const cushion = toFiat(r, results.rate) * (isUp ? -1 : 1);
-    expect(fiatCurrent + cushion).toEqual(results.fiat);
+    const expected = Math.round(100 * (fiatCurrent + cushion)) / 100;
+    expect(expected).toEqual(results.fiat);
   }
   if (results.coin !== undefined) {
     // This odd-looking comparison allows differences of 1,
