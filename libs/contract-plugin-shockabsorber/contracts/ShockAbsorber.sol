@@ -351,8 +351,9 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
   // ------------------------------------------------------------------------
   // Owners functionality
   // ------------------------------------------------------------------------
-  function drawDownCushion(address user) public {
-    uint timeMs = msNow();
+  function drawDownCushion(address user, uint timeMs) public {
+    require(timeMs < msNow(), "Time must be in the past");
+    console.log("*** drawDownCushion timeMs: ", uint(timeMs));
     int avgCoinPrincipal = this.getAvgCoinBalance(user,timeMs);
     console.log("avgCoinPrincipal: ", uint(avgCoinPrincipal));
     int avgFiatPrincipal = this.getAvgFiatPrincipal(user, timeMs);
@@ -372,6 +373,7 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
 
     // We always reserve the maximum percent, ignoring current rates
     // CushionDown ensures that this does not take balance below principal
+    console.log("userCushion.lastDrawDownTime: ", uint(userCushion.lastDrawDownTime));
     int timeSinceLastDrawDown = int(timeMs - userCushion.lastDrawDownTime);
     console.log("timeSinceLastDrawDown: ", uint(timeSinceLastDrawDown));
     int percentCushion = this.getMaxPercentCushion(timeSinceLastDrawDown);
@@ -379,6 +381,11 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     // How many coins we gonna keep now?
     int toReserve = (covered * percentCushion * avgCoinPrincipal) / (FLOAT_FACTOR * FLOAT_FACTOR);
     console.log("toReserve: ", uint(toReserve));
+
+    // If nothing to do, do nothing
+    if (toReserve == 0) {
+      return;
+    }
 
     // Transfer the reserve to this contract
     theCoin.pl_transferFrom(user, address(this), uint(toReserve), timeMs);

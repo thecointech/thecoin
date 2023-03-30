@@ -19,7 +19,6 @@ export class AbsorberSol {
   absorber: ShockAbsorber;
   coinCurrent = 0;
   timeMs = 0;
-  initMs = 0;
 
   fiatPrincipal = 0;
   coinAdjustment = 0;
@@ -30,6 +29,7 @@ export class AbsorberSol {
   avgCoinPrincipal = 0;
   lastAvgAdjustTime = 0;
   maxCoverAdjust = 0;
+  initMs = 0;
 
   oracle: {
     contract: SpxCadOracle;
@@ -59,8 +59,6 @@ export class AbsorberSol {
       rate: 100,
       validUntil: (await oracle.validUntil()).toNumber(),
     }
-    const lastBlock = await hre.ethers.provider.getBlock("latest");
-    this.initMs = lastBlock.timestamp * 1000;
     await this.updateUser();
   }
 
@@ -75,6 +73,7 @@ export class AbsorberSol {
     this.avgCoinPrincipal = cushion.avgCoinPrincipal.toNumber();
     this.lastAvgAdjustTime = cushion.lastAvgAdjustTime.toNumber();
     this.maxCoverAdjust = cushion.maxCoverAdjust.toNumber();
+    this.initMs = cushion.initTime.toNumber();
 
     const balance = await this.tcCore.balanceOf(this.user);
     this.coinCurrent = balance.toNumber();
@@ -138,7 +137,7 @@ export class AbsorberSol {
 
   drawDownCushion = async (timeMs: number) => {
     await this.setRate(100, timeMs);
-    await this.absorber.drawDownCushion(this.user);
+    await this.absorber.drawDownCushion(this.user, timeMs + this.initMs);
     const oldReserved = this.reserved;
     await this.updateUser();
     return this.reserved - oldReserved;

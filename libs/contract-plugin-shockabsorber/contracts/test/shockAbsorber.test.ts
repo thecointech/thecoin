@@ -185,28 +185,28 @@ describe('dep & withdraw track avg principal', () => {
   })
 })
 
-// describe('cushionUp with drawDown', () => {
-//   const inst = createTesterSync(5000);
+describe('cushionUp with drawDown', () => {
+  const inst = createTesterSync(5000);
 
-//   it.each([
-//     // First year, drawDown does nothing
-//     { year: 0, rate: 100,   fiat: 5000, coin: 0 },
-//     { year: 0, rate: 101.5, fiat: 5000, coin: 738916},
-//     { year: 0, rate: 103,   fiat: 5073.89, coin: 738916 },
-//     // Second year, we draw down 738916, cushionUp 717395
-//     { year: 1, rate: 100,   fiat: 5000, coin: 738916 }, // NOTE: This will cushionDown
-//     { year: 1, rate: 101.5, fiat: 5000, coin: 0 },
-//     { year: 1, rate: 103,   fiat: 5000, coin: 717395 }, // This is cushioned up again
-//     { year: 1, rate: 104.5, fiat: 5072.81, coin: 717395 },
-//     { year: 1, rate: 106,   fiat: 5145.63, coin: 717395 },
-//     // Third year, we draw down 717395, cushionUp 686198
-//     { year: 2, rate: 106,   fiat: 5071.77, coin: 686198 },
-//   ])(`with %s`, async (inputs) => {
-//     // call drawDownCushion prior to running the test
-//     await inst.tester.drawDownCushion(yearInMs * inputs.year);
-//     await testResults(inst.tester, inputs);
-//   })
-// })
+  it.each([
+    // First year, drawDown does nothing
+    { year: 0, rate: 100,   fiat: 5000, coin: 0 },
+    { year: 0, rate: 101.5, fiat: 5000, coin: 738916},
+    { year: 0, rate: 103,   fiat: 5073.89, coin: 738916 },
+    // Second year, we draw down 738916, cushionUp 717395
+    { year: 1, rate: 100,   fiat: 5000, coin: 738916 }, // NOTE: This will cushionDown
+    { year: 1, rate: 101.5, fiat: 5000, coin: 0 },
+    { year: 1, rate: 103,   fiat: 5000, coin: 717395 }, // This is cushioned up again
+    { year: 1, rate: 104.5, fiat: 5072.81, coin: 717395 },
+    { year: 1, rate: 106,   fiat: 5145.63, coin: 717395 },
+    // Third year, we draw down 717395, cushionUp 686198
+    { year: 2, rate: 106,   fiat: 5071.77, coin: 686198 },
+  ])(`with %s`, async (inputs) => {
+    // call drawDownCushion prior to running the test
+    await inst.tester.drawDownCushion(yearInMs * inputs.year);
+    await testResults(inst.tester, inputs);
+  })
+})
 
 // describe('Withdrawals are cushioned', () => {
 //   it('works when there is enough cushion', async () => {
