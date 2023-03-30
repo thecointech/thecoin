@@ -119,15 +119,18 @@ export class AbsorberSol {
 
   deposit = async (fiat: number, rate: number, timeMs: number) => {
     await this.setRate(rate, timeMs);
-    const coin = toCoin(fiat, 100);
+    const coin = toCoin(fiat, rate);
     await this.tcCore.transfer(this.user, coin);
     await this.updateUser();
   };
   withdraw = async (fiat: number, rate: number, timeMs: number) => {
     await this.setRate(rate, timeMs);
-    const coin = toCoin(fiat, 100);
+    const coin = toCoin(fiat, rate);
+    const preBalance = await this.tcCore.balanceOf(this.owner);
     await this.tcUser.transfer(this.owner, coin);
     await this.updateUser();
+    const postBalance = await this.tcCore.balanceOf(this.owner);
+    return postBalance.sub(preBalance).toNumber();
   }
 
   getAvgFiatPrincipal = async (timeMs: number) => {
@@ -163,9 +166,11 @@ async function setupLive(initFiat: number, blockTime?: number) {
   await tcCore.mintCoins(10e12, Owner.address, Date.now());
 
   // Create plugin & assign user
-  const initCoin = initFiat * 1e6 / 100;
+  const initCoin = toCoin(initFiat, 100);
   await tcCore.pl_assignPlugin(client1.address, absorber.address, ALL_PERMISSIONS, "0x1234");
   await tcCore.transfer(client1.address, initCoin);
+  // absorber needs funds - start with $100K
+  await tcCore.transfer(absorber.address, toCoin(100_000, 100));
 
   return { absorber, client1, oracle, tcCore, Owner };
 }

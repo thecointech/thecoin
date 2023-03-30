@@ -329,13 +329,13 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
 
     if (coinBalance < coinWithdraw) {
       // In Loss, run CushionDown
-      int additionalRequired = int(coinWithdraw - coinBalance);
-      // console.log("additionalRequired: ", uint(additionalRequired));
+      uint additionalRequired = coinWithdraw - coinBalance;
+      // console.log("additionalRequired: ", additionalRequired);
       int maxCushion = calcCushionDown(userCushion, int(coinBalance), msTime);
       // console.log("maxCushion: ", uint(maxCushion));
-      require(additionalRequired <= maxCushion, "Insufficient funds");
+      require(additionalRequired <= uint(maxCushion), "Insufficient funds");
       // transfer additionalRequired to this users account
-      theCoin.pl_transferTo(user, uint(additionalRequired), msTime);
+      theCoin.pl_transferTo(user, additionalRequired, msTime);
     }
 
     userCushion.avgFiatPrincipal += this.getAnnualizedValue(userCushion.lastAvgAdjustTime, msTime, userCushion.fiatPrincipal);
