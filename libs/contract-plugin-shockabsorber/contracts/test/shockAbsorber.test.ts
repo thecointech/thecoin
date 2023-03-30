@@ -164,10 +164,6 @@ describe('dep & withdraw track avg principal', () => {
     await testResults(tester, {year: 1, rate: 110, coin: 717395 });
   })
 
-  //////////////////////////////////////////////////////////////
-  // YOU ARE HERE
-  //////////////////////////////////////////////////////////////
-
   it ('correcly calculates balance after drawDownCushion partial covered', async () => {
     const tester = await createTester(10000);
     // This will reduce the reserved balance
@@ -268,101 +264,101 @@ describe('Withdrawals are cushioned', () => {
     await testResults(tester, {rate: 40, fiat: 400 });
   })
 
-//   it('gives a proper result after series of deposits down/up', async () => {
-//     const tester = await createTester(500);
-//     // Market drops 10%, we deposit $500 more.
-//     await tester.deposit(500, 90, 100000);
-//     // This means we have $500 @ 50c cushion,
-//     // and we have $500 @ 45c cushion.
-//     // At 45c, we should then have $500 + ($500 - 10%)
-//     expect(toFiat(tester.maxCovered, 45)).toEqual(950);
+  it('gives a proper result after series of deposits down/up', async () => {
+    const tester = await createTester(500);
+    // Market drops 10%, we deposit $500 more.
+    await tester.deposit(500, 90, 100000);
+    // This means we have $500 @ 50c cushion,
+    // and we have $500 @ 45c cushion.
+    // At 45c, we should then have $500 + ($500 - 10%)
+    expect(toFiat(tester.maxCovered, 45)).toEqual(950);
 
-//     await tester.deposit(500, 110, 100000);
-//     // Market up 10%, we deposit $500 more.
-//     // 500 @ 50c, 500 @ 45c, 500 @ 55c,
-//     // @45c = 500 + (500 * @50c * 0.9) + (500 @ 55c * 0.8181)
-//     expect(toFiat(tester.maxCovered, 45)).toEqual(1359.09);
-//   })
+    await tester.deposit(500, 110, 100000);
+    // Market up 10%, we deposit $500 more.
+    // 500 @ 50c, 500 @ 45c, 500 @ 55c,
+    // @45c = 500 + (500 * @50c * 0.9) + (500 @ 55c * 0.8181)
+    expect(toFiat(tester.maxCovered, 45)).toEqual(1359.09);
+  })
 
-//   it('gives a proper result after series of deposits up/down', async () => {
-//     // Identical to above, it should have the same result regardless of order of operations
-//     const tester = await createTester(500);
-//     await tester.deposit(500, 110, 100000);
-//     // $500 @ 50c, 500 @ 55c (validated by checking with toFiat)
-//     expect(toFiat(tester.maxCovered, 50)).toEqual(954.55);
+  it('gives a proper result after series of deposits up/down', async () => {
+    // Identical to above, it should have the same result regardless of order of operations
+    const tester = await createTester(500);
+    await tester.deposit(500, 110, 100000);
+    // $500 @ 50c, 500 @ 55c (validated by checking with toFiat)
+    expect(toFiat(tester.maxCovered, 50)).toEqual(954.55);
 
-//     await tester.deposit(500, 90, 100000);
-//     expect(toFiat(tester.maxCovered, 45)).toEqual(1359.09);
+    await tester.deposit(500, 90, 100000);
+    expect(toFiat(tester.maxCovered, 45)).toEqual(1359.09);
 
-//   })
+  })
 
-//   it('correctly updates on withdraw and deposit', async () => {
-//     const tester = await createTester(1000);
-//     // Idempotent withdraw/deposit when rates are down
-//     await tester.withdraw(100, 90, 100000);
-//     expect(toFiat(tester.maxCovered, 50)).toEqual(900);
-//     await tester.deposit(100, 90, 100000);
-//     expect(toFiat(tester.maxCovered, 50)).toEqual(1000);
+  it('correctly updates on withdraw and deposit', async () => {
+    const tester = await createTester(1000);
+    // Idempotent withdraw/deposit when rates are down
+    await tester.withdraw(100, 90, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toBeCloseTo(900, 1);
+    await tester.deposit(100, 90, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toBeCloseTo(1000, 1);
 
-//     // Idempotent withdraw/deposit when rates are up
-//     await tester.withdraw(100, 110, 100000);
-//     expect(toFiat(tester.maxCovered, 50)).toEqual(900);
-//     await tester.deposit(100, 110, 100000);
-//     expect(toFiat(tester.maxCovered, 50)).toEqual(1000);
+    // Idempotent withdraw/deposit when rates are up
+    await tester.withdraw(100, 110, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toBeCloseTo(900, 1);
+    await tester.deposit(100, 110, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toBeCloseTo(1000, 1);
 
-//     await tester.withdraw(100, 90, 100000);
-//     expect(toFiat(tester.maxCovered, 50)).toEqual(900);
-//     await tester.deposit(50, 90, 100000);
-//     expect(toFiat(tester.maxCovered, 50)).toEqual(950);
-//     await tester.deposit(50, 90, 100000);
-//     expect(toFiat(tester.maxCovered, 50)).toEqual(1000);
-//   })
+    await tester.withdraw(100, 90, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toBeCloseTo(900, 1);
+    await tester.deposit(50, 90, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toBeCloseTo(950, 1);
+    await tester.deposit(50, 90, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toBeCloseTo(1000, 1);
+  })
 
-//   it('generally works', async () => {
-//     const tester = await createTester(1000);
-//     // Idempotent withdraw/deposit when rates are down
-//     await tester.withdraw(100, 90, 100000);
-//     expect(toFiat(tester.maxCovered, 50)).toEqual(900);
-//     await tester.withdraw(100, 110, 100000);
-//     expect(toFiat(tester.maxCovered, 50)).toEqual(800);
-//     await tester.withdraw(100, 80, 100000);
-//     expect(toFiat(tester.maxCovered, 50)).toEqual(700);
+  it('generally works', async () => {
+    const tester = await createTester(1000);
+    // Idempotent withdraw/deposit when rates are down
+    await tester.withdraw(100, 90, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toBeCloseTo(900, 1);
+    await tester.withdraw(100, 110, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toBeCloseTo(800, 1);
+    await tester.withdraw(100, 80, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toBeCloseTo(700, 1);
 
-//     await tester.deposit(100, 100, 100000);
-//     expect(toFiat(tester.maxCovered, 50)).toEqual(800);
-//     await tester.deposit(100, 100, 100000);
-//     expect(toFiat(tester.maxCovered, 50)).toEqual(900);
+    await tester.deposit(100, 100, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toBeCloseTo(800, 1);
+    await tester.deposit(100, 100, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toBeCloseTo(900, 1);
 
-//     // Idempotent withdraw/deposit when rates are up
-//     await tester.withdraw(100, 110, 100000);
-//     expect(toFiat(tester.maxCovered, 50)).toEqual(800);
-//     await tester.deposit(100, 110, 100000);
-//     expect(toFiat(tester.maxCovered, 50)).toEqual(900);
-//   })
+    // Idempotent withdraw/deposit when rates are up
+    await tester.withdraw(100, 110, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toBeCloseTo(800, 1);
+    await tester.deposit(100, 110, 100000);
+    expect(toFiat(tester.maxCovered, 50)).toBeCloseTo(900, 1);
+  })
 
-//   it('generally works after years', async () => {
-//     const tester = await createTester(1000);
-//     const r = await tester.drawDownCushion(1 * yearInMs);
-//     // As above, but testing that cushionDown is correct
-//     await tester.withdraw(100, 90, 100000);
-//     await testResults(tester, {year: 1, rate: 50,  fiat: 900 });
-//     await tester.withdraw(100, 110, 100000);
-//     await testResults(tester, {year: 1, rate: 50,  fiat: 800 });
-//     await tester.withdraw(100, 80, 100000);
-//     await testResults(tester, {year: 1, rate: 50,  fiat: 700 });
-//     await testResults(tester, {year: 1, rate: 25,  fiat: 350 });
+  it('generally works after years', async () => {
+    const tester = await createTester(1000);
+    const r = await tester.drawDownCushion(1 * yearInMs);
+    // As above, but testing that cushionDown is correct
+    await tester.withdraw(100, 90, 100000);
+    await testResults(tester, {year: 1, rate: 50,  fiat: 900 });
+    await tester.withdraw(100, 110, 100000);
+    await testResults(tester, {year: 1, rate: 50,  fiat: 800 });
+    await tester.withdraw(100, 80, 100000);
+    await testResults(tester, {year: 1, rate: 50,  fiat: 700 });
+    await testResults(tester, {year: 1, rate: 25,  fiat: 350 });
 
-//     await tester.deposit(100, 100, 100000);
-//     await testResults(tester, {year: 1, rate: 50,  fiat: 800 });
-//     await tester.deposit(100, 100, 100000);
-//     await testResults(tester, {year: 1, rate: 50,  fiat: 900 });
+    await tester.deposit(100, 100, 100000);
+    await testResults(tester, {year: 1, rate: 50,  fiat: 800 });
+    await tester.deposit(100, 100, 100000);
+    await testResults(tester, {year: 1, rate: 50,  fiat: 900 });
 
-//     // Idempotent withdraw/deposit when rates are up
-//     await tester.withdraw(100, 110, 100000);
-//     await testResults(tester, {year: 1, rate: 50,  fiat: 800 });
-//     await tester.deposit(100, 110, 100000);
-//     await testResults(tester, {year: 1, rate: 50,  fiat: 900 });
-//   })
+    // Idempotent withdraw/deposit when rates are up
+    await tester.withdraw(100, 110, 100000);
+    await testResults(tester, {year: 1, rate: 50,  fiat: 800 });
+    await tester.deposit(100, 110, 100000);
+    await testResults(tester, {year: 1, rate: 50,  fiat: 900 });
+  })
 })
 
 
