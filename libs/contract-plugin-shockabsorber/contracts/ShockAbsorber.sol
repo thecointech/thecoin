@@ -31,6 +31,9 @@ struct UserCushion {
   // negative values mean we subbed from `coin` to cushion jump
   int coinAdjustment;
 
+  // When did this account attach?
+  uint initTime;
+
   // When did we last adjust the cushioning?
   uint lastDrawDownTime;
 
@@ -122,6 +125,7 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     cushions[user].fiatPrincipal = fiatBalance;
     cushions[user].lastAvgAdjustTime = timeMs;
     cushions[user].lastDrawDownTime = timeMs;
+    cushions[user].initTime = timeMs;
 
     numClients = numClients + 1;
   }
@@ -170,9 +174,9 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     }
 
     // The reserve amount applies fresh each year
-    int msPassed = int(timeMs - user.lastDrawDownTime);
+    int msPassed = int(timeMs - user.initTime);
     console.log("msPassed: ", uint(msPassed));
-    int year = int(1 + msPassed / YEAR_IN_MS);
+    int year = int(msPassed / YEAR_IN_MS);
     console.log("year: ", uint(year));
 
     int coinPrincipal = toCoin(user.fiatPrincipal, timeMs);
@@ -186,7 +190,7 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     }
     console.log("percentCovered: ", uint(percentCovered));
 
-    int maxPercentCushion = getMaxPercentCushion(year * YEAR_IN_MS);
+    int maxPercentCushion = getMaxPercentCushion((1 + year) * YEAR_IN_MS);
     console.log("maxPercentCushion: ", uint(maxPercentCushion));
     int coinMaxCushion = (maxPercentCushion * coinOriginal) / FLOAT_FACTOR;
     console.log("coinMaxCushion: ", uint(coinMaxCushion));

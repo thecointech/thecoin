@@ -1,9 +1,7 @@
-import { toFiat } from './shockAbsorber.common';
+import { toFiat, useJsTester } from './shockAbsorber.common';
 import { AbsorberJs } from './shockAbsorber.sim.lcl';
 import { AbsorberSol } from './shockAbsorber.sim.sol';
 
-// always use SOL tester in CI
-export const useJsTester = !process.env.JEST_CI && true;
 export type Tester = AbsorberJs | AbsorberSol;
 export type Results = {
   rate: number,
@@ -27,7 +25,6 @@ export const createTesterSync = (fiatPrincipal: number, jsOverride?: boolean) =>
   })
   return inst;
 }
-
 
 export const testResults = async (tester: Tester, results: Results) => {
   // console.log("================================================================")

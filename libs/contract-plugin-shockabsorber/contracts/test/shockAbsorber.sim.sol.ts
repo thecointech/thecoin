@@ -105,8 +105,8 @@ export class AbsorberSol {
     return nextTime;
   }
 
-  cushionUp = async (rate: number, year=1) => {
-    const currMs = await this.setRate(rate, (year - 1) * yearInMs);
+  cushionUp = async (rate: number, year=0) => {
+    const currMs = await this.setRate(rate, year * yearInMs);
     const r = await this.absorber.calcCushionUp(this.user, this.coinCurrent, currMs);
     await this.updateUser();
     return r.toNumber();
