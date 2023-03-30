@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { yearInMs } from './shockAbsorber.common';
-import { createTester, createTesterShim, createTesterSync, testResults } from './shockabsorber.sim'
+import { createTester, createTesterSync, testResults } from './shockabsorber.sim'
 
 jest.setTimeout(10 * 60 * 1000);
 
@@ -153,20 +153,6 @@ describe('dep & withdraw track avg principal', () => {
 
   it ('correcly calculates balance after drawDownCushion', async () => {
     const tester = await createTester(5000);
-    // This will reduce the reserved balance
-    await tester.drawDownCushion(yearInMs);
-
-    await testResults(tester, {year: 1, rate: 50,  fiat: 5000 });
-    await testResults(tester, {year: 1, rate: 100, fiat: 5000 });
-    await testResults(tester, {year: 1, rate: 101.5, fiat: 5000, coin: 0 });
-    await testResults(tester, {year: 1, rate: 103, fiat: 5000, coin: 717395 });
-    // As rate goes up, the cushion does not grow
-    await testResults(tester, {year: 1, rate: 104, coin: 717395 });
-    await testResults(tester, {year: 1, rate: 110, coin: 717395 });
-  })
-
-  it ('(JS) correcly calculates balance after drawDownCushion', async () => {
-    const tester = await createTesterShim(5000, true);
     // This will reduce the reserved balance
     await tester.drawDownCushion(yearInMs);
 
