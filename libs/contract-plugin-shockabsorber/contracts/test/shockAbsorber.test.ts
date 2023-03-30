@@ -1,51 +1,9 @@
 import { jest } from '@jest/globals';
 import hre from 'hardhat';
-import { createTesterShim, toFiat, yearInMs } from './shockabsorber.sim'
+import { yearInMs } from './shockAbsorber.common';
+import { createTester, createTesterShim, createTesterSync, testResults } from './shockabsorber.sim'
 
 jest.setTimeout(10 * 60 * 1000);
-// always use SOL tester in CI
-const useJsTester = !process.env.JEST_CI && false;
-type Tester = Awaited<ReturnType<typeof createTester>>;
-
-const createTester = (fiatPrincipal: number, blockTime?: number) => createTesterShim(fiatPrincipal, useJsTester, blockTime);
-const createTesterSync = (fiatPrincipal: number, jsOverride?: boolean) => {
-  const inst = {
-    tester: null as unknown as Tester,
-  }
-  beforeAll(async () => {
-    inst.tester = await createTesterShim(fiatPrincipal, jsOverride ?? useJsTester);
-  })
-  return inst;
-}
-
-type Results = {
-  rate: number,
-  fiat?: number,
-  coin?:number,
-  year?: number,
-}
-export const testResults = async (tester: Tester, results: Results) => {
-  console.log("================================================================")
-  const fiatCurrent = toFiat(tester.coinCurrent, results.rate);
-  const isUp = fiatCurrent > tester.fiatPrincipal;
-
-  let r = (isUp)
-    ? await tester.cushionUp(results.rate, results.year)
-    : await tester.cushionDown(results.rate);
-  if (r == -0) r = 0;
-  if (results.fiat) {
-    const cushion = toFiat(r, results.rate) * (isUp ? -1 : 1);
-    expect(fiatCurrent + cushion).toEqual(results.fiat);
-  }
-  if (results.coin !== undefined) {
-    // This odd-looking comparison allows differences of 1,
-    // to account for rounding in JS vs Sol, but still
-    // keep a proper error message on failure
-    if (Math.abs(r - results.coin) != 1) {
-      expect(r).toEqual(results.coin);
-    }
-  }
-}
 
 ///////////////////////////////////////////////////////////////////////////
 // Actual tests here
@@ -147,7 +105,7 @@ describe('cushionDown with principal partially covered', () => {
 describe('dep & withdraw track avg principal', () => {
   it ('adjusts avg with deposits', async () => {
     // 5 deposits, evenly spaced through the year
-    const tester = await createTester(100);
+    const tester = await createTester(100, 2 * yearInMs);
     for (let i = 1; i < 5; i++) {
       const timeMs = i * (yearInMs / 5);
       await tester.deposit(100, 100, timeMs);
@@ -160,21 +118,8 @@ describe('dep & withdraw track avg principal', () => {
     expect(Math.round(avgFiat)).toEqual(300);
   })
 
-  it ('adjusts avg with depositxJS', async () => {
-    const tester = await createTesterShim(0, true);
-    // 5 deposits, evenly spaced through the year
-    for (let i = 0; i < 5; i++) {
-      const timeMs = i * (yearInMs / 5);
-      await tester.deposit(100, 100, timeMs);
-    }
-    expect(tester.fiatPrincipal).toEqual(500);
-    const avgFiat = await tester.getAvgFiatPrincipal(yearInMs);
-    // 100 + 100 × 0.8 + 100 × 0.6 + 100 × 0.4 + 100 × 0.2
-    expect(avgFiat).toEqual(300);
-  })
-
   it ('adjusts avg with withdrawals', async () => {
-    const tester = await createTester(500);
+    const tester = await createTester(500, 2 * yearInMs);
     // 5 withdrawals, evenly spaced through the year
     for (let i = 0; i < 5; i++) {
       const timeMs = (i + 1) * (yearInMs / 5);
@@ -184,19 +129,6 @@ describe('dep & withdraw track avg principal', () => {
     const avgFiat = await tester.getAvgFiatPrincipal(yearInMs);
     // 100 + 100 × 0.8 + 100 × 0.6 + 100 × 0.4 + 100 × 0.2
     expect(Math.round(avgFiat)).toEqual(300);
-  })
-
-  it ('adjusts avg with withdrawxJS', async () => {
-    const tester = await createTesterShim(500, true);
-    // 5 withdrawals, evenly spaced through the year
-    for (let i = 0; i < 5; i++) {
-      const timeMs = (i + 1) * (yearInMs / 5);
-      await tester.withdraw(100, 100, timeMs);
-    }
-    expect(tester.fiatPrincipal).toEqual(0);
-    const avgFiat = await tester.getAvgFiatPrincipal(yearInMs);
-    // 100 + 100 × 0.8 + 100 × 0.6 + 100 × 0.4 + 100 × 0.2
-    expect(avgFiat).toEqual(300);
   })
 
   it.each([
@@ -211,39 +143,42 @@ describe('dep & withdraw track avg principal', () => {
   })
 
   it.each([
-    // { year: 0, reserved: 0 },
+    { year: 0, reserved: 0 },
     { year: 1, reserved: 738916 },
-    // { year: 2, reserved: 1456310 },
-  ])(`(JS) draws down on whole year, fully covered %s`, async (inputs) => {
-    const tester = await createTesterShim(5000, true);
-    console.log("------------------------------------------------")
+    { year: 2, reserved: 1456310 },
+  ])(`draws down on whole year, partially covered %s`, async (inputs) => {
+    const tester = await createTester(10000, yearInMs * 5);
     const r = await tester.drawDownCushion(inputs.year * yearInMs);
     expect(r).toEqual(inputs.reserved);
   })
 
-//   it.each([
-//     { year: 0, reserved: 0 },
-//     { year: 1, reserved: 738916 },
-//     { year: 2, reserved: 1456310 },
-//   ])(`draws down on whole year, partially covered %s`, async (inputs) => {
-//     const tester = await createTester(10000);
-//     const r = await tester.drawDownCushion(inputs.year * yearInMs);
-//     expect(r).toEqual(inputs.reserved);
-//   })
+  it ('correcly calculates balance after drawDownCushion', async () => {
+    const tester = await createTester(5000);
+    // This will reduce the reserved balance
+    await tester.drawDownCushion(yearInMs);
 
-//   it ('correcly calculates balance after drawDownCushion', async () => {
-//     const tester = await createTester(5000);
-//     // This will reduce the reserved balance
-//     await tester.drawDownCushion(yearInMs);
+    await testResults(tester, {year: 2, rate: 50,  fiat: 5000 });
+    await testResults(tester, {year: 2, rate: 100, fiat: 5000 });
+    await testResults(tester, {year: 2, rate: 101.5, fiat: 5000, coin: 0 });
+    await testResults(tester, {year: 2, rate: 103, fiat: 5000, coin: 717395 });
+    // As rate goes up, the cushion does not grow
+    await testResults(tester, {year: 2, rate: 104, coin: 717395 });
+    await testResults(tester, {year: 2, rate: 110, coin: 717395 });
+  })
 
-//     await testResults(tester, {year: 2, rate: 50,  fiat: 5000 });
-//     await testResults(tester, {year: 2, rate: 100, fiat: 5000 });
-//     await testResults(tester, {year: 2, rate: 101.5, fiat: 5000, coin: 0 });
-//     await testResults(tester, {year: 2, rate: 103, fiat: 5000, coin: 717395 });
-//     // As rate goes up, the cushion does not grow
-//     await testResults(tester, {year: 2, rate: 104, coin: 717395 });
-//     await testResults(tester, {year: 2, rate: 110, coin: 717395 });
-//   })
+  it ('(JS) correcly calculates balance after drawDownCushion', async () => {
+    const tester = await createTesterShim(5000, true);
+    // This will reduce the reserved balance
+    await tester.drawDownCushion(yearInMs);
+
+    await testResults(tester, {year: 2, rate: 50,  fiat: 5000 });
+    await testResults(tester, {year: 2, rate: 100, fiat: 5000 });
+    await testResults(tester, {year: 2, rate: 101.5, fiat: 5000, coin: 0 });
+    await testResults(tester, {year: 2, rate: 103, fiat: 5000, coin: 717395 });
+    // As rate goes up, the cushion does not grow
+    await testResults(tester, {year: 2, rate: 104, coin: 717395 });
+    await testResults(tester, {year: 2, rate: 110, coin: 717395 });
+  })
 
 //   it ('correcly calculates balance after drawDownCushion partial covered', async () => {
 //     const tester = await createTester(10000);

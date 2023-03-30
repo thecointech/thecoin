@@ -215,6 +215,8 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
 
     int coinPrincipal = toCoin(user.fiatPrincipal, timeMs);
     int coinOriginal = coinBalance + user.reserved;
+    console.log("coinOriginal: ", uint(coinOriginal));
+    console.log("user.reserved: ", uint(user.reserved));
 
     int percentCovered = (maxFiatProtected * FLOAT_FACTOR) / user.fiatPrincipal;
     if (percentCovered > FLOAT_FACTOR) {
@@ -230,7 +232,7 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
 
     int target = percentCovered * coinCovered;
     console.log("target: ", uint(target / FLOAT_FACTOR));
-    int original = percentCovered * coinOriginal - user.reserved;
+    int original = (percentCovered * coinOriginal) - (user.reserved * FLOAT_FACTOR);
     console.log("original: ", uint(original / FLOAT_FACTOR));
 
     return (target - original) / FLOAT_FACTOR;

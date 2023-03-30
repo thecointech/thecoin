@@ -1,0 +1,172 @@
+
+import hre from 'hardhat';
+import '@nomiclabs/hardhat-ethers';
+import { createAndInitOracle, setOracleValueRepeat } from '@thecointech/contract-oracle/testHelpers.ts';
+import { initAccounts, createAndInitTheCoin } from '@thecointech/contract-core/testHelpers.ts';
+import { ShockAbsorber } from '../../src';
+import { yearInMs, toCoin } from './shockAbsorber.common'
+import type { SpxCadOracle } from '@thecointech/contract-oracle';
+import { time } from "@nomicfoundation/hardhat-network-helpers";
+import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
+import { TheCoin } from '@thecointech/contract-core';
+import { Duration } from 'luxon';
+
+export class AbsorberSol {
+  user: string;
+  owner: string;
+  tcCore: TheCoin;
+  tcUser: TheCoin;
+  absorber: ShockAbsorber;
+  coinCurrent = 0;
+  timeMs = 0;
+  initMs = 0;
+
+  fiatPrincipal = 0;
+  coinAdjustment = 0;
+  maxCovered = 0;
+  reserved = 0;
+  lastDrawDownTime = 0;
+  avgFiatPrincipal = 0;
+  avgCoinPrincipal = 0;
+  lastAvgAdjustTime = 0;
+  maxCoverAdjust = 0;
+
+  oracle: {
+    contract: SpxCadOracle;
+    rate: number;
+    validUntil: number;
+  }
+
+  static async create(initFiat: number, blockTime?: number) {
+    const instance = new AbsorberSol();
+    await instance.init(initFiat, blockTime);
+    return instance;
+  }
+
+  async init(initFiat: number, blockTime?: number) {
+    // Reset network prior to any testing
+    await hre.network.provider.send("hardhat_reset")
+
+    const { tcCore, absorber, client1, Owner, oracle } = await setupLive(initFiat, blockTime);
+    this.user = client1.address;
+    this.owner = Owner.address;
+    this.absorber = absorber;
+    this.tcCore = tcCore;
+    this.tcUser = tcCore.connect(client1);
+
+    this.oracle = {
+      contract: oracle,
+      rate: 100,
+      validUntil: (await oracle.validUntil()).toNumber(),
+    }
+    const lastBlock = await hre.ethers.provider.getBlock("latest");
+    this.initMs = lastBlock.timestamp * 1000;
+    await this.updateUser();
+  }
+
+  async updateUser() {
+    const cushion = await this.absorber.getCushion(this.user);
+    this.fiatPrincipal = cushion.fiatPrincipal.toNumber() / 100;
+    this.coinAdjustment = cushion.coinAdjustment.toNumber();
+    this.maxCovered = cushion.maxCovered.toNumber();
+    this.reserved = cushion.reserved.toNumber();
+    this.lastDrawDownTime = cushion.lastDrawDownTime.toNumber();
+    this.avgFiatPrincipal = cushion.avgFiatPrincipal.toNumber() / 100;
+    this.avgCoinPrincipal = cushion.avgCoinPrincipal.toNumber();
+    this.lastAvgAdjustTime = cushion.lastAvgAdjustTime.toNumber();
+    this.maxCoverAdjust = cushion.maxCoverAdjust.toNumber();
+
+    const balance = await this.tcCore.balanceOf(this.user);
+    this.coinCurrent = balance.toNumber();
+    const lastBlock = await hre.ethers.provider.getBlock("latest");
+    this.timeMs = (lastBlock.timestamp * 1000) - this.initMs;
+  }
+
+  async setRate(rate: number, timeInMs: number) {
+    let nextTime = this.initMs + Math.max(this.timeMs, timeInMs);
+    // Check if we actually need to push rates?
+    if (this.oracle.rate != rate || this.oracle.validUntil < nextTime) {
+      // We have to push new rates, ensure that we advance time appropriately
+      // We have to be at least 1 second past the current validity block
+      nextTime = Math.max(nextTime, this.oracle.validUntil + 1000);
+      const diff = Duration.fromMillis(nextTime - this.oracle.validUntil);
+      const toAdvance = Math.max(1, Math.round(diff.as('days')));
+      await setOracleValueRepeat(this.oracle.contract, rate, toAdvance);
+      // Update cache
+      this.oracle.rate = rate;
+      this.oracle.validUntil = (await this.oracle.contract.validUntil()).toNumber();
+    }
+    // Set time to match timeInMs
+    if (nextTime - this.initMs != this.timeMs) {
+      this.timeMs = nextTime - this.initMs;
+      // Ensure blockchain matches time
+      await time.increaseTo(Math.round(nextTime / 1000));
+    }
+    return nextTime;
+  }
+
+  cushionUp = async (rate: number, year=1) => {
+    const currMs = await this.setRate(rate, (year - 1) * yearInMs);
+    const r = await this.absorber.calcCushionUp(this.user, this.coinCurrent, currMs);
+    await this.updateUser();
+    return r.toNumber();
+  };
+  cushionDown = async (rate: number) => {
+    const currMs = await this.setRate(rate, this.timeMs);
+    const r = await this.absorber.calcCushionDown(this.user, this.coinCurrent, currMs);
+    await this.updateUser();
+    return r.toNumber();
+  };
+
+  deposit = async (fiat: number, rate: number, timeMs: number) => {
+    await this.setRate(rate, timeMs);
+    const coin = toCoin(fiat, 100);
+    await this.tcCore.transfer(this.user, coin);
+    await this.updateUser();
+  };
+  withdraw = async (fiat: number, rate: number, timeMs: number) => {
+    await this.setRate(rate, timeMs);
+    const coin = toCoin(fiat, 100);
+    await this.tcUser.transfer(this.owner, coin);
+    await this.updateUser();
+  }
+
+  getAvgFiatPrincipal = async (timeMs: number) => {
+    const r = await this.absorber.getAvgFiatPrincipal(this.user, timeMs + this.initMs);
+    return r.toNumber() / 100;
+  }
+
+  drawDownCushion = async (timeMs: number) => {
+    await this.setRate(100, timeMs);
+    await this.absorber.drawDownCushion(this.user);
+    const oldReserved = this.reserved;
+    await this.updateUser();
+    return this.reserved - oldReserved;
+  }
+}
+
+
+async function setupAbsorber(tcCoreAddress?: string, oracleAddress?: string) {
+  const ShockAbsorber = await hre.ethers.getContractFactory('ShockAbsorber');
+  const absorber = await ShockAbsorber.deploy();
+  const zeroAddress = '0x0000000000000000000000000000000000000000';
+  await absorber.initialize(tcCoreAddress ?? zeroAddress, oracleAddress ?? zeroAddress);
+  return { absorber };
+}
+
+async function setupLive(initFiat: number, blockTime?: number) {
+  const { Owner, client1, OracleUpdater } = initAccounts(await hre.ethers.getSigners());
+  const tcCore = await createAndInitTheCoin(Owner);
+  const oracle = await createAndInitOracle(OracleUpdater, 100, blockTime);
+  const {absorber} = await setupAbsorber(tcCore.address, oracle.address);
+
+  // Mint a ridiculously large amount
+  await tcCore.mintCoins(10e12, Owner.address, Date.now());
+
+  // Create plugin & assign user
+  const initCoin = initFiat * 1e6 / 100;
+  await tcCore.pl_assignPlugin(client1.address, absorber.address, ALL_PERMISSIONS, "0x1234");
+  await tcCore.transfer(client1.address, initCoin);
+
+  return { absorber, client1, oracle, tcCore, Owner };
+}
