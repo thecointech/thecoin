@@ -3,7 +3,7 @@ import { hexZeroPad, hexStripZeros } from "@ethersproject/bytes";
 import { id } from "@ethersproject/hash";
 import { BigNumber } from "@ethersproject/bignumber";
 import { ERC20Response } from '../erc20response';
-import plugins from '../../plugins.json' assert { type: 'json' };
+import { getSourceCode } from '../plugins_devlive';
 
 export class Erc20Provider extends JsonRpcProvider {
 
@@ -63,9 +63,8 @@ export class Erc20Provider extends JsonRpcProvider {
     return result;
   }
 
-  async getSourceCode(address: string) {
-    const plugin = Object.values(plugins).find(p => p.address === address);
-    return plugin?.code;
+  getSourceCode(address: string) {
+    return getSourceCode({address});
   }
 }
 
