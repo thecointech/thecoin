@@ -54,6 +54,7 @@
     "@thecointech/async": "^0.2.93",
     "@thecointech/contract-tools": "^0.2.93",
     "@thecointech/contract-core": "^0.2.93",
+    "@thecointech/contract-plugin-converter": "^0.2.93",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.8",
     "jest": "*"
   },

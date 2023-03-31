@@ -70,7 +70,7 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
 
   mapping(address => UserCushion) cushions;
 
-  uint numClients = 0;
+  uint numClients;
 
   // Link back to core contract.
   IPluggable internal theCoin;

@@ -6,7 +6,7 @@ import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import parser from '@solidity-parser/parser'
 import type { PluginAndPermissionsStructOutput } from './types/contracts/IPluggable';
-import type { BaseASTNode, ContractDefinition, FunctionDefinition, StateVariableDeclaration, VariableDeclarationStatement, VariableDeclaration, FunctionCall, MemberAccess, Identifier, Expression, BinaryOperation, TupleExpression, ReturnStatement, IndexAccess, IfStatement, ExpressionStatement } from '@solidity-parser/parser/dist/src/ast-types';
+import type { BaseASTNode, ContractDefinition, FunctionDefinition, StateVariableDeclaration, VariableDeclarationStatement, VariableDeclaration, FunctionCall, MemberAccess, Identifier, Expression, BinaryOperation, TupleExpression, ReturnStatement, IndexAccess, IfStatement, ExpressionStatement, Block } from '@solidity-parser/parser/dist/src/ast-types';
 import type { ContractState, PluginBalanceMod } from './types';
 import { getPluginLogs, updateState } from './logs';
 
@@ -60,16 +60,18 @@ export async function getPluginModifier(user: string, {plugin, permissions}: Plu
         else if (isIfStatement(statement)) {
           const condition = getValue(statement.condition, variables);
           if (condition) {
-            if (statement.trueBody.type == "Block") {
-              runStatements(statement.trueBody.statements);
-            }
-            else {
-              throw new Error("Unhandled case here");
-            }
+            runStatements([statement.trueBody]);
+          }
+          else if (statement.falseBody) {
+            runStatements([statement.falseBody]);
           }
         }
         else if (isExpressionStatement(statement)) {
           evaluateExpression(statement, variables);
+        }
+        else if (isBlock(statement)) {
+          // Technically, we should have some kind of variable scoping here... /shrugs
+          runStatements(statement.statements);
         }
         else if (isReturn(statement)) {
           returnVal = getValue(statement.expression, variables);
@@ -78,6 +80,9 @@ export async function getPluginModifier(user: string, {plugin, permissions}: Plu
     }
 
     runStatements(statements);
+    if (returnVal === undefined) {
+      throw new Error("No return value specified from balanceOf");
+    }
     return returnVal!;
   }
 
@@ -92,7 +97,7 @@ function getInitialContractState(contract: ContractDefinition) {
       const { name, expression } = variable;
       if (name == null) throw new Error("Whats this?");
       if (expression != null) {
-        initialState[name] = getValue(expression, {});
+        initialState[name] = getValue(expression, initialState);
       }
       else {
         switch (variable.typeName?.type) {
@@ -104,6 +109,17 @@ function getInitialContractState(contract: ContractDefinition) {
               throw new Error("Unknown Variable Type");
             }
             break; // We don't use this at the moment...
+          case "ElementaryTypeName":
+            // Variable declarations without initialization
+            switch(variable.typeName.name) {
+              case "int":
+              case "uint":
+                initialState[name] = new Decimal(0);
+                break;
+              default:
+                throw new Error("Unknown Elementary Type");
+            }
+            break;
           default:
             throw new Error("Unknown Variable Type");
         }
@@ -121,7 +137,10 @@ const evaluateExpression = ({expression}: ExpressionStatement, variables: any) =
         const accessor = (expression.left as Identifier).name;
         variables[accessor] = right;
       }
+      break;
     }
+    default:
+      throw new Error("Unhandled Expression type");
   }
 }
 
@@ -133,7 +152,7 @@ const getValue = (initialValue: Expression|null, variables: any) : Decimal => {
     case "TupleExpression": return tupleExpression(initialValue, variables);
     case "Identifier": return identifier(initialValue, variables);
     case "IndexAccess": return indexAccess(initialValue, variables);
-    case "NumberLiteral": return new Decimal(initialValue.number);
+    case "NumberLiteral": return new Decimal(initialValue.number.replace(/_/g, ""));
     default: throw new Error("missing type");
   }
 }
@@ -149,6 +168,10 @@ function binaryOperation(initialValue: BinaryOperation, variables: any) : any {
     case "/": return left.dividedToIntegerBy(right);
     case '!=': return !left.eq(right);
     case '==': return left.eq(right);
+    case '<': return left.lessThan(right);
+    case '<=': return left.lessThanOrEqualTo(right);
+    case '>': return left.greaterThan(right);
+    case '>=': return left.greaterThanOrEqualTo(right);
     default: throw new Error("Invalid operation");
   }
 }
@@ -232,5 +255,4 @@ const isVariableDecl = (node: BaseASTNode|null) : node is VariableDeclaration =>
 const isVariableDeclStmt = (node: BaseASTNode) : node is VariableDeclarationStatement => node.type == "VariableDeclarationStatement";
 const isIfStatement = (node: BaseASTNode|null) : node is IfStatement => node?.type == "IfStatement";
 const isReturn = (node: BaseASTNode|null) : node is ReturnStatement => node?.type == "ReturnStatement";
-
-
+const isBlock = (node: BaseASTNode) : node is Block => node?.type == "Block";
