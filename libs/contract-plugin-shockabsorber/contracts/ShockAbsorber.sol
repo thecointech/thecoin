@@ -1,10 +1,9 @@
-/// @title Convert Currency & Time on-chain
+/// @title ShockAbsorber - smooth market movements
 /// @author Stephen Taylor
-/// @notice This plugin unlocks TheCoin from being tied to the stock
-/// market.  It allows converting currencies online and implements
-/// a delayable non-revokable allowance to permit Brokers to complete
-/// payments outside of trading hours, letting the trades settle at the
-/// time specified.
+/// @notice Smooths out the ups & downs of market movement.
+/// Each year reserves the first maxCushionUp percent of profit,
+/// and when the market drops it ensures the user does not lose any principal
+
 
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -22,6 +21,7 @@ import '@thecointech/contract-plugins/contracts/IPluggable.sol';
 
 import "hardhat/console.sol";
 
+// This could definitely be optimized...
 struct UserCushion {
   // CostBasis + the profit over time becomes protected
   int fiatPrincipal;
@@ -68,9 +68,6 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
 
   int maxCushionUpPercent;
 
-
-  // We list "to" first, as that is the value most likely to be repeated
-  // From => { To => Timestamp => Value }
   mapping(address => UserCushion) cushions;
 
   uint numClients = 0;
@@ -93,18 +90,6 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
 
   function getCushion(address user) public view returns(UserCushion memory) {
     return cushions[user];
-    // return userCushion;
-  }
-
-  // ------------------------------------------------------------------------
-  // TESTING FUNCTIONS - REMOVE PRIOR TO PROD PUBLISH
-  // ------------------------------------------------------------------------
-  function seedPending(address from, address to, uint amount, uint msTransferAt, uint msSignedAt) public onlyOwner{
-    // This can only run on testing blockchains.
-    // require(block.chainid == 0x13881 || block.chainid == 31337, "testing only");
-    // pending[from].transfers[to][msTransferAt] = pending[from].transfers[to][msTransferAt] + amount;
-    // pending[from].total = pending[from].total + amount;
-    // emit ValueChanged(from, msSignedAt, "pending[user].total", int(pending[from].total));
   }
 
   // ------------------------------------------------------------------------
@@ -130,19 +115,18 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     numClients = numClients + 1;
   }
 
-  function userDetached(address /*exClient*/, address /*initiator*/) override external onlyBaseContract {
-    // Total == 0 means no transfers remaining
-    // require(pending[exClient].total == 0, "Cannot remove plugin while a transaction is pending");
-    // delete pending[exClient];
-
+  function userDetached(address exClient, address /*initiator*/) override external onlyBaseContract {
+    // NOTE: THIS IS NOT TESTED (hopefully don't use it for a few years...)
+    // IT PROBABLY WONT WORK AS EXPECTED DUE TO FRACTIONAL YEARS NOT TESTED
+    _drawDownCushion(exClient, msNow());
+    delete cushions[exClient];
     numClients = numClients - 1;
-    // TODO:
   }
 
   // We automatically modify the balance to adjust for market fluctuations.
   function balanceOf(address user, int currentBalance) external view override returns(int)
   {
-    console.log("currentBalance: ", uint(currentBalance));
+    // console.log("currentBalance: ", uint(currentBalance));
     UserCushion storage userCushion = cushions[user];
 
     uint timeMs = msNow();
@@ -175,34 +159,34 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
 
     // The reserve amount applies fresh each year
     int msPassed = int(timeMs - user.initTime);
-    console.log("msPassed: ", uint(msPassed));
+    // console.log("msPassed: ", uint(msPassed));
     int year = int(msPassed / YEAR_IN_MS);
-    console.log("year: ", uint(year));
+    // console.log("year: ", uint(year));
 
     int coinPrincipal = toCoin(user.fiatPrincipal, timeMs);
     int coinOriginal = coinBalance + user.reserved;
-    console.log("coinOriginal: ", uint(coinOriginal));
-    console.log("coinPrincipal: ", uint(coinPrincipal));
+    // console.log("coinOriginal: ", uint(coinOriginal));
+    // console.log("coinPrincipal: ", uint(coinPrincipal));
 
     int percentCovered = (FLOAT_FACTOR * maxFiatProtected) / user.fiatPrincipal;
     if (percentCovered > FLOAT_FACTOR) {
       percentCovered = FLOAT_FACTOR;
     }
-    console.log("percentCovered: ", uint(percentCovered));
+    // console.log("percentCovered: ", uint(percentCovered));
 
     int maxPercentCushion = getMaxPercentCushion((1 + year) * YEAR_IN_MS);
-    console.log("maxPercentCushion: ", uint(maxPercentCushion));
+    // console.log("maxPercentCushion: ", uint(maxPercentCushion));
     int coinMaxCushion = (maxPercentCushion * coinOriginal) / FLOAT_FACTOR;
-    console.log("coinMaxCushion: ", uint(coinMaxCushion));
+    // console.log("coinMaxCushion: ", uint(coinMaxCushion));
 
     int coinCushion = coinOriginal - coinPrincipal;
-    console.log("coinCushion: ", uint(coinCushion));
+    // console.log("coinCushion: ", uint(coinCushion));
     int coinCovered = coinCushion;
     if (coinCushion > coinMaxCushion) {
       coinCovered = coinMaxCushion;
     }
     int r = ((coinCovered * percentCovered) / FLOAT_FACTOR) - user.reserved;
-    console.log("r: ", uint(r));
+    // console.log("r: ", uint(r));
     return r;
   }
 
@@ -219,25 +203,25 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
 
     int coinPrincipal = toCoin(user.fiatPrincipal, timeMs);
     int coinOriginal = coinBalance + user.reserved;
-    console.log("coinOriginal: ", uint(coinOriginal));
-    console.log("user.reserved: ", uint(user.reserved));
+    // console.log("coinOriginal: ", uint(coinOriginal));
+    // console.log("user.reserved: ", uint(user.reserved));
 
     int percentCovered = (maxFiatProtected * FLOAT_FACTOR) / user.fiatPrincipal;
     if (percentCovered > FLOAT_FACTOR) {
       percentCovered = FLOAT_FACTOR;
     }
-    console.log("percentCovered: ", uint(percentCovered));
+    // console.log("percentCovered: ", uint(percentCovered));
 
     int coinCovered = user.maxCovered;
     if (coinCovered > coinPrincipal) {
       coinCovered = coinPrincipal;
     }
-    console.log("coinCovered: ", uint(coinCovered));
+    // console.log("coinCovered: ", uint(coinCovered));
 
     int target = percentCovered * coinCovered;
-    console.log("target: ", uint(target / FLOAT_FACTOR));
+    // console.log("target: ", uint(target / FLOAT_FACTOR));
     int original = (percentCovered * coinOriginal) - (user.reserved * FLOAT_FACTOR);
-    console.log("original: ", uint(original / FLOAT_FACTOR));
+    // console.log("original: ", uint(original / FLOAT_FACTOR));
 
     return (target - original) / FLOAT_FACTOR;
   }
@@ -351,13 +335,17 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
   // ------------------------------------------------------------------------
   // Owners functionality
   // ------------------------------------------------------------------------
-  function drawDownCushion(address user, uint timeMs) public {
+  function drawDownCushion(address user, uint timeMs) public onlyOwner() {
+    _drawDownCushion(user, timeMs);
+  }
+
+  function _drawDownCushion(address user, uint timeMs) internal {
     require(timeMs < msNow(), "Time must be in the past");
-    console.log("*** drawDownCushion timeMs: ", uint(timeMs));
+    // console.log("*** drawDownCushion timeMs: ", uint(timeMs));
     int avgCoinPrincipal = this.getAvgCoinBalance(user,timeMs);
-    console.log("avgCoinPrincipal: ", uint(avgCoinPrincipal));
+    // console.log("avgCoinPrincipal: ", uint(avgCoinPrincipal));
     int avgFiatPrincipal = this.getAvgFiatPrincipal(user, timeMs);
-    console.log("avgFiatPrincipal: ", uint(avgFiatPrincipal));
+    // console.log("avgFiatPrincipal: ", uint(avgFiatPrincipal));
 
     // Prevent divide-by-zero
     if (avgCoinPrincipal == 0 || avgFiatPrincipal == 0) {
@@ -369,18 +357,18 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     if (covered > FLOAT_FACTOR) {
       covered = FLOAT_FACTOR;
     }
-    console.log("covered: ", uint(covered));
+    // console.log("covered: ", uint(covered));
 
     // We always reserve the maximum percent, ignoring current rates
     // CushionDown ensures that this does not take balance below principal
-    console.log("userCushion.lastDrawDownTime: ", uint(userCushion.lastDrawDownTime));
+    // console.log("userCushion.lastDrawDownTime: ", uint(userCushion.lastDrawDownTime));
     int timeSinceLastDrawDown = int(timeMs - userCushion.lastDrawDownTime);
-    console.log("timeSinceLastDrawDown: ", uint(timeSinceLastDrawDown));
+    // console.log("timeSinceLastDrawDown: ", uint(timeSinceLastDrawDown));
     int percentCushion = this.getMaxPercentCushion(timeSinceLastDrawDown);
-    console.log("percentCushion: ", uint(percentCushion));
+    // console.log("percentCushion: ", uint(percentCushion));
     // How many coins we gonna keep now?
     int toReserve = (covered * percentCushion * avgCoinPrincipal) / (FLOAT_FACTOR * FLOAT_FACTOR);
-    console.log("toReserve: ", uint(toReserve));
+    // console.log("toReserve: ", uint(toReserve));
 
     // If nothing to do, do nothing
     if (toReserve == 0) {
@@ -392,6 +380,10 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     userCushion.reserved += toReserve;
     userCushion.lastDrawDownTime = timeMs;
     userCushion.lastAvgAdjustTime = timeMs;
+  }
+
+  function withdraw(uint amount) internal onlyOwner() {
+    theCoin.pl_transferFrom(address(this), owner(), amount, msNow());
   }
 
   // ------------------------------------------------------------------------
