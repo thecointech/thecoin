@@ -47,7 +47,10 @@
       }
     },
     "./Erc20Provider": {
-      "development": "./build/mjs/web/mocked/index.js",
+      "development": {
+        "node": "./build/mjs/node/mocked.js",
+        "default": "./build/mjs/web/mocked/index.js"
+      },
       "devlive": "./build/mjs/web/local/index.js",
       "default": "./build/mjs/web/remote/index.js"
     },

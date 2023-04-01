@@ -10,9 +10,12 @@ import type { BaseASTNode, ContractDefinition, FunctionDefinition, StateVariable
 import type { ContractState, PluginBalanceMod } from './types';
 import { getPluginLogs, updateState } from './logs';
 
-export async function getPluginModifier(user: string, {plugin, permissions}: PluginAndPermissionsStructOutput) : Promise<PluginBalanceMod|null> {
+const RETURN_KEY = "__$return";
 
-  const provider = new Erc20Provider();
+export async function getPluginModifier(user: string, {plugin, permissions}: PluginAndPermissionsStructOutput, _provider?: Erc20Provider) : Promise<PluginBalanceMod|null> {
+
+  // Allow passing in a provider so we can mock it in testing
+  const provider = _provider ?? new Erc20Provider();
 
   // if this doesn't modify the balance, we don't need to emulate it
   if (permissions.mask(PERMISSION_BALANCE).eq(0)) {
@@ -23,7 +26,8 @@ export async function getPluginModifier(user: string, {plugin, permissions}: Plu
   const parsed = parser.parse(source);
 
   const contract = parsed.children.find(c => c.type == "ContractDefinition") as ContractDefinition;
-  const solBalanceOf = contract.subNodes.filter(f => f.type == "FunctionDefinition")
+  const functions = contract.subNodes.filter(f => f.type == "FunctionDefinition");
+  const solBalanceOf = functions
     .map(f => f as FunctionDefinition)
     .find(f => f.name == "balanceOf");
 
@@ -37,56 +41,61 @@ export async function getPluginModifier(user: string, {plugin, permissions}: Plu
   // It references currentState which is only updated within this fn
   const balanceOf = (balance: Decimal, timestamp: DateTime, rates: FXRate[]) => {
 
+    // Init variables
     const variables = {
       ...updateState(initialState, timestamp, logs),
       user,
       block: { timestamp: new Decimal(timestamp.toSeconds()).toInteger() },
       currentBalance: balance,
       __$rates: rates,
+      __$functions: functions,
     } as ContractState;
-    let returnVal: Decimal|undefined = undefined;
-    const runStatements = (statements: BaseASTNode[]) => {
-      for (const statement of statements) {
-        // Once return is requested, no more statements will run
-        if (returnVal) return;
 
-        if (isVariableDeclStmt(statement)) {
-          for (const variable of statement.variables) {
-            if (isVariableDecl(variable)) {
-              variables[variable.name!] = getValue(statement.initialValue, variables);
-            }
-          }
-        }
-        else if (isIfStatement(statement)) {
-          const condition = getValue(statement.condition, variables);
-          if (condition) {
-            runStatements([statement.trueBody]);
-          }
-          else if (statement.falseBody) {
-            runStatements([statement.falseBody]);
-          }
-        }
-        else if (isExpressionStatement(statement)) {
-          evaluateExpression(statement, variables);
-        }
-        else if (isBlock(statement)) {
-          // Technically, we should have some kind of variable scoping here... /shrugs
-          runStatements(statement.statements);
-        }
-        else if (isReturn(statement)) {
-          returnVal = getValue(statement.expression, variables);
-        }
-      }
-    }
-
-    runStatements(statements);
-    if (returnVal === undefined) {
+    runStatements(statements, variables);
+    const r = variables[RETURN_KEY];
+    if (r === undefined) {
       throw new Error("No return value specified from balanceOf");
     }
-    return returnVal!;
+    return r as Decimal;
   }
 
   return balanceOf;
+}
+
+// Execute a block of code
+function runStatements(statements: BaseASTNode[], variables: ContractState) {
+
+  for (const statement of statements) {
+    // Once return is requested, no more statements will run
+    if (variables[RETURN_KEY]) return;
+
+    if (isVariableDeclStmt(statement)) {
+      for (const variable of statement.variables) {
+        if (isVariableDecl(variable)) {
+          variables[variable.name!] = getValue(statement.initialValue, variables);
+        }
+      }
+    }
+    else if (isIfStatement(statement)) {
+      const condition = getValue(statement.condition, variables);
+      if (condition) {
+        runStatements([statement.trueBody], variables);
+      }
+      else if (statement.falseBody) {
+        runStatements([statement.falseBody], variables);
+      }
+    }
+    else if (isExpressionStatement(statement)) {
+      evaluateExpression(statement, variables);
+    }
+    else if (isBlock(statement)) {
+      // Technically, we should have some kind of variable scoping here... /shrugs
+      runStatements(statement.statements, variables);
+    }
+    else if (isReturn(statement)) {
+      variables[RETURN_KEY] = getValue(statement.expression, variables);
+    }
+  }
 }
 
 function getInitialContractState(contract: ContractDefinition) {
@@ -195,6 +204,17 @@ function callFunction(fnCall: FunctionCall, variables: any) {
       case "toFiat": return toFiat(args, variables.__$rates);
       case "toCoin": return toCoin(args, variables.__$rates);
       case "msNow": return variables.block.timestamp.mul(1000);
+      default: {
+        const name = fnCall.expression.name;
+        const fn = variables.__$functions.find((f: { name: string; }) => f.name == name);
+        if (fn) {
+          // Create a new scope for the function,
+          // then return it's return value
+          const scoped = {...variables};
+          runStatements(fn.body.statements, scoped);
+          return scoped[RETURN_KEY];
+        }
+      }
     }
   }
   else if (fnCall.expression.type == "ElementaryTypeName") {
@@ -218,7 +238,7 @@ function memberAccess(memberAccess: MemberAccess, variables: any): Decimal {
 
 const avgRate = (rate: FXRate) => ((rate.sell + rate.buy) / 2) || 1;
 
-export const toFiat = ([coin, timestamp]: any[], rates: FXRate[]) => {
+export const toFiat = ([coin, timestamp]: Decimal[], rates: FXRate[]) => {
   const rate = getFxRate(rates, timestamp.mul(1000).toNumber());
   // If no exchange rate, return 0?
   if (!rate.fxRate || !rate.buy) {
@@ -231,7 +251,7 @@ export const toFiat = ([coin, timestamp]: any[], rates: FXRate[]) => {
     .mul(100)
     .toint();
 }
-export const toCoin = ([fiat, timestamp]: any[], rates: FXRate[]) => {
+export const toCoin = ([fiat, timestamp]: Decimal[], rates: FXRate[]) => {
   const rate = getFxRate(rates, timestamp.mul(1000).toNumber());
   // If no exchange rate, return 0?
   if (!rate.fxRate || !rate.buy) {
