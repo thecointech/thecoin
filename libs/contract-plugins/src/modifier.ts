@@ -211,6 +211,12 @@ function callFunction(fnCall: FunctionCall, variables: any) {
           // Create a new scope for the function,
           // then return it's return value
           const scoped = {...variables};
+          // Copy the arguments into the named function parameters
+          for (let i = 0; i < fnCall.arguments.length; i++) {
+            const arg = fnCall.arguments[i];
+            const param = fn.parameters[i];
+            scoped[param.name] = getValue(arg, scoped);
+          }
           runStatements(fn.body.statements, scoped);
           return scoped[RETURN_KEY];
         }

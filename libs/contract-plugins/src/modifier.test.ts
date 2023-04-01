@@ -36,8 +36,40 @@ it ('UberConverter correctly accesses data', async () => {
   }))
 
   const modifier = await getModifier("UberConverter");
-  const rfiat = await modifier(1000, 1); // User has $100 pending
+  const rfiat = modifier(1000, 1); // User has $100 pending
   expect(rfiat.toNumber()).toBe(900);
+})
+
+it ('ShockAbsorber correctly accesses data', async () => {
+  jest.unstable_mockModule("@ethersproject/contracts", () => ({
+    Contract: class {
+      filters = {
+        ValueChanged: () => {},
+      }
+      queryFilter = () => Promise.resolve([
+        {
+          args: {
+            user,
+            msTime: new Decimal(0),
+            path: "cushions[user].fiatPrincipal",
+            change: new Decimal(2000),
+          }
+        },
+        {
+          args: {
+            user,
+            msTime: new Decimal(0),
+            path: "cushions[user].maxCovered",
+            change: new Decimal(20000000), // Assumes rate of 2
+          }
+        }
+      ] as any)
+    }
+  }))
+
+  const modifier = await getModifier("ShockAbsorber");
+  const rfiat = modifier(1000, 1); // User has $100 pending
+  expect(rfiat.toNumber()).toBe(2000);
 })
 
 const user = "0x1234567890123456789012345678901234567890";
