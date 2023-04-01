@@ -148,7 +148,7 @@ export class AbsorberSol {
 }
 
 
-async function setupAbsorber(tcCoreAddress?: string, oracleAddress?: string) {
+export async function setupAbsorber(tcCoreAddress?: string, oracleAddress?: string) {
   const ShockAbsorber = await hre.ethers.getContractFactory('ShockAbsorber');
   const absorber = await ShockAbsorber.deploy();
   const zeroAddress = '0x0000000000000000000000000000000000000000';
@@ -156,19 +156,25 @@ async function setupAbsorber(tcCoreAddress?: string, oracleAddress?: string) {
   return { absorber };
 }
 
-async function setupLive(initFiat: number, blockTime?: number) {
+export async function createAndInitAbsorber(blockTime?: number) {
   const { Owner, client1, OracleUpdater } = initAccounts(await hre.ethers.getSigners());
   const tcCore = await createAndInitTheCoin(Owner);
   const oracle = await createAndInitOracle(OracleUpdater, 100, blockTime);
   const {absorber} = await setupAbsorber(tcCore.address, oracle.address);
+  return { absorber, tcCore, oracle, client1, Owner };
+}
+
+async function setupLive(initFiat: number, blockTime?: number) {
+  const { Owner, client1, oracle, tcCore, absorber } = await createAndInitAbsorber(blockTime);
 
   // Mint a ridiculously large amount
   await tcCore.mintCoins(10e12, Owner.address, Date.now());
 
   // Create plugin & assign user
   const initCoin = toCoin(initFiat, 100);
-  await tcCore.pl_assignPlugin(client1.address, absorber.address, ALL_PERMISSIONS, "0x1234");
   await tcCore.transfer(client1.address, initCoin);
+  await tcCore.pl_assignPlugin(client1.address, absorber.address, ALL_PERMISSIONS, "0x1234");
+
   // absorber needs funds - start with $100K
   await tcCore.transfer(absorber.address, toCoin(100_000, 100));
 

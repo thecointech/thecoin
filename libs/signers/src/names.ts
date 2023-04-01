@@ -16,6 +16,7 @@ export enum AccountId {
   client1,
   client2,
   uberTester,
+  saTester, // ShockAbsorber Tester
 };
 
 export type AccountName = keyof typeof AccountId;
