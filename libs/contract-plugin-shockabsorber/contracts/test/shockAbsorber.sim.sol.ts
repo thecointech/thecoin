@@ -89,7 +89,7 @@ export class AbsorberSol {
       // We have to be at least 1 second past the current validity block
       nextTime = Math.max(nextTime, this.oracle.validUntil + 1000);
       const diff = Duration.fromMillis(nextTime - this.oracle.validUntil);
-      const toAdvance = Math.max(1, Math.round(diff.as('days')));
+      const toAdvance = Math.ceil(diff.as('days'));
       await setOracleValueRepeat(this.oracle.contract, rate, toAdvance);
       // Update cache
       this.oracle.rate = rate;
@@ -110,8 +110,8 @@ export class AbsorberSol {
     await this.updateUser();
     return r.toNumber();
   };
-  cushionDown = async (rate: number) => {
-    const currMs = await this.setRate(rate, this.timeMs);
+  cushionDown = async (rate: number, year=0) => {
+    const currMs = await this.setRate(rate, year * yearInMs);
     const r = await this.absorber.calcCushionDown(this.user, this.coinCurrent, currMs);
     await this.updateUser();
     return r.toNumber();

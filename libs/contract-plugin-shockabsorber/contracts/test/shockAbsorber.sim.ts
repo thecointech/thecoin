@@ -32,7 +32,7 @@ export const testResults = async (tester: Tester, results: Results) => {
 
   let r = (isUp)
     ? await tester.cushionUp(results.rate, results.year)
-    : await tester.cushionDown(results.rate);
+    : await tester.cushionDown(results.rate, results.year);
   if (r == -0) r = 0;
   if (results.fiat) {
     const cushion = toFiat(r, results.rate) * (isUp ? -1 : 1);
