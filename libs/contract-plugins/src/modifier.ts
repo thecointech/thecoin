@@ -135,6 +135,23 @@ function getInitialContractState(contract: ContractDefinition) {
       }
     }
   }
+  const functions = contract.subNodes.filter(f => f.type == "FunctionDefinition");
+  const initialize = functions
+    .map(f => f as FunctionDefinition)
+    .find(f => f.name == "initialize");
+  if (initialize?.body) {
+    for (const statement of initialize.body.statements) {
+      if (isExpressionStatement(statement)) {
+        // Skip functions
+        if (statement.expression?.type == "FunctionCall") {
+          continue;
+        }
+        evaluateExpression(statement, initialState);
+      }
+    }
+  }
+
+  // Run the initialize function if it exists
   return initialState;
 }
 
@@ -204,8 +221,10 @@ function callFunction(fnCall: FunctionCall, variables: any) {
       case "toFiat": return toFiat(args, variables.__$rates);
       case "toCoin": return toCoin(args, variables.__$rates);
       case "msNow": return variables.block.timestamp.mul(1000);
+      case "IPluggable": return undefined; // initialization-only fn
       default: {
         const name = fnCall.expression.name;
+        // Functions can be null during initialization
         const fn = variables.__$functions.find((f: { name: string; }) => f.name == name);
         if (fn) {
           // Create a new scope for the function,

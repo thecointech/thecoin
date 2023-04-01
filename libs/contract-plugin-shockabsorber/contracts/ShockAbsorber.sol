@@ -48,7 +48,6 @@ struct UserCushion {
   int maxCoverAdjust;
 }
 
-
 contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, PermissionUser {
 
   // By default, we protect up to $5000
@@ -141,11 +140,11 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     int currentFiat = toFiat(currentBalance, timeMs);
     int fiatPrincipal = userCushion.fiatPrincipal;
     if (currentFiat < fiatPrincipal) {
-      int cushion = calcCushionDown(userCushion, currentBalance, timeMs);
+      int cushion = _calcCushionDown(userCushion, currentBalance, timeMs);
       return currentBalance + cushion;
     }
     else if (currentFiat > fiatPrincipal) {
-      int reserve = calcCushionUp(userCushion, currentBalance, timeMs);
+      int reserve = _calcCushionUp(userCushion, currentBalance, timeMs);
       return currentBalance - reserve;
     }
     else {
@@ -156,10 +155,10 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
   // Public-access for testing
   function calcCushionUp(address user, int coinBalance, uint timeMs) public view returns(int) {
     UserCushion storage userCushion = cushions[user];
-    return calcCushionUp(userCushion, coinBalance, timeMs);
+    return _calcCushionUp(userCushion, coinBalance, timeMs);
   }
 
-  function calcCushionUp(UserCushion storage user, int coinBalance, uint timeMs) internal view returns(int) {
+  function _calcCushionUp(UserCushion storage user, int coinBalance, uint timeMs) internal view returns(int) {
     if (user.fiatPrincipal == 0) {
       return 0;
     }
@@ -200,10 +199,10 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
   // Public-access for testing
   function calcCushionDown(address user, int coinBalance, uint timeMs) public view returns(int) {
     UserCushion storage userCushion = cushions[user];
-    return calcCushionDown(userCushion, coinBalance, timeMs);
+    return _calcCushionDown(userCushion, coinBalance, timeMs);
   }
 
-  function calcCushionDown(UserCushion storage user, int coinBalance, uint timeMs) internal view returns(int) {
+  function _calcCushionDown(UserCushion storage user, int coinBalance, uint timeMs) internal view returns(int) {
     if (user.fiatPrincipal == 0) {
       return 0;
     }
@@ -325,7 +324,7 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
       // In Loss, run CushionDown
       uint additionalRequired = coinWithdraw - coinBalance;
       // console.log("additionalRequired: ", additionalRequired);
-      int maxCushion = calcCushionDown(userCushion, int(coinBalance), timeMs);
+      int maxCushion = _calcCushionDown(userCushion, int(coinBalance), timeMs);
       // console.log("maxCushion: ", uint(maxCushion));
       require(additionalRequired <= uint(maxCushion), "Insufficient funds");
       // transfer additionalRequired to this users account
