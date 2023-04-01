@@ -14,7 +14,7 @@ export function runModifier(balanceOf: PluginBalanceMod, fiat: number, timestamp
     validFrom: Number.MIN_SAFE_INTEGER,
     validTill: Number.MAX_SAFE_INTEGER,
   } as FXRate];
-  const ts = new Decimal(timestamp).div(1000)
+  const ts = new Decimal(timestamp)
   const coin = toCoin([new Decimal(fiat), ts], rates);
   const rcoin = balanceOf(coin, DateTime.fromMillis(timestamp), rates);
   return toFiat([rcoin, ts], rates);

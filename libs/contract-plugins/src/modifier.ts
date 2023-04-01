@@ -264,7 +264,7 @@ function memberAccess(memberAccess: MemberAccess, variables: any): Decimal {
 const avgRate = (rate: FXRate) => ((rate.sell + rate.buy) / 2) || 1;
 
 export const toFiat = ([coin, timestamp]: Decimal[], rates: FXRate[]) => {
-  const rate = getFxRate(rates, timestamp.mul(1000).toNumber());
+  const rate = getFxRate(rates, timestamp.toNumber());
   // If no exchange rate, return 0?
   if (!rate.fxRate || !rate.buy) {
     return new Decimal(0);
@@ -277,7 +277,7 @@ export const toFiat = ([coin, timestamp]: Decimal[], rates: FXRate[]) => {
     .toint();
 }
 export const toCoin = ([fiat, timestamp]: Decimal[], rates: FXRate[]) => {
-  const rate = getFxRate(rates, timestamp.mul(1000).toNumber());
+  const rate = getFxRate(rates, timestamp.toNumber());
   // If no exchange rate, return 0?
   if (!rate.fxRate || !rate.buy) {
     return new Decimal(0);
