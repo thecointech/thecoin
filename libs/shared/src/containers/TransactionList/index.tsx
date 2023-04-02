@@ -128,7 +128,7 @@ export const TransactionList = (props: MyProps) => {
     const addressComment = NormalizeAddress(tx.to) == account?.address ? tx.from : tx.to;
     return (
       <TransactionLine
-        key={index}
+        id={index}
         locale={locale}
 
         yearToDisplay={yearToDisplay}

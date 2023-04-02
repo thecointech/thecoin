@@ -29,11 +29,11 @@ abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
   // ------------------------------------------------------------------------
 
   // Assign new plugin to user.  Currently un-guarded.  Obvs needs that guard
-  function pl_assignPlugin(address user, address plugin, uint96 permissions, bytes memory /*signature*/) public
+  function pl_assignPlugin(address user, uint timeMs, address plugin, uint96 permissions, bytes memory /*signature*/) public
     onlyPluginMgr
   {
     IPlugin _p = IPlugin(plugin);
-    _p.userAttached(user, msg.sender);
+    _p.userAttached(user, timeMs, msg.sender);
 
     PluginAndPermissions memory pnp;
     pnp.plugin = _p;

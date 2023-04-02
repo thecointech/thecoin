@@ -70,7 +70,7 @@ contract BalanceGuardV0 is BasePlugin, OracleClient, Ownable, PermissionUser {
   }
 
     // If this is a new user, we initialize the guard to their fiat amount.
-  function userAttached(address newUser, address initiator) override external onlyOwner {
+  function userAttached(address newUser, uint timeMs, address initiator) override external onlyOwner {
     require(owner() == initiator, "FIXME! only tcCore should be able to call this, no?  only owner may attach this plugin");
     // only initialize if new user.
     if (userFiatBalance[newUser].costBasis == 0) {

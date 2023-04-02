@@ -99,13 +99,12 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     return PERMISSION_BALANCE & PERMISSION_DEPOSIT & PERMISSION_WITHDRAWAL & PERMISSION_AUTO_ACCESS;
   }
 
-  function userAttached(address user, address) override external onlyBaseContract {
-    require(cushions[user].fiatPrincipal == 0, "User is already attached");
+  function userAttached(address user, uint timeMs, address) override external onlyBaseContract {
+    require(cushions[user].initTime == 0, "User is already attached");
     require(numClients < 25, "Client limit reached");
 
-    uint timeMs = msNow();
     int coinBalance = theCoin.pl_balanceOf(user);
-    int fiatBalance = toFiat(coinBalance, timeMs);
+    int fiatBalance = toFiat(coinBalance, msNow()); // always calculate fiat now (?)
     int maxCovered = (FLOAT_FACTOR * int(coinBalance)) / (FLOAT_FACTOR - maxCushionDown);
     cushions[user].fiatPrincipal = fiatBalance;
     cushions[user].maxCovered = maxCovered;
@@ -115,7 +114,6 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
 
     emit ValueChanged(user, timeMs, "cushions[user].fiatPrincipal", fiatBalance);
     emit ValueChanged(user, timeMs, "cushions[user].maxCovered", maxCovered);
-    emit ValueChanged(user, timeMs, "cushions[user].lastAvgAdjustTime", int(timeMs));
     emit ValueChanged(user, timeMs, "cushions[user].initTime", int(timeMs));
 
     numClients = numClients + 1;

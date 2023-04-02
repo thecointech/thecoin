@@ -26,7 +26,7 @@ abstract contract BasePlugin is IPlugin {
   function msNow() public view returns(uint) { return block.timestamp * 1000; }
 
   // Default empty implementations allow clients to ignore fns they dont use
-  function userAttached(address user, address) virtual external override {}
+  function userAttached(address user, uint, address) virtual external override {}
   function userDetached(address user, address) virtual external override {}
   function preDeposit(address, uint, uint, uint) virtual external override {}
   function preWithdraw(address, uint balance, uint, uint) virtual external override returns(uint)

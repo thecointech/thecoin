@@ -26,7 +26,7 @@ it('converts fiat to TheCoin for current transfers', async () => {
   await uber.initialize(tcCore.address, oracle.address);
 
   // Assign to user, grant all permissions
-  await tcCore.pl_assignPlugin(signers.client1.address, uber.address, ALL_PERMISSIONS, "0x1234");
+  await tcCore.pl_assignPlugin(signers.client1.address, 0, uber.address, ALL_PERMISSIONS, "0x1234");
 
   // Transfer $100 now.
   const transfer = await buildUberTransfer(
@@ -78,7 +78,7 @@ it('Appropriately delays a transfer, and converts an appropriate amount at time'
   await uber.initialize(tcCore.address, oracle.address);
 
   // Assign to user, grant all permissions
-  await tcCore.pl_assignPlugin(signers.client1.address, uber.address, ALL_PERMISSIONS, "0x1234");
+  await tcCore.pl_assignPlugin(signers.client1.address, 0, uber.address, ALL_PERMISSIONS, "0x1234");
 
   // Transfer $100 in 1 weeks time.
   const delay = Duration.fromObject({day: 7});

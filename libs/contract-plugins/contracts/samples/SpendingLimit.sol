@@ -56,11 +56,11 @@ contract SpendingLimit is BasePlugin, OracleClient, Ownable, PermissionUser {
   }
 
     // If this is a new user, we initialize the guard to their fiat amount.
-  function userAttached(address newUser, address initiator) override external {
+  function userAttached(address newUser, uint timeMs, address initiator) override external {
     require(owner() == initiator, "only owner may attach this plugin");
     // only initialize if new user.
     if (userData[newUser].periodStart == 0) {
-      userData[newUser].periodStart = msNow();
+      userData[newUser].periodStart = timeMs;
     }
   }
 

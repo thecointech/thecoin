@@ -19,7 +19,7 @@ interface IPlugin is IERC165 {
   function getPermissions() external view returns(uint);
 
   // Hook called whenever a user adds a plugin to their account.
-  function userAttached(address add, address initiator) external;
+  function userAttached(address add, uint timeMs, address initiator) external;
 
   // Hook called whenever a user removes a plugin from their account
   function userDetached(address remove, address initiator) external;

@@ -36,7 +36,7 @@ contract DebugPrint is BasePlugin {
   function preDeposit(address user, uint, uint coin, uint timestamp) external override {
     emit PrintPreDeposit(user, coin, timestamp);
   }
-    function userAttached(address add, address initiator) external override {
+    function userAttached(address add, uint, address initiator) external override {
     emit PrintAttached(add, initiator);
   }
   function userDetached(address add, address initiator) external override {

@@ -173,7 +173,7 @@ async function setupLive(initFiat: number, blockTime?: number) {
   // Create plugin & assign user
   const initCoin = toCoin(initFiat, 100);
   await tcCore.transfer(client1.address, initCoin);
-  await tcCore.pl_assignPlugin(client1.address, absorber.address, ALL_PERMISSIONS, "0x1234");
+  await tcCore.pl_assignPlugin(client1.address, blockTime ?? 0, absorber.address, ALL_PERMISSIONS, "0x1234");
 
   // absorber needs funds - start with $100K
   await tcCore.transfer(absorber.address, toCoin(100_000, 100));

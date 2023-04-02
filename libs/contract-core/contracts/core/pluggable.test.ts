@@ -27,7 +27,7 @@ it('Calls appropriate methods on a plugin', async () => {
   }
 
   // Assign to user, grant all permissions, limit user to $100
-  const tx_assign = await tcCore.pl_assignPlugin(signers.client1.address, logger.address, ALL_PERMISSIONS, "0x1234");
+  const tx_assign = await tcCore.pl_assignPlugin(signers.client1.address, 0, logger.address, ALL_PERMISSIONS, "0x1234");
   await expectEvent(tx_assign, "PluginAttached", "PrintAttached");
 
   // Was it assigned with the right permissions?
