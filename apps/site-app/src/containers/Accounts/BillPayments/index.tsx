@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Dropdown, Message } from 'semantic-ui-react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { BuildVerifiedBillPayment } from '@thecointech/utilities/VerifiedBillPayment';
+import { BuildUberAction } from '@thecointech/utilities/UberAction';
 import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
 import { weBuyAt } from '@thecointech/fx-rates';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
@@ -15,6 +16,8 @@ import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import type { MessageWithValues } from '@thecointech/shared/types';
 import { log } from '@thecointech/logging';
+import { DateTime } from 'luxon';
+import Decimal from 'decimal.js-light';
 
 const translations = defineMessages({
   description: {
@@ -88,6 +91,10 @@ export const BillPayments = () => {
   const [successHidden, setSuccessHidden] = useState(true);
   const [errorHidden, setErrorHidden] = useState(true);
 
+  const asCoin = !account?.plugins?.length;
+  if (!asCoin) {
+    log.warn("WARNING: Submitting UberTransfer is experimental")
+  }
   const resetForm = () => {
     setCoinToSell(null);
     setResetDefault(Date.now());
@@ -113,10 +120,10 @@ export const BillPayments = () => {
     const statusApi = GetStatusApi();
     var { data } = await statusApi.status();
     // Check out if we have the right values
-    if (!data?.certifiedFee) {
-      setErrorHidden(false);
-      return false;
-    }
+    // if (!data?.certifiedFee) {
+    //   setErrorHidden(false);
+    //   return false;
+    // }
 
     if (doCancel)
       return false;
@@ -130,22 +137,37 @@ export const BillPayments = () => {
       accountNumber,
       payee,
     };
-    // To redeem, we construct & sign a message that
-    // that allows the broker to transfer TheCoin to itself
-    const billPayCommand = await BuildVerifiedBillPayment(
-      packet,
-      signer,
-      data.address,
-      coinToSell,
-      data.certifiedFee,
-    );
-    const billPayApi = GetBillPaymentsApi();
-    if (doCancel) return false;
 
+    const billPayApi = GetBillPaymentsApi();
+    const doUberBillPayment = async () => {
+      // TESTING ONLY: Can we pay 3 mins in the future?
+      const billPayCommand = await BuildUberAction(
+        packet,
+        signer,
+        data.address,
+        new Decimal(coinToSell),
+        124,
+        DateTime.now().plus({ minutes: 3 }),
+      )
+      setPaymentMessage(translations.step2);
+      setPercentComplete(0.25);
+      return await billPayApi.uberBillPayment(billPayCommand);
+    }
+    const doVerfiedBillPayment = async () => {
+      // Immediate transfer, cheaper than the uber bill payment
+      const billPayCommand = await BuildVerifiedBillPayment(
+        packet,
+        signer,
+        data.address,
+        coinToSell,
+        data.certifiedFee,
+      )
+      setPaymentMessage(translations.step2);
+      setPercentComplete(0.25);
+      return await billPayApi.billPayment(billPayCommand);
+    }
     // Send the command to the server
-    setPaymentMessage(translations.step2);
-    setPercentComplete(0.25);
-    const response = await billPayApi.billPayment(billPayCommand);
+    const response = await (asCoin ? doVerfiedBillPayment() : doUberBillPayment());
     const hash = response.data?.hash
     if (!hash) {
       log.error(`Error: missing response data: ${JSON.stringify(response)}`);
@@ -229,7 +251,7 @@ export const BillPayments = () => {
         {/*<Form.Input label="Bill Name" onChange={onNameChange} placeholder="An optional name to remember this payee by" /> */}
         <DualFxInput
           onChange={setCoinToSell}
-          asCoin={true}
+          asCoin={asCoin}
           maxValue={account!.balance}
           value={coinToSell}
           fxRate={rate}

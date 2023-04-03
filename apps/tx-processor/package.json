@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-processor",
-  "version": "0.2.91",
+  "version": "0.2.93",
   "private": "true",
   "type": "module",
   "description": "The Coin: A command-line app for completing transactions",
@@ -17,7 +17,7 @@
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
     "prod": "cross-env CONFIG_NAME=prod yarn start",
-    "start": "node -r @thecointech/setenv -r ../../__mocks__/mock_node ./build/main.js",
+    "start": "cross-env CONFIG_NAME=prod yarn run-env ./build/main.js",
     "test": "yarn run-jest",
     "test:ci": "yarn run-jest-nix",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
@@ -30,14 +30,14 @@
     ".": "./build/index.js"
   },
   "dependencies": {
-    "@thecointech/logging": "^0.2.91",
-    "@thecointech/setenv": "^0.2.91",
-    "@thecointech/tx-deposit": "^0.2.91",
-    "@thecointech/tx-etransfer": "^0.2.91",
+    "@thecointech/logging": "^0.2.93",
+    "@thecointech/setenv": "^0.2.93",
+    "@thecointech/tx-deposit": "^0.2.93",
+    "@thecointech/tx-etransfer": "^0.2.93",
     "open": "^8.2.1"
   },
   "devDependencies": {
-    "@thecointech/site-app": "^0.2.91",
+    "@thecointech/site-app": "^0.2.93",
     "jest": "*"
   }
 }

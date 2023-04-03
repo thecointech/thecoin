@@ -1,20 +1,14 @@
-import { accounts, privateKeys, contract } from '@openzeppelin/test-environment';
-import { Wallet } from 'ethers';
-import { TheGreenNFTL2Contract } from '../migrations/types';
+import { jest } from '@jest/globals';
 import { signGasslessUpdate, splitIpfsUri } from '../src';
-
-// Loads a compiled contract using OpenZeppelin test-environment
-contract.artifactsDir = "src/contracts";
-const factory: TheGreenNFTL2Contract = contract.fromArtifact('TheGreenNFTL2');
+import hre from 'hardhat';
 
 // Ethereum accounts used in these tests
 const [
   owner,  // Deploys the smart contract
   minter, // Owns the initial supply
   user, // rest are users
-] = accounts;
+] = await hre.ethers.getSigners();;
 
-const wallet = new Wallet(privateKeys[2]);
 const id = 1;
 // Sample data for updating metadata
 const sampleUri = "https://gateway.pinata.cloud/ipfs/Qma4hWzmKGzmGo1TDcHxCNLCgFu7aQTwG6pLbV6XPF2MT8";
@@ -25,7 +19,7 @@ jest.setTimeout(30 * 1000);
 it('Can update metadata', async () => {
   const nft = await init();
   // Can we update it to a legitimate metadata
-  await nft.updateMetaSha256(1, prefix, digest, { from: user});
+  await nft.connect(user).updateMetaSha256(1, prefix, digest);
   // Check that the data stored is legitimate
   const tokenUri = await nft.tokenURI(1);
   expect(tokenUri).toEqual(sampleUri);
@@ -34,7 +28,7 @@ it('Can update metadata', async () => {
 it('Can do gassless update of metadata', async () => {
   const nft = await init();
   // Can we do a gassless update?
-  const r = await signGasslessUpdate(wallet, id, 0, prefix, digest);
+  const r = await signGasslessUpdate(user, id, 0, prefix, digest);
   await nft.updateMetaSha256GassLess(id, prefix, digest, r.signature);
   // Check that the data stored is legitimate
   const tokenUri = await nft.tokenURI(id);
@@ -43,10 +37,10 @@ it('Can do gassless update of metadata', async () => {
 
 it('Can reset token', async () => {
   // Mint a random NFT
-  const nft = await init();
+  const nft = (await init()).connect(user);
   // Set and Reset URI
-  await nft.updateMetaSha256(1, prefix, digest, { from: user});
-  await nft.resetMetaSha256(id, {from: user });
+  await nft.updateMetaSha256(1, prefix, digest);
+  await nft.resetMetaSha256(id);
   // Check that the URI is back to default
   const tokenUri = await nft.tokenURI(id);
   const defaultUri = await nft.defaultTokenUri();
@@ -54,8 +48,10 @@ it('Can reset token', async () => {
 })
 
 const init = async () => {
-  const nft = await factory.new(minter, owner, {from: owner});
-  await nft.bulkMinting([id], 2022, {from: minter});
-  await nft.transferFrom(minter, user, id, {from: minter})
+  const NFT = await hre.ethers.getContractFactory("TheGreenNFTL2", minter);
+  const nft = await NFT.deploy(minter.address, minter.address);
+
+  await nft.bulkMinting([id], 2022);
+  await nft.transferFrom(minter.address, user.address, id)
   return nft;
 }

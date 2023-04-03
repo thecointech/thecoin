@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-core",
-  "version": "0.2.91",
+  "version": "0.2.93",
   "description": "The Coin: Solidity contract for TheCoin currency",
   "type": "module",
   "keywords": [
@@ -20,61 +20,60 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-s build:contracts build:types build:src",
-    "build:contracts": "yarn _truffle compile",
-    "build:types": "yarn contract-gen-types",
-    "build:src": "run-p build:src:*",
-    "_build:src:cjs": "yarn tsc --project tsconfig.build.cjs.json",
-    "build:src:mjs": "yarn tsc --project tsconfig.build.mjs.json",
-    "build:src:copy": "cpx \"./src/deployed/**\" ./build/cjs/deployed && cpx \"./src/deployed/**\" ./build/mjs/deployed",
+    "build": "run-s build:contracts build:copy build:src",
+    "build:contracts": "yarn _hardhat ./scripts/compile.ts",
+    "build:src": "yarn tsc -b",
+    "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
     "clean": "run-p clean:*",
     "clean:src": "rimraf ./build",
-    "clean:contracts": "rimraf ./src/contracts",
-    "clean:types": "rimraf ./src/types && rimraf ./migrations/types",
+    "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
     "test": "yarn run-jest",
     "test:ci": "yarn run-jest-nix",
-    "test:contract": "yarn _truffle test",
-    "prod:test": "cross-env CONFIG_NAME=prodtest yarn _deploy",
-    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn _deploy:polygon",
-    "prod": "cross-env CONFIG_NAME=prod yarn _deploy:polygon",
-    "_truffle": "run-env exec=truffle --config ./truffle-config.cjs",
-    "_deploy": "run-s _deploy:*",
-    "_deploy:polygon": "yarn _truffle migrate --network polygon && yarn seed",
-    "_deploy:ethereum": "yarn _truffle migrate --network ethereum",
-    "mint": "run-env ./mint/main.ts",
-    "seed": "run-env ./seed/main.ts",
-    "seed:fetch": "cross-env CONFIG_NAME=prodbeta yarn run-env ./seed/clone/fetch.ts",
-    "verify": "run-env ./internal/verify.ts"
+    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive run-s _deploy _seed:random",
+    "deploy:prod:test": "cross-env CONFIG_NAME=prodtest run-s _deploy _seed:clone",
+    "deploy:prod": "cross-env CONFIG_NAME=prod run-s _deploy",
+    "_deploy": "run-s _deploy:deploy _deploy:verify",
+    "_deploy:deploy": "yarn _hardhat ./scripts/deploy.ts",
+    "_deploy:verify": "yarn _hardhat ./scripts/verify.ts",
+    "_seed:random": "yarn _hardhat ./scripts/seed/random.ts",
+    "_seed:clone": "yarn _hardhat ./scripts/seed/clone.ts",
+    "_update": "yarn _hardhat ./scripts/update.ts && yarn _deploy:verify",
+    "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
   },
   "files": [
     "build/**/*"
   ],
   "main": "./build/index.js",
   "exports": {
-    "./contract": "./build/mjs/index.js",
+    "./contract": "./build/index.js",
+    "./testHelpers.ts": "./internal/testHelpers.ts",
     ".": {
-      "development": "./build/mjs/index_mocked.js",
-      "electron": "./build/mjs/index.js",
-      "default": "./build/mjs/index.js"
+      "development": "./build/index_mocked.js",
+      "electron": "./build/index.js",
+      "default": "./build/index.js"
     }
   },
-  "types": "./build/mjs/index.d.ts",
+  "types": "./build/index.d.ts",
   "typesVersions": {
     "*": {
+      "testHelpers.ts": ["./internal/testHelpers.ts"],
       "*": [
-        "build/mjs/index.d.ts"
+        "build/index.d.ts"
       ]
     }
   },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@openzeppelin/truffle-upgrades": "^1.14.0",
-    "@thecointech/async": "^0.2.91",
-    "@thecointech/contract-tools": "^0.2.91",
+    "@thecointech/async": "^0.2.93",
+    "@thecointech/contract-oracle": "^0.2.93",
+    "@thecointech/contract-tools": "^0.2.93",
     "jest": "*"
   },
   "dependencies": {
-    "@thecointech/contract-base": "^0.2.91"
+    "@solidity-parser/parser": "^0.14.5",
+    "@thecointech/contract-base": "^0.2.93",
+    "@thecointech/contract-plugins": "^0.2.93",
+    "@thecointech/fx-rates": "^0.2.93"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

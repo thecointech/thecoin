@@ -1,6 +1,8 @@
-import { Controller, Body, Route, Post, Response, Tags } from '@tsoa/runtime';
-import { certifiedTransfer } from '../exchange/VerifiedTransfer';
+import {
+  Controller, Body, Route, Post, Response, Tags,
+} from '@tsoa/runtime';
 import type { CertifiedTransferRequest } from '@thecointech/types';
+import { certifiedTransfer } from '../exchange/VerifiedTransfer';
 import type { ServerError, ValidateErrorJSON } from '../types';
 import type { CertifiedTransferResponse } from './types';
 
@@ -15,18 +17,17 @@ export class TransferController extends Controller {
      *
      * request CertifiedTransferRequest A request appropriately filled out and signed
      * returns CertifiedTransferResponse
-     **/
+     * */
   @Post()
   @Response('200', 'The response confirms to the user the order transfer is valid and has been initiated')
-  @Response<ValidateErrorJSON>(422, "Validation Failed")
-  @Response<ServerError>(500, "Server Error")
+  @Response<ValidateErrorJSON>(422, 'Validation Failed')
+  @Response<ServerError>(500, 'Server Error')
   async transfer(@Body() request: CertifiedTransferRequest) : Promise<CertifiedTransferResponse> {
     const hash = await certifiedTransfer(request);
     return {
-      message: "success",
-      hash
-    }
+      message: 'success',
+      hash,
+    };
   }
+
 }
-
-

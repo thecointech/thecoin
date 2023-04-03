@@ -7,5 +7,5 @@
     "outDir": "./build",
     "tsBuildInfoFile": "./build/.buildinfo",
   },
-  "include": ["./src/*.ts"]
+  "include": ["./src/*.ts"],
 }

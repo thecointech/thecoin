@@ -3,7 +3,8 @@ import { Transaction } from "@thecointech/tx-blockchain";
 //import { FXRate } from "containers/FxRate/types";
 
 export interface TxDatum extends Datum {
-  y: number;
+  y: number;  // Y is the final value,
+  raw: number; // raw is the balance prior to plugins
   costBasis: number;
   //fxRate: FXRate;
   txs: Transaction[],

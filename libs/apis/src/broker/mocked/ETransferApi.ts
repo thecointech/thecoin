@@ -1,18 +1,15 @@
 import { CertifiedTransfer, CertifiedTransferResponse, ETransferApi as SrcApi, ETransferCodeResponse, SignedMessage } from "@thecointech/broker-cad";
 import type { AxiosResponse } from 'axios';
 import { buildResponse } from '../../axios-utils';
-import { GetContract } from '@thecointech/contract-core';
 import { sleep } from '@thecointech/async';
 
 export class ETransferApi implements Pick<SrcApi, keyof SrcApi> {
   async eTransfer(request: CertifiedTransfer): Promise<AxiosResponse<CertifiedTransferResponse>> {
-    const contract = await GetContract();
-    const xfer = await contract.certifiedTransfer("", request.transfer.to, request.transfer.value, 5000, 1230, request.signature);
     await sleep(250);
     return buildResponse({
       message: "Success",
       state: "uh?",
-      hash: xfer.hash,
+      hash: "0x123456789012345678901234567",
     })
   }
 

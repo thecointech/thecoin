@@ -30,7 +30,7 @@ async function queryCalendar(url: string) {
   try {
     const r = await axios.get<TradierResponse>(url, {
       headers: {
-        Authorization: process.env.TRADIER_API_KEY,
+        Authorization: process.env.TRADIER_API_KEY!,
         Accept: 'application/json'
       }
     });

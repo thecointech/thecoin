@@ -33,7 +33,9 @@ export const Mint = () => {
   /////////////////////////////////////////////////////////
   const onMintCoins = useCallback(async () => {
     setStatus(MintStatus.PROCESSING);
+
     try {
+      debugger; // NOTE: THIS SHOULD BE IN MS, NOT SECONDS
       const { contract } = account;
       const brokerAddress = process.env.WALLET_BrokerCAD_ADDRESS!;
       const tx = await contract!.mintCoins(toMint, brokerAddress, DateTime.now().toSeconds());

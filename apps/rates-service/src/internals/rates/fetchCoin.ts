@@ -67,7 +67,7 @@ export function findRateFor(lastExpired: number, data: FinnhubData): CoinRate {
   }
 
   const cnt = data.t?.length ?? 0;
-  log.fatal(`Could not find coin rate for: ${lastExpired}.  \nWe have ${data.t.length} rates, from ${DateTime.fromSeconds(data.t[0])} => ${DateTime.fromSeconds(data.t[cnt - 1])}`);
+  log.fatal(`Could not find coin rate for: ${DateTime.fromMillis(lastExpired)}.  \nWe have ${data.t.length} rates, from ${DateTime.fromSeconds(data.t[0])} => ${DateTime.fromSeconds(data.t[cnt - 1])}`);
   throw new Error("RateNotFound");
 }
 

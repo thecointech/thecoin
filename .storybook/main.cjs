@@ -55,7 +55,9 @@ module.exports = {
           new DefinePlugin({ // Log Everything
             "process.env.LOG_NAME": JSON.stringify("Storybook"),
             "process.env.LOG_LEVEL": 0,
+            "BROWSER": true,
           }),
+          new AbsolutePathRemapper()
         ],
         experiments: {
           topLevelAwait: true,
@@ -63,12 +65,10 @@ module.exports = {
         resolve: {
           alias: {
             "fs": false,
+            "path": false,
           },
           modules: [mocksFolder],
         },
-        plugins: [
-          new AbsolutePathRemapper()
-        ]
       },
       config);
     // Exclude our build folder from compilation.

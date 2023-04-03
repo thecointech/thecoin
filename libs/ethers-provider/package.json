@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/ethers-provider",
-  "version": "0.2.91",
+  "version": "0.2.93",
   "description": "TheCoin: A custom ethers.js provider with access to Polygon and improved Etherscan support",
   "keywords": [
     "ethereum",
@@ -21,9 +21,9 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "run-p build:*",
-    "prebuild:cjs": "rimraf ./build/cjs/**.cjs",
-    "build:cjs": "yarn tsc --project tsconfig.build.cjs.json",
-    "postbuild:cjs": "node ./postbuild.cjs",
+    "_prebuild:cjs": "rimraf ./build/cjs/**.cjs",
+    "_build:cjs": "yarn tsc --project tsconfig.build.cjs.json",
+    "_postbuild:cjs": "node ./postbuild.cjs",
     "build:mjs": "yarn tsc --project tsconfig.build.mjs.json",
     "test": "yarn run-jest",
     "test:ci": "yarn run-jest-nix",
@@ -32,19 +32,13 @@
   "files": [
     "build/**/*"
   ],
+  "main": "./build/mjs/node/remote.js",
   "exports": {
     ".": {
       "node": {
-        "require": {
-          "development": "./build/cjs/node/mocked.js",
-          "devlive": "./build/cjs/node/local.js",
-          "default": "./build/cjs/node/remote.js"
-        },
-        "import": {
-          "development": "./build/mjs/node/mocked.js",
-          "devlive": "./build/mjs/node/local.js",
-          "default": "./build/mjs/node/remote.js"
-        }
+        "development": "./build/mjs/node/mocked.js",
+        "devlive": "./build/mjs/node/local.js",
+        "default": "./build/mjs/node/remote.js"
       },
       "browser": {
         "development": "./build/mjs/web/mocked/index.js",
@@ -53,7 +47,10 @@
       }
     },
     "./Erc20Provider": {
-      "development": "./build/mjs/web/mocked/index.js",
+      "development": {
+        "node": "./build/mjs/node/mocked.js",
+        "default": "./build/mjs/web/mocked/index.js"
+      },
       "devlive": "./build/mjs/web/local/index.js",
       "default": "./build/mjs/web/remote/index.js"
     },
@@ -72,11 +69,11 @@
   },
   "dependencies": {
     "@ethersproject/providers": "^5.6.2",
-    "@thecointech/logging": "^0.2.91"
+    "@thecointech/logging": "^0.2.93"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.2.91",
-    "@thecointech/setenv": "^0.2.91",
+    "@thecointech/jestutils": "^0.2.93",
+    "@thecointech/setenv": "^0.2.93",
     "jest": "*",
     "renamer": "^4.0.0"
   },

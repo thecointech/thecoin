@@ -1,61 +1,59 @@
-import { accounts, contract } from '@openzeppelin/test-environment';
-import { toNamedAccounts } from '../../internal/accounts';
-import { join } from 'path';
-import type { TheCoinInstance, DebugPrintInstance } from '../../migrations/types';
-import { PLUGINMGR_ROLE, ALL_PERMISSIONS, MINTER_ROLE } from '../../src/constants'
+import { jest } from '@jest/globals';
+import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
+import { createAndInitTheCoin, initAccounts } from '../../internal/testHelpers';
+import type { Contract, ContractTransaction } from 'ethers';
+import hre from 'hardhat';
 
 jest.setTimeout(5 * 60 * 1000);
-
-contract.artifactsDir = join(__dirname, "../../src/contracts");
-const DebugPrint = contract.fromArtifact('DebugPrint');
-const TheCoin = contract.fromArtifact('TheCoin');
-const named = toNamedAccounts(accounts);
-
-function expectEvent(response: Truffle.TransactionResponse<Truffle.AnyEvent>, ...events: string[]) {
-  const allEvents = [
-    ...DebugPrint.decodeLogs(response.receipt.rawLogs),
-    ...TheCoin.decodeLogs(response.receipt.rawLogs),
-  ].map(p => p.event);
-  events.forEach(e => {
-    expect(allEvents).toContain(e);
-  })
-}
 
 // Try creating core
 it('Calls appropriate methods on a plugin', async () => {
 
-  const core: TheCoinInstance = await TheCoin.new();
-  await core.initialize(named.TheCoin);
-  await core.grantRole(PLUGINMGR_ROLE, named.TheCoin, {from: named.TheCoin});
+  const signers = initAccounts(await hre.ethers.getSigners());
+  const tcCore = await createAndInitTheCoin(signers.Owner);
+  const DebugPrint = await hre.ethers.getContractFactory("DebugPrint");
+  const logger = await DebugPrint.deploy();
 
-  const logger: DebugPrintInstance = await DebugPrint.new();
+  async function expectEvent(response: ContractTransaction, ...events: string[]) {
+    const receipt = await response.wait();
+    const parsedLogs = receipt.logs.map(l => (
+      maybeParseLog(tcCore, l)) ??
+      maybeParseLog(logger, l)
+    ).map(p => p?.name);
+
+    events.forEach(e => {
+      expect(parsedLogs).toContain(e);
+    });
+  }
 
   // Assign to user, grant all permissions, limit user to $100
-  const tx_assign = await core.pl_assignPlugin(named.client1, logger.address, ALL_PERMISSIONS, "0x1234", { from: named.TheCoin });
-  expectEvent(tx_assign, "PluginAttached", "PrintAttached");
+  const tx_assign = await tcCore.pl_assignPlugin(signers.client1.address, 0, logger.address, ALL_PERMISSIONS, "0x1234");
+  await expectEvent(tx_assign, "PluginAttached", "PrintAttached");
 
   // Was it assigned with the right permissions?
-  const assigned = await core.findPlugin(named.client1, logger.address);
-  expect(assigned.permissions).toEqual(ALL_PERMISSIONS.toString());
+  const assigned = await tcCore.findPlugin(signers.client1.address, logger.address);
+  expect(assigned.permissions.toString()).toEqual(ALL_PERMISSIONS);
   expect(assigned.plugin).toEqual(logger.address);
 
   // Test token balance/transfer
   const balance = 10000;
-  await core.grantRole(MINTER_ROLE, named.Minter, { from: named.TheCoin })
-  await core.mintCoins(balance, named.TheCoin, Date.now(), { from: named.Minter })
-  const tx_deposit = await core.transfer(named.client1, balance, {from: named.TheCoin});
+  await tcCore.mintCoins(balance, signers.Owner.address, Date.now());
+  const tx_deposit = await tcCore.transfer(signers.client1.address, balance);
   expectEvent(tx_deposit, "Transfer", "PrintPreDeposit");
 
-  const cbal = await core.balanceOf(named.client1);
+  const cbal = await tcCore.balanceOf(signers.client1.address);
   expect(cbal.toNumber()).toEqual(balance);
-  const pbal = await core.pl_balanceOf(named.client1);
+  const pbal = await tcCore.pl_balanceOf(signers.client1.address);
   expect(pbal.toNumber()).toEqual(balance / 2);
 
-  const tx_withdraw = await core.transfer(named.TheCoin, balance, {from: named.client1});
+  const tx_withdraw = await tcCore.connect(signers.client1).transfer(signers.TheCoin.address, balance);
   expectEvent(tx_withdraw, "Transfer", "PrintPreWithdraw");
 
-  const detached = await core.pl_removePlugin(named.client1, 0, "0x1234", { from: named.TheCoin });
+  const detached = await tcCore.pl_removePlugin(signers.client1.address, 0, "0x1234");
   expectEvent(detached, "PluginDetached", "PrintDetached");
 
 });
 
+const maybeParseLog = (contract: Contract, l : any) => {
+  try { return contract.interface.parseLog(l)} catch (e) { return null }
+}
