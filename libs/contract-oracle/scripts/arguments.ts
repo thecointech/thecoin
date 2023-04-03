@@ -1,4 +1,3 @@
-import { log } from '@thecointech/logging';
 import { getSigner } from '@thecointech/signers';
 import { DateTime, Duration } from 'luxon';
 

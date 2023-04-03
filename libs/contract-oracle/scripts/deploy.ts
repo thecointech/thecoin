@@ -5,11 +5,16 @@ import { log } from '@thecointech/logging';
 import { getArguments } from './arguments';
 import '@nomiclabs/hardhat-ethers';
 import '@openzeppelin/hardhat-upgrades';
+import { getProvider } from '@thecointech/ethers-provider';
 
 async function main() {
 
-  const owner = await getSigner("Owner");
-
+  let owner = await getSigner("OracleUpdater");
+  // If not devlive, then add a provider
+  if (hre.network.config.chainId != 31337) {
+    const provider = getProvider();
+    owner = owner.connect(provider);
+  }
   const contractArgs = await getArguments()
   const Oracle = await hre.ethers.getContractFactory("SpxCadOracle", owner);
   const oracle = await hre.upgrades.deployProxy(Oracle, contractArgs);

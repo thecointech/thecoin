@@ -3,7 +3,7 @@ import styles from './styles.module.less';
 import { Grid } from 'semantic-ui-react';
 
 type VisualProps={
-  key: number,
+  id: number,
   locale: string,
 
   yearToDisplay: number,
@@ -22,11 +22,11 @@ type VisualProps={
   balanceCad: number
 
 };
-                
+
 export const TransactionLine = (props:VisualProps) => {
 
     return (
-      <Grid.Row id={"transaction_"+props.key} className={styles.transactionLine} >
+      <Grid.Row id={"transaction_"+props.id} className={styles.transactionLine} >
         <Grid.Column className={styles.dateColumn} width={2} textAlign='center' only='computer'>
           <div className={`${styles.dateInTable}`}>
             <div className={`font-small write-vertical ${styles.yearInTable}`}>{props.yearToDisplay}</div>
@@ -48,7 +48,7 @@ export const TransactionLine = (props:VisualProps) => {
         <Grid.Column className={styles.balanceColumn} textAlign='right' width={3} only='computer'>
           <div className={`font-big`}>{props.balanceCad} $</div>
         </Grid.Column>
-      
+
         <Grid.Column only='tablet mobile' width={15}>
           <div className={styles.commentLineForMobile}>
             <img src={props.imgForLine} />
@@ -64,8 +64,8 @@ export const TransactionLine = (props:VisualProps) => {
             <span className={`${props.classForMoneyCell} ${styles.money}`}>{props.changeCad} $</span>
           </div>
         </Grid.Column>
-      
+
       </Grid.Row>
-      
+
     );
 }

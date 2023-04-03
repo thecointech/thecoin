@@ -9,6 +9,10 @@
       "path": "../libs/contract-plugin-converter"
     },
     {
+      "name": "contract-plugin-shockabsorber",
+      "path": "../libs/contract-plugin-shockabsorber"
+    },
+    {
       "name": "contract-oracle",
       "path": "../libs/contract-oracle"
     },
@@ -29,6 +33,7 @@
       "path": "../libs/signers"
     },
     {
+      "name": "contract-plugins",
       "path": "../libs/contract-plugins"
     }
   ],

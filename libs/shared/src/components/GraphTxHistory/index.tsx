@@ -87,8 +87,8 @@ const useCalcLimitedFetchSerie = (props: GraphHistoryProps) => {
 
 type MinMax = ReturnType<typeof calcMinMax>;
 const calcMinMax = (datum: TxDatum[]) => {
-  let max = datum.reduce((p, d) => Math.max(p, d.y, d.costBasis), 0) ?? 100;
-  let min = datum.reduce((p, d) => Math.min(p, d.y, d.costBasis), max) ?? 0;
+  let max = datum.reduce((p, d) => Math.max(p, d.y, d.costBasis, d.raw), 0) ?? 100;
+  let min = datum.reduce((p, d) => Math.min(p, d.y, d.costBasis, d.raw), max) ?? 0;
 
   // max / min should have minimum size - $100
   const diff = Math.max(100, max - min);
@@ -174,13 +174,15 @@ const thingsToDisplayProperties = (props: GraphHistoryProps) => {
       //"points",
       'mesh',
       "legends",
-      StepLineLayer,
     ],
     useMesh: true,
     enableSlices: false,
   };
   if (props.plugins.length) {
     properties.layers!.push(RawLineLayer)
+  }
+  else {
+    properties.layers!.push(StepLineLayer)
   }
   return properties;
 }

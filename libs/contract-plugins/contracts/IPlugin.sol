@@ -19,7 +19,7 @@ interface IPlugin is IERC165 {
   function getPermissions() external view returns(uint);
 
   // Hook called whenever a user adds a plugin to their account.
-  function userAttached(address add, address initiator) external;
+  function userAttached(address add, uint timeMs, address initiator) external;
 
   // Hook called whenever a user removes a plugin from their account
   function userDetached(address remove, address initiator) external;
@@ -32,7 +32,7 @@ interface IPlugin is IERC165 {
   // automatically top up the account, restrict the transfer, or perform
   // some other kind of action.
   // requires PERMISSION_DEPOSIT/PERMISSION_WITHDRAWAL/PERMISSION_APPROVAL
-  function preDeposit(address user, uint coin, uint msTime) external;
+  function preDeposit(address user, uint balance, uint coin, uint msTime) external;
   function preWithdraw(address user, uint balance, uint coin, uint msTime) external returns(uint);
 
   function modifyTransfer(address from, address to, uint amount, uint16 currency, uint msTransferAt, uint msSignedAt) external returns (uint, uint16);

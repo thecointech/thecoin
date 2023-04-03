@@ -22,10 +22,11 @@ it('converts fiat to TheCoin for current transfers', async () => {
   await tcCore.transfer(signers.client1.address, 1000e6);
 
   // Create plugin
-  const uber = await UberConverter.deploy(tcCore.address, oracle.address);
+  const uber = await UberConverter.deploy();
+  await uber.initialize(tcCore.address, oracle.address);
 
   // Assign to user, grant all permissions
-  await tcCore.pl_assignPlugin(signers.client1.address, uber.address, ALL_PERMISSIONS, "0x1234");
+  await tcCore.pl_assignPlugin(signers.client1.address, 0, uber.address, ALL_PERMISSIONS, "0x1234");
 
   // Transfer $100 now.
   const transfer = await buildUberTransfer(
@@ -37,6 +38,7 @@ it('converts fiat to TheCoin for current transfers', async () => {
   )
   const initBalance = await tcCore.balanceOf(signers.client1.address);
   const r = await tcCore.uberTransfer(
+    transfer.chainId,
     transfer.from,
     transfer.to,
     transfer.amount,
@@ -72,10 +74,11 @@ it('Appropriately delays a transfer, and converts an appropriate amount at time'
   await tcCore.transfer(signers.client1.address, initAmount);
 
   // Create plugin
-  const uber = await UberConverter.deploy(tcCore.address, oracle.address);
+  const uber = await UberConverter.deploy();
+  await uber.initialize(tcCore.address, oracle.address);
 
   // Assign to user, grant all permissions
-  await tcCore.pl_assignPlugin(signers.client1.address, uber.address, ALL_PERMISSIONS, "0x1234");
+  await tcCore.pl_assignPlugin(signers.client1.address, 0, uber.address, ALL_PERMISSIONS, "0x1234");
 
   // Transfer $100 in 1 weeks time.
   const delay = Duration.fromObject({day: 7});
@@ -88,6 +91,7 @@ it('Appropriately delays a transfer, and converts an appropriate amount at time'
   );
 
   const r = await tcCore.uberTransfer(
+    transfer.chainId,
     transfer.from,
     transfer.to,
     transfer.amount,

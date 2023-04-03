@@ -4,6 +4,7 @@ import { SpxCadOracle } from './types';
 type RateFactory = (millis: number) => Promise<{rate: number, from: number, to: number}|null>;
 
 const MAX_LENGTH = 1000;
+const ONE_HR = 1000 * 60 * 60;
 
 export async function updateRates(oracle: SpxCadOracle, till: number, rateFactory: RateFactory) {
 
@@ -26,7 +27,7 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
     let rate = Math.round(r.rate * factor);
     // How long was the prior block  valid for?
     let to = r.to;
-    let duration = to - r.from;
+    let duration = to - timestamp;
 
     // We explicitly add duplicates.  This is because
     // our oracle is optimized for look-up by using a
@@ -47,6 +48,9 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
     // shorten/lengthen the current block
     if (duration != blockTime) {
       const newOffset = (priorOffset + (duration - blockTime)) % blockTime;
+      if (Math.abs(newOffset % (ONE_HR)) != 0) {
+        log.error("Offset is not a multiple of one hour", {timestamp, newOffset});
+      }
       offsets.push({
         from: to - duration,
         offset: newOffset,
@@ -65,17 +69,21 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
     }
     else if (rates.length > 1) {
       for (let s = 0; s < rates.length; s += MAX_LENGTH) {
+        log.trace(`Updating rates: ${s} of ${rates.length}`);
         const e = Math.min(s + MAX_LENGTH, rates.length);
         await oracle.bulkUpdate(rates.slice(s, e));
       }
     }
-    log.trace(`Updated ${rates.length} new rates, until ${timestamp} : ${new Date(timestamp * 1000)}`)
+    log.trace(`Updated ${rates.length} new rates, until ${timestamp} : ${new Date(timestamp)}`)
 
     // If we have offsets, push them to the oracle
     for (const offset of offsets) {
       await oracle.updateOffset(offset);
-      log.trace(`Pushing new Offset ${offset.offset} at ${new Date(offset.from * 1000)}`)
+      log.trace(`Pushing new Offset ${offset.offset / ONE_HR}hrs at ${new Date(offset.from)}`)
     }
+
+    const newLatest = (await oracle.validUntil()).toNumber();
+    log.trace(`New contract latest: ${new Date(newLatest)}`);
   }
   catch (err: any) {
     log.error({err}, "Error updating oracle");

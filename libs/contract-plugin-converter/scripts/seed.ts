@@ -28,7 +28,7 @@ async function main() {
   const ownConvert = connect(owner, converter);
 
   // In DevLive, we assign the converter to uberTester
-  await tcCore.pl_assignPlugin(testAddress, converter.address, ALL_PERMISSIONS, "0x1234");
+  await tcCore.pl_assignPlugin(testAddress, Date.now(), converter.address, ALL_PERMISSIONS, "0x1234");
 
   // We cannot know if the rates service has finished initializing yet
   await waitForRatesService()

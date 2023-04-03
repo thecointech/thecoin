@@ -5,13 +5,18 @@ import { log } from '@thecointech/logging';
 import { getArguments } from './arguments';
 import '@nomiclabs/hardhat-ethers';
 import '@openzeppelin/hardhat-upgrades';
+import { getProvider } from '@thecointech/ethers-provider';
 
 async function main() {
 
   const network = hre.config.defaultNetwork;
   const name = getName(network);
-  const owner = await getSigner("Owner");
-
+  let owner = await getSigner("Owner");
+  // If not devlive, then add a provider
+  if (hre.network.config.chainId != 31337) {
+    const provider = getProvider();
+    owner = owner.connect(provider);
+  }
   const contractArgs = await getArguments(network)
   const TheCoin = await hre.ethers.getContractFactory(name, owner);
   const theCoin = await hre.upgrades.deployProxy(TheCoin, contractArgs, { initializer: 'initialize(address _sender, address depositor)'});
