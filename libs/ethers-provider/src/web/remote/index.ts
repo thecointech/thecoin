@@ -162,9 +162,41 @@ export class Erc20Provider extends EtherscanProvider {
       apikey: this.apiKey
     }
 
-    const r = await this.fetch("contract", args);
-    return r.result;
+    const r: SrcCodeResponse[]  = await this.fetch("contract", args);
+    const [contract] = r;
+    if (contract.Proxy == "1") {
+      return this.getSourceCode(contract.Implementation);
+    }
+    const src = contract.SourceCode;
+    // For some reason the returned object is invalid JSON
+    // (for prodtest anyway)
+    const obj = JSON.parse(
+      (src.slice(0, 2) == '{{')
+      ? src.slice(1, -1)
+      : src
+    );
+    const entries = Object.entries(obj.sources);
+    const [contractSrcPair, ...rest] = entries.filter(pair => !pair[0].startsWith("@"))
+    if (rest.length > 0) {
+      throw new Error(`Violated assumption: More than one local contract for ${address} - ${rest.map(pair => pair[0]).join(', ')}`);
+    }
+    return (contractSrcPair[1] as any).content;
   }
+}
+
+type SrcCodeResponse = {
+  SourceCode: string; // "
+  ContractName: string; // "DAO",
+  CompilerVersion: string; // "v0.3.1-2016-04-12-3ad5e82",
+  OptimizationUsed: string; // "1",
+  Runs: string; // "200",
+  ConstructorArguments: string;
+  EVMVersion: string; // "Default",
+  Library: string; // "",
+  LicenseType: string; // "",
+  Proxy: string; // "0",
+  Implementation: string; // "",
+  SwarmSource: string; // ""
 }
 
 export const getProvider = () => new Erc20Provider();
