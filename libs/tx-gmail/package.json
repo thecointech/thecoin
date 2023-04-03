@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-gmail",
-  "version": "0.2.94",
+  "version": "0.2.95",
   "description": "The Coin: Fetch e-transfer emails from GMail and convert to tx",
   "type": "module",
   "keywords": [
@@ -37,7 +37,7 @@
   },
   "types": "./build/index_common.d.ts",
   "dependencies": {
-    "@thecointech/utilities": "^0.2.94",
+    "@thecointech/utilities": "^0.2.95",
     "currency.js": "^2.0.4",
     "js-base64": "^3.6.1"
   },
