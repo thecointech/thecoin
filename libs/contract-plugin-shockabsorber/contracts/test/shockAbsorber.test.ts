@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { toFiat, yearInMs } from './shockAbsorber.common';
-import { createTester, createTesterSync, testResults } from './shockabsorber.sim'
+import { createTester, createTesterSync, testResults } from './shockAbsorber.sim'
 
 jest.setTimeout(10 * 60 * 1000);
 
