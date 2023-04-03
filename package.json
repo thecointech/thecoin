@@ -15,6 +15,9 @@
   "engines": {
     "node": ">=12.18.x"
   },
+  "resolutions": {
+    "clone-deep": "4.0.1"
+  },
   "scripts": {
     "prepare": "ts-patch install -s",
     "_gen:tapcap-cs": "openapi-generator-cli generate -i apps/tapcap-supplier/api/swagger.json -g csharp-netcore -o apis/tapcap/cs -c apis/tapcap/client-cs-spec.json",

@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "../apps/harvester"
+		},
+		{
+			"path": "../apps/broker-service"
+		}
+	],
+	"settings": {}
+}
