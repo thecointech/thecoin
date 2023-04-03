@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-plugins",
-  "version": "0.2.93",
+  "version": "0.2.95",
   "description": "The Coin: Plugin functionality for contract-core",
   "type": "module",
   "keywords": [
@@ -39,7 +39,9 @@
   "types": "./build/index.d.ts",
   "typesVersions": {
     "*": {
-      "writePlugin": ["./internal/writePlugin.ts"],
+      "writePlugin": [
+        "./internal/writePlugin.ts"
+      ],
       "*": [
         "build/*.d.ts"
       ]
@@ -47,11 +49,11 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "^0.2.93",
-    "@thecointech/contract-tools": "^0.2.93",
+    "@thecointech/async": "^0.2.95",
+    "@thecointech/contract-tools": "^0.2.95",
     "jest": "*"
   },
   "dependencies": {
-    "@thecointech/contract-oracle": "^0.2.93"
+    "@thecointech/contract-oracle": "^0.2.95"
   }
 }
