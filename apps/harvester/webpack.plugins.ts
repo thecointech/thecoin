@@ -18,14 +18,9 @@ export const plugins = [
   new webpack.DefinePlugin({
     __VERSION__: JSON.stringify(require(packageFile).version),
     BROWSER: true,
-    'process.browser': true,
   }),
-  new webpack.EnvironmentPlugin({
-    LOG_LEVEL: 0,
-    ...env
+  new webpack.EnvironmentPlugin(env),
+  new webpack.ProvidePlugin({
+    process: 'process/browser',
   }),
-  // For some reason this crashes webpack
-  // new webpack.ProvidePlugin({
-  //   process: 'process/browser',
-  // }),
 ];

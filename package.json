@@ -178,7 +178,7 @@
     "typescript-plugin-css-modules": "^3.4.0",
     "url-loader": "2.0.1",
     "wait-port": "^0.2.9",
-    "webpack": "5.52.0",
+    "webpack": "5.77.0",
     "webpack-bundle-analyzer": "4.4.2",
     "webpack-cli": "4.7.2",
     "webpack-dev-middleware": "5.1.0",
