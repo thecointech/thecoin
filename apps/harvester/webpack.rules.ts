@@ -1,3 +1,4 @@
+import path from 'path';
 import type { ModuleOptions } from 'webpack';
 export const rules: Required<ModuleOptions>['rules'] = [
   // Add support for native node modules
@@ -29,6 +30,7 @@ export const rules: Required<ModuleOptions>['rules'] = [
     use: {
       loader: 'ts-loader',
       options: {
+        configFile: path.join(__dirname, 'tsconfig.app.json'),
         transpileOnly: true,
       },
     },

@@ -1,8 +1,7 @@
 import 'semantic-ui-css/semantic.min.css'
 import { Header } from 'semantic-ui-react'
-import { trainingRoutes } from './Training/Training'
-import { Outlet, RouteObject, Link, useLocation } from 'react-router-dom'
-import { accountRoutes } from './account/routes'
+import { Link, useLocation } from 'react-router-dom'
+import { Routes } from './app.routes'
 
 
 export const App = () => {
@@ -11,27 +10,33 @@ export const App = () => {
     <div>
       <Header>Semantic UI Is Loaded</Header>
       {location.pathname}
-      <Outlet />
+      <div>
+        <Link to="./train">Training</Link><br />
+        <Link to="./account">Account</Link><br />
+      </div>
+      <div>
+        <Routes />
+      </div>
     </div>
   )
 }
 
-export const appRoutes: RouteObject[] = [
-  {
-    path: "/",
-    element: <App />,
-    children: [
-      {
-        index: true,
-        element: (
-        <div>
-          <Link to="./train">Training</Link><br />
-          <Link to="./account">Account</Link><br />
-        </div>
-        )
-      },
-      ...trainingRoutes,
-      ...accountRoutes,
-    ]
-  },
-]
+// export const appRoutes: RouteObject[] = [
+//   {
+//     path: "/",
+//     element: <App />,
+//     children: [
+//       {
+//         index: true,
+//         element: (
+//         <div>
+//           <Link to="./train">Training</Link><br />
+//           <Link to="./account">Account</Link><br />
+//         </div>
+//         )
+//       },
+//       ...trainingRoutes,
+//       ...accountRoutes,
+//     ]
+//   },
+// ]

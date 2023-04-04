@@ -14,7 +14,7 @@
     }
   },
   "compilerOptions": {
-    "target": "es2017",
+    "target": "es2021",
     "allowJs": true,
     "jsx": "react-jsx",
     "module": "CommonJS",
@@ -38,6 +38,9 @@
     }
   },
   "include": [
-    "src/**/*"
+    "*.ts"
+  ],
+  "references": [
+    { "path": "./tsconfig.app.json" },
   ]
 }

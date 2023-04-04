@@ -5,7 +5,12 @@
 		},
 		{
 			"path": "../apps/broker-service"
+		},
+		{
+			"path": "../libs/shared"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"typescript.tsdk": "harvester\\node_modules\\typescript\\lib"
+	}
 }

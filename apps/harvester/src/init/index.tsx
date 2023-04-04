@@ -1,10 +1,10 @@
-import { ConfigStore } from '@thecointech/store';
 import { log } from '@thecointech/logging';
 import { configureHarversterStore } from './reducers';
+import { initAccounts } from './accounts';
 
 //
 // Initialize (most of) the application
-export function initialize() {
+export async function initialize() {
 
   try {
     // initialize logging first
@@ -13,7 +13,7 @@ export function initialize() {
     // ConfigStore.initialize();
 
     // initSidebar();
-    // await initAccounts();
+    await initAccounts();
     // await initFirestore();
     // await initGmail();
 

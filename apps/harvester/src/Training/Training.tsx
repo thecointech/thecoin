@@ -1,7 +1,7 @@
 
 import { Button } from 'semantic-ui-react'
 import { Step0 } from './Step0.Intro'
-import { Link, Outlet, RouteObject, useParams } from 'react-router-dom';
+// import { Link, Outlet, RouteObject, useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { Warmup } from './Step1.Warmup';
 import { ChequingBalance } from './Step2.ChequingBalance';
@@ -60,23 +60,23 @@ export const Training = () => {
   )
 }
 
-export const trainingRoutes: RouteObject[] = [
-  {
-    path: "train",
-    element: <Training />,
-    // children: [
-    //   {
-    //     index: true,
-    //     element: <Step0 />,
-    //   },
-    //   {
-    //     path: "1",
-    //     element: <h1>Dashboard</h1>,
-    //   },
-    //   {
-    //     path: "2",
-    //     element: <h1>About</h1>,
-    //   },
-    // ]
-  }
-]
+// export const trainingRoutes: RouteObject[] = [
+//   {
+//     path: "train",
+//     element: <Training />,
+//     // children: [
+//     //   {
+//     //     index: true,
+//     //     element: <Step0 />,
+//     //   },
+//     //   {
+//     //     path: "1",
+//     //     element: <h1>Dashboard</h1>,
+//     //   },
+//     //   {
+//     //     path: "2",
+//     //     element: <h1>About</h1>,
+//     //   },
+//     // ]
+//   }
+// ]

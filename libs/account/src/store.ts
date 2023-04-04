@@ -55,7 +55,7 @@ export function getStoredAccountData(address: string): AccountState | null {
 }
 
 // Utility function for fetching all stored accounts
-export function getAllAccounts(): AccountMap {
+export async function getAllAccounts(): Promise<AccountMap> {
   const allAccounts: AccountMap = {};
   for (let i = 0; i < localStorage.length; i++) {
     const raw = localStorage.key(i);
