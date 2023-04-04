@@ -35,8 +35,6 @@
     "@types/jest": "^29.4.0",
     "@types/luxon": "^3.2.0",
     "@types/node": "^18.11.18",
-    "@types/react": "^18.0.27",
-    "@types/react-dom": "^18.0.10",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "@vercel/webpack-asset-relocator-loader": "1.7.3",
@@ -56,6 +54,7 @@
   },
   "dependencies": {
     "@types/pouchdb": "^6.4.0",
+    "comdb": "^6.0.0-beta",
     "currency.js": "^2.0.4",
     "electron-context-menu": "^3.6.1",
     "electron-squirrel-startup": "^1.0.0",
@@ -64,8 +63,6 @@
     "puppeteer": "^19.6.0",
     "puppeteer-extra": "^3.3.4",
     "puppeteer-extra-plugin-stealth": "^2.11.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.0",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.4"

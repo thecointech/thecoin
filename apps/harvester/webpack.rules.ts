@@ -1,5 +1,4 @@
 import type { ModuleOptions } from 'webpack';
-
 export const rules: Required<ModuleOptions>['rules'] = [
   // Add support for native node modules
   {
@@ -7,6 +6,12 @@ export const rules: Required<ModuleOptions>['rules'] = [
     // "fake" .node file which is really a cjs file.
     test: /native_modules[/\\].+\.node$/,
     use: 'node-loader',
+  },
+  {
+    test: /\.m?js/,
+    resolve: {
+      fullySpecified: false,
+    },
   },
   {
     test: /[/\\]node_modules[/\\].+\.(m?js|node)$/,

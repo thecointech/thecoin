@@ -36,20 +36,3 @@ export async function setCurrentState(data: HarvestData) {
   })
 }
 
-export async function getProcessConfig() {
-  try {
-    return await _config.get<ConfigShape>(ConfigKey, { revs_info: true });
-  }
-  catch (err) {
-    return undefined;
-  }
-}
-
-export async function setProcessConfig(config: ConfigShape) {
-  const lastCfg = await getProcessConfig();
-  await _config.put({
-    ...config,
-    _id: ConfigKey,
-    _rev: lastCfg?._rev,
-  })
-}

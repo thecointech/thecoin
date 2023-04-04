@@ -8,7 +8,10 @@ const api : ScraperBridgeApi = {
 
   finishAction: (actionName) => ipcRenderer.invoke(actions.finishAction, actionName),
 
-  testAction: async (actionName, dynamicValues) => ipcRenderer.invoke(actions.testAction, actionName, dynamicValues),
+  testAction: (actionName, dynamicValues) => ipcRenderer.invoke(actions.testAction, actionName, dynamicValues),
+
+  setWalletMnemomic: (mnemonic) => ipcRenderer.invoke(actions.setWalletMnemomic, mnemonic),
+  getWalletAddress: () => ipcRenderer.invoke(actions.getWalletAddress)
 }
 
 export const connectRenderer = () => contextBridge.exposeInMainWorld('scraper', api)

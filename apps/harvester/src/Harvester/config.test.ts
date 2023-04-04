@@ -1,23 +1,30 @@
-import { ConfigShape, hydrateProcessor } from './config';
-import { initialize, setProcessConfig } from './db';
+import { jest } from '@jest/globals';
+import { initialize, ConfigShape, hydrateProcessor, setProcessConfig, getProcessConfig } from './config';
 import { RoundUp } from './RoundUp';
 import { TransferLimit } from './TransferLimit';
 import { TransferVisaOwing } from './TransferVisaOwing';
 
-import PouchDB from 'pouchdb'
-import memory from 'pouchdb-adapter-memory'
+jest.setTimeout(60000);
 
-beforeAll(() => {
-  // add the adapter to PouchDB
-  PouchDB.plugin(memory)
-})
+// it ('Correctly encrypts', async () => {
+//   await initialize('password');
 
-beforeEach(() => {
-  initialize({adapter: 'memory'});
-})
+//   // Get current
+//   const cfg = await getProcessConfig();
+//   const now = Date.now();
+//   await setProcessConfig({
+//     stages: [],
+//     wallet: 'wallet' + now,
+
+//   });
+
+//   const cfg2 = await getProcessConfig();
+//   expect (cfg2?.wallet).toEqual('wallet' + now);
+// })
 
 it ('Can save & load a config', async () => {
-  
+
+  await initialize();
 
   const config: ConfigShape = {
     stages: [

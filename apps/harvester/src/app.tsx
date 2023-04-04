@@ -2,6 +2,7 @@ import 'semantic-ui-css/semantic.min.css'
 import { Header } from 'semantic-ui-react'
 import { trainingRoutes } from './Training/Training'
 import { Outlet, RouteObject, Link, useLocation } from 'react-router-dom'
+import { accountRoutes } from './account/routes'
 
 
 export const App = () => {
@@ -22,9 +23,15 @@ export const appRoutes: RouteObject[] = [
     children: [
       {
         index: true,
-        element: <Link to="./train">Training</Link>
+        element: (
+        <div>
+          <Link to="./train">Training</Link><br />
+          <Link to="./account">Account</Link><br />
+        </div>
+        )
       },
       ...trainingRoutes,
+      ...accountRoutes,
     ]
   },
 ]

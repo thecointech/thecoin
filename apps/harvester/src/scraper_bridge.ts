@@ -5,6 +5,7 @@ import { ActionTypes, ValueType } from './scraper/types';
 import { warmup } from './scraper/warmup';
 import { actions, ScraperBridgeApi } from './scraper_actions';
 import { toBridge } from './scraper_bridge_conversions';
+import { getWalletAddress, setWalletMnemomic } from './Harvester/config';
 
 async function guard<T>(cb: () => Promise<T>) {
   try {
@@ -31,6 +32,9 @@ const api: ScraperBridgeApi = {
 
   // We can only pass POD back through the renderer, use toBridge to convert
   testAction: (actionName, dynamicValues) => guard(async () => toBridge(await replay(actionName, dynamicValues))),
+
+  setWalletMnemomic: (mnemonic) => guard(() => setWalletMnemomic(mnemonic)),
+  getWalletAddress: () => guard(() => getWalletAddress()),
 }
 
 export function initScraping() {

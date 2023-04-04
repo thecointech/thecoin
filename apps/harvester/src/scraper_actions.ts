@@ -17,8 +17,11 @@ export type ScraperBridgeApi = {
   // Finish Recording
   finishAction: (actionName: ActionTypes) => Promise<Result<boolean>>,
 
-  // A test of an action 
+  // A test of an action
   testAction(actionName: ActionTypes, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,
+
+  setWalletMnemomic(mnemonic: string): Promise<Result<boolean>>,
+  getWalletAddress(): Promise<Result<string|undefined>>,
 }
 
 
@@ -29,5 +32,9 @@ export const actions = {
   finishAction: 'scraper:finishAction',
 
   testAction: 'scraper.testAction',
+
+  // Not really scraper, but meh
+  setWalletMnemomic: 'scraper:setWalletMnemomic',
+  getWalletAddress: 'scraper:getWalletAddress',
 }
 export type Action = keyof typeof actions

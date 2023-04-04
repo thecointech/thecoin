@@ -1,4 +1,5 @@
 import { HarvestData, ProcessingStage } from './types';
+import { GetBillPaymentsApi } from '@thecointech/apis/broker'
 
 export class PayVisa implements ProcessingStage {
 
@@ -14,7 +15,7 @@ export class PayVisa implements ProcessingStage {
     // Do we have a new due amount?  If so, we better pay it.
 
     if (!lastState || (data.visa.dueDate > lastState?.visa.dueDate)) {
-      // We better pay that due amount 
+      // We better pay that due amount
       let dateToPay = data.visa.dueDate;
       let daysBack = this.daysPrior;
       while (daysBack > 0) {
