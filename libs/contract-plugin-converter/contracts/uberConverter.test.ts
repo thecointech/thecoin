@@ -1,7 +1,7 @@
 import hre from 'hardhat';
 import { jest } from '@jest/globals';
 import { createAndInitOracle, setOracleValueRepeat } from '@thecointech/contract-oracle/testHelpers.ts';
-import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
+import { ALL_PERMISSIONS, assignPlugin, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 import { initAccounts, createAndInitTheCoin } from '@thecointech/contract-core/testHelpers.ts';
 import { buildUberTransfer } from '@thecointech/utilities/UberTransfer';
 import Decimal from 'decimal.js-light';
@@ -26,7 +26,8 @@ it('converts fiat to TheCoin for current transfers', async () => {
   await uber.initialize(tcCore.address, oracle.address);
 
   // Assign to user, grant all permissions
-  await tcCore.pl_assignPlugin(signers.client1.address, 0, uber.address, ALL_PERMISSIONS, "0x1234");
+  const request = await buildAssignPluginRequest(signers.client1, uber.address, ALL_PERMISSIONS);
+  await assignPlugin(tcCore, request);
 
   // Transfer $100 now.
   const transfer = await buildUberTransfer(
@@ -78,7 +79,8 @@ it('Appropriately delays a transfer, and converts an appropriate amount at time'
   await uber.initialize(tcCore.address, oracle.address);
 
   // Assign to user, grant all permissions
-  await tcCore.pl_assignPlugin(signers.client1.address, 0, uber.address, ALL_PERMISSIONS, "0x1234");
+  const request = await buildAssignPluginRequest(signers.client1, uber.address, ALL_PERMISSIONS);
+  await assignPlugin(tcCore, request);
 
   // Transfer $100 in 1 weeks time.
   const delay = Duration.fromObject({day: 7});

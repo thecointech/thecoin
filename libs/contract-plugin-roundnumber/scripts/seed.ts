@@ -1,6 +1,6 @@
 import { getSigner } from '@thecointech/signers';
 import { ConnectContract } from '@thecointech/contract-core';
-import { PERMISSION_BALANCE } from '@thecointech/contract-plugins';
+import { ALL_PERMISSIONS, PERMISSION_BALANCE, assignPlugin, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 import { log } from '@thecointech/logging';
 import { getContract } from '../src/contract';
 import { DateTime } from 'luxon';
@@ -21,7 +21,8 @@ async function main() {
     log.debug("Seeding RoundNumber");
 
     const deployed = await getContract();
-    const assigned = await tcCore.pl_assignPlugin(clientAddr, deployed.address, PERMISSION_BALANCE, "0x1234");
+    const request = await buildAssignPluginRequest(client2, deployed.address, ALL_PERMISSIONS);
+    const assigned = await assignPlugin(tcCore, request);
     await assigned.wait();
 
     // Set the rounding amount for several times in the past, this

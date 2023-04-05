@@ -34,11 +34,11 @@ interface IPluggable is IERC20Upgradeable {
 
   // Assign new plugin to user.  Currently un-guarded.
   // Signature is of [user, plugin, permissions, lastTxTimestamp]
-  function pl_assignPlugin(address user, uint timeMs, address plugin, uint96 permissions, bytes memory signature) external;
+  function pl_assignPlugin(address user, uint chainId, address plugin, uint timeMs, uint96 permissions, uint msSignedAt, bytes memory signature) external;
 
   // Remove plugin from user.  As above
   // Signature is of [user, plugin, lastTxTimestamp]
-  function pl_removePlugin(address user, uint index, bytes memory signature) external;
+  function pl_removePlugin(address user, uint chainId, uint index, uint msSignedAt, bytes memory signature) external;
 
   // Users balance as reported by plugins
   function pl_balanceOf(address user) external view returns(int);

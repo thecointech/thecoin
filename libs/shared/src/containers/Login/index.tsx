@@ -12,6 +12,7 @@ import styles from "./styles.module.less";
 
 export type Props = {
   account: AccountState;
+  onLoginGoTo?: string
 }
 
 const translate = defineMessages({
@@ -80,8 +81,9 @@ export const Login = (props: Props) => {
   const accountApi = Account(address).useApi();
   const history = useHistory();
 
-  if (!isLocal(signer) || signer.privateKey) {
-    history.push('/');
+  // frantic hacking to complete harveter: not tested in other apps
+  if (!isLocal(signer)/* || signer.privateKey*/) {
+    history.push(props.onLoginGoTo ?? '/');
   }
 
   ////////////////////////////////
@@ -114,6 +116,9 @@ export const Login = (props: Props) => {
         setForceValidate(v => !v);
       }
       return false;
+    }
+    else if (percent === 100) {
+      history.push(props.onLoginGoTo ?? '/');
     }
     else {
       setPercentComplete(percent);

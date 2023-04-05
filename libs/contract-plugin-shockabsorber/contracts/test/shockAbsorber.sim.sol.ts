@@ -7,7 +7,7 @@ import { ShockAbsorber } from '../../src';
 import { yearInMs, toCoin } from './shockAbsorber.common'
 import type { SpxCadOracle } from '@thecointech/contract-oracle';
 import { time } from "@nomicfoundation/hardhat-network-helpers";
-import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
+import { ALL_PERMISSIONS, assignPlugin, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 import { TheCoin } from '@thecointech/contract-core';
 import { Duration } from 'luxon';
 
@@ -173,7 +173,9 @@ async function setupLive(initFiat: number, blockTime?: number) {
   // Create plugin & assign user
   const initCoin = toCoin(initFiat, 100);
   await tcCore.transfer(client1.address, initCoin);
-  await tcCore.pl_assignPlugin(client1.address, blockTime ?? 0, absorber.address, ALL_PERMISSIONS, "0x1234");
+
+  const request = await buildAssignPluginRequest(client1, absorber.address, ALL_PERMISSIONS);
+  await assignPlugin(tcCore, request);
 
   // absorber needs funds - start with $100K
   await tcCore.transfer(absorber.address, toCoin(100_000, 100));

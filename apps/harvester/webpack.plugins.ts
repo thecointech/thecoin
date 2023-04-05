@@ -19,7 +19,13 @@ export const plugins = [
     __VERSION__: JSON.stringify(require(packageFile).version),
     BROWSER: true,
   }),
-  new webpack.EnvironmentPlugin(env),
+  new webpack.EnvironmentPlugin({
+    // TODO: Electron doesn't support root-level await,
+    // so there is no way to load this data dynamically.
+    // Think long-n-hard about a better way to figure this out
+    WALLET_BrokerCAD_ADDRESS: "0x0000000000000000000000000000000000000000",
+    ...env
+  }),
   new webpack.ProvidePlugin({
     process: 'process/browser',
   }),

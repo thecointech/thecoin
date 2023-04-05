@@ -1,8 +1,9 @@
 import { jest } from '@jest/globals';
-import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
+import { ALL_PERMISSIONS, buildAssignPluginRequest, assignPlugin, buildRemovePluginRequest, removePlugin } from '@thecointech/contract-plugins';
 import { createAndInitTheCoin, initAccounts } from '../../internal/testHelpers';
 import type { Contract, ContractTransaction } from 'ethers';
 import hre from 'hardhat';
+import { DateTime } from 'luxon';
 
 jest.setTimeout(5 * 60 * 1000);
 
@@ -27,7 +28,8 @@ it('Calls appropriate methods on a plugin', async () => {
   }
 
   // Assign to user, grant all permissions, limit user to $100
-  const tx_assign = await tcCore.pl_assignPlugin(signers.client1.address, 0, logger.address, ALL_PERMISSIONS, "0x1234");
+  const request = await buildAssignPluginRequest(signers.client1, logger.address, ALL_PERMISSIONS);
+  const tx_assign = await assignPlugin(tcCore, request);
   await expectEvent(tx_assign, "PluginAttached", "PrintAttached");
 
   // Was it assigned with the right permissions?
@@ -49,7 +51,8 @@ it('Calls appropriate methods on a plugin', async () => {
   const tx_withdraw = await tcCore.connect(signers.client1).transfer(signers.TheCoin.address, balance);
   expectEvent(tx_withdraw, "Transfer", "PrintPreWithdraw");
 
-  const detached = await tcCore.pl_removePlugin(signers.client1.address, 0, "0x1234");
+  const removeReq = await buildRemovePluginRequest(signers.client1, 0);
+  const detached = await removePlugin(tcCore, removeReq);
   expectEvent(detached, "PluginDetached", "PrintDetached");
 
 });

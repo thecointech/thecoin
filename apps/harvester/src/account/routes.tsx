@@ -1,3 +1,4 @@
+import { Plugins } from './Plugins';
 import { SetupAccount } from './Setup';
 
 // export const TheCoinRoutes = {
@@ -7,7 +8,9 @@ import { SetupAccount } from './Setup';
 // }
 
 export const AccountRoutes = {
-  fallback: SetupAccount
+  ".": SetupAccount,
+  plugins: Plugins,
+  // fallback: SetupAccount
 }
 
 export const AccountRouter = () => <SetupAccount />

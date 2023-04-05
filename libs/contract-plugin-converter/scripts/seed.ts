@@ -1,6 +1,6 @@
 import { getSigner } from '@thecointech/signers';
 import { ConnectContract } from '@thecointech/contract-core';
-import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
+import { ALL_PERMISSIONS, assignPlugin, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 import { getContract } from '@thecointech/contract-plugin-converter';
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
@@ -28,7 +28,8 @@ async function main() {
   const ownConvert = connect(owner, converter);
 
   // In DevLive, we assign the converter to uberTester
-  await tcCore.pl_assignPlugin(testAddress, Date.now(), converter.address, ALL_PERMISSIONS, "0x1234");
+  const request = await buildAssignPluginRequest(tester, converter.address, ALL_PERMISSIONS);
+  await assignPlugin(tcCore, request);
 
   // We cannot know if the rates service has finished initializing yet
   await waitForRatesService()
