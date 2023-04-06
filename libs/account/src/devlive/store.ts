@@ -33,7 +33,7 @@ const addRemoteAccount = async (name: AccountName, active: boolean) => {
 
 // Add remote wallets.
 export const getAllAccounts = async () => {
-  if (!_devWallets) {
+  if (Object.keys(_devWallets).length === 0) {
     _devWallets = await Browser.getAllAccounts();
     await addRemoteAccount('client1', true);
     await addRemoteAccount('client2', false);
