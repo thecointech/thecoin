@@ -17,7 +17,7 @@ import { buildAccountStoreReducer } from '@thecointech/shared/containers/Account
   return combineReducers({
     router: connectRouter(history) as Reducer,
     accounts: accountStoreReducer,
-    ...injectedReducers,
+    ...rest,
   });
 }
 

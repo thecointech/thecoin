@@ -222,9 +222,6 @@ function AccountReducer(address: string, initialState: AccountState) {
         const decrypted = yield call(Wallet.fromEncryptedJson, JSON.stringify(signer), password, cb);
         // Ensure callback is called with 100% result so caller knows we are done
         log.trace("Account decrypted successfully");
-        if (callback) {
-          callback(1);
-        }
         // Store the result
         yield this.sendValues(this.actions.setSigner, [decrypted]);
       }

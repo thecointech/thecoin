@@ -35,7 +35,7 @@ export const Plugins = () => {
 
   const { rates } = useFxRates();
   const { buy, fxRate } = getFxRate(rates, 0);
-  const { balance } = active!;
+  const balance = active?.balance ?? 0;
   const cadBalance = toHuman(buy * balance * fxRate, true);
 
   const onInstallPlugins = async () => {

@@ -1,36 +1,18 @@
+import { AccountState } from '@thecointech/account';
+import { Redirect, Route, Switch } from 'react-router';
+import { Login } from './Login';
 import { Plugins } from './Plugins';
-import { SetupAccount } from './Setup';
+import { Upload } from './Upload';
 
-// export const TheCoinRoutes = {
-//   balance: Balance,
-//   purchase: Purchase,
-//   mint: Mint,
-// }
-
-export const AccountRoutes = {
-  ".": SetupAccount,
-  plugins: Plugins,
-  // fallback: SetupAccount
-}
-
-export const AccountRouter = () => <SetupAccount />
-// export const accountRoutes: RouteObject[] = [
-//   {
-//     path: "account",
-//     element: <SetupAccount />,
-//     // children: [
-//     //   {
-//     //     index: true,
-//     //     element: <Step0 />,
-//     //   },
-//     //   {
-//     //     path: "1",
-//     //     element: <h1>Dashboard</h1>,
-//     //   },
-//     //   {
-//     //     path: "2",
-//     //     element: <h1>About</h1>,
-//     //   },
-//     // ]
-//   }
-// ]
+export const AccountRouter = ({account}:{account?: AccountState}) => (
+  <Switch>
+    <Route path="/account/upload" component={Upload} />
+    <Route path="/account/login" render={() => (
+      account
+        ? <Login account={account} />
+        : <Redirect to="/account" />
+    )} />
+    <Route path="/account/plugins" component={Plugins} />
+    <Route render={() => <div>Bleauh</div>} />
+  </Switch>
+)

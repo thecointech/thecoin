@@ -1,19 +1,19 @@
 import { NotFoundPage } from '@thecointech/shared/containers/NotFoundPage';
-import { AccountRouter } from './account/routes';
+import { Account } from './account';
 import { TrainRouter } from './Training/routes';
 import { Route, Switch } from 'react-router-dom';
 
-export const AppRoutes = {
-  open: {
-    account: AccountRouter,
-    train: TrainRouter,
-  },
-  fallback: NotFoundPage
-}
+// export const AppRoutes = {
+//   open: {
+//     account: AccountRouter,
+//     train: TrainRouter,
+//   },
+//   fallback: NotFoundPage
+// }
 
 export const Routes = () => (
   <Switch>
-    <Route path='/account' component={AccountRouter} />
+    <Route path='/account' component={Account} />
     <Route path='/train' component={TrainRouter} />
     {/* <Route path={`${url}/generate/intro`} component={Intro} />
     <Route path={`${url}/generate`} component={Generate} />

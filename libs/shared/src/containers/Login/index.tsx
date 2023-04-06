@@ -12,7 +12,7 @@ import styles from "./styles.module.less";
 
 export type Props = {
   account: AccountState;
-  onLoginGoTo?: string
+  onLogin?: () => void;
 }
 
 const translate = defineMessages({
@@ -81,9 +81,8 @@ export const Login = (props: Props) => {
   const accountApi = Account(address).useApi();
   const history = useHistory();
 
-  // frantic hacking to complete harveter: not tested in other apps
-  if (!isLocal(signer)/* || signer.privateKey*/) {
-    history.push(props.onLoginGoTo ?? '/');
+  if (!isLocal(signer) || signer.privateKey) {
+    history.push('/');
   }
 
   ////////////////////////////////
@@ -118,7 +117,7 @@ export const Login = (props: Props) => {
       return false;
     }
     else if (percent === 100) {
-      history.push(props.onLoginGoTo ?? '/');
+      props.onLogin?.();
     }
     else {
       setPercentComplete(percent);

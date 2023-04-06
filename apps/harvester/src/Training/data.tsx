@@ -7,6 +7,9 @@ export enum Key {
 
   chqInitBalance = "chqInitBalance",
   vsaInitBalance = "vsaInitBalance",
+
+  wallet = "wallet",
+  pluginsRequested = "pluginsRequested",
 }
 
 // TODO: do we care?
@@ -48,7 +51,7 @@ export const SyncedInput = ({type, placeholder}: SyncedInputProps) => {
     setData(type, value);
   }, [value]);
 
-  return <Input 
+  return <Input
     onChange={(_, data) => setValue(data.value)}
     value={value}
     placeholder={placeholder}
