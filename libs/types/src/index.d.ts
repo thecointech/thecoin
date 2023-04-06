@@ -89,7 +89,7 @@ export type AssignPluginRequest = {
   chainId: number;
   user: string;
   plugin: string;
-  permissions: BigNumberish;
+  permissions: string;
   timeMs: DateTime;
   signedAt: DateTime;
   signature: string;

@@ -7,6 +7,7 @@ type States =
 
   "tcReady" |
   "tcWaiting" |
+  "tcResult" |
 
   "error" |
   "complete";
@@ -22,7 +23,11 @@ export const graph : StateGraph<States, "Plugin"> = {
   },
   tcWaiting: {
     onError: transitionTo<States>(core.requestManual, "error"),
-    next: transitionTo<States>(core.waitCoin, "complete"),
+    next: transitionTo<States>(core.waitCoin, "tcResult"),
+  },
+  tcResult: {
+    onError: transitionTo<States>(core.requestManual, "error"),
+    next: transitionTo<States>(core.markComplete, "complete"),
   },
 
   error: {

@@ -29,7 +29,7 @@ async function main() {
 
   // In DevLive, we assign the converter to uberTester
   const request = await buildAssignPluginRequest(tester, converter.address, ALL_PERMISSIONS);
-  await assignPlugin(tcCore, request);
+  await assignPlugin(bcCore, request);
 
   // We cannot know if the rates service has finished initializing yet
   await waitForRatesService()

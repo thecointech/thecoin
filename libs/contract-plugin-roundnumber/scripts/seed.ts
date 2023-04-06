@@ -12,7 +12,9 @@ async function main() {
 
   const client2 = await getSigner("client2");
   const theCoin = await getSigner("TheCoin");
+  const brokerCad = await getSigner("BrokerCAD");
   const tcCore = await ConnectContract(theCoin);
+  const bcCore = await ConnectContract(brokerCad);
   const clientAddr = await client2.getAddress();
   const existingPlugins = await tcCore.getUsersPlugins(clientAddr);
 
@@ -22,7 +24,7 @@ async function main() {
 
     const deployed = await getContract();
     const request = await buildAssignPluginRequest(client2, deployed.address, ALL_PERMISSIONS);
-    const assigned = await assignPlugin(tcCore, request);
+    const assigned = await assignPlugin(bcCore, request);
     await assigned.wait();
 
     // Set the rounding amount for several times in the past, this

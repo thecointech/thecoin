@@ -7,6 +7,7 @@ import { WebpackPlugin } from '@electron-forge/plugin-webpack';
 
 import { mainConfig } from './webpack.main.config';
 import { rendererConfig } from './webpack.renderer.config';
+import { devCSP } from './csp';
 
 const config: ForgeConfig = {
   packagerConfig: {},
@@ -14,6 +15,7 @@ const config: ForgeConfig = {
   makers: [new MakerSquirrel({}), new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})],
   plugins: [
     new WebpackPlugin({
+      devContentSecurityPolicy: devCSP, // `default-src 'self'; img-src 'self' data: ; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; connect-src 'self' data: ; font-src 'self' data: fonts.gstatic.com; object-src 'none' `,
       mainConfig,
       renderer: {
         config: rendererConfig,
@@ -28,6 +30,8 @@ const config: ForgeConfig = {
           },
         ],
       },
+      port: 3004,
+      loggerPort: 9004,
     }),
   ],
 };
