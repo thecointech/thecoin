@@ -6,6 +6,7 @@ import { arrayify } from '@ethersproject/bytes';
 import { sign } from "@thecointech/utilities/SignedMessages";
 import type { IPluggable } from './types/contracts';
 import type { AssignPluginRequest } from '@thecointech/types';
+import type { BigNumberish } from '@ethersproject/bignumber';
 
 // export type AssignPluginRequest = {
 //   chainId: number;
@@ -35,12 +36,12 @@ function getAssignPluginBuffer(request: Omit<AssignPluginRequest, 'signature'>) 
 export async function buildAssignPluginRequest(
   user: Signer,
   plugin: string,
-  permissions: string,
+  permissions: BigNumberish,
   timeMs?: DateTime)
 : Promise<AssignPluginRequest>
 {
   const chainId = parseInt(process.env.DEPLOY_POLYGON_NETWORK_ID ?? "-1");
-  const signedAt = DateTime.now();
+  const signedAt = DateTime.fromMillis(1680714890271);
   const address = await user.getAddress();
   var r = {
     chainId,
@@ -61,13 +62,11 @@ export async function buildAssignPluginRequest(
 
 export async function assignPlugin(contract: IPluggable, request: AssignPluginRequest) {
   const tx = await contract.pl_assignPlugin(
-    request.user,
-    request.chainId,
-    request.plugin,
-    request.signedAt.toMillis(),
-    request.permissions,
-    request.signedAt.toMillis(),
-    request.signature
+    {
+      ...request,
+      timeMs: request.timeMs.toMillis(),
+      msSignedAt: request.signedAt.toMillis(),
+    }
   );
   return tx;
 }

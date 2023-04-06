@@ -50,13 +50,10 @@ export async function buildRemovePluginRequest(
 }
 
 export async function removePlugin(contract: IPluggable, request: RemovePluginRequest) {
-  const tx = await contract.pl_removePlugin(
-    request.user,
-    request.chainId,
-    request.index,
-    request.signedAt.toMillis(),
-    request.signature
-  );
+  const tx = await contract.pl_removePlugin({
+    ...request,
+    msSignedAt: request.signedAt.toMillis(),
+  });
   return tx;
 }
 

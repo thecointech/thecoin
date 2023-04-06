@@ -7,6 +7,19 @@ import { DateTime } from 'luxon';
 
 jest.setTimeout(5 * 60 * 1000);
 
+// Potentially could be in contract-plugins, but that unfortunately
+// means a circular dependency because the contract impl is here
+// Could fix by moving impl there?
+it ('can assign plugin', async () => {
+  const signers = initAccounts(await hre.ethers.getSigners());
+  const tcCore = await createAndInitTheCoin(signers.Owner);
+
+  const request = await buildAssignPluginRequest(signers.client1, tcCore.address, ALL_PERMISSIONS);
+  const tx = await assignPlugin(tcCore, request);
+  expect(tx.hash).toBeDefined();
+})
+
+
 // Try creating core
 it('Calls appropriate methods on a plugin', async () => {
 

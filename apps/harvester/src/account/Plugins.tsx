@@ -15,6 +15,9 @@ export const Plugins = () => {
   const hasShockAbsorber = active?.plugins.some(plugin => plugin.address === shockAbsorber.address);
 
   const onInstallPlugins = async () => {
+    if (!active) {
+      throw new Error('No active account');
+    }
     const api = GetPluginsApi();
     const convRequest = await buildAssignPluginRequest(
       active.signer,

@@ -14,6 +14,7 @@ import "./Freezable.sol";
 
 import "hardhat/console.sol";
 
+
 abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
 
   // A plugin manager is allowed to assign/remove built-in plugins
@@ -29,48 +30,62 @@ abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
   // ------------------------------------------------------------------------
 
   // Assign new plugin to user.  Currently un-guarded.  Obvs needs that guard
-  function pl_assignPlugin(address user, uint chainId, address plugin, uint timeMs, uint96 permissions, uint msSignedAt, bytes memory signature) public
+  function pl_assignPlugin(AssignRequest calldata request) public
     onlyPluginMgr
-    timestampIncreases(user, msSignedAt)
+    timestampIncreases(request.user, request.msSignedAt)
   {
-    bytes memory packed = abi.encodePacked(chainId, plugin, timeMs, permissions, msSignedAt);
-		bytes32 signedMessage = ECDSAUpgradeable.toEthSignedMessageHash(packed);
-    require(ECDSAUpgradeable.recover(signedMessage, signature) == user, "Invalid signature for address");
+    bytes32 hashed = keccak256(
+      abi.encodePacked(request.chainId, request.plugin, request.timeMs, request.permissions, request.msSignedAt)
+    );
+		bytes32 signedMessage = ECDSAUpgradeable.toEthSignedMessageHash(hashed);
+    address signer = ECDSAUpgradeable.recover(signedMessage, request.signature);
+//    address signer = getAssignSigner(chainId, plugin, timeMs, permissions, msSignedAt, signature);
+    require(signer == request.user, "Invalid signature for address");
 
-    IPlugin _p = IPlugin(plugin);
-    _p.userAttached(user, timeMs, msg.sender);
+    IPlugin _p = IPlugin(request.plugin);
+    _p.userAttached(request.user, request.timeMs, msg.sender);
 
     PluginAndPermissions memory pnp;
     pnp.plugin = _p;
-    pnp.permissions = permissions;
-    userPlugins[user].push(pnp);
+    pnp.permissions = request.permissions;
+    userPlugins[request.user].push(pnp);
 
-    emit PluginAttached(user, plugin);
+    emit PluginAttached(request.user, request.plugin);
 
-    lastTxTimestamp[user] = msSignedAt;
+    lastTxTimestamp[request.user] = request.msSignedAt;
   }
 
-  // Remove plugin from user.  As above
-  function pl_removePlugin(address user, uint chainId, uint index, uint msSignedAt, bytes memory signature) public
-    onlyPluginMgr
-    timestampIncreases(user, msSignedAt)
-  {
-    bytes memory packed = abi.encodePacked(chainId, index, msSignedAt);
-		bytes32 signedMessage = ECDSAUpgradeable.toEthSignedMessageHash(packed);
-		address signer = ECDSAUpgradeable.recover(signedMessage, signature);
-    require(signer == user, "Invalid signature for address");
+  // function getAssignSigner(uint chainId, address plugin, uint timeMs, uint96 permissions, uint msSignedAt, bytes memory signature) internal pure returns (address) {
+  //   bytes memory packed = abi.encodePacked(chainId, plugin, timeMs, permissions, msSignedAt);
+  //   bytes32 hashed = keccak256(packed);
+	// 	bytes32 signedMessage = ECDSAUpgradeable.toEthSignedMessageHash(hashed);
+  //   return ECDSAUpgradeable.recover(signedMessage, signature);
+  // }
 
-    PluginAndPermissions[] storage pnps = userPlugins[user];
-    pnps[index].plugin.userDetached(user, msg.sender);
-    for (uint i = index; i < pnps.length-1; i++){
+  // Remove plugin from user.  As above
+  function pl_removePlugin(RemoveRequest calldata request) public
+    onlyPluginMgr
+    timestampIncreases(request.user, request.msSignedAt)
+  {
+    bytes32 hashed = keccak256(
+      abi.encodePacked(request.chainId, request.index, request.msSignedAt)
+    );
+		bytes32 signedMessage = ECDSAUpgradeable.toEthSignedMessageHash(hashed);
+		address signer = ECDSAUpgradeable.recover(signedMessage, request.signature);
+    require(signer == request.user, "Invalid signature for address");
+
+    PluginAndPermissions[] storage pnps = userPlugins[request.user];
+    pnps[request.index].plugin.userDetached(request.user, msg.sender);
+    for (uint i = request.index; i < pnps.length-1; i++){
       pnps[i] = pnps[i+1];
     }
     delete pnps[pnps.length-1];
     pnps.pop();
 
-    emit PluginDetached(user, address(this));
-    lastTxTimestamp[user] = msSignedAt;
+    emit PluginDetached(request.user, address(this));
+    lastTxTimestamp[request.user] = request.msSignedAt;
   }
+
 
   // function buildPluginModMessage(uint chainId, address from, address to, uint256 amount, uint16 currency, uint msTransferAt, uint msSignedAt) public pure returns (bytes32)
 	// {

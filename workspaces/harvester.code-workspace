@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "../libs/shared"
+		},
+		{
+			"path": "../libs/contract-plugins"
 		}
 	],
 	"settings": {
