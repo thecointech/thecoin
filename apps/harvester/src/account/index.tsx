@@ -5,13 +5,17 @@ import { Link, useLocation, useHistory } from 'react-router-dom'
 import { Step } from 'semantic-ui-react';
 import { getData, Key } from '../Training/data';
 import { AccountRouter } from './routes'
+import { getContract as getUberContract } from '@thecointech/contract-plugin-converter';
+import styles from './index.module.less';
+
+const converter = await getUberContract();
 
 export const Account = () => {
 
   const location = useLocation();
   const navigation = useHistory();
   const active = AccountMap.useActive();
-  const all = AccountMap.useData();
+  const active2 = AccountMap.useActive();
   const api = AccountMap.useApi();
   const stored = getData(Key.wallet);
 
@@ -25,7 +29,7 @@ export const Account = () => {
   }, []);
   const isUploaded = !!active;
   const isLoggedIn = !!active?.contract;
-  const hasPlugins = !!active?.plugins.length;
+  const hasPlugins = !!active?.plugins.some(p => p.address === converter.address);
   return (
     <div>
       <Step.Group ordered>
@@ -50,17 +54,17 @@ export const Account = () => {
           disabled={!isLoggedIn}
           pathname={location.pathname} />
       </Step.Group>
-      <div>
-        All Accounts:
-        <ul>
-          {Object.keys(all.map).map(a => (
-            <li key={a}>{a}</li>
-          ))}
-        </ul>
-
-        <Link to="/account/upload">Upload yes</Link>
+      <div className={styles.container}>
+        {/* <div>
+          All Accounts:
+          <ul>
+            {Object.keys(all.map).map(a => (
+              <li key={a}>{a}</li>
+            ))}
+          </ul>
+        </div> */}
+        <AccountRouter account={active} />
       </div>
-      <AccountRouter account={active} />
     </div>
   )
 }

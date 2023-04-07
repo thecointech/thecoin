@@ -9,7 +9,8 @@ export enum Key {
   vsaInitBalance = "vsaInitBalance",
 
   wallet = "wallet",
-  pluginsRequested = "pluginsRequested",
+  pluginCnvrtRequested = "pluginCnvrtRequested",
+  pluginAbsrbRequested = "pluginAbsrbRequested",
 }
 
 // TODO: do we care?
