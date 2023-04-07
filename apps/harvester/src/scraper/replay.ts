@@ -14,8 +14,8 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 export async function replay(actionName: 'chqBalance') : Promise<ChequeBalanceResult>;
 export async function replay(actionName: 'visaBalance') : Promise<VisaBalanceResult>;
 export async function replay(actionName: 'chqETransfer', dynamicValues: { amount: string }) : Promise<ETransferResult>;
-export async function replay(actionName: ActionTypes, dynamicValues?: Record<string, string>, delay?: number) : Promise<ReplayResult> 
-export async function replay(actionName: ActionTypes, dynamicValues?: Record<string, string>, delay = 250) {
+export async function replay(actionName: ActionTypes, dynamicValues?: Record<string, string>, delay?: number) : Promise<ReplayResult>
+export async function replay(actionName: ActionTypes, dynamicValues?: Record<string, string>, delay = 1000) {
 
   const { page, browser } = await startPuppeteer(false);
 
@@ -60,7 +60,7 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
     // Selectors suck, can we use something more robust?
     try {
       const el = await frame.waitForSelector(click.selector, { timeout: 5000 });
-      if (el) return el;  
+      if (el) return el;
     }
     catch (err) {
       console.log(`Couldn't find selector: ${click.selector}`)
@@ -113,7 +113,7 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
       // TS looses track of the type when nested
       return candidates[0].element as unknown as ElementHandle<HTMLElement>;
     }
-  
+
     // Add additional logic here if the selector doesn't work
     throw new Error(`Element not found: ${click.selector}`);
   }
@@ -159,20 +159,20 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
 
       // get all $ money amounts
       const all = Array.from(document.getElementsByTagName("*")) as HTMLElement[];
-      let amounts = all.filter(el => 
+      let amounts = all.filter(el =>
         el instanceof HTMLElement &&
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore (chrome-specific function) check is visible
         el.checkVisibility({
           checkOpacity: true,  // Check CSS opacity property too
           checkVisibilityCSS: true // Check CSS visibility property too
-        }) && 
+        }) &&
         // is $ amount
         el.innerText?.trim().match(/^\$[0-9, ]+\.\d{2}$/)
       ) as HTMLElement[]
 
       // Which amount is it?  First search for sibling
-    
+
       const siblings = all.filter(el => el.innerText?.trim() === ev.siblingText);
       const sibling = siblings[siblings.length - 1]
       // If we have a sibling in the document, filter out unsuitable amounts
@@ -226,7 +226,7 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
             await Promise.all([
               el.click(),
               page.waitForNavigation({ waitUntil: 'networkidle2' })
-            ]) 
+            ])
           }
           else {
             await el.click();

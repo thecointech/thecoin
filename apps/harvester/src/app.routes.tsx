@@ -1,6 +1,5 @@
-import { NotFoundPage } from '@thecointech/shared/containers/NotFoundPage';
 import { Account } from './account';
-import { TrainRouter } from './Training/routes';
+import { Training } from './Training';
 import { Route, Switch } from 'react-router-dom';
 
 // export const AppRoutes = {
@@ -14,7 +13,7 @@ import { Route, Switch } from 'react-router-dom';
 export const Routes = () => (
   <Switch>
     <Route path='/account' component={Account} />
-    <Route path='/train' component={TrainRouter} />
+    <Route path='/train' component={Training} />
     {/* <Route path={`${url}/generate/intro`} component={Intro} />
     <Route path={`${url}/generate`} component={Generate} />
     <Route path={`${url}/connect/exist`} component={ConnectExist} />

@@ -15,7 +15,6 @@ export const Account = () => {
   const location = useLocation();
   const navigation = useHistory();
   const active = AccountMap.useActive();
-  const active2 = AccountMap.useActive();
   const api = AccountMap.useApi();
   const stored = getData(Key.wallet);
 
@@ -55,14 +54,6 @@ export const Account = () => {
           pathname={location.pathname} />
       </Step.Group>
       <div className={styles.container}>
-        {/* <div>
-          All Accounts:
-          <ul>
-            {Object.keys(all.map).map(a => (
-              <li key={a}>{a}</li>
-            ))}
-          </ul>
-        </div> */}
         <AccountRouter account={active} />
       </div>
     </div>

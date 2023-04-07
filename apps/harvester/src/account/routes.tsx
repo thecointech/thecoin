@@ -13,6 +13,6 @@ export const AccountRouter = ({account}:{account?: AccountState}) => (
         : <Redirect to="/account" />
     )} />
     <Route path="/account/plugins" component={Plugins} />
-    <Route render={() => <div>Bleauh</div>} />
+    <Route render={() => <div>SOME KIND OF CLEVER INTRO BLURB</div>} />
   </Switch>
 )

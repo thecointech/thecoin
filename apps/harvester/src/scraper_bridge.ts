@@ -5,7 +5,8 @@ import { ActionTypes, ValueType } from './scraper/types';
 import { warmup } from './scraper/warmup';
 import { actions, ScraperBridgeApi } from './scraper_actions';
 import { toBridge } from './scraper_bridge_conversions';
-import { getWalletAddress, setWalletMnemomic } from './Harvester/config';
+import { getWalletAddress, initialize, setWalletMnemomic } from './Harvester/config';
+import type { Mnemonic } from '@ethersproject/hdnode';
 
 async function guard<T>(cb: () => Promise<T>) {
   try {
@@ -38,6 +39,13 @@ const api: ScraperBridgeApi = {
 }
 
 export function initScraping() {
+
+  // initialize the config db
+  // Yes, this is a hard-coded password.
+  // Will fix ASAP with dynamically
+  // generated code (Apr 04 2023)
+  initialize("hF,835-/=Pw\\nr6r");
+
   ipcMain.handle(actions.warmup, async (_event, url: string) => {
     console.log("Warmup");
     return api.warmup(url);
@@ -63,5 +71,13 @@ export function initScraping() {
     return api.testAction(actionName, dynamicValues);
   })
 
-  ipcMain.handle
+  ipcMain.handle(actions.setWalletMnemomic, async (_event, mnemonic: Mnemonic) => {
+    console.log(`setWalletMnemomic`);
+    return api.setWalletMnemomic(mnemonic as any);
+  })
+
+  ipcMain.handle(actions.getWalletAddress, async (_event) => {
+    console.log(`getWalletAddress`);
+    return api.getWalletAddress();
+  })
 }

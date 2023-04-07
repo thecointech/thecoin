@@ -35,6 +35,7 @@ function AccountReducer(address: string, initialState: AccountState) {
 
     *setSigner(signer: Signer) {
       yield this.storeValues({ signer });
+      yield delay(10);
       yield this.sendValues(this.actions.connect);
     }
 

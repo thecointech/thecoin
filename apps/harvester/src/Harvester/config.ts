@@ -7,6 +7,7 @@ import PouchDB from 'pouchdb';
 import memory from 'pouchdb-adapter-memory'
 import comdb from 'comdb';
 import { Wallet } from '@ethersproject/wallet';
+import { Mnemonic } from '@ethersproject/hdnode';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
@@ -17,7 +18,7 @@ export type ConfigShape = {
     args?: Record<string, string|number>,
   }[],
   // Store the account Mnemomic
-  wallet?: string,
+  wallet?: Mnemonic,
   // Store a constant key for the account state DB
   // This key should be derived from wallet mnemonic
   stateKey?: string,
@@ -46,17 +47,18 @@ export async function getProcessConfig() {
 
 export async function setProcessConfig(config: Partial<ConfigShape>) {
   const lastCfg = await getProcessConfig();
-  await _config.put({
+  const r = await _config.put({
     stages: config.stages ?? lastCfg?.stages ?? [],
     stateKey: config.stateKey ?? lastCfg?.stateKey,
     wallet: config.wallet ?? lastCfg?.wallet,
     _id: ConfigKey,
     _rev: lastCfg?._rev,
   })
+  console.log(r);
   await _config.loadDecrypted();
 }
 
-export async function setWalletMnemomic(mnemonic: string) {
+export async function setWalletMnemomic(mnemonic: Mnemonic) {
   // TODO: Generate state key from mnemomic
   await setProcessConfig({
     wallet: mnemonic,
@@ -67,9 +69,10 @@ export async function setWalletMnemomic(mnemonic: string) {
 export async function getWalletAddress() {
   const cfg = await getProcessConfig();
   if (cfg?.wallet) {
-    const wallet = Wallet.fromMnemonic(cfg.wallet);
+    const wallet = Wallet.fromMnemonic(cfg.wallet.phrase, cfg.wallet.path);
     return wallet.address;
   }
+  return null;
 }
 
 export async function hydrateProcessor() {

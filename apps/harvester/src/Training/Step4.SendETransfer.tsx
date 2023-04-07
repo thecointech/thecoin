@@ -1,15 +1,19 @@
 import { useState } from 'react';
 import { Container, Button, Icon, Input } from 'semantic-ui-react'
-import { getData, Key } from './data';
 import { useLearnValue } from './learnValue';
+import { TrainingReducer } from './state/reducer';
 
 const pageAction = "chqETransfer";
 
 export const SendETransfer = () => {
-  const url = getData(Key.chequing);
-  const [valid, setValid] = useState(false);
+
+  const data = TrainingReducer.useData();
+  const api = TrainingReducer.useApi();
+
   const [amount, setAmount] = useState(5.23);
   const [confirmation, learnConfirmation] = useLearnValue("confirm", "text");
+
+  const url = data.chequing.url;
 
   const initScraper = async () => {
     if (!url) alert("ERROR: Needs data")
@@ -23,6 +27,11 @@ export const SendETransfer = () => {
     }
   }
   const validate = async () => {
+    // Don't do e-transfers in dev mode
+    if (process.env.NODE_ENV == "development") {
+      api.setParameter("chequing", "eTransferPassed", true);
+      return;
+    }
     const r = await window.scraper.testAction(pageAction, {
       amount: amount.toString(),
     });
@@ -34,7 +43,7 @@ export const SendETransfer = () => {
       else {
         alert("Your test transfer was successful!, confirm: " + r.value.confirm);
       }
-      setValid(true);
+      api.setParameter("chequing", "eTransferPassed", true);
     }
   }
   return (
@@ -53,13 +62,14 @@ export const SendETransfer = () => {
         </ul>
       </div>
       <Button onClick={validate}>Test Learning</Button>
-      {valid && <Icon name='check circle' color="green" />}
+      {data.chequing.eTransferPassed && <Icon name='check circle' color="green" />}
       <div>Your AI read:
         <ul>
-          <li>Amount Sent: {valid && <Icon name='check circle' color="green" />}</li>
+          <li>Amount Sent: {data.chequing.eTransferPassed && <Icon name='check circle' color="green" />}</li>
           <li>Confirmation: {confirmation} {confirmation && <Icon name='check circle' color="green" />}</li>
         </ul>
       </div>
     </Container>
   )
 }
+

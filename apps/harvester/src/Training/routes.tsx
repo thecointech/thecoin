@@ -1,8 +1,18 @@
-// import { AuthSwitch } from '@thecointech/shared/containers/AuthRoute/index';
-import { Training } from './Training';
+import { Route, Switch } from 'react-router';
+import { Step0 } from './Step0.Intro';
+import { Warmup } from './Step1.Warmup';
+import { ChequingBalance } from './Step2.ChequingBalance';
+import { VisaBalance } from './Step3.VisaBalance';
+import { SendETransfer } from './Step4.SendETransfer';
+import { Complete } from './Step5.Complete';
 
-export const TrainRoutes = {
-  fallback: Training
-}
-
-export const TrainRouter = () => <Training />
+export const TrainingRouter = () => (
+  <Switch>
+    <Route path="/train/step1" component={Warmup} />
+    <Route path="/train/step2" component={ChequingBalance} />
+    <Route path="/train/step3" component={VisaBalance} />
+    <Route path="/train/step4" component={SendETransfer} />
+    <Route path="/train/step5" component={Complete} />
+    <Route component={Step0} />
+  </Switch>
+)

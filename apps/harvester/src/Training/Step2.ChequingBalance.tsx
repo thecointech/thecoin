@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { Container, Button, Icon } from 'semantic-ui-react'
-import { getData, Key, setData } from './data'
+import { TrainingReducer } from './state/reducer';
 
 const pageAction = "chqBalance";
 
 export const ChequingBalance = () => {
 
-  const url = getData(Key.chequing);
+  const data = TrainingReducer.useData();
+  const api = TrainingReducer.useApi();
   const [read,setRead] = useState('');
-  const [valid, setValid] = useState(false);
 
+  const url = data.chequing.url;
   const initScraper = async () => {
     if (!url) alert("ERROR: Needs data")
     else {
@@ -23,7 +24,7 @@ export const ChequingBalance = () => {
     if (r.value) {
       console.log("The AI read: " + r.value);
       setRead(r.value.text ?? '');
-      setData(Key.chqInitBalance, r.value.text);
+      api.setParameter("chequing", "initBalance", r.value.text);
 
       // Close the browser if needed
       await window.scraper.finishAction(pageAction);
@@ -31,23 +32,23 @@ export const ChequingBalance = () => {
   }
   const validate = async () => {
     const r = await window.scraper.testAction(pageAction);
-    if (r.error) alert(r.error) 
+    if (r.error) alert(r.error)
     if (r.value?.balance) {
       if (!read) {
         setRead(r.value.balance);
-        setValid(true);
+        api.setParameter("chequing", "testPassed", true);
       } else {
         // The value will have gone through a currency conversion,
         // so strip out any spaces to ensure it is equal to the read value
         // const same = r.value.balance == read.replace(/\s/g, '');
         // TODO: Do we care?
-        setValid(true)
+        api.setParameter("chequing", "testPassed", true);
       }
     }
   }
   return (
     <Container>
-      <div>Teach your AI how to read the balance correctly</div>
+      <h4>Teach your AI how to read the balance correctly</h4>
       <div>In order to harvest TheCoin effectively, your AI needs to be able to read the balance of your Chequing Account</div>
       <div>Follow these 3 steps to teach your AI how to read the balance:</div>
       <ul>
@@ -58,7 +59,7 @@ export const ChequingBalance = () => {
       <div>Finally, check the value below to ensure your AI hasn't accidentally read the wrong value!</div>
       <Button onClick={validate}>Test Learning</Button>
       <div>Your AI read: {read}
-        {valid && <Icon name='check circle' color="green" />}
+        {data.chequing.testPassed && <Icon name='check circle' color="green" />}
       </div>
     </Container>
   )

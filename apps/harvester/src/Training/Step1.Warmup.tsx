@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { Container, Button, Icon, Input } from 'semantic-ui-react'
-import { getData, Key, SyncedInput } from './data';
+import { Container, Button, Icon } from 'semantic-ui-react'
+import { TrainingReducer } from './state/reducer';
+import { BankKey } from './state/types';
 
 export const Warmup = () => {
 
   return (
     <Container>
-      <div>Time to warmup your AI's browser</div>
+      <h4>Time to warmup your AI's browser</h4>
       <div>This step unlocks a special kind of browser so your AI can drive it</div>
-      <div>Click the "Warmup" button, then 
+      <div>Click the "Warmup" button, then
         <ul>
           <li>log into your banks</li>
           <li>ensure you check the "Remember Me" or "Skip this step next time" so your AI can get past 2FA authentication</li>
@@ -17,23 +17,25 @@ export const Warmup = () => {
       </div>
       <div> We'll use all these things in the next steps to teach our AI how to harvest TheCoin for you</div>
       <div>
-        <Warmer type={Key.chequing} bal={Key.chqInitBalance} />
-        <Warmer type={Key.visa } bal={Key.vsaInitBalance} />
+        <Warmer bank="chequing" />
+        <Warmer bank="visa" />
       </div>
     </Container>
   )
 }
 
-const Warmer = ({type, bal}: {type: Key, bal: Key}) => {
+const Warmer = ({bank}: {bank: BankKey}) => {
 
-  const [isWarm, setIsWarm] = useState(!!getData(bal));
+  const data = TrainingReducer.useData();
+  const api = TrainingReducer.useApi();
 
-  const url = getData(type);
-  if (!url) return <div>ERROR: No url for type: {type}</div>
+  const url = data[bank].url;
+  if (!url) return <div>ERROR: No url for type: {url}</div>
   const warmup = async () => {
-    await window.scraper.warmup(url);
-    setIsWarm(true);
+    await window.scraper.warmup(url as string);
+    api.setParameter(bank, "warm", true);
   }
+  const isWarm = !!data[bank].warm;
   return (
     <>
       <div>{url}</div>

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { defineMessages, FormattedMessage } from "react-intl";
-import { useHistory } from "react-router";
 import { Button, Form, Header } from "semantic-ui-react";
-import { isLocal } from "@thecointech/signers";
 import { AccountState } from '@thecointech/account';
 import { UxPassword } from "../../components/UX/Password";
 import { ValidateCB } from '../../components/UX/types';
@@ -57,10 +55,6 @@ const translate = defineMessages({
                 description:"shared.login.decryptInProgress"}
 });
 
-//const decryptCancelled = { id: 'shared.login.decryptCancelled', defaultMessage:'Unlock cancelled.'};
-//const decryptSuccess = { id: 'shared.login.decryptSuccess', defaultMessage:'Unlock successful!  Please wait while we load your account info'};
-
-
 let __cancel = false;
 const onCancel = () => __cancel = true;
 const badPwdValid = (pwd: string) => {
@@ -77,13 +71,8 @@ export const Login = (props: Props) => {
   const [forceValidate, setForceValidate] = useState(false);
 
   const { account } = props;
-  const { signer, address }= account;
+  const { address }= account;
   const accountApi = Account(address).useApi();
-  const history = useHistory();
-
-  if (!isLocal(signer) || signer.privateKey) {
-    history.push('/');
-  }
 
   ////////////////////////////////
   const onDecryptWallet = (e: React.MouseEvent<HTMLElement>) => {

@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Container, Button, Icon } from 'semantic-ui-react'
-import { getData, Key } from './data';
 import { useLearnValue } from './learnValue';
+import { TrainingReducer } from './state/reducer';
 
 
 
 const pageAction = "visaBalance";
 
 export const VisaBalance = () => {
-  const url = getData(Key.visa);
-  const [valid, setValid] = useState(false);
+
+  const data = TrainingReducer.useData();
+  const api = TrainingReducer.useApi();
+  const url = data.visa.url;
+  // const [valid, setValid] = useState(false);
 
   const [balance, learnBalance] = useLearnValue("balance", "currency");
   const [dueAmount, learnDueAmount] = useLearnValue("dueAmount", "currency");
@@ -33,7 +36,7 @@ export const VisaBalance = () => {
     const r = await window.scraper.testAction(pageAction);
     if (r.error) alert(r.error)
     if (r.value?.balance && r.value?.dueAmount && r.value?.dueDate) {
-      setValid(true);
+      api.setParameter('visa', 'testPassed', true);
     }
   }
 
@@ -54,7 +57,7 @@ export const VisaBalance = () => {
         </ul>
       </div>
       <Button onClick={validate}>Test Learning</Button>
-      {valid && <Icon name='check circle' color="green" />}
+      {data.visa.testPassed && <Icon name='check circle' color="green" />}
       <div>Your AI read:
         <ul>
           <li>Balance: {balance} {balance && <Icon name='check circle' color="green" />}</li>

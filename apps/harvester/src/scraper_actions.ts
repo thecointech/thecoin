@@ -1,3 +1,4 @@
+import { Mnemonic } from '@ethersproject/hdnode';
 import type {ActionTypes, ValueResult, ValueType} from "./scraper/types";
 
 export type Result<T> = {
@@ -20,8 +21,8 @@ export type ScraperBridgeApi = {
   // A test of an action
   testAction(actionName: ActionTypes, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,
 
-  setWalletMnemomic(mnemonic: string): Promise<Result<boolean>>,
-  getWalletAddress(): Promise<Result<string|undefined>>,
+  setWalletMnemomic(mnemonic: Mnemonic): Promise<Result<boolean>>,
+  getWalletAddress(): Promise<Result<string|null>>,
 }
 
 
