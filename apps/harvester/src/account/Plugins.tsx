@@ -10,7 +10,6 @@ import { toHuman } from "@thecointech/utilities";
 import { sleep } from "@thecointech/async";
 import { Signer } from '@ethersproject/abstract-signer';
 import { getData, Key, setData } from '../Training/data';
-import styles from './plugins.module.less';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 

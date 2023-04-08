@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Container, Button, Icon } from 'semantic-ui-react'
 import { useLearnValue } from './learnValue';
 import { TrainingReducer } from './state/reducer';
@@ -12,7 +12,6 @@ export const VisaBalance = () => {
   const data = TrainingReducer.useData();
   const api = TrainingReducer.useApi();
   const url = data.visa.url;
-  // const [valid, setValid] = useState(false);
 
   const [balance, learnBalance] = useLearnValue("balance", "currency");
   const [dueAmount, learnDueAmount] = useLearnValue("dueAmount", "currency");

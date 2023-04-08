@@ -1,5 +1,5 @@
 import 'semantic-ui-css/semantic.min.css'
-import { Header, Menu } from 'semantic-ui-react'
+import { Menu } from 'semantic-ui-react'
 import { Link, useLocation } from 'react-router-dom'
 import { Routes } from './app.routes'
 import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
@@ -22,15 +22,21 @@ export const App = () => {
           />
           <Menu.Item
             name='Account'
-            active={location.pathname === '/account'}
+            active={location.pathname.startsWith('/account')}
             as={Link}
             to='/account'
           />
           <Menu.Item
             name='Training'
-            active={location.pathname === '/train'}
+            active={location.pathname.startsWith('/train')}
             as={Link}
             to='/train'
+          />
+          <Menu.Item
+            name='Config'
+            active={location.pathname.startsWith('/config')}
+            as={Link}
+            to='/config'
           />
         </Menu>
         {location.pathname}

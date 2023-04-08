@@ -11,11 +11,6 @@ const initVisa = localStorage.getItem("visa")
 export const initialState: TrainingState = {
   chequing: initChq ? JSON.parse(initChq) : {},
   visa: initVisa ? JSON.parse(initVisa) : {},
-  // chequing: getData(Key.chequing),
-  // visa: getData(Key.visa),
-
-  // chqWarm: !!getData(Key.chqInitBalance),
-  // vsaWarm: !!getData(Key.vsaInitBalance),
 };
 
 export class TrainingReducer extends BaseReducer<IActions, TrainingState>(TRAINING_KEY, initialState)

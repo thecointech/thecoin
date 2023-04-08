@@ -1,5 +1,6 @@
 import { jest } from '@jest/globals';
-import { initialize, ConfigShape, hydrateProcessor, setProcessConfig, getProcessConfig } from './config';
+import { defaultDays } from '../types';
+import { initialize, ConfigShape, hydrateProcessor, setProcessConfig } from './config';
 import { RoundUp } from './RoundUp';
 import { TransferLimit } from './TransferLimit';
 import { TransferVisaOwing } from './TransferVisaOwing';
@@ -27,7 +28,8 @@ it ('Can save & load a config', async () => {
   await initialize();
 
   const config: ConfigShape = {
-    stages: [
+    daysToRun: defaultDays,
+    steps: [
       {
         name: 'transferVisaOwing',
       },

@@ -8,21 +8,19 @@ import memory from 'pouchdb-adapter-memory'
 import comdb from 'comdb';
 import { Wallet } from '@ethersproject/wallet';
 import { Mnemonic } from '@ethersproject/hdnode';
+import { defaultDays, HarvestConfig } from '../types';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
 
 export type ConfigShape = {
-  stages: {
-    name: string,
-    args?: Record<string, string|number>,
-  }[],
   // Store the account Mnemomic
   wallet?: Mnemonic,
   // Store a constant key for the account state DB
   // This key should be derived from wallet mnemonic
   stateKey?: string,
-}
+} & HarvestConfig;
+
 // We use pouchDB revisions to keep the prior state of documents
 // NOTE: Not sure this works with ComDB
 const ConfigKey = "config";
@@ -48,13 +46,13 @@ export async function getProcessConfig() {
 export async function setProcessConfig(config: Partial<ConfigShape>) {
   const lastCfg = await getProcessConfig();
   const r = await _config.put({
-    stages: config.stages ?? lastCfg?.stages ?? [],
+    steps: config.steps ?? lastCfg?.steps ?? [],
+    daysToRun: config.daysToRun ?? lastCfg?.daysToRun ?? defaultDays,
     stateKey: config.stateKey ?? lastCfg?.stateKey,
     wallet: config.wallet ?? lastCfg?.wallet,
     _id: ConfigKey,
     _rev: lastCfg?._rev,
   })
-  console.log(r);
   await _config.loadDecrypted();
 }
 
@@ -77,18 +75,34 @@ export async function getWalletAddress() {
 
 export async function hydrateProcessor() {
   const config = await getProcessConfig();
-  if (!config?.stages) {
+  if (!config?.steps) {
     throw new Error('No config found');
   }
 
-  return config.stages.map(stage => {
-    switch (stage.name) {
+  return config.steps.map(stage => {
+    switch (stage?.name) {
       case 'roundUp': return new RoundUp(stage.args);
       case 'transferEverything': return new TransferEverything();
       case 'transferLimit': return new TransferLimit(stage.args);
       case 'transferVisaOwing': return new TransferVisaOwing();
       case 'payVisa': return new PayVisa(stage.args);
-      default: throw new Error(`Unknown processing stage: ${stage.name}`);
+      case null: return null;
+      default: throw new Error(`Unknown processing stage: ${stage!.name}`);
     }
   })
+}
+
+export async function getHarvestConfig() {
+  const config = await getProcessConfig();
+  return config?.steps
+    ? {
+        steps: config?.steps,
+        daysToRun: config?.daysToRun,
+      }
+    : undefined;
+}
+
+export async function setHarvestConfig(config: HarvestConfig) {
+  await setProcessConfig(config)
+  return true;
 }

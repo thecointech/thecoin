@@ -5,8 +5,9 @@ import { ActionTypes, ValueType } from './scraper/types';
 import { warmup } from './scraper/warmup';
 import { actions, ScraperBridgeApi } from './scraper_actions';
 import { toBridge } from './scraper_bridge_conversions';
-import { getWalletAddress, initialize, setWalletMnemomic } from './Harvester/config';
+import { getHarvestConfig, getWalletAddress, initialize, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
 import type { Mnemonic } from '@ethersproject/hdnode';
+import { HarvestConfig } from './types';
 
 async function guard<T>(cb: () => Promise<T>) {
   try {
@@ -36,6 +37,9 @@ const api: ScraperBridgeApi = {
 
   setWalletMnemomic: (mnemonic) => guard(() => setWalletMnemomic(mnemonic)),
   getWalletAddress: () => guard(() => getWalletAddress()),
+
+  getHarvestConfig: () => guard(() => getHarvestConfig()),
+  setHarvestConfig: (config) => guard(() => setHarvestConfig(config))
 }
 
 export function initScraping() {
@@ -55,17 +59,14 @@ export function initScraping() {
     console.log("Start", dynamicValues);
     return api.start(actionName, url, dynamicValues);
   })
-
   ipcMain.handle(actions.learnValue, async (_event, valueName: string, valueType: ValueType) => {
     console.log("LearnValue");
     return api.learnValue(valueName, valueType);
   })
-
   ipcMain.handle(actions.finishAction, async (_event, actionName: ActionTypes) => {
     console.log("finishAction");
     return api.finishAction(actionName);
   })
-
   ipcMain.handle(actions.testAction, async (_event, actionName: ActionTypes, dynamicValues: Record<string, string>) => {
     console.log("testAction");
     return api.testAction(actionName, dynamicValues);
@@ -75,9 +76,17 @@ export function initScraping() {
     console.log(`setWalletMnemomic`);
     return api.setWalletMnemomic(mnemonic as any);
   })
-
   ipcMain.handle(actions.getWalletAddress, async (_event) => {
     console.log(`getWalletAddress`);
     return api.getWalletAddress();
+  })
+
+  ipcMain.handle(actions.getHarvestConfig, async (_event) => {
+    console.log(`getHarvestConfig`);
+    return api.getHarvestConfig();
+  })
+  ipcMain.handle(actions.setHarvestConfig, async (_event, config: HarvestConfig) => {
+    console.log(`setHarvestConfig`);
+    return api.setHarvestConfig(config);
   })
 }

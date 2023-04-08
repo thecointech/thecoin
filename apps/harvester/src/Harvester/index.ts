@@ -5,12 +5,12 @@ import { HarvestData } from './types';
 import { hydrateProcessor } from './config';
 import { getLastState, setCurrentState } from './db';
 
-// type HarvestAction = 
+// type HarvestAction =
 export async function harvest() {
 
   // Initialize
   const lastState = await getLastState();
-  
+
   // Initialize data (do we want anything from last state?)
   let state: HarvestData = {
     chq: await replay('chqBalance'),
@@ -24,8 +24,8 @@ export async function harvest() {
   // Restore processing stages from memory
   const stages = await hydrateProcessor();
 
-  for (const stage of stages) {
-    state = await stage.process(state, lastState);
+  for (const stage of stages.filter(s => !!s)) {
+    state = await stage!.process(state, lastState);
   }
 
   await setCurrentState(state);

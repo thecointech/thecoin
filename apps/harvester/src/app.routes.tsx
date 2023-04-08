@@ -1,27 +1,14 @@
+import { Home } from './Home';
 import { Account } from './account';
 import { Training } from './Training';
 import { Route, Switch } from 'react-router-dom';
-
-// export const AppRoutes = {
-//   open: {
-//     account: AccountRouter,
-//     train: TrainRouter,
-//   },
-//   fallback: NotFoundPage
-// }
+import { HarvestConfig } from './HarvestConfig';
 
 export const Routes = () => (
   <Switch>
+    <Route exact path='/' component={Home} />
     <Route path='/account' component={Account} />
     <Route path='/train' component={Training} />
-    {/* <Route path={`${url}/generate/intro`} component={Intro} />
-    <Route path={`${url}/generate`} component={Generate} />
-    <Route path={`${url}/connect/exist`} component={ConnectExist} />
-    <Route path={`${url}/connect/create`} component={ConnectCreate} />
-    <Route path={`${url}/restore/list`} component={RestoreList} />
-    <Route path={`${url}/restore`} component={Restore} />
-    <Route path={`${url}/store`} component={Store} /> */}
-    {/* <Route render={() => <CreateExistingSwitch url={`${url}/`} />} /> */}
+    <Route path='/config' component={HarvestConfig} />
   </Switch>
 )
-  // <AuthSwitch path="/" {...AppRoutes} />

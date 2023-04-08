@@ -14,13 +14,6 @@ export interface TrainingState {
 
   readonly visa: BankState,
   readonly chequing: BankState,
-  // readonly visa?: string;
-  // readonly chequing?: string;
-
-  // readonly chqWarm: boolean,
-  // readonly vsaWarm: boolean,
-
-  // readonly
 }
 
 export type BankKey = keyof TrainingState;

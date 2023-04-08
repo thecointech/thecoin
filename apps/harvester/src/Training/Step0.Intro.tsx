@@ -1,5 +1,4 @@
 import { Container } from 'semantic-ui-react'
-import { Key } from './data'
 import { SyncedInput } from './state/SyncedInput';
 
 export const Step0 = () => {

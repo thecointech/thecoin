@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Input } from 'semantic-ui-react';
-import { getData, Key, setData } from '../data';
 import { TrainingReducer } from './reducer';
 import { BankKey, DataKey } from './types';
 
