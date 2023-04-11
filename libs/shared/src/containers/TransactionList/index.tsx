@@ -120,7 +120,7 @@ export const TransactionList = (props: MyProps) => {
     const contentForComment = changeCad < 0 ? <FormattedMessage {...translate.sent} /> : <FormattedMessage {...translate.received} />;
     const descForComment = changeCad < 0 ? <FormattedMessage {...translate.to} /> : <FormattedMessage {...translate.from} />;
 
-    const monthTodisplay = tx.date.setLocale(locale).monthShort;
+    const monthTodisplay = tx.date.setLocale(locale).monthShort!;
     const yearToDisplay = tx.date.setLocale(locale).year;
     const dayToDisplay = tx.date.setLocale(locale).day;
 

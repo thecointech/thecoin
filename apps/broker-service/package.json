@@ -55,7 +55,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "googleapis": "49.0.0",
-    "luxon": "1.28.1",
+    "luxon": "3.3.0",
     "openapi-types": "^7.2.3",
     "swagger-tools": "^0.10.4",
     "swagger-ui-express": "^4.2.0"

@@ -11,10 +11,10 @@ globalThis.fetch = jest.fn((name: string) =>
       return Promise.resolve(buffer.toString());
     }
   }),
-) as jest.Mock;
+) as jest.Mock<typeof globalThis.fetch>;
 
 
-export const getDate = (year: number, month: number) => DateTime.fromObject({year, month, zone: "America/New_York" })
+export const getDate = (year: number, month: number) => DateTime.fromObject({year, month}, {zone: "America/New_York" })
 
 // Basic data validation - is it all there?
 it ('parsed the data correctly', async () => {
