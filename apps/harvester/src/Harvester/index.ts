@@ -1,34 +1,54 @@
 import currency from 'currency.js';
 import { DateTime } from 'luxon';
-import { replay } from '../scraper/replay';
 import { HarvestData } from './types';
-import { hydrateProcessor } from './config';
-import { getLastState, setCurrentState } from './db';
+import { hydrateProcessor, initConfig } from './config';
+import { getLastState, setCurrentState, initState } from './db';
+import { getChequingData, getVisaData } from './fetchData';
+import { log } from '@thecointech/logging';
 
 // type HarvestAction =
 export async function harvest() {
 
-  // Initialize
-  const lastState = await getLastState();
+  try {
 
-  // Initialize data (do we want anything from last state?)
-  let state: HarvestData = {
-    chq: await replay('chqBalance'),
-    visa: await getVisaData(lastState?.visa.history.slice(-1)?.[0]?.date),
-    date: DateTime.now(),
-    coinBalance: lastState?.coinBalance ?? currency(0),
-    payVisa: lastState?.payVisa,
-    toCoin: lastState?.toCoin,
+    await initConfig();
+    initState();
+    // Initialize
+    const lastState = await getLastState();
+
+    // Initialize data (do we want anything from last state?)
+    const lastTxDate = lastState?.visa.history.slice(-1)?.[0]?.date;
+    const chq = await getChequingData();
+    const visa = await getVisaData(lastTxDate)
+    let state: HarvestData = {
+      chq,
+      visa,
+      date: DateTime.now(),
+      // Note, we don't use the actual coin balance because we want the
+      // harvesters actions to be independent of any other actions
+      // happening (eg manual xfer in & out).
+      coinBalance: lastState?.coinBalance ?? currency(0),
+      payVisa: lastState?.payVisa,
+      toCoin: lastState?.toCoin,
+    }
+
+    // Restore processing stages from memory
+    const stages = await hydrateProcessor();
+
+    for (const stage of stages.filter(s => !!s)) {
+      state = await stage!.process(state, lastState);
+    }
+
+    await setCurrentState(state);
   }
-
-  // Restore processing stages from memory
-  const stages = await hydrateProcessor();
-
-  for (const stage of stages.filter(s => !!s)) {
-    state = await stage!.process(state, lastState);
+  catch (err: unknown) {
+    if (err instanceof Error) {
+      log.fatal(err, "Error in harvest, aborting");
+    }
+    else {
+      log.fatal(`"Error in harvest: ${err}`);
+    }
   }
-
-  await setCurrentState(state);
 
   // // OPTIONAL: Transfer payment for existing purchases to TheCoin
   // const state1 = new TransferVisaOwing(lastState).process(state);
@@ -63,15 +83,3 @@ export async function harvest() {
 
 }
 
-async function getVisaData(lastTxDate?: DateTime) {
-  const data = await replay('visaBalance');
-  // Only keep the new transactions from history
-  const newTransactions = lastTxDate
-    ? data.history.filter(row => row.date > lastTxDate)
-    : data.history;
-
-  return {
-    ...data,
-    history: newTransactions,
-  }
-}

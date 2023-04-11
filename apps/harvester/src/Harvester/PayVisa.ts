@@ -1,5 +1,8 @@
 import { HarvestData, ProcessingStage } from './types';
 import { GetBillPaymentsApi } from '@thecointech/apis/broker'
+import { BuildUberAction } from '@thecointech/utilities/UberAction';
+import { getWallet } from './config';
+import Decimal from 'decimal.js-light';
 
 export class PayVisa implements ProcessingStage {
 
@@ -20,11 +23,25 @@ export class PayVisa implements ProcessingStage {
       let daysBack = this.daysPrior;
       while (daysBack > 0) {
         dateToPay = dateToPay.minus({ days: 1 });
-        // Only count week days (NOTE: this is very imperfect, it does not count bank holidays)
+        // Only count week days (NOTE: this is imperfect, it does not count bank holidays)
         if (dateToPay.weekday < 6) {
           daysBack--;
         }
       }
+
+      const wallet = await getWallet();
+      if (!wallet) {
+        throw new Error("Cannot pay bill: No wallet found");
+      }
+      const api = GetBillPaymentsApi();
+      const payment = await BuildUberAction(
+        {} as any,
+        wallet,
+        process.env.WALLET_BrokerCAD_ADDRESS!,
+        new Decimal(data.visa.dueAmount.value),
+        124,
+        dateToPay,
+      )
 
       // transfer visa dueAmount on dateToPay
     }

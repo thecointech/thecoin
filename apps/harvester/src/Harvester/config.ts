@@ -26,11 +26,17 @@ export type ConfigShape = {
 const ConfigKey = "config";
 
 let _config = null as unknown as PouchDB.Database<ConfigShape>;
-export async function initialize(password?: string) {
-  _config = new PouchDB<ConfigShape>('config', {adapter: 'memory'});
-  if (password) {
-    await _config.setPassword("password");
-    await _config.loadEncrypted();
+export async function initConfig(password?: string) {
+  if (!_config) {
+    _config = new PouchDB<ConfigShape>('config', {adapter: 'memory'});
+    if (password) {
+      // initialize the config db
+      // Yes, this is a hard-coded password.
+      // Will fix ASAP with dynamically
+      // generated code (Apr 04 2023)
+      await _config.setPassword(password ?? "hF,835-/=Pw\\nr6r");
+      await _config.loadEncrypted();
+    }
   }
 }
 
@@ -64,13 +70,17 @@ export async function setWalletMnemomic(mnemonic: Mnemonic) {
   return true;
 }
 
-export async function getWalletAddress() {
+export async function getWallet() {
   const cfg = await getProcessConfig();
   if (cfg?.wallet) {
-    const wallet = Wallet.fromMnemonic(cfg.wallet.phrase, cfg.wallet.path);
-    return wallet.address;
+    return Wallet.fromMnemonic(cfg.wallet.phrase, cfg.wallet.path);
   }
   return null;
+}
+
+export async function getWalletAddress() {
+  const wallet = await getWallet();
+  return wallet?.address ?? null;
 }
 
 export async function hydrateProcessor() {

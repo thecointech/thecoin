@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { defaultDays } from '../types';
-import { initialize, ConfigShape, hydrateProcessor, setProcessConfig } from './config';
+import { initConfig, ConfigShape, hydrateProcessor, setProcessConfig } from './config';
 import { RoundUp } from './RoundUp';
 import { TransferLimit } from './TransferLimit';
 import { TransferVisaOwing } from './TransferVisaOwing';
@@ -8,7 +8,7 @@ import { TransferVisaOwing } from './TransferVisaOwing';
 jest.setTimeout(60000);
 
 // it ('Correctly encrypts', async () => {
-//   await initialize('password');
+//   await initConfig('password');
 
 //   // Get current
 //   const cfg = await getProcessConfig();
@@ -25,7 +25,7 @@ jest.setTimeout(60000);
 
 it ('Can save & load a config', async () => {
 
-  await initialize();
+  await initConfig();
 
   const config: ConfigShape = {
     daysToRun: defaultDays,

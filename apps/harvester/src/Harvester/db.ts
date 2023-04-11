@@ -1,21 +1,17 @@
-import currency from 'currency.js';
-import { DateTime } from 'luxon';
-import { ConfigShape } from './config';
 import { HarvestData } from './types';
 import pouchdb from 'pouchdb';
 
 
 let _harvester = null as unknown as PouchDB.Database<HarvestData>;
-let _config = null as unknown as PouchDB.Database<ConfigShape>;
 
-export function initialize(options?: { adapter: string }) {
-  _harvester = new pouchdb<HarvestData>('harvester', options);
-  _config = new pouchdb<ConfigShape>('config', options);
+export function initState(options?: { adapter: string }) {
+  if (!_harvester) {
+    _harvester = new pouchdb<HarvestData>('harvester', options);
+  }
 }
 
 // We use pouchDB revisions to keep the prior state of documents
 const StateKey = "state";
-const ConfigKey = "config";
 
 export async function getLastState() {
   try {
