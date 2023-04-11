@@ -5,7 +5,7 @@
   "description": "Automatically harvest TheCoin",
   "main": ".webpack/main",
   "config": {
-    "forge": "./config.forge"
+    "forge": "./forge.config"
   },
   "keywords": [],
   "author": {
