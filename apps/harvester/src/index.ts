@@ -13,9 +13,10 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-const runHarvest = app.commandLine.getSwitchValue("--harvest");
+const runHarvest = process.argv.indexOf("--harvest") >= 0
+console.log("Running Harvest: " + runHarvest);
 if (runHarvest) {
-  harvest();
+  await harvest();
   app.quit();
 }
 

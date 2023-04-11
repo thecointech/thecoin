@@ -17,5 +17,8 @@ export const mainConfig: Configuration = {
   },
   externals: [
 
-  ]
+  ],
+  experiments: {
+    topLevelAwait: true,
+  },
 };

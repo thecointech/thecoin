@@ -16,6 +16,7 @@
     "record": "ts-node-esm src/scraper/main.ts",
     "replay": "ts-node-esm src/scraper/replay.ts",
     "dev": "electron-forge start",
+    "dev:harvest": "electron-forge start -- -- --harvest",
     "_dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "start": "electron-forge start",
     "package": "electron-forge package",
