@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom";
 // import { RouterProvider, createHashRouter } from "react-router-dom";
 import { ConnectedRouter } from 'connected-react-router';

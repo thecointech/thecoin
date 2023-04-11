@@ -65,11 +65,11 @@ export class Recorder {
         console.log('browser disconnected');
         const eventsStr = JSON.stringify(this.events, null, 2);
         console.log(eventsStr)
-  
+
         if (!existsSync(outFolder)) {
           mkdirSync(outFolder)
         }
-  
+
         writeFileSync(path.join(outFolder, `${this.name}.json`), eventsStr);
         // Cleanup
         delete Recorder.__instance;
@@ -77,7 +77,7 @@ export class Recorder {
         resolve(true);
       })
     })
-  
+
     return page;
   }
 
@@ -87,7 +87,7 @@ export class Recorder {
       if (!name || Recorder.__instance.name == name) return Recorder.__instance
       else {
         throw new Error("Cannot start recording new session without closing prior session")
-      } 
+      }
     }
     // We have no instance, we need a name & url
     if (!name || !url) {
@@ -144,7 +144,7 @@ export class Recorder {
         })
         .filter(v => !!v[1]);
       this.urlToFrameName = Object.fromEntries(frames);
-      // the load events are only useful for getting screenshots, 
+      // the load events are only useful for getting screenshots,
       // so don't keep them
       return;
     }
@@ -298,6 +298,7 @@ function onNewDocument() {
         const rowText = ancestor.innerText;
         return rowText.split(text)[0]?.trim();
       }
+      return undefined;
     }
 
     const getFrameUrl = () => {

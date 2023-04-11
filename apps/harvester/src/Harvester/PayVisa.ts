@@ -42,6 +42,7 @@ export class PayVisa implements ProcessingStage {
         124,
         dateToPay,
       )
+      api.uberBillPayment(payment);
 
       // transfer visa dueAmount on dateToPay
     }

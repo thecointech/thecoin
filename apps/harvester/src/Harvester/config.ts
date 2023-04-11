@@ -51,7 +51,7 @@ export async function getProcessConfig() {
 
 export async function setProcessConfig(config: Partial<ConfigShape>) {
   const lastCfg = await getProcessConfig();
-  const r = await _config.put({
+  await _config.put({
     steps: config.steps ?? lastCfg?.steps ?? [],
     daysToRun: config.daysToRun ?? lastCfg?.daysToRun ?? defaultDays,
     stateKey: config.stateKey ?? lastCfg?.stateKey,
