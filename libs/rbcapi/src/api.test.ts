@@ -8,6 +8,7 @@ import { describe, IsManualRun } from '@thecointech/jestutils';
 import { getEnvVars } from '@thecointech/setenv';
 import adapter from 'pouchdb-adapter-memory';
 
+jest.setTimeout(5*60*1000);
 const env = getEnvVars("prod");
 let api: RbcApi; // Intialized below
 
