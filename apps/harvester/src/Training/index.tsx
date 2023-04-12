@@ -38,6 +38,7 @@ export const Training = () => {
   }, [])
 
   const page0Complete = isUrl(data.chequing.url) && isUrl(data.visa.url);
+  const cdComplete = data.hasCreditDetails;
   const page1Complete = !!(data.chequing.warm && data.visa.warm);
   const page2Complete = data.chequing.testPassed;
   const page3Complete = data.visa.testPassed;
@@ -48,24 +49,31 @@ export const Training = () => {
       <Step.Group ordered>
         <TrainingStep
           title="Intro"
-          description="Learn why we need to train"
+          description="Why we need to train"
           page={0}
           completed={page0Complete}
           disabled={false}
           pathname={location.pathname} />
         <TrainingStep
+          title="Details"
+          description="Credit details"
+          page={1}
+          completed={cdComplete}
+          disabled={!page0Complete}
+          pathname={location.pathname} />
+        <TrainingStep
           title="Warmup"
           description="Prepare your bank account"
-          page={1}
+          page={2}
           //validPage={validPage}
           completed={page1Complete}
-          disabled={!page0Complete}
+          disabled={!cdComplete}
           // completed={isLoggedIn}
           pathname={location.pathname} />
         <TrainingStep
           title="Chequing"
           description="Learn to earn"
-          page={2}
+          page={3}
           //validPage={validPage}
           completed={page2Complete}
           disabled={!page1Complete}
@@ -73,7 +81,7 @@ export const Training = () => {
         <TrainingStep
           title="Visa"
           description="Learn to earn"
-          page={3}
+          page={4}
           //validPage={validPage}
           completed={page3Complete}
           disabled={!page2Complete}
@@ -81,15 +89,15 @@ export const Training = () => {
         <TrainingStep
           title="Send e-transfer"
           description="Learn to pay"
-          page={4}
+          page={5}
           //validPage={validPage}
           completed={page4Complete}
           disabled={!page3Complete}
           pathname={location.pathname} />
         <TrainingStep
           title="Complete"
-          description="Relax and earn"
-          page={5}
+          description="Start Earning"
+          page={6}
           //validPage={validPage}
           completed={page4Complete}
           disabled={!page4Complete}

@@ -6,7 +6,7 @@ import { ChequeBalanceResult, VisaBalanceResult } from '../scraper/types'
 export type HarvestData = {
 
   date: DateTime,
-  
+
   visa: VisaBalanceResult,
   chq: ChequeBalanceResult,
 
@@ -15,6 +15,11 @@ export type HarvestData = {
   payVisa?: currency,
 
   coinBalance: currency,
+}
+
+export type CreditDetails = {
+  payee: string,
+  accountNumber: string,
 }
 
 export interface ProcessingStage {

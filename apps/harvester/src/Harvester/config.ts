@@ -5,6 +5,7 @@ import { Wallet } from '@ethersproject/wallet';
 import { Mnemonic } from '@ethersproject/hdnode';
 import { defaultDays, HarvestConfig } from '../types';
 import { createStep } from './steps';
+import { CreditDetails } from './types';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
@@ -15,6 +16,8 @@ export type ConfigShape = {
   // Store a constant key for the account state DB
   // This key should be derived from wallet mnemonic
   stateKey?: string,
+
+  creditDetails?: CreditDetails,
 } & HarvestConfig;
 
 // We use pouchDB revisions to keep the prior state of documents
@@ -23,7 +26,6 @@ const ConfigKey = "config";
 
 let _config = null as unknown as PouchDB.Database<ConfigShape>;
 export async function initConfig(password?: string) {
-  debugger;
   if (!_config) {
     _config = new PouchDB<ConfigShape>('config', {adapter: 'memory'});
     // initialize the config db
@@ -51,6 +53,7 @@ export async function setProcessConfig(config: Partial<ConfigShape>) {
     daysToRun: config.daysToRun ?? lastCfg?.daysToRun ?? defaultDays,
     stateKey: config.stateKey ?? lastCfg?.stateKey,
     wallet: config.wallet ?? lastCfg?.wallet,
+    creditDetails: config.creditDetails ?? lastCfg?.creditDetails,
     _id: ConfigKey,
     _rev: lastCfg?._rev,
   })
@@ -85,6 +88,15 @@ export async function hydrateProcessor() {
   }
 
   return config.steps.map(createStep)
+}
+
+export async function setCreditDetails(creditDetails: CreditDetails) {
+  await setProcessConfig({creditDetails})
+  return true;
+}
+export async function hasCreditDetails() {
+  const config = await getProcessConfig();
+  return !!config?.creditDetails;
 }
 
 export async function getHarvestConfig() {

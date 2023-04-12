@@ -5,9 +5,10 @@ import { ActionTypes, ValueType } from './scraper/types';
 import { warmup } from './scraper/warmup';
 import { actions, ScraperBridgeApi } from './scraper_actions';
 import { toBridge } from './scraper_bridge_conversions';
-import { getHarvestConfig, getWalletAddress, initConfig, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
+import { getHarvestConfig, getWalletAddress, hasCreditDetails, initConfig, setCreditDetails, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
 import type { Mnemonic } from '@ethersproject/hdnode';
 import { HarvestConfig } from './types';
+import { CreditDetails } from './Harvester/types';
 
 async function guard<T>(cb: () => Promise<T>) {
   try {
@@ -38,6 +39,9 @@ const api: ScraperBridgeApi = {
   setWalletMnemomic: (mnemonic) => guard(() => setWalletMnemomic(mnemonic)),
   getWalletAddress: () => guard(() => getWalletAddress()),
 
+  setCreditDetails: (details) => guard(() => setCreditDetails(details)),
+  hasCreditDetails: () => guard(() => hasCreditDetails()),
+
   getHarvestConfig: () => guard(() => getHarvestConfig()),
   setHarvestConfig: (config) => guard(() => setHarvestConfig(config))
 }
@@ -47,42 +51,40 @@ export function initScraping() {
   initConfig();
 
   ipcMain.handle(actions.warmup, async (_event, url: string) => {
-    console.log("Warmup");
     return api.warmup(url);
   }),
 
   ipcMain.handle(actions.start, async (_event, actionName: ActionTypes, url: string, dynamicValues: Record<string, string>) => {
-    console.log("Start", dynamicValues);
     return api.start(actionName, url, dynamicValues);
   })
   ipcMain.handle(actions.learnValue, async (_event, valueName: string, valueType: ValueType) => {
-    console.log("LearnValue");
     return api.learnValue(valueName, valueType);
   })
   ipcMain.handle(actions.finishAction, async (_event, actionName: ActionTypes) => {
-    console.log("finishAction");
     return api.finishAction(actionName);
   })
   ipcMain.handle(actions.testAction, async (_event, actionName: ActionTypes, dynamicValues: Record<string, string>) => {
-    console.log("testAction");
     return api.testAction(actionName, dynamicValues);
   })
 
   ipcMain.handle(actions.setWalletMnemomic, async (_event, mnemonic: Mnemonic) => {
-    console.log(`setWalletMnemomic`);
     return api.setWalletMnemomic(mnemonic as any);
   })
   ipcMain.handle(actions.getWalletAddress, async (_event) => {
-    console.log(`getWalletAddress`);
     return api.getWalletAddress();
   })
 
+  ipcMain.handle(actions.hasCreditDetails, async (_event) => {
+    return api.hasCreditDetails();
+  })
+  ipcMain.handle(actions.setCreditDetails, async (_event, details: CreditDetails) => {
+    return api.setCreditDetails(details);
+  })
+
   ipcMain.handle(actions.getHarvestConfig, async (_event) => {
-    console.log(`getHarvestConfig`);
     return api.getHarvestConfig();
   })
   ipcMain.handle(actions.setHarvestConfig, async (_event, config: HarvestConfig) => {
-    console.log(`setHarvestConfig`);
     return api.setHarvestConfig(config);
   })
 }

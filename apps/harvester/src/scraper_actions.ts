@@ -1,6 +1,7 @@
 import { Mnemonic } from '@ethersproject/hdnode';
 import { HarvestConfig } from './types';
 import type {ActionTypes, ValueResult, ValueType} from "./scraper/types";
+import { CreditDetails } from './Harvester/types';
 
 export type Result<T> = {
   error?: string;
@@ -25,6 +26,9 @@ export type ScraperBridgeApi = {
   setWalletMnemomic(mnemonic: Mnemonic): Promise<Result<boolean>>,
   getWalletAddress(): Promise<Result<string|null>>,
 
+  hasCreditDetails(): Promise<Result<boolean>>,
+  setCreditDetails(details: CreditDetails): Promise<Result<boolean>>,
+
   getHarvestConfig(): Promise<Result<HarvestConfig|undefined>>,
   setHarvestConfig(config: HarvestConfig): Promise<Result<boolean>>
 }
@@ -43,6 +47,9 @@ export const actions = {
   getWalletAddress: 'scraper:getWalletAddress',
 
   // fuggit
+  setCreditDetails: "scraper:setCreditDetails",
+  hasCreditDetails: "scraper:hasCreditDetails",
+
   getHarvestConfig: 'scraper:getHarvestConfig',
   setHarvestConfig: 'scraper:setHarvestConfig',
 }

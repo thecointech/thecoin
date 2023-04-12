@@ -13,6 +13,9 @@ const api : ScraperBridgeApi = {
   setWalletMnemomic: (mnemonic) => ipcRenderer.invoke(actions.setWalletMnemomic, mnemonic),
   getWalletAddress: () => ipcRenderer.invoke(actions.getWalletAddress),
 
+  hasCreditDetails: () => ipcRenderer.invoke(actions.hasCreditDetails),
+  setCreditDetails: (details) => ipcRenderer.invoke(actions.setCreditDetails, details),
+
   getHarvestConfig: () => ipcRenderer.invoke(actions.getHarvestConfig),
   setHarvestConfig: (config) => ipcRenderer.invoke(actions.setHarvestConfig, config),
 }
