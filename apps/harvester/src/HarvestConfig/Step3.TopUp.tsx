@@ -14,14 +14,11 @@ export const TopUp = () => {
   useEffect(() => {
     if (enabled) {
       api.setStep(HarvestStepType.TopUp, {
-        name: 'TopUp',
-        args: {
-          topUp
-        }
+        topUp
       });
     }
     else {
-      api.setStep(HarvestStepType.TopUp, null);
+      api.clearStep(HarvestStepType.TopUp);
     }
   }, [enabled, topUp]);
 

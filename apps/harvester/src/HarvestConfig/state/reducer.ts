@@ -1,6 +1,6 @@
 
 import { BaseReducer } from '@thecointech/shared/store/immerReducer'
-import { HarvestConfig, defaultDays, DaysArray, HarvestStep, HarvestStepType } from '../../types';
+import { HarvestConfig, defaultDays, DaysArray, HarvestStepType, HarvestArgs } from '../../types';
 import { IActions } from './types';
 
 export const CONFIG_KEY = "config";
@@ -10,9 +10,8 @@ const stored = await window.scraper.getHarvestConfig();
 export const initialState: HarvestConfig = stored.value ?? {
   daysToRun: defaultDays,
   steps: [
-    { name: 'readVisaOwing' },
     {
-      name: 'roundUp',
+      type: HarvestStepType.RoundUp,
       args: {
         roundPoint: 100,
       },
@@ -20,13 +19,13 @@ export const initialState: HarvestConfig = stored.value ?? {
     null,
     null,
     {
-      name: 'transferLimit',
+      type: HarvestStepType.TransferLimit,
       args: {
         limit: 200,
       },
     },
-    { name: 'sendETransfer' },
-    { name: 'payVisa' },
+    { type: HarvestStepType.SendETransfer },
+    { type: HarvestStepType.PayVisa },
   ]
 };
 
@@ -35,10 +34,20 @@ export class ConfigReducer extends BaseReducer<IActions, HarvestConfig>(CONFIG_K
   setDaysToRun(daysToRun: DaysArray): void {
     this.draftState.daysToRun = daysToRun;
   }
-  setStep(index: HarvestStepType, step: HarvestStep|null): void {
+  setStep(type: HarvestStepType, args?: HarvestArgs): void {
+    this.draftState.steps = [
+      ...this.state.steps.slice(0, type),
+      {
+        type,
+        args
+      },
+      ...this.state.steps.slice(type + 1),
+    ]
+  }
+  clearStep(index: HarvestStepType): void {
     this.draftState.steps = [
       ...this.state.steps.slice(0, index),
-      step,
+      null,
       ...this.state.steps.slice(index + 1),
     ]
   }

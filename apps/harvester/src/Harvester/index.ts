@@ -14,6 +14,7 @@ export async function harvest() {
     await initConfig();
     initState();
     // Initialize
+    const stages = await hydrateProcessor();
     const lastState = await getLastState();
 
     // Initialize data (do we want anything from last state?)
@@ -28,12 +29,10 @@ export async function harvest() {
       // harvesters actions to be independent of any other actions
       // happening (eg manual xfer in & out).
       coinBalance: lastState?.coinBalance ?? currency(0),
+
       payVisa: lastState?.payVisa,
       toCoin: lastState?.toCoin,
     }
-
-    // Restore processing stages from memory
-    const stages = await hydrateProcessor();
 
     for (const stage of stages.filter(s => !!s)) {
       state = await stage!.process(state, lastState);

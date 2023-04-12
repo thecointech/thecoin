@@ -1,10 +1,10 @@
 import currency from 'currency.js';
-import { HarvestData, ProcessingStage } from './types';
+import { HarvestData, ProcessingStage } from '../types';
 
 
 export class TransferVisaOwing implements ProcessingStage {
 
-  async process(data: HarvestData, lastState?: HarvestData) { 
+  async process(data: HarvestData, lastState?: HarvestData) {
     const currentBalance = data.visa.balance;
     let priorBalance = lastState?.visa.balance ?? currency(0);
 

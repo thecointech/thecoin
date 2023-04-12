@@ -1,5 +1,5 @@
 import currency from 'currency.js';
-import { HarvestData, ProcessingStage } from './types';
+import { HarvestData, ProcessingStage } from '../types';
 
 export class RoundUp implements ProcessingStage {
 

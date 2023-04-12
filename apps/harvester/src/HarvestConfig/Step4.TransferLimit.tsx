@@ -15,14 +15,11 @@ export const TransferLimit = () => {
   useEffect(() => {
     if (enabled) {
       api.setStep(HarvestStepType.TransferLimit, {
-        name: 'TransferLimit',
-        args: {
-          limit
-        }
+        limit
       });
     }
     else {
-      api.setStep(HarvestStepType.TransferLimit, null);
+      api.clearStep(HarvestStepType.TransferLimit);
     }
   }, [enabled, limit]);
 

@@ -1,4 +1,4 @@
-import { HarvestData, ProcessingStage } from './types';
+import { HarvestData, ProcessingStage } from '../types';
 
 export class TransferLimit implements ProcessingStage {
 

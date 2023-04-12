@@ -1,7 +1,7 @@
-import { HarvestData, ProcessingStage } from './types';
+import { HarvestData, ProcessingStage } from '../types';
 import { GetBillPaymentsApi } from '@thecointech/apis/broker'
 import { BuildUberAction } from '@thecointech/utilities/UberAction';
-import { getWallet } from './config';
+import { getWallet } from '../config';
 import Decimal from 'decimal.js-light';
 
 export class PayVisa implements ProcessingStage {

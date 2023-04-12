@@ -1,5 +1,5 @@
-import { replay } from '../scraper/replay';
-import { HarvestData, ProcessingStage } from './types';
+import { replay } from '../../scraper/replay';
+import { HarvestData, ProcessingStage } from '../types';
 
 
 export class TransferVisaOwing implements ProcessingStage {

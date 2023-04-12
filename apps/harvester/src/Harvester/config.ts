@@ -1,14 +1,10 @@
-import { PayVisa } from './PayVisa';
-import { RoundUp } from './RoundUp';
-import { TransferEverything } from './TransferEverything';
-import { TransferLimit } from './TransferLimit';
-import { TransferVisaOwing } from './TransferVisaOwing';
 import PouchDB from 'pouchdb';
 import memory from 'pouchdb-adapter-memory'
 import comdb from 'comdb';
 import { Wallet } from '@ethersproject/wallet';
 import { Mnemonic } from '@ethersproject/hdnode';
 import { defaultDays, HarvestConfig } from '../types';
+import { createStep } from './steps';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
@@ -27,16 +23,15 @@ const ConfigKey = "config";
 
 let _config = null as unknown as PouchDB.Database<ConfigShape>;
 export async function initConfig(password?: string) {
+  debugger;
   if (!_config) {
     _config = new PouchDB<ConfigShape>('config', {adapter: 'memory'});
-    if (password) {
-      // initialize the config db
-      // Yes, this is a hard-coded password.
-      // Will fix ASAP with dynamically
-      // generated code (Apr 04 2023)
-      await _config.setPassword(password ?? "hF,835-/=Pw\\nr6r");
-      await _config.loadEncrypted();
-    }
+    // initialize the config db
+    // Yes, this is a hard-coded password.
+    // Will fix ASAP with dynamically
+    // generated code (Apr 04 2023)
+    await _config.setPassword(password ?? "hF,835-/=Pw\\nr6r");
+    await _config.loadEncrypted();
   }
 }
 
@@ -89,17 +84,7 @@ export async function hydrateProcessor() {
     throw new Error('No config found');
   }
 
-  return config.steps.map(stage => {
-    switch (stage?.name) {
-      case 'roundUp': return new RoundUp(stage.args);
-      case 'transferEverything': return new TransferEverything();
-      case 'transferLimit': return new TransferLimit(stage.args);
-      case 'transferVisaOwing': return new TransferVisaOwing();
-      case 'payVisa': return new PayVisa(stage.args);
-      case null: return null;
-      default: throw new Error(`Unknown processing stage: ${stage!.name}`);
-    }
-  })
+  return config.steps.map(createStep)
 }
 
 export async function getHarvestConfig() {

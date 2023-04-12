@@ -3,7 +3,7 @@
 
 /* --- STATE --- */
 
-import { DaysArray, HarvestStep, HarvestStepType } from '../../types';
+import { DaysArray, HarvestArgs, HarvestStepType } from '../../types';
 
 // export interface ConfigState {
 //   readonly daysToRun: DaysArray,
@@ -12,6 +12,7 @@ import { DaysArray, HarvestStep, HarvestStepType } from '../../types';
 
 /* --- ACTIONS --- */
 export interface IActions {
-  setStep(index: HarvestStepType, step: HarvestStep|null): void;
+  setStep(type: HarvestStepType, args:HarvestArgs): void;
+  clearStep(type: HarvestStepType): void;
   setDaysToRun(daysToRun: DaysArray): void;
 }

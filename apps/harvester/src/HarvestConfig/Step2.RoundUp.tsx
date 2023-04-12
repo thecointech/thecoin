@@ -14,14 +14,11 @@ export const RoundUp = () => {
   useEffect(() => {
     if (enabled) {
       api.setStep(HarvestStepType.RoundUp, {
-        name: 'RoundUp',
-        args: {
-          roundPoint
-        }
+        roundPoint
       });
     }
     else {
-      api.setStep(HarvestStepType.RoundUp, null);
+      api.clearStep(HarvestStepType.RoundUp);
     }
   }, [enabled, roundPoint]);
 

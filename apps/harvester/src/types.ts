@@ -1,8 +1,4 @@
 
-export type HarvestStep = {
-  name: string,
-  args?: Record<string, string|number>,
-}
 
 export type DaysArray = [boolean, boolean, boolean, boolean, boolean, boolean, boolean];
 export const defaultDays: DaysArray = [
@@ -16,7 +12,8 @@ export const defaultDays: DaysArray = [
 ]
 
 export enum HarvestStepType {
-  ReadVisaOwing,
+  // ReadVisaOwing,
+  TransferVisaOwing,
   RoundUp,
   TransferEverything,
   TopUp,
@@ -24,10 +21,17 @@ export enum HarvestStepType {
   SendETransfer,
   PayVisa,
 }
+
+export type HarvestArgs = Record<string, string|number>
+
+export type HarvestStep = {
+  type: HarvestStepType,
+  args?: HarvestArgs,
+}
+
 export type HarvestConfig = {
   daysToRun: DaysArray,
   steps: Array<HarvestStep|null>,
-    // HarvestStep|null, // ReadVisaOwing, compulsory-ish
     // HarvestStep|null, // RoundUp,
     // HarvestStep|null, // TransferEverything,
     // HarvestStep|null, // TopUp,
