@@ -4,7 +4,7 @@ import type IForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import { getEnvVars } from '@thecointech/setenv';
 import path from 'path';
 
-const packageFile = path.join(__dirname, 'package.json');
+const packageFile = path.join(__dirname, '../package.json');
 
 const env = getEnvVars();
 

@@ -17,7 +17,7 @@
     "target": "es2021",
     "allowJs": true,
     "jsx": "react-jsx",
-    "module": "CommonJS",
+    "module": "Node16",
     "lib": [
       "dom",
       "es2021"
@@ -38,7 +38,7 @@
     }
   },
   "include": [
-    "*.ts", "src/global.d.ts",
+    "*.ts",
   ],
   "references": [
     { "path": "./tsconfig.app.json" },

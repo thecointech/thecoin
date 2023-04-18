@@ -5,9 +5,9 @@ import { MakerDeb } from '@electron-forge/maker-deb';
 import { MakerRpm } from '@electron-forge/maker-rpm';
 import { WebpackPlugin } from '@electron-forge/plugin-webpack';
 
-import { mainConfig } from './webpack.main.config';
-import { rendererConfig } from './webpack.renderer.config';
-import { devCSP } from './csp';
+import { mainConfig } from './config/webpack.main.config';
+import { rendererConfig } from './config/webpack.renderer.config';
+import { devCSP } from './config/csp';
 
 const config: ForgeConfig = {
   packagerConfig: {},

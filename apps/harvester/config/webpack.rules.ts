@@ -30,7 +30,7 @@ export const rules: Required<ModuleOptions>['rules'] = [
     use: {
       loader: 'ts-loader',
       options: {
-        configFile: path.join(__dirname, 'tsconfig.app.json'),
+        configFile: path.join(__dirname, '..', 'tsconfig.app.json'),
         transpileOnly: true,
       },
     },

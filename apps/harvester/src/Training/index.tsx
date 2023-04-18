@@ -49,7 +49,7 @@ export const Training = () => {
       <Step.Group ordered>
         <TrainingStep
           title="Intro"
-          description="Why we need to train"
+          description="Why we train"
           page={0}
           completed={page0Complete}
           disabled={false}
@@ -63,9 +63,8 @@ export const Training = () => {
           pathname={location.pathname} />
         <TrainingStep
           title="Warmup"
-          description="Prepare your bank account"
+          description="Prep the AI"
           page={2}
-          //validPage={validPage}
           completed={page1Complete}
           disabled={!cdComplete}
           // completed={isLoggedIn}
@@ -74,7 +73,6 @@ export const Training = () => {
           title="Chequing"
           description="Learn to earn"
           page={3}
-          //validPage={validPage}
           completed={page2Complete}
           disabled={!page1Complete}
           pathname={location.pathname} />
@@ -82,7 +80,6 @@ export const Training = () => {
           title="Visa"
           description="Learn to earn"
           page={4}
-          //validPage={validPage}
           completed={page3Complete}
           disabled={!page2Complete}
           pathname={location.pathname} />
@@ -90,7 +87,6 @@ export const Training = () => {
           title="Send e-transfer"
           description="Learn to pay"
           page={5}
-          //validPage={validPage}
           completed={page4Complete}
           disabled={!page3Complete}
           pathname={location.pathname} />
@@ -98,7 +94,6 @@ export const Training = () => {
           title="Complete"
           description="Start Earning"
           page={6}
-          //validPage={validPage}
           completed={page4Complete}
           disabled={!page4Complete}
           pathname={location.pathname} />

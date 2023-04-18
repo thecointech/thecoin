@@ -7,6 +7,7 @@
   "config": {
     "forge": "./forge.config"
   },
+  "type": "commonjs",
   "keywords": [],
   "author": {
     "name": "Stephen Taylor",
@@ -25,7 +26,7 @@
     "lint": "eslint --ext .ts,.tsx .",
     "build": "yarn tsc --noEmit",
     "build:app": "yarn tsc --noEmit tsconfig.app.json",
-    "test": "yarn jest"
+    "test": "yarn run-jest"
   },
   "license": "MIT",
   "devDependencies": {
