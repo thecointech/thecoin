@@ -1,5 +1,6 @@
 import currency from 'currency.js';
 import { HarvestData, ProcessingStage } from '../types';
+import { log } from '@thecointech/logging';
 
 export class RoundUp implements ProcessingStage {
 
@@ -13,9 +14,10 @@ export class RoundUp implements ProcessingStage {
 
   async process(data: HarvestData) {
     if (data.toCoin) {
+      log.info(`Round up ${data.toCoin} to ${this.roundPoint}`);
       return {
         ...data,
-        toCoin: currency(this.roundPoint * Math.ceil(data.toCoin.intValue / this.roundPoint)),
+        toCoin: currency(this.roundPoint * Math.ceil(data.toCoin.value / this.roundPoint)),
       }
     }
     return data;
