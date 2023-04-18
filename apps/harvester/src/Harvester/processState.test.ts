@@ -1,14 +1,29 @@
+import { jest } from '@jest/globals';
 import currency from 'currency.js';
 import { RoundUp } from './steps/RoundUp'
 import { TransferVisaOwing } from './steps/TransferVisaOwing'
 import { HarvestData } from './types';
 import { SendETransfer } from './steps/SendETransfer';
-import { PayVisa } from './steps/PayVisa';
 import { DateTime } from 'luxon';
-import { processState } from '.';
+import { Wallet } from 'ethers';
+import { processState } from './processState';
 
+jest.unstable_mockModule('./config', () => {
+  return {
+    getWallet: () => Wallet.createRandom(),
+    getCreditDetails: () => ({
+      payee: 'payee',
+      accountNumber: "12345"
+    })
+  }
+})
 
 it ('can process on first run', async () => {
+
+  // must happen later to allow mocking
+  const { PayVisa } = await import('./steps/PayVisa');
+  // Mock env vars
+  process.env.WALLET_BrokerCAD_ADDRESS = "0x" + "0".repeat(40);
 
   // Simple runnable config
   const stages = [
@@ -33,5 +48,5 @@ it ('can process on first run', async () => {
 
   const nextState = await processState(stages, state);
 
-  expect(nextState.toCoin).toBeTruthy();
+  expect(nextState.toETransfer).toBeTruthy();
 })

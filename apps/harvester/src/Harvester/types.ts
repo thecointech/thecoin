@@ -11,7 +11,7 @@ export type HarvestData = {
   chq: ChequeBalanceResult,
 
   // Temp Actions?
-  toCoin?: currency,
+  toETransfer?: currency,
   payVisa?: currency,
 
   coinBalance: currency,

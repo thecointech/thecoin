@@ -1,9 +1,10 @@
 import { HarvestData, ProcessingStage } from '../types';
 import { GetBillPaymentsApi } from '@thecointech/apis/broker'
 import { BuildUberAction } from '@thecointech/utilities/UberAction';
-import { getWallet } from '../config';
+import { getCreditDetails, getWallet } from '../config';
 import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
+import type { BillPayeePacket } from '@thecointech/types';
 
 export class PayVisa implements ProcessingStage {
 
@@ -26,16 +27,22 @@ export class PayVisa implements ProcessingStage {
       if (!wallet) {
         throw new Error("Cannot pay bill: No wallet found");
       }
+
+      const creditDetails = await getCreditDetails();
+      if (!creditDetails) {
+        throw new Error("Cannot pay bill: Account Details not set");
+      }
+
       const api = GetBillPaymentsApi();
       const payment = await BuildUberAction(
-        {} as any,
+        creditDetails,
         wallet,
         process.env.WALLET_BrokerCAD_ADDRESS!,
         new Decimal(data.visa.dueAmount.value),
         124,
         dateToPay,
       )
-      api.uberBillPayment(payment);
+      await api.uberBillPayment(payment);
 
       // transfer visa dueAmount on dateToPay
     }

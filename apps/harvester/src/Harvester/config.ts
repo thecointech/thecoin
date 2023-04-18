@@ -96,9 +96,13 @@ export async function setCreditDetails(creditDetails: CreditDetails) {
   await setProcessConfig({creditDetails})
   return true;
 }
-export async function hasCreditDetails() {
+
+export async function getCreditDetails() {
   const config = await getProcessConfig();
-  return !!config?.creditDetails;
+  return config?.creditDetails;
+}
+export async function hasCreditDetails() {
+  return !!(await getCreditDetails());
 }
 
 export async function getHarvestConfig() {

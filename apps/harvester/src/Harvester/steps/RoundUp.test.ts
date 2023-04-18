@@ -7,7 +7,7 @@ it ("rounds up correctly", async () => {
     const r = await ru.process({
       toCoin: currency(amt),
     } as any);
-    return r.toCoin?.value;
+    return r.toETransfer?.value;
   }
 
   expect(await ru(100, 100)).toEqual(100);

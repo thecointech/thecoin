@@ -13,11 +13,11 @@ export class RoundUp implements ProcessingStage {
   }
 
   async process(data: HarvestData) {
-    if (data.toCoin) {
-      log.info(`Round up ${data.toCoin} to ${this.roundPoint}`);
+    if (data.toETransfer) {
+      log.info(`Round up ${data.toETransfer} to ${this.roundPoint}`);
       return {
         ...data,
-        toCoin: currency(this.roundPoint * Math.ceil(data.toCoin.value / this.roundPoint)),
+        toCoin: currency(this.roundPoint * Math.ceil(data.toETransfer.value / this.roundPoint)),
       }
     }
     return data;

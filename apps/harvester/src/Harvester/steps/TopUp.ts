@@ -13,10 +13,10 @@ export class TopUp implements ProcessingStage {
   async process(data: HarvestData) {
     // Each (month?) we add topUp to the amount to transfer
     // TODO: NOT YET IMPLEMENTED
-    if (!data.toCoin) return data;
+    if (!data.toETransfer) return data;
     return {
       ...data,
-      toCoin: data.toCoin.add(this.topUp),
+      toCoin: data.toETransfer.add(this.topUp),
     }
   }
 

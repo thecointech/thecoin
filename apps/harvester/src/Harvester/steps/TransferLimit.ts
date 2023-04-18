@@ -11,9 +11,9 @@ export class TransferLimit implements ProcessingStage {
   }
 
   async process(data: HarvestData) {
-    if (data.toCoin) {
+    if (data.toETransfer) {
       const maxTransfer = data.chq.balance.subtract(this.limit);
-      if (maxTransfer.value < data.toCoin.value) {
+      if (maxTransfer.value < data.toETransfer.value) {
         return {
           ...data,
           toCoin: maxTransfer,

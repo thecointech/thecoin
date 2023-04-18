@@ -1,38 +1,14 @@
-import currency from 'currency.js';
-import { DateTime } from 'luxon';
-import { HarvestData, ProcessingStage } from './types';
-import { hydrateProcessor, initConfig } from './config';
-import { getLastState, setCurrentState, initState } from './db';
-import { getChequingData, getVisaData } from './fetchData';
+import { setCurrentState } from './db';
 import { log } from '@thecointech/logging';
+import { processState } from './processState';
+import { initialize } from './initialize';
 
 // type HarvestAction =
 export async function harvest() {
 
   try {
 
-    await initConfig();
-    initState();
-    // Initialize
-    const stages = await hydrateProcessor();
-    const lastState = await getLastState();
-
-    // Initialize data (do we want anything from last state?)
-    const lastTxDate = lastState?.visa.history.slice(-1)?.[0]?.date;
-    const chq = await getChequingData();
-    const visa = await getVisaData(lastTxDate)
-    let state: HarvestData = {
-      chq,
-      visa,
-      date: DateTime.now(),
-      // Note, we don't use the actual coin balance because we want the
-      // harvesters actions to be independent of any other actions
-      // happening (eg manual xfer in & out).
-      coinBalance: lastState?.coinBalance ?? currency(0),
-
-      payVisa: lastState?.payVisa,
-      toCoin: lastState?.toCoin,
-    }
+    const { stages, state, lastState } = await initialize();
 
     const nextState = await processState(stages, state, lastState);
 
@@ -78,11 +54,4 @@ export async function harvest() {
   // TRANSFER OUT:
   // PayVisa: if (transferOut > 0 && dueDate > lastDueDate)
 
-}
-
-export async function processState(stages: ProcessingStage[], state: HarvestData, lastState?: HarvestData) {
-  for (const stage of stages) {
-    state = await stage.process(state, lastState);
-  }
-  return state;
 }
