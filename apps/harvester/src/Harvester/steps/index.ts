@@ -1,4 +1,5 @@
 import { HarvestStep, HarvestStepType } from '../../types';
+import { ProcessingStage } from '../types';
 import { PayVisa } from './PayVisa';
 import { RoundUp } from './RoundUp';
 import { SendETransfer } from './SendETransfer';
@@ -7,7 +8,7 @@ import { TransferEverything } from './TransferEverything';
 import { TransferLimit } from './TransferLimit';
 import { TransferVisaOwing } from './TransferVisaOwing';
 
-export const createStep = (step: HarvestStep|null) => {
+export const createStep = (step: HarvestStep|null) : ProcessingStage => {
   switch (step?.type) {
     case HarvestStepType.TransferVisaOwing: return new TransferVisaOwing();
     case HarvestStepType.RoundUp: return new RoundUp(step.args);
@@ -16,7 +17,6 @@ export const createStep = (step: HarvestStep|null) => {
     case HarvestStepType.PayVisa: return new PayVisa(step.args);
     case HarvestStepType.TopUp: return new TopUp(step.args);
     case HarvestStepType.SendETransfer: return new SendETransfer();
-    case undefined: return null;
     default: throw new Error(`Unknown processing step: ${step!.type}`);
   }
 }

@@ -87,7 +87,9 @@ export async function hydrateProcessor() {
     throw new Error('No config found');
   }
 
-  return config.steps.map(createStep)
+  return Object.values(config.steps)
+    .filter(step => !!step)
+    .map(createStep)
 }
 
 export async function setCreditDetails(creditDetails: CreditDetails) {

@@ -1,6 +1,6 @@
 import currency from 'currency.js';
 import { DateTime } from 'luxon';
-import { HarvestData } from './types';
+import { HarvestData, ProcessingStage } from './types';
 import { hydrateProcessor, initConfig } from './config';
 import { getLastState, setCurrentState, initState } from './db';
 import { getChequingData, getVisaData } from './fetchData';
@@ -34,11 +34,9 @@ export async function harvest() {
       toCoin: lastState?.toCoin,
     }
 
-    for (const stage of stages.filter(s => !!s)) {
-      state = await stage!.process(state, lastState);
-    }
+    const nextState = await processState(stages, state, lastState);
 
-    await setCurrentState(state);
+    await setCurrentState(nextState);
   }
   catch (err: unknown) {
     if (err instanceof Error) {
@@ -82,3 +80,9 @@ export async function harvest() {
 
 }
 
+export async function processState(stages: ProcessingStage[], state: HarvestData, lastState?: HarvestData) {
+  for (const stage of stages) {
+    state = await stage.process(state, lastState);
+  }
+  return state;
+}

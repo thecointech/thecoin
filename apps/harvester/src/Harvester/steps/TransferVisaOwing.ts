@@ -22,7 +22,6 @@ export class TransferVisaOwing implements ProcessingStage {
       // else, we should probably validate we haven't missed it.
     }
 
-
     const toCoin = currentBalance.subtract(priorBalance);
     if (toCoin.intValue > 0) {
       return {
