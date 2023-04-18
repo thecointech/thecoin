@@ -3,6 +3,7 @@ import { GetBillPaymentsApi } from '@thecointech/apis/broker'
 import { BuildUberAction } from '@thecointech/utilities/UberAction';
 import { getWallet } from '../config';
 import Decimal from 'decimal.js-light';
+import { DateTime } from 'luxon';
 
 export class PayVisa implements ProcessingStage {
 
@@ -19,15 +20,7 @@ export class PayVisa implements ProcessingStage {
 
     if (!lastState || (data.visa.dueDate > lastState?.visa.dueDate)) {
       // We better pay that due amount
-      let dateToPay = data.visa.dueDate;
-      let daysBack = this.daysPrior;
-      while (daysBack > 0) {
-        dateToPay = dateToPay.minus({ days: 1 });
-        // Only count week days (NOTE: this is imperfect, it does not count bank holidays)
-        if (dateToPay.weekday < 6) {
-          daysBack--;
-        }
-      }
+      const dateToPay = getDateToPay(data.visa.dueDate, this.daysPrior);
 
       const wallet = await getWallet();
       if (!wallet) {
@@ -48,5 +41,16 @@ export class PayVisa implements ProcessingStage {
     }
     return data;
   }
+}
 
+export function getDateToPay(dateToPay: DateTime, daysPrior: number) {
+  let daysBack = daysPrior;
+  while (daysBack > 0) {
+    dateToPay = dateToPay.minus({ days: 1 });
+    // Only count week days (NOTE: this is imperfect, it does not count bank holidays)
+    if (dateToPay.weekday < 6) {
+      daysBack--;
+    }
+  }
+  return dateToPay;
 }
