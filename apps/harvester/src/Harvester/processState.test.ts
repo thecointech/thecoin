@@ -34,23 +34,27 @@ it ('can process on first run', async () => {
   ];
   const state: HarvestData = {
     chq: {
-      balance: currency((500 + Math.random() * 1000).toFixed(2)),
+      balance: currency(500),
     },
     visa: {
-      balance: currency((Math.random() * 500).toFixed(2)),
-      dueAmount: currency((Math.random() * 500).toFixed(2)),
+      balance: currency(325),
+      dueAmount: currency(100),
       dueDate: DateTime.now().plus({ weeks: 1 }),
       history: [],
     },
     date: DateTime.now(),
 
     state: {
-      harvesterBalance: currency((Math.random() * 500).toFixed(2)),
+      harvesterBalance: currency(200),
     },
     delta: []
   }
 
   const nextState = await processState(stages, state);
 
-  expect(nextState.state.toETransfer).toBeTruthy();
+  expect(nextState.delta.length).toEqual(4);
+  // money to be etransfered should be gone
+  expect(nextState.state.harvesterBalance).toEqual(currency(500));
+  expect(nextState.state.toPayVisa).toEqual(currency(100));
+  expect(nextState.state.toETransfer).toBeUndefined();
 })
