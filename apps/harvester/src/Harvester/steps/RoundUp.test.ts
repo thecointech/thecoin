@@ -5,7 +5,9 @@ it ("rounds up correctly", async () => {
   const ru = async (amt: number, roundPoint: number) => {
     const ru = new RoundUp({ roundPoint });
     const r = await ru.process({
-      toCoin: currency(amt),
+      state: {
+        toETransfer: currency(amt),
+      }
     } as any);
     return r.toETransfer?.value;
   }

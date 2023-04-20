@@ -1,10 +1,12 @@
-import { HarvestData, ProcessingStage } from '../types';
+import { getDataAsDate, HarvestData, HarvestDelta, ProcessingStage } from '../types';
 import { GetBillPaymentsApi } from '@thecointech/apis/broker'
 import { BuildUberAction } from '@thecointech/utilities/UberAction';
 import { getCreditDetails, getWallet } from '../config';
 import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
-import type { BillPayeePacket } from '@thecointech/types';
+import currency from 'currency.js';
+
+const PayVisaKey = "PayVisa";
 
 export class PayVisa implements ProcessingStage {
 
@@ -16,10 +18,13 @@ export class PayVisa implements ProcessingStage {
     }
   }
 
-  async process(data: HarvestData, lastState?: HarvestData) {
+
+  async process(data: HarvestData) : Promise<HarvestDelta> {
     // Do we have a new due amount?  If so, we better pay it.
 
-    if (!lastState || (data.visa.dueDate > lastState?.visa.dueDate)) {
+    const lastDueDate = getDataAsDate(PayVisaKey, data.state.stepData);
+
+    if (!lastDueDate || (data.visa.dueDate > lastDueDate)) {
       // We better pay that due amount
       const dateToPay = getDateToPay(data.visa.dueDate, this.daysPrior);
 
@@ -33,6 +38,7 @@ export class PayVisa implements ProcessingStage {
         throw new Error("Cannot pay bill: Account Details not set");
       }
 
+      // transfer visa dueAmount on dateToPay
       const api = GetBillPaymentsApi();
       const payment = await BuildUberAction(
         creditDetails,
@@ -44,9 +50,16 @@ export class PayVisa implements ProcessingStage {
       )
       await api.uberBillPayment(payment);
 
-      // transfer visa dueAmount on dateToPay
+      const harvesterBalance = data.state.harvesterBalance ?? currency(0);
+      return {
+        toPayVisa: data.visa.dueAmount,
+        harvesterBalance: harvesterBalance.subtract(data.visa.dueAmount),
+        stepData: {
+          [PayVisaKey]: dateToPay.toISO()!,
+        }
+      }
     }
-    return data;
+    return {};
   }
 }
 

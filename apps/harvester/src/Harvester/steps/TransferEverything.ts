@@ -4,9 +4,7 @@ export class TransferEverything implements ProcessingStage {
 
   async process(data: HarvestData) {
     return {
-      ...data,
-      toCoin: data.chq.balance
+      toETransfer: data.chq.balance
     }
   }
-
 }

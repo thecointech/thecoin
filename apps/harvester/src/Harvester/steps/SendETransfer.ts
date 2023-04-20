@@ -6,21 +6,24 @@ import currency from 'currency.js';
 
 export class SendETransfer implements ProcessingStage {
 
-  async process(data: HarvestData) {
-    if (data.toETransfer) {
-      log.info(`Transferring ${data.toETransfer} to TheCoin`);
-      const confirm = await sendETransfer(data.toETransfer)
+  async process({state}: HarvestData) {
+    if (state.toETransfer) {
+      log.info(`Transferring ${state.toETransfer} to TheCoin`);
+      const confirm = await sendETransfer(state.toETransfer)
       // const confirm = await replay('chqETransfer', { amount: data.toCoin.toString() });
       if (confirm.confirm) {
-        log.info(`Successfully transferred ${data.toETransfer} to TheCoin`);
-        data.coinBalance = data.coinBalance.add(data.toETransfer);
-        data.toETransfer = undefined;
+        log.info(`Successfully transferred ${state.toETransfer} to TheCoin`);
+        const currBalance = state.harvesterBalance ?? currency(0);
+        return {
+          toETransfer: undefined,
+          harvesterBalance: currBalance.add(state.toETransfer),
+        }
       } else {
-        log.error(`Failed to transfer ${data.toETransfer} to TheCoin`);
+        log.error(`Failed to transfer ${state.toETransfer} to TheCoin`);
         // TODO: Handle this case
       }
     }
-    return data;
+    return {};
   }
 }
 

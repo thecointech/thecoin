@@ -8,9 +8,9 @@ export async function harvest() {
 
   try {
 
-    const { stages, state, lastState } = await initialize();
+    const { stages, state } = await initialize();
 
-    const nextState = await processState(stages, state, lastState);
+    const nextState = await processState(stages, state);
 
     await setCurrentState(nextState);
   }

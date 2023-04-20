@@ -1,34 +1,46 @@
+import { DateTime } from 'luxon';
+import { HarvestData, ProcessingStage, getDataAsCurrency, getDataAsDate } from '../types';
 import currency from 'currency.js';
-import { HarvestData, ProcessingStage } from '../types';
 
+const TransferVisaOwingKey = 'TransferVisaOwing';
 
 export class TransferVisaOwing implements ProcessingStage {
 
-  async process(data: HarvestData, lastState?: HarvestData) {
+  async process(data: HarvestData) {
     const currentBalance = data.visa.balance;
-    let priorBalance = lastState?.visa.balance ?? currency(0);
+    let priorBalance = getDataAsCurrency(TransferVisaOwingKey, data.state.stepData);
 
     // Do we have a payment pending?
-    let pending = lastState?.payVisa;
+    let pending = data.state.toPayVisa;
     if (pending) {
+
       // Has this pending amount been applied?
-      const payments = data.visa.history.filter(r => r.credit);
-      const pendingPayment = payments.filter(r => r.credit === pending);
-      if (pendingPayment.length > 0) {
+      if (lastPaymentSettled(data, pending)) {
         // Tx happened, reduce prior balance
         priorBalance = priorBalance.subtract(pending);
         pending = undefined;
       }
-      // else, we should probably validate we haven't missed it.
     }
 
-    const toCoin = currentBalance.subtract(priorBalance);
-    if (toCoin.intValue > 0) {
-      return {
-        ...data,
-        toCoin,
+    const toETransfer = currentBalance.subtract(priorBalance);
+    return {
+      toETransfer: toETransfer.intValue > 0 ? toETransfer : undefined,
+      toPayVisa: pending,
+      stepData: {
+        [TransferVisaOwingKey]: currentBalance.toString(),
       }
-    }
-    return data;
+    };
   }
+}
+
+
+function lastPaymentSettled(data: HarvestData, pending: currency) : boolean {
+  const payments = data.visa.history.filter(r => r.credit);
+  const pendingPayment = payments.filter(r => r.credit === pending);
+  if (pendingPayment.length > 0) {
+    return true;
+  }
+  // If it's been 7 days, it's probably settled and we must have missed it
+  const lastPayDate = getDataAsDate('PayVisaKey', data.state.stepData);
+  return (lastPayDate && lastPayDate < DateTime.now().minus({ days: 7 })) ?? false;
 }

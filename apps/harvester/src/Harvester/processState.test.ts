@@ -43,10 +43,14 @@ it ('can process on first run', async () => {
       history: [],
     },
     date: DateTime.now(),
-    coinBalance: currency((Math.random() * 500).toFixed(2)),
+
+    state: {
+      harvesterBalance: currency((Math.random() * 500).toFixed(2)),
+    },
+    delta: []
   }
 
   const nextState = await processState(stages, state);
 
-  expect(nextState.toETransfer).toBeTruthy();
+  expect(nextState.state.toETransfer).toBeTruthy();
 })

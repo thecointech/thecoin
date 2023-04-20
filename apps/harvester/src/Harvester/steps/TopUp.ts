@@ -1,5 +1,7 @@
-import { HarvestData, ProcessingStage } from '../types';
+import { DateTime } from 'luxon';
+import { HarvestData, ProcessingStage, getDataAsDate } from '../types';
 
+const TopUpKey = 'TopUp';
 export class TopUp implements ProcessingStage {
 
   topUp = 10;
@@ -10,14 +12,19 @@ export class TopUp implements ProcessingStage {
     }
   }
 
-  async process(data: HarvestData) {
+  async process({state}: HarvestData) {
     // Each (month?) we add topUp to the amount to transfer
-    // TODO: NOT YET IMPLEMENTED
-    if (!data.toETransfer) return data;
-    return {
-      ...data,
-      toCoin: data.toETransfer.add(this.topUp),
+    if (state.toETransfer) {
+      const lastDate = getDataAsDate(TopUpKey, state.stepData);
+      if (!lastDate || lastDate.plus({months: 1}) < DateTime.now()) {
+        return {
+          toETransfer: state.toETransfer.add(this.topUp),
+          stepData: {
+            [TopUpKey]: DateTime.now().toISO()!,
+          }
+        }
+      }
     }
+    return {};
   }
-
 }
