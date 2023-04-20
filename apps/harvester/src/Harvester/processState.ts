@@ -5,9 +5,9 @@ export async function processState(stages: ProcessingStage[], state: HarvestData
   for (const stage of stages) {
     const delta = await stage.process(nextState);
 
-    const stepData = state.state.stepData || delta.stepData
+    const stepData = nextState.state.stepData || delta.stepData
     ? {
-        ...state.state.stepData,
+        ...nextState.state.stepData,
         ...delta.stepData
       }
       : undefined;

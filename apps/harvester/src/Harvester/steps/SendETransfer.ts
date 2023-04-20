@@ -10,7 +10,6 @@ export class SendETransfer implements ProcessingStage {
     if (state.toETransfer) {
       log.info(`Transferring ${state.toETransfer} to TheCoin`);
       const confirm = await sendETransfer(state.toETransfer)
-      // const confirm = await replay('chqETransfer', { amount: data.toCoin.toString() });
       if (confirm.confirm) {
         log.info(`Successfully transferred ${state.toETransfer} to TheCoin`);
         const currBalance = state.harvesterBalance ?? currency(0);
