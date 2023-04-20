@@ -5,6 +5,7 @@ import { getCreditDetails, getWallet } from '../config';
 import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
 import currency from 'currency.js';
+import { log } from '@thecointech/logging';
 
 const PayVisaKey = "PayVisa";
 
@@ -48,14 +49,17 @@ export class PayVisa implements ProcessingStage {
         124,
         dateToPay,
       )
-      await api.uberBillPayment(payment);
-
+      const r = await api.uberBillPayment(payment);
+      if (r.status !== 200) {
+        log.error("Error on uberBillPayment: ", r.data.message);
+        // WHAT TO DO HERE???
+      }
       const harvesterBalance = data.state.harvesterBalance ?? currency(0);
       return {
         toPayVisa: data.visa.dueAmount,
         harvesterBalance: harvesterBalance.subtract(data.visa.dueAmount),
         stepData: {
-          [PayVisaKey]: dateToPay.toISO()!,
+          [PayVisaKey]: data.visa.dueDate.toISO()!,
         }
       }
     }
