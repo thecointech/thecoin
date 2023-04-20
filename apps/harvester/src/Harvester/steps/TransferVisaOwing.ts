@@ -40,7 +40,7 @@ function lastPaymentSettled(data: HarvestData, pending: currency) : boolean {
   if (pendingPayment.length > 0) {
     return true;
   }
-  // If it's been 7 days, it's probably settled and we must have missed it
+  // If it's been 6 days, it's probably settled and we must have missed it
   const lastPayDate = getDataAsDate('PayVisaKey', data.state.stepData);
-  return (lastPayDate && lastPayDate < DateTime.now().minus({ days: 7 })) ?? false;
+  return (lastPayDate && lastPayDate < DateTime.now().minus({ days: 6 })) ?? false;
 }
