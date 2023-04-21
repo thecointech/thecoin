@@ -3,6 +3,8 @@ import * as Src from '.';
 const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
 export class UberConverter implements Pick<Src.UberConverter, 'processPending'> {
 
+  address = "0xC000000000000000000000000000000000000000";
+  // "0xC0"
   // prefix is (c) for sending to the coin
   genReceipt = (prefix: string = '0') => {
     return Promise.resolve({

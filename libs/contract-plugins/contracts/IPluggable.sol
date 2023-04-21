@@ -24,21 +24,40 @@ struct PluginAndPermissions {
 }
 
 
+struct AssignRequest {
+  address user;
+  uint chainId;
+  address plugin;
+  uint timeMs;
+  uint96 permissions;
+  uint msSignedAt;
+  bytes signature;
+}
+
+struct RemoveRequest {
+  address user;
+  uint chainId;
+  uint index;
+  uint msSignedAt;
+  bytes signature;
+}
+
+
 /// @title Interface to allow plugins to interop with base contract
 /// @author TheCoin
 /// @dev Plugin-specific versions allow plugins to do stuff ordinary users can't do.
 interface IPluggable is IERC20Upgradeable {
 
   event PluginAttached(address add, address plugin);
-  event PluginDetached(address add, address plugin);
+  event PluginDetached(address det, address plugin);
 
   // Assign new plugin to user.  Currently un-guarded.
   // Signature is of [user, plugin, permissions, lastTxTimestamp]
-  function pl_assignPlugin(address user, uint timeMs, address plugin, uint96 permissions, bytes memory signature) external;
+  function pl_assignPlugin(AssignRequest calldata request) external;
 
   // Remove plugin from user.  As above
   // Signature is of [user, plugin, lastTxTimestamp]
-  function pl_removePlugin(address user, uint index, bytes memory signature) external;
+  function pl_removePlugin(RemoveRequest calldata request) external;
 
   // Users balance as reported by plugins
   function pl_balanceOf(address user) external view returns(int);

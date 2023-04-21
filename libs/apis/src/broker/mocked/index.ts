@@ -6,6 +6,7 @@ import { BillPaymentsApi } from './BillPaymentsApi';
 import { DirectTransferApi } from './DirectTransferApi';
 import { StatusApi } from './StatusApi';
 import { UserVerificationApi } from "./UserVerificationApi";
+import { PluginsApi } from './PluginsApi';
 
 export const GetUserVerificationApi = () => new UserVerificationApi();
 export const GetStatusApi = () => new StatusApi();
@@ -14,5 +15,6 @@ export const GetDirectTransferApi = () => new DirectTransferApi();
 export const GetETransferApi = () => new ETransferApi();
 export const GetSecureApi = () => new SecureApi();
 export const GetReferrersApi = () => new ReferralsApi();
+export const GetPluginsApi = () => new PluginsApi();
 
 export { StatusType } from './UserVerificationApi';

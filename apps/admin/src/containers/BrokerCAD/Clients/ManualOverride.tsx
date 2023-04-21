@@ -5,6 +5,7 @@ import { log } from '@thecointech/logging';
 import { manualOverrideTransition } from '@thecointech/tx-statemachine/transitions';
 import { graph as sellgraph } from '@thecointech/tx-etransfer';
 import { graph as billgraph } from '@thecointech/tx-bill';
+import { graph as plugingraph } from '@thecointech/tx-plugins';
 import { etransfer as etransfergraph, manual as manualgraph } from '@thecointech/tx-deposit';
 
 export const ManualOverride = (props: AnyAction) => {
@@ -36,6 +37,7 @@ function getStateGraph(type: ActionType, data: AnyActionData) {
   switch(type) {
     case "Sell": return sellgraph;
     case "Bill": return billgraph;
+    case "Plugin": return plugingraph;
     case "Buy": return (data as ActionDataTypes["Buy"]).initial.type ==  "etransfer"
       ? etransfergraph
       : manualgraph;

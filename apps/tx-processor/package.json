@@ -34,6 +34,8 @@
     "@thecointech/setenv": "^0.2.95",
     "@thecointech/tx-deposit": "^0.2.95",
     "@thecointech/tx-etransfer": "^0.2.95",
+    "@thecointech/tx-bill": "^0.2.95",
+    "@thecointech/tx-plugins": "^0.2.95",
     "open": "^8.2.1"
   },
   "devDependencies": {

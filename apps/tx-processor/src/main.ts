@@ -9,6 +9,7 @@ import { processUnsettledBillPayments } from './bills';
 import { initialize, release } from './initialize';
 
 import { processReferrals } from './referrals';
+import { processPlugin } from './plugins';
 
 //
 // Process deposits: Make 'em Rain!!!
@@ -42,6 +43,7 @@ async function Process() {
   await ProcessETransfers(contract, bank);
   await ProcessBillPayments(contract, bank);
 
+  await processPlugin(contract);
   await processReferrals();
 
   log.debug('Completed processing');

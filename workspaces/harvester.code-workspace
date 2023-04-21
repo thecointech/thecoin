@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "../apps/harvester"
+		},
+		{
+			"path": "../apps/broker-service"
+		},
+		{
+			"path": "../libs/shared"
+		},
+		{
+			"path": "../libs/contract-plugins"
+		}
+	],
+	"settings": {
+		"typescript.tsdk": "harvester\\node_modules\\typescript\\lib"
+	}
+}
