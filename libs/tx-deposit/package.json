@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-deposit",
-  "version": "0.2.96",
+  "version": "0.2.97",
   "description": "The Coin: A library for e-transfer deposits",
   "type": "module",
   "keywords": [
@@ -29,9 +29,9 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/bank-interface": "^0.2.96",
-    "@thecointech/tx-gmail": "^0.2.96",
-    "@thecointech/tx-statemachine": "^0.2.96"
+    "@thecointech/bank-interface": "^0.2.97",
+    "@thecointech/tx-gmail": "^0.2.97",
+    "@thecointech/tx-statemachine": "^0.2.97"
   },
   "devDependencies": {
     "jest": "*"
