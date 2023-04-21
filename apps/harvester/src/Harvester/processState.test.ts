@@ -23,7 +23,6 @@ it ('can process on first run', async () => {
   // must happen later to allow mocking
   const { PayVisa } = await import('./steps/PayVisa');
   // Mock env vars
-  process.env.WALLET_BrokerCAD_ADDRESS = "0x" + "0".repeat(40);
 
   // Simple runnable config
   const stages = [

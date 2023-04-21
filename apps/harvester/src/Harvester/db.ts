@@ -40,7 +40,7 @@ export async function setCurrentState(data: HarvestData) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-export const toDb = (data: HarvestData) => ({
+export const toDb = (data: HarvestData) => cleanseObject({
   date: data.date.toISO()!,
 
   visa: toDbVisa(data.visa),
@@ -78,7 +78,7 @@ const toDbHistory = (history: HarvestData['visa']['history'][number]) => ({
 
 ////////////////////////////////////////////////////////////////////////////////
 
-export const fromDb = (data: StoredData) : HarvestData => cleanseObject({
+export const fromDb = (data: StoredData) : HarvestData => ({
   date: DateTime.fromISO(data.date),
   visa: fromDbVisa(data.visa),
   chq: fromDbChequing(data.chq),
@@ -126,7 +126,7 @@ function cleanseObject(obj: any) {
     }
     else if (typeof value === 'object') {
       cleanseObject(value)
-      if (!Object.keys(value!).length) delete obj[key]
+      // if (!Object.keys(value!).length) delete obj[key]
     }
   }
   return obj

@@ -3,4 +3,12 @@
  * once I figure that out this should be normalized with the rest of the jest configs
  */
 
-module.exports = require('@thecointech/jestutils/config');
+const d = require('@thecointech/jestutils/config');
+
+module.exports = {
+  ...d,
+  globals: {
+    ...d.globals,
+    __VERSION__: 'jest',
+  }
+}

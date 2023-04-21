@@ -3,7 +3,6 @@ import { DateTime } from 'luxon';
 import currency from 'currency.js';
 import { Wallet } from 'ethers';
 
-process.env.WALLET_BrokerCAD_ADDRESS = "0x" + "B".repeat(40);
 jest.setTimeout(10000);
 // jest.useFakeTimers()
 jest.unstable_mockModule('../config', () => {
