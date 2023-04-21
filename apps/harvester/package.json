@@ -1,5 +1,6 @@
 {
   "name": "harvester",
+  "private": true,
   "productName": "harvester",
   "version": "0.2.96",
   "description": "Automatically harvest TheCoin",
