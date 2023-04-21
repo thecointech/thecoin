@@ -1,6 +1,6 @@
 import { log } from "@thecointech/logging";
 import { getFirestore, init as FirestoreInit } from '@thecointech/firestore';
-import { RbcStore, initBrowser, closeBrowser } from "@thecointech/rbcapi";
+import { RbcStore, closeBrowser } from "@thecointech/rbcapi";
 import gmail from '@thecointech/tx-gmail';
 import { ConfigStore } from "@thecointech/store";
 import { getSigner } from '@thecointech/signers';
@@ -33,10 +33,6 @@ export async function initialize() {
   let token = await ConfigStore.get("gmail.token")
   token = await gmail.initialize(token);
   await ConfigStore.set("gmail.token", token)
-
-  await initBrowser({
-    headless: true
-  })
 
   log.debug('Init complete');
   return contract;
