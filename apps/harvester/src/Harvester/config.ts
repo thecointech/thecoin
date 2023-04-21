@@ -6,6 +6,7 @@ import { Mnemonic } from '@ethersproject/hdnode';
 import { defaultDays, HarvestConfig } from '../types';
 import { createStep } from './steps';
 import { CreditDetails } from './types';
+import { setSchedule } from './schedule/scheduler';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
@@ -116,6 +117,8 @@ export async function getHarvestConfig() {
 }
 
 export async function setHarvestConfig(config: HarvestConfig) {
+  const existing = await getHarvestConfig();
+  await setSchedule(config.daysToRun, existing?.daysToRun);
   await setProcessConfig(config)
   return true;
 }
