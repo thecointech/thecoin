@@ -15,6 +15,9 @@
   "engines": {
     "node": ">=12.18.x"
   },
+  "resolutions": {
+    "clone-deep": "4.0.1"
+  },
   "scripts": {
     "prepare": "ts-patch install -s",
     "_gen:tapcap-cs": "openapi-generator-cli generate -i apps/tapcap-supplier/api/swagger.json -g csharp-netcore -o apis/tapcap/cs -c apis/tapcap/client-cs-spec.json",
@@ -101,7 +104,7 @@
     "@types/jest": "^29.5.0",
     "@types/less": "^3.0.1",
     "@types/lodash": "^4.14.170",
-    "@types/luxon": "1.26.2",
+    "@types/luxon": "3.3.0",
     "@types/node": "16.11.39",
     "@types/prop-types": "15.7.1",
     "@types/react": "16.14.0",
@@ -175,7 +178,7 @@
     "typescript-plugin-css-modules": "^3.4.0",
     "url-loader": "2.0.1",
     "wait-port": "^0.2.9",
-    "webpack": "5.52.0",
+    "webpack": "5.77.0",
     "webpack-bundle-analyzer": "4.4.2",
     "webpack-cli": "4.7.2",
     "webpack-dev-middleware": "5.1.0",

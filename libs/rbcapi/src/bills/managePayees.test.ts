@@ -1,16 +1,15 @@
 
 import { jest } from "@jest/globals";
-import { getEnvVars } from "@thecointech/setenv";
 import { deletePayee, addPayee } from './managePayees';
-import { describe, IsManualRun } from '@thecointech/jestutils';
+import { describe } from '@thecointech/jestutils';
 import { getPayeeOptions, openBillPaymentPage } from '.';
-import { ApiAction, initBrowser, closeBrowser } from '../action';
+import { ApiAction } from '../action';
 import { log } from '@thecointech/logging';
+import { closeBrowser } from '../puppeteer';
 
-const vars = getEnvVars("prod");
 jest.setTimeout(5 * 60 * 1000);
 
-const shouldRun = !!vars.RBCAPI_CREDENTIALS_PATH && !process.env.JEST_CI;
+const shouldRun = !!process.env.RBCAPI_CREDENTIALS_PATH && !process.env.JEST_CI;
 
 // We run this test on the live website to catch any changes to RBC website.
 describe("Testing Payee Management", () => {
@@ -20,9 +19,7 @@ describe("Testing Payee Management", () => {
   const fakeVisaName = "testing fakevisa";
 
   beforeAll(async () => {
-    process.env.RBCAPI_CREDENTIALS_PATH = vars.RBCAPI_CREDENTIALS_PATH;
     ApiAction.initCredentials();
-    await initBrowser({headless: !IsManualRun});
     // Disable logging in this file
     log.level(0);
   })

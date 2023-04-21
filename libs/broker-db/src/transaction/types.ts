@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import { DocumentReference } from "@thecointech/firestore";
-import type { CertifiedTransfer, UberTransferAction } from '@thecointech/types';
+import type { CertifiedTransfer, UberTransferAction, AssignPluginRequest, RemovePluginRequest } from '@thecointech/types';
+
 // Data definition for documents stored in
 // /{action}/randomId.
 export type IncompleteRef = {
@@ -51,8 +52,10 @@ export type ActionDataTypes = {
   } & BaseActionData;
   Sell: { initial: CertifiedTransfer } & BaseActionData;
   Bill: { initial: CertifiedTransfer | UberTransferAction } & BaseActionData;
+  Plugin:  { initial: AssignPluginRequest | RemovePluginRequest } & BaseActionData;
 }
 export type ActionType = keyof ActionDataTypes;
+export type TxActionType = "Buy" | "Sell" | "Bill";
 export type AnyActionData = ActionDataTypes[ActionType];
 
 // A structure encompassing all the data related to an action

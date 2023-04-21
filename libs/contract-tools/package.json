@@ -16,7 +16,7 @@
     "directory": "libs/contract-tools"
   },
   "scripts": {
-    "clean": "rimraf ./build",
+    "_clean NOTE: THIS KEEPS FAILING DUE TO HARDHAT CONFIG(?)": "rimraf ./build",
     "build": "yarn tsc",
     "emulator": "hardhat --config ./src/hardhat.config.ts node --port 9545"
   },

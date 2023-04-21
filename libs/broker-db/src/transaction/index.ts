@@ -177,7 +177,10 @@ export async function getIncompleteActions<Type extends ActionType>(type: Type) 
     return getAction(address, type, id);
   });
   log.debug({ action: type }, `Fetched ${fetchAll.length} actions of type: {action}`)
-  return await Promise.all(fetchAll)
+  const all = await Promise.all(fetchAll);
+  // ensure actions are sorted by date
+  all.sort((a, b) => a.data.date.toMillis() - b.data.date.toMillis());
+  return all
 }
 
 //

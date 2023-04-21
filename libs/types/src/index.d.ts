@@ -84,3 +84,21 @@ export interface BillPayeePacket {
   payee: string;
   accountNumber: string;
 }
+
+export type AssignPluginRequest = {
+  chainId: number;
+  user: string;
+  plugin: string;
+  permissions: string;
+  timeMs: DateTime;
+  signedAt: DateTime;
+  signature: string;
+}
+
+export type RemovePluginRequest = {
+  user: string;
+  chainId: number;
+  index: number;
+  signedAt: DateTime;
+  signature: string;
+}

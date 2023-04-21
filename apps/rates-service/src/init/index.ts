@@ -7,7 +7,7 @@ import { seed } from './seed';
 
 export async function init() {
   // Init luxon to use the right timezone
-  Settings.defaultZoneName = 'America/New_York';
+  Settings.defaultZone = 'America/New_York';
   // connect to DB
   if (process.env.RATES_SERVICE_ACCOUNT) {
     process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.RATES_SERVICE_ACCOUNT;

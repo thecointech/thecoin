@@ -76,3 +76,4 @@ apps/tx-processor/run_service.cmd
 storybook-static/
 /data/
 exported/
+/harvester/harvester/

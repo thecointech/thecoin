@@ -6,8 +6,9 @@ import { getSigner, AccountName } from '@thecointech/signers';
 import { NormalizeAddress } from '@thecointech/utilities/Address';
 import { AccountState, buildNewAccount } from '../state';
 import * as Browser from '../store';
+import { AccountMap } from '../map';
 
-const _devWallets = Browser.getAllAccounts();
+let _devWallets: AccountMap = {};
 let _initial = null as string|null;
 
 const addRemoteAccount = async (name: AccountName, active: boolean) => {
@@ -31,12 +32,16 @@ const addRemoteAccount = async (name: AccountName, active: boolean) => {
 }
 
 // Add remote wallets.
-await addRemoteAccount('client1', true);
-await addRemoteAccount('client2', false);
-await addRemoteAccount('uberTester', false);
-await addRemoteAccount('saTester', false);
-
-export const getAllAccounts = () => _devWallets;
+export const getAllAccounts = async () => {
+  if (Object.keys(_devWallets).length === 0) {
+    _devWallets = await Browser.getAllAccounts();
+    await addRemoteAccount('client1', true);
+    await addRemoteAccount('client2', false);
+    await addRemoteAccount('uberTester', false);
+    await addRemoteAccount('saTester', false);
+  }
+  return _devWallets;
+}
 export const getInitialAddress = () => _initial;
 export const deleteAccount = (account: AccountState) => {
   Browser.deleteAccount(account);
