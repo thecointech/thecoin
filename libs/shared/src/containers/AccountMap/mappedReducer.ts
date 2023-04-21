@@ -17,9 +17,16 @@ export const mappedReducer = (accountMapReducer: Reducer, accountReducers: Reduc
     for (let i = 0; i < accountKeys.length; i++) {
       const key = accountKeys[i];
       const prevState = prevMap[key];
-      const nextState = accountReducers[key](prevState, action);
-      nextMap[key] = nextState;
-      changed = changed || (nextState != prevState);
+      // When deleting an account, the reducers remain running
+      // for a few ticks, and if they execute they restore the
+      // map to their initial state (which is {}, an invalid value)
+      // We head that off here by simply not processing a reducer
+      // that has no data.
+      if (prevState) {
+        const nextState = accountReducers[key](prevState, action);
+        nextMap[key] = nextState;
+        changed = changed || (nextState != prevState);
+      }
     }
     return changed ? nextMap : prevMap;
   }
@@ -27,11 +34,13 @@ export const mappedReducer = (accountMapReducer: Reducer, accountReducers: Reduc
   // Cross-slicing reducer function. Allows both AccountMap reducer
   // and actual accounts to operate on the data in accounts.map
   return (state: AccountMapState, action: AnyAction) => {
-
     // First, run on account map
     const nextState = accountMapReducer(state, action);
     if (nextState != state)
       return nextState;
+
+    // Do not process any actions that are not for the account map
+    // (this check happens again in individual reducers)
 
     // next, run on each account reducer in turn
     const nextMap = combinedReducer(state.map, action);

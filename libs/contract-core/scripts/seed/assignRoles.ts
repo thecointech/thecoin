@@ -34,5 +34,5 @@ export async function assignRoles(contract: TheCoin) {
   await setupRole(tcCore, MINTER_ROLE, "Minter");
   await setupRole(tcCore, BROKER_ROLE, "BrokerCAD");
   await setupRole(tcCore, MRFREEZE_ROLE, "Police");
-  await setupRole(tcCore, PLUGINMGR_ROLE, "TheCoin");
+  await setupRole(tcCore, PLUGINMGR_ROLE, "BrokerCAD");
 }

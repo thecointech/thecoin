@@ -1,3 +1,3 @@
 import { Settings } from "luxon";
 
-Settings.defaultZoneName = "America/New_York";
+Settings.defaultZone = "America/New_York";

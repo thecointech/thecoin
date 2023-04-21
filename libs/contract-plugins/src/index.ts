@@ -4,6 +4,8 @@ import { PluginDetails } from './types';
 import { IPluggable } from './types/contracts/IPluggable';
 export * from './constants';
 export * from './types';
+export * from './assign';
+export * from './remove';
 
 export async function getPluginDetails(tcCore: IPluggable) : Promise<PluginDetails[]>{
   const user = await tcCore.signer.getAddress();

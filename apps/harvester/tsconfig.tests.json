@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "module": "Node16",
+    "target": "ES2017",
+    "esModuleInterop": true,
+    "moduleResolution": "Node",
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+  },
+  "include": ["**/*.test.*", "**/*.d.ts"],
+}

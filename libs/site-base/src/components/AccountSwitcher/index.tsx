@@ -47,7 +47,7 @@ export const AccountSwitcher = () => {
           accounts
             .sort((a, b) => a.name.localeCompare(b.name))
             .map(account => (
-              <AccountItem account={account} onClick={onClick} active={account.address == activeAccount?.address}/>
+              <AccountItem key={account.address} account={account} onClick={onClick} active={account.address == activeAccount?.address}/>
             ))
         }
         <Dropdown.Divider />

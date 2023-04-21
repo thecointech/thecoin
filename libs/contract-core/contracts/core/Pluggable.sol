@@ -14,6 +14,7 @@ import "./Freezable.sol";
 
 import "hardhat/console.sol";
 
+
 abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
 
   // A plugin manager is allowed to assign/remove built-in plugins
@@ -29,34 +30,76 @@ abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
   // ------------------------------------------------------------------------
 
   // Assign new plugin to user.  Currently un-guarded.  Obvs needs that guard
-  function pl_assignPlugin(address user, uint timeMs, address plugin, uint96 permissions, bytes memory /*signature*/) public
+  function pl_assignPlugin(AssignRequest calldata request) public
     onlyPluginMgr
+    timestampIncreases(request.user, request.msSignedAt)
   {
-    IPlugin _p = IPlugin(plugin);
-    _p.userAttached(user, timeMs, msg.sender);
+    bytes32 hashed = keccak256(
+      abi.encodePacked(request.chainId, request.plugin, request.timeMs, request.permissions, request.msSignedAt)
+    );
+		bytes32 signedMessage = ECDSAUpgradeable.toEthSignedMessageHash(hashed);
+    address signer = ECDSAUpgradeable.recover(signedMessage, request.signature);
+//    address signer = getAssignSigner(chainId, plugin, timeMs, permissions, msSignedAt, signature);
+    require(signer == request.user, "Invalid signature for address");
+
+    IPlugin _p = IPlugin(request.plugin);
+    _p.userAttached(request.user, request.timeMs, msg.sender);
 
     PluginAndPermissions memory pnp;
     pnp.plugin = _p;
-    pnp.permissions = permissions;
-    userPlugins[user].push(pnp);
+    pnp.permissions = request.permissions;
+    userPlugins[request.user].push(pnp);
 
-    emit PluginAttached(user, plugin);
+    emit PluginAttached(request.user, request.plugin);
+
+    lastTxTimestamp[request.user] = request.msSignedAt;
   }
 
+  // function getAssignSigner(uint chainId, address plugin, uint timeMs, uint96 permissions, uint msSignedAt, bytes memory signature) internal pure returns (address) {
+  //   bytes memory packed = abi.encodePacked(chainId, plugin, timeMs, permissions, msSignedAt);
+  //   bytes32 hashed = keccak256(packed);
+	// 	bytes32 signedMessage = ECDSAUpgradeable.toEthSignedMessageHash(hashed);
+  //   return ECDSAUpgradeable.recover(signedMessage, signature);
+  // }
+
   // Remove plugin from user.  As above
-  function pl_removePlugin(address user, uint index, bytes memory /*signature*/) public
+  function pl_removePlugin(RemoveRequest calldata request) public
     onlyPluginMgr
+    timestampIncreases(request.user, request.msSignedAt)
   {
-    PluginAndPermissions[] storage pnps = userPlugins[user];
-    pnps[index].plugin.userDetached(user, msg.sender);
-    for (uint i = index; i < pnps.length-1; i++){
+    bytes32 hashed = keccak256(
+      abi.encodePacked(request.chainId, request.index, request.msSignedAt)
+    );
+		bytes32 signedMessage = ECDSAUpgradeable.toEthSignedMessageHash(hashed);
+		address signer = ECDSAUpgradeable.recover(signedMessage, request.signature);
+    require(signer == request.user, "Invalid signature for address");
+
+    PluginAndPermissions[] storage pnps = userPlugins[request.user];
+    pnps[request.index].plugin.userDetached(request.user, msg.sender);
+    for (uint i = request.index; i < pnps.length-1; i++){
       pnps[i] = pnps[i+1];
     }
     delete pnps[pnps.length-1];
     pnps.pop();
 
-    emit PluginDetached(user, address(this));
+    emit PluginDetached(request.user, address(this));
+    lastTxTimestamp[request.user] = request.msSignedAt;
   }
+
+
+  // function buildPluginModMessage(uint chainId, address from, address to, uint256 amount, uint16 currency, uint msTransferAt, uint msSignedAt) public pure returns (bytes32)
+	// {
+	// 	bytes memory packed = abi.encodePacked(chainId, from, to, amount, currency, msTransferAt, msSignedAt);
+	// 	return keccak256(packed);
+	// }
+
+ 	// function recoverPluginModSigner(uint chainId, address plugin, uint timeMs, uint96 permissions, uint signedTime, bytes memory signature) public pure returns (address)
+	// {
+	// 	// This recreates the message that was signed on the client.
+  //   bytes32 message = buildPluginModMessage(chainId, plugin, timeMs, permissions, signedTime);
+	// 	bytes32 signedMessage = ECDSAUpgradeable.toEthSignedMessageHash(message);
+	// 	return ECDSAUpgradeable.recover(signedMessage, signature);
+	// }
 
   // Users balance as reported by plugins
   // This is distinct from the standard balance

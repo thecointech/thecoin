@@ -3,7 +3,7 @@ import { findNames, spliceEmail } from "./matchEmails";
 import { spliceBank } from "./matchBank";
 import { addReconciled } from "./utils";
 import { AllData, Reconciliations, ReconciledRecord, ReconciledHistory, UserReconciled } from "./types";
-import { ActionType, AnyAction } from "@thecointech/broker-db";
+import { ActionType, AnyAction, TxActionType } from "@thecointech/broker-db";
 import { DateTime } from 'luxon';
 
 // Match all DB entries with raw data
@@ -31,7 +31,7 @@ export function matchDB(data: AllData) {
   return r;
 }
 
-export function convertBaseTransactions(data: AllData, type: ActionType) {
+export function convertBaseTransactions(data: AllData, type: TxActionType) {
   const allOfType = data.dbs[type];
   const converted = Object.entries(allOfType).map(([address, actions]: [string, AnyAction[]]) => {
     // find the bank record that matches this purchase

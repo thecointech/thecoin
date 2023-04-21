@@ -9,6 +9,7 @@ import type { PluginAndPermissionsStructOutput } from './types/contracts/IPlugga
 import type { BaseASTNode, ContractDefinition, FunctionDefinition, StateVariableDeclaration, VariableDeclarationStatement, VariableDeclaration, FunctionCall, MemberAccess, Identifier, Expression, BinaryOperation, TupleExpression, ReturnStatement, IndexAccess, IfStatement, ExpressionStatement, Block } from '@solidity-parser/parser/dist/src/ast-types';
 import type { ContractState, PluginBalanceMod } from './types';
 import { getPluginLogs, updateState } from './logs';
+import { log } from '@thecointech/logging';
 
 const RETURN_KEY = "__$return";
 
@@ -23,6 +24,10 @@ export async function getPluginModifier(user: string, {plugin, permissions}: Plu
   }
 
   const source = await provider.getSourceCode(plugin);
+  if (source == null) {
+    log.error(`Could not get source code for plugin ${plugin}`);
+    return null;
+  }
   const parsed = parser.parse(source);
 
   const contract = parsed.children.find(c => c.type == "ContractDefinition") as ContractDefinition;

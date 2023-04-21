@@ -28,7 +28,7 @@ import '@thecointech/site-semantic-theme/semantic.less';
 import styles from './styles.module.less';
 import { WidgetWrapper, BalanceAndProfit, ClimateImpact} from '../Widgets'
 
-init();
+await init();
 
 export const App = () => {
   FxRateReducer.useStore();
