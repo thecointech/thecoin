@@ -21,7 +21,7 @@ export async function addPayee(act: ApiAction, nickname: string, payee: string, 
   const secondEntry = await act.page.$("input#Company2")
   if (secondEntry) {
     // what is the name of this second entry?
-    const company2 = await act.page.evaluate(el => el.parentElement.parentElement.textContent, secondEntry);
+    const company2 = await act.page.evaluate(el => el?.parentElement?.parentElement?.textContent, secondEntry);
     log.error(`Non-unique name passed to addPayee, found ${company2?.trim()} when searcing ${payee}`)
     throw new Error(Errors.DuplicateNameError);
   }
@@ -35,7 +35,7 @@ export async function addPayee(act: ApiAction, nickname: string, payee: string, 
   const errorMessage = await act.page.$("#attention-notice-pl-1");
   if (errorMessage) {
     const text = await act.page. evaluate(el => el.textContent, errorMessage);
-    log.error(`Error on setting account number: ${text.trim()}`);
+    log.error(`Error on setting account number: ${text?.trim()}`);
     throw new Error(Errors.SetAccountNumberFailed);
   }
 

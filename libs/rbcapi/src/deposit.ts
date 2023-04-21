@@ -92,7 +92,7 @@ async function findErrorResult(page: Page) {
 
   const allH3 = await page.$$("h3.font-weight-100");
   const allContents = await Promise.all(allH3.map(el => page.evaluate(el => el.textContent, el)))
-  const reason = allContents.find(s => s.match(/\([0-9]+\)/) != null)
+  const reason = allContents.find(s => s?.match(/\([0-9]+\)/) != null)
   const str = reason?.trim() ?? "We don't know what went wrong."
   return getErrorResult(str);
 }

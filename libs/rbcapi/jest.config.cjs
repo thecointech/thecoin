@@ -1,1 +1,8 @@
-module.exports = require('@thecointech/jestutils/config');
+const defaults = require('@thecointech/jestutils/config');
+module.exports = {
+  ...defaults,
+  setupFiles: [
+    ...defaults.setupFiles,
+    "./jest.prodenv.cjs"
+  ]
+}

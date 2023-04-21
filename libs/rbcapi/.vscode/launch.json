@@ -5,20 +5,22 @@
 	"version": "0.2.0",
 	"configurations": [
 	{
-		"type": "node",
-		"name": "vscode-jest-tests",
+    "type": "node",
+    "name": "vscode-jest-tests.v2",
 		"request": "launch",
-		"preLaunchTask": "npm: build",
-		"program": "${workspaceFolder}/../../node_modules/jest/bin/jest",
+    "console": "integratedTerminal",
+    "internalConsoleOptions": "neverOpen",
+    "cwd": "${workspaceFolder}",
+    "runtimeExecutable": "yarn",
 		"args": [
-			"--runInBand",
-			"--config",
-			"jest.config.js"
+      "test",
+      "--runInBand",
+      "--watchAll=false",
+      "--testNamePattern",
+      "${jest.testNamePattern}",
+      "--runTestsByPath",
+      "${jest.testFile}"
 		],
-		"cwd": "${workspaceFolder}",
-		"console": "integratedTerminal",
-		"internalConsoleOptions": "neverOpen",
-		"disableOptimisticBPs": true
-	}
+	},
 	]
 }
