@@ -24,10 +24,14 @@ export const pluginActionConverter = buildConverter<ActionDataTypes["Plugin"]>(
   // timeMs only exists on AssignPluginRequest, so needs it's own converter
   convertDates<AssignPluginRequest>("timeMs"),
 );
+export const heartbeatActionConverter = buildConverter<ActionDataTypes["Heartbeat"]>(
+  convertDates<ActionDataTypes["Heartbeat"]>("date"),
+)
 
 export const actionConverters = {
   Buy: buyActionConverter,
   Sell: sellActionConverter,
   Bill: billActionConverter,
   Plugin: pluginActionConverter,
+  Heartbeat: heartbeatActionConverter,
 }

@@ -53,6 +53,15 @@ export type ActionDataTypes = {
   Sell: { initial: CertifiedTransfer } & BaseActionData;
   Bill: { initial: CertifiedTransfer | UberTransferAction } & BaseActionData;
   Plugin:  { initial: AssignPluginRequest | RemovePluginRequest } & BaseActionData;
+
+  // Not an action, but lets store it here anyway
+  Heartbeat: {
+    date: DateTime;
+    result: string;
+    // Not currently used
+    initialId?: unknown;
+    initial?: unknown;
+  }
 }
 export type ActionType = keyof ActionDataTypes;
 export type TxActionType = "Buy" | "Sell" | "Bill";

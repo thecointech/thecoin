@@ -2,6 +2,9 @@ import { setCurrentState } from './db';
 import { log } from '@thecointech/logging';
 import { processState } from './processState';
 import { initialize } from './initialize';
+import { GetHarvesterApi, GetStatusApi } from '@thecointech/apis/broker';
+import { getWallet } from './config';
+import { GetSignedMessage } from "@thecointech/utilities/SignedMessages";
 
 export async function harvest() {
 
@@ -16,7 +19,6 @@ export async function harvest() {
     await setCurrentState(nextState);
 
     log.info(`Harvest complete`);
-
     // TODO: brokercad heartbeat
   }
   catch (err: unknown) {

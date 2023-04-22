@@ -26,6 +26,8 @@ export const initialState: HarvestConfig = stored.value ?? {
     },
     { type: HarvestStepType.SendETransfer },
     { type: HarvestStepType.PayVisa },
+    // Heartbeat so we can be certain the harvester is alive when remote
+    { type: HarvestStepType.Heartbeat },
   ]
 };
 
