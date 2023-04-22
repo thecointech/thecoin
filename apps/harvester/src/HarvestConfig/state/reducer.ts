@@ -11,6 +11,9 @@ export const initialState: HarvestConfig = stored.value ?? {
   daysToRun: defaultDays,
   steps: [
     {
+      type: HarvestStepType.TransferVisaOwing,
+    },
+    {
       type: HarvestStepType.RoundUp,
       args: {
         roundPoint: 100,

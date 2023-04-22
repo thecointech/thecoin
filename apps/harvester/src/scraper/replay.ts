@@ -17,7 +17,7 @@ export async function replay(actionName: 'chqETransfer', dynamicValues: { amount
 export async function replay(actionName: ActionTypes, dynamicValues?: Record<string, string>, delay?: number) : Promise<ReplayResult>
 export async function replay(actionName: ActionTypes, dynamicValues?: Record<string, string>, delay = 1000) {
 
-  const { page, browser } = await startPuppeteer(false);
+  const { page, browser } = await startPuppeteer();
 
   const values: Record<string, string|DateTime|currency|HistoryRow[]> = {}
 

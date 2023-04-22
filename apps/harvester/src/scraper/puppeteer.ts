@@ -5,6 +5,7 @@ import { getPlugins } from './puppeteer-plugins';
 const puppeteer = addExtra(puppeteerVanilla);
 const plugins = getPlugins();
 
+let _browser: any;
 export async function startPuppeteer(headless?: boolean) {
 
   const shouldBeHeadless = headless ?? process.env.RUN_SCRAPER_HEADLESS !== 'false';
@@ -31,5 +32,12 @@ export async function startPuppeteer(headless?: boolean) {
     height: 720,
     deviceScaleFactor: 1,
   });
+  _browser = browser;
   return { browser, page };
+}
+
+export async function closeBrowser() {
+  if (_browser) {
+    await _browser.close();
+  }
 }

@@ -18,6 +18,7 @@ export const mainConfig: Configuration = {
   },
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
+    conditionNames: [env.CONFIG_NAME, "node", "import", "default"],
   },
   externals: [
 

@@ -17,11 +17,14 @@ export class Heartbeat implements ProcessingStage {
       result + serverTimestamp.data,
       wallet!,
     )
-    GetHarvesterApi().heartbeat({
+    const r = await GetHarvesterApi().heartbeat({
       timeMs: serverTimestamp.data,
       result: "success",
       signature: signedPacket.signature,
-    })
+    });
+    log.info(`Sent Heartbeat: ${r.statusText}`);
+
+
     return {};
   }
 }

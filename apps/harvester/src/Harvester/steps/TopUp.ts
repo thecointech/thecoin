@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon';
 import { HarvestData, ProcessingStage, getDataAsDate } from '../types';
 import currency from 'currency.js';
+import { log } from '@thecointech/logging';
 
 const TopUpKey = 'TopUp';
 export class TopUp implements ProcessingStage {
@@ -18,7 +19,10 @@ export class TopUp implements ProcessingStage {
     if (state.toETransfer) {
       const lastDate = getDataAsDate(TopUpKey, state.stepData);
       if (!lastDate || lastDate.plus({months: 1}) < DateTime.now()) {
-        const currBalance = state.harvesterBalance ?? currency(0);
+        const harvesterBalance = (state.harvesterBalance ?? currency(0))
+          .subtract(this.topUp);
+
+        log.info(`Adding topup: ${this.topUp}`);
         return {
           toETransfer: state.toETransfer.add(this.topUp),
           // We subtract the topUp from the harvesters balance.
@@ -29,7 +33,7 @@ export class TopUp implements ProcessingStage {
           // If the transfer fails for whatever reason, the state
           // remembers that it -should- have been transferred
           // because the topUp is encoded into the harvesterBalance
-          harvesterBalance: currBalance.subtract(this.topUp),
+          harvesterBalance,
           stepData: {
             [TopUpKey]: DateTime.now().toISO()!,
           }
