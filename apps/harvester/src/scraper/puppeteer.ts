@@ -5,11 +5,12 @@ import { getPlugins } from './puppeteer-plugins';
 const puppeteer = addExtra(puppeteerVanilla);
 const plugins = getPlugins();
 
-export async function startPuppeteer(headless: boolean) {
+export async function startPuppeteer(headless?: boolean) {
 
+  const shouldBeHeadless = headless ?? process.env.RUN_SCRAPER_HEADLESS !== 'false';
   const expath = executablePath();
   const browser = await puppeteer.launch({
-    headless,
+    headless: shouldBeHeadless,
     executablePath: expath,
     // After install this appears in the AppData directory
     userDataDir: './myChromeSession'
