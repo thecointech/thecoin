@@ -7,6 +7,8 @@ export const getFileStream = (name: string, folder: string, rotate: boolean) : S
   mkdirSync(logfolder, { recursive: true });
   const filepath = `${logfolder}/tc.log`
 
+  console.log("Logging to file:", filepath);
+
   return {
     level: 'trace',
     type: rotate ? 'rotating-file' : 'file',

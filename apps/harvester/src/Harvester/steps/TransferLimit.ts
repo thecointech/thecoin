@@ -1,3 +1,4 @@
+import { log } from '@thecointech/logging';
 import { HarvestData, ProcessingStage } from '../types';
 
 export class TransferLimit implements ProcessingStage {
@@ -14,6 +15,7 @@ export class TransferLimit implements ProcessingStage {
     if (data.state.toETransfer) {
       const maxTransfer = data.chq.balance.subtract(this.limit);
       if (maxTransfer.value < data.state.toETransfer.value) {
+        log.info('Limiting transfer to ' + maxTransfer);
         return {
           toETransfer: maxTransfer,
         }

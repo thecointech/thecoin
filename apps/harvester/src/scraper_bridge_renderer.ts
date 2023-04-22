@@ -18,6 +18,9 @@ const api : ScraperBridgeApi = {
 
   getHarvestConfig: () => ipcRenderer.invoke(actions.getHarvestConfig),
   setHarvestConfig: (config) => ipcRenderer.invoke(actions.setHarvestConfig, config),
+
+  openLogsFolder: () => ipcRenderer.invoke(actions.openLogsFolder),
+  getArgv: () => ipcRenderer.invoke(actions.getArgv),
 }
 
 export const connectRenderer = () => contextBridge.exposeInMainWorld('scraper', api)

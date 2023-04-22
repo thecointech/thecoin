@@ -11,6 +11,9 @@ export const initialState: HarvestConfig = stored.value ?? {
   daysToRun: defaultDays,
   steps: [
     {
+      type: HarvestStepType.TransferVisaOwing,
+    },
+    {
       type: HarvestStepType.RoundUp,
       args: {
         roundPoint: 100,
@@ -26,6 +29,8 @@ export const initialState: HarvestConfig = stored.value ?? {
     },
     { type: HarvestStepType.SendETransfer },
     { type: HarvestStepType.PayVisa },
+    // Heartbeat so we can be certain the harvester is alive when remote
+    { type: HarvestStepType.Heartbeat },
   ]
 };
 
