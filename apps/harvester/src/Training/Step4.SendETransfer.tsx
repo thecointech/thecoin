@@ -9,6 +9,7 @@ export const SendETransfer = () => {
 
   const data = TrainingReducer.useData();
   const api = TrainingReducer.useApi();
+  const [validating, setValidating] = useState(false);
 
   const [amount, setAmount] = useState(5.23);
   const [confirmation, learnConfirmation] = useLearnValue("confirm", "text");
@@ -32,6 +33,7 @@ export const SendETransfer = () => {
       api.setParameter("chequing", "eTransferPassed", true);
       return;
     }
+    setValidating(true);
     const r = await window.scraper.testAction(pageAction, {
       amount: amount.toString(),
     });
@@ -45,6 +47,7 @@ export const SendETransfer = () => {
       }
       api.setParameter("chequing", "eTransferPassed", true);
     }
+    setValidating(false);
   }
   return (
     <Container>
@@ -61,7 +64,7 @@ export const SendETransfer = () => {
           <li><Button onClick={learnConfirmation}>Click here</Button>, then click on the e-Transfer confirmation code</li>
         </ul>
       </div>
-      <Button onClick={validate}>Test Learning</Button>
+      <Button onClick={validate} loading={validating}>Test Learning</Button>
       {data.chequing.eTransferPassed && <Icon name='check circle' color="green" />}
       <div>Your AI read:
         <ul>
