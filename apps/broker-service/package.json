@@ -28,7 +28,8 @@
     "clean": "rimraf ./build && rimraf ./src/api",
     "test": "yarn run-jest",
     "test:ci": "yarn run-jest-nix",
-    "test:coverage": "yarn test --coverage"
+    "test:coverage": "yarn test --coverage",
+    "gcp-build": ""
   },
   "engines": {
     "node": "16.x.x"
