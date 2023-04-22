@@ -25,13 +25,13 @@ export const mainConfig: Configuration = {
   plugins: [
     new DefinePlugin({
       __VERSION__: JSON.stringify(require(packageFile).version),
-      TC_LOG_FOLDER: './logs',
     }),
     new EnvironmentPlugin({
       // TODO: Electron doesn't support root-level await,
       // so there is no way to load this data dynamically.
       // Think long-n-hard about a better way to figure this out
       WALLET_BrokerCAD_ADDRESS: "0x0000000000000000000000000000000000000000",
+      TC_LOG_FOLDER: './logs',
       ...env
     }),
   ],

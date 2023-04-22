@@ -9,6 +9,8 @@ export const App = () => {
   FxRateReducer.useStore();
   const location = useLocation();
 
+  window.scraper.getArgv().then(r => console.log(r.value));
+
   return (
     <div className={styles.app}>
       <div>
@@ -37,6 +39,10 @@ export const App = () => {
             active={location.pathname.startsWith('/config')}
             as={Link}
             to='/config'
+          />
+          <Menu.Item
+            name='Logs'
+            onClick={window.scraper.openLogsFolder}
           />
         </Menu>
         {location.pathname}
