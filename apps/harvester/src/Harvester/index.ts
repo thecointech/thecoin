@@ -16,7 +16,6 @@ export async function harvest() {
     await setCurrentState(nextState);
 
     log.info(`Harvest complete`);
-    // TODO: brokercad heartbeat
   }
   catch (err: unknown) {
     if (err instanceof Error) {
@@ -25,9 +24,8 @@ export async function harvest() {
     else {
       log.fatal(`"Error in harvest: ${err}`);
     }
-    // TODO: Launch app but notify of error
+    // TODO: Launch app but notify of error (???)
 
-    log.info(`Args: ${JSON.stringify(process.argv)}`);
     // throw err;
   }
 }
