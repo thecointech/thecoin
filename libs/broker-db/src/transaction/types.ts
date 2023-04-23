@@ -86,6 +86,7 @@ export type SellAction = TypedAction<'Sell'>;
 export type BuyAction = TypedAction<'Buy'>;
 export type BillAction = TypedAction<'Bill'>;
 export type AnyAction = TypedAction<ActionType>;
+export type AnyTxAction = TypedAction<TxActionType>;
 
 // Store a mapping of address => Actions[]
 export type ActionDictionary<Type extends ActionType> = Record<string, TypedAction<Type>[]>;
