@@ -53,6 +53,15 @@ export type ActionDataTypes = {
   Sell: { initial: CertifiedTransfer } & BaseActionData;
   Bill: { initial: CertifiedTransfer | UberTransferAction } & BaseActionData;
   Plugin:  { initial: AssignPluginRequest | RemovePluginRequest } & BaseActionData;
+
+  // Not an action, but lets store it here anyway
+  Heartbeat: {
+    date: DateTime;
+    result: string;
+    // Not currently used
+    initialId?: unknown;
+    initial?: unknown;
+  }
 }
 export type ActionType = keyof ActionDataTypes;
 export type TxActionType = "Buy" | "Sell" | "Bill";
@@ -77,6 +86,7 @@ export type SellAction = TypedAction<'Sell'>;
 export type BuyAction = TypedAction<'Buy'>;
 export type BillAction = TypedAction<'Bill'>;
 export type AnyAction = TypedAction<ActionType>;
+export type AnyTxAction = TypedAction<TxActionType>;
 
 // Store a mapping of address => Actions[]
 export type ActionDictionary<Type extends ActionType> = Record<string, TypedAction<Type>[]>;

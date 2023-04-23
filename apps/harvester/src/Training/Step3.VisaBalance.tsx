@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Container, Button, Icon } from 'semantic-ui-react'
 import { useLearnValue } from './learnValue';
 import { TrainingReducer } from './state/reducer';
@@ -12,6 +12,7 @@ export const VisaBalance = () => {
   const data = TrainingReducer.useData();
   const api = TrainingReducer.useApi();
   const url = data.visa.url;
+  const [validating, setValidating] = useState(false);
 
   const [balance, learnBalance] = useLearnValue("balance", "currency");
   const [dueAmount, learnDueAmount] = useLearnValue("dueAmount", "currency");
@@ -32,11 +33,13 @@ export const VisaBalance = () => {
     }
   }
   const validate = async () => {
+    setValidating(true);
     const r = await window.scraper.testAction(pageAction);
     if (r.error) alert(r.error)
     if (r.value?.balance && r.value?.dueAmount && r.value?.dueDate) {
       api.setParameter('visa', 'testPassed', true);
     }
+    setValidating(false);
   }
 
   return (
@@ -55,7 +58,7 @@ export const VisaBalance = () => {
           <li><Button onClick={learnHistory}>Click here</Button>, then click anywhere on the account history</li>
         </ul>
       </div>
-      <Button onClick={validate}>Test Learning</Button>
+      <Button onClick={validate} loading={validating}>Test Learning</Button>
       {data.visa.testPassed && <Icon name='check circle' color="green" />}
       <div>Your AI read:
         <ul>

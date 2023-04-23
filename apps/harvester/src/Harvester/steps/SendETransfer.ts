@@ -13,11 +13,13 @@ export class SendETransfer implements ProcessingStage {
       const confirm = await sendETransfer(toTransfer)
 
       if (confirm.confirm) {
-        log.info(`Successfully transferred ${state.toETransfer} to TheCoin`);
-        const currBalance = state.harvesterBalance ?? currency(0);
+        const harvesterBalance = (state.harvesterBalance ?? currency(0))
+          .add(toTransfer);
+
+        log.info(`Successfully transferred ${state.toETransfer} to TheCoin, new balance ${harvesterBalance}`);
         return {
           toETransfer: undefined,
-          harvesterBalance: currBalance.add(toTransfer),
+          harvesterBalance,
         }
       } else {
         log.error(`Failed to transfer ${toTransfer} to TheCoin`);

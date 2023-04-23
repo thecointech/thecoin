@@ -38,6 +38,10 @@ export const App = () => {
             as={Link}
             to='/config'
           />
+          <Menu.Item
+            name='Logs'
+            onClick={window.scraper.openLogsFolder}
+          />
         </Menu>
         {location.pathname}
       </div>
@@ -47,23 +51,3 @@ export const App = () => {
     </div>
   )
 }
-
-// export const appRoutes: RouteObject[] = [
-//   {
-//     path: "/",
-//     element: <App />,
-//     children: [
-//       {
-//         index: true,
-//         element: (
-//         <div>
-//           <Link to="./train">Training</Link><br />
-//           <Link to="./account">Account</Link><br />
-//         </div>
-//         )
-//       },
-//       ...trainingRoutes,
-//       ...accountRoutes,
-//     ]
-//   },
-// ]

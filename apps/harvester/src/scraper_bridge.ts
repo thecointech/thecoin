@@ -9,6 +9,9 @@ import { getHarvestConfig, getWalletAddress, hasCreditDetails, initConfig, setCr
 import type { Mnemonic } from '@ethersproject/hdnode';
 import { HarvestConfig } from './types';
 import { CreditDetails } from './Harvester/types';
+import { exec } from 'child_process';
+import { cwd } from 'process';
+import { join } from 'path';
 
 async function guard<T>(cb: () => Promise<T>) {
   try {
@@ -43,7 +46,21 @@ const api: ScraperBridgeApi = {
   hasCreditDetails: () => guard(() => hasCreditDetails()),
 
   getHarvestConfig: () => guard(() => getHarvestConfig()),
-  setHarvestConfig: (config) => guard(() => setHarvestConfig(config))
+  setHarvestConfig: (config) => guard(() => setHarvestConfig(config)),
+
+  openLogsFolder: () => guard(async () => {
+    const logFolder = process.env.TC_LOG_FOLDER;
+    if (!logFolder) {
+      return false;
+    }
+    const logsPath = join(cwd(), logFolder);
+    exec(`start "" "${logsPath}"`);
+    return true;
+  }),
+  getArgv: () => guard(() => Promise.resolve(JSON.stringify({
+    argv: process.argv,
+    broker: process.env.WALLET_BrokerCAD_ADDRESS
+  }))),
 }
 
 export function initScraping() {
@@ -86,5 +103,12 @@ export function initScraping() {
   })
   ipcMain.handle(actions.setHarvestConfig, async (_event, config: HarvestConfig) => {
     return api.setHarvestConfig(config);
+  })
+
+  ipcMain.handle(actions.openLogsFolder, async (_event) => {
+    return api.openLogsFolder();
+  })
+  ipcMain.handle(actions.getArgv, async (_event) => {
+    return api.getArgv();
   })
 }

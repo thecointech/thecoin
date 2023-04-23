@@ -23,11 +23,13 @@ export class PayVisa implements ProcessingStage {
   async process(data: HarvestData) : Promise<HarvestDelta> {
     // Do we have a new due amount?  If so, we better pay it.
 
+    log.info('Processing PayVisa');
     const lastDueDate = getDataAsDate(PayVisaKey, data.state.stepData);
 
     if (!lastDueDate || (data.visa.dueDate > lastDueDate)) {
       // We better pay that due amount
       const dateToPay = getDateToPay(data.visa.dueDate, this.daysPrior);
+      log.info('PayVisa: dateToPay', dateToPay.toISO());
 
       const wallet = await getWallet();
       if (!wallet) {
@@ -54,10 +56,13 @@ export class PayVisa implements ProcessingStage {
         log.error("Error on uberBillPayment: ", r.data.message);
         // WHAT TO DO HERE???
       }
-      const harvesterBalance = data.state.harvesterBalance ?? currency(0);
+      const harvesterBalance = (data.state.harvesterBalance ?? currency(0))
+        .subtract(data.visa.dueAmount);
+
+      log.info('Sent payment request, new balance', harvesterBalance.toString());
       return {
         toPayVisa: data.visa.dueAmount,
-        harvesterBalance: harvesterBalance.subtract(data.visa.dueAmount),
+        harvesterBalance,
         stepData: {
           [PayVisaKey]: data.visa.dueDate.toISO()!,
         }

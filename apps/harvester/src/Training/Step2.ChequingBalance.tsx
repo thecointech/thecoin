@@ -9,6 +9,7 @@ export const ChequingBalance = () => {
   const data = TrainingReducer.useData();
   const api = TrainingReducer.useApi();
   const [read,setRead] = useState('');
+  const [validating, setValidating] = useState(false);
 
   const url = data.chequing.url;
   const initScraper = async () => {
@@ -31,6 +32,7 @@ export const ChequingBalance = () => {
     }
   }
   const validate = async () => {
+    setValidating(true);
     const r = await window.scraper.testAction(pageAction);
     if (r.error) alert(r.error)
     if (r.value?.balance) {
@@ -45,6 +47,7 @@ export const ChequingBalance = () => {
         api.setParameter("chequing", "testPassed", true);
       }
     }
+    setValidating(false);
   }
   return (
     <Container>
@@ -57,7 +60,7 @@ export const ChequingBalance = () => {
         <li><Button onClick={teachBalance}>Click here</Button>, then click on the balance you want your AI to read</li>
       </ul>
       <div>Finally, check the value below to ensure your AI hasn't accidentally read the wrong value!</div>
-      <Button onClick={validate}>Test Learning</Button>
+      <Button onClick={validate} loading={validating}>Test Learning</Button>
       <div>Your AI read: {read}
         {data.chequing.testPassed && <Icon name='check circle' color="green" />}
       </div>

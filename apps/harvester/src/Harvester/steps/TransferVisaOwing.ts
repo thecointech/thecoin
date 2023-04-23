@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon';
 import { HarvestData, ProcessingStage, getDataAsCurrency, getDataAsDate } from '../types';
 import currency from 'currency.js';
+import { log } from '@thecointech/logging';
 
 const TransferVisaOwingKey = 'TransferVisaOwing';
 
@@ -16,6 +17,7 @@ export class TransferVisaOwing implements ProcessingStage {
 
       // Has this pending amount been applied?
       if (lastPaymentSettled(data, pending)) {
+        log.info(`TransferVisaOwing: Pending payment settled`);
         // Tx happened, reduce prior balance
         priorBalance = priorBalance.subtract(pending);
         pending = undefined;
@@ -23,6 +25,7 @@ export class TransferVisaOwing implements ProcessingStage {
     }
 
     const toETransfer = currentBalance.subtract(priorBalance);
+    log.info(`TransferVisaOwing: Calculated visa spending at: ${toETransfer}`);
     return {
       toETransfer: toETransfer.intValue > 0 ? toETransfer : undefined,
       toPayVisa: pending,

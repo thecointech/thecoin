@@ -17,7 +17,7 @@ export interface TrainingState {
   readonly hasCreditDetails: boolean,
 }
 
-export type BankKey = keyof TrainingState;
+export type BankKey = "visa"|"chequing"; //keyof TrainingState;
 export type DataKey = keyof BankState;
 
 /* --- ACTIONS --- */

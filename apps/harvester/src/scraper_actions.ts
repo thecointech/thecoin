@@ -30,7 +30,10 @@ export type ScraperBridgeApi = {
   setCreditDetails(details: CreditDetails): Promise<Result<boolean>>,
 
   getHarvestConfig(): Promise<Result<HarvestConfig|undefined>>,
-  setHarvestConfig(config: HarvestConfig): Promise<Result<boolean>>
+  setHarvestConfig(config: HarvestConfig): Promise<Result<boolean>>,
+
+  openLogsFolder(): Promise<Result<boolean>>,
+  getArgv() : Promise<Result<string>>
 }
 
 
@@ -52,5 +55,8 @@ export const actions = {
 
   getHarvestConfig: 'scraper:getHarvestConfig',
   setHarvestConfig: 'scraper:setHarvestConfig',
+
+  openLogsFolder: 'scraper:openLogsFolder',
+  getArgv: 'scraper:getArgv'
 }
 export type Action = keyof typeof actions

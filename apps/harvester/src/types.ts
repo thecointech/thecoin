@@ -20,6 +20,7 @@ export enum HarvestStepType {
   TransferLimit,
   SendETransfer,
   PayVisa,
+  Heartbeat,
 }
 
 export type HarvestArgs = Record<string, string|number>
