@@ -1,11 +1,11 @@
 import React from "react"
-import { AnyAction, TransitionDelta } from '@thecointech/broker-db'
+import { AnyTxAction, TransitionDelta } from '@thecointech/broker-db'
 import { RefundButton } from "containers/Refund"
 import { DateTime } from 'luxon'
 import { Icon, List } from "semantic-ui-react";
 import { ManualOverride } from './ManualOverride';
 
-export const ClientTransaction = (props: AnyAction) => {
+export const ClientTransaction = (props: AnyTxAction) => {
   const date = props.data.date;
 
   // Create default values
@@ -38,7 +38,7 @@ const TransactionIcon = ({ type }: { type: string }) => {
   }
 }
 
-const TransactionPath = (props: AnyAction['doc']) => <div>{props.path}</div>
+const TransactionPath = (props: AnyTxAction['doc']) => <div>{props.path}</div>
 
 const TransactionEntry = (props: TransitionDelta) =>
   <li key={props.created.toMillis()}>

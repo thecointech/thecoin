@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { ActionDataTypes, ActionType, AnyAction, AnyActionData, storeTransition } from '@thecointech/broker-db';
+import { ActionDataTypes, AnyActionData, AnyTxAction, TxActionType, storeTransition } from '@thecointech/broker-db';
 import { Button, Select } from 'semantic-ui-react';
 import { log } from '@thecointech/logging';
 import { manualOverrideTransition } from '@thecointech/tx-statemachine/transitions';
 import { graph as sellgraph } from '@thecointech/tx-etransfer';
 import { graph as billgraph } from '@thecointech/tx-bill';
-import { graph as plugingraph } from '@thecointech/tx-plugins';
+// import { graph as plugingraph } from '@thecointech/tx-plugins';
 import { etransfer as etransfergraph, manual as manualgraph } from '@thecointech/tx-deposit';
 
-export const ManualOverride = (props: AnyAction) => {
+export const ManualOverride = (props: AnyTxAction) => {
   const [newState, setNewState] = useState<MaybeString>()
   return (
     <div>
@@ -24,7 +24,7 @@ export const ManualOverride = (props: AnyAction) => {
   )
 }
 
-function buildOptions(type: ActionType, data: AnyActionData) {
+function buildOptions(type: TxActionType, data: AnyActionData) {
   // What states can we go to?
   // We may need to consider a cleaner view than the raw to-any-state
   const stategraph = getStateGraph(type, data);
@@ -33,18 +33,18 @@ function buildOptions(type: ActionType, data: AnyActionData) {
     .map(state => ({ key: state, value: state, text: state }))
 }
 
-function getStateGraph(type: ActionType, data: AnyActionData) {
+function getStateGraph(type: TxActionType, data: AnyActionData) {
   switch(type) {
     case "Sell": return sellgraph;
     case "Bill": return billgraph;
-    case "Plugin": return plugingraph;
+    // case "Plugin": return plugingraph;
     case "Buy": return (data as ActionDataTypes["Buy"]).initial.type ==  "etransfer"
       ? etransfergraph
       : manualgraph;
   }
 }
 
-function overrideCurrentState(action: AnyAction, newState: MaybeString) {
+function overrideCurrentState(action: AnyTxAction, newState: MaybeString) {
   if (!newState) {
     alert("Select a state");
     return;
