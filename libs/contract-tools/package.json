@@ -22,7 +22,8 @@
   },
   "exports": {
     "./hardhat.config": "./build/hardhat.config.js",
-    "./writeContract": "./build/writeContract.js"
+    "./writeContract": "./build/writeContract.js",
+    "./gasTools": "./build/gasTools.js"
   },
   "typesVersions": {
     "*": {
