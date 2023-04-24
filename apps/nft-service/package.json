@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/nft-service",
-  "version": "0.2.95",
+  "version": "0.2.98",
   "private": true,
   "type": "module",
   "description": "TheCoin NFT service.  Manage uploads and gassless transactions with the TheCoin NFT contract",
@@ -29,7 +29,8 @@
     "clean:test": "rimraf ./coverage",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
     "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix"
+    "test:ci": "yarn run-jest-nix",
+    "gcp-build": ""
   },
   "engines": {
     "node": "16.x.x"
@@ -40,11 +41,11 @@
   "main": "./build/main.js",
   "dependencies": {
     "@pinata/sdk": "1.1.23",
-    "@thecointech/contract-nft": "^0.2.95",
-    "@thecointech/logging": "^0.2.95",
-    "@thecointech/setenv": "^0.2.95",
-    "@thecointech/signers": "^0.2.95",
-    "@thecointech/utilities": "^0.2.95",
+    "@thecointech/contract-nft": "^0.2.98",
+    "@thecointech/logging": "^0.2.98",
+    "@thecointech/setenv": "^0.2.98",
+    "@thecointech/signers": "^0.2.98",
+    "@thecointech/utilities": "^0.2.98",
     "@tsoa/runtime": "^4.1.0",
     "axios": "0.26.1",
     "cors": "^2.8.5",
