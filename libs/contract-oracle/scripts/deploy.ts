@@ -1,13 +1,10 @@
 import hre from 'hardhat';
 import { storeContractAddress } from '@thecointech/contract-tools/writeContract';
 import { getDeploySigner } from '@thecointech/contract-tools/deploySigner';
-import { getSigner } from '@thecointech/signers';
 import { log } from '@thecointech/logging';
 import { getArguments } from './arguments';
 import '@nomiclabs/hardhat-ethers';
 import '@openzeppelin/hardhat-upgrades';
-import { getProvider } from '@thecointech/ethers-provider';
-import { BigNumber } from 'ethers';
 
 async function main() {
 

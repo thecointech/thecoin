@@ -25,7 +25,6 @@ export async function getOverrideFees(provider: Provider) {
   return {
     maxFeePerGas: base.mul(2).add(tip),
     maxPriorityFeePerGas: BigNumber.from(tip),
-    gasPrice: fees.gasPrice,
   }
 }
 

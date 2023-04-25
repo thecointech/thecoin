@@ -2,24 +2,19 @@ import hre from 'hardhat';
 import '@nomiclabs/hardhat-ethers';
 import '@openzeppelin/hardhat-upgrades';
 import { writePlugin } from '@thecointech/contract-plugins/writePlugin';
-import { getSigner } from '@thecointech/signers';
 import { log } from '@thecointech/logging';
-import { getProvider } from '@thecointech/ethers-provider';
 import { getArguments } from './arguments';
 import { fetchRate, weSellAt } from '@thecointech/fx-rates';
 import { toCoinDecimal } from '@thecointech/utilities';
 import { ConnectContract } from '@thecointech/contract-core';
 import Decimal from 'decimal.js-light';
+import { getDeploySigner, getOverrideFees } from '@thecointech/contract-tools/deploySigner';
+import { getProvider } from '@thecointech/ethers-provider';
+import { getContract } from '../src';
 
 async function main() {
   // BrokerCAD directly owns this contract (and associated benefits)
-  let brokerCAD = await getSigner('BrokerCAD');
-  // If not devlive, then add a provider
-  if (hre.network.config.chainId !== 31337) {
-    const provider = getProvider();
-    brokerCAD = brokerCAD.connect(provider);
-  }
-
+  const brokerCAD = await getDeploySigner("BrokerCAD");
   const deployArgs = await getArguments();
   const ShockAbsorber = await hre.ethers.getContractFactory('ShockAbsorber', brokerCAD);
   const shockAbsorber = await hre.upgrades.deployProxy(ShockAbsorber, deployArgs);
@@ -39,7 +34,8 @@ async function main() {
   );
 
   const bcCore = await ConnectContract(brokerCAD);
-  await bcCore.exactTransfer(shockAbsorber.address, coin.toNumber(), now.getTime());
+  const overrides = await getOverrideFees(getProvider());
+  await bcCore.exactTransfer(shockAbsorber.address, coin.toNumber(), now.getTime(), overrides);
 }
 
 main().catch((error) => {
