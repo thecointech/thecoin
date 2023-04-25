@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/rates-service",
-  "version": "0.2.93",
+  "version": "0.2.98",
   "private": true,
   "description": "TheCoin rates service.  Publishes the official exchange rate for TheCore cryptocurrency into fiat currencies",
   "type": "module",
@@ -29,7 +29,8 @@
     "clean:test": "rimraf ./coverage",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
     "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix"
+    "test:ci": "yarn run-jest-nix",
+    "gcp-build": ""
   },
   "engines": {
     "node": "16.x.x"
@@ -40,21 +41,23 @@
   "main": "./build/main.js",
   "dependencies": {
     "@google-cloud/firestore": "4.12.3",
-    "@thecointech/async": "^0.2.93",
-    "@thecointech/email": "^0.2.93",
-    "@thecointech/firestore": "^0.2.93",
-    "@thecointech/fx-rates": "^0.2.93",
-    "@thecointech/logging": "^0.2.93",
-    "@thecointech/market-status": "^0.2.93",
-    "@thecointech/pricing": "^0.2.93",
-    "@thecointech/setenv": "^0.2.93",
-    "@thecointech/utilities": "^0.2.93",
+    "@thecointech/async": "^0.2.98",
+    "@thecointech/contract-oracle": "^0.2.98",
+    "@thecointech/email": "^0.2.98",
+    "@thecointech/firestore": "^0.2.98",
+    "@thecointech/fx-rates": "^0.2.98",
+    "@thecointech/logging": "^0.2.98",
+    "@thecointech/market-status": "^0.2.98",
+    "@thecointech/pricing": "^0.2.98",
+    "@thecointech/setenv": "^0.2.98",
+    "@thecointech/signers": "^0.2.98",
+    "@thecointech/utilities": "^0.2.98",
     "@tsoa/runtime": "^4.1.0",
-    "axios": "0.21.4",
+    "axios": "0.26.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "js-yaml": "^3.13.1",
-    "luxon": "1.26.0",
+    "luxon": "3.3.0",
     "swagger-tools": "^0.10.4",
     "swagger-ui-express": "^4.2.0"
   },

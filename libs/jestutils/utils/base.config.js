@@ -29,7 +29,7 @@ module.exports = {
   globals: {
     'ts-jest': {
       useESM: true,
-      tsconfig: {
+      tsconfig: "tsconfig.tests.json", /*{
         ...compilerOptions,
         // compile as module
         // module: "CommonJS",
@@ -46,7 +46,7 @@ module.exports = {
         rootDir: rootFolder,
         // do not write files during testing
         noEmit: true,
-      },
+      }, */
       astTransformers: {
         before: [
           {
@@ -64,7 +64,7 @@ module.exports = {
 
   // modulePathIgnorePatterns: ["build"],
   // By default, we add the 'src' folder to jest
-  moduleDirectories: [mocks, 'node_modules', 'src'],
+  moduleDirectories: [mocks, 'node_modules'],
   // Mock styling (easier than parsing them)
   moduleNameMapper: {
     "@thecointech/site-semantic-theme/variables": getTool('mockLessVars.mjs'),

@@ -10,7 +10,7 @@ import { DateTime } from 'luxon';
 
 
 export const depositFiat = makeTransition<"Buy">("depositFiat", async (container) => (
-  verifyPreTransfer(container) || await doDeposit(container)
+  await verifyPreTransfer(container) ?? await doDeposit(container)
 ))
 
 async function doDeposit(container: BuyActionContainer) {

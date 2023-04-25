@@ -15,6 +15,10 @@ const baseOptions = {
   entry: './src/index.ts',
   // Put your normal webpack config below here
   module: { rules},
+  externals: [
+    "utf-8-validate",
+    "bufferutil",
+  ],
   resolve: {
     mainFields: ["main"],
     conditionNames: [env.CONFIG_NAME, "node", "import", "default"],

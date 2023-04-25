@@ -1,10 +1,13 @@
 {
 	"folders": [
 		{
-			"path": "../apps\\rates-service"
+			"path": "../apps/rates-service"
 		},
 		{
-			"path": "../libs\\utils-ts"
+			"path": "../libs/utils-ts"
+		},
+		{
+			"path": "../libs/contract-oracle"
 		}
 	],
 	"settings": {

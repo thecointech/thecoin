@@ -30,7 +30,7 @@ async function queryCalendar(url: string) {
   try {
     const r = await axios.get<TradierResponse>(url, {
       headers: {
-        Authorization: process.env.TRADIER_API_KEY,
+        Authorization: process.env.TRADIER_API_KEY!,
         Accept: 'application/json'
       }
     });
@@ -68,14 +68,16 @@ export async function getCalendar(date: DateTime) {
 function getAsTS(data: DayData, startEnd: "start" | "end") {
   const [year, month, day] = data.date.split("-");
   const [hour, minute] = data.open[startEnd].split(":")
-  return DateTime.fromObject({
-    year: parseInt(year),
-    month: parseInt(month),
-    day: parseInt(day),
-    hour: parseInt(hour),
-    minute: parseInt(minute),
-    zone: MarketTZ
-  }).toMillis();
+  return DateTime.fromObject(
+    {
+      year: parseInt(year),
+      month: parseInt(month),
+      day: parseInt(day),
+      hour: parseInt(hour),
+      minute: parseInt(minute),
+    },
+    { zone: MarketTZ }
+  ).toMillis();
 }
 
 // Returns either 0 for currently open, or timestamp of when it will be open

@@ -14,8 +14,8 @@ class RatesApi implements Pick<IRatesApi, keyof IRatesApi> {
       : DateTime.now();
 
     return buildResponse({
-      buy: 1,
-      sell: 1,
+      buy: 2,
+      sell: 2,
       fxRate: 1,
       target: 124,
       validFrom: date.set({hour: 0, minute: 0, second: 0}).toMillis(),

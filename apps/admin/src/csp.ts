@@ -6,6 +6,9 @@ const connectInfura = process.env.CONFIG_NAME == "devlive"
 
 const connectCeramic = `https://api-testnet.polygonscan.com/api ${process.env.CERAMIC_URL}`;
 const connectFirestore = "https://firestore.googleapis.com"
+const frameCeramic = (process.env.CONFIG_ENV ?? process.env.CONFIG_NAME) == "prod"
+  ? "https://app.3idconnect.org/"
+  : "https://app-clay.3idconnect.org/";
 
 const appCSP = `
   default-src 'self';
@@ -14,7 +17,7 @@ const appCSP = `
   style-src 'self' 'unsafe-inline' fonts.googleapis.com;
   connect-src 'self' data: https://oauth2.googleapis.com/token https://www.googleapis.com https://securetoken.googleapis.com ${connectCeramic} ${connectFirestore} ${connectInfura} ${connectRates};
   font-src 'self' data: fonts.gstatic.com;
-  frame-src https://app-clay.3idconnect.org/ https://broker-cad.firebaseapp.com/ https://${process.env.TCCC_FIRESTORE_AUTH_DOMAIN}/;
+  frame-src  ${frameCeramic} https://broker-cad.firebaseapp.com/ https://${process.env.TCCC_FIRESTORE_AUTH_DOMAIN}/;
 `;
 
 const devtoolsCSP = `

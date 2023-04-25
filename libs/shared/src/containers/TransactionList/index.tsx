@@ -52,7 +52,7 @@ function buildPagination(transactions: Transaction[], maxRowCount: number, curre
   const pageCount = Math.ceil(transactions.length / maxRowCount);
   currentPage = Math.min(currentPage, pageCount - 1);
   if (pageCount > 1) {
-    console.error('WARNING: Not Tested');
+    // console.error('WARNING: Not Tested');
     const startRow = currentPage * maxRowCount;
     transactions = transactions.slice(startRow, startRow + maxRowCount);
 
@@ -79,13 +79,16 @@ function buildPagination(transactions: Transaction[], maxRowCount: number, curre
 
 export const TransactionList = (props: MyProps) => {
 
-  const [fromDate, setFromDate] = useState(new Date());
-  const [untilDate, setUntilDate] = useState(new Date());
+  const [fromDate, setFromDate] = useState(DateTime.now());
+  const [untilDate, setUntilDate] = useState(DateTime.now());
 
 
   function onDateRangeChange(from: Date, until: Date) {
-    setFromDate(from);
-    setUntilDate(until);
+    // Show all txs for a given day
+    const roundedFrom = DateTime.fromJSDate(from).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+    const roundedTo = DateTime.fromJSDate(until).set({ hour: 23, minute: 59, second: 59, millisecond: 999 });
+    setFromDate(roundedFrom);
+    setUntilDate(roundedTo);
   }
   const { locale } = useSelector(selectLocale);
 
@@ -95,7 +98,7 @@ export const TransactionList = (props: MyProps) => {
   const transactions = account!.history;
   const transactionLoading = account?.historyLoading;
 
-  let filteredTx = transactions.filter((tx) => tx.date.toMillis() >= fromDate.getTime() && tx.date.toMillis() <= untilDate.getTime())
+  let filteredTx = transactions.filter((tx) => tx.date.toMillis() >= fromDate.toMillis() && tx.date.toMillis() <= untilDate.toMillis())
   filteredTx.reverse();
   // Don't display the fee's
   const xferAssistAddress = process.env.WALLET_BrokerTransferAssistant_ADDRESS;
@@ -117,7 +120,7 @@ export const TransactionList = (props: MyProps) => {
     const contentForComment = changeCad < 0 ? <FormattedMessage {...translate.sent} /> : <FormattedMessage {...translate.received} />;
     const descForComment = changeCad < 0 ? <FormattedMessage {...translate.to} /> : <FormattedMessage {...translate.from} />;
 
-    const monthTodisplay = tx.date.setLocale(locale).monthShort;
+    const monthTodisplay = tx.date.setLocale(locale).monthShort!;
     const yearToDisplay = tx.date.setLocale(locale).year;
     const dayToDisplay = tx.date.setLocale(locale).day;
 
@@ -125,7 +128,7 @@ export const TransactionList = (props: MyProps) => {
     const addressComment = NormalizeAddress(tx.to) == account?.address ? tx.from : tx.to;
     return (
       <TransactionLine
-        key={index}
+        id={index}
         locale={locale}
 
         yearToDisplay={yearToDisplay}

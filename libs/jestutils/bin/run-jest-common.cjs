@@ -1,20 +1,19 @@
-const jest = require("jest");
-const { exit, cwd } = require("process");
-
-const last = process.argv[process.argv.length - 1];
-const testMatch = (
-  process.argv.length > 2 &&
-  !last.startsWith("--")
-)
-  ? [`**/${last}`]
-  : undefined;
+const jest = require('jest');
+const { exit, cwd } = require('process');
+const { join } = require('path');
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
+const { argv } = yargs(hideBin(process.argv));
 
 const options = {
   projects: [cwd()],
-  runInBand: process.argv.includes("--runInBand"),
-  forceExit: process.argv.includes("--forceExit"),
-  testMatch,
+  ...argv,
 };
+
+// hard-code the link to the hardhat config file.
+// This sidesteps all the issues with ESM modules that
+// popup when we try to reference the TS files in jest
+process.env.HARDHAT_CONFIG = join(__dirname, '../../contract-tools/build/hardhat.config.js');
 
 jest
   .runCLI(options, options.projects)

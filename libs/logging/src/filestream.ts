@@ -5,8 +5,9 @@ export const getFileStream = (name: string, folder: string, rotate: boolean) : S
 
   const logfolder = `${folder}/${name}`
   mkdirSync(logfolder, { recursive: true });
-  const time = new Date().toISOString().replace(/:/g, "-");
-  const filepath = `${logfolder}/${time}.log`
+  const filepath = `${logfolder}/tc.log`
+
+  console.log("Logging to file:", filepath);
 
   return {
     level: 'trace',

@@ -45,6 +45,7 @@ export interface EncryptedPacket {
 }
 
 export interface CertifiedTransferRequest {
+  chainId: number;
   from: string;
   to: string;
   value: number;
@@ -57,6 +58,24 @@ export interface CertifiedTransfer {
   instructionPacket: EncryptedPacket;
   signature: string;
 }
+
+export type UberTransfer = {
+  chainId: number;
+  from: string,
+  to: string,
+  amount: number,
+  currency: number,
+  transferMillis: number,
+  signedMillis: number,
+  signature: string,
+}
+
+export type UberTransferAction = {
+  transfer: UberTransfer,
+  instructionPacket: EncryptedPacket,
+  signature: string,
+}
+
 export interface BrokerStatus {
   address: string;
   certifiedFee: number;
@@ -64,4 +83,22 @@ export interface BrokerStatus {
 export interface BillPayeePacket {
   payee: string;
   accountNumber: string;
+}
+
+export type AssignPluginRequest = {
+  chainId: number;
+  user: string;
+  plugin: string;
+  permissions: string;
+  timeMs: DateTime;
+  signedAt: DateTime;
+  signature: string;
+}
+
+export type RemovePluginRequest = {
+  user: string;
+  chainId: number;
+  index: number;
+  signedAt: DateTime;
+  signature: string;
 }

@@ -9,6 +9,6 @@
   "include": ["./src/**/*", "./src/**/*.json"],
   "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"],
   "references": [
-    { "path": "../logging/tsconfig.build.mjs.json" }
+    { "path": "../logging/tsconfig.build.mjs.json" },
   ]
 }

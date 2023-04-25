@@ -14,7 +14,7 @@ import type { Overrides } from '@ethersproject/contracts';
 // Send the current balance to the client.  If successful,
 // this will reset the coin balance to 0
 export const sendCoin = makeTransition('sendCoin', async (container) =>
-  verifyPreTransfer(container) || await doSendCoin(container)
+  await verifyPreTransfer(container) ?? await doSendCoin(container)
 )
 
 // implementation

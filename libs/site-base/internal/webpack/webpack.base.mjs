@@ -22,7 +22,7 @@ const version = require(packageFile).version;
 
 
 export default {
-  externals: ['dtrace-provider', 'fs', 'mv', 'os', 'source-map-support', 'secret-manager'],
+  externals: ['dtrace-provider', 'mv', 'os', 'source-map-support', 'secret-manager'],
   output: {
     path: _resolve(projectRoot, 'build'),
     publicPath: '/',
@@ -70,6 +70,7 @@ export default {
   plugins: [
     new webpack.DefinePlugin({
       __VERSION__: JSON.stringify(version),
+      BROWSER: true,
     }),
     ...envFiles.map(path => new Dotenv({ path, ignoreStub: true })),
 
@@ -99,6 +100,8 @@ export default {
       "crypto": require.resolve("crypto-browserify"),
       "stream": require.resolve("stream-browserify"),
       "vm": false,
+      "fs": false,
+      "path": false,
     }
   },
   target: 'web',

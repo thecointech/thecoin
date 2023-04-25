@@ -7,7 +7,9 @@ import {
   ETransferApi,
   UserVerificationApi,
   SecureApi,
-  ReferralsApi
+  ReferralsApi,
+  PluginsApi,
+  HarvesterApi
 } from '@thecointech/broker-cad';
 
 export const StatusType = StatusType_Import;
@@ -23,3 +25,5 @@ export const GetETransferApi = () => new ETransferApi(undefined, BrokerCADAddres
 
 export const GetSecureApi = () => new SecureApi(undefined, BrokerCADAddress);
 export const GetReferrersApi = () => new ReferralsApi(undefined, BrokerCADAddress);
+export const GetPluginsApi = () => new PluginsApi(undefined, BrokerCADAddress);
+export const GetHarvesterApi = () => new HarvesterApi(undefined, BrokerCADAddress);

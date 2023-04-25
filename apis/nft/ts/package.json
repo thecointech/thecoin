@@ -1,8 +1,14 @@
 {
   "name": "@thecointech/nft",
-  "version": "0.2.93",
+  "version": "0.2.98",
   "description": "OpenAPI client for @thecointech/nft",
   "author": "OpenAPI-Generator Contributors",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "apis/nft/ts"
+  },
   "keywords": [
     "axios",
     "typescript",
@@ -10,20 +16,16 @@
     "openapi-generator",
     "@thecointech/nft"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/thecointech/thecoin.git",
-    "directory": "apis/nft/ts"
-  },
   "license": "Unlicense",
-  "main": "./dist/index.js",
-  "typings": "./dist/index.d.ts",
+  "main": "./dist/esm/index.js",
+  "typings": "./dist/esm/index.d.ts",
+  "sideEffects": false,
   "scripts": {
-    "build": "tsc --moduleResolution node --outDir dist/",
-    "prepublishOnly": "npm run build"
+    "build": "tsc -p tsconfig.esm.json",
+    "prepare": "npm run build"
   },
   "dependencies": {
-    "axios": "0.21.4"
+    "axios": "^0.26.1"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"

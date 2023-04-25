@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/market-status",
-  "version": "0.2.93",
+  "version": "0.2.98",
   "description": "TheCoin: Basic library to check if/when the stock market is open",
   "type": "module",
   "keywords": [
@@ -38,10 +38,7 @@
   },
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/logging": "^0.2.93"
-  },
-  "peerDependencies": {
-    "axios": "*"
+    "@thecointech/logging": "^0.2.98"
   },
   "devDependencies": {
     "jest": "*"

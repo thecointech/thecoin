@@ -5,6 +5,18 @@
       "path": "../libs/contract-core"
     },
     {
+      "name": "contract-plugin-converter",
+      "path": "../libs/contract-plugin-converter"
+    },
+    {
+      "name": "contract-plugin-shockabsorber",
+      "path": "../libs/contract-plugin-shockabsorber"
+    },
+    {
+      "name": "contract-oracle",
+      "path": "../libs/contract-oracle"
+    },
+    {
       "name": "contract-nft",
       "path": "../libs/contract-nft"
     },
@@ -17,10 +29,12 @@
       "path": "../libs/contract-tools"
     },
     {
+      "name": "signers",
       "path": "../libs/signers"
     },
     {
-      "path": "../libs/truffle-ethers-provider"
+      "name": "contract-plugins",
+      "path": "../libs/contract-plugins"
     }
   ],
 	"settings": {
