@@ -1,6 +1,3 @@
-export { connectIDX } from "./idx";
+export * from './composedb';
 export * from './encrypted';
 export * from './types';
-export * from './link';
-export * from './history';
-
