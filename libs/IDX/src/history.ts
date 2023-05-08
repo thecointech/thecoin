@@ -1,6 +1,6 @@
 import { log } from '@thecointech/logging';
 import { ComposeClient } from '@composedb/client';
-import { definition } from './__generated__/account-composite';
+import { getDefintions } from './definition';
 import type { JWE } from 'did-jwt';
 
 export async function getHistory(
@@ -8,6 +8,7 @@ export async function getHistory(
   count?: number,
   progress?: (percent: number) => void
 ) {
+  const definition = await getDefintions();
   const ceramic = client.context.ceramic;
   const account = client.did?.parent; // 'did:pkh:eip155:31337:0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266'
   const params = {

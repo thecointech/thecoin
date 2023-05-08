@@ -5,7 +5,7 @@ import { ComposeClient as SrcApi } from './types';
 //
 // An in-memory ComposeDB mock for development/testing
 export class ComposeClient implements Pick<SrcApi, "executeQuery"> {
-  executeQuery<Data = Record<string, unknown>>(source: string | Source, variableValues?: Record<string, unknown> | undefined): Promise<ExecutionResult<Data, ObjMap<unknown>>> {
+  executeQuery<Data = Record<string, unknown>>(_source: string | Source, _variableValues?: Record<string, unknown> | undefined): Promise<ExecutionResult<Data, ObjMap<unknown>>> {
     throw new Error('Method not implemented.');
   }
   // async get<Key extends string | number | symbol, ContentType = any>(key: Key): Promise<ContentType | null> {

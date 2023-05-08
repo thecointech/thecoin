@@ -2,6 +2,7 @@ import { DID } from 'dids'
 import { getResolver } from 'key-did-resolver'
 import { Ed25519Provider } from 'key-did-provider-ed25519'
 import { fromString } from 'uint8arrays/from-string'
+import { keccak256 } from '@ethersproject/keccak256';
 import { Signer } from '@ethersproject/abstract-signer';
 import { ComposeClient } from '@composedb/client';
 
@@ -23,11 +24,10 @@ export async function getOneOffEncryptDid(client: ComposeClient) {
   const signer = getSigner(client);
   // Hexadecimal-encoded private key for a DID having admin access to the target Ceramic node
   const msg = await signer.signMessage("This gives permission to read or write profile data");
-
-  const privateKey = fromString(msg.slice(2), 'base16')
+  const privateKey = fromString(keccak256(msg).slice(2), 'base16')
   const oneOffDid = new DID({
     resolver: getResolver(),
-    provider: new Ed25519Provider(privateKey.slice(0, 32)),
+    provider: new Ed25519Provider(privateKey),
   })
   await oneOffDid.authenticate();
   return oneOffDid;

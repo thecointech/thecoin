@@ -10,18 +10,14 @@ const outJson = new URL('./output/', schemaFolder);
 
 const files = [
   './profile.graphql',
-  './testing.graphql',
-  './message.graphql',
-  './profile-simple.graphql',
+  // './testing.graphql',
+  // './message.graphql',
+  // './profile-simple.graphql',
 ]
-// const profileSrc = fileURLToPath(new URL('./profile.graphql', schemas))
-// const testSrc = fileURLToPath(new URL('./testing.graphql', schemas))
-// const messageSrc = fileURLToPath(new URL('./message.graphql', schemas))
-// const profileSimpleSrc = fileURLToPath(new URL('./profile-simple.graphql', schemas))
-// const compositeFolder = new URL('./composites/', import.meta.url)
+
 const outputPath = fileURLToPath(new URL('./merged.json', outJson))
-const compiledJson = fileURLToPath(new URL('./compiled.json', outJson))
-const compiledTs = fileURLToPath(new URL('../src/__generated__/account-composite.ts', import.meta.url))
+const compiledJson = fileURLToPath(new URL(`./${process.env.CONFIG_NAME}-compiled.json`, outJson))
+const compiledTs = fileURLToPath(new URL(`../src/__generated__/${process.env.CONFIG_NAME}-definition.ts`, import.meta.url))
 
 async function getCeramic() {
   log.debug("Connecting to Ceramic...");
@@ -44,19 +40,8 @@ async function convertSchemaToComposite(ceramic: CeramicClient) {
   const srcs = await Promise.all(files.map(
       file => createComposite(ceramic, fileURLToPath(new URL(file, schemaFolder)))
   ));
-  // const profileSingle = await createComposite(ceramic, profileSrc);
-  // const testingSingle = await createComposite(ceramic, testSrc);
-  // const messageSingle = await createComposite(ceramic, messageSrc);
-  // const profileSimpleSingle = await createComposite(ceramic, profileSimpleSrc);
-
   const mergedComposite = Composite
     .from(srcs)
-  //   .setAliases({
-  //   [profileSingle.modelIDs[0]]: 'Profile',
-  //   [testingSingle.modelIDs[0]]: 'Testing',
-  //   [messageSingle.modelIDs[0]]: 'Message',
-  //   [profileSimpleSingle.modelIDs[0]]: 'ProfileSimple',
-  // })
 
   // Replace by the path to the encoded composite file
   await writeEncodedComposite(mergedComposite, outputPath);

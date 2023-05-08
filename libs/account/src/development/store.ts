@@ -4,7 +4,7 @@ import { ConnectContract } from '@thecointech/contract-core';
 import { getPluginDetails } from '@thecointech/contract-plugins';
 import { AccountMap } from '../map';
 import { AccountState, buildNewAccount } from '../state';
-import { connectIDX } from '@thecointech/idx';
+import { getComposeDB } from '@thecointech/idx';
 
 const _devAccounts: AccountMap = {};
 let _initial: null|string = null;
@@ -22,7 +22,7 @@ async function initDevWallets() {
   // connect to mocked services - normally this is done by "connect" call
   randomAccount.contract = await ConnectContract(randomAccount.signer);
   randomAccount.plugins = await getPluginDetails(randomAccount.contract);
-  randomAccount.idx = await connectIDX(randomAccount.signer);
+  randomAccount.idx = await getComposeDB(randomAccount.signer);
 
   _devAccounts[randomAccount.address] = randomAccount
   _initial = randomAccount.address;
