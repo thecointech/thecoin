@@ -12,7 +12,7 @@ export async function getHistory(
   const definition = await getDefintions();
   const ceramic = client.context.ceramic;
   //const account = client.did?.parent; // 'did:pkh:eip155:31337:0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266'
-  const account = `did:pkh:eip155:${process.env.DEPLOY_POLYGON_NETWORK_ID}:${address}`;
+  const account = `did:pkh:eip155:${process.env.DEPLOY_POLYGON_NETWORK_ID}:${address.toLowerCase()}`;
   const params = {
     account,
     model: definition.models.EncryptedProfile.id

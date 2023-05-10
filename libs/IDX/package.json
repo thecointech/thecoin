@@ -28,7 +28,7 @@
     "test": "yarn run-jest",
     "test:ci": "yarn run-jest-nix",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
-    "bootstrap": "yarn run-env ./tools/bootstrap.ts && yarn build"
+    "bootstrap": "yarn _deploy && yarn build"
   },
   "files": [
     "build/**/*"
