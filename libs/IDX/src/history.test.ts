@@ -9,8 +9,9 @@ jest.setTimeout(5 * 60 * 1000);
 
 describe('History', () => {
   it ('reads the full history', async () => {
-    const client = await getClient();
-    const history = await getHistory(client, 15);
+    const {client, signer} = await getClient();
+    const address = await signer.getAddress();
+    const history = await getHistory(address, client, 15);
     expect(history.length > 1);
 
     const did = await getOneOffEncryptDid(client);

@@ -20,17 +20,17 @@ describe('encryption tests', () => {
     };
     // Scope to ensure we create a new session each time
     {
-      const client = await getClient();
+      const {client} = await getClient();
       await setEncrypted(client, initial);
     }
     {
-      const client = await getClient();
+      const {client} = await getClient();
       const r1 = await loadEncrypted(client);
       expect(r1).toEqual(initial);
     }
     {
       // What happens when we update it?
-      const client = await getClient();
+      const {client} = await getClient();
       initial.sin = "something else";
       await setEncrypted(client, initial);
       const r2 = await loadEncrypted(client);
@@ -40,7 +40,7 @@ describe('encryption tests', () => {
 
   it ("can share read-only access with admin", async () => {
 
-    const client = await getClient();
+    const {client} = await getClient();
     const clientDid = await getOneOffEncryptDid(client);
     const adminDid = await getAdminDID();
 

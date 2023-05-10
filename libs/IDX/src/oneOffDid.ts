@@ -12,7 +12,10 @@ export function setSigner(client: ComposeClient, signer: Signer) {
   (client as any).__signer = signer;
 }
 
-function getSigner(client: ComposeClient) {
+function getSigner(client: ComposeClient|Signer) {
+  if ((client as any)._isSigner) {
+    return client as Signer;
+  }
   const signer = (client as any).__signer as Signer;
   if (!signer) {
     throw new Error("Client is missing signer");
@@ -20,7 +23,7 @@ function getSigner(client: ComposeClient) {
   return signer;
 }
 
-export async function getOneOffEncryptDid(client: ComposeClient) {
+export async function getOneOffEncryptDid(client: ComposeClient|Signer) {
   const signer = getSigner(client);
   // Hexadecimal-encoded private key for a DID having admin access to the target Ceramic node
   const msg = await signer.signMessage("This gives permission to read or write profile data");
