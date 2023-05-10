@@ -4,13 +4,15 @@ import { getDefintions } from './definition';
 import type { JWE } from 'did-jwt';
 
 export async function getHistory(
+  address: string,
   client: ComposeClient,
   count?: number,
   progress?: (percent: number) => void
 ) {
   const definition = await getDefintions();
   const ceramic = client.context.ceramic;
-  const account = client.did?.parent; // 'did:pkh:eip155:31337:0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266'
+  //const account = client.did?.parent; // 'did:pkh:eip155:31337:0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266'
+  const account = `did:pkh:eip155:${process.env.DEPLOY_POLYGON_NETWORK_ID}:${address}`;
   const params = {
     account,
     model: definition.models.EncryptedProfile.id

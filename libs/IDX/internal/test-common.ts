@@ -12,5 +12,5 @@ export async function getClient() {
     .fromMnemonic("test test test test test test test test test test test junk");
 
   const client = await getComposeDB(signer);
-  return client;
+  return { signer, client };
 }

@@ -6,7 +6,7 @@ const recipients = process.env.WALLET_BrokerCAD_DID
   ? [process.env.WALLET_BrokerCAD_DID]
   : undefined;
 
-export const setDetails = (idx: ComposeClient, details: AccountDetails): Promise<any> =>
+export const setDetails = (idx: ComposeClient, details: AccountDetails) =>
   setEncrypted(idx, details, recipients);
 
 export const loadDetails = async (idx: ComposeClient) =>

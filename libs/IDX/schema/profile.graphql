@@ -1,7 +1,7 @@
 type EncryptedProfile @createModel(accountRelation: SINGLE, description: "DagJWE-encrypted model") {
   protected: String! @string(maxLength: 250)
   iv: String! @string(maxLength: 250)
-  ciphertext: String! @string(maxLength: 2500)
+  ciphertext: String! @string(maxLength: 16384)
   tag: String! @string(maxLength: 250)
   aad: String @string(maxLength: 250)
   recipients: [Recipient!]! @list(maxLength: 2)
