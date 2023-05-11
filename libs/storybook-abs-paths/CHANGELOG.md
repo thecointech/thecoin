@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.102](https://github.com/thecointech/thecoin/compare/v0.2.101...v0.2.102) (2023-05-11)
+
+**Note:** Version bump only for package @thecointech/storybook-abs-paths
+
+
+
+
+
 ## [0.2.101](https://github.com/thecointech/thecoin/compare/v0.2.100...v0.2.101) (2023-05-11)
 
 **Note:** Version bump only for package @thecointech/storybook-abs-paths
