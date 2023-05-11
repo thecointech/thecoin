@@ -5,7 +5,7 @@ import { NormalizeAddress } from '@thecointech/utilities/Address';
 import type { TheCoin } from '@thecointech/contract-core';
 import type { Transaction } from '@thecointech/tx-blockchain';
 import type { Signer } from '@ethersproject/abstract-signer';
-import type { SelfID } from '@thecointech/idx';
+import type { ComposeClient } from '@thecointech/idx';
 import { PluginDetails } from '@thecointech/contract-plugins';
 
 
@@ -29,7 +29,7 @@ export type AccountState = {
 
 
   // IDX vars
-  idx: SelfID | null;
+  idx: ComposeClient | null;
   // Are we saving/loading something from IDX?
   idxIO?: boolean;
 

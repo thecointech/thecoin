@@ -7,7 +7,7 @@ import { FxRateReducer } from '../../containers/FxRate/reducer';
 import { SagaReducer } from '../../store/immerReducer';
 import { isLocal } from '@thecointech/signers';
 import { loadAndMergeHistory, calculateTxBalances, mergeTransactions, Transaction } from '@thecointech/tx-blockchain';
-import { connectIDX } from '@thecointech/idx';
+import { getComposeDB } from '@thecointech/idx';
 import { AccountDetails, AccountState, DefaultAccountValues } from '@thecointech/account';
 import { loadDetails, setDetails } from '../AccountDetails';
 import { DateTime } from 'luxon';
@@ -58,7 +58,7 @@ function AccountReducer(address: string, initialState: AccountState) {
     *getIDX() {
       let idx = this.state.idx;
       if (!idx) {
-        idx = yield call(connectIDX, this.state.signer);
+        idx = yield call(getComposeDB, this.state.signer);
         yield this.storeValues({ idx, idxIO: true });
       }
       return idx;
