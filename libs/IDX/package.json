@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/idx",
-  "version": "0.2.99",
+  "version": "0.2.100",
   "description": "TheCoin: Interface to IDX backend for accounts",
   "type": "module",
   "keywords": [
