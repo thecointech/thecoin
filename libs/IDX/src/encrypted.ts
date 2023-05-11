@@ -64,24 +64,32 @@ const updateRecord = (client: ComposeClient, encrypted: JWE, id: string) =>
   })
 
 export const getEncrypted = async (client: ComposeClient) => {
-  const r = await client.executeQuery<{
-    viewer: {
-      encryptedProfile: JWE & { id: string }
-    }
-  }>(`
-    query GetProfile {
-      viewer {
-        encryptedProfile {
-          ${encryptedDocument}
-        }
+  try {
+    const r = await client.executeQuery<{
+      viewer: {
+        encryptedProfile: JWE & { id: string }
       }
-    }`
-  );
+    }>(`
+      query GetProfile {
+        viewer {
+          encryptedProfile {
+            ${encryptedDocument}
+          }
+        }
+      }`
+    );
 
-  if (r.errors) {
-    log.error("Error getting encrypted record", JSON.stringify(r.errors));
+    if (r.errors) {
+      log.error("Error getting encrypted record", JSON.stringify(r.errors));
+    }
+    return r.data?.viewer.encryptedProfile ?? null;
   }
-  return r.data?.viewer.encryptedProfile ?? null;
+  catch (err) {
+    if (err instanceof Error)
+      log.error(err, "Error getting encrypted record");
+    else log.error("Error getting encrypted record: ", JSON.stringify(err));
+    return null;
+  }
 }
 
 // Load the encrypted record and decrypt
