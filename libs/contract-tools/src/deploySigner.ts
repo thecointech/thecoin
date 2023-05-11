@@ -53,6 +53,5 @@ export async function getDeploySigner(owner: AccountName) {
     // const fees = await getOverrideFees(this);
     return fees;
   }
-  provider.__youShouldSeeThis = "You should see this";
   return base.connect(provider);
 }
