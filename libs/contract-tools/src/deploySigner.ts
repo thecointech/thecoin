@@ -30,8 +30,10 @@ export async function getOverrideFees(provider: Provider) {
 
 export async function getDeploySigner(owner: AccountName) {
   // First, verify we are deploying to the right network.
-  if (hre.network.config.chainId?.toString() !== process.env.DEPLOY_POLYGON_NETWORK_ID) {
-    throw new Error('Missmatched ChainIDs');
+  const chainId = hre.network.config.chainId;
+  const deployId = process.env.DEPLOY_POLYGON_NETWORK_ID;
+  if (chainId?.toString() != deployId?.toString()) {
+    throw new Error(`Missmatched ChainIDs: ${chainId} != ${deployId}`);
   }
 
   const { getSigner } = await eval("import('@thecointech/signers')");

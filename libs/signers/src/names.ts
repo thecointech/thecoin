@@ -12,6 +12,8 @@ export enum AccountId {
   BrokerTransferAssistant,
   // Owns & updates SpxCadOracle
   OracleUpdater,
+  // Locks down ceramic access
+  CeramicValidator,
   // NOTE: The following accounts for testing only!
   client1,
   client2,
