@@ -1,5 +1,6 @@
 import { log } from '@thecointech/logging';
 import { SpxCadOracle } from './types';
+import { BigNumber } from '@ethersproject/bignumber';
 
 type RateFactory = (millis: number) => Promise<{rate: number, from: number, to: number}|null>;
 
@@ -61,24 +62,26 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
   }
 
   try {
+    const overrides = await getOverrideFees(oracle);
+
     // If we have enough rates, push them to the oracle
     if (rates.length == 1) {
       // The majority of time, we only have one rate to push
       // So use this function, as it's a wee bit cheaper than the below
-      await oracle.update(rates[0]);
+      await oracle.update(rates[0], overrides);
     }
     else if (rates.length > 1) {
       for (let s = 0; s < rates.length; s += MAX_LENGTH) {
         log.trace(`Updating rates: ${s} of ${rates.length}`);
         const e = Math.min(s + MAX_LENGTH, rates.length);
-        await oracle.bulkUpdate(rates.slice(s, e));
+        await oracle.bulkUpdate(rates.slice(s, e), overrides);
       }
     }
     log.trace(`Updated ${rates.length} new rates, until ${timestamp} : ${new Date(timestamp)}`)
 
     // If we have offsets, push them to the oracle
     for (const offset of offsets) {
-      await oracle.updateOffset(offset);
+      await oracle.updateOffset(offset, overrides);
       log.trace(`Pushing new Offset ${offset.offset / ONE_HR}hrs at ${new Date(offset.from)}`)
     }
 
@@ -92,4 +95,21 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
   }
 
   return true;
+}
+
+// Dup 3x, must be refactored
+const MinimumBloodsuckerFee = 30 * Math.pow(10, 9);
+
+async function getOverrideFees(oracle: SpxCadOracle) {
+  const fees = await oracle.provider.getFeeData();
+  if (!fees.maxFeePerGas || !fees.maxPriorityFeePerGas) return undefined;
+
+  // calculate new maximums at least 10% higher than previously
+  const base = fees.maxFeePerGas.sub(fees.maxPriorityFeePerGas);
+  const newMinimumTip = MinimumBloodsuckerFee;
+  const tip = Math.max(fees.maxPriorityFeePerGas.toNumber(), newMinimumTip);
+  return {
+    maxFeePerGas: base.mul(2).add(tip),
+    maxPriorityFeePerGas: BigNumber.from(tip),
+  }
 }
