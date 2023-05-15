@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  ipfs:
+    image: ceramicnetwork/go-ipfs-daemon
+    restart: always
+    volumes:
+      - ipfs-data:/data/ipfs
+    ports:
+      - "5001"
+      - "8011"
+
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: composedb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: <PWD IN BITWARDEN@THECOIN>
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432"
+
+  ceramic:
+    image: ceramicnetwork/js-ceramic
+    restart: always
+    environment:
+      NODE_ENV: production
+    volumes:
+      - ceramic-logs:/root/.ceramic/logs
+      - ceramic-data:/root/.ceramic/statestore
+      - /srv/ceramic/daemon.config.json:/root/.ceramic/daemon.config.json
+    ports:
+      - 7007:7007
+    depends_on:
+      - ipfs
+      - postgres
+
+  reverse:
+    image: nginx
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/nginx:/etc/nginx:ro
+      - /etc/letsencrypt:/etc/ssl/private:ro
+    depends_on:
+      - ceramic
+
+volumes:
+  ipfs-data:
+  postgres-data:
+  ceramic-logs:
+  ceramic-data:
+

@@ -1,0 +1,37 @@
+{
+    "anchor": {
+        "ethereum-rpc-url": "https://mainnet.infura.io/v3/<KEY>",
+	"auth-method": "did"
+    },
+    "http-api": {
+        "cors-allowed-origins": [
+            ".*"
+        ],
+        "admin-dids": [
+           "did:key:<DID>"
+        ]
+    },
+    "ipfs": {
+        "mode": "remote",
+        "host": "http://ipfs:5001"
+    },
+    "indexing": {
+        "db": "postgres://postgres:<PWD IN BITWARDEN@THECOIN>@postgres:5432/composedb",
+        "allow-queries-before-historical-sync": true,
+        "enable-historical-sync": false
+    },
+    "logger": {
+        "log-level": 2,
+        "log-to-files": true
+    },
+    "network": {
+        "name": "mainnet"
+    },
+    "node": {
+        "private-seed-url": "inplace:ed25519#<PROD_SEED>"
+    },
+    "state-store": {
+        "mode": "fs",
+        "local-directory": "/root/.ceramic/statestore"
+    }
+}

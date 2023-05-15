@@ -70,8 +70,8 @@ function AccountReducer(address: string, initialState: AccountState) {
       if (idx) {
         yield this.storeValues({ idx, idxIO: true });
         log.trace("IDX: Restoring account details");
-        const payload = yield call(loadDetails, idx);
-        const details = payload?.data || DefaultAccountValues.details;
+        const payload: Awaited<ReturnType<typeof loadDetails>> = yield call(loadDetails, idx);
+        const details = payload || DefaultAccountValues.details;
         log.trace("IDX: read complete");
         yield this.storeValues({ details, idxIO: false });
 
