@@ -32,8 +32,8 @@ export const mainConfig: Configuration = {
       // so there is no way to load this data dynamically.
       // Think long-n-hard about a better way to figure this out
       WALLET_BrokerCAD_ADDRESS: "0x0000000000000000000000000000000000000000",
+      ...env,
       TC_LOG_FOLDER: './logs',
-      ...env
     }),
   ],
   experiments: {

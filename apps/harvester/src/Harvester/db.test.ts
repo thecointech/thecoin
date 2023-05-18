@@ -2,9 +2,10 @@ import { jest } from '@jest/globals';
 import { DateTime } from 'luxon'
 import { HarvestData } from './types'
 import currency from 'currency.js'
-import { fromDb, getLastState, initState, setCurrentState, toDb } from './db'
+import { getCurrentState, initState, setCurrentState } from './db'
 import memory from 'pouchdb-adapter-memory'
 import PouchDB from 'pouchdb';
+import { fromDb, toDb } from './db_translate';
 
 PouchDB.plugin(memory)
 jest.setTimeout(30000);
@@ -19,9 +20,8 @@ it ('can roundtrip in the db', async () => {
   initState({ adapter: 'memory' });
 
   await setCurrentState(sample);
-  const last = await getLastState();
-  const { _id, _rev, _revs_info, ...lastState } = last!;
-  expect(lastState).toEqual(sample);
+  const last = await getCurrentState();
+  expect(last).toEqual(sample);
 })
 
 const sample: HarvestData = {
