@@ -3,6 +3,7 @@ import { Button, Dimmer, Loader, Segment } from 'semantic-ui-react'
 import { HarvestData } from '../Harvester/types';
 import { fromDb } from '../Harvester/db_translate';
 import { DateTime } from 'luxon';
+import { log } from '@thecointech/logging';
 
 
 export const Results = () => {
@@ -11,22 +12,26 @@ export const Results = () => {
   const [state, setState] = useState<HarvestData|undefined>();
 
   useEffect(() => {
+    log.info("Loading state");
     getCurrentState().then(state => {
       if (state.error) {
         alert(state.error);
       }
       else {
+        log.info("State Received: " + JSON.stringify(state));
         setState(state.value);
       }
     })
   }, [])
   const runImmediately = async () => {
     setRunning(true);
+    log.info("Commencing manual run");
     const r = await window.scraper.runHarvester();
     if (r.error) {
       alert("Error - please check logs:\n " + r.error);
     }
     const state = await getCurrentState();
+    log.info("Updating state");
     setState(state.value);
     setRunning(false);
   }

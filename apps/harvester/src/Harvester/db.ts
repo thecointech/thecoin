@@ -1,13 +1,24 @@
 import { HarvestData } from './types';
 import pouchdb from 'pouchdb';
+import electron from 'electron';
 import { StoredData, fromDb, toDb } from './db_translate';
+import path from 'path';
+import { log } from '@thecointech/logging';
 
+const db_path = path.join(electron.app.getPath('userData'), 'harvester.db');
 
 let _harvester = null as unknown as PouchDB.Database<StoredData>;
 
 export function initState(options?: { adapter: string }) {
+  log.info(`Initializing state database at ${db_path}`);
+  if (process.env.NODE_ENV === 'development') {
+    options = {
+      adapter: 'memory',
+      ...options,
+    }
+  }
   if (!_harvester) {
-    _harvester = new pouchdb<StoredData>('harvester', options);
+    _harvester = new pouchdb<StoredData>(db_path, options);
   }
 }
 
