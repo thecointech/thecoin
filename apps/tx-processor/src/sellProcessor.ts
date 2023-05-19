@@ -27,7 +27,7 @@ export async function processPayments(tcCore: TheCoin, bank: RbcApi) {
     const executed = await processAction(action, tcCore, bank);
     r.push(executed);
   }
-  log.debug(`Processed ${r.length} bill payments`);
+  log.debug(`Processed ${r.length} payments`);
   return r;
 }
 
