@@ -4,12 +4,9 @@ import type { TheCoin } from '@thecointech/contract-core';
 import { SendMail } from '@thecointech/email';
 import { exit } from 'process';
 import { processUnsettledDeposits } from './deposits';
-import { processUnsettledETransfers } from './etransfer';
-import { processUnsettledBillPayments } from './bills';
 import { initialize, release } from './initialize';
-
 import { processReferrals } from './referrals';
-import { processPlugin } from './plugins';
+import { processPayments } from './sellProcessor';
 
 //
 // Process deposits: Make 'em Rain!!!
@@ -20,30 +17,11 @@ async function ProcessDeposits(contract: TheCoin, bank: RbcApi) {
   return deposits;
 }
 
-//
-// Process withdrawals: Still Raining!
-async function ProcessETransfers(contract: TheCoin, bank: RbcApi) {
-  log.debug('Processing eTransfers');
-  const eTransfers = await processUnsettledETransfers(contract, bank);
-  log.debug(`Processed ${eTransfers.length} eTransfers`);
-}
-
-//
-// Get notified if you need to address something
-async function ProcessBillPayments(contract: TheCoin, bank: RbcApi) {
-  log.debug('Processing Bill Payments');
-  const billPayments = await processUnsettledBillPayments(contract, bank);
-  log.debug(`Processed ${billPayments.length} bill payments`);
-}
-
 async function Process() {
   const contract = await initialize();
   const bank = new RbcApi();
   await ProcessDeposits(contract, bank);
-  await ProcessETransfers(contract, bank);
-  await ProcessBillPayments(contract, bank);
-
-  await processPlugin(contract);
+  await processPayments(contract, bank);
   await processReferrals();
 
   log.debug('Completed processing');
