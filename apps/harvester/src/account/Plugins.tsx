@@ -79,7 +79,7 @@ export const Plugins = () => {
           {hasConverter || cnvrtRequested ? "Pending" : ""}
         </div>
         <div>
-          <Checkbox defaultChecked label='UberConverter (recommended)' />
+          <Checkbox defaultChecked label='ShockAbsorber (recommended)' />
           {hasShockAbsorber || absrbRequested ? "Pending" : ""}
         </div>
       </div>

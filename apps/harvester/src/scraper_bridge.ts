@@ -12,6 +12,8 @@ import { CreditDetails } from './Harvester/types';
 import { exec } from 'child_process';
 import { cwd } from 'process';
 import { join } from 'path';
+import { getState } from './Harvester/db';
+import { harvest } from './Harvester';
 
 async function guard<T>(cb: () => Promise<T>) {
   try {
@@ -47,6 +49,9 @@ const api: ScraperBridgeApi = {
 
   getHarvestConfig: () => guard(() => getHarvestConfig()),
   setHarvestConfig: (config) => guard(() => setHarvestConfig(config)),
+
+  runHarvester: () => guard(() => harvest()),
+  getCurrentState: () => guard(() => getState()),
 
   openLogsFolder: () => guard(async () => {
     const logFolder = process.env.TC_LOG_FOLDER;
@@ -103,6 +108,13 @@ export function initScraping() {
   })
   ipcMain.handle(actions.setHarvestConfig, async (_event, config: HarvestConfig) => {
     return api.setHarvestConfig(config);
+  })
+
+  ipcMain.handle(actions.runHarvester, async (_event) => {
+    return api.runHarvester();
+  })
+  ipcMain.handle(actions.getCurrentState, async (_event) => {
+    return api.getCurrentState();
   })
 
   ipcMain.handle(actions.openLogsFolder, async (_event) => {

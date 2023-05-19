@@ -7,7 +7,7 @@ import { DateTime } from 'luxon';
 import currency from 'currency.js';
 import { log } from '@thecointech/logging';
 
-const PayVisaKey = "PayVisa";
+export const PayVisaKey = "PayVisa";
 
 export class PayVisa implements ProcessingStage {
 

@@ -1,7 +1,7 @@
 import { Mnemonic } from '@ethersproject/hdnode';
 import { HarvestConfig } from './types';
 import type {ActionTypes, ValueResult, ValueType} from "./scraper/types";
-import { CreditDetails } from './Harvester/types';
+import { CreditDetails, HarvestData } from './Harvester/types';
 
 export type Result<T> = {
   error?: string;
@@ -32,6 +32,9 @@ export type ScraperBridgeApi = {
   getHarvestConfig(): Promise<Result<HarvestConfig|undefined>>,
   setHarvestConfig(config: HarvestConfig): Promise<Result<boolean>>,
 
+  runHarvester(): Promise<Result<void>>,
+  getCurrentState(): Promise<Result<HarvestData>>,
+
   openLogsFolder(): Promise<Result<boolean>>,
   getArgv() : Promise<Result<string>>
 }
@@ -55,6 +58,9 @@ export const actions = {
 
   getHarvestConfig: 'scraper:getHarvestConfig',
   setHarvestConfig: 'scraper:setHarvestConfig',
+
+  runHarvester: 'scraper.runHarvester',
+  getCurrentState: 'scraper.getCurrentState',
 
   openLogsFolder: 'scraper:openLogsFolder',
   getArgv: 'scraper:getArgv'

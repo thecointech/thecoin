@@ -26,3 +26,9 @@ export class ComposeClient implements Pick<SrcApi, "executeQuery"> {
 
 export const getComposeDB = () => Promise.resolve(new ComposeClient)
 export const getHistory = () => Promise.resolve([])
+
+var encrypted: any = undefined;
+export const setEncrypted = (v: any) => {
+  encrypted = v;
+}
+export const loadEncrypted = () => encrypted;
