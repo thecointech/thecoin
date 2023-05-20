@@ -11,6 +11,8 @@ export async function updateOracle(timestamp: number) {
   // Because there are multiple versions of this service running, we
   // need to ensure that there is only 1 update happening at any given time
   const guard = await enterCS();
+  log.debug(`UpdateOracle acquired CS: ${guard && guard.toDate()}`);
+
   if (!guard) {
     log.warn("Cannot update Oracle - someone else holds the critical section");
     return;
@@ -49,34 +51,32 @@ export async function updateOracle(timestamp: number) {
 
 
 const cs_doc = "admin/__updater_cs";
+const start_key = "started";
+const complete_key = "complete";
 function enterCS() {
   const db: FirestoreAdmin = getFirestore() as any;
-  const cs = db.doc(cs_doc);
+  const ref = db.doc(cs_doc);
   return db.runTransaction(async t => {
-    const cs_get = await t.get(cs);
-    const cs_data = cs_get.data();
+    const doc = await t.get(ref);
     // Check if someone else currently holds the lock
-    if (cs_data?.started != cs_data?.complete) {
+    log.info(`CS state: ${JSON.stringify(doc?.data())}`)
+    if (doc.get(start_key)?.toMillis() != doc.get(complete_key)?.toMillis()) {
       return false;
     }
     const timestamp = Timestamp.now();
-    t.set(
-      cs,
+    t.update(
+      ref,
       { started: timestamp },
-      { merge: true }
+      { lastUpdateTime: doc.updateTime }
     );
-    // const cs_verify = await t.get(cs);
-    // // Check again, did we acquire the lock?
-    // if (cs_verify.data()?.started != timestamp)
-    //   return false;
-
     return timestamp;
   })
 }
 function exitCS(guard: Timestamp) {
   const db: FirestoreAdmin = getFirestore() as any;
-  const cs = db.doc(cs_doc);
-  return cs.set({
-    completed: guard
-  })
+  const doc = db.doc(cs_doc);
+  return doc.set(
+    { [complete_key]: guard },
+    { merge: true }
+  )
 }
