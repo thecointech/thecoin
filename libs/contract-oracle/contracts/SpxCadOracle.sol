@@ -59,6 +59,10 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
   // is because the gas limits are too low to allow storing all prior values.
   function bulkUpdate(uint64[] calldata newValues) public onlyUpdater() {
     // TODO: http://zxstudio.org/blog/2018/09/11/effectively-storing-arrays-in-solidity/
+
+    // check that there aren't too many new values...
+    int newMaxTimestamp = INITIAL_TIMESTAMP + int(newValues.length) * BLOCK_TIME;
+    require(newMaxTimestamp < (int(block.timestamp) + (BLOCK_TIME * 2)), "Too many updates");
     for (uint i = 0; i < newValues.length; i++) {
       rates.push(newValues[i]);
     }

@@ -64,7 +64,7 @@ export type ActionDataTypes = {
   }
 }
 export type ActionType = keyof ActionDataTypes;
-export type TxActionType = "Buy" | "Sell" | "Bill";
+export type TxActionType = "Buy" | "Sell" | "Bill" | "Plugin";
 export type AnyActionData = ActionDataTypes[ActionType];
 
 // A structure encompassing all the data related to an action
@@ -85,6 +85,7 @@ export interface TypedAction<Type extends ActionType> {
 export type SellAction = TypedAction<'Sell'>;
 export type BuyAction = TypedAction<'Buy'>;
 export type BillAction = TypedAction<'Bill'>;
+export type PluginAction = TypedAction<'Plugin'>;
 export type AnyAction = TypedAction<ActionType>;
 export type AnyTxAction = TypedAction<TxActionType>;
 

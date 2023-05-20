@@ -61,6 +61,8 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
     }
   }
 
+  log.info(`Pushing ${rates.length} new rates, until ${timestamp} : ${new Date(timestamp)}`);
+
   try {
     const overrides = await getOverrideFees(oracle);
 

@@ -41,6 +41,7 @@ export const Client = (props: Props) => {
     ...props.Buy,
     ...props.Sell,
     ...props.Bill,
+    ...props.Plugin
   ].sort((a, b) => a.data.date.toMillis() - b.data.date.toMillis());
 
 
