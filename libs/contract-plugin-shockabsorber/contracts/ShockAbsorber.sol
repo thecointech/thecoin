@@ -91,6 +91,10 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     return cushions[user];
   }
 
+  function setOracle(address oracle) public onlyOwner() {
+    setFeed(oracle);
+  }
+
   // ------------------------------------------------------------------------
   // IPlugin Implementation
   // ------------------------------------------------------------------------
