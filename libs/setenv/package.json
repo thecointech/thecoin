@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/setenv",
-  "version": "0.2.106",
+  "version": "0.2.107",
   "description": "TheCoin: Environment setup library",
   "type": "module",
   "keywords": [
