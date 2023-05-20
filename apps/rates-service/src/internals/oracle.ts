@@ -8,7 +8,9 @@ export async function updateOracle(timestamp: number) {
   const signer = await getSigner("OracleUpdater");
   const oracle = await connectOracle(signer);
 
-  // Our oracle operates in seconds
+  log.info(`Updating Oracle ${oracle.address} to ${DateTime.fromMillis(timestamp).toLocaleString(DateTime.DATETIME_SHORT)}`);
+
+  // Our oracle operates in milliseconds
   await updateRates(oracle, timestamp, async (ts) => {
     // do we have a data for this time?
     const rates = await getCombinedRates(ts);
@@ -23,8 +25,5 @@ export async function updateOracle(timestamp: number) {
   })
 
   const validTo = await oracle.validUntil();
-  log.info("Oracle updated from {from} to {to}", {
-    from: DateTime.fromMillis(timestamp).toLocaleString(DateTime.DATETIME_SHORT),
-    to: DateTime.fromMillis(validTo.toNumber()).toLocaleString(DateTime.DATETIME_SHORT),
-  })
+  log.info(`Oracle updated to ${DateTime.fromMillis(validTo.toNumber()).toLocaleString(DateTime.DATETIME_SHORT)}`);
 }

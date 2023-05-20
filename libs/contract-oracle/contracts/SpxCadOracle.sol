@@ -61,8 +61,9 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
     // TODO: http://zxstudio.org/blog/2018/09/11/effectively-storing-arrays-in-solidity/
 
     // check that there aren't too many new values...
-    int newMaxTimestamp = INITIAL_TIMESTAMP + int(newValues.length) * BLOCK_TIME;
-    require(newMaxTimestamp < (int(block.timestamp) + (BLOCK_TIME * 2)), "Too many updates");
+    int pushValidUntil = INITIAL_TIMESTAMP + (int(newValues.length) * BLOCK_TIME);
+    int maxValidUntil = int(msNow()) + (BLOCK_TIME * 2);
+    require(pushValidUntil <= maxValidUntil, "Too many updates");
     for (uint i = 0; i < newValues.length; i++) {
       rates.push(newValues[i]);
     }
