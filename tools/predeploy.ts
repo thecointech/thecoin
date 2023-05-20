@@ -58,7 +58,12 @@ export function gCloudDeploy() {
 }
 
 export async function copyEnvVarsLocal(outYamlFile: string, additionalVars: Record<string, string> = {}) {
+
+  // Get version from package.json
+  const packageJson = JSON.parse(readFileSync(`${process.cwd()}/package.json`, 'utf8'));
+
   const env = {
+    TC_APP_VERSION: packageJson.version,
     ...getEnvVars(),
     ...additionalVars,
   }

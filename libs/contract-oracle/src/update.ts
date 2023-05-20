@@ -64,18 +64,19 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
   log.info(`Pushing ${rates.length} new rates, until ${timestamp} : ${new Date(timestamp)}`);
 
   try {
-    const overrides = await getOverrideFees(oracle);
 
     // If we have enough rates, push them to the oracle
     if (rates.length == 1) {
       // The majority of time, we only have one rate to push
       // So use this function, as it's a wee bit cheaper than the below
+      const overrides = await getOverrideFees(oracle);
       await oracle.update(rates[0], overrides);
     }
     else if (rates.length > 1) {
       for (let s = 0; s < rates.length; s += MAX_LENGTH) {
         log.trace(`Updating rates: ${s} of ${rates.length}`);
         const e = Math.min(s + MAX_LENGTH, rates.length);
+        const overrides = await getOverrideFees(oracle);
         await oracle.bulkUpdate(rates.slice(s, e), overrides);
       }
     }
@@ -83,7 +84,8 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
 
     // If we have offsets, push them to the oracle
     for (const offset of offsets) {
-      await oracle.updateOffset(offset, overrides);
+        const overrides = await getOverrideFees(oracle);
+        await oracle.updateOffset(offset, overrides);
       log.trace(`Pushing new Offset ${offset.offset / ONE_HR}hrs at ${new Date(offset.from)}`)
     }
 
@@ -91,7 +93,7 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
     log.trace(`New contract latest: ${new Date(newLatest)}`);
   }
   catch (err: any) {
-    log.error({err}, "Error updating oracle");
+    log.error(err, "Error updating oracle");
     // await SendMail("Error updating oracle", err.message);
     throw err;
   }

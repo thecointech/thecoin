@@ -36,12 +36,13 @@ export async function seed() {
   // Always seed with live rates (falls back to random)
   await seedRates(from, validityInterval);
 
+  // re-enable logging
+  oldLevels.forEach((lvl, idx) => log.levels(idx, lvl));
+
   // Triggering an update ensures the oracle is updated
   // before we re-enable logging
   await update();
 
-  // re-enable logging
-  oldLevels.forEach((lvl, idx) => log.levels(idx, lvl));
   log.trace(`Seeding complete from ${from.toLocaleString(DateTime.DATETIME_MED)}`);
 
   return from;
