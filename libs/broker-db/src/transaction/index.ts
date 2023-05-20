@@ -106,6 +106,7 @@ export async function getAllActions(addresses: string[]) {
     Buy: await getAllActionsOfType(addresses, "Buy"),
     Sell: await getAllActionsOfType(addresses, "Sell"),
     Bill: await getAllActionsOfType(addresses, "Bill"),
+    Plugin: await getAllActionsOfType(addresses, "Plugin"),
   }
 }
 
