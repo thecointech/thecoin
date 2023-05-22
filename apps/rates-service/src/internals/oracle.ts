@@ -22,7 +22,7 @@ export async function updateOracle(timestamp: number) {
     const signer = await getSigner("OracleUpdater");
     const oracle = await connectOracle(signer);
 
-    log.info(`Updating Oracle ${oracle.address} to ${DateTime.fromMillis(timestamp).toLocaleString(DateTime.DATETIME_SHORT)}`);
+    log.info(`Updating Oracle ${oracle.address} at ${DateTime.fromMillis(timestamp).toLocaleString(DateTime.DATETIME_SHORT)}`);
 
     // Our oracle operates in milliseconds
     await updateRates(oracle, timestamp, async (ts) => {
@@ -64,11 +64,20 @@ function enterCS() {
       return false;
     }
     const timestamp = Timestamp.now();
-    t.update(
-      ref,
-      { started: timestamp },
-      { lastUpdateTime: doc.updateTime }
-    );
+    // Enable set for dev:live
+    if (!doc.exists) {
+      t.set(
+        ref,
+        { started: timestamp }
+      )
+    }
+    else {
+      t.update(
+        ref,
+        { started: timestamp },
+        { lastUpdateTime: doc.updateTime }
+      );
+    }
     return timestamp;
   })
 }

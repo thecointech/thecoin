@@ -51,6 +51,10 @@ contract UberConverter is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     theCoin = IPluggable(baseContract);
   }
 
+  function setOracle(address oracle) public onlyOwner() {
+    setFeed(oracle);
+  }
+
   // ------------------------------------------------------------------------
   // TESTING FUNCTIONS - REMOVE PRIOR TO PROD PUBLISH
   // ------------------------------------------------------------------------

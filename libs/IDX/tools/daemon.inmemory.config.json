@@ -1,5 +1,4 @@
 {
-  "anchor": {},
   "http-api": {
     "cors-allowed-origins": [
       ".*"
@@ -22,7 +21,12 @@
   "network": {
     "name": "inmemory"
   },
-  "node": {},
+  "anchor": {
+    "auth-method": "did"
+  },
+  "node": {
+    "private-seed-url": "inplace:ed25519#e663239643ed99d36a29bd048717c4e2b4be6c5629b997cae6de6184bf4e92a1"
+  },
   "state-store": {
     "mode": "fs"
   },
