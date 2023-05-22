@@ -33,7 +33,7 @@
     "build": "cross-env CONFIG_NAME=prod yarn build:all",
     "rebuild": "cross-env CONFIG_NAME=prod yarn build:src",
     "emulator:firestore": "yarn firebase emulators:start --only firestore --project broker-cad",
-    "emulator:ceramic": "yarn ceramic daemon --config ./tools/ceramic/daemon.config.json",
+    "emulator:ceramic": "yarn ceramic daemon --config ./libs/IDX/tools/daemon.inmemory.config.json",
     "emulator:blockchain": "cd libs/contract-tools && yarn emulator",
     "emulator:bootstrap": "yarn wait-port 7007 && cross-env CONFIG_NAME=devlive yarn bootstrap",
     "emulators": "yarn run-p emulator:*",
