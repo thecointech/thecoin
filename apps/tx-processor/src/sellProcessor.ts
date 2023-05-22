@@ -33,14 +33,17 @@ export async function processPayments(tcCore: TheCoin, bank: RbcApi) {
 
 async function processAction(action: AnyAction, tcCore: TheCoin, bank: RbcApi) {
   if (isType(action, 'Bill')) {
+    log.debug({ initialId: action.data.initialId }, "Processing Bill: {initialId}");
     const ex = BillProcessor(action.data.initial.transfer, tcCore, bank);
     return await ex.execute(null, action);
   }
   else if (isType(action, "Plugin")) {
+    log.debug({ initialId: action.data.initialId }, "Processing Plugin: {initialId}");
     const ex = PluginProcessor(tcCore);
     return await ex.execute(null, action);
   }
   else if (isType(action, "Sell")) {
+    log.debug({ initialId: action.data.initialId }, "Processing Withdrawal: {initialId}");
     const ex = ETransferProcessor(tcCore, bank);
     return await ex.execute(null, action);
   }
