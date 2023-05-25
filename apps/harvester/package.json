@@ -25,8 +25,7 @@
     "make": "cross-env CONFIG_NAME=prodbeta electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "build": "yarn tsc --noEmit",
-    "build:app": "yarn tsc --noEmit tsconfig.app.json",
+    "build": "yarn tsc --noEmit tsconfig.app.json",
     "test": "yarn run-jest"
   },
   "license": "MIT",
