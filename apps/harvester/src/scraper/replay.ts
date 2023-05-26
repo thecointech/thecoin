@@ -46,7 +46,14 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
 
   const screenshotFolder = path.join(outFolder, actionName);
   mkdirSync(screenshotFolder, { recursive: true });
-  const saveScreenshot = debounce((page: Page, fileName: string) => page.screenshot({ path: path.join(screenshotFolder, fileName) }))
+  const doSaveScreenshot = async (page: Page, fileName: string) => {
+    const outfile = path.join(screenshotFolder, fileName);
+    log.debug(`saving screenshot: ${outfile}`);
+    const r = await page.screenshot({ path: outfile })
+    log.debug(`Saved screenshot: (${r.length})`);
+  }
+  const saveScreenshot = debounce(doSaveScreenshot);
+
 
   async function getFrame(click: ClickEvent) {
     if (!click.frame) {
@@ -76,7 +83,22 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
     }
     catch (err) {
       log.error(`Couldn't find selector: ${click.selector}`)
+      await doSaveScreenshot(page, `error-click-${actionName}-${click.tagName}.png`);
     }
+
+    log.debug(`Searching for alternative ${click.tagName} elements`);
+
+    try {
+      function __mainlogger(msg: string) {
+        log.debug(msg);
+      }
+      await page.exposeFunction('__mainlogger', __mainlogger);
+    }
+    catch (err) {
+      log.error(`Couldn't expose logger: ${err}`);
+    }
+
+
     // Else search for tag + text combo at location
     // const els = await frame.$x(`//${click.tagName}`);
     const els = await page.evaluate(click => {
@@ -100,6 +122,13 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
         return tops + rights + bottoms + lefts;
       }
       const els = document.getElementsByTagName(click.tagName);
+      try {
+        //@ts-ignore
+        __mainlogger(`MAINLOGGER: found ${els?.length} elements of type ${click.tagName}`);
+      }
+      catch (err) {
+        console.log(err);
+      }
 
       return Array.from(els as HTMLCollectionOf<HTMLElement>)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -117,13 +146,17 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
         }))
     }, click);
 
-    const candidates = els
-      .filter(el => el.innerText == click.text)
-      .sort((a, b) => a.positionSimilarity - b.positionSimilarity);
+    log.debug(`Found ${JSON.stringify(els)} potentially matching elements`)
 
-    if (candidates[0]) {
-      // TS looses track of the type when nested
-      return candidates[0].element as unknown as ElementHandle<HTMLElement>;
+    if (els) {
+      const candidates = els
+        .filter(el => el.innerText == click.text)
+        .sort((a, b) => a.positionSimilarity - b.positionSimilarity);
+
+      if (candidates[0]) {
+        // TS looses track of the type when nested
+        return candidates[0].element as unknown as ElementHandle<HTMLElement>;
+      }
     }
 
     // Add additional logic here if the selector doesn't work
