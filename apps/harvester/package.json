@@ -20,6 +20,7 @@
     "dev": "electron-forge start",
     "dev:harvest": "electron-forge start -- -- --harvest",
     "_dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
+    "prod": "cross-env CONFIG_NAME=prod yarn dev",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "cross-env CONFIG_NAME=prodbeta electron-forge make",

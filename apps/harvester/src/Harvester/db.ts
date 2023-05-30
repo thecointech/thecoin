@@ -7,27 +7,29 @@ import { log } from '@thecointech/logging';
 
 const db_path = path.join(electron.app.getPath('userData'), 'harvester.db');
 
-let _harvester = null as unknown as PouchDB.Database<StoredData>;
-
 export function initState(options?: { adapter: string }) {
-  log.info(`Initializing state database at ${db_path}`);
   if (process.env.NODE_ENV === 'development') {
+    log.info(`Initializing in-memory state database`);
     options = {
       adapter: 'memory',
       ...options,
     }
   }
-  if (!_harvester) {
-    _harvester = new pouchdb<StoredData>(db_path, options);
+  else {
+    log.info(`Initializing state database at ${db_path}`);
   }
+  return new pouchdb<StoredData>(db_path, options);
 }
+let _harvester = null as unknown as PouchDB.Database<StoredData>;
+
+export const getDb = () => _harvester ??= initState();
 
 // We use pouchDB revisions to keep the prior state of documents
 const StateKey = "state";
 
 export async function getState() {
   try {
-    return await _harvester.get(StateKey, { revs_info: true });
+    return await getDb().get(StateKey, { revs_info: true });
   }
   catch (err) {
     return undefined;
@@ -37,7 +39,7 @@ export async function getState() {
 export async function setCurrentState(data: HarvestData) {
 
   const lastState = await getState();
-  await _harvester.put({
+  await getDb().put({
     _id: StateKey,
     _rev: lastState?._rev,
     ...toDb(data),
