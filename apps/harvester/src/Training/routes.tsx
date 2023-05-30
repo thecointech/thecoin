@@ -9,12 +9,13 @@ import { Complete } from './Step5.Complete';
 
 export const TrainingRouter = () => (
   <Switch>
-    <Route path="/train/step0" component={Warmup} />
+    <Route path="/train/step0" component={Step0} />
     <Route path="/train/step1" component={CreditDetails} />
-    <Route path="/train/step2" component={ChequingBalance} />
-    <Route path="/train/step3" component={VisaBalance} />
-    <Route path="/train/step4" component={SendETransfer} />
-    <Route path="/train/step5" component={Complete} />
+    <Route path="/train/step2" component={Warmup} />
+    <Route path="/train/step3" component={ChequingBalance} />
+    <Route path="/train/step4" component={VisaBalance} />
+    <Route path="/train/step5" component={SendETransfer} />
+    <Route path="/train/step6" component={Complete} />
     <Route component={Step0} />
   </Switch>
 )
