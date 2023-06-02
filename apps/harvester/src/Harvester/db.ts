@@ -1,11 +1,11 @@
 import { HarvestData } from './types';
 import pouchdb from 'pouchdb';
-import electron from 'electron';
 import { StoredData, fromDb, toDb } from './db_translate';
 import path from 'path';
 import { log } from '@thecointech/logging';
+import { rootFolder } from '../paths';
 
-const db_path = path.join(electron.app.getPath('userData'), 'harvester.db');
+const db_path = path.join(rootFolder, 'harvester.db');
 
 export function initState(options?: { adapter: string }) {
   if (process.env.NODE_ENV === 'development') {

@@ -8,14 +8,14 @@ import { createStep } from './steps';
 import { CreditDetails } from './types';
 import { setSchedule } from './schedule/scheduler';
 import path from 'path';
-import electron from 'electron';
 import { log } from '@thecointech/logging';
 import { ActionTypes, AnyEvent } from '../scraper/types';
+import { rootFolder } from '../paths';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
 
-const db_path = path.join(electron.app.getPath('userData'), 'config.db');
+const db_path = path.join(rootFolder, 'config.db');
 
 export type ConfigShape = {
   // Store the account Mnemomic
