@@ -6,13 +6,12 @@ import { Upload } from './Upload';
 
 export const AccountRouter = ({account}:{account?: AccountState}) => (
   <Switch>
-    <Route path="/account/upload" component={Upload} />
     <Route path="/account/login" render={() => (
       account
         ? <Login account={account} />
         : <Redirect to="/account" />
     )} />
     <Route path="/account/plugins" component={Plugins} />
-    <Route render={() => <div>SOME KIND OF CLEVER INTRO BLURB</div>} />
+    <Route path="/account" component={Upload} />
   </Switch>
 )

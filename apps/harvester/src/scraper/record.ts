@@ -1,12 +1,15 @@
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync } from 'fs';
 import path from 'path';
 import type { Browser, Page } from 'puppeteer';
 import { debounce } from './debounce';
 import { startElementHighlight } from './highlighter';
 import { getTableData } from './table';
 import { startPuppeteer } from './puppeteer';
-import { AnyEvent, ElementData, outFolder, ValueResult, ValueType } from './types';
+import { ActionTypes, AnyEvent, ElementData, ValueResult, ValueType } from './types';
 import { getValueParsing } from './valueParsing';
+import { log } from '@thecointech/logging';
+import { setEvents } from '../Harvester/config';
+import { outFolder } from '../paths';
 
 // types injected into window
 declare global {
@@ -25,7 +28,8 @@ type ValueWaiter = {
 
 export class Recorder {
 
-  readonly name: string;
+  readonly name: ActionTypes;
+  readonly screenshotFolder: string;
   disconnected?: Promise<boolean>;
   step = 0;
   events: AnyEvent[] = [];
@@ -43,15 +47,21 @@ export class Recorder {
   private onValue?: ValueWaiter;
   private static __instance?: Recorder;
 
-  private constructor(name: string, dynamicValues?: Record<string, string>) {
+  private constructor(name: ActionTypes, dynamicValues?: Record<string, string>) {
     this.name = name;
+    this.screenshotFolder = path.join(outFolder, this.name);
+
     this.dynamicValues = dynamicValues ?? {};
-    console.log("Recording", this.name, " with dynamic values", this.dynamicValues);
+    log.info(`Recording ${this.name} with dynamic values ${JSON.stringify(this.dynamicValues)}`);
   }
   private async initialize(url: string) {
     const { browser, page } = await startPuppeteer(false);
     this.browser = browser;
     this.page = page;
+
+    if (!existsSync(this.screenshotFolder)) {
+      mkdirSync(this.screenshotFolder, { recursive: true })
+    }
 
     await page.exposeFunction('__onAnyEvent', this.eventHandler);
 
@@ -60,17 +70,11 @@ export class Recorder {
     await page.goto(url);
 
     this.disconnected = new Promise((resolve) => {
-      browser.on('disconnected', () => {
+      browser.on('disconnected', async () => {
 
-        console.log('browser disconnected');
-        const eventsStr = JSON.stringify(this.events, null, 2);
-        console.log(eventsStr)
+        log.info(`browser disconnected with ${this.events.length} events`);
+        await setEvents(this.name, this.events);
 
-        if (!existsSync(outFolder)) {
-          mkdirSync(outFolder)
-        }
-
-        writeFileSync(path.join(outFolder, `${this.name}.json`), eventsStr);
         // Cleanup
         delete Recorder.__instance;
         Recorder.__instance = undefined;
@@ -81,7 +85,7 @@ export class Recorder {
     return page;
   }
 
-  static async instance(name?: string, url?: string, capture?: Record<string, string>) {
+  static async instance(name?: ActionTypes, url?: string, capture?: Record<string, string>) {
     // Should we re?
     if (Recorder.__instance) {
       if (!name || Recorder.__instance.name == name) return Recorder.__instance
@@ -126,7 +130,7 @@ export class Recorder {
   }
 
   eventHandler = async (event: AnyEvent) => {
-    console.log("event name: " + event.type);
+    log.debug("event name: " + event.type);
     if (event.type == 'navigation') {
       if (event.to == 'about:blank') {
         return;
@@ -135,7 +139,7 @@ export class Recorder {
     }
     else if (event.type == 'load') {
       // Debounce this as we get multiple page-loads for the same step
-      this.saveScreenshot(this.page, path.join(outFolder, `nav-${this.step}.png`));
+      this.saveScreenshot(this.page, `record-${this.step}.png`);
 
       // We keep track of the iframes, and their related URLs
       const frames = this.page.frames()
@@ -155,7 +159,7 @@ export class Recorder {
     else if (event.type == "value") {
       // If we have a promise awaiting (and we really should!)
       if (!this.onValue) {
-        console.error("VALUE MARK WITH NO CB");
+        log.error("VALUE MARK WITH NO CB");
         throw new Error();
       }
       if (event.frame) {
@@ -192,11 +196,13 @@ export class Recorder {
       }
     }
 
-    console.log(`Recieved event: ${JSON.stringify(event)}`)
+    // strip value out to prevent logging sensitive info
+    const { value, ...sanitized } = event as any;
+    log.debug(`Received event: ${JSON.stringify(sanitized)}`)
     this.events.push(event);
   }
 
-  saveScreenshot = debounce((page: Page, path: string) => page.screenshot({ path }))
+  saveScreenshot = debounce((page: Page, fileName: string) => page.screenshot({ path: path.join(this.screenshotFolder, fileName) }))
 }
 
 function onNewDocument() {

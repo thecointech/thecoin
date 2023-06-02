@@ -1,12 +1,12 @@
 import puppeteerVanilla, { executablePath } from 'puppeteer';
 import { addExtra } from 'puppeteer-extra';
 import { getPlugins } from './puppeteer-plugins';
-import electron from 'electron';
+import { rootFolder } from '../paths';
 import path from "path";
 
 const puppeteer = addExtra(puppeteerVanilla);
 const plugins = getPlugins();
-const userDataDir = path.join(electron.app.getPath('userData'), 'chrome_data');
+const userDataDir = path.join(rootFolder, 'chrome_data');
 
 let _browser: any;
 export async function startPuppeteer(headless?: boolean) {

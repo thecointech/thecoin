@@ -49,7 +49,7 @@ export const Results = () => {
         <p>Last Run: {state?.date.toLocaleString(DateTime.DATETIME_SHORT) ?? 'N/A'}</p>
       </div>
       <div>
-        <Button onClick={runImmediately}>Manual Run</Button>
+        <Button onClick={runImmediately}>Run Harvester Now</Button>
       </div>
     </Dimmer.Dimmable>
 

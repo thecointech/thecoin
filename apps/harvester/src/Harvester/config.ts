@@ -8,13 +8,14 @@ import { createStep } from './steps';
 import { CreditDetails } from './types';
 import { setSchedule } from './schedule/scheduler';
 import path from 'path';
-import electron from 'electron';
 import { log } from '@thecointech/logging';
+import { ActionTypes, AnyEvent } from '../scraper/types';
+import { rootFolder } from '../paths';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
 
-const db_path = path.join(electron.app.getPath('userData'), 'config.db');
+const db_path = path.join(rootFolder, 'config.db');
 
 export type ConfigShape = {
   // Store the account Mnemomic
@@ -24,6 +25,11 @@ export type ConfigShape = {
   stateKey?: string,
 
   creditDetails?: CreditDetails,
+
+  scraping?: {
+    [key in ActionTypes]?: AnyEvent[];
+  },
+
 } & HarvestConfig;
 
 // We use pouchDB revisions to keep the prior state of documents
@@ -66,6 +72,10 @@ export async function setProcessConfig(config: Partial<ConfigShape>) {
     stateKey: config.stateKey ?? lastCfg?.stateKey,
     wallet: config.wallet ?? lastCfg?.wallet,
     creditDetails: config.creditDetails ?? lastCfg?.creditDetails,
+    scraping: {
+      ...lastCfg?.scraping,
+      ...config.scraping,
+    },
     _id: ConfigKey,
     _rev: lastCfg?._rev,
   })
@@ -102,6 +112,19 @@ export async function hydrateProcessor() {
   return Object.values(config.steps)
     .filter(step => !!step)
     .map(createStep)
+}
+
+export async function setEvents(type: ActionTypes, events: AnyEvent[]) {
+  await setProcessConfig({
+    scraping: {
+      [type]: events
+    }
+  })
+}
+
+export async function getEvents(type: ActionTypes) {
+  const config = await getProcessConfig();
+  return config?.scraping?.[type];
 }
 
 export async function setCreditDetails(creditDetails: CreditDetails) {

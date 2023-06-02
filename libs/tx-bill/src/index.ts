@@ -7,7 +7,7 @@ import { graph } from './graph';
 import { uberGraph } from './uberGraph';
 import { CertifiedTransfer, CertifiedTransferRequest, UberTransfer } from '@thecointech/types';
 
-export { graph };
+export { graph, uberGraph };
 export const CertifiedProcessor = (contract: TheCoin, bank: IBank | null = null) => new StateMachineProcessor(graph, contract, bank);
 export const UberProcessor = (contract: TheCoin, bank: IBank | null = null) => new StateMachineProcessor(uberGraph, contract, bank);
 export const Processor = (transfer: CertifiedTransferRequest | UberTransfer, contract: TheCoin, bank: IBank | null = null) => (

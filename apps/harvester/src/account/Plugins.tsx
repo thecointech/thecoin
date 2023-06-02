@@ -51,13 +51,13 @@ export const Plugins = () => {
       throw new Error('No active account');
     }
     if (!cnvrtRequested) {
-      sendAssignRequest(active.signer, converter.address);
+      await sendAssignRequest(active.signer, converter.address);
       setData(Key.pluginCnvrtRequested, "true");
     }
     // ensure the timestamp increases...
     await sleep(250);
     if (!absrbRequested) {
-      sendAssignRequest(active.signer, shockAbsorber.address);
+      await sendAssignRequest(active.signer, shockAbsorber.address);
       setData(Key.pluginAbsrbRequested, "true");
     }
     setRequestSent(true);

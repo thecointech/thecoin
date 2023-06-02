@@ -3,7 +3,7 @@ import * as core from '@thecointech/tx-statemachine/transitions';
 import * as bills from './transitions';
 import type { ActionType } from "@thecointech/broker-db";
 
-export type States =
+export type ActionStates =
   "initial" |
 
   // First step, register the transfer
@@ -25,21 +25,20 @@ export type States =
 
   "billInitial" |
   "billReady" |
-  "billResult" |
+  "billResult";
 
-  "error" |
-  "complete";
+export type States = ActionStates|"error"|"complete";
 
 // TODO: Can this be defined as pure data?
 // Yes, yes it can...
 type GraphTransitions<Type extends ActionType, States extends string> = {
   [P in States]: {
     action: NamedTransition<Type>,
-    error?: NamedTransition<Type>,
-    next: States,
+    onError?: NamedTransition<Type>,
+    next: States|"error"|"complete",
   }
 }
-export const rawGraph: GraphTransitions<'Bill', States>  = {
+export const rawGraph: GraphTransitions<'Bill', ActionStates>  = {
   initial: {
     action: core.preTransfer,
     next: "tcRegisterReady",
@@ -48,7 +47,7 @@ export const rawGraph: GraphTransitions<'Bill', States>  = {
   tcRegisterReady: {
     action: core.uberDepositCoin,
     next: "tcRegisterWaiting",
-    error: core.requestManual,
+    onError: core.requestManual,
   },
   tcRegisterWaiting: {
     action: core.waitCoin,
@@ -67,57 +66,61 @@ export const rawGraph: GraphTransitions<'Bill', States>  = {
 
   // transfer timestamp has passed, prepare finalize
   tcFinalizeInitial: {
-    error: core.requestManual,
+    onError: core.requestManual,
     action: core.preTransfer,
     next: "tcFinalizeReady",
   },
   // Transfer pending from => to
   tcFinalizeReady: {
-    error: core.requestManual,
+    onError: core.requestManual,
     action: core.uberClearPending,
     next: "tcFinalizeWaiting",
   },
   // Wait for the transfer to complete
   tcFinalizeWaiting: {
-    error: core.requestManual,
+    onError: core.requestManual,
     action: core.waitCoin,
     next: "coinTransferComplete",
   },
 
   coinTransferComplete: {
-    error: core.requestManual,
     action: core.toFiat,
+    onError: core.requestManual,
     next: "billInitial",
   },
 
   // Send/pay the bill.
   billInitial: {
-    error: core.requestManual,
     action: core.preTransfer,
+    onError: core.requestManual,
     next: "billReady",
   },
   billReady: {
-    error: core.requestManual,
     action: bills.payBill,
+    onError: core.requestManual,
     next: "billResult",
   },
   // After result, we wait until the pending transfer timestamp has passed
   billResult: {
-    error: core.requestManual,
+    onError: core.requestManual,
     action: core.uberWaitPending,
     next: "complete",
   },
-
-  error: {} as any,
-  complete: {} as any,
 }
 
-export const uberGraph = Object.fromEntries(Object.entries(rawGraph).map(
-  ([name, state]) => [name, {
-  next: transitionTo<States, "Bill">(state.action, state.next),
-  error: state.error ? transitionTo<States, "Bill">(state.error, 'error') : undefined,
-}])) as any as  StateGraph<States, "Bill">;
 
+export const uberGraph = {
+  ...Object.fromEntries(Object.entries(rawGraph).map(
+    ([name, state]) => [name, {
+      next: transitionTo<States, "Bill">(state.action, state.next),
+      onError: state.onError ? transitionTo<States, "Bill">(state.onError, 'error') : undefined,
+    }])
+  ),
+  error: {
+    next: core.manualOverride,
+  },
+  complete: null,
+} as any as StateGraph<States, "Bill">
 
 
 // // Original Version - it's icky

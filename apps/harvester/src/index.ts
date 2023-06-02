@@ -15,7 +15,9 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-log.info(`Started Harvester, ${process.env.CONFIG_NAME} v${__VERSION__}`);
+log.info(`-----------------------------------------------------------------------------------`);
+log.info(`Started Harvester, ${process.env.CONFIG_NAME} v${__VERSION__} - ${process.env.APP_BUILD_DATE}`);
+log.info(`PWD: ${process.cwd()}`);
 
 const runHarvest = process.argv.indexOf("--harvest") >= 0
 if (runHarvest) {

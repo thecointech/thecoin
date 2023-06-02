@@ -2,8 +2,6 @@ import type currency from 'currency.js';
 import type { DateTime } from 'luxon';
 import type { HistoryRow } from './table';
 
-export const outFolder = './output';
-
 export type ActionTypes = 'visaBalance'|'chqBalance'|'chqETransfer';
 
 export type VisaBalanceResult = {

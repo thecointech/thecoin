@@ -33,7 +33,8 @@ export const mainConfig: Configuration = {
       // Think long-n-hard about a better way to figure this out
       WALLET_BrokerCAD_ADDRESS: "0x0000000000000000000000000000000000000000",
       ...env,
-      TC_LOG_FOLDER: './logs',
+      TC_LOG_FOLDER: '../logs',
+      APP_BUILD_DATE: JSON.stringify(new Date()),
     }),
   ],
   experiments: {
