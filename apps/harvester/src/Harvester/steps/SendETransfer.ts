@@ -6,25 +6,42 @@ import currency from 'currency.js';
 
 export class SendETransfer implements ProcessingStage {
 
+  // Don't send less than $10, it's not worth the effort
+  minETransfer = 10;
+
+  constructor(config?: Record<string, string|number>) {
+    if (config?.minETransfer) {
+      this.minETransfer = Number(config.minETransfer);
+    }
+  }
+
   async process({chq, state}: HarvestData) {
-    if (state.toETransfer) {
-      log.info(`Transferring ${state.toETransfer} to TheCoin`);
-      const toTransfer = getTransferAmount(state.toETransfer, chq.balance);
-      const confirm = await sendETransfer(toTransfer)
+    if (!state.toETransfer) {
+      log.info(`Skipping e-Transfer, no value set`);
+      return {}
+    }
+    if (state.toETransfer.value < this.minETransfer) {
+      log.info(`Skipping e-Transfer, value of ${state.toETransfer} is less than minimum of ${this.minETransfer}`);
+      return {}
+    }
 
-      if (confirm.confirm) {
-        const harvesterBalance = (state.harvesterBalance ?? currency(0))
-          .add(toTransfer);
+    log.info(`Transferring ${state.toETransfer} to TheCoin`);
 
-        log.info(`Successfully transferred ${state.toETransfer} to TheCoin, new balance ${harvesterBalance}`);
-        return {
-          toETransfer: undefined,
-          harvesterBalance,
-        }
-      } else {
-        log.error(`Failed to transfer ${toTransfer} to TheCoin`);
-        // TODO: Handle this case
+    const toTransfer = getTransferAmount(state.toETransfer, chq.balance);
+    const confirm = await sendETransfer(toTransfer)
+
+    if (confirm.confirm) {
+      const harvesterBalance = (state.harvesterBalance ?? currency(0))
+        .add(toTransfer);
+
+      log.info(`Successfully transferred ${state.toETransfer} to TheCoin, new balance ${harvesterBalance}`);
+      return {
+        toETransfer: undefined,
+        harvesterBalance,
       }
+    } else {
+      log.error(`Failed to transfer ${toTransfer} to TheCoin`);
+      // TODO: Handle this case
     }
     return {};
   }
