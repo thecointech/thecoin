@@ -1,9 +1,9 @@
-import type { HarvestData, ProcessingStage } from './types';
+import type { HarvestData, ProcessingStage, UserData } from './types';
 
-export async function processState(stages: ProcessingStage[], state: HarvestData) {
+export async function processState(stages: ProcessingStage[], state: HarvestData, user: UserData) {
   let nextState = state;
   for (const stage of stages) {
-    const delta = await stage.process(nextState);
+    const delta = await stage.process(nextState, user);
 
     const stepData = nextState.state.stepData || delta.stepData
     ? {

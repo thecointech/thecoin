@@ -13,7 +13,7 @@ export async function harvest() {
 
     log.info(`Commencing Harvest`);
 
-    const { stages, state } = await initialize();
+    const { stages, state, user } = await initialize();
 
     log.info(`Resume from last: harvesterBalance ${state.state.harvesterBalance}`);
 
@@ -31,7 +31,7 @@ export async function harvest() {
         return;
       }
     }
-    const nextState = await processState(stages, state);
+    const nextState = await processState(stages, state, user);
 
     await setCurrentState(nextState);
 

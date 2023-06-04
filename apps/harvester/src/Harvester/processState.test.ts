@@ -1,28 +1,14 @@
-import { jest } from '@jest/globals';
 import currency from 'currency.js';
 import { RoundUp } from './steps/RoundUp'
 import { TransferVisaOwing } from './steps/TransferVisaOwing'
-import { HarvestData } from './types';
+import { HarvestData, Replay } from './types';
 import { SendETransfer } from './steps/SendETransfer';
 import { DateTime } from 'luxon';
 import { Wallet } from 'ethers';
 import { processState } from './processState';
-
-jest.unstable_mockModule('./config', () => {
-  return {
-    getWallet: () => Wallet.createRandom(),
-    getCreditDetails: () => ({
-      payee: 'payee',
-      accountNumber: "12345"
-    })
-  }
-})
+import { PayVisa } from './steps/PayVisa';
 
 it ('can process on first run', async () => {
-
-  // must happen later to allow mocking
-  const { PayVisa } = await import('./steps/PayVisa');
-  // Mock env vars
 
   // Simple runnable config
   const stages = [
@@ -48,8 +34,16 @@ it ('can process on first run', async () => {
     },
     delta: []
   }
+  const user = {
+    wallet: Wallet.createRandom(),
+    replay: (() => Promise.resolve({ confirm: "1234" })) as any as Replay,
+    creditDetails: {
+      payee: 'payee',
+      accountNumber: "12345"
+    }
+  }
 
-  const nextState = await processState(stages, state);
+  const nextState = await processState(stages, state, user);
 
   expect(nextState.delta.length).toEqual(4);
   // money to be etransfered should be gone

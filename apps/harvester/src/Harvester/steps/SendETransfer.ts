@@ -1,6 +1,5 @@
 import { log } from '@thecointech/logging';
-import { replay } from '../../scraper/replay';
-import { HarvestData, ProcessingStage } from '../types';
+import type { HarvestData, ProcessingStage, UserData, Replay } from '../types';
 import currency from 'currency.js';
 
 
@@ -15,7 +14,7 @@ export class SendETransfer implements ProcessingStage {
     }
   }
 
-  async process({chq, state}: HarvestData) {
+  async process({chq, state}: HarvestData, {replay}: UserData) {
     if (!state.toETransfer) {
       log.info(`Skipping e-Transfer, no value set`);
       return {}
@@ -28,7 +27,7 @@ export class SendETransfer implements ProcessingStage {
     log.info(`Transferring ${state.toETransfer} to TheCoin`);
 
     const toTransfer = getTransferAmount(state.toETransfer, chq.balance);
-    const confirm = await sendETransfer(toTransfer)
+    const confirm = await sendETransfer(toTransfer, replay)
 
     if (confirm.confirm) {
       const harvesterBalance = (state.harvesterBalance ?? currency(0))
@@ -67,7 +66,7 @@ const getTransferAmount = (toETransfer: currency, balance: currency) => {
   return toETransfer;
 }
 
-const sendETransfer = (amount: currency) =>
+const sendETransfer = (amount: currency, replay: Replay) =>
   process.env.CONFIG_NAME == "prod" || process.env.CONFIG_NAME == "prodbeta"
     ? replay('chqETransfer', { amount: amount.toString() })
     : { confirm: "1234" };
