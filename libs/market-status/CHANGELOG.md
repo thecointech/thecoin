@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.111](https://github.com/thecointech/thecoin/compare/v0.2.110...v0.2.111) (2023-06-04)
+
+**Note:** Version bump only for package @thecointech/market-status
+
+
+
+
+
 ## [0.2.110](https://github.com/thecointech/thecoin/compare/v0.2.109...v0.2.110) (2023-06-02)
 
 **Note:** Version bump only for package @thecointech/market-status
