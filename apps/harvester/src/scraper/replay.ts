@@ -15,6 +15,8 @@ import { outFolder } from '../paths';
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+export type Replay = typeof replay;
+
 export async function replay(actionName: 'chqBalance') : Promise<ChequeBalanceResult>;
 export async function replay(actionName: 'visaBalance') : Promise<VisaBalanceResult>;
 export async function replay(actionName: 'chqETransfer', dynamicValues: { amount: string }) : Promise<ETransferResult>;
@@ -48,9 +50,7 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
   mkdirSync(screenshotFolder, { recursive: true });
   const doSaveScreenshot = async (page: Page, fileName: string) => {
     const outfile = path.join(screenshotFolder, fileName);
-    log.debug(`saving screenshot: ${outfile}`);
-    const r = await page.screenshot({ path: outfile })
-    log.debug(`Saved screenshot: (${r.length})`);
+    await page.screenshot({ path: outfile })
   }
   const saveScreenshot = debounce(doSaveScreenshot);
 

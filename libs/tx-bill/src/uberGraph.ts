@@ -100,10 +100,9 @@ export const rawGraph: GraphTransitions<'Bill', ActionStates>  = {
     onError: core.requestManual,
     next: "billResult",
   },
-  // After result, we wait until the pending transfer timestamp has passed
   billResult: {
     onError: core.requestManual,
-    action: core.uberWaitPending,
+    action: core.markComplete,
     next: "complete",
   },
 }

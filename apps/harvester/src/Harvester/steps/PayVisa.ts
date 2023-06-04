@@ -1,7 +1,6 @@
-import { getDataAsDate, HarvestData, HarvestDelta, ProcessingStage } from '../types';
+import { getDataAsDate, HarvestData, HarvestDelta, ProcessingStage, UserData } from '../types';
 import { GetBillPaymentsApi } from '@thecointech/apis/broker'
 import { BuildUberAction } from '@thecointech/utilities/UberAction';
-import { getCreditDetails, getWallet } from '../config';
 import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
 import currency from 'currency.js';
@@ -20,7 +19,7 @@ export class PayVisa implements ProcessingStage {
   }
 
 
-  async process(data: HarvestData) : Promise<HarvestDelta> {
+  async process(data: HarvestData, { wallet, creditDetails }: UserData) : Promise<HarvestDelta> {
     // Do we have a new due amount?  If so, we better pay it.
 
     log.info('Processing PayVisa');
@@ -30,16 +29,6 @@ export class PayVisa implements ProcessingStage {
       // We better pay that due amount
       const dateToPay = getDateToPay(data.visa.dueDate, this.daysPrior);
       log.info('PayVisa: dateToPay', dateToPay.toISO());
-
-      const wallet = await getWallet();
-      if (!wallet) {
-        throw new Error("Cannot pay bill: No wallet found");
-      }
-
-      const creditDetails = await getCreditDetails();
-      if (!creditDetails) {
-        throw new Error("Cannot pay bill: Account Details not set");
-      }
 
       // transfer visa dueAmount on dateToPay
       const api = GetBillPaymentsApi();
