@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import { ContractState } from './types';
 import { last } from '@thecointech/utilities';
-import { getProvider } from '@thecointech/ethers-provider';
+import { getProvider } from '@thecointech/ethers-provider/infura';
 import type { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
 
 type BaseLogs = {

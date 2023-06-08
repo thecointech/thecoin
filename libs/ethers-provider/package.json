@@ -46,6 +46,11 @@
         "default": "./build/mjs/web/remote/index.js"
       }
     },
+    "./infura": {
+      "development": "./build/mjs/node/mocked.js",
+      "devlive": "./build/mjs/node/local.js",
+      "default": "./build/mjs/node/remote.js"
+    },
     "./Erc20Provider": {
       "development": {
         "node": "./build/mjs/node/mocked.js",
@@ -64,6 +69,9 @@
       ],
       "Erc20Provider/web": [
         "build/mjs/web/remote/index.d.ts"
+      ],
+      "infura": [
+        "build/mjs/node/remote.d.ts"
       ]
     }
   },
