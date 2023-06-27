@@ -1,17 +1,20 @@
 import Decimal from "decimal.js-light";
 import { DateTime } from "luxon";
-import { AnyActionContainer, getCurrentState } from "../types";
+import { TypedActionContainer, getCurrentState } from "../types";
 import { FXRate, RatesApi } from "@thecointech/pricing";
 import { toCoinDecimal, toHumanDecimal } from "@thecointech/utilities";
 import { log } from "@thecointech/logging";
 import { nextOpenTimestamp } from "@thecointech/market-status";
 import { makeTransition } from '../makeTransition';
+import { isUberTransfer } from '@thecointech/utilities/UberTransfer'
+import { ActionDataTypes } from '@thecointech/broker-db';
 
 type Currency = "fiat" | "coin";
+type XferAction = "Buy" | "Sell" | "Bill";
 type Converter = (v: Decimal, rate: FXRate) => Decimal;
 //
 // Convert fiat to coin
-export const  toCoin = makeTransition( "toCoin", async (container) =>
+export const  toCoin = makeTransition<XferAction>( "toCoin", async (container) =>
   doConversion(container, "fiat", "coin", (val, rate) =>
     toCoinDecimal(val
       .div(rate.fxRate * rate.sell) // the rate we sell at
@@ -20,14 +23,14 @@ export const  toCoin = makeTransition( "toCoin", async (container) =>
 
 //
 // Convert coin to fiat
-export const  toFiat = makeTransition( "toFiat", async (container) =>
+export const  toFiat = makeTransition<XferAction>( "toFiat", async (container) =>
   doConversion(container, "coin", "fiat", (val, rate) =>
     toHumanDecimal(val
       .mul(rate.fxRate * rate.buy) // the rate we buy at
     ))
 );
 
-async function doConversion(container: AnyActionContainer, from: Currency, to: Currency, multiplier: Converter) {
+async function doConversion(container: TypedActionContainer<XferAction>, from: Currency, to: Currency, multiplier: Converter) {
   const currentState = getCurrentState(container);
   const fromValue = currentState.data[from];
   if (!fromValue || fromValue.isZero()) {
@@ -35,8 +38,8 @@ async function doConversion(container: AnyActionContainer, from: Currency, to: C
   }
 
   // First, what is our settlement date here?
-  const initiated = container.action.data.date;
-  const nextOpen = await nextOpenTimestamp(initiated);
+  const settledOn = getSettleDate(container);
+  const nextOpen = await nextOpenTimestamp(settledOn);
   if (nextOpen >= Date.now())
     return null;
 
@@ -63,3 +66,18 @@ async function getConvertAt(date: DateTime) {
   // const { buy, sell, fxRate } = rate.data;
   // return fxRate * (from == "fiat" ? sell : buy);
 }
+
+function getSettleDate(container: TypedActionContainer<XferAction>) {
+  const action = container.action.data.initial;
+
+  if (isSellAction(action)) {
+    if (isUberTransfer(action.transfer)) {
+      return DateTime.fromMillis(action.transfer.transferMillis);
+    }
+  }
+  return container.action.data.date;
+}
+
+export const isSellAction = (action: ActionDataTypes[XferAction]["initial"]): action is ActionDataTypes["Sell"|"Bill"]["initial"] => (
+  !!((action as ActionDataTypes["Sell"|"Bill"]["initial"]).transfer)
+)

@@ -4,7 +4,7 @@ import { arrayify } from '@ethersproject/bytes';
 import { verifyMessage } from '@ethersproject/wallet';
 import type Decimal from 'decimal.js-light';
 import type { Signer } from "@ethersproject/abstract-signer";
-import type { UberTransfer } from "@thecointech/types";
+import type { AnyTransfer, UberTransfer } from "@thecointech/types";
 import { DateTime } from 'luxon';
 
 function getHash(
@@ -73,3 +73,14 @@ export async function buildUberTransfer(
   };
   return r;
 }
+
+export const isUberTransfer = (transfer: AnyTransfer): transfer is UberTransfer => (
+  typeof (transfer as UberTransfer).chainId == "number" &&
+  typeof (transfer as UberTransfer).from == "string" &&
+  typeof (transfer as UberTransfer).to == "string" &&
+  typeof (transfer as UberTransfer).amount == "number" &&
+  typeof (transfer as UberTransfer).currency == 'number' &&
+  typeof (transfer as UberTransfer).transferMillis == "number" &&
+  typeof (transfer as UberTransfer).signedMillis == "number" &&
+  typeof (transfer as UberTransfer).signature == "string"
+)
