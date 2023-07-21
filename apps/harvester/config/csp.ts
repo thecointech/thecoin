@@ -1,11 +1,11 @@
+import { loadEnvVars } from '@thecointech/setenv';
+loadEnvVars();
 
-
-export const devCSP =
-"default-src 'self' ;" +
-"img-src 'self' data: ; " +
-"script-src 'self' 'unsafe-eval'; " +
-"style-src 'self' 'unsafe-inline' fonts.googleapis.com; " +
-"connect-src 'self'  localhost:* data: https://api.polygonscan.com https://beta-dot-carbon-theorem-283310.nn.r.appspot.com https://tc-ceramic.thecoin.io ; " +
-"font-src 'self' data: fonts.gstatic.com; " +
-"object-src 'none' "
-
+export const getCSP = () =>
+  "default-src 'self' ;" +
+  "img-src 'self' data: ; " +
+  "script-src 'self' 'unsafe-eval'; " +
+  "style-src 'self' 'unsafe-inline' fonts.googleapis.com; " +
+  `connect-src 'self'  localhost:* data: ${process.env.POLYGONSCAN_URL} ${process.env.INFURA_URL} ${process.env.CERAMIC_URL} ${process.env.URL_SERVICE_RATES}/;` +
+  "font-src 'self' data: fonts.gstatic.com; " +
+  "object-src 'none' "

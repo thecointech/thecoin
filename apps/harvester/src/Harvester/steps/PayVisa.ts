@@ -51,6 +51,7 @@ export class PayVisa implements ProcessingStage {
       log.info('Sent payment request, new balance', harvesterBalance.toString());
       return {
         toPayVisa: data.visa.dueAmount,
+        toPayVisaDate: dateToPay,
         harvesterBalance,
         stepData: {
           [PayVisaKey]: data.visa.dueDate.toISO()!,

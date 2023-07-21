@@ -1,5 +1,5 @@
 import { makeTransition  } from '../makeTransition';
-import { isCertTransfer } from '../types';
+import { isCertTransfer } from '@thecointech/utilities/VerifiedTransfer';
 
 // this deposit can operate on both bill & sell types.
 type BSActionTypes = "Bill"|"Sell";

@@ -8,7 +8,7 @@ import { graph as billgraph, uberGraph } from '@thecointech/tx-bill';
 import { graph as plugingraph } from '@thecointech/tx-plugins';
 // import { graph as plugingraph } from '@thecointech/tx-plugins';
 import { etransfer as etransfergraph, manual as manualgraph } from '@thecointech/tx-deposit';
-import { isCertTransfer } from '@thecointech/tx-statemachine';
+import { isCertTransfer } from '@thecointech/utilities/VerifiedTransfer';
 
 export const ManualOverride = (props: AnyTxAction) => {
   const [newState, setNewState] = useState<MaybeString>()

@@ -1,9 +1,11 @@
 import { makeTransition  } from '../makeTransition';
-import { isCertTransfer, TransitionCallback } from '../types';
+import { TransitionCallback } from '../types';
 import { verifyPreTransfer } from './verifyPreTransfer';
 import { connectConverter } from '@thecointech/contract-plugin-converter';
 import { calculateOverrides, convertBN, toDelta } from './coinUtils';
 import { log } from '@thecointech/logging';
+import { isCertTransfer } from '@thecointech/utilities/VerifiedTransfer';
+
 // this deposit can operate on both bill & sell types.
 type BSActionTypes = "Bill"|"Sell";
 //

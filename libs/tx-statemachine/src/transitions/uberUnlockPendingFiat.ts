@@ -1,7 +1,8 @@
 import { nextOpenTimestamp } from '@thecointech/market-status';
 import { DateTime } from 'luxon';
 import { makeTransition } from '../makeTransition';
-import { getCurrentState, isCertTransfer } from '../types';
+import { getCurrentState } from '../types';
+import { isCertTransfer } from '@thecointech/utilities/VerifiedTransfer';
 import Decimal from 'decimal.js-light';
 
 // this deposit can operate on both bill & sell types.

@@ -35,7 +35,7 @@ describe("Blockchain check operations", () => {
     const receipt = await container.contract.provider.waitForTransaction(hash, 0);
 
     const balance = updateCoinBalance(container, receipt)
-    expect(balance.eq(446826763)).toBeTruthy();
+    expect(balance?.coin.eq(446826763)).toBeTruthy();
   })
 
   it("currectly updates deposit value", async () => {
@@ -46,7 +46,7 @@ describe("Blockchain check operations", () => {
     const container = await getContainer("0x4d397e03e28b6041d8bc559debdc1742d33f59ad", new Decimal(475961968));
     const receipt = await container.contract.provider.waitForTransaction(hash, 0);
     const balance = updateCoinBalance(container, receipt)
-    expect(balance.eq(0)).toBeTruthy();
+    expect(balance?.coin.eq(0)).toBeTruthy();
   })
 
 }, !!vars.INFURA_PROJECT_ID)

@@ -1,10 +1,11 @@
-import { getCurrentState, isCertTransfer, TransitionCallback, TypedActionContainer } from "../types";
+import { getCurrentState, TransitionCallback, TypedActionContainer } from "../types";
 import { verifyPreTransfer } from "./verifyPreTransfer";
 import { TransactionResponse } from '@ethersproject/providers';
 import { calculateOverrides, convertBN, toDelta } from './coinUtils';
 import { log } from '@thecointech/logging';
 import { makeTransition  } from '../makeTransition';
 import type { UberTransfer } from '@thecointech/types';
+import { isCertTransfer } from '@thecointech/utilities/VerifiedTransfer';
 
 // this deposit can operate on both bill & sell types.
 type BSActionTypes = "Bill"|"Sell";

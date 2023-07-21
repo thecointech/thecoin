@@ -29,7 +29,9 @@ async function Process() {
 
 async function run() {
   try {
+    log.info('Running tx-processor');
     await Process();
+    log.info('Completed running tx-processor');
   } catch (e: any) {
     log.fatal(e);
     const msent = await SendMail(`tx-processor ${e.message}`, `${e.message}\n${e.stack}`);

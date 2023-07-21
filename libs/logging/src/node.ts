@@ -1,6 +1,7 @@
 import bunyan from "bunyan";
 import { getConsoleStream } from "./consolestream";
 import { getFileStream } from "./filestream";
+import { getSeqStream } from './seqstream';
 
 const getStreams = (name: string, level?: number) => {
   const streams = [getConsoleStream(level)];
@@ -10,6 +11,11 @@ const getStreams = (name: string, level?: number) => {
     if (process.env.TC_LOG_FOLDER)
     {
       const stream = getFileStream(name, process.env.TC_LOG_FOLDER, true)
+      streams.push(stream);
+    }
+    if (process.env.URL_SEQ_LOGGING)
+    {
+      const stream = getSeqStream(name, process.env.URL_SEQ_LOGGING)
       streams.push(stream);
     }
   }

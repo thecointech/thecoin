@@ -32,7 +32,7 @@ export const graph : StateGraph<States, "Bill"> = {
   },
   tcResult: {
     onError: transitionTo<States>(core.requestManual, "error"),
-    next: transitionTo<States>(core.toFiat, "converted"),
+    next: transitionTo<States, "Bill">(core.toFiat, "converted"),
   },
 
   converted: {
