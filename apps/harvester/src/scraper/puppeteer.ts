@@ -1,9 +1,12 @@
 import puppeteerVanilla, { executablePath } from 'puppeteer';
 import { addExtra } from 'puppeteer-extra';
 import { getPlugins } from './puppeteer-plugins';
+import { rootFolder } from '../paths';
+import path from "path";
 
 const puppeteer = addExtra(puppeteerVanilla);
 const plugins = getPlugins();
+const userDataDir = path.join(rootFolder, 'chrome_data');
 
 let _browser: any;
 export async function startPuppeteer(headless?: boolean) {
@@ -14,7 +17,7 @@ export async function startPuppeteer(headless?: boolean) {
     headless: shouldBeHeadless,
     executablePath: expath,
     // After install this appears in the AppData directory
-    userDataDir: './myChromeSession'
+    userDataDir,
   })
 
   for (const plugin of plugins) {

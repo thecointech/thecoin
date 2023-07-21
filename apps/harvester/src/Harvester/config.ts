@@ -7,9 +7,16 @@ import { defaultDays, HarvestConfig } from '../types';
 import { createStep } from './steps';
 import { CreditDetails } from './types';
 import { setSchedule } from './schedule/scheduler';
+import path from 'path';
+import { log } from '@thecointech/logging';
+import { ActionTypes, AnyEvent } from '../scraper/types';
+import { rootFolder } from '../paths';
+import { ClearPendingVisa } from './steps/ClearPendingVisa';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
+
+const db_path = path.join(rootFolder, 'config.db');
 
 export type ConfigShape = {
   // Store the account Mnemomic
@@ -19,6 +26,11 @@ export type ConfigShape = {
   stateKey?: string,
 
   creditDetails?: CreditDetails,
+
+  scraping?: {
+    [key in ActionTypes]?: AnyEvent[];
+  },
+
 } & HarvestConfig;
 
 // We use pouchDB revisions to keep the prior state of documents
@@ -28,13 +40,17 @@ const ConfigKey = "config";
 let _config = null as unknown as PouchDB.Database<ConfigShape>;
 export async function initConfig(password?: string) {
   if (!_config) {
-    _config = new PouchDB<ConfigShape>('config', {adapter: 'memory'});
-    // initialize the config db
-    // Yes, this is a hard-coded password.
-    // Will fix ASAP with dynamically
-    // generated code (Apr 04 2023)
-    await _config.setPassword(password ?? "hF,835-/=Pw\\nr6r");
-    await _config.loadEncrypted();
+    _config = new PouchDB<ConfigShape>(db_path, {adapter: 'memory'});
+    log.info(`Initializing ${process.env.NODE_ENV} config database at ${db_path}`);
+    if (process.env.NODE_ENV !== "development") {
+      log.info(`Encrypting config DB`);
+      // initialize the config db
+      // Yes, this is a hard-coded password.
+      // Will fix ASAP with dynamically
+      // generated code (Apr 04 2023)
+      await _config.setPassword(password ?? "hF,835-/=Pw\\nr6r");
+      await _config.loadEncrypted();
+    }
   }
 }
 
@@ -48,6 +64,8 @@ export async function getProcessConfig() {
 }
 
 export async function setProcessConfig(config: Partial<ConfigShape>) {
+  await initConfig();
+  log.info("Setting config file...");
   const lastCfg = await getProcessConfig();
   await _config.put({
     steps: config.steps ?? lastCfg?.steps ?? [],
@@ -55,6 +73,10 @@ export async function setProcessConfig(config: Partial<ConfigShape>) {
     stateKey: config.stateKey ?? lastCfg?.stateKey,
     wallet: config.wallet ?? lastCfg?.wallet,
     creditDetails: config.creditDetails ?? lastCfg?.creditDetails,
+    scraping: {
+      ...lastCfg?.scraping,
+      ...config.scraping,
+    },
     _id: ConfigKey,
     _rev: lastCfg?._rev,
   })
@@ -88,9 +110,29 @@ export async function hydrateProcessor() {
     throw new Error('No config found');
   }
 
-  return Object.values(config.steps)
+  const steps = Object.values(config.steps)
     .filter(step => !!step)
     .map(createStep)
+
+  log.warn("HACK ALERT: Manually adding ClearPendingVisa step");
+
+  return [
+    new ClearPendingVisa(),
+    ...steps
+  ]
+}
+
+export async function setEvents(type: ActionTypes, events: AnyEvent[]) {
+  await setProcessConfig({
+    scraping: {
+      [type]: events
+    }
+  })
+}
+
+export async function getEvents(type: ActionTypes) {
+  const config = await getProcessConfig();
+  return config?.scraping?.[type];
 }
 
 export async function setCreditDetails(creditDetails: CreditDetails) {

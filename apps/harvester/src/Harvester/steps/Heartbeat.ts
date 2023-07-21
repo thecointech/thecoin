@@ -6,7 +6,7 @@ import { GetSignedMessage } from '@thecointech/utilities/SignedMessages';
 
 export class Heartbeat implements ProcessingStage {
 
-  async process(data: HarvestData) {
+  async process(_data: HarvestData) {
 
     log.info("Sending Heartbeat");
 

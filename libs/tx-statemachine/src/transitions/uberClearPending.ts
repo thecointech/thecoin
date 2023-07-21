@@ -1,10 +1,11 @@
 import { makeTransition  } from '../makeTransition';
-import { isCertTransfer, TransitionCallback } from '../types';
+import { TransitionCallback } from '../types';
 import { verifyPreTransfer } from './verifyPreTransfer';
 import { connectConverter } from '@thecointech/contract-plugin-converter';
-import { getSigner } from '@thecointech/signers';
 import { calculateOverrides, convertBN, toDelta } from './coinUtils';
 import { log } from '@thecointech/logging';
+import { isCertTransfer } from '@thecointech/utilities/VerifiedTransfer';
+
 // this deposit can operate on both bill & sell types.
 type BSActionTypes = "Bill"|"Sell";
 //
@@ -15,7 +16,7 @@ export const uberClearPending = makeTransition<BSActionTypes>("uberClearPending"
 
 const doClearPending: TransitionCallback<BSActionTypes> = async (container) => {
 
-  const signer = await getSigner("BrokerTransferAssistant");
+  const signer = container.contract.signer;
   const uc = await connectConverter(signer);
 
   const request = container.action.data.initial;
@@ -27,6 +28,6 @@ const doClearPending: TransitionCallback<BSActionTypes> = async (container) => {
   const { from, to, transferMillis } = request.transfer;
   const overrides = await calculateOverrides(container, uberClearPending);
   log.debug({address: from}, `Processing pending from {address} with overrides ${JSON.stringify(overrides, convertBN)}`);
-  const tx = await uc.processPending(from, to, transferMillis);
+  const tx = await uc.processPending(from, to, transferMillis, overrides);
   return toDelta(tx);
 };

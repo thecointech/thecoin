@@ -2,11 +2,13 @@ import { InfuraProvider } from "@ethersproject/providers";
 import { Network } from '../types';
 
 function getInfuraNetwork(deployTo: Network) {
-  switch(process.env[`DEPLOY_${deployTo}_NETWORK`])
+  if (deployTo !== "POLYGON") throw new Error("Fix multi-network support");
+
+  switch(process.env.DEPLOY_POLYGON_NETWORK)
   {
     case "polygon-testnet": return "maticmum";
     case "polygon-mainnet": return "matic";
-    default: return process.env[`DEPLOY_${deployTo}_NETWORK`];
+    default: return process.env.DEPLOY_POLYGON_NETWORK;
   }
 };
 

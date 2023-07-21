@@ -2,7 +2,7 @@
   "name": "harvester",
   "private": true,
   "productName": "harvester",
-  "version": "0.2.98",
+  "version": "0.2.111",
   "description": "Automatically harvest TheCoin",
   "main": ".webpack/main",
   "config": {
@@ -20,13 +20,15 @@
     "dev": "electron-forge start",
     "dev:harvest": "electron-forge start -- -- --harvest",
     "_dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
+    "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
+    "prod:beta": "cross-env CONFIG_NAME=prodbeta yarn dev",
+    "prod": "cross-env CONFIG_NAME=prod yarn dev",
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make",
+    "make": "cross-env CONFIG_NAME=prodbeta electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "build": "yarn tsc --noEmit",
-    "build:app": "yarn tsc --noEmit tsconfig.app.json",
+    "build": "yarn tsc --noEmit tsconfig.app.json",
     "test": "yarn run-jest"
   },
   "license": "MIT",
@@ -58,8 +60,8 @@
     "windows-scheduler": "1.0.1"
   },
   "dependencies": {
-    "@thecointech/apis": "^0.2.98",
-    "@thecointech/contract-plugins": "^0.2.98",
+    "@thecointech/apis": "^0.2.111",
+    "@thecointech/contract-plugins": "^0.2.111",
     "comdb": "^6.0.0-beta",
     "currency.js": "^2.0.4",
     "electron-context-menu": "^3.6.1",

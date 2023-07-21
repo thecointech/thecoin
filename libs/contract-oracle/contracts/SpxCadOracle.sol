@@ -59,9 +59,19 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
   // is because the gas limits are too low to allow storing all prior values.
   function bulkUpdate(uint64[] calldata newValues) public onlyUpdater() {
     // TODO: http://zxstudio.org/blog/2018/09/11/effectively-storing-arrays-in-solidity/
+
+    // check that there aren't too many new values...
+    int pushValidUntil = INITIAL_TIMESTAMP + (int(newValues.length) * BLOCK_TIME);
+    int maxValidUntil = int(msNow()) + (BLOCK_TIME);
+    require(pushValidUntil <= maxValidUntil, "Too many updates");
     for (uint i = 0; i < newValues.length; i++) {
       rates.push(newValues[i]);
     }
+  }
+
+  function clearAllData() public onlyUpdater{
+    delete rates;
+    delete offsets;
   }
 
   function msNow() public view returns(uint) { return block.timestamp * 1000; }
@@ -73,11 +83,10 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
     int offset = getOffset(millis);
     // Only update the value if our current value is near expiry
     int currentExpires = offset + INITIAL_TIMESTAMP + (int(rates.length) * BLOCK_TIME);
-    // We allow updates to happen only after 1 min prior to expiry
+    // We allow updates to happen only after 2 min prior to expiry
     // This is to prevent multiple updates from happening
-    if (currentExpires - 60 > int(millis)) {
-      return;
-    }
+    require((currentExpires - 120) < int(millis), "Cannot set new value before prior expires");
+
     rates.push(newValue);
   }
 
@@ -85,6 +94,13 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
   // update our time offset.
   function updateOffset(MilliSecondsOffset calldata offset) public onlyUpdater() {
     offsets.push(offset);
+  }
+
+  //
+  // Return's the last applied offset
+  function lastOffsetFrom() public view returns (int) {
+    if (offsets.length == 0) return 0;
+    return offsets[offsets.length - 1].from;
   }
 
   //

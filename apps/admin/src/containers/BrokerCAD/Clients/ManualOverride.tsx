@@ -4,9 +4,11 @@ import { Button, Select } from 'semantic-ui-react';
 import { log } from '@thecointech/logging';
 import { manualOverrideTransition } from '@thecointech/tx-statemachine/transitions';
 import { graph as sellgraph } from '@thecointech/tx-etransfer';
-import { graph as billgraph } from '@thecointech/tx-bill';
+import { graph as billgraph, uberGraph } from '@thecointech/tx-bill';
+import { graph as plugingraph } from '@thecointech/tx-plugins';
 // import { graph as plugingraph } from '@thecointech/tx-plugins';
 import { etransfer as etransfergraph, manual as manualgraph } from '@thecointech/tx-deposit';
+import { isCertTransfer } from '@thecointech/utilities/VerifiedTransfer';
 
 export const ManualOverride = (props: AnyTxAction) => {
   const [newState, setNewState] = useState<MaybeString>()
@@ -36,7 +38,15 @@ function buildOptions(type: TxActionType, data: AnyActionData) {
 function getStateGraph(type: TxActionType, data: AnyActionData) {
   switch(type) {
     case "Sell": return sellgraph;
-    case "Bill": return billgraph;
+    case "Bill": {
+      if (isCertTransfer(data.initial as any)) {
+        return billgraph;
+      }
+      else {
+        return uberGraph;
+      }
+    }
+    case "Plugin": return plugingraph;
     // case "Plugin": return plugingraph;
     case "Buy": return (data as ActionDataTypes["Buy"]).initial.type ==  "etransfer"
       ? etransfergraph

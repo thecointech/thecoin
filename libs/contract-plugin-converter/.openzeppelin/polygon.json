@@ -1,0 +1,285 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0x6Bcd44d1fd4F36EE18deCed95a5229cE835741C1",
+    "txHash": "0x69984911cc5704e8ba7cdc1eb18c822800ca093a1e185871d140e9bcc3d13159"
+  },
+  "proxies": [
+    {
+      "address": "0x3d3D4da44Df1a3ab2769a9A42a498F4B6d6484E7",
+      "txHash": "0x4378ddb5a0e69a3c5fc7b12b83ca466a02448b71fd3998b6901a0911d1953f6b",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x70da7D05Ee936E583A5165c62A1DEd3Cb0A07C82",
+      "txHash": "0x9175b7933ec484595d37f3769c3822ee4cbbffce0dff447fad7db55efe43becc",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "f027a80afd3ebb5d99151d08431e0748e10cde212be5d3fce98065d1a9490d79": {
+      "address": "0x8044c7DA6108ad22F465655E037861d8AC41E626",
+      "txHash": "0xe174f14f14ef596ab97184917875d0b96a877d76454ae677b0f408ae7461197c",
+      "layout": {
+        "storage": [
+          {
+            "label": "priceFeed",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(AggregatorV3Interface)713",
+            "contract": "OracleClient",
+            "src": "@thecointech\\contract-oracle\\contracts\\OracleClient.sol:15"
+          },
+          {
+            "label": "_initialized",
+            "offset": 20,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:39"
+          },
+          {
+            "label": "_initializing",
+            "offset": 21,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:44"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:22"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "52",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:87"
+          },
+          {
+            "label": "pending",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_mapping(t_address,t_struct(PendingTransactions)1217_storage)",
+            "contract": "UberConverter",
+            "src": "contracts\\UberConverter.sol:39"
+          },
+          {
+            "label": "theCoin",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_contract(IPluggable)1091",
+            "contract": "UberConverter",
+            "src": "contracts\\UberConverter.sol:42"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_contract(AggregatorV3Interface)713": {
+            "label": "contract AggregatorV3Interface",
+            "numberOfBytes": "20"
+          },
+          "t_contract(IPluggable)1091": {
+            "label": "contract IPluggable",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_uint256))": {
+            "label": "mapping(address => mapping(uint256 => uint256))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_struct(PendingTransactions)1217_storage)": {
+            "label": "mapping(address => struct PendingTransactions)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(PendingTransactions)1217_storage": {
+            "label": "struct PendingTransactions",
+            "members": [
+              {
+                "label": "total",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "transfers",
+                "type": "t_mapping(t_address,t_mapping(t_uint256,t_uint256))",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "082c9c46d9732c8ae0d2336faceb8693b8d4290db2a3a185e1066c37356d7700": {
+      "address": "0xfebB8A337b6768851eDB6d3C3700863E87392D82",
+      "txHash": "0xf3a32f90926e071303d0619e4920bbe74da39575618b83e28723502ffda96686",
+      "layout": {
+        "storage": [
+          {
+            "label": "priceFeed",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(AggregatorV3Interface)713",
+            "contract": "OracleClient",
+            "src": "@thecointech\\contract-oracle\\contracts\\OracleClient.sol:15"
+          },
+          {
+            "label": "_initialized",
+            "offset": 20,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:39"
+          },
+          {
+            "label": "_initializing",
+            "offset": 21,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:44"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:22"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "52",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:87"
+          },
+          {
+            "label": "pending",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_mapping(t_address,t_struct(PendingTransactions)1217_storage)",
+            "contract": "UberConverter",
+            "src": "contracts\\UberConverter.sol:39"
+          },
+          {
+            "label": "theCoin",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_contract(IPluggable)1091",
+            "contract": "UberConverter",
+            "src": "contracts\\UberConverter.sol:42"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_contract(AggregatorV3Interface)713": {
+            "label": "contract AggregatorV3Interface",
+            "numberOfBytes": "20"
+          },
+          "t_contract(IPluggable)1091": {
+            "label": "contract IPluggable",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_uint256))": {
+            "label": "mapping(address => mapping(uint256 => uint256))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_struct(PendingTransactions)1217_storage)": {
+            "label": "mapping(address => struct PendingTransactions)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(PendingTransactions)1217_storage": {
+            "label": "struct PendingTransactions",
+            "members": [
+              {
+                "label": "total",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "transfers",
+                "type": "t_mapping(t_address,t_mapping(t_uint256,t_uint256))",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    }
+  }
+}

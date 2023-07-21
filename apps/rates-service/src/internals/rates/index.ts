@@ -11,7 +11,7 @@ export { updateRates } from './UpdateDb'
 //
 
 async function getRates<K extends RateKey>(key: K, timestamp: number) : Promise<RateTypes[K]|null> {
-  log.trace("getting rates for {FxKey} at {Timestamp}", key, timestamp);
+  // log.trace("getting rates for {FxKey} at {Timestamp}", key, timestamp);
 
   // We don't support future times
   if (timestamp > Date.now())

@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-oracle",
-  "version": "0.2.98",
+  "version": "0.2.111",
   "description": "The Coin: Price Oracles for TheCoin",
   "type": "module",
   "keywords": [
@@ -38,6 +38,7 @@
     "_deploy": "run-s _deploy:deploy _deploy:verify",
     "_deploy:deploy": "yarn _hardhat ./scripts/deploy.ts",
     "_deploy:verify": "yarn _hardhat ./scripts/verify.ts",
+    "_update": "yarn build && yarn _hardhat ./scripts/update.ts && yarn _deploy:verify",
     "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
   },
   "files": [
@@ -64,11 +65,11 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "^0.2.98",
-    "@thecointech/contract-tools": "^0.2.98",
+    "@thecointech/async": "^0.2.111",
+    "@thecointech/contract-tools": "^0.2.111",
     "jest": "*"
   },
   "dependencies": {
-    "@thecointech/contract-base": "^0.2.98"
+    "@thecointech/contract-base": "^0.2.111"
   }
 }

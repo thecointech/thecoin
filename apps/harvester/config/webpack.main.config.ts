@@ -1,10 +1,12 @@
 import { type Configuration, DefinePlugin, EnvironmentPlugin, } from 'webpack';
 import { rules } from './webpack.rules';
 import path from 'path';
-import { getEnvVars } from '@thecointech/setenv';
+import { getEnvFiles } from '@thecointech/setenv';
+import Dotenv from 'dotenv-webpack';
 
-const env = getEnvVars();
 const packageFile = path.join(__dirname, '../package.json');
+const configName = process.env.CONFIG_NAME ?? 'development';
+const envFiles = getEnvFiles(configName);
 
 export const mainConfig: Configuration = {
   /**
@@ -18,7 +20,7 @@ export const mainConfig: Configuration = {
   },
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
-    conditionNames: [env.CONFIG_NAME, "node", "import", "default"],
+    conditionNames: [configName, "node", "import", "default"],
   },
   externals: [
 
@@ -26,15 +28,10 @@ export const mainConfig: Configuration = {
   plugins: [
     new DefinePlugin({
       __VERSION__: JSON.stringify(require(packageFile).version),
+      __APP_BUILD_DATE__: JSON.stringify(new Date()),
+      ['process.env.TC_LOG_FOLDER']: JSON.stringify('./logs'),
     }),
-    new EnvironmentPlugin({
-      // TODO: Electron doesn't support root-level await,
-      // so there is no way to load this data dynamically.
-      // Think long-n-hard about a better way to figure this out
-      WALLET_BrokerCAD_ADDRESS: "0x0000000000000000000000000000000000000000",
-      TC_LOG_FOLDER: './logs',
-      ...env
-    }),
+    ...envFiles.map(path => new Dotenv({ path, ignoreStub: true })),
   ],
   experiments: {
     topLevelAwait: true,

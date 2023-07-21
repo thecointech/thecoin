@@ -44,6 +44,22 @@ export const Training = () => {
   const page3Complete = data.visa.testPassed;
   const page4Complete = data.chequing.eTransferPassed;
 
+  const nextPage = () => {
+    const curr = location.pathname;
+    // Page is last number
+    const m = curr.match(/\/step([0-9])$/)
+    if (m) {
+      if (m[1] == "6") {
+        navigate.push("/config/step0");
+      }
+      else {
+        navigate.push("/train/step" + (parseInt(m[1]) + 1));
+      }
+    } else {
+      navigate.push("/train/step0");
+    }
+  }
+
   return (
     <div>
       <Step.Group ordered>
@@ -106,16 +122,7 @@ export const Training = () => {
       <div className={styles.container}>
         <TrainingRouter />
 
-        <Button onClick={() => {
-          const curr = location.pathname;
-          // Page is last number
-          const m = curr.match(/\/step([0-9])$/)
-          if (m) {
-            navigate.push("/train/step" + (parseInt(m[1]) + 1));
-          } else {
-            navigate.push("/train/step1");
-          }
-        }}>Next</Button>
+        <Button onClick={nextPage}>Next</Button>
       </div>
     </div>
   )

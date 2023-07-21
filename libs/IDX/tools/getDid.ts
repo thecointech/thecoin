@@ -1,13 +1,14 @@
-import { Core } from '@self.id/core'
-import { getConfig } from '../src/config';
-import { getHistory } from '../src/history';
+import { getAdminDID } from '../internal/admin';
 
-const aliases = await getConfig();
-const core = new Core({ ceramic: 'testnet-clay', aliases});
+// import { LedgerSigner } from "@thecointech/hardware-wallet";
+import { getSigner } from "@thecointech/signers";
+import { getOneOffEncryptDid } from '../src/oneOffDid';
 
-const all = await getHistory("0x445758e37f47b44e05e74ee4799f3469de62a2cb", core);
-if (all) {
-  for (const commit of all) {
-    console.log(commit.ciphertext);
-  }
-}
+// const signer = new LedgerSigner();
+const signer = await getSigner("CeramicValidator");
+const address = await signer.getAddress();
+console.log(address);
+const did = await getOneOffEncryptDid(signer);
+// const did = await getAdminDID();
+
+console.log(did.id);

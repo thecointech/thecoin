@@ -7,15 +7,22 @@ import { WebpackPlugin } from '@electron-forge/plugin-webpack';
 
 import { mainConfig } from './config/webpack.main.config';
 import { rendererConfig } from './config/webpack.renderer.config';
-import { devCSP } from './config/csp';
+import { getCSP } from './config/csp';
 
 const config: ForgeConfig = {
-  packagerConfig: {},
+  packagerConfig: {
+    icon: 'assets/appicon',
+  },
   rebuildConfig: {},
-  makers: [new MakerSquirrel({}), new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})],
+  makers: [
+    new MakerSquirrel({
+      setupIcon: 'assets/appicon.ico',
+    }),
+    new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})
+  ],
   plugins: [
     new WebpackPlugin({
-      devContentSecurityPolicy: devCSP, // `default-src 'self'; img-src 'self' data: ; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; connect-src 'self' data: ; font-src 'self' data: fonts.gstatic.com; object-src 'none' `,
+      devContentSecurityPolicy: getCSP(),
       mainConfig,
       renderer: {
         config: rendererConfig,

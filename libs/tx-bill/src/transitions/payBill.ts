@@ -20,7 +20,7 @@ export const payBill = makeTransition<"Bill">("payBill", async (container) =>
 const doPayBill: TransitionCallback<"Bill"> = async (container) => {
   // Can we pay a bill in our current state?
   const currentState = getCurrentState(container)
-  const {fiat} = currentState.data;
+  const { fiat } = currentState.data;
   if (!fiat?.isPositive())
     return { error: "Cannot send e-Transfer, no fiat available" };
 

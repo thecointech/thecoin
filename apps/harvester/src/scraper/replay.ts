@@ -1,15 +1,21 @@
 import currency from 'currency.js';
-import { readFileSync } from 'fs';
 import { DateTime } from 'luxon';
-import path from 'path';
-import { ElementHandle } from 'puppeteer';
+import { ElementHandle, Page } from 'puppeteer';
 import { startPuppeteer } from './puppeteer';
 import { getTableData, HistoryRow } from './table';
-import { AnyEvent, InputEvent, ClickEvent, outFolder, ValueEvent, ActionTypes, ChequeBalanceResult, VisaBalanceResult, ReplayResult, ETransferResult } from './types';
+import { AnyEvent, InputEvent, ClickEvent, ValueEvent, ActionTypes, ChequeBalanceResult, VisaBalanceResult, ReplayResult, ETransferResult } from './types';
 import { CurrencyType, getCurrencyConverter } from './valueParsing';
+import { getEvents } from '../Harvester/config';
+import { log } from '@thecointech/logging';
+import { debounce } from './debounce';
+import path from 'path';
+import { mkdirSync } from 'fs';
+import { outFolder } from '../paths';
 
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+export type Replay = typeof replay;
 
 export async function replay(actionName: 'chqBalance') : Promise<ChequeBalanceResult>;
 export async function replay(actionName: 'visaBalance') : Promise<VisaBalanceResult>;
@@ -22,8 +28,12 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
   const values: Record<string, string|DateTime|currency|HistoryRow[]> = {}
 
   // read events
-  const eventsFile = readFileSync(path.join(outFolder, `${actionName}.json`), 'utf-8');
-  const events = JSON.parse(eventsFile) as AnyEvent[];
+  const events = await getEvents(actionName);
+  log.debug(`Replaying ${actionName} with ${events?.length} events`);
+
+  if (!events) {
+    throw new Error(`No events found for ${actionName}`);
+  }
 
   // Security: limit this session to a single domain.
   // TODO: This triggers on safe routes, disable until we have a better view
@@ -35,6 +45,15 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
   //     debugger;
   //   };
   // }, hostname);
+
+  const screenshotFolder = path.join(outFolder, actionName);
+  mkdirSync(screenshotFolder, { recursive: true });
+  const doSaveScreenshot = async (page: Page, fileName: string) => {
+    const outfile = path.join(screenshotFolder, fileName);
+    await page.screenshot({ path: outfile })
+  }
+  const saveScreenshot = debounce(doSaveScreenshot);
+
 
   async function getFrame(click: ClickEvent) {
     if (!click.frame) {
@@ -63,8 +82,23 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
       if (el) return el;
     }
     catch (err) {
-      console.log(`Couldn't find selector: ${click.selector}`)
+      log.error(`Couldn't find selector: ${click.selector}`)
+      await doSaveScreenshot(page, `error-click-${actionName}-${click.tagName}.png`);
     }
+
+    log.debug(`Searching for alternative ${click.tagName} elements`);
+
+    try {
+      function __mainlogger(msg: string) {
+        log.debug(msg);
+      }
+      await page.exposeFunction('__mainlogger', __mainlogger);
+    }
+    catch (err) {
+      log.error(`Couldn't expose logger: ${err}`);
+    }
+
+
     // Else search for tag + text combo at location
     // const els = await frame.$x(`//${click.tagName}`);
     const els = await page.evaluate(click => {
@@ -88,6 +122,13 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
         return tops + rights + bottoms + lefts;
       }
       const els = document.getElementsByTagName(click.tagName);
+      try {
+        //@ts-ignore
+        __mainlogger(`MAINLOGGER: found ${els?.length} elements of type ${click.tagName}`);
+      }
+      catch (err) {
+        console.log(err);
+      }
 
       return Array.from(els as HTMLCollectionOf<HTMLElement>)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -105,13 +146,17 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
         }))
     }, click);
 
-    const candidates = els
-      .filter(el => el.innerText == click.text)
-      .sort((a, b) => a.positionSimilarity - b.positionSimilarity);
+    log.debug(`Found ${JSON.stringify(els)} potentially matching elements`)
 
-    if (candidates[0]) {
-      // TS looses track of the type when nested
-      return candidates[0].element as unknown as ElementHandle<HTMLElement>;
+    if (els) {
+      const candidates = els
+        .filter(el => el.innerText == click.text)
+        .sort((a, b) => a.positionSimilarity - b.positionSimilarity);
+
+      if (candidates[0]) {
+        // TS looses track of the type when nested
+        return candidates[0].element as unknown as ElementHandle<HTMLElement>;
+      }
     }
 
     // Add additional logic here if the selector doesn't work
@@ -206,7 +251,7 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
       await sleep(delay);
       switch(event.type) {
         case 'navigation': {
-          console.log('Waiting navigation');
+          log.debug('Waiting navigation');
           // Only directly navigate on the first item
           // The rest of the time all navigations
           // must be from clicking links etc
@@ -216,10 +261,12 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
               page.waitForNavigation({ waitUntil: 'networkidle2' })
             ])
           }
+
+          saveScreenshot(page, `replay-${i}.png`)
           break;
         }
         case 'click': {
-          console.log(`Clicking on: ${event.text}`);
+          log.debug(`Clicking on: ${event.text}`);
           // If this click caused a navigation?
           const el = await getClickElement(event);
           if (events[i + 1]?.type == "navigation") {
@@ -234,7 +281,7 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
           break;
         }
         case 'input': {
-          console.log(`Entering value: ${event.value} into ${event.selector}`);
+          log.debug(`Entering value: ############## into ${event.selector}`);
           if (event.value) {
             // Is this a dynamic input?
             const value = event.dynamicName
@@ -263,13 +310,18 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
           // websites who don't have load/navigation events
           // (thanks again tangerine ya bastard!)
           if (event.parsing?.type == "table") {
-            console.log(`Reading table`);
+            log.debug(`Reading table`);
             const tryReadTable = async () => {
               for (let i = 0; i < 15; i++) {
-                const value = await getTableData(page, event.font);
-                if (value.length > 0) {
-                  values[event.name ?? 'defaultValue'] = value;
-                  return true;
+                try {
+                  const value = await getTableData(page, event.font);
+                  if (value.length > 0) {
+                    values[event.name ?? 'defaultValue'] = value;
+                    return true;
+                  }
+                }
+                catch (e) {
+                  log.error(`Couldn't read table: ${event.selector} - ${e}`);
                 }
                 await sleep(1000);
               }
@@ -282,17 +334,22 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
             // All good, continue
             break;
           } else {
-            console.log(`Reading value: ${event.selector}`);
+            log.debug(`Reading value: ${event.selector}`);
             // The 15 second wait is to compensate for SPA
             // websites who don't have load/navigation events
             // (thanks again tangerine ya bastard!)
             const tryReadValue = async () => {
               for (let i = 0; i < 15; i++) {
-                const value = await readValue(event);
-                const parsed = parseValue(value, event);
-                if (parsed) {
-                  values[event.name ?? 'defaultValue'] = parsed;
-                  return true;
+                try {
+                  const value = await readValue(event);
+                  const parsed = parseValue(value, event);
+                  if (parsed) {
+                    values[event.name ?? 'defaultValue'] = parsed;
+                    return true;
+                  }
+                }
+                catch (e) {
+                  log.error(`Couldn't read value: ${event.selector} - ${e}`);
                 }
                 await sleep(1000);
               }
@@ -315,7 +372,12 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
   // Wait for a second in case anyone is watching
   await sleep(3000);
   await browser.close();
-  console.log(`We got values: ${JSON.stringify(values)}`);
+  // remove history (personal info) from logged info (TODO: remove this line entirely)
+  const { history, ...sanitize } = values;
+  log.debug(`We got values: ${JSON.stringify({
+    ...sanitize,
+    history: `${(history as any)?.length } rows`
+  })}`);
 
   return values;
 }

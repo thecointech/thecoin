@@ -6,6 +6,7 @@ import { arrayify } from '@ethersproject/bytes';
 import { sign } from "@thecointech/utilities/SignedMessages";
 import type { IPluggable } from './types/contracts';
 import type { AssignPluginRequest } from '@thecointech/types';
+import type { Overrides } from 'ethers';
 
 // export type AssignPluginRequest = {
 //   chainId: number;
@@ -59,13 +60,14 @@ export async function buildAssignPluginRequest(
   };
 }
 
-export async function assignPlugin(contract: IPluggable, request: AssignPluginRequest) {
+export async function assignPlugin(contract: IPluggable, request: AssignPluginRequest, overrides?: Overrides) {
   const tx = await contract.pl_assignPlugin(
     {
       ...request,
       timeMs: request.timeMs.toMillis(),
       msSignedAt: request.signedAt.toMillis(),
-    }
+    },
+    overrides,
   );
   return tx;
 }

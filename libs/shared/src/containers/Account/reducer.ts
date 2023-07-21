@@ -7,7 +7,7 @@ import { FxRateReducer } from '../../containers/FxRate/reducer';
 import { SagaReducer } from '../../store/immerReducer';
 import { isLocal } from '@thecointech/signers';
 import { loadAndMergeHistory, calculateTxBalances, mergeTransactions, Transaction } from '@thecointech/tx-blockchain';
-import { connectIDX } from '@thecointech/idx';
+import { getComposeDB } from '@thecointech/idx';
 import { AccountDetails, AccountState, DefaultAccountValues } from '@thecointech/account';
 import { loadDetails, setDetails } from '../AccountDetails';
 import { DateTime } from 'luxon';
@@ -58,7 +58,7 @@ function AccountReducer(address: string, initialState: AccountState) {
     *getIDX() {
       let idx = this.state.idx;
       if (!idx) {
-        idx = yield call(connectIDX, this.state.signer);
+        idx = yield call(getComposeDB, this.state.signer);
         yield this.storeValues({ idx, idxIO: true });
       }
       return idx;
@@ -70,8 +70,8 @@ function AccountReducer(address: string, initialState: AccountState) {
       if (idx) {
         yield this.storeValues({ idx, idxIO: true });
         log.trace("IDX: Restoring account details");
-        const payload = yield call(loadDetails, idx);
-        const details = payload?.data || DefaultAccountValues.details;
+        const payload: Awaited<ReturnType<typeof loadDetails>> = yield call(loadDetails, idx);
+        const details = payload || DefaultAccountValues.details;
         log.trace("IDX: read complete");
         yield this.storeValues({ details, idxIO: false });
 

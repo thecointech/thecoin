@@ -12,32 +12,30 @@ export async function setSchedule(schedule: DaysArray, existing?: DaysArray) {
     // no change
     return;
   }
+  log.info(`Creating schedule: ${JSON.stringify(schedule)}`);
 
-  if (existing) {
-    log.info(`Updating schedule: ${JSON.stringify(existing)}`);
-  // Modify task
-    try {
-      const r = execSync(`schtasks /delete /tn ${TaskName} /F`);
-      log.debug(r.toString());
-    }
-    catch (err) {
-      // no worries, it's already gone
-    }
+  try {
+    log.debug(`Deleting existing schedule`);
+    const r = execSync(`schtasks /delete /tn ${TaskName} /F`);
+    log.debug(r.toString());
+  }
+  catch (err) {
+    // no worries, it's already gone
   }
 
   try {
-
-    log.info(`Creating schedule: ${JSON.stringify(schedule)}`);
-
     // get a temp file
-    const tmpName = crypto.randomBytes(16).toString('base64').replace(/\//,'_');
+    const tmpName = `tc-sch-${crypto.randomBytes(16).toString('base64').replace(/\//,'_')}`;
     const xml = generateXml(schedule);
     const filepath = `${tmpdir()}/${tmpName}.xml`;
+    log.debug(`Writing temp file: ${filepath}`);
     writeFileSync(filepath, xml);
     let success = false;
     const r = execSync(`schtasks /create /tn ${TaskName} /xml ${filepath}`);
-    log.debug(r.toString());
+    log.info(r.toString());
+    log.debug(`Removing temp file: ${filepath}`);
     unlinkSync(filepath);
+    log.info(`Schedule set`);
     return success;
   }
   catch (err) {

@@ -39,6 +39,12 @@ export const App = () => {
             to='/config'
           />
           <Menu.Item
+            name='Results'
+            active={location.pathname.startsWith('/results')}
+            as={Link}
+            to='/results'
+          />
+          <Menu.Item
             name='Logs'
             onClick={window.scraper.openLogsFolder}
           />

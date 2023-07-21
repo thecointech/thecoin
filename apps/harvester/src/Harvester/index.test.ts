@@ -28,6 +28,7 @@ jest.unstable_mockModule('./config', () => ({
     payee: 'payee',
     accountNumber: "12345"
   }),
+  getEvents: () => [],
 }));
 
 it ('runs the full stack', async () => {
