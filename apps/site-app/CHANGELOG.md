@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.113](https://github.com/thecointech/thecoin/compare/v0.2.112...v0.2.113) (2023-07-21)
+
+**Note:** Version bump only for package @thecointech/site-app
+
+
+
+
+
 ## [0.2.112](https://github.com/thecointech/thecoin/compare/v0.2.111...v0.2.112) (2023-07-21)
 
 **Note:** Version bump only for package @thecointech/site-app

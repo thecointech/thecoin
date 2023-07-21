@@ -2,7 +2,7 @@
   "name": "harvester",
   "private": true,
   "productName": "harvester",
-  "version": "0.2.112",
+  "version": "0.2.113",
   "description": "Automatically harvest TheCoin",
   "main": ".webpack/main",
   "config": {
@@ -60,8 +60,8 @@
     "windows-scheduler": "1.0.1"
   },
   "dependencies": {
-    "@thecointech/apis": "^0.2.112",
-    "@thecointech/contract-plugins": "^0.2.112",
+    "@thecointech/apis": "^0.2.113",
+    "@thecointech/contract-plugins": "^0.2.113",
     "comdb": "^6.0.0-beta",
     "currency.js": "^2.0.4",
     "electron-context-menu": "^3.6.1",
