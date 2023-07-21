@@ -42,7 +42,7 @@ async function doConversion(container: TypedActionContainer<XferAction>, from: C
   const settledOn = await getSettledAt(container);
   log.debug(`Conversion - settledOn: ${settledOn}`);
 
-  if (settledOn.diffNow().milliseconds < 0)
+  if (DateTime.now() <= settledOn)
     return null;
 
   const convertAt = await getConvertAt(settledOn);
