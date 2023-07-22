@@ -57,7 +57,7 @@ export function transitionTo<States extends string, Type extends ActionType=Acti
       //  `(replay: {replay}): {initialId} transitioning via {transition} to state {state}`);
     }
     else {
-      log.debug({ initialId: container.action.data.initialId, state: nextState, transition: transition.transitionName },
+      log.info({ initialId: container.action.data.initialId, state: nextState, transition: transition.transitionName },
         `{initialId} transitioning via {transition} to state {state}`);
     }
 
@@ -75,7 +75,11 @@ export function transitionTo<States extends string, Type extends ActionType=Acti
           }
         }
       }
-      throw new Error(`Replay event ${replay.type} does not match next transition ${transition.transitionName}`);
+      log.error(
+        { initialId: container.action.data.initialId, replayType: replay.type, transition: transition.transitionName },
+        "Replay event does not match next transition"
+      )
+      return null
     }
     const delta = replay ?? await runAndStoreTransition<Type>(container, transition);
     return delta
@@ -166,7 +170,7 @@ export class StateMachineProcessor<States extends string, Type extends ActionTyp
       // If our last transition left an error state, what should we do?
       if (currentState.delta.error) {
         // Log every error.
-        log.error({ state }, `Error occured on {state}, ${currentState.delta.error}`);
+        log.trace({ state }, `Error occured on {state}, ${currentState.delta.error}`);
           // IF we have a handler, we continue processing
         if (transitions.onError) {
           nextState = await transitions.onError?.(container, currentState, replay);
