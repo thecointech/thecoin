@@ -25,5 +25,5 @@ const getStreams = (name: string, level?: number) => {
 export const init_node = (name: string, level?: number) =>
   bunyan.createLogger({
     name,
-    streams: getStreams(name, level)
+    streams: getStreams(name, level),
   });

@@ -16,7 +16,13 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
   let priorOffset = (await oracle.getOffset(from)).toNumber();
   let timestamp = from;
 
-  log.debug(`Updating Oracle from ${new Date(from)} to ${new Date(till)}`);
+  log.info(`Updating Oracle from ${new Date(from)} to ${new Date(till)}`);
+
+  // Not an application error, but we should never be this far out of date
+  const hoursToUpdate = (till - from) / ONE_HR;
+  if (hoursToUpdate > 24) {
+    log.error({hours: hoursToUpdate}, "Oracle is out {hours} of date");
+  }
 
   const rates: number[] = [];
   const offsets: {from: number, offset: number}[] = [];
@@ -90,7 +96,7 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
       // So use this function, as it's a wee bit cheaper than the below
       const overrides = await getOverrideFees(oracle);
       const tx = await oracle.update(rates[0], overrides);
-      log.debug(`Waiting single insert: ${tx.hash}`)
+      log.info(`Waiting single insert: ${tx.hash}`)
       await tx.wait(2);
     }
     else if (rates.length > 1) {
@@ -99,7 +105,7 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
         const e = Math.min(s + MAX_LENGTH, rates.length);
         const overrides = await getOverrideFees(oracle);
         const tx = await oracle.bulkUpdate(rates.slice(s, e), overrides);
-        log.debug(`Waiting bulk insert: ${tx.hash}`)
+        log.info(`Waiting bulk insert: ${tx.hash}`)
         await tx.wait(2);
       }
     }
