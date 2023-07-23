@@ -21,7 +21,7 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
   // Not an application error, but we should never be this far out of date
   const hoursToUpdate = (till - from) / ONE_HR;
   if (hoursToUpdate > 24) {
-    log.error({hours: hoursToUpdate}, "Oracle is out {hours} of date");
+    log.error({hours: hoursToUpdate}, "Oracle is {hours} hours of date");
   }
 
   const rates: number[] = [];
