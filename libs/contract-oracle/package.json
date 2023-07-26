@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-oracle",
-  "version": "0.2.113",
+  "version": "0.2.114",
   "description": "The Coin: Price Oracles for TheCoin",
   "type": "module",
   "keywords": [
@@ -29,12 +29,16 @@
     "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
     "test": "yarn run-jest",
     "test:ci": "yarn run-jest-nix",
+    "validate:prod": "cross-env CONFIG_NAME=prod yarn _hardhat ./scripts/validate.ts",
+    "validate:localprod": "cross-env CONFIG_NAME=prod URL_SERVICE_RATES=http://localhost:7001/api/v1 yarn _hardhat ./scripts/validate.ts",
+    "reset:localprod": "cross-env CONFIG_NAME=prod URL_SERVICE_RATES=http://localhost:7001/api/v1 yarn _hardhat ./scripts/reset.ts",
     "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn deploy:polygon",
     "deploy:prod": "cross-env CONFIG_NAME=prod yarn deploy:polygon",
     "deploy:prodtest": "cross-env CONFIG_NAME=prodtest yarn deploy:polygon",
     "deploy:both": "yarn deploy:polygon && yarn deploy:ethereum",
     "deploy:polygon": "cross-env HARDHAT_NETWORK=polygon yarn _deploy",
     "deploy:ethereum": "cross-env HARDHAT_NETWORK=ethereum yarn _deploy",
+    "update:prod": "cross-env CONFIG_NAME=prod yarn _update",
     "_deploy": "run-s _deploy:deploy _deploy:verify",
     "_deploy:deploy": "yarn _hardhat ./scripts/deploy.ts",
     "_deploy:verify": "yarn _hardhat ./scripts/verify.ts",
@@ -65,11 +69,11 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "^0.2.113",
-    "@thecointech/contract-tools": "^0.2.113",
+    "@thecointech/async": "^0.2.114",
+    "@thecointech/contract-tools": "^0.2.114",
     "jest": "*"
   },
   "dependencies": {
-    "@thecointech/contract-base": "^0.2.113"
+    "@thecointech/contract-base": "^0.2.114"
   }
 }

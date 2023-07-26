@@ -22,10 +22,21 @@ export async function updateOracle(timestamp: number) {
     const signer = await getSigner("OracleUpdater");
     const oracle = await connectOracle(signer);
 
-    log.info(`Updating Oracle ${oracle.address} at ${DateTime.fromMillis(timestamp).toLocaleString(DateTime.DATETIME_SHORT)}`);
+    log.info(
+      {
+        date: DateTime.fromMillis(timestamp).toLocaleString(DateTime.DATETIME_SHORT),
+        address: oracle.address,
+      },
+      'Updating Oracle {address} at {date}'
+    );
 
     // Our oracle operates in milliseconds
     await updateRates(oracle, timestamp, async (ts) => {
+
+      log.trace(
+        {date: DateTime.fromMillis(ts).toLocaleString(DateTime.DATETIME_SHORT)},
+        'Fetching rate for oracle at {date}'
+      )
       // do we have a data for this time?
       const rates = await getCombinedRates(ts);
       if (!rates) return null;
@@ -39,10 +50,19 @@ export async function updateOracle(timestamp: number) {
     })
 
     const validTo = await oracle.validUntil();
-    log.info(`Oracle updated to ${DateTime.fromMillis(validTo.toNumber()).toLocaleString(DateTime.DATETIME_SHORT)}`);
-  }
-  catch(err) {
-    throw err;
+    const validToDate = DateTime.fromMillis(validTo.toNumber());
+    if (validToDate > DateTime.now().plus({ hours: 6})) {
+      log.error(
+        { date: validToDate.toLocaleString(DateTime.DATETIME_SHORT) },
+        "Oracle is too far in the future {date}"
+      );
+    }
+    else {
+      log.info(
+        { date: validToDate.toLocaleString(DateTime.DATETIME_SHORT) },
+        'Oracle updated to {date}'
+      );
+    }
   }
   finally {
     await exitCS(guard);

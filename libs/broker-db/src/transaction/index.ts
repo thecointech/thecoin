@@ -177,7 +177,7 @@ export async function getIncompleteActions<Type extends ActionType>(type: Type) 
     const { address, id } = decomposeActionPath(path);
     return getAction(address, type, id);
   });
-  log.debug({ action: type }, `Fetched ${fetchAll.length} actions of type: {action}`)
+  log.debug({ action: type, length: fetchAll.length }, 'Fetched {fetchAll.length} actions of type: {action}')
   const all = await Promise.all(fetchAll);
   // ensure actions are sorted by date
   all.sort((a, b) => a.data.date.toMillis() - b.data.date.toMillis());
