@@ -23,8 +23,11 @@ export async function updateOracle(timestamp: number) {
     const oracle = await connectOracle(signer);
 
     log.info(
-      { date: DateTime.fromMillis(timestamp).toLocaleString(DateTime.DATETIME_SHORT)},
-      'Updating Oracle ${oracle.address} at {date}'
+      {
+        date: DateTime.fromMillis(timestamp).toLocaleString(DateTime.DATETIME_SHORT),
+        address: oracle.address,
+      },
+      'Updating Oracle {address} at {date}'
     );
 
     // Our oracle operates in milliseconds

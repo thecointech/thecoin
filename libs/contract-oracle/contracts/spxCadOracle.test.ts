@@ -6,6 +6,7 @@ import { getContract } from '../src/index_mocked';
 import hre from 'hardhat';
 import '@nomiclabs/hardhat-ethers';
 import { existsSync, readFileSync } from 'fs';
+import { DateTime, Duration } from 'luxon';
 
 jest.setTimeout(5 * 60 * 1000);
 const factor = Math.pow(10, 8);
@@ -81,6 +82,27 @@ describe('Oracle Tests', () => {
     }
   })
 }, shouldRun)
+
+it ("Does not add too many rates", async () => {
+  const SpxCadOracle = await hre.ethers.getContractFactory('SpxCadOracle');
+  const oracle = await SpxCadOracle.deploy();
+
+  const initialTimestamp = DateTime.now().minus({ weeks: 1 }).toMillis();
+  const blockTime = Duration.fromObject({ hours: 24 }).toMillis();
+  await oracle.initialize(owner.address, initialTimestamp, blockTime);
+
+  const toInsert = Array(6).fill(100);
+  await oracle.bulkUpdate(toInsert);
+
+  const firstValid = (await oracle.validUntil()).toNumber();
+  // This should fail.
+  await expect(oracle.bulkUpdate(toInsert))
+    .rejects.toThrow();
+
+  const secondValid = (await oracle.validUntil()).toNumber();
+
+  expect (secondValid).toEqual(firstValid);
+})
 
 type LiveRate = {
   from: number,
