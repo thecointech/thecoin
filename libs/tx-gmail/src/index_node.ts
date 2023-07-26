@@ -10,9 +10,8 @@ const fns: functions = {
   bridge: (ipc) => { registerIpcListeners(ipc as IpcMain); },
   initialize: async (token) => {
     const auth = getAuthClient();
-    const credentials = token ? JSON.parse(token) : await getNewTokens(auth);
+    const credentials = getCredentials(token) ?? await getNewTokens(auth);
     auth.setCredentials(credentials);
-
     if (!credentials || !isValid(auth)) {
       log.fatal(`Cannot run tx-gmail without auth: credentials ${JSON.stringify(credentials)}`)
       throw new Error("NoAuth");
@@ -27,6 +26,20 @@ const fns: functions = {
 }
 
 export default fns;
+
+function getCredentials(token?: string) {
+  if (token) {
+    const credentials =  JSON.parse(token);
+    return credentials;
+    // if (credentials.expiry_date > Date.now()) {
+    //   return credentials;
+    // }
+    // else {
+    //   log.warn("Token expired, requesting new token");
+    // }
+  }
+  return null;
+}
 
 function registerIpcListeners(ipc: IpcMain) {
   log.debug("Initializing tx-gmail IPC:handle...");

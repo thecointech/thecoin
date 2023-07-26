@@ -1,4 +1,3 @@
-import { ReducersMapObject } from "redux";
 import { AccountMapState, IAccountStoreAPI, initialState } from "./types";
 import { AccountState, buildNewAccount } from "@thecointech/account";
 import { deleteAccount, storeAccount } from "@thecointech/account/store";
@@ -10,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { activeAccountSelector, selectAccountArray } from './selectors';
 import { log } from '@thecointech/logging';
 import type { Signer } from '@ethersproject/abstract-signer';
+import type { ReducersMapObject } from "redux";
 
 export class AccountMap extends BaseReducer<IAccountStoreAPI, AccountMapState>('accounts', initialState) implements IAccountStoreAPI {
 
@@ -52,11 +52,24 @@ export class AccountMap extends BaseReducer<IAccountStoreAPI, AccountMapState>('
     log.trace({address}, 'Removing account from localStorage: {address}');
     const { signer } = account;
     // We don't want active account with an invalid value
-    if (this.state.active == address) {
-      this.draftState.active = null;
+    const active = this.state.active == address
+      ? null
+      : this.state.active;
+
+    // delete the account from our map
+    this.draftState = {
+      active,
+      map: Object.entries(this.state.map)
+        .reduce((m, entry) => {
+          if (entry[0] != account.address) {
+            return {
+              ...m,
+              [entry[0]]: entry[1]
+            }
+          }
+          return m;
+        }, {})
     }
-    // Remove from the list
-    delete this.draftState.map[address];
     // Finally, remove from the website entirely.
     deleteAccount(account);
     // For good measure, we clear the data in the JS object.

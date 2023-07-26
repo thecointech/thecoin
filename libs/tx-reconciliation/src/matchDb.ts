@@ -2,8 +2,8 @@ import { spliceBlockchain } from "./matchBlockchain";
 import { findNames, spliceEmail } from "./matchEmails";
 import { spliceBank } from "./matchBank";
 import { addReconciled } from "./utils";
-import { AllData, Reconciliations, ReconciledRecord, ReconciledHistory, UserReconciled } from "types";
-import { ActionType, AnyAction } from "@thecointech/broker-db";
+import { AllData, Reconciliations, ReconciledRecord, ReconciledHistory, UserReconciled } from "./types";
+import { ActionType, AnyTxAction, TxActionType } from "@thecointech/broker-db";
 import { DateTime } from 'luxon';
 
 // Match all DB entries with raw data
@@ -31,9 +31,9 @@ export function matchDB(data: AllData) {
   return r;
 }
 
-export function convertBaseTransactions(data: AllData, type: ActionType) {
+export function convertBaseTransactions(data: AllData, type: TxActionType) {
   const allOfType = data.dbs[type];
-  const converted = Object.entries(allOfType).map(([address, actions]: [string, AnyAction[]]) => {
+  const converted = Object.entries(allOfType).map(([address, actions]: [string, AnyTxAction[]]) => {
     // find the bank record that matches this purchase
     const names = findNames(data, address);
     const records = actions.map(d => convertBaseTransactionRecord(d, type));
@@ -50,7 +50,8 @@ export function convertBaseTransactions(data: AllData, type: ActionType) {
 const bankActions = [
   "sendETransfer",
   "payBill",
-  "depositFiat"
+  "depositFiat",
+  "depositFiatManual",
 ]
 
 function fillBank(entry: ReconciledHistory, data: AllData, user: UserReconciled, initiated: DateTime, type: ActionType, maxDays: number) {
@@ -88,7 +89,7 @@ function matchTransactions(data: AllData, reconciled: Reconciliations, maxDays: 
   }
 }
 
-const convertBaseTransactionRecord = (record: AnyAction, type: ActionType) : ReconciledRecord => ({
+const convertBaseTransactionRecord = (record: AnyTxAction, type: TxActionType) : ReconciledRecord => ({
   // Basic/core data
   data: {
     type,

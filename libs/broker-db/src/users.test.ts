@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import { describe, filterByEmulator } from '@thecointech/jestutils';
 import { init } from '@thecointech/firestore';
 import { getAllUsers } from './users';

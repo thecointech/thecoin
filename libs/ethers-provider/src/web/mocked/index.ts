@@ -2,16 +2,21 @@ import { BlockTag, Filter, BaseProvider, Log } from '@ethersproject/providers';
 import { hexZeroPad } from "@ethersproject/bytes";
 import { BigNumber } from "@ethersproject/bignumber";
 import { ERC20Response } from '../erc20response';
-import { log } from '@thecointech/logging';
-import transferFrom from './logs-transfer-from.json';
-import transferTo from './logs-transfer-to.json';
-import exactFrom from './logs-exact-from.json'
-import exactTo from './logs-exact-to.json'
+import transferFrom from './logs-transfer-from.json' assert { type: 'json' };
+import transferTo from './logs-transfer-to.json' assert { type: 'json' };
+import exactFrom from './logs-exact-from.json' assert { type: 'json' };
+import exactTo from './logs-exact-to.json' assert { type: 'json' };
+import { getSourceCode } from '../plugins_devlive';
 
 export class Erc20Provider extends BaseProvider {
+  connection: { url: string; };
 
   constructor() {
-    super('any')
+    super('unspecified');
+
+    this.connection = {
+      url: "mocked",
+    }
   }
 
   //
@@ -57,12 +62,20 @@ export class Erc20Provider extends BaseProvider {
       removed: false,
     }))
   }
+
+  async getLogs(): Promise<Log[]> {
+    return [];
+  }
+
+  async getSourceCode(name: string) {
+    return getSourceCode({name});
+  }
 }
 
 async function getRemapping(clientAddress?: string) : Promise<Record<string, string>> {
   // This remapping will not work in development node scripts
   // As this function currently only happens on the website that shouldn't be a problem
-  if (!process.env.WALLET_BrokerCAD_ADDRESS) log.warn("Expected BrokerCAD address is missing, remapping will not work");
+  if (!process.env.WALLET_BrokerCAD_ADDRESS) console.error("Expected BrokerCAD address is missing, remapping will not work");
   return {
     // random address if none supplied
     client: clientAddress ?? "0x383Bece786eB848e51A373B2dd96914B0ac1b04B",

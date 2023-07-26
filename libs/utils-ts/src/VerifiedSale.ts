@@ -1,6 +1,6 @@
-import { ETransferPacket, CertifiedTransfer } from "@thecointech/types";
-import { Signer } from "ethers";
 import { BuildVerifiedAction } from "./VerifiedAction";
+import type { Signer } from "@ethersproject/abstract-signer";
+import type { ETransferPacket, CertifiedTransfer } from "@thecointech/types";
 
 // ---------------------------------------------------------\\
 

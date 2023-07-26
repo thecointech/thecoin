@@ -11,7 +11,7 @@ export { updateRates } from './UpdateDb'
 //
 
 async function getRates<K extends RateKey>(key: K, timestamp: number) : Promise<RateTypes[K]|null> {
-  console.log("getting rates for {FxKey} at {Timestamp}", key, timestamp);
+  // log.trace("getting rates for {FxKey} at {Timestamp}", key, timestamp);
 
   // We don't support future times
   if (timestamp > Date.now())
@@ -32,7 +32,7 @@ async function getRates<K extends RateKey>(key: K, timestamp: number) : Promise<
 
   // Finally, if something has gone really wrong with our updates, try forcing it.
   // This shouldn't happen, it is most likely an error condition.
-  console.warn("Could not find {FxKey} for {Timestamp}, forcing update",
+  log.warn("Could not find {FxKey} for {Timestamp}, forcing update",
     key, timestamp);
 
   const updated = await update();
@@ -117,7 +117,7 @@ async function maybeInsert(ts: number, lastExpired: number, rates: CombinedRates
         return rate.validTill;
       }
     }
-    catch (e) {
+    catch (e: any) {
       log.error(e, "Error fetching {Timestamp}", ts);
     }
   }

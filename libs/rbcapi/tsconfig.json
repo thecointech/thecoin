@@ -3,8 +3,7 @@
   "compilerOptions": {
     "outDir": "./build/",
     "tsBuildInfoFile": "./build/.buildinfo",
-    "rootDir": "./src/",
-    "target": "es2018"
+    "rootDir": "./src/"
   },
   "include": ["src/**/*"]
 }

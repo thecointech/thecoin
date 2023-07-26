@@ -1,16 +1,14 @@
-import { accounts, contract } from '@openzeppelin/test-environment';
-import { TheGreenNFTL2Contract } from '../migrations/types';
+import { jest } from '@jest/globals';
+import hre from 'hardhat';
 
-// Loads a compiled contract using OpenZeppelin test-environment
-contract.artifactsDir = "src/contracts";
-const factory: TheGreenNFTL2Contract = contract.fromArtifact('TheGreenNFTL2');
-const minter = accounts[0];
 jest.setTimeout(120000);
 
 it('Returns relevant validity', async () => {
-  const nft = await factory.new(minter, minter);
+  const [minter] = await hre.ethers.getSigners();
+  const NFT = await hre.ethers.getContractFactory("TheGreenNFTL2");
+  const nft = await NFT.deploy(minter.address, minter.address);
   const ids = [1, 10, 100, 1000, 10000];
-  await nft.bulkMinting(ids, 2000, {from: minter});
+  await nft.bulkMinting(ids, 2000);
   const validities = await Promise.all(
     // the Validity fn returns a tuple.  Maybe because of this it
     // doesn't turn up in our contract types.  It is there though

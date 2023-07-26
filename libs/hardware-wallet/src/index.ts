@@ -10,9 +10,16 @@ import { resolveProperties, defineReadOnly } from '@ethersproject/properties';
 import { UnsignedTransaction, serialize } from '@ethersproject/transactions';
 import { sleep } from '@thecointech/async';
 
-import Transport from "@ledgerhq/hw-transport-node-hid";
-import Eth from "@ledgerhq/hw-app-eth";
+import TransportFactory from "@ledgerhq/hw-transport-node-hid";
+import EthFactory from "@ledgerhq/hw-app-eth";
 const defaultPath = "m/44'/60'/0'/0/0";
+
+//@ts-ignore weird-o hack to get jest to run this file with no complaints.
+// Same as in shared/store/index.ts
+const Transport: typeof TransportFactory = TransportFactory.default ?? TransportFactory;
+//@ts-ignore weird-o hack to get jest to run this file with no complaints.
+const Eth: typeof EthFactory = EthFactory.default ?? EthFactory;;
+
 
 export class LedgerSigner extends Signer {
 
@@ -21,7 +28,7 @@ export class LedgerSigner extends Signer {
   path: string;
   //@ts-ignore
   type: string;
-  _eth: Promise<Eth>;
+  _eth: Promise<EthFactory>;
 
   constructor(provider?: Provider, type?: string, path?: string) {
     super()
@@ -44,7 +51,7 @@ export class LedgerSigner extends Signer {
   }
 
 
-  _retry<T = any>(callback: (eth: Eth) => Promise<T>, timeout?: number): Promise<T> {
+  _retry<T = any>(callback: (eth: EthFactory) => Promise<T>, timeout?: number): Promise<T> {
     return new Promise(async (resolve, reject) => {
       if (timeout && timeout > 0) {
         setTimeout(() => { reject(new Error("timeout")); }, timeout);

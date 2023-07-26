@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import { SimulationParameters } from './params';
 import { SimulationState, zeroState, increment, balanceChange } from './state';
 import { getMarketData, MarketData } from './market';
@@ -66,7 +66,7 @@ export class ReturnSimulator {
 
     // Calculate the div from 1 share
     const monthDiv = new Decimal(state.market.D).div(12);
-    const weekDiv = monthDiv.div(state.date.daysInMonth).mul(7);
+    const weekDiv = monthDiv.div(state.date.daysInMonth!).mul(7);
 
     // How much of each shares div is allocated to CO2 offsets?
     const maxWeekOffsetPercent = new Decimal(this.params.maxOffsetPercentage).div(52.17857);

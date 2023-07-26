@@ -6,7 +6,7 @@ import { PeriodicalParams, ShockAbsorber, SimulationParameters } from '../simula
 import styles from './styles.module.less';
 import { Accordion, Icon } from 'semantic-ui-react';
 import { basic } from './Basic';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 
 const translations = defineMessages({
 

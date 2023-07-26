@@ -1,6 +1,6 @@
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
 import { Wallet } from '@ethersproject/wallet';
-import { AccountName } from './names';
+import type { AccountName } from './names';
 
 // If running on GAE, check in secrets manager
 const PrivilegedEnv = () => process.env["GAE_ENV"] || process.env["GOOGLE_APPLICATION_CREDENTIALS"];

@@ -1,7 +1,8 @@
 {
   "name": "@thecointech/async",
-  "version": "0.2.75",
+  "version": "0.2.113",
   "description": "TheCoin: utility functions for async control",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "ethereum"
@@ -19,6 +20,12 @@
     "build": "yarn tsc",
     "clean": "rimraf ./build"
   },
-  "exports": "./build/index.js",
+  "exports": {
+    ".": {
+      "development": "./build/async_mocked.js",
+      "devlive": "./build/async_mocked.js",
+      "default": "./build/index.js"
+    }
+  },
   "types": "./build/index.d.ts"
 }

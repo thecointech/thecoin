@@ -1,7 +1,7 @@
-import { AccountName } from './names';
-import { getAndCacheSigner } from './cache'
+import { getAndCacheSigner } from './cache';
 import { loadFromDisk } from './fromDisk';
 import { loadHardware } from './fromHardware';
+import type { AccountName } from './names';
 
 //
 // NodeJS (?) environments running locally.

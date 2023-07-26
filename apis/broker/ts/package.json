@@ -1,8 +1,14 @@
 {
   "name": "@thecointech/broker-cad",
-  "version": "0.2.75",
+  "version": "0.2.113",
   "description": "OpenAPI client for @thecointech/broker-cad",
   "author": "OpenAPI-Generator Contributors",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "apis/broker/ts"
+  },
   "keywords": [
     "axios",
     "typescript",
@@ -10,20 +16,16 @@
     "openapi-generator",
     "@thecointech/broker-cad"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/thecointech/thecoin.git",
-    "directory": "apis/broker/ts"
-  },
   "license": "Unlicense",
-  "main": "./dist/index.js",
-  "typings": "./dist/index.d.ts",
+  "main": "./dist/esm/index.js",
+  "typings": "./dist/esm/index.d.ts",
+  "sideEffects": false,
   "scripts": {
-    "build": "tsc --outDir dist/",
-    "prepublishOnly": "npm run build"
+    "build": "tsc -p tsconfig.esm.json",
+    "prepare": "npm run build"
   },
   "dependencies": {
-    "axios": "0.21.4"
+    "axios": "^0.26.1"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"

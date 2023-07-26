@@ -15,6 +15,9 @@ All data is persisted on a locally-redundant store called `ceramic-store` - this
 
 The virtual network was setup to ensure our outbound IP address was deterministic.
 
+NOTE: I've not been able to get `js-ceramic` to load it's config from azure file mount.  The configuration is all in
+arguments to the app.
+
 ## Costs
 
 Our nodes are way over-powered for what they need to do, but our Azure Grant covers the costs (if only barely).
@@ -30,8 +33,8 @@ To break the glass:
 ```ps
 $ENV:RESOURCE_ID='...'
 
-az container export -g $ENV:RESOURCE_ID --name ipfs-daemon --file ipfs-daemon.yaml
-az container create -g $ENV:RESOURCE_ID -f ./ipfs-daemon.yaml
+az container export -g idx-resources --name ipfs-daemon --file ipfs-daemon.yaml
+az container create -g idx-resources -f ./ipfs-daemon.yaml
 
 // NOTE: This is for containers, we use app services now, not sure what the equivalent is
 az container export -g $ENV:RESOURCE_ID --name js-ceramic --file js-ceramic.yaml

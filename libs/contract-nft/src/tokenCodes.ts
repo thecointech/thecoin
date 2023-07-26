@@ -1,11 +1,14 @@
-import { utils, Signer } from 'ethers';
 import bs58 from 'bs58';
 import { sign } from "@thecointech/utilities/SignedMessages";
+import { arrayify } from "@ethersproject/bytes";
+import { keccak256 } from "@ethersproject/solidity";
+import { verifyMessage } from '@ethersproject/wallet';
+import type { Signer } from '@ethersproject/abstract-signer';
 
 const remove0x = (s: string) => s.match(/^(?:0x)?(.+)$/i)?.[1] ?? s;
 const getClaimTokenHash = (tokenId: number) => (
-  utils.arrayify(
-    utils.solidityKeccak256(["uint256"], [tokenId])
+  arrayify(
+    keccak256(["uint256"], [tokenId])
   )
 )
 
@@ -36,5 +39,5 @@ export function getTokenClaimSig(code: string) {
 export function getTokenClaimAuthority(tokenId: number, code: string) {
   const signature = getTokenClaimSig(code);
   const hash = getClaimTokenHash(tokenId);
-  return utils.verifyMessage(hash, signature);
+  return verifyMessage(hash, signature);
 }

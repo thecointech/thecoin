@@ -1,8 +1,8 @@
-import { range } from 'lodash';
+import lodash from 'lodash';
 import { DateTime } from 'luxon';
 import { MarketData } from '../../src/containers/BenefitsSimulator/simulator/market';
 import { MergeSimParamaters } from '../../src/containers/BenefitsSimulator/simulator/params';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 
 export function generateData(CAGR = 10, LGR=0, yearsToSimulate = 10, noise = 0.1): MarketData[] {
   const monthStart = DateTime.fromObject({
@@ -15,7 +15,7 @@ export function generateData(CAGR = 10, LGR=0, yearsToSimulate = 10, noise = 0.1
   const finalVal = startingVal * Math.pow(1 + CAGR / 100, yearsToSimulate);
   const CMGR = Math.pow(finalVal / startingVal, 1 / totalMonths);
   const LMGR = LGR / 12;
-  return range(0, totalMonths).map(idx => {
+  return lodash.range(0, totalMonths).map(idx => {
     let value = startingVal * Math.pow(CMGR, idx) + startingVal * LMGR * idx;
     // Add some random noise
     value = value * (Math.random() * noise + (1 - (noise / 2)));

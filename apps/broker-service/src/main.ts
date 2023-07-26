@@ -6,7 +6,7 @@ import express, {
 import bodyParser from "body-parser";
 import { RegisterRoutes } from './routes/routes';
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from './api/swagger.json';
+import swaggerDocument from './api/swagger.json' assert {type: "json"};
 import { init } from './init';
 import cors from 'cors';
 import { ValidateError } from "@tsoa/runtime";
@@ -20,7 +20,12 @@ app.use(cors());
 // Use body parser to read sent json payloads
 // otherwise nothing is recieved in body
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+  verify:(req,_res,buf) => {
+    // @ts-ignore
+    req.rawBody=buf
+  }
+}));
 RegisterRoutes(app);
 
 (async () => {

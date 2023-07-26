@@ -1,6 +1,7 @@
 import { log } from "@thecointech/logging";
-import { Decimal } from "decimal.js-light";
+import Decimal from 'decimal.js-light';;
 import { AnyActionContainer, getCurrentState, TransitionCallback } from "../types";
+import { makeTransition  } from '../makeTransition';
 import { verifyPreTransfer } from "./verifyPreTransfer";
 import { DateTime } from "luxon";
 import { toCoin } from "./toCoin";
@@ -12,9 +13,9 @@ import type { Overrides } from '@ethersproject/contracts';
 //
 // Send the current balance to the client.  If successful,
 // this will reset the coin balance to 0
-export async function sendCoin(container: AnyActionContainer) {
-  return verifyPreTransfer(container) ?? await doSendCoin(container);
-}
+export const sendCoin = makeTransition('sendCoin', async (container) =>
+  await verifyPreTransfer(container) ?? await doSendCoin(container)
+)
 
 // implementation
 const doSendCoin: TransitionCallback = async (container) => {
@@ -44,6 +45,6 @@ async function startTheTransfer(address: string, value: Decimal, settled: DateTi
 }
 
 function findSettledDate(container: AnyActionContainer) {
-  const settlements = container.history.filter(t => t.delta.type == toCoin.name);
+  const settlements = container.history.filter(t => t.delta.type == toCoin.transitionName);
   return last(settlements)?.delta.date ?? container.action.data.date;
 }

@@ -1,19 +1,19 @@
+import { jest } from '@jest/globals';
 import { getCalendar, nextOpenTimestamp } from '.';
-import { DateTime, Settings } from 'luxon';
+import { DateTime } from 'luxon';
 import { describe } from '@thecointech/jestutils';
 import { getEnvVars } from '@thecointech/setenv';
 
-Settings.defaultZoneName = "America/New_York";
 const jan1st2019 = DateTime.fromObject({year: 2019, month: 1, day: 1});
-jest.unmock('axios');
 
-try {
-  getEnvVars('prod');
-} catch {}
+const prodVars = getEnvVars('prodtest');
+jest.setTimeout(60000);
 
 describe("Live MarketStatus tests", () => {
 
-  beforeEach(() => { jest.resetAllMocks() });
+  const OLD_ENV = process.env;
+  beforeEach(() => process.env = prodVars);
+  afterAll(() => process.env = OLD_ENV);
 
   it("Returns Valid Calendar", async () => {
     const calendar1 = await getCalendar(jan1st2019);
@@ -52,4 +52,4 @@ describe("Live MarketStatus tests", () => {
     const ndate = DateTime.fromMillis(nts);
     expect(ndate.toString()).toMatch("2019-04-01T09:32:00.000-04:00");
   });
-}, !!process.env.TRADIER_API_KEY)
+}, !!prodVars.TRADIER_API_KEY)

@@ -1,25 +1,34 @@
-import type StreamID from '@ceramicnetwork/streamid';
-import type { SelfID as SrcApi } from '@self.id/web';
+import { Source, ExecutionResult } from 'graphql';
+import { ObjMap } from 'graphql/jsutils/ObjMap';
+import { ComposeClient as SrcApi } from './types';
 
 //
-// An in-memory IDX mock for development/testing
-export class SelfID implements Pick<SrcApi, "get" | "set"> {
-  get<Key extends string | number | symbol, ContentType = any>(key: Key): Promise<ContentType | null> {
-    const r = this.records.get(key);
-    return Promise.resolve(
-      r
-        ? JSON.parse(r)
-        : null
-    );
+// An in-memory ComposeDB mock for development/testing
+export class ComposeClient implements Pick<SrcApi, "executeQuery"> {
+  executeQuery<Data = Record<string, unknown>>(_source: string | Source, _variableValues?: Record<string, unknown> | undefined): Promise<ExecutionResult<Data, ObjMap<unknown>>> {
+    throw new Error('Method not implemented.');
   }
-  set<Key extends string | number | symbol, ContentType = any>(key: Key, content: ContentType): Promise<StreamID> {
-    if (!content) this.records.delete(key);
-    else this.records.set(key, JSON.stringify(content));
-    return Promise.resolve({} as StreamID);
-  }
+  // async get<Key extends string | number | symbol, ContentType = any>(key: Key): Promise<ContentType | null> {
+  //   const r = this.records.get(key);
+  //   await sleep(500);
+  //   return r
+  //     ? JSON.parse(r)
+  //     : null
+  // }
+  // async set<Key extends string | number | symbol, ContentType = any>(key: Key, content: ContentType): Promise<StreamID> {
+  //   if (!content) this.records.delete(key);
+  //   else this.records.set(key, JSON.stringify(content));
+  //   await sleep(500);
+  //   return {};
+  // }
   records: Map<string | number | symbol, string> = new Map();
 }
 
-export const connectIDX = () => Promise.resolve(new SelfID)
-export const setEncrypted = (idx: SelfID, definition: string, data: any | null) => idx.set(definition, data);
-export const loadEncrypted = (idx: SelfID, definition: string) => idx.get(definition);
+export const getComposeDB = () => Promise.resolve(new ComposeClient)
+export const getHistory = () => Promise.resolve([])
+
+var encrypted: any = undefined;
+export const setEncrypted = (v: any) => {
+  encrypted = v;
+}
+export const loadEncrypted = () => encrypted;

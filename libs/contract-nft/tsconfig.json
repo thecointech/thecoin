@@ -9,6 +9,6 @@
     // typechain generates .ts files with unused locals
     "noUnusedLocals": false,
   },
-  "include": ["**/*.ts", "**/*.json", "../contract-base/src/provider.ts"],
+  "include": ["**/*.ts", "**/*.json"],
   "exclude": ["node_modules", "build", "cache", "artifacts"]
 }

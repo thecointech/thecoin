@@ -7,6 +7,7 @@ import styles from './styles.module.less';
 import { Tooltip } from "./Tooltip/Tooltip";
 import { Duration, DurationButtons } from "./DurationButtons";
 import { AppContainer } from "components/AppContainers";
+import { isPresent } from "@thecointech/utilities";
 
 const theme: Theme = {
   fontSize: 10,
@@ -27,7 +28,7 @@ const theme: Theme = {
 };
 
 export const HistoryGraph = () => {
-  const [duration, setDuration] = useState(31 as Duration);
+  const [duration, setDuration] = useState(Number.POSITIVE_INFINITY as Duration);
 
   const account = AccountMap.useActive();
   const txs = account?.history ?? [];
@@ -35,10 +36,16 @@ export const HistoryGraph = () => {
     ? DateTime.local().minus({days: duration})
     : undefined;
 
+  const modifiers = account?.plugins
+    .map(d => d.emulator)
+    .filter(isPresent)
+    ?? [];
+
   return (
     <AppContainer className={styles.graphBackground}>
       <DurationButtons duration={duration} setDuration={setDuration} />
       <GraphTxHistory
+        plugins={modifiers}
         txs={txs}
         from={from}
         theme={theme}

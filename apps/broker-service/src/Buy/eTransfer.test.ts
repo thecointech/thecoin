@@ -1,21 +1,16 @@
 import { GetWallet } from "../exchange/Wallet";
-import { GetHash, GenerateCode } from './eTransfer'
-import { sign } from "@thecointech/utilities/SignedMessages";
+import { GenerateCode } from './eTransfer'
+import { GetSignedMessage } from "@thecointech/utilities/SignedMessages";
 
 async function getCode(ts: number)
 {
 	const wallet = await GetWallet();
-  const _ts = `${ts}`;
-  const signature = await sign(GetHash(_ts), wallet);
-	const code = await GenerateCode({
-		message: _ts,
-		signature
-  });
+  const message = await GetSignedMessage(ts.toString(), wallet);
+	const code = await GenerateCode(message);
   return code;
 }
 
 test("Can generate eTransfer key", async () => {
-  jest.setTimeout(50000);
 	const code = await getCode(Date.now());
 	expect(code).toBeTruthy();
 	expect(code.length).toBe(6);
@@ -27,7 +22,7 @@ test("rejects old eTransfer key", async () => {
       try {
         return await getCode(Date.now() - (10 * 60 * 1000));
       }
-      catch (e) {
+      catch (e: any) {
         throw new Error(e.message);
       }
   }

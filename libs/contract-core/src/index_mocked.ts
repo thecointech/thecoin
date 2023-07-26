@@ -1,12 +1,14 @@
 import * as Src from '.';
 import { BigNumber, ContractTransaction, Signer } from 'ethers'
 import { sleep } from '@thecointech/async'
-export const COIN_EXP = 1000000;
+import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
+import { PluginAndPermissionsStructOutput } from './types/contracts/TheCoinL1';
+export * from './constants';
 
 const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
 let nonce = 12;
 let confirmations = 1;
-export class TheCoin implements Pick<Src.TheCoin, 'exactTransfer' | 'balanceOf' | 'certifiedTransfer'>{
+export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugins'|'exactTransfer' | 'balanceOf' | 'certifiedTransfer'>{
 
   signer?: Signer;
   constructor(signer?: Signer) {
@@ -28,10 +30,15 @@ export class TheCoin implements Pick<Src.TheCoin, 'exactTransfer' | 'balanceOf' 
   mintCoins = () => this.genReceipt();
   burnCoins = () => this.genReceipt();
   exactTransfer = () => this.genReceipt('e');
-  balanceOf = () => Promise.resolve(BigNumber.from(1000000000));
+  balanceOf = () => Promise.resolve(BigNumber.from(995000000));
   certifiedTransfer = () => this.genReceipt('c', { confirmations: 1 })
+  uberTransfer = () => this.genReceipt('c', { confirmations: 1 })
   // Run during testing.  Remove once deployement is secure.
   runCloneTransfer = () => this.genReceipt();
+  getUsersPlugins = () => Promise.resolve([{
+    plugin: "RoundNumber",
+    permissions: BigNumber.from(ALL_PERMISSIONS)
+  } as PluginAndPermissionsStructOutput]);
 
   provider = {
     waitForTransaction: (hash: string) => Promise.resolve({

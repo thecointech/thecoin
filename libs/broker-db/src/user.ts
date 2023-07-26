@@ -1,7 +1,8 @@
 import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
 import { getFirestore, CollectionReference, DocumentReference } from '@thecointech/firestore';
 import { AllUserData, userDataConverter, UserVerifiedInfo } from "./user.types";
-import { DateTime } from "luxon";
+import { getActionDoc } from './transaction';
+import { DateTime } from 'luxon';
 
 //
 // Collection of all users
@@ -28,19 +29,55 @@ export async function getUserData(address: string) : Promise<AllUserData|undefin
 }
 
 //
+// Get users with matching UniqueIdSig
+export async function getUsersWithUniqueIdSig(uniqueIdSig: string) {
+  const r = await getUserCollection()
+    .where("uniqueIdSig", "==", uniqueIdSig)
+    .get();
+
+  // TODO: Remove unnecessary spread once TS is upgraded
+  return [...r.docs].map(doc => ({
+    ...doc.data(),
+    address: doc.id,
+  }));
+}
+
+//
+// This awkwardly named function gets all users data
+// that includes verified data and without referral codes.
+// We only support this because our online service cannot
+// sign our users referral codes (at least, not without
+// BrokerCAD unlocked, which I'm hestitant to make hot)
+export async function getVerifiedUsersNoReferralCode() {
+  const r = await getUserCollection()
+    .where("referralCode", "==", null)
+    .get();
+  // TODO: Remove unnecessary spread once TS is upgraded
+  return [...r.docs].map(doc => ({
+    ...doc.data(),
+    address: doc.id,
+  }));
+}
+
+//
 // Declare that the user address passed in here
 // is a valid, unique person on authority of signature owner
-export async function setUserVerified(signature: string, address: string, date: DateTime) {
+export async function setUserVerified(address: string, data: Partial<UserVerifiedInfo>) {
 	const userDoc = getUserDoc(address)
-	const data: UserVerifiedInfo = {
-		verified: signature,
-		verifiedDate: date
-	}
 	// We store the verified signature
 	await userDoc.set(data, { merge: true });
 }
 
 export async function getUserVerified(address: string) {
 	const userData = await getUserData(address);
-	return userData?.verified;
+	return userData?.status == "approved";
+}
+
+export async function setHeartbeat(address: string, result: string) {
+  // always push a new entry
+  const doc = getActionDoc(address, "Heartbeat");
+  await doc.set({
+    date: DateTime.now(),
+    result,
+  })
 }

@@ -1,0 +1,39 @@
+{
+  "name": "@thecointech/tx-plugins",
+  "version": "0.2.113",
+  "description": "The Coin: Handles plugin change requests",
+  "type": "module",
+  "keywords": [
+    "THECoin"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/tx-plugins"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "build": "yarn tsc -b tsconfig.build.json",
+    "clean": "rimraf ./build && rimraf ./coverage",
+    "_test": "yarn run-jest"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "main": "./build/index.js",
+  "exports": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "dependencies": {
+    "@thecointech/contract-plugins": "^0.2.113",
+    "@thecointech/tx-statemachine": "^0.2.113"
+  },
+  "devDependencies": {
+    "jest": "*"
+  }
+}

@@ -1,20 +1,16 @@
 import { log } from "@thecointech/logging";
 import { decryptTo } from "@thecointech/utilities/Encrypt";
 import { isPacketValid } from '@thecointech/utilities/VerifiedSale';
-import { readFileSync } from "fs";
 import { getCurrentState, TypedActionContainer } from "@thecointech/tx-statemachine";
 import { EncryptedPacket, ETransferPacket } from "@thecointech/types";
-import { Decimal } from "decimal.js-light";
+import Decimal from 'decimal.js-light';;
 import { DateTime } from 'luxon';
-
-// NOTE: server does not have private key, and will not pass this step
-const privateKeyPath = process.env.USERDATA_INSTRUCTION_PK;
-const privateKey = privateKeyPath ? readFileSync(privateKeyPath).toString() : null;
+import { makeTransition } from '@thecointech/tx-statemachine';
 
 //
 // Attempt to send the balance as e-Transfer.
 // If successfull will reset the fiat balance to 0
-export async function sendETransfer(container: TypedActionContainer<"Sell">) {
+export const sendETransfer = makeTransition<"Sell">("sendETransfer", async (container) => {
 
   // Can we send an eTransfer in our current state?
   const currentState = getCurrentState(container)
@@ -31,7 +27,7 @@ export async function sendETransfer(container: TypedActionContainer<"Sell">) {
   // is interrupted; this action is atomic and the decoded actions cannot be serialized.
   if (!container.instructions) {
       // Get sending instructions
-    const decrypted = decryptInstructions(container.action.data.initial.instructionPacket);
+    const decrypted = await decryptInstructions(container.action.data.initial.instructionPacket);
     if (!isPacketValid(decrypted))
       return { error: "e-Transfer packet is invalid" };
     // Keep track of decrypted instructions
@@ -43,9 +39,9 @@ export async function sendETransfer(container: TypedActionContainer<"Sell">) {
 
 
   // Send the transfer
-  const {address} = container.action;
+  const prefix = getPrefix(container);
   const toName = container.instructions.email.split('@')[0];
-  const confirmation = await bank.sendETransfer(address, fiat.toNumber(), toName, container.instructions, progressCb);
+  const confirmation = await bank.sendETransfer(prefix, fiat.toNumber(), toName, container.instructions, progressCb);
 
   // If we have confirmation code, return success
   return (confirmation > 0)
@@ -55,19 +51,34 @@ export async function sendETransfer(container: TypedActionContainer<"Sell">) {
         date: DateTime.now(),
       }
     : { error: `Error Code: ${confirmation}`}
-}
+});
 
 function progressCb(msg: string) {
   log.trace(msg);
 }
 
+function getPrefix(container: TypedActionContainer<"Sell">) {
+  const now = DateTime.now().toSQL({includeOffset: false, includeZone: false});
+  const id = container.action.data.initialId.substring(0, 32);
+  const {address} = container.action;
+  return `${now} - ${address} - ${id}`;
+}
+
 //
 // Decrypt the actions' instruction packet
-function decryptInstructions(packet: EncryptedPacket) {
+async function decryptInstructions(packet: EncryptedPacket) {
+
+  // NOTE: server does not have private key, and will not pass this step
+  const privateKeyPath = process.env.USERDATA_INSTRUCTION_PK;
+  if (!privateKeyPath) return null;
+
+  const { readFileSync } = await import('fs');
+  const privateKey = readFileSync(privateKeyPath, 'utf8');
   if (!privateKey) {
     log.warn("Attempting to decrypt instructions, but no private key is present");
     return null;
   }
+
   return decryptTo<ETransferPacket>(privateKey, packet);
 }
 

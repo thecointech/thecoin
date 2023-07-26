@@ -1,0 +1,9 @@
+{
+  "name": "@thecointech/--mocks--",
+  "version": "0.2.113",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "yarn tsc"
+  }
+}

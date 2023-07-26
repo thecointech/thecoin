@@ -28,9 +28,9 @@ export class RbcApi implements IBank {
       progressCb("Initializing Bank API");
       return await send(prefix, amount, name, packet);
     }
-    catch (e) {
+    catch (e: any) {
       //return getErrorResult(JSON.stringify(e))
-      log.error(`Error sending etransfer - ${e}`)
+      log.error(e, `Error sending etransfer - ${e}`)
     }
     return -1;
   }
@@ -44,4 +44,4 @@ export class RbcApi implements IBank {
 export { RbcStore } from './store';
 export * from './types';
 export * from '@thecointech/bank-interface';
-export { initBrowser, closeBrowser } from './action';
+export { closeBrowser } from './puppeteer';

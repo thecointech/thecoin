@@ -38,8 +38,9 @@ export async function fetchCoinRate(latestValidUntil: number, now: number) {
 export function findRateFor(lastExpired: number, data: FinnhubData): CoinRate {
 
   const response = (idx: number) => ({
-    buy: data.l[idx] / 1000,
-    sell: data.h[idx] / 1000,
+    // Our buy/sell price should now be equal
+    buy: (data.l[idx] + data.h[idx]) / 2000,
+    sell: (data.l[idx] + data.h[idx]) / 2000,
     validFrom: lastExpired,
     validTill: 0
   })
@@ -66,7 +67,7 @@ export function findRateFor(lastExpired: number, data: FinnhubData): CoinRate {
   }
 
   const cnt = data.t?.length ?? 0;
-  log.fatal(`Could not find coin rate for: ${lastExpired}.  \nWe have ${data.t.length} rates, from ${DateTime.fromSeconds(data.t[0])} => ${DateTime.fromSeconds(data.t[cnt - 1])}`);
+  log.fatal(`Could not find coin rate for: ${DateTime.fromMillis(lastExpired)}.  \nWe have ${data.t.length} rates, from ${DateTime.fromSeconds(data.t[0])} => ${DateTime.fromSeconds(data.t[cnt - 1])}`);
   throw new Error("RateNotFound");
 }
 

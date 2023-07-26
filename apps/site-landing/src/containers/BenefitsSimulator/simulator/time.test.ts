@@ -1,4 +1,4 @@
-import { range } from 'lodash';
+import lodash from 'lodash';
 import { DateTime } from 'luxon';
 import { straddlesMonth, straddlesYear } from './time';
 
@@ -11,7 +11,7 @@ it('correctly straddles months', () => {
   expect(straddlesM(2, 8)).toBeFalsy()
   // We should have 7 * 12 days straddling months within a year
   const jan1 = DateTime.fromObject({month: 1, day: 1});
-  const allStraddles = range(0, 365).reduce((acc, days) => {
+  const allStraddles = lodash.range(0, 365).reduce((acc, days) => {
     const d = jan1.plus({days});
     const s = straddlesMonth(d);
     return s ? acc + 1 : acc;
@@ -40,7 +40,7 @@ it('correctly straddles years', () => {
     try {
       const end = start.plus({years: 25});
       const numDays = end.diff(start, "day").days;
-      const allStraddles = range(0, numDays).reduce((acc, days) => {
+      const allStraddles = lodash.range(0, numDays).reduce((acc, days) => {
         const d = start.plus({ days });
         const s = straddlesYear(start, d);
 

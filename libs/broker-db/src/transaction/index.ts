@@ -106,6 +106,7 @@ export async function getAllActions(addresses: string[]) {
     Buy: await getAllActionsOfType(addresses, "Buy"),
     Sell: await getAllActionsOfType(addresses, "Sell"),
     Bill: await getAllActionsOfType(addresses, "Bill"),
+    Plugin: await getAllActionsOfType(addresses, "Plugin"),
   }
 }
 
@@ -176,8 +177,11 @@ export async function getIncompleteActions<Type extends ActionType>(type: Type) 
     const { address, id } = decomposeActionPath(path);
     return getAction(address, type, id);
   });
-  log.debug({ action: type }, `Fetched ${fetchAll.length} actions of type: {action}`)
-  return await Promise.all(fetchAll)
+  log.debug({ action: type, length: fetchAll.length }, 'Fetched {fetchAll.length} actions of type: {action}')
+  const all = await Promise.all(fetchAll);
+  // ensure actions are sorted by date
+  all.sort((a, b) => a.data.date.toMillis() - b.data.date.toMillis());
+  return all
 }
 
 //

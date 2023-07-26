@@ -1,6 +1,6 @@
 import { ActionType, getIncompleteActions } from '@thecointech/broker-db';
 import { UserData } from '../Clients/data';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import { GetContract } from '@thecointech/contract-core';
 
 export async function fetchIncomplete() {
@@ -9,6 +9,7 @@ export async function fetchIncomplete() {
   await fetchIncompleteType("Bill", users);
   await fetchIncompleteType("Buy", users);
   await fetchIncompleteType("Sell", users);
+  await fetchIncompleteType("Plugin", users);
   return users;
 }
 
@@ -25,16 +26,17 @@ async function fetchIncompleteType(type: ActionType, users: UserData[]) {
 
 const newUserData = async (address: string) => ({
   address,
-  name: "Fixme",
   Buy: [],
   Sell: [],
   Bill: [],
+  Plugin: [],
   transactions: [],
   balanceCoin: await getBalance(address),
+  details: {},
 })
 
 async function getBalance(address: string) {
-  const contract = GetContract();
+  const contract = await GetContract();
   const balance = await contract.balanceOf(address);
   return new Decimal(balance.toString());
 }

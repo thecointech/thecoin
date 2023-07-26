@@ -1,7 +1,8 @@
 {
   "name": "@thecointech/email",
-  "version": "0.2.75",
+  "version": "0.2.113",
   "description": "The Coin: auto-mailing library.  Not for external user really",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "email"
@@ -20,7 +21,8 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "yarn tsc --project tsconfig.build.json",
-    "test": "yarn jest",
+    "test": "yarn run-jest",
+    "test:ci": "yarn run-jest-nix",
     "clean": "rimraf ./build && rimraf ./coverage"
   },
   "files": [
@@ -36,11 +38,10 @@
     }
   },
   "dependencies": {
-    "@thecointech/logging": "^0.2.75",
-    "node-mailjet": "^3.3.5"
+    "@thecointech/logging": "^0.2.113",
+    "node-mailjet": "^4.0.1"
   },
   "devDependencies": {
-    "@types/node-mailjet": "^3.3.1",
     "jest": "*"
   },
   "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"

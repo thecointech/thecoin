@@ -2,7 +2,7 @@
  * Simple library wraps mailjet for single-source type-safe sending of templates etc.
  */
 
-import { DateTime } from 'luxon';
+import type { DateTime } from 'luxon';
 import { SendMail, SendTemplate } from './AutoMailer';
 
 export type DepositConfirmationVariables = {

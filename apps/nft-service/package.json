@@ -1,7 +1,8 @@
 {
   "name": "@thecointech/nft-service",
-  "version": "0.2.75",
+  "version": "0.2.113",
   "private": true,
+  "type": "module",
   "description": "TheCoin NFT service.  Manage uploads and gassless transactions with the TheCoin NFT contract",
   "keywords": [
     "TheCoin",
@@ -16,21 +17,23 @@
     "directory": "apps/nft-service"
   },
   "scripts": {
-    "start": "node ./build/main.js",
-    "dev": "cross-env TS_NODE_PROJECT=../../tsconfig.dev.json node --inspect=9233 -r ts-node/register ./src/main.ts",
+    "start": "run-env ./build/main.js",
+    "dev": "yarn run-env --inspect=9233 ./src/main.ts",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
-    "prod:test": "yarn run-env dotenv_config_path=../../environments/prodtest.env",
-    "deploy": "ts-node --skip-project deploy",
+    "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
+    "deploy": "yarn run-env ./deploy.ts",
     "build": "yarn tsc -b tsconfig.build.json",
     "gen:swagger": "yarn tsoa spec-and-routes",
     "clean": "run-p clean:*",
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
-    "test": "jest --coverage"
+    "test": "yarn run-jest",
+    "test:ci": "yarn run-jest-nix",
+    "gcp-build": ""
   },
   "engines": {
-    "node": "14.x.x"
+    "node": "16.x.x"
   },
   "files": [
     "build/**/*"
@@ -38,28 +41,26 @@
   "main": "./build/main.js",
   "dependencies": {
     "@pinata/sdk": "1.1.23",
-    "@thecointech/contract-nft": "^0.2.75",
-    "@thecointech/logging": "^0.2.75",
-    "@thecointech/signers": "^0.2.75",
-    "@thecointech/utilities": "^0.2.75",
-    "@tsoa/runtime": "^3.8.0",
-    "axios": "0.21.4",
+    "@thecointech/contract-nft": "^0.2.113",
+    "@thecointech/logging": "^0.2.113",
+    "@thecointech/setenv": "^0.2.113",
+    "@thecointech/signers": "^0.2.113",
+    "@thecointech/utilities": "^0.2.113",
+    "@tsoa/runtime": "^4.1.0",
+    "axios": "0.26.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "helmet": "^4.6.0",
-    "image-type": "^4.1.0",
+    "image-type": "^5.0.0",
     "js-yaml": "^3.13.1",
-    "luxon": "1.26.0",
+    "luxon": "3.3.0",
     "multer": "^1.4.2",
-    "node-fetch": "^3.1.1",
     "swagger-tools": "^0.10.4",
     "swagger-ui-express": "^4.2.0"
   },
   "devDependencies": {
     "@types/multer": "^1.4.5",
-    "@types/node-fetch": "^3.0.3",
     "@types/swagger-ui-express": "^4.1.1",
-    "jest": "*",
-    "tsoa": "^3.8.0"
+    "jest": "*"
   }
 }

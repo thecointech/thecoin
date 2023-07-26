@@ -1,5 +1,5 @@
-import { TransitionCallback } from '@thecointech/tx-statemachine'
-import { Decimal } from 'decimal.js-light';
+import { makeTransition } from '@thecointech/tx-statemachine'
+import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
 
 export type Deposit = {
@@ -8,7 +8,7 @@ export type Deposit = {
   date: DateTime;
 }
 
-export const makeDeposit = (deposit: Deposit) : TransitionCallback<"Buy"> => {
-  const depositFiatManual = () => Promise.resolve(deposit)
+export const makeDeposit = (deposit: Deposit) => {
+  const depositFiatManual = makeTransition<"Buy">("depositFiatManual", () => Promise.resolve(deposit));
   return depositFiatManual;
 }

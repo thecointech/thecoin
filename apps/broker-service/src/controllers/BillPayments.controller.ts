@@ -1,8 +1,9 @@
-import { CertifiedTransfer } from '@thecointech/types';
 import { Controller, Body, Route, Post, Response, Tags } from '@tsoa/runtime';
 import { ProcessBillPayment } from '../exchange/VerifiedBillPayments';
-import { ServerError, ValidateErrorJSON } from '../types';
-import { CertifiedTransferResponse } from './types';
+import { ProcessUberBillPayment } from '../exchange/uberBillPayment';
+import type { ServerError, ValidateErrorJSON } from '../types';
+import type { CertifiedTransfer, UberTransferAction } from '@thecointech/types';
+import type { CertifiedTransferResponse } from './types';
 
 
 @Route('bills')
@@ -23,6 +24,18 @@ export class BillPaymentsController extends Controller {
     @Response<ServerError>(500, "Server Error")
     async billPayment(@Body() request: CertifiedTransfer) : Promise<CertifiedTransferResponse> {
         const r = await ProcessBillPayment(request);
+        return {
+          message: "success",
+          ...r,
+        }
+    }
+
+    @Post("uberBillPayment")
+    @Response('200', 'The response confirms to the user the order has been processed')
+    @Response<ValidateErrorJSON>(422, "Validation Failed")
+    @Response<ServerError>(500, "Server Error")
+    async uberBillPayment(@Body() request: UberTransferAction) : Promise<CertifiedTransferResponse> {
+        const r = await ProcessUberBillPayment(request);
         return {
           message: "success",
           ...r,

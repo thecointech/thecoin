@@ -1,4 +1,4 @@
-import { Wallet } from "ethers";
+import { Wallet } from "@ethersproject/wallet";
 import { BuildVerifiedXfer, GetTransferSigner } from "./VerifiedTransfer";
 
 test("Verified signature matches", async () => {
@@ -15,6 +15,7 @@ test("Verified signature matches", async () => {
 
   const { timestamp, signature } = verifiedXfer;
   const signer2 = GetTransferSigner({
+    chainId: verifiedXfer.chainId,
     from: wallet.address,
     to: wallet.address,
     value,

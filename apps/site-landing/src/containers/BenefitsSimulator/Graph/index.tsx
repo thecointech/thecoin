@@ -5,7 +5,7 @@ import { calcAllResults, CoinReturns, MarketData, SimulationParameters } from '.
 import { sleep } from '@thecointech/async';
 import { log } from '@thecointech/logging';
 import { BenefitsReducer } from '../reducer';
-import { debounce } from 'lodash';
+import lodash from 'lodash';
 
 type Props = {
   params: SimulationParameters,
@@ -61,7 +61,7 @@ export const BenefitsGraph = ({ params, snpData, animate, years }: Props) => {
     if (!simulator) return;
     // Run the update asynchronously to give ourselves a chance to re-render
     let isCancelled = false;
-    const runSim = debounce(async () => {
+    const runSim = lodash.debounce(async () => {
       const updateEveryMs = 2500; // every 2.5 seconds, update
       log.trace('Begin Sim');
 

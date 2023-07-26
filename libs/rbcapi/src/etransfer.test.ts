@@ -1,10 +1,9 @@
-process.env.CONFIG_NAME = "prod";
-require("@thecointech/setenv");
-
+import { jest } from "@jest/globals";
 import { RbcStore } from './store';
-import { ApiAction, initBrowser } from './action';
+import { ApiAction } from './action';
 import { send } from './etransfer';
 import { describe, IsManualRun } from '@thecointech/jestutils';
+import { closeBrowser } from './puppeteer';
 
 
 // Note, this test will send real money from a real account.
@@ -24,12 +23,6 @@ describe("Live tests on live account", () => {
   test("Can send e-Transfer", async () => {
     jest.setTimeout(500000);
     try {
-
-      // Always display browser for manual test
-      const browser = await initBrowser({
-        headless: false
-      })
-
       const confirmation = await send("TestEmail", 5, "test", {
         email: "test@thecoin.io",
         question: "question",
@@ -38,7 +31,7 @@ describe("Live tests on live account", () => {
       });
       expect(confirmation).toBeTruthy();
 
-      await browser.close();
+      await closeBrowser();
     }
     catch(e) {
       console.error(e);

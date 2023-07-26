@@ -1,6 +1,7 @@
 import type { CurrencyCode, FXRate } from '@thecointech/pricing';
 
 // file deepcode ignore ComparisonObjectExpression: <Ignore complaints about comparison vs EmptyRate>
+// TODO: This is a terrible idea!  Return undefined if it's not found!
 export const EmptyRate: FXRate = {
   target: 0 as CurrencyCode,
   buy: 0,

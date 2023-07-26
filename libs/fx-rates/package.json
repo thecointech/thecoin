@@ -1,7 +1,8 @@
 {
   "name": "@thecointech/fx-rates",
-  "version": "0.2.75",
+  "version": "0.2.113",
   "description": "TheCoin: Client library for fetching fx-rates",
+  "type": "module",
   "keywords": [
     "TheCoin",
     "S&P500"
@@ -25,16 +26,11 @@
   "files": [
     "build/**/*"
   ],
-  "exports": {
-    ".": {
-      "development": "./build/index_mocked.js",
-      "default": "./build/index.js"
-    }
-  },
+  "exports": "./build/index.js",
   "types": "build/index.d.ts",
   "dependencies": {
-    "@thecointech/logging": "^0.2.75",
-    "@thecointech/pricing": "^0.2.75"
+    "@thecointech/apis": "^0.2.113",
+    "@thecointech/logging": "^0.2.113"
   },
   "devDependencies": {
     "jest": "*"

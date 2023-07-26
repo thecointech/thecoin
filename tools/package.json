@@ -1,0 +1,14 @@
+{
+  "name": "@thecointech/tools",
+  "version": "0.2.113",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "prod:test:deposit": "run-env cfg=prodtest ./fakeDeposit.ts",
+    "dump-firestore": "run-env cfg=devlive ./dumpFirestore.ts",
+    "cancel-tx": "run-env cfg=prod ./transactions/cancelTx.ts"
+  },
+  "devDependencies": {
+    "@thecointech/setenv": "^0.2.113"
+  }
+}

@@ -2,8 +2,9 @@
   "name": "@thecointech/site-base",
   "productName": "THECoin: Website - Base",
   "private": true,
-  "version": "0.2.75",
+  "version": "0.2.113",
   "description": "THECoin: Future-proof currency",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git://github.com/thecointech/thecoin.git"
@@ -13,7 +14,7 @@
   "scripts": {
     "prebuild": "yarn build:i18n",
     "build": "run-p build:src build:link",
-    "build:src": "yarn ttsc -b \"tsconfig.build.json\"",
+    "build:src": "yarn tsc -b \"tsconfig.build.json\"",
     "build:link": "node ../../tools/link-assets.mjs",
     "build:i18n": "run-s extract compile",
     "clean": "run-p clean:*",
@@ -24,11 +25,12 @@
     "lint:src": "eslint . --ext .js,.ts,.jsx,.tsx",
     "lint:src:fix": "eslint --fix",
     "pretest": "yarn clean:test",
-    "test": "cross-env NODE_ENV=test jest --coverage",
+    "test": "yarn run-jest",
+    "test:ci": "yarn run-jest-nix",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern [sha512:contenthash:base64:6]",
-    "compile": "formatjs compile lang/en.json --out-file src/translations/en.json --format ../../tools/format-intl.js && formatjs compile lang/fr.json --out-file src/translations/fr.json --format ../../tools/format-intl.js"
+    "compile": "formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json"
   },
   "files": [
     "build/**/*"
@@ -55,14 +57,14 @@
   },
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.4.1",
-    "@thecointech/shared": "^0.2.75",
-    "@thecointech/site-semantic-theme": "^0.2.75",
-    "@thecointech/utilities": "^0.2.75",
+    "@thecointech/apis": "^0.2.113",
+    "@thecointech/shared": "^0.2.113",
+    "@thecointech/site-semantic-theme": "^0.2.113",
+    "@thecointech/utilities": "^0.2.113",
     "connected-react-router": "^6.6.1",
     "intl": "^1.2.5",
-    "react-animate-height": "^2.0.18",
+    "react-animate-height": "^3.0.4",
     "react-ga": "^2.7.0",
-    "react-helmet": "6.0.0-beta",
     "react-measure": "^2.3.0",
     "react-transition-group": "^4.3.0",
     "reselect": "4.0.0",
@@ -71,7 +73,6 @@
   },
   "devDependencies": {
     "@types/intl": "^1.2.0",
-    "@types/react-helmet": "5.0.9",
     "@types/react-measure": "^2.0.5",
     "@types/react-transition-group": "^4.2.3",
     "@types/zxcvbn": "^4.4.0",

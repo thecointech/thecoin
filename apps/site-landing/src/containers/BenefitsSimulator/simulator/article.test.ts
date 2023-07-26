@@ -3,7 +3,7 @@ import { basicParams, generateData } from '../../../../internals/historical/simu
 import { createParams, SimulationParameters } from './params';
 import { ReturnSimulator } from './simulator';
 import { netFiat } from './state';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 
 //
 // Test the article: "Hacking your income with TheCoin"

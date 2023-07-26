@@ -12,9 +12,28 @@
             "webRoot": "${workspaceFolder}",
             "sourceMaps": true,
             "outFiles": [
-              "${workspaceFolder}/**/*.js",
-              "!**/node_modules/**"
+                "${workspaceFolder}/**/*.js",
+                "!**/node_modules/**"
             ]
+        },
+        {
+            "type": "node",
+            "name": "vscode-jest-tests.v2",
+            "request": "launch",
+            "args": [
+                "test",
+                "--runInBand",
+                "--watchAll=false",
+                "--testNamePattern",
+                "${jest.testNamePattern}",
+                "--runTestsByPath",
+                "${jest.testFile}"
+            ],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "disableOptimisticBPs": true,
+            "runtimeExecutable": "yarn"
         }
     ]
 }

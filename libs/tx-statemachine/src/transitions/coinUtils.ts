@@ -1,10 +1,11 @@
 import { TransactionResponse } from "@ethersproject/abstract-provider";
 import { BigNumber } from '@ethersproject/bignumber';
 import { log } from '@thecointech/logging';
-import { AnyActionContainer } from '../types';
+import { AnyActionContainer, NamedTransition } from '../types';
 import { last } from '@thecointech/utilities';
 import type { Overrides } from '@ethersproject/contracts';
 import type { Transaction } from '@ethersproject/transactions';
+import { ActionType } from "@thecointech/broker-db";
 
 // It does not seem that any transactions submitted with less then 30Gwei are accepted
 const MinimumBloodsuckerFee = 30 * Math.pow(10, 9);
@@ -30,10 +31,10 @@ export const toDelta = (tx: TransactionResponse) => {
       hash: tx.hash,
       meta: JSON.stringify(tx, convertBN),
     }
-  } catch(e) {
+  } catch(e: any) {
     log.error(e, `Error converting {hash}`, {hash: tx.hash});
     return {
-      error: e.error,
+      error: e.message ?? e.toString(),
       hash: undefined,
     }
   }
@@ -41,7 +42,7 @@ export const toDelta = (tx: TransactionResponse) => {
 
 // If we have prior, the tx failed for whatever reason and we now need to
 // replace it (ie, jack up the bribe)
-export async function calculateOverrides(container: AnyActionContainer, transition: Function) : Promise<Overrides> {
+export async function calculateOverrides<Type extends ActionType=ActionType>(container: AnyActionContainer, transition: NamedTransition<Type>) : Promise<Overrides> {
   const prior = findPriorAttempt(container, transition);
   const nonce = await getNonce(container, prior);
   const fees = await getOverrideFees(container, prior)
@@ -52,8 +53,8 @@ export async function calculateOverrides(container: AnyActionContainer, transiti
 }
 
 // Find the latest (reportedly) successful attempt
-function findPriorAttempt(container: AnyActionContainer, transition: Function) {
-  const attempts = container.history.filter(t => (t.delta.type == transition.name) && (!t.delta.error));
+function findPriorAttempt<Type extends ActionType=ActionType>(container: AnyActionContainer, transition: NamedTransition<Type>) {
+  const attempts = container.history.filter(t => (t.delta.type == transition.transitionName) && (!t.delta.error));
   const prior = last(attempts);
   if (prior?.delta.meta) {
     try {

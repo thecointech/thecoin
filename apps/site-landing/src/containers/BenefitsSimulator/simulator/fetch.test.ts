@@ -1,19 +1,20 @@
+import { jest } from '@jest/globals';
 import { DateTime } from 'luxon';
 import { readFileSync } from 'fs';
-import { join } from 'path';
 import { fetchMarketData } from './fetch';
 
+const rootUrl = import.meta.url;
 globalThis.fetch = jest.fn((name: string) =>
   Promise.resolve({
     text: () => {
-      const buffer = readFileSync(join(__dirname, name));
+      const buffer = readFileSync(new URL(`.${name}`, rootUrl));
       return Promise.resolve(buffer.toString());
     }
   }),
-) as jest.Mock;
+) as jest.Mock<typeof globalThis.fetch>;
 
 
-export const getDate = (year: number, month: number) => DateTime.fromObject({year, month, zone: "America/New_York" })
+export const getDate = (year: number, month: number) => DateTime.fromObject({year, month}, {zone: "America/New_York" })
 
 // Basic data validation - is it all there?
 it ('parsed the data correctly', async () => {

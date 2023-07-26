@@ -1,6 +1,6 @@
 import { Wallet } from '@ethersproject/wallet';
 import { getAndCacheSigner } from './cache';
-import { AccountName } from "./names";
+import type { AccountName } from "./names";
 
 function loadFromPK(name: AccountName) {
   const pk = process.env[`WALLET_${name}_KEY`];

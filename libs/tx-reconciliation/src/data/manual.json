@@ -1,6 +1,38 @@
 {
   "connect": {
-    "bank": [
+    "bank": []
+  },
+  "blockchain": {
+    "delete": [
+      "0x5bdb11c8a63c4147fe184bafd94b36701522ed5f47ff38f04a88f019e1d97b59"
+    ]
+  },
+  "database": {
+    "delete": [
+      {
+        "type": "Buy",
+        "address": "0xCA8EEA33826F9ADA044D58CAC4869D0A6B4E90E4",
+        "initialId": "other:1000:1554148691000",
+        "notes": "I can't find this transfer anywhere, it was probably intended to come from init deposit but that is just too complicated"
+      },
+      {
+        "type": "Buy",
+        "address": "0xCA8EEA33826F9ADA044D58CAC4869D0A6B4E90E4",
+        "initialId": "other",
+        "notes": "wages"
+      },
+      {
+        "type": "Buy",
+        "address": "0x3043A245DC9F1A9574635E7FF1DEA6CCFFAB8B92",
+        "initialId": "other",
+        "notes": "wages"
+      },
+      {
+        "type": "Buy",
+        "address": "0xD86C97292B9BE3A91BD8279F114752248B80E8C5",
+        "initialId": "other",
+        "notes": "wages"
+      }
     ]
   }
 }

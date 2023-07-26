@@ -10,12 +10,20 @@ export enum AccountId {
   Police,
   BrokerCAD,
   BrokerTransferAssistant,
+  // Owns & updates SpxCadOracle
+  OracleUpdater,
+  // Locks down ceramic access
+  CeramicValidator,
   // NOTE: The following accounts for testing only!
   client1,
   client2,
+  uberTester,
+  saTester, // ShockAbsorber Tester
 };
 
 export type AccountName = keyof typeof AccountId;
+export type NamedAccounts = Record<AccountName, Signer>;
+
 
 // Better names for these functions would be isLocal/isRemote
 export const isRemote = (signer?: Signer): signer is Signer => !isLocal(signer);

@@ -1,63 +1,46 @@
-import { log } from "@thecointech/logging";
-import { RbcApi } from "@thecointech/rbcapi";
-import { TheCoin } from '@thecointech/contract-core';
-import { processUnsettledDeposits } from './deposits';
-import { processUnsettledETransfers } from './etransfer';
-import { processUnsettledBillPayments } from './bills';
+import { log } from '@thecointech/logging';
+import { RbcApi } from '@thecointech/rbcapi';
+import type { TheCoin } from '@thecointech/contract-core';
 import { SendMail } from '@thecointech/email';
-import { initialize, release } from './initialize';
-
 import { exit } from 'process';
+import { processUnsettledDeposits } from './deposits';
+import { initialize, release } from './initialize';
+import { processReferrals } from './referrals';
+import { processPayments } from './sellProcessor';
 
 //
 // Process deposits: Make 'em Rain!!!
 async function ProcessDeposits(contract: TheCoin, bank: RbcApi) {
-  log.debug("Processing Deposits");
+  log.debug('Processing Deposits');
   const deposits = await processUnsettledDeposits(contract, bank);
   log.debug(`Processed ${deposits.length} deposits`);
   return deposits;
-}
-
-//
-// Process withdrawals: Still Raining!
-async function ProcessETransfers(contract: TheCoin, bank: RbcApi) {
-  log.debug("Processing eTransfers");
-  const eTransfers = await processUnsettledETransfers(contract, bank);
-  log.debug(`Processed ${eTransfers.length} eTransfers`);
-}
-
-//
-// Get notified if you need to address something
-async function ProcessBillPayments(contract: TheCoin, bank: RbcApi) {
-  log.debug("Processing Bill Payments");
-  const billPayments = await processUnsettledBillPayments(contract, bank);
-  log.debug(`Processed ${billPayments.length} bill payments`);
 }
 
 async function Process() {
   const contract = await initialize();
   const bank = new RbcApi();
   await ProcessDeposits(contract, bank);
-  await ProcessETransfers(contract, bank);
-  await ProcessBillPayments(contract, bank);
+  await processPayments(contract, bank);
+  await processReferrals();
 
-  log.debug(`Completed processing`);
+  log.debug('Completed processing');
 }
 
 async function run() {
   try {
+    log.info('Running tx-processor');
     await Process();
-  }
-  catch(e: any) {
+    log.info('Completed running tx-processor');
+  } catch (e: any) {
     log.fatal(e);
-    await SendMail("tx-processor exception", `${e.message}\n${e.stack}`);
-  }
-  finally {
+    const msent = await SendMail(`tx-processor ${e.message}`, `${e.message}\n${e.stack}`);
+    log.info(`Email notification sent: ${msent}`);
+  } finally {
     await release();
     // I have been unable to figure out why we still have handles open
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    await new Promise((resolve) => setTimeout(resolve, 5000));
     exit(0);
   }
 }
 run();
-

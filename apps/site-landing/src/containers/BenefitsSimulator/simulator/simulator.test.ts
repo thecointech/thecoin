@@ -1,4 +1,4 @@
-import { range } from 'lodash';
+import lodash from 'lodash';
 import { DateTime } from 'luxon';
 import { fetchMarketData } from '.';
 import { getDate } from './fetch.test';
@@ -6,7 +6,7 @@ import { createParams } from './params';
 import { one } from './sim.decimal';
 import { ReturnSimulator } from './simulator';
 import { grossFiat, SimulationState } from './state';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 
 const calcPercent = (state: SimulationState): number =>
   grossFiat(state)
@@ -57,7 +57,7 @@ it('accurately calculates for a single month', async () => {
   const data = await fetchMarketDataNoFx();
   const startDate = getDate(2010, 1);
   const sim = new ReturnSimulator(data, params);
-  const returns = range(0, 12).map(
+  const returns = lodash.range(0, 12).map(
     idx => runSim(sim, startDate.plus({ months: idx }), startDate.plus({ months: idx + 1 }))
   );
 
@@ -75,7 +75,7 @@ it('accurately caclulates for a 6 month period', async () => {
   const data = await fetchMarketDataNoFx();
   const startDate = getDate(2010, 1);
   const sim = new ReturnSimulator(data, params);
-  const states = range(0, 7).map(
+  const states = lodash.range(0, 7).map(
     idx => runSim(sim, startDate.plus({ months: idx }), startDate.plus({ months: idx + 6 }))
   )
 

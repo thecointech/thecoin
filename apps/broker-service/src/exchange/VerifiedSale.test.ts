@@ -22,7 +22,6 @@ it("has valid status", async () => {
 
 it("Submits a sale for processing", async () => {
 
-  jest.setTimeout(900000);
   const wallet = Wallet.createRandom();
   expect(wallet).toBeDefined();
 

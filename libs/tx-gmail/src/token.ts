@@ -25,16 +25,23 @@ export async function getNewTokens(oAuth2Client: OAuth2Client) {
 
 /** Get code to be swapped for token */
 export function getCode(url: string) {
-  log.debug('Begin OAuth process');
-  open(url);
+  log.debug(`Begin OAuth process: ${url}`);
+  try {
+    open(url);
+  }
+  catch {
+    log.debug(`Please go to:\n${url}`);
+  }
+
   return new Promise<string>((resolve, reject) => {
+
     const server = http.createServer(async (req, res) => {
       if (!req.url)
         return;
       const path = new URL(req.url, process.env.TX_GMAIL_CLIENT_URI);
       if (path.pathname == '/gauth') {
+        clearTimeout(serverTimeout);
         const code = path.searchParams.get('code');
-
         if (code) {
           log.debug('Auth Successful');
           res.end(
@@ -52,6 +59,12 @@ export function getCode(url: string) {
         res.end();
       }
     }).listen(Number(process.env.TX_GMAIL_CLIENT_LISTENER_PORT), "localhost", () => log.debug("Waiting for code"));
+
+    // Give a 10 minute timeout, then throw
+    const serverTimeout = setTimeout(() => {
+      server.close();
+      reject(new Error("Timeout waiting for code"));
+    }, 10 * 60 * 1000);
   })
 
 }

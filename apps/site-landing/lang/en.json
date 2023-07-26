@@ -59,10 +59,6 @@
     "defaultMessage": "Subscribe to our newsletter:",
     "description": "Footer CTA Part2"
   },
-  "4+OlAD": {
-    "defaultMessage": "Save, invest and spend money with TheCoin,",
-    "description": "home page tagline part1"
-  },
   "43E4EL": {
     "defaultMessage": "We fund clean energy projects to replace dirty coal power",
     "description": "site.wedomore.energy.description: Title for the energy photo for the We Do More page"
@@ -106,6 +102,10 @@
   "B7gcLo": {
     "defaultMessage": "Better Farming",
     "description": "site.wedomore.smallPlant.title: Title for the smallPlant photo for the We Do More page"
+  },
+  "Bpz5oH": {
+    "defaultMessage": "If reducing CO2 was profitable,",
+    "description": "home page tagline part1"
   },
   "CTUhFX": {
     "defaultMessage": "Once-a-year expenses that cannot be put on a credit card",
@@ -238,8 +238,8 @@
   "V0XJgr": {
     "defaultMessage": "Average value after"
   },
-  "VA10q2": {
-    "defaultMessage": "get 100% of benefits and save our Planet.",
+  "W6+t/S": {
+    "defaultMessage": "Would the climate crisis still be a crisis?",
     "description": "home page tagline part2"
   },
   "W8cvxr": {

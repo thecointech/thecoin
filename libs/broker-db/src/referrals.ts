@@ -4,7 +4,7 @@ import { log } from '@thecointech/logging';
 import { DateTime } from "luxon";
 import { referrerConverter, VerifiedReferrer } from "./referrals.types";
 import { ReferralData } from "./user.types";
-import { getUserDoc, getUserData } from "./user";
+import { getUserDoc, getUserData, setUserVerified } from "./user";
 
 export type { VerifiedReferrer } from './referrals.types';
 
@@ -13,7 +13,9 @@ export function getReferrersCollection() : CollectionReference<VerifiedReferrer>
 }
 
 export function getReferrerDoc(code: string) : DocumentReference<VerifiedReferrer> {
-  if (!IsValidShortCode(code)) throw new Error("Invalid Short Code");
+  if (!IsValidShortCode(code)) {
+    throw new Error("Invalid Short Code");
+  }
   return getReferrersCollection().doc(code.toLowerCase());
 }
 
@@ -33,17 +35,39 @@ export async function getUsersReferrer(address: string) {
 
 //
 //  Add a referral code for an account
-//  TODO: Only verified accounts can have referral codes?
 export async function createReferrer(signature: string, address: string) {
-  const code = getShortCode(signature);
-  const referrerDoc = getReferrerDoc(code);
 
-  const data: VerifiedReferrer = {
-    address,
-    signature
-  };
-  await referrerDoc.set(data);
-  return code;
+  // We simply assume we'll find something unique in here
+  // Fix prior to 1 billion users... :-)
+  for (let offset = 0; offset < signature.length; offset++) {
+    let code = getShortCode(signature, offset);
+    const maybe = getReferrerDoc(code);
+    let existing = await maybe.get();
+    // Does this address already have a code?
+    if (existing.data()?.address == address) {
+      log.debug({address, code}, "Found existing code for {address} - {code}");
+      await setUserVerified(address, {referralCode: code });
+      return code;
+    }
+    // else, if it's a free slot, pop it in.
+    if (!existing.exists) {
+      const data: VerifiedReferrer = {
+        address,
+        signature,
+        offset,
+      };
+      await maybe.set(data);
+
+      // update the users data
+      await setUserVerified(address, {referralCode: code });
+      log.debug({address, code}, "Set new code for {address} - {code}");
+      return code
+    }
+  }
+
+  // This should basically never happen
+  log.error({address}, "Couldn't generate unique code for {address}");
+  return null;
 }
 
 //
