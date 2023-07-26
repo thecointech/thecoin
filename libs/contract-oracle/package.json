@@ -38,6 +38,7 @@
     "deploy:both": "yarn deploy:polygon && yarn deploy:ethereum",
     "deploy:polygon": "cross-env HARDHAT_NETWORK=polygon yarn _deploy",
     "deploy:ethereum": "cross-env HARDHAT_NETWORK=ethereum yarn _deploy",
+    "update:prod": "cross-env CONFIG_NAME=prod yarn _update",
     "_deploy": "run-s _deploy:deploy _deploy:verify",
     "_deploy:deploy": "yarn _hardhat ./scripts/deploy.ts",
     "_deploy:verify": "yarn _hardhat ./scripts/verify.ts",
