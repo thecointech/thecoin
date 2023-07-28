@@ -19,7 +19,14 @@ const start = DateTime.fromMillis(INITIAL_TIMESTAMP);
 const factor = Math.pow(10, await oracle.decimals());
 log.debug("Initial timestamp: " + start.toLocaleString());
 const now = DateTime.now();
+const currOffset = (await oracle.getOffset(now.toMillis())).toNumber();
 
+const latestRound = await oracle.latestRoundData();
+const blockIdx = latestRound[0].toNumber();
+
+const pushValidUntil = INITIAL_TIMESTAMP + (4 + blockIdx) * BLOCK_TIME;
+const maxValidUntil = 1690399925000 + (BLOCK_TIME);
+if (!(pushValidUntil <= maxValidUntil)) console.log("Too many updates")
 let orates = [];
 for (let i = 0; i < 20; i++) {
   const rate = (await oracle.getRoundData(i))[1].toNumber();
