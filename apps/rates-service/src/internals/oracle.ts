@@ -23,7 +23,7 @@ export async function updateOracle(timestamp: number) {
     const signer = await getSigner("OracleUpdater");
     const oracle = await connectOracle(signer);
 
-    log.info(
+    log.debug(
       {
         date: toDateStr(timestamp),
         address: oracle.address,

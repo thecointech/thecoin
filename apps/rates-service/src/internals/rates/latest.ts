@@ -106,13 +106,14 @@ function checkValidity(key: RateKey, newRate: RateType) {
 
   // if we don't have at least 5 seconds before the new rate comes into effect, then warn
   // there isn't much we can do about this, but we should be tracking possible errors
-  const now = Date.now();
-  if (newRate.validFrom - now < 5000) {
-    log.warn(
-      { FxKey: key, now: toDateStr(now), NewTill: toDateStr(newRate.validTill) },
-      `New rate {FxKey} comes into force without sufficient time to allow updates to propagate: {NewTill} - {now} < 5s`
-    );
-  }
+  // This is not currently an issue, but I'll leave it here as a reminder
+  // const now = Date.now();
+  // if (newRate.validFrom - now < 5000) {
+  //   log.warn(
+  //     { FxKey: key, now: toDateStr(now), NewTill: toDateStr(newRate.validTill) },
+  //     `New rate {FxKey} comes into force without sufficient time to allow updates to propagate: {NewTill} - {now} < 5s`
+  //   );
+  // }
   return true;
 }
 
