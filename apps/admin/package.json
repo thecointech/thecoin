@@ -2,15 +2,12 @@
   "name": "thecoin-admin",
   "private": true,
   "productName": "thecoin-admin",
-  "workspaces": {
-    "nohoist": [
-      "**/electron",
-      "**/electron-devtools-installer/**"
-    ]
-  },
   "version": "0.2.115",
   "description": "Admin: audit TheCoin system ops",
   "main": ".webpack/main",
+  "config": {
+    "forge": "./config.forge"
+  },
   "scripts": {
     "build": "yarn make",
     "dev": "yarn electron-forge start",
@@ -27,10 +24,6 @@
   "author": {
     "name": "Stephen Taylor",
     "email": "stephen.taylor.dev@gmail.com"
-  },
-  "license": "MIT",
-  "config": {
-    "forge": "./config.forge.js"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.2.1",

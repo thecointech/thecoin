@@ -1,3 +1,4 @@
+import path from 'path';
 import type { ModuleOptions } from 'webpack';
 
 export const rules: Required<ModuleOptions>['rules'] = [
@@ -7,6 +8,12 @@ export const rules: Required<ModuleOptions>['rules'] = [
     // "fake" .node file which is really a cjs file.
     test: /native_modules[/\\].+\.node$/,
     use: 'node-loader',
+  },
+  {
+    test: /\.m?js/,
+    resolve: {
+      fullySpecified: false,
+    },
   },
   {
     test: /[/\\]node_modules[/\\].+\.(m?js|node)$/,
@@ -24,6 +31,7 @@ export const rules: Required<ModuleOptions>['rules'] = [
     use: {
       loader: 'ts-loader',
       options: {
+        configFile: path.join(__dirname, '..', 'tsconfig.app.json'),
         transpileOnly: true,
       },
     },
