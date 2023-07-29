@@ -56,8 +56,7 @@
     "style-loader": "^3.0.0",
     "ts-jest": "^29.0.5",
     "ts-loader": "^9.2.2",
-    "ts-node": "^10.0.0",
-    "windows-scheduler": "1.0.1"
+    "ts-node": "^10.0.0"
   },
   "dependencies": {
     "@thecointech/apis": "^0.2.115",
