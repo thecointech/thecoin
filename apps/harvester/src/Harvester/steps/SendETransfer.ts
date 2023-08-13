@@ -33,7 +33,7 @@ export class SendETransfer implements ProcessingStage {
       const harvesterBalance = (state.harvesterBalance ?? currency(0))
         .add(toTransfer);
 
-      log.info(`Successfully transferred ${state.toETransfer} to TheCoin, new balance ${harvesterBalance}`);
+      log.info(`Successfully transferred ${toTransfer} to TheCoin, new balance ${harvesterBalance}`);
       return {
         toETransfer: undefined,
         harvesterBalance,

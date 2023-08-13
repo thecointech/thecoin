@@ -1,5 +1,7 @@
-import path from 'path';
 import type { ModuleOptions } from 'webpack';
+//@ts-ignore
+import less_loaders from '@thecointech/site-semantic-theme/webpack.less';
+import { configFile } from './webpack.common';
 
 export const rules: Required<ModuleOptions>['rules'] = [
   // Add support for native node modules
@@ -31,9 +33,21 @@ export const rules: Required<ModuleOptions>['rules'] = [
     use: {
       loader: 'ts-loader',
       options: {
-        configFile: path.join(__dirname, '..', 'tsconfig.app.json'),
+        configFile,
         transpileOnly: true,
       },
     },
+  },
+  {
+    test: /(?<!module)\.css$/,
+    use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+  },
+  // Explicitly process Semantics Less files.
+  less_loaders.semantic_less_loader,
+  // Loaders for module files
+  less_loaders.css_module_loader,
+  {
+    test: /\.(svg|png|jpg|ttf|eot|woff2?)$/,
+    type: 'asset'
   },
 ];

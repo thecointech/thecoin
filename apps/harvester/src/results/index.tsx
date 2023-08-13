@@ -4,6 +4,7 @@ import { HarvestData } from '../Harvester/types';
 import { fromDb } from '../Harvester/db_translate';
 import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
+import { Result } from '../scraper_actions';
 
 
 export const Results = () => {
@@ -57,13 +58,15 @@ export const Results = () => {
 }
 
 
-const getCurrentState = async () => {
+const getCurrentState = async () : Promise<Result<HarvestData>> => {
   var r = await window.scraper.getCurrentState();
   if (r.value) {
-    const converted = fromDb(r.value);
+    const converted: HarvestData = fromDb(r.value);
     return {
       value: converted,
     }
   }
-  return r;
+  return {
+    error: r.error,
+  };
 }

@@ -1,5 +1,5 @@
 import { app, BrowserWindow, session  } from 'electron';
-import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
+// import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { getCSP } from './csp';
 import { ipcMain } from 'electron';
 import { log } from '@thecointech/logging';
@@ -34,7 +34,6 @@ const createWindow = (): void => {
     webPreferences:
     {
       nodeIntegration: false,
-      enableRemoteModule: false,
       contextIsolation: true,
       sandbox: true,
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
@@ -74,10 +73,10 @@ app.on('activate', () => {
 
 app.whenReady()
 .then(() => {
-  log.info("App Ready");
   // Initialize node-side tx-gmail
   gmail.bridge(ipcMain);
   signers.bridge(ipcMain);
+  log.info("App Ready");
 
   session.defaultSession.webRequest.onHeadersReceived({ urls: ["*://localhost:*/*"] }, (details, callback) => {
     callback({
@@ -88,13 +87,13 @@ app.whenReady()
     })
   })
 
-  if (process.env.NODE_ENV === 'development') {
-    installExtension(REDUX_DEVTOOLS)
-      .then((name) => console.log(`Added Extension:  ${name}`))
-      .catch((err) => console.log('An error occurred: ', err));
-    installExtension(REACT_DEVELOPER_TOOLS)
-      .then((name) => console.log(`Added Extension:  ${name}`))
-      .catch((err) => console.log('An error occurred: ', err));
-  }
+  // if (process.env.NODE_ENV === 'development') {
+  //   installExtension(REDUX_DEVTOOLS)
+  //     .then((name) => console.log(`Added Extension:  ${name}`))
+  //     .catch((err) => console.log('An error occurred: ', err));
+  //   installExtension(REACT_DEVELOPER_TOOLS)
+  //     .then((name) => console.log(`Added Extension:  ${name}`))
+  //     .catch((err) => console.log('An error occurred: ', err));
+  // }
 })
 .catch(console.error);

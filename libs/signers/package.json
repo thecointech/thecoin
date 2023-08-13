@@ -68,6 +68,7 @@
     "@thecointech/logging": "^0.2.115"
   },
   "devDependencies": {
+    "@thecointech/electron-utils": "^0.2.115",
     "jest": "*"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"

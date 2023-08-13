@@ -1,10 +1,9 @@
 
-
-
 // Duplicate the electron IPC class here
 // Unfortunately electron can't be hoisted, so we
-// don't have access to its definitions anywhere
-interface IpcMainInvokeEvent extends Event {
+// don't have access to its definitions in libraries
+// where we might need it
+interface IpcMainInvokeEvent {
 
   // Docs: https://electronjs.org/docs/api/structures/ipc-main-invoke-event
 

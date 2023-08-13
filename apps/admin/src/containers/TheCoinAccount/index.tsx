@@ -1,4 +1,3 @@
-import React from 'react';
 import { TheCoinRoutes } from './Routes';
 import { AccountId } from '@thecointech/signers';
 import { AccountBase } from '../AccountBase';

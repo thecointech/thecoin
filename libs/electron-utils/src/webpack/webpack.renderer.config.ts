@@ -1,41 +1,25 @@
 import type { Configuration } from 'webpack';
-//@ts-ignore
-import less_loaders from '@thecointech/site-semantic-theme/webpack.less';
 import { rules } from './webpack.rules';
 import { plugins } from './webpack.plugins';
-import { commonPlugins } from './webpack.common';
-import { getEnvVars } from '@thecointech/setenv';
 import path from 'path';
+import merge from 'webpack-merge';
+//@ts-ignore
+import getMocks from '@thecointech/setenv/webpack';
+import { env } from './webpack.common';
 
-const env = getEnvVars();
-const rootPath = path.join(__dirname, '../..');
+const rootPath = path.join(__dirname, '../../../..');
 
-rules.push(
-  {
-    test: /(?<!module)\.css$/,
-    use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
-  },
-  // Explicitly process Semantics Less files.
-  less_loaders.semantic_less_loader,
-  // Loaders for module files
-  less_loaders.css_module_loader,
-);
-
-export const rendererConfig: Configuration = {
+const baseOptions: Configuration = {
   module: {
     rules,
   },
-  plugins: {
-    ...plugins,
-    ...commonPlugins,
-  },
+  plugins,
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
     conditionNames: [env.CONFIG_NAME, "electron", "browser", "webpack", "import", "default"],
+    modules: [path.resolve(process.cwd(), 'src'), 'node_modules'],
     fallback: {
       "crypto": require.resolve("crypto-browserify"),
-      // "http": require.resolve("stream-http"),
-      // "https": require.resolve("https-browserify"),
       "stream": require.resolve("stream-browserify"),
       "path": require.resolve("path-browserify"),
       "fs": false,
@@ -52,3 +36,5 @@ export const rendererConfig: Configuration = {
     topLevelAwait: true,
   },
 };
+
+export const rendererConfig = merge(getMocks(env), baseOptions);

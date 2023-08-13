@@ -1,4 +1,3 @@
-import React from 'react';
 //import { useEffect, useState, useCallback } from 'react';
 // import { authorize, finishLogin, isValid } from '@thecointech/tx-processing/deposit/auth';
 // import { Input, Button } from 'semantic-ui-react';
