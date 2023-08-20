@@ -4,6 +4,9 @@
   "productName": "thecoin-admin",
   "version": "0.2.115",
   "description": "Admin: audit TheCoin system ops",
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
   "main": ".webpack/main",
   "config": {
     "forge": "./config.forge"
@@ -22,10 +25,6 @@
     "lint": "eslint --ext .ts ."
   },
   "keywords": [],
-  "author": {
-    "name": "Stephen Taylor",
-    "email": "stephen.taylor.dev@gmail.com"
-  },
   "devDependencies": {
     "@electron-forge/cli": "^6.2.1",
     "@electron-forge/maker-deb": "^6.2.1",

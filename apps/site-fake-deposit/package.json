@@ -10,7 +10,7 @@
     "url": "git://github.com/thecointech/thecoin.git"
   },
   "author": "Stephen Taylor",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "pre_build": "run-p build:*",
     "_build": "yarn cross-env NODE_ENV=production webpack --config ../../libs/site-base/internal/webpack/webpack.prod.babel.js --progress",

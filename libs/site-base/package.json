@@ -10,7 +10,7 @@
     "url": "git://github.com/thecointech/thecoin.git"
   },
   "author": "Stephen Taylor",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "prebuild": "yarn build:i18n",
     "build": "run-p build:src build:link",

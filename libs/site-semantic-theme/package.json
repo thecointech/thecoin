@@ -15,7 +15,7 @@
     "url": "git://github.com/thecointech/thecoin.git"
   },
   "author": "Stephen Taylor",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "exports": {
     "./build": "./internal/buildSemantic.cjs",
     "./webpack.less": "./internal/webpack.less.cjs",
