@@ -6,7 +6,7 @@ import { ConfigReducer } from './state/reducer';
 export const RoundUp = () => {
   const data = ConfigReducer.useData();
   const api = ConfigReducer.useApi();
-  const roundUp = data.steps[HarvestStepType.RoundUp];
+  const roundUp = data.steps.find(step => step.type === HarvestStepType.RoundUp);
 
   const [enabled, setEnabled] = useState(!!roundUp ?? false);
   const [roundPoint, setRoundPoint] = useState(roundUp?.args?.['roundPoint'] ?? 100);

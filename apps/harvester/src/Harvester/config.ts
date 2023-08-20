@@ -11,7 +11,6 @@ import path from 'path';
 import { log } from '@thecointech/logging';
 import { ActionTypes, AnyEvent } from '../scraper/types';
 import { rootFolder } from '../paths';
-import { ClearPendingVisa } from './steps/ClearPendingVisa';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
@@ -114,12 +113,7 @@ export async function hydrateProcessor() {
     .filter(step => !!step)
     .map(createStep)
 
-  log.warn("HACK ALERT: Manually adding ClearPendingVisa step");
-
-  return [
-    new ClearPendingVisa(),
-    ...steps
-  ]
+  return steps;
 }
 
 export async function setEvents(type: ActionTypes, events: AnyEvent[]) {

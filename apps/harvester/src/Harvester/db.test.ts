@@ -2,11 +2,10 @@ import { jest } from '@jest/globals';
 import { DateTime } from 'luxon'
 import { HarvestData } from './types'
 import currency from 'currency.js'
-import { exportResults, getCurrentState, initState, setCurrentState } from './db'
+import { getCurrentState, initState, setCurrentState } from './db'
 import memory from 'pouchdb-adapter-memory'
 import PouchDB from 'pouchdb';
-import { StoredData, fromDb, toDb } from './db_translate';
-import { writeFile } from 'fs/promises';
+import { fromDb, toDb } from './db_translate';
 
 PouchDB.plugin(memory)
 jest.setTimeout(30000);

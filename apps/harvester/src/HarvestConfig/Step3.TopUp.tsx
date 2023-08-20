@@ -6,7 +6,7 @@ import { ConfigReducer } from './state/reducer';
 export const TopUp = () => {
   const data = ConfigReducer.useData();
   const api = ConfigReducer.useApi();
-  const topUpStep = data.steps[HarvestStepType.TopUp];
+  const topUpStep = data.steps.find(step => step.type === HarvestStepType.TopUp);
 
   const [enabled, setEnabled] = useState(!!topUpStep ?? false);
   const [topUp, setTopUp] = useState(topUpStep?.args?.['topUp'] ?? 10);

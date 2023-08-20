@@ -48,5 +48,7 @@ export async function harvest() {
 
     // throw err;
   }
-  await closeBrowser();
+  finally {
+    await closeBrowser();
+  }
 }
