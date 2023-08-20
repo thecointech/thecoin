@@ -52,6 +52,7 @@ export const rawGraph: GraphTransitions<'Bill', ActionStates>  = {
   tcRegisterWaiting: {
     action: core.waitCoin,
     next: "tcWaitToFinalize",
+    onError: core.requestManual,
   },
 
   // BILLS ONLY PROCESS AFTER THE TRANSFER IS COMPLETE

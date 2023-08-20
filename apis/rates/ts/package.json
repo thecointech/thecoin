@@ -16,7 +16,7 @@
     "openapi-generator",
     "@thecointech/pricing"
   ],
-  "license": "Unlicense",
+  "license": "GPL-3.0-or-later",
   "main": "./dist/esm/index.js",
   "typings": "./dist/esm/index.d.ts",
   "sideEffects": false,

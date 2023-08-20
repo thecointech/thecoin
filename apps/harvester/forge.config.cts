@@ -3,14 +3,17 @@ import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { MakerZIP } from '@electron-forge/maker-zip';
 import { MakerDeb } from '@electron-forge/maker-deb';
 import { MakerRpm } from '@electron-forge/maker-rpm';
+import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives';
 import { WebpackPlugin } from '@electron-forge/plugin-webpack';
 
-import { mainConfig } from './config/webpack.main.config';
-import { rendererConfig } from './config/webpack.renderer.config';
+import { mainConfig } from '@thecointech/electron-utils/webpack/webpack.main.config';
+import { rendererConfig } from '@thecointech/electron-utils/webpack/webpack.renderer.config';
+
 import { getCSP } from './config/csp';
 
 const config: ForgeConfig = {
   packagerConfig: {
+    asar: true,
     icon: 'assets/appicon',
   },
   rebuildConfig: {},
@@ -21,6 +24,7 @@ const config: ForgeConfig = {
     new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})
   ],
   plugins: [
+    new AutoUnpackNativesPlugin({}),
     new WebpackPlugin({
       devContentSecurityPolicy: getCSP(),
       mainConfig,

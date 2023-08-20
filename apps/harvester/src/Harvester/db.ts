@@ -53,7 +53,7 @@ export async function getCurrentState() {
   }
   const {
     _id,
-    _ref,
+    _rev,
     _revs_info,
     ...state
   } = r;

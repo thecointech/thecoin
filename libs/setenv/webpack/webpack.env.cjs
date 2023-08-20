@@ -27,7 +27,10 @@ const compileMocks = {
 const allMocks = {
   // Expose all mocks
   resolve: {
-    modules: [mocksFolder]
+    modules: [
+      mocksFolder,
+      'node_modules',
+    ]
   }
 }
 

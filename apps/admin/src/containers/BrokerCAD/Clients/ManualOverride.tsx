@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ActionDataTypes, AnyActionData, AnyTxAction, TxActionType, storeTransition } from '@thecointech/broker-db';
 import { Button, Select } from 'semantic-ui-react';
 import { log } from '@thecointech/logging';

@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import { ContractState } from './types';
 import { last } from '@thecointech/utilities';
-import { getProvider } from '@thecointech/ethers-provider/infura';
+// import { getProvider } from '@thecointech/ethers-provider/infura';
 import type { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
 
 type BaseLogs = {
@@ -15,9 +15,12 @@ type BaseLogs = {
   amnt: Decimal
 }
 
-export async function getPluginLogs(address: string, user: string, _provider: Erc20Provider, fromBlock: number) : Promise<BaseLogs[]> {
+export async function getPluginLogs(address: string, user: string, provider: Erc20Provider, fromBlock: number) : Promise<BaseLogs[]> {
   // TODO: Why does Erc20Provider screw this one up?
-  const provider = getProvider();
+  // const provider = getProvider();
+  if (provider) {
+    throw new Error("You need to fix this")
+  }
   const contract = new Contract(address, BasePluginSpec.abi, provider) as BasePlugin;
   const filter = contract.filters.ValueChanged(user);
   // const logs = await _provider.getEtherscanLogs(filter, "and")

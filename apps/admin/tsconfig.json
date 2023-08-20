@@ -1,11 +1,7 @@
 {
-  "extends": "../tsconfig.apps.json",
-  "compilerOptions": {
-    "tsBuildInfoFile": "./build/.buildinfo",
-    "outDir": "./build/",
-    "rootDir": "./src/",
-    "baseUrl": "./src/",
-    "skipLibCheck": true
-  },
-  "include": ["src/**/*"]
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.tests.json" },
+    { "path": "./tsconfig.build.json" },
+  ]
 }

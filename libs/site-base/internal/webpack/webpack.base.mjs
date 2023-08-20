@@ -2,7 +2,6 @@
  * COMMON WEBPACK CONFIGURATION
  */
 import { getEnvFiles } from '@thecointech/setenv';
-
 import { join, resolve as _resolve } from 'path';
 import webpack from 'webpack';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';

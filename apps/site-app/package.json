@@ -10,7 +10,7 @@
     "url": "git://github.com/thecointech/thecoin.git"
   },
   "author": "Stephen Taylor",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "preanalyze": "yarn clean:analyze",
     "analyze": "node ./internals/scripts/analyze.js",
@@ -88,7 +88,6 @@
     "plop": "2.4.0",
     "react-app-polyfill": "1.0.1",
     "react-test-renderer": "16.8.6",
-    "shelljs": "0.8.3",
     "whatwg-fetch": "3.0.0"
   }
 }

@@ -28,6 +28,7 @@ const toDbDelta = (delta: HarvestDelta) => ({
   harvesterBalance: delta.harvesterBalance?.toString(),
   toETransfer: delta.toETransfer?.toString(),
   toPayVisa: delta.toPayVisa?.toString(),
+  toPayVisaDate: delta.toPayVisaDate?.toISO(),
   stepData: delta.stepData,
 })
 
@@ -61,11 +62,13 @@ const fromDbChequing = (data: StoredData['chq']) => ({
 })
 
 const maybeCurrency = (v: string | undefined) => v ? new currency(v) : undefined;
+const maybeDate = (v: string | undefined | null) => v ? DateTime.fromISO(v) : undefined;
 
 const fromDbDelta = (data: StoredData['delta'][number]) => ({
   harvesterBalance: maybeCurrency(data.harvesterBalance),
   toETransfer: maybeCurrency(data.toETransfer),
   toPayVisa: maybeCurrency(data.toPayVisa),
+  toPayVisaDate: maybeDate(data.toPayVisaDate),
   stepData: data.stepData,
 })
 
@@ -79,10 +82,10 @@ const fromDbHistory = (data: StoredData['visa']['history'][number]) => ({
 
 // Remove all undefined parameters from the object recursively
 
-function cleanseObject(obj: any) {
-  for (const [key, value] of Object.entries(obj)) {
+function cleanseObject<T>(obj: T) {
+  for (const [key, value] of Object.entries(obj as any)) {
     if (value === undefined || value == null) {
-      delete obj[key]
+      delete (obj as any)[key]
     }
     else if (DateTime.isDateTime(value) || (value as any).intValue) {
       // do nothing
