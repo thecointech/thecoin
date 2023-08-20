@@ -6,7 +6,6 @@ import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
 import { Result } from '../scraper_actions';
 
-
 export const Results = () => {
 
   const [running, setRunning] = useState(false);
@@ -36,6 +35,24 @@ export const Results = () => {
     setState(state.value);
     setRunning(false);
   }
+
+  const exportResults = async () => {
+    const r = await window.scraper.exportResults();
+    if (r.error) {
+      alert("Error - please check logs:\n " + r.error);
+    }
+    const a = window.document.createElement('a');
+    a.href = window.URL.createObjectURL(new Blob([r.value ?? 'no values'], { type: 'text/csv' }));
+    a.download = 'results.csv';
+
+    // Append anchor to body.
+    document.body.appendChild(a);
+    a.click();
+
+    // Remove anchor from body
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(a.href);
+  }
   return (
     <Dimmer.Dimmable as={Segment} dimmed={running}>
       <Dimmer active={running} inverted>
@@ -48,6 +65,9 @@ export const Results = () => {
         <p>Harvester Balance: {state?.state.harvesterBalance?.format() ?? 'N/A'}</p>
         <p>Visa Payment Pending: {state?.state.toPayVisa?.format() ?? 'N/A'}</p>
         <p>Last Run: {state?.date.toLocaleString(DateTime.DATETIME_SHORT) ?? 'N/A'}</p>
+      </div>
+      <div>
+        <Button onClick={exportResults}>Export Results</Button>
       </div>
       <div>
         <Button onClick={runImmediately}>Run Harvester Now</Button>
