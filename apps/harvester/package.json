@@ -32,6 +32,7 @@
     "test": "yarn run-jest"
   },
   "devDependencies": {
+    "@thecointech/jestutils": "^0.2.115",
     "@electron-forge/cli": "^6.2.1",
     "@electron-forge/maker-deb": "^6.2.1",
     "@electron-forge/maker-rpm": "^6.2.1",
@@ -50,8 +51,17 @@
     "pouchdb-adapter-memory": "^8.0.1"
   },
   "dependencies": {
+    "@thecointech/account": "^0.2.115",
     "@thecointech/apis": "^0.2.115",
+    "@thecointech/async": "^0.2.115",
     "@thecointech/contract-plugins": "^0.2.115",
+    "@thecointech/contract-plugin-converter": "^0.2.115",
+    "@thecointech/contract-plugin-shockabsorber": "^0.2.115",
+    "@thecointech/fx-rates": "^0.2.115",
+    "@thecointech/shared": "^0.2.115",
+    "@thecointech/signers": "^0.2.115",
+    "@thecointech/utilities": "^0.2.115",
+    "@thecointech/logging": "^0.2.115",
     "comdb": "^6.0.0-beta",
     "currency.js": "^2.0.4",
     "electron-context-menu": "^3.6.1",
