@@ -4,6 +4,7 @@ import { getCombinedRates } from './rates';
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
 import { FirestoreAdmin, Timestamp, getFirestore } from '@thecointech/firestore';
+import { toDateStr } from '../utils/date';
 
 
 export async function updateOracle(timestamp: number) {
@@ -22,9 +23,9 @@ export async function updateOracle(timestamp: number) {
     const signer = await getSigner("OracleUpdater");
     const oracle = await connectOracle(signer);
 
-    log.info(
+    log.debug(
       {
-        date: DateTime.fromMillis(timestamp).toLocaleString(DateTime.DATETIME_SHORT),
+        date: toDateStr(timestamp),
         address: oracle.address,
       },
       'Updating Oracle {address} at {date}'
@@ -34,7 +35,7 @@ export async function updateOracle(timestamp: number) {
     await updateRates(oracle, timestamp, async (ts) => {
 
       log.trace(
-        {date: DateTime.fromMillis(ts).toLocaleString(DateTime.DATETIME_SHORT)},
+        {date: toDateStr(ts)},
         'Fetching rate for oracle at {date}'
       )
       // do we have a data for this time?
@@ -53,13 +54,13 @@ export async function updateOracle(timestamp: number) {
     const validToDate = DateTime.fromMillis(validTo.toNumber());
     if (validToDate > DateTime.now().plus({ hours: 6})) {
       log.error(
-        { date: validToDate.toLocaleString(DateTime.DATETIME_SHORT) },
+        { date: toDateStr(validToDate) },
         "Oracle is too far in the future {date}"
       );
     }
     else {
       log.info(
-        { date: validToDate.toLocaleString(DateTime.DATETIME_SHORT) },
+        { date: toDateStr(validToDate) },
         'Oracle updated to {date}'
       );
     }

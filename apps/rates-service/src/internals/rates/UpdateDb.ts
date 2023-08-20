@@ -12,14 +12,17 @@ import { waitTillBuffer } from "./delay";
 import { fetchFxRate } from "./fetchFx";
 import { log } from '@thecointech/logging';
 import { updateOracle } from '../oracle';
+import { toDateStr } from '../../utils/date';
 
 /////////////////////////////////////////////////////////////////////////////////
 
 //
 // Logs important info, and returns true if we should update.
 function isUpdateRequired(key: RateKey, now: number, current: RateType) {
-  log.debug("Updating {FxKey} with current expiration {ValidUntil}",
-    key, current.validTill);
+  log.debug(
+    { FxKey: key, now: toDateStr(now), ValidUntil: toDateStr(current.validTill), },
+    "Updating {FxKey} at {now} with current expiration {ValidUntil}",
+  );
 
   // Quick exit if we are updating again too quickly
   // We should only update in the period between
@@ -28,8 +31,10 @@ function isUpdateRequired(key: RateKey, now: number, current: RateType) {
   const remainingValidity = current.validTill - now;
   if (remainingValidity > RateOffsetFromMarket)
   {
-    log.debug("Existing {FxKey} has remaining validity {Remaining}, no update required",
-      key, remainingValidity);
+    log.debug(
+      { FxKey: key, Remaining: remainingValidity },
+      "Existing {FxKey} has remaining validity {Remaining}ms, no update required"
+    );
     return false;
   }
   return true;
@@ -40,7 +45,7 @@ function validateNewRate(key: RateKey, validator: boolean) {
   if (!validator) {
     // We require an update, but have no new data.
     // What should we do here?
-    log.error("{FxKey} required update, but no new rates were found", key);
+    log.error({ FxKey: key }, "{FxKey} required update, but no new rates were found");
     throw new Error('NoUpdatesFetched');
   }
 }
@@ -61,8 +66,10 @@ export async function ensureLatestCoinRate(now: number)
   // If we are updating on time, we should only have a single rate to insert
   if (newRates.length > 1)
   {
-    log.warn("Multiple inserts found for {FxKey} from {ValidFrom} to {ValidTill}",
-      key, current.validFrom, now);
+    log.warn(
+      { FxKey: key, ValidFrom: toDateStr(current.validFrom), ValidTill: toDateStr(current.validTill) },
+      "Multiple inserts found for {FxKey} from {ValidFrom} to {ValidTill}"
+    );
   }
 
   // Insert to DB
@@ -71,7 +78,7 @@ export async function ensureLatestCoinRate(now: number)
 
   // Update our cache of latest rate
   updateLatest(key, newRates.pop()!)
-  log.debug("Finished update for {FxKey}", key);
+  log.debug({ FxKey: key }, "Finished update for {FxKey}");
 }
 
 //
@@ -88,20 +95,26 @@ export async function ensureLatestFxRate(now: number) {
   const fxRates = await fetchFxRate(current.validTill, now);
   validateNewRate(key, !!fxRates);
 
+  log.info(
+    { FxKey: key, LastValid: toDateStr(current.validFrom), NextValid: toDateStr(current.validTill) },
+    "Updating {FxKey} from {LastValid} to {NextValid}"
+  );
+
+
   if (current.validTill < fxRates.validFrom)
   {
     // We have a hole in our validity,
     // update the latest to extend it's validity
     // until now.
+    log.warn("This should never happen");
     current.validTill = fxRates.validFrom;
-    await setRate("FxRates", current);
   }
   // Insert to DB
   await setRate(key, fxRates);
 
   // Update our cache of latest rate
   updateLatest(key, fxRates)
-  log.debug("Finished update for {FxKey}", key);
+  log.debug({ FxKey: key }, "Finished update for {FxKey}");
 }
 
 
