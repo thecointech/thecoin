@@ -10,6 +10,7 @@ export const defaultDays: DaysArray = [
   false,
   false,
 ]
+export const defaultTime = "08:00";
 
 export enum HarvestStepType {
   // ReadVisaOwing,
@@ -31,16 +32,14 @@ export type HarvestStep = {
   args?: HarvestArgs,
 }
 export type HarvestSteps = Array<HarvestStep>;
-export type HarvestConfig = {
+
+export type HarvestSchedule = {
   daysToRun: DaysArray,
+  timeToRun: string,
+}
+export type HarvestConfig = {
+  schedule: HarvestSchedule,
   steps: HarvestSteps,
-    // HarvestStep|null, // RoundUp,
-    // HarvestStep|null, // TransferEverything,
-    // HarvestStep|null, // TopUp,
-    // HarvestStep|null, // TransferLimit,
-    // HarvestStep|null, // SendETransfer
-    // HarvestStep|null, // PayVisa
-  // ]
 }
 
 // Until we have a proper graph, just explicitly set an order
