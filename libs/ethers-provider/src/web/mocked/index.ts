@@ -22,7 +22,7 @@ export class Erc20Provider extends BaseProvider {
   //
   // In devlive, we do not have access to Etherscans advanced api
   // but we can replicate using just events
-  async getERC20History(args: {address?: string, contractAddress?: string, startBlock?: BlockTag, endBlock?: BlockTag}) {
+  async getERC20History(args: {address?: string, contractAddress?: string, fromBlock?: BlockTag, toBlock?: BlockTag}) {
 
     const remapping: any = await getRemapping(args.address);
     const result = [...transferFrom.result, ...transferTo.result];
@@ -45,6 +45,11 @@ export class Erc20Provider extends BaseProvider {
   }
 
   async getEtherscanLogs(filter: Filter, _conditional: "or"|"and") : Promise<Array<Log>>{
+
+    // We get called from logs, and that'd throw if we returned this...
+    if (filter.topics?.[0] != '0x53abef67a06a7d88762ab2558635c2ccf615af355d42c5a0c98715be5fb39e75')
+      return [];
+
     const raw = (filter.topics?.[1] === null)
       ? exactFrom
       : exactTo;

@@ -7,7 +7,7 @@ export const TransferLimit = () => {
 
   const data = ConfigReducer.useData();
   const api = ConfigReducer.useApi();
-  const xferLimit = data.steps[HarvestStepType.TransferLimit];
+  const xferLimit = data.steps.find(step => step.type === HarvestStepType.TransferLimit);
 
   const [enabled, setEnabled] = useState(!!xferLimit ?? false);
   const [limit, setLimit] = useState(xferLimit?.args?.['limit'] ?? 250);
