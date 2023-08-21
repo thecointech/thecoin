@@ -18,7 +18,7 @@ export const Results = () => {
         alert(state.error);
       }
       else {
-        log.info("State Received: " + JSON.stringify(state));
+        // log.info("State Received: " + JSON.stringify(state));
         setState(state.value);
       }
     })
