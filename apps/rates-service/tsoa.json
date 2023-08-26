@@ -7,7 +7,7 @@
 
   "spec": {
     "basePath": "/api/v1",
-    "specVersion": 2,
+    "specVersion": 3,
     "outputDirectory": "./src/api"
   },
   "routes": {
