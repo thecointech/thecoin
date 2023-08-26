@@ -108,8 +108,8 @@ export class Erc20Provider extends EtherscanProvider {
     const {address, contractAddress, fromBlock, toBlock} = args;
     const params: Record<string, any> = {
       action: "tokentx",
-      startblock: ((fromBlock == null) ? initBlock : fromBlock),
-      endblock: ((toBlock == null) ? 99999999 : toBlock),
+      startblock: fromBlock ?? initBlock,
+      endblock: toBlock,
       sort: "asc",
     };
     if (address) params.address = address;
@@ -129,8 +129,8 @@ export class Erc20Provider extends EtherscanProvider {
     const params: Record<string, any> = {
       action: "getLogs",
       address: filter.address,
-      fromBlock: !fromBlock ? initBlock : fromBlock,
-      toBlock: !toBlock ? 99999999 : toBlock,
+      fromBlock: fromBlock ?? initBlock,
+      toBlock,
       topic1_2_opr: conditional
     };
     const topicsAdded: number[] = [];
