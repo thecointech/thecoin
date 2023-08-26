@@ -1,8 +1,6 @@
 import { getEnvVars } from '@thecointech/setenv';
 import { Erc20Provider } from '.';
 import { describe } from '@thecointech/jestutils';
-import { ethers } from 'ethers';
-import { GetContract } from '@thecointech/contract-core/contract';
 
 const prodVars = getEnvVars('prodtest');
 
