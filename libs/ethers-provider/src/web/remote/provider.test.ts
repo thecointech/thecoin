@@ -16,7 +16,6 @@ describe('manual test', () => {
   it("reads ERC20 txs", async () => {
     const provider = new Erc20Provider();
 
-
     const contractHistory = await provider.getERC20History({ contractAddress });
     expect(contractHistory.length).toBeGreaterThan(0);
 
