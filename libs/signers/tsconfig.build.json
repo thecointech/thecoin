@@ -3,6 +3,6 @@
   "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"],
   "references": [
     { "path": "../logging/tsconfig.build.mjs.json" },
-    { "path": "../ethers-provider/tsconfig.build.mjs.json" }
+    { "path": "../ethers-provider/tsconfig.build.json" }
   ]
 }
