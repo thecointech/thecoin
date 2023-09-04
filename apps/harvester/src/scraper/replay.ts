@@ -1,6 +1,6 @@
 import currency from 'currency.js';
 import { DateTime } from 'luxon';
-import { ElementHandle, Page } from 'puppeteer';
+import type { Page } from 'puppeteer';
 import { startPuppeteer } from './puppeteer';
 import { getTableData, HistoryRow } from './table';
 import { AnyEvent, InputEvent, ClickEvent, ValueEvent, ActionTypes, ChequeBalanceResult, VisaBalanceResult, ReplayResult, ETransferResult } from './types';
@@ -11,6 +11,7 @@ import { debounce } from './debounce';
 import path from 'path';
 import { mkdirSync } from 'fs';
 import { outFolder } from '../paths';
+import { getElementForEvent } from './elements';
 
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -22,11 +23,6 @@ export async function replay(actionName: 'visaBalance') : Promise<VisaBalanceRes
 export async function replay(actionName: 'chqETransfer', dynamicValues: { amount: string }) : Promise<ETransferResult>;
 export async function replay(actionName: ActionTypes, dynamicValues?: Record<string, string>, delay?: number) : Promise<ReplayResult>
 export async function replay(actionName: ActionTypes, dynamicValues?: Record<string, string>, delay = 1000) {
-
-  const { page, browser } = await startPuppeteer();
-
-  const values: Record<string, string|DateTime|currency|HistoryRow[]> = {}
-
   // read events
   const events = await getEvents(actionName);
   log.debug(`Replaying ${actionName} with ${events?.length} events`);
@@ -34,6 +30,15 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
   if (!events) {
     throw new Error(`No events found for ${actionName}`);
   }
+
+  return await replayEvents(actionName, events, dynamicValues, delay);
+}
+
+export async function replayEvents(actionName: ActionTypes, events: AnyEvent[], dynamicValues?: Record<string, string>, delay = 1000) {
+
+  const { page, browser } = await startPuppeteer();
+
+  const values: Record<string, string|DateTime|currency|HistoryRow[]> = {}
 
   // Security: limit this session to a single domain.
   // TODO: This triggers on safe routes, disable until we have a better view
@@ -82,7 +87,7 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
       if (el) return el;
     }
     catch (err) {
-      log.error(`Couldn't find selector: ${click.selector}`)
+      log.warn(`Couldn't find selector: ${click.selector}`)
       await doSaveScreenshot(page, `error-click-${actionName}-${click.tagName}.png`);
     }
 
@@ -98,69 +103,72 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
       log.error(`Couldn't expose logger: ${err}`);
     }
 
-
-    // Else search for tag + text combo at location
-    // const els = await frame.$x(`//${click.tagName}`);
-    const els = await page.evaluate(click => {
-
-      const getCoords = (elem: Element) => {
-        const box = elem.getBoundingClientRect();
-        return {
-          top: box.top + window.pageYOffset,
-          right: box.right + window.pageXOffset,
-          bottom: box.bottom + window.pageYOffset,
-          left: box.left + window.pageXOffset
-        };
-      }
-
-      const getPositionSimilarity = (elem: Element) => {
-        const elCoords = getCoords(elem);
-        const tops = Math.abs(click.coords.top - elCoords.top)
-        const rights = Math.abs(click.coords.right - elCoords.right)
-        const bottoms = Math.abs(click.coords.bottom - elCoords.bottom)
-        const lefts = Math.abs(click.coords.left - elCoords.left)
-        return tops + rights + bottoms + lefts;
-      }
-      const els = document.getElementsByTagName(click.tagName);
-      try {
-        //@ts-ignore
-        __mainlogger(`MAINLOGGER: found ${els?.length} elements of type ${click.tagName}`);
-      }
-      catch (err) {
-        console.log(err);
-      }
-
-      return Array.from(els as HTMLCollectionOf<HTMLElement>)
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore chrome-specific function
-        .filter(el => el.checkVisibility({
-          checkOpacity: true,  // Check CSS opacity property too
-          checkVisibilityCSS: true // Check CSS visibility property too
-        }))
-        .map(el => ({
-          innerText: el.innerText,
-          element: el,
-          box: el.getBoundingClientRect(),
-          style: getComputedStyle(el),
-          positionSimilarity: getPositionSimilarity(el),
-        }))
-    }, click);
-
-    log.debug(`Found ${JSON.stringify(els)} potentially matching elements`)
-
-    if (els) {
-      const candidates = els
-        .filter(el => el.innerText == click.text)
-        .sort((a, b) => a.positionSimilarity - b.positionSimilarity);
-
-      if (candidates[0]) {
-        // TS looses track of the type when nested
-        return candidates[0].element as unknown as ElementHandle<HTMLElement>;
-      }
-    }
-
-    // Add additional logic here if the selector doesn't work
+    const elem = await getElementForEvent(frame, click);
+    if (elem) return elem;
     throw new Error(`Element not found: ${click.selector}`);
+
+    // // Else search for tag + text combo at location
+    // // const els = await frame.$x(`//${click.tagName}`);
+    // const els = await page.evaluate(click => {
+
+    //   const getCoords = (elem: Element) => {
+    //     const box = elem.getBoundingClientRect();
+    //     return {
+    //       top: box.top + window.pageYOffset,
+    //       right: box.right + window.pageXOffset,
+    //       bottom: box.bottom + window.pageYOffset,
+    //       left: box.left + window.pageXOffset
+    //     };
+    //   }
+
+    //   const getPositionSimilarity = (elem: Element) => {
+    //     const elCoords = getCoords(elem);
+    //     const tops = Math.abs(click.coords.top - elCoords.top)
+    //     const rights = Math.abs(click.coords.right - elCoords.right)
+    //     const bottoms = Math.abs(click.coords.bottom - elCoords.bottom)
+    //     const lefts = Math.abs(click.coords.left - elCoords.left)
+    //     return tops + rights + bottoms + lefts;
+    //   }
+    //   const els = document.getElementsByTagName(click.tagName);
+    //   try {
+    //     //@ts-ignore
+    //     __mainlogger(`MAINLOGGER: found ${els?.length} elements of type ${click.tagName}`);
+    //   }
+    //   catch (err) {
+    //     console.log(err);
+    //   }
+
+    //   return Array.from(els as HTMLCollectionOf<HTMLElement>)
+    //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //     //@ts-ignore chrome-specific function
+    //     .filter(el => el.checkVisibility({
+    //       checkOpacity: true,  // Check CSS opacity property too
+    //       checkVisibilityCSS: true // Check CSS visibility property too
+    //     }))
+    //     .map(el => ({
+    //       innerText: el.innerText,
+    //       element: el,
+    //       box: el.getBoundingClientRect(),
+    //       style: getComputedStyle(el),
+    //       positionSimilarity: getPositionSimilarity(el),
+    //     }))
+    // }, click);
+
+    // log.debug(`Found ${JSON.stringify(els)} potentially matching elements`)
+
+    // if (els) {
+    //   const candidates = els
+    //     .filter(el => el.innerText == click.text)
+    //     .sort((a, b) => a.positionSimilarity - b.positionSimilarity);
+
+    //   if (candidates[0]) {
+    //     // TS looses track of the type when nested
+    //     return candidates[0].element as unknown as ElementHandle<HTMLElement>;
+    //   }
+    // }
+
+    // // Add additional logic here if the selector doesn't work
+    // throw new Error(`Element not found: ${click.selector}`);
   }
 
   async function getInputElement(input: InputEvent) {

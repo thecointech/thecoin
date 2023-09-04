@@ -53,6 +53,24 @@ export const Results = () => {
     document.body.removeChild(a);
     window.URL.revokeObjectURL(a.href);
   }
+
+  const exportConfig = async () => {
+    const r = await window.scraper.exportConfig();
+    if (r.error) {
+      alert("Error - please check logs:\n " + r.error);
+    }
+    const a = window.document.createElement('a');
+    a.href = window.URL.createObjectURL(new Blob([r.value ?? 'no values'], { type: 'text/csv' }));
+    a.download = 'config.json';
+
+    // Append anchor to body.
+    document.body.appendChild(a);
+    a.click();
+
+    // Remove anchor from body
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(a.href);
+  }
   return (
     <Dimmer.Dimmable as={Segment} dimmed={running}>
       <Dimmer active={running} inverted>
@@ -68,6 +86,9 @@ export const Results = () => {
       </div>
       <div>
         <Button onClick={exportResults}>Export Results</Button>
+      </div>
+      <div>
+        <Button onClick={exportConfig}>Export Config</Button>
       </div>
       <div>
         <Button onClick={runImmediately}>Run Harvester Now</Button>
