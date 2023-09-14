@@ -2,19 +2,19 @@ import type { ElementHandle, Frame, Page } from 'puppeteer';
 import type { ClickEvent } from './types';
 import { log } from '@thecointech/logging';
 
-type ElementWithProperties = {
-  element: ElementHandle,
-  text: string,
-  box: DOMRect,
-  style: CSSStyleDeclaration,
-  coords: {
-    top: number,
-    right: number,
-    bottom: number,
-    left: number
-  },
-  positionSimilarity: number
-}
+// type ElementWithProperties = {
+//   element: ElementHandle,
+//   text: string,
+//   box: DOMRect,
+//   style: CSSStyleDeclaration,
+//   coords: {
+//     top: number,
+//     right: number,
+//     bottom: number,
+//     left: number
+//   },
+//   positionSimilarity: number
+// }
 
 export async function getElementForEvent(frame: Page|Frame, event: ClickEvent) {
   const allElems = await frame.$$(event.tagName);
@@ -30,10 +30,10 @@ export async function getElementForEvent(frame: Page|Frame, event: ClickEvent) {
     );
   }
 
-  const scored = candidates.map(el => ({
-    element: el.element,
-    score: scoreElement(el, event)
-  }))
+  // const scored = candidates.map(el => ({
+  //   element: el.element,
+  //   score: scoreElement(el, event)
+  // }))
 
   const sorted = candidates
     .filter(el => el.text == event.text)
@@ -45,11 +45,12 @@ export async function getElementForEvent(frame: Page|Frame, event: ClickEvent) {
   return candidate?.element;
 }
 
-export async function scoreElement(el: ElementWithProperties, event: ClickEvent) {
+// export async function scoreElement(el: ElementWithProperties, event: ClickEvent) {
   
-}
+// }
 
 export async function isElementVisible(elem: ElementHandle) {
+  // @ts-ignore
   return await elem.evaluate(el => el.checkVisibility({
     checkOpacity: true,  // Check CSS opacity property too
     checkVisibilityCSS: true // Check CSS visibility property too
@@ -78,6 +79,8 @@ export async function getElementProperties(elem: ElementHandle, event: ClickEven
   return {
     element: elem,
     text,
+    font,
+    selector,
     box,
     style,
     coords,
@@ -94,51 +97,56 @@ function getPositionSimilarity(coords: any, event: ClickEvent) {
 }
 
 // Inspired by: https://stackoverflow.com/questions/42184322/javascript-get-element-unique-selector
-export function getSelector(elem: HTMLElement, descendentSelector = ''): string {
-  const {
-    tagName,
-    id,
-    parentNode
-  } = elem;
+export function getSelector(elem: Element) {
+  const _getSelector = (elem: HTMLElement, descendentSelector = ''): string => {
+    const {
+      tagName,
+      id,
+      parentNode
+    } = elem;
 
-  if (tagName === 'HTML') return `HTML${descendentSelector}`;
+    if (tagName === 'HTML') return `HTML${descendentSelector}`;
 
-  const thisSel = (id !== '')
-    ? `${tagName}#${CSS.escape(id)}`
-    : tagName;
+    const thisSel = (id !== '')
+      ? `${tagName}#${CSS.escape(id)}`
+      : tagName;
 
-  const selected = document.querySelectorAll(thisSel + descendentSelector);
-  if (selected.length == 1) return thisSel + descendentSelector;
-  if (selected.length == 0) {
-    console.error("Cannot find element with selector: " + thisSel + descendentSelector)
-    // Return a selector that still works
-    return descendentSelector.slice(2)
+    const selected = document.querySelectorAll(thisSel + descendentSelector);
+    if (selected.length == 1) return thisSel + descendentSelector;
+    if (selected.length == 0) {
+      console.error("Cannot find element with selector: " + thisSel + descendentSelector)
+      // Return a selector that still works
+      return descendentSelector.slice(2)
+    }
+
+    // Skip class names, we don't need them and they
+    // can be altered in js to mess us up (eg - on mouseover)
+    // if (className) {
+    //   const classes = className.split(/\s/);
+    //   for (let i = 0; i < classes.length; i++) {
+    //     thisSel += `.${classes[i]}`;
+    //   }
+    // }
+
+    let childIndex = 1;
+
+    for (let e: Element = elem; e.previousElementSibling; e = e.previousElementSibling) {
+      childIndex += 1;
+    }
+
+    const selector = `${thisSel}:nth-child(${childIndex})${descendentSelector}`;
+    if (document.querySelectorAll(selector).length == 1) return selector;
+
+    return parentNode
+      ? _getSelector(parentNode as HTMLElement, ` > ${selector}`)
+      : selector;
   }
 
-  // Skip class names, we don't need them and they
-  // can be altered in js to mess us up (eg - on mouseover)
-  // if (className) {
-  //   const classes = className.split(/\s/);
-  //   for (let i = 0; i < classes.length; i++) {
-  //     thisSel += `.${classes[i]}`;
-  //   }
-  // }
-
-  let childIndex = 1;
-
-  for (let e: Element = elem; e.previousElementSibling; e = e.previousElementSibling) {
-    childIndex += 1;
-  }
-
-  const selector = `${thisSel}:nth-child(${childIndex})${descendentSelector}`;
-  if (document.querySelectorAll(selector).length == 1) return selector;
-
-  return parentNode
-    ? getSelector(parentNode as HTMLElement, ` > ${selector}`)
-    : selector;
+  return _getSelector(elem as HTMLElement);
 }
 
-export function getFontData(elem: HTMLElement) {
+
+export function getFontData(elem: Element) {
   const styles = getComputedStyle(elem);
   return {
     font: styles.font,
