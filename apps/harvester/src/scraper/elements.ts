@@ -1,5 +1,5 @@
 import type { ElementHandle, Frame, Page } from 'puppeteer';
-import type { ClickEvent } from './types';
+import type { ClickEvent, ElementData } from './types';
 import { log } from '@thecointech/logging';
 
 // type ElementWithProperties = {
@@ -96,6 +96,36 @@ function getPositionSimilarity(coords: any, event: ClickEvent) {
   return tops + rights + bottoms + lefts;
 }
 
+export async function registerElementAttrFns(page: Page) {
+  await page.evaluateOnNewDocument((fns) => {
+    eval(`window.getFrameUrl = ${fns.getFrameUrl};`)
+    eval(`window.getSelector = ${fns.getSelector};`)
+    eval(`window.getFontData = ${fns.getFontData};`)
+    eval(`window.getSiblingText = ${fns.getSiblingText};`)
+    eval(`window.getCoords = ${fns.getCoords};`)
+    // @ts-ignore
+    window.getElementData = (el: HTMLElement): ElementData => ({
+      frame: getFrameUrl(),
+      tagName: el.tagName,
+      selector: getSelector(el),
+      coords: getCoords(el),
+      siblingText: getSiblingText(el),
+    })
+  }, {
+    getFrameUrl: getFrameUrl.toString(),
+    getSelector: getSelector.toString(),
+    getFontData: getFontData.toString(),
+    getSiblingText: getSiblingText.toString(),
+    getCoords: getCoords.toString(),
+  });
+}
+
+const getFrameUrl = () => {
+  // Because this runs in the context of the frame, it's
+  // always that frames href
+  return location.href
+}
+
 // Inspired by: https://stackoverflow.com/questions/42184322/javascript-get-element-unique-selector
 export function getSelector(elem: Element) {
   const _getSelector = (elem: HTMLElement, descendentSelector = ''): string => {
@@ -145,13 +175,53 @@ export function getSelector(elem: Element) {
   return _getSelector(elem as HTMLElement);
 }
 
+const getCoords = (elem: HTMLElement) => {
+  const box = elem.getBoundingClientRect();
+  return {
+    top: box.top + window.pageYOffset,
+    right: box.right + window.pageXOffset,
+    bottom: box.bottom + window.pageYOffset,
+    left: box.left + window.pageXOffset
+  };
+}
 
 export function getFontData(elem: Element) {
-  const styles = getComputedStyle(elem);
-  return {
-    font: styles.font,
-    color: styles.color,
-    size: styles.fontSize,
-    style: styles.fontStyle,
+  const _getFontData = (elem: Element) => {
+    const styles = getComputedStyle(elem);
+    return {
+      font: styles.font,
+      color: styles.color,
+      size: styles.fontSize,
+      style: styles.fontStyle,
+    }  
   }
+  return _getFontData(elem)
+}
+
+const getSiblingText = (el: HTMLElement) => {
+  const _getSiblingText = (el: HTMLElement) => {
+    const text = el.innerText;
+    const findParent = (el: HTMLElement): HTMLElement | null => el?.innerText?.startsWith(text) ? findParent(el.parentElement as HTMLElement) : el;
+    const ancestor = findParent(el);
+    if (ancestor) {
+      // Is this a row?
+      const elcoords = getCoords(el);
+      const rowcoords = getCoords(ancestor);
+      // Is it much higher than element?
+      const heightFactor = (
+        (rowcoords.bottom - rowcoords.top) /
+        (elcoords.bottom - elcoords.top)
+      )
+      if (heightFactor > 2.5) return undefined;
+      const widthFactor = (
+        (rowcoords.right - rowcoords.left) /
+        (elcoords.right - elcoords.left)
+      )
+      if (widthFactor < 2.5) return undefined
+      const rowText = ancestor.innerText;
+      return rowText.split(text)[0]?.trim();
+    }
+    return undefined;
+  }
+  return _getSiblingText(el);
 }
