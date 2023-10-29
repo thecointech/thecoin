@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer"
 import { jest } from "@jest/globals"
-import { registerElementAttrFns } from "./elements";
+import { getElementForEvent, registerElementAttrFns } from "./elements";
 
 jest.setTimeout(10 * 60 * 1000);
 
@@ -35,16 +35,43 @@ it('Generates element data', async () => {
 
   await page.exposeFunction('__onAnyEvent', __onAnyEvent);
 
-  page.goto("file:///C:/src/page/Overview%20Tangerine.html");
+  await page.goto("file:///C:/src/page/Overview%20Tangerine.html");
 
   await promise;
 })
 
-// it ('finds element data for the selector', async () => {
-//   const selector = {"selector":"H1","font":{"font":"700 32px / 38.4px TangerineCircular, Arial, Helvetica, sans-serif","color":"rgb(51, 51, 51)","size":"32px","style":"normal"}};
+it ('finds element data for the selector', async () => {
 
-//   const browser = await puppeteer.launch({ headless: false });
-//   const page = await browser.newPage()
-//   page.setBypassCSP(true);
+   const click = {
+    "frame": "file:///C:/src/page/Overview%20Tangerine.html#/",
+    "tagName": "SPAN",
+    "selector": "SPAN#account-summary-card-have-total",
+    "coords": {
+      "top": 562.9896240234375,
+      "right": 365.6666717529297,
+      "bottom": 588.9896240234375,
+      "left": 300.59375
+    },
+    "text": "$233.45",
+    "font": {
+      "font": "700 18px / 21.6px TangerineCircular, Arial, Helvetica, sans-serif",
+      "color": "rgb(51, 51, 51)",
+      "size": "18px",
+      "style": "normal"
+    },
+    "siblingText": "What I Have"
+  }
 
-// })
+  const browser = await puppeteer.launch({ headless: false });
+  const page = await browser.newPage()
+  await registerElementAttrFns(page);
+  page.setBypassCSP(true);
+  await page.goto("file:///C:/src/page/Overview%20Tangerine.html");
+
+  // first, navigate to the right iframe
+  const element = await getElementForEvent(page, click);
+
+  expect(element).toBeTruthy();
+
+  await browser.close()
+})

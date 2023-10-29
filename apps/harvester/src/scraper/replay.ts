@@ -103,7 +103,7 @@ export async function replayEvents(actionName: ActionTypes, events: AnyEvent[], 
       log.error(`Couldn't expose logger: ${err}`);
     }
 
-    const elem = await getElementForEvent(frame, click);
+    const elem = await getElementForEvent(page, click);
     if (elem) return elem;
     throw new Error(`Element not found: ${click.selector}`);
 

@@ -55,6 +55,8 @@ export type ElementData = {
   tagName: string,
   selector: string,
   coords: Coords,
+  text?: string,
+  font?: Font,
   siblingText?: string,
 }
 
@@ -78,8 +80,8 @@ export type ClickEvent = {
   type: "click",
   clickX: number,
   clickY: number,
-  font: Font,
-  text: string,
+  // font: Font,
+  // text: string,
 } & BaseEvent & ElementData;
 
 export type InputEvent = {

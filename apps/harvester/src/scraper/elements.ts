@@ -1,6 +1,7 @@
-import type { ElementHandle, Frame, Page } from 'puppeteer';
+import type { ElementHandle, Page } from 'puppeteer';
 import type { ClickEvent, ElementData } from './types';
 import { log } from '@thecointech/logging';
+import { sleep } from '@thecointech/async';
 
 // type ElementWithProperties = {
 //   element: ElementHandle,
@@ -16,38 +17,32 @@ import { log } from '@thecointech/logging';
 //   positionSimilarity: number
 // }
 
-export async function getElementForEvent(frame: Page|Frame, event: ClickEvent) {
+export async function getElementForEvent(page: Page, event: ElementData) {
+  const frame = await getFrame(page, event);
   const allElems = await frame.$$(event.tagName);
 
-  frame.evaluate(`${getFontData}`);
+  // await frame.evaluate(`${getFontData}`);
 
   const candidates = [];
   for (const el of allElems) {
     if (!await isElementVisible(el)) continue;
 
-    candidates.push(
-      await getElementProperties(el, event)
-    );
+    const props = await getElementProperties(el);
+    const score = scoreElement(props, event)
+    candidates.push({
+      element: el,
+      score,
+      ...props,
+    });
   }
 
-  // const scored = candidates.map(el => ({
-  //   element: el.element,
-  //   score: scoreElement(el, event)
-  // }))
-
-  const sorted = candidates
-    .filter(el => el.text == event.text)
-    .sort((a, b) => a.positionSimilarity - b.positionSimilarity);
+  const sorted = candidates.sort((a, b) => a.score - b.score);
   log.debug(`Found ${sorted.length} potentially matching elements from ${candidates.length} candidates`);
 
   const candidate = sorted[0];
-  log.debug(`Best candiate has  ${candidate?.positionSimilarity} similarity`);
+  log.debug(`Best candiate has  ${candidate?.score} score`);
   return candidate?.element;
 }
-
-// export async function scoreElement(el: ElementWithProperties, event: ClickEvent) {
-  
-// }
 
 export async function isElementVisible(elem: ElementHandle) {
   // @ts-ignore
@@ -57,38 +52,45 @@ export async function isElementVisible(elem: ElementHandle) {
   }));
 }
 
-export async function getElementProperties(elem: ElementHandle, event: ClickEvent) {
-  //@ts-ignore
-  const text = await elem.evaluate(el => el.innerText);
-  const style = await elem.evaluate(el => getComputedStyle(el));
-  const box = await elem.evaluate(el => el.getBoundingClientRect());
-  const font = await elem.evaluate(el => getFontData(el as HTMLElement));
-  const selector = await elem.evaluate(el => getSelector(el as HTMLElement));
-  const coords = await elem.evaluate(el => {
-    const box = el.getBoundingClientRect();
-    return {
-      top: box.top + window.pageYOffset,
-      right: box.right + window.pageXOffset,
-      bottom: box.bottom + window.pageYOffset,
-      left: box.left + window.pageXOffset
-    };
-  });
-
-  const positionSimilarity = getPositionSimilarity(coords, event);
-
-  return {
-    element: elem,
-    text,
-    font,
-    selector,
-    box,
-    style,
-    coords,
-    positionSimilarity,
-  }
+export async function getElementProperties(elem: ElementHandle) {
+  // @ts-ignore
+  return await elem.evaluate(el => window.getElementData(el));
 }
 
-function getPositionSimilarity(coords: any, event: ClickEvent) {
+async function scoreElement(potential: ElementData, original: ElementData) {
+  let score = 0;
+  if (potential.tagName == original.tagName) score = score + 10;
+  if (potential.selector == original.selector) score = score + 50;
+  if (potential.siblingText == original.siblingText) score = score + 10;
+  if (potential.text == original.text) score = score + 10;
+  if (potential.font?.color == original.font?.color) score = score + 5;
+  if (potential.font?.font == original.font?.font) score = score + 5;
+  if (potential.font?.size == original.font?.size) score = score + 5;
+  if (potential.font?.style == original.font?.style) score = score + 5;
+  
+  const positionSimilarity = getPositionSimilarity(potential.coords, original);
+  score = score + Math.max(0, 20 - positionSimilarity / 100);
+  return score;
+} 
+
+async function getFrame(page: Page, click: ElementData) {
+  if (!click.frame) {
+    return page;
+  }
+  // wait for any iframe to load
+  // await page.waitForSelector('iframe')
+  for (let i = 0; i < 20; i++) {
+    const maybe = page.frames().find(f => f.name() == click.frame);
+    if (maybe) return maybe;
+
+    // back-off and retry
+    await sleep(1000);
+  }
+  // return page.  Who knows, maybe it'll work?
+  return page;
+}
+
+function getPositionSimilarity(coords: any, event: ElementData) {
   const tops = Math.abs(event.coords.top - coords.top)
   const rights = Math.abs(event.coords.right - coords.right)
   const bottoms = Math.abs(event.coords.bottom - coords.bottom)
@@ -104,11 +106,13 @@ export async function registerElementAttrFns(page: Page) {
     eval(`window.getSiblingText = ${fns.getSiblingText};`)
     eval(`window.getCoords = ${fns.getCoords};`)
     // @ts-ignore
-    window.getElementData = (el: HTMLElement): ElementData => ({
+    window.getElementData = (el: HTMLElement): ClickEvent => ({
       frame: getFrameUrl(),
       tagName: el.tagName,
       selector: getSelector(el),
       coords: getCoords(el),
+      text: el.innerText,
+      font: getFontData(el),
       siblingText: getSiblingText(el),
     })
   }, {
