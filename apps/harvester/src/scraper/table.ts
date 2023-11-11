@@ -126,12 +126,11 @@ async function getTextNodeData(page: Page) : Promise<RawText[]> {
 
     // get document coordinates of the element
     const getCoords = (elem: any) => {
-      const box = elem.parentNode?.getBoundingClientRect();
       return {
-        top: box.top + window.pageYOffset,
-        right: box.right + window.pageXOffset,
-        bottom: box.bottom + window.pageYOffset,
-        left: box.left + window.pageXOffset
+        top: elem.offsetTop,
+        left: elem.offsetLeft,
+        height: elem.offsetHeight,
+        width: elem.offsetWidth,
       };
     }
     const getFontData = (elem: any) => {

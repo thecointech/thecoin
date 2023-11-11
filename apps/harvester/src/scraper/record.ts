@@ -5,11 +5,12 @@ import { debounce } from './debounce';
 import { startElementHighlight } from './highlighter';
 import { getTableData } from './table';
 import { startPuppeteer } from './puppeteer';
-import { ActionTypes, AnyEvent, ElementData, ValueResult, ValueType } from './types';
+import { ActionTypes, AnyEvent, ValueResult, ValueType } from './types';
 import { getValueParsing } from './valueParsing';
 import { log } from '@thecointech/logging';
 import { setEvents } from '../Harvester/config';
 import { outFolder } from '../paths';
+import { registerElementAttrFns } from './elements';
 
 // types injected into window
 declare global {
@@ -62,6 +63,8 @@ export class Recorder {
     if (!existsSync(this.screenshotFolder)) {
       mkdirSync(this.screenshotFolder, { recursive: true })
     }
+
+    await registerElementAttrFns(page);
 
     await page.exposeFunction('__onAnyEvent', this.eventHandler);
 
@@ -217,109 +220,109 @@ function onNewDocument() {
     };
 
     // Inspired by: https://stackoverflow.com/questions/42184322/javascript-get-element-unique-selector
-    const getSelector = (elem: HTMLElement, descendentSelector = ''): string => {
-      const {
-        tagName,
-        id,
-        parentNode
-      } = elem;
+    // const getSelector = (elem: HTMLElement, descendentSelector = ''): string => {
+    //   const {
+    //     tagName,
+    //     id,
+    //     parentNode
+    //   } = elem;
 
-      if (tagName === 'HTML') return `HTML${descendentSelector}`;
+    //   if (tagName === 'HTML') return `HTML${descendentSelector}`;
 
-      const thisSel = (id !== '')
-        ? `${tagName}#${CSS.escape(id)}`
-        : tagName;
+    //   const thisSel = (id !== '')
+    //     ? `${tagName}#${CSS.escape(id)}`
+    //     : tagName;
 
-      const selected = document.querySelectorAll(thisSel + descendentSelector);
-      if (selected.length == 1) return thisSel + descendentSelector;
-      if (selected.length == 0) {
-        console.error("Cannot find element with selector: " + thisSel + descendentSelector)
-        // Return a selector that still works
-        return descendentSelector.slice(2)
-      }
+    //   const selected = document.querySelectorAll(thisSel + descendentSelector);
+    //   if (selected.length == 1) return thisSel + descendentSelector;
+    //   if (selected.length == 0) {
+    //     console.error("Cannot find element with selector: " + thisSel + descendentSelector)
+    //     // Return a selector that still works
+    //     return descendentSelector.slice(2)
+    //   }
 
-      // Skip class names, we don't need them and they
-      // can be altered in js to mess us up (eg - on mouseover)
-      // if (className) {
-      //   const classes = className.split(/\s/);
-      //   for (let i = 0; i < classes.length; i++) {
-      //     thisSel += `.${classes[i]}`;
-      //   }
-      // }
+    //   // Skip class names, we don't need them and they
+    //   // can be altered in js to mess us up (eg - on mouseover)
+    //   // if (className) {
+    //   //   const classes = className.split(/\s/);
+    //   //   for (let i = 0; i < classes.length; i++) {
+    //   //     thisSel += `.${classes[i]}`;
+    //   //   }
+    //   // }
 
-      let childIndex = 1;
+    //   let childIndex = 1;
 
-      for (let e: Element = elem; e.previousElementSibling; e = e.previousElementSibling) {
-        childIndex += 1;
-      }
+    //   for (let e: Element = elem; e.previousElementSibling; e = e.previousElementSibling) {
+    //     childIndex += 1;
+    //   }
 
-      const selector = `${thisSel}:nth-child(${childIndex})${descendentSelector}`;
-      if (document.querySelectorAll(selector).length == 1) return selector;
+    //   const selector = `${thisSel}:nth-child(${childIndex})${descendentSelector}`;
+    //   if (document.querySelectorAll(selector).length == 1) return selector;
 
-      return parentNode
-        ? getSelector(parentNode as HTMLElement, ` > ${selector}`)
-        : selector;
-    }
+    //   return parentNode
+    //     ? getSelector(parentNode as HTMLElement, ` > ${selector}`)
+    //     : selector;
+    // }
 
-    // get document coordinates of the element
-    const getCoords = (elem: HTMLElement) => {
-      const box = elem.getBoundingClientRect();
-      return {
-        top: box.top + window.pageYOffset,
-        right: box.right + window.pageXOffset,
-        bottom: box.bottom + window.pageYOffset,
-        left: box.left + window.pageXOffset
-      };
-    }
+    // // get document coordinates of the element
+    // const getCoords = (elem: HTMLElement) => {
+    //   const box = elem.getBoundingClientRect();
+    //   return {
+    //     top: box.top + window.pageYOffset,
+    //     right: box.right + window.pageXOffset,
+    //     bottom: box.bottom + window.pageYOffset,
+    //     left: box.left + window.pageXOffset
+    //   };
+    // }
 
-    const getFontData = (elem: HTMLElement) => {
-      const styles = getComputedStyle(elem);
-      return {
-        font: styles.font,
-        color: styles.color,
-        size: styles.fontSize,
-        style: styles.fontStyle,
-      }
-    }
+    // const getFontData = (elem: HTMLElement) => {
+    //   const styles = getComputedStyle(elem);
+    //   return {
+    //     font: styles.font,
+    //     color: styles.color,
+    //     size: styles.fontSize,
+    //     style: styles.fontStyle,
+    //   }
+    // }
 
-    const getSiblingText = (el: HTMLElement) => {
-      const text = el.innerText;
-      const findParent = (el: HTMLElement): HTMLElement | null => el?.innerText?.startsWith(text) ? findParent(el.parentElement as HTMLElement) : el;
-      const ancestor = findParent(el);
-      if (ancestor) {
-        // Is this a row?
-        const elcoords = getCoords(el);
-        const rowcoords = getCoords(ancestor);
-        // Is it much higher than element?
-        const heightFactor = (
-          (rowcoords.bottom - rowcoords.top) /
-          (elcoords.bottom - elcoords.top)
-        )
-        if (heightFactor > 2.5) return undefined;
-        const widthFactor = (
-          (rowcoords.right - rowcoords.left) /
-          (elcoords.right - elcoords.left)
-        )
-        if (widthFactor < 2.5) return undefined
-        const rowText = ancestor.innerText;
-        return rowText.split(text)[0]?.trim();
-      }
-      return undefined;
-    }
+    // const getSiblingText = (el: HTMLElement) => {
+    //   const text = el.innerText;
+    //   const findParent = (el: HTMLElement): HTMLElement | null => el?.innerText?.startsWith(text) ? findParent(el.parentElement as HTMLElement) : el;
+    //   const ancestor = findParent(el);
+    //   if (ancestor) {
+    //     // Is this a row?
+    //     const elcoords = getCoords(el);
+    //     const rowcoords = getCoords(ancestor);
+    //     // Is it much higher than element?
+    //     const heightFactor = (
+    //       (rowcoords.bottom - rowcoords.top) /
+    //       (elcoords.bottom - elcoords.top)
+    //     )
+    //     if (heightFactor > 2.5) return undefined;
+    //     const widthFactor = (
+    //       (rowcoords.right - rowcoords.left) /
+    //       (elcoords.right - elcoords.left)
+    //     )
+    //     if (widthFactor < 2.5) return undefined
+    //     const rowText = ancestor.innerText;
+    //     return rowText.split(text)[0]?.trim();
+    //   }
+    //   return undefined;
+    // }
 
-    const getFrameUrl = () => {
-      // Because this runs in the context of the frame, it's
-      // always that frames href
-      return location.href
-    }
+    // const getFrameUrl = () => {
+    //   // Because this runs in the context of the frame, it's
+    //   // always that frames href
+    //   return location.href
+    // }
 
-    const getElementData = (el: HTMLElement): ElementData => ({
-      frame: getFrameUrl(),
-      tagName: el.tagName,
-      selector: getSelector(el),
-      coords: getCoords(el),
-      siblingText: getSiblingText(el),
-    })
+    // const getElementData = (el: HTMLElement): ElementData => ({
+    //   frame: getFrameUrl(),
+    //   tagName: el.tagName,
+    //   selector: getSelector(el),
+    //   coords: getCoords(el),
+    //   siblingText: getSiblingText(el),
+    // })
 
     /////////////////////////////////////////////////////////////////////////
 
@@ -345,9 +348,8 @@ function onNewDocument() {
           timestamp: Date.now(),
           clickX: ev.pageX,
           clickY: ev.pageY,
-          text: ev.target.innerText,
-          font: getFontData(ev.target),
-          ...getElementData(ev.target),
+          // @ts-ignore
+          ...window.getElementData(ev.target)
         });
         // Reset back to the default
         if (__clickAction == "value") {
@@ -367,7 +369,8 @@ function onNewDocument() {
         type: "input",
         timestamp: Date.now(),
         value: target?.value,
-        ...getElementData(target),
+          // @ts-ignore
+          ...window.getElementData(ev.target)
       })
     }, opts);
 

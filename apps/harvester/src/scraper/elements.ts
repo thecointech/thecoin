@@ -3,73 +3,98 @@ import type { ClickEvent, ElementData } from './types';
 import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
 
-// type ElementWithProperties = {
-//   element: ElementHandle,
-//   text: string,
-//   box: DOMRect,
-//   style: CSSStyleDeclaration,
-//   coords: {
-//     top: number,
-//     right: number,
-//     bottom: number,
-//     left: number
-//   },
-//   positionSimilarity: number
-// }
+type FoundElement = {
+  element: ElementHandle<Element>,
+  score: number,
+} & ElementData
 
-export async function getElementForEvent(page: Page, event: ElementData) {
-  const frame = await getFrame(page, event);
-  const allElems = await frame.$$(event.tagName);
 
-  // await frame.evaluate(`${getFontData}`);
+export async function getElementForEvent(page: Page, event: ElementData, timeout=30000) {
 
-  const candidates = [];
-  for (const el of allElems) {
-    if (!await isElementVisible(el)) continue;
+  const startTick = Date.now();
 
-    const props = await getElementProperties(el);
-    const score = scoreElement(props, event)
-    candidates.push({
-      element: el,
-      score,
-      ...props,
-    });
+  while (startTick + timeout < Date.now()) {
+    const frame = await getFrame(page, event);
+    // NOTE: We could loosen this to any element
+    // That may improve resiliance 
+    const allElems = await frame.$$(event.tagName);
+  
+    const candidates : FoundElement[] = [];
+    for (const el of allElems) {
+      if (!await isElementVisible(el)) continue;
+  
+      const props = await getElementProperties(el);
+      const score = scoreElement(props, event)
+      candidates.push({
+        element: el,
+        score,
+        ...props,
+      });
+    }
+  
+    const sorted = candidates.sort((a, b) => a.score - b.score);
+    log.debug(`Found ${sorted.length} potentially matching elements from ${candidates.length} candidates`);
+  
+    const candidate = sorted[0];
+    log.debug(`Best candiate has  ${candidate?.score} score`);
+    // Max score is 125.  60 is chosen arbitrarily, but
+    // works for selector + location, or
+    // location + siblings + tagName + text
+    if (candidate?.score > 60) {
+      // Do we need to worry about multiple candidates?
+      if (sorted[1]?.score / candidate.score > 0.9) {
+        log.warn(`Second best candidate has  ${sorted[1].score} score`);
+      }
+      return candidate;
+    }
+    // Continue waiting
+    await sleep(500);
   }
-
-  const sorted = candidates.sort((a, b) => a.score - b.score);
-  log.debug(`Found ${sorted.length} potentially matching elements from ${candidates.length} candidates`);
-
-  const candidate = sorted[0];
-  log.debug(`Best candiate has  ${candidate?.score} score`);
-  return candidate?.element;
+  // Not found, throw
+  throw new Error(`Element not found: ${event.selector}`);
 }
 
 export async function isElementVisible(elem: ElementHandle) {
-  // @ts-ignore
+  // @ts-ignore checkVisibility is chrome-specific
   return await elem.evaluate(el => el.checkVisibility({
     checkOpacity: true,  // Check CSS opacity property too
     checkVisibilityCSS: true // Check CSS visibility property too
   }));
 }
 
-export async function getElementProperties(elem: ElementHandle) {
+export function getElementProperties(elem: ElementHandle) : Promise<ElementData> {
   // @ts-ignore
-  return await elem.evaluate(el => window.getElementData(el));
+  return elem.evaluate(el => window.getElementData(el));
 }
 
-async function scoreElement(potential: ElementData, original: ElementData) {
+function scoreElement(potential: ElementData, original: ElementData) {
   let score = 0;
-  if (potential.tagName == original.tagName) score = score + 10;
-  if (potential.selector == original.selector) score = score + 50;
-  if (potential.siblingText == original.siblingText) score = score + 10;
-  if (potential.text == original.text) score = score + 10;
+  if (potential.tagName == original.tagName) score = score + 15;
+  if (potential.selector == original.selector) score = score + 40;
   if (potential.font?.color == original.font?.color) score = score + 5;
   if (potential.font?.font == original.font?.font) score = score + 5;
   if (potential.font?.size == original.font?.size) score = score + 5;
   if (potential.font?.style == original.font?.style) score = score + 5;
+  if (potential.text == original.text) score = score + 10;
+  // Else, we still match if both are a dollar amount
+  else if (
+    original.text?.trim().match(/^\$[0-9, ]+\.\d{2}$/) &&
+    potential.text?.trim().match(/^\$[0-9, ]+\.\d{2}$/)
+  ) {
+    score = score + 10;
+  }
+
+  // up to 4 matching siblings for max 20 pts
+  const matchingSiblings = potential.siblingText?.filter(
+    t => original.siblingText?.includes(t)
+  );
+  score = score + Math.min(20, (matchingSiblings?.length ?? 0) * 5);
   
+  // up to 20 pts from position
   const positionSimilarity = getPositionSimilarity(potential.coords, original);
-  score = score + Math.max(0, 20 - positionSimilarity / 100);
+  score = score + Math.max(0, 20 - (positionSimilarity / 20));
+
+  // max score is 125
   return score;
 } 
 
@@ -92,10 +117,10 @@ async function getFrame(page: Page, click: ElementData) {
 
 function getPositionSimilarity(coords: any, event: ElementData) {
   const tops = Math.abs(event.coords.top - coords.top)
-  const rights = Math.abs(event.coords.right - coords.right)
-  const bottoms = Math.abs(event.coords.bottom - coords.bottom)
+  const heights = Math.abs(event.coords.height - coords.height)
+  const widths = Math.abs(event.coords.width - coords.width)
   const lefts = Math.abs(event.coords.left - coords.left)
-  return tops + rights + bottoms + lefts;
+  return tops + heights + widths + lefts;
 }
 
 export async function registerElementAttrFns(page: Page) {
@@ -153,17 +178,7 @@ export function getSelector(elem: Element) {
       return descendentSelector.slice(2)
     }
 
-    // Skip class names, we don't need them and they
-    // can be altered in js to mess us up (eg - on mouseover)
-    // if (className) {
-    //   const classes = className.split(/\s/);
-    //   for (let i = 0; i < classes.length; i++) {
-    //     thisSel += `.${classes[i]}`;
-    //   }
-    // }
-
     let childIndex = 1;
-
     for (let e: Element = elem; e.previousElementSibling; e = e.previousElementSibling) {
       childIndex += 1;
     }
@@ -180,12 +195,11 @@ export function getSelector(elem: Element) {
 }
 
 const getCoords = (elem: HTMLElement) => {
-  const box = elem.getBoundingClientRect();
   return {
-    top: box.top + window.pageYOffset,
-    right: box.right + window.pageXOffset,
-    bottom: box.bottom + window.pageYOffset,
-    left: box.left + window.pageXOffset
+    top: elem.offsetTop,
+    left: elem.offsetLeft,
+    height: elem.offsetHeight,
+    width: elem.offsetWidth,
   };
 }
 
@@ -204,28 +218,35 @@ export function getFontData(elem: Element) {
 
 const getSiblingText = (el: HTMLElement) => {
   const _getSiblingText = (el: HTMLElement) => {
-    const text = el.innerText;
-    const findParent = (el: HTMLElement): HTMLElement | null => el?.innerText?.startsWith(text) ? findParent(el.parentElement as HTMLElement) : el;
-    const ancestor = findParent(el);
-    if (ancestor) {
+    // const text = el.innerText;
+    //@ts-ignore
+    const allTags = [...document.body.getElementsByTagName("*")]
+    // const allText: HTMLElement[] = $x('//*/text()').map(e => e.parentElement)
+    const allText = allTags.filter(el =>
+      el.innerText && 
+      el.checkVisibility({
+        checkOpacity: true,  // Check CSS opacity property too
+        checkVisibilityCSS: true // Check CSS visibility property too
+      })
+    )
+
+    const elcoords = getCoords(el);
+    const candidates = allText.filter(candidate => {
+      // Skip yourself
+      if (candidate == el) return false
       // Is this a row?
-      const elcoords = getCoords(el);
-      const rowcoords = getCoords(ancestor);
-      // Is it much higher than element?
-      const heightFactor = (
-        (rowcoords.bottom - rowcoords.top) /
-        (elcoords.bottom - elcoords.top)
-      )
-      if (heightFactor > 2.5) return undefined;
-      const widthFactor = (
-        (rowcoords.right - rowcoords.left) /
-        (elcoords.right - elcoords.left)
-      )
-      if (widthFactor < 2.5) return undefined
-      const rowText = ancestor.innerText;
-      return rowText.split(text)[0]?.trim();
-    }
-    return undefined;
+      const rowcoords = getCoords(candidate);
+      // If it's off the edge of the page ignore it
+      if (rowcoords.left < 0 || rowcoords.top < 0) return false;
+      // If it's too large ignore it
+      if (rowcoords.height > (elcoords.height * 3)) return false;
+      // Is it centered on this node?
+      const rowCenter = rowcoords.top + (rowcoords.height / 2)
+      const elCenter = elcoords.top + (elcoords.height / 2)
+      // We allow for slight offsets of generally 2/3 pixels
+      return Math.abs(rowCenter - elCenter) < 2
+    })
+    return candidates.map(c => c.innerText);
   }
   return _getSiblingText(el);
 }

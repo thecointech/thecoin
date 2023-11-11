@@ -48,8 +48,8 @@ it ('finds element data for the selector', async () => {
     "selector": "SPAN#account-summary-card-have-total",
     "coords": {
       "top": 562.9896240234375,
-      "right": 365.6666717529297,
-      "bottom": 588.9896240234375,
+      "width": 365.6666717529297,
+      "height": 588.9896240234375,
       "left": 300.59375
     },
     "text": "$233.45",
@@ -59,7 +59,7 @@ it ('finds element data for the selector', async () => {
       "size": "18px",
       "style": "normal"
     },
-    "siblingText": "What I Have"
+    "siblingText": ["What I Have"]
   }
 
   const browser = await puppeteer.launch({ headless: false });

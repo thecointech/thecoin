@@ -40,8 +40,8 @@ export type BaseEvent = {
 export type Coords = {
   top: number,
   left: number,
-  bottom: number,
-  right: number,
+  height: number,
+  width: number,
 }
 export type Font = {
   font: string,
@@ -55,9 +55,9 @@ export type ElementData = {
   tagName: string,
   selector: string,
   coords: Coords,
-  text?: string,
+  text: string,
   font?: Font,
-  siblingText?: string,
+  siblingText?: string[],
 }
 
 export type NavigationEvent = BaseEvent & {
