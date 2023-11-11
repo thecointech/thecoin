@@ -8,12 +8,13 @@ import { getAdminDID } from '../internal/admin'
 const schemaFolder = new URL('../schema/', import.meta.url);
 const outJson = new URL('./output/', schemaFolder);
 
-const files = [
-  './profile.graphql',
+const files = {
+  "EncryptedProfile": './profile.graphql',
+}
   // './testing.graphql',
   // './message.graphql',
   // './profile-simple.graphql',
-]
+//]
 
 const outputPath = fileURLToPath(new URL('./merged.json', outJson))
 const compiledJson = fileURLToPath(new URL(`./${process.env.CONFIG_NAME}-compiled.json`, outJson))
@@ -37,14 +38,22 @@ async function getCeramic() {
 
 async function convertSchemaToComposite(ceramic: CeramicClient) {
   log.debug("Merging Schema to Composite");
-  const srcs = await Promise.all(files.map(
-      file => createComposite(ceramic, fileURLToPath(new URL(file, schemaFolder)))
+  const srcs = await Promise.all(Object.entries(files).map(
+      async file => [
+        file[0],
+        await createComposite(ceramic, fileURLToPath(new URL(file[1], schemaFolder)))
+      ] as [string, Composite]
   ));
   const mergedComposite = Composite
-    .from(srcs)
+    .from(srcs.map(s => s[1]))
 
+  const aliases = srcs.reduce(
+    (acc, s) => ({ ...acc, [s[1].modelIDs[0]]: s[0] }),
+    {} as Record<string, string>
+  )
+  const aliasedComposite = mergedComposite.setAliases(aliases);
   // Replace by the path to the encoded composite file
-  await writeEncodedComposite(mergedComposite, outputPath);
+  await writeEncodedComposite(aliasedComposite, outputPath);
 }
 
 async function deployComposite(ceramic: CeramicClient) {
