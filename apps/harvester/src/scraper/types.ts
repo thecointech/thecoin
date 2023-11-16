@@ -88,6 +88,8 @@ export type InputEvent = {
   type: "input",
   dynamicName?: string,
   value?: string,
+  hitEnter?: boolean,
+  valueChange?: boolean,
 } & BaseEvent & ElementData;
 
 // Not really an event, but something to read later

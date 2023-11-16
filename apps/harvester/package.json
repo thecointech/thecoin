@@ -28,7 +28,8 @@
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
     "build": "yarn tsc -b",
-    "test": "yarn run-jest"
+    "test": "yarn run-jest",
+    "test:record": "yarn run-env ./src/scraper/main.ts --record"
   },
   "devDependencies": {
     "@thecointech/jestutils": "^0.2.115",

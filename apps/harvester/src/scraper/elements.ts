@@ -1,5 +1,5 @@
 import type { ElementHandle, Page } from 'puppeteer';
-import type { ClickEvent, ElementData } from './types';
+import type { ElementData } from './types';
 import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
 
@@ -8,39 +8,57 @@ type FoundElement = {
   score: number,
 } & ElementData
 
+declare let window: Window & {
+  getElementData: (el: HTMLElement) => ElementData
+};
 
 export async function getElementForEvent(page: Page, event: ElementData, timeout=30000) {
 
   const startTick = Date.now();
 
-  while (startTick + timeout < Date.now()) {
+  while (Date.now() < startTick + timeout) {
     const frame = await getFrame(page, event);
     // NOTE: We could loosen this to any element
     // That may improve resiliance 
-    const allElems = await frame.$$(event.tagName);
-  
-    const candidates : FoundElement[] = [];
-    for (const el of allElems) {
-      if (!await isElementVisible(el)) continue;
-  
-      const props = await getElementProperties(el);
-      const score = scoreElement(props, event)
-      candidates.push({
+    const allElems = await frame.$$(event.tagName)
+    const allProps = await frame.evaluate((...els) => 
+      els.map(el => ({
+        //@ts-ignore
+        isVisible: el.checkVisibility({
+        checkOpacity: true,  // Check CSS opacity property too
+        checkVisibilityCSS: true // Check CSS visibility property too
+        }),
+        ...window.getElementData(el as HTMLElement)
+      })), ...allElems)
+
+    const candidates = allElems
+      .map((el, i) => ({
         element: el,
-        score,
-        ...props,
-      });
-    }
+        ...allProps[i],
+      }))
+      .filter(el => el.isVisible)
+      .map(el => ({
+        ...el,
+        score: scoreElement(el, event)
+      }));
+
+    // const candidates : FoundElement[] = [];
+    // for (const el of allElems) {
+    //   const score = scoreElement(el, event)
+    //   candidates.push({
+    //     score,
+    //     ...el,
+    //     element: el.element as any
+    //   });
+    // }
   
-    const sorted = candidates.sort((a, b) => a.score - b.score);
-    log.debug(`Found ${sorted.length} potentially matching elements from ${candidates.length} candidates`);
-  
+    const sorted = candidates.sort((a, b) => b.score - a.score);
+    log.debug(`Found ${sorted.length} potentially matching elements from ${candidates.length} candidates, best: ${sorted[0]?.score}, second best: ${sorted[1]?.score}`);
     const candidate = sorted[0];
-    log.debug(`Best candiate has  ${candidate?.score} score`);
-    // Max score is 125.  60 is chosen arbitrarily, but
-    // works for selector + location, or
-    // location + siblings + tagName + text
-    if (candidate?.score > 60) {
+    // Max score is 125.  70 is chosen arbitrarily, but
+    // works for selector + location + tagName, or
+    // location + siblings + tagName + text + font
+    if (candidate?.score >= 70) {
       // Do we need to worry about multiple candidates?
       if (sorted[1]?.score / candidate.score > 0.9) {
         log.warn(`Second best candidate has  ${sorted[1].score} score`);
@@ -85,10 +103,22 @@ function scoreElement(potential: ElementData, original: ElementData) {
   }
 
   // up to 4 matching siblings for max 20 pts
-  const matchingSiblings = potential.siblingText?.filter(
-    t => original.siblingText?.includes(t)
-  );
-  score = score + Math.min(20, (matchingSiblings?.length ?? 0) * 5);
+  if (potential.siblingText?.length && original.siblingText?.length) {
+    const matched = potential.siblingText.filter(
+      t => original.siblingText?.includes(t)
+    );
+    if (matched.length > 0) {
+      // Max score for perfect match, but decreases with each miss
+      // Eg, 1 matched, 1 unmatched = 50% score
+      // Eg, 1 matched, 2 unmatched = 33% score
+      // Eg, 3 matched, 1 unmatched = 75% score
+      const unmatched = (
+        potential.siblingText.length - matched.length + 
+        original.siblingText.length - matched.length
+      )
+      score = score + (20 * matched.length / (unmatched  + matched.length));
+    }
+  }
   
   // up to 20 pts from position
   const positionSimilarity = getPositionSimilarity(potential.coords, original);
@@ -130,8 +160,7 @@ export async function registerElementAttrFns(page: Page) {
     eval(`window.getFontData = ${fns.getFontData};`)
     eval(`window.getSiblingText = ${fns.getSiblingText};`)
     eval(`window.getCoords = ${fns.getCoords};`)
-    // @ts-ignore
-    window.getElementData = (el: HTMLElement): ClickEvent => ({
+    window.getElementData = (el: HTMLElement): ElementData => ({
       frame: getFrameUrl(),
       tagName: el.tagName,
       selector: getSelector(el),
@@ -194,12 +223,13 @@ export function getSelector(elem: Element) {
   return _getSelector(elem as HTMLElement);
 }
 
-const getCoords = (elem: HTMLElement) => {
+const getCoords = (elem: Element) => {
+  const box = elem.getBoundingClientRect();
   return {
-    top: elem.offsetTop,
-    left: elem.offsetLeft,
-    height: elem.offsetHeight,
-    width: elem.offsetWidth,
+    top: box.top + window.scrollY,
+    left: box.left + window.scrollX,
+    height: box.height,
+    width: box.width,
   };
 }
 
@@ -219,12 +249,20 @@ export function getFontData(elem: Element) {
 const getSiblingText = (el: HTMLElement) => {
   const _getSiblingText = (el: HTMLElement) => {
     // const text = el.innerText;
-    //@ts-ignore
-    const allTags = [...document.body.getElementsByTagName("*")]
+    const walker = el.ownerDocument.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+    );
+
+    const textNodes = [];
+    let node: Node|null;
+    while (node = walker.nextNode()) {
+      textNodes.push(node);
+    }
     // const allText: HTMLElement[] = $x('//*/text()').map(e => e.parentElement)
-    const allText = allTags.filter(el =>
-      el.innerText && 
-      el.checkVisibility({
+    const allText = textNodes.filter(el =>
+      el.textContent?.trim() && 
+      el.parentElement?.checkVisibility({
         checkOpacity: true,  // Check CSS opacity property too
         checkVisibilityCSS: true // Check CSS visibility property too
       })
@@ -233,9 +271,9 @@ const getSiblingText = (el: HTMLElement) => {
     const elcoords = getCoords(el);
     const candidates = allText.filter(candidate => {
       // Skip yourself
-      if (candidate == el) return false
+      if (candidate == el || !candidate.parentElement) return false
       // Is this a row?
-      const rowcoords = getCoords(candidate);
+      const rowcoords = getCoords(candidate.parentElement);
       // If it's off the edge of the page ignore it
       if (rowcoords.left < 0 || rowcoords.top < 0) return false;
       // If it's too large ignore it
@@ -246,7 +284,7 @@ const getSiblingText = (el: HTMLElement) => {
       // We allow for slight offsets of generally 2/3 pixels
       return Math.abs(rowCenter - elCenter) < 2
     })
-    return candidates.map(c => c.innerText);
+    return candidates.map(c => c.textContent).filter(t => !!t) as string[];
   }
   return _getSiblingText(el);
 }

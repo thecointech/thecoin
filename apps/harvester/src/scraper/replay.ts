@@ -109,11 +109,23 @@ export async function replayEvents(actionName: ActionTypes, events: AnyEvent[], 
 
             const {element} = await getElementForEvent(page, event);
             await element.focus();
-            if (event.tagName == "INPUT") {
+            if (event.tagName == "INPUT" || event.tagName == "TEXTAREA") {
               // clear existing value
               await page.evaluate((el) => (el as HTMLInputElement).value = "", element)
               // Simulate typing to mimic input actions
               await page.keyboard.type(value, { delay: 20 });
+              // If the user pressed enter, simulate this too
+              if (event.hitEnter) {
+                if (events[i + 1]?.type == "navigation") {
+                  await Promise.all([
+                    page.keyboard.press('Enter'),
+                    page.waitForNavigation({ waitUntil: 'networkidle2' })
+                  ])
+                }
+                else {
+                  await page.keyboard.press('Enter');
+                }
+              }
             }
             else if (event.tagName == "SELECT") {
               await element.evaluate((v, value) => (v as HTMLSelectElement).value = value, value)
