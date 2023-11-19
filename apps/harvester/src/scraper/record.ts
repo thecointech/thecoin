@@ -191,7 +191,7 @@ export class Recorder {
           format: null,
         }
         // Return the most recent payment
-        const mostRecentPayment = table.find(row => row.credit)?.credit;
+        const mostRecentPayment = table.find(row => row.credit?.intValue)?.credit;
         this.onValue.resolve({
           text: "Your most recent payment was: " + mostRecentPayment,
           parsing: { type: "text", format: null },

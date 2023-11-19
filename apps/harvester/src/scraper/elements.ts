@@ -309,7 +309,7 @@ type SearchElement = {
   data: ElementData
 }
 
-const getAllElements = async (frame: Page|Frame) => {
+export const getAllElements = async (frame: Page|Frame) => {
   // const allElements = await frame.$x("//text()")
   const allElements = await frame.$$("*")
   const allData: (ElementData|null)[] = await frame.evaluate(

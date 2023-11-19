@@ -10,6 +10,15 @@ import { mainConfig } from '@thecointech/electron-utils/webpack/webpack.main.con
 import { rendererConfig } from '@thecointech/electron-utils/webpack/webpack.renderer.config';
 
 import { getCSP } from './config/csp';
+import { DefinePlugin } from 'webpack';
+
+const mergedConfig = mainConfig({
+  plugins: [
+    new DefinePlugin({
+      ['process.env.TC_LOG_FOLDER']: JSON.stringify('./logs')
+    })
+  ],
+})
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -27,7 +36,7 @@ const config: ForgeConfig = {
     new AutoUnpackNativesPlugin({}),
     new WebpackPlugin({
       devContentSecurityPolicy: getCSP(),
-      mainConfig,
+      mainConfig: mergedConfig,
       renderer: {
         config: rendererConfig,
         entryPoints: [

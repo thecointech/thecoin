@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Checkbox, Container, Input } from 'semantic-ui-react'
 import { HarvestStepType } from '../types';
 import { ConfigReducer } from './state/reducer';
+import { safeParseFloat } from './state/utils';
 
 export const TopUp = () => {
   const data = ConfigReducer.useData();
@@ -37,7 +38,7 @@ export const TopUp = () => {
       </div>
       <div>
         <Checkbox toggle label="Additional Top-up" checked={enabled} onChange={(_, {checked}) => setEnabled(!!checked)}/>
-        <Input placeholder="Amount" value={topUp} onChange={(_, {value}) => setTopUp(parseFloat(value))}/>
+        <Input placeholder="Amount" value={topUp} onChange={(_, {value}) => setTopUp(safeParseFloat(value))}/>
       </div>
     </Container>
   )

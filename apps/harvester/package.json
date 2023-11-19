@@ -16,7 +16,7 @@
   },
   "scripts": {
     "scraper": "run-env src/scraper/main.ts",
-    "dev": "electron-forge start",
+    "dev": "cross-env RUN_SCRAPER_HEADLESS=false electron-forge start",
     "dev:harvest": "electron-forge start -- -- --harvest",
     "_dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",

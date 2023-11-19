@@ -25,4 +25,8 @@ export const baseOptions: Configuration = {
   },
 };
 
-export const mainConfig = merge(getMocks(env), baseOptions);
+export const mainConfig = (custom: Configuration = {}) => merge(
+  custom,
+  getMocks(env), 
+  baseOptions,
+);
