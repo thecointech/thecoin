@@ -33,14 +33,23 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
 
     // Sort by score to see if any element is close enough
     const sorted = candidates.sort((a, b) => b.score - a.score);
-    log.debug(`Found ${sorted.length} potentially matching elements from ${candidates.length} candidates, best: ${sorted[0]?.score}, second best: ${sorted[1]?.score}`);
+    log.debug(`Found ${sorted.length} candidates, best: ${sorted[0]?.score}, second best: ${sorted[1]?.score}`);
     const candidate = sorted[0];
-    // Max score is 125.  70 is chosen arbitrarily, but
-    // works for selector + location + tagName, or
-    // location + siblings + tagName + text + font
+
+    // Extra debugging
+    if (process.env.VERBOSE_COIN_SCRAPER) {
+      log.debug(`Text: ${event.text} - ${candidate?.data?.text}`);
+      log.debug(`Label: ${event.label} - ${candidate?.data?.label}`);
+      log.debug(`Coords: ${JSON.stringify(event.coords)} - ${JSON.stringify(candidate?.data?.coords)}`);
+      log.debug(`Siblings: ${JSON.stringify(event.siblingText)} - ${JSON.stringify(candidate?.data?.siblingText)}`);
+    }
+
     const elapsed = Date.now() - startTick;
     log.info(`Search took: ${(elapsed / 1000).toFixed(2)}ms`)
 
+    // Max score is 125.  70 is chosen arbitrarily, but
+    // works for selector + location + tagName, or
+    // location + siblings + tagName + text + font
     if (candidate?.score >= 70) {
       // Do we need to worry about multiple candidates?
       if (sorted[1]?.score / candidate.score > 0.9) {
