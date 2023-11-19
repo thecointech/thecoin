@@ -1,5 +1,5 @@
 import type { ElementHandle, Frame, Page } from 'puppeteer';
-import type { Coords, ElementData, Font } from './types';
+import type { Coords, ElementData } from './types';
 import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
 
@@ -20,7 +20,7 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
   while (Date.now() < startTick + timeout) {
     const frame = await getFrame(page, event);
 
-    const elements = await getElements(frame);
+    const elements = await getAllElements(frame);
     const withSiblings = fillOutSiblingText(elements);
     // const scored = withSiblings.map(el => scoreElement(el.data, event))
 
@@ -141,21 +141,40 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
 
 function scoreElement(potential: ElementData, original: ElementData) {
   let score = 0;
-  if (potential.tagName == original.tagName) score = score + 15;
-  if (potential.selector == original.selector) score = score + 40;
+  if (potential.tagName == original.tagName) score = score + 10;
+  if (potential.selector == original.selector) score = score + 30;
   if (potential.font?.color == original.font?.color) score = score + 5;
   if (potential.font?.font == original.font?.font) score = score + 5;
   if (potential.font?.size == original.font?.size) score = score + 5;
   if (potential.font?.style == original.font?.style) score = score + 5;
-  if (potential.text == original.text) score = score + 10;
+  if (potential.text == original.text) score = score + 20;
   // Else, we still match if both are a dollar amount
   else if (
     original.text?.trim().match(/^\$[0-9, ]+\.\d{2}$/) &&
     potential.text?.trim().match(/^\$[0-9, ]+\.\d{2}$/)
   ) {
-    score = score + 10;
+    score = score + 20;
   }
 
+  if (
+    potential.role && original.role &&
+    potential.role == original.role
+  ) {
+    score = score + 15;
+  }
+  else if (potential.role != original.role) {
+    score = score - 5;
+  }
+  if (
+    potential.label &&  original.label &&
+    potential.label == original.label
+  ) {
+    score = score + 30;
+  }
+  else if (potential.label != original.label) {
+    score = score - 10;
+  }
+  
   // up to 4 matching siblings for max 20 pts
   if (potential.siblingText?.length && original.siblingText?.length) {
     const matched = potential.siblingText.filter(
@@ -172,6 +191,10 @@ function scoreElement(potential: ElementData, original: ElementData) {
       )
       score = score + (20 * matched.length / (unmatched  + matched.length));
     }
+  }
+  // If neither have any siblings, mark as 10 pts cause that's pretty close
+  else if (potential.siblingText?.length == original.siblingText?.length) {
+    score = score + 10;
   }
   
   // up to 20 pts from position
@@ -209,28 +232,58 @@ function getPositionSimilarity(coords: any, event: ElementData) {
 
 export async function registerElementAttrFns(page: Page) {
   await page.evaluateOnNewDocument((fns) => {
+    eval(`window.getElementProps = ${fns.getElementProps};`)
     eval(`window.getFrameUrl = ${fns.getFrameUrl};`)
     eval(`window.getSelector = ${fns.getSelector};`)
     eval(`window.getFontData = ${fns.getFontData};`)
+    eval(`window.getElementText = ${fns.getElementText};`)
     eval(`window.getSiblingText = ${fns.getSiblingText};`)
     eval(`window.getCoords = ${fns.getCoords};`)
-    window.getElementData = (el: HTMLElement, skipSibling?: boolean): ElementData => ({
-      frame: getFrameUrl(),
-      tagName: el.tagName,
-      selector: getSelector(el),
-      coords: getCoords(el),
-      text: el.innerText,
-      font: getFontData(el),
-      siblingText: skipSibling ? [] : getSiblingText(el),
-    })
+    window.getElementData = (el: HTMLElement, skipSibling?: boolean) => {
+      const r: ElementData = getElementProps(el);
+      if (!skipSibling) {
+        const allNodes = document.querySelectorAll("*");
+        const potentialSiblings = Array.from(allNodes)
+          .filter(ps => (
+            ps != el && 
+            //@ts-ignore
+            ps.checkVisibility({
+              checkOpacity: true,  // Check CSS opacity property too
+              checkVisibilityCSS: true // Check CSS visibility property too
+            })
+          ))
+          .map(ps => ({
+            element: ps,
+            coords: getCoords(ps),
+            nodeValue: getElementText(ps),
+          }))
+          .filter(ps => !!ps.nodeValue)
+        r.siblingText = getSiblingText(r.coords, potentialSiblings);
+      }
+      return r;
+    }
   }, {
+    getElementProps: getElementProps.toString(),
     getFrameUrl: getFrameUrl.toString(),
     getSelector: getSelector.toString(),
     getFontData: getFontData.toString(),
+    getElementText: getElementText.toString(),
     getSiblingText: getSiblingText.toString(),
     getCoords: getCoords.toString(),
   });
 }
+
+const getElementProps = (el: HTMLElement) => ({
+  frame: getFrameUrl(),
+  tagName: el.tagName,
+  role: el.getAttribute("role"),
+  selector: getSelector(el),
+  coords: getCoords(el),
+  font: getFontData(el),
+  label: el.getAttribute("aria-label"),
+  text: el.innerText,
+  nodeValue: getElementText(el),  
+})
 
 const getFrameUrl = () => {
   // Because this runs in the context of the frame, it's
@@ -300,48 +353,74 @@ export function getFontData(elem: Element) {
   return _getFontData(elem)
 }
 
-const getSiblingText = (el: HTMLElement) => {
-  const _getSiblingText = (el: HTMLElement) => {
-    // const text = el.innerText;
-    const walker = el.ownerDocument.createTreeWalker(
-      document.body,
-      NodeFilter.SHOW_TEXT,
-    );
-
-    const textNodes = [];
-    let node: Node|null;
-    while (node = walker.nextNode()) {
-      textNodes.push(node);
-    }
-    // const allText: HTMLElement[] = $x('//*/text()').map(e => e.parentElement)
-    const allText = textNodes.filter(el =>
-      el.textContent?.trim() && 
-      el.parentElement?.checkVisibility({
-        checkOpacity: true,  // Check CSS opacity property too
-        checkVisibilityCSS: true // Check CSS visibility property too
-      })
-    )
-
-    const elcoords = getCoords(el);
-    const candidates = allText.filter(candidate => {
-      // Skip yourself
-      if (candidate == el || !candidate.parentElement) return false
-      // Is this a row?
-      const rowcoords = getCoords(candidate.parentElement);
-      // If it's off the edge of the page ignore it
-      if (rowcoords.left < 0 || rowcoords.top < 0) return false;
-      // If it's too large ignore it
-      if (rowcoords.height > (elcoords.height * 3)) return false;
-      // Is it centered on this node?
-      const rowCenter = rowcoords.top + (rowcoords.height / 2)
-      const elCenter = elcoords.top + (elcoords.height / 2)
-      // We allow for slight offsets of generally 2/3 pixels
-      return Math.abs(rowCenter - elCenter) < 2
-    })
-    return candidates.map(c => c.textContent).filter(t => !!t) as string[];
-  }
-  return _getSiblingText(el);
+function getElementText(elem: Element) {
+  return Array.from(elem.childNodes)
+    .filter(n => n.nodeType == 3)
+    .map(n => n.nodeValue)
+    .join(" ")
+    .replace(/\s+/, ' ')
+    .trim()
 }
+
+const getSiblingText = (elcoords: Coords, allText: Pick<ElementData, 'coords'|'nodeValue'>[]) => allText
+  .filter(c => !!c.nodeValue)
+  .filter(candidate => {
+    // Is this a row?
+    const rowcoords = candidate.coords;
+    // If it's off the edge of the page ignore it
+    if (rowcoords.left < 0 || rowcoords.top < 0) return false;
+    // If it's too large ignore it
+    if (rowcoords.height > (elcoords.height * 3)) return false;
+    // Is it centered on this node?
+    const rowCenter = rowcoords.top + (rowcoords.height / 2)
+    const elCenter = elcoords.top + (elcoords.height / 2)
+    // We allow for slight offsets of generally 2/3 pixels
+    return Math.abs(rowCenter - elCenter) < 2
+  })
+  .map(c => c.nodeValue) as string[];
+
+// const getSiblingText = (el: HTMLElement, candidates: HTMLElement[]) => {
+//   const _getSiblingText = (el: HTMLElement, candidates: HTMLElement[]) => {
+//     // const text = el.innerText;
+//     const walker = el.ownerDocument.createTreeWalker(
+//       document.body,
+//       NodeFilter.SHOW_TEXT,
+//     );
+
+//     const textNodes = [];
+//     let node: Node|null;
+//     while (node = walker.nextNode()) {
+//       textNodes.push(node);
+//     }
+//     // const allText: HTMLElement[] = $x('//*/text()').map(e => e.parentElement)
+//     const allText = textNodes.filter(el =>
+//       el.textContent?.trim() && 
+//       el.parentElement?.checkVisibility({
+//         checkOpacity: true,  // Check CSS opacity property too
+//         checkVisibilityCSS: true // Check CSS visibility property too
+//       })
+//     )
+
+//     const elcoords = getCoords(el);
+//     const candidates = allText.filter(candidate => {
+//       // Skip yourself
+//       if (candidate == el || !candidate.parentElement) return false
+//       // Is this a row?
+//       const rowcoords = getCoords(candidate.parentElement);
+//       // If it's off the edge of the page ignore it
+//       if (rowcoords.left < 0 || rowcoords.top < 0) return false;
+//       // If it's too large ignore it
+//       if (rowcoords.height > (elcoords.height * 3)) return false;
+//       // Is it centered on this node?
+//       const rowCenter = rowcoords.top + (rowcoords.height / 2)
+//       const elCenter = elcoords.top + (elcoords.height / 2)
+//       // We allow for slight offsets of generally 2/3 pixels
+//       return Math.abs(rowCenter - elCenter) < 2
+//     })
+//     return candidates.map(c => c.textContent).filter(t => !!t) as string[];
+//   }
+//   return _getSiblingText(el);
+// }
 
 // type SearchData = {
 //   siblingText?: string[];
@@ -357,30 +436,19 @@ type SearchElement = {
   data: ElementData
 }
 
-const getElements = async (frame: Page|Frame) => {
+const getAllElements = async (frame: Page|Frame) => {
   // const allElements = await frame.$x("//text()")
   const allElements = await frame.$$("*")
   const allData: (ElementData|null)[] = await frame.evaluate(
     (...els) => els.map(el => 
       (
-        el instanceof HTMLElement && 
-        el.checkVisibility({
-          checkOpacity: true,  // Check CSS opacity property too
-          checkVisibilityCSS: true // Check CSS visibility property too
-        })
-      ) ? {
-            tagName: el.tagName,
-            selector: getSelector(el),
-            coords: getCoords(el),
-            text: el.innerText,
-            font: getFontData(el),
-            nodeValue: Array.from(el.childNodes)
-              .filter(n => n.nodeType == 3)
-              .map(n => n.nodeValue)
-              .join(" ")
-              .replace(/\s+/, ' ')
-              .trim()
-          }
+        el instanceof HTMLElement
+        //@ts-ignore
+        // && el.checkVisibility({
+        //   checkOpacity: true,  // Check CSS opacity property too
+        //   checkVisibilityCSS: true // Check CSS visibility property too
+        // })
+      ) ? getElementProps(el)
         : null
     ),
     ...allElements
@@ -403,6 +471,8 @@ const getBuckets = (coords: Coords) => {
   return Math.floor(center / BUCKET_PIXELS);
 }
 
+// fill out sibling text for each element in the tree.
+// This is an O(n^2) operation, so we use a bucketing approach
 const fillOutSiblingText = (allElements: SearchElement[]) => {
   // Implement bucketting to optimize the search time for sibling text
   const bucketed: SearchElement[][] = [];
@@ -431,21 +501,8 @@ const fillOutSiblingText = (allElements: SearchElement[]) => {
         ...(neighbours || [])
       ].filter(el => !!el.data.nodeValue)
 
-      const siblings = candidates.filter(candidate => {
-        // Is this a row?
-        const rowcoords = candidate.data.coords;
-        // If it's too large ignore it
-        if (rowcoords.height > (elcoords.height * 3)) return false;
-        // Is it centered on this node?
-        const rowCenter = rowcoords.top + (rowcoords.height / 2)
-        const elCenter = elcoords.top + (elcoords.height / 2)
-        // We allow for slight offsets of generally 2/3 pixels
-        return Math.abs(rowCenter - elCenter) < 2
-      })
-      el.data.siblingText = siblings
-        .map(s => s.data.nodeValue as string)
+      el.data.siblingText = getSiblingText(el.data.coords, candidates.map(c => c.data));
     }
   }
-//  return bucketed.reduce((r, bucket) => r.concat(bucket || []), [])
   return bucketed.flat()
 }

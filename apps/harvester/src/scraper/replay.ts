@@ -170,7 +170,7 @@ export async function replayEvents(actionName: ActionTypes, events: AnyEvent[], 
               for (let i = 0; i < 15; i++) {
                 try {
                   const el = await getElementForEvent(page, event);
-                  const parsed = parseValue(el.text, event);
+                  const parsed = parseValue(el.data.text, event);
                   if (parsed) {
                     values[event.name ?? 'defaultValue'] = parsed;
                     return true;

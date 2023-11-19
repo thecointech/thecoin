@@ -53,8 +53,10 @@ export type ElementData = {
   // The frames to dereference on our way to the data
   frame?: string
   tagName: string,
+  role: string|null,
   selector: string,
   coords: Coords,
+  label: string|null,
   text: string,
   nodeValue?: string|null,
   font?: Font,
