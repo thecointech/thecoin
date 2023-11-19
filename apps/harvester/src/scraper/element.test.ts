@@ -42,7 +42,7 @@ it('Generates element data', async () => {
 
 it ('finds element data for the selector', async () => {
 
-   const click = {
+   const click: any = {
     "frame": "file:///C:/src/page/Overview%20Tangerine.html#/",
     "tagName": "SPAN",
     "selector": "SPAN#account-summary-card-have-total",
