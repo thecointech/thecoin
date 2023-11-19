@@ -37,6 +37,7 @@ export type ScraperBridgeApi = {
   getCurrentState(): Promise<Result<StoredData>>,
 
   exportResults(): Promise<Result<string>>
+  exportConfig(): Promise<Result<string>>
 
   openLogsFolder(): Promise<Result<boolean>>,
   getArgv() : Promise<Result<string>>
@@ -66,6 +67,7 @@ export const actions = {
   getCurrentState: 'scraper.getCurrentState',
 
   exportResults: 'scraper:exportResults',
+  exportConfig: 'scraper:exportConfig',
 
   openLogsFolder: 'scraper:openLogsFolder',
   getArgv: 'scraper:getArgv'
