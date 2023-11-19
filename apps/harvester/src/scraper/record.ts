@@ -337,52 +337,6 @@ function onNewDocument() {
       }
     })
 
-    // // If user presses enter to submit
-    // const inputElements = document.querySelectorAll('input[type="text"]');
-    // console.log(`Hooking ${inputElements.length} inputs`);
-    // inputElements.forEach(inputElement => {
-    //   inputElement.addEventListener('keydown', ev => {
-    //     if (ev instanceof KeyboardEvent) {
-    //       // is this an enter key?
-    //       console.log('KeyDown: ' + ev.key)
-    //       if ((ev as KeyboardEvent).key == "Enter") {
-    //         // If the target is an input
-    //         if (ev.target instanceof HTMLInputElement) {
-    //           __onAnyEvent({
-    //             type: "input",
-    //             timestamp: Date.now(),
-    //             hitEnter: true,
-    //             value: ev.target?.value,
-    //             // @ts-ignore
-    //             ...window.getElementData(ev.target)
-    //           })
-    //         }
-    //       };
-    //     }
-    //     else {
-    //       console.log("whatsup", ev);
-    //     }
-    //   })
-    // });
-    // // If the user presses enter to submit
-    // window.addEventListener("keydown", (ev) => {
-    //   console.log('KeyDown: ' + ev.key)
-    //   // is this an enter key?
-    //   if (ev.key == "Enter") {
-    //     // If the target is an input
-    //     if (ev.target instanceof HTMLInputElement) {
-    //       __onAnyEvent({
-    //         type: "input",
-    //         timestamp: Date.now(),
-    //         hitEnter: true,
-    //         value: ev.target?.value,
-    //           // @ts-ignore
-    //           ...window.getElementData(ev.target)
-    //       })
-    //     }
-    //   }
-    // })
-
     globalThis.__eventsHooked = true;
   }
 }
