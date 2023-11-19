@@ -51,7 +51,7 @@
     "@thecointech/tx-bill": "^0.2.115",
     "@thecointech/tx-etransfer": "^0.2.115",
     "@thecointech/utilities": "^0.2.115",
-    "@tsoa/runtime": "^4.1.0",
+    "@tsoa/runtime": "6.0.0-rc.2",
     "axios": "0.26.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
