@@ -22,7 +22,6 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
 
     const elements = await getAllElements(frame);
     const withSiblings = fillOutSiblingText(elements);
-    // const scored = withSiblings.map(el => scoreElement(el.data, event))
 
     const candidates = withSiblings.reduce((acc, el) => {
       acc.push({
@@ -53,91 +52,9 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
     await sleep(500);
   }
 
-/*    // NOTE: We could loosen this to any element
-    // That may improve resiliance 
-    const allElems = await frame.$$(event.tagName)
-    log.debug(`There are ${allElems.length}  ${event.tagName} elements`)
-    let skipSibling = allElems.length > 100 && firstPass;
-    const candidates : FoundElement[] = [];
-    for (const el of allElems) {
-      if (!await isElementVisible(el)) continue;
-  
-      const props = await getElementProperties(el, skipSibling);
-      const score = scoreElement(props, event)
-      candidates.push({
-        element: el,
-        score,
-        ...props
-      })
-    }
-    // const allProps = await frame.evaluate((...els) => 
-    //   els.map(el => ({
-    //     //@ts-ignore
-    //     isVisible: el.checkVisibility({
-    //     checkOpacity: true,  // Check CSS opacity property too
-    //     checkVisibilityCSS: true // Check CSS visibility property too
-    //     }),
-    //     ...window.getElementData(el as HTMLElement)
-    //   })), ...allElems)
-
-    // const candidates = allElems
-    //   .map((el, i) => ({
-    //     element: el,
-    //     ...allProps[i],
-    //   }))
-    //   .filter(el => el.isVisible)
-    //   .map(el => ({
-    //     ...el,
-    //     score: scoreElement(el, event)
-    //   }));
-
-    // const candidates : FoundElement[] = [];
-    // for (const el of allElems) {
-    //   const score = scoreElement(el, event)
-    //   candidates.push({
-    //     score,
-    //     ...el,
-    //     element: el.element as any
-    //   });
-    // }
-  
-    const sorted = candidates.sort((a, b) => b.score - a.score);
-    log.debug(`Found ${sorted.length} potentially matching elements from ${candidates.length} candidates, best: ${sorted[0]?.score}, second best: ${sorted[1]?.score}`);
-    const candidate = sorted[0];
-    // Max score is 125.  70 is chosen arbitrarily, but
-    // works for selector + location + tagName, or
-    // location + siblings + tagName + text + font
-    const elapsed = Date.now() - startTick;
-    log.info(`Search took: ${(elapsed / 1000).toFixed(2)}ms`)
-
-    if (candidate?.score >= 70) {
-      // Do we need to worry about multiple candidates?
-      if (sorted[1]?.score / candidate.score > 0.9) {
-        log.warn(`Second best candidate has  ${sorted[1].score} score`);
-      }
-      return candidate;
-    }
-    // Continue waiting
-    await sleep(500);
-    firstPass = false
-  }
-  */
   // Not found, throw
   throw new Error(`Element not found: ${event.selector}`);
 }
-
-// export async function isElementVisible(elem: ElementHandle) {
-//   // @ts-ignore checkVisibility is chrome-specific
-//   return await elem.evaluate(el => el.checkVisibility({
-//     checkOpacity: true,  // Check CSS opacity property too
-//     checkVisibilityCSS: true // Check CSS visibility property too
-//   }));
-// }
-
-// export function getElementProperties(elem: ElementHandle, skipSibling: boolean) : Promise<ElementData> {
-//   // @ts-ignore
-//   return elem.evaluate((el, skipSibling) => window.getElementData(el, skipSibling), skipSibling);
-// }
 
 function scoreElement(potential: ElementData, original: ElementData) {
   let score = 0;
@@ -210,7 +127,6 @@ async function getFrame(page: Page, click: ElementData) {
     return page;
   }
   // wait for any iframe to load
-  // await page.waitForSelector('iframe')
   for (let i = 0; i < 20; i++) {
     const maybe = page.frames().find(f => f.name() == click.frame);
     if (maybe) return maybe;
@@ -379,58 +295,6 @@ const getSiblingText = (elcoords: Coords, allText: Pick<ElementData, 'coords'|'n
   })
   .map(c => c.nodeValue) as string[];
 
-// const getSiblingText = (el: HTMLElement, candidates: HTMLElement[]) => {
-//   const _getSiblingText = (el: HTMLElement, candidates: HTMLElement[]) => {
-//     // const text = el.innerText;
-//     const walker = el.ownerDocument.createTreeWalker(
-//       document.body,
-//       NodeFilter.SHOW_TEXT,
-//     );
-
-//     const textNodes = [];
-//     let node: Node|null;
-//     while (node = walker.nextNode()) {
-//       textNodes.push(node);
-//     }
-//     // const allText: HTMLElement[] = $x('//*/text()').map(e => e.parentElement)
-//     const allText = textNodes.filter(el =>
-//       el.textContent?.trim() && 
-//       el.parentElement?.checkVisibility({
-//         checkOpacity: true,  // Check CSS opacity property too
-//         checkVisibilityCSS: true // Check CSS visibility property too
-//       })
-//     )
-
-//     const elcoords = getCoords(el);
-//     const candidates = allText.filter(candidate => {
-//       // Skip yourself
-//       if (candidate == el || !candidate.parentElement) return false
-//       // Is this a row?
-//       const rowcoords = getCoords(candidate.parentElement);
-//       // If it's off the edge of the page ignore it
-//       if (rowcoords.left < 0 || rowcoords.top < 0) return false;
-//       // If it's too large ignore it
-//       if (rowcoords.height > (elcoords.height * 3)) return false;
-//       // Is it centered on this node?
-//       const rowCenter = rowcoords.top + (rowcoords.height / 2)
-//       const elCenter = elcoords.top + (elcoords.height / 2)
-//       // We allow for slight offsets of generally 2/3 pixels
-//       return Math.abs(rowCenter - elCenter) < 2
-//     })
-//     return candidates.map(c => c.textContent).filter(t => !!t) as string[];
-//   }
-//   return _getSiblingText(el);
-// }
-
-// type SearchData = {
-//   siblingText?: string[];
-//   tagName: string,
-//   selector: string,
-//   coords: Coords,
-//   font: Font,
-//   text: string,
-//   value: string|null,
-// }
 type SearchElement = {
   element: ElementHandle<HTMLElement>,
   data: ElementData
