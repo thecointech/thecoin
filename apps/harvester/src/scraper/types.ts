@@ -56,6 +56,7 @@ export type ElementData = {
   selector: string,
   coords: Coords,
   text: string,
+  nodeValue?: string|null,
   font?: Font,
   siblingText?: string[],
 }
