@@ -13,7 +13,7 @@
   },
   "type": "commonjs",
   "scripts": {
-    "build": "yarn make",
+    "build": "yarn tsc -b",
     "dev": "yarn electron-forge start",
     "_dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
