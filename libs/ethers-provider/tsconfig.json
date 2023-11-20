@@ -1,8 +1,7 @@
 {
-  "extends": "../tsconfig.libs.json",
-  "compilerOptions": {
-    "rootDir": "./src/",
-    "baseUrl": "./src/"
-  },
-  "include": ["./src/**/*.ts", "./src/**/*.json"]
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.tests.json" },
+    { "path": "./tsconfig.build.json" },
+  ]
 }

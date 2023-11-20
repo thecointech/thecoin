@@ -53,6 +53,7 @@ const sample: HarvestData = {
       harvesterBalance: new currency(100),
       toETransfer: new currency(100),
       toPayVisa: new currency(100),
+      toPayVisaDate: DateTime.now(),
       stepData: {
         RoundUp: "123.23",
       }

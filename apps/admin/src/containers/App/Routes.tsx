@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { AuthSwitch } from '@thecointech/shared/containers/AuthRoute';
 import { NotFoundPage } from '@thecointech/shared/containers/NotFoundPage';
 import { AccountId } from '@thecointech/signers';

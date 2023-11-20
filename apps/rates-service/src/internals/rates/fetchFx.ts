@@ -8,7 +8,8 @@ export async function fetchFxRate(currentValidUntil: number, now: number) : Prom
   // We reset validFrom to be timestamp (as we can't
   // set a price in the past)
   const validFrom = currentValidUntil;
-  let validUntil = alignToNextBoundary(now, FXUpdateInterval)
+  const updateFrom = Math.max(validFrom, now);
+  let validUntil = alignToNextBoundary(updateFrom, FXUpdateInterval)
 
   // Update with the latest USD/CAD forex
   // Unlike stocks, this is a point-in-time,

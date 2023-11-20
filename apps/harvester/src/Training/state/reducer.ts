@@ -21,17 +21,12 @@ export class TrainingReducer extends BaseReducer<IActions, TrainingState>(TRAINI
   }
 
   setParameter(bank: BankKey, key: DataKey, value: string|boolean|number): void {
-    if (bank == "hasCreditDetails") {
-      this.draftState.hasCreditDetails = !!value;
-    }
-    else {
-      const n = {
-        ...this.state[bank],
-        [key]: value,
-        hasCreditDetails: this.state.hasCreditDetails
-      };
-      this.draftState[bank] = n;
-      localStorage.setItem(bank, JSON.stringify(n));
-    }
+    const n = {
+      ...this.state[bank],
+      [key]: value,
+      hasCreditDetails: this.state.hasCreditDetails
+    };
+    this.draftState[bank] = n;
+    localStorage.setItem(bank, JSON.stringify(n));
   }
 }

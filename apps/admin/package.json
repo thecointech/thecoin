@@ -2,17 +2,18 @@
   "name": "thecoin-admin",
   "private": true,
   "productName": "thecoin-admin",
-  "workspaces": {
-    "nohoist": [
-      "**/electron",
-      "**/electron-devtools-installer/**"
-    ]
-  },
   "version": "0.2.115",
   "description": "Admin: audit TheCoin system ops",
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
   "main": ".webpack/main",
+  "config": {
+    "forge": "./config.forge"
+  },
+  "type": "commonjs",
   "scripts": {
-    "build": "yarn make",
+    "build": "yarn tsc -b",
     "dev": "yarn electron-forge start",
     "_dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
@@ -24,26 +25,20 @@
     "lint": "eslint --ext .ts ."
   },
   "keywords": [],
-  "author": {
-    "name": "Stephen Taylor",
-    "email": "stephen.taylor.dev@gmail.com"
-  },
-  "license": "MIT",
-  "config": {
-    "forge": "./config.forge.js"
-  },
   "devDependencies": {
-    "@electron-forge/cli": "6.0.0-beta.59",
-    "@electron-forge/maker-deb": "6.0.0-beta.59",
-    "@electron-forge/maker-rpm": "6.0.0-beta.59",
-    "@electron-forge/maker-squirrel": "6.0.0-beta.59",
-    "@electron-forge/maker-zip": "6.0.0-beta.59",
-    "@electron-forge/plugin-webpack": "6.0.0-beta.59",
-    "@vercel/webpack-asset-relocator-loader": "1.6.0",
-    "electron": "13.1.8",
+    "@electron-forge/cli": "^6.2.1",
+    "@electron-forge/maker-deb": "^6.2.1",
+    "@electron-forge/maker-rpm": "^6.2.1",
+    "@electron-forge/maker-squirrel": "^6.2.1",
+    "@electron-forge/maker-zip": "^6.2.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
+    "@electron-forge/plugin-webpack": "^6.2.1",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "electron": "25.3.2",
     "electron-devtools-installer": "^3.2.0",
-    "esm": "3.2.25",
-    "node-loader": "^2.0.0"
+    "eslint": "^8.0.1",
+    "eslint-plugin-import": "^2.25.0"
   },
   "dependencies": {
     "@thecointech/contract-core": "^0.2.115",

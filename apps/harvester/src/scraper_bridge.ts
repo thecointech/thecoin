@@ -5,14 +5,14 @@ import { ActionTypes, ValueType } from './scraper/types';
 import { warmup } from './scraper/warmup';
 import { actions, ScraperBridgeApi } from './scraper_actions';
 import { toBridge } from './scraper_bridge_conversions';
-import { getHarvestConfig, getWalletAddress, hasCreditDetails, initConfig, setCreditDetails, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
+import { getHarvestConfig, getProcessConfig, getWalletAddress, hasCreditDetails, initConfig, setCreditDetails, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
 import type { Mnemonic } from '@ethersproject/hdnode';
 import { HarvestConfig } from './types';
 import { CreditDetails } from './Harvester/types';
 import { exec } from 'child_process';
 import { cwd } from 'process';
 import { join } from 'path';
-import { getState } from './Harvester/db';
+import { exportResults, getState } from './Harvester/db';
 import { harvest } from './Harvester';
 
 async function guard<T>(cb: () => Promise<T>) {
@@ -52,6 +52,12 @@ const api: ScraperBridgeApi = {
 
   runHarvester: () => guard(() => harvest()),
   getCurrentState: () => guard(() => getState()),
+
+  exportResults: () => guard(() => exportResults()),
+  exportConfig: () => guard(async () => {
+    const config = await getProcessConfig();
+    return JSON.stringify(config, null, 2);
+  }),
 
   openLogsFolder: () => guard(async () => {
     const logFolder = process.env.TC_LOG_FOLDER;
@@ -115,6 +121,13 @@ export function initScraping() {
   })
   ipcMain.handle(actions.getCurrentState, async (_event) => {
     return api.getCurrentState();
+  })
+
+  ipcMain.handle(actions.exportResults, async (_event) => {
+    return api.exportResults();
+  })
+  ipcMain.handle(actions.exportConfig, async (_event) => {
+    return api.exportConfig();
   })
 
   ipcMain.handle(actions.openLogsFolder, async (_event) => {

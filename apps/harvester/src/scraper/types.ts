@@ -40,8 +40,8 @@ export type BaseEvent = {
 export type Coords = {
   top: number,
   left: number,
-  bottom: number,
-  right: number,
+  height: number,
+  width: number,
 }
 export type Font = {
   font: string,
@@ -53,9 +53,14 @@ export type ElementData = {
   // The frames to dereference on our way to the data
   frame?: string
   tagName: string,
+  role: string|null,
   selector: string,
   coords: Coords,
-  siblingText?: string,
+  label: string|null,
+  text: string,
+  nodeValue?: string|null,
+  font?: Font,
+  siblingText?: string[],
 }
 
 export type NavigationEvent = BaseEvent & {
@@ -78,14 +83,16 @@ export type ClickEvent = {
   type: "click",
   clickX: number,
   clickY: number,
-  font: Font,
-  text: string,
+  // font: Font,
+  // text: string,
 } & BaseEvent & ElementData;
 
 export type InputEvent = {
   type: "input",
   dynamicName?: string,
   value?: string,
+  hitEnter?: boolean,
+  valueChange?: boolean,
 } & BaseEvent & ElementData;
 
 // Not really an event, but something to read later

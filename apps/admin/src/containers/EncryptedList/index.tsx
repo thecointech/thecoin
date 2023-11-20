@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { PrivateKeyButton } from "./PrivateKeyButton";
 import { TransferList, TransferRenderer } from "../TransferList";
 import { Confirm } from "semantic-ui-react";

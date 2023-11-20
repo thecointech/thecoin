@@ -8,7 +8,7 @@
   ],
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
@@ -68,6 +68,7 @@
     "@thecointech/logging": "^0.2.115"
   },
   "devDependencies": {
+    "@thecointech/electron-utils": "^0.2.115",
     "jest": "*"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"

@@ -3,7 +3,7 @@ import memory from 'pouchdb-adapter-memory'
 import comdb from 'comdb';
 import { Wallet } from '@ethersproject/wallet';
 import { Mnemonic } from '@ethersproject/hdnode';
-import { defaultDays, HarvestConfig } from '../types';
+import { defaultDays, defaultTime, HarvestConfig } from '../types';
 import { createStep } from './steps';
 import { CreditDetails } from './types';
 import { setSchedule } from './schedule/scheduler';
@@ -11,7 +11,6 @@ import path from 'path';
 import { log } from '@thecointech/logging';
 import { ActionTypes, AnyEvent } from '../scraper/types';
 import { rootFolder } from '../paths';
-import { ClearPendingVisa } from './steps/ClearPendingVisa';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
@@ -69,7 +68,10 @@ export async function setProcessConfig(config: Partial<ConfigShape>) {
   const lastCfg = await getProcessConfig();
   await _config.put({
     steps: config.steps ?? lastCfg?.steps ?? [],
-    daysToRun: config.daysToRun ?? lastCfg?.daysToRun ?? defaultDays,
+    schedule: {
+      daysToRun: config.schedule?.daysToRun ?? lastCfg?.schedule?.daysToRun ?? defaultDays,
+      timeToRun: config.schedule?.timeToRun ?? lastCfg?.schedule?.timeToRun ?? defaultTime,
+    },
     stateKey: config.stateKey ?? lastCfg?.stateKey,
     wallet: config.wallet ?? lastCfg?.wallet,
     creditDetails: config.creditDetails ?? lastCfg?.creditDetails,
@@ -114,12 +116,7 @@ export async function hydrateProcessor() {
     .filter(step => !!step)
     .map(createStep)
 
-  log.warn("HACK ALERT: Manually adding ClearPendingVisa step");
-
-  return [
-    new ClearPendingVisa(),
-    ...steps
-  ]
+  return steps;
 }
 
 export async function setEvents(type: ActionTypes, events: AnyEvent[]) {
@@ -152,15 +149,15 @@ export async function getHarvestConfig() {
   const config = await getProcessConfig();
   return config?.steps
     ? {
-        steps: config?.steps,
-        daysToRun: config?.daysToRun,
+        steps: config.steps,
+        schedule: config.schedule,
       }
     : undefined;
 }
 
 export async function setHarvestConfig(config: HarvestConfig) {
   const existing = await getHarvestConfig();
-  await setSchedule(config.daysToRun, existing?.daysToRun);
+  await setSchedule(config.schedule, existing?.schedule);
   await setProcessConfig(config)
   return true;
 }

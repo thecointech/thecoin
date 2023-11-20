@@ -1,4 +1,3 @@
-import React from "react";
 import { Accordion, Icon } from "semantic-ui-react";
 import { TransferRenderer } from "./types";
 import { AnyActionContainer } from '@thecointech/tx-statemachine';

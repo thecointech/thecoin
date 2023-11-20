@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import { Checkbox, Container, Input, Label } from 'semantic-ui-react'
 import { HarvestStepType } from '../types';
 import { ConfigReducer } from './state/reducer';
+import { safeParseFloat } from './state/utils';
 
 export const TransferLimit = () => {
 
   const data = ConfigReducer.useData();
   const api = ConfigReducer.useApi();
-  const xferLimit = data.steps[HarvestStepType.TransferLimit];
+  const xferLimit = data.steps.find(step => step.type === HarvestStepType.TransferLimit);
 
   const [enabled, setEnabled] = useState(!!xferLimit ?? false);
   const [limit, setLimit] = useState(xferLimit?.args?.['limit'] ?? 250);
@@ -39,7 +40,7 @@ export const TransferLimit = () => {
       <div>
       <Checkbox toggle label="Leave at least " checked={enabled} onChange={(_, {checked}) => setEnabled(!!checked)}/>
         &nbsp;&nbsp;
-        <Input placeholder="Amount" labelPosition="left" type="number" value={limit} onChange={(_, {value}) => setLimit(parseFloat(value))}>
+        <Input placeholder="Amount" labelPosition="left" type="number" value={limit} onChange={(_, {value}) => setLimit(safeParseFloat(value))}>
           <Label basic>$</Label>
           <input />
         </Input>

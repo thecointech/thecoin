@@ -30,6 +30,15 @@ export class PayVisa implements ProcessingStage {
       const dateToPay = getDateToPay(data.visa.dueDate, this.daysPrior);
       log.info('PayVisa: dateToPay', dateToPay.toISO());
 
+      if (data.state.toPayVisa != undefined) {
+        log.error(
+          data.state,
+          'PayVisa: toPayVisa already set for {toPayVisa} with date: {toPayVisaDate}'
+        );
+        // But we continue regardless, cause we gotta keep up with payments
+        // TODO: perhaps turn toPay into an array?
+      }
+
       // transfer visa dueAmount on dateToPay
       const api = GetBillPaymentsApi();
       const payment = await BuildUberAction(
@@ -45,16 +54,17 @@ export class PayVisa implements ProcessingStage {
         log.error("Error on uberBillPayment: ", r.data.message);
         // WHAT TO DO HERE???
       }
-      const harvesterBalance = (data.state.harvesterBalance ?? currency(0))
-        .subtract(data.visa.dueAmount);
+      else {
+        const remainingBalance = (data.state.harvesterBalance ?? currency(0))
+          .subtract(data.visa.dueAmount);
 
-      log.info('Sent payment request, new balance', harvesterBalance.toString());
-      return {
-        toPayVisa: data.visa.dueAmount,
-        toPayVisaDate: dateToPay,
-        harvesterBalance,
-        stepData: {
-          [PayVisaKey]: data.visa.dueDate.toISO()!,
+        log.info('Sent payment request, current balance remaining ', remainingBalance.toString());
+        return {
+          toPayVisa: data.visa.dueAmount.add(data.state.toPayVisa ?? 0),
+          toPayVisaDate: dateToPay,
+          stepData: {
+            [PayVisaKey]: data.visa.dueDate.toISO()!,
+          }
         }
       }
     }
