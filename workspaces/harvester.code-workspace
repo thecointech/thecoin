@@ -1,15 +1,23 @@
 {
 	"folders": [
 		{
+			"name": "harvester",
 			"path": "../apps/harvester"
 		},
 		{
+			"name": "electron-utils",
+			"path": "../libs/electron-utils"
+		},
+		{
+			"name": "broker-service",
 			"path": "../apps/broker-service"
 		},
 		{
+			"name": "shared",
 			"path": "../libs/shared"
 		},
 		{
+			"name": "contract-plugins",
 			"path": "../libs/contract-plugins"
 		}
 	],

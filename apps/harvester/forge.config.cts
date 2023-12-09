@@ -15,7 +15,8 @@ import { DefinePlugin } from 'webpack';
 const mergedConfig = mainConfig({
   plugins: [
     new DefinePlugin({
-      ['process.env.TC_LOG_FOLDER']: JSON.stringify('./logs')
+      ['process.env.TC_LOG_FOLDER']: JSON.stringify("false"),
+      ['process.env.URL_SEQ_LOGGING']: JSON.stringify("false"),
     })
   ],
 })

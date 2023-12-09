@@ -3,3 +3,4 @@ import path from 'path';
 
 export const rootFolder = electron.app?.getPath('userData') ?? '.';
 export const outFolder = path.join(rootFolder, 'output');
+export const logsFolder = path.join(rootFolder, 'logs');

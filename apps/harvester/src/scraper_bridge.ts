@@ -10,10 +10,9 @@ import type { Mnemonic } from '@ethersproject/hdnode';
 import { HarvestConfig } from './types';
 import { CreditDetails } from './Harvester/types';
 import { exec } from 'child_process';
-import { cwd } from 'process';
-import { join } from 'path';
 import { exportResults, getState } from './Harvester/db';
 import { harvest } from './Harvester';
+import { logsFolder } from './paths';
 
 async function guard<T>(cb: () => Promise<T>) {
   try {
@@ -60,12 +59,7 @@ const api: ScraperBridgeApi = {
   }),
 
   openLogsFolder: () => guard(async () => {
-    const logFolder = process.env.TC_LOG_FOLDER;
-    if (!logFolder) {
-      return false;
-    }
-    const logsPath = join(cwd(), logFolder);
-    exec(`start "" "${logsPath}"`);
+    exec(`start "" "${logsFolder}"`);
     return true;
   }),
   getArgv: () => guard(() => Promise.resolve(JSON.stringify({
