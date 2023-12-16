@@ -5,6 +5,7 @@ import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
 import currency from 'currency.js';
 import { log } from '@thecointech/logging';
+import { notify, notifyError } from '../notify';
 
 export const PayVisaKey = "PayVisa";
 
@@ -52,11 +53,22 @@ export class PayVisa implements ProcessingStage {
       const r = await api.uberBillPayment(payment);
       if (r.status !== 200) {
         log.error("Error on uberBillPayment: ", r.data.message);
+
+        notifyError({
+          title: 'Harvester Error',
+          message: 'Submitting a payment request failed.  Please contact support.',
+        })
         // WHAT TO DO HERE???
       }
       else {
         const remainingBalance = (data.state.harvesterBalance ?? currency(0))
           .subtract(data.visa.dueAmount);
+
+        notify({
+          icon: 'money.png',
+          title: 'Payment Request Sent',
+          message: `Visa balance of ${data.visa.dueAmount} is scheduled to be paid ${dateToPay.toLocaleString(DateTime.DATE_MED)}.`,
+        })
 
         log.info('Sent payment request, current balance remaining ', remainingBalance.toString());
         return {

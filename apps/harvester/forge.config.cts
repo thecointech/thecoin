@@ -23,8 +23,15 @@ const mergedConfig = mainConfig({
 
 const config: ForgeConfig = {
   packagerConfig: {
-    asar: true,
+    asar: {
+      unpack: './node_modules/node-notifier/**/*'
+    },
     icon: 'assets/appicon',
+    extraResource: [
+      // Include our assets outside of the asar
+      // file so we can reference them by absolute path
+      './assets'
+    ],
   },
   rebuildConfig: {},
   makers: [
