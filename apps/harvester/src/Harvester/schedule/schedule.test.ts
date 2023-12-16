@@ -19,7 +19,7 @@ describe('Scheduler', () => {
   })
 
   it ("finds the right executable", async () => {
-    const executable = getHarvesterExecutable("C:\\Users\\kiwi_\\AppData\\Local\\harvester\\app-0.2.116\\harvester.exe,--process-start-args=--notify")
+    const executable = getHarvesterExecutable("C:\\Users\\UserName\\AppData\\Local\\harvester\\app-0.2.116\\harvester.exe,--process-start-args=--notify")
     expect(executable).toMatch(/harvester.exe/);
   })
 }, IsManualRun)
