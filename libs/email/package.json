@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@thecointech/logging": "^0.2.116",
-    "node-mailjet": "^4.0.1"
+    "node-mailjet": "^5.0.0"
   },
   "devDependencies": {
     "jest": "*"
