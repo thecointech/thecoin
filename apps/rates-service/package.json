@@ -34,7 +34,7 @@
     "gcp-build": ""
   },
   "engines": {
-    "node": "16.x.x"
+    "node": "18.x.x"
   },
   "files": [
     "build/**/*"
