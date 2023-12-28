@@ -22,9 +22,9 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-s build:contracts build:copy build:src",
+    "build": "run -T run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
-    "build:src": "yarn tsc --project tsconfig.build.json",
+    "build:src": "run -T tsc --project tsconfig.build.json",
     "build:copy": "cpx \"./src/deployed\" ./build/",
     "clean": "run-p 'clean:*'",
     "clean:src": "rimraf ./build",
@@ -57,6 +57,7 @@
     "@openzeppelin/contracts": "^4.5.0",
     "@thecointech/contract-core": "^0.2.116",
     "@thecointech/contract-tools": "^0.2.116",
+    "@thecointech/setenv": "workspace:^",
     "@thecointech/signers": "^0.2.116",
     "@types/bs58": "^4.0.1",
     "jest": "*"

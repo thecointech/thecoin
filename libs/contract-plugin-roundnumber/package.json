@@ -16,9 +16,9 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-s build:contracts build:copy build:src",
+    "build": "run -T run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
-    "build:src": "yarn tsc --project tsconfig.build.json",
+    "build:src": "run -T tsc --project tsconfig.build.json",
     "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
     "clean": "run-p 'clean:*'",
     "clean:src": "rimraf ./build",
@@ -42,6 +42,7 @@
   "devDependencies": {
     "@thecointech/async": "^0.2.116",
     "@thecointech/contract-tools": "^0.2.116",
+    "@thecointech/setenv": "workspace:^",
     "jest": "*"
   },
   "dependencies": {

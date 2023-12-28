@@ -27,7 +27,7 @@
     "make": "yarn run -T cross-env CONFIG_NAME=prodbeta electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "build": "yarn tsc -b",
+    "build": "run -T tsc -b",
     "test": "yarn run-jest",
     "test:record": "yarn run-env ./src/scraper/main.ts --record"
   },

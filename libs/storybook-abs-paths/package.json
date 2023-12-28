@@ -11,7 +11,7 @@
     "directory": "libs/storybook-abs-paths"
   },
   "scripts": {
-    "build": "yarn tsc",
+    "build": "run -T tsc",
     "clean": "rimraf ./build"
   },
   "files": [

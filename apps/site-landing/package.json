@@ -14,11 +14,12 @@
   "scripts": {
     "preanalyze": "yarn clean:analyze",
     "analyze": "node ./internals/scripts/analyze.js",
-    "prebuild": "run-p build:*",
-    "build": "run-env exec=webpack --config ../../libs/site-base/internal/webpack/webpack.prod.mjs --progress",
-    "build:semantic": "node ./internals/buildSemantic.mjs",
-    "build:i18n": "run-s extract compile",
-    "build:copy": "cpx \"./src/containers/BenefitsSimulator/simulator/*.csv\" ./build/",
+    "build": "run -T run-s prebuild build:src",
+    "build:src": "run-env exec=webpack --config ../../libs/site-base/internal/webpack/webpack.prod.mjs --progress",
+    "prebuild": "run -T run-p 'prebuild:*'",
+    "prebuild:semantic": "node ./internals/buildSemantic.mjs",
+    "prebuild:i18n": "run -T run-s extract compile",
+    "prebuild:copy": "run -T cpx \"./src/containers/BenefitsSimulator/simulator/*.csv\" ./build/",
     "clean": "run-p 'clean:*'",
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
@@ -38,8 +39,8 @@
     "test": "yarn run-jest",
     "test:ci": "yarn run-jest-nix",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern [sha512:contenthash:base64:6]",
-    "compile": "formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json",
+    "extract": "run -T formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
+    "compile": "run -T formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json",
     "run_simulation": "cross-env NODE_ENV=production ts-node -T --skip-project ./internals/main_sim.ts",
     "update_snp_data": "run-env ./internals/historical/main.ts"
   },
@@ -66,6 +67,7 @@
     "sanitize.css": "10.0.0"
   },
   "devDependencies": {
+    "@thecointech/setenv": "workspace:^",
     "@types/papaparse": "^5.0.3",
     "@types/react-helmet": "^6.1.5",
     "@types/react-test-renderer": "^16.9.0",

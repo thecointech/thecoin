@@ -17,7 +17,7 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc",
+    "build": "run -T tsc",
     "clean": "rimraf ./build"
   },
   "exports": {

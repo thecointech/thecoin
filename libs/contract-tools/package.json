@@ -16,7 +16,7 @@
   },
   "scripts": {
     "_clean NOTE: THIS KEEPS FAILING DUE TO HARDHAT CONFIG(?)": "rimraf ./build",
-    "build": "yarn tsc",
+    "build": "run -T tsc",
     "emulator": "hardhat --config ./src/hardhat.config.ts node --port 9545"
   },
   "exports": {

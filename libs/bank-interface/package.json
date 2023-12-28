@@ -21,7 +21,7 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc -b tsconfig.json",
+    "build": "run -T tsc -b tsconfig.json",
     "clean": "rimraf ./build"
   },
   "files": [

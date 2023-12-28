@@ -20,9 +20,9 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-p build:*",
-    "_build:cjs": "yarn tsc --project tsconfig.build.cjs.json",
-    "build:mjs": "yarn tsc --project tsconfig.build.mjs.json",
+    "build": "run-p 'build:*'",
+    "_build:cjs": "run -T tsc --project tsconfig.build.cjs.json",
+    "build:mjs": "run -T tsc --project tsconfig.build.mjs.json",
     "clean": "rimraf ./build && rimraf ./coverage"
   },
   "files": [

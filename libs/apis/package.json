@@ -19,7 +19,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "build": "yarn tsc --project tsconfig.json",
+    "build": "run -T tsc --project tsconfig.json",
     "clean": "rimraf ./build && rimraf ./coverage"
   },
   "files": [

@@ -22,7 +22,7 @@
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
     "deploy": "yarn run-env ./deploy.ts",
-    "build": "yarn tsc -b tsconfig.build.json",
+    "build": "run -T tsc -b tsconfig.build.json",
     "gen:swagger": "run -T tsoa spec-and-routes",
     "clean": "run-p 'clean:*'",
     "clean:build": "rimraf ./build",

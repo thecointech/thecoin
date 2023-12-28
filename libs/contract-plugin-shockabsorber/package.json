@@ -20,9 +20,9 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-s build:contracts build:copy build:src",
+    "build": "run -T run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
-    "build:src": "yarn tsc -b",
+    "build:src": "run -T tsc -b",
     "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
     "clean": "run-p 'clean:*'",
     "clean:src": "rimraf ./build",
@@ -57,6 +57,7 @@
     "@thecointech/contract-core": "^0.2.116",
     "@thecointech/contract-plugin-converter": "^0.2.116",
     "@thecointech/contract-tools": "^0.2.116",
+    "@thecointech/setenv": "workspace:^",
     "jest": "*"
   },
   "dependencies": {

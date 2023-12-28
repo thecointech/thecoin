@@ -20,14 +20,14 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-s build:contracts build:copy build:src",
+    "build": "run -T run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
-    "build:src": "yarn tsc -b",
+    "build:src": "run -T tsc -b",
     "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
     "clean": "rimraf ./build",
     "test": "yarn run-jest",
     "test:ci": "yarn run-jest-nix",
-    "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
+    "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts run-env"
   },
   "files": [
     "build/**/*"
@@ -51,7 +51,9 @@
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
     "@thecointech/async": "^0.2.116",
+    "@thecointech/contract-plugins": "workspace:^",
     "@thecointech/contract-tools": "^0.2.116",
+    "@thecointech/setenv": "workspace:^",
     "jest": "*"
   },
   "dependencies": {
