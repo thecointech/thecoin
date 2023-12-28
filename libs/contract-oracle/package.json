@@ -69,8 +69,8 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "^0.2.116",
-    "@thecointech/contract-tools": "^0.2.116",
+    "@thecointech/async": "workspace:^",
+    "@thecointech/contract-tools": "workspace:^",
     "@thecointech/jestutils": "workspace:^",
     "@thecointech/setenv": "workspace:^",
     "cross-env": "^7.0.3",
@@ -79,6 +79,6 @@
     "rimraf": "5.0.5"
   },
   "dependencies": {
-    "@thecointech/contract-base": "^0.2.116"
+    "@thecointech/contract-base": "workspace:^"
   }
 }

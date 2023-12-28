@@ -30,8 +30,8 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/contract-plugins": "^0.2.116",
-    "@thecointech/tx-statemachine": "^0.2.116"
+    "@thecointech/contract-plugins": "workspace:^",
+    "@thecointech/tx-statemachine": "workspace:^"
   },
   "devDependencies": {
     "jest": "*"

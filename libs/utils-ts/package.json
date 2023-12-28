@@ -47,13 +47,13 @@
     }
   },
   "dependencies": {
-    "@thecointech/logging": "^0.2.116",
+    "@thecointech/logging": "workspace:^",
     "base32": "^0.0.6",
     "decimal.js-light": "^2.5.1",
     "ethers": "^5.7.0"
   },
   "devDependencies": {
-    "@thecointech/types": "^0.2.116",
+    "@thecointech/types": "workspace:^",
     "jest": "*"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"

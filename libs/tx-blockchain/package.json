@@ -36,8 +36,8 @@
     }
   },
   "dependencies": {
-    "@thecointech/contract-core": "^0.2.116",
-    "@thecointech/utilities": "^0.2.116"
+    "@thecointech/contract-core": "workspace:^",
+    "@thecointech/utilities": "workspace:^"
   },
   "devDependencies": {
     "jest": "*"

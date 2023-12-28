@@ -55,10 +55,10 @@
   "types": "./build/index.d.ts",
   "devDependencies": {
     "@openzeppelin/contracts": "^4.5.0",
-    "@thecointech/contract-core": "^0.2.116",
-    "@thecointech/contract-tools": "^0.2.116",
+    "@thecointech/contract-core": "workspace:^",
+    "@thecointech/contract-tools": "workspace:^",
     "@thecointech/setenv": "workspace:^",
-    "@thecointech/signers": "^0.2.116",
+    "@thecointech/signers": "workspace:^",
     "@types/bs58": "^4.0.1",
     "jest": "*"
   },
@@ -70,8 +70,8 @@
     ]
   },
   "dependencies": {
-    "@thecointech/contract-base": "^0.2.116",
-    "@thecointech/utilities": "^0.2.116",
+    "@thecointech/contract-base": "workspace:^",
+    "@thecointech/utilities": "workspace:^",
     "bs58": "^4.0.1"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"

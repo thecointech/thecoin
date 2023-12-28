@@ -29,8 +29,8 @@
   "exports": "./build/index.js",
   "types": "build/index.d.ts",
   "dependencies": {
-    "@thecointech/apis": "^0.2.116",
-    "@thecointech/logging": "^0.2.116"
+    "@thecointech/apis": "workspace:^",
+    "@thecointech/logging": "workspace:^"
   },
   "devDependencies": {
     "jest": "*"

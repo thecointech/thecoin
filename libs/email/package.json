@@ -38,7 +38,7 @@
     }
   },
   "dependencies": {
-    "@thecointech/logging": "^0.2.116",
+    "@thecointech/logging": "workspace:^",
     "node-mailjet": "^4.0.1"
   },
   "devDependencies": {

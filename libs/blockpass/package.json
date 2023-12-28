@@ -35,11 +35,11 @@
   },
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/shared": "^0.2.116"
+    "@thecointech/shared": "workspace:^"
   },
   "devDependencies": {
-    "@thecointech/async": "^0.2.116",
-    "@thecointech/broker-cad": "^0.2.116",
+    "@thecointech/async": "workspace:^",
+    "@thecointech/broker-cad": "workspace:^",
     "jest": "*"
   }
 }

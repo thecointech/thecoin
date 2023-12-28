@@ -26,6 +26,6 @@
     "compile": "formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json"
   },
   "dependencies": {
-    "@thecointech/site-base": "^0.2.116"
+    "@thecointech/site-base": "workspace:^"
   }
 }
