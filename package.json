@@ -179,7 +179,6 @@
     "ts-patch": "^3.1.1",
     "typescript": "^4.7.3",
     "typescript-plugin-css-modules": "^3.4.0",
-    "url-loader": "2.0.1",
     "wait-port": "^0.2.9",
     "webpack": "5.77.0",
     "webpack-bundle-analyzer": "4.4.2",

@@ -1,12 +1,10 @@
 {
   "name": "@thecointech/site-semantic-theme",
-  "productName": "THECoin: Website - Semantic THeme",
+  "productName": "THECoin: Website - Semantic Theme",
   "private": true,
   "type": "module",
-  "workspaces": {
-    "nohoist": [
-      "semantic-ui-less"
-    ]
+  "installConfig": {
+    "hoistingLimits": "workspaces"
   },
   "version": "0.2.116",
   "description": "THECoin: Future-proof currency: Semantic theme for websites",
