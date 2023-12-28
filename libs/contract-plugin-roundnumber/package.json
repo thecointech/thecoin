@@ -20,7 +20,7 @@
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
     "build:src": "yarn tsc --project tsconfig.build.json",
     "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
-    "clean": "run-p clean:*",
+    "clean": "run-p 'clean:*'",
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
     "test": "yarn run-jest",

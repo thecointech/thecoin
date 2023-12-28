@@ -18,7 +18,7 @@
     "build": "yarn run-env exec=webpack --config ../../libs/site-base/internal/webpack/webpack.prod.mjs --progress",
     "build:semantic": "node ./internals/buildSemantic.mjs",
     "build:i18n": "run-s extract compile",
-    "clean": "run-p clean:*",
+    "clean": "run-p 'clean:*'",
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
     "clean:analyze": "rimraf stats.json",

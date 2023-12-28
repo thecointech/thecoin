@@ -1,9 +1,5 @@
 {
-  "packages": [
-    "apis/**/*"
-  ],
   "npmClient": "yarn",
-  "useWorkspaces": true,
   "version": "0.2.116",
   "command": {
     "publish": {

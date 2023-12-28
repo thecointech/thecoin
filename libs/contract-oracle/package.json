@@ -24,7 +24,7 @@
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
     "build:src": "yarn tsc -b",
     "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
-    "clean": "run-p clean:*",
+    "clean": "run-p 'clean:*'",
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
     "test": "yarn run-jest",
@@ -71,7 +71,12 @@
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
     "@thecointech/async": "^0.2.116",
     "@thecointech/contract-tools": "^0.2.116",
-    "jest": "*"
+    "@thecointech/jestutils": "workspace:^",
+    "@thecointech/setenv": "workspace:^",
+    "cross-env": "^7.0.3",
+    "jest": "*",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "5.0.5"
   },
   "dependencies": {
     "@thecointech/contract-base": "^0.2.116"

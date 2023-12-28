@@ -19,7 +19,7 @@
     "build:semantic": "node ./internals/buildSemantic.mjs",
     "build:i18n": "run-s extract compile",
     "build:copy": "cpx \"./src/containers/BenefitsSimulator/simulator/*.csv\" ./build/",
-    "clean": "run-p clean:*",
+    "clean": "run-p 'clean:*'",
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
     "clean:analyze": "rimraf stats.json",

@@ -17,7 +17,7 @@
     "build:src": "yarn tsc -b \"tsconfig.build.json\"",
     "build:link": "node ../../tools/link-assets.mjs",
     "build:i18n": "run-s extract compile",
-    "clean": "run-p clean:*",
+    "clean": "run-p 'clean:*'",
     "clean:src": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
     "lint": "yarn lint:src && yarn lint:css",

@@ -25,7 +25,7 @@
     "deploy": "yarn run-env ./deploy.ts",
     "build": "yarn tsc -b tsconfig.build.json",
     "gen:swagger": "yarn tsoa spec-and-routes",
-    "clean": "run-p clean:*",
+    "clean": "run-p 'clean:*'",
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
     "test:summary": "jest --coverage > ./coverage/summary.txt",

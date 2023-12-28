@@ -23,7 +23,8 @@
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "yarn run-jest",
     "test:ci": "yarn run-jest-nix",
-    "test:summary": "jest --coverage > ./coverage/summary.txt"
+    "test:summary": "jest --coverage > ./coverage/summary.txt",
+    ":run-jest": "run run-jest $@"
   },
   "files": [
     "build/**/*"
