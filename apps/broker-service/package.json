@@ -24,7 +24,7 @@
     "prod:beta": "cross-env CONFIG_NAME=prodbeta yarn dev",
     "deploy": "yarn run-env ./deploy.ts",
     "build": "yarn tsc -b tsconfig.build.json",
-    "gen:swagger": "yarn tsoa spec-and-routes",
+    "gen:swagger": "run -T tsoa spec-and-routes",
     "clean": "rimraf ./build && rimraf ./src/api",
     "test": "yarn run-jest",
     "test:ci": "yarn run-jest-nix",
