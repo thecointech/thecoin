@@ -12,9 +12,6 @@ import '@thecointech/contract-plugins/contracts/IPluggable.sol';
 import '@thecointech/contract-plugins/contracts/permissions.sol';
 import "./Freezable.sol";
 
-import "hardhat/console.sol";
-
-
 abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
 
   // A plugin manager is allowed to assign/remove built-in plugins
@@ -122,7 +119,7 @@ abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
 
   // A special-purpose plugin transfer fn, in case we need to restrict it later(?)
   function pl_transferTo(address user, uint amount, uint timeMillis) public {
-    console.log("************** PL TRANSFER TO **************", user, amount, timeMillis);
+
     // We assume the plugin knows what it's doing here;
     // no need to check permissions etc
     // (NOTE: to consider: if this does an exact transfer,
@@ -141,10 +138,8 @@ abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
       }
       userPlugins[user][i].plugin.preDeposit(user, balance, amount, timeMillis);
     }
-    console.log("Doing the transfer");
 
     _transfer(_msgSender(), user, amount);
-    console.log("Done");
 
     emit ExactTransfer(_msgSender(), user, amount, timeMillis);
 

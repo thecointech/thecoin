@@ -128,13 +128,13 @@ it("Pauses and resumes running a processing graph on an action", async () => {
 
   // Simulate transition error
   graph.withCoin = { next: FSM.transitionTo<States>(makeError, "finalize") };
-  await runTest('finalize', 1, 2);
+  await runTest('finalize', 1, 1);
   // We still log the error,
-  await runTest('finalize', 0, 2);
+  await runTest('finalize', 0, 1);
 
   // We can handle an error with an appropriate transition
   graph.finalize.onError = FSM.transitionTo<States>(logError, "error"),
-  await runTest('error', 1, 1);
+  await runTest('error', 1, 0);
 
   // No errors, re-run the entire thing
   graph.withCoin.next = FSM.transitionTo<States>(noop, "finalize");

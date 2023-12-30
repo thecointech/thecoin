@@ -1,4 +1,3 @@
-
 import hre from 'hardhat';
 import '@nomiclabs/hardhat-ethers';
 import { createAndInitOracle, setOracleValueRepeat } from '@thecointech/contract-oracle/testHelpers.ts';
@@ -83,6 +82,7 @@ export class AbsorberSol {
 
   async setRate(rate: number, timeInMs: number) {
     let nextTime = this.initMs + Math.max(this.timeMs, timeInMs);
+
     // Check if we actually need to push rates?
     if (this.oracle.rate != rate || this.oracle.validUntil < nextTime) {
       // We have to push new rates, ensure that we advance time appropriately
@@ -90,17 +90,25 @@ export class AbsorberSol {
       nextTime = Math.max(nextTime, this.oracle.validUntil + 1000);
       const diff = Duration.fromMillis(nextTime - this.oracle.validUntil);
       const toAdvance = Math.ceil(diff.as('days'));
+      // Expire current value
+      await time.increaseTo(Math.round(nextTime / 1000));
+      // Set the new value
       await setOracleValueRepeat(this.oracle.contract, rate, toAdvance);
       // Update cache
       this.oracle.rate = rate;
       this.oracle.validUntil = (await this.oracle.contract.validUntil()).toNumber();
+    } else {
+      // Have we moved forward in time?
+      if (this.timeMs < timeInMs) {
+        // Still move the blockchain forward to simulate time passing
+        await time.increaseTo(Math.round(nextTime / 1000));
+      }
     }
     // Set time to match timeInMs
     if (nextTime - this.initMs != this.timeMs) {
       this.timeMs = nextTime - this.initMs;
-      // Ensure blockchain matches time
-      await time.increaseTo(Math.round(nextTime / 1000));
     }
+
     return nextTime;
   }
 
@@ -167,14 +175,14 @@ export async function createAndInitAbsorber(blockTime?: number) {
 async function setupLive(initFiat: number, blockTime?: number) {
   const { Owner, client1, oracle, tcCore, absorber } = await createAndInitAbsorber(blockTime);
 
-  // Mint a ridiculously large amount
+    // Mint a ridiculously large amount
   await tcCore.mintCoins(10e12, Owner.address, Date.now());
 
   // Create plugin & assign user
   const initCoin = toCoin(initFiat, 100);
   await tcCore.transfer(client1.address, initCoin);
 
-  const request = await buildAssignPluginRequest(client1, absorber.address, ALL_PERMISSIONS);
+    const request = await buildAssignPluginRequest(client1, absorber.address, ALL_PERMISSIONS);
   await assignPlugin(tcCore, request);
 
   // absorber needs funds - start with $100K

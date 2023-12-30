@@ -45,7 +45,6 @@
   "devDependencies": {
     "@types/pouchdb": "^6.4.0",
     "@types/pouchdb-upsert": "^2.2.6",
-    "jest": "*",
     "pouchdb-adapter-memory": "^7.3.0"
   },
   "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"

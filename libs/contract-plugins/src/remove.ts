@@ -50,7 +50,7 @@ export async function buildRemovePluginRequest(
   };
 }
 
-export async function removePlugin(contract: IPluggable, request: RemovePluginRequest, overrides?: Overrides) {
+export async function removePlugin(contract: IPluggable, request: RemovePluginRequest, overrides: Overrides = {}) {
   const tx = await contract.pl_removePlugin({
     ...request,
     msSignedAt: request.signedAt.toMillis(),

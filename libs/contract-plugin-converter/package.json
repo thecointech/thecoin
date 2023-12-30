@@ -55,8 +55,7 @@
     "@thecointech/async": "workspace:^",
     "@thecointech/contract-core": "workspace:^",
     "@thecointech/contract-tools": "workspace:^",
-    "@thecointech/setenv": "workspace:^",
-    "jest": "*"
+    "@thecointech/setenv": "workspace:^"
   },
   "dependencies": {
     "@thecointech/contract-oracle": "workspace:^",

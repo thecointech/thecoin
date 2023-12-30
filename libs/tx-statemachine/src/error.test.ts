@@ -40,10 +40,16 @@ const noop = makeTransition("noop", async () => transitionBase('noop'));
 
 // Simulate an error occuring
 let shouldError = true;
-const maybeError = makeTransition("maybeError", async () => ({
-  ...transitionBase("maybeError"),
-  ...(shouldError ? {error: "An error occurs" } : {})
-}));
+const maybeError = makeTransition("maybeError", async () => {
+  if (shouldError) {
+    log.error("An error occurs");
+    return {
+      ...transitionBase("maybeError"),
+      error: "An error occurs",
+    }
+  }
+  return transitionBase("maybeError");
+});
 
 type States = "initial"|"testError"|"error"|"complete";
 
@@ -102,24 +108,24 @@ it("Error replay is handled appropriately", async () => {
   // The first run hits error
   await runTest('error', 2, 1);
   // Replay does the same thing
-  await runTest('error', 0, 1);
+  await runTest('error', 0, 0);
 
   // Manually push a new state onto the stack
   // This is the equivalent of storeTransition in ManualOverride.tsx
   action.history.push(manualOverrideTransition("initial"));
 
   // Same error occurs, we haven't actually fixed it.
-  await runTest('error', 2, 2);
+  await runTest('error', 2, 1);
   // Fix the error
   shouldError = false;
   // Re-running changes nothing, because all entries are replayed
-  await runTest('error', 0, 2);
+  await runTest('error', 0, 0);
 
   // Manually restart again.  This time the issue is fixed.
   action.history.push(manualOverrideTransition("initial"));
 
   // Should now complete
-  const container = await runTest('complete', 2, 2);
+  const container = await runTest('complete', 2, 0);
   // 2 failure, 1 success * 3 states === a total history of 9.
   expect(container.history.length === 9)
 })

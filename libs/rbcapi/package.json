@@ -25,7 +25,7 @@
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "yarn run-jest --runInBand --forceExit",
+    "test": "run :jest '--runInBand --forceExit'",
     "test:ci": "yarn run-jest-nix --runInBand",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
@@ -53,9 +53,9 @@
     "puppeteer-extra-plugin-stealth": "^2.11.1"
   },
   "devDependencies": {
+    "@thecointech/jestutils": "workspace:^",
     "@thecointech/types": "workspace:^",
-    "@types/promise.any": "^2.0.0",
-    "jest": "*"
+    "@types/promise.any": "^2.0.0"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

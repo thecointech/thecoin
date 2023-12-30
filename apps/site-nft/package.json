@@ -60,7 +60,6 @@
     "exif-library": "https://github.com/FrozenKiwi/exif-library#1db15506"
   },
   "devDependencies": {
-    "@thecointech/setenv": "workspace:^",
-    "jest": "*"
+    "@thecointech/setenv": "workspace:^"
   }
 }

@@ -32,8 +32,5 @@
   "dependencies": {
     "@thecointech/tx-statemachine": "workspace:^"
   },
-  "devDependencies": {
-    "jest": "*"
-  },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

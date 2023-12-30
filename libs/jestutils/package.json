@@ -24,7 +24,7 @@
     "test": "run :jest",
     "test:ci": "yarn run-jest-nix",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
-    ":jest": "cd $INIT_CWD && yarn node --experimental-vm-modules $(yarn bin jest) $@"
+    ":jest": "cd $INIT_CWD && yarn node --experimental-vm-modules $(cd ../.. && yarn bin jest) $@"
   },
   "files": [
     "build/**/*"
@@ -41,8 +41,5 @@
         "build/*.d.ts"
       ]
     }
-  },
-  "devDependencies": {
-    "jest": "*"
   }
 }

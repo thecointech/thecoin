@@ -62,8 +62,7 @@
   },
   "devDependencies": {
     "@thecointech/bank-interface": "workspace:^",
-    "@thecointech/tx-gmail": "workspace:^",
-    "jest": "*"
+    "@thecointech/tx-gmail": "workspace:^"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

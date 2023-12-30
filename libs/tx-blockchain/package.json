@@ -38,8 +38,5 @@
   "dependencies": {
     "@thecointech/contract-core": "workspace:^",
     "@thecointech/utilities": "workspace:^"
-  },
-  "devDependencies": {
-    "jest": "*"
   }
 }

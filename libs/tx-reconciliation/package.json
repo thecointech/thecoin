@@ -44,8 +44,5 @@
     "@thecointech/tx-gmail": "workspace:^",
     "@thecointech/utilities": "workspace:^",
     "fastest-levenshtein": "^1.0.12"
-  },
-  "devDependencies": {
-    "jest": "*"
   }
 }

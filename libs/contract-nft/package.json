@@ -59,8 +59,7 @@
     "@thecointech/contract-tools": "workspace:^",
     "@thecointech/setenv": "workspace:^",
     "@thecointech/signers": "workspace:^",
-    "@types/bs58": "^4.0.1",
-    "jest": "*"
+    "@types/bs58": "^4.0.1"
   },
   "dependenciesComments": {
     "@thecointech/contract-core": [

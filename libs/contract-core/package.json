@@ -69,8 +69,7 @@
     "@thecointech/async": "workspace:^",
     "@thecointech/contract-oracle": "workspace:^",
     "@thecointech/contract-tools": "workspace:^",
-    "@thecointech/setenv": "workspace:^",
-    "jest": "*"
+    "@thecointech/setenv": "workspace:^"
   },
   "dependencies": {
     "@solidity-parser/parser": "^0.14.5",

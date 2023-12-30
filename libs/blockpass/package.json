@@ -39,7 +39,6 @@
   },
   "devDependencies": {
     "@thecointech/async": "workspace:^",
-    "@thecointech/broker-cad": "workspace:^",
-    "jest": "*"
+    "@thecointech/broker-cad": "workspace:^"
   }
 }

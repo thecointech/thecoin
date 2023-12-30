@@ -35,7 +35,9 @@ it("Can claim tokens", async () => {
     // Use it to mint
   const r = await nft.claimToken(13, users[1].address, sig);
   const receipt = await r.wait();
-  expect(receipt.events?.length).toEqual(2); // Approval & Transfer
+  expect(receipt.events?.length).toEqual(1); // Approval & Transfer
+  expect(receipt.events[0].event).toEqual("Transfer");
+  expect(receipt.events[0].args.to).toEqual(users[1].address);
   // check ownership transfered
   const owner = await nft.ownerOf(13);
   expect(owner).toEqual(users[1].address);

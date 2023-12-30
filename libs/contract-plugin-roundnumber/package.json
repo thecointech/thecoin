@@ -42,8 +42,7 @@
   "devDependencies": {
     "@thecointech/async": "workspace:^",
     "@thecointech/contract-tools": "workspace:^",
-    "@thecointech/setenv": "workspace:^",
-    "jest": "*"
+    "@thecointech/setenv": "workspace:^"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.8.0",

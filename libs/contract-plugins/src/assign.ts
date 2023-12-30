@@ -60,7 +60,7 @@ export async function buildAssignPluginRequest(
   };
 }
 
-export async function assignPlugin(contract: IPluggable, request: AssignPluginRequest, overrides?: Overrides) {
+export async function assignPlugin(contract: IPluggable, request: AssignPluginRequest, overrides: Overrides = {}) {
   const tx = await contract.pl_assignPlugin(
     {
       ...request,

@@ -38,7 +38,6 @@
     "open": "^8.2.1"
   },
   "devDependencies": {
-    "@thecointech/site-app": "workspace:^",
-    "jest": "*"
+    "@thecointech/site-app": "workspace:^"
   }
 }

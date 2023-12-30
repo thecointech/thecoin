@@ -34,8 +34,5 @@
     "@ledgerhq/hw-transport-node-hid": "^6.11.2",
     "@thecointech/async": "workspace:^"
   },
-  "devDependencies": {
-    "jest": "*"
-  },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

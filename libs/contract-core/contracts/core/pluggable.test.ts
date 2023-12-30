@@ -13,8 +13,10 @@ jest.setTimeout(5 * 60 * 1000);
 it ('can assign plugin', async () => {
   const signers = initAccounts(await hre.ethers.getSigners());
   const tcCore = await createAndInitTheCoin(signers.Owner);
+  const DebugPrint = await hre.ethers.getContractFactory("DebugPrint");
+  const logger = await DebugPrint.deploy();
 
-  const request = await buildAssignPluginRequest(signers.client1, tcCore.address, ALL_PERMISSIONS);
+  const request = await buildAssignPluginRequest(signers.client1, logger.address, ALL_PERMISSIONS);
   const tx = await assignPlugin(tcCore, request);
   expect(tx.hash).toBeDefined();
 })
@@ -47,7 +49,7 @@ it('Calls appropriate methods on a plugin', async () => {
 
   // Was it assigned with the right permissions?
   const assigned = await tcCore.findPlugin(signers.client1.address, logger.address);
-  expect(assigned.permissions.toString()).toEqual(ALL_PERMISSIONS);
+  expect(assigned.permissions.toHexString()).toEqual(ALL_PERMISSIONS.toLowerCase());
   expect(assigned.plugin).toEqual(logger.address);
 
   // Test token balance/transfer

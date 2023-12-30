@@ -23,8 +23,8 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
 
   // Not an application error, but we should never be this far out of date
   const hoursToUpdate = (till - from) / ONE_HR;
-  if (hoursToUpdate > 24) {
-    log.warn({hours: hoursToUpdate}, "Oracle is {hours} hours of date");
+  if (hoursToUpdate > 24 && !process.env.JEST_WORKER_ID) {
+    log.warn({hours: hoursToUpdate}, "Oracle is {hours}hrs out-of-date");
   }
 
   const rates: number[] = [];

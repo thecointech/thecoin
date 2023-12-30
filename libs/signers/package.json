@@ -68,8 +68,7 @@
     "@thecointech/logging": "workspace:^"
   },
   "devDependencies": {
-    "@thecointech/electron-utils": "workspace:^",
-    "jest": "*"
+    "@thecointech/electron-utils": "workspace:^"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

@@ -79,7 +79,6 @@
     "@types/d3-shape": "^2.0.0",
     "@types/history": "^4.7.3",
     "@types/hoist-non-react-statics": "^3.3.1",
-    "@types/react-dates": "21.8.0",
-    "jest": "*"
+    "@types/react-dates": "21.8.0"
   }
 }

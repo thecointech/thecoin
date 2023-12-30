@@ -21,7 +21,7 @@
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "_test": "yarn run-jest"
+    "_test": "run :jest"
   },
   "files": [
     "build/**/*"
@@ -32,8 +32,5 @@
   "dependencies": {
     "@thecointech/contract-plugins": "workspace:^",
     "@thecointech/tx-statemachine": "workspace:^"
-  },
-  "devDependencies": {
-    "jest": "*"
   }
 }
