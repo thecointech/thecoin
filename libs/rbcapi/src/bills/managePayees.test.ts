@@ -5,7 +5,7 @@ import { describe } from '@thecointech/jestutils';
 import { getPayeeOptions, openBillPaymentPage } from '.';
 import { ApiAction } from '../action';
 import { log } from '@thecointech/logging';
-import { closeBrowser } from '../puppeteer';
+import { closeBrowser } from '../scraper';
 
 jest.setTimeout(5 * 60 * 1000);
 

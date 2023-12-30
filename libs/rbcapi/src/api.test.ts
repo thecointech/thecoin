@@ -6,7 +6,7 @@ import { ApiAction } from './action';
 import { ConfigStore } from '@thecointech/store';
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import adapter from 'pouchdb-adapter-memory';
-import { closeBrowser } from './puppeteer';
+import { closeBrowser } from './scraper';
 
 jest.setTimeout(5*60*1000);
 let api: RbcApi; // Intialized below

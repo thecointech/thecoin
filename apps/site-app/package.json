@@ -36,7 +36,7 @@
     "lint:src:fix": "eslint --fix",
     "typecheck": "tsc --noEmit",
     "pretest": "yarn clean:test",
-    "test": "yarn run-jest",
+    "test": "run :jest",
     "test:ci": "yarn run-jest-nix",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",

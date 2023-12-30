@@ -3,7 +3,7 @@ import { RbcStore } from './store';
 import { ApiAction } from './action';
 import { send } from './etransfer';
 import { describe, IsManualRun } from '@thecointech/jestutils';
-import { closeBrowser } from './puppeteer';
+import { closeBrowser } from './scraper';
 
 
 // Note, this test will send real money from a real account.

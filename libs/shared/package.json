@@ -16,7 +16,7 @@
     "directory": "libs/shared"
   },
   "scripts": {
-    "test": "yarn run-jest",
+    "test": "run :jest",
     "test:ci": "yarn run-jest-nix",
     "clean": "rimraf ./build",
     "build": "run -T run-s build:i18n build:src build:link",

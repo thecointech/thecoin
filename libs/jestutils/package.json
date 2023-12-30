@@ -19,12 +19,12 @@
     "run-jest-nix": "./bin/run-jest-nix.cjs"
   },
   "scripts": {
-    "build": "run -T tsc -b tsconfig.build.json",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "yarn run-jest",
+    "test": "run :jest",
     "test:ci": "yarn run-jest-nix",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
-    ":run-jest": "run run-jest $@"
+    ":jest": "cd $INIT_CWD && yarn node --experimental-vm-modules $(yarn bin jest) $@"
   },
   "files": [
     "build/**/*"

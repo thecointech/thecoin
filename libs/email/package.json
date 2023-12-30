@@ -20,8 +20,8 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run -T tsc --project tsconfig.build.json",
-    "test": "yarn run-jest",
+    "build": "run -T tsc -b",
+    "test": "run :jest",
     "test:ci": "yarn run-jest-nix",
     "clean": "rimraf ./build && rimraf ./coverage"
   },

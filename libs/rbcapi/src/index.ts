@@ -44,4 +44,4 @@ export class RbcApi implements IBank {
 export { RbcStore } from './store';
 export * from './types';
 export * from '@thecointech/bank-interface';
-export { closeBrowser } from './puppeteer';
+export { closeBrowser } from './scraper';

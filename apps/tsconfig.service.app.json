@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.apps.json",
+  "compilerOptions": {
+    "lib": ["ES2019"],
+    /* Required for TSOA */
+    "experimentalDecorators": true,
+    "alwaysStrict": false,
+    "noImplicitUseStrict": true,
+  },
+}

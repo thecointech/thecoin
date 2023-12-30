@@ -27,7 +27,7 @@
     "clean": "run-p 'clean:*'",
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
-    "test": "yarn run-jest",
+    "test": "run :jest",
     "test:ci": "yarn run-jest-nix",
     "validate:prod": "cross-env CONFIG_NAME=prod yarn _hardhat ./scripts/validate.ts",
     "validate:localprod": "cross-env CONFIG_NAME=prod URL_SERVICE_RATES=http://localhost:7001/api/v1 yarn _hardhat ./scripts/validate.ts",

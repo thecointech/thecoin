@@ -1,11 +1,11 @@
 {
-  "extends": "./tsconfig.json",
-  "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"],
-  "references": [
-    { "path": "../../libs/tx-deposit/tsconfig.build.json" },
-    { "path": "../../libs/tx-etransfer/tsconfig.build.json" },
-    { "path": "../../libs/tx-bill/tsconfig.build.json" },
-    { "path": "../../libs/rbcapi/tsconfig.build.json" }
-  ]
+  "extends": "../tsconfig.apps.json",
+  "compilerOptions": {
+    "outDir": "./build/",
+    "tsBuildInfoFile": "./build/.buildinfo",
+    "rootDir": "./src/",
+    "baseUrl": "./src/"
+  },
+  "include": ["src/**/*", "src/**/*.json"],
+  "exclude": ["**/*.test.*", "**/__mocks__/**", "**/*.stories.*"],
 }
-

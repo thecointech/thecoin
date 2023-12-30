@@ -1,15 +1,10 @@
 {
-  "extends": "../tsconfig.apps.json",
+  "extends": "../tsconfig.service.app.json",
   "compilerOptions": {
     /* Basic Options */
     "outDir": "./build",
     "rootDir": "./src",
     "tsBuildInfoFile": "./build/.buildinfo",
-    "lib": ["ES2019"],
-    /* Required for TSOA */
-    "experimentalDecorators": true,
-    "alwaysStrict": false,
-    "noImplicitUseStrict": true,
   },
   "include": ["./src/**/*.*"],
   "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"]

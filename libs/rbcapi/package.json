@@ -23,7 +23,7 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run -T tsc -b tsconfig.build.json",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "yarn run-jest --runInBand --forceExit",
     "test:ci": "yarn run-jest-nix --runInBand",

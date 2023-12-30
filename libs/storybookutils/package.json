@@ -12,7 +12,7 @@
     "directory": "libs/storybookutils"
   },
   "scripts": {
-    "build": "run -T tsc -b tsconfig.build.json",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build"
   },
   "files": [

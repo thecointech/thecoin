@@ -33,7 +33,7 @@
     "build:storybook": "build-storybook",
     "build:all": "run-s clean genapis build:src build:storybook",
     "build": "cross-env CONFIG_NAME=prod yarn build:all",
-    "minbuild": "cross-env CONFIG_NAME=prod yarn build:src",
+    "re:build": "cross-env CONFIG_NAME=prod yarn build:src",
     "emulator:firestore": "yarn firebase emulators:start --only firestore --project broker-cad",
     "emulator:ceramic": "yarn ceramic daemon --config ./libs/IDX/tools/daemon.inmemory.config.json",
     "emulator:blockchain": "cd libs/contract-tools && yarn emulator",

@@ -23,9 +23,9 @@
     "_deploy": "yarn run-env ./scripts/deploy.ts",
     "emulator": "yarn ceramic daemon --config ./tools/daemon.inmemory.config.json",
     "graphql": "yarn run-env ./scripts/run-graphql.ts",
-    "build": "run -T tsc --project tsconfig.build.json",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "yarn run-jest",
+    "test": "run :jest",
     "test:ci": "yarn run-jest-nix",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
     "bootstrap": "yarn _deploy && yarn build"

@@ -10,14 +10,14 @@
   "homepage": "http://thecoin.io",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "build": "run -T tsc -b tsconfig.build.json",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
     "dev": "run-env ./src/main.ts",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
     "prod": "cross-env CONFIG_NAME=prod yarn start",
     "start": "cross-env CONFIG_NAME=prod yarn run-env ./build/main.js",
-    "test": "yarn run-jest",
+    "test": "run :jest",
     "test:ci": "yarn run-jest-nix",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
