@@ -10470,7 +10470,7 @@ __metadata:
     "@thecointech/setenv": "workspace:^"
     "@thecointech/shared": "workspace:^"
     "@thecointech/site-base": "workspace:^"
-    "@toast-ui/react-image-editor": "npm:3.14.2"
+    "@toast-ui/react-image-editor": "npm:^3.15.2"
     exif-library: "https://github.com/FrozenKiwi/exif-library#1db15506"
   languageName: unknown
   linkType: soft
@@ -10781,15 +10781,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@toast-ui/react-image-editor@npm:3.14.2":
-  version: 3.14.2
-  resolution: "@toast-ui/react-image-editor@npm:3.14.2"
+"@toast-ui/react-image-editor@npm:^3.15.2":
+  version: 3.15.2
+  resolution: "@toast-ui/react-image-editor@npm:3.15.2"
   dependencies:
     fabric: "npm:^4.2.0"
-    tui-image-editor: "npm:^3.14.2"
+    tui-image-editor: "npm:^3.15.2"
   peerDependencies:
-    react: ^16.0.0
-  checksum: 07b389ab55657256c38130fdd9e14a8ac314bc01da9be2fbea05d06acd6f19e7985e521e6f8cc4db3dae3f27164807c9b9e1e3e6acad2e33e2e706452aaea160
+    react: ^17.0.2
+  checksum: f6901f1bed2ac9779a5fc530177e5ab4a7ff6a5a412fca715a1a93491595eb54c0226951c4fd8ef7eff7c1bd9a0c281647725cf7fed9fc80ad5076353573cf2f
   languageName: node
   linkType: hard
 
@@ -13939,9 +13939,9 @@ __metadata:
   linkType: hard
 
 "array-equal@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "array-equal@npm:1.0.0"
-  checksum: 5841f0b823e6806d147d40e262a0f66cb7d3272b9f9ffa8dedb868fc7799cb410ae262a32f6f358baa6c3ee7d6271eeab86b516cdfd8f9a8fa12b4f15a18e119
+  version: 1.0.2
+  resolution: "array-equal@npm:1.0.2"
+  checksum: c308184b1df488bed0eba1a8835d77789349d3859a334cb60f77df15dc4ab232c185c78b643ae68651eef1b7148942223d72fa1aba218d24ec6cf9637fb49d8e
   languageName: node
   linkType: hard
 
@@ -16110,14 +16110,14 @@ __metadata:
   linkType: hard
 
 "canvas@npm:^2.6.1":
-  version: 2.8.0
-  resolution: "canvas@npm:2.8.0"
+  version: 2.11.2
+  resolution: "canvas@npm:2.11.2"
   dependencies:
     "@mapbox/node-pre-gyp": "npm:^1.0.0"
-    nan: "npm:^2.14.0"
+    nan: "npm:^2.17.0"
     node-gyp: "npm:latest"
     simple-get: "npm:^3.0.3"
-  checksum: fa1d60db4fb5b0e5de3ddb4db1d8a5d3b67786a8afb969e85498c6b3525aa7d4dd6688c8dc27a9bc479970b738091f8d6b60fe1d0d0e6ead661c75c240c32e3a
+  checksum: 943368798ad1b66b18633aa34b6181e1038dac5433fc9727cd07be35f0a633f572b60d9edb95f5ff90b6a9128e86d5312035f91a2934101c73185b15d906230a
   languageName: node
   linkType: hard
 
@@ -17680,7 +17680,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-pure@npm:^3.0.1, core-js-pure@npm:^3.15.0, core-js-pure@npm:^3.6.4, core-js-pure@npm:^3.8.1":
+"core-js-pure@npm:^3.0.1, core-js-pure@npm:^3.15.0, core-js-pure@npm:^3.8.1":
   version: 3.21.1
   resolution: "core-js-pure@npm:3.21.1"
   checksum: 49903104b8d61b2a223342d723d7719dc4eee8331d774cc2eb6869e4eb9aab6fcab003e0fce8a79046a53ec807c834df9ab0042d54e00b8e50447ce4da202dc0
@@ -21647,8 +21647,8 @@ __metadata:
   linkType: hard
 
 "fabric@npm:^4.2.0":
-  version: 4.5.0
-  resolution: "fabric@npm:4.5.0"
+  version: 4.6.0
+  resolution: "fabric@npm:4.6.0"
   dependencies:
     canvas: "npm:^2.6.1"
     jsdom: "npm:^15.2.1"
@@ -21657,7 +21657,7 @@ __metadata:
       optional: true
     jsdom:
       optional: true
-  checksum: bd0cd52b86865d281a1399646b80ec70a662d9184f026e16c4f733dc71ea354e03f2e3221fa756b8ebd6c4a728114ecdd53ae73143e65f0d4aafcd3e889691bc
+  checksum: cac9a1c3f4706714ffd2920a88cac6dc6454216e1b3aa5278219b16a16fd1a9e5bd7fc6454d11a75914c5d595b054583778b446050587349e2b31a8ad97b65b5
   languageName: node
   linkType: hard
 
@@ -32296,7 +32296,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nan@npm:^2.18.0":
+"nan@npm:^2.17.0, nan@npm:^2.18.0":
   version: 2.18.0
   resolution: "nan@npm:2.18.0"
   dependencies:
@@ -33388,7 +33388,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nwsapi@npm:^2.2.0, nwsapi@npm:^2.2.2":
+"nwsapi@npm:^2.2.0":
+  version: 2.2.7
+  resolution: "nwsapi@npm:2.2.7"
+  checksum: 44be198adae99208487a1c886c0a3712264f7bbafa44368ad96c003512fed2753d4e22890ca1e6edb2690c3456a169f2a3c33bfacde1905cf3bf01c7722464db
+  languageName: node
+  linkType: hard
+
+"nwsapi@npm:^2.2.2":
   version: 2.2.2
   resolution: "nwsapi@npm:2.2.2"
   checksum: f7c4fedb0dc0786204ee99f440e9827d6e01a0c0322e93b5c9a9a382dd0bd9650d98ca3d1967a77554e3ec1f9a46a20cfea80a41fb00e91c5101c53d8b2c9aed
@@ -42571,38 +42578,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tui-code-snippet@npm:^1.5.0":
-  version: 1.5.2
-  resolution: "tui-code-snippet@npm:1.5.2"
-  checksum: 5eaa4a3c24d101669537b427aad38b4aaa9576e362aed870996139ce18c3cf0ef8e49649d6cfe0c544fbce2fdf0bab1bf692d23a631775a259fef0eafda65edf
-  languageName: node
-  linkType: hard
-
-"tui-code-snippet@npm:^2.2.0":
-  version: 2.3.2
-  resolution: "tui-code-snippet@npm:2.3.2"
-  checksum: 96f08e31b9081e1e800305520e808b7a7bfaadaaf7da9748d1267a6fac745e30df0e596ab9ebd3108e76c4d2d4b04e3a9d0d0f9a242af814649eb624d9f3d292
+"tui-code-snippet@npm:^2.3.3":
+  version: 2.3.3
+  resolution: "tui-code-snippet@npm:2.3.3"
+  checksum: 01550108e4523280cc0cb06d6c0378470563bfb21a3c7f445ad868b18751f30d3cb53fcbd3ad9c27dc0b51435280214ad8b76530a0d031ab5107d0090a1c0cfd
   languageName: node
   linkType: hard
 
 "tui-color-picker@npm:^2.2.6":
-  version: 2.2.6
-  resolution: "tui-color-picker@npm:2.2.6"
-  dependencies:
-    tui-code-snippet: "npm:^2.2.0"
-  checksum: d97996b46e07fe595e6b3ce0c0508906db7fc224ff452af8303e832070d3f9649ea60b87fca63517eecc5ac00164617fd9d3fa88787b8146c36b6db357335a9f
+  version: 2.2.8
+  resolution: "tui-color-picker@npm:2.2.8"
+  checksum: 041f648df16e03528f3214edde660b0228dd5e376db074cf7675254903a57152be5564d8efa33622f00c0cf7db9712050702f29bfdb43bf18ba26786f6817c26
   languageName: node
   linkType: hard
 
-"tui-image-editor@npm:^3.14.2":
-  version: 3.14.3
-  resolution: "tui-image-editor@npm:3.14.3"
+"tui-image-editor@npm:^3.15.2":
+  version: 3.15.3
+  resolution: "tui-image-editor@npm:3.15.3"
   dependencies:
-    core-js-pure: "npm:^3.6.4"
     fabric: "npm:^4.2.0"
-    tui-code-snippet: "npm:^1.5.0"
+    tui-code-snippet: "npm:^2.3.3"
     tui-color-picker: "npm:^2.2.6"
-  checksum: 12aee49e012723fc944a36754b519796c1829d7a037abe67ca21d3644bad0a98bd1e6679450d7a73f8dc70c2ec69e71871787b496f964814efba942a215d07be
+  checksum: 34679d3d8d35d2163c001f95575f4f21aa42201b1951695dc0238ae3462b3995e600b173bb8ca9e0ca0c28832bd5e6ba849f7305e92e28a24893fa5373a3c30a
   languageName: node
   linkType: hard
 
@@ -44624,13 +44621,13 @@ __metadata:
   linkType: hard
 
 "whatwg-url@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "whatwg-url@npm:7.0.0"
+  version: 7.1.0
+  resolution: "whatwg-url@npm:7.1.0"
   dependencies:
     lodash.sortby: "npm:^4.7.0"
     tr46: "npm:^1.0.1"
     webidl-conversions: "npm:^4.0.2"
-  checksum: 5f788999ba5b82b84b99c6aa047e55f028bb502cc84a086251e14ed9451bd20727b34c1f819c0a4be51b45cad7246e169334d53f2dd5e5b91b42c8b90ca64f30
+  checksum: 2785fe4647690e5a0225a79509ba5e21fdf4a71f9de3eabdba1192483fe006fc79961198e0b99f82751557309f17fc5a07d4d83c251aa5b2f85ba71e674cbee9
   languageName: node
   linkType: hard
 
@@ -44977,7 +44974,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ws@npm:7.4.6, ws@npm:>=7.4.6, ws@npm:^7.0.0, ws@npm:^7.2.3, ws@npm:^7.3.1, ws@npm:^7.4.6":
+"ws@npm:7.4.6, ws@npm:>=7.4.6, ws@npm:^7.2.3, ws@npm:^7.3.1, ws@npm:^7.4.6":
   version: 7.4.6
   resolution: "ws@npm:7.4.6"
   peerDependencies:
@@ -45004,6 +45001,21 @@ __metadata:
     utf-8-validate:
       optional: true
   checksum: 579817dbbab3ee46669129c220cfd81ba6cdb9ab5c3e9a105702dd045743c4ab72e33bb384573827c0c481213417cc880e41bc097e0fc541a0b79fa3eb38207d
+  languageName: node
+  linkType: hard
+
+"ws@npm:^7.0.0":
+  version: 7.5.9
+  resolution: "ws@npm:7.5.9"
+  peerDependencies:
+    bufferutil: ^4.0.1
+    utf-8-validate: ^5.0.2
+  peerDependenciesMeta:
+    bufferutil:
+      optional: true
+    utf-8-validate:
+      optional: true
+  checksum: aec4ef4eb65821a7dde7b44790f8699cfafb7978c9b080f6d7a98a7f8fc0ce674c027073a78574c94786ba7112cc90fa2cc94fc224ceba4d4b1030cff9662494
   languageName: node
   linkType: hard
 

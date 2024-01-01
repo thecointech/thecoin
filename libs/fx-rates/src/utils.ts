@@ -20,7 +20,7 @@ export function getFxRate(rates: FXRate[], ts: number): FXRate {
   {
     return rates.slice(-1)[0];
   }
-  return rates.find((rate: FXRate) => validFor(rate, ts)) || EmptyRate;
+  return rates.find(rate => validFor(rate, ts)) || EmptyRate;
 }
 
 export const getRate = (rates: FXRate[], date?: Date) => getFxRate(rates, date?.getTime() ?? 0);

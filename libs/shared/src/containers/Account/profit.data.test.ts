@@ -90,7 +90,7 @@ export const ExampleRates: FXRate[] = [
 
 export const getSimpleTransactions = (broker: string): Transaction[] => [
   {
-    date: DateTime.fromObject({ year: 2018, month: 2 }),
+    date: DateTime.fromObject({ year: 2018, month: 1 }),
     change: 50000,
     value: new Decimal(50000),
     from: broker,
@@ -101,7 +101,7 @@ export const getSimpleTransactions = (broker: string): Transaction[] => [
     txHash: "0x000f",
   },
   {
-    date: DateTime.fromObject({ year: 2018, month: 3 }),
+    date: DateTime.fromObject({ year: 2018, month: 2 }),
     change: 50000,
     value: new Decimal(50000),
     from: "broker",
@@ -112,7 +112,7 @@ export const getSimpleTransactions = (broker: string): Transaction[] => [
     txHash: "0x000f",
   },
   {
-    date: DateTime.fromObject({ year: 2018, month: 4 }),  // Withdraw: $5
+    date: DateTime.fromObject({ year: 2018, month: 3 }),  // Withdraw: $5
     change: -25000,
     value: new Decimal(25000),
     from: "client",
@@ -123,7 +123,7 @@ export const getSimpleTransactions = (broker: string): Transaction[] => [
     txHash: "0x000f",
   },
   {
-    date: DateTime.fromObject({ year: 2018, month: 5 }),  // Withdraw: $2.50
+    date: DateTime.fromObject({ year: 2018, month: 4 }),  // Withdraw: $2.50
     change: -25000,
     value: new Decimal(25000),
     from: "client",
@@ -135,45 +135,46 @@ export const getSimpleTransactions = (broker: string): Transaction[] => [
   }
 ];
 
+const getMillis = (year: number, month: number) => DateTime.fromObject({ year, month }).toMillis();
 export const SimpleRates: FXRate[] = [
   {
     target: 124,
     buy: 100,
     sell: 100,
     fxRate: 1,
-    validFrom: new Date(2018, 1).getTime(),
-    validTill: new Date(2018, 2).getTime(),
+    validFrom: getMillis(2018, 1),
+    validTill: getMillis(2018, 2),
   },
   {
     target: 124,
     buy: 200,
     sell: 200,
     fxRate: 1,
-    validFrom: new Date(2018, 2).getTime(),
-    validTill: new Date(2018, 3).getTime(),
+    validFrom: getMillis(2018, 2),
+    validTill: getMillis(2018, 3),
   },
   {
     target: 124,
     buy: 200,
     sell: 200,
     fxRate: 1,
-    validFrom: new Date(2018, 3).getTime(),
-    validTill: new Date(2018, 4).getTime(),
+    validFrom: getMillis(2018, 3),
+    validTill: getMillis(2018, 4),
   },
   {
     target: 124,
     buy: 100,
     sell: 100,
     fxRate: 1,
-    validFrom: new Date(2018, 4).getTime(),
-    validTill: new Date(2018, 5).getTime(),
+    validFrom: getMillis(2018, 4),
+    validTill: getMillis(2018, 5),
   },
   {
     target: 124,
     buy: 250,
     sell: 250,
     fxRate: 1,
-    validFrom: new Date(2018, 4).getTime(),
+    validFrom: getMillis(2018, 4),
     validTill: new Date().getTime() + 10000000,
   },
 ]
