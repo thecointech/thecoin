@@ -24528,7 +24528,6 @@ __metadata:
     eslint: "npm:^8.0.1"
     eslint-plugin-import: "npm:^2.25.0"
     fork-ts-checker-webpack-plugin: "npm:^7.2.13"
-    jest: "npm:^29.4.3"
     pouchdb: "npm:^8.0.1"
     pouchdb-adapter-memory: "npm:^8.0.1"
     puppeteer: "npm:^19.6.0"
@@ -28187,7 +28186,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest@npm:^29.4.3, jest@npm:^29.5.0":
+"jest@npm:^29.5.0":
   version: 29.5.0
   resolution: "jest@npm:29.5.0"
   dependencies:
