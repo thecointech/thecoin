@@ -12,10 +12,10 @@ import { CertifiedTransfer, UberTransferAction } from '@thecointech/types';
 
 jest.useFakeTimers();
 const getSingle = jest.fn<(currency: number, timestamp: number) => Promise<any>>();
-jest.unstable_mockModule('@thecointech/pricing', () => ({
-  RatesApi: class {
-    getSingle = getSingle
-  }
+jest.unstable_mockModule('@thecointech/apis/pricing', () => ({
+  GetRatesApi: () => ({
+    getSingle,
+  })
 }))
 
 beforeEach(async () => {
