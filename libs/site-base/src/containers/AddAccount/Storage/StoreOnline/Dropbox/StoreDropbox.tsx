@@ -1,6 +1,6 @@
 import React from "react";
 
-export const StoreDropbox : React.FC = (props) => {
+export const StoreDropbox = (props: { children: React.ReactNode }) => {
 
     return (
       <>

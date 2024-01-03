@@ -27,8 +27,9 @@ const translate = defineMessages({
 type Props = {
   background?: string;
   id?: string;
+  children?: React.ReactNode
 }
-export const FooterShared: React.FC<Props> = ({ children, background, id }) => (
+export const FooterShared = ({ children, background, id }: Props) => (
   <>
     <div className={`${styles.background} ${background ?? ''}`} />
     <div className={styles.footerContainer}>

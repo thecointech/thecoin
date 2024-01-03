@@ -7,6 +7,7 @@ import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from 're
 interface Props {
   payload: string;
   label?: MessageDescriptor;
+  children?: React.ReactNode;
 }
 
 const translate = defineMessages({

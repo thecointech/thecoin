@@ -3,7 +3,7 @@ import Measure, { ContentRect } from 'react-measure';
 import { HeightMeasureReducer } from './reducer';
 
 
-export const ContentHeightMeasure: React.FC = (props) => {
+export const ContentHeightMeasure = (props: { children: React.ReactNode }) => {
   const [timestamp] = useState(new Date().getTime());
   HeightMeasureReducer.useStore();
   const actions = HeightMeasureReducer.useApi();
@@ -15,7 +15,8 @@ export const ContentHeightMeasure: React.FC = (props) => {
 
   return (
     <Measure bounds onResize={onContentSized}>
-      {({ measureRef }) => <div ref={measureRef}>{props.children}</div>}
+      {({ measureRef }: { measureRef: React.RefObject<HTMLDivElement> }) => <div ref={measureRef}>{props.children}</div>}
     </Measure>
   );
 }
+

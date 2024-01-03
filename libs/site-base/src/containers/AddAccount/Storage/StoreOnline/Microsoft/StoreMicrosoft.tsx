@@ -1,6 +1,6 @@
 import React from "react";
 
-export const StoreMicrosoft : React.FC = (props) => {
+export const StoreMicrosoft = (props: { children: React.ReactNode }) => {
 
     return (
       <>

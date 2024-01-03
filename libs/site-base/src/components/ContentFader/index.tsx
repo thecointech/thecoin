@@ -10,7 +10,7 @@ const classStyles = {
   exitActive: styles.fadeExitActive,
 };
 
-export const ContentFader: React.FC = (props) => {
+export const ContentFader = (props: { children: React.ReactNode }) => {
   const location = useLocation();
   return (
     <TransitionGroup className={styles.fadeBase}>

@@ -5,7 +5,7 @@ import { LessVars } from '@thecointech/site-semantic-theme/variables';
 import { selectContent } from '../ContentHeightMeasure/selector';
 import styles from './styles.module.less';
 
-export const ContentHeightAnimate: React.FC = (props)=> {
+export const ContentHeightAnimate = (props: { children: React.ReactNode })=> {
 
   const mainHeightDivStyle = useSelector(selectContent);
   return (

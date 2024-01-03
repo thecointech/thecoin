@@ -1,4 +1,4 @@
-import React from "react";
+import React, { type ReactNode } from "react";
 import { defineMessage, FormattedMessage } from "react-intl";
 import { Header } from "semantic-ui-react";
 import styles from "./styles.module.less";
@@ -8,7 +8,11 @@ const title = defineMessage({
       description: "shared.widgets.availablesoon.title:Title for the Widget Available Soon in the app",
 });
 
-export const AvailableSoon: React.FC<{fill?: boolean}> = ({fill, children}) => {
+type Props = {
+  fill?: boolean
+  children?: ReactNode | undefined
+}
+export const AvailableSoon: React.FC<Props> = ({fill, children}) => {
   return (
     <div className={`${styles.availableSoonContainer} ${fill ? styles.fill : ''}`}>
       {children}

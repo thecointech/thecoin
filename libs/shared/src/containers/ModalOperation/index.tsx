@@ -11,6 +11,7 @@ interface ModalProps {
   closeIconFct?: (value:string) => void;
   cancelCallback?: () => void;
   okCallback?: () => void;
+  children?: React.ReactNode | undefined;
 }
 
 const translate = defineMessages({
@@ -54,8 +55,10 @@ export const ModalOperation : React.FC<ModalProps> = (props) => {
     const { cancelCallback, okCallback, progressPercent } = props;
     return (
       <Modal.Actions>
-        {renderCancelButton(cancelCallback)}
-        {renderOkButton(okCallback, progressPercent)}
+        <>
+          {renderCancelButton(cancelCallback)}
+          {renderOkButton(okCallback, progressPercent)}
+        </>
       </Modal.Actions>
     );
   }
