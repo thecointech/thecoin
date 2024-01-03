@@ -20,6 +20,7 @@
     "build:pre:semantic": "node ./internals/buildSemantic.mjs",
     "build:pre:i18n": "run -T run-s extract compile",
     "build:pre:copy": "run -T cpx \"./src/containers/BenefitsSimulator/simulator/*.csv\" ./build/",
+    "build:pre:tests": "run -T tsc --project ./tsconfig.tests.json",
     "clean": "run-p 'clean:*'",
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",

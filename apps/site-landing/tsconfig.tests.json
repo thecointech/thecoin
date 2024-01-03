@@ -1,4 +1,7 @@
 {
   "extends": "../../tsconfig.tests.json",
-  "include": ["**/*.test.*", "scripts/**.ts", "internal/*.*", "**/*.stories.*", "**/hardhat.d.ts"],
+  "compilerOptions": {
+    "baseUrl": "./src",
+  },
+  "include": ["**/*.test.*", "scripts/**.ts", "internal/*.*", "**/*.stories.*", "**/hardhat.d.ts", "./src/global.d.ts"],
 }

@@ -26,7 +26,7 @@
     "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
     "clean": "run-p 'clean:*'",
     "clean:src": "rimraf ./build",
-    "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
+    "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types && rimraf /.hardhat",
     "test": "run :jest",
     "test:ci": "yarn run-jest-nix",
     "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive run-s _deploy _seed:random",
