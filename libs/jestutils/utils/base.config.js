@@ -63,7 +63,7 @@ module.exports = {
 
   // modulePathIgnorePatterns: ["build"],
   // By default, we add the 'src' folder to jest
-  moduleDirectories: [mocks, '<rootDir>/src', 'node_modules', `${rootFolder}/node_modules`],
+  moduleDirectories: [mocks, '<rootDir>/src', 'node_modules'],
   // Mock styling (easier than parsing them)
   moduleNameMapper: {
     "@thecointech/site-semantic-theme/variables": getTool('mockLessVars.mjs'),

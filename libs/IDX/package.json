@@ -15,6 +15,9 @@
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/idx"
   },
+  "installConfig": {
+    "hoistingLimits": "workspaces"
+  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
@@ -49,7 +52,11 @@
   },
   "devDependencies": {
     "@composedb/types": "^0.4.4",
-    "@glazed/devtools": "^0.2.0"
+    "@glazed/devtools": "^0.2.0",
+    "@ceramicnetwork/cli": "^2.29.0",
+    "@composedb/cli": "^0.4.4",
+    "@composedb/devtools": "^0.4.4",
+    "@composedb/devtools-node": "^0.4.4"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }
