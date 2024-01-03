@@ -17,7 +17,6 @@
     "dev": "run-p watch serve"
   },
   "devDependencies": {
-    "firebase": "^9.2.0",
     "mini-css-extract-plugin": "^2.4.2"
   }
 }

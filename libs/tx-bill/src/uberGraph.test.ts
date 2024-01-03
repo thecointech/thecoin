@@ -2,6 +2,7 @@ import { jest } from "@jest/globals";
 import { ConnectContract } from '@thecointech/contract-core';
 import { getSigner } from '@thecointech/signers';
 import { RbcApi } from '@thecointech/rbcapi';
+import { init } from '@thecointech/firestore';
 import { StateSnapshot, TypedActionContainer } from '@thecointech/tx-statemachine';
 import { States, rawGraph } from './uberGraph';
 import { DateTime } from 'luxon';
@@ -10,7 +11,7 @@ jest.setTimeout(10 * 60 * 60 * 1000);
 jest.useFakeTimers();
 
 it('processes pending', async () => {
-
+  init()
   const date = DateTime.now();
   const container = await getMockContainer(date);
   let state = container.history[0];

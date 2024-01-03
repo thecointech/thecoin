@@ -85,3 +85,4 @@ storybook-static/
 /data/
 exported/
 /harvester/harvester/
+.nx/cache
