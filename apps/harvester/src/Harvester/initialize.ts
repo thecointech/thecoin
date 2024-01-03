@@ -1,14 +1,11 @@
 import { DateTime } from 'luxon';
-import { initConfig, hydrateProcessor, getWallet, getCreditDetails } from './config';
-import { initState, getCurrentState } from './db';
+import { hydrateProcessor, getWallet, getCreditDetails } from './config';
+import { getCurrentState } from './db';
 import { getChequingData, getVisaData } from './fetchData';
 import { HarvestData } from './types';
 import { replay } from '../scraper/replay';
 
 export async function initialize() {
-
-  await initConfig();
-  initState();
 
   // Initialize
   const stages = await hydrateProcessor();

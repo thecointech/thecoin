@@ -1,13 +1,15 @@
-import { initConfig } from '../Harvester/config';
+import { getProcessConfig } from '../Harvester/config';
 import { replayEvents } from './replay';
 import { AnyEvent } from './types';
 
 console.log("Testing stuff");
 
-await initConfig();
 process.env.RUN_SCRAPER_HEADLESS = "false";
 (async () => {
-    let events: AnyEvent[] = [];
+    // await initConfig();
+
+    const config = await getProcessConfig();
+    let events: AnyEvent[] = config?.scraping?.chqBalance ?? [];
 
     // const recorder =  await Recorder.instance("chqBalance", "https://en.wikipedia.org/wiki/Main_Page",
     // {

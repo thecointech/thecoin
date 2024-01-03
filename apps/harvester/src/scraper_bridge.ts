@@ -5,7 +5,7 @@ import { ActionTypes, ValueType } from './scraper/types';
 import { warmup } from './scraper/warmup';
 import { actions, ScraperBridgeApi } from './scraper_actions';
 import { toBridge } from './scraper_bridge_conversions';
-import { getHarvestConfig, getProcessConfig, getWalletAddress, hasCreditDetails, initConfig, setCreditDetails, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
+import { getHarvestConfig, getProcessConfig, getWalletAddress, hasCreditDetails, setCreditDetails, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
 import type { Mnemonic } from '@ethersproject/hdnode';
 import { HarvestConfig } from './types';
 import { CreditDetails } from './Harvester/types';
@@ -69,8 +69,6 @@ const api: ScraperBridgeApi = {
 }
 
 export function initScraping() {
-
-  initConfig();
 
   ipcMain.handle(actions.warmup, async (_event, url: string) => {
     return api.warmup(url);

@@ -1,7 +1,7 @@
 import { log } from '@thecointech/logging';
 import type { HarvestData, ProcessingStage, UserData, Replay } from '../types';
 import currency from 'currency.js';
-
+import { notify, notifyError } from '../notify';
 
 export class SendETransfer implements ProcessingStage {
 
@@ -34,6 +34,13 @@ export class SendETransfer implements ProcessingStage {
         .add(toTransfer);
 
       log.info(`Successfully transferred ${toTransfer} to TheCoin, new balance ${harvesterBalance}`);
+
+      notify({
+        title: 'E-Transfer Successful',
+        message: `You've just moved ${toTransfer.format()} into your harvester account.`,
+        icon: 'seeds.png',
+      });
+
       return {
         toETransfer: undefined,
         harvesterBalance,
@@ -41,6 +48,11 @@ export class SendETransfer implements ProcessingStage {
     } else {
       log.error(`Failed to transfer ${toTransfer} to TheCoin`);
       // TODO: Handle this case
+
+      notifyError({
+        title: 'E-Transfer Failed',
+        message: 'Failed to send an e-transfer.  Please contact support.',
+      });
     }
     return {};
   }
