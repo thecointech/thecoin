@@ -41,4 +41,6 @@ jobs:
     #- name: Check no build outputs changing in git
     #  run: yarn check-changes <-- this fails in CI, but we don't know why
     - name: Test all
-      run: yarn test:ci
+      run: yarn test --ci
+      env:
+        JEST_CI: true
