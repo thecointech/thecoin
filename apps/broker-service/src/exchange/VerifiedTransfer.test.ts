@@ -18,7 +18,7 @@ test("Transfer checks balance", async () => {
 test("Transfer checks fee", async () => {
 	const wallet = Wallet.createRandom();
   const status = await current();
-	const certTransfer = await BuildVerifiedXfer(wallet, status.BrokerCAD, 100, 0);
+	const certTransfer = await BuildVerifiedXfer(wallet, status.BrokerCAD, 100, -5000);
 	await expect(certifiedTransfer(certTransfer)).rejects.toThrow("Transfer validation failed");
 })
 

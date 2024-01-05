@@ -87,7 +87,7 @@ it ("Does not add too many rates", async () => {
   const SpxCadOracle = await hre.ethers.getContractFactory('SpxCadOracle');
   const oracle = await SpxCadOracle.deploy();
   const now = DateTime.now();
-  const initialTimestamp = now.minus({ weeks: 1 }).toMillis();
+  const initialTimestamp = now.minus({ weeks: 1, minutes: 1 }).toMillis();
   const blockTime = Duration.fromObject({ hours: 24 }).toMillis();
   await oracle.initialize(owner.address, initialTimestamp, blockTime);
 
@@ -103,9 +103,6 @@ it ("Does not add too many rates", async () => {
   expect (secondValid).toEqual(firstValid);
 
   await oracle.updateOffset({from: now.toMillis(), offset: -(60 * 60 * 1000)});
-
-  const pushValidUntil = initialTimestamp + (2 + 6) * blockTime;
-  const maxValidUntil = now.toMillis() + blockTime;
 
   // But we still should be able to push two more updates?
   await oracle.bulkUpdate(toInsert.slice(0, 2));

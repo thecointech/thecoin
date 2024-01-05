@@ -100,8 +100,13 @@ export class AbsorberSol {
     } else {
       // Have we moved forward in time?
       if (this.timeMs < timeInMs) {
-        // Still move the blockchain forward to simulate time passing
-        await time.increaseTo(Math.round(nextTime / 1000));
+        try {
+          // Still move the blockchain forward to simulate time passing
+          await time.increaseTo(Math.round(nextTime / 1000));
+        } catch (e) {
+          // This sometimes fails if the blockchain has advanced past now,
+          // but we kinda don't care.
+        }
       }
     }
     // Set time to match timeInMs

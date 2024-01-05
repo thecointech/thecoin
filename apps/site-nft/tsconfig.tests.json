@@ -3,5 +3,5 @@
   "compilerOptions": {
     "baseUrl": "./src",
   },
-  "include": ["**/*.test.*", "scripts/**.ts", "internal/*.*", "**/*.stories.*", "**/hardhat.d.ts"],
+  "include": ["**/*.test.*", "scripts/**.ts", "internal/*.*", "**/*.stories.*", "**/global.d.ts"],
 }

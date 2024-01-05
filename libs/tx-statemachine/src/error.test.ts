@@ -42,7 +42,6 @@ const noop = makeTransition("noop", async () => transitionBase('noop'));
 let shouldError = true;
 const maybeError = makeTransition("maybeError", async () => {
   if (shouldError) {
-    log.error("An error occurs");
     return {
       ...transitionBase("maybeError"),
       error: "An error occurs",

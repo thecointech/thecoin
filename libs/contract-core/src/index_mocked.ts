@@ -8,6 +8,7 @@ export * from './constants';
 const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
 let nonce = 12;
 let confirmations = 1;
+let lastTxVal: number|undefined = undefined;
 export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugins'|'exactTransfer' | 'balanceOf' | 'certifiedTransfer'>{
 
   signer?: Signer;
@@ -17,8 +18,9 @@ export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugin
   // prefix is (e) for exactTransfer and (c) for certifiedTransfer, and (0) for other
   // We embed this in the identifier so we can tell through the rest of the mock
   // what kind of transaction it represented
-  genReceipt = (prefix: string = '0', opts?: any) => {
+  genReceipt = (prefix: string = '0', opts?: any, txval?: number) => {
     confirmations = 2;
+    lastTxVal = txval;
     return Promise.resolve({
       wait: () => { },
       hash: `0x${prefix}${genRanHex(63)}`,
@@ -29,9 +31,9 @@ export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugin
 
   mintCoins = () => this.genReceipt();
   burnCoins = () => this.genReceipt();
-  exactTransfer = () => this.genReceipt('e');
+  exactTransfer = (_: string, value: number) => this.genReceipt('e', undefined, value);
   balanceOf = () => Promise.resolve(BigNumber.from(995000000));
-  certifiedTransfer = () => this.genReceipt('c', { confirmations: 1 })
+  certifiedTransfer = (...args: any[]) => this.genReceipt('c', { confirmations: 1 }, args[3])
   uberTransfer = () => this.genReceipt('c', { confirmations: 1 })
   // Run during testing.  Remove once deployement is secure.
   runCloneTransfer = () => this.genReceipt();
@@ -86,7 +88,7 @@ export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugin
           timestamp: BigNumber.from(`0x${item.data.slice(66)}`),
           from, // random address, currently ignored
           to,
-          amount: BigNumber.from(20000000),
+          amount: BigNumber.from(lastTxVal ?? 20000000),
         }
       }
     },
