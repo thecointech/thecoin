@@ -25,7 +25,7 @@
     "prepare": "npm run build"
   },
   "dependencies": {
-    "axios": "^0.26.1"
+    "axios": "^1.6.4"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
