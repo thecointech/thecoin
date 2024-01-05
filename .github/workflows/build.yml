@@ -23,12 +23,12 @@ jobs:
         java-version: '11'
         java-package: jre # optional (jdk, jre, jdk+fx or jre+fx) - defaults to jdk
     # - uses: c-hive/gha-yarn-cache@v2
+    - run: corepack enable
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18.x'
         cache: 'yarn'
-    - run: corepack enable
     - name: Install dependencies
       run: yarn install --frozen-lockfile --immutable
     - name: Build
