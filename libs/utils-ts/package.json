@@ -53,6 +53,7 @@
     "ethers": "^5.7.0"
   },
   "devDependencies": {
+    "@thecointech/jestutils": "workspace:^",
     "@thecointech/types": "workspace:^"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"

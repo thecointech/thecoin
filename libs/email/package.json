@@ -41,5 +41,8 @@
     "@thecointech/logging": "workspace:^",
     "node-mailjet": "^4.0.1"
   },
+  "devDependencies": {
+    "@thecointech/jestutils": "workspace:^"
+  },
   "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
 }

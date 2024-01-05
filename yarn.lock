@@ -9648,6 +9648,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/email@workspace:libs/email"
   dependencies:
+    "@thecointech/jestutils": "workspace:^"
     "@thecointech/logging": "workspace:^"
     node-mailjet: "npm:^4.0.1"
   languageName: unknown
@@ -9668,6 +9669,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/firestore@workspace:libs/firestore"
   dependencies:
+    "@thecointech/jestutils": "workspace:^"
     "@thecointech/logging": "workspace:^"
     firestore-jest-mock: "https://github.com/thecointech/firestore-jest-mock#f4145e6f28c02419ec5e338a6f5a424ab189986c"
   peerDependencies:
@@ -9738,6 +9740,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/market-status@workspace:libs/market-status"
   dependencies:
+    "@thecointech/jestutils": "workspace:^"
     "@thecointech/logging": "workspace:^"
   languageName: unknown
   linkType: soft
@@ -10042,6 +10045,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/store@workspace:libs/store"
   dependencies:
+    "@thecointech/jestutils": "workspace:^"
     "@thecointech/logging": "workspace:^"
     "@types/pouchdb": "npm:^6.4.0"
     "@types/pouchdb-upsert": "npm:^2.2.6"
@@ -10314,6 +10318,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/utilities@workspace:libs/utils-ts"
   dependencies:
+    "@thecointech/jestutils": "workspace:^"
     "@thecointech/logging": "workspace:^"
     "@thecointech/types": "workspace:^"
     base32: "npm:^0.0.6"

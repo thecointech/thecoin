@@ -43,6 +43,7 @@
     "pouchdb-upsert": "^2.2.0"
   },
   "devDependencies": {
+    "@thecointech/jestutils": "workspace:^",
     "@types/pouchdb": "^6.4.0",
     "@types/pouchdb-upsert": "^2.2.6",
     "pouchdb-adapter-memory": "^7.3.0"
