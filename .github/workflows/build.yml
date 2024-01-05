@@ -24,11 +24,13 @@ jobs:
         java-package: jre # optional (jdk, jre, jdk+fx or jre+fx) - defaults to jdk
     # - uses: c-hive/gha-yarn-cache@v2
     - name: Use Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v4
       with:
-        node-version: '16.x'
+        node-version: '18.x'
+        cache: 'yarn'
+    - run: corepack enable
     - name: Install dependencies
-      run: yarn install --prefer-offline --frozen-lockfile
+      run: yarn install --frozen-lockfile --immutable
     - name: Build
       env:
          # Fix OOM in build admin
