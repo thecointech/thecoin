@@ -23,7 +23,7 @@
     "build": "run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
     "build:src": "run -T tsc -b",
-    "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
+    "build:copy": "run -T cpx \"./src/deployed/**\" ./build/deployed",
     "clean": "run-p 'clean:*'",
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
