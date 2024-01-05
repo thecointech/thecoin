@@ -64,7 +64,7 @@
     "check-changes": "git diff-index --patch-with-stat HEAD && git diff-index --quiet HEAD -- "
   },
   "dependencies": {
-    "axios": "0.26.1",
+    "axios": "1.6.4",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
     "ethers": "^5.7.0",
