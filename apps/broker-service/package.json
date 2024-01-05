@@ -52,7 +52,7 @@
     "@thecointech/tx-etransfer": "^0.2.116",
     "@thecointech/utilities": "^0.2.116",
     "@tsoa/runtime": "6.0.0-rc.2",
-    "axios": "0.26.1",
+    "axios": "1.6.4",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "googleapis": "49.0.0",
