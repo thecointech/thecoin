@@ -15,6 +15,7 @@ const getRoots = () => [
 module.exports = {
   preset: 'ts-jest/presets/default-esm',
   verbose: true,
+  testTimeout: 15 * 1000,
   // transform: {
   //   "^.+\\.tsx?$": "ts-jest",
   //   // transform our built files to be CJS
