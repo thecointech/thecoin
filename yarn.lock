@@ -20654,11 +20654,11 @@ __metadata:
 
 "ethereumjs-abi@npm:^0.6.8":
   version: 0.6.8
-  resolution: "ethereumjs-abi@https://github.com/ethereumjs/ethereumjs-abi.git#commit=1a27c59c15ab1e95ee8e5c4ed6ad814c49cc439e"
+  resolution: "ethereumjs-abi@npm:0.6.8"
   dependencies:
     bn.js: "npm:^4.11.8"
     ethereumjs-util: "npm:^6.0.0"
-  checksum: 984fb013e5b13fd3deb0f5a3ad3b0c51b34c33ec7435949a723463aff8f7cd8b5c8ed1b99ba408ba47efc52f7763e9bbd4a6c3d1c0fef70651f23ecff738c2b1
+  checksum: a7ff1917625e3c812cb3bca6c1231fc0ece282cc7d202d60545a9c31cd379fd751bfed5ff78dae4279cb1ba4d0e8967f9fdd4f135a334a38dbf04e7afd0c4bcf
   languageName: node
   linkType: hard
 
