@@ -27,7 +27,7 @@
     "clean": "run-p 'clean:*'",
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
-    "test": "yarn run :jest --runInBand ",
+    "test": "yarn run :jest",
     "test:ci": "yarn run-jest-nix",
     "dev:live": "cross-env CONFIG_NAME=devlive run-s _deploy _seed",
     "deploy:prodtest": "cross-env CONFIG_NAME=prodtest yarn _deploy",
