@@ -30,7 +30,6 @@
     "clean:test": "rimraf ./coverage",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
     "test": "run :jest",
-    "test:ci": "yarn run-jest-nix",
     "gcp-build": ""
   },
   "engines": {

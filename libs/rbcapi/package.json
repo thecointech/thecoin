@@ -25,8 +25,7 @@
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "run :jest '--runInBand --forceExit'",
-    "test:ci": "yarn run-jest-nix --runInBand",
+    "test": "run :jest '--runInBand --forceExit --'",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [

@@ -18,7 +18,6 @@
     "prod": "cross-env CONFIG_NAME=prod yarn start",
     "start": "cross-env CONFIG_NAME=prod yarn run-env ./build/main.js",
     "test": "run :jest",
-    "test:ci": "yarn run-jest-nix",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [

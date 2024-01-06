@@ -27,7 +27,6 @@
     "gen:swagger": "run -T tsoa spec-and-routes",
     "clean": "rimraf ./build && rimraf ./src/api",
     "test": "run :jest",
-    "test:ci": "yarn run-jest-nix",
     "test:coverage": "yarn test --coverage",
     "gcp-build": ""
   },

@@ -26,7 +26,6 @@
     "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
     "clean": "rimraf ./build",
     "test": "run :jest",
-    "test:ci": "yarn run-jest-nix",
     "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts run-env"
   },
   "files": [

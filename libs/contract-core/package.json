@@ -28,7 +28,6 @@
     "clean:src": "rimraf ./build",
     "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types && rimraf /.hardhat",
     "test": "run :jest",
-    "test:ci": "yarn run-jest-nix",
     "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive run-s _deploy _seed:random",
     "deploy:prod:test": "cross-env CONFIG_NAME=prodtest run-s _deploy _seed:clone",
     "deploy:prod": "cross-env CONFIG_NAME=prod run-s _deploy",

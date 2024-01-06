@@ -21,8 +21,7 @@
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "run :jest",
-    "test:ci": "yarn run-jest-nix"
+    "test": "run :jest"
   },
   "files": [
     "build/**/*"

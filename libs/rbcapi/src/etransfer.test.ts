@@ -5,7 +5,6 @@ import { send } from './etransfer';
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { closeBrowser } from './scraper';
 
-
 // Note, this test will send real money from a real account.
 // So ya probably want to leave it disabled except for manual runs.
 describe("Live tests on live account", () => {
