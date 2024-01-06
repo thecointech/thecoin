@@ -62,6 +62,7 @@
     "@thecointech/shared": "workspace:^",
     "@thecointech/signers": "workspace:^",
     "@thecointech/utilities": "workspace:^",
+    "@xenova/transformers": "^2.13.4",
     "comdb": "^6.0.0-beta",
     "currency.js": "^2.0.4",
     "electron-context-menu": "^3.6.1",
