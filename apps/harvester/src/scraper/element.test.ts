@@ -2,6 +2,8 @@ import puppeteer from "puppeteer"
 import { jest } from "@jest/globals"
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { getElementForEvent, registerElementAttrFns } from "./elements";
+import { getSiblingScore  } from "./elements.score";
+import { patchOnnxForJest } from '../../internal/jestPatch'
 
 jest.setTimeout(10 * 60 * 1000);
 
@@ -78,3 +80,31 @@ describe ('Element tests', () => {
     await browser.close()
   })
 }, IsManualRun)
+
+it('scores siblings', async () => {
+  patchOnnxForJest()
+  {
+    // Should be pretty close to 1
+    const siblingScore = await getSiblingScore(
+      ["Account Number", "Balance"], 
+      ["Your Account No.", "Current Balance"]
+    )
+    expect(siblingScore).toBeCloseTo(1, 0.05)
+  }
+  {
+    // Should be less then 1
+    const siblingScore = await getSiblingScore(
+      ["Account Number", "Balance", "More Info Here"],
+      ["Your Account No.", "Current Balance"]
+    )
+    expect(siblingScore).toBeCloseTo(1, 0.05)
+  }
+  {
+    // Should be less then 1
+    const siblingScore = await getSiblingScore(
+      ["Account Number", "Balance"],
+      ["Your Account No.", "Current Balance", "More Info Here"]
+    )
+    expect(siblingScore).toBeCloseTo(1, 0.05)
+  }
+})

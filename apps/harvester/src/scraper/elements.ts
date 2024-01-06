@@ -2,6 +2,7 @@ import type { ElementHandle, Frame, Page } from 'puppeteer';
 import type { Coords, ElementData } from './types';
 import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
+import { scoreElement } from './elements.score';
 
 type FoundElement = {
   element: ElementHandle<Element>,
@@ -23,13 +24,23 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
     const elements = await getAllElements(frame);
     const withSiblings = fillOutSiblingText(elements);
 
-    const candidates = withSiblings.reduce((acc, el) => {
-      acc.push({
-        ...el,
-        score: scoreElement(el.data, event),
-      })
-      return acc;
-    }, [] as FoundElement[]);
+    const candidates: FoundElement[] = [];
+    for (const el of withSiblings) {
+      const score = await scoreElement(el.data, event);
+      if (score > 0) {
+        candidates.push({
+          ...el,
+          score
+        })
+      }
+    }
+    // const candidates = withSiblings.reduce((acc, el) => {
+    //   acc.push({
+    //     ...el,
+    //     score: await scoreElement(el.data, event),
+    //   })
+    //   return acc;
+    // }, [] as FoundElement[]);
 
     // Sort by score to see if any element is close enough
     const sorted = candidates.sort((a, b) => b.score - a.score);
@@ -65,75 +76,6 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
   throw new Error(`Element not found: ${event.selector}`);
 }
 
-// This scoring function reaaaaally needs to be replaced with 
-// a computed (learned) model, because manually scoring is just too hard to figure out
-function scoreElement(potential: ElementData, original: ElementData) {
-  let score = 0;
-  if (potential.tagName == original.tagName) score = score + 20;
-  if (potential.selector == original.selector) score = score + 10;
-  if (potential.font?.color == original.font?.color) score = score + 5;
-  if (potential.font?.font == original.font?.font) score = score + 5;
-  if (potential.font?.size == original.font?.size) score = score + 5;
-  if (potential.font?.style == original.font?.style) score = score + 5;
-  // If the text is exactly the same, that's a big bonus
-  if (potential.nodeValue == original.nodeValue) score = score + 40;
-  // Else, we still match if both are a dollar amount
-  else if (
-    original.text?.trim().match(/^\$[0-9, ]+\.\d{2}$/) &&
-    potential.text?.trim().match(/^\$[0-9, ]+\.\d{2}$/)
-  ) {
-    score = score + 20;
-  }
-
-  if (
-    potential.role && original.role &&
-    potential.role == original.role
-  ) {
-    score = score + 15;
-  }
-  else if (potential.role != original.role) {
-    score = score - 5;
-  }
-  if (
-    potential.label &&  original.label &&
-    potential.label == original.label
-  ) {
-    score = score + 30;
-  }
-  else if (potential.label != original.label) {
-    score = score - 10;
-  }
-
-  // up to 4 matching siblings for max 20 pts
-  if (potential.siblingText?.length && original.siblingText?.length) {
-    const matched = potential.siblingText.filter(
-      t => original.siblingText?.includes(t)
-    );
-    if (matched.length > 0) {
-      // Max score for perfect match, but decreases with each miss
-      // Eg, 1 matched, 1 unmatched = 50% score
-      // Eg, 1 matched, 2 unmatched = 33% score
-      // Eg, 3 matched, 1 unmatched = 75% score
-      const unmatched = (
-        potential.siblingText.length - matched.length +
-        original.siblingText.length - matched.length
-      )
-      score = score + (20 * matched.length / (unmatched  + matched.length));
-    }
-  }
-  // If neither have any siblings, mark as 10 pts cause that's pretty close
-  else if (potential.siblingText?.length == original.siblingText?.length) {
-    score = score + 10;
-  }
-
-  // up to 20 pts from position
-  const positionDiff = calcPositionDifference(potential.coords, original);
-  score = score + Math.max(0, 20 - (positionDiff / 20));
-
-  // max score is 125
-  return score;
-}
-
 async function getFrame(page: Page, click: ElementData) {
   if (!click.frame) {
     return page;
@@ -148,14 +90,6 @@ async function getFrame(page: Page, click: ElementData) {
   }
   // return page.  Who knows, maybe it'll work?
   return page;
-}
-
-function calcPositionDifference(coords: Coords, event: ElementData) {
-  const tops = Math.abs(event.coords.top - coords.top)
-  const heights = Math.abs(event.coords.height - coords.height)
-  const widths = Math.abs(event.coords.width - coords.width)
-  const lefts = Math.abs(event.coords.left - coords.left)
-  return tops + heights + widths + lefts;
 }
 
 export async function registerElementAttrFns(page: Page) {
