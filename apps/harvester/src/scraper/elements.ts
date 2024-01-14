@@ -254,10 +254,10 @@ export const getAllElements = async (frame: Page|Frame) => {
       (
         el instanceof HTMLElement
         //@ts-ignore
-        // && el.checkVisibility({
-        //   checkOpacity: true,  // Check CSS opacity property too
-        //   checkVisibilityCSS: true // Check CSS visibility property too
-        // })
+        && el.checkVisibility({
+          checkOpacity: true,  // Check CSS opacity property too
+          checkVisibilityCSS: true // Check CSS visibility property too
+        })
       ) ? getElementProps(el)
         : null
     ),

@@ -81,30 +81,29 @@ describe ('Element tests', () => {
   })
 }, IsManualRun)
 
+// To review - This isn't the best evaluation,
+// We probably need to improve the semantic
+// analysis to get more context for a given element
 it('scores siblings', async () => {
   patchOnnxForJest()
-  {
-    // Should be pretty close to 1
-    const siblingScore = await getSiblingScore(
-      ["Account Number", "Balance"], 
-      ["Your Account No.", "Current Balance"]
-    )
-    expect(siblingScore).toBeCloseTo(1, 0.05)
-  }
-  {
-    // Should be less then 1
-    const siblingScore = await getSiblingScore(
-      ["Account Number", "Balance", "More Info Here"],
-      ["Your Account No.", "Current Balance"]
-    )
-    expect(siblingScore).toBeCloseTo(1, 0.05)
-  }
-  {
-    // Should be less then 1
-    const siblingScore = await getSiblingScore(
-      ["Account Number", "Balance"],
-      ["Your Account No.", "Current Balance", "More Info Here"]
-    )
-    expect(siblingScore).toBeCloseTo(1, 0.05)
-  }
+
+  // Should be pretty close to 1
+  const baseline = await getSiblingScore(
+    ["Account Number", "Account Balance"],
+    ["Account #", "Current Balance"]
+  )
+  expect(baseline).toBeCloseTo(0.7, 0.05)
+
+  // Should be less then baseline
+  const modOriginal = await getSiblingScore(
+    ["Account Number", "Account Balance", "More Info Here"],
+    ["Account #", "Current Balance"]
+  )
+  expect(modOriginal).toBeLessThan(baseline)
+  // Should be less then 1
+  const modCurrent = await getSiblingScore(
+    ["Account Number", "Account Balance"],
+    ["Account #", "Current Balance", "More Info Here"]
+  )
+  expect(modCurrent).toBeLessThan(baseline)
 })

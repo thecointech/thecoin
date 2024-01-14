@@ -15,8 +15,17 @@ export class SimilarityPipeline {
     if (!this.instance) {
       // NOTE: Fix this for deployment etc
       env.cacheDir = './.cache';
-
-      this.instance = pipeline(task, model, { progress_callback });
+      // Wrap in new promise to ensure that instance is assigned
+      // before the pipeline begins it's requests (prevents a race condition)
+      this.instance = new Promise(async (resolve, reject) => {
+        try {
+          const r = await pipeline(task, model, { progress_callback });
+          resolve(r)
+        }
+        catch (e) {
+          reject(e)
+        }
+      })
     }
 
     return this.instance;
