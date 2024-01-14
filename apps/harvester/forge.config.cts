@@ -12,6 +12,17 @@ import { rendererConfig } from '@thecointech/electron-utils/webpack/webpack.rend
 import { getCSP } from './config/csp';
 import { DefinePlugin } from 'webpack';
 
+// const ForgeExternalsPlugin = require('@timfish/forge-externals-plugin')
+
+const externals = [
+  'leveldown',
+  'onnxruntime-node',
+  'sharp',
+  'utf-8-validate',
+  'bufferutil',
+];
+
+
 const mergedConfig = mainConfig({
   plugins: [
     new DefinePlugin({
@@ -19,6 +30,7 @@ const mergedConfig = mainConfig({
       ['process.env.URL_SEQ_LOGGING']: JSON.stringify("false"),
     })
   ],
+  externals
 })
 
 const config: ForgeConfig = {
@@ -61,6 +73,12 @@ const config: ForgeConfig = {
       port: 3004,
       loggerPort: 9004,
     }),
+    // new ForgeExternalsPlugin(
+    //   {
+    //     externals,
+    //     includeDeps: true
+    //   }
+    // )
   ],
 };
 

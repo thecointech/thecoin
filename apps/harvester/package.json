@@ -8,6 +8,9 @@
   "config": {
     "forge": "./forge.config"
   },
+  "installConfig": {
+    "hoistingLimits": "workspaces"
+  },
   "type": "commonjs",
   "keywords": [],
   "author": {
@@ -32,14 +35,15 @@
     "test:record": "yarn run-env ./src/scraper/main.ts --record"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.2.1",
-    "@electron-forge/maker-deb": "^6.2.1",
-    "@electron-forge/maker-rpm": "^6.2.1",
-    "@electron-forge/maker-squirrel": "^6.2.1",
-    "@electron-forge/maker-zip": "^6.2.1",
-    "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
-    "@electron-forge/plugin-webpack": "^6.2.1",
+    "@electron-forge/cli": "^7.2.0",
+    "@electron-forge/maker-deb": "^7.2.0",
+    "@electron-forge/maker-rpm": "^7.2.0",
+    "@electron-forge/maker-squirrel": "^7.2.0",
+    "@electron-forge/maker-zip": "^7.2.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.2.0",
+    "@electron-forge/plugin-webpack": "^7.2.0",
     "@thecointech/jestutils": "workspace:^",
+    "@timfish/forge-externals-plugin": "0.2.1",
     "@types/node-notifier": "^8.0.2",
     "@types/pouchdb": "^6.4.0",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
@@ -51,7 +55,7 @@
     "pouchdb-adapter-memory": "^8.0.1"
   },
   "dependencies": {
-    "@thecointech/account": "workspace:^",
+    "@thecointech/account": "0.2.116",
     "@thecointech/apis": "workspace:^",
     "@thecointech/async": "workspace:^",
     "@thecointech/contract-plugin-converter": "workspace:^",

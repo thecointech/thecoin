@@ -30,8 +30,8 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@ledgerhq/hw-app-eth": "^6.18.0",
-    "@ledgerhq/hw-transport-node-hid": "^6.11.2",
+    "@ledgerhq/hw-app-eth": "^6.35.2",
+    "@ledgerhq/hw-transport-node-hid": "^6.28.1",
     "@thecointech/async": "workspace:^"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
