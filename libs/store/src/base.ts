@@ -13,7 +13,7 @@ type UpsertResponse = {
   updated: boolean;
 }
 
-export function BaseStore<T>(name: string) {
+export function BaseStore<T extends Object>(name: string) {
 
   type UpsertFn = (val: Partial<T>) => false | T;
 

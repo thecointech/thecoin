@@ -50,7 +50,7 @@
     "@thecointech/tx-bill": "workspace:^",
     "@thecointech/tx-etransfer": "workspace:^",
     "@thecointech/utilities": "workspace:^",
-    "@tsoa/runtime": "6.0.0-rc.2",
+    "@tsoa/runtime": "^6.0.0",
     "axios": "0.26.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",

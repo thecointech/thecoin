@@ -68,7 +68,7 @@
     "react-dropzone": "12.0.4",
     "react-input-mask": "2.0.4",
     "react-with-direction": "^1.3.1",
-    "redux-injectors": "https://github.com/FrozenKiwi/redux-injectors#6209c56b",
+    "redux-injectors": "https://github.com/FrozenKiwi/redux-injectors#6209c56b7c2508e002b669010ad3c0d5e0bab9eb",
     "ts-clipboard": "^1.0.17"
   },
   "devDependencies": {

@@ -139,7 +139,10 @@ export function SagaReducer<U, T>(key: string, initialState: T, sagas: SagaBuild
 
     // Exposed as an
     updateWithValues(newState: Partial<T>) {
-      Object.assign(this.draftState, newState);
+      this.draftState = {
+        ...this.draftState,
+        ...newState
+      };
     }
 
     static rootSaga: any;

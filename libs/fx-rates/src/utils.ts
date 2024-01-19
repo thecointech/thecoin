@@ -1,7 +1,5 @@
 import type { CurrencyCode, FXRate } from '@thecointech/pricing';
 
-// file deepcode ignore ComparisonObjectExpression: <Ignore complaints about comparison vs EmptyRate>
-// TODO: This is a terrible idea!  Return undefined if it's not found!
 export const EmptyRate: FXRate = {
   target: 0 as CurrencyCode,
   buy: 0,
@@ -9,7 +7,7 @@ export const EmptyRate: FXRate = {
   fxRate: 0,
   validFrom: 0,
   validTill: 0,
-};
+} as any;
 
 export const validFor = (rate: Pick<FXRate, "validFrom"|"validTill">, ts: number) =>
   rate.validFrom <= ts && rate.validTill > ts;
