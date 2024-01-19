@@ -1,25 +1,31 @@
-const path = require('path');
+import path from 'path';
 const rootFolder = path.join(__dirname, '..');
 const mocksFolder = path.join(rootFolder, 'libs', '__mocks__');
-const { DefinePlugin } = require('webpack');
-const { AbsolutePathRemapper } = require('@thecointech/storybook-abs-paths');
-const { merge } = require("webpack-merge")
+import { DefinePlugin } from 'webpack';
+import { AbsolutePathRemapper } from '@thecointech/storybook-abs-paths';
+import { merge } from "webpack-merge";
+
+const getAbsolutePath = (packageName: string) =>
+  path.dirname(require.resolve(path.join(packageName, 'package.json')));
 
 module.exports = {
   features: {
     previewCsfV3: true,
     storyStoreV7: true,
   },
+
   stories: [
     "../stories/**/*.stories.mdx",
     "../stories/**/*.stories.@(ts|tsx)",
     "../libs/*/!(node_modules)/**/*.stories.@(js|jsx|ts|tsx)",
     "../apps/*/!(node_modules)/**/*.stories.@(js|jsx|ts|tsx)",
   ],
+
   addons: [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials"
+    getAbsolutePath("@storybook/addon-links"),
+    getAbsolutePath("@storybook/addon-essentials")
   ],
+
   babel: async (options) => ({
     ...options,
     plugins: [
@@ -34,6 +40,7 @@ module.exports = {
       ],
     ]
   }),
+
   webpackFinal: async (config) => {
     const shared_loaders = await import('@thecointech/site-semantic-theme/webpack.less');
 
@@ -78,7 +85,13 @@ module.exports = {
     babelRule.exclude = /(node_modules)|(build)/
     return r;
   },
-  core: {
-    builder: "webpack5",
+
+  framework: {
+    name: getAbsolutePath("@storybook/react-webpack5"),
+    options: {}
   },
+
+  docs: {
+    autodocs: true
+  }
 }
