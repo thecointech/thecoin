@@ -23,7 +23,7 @@
     "build:link": "node ../../tools/link-assets.mjs",
     "build:i18n": "run-s extract compile",
     "extract": "run -T formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
-    "compile": "run -T formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json"
+    "compile": "run -T formatjs compile lang/en.json --out-file src/translations/en.json && run -T formatjs compile lang/fr.json --out-file src/translations/fr.json"
   },
   "files": [
     "./build/**/*"
