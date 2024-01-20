@@ -19,7 +19,7 @@
     "test": "run :jest",
     "clean": "rimraf ./build",
     "build": "run -T run-s build:i18n build:src build:link",
-    "build:src": "run -T tsc -b tsconfig.build.json",
+    "build:src": "run -T tsc -b",
     "build:link": "node ../../tools/link-assets.mjs",
     "build:i18n": "run-s extract compile",
     "extract": "run -T formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",

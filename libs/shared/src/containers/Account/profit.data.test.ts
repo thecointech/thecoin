@@ -84,7 +84,7 @@ export const ExampleRates: FXRate[] = [
   { "buy": 2.95099, "sell": 2.95128, "fxRate": 1.3199, "validTill": 1561404690000, "validFrom": 1561393890000, "target": 124 },
   { "buy": 2.8645701, "sell": 2.8652699999999998, "fxRate": 1.33242, "validTill": 1554157890000, "validFrom": 1554147090000, "target": 124 },
   { "buy": 2.8871100000000003, "sell": 2.88858, "fxRate": 1.3312, "validTill": 1567096290000, "validFrom": 1567085490000, "target": 124 }
-]
+] as any
 
 
 
@@ -177,6 +177,6 @@ export const SimpleRates: FXRate[] = [
     validFrom: getMillis(2018, 4),
     validTill: new Date().getTime() + 10000000,
   },
-]
+] as any
 
 test('Always passes', () => { }); // just to stop jest complaining;
