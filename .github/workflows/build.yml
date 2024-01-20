@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      YARN_CHECKSUM_BEHAVIOR: ignore
     steps:
     - name: Run start date
       run: echo "Started at $(date +'%Y-%m-%dT%H:%M:%S')"
