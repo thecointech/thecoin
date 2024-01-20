@@ -1,9 +1,9 @@
 import Decimal from 'decimal.js-light';
 import { getPluginModifier } from './modifier';
 import { PluginDetails } from './types';
-import { IPluggable } from './types/contracts/IPluggable';
+import { IPluggable } from './codegen/contracts/IPluggable';
 export * from './constants';
-export * from './types';
+export * from './codegen';
 export * from './assign';
 export * from './remove';
 

@@ -1,7 +1,7 @@
 import hre from 'hardhat';
 import { jest } from '@jest/globals';
 import { getTokenClaimCode, getTokenClaimSig } from '../src/tokenCodes';
-import type { TheGreenNFTL2 } from '../src/types';
+import type { TheGreenNFTL2 } from '../src/codegen';
 import '@nomiclabs/hardhat-ethers';
 
 const [

@@ -2,7 +2,7 @@ import * as Src from '.';
 import { BigNumber, ContractTransaction, Signer } from 'ethers'
 import { sleep } from '@thecointech/async'
 import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
-import { PluginAndPermissionsStructOutput } from './types/contracts/TheCoinL1';
+import { PluginAndPermissionsStructOutput } from './codegen/contracts/TheCoinL1';
 export * from './constants';
 
 const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');

@@ -4,7 +4,7 @@ import { keccak256 } from '@ethersproject/solidity';
 import { verifyMessage } from '@ethersproject/wallet';
 import { arrayify } from '@ethersproject/bytes';
 import { sign } from "@thecointech/utilities/SignedMessages";
-import type { IPluggable } from './types/contracts';
+import type { IPluggable } from './codegen/contracts';
 import type { AssignPluginRequest } from '@thecointech/types';
 import type { Overrides } from 'ethers';
 

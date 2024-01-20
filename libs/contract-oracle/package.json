@@ -19,14 +19,14 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-s build:contracts build:copy build:src",
+    "prepublishOnly": "run -T rimraf ./build/.buildinfo",
+    "build": "run -T run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
     "build:src": "run -T tsc -b",
     "build:copy": "run -T cpx \"./src/deployed/**\" ./build/deployed",
-    "clean": "run-p 'clean:*'",
-    "clean:src": "rimraf ./build",
-    "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
+    "clean": "run -T run-p 'clean:*'",
+    "clean:src": "run -T rimraf ./build",
+    "clean:contracts": "run -T rimraf ./src/codegen && run -T rimraf ./src/types",
     "test": "run :jest",
     "validate:prod": "cross-env CONFIG_NAME=prod yarn _hardhat ./scripts/validate.ts",
     "validate:localprod": "cross-env CONFIG_NAME=prod URL_SERVICE_RATES=http://localhost:7001/api/v1 yarn _hardhat ./scripts/validate.ts",
@@ -71,10 +71,7 @@
     "@thecointech/async": "workspace:^",
     "@thecointech/contract-tools": "workspace:^",
     "@thecointech/jestutils": "workspace:^",
-    "@thecointech/setenv": "workspace:^",
-    "cross-env": "^7.0.3",
-    "npm-run-all": "^4.1.5",
-    "rimraf": "5.0.5"
+    "@thecointech/setenv": "workspace:^"
   },
   "dependencies": {
     "@thecointech/contract-base": "workspace:^"

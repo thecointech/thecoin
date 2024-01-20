@@ -25,7 +25,7 @@
     "clean:analyze": "rimraf stats.json",
     "deploy:rebuild": "yarn build",
     "deploy": "yarn run-env ./deploy.ts",
-    "dev": "cross-env NODE_ENV=development run-env internals/server.mjs",
+    "dev": "run -T cross-env NODE_ENV=development run-env internals/server.mjs",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
     "prod:beta": "cross-env CONFIG_NAME=prodbeta yarn dev",

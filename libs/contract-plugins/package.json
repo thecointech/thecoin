@@ -19,12 +19,12 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "prepublishOnly": "run -T rimraf ./build/.buildinfo",
     "build": "run -T run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
     "build:src": "run -T tsc -b",
-    "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
-    "clean": "rimraf ./build",
+    "build:copy": "run -T cpx \"./src/deployed/**\" ./build/deployed",
+    "clean": "run -T rimraf ./build && run-T rimraf ./src/codegen",
     "test": "run :jest",
     "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts run-env"
   },

@@ -63,8 +63,7 @@
 libs/*/.openzeppelin/unknown-1337.json
 libs/*/.openzeppelin/unknown-31337.json
 libs/contract-*/.hardhat/cache
-libs/contract-*/src/contracts
-libs/contract-*/src/types
+libs/contract-*/src/codegen
 libs/contract-*/migrations/types
 libs/contract-*/src/deployed/*-fork.json
 libs/contract-*/**/devlive-polygon*

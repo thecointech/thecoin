@@ -15,14 +15,14 @@
     "directory": "libs/contract-plugin-roundnumber"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "prepublishOnly": "run -T rimraf ./build/.buildinfo",
     "build": "run -T run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
     "build:src": "run -T tsc -b",
-    "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
-    "clean": "run-p 'clean:*'",
+    "build:copy": "run -T cpx \"./src/deployed/**\" ./build/deployed",
+    "clean": "run -T run-p 'clean:*'",
     "clean:src": "rimraf ./build",
-    "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
+    "clean:contracts": "rimraf ./src/codegen",
     "test": "run :jest",
     "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive run-s _deploy _seed",
     "prod:test": "cross-env CONFIG_NAME=prodtest run-s _deploy _seed",

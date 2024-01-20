@@ -1,6 +1,6 @@
 import { BigNumber, ContractTransaction } from 'ethers';
 import { DateTime } from 'luxon';
-import { SpxCadOracle as Src } from './types/contracts/SpxCadOracle';
+import { SpxCadOracle as Src } from './codegen/contracts/SpxCadOracle';
 import { last } from '@thecointech/utilities';
 export * from './update';
 

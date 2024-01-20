@@ -3,6 +3,7 @@ import { last } from '@thecointech/utilities/ArrayExtns';
 import { describe } from '@thecointech/jestutils';
 import { updateRates } from '../src/update';
 import { getContract } from '../src/index_mocked';
+import { getOracleFactory } from '../src';
 import hre from 'hardhat';
 import '@nomiclabs/hardhat-ethers';
 import { existsSync, readFileSync } from 'fs';
@@ -52,7 +53,7 @@ describe('Oracle Tests', () => {
   // algo matches the JS version tested above
   it("it can find rate in SOL version", async () => {
 
-    const SpxCadOracle = await hre.ethers.getContractFactory('SpxCadOracle');
+    const SpxCadOracle = getOracleFactory();
     const oracle = await SpxCadOracle.deploy();
 
     // ignore the first live rate, since there are some issues with the first day

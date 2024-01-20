@@ -1,5 +1,5 @@
 import { log } from '@thecointech/logging';
-import { SpxCadOracle } from './types';
+import { SpxCadOracle } from './codegen';
 import { BigNumber } from '@ethersproject/bignumber';
 
 type RateFactory = (millis: number) => Promise<{rate: number, from: number, to: number}|null>;
