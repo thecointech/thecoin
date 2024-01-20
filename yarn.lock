@@ -10875,7 +10875,6 @@ __metadata:
     "@thecointech/logging": "workspace:^"
     "@thecointech/site-semantic-theme": "workspace:^"
     "@thecointech/store": "workspace:^"
-    "@thecointech/storybookutils": "workspace:^"
     "@thecointech/tx-blockchain": "workspace:^"
     "@thecointech/types": "workspace:^"
     "@thecointech/utilities": "workspace:^"
@@ -11071,7 +11070,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/storybookutils@workspace:^, @thecointech/storybookutils@workspace:libs/storybookutils":
+"@thecointech/storybookutils@workspace:libs/storybookutils":
   version: 0.0.0-use.local
   resolution: "@thecointech/storybookutils@workspace:libs/storybookutils"
   dependencies:
