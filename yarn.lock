@@ -10875,8 +10875,9 @@ __metadata:
     "@thecointech/logging": "workspace:^"
     "@thecointech/site-semantic-theme": "workspace:^"
     "@thecointech/store": "workspace:^"
+    "@thecointech/storybookutils": "workspace:^"
     "@thecointech/tx-blockchain": "workspace:^"
-    "@thecointech/types": "npm:*"
+    "@thecointech/types": "workspace:^"
     "@thecointech/utilities": "workspace:^"
     "@types/d3-scale-chromatic": "npm:^2.0.0"
     "@types/d3-shape": "npm:^2.0.0"
@@ -11070,7 +11071,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/storybookutils@workspace:libs/storybookutils":
+"@thecointech/storybookutils@workspace:^, @thecointech/storybookutils@workspace:libs/storybookutils":
   version: 0.0.0-use.local
   resolution: "@thecointech/storybookutils@workspace:libs/storybookutils"
   dependencies:
@@ -11318,7 +11319,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/types@npm:*, @thecointech/types@workspace:^, @thecointech/types@workspace:libs/types":
+"@thecointech/types@workspace:^, @thecointech/types@workspace:libs/types":
   version: 0.0.0-use.local
   resolution: "@thecointech/types@workspace:libs/types"
   dependencies:
