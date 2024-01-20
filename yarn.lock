@@ -11340,7 +11340,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@timfish/forge-externals-plugin@https://github.com/FrozenKiwi/forge-externals-plugin-monorepo.git":
+"@timfish/forge-externals-plugin@https://github.com/FrozenKiwi/forge-externals-plugin-monorepo":
   version: 0.2.1
   resolution: "@timfish/forge-externals-plugin@https://github.com/FrozenKiwi/forge-externals-plugin-monorepo.git#commit=283ffe89d979bbae5fee131ada5ef89e2ea59c76"
   dependencies:
@@ -24534,7 +24534,7 @@ __metadata:
     "@thecointech/shared": "workspace:^"
     "@thecointech/signers": "workspace:^"
     "@thecointech/utilities": "workspace:^"
-    "@timfish/forge-externals-plugin": "https://github.com/FrozenKiwi/forge-externals-plugin-monorepo.git"
+    "@timfish/forge-externals-plugin": "https://github.com/FrozenKiwi/forge-externals-plugin-monorepo"
     "@types/node-notifier": "npm:^8.0.2"
     "@types/pouchdb": "npm:^6.4.0"
     "@typescript-eslint/eslint-plugin": "npm:^5.0.0"

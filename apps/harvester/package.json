@@ -40,7 +40,7 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.2.0",
     "@electron-forge/plugin-webpack": "^7.2.0",
     "@thecointech/jestutils": "workspace:^",
-    "@timfish/forge-externals-plugin": "https://github.com/FrozenKiwi/forge-externals-plugin-monorepo.git",
+    "@timfish/forge-externals-plugin": "https://github.com/FrozenKiwi/forge-externals-plugin-monorepo",
     "@types/node-notifier": "^8.0.2",
     "@types/pouchdb": "^6.4.0",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
