@@ -15,42 +15,33 @@ export type Props = {
 
 const translate = defineMessages({
               aboveTheTitle : {
-                id: "shared.login.aboveTheTitle",
                 defaultMessage:"WELCOME BACK TO THE COIN",
                 description:"shared.login.aboveTheTitle: Title above the main Title for the create account form page"},
               title : {
-                id: "shared.login.title",
                 defaultMessage:"Log into",
                 description:"shared.login.title: Title for the create account form page"},
               button : {
-                id: "shared.login.button",
                 defaultMessage:"Log In",
                 description:"shared.login.button: Text of the button for the login page"},
               textAtTheBottom : {
-                id: "shared.login.textAtTheBottom",
                 defaultMessage:"Or select a different account from the account switcher. You can find it at the top menu.",
                 description:"shared.login.textAtTheBottom: Text at the bottom for the login page before the account name"},
               placeholderPassword : {
-                id: "shared.login.placeholder.wallet",
                 defaultMessage:'Wallet Password',
                 description:"shared.login.placeholder.wallet: PLaceholder for the Passford field in the create account form"},
               passwordLabel : {
-                id: "shared.login.passwordLabel",
                 defaultMessage:'Password',
                 description:"shared.login.passwordLabel"},
               decryptHeader : {
-                id: "shared.login.decryptHeader",
                 defaultMessage:'Logging into your account.',
                 description:"shared.login.decryptHeader"},
               decryptNoPwd : {
                   defaultMessage:'Please enter your password',
                   description:"Error when logging in without password"},
               decryptIncorrectPwd : {
-                id: "shared.login.decryptIncorrectPwd",
                 defaultMessage:'Unlock failed: Please check your password and try again.',
                 description:"shared.login.decryptIncorrectPwd"},
               decryptInProgress : {
-                id: "shared.login.decryptInProgress",
                 defaultMessage:'Please wait, We are {percentComplete}% done opening your account.',
                 description:"shared.login.decryptInProgress"}
 });

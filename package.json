@@ -21,7 +21,7 @@
     "yargs": "17.7.2"
   },
   "scripts": {
-    "prepare": "ts-patch install -s",
+    "postinstall": "ts-patch install -s",
     "gen:pre": "openapi-generator-cli version-manager set 7.0.0",
     "_gen:api:tapcap-cs": "openapi-generator-cli generate -i apps/tapcap-supplier/api/swagger.json -g csharp-netcore -o apis/tapcap/cs -c apis/tapcap/client-cs-spec.json",
     "gen:api:rates": "openapi-generator-cli generate -i apps/rates-service/src/api/swagger.json -g typescript-axios -o apis/rates/ts -c apis/rates/client-ts-spec.json",
