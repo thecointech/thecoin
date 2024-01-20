@@ -3,7 +3,7 @@ import { getPluginModifier } from './modifier';
 import { PluginDetails } from './types';
 import { IPluggable } from './codegen/contracts/IPluggable';
 export * from './constants';
-export * from './codegen';
+export * from './types';
 export * from './assign';
 export * from './remove';
 

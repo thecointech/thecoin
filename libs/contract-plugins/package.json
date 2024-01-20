@@ -24,7 +24,7 @@
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
     "build:src": "run -T tsc -b",
     "build:copy": "run -T cpx \"./src/deployed/**\" ./build/deployed",
-    "clean": "run -T rimraf ./build && run-T rimraf ./src/codegen",
+    "clean": "run -T rimraf ./build && run -T rimraf ./src/codegen",
     "test": "run :jest",
     "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts run-env"
   },
