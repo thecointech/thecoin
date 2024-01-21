@@ -7,7 +7,7 @@ import { rootFolder } from '../paths';
 
 const db_path = path.join(rootFolder, 'harvester.db');
 
-export function initState(options?: { adapter: string }) {
+function initState(options?: { adapter: string }) {
   if (process.env.NODE_ENV === 'development') {
     log.info(`Initializing in-memory state database`);
     options = {
@@ -20,9 +20,9 @@ export function initState(options?: { adapter: string }) {
   }
   return new pouchdb<StoredData>(db_path, options);
 }
-let _harvester = null as unknown as PouchDB.Database<StoredData>;
+let __harvester = null as unknown as PouchDB.Database<StoredData>;
 
-export const getDb = () => _harvester ??= initState();
+export const getDb = () => __harvester ??= initState();
 
 // We use pouchDB revisions to keep the prior state of documents
 const StateKey = "state";

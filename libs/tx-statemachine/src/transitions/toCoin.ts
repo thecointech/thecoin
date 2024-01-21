@@ -1,7 +1,7 @@
 import Decimal from "decimal.js-light";
 import { DateTime } from "luxon";
 import { TypedActionContainer, getCurrentState } from "../types";
-import { FXRate, RatesApi } from "@thecointech/pricing";
+import { FXRate, GetRatesApi } from '@thecointech/apis/pricing';
 import { toCoinDecimal, toHumanDecimal } from "@thecointech/utilities";
 import { log } from "@thecointech/logging";
 import { nextOpenTimestamp } from "@thecointech/market-status";
@@ -59,7 +59,7 @@ async function doConversion(container: TypedActionContainer<XferAction>, from: C
 
 // Fetch conversion rate from server
 async function getConvertAt(date: DateTime) {
-  const ratesApi = new RatesApi(undefined, process.env.URL_SERVICE_RATES);
+  const ratesApi = GetRatesApi();
   const rate = await ratesApi.getSingle(124, date.toMillis());
   if (rate.status != 200 || !rate.data.sell) {
     log.error(`Error fetching rate for: ${date}`);

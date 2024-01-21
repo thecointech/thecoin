@@ -19,10 +19,9 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc --project tsconfig.build.json",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix"
+    "test": "run :jest"
   },
   "files": [
     "build/**/*"
@@ -63,13 +62,12 @@
   },
   "dependencies": {
     "@google-cloud/secret-manager": "^3.5.0",
-    "@thecointech/ethers-provider": "^0.2.116",
-    "@thecointech/hardware-wallet": "^0.2.116",
-    "@thecointech/logging": "^0.2.116"
+    "@thecointech/ethers-provider": "0.2.116",
+    "@thecointech/hardware-wallet": "0.2.116",
+    "@thecointech/logging": "0.2.116"
   },
   "devDependencies": {
-    "@thecointech/electron-utils": "^0.2.116",
-    "jest": "*"
+    "@thecointech/electron-utils": "0.2.116"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

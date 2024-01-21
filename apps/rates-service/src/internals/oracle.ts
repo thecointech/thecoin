@@ -81,6 +81,8 @@ function enterCS() {
     const doc = await t.get(ref);
     // Check if someone else currently holds the lock
     log.info(`CS state: ${JSON.stringify(doc?.data())}`)
+    console.log('CS state: ', doc)
+    console.log('t: ', t)
     if (doc.get(start_key)?.toMillis() != doc.get(complete_key)?.toMillis()) {
       return false;
     }

@@ -10,7 +10,6 @@ import { DateTime } from 'luxon';
 
 const translate = defineMessages({
       title : {
-        id: "shared.balance.title",
         defaultMessage:"Recent Operations",
         description:"shared.balance.title: Title for the congratulations page"}});
 

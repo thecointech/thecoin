@@ -1,5 +1,4 @@
 import { jest } from '@jest/globals';
-import { initState } from './db';
 import PouchDB from 'pouchdb';
 import memory from 'pouchdb-adapter-memory'
 import { Wallet } from 'ethers';
@@ -32,7 +31,6 @@ jest.unstable_mockModule('./config', () => ({
 }));
 
 it ('runs the full stack', async () => {
-  initState({adapter: 'memory'});
 
   const { harvest } = await import('./index');
 

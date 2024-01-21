@@ -5,7 +5,9 @@
     "rootDir": "./src",
     "isolatedModules": false,
     "tsBuildInfoFile": "./build/.buildinfo",
-    "noUnusedLocals": false,
+    // Auto-gen code has unused vars in them
+    // src/types/@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.ts:12:3
+    "noUnusedLocals": false
   },
   "include": ["./src/**/*", "./src/**/*.json"],
   "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"]

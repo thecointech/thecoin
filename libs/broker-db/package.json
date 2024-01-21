@@ -20,10 +20,9 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc -b tsconfig.build.json",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
+    "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [
@@ -50,12 +49,9 @@
     }
   },
   "dependencies": {
-    "@thecointech/firestore": "^0.2.116",
-    "@thecointech/utilities": "^0.2.116",
+    "@thecointech/firestore": "0.2.116",
+    "@thecointech/utilities": "0.2.116",
     "fast-deep-equal": "3.1.3"
-  },
-  "devDependencies": {
-    "jest": "*"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

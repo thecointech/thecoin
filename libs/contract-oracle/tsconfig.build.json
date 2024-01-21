@@ -4,6 +4,9 @@
     "rootDir": "./src",
     "outDir": "./build",
     "tsBuildInfoFile": "./build/.buildinfo",
+    // Auto-gen code has unused vars in them
+    // src/types/@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.ts:12:3
+    "noUnusedLocals": false
   },
   "include": ["./src/**/*", "./src/**/*.json"],
   "exclude": ["**/*.test.*", "**/*.stories.*"]

@@ -1,7 +1,7 @@
 import { TransitionDelta, storeTransition, ActionType, TypedAction } from "@thecointech/broker-db";
 import { log } from "@thecointech/logging";
 import { DateTime } from "luxon";
-import { InstructionDataTypes, NamedTransition, StateGraph, StateSnapshot, Transition, TypedActionContainer } from "./types";
+import { InstructionDataTypes, NamedTransition, StateGraph, StateSnapshot, Transition, TypedActionContainer, getCurrentState } from "./types";
 import type { TheCoin } from '@thecointech/contract-core';
 import type { IBank } from '@thecointech/bank-interface';
 export * from './types';
@@ -36,6 +36,12 @@ async function runAndStoreTransition<Type extends ActionType>(container: TypedAc
     ...delta,
   }
 
+  if (delta.error) {
+    log.error(
+      { state: getCurrentState(container).name, error: delta.error, transition: transition.transitionName, initialId: container.action.data.initialId },
+      'Error on {state} => {transition} for {initialId}: {error}'
+    );
+  }
   log.trace({ delta, transition: transition.transitionName, initialId: container.action.data.initialId },
     `Storing delta {delta} for transition {transition} for {initialId}`);
 

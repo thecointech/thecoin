@@ -12,10 +12,10 @@ import { CertifiedTransfer, UberTransferAction } from '@thecointech/types';
 
 jest.useFakeTimers();
 const getSingle = jest.fn<(currency: number, timestamp: number) => Promise<any>>();
-jest.unstable_mockModule('@thecointech/pricing', () => ({
-  RatesApi: class {
-    getSingle = getSingle
-  }
+jest.unstable_mockModule('@thecointech/apis/pricing', () => ({
+  GetRatesApi: () => ({
+    getSingle,
+  })
 }))
 
 beforeEach(async () => {
@@ -81,21 +81,23 @@ it ("correctly converts CertifiedTransfer", async () => {
   const preRun = await toFiat(container);
   expect(preRun).toBeNull();
 
-  // processed next day
+  // processed next day (monday, at 9pm)
   jest.setSystemTime(now.plus({day: 1}).toJSDate());
   const postRun = await toFiat(container);
   expect(postRun?.coin?.eq(0)).toBeTruthy();
   expect(postRun?.fiat?.gt(0)).toBeTruthy();
 
+  const mondayMorning = now.plus({days: 1}).set({ hour: 9, minute: 32, second: 0 });
   expect(getSingle).toBeCalledTimes(1);
-  expect(getSingle).toBeCalledWith(124, now.toMillis());
+  expect(getSingle).toBeCalledWith(124, mondayMorning.toMillis());
 })
 
 // Data
 
-// Now is last wednesday
+// Now is 12pm sunday last sunday
+const now = DateTime.now().minus({ days: DateTime.now().weekday }).set({ hour: 12, minute: 0, second: 0 });
+
 const amount = new Decimal(100e6);
-const now = DateTime.now().minus({ days: (7 + 3 - DateTime.now().weekday) % 7 }).set({ hour: 12 });
 const signer = Wallet.createRandom();
 const instructions = {
   payee: "TestAccount",

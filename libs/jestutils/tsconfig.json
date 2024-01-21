@@ -1,13 +1,7 @@
 {
-  "extends": "../tsconfig.libs.json",
-  "compilerOptions": {
-    "module": "CommonJS",
-    "rootDir": "./src",
-    "baseUrl": "./src/",
-    "outDir": "./build",
-    "tsBuildInfoFile": "./build/.buildinfo",
-
-    "allowSyntheticDefaultImports": true,
-  },
-  "include": ["./src/**/*"]
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.tests.json" },
+    { "path": "./tsconfig.build.json" },
+  ]
 }

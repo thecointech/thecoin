@@ -12,12 +12,11 @@
   "author": "Stephen Taylor",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "prebuild": "yarn build:i18n",
-    "build": "run-p build:src build:link",
-    "build:src": "yarn tsc -b \"tsconfig.build.json\"",
+    "build": "run -T run-s build:i18n build:src build:link",
+    "build:src": "run -T tsc -b \"tsconfig.build.json\"",
     "build:link": "node ../../tools/link-assets.mjs",
     "build:i18n": "run-s extract compile",
-    "clean": "run-p clean:*",
+    "clean": "run-p 'clean:*'",
     "clean:src": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
     "lint": "yarn lint:src && yarn lint:css",
@@ -25,12 +24,11 @@
     "lint:src": "eslint . --ext .js,.ts,.jsx,.tsx",
     "lint:src:fix": "eslint --fix",
     "pretest": "yarn clean:test",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
+    "test": "run :jest",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern [sha512:contenthash:base64:6]",
-    "compile": "formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json"
+    "extract": "run -T formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
+    "compile": "run -T formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json"
   },
   "files": [
     "build/**/*"
@@ -57,10 +55,10 @@
   },
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.4.1",
-    "@thecointech/apis": "^0.2.116",
-    "@thecointech/shared": "^0.2.116",
-    "@thecointech/site-semantic-theme": "^0.2.116",
-    "@thecointech/utilities": "^0.2.116",
+    "@thecointech/apis": "0.2.116",
+    "@thecointech/shared": "0.2.116",
+    "@thecointech/site-semantic-theme": "0.2.116",
+    "@thecointech/utilities": "0.2.116",
     "connected-react-router": "^6.6.1",
     "intl": "^1.2.5",
     "react-animate-height": "^3.0.4",
@@ -72,12 +70,15 @@
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
+    "@thecointech/setenv": "0.2.116",
     "@types/dotenv-webpack": "^7.0.3",
     "@types/intl": "^1.2.0",
     "@types/react-measure": "^2.0.5",
     "@types/react-transition-group": "^4.2.3",
     "@types/zxcvbn": "^4.4.0",
     "dotenv-webpack": "^7.0.3",
+    "fontsource-abril-fatface": "3.1.5",
+    "fontsource-montserrat": "3.1.5",
     "minimist": "^1.2.3",
     "nocache": "^2.1.0"
   }

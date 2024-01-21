@@ -137,7 +137,7 @@ export async function seedWithRandomRates(from: DateTime, validityInterval: Dura
   const now = Date.now();
   let rate = latest?.buy ?? 1;
   for (
-    let ts = latest?.validTill ?? from.toMillis();
+    let ts = latest?.validTill || from.toMillis();
     ts < now;
     ts += msValidityInterval) {
     const validity = {

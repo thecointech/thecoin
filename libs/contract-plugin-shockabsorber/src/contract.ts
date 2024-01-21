@@ -1,6 +1,6 @@
 import { Contract } from '@ethersproject/contracts';
-import type { ShockAbsorber } from './types/contracts/ShockAbsorber';
-import UberSpec from './contracts/contracts/ShockAbsorber.sol/ShockAbsorber.json' assert {type: "json"};
+import type { ShockAbsorber } from './codegen/contracts/ShockAbsorber';
+import UberSpec from './codegen/contracts/ShockAbsorber.sol/ShockAbsorber.json' assert {type: "json"};
 import { getProvider } from '@thecointech/ethers-provider';
 
 const getAbi = () => UberSpec.abi;

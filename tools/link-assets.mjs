@@ -4,8 +4,8 @@ import path from 'path';
 
 function readTsConfig() {
   try {
-    if (fs.existsSync('./tsconfig.json')) {
-      const cfgString = fs.readFileSync('./tsconfig.json');
+    if (fs.existsSync('./tsconfig.build.json')) {
+      const cfgString = fs.readFileSync('./tsconfig.build.json');
       return JSON.parse(cfgString).compilerOptions;
     }
   }

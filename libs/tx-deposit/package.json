@@ -19,7 +19,7 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc -b tsconfig.build.json",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage"
   },
   "files": [
@@ -29,12 +29,9 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/bank-interface": "^0.2.116",
-    "@thecointech/tx-gmail": "^0.2.116",
-    "@thecointech/tx-statemachine": "^0.2.116"
-  },
-  "devDependencies": {
-    "jest": "*"
+    "@thecointech/bank-interface": "0.2.116",
+    "@thecointech/tx-gmail": "0.2.116",
+    "@thecointech/tx-statemachine": "0.2.116"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

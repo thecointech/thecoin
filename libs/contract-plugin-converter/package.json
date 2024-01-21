@@ -20,15 +20,14 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-s build:contracts build:copy build:src",
+    "build": "run -T run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
-    "build:src": "yarn tsc -b",
+    "build:src": "run -T tsc -b",
     "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
-    "clean": "run-p clean:*",
+    "clean": "run -T run-p 'clean:*'",
     "clean:src": "rimraf ./build",
-    "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
+    "clean:contracts": "rimraf ./src/codegen",
+    "test": "run :jest",
     "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive run-s _deploy _seed",
     "deploy:prodtest": "cross-env CONFIG_NAME=prodtest yarn _deploy",
     "deploy:prod": "cross-env CONFIG_NAME=prod yarn _deploy",
@@ -52,13 +51,13 @@
   "types": "./build/index.d.ts",
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "^0.2.116",
-    "@thecointech/contract-core": "^0.2.116",
-    "@thecointech/contract-tools": "^0.2.116",
-    "jest": "*"
+    "@thecointech/async": "0.2.116",
+    "@thecointech/contract-core": "0.2.116",
+    "@thecointech/contract-tools": "0.2.116",
+    "@thecointech/setenv": "0.2.116"
   },
   "dependencies": {
-    "@thecointech/contract-oracle": "^0.2.116",
-    "@thecointech/contract-plugins": "^0.2.116"
+    "@thecointech/contract-oracle": "0.2.116",
+    "@thecointech/contract-plugins": "0.2.116"
   }
 }

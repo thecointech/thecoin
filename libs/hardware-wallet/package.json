@@ -21,7 +21,7 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc -p tsconfig.build.json",
+    "build": "run -T tsc -p tsconfig.build.json",
     "clean": "rimraf ./build"
   },
   "files": [
@@ -32,10 +32,7 @@
   "dependencies": {
     "@ledgerhq/hw-app-eth": "^6.18.0",
     "@ledgerhq/hw-transport-node-hid": "^6.11.2",
-    "@thecointech/async": "^0.2.116"
-  },
-  "devDependencies": {
-    "jest": "*"
+    "@thecointech/async": "0.2.116"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

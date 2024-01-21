@@ -2,7 +2,7 @@ import { jest } from '@jest/globals';
 import { DateTime } from 'luxon'
 import { HarvestData } from './types'
 import currency from 'currency.js'
-import { getCurrentState, initState, setCurrentState } from './db'
+import { getCurrentState, setCurrentState } from './db'
 import memory from 'pouchdb-adapter-memory'
 import PouchDB from 'pouchdb';
 import { fromDb, toDb } from './db_translate';
@@ -17,8 +17,6 @@ it ('can convert to/from db', () => {
 })
 
 it ('can roundtrip in the db', async () => {
-  initState({ adapter: 'memory' });
-
   await setCurrentState(sample);
   const last = await getCurrentState();
   expect(last).toEqual(sample);

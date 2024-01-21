@@ -19,9 +19,9 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc -b tsconfig.build.json",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "_test": "yarn run-jest"
+    "_test": "run :jest"
   },
   "files": [
     "build/**/*"
@@ -30,10 +30,7 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/contract-plugins": "^0.2.116",
-    "@thecointech/tx-statemachine": "^0.2.116"
-  },
-  "devDependencies": {
-    "jest": "*"
+    "@thecointech/contract-plugins": "0.2.116",
+    "@thecointech/tx-statemachine": "0.2.116"
   }
 }

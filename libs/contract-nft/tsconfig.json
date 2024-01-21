@@ -1,14 +1,8 @@
 {
-  "extends": "../tsconfig.libs.json",
-  "compilerOptions": {
-
-    "outDir": "./build",
-
-    "isolatedModules": false,
-    "tsBuildInfoFile": "./build/.buildinfo",
-    // typechain generates .ts files with unused locals
-    "noUnusedLocals": false,
-  },
-  "include": ["**/*.ts", "**/*.json"],
-  "exclude": ["node_modules", "build", "cache", "artifacts"]
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.tests.json" },
+    { "path": "./tsconfig.build.json" },
+    { "path": "../signers/tsconfig.build.json" }
+  ]
 }

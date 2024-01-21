@@ -2,12 +2,13 @@ import { jest } from '@jest/globals';
 import { DateTime } from 'luxon';
 import { readFileSync } from 'fs';
 import { fetchMarketData } from './fetch';
+import { URL } from 'url'; // Import explicitly so we get the right (node/browser) version
 
 const rootUrl = import.meta.url;
 globalThis.fetch = jest.fn((name: string) =>
   Promise.resolve({
     text: () => {
-      const buffer = readFileSync(new URL(`.${name}`, rootUrl));
+      const buffer = readFileSync(new URL(`./${name}`, rootUrl));
       return Promise.resolve(buffer.toString());
     }
   }),

@@ -16,7 +16,7 @@
     "directory": "libs/electron-utils"
   },
   "scripts": {
-    "build": "yarn tsc",
+    "build": "run -T tsc",
     "clean": "rimraf ./build && rimraf ./coverage"
   },
   "files": [
@@ -37,7 +37,7 @@
     }
   },
   "devDependencies": {
-    "@thecointech/setenv": "^0.2.116",
+    "@thecointech/setenv": "0.2.116",
     "@vercel/webpack-asset-relocator-loader": "1.7.3",
     "css-loader": "^6.0.0",
     "fork-ts-checker-webpack-plugin": "^7.2.13",

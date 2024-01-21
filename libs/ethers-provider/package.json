@@ -20,9 +20,8 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc -b",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
+    "build": "run -T tsc -b",
+    "test": "run :jest",
     "clean": "rimraf ./build"
   },
   "files": [
@@ -73,12 +72,11 @@
   },
   "dependencies": {
     "@ethersproject/providers": "^5.7.0",
-    "@thecointech/logging": "^0.2.116"
+    "@thecointech/logging": "0.2.116"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.2.116",
-    "@thecointech/setenv": "^0.2.116",
-    "jest": "*"
+    "@thecointech/jestutils": "0.2.116",
+    "@thecointech/setenv": "0.2.116"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

@@ -21,11 +21,11 @@
   "typings": "./dist/esm/index.d.ts",
   "sideEffects": false,
   "scripts": {
-    "build": "tsc -p tsconfig.esm.json",
+    "build": "run -T tsc -p tsconfig.esm.json",
     "prepare": "npm run build"
   },
   "dependencies": {
-    "axios": "^0.26.1"
+    "axios": "1.6.5"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"

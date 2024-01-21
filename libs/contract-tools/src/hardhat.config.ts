@@ -20,12 +20,12 @@ const config: HardhatUserConfig = {
     }
   },
   paths: {
-    artifacts: "./src/contracts",
+    artifacts: "./src/codegen",
     root: process.cwd(),
     cache: `${process.cwd()}/.hardhat/cache`,
   },
   typechain: {
-    outDir: "src/types"
+    outDir: "src/codegen"
   },
   defaultNetwork,
   networks: getNetworks(),

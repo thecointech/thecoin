@@ -19,7 +19,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "build": "yarn tsc --project tsconfig.json",
+    "build": "run -T tsc --project tsconfig.json",
     "clean": "rimraf ./build && rimraf ./coverage"
   },
   "files": [
@@ -53,11 +53,11 @@
     }
   },
   "dependencies": {
-    "@thecointech/broker-cad": "^0.2.116",
-    "@thecointech/nft": "^0.2.116",
-    "@thecointech/pricing": "^0.2.116"
+    "@thecointech/broker-cad": "0.2.116",
+    "@thecointech/nft": "0.2.116",
+    "@thecointech/pricing": "0.2.116"
   },
   "devDependencies": {
-    "@thecointech/async": "^0.2.116"
+    "@thecointech/async": "0.2.116"
   }
 }

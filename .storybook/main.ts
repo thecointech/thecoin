@@ -1,40 +1,32 @@
-const path = require('path');
+import type { StorybookConfig } from '@storybook/react-webpack5';
+import path from 'path';
+import { DefinePlugin, RuleSetRule } from 'webpack';
+import { AbsolutePathRemapper } from '@thecointech/storybook-abs-paths';
+import { merge } from "webpack-merge";
+
 const rootFolder = path.join(__dirname, '..');
 const mocksFolder = path.join(rootFolder, 'libs', '__mocks__');
-const { DefinePlugin } = require('webpack');
-const { AbsolutePathRemapper } = require('@thecointech/storybook-abs-paths');
-const { merge } = require("webpack-merge")
 
-module.exports = {
-  features: {
-    previewCsfV3: true,
-    storyStoreV7: true,
-  },
+const getAbsolutePath = (packageName: string) =>
+  path.dirname(require.resolve(path.join(packageName, 'package.json')));
+
+const config: StorybookConfig = {
+
   stories: [
     "../stories/**/*.stories.mdx",
     "../stories/**/*.stories.@(ts|tsx)",
     "../libs/*/!(node_modules)/**/*.stories.@(js|jsx|ts|tsx)",
     "../apps/*/!(node_modules)/**/*.stories.@(js|jsx|ts|tsx)",
   ],
+
   addons: [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials"
+    getAbsolutePath("@storybook/addon-links"),
+    getAbsolutePath("@storybook/addon-essentials"),
+    getAbsolutePath("storybook-addon-intl"),
   ],
-  babel: async (options) => ({
-    ...options,
-    plugins: [
-      ...options.plugins,
-      "@babel/plugin-syntax-import-assertions",
-      [
-        "formatjs",
-        {
-          "idInterpolationPattern": "[sha512:contenthash:base64:6]",
-          "ast": true
-        }
-      ],
-    ]
-  }),
+
   webpackFinal: async (config) => {
+    //@ts-ignore
     const shared_loaders = await import('@thecointech/site-semantic-theme/webpack.less');
 
     const r = merge(
@@ -74,11 +66,22 @@ module.exports = {
     // Exclude our build folder from compilation.
     // This is because shared/site-base build to ES2017
     // which somehow breaks the FormatJS babel plugin.
-    const babelRule = r.module.rules.find(rule => rule.include?.includes?.(rootFolder));
-    babelRule.exclude = /(node_modules)|(build)/
+    //@ts-ignore
+    const babelRule = r.module?.rules?.find(rule => rule?.include?.includes?.(rootFolder));
+    if (babelRule) {
+      (babelRule as RuleSetRule).exclude = /(node_modules)|(build)/
+    }
     return r;
   },
-  core: {
-    builder: "webpack5",
+
+  framework: {
+    name: getAbsolutePath("@storybook/react-webpack5") as "@storybook/react-webpack5",
+    options: {}
   },
+
+  docs: {
+    autodocs: true
+  }
 }
+
+export default config

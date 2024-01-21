@@ -5,30 +5,51 @@ module.exports = function (request, options) {
 
   const maybeMocked = getMockedIfExists(request, options);
 
-  const isOurModule = request.includes("@thecointech");
+  const isOurModule = request.startsWith("@thecointech");
 
-  const r = options.defaultResolver(maybeMocked, {
-    ...options,
-    conditions: getConditions(options.conditions),
-    packageFilter: getPackageFilter(request),
-    moduleDirectories: getModuleDirectories(request),
-  })
-
-  // Jest resolver only resolves the first entry of an
-  // `exports` object, so where we have multiple (site-base)
-  // it always returns the first one, even when it is the second
-  // that is valid
-  if (isOurModule) {
-    if (!existsSync(r)) {
-      // see if there is a folder & index.js here
-      const parsed = path.parse(r);
-      const index = path.join(parsed.dir, parsed.name, "index.js");
-      if (existsSync(index)) {
-        return index;
+  try {
+    return options.defaultResolver(maybeMocked, {
+      ...options,
+      conditions: getConditions(options.conditions),
+      packageFilter: getPackageFilter(request),
+      moduleDirectories: getModuleDirectories(request),
+    })
+  } catch (e) {
+    if (isOurModule) {
+      // Jest resolver only resolves the first entry of an
+      // `exports` object, so where we have multiple (site-base)
+      // it always returns the first one, even when it is the second
+      // that is valid
+      const bits = request.split("/").slice(1);
+      const r = path.join(__dirname, '../../..', 'node_modules/@thecointech', bits[0], 'build', ...bits.slice(1), 'index.js');
+      if (existsSync(r)) {
+        return r;
       }
     }
+
+    // If no match, re-throw the origianl exception
+    throw e
   }
-  return r;
+
+  //   // Jest resolver only resolves the first entry of an
+  //   // `exports` object, so where we have multiple (site-base)
+  //   // it always returns the first one, even when it is the second
+  //   // that is valid
+  //   if (isOurModule) {
+  //     if (!existsSync(r)) {
+  //       // see if there is a folder & index.js here
+  //       const parsed = path.parse(r);
+  //       const index = path.join(parsed.dir, parsed.name, "index.js");
+  //       if (existsSync(index)) {
+  //         return index;
+  //       }
+  //     }
+  //   }
+  //   return r;
+
+  // } catch (e) {
+  //   throw e
+  // }
 }
 
 /*

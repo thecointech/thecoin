@@ -24,6 +24,7 @@
                 "encryptedPacket": "pCSaHIX6E34Gqu8vrO2QsOMEDs5a2+nKFJ6ottmA8UzOxJ4CczSTLrRMKhQ//EaCGAcI5MqxtD6SkFtrviHN5OqOPM8QeiS6l6nKarv4H90OvXHgduobcO08Z7P98T7GEXCFsNBKy0OG6UrvFZieOTADRNSTr3+C7wtYn9/yiST93ulyGkh8Jf2Ge3DACO7EAEpVeXCUffqZF6TlrtrkpeZ+/XWgNFp+1TRmGjXTmKEzyi6QSzNaszMxjH3JJjRuGUGZdolr6EEd8/Q6MjsmoCbnNT45xJxwAUQhNVeJdEKhiWlW7rHL8dhtj4Bj+n+jO9mVjPvHtr1W25xQSzDk/Q=="
               },
               "transfer": {
+                "chainId": 1234,
                 "value": 93137434,
                 "from": "0x445758E37F47B44E05E74EE4799F3469DE62A2CB",
                 "fee": 5000,

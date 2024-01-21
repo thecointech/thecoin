@@ -5,6 +5,8 @@ import crypto from 'crypto';
 import { tmpdir } from 'os';
 import { unlinkSync, writeFileSync } from 'fs';
 import { execSync } from 'child_process';
+import path from 'path';
+import fs from 'fs';
 
 const TaskName = "thecoin-harvest";
 export async function setSchedule(schedule: HarvestSchedule, existing?: HarvestSchedule) {
@@ -47,6 +49,14 @@ export async function setSchedule(schedule: HarvestSchedule, existing?: HarvestS
     }
     throw err;
   }
+}
+
+export const getHarvesterExecutable = (argv0: string) => {
+  const currentExecutable = argv0.split(',')[0];
+  const baseExecutable = path.resolve(path.dirname(currentExecutable), "../", "harvester.exe");
+  return fs.existsSync(baseExecutable)
+    ? baseExecutable
+    : currentExecutable;
 }
 
 const generateXml = (schedule: DaysArray, timeToRun: string) => {
@@ -93,8 +103,8 @@ const generateXml = (schedule: DaysArray, timeToRun: string) => {
     </Settings>
     <Actions Context="Author">
       <Exec>
-        <Command>${process.argv0}</Command>
-        <Arguments>--harvest</Arguments>
+        <Command>${getHarvesterExecutable(process.argv0)}</Command>
+        <Arguments>--process-start-args="--harvest"</Arguments>
       </Exec>
     </Actions>
   </Task>`

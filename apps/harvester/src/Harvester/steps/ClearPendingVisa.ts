@@ -2,6 +2,7 @@ import { DateTime } from 'luxon';
 import { HarvestData, ProcessingStage } from '../types';
 import currency from 'currency.js';
 import { log } from '@thecointech/logging';
+import { notify } from '../notify';
 
 //
 // Detect when a visa payment has cleared and reduce the harvester balance to match
@@ -21,6 +22,12 @@ export class ClearPendingVisa implements ProcessingStage {
         pending = undefined;
         pendingDate = undefined;
         log.info(`TransferVisaOwing: Pending payment ${pending} settled, new balance: ${harvesterBalance}`);
+
+        notify({
+          title: 'Scheduled Payment Completed',
+          message: `Your payment of ${pending} has been settled.`,
+          icon: "money.png",
+        })
       }
     }
 

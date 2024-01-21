@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/storybookutils",
-  "private": "true",
+  "private": true,
   "version": "0.2.116",
   "description": "The Coin: common storybook decorators",
   "type": "module",
@@ -13,7 +13,7 @@
     "directory": "libs/storybookutils"
   },
   "scripts": {
-    "build": "yarn tsc -b tsconfig.build.json",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build"
   },
   "files": [
@@ -21,6 +21,6 @@
   ],
   "main": "./build/index.js",
   "dependencies": {
-    "@thecointech/shared": "^0.2.116"
+    "@thecointech/shared": "0.2.116"
   }
 }
