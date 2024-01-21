@@ -8,7 +8,8 @@ import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
 import '@nomiclabs/hardhat-ethers';
 
-jest.setTimeout(10 * 60 * 1000);
+const timeout = 10 * 60 * 1000;
+jest.setTimeout(timeout);
 
 it('converts fiat to TheCoin for current transfers', async () => {
 
@@ -59,4 +60,4 @@ it('converts fiat to TheCoin for current transfers', async () => {
   // The money was transferred, there should be logs!
   expect(receipt.events?.filter(e => e.event == "Transfer").length).toEqual(1);
   expect(receipt.events?.filter(e => e.event == "ExactTransfer").length).toEqual(1);
-});
+}, timeout);

@@ -8,7 +8,8 @@ import Decimal from 'decimal.js-light';
 import { DateTime, Duration } from 'luxon';
 import '@nomiclabs/hardhat-ethers';
 
-jest.setTimeout(10 * 60 * 1000);
+const timeout = 10 * 60 * 1000;
+jest.setTimeout(timeout);
 
 it('Appropriately delays a transfer, and converts an appropriate amount at time', async () => {
 
@@ -106,4 +107,4 @@ it('Appropriately delays a transfer, and converts an appropriate amount at time'
   expect(et?.args?.from).toBe(transfer.from);
   expect(et?.args?.to).toBe(transfer.to);
   expect(et?.args?.timestamp.toNumber()).toBe(transfer.transferMillis);
-});
+}, timeout);
