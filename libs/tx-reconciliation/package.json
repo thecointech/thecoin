@@ -1,6 +1,7 @@
 {
   "name": "@thecointech/tx-reconciliation",
   "version": "0.2.116",
+  "private": true,
   "description": "The Coin: Process reconciliation between bank, blockchain, database and emails to ensure all transactions are completed appropriately",
   "type": "module",
   "keywords": [

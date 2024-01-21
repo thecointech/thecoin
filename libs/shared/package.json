@@ -9,6 +9,7 @@
   ],
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
+  "private": true,
   "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",

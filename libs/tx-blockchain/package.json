@@ -1,6 +1,7 @@
 {
   "name": "@thecointech/tx-blockchain",
   "version": "0.2.116",
+  "private": true,
   "description": "The Coin: high-level interactions with the ethereum contract",
   "type": "module",
   "keywords": [
