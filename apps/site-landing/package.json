@@ -56,9 +56,9 @@
   "dependencies": {
     "@prismicio/client": "^6.6.2",
     "@prismicio/react": "^2.4.3",
-    "@thecointech/shared": "workspace:^",
-    "@thecointech/site-base": "workspace:^",
-    "@thecointech/utilities": "workspace:^",
+    "@thecointech/shared": "0.2.116",
+    "@thecointech/site-base": "0.2.116",
+    "@thecointech/utilities": "0.2.116",
     "connected-react-router": "^6.6.1",
     "papaparse": "^5.1.1",
     "react-ga": "^2.7.0",
@@ -67,8 +67,8 @@
     "sanitize.css": "10.0.0"
   },
   "devDependencies": {
-    "@thecointech/setenv": "workspace:^",
-    "@thecointech/site-semantic-theme": "workspace:^",
+    "@thecointech/setenv": "0.2.116",
+    "@thecointech/site-semantic-theme": "0.2.116",
     "@types/papaparse": "^5.0.3",
     "@types/react-helmet": "^6.1.5",
     "@types/react-test-renderer": "^16.9.0",

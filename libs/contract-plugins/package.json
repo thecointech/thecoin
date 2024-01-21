@@ -49,12 +49,12 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "workspace:^",
-    "@thecointech/contract-plugins": "workspace:^",
-    "@thecointech/contract-tools": "workspace:^",
-    "@thecointech/setenv": "workspace:^"
+    "@thecointech/async": "0.2.116",
+    "@thecointech/contract-plugins": "0.2.116",
+    "@thecointech/contract-tools": "0.2.116",
+    "@thecointech/setenv": "0.2.116"
   },
   "dependencies": {
-    "@thecointech/contract-oracle": "workspace:^"
+    "@thecointech/contract-oracle": "0.2.116"
   }
 }

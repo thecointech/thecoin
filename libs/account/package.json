@@ -49,13 +49,13 @@
     }
   },
   "dependencies": {
-    "@thecointech/contract-core": "workspace:^",
-    "@thecointech/fx-rates": "workspace:^",
-    "@thecointech/idx": "workspace:^",
-    "@thecointech/logging": "workspace:^",
-    "@thecointech/signers": "workspace:^",
-    "@thecointech/tx-blockchain": "workspace:^",
-    "@thecointech/utilities": "workspace:^"
+    "@thecointech/contract-core": "0.2.116",
+    "@thecointech/fx-rates": "0.2.116",
+    "@thecointech/idx": "0.2.116",
+    "@thecointech/logging": "0.2.116",
+    "@thecointech/signers": "0.2.116",
+    "@thecointech/tx-blockchain": "0.2.116",
+    "@thecointech/utilities": "0.2.116"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

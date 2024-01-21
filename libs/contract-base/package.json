@@ -41,8 +41,8 @@
     }
   },
   "dependencies": {
-    "@thecointech/signers": "workspace:^",
-    "@thecointech/utilities": "workspace:^"
+    "@thecointech/signers": "0.2.116",
+    "@thecointech/utilities": "0.2.116"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

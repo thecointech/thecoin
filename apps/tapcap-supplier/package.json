@@ -9,6 +9,6 @@
     "_gen:swagger": "./bin/Release/net5.0/TapCapSupplier.exe --swagger ./api/swagger.json "
   },
   "dependencies": {
-    "@thecointech/pricing": "workspace:^"
+    "@thecointech/pricing": "0.2.116"
   }
 }

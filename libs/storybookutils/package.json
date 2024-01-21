@@ -21,6 +21,6 @@
   ],
   "main": "./build/index.js",
   "dependencies": {
-    "@thecointech/shared": "workspace:^"
+    "@thecointech/shared": "0.2.116"
   }
 }

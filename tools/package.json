@@ -9,6 +9,6 @@
     "cancel-tx": "run-env cfg=prod ./transactions/cancelTx.ts"
   },
   "devDependencies": {
-    "@thecointech/setenv": "workspace:^"
+    "@thecointech/setenv": "0.2.116"
   }
 }

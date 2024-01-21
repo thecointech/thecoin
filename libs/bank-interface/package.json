@@ -30,6 +30,6 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "devDependencies": {
-    "@thecointech/types": "workspace:^"
+    "@thecointech/types": "0.2.116"
   }
 }

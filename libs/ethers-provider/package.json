@@ -72,11 +72,11 @@
   },
   "dependencies": {
     "@ethersproject/providers": "^5.7.0",
-    "@thecointech/logging": "workspace:^"
+    "@thecointech/logging": "0.2.116"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "workspace:^",
-    "@thecointech/setenv": "workspace:^"
+    "@thecointech/jestutils": "0.2.116",
+    "@thecointech/setenv": "0.2.116"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

@@ -53,11 +53,11 @@
     }
   },
   "dependencies": {
-    "@thecointech/broker-cad": "workspace:^",
-    "@thecointech/nft": "workspace:^",
-    "@thecointech/pricing": "workspace:^"
+    "@thecointech/broker-cad": "0.2.116",
+    "@thecointech/nft": "0.2.116",
+    "@thecointech/pricing": "0.2.116"
   },
   "devDependencies": {
-    "@thecointech/async": "workspace:^"
+    "@thecointech/async": "0.2.116"
   }
 }

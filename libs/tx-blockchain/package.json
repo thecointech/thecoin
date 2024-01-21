@@ -36,7 +36,7 @@
     }
   },
   "dependencies": {
-    "@thecointech/contract-core": "workspace:^",
-    "@thecointech/utilities": "workspace:^"
+    "@thecointech/contract-core": "0.2.116",
+    "@thecointech/utilities": "0.2.116"
   }
 }

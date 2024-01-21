@@ -49,19 +49,19 @@
     }
   },
   "dependencies": {
-    "@thecointech/async": "workspace:^",
-    "@thecointech/broker-db": "workspace:^",
-    "@thecointech/contract-core": "workspace:^",
-    "@thecointech/contract-plugin-converter": "workspace:^",
-    "@thecointech/email": "workspace:^",
-    "@thecointech/fx-rates": "workspace:^",
-    "@thecointech/logging": "workspace:^",
-    "@thecointech/market-status": "workspace:^",
-    "@thecointech/utilities": "workspace:^"
+    "@thecointech/async": "0.2.116",
+    "@thecointech/broker-db": "0.2.116",
+    "@thecointech/contract-core": "0.2.116",
+    "@thecointech/contract-plugin-converter": "0.2.116",
+    "@thecointech/email": "0.2.116",
+    "@thecointech/fx-rates": "0.2.116",
+    "@thecointech/logging": "0.2.116",
+    "@thecointech/market-status": "0.2.116",
+    "@thecointech/utilities": "0.2.116"
   },
   "devDependencies": {
-    "@thecointech/bank-interface": "workspace:^",
-    "@thecointech/tx-gmail": "workspace:^"
+    "@thecointech/bank-interface": "0.2.116",
+    "@thecointech/tx-gmail": "0.2.116"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

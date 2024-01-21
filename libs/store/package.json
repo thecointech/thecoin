@@ -37,12 +37,12 @@
   },
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/logging": "workspace:^",
+    "@thecointech/logging": "0.2.116",
     "pouchdb": "^7.3.0",
     "pouchdb-upsert": "^2.2.0"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "workspace:^",
+    "@thecointech/jestutils": "0.2.116",
     "@types/pouchdb": "^6.4.0",
     "@types/pouchdb-upsert": "^2.2.6",
     "pouchdb-adapter-memory": "^7.3.0"

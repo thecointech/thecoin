@@ -39,14 +39,14 @@
   },
   "types": "./build/index.d.ts",
   "devDependencies": {
-    "@thecointech/async": "workspace:^",
-    "@thecointech/contract-tools": "workspace:^",
-    "@thecointech/setenv": "workspace:^"
+    "@thecointech/async": "0.2.116",
+    "@thecointech/contract-tools": "0.2.116",
+    "@thecointech/setenv": "0.2.116"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.8.0",
-    "@thecointech/contract-core": "workspace:^",
-    "@thecointech/contract-oracle": "workspace:^",
-    "@thecointech/contract-plugins": "workspace:^"
+    "@thecointech/contract-core": "0.2.116",
+    "@thecointech/contract-oracle": "0.2.116",
+    "@thecointech/contract-plugins": "0.2.116"
   }
 }

@@ -41,12 +41,12 @@
     "eslint-plugin-import": "^2.25.0"
   },
   "dependencies": {
-    "@thecointech/contract-core": "workspace:^",
-    "@thecointech/shared": "workspace:^",
-    "@thecointech/tx-bill": "workspace:^",
-    "@thecointech/tx-deposit": "workspace:^",
-    "@thecointech/tx-etransfer": "workspace:^",
-    "@thecointech/tx-statemachine": "workspace:^",
+    "@thecointech/contract-core": "0.2.116",
+    "@thecointech/shared": "0.2.116",
+    "@thecointech/tx-bill": "0.2.116",
+    "@thecointech/tx-deposit": "0.2.116",
+    "@thecointech/tx-etransfer": "0.2.116",
+    "@thecointech/tx-statemachine": "0.2.116",
     "electron-squirrel-startup": "^1.0.0",
     "semantic-ui-css": "^2.4.1"
   }

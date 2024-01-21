@@ -37,11 +37,11 @@
     }
   },
   "dependencies": {
-    "@thecointech/logging": "workspace:^",
+    "@thecointech/logging": "0.2.116",
     "node-mailjet": "^4.0.1"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "workspace:^"
+    "@thecointech/jestutils": "0.2.116"
   },
   "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
 }

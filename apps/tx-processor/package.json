@@ -29,15 +29,15 @@
     ".": "./build/index.js"
   },
   "dependencies": {
-    "@thecointech/logging": "workspace:^",
-    "@thecointech/setenv": "workspace:^",
-    "@thecointech/tx-bill": "workspace:^",
-    "@thecointech/tx-deposit": "workspace:^",
-    "@thecointech/tx-etransfer": "workspace:^",
-    "@thecointech/tx-plugins": "workspace:^",
+    "@thecointech/logging": "0.2.116",
+    "@thecointech/setenv": "0.2.116",
+    "@thecointech/tx-bill": "0.2.116",
+    "@thecointech/tx-deposit": "0.2.116",
+    "@thecointech/tx-etransfer": "0.2.116",
+    "@thecointech/tx-plugins": "0.2.116",
     "open": "^8.2.1"
   },
   "devDependencies": {
-    "@thecointech/site-app": "workspace:^"
+    "@thecointech/site-app": "0.2.116"
   }
 }
