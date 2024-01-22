@@ -1,5 +1,6 @@
 import { HarvestStep, HarvestStepType } from '../../types';
 import { ProcessingStage } from '../types';
+import { ClearPendingVisa } from './ClearPendingVisa';
 import { Heartbeat } from './Heartbeat';
 import { PayVisa } from './PayVisa';
 import { RoundUp } from './RoundUp';
@@ -9,8 +10,9 @@ import { TransferEverything } from './TransferEverything';
 import { TransferLimit } from './TransferLimit';
 import { TransferVisaOwing } from './TransferVisaOwing';
 
-export const createStep = (step: HarvestStep|null) : ProcessingStage => {
-  switch (step?.type) {
+export const createStep = (step: HarvestStep) : ProcessingStage => {
+  switch (step.type) {
+    case HarvestStepType.ClearPendingVisa: return new ClearPendingVisa();
     case HarvestStepType.TransferVisaOwing: return new TransferVisaOwing();
     case HarvestStepType.RoundUp: return new RoundUp(step.args);
     case HarvestStepType.TransferEverything: return new TransferEverything();

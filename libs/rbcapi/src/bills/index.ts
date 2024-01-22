@@ -1,4 +1,4 @@
-import { ProgressCallback } from '@thecointech/bank-interface';
+import type { ProgressCallback } from '@thecointech/bank-interface';
 import { Page } from 'puppeteer';
 import { ApiAction } from '../action';
 import Decimal from 'decimal.js-light';

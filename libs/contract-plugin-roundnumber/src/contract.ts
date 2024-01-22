@@ -1,6 +1,6 @@
 import { Contract } from '@ethersproject/contracts';
-import { RoundNumber } from './types';
-import RoundNumberSpec from './contracts/contracts/RoundNumber.sol/RoundNumber.json' assert {type: "json"};
+import { RoundNumber } from './codegen';
+import RoundNumberSpec from './codegen/contracts/RoundNumber.sol/RoundNumber.json' assert {type: "json"};
 import { getProvider } from '@thecointech/ethers-provider';
 
 const getAbi = () => RoundNumberSpec.abi;

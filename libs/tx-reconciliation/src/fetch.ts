@@ -1,6 +1,6 @@
 import gmail from '@thecointech/tx-gmail';
 import { getAllActions, getAllUsers } from "@thecointech/broker-db";
-import { IBank } from '@thecointech/bank-interface';
+import type { IBank } from '@thecointech/bank-interface';
 import { fetchCoinHistory } from '@thecointech/tx-blockchain/thecoin';
 import { fetchBankTransactions } from './bank';
 import { NormalizeAddress } from '@thecointech/utilities';

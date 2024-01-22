@@ -1,6 +1,7 @@
 {
   "name": "@thecointech/contract-plugin-converter",
-  "version": "0.2.112",
+  "version": "0.2.116",
+  "private": true,
   "description": "The Coin: Converter allows changing a transactions time and currency",
   "type": "module",
   "keywords": [
@@ -9,7 +10,7 @@
   ],
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
@@ -20,15 +21,14 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-s build:contracts build:copy build:src",
+    "build": "run -T run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
-    "build:src": "yarn tsc -b",
+    "build:src": "run -T tsc -b",
     "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
-    "clean": "run-p clean:*",
+    "clean": "run -T run-p 'clean:*'",
     "clean:src": "rimraf ./build",
-    "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
+    "clean:contracts": "rimraf ./src/codegen",
+    "test": "run :jest",
     "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive run-s _deploy _seed",
     "deploy:prodtest": "cross-env CONFIG_NAME=prodtest yarn _deploy",
     "deploy:prod": "cross-env CONFIG_NAME=prod yarn _deploy",
@@ -52,13 +52,13 @@
   "types": "./build/index.d.ts",
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "^0.2.112",
-    "@thecointech/contract-core": "^0.2.112",
-    "@thecointech/contract-tools": "^0.2.112",
-    "jest": "*"
+    "@thecointech/async": "0.2.116",
+    "@thecointech/contract-core": "0.2.116",
+    "@thecointech/contract-tools": "0.2.116",
+    "@thecointech/setenv": "0.2.116"
   },
   "dependencies": {
-    "@thecointech/contract-oracle": "^0.2.112",
-    "@thecointech/contract-plugins": "^0.2.112"
+    "@thecointech/contract-oracle": "0.2.116",
+    "@thecointech/contract-plugins": "0.2.116"
   }
 }

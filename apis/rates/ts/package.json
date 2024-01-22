@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/pricing",
-  "version": "0.2.112",
+  "version": "0.2.116",
   "description": "OpenAPI client for @thecointech/pricing",
   "author": "OpenAPI-Generator Contributors",
   "repository": {
@@ -16,7 +16,7 @@
     "openapi-generator",
     "@thecointech/pricing"
   ],
-  "license": "Unlicense",
+  "license": "GPL-3.0-or-later",
   "main": "./dist/esm/index.js",
   "typings": "./dist/esm/index.d.ts",
   "sideEffects": false,
@@ -25,7 +25,7 @@
     "prepare": "npm run build"
   },
   "dependencies": {
-    "axios": "^0.26.1"
+    "axios": "1.6.5"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"

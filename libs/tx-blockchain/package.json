@@ -1,7 +1,7 @@
 {
   "name": "@thecointech/tx-blockchain",
-  "private": "true",
-  "version": "0.2.112",
+  "version": "0.2.116",
+  "private": true,
   "description": "The Coin: high-level interactions with the ethereum contract",
   "type": "module",
   "keywords": [
@@ -9,12 +9,11 @@
   ],
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "scripts": {
-    "build": "yarn tsc -b tsconfig.build.json",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
+    "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [
@@ -37,10 +36,7 @@
     }
   },
   "dependencies": {
-    "@thecointech/contract-core": "^0.2.112",
-    "@thecointech/utilities": "^0.2.112"
-  },
-  "devDependencies": {
-    "jest": "*"
+    "@thecointech/contract-core": "0.2.116",
+    "@thecointech/utilities": "0.2.116"
   }
 }

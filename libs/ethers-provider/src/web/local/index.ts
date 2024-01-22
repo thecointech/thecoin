@@ -22,11 +22,11 @@ export class Erc20Provider extends JsonRpcProvider {
   //
   // In devlive, we do not have access to Etherscans advanced api
   // but we can replicate using just events
-  async getERC20History(args: {address?: string, contractAddress?: string, startBlock?: BlockTag, endBlock?: BlockTag}) {
+  async getERC20History(args: {address?: string, contractAddress?: string, fromBlock?: BlockTag, toBlock?: BlockTag}) {
     const buildFilter = ([t1, t2]: [string|null, string|null]) => ({
       address: args.contractAddress,
-      fromBlock: args.startBlock,
-      toBlock: args.endBlock,
+      fromBlock: args.fromBlock,
+      toBlock: args.toBlock,
       topics: [
         id('Transfer(address,address,uint256)'),
         t1 ? hexZeroPad(args.address!, 32) : null,

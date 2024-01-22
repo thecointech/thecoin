@@ -1,7 +1,7 @@
 {
   "name": "@thecointech/types",
-  "private": "true",
-  "version": "0.2.112",
+  "version": "0.2.116",
+  "private": true,
   "description": "The Coin: Typescript type information exported from swagger yaml.  This package doesn't need to be published",
   "type": "module",
   "keywords": [
@@ -10,7 +10,7 @@
   ],
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",

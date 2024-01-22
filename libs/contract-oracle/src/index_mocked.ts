@@ -1,10 +1,10 @@
 import { BigNumber, ContractTransaction } from 'ethers';
 import { DateTime } from 'luxon';
-import { SpxCadOracle as Src } from './types/contracts/SpxCadOracle';
+import { SpxCadOracle as Src } from './codegen/contracts/SpxCadOracle';
 import { last } from '@thecointech/utilities';
 export * from './update';
 
-export class SpxCadOracle implements Pick<Src, 'INITIAL_TIMESTAMP'|'BLOCK_TIME'|'initialize'|'update'|'bulkUpdate'|'updateOffset'|'getOffset' | 'getBlockIndexFor' | 'getRoundFromTimestamp'|'decimals'> {
+export class SpxCadOracle implements Pick<Src, 'INITIAL_TIMESTAMP' | 'BLOCK_TIME' | 'initialize' | 'update' | 'bulkUpdate' | 'updateOffset' | 'getOffset' | 'lastOffsetFrom' | 'getBlockIndexFor' | 'getRoundFromTimestamp' | 'decimals'> {
 
   // By default, we cover the last year
   initialTimestamp = DateTime
@@ -49,6 +49,14 @@ export class SpxCadOracle implements Pick<Src, 'INITIAL_TIMESTAMP'|'BLOCK_TIME'|
       }
     }
     return Promise.resolve(BigNumber.from(0));;
+  }
+
+  async lastOffsetFrom() {
+    return Promise.resolve(BigNumber.from(
+      this.offsets.length == 0
+        ? 0
+        : this.offsets[this.offsets.length - 1].from)
+    );
   }
 
   async getBlockIndexFor(timestamp: number): Promise<BigNumber> {

@@ -3,7 +3,7 @@ import { describe, IsManualRun } from '@thecointech/jestutils';
 import { prepareBillPayee } from '.';
 import * as manage from './managePayees';
 import { ApiAction } from '../action';
-import { closeBrowser } from '../puppeteer';
+import { closeBrowser } from '../scraper';
 
 jest.setTimeout(5 * 60 * 1000);
 // Disable until Jest supports spyOn cleanly

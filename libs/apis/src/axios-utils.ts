@@ -1,4 +1,4 @@
-import { AxiosResponse, AxiosRequestConfig } from "axios";
+import type { AxiosResponse } from "axios";
 
 export function buildResponse<T>(data: T): AxiosResponse<T> {
   return {
@@ -6,7 +6,7 @@ export function buildResponse<T>(data: T): AxiosResponse<T> {
     status: 200,
     statusText: "Success",
     headers: {} as any,
-    config: {} as AxiosRequestConfig,
+    config: {} as any,
   }
 }
 

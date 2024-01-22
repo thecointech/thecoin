@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-base",
-  "version": "0.2.112",
+  "version": "0.2.116",
   "description": "TheCoin: Basic contract management for NFT & Core contracts",
   "type": "module",
   "keywords": [
@@ -20,7 +20,7 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc",
+    "build": "run -T tsc",
     "clean": "rimraf ./build"
   },
   "files": [
@@ -41,8 +41,8 @@
     }
   },
   "dependencies": {
-    "@thecointech/signers": "^0.2.112",
-    "@thecointech/utilities": "^0.2.112"
+    "@thecointech/signers": "0.2.116",
+    "@thecointech/utilities": "0.2.116"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

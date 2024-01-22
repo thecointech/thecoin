@@ -1,7 +1,8 @@
 import { getFirestore, Timestamp, CollectionReference } from "@thecointech/firestore";
-import { CoinRate, FxRates, RateKey, RateType } from "./types";
+import { CoinRate, FxRates, RateKey, RateType, RateTypes } from "./types";
 import { IsDebug } from "@thecointech/utilities/IsDebug";
 import { log } from "@thecointech/logging";
+import { toDateStr } from '../../utils/date';
 
 
 //
@@ -34,14 +35,14 @@ export const toDbType = (rt: RateType): DbType => ({
   validTill: Timestamp.fromMillis(rt.validTill),
 })
 
-export const getLatestStored = async (key: RateKey) : Promise<RateType|null> => {
+export const getLatestStored = async <T extends RateKey>(key: T) : Promise<RateTypes[T]|null> => {
   const snapshot = await getRatesCollection(key)
     .orderBy('validTill', "desc")
     .limit(1)
     .get();
   return snapshot.empty
    ? null
-   : toRateType(snapshot.docs[0].data())
+   : toRateType(snapshot.docs[0].data()) as RateTypes[T]
 }
 
 //
@@ -74,7 +75,10 @@ export const getFxRates = (ts: number) => getRate("FxRates", ts) as Promise<FxRa
 //
 // Set the new rate. Does no validity checking
 export function setRate(key: RateKey, rate: RateType) {
-  log.trace({ FxKey: key, ValidTill: rate.validTill }, "Setting {FxKey} rate with validity {ValidTill}");
+  log.trace(
+    { FxKey: key, ValidTill: toDateStr(rate.validTill) },
+    "Setting {FxKey} rate with ValidTill {ValidTill}"
+  );
   const doc = getRateDoc(key, rate.validFrom);
   const data = toDbType(rate);
   return doc.set(data, {merge: false});

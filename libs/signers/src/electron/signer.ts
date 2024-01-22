@@ -1,4 +1,4 @@
-import type { IpcRenderer } from './electron_types';
+import type { IpcRenderer } from '@thecointech/electron-utils/types/ipc';
 import type { BlockTag, FeeData, Provider, TransactionRequest, TransactionResponse } from "@ethersproject/abstract-provider";
 import type { BigNumber } from "@ethersproject/bignumber";
 import type { Bytes } from "@ethersproject/bytes";

@@ -5,6 +5,9 @@ import { DaysArray } from '../types';
 
 export const DaysToRun = () => {
 
+  const { schedule } = ConfigReducer.useData();
+  const api = ConfigReducer.useApi();
+
   return (
     <Container>
       <h4>Schedule the days the harvester runs on</h4>
@@ -13,6 +16,10 @@ export const DaysToRun = () => {
         However, if you have limits on the number of e-transfers you can spend, or simply
         don't want the harvester running too frequently you can specify which days to run on.
         A recommended balance is to run on Tuesday and Friday.
+      </div>
+      <div>
+        <label htmlFor="tod">Time to run:</label>
+        <input id="tod" type='time' value={schedule.timeToRun} onChange={e => api.setTimeToRun(e.target.value)} />
       </div>
       <div>
         <DayToggle day={0} />
@@ -31,16 +38,16 @@ type DayToggleProps = {
   day: number;
 }
 const DayToggle = ({day} : DayToggleProps) => {
-  const data = ConfigReducer.useData();
+  const { schedule } = ConfigReducer.useData();
   const api = ConfigReducer.useApi();
   return (
     <div>
       <Checkbox
         toggle
-        checked={data.daysToRun[day]}
+        checked={schedule.daysToRun[day]}
         label={Info.weekdays()[day]}
         onChange={(_, { checked }) => {
-          const v = [...data.daysToRun] as DaysArray;
+          const v = [...schedule.daysToRun] as DaysArray;
           v[day] = !!checked;
           api.setDaysToRun(v);
         }}

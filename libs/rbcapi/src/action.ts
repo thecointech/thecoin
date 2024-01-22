@@ -2,7 +2,7 @@ import type {ElementHandle, HTTPResponse, Page, WaitForOptions} from 'puppeteer'
 import fs, { readFileSync } from 'fs';
 import { log } from '@thecointech/logging';
 import { AuthOptions, Credentials, isCredentials } from './types';
-import { getPage } from './puppeteer';
+import { getPage } from './scraper';
 
 ////////////////////////////////////////////////////////////////
 // API action, a single-shot action created by the API.

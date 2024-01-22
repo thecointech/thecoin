@@ -1,6 +1,5 @@
-import React from "react"
 import { AnyTxAction, TransitionDelta } from '@thecointech/broker-db'
-import { RefundButton } from "containers/Refund"
+import { RefundButton } from "../../Refund"
 import { DateTime } from 'luxon'
 import { Icon, List } from "semantic-ui-react";
 import { ManualOverride } from './ManualOverride';

@@ -1,6 +1,6 @@
 
 import { BaseReducer } from '@thecointech/shared/store/immerReducer'
-import { HarvestConfig, defaultDays, DaysArray, HarvestStepType, HarvestArgs } from '../../types';
+import { HarvestConfig, defaultDays, DaysArray, HarvestStepType, HarvestArgs, addStep, removeStep, defaultTime } from '../../types';
 import { IActions } from './types';
 
 export const CONFIG_KEY = "config";
@@ -8,8 +8,14 @@ export const CONFIG_KEY = "config";
 // The initial state of the App
 const stored = await window.scraper.getHarvestConfig();
 export const initialState: HarvestConfig = stored.value ?? {
-  daysToRun: defaultDays,
+  schedule: {
+    daysToRun: defaultDays,
+    timeToRun: defaultTime,
+  },
   steps: [
+    {
+      type: HarvestStepType.ClearPendingVisa,
+    },
     {
       type: HarvestStepType.TransferVisaOwing,
     },
@@ -19,8 +25,6 @@ export const initialState: HarvestConfig = stored.value ?? {
         roundPoint: 100,
       },
     },
-    null,
-    null,
     {
       type: HarvestStepType.TransferLimit,
       args: {
@@ -37,23 +41,21 @@ export const initialState: HarvestConfig = stored.value ?? {
 export class ConfigReducer extends BaseReducer<IActions, HarvestConfig>(CONFIG_KEY, initialState)
   implements IActions {
   setDaysToRun(daysToRun: DaysArray): void {
-    this.draftState.daysToRun = daysToRun;
+    this.draftState.schedule = {
+      ...this.state.schedule,
+      daysToRun
+    };
+  }
+  setTimeToRun(time: string): void {
+    this.draftState.schedule = {
+      ...this.state.schedule,
+      timeToRun: time
+    }
   }
   setStep(type: HarvestStepType, args?: HarvestArgs): void {
-    this.draftState.steps = [
-      ...this.state.steps.slice(0, type),
-      {
-        type,
-        args
-      },
-      ...this.state.steps.slice(type + 1),
-    ]
+    this.draftState.steps = addStep({type, args}, this.state.steps);
   }
-  clearStep(index: HarvestStepType): void {
-    this.draftState.steps = [
-      ...this.state.steps.slice(0, index),
-      null,
-      ...this.state.steps.slice(index + 1),
-    ]
+  clearStep(type: HarvestStepType): void {
+    this.draftState.steps = removeStep(type, this.state.steps)
   }
 }

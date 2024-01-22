@@ -3,7 +3,8 @@ import type { TheCoin } from '@thecointech/contract-core';
 import gmail from '@thecointech/tx-gmail';
 import { eTransferProcessor, getBuyETransferAction } from '@thecointech/tx-deposit';
 import { TypedActionContainer } from '@thecointech/tx-statemachine';
-import { IBank } from '@thecointech/bank-interface';
+import type { IBank } from '@thecointech/bank-interface';
+import { log } from '@thecointech/logging';
 
 export async function processUnsettledDeposits(contract: TheCoin, bank: IBank)
 {
@@ -18,11 +19,18 @@ export async function processUnsettledDeposits(contract: TheCoin, bank: IBank)
   const processed: TypedActionContainer<"Buy">[] = []
   // Process each raw deposit.
   for (const eTransfer of raw) {
-    const action = await getBuyETransferAction(eTransfer);
-    // Subtract from our list of incomplete
-    incomplete = incomplete.filter(i => i.doc.path != action.doc.path);
-    const r = await processor.execute(eTransfer, action);
-    processed.push(r);
+    try {
+      log.info({ initialId: eTransfer.id }, 'Processing eTransfer {initialId}');
+      const action = await getBuyETransferAction(eTransfer);
+      // Subtract from our list of incomplete
+      incomplete = incomplete.filter(i => i.doc.path != action.doc.path);
+      const r = await processor.execute(eTransfer, action);
+      processed.push(r);
+    }
+    catch (err: any) {
+      // Do not let a failed transaction derail the whole party
+      log.error(err, 'Error processing deposit {initialId}', { initialId: eTransfer.id });
+    }
   }
 
   // If we do not have eTransfer info, we cannot deposit
@@ -32,9 +40,15 @@ export async function processUnsettledDeposits(contract: TheCoin, bank: IBank)
   // action may be resumed by a raw eTransfer.  This is only
   // to resume incomplete actions for which we no longer have email)
   for (const ic of incomplete) {
-    processed.push(
-      await processor.execute(null, ic)
-    );
+    try {
+      log.info({ initialId: ic.data.initialId }, 'Resuming eTransfer {initialId}');
+      processed.push(
+        await processor.execute(null, ic)
+      );
+    }
+    catch (err: any) {
+      log.error(err, 'Error resuming deposit {initialId}', { initialId: ic.data.initialId });
+    }
   }
   return processed;
 }

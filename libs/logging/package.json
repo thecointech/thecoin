@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/logging",
-  "version": "0.2.112",
+  "version": "0.2.116",
   "description": "The Coin: Common logging setup",
   "type": "module",
   "keywords": [
@@ -9,7 +9,7 @@
   ],
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
@@ -20,9 +20,7 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-p build:*",
-    "_build:cjs": "yarn tsc --project tsconfig.build.cjs.json",
-    "build:mjs": "yarn tsc --project tsconfig.build.mjs.json",
+    "build": "run -T tsc",
     "clean": "rimraf ./build && rimraf ./coverage"
   },
   "files": [
@@ -30,11 +28,11 @@
   ],
   "exports": {
     ".": {
-      "node": "./build/mjs/log_node.js",
-      "default": "./build/mjs/log_browser.js"
+      "node": "./build/log_node.js",
+      "default": "./build/log_browser.js"
     }
   },
-  "types": "./build/mjs/log_browser.d.ts",
+  "types": "./build/log_browser.d.ts",
   "dependencies": {
     "browser-bunyan": "^1.6.3",
     "bunyan": "^1.8.13",

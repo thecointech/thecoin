@@ -1,13 +1,15 @@
-import { DaysArray } from '../../types';
+import { DaysArray, HarvestSchedule } from '../../types';
 import { log } from '@thecointech/logging';
 import { DateTime, Info } from 'luxon';
 import crypto from 'crypto';
 import { tmpdir } from 'os';
 import { unlinkSync, writeFileSync } from 'fs';
 import { execSync } from 'child_process';
+import path from 'path';
+import fs from 'fs';
 
 const TaskName = "thecoin-harvest";
-export async function setSchedule(schedule: DaysArray, existing?: DaysArray) {
+export async function setSchedule(schedule: HarvestSchedule, existing?: HarvestSchedule) {
   if (JSON.stringify(existing) == JSON.stringify(schedule)) {
     // no change
     return;
@@ -26,7 +28,7 @@ export async function setSchedule(schedule: DaysArray, existing?: DaysArray) {
   try {
     // get a temp file
     const tmpName = `tc-sch-${crypto.randomBytes(16).toString('base64').replace(/\//,'_')}`;
-    const xml = generateXml(schedule);
+    const xml = generateXml(schedule.daysToRun, schedule.timeToRun);
     const filepath = `${tmpdir()}/${tmpName}.xml`;
     log.debug(`Writing temp file: ${filepath}`);
     writeFileSync(filepath, xml);
@@ -49,7 +51,15 @@ export async function setSchedule(schedule: DaysArray, existing?: DaysArray) {
   }
 }
 
-const generateXml = (schedule: DaysArray) => {
+export const getHarvesterExecutable = (argv0: string) => {
+  const currentExecutable = argv0.split(',')[0];
+  const baseExecutable = path.resolve(path.dirname(currentExecutable), "../", "harvester.exe");
+  return fs.existsSync(baseExecutable)
+    ? baseExecutable
+    : currentExecutable;
+}
+
+const generateXml = (schedule: DaysArray, timeToRun: string) => {
   const daysToRun = schedule
     .map((d, idx) => d ? Info.weekdays('long')[idx] : null)
     .filter(d => !!d)
@@ -62,7 +72,7 @@ const generateXml = (schedule: DaysArray) => {
     </RegistrationInfo>
     <Triggers>
       <CalendarTrigger>
-        <StartBoundary>${DateTime.now().toSQLDate()}T9:00:00</StartBoundary>
+        <StartBoundary>${DateTime.now().toSQLDate()}T${timeToRun}</StartBoundary>
         <Enabled>true</Enabled>
         <ScheduleByWeek>
           <DaysOfWeek>
@@ -93,8 +103,8 @@ const generateXml = (schedule: DaysArray) => {
     </Settings>
     <Actions Context="Author">
       <Exec>
-        <Command>${process.argv0}</Command>
-        <Arguments>--harvest</Arguments>
+        <Command>${getHarvesterExecutable(process.argv0)}</Command>
+        <Arguments>--process-start-args="--harvest"</Arguments>
       </Exec>
     </Actions>
   </Task>`

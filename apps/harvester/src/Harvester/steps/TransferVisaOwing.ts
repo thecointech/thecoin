@@ -10,7 +10,7 @@ export class TransferVisaOwing implements ProcessingStage {
     const currentOwing = data.visa.balance;
 
     const toETransfer = currentOwing.subtract(harvesterBalance);
-    log.info(`TransferVisaOwing: Calculated visa spending at: ${toETransfer}`);
+    log.info(`TransferVisaOwing: Calculated visa owing at: ${toETransfer}`);
     return {
       toETransfer: toETransfer.intValue > 0 ? toETransfer : undefined,
     };

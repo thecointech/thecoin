@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/nft-service",
-  "version": "0.2.112",
+  "version": "0.2.116",
   "private": true,
   "type": "module",
   "description": "TheCoin NFT service.  Manage uploads and gassless transactions with the TheCoin NFT contract",
@@ -10,7 +10,7 @@
   ],
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
@@ -22,18 +22,17 @@
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
     "deploy": "yarn run-env ./deploy.ts",
-    "build": "yarn tsc -b tsconfig.build.json",
-    "gen:swagger": "yarn tsoa spec-and-routes",
-    "clean": "run-p clean:*",
+    "build": "run -T tsc -b",
+    "gen:swagger": "run -T tsoa spec-and-routes",
+    "clean": "run-p 'clean:*'",
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
+    "test": "run :jest",
     "gcp-build": ""
   },
   "engines": {
-    "node": "16.x.x"
+    "node": "18.x.x"
   },
   "files": [
     "build/**/*"
@@ -41,12 +40,12 @@
   "main": "./build/main.js",
   "dependencies": {
     "@pinata/sdk": "1.1.23",
-    "@thecointech/contract-nft": "^0.2.112",
-    "@thecointech/logging": "^0.2.112",
-    "@thecointech/setenv": "^0.2.112",
-    "@thecointech/signers": "^0.2.112",
-    "@thecointech/utilities": "^0.2.112",
-    "@tsoa/runtime": "^4.1.0",
+    "@thecointech/contract-nft": "0.2.116",
+    "@thecointech/logging": "0.2.116",
+    "@thecointech/setenv": "0.2.116",
+    "@thecointech/signers": "0.2.116",
+    "@thecointech/utilities": "0.2.116",
+    "@tsoa/runtime": "^6.0.0",
     "axios": "0.26.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
@@ -60,7 +59,6 @@
   },
   "devDependencies": {
     "@types/multer": "^1.4.5",
-    "@types/swagger-ui-express": "^4.1.1",
-    "jest": "*"
+    "@types/swagger-ui-express": "^4.1.1"
   }
 }

@@ -13,18 +13,23 @@ jest.unstable_mockModule('@thecointech/logging', () => ({
     info: jest.fn(),
     trace: jest.fn(),
     warn: jest.fn(),
-    error: jest.fn((...args) => errors.push(args[1])),
+    error: jest.fn((args: Record<string, string>, msg: string) => {
+      errors.push(
+        msg
+          .replace(/{state}/g, args.state)
+          .replace(/{error}/g, args.error)
+          .replace(/{transition}/g, args.transition)
+        )
+    }),
   }
 }));
 const { processUnsettledDeposits } = await import('.')
 const { getCurrentState } = await import('@thecointech/tx-statemachine');
 
-
 it("Can complete deposits", async () => {
 
   init({});
   await gmail.initialize();
-  // const error = jest.spyOn(log, 'error').mockImplementation();
 
   const brokerCad = await getSigner("BrokerCAD");
   const theContract = await ConnectContract(brokerCad);
@@ -44,9 +49,9 @@ it("Can complete deposits", async () => {
   const results = deposits.map(getCurrentState);
   expect(results.map(r => r.name)).toEqual(['complete', 'error', 'error', 'error'])
   expect(errors).toEqual([
-    "Error occured on {state}, Already Deposited",
-    "Error occured on {state}, This transfer was cancelled",
-    "Error occured on {state}, This transfer cannot be processed",
+    "Error on depositReady => depositFiat for {initialId}: Already Deposited",
+    "Error on depositReady => depositFiat for {initialId}: This transfer was cancelled",
+    "Error on depositReady => depositFiat for {initialId}: This transfer cannot be processed",
   ])
 
   // If passed, balance is 0

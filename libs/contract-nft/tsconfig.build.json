@@ -1,11 +1,16 @@
+
 {
-  "extends": "./tsconfig.json",
+  "extends": "../tsconfig.libs.json",
   "compilerOptions": {
-    "rootDir": "./src"
+
+    "outDir": "./build",
+    "rootDir": "./src",
+
+    "isolatedModules": false,
+    "tsBuildInfoFile": "./build/.buildinfo",
+    // typechain generates .ts files with unused locals
+    "noUnusedLocals": false,
   },
   "include": ["./src/**/*", "./src/**/*.json"],
   "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"],
-  "references": [
-    { "path": "../signers/tsconfig.build.json" }
-  ]
 }

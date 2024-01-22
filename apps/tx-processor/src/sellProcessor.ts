@@ -24,8 +24,14 @@ export async function processPayments(tcCore: TheCoin, bank: RbcApi) {
   const r: AnyActionContainer[] = [];
 
   for (const action of allActions) {
-    const executed = await processAction(action, tcCore, bank);
-    r.push(executed);
+    try {
+      const executed = await processAction(action, tcCore, bank);
+      r.push(executed);
+    }
+    catch (e: any) {
+      // Do not let a failed transaction derail the whole party
+      log.error(e, 'Unknown error processing {initialId}', { initialId: action.data.initialId });
+    }
   }
   log.debug(`Processed ${r.length} payments`);
   return r;

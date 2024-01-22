@@ -5,7 +5,7 @@ import { debounce } from './debounce';
 import { startElementHighlight } from './highlighter';
 import { getTableData } from './table';
 import { startPuppeteer } from './puppeteer';
-import { ActionTypes, AnyEvent, ElementData, ValueResult, ValueType } from './types';
+import { ActionTypes, AnyEvent, InputEvent, ValueResult, ValueType } from './types';
 import { getValueParsing } from './valueParsing';
 import { log } from '@thecointech/logging';
 import { setEvents } from '../Harvester/config';
@@ -47,6 +47,9 @@ export class Recorder {
   private onValue?: ValueWaiter;
   private static __instance?: Recorder;
 
+  private lastInputEvent: InputEvent | undefined;
+
+
   private constructor(name: ActionTypes, dynamicValues?: Record<string, string>) {
     this.name = name;
     this.screenshotFolder = path.join(outFolder, this.name);
@@ -73,6 +76,7 @@ export class Recorder {
       browser.on('disconnected', async () => {
 
         log.info(`browser disconnected with ${this.events.length} events`);
+        console.log(JSON.stringify(this.events));
         await setEvents(this.name, this.events);
 
         // Cleanup
@@ -153,8 +157,21 @@ export class Recorder {
       return;
     }
     else if (event.type == "input") {
-      const captured = Object.entries(this.dynamicValues).find(v => v[1] == event.value);
-      if (captured) event.dynamicName = captured[0];
+      // Input events come in a stream, and we cache them
+      // until we have the final one.
+      if (event.hitEnter || event.valueChange) {
+        // If user hit's enter or input emits value changed, this
+        // is final and we can drop the cache
+        this.lastInputEvent = undefined;
+
+        const captured = Object.entries(this.dynamicValues).find(v => v[1] == event.value);
+        if (captured) event.dynamicName = captured[0];
+      }
+      else {
+        // we are mid-stream, cache the event and return
+        this.lastInputEvent = event;
+        return;
+      }
     }
     else if (event.type == "value") {
       // If we have a promise awaiting (and we really should!)
@@ -174,7 +191,7 @@ export class Recorder {
           format: null,
         }
         // Return the most recent payment
-        const mostRecentPayment = table.find(row => row.credit)?.credit;
+        const mostRecentPayment = table.find(row => row.credit?.intValue)?.credit;
         this.onValue.resolve({
           text: "Your most recent payment was: " + mostRecentPayment,
           parsing: { type: "text", format: null },
@@ -196,12 +213,22 @@ export class Recorder {
       }
     }
 
-    // strip value out to prevent logging sensitive info
-    const { value, ...sanitized } = event as any;
-    log.debug(`Received event: ${JSON.stringify(sanitized)}`)
+    // If we have a pending input event, add it to the list first
+    if (this.lastInputEvent) {
+      this.events.push(this.lastInputEvent);
+      this.logEvent(this.lastInputEvent);
+      this.lastInputEvent = undefined;
+    }
+
+    this.logEvent(event);
     this.events.push(event);
   }
 
+  logEvent(event: AnyEvent) {
+    // strip value out to prevent logging sensitive info
+    const { value, ...sanitized } = event as any;
+    log.debug(`Received event: ${JSON.stringify(sanitized)}`)
+  }
   saveScreenshot = debounce((page: Page, fileName: string) => page.screenshot({ path: path.join(this.screenshotFolder, fileName) }))
 }
 
@@ -215,111 +242,6 @@ function onNewDocument() {
       capture: true,
       passive: true
     };
-
-    // Inspired by: https://stackoverflow.com/questions/42184322/javascript-get-element-unique-selector
-    const getSelector = (elem: HTMLElement, descendentSelector = ''): string => {
-      const {
-        tagName,
-        id,
-        parentNode
-      } = elem;
-
-      if (tagName === 'HTML') return `HTML${descendentSelector}`;
-
-      const thisSel = (id !== '')
-        ? `${tagName}#${CSS.escape(id)}`
-        : tagName;
-
-      const selected = document.querySelectorAll(thisSel + descendentSelector);
-      if (selected.length == 1) return thisSel + descendentSelector;
-      if (selected.length == 0) {
-        console.error("Cannot find element with selector: " + thisSel + descendentSelector)
-        // Return a selector that still works
-        return descendentSelector.slice(2)
-      }
-
-      // Skip class names, we don't need them and they
-      // can be altered in js to mess us up (eg - on mouseover)
-      // if (className) {
-      //   const classes = className.split(/\s/);
-      //   for (let i = 0; i < classes.length; i++) {
-      //     thisSel += `.${classes[i]}`;
-      //   }
-      // }
-
-      let childIndex = 1;
-
-      for (let e: Element = elem; e.previousElementSibling; e = e.previousElementSibling) {
-        childIndex += 1;
-      }
-
-      const selector = `${thisSel}:nth-child(${childIndex})${descendentSelector}`;
-      if (document.querySelectorAll(selector).length == 1) return selector;
-
-      return parentNode
-        ? getSelector(parentNode as HTMLElement, ` > ${selector}`)
-        : selector;
-    }
-
-    // get document coordinates of the element
-    const getCoords = (elem: HTMLElement) => {
-      const box = elem.getBoundingClientRect();
-      return {
-        top: box.top + window.pageYOffset,
-        right: box.right + window.pageXOffset,
-        bottom: box.bottom + window.pageYOffset,
-        left: box.left + window.pageXOffset
-      };
-    }
-
-    const getFontData = (elem: HTMLElement) => {
-      const styles = getComputedStyle(elem);
-      return {
-        font: styles.font,
-        color: styles.color,
-        size: styles.fontSize,
-        style: styles.fontStyle,
-      }
-    }
-
-    const getSiblingText = (el: HTMLElement) => {
-      const text = el.innerText;
-      const findParent = (el: HTMLElement): HTMLElement | null => el?.innerText?.startsWith(text) ? findParent(el.parentElement as HTMLElement) : el;
-      const ancestor = findParent(el);
-      if (ancestor) {
-        // Is this a row?
-        const elcoords = getCoords(el);
-        const rowcoords = getCoords(ancestor);
-        // Is it much higher than element?
-        const heightFactor = (
-          (rowcoords.bottom - rowcoords.top) /
-          (elcoords.bottom - elcoords.top)
-        )
-        if (heightFactor > 2.5) return undefined;
-        const widthFactor = (
-          (rowcoords.right - rowcoords.left) /
-          (elcoords.right - elcoords.left)
-        )
-        if (widthFactor < 2.5) return undefined
-        const rowText = ancestor.innerText;
-        return rowText.split(text)[0]?.trim();
-      }
-      return undefined;
-    }
-
-    const getFrameUrl = () => {
-      // Because this runs in the context of the frame, it's
-      // always that frames href
-      return location.href
-    }
-
-    const getElementData = (el: HTMLElement): ElementData => ({
-      frame: getFrameUrl(),
-      tagName: el.tagName,
-      selector: getSelector(el),
-      coords: getCoords(el),
-      siblingText: getSiblingText(el),
-    })
 
     /////////////////////////////////////////////////////////////////////////
 
@@ -345,9 +267,8 @@ function onNewDocument() {
           timestamp: Date.now(),
           clickX: ev.pageX,
           clickY: ev.pageY,
-          text: ev.target.innerText,
-          font: getFontData(ev.target),
-          ...getElementData(ev.target),
+          // @ts-ignore
+          ...window.getElementData(ev.target)
         });
         // Reset back to the default
         if (__clickAction == "value") {
@@ -366,10 +287,55 @@ function onNewDocument() {
       __onAnyEvent({
         type: "input",
         timestamp: Date.now(),
+        valueChanged: true,
         value: target?.value,
-        ...getElementData(target),
+          // @ts-ignore
+          ...window.getElementData(ev.target)
       })
     }, opts);
+
+    window.addEventListener('submit', (ev) => {
+      console.log("Submitting: ", ev.target);
+    });
+
+    const enterEventListener = (ev: Event) => {
+      if (ev instanceof KeyboardEvent) {
+        // is this an enter key?
+        if (ev.key == "Enter") {
+          __onAnyEvent({
+            type: "input",
+            timestamp: Date.now(),
+            hitEnter: true,
+            value: (ev.target as HTMLInputElement)?.value,
+            // @ts-ignore
+            ...window.getElementData(ev.target)
+          })
+        }
+        else {
+          __onAnyEvent({
+            type: "input",
+            timestamp: Date.now(),
+            value: (ev.target as HTMLInputElement)?.value + ev.key,
+              // @ts-ignore
+              ...window.getElementData(ev.target)
+          })
+        }
+      }
+    }
+
+    window.addEventListener('focusin', (ev) => {
+      // Is this an input?
+      console.log("Focusin: ", ev.target);
+      if (ev.target instanceof HTMLInputElement || ev.target instanceof HTMLTextAreaElement) {
+        ev.target.addEventListener('keydown', enterEventListener, opts)
+      }
+    })
+    window.addEventListener('focusout', ev => {
+      console.log("Focusout: ", ev.target);
+      if (ev.target instanceof HTMLInputElement || ev.target instanceof HTMLTextAreaElement) {
+        ev.target?.removeEventListener('keydown', enterEventListener)
+      }
+    })
 
     globalThis.__eventsHooked = true;
   }

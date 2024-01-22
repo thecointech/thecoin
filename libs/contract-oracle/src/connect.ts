@@ -1,7 +1,7 @@
 import { getContract } from "./contract";
 import { connect } from '@thecointech/contract-base/connect';
 import type { Signer } from "@ethersproject/abstract-signer";
-import type { SpxCadOracle } from './types/contracts/SpxCadOracle';
+import type { SpxCadOracle } from './codegen/contracts/SpxCadOracle';
 
 export async function connectOracle(signer: Signer, onFailure?: (err: Error) => void): Promise<SpxCadOracle> {
   // First fetch contract

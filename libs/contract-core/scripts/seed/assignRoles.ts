@@ -2,7 +2,7 @@ import { getSigner, AccountName } from '@thecointech/signers';
 import { log } from '@thecointech/logging';
 import { connect } from '@thecointech/contract-base/connect';
 import { MINTER_ROLE, MRFREEZE_ROLE, BROKER_ROLE, PLUGINMGR_ROLE, THECOIN_ROLE } from "../../src/constants";
-import { TheCoin } from '../../src/types';
+import { TheCoin } from '../../src/codegen';
 
 async function getAddress(name: AccountName) {
   const envAddress = process.env[`WALLET_${name}_ADDRESS`];

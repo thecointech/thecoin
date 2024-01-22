@@ -1,5 +1,5 @@
 import { log } from '@thecointech/logging';
-import { SpxCadOracle } from './types';
+import { SpxCadOracle } from './codegen';
 import { BigNumber } from '@ethersproject/bignumber';
 
 type RateFactory = (millis: number) => Promise<{rate: number, from: number, to: number}|null>;
@@ -16,7 +16,16 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
   let priorOffset = (await oracle.getOffset(from)).toNumber();
   let timestamp = from;
 
-  log.debug(`Updating Oracle from ${new Date(from)} to ${new Date(till)}`);
+  log.info(
+    { from: new Date(from), till: new Date(till) },
+    'Updating Oracle from {from} to ${till}'
+  );
+
+  // Not an application error, but we should never be this far out of date
+  const hoursToUpdate = (till - from) / ONE_HR;
+  if (hoursToUpdate > 24 && !process.env.JEST_WORKER_ID) {
+    log.warn({hours: hoursToUpdate}, "Oracle is {hours}hrs out-of-date");
+  }
 
   const rates: number[] = [];
   const offsets: {from: number, offset: number}[] = [];
@@ -48,6 +57,11 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
     rates.push(rate);
     timestamp += blockTime;
 
+    log.debug(
+      { timestamp, length: rates.length },
+      '{length} rates fetched reaches {timestamp}'
+    )
+
     // If not 3 hours in length, we use the offset to
     // shorten/lengthen the current block
     if (duration != blockTime) {
@@ -64,7 +78,17 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
     }
   }
 
-  log.info(`Pushing ${rates.length} new rates, until ${timestamp} : ${new Date(timestamp)}`);
+  log.info(
+    { timestamp, length: rates.length, date: new Date(timestamp) },
+    "Completed fetch with {length} new rates reaching {timestamp} - {date}"
+  )
+
+  // We have pushed too many rates repeatedly, so double-check here
+  const doubleCheckValidUntil = from + (rates.length * blockTime);
+  if (doubleCheckValidUntil > (Date.now() + 5 * ONE_HR)) {
+    log.fatal({ expiry: new Date(doubleCheckValidUntil) }, "Too many rates, calculated expiry is {expiry}");
+    return false;
+  }
 
   try {
 
@@ -90,7 +114,7 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
       // So use this function, as it's a wee bit cheaper than the below
       const overrides = await getOverrideFees(oracle);
       const tx = await oracle.update(rates[0], overrides);
-      log.debug(`Waiting single insert: ${tx.hash}`)
+      log.info(`Waiting single insert: ${tx.hash}`)
       await tx.wait(2);
     }
     else if (rates.length > 1) {
@@ -99,7 +123,7 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
         const e = Math.min(s + MAX_LENGTH, rates.length);
         const overrides = await getOverrideFees(oracle);
         const tx = await oracle.bulkUpdate(rates.slice(s, e), overrides);
-        log.debug(`Waiting bulk insert: ${tx.hash}`)
+        log.info(`Waiting bulk insert: ${tx.hash}`)
         await tx.wait(2);
       }
     }

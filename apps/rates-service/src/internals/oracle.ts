@@ -4,6 +4,7 @@ import { getCombinedRates } from './rates';
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
 import { FirestoreAdmin, Timestamp, getFirestore } from '@thecointech/firestore';
+import { toDateStr } from '../utils/date';
 
 
 export async function updateOracle(timestamp: number) {
@@ -22,10 +23,21 @@ export async function updateOracle(timestamp: number) {
     const signer = await getSigner("OracleUpdater");
     const oracle = await connectOracle(signer);
 
-    log.info(`Updating Oracle ${oracle.address} at ${DateTime.fromMillis(timestamp).toLocaleString(DateTime.DATETIME_SHORT)}`);
+    log.debug(
+      {
+        date: toDateStr(timestamp),
+        address: oracle.address,
+      },
+      'Updating Oracle {address} at {date}'
+    );
 
     // Our oracle operates in milliseconds
     await updateRates(oracle, timestamp, async (ts) => {
+
+      log.trace(
+        {date: toDateStr(ts)},
+        'Fetching rate for oracle at {date}'
+      )
       // do we have a data for this time?
       const rates = await getCombinedRates(ts);
       if (!rates) return null;
@@ -39,10 +51,19 @@ export async function updateOracle(timestamp: number) {
     })
 
     const validTo = await oracle.validUntil();
-    log.info(`Oracle updated to ${DateTime.fromMillis(validTo.toNumber()).toLocaleString(DateTime.DATETIME_SHORT)}`);
-  }
-  catch(err) {
-    throw err;
+    const validToDate = DateTime.fromMillis(validTo.toNumber());
+    if (validToDate > DateTime.now().plus({ hours: 6})) {
+      log.error(
+        { date: toDateStr(validToDate) },
+        "Oracle is too far in the future {date}"
+      );
+    }
+    else {
+      log.info(
+        { date: toDateStr(validToDate) },
+        'Oracle updated to {date}'
+      );
+    }
   }
   finally {
     await exitCS(guard);
@@ -60,6 +81,8 @@ function enterCS() {
     const doc = await t.get(ref);
     // Check if someone else currently holds the lock
     log.info(`CS state: ${JSON.stringify(doc?.data())}`)
+    console.log('CS state: ', doc)
+    console.log('t: ', t)
     if (doc.get(start_key)?.toMillis() != doc.get(complete_key)?.toMillis()) {
       return false;
     }

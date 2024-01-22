@@ -4,7 +4,7 @@ import { keccak256 } from '@ethersproject/solidity';
 import { verifyMessage } from '@ethersproject/wallet';
 import { arrayify } from '@ethersproject/bytes';
 import { sign } from "@thecointech/utilities/SignedMessages";
-import type { IPluggable } from './types/contracts';
+import type { IPluggable } from './codegen/contracts';
 import type { RemovePluginRequest } from '@thecointech/types';
 import type { Overrides } from 'ethers';
 // export type RemovePluginRequest = {
@@ -50,7 +50,7 @@ export async function buildRemovePluginRequest(
   };
 }
 
-export async function removePlugin(contract: IPluggable, request: RemovePluginRequest, overrides?: Overrides) {
+export async function removePlugin(contract: IPluggable, request: RemovePluginRequest, overrides: Overrides = {}) {
   const tx = await contract.pl_removePlugin({
     ...request,
     msSignedAt: request.signedAt.toMillis(),

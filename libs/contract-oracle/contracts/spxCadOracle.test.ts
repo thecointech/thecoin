@@ -3,9 +3,11 @@ import { last } from '@thecointech/utilities/ArrayExtns';
 import { describe } from '@thecointech/jestutils';
 import { updateRates } from '../src/update';
 import { getContract } from '../src/index_mocked';
+import { getOracleFactory } from '../src';
 import hre from 'hardhat';
 import '@nomiclabs/hardhat-ethers';
 import { existsSync, readFileSync } from 'fs';
+import { DateTime, Duration } from 'luxon';
 
 jest.setTimeout(5 * 60 * 1000);
 const factor = Math.pow(10, 8);
@@ -51,7 +53,7 @@ describe('Oracle Tests', () => {
   // algo matches the JS version tested above
   it("it can find rate in SOL version", async () => {
 
-    const SpxCadOracle = await hre.ethers.getContractFactory('SpxCadOracle');
+    const SpxCadOracle = getOracleFactory();
     const oracle = await SpxCadOracle.deploy();
 
     // ignore the first live rate, since there are some issues with the first day
@@ -81,6 +83,33 @@ describe('Oracle Tests', () => {
     }
   })
 }, shouldRun)
+
+it ("Does not add too many rates", async () => {
+  const SpxCadOracle = await hre.ethers.getContractFactory('SpxCadOracle');
+  const oracle = await SpxCadOracle.deploy();
+  const now = DateTime.now();
+  const initialTimestamp = now.minus({ weeks: 1, minutes: 1 }).toMillis();
+  const blockTime = Duration.fromObject({ hours: 24 }).toMillis();
+  await oracle.initialize(owner.address, initialTimestamp, blockTime);
+
+  const toInsert = Array(6).fill(100);
+  await oracle.bulkUpdate(toInsert);
+
+  const firstValid = (await oracle.validUntil()).toNumber();
+  // This should fail.
+  await expect(oracle.bulkUpdate(toInsert))
+    .rejects.toThrow();
+
+  const secondValid = (await oracle.validUntil()).toNumber();
+  expect (secondValid).toEqual(firstValid);
+
+  await oracle.updateOffset({from: now.toMillis(), offset: -(60 * 60 * 1000)});
+
+  // But we still should be able to push two more updates?
+  await oracle.bulkUpdate(toInsert.slice(0, 2));
+  const lastValid = (await oracle.validUntil()).toNumber();
+  expect(lastValid).toBeGreaterThanOrEqual(Date.now());
+})
 
 type LiveRate = {
   from: number,

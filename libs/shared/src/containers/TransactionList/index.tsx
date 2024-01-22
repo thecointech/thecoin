@@ -23,27 +23,21 @@ type MyProps = {
 
 const translate = defineMessages({
         sent : {
-          id: "shared.transactionList.sent",
           defaultMessage:"Sent",
           description:"shared.transactionList.sent: For title in comment section for the transaction history"},
         received : {
-          id: "shared.transactionList.received",
           defaultMessage:"Received",
           description:"shared.transactionList.received: For title in comment section for the transaction history"},
         to : {
-          id: "shared.transactionList.to",
           defaultMessage:"To",
           description:"shared.transactionList.to: For description in comment section for the transaction history"},
         from : {
-          id: "shared.transactionList.from",
           defaultMessage:"From",
           description:"shared.transactionList.from: For description in comment section for the transaction history"},
         notransactions : {
-          id: "shared.transactionList.notransactions",
           defaultMessage:"We don't have any transactions matching your query.",
           description:"app.transactionList.notransactions: For when we have no transactions to display for the transaction history"},
         loading : {
-          id: "shared.transactionList.loading",
           defaultMessage:"Loading...",
           description:"shared.transactionList.loading: For loading in comment section for the transaction history"}});
 

@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.libs.json",
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "./build/",
+    "tsBuildInfoFile": "./build/.buildinfo",
+    "rootDir": "./src/",
+    "baseUrl": "./src/"
+  },
+  "include": ["src/**/*", "src/**/*.json"],
+}

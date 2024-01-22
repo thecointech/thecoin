@@ -1,0 +1,49 @@
+{
+  "name": "@thecointech/electron-utils",
+  "version": "0.2.116",
+  "private": true,
+  "description": "The Coin: shared thingies for electron apps",
+  "keywords": [
+    "TheCoin",
+    "electron"
+  ],
+  "type": "commonjs",
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/electron-utils"
+  },
+  "scripts": {
+    "build": "run -T tsc",
+    "clean": "rimraf ./build && rimraf ./coverage"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "exports": {
+    "./webpack/*": "./build/webpack/*.js",
+    "./types/*": "./build/types/*.d.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "webpack/*": [
+        "./build/webpack/*.d.ts"
+      ],
+      "types/*": [
+        "./build/types/*.d.ts"
+      ]
+    }
+  },
+  "devDependencies": {
+    "@thecointech/setenv": "0.2.116",
+    "@vercel/webpack-asset-relocator-loader": "1.7.3",
+    "css-loader": "^6.0.0",
+    "fork-ts-checker-webpack-plugin": "^7.2.13",
+    "node-loader": "^2.0.0",
+    "style-loader": "^3.0.0",
+    "ts-loader": "^9.2.2"
+  }
+}

@@ -1,7 +1,7 @@
 {
   "name": "@thecointech/jestutils",
-  "private": "true",
-  "version": "0.2.112",
+  "version": "0.2.116",
+  "private": true,
   "description": "The Coin: Simple jest extentions",
   "keywords": [
     "TheCoin",
@@ -9,7 +9,7 @@
   ],
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
@@ -20,11 +20,11 @@
     "run-jest-nix": "./bin/run-jest-nix.cjs"
   },
   "scripts": {
-    "build": "yarn tsc -b tsconfig.build.json",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
-    "test:summary": "jest --coverage > ./coverage/summary.txt"
+    "test": "run :jest",
+    "test:summary": "jest --coverage > ./coverage/summary.txt",
+    ":jest": "cd $INIT_CWD && yarn node --experimental-vm-modules $(cd ../.. && yarn bin jest) $@"
   },
   "files": [
     "build/**/*"
@@ -41,8 +41,5 @@
         "build/*.d.ts"
       ]
     }
-  },
-  "devDependencies": {
-    "jest": "*"
   }
 }
