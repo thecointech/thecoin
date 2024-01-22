@@ -1,6 +1,7 @@
 {
   "name": "@thecointech/contract-plugin-roundnumber",
   "version": "0.2.116",
+  "private": true,
   "description": "The Coin: A sample plugin rounds balance to nearest round number",
   "type": "module",
   "keywords": [

@@ -1,8 +1,8 @@
 {
   "name": "harvester",
-  "private": true,
   "productName": "harvester",
   "version": "0.2.116",
+  "private": true,
   "description": "Automatically harvest TheCoin",
   "main": ".webpack/main",
   "config": {

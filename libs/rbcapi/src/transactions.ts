@@ -1,6 +1,6 @@
 import { Page } from "puppeteer";
 import { DateTime } from "luxon";
-import { BankTx } from "@thecointech/bank-interface"
+import type { BankTx } from "@thecointech/bank-interface"
 import { ApiAction } from "./action";
 import { downloadTxCsv } from "./transactionsDownload";
 import { RbcStore } from "./store";

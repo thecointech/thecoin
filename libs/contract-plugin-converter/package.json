@@ -1,6 +1,7 @@
 {
   "name": "@thecointech/contract-plugin-converter",
   "version": "0.2.116",
+  "private": true,
   "description": "The Coin: Converter allows changing a transactions time and currency",
   "type": "module",
   "keywords": [
