@@ -50,7 +50,6 @@
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
     "@thecointech/async": "0.2.116",
-    "@thecointech/contract-plugins": "0.2.116",
     "@thecointech/contract-tools": "0.2.116",
     "@thecointech/setenv": "0.2.116"
   },
