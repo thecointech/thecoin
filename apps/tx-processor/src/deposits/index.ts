@@ -3,7 +3,7 @@ import type { TheCoin } from '@thecointech/contract-core';
 import gmail from '@thecointech/tx-gmail';
 import { eTransferProcessor, getBuyETransferAction } from '@thecointech/tx-deposit';
 import { TypedActionContainer } from '@thecointech/tx-statemachine';
-import { IBank } from '@thecointech/bank-interface';
+import type { IBank } from '@thecointech/bank-interface';
 import { log } from '@thecointech/logging';
 
 export async function processUnsettledDeposits(contract: TheCoin, bank: IBank)

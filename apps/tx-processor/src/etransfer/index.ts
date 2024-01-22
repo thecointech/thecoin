@@ -1,4 +1,4 @@
-import { IBank } from '@thecointech/bank-interface';
+import type { IBank } from '@thecointech/bank-interface';
 import { getIncompleteActions } from '@thecointech/broker-db';
 import type { TheCoin } from '@thecointech/contract-core';
 import { Processor } from '@thecointech/tx-etransfer';

@@ -37,12 +37,14 @@
     }
   },
   "dependencies": {
-    "@thecointech/bank-interface": "0.2.116",
     "@thecointech/broker-db": "0.2.116",
     "@thecointech/shared": "0.2.116",
     "@thecointech/tx-blockchain": "0.2.116",
     "@thecointech/tx-gmail": "0.2.116",
     "@thecointech/utilities": "0.2.116",
     "fastest-levenshtein": "^1.0.12"
+  },
+  "devDependencies": {
+    "@thecointech/bank-interface": "0.2.116"
   }
 }

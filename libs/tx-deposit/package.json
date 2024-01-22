@@ -1,6 +1,7 @@
 {
   "name": "@thecointech/tx-deposit",
   "version": "0.2.116",
+  "private": true,
   "description": "The Coin: A library for e-transfer deposits",
   "type": "module",
   "keywords": [

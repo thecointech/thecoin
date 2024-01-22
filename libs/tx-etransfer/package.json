@@ -28,8 +28,10 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/bank-interface": "0.2.116",
     "@thecointech/tx-statemachine": "0.2.116"
+  },
+  "devDependencies": {
+    "@thecointech/bank-interface": "0.2.116"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

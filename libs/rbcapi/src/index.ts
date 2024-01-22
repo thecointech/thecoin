@@ -1,5 +1,5 @@
 import { log } from '@thecointech/logging';
-import { IBank, ProgressCallback} from '@thecointech/bank-interface';
+import type { IBank, ProgressCallback} from '@thecointech/bank-interface';
 import { ETransferPacket } from '@thecointech/types';
 import { RbcStore } from './store';
 import { ApiAction } from './action';
