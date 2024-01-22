@@ -10618,7 +10618,6 @@ __metadata:
     "@openzeppelin/contracts-upgradeable": "npm:^4.5.2"
     "@thecointech/async": "npm:0.2.116"
     "@thecointech/contract-oracle": "npm:0.2.116"
-    "@thecointech/contract-plugins": "npm:0.2.116"
     "@thecointech/contract-tools": "npm:0.2.116"
     "@thecointech/setenv": "npm:0.2.116"
   languageName: unknown
@@ -10874,7 +10873,6 @@ __metadata:
     "@thecointech/fx-rates": "npm:0.2.116"
     "@thecointech/logging": "npm:0.2.116"
     "@thecointech/site-semantic-theme": "npm:0.2.116"
-    "@thecointech/store": "npm:0.2.116"
     "@thecointech/tx-blockchain": "npm:0.2.116"
     "@thecointech/types": "npm:0.2.116"
     "@thecointech/utilities": "npm:0.2.116"
