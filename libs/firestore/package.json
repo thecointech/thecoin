@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/firestore",
-  "version": "0.2.117",
+  "version": "0.2.118",
   "description": "The Coin: Environment-agnostic access to firestore",
   "type": "module",
   "keywords": [
@@ -39,15 +39,15 @@
   },
   "types": "./build/index_common.d.ts",
   "dependencies": {
-    "@thecointech/logging": "^0.2.117"
+    "@thecointech/logging": "^0.2.118"
   },
   "peerDependencies": {
     "@google-cloud/firestore": "*",
     "firebase": "*"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.2.117",
+    "@thecointech/jestutils": "^0.2.118",
     "firestore-jest-mock": "https://github.com/thecointech/firestore-jest-mock#f4145e6f28c02419ec5e338a6f5a424ab189986c"
   },
-  "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
+  "gitHead": "d1248c20b4a3bb83ea5d103b631a10cbb4d609aa"
 }

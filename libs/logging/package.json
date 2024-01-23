@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/logging",
-  "version": "0.2.117",
+  "version": "0.2.118",
   "description": "The Coin: Common logging setup",
   "type": "module",
   "keywords": [
@@ -42,5 +42,5 @@
   "devDependencies": {
     "@types/bunyan": "^1.8.6"
   },
-  "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
+  "gitHead": "d1248c20b4a3bb83ea5d103b631a10cbb4d609aa"
 }

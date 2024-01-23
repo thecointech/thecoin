@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/setenv",
-  "version": "0.2.117",
+  "version": "0.2.118",
   "description": "TheCoin: Environment setup library",
   "type": "module",
   "keywords": [
@@ -43,5 +43,6 @@
   "types": "./build/mjs/index.d.ts",
   "dependencies": {
     "dotenv": "^10.0.0"
-  }
+  },
+  "gitHead": "d1248c20b4a3bb83ea5d103b631a10cbb4d609aa"
 }

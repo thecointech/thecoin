@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/fx-rates",
-  "version": "0.2.117",
+  "version": "0.2.118",
   "description": "TheCoin: Client library for fetching fx-rates",
   "type": "module",
   "keywords": [
@@ -29,8 +29,8 @@
   "exports": "./build/index.js",
   "types": "build/index.d.ts",
   "dependencies": {
-    "@thecointech/apis": "^0.2.117",
-    "@thecointech/logging": "^0.2.117"
+    "@thecointech/apis": "^0.2.118",
+    "@thecointech/logging": "^0.2.118"
   },
-  "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
+  "gitHead": "d1248c20b4a3bb83ea5d103b631a10cbb4d609aa"
 }
