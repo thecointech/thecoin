@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-plugin-shockabsorber",
-  "version": "0.2.116",
+  "version": "0.2.118",
   "description": "The Coin: ShockAbsorber protects accounts from market moves",
   "type": "module",
   "keywords": [
@@ -52,14 +52,15 @@
   "devDependencies": {
     "@nomicfoundation/hardhat-network-helpers": "^1.0.8",
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "0.2.116",
-    "@thecointech/contract-core": "0.2.116",
-    "@thecointech/contract-plugin-converter": "0.2.116",
-    "@thecointech/contract-tools": "0.2.116",
-    "@thecointech/setenv": "0.2.116"
+    "@thecointech/async": "^0.2.118",
+    "@thecointech/contract-core": "^0.2.118",
+    "@thecointech/contract-plugin-converter": "^0.2.118",
+    "@thecointech/contract-tools": "^0.2.118",
+    "@thecointech/setenv": "^0.2.118"
   },
   "dependencies": {
-    "@thecointech/contract-oracle": "0.2.116",
-    "@thecointech/contract-plugins": "0.2.116"
-  }
+    "@thecointech/contract-oracle": "^0.2.118",
+    "@thecointech/contract-plugins": "^0.2.118"
+  },
+  "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
 }

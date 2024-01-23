@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/pricing",
-  "version": "0.2.116",
+  "version": "0.2.118",
   "description": "OpenAPI client for @thecointech/pricing",
   "author": "OpenAPI-Generator Contributors",
   "repository": {
@@ -30,5 +30,5 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
-  "gitHead": "6748a626f205f5a4cfeadf96ece7a76633177136"
+  "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
 }
