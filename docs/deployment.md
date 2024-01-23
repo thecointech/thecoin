@@ -43,6 +43,13 @@ The deployment happens in 2 stages:
 
 First, the libraries are deployed.
 
+### Publishing Packages
+
+We publish to Github Packages
+ 1. Authenticate with Github
+   a. Generate a PAT (classic)
+   b. Lerna doesn't appear to use yarn for publishing, so set auth in `~/.npmrc`
+
 Next, the apps are deployed.
 ## Things to Deploy
 
