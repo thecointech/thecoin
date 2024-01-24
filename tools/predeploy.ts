@@ -52,8 +52,8 @@ export async function FirebaseDeploy(envName: string) {
 //
 export function gCloudDeploy() {
   const deploy = (process.env.SETTINGS == 'beta')
-    ? "gcloud app deploy --version=beta --no-promote"
-    : "gcloud app deploy"
+    ? "gcloud app deploy --quiet --version=beta --no-promote"
+    : "gcloud app deploy --quiet"
   return ShellCmd(deploy);
 }
 

@@ -81,7 +81,7 @@ https://docs.github.com/en/packages/working-with-a-github-packages-registry/work
 
 To upload to Github Packages, add your GH PAT token to your global .npmrc file
 
-The GAE apps need an .npmrc file co-located with the app to allow installing from GitHub packages (from GAE).  To ease maintenance, we store a single .npmrc file with no secret in /tools/.npmrc.  The deployer should fill this in with their deployment key.  This file is then copied to the deploying folder, and the secret injected into the file prior to publishing.
+The GAE apps need an .npmrc file co-located with the app to allow installing from GitHub packages (from GAE).  To ease maintenance, we store a single .npmrc file with no secret in /tools/.npmrc.  The deployment automatically fills this in with the set key.  This file is then copied to the deploying folder, and the secret injected into the file prior to publishing.
 
 These files are then ignored, so we do not have any files committed into Git that could at any point have our secrets exposed.
 
