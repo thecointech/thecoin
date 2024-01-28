@@ -188,7 +188,7 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
     // Search backwards for the correct offset
     // This assumes most queries will be for current time
     for (int i = int(offsets.length) - 1; i >= 0; i--) {
-      if (offsets[uint(i)].from < int(millis)) {
+      if (offsets[uint(i)].from <= int(millis)) {
         return offsets[uint(i)].offset;
       }
     }

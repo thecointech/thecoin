@@ -4,7 +4,7 @@ import { SpxCadOracle as Src } from './codegen/contracts/SpxCadOracle';
 import { last } from '@thecointech/utilities';
 export * from './update';
 
-export class SpxCadOracle implements Pick<Src, 'INITIAL_TIMESTAMP' | 'BLOCK_TIME' | 'initialize' | 'update' | 'bulkUpdate' | 'updateOffset' | 'getOffset' | 'lastOffsetFrom' | 'getBlockIndexFor' | 'getRoundFromTimestamp' | 'decimals'> {
+export class SpxCadOracleMocked implements Pick<Src, 'INITIAL_TIMESTAMP' | 'BLOCK_TIME' | 'initialize' | 'update' | 'bulkUpdate' | 'updateOffset' | 'getOffset' | 'lastOffsetFrom' | 'getBlockIndexFor' | 'getRoundFromTimestamp' | 'decimals'> {
 
   // By default, we cover the last year
   initialTimestamp = DateTime
@@ -16,6 +16,10 @@ export class SpxCadOracle implements Pick<Src, 'INITIAL_TIMESTAMP' | 'BLOCK_TIME
   blockTime = 24 * 60 * 60 * 1000;
   offsets: { from: number, offset: number}[] = [];
   rates: number[] = [];
+
+  provider = {
+    getFeeData: () => ({ fees: {} }),
+  }
 
   async initialize(_updater: string, initialTimestamp: number, blockTime: number) {
     this.initialTimestamp = initialTimestamp;
@@ -29,22 +33,28 @@ export class SpxCadOracle implements Pick<Src, 'INITIAL_TIMESTAMP' | 'BLOCK_TIME
 
   async bulkUpdate(rates: number[]) {
     this.rates.push(...rates);
-    return {} as any;
+    return {
+      wait: () => Promise.resolve(),
+    } as any;
   }
   update(newValue: number): Promise<ContractTransaction> {
     this.rates.push(newValue);
-    return {} as any;
+    return {
+      wait: () => Promise.resolve(),
+    } as any;
   }
   updateOffset(offset: { from: number, offset: number}): Promise<ContractTransaction> {
     this.offsets.push(offset);
-    return {} as any;
+    return {
+      wait: () => Promise.resolve(),
+    } as any;
   }
 
   async getOffset(timestamp: number): Promise<BigNumber> {
     // Search backwards for the correct offset
     // This assumes most queries will be for current time
     for (let i = this.offsets.length - 1; i >= 0; i--) {
-      if (this.offsets[i].from < timestamp) {
+      if (this.offsets[i].from <= timestamp) {
         return Promise.resolve(BigNumber.from(this.offsets[i].offset));
       }
     }
@@ -73,5 +83,5 @@ export class SpxCadOracle implements Pick<Src, 'INITIAL_TIMESTAMP' | 'BLOCK_TIME
   async decimals() { return Promise.resolve(8); }
 }
 
-export const getContract = () => new SpxCadOracle() as unknown as Src;
+export const getContract = () => new SpxCadOracleMocked() as unknown as Src;
 export const connectOracle = getContract;
