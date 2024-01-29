@@ -8,6 +8,7 @@ import hre from 'hardhat';
 import '@nomiclabs/hardhat-ethers';
 import { existsSync, readFileSync } from 'fs';
 import { DateTime, Duration } from 'luxon';
+import { createAndInitOracle } from '../internal/testHelpers';
 
 jest.setTimeout(5 * 60 * 1000);
 const factor = Math.pow(10, 8);
@@ -109,6 +110,43 @@ it ("Does not add too many rates", async () => {
   await oracle.bulkUpdate(toInsert.slice(0, 2));
   const lastValid = (await oracle.validUntil()).toNumber();
   expect(lastValid).toBeGreaterThanOrEqual(Date.now());
+})
+
+it ("Can reset to point-in-time", async () => {
+  const [owner] = await hre.ethers.getSigners();
+  const oracle = await createAndInitOracle(owner, 2, blockTime, 100);
+  const initial = (await oracle.INITIAL_TIMESTAMP()).toNumber();
+  const validUntil = (await oracle.validUntil()).toNumber();
+  // Add some offsets evenly spaced in the time
+  for (let i = 1; i < 10; i++) {
+    const from = initial + (validUntil - initial) * (i / 10);
+    await oracle.updateOffset({from: from, offset: -(60 * 60 * 1000)});
+  }
+
+  // Cache current values
+  const preRates = await oracle.getRates();
+  const preOffsets = await oracle.getOffsets();
+
+  // Clear half the values
+  const middle = initial + (validUntil - initial) / 2;
+  await oracle.resetTo(middle);
+
+  // get new values
+  const postRates = await oracle.getRates();
+  const postOffsets = await oracle.getOffsets();
+
+  const postValid = (await oracle.validUntil()).toNumber();
+  expect(postValid).toBeGreaterThan(middle);
+  expect(postValid).toBeLessThan(middle + blockTime);
+
+  for (let i = 0; i < preOffsets.length; i++) {
+    if (i < postOffsets.length) {
+      expect(preOffsets[i].from.toNumber()).toBeLessThanOrEqual(middle);
+    }
+    else {
+      expect(preOffsets[i].from.toNumber()).toBeGreaterThan(middle);
+    }
+  }
 })
 
 type LiveRate = {
