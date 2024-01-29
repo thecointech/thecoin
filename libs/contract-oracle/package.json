@@ -42,7 +42,7 @@
     "_deploy:deploy": "yarn _hardhat ./scripts/deploy.ts",
     "_deploy:verify": "yarn _hardhat ./scripts/verify.ts",
     "_update": "yarn build && yarn _hardhat ./scripts/update.ts && yarn _deploy:verify",
-    "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
+    "_hardhat": "run -T cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
   },
   "files": [
     "build/**/*"
