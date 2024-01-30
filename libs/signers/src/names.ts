@@ -10,7 +10,8 @@ export enum AccountId {
   Police,
   BrokerCAD,
   BrokerTransferAssistant,
-  // Owns & updates SpxCadOracle
+  // Manage SpxCadOracle
+  OracleOwner,
   OracleUpdater,
   // Locks down ceramic access
   CeramicValidator,
