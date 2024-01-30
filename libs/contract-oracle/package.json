@@ -27,7 +27,7 @@
     "clean": "run -T run-p 'clean:*'",
     "clean:src": "run -T rimraf ./build",
     "clean:contracts": "run -T rimraf ./src/codegen && run -T rimraf ./src/types",
-    "test": "run :jest",
+    "test": "run :jest $@",
     "validate:prod": "cross-env CONFIG_NAME=prod yarn _hardhat ./scripts/validate.ts",
     "validate:localprod": "cross-env CONFIG_NAME=prod URL_SERVICE_RATES=http://localhost:7001/api/v1 yarn _hardhat ./scripts/validate.ts",
     "reset:localprod": "cross-env CONFIG_NAME=prod URL_SERVICE_RATES=http://localhost:7001/api/v1 yarn _hardhat ./scripts/reset.ts",
@@ -42,7 +42,7 @@
     "_deploy:deploy": "yarn _hardhat ./scripts/deploy.ts",
     "_deploy:verify": "yarn _hardhat ./scripts/verify.ts",
     "_update": "yarn build && yarn _hardhat ./scripts/update.ts && yarn _deploy:verify",
-    "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
+    "_hardhat": "run -T cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
   },
   "files": [
     "build/**/*"
