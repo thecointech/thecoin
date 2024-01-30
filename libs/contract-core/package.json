@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-core",
-  "version": "0.2.118",
+  "version": "0.2.119",
   "description": "The Coin: Solidity contract for TheCoin currency",
   "type": "module",
   "keywords": [
@@ -65,16 +65,16 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "^0.2.118",
-    "@thecointech/contract-oracle": "^0.2.118",
-    "@thecointech/contract-tools": "^0.2.118",
-    "@thecointech/setenv": "^0.2.118"
+    "@thecointech/async": "^0.2.119",
+    "@thecointech/contract-oracle": "^0.2.119",
+    "@thecointech/contract-tools": "^0.2.119",
+    "@thecointech/setenv": "^0.2.119"
   },
   "dependencies": {
     "@solidity-parser/parser": "^0.14.5",
-    "@thecointech/contract-base": "^0.2.118",
-    "@thecointech/contract-plugins": "^0.2.118",
-    "@thecointech/fx-rates": "^0.2.118"
+    "@thecointech/contract-base": "^0.2.119",
+    "@thecointech/contract-plugins": "^0.2.119",
+    "@thecointech/fx-rates": "^0.2.119"
   },
   "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
 }

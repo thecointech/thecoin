@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.119](https://github.com/thecointech/thecoin/compare/v0.2.118...v0.2.119) (2024-01-30)
+
+**Note:** Version bump only for package @thecointech/firestore
+
+
+
+
+
 ## [0.2.118](https://github.com/thecointech/thecoin/compare/v0.2.117...v0.2.118) (2024-01-23)
 
 **Note:** Version bump only for package @thecointech/firestore
