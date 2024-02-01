@@ -15,7 +15,6 @@ import { updateOracle } from '../oracle';
 import { toDateStr } from '../../utils/date';
 
 /////////////////////////////////////////////////////////////////////////////////
-
 //
 // Logs important info, and returns true if we should update.
 function isUpdateRequired(key: RateKey, now: number, current: RateType) {
@@ -40,16 +39,6 @@ function isUpdateRequired(key: RateKey, now: number, current: RateType) {
   return true;
 }
 
-function validateNewRate(key: RateKey, validator: boolean) {
-  // Does the new rate meaningfully update our existing latest rate?
-  if (!validator) {
-    // We require an update, but have no new data.
-    // What should we do here?
-    log.error({ FxKey: key }, "{FxKey} required update, but no new rates were found");
-    throw new Error('NoUpdatesFetched');
-  }
-}
-
 //
 // Fetch all intervening rates from latest to now,
 // set to DB and update our latest rate
@@ -58,11 +47,14 @@ export async function ensureLatestCoinRate(now: number)
   const key = "Coin";
   const current = getLatest(key);
   if (!isUpdateRequired(key, now, current))
-    return;
+    return true;
 
   // fetch any new rates from then till now
   const newRates = await fetchCoinRate(current.validTill, now);
-  validateNewRate(key, !!newRates.length);
+  if (!newRates.length) {
+    log.warn({ FxKey: key }, "{FxKey} required update, but no new rates were found");
+    return false;
+  }
   // If we are updating on time, we should only have a single rate to insert
   if (newRates.length > 1)
   {
@@ -79,6 +71,7 @@ export async function ensureLatestCoinRate(now: number)
   // Update our cache of latest rate
   updateLatest(key, newRates.pop()!)
   log.debug({ FxKey: key }, "Finished update for {FxKey}");
+  return true;
 }
 
 //
@@ -89,17 +82,19 @@ export async function ensureLatestFxRate(now: number) {
   const key = "FxRates";
   const current = getLatest(key);
   if (!isUpdateRequired(key, now, current))
-    return;
+    return true;
 
   // fetch any new rates from then till now
   const fxRates = await fetchFxRate(current.validTill, now);
-  validateNewRate(key, !!fxRates);
+  if (!fxRates) {
+    log.warn({ FxKey: key }, "{FxKey} required update, but no new rates were found");
+    return false;
+  }
 
   log.info(
     { FxKey: key, LastValid: toDateStr(current.validFrom), NextValid: toDateStr(current.validTill) },
     "Updating {FxKey} from {LastValid} to {NextValid}"
   );
-
 
   if (current.validTill < fxRates.validFrom)
   {
@@ -115,6 +110,7 @@ export async function ensureLatestFxRate(now: number) {
   // Update our cache of latest rate
   updateLatest(key, fxRates)
   log.debug({ FxKey: key }, "Finished update for {FxKey}");
+  return true;
 }
 
 
@@ -127,10 +123,13 @@ export async function update() {
       // backoff/retry logic.  If the ensure
       // is called again it won't matter because it's already
       // up to date.
-      await Promise.all([
+      const r = await Promise.all([
         ensureLatestCoinRate(now),
         ensureLatestFxRate(now),
       ]);
+      if (r.includes(false)) {
+        return false;
+      }
 
       // Once we have updated, do a matching update on Oracle
       await updateOracle(now);
@@ -150,6 +149,7 @@ export async function updateRates() {
     if(await update())
       return true;
   }
+  log.error("Failed to update rates");
   return false;
 }
 
