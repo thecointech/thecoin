@@ -18,6 +18,10 @@ contract OracleClient {
     priceFeed = AggregatorV3Interface(oracle);
   }
 
+  function getOracle() public view returns(address) {
+    return address(priceFeed);
+  }
+
   // Convert to fiat with 2 decimal places (ie, floor to cent)
   function toFiat(int coin, uint millis) public view returns(int) {
     uint price = getPrice(millis);
