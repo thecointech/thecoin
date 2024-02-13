@@ -10718,6 +10718,7 @@ __metadata:
     "@didtools/pkh-ethereum": "npm:^0.3.0"
     "@glazed/devtools": "npm:^0.2.0"
     "@thecointech/logging": "npm:^0.2.118"
+    "@thecointech/setenv": "workspace:^"
     "@thecointech/utilities": "npm:^0.2.118"
     did-session: "npm:^2.0.1"
   languageName: unknown
@@ -10850,7 +10851,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/setenv@npm:^0.2.118, @thecointech/setenv@workspace:libs/setenv":
+"@thecointech/setenv@npm:^0.2.118, @thecointech/setenv@workspace:^, @thecointech/setenv@workspace:libs/setenv":
   version: 0.0.0-use.local
   resolution: "@thecointech/setenv@workspace:libs/setenv"
   dependencies:
@@ -11343,7 +11344,7 @@ __metadata:
   resolution: "@timfish/forge-externals-plugin@https://github.com/FrozenKiwi/forge-externals-plugin-monorepo.git#commit=283ffe89d979bbae5fee131ada5ef89e2ea59c76"
   dependencies:
     flora-colossus: "npm:1.0.1"
-  checksum: 151a4b4d224e76478af9d1889e0811a118b9050072972370673fe4d02ba87e77a9fa1d7f8fc30408a22b41c6012550c989b4ecf3a0ae99a801777c7e52b1ebe9
+  checksum: 2d03da7d2d7f75b600a8401115a2ba892ceb73b318a8b3859c4a5b8c83fe21121263635870459aef37108cb0377cd4efcb73917f476cce5e371ebd6be0390190
   languageName: node
   linkType: hard
 
