@@ -1,13 +1,34 @@
 import { getSigner } from "@thecointech/signers";
 import { randomBytes } from "crypto";
-import { DateTime } from "luxon";
+import { DateTime, Duration } from "luxon";
 
 import { SendMail } from '@thecointech/email';
+import { GetPluginsApi, GetBillPaymentsApi } from '@thecointech/apis/broker';
+import { GetContract } from '@thecointech/contract-core';
+import { getContract as getUberContract } from '@thecointech/contract-plugin-converter';
+import { getContract as getShockAbsorberContract } from '@thecointech/contract-plugin-shockabsorber';
+import { ALL_PERMISSIONS, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 
 // Init/Demo account
 // Starting from Jan 1 2022
 // Send a deposit email to
 
+const signer = await getSigner("testDemoAccount");
+const address = await signer.getAddress();
+const startDate = DateTime.fromObject({
+  year: 2023,
+  month: 1,
+  day: 2,
+  hour: 9,
+  minute: 35
+})
+const endDate = startDate.plus({month: 1});
+const visaStep = Duration.fromObject({week: 4});
+const weeklySpending = 350;
+const harvestRunsOnDay = [
+  2, // Monday
+  5, // Thursday
+]
 
 export const getEmailTitle = () => "[REDIRECT:] INTERAC e-Transfer: (fake deposit) has sent you money."
 export const getEmailAddress = (coinAddress: string) => `${coinAddress}@test.thecoin.io`
@@ -45,23 +66,70 @@ www.interac.ca
 =C2=AE Trade-mark of Interac Corp.  Used under license.`
 }
 
+// First, assign plugins
+const tcCore = await GetContract();
+const plugins = await tcCore.getUsersPlugins(address);
+if (plugins.length == 0) {
+  const oldNow = DateTime.now
 
-const signer = await getSigner("testDemoAccount");
-const address = await signer.getAddress();
+  const assignPlugin = async (pluginAddress: string, minutesBack: number) => {
+    const api = GetPluginsApi();
+    DateTime.now = () => startDate.minus({minute: minutesBack})
+    const request = await buildAssignPluginRequest(
+      signer,
+      pluginAddress,
+      ALL_PERMISSIONS,
+    );
+    console.log(request);
+    await api.assignPlugin({
+      ...request,
+      timeMs: request.timeMs.toMillis(),
+      signedAt: request.signedAt.toMillis(),
+    });
+  }
+  const converter = await getUberContract();
+  const shockAbsorber = await getShockAbsorberContract();
 
-const body = getEmailBody(350, DateTime.fromObject({
-  year: 2023,
-  month: 1,
-  day: 2,
-  hour: 8,
-  minute: 35
-}));
+  // await assignPlugin(converter.address, 10);
+  await assignPlugin(shockAbsorber.address, 5);
+
+  DateTime.now = oldNow
+}
+
+// let currDate = startDate;
+// let visa = startDate;
+// let nextPayDate = visa.plus(visaStep);
+// while (currDate < endDate) {
+//   // We do something on this date
+//   const toSend = (weeklySpending / harvestRunsOnDay.length);
+//   if (harvestRunsOnDay.includes(currDate.weekday)) {
+//     await SendMail(
+//       getEmailTitle(),
+//       getEmailBody(toSend, currDate),
+//       getEmailAddress(address),
+//     )
+//   }
+//   if (nextPayDate == currDate) {
+//     BrokerApi.sendDeposit(toSend, currDate, address, signer);
+//   }
+//   visa = nextPayDate;
+//   nextPayDate = nextPayDate.plus(visaStep);
+//   currDate = currDate.plus({day: 1});
+// }
+
+// const body = getEmailBody(toSend, DateTime.fromObject({
+//   year: 2023,
+//   month: 1,
+//   day: 2,
+//   hour: 8,
+//   minute: 35
+// }));
 
 
-import { Base64 } from 'js-base64';
+// import { Base64 } from 'js-base64';
 
-const enc = Base64.encode(body);
-console.log(enc);
+// const enc = Base64.encode(body);
+// console.log(enc);
 
 // await SendMail(
 //   getEmailTitle(),
