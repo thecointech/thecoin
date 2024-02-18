@@ -15,7 +15,7 @@
     "clean": "rimraf ./build && rimraf ./coverage",
     "dev": "run-env ./src/main.ts",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
-    "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
+    "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn dev",
     "prod": "cross-env CONFIG_NAME=prod yarn start",
     "start": "cross-env CONFIG_NAME=prod yarn run-env ./build/main.js",
     "test": "run :jest",

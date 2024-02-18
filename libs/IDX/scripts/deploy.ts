@@ -23,6 +23,8 @@ const compiledTs = fileURLToPath(new URL(`../src/__generated__/${process.env.CON
 async function getCeramic() {
   log.debug("Connecting to Ceramic...");
 
+  // OVERRIDE FOR DEPLOYING TO CLAY
+  // const ceramicUrl = "http://localhost:7007" //process.env.CERAMIC_URL
   const ceramicUrl = process.env.CERAMIC_URL
   if (!ceramicUrl) {
     throw new Error("Missing CERAMIC_URL")
