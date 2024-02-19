@@ -33,7 +33,9 @@ const env = {
 const loader = new URL("ncr-ts.mjs", import.meta.url)
 
 // Always attach experimental loader
-env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --loader=${loader}`;
+// NOTE: -es-module-specifier-resolution is no longer supported by node,
+// but is required by ts-node to correctly resolve imports
+env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --loader=${loader} --es-module-specifier-resolution=node`;
 
 // If this is yarn script?
 if (executable != "node") {
