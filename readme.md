@@ -1,6 +1,8 @@
 After Checkout:
 
 On Blank Windows Machine:
+ - install node20
+ - run "corepack enable"
  - Ensure that Visual Studio C++ Development option is installed
   - Select the (Optional) Windows 10 SDK.
   - Win11 is supported in node-gyp 9, but for some reason we use node-gyp 8 from within the repo
