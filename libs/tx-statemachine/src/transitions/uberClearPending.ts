@@ -25,6 +25,13 @@ const doClearPending: TransitionCallback<BSActionTypes> = async (container) => {
     throw new Error("Cannot deposit certified transfer");
   }
 
+  // If we already have a coin balance, it may be that the original
+  // UberTransfer completed immediately.  In this case, there is no need to do anything
+  const currentState = getCurrentState(container)
+  if (currentState.data.coin?.isPositive()) {
+    return {};
+  }
+
   const { from, to, transferMillis } = request.transfer;
   const overrides = await calculateOverrides(container, uberClearPending);
   log.debug({address: from}, `Processing pending from {address} with overrides ${JSON.stringify(overrides, convertBN)}`);
