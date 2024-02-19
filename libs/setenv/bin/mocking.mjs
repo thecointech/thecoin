@@ -6,20 +6,17 @@ function getIsMockedFn() {
       //
       // If running in dev mode, use all available mocks
       //
-      console.warn('--- Injecting All TC mocks ---');
       return () => true;
     case 'devlive':
       //
       // Dev live is internally connected, but all external connections are mocked
       //
-      console.warn('--- Injecting external TC mocks ---');
       return spec => ["googleapis", "google-auth-library", "axios"].includes(spec);
     default:
       //
       // Production environments only use config-specific mocks
       // (namely, signers/rbcapi in prodtest)
       //
-      console.warn(`--- Injecting ${process.env.CONFIG_NAME}-specific implementations ---`);
       return () => false;
   }
 }

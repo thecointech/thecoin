@@ -1,7 +1,8 @@
 // NodeCustomResolver
 import { resolve as resolve_ts, load as load_ts } from 'ts-node/esm/transpile-only';
-import { getConditions } from './conditions.mjs';
+import { addConditions } from './conditions.mjs';
 import { getIfMocked } from './mocking.mjs';
+import { extensionResolve } from './extension-resolution.mjs';
 
 /**
  * @param {string} specifier
@@ -18,12 +19,9 @@ export async function resolve(specifier, context, defaultResolve)
 
   const res = (specifier.includes("thecointech") || specifier.startsWith("."))
     // For our files we need to use the ts-node transpiler
-    ? await resolve_ts(specOrMocked, {
-      ...context,
-      conditions: getConditions(context),
-    }, defaultResolve)
+    ? await resolve_ts(specOrMocked, addConditions(context), defaultResolve)
     // for everything else, just use the default
-    : await defaultResolve(specOrMocked, context, defaultResolve);
+    : await extensionResolve(specOrMocked, context, defaultResolve);
 
   return res;
 }

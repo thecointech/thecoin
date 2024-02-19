@@ -19,6 +19,8 @@ let args = process.argv.slice(2);
 const config = sliceArgs(args, "cfg", process.env.CONFIG_NAME ?? "development");
 let executable = sliceArgs(args, "exec", "node");
 
+console.log(`--- RUNNING ${config} ENV ---`)
+
 // Now, run node with ncr
 // TODO: Support ts-node?
 const env = {
@@ -28,12 +30,10 @@ const env = {
   ...process.env,
 }
 
-const loader = args.find(arg => arg.endsWith('.ts'))
-  ? new URL("ncr-ts.mjs", import.meta.url)
-  : new URL("ncr-js.mjs", import.meta.url);
+const loader = new URL("ncr-ts.mjs", import.meta.url)
 
 // Always attach experimental loader
-env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --loader=${loader} --es-module-specifier-resolution=node`;
+env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --loader=${loader}`;
 
 // If this is yarn script?
 if (executable != "node") {
