@@ -62,7 +62,7 @@
     "connected-react-router": "^6.6.1",
     "file-saver": "^2.0.2",
     "intl": "^1.2.5",
-    "ip": "1.1.5",
+    "ip": "1.1.9",
     "papaparse": "^5.1.1",
     "qrcode.react": "1.0.1",
     "react-confetti": "^6.0.0",
