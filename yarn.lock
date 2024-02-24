@@ -10718,6 +10718,7 @@ __metadata:
     "@didtools/pkh-ethereum": "npm:^0.3.0"
     "@glazed/devtools": "npm:^0.2.0"
     "@thecointech/logging": "npm:^0.2.119"
+    "@thecointech/setenv": "workspace:^"
     "@thecointech/utilities": "npm:^0.2.119"
     did-session: "npm:^2.0.1"
   languageName: unknown
@@ -10850,7 +10851,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/setenv@npm:^0.2.119, @thecointech/setenv@workspace:libs/setenv":
+"@thecointech/setenv@npm:^0.2.119, @thecointech/setenv@workspace:^, @thecointech/setenv@workspace:libs/setenv":
   version: 0.0.0-use.local
   resolution: "@thecointech/setenv@workspace:libs/setenv"
   dependencies:
@@ -11256,7 +11257,7 @@ __metadata:
     "@thecointech/utilities": "npm:^0.2.119"
     currency.js: "npm:^2.0.4"
     googleapis: "npm:^129.0.0"
-    js-base64: "npm:^3.6.1"
+    js-base64: "npm:^3.7.6"
   languageName: unknown
   linkType: soft
 
@@ -11343,7 +11344,7 @@ __metadata:
   resolution: "@timfish/forge-externals-plugin@https://github.com/FrozenKiwi/forge-externals-plugin-monorepo.git#commit=283ffe89d979bbae5fee131ada5ef89e2ea59c76"
   dependencies:
     flora-colossus: "npm:1.0.1"
-  checksum: 151a4b4d224e76478af9d1889e0811a118b9050072972370673fe4d02ba87e77a9fa1d7f8fc30408a22b41c6012550c989b4ecf3a0ae99a801777c7e52b1ebe9
+  checksum: 2d03da7d2d7f75b600a8401115a2ba892ceb73b318a8b3859c4a5b8c83fe21121263635870459aef37108cb0377cd4efcb73917f476cce5e371ebd6be0390190
   languageName: node
   linkType: hard
 
@@ -28041,10 +28042,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-base64@npm:^3.6.1":
-  version: 3.7.5
-  resolution: "js-base64@npm:3.7.5"
-  checksum: 641f4979fc5cf90b897e265a158dfcbef483219c76bc9a755875cb03ff73efdb1bd468a42e0343e05a3af7226f9d333c08ee4bb10f42a4c526988845ce1dcf1b
+"js-base64@npm:^3.7.6":
+  version: 3.7.6
+  resolution: "js-base64@npm:3.7.6"
+  checksum: d9ae30a04e28e5814c6c606d08ecf9aac16daea0fcbc549e3b971042a4d4ecc7cf60ea96e1c9e8a463ca75fcbfd13613b87bddb3a8fe92801271e7eedcd3e8d3
   languageName: node
   linkType: hard
 

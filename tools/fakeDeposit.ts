@@ -12,7 +12,7 @@ async function fakeDepositEmail(address: string, amount: number) {
   log.debug(`Sending $${amount} to ${address}`);
 
   SendMail(
-    "[REDIRECT:] INTERAC e-Transfer: (fake deposit) has sent you money.",
+    "INTERAC e-Transfer: (fake deposit) has sent you money.",
     `
 Hi Coin,
 

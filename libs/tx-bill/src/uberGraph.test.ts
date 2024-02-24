@@ -1,11 +1,8 @@
 import { jest } from "@jest/globals";
-import { ConnectContract } from '@thecointech/contract-core';
-import { getSigner } from '@thecointech/signers';
-import { RbcApi } from '@thecointech/rbcapi';
 import { init } from '@thecointech/firestore';
-import { StateSnapshot, TypedActionContainer } from '@thecointech/tx-statemachine';
-import { States, rawGraph } from './uberGraph';
+import { rawGraph } from './uberGraph';
 import { DateTime } from 'luxon';
+import { getMockContainer } from "../internal/mockContainer";
 
 jest.setTimeout(10 * 60 * 60 * 1000);
 jest.useFakeTimers();
@@ -14,6 +11,7 @@ it('processes pending', async () => {
   init()
   const date = DateTime.now();
   const container = await getMockContainer(date);
+  container.instructions = {} as any; // bypass encryption
   let state = container.history[0];
 
   const incrementState = async () => {
@@ -104,41 +102,3 @@ it('processes pending', async () => {
   expect(state.name).toBe("complete");
 })
 
-const getMockContainer = async (date: DateTime) : Promise<TypedActionContainer<"Bill">> => ({
-  instructions: {} as any,
-  action: {
-    address: '0x445758E37F47B44E05E74EE4799F3469DE62A2CB',
-    type: "Bill" as 'Bill',
-    data: {
-      initial: {
-        transfer: {
-          from: '0x445758E37F47B44E05E74EE4799F3469DE62A2CB',
-          to: '0x23544d1596b2d8f608d1fd441131e719e0c5a685',
-          amount: 100,
-          currency: 124,
-          signedMillis: date.toMillis(),
-          transferMillis: date.plus({ days: 1 }).toMillis(),
-        } as any,
-        instructionPacket: {} as any,
-        signature: '0x123',
-      },
-      date,
-      initialId: "0x123",
-    },
-    history: [],
-    doc: {} as any,
-  },
-  history: [{
-    name: "initial",
-    data: {},
-    delta: {
-      type: "no prior state",
-      created: date,
-      date,
-    }
-  }] as StateSnapshot<States>[],
-  contract:  await ConnectContract(
-    await getSigner("BrokerTransferAssistant")
-  ),
-  bank: new RbcApi(),
-})

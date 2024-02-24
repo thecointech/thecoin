@@ -59,15 +59,18 @@ it("Can complete deposits", async () => {
     const result = results[i];
     // All emails should be appropriately marked
     expect(deposits[i].instructions?.raw?.labelIds).toContain('etransfer')
+
+    const hashes = deposits[i].history.filter(d => d.delta.hash)
     if (result.name == "complete") {
-      expect(result.data.hash).toBeTruthy();
+      // A hash should be set and the cleared in the subsequent wait
+      expect(hashes.length).toBe(1);
       expect(result.data.coin?.isZero()).toBeTruthy();
       expect(result.data.fiat?.isZero()).toBeTruthy();
       expect(deposits[i].instructions?.raw?.labelIds).toContain('deposited')
     }
     else {
       expect(result.name).toEqual('error')
-      expect(result.data.hash).toBeUndefined();
+      expect(hashes.length).toBe(0);
 
       // If we have no value, then the deposits were not completed
       if (result.data.fiat === undefined || result.data.coin !== undefined) {

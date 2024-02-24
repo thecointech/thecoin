@@ -6,13 +6,8 @@ import { getCurrentState } from '@thecointech/tx-statemachine';
 import { DateTime } from 'luxon';
 import { getFirestore } from '@thecointech/firestore';
 import data from './index.test.mockdb.json' assert {type: "json"};
-import { fileURLToPath } from 'url';
 import { RbcApi } from '@thecointech/rbcapi';
 import { getSigner } from '@thecointech/signers';
-
-// The eTransfer needs to find a file to read for it's decryption key.
-// It's not actually used, so any file will do (ie - this one...)
-process.env.USERDATA_INSTRUCTION_PK = fileURLToPath(import.meta.url);
 
 let ev: any = undefined;
 jest.unstable_mockModule('@thecointech/utilities/Encrypt', () => ({
@@ -38,11 +33,13 @@ it('Succesfully Processes Sell', async ()=> {
   const bank = new RbcApi();
   const eTransfers = await processUnsettledETransfers(contract, bank);
 
-  const results = eTransfers.map(getCurrentState);
-  for (const result of results)
+  for (const xfer of eTransfers)
   {
+    const result = getCurrentState(xfer);
+
     expect(result.name).toEqual("complete");
-    expect(result.data.hash).toBeTruthy();
+    // A hash should be set and the cleared in the subsequent wait
+    expect(xfer.history.filter(d => d.delta.hash).length).toBe(1)
     expect(result.data.fiat?.isZero()).toBeTruthy();
     expect(result.data.coin?.isZero()).toBeTruthy();
   }

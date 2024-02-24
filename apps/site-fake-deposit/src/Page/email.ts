@@ -2,7 +2,7 @@
 import { randomBytes } from "crypto";
 import { DateTime } from 'luxon';
 
-export const getEmailTitle = () => "[REDIRECT:] INTERAC e-Transfer: (fake deposit) has sent you money."
+export const getEmailTitle = () => "INTERAC e-Transfer: (fake deposit) has sent you money."
 export const getEmailAddress = (coinAddress: string) => `${coinAddress}@test.thecoin.io`
 export const getEmailBody = (amount: number) => {
   const randomId = randomBytes(4).toString('hex');

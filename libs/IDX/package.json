@@ -22,7 +22,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "prepublishOnly": "run -T rimraf ./build/.buildinfo",
     "_deploy": "yarn run-env ./scripts/deploy.ts",
     "emulator": "yarn ceramic daemon --config ./tools/daemon.inmemory.config.json",
     "graphql": "yarn run-env ./scripts/run-graphql.ts",
@@ -55,7 +55,8 @@
     "@composedb/devtools": "^0.4.4",
     "@composedb/devtools-node": "^0.4.4",
     "@composedb/types": "^0.4.4",
-    "@glazed/devtools": "^0.2.0"
+    "@glazed/devtools": "^0.2.0",
+    "@thecointech/setenv": "workspace:^"
   },
   "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
 }
