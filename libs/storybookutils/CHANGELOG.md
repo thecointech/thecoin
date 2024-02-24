@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.120](https://github.com/thecointech/thecoin/compare/v0.2.119...v0.2.120) (2024-02-24)
+
+**Note:** Version bump only for package @thecointech/storybookutils
+
+
+
+
+
 ## [0.2.119](https://github.com/thecointech/thecoin/compare/v0.2.118...v0.2.119) (2024-01-30)
 
 **Note:** Version bump only for package @thecointech/storybookutils
