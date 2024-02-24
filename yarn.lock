@@ -10718,6 +10718,7 @@ __metadata:
     "@didtools/pkh-ethereum": "npm:^0.3.0"
     "@glazed/devtools": "npm:^0.2.0"
     "@thecointech/logging": "npm:^0.2.119"
+    "@thecointech/setenv": "workspace:^"
     "@thecointech/utilities": "npm:^0.2.119"
     did-session: "npm:^2.0.1"
   languageName: unknown
@@ -10850,7 +10851,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/setenv@npm:^0.2.119, @thecointech/setenv@workspace:libs/setenv":
+"@thecointech/setenv@npm:^0.2.119, @thecointech/setenv@workspace:^, @thecointech/setenv@workspace:libs/setenv":
   version: 0.0.0-use.local
   resolution: "@thecointech/setenv@workspace:libs/setenv"
   dependencies:
