@@ -255,9 +255,9 @@ abstract contract Pluggable is Freezable, IPluggable, PermissionUser {
     require(finalCurrency == 0, "Cannot transfer non-Coin currencies directly");
 
     // Seems good - do the transfer
+    notifyWithdraw(from, finalAmount, msTransferAt);
+    notifyDeposit(to, finalAmount, msTransferAt);
     _transfer(from, to, finalAmount);
-    //_transfer(from, msg.sender, fee);
-
     emit ExactTransfer(from, to, finalAmount, msTransferAt);
   }
 

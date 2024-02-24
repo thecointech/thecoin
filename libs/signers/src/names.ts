@@ -20,6 +20,11 @@ export enum AccountId {
   client2,
   uberTester,
   saTester, // ShockAbsorber Tester
+
+  // A full testing account, published to test.thecoin.io
+  // Opens Jan1 2022.  1/2 testing, 1/2 demo account
+  // Includes harvester, uberConverter, and shockabsorber
+  testDemoAccount,
 };
 
 export type AccountName = keyof typeof AccountId;

@@ -12,13 +12,26 @@ import { makeTransition } from '../makeTransition';
 export const  waitCoin = makeTransition("waitCoin", async (container) => {
 
   const currentState = getCurrentState(container)
+  // NOTE!  This only processes transfers
+  // that happened immediately prior in the graph
   const hash = currentState.delta.hash;
-  if (!hash) return { error: "Cannot await transaction, no hash present"};
+  if (!hash) {
+    // This is theoretically legal (if, for example, an
+    // ubertransfer was made that completed immediately)
+    // however, it shouldn't actually happen using harvester,
+    // so make it an error until we fix
+    // https://github.com/thecointech/thecoin/issues/525
+    log.error("Cannot await transaction, no hash present");
+    return {}
+  }
+
   const receipt = await waitTransaction(container.contract, hash);
   return receipt
     ? {
         meta: `confirmations: ${receipt.confirmations}`,
         ...updateCoinBalance(container, receipt),
+        // Prevent this tx from being used again
+        hash: undefined
       }
     // Our tx has not yet been mined.  While not critical, it is concerning.
     // We have warned, but now return null to allow back-off-and-retry.

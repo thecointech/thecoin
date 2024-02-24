@@ -37,6 +37,26 @@ export function toDepositData(email: gmail_v1.Schema$Message): eTransferData | n
     return null;
   }
 
+  // PRODTEST-ONLY-CODE
+  // In prodtest we allow overriding the recieved date
+  if (process.env.CONFIG_NAME === "prodtest") {
+    const overrideDate = body.match(/{ dateOverride: "([^}]+)" }/)
+    if (overrideDate) {
+      const d = DateTime.fromISO(overrideDate[1]);
+      if (d.isValid)
+        return {
+          raw: email,
+          recieved: d,
+          id: getSourceId(url),
+          depositUrl: url.toString(),
+          address,
+          cad: new Decimal(amount),
+          ...userInfo
+        }
+    }
+  }
+  // END PRODTEST-ONLY-CODE
+
   return {
     raw: email,
     recieved: dateRecieved,
