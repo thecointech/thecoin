@@ -6,13 +6,8 @@ import { getCurrentState } from '@thecointech/tx-statemachine';
 import { DateTime } from 'luxon';
 import { getFirestore } from '@thecointech/firestore';
 import data from './index.test.mockdb.json' assert {type: "json"};
-import { fileURLToPath } from 'url';
 import { RbcApi } from '@thecointech/rbcapi';
 import { getSigner } from '@thecointech/signers';
-
-// The eTransfer needs to find a file to read for it's decryption key.
-// It's not actually used, so any file will do (ie - this one...)
-process.env.USERDATA_INSTRUCTION_PK = fileURLToPath(import.meta.url);
 
 let ev: any = undefined;
 jest.unstable_mockModule('@thecointech/utilities/Encrypt', () => ({

@@ -20,7 +20,8 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "run -T tsc -b",
-    "clean": "rimraf ./build && rimraf ./coverage"
+    "clean": "rimraf ./build && rimraf ./coverage",
+    "test": "run :jest"
   },
   "files": [
     "build/**/*"
