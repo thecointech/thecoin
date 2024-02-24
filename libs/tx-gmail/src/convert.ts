@@ -139,9 +139,6 @@ function getSubject(email: gmail_v1.Schema$Message) {
   // First, ignore any emails with no subject
   if (!subject)
     return null;
-  // filter an RE emails
-  if (subject.startsWith("Re: [REDIRECT:]"))
-    return null;
   // Filter expired notifications
   if (subject.endsWith("expired."))
     return null;
@@ -154,19 +151,19 @@ function getSubject(email: gmail_v1.Schema$Message) {
 }
 
 function getSubjectAnglais(subject: string) {
-  const redirectHeader = "[REDIRECT:] INTERAC e-Transfer: "
+  const redirectHeader = "INTERAC e-Transfer: "
   if (!subject.endsWith("sent you money.") || !subject.startsWith(redirectHeader)) {
     return null;
   }
-  return subject.substr(redirectHeader.length);
+  return subject.substring(redirectHeader.length);
 }
 
 function getSubjectFrancais(subject: string) {
-  const redirectHeader = "[REDIRECT:] Virement INTERAC"
+  const redirectHeader = "Virement INTERAC"
   if (!subject.endsWith("vous a envoyé des fonds.") || !subject.startsWith(redirectHeader)) {
     return null;
   }
-  return subject.substr(redirectHeader.length);
+  return subject.substring(redirectHeader.length);
 }
 
 function getBody(email: gmail_v1.Schema$Message) {
