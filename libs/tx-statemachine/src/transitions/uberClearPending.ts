@@ -1,5 +1,5 @@
 import { makeTransition  } from '../makeTransition';
-import { TransitionCallback } from '../types';
+import { TransitionCallback, getCurrentState } from '../types';
 import { verifyPreTransfer } from './verifyPreTransfer';
 import { connectConverter } from '@thecointech/contract-plugin-converter';
 import { calculateOverrides, convertBN, toDelta } from './coinUtils';
@@ -29,6 +29,10 @@ const doClearPending: TransitionCallback<BSActionTypes> = async (container) => {
   // UberTransfer completed immediately.  In this case, there is no need to do anything
   const currentState = getCurrentState(container)
   if (currentState.data.coin?.isPositive()) {
+    log.error(
+      { initialId: container.action.data.initialId },
+      "Cannot clear pending, already have coin balance"
+    )
     return {};
   }
 
