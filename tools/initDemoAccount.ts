@@ -80,7 +80,40 @@ www.interac.ca
 
 // First, assign plugins
 const tcCore = await GetContract();
+
+const uberConverter = await getUberContract();
+const asCoin = await uberConverter["toCoin(uint256,uint256)"](140000, 1676907300000);
+console.log(`Coin: ${asCoin.toString()}`);
+
+const balance = await tcCore.balanceOf(address);
+console.log(`Balance: ${balance.toString()}`);
+const plBalacne = await tcCore.pl_balanceOf(address);
+console.log(`PlBalance: ${plBalacne.toString()}`);
+
+const shockAbsorber = await getShockAbsorberContract();
+const balance2 = await shockAbsorber.balanceOf(shockAbsorber.address, balance);
+console.log(`Balance2: ${balance2.toString()}`);
+
+
+// SINGLE DEPOSIT CHECKING
+const depositCoin = 33261580
+const depositTime = startDate.plus({days: 17});
+const depositFiat = await shockAbsorber["toFiat(int256,uint256)"](depositCoin, depositTime.toMillis());
+console.log(`DepositFiat: ${depositFiat.toNumber() / 100}`);
+
+const price = await shockAbsorber.getPrice(depositTime.toMillis());
+const manualCalc = depositCoin * price.toNumber() / 1e12;
+console.log(`ManualCalc: ${manualCalc}`);
+
+const cushion = await shockAbsorber.getCushion(address);
+
+console.log(`Sofar: ${cushion.toString()}`);
+
+//
+
 const plugins = await tcCore.getUsersPlugins(address);
+
+throw new Error("stop here");
 if (plugins.length == 0) {
   const oldNow = DateTime.now
 
@@ -137,22 +170,22 @@ while (currDate < endDate) {
     }
 
     // If it's time to pay our visa bills?
-    // if (nextPayDate <= currDate) {
-    //   console.log(`Sending BillPayment `);
+    if (nextPayDate <= currDate) {
+      console.log(`Sending BillPayment `);
 
-    //   const dueDate = nextPayDate.plus(visaDuePeriod);
-    //   const billPayment = await BuildUberAction(
-    //     mockPayee,
-    //     signer,
-    //     brokerAddress,
-    //     new Decimal(billTotal),
-    //     CurrencyCode.CAD,
-    //     dueDate
-    //   )
-    //   await payBillApi.uberBillPayment(billPayment);
+      const dueDate = nextPayDate.plus(visaDuePeriod);
+      const billPayment = await BuildUberAction(
+        mockPayee,
+        signer,
+        brokerAddress,
+        new Decimal(billTotal),
+        CurrencyCode.CAD,
+        dueDate
+      )
+      await payBillApi.uberBillPayment(billPayment);
 
-    //   nextPayDate = nextPayDate.plus(visaStep);
-    // }
+      nextPayDate = nextPayDate.plus(visaStep);
+    }
   }
 
   currDate = currDate.plus({day: 1});
