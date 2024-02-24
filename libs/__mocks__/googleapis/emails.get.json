@@ -47,7 +47,7 @@
           },
           {
             "name": "Subject",
-            "value": "[REDIRECT:] INTERAC e-Transfer: (fake deposit) has sent you money."
+            "value": "INTERAC e-Transfer: (fake deposit) has sent you money."
           },
           {
             "name": "Date",
@@ -147,7 +147,7 @@
           },
           {
             "name": "Subject",
-            "value": "[REDIRECT:] INTERAC e-Transfer: (fake deposit) has sent you money."
+            "value": "INTERAC e-Transfer: (fake deposit) has sent you money."
           },
           {
             "name": "Date",
@@ -266,7 +266,7 @@
           },
           {
             "name": "Subject",
-            "value": "[REDIRECT:] INTERAC e-Transfer: Some Person sent you money."
+            "value": "INTERAC e-Transfer: Some Person sent you money."
           },
           {
             "name": "MIME-Version",
@@ -430,7 +430,7 @@
           },
           {
             "name": "Subject",
-            "value": "[REDIRECT:] INTERAC e-Transfer: (fake deposit) has sent you money."
+            "value": "INTERAC e-Transfer: (fake deposit) has sent you money."
           },
           {
             "name": "Date",
@@ -532,7 +532,7 @@
           },
           {
             "name": "Subject",
-            "value": "[REDIRECT:] INTERAC e-Transfer: (fake deposit) has sent you money."
+            "value": "INTERAC e-Transfer: (fake deposit) has sent you money."
           },
           {
             "name": "Date",
