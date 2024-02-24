@@ -33,11 +33,13 @@ it('Succesfully Processes Sell', async ()=> {
   const bank = new RbcApi();
   const eTransfers = await processUnsettledETransfers(contract, bank);
 
-  const results = eTransfers.map(getCurrentState);
-  for (const result of results)
+  for (const xfer of eTransfers)
   {
+    const result = getCurrentState(xfer);
+
     expect(result.name).toEqual("complete");
-    expect(result.data.hash).toBeTruthy();
+    // A hash should be set and the cleared in the subsequent wait
+    expect(xfer.history.filter(d => d.delta.hash).length).toBe(1)
     expect(result.data.fiat?.isZero()).toBeTruthy();
     expect(result.data.coin?.isZero()).toBeTruthy();
   }
