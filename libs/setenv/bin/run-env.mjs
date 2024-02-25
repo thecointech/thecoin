@@ -30,7 +30,10 @@ const env = {
   ...process.env,
 }
 
-const loader = new URL("ncr-ts.mjs", import.meta.url)
+const loader = args.find(arg => arg.endsWith('.ts'))
+  ? new URL("ncr-ts.mjs", import.meta.url)
+  : new URL("ncr-js.mjs", import.meta.url);
+// const loader = new URL("ncr-ts.mjs", import.meta.url)
 
 // Always attach experimental loader
 // NOTE: -es-module-specifier-resolution is no longer supported by node,
