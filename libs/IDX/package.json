@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/idx",
-  "version": "0.2.120",
+  "version": "0.2.121",
   "description": "TheCoin: Interface to IDX backend for accounts",
   "type": "module",
   "keywords": [
@@ -45,8 +45,8 @@
   "dependencies": {
     "@composedb/client": "^0.4.4",
     "@didtools/pkh-ethereum": "^0.3.0",
-    "@thecointech/logging": "^0.2.120",
-    "@thecointech/utilities": "^0.2.120",
+    "@thecointech/logging": "^0.2.121",
+    "@thecointech/utilities": "^0.2.121",
     "did-session": "^2.0.1"
   },
   "devDependencies": {
