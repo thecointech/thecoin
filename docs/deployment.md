@@ -6,6 +6,8 @@ Our system is built to be deployed on Google App Engine (GAE).  The services are
 
 Each deployment app (rates/broker/site/nft) needs a GAE configuration for each environment (test/beta|prod).  The GAE configuration is used to set the deployment target for all the apps, deploying at the same time. See https://medium.com/google-cloud/how-to-use-multiple-accounts-with-gcloud-848fdb53a39a for how to create new configs.
 
+You also need to login to firebase.  Navigate to root folder and run `yarn firebase login`
+
 #### Caveate BETA|PROD:
 Our BETA services (rates/broker) are assigned a specific version to differentiate them from prod.  Unfortunately, we cannot specify a version using configs on GAE.   The beta environments are deployed to prod and the version is specified within the `deploy.ts` deployment scripts.
 
@@ -48,7 +50,7 @@ First, the libraries are deployed.
 We publish to Github Packages
  1. Authenticate with Github
    a. Generate a PAT (classic)
-   b. Lerna doesn't appear to use yarn for publishing, so set auth in `~/.npmrc`
+   b. Lerna doesn't appear to use yarn for publishing, so set auth in `~/.npmrc` (NOTE - this doesn't appear to work for linux, use the PAT as password with asked for login credentials)
 
 Next, the apps are deployed.
 ## Things to Deploy

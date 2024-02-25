@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tools",
-  "version": "0.2.119",
+  "version": "0.2.120",
   "type": "module",
   "private": true,
   "scripts": {
@@ -9,6 +9,6 @@
     "cancel-tx": "run-env cfg=prod ./transactions/cancelTx.ts"
   },
   "devDependencies": {
-    "@thecointech/setenv": "^0.2.119"
+    "@thecointech/setenv": "^0.2.120"
   }
 }
