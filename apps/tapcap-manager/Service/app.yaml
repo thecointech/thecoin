@@ -12,7 +12,7 @@
 # limitations under the License.
 
 # [START app_yaml]
-runtime: nodejs18
+runtime: nodejs20
 instance_class: F4
 
 service: tapcap

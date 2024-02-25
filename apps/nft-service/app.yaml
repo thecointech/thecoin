@@ -1,5 +1,5 @@
 # [START app_yaml]
-runtime: nodejs18
+runtime: nodejs20
 instance_class: F1
 
 # include environment variables.
