@@ -6,7 +6,7 @@ import { OracleClientTest__factory } from "../src/codegen";
 
 it ('rounds correctly', async () => {
   const [owner] = await hre.ethers.getSigners();
-  const oracle = await createOracle(owner, 15);
+  const oracle = await createOracle(owner, 25);
 
   // Create client
   const Client: OracleClientTest__factory = await hre.ethers.getContractFactory('OracleClientTest');
@@ -20,21 +20,21 @@ it ('rounds correctly', async () => {
     return DateTime.fromMillis(initTime.toNumber());
   };
 
-  // {
-  //   const coin = 33333333;
-  //   let rate = 300027003;
-  //   let currDate = await setRate(rate);
+  {
+    const coin = 33333333;
+    let rate = 300027003;
+    let currDate = await setRate(rate);
 
-  //   for (let i = 0; i < 10; i++) {
-  //     const testCoin = coin + i * 100;
-  //     const jsFiat = testCoin * rate / 1e12;
-  //     // Test rounding to
-  //     const solFiatUU = await client["toFiat(uint256,uint256)"](testCoin, currDate.toMillis());
-  //     expect(Math.round(jsFiat)).toEqual(solFiatUU.toNumber());
-  //     const solFiatIU = await client["toFiat(int256,uint256)"](testCoin, currDate.toMillis());
-  //     expect(Math.round(jsFiat)).toEqual(solFiatIU.toNumber());
-  //   }
-  // }
+    for (let i = 0; i < 10; i++) {
+      const testCoin = coin + i * 100;
+      const jsFiat = testCoin * rate / 1e12;
+      // Test rounding to
+      const solFiatUU = await client["toFiat(uint256,uint256)"](testCoin, currDate.toMillis());
+      expect(Math.round(jsFiat)).toEqual(solFiatUU.toNumber());
+      const solFiatIU = await client["toFiat(int256,uint256)"](testCoin, currDate.toMillis());
+      expect(Math.round(jsFiat)).toEqual(solFiatIU.toNumber());
+    }
+  }
 
   {
     const testFiat = 100_00;
