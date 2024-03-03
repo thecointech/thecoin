@@ -4,7 +4,7 @@ import { RbcApi } from '@thecointech/rbcapi';
 import { Processor as BillProcessor } from '@thecointech/tx-bill';
 import { Processor as PluginProcessor } from '@thecointech/tx-plugins';
 import { Processor as WithdrawalProcessor } from '@thecointech/tx-etransfer';
-import { AnyActionContainer } from '@thecointech/tx-statemachine';
+import { AnyActionContainer, getCurrentState } from '@thecointech/tx-statemachine';
 import { log } from '@thecointech/logging';
 import gmail from '@thecointech/tx-gmail';
 import { getBuyETransferAction, eTransferProcessor as DepositProcessor } from '@thecointech/tx-deposit';
@@ -38,7 +38,9 @@ export async function processTransfers(tcCore: TheCoin, bank: RbcApi) {
       log.error(e, 'Unknown error processing {initialId}', { initialId: action.data.initialId });
     }
   }
-  log.debug(`Processed ${r.length} payments`);
+
+  const completed = r.filter(a => getCurrentState(a).name == 'complete');
+  log.info(`Processed ${allActions.length} transactions, completed ${completed.length}`);
   return r;
 }
 
