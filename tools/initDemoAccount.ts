@@ -85,7 +85,6 @@ const tcCore = await GetContract();
 
 const plugins = await tcCore.getUsersPlugins(address);
 
-throw new Error("stop here");
 if (plugins.length == 0) {
   const oldNow = DateTime.now
 
@@ -122,12 +121,13 @@ let nextPayDate = startDate.plus(visaStep);
 DateTime.now = () => currDate
 
 let numSent = 0;
+let doSendEmail = false;
 while (currDate < endDate) {
 
   // If we run harvester on this day?
   if (harvestRunsOnDay.includes(currDate.weekday)) {
 
-    if (currDate >= pausedDate) {
+    if (currDate >= pausedDate && doSendEmail) {
       console.log(`Running Harvester for ${currDate.weekdayShort} ${currDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
       numSent++;
        // We always do our transfer
@@ -160,6 +160,7 @@ while (currDate < endDate) {
           dueDate
         )
         await payBillApi.uberBillPayment(billPayment);
+        doSendEmail = true;
       }
 
       nextPayDate = nextPayDate.plus(visaStep);

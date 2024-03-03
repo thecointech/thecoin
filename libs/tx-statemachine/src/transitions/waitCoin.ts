@@ -9,7 +9,7 @@ import { makeTransition } from '../makeTransition';
 
 //
 // Wait for a transfer to complete
-export const  waitCoin = makeTransition("waitCoin", async (container) => {
+export const waitCoin = makeTransition("waitCoin", async (container) => {
 
   const currentState = getCurrentState(container)
   // NOTE!  This only processes transfers
@@ -31,7 +31,7 @@ export const  waitCoin = makeTransition("waitCoin", async (container) => {
         meta: `confirmations: ${receipt.confirmations}`,
         ...updateCoinBalance(container, receipt),
         // Prevent this tx from being used again
-        hash: undefined
+        hash: ""
       }
     // Our tx has not yet been mined.  While not critical, it is concerning.
     // We have warned, but now return null to allow back-off-and-retry.
@@ -50,16 +50,25 @@ function parseLog(contract: TheCoin, log: TransactionReceipt["logs"][0]) {
 export function updateCoinBalance(container: AnyActionContainer, receipt: TransactionReceipt) {
 
   const parsed = receipt.logs.map(l => parseLog(container.contract, l))
-  // We use ExactTransfer instead of Transfer because we know there
-  // will always be 1 and only 1 in any transaction we initiate.
-  const [transfer, ...rest] = parsed.filter(p => p?.name == "ExactTransfer");
+  // We use ExactTransfer instead of Transfer to ensure we
+  const exactTransfers = parsed.filter(p => p?.name == "ExactTransfer");
+  // Only use the transfer from the current user to us(?)
+  const legalAddresses = [
+    NormalizeAddress(process.env.WALLET_BrokerCAD_ADDRESS!),
+    container.action.address,
+  ]
+  const [transfer, ...rest] = exactTransfers.filter(t => (
+    legalAddresses.includes(NormalizeAddress(t?.args.from)) &&
+    legalAddresses.includes(NormalizeAddress(t?.args.to))
+  ));
+
   if (!transfer) {
-    if (rest.length > 0) {
-      // We have too many transfers, so we don't know what to do.
-      throw new Error(`Assumption Violated: ExactTransfer not as expected`);
-    }
     // It is legal to have 0 transfers (with UberConverter)
     return undefined;
+  }
+  if (rest.length > 0) {
+    // We have too many transfers, so we don't know what to do.
+    throw new Error(`Assumption Violated: ExactTransfer not as expected`);
   }
 
   let balance = getCurrentState(container).data.coin ?? new Decimal(0);
