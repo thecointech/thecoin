@@ -8,6 +8,8 @@ import { AnyActionContainer } from '@thecointech/tx-statemachine';
 import { log } from '@thecointech/logging';
 import gmail from '@thecointech/tx-gmail';
 import { getBuyETransferAction, eTransferProcessor as DepositProcessor } from '@thecointech/tx-deposit';
+import { AnyTransfer } from '@thecointech/types';
+import { isUberTransfer } from '@thecointech/utilities/UberTransfer'
 
 export async function processTransfers(tcCore: TheCoin, bank: RbcApi) {
   log.debug('Processing All Transfers');
@@ -17,12 +19,12 @@ export async function processTransfers(tcCore: TheCoin, bank: RbcApi) {
   let etransfers = await getIncompleteActions("Sell");
   let purchases = await getAllPurchaseActions();
   const allActions = [
-    ...bills,
-    ...plugins,
-    ...etransfers,
-    ...purchases,
+    ...bills.map(b => ({ ...b, executeDate: getWithdrawDate(b.data.initial.transfer) })),
+    ...plugins.map(b => ({ ...b, executeDate: b.data.initial.signedAt.toMillis() })),
+    ...etransfers.map(b => ({ ...b, executeDate: getWithdrawDate(b.data.initial.transfer) })),
+    ...purchases.map(b => ({ ...b, executeDate: b.data.date.toMillis() })),
   ];
-  allActions.sort((a, b) => a.data.date.toMillis() - b.data.date.toMillis());
+  allActions.sort((a, b) => a.executeDate - b.executeDate);
 
   const r: AnyActionContainer[] = [];
 
@@ -79,10 +81,8 @@ async function getAllPurchaseActions() {
   let purchases = [];
 
   for (const eTransfer of raw) {
-    log.info({ initialId: eTransfer.id }, 'Processing eTransfer {initialId}');
     const action = await getBuyETransferAction(eTransfer);
-
-    // Subtract from our list of incomplete
+    // Subtract from our list of incomplete if it's already there
     incomplete = incomplete.filter(i => i.doc.path != action.doc.path);
     purchases.push(action);
   }
@@ -91,3 +91,8 @@ async function getAllPurchaseActions() {
     ...purchases,
   ]
 }
+
+const getWithdrawDate = (req: AnyTransfer) =>
+  isUberTransfer(req)
+    ? req.signedMillis
+    : req.timestamp;

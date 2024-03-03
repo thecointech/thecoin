@@ -38,6 +38,8 @@ export type TransitionDelta = {
 // that have happened to the collection.
 export type BaseActionData = {
   initial: unknown,
+  // Date the action was created.  This may differ from the date the
+  // action happens.
   date: DateTime;
   initialId: string
 }

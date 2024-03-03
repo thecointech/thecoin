@@ -16,10 +16,10 @@ export const ClientTransaction = (props: AnyTxAction) => {
 
   return (
     <List.Item key={props.data.initialId}>
-      <TransactionIcon type={final.type} />
-      {`${date.toISODate()} ${final.type} - ${fiat} : ${coin}`}
+      <TransactionIcon type={final?.type} />
+      {`${date.toISODate()} ${final?.type ?? props.type} - ${fiat} : ${coin}`}
       <TransactionPath {...props.doc} />
-      {final.type == "markComplete"
+      {final?.type == "markComplete"
         ? undefined
         : <RefundButton action={props} />
       }
@@ -29,7 +29,7 @@ export const ClientTransaction = (props: AnyTxAction) => {
   )
 }
 
-const TransactionIcon = ({ type }: { type: string }) => {
+const TransactionIcon = ({ type }: { type?: string }) => {
   switch (type) {
     case "markComplete": return <Icon name="check circle outline" color='green' />
     case "error": return <Icon name="times circle outline" color='red' />
