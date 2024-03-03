@@ -63,7 +63,17 @@ export function updateCoinBalance(container: AnyActionContainer, receipt: Transa
   ));
 
   if (!transfer) {
-    // It is legal to have 0 transfers (with UberConverter)
+    // We expect a transfer, but couldn't find one that matched us.
+    // If there was an ExactTransfer but we aren't involved, that's an issue
+    // (It is legal to have 0 transfers with UberConverter)
+    if (exactTransfers.length !== 0) {
+      log.error(
+        { initialId: container.action.data.initialId, hash: receipt.transactionHash },
+        "ExactTransfer found for {initialId} in {hash}, but it does not match Broker address"
+      );
+      // We have no idea what is going on here, so hard-stop
+      throw new Error("ExactTransfer not as expected");
+    }
     return undefined;
   }
   if (rest.length > 0) {

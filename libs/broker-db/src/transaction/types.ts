@@ -48,6 +48,9 @@ export type ActionDataTypes = {
     initial: {
       amount: Decimal;
       type: PurchaseType;
+      // NOTE: raw is filled out on the server and is
+      // never to be persisted to the DB
+      raw?: any;
     }
   } & BaseActionData;
   Sell: { initial: CertifiedTransfer } & BaseActionData;

@@ -196,7 +196,7 @@ export async function removeIncomplete(type: ActionType, doc: DocumentReference)
 
   // mocked db does not implement 'where' clause, so manually filter here so tests pass
   let docs = [...snapshot.docs];
-  if (process.env.NODE_ENV === 'test') {
+  if (process.env.CONFIG_NAME === 'development') {
     docs = docs.filter(d => d.get('ref') == doc);
   }
 

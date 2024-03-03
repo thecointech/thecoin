@@ -26,7 +26,7 @@ const startDate = DateTime.fromObject({
   hour: 9,
   minute: 35
 })
-const pausedDate = startDate.plus({month: 1});
+const pausedDate = startDate;
 const endDate = startDate.plus({month: 2});
 const visaStep = Duration.fromObject({week: 4});
 const visaDuePeriod = Duration.fromObject({week: 3});
@@ -85,7 +85,7 @@ const tcCore = await GetContract();
 
 const plugins = await tcCore.getUsersPlugins(address);
 
-if (plugins.length == 0) {
+if (plugins.length == 0 && false) {
   const oldNow = DateTime.now
 
   console.log("Assigning plugins to account...");
@@ -98,7 +98,6 @@ if (plugins.length == 0) {
       pluginAddress,
       ALL_PERMISSIONS,
     );
-    console.log(request);
     await api.assignPlugin({
       ...request,
       timeMs: request.timeMs.toMillis(),
@@ -108,8 +107,8 @@ if (plugins.length == 0) {
   const converter = await getUberContract();
   const shockAbsorber = await getShockAbsorberContract();
 
-  // await assignPlugin(converter.address, 10);
-  // await assignPlugin(shockAbsorber.address, 5);
+  await assignPlugin(converter.address, 10);
+  await assignPlugin(shockAbsorber.address, 5);
 
   DateTime.now = oldNow
 }
@@ -121,13 +120,12 @@ let nextPayDate = startDate.plus(visaStep);
 DateTime.now = () => currDate
 
 let numSent = 0;
-let doSendEmail = false;
 while (currDate < endDate) {
 
   // If we run harvester on this day?
   if (harvestRunsOnDay.includes(currDate.weekday)) {
 
-    if (currDate >= pausedDate && doSendEmail) {
+    if (currDate >= pausedDate) {
       console.log(`Running Harvester for ${currDate.weekdayShort} ${currDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
       numSent++;
        // We always do our transfer
@@ -160,7 +158,6 @@ while (currDate < endDate) {
           dueDate
         )
         await payBillApi.uberBillPayment(billPayment);
-        doSendEmail = true;
       }
 
       nextPayDate = nextPayDate.plus(visaStep);
