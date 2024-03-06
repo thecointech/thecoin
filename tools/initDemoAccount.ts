@@ -26,8 +26,8 @@ const startDate = DateTime.fromObject({
   hour: 9,
   minute: 35
 })
-const pausedDate = startDate.plus({month: 3});
-const endDate = startDate.plus({month: 4});
+const pausedDate = startDate.plus({month: 4});
+const endDate = startDate.plus({month: 5});
 const visaStep = Duration.fromObject({week: 4});
 const visaDuePeriod = Duration.fromObject({week: 3});
 const weeklySpending = 350;
