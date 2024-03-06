@@ -31,7 +31,7 @@ export const  waitCoin = makeTransition("waitCoin", async (container) => {
         meta: `confirmations: ${receipt.confirmations}`,
         ...updateCoinBalance(container, receipt),
         // Prevent this tx from being used again
-        hash: undefined
+        hash: ""
       }
     // Our tx has not yet been mined.  While not critical, it is concerning.
     // We have warned, but now return null to allow back-off-and-retry.
