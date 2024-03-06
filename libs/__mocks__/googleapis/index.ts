@@ -71,7 +71,11 @@ export namespace google {
             .find(e => e.data.id === opts.id)
             ?.data.labelIds.push(...labelIds)
         }
-      }
+      },
+
+      getProfile: () => ({ data: {
+        emailAddress: `autodeposit@${process.env.TX_GMAIL_DEPOSIT_DOMAIN}` }
+      }),
     }
   }
 
