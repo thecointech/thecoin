@@ -52,7 +52,7 @@
   "dependencies": {
     "@nivo/bar": "0.79.1",
     "@nivo/core": "0.79.0",
-    "@nivo/line": "0.79.1",
+    "@nivo/line": "0.85.0",
     "@nivo/tooltip": "0.79.0",
     "@thecointech/account": "^0.2.121",
     "@thecointech/fx-rates": "^0.2.121",
