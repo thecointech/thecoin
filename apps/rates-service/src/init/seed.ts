@@ -24,7 +24,7 @@ export async function seed() {
   // Seed our DB for a year, values set for a day.
   const from = DateTime
     .local()
-    .minus({ years: 1.1 })
+    .minus({ years: 1.5 })
     .set({
       hour: 9,
       minute: 31,

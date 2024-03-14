@@ -54,14 +54,6 @@ export function updateCoinBalance(container: AnyActionContainer, receipt: Transa
 
   const parsed = receipt.logs.map(l => parseLog(container.contract, l));
 
-  // TODO: Should plugin assignment be in it's own action?
-  // It makes sense to keep it in the off chance some future
-  // plugin makes a transfer at the same moment as assignment (?)
-  // If this is a plugin assignment, then all is well
-  if (parsed.length == 0 && parsed[0]?.name == "PluginAttached") {
-    return {};
-  }
-
   // We use ExactTransfer instead of Transfer to ensure we
   const exactTransfers = parsed.filter(p => p?.name == "ExactTransfer");
   // Only use the transfer from the current user to us(?)

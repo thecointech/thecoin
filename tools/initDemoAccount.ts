@@ -70,6 +70,7 @@ if (plugins.length == 0) {
   await assignPlugin(shockAbsorber.address, 5);
 
   DateTime.now = oldNow
+  process.exit(0);
 }
 
 const payBillApi = GetBillPaymentsApi();

@@ -14,10 +14,15 @@ export const ClientTransaction = (props: AnyTxAction) => {
   const fiat = history.find(r => r.fiat)?.fiat ?? "NO FIAT";
   const coin = history.find(r => r.coin)?.coin ?? "NO COIN";
 
+  // TODO: Obvs not gonna work in release
+  const project = "tccc-testing";
+  const firestorePath = `https://console.cloud.google.com/firestore/databases/-default-/data/panel/User/${props.address}/${props.type}/${props.doc.id}?project=${project}&pli=1`;
+
   return (
     <List.Item key={props.data.initialId}>
       <TransactionIcon type={final?.type} />
       {`${date.toISODate()} ${final?.type ?? props.type} - ${fiat} : ${coin}`}
+      <a href={firestorePath}>{props.data.initialId.slice(0, 10)}</a>
       <TransactionPath {...props.doc} />
       {final?.type == "markComplete"
         ? undefined
@@ -45,6 +50,7 @@ const TransactionEntry = (props: TransitionDelta) =>
     <TransactionEntryHash delta={props} />
     <TransactionEntryItem delta={props} item="date" />
     <TransactionEntryItem delta={props} item="meta" />
+    <TransactionEntryItem delta={props} item="error" />
   </li>
 
 const TransactionEntryHash = ({delta}: {delta: TransitionDelta}) => (
@@ -58,6 +64,6 @@ const TransactionEntryHash = ({delta}: {delta: TransitionDelta}) => (
 
 const TransactionEntryItem = ({delta, item}: {delta: TransitionDelta, item: keyof TransitionDelta}) => (
   delta[item]
-    ? <div>&nbsp;&nbsp;&nbsp;{` - ${item}: ${delta[item]?.toString()}`}</div>
+    ? <div>&nbsp;&nbsp;&nbsp;{` - ${item}: ${delta[item]?.toString().slice(0, 50)}`}</div>
     : null
 )
