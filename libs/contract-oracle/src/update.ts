@@ -98,7 +98,8 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
 
   // We have pushed too many rates repeatedly, so double-check here
   const doubleCheckValidUntil = from + (rates.length * blockTime);
-  if (doubleCheckValidUntil > (Date.now() + 5 * ONE_HR)) {
+  const maxLegalValidUntil = Date.now() + (1.5 * blockTime);
+  if (doubleCheckValidUntil > maxLegalValidUntil) {
     log.fatal({ expiry: new Date(doubleCheckValidUntil) }, "Too many rates, calculated expiry is {expiry}");
     return false;
   }

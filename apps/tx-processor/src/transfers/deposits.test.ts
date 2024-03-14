@@ -4,6 +4,7 @@ import { ConnectContract } from '@thecointech/contract-core';
 import { ETransferErrorCode, RbcApi } from '@thecointech/rbcapi';
 import gmail from '@thecointech/tx-gmail';
 import { getSigner } from '@thecointech/signers';
+import { BuyActionContainer } from '@thecointech/tx-statemachine';
 
 jest.setTimeout(900000);
 const errors: string[] = [];
@@ -23,7 +24,7 @@ jest.unstable_mockModule('@thecointech/logging', () => ({
     }),
   }
 }));
-const { processUnsettledDeposits } = await import('.')
+const { processTransfers } = await import('.')
 const { getCurrentState } = await import('@thecointech/tx-statemachine');
 
 it("Can complete deposits", async () => {
@@ -37,7 +38,7 @@ it("Can complete deposits", async () => {
 
   // We have 5 deposits, and
   setupReturnValues(bank)
-  const deposits = await processUnsettledDeposits(theContract, bank);
+  const deposits = (await processTransfers(theContract, bank)) as BuyActionContainer[];
   expect(deposits.length).toEqual(4);
   // First, ensure that we have added our users to the DB
   for (const deposit of deposits) {

@@ -52,7 +52,7 @@ export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugin
         transactionIndex: "0x0",
         blockHash: "0x69c0f8b66f0479886348db0859468527d154e3bd6bdac90db989b0092c130a07",
         blockNumber: "0x14",
-        address: "0x23544d1596b2d8f608d1fd441131e719e0c5a685",
+        address: process.env.WALLET_BrokerCAD_ADDRESS,
         data: "0x0000000000000000000000000000000000000000000000000000000003a39dbd00000000000000000000000000000000000000000000000000000179e00cb316",
         topics: [
           "0x53abef67a06a7d88762ab2558635c2ccf615af355d42c5a0c98715be5fb39e75",
@@ -80,8 +80,8 @@ export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugin
     // Only used by fetchExactTimestamps
     parseLog: (item: any) => {
       const isOut = item.transactionHash[2] == 'c';
-      const to = isOut ? "0x23544d1596b2d8f608d1fd441131e719e0c5a685" : '0x445758E37F47B44E05E74EE4799F3469DE62A2CB';
-      const from = isOut ? '0x445758E37F47B44E05E74EE4799F3469DE62A2CB' : "0x23544d1596b2d8f608d1fd441131e719e0c5a685";
+      const to = isOut ? process.env.WALLET_BrokerCAD_ADDRESS : '0x445758E37F47B44E05E74EE4799F3469DE62A2CB';
+      const from = isOut ? '0x445758E37F47B44E05E74EE4799F3469DE62A2CB' : process.env.WALLET_BrokerCAD_ADDRESS;
       return {
         name: "ExactTransfer",
         args: {

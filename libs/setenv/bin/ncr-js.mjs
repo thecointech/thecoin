@@ -16,7 +16,7 @@ import {fileURLToPath} from 'url'
  */
 
 // Inspired by https://stackoverflow.com/questions/74660824/nodejs-v19-drops-support-for-es-module-specifier-resolution-node-which-makes-i
-const extensions = ['mjs', 'js', 'json']
+const extensions = ['mjs', 'js', 'json', 'less', 'css']
 const indexFiles = extensions.map(e => `index.${e}`)
 const postfixes = extensions.map(e => `.${e}`).concat(indexFiles.map(p => `/${p}`))
 const prefixes = ['/', './', '../']

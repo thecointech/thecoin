@@ -1,27 +1,16 @@
 import { log } from '@thecointech/logging';
 import { RbcApi } from '@thecointech/rbcapi';
-import type { TheCoin } from '@thecointech/contract-core';
 import { SendMail } from '@thecointech/email';
 import { exit } from 'process';
-import { processUnsettledDeposits } from './deposits';
 import { initialize, release } from './initialize';
 import { processReferrals } from './referrals';
-import { processPayments } from './sellProcessor';
+import { processTransfers } from './transfers';
 
-//
-// Process deposits: Make 'em Rain!!!
-async function ProcessDeposits(contract: TheCoin, bank: RbcApi) {
-  log.debug('Processing Deposits');
-  const deposits = await processUnsettledDeposits(contract, bank);
-  log.debug(`Processed ${deposits.length} deposits`);
-  return deposits;
-}
 
 async function Process() {
   const contract = await initialize();
   const bank = new RbcApi();
-  await ProcessDeposits(contract, bank);
-  await processPayments(contract, bank);
+  await processTransfers(contract, bank);
   await processReferrals();
 
   log.debug('Completed processing');
