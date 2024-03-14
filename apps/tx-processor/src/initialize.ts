@@ -13,13 +13,11 @@ export async function initialize() {
   // the GOOGLE_APPLICATION_CREDENTIALS env variable below
   // to ensure prodtest loads from the right location
   const signer = await getSigner('BrokerCAD');
-  await getSigner('BrokerTransferAssistant');
-  const address = await signer.getAddress();
   const contract = await ConnectContract(signer);
   if (!contract) {
     throw new Error("Couldn't initialize contract")
   }
-  log.debug(`Initialized contract to address: ${address}`);
+  log.debug(`Initialized contract to address: ${contract.address}`);
 
   // Set to broker service account for Firestore Access
   // Must be done after connecting the signer abov

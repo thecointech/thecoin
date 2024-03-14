@@ -49,7 +49,19 @@ function parseLog(contract: TheCoin, log: TransactionReceipt["logs"][0]) {
 }
 export function updateCoinBalance(container: AnyActionContainer, receipt: TransactionReceipt) {
 
-  const parsed = receipt.logs.map(l => parseLog(container.contract, l))
+  // TODO: Check for success and return failure in that case.
+  // if (receipt.status === 0)
+
+  const parsed = receipt.logs.map(l => parseLog(container.contract, l));
+
+  // TODO: Should plugin assignment be in it's own action?
+  // It makes sense to keep it in the off chance some future
+  // plugin makes a transfer at the same moment as assignment (?)
+  // If this is a plugin assignment, then all is well
+  if (parsed.length == 0 && parsed[0]?.name == "PluginAttached") {
+    return {};
+  }
+
   // We use ExactTransfer instead of Transfer to ensure we
   const exactTransfers = parsed.filter(p => p?.name == "ExactTransfer");
   // Only use the transfer from the current user to us(?)
@@ -74,6 +86,7 @@ export function updateCoinBalance(container: AnyActionContainer, receipt: Transa
       // We have no idea what is going on here, so hard-stop
       throw new Error("ExactTransfer not as expected");
     }
+
     return undefined;
   }
   if (rest.length > 0) {
