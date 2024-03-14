@@ -24,7 +24,7 @@ export async function seed() {
   // Seed our DB for a year, values set for a day.
   const from = DateTime
     .local()
-    .minus({ years: 1 })
+    .minus({ years: 1.1 })
     .set({
       hour: 9,
       minute: 31,
@@ -36,12 +36,12 @@ export async function seed() {
   // Always seed with live rates (falls back to random)
   await seedRates(from, validityInterval);
 
-  // re-enable logging
-  oldLevels.forEach((lvl, idx) => log.levels(idx, lvl));
-
   // Triggering an update ensures the oracle is updated
   // before we re-enable logging
   await update();
+
+  // re-enable logging
+  oldLevels.forEach((lvl, idx) => log.levels(idx, lvl));
 
   log.trace(`Seeding complete from ${from.toLocaleString(DateTime.DATETIME_MED)}`);
 

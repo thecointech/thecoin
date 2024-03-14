@@ -45,10 +45,13 @@ export async function updateOracle(timestamp: number) {
     const validTo = await oracle.validUntil();
     const validToDate = DateTime.fromMillis(validTo.toNumber());
     if (validToDate > DateTime.now().plus({ hours: 6 })) {
-      log.error(
-        { date: toDateStr(validToDate) },
-        "Oracle is too far in the future {date}"
-      );
+      // Ignore this in develop (the duration of a rate is longer than 6h)
+      if (process.env.NODE_ENV !== "development") {
+        log.error(
+          { date: toDateStr(validToDate) },
+          "Oracle is too far in the future {date}"
+        );
+      }
     }
     else {
       log.info(
@@ -106,7 +109,7 @@ const cs_doc = "admin/__updater_cs";
 const start_key = "started";
 const complete_key = "complete";
 function enterCS() {
-  const db: FirestoreAdmin = getFirestore() as any;
+  const db = getFirestore() as FirestoreAdmin;
   const ref = db.doc(cs_doc);
   return db.runTransaction(async t => {
     const doc = await t.get(ref);
