@@ -2,8 +2,9 @@ import emaillist from './emails.list.json' assert {type: "json"};
 import emailget from './emails.get.json' assert {type: "json"};
 import { gmail_v1, drive_v3 } from "googleapis";
 import { wallets } from '../wallets';
+import os from 'node:os';
+import fs from 'node:fs';
 
-// file deepcode ignore no-namespace: <comment the reason here>
 export namespace google {
 
 
@@ -13,7 +14,6 @@ export namespace google {
       setCredentials = () => {
         // Ignore input, just set default
         this.credentials = {
-          //  deepcode ignore HardcodedNonCryptoSecret: Not A Secret
           access_token: "TEST_TOKEN"
         }
       }
@@ -30,6 +30,8 @@ export namespace google {
   export function drive() {
     return new DriveMocked();
   }
+
+  const emailCacheFile = os.tmpdir() + "/devlive-email.json";
 
   class GmailMocked {
     users = {
@@ -58,11 +60,31 @@ export namespace google {
 
       messages: {
         async list() {
-          return emaillist;
+          if (!fs.existsSync(emailCacheFile)) {
+            return emaillist;
+          }
+          // read the file
+          const raw = fs.readFileSync(emailCacheFile, "utf8");
+          // as JSON
+          const json = JSON.parse(raw);
+          return {
+            data: {
+              messages: json
+            }
+          }
         },
 
         async get(opts: { id: string }) {
-          return emailget.find(e => e.data.id === opts.id)
+          if (!fs.existsSync(emailCacheFile)) {
+            return emailget.find(e => e.data.id === opts.id);
+          }
+          // read the file
+          const raw = fs.readFileSync(emailCacheFile, "utf8");
+          // as JSON
+          const json = JSON.parse(raw);
+          return {
+            data: json.find((e: any) => e.id === opts.id)
+          }
         },
 
         async modify(opts: gmail_v1.Params$Resource$Users$Messages$Modify) {

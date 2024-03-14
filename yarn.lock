@@ -10671,6 +10671,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@thecointech/email-fake-deposit@npm:^0.2.121, @thecointech/email-fake-deposit@workspace:libs/email-fake-deposit":
+  version: 0.0.0-use.local
+  resolution: "@thecointech/email-fake-deposit@workspace:libs/email-fake-deposit"
+  dependencies:
+    "@thecointech/email": "npm:^0.2.121"
+    "@thecointech/setenv": "npm:^0.2.121"
+  languageName: unknown
+  linkType: soft
+
 "@thecointech/email@npm:^0.2.121, @thecointech/email@workspace:libs/email":
   version: 0.0.0-use.local
   resolution: "@thecointech/email@workspace:libs/email"
@@ -11064,6 +11073,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/site-test-deposit@workspace:apps/site-fake-deposit"
   dependencies:
+    "@thecointech/email-fake-deposit": "npm:^0.2.121"
+    "@thecointech/setenv": "npm:^0.2.121"
     "@thecointech/site-base": "npm:^0.2.121"
   languageName: unknown
   linkType: soft

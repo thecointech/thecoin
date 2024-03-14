@@ -1,19 +1,14 @@
-import { SendMail } from '@thecointech/email';
 import { randomBytes } from "crypto";
 import { DateTime } from 'luxon';
-import yargs from 'yargs';
-import { log } from '@thecointech/logging';
 
-async function fakeDepositEmail(address: string, amount: number) {
-
+export const getEmailTitle = () => "INTERAC e-Transfer: (fake deposit) has sent you money."
+export const getEmailAddress = (coinAddress: string) => `${coinAddress}@${process.env.TX_GMAIL_DEPOSIT_DOMAIN}`
+export const getEmailBody = (amount: number, when: DateTime) => {
   const randomId = randomBytes(4).toString('hex');
   const p1 = randomBytes(32).toString('hex');
   const expiry = DateTime.now().plus({month: 1})
-  log.debug(`Sending $${amount} to ${address}`);
 
-  SendMail(
-    "INTERAC e-Transfer: (fake deposit) has sent you money.",
-    `
+  return `
 Hi Coin,
 
 Fake Deposit sent you a money transfer for the amount of $${amount.toFixed(2)} (CAD) .
@@ -37,14 +32,7 @@ Interac Corp.
 P.O. Box 45, Toronto, Ontario M5J 2J1
 www.interac.ca
 
-=C2=AE Trade-mark of Interac Corp.  Used under license.`,
-    `${address}@test.thecoin.io`,
-  )
+{ dateOverride: "${when.toISO()}" }
+
+=C2=AE Trade-mark of Interac Corp.  Used under license.`
 }
-
-const argv = yargs(process.argv.slice(2))
-  .usage('Usage: $0 -amt [num] -addr [num]')
-  .default({ 'amt': 10, addr: "0x445758e37f47b44e05e74ee4799f3469de62a2cb"})  // TestAccNoT
-  .argv;
-
-fakeDepositEmail(argv.addr, argv.amt);

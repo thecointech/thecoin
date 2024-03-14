@@ -1,19 +1,5 @@
 [
   {
-    "config": {
-      "url": "https://www.googleapis.com/gmail/v1/users/me/messages/17ac461078d120ff",
-      "method": "GET",
-      "headers": {
-        "x-goog-api-client": "gdcl/3.2.1 gl-node/14.15.5 auth/5.9.2",
-        "Accept-Encoding": "gzip",
-        "User-Agent": "google-api-nodejs-client/3.2.1 (gzip)",
-        "Authorization": "Bearer ya29.a0ARrdaM8k7kiKYMIV3oordclfqxOBeoPJqrB34VKiBFySTGRW3D_WubfuCClPmrP3-0y7WDwdp5sAMcdFT7fx1myIBChj92ctWGBlSV086Zb13QH5Z3WsTQtnGnvk0T0awMo9kazMK84vRC0g0K8M7pVhxwVsgg",
-        "Accept": "application/json"
-      },
-      "params": {},
-      "retry": true,
-      "responseType": "json"
-    },
     "data": {
       "id": "17ac461078d120ff",
       "threadId": "17ac45a38e2394ff",
@@ -100,20 +86,6 @@
     }
   },
   {
-    "config": {
-      "url": "https://www.googleapis.com/gmail/v1/users/me/messages/17ac45a38e2394ff",
-      "method": "GET",
-      "headers": {
-        "x-goog-api-client": "gdcl/3.2.1 gl-node/14.15.5 auth/5.9.2",
-        "Accept-Encoding": "gzip",
-        "User-Agent": "google-api-nodejs-client/3.2.1 (gzip)",
-        "Authorization": "Bearer ya29.a0ARrdaM8k7kiKYMIV3oordclfqxOBeoPJqrB34VKiBFySTGRW3D_WubfuCClPmrP3-0y7WDwdp5sAMcdFT7fx1myIBChj92ctWGBlSV086Zb13QH5Z3WsTQtnGnvk0T0awMo9kazMK84vRC0g0K8M7pVhxwVsgg",
-        "Accept": "application/json"
-      },
-      "params": {},
-      "retry": true,
-      "responseType": "json"
-    },
     "data": {
       "id": "17ac45a38e2394ff",
       "threadId": "17ac45a38e2394ff",
@@ -200,20 +172,6 @@
     }
   },
   {
-    "config": {
-      "url": "https://www.googleapis.com/gmail/v1/users/me/messages/17ac3cfb6345ccda",
-      "method": "GET",
-      "headers": {
-        "x-goog-api-client": "gdcl/3.2.1 gl-node/14.15.5 auth/5.9.2",
-        "Accept-Encoding": "gzip",
-        "User-Agent": "google-api-nodejs-client/3.2.1 (gzip)",
-        "Authorization": "Bearer ya29.a0ARrdaM8k7kiKYMIV3oordclfqxOBeoPJqrB34VKiBFySTGRW3D_WubfuCClPmrP3-0y7WDwdp5sAMcdFT7fx1myIBChj92ctWGBlSV086Zb13QH5Z3WsTQtnGnvk0T0awMo9kazMK84vRC0g0K8M7pVhxwVsgg",
-        "Accept": "application/json"
-      },
-      "params": {},
-      "retry": true,
-      "responseType": "json"
-    },
     "data": {
       "id": "17ac3cfb6345ccda",
       "threadId": "17ac3c6a548bed36",
@@ -382,20 +340,6 @@
     }
   },
   {
-    "config": {
-      "url": "https://www.googleapis.com/gmail/v1/users/me/messages/17ac0f8026ffba26",
-      "method": "GET",
-      "headers": {
-        "x-goog-api-client": "gdcl/3.2.1 gl-node/14.15.5 auth/5.9.2",
-        "Accept-Encoding": "gzip",
-        "User-Agent": "google-api-nodejs-client/3.2.1 (gzip)",
-        "Authorization": "Bearer ya29.a0ARrdaM8k7kiKYMIV3oordclfqxOBeoPJqrB34VKiBFySTGRW3D_WubfuCClPmrP3-0y7WDwdp5sAMcdFT7fx1myIBChj92ctWGBlSV086Zb13QH5Z3WsTQtnGnvk0T0awMo9kazMK84vRC0g0K8M7pVhxwVsgg",
-        "Accept": "application/json"
-      },
-      "params": {},
-      "retry": true,
-      "responseType": "json"
-    },
     "data": {
       "id": "17ac0f8026ffba26",
       "threadId": "17ac0f8026ffba26",
@@ -483,20 +427,6 @@
     }
   },
   {
-    "config": {
-      "url": "https://www.googleapis.com/gmail/v1/users/me/messages/17ac0f8026ffba26",
-      "method": "GET",
-      "headers": {
-        "x-goog-api-client": "gdcl/3.2.1 gl-node/14.15.5 auth/5.9.2",
-        "Accept-Encoding": "gzip",
-        "User-Agent": "google-api-nodejs-client/3.2.1 (gzip)",
-        "Authorization": "Bearer ya29.a0ARrdaM8k7kiKYMIV3oordclfqxOBeoPJqrB34VKiBFySTGRW3D_WubfuCClPmrP3-0y7WDwdp5sAMcdFT7fx1myIBChj92ctWGBlSV086Zb13QH5Z3WsTQtnGnvk0T0awMo9kazMK84vRC0g0K8M7pVhxwVsgg",
-        "Accept": "application/json"
-      },
-      "params": {},
-      "retry": true,
-      "responseType": "json"
-    },
     "data": {
       "id": "17ac0f8026ffba26",
       "threadId": "17ac0f8026ffba26",
