@@ -5,7 +5,7 @@ import { NonceManager } from "@ethersproject/experimental";
 import type { Signer } from '@ethersproject/abstract-signer';
 
 const walletName = 'BrokerTransferAssistant';
-export const GetWallet = getSigner(walletName);
+export const GetWallet = () => getSigner(walletName);
 export const GetContract = async () => {
   const signer = await getNonceSafeSigner();
   return await ConnectContract(signer);
@@ -17,7 +17,7 @@ let signerPromise: Promise<Signer> | null = null;
 function getNonceSafeSigner() {
   if (signerPromise === null) {
     signerPromise = new Promise<Signer>(async resolve => {
-      const signer = await getSigner(walletName)
+      const signer = await GetWallet();
       resolve(new NonceManager(signer));
     });
   }
