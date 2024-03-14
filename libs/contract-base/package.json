@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-base",
-  "version": "0.2.121",
+  "version": "0.2.122",
   "description": "TheCoin: Basic contract management for NFT & Core contracts",
   "type": "module",
   "keywords": [
@@ -41,8 +41,8 @@
     }
   },
   "dependencies": {
-    "@thecointech/signers": "^0.2.121",
-    "@thecointech/utilities": "^0.2.121"
+    "@thecointech/signers": "^0.2.122",
+    "@thecointech/utilities": "^0.2.122"
   },
   "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
 }
