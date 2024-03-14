@@ -1,4 +1,6 @@
 import fs from 'fs'
 import { emailCacheFile } from '../src/devlive.ts'
 
-fs.unlinkSync(emailCacheFile)
+if (fs.existsSync(emailCacheFile)) {
+  fs.unlinkSync(emailCacheFile)
+}
