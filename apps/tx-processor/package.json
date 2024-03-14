@@ -14,10 +14,10 @@
     "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
     "dev": "run-env ./src/main.ts",
-    "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
+    "dev:live": "run -T cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn dev",
-    "prod": "cross-env CONFIG_NAME=prod yarn start",
-    "start": "cross-env CONFIG_NAME=prod yarn run-env ./build/main.js",
+    "prod": "run -T cross-env CONFIG_NAME=prod yarn start",
+    "start": "run -T cross-env CONFIG_NAME=prod yarn run-env ./build/main.js",
     "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },

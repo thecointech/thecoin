@@ -31,6 +31,6 @@ export async function createAndInitOracle(owner: SignerWithAddress, rate = 2, bl
 export async function setOracleValueRepeat(oracle: SpxCadOracle, rate: number, days: number) {
   const bt = (oracle as any).__blockTime;
   const numEntries = Math.ceil(days / Duration.fromMillis(bt).as("days"));
-    const tx = await oracle.bulkUpdate(new Array(numEntries).fill(rate * 1e8));
+  const tx = await oracle.bulkUpdate(new Array(numEntries).fill(Math.round(rate * 1e8)));
   return await tx.wait();
 }

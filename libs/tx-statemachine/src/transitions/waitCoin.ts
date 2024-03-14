@@ -9,7 +9,7 @@ import { makeTransition } from '../makeTransition';
 
 //
 // Wait for a transfer to complete
-export const  waitCoin = makeTransition("waitCoin", async (container) => {
+export const waitCoin = makeTransition("waitCoin", async (container) => {
 
   const currentState = getCurrentState(container)
   // NOTE!  This only processes transfers
@@ -49,17 +49,41 @@ function parseLog(contract: TheCoin, log: TransactionReceipt["logs"][0]) {
 }
 export function updateCoinBalance(container: AnyActionContainer, receipt: TransactionReceipt) {
 
-  const parsed = receipt.logs.map(l => parseLog(container.contract, l))
-  // We use ExactTransfer instead of Transfer because we know there
-  // will always be 1 and only 1 in any transaction we initiate.
-  const [transfer, ...rest] = parsed.filter(p => p?.name == "ExactTransfer");
+  // TODO: Check for success and return failure in that case.
+  // if (receipt.status === 0)
+
+  const parsed = receipt.logs.map(l => parseLog(container.contract, l));
+
+  // We use ExactTransfer instead of Transfer to ensure we
+  const exactTransfers = parsed.filter(p => p?.name == "ExactTransfer");
+  // Only use the transfer from the current user to us(?)
+  const legalAddresses = [
+    NormalizeAddress(process.env.WALLET_BrokerCAD_ADDRESS!),
+    container.action.address,
+  ]
+  const [transfer, ...rest] = exactTransfers.filter(t => (
+    legalAddresses.includes(NormalizeAddress(t?.args.from)) &&
+    legalAddresses.includes(NormalizeAddress(t?.args.to))
+  ));
+
   if (!transfer) {
-    if (rest.length > 0) {
-      // We have too many transfers, so we don't know what to do.
-      throw new Error(`Assumption Violated: ExactTransfer not as expected`);
+    // We expect a transfer, but couldn't find one that matched us.
+    // If there was an ExactTransfer but we aren't involved, that's an issue
+    // (It is legal to have 0 transfers with UberConverter)
+    if (exactTransfers.length !== 0) {
+      log.error(
+        { initialId: container.action.data.initialId, hash: receipt.transactionHash },
+        "ExactTransfer found for {initialId} in {hash}, but it does not match Broker address"
+      );
+      // We have no idea what is going on here, so hard-stop
+      throw new Error("ExactTransfer not as expected");
     }
-    // It is legal to have 0 transfers (with UberConverter)
+
     return undefined;
+  }
+  if (rest.length > 0) {
+    // We have too many transfers, so we don't know what to do.
+    throw new Error(`Assumption Violated: ExactTransfer not as expected`);
   }
 
   let balance = getCurrentState(container).data.coin ?? new Decimal(0);

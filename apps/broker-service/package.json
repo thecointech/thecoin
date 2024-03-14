@@ -19,9 +19,9 @@
   "scripts": {
     "start": "run-env ./build/main.js",
     "dev": "yarn run-env --inspect=9232 ./src/main.ts",
-    "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
-    "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
-    "prod:beta": "cross-env CONFIG_NAME=prodbeta yarn dev",
+    "dev:live": "run -T cross-env CONFIG_NAME=devlive yarn dev",
+    "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn dev",
+    "prod:beta": "run -T cross-env CONFIG_NAME=prodbeta yarn dev",
     "deploy": "yarn run-env ./deploy.ts",
     "build": "run -T tsc -b",
     "gen:swagger": "run -T tsoa spec-and-routes",
@@ -38,6 +38,7 @@
   ],
   "main": "./build/main.js",
   "dependencies": {
+    "@ethersproject/experimental": "5.7.0",
     "@google-cloud/firestore": "4.12.3",
     "@google-cloud/storage": "^7.7.0",
     "@thecointech/contract-core": "^0.2.121",

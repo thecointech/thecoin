@@ -4,8 +4,6 @@ import { DateTime } from 'luxon';
 import { COIN_EXP, ConnectContract, GetContract } from '../../src';
 import {assignRoles} from './assignRoles';
 
-import { getContract } from '@thecointech/contract-oracle';
-
 const theCoin = await getSigner("TheCoin");
 const minter = await getSigner("Minter");
 const brokerCAD = await getSigner("BrokerCAD");

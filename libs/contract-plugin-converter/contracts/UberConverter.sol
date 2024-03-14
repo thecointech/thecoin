@@ -103,17 +103,18 @@ contract UberConverter is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     if (currency == CurrencyCode) {
 
       // If this is scheduled to happen in the future?
-      if (msTransferAt > msNow()) {
+      // TEMP ONLY - REMOVE AFTER CREATING DEMO ACCOUNT
+      // if (msTransferAt > msNow()) {
         pending[from].transfers[to][msTransferAt] = pending[from].transfers[to][msTransferAt] + amount;
         pending[from].total = pending[from].total + amount;
         finalAmount = 0;
         emit ValueChanged(from, msSignedAt, "pending[user].total", int(pending[from].total));
-      }
+      // }
       // Happening now, so convert to Coin
-      else {
-        finalAmount = toCoin(amount, msTransferAt);
-        finalCurrency = 0;
-      }
+      // else {
+      //   finalAmount = toCoin(amount, msTransferAt);
+      //   finalCurrency = 0;
+      // }
     }
     return (finalAmount, finalCurrency);
   }

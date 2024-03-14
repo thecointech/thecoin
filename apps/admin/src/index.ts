@@ -5,6 +5,7 @@ import { ipcMain } from 'electron';
 import { log } from '@thecointech/logging';
 import gmail from '@thecointech/tx-gmail';
 import * as signers from '@thecointech/signers/electron';
+import contextMenu from 'electron-context-menu';
 
 // We need to pull in environment vars to load signers
 import { getEnvVars } from '@thecointech/setenv';
@@ -24,6 +25,8 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
 }
+
+contextMenu();
 
 const createWindow = (): void => {
   // Create the browser window.

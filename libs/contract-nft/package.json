@@ -31,7 +31,7 @@
     "clean:contracts": "rimraf ./src/codegen",
     "test": "run :jest",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn deploy:both",
-    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn deploy:polygon",
+    "dev:live": "run -T wait-port 9545 && run -T cross-env CONFIG_NAME=devlive yarn deploy:polygon",
     "deploy:both": "yarn deploy:polygon && yarn deploy:ethereum",
     "deploy:polygon": "cross-env HARDHAT_NETWORK=polygon yarn _deploy",
     "deploy:ethereum": "cross-env HARDHAT_NETWORK=ethereum yarn _deploy",

@@ -4,7 +4,7 @@ import { writeFileSync } from 'fs';
 const password = "0nC927z!Vkka";
 
 (async () => {
-  console.log("Generating a random wallet with password 'random'");
+  console.log(`Generating a random wallet with password '${password}'`);
 
   const wallet = Wallet.createRandom();
   const encrypted = await wallet.encrypt(password);
