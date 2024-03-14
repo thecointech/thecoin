@@ -19,7 +19,7 @@
   "scripts": {
     "build": "run -T tsc -b",
     "dev:live": "run-env ./scripts/cleanDevliveFile.ts",
-    "clean": "run -T rimraf ./build && run -T rimraf ./coverage && yarn dev:live"
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage"
   },
   "files": [
     "build/**/*"
