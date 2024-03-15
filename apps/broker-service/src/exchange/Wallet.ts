@@ -33,7 +33,7 @@ function getNonceSafeSigner(provider: Provider) {
       log.debug({ Signer: walletName, Balance: formatEther(signerBalance) }, "Loaded {Signer} with eth reserves: ${Balance}")
       const minimumBalance = parseUnits('0.2', "ether");
       if (signerBalance.lt(minimumBalance)) {
-        await SendMail(`WARNING: ${walletName} balance too low ${signerBalance.toString()}`, `Signer balance too low ${signerBalance.toString()}\nMinimum balance required: ${minimumBalance.toString()}`);
+        await SendMail(`WARNING: ${walletName} balance too low ${formatEther(signerBalance)}`, `Signer balance too low ${formatEther(signerBalance)}\nMinimum balance required: ${minimumBalance.toString()}`);
         log.error(
           { Balance: formatEther(signerBalance), MinimumBalance: formatEther(minimumBalance), Signer: walletName },
           `{Signer} ether balance too low {Balance} < {MinimumBalance}`

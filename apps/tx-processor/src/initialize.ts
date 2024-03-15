@@ -57,7 +57,7 @@ async function verifyEtherReserves(signer: Signer) {
       { Balance: formatEther(signerBalance), MinimumBalance: formatEther(minimumBalance), Signer: 'BrokerCAD' },
       `Signer {Signer} ether balance too low {Balance} < {MinimumBalance}`
     );
-    await SendMail(`WARNING: Signer balance too low ${signerBalance.toString()}`, `Signer balance too low ${signerBalance.toString()}\nMinimum balance required: ${minimumBalance.toString()}`);
+    await SendMail(`WARNING: Signer balance too low ${formatEther(signerBalance)}`, `Signer balance too low ${formatEther(signerBalance)}\nMinimum balance required: ${minimumBalance.toString()}`);
     // If anyone is watching, give them time to react
     await sleep(10_000);
   }
