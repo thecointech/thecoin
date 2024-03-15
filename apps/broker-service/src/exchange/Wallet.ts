@@ -3,7 +3,10 @@ import { getSigner } from '@thecointech/signers';
 import { ConnectContract, GetContract as GetCore } from '@thecointech/contract-core';
 import { NonceManager } from "@ethersproject/experimental";
 import type { Signer } from '@ethersproject/abstract-signer';
-import { Provider } from '@ethersproject/abstract-provider';
+import type { Provider } from '@ethersproject/abstract-provider';
+import { formatEther, parseUnits } from "@ethersproject/units";
+import { SendMail } from '@thecointech/email';
+import { log } from '@thecointech/logging';
 
 const walletName = 'BrokerTransferAssistant';
 export const GetWallet = () => getSigner(walletName);
@@ -24,6 +27,19 @@ function getNonceSafeSigner(provider: Provider) {
       // and the ConnectContract call checks other signers
       // are connected to the same network as the contract
       const connected = signer.connect(provider);
+
+      // Keep an eye on our ether reserves
+      const signerBalance = await connected.getBalance();
+      log.debug({ Signer: walletName, Balance: formatEther(signerBalance) }, "Loaded {Signer} with eth reserves: ${Balance}")
+      const minimumBalance = parseUnits('0.2', "ether");
+      if (signerBalance.lt(minimumBalance)) {
+        await SendMail(`WARNING: ${walletName} balance too low ${signerBalance.toString()}`, `Signer balance too low ${signerBalance.toString()}\nMinimum balance required: ${minimumBalance.toString()}`);
+        log.error(
+          { Balance: formatEther(signerBalance), MinimumBalance: formatEther(minimumBalance), Signer: walletName },
+          `{Signer} ether balance too low {Balance} < {MinimumBalance}`
+        );
+      }
+
       const manager = new NonceManager(connected);
       resolve(manager);
     });
