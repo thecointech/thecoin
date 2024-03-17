@@ -29,7 +29,8 @@ describe('Oracle Tests', () => {
     const initialTimestamp = rates[0].from;
     const oracle = getContract();
     await oracle.initialize(owner.address, initialTimestamp, blockTime);
-    await updateRates(oracle, last(rates).to, factory);
+    const till = Math.min(last(rates).to, Date.now());
+    await updateRates(oracle, till, factory);
 
     // Now, test every single rates to prove it's consistent
     for (const r of rates) {
@@ -38,12 +39,15 @@ describe('Oracle Tests', () => {
         const expected = Math.round(r.rate * factor);
         expect(s.toNumber()).toEqual(expected);
       }
-      test(r.from);
-      test(r.to - 1);
-      const duration = r.to - r.from;
+      const from = r.from;
+      const to = Math.min(r.to, Date.now());
+
+      test(from);
+      test(to - 1);
+      const duration = to - from;
       for (let i = 0; i < 3; i++) {
         const t = Math.floor(Math.random() * duration);
-        test(r.from + t);
+        test(from + t);
       }
     }
   })
@@ -53,14 +57,13 @@ describe('Oracle Tests', () => {
   // this ensures that the basics work, and that our
   // algo matches the JS version tested above
   it("it can find rate in SOL version", async () => {
-
-    const SpxCadOracle = getOracleFactory();
+    const SpxCadOracle = getOracleFactory(owner);
     const oracle = await SpxCadOracle.deploy();
 
     // ignore the first live rate, since there are some issues with the first day
     // Choose ~300 entries, this should always catch one DST changeover
     const { rates, factory } = await getRatesFactory();
-    const start = Math.floor(Math.random() * (rates.length - 300));
+    const start = Math.floor(Math.random() * (rates.length - 301));
     const initialTimestamp = rates[start].from;
     const till = rates[start + 300].to;
 
@@ -165,8 +168,21 @@ async function getRatesFactory() {
           ...rates[i]
         }
         const nextRate = rates[i + 1];
-        if (nextRate && nextRate.from != r.to) {
-          r.to = nextRate.from;
+        if (nextRate) {
+          if (nextRate.from != r.to) {
+            r.to = nextRate.from;
+          }
+        }
+        else if (r.to > millis) {
+          // If it's the last rate, limit it's duration to blocktime
+          // Otherwise it breaks testing over the weekend (normally
+          // the validity of the currency field limits the duration
+          // to a max of blocktime, but this files values are squished)
+          return {
+            ...r,
+            from: millis,
+            to: millis + blockTime
+          }
         }
         return r;
       }

@@ -8,7 +8,18 @@ import { ALL_PERMISSIONS, buildAssignPluginRequest } from '@thecointech/contract
 import { BuildUberAction } from '@thecointech/utilities/UberAction';
 import Decimal from 'decimal.js-light';
 import { CurrencyCode } from "@thecointech/fx-rates";
-import { SendFakeDeposit } from '@thecointech/email-fake-deposit';
+import { SendFakeDeposit, emailCacheFile } from '@thecointech/email-fake-deposit';
+import { writeFileSync } from "fs";
+
+// Always delete any existing emails
+//execSync("yarn dev:live", { stdio: "inherit", cwd: "../libs/email-fake-deposit" });
+// the above line takes for ages, so do it manually
+if (process.env.CONFIG_NAME == "devlive") {
+  writeFileSync(emailCacheFile, "[]");
+}
+
+const pausedAfterMonths = 0;
+const monthsToRun = 2;
 
 // Init/Demo account
 // Starting from Jan 1 2022
@@ -23,8 +34,11 @@ const startDate = DateTime.fromObject({
   hour: 9,
   minute: 35
 })
-const pausedDate = startDate; //.plus({month: 6});
-const endDate = DateTime.now(); //startDate.plus({month: 6});
+const pausedDate = startDate.plus({month: pausedAfterMonths});
+const endDate = DateTime.min(
+  startDate.plus({month: pausedAfterMonths + monthsToRun}),
+  DateTime.now()
+);
 const visaStep = Duration.fromObject({week: 4});
 const visaDuePeriod = Duration.fromObject({week: 3});
 const weeklySpending = 350;
@@ -43,7 +57,7 @@ const mockPayee = {
 // First, assign plugins
 const tcCore = await GetContract();
 const plugins = await tcCore.getUsersPlugins(address);
-
+console.log(`Got ${plugins.length} plugins`)
 if (plugins.length == 0) {
   const oldNow = DateTime.now
 
