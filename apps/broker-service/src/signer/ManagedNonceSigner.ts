@@ -35,10 +35,12 @@ export class ManagedNonceSigner extends Signer {
     if (transaction.nonce == undefined) {
       // Because there are multiple versions of this service running, we
       // need to lock the nonce while in-use and ensure it is always up-to-date
-      return guardFn<TransactionResponse>(async (lastNonce: number) => {
-        transaction = utils.shallowCopy(transaction);
-        const pendingNonce = await this.getTransactionCount("pending")
-        transaction.nonce = Math.max(pendingNonce, lastNonce + 1);
+      return guardFn<TransactionResponse>(async (lastNonce) => {
+        if (lastNonce !== undefined) {
+          transaction = utils.shallowCopy(transaction);
+          const pendingNonce = await this.getTransactionCount("pending")
+          transaction.nonce = Math.max(pendingNonce, lastNonce + 1);
+        }
         return await this.baseSigner.sendTransaction(transaction);
       });
     }
@@ -49,7 +51,7 @@ export class ManagedNonceSigner extends Signer {
   }
 }
 
-export async function guardFn<T extends { nonce?: number }>(fn: (lastNonce: number) => Promise<T>): Promise<T> {
+export async function guardFn<T extends { nonce?: number }>(fn: (lastNonce: number|undefined) => Promise<T>): Promise<T> {
   const guard = await enterCS();
 
   if (!guard) {
@@ -58,7 +60,7 @@ export async function guardFn<T extends { nonce?: number }>(fn: (lastNonce: numb
 
   log.debug(`CS acquired ManagedNonce: ${guard.lastNonce}`);
 
-  let usedNonce = guard.lastNonce ?? 0;
+  let usedNonce = guard.lastNonce;
   try {
     const tx = await fn(guard.lastNonce);
     // Do not update the nonce unless the transaction is
@@ -122,7 +124,7 @@ async function enterCS() {
       }
 
       return {
-        lastNonce: doc.get(lastNonce_key),
+        lastNonce: doc.get(lastNonce_key) as number|undefined,
         timestamp,
       }
     });
@@ -134,14 +136,24 @@ async function enterCS() {
   return false;
 }
 
-function exitCS(guard: Timestamp, lastNonce: number) {
+function exitCS(guard: Timestamp, lastNonce: number|undefined) {
   const db: FirestoreAdmin = getFirestore() as any;
   const doc = db.doc(cs_doc);
-  return doc.set(
-    {
-      [complete_key]: guard,
-      [lastNonce_key]: lastNonce,
-    },
-    { merge: true }
-  )
+  if (lastNonce !== undefined) {
+    return doc.set(
+      {
+        [complete_key]: guard,
+        [lastNonce_key]: lastNonce,
+      },
+      { merge: true }
+    )
+  }
+  else {
+    return doc.set(
+      {
+        [complete_key]: guard,
+      },
+      { merge: true }
+    )
+  }
 }

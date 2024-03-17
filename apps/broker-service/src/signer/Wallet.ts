@@ -1,7 +1,7 @@
 
 import { getSigner } from '@thecointech/signers';
 import { ConnectContract, GetContract as GetCore } from '@thecointech/contract-core';
-import type { Signer } from '@ethersproject/abstract-signer';
+// import type { Signer } from '@ethersproject/abstract-signer';
 import type { Provider } from '@ethersproject/abstract-provider';
 import { formatEther, parseUnits } from "@ethersproject/units";
 import { SendMail } from '@thecointech/email';
@@ -16,10 +16,10 @@ export const GetContract = async () => {
   return await ConnectContract(signer);
 }
 
-let signerPromise: Promise<Signer> | null = null;
-function getNonceSafeSigner(provider: Provider) {
-  if (signerPromise === null) {
-    signerPromise = new Promise<Signer>(async resolve => {
+// let signerPromise: Promise<Signer> | null = null;
+async function getNonceSafeSigner(provider: Provider) {
+  // if (signerPromise === null) {
+    // signerPromise = new Promise<Signer>(async resolve => {
       const signer = await GetWallet();
       // The NonceManager is not recognized as a wallet,
       // and the ConnectContract call checks other signers
@@ -40,9 +40,9 @@ function getNonceSafeSigner(provider: Provider) {
         );
       }
 
-      const manager = new ManagedNonceSigner(connected);
-      resolve(manager);
-    });
-  }
-  return signerPromise;
+      return new ManagedNonceSigner(connected);
+      // resolve(manager);
+    // });
+  // }
+  // return signerPromise;
 }

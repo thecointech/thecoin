@@ -11113,7 +11113,6 @@ __metadata:
     "@storybook/react-webpack5": "npm:7.6.10"
     "@testing-library/jest-dom": "npm:^6.1.6"
     "@testing-library/react": "npm:^12.1.2"
-    "@thecointech/setenv": "npm:^0.2.122"
     "@tsoa/cli": "npm:^6.0.0-rc.3"
     "@types/create-hash": "npm:^1.2.2"
     "@types/express": "npm:4.17.1"
