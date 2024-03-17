@@ -19,7 +19,7 @@
   "scripts": {
     "start": "run-env ./build/main.js",
     "dev": "yarn run-env --inspect=9232 ./src/main.ts",
-    "_dev:live": "run -T cross-env CONFIG_NAME=devlive yarn dev",
+    "dev:live": "run -T cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn dev",
     "prod:beta": "run -T cross-env CONFIG_NAME=prodbeta yarn dev",
     "deploy": "yarn run-env ./deploy.ts",
