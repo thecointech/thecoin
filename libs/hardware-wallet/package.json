@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/hardware-wallet",
-  "version": "0.2.122",
+  "version": "0.2.123",
   "description": "TheCoin: An Ethers.js signer implemented for Ledger",
   "type": "module",
   "keywords": [
@@ -32,7 +32,7 @@
   "dependencies": {
     "@ledgerhq/hw-app-eth": "^6.18.0",
     "@ledgerhq/hw-transport-node-hid": "^6.11.2",
-    "@thecointech/async": "^0.2.122"
+    "@thecointech/async": "^0.2.123"
   },
   "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
 }
