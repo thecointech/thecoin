@@ -1,4 +1,4 @@
-import { GetContract } from './Wallet';
+import { GetContract } from '../signer/Wallet';
 import { TransactionResponse } from '@ethersproject/providers';
 import { CertifiedTransferRequest } from '@thecointech/types';
 import { log } from '@thecointech/logging';
