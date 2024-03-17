@@ -2,7 +2,7 @@ import { validateUberAction } from './CertifiedActionVerify';
 import { createAction } from '@thecointech/broker-db';
 import { DateTime } from 'luxon';
 import { UberProcessor } from "@thecointech/tx-bill";
-import { GetContract } from './Wallet';
+import { GetContract } from '../signer/Wallet';
 import { getCurrentState } from '@thecointech/tx-statemachine';
 import { SendMail } from '@thecointech/email';
 import { log } from '@thecointech/logging';

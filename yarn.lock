@@ -3453,17 +3453,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/experimental@npm:5.7.0":
-  version: 5.7.0
-  resolution: "@ethersproject/experimental@npm:5.7.0"
-  dependencies:
-    "@ethersproject/web": "npm:^5.7.0"
-    ethers: "npm:^5.7.0"
-    scrypt-js: "npm:3.0.1"
-  checksum: 0546f8737ca062ce7d4a890d9cb354fde34b10b042b1d6b26e7206810c39d0fdb7ac20e60686a89f3f41faf33cc4c4c7366f49700a2d0978f0457e79759a79a4
-  languageName: node
-  linkType: hard
-
 "@ethersproject/hash@npm:5.7.0, @ethersproject/hash@npm:^5.7.0":
   version: 5.7.0
   resolution: "@ethersproject/hash@npm:5.7.0"
@@ -10505,9 +10494,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/broker-service@workspace:apps/broker-service"
   dependencies:
-    "@ethersproject/experimental": "npm:5.7.0"
     "@google-cloud/firestore": "npm:4.12.3"
     "@google-cloud/storage": "npm:^7.7.0"
+    "@thecointech/async": "npm:^0.2.122"
     "@thecointech/contract-core": "npm:^0.2.122"
     "@thecointech/contract-plugins": "npm:^0.2.122"
     "@thecointech/email": "npm:^0.2.122"
@@ -11124,6 +11113,7 @@ __metadata:
     "@storybook/react-webpack5": "npm:7.6.10"
     "@testing-library/jest-dom": "npm:^6.1.6"
     "@testing-library/react": "npm:^12.1.2"
+    "@thecointech/setenv": "npm:^0.2.122"
     "@tsoa/cli": "npm:^6.0.0-rc.3"
     "@types/create-hash": "npm:^1.2.2"
     "@types/express": "npm:4.17.1"

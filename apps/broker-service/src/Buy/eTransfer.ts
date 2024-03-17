@@ -1,4 +1,4 @@
-import { GetWallet } from "../exchange/Wallet";
+import { GetWallet } from "../signer/Wallet";
 import { getAddressShortCode } from "@thecointech/utilities/Address";
 import { getSigner } from '../signedTimestamp';
 import { SignedMessage } from '@thecointech/types';
