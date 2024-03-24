@@ -1,7 +1,9 @@
 import { log } from '@thecointech/logging';
-import type { HarvestData, ProcessingStage, UserData, Replay } from '../types';
+import type { HarvestData, ProcessingStage, UserData } from '../types';
 import currency from 'currency.js';
 import { notify, notifyError } from '../notify';
+import { SendFakeDeposit } from '@thecointech/email-fake-deposit';
+import { DateTime } from 'luxon';
 
 export class SendETransfer implements ProcessingStage {
 
@@ -14,7 +16,7 @@ export class SendETransfer implements ProcessingStage {
     }
   }
 
-  async process({chq, state}: HarvestData, {replay}: UserData) {
+  async process({chq, state}: HarvestData, user: UserData) {
     if (!state.toETransfer) {
       log.info(`Skipping e-Transfer, no value set`);
       return {}
@@ -27,7 +29,7 @@ export class SendETransfer implements ProcessingStage {
     log.info(`Transferring ${state.toETransfer} to TheCoin`);
 
     const toTransfer = getTransferAmount(state.toETransfer, chq.balance);
-    const confirm = await sendETransfer(toTransfer, replay)
+    const confirm = await sendETransfer(toTransfer, user)
 
     if (confirm.confirm) {
       const harvesterBalance = (state.harvesterBalance ?? currency(0))
@@ -78,7 +80,18 @@ const getTransferAmount = (toETransfer: currency, balance: currency) => {
   return toETransfer;
 }
 
-const sendETransfer = (amount: currency, replay: Replay) =>
-  process.env.CONFIG_NAME == "prod" || process.env.CONFIG_NAME == "prodbeta"
-    ? replay('chqETransfer', { amount: amount.toString() })
-    : { confirm: "1234" };
+async function sendETransfer(amount: currency, {replay, wallet}: UserData) {
+  if (process.env.CONFIG_NAME == "prod" || process.env.CONFIG_NAME == "prodbeta") {
+    return replay('chqETransfer', { amount: amount.toString() })
+  }
+  else {
+    // We still send in testing environments
+    if (process.env.CONFIG_NAME == "prodtest" || process.env.CONFIG_NAME == "devlive") {
+      const address = await wallet.getAddress();
+      await SendFakeDeposit(address, amount.value, DateTime.now());
+    }
+    return {
+      confirm: "1234"
+    }
+  }
+}
