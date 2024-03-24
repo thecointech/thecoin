@@ -6,7 +6,7 @@ import { Mnemonic } from '@ethersproject/hdnode';
 import { defaultDays, defaultTime, HarvestConfig } from '../types';
 import { createStep } from './steps';
 import { CreditDetails } from './types';
-import { setSchedule } from './schedule/scheduler-win32';
+import { setSchedule } from './schedule';
 import path from 'path';
 import { log } from '@thecointech/logging';
 import { ActionTypes, AnyEvent } from '../scraper/types';

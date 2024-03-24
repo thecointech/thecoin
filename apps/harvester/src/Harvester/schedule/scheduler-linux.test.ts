@@ -5,7 +5,7 @@ it ('calculates a cron schedule', () => {
         daysToRun: [false, true, false, false, true, false, false], 
         timeToRun: '23:59' 
     });
-    expect(s).toEqual('59 23 * * 1,5')
+    expect(s).toEqual('59 23 * * 1,4')
 })
 
 // Do not run this test in CI
