@@ -37,7 +37,7 @@ export type ConfigShape = {
 const ConfigKey = "config";
 
 let __config = null as unknown as PouchDB.Database<ConfigShape>;
-async function getConfig(password?: string) {
+export async function getConfig(password?: string) {
   if (!__config) {
     __config = new PouchDB<ConfigShape>(db_path, {adapter: 'memory'});
     log.info(`Initializing ${process.env.NODE_ENV} config database at ${db_path}`);
@@ -57,7 +57,8 @@ async function getConfig(password?: string) {
 export async function getProcessConfig() {
   try {
     const db = await getConfig();
-    return db.get<ConfigShape>(ConfigKey, { revs_info: true });
+    const doc = await db.get<ConfigShape>(ConfigKey, { revs_info: true });
+    return doc;
   }
   catch (err) {
     return undefined;

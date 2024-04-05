@@ -19,7 +19,7 @@ export async function setSchedule(schedule: HarvestSchedule, _existing?: Harvest
     crontab.remove(jobs[0]);
   }
 
-  const runCmd = `${process.execPath} --process-start-args="--harvest"`;
+  const runCmd = `${process.execPath} --harvest`;
   crontab.create(runCmd, cronSchedule, TaskName);
   await saveCrontab(crontab);
 
@@ -47,7 +47,7 @@ const getCrontab = () => new Promise<CronTab>((resolve, reject) => {
 })
 
 const saveCrontab = (crontab: CronTab) => new Promise<void>((resolve, reject) => {
-  crontab.save((err) => {
+  crontab.save(err => {
     if (err?.message) {
       log.error("Error saving crontab: " + err.message);
       reject(err);

@@ -9,10 +9,11 @@ import { getHarvestConfig, getProcessConfig, getWalletAddress, hasCreditDetails,
 import type { Mnemonic } from '@ethersproject/hdnode';
 import { HarvestConfig } from './types';
 import { CreditDetails } from './Harvester/types';
-import { exec } from 'child_process';
+import { spawn } from 'child_process';
 import { exportResults, getState, setCurrentBalance } from './Harvester/db';
 import { harvest } from './Harvester';
 import { logsFolder } from './paths';
+import { platform } from 'node:os';
 
 async function guard<T>(cb: () => Promise<T>) {
   try {
@@ -59,12 +60,13 @@ const api: ScraperBridgeApi = {
   }),
 
   openLogsFolder: () => guard(async () => {
-    exec(`start "" "${logsFolder}"`);
+    openFolder(logsFolder);
     return true;
   }),
   getArgv: () => guard(() => Promise.resolve(JSON.stringify({
     argv: process.argv,
-    broker: process.env.WALLET_BrokerCAD_ADDRESS
+    broker: process.env.WALLET_BrokerCAD_ADDRESS,
+    logsFolder,
   }))),
 
   setCurrentBalance: (balance) => guard(() => setCurrentBalance(balance))
@@ -134,4 +136,15 @@ export function initScraping() {
   ipcMain.handle(actions.setCurrentBalance, async (_event, balance: number) => {
     return api.setCurrentBalance(balance);
   })
+}
+
+
+const openFolder = (path: string) => {
+  let explorer = '';
+  switch (platform()) {
+      case "win32": explorer = "explorer"; break;
+      case "linux": explorer = "xdg-open"; break;
+      case "darwin": explorer = "open"; break;
+  }
+  spawn(explorer, [path], { detached: true }).unref();
 }
