@@ -4,6 +4,8 @@ import { StoredData, fromDb, toDb } from './db_translate';
 import path from 'path';
 import { log } from '@thecointech/logging';
 import { rootFolder } from '../paths';
+import currency from 'currency.js';
+import { DateTime } from 'luxon';
 
 const db_path = path.join(rootFolder, 'harvester.db');
 
@@ -58,6 +60,49 @@ export async function getCurrentState() {
     ...state
   } = r;
   return fromDb(state);
+}
+
+// Override the harvesters current balance
+export async function setCurrentBalance(balance: number) {
+  log.warn("Overriding harvester balance to, setting", balance);
+  const current = await getCurrentState();
+  if (current != null) {
+    await setCurrentState({
+      ...current,
+      state: {
+        ...current.state,
+        harvesterBalance: currency(balance),
+      },
+      delta: [
+        ...current.delta,
+        {
+          harvesterBalance: currency(balance),
+        }
+      ]
+    });  
+  }
+
+  else {
+    await setCurrentState({
+      chq: {
+        balance: currency(0), // What to put here?
+      },
+      visa: {
+        balance: currency(0),
+        dueAmount: currency(0),
+        dueDate: DateTime.fromMillis(0),
+        history: [],
+      },
+      date: DateTime.now(),
+      delta: [{
+        harvesterBalance: currency(balance),
+      }],
+      state: {
+        harvesterBalance: currency(balance),
+      }
+    });
+  }
+  return true;
 }
 
 // Export all results as CSV string

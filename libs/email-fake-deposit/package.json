@@ -27,7 +27,8 @@
   "exports": {
     ".": {
       "devlive": "./build/devlive.js",
-      "prodtest": "./build/prodtest.js"
+      "prodtest": "./build/prodtest.js",
+      "default": "./build/default.js"
     }
   },
   "types": "./build/devlive.d.ts",

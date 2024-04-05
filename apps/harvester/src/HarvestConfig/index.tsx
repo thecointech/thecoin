@@ -56,6 +56,15 @@ export const HarvestConfig = () => {
           // completed={hasPlugins}
           to="/config/step5"
           pathname={location.pathname} />
+        { process.env.CONFIG_NAME=="prodtest"
+          ? <ConfigStep
+              title="Override Balance"
+              description="PRODTEST ONLY"
+              // completed={hasPlugins}
+              to="/config/step6"
+              pathname={location.pathname} />
+          : undefined
+      }
       </Step.Group>
       <div className={styles.container}>
         <ConfigRouter />

@@ -107,7 +107,7 @@ it ("Does not add too many rates", async () => {
   const secondValid = (await oracle.validUntil()).toNumber();
   expect (secondValid).toEqual(firstValid);
 
-  await oracle.updateOffset({from: now.toMillis(), offset: -(60 * 60 * 1000)});
+  await oracle.updateOffset({from: now.toMillis(), offset: -(65 * 60 * 1000)});
 
   // But we still should be able to push two more updates?
   await oracle.bulkUpdate(toInsert.slice(0, 2));

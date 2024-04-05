@@ -2,7 +2,7 @@ import { jest } from '@jest/globals';
 import { DateTime } from 'luxon'
 import { HarvestData } from './types'
 import currency from 'currency.js'
-import { getCurrentState, setCurrentState } from './db'
+import { getCurrentState, setCurrentBalance, setCurrentState } from './db'
 import memory from 'pouchdb-adapter-memory'
 import PouchDB from 'pouchdb';
 import { fromDb, toDb } from './db_translate';
@@ -20,6 +20,12 @@ it ('can roundtrip in the db', async () => {
   await setCurrentState(sample);
   const last = await getCurrentState();
   expect(last).toEqual(sample);
+})
+
+it ('can override balance', async () => {
+  await setCurrentBalance(124.23);
+  const r = await getCurrentState();
+  expect(r?.state.harvesterBalance?.value).toEqual(124.23);
 })
 
 const sample: HarvestData = {

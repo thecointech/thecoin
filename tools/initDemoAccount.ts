@@ -10,6 +10,7 @@ import Decimal from 'decimal.js-light';
 import { CurrencyCode } from "@thecointech/fx-rates";
 import { SendFakeDeposit, emailCacheFile } from '@thecointech/email-fake-deposit';
 import { writeFileSync } from "fs";
+import { loadAndMergeHistory } from '@thecointech/tx-blockchain';
 
 // Always delete any existing emails
 //execSync("yarn dev:live", { stdio: "inherit", cwd: "../libs/email-fake-deposit" });
@@ -18,14 +19,16 @@ if (process.env.CONFIG_NAME == "devlive") {
   writeFileSync(emailCacheFile, "[]");
 }
 
+// TODO: Use the account itself to set an initial date
 const pausedAfterMonths = 0;
-const monthsToRun = 2;
+const monthsToRun = 50;
 
 // Init/Demo account
 // Starting from Jan 1 2022
 // Send a deposit email to
+const tcCore = await GetContract();
 const signer = await getSigner("testDemoAccount");
-const address = await signer.getAddress();
+const testAddress = await signer.getAddress();
 const brokerAddress = process.env.WALLET_BrokerCAD_ADDRESS!;
 const startDate = DateTime.fromObject({
   year: 2023,
@@ -34,7 +37,13 @@ const startDate = DateTime.fromObject({
   hour: 9,
   minute: 35
 })
-const pausedDate = startDate.plus({month: pausedAfterMonths});
+
+// Get date of last transaction
+const tx = await loadAndMergeHistory(0, tcCore, testAddress);
+const lastTxDate = tx[tx.length - 1]?.date ?? startDate;
+console.log(`Last tx: ${lastTxDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
+
+const pausedDate = lastTxDate.plus({ hour: 1}); // startDate.plus({month: pausedAfterMonths});
 const endDate = DateTime.min(
   startDate.plus({month: pausedAfterMonths + monthsToRun}),
   DateTime.now()
@@ -55,8 +64,7 @@ const mockPayee = {
 }
 
 // First, assign plugins
-const tcCore = await GetContract();
-const plugins = await tcCore.getUsersPlugins(address);
+const plugins = await tcCore.getUsersPlugins(testAddress);
 console.log(`Got ${plugins.length} plugins`)
 if (plugins.length == 0) {
   const oldNow = DateTime.now
@@ -103,7 +111,7 @@ while (currDate < endDate) {
       console.log(`Running Harvester for ${currDate.weekdayShort} ${currDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
       numSent++;
        // We always do our transfer
-      const r = await SendFakeDeposit(address, harvestSends, currDate);
+      const r = await SendFakeDeposit(testAddress, harvestSends, currDate);
       if (!r) {
         console.log("Failed to send mail");
         break;
