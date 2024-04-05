@@ -16,9 +16,11 @@ export const OverrideInitialBalance = () => {
   const cadBalance = toHuman(buy * balance * fxRate, true);
 
   const [overrideBalance, setOverrideBalance] = useState(0);
+  const [pendingAmount, setPendingAmount] = useState(0);
+  const [pendingDate, setPendingDate] = useState<Date|null>(null);
 
   const onApplyBalance = () => {
-    window.scraper.setCurrentBalance(overrideBalance)
+    window.scraper.setOverrides(overrideBalance, pendingAmount, pendingDate)
   }
 
   return (
@@ -28,7 +30,7 @@ export const OverrideInitialBalance = () => {
         Initialize the harvester to a specific balance.
       </div>
       <div>
-        You're account currently has a balance of ${cadBalance}.  
+        You're account currently has a balance of ${cadBalance}.
         The harvester doesn't know what this balance is for, so by default it will ignore it.
         Here you can tell the harvester to include this balance in it's processing.
       </div>
@@ -36,12 +38,21 @@ export const OverrideInitialBalance = () => {
         This won't change how it behaves in future.
       </div>
       <div>
-        <Input placeholder="Amount" value={overrideBalance} onChange={(_, {value}) => 
+        <Input placeholder="Amount" value={overrideBalance} onChange={(_, {value}) =>
           setOverrideBalance(
             Math.min(safeParseFloat(value), cadBalance)
           )
         }/>
-        <Button onClick={onApplyBalance} />
+        <br />
+        <Input placeholder="Pending Payment" value={pendingAmount} onChange={(_, {value}) =>
+          setPendingAmount(
+            Math.min(safeParseFloat(value), cadBalance)
+          )
+        }/>
+        <input type="date" value={pendingDate?.toDateString()} onChange={value => setPendingDate(value.target.valueAsDate)} />
+        <Button onClick={onApplyBalance}>
+          Apply
+        </Button>
       </div>
     </Container>
   )

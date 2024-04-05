@@ -10,7 +10,7 @@ import type { Mnemonic } from '@ethersproject/hdnode';
 import { HarvestConfig } from './types';
 import { CreditDetails } from './Harvester/types';
 import { exec } from 'child_process';
-import { exportResults, getState, setCurrentBalance } from './Harvester/db';
+import { exportResults, getState, setOverrides } from './Harvester/db';
 import { harvest } from './Harvester';
 import { logsFolder } from './paths';
 
@@ -67,7 +67,7 @@ const api: ScraperBridgeApi = {
     broker: process.env.WALLET_BrokerCAD_ADDRESS
   }))),
 
-  setCurrentBalance: (balance) => guard(() => setCurrentBalance(balance))
+  setOverrides: (balance, pendingAmt, pendingDate) => guard(() => setOverrides(balance, pendingAmt, pendingDate)),
 }
 
 export function initScraping() {
@@ -131,7 +131,7 @@ export function initScraping() {
     return api.getArgv();
   })
 
-  ipcMain.handle(actions.setCurrentBalance, async (_event, balance: number) => {
-    return api.setCurrentBalance(balance);
+  ipcMain.handle(actions.setOverrides, async (_event, balance: number, pendingAmt: number, pendingDate: Date) => {
+    return api.setOverrides(balance, pendingAmt, pendingDate);
   })
 }
