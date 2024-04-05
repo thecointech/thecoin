@@ -42,7 +42,7 @@ export type ScraperBridgeApi = {
   openLogsFolder(): Promise<Result<boolean>>,
   getArgv() : Promise<Result<string>>,
 
-  setCurrentBalance(balance: number): Promise<Result<boolean>>
+  setOverrides(balance: number, pendingAmt: number, pendingDate: Date|null): Promise<Result<boolean>>
 }
 
 
@@ -74,6 +74,6 @@ export const actions = {
   openLogsFolder: 'scraper:openLogsFolder',
   getArgv: 'scraper:getArgv',
 
-  setCurrentBalance: 'scraper:setCurrentBalance',
+  setOverrides: 'scraper:setOverrides',
 }
 export type Action = keyof typeof actions
