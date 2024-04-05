@@ -5,6 +5,7 @@ import { AccountMap } from '@thecointech/shared/containers/AccountMap/reducer';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { getFxRate } from '@thecointech/fx-rates';
 import { toHuman } from "@thecointech/utilities";
+import { DateTime } from 'luxon';
 
 export const OverrideInitialBalance = () => {
 
@@ -17,11 +18,13 @@ export const OverrideInitialBalance = () => {
 
   const [overrideBalance, setOverrideBalance] = useState(0);
   const [pendingAmount, setPendingAmount] = useState(0);
-  const [pendingDate, setPendingDate] = useState<Date|null>(null);
+  const [pendingDate, setPendingDate] = useState<DateTime|null>(null);
 
   const onApplyBalance = () => {
-    window.scraper.setOverrides(overrideBalance, pendingAmount, pendingDate)
+    window.scraper.setOverrides(overrideBalance, pendingAmount, pendingDate?.toISO())
   }
+
+  const dateFormatted = pendingDate?.toISO()?.slice(0, 16);
 
   return (
     <Container>
@@ -49,7 +52,10 @@ export const OverrideInitialBalance = () => {
             Math.min(safeParseFloat(value), cadBalance)
           )
         }/>
-        <input type="date" value={pendingDate?.toDateString()} onChange={value => setPendingDate(value.target.valueAsDate)} />
+        <input type="datetime-local"
+          value={dateFormatted}
+          onChange={value => setPendingDate(DateTime.fromISO(value.target.value))}
+        />
         <Button onClick={onApplyBalance}>
           Apply
         </Button>

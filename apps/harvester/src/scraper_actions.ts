@@ -42,7 +42,7 @@ export type ScraperBridgeApi = {
   openLogsFolder(): Promise<Result<boolean>>,
   getArgv() : Promise<Result<string>>,
 
-  setOverrides(balance: number, pendingAmt: number, pendingDate: Date|null): Promise<Result<boolean>>
+  setOverrides(balance: number, pendingAmt: number, pendingDate: string|null|undefined): Promise<Result<boolean>>
 }
 
 

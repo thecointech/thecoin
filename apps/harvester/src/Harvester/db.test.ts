@@ -23,12 +23,12 @@ it ('can roundtrip in the db', async () => {
 })
 
 it ('can override balance', async () => {
-  const now = new Date();
-  await setOverrides(124.23, 1400, now);
+  const now = DateTime.now();
+  await setOverrides(124.23, 1400, now.toISO());
   const r = await getCurrentState();
   expect(r?.state.harvesterBalance?.value).toEqual(124.23);
   expect(r?.state.toPayVisa?.value).toEqual(1400);
-  expect(r?.state.toPayVisaDate?.toJSDate()).toEqual(now);
+  expect(r?.state.toPayVisaDate).toEqual(now);
 })
 
 const sample: HarvestData = {

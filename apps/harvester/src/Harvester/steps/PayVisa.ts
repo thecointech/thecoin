@@ -17,6 +17,10 @@ export class PayVisa implements ProcessingStage {
     if (config?.daysPrior) {
       this.daysPrior = Number(config.daysPrior);
     }
+    // We started running prodtest with 0 offset, continue
+    else if (process.env.CONFIG_NAME==='prodtest') {
+      this.daysPrior = 0;
+    }
   }
 
 

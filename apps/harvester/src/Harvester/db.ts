@@ -63,14 +63,14 @@ export async function getCurrentState() {
 }
 
 // Override the harvesters current balance
-export async function setOverrides(balance: number, pendingAmount: number, pendingDate: Date|null) {
-  log.warn("Overriding harvester balance to, setting", balance);
+export async function setOverrides(balance: number, pendingAmount: number, pendingDate: string|null|undefined) {
+  log.warn(`Overriding harvester balance: ${balance}, pending amount: ${pendingAmount}, pending date: ${pendingDate}`);
   const current = await getCurrentState();
   if (current != null) {
     const pendingOverride = pendingAmount > 0 && pendingDate != null
       ? {
         toPayVisa: currency(pendingAmount),
-        toPayVisaDate: DateTime.fromJSDate(pendingDate),
+        toPayVisaDate: DateTime.fromISO(pendingDate),
       }
       : {};
     await setCurrentState({
