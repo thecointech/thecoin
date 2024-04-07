@@ -133,7 +133,7 @@ export function initScraping() {
     return api.getArgv();
   })
 
-  ipcMain.handle(actions.setOverrides, async (_event, balance: number, pendingAmt: number, pendingDate: string|null) => {
+  ipcMain.handle(actions.setOverrides, async (_event, balance: number, pendingAmt: number|null, pendingDate: string|null) => {
     return api.setOverrides(balance, pendingAmt, pendingDate);
   })
 }

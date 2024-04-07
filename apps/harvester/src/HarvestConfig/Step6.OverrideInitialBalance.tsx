@@ -17,11 +17,11 @@ export const OverrideInitialBalance = () => {
   const cadBalance = toHuman(buy * balance * fxRate, true);
 
   const [overrideBalance, setOverrideBalance] = useState<number>();
-  const [pendingAmount, setPendingAmount] = useState<number>();
+  const [pendingAmount, setPendingAmount] = useState<number|null>(null);
   const [pendingDate, setPendingDate] = useState<DateTime|null>(null);
 
   const onApplyBalance = () => {
-    if (overrideBalance && pendingAmount) {
+    if (overrideBalance != undefined) {
       window.scraper.setOverrides(overrideBalance, pendingAmount, pendingDate?.toISO())
     }
   }
