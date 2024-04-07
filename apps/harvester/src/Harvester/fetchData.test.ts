@@ -38,6 +38,9 @@ it ('matches visa steps from initDemoAccount', () => {
     testEmulator('2024-03-26', 1575, '2024-04-15'); // Tues
     testEmulator('2024-03-27', 1575, '2024-04-15'); // Wed
     testEmulator('2024-03-28', 1750, '2024-04-15'); // Thurs
+
+    testEmulator('2024-04-07', 2100, '2024-04-15'); // Thurs
+
 })
 
 it ('emulates appropriate history', () => {

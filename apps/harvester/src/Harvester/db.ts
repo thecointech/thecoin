@@ -66,54 +66,48 @@ export async function getCurrentState() {
 // Override the harvesters current balance
 export async function setOverrides(balance: number, pendingAmount: number, pendingDate: string|null|undefined) {
   log.warn(`Overriding harvester balance: ${balance}, pending amount: ${pendingAmount}, pending date: ${pendingDate}`);
-  const current = await getCurrentState();
-  if (current != null) {
-    const pendingOverride = pendingAmount > 0 && pendingDate != null
-      ? {
-        toPayVisa: currency(pendingAmount),
-        toPayVisaDate: DateTime.fromISO(pendingDate),
-        stepData: {
-          [PayVisaKey]: pendingDate,
-        }
-      }
-      : {};
-    await setCurrentState({
-      ...current,
-      state: {
-        ...current.state,
+
+  const pendingOverride = pendingAmount > 0 && pendingDate != null
+  ? {
+    toPayVisa: currency(pendingAmount),
+    toPayVisaDate: DateTime.fromISO(pendingDate),
+    stepData: {
+      [PayVisaKey]: pendingDate,
+    }
+  }
+  : {};
+
+  const current = (await getCurrentState()) ?? {
+    chq: {
+      balance: currency(0), // What to put here?
+    },
+    visa: {
+      balance: currency(0),
+      dueAmount: currency(0),
+      dueDate: DateTime.fromMillis(0),
+      history: [],
+    },
+    date: DateTime.now(),
+    state: {},
+    delta: [],
+  };
+
+  await setCurrentState({
+    ...current,
+    state: {
+      ...current.state,
+      harvesterBalance: currency(balance),
+      ...pendingOverride,
+    },
+    delta: [
+      ...current.delta,
+      {
         harvesterBalance: currency(balance),
         ...pendingOverride,
-      },
-      delta: [
-        ...current.delta,
-        {
-          harvesterBalance: currency(balance),
-          ...pendingOverride,
-        }
-      ]
-    });
-  }
-
-  else {
-    await setCurrentState({
-      chq: {
-        balance: currency(0), // What to put here?
-      },
-      visa: {
-        balance: currency(0),
-        dueAmount: currency(0),
-        dueDate: DateTime.fromMillis(0),
-        history: [],
-      },
-      date: DateTime.now(),
-      delta: [{
-        harvesterBalance: currency(balance),
-      }],
-      state: {
-        harvesterBalance: currency(balance),
       }
-    });
-  }
+    ]
+  });
+
   return true;
 }
 
