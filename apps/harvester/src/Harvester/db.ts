@@ -6,6 +6,7 @@ import { log } from '@thecointech/logging';
 import { rootFolder } from '../paths';
 import currency from 'currency.js';
 import { DateTime } from 'luxon';
+import { PayVisaKey } from './steps/PayVisa';
 
 const db_path = path.join(rootFolder, 'harvester.db');
 
@@ -71,6 +72,9 @@ export async function setOverrides(balance: number, pendingAmount: number, pendi
       ? {
         toPayVisa: currency(pendingAmount),
         toPayVisaDate: DateTime.fromISO(pendingDate),
+        stepData: {
+          [PayVisaKey]: pendingDate,
+        }
       }
       : {};
     await setCurrentState({

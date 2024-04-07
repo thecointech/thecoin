@@ -23,11 +23,12 @@ export class PayVisa implements ProcessingStage {
     }
   }
 
-
   async process(data: HarvestData, { wallet, creditDetails }: UserData) : Promise<HarvestDelta> {
     // Do we have a new due amount?  If so, we better pay it.
 
     log.info('Processing PayVisa');
+    // Note, we use the date from stepData, as the date recorded as
+    // state.toPayVisaDate is the date of the payment, not the due date
     const lastDueDate = getDataAsDate(PayVisaKey, data.state.stepData);
 
     if (!lastDueDate || (data.visa.dueDate > lastDueDate)) {
