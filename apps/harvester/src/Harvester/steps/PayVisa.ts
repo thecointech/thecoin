@@ -6,6 +6,7 @@ import { DateTime } from 'luxon';
 import currency from 'currency.js';
 import { log } from '@thecointech/logging';
 import { notify, notifyError } from '../notify';
+import type { UberTransferAction } from '@thecointech/types';
 
 export const PayVisaKey = "PayVisa";
 
@@ -45,8 +46,8 @@ export class PayVisa implements ProcessingStage {
         // TODO: perhaps turn toPay into an array?
       }
 
+      // Send payment request
       // transfer visa dueAmount on dateToPay
-      const api = GetBillPaymentsApi();
       const payment = await BuildUberAction(
         creditDetails,
         wallet,
@@ -55,7 +56,7 @@ export class PayVisa implements ProcessingStage {
         124,
         dateToPay,
       )
-      const r = await api.uberBillPayment(payment);
+      const r = await sendVisaPayment(payment);
       if (r.status !== 200) {
         log.error("Error on uberBillPayment: ", r.data.message);
 
@@ -99,4 +100,20 @@ export function getDateToPay(dateToPay: DateTime, daysPrior: number) {
     }
   }
   return dateToPay;
+}
+
+async function sendVisaPayment(payment: UberTransferAction) {
+  if (process.env.HARVESTER_DRY_RUN) {
+    return {
+      status: 200,
+      data: {
+        message: "DRY RUN: Visa payment not sent",
+      }
+    }
+  }
+  // Send payment request
+  // transfer visa dueAmount on dateToPay
+  const api = GetBillPaymentsApi();
+  const r = await api.uberBillPayment(payment);
+  return r;
 }

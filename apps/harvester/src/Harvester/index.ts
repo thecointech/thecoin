@@ -35,7 +35,9 @@ export async function harvest() {
     }
     const nextState = await processState(stages, state, user);
 
-    await setCurrentState(nextState);
+    if (!process.env.HARVESTER_DRY_RUN) {
+      await setCurrentState(nextState);
+    }
 
     log.info(`Harvest complete`);
   }

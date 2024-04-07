@@ -5,6 +5,11 @@ import currency from 'currency.js';
 import { HistoryRow } from '../scraper/table';
 
 export async function getChequingData() : Promise<ChequeBalanceResult> {
+  if (process.env.HARVESTER_OVERRIDE_CHQ_BALANCE) {
+    return {
+      balance: currency(process.env.HARVESTER_OVERRIDE_CHQ_BALANCE),
+    }
+  }
   switch (process.env.CONFIG_NAME) {
     case 'development':
     case 'devlive':
@@ -20,6 +25,15 @@ export async function getChequingData() : Promise<ChequeBalanceResult> {
 }
 
 export async function getVisaData(lastTxDate?: DateTime) : Promise<VisaBalanceResult> {
+  if (process.env.HARVESTER_OVERRIDE_VISA_BALANCE) {
+    const data = JSON.parse(process.env.HARVESTER_OVERRIDE_VISA_BALANCE);
+    return {
+      balance: currency(data.balance ?? 0),
+      dueDate: DateTime.fromISO(data.dueDate),
+      dueAmount: currency(data.dueAmount),
+      history: [],
+    }
+  }
   switch (process.env.CONFIG_NAME) {
     case 'development':
     case 'devlive':

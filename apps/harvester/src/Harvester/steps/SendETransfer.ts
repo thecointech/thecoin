@@ -81,7 +81,12 @@ const getTransferAmount = (toETransfer: currency, balance: currency) => {
 }
 
 async function sendETransfer(amount: currency, {replay, wallet}: UserData) {
-  if (process.env.CONFIG_NAME == "prod" || process.env.CONFIG_NAME == "prodbeta") {
+  if (process.env.HARVESTER_DRY_RUN) {
+    return {
+      confirm: "DRYRUN"
+    }
+  }
+  else if (process.env.CONFIG_NAME == "prod" || process.env.CONFIG_NAME == "prodbeta") {
     return replay('chqETransfer', { amount: amount.toString() })
   }
   else {
