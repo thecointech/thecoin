@@ -16,12 +16,14 @@ export const OverrideInitialBalance = () => {
   const balance = active?.balance ?? 0;
   const cadBalance = toHuman(buy * balance * fxRate, true);
 
-  const [overrideBalance, setOverrideBalance] = useState(0);
-  const [pendingAmount, setPendingAmount] = useState(0);
+  const [overrideBalance, setOverrideBalance] = useState<number>();
+  const [pendingAmount, setPendingAmount] = useState<number>();
   const [pendingDate, setPendingDate] = useState<DateTime|null>(null);
 
   const onApplyBalance = () => {
-    window.scraper.setOverrides(overrideBalance, pendingAmount, pendingDate?.toISO())
+    if (overrideBalance && pendingAmount) {
+      window.scraper.setOverrides(overrideBalance, pendingAmount, pendingDate?.toISO())
+    }
   }
 
   const dateFormatted = pendingDate?.toISO()?.slice(0, 16);
