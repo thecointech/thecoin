@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-oracle",
-  "version": "0.2.123",
+  "version": "0.2.124",
   "description": "The Coin: Price Oracles for TheCoin",
   "type": "module",
   "keywords": [
@@ -68,13 +68,13 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "^0.2.123",
-    "@thecointech/contract-tools": "^0.2.123",
-    "@thecointech/jestutils": "^0.2.123",
-    "@thecointech/setenv": "^0.2.123"
+    "@thecointech/async": "^0.2.124",
+    "@thecointech/contract-tools": "^0.2.124",
+    "@thecointech/jestutils": "^0.2.124",
+    "@thecointech/setenv": "^0.2.124"
   },
   "dependencies": {
-    "@thecointech/contract-base": "^0.2.123"
+    "@thecointech/contract-base": "^0.2.124"
   },
   "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
 }
