@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/setenv",
-  "version": "0.2.116",
+  "version": "0.2.123",
   "description": "TheCoin: Environment setup library",
   "type": "module",
   "keywords": [
@@ -22,11 +22,10 @@
     "run-env": "./bin/run-env.mjs"
   },
   "scripts": {
-    "build": "run-p build:*",
-    "build:cjs": "yarn tsc --project tsconfig.build.cjs.json",
-    "build:mjs": "yarn tsc --project tsconfig.build.mjs.json",
-    "postbuild:cjs": "node ./postbuild.cjs",
-    "clean": "rimraf ./build && rimraf ./coverage"
+    "build": "run -T run-p 'build:*'",
+    "build:cjs": "run -T tsc --project tsconfig.build.cjs.json && node ./postbuild.cjs",
+    "build:mjs": "run -T tsc --project tsconfig.build.mjs.json",
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage"
   },
   "exports": {
     ".": {
@@ -44,5 +43,6 @@
   "types": "./build/mjs/index.d.ts",
   "dependencies": {
     "dotenv": "^10.0.0"
-  }
+  },
+  "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
 }

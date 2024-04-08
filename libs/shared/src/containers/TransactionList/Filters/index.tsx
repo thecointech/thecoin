@@ -7,16 +7,14 @@ type VisualProps={
     onDateRangeChange: (from: Date, until: Date) => void,
 };
 
-const translate = defineMessages({ 
-    hide : {  
-      id: "shared.transactionList.filters.hide", 
+const translate = defineMessages({
+    hide : {
       defaultMessage:"Hide filters",
       description:"shared.transactionList.filters.hide: Label for the filter show / hide system"},
-    show : {  
-      id: "shared.transactionList.filters.show", 
+    show : {
       defaultMessage:"Show filters",
       description:"shared.transactionList.filters.show: Label for the filter show / hide system"}});
-                
+
 export const Filters = (props:VisualProps) => {
 
     const [filtersVisibility, setFiltersVisibility] = useState(true);

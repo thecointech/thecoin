@@ -1,12 +1,11 @@
 {
-  "extends": "./tsconfig.json",
-  "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"],
-  "references": [
-    { "path": "../../libs/utils-ts/tsconfig.build.json" },
-    { "path": "../../libs/broker-db/tsconfig.build.json" },
-    { "path": "../../libs/tx-gmail/tsconfig.build.json" },
-    { "path": "../../libs/tx-blockchain/tsconfig.build.json" },
-    { "path": "../../libs/bank-interface/tsconfig.json" }
-  ]
+  "extends": "../tsconfig.libs.json",
+  "compilerOptions": {
+    "outDir": "./build/",
+    "tsBuildInfoFile": "./build/.buildinfo",
+    "rootDir": "./src/",
+    "baseUrl": "./src/"
+  },
+  "include": ["src/**/*", "src/**/*.json"],
+  "exclude": ["**/*.test.*", "**/__mocks__/**", "**/*.stories.*"],
 }
-

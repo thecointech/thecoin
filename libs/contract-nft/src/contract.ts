@@ -1,8 +1,8 @@
 import { Contract } from '@ethersproject/contracts';
 import { TheGreenNFT } from '.';
 import { getProvider, Network } from '@thecointech/ethers-provider';
-import TheGreenNFT1Spec from './contracts/contracts/ethereum/TheGreenNFTL1.sol/TheGreenNFTL1.json' assert {type: "json"};
-import TheGreenNFT2Spec from './contracts/contracts/polygon/TheGreenNFTL2.sol/TheGreenNFTL2.json' assert {type: "json"};
+import TheGreenNFT1Spec from './codegen/contracts/ethereum/TheGreenNFTL1.sol/TheGreenNFTL1.json' assert {type: "json"};
+import TheGreenNFT2Spec from './codegen/contracts/polygon/TheGreenNFTL2.sol/TheGreenNFTL2.json' assert {type: "json"};
 
 const getAbi = (network: Network) => {
   return network == "POLYGON"

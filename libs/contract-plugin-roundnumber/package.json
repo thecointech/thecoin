@@ -1,6 +1,7 @@
 {
   "name": "@thecointech/contract-plugin-roundnumber",
-  "version": "0.2.116",
+  "version": "0.2.123",
+  "private": true,
   "description": "The Coin: A sample plugin rounds balance to nearest round number",
   "type": "module",
   "keywords": [
@@ -15,17 +16,17 @@
     "directory": "libs/contract-plugin-roundnumber"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-s build:contracts build:copy build:src",
+    "prepublishOnly": "run -T rimraf ./build/.buildinfo",
+    "build": "run -T run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
-    "build:src": "yarn tsc --project tsconfig.build.json",
-    "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
-    "clean": "run-p clean:*",
+    "build:src": "run -T tsc -b",
+    "build:copy": "run -T cpx \"./src/deployed/**\" ./build/deployed",
+    "clean": "run -T run-p 'clean:*'",
     "clean:src": "rimraf ./build",
-    "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
-    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive run-s _deploy _seed",
+    "clean:contracts": "rimraf ./src/codegen",
+    "test": "run :jest",
+    "dev:live": "run -T wait-port 9545 && run -T cross-env CONFIG_NAME=devlive run-s _deploy",
+    "dev:live:finalize": "yarn _seed",
     "prod:test": "cross-env CONFIG_NAME=prodtest run-s _deploy _seed",
     "prod": "cross-env CONFIG_NAME=prod run-s _deploy _seed",
     "_deploy": "yarn _hardhat ./scripts/deploy.ts",
@@ -40,14 +41,14 @@
   },
   "types": "./build/index.d.ts",
   "devDependencies": {
-    "@thecointech/async": "^0.2.116",
-    "@thecointech/contract-tools": "^0.2.116",
-    "jest": "*"
+    "@thecointech/async": "^0.2.123",
+    "@thecointech/contract-tools": "^0.2.123",
+    "@thecointech/setenv": "^0.2.123"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.8.0",
-    "@thecointech/contract-core": "^0.2.116",
-    "@thecointech/contract-oracle": "^0.2.116",
-    "@thecointech/contract-plugins": "^0.2.116"
+    "@thecointech/contract-core": "^0.2.123",
+    "@thecointech/contract-oracle": "^0.2.123",
+    "@thecointech/contract-plugins": "^0.2.123"
   }
 }

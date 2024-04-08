@@ -1,6 +1,7 @@
 import { log } from '@thecointech/logging';
-import { SpxCadOracle } from './types';
+import { SpxCadOracle } from './codegen';
 import { BigNumber } from '@ethersproject/bignumber';
+import { DateTime, Duration } from 'luxon';
 
 type RateFactory = (millis: number) => Promise<{rate: number, from: number, to: number}|null>;
 
@@ -17,14 +18,14 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
   let timestamp = from;
 
   log.info(
-    { from: new Date(from), till: new Date(till) },
-    'Updating Oracle from {from} to ${till}'
+    { from: new Date(from), till: new Date(till), lastOffsetFrom, priorOffset, },
+    'Updating Oracle from {from} to {till}: last: {lastOffsetFrom}, prior: {priorOffset}'
   );
 
   // Not an application error, but we should never be this far out of date
   const hoursToUpdate = (till - from) / ONE_HR;
-  if (hoursToUpdate > 24) {
-    log.warn({hours: hoursToUpdate}, "Oracle is {hours} hours of date");
+  if (hoursToUpdate > 24 && !process.env.JEST_WORKER_ID) {
+    log.warn({hours: hoursToUpdate}, "Oracle is {hours}hrs out-of-date");
   }
 
   const rates: number[] = [];
@@ -36,46 +37,58 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
       break;
     }
 
+    // Error checking
+    if (r.from != timestamp) {
+      log.error(
+        {from: new Date(r.from), timestamp: new Date(timestamp)},
+        "Oracle block does not start at the same time as service: {from} != {timestamp}"
+      );
+      // Not fatal, our offset calculation can handle this.
+    }
+
     // rates have 8 decimal points
     let rate = Math.round(r.rate * factor);
-    // How long was the prior block  valid for?
-    let to = r.to;
-    let duration = to - timestamp;
+    // How long is this rate valid for?
+    // We use timestamp instead of (r.to) in case
+    // of difference between oracle/service time
+    let duration = r.to - timestamp;
 
-    // We explicitly add duplicates.  This is because
-    // our oracle is optimized for look-up by using a
-    // consistent duration for every time block
-    while ((rates.length + 1) * blockTime < to - from) {
-    // while (duration >= (1.5 * blockTime)) {
+    const toAdd = calculateNumBlocks(duration, blockTime);
+
+    if (toAdd.offset) {
+      log.info(
+        { offset: toAdd.offset },
+        'Rate.to is not an even multiple of blockTime: applying offset {offset}'
+      );
+      // Our new offset shifts our final block in time.  Our first
+      // block always starts at the 'correct' time so we only need
+      // to care about the finish time.
+      const newOffset = Math.round(toAdd.offset);
+      // Trigger the offset on the boundary of the final regular-length
+      // block (ie multiple of blocktime).
+      // If the block is shortened (eg - negative offset)
+      // then the border is when the block actually ends: eg r.to
+      // If the block is lengthened (eg - positive offset)
+      // then the new offset has to be applied when the final
+      // block would normally finish (which is before r.to).
+      const timeBeforeEndToApplyOffset = Math.max(0, newOffset);
+      const finalOffset = newOffset + priorOffset;
+      offsets.push({
+        from: r.to - timeBeforeEndToApplyOffset,
+        offset: finalOffset,
+      });
+      priorOffset = finalOffset;
+    }
+    for (let i = 0; i < toAdd.numBlocks; i++) {
       rates.push(rate);
-      duration -= blockTime;
-      timestamp += blockTime;
     }
 
-    // This rate should take us up to (and possibly past)
-    // the blocktime boundary.
-    rates.push(rate);
-    timestamp += blockTime;
+    timestamp = r.to;
 
     log.debug(
-      { timestamp, length: rates.length },
+      { timestamp: new Date(timestamp), length: rates.length },
       '{length} rates fetched reaches {timestamp}'
     )
-
-    // If not 3 hours in length, we use the offset to
-    // shorten/lengthen the current block
-    if (duration != blockTime) {
-      const newOffset = (priorOffset + (duration - blockTime)) % blockTime;
-      if (Math.abs(newOffset % (ONE_HR)) != 0) {
-        log.error("Offset is not a multiple of one hour", {timestamp, newOffset});
-      }
-      offsets.push({
-        from: to - duration,
-        offset: newOffset,
-      });
-      timestamp += (newOffset - priorOffset);
-      priorOffset = newOffset;
-    }
   }
 
   log.info(
@@ -85,7 +98,8 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
 
   // We have pushed too many rates repeatedly, so double-check here
   const doubleCheckValidUntil = from + (rates.length * blockTime);
-  if (doubleCheckValidUntil > (Date.now() + 5 * ONE_HR)) {
+  const maxLegalValidUntil = Date.now() + (1.5 * blockTime);
+  if (doubleCheckValidUntil > maxLegalValidUntil) {
     log.fatal({ expiry: new Date(doubleCheckValidUntil) }, "Too many rates, calculated expiry is {expiry}");
     return false;
   }
@@ -105,7 +119,7 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
       log.trace(`Pushing new Offset ${offset.offset / ONE_HR}hrs at ${new Date(offset.from)}`);
       const tx = await oracle.updateOffset(offset, overrides);
       log.debug(`Waiting offset: ${tx.hash}`)
-      await tx.wait(2);
+      await tx.wait();
     }
 
     // If we have enough rates, push them to the oracle
@@ -115,7 +129,7 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
       const overrides = await getOverrideFees(oracle);
       const tx = await oracle.update(rates[0], overrides);
       log.info(`Waiting single insert: ${tx.hash}`)
-      await tx.wait(2);
+      await tx.wait();
     }
     else if (rates.length > 1) {
       for (let s = 0; s < rates.length; s += MAX_LENGTH) {
@@ -124,7 +138,7 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
         const overrides = await getOverrideFees(oracle);
         const tx = await oracle.bulkUpdate(rates.slice(s, e), overrides);
         log.info(`Waiting bulk insert: ${tx.hash}`)
-        await tx.wait(2);
+        await tx.wait();
       }
     }
     log.trace(`Updated ${rates.length} new rates, until ${timestamp} : ${new Date(timestamp)}`)
@@ -139,6 +153,34 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
   }
 
   return true;
+}
+
+function calculateNumBlocks(duration: number, blockTime: number) {
+  const blockRatio = duration / blockTime; // Total number of blocks to add
+  // We explicitly add duplicates.  This is because
+  // our oracle is optimized for look-up by using a
+  // consistent duration for every time block
+  let numBlocks = Math.floor(blockRatio);
+  const offsetRatio = blockRatio - numBlocks;
+  if (offsetRatio == 0) {
+    return { numBlocks, }
+  }
+  // What's the shortest distance to a round number of blocks?
+  // Handle cases where duration is not a multiple of blockTime
+  // This happens during DST changes and colossal fuckups
+  if (offsetRatio > 0.5 || numBlocks == 0) {
+    // We need to add most of block.
+    // Add a new block & shorten it
+    return {
+      numBlocks: numBlocks + 1,
+      offset: (offsetRatio * blockTime) - blockTime,
+    }
+  } else {
+    return {
+      numBlocks,
+      offset: offsetRatio * blockTime,
+    }
+  }
 }
 
 // Dup 3x, must be refactored

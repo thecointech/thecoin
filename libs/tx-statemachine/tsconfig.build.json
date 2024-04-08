@@ -1,8 +1,11 @@
 {
-  "extends": "./tsconfig.json",
-  "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"],
-  "references": [
-    { "path": "../utils-ts/tsconfig.build.json" },
-  ]
+  "extends": "../tsconfig.libs.json",
+  "compilerOptions": {
+    "outDir": "./build/",
+    "tsBuildInfoFile": "./build/.buildinfo",
+    "rootDir": "./src/",
+    "baseUrl": "./src/"
+  },
+  "include": ["src/**/*", "src/**/*.json"],
+  "exclude": ["**/*.test.*", "**/__mocks__/**", "**/*.stories.*"],
 }
-

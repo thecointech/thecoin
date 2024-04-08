@@ -2,7 +2,7 @@ import { validateUberAction } from './CertifiedActionVerify';
 import { createAction } from '@thecointech/broker-db';
 import { DateTime } from 'luxon';
 import { UberProcessor } from "@thecointech/tx-bill";
-import { GetContract } from './Wallet';
+import { GetContract } from '../signer/Wallet';
 import { getCurrentState } from '@thecointech/tx-statemachine';
 import { SendMail } from '@thecointech/email';
 import { log } from '@thecointech/logging';
@@ -11,7 +11,7 @@ import type { UberTransferAction } from '@thecointech/types';
 export async function  ProcessUberBillPayment(sale: UberTransferAction) {
   const user = sale.transfer.from;
   const initialId = sale.signature;
-  log.trace({user, initialId }, `Initiating bill from {user} with initialId {initialId}`);
+  log.trace({user, initialId }, `Initiating UberBill from {user} with initialId {initialId}`);
   await validateUberAction(sale);
 
   // First, create/register the action
@@ -20,6 +20,8 @@ export async function  ProcessUberBillPayment(sale: UberTransferAction) {
     date: DateTime.now(),
     initialId: sale.signature
   })
+
+  log.trace({ActionId: action.doc.id, initialId }, 'Created action {ActionID} for initialId {initialId}');
 
   // Process the sale
   const contract = await GetContract();

@@ -15,11 +15,9 @@ interface ModalProps {
 
 const translate = defineMessages({
   ok : {
-    id: "shared.modalOperation.ok",
     defaultMessage:"Ok",
     description:"shared.modalOperation.ok: Text for the ok button for the modal tool"},
   cancel : {
-    id: "shared.modalOperation.cancel",
     defaultMessage:"Cancel",
     description:"shared.modalOperation.cancel: Text for the cancel button for the modal tool"}});
 

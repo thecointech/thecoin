@@ -6,7 +6,7 @@ import { Mnemonic } from '@ethersproject/hdnode';
 import { defaultDays, defaultTime, HarvestConfig } from '../types';
 import { createStep } from './steps';
 import { CreditDetails } from './types';
-import { setSchedule } from './schedule/scheduler';
+import { setSchedule } from './schedule';
 import path from 'path';
 import { log } from '@thecointech/logging';
 import { ActionTypes, AnyEvent } from '../scraper/types';
@@ -36,10 +36,10 @@ export type ConfigShape = {
 // NOTE: Not sure this works with ComDB
 const ConfigKey = "config";
 
-let _config = null as unknown as PouchDB.Database<ConfigShape>;
-export async function initConfig(password?: string) {
-  if (!_config) {
-    _config = new PouchDB<ConfigShape>(db_path, {adapter: 'memory'});
+let __config = null as unknown as PouchDB.Database<ConfigShape>;
+export async function getConfig(password?: string) {
+  if (!__config) {
+    __config = new PouchDB<ConfigShape>(db_path, {adapter: 'memory'});
     log.info(`Initializing ${process.env.NODE_ENV} config database at ${db_path}`);
     if (process.env.NODE_ENV !== "development") {
       log.info(`Encrypting config DB`);
@@ -47,15 +47,18 @@ export async function initConfig(password?: string) {
       // Yes, this is a hard-coded password.
       // Will fix ASAP with dynamically
       // generated code (Apr 04 2023)
-      await _config.setPassword(password ?? "hF,835-/=Pw\\nr6r");
-      await _config.loadEncrypted();
+      await __config.setPassword(password ?? "hF,835-/=Pw\\nr6r");
+      await __config.loadEncrypted();
     }
   }
+  return __config;
 }
 
 export async function getProcessConfig() {
   try {
-    return await _config.get<ConfigShape>(ConfigKey, { revs_info: true });
+    const db = await getConfig();
+    const doc = await db.get<ConfigShape>(ConfigKey, { revs_info: true });
+    return doc;
   }
   catch (err) {
     return undefined;
@@ -63,10 +66,10 @@ export async function getProcessConfig() {
 }
 
 export async function setProcessConfig(config: Partial<ConfigShape>) {
-  await initConfig();
   log.info("Setting config file...");
   const lastCfg = await getProcessConfig();
-  await _config.put({
+  const db = await getConfig();
+  await db.put({
     steps: config.steps ?? lastCfg?.steps ?? [],
     schedule: {
       daysToRun: config.schedule?.daysToRun ?? lastCfg?.schedule?.daysToRun ?? defaultDays,
@@ -82,7 +85,7 @@ export async function setProcessConfig(config: Partial<ConfigShape>) {
     _id: ConfigKey,
     _rev: lastCfg?._rev,
   })
-  await _config.loadDecrypted();
+  await db.loadDecrypted();
 }
 
 export async function setWalletMnemomic(mnemonic: Mnemonic) {

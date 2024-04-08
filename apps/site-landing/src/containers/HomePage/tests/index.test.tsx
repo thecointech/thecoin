@@ -11,12 +11,13 @@ import { MemoryRouter } from 'react-router';
 
 jest.mock('react-redux', () => ({
   useDispatch: jest.fn(),
-  useSelector: jest.fn((selector) => selector({
-    accounts: {
-      map: {},
-      active: undefined,
-    }
-  })),
+  useSelector: jest.fn(() => ({})),
+  // useSelector: jest.fn(selector => selector({
+  //   accounts: {
+  //     map: {},
+  //     active: undefined,
+  //   }
+  // })),
 }));
 
 describe('<HomePage />', () => {

@@ -44,7 +44,7 @@ export const toDelta = (tx: TransactionResponse) => {
 // replace it (ie, jack up the bribe)
 export async function calculateOverrides<Type extends ActionType=ActionType>(container: AnyActionContainer, transition: NamedTransition<Type>) : Promise<Overrides> {
   const prior = findPriorAttempt(container, transition);
-  const nonce = await getNonce(container, prior);
+  const nonce = await getNonce(prior);
   const fees = await getOverrideFees(container, prior)
   return {
     nonce,
@@ -88,8 +88,10 @@ async function getOverrideFees(container: AnyActionContainer, prior?: Transactio
   }
 }
 
-async function getNonce(container: AnyActionContainer, prior?: Transaction) {
+async function getNonce(prior?: Transaction) {
   if (prior?.nonce) return prior.nonce;
-  const address = await container.contract.signer.getAddress();
-  return await container.contract.provider.getTransactionCount(address);
+  // DO NOT SET AN EXPLICIT NONCE!!!  The contract running in GAE may submit
+  // simultaneous transactions uses a DB-based lock to ensure in-order
+  // submission
+  return undefined;
 }

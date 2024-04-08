@@ -5,13 +5,14 @@
 import * as React from 'react';
 import { Button, Container, Form, Input } from 'semantic-ui-react';
 import { UxAddress } from '@thecointech/shared/components/UX/Address';
+import { DateTime } from 'luxon';
 // Either import CSS or LESS;
 // - LESS is slower, but offers on-save hot-reload
 // - CSS is faster, but requires manual recompile
 import '../semantic/semantic.css';
 //import '@thecointech/site-semantic-theme/semantic.less';
 import styles from './styles.module.less';
-import { getEmailAddress, getEmailBody, getEmailTitle } from './email';
+import { getEmailAddress, getEmailBody, getEmailTitle } from '@thecointech/email-fake-deposit';
 
 export const Page = () => {
 
@@ -26,7 +27,7 @@ export const Page = () => {
 
     var link = `mailto:${getEmailAddress(address)}?`
     + "&subject=" + encodeURIComponent(getEmailTitle())
-    + "&body=" + encodeURIComponent(getEmailBody(amount));
+    + "&body=" + encodeURIComponent(getEmailBody(amount, DateTime.now()));
 
     window.open(link, '_blank');
   }

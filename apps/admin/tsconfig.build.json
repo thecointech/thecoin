@@ -1,17 +1,6 @@
 {
-  "extends": "../tsconfig.apps.json",
+  "extends": "../tsconfig.electron.app.json",
   "compilerOptions": {
-    "plugins": [
-      {
-        "transform": "@formatjs/ts-transformer",
-        "import": "transform",
-        "type": "config",
-        "overrideIdFn": "[sha512:contenthash:base64:6]",
-        "ast": true
-      }
-    ],
-    "noEmit": true,
-    "jsx": "react-jsx",
     "rootDir": "./src",
     "outDir": "./build",
     "tsBuildInfoFile": "./build/.buildinfo",

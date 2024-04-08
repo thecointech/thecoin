@@ -5,15 +5,15 @@ import { ActionTypes, ValueType } from './scraper/types';
 import { warmup } from './scraper/warmup';
 import { actions, ScraperBridgeApi } from './scraper_actions';
 import { toBridge } from './scraper_bridge_conversions';
-import { getHarvestConfig, getProcessConfig, getWalletAddress, hasCreditDetails, initConfig, setCreditDetails, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
+import { getHarvestConfig, getProcessConfig, getWalletAddress, hasCreditDetails, setCreditDetails, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
 import type { Mnemonic } from '@ethersproject/hdnode';
 import { HarvestConfig } from './types';
 import { CreditDetails } from './Harvester/types';
-import { exec } from 'child_process';
-import { cwd } from 'process';
-import { join } from 'path';
-import { exportResults, getState } from './Harvester/db';
+import { spawn } from 'child_process';
+import { exportResults, getState, setOverrides } from './Harvester/db';
 import { harvest } from './Harvester';
+import { logsFolder } from './paths';
+import { platform } from 'node:os';
 
 async function guard<T>(cb: () => Promise<T>) {
   try {
@@ -60,23 +60,19 @@ const api: ScraperBridgeApi = {
   }),
 
   openLogsFolder: () => guard(async () => {
-    const logFolder = process.env.TC_LOG_FOLDER;
-    if (!logFolder) {
-      return false;
-    }
-    const logsPath = join(cwd(), logFolder);
-    exec(`start "" "${logsPath}"`);
+    openFolder(logsFolder);
     return true;
   }),
   getArgv: () => guard(() => Promise.resolve(JSON.stringify({
     argv: process.argv,
-    broker: process.env.WALLET_BrokerCAD_ADDRESS
+    broker: process.env.WALLET_BrokerCAD_ADDRESS,
+    logsFolder,
   }))),
+
+  setOverrides: (balance, pendingAmt, pendingDate) => guard(() => setOverrides(balance, pendingAmt, pendingDate)),
 }
 
 export function initScraping() {
-
-  initConfig();
 
   ipcMain.handle(actions.warmup, async (_event, url: string) => {
     return api.warmup(url);
@@ -136,4 +132,19 @@ export function initScraping() {
   ipcMain.handle(actions.getArgv, async (_event) => {
     return api.getArgv();
   })
+
+  ipcMain.handle(actions.setOverrides, async (_event, balance: number, pendingAmt: number|null, pendingDate: string|null) => {
+    return api.setOverrides(balance, pendingAmt, pendingDate);
+  })
+}
+
+
+const openFolder = (path: string) => {
+  let explorer = '';
+  switch (platform()) {
+      case "win32": explorer = "explorer"; break;
+      case "linux": explorer = "xdg-open"; break;
+      case "darwin": explorer = "open"; break;
+  }
+  spawn(explorer, [path], { detached: true }).unref();
 }

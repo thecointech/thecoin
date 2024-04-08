@@ -27,6 +27,8 @@ const api : ScraperBridgeApi = {
 
   openLogsFolder: () => ipcRenderer.invoke(actions.openLogsFolder),
   getArgv: () => ipcRenderer.invoke(actions.getArgv),
+
+  setOverrides: (balance, pendingAmt, pendingDate) => ipcRenderer.invoke(actions.setOverrides, balance, pendingAmt, pendingDate),
 }
 
 export const connectRenderer = () => contextBridge.exposeInMainWorld('scraper', api)

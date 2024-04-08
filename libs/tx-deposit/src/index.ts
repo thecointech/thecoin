@@ -18,10 +18,12 @@ export const manualProcessor = (contract: TheCoin, deposit: Deposit) => new Stat
 //
 // For each deposit email, either find an existing incomplete action
 // or create a new action for the data
-export function getBuyETransferAction(etransfer: eTransferData) {
+export async function getBuyETransferAction(etransfer: eTransferData) {
   // We assume (for now) that id is unique amongst all eTransfers
   const { id, address, cad, recieved } = etransfer;
-  return getBuyTypeAction("etransfer", address, cad, recieved, id)
+  const action = await getBuyTypeAction("etransfer", address, cad, recieved, id)
+  action.data.initial.raw = etransfer;
+  return action;
 }
 
 //

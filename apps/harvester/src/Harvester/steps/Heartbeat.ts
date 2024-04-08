@@ -10,6 +10,11 @@ export class Heartbeat implements ProcessingStage {
 
     log.info("Sending Heartbeat");
 
+    if (process.env.HARVESTER_DRY_RUN) {
+      log.info(`Skipping Heartbeat: DRY_RUN`);
+      return {};
+    }
+
     const wallet = await getWallet();
     const serverTimestamp = await GetStatusApi().timestamp();
     const result = "success";
