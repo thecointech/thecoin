@@ -8,7 +8,7 @@ import stat
 import time
 import logging
 
-config_name = "prodtest"
+config_name = "prodbeta"
 os.environ["CONFIG_NAME"] = config_name
 
 logger = logging.getLogger()
@@ -58,9 +58,11 @@ def checkout():
   new_deploy.mkdir(parents=True, exist_ok=True)
   os.chdir(new_deploy)
   os.system('git clone https://github.com/thecointech/thecoin.git .') # Cloning
+  logger.info("New clone complete")
 
   # switch to publish/Test
   os.system(f'git checkout publish/{config_name}')
+  logger.info("Switched to branch")
 
   # Merge in latest changes
   success = os.system('git merge origin/dev --no-ff --no-edit')
@@ -78,13 +80,16 @@ def buildAndDeploy():
   # Try to run a publish
   success = os.system('yarn');
   if success != 0: raise RuntimeError("Couldn't install")
+  logger.info("Dependencies installed")
 
   success = os.system('yarn build')
   if success != 0: raise RuntimeError("Couldn't build")
+  logger.info("Build complete")
 
   # First, deploy the libraries
   success = os.system('yarn _deploy:lib --force-publish')
   if success != 0: raise RuntimeError("Couldn't deploy libraries")
+  logger.info("Libraries deployed")
 
   # Rebuild apps so we get the right versions
   for attempt in range(3):
@@ -92,10 +97,12 @@ def buildAndDeploy():
     success = os.system('yarn _deploy:app:rebuild')
     if success == 0: break
   if success != 0: raise RuntimeError("Couldn't re-build")
+  logger.info("Apps rebuilt")
 
   # deploy online services
   success = os.system('yarn _deploy:app:gcloud')
   if success != 0: raise RuntimeError("Error deploying to gcloud")
+  logger.info("Apps deployed")
 
   logger.info(f"Deploy Success: {success}")
   return True
@@ -155,15 +162,19 @@ def mergeBackIntoDev():
   temp_deploy.mkdir(parents=True, exist_ok=True)
   os.chdir(temp_deploy)
   os.system('git clone https://github.com/thecointech/thecoin.git .') # Cloning
+  logger.info("Merge-back checkout created")
 
   # Merge in publishing changes
   success = os.system(f'git merge origin/publish/{config_name} --no-ff --no-edit')
   if success != 0:
     logger.error("Merge Failed")
     exit(1)
+  logger.info("Published branch merged")
     
   # push changes back
   os.system('git push')
+  logger.info("Changes pushed")
+
   # cleanup
   os.chdir(base)
   shutil.rmtree(temp_deploy, onerror=remove_readonly)
