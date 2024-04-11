@@ -4,6 +4,8 @@ import { log } from '@thecointech/logging';
 
 export class RoundUp implements ProcessingStage {
 
+  readonly name = 'RoundUp';
+
   roundPoint = 100;
 
   constructor(args?: Record<string, string|number>) {

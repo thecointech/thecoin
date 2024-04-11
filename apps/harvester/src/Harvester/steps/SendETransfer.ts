@@ -7,6 +7,8 @@ import { DateTime } from 'luxon';
 
 export class SendETransfer implements ProcessingStage {
 
+  readonly name = 'SendETransfer';
+
   // Don't send less than $10, it's not worth the effort
   minETransfer = 10;
 

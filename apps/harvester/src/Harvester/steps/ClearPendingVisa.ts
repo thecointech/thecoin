@@ -8,6 +8,8 @@ import { notify } from '../notify';
 // Detect when a visa payment has cleared and reduce the harvester balance to match
 export class ClearPendingVisa implements ProcessingStage {
 
+  readonly name = 'ClearPendingVisa';
+
   async process(data: HarvestData) {
     // Do we have a payment pending?
     let pending = data.state.toPayVisa;
