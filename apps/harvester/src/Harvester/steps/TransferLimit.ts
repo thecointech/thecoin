@@ -3,6 +3,8 @@ import { HarvestData, ProcessingStage } from '../types';
 
 export class TransferLimit implements ProcessingStage {
 
+  readonly name = 'TransferLimit';
+
   limit = 200;
 
   constructor(config?: Record<string, string|number>) {

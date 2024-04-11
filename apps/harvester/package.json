@@ -15,7 +15,6 @@
     "email": "stephen.taylor.dev@gmail.com"
   },
   "scripts": {
-    "scraper": "run-env src/scraper/main.ts",
     "dev": "yarn run -T cross-env RUN_SCRAPER_HEADLESS=false electron-forge start",
     "dev:harvest": "electron-forge start -- -- --harvest",
     "_dev:live": "yarn run -T cross-env CONFIG_NAME=devlive yarn dev",
@@ -30,7 +29,7 @@
     "lint": "eslint --ext .ts,.tsx .",
     "build": "run -T tsc -b",
     "test": "yarn :jest",
-    "test:record": "yarn run-env ./src/scraper/main.ts --record"
+    "scraper:record": "yarn run-env ./src/scraper/main.ts --record"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.2.0",
@@ -41,6 +40,7 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.2.0",
     "@electron-forge/plugin-webpack": "^7.2.0",
     "@thecointech/jestutils": "^0.2.124",
+    "@thecointech/setenv": "workspace:^",
     "@timfish/forge-externals-plugin": "https://github.com/FrozenKiwi/forge-externals-plugin-monorepo",
     "@types/node-notifier": "^8.0.2",
     "@types/pouchdb": "^6.4.0",

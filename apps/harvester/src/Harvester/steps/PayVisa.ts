@@ -12,6 +12,8 @@ export const PayVisaKey = "PayVisa";
 
 export class PayVisa implements ProcessingStage {
 
+  readonly name = 'PayVisa';
+
   // How many days prior to the due date should we pay the visa?
   daysPrior = 3;
   constructor(config?: Record<string, string|number>) {
