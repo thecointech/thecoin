@@ -56,7 +56,7 @@ export function errorHandler(
   next: NextFunction
 ): ExResponse | void {
   if (err instanceof ValidateError) {
-    log.warn(`Caught ${err.message} on ${req.path}:`, err.fields);
+    log.warn(err, `Validation error on ${req.path}: ${err.fields}`);
     const r: ValidateErrorJSON = {
       message: "Validation failed",
       details: err?.fields,
@@ -64,7 +64,7 @@ export function errorHandler(
     return res.status(422).json(r);
   }
   if (err instanceof Error) {
-    log.error(`Caught ${err.message} on ${req.path}:`);
+    log.error(err, `${req.path} with Params: ${JSON.stringify(req.params)}, Body: ${JSON.stringify(req.body)}`);
     return res.status(500).json({
       message: "Internal Server Error",
     });
