@@ -54,7 +54,7 @@ function lastPaymentSettled(data: HarvestData, pending: currency, pendingDate: D
   const payments = data.visa.history
     .filter(r => r.date >= pendingClean)
     .filter(r => r.credit?.intValue);
-  log.info(`TransferVisaOwing: Found ${payments.length} credits, first ${payments[0].credit?.value}`);
+  log.info(`TransferVisaOwing: Found ${payments.length} credits, first ${payments[0]?.credit?.value}`);
   const pendingPayment = payments.filter(r => r.credit!.value == pending.value);
   if (pendingPayment.length > 0) {
     log.info(`TransferVisaOwing: Found matching credit for pending payment: ${pending}`);

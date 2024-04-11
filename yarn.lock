@@ -24558,6 +24558,7 @@ __metadata:
     "@thecointech/fx-rates": "npm:^0.2.124"
     "@thecointech/jestutils": "npm:^0.2.124"
     "@thecointech/logging": "npm:^0.2.124"
+    "@thecointech/setenv": "workspace:^"
     "@thecointech/shared": "npm:^0.2.124"
     "@thecointech/signers": "npm:^0.2.124"
     "@thecointech/utilities": "npm:^0.2.124"

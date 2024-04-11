@@ -1,10 +1,12 @@
 import puppeteerVanilla, { type Browser, executablePath } from 'puppeteer';
 import { addExtra } from 'puppeteer-extra';
-import { getPlugins } from './plugins';
 import { mkdirSync } from 'node:fs';
+import StealthPlugins from 'puppeteer-extra-plugin-stealth';
 
+// NOTE!  This is duplicated in harvester
+// We should deduplicate to a single scraping package
 const puppeteer = addExtra(puppeteerVanilla);
-const plugins = getPlugins();
+puppeteer.use(StealthPlugins());
 
 let _browser: Browser | null = null;
 
@@ -21,9 +23,6 @@ export async function startPuppeteer() {
     userDataDir,
   })
 
-  for (const plugin of plugins) {
-    await plugin.onBrowser(browser);
-  }
   return browser;
 }
 
@@ -60,9 +59,9 @@ export async function getPage() {
   const page = await getNewPage();
 
   // setup for constant dimensions
-  for (const plugin of plugins) {
-    await plugin.onPageCreated(page);
-  }
+  // for (const plugin of plugins) {
+  //   await plugin.onPageCreated(page);
+  // }
 
   await page.setViewport({
     width: 1280,

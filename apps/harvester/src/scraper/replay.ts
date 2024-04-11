@@ -10,8 +10,9 @@ import { log } from '@thecointech/logging';
 import { debounce } from './debounce';
 import path from 'path';
 import { mkdirSync } from 'fs';
-import { outFolder } from '../paths';
+import { logsFolder, outFolder } from '../paths';
 import { getElementForEvent } from './elements';
+import { writeFileSync } from 'node:fs';
 
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -31,12 +32,28 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
     throw new Error(`No events found for ${actionName}`);
   }
 
-  return await replayEvents(actionName, events, dynamicValues, delay);
+  const { page, browser } = await startPuppeteer();
+
+  try {
+    const r = await replayEvents(page, actionName, events, dynamicValues, delay);
+    return r;
+  }
+  catch (err) {
+    log.error(err, `Failed to replay ${actionName}`);
+    const dumpIn = process.env.HARVESTER_SAVE_DUMP;
+    if (dumpIn) {
+      const dumpFolder = path.join(logsFolder, "dumps", actionName);
+      await dumpPage(page, dumpFolder);
+    }
+    throw err;
+  }
+  finally {
+    await page.close();
+    await browser.close();
+  }
 }
 
-export async function replayEvents(actionName: ActionTypes, events: AnyEvent[], dynamicValues?: Record<string, string>, delay = 1000) {
-
-  const { page, browser } = await startPuppeteer();
+export async function replayEvents(page: Page, actionName: ActionTypes, events: AnyEvent[], dynamicValues?: Record<string, string>, delay = 1000) {
 
   const values: Record<string, string|DateTime|currency|HistoryRow[]> = {}
 
@@ -197,14 +214,11 @@ export async function replayEvents(actionName: ActionTypes, events: AnyEvent[], 
 
   await processInstructions(events)
 
-  // Wait for a second in case anyone is watching
-  await sleep(3000);
-  await browser.close();
   // remove history (personal info) from logged info (TODO: remove this line entirely)
   const { history, ...sanitize } = values;
   log.debug(`We got values: ${JSON.stringify({
     ...sanitize,
-    history: `${(history as any)?.length } rows`
+    history: `${(history as any)?.length ?? 0 } rows`
   })}`);
 
   return values;
@@ -228,3 +242,15 @@ function parseValue(value: string, event: ValueEvent) {
   return value;
 }
 
+export async function dumpPage(page: Page, dumpFolder: string) {
+  mkdirSync(dumpFolder, { recursive: true });
+  // Save screenshot
+  await page.screenshot({ path: path.join(dumpFolder, `screenshot.png`) });
+  // Save content
+  const content = await page.content();
+  writeFileSync(path.join(dumpFolder, `content.html`), content);
+  // Lastly, try for MHTML
+  const cdp = await page.target().createCDPSession();
+  const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
+  writeFileSync(path.join(dumpFolder, 'snapshot.mhtml'), data);
+}
