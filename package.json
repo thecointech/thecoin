@@ -66,7 +66,7 @@
     "check-changes": "git diff-index --patch-with-stat HEAD && git diff-index --quiet HEAD -- "
   },
   "dependencies": {
-    "axios": "0.26.1",
+    "axios": "1.6.5",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
     "ethers": "^5.7.0",
@@ -101,7 +101,7 @@
     "@storybook/react-webpack5": "7.6.10",
     "@testing-library/jest-dom": "^6.1.6",
     "@testing-library/react": "^12.1.2",
-    "@tsoa/cli": "^6.0.0-rc.3",
+    "@tsoa/cli": "6.2.0",
     "@types/create-hash": "^1.2.2",
     "@types/express": "4.17.1",
     "@types/invariant": "2.2.30",
