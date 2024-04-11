@@ -1,18 +1,15 @@
-import puppeteerVanilla, { type Browser, executablePath } from 'puppeteer';
+import puppeteerVanilla, { executablePath } from 'puppeteer';
 import { addExtra } from 'puppeteer-extra';
+import { getPlugins } from './puppeteer-plugins';
 import { rootFolder } from '../paths';
 import path from "path";
 import { registerElementAttrFns } from './elements';
-import StealthPlugins from 'puppeteer-extra-plugin-stealth';
 
-// NOTE!  This is duplicated in harvester
-// We should deduplicate to a single scraping package
 const puppeteer = addExtra(puppeteerVanilla);
-puppeteer.use(StealthPlugins());
+const plugins = getPlugins();
 const userDataDir = path.join(rootFolder, 'chrome_data');
 
-let _browser: Browser | null = null;
-
+let _browser: any;
 export async function startPuppeteer(headless?: boolean) {
 
   const shouldBeHeadless = headless ?? process.env.RUN_SCRAPER_HEADLESS !== 'false';
@@ -24,7 +21,15 @@ export async function startPuppeteer(headless?: boolean) {
     userDataDir,
   })
 
+  for (const plugin of plugins) {
+    await plugin.onBrowser(browser);
+  }
+
   const [page] = await browser.pages();
+
+  for (const plugin of plugins) {
+    await plugin.onPageCreated(page);
+  }
 
   await page.setViewport({
     width: 1280,
