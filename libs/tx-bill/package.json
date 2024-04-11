@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-bill",
-  "version": "0.2.124",
+  "version": "0.2.125",
   "description": "The Coin: A library handles bill payments",
   "type": "module",
   "keywords": [
@@ -30,7 +30,7 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/tx-statemachine": "^0.2.124"
+    "@thecointech/tx-statemachine": "^0.2.125"
   },
   "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
 }

@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-tools",
-  "version": "0.2.124",
+  "version": "0.2.125",
   "private": true,
   "description": "TheCoin: Build & deploy tools for our smart contracts",
   "keywords": [
@@ -36,7 +36,7 @@
     "@nomiclabs/hardhat-ethers": "^2.1.0",
     "@nomiclabs/hardhat-etherscan": "^3.1.0",
     "@openzeppelin/hardhat-upgrades": "^1.19.1",
-    "@thecointech/signers": "^0.2.124",
+    "@thecointech/signers": "^0.2.125",
     "@typechain/ethers-v5": "10.1.0",
     "@typechain/hardhat": "^6.1.2",
     "hardhat": "^2.10.1",
