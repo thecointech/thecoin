@@ -1,6 +1,6 @@
 import { Contract } from '@ethersproject/contracts';
-import { TheCoin } from './types';
-import TheCoinSpec from './contracts/contracts/TheCoin.sol/TheCoin.json' assert {type: "json"};
+import { TheCoin } from './codegen';
+import TheCoinSpec from './codegen/contracts/TheCoin.sol/TheCoin.json' assert {type: "json"};
 import { getProvider } from '@thecointech/ethers-provider';
 
 //
@@ -9,7 +9,7 @@ import { getProvider } from '@thecointech/ethers-provider';
 export const InitialCoinBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0", 10);
 
 const getAbi = () => TheCoinSpec.abi;
-const getContractAddress = async () => {
+export const getContractAddress = async () : Promise<string> => {
 
   const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME;
   const deployment = await import(`./deployed/${config_env}-polygon.json`, { assert: { type: 'json' } });

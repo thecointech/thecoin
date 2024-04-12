@@ -1,9 +1,0 @@
-{
-  "definitions": {
-    "AccountDetails": "kjzl6cwe1jw1481v0ze0l8u89afyzru9fg30dr9ukph5iml0kurw971cra96ded"
-  },
-  "schemas": {
-    "jwe": "ceramic://k3y52l7qbv1frxys44epgrys92wfuwden1luz716fgb63tisc3l3yhwiw0gfmngn4"
-  },
-  "tiles": {}
-}

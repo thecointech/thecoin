@@ -1,0 +1,432 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0x86d2CA6E284FaB438C5BBc3783BabE641Bfc97DA",
+    "txHash": "0x01dfb450016087b2cb7fd61ee18ff15894e911166da313632121e2e9300edefd"
+  },
+  "proxies": [
+    {
+      "address": "0x7fE1BF55f1eF9A390510C6E8d0a5d39b78348f5C",
+      "txHash": "0xcba26035b5fe04a449142e82f242b76f668b1685b9ff9e63f4108cb29e582e93",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "f21e0f5fefe210f1c23759f6b2dbbfb56b11e1bc16e2ff8cb34541a044b567d8": {
+      "address": "0x456d6A71B728E4b410C07776E18765ee7e8Cc086",
+      "txHash": "0x61b969a28f31e87f977343a19b2d95453de82f261286b054ecae3ffbc813e522",
+      "layout": {
+        "storage": [
+          {
+            "label": "priceFeed",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(AggregatorV3Interface)713",
+            "contract": "OracleClient",
+            "src": "@thecointech\\contract-oracle\\contracts\\OracleClient.sol:15"
+          },
+          {
+            "label": "_initialized",
+            "offset": 20,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:39"
+          },
+          {
+            "label": "_initializing",
+            "offset": 21,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:44"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:22"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "52",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:87"
+          },
+          {
+            "label": "maxCushionDown",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_int256",
+            "contract": "ShockAbsorber",
+            "src": "contracts\\ShockAbsorber.sol:62"
+          },
+          {
+            "label": "maxCushionUp",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_int256",
+            "contract": "ShockAbsorber",
+            "src": "contracts\\ShockAbsorber.sol:66"
+          },
+          {
+            "label": "maxCushionUpPercent",
+            "offset": 0,
+            "slot": "103",
+            "type": "t_int256",
+            "contract": "ShockAbsorber",
+            "src": "contracts\\ShockAbsorber.sol:68"
+          },
+          {
+            "label": "cushions",
+            "offset": 0,
+            "slot": "104",
+            "type": "t_mapping(t_address,t_struct(UserCushion)1229_storage)",
+            "contract": "ShockAbsorber",
+            "src": "contracts\\ShockAbsorber.sol:70"
+          },
+          {
+            "label": "numClients",
+            "offset": 0,
+            "slot": "105",
+            "type": "t_uint256",
+            "contract": "ShockAbsorber",
+            "src": "contracts\\ShockAbsorber.sol:72"
+          },
+          {
+            "label": "theCoin",
+            "offset": 0,
+            "slot": "106",
+            "type": "t_contract(IPluggable)1091",
+            "contract": "ShockAbsorber",
+            "src": "contracts\\ShockAbsorber.sol:75"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_contract(AggregatorV3Interface)713": {
+            "label": "contract AggregatorV3Interface",
+            "numberOfBytes": "20"
+          },
+          "t_contract(IPluggable)1091": {
+            "label": "contract IPluggable",
+            "numberOfBytes": "20"
+          },
+          "t_int256": {
+            "label": "int256",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_struct(UserCushion)1229_storage)": {
+            "label": "mapping(address => struct UserCushion)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(UserCushion)1229_storage": {
+            "label": "struct UserCushion",
+            "members": [
+              {
+                "label": "fiatPrincipal",
+                "type": "t_int256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "coinAdjustment",
+                "type": "t_int256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "initTime",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "lastDrawDownTime",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "avgFiatPrincipal",
+                "type": "t_int256",
+                "offset": 0,
+                "slot": "4"
+              },
+              {
+                "label": "avgCoinPrincipal",
+                "type": "t_int256",
+                "offset": 0,
+                "slot": "5"
+              },
+              {
+                "label": "lastAvgAdjustTime",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "6"
+              },
+              {
+                "label": "reserved",
+                "type": "t_int256",
+                "offset": 0,
+                "slot": "7"
+              },
+              {
+                "label": "maxCovered",
+                "type": "t_int256",
+                "offset": 0,
+                "slot": "8"
+              },
+              {
+                "label": "maxCoverAdjust",
+                "type": "t_int256",
+                "offset": 0,
+                "slot": "9"
+              }
+            ],
+            "numberOfBytes": "320"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "ffe1acc3224e633f345201790cbd0f57a3df0d497a1a0f911ffb3e5a7daf1f78": {
+      "address": "0x3E79e04CC8C2C370cD6Fb01F9d24C2cc17b6CD31",
+      "txHash": "0x1c781ec3103a87d4cf2217282f56a233d880f99acd63e98c3183bdb2511b88c0",
+      "layout": {
+        "storage": [
+          {
+            "label": "priceFeed",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(AggregatorV3Interface)713",
+            "contract": "OracleClient",
+            "src": "@thecointech\\contract-oracle\\contracts\\OracleClient.sol:15"
+          },
+          {
+            "label": "_initialized",
+            "offset": 20,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:39"
+          },
+          {
+            "label": "_initializing",
+            "offset": 21,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:44"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:22"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "52",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:87"
+          },
+          {
+            "label": "maxCushionDown",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_int256",
+            "contract": "ShockAbsorber",
+            "src": "contracts\\ShockAbsorber.sol:62"
+          },
+          {
+            "label": "maxCushionUp",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_int256",
+            "contract": "ShockAbsorber",
+            "src": "contracts\\ShockAbsorber.sol:66"
+          },
+          {
+            "label": "maxCushionUpPercent",
+            "offset": 0,
+            "slot": "103",
+            "type": "t_int256",
+            "contract": "ShockAbsorber",
+            "src": "contracts\\ShockAbsorber.sol:68"
+          },
+          {
+            "label": "cushions",
+            "offset": 0,
+            "slot": "104",
+            "type": "t_mapping(t_address,t_struct(UserCushion)1229_storage)",
+            "contract": "ShockAbsorber",
+            "src": "contracts\\ShockAbsorber.sol:70"
+          },
+          {
+            "label": "numClients",
+            "offset": 0,
+            "slot": "105",
+            "type": "t_uint256",
+            "contract": "ShockAbsorber",
+            "src": "contracts\\ShockAbsorber.sol:72"
+          },
+          {
+            "label": "theCoin",
+            "offset": 0,
+            "slot": "106",
+            "type": "t_contract(IPluggable)1091",
+            "contract": "ShockAbsorber",
+            "src": "contracts\\ShockAbsorber.sol:75"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_contract(AggregatorV3Interface)713": {
+            "label": "contract AggregatorV3Interface",
+            "numberOfBytes": "20"
+          },
+          "t_contract(IPluggable)1091": {
+            "label": "contract IPluggable",
+            "numberOfBytes": "20"
+          },
+          "t_int256": {
+            "label": "int256",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_struct(UserCushion)1229_storage)": {
+            "label": "mapping(address => struct UserCushion)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(UserCushion)1229_storage": {
+            "label": "struct UserCushion",
+            "members": [
+              {
+                "label": "fiatPrincipal",
+                "type": "t_int256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "coinAdjustment",
+                "type": "t_int256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "initTime",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "lastDrawDownTime",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "avgFiatPrincipal",
+                "type": "t_int256",
+                "offset": 0,
+                "slot": "4"
+              },
+              {
+                "label": "avgCoinPrincipal",
+                "type": "t_int256",
+                "offset": 0,
+                "slot": "5"
+              },
+              {
+                "label": "lastAvgAdjustTime",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "6"
+              },
+              {
+                "label": "reserved",
+                "type": "t_int256",
+                "offset": 0,
+                "slot": "7"
+              },
+              {
+                "label": "maxCovered",
+                "type": "t_int256",
+                "offset": 0,
+                "slot": "8"
+              },
+              {
+                "label": "maxCoverAdjust",
+                "type": "t_int256",
+                "offset": 0,
+                "slot": "9"
+              }
+            ],
+            "numberOfBytes": "320"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,12 +1,15 @@
 {
-  "extends": "./tsconfig.json",
-  "include": ["./src/**/*", "./src/**/*.json"],
-  "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"],
-  "references": [
-    { "path": "../signers/tsconfig.build.json" },
-    { "path": "../contract-tools/tsconfig.json" },
-    { "path": "../contract-base/tsconfig.json" },
-  ]
+  "extends": "../tsconfig.libs.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./build",
+    "tsBuildInfoFile": "./build/.buildinfo",
+    // Auto-gen code has unused vars in them
+    // src/types/@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.ts:12:3
+    "noUnusedLocals": false
+  },
+  "include": ["./src/**/*.ts", "./src/**/*.json"],
+  "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"]
 }
 
 

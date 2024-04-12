@@ -1,7 +1,8 @@
-import { toHuman } from "@thecointech/utilities";
+import { toHuman, toHumanDecimal } from "@thecointech/utilities";
 import { fiatChange } from "../../containers/Account/profit";
 import { DateTime } from "luxon";
 import { weSellAt } from '@thecointech/fx-rates';
+import Decimal from 'decimal.js-light';
 import type { FXRate } from "@thecointech/pricing";
 import type { Transaction } from "@thecointech/tx-blockchain";
 import type { IFxRates } from "../../containers/FxRate";
@@ -12,7 +13,7 @@ export const MarketTZ = "America/New_York";
 
 export const getDateVals = ({ txs, from, to }: Pick<GraphHistoryProps, "txs"|"from"|"to">) => {
   to = to ?? DateTime.local();
-  from = from ?? txs[0].date;
+  from = from ?? txs[0]?.date ?? to;
   // We query the fxrates at 4pm (end-of-day) or now, if day is today.
   const eod = from.setZone(MarketTZ).set({
     hour: 16,
@@ -65,10 +66,17 @@ export function getAccountSerie(data: GraphHistoryProps, rates: FXRate[], ratesA
 
     // If not already present, fetch this rate
     ratesApi?.fetchRateAtDate(eod)
+    // For each plugin, apply it's effect to the result
+    const timestamp = DateTime.fromJSDate(eod);
+    const balanceMod = data.plugins.reduce((bal, plugin) => plugin(bal, timestamp, rates), new Decimal(balance))
+
     const exRate = weSellAt(rates, eod);
+    const finalFiat = toHumanDecimal(balanceMod.mul(exRate));
+    const rawFiat = toHumanDecimal(new Decimal(balance).mul(exRate));
     accountValuesDatum.push({
       x: date.toISODate(),
-      y: toHuman(exRate * balance),
+      y: finalFiat.toNumber(),
+      raw: rawFiat.toNumber(),
       costBasis,
       txs: daysTxs,
     })

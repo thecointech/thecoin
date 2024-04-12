@@ -104,12 +104,12 @@ export class Erc20Provider extends EtherscanProvider {
     })
   }
 
-  async getERC20History(args: {address?: string, contractAddress?: string, startBlock?: BlockTag, endBlock?: BlockTag}) {
-    const {address, contractAddress, startBlock, endBlock} = args;
+  async getERC20History(args: {address?: string, contractAddress?: string, fromBlock?: BlockTag, toBlock?: BlockTag}) {
+    const {address, contractAddress, fromBlock, toBlock} = args;
     const params: Record<string, any> = {
       action: "tokentx",
-      startblock: ((startBlock == null) ? initBlock : startBlock),
-      endblock: ((endBlock == null) ? 99999999 : endBlock),
+      startblock: fromBlock ?? initBlock,
+      endblock: toBlock,
       sort: "asc",
     };
     if (address) params.address = address;
@@ -125,12 +125,12 @@ export class Erc20Provider extends EtherscanProvider {
   }
 
   async getEtherscanLogs(filter: Filter, conditional: "or"|"and") : Promise<Array<Log>>{
-    const { startBlock, endBlock } = filter as any;
+    const { fromBlock, toBlock } = filter;
     const params: Record<string, any> = {
       action: "getLogs",
       address: filter.address,
-      startblock: !startBlock ? initBlock : startBlock,
-      endblock: !endBlock ? 99999999 : endBlock,
+      fromBlock: fromBlock ?? initBlock,
+      toBlock,
       topic1_2_opr: conditional
     };
     const topicsAdded: number[] = [];
@@ -154,6 +154,49 @@ export class Erc20Provider extends EtherscanProvider {
   getSigner(_id: number): Promise<Signer> {
     throw new Error("Cannot call getSigner on an Erc20Provider");
   }
+
+  async getSourceCode(address: string) : Promise<string> {
+    const args: Record<string, any> = {
+      action: "getsourcecode",
+      address,
+      apikey: this.apiKey
+    }
+
+    const r: SrcCodeResponse[]  = await this.fetch("contract", args);
+    const [contract] = r;
+    if (contract.Proxy == "1") {
+      return this.getSourceCode(contract.Implementation);
+    }
+    const src = contract.SourceCode;
+    // For some reason the returned object is invalid JSON
+    // (for prodtest anyway)
+    const obj = JSON.parse(
+      (src.slice(0, 2) == '{{')
+      ? src.slice(1, -1)
+      : src
+    );
+    const entries = Object.entries(obj.sources);
+    const [contractSrcPair, ...rest] = entries.filter(pair => !pair[0].startsWith("@"))
+    if (rest.length > 0) {
+      throw new Error(`Violated assumption: More than one local contract for ${address} - ${rest.map(pair => pair[0]).join(', ')}`);
+    }
+    return (contractSrcPair[1] as any).content;
+  }
+}
+
+type SrcCodeResponse = {
+  SourceCode: string; // "
+  ContractName: string; // "DAO",
+  CompilerVersion: string; // "v0.3.1-2016-04-12-3ad5e82",
+  OptimizationUsed: string; // "1",
+  Runs: string; // "200",
+  ConstructorArguments: string;
+  EVMVersion: string; // "Default",
+  Library: string; // "",
+  LicenseType: string; // "",
+  Proxy: string; // "0",
+  Implementation: string; // "",
+  SwarmSource: string; // ""
 }
 
 export const getProvider = () => new Erc20Provider();

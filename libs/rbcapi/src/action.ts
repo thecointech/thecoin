@@ -1,31 +1,13 @@
-import puppeteer, { Browser, Page } from 'puppeteer';
+import type {ElementHandle, HTTPResponse, Page, WaitForOptions} from 'puppeteer';
 import fs, { readFileSync } from 'fs';
 import { log } from '@thecointech/logging';
 import { AuthOptions, Credentials, isCredentials } from './types';
+import { getPage } from './scraper';
 
 ////////////////////////////////////////////////////////////////
 // API action, a single-shot action created by the API.
 // Wraps a puppeteer page to ensure issues with one
 // action do not affect synchronous actions.
-
-let _browser: Browser | null = null;
-export async function initBrowser(options?: puppeteer.BrowserLaunchArgumentOptions) {
-  _browser = await puppeteer.launch(options);
-  _browser.on('disconnected', initBrowser);
-  return _browser;
-}
-
-export async function closeBrowser() {
-  if (_browser) {
-    await _browser.close();
-    _browser = null;
-  }
-}
-
-async function getPage() {
-  const browser = _browser ?? await initBrowser();
-  return browser.newPage();
-}
 
 export class ApiAction {
 
@@ -54,7 +36,7 @@ export class ApiAction {
   }
 
   page!: Page;
-  navigationPromise!: Promise<puppeteer.HTTPResponse | null>;
+  navigationPromise!: Promise<HTTPResponse | null>;
   outCache?: string;
   step: number = 0;
 
@@ -145,13 +127,13 @@ export class ApiAction {
     }
   }
 
-  async findPVQuestion(answer: puppeteer.ElementHandle<Element>) {
+  async findPVQuestion(answer: ElementHandle<Element>) {
     const pvqQuestion = await answer.$x("//INPUT[@id='pvqAnswer']/../../preceding-sibling::TR/TD[2]");
     if (pvqQuestion == null || pvqQuestion.length == 0) {
       log.error("Cannot find PVQ question");
       return null;
     }
-    const pvq: string = await this.page.evaluate(el => el.innerText, pvqQuestion[0]);
+    const pvq: string = await this.page.evaluate(el => (el as any).innerText, pvqQuestion[0]);
     log.debug({ pvq }, "Found question: {pvq}")
     return pvq;
   }
@@ -169,7 +151,7 @@ export class ApiAction {
 
   //////////////////////////////////////////
 
-  async clickAndNavigate(selector: string, stepName: string, options?: puppeteer.WaitForOptions) {
+  async clickAndNavigate(selector: string, stepName: string, options?: WaitForOptions) {
     const navigationWaiter = this.page.waitForNavigation({
       timeout: 90000, // MB internet means this can timeout prematurely
       ...options
@@ -179,11 +161,21 @@ export class ApiAction {
     await this.writeStep(stepName);
   }
 
-  async findElementsWithText(elementType: string, searchText: string) {
-    return this.page.$x(`//${elementType}[contains(., '${searchText}')]`);
+  async findElementsWithText<K extends keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap>(elementType: K, searchText: string) {
+    const nodes = await this.page.$x(`//${elementType}[contains(., '${searchText}')]`);
+    return Promise.all(
+      nodes.map(node => {
+        try {
+          return node.toElement(elementType)
+        } catch (e) {
+          node.dispose();
+          return null;
+        };
+      }).filter(n => n != null)
+    );
   }
 
-  async clickOnText(text: string, type: string, waitElement?: string, stepName?: string) {
+  async clickOnText<K extends keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap>(text: string, type: K, waitElement?: string, stepName?: string) {
     const [link] = await this.findElementsWithText(type, text);
     if (!link)
       throw (`Could not find element ${type} with text: ${text}`)

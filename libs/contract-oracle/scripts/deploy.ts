@@ -1,6 +1,6 @@
 import hre from 'hardhat';
 import { storeContractAddress } from '@thecointech/contract-tools/writeContract';
-import { getSigner } from '@thecointech/signers';
+import { getDeploySigner } from '@thecointech/contract-tools/deploySigner';
 import { log } from '@thecointech/logging';
 import { getArguments } from './arguments';
 import '@nomiclabs/hardhat-ethers';
@@ -8,8 +8,7 @@ import '@openzeppelin/hardhat-upgrades';
 
 async function main() {
 
-  const owner = await getSigner("Owner");
-
+  const owner = await getDeploySigner("OracleUpdater")
   const contractArgs = await getArguments()
   const Oracle = await hre.ethers.getContractFactory("SpxCadOracle", owner);
   const oracle = await hre.upgrades.deployProxy(Oracle, contractArgs);

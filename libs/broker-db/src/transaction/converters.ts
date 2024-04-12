@@ -1,3 +1,4 @@
+import { AssignPluginRequest } from '@thecointech/types';
 import { buildConverter, convertDecimal, convertDates, serverTimestamp } from "../converter";
 import { ActionDataTypes, TransitionDelta, IncompleteRef } from "./types";
 
@@ -17,9 +18,20 @@ export const sellActionConverter = buildConverter<ActionDataTypes["Sell"]>(
 export const billActionConverter = buildConverter<ActionDataTypes["Bill"]>(
   convertDates<ActionDataTypes["Bill"]>("date"),
 );
+export const pluginActionConverter = buildConverter<ActionDataTypes["Plugin"]>(
+  convertDates<ActionDataTypes["Plugin"]>("date"),
+  convertDates<ActionDataTypes["Plugin"]["initial"]>("signedAt"),
+  // timeMs only exists on AssignPluginRequest, so needs it's own converter
+  convertDates<AssignPluginRequest>("timeMs"),
+);
+export const heartbeatActionConverter = buildConverter<ActionDataTypes["Heartbeat"]>(
+  convertDates<ActionDataTypes["Heartbeat"]>("date"),
+)
 
 export const actionConverters = {
   Buy: buyActionConverter,
   Sell: sellActionConverter,
   Bill: billActionConverter,
+  Plugin: pluginActionConverter,
+  Heartbeat: heartbeatActionConverter,
 }

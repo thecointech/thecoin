@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ResponsiveLine, PointTooltip, LineSvgProps } from '@nivo/line'
 import { Transaction } from '@thecointech/tx-blockchain';
 import { DateTime } from 'luxon';
+import { PluginBalanceMod } from '@thecointech/contract-plugins';
 import { TooltipWidget, TxDatum } from "./types";
 import { Theme as NivoTheme } from "@nivo/core";
 import { linearGradientDef } from "@nivo/core";
@@ -11,6 +12,7 @@ import { Placeholder } from "semantic-ui-react";
 import { useFxRates, FxRateReducer } from "../../containers/FxRate";
 import Decimal from 'decimal.js-light';
 import styles from './styles.module.less';
+import { RawLineLayer } from './RawLineLayer';
 
 // Easy access to theme definition
 export type Theme = {
@@ -19,6 +21,7 @@ export type Theme = {
 } & NivoTheme;
 
 export type GraphHistoryProps = {
+  plugins: PluginBalanceMod[],
   txs: Transaction[],
   height: number,
   theme?: Theme,
@@ -49,7 +52,7 @@ export const GraphTxHistory = (props: GraphHistoryProps) => {
             {...commonProperties}
             {...axisProperties(minMax, datum.length)}
             {...colorProperties(minMax)}
-            {...thingsToDisplayProperties}
+            {...thingsToDisplayProperties(props)}
           />
       }
     </div>
@@ -84,8 +87,8 @@ const useCalcLimitedFetchSerie = (props: GraphHistoryProps) => {
 
 type MinMax = ReturnType<typeof calcMinMax>;
 const calcMinMax = (datum: TxDatum[]) => {
-  let max = datum.reduce((p, d) => Math.max(p, d.y, d.costBasis), 0) ?? 100;
-  let min = datum.reduce((p, d) => Math.min(p, d.y, d.costBasis), max) ?? 0;
+  let max = datum.reduce((p, d) => Math.max(p, d.y, d.costBasis, d.raw), 0) ?? 100;
+  let min = datum.reduce((p, d) => Math.min(p, d.y, d.costBasis, d.raw), max) ?? 0;
 
   // max / min should have minimum size - $100
   const diff = Math.max(100, max - min);
@@ -158,20 +161,28 @@ const colorProperties = ({min, max}: MinMax) : Partial<LineSvgProps> => ({
   fill: [{ match: '*', id: 'gradientA' }]
 })
 
-const thingsToDisplayProperties: Partial<LineSvgProps> = {
-  layers: [
-    //"grid",
-    "markers",
-    "axes",
-    "areas",
-    "crosshair",
-    "lines",
-    //"slices",
-    //"points",
-    'mesh',
-    "legends",
-    StepLineLayer,
-  ],
-  useMesh: true,
-  enableSlices: false,
+const thingsToDisplayProperties = (props: GraphHistoryProps) => {
+  const properties: Partial<LineSvgProps> = {
+    layers: [
+      //"grid",
+      "markers",
+      "axes",
+      "areas",
+      "crosshair",
+      "lines",
+      //"slices",
+      //"points",
+      'mesh',
+      "legends",
+    ],
+    useMesh: true,
+    enableSlices: false,
+  };
+  if (props.plugins.length) {
+    properties.layers!.push(RawLineLayer)
+  }
+  else {
+    properties.layers!.push(StepLineLayer)
+  }
+  return properties;
 }

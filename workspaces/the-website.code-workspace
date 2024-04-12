@@ -31,6 +31,9 @@
     {
       "name": "contract",
       "path": "../libs/contract"
+    },
+    {
+      "path": "../libs/contract-plugins"
     }
   ],
   "settings": {

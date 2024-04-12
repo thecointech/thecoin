@@ -1,6 +1,8 @@
 import { IsValidAddress, NormalizeAddress } from "@thecointech/utilities";
 import { getFirestore, CollectionReference, DocumentReference } from '@thecointech/firestore';
 import { AllUserData, userDataConverter, UserVerifiedInfo } from "./user.types";
+import { getActionDoc } from './transaction';
+import { DateTime } from 'luxon';
 
 //
 // Collection of all users
@@ -69,4 +71,13 @@ export async function setUserVerified(address: string, data: Partial<UserVerifie
 export async function getUserVerified(address: string) {
 	const userData = await getUserData(address);
 	return userData?.status == "approved";
+}
+
+export async function setHeartbeat(address: string, result: string) {
+  // always push a new entry
+  const doc = getActionDoc(address, "Heartbeat");
+  await doc.set({
+    date: DateTime.now(),
+    result,
+  })
 }

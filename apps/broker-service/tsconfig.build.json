@@ -1,8 +1,11 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../tsconfig.service.app.json",
+  "compilerOptions": {
+    /* Basic Options */
+    "outDir": "./build",   /* Redirect output structure to the directory. */
+    "rootDir": "./src",                         /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+    "tsBuildInfoFile": "./build/.buildinfo",          /* Specify file to store incremental compilation information */
+  },
   "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"],
-  "references": [
-    { "path": "../../libs/email/tsconfig.build.json" },
-    { "path": "../../libs/tx-etransfer/tsconfig.build.json" },
-  ]
+  "include": ["./src/**/*.*" ]
 }

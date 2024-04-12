@@ -17,6 +17,7 @@ export type DbRecords = {
   Buy: ActionDictionary<"Buy">;
   Sell: ActionDictionary<"Sell">;
   Bill: ActionDictionary<"Bill">;
+  Plugin: ActionDictionary<"Plugin">;
 }
 
 export type AllData = {

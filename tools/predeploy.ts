@@ -52,13 +52,18 @@ export async function FirebaseDeploy(envName: string) {
 //
 export function gCloudDeploy() {
   const deploy = (process.env.SETTINGS == 'beta')
-    ? "gcloud app deploy --version=beta --no-promote"
-    : "gcloud app deploy"
+    ? "gcloud app deploy --quiet --version=beta --no-promote"
+    : "gcloud app deploy --quiet"
   return ShellCmd(deploy);
 }
 
 export async function copyEnvVarsLocal(outYamlFile: string, additionalVars: Record<string, string> = {}) {
+
+  // Get version from package.json
+  const packageJson = JSON.parse(readFileSync(`${process.cwd()}/package.json`, 'utf8'));
+
   const env = {
+    TC_APP_VERSION: packageJson.version,
     ...getEnvVars(),
     ...additionalVars,
   }
@@ -68,7 +73,7 @@ export async function copyEnvVarsLocal(outYamlFile: string, additionalVars: Reco
     .filter(([key]) => !key.startsWith('CERAMIC_'))
     .filter(([key]) => !key.startsWith('GITHUB_'))
     .filter(([key]) => !key.endsWith('_SERVICE_ACCOUNT'))
-    .filter(([key]) => key !== 'STORAGE_PATH' && key != 'TC_LOG_FOLDER' && key != 'USERDATA_INSTRUCTION_PK')
+    .filter(([key]) => key !== 'STORAGE_PATH' && key != 'TC_LOG_FOLDER' && !key.startsWith('USERDATA_INSTRUCTION'))
     .map(([key, val]) => {
       const sval = JSON.stringify(val);
       return [key, sval].join(': ');

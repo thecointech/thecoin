@@ -13,9 +13,8 @@ export function alignToNextBoundary(timestamp: number, updateInterval: number) :
     minute: 31,
     second: 0,
     millisecond: 0,
-    zone: initSearchDt.zone
     //millisecond: RateOffsetFromMarket
-  }).plus({milliseconds: RateOffsetFromMarket});
+  }, { zone: initSearchDt.zone }).plus({milliseconds: RateOffsetFromMarket});
 
   // Now, we search to find the boundary immediately after timestamp
   return (initSearchDt < iterator)
@@ -33,7 +32,7 @@ function searchBackForBoundary(init: DateTime, iterator: DateTime, interval: num
     if (lastDst != iterator.isInDST)
       iterator = fixDst(iterator, lastDst);
 
-    if (iterator < init)
+    if (iterator <= init)
       return r.toMillis();
     r = iterator;
   } while (iterator.day == init.day);

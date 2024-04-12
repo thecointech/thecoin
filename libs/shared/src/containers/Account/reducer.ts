@@ -7,7 +7,7 @@ import { FxRateReducer } from '../../containers/FxRate/reducer';
 import { SagaReducer } from '../../store/immerReducer';
 import { isLocal } from '@thecointech/signers';
 import { loadAndMergeHistory, calculateTxBalances, mergeTransactions, Transaction } from '@thecointech/tx-blockchain';
-import { connectIDX } from '@thecointech/idx';
+import { getComposeDB } from '@thecointech/idx';
 import { AccountDetails, AccountState, DefaultAccountValues } from '@thecointech/account';
 import { loadDetails, setDetails } from '../AccountDetails';
 import { DateTime } from 'luxon';
@@ -18,6 +18,7 @@ import type { SagaIterator } from '@redux-saga/core';
 import type { AccountMapStore } from '../AccountMap';
 import type { DecryptCallback, IActions } from './types';
 import type { Dictionary } from 'lodash';
+import { getPluginDetails } from '@thecointech/contract-plugins';
 
 const KycPollingInterval = (process.env.NODE_ENV === 'production')
   ? 5 * 60 * 1000 // 5 minutes
@@ -34,18 +35,20 @@ function AccountReducer(address: string, initialState: AccountState) {
 
     *setSigner(signer: Signer) {
       yield this.storeValues({ signer });
+      yield delay(10);
       yield this.sendValues(this.actions.connect);
     }
 
-    *connect(): Generator<StrictEffect, void, TheCoin> {
+    *connect(): Generator<StrictEffect, void, TheCoin&any[]> {
       // Load details last, so it
       yield this.sendValues(this.actions.loadDetails);
 
       const { signer } = this.state;
       // Connect to the contract
       const contract = yield call(ConnectContract, signer);
+      const plugins = yield call(getPluginDetails, contract);
       // store the contract prior to trying update history.
-      yield this.storeValues({ contract });
+      yield this.storeValues({ contract, plugins });
       // Load history info by default
       yield this.sendValues(this.actions.updateHistory, [DateTime.fromMillis(0), DateTime.now()]);
     }
@@ -55,7 +58,7 @@ function AccountReducer(address: string, initialState: AccountState) {
     *getIDX() {
       let idx = this.state.idx;
       if (!idx) {
-        idx = yield call(connectIDX, this.state.signer);
+        idx = yield call(getComposeDB, this.state.signer);
         yield this.storeValues({ idx, idxIO: true });
       }
       return idx;
@@ -67,8 +70,8 @@ function AccountReducer(address: string, initialState: AccountState) {
       if (idx) {
         yield this.storeValues({ idx, idxIO: true });
         log.trace("IDX: Restoring account details");
-        const payload = yield call(loadDetails, idx);
-        const details = payload?.data || DefaultAccountValues.details;
+        const payload: Awaited<ReturnType<typeof loadDetails>> = yield call(loadDetails, idx);
+        const details = payload || DefaultAccountValues.details;
         log.trace("IDX: read complete");
         yield this.storeValues({ details, idxIO: false });
 
@@ -171,7 +174,7 @@ function AccountReducer(address: string, initialState: AccountState) {
       const balance = yield call(contract.balanceOf, address);
       yield this.storeValues({ balance: balance.toNumber(), historyLoading: true });
 
-      log.trace(`Updating from ${from} -> ${until}`);
+      log.trace(`Updating from ${historyEnd ?? from} -> ${until}`);
       const oldHistory = this.state.history;
       const fromBlock = this.state.historyEndBlock || InitialCoinBlock;
       // Retrieve transactions for all time
@@ -220,9 +223,6 @@ function AccountReducer(address: string, initialState: AccountState) {
         const decrypted = yield call(Wallet.fromEncryptedJson, JSON.stringify(signer), password, cb);
         // Ensure callback is called with 100% result so caller knows we are done
         log.trace("Account decrypted successfully");
-        if (callback) {
-          callback(1);
-        }
         // Store the result
         yield this.sendValues(this.actions.setSigner, [decrypted]);
       }

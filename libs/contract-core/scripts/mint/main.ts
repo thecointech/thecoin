@@ -8,7 +8,7 @@ import { getContract } from './contract';
 import { log } from '@thecointech/logging';
 
 Settings.throwOnInvalid = true;
-Settings.defaultZoneName = "America/New_York";
+Settings.defaultZone = "America/New_York";
 
 export async function ensureAddresses() {
   for (const account of ["BrokerCAD", "TheCoin", "BrokerTransferAssistant", "Minter"]) {

@@ -1,6 +1,5 @@
 import type { CurrencyCode, FXRate } from '@thecointech/pricing';
 
-// file deepcode ignore ComparisonObjectExpression: <Ignore complaints about comparison vs EmptyRate>
 export const EmptyRate: FXRate = {
   target: 0 as CurrencyCode,
   buy: 0,
@@ -8,7 +7,7 @@ export const EmptyRate: FXRate = {
   fxRate: 0,
   validFrom: 0,
   validTill: 0,
-};
+} as any;
 
 export const validFor = (rate: Pick<FXRate, "validFrom"|"validTill">, ts: number) =>
   rate.validFrom <= ts && rate.validTill > ts;
@@ -19,7 +18,7 @@ export function getFxRate(rates: FXRate[], ts: number): FXRate {
   {
     return rates.slice(-1)[0];
   }
-  return rates.find((rate: FXRate) => validFor(rate, ts)) || EmptyRate;
+  return rates.find(rate => validFor(rate, ts)) || EmptyRate;
 }
 
 export const getRate = (rates: FXRate[], date?: Date) => getFxRate(rates, date?.getTime() ?? 0);

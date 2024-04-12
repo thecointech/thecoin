@@ -5,7 +5,7 @@ const cacheName = "mocked.cache.json";
 let toDisk = "";
 jest.unstable_mockModule('fs', () => ({
   writeFileSync: jest.fn((_, data) => toDisk = data.toString()),
-  readFileSync: jest.fn((filePath) => filePath.endsWith(cacheName) ? toDisk : null ),
+  readFileSync: jest.fn((filePath: string) => filePath.endsWith(cacheName) ? toDisk : null ),
   existsSync: jest.fn(() => toDisk != ""),
   mkdirSync: jest.fn(),
   statSync: jest.fn(() => ({ mtime: new Date() })),
@@ -20,6 +20,7 @@ it("should be able to read/write the cached data", async () => {
       Bill: {},
       Buy: {},
       Sell: {},
+      Plugin: {},
     },
     eTransfers: [],
     obsolete: {},

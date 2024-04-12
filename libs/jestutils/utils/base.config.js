@@ -1,5 +1,4 @@
 const path = require('path');
-const { compilerOptions } = require('../../../tsconfig.base.json');
 const { cwd } = require('process');
 
 const getTool = (name) => path.join(__dirname, name);
@@ -16,6 +15,7 @@ const getRoots = () => [
 module.exports = {
   preset: 'ts-jest/presets/default-esm',
   verbose: true,
+  testTimeout: 15 * 1000,
   // transform: {
   //   "^.+\\.tsx?$": "ts-jest",
   //   // transform our built files to be CJS
@@ -29,7 +29,7 @@ module.exports = {
   globals: {
     'ts-jest': {
       useESM: true,
-      tsconfig: {
+      tsconfig: "tsconfig.tests.json", /*{
         ...compilerOptions,
         // compile as module
         // module: "CommonJS",
@@ -46,7 +46,7 @@ module.exports = {
         rootDir: rootFolder,
         // do not write files during testing
         noEmit: true,
-      },
+      }, */
       astTransformers: {
         before: [
           {
@@ -64,7 +64,7 @@ module.exports = {
 
   // modulePathIgnorePatterns: ["build"],
   // By default, we add the 'src' folder to jest
-  moduleDirectories: [mocks, 'node_modules'],
+  moduleDirectories: [mocks, '<rootDir>/src', 'node_modules'],
   // Mock styling (easier than parsing them)
   moduleNameMapper: {
     "@thecointech/site-semantic-theme/variables": getTool('mockLessVars.mjs'),

@@ -38,7 +38,7 @@ export const etransfer : StateGraph<States, "Buy"> = {
     next: transitionTo<States, "Buy">(deposit.labelEmailDeposited, "deposited"),
   },
   deposited: {
-    next: transitionTo<States>(core.toCoin, "converted"),
+    next: transitionTo<States, "Buy">(core.toCoin, "converted"),
   },
 
   converted: {

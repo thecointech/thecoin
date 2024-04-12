@@ -1,17 +1,11 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../tsconfig.web.app.json",
   "compilerOptions": {
-    "plugins": [
-      {
-        "transform": "@formatjs/ts-transformer",
-        "import": "transform",
-        "type": "config",
-        "overrideIdFn": "[sha512:contenthash:base64:6]",
-        "ast": true
-      }
-    ]
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "outDir": "./build/",
+    "tsBuildInfoFile": "./build/.buildinfo",
   },
-  "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"],
-  "references": [{ "path": "../../libs/site-base/tsconfig.build.json" }],
-  "composite": true
+  "include": ["src/**/*"],
+  "exclude": ["**/*.test.*", "**/__mocks__/**", "**/*.stories.*"],
 }

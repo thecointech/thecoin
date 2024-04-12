@@ -1,15 +1,14 @@
 import { jest } from "@jest/globals";
-import { getEnvVars } from "@thecointech/setenv";
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { prepareBillPayee } from '.';
 import * as manage from './managePayees';
-import { ApiAction, closeBrowser, initBrowser } from '../action';
+import { ApiAction } from '../action';
+import { closeBrowser } from '../scraper';
 
-const vars = getEnvVars("prod");
 jest.setTimeout(5 * 60 * 1000);
 // Disable until Jest supports spyOn cleanly
 // https://github.com/facebook/jest/issues/9430
-const shouldRun = false && !!vars.RBCAPI_CREDENTIALS_PATH && !process.env.JEST_CI;
+const shouldRun = false && !!process.env.RBCAPI_CREDENTIALS_PATH && !process.env.JEST_CI;
 
 // We run this test on the live website to catch any changes to RBC website.
 describe("Testing Pay Bills", () => {
@@ -18,14 +17,8 @@ describe("Testing Pay Bills", () => {
   const fakeVisaIssuer = "VISA - TORONTO DOMINION";
   const fakeVisaName = "testing fakevisa";
 
-  beforeAll(async () => {
-    process.env.RBCAPI_CREDENTIALS_PATH = vars.RBCAPI_CREDENTIALS_PATH;
-    ApiAction.initCredentials();
-    await initBrowser({headless: !IsManualRun});
-  })
-  afterAll(async () => {
-    await closeBrowser();
-  })
+  beforeAll(ApiAction.initCredentials)
+  afterAll(closeBrowser)
 
   it ('correctly prepares to payee page', async () => {
     const p1 = await prepareBillPayee("test-preparePayee", fakeVisaName, fakeVisaIssuer, fakeVisaNumber);

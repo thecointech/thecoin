@@ -1,0 +1,60 @@
+{
+  "name": "@thecointech/contract-plugins",
+  "version": "0.2.125",
+  "description": "The Coin: Plugin functionality for contract-core",
+  "type": "module",
+  "keywords": [
+    "TheCoin",
+    "ethereum"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/contract-plugins"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "prepublishOnly": "run -T rimraf ./build/.buildinfo",
+    "build": "run -T run-s build:contracts build:copy build:src",
+    "build:contracts": "yarn _hardhat ./scripts/compile.ts",
+    "build:src": "run -T tsc -b",
+    "build:copy": "run -T cpx \"./src/deployed/**\" ./build/deployed",
+    "clean": "run -T rimraf ./build && run -T rimraf ./src/codegen",
+    "test": "run :jest",
+    "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts run-env"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "exports": {
+    "./writePlugin": "./internal/writePlugin.ts",
+    "./*": "./build/*.js",
+    ".": "./build/index.js"
+  },
+  "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "writePlugin": [
+        "./internal/writePlugin.ts"
+      ],
+      "*": [
+        "build/*.d.ts"
+      ]
+    }
+  },
+  "devDependencies": {
+    "@openzeppelin/contracts-upgradeable": "^4.5.2",
+    "@thecointech/async": "^0.2.125",
+    "@thecointech/contract-tools": "^0.2.125",
+    "@thecointech/setenv": "^0.2.125"
+  },
+  "dependencies": {
+    "@thecointech/contract-oracle": "^0.2.125"
+  },
+  "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
+}

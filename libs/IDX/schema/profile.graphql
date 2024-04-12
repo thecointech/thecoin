@@ -1,0 +1,39 @@
+type EncryptedProfile @createModel(accountRelation: SINGLE, description: "DagJWE-encrypted model") {
+  protected: String! @string(maxLength: 250)
+  iv: String! @string(maxLength: 250)
+  ciphertext: String! @string(maxLength: 245760)
+  tag: String! @string(maxLength: 250)
+  aad: String @string(maxLength: 250)
+  recipients: [Recipient!]! @list(maxLength: 2)
+}
+
+type Recipient {
+  header: RecipientHeader!
+  encrypted_key: String! @string(maxLength: 250)
+}
+
+type RecipientHeader {
+  alg: String!  @string(maxLength: 250)
+  iv: String!  @string(maxLength: 250)
+  tag: String!  @string(maxLength: 250)
+  epk: EphemeralPublicKey
+  kid: String  @string(maxLength: 250)
+  apv: String  @string(maxLength: 250)
+  apu: String  @string(maxLength: 250)
+  # enc: String @string(maxLength: 250)
+}
+
+#
+# The JWK representation of an ephemeral public key.
+# See https://www.rfc-editor.org/rfc/rfc7518.html#section-6
+#
+type EphemeralPublicKey {
+  kty: String  @string(maxLength: 250)
+  # ECC
+  crv: String  @string(maxLength: 250)
+  x: String  @string(maxLength: 250)
+  y: String  @string(maxLength: 250)
+  # RSA
+  n: String  @string(maxLength: 250)
+  e: String  @string(maxLength: 250)
+}

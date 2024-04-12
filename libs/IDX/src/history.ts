@@ -1,56 +1,44 @@
 import { log } from '@thecointech/logging';
-import { getLink } from './link';
-import { TileDocument } from '@ceramicnetwork/stream-tile'
-import type { CeramicApi } from '@ceramicnetwork/common';
-import type { DataModel } from '@glazed/datamodel';
-import type { DIDDataStore } from '@glazed/did-datastore';
-import type { ConfigType } from './types';
+import { ComposeClient } from '@composedb/client';
+import { getDefintions } from './definition';
 import type { JWE } from 'did-jwt';
-
-type CeramicCommon = {
-  ceramic: CeramicApi,
-  dataModel:  DataModel<ConfigType>,
-  dataStore: DIDDataStore<ConfigType>
-};
 
 export async function getHistory(
   address: string,
-  { ceramic, dataModel, dataStore }: CeramicCommon,
+  client: ComposeClient,
+  count?: number,
   progress?: (percent: number) => void
-) : Promise<JWE[]|null>{
-
-  const link = await getLink(address, ceramic);
-  const did = link.did;
-  if (!did) {
-    log.debug("No DID found for account");
-    return null;
-  };
-
-  log.trace(`Loading history for ${did}`);
-
-  const definitionId = dataModel.getDefinitionID("AccountDetails");
-  // The recordId is the stream defined by definition for this DID
-  const streamId = await dataStore.getRecordID(definitionId!, did);
-  if (!streamId)
-    return null;
-
-  const stream = await TileDocument.load(ceramic, streamId);
-  const ids = stream.allCommitIds;
-  log.trace(`Found ${ids.length} commits`);
-
-  // TODO: do this with a multi-query instead
-  const commits: JWE[] = [];
-  for (let i = 0; i < ids.length; i++) {
-    try {
-      const commit = await ceramic.loadStream(ids[i]);
-      if (commit) {
-        commits.push(commit.content);
-      }
-    }
-    catch (e: any) {
-      log.error(`Cannot load commit: ${e.message}`);
-    }
-    progress?.(i / ids.length);
+) {
+  const definition = await getDefintions();
+  const ceramic = client.context.ceramic;
+  //const account = client.did?.parent; // 'did:pkh:eip155:31337:0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266'
+  const account = `did:pkh:eip155:${process.env.DEPLOY_POLYGON_NETWORK_ID}:${address.toLowerCase()}`;
+  const params = {
+    account,
+    model: definition.models.EncryptedProfile.id
   }
-  return commits;
+  // Get the latest record, this comes with a list of commits.
+  const single = await client.context.querySingle(params);
+  if (single) {
+    // Load prior commits
+    const ids = single.allCommitIds;
+    const commits: JWE[] = [];
+    const numToFetch = count ?? ids.length;
+    const startAt = ids.length - numToFetch;
+    for (let i = startAt; i < ids.length; i++) {
+      try {
+        const commit = await ceramic.loadStream(ids[i]);
+        if (commit) {
+          commits.push(commit.content);
+        }
+      }
+      catch (e: any) {
+        log.error(`Cannot load commit: ${e.message}`);
+      }
+      progress?.((i - startAt) / numToFetch);
+      console.log(i - startAt);
+    }
+    return commits;
+  }
+  return null;
 }

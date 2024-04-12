@@ -1,9 +1,9 @@
 import { Contract } from '@ethersproject/contracts';
-import type { UberConverter } from './types/contracts/UberConverter';
-import OracleSpec from './contracts/contracts/UberConverter.sol/UberConverter.json' assert {type: "json"};
+import type { UberConverter } from './codegen/contracts/UberConverter';
+import UberSpec from './codegen/contracts/UberConverter.sol/UberConverter.json' assert {type: "json"};
 import { getProvider } from '@thecointech/ethers-provider';
 
-const getAbi = () => OracleSpec.abi;
+const getAbi = () => UberSpec.abi;
 const getContractAddress = async () => {
 
   const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME;
@@ -23,12 +23,12 @@ const buildContract = async () =>
   ) as UberConverter
 
 declare module globalThis {
-  let __oracle: UberConverter|undefined;
+  let __uberConverter: UberConverter|undefined;
 }
 
 export async function getContract() : Promise<UberConverter> {
-  if (!globalThis.__oracle) {
-    globalThis.__oracle= await buildContract();
+  if (!globalThis.__uberConverter) {
+    globalThis.__uberConverter= await buildContract();
   }
-  return globalThis.__oracle;
+  return globalThis.__uberConverter;
 }

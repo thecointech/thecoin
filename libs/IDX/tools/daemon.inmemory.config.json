@@ -1,0 +1,38 @@
+{
+  "http-api": {
+    "cors-allowed-origins": [
+      ".*"
+    ],
+    "admin-dids": [
+      "did:key:z6Mkt6psEtumkbnyRqo3vEiFmTkMRDn72r5vf7SKf2aBrwic"
+    ]
+  },
+  "ipfs": {
+    "mode": "bundled"
+  },
+  "logger": {
+    "log-level": 2,
+    "log-to-files": false
+  },
+  "metrics": {
+    "metrics-exporter-enabled": false,
+    "metrics-port": 9090
+  },
+  "network": {
+    "name": "inmemory"
+  },
+  "anchor": {
+    "auth-method": "did"
+  },
+  "node": {
+    "private-seed-url": "inplace:ed25519#e663239643ed99d36a29bd048717c4e2b4be6c5629b997cae6de6184bf4e92a1"
+  },
+  "state-store": {
+    "mode": "fs"
+  },
+  "indexing": {
+    "db": "sqlite://./.ceramic/indexing.sqlite",
+    "allow-queries-before-historical-sync": true,
+    "models": []
+  }
+}

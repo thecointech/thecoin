@@ -1,6 +1,7 @@
 import { readFileSync } from "fs";
 import { Wallet } from '@ethersproject/wallet';
 import { BROKER_ROLE, GetContract, MINTER_ROLE, MRFREEZE_ROLE, PLUGINMGR_ROLE, THECOIN_ROLE } from '@thecointech/contract-core'
+import { AccountId } from '@thecointech/signers';
 
 // Used to read back the mnemonic so we can deploy nicely.
 async function readMnemonic(name: string) {
@@ -34,13 +35,8 @@ await getRoles("Minter", MINTER_ROLE);
 await getRoles("MrFreeze", MRFREEZE_ROLE);
 await getRoles("PluginMgr", PLUGINMGR_ROLE);
 
-await readMnemonic("Owner");
-await readMnemonic("TheCoin");
-await readMnemonic("TCManager");
-await readMnemonic("Minter");
-await readMnemonic("Police");
-await readMnemonic("BrokerCAD");
-await readMnemonic("BrokerTransferAssistant");
-await readMnemonic("client1");
-await readMnemonic("client2");
-await readMnemonic("NFTMinter");
+for (const name in AccountId) {
+  if(!/^\d+$/.test(name)) {
+    await readMnemonic(name);
+  }
+}

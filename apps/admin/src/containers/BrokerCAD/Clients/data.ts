@@ -1,6 +1,6 @@
 // import { type SelfID, getLink } from '@thecointech/idx';
 import { AccountState } from '@thecointech/account';
-import { BillAction, BuyAction, getAllActions, getAllUsers, SellAction } from '@thecointech/broker-db';
+import { BillAction, BuyAction, getAllActions, getAllUsers, PluginAction, SellAction } from '@thecointech/broker-db';
 import gmail, { eTransferData } from '@thecointech/tx-gmail';
 import Decimal from 'decimal.js-light';
 
@@ -11,6 +11,7 @@ export type UserData = {
   Buy: BuyAction[],
   Sell: SellAction[],
   Bill: BillAction[],
+  Plugin: PluginAction[],
   balanceCoin: Decimal;
 };
 
@@ -56,6 +57,7 @@ export async function getAllUserData(account: AccountState) {
       Buy: data.Buy[user],
       Sell: data.Sell[user],
       Bill: data.Bill[user],
+      Plugin: [],
       balanceCoin: new Decimal(balances[idx].toNumber()),
       // details: details[idx] ?? {},
     }

@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import { DocumentReference } from "@thecointech/firestore";
-import { CertifiedTransfer } from '@thecointech/types';
+import type { CertifiedTransfer, UberTransferAction, AssignPluginRequest, RemovePluginRequest } from '@thecointech/types';
 
 // Data definition for documents stored in
 // /{action}/randomId.
@@ -38,6 +38,8 @@ export type TransitionDelta = {
 // that have happened to the collection.
 export type BaseActionData = {
   initial: unknown,
+  // Date the action was created.  This may differ from the date the
+  // action happens.
   date: DateTime;
   initialId: string
 }
@@ -48,12 +50,26 @@ export type ActionDataTypes = {
     initial: {
       amount: Decimal;
       type: PurchaseType;
+      // NOTE: raw is filled out on the server and is
+      // never to be persisted to the DB
+      raw?: any;
     }
   } & BaseActionData;
   Sell: { initial: CertifiedTransfer } & BaseActionData;
-  Bill: { initial: CertifiedTransfer } & BaseActionData;
+  Bill: { initial: CertifiedTransfer | UberTransferAction } & BaseActionData;
+  Plugin:  { initial: AssignPluginRequest | RemovePluginRequest } & BaseActionData;
+
+  // Not an action, but lets store it here anyway
+  Heartbeat: {
+    date: DateTime;
+    result: string;
+    // Not currently used
+    initialId?: unknown;
+    initial?: unknown;
+  }
 }
 export type ActionType = keyof ActionDataTypes;
+export type TxActionType = "Buy" | "Sell" | "Bill" | "Plugin";
 export type AnyActionData = ActionDataTypes[ActionType];
 
 // A structure encompassing all the data related to an action
@@ -74,7 +90,9 @@ export interface TypedAction<Type extends ActionType> {
 export type SellAction = TypedAction<'Sell'>;
 export type BuyAction = TypedAction<'Buy'>;
 export type BillAction = TypedAction<'Bill'>;
+export type PluginAction = TypedAction<'Plugin'>;
 export type AnyAction = TypedAction<ActionType>;
+export type AnyTxAction = TypedAction<TxActionType>;
 
 // Store a mapping of address => Actions[]
 export type ActionDictionary<Type extends ActionType> = Record<string, TypedAction<Type>[]>;

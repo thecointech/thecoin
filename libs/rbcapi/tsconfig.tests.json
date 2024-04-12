@@ -1,0 +1,7 @@
+{
+  "extends": "../../tsconfig.tests.json",
+  "compilerOptions": {
+    "lib": ["es2021", "dom"]
+  },
+  "include": ["**/*.test.*", "scripts/**.ts", "internal/*.*", "**/*.stories.*", "**/hardhat.d.ts"],
+}

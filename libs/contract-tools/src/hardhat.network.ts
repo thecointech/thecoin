@@ -1,17 +1,24 @@
-import { getProvider, Network } from '@thecointech/ethers-provider';
+import type { Network } from '@thecointech/ethers-provider';
 
-// Our providers are source-of-truth for connections to the blockchain
-function getLiveNetwork(type: Network) {
-  const provider = getProvider(type);
+function getLiveNetwork(_type: Network) {
+  // Our providers are source-of-truth for connections to the blockchain
+  // TODO: Revert to using providers if/when HardHat allows ESM modules for config files.
+  // NOTE: These URLs won't work, they should be Infura urls similar to https://hardhat.org/hardhat-runner/docs/config
+  const url = process.env.CONFIG_NAME === "prodtest"
+   ? 'https://polygon-mumbai.infura.io/v3/'
+   : "https://polygon-mainnet.infura.io/v3/"
+
   return {
-    chainId: provider.network.chainId,
-    url: provider.connection.url,
+    chainId: parseInt(process.env.DEPLOY_POLYGON_NETWORK_ID!),
+    url: `${url}${process.env.INFURA_PROJECT_ID}`,
   }
 }
 function getDevNetwork() {
   return {
     url: "http://localhost:9545",
-    chainId: 31337
+    chainId: parseInt(process.env.DEPLOY_POLYGON_NETWORK_ID!),
+    // Just too much spam in the dev:live logs
+    loggingEnabled: false,
   }
 }
 export function getNetworks() {

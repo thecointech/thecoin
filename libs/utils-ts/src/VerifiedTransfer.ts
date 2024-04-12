@@ -3,9 +3,10 @@ import { keccak256 } from '@ethersproject/solidity';
 import { arrayify } from '@ethersproject/bytes';
 import { verifyMessage } from '@ethersproject/wallet';
 import type { Signer } from "@ethersproject/abstract-signer";
-import type { CertifiedTransferRequest } from "@thecointech/types";
+import type { AnyTransfer, CertifiedTransferRequest } from "@thecointech/types";
 
 function GetHash(
+  chainId: number,
   from: string,
   to: string,
   value: number,
@@ -13,13 +14,14 @@ function GetHash(
   timestamp: number
 ) {
   const ethersHash = keccak256(
-    ["address", "address", "uint256", "uint256", "uint256"],
-    [from, to, value, fee, timestamp]
+    ["uint", "address", "address", "uint256", "uint256", "uint256"],
+    [chainId, from, to, value, fee, timestamp]
   );
   return arrayify(ethersHash);
 }
 
 export async function SignVerifiedXfer(
+  chainId: number,
   from: Signer,
   to: string,
   value: number,
@@ -27,15 +29,15 @@ export async function SignVerifiedXfer(
   timestamp: number
 ) {
   const address = await from.getAddress();
-  const hash = GetHash(address, to, value, fee, timestamp);
+  const hash = GetHash(chainId, address, to, value, fee, timestamp);
   return await sign(hash, from);
 }
 
 export function GetTransferSigner(
   transfer: CertifiedTransferRequest
 ) {
-  const { from, to, value, fee, timestamp, signature } = transfer;
-  const hash = GetHash(from, to, value, fee, timestamp);
+  const { chainId, from, to, value, fee, timestamp, signature } = transfer;
+  const hash = GetHash(chainId, from, to, value, fee, timestamp);
   return verifyMessage(hash, signature);
 }
 
@@ -47,10 +49,12 @@ export async function BuildVerifiedXfer(
   value: number,
   fee: number
 ) {
+  const chainId = parseInt(process.env.DEPLOY_POLYGON_NETWORK_ID!);
   const timestamp = Date.now();
   const address = await from.getAddress();
-  const signature = await SignVerifiedXfer(from, to, value, fee, timestamp);
+  const signature = await SignVerifiedXfer(chainId, from, to, value, fee, timestamp);
   const r: CertifiedTransferRequest = {
+    chainId,
     from: address,
     to: to,
     value: value,
@@ -60,3 +64,13 @@ export async function BuildVerifiedXfer(
   };
   return r;
 }
+
+export const isCertTransfer = (transfer: AnyTransfer): transfer is CertifiedTransferRequest => (
+  typeof (transfer as CertifiedTransferRequest).chainId == "number" &&
+  typeof (transfer as CertifiedTransferRequest).from == "string" &&
+  typeof (transfer as CertifiedTransferRequest).to == "string" &&
+  typeof (transfer as CertifiedTransferRequest).fee == "number" &&
+  typeof (transfer as CertifiedTransferRequest).value == 'number' &&
+  typeof (transfer as CertifiedTransferRequest).timestamp == "number" &&
+  typeof (transfer as CertifiedTransferRequest).signature == "string"
+)

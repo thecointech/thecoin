@@ -1,5 +1,7 @@
 pragma solidity ^0.8.9;
 
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 contract SelfDestructor {
 
   address payable private immutable owner;

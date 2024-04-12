@@ -3,29 +3,33 @@
   "productName": "THECoin: Website - Test Deposit",
   "private": true,
   "type": "module",
-  "version": "0.2.93",
+  "version": "0.2.125",
   "description": "THECoin: simple email generator to trigger deposits on testnet",
   "repository": {
     "type": "git",
     "url": "git://github.com/thecointech/thecoin.git"
   },
   "author": "Stephen Taylor",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "scripts": {
-    "pre_build": "run-p build:*",
-    "_build": "yarn cross-env NODE_ENV=production webpack --config ../../libs/site-base/internal/webpack/webpack.prod.babel.js --progress",
+    "_build": "run -T run-s build:src build:semantic build:i18n",
+    "build:src": "run-env exec=webpack --config ../../libs/site-base/internal/webpack/webpack.prod.mjs --progress",
     "build:semantic": "node ./internals/buildSemantic.mjs",
     "build:i18n": "run-s extract compile",
-    "clean": "run-p clean:*",
+    "clean": "run-p 'clean:*'",
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
     "clean:analyze": "rimraf stats.json",
     "_deploy": "yarn run-env ./deploy.ts",
     "dev": "yarn node internals/server.cjs --port=3004",
-    "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern [sha512:contenthash:base64:6]",
-    "compile": "formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json"
+    "extract": "run -T formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
+    "compile": "run -T formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json"
   },
   "dependencies": {
-    "@thecointech/site-base": "^0.2.93"
+    "@thecointech/email-fake-deposit": "^0.2.125",
+    "@thecointech/site-base": "^0.2.125"
+  },
+  "devDependencies": {
+    "@thecointech/setenv": "^0.2.125"
   }
 }

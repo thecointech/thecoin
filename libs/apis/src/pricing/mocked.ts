@@ -13,14 +13,14 @@ class RatesApi implements Pick<IRatesApi, keyof IRatesApi> {
       ? DateTime.fromMillis(timestamp)
       : DateTime.now();
 
-    return buildResponse({
-      buy: 1,
-      sell: 1,
+    return buildResponse<FXRate>({
+      buy: 2,
+      sell: 2,
       fxRate: 1,
       target: 124,
       validFrom: date.set({hour: 0, minute: 0, second: 0}).toMillis(),
       validTill: date.plus({days: 1}).set({hour: 0, minute: 0, second: 0}).toMillis(),
-    });
+    } as any);
   }
 }
 

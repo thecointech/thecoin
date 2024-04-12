@@ -1,0 +1,67 @@
+{
+  "name": "@thecointech/contract-plugin-shockabsorber",
+  "version": "0.2.125",
+  "description": "The Coin: ShockAbsorber protects accounts from market moves",
+  "type": "module",
+  "keywords": [
+    "TheCoin",
+    "ethereum"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/contract-plugin-shockabsorber"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "build": "run -T run-s build:contracts build:copy build:src",
+    "build:contracts": "yarn _hardhat ./scripts/compile.ts",
+    "build:src": "run -T tsc -b",
+    "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
+    "clean": "run -T run-p 'clean:*'",
+    "clean:src": "rimraf ./build",
+    "clean:contracts": "rimraf ./src/codegen",
+    "test": "yarn run :jest",
+    "dev:live": "cross-env CONFIG_NAME=devlive run-s _deploy",
+    "dev:live:finalize": "yarn _seed",
+    "deploy:prodtest": "cross-env CONFIG_NAME=prodtest yarn _deploy",
+    "deploy:prod": "cross-env CONFIG_NAME=prod yarn _deploy",
+    "_deploy": "run-s _deploy:deploy _deploy:verify",
+    "_deploy:deploy": "yarn _hardhat ./scripts/deploy.ts",
+    "_deploy:verify": "yarn _hardhat ./scripts/verify.ts",
+    "_seed": "yarn _hardhat ./scripts/seed.ts",
+    "_update": "yarn build && yarn _hardhat ./scripts/update.ts && yarn _deploy:verify",
+    "_hardhat": "run -T cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "exports": {
+    ".": {
+      "development": "./build/shockabsorber_mocked.js",
+      "electron": "./build/index.js",
+      "default": "./build/index.js"
+    }
+  },
+  "types": "./build/index.d.ts",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.8",
+    "@openzeppelin/contracts-upgradeable": "^4.5.2",
+    "@thecointech/async": "^0.2.125",
+    "@thecointech/contract-core": "^0.2.125",
+    "@thecointech/contract-plugin-converter": "^0.2.125",
+    "@thecointech/contract-tools": "^0.2.125",
+    "@thecointech/setenv": "^0.2.125"
+  },
+  "dependencies": {
+    "@thecointech/contract-oracle": "^0.2.125",
+    "@thecointech/contract-plugins": "^0.2.125"
+  },
+  "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
+}

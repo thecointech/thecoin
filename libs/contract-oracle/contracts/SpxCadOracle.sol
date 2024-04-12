@@ -25,7 +25,7 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
   // NOTE: This is tightly packed, but usage could be improved dramatically
   // Perhaps we should drop to an uint32 instead
   uint64[] rates;
-  // The timestamp rates[0] starts at.  Is (should be) immutable
+  // The timestamp (in millis) rates[0] starts at.  Is (should be) immutable
   int public INITIAL_TIMESTAMP;
   // Each rates entry is value for 3 hours
   int public BLOCK_TIME;
@@ -37,15 +37,17 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
   // a given rate will be effective for.
   // NOTE! These offsets are read very frequently,
   // but written 2x per year, do not optimize for space
-  struct SecondsOffset {
+  struct MilliSecondsOffset {
     // When this offset takes effect
     int from;
-    // How many seconds to offset this block for.
+    // How many milliseconds to offset this block for.
     int offset;
   }
   // All historical offsets from then until now.
-  SecondsOffset[] offsets;
+  MilliSecondsOffset[] offsets;
 
+  //////////////////////////////////////////////////////////////////////////
+  // Constructor
   function initialize(address updater, int initialTimestamp, int blockTime) public initializer {
     __Ownable_init();
     __AccessControl_init();
@@ -59,35 +61,72 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
   // is because the gas limits are too low to allow storing all prior values.
   function bulkUpdate(uint64[] calldata newValues) public onlyUpdater() {
     // TODO: http://zxstudio.org/blog/2018/09/11/effectively-storing-arrays-in-solidity/
+
+    // check that there aren't too many new values...
+    uint pushValidUntil = validUntil() + (newValues.length * uint(BLOCK_TIME));
+    uint maxValidUntil = msNow() + uint(BLOCK_TIME);
+    require(pushValidUntil <= maxValidUntil, "Too many updates");
     for (uint i = 0; i < newValues.length; i++) {
       rates.push(newValues[i]);
     }
   }
 
   //
+  // Clear all data after millis, effectively
+  // restoring the contract to that point in time
+  function resetTo(uint64 millis) public onlyOwner {
+    // Clear rates
+    uint targetLength = getBlockIndexFor(millis) + 1;
+    while (rates.length > targetLength) {
+      rates.pop();
+    }
+
+    // Clear offsets (note, will crash if 0 offsets)
+    int64 imillis = int64(millis);
+    for (int i = int(offsets.length) - 1; i >= 0; i--) {
+      if (offsets[uint(i)].from <= imillis) {
+        break;
+      }
+      offsets.pop();
+    }
+  }
+
+  function clearAllData() public onlyOwner {
+    delete rates;
+    delete offsets;
+  }
+
+  //
   // Add a new rate to the end of the list.
   function update(uint64 newValue) public onlyUpdater() {
-    int offset = getOffset(block.timestamp);
+    uint millis = msNow();
+    int offset = getOffset(millis);
     // Only update the value if our current value is near expiry
     int currentExpires = offset + INITIAL_TIMESTAMP + (int(rates.length) * BLOCK_TIME);
-    // We allow updates to happen only after 1 min prior to expiry
+    // We allow updates to happen only after 2 min prior to expiry
     // This is to prevent multiple updates from happening
-    if (currentExpires - 60 > int(block.timestamp)) {
-      return;
-    }
+    require((currentExpires - 120) < int(millis), "Cannot set new value before prior expires");
+
     rates.push(newValue);
   }
 
   //
   // update our time offset.
-  function updateOffset(SecondsOffset calldata offset) public onlyUpdater() {
+  function updateOffset(MilliSecondsOffset calldata offset) public onlyUpdater() {
     offsets.push(offset);
+  }
+
+  //
+  // Return's the last applied offset
+  function lastOffsetFrom() public view returns (int) {
+    if (offsets.length == 0) return 0;
+    return offsets[offsets.length - 1].from;
   }
 
   //
   // Get the timestamp our current block is valid until
   function validUntil() public view returns (uint) {
-    int offset = getOffset(block.timestamp);
+    int offset = getOffset(msNow());
     return uint(offset + INITIAL_TIMESTAMP + (int(rates.length) * BLOCK_TIME));
   }
 
@@ -141,38 +180,44 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
     );
   }
 
-  function getRoundFromTimestamp(uint timestamp)
+  function getRoundFromTimestamp(uint millis)
     external
     view
     override
     returns (uint answer)
   {
-    require(int(timestamp) >= INITIAL_TIMESTAMP, "Timestamp before oracle inception");
-    uint blockIdx = getBlockIndexFor(timestamp);
+    require(int(millis) >= INITIAL_TIMESTAMP, "Timestamp before oracle inception");
+    uint blockIdx = getBlockIndexFor(millis);
     require(blockIdx < rates.length, "Timestamp not yet valid");
     return rates[blockIdx];
   }
 
   // Get the time offset for the given timestamp.
-  function getBlockIndexFor(uint timestamp) public view returns (uint blockIdx) {
+  function getBlockIndexFor(uint millis) public view returns (uint blockIdx) {
     // Search backwards for the correct offset
     // This assumes most queries will be for current time
-    int offset = getOffset(timestamp);
+    int offset = getOffset(millis);
     // NOTE: Solidity will throw on underflow here.
-    int searchTime = int(timestamp) - INITIAL_TIMESTAMP - offset;
+    int searchTime = int(millis) - INITIAL_TIMESTAMP - offset;
     return uint(searchTime / BLOCK_TIME);
   }
   // Get the time offset for the given timestamp.
-  function getOffset(uint timestamp) public view returns (int offset) {
+  function getOffset(uint millis) public view returns (int offset) {
     // Search backwards for the correct offset
     // This assumes most queries will be for current time
     for (int i = int(offsets.length) - 1; i >= 0; i--) {
-      if (offsets[uint(i)].from < int(timestamp)) {
+      if (offsets[uint(i)].from <= int(millis)) {
         return offsets[uint(i)].offset;
       }
     }
     return 0;
   }
+
+  // Accessors
+  function getRates() public view returns (uint64[] memory) { return rates; }
+  function getOffsets() public view returns (MilliSecondsOffset[] memory) { return offsets; }
+
+  function msNow() public view returns(uint) { return block.timestamp * 1000; }
 
   //-- Un-interesting functions below
 

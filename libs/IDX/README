@@ -1,0 +1,25 @@
+The IDX folder stores user details via ceramic.
+
+The server is running locally using 4 docker containers
+ipfs - holds data - NEEDS BACKUP
+postgres - DB, probably doesn't need backup
+ceramic - API with the outside world - NEEDS BACKUP
+nginx - reverse proxy to turn HTTPS into HTTP for ceramic
+
+The services are all within a single `docker-compose.yaml` file.
+
+Important folders:
+/srv/ceramic/ - Holds the daemon.config.json file for ceramic
+/etc/letsencrypt/ - where LetSEncrypt outputs it's certificate files.
+
+The docker containers have named volumes which are unrelated to the rest of the crap in that server
+
+Tutorial was the base of this: https://faun.pub/docker-letsencrypt-dns-validation-75ba8c08a0d & https://www.freecodecamp.org/news/docker-nginx-letsencrypt-easy-secure-reverse-proxy-40165ba3aee2/
+
+However, if you have to set this up again, don't read random tutorials, it's actually fairly straight-forward to setup a server based on the official docs: https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/.  One important thing, I couldn't figure out how to get nginx to fill out a created folder with it's config, so copied it directly out of the container.  Also, you can't directly map the `letsencrypt/live` folder, because those files are just `ln` from `../archives`.  Weird, but hardly the strangest part of this journey.
+
+Honestly, have a beer mon amie, this whole thing is a big basket of shit.
+
+Certificate is issued from LetsEncrypt.  LetsEncrypt connects to Google Domains directly to do the DNS validation and then issue a certificate, which is very handy, lets keep doing that.
+
+This time I used a docker container from https://github.com/aaomidi/certbot-dns-google-domains

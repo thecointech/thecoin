@@ -3,15 +3,18 @@ import { last } from '@thecointech/utilities/ArrayExtns';
 import { describe } from '@thecointech/jestutils';
 import { updateRates } from '../src/update';
 import { getContract } from '../src/index_mocked';
+import { getOracleFactory } from '../src';
 import hre from 'hardhat';
 import '@nomiclabs/hardhat-ethers';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
+import { DateTime, Duration } from 'luxon';
+import { createAndInitOracle } from '../internal/testHelpers';
 
 jest.setTimeout(5 * 60 * 1000);
 const factor = Math.pow(10, 8);
-const blockTime = 3 * 60 * 60;
+const blockTime = 3 * 60 * 60 * 1000;
 const [owner] = await hre.ethers.getSigners();
-const ratesFiles = new URL('../internal/rates.json', import.meta.url);
+const ratesFiles = new URL('../../../data/rates.json', import.meta.url);
 const shouldRun = existsSync(ratesFiles);
 
 describe('Oracle Tests', () => {
@@ -26,7 +29,8 @@ describe('Oracle Tests', () => {
     const initialTimestamp = rates[0].from;
     const oracle = getContract();
     await oracle.initialize(owner.address, initialTimestamp, blockTime);
-    await updateRates(oracle, last(rates).to, factory);
+    const till = Math.min(last(rates).to, Date.now());
+    await updateRates(oracle, till, factory);
 
     // Now, test every single rates to prove it's consistent
     for (const r of rates) {
@@ -35,12 +39,15 @@ describe('Oracle Tests', () => {
         const expected = Math.round(r.rate * factor);
         expect(s.toNumber()).toEqual(expected);
       }
-      test(r.from);
-      test(r.to - 1);
-      const duration = r.to - r.from;
+      const from = r.from;
+      const to = Math.min(r.to, Date.now());
+
+      test(from);
+      test(to - 1);
+      const duration = to - from;
       for (let i = 0; i < 3; i++) {
         const t = Math.floor(Math.random() * duration);
-        test(r.from + t);
+        test(from + t);
       }
     }
   })
@@ -50,14 +57,13 @@ describe('Oracle Tests', () => {
   // this ensures that the basics work, and that our
   // algo matches the JS version tested above
   it("it can find rate in SOL version", async () => {
-
-    const SpxCadOracle = await hre.ethers.getContractFactory('SpxCadOracle');
+    const SpxCadOracle = getOracleFactory(owner);
     const oracle = await SpxCadOracle.deploy();
 
     // ignore the first live rate, since there are some issues with the first day
     // Choose ~300 entries, this should always catch one DST changeover
     const { rates, factory } = await getRatesFactory();
-    const start = Math.floor(Math.random() * (rates.length - 300));
+    const start = Math.floor(Math.random() * (rates.length - 301));
     const initialTimestamp = rates[start].from;
     const till = rates[start + 300].to;
 
@@ -82,19 +88,101 @@ describe('Oracle Tests', () => {
   })
 }, shouldRun)
 
+it ("Does not add too many rates", async () => {
+  const SpxCadOracle = await hre.ethers.getContractFactory('SpxCadOracle');
+  const oracle = await SpxCadOracle.deploy();
+  const now = DateTime.now();
+  const initialTimestamp = now.minus({ weeks: 1, minutes: 1 }).toMillis();
+  const blockTime = Duration.fromObject({ hours: 24 }).toMillis();
+  await oracle.initialize(owner.address, initialTimestamp, blockTime);
 
+  const toInsert = Array(6).fill(100);
+  await oracle.bulkUpdate(toInsert);
+
+  const firstValid = (await oracle.validUntil()).toNumber();
+  // This should fail.
+  await expect(oracle.bulkUpdate(toInsert))
+    .rejects.toThrow();
+
+  const secondValid = (await oracle.validUntil()).toNumber();
+  expect (secondValid).toEqual(firstValid);
+
+  await oracle.updateOffset({from: now.toMillis(), offset: -(65 * 60 * 1000)});
+
+  // But we still should be able to push two more updates?
+  await oracle.bulkUpdate(toInsert.slice(0, 2));
+  const lastValid = (await oracle.validUntil()).toNumber();
+  expect(lastValid).toBeGreaterThanOrEqual(Date.now());
+})
+
+it ("Can reset to point-in-time", async () => {
+  const [owner] = await hre.ethers.getSigners();
+  const oracle = await createAndInitOracle(owner, 2, blockTime, 100);
+  const initial = (await oracle.INITIAL_TIMESTAMP()).toNumber();
+  const validUntil = (await oracle.validUntil()).toNumber();
+  // Add some offsets evenly spaced in the time
+  for (let i = 1; i < 10; i++) {
+    const from = initial + (validUntil - initial) * (i / 10);
+    await oracle.updateOffset({from: from, offset: -(60 * 60 * 1000)});
+  }
+
+  // Cache current values
+  const preRates = await oracle.getRates();
+  const preOffsets = await oracle.getOffsets();
+
+  // Clear half the values
+  const middle = initial + (validUntil - initial) / 2;
+  await oracle.resetTo(middle);
+
+  // get new values
+  const postRates = await oracle.getRates();
+  const postOffsets = await oracle.getOffsets();
+
+  const postValid = (await oracle.validUntil()).toNumber();
+  expect(postValid).toBeGreaterThan(middle);
+  expect(postValid).toBeLessThan(middle + blockTime);
+
+  for (let i = 0; i < preOffsets.length; i++) {
+    if (i < postOffsets.length) {
+      expect(preOffsets[i].from.toNumber()).toBeLessThanOrEqual(middle);
+    }
+    else {
+      expect(preOffsets[i].from.toNumber()).toBeGreaterThan(middle);
+    }
+  }
+})
+
+type LiveRate = {
+  from: number,
+  to: number,
+  rate: number,
+}
 async function getRatesFactory() {
-  const liveRates  = await import ('../internal/rates.json'/*, { assert: {type: "json"}}*/);
-  const rates = liveRates.default.rates.slice(8);
-  const factory = async (timestamp: number) => {
+  const rawRates = readFileSync(ratesFiles, 'utf-8');
+  const liveRates  = JSON.parse(rawRates).rates as LiveRate[];
+  const rates = liveRates.slice(8);
+  const factory = async (millis: number) => {
     for (let i = 0; i < rates.length; i++) {
-      if (rates[i].to > timestamp) {
+      if (rates[i].to > millis) {
         const r = {
           ...rates[i]
         }
         const nextRate = rates[i + 1];
-        if (nextRate && nextRate.from != r.to) {
-          r.to = nextRate.from;
+        if (nextRate) {
+          if (nextRate.from != r.to) {
+            r.to = nextRate.from;
+          }
+        }
+        else if (r.to > millis) {
+          // If it's the last rate, limit it's duration to blocktime
+          // Otherwise it breaks testing over the weekend (normally
+          // the validity of the currency field limits the duration
+          // to a max of blocktime, but this files values are squished)
+          return {
+            ...r,
+            from: millis,
+            to: millis + blockTime
+          }
         }
         return r;
       }

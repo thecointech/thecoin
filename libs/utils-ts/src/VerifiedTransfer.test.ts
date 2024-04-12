@@ -15,6 +15,7 @@ test("Verified signature matches", async () => {
 
   const { timestamp, signature } = verifiedXfer;
   const signer2 = GetTransferSigner({
+    chainId: verifiedXfer.chainId,
     from: wallet.address,
     to: wallet.address,
     value,

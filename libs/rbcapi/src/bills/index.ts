@@ -1,4 +1,4 @@
-import { ProgressCallback } from '@thecointech/bank-interface';
+import type { ProgressCallback } from '@thecointech/bank-interface';
 import { Page } from 'puppeteer';
 import { ApiAction } from '../action';
 import Decimal from 'decimal.js-light';
@@ -19,9 +19,13 @@ export async function payBill(prefix: string, nickname: string, payee: string, a
 
   // get confirmation number;
   const [confirmHeader] = await act.findElementsWithText("th", "Confirmation Number");
-  const confirmation = await act.page.evaluate(th => th.nextElementSibling.textContent, confirmHeader);
+  const confirmation = await act.page.evaluate(th => th?.nextElementSibling?.textContent, confirmHeader);
+  if (!confirmation) {
+    const innerText = await act.page.evaluate(th => th?.parentElement?.textContent, confirmHeader);
+    log.error("Bill payment confirmation not found with content: " + innerText);
+    throw new Error("BILL-PAYMENT-NOT-FOUND");
+  }
   log.debug(`Bill payment confirmation: ${confirmation}`);
-
   return confirmation;
 }
 

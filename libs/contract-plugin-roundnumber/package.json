@@ -1,0 +1,54 @@
+{
+  "name": "@thecointech/contract-plugin-roundnumber",
+  "version": "0.2.125",
+  "private": true,
+  "description": "The Coin: A sample plugin rounds balance to nearest round number",
+  "type": "module",
+  "keywords": [
+    "TheCoin"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/contract-plugin-roundnumber"
+  },
+  "scripts": {
+    "prepublishOnly": "run -T rimraf ./build/.buildinfo",
+    "build": "run -T run-s build:contracts build:copy build:src",
+    "build:contracts": "yarn _hardhat ./scripts/compile.ts",
+    "build:src": "run -T tsc -b",
+    "build:copy": "run -T cpx \"./src/deployed/**\" ./build/deployed",
+    "clean": "run -T run-p 'clean:*'",
+    "clean:src": "rimraf ./build",
+    "clean:contracts": "rimraf ./src/codegen",
+    "test": "run :jest",
+    "dev:live": "run -T wait-port 9545 && run -T cross-env CONFIG_NAME=devlive run-s _deploy",
+    "dev:live:finalize": "yarn _seed",
+    "prod:test": "cross-env CONFIG_NAME=prodtest run-s _deploy _seed",
+    "prod": "cross-env CONFIG_NAME=prod run-s _deploy _seed",
+    "_deploy": "yarn _hardhat ./scripts/deploy.ts",
+    "_seed": "yarn _hardhat ./scripts/seed.ts",
+    "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "exports": {
+    ".": "./build/index.js"
+  },
+  "types": "./build/index.d.ts",
+  "devDependencies": {
+    "@thecointech/async": "^0.2.125",
+    "@thecointech/contract-tools": "^0.2.125",
+    "@thecointech/setenv": "^0.2.125"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.8.0",
+    "@thecointech/contract-core": "^0.2.125",
+    "@thecointech/contract-oracle": "^0.2.125",
+    "@thecointech/contract-plugins": "^0.2.125"
+  }
+}

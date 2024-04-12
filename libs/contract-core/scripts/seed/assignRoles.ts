@@ -2,7 +2,7 @@ import { getSigner, AccountName } from '@thecointech/signers';
 import { log } from '@thecointech/logging';
 import { connect } from '@thecointech/contract-base/connect';
 import { MINTER_ROLE, MRFREEZE_ROLE, BROKER_ROLE, PLUGINMGR_ROLE, THECOIN_ROLE } from "../../src/constants";
-import { TheCoin } from '../../src/types';
+import { TheCoin } from '../../src/codegen';
 
 async function getAddress(name: AccountName) {
   const envAddress = process.env[`WALLET_${name}_ADDRESS`];
@@ -34,5 +34,5 @@ export async function assignRoles(contract: TheCoin) {
   await setupRole(tcCore, MINTER_ROLE, "Minter");
   await setupRole(tcCore, BROKER_ROLE, "BrokerCAD");
   await setupRole(tcCore, MRFREEZE_ROLE, "Police");
-  await setupRole(tcCore, PLUGINMGR_ROLE, "TheCoin");
+  await setupRole(tcCore, PLUGINMGR_ROLE, "BrokerCAD");
 }

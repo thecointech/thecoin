@@ -19,6 +19,9 @@
 		{
 			"name": "firestore",
 			"path": "../libs/firestore"
+		},
+		{
+			"path": "../libs/tx-bill"
 		}
 	],
 	"settings": {

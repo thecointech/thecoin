@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AccountDetails } from '@thecointech/account';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
-import { getHistory, SelfID } from '@thecointech/idx';
+import { getHistory, ComposeClient } from '@thecointech/idx';
 import { Header, Input, List } from 'semantic-ui-react';
 import { ClientTransaction } from './ClientTransaction';
 import { UserData } from './data';
@@ -41,6 +41,7 @@ export const Client = (props: Props) => {
     ...props.Buy,
     ...props.Sell,
     ...props.Bill,
+    ...props.Plugin
   ].sort((a, b) => a.data.date.toMillis() - b.data.date.toMillis());
 
 
@@ -79,15 +80,15 @@ export const Client = (props: Props) => {
 }
 
 type SetDetailsState = (setter: (acc: AccountDetails[]) => AccountDetails[]) => void;
-async function loadDetails(address: string, idx: SelfID, setAllDetails: SetDetailsState, setPercent: (n: number)=> void, isCancelled: () => boolean) {
-  const history = await getHistory(address, idx.client, setPercent);
+async function loadDetails(address: string, client: ComposeClient, setAllDetails: SetDetailsState, setPercent: (n: number)=> void, isCancelled: () => boolean) {
+  const history = await getHistory(address, client, 5, setPercent);
   if (!history) return;
 
   for (const raw of history) {
     try {
-      const decrypted = await idx.did.decryptDagJWE(raw);
+      const decrypted = await client.did?.decryptDagJWE(raw);
       if (isCancelled()) { return; }
-      setAllDetails(acc => [...acc, decrypted.data]);
+      setAllDetails(acc => [...acc, decrypted?.data]);
     }
     catch (e) { }
   }

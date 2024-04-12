@@ -59,6 +59,7 @@ export type TypedData = {
   value: string;
 }
 
+// NOTE: Mocked entry was deleted in Commit: #108c21b38993745e16056ea8d5a38c5cb81136a5
 // Basic type for the data returned from blockpass.
 // Sample from: https://docs.blockpass.org/docs/connect/KYCC-Dashboard-API-RefId#response-1
 // TODO: this has not yet been verified with live data

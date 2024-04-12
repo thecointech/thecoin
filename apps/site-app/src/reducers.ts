@@ -19,6 +19,5 @@ function createReducer(injectedReducers?: ReducersMapObject): Reducer {
   });
 }
 
-
 export { history };
 export const configureAppStore = () => configureStore(createReducer);

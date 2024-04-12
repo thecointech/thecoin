@@ -1,8 +1,11 @@
 {
-  "extends": "./tsconfig.json",
-  "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"],
-  "references": [
-    { "path": "../../libs/utils-ts/tsconfig.build.json" },
-    { "path": "../../libs/fx-rates/tsconfig.build.json" },
-  ]
+  "extends": "../tsconfig.service.app.json",
+  "compilerOptions": {
+    /* Basic Options */
+    "outDir": "./build",
+    "rootDir": "./src",
+    "tsBuildInfoFile": "./build/.buildinfo",
+  },
+  "include": ["./src/**/*.*"],
+  "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"]
 }

@@ -1,0 +1,41 @@
+{
+  "name": "@thecointech/email-fake-deposit",
+  "version": "0.2.125",
+  "private": true,
+  "description": "The Coin: Fake deposits for devlive & prodtest",
+  "type": "module",
+  "keywords": [
+    "TheCoin",
+    "email"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/email-fake-deposit"
+  },
+  "scripts": {
+    "build": "run -T tsc -b",
+    "dev:live": "run-env ./scripts/cleanDevliveFile.ts",
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "exports": {
+    ".": {
+      "devlive": "./build/devlive.js",
+      "prodtest": "./build/prodtest.js",
+      "default": "./build/default.js"
+    }
+  },
+  "types": "./build/devlive.d.ts",
+  "dependencies": {
+    "@thecointech/email": "^0.2.125"
+  },
+  "devDependencies": {
+    "@thecointech/setenv": "^0.2.125"
+  }
+}

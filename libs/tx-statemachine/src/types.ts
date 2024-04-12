@@ -36,6 +36,8 @@ export type InstructionDataTypes = {
   Buy: eTransferData;
   Sell: ETransferPacket;
   Bill: BillPayeePacket;
+  Plugin: null; // Not part of the graph
+  Heartbeat: null; // Not part of the graph
 }
 
 export interface TypedActionContainer<Type extends ActionType> {

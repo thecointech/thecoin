@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      YARN_CHECKSUM_BEHAVIOR: ignore
     steps:
     - name: Run start date
       run: echo "Started at $(date +'%Y-%m-%dT%H:%M:%S')"
@@ -23,14 +25,14 @@ jobs:
         java-version: '11'
         java-package: jre # optional (jdk, jre, jdk+fx or jre+fx) - defaults to jdk
     # - uses: c-hive/gha-yarn-cache@v2
+    - run: corepack enable
     - name: Use Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v4
       with:
-        node-version: '16.x'
+        node-version: '18.x'
+        cache: 'yarn'
     - name: Install dependencies
-      run: yarn install --prefer-offline --frozen-lockfile
-    - name: Set OpenAPI CLI Version
-      run: yarn openapi-generator-cli version-manager set latest
+      run: yarn install --immutable
     - name: Build
       env:
          # Fix OOM in build admin
@@ -41,4 +43,6 @@ jobs:
     #- name: Check no build outputs changing in git
     #  run: yarn check-changes <-- this fails in CI, but we don't know why
     - name: Test all
-      run: yarn test:ci
+      run: yarn test --ci
+      env:
+        JEST_CI: true

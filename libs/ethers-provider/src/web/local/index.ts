@@ -1,8 +1,9 @@
-import { BlockTag, Filter, JsonRpcProvider, Log } from '@ethersproject/providers';
+import { BlockTag, Filter, JsonRpcProvider, Log, TransactionReceipt } from '@ethersproject/providers';
 import { hexZeroPad, hexStripZeros } from "@ethersproject/bytes";
 import { id } from "@ethersproject/hash";
 import { BigNumber } from "@ethersproject/bignumber";
 import { ERC20Response } from '../erc20response';
+import { getSourceCode } from '../plugins_devlive';
 
 export class Erc20Provider extends JsonRpcProvider {
 
@@ -10,13 +11,22 @@ export class Erc20Provider extends JsonRpcProvider {
     super(`http://localhost:${process.env.DEPLOY_NETWORK_PORT}`);
   }
 
+  async waitForTransaction(transactionHash: string, confirmations?: number | undefined, timeout?: number | undefined): Promise<TransactionReceipt> {
+    const r = await super.waitForTransaction(transactionHash, confirmations, timeout);
+    // Every time we wait, advance the block number
+    // to prevent deadlocking when waiting for confirmations
+    await this.send("evm_mine", []);
+    return r;
+  }
+
   //
   // In devlive, we do not have access to Etherscans advanced api
   // but we can replicate using just events
-  async getERC20History(args: {address?: string, contractAddress?: string, startBlock?: BlockTag, endBlock?: BlockTag}) {
+  async getERC20History(args: {address?: string, contractAddress?: string, fromBlock?: BlockTag, toBlock?: BlockTag}) {
     const buildFilter = ([t1, t2]: [string|null, string|null]) => ({
       address: args.contractAddress,
-      fromBlock: 0,
+      fromBlock: args.fromBlock,
+      toBlock: args.toBlock,
       topics: [
         id('Transfer(address,address,uint256)'),
         t1 ? hexZeroPad(args.address!, 32) : null,
@@ -51,6 +61,10 @@ export class Erc20Provider extends JsonRpcProvider {
     filter.fromBlock = 0;
     const result = await this.getLogs(filter);
     return result;
+  }
+
+  getSourceCode(address: string) {
+    return getSourceCode({address});
   }
 }
 

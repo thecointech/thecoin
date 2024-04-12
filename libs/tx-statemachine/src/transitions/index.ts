@@ -9,3 +9,8 @@ export * from './verifyPreTransfer';
 export * from './requestManual';
 export * from './markComplete';
 export * from './manualOverride';
+
+export * from './uberClearPending';
+export * from './uberDepositCoin';
+export * from './uberUnlockPendingFiat';
+export * from './uberWaitPending';

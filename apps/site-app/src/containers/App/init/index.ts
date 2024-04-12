@@ -1,5 +1,5 @@
 import { initAccounts } from './accounts'
 
-export function init() {
-  initAccounts()
+export async function init() {
+  await initAccounts()
 }

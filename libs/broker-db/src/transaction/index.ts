@@ -2,7 +2,7 @@ import { getFirestore, DocumentReference, DocumentSnapshot, FirestoreDataConvert
 import { log } from "@thecointech/logging";
 import { ActionType, ActionDataTypes, TransitionDelta, TypedAction, AnyActionData, ActionDictionary } from "./types";
 import { getUserDoc } from "../user";
-import equal from "fast-deep-equal/es6";
+import equal from "fast-deep-equal/es6/index.js";
 import { actionConverters, incompleteConverter, transitionConverter } from "./converters";
 
 const incompleteCollection = (type: ActionType) => getFirestore().collection(type).withConverter(incompleteConverter);
@@ -106,6 +106,7 @@ export async function getAllActions(addresses: string[]) {
     Buy: await getAllActionsOfType(addresses, "Buy"),
     Sell: await getAllActionsOfType(addresses, "Sell"),
     Bill: await getAllActionsOfType(addresses, "Bill"),
+    Plugin: await getAllActionsOfType(addresses, "Plugin"),
   }
 }
 
@@ -176,8 +177,11 @@ export async function getIncompleteActions<Type extends ActionType>(type: Type) 
     const { address, id } = decomposeActionPath(path);
     return getAction(address, type, id);
   });
-  log.debug({ action: type }, `Fetched ${fetchAll.length} actions of type: {action}`)
-  return await Promise.all(fetchAll)
+  log.debug({ action: type, length: fetchAll.length }, 'Fetched {fetchAll.length} actions of type: {action}')
+  const all = await Promise.all(fetchAll);
+  // ensure actions are sorted by date
+  all.sort((a, b) => a.data.date.toMillis() - b.data.date.toMillis());
+  return all
 }
 
 //
@@ -192,7 +196,7 @@ export async function removeIncomplete(type: ActionType, doc: DocumentReference)
 
   // mocked db does not implement 'where' clause, so manually filter here so tests pass
   let docs = [...snapshot.docs];
-  if (process.env.NODE_ENV === 'test') {
+  if (process.env.CONFIG_NAME === 'development') {
     docs = docs.filter(d => d.get('ref') == doc);
   }
 

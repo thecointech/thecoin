@@ -9,12 +9,10 @@
 
 pragma solidity ^0.8.0;
 
-import './BasePlugin.sol';
+import '@thecointech/contract-plugins/contracts/BasePlugin.sol';
 
 contract DebugPrint is BasePlugin {
 
-  event PrintGetPermissions();
-  // event PrintBalanceOf(address user, uint currentBalance);
   event PrintPreWithdraw(address user, uint coin, uint timestamp);
   event PrintPreDeposit(address user, uint coin, uint timestamp);
   event PrintAttached(address user, address initiator);
@@ -23,24 +21,22 @@ contract DebugPrint is BasePlugin {
 
   // We modify the users balance to reflect what they can actually spend.
   // When a withdrawal occurs we may boost the
-  function getPermissions() override external returns(uint) {
-    emit PrintGetPermissions();
+  function getPermissions() override external pure returns(uint) {
     return 0;
   }
   function balanceOf(address /*user*/, int currentBalance) external pure override returns(int) {
     // Cannot log in a view function unfortunately,
     // so instead just return balance / 2 to prove we were called
-    // emit PrintBalanceOf(user, currentBalance);
     return currentBalance / 2;
   }
   function preWithdraw(address user, uint balance, uint coin, uint timestamp) external override returns(uint) {
     emit PrintPreWithdraw(user, coin, timestamp);
     return balance;
   }
-  function preDeposit(address user, uint coin, uint timestamp) external override {
+  function preDeposit(address user, uint, uint coin, uint timestamp) external override {
     emit PrintPreDeposit(user, coin, timestamp);
   }
-    function userAttached(address add, address initiator) external override {
+    function userAttached(address add, uint, address initiator) external override {
     emit PrintAttached(add, initiator);
   }
   function userDetached(address add, address initiator) external override {

@@ -1,9 +1,0 @@
-{
-  "extends": "../tsconfig.base.json",
-  "compilerOptions": {
-    "noUnusedLocals": false,
-    "noImplicitAny": false,
-    "allowUnreachableCode": true,
-    "allowUnusedLabels": true
-  }
-}

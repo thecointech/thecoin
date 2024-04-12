@@ -1,5 +1,5 @@
 import { log } from '@thecointech/logging';
-import { IBank, ProgressCallback} from '@thecointech/bank-interface';
+import type { IBank, ProgressCallback} from '@thecointech/bank-interface';
 import { ETransferPacket } from '@thecointech/types';
 import { RbcStore } from './store';
 import { ApiAction } from './action';
@@ -44,4 +44,4 @@ export class RbcApi implements IBank {
 export { RbcStore } from './store';
 export * from './types';
 export * from '@thecointech/bank-interface';
-export { initBrowser, closeBrowser } from './action';
+export { closeBrowser } from './scraper';

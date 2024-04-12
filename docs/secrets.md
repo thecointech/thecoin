@@ -28,3 +28,7 @@ prod:
 test:
   `*@thecoin.io`
   `*@test.thecoin.io`
+
+### User Data
+
+See Encryption.md

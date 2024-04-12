@@ -1,8 +1,8 @@
 import { validateAction } from './CertifiedActionVerify';
 import { createAction } from '@thecointech/broker-db';
 import { DateTime } from 'luxon';
-import { Processor } from "@thecointech/tx-bill";
-import { GetContract } from './Wallet';
+import { CertifiedProcessor } from "@thecointech/tx-bill";
+import { GetContract } from '../signer/Wallet';
 import { getCurrentState } from '@thecointech/tx-statemachine';
 import { SendMail } from '@thecointech/email';
 import { log } from '@thecointech/logging';
@@ -21,9 +21,11 @@ export async function  ProcessBillPayment(sale: CertifiedTransfer) {
     initialId: sale.signature
   })
 
+  log.trace({ActionId: action.doc.id, initialId }, 'Created action {ActionID} for initialId {initialId}');
+
   // Process the sale
   const contract = await GetContract();
-  const processor = Processor(contract);
+  const processor = CertifiedProcessor(contract);
   const container = await processor.execute(null, action, "tcWaiting");
   const latestState = getCurrentState(container);
 

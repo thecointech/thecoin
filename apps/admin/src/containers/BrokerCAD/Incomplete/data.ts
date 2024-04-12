@@ -9,6 +9,7 @@ export async function fetchIncomplete() {
   await fetchIncompleteType("Bill", users);
   await fetchIncompleteType("Buy", users);
   await fetchIncompleteType("Sell", users);
+  await fetchIncompleteType("Plugin", users);
   return users;
 }
 
@@ -28,6 +29,7 @@ const newUserData = async (address: string) => ({
   Buy: [],
   Sell: [],
   Bill: [],
+  Plugin: [],
   transactions: [],
   balanceCoin: await getBalance(address),
   details: {},

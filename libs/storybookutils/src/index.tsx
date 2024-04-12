@@ -8,6 +8,8 @@ import { LanguageProviderReducer } from '@thecointech/shared/containers/Language
 import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
 import { getAllAccounts, getInitialAddress } from '@thecointech/account/store';
 
+const accounts = await getAllAccounts();
+
 export function withStore<T extends ApplicationBaseState>(initialState?: Partial<T>) {
   const createReducer = (injectedReducers?: ReducersMapObject) =>
     injectedReducers
@@ -21,7 +23,7 @@ export function withAccounts(initialState?: AccountMapState) {
   // If no accounts passed, default to dev accounts
   AccountMap.initialize(initialState ?? {
     active: getInitialAddress(),
-    map: getAllAccounts(),
+    map: accounts,
   })
   const createReducer = (injectedReducers?: ReducersMapObject) => {
     const { accountStoreReducer, rest } = buildAccountStoreReducer(injectedReducers);

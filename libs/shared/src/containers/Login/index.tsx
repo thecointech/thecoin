@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { defineMessages, FormattedMessage } from "react-intl";
-import { useHistory } from "react-router";
 import { Button, Form, Header } from "semantic-ui-react";
-import { isLocal } from "@thecointech/signers";
 import { AccountState } from '@thecointech/account';
 import { UxPassword } from "../../components/UX/Password";
 import { ValidateCB } from '../../components/UX/types';
@@ -12,53 +10,41 @@ import styles from "./styles.module.less";
 
 export type Props = {
   account: AccountState;
+  onLogin?: () => void;
 }
 
 const translate = defineMessages({
               aboveTheTitle : {
-                id: "shared.login.aboveTheTitle",
                 defaultMessage:"WELCOME BACK TO THE COIN",
                 description:"shared.login.aboveTheTitle: Title above the main Title for the create account form page"},
               title : {
-                id: "shared.login.title",
                 defaultMessage:"Log into",
                 description:"shared.login.title: Title for the create account form page"},
               button : {
-                id: "shared.login.button",
                 defaultMessage:"Log In",
                 description:"shared.login.button: Text of the button for the login page"},
               textAtTheBottom : {
-                id: "shared.login.textAtTheBottom",
                 defaultMessage:"Or select a different account from the account switcher. You can find it at the top menu.",
                 description:"shared.login.textAtTheBottom: Text at the bottom for the login page before the account name"},
               placeholderPassword : {
-                id: "shared.login.placeholder.wallet",
                 defaultMessage:'Wallet Password',
                 description:"shared.login.placeholder.wallet: PLaceholder for the Passford field in the create account form"},
               passwordLabel : {
-                id: "shared.login.passwordLabel",
                 defaultMessage:'Password',
                 description:"shared.login.passwordLabel"},
               decryptHeader : {
-                id: "shared.login.decryptHeader",
                 defaultMessage:'Logging into your account.',
                 description:"shared.login.decryptHeader"},
               decryptNoPwd : {
                   defaultMessage:'Please enter your password',
                   description:"Error when logging in without password"},
               decryptIncorrectPwd : {
-                id: "shared.login.decryptIncorrectPwd",
                 defaultMessage:'Unlock failed: Please check your password and try again.',
                 description:"shared.login.decryptIncorrectPwd"},
               decryptInProgress : {
-                id: "shared.login.decryptInProgress",
                 defaultMessage:'Please wait, We are {percentComplete}% done opening your account.',
                 description:"shared.login.decryptInProgress"}
 });
-
-//const decryptCancelled = { id: 'shared.login.decryptCancelled', defaultMessage:'Unlock cancelled.'};
-//const decryptSuccess = { id: 'shared.login.decryptSuccess', defaultMessage:'Unlock successful!  Please wait while we load your account info'};
-
 
 let __cancel = false;
 const onCancel = () => __cancel = true;
@@ -76,13 +62,8 @@ export const Login = (props: Props) => {
   const [forceValidate, setForceValidate] = useState(false);
 
   const { account } = props;
-  const { signer, address }= account;
+  const { address }= account;
   const accountApi = Account(address).useApi();
-  const history = useHistory();
-
-  if (!isLocal(signer) || signer.privateKey) {
-    history.push('/');
-  }
 
   ////////////////////////////////
   const onDecryptWallet = (e: React.MouseEvent<HTMLElement>) => {
@@ -114,6 +95,9 @@ export const Login = (props: Props) => {
         setForceValidate(v => !v);
       }
       return false;
+    }
+    else if (percent === 100) {
+      props.onLogin?.();
     }
     else {
       setPercentComplete(percent);

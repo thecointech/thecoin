@@ -1,5 +1,6 @@
 const { getEnvVars } = require('@thecointech/setenv');
 const  netstat = require('node-netstat');
+const { join } = require('path');
 
 const config = getEnvVars('development');
 const devlive = getEnvVars('devlive');
@@ -38,6 +39,7 @@ const globalSetup = async () => {
     process.env.DEPLOY_NETWORK_PORT = BlockchainPort;
 
   process.env = {
+    HARDHAT_CONFIG: join(__dirname, '../../contract-tools/build/hardhat.config.js'),
     ...process.env,
     ...config,
   };

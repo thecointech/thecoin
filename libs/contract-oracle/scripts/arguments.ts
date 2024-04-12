@@ -1,4 +1,3 @@
-import { log } from '@thecointech/logging';
 import { getSigner } from '@thecointech/signers';
 import { DateTime, Duration } from 'luxon';
 
@@ -7,7 +6,7 @@ async function getDevLiveArguments() {
   const updater = await getSigner("OracleUpdater");
   const from = DateTime
   .local()
-  .minus({ years: 1.1 })
+  .minus({ years: 1.5 })
   .setZone("America/New_York")
   .set({
     hour: 9,
@@ -18,8 +17,8 @@ async function getDevLiveArguments() {
   const blockDuration = Duration.fromObject({ days: 1 });
   return [
     await updater.getAddress(),
-    from.toSeconds(),
-    blockDuration.as("seconds"),
+    from.toMillis(),
+    blockDuration.as("milliseconds"),
   ]
 }
 

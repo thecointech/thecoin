@@ -1,11 +1,10 @@
-import React from "react"
-import { AnyAction, TransitionDelta } from '@thecointech/broker-db'
-import { RefundButton } from "containers/Refund"
+import { AnyTxAction, TransitionDelta } from '@thecointech/broker-db'
+import { RefundButton } from "../../Refund"
 import { DateTime } from 'luxon'
 import { Icon, List } from "semantic-ui-react";
 import { ManualOverride } from './ManualOverride';
 
-export const ClientTransaction = (props: AnyAction) => {
+export const ClientTransaction = (props: AnyTxAction) => {
   const date = props.data.date;
 
   // Create default values
@@ -15,12 +14,17 @@ export const ClientTransaction = (props: AnyAction) => {
   const fiat = history.find(r => r.fiat)?.fiat ?? "NO FIAT";
   const coin = history.find(r => r.coin)?.coin ?? "NO COIN";
 
+  // TODO: Obvs not gonna work in release
+  const project = "tccc-testing";
+  const firestorePath = `https://console.cloud.google.com/firestore/databases/-default-/data/panel/User/${props.address}/${props.type}/${props.doc.id}?project=${project}&pli=1`;
+
   return (
     <List.Item key={props.data.initialId}>
-      <TransactionIcon type={final.type} />
-      {`${date.toISODate()} ${final.type} - ${fiat} : ${coin}`}
+      <TransactionIcon type={final?.type} />
+      {`${date.toISODate()} ${final?.type ?? props.type} - ${fiat} : ${coin}`}
+      <a href={firestorePath}>{props.data.initialId.slice(0, 10)}</a>
       <TransactionPath {...props.doc} />
-      {final.type == "markComplete"
+      {final?.type == "markComplete"
         ? undefined
         : <RefundButton action={props} />
       }
@@ -30,7 +34,7 @@ export const ClientTransaction = (props: AnyAction) => {
   )
 }
 
-const TransactionIcon = ({ type }: { type: string }) => {
+const TransactionIcon = ({ type }: { type?: string }) => {
   switch (type) {
     case "markComplete": return <Icon name="check circle outline" color='green' />
     case "error": return <Icon name="times circle outline" color='red' />
@@ -38,7 +42,7 @@ const TransactionIcon = ({ type }: { type: string }) => {
   }
 }
 
-const TransactionPath = (props: AnyAction['doc']) => <div>{props.path}</div>
+const TransactionPath = (props: AnyTxAction['doc']) => <div>{props.path}</div>
 
 const TransactionEntry = (props: TransitionDelta) =>
   <li key={props.created.toMillis()}>
@@ -46,6 +50,7 @@ const TransactionEntry = (props: TransitionDelta) =>
     <TransactionEntryHash delta={props} />
     <TransactionEntryItem delta={props} item="date" />
     <TransactionEntryItem delta={props} item="meta" />
+    <TransactionEntryItem delta={props} item="error" />
   </li>
 
 const TransactionEntryHash = ({delta}: {delta: TransitionDelta}) => (
@@ -59,6 +64,6 @@ const TransactionEntryHash = ({delta}: {delta: TransitionDelta}) => (
 
 const TransactionEntryItem = ({delta, item}: {delta: TransitionDelta, item: keyof TransitionDelta}) => (
   delta[item]
-    ? <div>&nbsp;&nbsp;&nbsp;{` - ${item}: ${delta[item]?.toString()}`}</div>
+    ? <div>&nbsp;&nbsp;&nbsp;{` - ${item}: ${delta[item]?.toString().slice(0, 50)}`}</div>
     : null
 )

@@ -1,0 +1,4 @@
+type Testing @createModel(accountRelation: LIST, description: "Direct message model") {
+  recipient: DID! @accountReference
+  directMessage: String! @string(minLength: 1, maxLength: 200)
+}

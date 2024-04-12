@@ -1,7 +1,7 @@
 import { TransitionDelta, storeTransition, ActionType, TypedAction } from "@thecointech/broker-db";
 import { log } from "@thecointech/logging";
 import { DateTime } from "luxon";
-import { InstructionDataTypes, NamedTransition, StateGraph, StateSnapshot, Transition, TypedActionContainer } from "./types";
+import { InstructionDataTypes, NamedTransition, StateGraph, StateSnapshot, Transition, TypedActionContainer, getCurrentState } from "./types";
 import type { TheCoin } from '@thecointech/contract-core';
 import type { IBank } from '@thecointech/bank-interface';
 export * from './types';
@@ -36,6 +36,12 @@ async function runAndStoreTransition<Type extends ActionType>(container: TypedAc
     ...delta,
   }
 
+  if (delta.error) {
+    log.error(
+      { state: getCurrentState(container).name, error: delta.error, transition: transition.transitionName, initialId: container.action.data.initialId },
+      'Error on {state} => {transition} for {initialId}: {error}'
+    );
+  }
   log.trace({ delta, transition: transition.transitionName, initialId: container.action.data.initialId },
     `Storing delta {delta} for transition {transition} for {initialId}`);
 
@@ -57,7 +63,7 @@ export function transitionTo<States extends string, Type extends ActionType=Acti
       //  `(replay: {replay}): {initialId} transitioning via {transition} to state {state}`);
     }
     else {
-      log.debug({ initialId: container.action.data.initialId, state: nextState, transition: transition.transitionName },
+      log.info({ initialId: container.action.data.initialId, state: nextState, transition: transition.transitionName },
         `{initialId} transitioning via {transition} to state {state}`);
     }
 
@@ -75,7 +81,11 @@ export function transitionTo<States extends string, Type extends ActionType=Acti
           }
         }
       }
-      throw new Error(`Replay event ${replay.type} does not match next transition ${transition.transitionName}`);
+      log.error(
+        { initialId: container.action.data.initialId, replayType: replay.type, transition: transition.transitionName },
+        "Replay event does not match next transition"
+      )
+      return null
     }
     const delta = replay ?? await runAndStoreTransition<Type>(container, transition);
     return delta
@@ -166,7 +176,7 @@ export class StateMachineProcessor<States extends string, Type extends ActionTyp
       // If our last transition left an error state, what should we do?
       if (currentState.delta.error) {
         // Log every error.
-        log.error({ state }, `Error occured on {state}, ${currentState.delta.error}`);
+        log.trace({ state }, `Error occured on {state}, ${currentState.delta.error}`);
           // IF we have a handler, we continue processing
         if (transitions.onError) {
           nextState = await transitions.onError?.(container, currentState, replay);

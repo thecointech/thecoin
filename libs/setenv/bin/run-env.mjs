@@ -19,10 +19,13 @@ let args = process.argv.slice(2);
 const config = sliceArgs(args, "cfg", process.env.CONFIG_NAME ?? "development");
 let executable = sliceArgs(args, "exec", "node");
 
+console.log(`--- RUNNING ${config} ENV ---`)
+
 // Now, run node with ncr
 // TODO: Support ts-node?
 const env = {
   NODE_NO_WARNINGS: 1,
+  TS_NODE_PROJECT: process.env.TS_NODE_PROJECT ?? "tsconfig.build.json",
   ...getEnvVars(config),
   ...process.env,
 }
@@ -30,8 +33,11 @@ const env = {
 const loader = args.find(arg => arg.endsWith('.ts'))
   ? new URL("ncr-ts.mjs", import.meta.url)
   : new URL("ncr-js.mjs", import.meta.url);
+// const loader = new URL("ncr-ts.mjs", import.meta.url)
 
 // Always attach experimental loader
+// NOTE: -es-module-specifier-resolution is no longer supported by node,
+// but is required by ts-node to correctly resolve imports
 env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --loader=${loader} --es-module-specifier-resolution=node`;
 
 // If this is yarn script?

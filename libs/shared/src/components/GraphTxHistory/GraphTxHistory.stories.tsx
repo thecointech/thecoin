@@ -4,9 +4,12 @@ import { GraphTxHistory, Theme } from '.';
 import { Transaction } from '@thecointech/tx-blockchain';
 import { DateTime } from 'luxon';
 import { withStore, withReducer } from '@thecointech/storybookutils';
-import { FXRate, FxRateReducer } from 'containers/FxRate';
+import { FXRate, FxRateReducer } from '../../containers/FxRate';
 import { toCoin } from '@thecointech/utilities'
 import Decimal from 'decimal.js-light';
+import { COIN_EXP } from '@thecointech/contract-core';
+import { getFxRate } from '@thecointech/fx-rates';
+import { PluginBalanceMod } from '@thecointech/contract-plugins/types';
 
 export default {
   title: 'Shared/GraphTxHistory',
@@ -14,7 +17,11 @@ export default {
   argTypes: {
     lineColor: { control: 'color' },
     from: { control: 'date' },
-    to: { control: 'date' }
+    to: { control: 'date' },
+    plugins: {
+      options: [ "RoundNumber"],
+      control: "check",
+    }
   },
   decorators: [
     withReducer(FxRateReducer),
@@ -27,6 +34,7 @@ const defaultArgs = {
   from: Date.now() - (30 * days),
   to: Date.now(),
   txFrequency: 5,
+  plugins: ["RoundNumber"],
   lineColor: '#61C1B8',
 }
 
@@ -48,6 +56,7 @@ const template: Story<typeof defaultArgs> = (args) => {
 
   const GraphWrapper = () => (
     <GraphTxHistory
+      plugins={getPlugins(args.plugins)}
       height={350}
       txs={txs}
       from={DateTime.fromMillis(args.from)}
@@ -102,8 +111,24 @@ const genFxRates = ({from, to}: {from: number, to: number}) => {
       target: 124,
       validFrom: date,
       validTill: date + incr,
-    })
+    } as any)
     date = date + incr;
   }
   return r;
 }
+
+const RoundNumber = (coin: Decimal, timestamp: DateTime, rates: FXRate[]) => {
+  const rate = getFxRate(rates, timestamp.toMillis());
+  const fiat = coin.mul(rate.buy).mul(rate.fxRate).div(COIN_EXP);
+  const rounded = fiat.div(100).toint().mul(100);
+  return rounded.mul(COIN_EXP).div(rate.buy).div(rate.fxRate);
+}
+function getPlugins(plugins: string[]) : PluginBalanceMod[] {
+  return plugins.map(p => {
+    switch(p) {
+      case "RoundNumber": return RoundNumber;
+      default: throw new Error("Unknown Plugin Here!")
+    }
+  })
+}
+

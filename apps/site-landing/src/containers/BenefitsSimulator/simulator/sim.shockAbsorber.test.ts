@@ -3,7 +3,7 @@ import { createParams } from './params';
 import { grossFiat, zeroState } from './state';
 import { applyShockAborber } from './sim.shockAbsorber';
 import { SimulationState } from '.';
-import { DateObject, DateTime } from 'luxon';
+import { DateObjectUnits, DateTime } from 'luxon';
 import { one, zero } from './sim.decimal';
 import Decimal from 'decimal.js-light';
 
@@ -19,7 +19,7 @@ const params = createParams({
   }
 });
 
-const runAbsorber = (state: SimulationState, price: number, expectedFiat: number, date: DateObject={year: 2020}) => {
+const runAbsorber = (state: SimulationState, price: number, expectedFiat: number, date: DateObjectUnits={year: 2020}) => {
   const d = DateTime.fromObject(date)
   state.date = d;
   state.market = {

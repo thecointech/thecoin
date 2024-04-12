@@ -1,0 +1,84 @@
+version: '3'
+
+services:
+  ipfs:
+    image: ceramicnetwork/go-ipfs-daemon
+    restart: always
+    volumes:
+      - ipfs-data:/data/ipfs
+    ports:
+      - "5001"
+      - "8011"
+
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: composedb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: <PWD IN BITWARDEN@THECOIN>
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432"
+
+  ceramic:
+    image: ceramicnetwork/js-ceramic
+    restart: always
+    environment:
+      NODE_ENV: production
+    volumes:
+      - ceramic-logs:/root/.ceramic/logs
+      - ceramic-data:/root/.ceramic/statestore
+      - /srv/ceramic/daemon.config.json:/root/.ceramic/daemon.config.json
+    ports:
+      - 7000:7007
+    depends_on:
+      - ipfs
+      - postgres
+
+  seq:
+    image:
+      datalust/seq
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - BASE_URI=https://test.logging.thecoin.io
+    ports:
+      - 80:80
+      - 19350:5341
+    volumes:
+      - seq-data:/data
+
+  # NOTE! We can't listen on the same ports in NGINX
+  # as the services do.
+  # To keep translations within this file, NGINX
+  # listens on slight variations of the port, and
+  # docker translates from default to variation
+  # in here.  NGINX forwards from variation => variation
+  # and docker translates from variation back to default
+  # here.  This way, everyone uses the defaults, NGINX
+  # uses the variations in it's conf-d files,
+  # and all the translating happens here
+  reverse:
+    image: nginx
+    container_name: nginx
+    restart: always
+    ports:
+      - 443:443     # SEQ Api/UI
+      - 19357:19350 # Seq Ingest
+      - 7007:7000   # Ceramic
+    volumes:
+      - /etc/nginx:/etc/nginx:ro
+      - /etc/letsencrypt:/etc/ssl/private:ro
+    depends_on:
+      - ceramic
+      - seq
+
+volumes:
+  ipfs-data:
+  postgres-data:
+  ceramic-logs:
+  ceramic-data:
+  seq-data:

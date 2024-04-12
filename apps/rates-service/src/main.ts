@@ -7,6 +7,8 @@ import cors from 'cors';
 import { SendMail } from '@thecointech/email';
 import { log } from '@thecointech/logging';
 
+log.info(`Loading App: v${process.env.TC_APP_VERSION ?? process.env.npm_package_version} - ${process.env.CONFIG_NAME} (${process.env.NODE_ENV})`);
+
 const app = express();
 // enable cors
 app.use(cors());
