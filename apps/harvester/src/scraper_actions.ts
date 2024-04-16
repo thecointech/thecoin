@@ -14,9 +14,10 @@ export type ScraperBridgeApi = {
   // will contain the data of the file read from the main process.
   warmup: (url: string) => Promise<Result<boolean>>,
 
-  start: (actionName: ActionTypes, url: string, dynamicValues?: Record<string, string>) => Promise<Result<boolean>>,
+  start: (actionName: ActionTypes, url: string, dynamicValues?: string[]) => Promise<Result<boolean>>,
 
   learnValue: (valueName: string, valueType: ValueType) => Promise<Result<ValueResult>>,
+  setDynamicInput: (name: string, value: string) => Promise<Result<string>>,
 
   // Finish Recording
   finishAction: (actionName: ActionTypes) => Promise<Result<boolean>>,
@@ -50,6 +51,7 @@ export const actions = {
   warmup: 'scraper:warmup',
   start: 'scraper:start',
   learnValue: 'scraper:learnValue',
+  setDynamicInput: 'scraper:setDynamicInput',
   finishAction: 'scraper:finishAction',
 
   testAction: 'scraper.testAction',

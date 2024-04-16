@@ -17,13 +17,19 @@ declare global {
   // eslint-disable-next-line no-var
   var __eventsHooked: boolean;
   // eslint-disable-next-line no-var
-  var __clickAction: "click" | "value";
+  var __clickAction: "click" | "value" | "dynamicInput";
+  var __clickTypeFilter: undefined | "INPUT";
 }
 
 type ValueWaiter = {
   name: string,
   type: ValueType,
   resolve: (value: ValueResult) => void;
+}
+type DynamicInputWaiter = {
+  name: string,
+  value: string,
+  resolve: (value: string) => void;
 }
 
 export class Recorder {
@@ -35,27 +41,30 @@ export class Recorder {
   events: AnyEvent[] = [];
 
   // inputs can either be static (ie - constant every time)
-  // or dynamic (ie - supplied each run).  The capture Record
-  // here tests input values against a pre-supplied list of
-  // values, if one matches then we mark the input for substitution
-  dynamicValues: Record<string, string>;
+  // or dynamic (ie - supplied each run).  We set the 
+  // required dynamic inputs in the constructor, and the
+  // recording will not be successful if they are not captured.
+  dynamicInputs: Record<string, boolean>;
 
   urlToFrameName: Record<string, string> = {};
 
   private page!: Page;
   private browser!: Browser;
   private onValue?: ValueWaiter;
+  private onInput?: DynamicInputWaiter;
   private static __instance?: Recorder;
 
   private lastInputEvent: InputEvent | undefined;
 
 
-  private constructor(name: ActionTypes, dynamicValues?: Record<string, string>) {
+  private constructor(name: ActionTypes, dynamicInputs?: string[]) {
     this.name = name;
     this.screenshotFolder = path.join(outFolder, this.name);
 
-    this.dynamicValues = dynamicValues ?? {};
-    log.info(`Recording ${this.name} with dynamic values ${JSON.stringify(this.dynamicValues)}`);
+    this.dynamicInputs = Object.fromEntries(
+      dynamicInputs?.map(name => [name, false]
+    ) ?? []);
+    log.info(`Recording ${this.name} with dynamic inputs: ${dynamicInputs?.join(', ') ?? 'none'}`);
   }
   private async initialize(url: string) {
     const { browser, page } = await startPuppeteer(false);
@@ -72,11 +81,19 @@ export class Recorder {
 
     await page.goto(url);
 
-    this.disconnected = new Promise((resolve) => {
+    this.disconnected = new Promise((resolve, reject) => {
       browser.on('disconnected', async () => {
 
         log.info(`browser disconnected with ${this.events.length} events`);
-        console.log(JSON.stringify(this.events));
+
+        // Verify that we got all our dyamic inputs
+        for (const [name, value] of Object.entries(this.dynamicInputs)) {
+          if (!value) {
+            log.error(`Dynamic input ${name} was not captured`)
+            reject(`Dynamic input ${name} was not captured`)
+          }
+        }
+
         await setEvents(this.name, this.events);
 
         // Cleanup
@@ -89,7 +106,7 @@ export class Recorder {
     return page;
   }
 
-  static async instance(name?: ActionTypes, url?: string, capture?: Record<string, string>) {
+  static async instance(name?: ActionTypes, url?: string, capture?: string[]) {
     // Should we re?
     if (Recorder.__instance) {
       if (!name || Recorder.__instance.name == name) return Recorder.__instance
@@ -117,6 +134,7 @@ export class Recorder {
     return false;
   }
 
+  // Enter value-read mode
   setRequiredValue = async (name = "defaultValue", type: ValueType = "text") => {
     const waiter = new Promise<ValueResult>(resolve => {
       this.onValue = {
@@ -128,11 +146,35 @@ export class Recorder {
 
     await this.page.evaluate(() => {
       __clickAction = "value";
+      // Blur current input to force user click
+      window.focus()
+      if (document.activeElement instanceof HTMLInputElement) {
+        document.activeElement.blur()
+      }
     })
     await this.page.evaluate(startElementHighlight);
     return waiter;
   }
 
+  // Enter value-write mode
+  setDynamicInput = async (name: string, value: string) => {
+    const waiter = new Promise<string>(resolve => {
+      this.onInput = {
+        name,
+        value,
+        resolve
+      }
+    })
+
+    await this.page.evaluate(() => {
+      __clickAction = "dynamicInput";
+      __clickTypeFilter = "INPUT";
+    })
+    await this.page.evaluate(startElementHighlight);
+    return waiter;
+  }
+
+  // Record the stream of events from the browser.
   eventHandler = async (event: AnyEvent) => {
     log.debug("event name: " + event.type);
     if (event.type == 'navigation') {
@@ -163,15 +205,33 @@ export class Recorder {
         // If user hit's enter or input emits value changed, this
         // is final and we can drop the cache
         this.lastInputEvent = undefined;
-
-        const captured = Object.entries(this.dynamicValues).find(v => v[1] == event.value);
-        if (captured) event.dynamicName = captured[0];
       }
       else {
         // we are mid-stream, cache the event and return
         this.lastInputEvent = event;
         return;
       }
+    }
+    else if (event.type == "dynamicInput") {
+      if (!this.onInput) {
+        log.error("DYNAMIC INPUT MARK WITH NO CB");
+        throw new Error();
+      }
+      if (event.frame) {
+        event.frame = this.urlToFrameName[event.frame]
+      }
+      event.dynamicName = this.onInput.name;
+      // Set the input in the webpage
+      // clear existing value
+      const element = await this.page.$(event.selector);
+      await element?.evaluate(el => (el as HTMLInputElement).value = "");
+      await element?.focus();
+      await this.page.keyboard.type(this.onInput.value, { delay: 20 });
+      // await this.page.$eval(event.selector, (el, value) => (el as HTMLInputElement).value = value, this.onInput.value);
+      // Mark this input as successfully captured
+      this.dynamicInputs[this.onInput.name] = true;
+      // Resolve the promise (notify the user that we're done)
+      this.onInput.resolve(event.selector);
     }
     else if (event.type == "value") {
       // If we have a promise awaiting (and we really should!)
@@ -206,6 +266,7 @@ export class Recorder {
       }
       this.onValue = undefined;
     }
+
     if (event.type == 'click') {
       // Dig through any frames on the page to find our element
       if (event.frame) {
@@ -236,6 +297,7 @@ function onNewDocument() {
   __onAnyEvent({ type: "navigation", to: window.location.href, timestamp: Date.now() });
 
   globalThis.__clickAction = "click";
+  globalThis.__clickTypeFilter = undefined;
 
   if (!globalThis.__eventsHooked) {
     const opts = {
@@ -261,7 +323,15 @@ function onNewDocument() {
 
     // listen to clicks
     window.addEventListener("click", (ev) => {
+      console.log("Click: " + (ev.target as any)?.nodeName);
       if (ev.target instanceof HTMLElement) {
+        // Do not capture clicks on unrelated elements
+        if (__clickTypeFilter && ev.target.nodeName != __clickTypeFilter) {
+          console.log("Skipping click on " + ev.target.nodeName);
+          ev.preventDefault();
+          ev.stopImmediatePropagation();
+          return;
+        }
         __onAnyEvent({
           type: __clickAction,
           timestamp: Date.now(),
@@ -270,13 +340,14 @@ function onNewDocument() {
           // @ts-ignore
           ...window.getElementData(ev.target)
         });
-        // Reset back to the default
+        // Take no action if reading value
         if (__clickAction == "value") {
           console.log("Reading Value: " + ev.target.innerText);
           ev.preventDefault();
           ev.stopImmediatePropagation();
-          __clickAction = "click";
         }
+        __clickAction = "click";
+        __clickTypeFilter = undefined;
       }
     }, { capture: true });
 

@@ -36,6 +36,10 @@ const api: ScraperBridgeApi = {
     const instance = await Recorder.instance();
     return instance.setRequiredValue(valueName, valueType);
   }),
+  setDynamicInput: (name, value) => guard(async () => {
+    const instance = await Recorder.instance();
+    return instance.setDynamicInput(name, value);
+  }),
   finishAction: (actionName) => guard(() => Recorder.release(actionName)),
 
   // We can only pass POD back through the renderer, use toBridge to convert
@@ -78,11 +82,14 @@ export function initScraping() {
     return api.warmup(url);
   }),
 
-  ipcMain.handle(actions.start, async (_event, actionName: ActionTypes, url: string, dynamicValues: Record<string, string>) => {
+  ipcMain.handle(actions.start, async (_event, actionName: ActionTypes, url: string, dynamicValues?: string[]) => {
     return api.start(actionName, url, dynamicValues);
   })
   ipcMain.handle(actions.learnValue, async (_event, valueName: string, valueType: ValueType) => {
     return api.learnValue(valueName, valueType);
+  })
+  ipcMain.handle(actions.setDynamicInput, async (_event, name: string, value: ValueType) => {
+    return api.setDynamicInput(name, value);
   })
   ipcMain.handle(actions.finishAction, async (_event, actionName: ActionTypes) => {
     return api.finishAction(actionName);
