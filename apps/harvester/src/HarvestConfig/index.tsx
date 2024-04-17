@@ -1,6 +1,6 @@
 import { Link, useLocation, useHistory } from 'react-router-dom'
 import { Button, Step } from 'semantic-ui-react';
-import { ConfigRouter } from './routes'
+import { ConfigRouter, routes } from './routes'
 import styles from './index.module.less';
 import { ConfigReducer } from './state/reducer';
 
@@ -24,9 +24,19 @@ export const HarvestConfig = () => {
           title="Intro"
           description="Last step"
           // completed={true}
-          to="/config/step0"
+          to="/config"
           pathname={location.pathname} />
-        <ConfigStep
+        {
+          routes.map((r, i) => (
+            <ConfigStep
+              key={i}
+              title={r.title}
+              description={r.description}
+              to={`/config/step${i}`}
+              pathname={location.pathname} />
+          ))
+        }
+        {/* <ConfigStep
           title="Schedule"
           description="When to run"
           // completed={isLoggedIn}
@@ -56,6 +66,12 @@ export const HarvestConfig = () => {
           // completed={hasPlugins}
           to="/config/step5"
           pathname={location.pathname} />
+        <ConfigStep
+          title="Complete"
+          description="Sdlfkjsdf"
+          // completed={hasPlugins}
+          to="/config/step6"
+          pathname={location.pathname} />
         { process.env.CONFIG_NAME=="prodtest"
           ? <ConfigStep
               title="Override Balance"
@@ -64,7 +80,7 @@ export const HarvestConfig = () => {
               to="/config/step6"
               pathname={location.pathname} />
           : undefined
-      }
+        } */}
       </Step.Group>
       <div className={styles.container}>
         <ConfigRouter />
@@ -73,7 +89,7 @@ export const HarvestConfig = () => {
           if (m) {
             navigate.push("/config/step" + (parseInt(m[1]) + 1));
           } else {
-            navigate.push("/config/step1");
+            navigate.push("/config/step0");
           }
         }}>Next</Button>
       </div>

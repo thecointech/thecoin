@@ -4,7 +4,7 @@ import { HarvestStepType } from '../types';
 import { ConfigReducer } from './state/reducer';
 import { safeParseFloat } from './state/utils';
 
-export const TransferLimit = () => {
+export const ChequeMinimum = () => {
 
   const data = ConfigReducer.useData();
   const api = ConfigReducer.useApi();
