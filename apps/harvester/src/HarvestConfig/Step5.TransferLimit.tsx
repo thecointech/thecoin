@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Checkbox, Container, Input, Label } from 'semantic-ui-react'
+import { Checkbox, Container, Input, Label, Message } from 'semantic-ui-react'
 import { HarvestStepType } from '../types';
 import { ConfigReducer } from './state/reducer';
 import { safeParseFloat } from './state/utils';
@@ -10,12 +10,24 @@ export const TransferLimit = () => {
   const api = ConfigReducer.useApi();
   const xferLimit = data.steps.find(step => step.type === HarvestStepType.TransferLimit);
 
+  const [enabled, setEnabled] = useState(!!xferLimit ?? false);
   const [limit, setLimit] = useState(xferLimit?.args?.['limit'] ?? 2500);
+  const [warning, setWarning] = useState<string>();
 
   useEffect(() => {
-    api.setStep(HarvestStepType.TransferLimit, {
-      limit
-    });
+    if (enabled) {
+      api.setStep(HarvestStepType.TransferLimit, {
+        limit
+      });
+      setWarning(
+        Number(limit) > 3000
+          ? "Interac e-Transfer are often limited to $3000.  Are you sure you want to do this?"
+          : undefined
+      );
+    }
+    else {
+      api.clearStep(HarvestStepType.TransferLimit)
+    }
   }, [limit]);
 
   return (
@@ -30,13 +42,14 @@ export const TransferLimit = () => {
         to set a lower limit in case you need to make transfers for other reasons.
       </div>
       <div>
-      <Checkbox toggle label="Don't transfer more than " checked={true} />
+      <Checkbox toggle label="Leave at least " checked={enabled} onChange={(_, {checked}) => setEnabled(!!checked)}/>
         &nbsp;&nbsp;
         <Input placeholder="Amount" labelPosition="left" type="number" value={limit} onChange={(_, {value}) => setLimit(safeParseFloat(value))}>
           <Label basic>$</Label>
           <input />
         </Input>
       </div>
+      {warning && <Message warning>{warning}</Message>}
     </Container>
   )
 }

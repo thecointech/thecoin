@@ -1,8 +1,8 @@
 import currency from 'currency.js';
-import { TransferLimit } from './TransferLimit';
+import { ChequeMinimum } from './ChequeMinimum';
 
 const limiter = (balance: number, toETransfer: number) => {
-  const limiter = new TransferLimit();
+  const limiter = new ChequeMinimum();
   const state: any = {
     chq: {
       balance: new currency(balance),
