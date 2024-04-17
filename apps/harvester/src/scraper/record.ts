@@ -16,9 +16,9 @@ declare global {
   function __onAnyEvent(event: AnyEvent): boolean;
   // eslint-disable-next-line no-var
   var __eventsHooked: boolean;
-  // eslint-disable-next-line no-var
   var __clickAction: "click" | "value" | "dynamicInput";
-  var __clickTypeFilter: undefined | "INPUT";
+  var __clickTypeFilter: undefined | string;
+  var __rehookEvents: () => void;
 }
 
 type ValueWaiter = {
@@ -167,8 +167,9 @@ export class Recorder {
     })
 
     await this.page.evaluate(() => {
+      globalThis.__rehookEvents?.();
       __clickAction = "dynamicInput";
-      __clickTypeFilter = "INPUT";
+      __clickTypeFilter = "(INPUT)|(TEXTAREA)";
     })
     await this.page.evaluate(startElementHighlight);
     return waiter;
@@ -199,6 +200,10 @@ export class Recorder {
       return;
     }
     else if (event.type == "input") {
+      // This is a dynamic input event, we can ignore it.
+      if (this.onInput) {
+        return;
+      }
       // Input events come in a stream, and we cache them
       // until we have the final one.
       if (event.hitEnter || event.valueChange) {
@@ -227,11 +232,14 @@ export class Recorder {
       await element?.evaluate(el => (el as HTMLInputElement).value = "");
       await element?.focus();
       await this.page.keyboard.type(this.onInput.value, { delay: 20 });
+      await this.page.evaluate(el => (el as HTMLInputElement).blur(), element);
+      
       // await this.page.$eval(event.selector, (el, value) => (el as HTMLInputElement).value = value, this.onInput.value);
       // Mark this input as successfully captured
       this.dynamicInputs[this.onInput.name] = true;
       // Resolve the promise (notify the user that we're done)
       this.onInput.resolve(event.selector);
+      this.onInput = undefined;
     }
     else if (event.type == "value") {
       // If we have a promise awaiting (and we really should!)
@@ -299,6 +307,9 @@ function onNewDocument() {
   globalThis.__clickAction = "click";
   globalThis.__clickTypeFilter = undefined;
 
+  // Disable console.clear
+  console.clear = () => {};
+
   if (!globalThis.__eventsHooked) {
     const opts = {
       capture: true,
@@ -321,35 +332,84 @@ function onNewDocument() {
       })
     });
 
-    // listen to clicks
-    window.addEventListener("click", (ev) => {
-      console.log("Click: " + (ev.target as any)?.nodeName);
+    const getFilteredTarget = (ev: MouseEvent): HTMLElement|null => {
+      console.log(`GettingFiltered: ${(ev.target as any)?.nodeName}, id: ${(ev.target as any)?.id}, x: ${ev.pageX}, y: ${ev.pageY}`);
+
       if (ev.target instanceof HTMLElement) {
-        // Do not capture clicks on unrelated elements
-        if (__clickTypeFilter && ev.target.nodeName != __clickTypeFilter) {
-          console.log("Skipping click on " + ev.target.nodeName);
-          ev.preventDefault();
-          ev.stopImmediatePropagation();
-          return;
+        if (!__clickTypeFilter) {
+          return ev.target;
         }
-        __onAnyEvent({
-          type: __clickAction,
-          timestamp: Date.now(),
-          clickX: ev.pageX,
-          clickY: ev.pageY,
-          // @ts-ignore
-          ...window.getElementData(ev.target)
-        });
+
+        const typerex = new RegExp(__clickTypeFilter);
+        // If we have a filter, does the default match?
+        if (typerex.test(ev.target.nodeName)) {
+          return ev.target;
+        }
+        const x = ev.pageX;
+        const y = ev.pageY;
+        const els = document.elementsFromPoint(x, y);
+        for (const el of els) {
+          if (typerex.test(el.nodeName)) {
+            return el as HTMLElement;
+          }
+        }
+      }
+      return null;
+    }
+
+    // listen to clicks
+    const clickEventListener = (ev: MouseEvent) => {
+      const target = getFilteredTarget(ev);
+
+      if (target) {
+        // Get local copies of the data to ensure we don't care
+        // about any changes that may be made during the click
+        const sendType = __clickAction;
+        // @ts-ignore
+        const data = window.getElementData(target);
+        const sendEvent = () => {
+          __onAnyEvent({
+            type: sendType,
+            timestamp: Date.now(),
+            clickX: ev.pageX,
+            clickY: ev.pageY,
+            ...data
+          });
+        }
+
+        if (__clickAction == "dynamicInput") {
+          // Allow any events to process before
+          // we take over the execution of the click
+          setTimeout(sendEvent, 1000);
+        }
+        else {
+          // Send immediately
+          sendEvent();
+        }
+
         // Take no action if reading value
         if (__clickAction == "value") {
-          console.log("Reading Value: " + ev.target.innerText);
+          console.log("Reading Value: " + target.innerText);
           ev.preventDefault();
           ev.stopImmediatePropagation();
         }
         __clickAction = "click";
         __clickTypeFilter = undefined;
       }
-    }, { capture: true });
+      else {
+        // Do not capture clicks on unrelated elements
+        console.log("Skipping click");
+        ev.preventDefault();
+        ev.stopImmediatePropagation();
+      }
+    }
+    window.addEventListener("click", clickEventListener, { capture: true });
+    // Allow our hooks to supersede anything being applied by the page
+    globalThis.__rehookEvents = () => {
+      console.log("Rehooking Events");
+      window.removeEventListener("click", clickEventListener, { capture: true });
+      window.addEventListener("click", clickEventListener, { capture: true });
+    }
 
     // When leaving an input, capture it's value
     window.addEventListener("change", (ev) => {

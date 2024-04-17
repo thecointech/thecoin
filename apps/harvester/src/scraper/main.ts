@@ -11,7 +11,7 @@ let doReplay = true;
 //    const config = await getProcessConfig();
 //    let events: AnyEvent[] = config?.scraping?.chqBalance ?? [];
 
-const recorder =  await Recorder.instance("chqBalance", "https://en.wikipedia.org/wiki/Main_Page", ["SearchFor"]);
+const recorder =  await Recorder.instance("chqBalance", "https://www.google.com", ["SearchFor"]);
 await new Promise(resolve => setTimeout(resolve, 3 * 1000));
 const selected = await recorder.setRequiredValue("SearchFor");
 console.log("Value " + selected.text);

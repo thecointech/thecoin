@@ -100,7 +100,7 @@ export function startElementHighlight() {
         continue
       }
 
-      const color = (__clickTypeFilter && el.nodeName != __clickTypeFilter)
+      const color = (__clickTypeFilter && !(new RegExp(__clickTypeFilter).test(el.nodeName)))
         ? "grey"
         : "yellow";
       box.setColor(color);

@@ -67,11 +67,15 @@ const api: ScraperBridgeApi = {
     openFolder(logsFolder);
     return true;
   }),
-  getArgv: () => guard(() => Promise.resolve(JSON.stringify({
+  getArgv: () => guard(() => Promise.resolve({
     argv: process.argv,
     broker: process.env.WALLET_BrokerCAD_ADDRESS,
+    saveDump: process.env.HARVESTER_SAVE_DUMP,
+    env: {
+      ...process.env
+    },
     logsFolder,
-  }))),
+  })),
 
   setOverrides: (balance, pendingAmt, pendingDate) => guard(() => setOverrides(balance, pendingAmt, pendingDate)),
 }
