@@ -1,9 +1,9 @@
 import { log } from '@thecointech/logging';
 import { HarvestData, ProcessingStage } from '../types';
 
-export class TransferLimit implements ProcessingStage {
+export class ChequeMinimum implements ProcessingStage {
 
-  readonly name = 'TransferLimit';
+  readonly name = 'ChequeMinimum';
 
   limit = 200;
 
