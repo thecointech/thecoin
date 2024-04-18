@@ -17,6 +17,7 @@
         "BREAK_ON_STARTUP": "true",
         "RUN_SCRAPER_HEADLESS": "false",
         "CONFIG_NAME": "prodbeta",
+        "HARVESTER_ALLOW_OVERRIDES": "true",
         // DRY RUN
         "HARVESTER_DRY_RUN": "true",
         "HARVESTER_OVERRIDE_CHQ_BALANCE": "9000",

@@ -36,51 +36,6 @@ export const HarvestConfig = () => {
               pathname={location.pathname} />
           ))
         }
-        {/* <ConfigStep
-          title="Schedule"
-          description="When to run"
-          // completed={isLoggedIn}
-          to="/config/step1"
-          pathname={location.pathname} />
-        <ConfigStep
-          title="Transfer Amount"
-          description="Tweak how much is transferred"
-          // completed={hasPlugins}
-          to="/config/step2"
-          pathname={location.pathname} />
-        <ConfigStep
-          title="Top Up"
-          description="Super-savings"
-          // completed={hasPlugins}
-          to="/config/step3"
-          pathname={location.pathname} />
-        <ConfigStep
-          title="Limits"
-          description="Sdlfkjsdf"
-          // completed={hasPlugins}
-          to="/config/step4"
-          pathname={location.pathname} />
-        <ConfigStep
-          title="Complete"
-          description="Sdlfkjsdf"
-          // completed={hasPlugins}
-          to="/config/step5"
-          pathname={location.pathname} />
-        <ConfigStep
-          title="Complete"
-          description="Sdlfkjsdf"
-          // completed={hasPlugins}
-          to="/config/step6"
-          pathname={location.pathname} />
-        { process.env.CONFIG_NAME=="prodtest"
-          ? <ConfigStep
-              title="Override Balance"
-              description="PRODTEST ONLY"
-              // completed={hasPlugins}
-              to="/config/step6"
-              pathname={location.pathname} />
-          : undefined
-        } */}
       </Step.Group>
       <div className={styles.container}>
         <ConfigRouter />

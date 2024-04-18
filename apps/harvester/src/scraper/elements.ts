@@ -48,7 +48,7 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
     const candidate = sorted[0];
 
     // Extra debugging
-    if (process.env.VERBOSE_COIN_SCRAPER) {
+    if (process.env.HARVESTER_VERBOSE_SCRAPER) {
       log.debug(`Text: ${event.text} - ${candidate?.data?.text}`);
       log.debug(`Label: ${event.label} - ${candidate?.data?.label}`);
       log.debug(`Coords: ${JSON.stringify(event.coords)} - ${JSON.stringify(candidate?.data?.coords)}`);

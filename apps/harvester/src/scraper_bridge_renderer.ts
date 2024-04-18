@@ -29,6 +29,7 @@ const api : ScraperBridgeApi = {
   openLogsFolder: () => ipcRenderer.invoke(actions.openLogsFolder),
   getArgv: () => ipcRenderer.invoke(actions.getArgv),
 
+  allowOverrides: () => ipcRenderer.invoke(actions.allowOverrides),
   setOverrides: (balance, pendingAmt, pendingDate) => ipcRenderer.invoke(actions.setOverrides, balance, pendingAmt, pendingDate),
 }
 

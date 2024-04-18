@@ -77,6 +77,7 @@ const api: ScraperBridgeApi = {
     logsFolder,
   })),
 
+  allowOverrides: () => guard(() => Promise.resolve(process.env.HARVESTER_ALLOW_OVERRIDES === "true")),
   setOverrides: (balance, pendingAmt, pendingDate) => guard(() => setOverrides(balance, pendingAmt, pendingDate)),
 }
 
@@ -144,6 +145,9 @@ export function initScraping() {
     return api.getArgv();
   })
 
+  ipcMain.handle(actions.allowOverrides, async (_event) => {
+    return api.allowOverrides();
+  })
   ipcMain.handle(actions.setOverrides, async (_event, balance: number, pendingAmt: number|null, pendingDate: string|null) => {
     return api.setOverrides(balance, pendingAmt, pendingDate);
   })

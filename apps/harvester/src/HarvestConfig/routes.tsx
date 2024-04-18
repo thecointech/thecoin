@@ -41,7 +41,7 @@ export const routes = [
   },
 ]
 // For now, hide the overrides
-if (window.AllowOverrides) {
+if (await window.scraper.allowOverrides()) {
   routes.push(  {
     component: OverrideInitialBalance,
     title: "Overrides",
@@ -54,13 +54,6 @@ export const ConfigRouter = () => (
     {
       routes.map((r, i) => <Route key={i} path={`/config/step${i}`} component={r.component} />)
     }
-    {/* <Route path="/config/step1" component={DaysToRun} />
-    <Route path="/config/step2" component={RoundUp} />
-    <Route path="/config/step3" component={TopUp} />
-    <Route path="/config/step4" component={ChequeMinimum} />
-    <Route path="/config/step5" component={TransferLimit} />
-    <Route path="/config/step6" component={Complete} />
-    <Route path="/config/step7" component={OverrideInitialBalance} /> */}
     <Route key="intro" component={Intro} />
   </Switch>
 )
