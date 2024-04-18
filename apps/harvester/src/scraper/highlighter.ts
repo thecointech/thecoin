@@ -2,6 +2,7 @@
 // Start highlighting the element under the mouse
 export function startElementHighlight() {
 
+  console.log("Starting highlighter");
   const body = document.body;
   if (!body) {
     console.log("WTF");
@@ -77,12 +78,19 @@ export function startElementHighlight() {
 
       this.show();
     }
+
+    setColor(color: string) {
+      this.top.style.background = color;
+      this.bottom.style.background = color;
+      this.left.style.background = color;
+      this.right.style.background = color;
+    }
   }
 
   const box = new Overlay();
 
   const listener = ({ x, y }: {x: number, y: number}) => {
-    if (__clickAction != "value") {
+    if (__clickAction == "click") {
       box.hide();
       window.removeEventListener("mousemove", listener);
     }
@@ -91,6 +99,12 @@ export function startElementHighlight() {
       if (el == box.outer || el == box.top || el == box.right || el == box.left || el == box.bottom) {
         continue
       }
+
+      const color = (__clickTypeFilter && !(new RegExp(__clickTypeFilter).test(el.nodeName)))
+        ? "grey"
+        : "yellow";
+      box.setColor(color);
+
       const rect = el.getBoundingClientRect()
       box.render(rect.width, rect.height, rect.left + window.scrollX, rect.top + window.scrollY);
       break;

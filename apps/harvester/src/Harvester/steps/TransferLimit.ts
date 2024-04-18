@@ -1,28 +1,25 @@
 import { log } from '@thecointech/logging';
 import { HarvestData, ProcessingStage } from '../types';
+import currency from 'currency.js';
 
 export class TransferLimit implements ProcessingStage {
 
   readonly name = 'TransferLimit';
 
-  limit = 200;
+  limit = currency(2500);
 
   constructor(config?: Record<string, string|number>) {
     if (config?.limit) {
-      this.limit = Number(config.limit);
+      this.limit = currency(config.limit);
     }
   }
 
   async process(data: HarvestData) {
     if (data.state.toETransfer) {
-      log.info('Protecting chq minimum balance of ' + this.limit);
-      const maxTransfer = data.chq.balance.subtract(
-        Math.min(this.limit, data.chq.balance.value)
-      );
-      if (maxTransfer.value < data.state.toETransfer.value) {
-        log.info('Limiting transfer to ' + maxTransfer);
+      if (this.limit < data.state.toETransfer) {
+        log.warn(`Requested e-transfer is too large: ${data.state.toETransfer}, max ${this.limit}`);
         return {
-          toETransfer: maxTransfer,
+          toETransfer: this.limit,
         }
       }
     }

@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Container, Button, Icon } from 'semantic-ui-react'
 import { TrainingReducer } from './state/reducer';
+import { useLearnValue } from './learnValue';
 
 const pageAction = "chqBalance";
 
@@ -8,10 +9,19 @@ export const ChequingBalance = () => {
 
   const data = TrainingReducer.useData();
   const api = TrainingReducer.useApi();
-  const [read,setRead] = useState('');
+  // const [read,setRead] = useState('');
   const [validating, setValidating] = useState(false);
 
+  const [balance, learnBalance] = useLearnValue("balance", "currency");
+  
   const url = data.chequing.url;
+
+  useEffect(() => {
+    if (balance) {
+      window.scraper.finishAction(pageAction);
+    }
+  }, [balance])
+
   const initScraper = async () => {
     if (!url) alert("ERROR: Needs data")
     else {
@@ -19,33 +29,12 @@ export const ChequingBalance = () => {
       console.log("scraper started");
     }
   }
-  const teachBalance = async () => {
-    const r = await window.scraper.learnValue('balance', "currency");
-    if (r.error) alert(r.error);
-    if (r.value) {
-      console.log("The AI read: " + r.value);
-      setRead(r.value.text ?? '');
-      api.setParameter("chequing", "initBalance", r.value.text);
-
-      // Close the browser if needed
-      await window.scraper.finishAction(pageAction);
-    }
-  }
   const validate = async () => {
     setValidating(true);
     const r = await window.scraper.testAction(pageAction);
     if (r.error) alert(r.error)
     if (r.value?.balance) {
-      if (!read) {
-        setRead(r.value.balance);
-        api.setParameter("chequing", "testPassed", true);
-      } else {
-        // The value will have gone through a currency conversion,
-        // so strip out any spaces to ensure it is equal to the read value
-        // const same = r.value.balance == read.replace(/\s/g, '');
-        // TODO: Do we care?
-        api.setParameter("chequing", "testPassed", true);
-      }
+      api.setParameter("chequing", "testPassed", true);
     }
     setValidating(false);
   }
@@ -57,11 +46,11 @@ export const ChequingBalance = () => {
       <ul>
         <li><Button onClick={initScraper}>Start</Button> the webpage</li>
         <li>Navigate to your balance page</li>
-        <li><Button onClick={teachBalance}>Click here</Button>, then click on the balance you want your AI to read</li>
+        <li><Button onClick={learnBalance}>Click here</Button>, then click on the balance you want your AI to read</li>
       </ul>
       <div>Finally, check the value below to ensure your AI hasn't accidentally read the wrong value!</div>
       <Button onClick={validate} loading={validating}>Test Learning</Button>
-      <div>Your AI read: {read}
+      <div>Your AI read: {balance}
         {data.chequing.testPassed && <Icon name='check circle' color="green" />}
       </div>
     </Container>

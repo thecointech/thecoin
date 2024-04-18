@@ -5,6 +5,7 @@ const api : ScraperBridgeApi = {
   warmup: (url) => ipcRenderer.invoke(actions.warmup, url),
   start: (actionName, url, dynamicValues) => ipcRenderer.invoke(actions.start, actionName, url, dynamicValues),
   learnValue: (valueName, valueType) => ipcRenderer.invoke(actions.learnValue, valueName, valueType),
+  setDynamicInput: (name, value) => ipcRenderer.invoke(actions.setDynamicInput, name, value),
 
   finishAction: (actionName) => ipcRenderer.invoke(actions.finishAction, actionName),
 
@@ -28,6 +29,7 @@ const api : ScraperBridgeApi = {
   openLogsFolder: () => ipcRenderer.invoke(actions.openLogsFolder),
   getArgv: () => ipcRenderer.invoke(actions.getArgv),
 
+  allowOverrides: () => ipcRenderer.invoke(actions.allowOverrides),
   setOverrides: (balance, pendingAmt, pendingDate) => ipcRenderer.invoke(actions.setOverrides, balance, pendingAmt, pendingDate),
 }
 

@@ -36,6 +36,10 @@ const api: ScraperBridgeApi = {
     const instance = await Recorder.instance();
     return instance.setRequiredValue(valueName, valueType);
   }),
+  setDynamicInput: (name, value) => guard(async () => {
+    const instance = await Recorder.instance();
+    return instance.setDynamicInput(name, value);
+  }),
   finishAction: (actionName) => guard(() => Recorder.release(actionName)),
 
   // We can only pass POD back through the renderer, use toBridge to convert
@@ -63,12 +67,17 @@ const api: ScraperBridgeApi = {
     openFolder(logsFolder);
     return true;
   }),
-  getArgv: () => guard(() => Promise.resolve(JSON.stringify({
+  getArgv: () => guard(() => Promise.resolve({
     argv: process.argv,
     broker: process.env.WALLET_BrokerCAD_ADDRESS,
+    saveDump: process.env.HARVESTER_SAVE_DUMP,
+    env: {
+      ...process.env
+    },
     logsFolder,
-  }))),
+  })),
 
+  allowOverrides: () => guard(() => Promise.resolve(process.env.HARVESTER_ALLOW_OVERRIDES === "true")),
   setOverrides: (balance, pendingAmt, pendingDate) => guard(() => setOverrides(balance, pendingAmt, pendingDate)),
 }
 
@@ -78,11 +87,14 @@ export function initScraping() {
     return api.warmup(url);
   }),
 
-  ipcMain.handle(actions.start, async (_event, actionName: ActionTypes, url: string, dynamicValues: Record<string, string>) => {
+  ipcMain.handle(actions.start, async (_event, actionName: ActionTypes, url: string, dynamicValues?: string[]) => {
     return api.start(actionName, url, dynamicValues);
   })
   ipcMain.handle(actions.learnValue, async (_event, valueName: string, valueType: ValueType) => {
     return api.learnValue(valueName, valueType);
+  })
+  ipcMain.handle(actions.setDynamicInput, async (_event, name: string, value: ValueType) => {
+    return api.setDynamicInput(name, value);
   })
   ipcMain.handle(actions.finishAction, async (_event, actionName: ActionTypes) => {
     return api.finishAction(actionName);
@@ -133,6 +145,9 @@ export function initScraping() {
     return api.getArgv();
   })
 
+  ipcMain.handle(actions.allowOverrides, async (_event) => {
+    return api.allowOverrides();
+  })
   ipcMain.handle(actions.setOverrides, async (_event, balance: number, pendingAmt: number|null, pendingDate: string|null) => {
     return api.setOverrides(balance, pendingAmt, pendingDate);
   })
