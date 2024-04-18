@@ -9,8 +9,15 @@ export type HarvestDelta = {
   // transfers in and out of the coin account
   harvesterBalance?: currency,
 
+  // How much to transfer to TheCoin
+  // Should be 0 at the end of every run
   toETransfer?: currency,
+  // A pending payment to the Visa
+  // Set in the run when initiated, cleared
+  // in a later run when it's settled
   toPayVisa?: currency,
+  // When the pending payment above is scheduled to settle
+  toPayVisaDate?: DateTime,
 
   stepData?: Record<string, string>,
 }
@@ -40,6 +47,7 @@ export type CreditDetails = {
 }
 
 export interface ProcessingStage {
+  readonly name: string;
   process: (data: HarvestData, user: UserData, lastState?: HarvestData) => Promise<HarvestDelta>;
 }
 

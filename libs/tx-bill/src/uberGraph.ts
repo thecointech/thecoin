@@ -27,7 +27,7 @@ export type ActionStates =
   "billReady" |
   "billResult";
 
-export type States = ActionStates|"error"|"complete";
+export type States = ActionStates|"error"|"complete"|"cancelled";
 
 // TODO: Can this be defined as pure data?
 // Yes, yes it can...
@@ -52,6 +52,7 @@ export const rawGraph: GraphTransitions<'Bill', ActionStates>  = {
   tcRegisterWaiting: {
     action: core.waitCoin,
     next: "tcWaitToFinalize",
+    onError: core.requestManual,
   },
 
   // BILLS ONLY PROCESS AFTER THE TRANSFER IS COMPLETE
@@ -117,6 +118,9 @@ export const uberGraph = {
   ),
   error: {
     next: core.manualOverride,
+  },
+  cancelled: {
+    next: transitionTo<States, "Bill">(core.markComplete, 'complete'),
   },
   complete: null,
 } as any as StateGraph<States, "Bill">

@@ -19,7 +19,7 @@ export const manual = (deposit: Deposit): StateGraph<States, "Buy"> => ({
     next: transitionTo<States, "Buy">(makeDeposit(deposit), "deposited"),
   },
   deposited: {
-    next: transitionTo<States>(core.toCoin, "converted"),
+    next: transitionTo<States, "Buy">(core.toCoin, "converted"),
   },
   converted: {
     onError: transitionTo<States>(core.requestManual, "error"),

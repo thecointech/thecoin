@@ -1,7 +1,7 @@
 import { ActionType, TransitionDelta, TypedAction, StateData } from "@thecointech/broker-db";
 import type { TheCoin } from "@thecointech/contract-core";
 import type { eTransferData } from "@thecointech/tx-gmail";
-import type { BillPayeePacket, CertifiedTransferRequest, ETransferPacket, UberTransfer } from "@thecointech/types";
+import type { BillPayeePacket, ETransferPacket } from "@thecointech/types";
 import type { IBank } from '@thecointech/bank-interface';
 
 export type RequiredStates = "initial" | "complete" | "error";
@@ -66,6 +66,3 @@ export interface NamedTransition<Type extends ActionType=ActionType> extends Tra
 
 // Handy utility function to get current state (last entry in the history)
 export const getCurrentState = (container: AnyActionContainer) => container.history[container.history.length - 1];
-
-// An awkward place to put this function, but it's only used in our transitions
-export const isCertTransfer = (transfer: CertifiedTransferRequest|UberTransfer): transfer is CertifiedTransferRequest => !!(transfer as CertifiedTransferRequest).value;

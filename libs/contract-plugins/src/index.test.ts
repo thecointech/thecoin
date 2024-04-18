@@ -1,7 +1,7 @@
 import { getPluginDetails, ALL_PERMISSIONS } from './index';
 import { Wallet } from '@ethersproject/wallet';
 import { runModifier } from '../internal/common';
-import { IPluggable, PluginAndPermissionsStructOutput } from './types/contracts/IPluggable';
+import { IPluggable, PluginAndPermissionsStructOutput } from './codegen/contracts/IPluggable';
 import { BigNumber } from '@ethersproject/bignumber';
 
 

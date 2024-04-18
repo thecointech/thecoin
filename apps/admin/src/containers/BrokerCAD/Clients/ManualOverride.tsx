@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ActionDataTypes, AnyActionData, AnyTxAction, TxActionType, storeTransition } from '@thecointech/broker-db';
 import { Button, Select } from 'semantic-ui-react';
 import { log } from '@thecointech/logging';
@@ -8,7 +8,7 @@ import { graph as billgraph, uberGraph } from '@thecointech/tx-bill';
 import { graph as plugingraph } from '@thecointech/tx-plugins';
 // import { graph as plugingraph } from '@thecointech/tx-plugins';
 import { etransfer as etransfergraph, manual as manualgraph } from '@thecointech/tx-deposit';
-import { isCertTransfer } from '@thecointech/tx-statemachine';
+import { isCertTransfer } from '@thecointech/utilities/VerifiedTransfer';
 
 export const ManualOverride = (props: AnyTxAction) => {
   const [newState, setNewState] = useState<MaybeString>()

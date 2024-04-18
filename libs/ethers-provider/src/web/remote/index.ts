@@ -104,12 +104,12 @@ export class Erc20Provider extends EtherscanProvider {
     })
   }
 
-  async getERC20History(args: {address?: string, contractAddress?: string, startBlock?: BlockTag, endBlock?: BlockTag}) {
-    const {address, contractAddress, startBlock, endBlock} = args;
+  async getERC20History(args: {address?: string, contractAddress?: string, fromBlock?: BlockTag, toBlock?: BlockTag}) {
+    const {address, contractAddress, fromBlock, toBlock} = args;
     const params: Record<string, any> = {
       action: "tokentx",
-      startblock: ((startBlock == null) ? initBlock : startBlock),
-      endblock: ((endBlock == null) ? 99999999 : endBlock),
+      startblock: fromBlock ?? initBlock,
+      endblock: toBlock,
       sort: "asc",
     };
     if (address) params.address = address;
@@ -125,12 +125,12 @@ export class Erc20Provider extends EtherscanProvider {
   }
 
   async getEtherscanLogs(filter: Filter, conditional: "or"|"and") : Promise<Array<Log>>{
-    const { startBlock, endBlock } = filter as any;
+    const { fromBlock, toBlock } = filter;
     const params: Record<string, any> = {
       action: "getLogs",
       address: filter.address,
-      startblock: !startBlock ? initBlock : startBlock,
-      endblock: !endBlock ? 99999999 : endBlock,
+      fromBlock: fromBlock ?? initBlock,
+      toBlock,
       topic1_2_opr: conditional
     };
     const topicsAdded: number[] = [];

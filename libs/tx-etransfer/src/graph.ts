@@ -15,7 +15,8 @@ type States =
   "eTransferResult" |
 
   "error" |
-  "complete";
+  "complete" |
+  "cancelled";
 //"refunding" |
 //"refundReady";
 
@@ -35,7 +36,7 @@ export const graph : StateGraph<States, "Sell"> = {
   },
   tcResult: {
     onError: transitionTo<States>(core.requestManual, "error"),
-    next: transitionTo<States>(core.toFiat, "converted"),
+    next: transitionTo<States, "Sell">(core.toFiat, "converted"),
   },
 
   converted: {
@@ -60,6 +61,9 @@ export const graph : StateGraph<States, "Sell"> = {
   // },
   error: {
     next: core.manualOverride,
+  },
+  cancelled: {
+    next: transitionTo<States>(core.markComplete, 'complete'),
   },
   complete: null,
 }

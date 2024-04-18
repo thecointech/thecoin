@@ -1,0 +1,7 @@
+{
+  "extends": "../../tsconfig.tests.json",
+  "compilerOptions": {
+    "baseUrl": "./src",
+  },
+  "include": ["**/*.test.*", "scripts/**.ts", "internal/*.*", "**/*.stories.*", "**/global.d.ts"],
+}

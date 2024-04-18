@@ -1,4 +1,4 @@
-import type { IpcMain, IpcRenderer } from './electron_types';
+import type { IpcMain, IpcRenderer } from '@thecointech/electron-utils/types/ipc';
 import type { setETransferLabel } from './fetch';
 import type { queryETransfers, queryNewDepositEmails } from './query';
 

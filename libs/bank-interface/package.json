@@ -1,6 +1,7 @@
 {
   "name": "@thecointech/bank-interface",
-  "version": "0.2.111",
+  "version": "0.2.125",
+  "private": true,
   "description": "The Coin: Generic banking interface.  Contains no implementation.",
   "type": "module",
   "keywords": [
@@ -10,7 +11,7 @@
   ],
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
@@ -21,7 +22,7 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc -b tsconfig.json",
+    "build": "run -T tsc -b tsconfig.json",
     "clean": "rimraf ./build"
   },
   "files": [
@@ -30,6 +31,6 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "devDependencies": {
-    "@thecointech/types": "^0.2.111"
+    "@thecointech/types": "^0.2.125"
   }
 }

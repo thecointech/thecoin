@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/signers",
-  "version": "0.2.111",
+  "version": "0.2.125",
   "description": "The Coin: centralized access for built-in signers.  Not for external use",
   "type": "module",
   "keywords": [
@@ -8,7 +8,7 @@
   ],
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
@@ -19,10 +19,9 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc --project tsconfig.build.json",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix"
+    "test": "run :jest"
   },
   "files": [
     "build/**/*"
@@ -63,12 +62,12 @@
   },
   "dependencies": {
     "@google-cloud/secret-manager": "^3.5.0",
-    "@thecointech/ethers-provider": "^0.2.111",
-    "@thecointech/hardware-wallet": "^0.2.111",
-    "@thecointech/logging": "^0.2.111"
+    "@thecointech/ethers-provider": "^0.2.125",
+    "@thecointech/hardware-wallet": "^0.2.125",
+    "@thecointech/logging": "^0.2.125"
   },
   "devDependencies": {
-    "jest": "*"
+    "@thecointech/electron-utils": "^0.2.125"
   },
-  "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
+  "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
 }

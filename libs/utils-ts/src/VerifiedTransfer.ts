@@ -3,7 +3,7 @@ import { keccak256 } from '@ethersproject/solidity';
 import { arrayify } from '@ethersproject/bytes';
 import { verifyMessage } from '@ethersproject/wallet';
 import type { Signer } from "@ethersproject/abstract-signer";
-import type { CertifiedTransferRequest } from "@thecointech/types";
+import type { AnyTransfer, CertifiedTransferRequest } from "@thecointech/types";
 
 function GetHash(
   chainId: number,
@@ -64,3 +64,13 @@ export async function BuildVerifiedXfer(
   };
   return r;
 }
+
+export const isCertTransfer = (transfer: AnyTransfer): transfer is CertifiedTransferRequest => (
+  typeof (transfer as CertifiedTransferRequest).chainId == "number" &&
+  typeof (transfer as CertifiedTransferRequest).from == "string" &&
+  typeof (transfer as CertifiedTransferRequest).to == "string" &&
+  typeof (transfer as CertifiedTransferRequest).fee == "number" &&
+  typeof (transfer as CertifiedTransferRequest).value == 'number' &&
+  typeof (transfer as CertifiedTransferRequest).timestamp == "number" &&
+  typeof (transfer as CertifiedTransferRequest).signature == "string"
+)

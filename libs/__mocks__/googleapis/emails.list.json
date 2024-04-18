@@ -1,20 +1,4 @@
 {
-  "config": {
-    "url": "https://www.googleapis.com/gmail/v1/users/me/messages?q=redirect%20interac%20-remember%20-expired%20-label%3Aetransfer-deposited%20-label%3Aetransfer-rejected",
-    "method": "GET",
-    "headers": {
-      "x-goog-api-client": "gdcl/3.2.1 gl-node/14.15.5 auth/5.9.2",
-      "Accept-Encoding": "gzip",
-      "User-Agent": "google-api-nodejs-client/3.2.1 (gzip)",
-      "Authorization": "Bearer ya29.a0ARrdaM8k7kiKYMIV3oordclfqxOBeoPJqrB34VKiBFySTGRW3D_WubfuCClPmrP3-0y7WDwdp5sAMcdFT7fx1myIBChj92ctWGBlSV086Zb13QH5Z3WsTQtnGnvk0T0awMo9kazMK84vRC0g0K8M7pVhxwVsgg",
-      "Accept": "application/json"
-    },
-    "params": {
-      "q": "redirect interac -remember -expired -label:etransfer-deposited -label:etransfer-rejected"
-    },
-    "retry": true,
-    "responseType": "json"
-  },
   "data": {
     "messages": [
       {

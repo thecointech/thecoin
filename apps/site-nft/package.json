@@ -3,7 +3,7 @@
   "productName": "THECoin: NFT",
   "private": true,
   "type": "module",
-  "version": "0.2.111",
+  "version": "0.2.125",
   "description": "THECoin NFT: some neat tagline",
   "repository": {
     "type": "git",
@@ -11,21 +11,22 @@
     "directory": "apps/site-nft"
   },
   "author": "Stephen Taylor",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "preanalyze": "yarn clean:analyze",
     "analyze": "node ./internals/scripts/analyze.js",
-    "prebuild": "run-p build:semantic build:i18l",
-    "build": "yarn run-env exec=webpack --config ../../libs/site-base/internal/webpack/webpack.prod.mjs --progress",
-    "build:semantic": "node ./internals/buildSemantic.mjs",
-    "build:i18l": "run-s extract compile",
-    "clean": "run-p clean:*",
+    "build": "run -T run-s build:pre build:src",
+    "build:src": "yarn run-env exec=webpack --config ../../libs/site-base/internal/webpack/webpack.prod.mjs --progress",
+    "build:pre": "run -T run-p 'build:pre:*'",
+    "build:pre:semantic": "node ./internals/buildSemantic.mjs",
+    "build:pre:i18l": "run-s extract compile",
+    "clean": "run-p 'clean:*'",
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
     "clean:analyze": "rimraf stats.json",
     "deploy:rebuild": "yarn build",
-    "deploy": "yarn run-env ./deploy.ts",
-    "dev": "yarn run-env internals/server.mjs --port=3003",
+    "deploy": "run-env ./deploy.ts",
+    "dev": "run-env internals/server.mjs --port=3003",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
     "start": "firebase emulators:start --only hosting",
@@ -34,12 +35,11 @@
     "lint:src": "eslint . --ext .js,.ts,.jsx,.tsx",
     "lint:src:fix": "eslint --fix",
     "pretest": "yarn clean:test",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
+    "test": "run :jest",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern [sha512:contenthash:base64:6]",
-    "compile": "formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json"
+    "extract": "run -T formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
+    "compile": "run -T formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -51,14 +51,14 @@
     ]
   },
   "dependencies": {
-    "@thecointech/contract-nft": "^0.2.111",
-    "@thecointech/nft": "^0.2.111",
-    "@thecointech/shared": "^0.2.111",
-    "@thecointech/site-base": "^0.2.111",
-    "@toast-ui/react-image-editor": "3.14.2",
-    "exif-library": "https://github.com/FrozenKiwi/exif-library#1db15506"
+    "@thecointech/contract-nft": "^0.2.125",
+    "@thecointech/nft": "^0.2.125",
+    "@thecointech/shared": "^0.2.125",
+    "@thecointech/site-base": "^0.2.125",
+    "@toast-ui/react-image-editor": "^3.15.2",
+    "exif-library": "https://github.com/FrozenKiwi/exif-library#cf25837936add5820fcc25d36e18ed1d39f79bc6"
   },
   "devDependencies": {
-    "jest": "*"
+    "@thecointech/setenv": "^0.2.125"
   }
 }

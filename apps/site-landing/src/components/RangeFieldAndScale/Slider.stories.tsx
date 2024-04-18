@@ -32,8 +32,8 @@ export const Slider: Story<typeof meta["args"]> = ({ label, ...rest }) => (
     <RangeFieldAndScale
       {...rest}
       onChange={onChange}
-      label={{ id: 1, defaultMessage: label }}
-      tooltip={{ id: 2, defaultMessage: "I'm a tooltip" }}
+      label={{ id: "1", defaultMessage: label }}
+      tooltip={{ id: "2", defaultMessage: "I'm a tooltip" }}
     />
   </div>
 )

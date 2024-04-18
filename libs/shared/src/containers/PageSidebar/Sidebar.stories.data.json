@@ -1,33 +1,33 @@
 {
   "header": {
-    "title": { "id": 1, "defaultMessage": "Profile" },
+    "title": { "id": "1", "defaultMessage": "Profile" },
     "avatar": "https://sadanduseless.b-cdn.net/wp-content/uploads/2019/07/yawning-rabbits4.jpg",
     "accountName": "The quick brown fox jumps over the lazy dog.",
     "address": "0x1234567890123456789012345678901234567890"
   },
   "links": [
     {
-      "name": { "id": 2, "defaultMessage": "Home" },
+      "name": { "id": "2", "defaultMessage": "Home" },
       "to": "/",
       "icon": "home"
     },
     {
-      "name": { "id": 3, "defaultMessage": "Top up Balance" },
+      "name": { "id": "3", "defaultMessage": "Top up Balance" },
       "to": "/balance",
       "icon": "arrow circle up"
     },
     {
-      "name": { "id": 4, "defaultMessage": "Make a Payment" },
+      "name": { "id": "4", "defaultMessage": "Make a Payment" },
       "to": "/payment",
       "icon": "arrow circle right"
     },
     {
-      "name": { "id": 5, "defaultMessage": "Settings" },
+      "name": { "id": "5", "defaultMessage": "Settings" },
       "to": "/settings",
       "icon": "setting"
     },
     {
-      "name": { "id": 6, "defaultMessage": "Help" },
+      "name": { "id": "6", "defaultMessage": "Help" },
       "to": "/help",
       "icon": "life ring"
     }

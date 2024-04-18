@@ -15,7 +15,8 @@ type States =
   "billResult" |
 
   "error" |
-  "complete";
+  "complete" |
+  "cancelled";
 
 export const graph : StateGraph<States, "Bill"> = {
   initial: {
@@ -32,7 +33,7 @@ export const graph : StateGraph<States, "Bill"> = {
   },
   tcResult: {
     onError: transitionTo<States>(core.requestManual, "error"),
-    next: transitionTo<States>(core.toFiat, "converted"),
+    next: transitionTo<States, "Bill">(core.toFiat, "converted"),
   },
 
   converted: {
@@ -50,6 +51,9 @@ export const graph : StateGraph<States, "Bill"> = {
   },
   error: {
     next: core.manualOverride,
+  },
+  cancelled: {
+    next: transitionTo<States>(core.markComplete, 'complete'),
   },
   complete: null
 }

@@ -20,7 +20,7 @@ it('seeds the DB appropriately', async () => {
     let ts = from.toMillis();
     do {
       const entry = await db.collection(type).doc(ts.toString()).get();
-      expect(entry.exists);
+      expect(entry.exists).toBeTruthy();
       ts += validityInterval.as('milliseconds');
 
       const data = entry.data();

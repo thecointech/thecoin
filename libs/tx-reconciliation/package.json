@@ -1,7 +1,7 @@
 {
   "name": "@thecointech/tx-reconciliation",
-  "private": "true",
-  "version": "0.2.111",
+  "version": "0.2.125",
+  "private": true,
   "description": "The Coin: Process reconciliation between bank, blockchain, database and emails to ensure all transactions are completed appropriately",
   "type": "module",
   "keywords": [
@@ -9,12 +9,11 @@
   ],
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "scripts": {
-    "build": "yarn tsc -b tsconfig.build.json",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
+    "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [
@@ -38,15 +37,14 @@
     }
   },
   "dependencies": {
-    "@thecointech/bank-interface": "^0.2.111",
-    "@thecointech/broker-db": "^0.2.111",
-    "@thecointech/shared": "^0.2.111",
-    "@thecointech/tx-blockchain": "^0.2.111",
-    "@thecointech/tx-gmail": "^0.2.111",
-    "@thecointech/utilities": "^0.2.111",
+    "@thecointech/broker-db": "^0.2.125",
+    "@thecointech/shared": "^0.2.125",
+    "@thecointech/tx-blockchain": "^0.2.125",
+    "@thecointech/tx-gmail": "^0.2.125",
+    "@thecointech/utilities": "^0.2.125",
     "fastest-levenshtein": "^1.0.12"
   },
   "devDependencies": {
-    "jest": "*"
+    "@thecointech/bank-interface": "^0.2.125"
   }
 }

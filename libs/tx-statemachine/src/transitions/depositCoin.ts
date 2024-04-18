@@ -5,11 +5,10 @@ import { calculateOverrides, convertBN, toDelta } from './coinUtils';
 import { log } from '@thecointech/logging';
 import { makeTransition  } from '../makeTransition';
 import type { CertifiedTransferRequest, UberTransfer } from '@thecointech/types';
+import { isCertTransfer } from '@thecointech/utilities/VerifiedTransfer';
 
 // this deposit can operate on both bill & sell types.
 type BSActionTypes = "Bill"|"Sell";
-
-const isCertTransfer = (transfer: CertifiedTransferRequest|UberTransfer): transfer is CertifiedTransferRequest => !!(transfer as CertifiedTransferRequest).value;
 
 //
 // Deposit an eTransfer and update fiat balance

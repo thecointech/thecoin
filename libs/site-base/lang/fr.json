@@ -215,7 +215,7 @@
     "defaultMessage": "Créer un compte",
     "description": "app.account.create.form.buttonCreate: Button for the create account form page"
   },
-  "G5dlT": {
+  "G5dlT+": {
     "defaultMessage": "Copier",
     "description": "base.copyToClipboard.link: Link for the button for the copy to clipboard tool"
   },

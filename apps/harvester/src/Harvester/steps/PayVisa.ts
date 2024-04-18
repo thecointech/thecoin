@@ -5,10 +5,14 @@ import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
 import currency from 'currency.js';
 import { log } from '@thecointech/logging';
+import { notify, notifyError } from '../notify';
+import type { UberTransferAction } from '@thecointech/types';
 
 export const PayVisaKey = "PayVisa";
 
 export class PayVisa implements ProcessingStage {
+
+  readonly name = 'PayVisa';
 
   // How many days prior to the due date should we pay the visa?
   daysPrior = 3;
@@ -16,13 +20,18 @@ export class PayVisa implements ProcessingStage {
     if (config?.daysPrior) {
       this.daysPrior = Number(config.daysPrior);
     }
+    // We started running prodtest with 0 offset, continue
+    else if (process.env.CONFIG_NAME==='prodtest') {
+      this.daysPrior = 0;
+    }
   }
-
 
   async process(data: HarvestData, { wallet, creditDetails }: UserData) : Promise<HarvestDelta> {
     // Do we have a new due amount?  If so, we better pay it.
 
     log.info('Processing PayVisa');
+    // Note, we use the date from stepData, as the date recorded as
+    // state.toPayVisaDate is the date of the payment, not the due date
     const lastDueDate = getDataAsDate(PayVisaKey, data.state.stepData);
 
     if (!lastDueDate || (data.visa.dueDate > lastDueDate)) {
@@ -30,8 +39,17 @@ export class PayVisa implements ProcessingStage {
       const dateToPay = getDateToPay(data.visa.dueDate, this.daysPrior);
       log.info('PayVisa: dateToPay', dateToPay.toISO());
 
+      if (data.state.toPayVisa != undefined) {
+        log.error(
+          data.state,
+          'PayVisa: toPayVisa already set for {toPayVisa} with date: {toPayVisaDate}'
+        );
+        // But we continue regardless, cause we gotta keep up with payments
+        // TODO: perhaps turn toPay into an array?
+      }
+
+      // Send payment request
       // transfer visa dueAmount on dateToPay
-      const api = GetBillPaymentsApi();
       const payment = await BuildUberAction(
         creditDetails,
         wallet,
@@ -40,20 +58,33 @@ export class PayVisa implements ProcessingStage {
         124,
         dateToPay,
       )
-      const r = await api.uberBillPayment(payment);
+      const r = await sendVisaPayment(payment);
       if (r.status !== 200) {
         log.error("Error on uberBillPayment: ", r.data.message);
+
+        notifyError({
+          title: 'Harvester Error',
+          message: 'Submitting a payment request failed.  Please contact support.',
+        })
         // WHAT TO DO HERE???
       }
-      const harvesterBalance = (data.state.harvesterBalance ?? currency(0))
-        .subtract(data.visa.dueAmount);
+      else {
+        const remainingBalance = (data.state.harvesterBalance ?? currency(0))
+          .subtract(data.visa.dueAmount);
 
-      log.info('Sent payment request, new balance', harvesterBalance.toString());
-      return {
-        toPayVisa: data.visa.dueAmount,
-        harvesterBalance,
-        stepData: {
-          [PayVisaKey]: data.visa.dueDate.toISO()!,
+        notify({
+          icon: 'money.png',
+          title: 'Payment Request Sent',
+          message: `Visa balance of ${data.visa.dueAmount} is scheduled to be paid ${dateToPay.toLocaleString(DateTime.DATE_MED)}.`,
+        })
+
+        log.info('Sent payment request, current balance remaining ', remainingBalance.toString());
+        return {
+          toPayVisa: data.visa.dueAmount.add(data.state.toPayVisa ?? 0),
+          toPayVisaDate: dateToPay,
+          stepData: {
+            [PayVisaKey]: data.visa.dueDate.toISO()!,
+          }
         }
       }
     }
@@ -71,4 +102,20 @@ export function getDateToPay(dateToPay: DateTime, daysPrior: number) {
     }
   }
   return dateToPay;
+}
+
+async function sendVisaPayment(payment: UberTransferAction) {
+  if (process.env.HARVESTER_DRY_RUN) {
+    return {
+      status: 200,
+      data: {
+        message: "DRY RUN: Visa payment not sent",
+      }
+    }
+  }
+  // Send payment request
+  // transfer visa dueAmount on dateToPay
+  const api = GetBillPaymentsApi();
+  const r = await api.uberBillPayment(payment);
+  return r;
 }

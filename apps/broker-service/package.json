@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/broker-service",
-  "version": "0.2.111",
+  "version": "0.2.125",
   "private": true,
   "type": "module",
   "description": "TheCoin simple broker services.  This sample API is an example of how to setup the simplest low-volume exchange, when combined with the included server code, without external dependencies",
@@ -10,7 +10,7 @@
   ],
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
@@ -19,20 +19,19 @@
   "scripts": {
     "start": "run-env ./build/main.js",
     "dev": "yarn run-env --inspect=9232 ./src/main.ts",
-    "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
-    "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
-    "prod:beta": "cross-env CONFIG_NAME=prodbeta yarn dev",
+    "dev:live": "run -T cross-env CONFIG_NAME=devlive yarn dev",
+    "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn dev",
+    "prod:beta": "run -T cross-env CONFIG_NAME=prodbeta yarn dev",
     "deploy": "yarn run-env ./deploy.ts",
-    "build": "yarn tsc -b tsconfig.build.json",
-    "gen:swagger": "yarn tsoa spec-and-routes",
+    "build": "run -T tsc -b",
+    "gen:swagger": "run -T tsoa spec-and-routes",
     "clean": "rimraf ./build && rimraf ./src/api",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
+    "test": "run :jest",
     "test:coverage": "yarn test --coverage",
     "gcp-build": ""
   },
   "engines": {
-    "node": "16.x.x"
+    "node": "18.x.x"
   },
   "files": [
     "build/**/*"
@@ -40,22 +39,23 @@
   "main": "./build/main.js",
   "dependencies": {
     "@google-cloud/firestore": "4.12.3",
-    "@google-cloud/storage": "^6.0.0",
-    "@thecointech/contract-core": "^0.2.111",
-    "@thecointech/contract-plugins": "^0.2.111",
-    "@thecointech/email": "^0.2.111",
-    "@thecointech/logging": "^0.2.111",
-    "@thecointech/pricing": "^0.2.111",
-    "@thecointech/setenv": "^0.2.111",
-    "@thecointech/signers": "^0.2.111",
-    "@thecointech/tx-bill": "^0.2.111",
-    "@thecointech/tx-etransfer": "^0.2.111",
-    "@thecointech/utilities": "^0.2.111",
-    "@tsoa/runtime": "^4.1.0",
-    "axios": "0.26.1",
+    "@google-cloud/storage": "^7.7.0",
+    "@thecointech/async": "^0.2.125",
+    "@thecointech/contract-core": "^0.2.125",
+    "@thecointech/contract-plugins": "^0.2.125",
+    "@thecointech/email": "^0.2.125",
+    "@thecointech/logging": "^0.2.125",
+    "@thecointech/pricing": "^0.2.125",
+    "@thecointech/setenv": "^0.2.125",
+    "@thecointech/signers": "^0.2.125",
+    "@thecointech/tx-bill": "^0.2.125",
+    "@thecointech/tx-etransfer": "^0.2.125",
+    "@thecointech/utilities": "^0.2.125",
+    "@tsoa/runtime": "6.2.0",
+    "axios": "1.6.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "googleapis": "49.0.0",
+    "googleapis": "^129.0.0",
     "luxon": "3.3.0",
     "openapi-types": "^7.2.3",
     "swagger-tools": "^0.10.4",
@@ -63,7 +63,6 @@
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",
-    "@types/swagger-ui-express": "^4.1.1",
-    "jest": "*"
+    "@types/swagger-ui-express": "^4.1.1"
   }
 }

@@ -44,6 +44,8 @@ export interface EncryptedPacket {
   version: string;
 }
 
+// IMPORTANT: Any changes to this structure requires
+// updating the matching isCertTransfer function
 export interface CertifiedTransferRequest {
   chainId: number;
   from: string;
@@ -59,6 +61,8 @@ export interface CertifiedTransfer {
   signature: string;
 }
 
+// IMPORTANT: Any changes to this structure requires
+// updating the matching isUberTransfer function
 export type UberTransfer = {
   chainId: number;
   from: string,
@@ -75,6 +79,8 @@ export type UberTransferAction = {
   instructionPacket: EncryptedPacket,
   signature: string,
 }
+
+export type AnyTransfer = CertifiedTransferRequest | UberTransfer;
 
 export interface BrokerStatus {
   address: string;

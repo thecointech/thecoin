@@ -3,6 +3,7 @@ import { addExtra } from 'puppeteer-extra';
 import { getPlugins } from './puppeteer-plugins';
 import { rootFolder } from '../paths';
 import path from "path";
+import { registerElementAttrFns } from './elements';
 
 const puppeteer = addExtra(puppeteerVanilla);
 const plugins = getPlugins();
@@ -36,6 +37,10 @@ export async function startPuppeteer(headless?: boolean) {
     deviceScaleFactor: 1,
   });
   _browser = browser;
+
+  // Always inject helper functions
+  await registerElementAttrFns(page);
+
   return { browser, page };
 }
 

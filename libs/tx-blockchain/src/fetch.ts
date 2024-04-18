@@ -32,7 +32,7 @@ export async function loadAndMergeHistory(fromBlock: number, contract: TheCoin, 
   try {
     const contractAddress = contract.address;
     const provider = new Erc20Provider();
-    const allTxs = await provider.getERC20History({address, contractAddress, startBlock: fromBlock});
+    const allTxs = await provider.getERC20History({address, contractAddress, fromBlock});
 
     // Fee's are listed separately here, but treated as a single TX in the rest of TheCoin
     //const xferAssist = NormalizeAddress(process.env.WALLET_BrokerTransferAssistant_ADDRESS!);
@@ -90,8 +90,10 @@ async function fetchExactTimestamps(contract: TheCoin, provider: Erc20Provider, 
 
 async function filterExactTransfers(contract: TheCoin, provider: Erc20Provider, fromBlock: number, addresses: [string|null, string|null]) {
   const filter = contract.filters.ExactTransfer(...addresses);
-  (filter as any).startBlock = fromBlock;
-  const logs = await provider.getEtherscanLogs(filter, "and");
+  const logs = await provider.getEtherscanLogs({
+    ...filter,
+    fromBlock
+  }, "and");
   return  logs.reduce((acc, item) => ({
     ...acc,
     [item.transactionHash]: contract.interface.parseLog(item).args.timestamp.toNumber()

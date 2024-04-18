@@ -4,6 +4,8 @@ import { log } from '@thecointech/logging';
 
 export class RoundUp implements ProcessingStage {
 
+  readonly name = 'RoundUp';
+
   roundPoint = 100;
 
   constructor(args?: Record<string, string|number>) {
@@ -14,8 +16,8 @@ export class RoundUp implements ProcessingStage {
 
   async process(data: HarvestData) {
     if (data.state.toETransfer) {
-      log.info(`Round up ${data.state.toETransfer} by ${this.roundPoint}`);
       const toETransfer = currency(this.roundPoint * Math.ceil(data.state.toETransfer.value / this.roundPoint));
+      log.info(`Round up ${data.state.toETransfer} by ${this.roundPoint} to ${toETransfer}`);
       return { toETransfer };
     }
     return {};

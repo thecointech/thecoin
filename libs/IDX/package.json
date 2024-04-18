@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/idx",
-  "version": "0.2.111",
+  "version": "0.2.125",
   "description": "TheCoin: Interface to IDX backend for accounts",
   "type": "module",
   "keywords": [
@@ -15,18 +15,20 @@
     "url": "git+https://github.com/thecointech/thecoin.git",
     "directory": "libs/idx"
   },
+  "installConfig": {
+    "hoistingLimits": "workspaces"
+  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "prepublishOnly": "run -T rimraf ./build/.buildinfo",
     "_deploy": "yarn run-env ./scripts/deploy.ts",
     "emulator": "yarn ceramic daemon --config ./tools/daemon.inmemory.config.json",
     "graphql": "yarn run-env ./scripts/run-graphql.ts",
-    "build": "yarn tsc --project tsconfig.build.json",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
+    "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
     "bootstrap": "yarn _deploy && yarn build"
   },
@@ -43,14 +45,18 @@
   "dependencies": {
     "@composedb/client": "^0.4.4",
     "@didtools/pkh-ethereum": "^0.3.0",
-    "@thecointech/logging": "^0.2.111",
-    "@thecointech/utilities": "^0.2.111",
+    "@thecointech/logging": "^0.2.125",
+    "@thecointech/utilities": "^0.2.125",
     "did-session": "^2.0.1"
   },
   "devDependencies": {
+    "@ceramicnetwork/cli": "^2.29.0",
+    "@composedb/cli": "^0.4.4",
+    "@composedb/devtools": "^0.4.4",
+    "@composedb/devtools-node": "^0.4.4",
     "@composedb/types": "^0.4.4",
     "@glazed/devtools": "^0.2.0",
-    "jest": "*"
+    "@thecointech/setenv": "workspace:^"
   },
-  "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
+  "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
 }
