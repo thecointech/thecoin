@@ -14,7 +14,12 @@ type MailjetResponse = {
   Messages: [ { Status: "success"|"error" } ]
 }
 
-export async function SendMail(subject: string, message: string, toEmail?: string) {
+const getSubject = (subject: string, markEnvironment: boolean) =>
+  markEnvironment
+    ? `${process.env.CONFIG_NAME}: ${subject}`
+    : subject
+
+export async function SendMail(subject: string, message: string, toEmail?: string, markEnvironment=true) {
 	const options = {
 		Messages: [
 			{
@@ -27,7 +32,7 @@ export async function SendMail(subject: string, message: string, toEmail?: strin
 						Email: toEmail ?? "stephen.taylor.dev@gmail.com",
 					},
 				],
-				Subject: `${process.env.CONFIG_NAME}: ${subject}`,
+				Subject: getSubject(subject, markEnvironment),
 				TextPart: message
 			},
 		],
@@ -36,8 +41,11 @@ export async function SendMail(subject: string, message: string, toEmail?: strin
   const mj = await getClient();
 	const response = await mj.post('send', { version: 'v3.1' }).request<MailjetResponse>(options);
 
-	// Render the index route on success
-	return response.body.Messages.every(m => m.Status == "success");
+  const failed = response.body.Messages.filter(m => m.Status != "success");
+	failed.forEach(m => {
+    log.error(`Failed sending email: ${JSON.stringify(m)}`)
+  })
+	return failed.length == 0;
 }
 
 export async function SendTemplate(to: string, template: number, variables: object)

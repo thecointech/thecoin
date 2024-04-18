@@ -1,7 +1,7 @@
 import Decimal from "decimal.js-light";
 import { DateTime } from "luxon";
 import { TypedActionContainer, getCurrentState } from "../types";
-import { FXRate, RatesApi } from "@thecointech/pricing";
+import { FXRate, GetRatesApi } from '@thecointech/apis/pricing';
 import { toCoinDecimal, toHumanDecimal } from "@thecointech/utilities";
 import { log } from "@thecointech/logging";
 import { nextOpenTimestamp } from "@thecointech/market-status";
@@ -12,6 +12,7 @@ import { ActionDataTypes } from '@thecointech/broker-db';
 type Currency = "fiat" | "coin";
 type XferAction = "Buy" | "Sell" | "Bill";
 type Converter = (v: Decimal, rate: FXRate) => Decimal;
+
 //
 // Convert fiat to coin
 export const  toCoin = makeTransition<XferAction>( "toCoin", async (container) =>
@@ -38,17 +39,19 @@ async function doConversion(container: TypedActionContainer<XferAction>, from: C
   }
 
   // First, what is our settlement date here?
-  const settledOn = getSettleDate(container);
-  const nextOpen = await nextOpenTimestamp(settledOn);
-  if (nextOpen >= Date.now())
+  const settledOn = await getSettledAt(container);
+  log.debug(`Conversion - settledOn: ${settledOn}`);
+
+  if (DateTime.now() <= settledOn)
     return null;
 
-  const date = DateTime.fromMillis(nextOpen);
-  const convertAt = await getConvertAt(date);
-  if (!convertAt) return { error: `Failed fetching exchange rate for ${date}` };
+  const convertAt = await getConvertAt(settledOn);
+  if (!convertAt) return { error: `Failed fetching exchange rate for ${settledOn}` };
+
+  log.debug(`Conversion - convertAt: ${convertAt.fxRate * convertAt.sell}`);
 
   return {
-    date,
+    date: settledOn,
     [from]: new Decimal(0),
     [to]: multiplier(fromValue, convertAt),
   }
@@ -56,7 +59,7 @@ async function doConversion(container: TypedActionContainer<XferAction>, from: C
 
 // Fetch conversion rate from server
 async function getConvertAt(date: DateTime) {
-  const ratesApi = new RatesApi(undefined, process.env.URL_SERVICE_RATES);
+  const ratesApi = GetRatesApi();
   const rate = await ratesApi.getSingle(124, date.toMillis());
   if (rate.status != 200 || !rate.data.sell) {
     log.error(`Error fetching rate for: ${date}`);
@@ -67,15 +70,19 @@ async function getConvertAt(date: DateTime) {
   // return fxRate * (from == "fiat" ? sell : buy);
 }
 
-function getSettleDate(container: TypedActionContainer<XferAction>) {
+async function getSettledAt(container: TypedActionContainer<XferAction>) {
   const action = container.action.data.initial;
+  const requestDate = container.action.data.date;
 
   if (isSellAction(action)) {
     if (isUberTransfer(action.transfer)) {
+      // For future-dated transfers we take the exact timestamp
       return DateTime.fromMillis(action.transfer.transferMillis);
     }
   }
-  return container.action.data.date;
+  // For immediate transfers, we just take the next open timestamp
+  const nextOpen = await nextOpenTimestamp(requestDate);
+  return DateTime.fromMillis(nextOpen)
 }
 
 export const isSellAction = (action: ActionDataTypes[XferAction]["initial"]): action is ActionDataTypes["Sell"|"Bill"]["initial"] => (

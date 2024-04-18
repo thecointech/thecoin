@@ -1,6 +1,6 @@
 import { Contract } from '@ethersproject/contracts';
-import type { UberConverter } from './types/contracts/UberConverter';
-import UberSpec from './contracts/contracts/UberConverter.sol/UberConverter.json' assert {type: "json"};
+import type { UberConverter } from './codegen/contracts/UberConverter';
+import UberSpec from './codegen/contracts/UberConverter.sol/UberConverter.json' assert {type: "json"};
 import { getProvider } from '@thecointech/ethers-provider';
 
 const getAbi = () => UberSpec.abi;

@@ -1,0 +1,103 @@
+[
+    {
+        "type": "navigation",
+        "to": "https://en.wikipedia.org/wiki/Main_Page",
+        "timestamp": 1712850064390
+    },
+    {
+        "type": "click",
+        "timestamp": 1712850067738,
+        "clickX": 744,
+        "clickY": 426,
+        "tagName": "A",
+        "role": null,
+        "selector": "DIV#mp-itn > UL:nth-child(3) > LI:nth-child(3) > A:nth-child(1)",
+        "coords": {
+            "top": 412.375,
+            "left": 725.0625,
+            "height": 16,
+            "width": 98.8125
+        },
+        "font": {
+            "font": "14px / 22px sans-serif",
+            "color": "rgb(51, 102, 204)",
+            "size": "14px",
+            "style": "normal"
+        },
+        "label": null,
+        "text": "NCAA Division I",
+        "nodeValue": "NCAA Division I",
+        "siblingText": [
+            "basketball"
+        ]
+    },
+    {
+        "type": "navigation",
+        "to": "https://en.wikipedia.org/wiki/NCAA_Division_I",
+        "timestamp": 1712850067813
+    },
+    {
+        "type": "click",
+        "timestamp": 1712850074371,
+        "clickX": 158,
+        "clickY": 355,
+        "tagName": "DIV",
+        "role": null,
+        "selector": "LI#toc-Men\\'s_team_sports > A:nth-child(1) > DIV:nth-child(1)",
+        "coords": {
+            "top": 340.40625,
+            "left": 80,
+            "height": 28,
+            "width": 187
+        },
+        "font": {
+            "font": "14px sans-serif",
+            "color": "rgb(51, 102, 204)",
+            "size": "14px",
+            "style": "normal"
+        },
+        "label": null,
+        "text": "Men's team sports",
+        "nodeValue": "Men's team sports",
+        "siblingText": []
+    },
+    {
+        "type": "value",
+        "timestamp": 1712850078937,
+        "clickX": 485,
+        "clickY": 5995,
+        "tagName": "TD",
+        "role": null,
+        "selector": "TABLE:nth-child(43) > TBODY:nth-child(2) > TR:nth-child(4) > TD:nth-child(2)",
+        "coords": {
+            "top": 5982.578125,
+            "left": 374.65625,
+            "height": 28.59375,
+            "width": 127.59375
+        },
+        "font": {
+            "font": "14px / 22px sans-serif",
+            "color": "rgb(32, 33, 34)",
+            "size": "14px",
+            "style": "normal"
+        },
+        "label": null,
+        "text": "Soccer",
+        "nodeValue": "",
+        "siblingText": [
+            "4",
+            "Soccer",
+            "1959",
+            "204",
+            "23",
+            "9.9",
+            "Fall",
+            "Saint Louis (10)"
+        ],
+        "name": "defaultValue",
+        "parsing": {
+            "type": "text",
+            "format": null
+        }
+    }
+]

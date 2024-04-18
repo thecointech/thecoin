@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { URL } from 'url';
 
 let translationFR = new URL(`./fr.json`, import.meta.url);
 let translationEN = new URL(`./en.json`, import.meta.url);

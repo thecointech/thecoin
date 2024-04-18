@@ -6,7 +6,7 @@ import { GetTransferSigner } from '@thecointech/utilities/VerifiedTransfer'
 import { ValidateError } from '@tsoa/runtime';
 import { getBrokerCADAddress } from '../status';
 import constants from '../status/constant.json' assert { type: 'json' };
-import { GetContract } from './Wallet';
+import { GetContract } from '../signer/Wallet';
 
 type AnyAction = CertifiedTransfer | UberTransferAction;
 

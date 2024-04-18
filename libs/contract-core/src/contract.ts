@@ -1,6 +1,6 @@
 import { Contract } from '@ethersproject/contracts';
-import { TheCoin } from './types';
-import TheCoinSpec from './contracts/contracts/TheCoin.sol/TheCoin.json' assert {type: "json"};
+import { TheCoin } from './codegen';
+import TheCoinSpec from './codegen/contracts/TheCoin.sol/TheCoin.json' assert {type: "json"};
 import { getProvider } from '@thecointech/ethers-provider';
 
 //

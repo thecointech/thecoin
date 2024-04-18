@@ -1,6 +1,6 @@
 import { ActionType } from '@thecointech/broker-db';
 import { AnyActionContainer } from '@thecointech/tx-statemachine';
-import React, { useState } from "react";
+import { useState } from "react";
 import { List, Icon } from "semantic-ui-react";
 import { TransferRow } from "./TransferRow";
 import { TransferRenderer } from "./types";

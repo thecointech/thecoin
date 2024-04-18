@@ -5,7 +5,7 @@ import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import parser from '@solidity-parser/parser'
-import type { PluginAndPermissionsStructOutput } from './types/contracts/IPluggable';
+import type { PluginAndPermissionsStructOutput } from './codegen/contracts/IPluggable';
 import type { BaseASTNode, ContractDefinition, FunctionDefinition, StateVariableDeclaration, VariableDeclarationStatement, VariableDeclaration, FunctionCall, MemberAccess, Identifier, Expression, BinaryOperation, TupleExpression, ReturnStatement, IndexAccess, IfStatement, ExpressionStatement, Block } from '@solidity-parser/parser/dist/src/ast-types';
 import type { ContractState, PluginBalanceMod } from './types';
 import { getPluginLogs, updateState } from './logs';

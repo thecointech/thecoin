@@ -4,11 +4,12 @@ import { GraphTxHistory, Theme } from '.';
 import { Transaction } from '@thecointech/tx-blockchain';
 import { DateTime } from 'luxon';
 import { withStore, withReducer } from '@thecointech/storybookutils';
-import { FXRate, FxRateReducer } from 'containers/FxRate';
+import { FXRate, FxRateReducer } from '../../containers/FxRate';
 import { toCoin } from '@thecointech/utilities'
 import Decimal from 'decimal.js-light';
-import { COIN_EXP, PluginBalanceMod } from '@thecointech/contract-core';
+import { COIN_EXP } from '@thecointech/contract-core';
 import { getFxRate } from '@thecointech/fx-rates';
+import { PluginBalanceMod } from '@thecointech/contract-plugins/types';
 
 export default {
   title: 'Shared/GraphTxHistory',
@@ -110,7 +111,7 @@ const genFxRates = ({from, to}: {from: number, to: number}) => {
       target: 124,
       validFrom: date,
       validTill: date + incr,
-    })
+    } as any)
     date = date + incr;
   }
   return r;

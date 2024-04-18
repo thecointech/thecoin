@@ -328,7 +328,7 @@ contract ShockAbsorber is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
       // console.log("additionalRequired: ", additionalRequired);
       int maxCushion = _calcCushionDown(userCushion, int(coinBalance), timeMs);
       // console.log("maxCushion: ", uint(maxCushion));
-      require(additionalRequired <= uint(maxCushion), "Insufficient funds");
+      require(int(additionalRequired) <= maxCushion, "Insufficient funds");
       // transfer additionalRequired to this users account
       theCoin.pl_transferTo(user, additionalRequired, timeMs);
     }

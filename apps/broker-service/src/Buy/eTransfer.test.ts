@@ -1,4 +1,4 @@
-import { GetWallet } from "../exchange/Wallet";
+import { GetWallet } from "../signer/Wallet";
 import { GenerateCode } from './eTransfer'
 import { GetSignedMessage } from "@thecointech/utilities/SignedMessages";
 

@@ -37,6 +37,26 @@ export function toDepositData(email: gmail_v1.Schema$Message): eTransferData | n
     return null;
   }
 
+  // PRODTEST-ONLY-CODE
+  // In prodtest we allow overriding the recieved date
+  if (process.env.CONFIG_NAME === "prodtest") {
+    const overrideDate = body.match(/{ dateOverride: "([^}]+)" }/)
+    if (overrideDate) {
+      const d = DateTime.fromISO(overrideDate[1]);
+      if (d.isValid)
+        return {
+          raw: email,
+          recieved: d,
+          id: getSourceId(url),
+          depositUrl: url.toString(),
+          address,
+          cad: new Decimal(amount),
+          ...userInfo
+        }
+    }
+  }
+  // END PRODTEST-ONLY-CODE
+
   return {
     raw: email,
     recieved: dateRecieved,
@@ -119,9 +139,6 @@ function getSubject(email: gmail_v1.Schema$Message) {
   // First, ignore any emails with no subject
   if (!subject)
     return null;
-  // filter an RE emails
-  if (subject.startsWith("Re: [REDIRECT:]"))
-    return null;
   // Filter expired notifications
   if (subject.endsWith("expired."))
     return null;
@@ -134,19 +151,19 @@ function getSubject(email: gmail_v1.Schema$Message) {
 }
 
 function getSubjectAnglais(subject: string) {
-  const redirectHeader = "[REDIRECT:] INTERAC e-Transfer: "
+  const redirectHeader = "INTERAC e-Transfer: "
   if (!subject.endsWith("sent you money.") || !subject.startsWith(redirectHeader)) {
     return null;
   }
-  return subject.substr(redirectHeader.length);
+  return subject.substring(redirectHeader.length);
 }
 
 function getSubjectFrancais(subject: string) {
-  const redirectHeader = "[REDIRECT:] Virement INTERAC"
+  const redirectHeader = "Virement INTERAC"
   if (!subject.endsWith("vous a envoyé des fonds.") || !subject.startsWith(redirectHeader)) {
     return null;
   }
-  return subject.substr(redirectHeader.length);
+  return subject.substring(redirectHeader.length);
 }
 
 function getBody(email: gmail_v1.Schema$Message) {

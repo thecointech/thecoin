@@ -1,4 +1,3 @@
-import React from 'react';
 import { ClientSelect } from '../Clients/ClientSelect';
 import { fetchIncomplete } from './data';
 

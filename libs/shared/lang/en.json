@@ -3,13 +3,29 @@
     "defaultMessage": "Password",
     "description": "Default password entry label"
   },
+  "+yDOnO": {
+    "defaultMessage": "We don't have any transactions matching your query.",
+    "description": "app.transactionList.notransactions: For when we have no transactions to display for the transaction history"
+  },
   "0jq3Gk": {
     "defaultMessage": "weak",
     "description": "Password complexity indicator"
   },
+  "0zfmOG": {
+    "defaultMessage": "Cancel",
+    "description": "shared.modalOperation.cancel: Text for the cancel button for the modal tool"
+  },
   "1zKoXW": {
     "defaultMessage": "Must be less than {max}",
     "description": "UxNumeric error value too high"
+  },
+  "2Rp4o1": {
+    "defaultMessage": "Password",
+    "description": "shared.login.passwordLabel"
+  },
+  "53+jpb": {
+    "defaultMessage": "Unlock failed: Please check your password and try again.",
+    "description": "shared.login.decryptIncorrectPwd"
   },
   "7ACrRj": {
     "defaultMessage": "Please enter your password",
@@ -31,6 +47,10 @@
     "defaultMessage": "An email address requires the '@' symbol",
     "description": "Default placeholder for email feild"
   },
+  "E+Cwnl": {
+    "defaultMessage": "Ok",
+    "description": "shared.modalOperation.ok: Text for the ok button for the modal tool"
+  },
   "EsoShw": {
     "defaultMessage": "Connecting to your Web3 provider",
     "description": "Message to display while waiting for user to complete Web3 connection"
@@ -39,9 +59,21 @@
     "defaultMessage": "Please enter your password",
     "description": "Error when logging in without password"
   },
+  "FSygB8": {
+    "defaultMessage": "Logging into your account.",
+    "description": "shared.login.decryptHeader"
+  },
   "G5dlT+": {
     "defaultMessage": "Copy",
     "description": "base.copyToClipboard.link: Link for the button for the copy to clipboard tool"
+  },
+  "HBuFPg": {
+    "defaultMessage": "Or select a different account from the account switcher. You can find it at the top menu.",
+    "description": "shared.login.textAtTheBottom: Text at the bottom for the login page before the account name"
+  },
+  "HPpZfH": {
+    "defaultMessage": "Please wait, We are {percentComplete}% done opening your account.",
+    "description": "shared.login.decryptInProgress"
   },
   "J1aGsC": {
     "defaultMessage": "Please enter a valid number",
@@ -54,6 +86,14 @@
   "OFKzhW": {
     "defaultMessage": "Show Password",
     "description": "Label for toggle showing password in input"
+  },
+  "QdopU+": {
+    "defaultMessage": "WELCOME BACK TO THE COIN",
+    "description": "shared.login.aboveTheTitle: Title above the main Title for the create account form page"
+  },
+  "QoJgfV": {
+    "defaultMessage": "Log In",
+    "description": "shared.login.button: Text of the button for the login page"
   },
   "SCn4XT": {
     "defaultMessage": "ineffectual",
@@ -71,6 +111,14 @@
     "defaultMessage": "Coming Soon",
     "description": "shared.widgets.availablesoon.title:Title for the Widget Available Soon in the app"
   },
+  "bi1h2T": {
+    "defaultMessage": "From",
+    "description": "shared.transactionList.from: For description in comment section for the transaction history"
+  },
+  "c4Q+vA": {
+    "defaultMessage": "Sent",
+    "description": "shared.transactionList.sent: For title in comment section for the transaction history"
+  },
   "cINV4p": {
     "defaultMessage": "Copied to your clipboard",
     "description": "base.copyToClipboard.messageSuccess: Success message for the button for the copy to clipboard tool"
@@ -79,17 +127,33 @@
     "defaultMessage": "Address",
     "description": "Default label for ethereum address field"
   },
+  "f5vm4G": {
+    "defaultMessage": "Loading...",
+    "description": "shared.transactionList.loading: For loading in comment section for the transaction history"
+  },
   "gqUbj6": {
     "defaultMessage": "moderate",
     "description": "Password complexity indicator"
+  },
+  "hP2Jyj": {
+    "defaultMessage": "Received",
+    "description": "shared.transactionList.received: For title in comment section for the transaction history"
   },
   "hiKmVf": {
     "defaultMessage": "An address is 40 characters long, and consists only of numbers and the letters A-F",
     "description": "Describe a valid format for an ethereum address"
   },
+  "iAyWom": {
+    "defaultMessage": "Log into",
+    "description": "shared.login.title: Title for the create account form page"
+  },
   "jNMJW6": {
     "defaultMessage": "Restore Account",
     "description": "shared.account.uploadWallet.aboveTheTitle: The above the title title for the upload your account page"
+  },
+  "k5hxGk": {
+    "defaultMessage": "To",
+    "description": "shared.transactionList.to: For description in comment section for the transaction history"
   },
   "mZ3WoP": {
     "defaultMessage": "vulnerable",
@@ -103,97 +167,29 @@
     "defaultMessage": "An ethereum address",
     "description": "shared.uxaddress.address.error: Error Message for the address field in make a payment / coin transfer"
   },
-  "rMCWq0": {
-    "defaultMessage": "Home",
-    "description": "shared.NotFoundPage.button: Go back to homepage button for the 404 page"
-  },
-  "shared.balance.title": {
+  "r8PHp4": {
     "defaultMessage": "Recent Operations",
     "description": "shared.balance.title: Title for the congratulations page"
   },
-  "shared.login.aboveTheTitle": {
-    "defaultMessage": "WELCOME BACK TO THE COIN",
-    "description": "shared.login.aboveTheTitle: Title above the main Title for the create account form page"
-  },
-  "shared.login.button": {
-    "defaultMessage": "Log In",
-    "description": "shared.login.button: Text of the button for the login page"
-  },
-  "shared.login.decryptHeader": {
-    "defaultMessage": "Logging into your account.",
-    "description": "shared.login.decryptHeader"
-  },
-  "shared.login.decryptInProgress": {
-    "defaultMessage": "Please wait, We are {percentComplete}% done opening your account.",
-    "description": "shared.login.decryptInProgress"
-  },
-  "shared.login.decryptIncorrectPwd": {
-    "defaultMessage": "Unlock failed: Please check your password and try again.",
-    "description": "shared.login.decryptIncorrectPwd"
-  },
-  "shared.login.passwordLabel": {
-    "defaultMessage": "Password",
-    "description": "shared.login.passwordLabel"
-  },
-  "shared.login.placeholder.wallet": {
-    "defaultMessage": "Wallet Password",
-    "description": "shared.login.placeholder.wallet: PLaceholder for the Passford field in the create account form"
-  },
-  "shared.login.textAtTheBottom": {
-    "defaultMessage": "Or select a different account from the account switcher. You can find it at the top menu.",
-    "description": "shared.login.textAtTheBottom: Text at the bottom for the login page before the account name"
-  },
-  "shared.login.title": {
-    "defaultMessage": "Log into",
-    "description": "shared.login.title: Title for the create account form page"
-  },
-  "shared.modalOperation.cancel": {
-    "defaultMessage": "Cancel",
-    "description": "shared.modalOperation.cancel: Text for the cancel button for the modal tool"
-  },
-  "shared.modalOperation.ok": {
-    "defaultMessage": "Ok",
-    "description": "shared.modalOperation.ok: Text for the ok button for the modal tool"
-  },
-  "shared.transactionList.filters.hide": {
-    "defaultMessage": "Hide filters",
-    "description": "shared.transactionList.filters.hide: Label for the filter show / hide system"
-  },
-  "shared.transactionList.filters.show": {
-    "defaultMessage": "Show filters",
-    "description": "shared.transactionList.filters.show: Label for the filter show / hide system"
-  },
-  "shared.transactionList.from": {
-    "defaultMessage": "From",
-    "description": "shared.transactionList.from: For description in comment section for the transaction history"
-  },
-  "shared.transactionList.loading": {
-    "defaultMessage": "Loading...",
-    "description": "shared.transactionList.loading: For loading in comment section for the transaction history"
-  },
-  "shared.transactionList.notransactions": {
-    "defaultMessage": "We don't have any transactions matching your query.",
-    "description": "app.transactionList.notransactions: For when we have no transactions to display for the transaction history"
-  },
-  "shared.transactionList.received": {
-    "defaultMessage": "Received",
-    "description": "shared.transactionList.received: For title in comment section for the transaction history"
-  },
-  "shared.transactionList.sent": {
-    "defaultMessage": "Sent",
-    "description": "shared.transactionList.sent: For title in comment section for the transaction history"
-  },
-  "shared.transactionList.to": {
-    "defaultMessage": "To",
-    "description": "shared.transactionList.to: For description in comment section for the transaction history"
+  "rMCWq0": {
+    "defaultMessage": "Home",
+    "description": "shared.NotFoundPage.button: Go back to homepage button for the 404 page"
   },
   "uT8hFA": {
     "defaultMessage": "strength",
     "description": "Password complexity indicator"
   },
+  "v1EAX6": {
+    "defaultMessage": "Show filters",
+    "description": "shared.transactionList.filters.show: Label for the filter show / hide system"
+  },
   "vLxh3t": {
     "defaultMessage": "At least moderate strength",
     "description": "New password entry placeholder"
+  },
+  "veRB0m": {
+    "defaultMessage": "Hide filters",
+    "description": "shared.transactionList.filters.hide: Label for the filter show / hide system"
   },
   "wFpI1F": {
     "defaultMessage": "Hide Password",
@@ -206,6 +202,10 @@
   "ypa6Gp": {
     "defaultMessage": "Load an Account",
     "description": "shared.account.uploadWallet.title: Title for the upload your account page"
+  },
+  "yrJmTB": {
+    "defaultMessage": "Wallet Password",
+    "description": "shared.login.placeholder.wallet: PLaceholder for the Passford field in the create account form"
   },
   "zlzBIp": {
     "defaultMessage": "Must be larger than {min}",

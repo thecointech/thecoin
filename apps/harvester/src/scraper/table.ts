@@ -2,8 +2,9 @@
 import currency from 'currency.js';
 import { DateTime } from 'luxon';
 import { Page, } from 'puppeteer';
-import { Coords, Font } from './types';
+import { ElementData, Font } from './types';
 import { getCurrencyConverter, guessCurrencyFormat, guessDateFormat } from './valueParsing';
+import { getAllElements } from './elements';
 
 export type HistoryRow = {
   date: DateTime,
@@ -22,22 +23,20 @@ export async function getTableData(page: Page, font: Font) {
   return mapColumnsToTypes(table);
 }
 
-type RawText = { text: string, bbox: Coords, style: Font }
-
 const groupBy = <T>(array: T[], predicate: (value: T, index: number, array: T[]) => string|number) =>
   array.reduce((acc, value, index, array) => {
     (acc[predicate(value, index, array)] ||= []).push(value);
     return acc;
   }, {} as { [key: string]: T[] });
 
-export function findTableRows(rawText: RawText[], style: Font) {
+export function findTableRows(rawText: ElementData[], style: Font) {
   // group all content into rows
-  const rows = groupBy(rawText, el => el.bbox.top);
+  const rows = groupBy(rawText, el => el.coords.top);
   // Get rid of all the rows at y==0 (eg style tags etc)
   // delete rows['0'];
   // remove all rows that are too small (we need 3 at least)
   const tableRows = Object.entries(rows).filter(r => r[1].length > 2).slice(1);
-  const tables = groupBy(tableRows, row => row[1][0].bbox.left);
+  const tables = groupBy(tableRows, row => row[1][0].coords.left);
   const sortedtables = Object.entries(tables).sort((l, r) => r[1].length - l[1].length);
 
   const allMatches = sortedtables.map(([ , rows]) => {
@@ -48,9 +47,9 @@ export function findTableRows(rawText: RawText[], style: Font) {
     );
     // only use rows that match the given style
     const matches = txrows.filter(row => 
-      row[1][0].style.color === style.color &&
-      row[1][0].style.size === style.size &&
-      row[1][0].style.style === style.style
+      row[1][0].font?.color === style.color &&
+      row[1][0].font?.size === style.size &&
+      row[1][0].font?.style === style.style
     );
     return matches;
   });
@@ -95,16 +94,15 @@ function guessCurrencyColumn(row: string[]): [number, (value: string) => currenc
   throw new Error("Couldn't guess date column");
 }
 
-
-export function lineUpColumns(rawRows: RawText[][]) {
-  const allColumnStarts = new Set(rawRows.flatMap(row => row.map(entry => entry.bbox.left)));
+export function lineUpColumns(rawRows: ElementData[][]) {
+  const allColumnStarts = new Set(rawRows.flatMap(row => row.map(entry => entry.coords.left)));
   const columnEntries = Object.fromEntries(
     [...allColumnStarts].sort((a, b) => a - b).map((v, i) => [v, i])
   );
   const tabulised = rawRows.reduce((table, row) => {
     const newRow: string[] = [];
     row.forEach(entry => {
-      newRow[columnEntries[entry.bbox.left]] = entry.text;
+      newRow[columnEntries[entry.coords.left]] = entry.text;
     })
     table.push(newRow);
     return table;
@@ -112,42 +110,9 @@ export function lineUpColumns(rawRows: RawText[][]) {
   return tabulised;
 }
 
-async function getTextNodeData(page: Page) : Promise<RawText[]> {
-  const allText = await page.$x('//*/text()');
-  return page.evaluate((...allText) => {
-    console.log(allText);
-    const withcontent = allText.filter((el: any) => 
-      el.parentNode &&
-      el.parentNode.checkVisibility({
-        checkOpacity: true,  // Check CSS opacity property too
-        checkVisibilityCSS: true // Check CSS visibility property too
-      }) &&
-      !!el.textContent.replace(/\s+/, ''));
-
-    // get document coordinates of the element
-    const getCoords = (elem: any) => {
-      const box = elem.parentNode?.getBoundingClientRect();
-      return {
-        top: box.top + window.pageYOffset,
-        right: box.right + window.pageXOffset,
-        bottom: box.bottom + window.pageYOffset,
-        left: box.left + window.pageXOffset
-      };
-    }
-    const getFontData = (elem: any) => {
-      const styles = getComputedStyle(elem.parentNode);
-      return {
-        font: styles.font,
-        color: styles.color,
-        size: styles.fontSize,
-        style: styles.fontStyle,
-      }
-    }
-
-    return withcontent.map((el: any) => ({
-      text: el.textContent,
-      bbox: getCoords(el),
-      style: getFontData(el),
-    }))
-  }, ...allText)
+async function getTextNodeData(page: Page) : Promise<ElementData[]> {
+  const allElements = await getAllElements(page);
+  return allElements
+    .filter(el => el.data.nodeValue)
+    .map(se => se.data)
 }

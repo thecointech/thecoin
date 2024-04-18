@@ -1,4 +1,4 @@
-import { updateCoinBalance } from "./waitCoin";
+import { updateCoinBalance, waitCoin } from "./waitCoin";
 import { getEnvVars } from "@thecointech/setenv";
 import { InfuraProvider } from "@ethersproject/providers";
 import { NormalizeAddress } from '@thecointech/utilities';
@@ -47,6 +47,15 @@ describe("Blockchain check operations", () => {
     const receipt = await container.contract.provider.waitForTransaction(hash, 0);
     const balance = updateCoinBalance(container, receipt)
     expect(balance?.coin.eq(0)).toBeTruthy();
+  })
+
+  it("Can handle cushionDown in a tx", async () => {
+    const container = await getContainer("0x81Cc76E08461C05E9342566e6cC793080D594109");
+    container.history[0].delta = {
+      hash: "0xc06acc30c4d72c7c75c624707a071cec2db4260eafb6c6057801220b5bda06ae"
+    } as any
+    const delta = await waitCoin(container);
+    expect(delta?.coin.eq(260557655)).toBeTruthy();
   })
 
 }, !!vars.INFURA_PROJECT_ID)
