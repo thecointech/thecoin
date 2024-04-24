@@ -8,9 +8,12 @@ export type Heartbeat = {
   result: string;
 }
 
+const FiveMins = 5 * 60 * 1000;
+
 export async function heartbeat(request: Heartbeat) {
-  if (request.timeMs < (Date.now() - 5000)) {
-    log.error({signedTime: request.timeMs}, 'Heartbeat too old: {signedTime}')
+  const now = Date.now();
+  if (request.timeMs < (now - FiveMins)) {
+    log.error({signedTime: request.timeMs, now}, 'Heartbeat too old: {signedTime}, now: {now}')
     return false;
   }
   const signer = await GetSigner({
