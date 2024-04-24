@@ -1,7 +1,7 @@
 import { TransactionResponse } from '@ethersproject/providers';
 import { log } from '@thecointech/logging';
 import type { UberTransfer } from '@thecointech/types';
-import { GetContract } from './Wallet';
+import { GetContract } from '../signer/Wallet';
 import { getBrokerCADAddress } from '../status';
 
 // Do we want to keep a record of this?

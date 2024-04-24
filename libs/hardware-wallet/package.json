@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/hardware-wallet",
-  "version": "0.2.116",
+  "version": "0.2.125",
   "description": "TheCoin: An Ethers.js signer implemented for Ledger",
   "type": "module",
   "keywords": [
@@ -21,7 +21,7 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc -p tsconfig.build.json",
+    "build": "run -T tsc -p tsconfig.build.json",
     "clean": "rimraf ./build"
   },
   "files": [
@@ -32,10 +32,7 @@
   "dependencies": {
     "@ledgerhq/hw-app-eth": "^6.18.0",
     "@ledgerhq/hw-transport-node-hid": "^6.11.2",
-    "@thecointech/async": "^0.2.116"
+    "@thecointech/async": "^0.2.125"
   },
-  "devDependencies": {
-    "jest": "*"
-  },
-  "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
+  "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
 }

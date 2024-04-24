@@ -7,6 +7,7 @@ import { RoundUp } from './RoundUp';
 import { SendETransfer } from './SendETransfer';
 import { TopUp } from './TopUp';
 import { TransferEverything } from './TransferEverything';
+import { ChequeMinimum } from './ChequeMinimum';
 import { TransferLimit } from './TransferLimit';
 import { TransferVisaOwing } from './TransferVisaOwing';
 
@@ -16,6 +17,7 @@ export const createStep = (step: HarvestStep) : ProcessingStage => {
     case HarvestStepType.TransferVisaOwing: return new TransferVisaOwing();
     case HarvestStepType.RoundUp: return new RoundUp(step.args);
     case HarvestStepType.TransferEverything: return new TransferEverything();
+    case HarvestStepType.ChequeMinimum: return new ChequeMinimum(step.args);
     case HarvestStepType.TransferLimit: return new TransferLimit(step.args);
     case HarvestStepType.PayVisa: return new PayVisa(step.args);
     case HarvestStepType.TopUp: return new TopUp(step.args);

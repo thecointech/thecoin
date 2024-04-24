@@ -14,10 +14,6 @@ export const requestManual = makeTransition("requestManual", async (action) => {
     `History:\n ${printHistory(action)}\n`
   );
 
-  // Remove from our list of active transctions(?)
-  // TODO: For now we leave failed tx's in the incomplete list
-  // Until they are dealt with we should be reminded that they are not completed
-  //await removeIncomplete(action.action.type, action.action.doc);
   // Make no state changes.
   return {};
 });

@@ -47,6 +47,7 @@ export type CreditDetails = {
 }
 
 export interface ProcessingStage {
+  readonly name: string;
   process: (data: HarvestData, user: UserData, lastState?: HarvestData) => Promise<HarvestDelta>;
 }
 

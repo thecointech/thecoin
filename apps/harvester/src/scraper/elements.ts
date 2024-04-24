@@ -2,6 +2,7 @@ import type { ElementHandle, Frame, Page } from 'puppeteer';
 import type { Coords, ElementData } from './types';
 import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
+import { scoreElement } from './elements.score';
 
 type FoundElement = {
   element: ElementHandle<Element>,
@@ -23,13 +24,23 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
     const elements = await getAllElements(frame);
     const withSiblings = fillOutSiblingText(elements);
 
-    const candidates = withSiblings.reduce((acc, el) => {
-      acc.push({
-        ...el,
-        score: scoreElement(el.data, event),
-      })
-      return acc;
-    }, [] as FoundElement[]);
+    const candidates: FoundElement[] = [];
+    for (const el of withSiblings) {
+      const score = await scoreElement(el.data, event);
+      if (score > 0) {
+        candidates.push({
+          ...el,
+          score
+        })
+      }
+    }
+    // const candidates = withSiblings.reduce((acc, el) => {
+    //   acc.push({
+    //     ...el,
+    //     score: await scoreElement(el.data, event),
+    //   })
+    //   return acc;
+    // }, [] as FoundElement[]);
 
     // Sort by score to see if any element is close enough
     const sorted = candidates.sort((a, b) => b.score - a.score);
@@ -37,7 +48,7 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
     const candidate = sorted[0];
 
     // Extra debugging
-    if (process.env.VERBOSE_COIN_SCRAPER) {
+    if (process.env.HARVESTER_VERBOSE_SCRAPER) {
       log.debug(`Text: ${event.text} - ${candidate?.data?.text}`);
       log.debug(`Label: ${event.label} - ${candidate?.data?.label}`);
       log.debug(`Coords: ${JSON.stringify(event.coords)} - ${JSON.stringify(candidate?.data?.coords)}`);
@@ -65,72 +76,6 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
   throw new Error(`Element not found: ${event.selector}`);
 }
 
-function scoreElement(potential: ElementData, original: ElementData) {
-  let score = 0;
-  if (potential.tagName == original.tagName) score = score + 10;
-  if (potential.selector == original.selector) score = score + 30;
-  if (potential.font?.color == original.font?.color) score = score + 5;
-  if (potential.font?.font == original.font?.font) score = score + 5;
-  if (potential.font?.size == original.font?.size) score = score + 5;
-  if (potential.font?.style == original.font?.style) score = score + 5;
-  if (potential.text == original.text) score = score + 20;
-  // Else, we still match if both are a dollar amount
-  else if (
-    original.text?.trim().match(/^\$[0-9, ]+\.\d{2}$/) &&
-    potential.text?.trim().match(/^\$[0-9, ]+\.\d{2}$/)
-  ) {
-    score = score + 20;
-  }
-
-  if (
-    potential.role && original.role &&
-    potential.role == original.role
-  ) {
-    score = score + 15;
-  }
-  else if (potential.role != original.role) {
-    score = score - 5;
-  }
-  if (
-    potential.label &&  original.label &&
-    potential.label == original.label
-  ) {
-    score = score + 30;
-  }
-  else if (potential.label != original.label) {
-    score = score - 10;
-  }
-  
-  // up to 4 matching siblings for max 20 pts
-  if (potential.siblingText?.length && original.siblingText?.length) {
-    const matched = potential.siblingText.filter(
-      t => original.siblingText?.includes(t)
-    );
-    if (matched.length > 0) {
-      // Max score for perfect match, but decreases with each miss
-      // Eg, 1 matched, 1 unmatched = 50% score
-      // Eg, 1 matched, 2 unmatched = 33% score
-      // Eg, 3 matched, 1 unmatched = 75% score
-      const unmatched = (
-        potential.siblingText.length - matched.length + 
-        original.siblingText.length - matched.length
-      )
-      score = score + (20 * matched.length / (unmatched  + matched.length));
-    }
-  }
-  // If neither have any siblings, mark as 10 pts cause that's pretty close
-  else if (potential.siblingText?.length == original.siblingText?.length) {
-    score = score + 10;
-  }
-  
-  // up to 20 pts from position
-  const positionSimilarity = getPositionSimilarity(potential.coords, original);
-  score = score + Math.max(0, 20 - (positionSimilarity / 20));
-
-  // max score is 125
-  return score;
-} 
-
 async function getFrame(page: Page, click: ElementData) {
   if (!click.frame) {
     return page;
@@ -145,14 +90,6 @@ async function getFrame(page: Page, click: ElementData) {
   }
   // return page.  Who knows, maybe it'll work?
   return page;
-}
-
-function getPositionSimilarity(coords: any, event: ElementData) {
-  const tops = Math.abs(event.coords.top - coords.top)
-  const heights = Math.abs(event.coords.height - coords.height)
-  const widths = Math.abs(event.coords.width - coords.width)
-  const lefts = Math.abs(event.coords.left - coords.left)
-  return tops + heights + widths + lefts;
 }
 
 export async function registerElementAttrFns(page: Page) {
@@ -170,7 +107,7 @@ export async function registerElementAttrFns(page: Page) {
         const allNodes = document.querySelectorAll("*");
         const potentialSiblings = Array.from(allNodes)
           .filter(ps => (
-            ps != el && 
+            ps != el &&
             //@ts-ignore
             ps.checkVisibility({
               checkOpacity: true,  // Check CSS opacity property too
@@ -207,7 +144,7 @@ const getElementProps = (el: HTMLElement) => ({
   font: getFontData(el),
   label: el.getAttribute("aria-label"),
   text: el.innerText,
-  nodeValue: getElementText(el),  
+  nodeValue: getElementText(el),
 })
 
 const getFrameUrl = () => {
@@ -273,7 +210,7 @@ export function getFontData(elem: Element) {
       color: styles.color,
       size: styles.fontSize,
       style: styles.fontStyle,
-    }  
+    }
   }
   return _getFontData(elem)
 }
@@ -313,14 +250,14 @@ export const getAllElements = async (frame: Page|Frame) => {
   // const allElements = await frame.$x("//text()")
   const allElements = await frame.$$("*")
   const allData: (ElementData|null)[] = await frame.evaluate(
-    (...els) => els.map(el => 
+    (...els) => els.map(el =>
       (
         el instanceof HTMLElement
         //@ts-ignore
-        // && el.checkVisibility({
-        //   checkOpacity: true,  // Check CSS opacity property too
-        //   checkVisibilityCSS: true // Check CSS visibility property too
-        // })
+        && el.checkVisibility({
+          checkOpacity: true,  // Check CSS opacity property too
+          checkVisibilityCSS: true // Check CSS visibility property too
+        })
       ) ? getElementProps(el)
         : null
     ),
@@ -353,7 +290,7 @@ const fillOutSiblingText = (allElements: SearchElement[]) => {
     const el = allElements[i];
     const bucket = getBuckets(el.data.coords);
     if (!bucketed[bucket]) bucketed[bucket] = [el]
-    else bucketed[bucket].push(el)        
+    else bucketed[bucket].push(el)
   }
 
   // Now fill out the siblings
@@ -365,7 +302,7 @@ const fillOutSiblingText = (allElements: SearchElement[]) => {
       const el = bucket[i];
       const elcoords = el.data.coords;
       const center = elcoords.top + (elcoords.height / 2)
-      const neighbours = (center % BUCKET_PIXELS)  < (BUCKET_PIXELS / 2) 
+      const neighbours = (center % BUCKET_PIXELS)  < (BUCKET_PIXELS / 2)
         ? bucketed[bidx - 1]
         : bucketed[bidx + 1]
 

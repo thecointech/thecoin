@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-bill",
-  "version": "0.2.116",
+  "version": "0.2.125",
   "description": "The Coin: A library handles bill payments",
   "type": "module",
   "keywords": [
@@ -19,9 +19,9 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc -b tsconfig.build.json",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "yarn run-jest"
+    "test": "run :jest"
   },
   "files": [
     "build/**/*"
@@ -30,10 +30,7 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/tx-statemachine": "^0.2.116"
+    "@thecointech/tx-statemachine": "^0.2.125"
   },
-  "devDependencies": {
-    "jest": "*"
-  },
-  "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
+  "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
 }

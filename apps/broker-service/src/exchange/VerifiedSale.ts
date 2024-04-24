@@ -1,7 +1,7 @@
 import { validateAction } from './CertifiedActionVerify';
 import { CertifiedTransfer } from '@thecointech/types';
 import { Processor, getSellAction } from "@thecointech/tx-etransfer";
-import { GetContract } from './Wallet';
+import { GetContract } from '../signer/Wallet';
 import { getCurrentState } from '@thecointech/tx-statemachine';
 import { SendMail } from '@thecointech/email';
 import { log } from '@thecointech/logging';

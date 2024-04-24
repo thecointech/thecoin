@@ -2,7 +2,7 @@ import { toHuman, toHumanDecimal } from "@thecointech/utilities";
 import { fiatChange } from "../../containers/Account/profit";
 import { DateTime } from "luxon";
 import { weSellAt } from '@thecointech/fx-rates';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import type { FXRate } from "@thecointech/pricing";
 import type { Transaction } from "@thecointech/tx-blockchain";
 import type { IFxRates } from "../../containers/FxRate";

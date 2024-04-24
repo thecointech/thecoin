@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/logging",
-  "version": "0.2.116",
+  "version": "0.2.125",
   "description": "The Coin: Common logging setup",
   "type": "module",
   "keywords": [
@@ -20,21 +20,19 @@
   },
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-p build:*",
-    "_build:cjs": "yarn tsc --project tsconfig.build.cjs.json",
-    "build:mjs": "yarn tsc --project tsconfig.build.mjs.json",
-    "clean": "rimraf ./build && rimraf ./coverage"
+    "build": "run -T tsc",
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage"
   },
   "files": [
     "build/**/*"
   ],
   "exports": {
     ".": {
-      "node": "./build/mjs/log_node.js",
-      "default": "./build/mjs/log_browser.js"
+      "node": "./build/log_node.js",
+      "default": "./build/log_browser.js"
     }
   },
-  "types": "./build/mjs/log_browser.d.ts",
+  "types": "./build/log_browser.d.ts",
   "dependencies": {
     "browser-bunyan": "^1.6.3",
     "bunyan": "^1.8.13",
@@ -44,5 +42,5 @@
   "devDependencies": {
     "@types/bunyan": "^1.8.6"
   },
-  "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
+  "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
 }

@@ -2,12 +2,12 @@ import { jest } from '@jest/globals';
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { getPluginLogs } from './logs';
 import { getEnvVars } from '@thecointech/setenv';
-import BasePluginSpec from './contracts/contracts/BasePlugin.sol/BasePlugin.json' assert {type: "json"};
+import BasePluginSpec from './codegen/contracts/BasePlugin.sol/BasePlugin.json' assert {type: "json"};
 // import hre from 'hardhat';
 // import { createAndInitOracle } from '@thecointech/contract-oracle/testHelpers.ts';
 // import { getPluginLogs, updateState } from './logs';
 // import { DateTime } from 'luxon';
-// import { RoundNumber } from './types';
+// import { RoundNumber } from './codegen';
 
 import { getProvider } from '@thecointech/ethers-provider/Erc20Provider/web';
 

@@ -1,9 +1,9 @@
 import { Contract, ContractFactory } from '@ethersproject/contracts';
-import type { SpxCadOracle } from './types/contracts/SpxCadOracle';
-import OracleSpec from './contracts/contracts/SpxCadOracle.sol/SpxCadOracle.json' assert {type: "json"};
+import type { SpxCadOracle } from './codegen/contracts/SpxCadOracle';
+import OracleSpec from './codegen/contracts/SpxCadOracle.sol/SpxCadOracle.json' assert {type: "json"};
 import { getProvider } from '@thecointech/ethers-provider';
 import type { Signer } from '@ethersproject/abstract-signer';
-import { SpxCadOracle__factory } from './types';
+import { SpxCadOracle__factory } from './codegen';
 
 const getAbi = () => OracleSpec.abi;
 const getContractAddress = async () => {

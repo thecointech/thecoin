@@ -3,25 +3,26 @@ import { DateTime } from 'luxon';
 import type { Page } from 'puppeteer';
 import { startPuppeteer } from './puppeteer';
 import { getTableData, HistoryRow } from './table';
-import { AnyEvent, ValueEvent, ActionTypes, ChequeBalanceResult, VisaBalanceResult, ReplayResult, ETransferResult } from './types';
+import { AnyEvent, ValueEvent, ActionTypes, ChequeBalanceResult, VisaBalanceResult, ReplayResult, ETransferResult, ElementData } from './types';
 import { CurrencyType, getCurrencyConverter } from './valueParsing';
 import { getEvents } from '../Harvester/config';
 import { log } from '@thecointech/logging';
 import { debounce } from './debounce';
 import path from 'path';
 import { mkdirSync } from 'fs';
-import { outFolder } from '../paths';
+import { logsFolder, outFolder } from '../paths';
 import { getElementForEvent } from './elements';
+import { writeFileSync } from 'node:fs';
 
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export type Replay = typeof replay;
 
-export async function replay(actionName: 'chqBalance') : Promise<ChequeBalanceResult>;
-export async function replay(actionName: 'visaBalance') : Promise<VisaBalanceResult>;
-export async function replay(actionName: 'chqETransfer', dynamicValues: { amount: string }) : Promise<ETransferResult>;
-export async function replay(actionName: ActionTypes, dynamicValues?: Record<string, string>, delay?: number) : Promise<ReplayResult>
+export async function replay(actionName: 'chqBalance'): Promise<ChequeBalanceResult>;
+export async function replay(actionName: 'visaBalance'): Promise<VisaBalanceResult>;
+export async function replay(actionName: 'chqETransfer', dynamicValues: { amount: string }): Promise<ETransferResult>;
+export async function replay(actionName: ActionTypes, dynamicValues?: Record<string, string>, delay?: number): Promise<ReplayResult>
 export async function replay(actionName: ActionTypes, dynamicValues?: Record<string, string>, delay = 1000) {
   // read events
   const events = await getEvents(actionName);
@@ -31,14 +32,30 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
     throw new Error(`No events found for ${actionName}`);
   }
 
-  return await replayEvents(actionName, events, dynamicValues, delay);
-}
-
-export async function replayEvents(actionName: ActionTypes, events: AnyEvent[], dynamicValues?: Record<string, string>, delay = 1000) {
-
   const { page, browser } = await startPuppeteer();
 
-  const values: Record<string, string|DateTime|currency|HistoryRow[]> = {}
+  try {
+    const r = await replayEvents(page, actionName, events, dynamicValues, delay);
+    return r;
+  }
+  catch (err) {
+    const saveDump = process.env.HARVESTER_SAVE_DUMP;
+    log.error(`Failed to replay ${actionName}, doing dump: ${saveDump ?? false}`);
+    if (saveDump) {
+      const dumpFolder = path.join(logsFolder, "dumps", `${actionName}-${DateTime.now().toSQLDate()}`);
+      await dumpPage(page, dumpFolder);
+    }
+    throw err;
+  }
+  finally {
+    await page.close();
+    await browser.close();
+  }
+}
+
+export async function replayEvents(page: Page, actionName: ActionTypes, events: AnyEvent[], dynamicValues?: Record<string, string>, delay = 1000) {
+
+  const values: Record<string, string | DateTime | currency | HistoryRow[]> = {}
 
   // Security: limit this session to a single domain.
   // TODO: This triggers on safe routes, disable until we have a better view
@@ -65,7 +82,7 @@ export async function replayEvents(actionName: ActionTypes, events: AnyEvent[], 
       const event = events[i];
       // Keep a slight delay on events, time is not a priority here
       await sleep(delay);
-      switch(event.type) {
+      switch (event.type) {
         case 'navigation': {
           log.debug('Waiting navigation');
           // Only directly navigate on the first item
@@ -84,7 +101,7 @@ export async function replayEvents(actionName: ActionTypes, events: AnyEvent[], 
         case 'click': {
           log.debug(`Clicking on: ${event.text}`);
           // If this click caused a navigation?
-          const {element} = await getElementForEvent(page, event);
+          const { element } = await getElementForEvent(page, event);
           if (events[i + 1]?.type == "navigation") {
             await Promise.all([
               element.click(),
@@ -98,39 +115,30 @@ export async function replayEvents(actionName: ActionTypes, events: AnyEvent[], 
         }
         case 'input': {
           log.debug(`Entering value: ############## into ${event.selector}`);
-          if (event.value) {
-            // Is this a dynamic input?
-            const value = event.dynamicName
-              ? dynamicValues?.[event.dynamicName]
-              : event.value;
-            if (value === undefined) {
-              throw new Error(`Dynamic value not supplied: ${event.dynamicName}`);
+          await enterValue(page, event, event.value);
+        
+          // If the user pressed enter, simulate this too
+          if (event.hitEnter) {
+            if (events[i + 1]?.type == "navigation") {
+              await Promise.all([
+                page.keyboard.press('Enter'),
+                page.waitForNavigation({ waitUntil: 'networkidle2' })
+              ])
             }
-
-            const {element} = await getElementForEvent(page, event);
-            await element.focus();
-            if (event.tagName == "INPUT" || event.tagName == "TEXTAREA") {
-              // clear existing value
-              await page.evaluate((el) => (el as HTMLInputElement).value = "", element)
-              // Simulate typing to mimic input actions
-              await page.keyboard.type(value, { delay: 20 });
-              // If the user pressed enter, simulate this too
-              if (event.hitEnter) {
-                if (events[i + 1]?.type == "navigation") {
-                  await Promise.all([
-                    page.keyboard.press('Enter'),
-                    page.waitForNavigation({ waitUntil: 'networkidle2' })
-                  ])
-                }
-                else {
-                  await page.keyboard.press('Enter');
-                }
-              }
-            }
-            else if (event.tagName == "SELECT") {
-              await element.evaluate((v, value) => (v as HTMLSelectElement).value = value, value)
+            else {
+              await page.keyboard.press('Enter');
             }
           }
+          break;
+        }
+        case 'dynamicInput': {
+          log.debug(`Entering dynamicValue : ${event.dynamicName} into ${event.selector}`);
+          const value = dynamicValues?.[event.dynamicName];
+          if (!value) {
+            throw new Error(`Dynamic value not supplied: ${event.dynamicName}`);
+          }
+
+          await enterValue(page, event, value);
           break;
         }
         case 'value': {
@@ -197,23 +205,34 @@ export async function replayEvents(actionName: ActionTypes, events: AnyEvent[], 
 
   await processInstructions(events)
 
-  // Wait for a second in case anyone is watching
-  await sleep(3000);
-  await browser.close();
   // remove history (personal info) from logged info (TODO: remove this line entirely)
   const { history, ...sanitize } = values;
   log.debug(`We got values: ${JSON.stringify({
     ...sanitize,
-    history: `${(history as any)?.length } rows`
+    history: `${(history as any)?.length ?? 0} rows`
   })}`);
 
   return values;
 }
 
 
+async function enterValue(page: Page, event: ElementData, value: string) {
+  const { element } = await getElementForEvent(page, event);
+  await element.focus();
+  if (event.tagName == "INPUT" || event.tagName == "TEXTAREA") {
+    // clear existing value
+    await page.evaluate((el) => (el as HTMLInputElement).value = "", element);
+    // Simulate typing to mimic input actions
+    await page.keyboard.type(value, { delay: 20 });
+  }
+  else if (event.tagName == "SELECT") {
+    await element.evaluate((v, value) => (v as HTMLSelectElement).value = value, value);
+  }
+}
+
 function parseValue(value: string, event: ValueEvent) {
   if (value && event.parsing?.format) {
-    switch(event.parsing?.type) {
+    switch (event.parsing?.type) {
       case "date": {
         const d = DateTime.fromFormat(value, event.parsing.format);
         if (d.isValid) return d;
@@ -228,3 +247,15 @@ function parseValue(value: string, event: ValueEvent) {
   return value;
 }
 
+export async function dumpPage(page: Page, dumpFolder: string) {
+  mkdirSync(dumpFolder, { recursive: true });
+  // Save screenshot
+  await page.screenshot({ path: path.join(dumpFolder, `screenshot.png`) });
+  // Save content
+  const content = await page.content();
+  writeFileSync(path.join(dumpFolder, `content.html`), content);
+  // Lastly, try for MHTML
+  const cdp = await page.target().createCDPSession();
+  const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
+  writeFileSync(path.join(dumpFolder, 'snapshot.mhtml'), data);
+}

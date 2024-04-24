@@ -6,7 +6,7 @@ import { routerMiddleware } from 'connected-react-router';
 import { createInjectorsEnhancer } from 'redux-injectors';
 import reduxSaga from '@redux-saga/core';
 import { history } from './history';
-import { createStore, compose, applyMiddleware, ReducersMapObject, Reducer } from 'redux';
+import { createStore, compose, applyMiddleware, ReducersMapObject, Reducer, StoreEnhancer } from 'redux';
 import { ApplicationBaseState } from '../types';
 export { history };
 
@@ -40,7 +40,7 @@ export function configureStore(createReducer: reducerFn, initialState?: Applicat
   const store = createStore(
     createReducer(),
     initialState,
-    doCompose(...enhancers)
+    doCompose(...enhancers) as StoreEnhancer
    )
 
   // Make reducers hot reloadable, see http://mxs.is/googmo

@@ -1,18 +1,16 @@
 {
   "name": "@thecointech/site-semantic-theme",
-  "productName": "THECoin: Website - Semantic THeme",
+  "productName": "THECoin: Website - Semantic Theme",
   "private": true,
   "type": "module",
-  "workspaces": {
-    "nohoist": [
-      "semantic-ui-less"
-    ]
-  },
-  "version": "0.2.116",
+  "version": "0.2.125",
   "description": "THECoin: Future-proof currency: Semantic theme for websites",
   "repository": {
     "type": "git",
     "url": "git://github.com/thecointech/thecoin.git"
+  },
+  "installConfig": {
+    "hoistingLimits": "workspaces"
   },
   "author": "Stephen Taylor",
   "license": "GPL-3.0-or-later",

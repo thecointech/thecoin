@@ -2,8 +2,8 @@ import type { ForgeConfig } from '@electron-forge/shared-types';
 import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { MakerZIP } from '@electron-forge/maker-zip';
 import { MakerDeb } from '@electron-forge/maker-deb';
-import { MakerRpm } from '@electron-forge/maker-rpm';
-import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives';
+// import { MakerRpm } from '@electron-forge/maker-rpm';
+// import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives';
 import { WebpackPlugin } from '@electron-forge/plugin-webpack';
 
 import { mainConfig } from '@thecointech/electron-utils/webpack/webpack.main.config';
@@ -12,31 +12,48 @@ import { rendererConfig } from '@thecointech/electron-utils/webpack/webpack.rend
 import { getCSP } from './config/csp';
 import { DefinePlugin } from 'webpack';
 
-const mergedConfig = mainConfig({
+const ForgeExternalsPlugin = require('@timfish/forge-externals-plugin')
+
+const mainConfigMerged = mainConfig({
   plugins: [
     new DefinePlugin({
-      ['process.env.TC_LOG_FOLDER']: JSON.stringify('./logs')
+      ['process.env.TC_LOG_FOLDER']: JSON.stringify("false"),
+      ['process.env.URL_SEQ_LOGGING']: JSON.stringify("false"),
     })
+  ],
+  externals: [
+    'leveldown',
+    'onnxruntime-node',
+    'sharp',
+    'puppeteer',
   ],
 })
 
 const config: ForgeConfig = {
   packagerConfig: {
-    asar: true,
-    icon: 'assets/appicon',
+    asar: false,
+    // asar: {
+    //   unpack: './node_modules/node-notifier/**/*'
+    // },
+    // icon: 'assets/appicon',
+    // extraResource: [
+    //   // Include our assets outside of the asar
+    //   // file so we can reference them by absolute path
+    //   './assets'
+    // ],
   },
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({
       setupIcon: 'assets/appicon.ico',
     }),
-    new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})
+    new MakerZIP({}, ['darwin']), /*new MakerRpm({}),*/ new MakerDeb({})
   ],
   plugins: [
-    new AutoUnpackNativesPlugin({}),
+    // new AutoUnpackNativesPlugin({}),
     new WebpackPlugin({
       devContentSecurityPolicy: getCSP(),
-      mainConfig: mergedConfig,
+      mainConfig: mainConfigMerged,
       renderer: {
         config: rendererConfig,
         entryPoints: [
@@ -53,6 +70,10 @@ const config: ForgeConfig = {
       port: 3004,
       loggerPort: 9004,
     }),
+    new ForgeExternalsPlugin({
+      externals: mainConfigMerged.externals,
+      includeDeps: true,
+    })
   ],
 };
 

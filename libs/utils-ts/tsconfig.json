@@ -1,13 +1,7 @@
 {
-  "extends": "../tsconfig.libs.json",
-  "compilerOptions": {
-
-    "rootDir": "./src",
-    "baseUrl": "./src/",
-    "outDir": "./build",
-    "tsBuildInfoFile": "./build/.buildinfo",
-
-    "allowSyntheticDefaultImports": true,
-  },
-  "include": ["./src/**/*", "./src/**/*.json", "types/global.d.ts"]
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.tests.json" },
+    { "path": "./tsconfig.build.json" },
+  ]
 }
