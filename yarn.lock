@@ -11527,7 +11527,7 @@ __metadata:
     "@thecointech/jestutils": "npm:^0.2.125"
     "@thecointech/logging": "npm:^0.2.125"
     "@thecointech/types": "npm:^0.2.125"
-    base32: "npm:^0.0.6"
+    base32: "npm:^0.0.7"
     decimal.js-light: "npm:^2.5.1"
     ethers: "npm:^5.7.0"
   languageName: unknown
@@ -15354,14 +15354,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"base32@npm:^0.0.6":
-  version: 0.0.6
-  resolution: "base32@npm:0.0.6"
+"base32@npm:^0.0.7":
+  version: 0.0.7
+  resolution: "base32@npm:0.0.7"
   dependencies:
-    optimist: "npm:>=0.1.0"
+    minimist: "npm:^1.2.6"
   bin:
-    base32: ./bin/base32.js
-  checksum: 955053ab4246e5bf32048b963cc2f97b9e9941bea4aae6905b8dc6853943165f7a858e3cafbc5589dbb54be5e0a7f2f1d45706f21de26d5292a58c703e288fdd
+    base32: bin/base32.js
+  checksum: 5814471dfc83a1f18eb1192f04a80edf1b799960ad8406ebfbb26cdf840929a3a08c1b669a94c2639c50db51f9b22658d7a9a7d2b6ca14ae521683c7e3e6f142
   languageName: node
   linkType: hard
 
@@ -31675,13 +31675,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimist@npm:~0.0.1":
-  version: 0.0.10
-  resolution: "minimist@npm:0.0.10"
-  checksum: c505a020144b6e49f2b1c7d1e378f3692b7102e989b4a49338fc171eb4229ddddb430e779ff803dcb11854050e3fe3c2298962a7d73c20df7c2044c92b2ba1da
-  languageName: node
-  linkType: hard
-
 "minipass-collect@npm:^1.0.2":
   version: 1.0.2
   resolution: "minipass-collect@npm:1.0.2"
@@ -33735,16 +33728,6 @@ __metadata:
   bin:
     opener: bin/opener-bin.js
   checksum: dd56256ab0cf796585617bc28e06e058adf09211781e70b264c76a1dbe16e90f868c974e5bf5309c93469157c7d14b89c35dc53fe7293b0e40b4d2f92073bc79
-  languageName: node
-  linkType: hard
-
-"optimist@npm:>=0.1.0":
-  version: 0.6.1
-  resolution: "optimist@npm:0.6.1"
-  dependencies:
-    minimist: "npm:~0.0.1"
-    wordwrap: "npm:~0.0.2"
-  checksum: 8cb417328121e732dbfb4d94d53bb39b1406446b55323ed4ce787decc52394927e051ba879eb3ffa3171fe22a35ce13b460114b60effcead77443ee87c2f9b0f
   languageName: node
   linkType: hard
 
@@ -44324,13 +44307,6 @@ __metadata:
   version: 1.0.0
   resolution: "wordwrap@npm:1.0.0"
   checksum: 7ed2e44f3c33c5c3e3771134d2b0aee4314c9e49c749e37f464bf69f2bcdf0cbf9419ca638098e2717cff4875c47f56a007532f6111c3319f557a2ca91278e92
-  languageName: node
-  linkType: hard
-
-"wordwrap@npm:~0.0.2":
-  version: 0.0.3
-  resolution: "wordwrap@npm:0.0.3"
-  checksum: b3b212f8b2167091f59bc60929ada2166eb157abb6c8c82e2a705fe5aa5876440c3966ab39eb6c7bcb2ff0ac0c8d9fba726a9c2057b83bd65cdc1858f9d816ce
   languageName: node
   linkType: hard
 
