@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { Wallet } from '@ethersproject/wallet';
+import { Wallet } from 'ethers';
 import { BROKER_ROLE, GetContract, MINTER_ROLE, MRFREEZE_ROLE, PLUGINMGR_ROLE, THECOIN_ROLE } from '@thecointech/contract-core'
 import { AccountId } from '@thecointech/signers';
 

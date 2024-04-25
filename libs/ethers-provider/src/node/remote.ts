@@ -1,4 +1,4 @@
-import { InfuraProvider } from "@ethersproject/providers";
+import { InfuraProvider } from "ethers";
 import { Network } from '../types';
 
 function getInfuraNetwork(deployTo: Network) {
@@ -6,7 +6,7 @@ function getInfuraNetwork(deployTo: Network) {
 
   switch(process.env.DEPLOY_POLYGON_NETWORK)
   {
-    case "polygon-testnet": return "maticmum";
+    case "polygon-testnet": return 80002; // Amoy
     case "polygon-mainnet": return "matic";
     default: return process.env.DEPLOY_POLYGON_NETWORK;
   }

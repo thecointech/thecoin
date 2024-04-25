@@ -1,6 +1,6 @@
 import { isInternalAddress, Transaction } from "./types";
 import type { TheCoin } from '@thecointech/contract-core';
-import { BigNumber } from "@ethersproject/bignumber";
+import { BigNumber } from "ethers";
 import { DateTime } from "luxon";
 import Decimal from 'decimal.js-light';;
 import { log } from '@thecointech/logging';

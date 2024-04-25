@@ -1,6 +1,6 @@
 import { connect } from '@thecointech/contract-base/connect';
 import { getContract } from './contract';
-import type { Signer } from "@ethersproject/abstract-signer";
+import type { Signer } from "ethers";
 import { RoundNumber } from './codegen';
 export * from './contract';
 export type { RoundNumber} from './codegen/contracts/RoundNumber';

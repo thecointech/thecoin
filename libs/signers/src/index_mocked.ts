@@ -1,4 +1,4 @@
-import { Wallet } from '@ethersproject/wallet';
+import { Wallet } from 'ethers';
 import { getAndCacheSigner } from './cache';
 import { AccountId, AccountName } from './names';
 

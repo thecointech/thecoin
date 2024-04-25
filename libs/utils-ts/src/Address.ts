@@ -1,9 +1,7 @@
 
 import base32 from 'base32';
 import { sign } from "./SignedMessages";
-import type { Signer } from '@ethersproject/abstract-signer';
-import { keccak256 } from '@ethersproject/solidity';
-import { arrayify } from '@ethersproject/bytes';
+import { solidityPackedKeccak256, type Signer, getBytes } from 'ethers';
 
 export function IsValidAddress(address: string) {
 	return /^(0x)?[a-fA-F0-9]{40}$/.test(address);
@@ -59,9 +57,10 @@ export function getAddressShortCodeSig(address: string, signer: Signer) {
 export function GetHash(
   value: string
 ) {
-  const ethersHash = keccak256(
-    ["string"],
-    [value]
+  return getBytes(
+    solidityPackedKeccak256(
+      ["string"],
+      [value]
+    )
   );
-  return arrayify(ethersHash);
 }

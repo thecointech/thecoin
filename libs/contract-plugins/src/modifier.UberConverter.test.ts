@@ -5,7 +5,7 @@ import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
 // Theoretically, we could user hardhat to spin up a whole
 // working version of the contract, but that sounds like
 // a lot of work.
-jest.unstable_mockModule("@ethersproject/contracts", () => ({
+jest.unstable_mockModule("ethers", () => ({
   Contract: class {
     filters = {
       ValueChanged: () => ({}),

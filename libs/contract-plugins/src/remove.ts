@@ -1,8 +1,8 @@
-import { Signer } from '@ethersproject/abstract-signer';
+import { Signer } from 'ethers';
 import { DateTime } from 'luxon';
-import { keccak256 } from '@ethersproject/solidity';
-import { verifyMessage } from '@ethersproject/wallet';
-import { arrayify } from '@ethersproject/bytes';
+import { keccak256 } from 'ethers';
+import { verifyMessage } from 'ethers';
+import { arrayify } from 'ethers';
 import { sign } from "@thecointech/utilities/SignedMessages";
 import type { IPluggable } from './codegen/contracts';
 import type { RemovePluginRequest } from '@thecointech/types';

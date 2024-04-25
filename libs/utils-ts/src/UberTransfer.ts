@@ -1,9 +1,6 @@
 import { sign } from "./SignedMessages";
-import { keccak256 } from '@ethersproject/solidity';
-import { arrayify } from '@ethersproject/bytes';
-import { verifyMessage } from '@ethersproject/wallet';
+import { solidityPackedKeccak256, verifyMessage, type Signer, getBytes } from 'ethers';
 import type Decimal from 'decimal.js-light';
-import type { Signer } from "@ethersproject/abstract-signer";
 import type { AnyTransfer, UberTransfer } from "@thecointech/types";
 import { DateTime } from 'luxon';
 
@@ -16,11 +13,12 @@ function getHash(
   transferTime: number,
   signedTime: number,
 ) {
-  const ethersHash = keccak256(
-    ["uint", "address", "address", "uint", "uint16", "uint", "uint"],
-    [chainId, from, to, amount, currency, transferTime, signedTime]
-  );
-  return arrayify(ethersHash);
+  return getBytes(
+    solidityPackedKeccak256(
+      ["uint", "address", "address", "uint", "uint16", "uint", "uint"],
+      [chainId, from, to, amount, currency, transferTime, signedTime]
+    )
+  )
 }
 
 export async function signUberTransfer(

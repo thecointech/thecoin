@@ -1,10 +1,10 @@
-import { TransactionResponse } from "@ethersproject/abstract-provider";
-import { BigNumber } from '@ethersproject/bignumber';
+import { TransactionResponse } from "ethers";
+import { BigNumber } from 'ethers';
 import { log } from '@thecointech/logging';
 import { AnyActionContainer, NamedTransition } from '../types';
 import { last } from '@thecointech/utilities';
-import type { Overrides } from '@ethersproject/contracts';
-import type { Transaction } from '@ethersproject/transactions';
+import type { Overrides } from 'ethers';
+import type { Transaction } from 'ethers';
 import { ActionType } from "@thecointech/broker-db";
 
 // It does not seem that any transactions submitted with less then 30Gwei are accepted

@@ -3,7 +3,7 @@ import { jest } from '@jest/globals';
 import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
 import Decimal from 'decimal.js-light';
 
-jest.unstable_mockModule("@ethersproject/contracts", () => ({
+jest.unstable_mockModule("ethers", () => ({
   Contract: class {
     filters = {
       ValueChanged: () => ({}),

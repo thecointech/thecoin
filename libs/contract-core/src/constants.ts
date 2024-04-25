@@ -1,4 +1,4 @@
-import { keccak256 } from '@ethersproject/solidity';
+import { keccak256 } from 'ethers';
 export { COIN_EXP } from '@thecointech/contract-base';
 
 // Duplicate of roles defined in solidity files.

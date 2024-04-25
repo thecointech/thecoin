@@ -1,4 +1,4 @@
-import { Contract } from '@ethersproject/contracts';
+import { Contract } from 'ethers';
 import type { ShockAbsorber } from './codegen/contracts/ShockAbsorber';
 import UberSpec from './codegen/contracts/ShockAbsorber.sol/ShockAbsorber.json' assert {type: "json"};
 import { getProvider } from '@thecointech/ethers-provider';

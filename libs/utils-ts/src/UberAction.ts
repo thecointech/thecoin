@@ -1,7 +1,7 @@
 import { buildUberTransfer } from "./UberTransfer";
 import { encrypt, GetHash } from "./Encrypt";
 import { sign } from "./SignedMessages";
-import type { Signer } from "@ethersproject/abstract-signer";
+import type { Signer } from "ethers";
 import type { BillPayeePacket, ETransferPacket, UberTransferAction } from "@thecointech/types";
 import type { DateTime } from 'luxon';
 import type Decimal from 'decimal.js-light';

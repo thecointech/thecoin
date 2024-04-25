@@ -1,5 +1,5 @@
-import { Wallet } from '@ethersproject/wallet';
-import type { Signer } from '@ethersproject/abstract-signer';
+import { Wallet } from 'ethers';
+import type { Signer } from 'ethers';
 
 export enum AccountId {
   Owner,

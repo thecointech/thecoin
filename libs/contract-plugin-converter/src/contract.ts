@@ -1,4 +1,4 @@
-import { Contract } from '@ethersproject/contracts';
+import { Contract } from 'ethers';
 import type { UberConverter } from './codegen/contracts/UberConverter';
 import UberSpec from './codegen/contracts/UberConverter.sol/UberConverter.json' assert {type: "json"};
 import { getProvider } from '@thecointech/ethers-provider';

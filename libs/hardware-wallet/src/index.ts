@@ -1,13 +1,12 @@
-import { Provider, TransactionRequest } from '@ethersproject/abstract-provider';
-import { getAddress } from '@ethersproject/address';
-import { Signer } from "@ethersproject/abstract-signer";
-import { Bytes } from '@ethersproject/bytes';
-import { Deferrable } from '@ethersproject/properties';
-import { toUtf8Bytes } from '@ethersproject/strings';
-import { BigNumber } from '@ethersproject/bignumber';
-import { hexlify, joinSignature } from '@ethersproject/bytes';
-import { resolveProperties, defineReadOnly } from '@ethersproject/properties';
-import { UnsignedTransaction, serialize } from '@ethersproject/transactions';
+import { Provider, TransactionRequest, AbstractSigner } from 'ethers';
+import { getAddress, type Signer } from 'ethers';
+import { Bytes } from 'ethers';
+import { Deferrable } from 'ethers';
+import { toUtf8Bytes } from 'ethers';
+import { BigNumber } from 'ethers';
+import { hexlify, joinSignature } from 'ethers';
+import { resolveProperties, defineReadOnly } from 'ethers';
+import { UnsignedTransaction, serialize } from 'ethers';
 import { sleep } from '@thecointech/async';
 
 import TransportFactory from "@ledgerhq/hw-transport-node-hid";
@@ -21,7 +20,7 @@ const Transport: typeof TransportFactory = TransportFactory.default ?? Transport
 const Eth: typeof EthFactory = EthFactory.default ?? EthFactory;;
 
 
-export class LedgerSigner extends Signer {
+export class LedgerSigner extends AbstractSigner {
 
   address?: string;
   //@ts-ignore

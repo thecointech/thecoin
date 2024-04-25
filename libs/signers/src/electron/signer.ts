@@ -1,10 +1,10 @@
 import type { IpcRenderer } from '@thecointech/electron-utils/types/ipc';
-import type { BlockTag, FeeData, Provider, TransactionRequest, TransactionResponse } from "@ethersproject/abstract-provider";
-import type { BigNumber } from "@ethersproject/bignumber";
-import type { Bytes } from "@ethersproject/bytes";
-import type { Deferrable } from "@ethersproject/properties";
+import type { BlockTag, FeeData, Provider, TransactionRequest, TransactionResponse } from "ethers";
+import type { BigNumber } from "ethers";
+import type { Bytes } from "ethers";
+import type { Deferrable } from "ethers";
 import type { AccountName } from '../names';
-import { Signer } from '@ethersproject/abstract-signer'
+import { Signer } from 'ethers'
 import { SIGNER_CHANNEL } from './types';
 import { getProvider } from '@thecointech/ethers-provider';
 

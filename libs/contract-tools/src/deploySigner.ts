@@ -1,6 +1,6 @@
-import { BigNumber } from '@ethersproject/bignumber';
-import type { Provider } from '@ethersproject/abstract-provider';
-import type { Signer } from '@ethersproject/abstract-signer';
+import { BigNumber } from 'ethers';
+import type { Provider } from 'ethers';
+import type { Signer } from 'ethers';
 import type { AccountName } from '@thecointech/signers';
 import hre from 'hardhat';
 

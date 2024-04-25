@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import type { FXRate } from '@thecointech/pricing';
 import type { PluginBalanceMod } from '../src/types';
 import { ALL_PERMISSIONS } from '../src/constants';
-import { BigNumber } from '@ethersproject/bignumber';
+import { BigNumber } from 'ethers';
 import Decimal from 'decimal.js-light';
 import type { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
 

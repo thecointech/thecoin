@@ -1,7 +1,6 @@
-import { BlockTag, EtherscanProvider, Filter, Formatter, Log } from '@ethersproject/providers'
-import type { Signer } from '@ethersproject/abstract-signer'
-import { getNetwork } from './networks';
-import { logger, errors } from './logger';
+import { BlockTag, EtherscanProvider, Filter, LogParams } from 'ethers'
+import type { Signer } from 'ethers'
+// import { getNetwork } from './networks';
 import { convert } from '../erc20response';
 
 //
@@ -18,91 +17,87 @@ export class Erc20Provider extends EtherscanProvider {
     const apiKey = process.env.POLYGONSCAN_API_KEY;
     if (!network || !apiKey) throw new Error("Cannot use Provider without network & key");
 
-    const standardNetwork = getNetwork(network);
-    switch (standardNetwork?.name) {
-      case 'optimism-mainnet':
-      case 'optimism-testnet':
-      case 'bsc-mainnet':
-      case 'bsc-testnet':
-      case 'polygon-mainnet':
-      case 'polygon-testnet':
-      case 'arbitrum-mainnet':
-      case 'arbitrum-testnet':
+    // const standardNetwork = getNetwork(network);
+    // switch (standardNetwork?.name) {
+    //   case 'optimism-mainnet':
+    //   case 'optimism-testnet':
+    //   case 'bsc-mainnet':
+    //   case 'bsc-testnet':
+    //   case 'polygon-mainnet':
+    //   case 'polygon-testnet':
+    //   case 'arbitrum-mainnet':
+    //   case 'arbitrum-testnet':
 
-      // aliases
-      case 'optimism':
-      case 'optimism-kovan':
-      case 'bsc':
-      case 'binance':
-      case 'polygon':
-      case 'arbitrum':
-      case 'mumbai':
-      case 'chapel':
+    //   // aliases
+    //   case 'optimism':
+    //   case 'optimism-kovan':
+    //   case 'bsc':
+    //   case 'binance':
+    //   case 'polygon':
+    //   case 'arbitrum':
+    //   case 'mumbai':
+    //   case 'chapel':
 
-      // standard networks
-      case 'homestead':
-      case 'ethereum':
-      case 'mainnet':
-      case 'kovan':
-      case 'ropsten':
-      case 'goerli':
-      case 'rinkeby':
-        break
-      default:
-        throw logger.makeError('unsupported network', errors.UNSUPPORTED_OPERATION, {
-          network
-        })
-    }
+    //   // standard networks
+    //   case 'homestead':
+    //   case 'ethereum':
+    //   case 'mainnet':
+    //   case 'kovan':
+    //   case 'ropsten':
+    //   case 'goerli':
+    //   case 'rinkeby':
+    //     break
+    //   default:
+    //     throw makeError('unsupported network: ' + standardNetwork?.name, "NETWORK_ERROR")
+    // }
 
-    super(standardNetwork, apiKey)
+    super(network, apiKey)
   }
-  isCommunityResource(): boolean {
-    return false;
-  }
-  getBaseUrl() :string {
-    switch (this.network.name) {
-      case 'optimism-mainnet':
-      case 'optimism':
-        return 'https://api.explorer.optimism.io'
-      case 'optimism-testnet':
-      case 'optimism-kovan':
-        return 'https://api.kovan.optimism.io'
-      case 'bsc-mainnet':
-      case 'bsc':
-        return 'http://api.bscscan.com'
-      case 'bsc-testnet':
-        return 'http://api-testnet.bscscan.com'
-      case 'polygon-mainnet':
-      case 'polygon':
-        return 'https://api.polygonscan.com'
-      case 'polygon-testnet':
-      case 'mumbai':
-        return 'https://api-testnet.polygonscan.com'
-      case 'arbitrum-mainnet':
-      case 'arbitrum':
-        return 'https://api.arbiscan.io'
-      case 'arbitrum-testnet':
-      case 'arbitrum-rinkeby':
-        return 'https://api.rinkeby-explorer.arbitrum.io'
-      case 'homestead':
-        return 'https://api.etherscan.io'
+  // isCommunityResource(): boolean {
+  //   return false;
+  // }
+  // getBaseUrl() :string {
+  //   switch (this.network.name) {
+  //     case 'optimism-mainnet':
+  //     case 'optimism':
+  //       return 'https://api.explorer.optimism.io'
+  //     case 'optimism-testnet':
+  //     case 'optimism-kovan':
+  //       return 'https://api.kovan.optimism.io'
+  //     case 'bsc-mainnet':
+  //     case 'bsc':
+  //       return 'http://api.bscscan.com'
+  //     case 'bsc-testnet':
+  //       return 'http://api-testnet.bscscan.com'
+  //     case 'polygon-mainnet':
+  //     case 'polygon':
+  //       return 'https://api.polygonscan.com'
+  //     case 'polygon-testnet':
+  //     case 'mumbai':
+  //       return 'https://api-testnet.polygonscan.com'
+  //     case 'arbitrum-mainnet':
+  //     case 'arbitrum':
+  //       return 'https://api.arbiscan.io'
+  //     case 'arbitrum-testnet':
+  //     case 'arbitrum-rinkeby':
+  //       return 'https://api.rinkeby-explorer.arbitrum.io'
+  //     case 'homestead':
+  //       return 'https://api.etherscan.io'
 
-      case 'ropsten':
-        return 'https://api-ropsten.etherscan.io'
+  //     case 'ropsten':
+  //       return 'https://api-ropsten.etherscan.io'
 
-      case 'rinkeby':
-        return 'https://api-rinkeby.etherscan.io'
+  //     case 'rinkeby':
+  //       return 'https://api-rinkeby.etherscan.io'
 
-      case 'kovan':
-        return 'https://api-kovan.etherscan.io'
+  //     case 'kovan':
+  //       return 'https://api-kovan.etherscan.io'
 
-      case 'goerli':
-        return 'https://api-goerli.etherscan.io'
-    }
-    throw logger.makeError('unsupported network', errors.UNSUPPORTED_OPERATION, {
-      network: this.network.name
-    })
-  }
+  //     case 'goerli':
+  //       return 'https://api-goerli.etherscan.io'
+  //   }
+  //   throw makeError('unsupported network: ' + this.network.name, "NETWORK_ERROR")
+  // }
 
   async getERC20History(args: {address?: string, contractAddress?: string, fromBlock?: BlockTag, toBlock?: BlockTag}) {
     const {address, contractAddress, fromBlock, toBlock} = args;
@@ -124,7 +119,7 @@ export class Erc20Provider extends EtherscanProvider {
     });
   }
 
-  async getEtherscanLogs(filter: Filter, conditional: "or"|"and") : Promise<Array<Log>>{
+  async getEtherscanLogs(filter: Filter, conditional: "or"|"and") : Promise<Array<LogParams>>{
     const { fromBlock, toBlock } = filter;
     const params: Record<string, any> = {
       action: "getLogs",
@@ -146,7 +141,8 @@ export class Erc20Provider extends EtherscanProvider {
 
     const result = await this.fetch("logs", params);
 
-    return Formatter.arrayOf(this.formatter.filterLog.bind(this.formatter))(result);
+    return result;
+    // return Formatter.arrayOf(this.formatter.filterLog.bind(this.formatter))(result);
   }
 
   // We define the getSigner method from BaseRpcProvider because we share

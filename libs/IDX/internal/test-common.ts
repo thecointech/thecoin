@@ -1,5 +1,5 @@
 import { getComposeDB } from '../src/composedb'
-import { Wallet } from "@ethersproject/wallet";
+import { Wallet } from "ethers";
 
 export async function getClient() {
   global.window = {

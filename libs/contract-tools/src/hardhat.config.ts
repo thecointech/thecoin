@@ -1,7 +1,7 @@
 import type { HardhatUserConfig } from "hardhat/config";
 import "@typechain/hardhat";
-import '@nomiclabs/hardhat-ethers';
-import '@nomiclabs/hardhat-etherscan';
+import "@nomicfoundation/hardhat-ethers";
+import "@nomicfoundation/hardhat-verify";
 import '@openzeppelin/hardhat-upgrades';
 import { getNetworks } from './hardhat.network';
 

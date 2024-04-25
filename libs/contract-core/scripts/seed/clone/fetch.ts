@@ -3,7 +3,7 @@ import { getAllUsers, getAllActions } from "@thecointech/broker-db";
 import { init } from "@thecointech/firestore";
 import { writeFileSync } from 'fs';
 import { cacheFile } from './load';
-import { EtherscanProvider, TransactionResponse } from '@ethersproject/providers';
+import { EtherscanProvider, TransactionResponse } from 'ethers';
 import { GetContract } from '@thecointech/contract-core';
 import { isPresent, NormalizeAddress } from '@thecointech/utilities';
 import { toIgnore } from './changes';

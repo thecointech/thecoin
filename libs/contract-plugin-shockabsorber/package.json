@@ -51,7 +51,7 @@
   },
   "types": "./build/index.d.ts",
   "devDependencies": {
-    "@nomicfoundation/hardhat-network-helpers": "^1.0.8",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.10",
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
     "@thecointech/async": "^0.2.125",
     "@thecointech/contract-core": "^0.2.125",

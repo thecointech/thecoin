@@ -1,4 +1,4 @@
-import { Web3Provider } from '@ethersproject/providers';
+import { Web3Provider } from 'ethers';
 import { GetContract } from '@thecointech/contract-core';
 import { getWeb3Type } from '../../utils/detection';
 

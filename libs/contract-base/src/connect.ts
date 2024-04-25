@@ -1,8 +1,8 @@
-import { Wallet } from "@ethersproject/wallet"
+import { Wallet } from "ethers"
 import { log } from '@thecointech/logging';
-import type { BaseContract } from '@ethersproject/contracts';
-import type { Signer } from "@ethersproject/abstract-signer"
-import type { Network } from '@ethersproject/networks'
+import type { BaseContract } from 'ethers';
+import type { Signer } from "ethers"
+import type { Network } from 'ethers'
 
 export function connect<T extends BaseContract>(signer: Signer, contract: T, onFailure?: (err: Error) => void): T {
 

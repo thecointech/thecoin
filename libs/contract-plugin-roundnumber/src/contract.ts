@@ -1,4 +1,4 @@
-import { Contract } from '@ethersproject/contracts';
+import { Contract } from 'ethers';
 import { RoundNumber } from './codegen';
 import RoundNumberSpec from './codegen/contracts/RoundNumber.sol/RoundNumber.json' assert {type: "json"};
 import { getProvider } from '@thecointech/ethers-provider';

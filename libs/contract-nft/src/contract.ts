@@ -1,4 +1,4 @@
-import { Contract } from '@ethersproject/contracts';
+import { Contract } from 'ethers';
 import { TheGreenNFT } from '.';
 import { getProvider, Network } from '@thecointech/ethers-provider';
 import TheGreenNFT1Spec from './codegen/contracts/ethereum/TheGreenNFTL1.sol/TheGreenNFTL1.json' assert {type: "json"};

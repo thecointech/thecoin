@@ -1,6 +1,4 @@
-import { BlockTag, Filter, BaseProvider, Log } from '@ethersproject/providers';
-import { hexZeroPad } from "@ethersproject/bytes";
-import { BigNumber } from "@ethersproject/bignumber";
+import { BlockTag, Filter, AbstractProvider, type LogParams, type Log, zeroPadValue } from 'ethers';
 import { ERC20Response } from '../erc20response';
 import transferFrom from './logs-transfer-from.json' assert { type: 'json' };
 import transferTo from './logs-transfer-to.json' assert { type: 'json' };
@@ -8,7 +6,7 @@ import exactFrom from './logs-exact-from.json' assert { type: 'json' };
 import exactTo from './logs-exact-to.json' assert { type: 'json' };
 import { getSourceCode } from '../plugins_devlive';
 
-export class Erc20Provider extends BaseProvider {
+export class Erc20Provider extends AbstractProvider {
   connection: { url: string; };
 
   constructor() {
@@ -38,13 +36,13 @@ export class Erc20Provider extends BaseProvider {
 
         from: remapping[tx.topics[1]],
         to: remapping[tx.topics[2]!],
-        value: BigNumber.from(tx.data),
+        value: BigInt(tx.data),
       } as any;
     }).sort((a, b) => a.blockNumber - b.blockNumber);
 
   }
 
-  async getEtherscanLogs(filter: Filter, _conditional: "or"|"and") : Promise<Array<Log>>{
+  async getEtherscanLogs(filter: Filter, _conditional: "or"|"and") : Promise<Array<LogParams>>{
 
     // We get called from logs, and that'd throw if we returned this...
     if (filter.topics?.[0] != '0x53abef67a06a7d88762ab2558635c2ccf615af355d42c5a0c98715be5fb39e75')
@@ -56,12 +54,12 @@ export class Erc20Provider extends BaseProvider {
 
     const clientTopic = filter.topics!.slice(1).find(t => t) as string
     const remapping: any = await getRemapping(clientTopic);
-    remapping.broker = hexZeroPad(remapping.broker, 32);
+    remapping.broker = zeroPadValue(remapping.broker, 32);
 
     return raw.result.map(l => ({
       ...l,
       blockNumber: parseInt(l.blockNumber, 16),
-      logIndex: parseInt(l.logIndex, 16),
+      index: parseInt(l.logIndex, 16),
       transactionIndex: parseInt(l.transactionIndex, 16),
       topics: l.topics.map(t => remapping[t] ?? t),
       removed: false,

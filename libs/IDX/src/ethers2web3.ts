@@ -1,5 +1,5 @@
-import type { Signer } from '@ethersproject/abstract-signer';
-import { arrayify } from '@ethersproject/bytes';
+import type { Signer } from 'ethers';
+import { arrayify } from 'ethers';
 
 type Web3Send = {
   method: string,

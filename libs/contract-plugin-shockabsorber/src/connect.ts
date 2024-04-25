@@ -1,5 +1,5 @@
 import { connect } from '@thecointech/contract-base/connect';
-import type { Signer } from '@ethersproject/abstract-signer';
+import type { Signer } from 'ethers';
 import { getContract } from './contract';
 import type { ShockAbsorber } from './codegen/contracts/ShockAbsorber';
 

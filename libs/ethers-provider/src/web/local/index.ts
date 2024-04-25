@@ -1,7 +1,6 @@
-import { BlockTag, Filter, JsonRpcProvider, Log, TransactionReceipt } from '@ethersproject/providers';
-import { hexZeroPad, hexStripZeros } from "@ethersproject/bytes";
-import { id } from "@ethersproject/hash";
-import { BigNumber } from "@ethersproject/bignumber";
+import { BlockTag, Filter, JsonRpcProvider, Log, TransactionReceipt } from 'ethers';
+import { hexZeroPad, hexStripZeros } from "ethers";
+import { id } from "ethers";
 import { ERC20Response } from '../erc20response';
 import { getSourceCode } from '../plugins_devlive';
 
@@ -11,7 +10,7 @@ export class Erc20Provider extends JsonRpcProvider {
     super(`http://localhost:${process.env.DEPLOY_NETWORK_PORT}`);
   }
 
-  async waitForTransaction(transactionHash: string, confirmations?: number | undefined, timeout?: number | undefined): Promise<TransactionReceipt> {
+  async waitForTransaction(transactionHash: string, confirmations?: number | undefined, timeout?: number | undefined): Promise<null | TransactionReceipt> {
     const r = await super.waitForTransaction(transactionHash, confirmations, timeout);
     // Every time we wait, advance the block number
     // to prevent deadlocking when waiting for confirmations
@@ -51,7 +50,7 @@ export class Erc20Provider extends JsonRpcProvider {
 
         from: hexStripZeros(tx.topics[1]),
         to: hexStripZeros(tx.topics[2]),
-        value: BigNumber.from(tx.data),
+        value: BigInt(tx.data),
       } as any;
       return result;
     });

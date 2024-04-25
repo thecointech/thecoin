@@ -1,9 +1,9 @@
 import bs58 from 'bs58';
 import { sign } from "@thecointech/utilities/SignedMessages";
-import { arrayify } from "@ethersproject/bytes";
-import { keccak256 } from "@ethersproject/solidity";
-import { verifyMessage } from '@ethersproject/wallet';
-import type { Signer } from '@ethersproject/abstract-signer';
+import { arrayify } from "ethers";
+import { keccak256 } from "ethers";
+import { verifyMessage } from 'ethers';
+import type { Signer } from 'ethers';
 
 const remove0x = (s: string) => s.match(/^(?:0x)?(.+)$/i)?.[1] ?? s;
 const getClaimTokenHash = (tokenId: number) => (

@@ -1,8 +1,5 @@
 import { sign } from "./SignedMessages";
-import { keccak256 } from '@ethersproject/solidity';
-import { arrayify } from '@ethersproject/bytes';
-import { verifyMessage } from '@ethersproject/wallet';
-import type { Signer } from "@ethersproject/abstract-signer";
+import { solidityPackedKeccak256, verifyMessage, type Signer, getBytes } from 'ethers';
 import type { AnyTransfer, CertifiedTransferRequest } from "@thecointech/types";
 
 function GetHash(
@@ -13,11 +10,12 @@ function GetHash(
   fee: number,
   timestamp: number
 ) {
-  const ethersHash = keccak256(
-    ["uint", "address", "address", "uint256", "uint256", "uint256"],
-    [chainId, from, to, value, fee, timestamp]
-  );
-  return arrayify(ethersHash);
+  return getBytes(
+    solidityPackedKeccak256(
+      ["uint", "address", "address", "uint256", "uint256", "uint256"],
+      [chainId, from, to, value, fee, timestamp]
+    )
+  )
 }
 
 export async function SignVerifiedXfer(

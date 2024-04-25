@@ -1,5 +1,5 @@
-import type { ProgressCallback } from '@ethersproject/json-wallets';
-import { Wallet } from "@ethersproject/wallet";
+import type { ProgressCallback } from 'ethers';
+import { Wallet } from "ethers";
 import { existsSync, readFileSync } from 'fs';
 import type { AccountName } from './names';
 

@@ -1,5 +1,5 @@
-import { Formatter } from '@ethersproject/providers';
-import { BigNumber } from '@ethersproject/bignumber';
+import { Formatter } from 'ethers';
+import { BigNumber } from 'ethers';
 
 export interface ERC20Response {
 
