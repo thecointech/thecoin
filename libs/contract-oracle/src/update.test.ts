@@ -90,7 +90,7 @@ it ('Handles random offsets JS', async () => {
 
   const factor = Math.pow(10, Number(await mocked.decimals()));
   const oInit = await mocked.getRoundFromTimestamp(start.toMillis());
-  expect(oInit).toEqual(1 * factor);
+  expect(Number(oInit)).toEqual(1 * factor);
 
   await validateResults(mocked, rates);
 })
@@ -107,7 +107,7 @@ it ('Handles random offsets SOL', async () => {
 
   const factor = Math.pow(10, Number(await oracle.decimals()));
   const oInit = await oracle.getRoundFromTimestamp(start.toMillis());
-  expect(oInit).toEqual(1 * factor);
+  expect(Number(oInit)).toEqual(1 * factor);
 
   await validateResults(oracle, rates);
 })
@@ -175,12 +175,12 @@ const updateSimpleRates = (mocked: SpxCadOracleMocked|SpxCadOracle, rates: any[]
   )
 
 const validateResults = async (mocked: SpxCadOracleMocked|SpxCadOracle, rates: any[]) => {
-  const factor = BigInt(Math.pow(10, Number(await mocked.decimals())));
+  const factor = Math.pow(10, Number(await mocked.decimals()));
   for (const r of rates) {
     const oStart = await mocked.getRoundFromTimestamp(r.from.toMillis());
-    expect(oStart).toEqual(r.rate * factor);
+    expect(Number(oStart)).toEqual(r.rate * factor);
     const oTo = await mocked.getRoundFromTimestamp(r.to.toMillis() - 1);
-    expect(oTo).toEqual(r.rate * factor);
+    expect(Number(oTo)).toEqual(r.rate * factor);
   }
 }
 

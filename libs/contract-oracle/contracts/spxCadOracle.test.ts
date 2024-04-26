@@ -37,7 +37,7 @@ describe('Oracle Tests', () => {
       const test = async (t: number) => {
         const s = await oracle.getRoundFromTimestamp(t);
         const expected = Math.round(r.rate * factor);
-        expect(s).toEqual(expected);
+        expect(Number(s)).toEqual(expected);
       }
       const from = r.from;
       const to = Math.min(r.to, Date.now());
@@ -75,7 +75,7 @@ describe('Oracle Tests', () => {
       const test = async (t: number) => {
         const s = await oracle.getRoundFromTimestamp(t);
         const expected = Math.round(r.rate * factor);
-        expect(s).toEqual(expected);
+        expect(Number(s)).toEqual(expected);
       }
       await test(r.from);
       await test(r.to - 1);

@@ -30,9 +30,9 @@ it ('rounds correctly', async () => {
       const jsFiat = testCoin * rate / 1e12;
       // Test rounding to
       const solFiatUU = await client["toFiat(uint256,uint256)"](testCoin, currDate.toMillis());
-      expect(Math.round(jsFiat)).toEqual(solFiatUU);
+      expect(Math.round(jsFiat)).toEqual(Number(solFiatUU));
       const solFiatIU = await client["toFiat(int256,uint256)"](testCoin, currDate.toMillis());
-      expect(Math.round(jsFiat)).toEqual(solFiatIU);
+      expect(Math.round(jsFiat)).toEqual(Number(solFiatIU));
     }
   }
 
@@ -47,9 +47,9 @@ it ('rounds correctly', async () => {
       const jsCoin = testFiat * 1e12 / rate;
 
       const solCoinUU = await client["toCoin(uint256,uint256)"](testFiat, currDate.toMillis());
-      expect(Math.round(jsCoin)).toEqual(solCoinUU);
+      expect(Math.round(jsCoin)).toEqual(Number(solCoinUU));
       const solCoinIU = await client["toCoin(int256,uint256)"](testFiat, currDate.toMillis());
-      expect(Math.round(jsCoin)).toEqual(solCoinIU);
+      expect(Math.round(jsCoin)).toEqual(Number(solCoinIU));
     }
   }
 })

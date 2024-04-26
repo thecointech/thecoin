@@ -27,8 +27,13 @@ export class SpxCadOracleMocked implements Pick<Src, 'INITIAL_TIMESTAMP' | 'BLOC
   offsets: { from: number, offset: bigint}[] = [];
   rates: bigint[] = [];
 
-  provider = {
-    getFeeData: () => ({ fees: {} }),
+  runner = {
+    provider: {
+      getFeeData: () => ({
+        maxFeePerGas: 10n,
+        maxPriorityFeePerGas: 10n,
+      }),
+    }
   }
 
   initialize = makeFn((_updater: AddressLike, initialTimestamp: BigNumberish, blockTime: BigNumberish) => {

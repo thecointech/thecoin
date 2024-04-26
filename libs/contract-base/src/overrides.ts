@@ -1,14 +1,25 @@
 import { BaseContract, Provider, type Transaction } from "ethers";
 
-const MinimumBloodsuckerFee = BigInt(30 * Math.pow(10, 9));
 const bigIntMax = (...args: bigint[]) => args.reduce((m, e) => e > m ? e : m);
 
-export async function getOverrideFees(provider: Provider|BaseContract, prior?: Transaction) {
-  const p = provider instanceof BaseContract ? provider.runner?.provider : provider;
-  if (!p) {
-    throw new Error("No provider");
-  }
-  const fees = await p.getFeeData();
+const throwError = (msg: string): never => { throw new Error(msg) };
+
+function getProvider(providerOrContract: Provider|BaseContract) {
+  return (
+    ((providerOrContract as BaseContract).runner?.provider) ??
+    (
+      (providerOrContract as Provider).getFeeData
+        ? (providerOrContract as Provider)
+        : throwError("No Provider Found")
+    )
+  )
+}
+
+const MinimumBloodsuckerFee = BigInt(30 * Math.pow(10, 9));
+
+export async function getOverrideFees(providerOrContract: Provider|BaseContract, prior?: Transaction) {
+  const provider = getProvider(providerOrContract);
+  const fees = await provider.getFeeData();
   if (!fees.maxFeePerGas || !fees.maxPriorityFeePerGas) {
     throw new Error("Fee data not available");
   };
