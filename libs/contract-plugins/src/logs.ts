@@ -15,19 +15,16 @@ type BaseLogs = {
 export async function getPluginLogs(address: string, user: string, provider: Erc20Provider, fromBlock: number) : Promise<BaseLogs[]> {
   const contract = BasePlugin__factory.connect(address, provider);
   const filter = contract.filters.ValueChanged(user);
-  const logs = await provider.getEtherscanLogs({
-    ...filter,
-    fromBlock
-  }, "and");
+  const logs = await contract.queryFilter(filter, fromBlock);
 
   return logs
-  .map(log => contract.interface.parseLog(log)?.args)
-  .filter(isDefined)
-  .map(args => ({
-    user: args.user,
-    timestamp: DateTime.fromMillis(args.msTime.toNumber()),
-    path: args.path,
-    amnt: new Decimal(args.change.toString()),
+    .map(log => log?.args)
+    .filter(isDefined)
+    .map(args => ({
+      user: args.user,
+      timestamp: DateTime.fromMillis(Number(args.msTime)),
+      path: args.path,
+      amnt: new Decimal(args.change.toString()),
   }))
 }
 

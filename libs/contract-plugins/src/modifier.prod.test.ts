@@ -4,7 +4,7 @@ import { getEnvVars } from "@thecointech/setenv";
 import { getModifier } from '../internal/common';
 import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider/web';
 
-const prodVars = getEnvVars('prodtest');
+const prodVars = getEnvVars('prod');
 jest.setTimeout(60000);
 
 describe('Works with remote plugins', () => {
@@ -16,7 +16,7 @@ describe('Works with remote plugins', () => {
   it('Fetches code from remote & runs it', async () => {
     // Test that we can fetch & compile UberConverter
     // Force use of remote things
-    const converterAddress = "0xC77EB386b4db0c618674AF2A7d9A0694C8A185be";
+    const converterAddress = "0x70da7D05Ee936E583A5165c62A1DEd3Cb0A07C82";
     const provider = new Erc20Provider();
     const modifier = await getModifier(converterAddress, provider);
     expect(modifier).toBeTruthy();

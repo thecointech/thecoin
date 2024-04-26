@@ -66,7 +66,11 @@ export class Erc20Provider extends AbstractProvider {
     }))
   }
 
-  async getLogs(): Promise<Log[]> {
+  override async resolveName(name: string) {
+    return name;
+  }
+
+  override async getLogs(): Promise<Log[]> {
     return [];
   }
 

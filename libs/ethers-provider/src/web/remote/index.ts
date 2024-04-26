@@ -20,7 +20,7 @@ export class Erc20Provider extends EtherscanProvider {
     if (network == "matic-amoy") {
       const override = new Network(network, BigInt(chainId))
       override.attachPlugin(
-        new EtherscanPlugin("https://api-amoy.polygonscan.com/api")
+        new EtherscanPlugin("https://api-amoy.polygonscan.com")
       )
       super(override, apiKey);
     }
@@ -76,9 +76,9 @@ export class Erc20Provider extends EtherscanProvider {
     const { fromBlock, toBlock } = filter as any;
     const params: Record<string, any> = {
       action: "getLogs",
-      address: "0x34fA894d7fE1FA5FA9d109434345B47DBe3B01fc", // filter.address,
+      address: filter.address,
       fromBlock: Number(fromBlock ?? initBlock),
-      toBlock: toBlock ? Number(toBlock) : "latest",
+      toBlock: Number(toBlock) ? Number(toBlock) : "latest",
       topic1_2_opr: conditional
     };
     const topicsAdded: number[] = [];
