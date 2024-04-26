@@ -19,7 +19,7 @@ export async function getPluginModifier(user: string, {plugin, permissions}: Plu
   const provider = _provider ?? new Erc20Provider();
 
   // if this doesn't modify the balance, we don't need to emulate it
-  if (permissions.mask(PERMISSION_BALANCE).eq(0)) {
+  if ((permissions & PERMISSION_BALANCE) == 0n) {
     return null;
   }
 

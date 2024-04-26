@@ -1,21 +1,16 @@
 import type { IpcRenderer } from '@thecointech/electron-utils/types/ipc';
-import type { BlockTag, FeeData, Provider, TransactionRequest, TransactionResponse } from "ethers";
-import type { BigNumber } from "ethers";
-import type { Bytes } from "ethers";
-import type { Deferrable } from "ethers";
+import type { Signer,BlockTag, FeeData, Provider, TransactionRequest, TransactionResponse, BytesLike, TransactionLike, TypedDataDomain, TypedDataField } from "ethers";
 import type { AccountName } from '../names';
-import { Signer } from 'ethers'
 import { SIGNER_CHANNEL } from './types';
 import { getProvider } from '@thecointech/ethers-provider';
 
-export class ElectronSigner extends Signer {
+export class ElectronSigner implements Signer {
   static _ipc: IpcRenderer;
 
-  provider?: Provider | undefined;
+  provider: Provider | null;
   _ident: AccountName;
 
   constructor(ident: AccountName) {
-    super();
     this._ident = ident;
     // Default provider
     this.provider = getProvider();
@@ -24,37 +19,47 @@ export class ElectronSigner extends Signer {
   invoke(fn: string, ...args: any[]) : Promise<any> {
     return ElectronSigner._ipc.invoke(SIGNER_CHANNEL, this._ident, fn, args);
   }
+
+  getNonce(blockTag?: BlockTag | undefined): Promise<number> {
+    return this.invoke('getNonce', blockTag);
+  }
+  populateCall(tx: TransactionRequest): Promise<TransactionLike<string>> {
+    return this.invoke('populateCall', tx);
+  }
+  signTypedData(domain: TypedDataDomain, types: Record<string, TypedDataField[]>, value: Record<string, any>): Promise<string> {
+    return this.invoke('signTypedData', domain, types, value);
+  }
   getAddress(): Promise<string> {
     return this.invoke('getAddress');
   }
-  signMessage(message: string | Bytes): Promise<string> {
+  signMessage(message: BytesLike): Promise<string> {
     return this.invoke('signMessage', message);
   }
-  signTransaction(transaction: Deferrable<TransactionRequest>): Promise<string> {
+  signTransaction(transaction: TransactionRequest): Promise<string> {
     return this.invoke('signTransaction', transaction)
   }
   connect(): Signer {
     throw new Error('Cannot re-connect Electron signer.');
   }
-  getBalance(): Promise<BigNumber> {
+  getBalance(): Promise<BigInt> {
     return this.invoke('getBalance');
   }
   getTransactionCount(blockTag?: BlockTag): Promise<number> {
     return this.invoke('getTransactionCount', blockTag);
   }
-  estimateGas(transaction: Deferrable<TransactionRequest>): Promise<BigNumber> {
+  estimateGas(transaction: TransactionRequest): Promise<bigint> {
     return this.invoke('estimateGas', transaction);
   }
-  call(transaction: Deferrable<TransactionRequest>, blockTag?: BlockTag): Promise<string> {
+  call(transaction: TransactionRequest, blockTag?: BlockTag): Promise<string> {
     return this.invoke('call', transaction, blockTag);
   }
-  sendTransaction(transaction: Deferrable<TransactionRequest>): Promise<TransactionResponse> {
+  sendTransaction(transaction: TransactionRequest): Promise<TransactionResponse> {
     return this.invoke('sendTransaction', transaction);
   }
   getChainId(): Promise<number> {
     return this.invoke('getChainId');
   }
-  getGasPrice(): Promise<BigNumber> {
+  getGasPrice(): Promise<BigInt> {
     return this.invoke('getGasPrice');
   }
   getFeeData(): Promise<FeeData> {
@@ -63,7 +68,7 @@ export class ElectronSigner extends Signer {
   resolveName(name: string): Promise<string> {
     return this.invoke('resolveName', name);
   }
-  populateTransaction(transaction: Deferrable<TransactionRequest>): Promise<TransactionRequest> {
+  populateTransaction(transaction: TransactionRequest): Promise<TransactionLike<string>> {
     return this.invoke('populateTransaction', transaction);
   }
 }

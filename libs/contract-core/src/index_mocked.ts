@@ -1,14 +1,22 @@
 import * as Src from '.';
-import { BigNumber, ContractTransaction, Signer } from 'ethers'
+import { AddressLike, BigNumberish, ContractTransaction, Signer } from 'ethers'
 import { sleep } from '@thecointech/async'
 import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
 import { PluginAndPermissionsStructOutput } from './codegen/contracts/TheCoinL1';
+import { StateMutability, TypedContractMethod } from './codegen/common';
 export * from './constants';
 
 const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
 let nonce = 12;
 let confirmations = 1;
-let lastTxVal: number|undefined = undefined;
+let lastTxVal: BigNumberish|undefined = undefined;
+
+
+const makeFn = <
+A extends Array<any> = Array<any>,
+R = any,
+S extends StateMutability = "payable"
+>(r: (...a: A) => R, _s?: S) => r as any as TypedContractMethod<A, [Awaited<R>], S>;
 export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugins'|'exactTransfer' | 'balanceOf' | 'certifiedTransfer'>{
 
   signer?: Signer;
@@ -18,29 +26,30 @@ export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugin
   // prefix is (e) for exactTransfer and (c) for certifiedTransfer, and (0) for other
   // We embed this in the identifier so we can tell through the rest of the mock
   // what kind of transaction it represented
-  genReceipt = (prefix: string = '0', opts?: any, txval?: number) => {
+  genReceipt = (prefix: string = '0', opts?: any, txval?: BigNumberish) => {
     confirmations = 2;
     lastTxVal = txval;
-    return Promise.resolve({
+    return {
       wait: () => { },
       hash: `0x${prefix}${genRanHex(63)}`,
       ...opts,
       nonce: nonce++,
-    } as any as ContractTransaction)
+    } as any as ContractTransaction
   }
 
   mintCoins = () => this.genReceipt();
   burnCoins = () => this.genReceipt();
-  exactTransfer = (_: string, value: number) => this.genReceipt('e', undefined, value);
-  balanceOf = () => Promise.resolve(BigNumber.from(995000000));
-  certifiedTransfer = (...args: any[]) => this.genReceipt('c', { confirmations: 1 }, args[3])
-  uberTransfer = () => this.genReceipt('c', { confirmations: 1 })
+  exactTransfer = makeFn((_: AddressLike, _value: BigNumberish, _t: any) => {}, "nonpayable");
+  balanceOf = makeFn((_: AddressLike) => 995000000n, "view");
+  certifiedTransfer = makeFn((..._args: any[]) => {}, "nonpayable") //this.genReceipt('c', { confirmations: 1 }, args[3]), "nonpayable");
+  uberTransfer = makeFn((..._args: any[]) => {}, "nonpayable") //this.genReceipt('c', { confirmations: 1 }))
   // Run during testing.  Remove once deployement is secure.
   runCloneTransfer = () => this.genReceipt();
-  getUsersPlugins = () => Promise.resolve([{
+  getUsersPlugins = makeFn((_s: AddressLike) => [{
     plugin: "RoundNumber",
-    permissions: BigNumber.from(ALL_PERMISSIONS)
-  } as PluginAndPermissionsStructOutput]);
+    permissions: ALL_PERMISSIONS,
+  } as PluginAndPermissionsStructOutput]
+  , "view");
 
   provider = {
     waitForTransaction: (hash: string) => Promise.resolve({
@@ -68,9 +77,9 @@ export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugin
     getTransactionReceipt: () => Promise.resolve({ blockNumber: 123, blockHash: "0x45678" }),
     getTransactionCount: () => Promise.resolve(1),
     getFeeData: () => Promise.resolve({
-      maxFeePerGas: BigNumber.from(1000),
-      maxPriorityFeePerGas: BigNumber.from(1000),
-      gasPrice: BigNumber.from(1000)
+      maxFeePerGas: 1000n,
+      maxPriorityFeePerGas: 1000n,
+      gasPrice: 1000n,
     })
   }
   estimate = {
@@ -85,10 +94,10 @@ export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugin
       return {
         name: "ExactTransfer",
         args: {
-          timestamp: BigNumber.from(`0x${item.data.slice(66)}`),
+          timestamp: BigInt(`0x${item.data.slice(66)}`),
           from, // random address, currently ignored
           to,
-          amount: BigNumber.from(lastTxVal ?? 20000000),
+          amount: BigInt(lastTxVal ?? 20000000),
         }
       }
     },

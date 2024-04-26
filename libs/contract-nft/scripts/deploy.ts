@@ -5,7 +5,7 @@ import { storeContractAddress } from '@thecointech/contract-tools/writeContract'
 import { getProvider } from '@thecointech/ethers-provider';
 import { getArguments } from './arguments';
 import type { Network } from '@thecointech/contract-base';
-import '@nomiclabs/hardhat-ethers';
+import '@nomicfoundation/hardhat-ethers';
 
 async function main() {
   const network = hre.config.defaultNetwork;

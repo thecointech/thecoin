@@ -10,7 +10,7 @@ export class Erc20Provider extends AbstractProvider {
   connection: { url: string; };
 
   constructor() {
-    super('unspecified');
+    super('any');
 
     this.connection = {
       url: "mocked",

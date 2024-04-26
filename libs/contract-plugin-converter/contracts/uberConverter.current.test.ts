@@ -6,7 +6,7 @@ import { initAccounts, createAndInitTheCoin } from '@thecointech/contract-core/t
 import { buildUberTransfer } from '@thecointech/utilities/UberTransfer';
 import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
-import '@nomiclabs/hardhat-ethers';
+import '@nomicfoundation/hardhat-ethers';
 
 const timeout = 10 * 60 * 1000;
 jest.setTimeout(timeout);

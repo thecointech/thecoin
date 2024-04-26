@@ -1,5 +1,5 @@
 import { BlockTag, Filter, JsonRpcProvider, Log, TransactionReceipt } from 'ethers';
-import { hexZeroPad, hexStripZeros } from "ethers";
+import { zeroPadValue } from "ethers";
 import { id } from "ethers";
 import { ERC20Response } from '../erc20response';
 import { getSourceCode } from '../plugins_devlive';
@@ -28,8 +28,8 @@ export class Erc20Provider extends JsonRpcProvider {
       toBlock: args.toBlock,
       topics: [
         id('Transfer(address,address,uint256)'),
-        t1 ? hexZeroPad(args.address!, 32) : null,
-        t2 ? hexZeroPad(args.address!, 32) : null,
+        t1 ? zeroPadValue(args.address!, 32) : null,
+        t2 ? zeroPadValue(args.address!, 32) : null,
       ]
     })
 
@@ -37,21 +37,21 @@ export class Erc20Provider extends JsonRpcProvider {
     const to = await this.getLogs(buildFilter([null, args.address!]));
     const result = [...from, ...to].sort((a, b) => a.blockNumber - b.blockNumber);
 
+    debugger;
     return result.map((tx: any) : ERC20Response => {
       if (!tx.timestamp) tx.timestamp = tx.timeStamp
       const result: ERC20Response = {
-        blockNumber: Number(tx.blockNumber),
+        ...tx,
         // Not present on this
         timestamp: Number(tx.blockNumber),
         hash: tx.transactionHash,
-        blockHash: tx.blockHash,
         contractAddress: tx.address,
-        transactionIndex: tx.transactionIndex,
 
-        from: hexStripZeros(tx.topics[1]),
-        to: hexStripZeros(tx.topics[2]),
+        // Used to be hexStripZeros(tx.topics[1]),
+        from: tx.topics[1],
+        to: tx.topics[2],
         value: BigInt(tx.data),
-      } as any;
+      };
       return result;
     });
   }

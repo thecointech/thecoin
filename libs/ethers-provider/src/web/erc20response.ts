@@ -1,9 +1,8 @@
-import { Formatter } from 'ethers';
-import { BigNumber } from 'ethers';
-
+// import { formatTransactionResponse } from 'ethers';
 export interface ERC20Response {
 
   blockNumber: number;
+  confirmations: number;
   timestamp: number;
   hash: string;
   nonce: number;
@@ -12,43 +11,61 @@ export interface ERC20Response {
 
   to: string;
   from: string;
-  value: BigNumber;
+  value: BigInt;
 
   tokenName: string,
   tokenSymbol: string,
   tokenDecimal: number,
   transactionIndex: number,
 
-  gas: BigNumber,
-  gasPrice: BigNumber,
-  gasUsed: BigNumber,
+  gas: BigInt,
+  gasPrice: BigInt,
+  gasUsed: BigInt,
+  cumulativeGasUsed: BigInt,
 }
 
-const formatter = new Formatter();
-const f_address = formatter.address.bind(formatter);
-const f_bigNumber = formatter.bigNumber.bind(formatter);
-const f_hash = formatter.hash.bind(formatter);
-const f_number = formatter.number.bind(formatter);
+export function format(tx: any): ERC20Response {
+  return {
+    ...tx,
+    blockNumber: Number(tx.blockNumber),
+    confirmations: Number(tx.confirmations),
+    timestamp: Number(tx.timestamp ?? tx.timeStamp),
+    nonce: Number(tx.nonce),
+    transactionIndex: Number(tx.transactionIndex),
+    tokenDecimal: Number(tx.tokenDecimal),
 
-const f_string = (s: string) => s
-const erc20formatter = {
-  blockNumber: f_number,
-  timestamp: f_number,
-  hash: f_hash,
-  nonce: f_number,
-  blockHash: f_hash,
-  from: f_address,
-  contractAddress: f_address,
-  to: f_address,
-
-  value: f_bigNumber,
-  tokenName: f_string,
-  tokenSymbol: f_string,
-  tokenDecimal: f_number,
-  transactionIndex: f_number,
-
-  gas: f_bigNumber,
-  gasPrice: f_bigNumber,
-  gasUsed: f_bigNumber,
+    value: BigInt(tx.value),
+    gas: BigInt(tx.gas),
+    gasPrice: BigInt(tx.gasPrice),
+    gasUsed: BigInt(tx.gasUsed),
+    cumulativeGasUsed: BigInt(tx.cumulativeGasUsed),
+  }
 }
-export const convert = (tx: any) => Formatter.check(erc20formatter, tx) as ERC20Response
+// const formatter = new Formatter();
+// const f_address = formatter.address.bind(formatter);
+// const f_bigNumber = formatter.bigNumber.bind(formatter);
+// const f_hash = formatter.hash.bind(formatter);
+// const f_number = formatter.number.bind(formatter);
+
+// const f_string = (s: string) => s
+// const erc20formatter = {
+//   blockNumber: f_number,
+//   timestamp: f_number,
+//   hash: f_hash,
+//   nonce: f_number,
+//   blockHash: f_hash,
+//   from: f_address,
+//   contractAddress: f_address,
+//   to: f_address,
+
+//   value: f_bigNumber,
+//   tokenName: f_string,
+//   tokenSymbol: f_string,
+//   tokenDecimal: f_number,
+//   transactionIndex: f_number,
+
+//   gas: f_bigNumber,
+//   gasPrice: f_bigNumber,
+//   gasUsed: f_bigNumber,
+// }
+// export const convert = (tx: any) => Formatter.check(erc20formatter, tx) as ERC20Response

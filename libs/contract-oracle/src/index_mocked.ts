@@ -1,86 +1,98 @@
-import { BigNumber, ContractTransaction } from 'ethers';
-import { DateTime } from 'luxon';
-import { SpxCadOracle as Src } from './codegen/contracts/SpxCadOracle';
 import { last } from '@thecointech/utilities';
+import { DateTime } from 'luxon';
+import type { AddressLike, BigNumberish, ContractTransaction } from 'ethers';
+import type { SpxCadOracle as Src } from './codegen/contracts/SpxCadOracle';
+import type { StateMutability, TypedContractMethod } from './codegen/common';
+
 export * from './update';
+
+const makeFn = <
+A extends Array<any> = Array<any>,
+R = any,
+S extends StateMutability = "payable"
+>(r: (...a: A) => R, _s?: S) => r as any as TypedContractMethod<A, [Awaited<R>], S>;
 
 export class SpxCadOracleMocked implements Pick<Src, 'INITIAL_TIMESTAMP' | 'BLOCK_TIME' | 'initialize' | 'update' | 'bulkUpdate' | 'updateOffset' | 'getOffset' | 'lastOffsetFrom' | 'getBlockIndexFor' | 'getRoundFromTimestamp' | 'decimals'> {
 
   // By default, we cover the last year
-  initialTimestamp = DateTime
-    .now()
-    .minus({ years: 1 })
-    .set({ hour: 9, minute: 31, second: 30, millisecond: 0 })
-    .toMillis();
+  initialTimestamp = BigInt(
+    DateTime
+      .now()
+      .minus({ years: 1 })
+      .set({ hour: 9, minute: 31, second: 30, millisecond: 0 })
+      .toMillis()
+  );
   // In most code, we run on 3hrs, but in here lets up that to 24 hrs.
-  blockTime = 24 * 60 * 60 * 1000;
-  offsets: { from: number, offset: number}[] = [];
-  rates: number[] = [];
+  blockTime = BigInt(24 * 60 * 60 * 1000);
+  offsets: { from: number, offset: bigint}[] = [];
+  rates: bigint[] = [];
 
   provider = {
     getFeeData: () => ({ fees: {} }),
   }
 
-  async initialize(_updater: string, initialTimestamp: number, blockTime: number) {
-    this.initialTimestamp = initialTimestamp;
-    this.blockTime = blockTime;
+  initialize = makeFn((_updater: AddressLike, initialTimestamp: BigNumberish, blockTime: BigNumberish) => {
+    this.initialTimestamp = BigInt(initialTimestamp);
+    this.blockTime = BigInt(blockTime);
     this.rates = [];
     return { } as any;
-  }
-  INITIAL_TIMESTAMP = () => Promise.resolve(BigNumber.from(this.initialTimestamp));
-  BLOCK_TIME = () => Promise.resolve(BigNumber.from(this.blockTime));
-  validUntil = () => Promise.resolve(BigNumber.from((last(this.offsets)?.offset ?? 0) + this.initialTimestamp + (this.rates.length * this.blockTime)));
+  })
+  INITIAL_TIMESTAMP = makeFn(() => this.initialTimestamp, "view");
+  BLOCK_TIME = makeFn(() => this.blockTime, "view");
+  validUntil = makeFn(() => (last(this.offsets)?.offset ?? 0n) + this.initialTimestamp + (BigInt(this.rates.length) * this.blockTime));
 
-  async bulkUpdate(rates: number[]) {
-    this.rates.push(...rates);
+  bulkUpdate = makeFn((rates: BigNumberish[]) => {
+    this.rates.push(...rates.map(n => BigInt(n)));
     return {
       wait: () => Promise.resolve(),
     } as any;
-  }
-  update(newValue: number): Promise<ContractTransaction> {
-    this.rates.push(newValue);
-    return {
-      wait: () => Promise.resolve(),
-    } as any;
-  }
-  updateOffset(offset: { from: number, offset: number}): Promise<ContractTransaction> {
-    this.offsets.push(offset);
-    return {
-      wait: () => Promise.resolve(),
-    } as any;
-  }
+  })
 
-  async getOffset(timestamp: number): Promise<BigNumber> {
+  update = makeFn((newValue: BigNumberish) => {
+    this.rates.push(BigInt(newValue));
+    return {
+      wait: () => Promise.resolve(),
+    } as any;
+  });
+
+  updateOffset = makeFn((offset: { from: BigNumberish, offset: BigNumberish}) => {
+    this.offsets.push({
+      from: Number(offset.from),
+      offset: BigInt(offset.offset),
+    });
+    return {
+      wait: () => Promise.resolve(),
+    } as any;
+  })
+
+  getOffset = makeFn((timestamp: BigNumberish) => {
     // Search backwards for the correct offset
     // This assumes most queries will be for current time
     for (let i = this.offsets.length - 1; i >= 0; i--) {
-      if (this.offsets[i].from <= timestamp) {
-        return Promise.resolve(BigNumber.from(this.offsets[i].offset));
+      if (this.offsets[i].from <= Number(timestamp)) {
+        return this.offsets[i].offset;
       }
     }
-    return Promise.resolve(BigNumber.from(0));;
-  }
+    return 0n;
+  }, "view")
 
-  async lastOffsetFrom() {
-    return Promise.resolve(BigNumber.from(
-      this.offsets.length == 0
-        ? 0
-        : this.offsets[this.offsets.length - 1].from)
-    );
-  }
+  lastOffsetFrom = makeFn(() => {
+    return this.offsets.length == 0
+        ? 0n
+        : BigInt(this.offsets[this.offsets.length - 1].from)
+  }, 'view')
 
-  async getBlockIndexFor(timestamp: number): Promise<BigNumber> {
+  getBlockIndexFor = makeFn(async (timestamp: BigNumberish) => {
     const offset = await this.getOffset(timestamp);
-    const blockIdx = (timestamp - this.initialTimestamp - offset.toNumber()) / this.blockTime;
-    return Promise.resolve(BigNumber.from(Math.floor(blockIdx)));
-  }
+    return (BigInt(timestamp) - this.initialTimestamp - offset) / this.blockTime;
+  }, "view")
 
-  async getRoundFromTimestamp(timestamp: number): Promise<BigNumber> {
+  getRoundFromTimestamp = makeFn(async (timestamp: BigNumberish) => {
     const blockIdx = await this.getBlockIndexFor(timestamp);
-    return Promise.resolve(BigNumber.from(this.rates[blockIdx.toNumber()]));
-  }
+    return this.rates[Number(blockIdx)];
+  }, "view")
 
-  async decimals() { return Promise.resolve(8); }
+  decimals = makeFn(() => 8n, "view");
 }
 
 export const getContract = () => new SpxCadOracleMocked() as unknown as Src;

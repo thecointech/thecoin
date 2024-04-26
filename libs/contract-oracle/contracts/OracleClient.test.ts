@@ -1,6 +1,6 @@
 import { createOracle } from "../internal/testHelpers";
 import hre from 'hardhat';
-import '@nomiclabs/hardhat-ethers';
+import '@nomicfoundation/hardhat-ethers';
 import { DateTime } from "luxon";
 import { OracleClientTest__factory } from "../src/codegen";
 
@@ -11,13 +11,13 @@ it ('rounds correctly', async () => {
   // Create client
   const Client: OracleClientTest__factory = await hre.ethers.getContractFactory('OracleClientTest');
   const client = await Client.deploy();
-  await client.setOracle(oracle.address);
+  await client.setOracle(oracle);
 
   // Starting value
   const setRate = async (rate: number) => {
     const initTime = await oracle.validUntil();
     await oracle.update(rate);
-    return DateTime.fromMillis(initTime.toNumber());
+    return DateTime.fromMillis(Number(initTime));
   };
 
   {
@@ -30,9 +30,9 @@ it ('rounds correctly', async () => {
       const jsFiat = testCoin * rate / 1e12;
       // Test rounding to
       const solFiatUU = await client["toFiat(uint256,uint256)"](testCoin, currDate.toMillis());
-      expect(Math.round(jsFiat)).toEqual(solFiatUU.toNumber());
+      expect(Math.round(jsFiat)).toEqual(solFiatUU);
       const solFiatIU = await client["toFiat(int256,uint256)"](testCoin, currDate.toMillis());
-      expect(Math.round(jsFiat)).toEqual(solFiatIU.toNumber());
+      expect(Math.round(jsFiat)).toEqual(solFiatIU);
     }
   }
 
@@ -47,9 +47,9 @@ it ('rounds correctly', async () => {
       const jsCoin = testFiat * 1e12 / rate;
 
       const solCoinUU = await client["toCoin(uint256,uint256)"](testFiat, currDate.toMillis());
-      expect(Math.round(jsCoin)).toEqual(solCoinUU.toNumber());
+      expect(Math.round(jsCoin)).toEqual(solCoinUU);
       const solCoinIU = await client["toCoin(int256,uint256)"](testFiat, currDate.toMillis());
-      expect(Math.round(jsCoin)).toEqual(solCoinIU.toNumber());
+      expect(Math.round(jsCoin)).toEqual(solCoinIU);
     }
   }
 })

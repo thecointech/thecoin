@@ -7,8 +7,7 @@ export * from './types';
 export * from './assign';
 export * from './remove';
 
-export async function getPluginDetails(tcCore: IPluggable) : Promise<PluginDetails[]>{
-  const user = await tcCore.signer.getAddress();
+export async function getPluginDetails(tcCore: IPluggable, user: string) : Promise<PluginDetails[]>{
   const plugins = await tcCore.getUsersPlugins(user);
   const details = plugins.map(async (plugin) => ({
     address: plugin.plugin,

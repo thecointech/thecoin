@@ -8,8 +8,7 @@ export async function getClient() {
     } as any
   } as any
 
-  const signer = Wallet
-    .fromMnemonic("test test test test test test test test test test test junk");
+  const signer = Wallet.fromPhrase("test test test test test test test test test test test junk");
 
   const client = await getComposeDB(signer);
   return { signer, client };

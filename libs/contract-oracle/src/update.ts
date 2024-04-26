@@ -1,6 +1,6 @@
 import { log } from '@thecointech/logging';
 import { SpxCadOracle } from './codegen';
-import { BigNumber } from 'ethers';
+import { getOverrideFees } from '@thecointech/contract-base';
 import { DateTime, Duration } from 'luxon';
 
 type RateFactory = (millis: number) => Promise<{rate: number, from: number, to: number}|null>;
@@ -10,11 +10,12 @@ const ONE_HR = 1000 * 60 * 60;
 
 export async function updateRates(oracle: SpxCadOracle, till: number, rateFactory: RateFactory) {
 
-  const factor = Math.pow(10, await oracle.decimals());
-  const from = (await oracle.validUntil()).toNumber();
-  const blockTime = (await oracle.BLOCK_TIME()).toNumber();
-  const lastOffsetFrom = (await oracle.lastOffsetFrom()).toNumber();
-  let priorOffset = (await oracle.getOffset(from)).toNumber();
+  const decimals = await oracle.decimals();
+  const factor = Math.pow(10, Number(decimals));
+  const from = Number(await oracle.validUntil());
+  const blockTime = Number(await oracle.BLOCK_TIME());
+  const lastOffsetFrom = await oracle.lastOffsetFrom();
+  let priorOffset = Number(await oracle.getOffset(from));
   let timestamp = from;
 
   log.info(
@@ -143,8 +144,8 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
     }
     log.trace(`Updated ${rates.length} new rates, until ${timestamp} : ${new Date(timestamp)}`)
 
-    const newLatest = (await oracle.validUntil()).toNumber();
-    log.trace(`New contract latest: ${new Date(newLatest)}`);
+    const newLatest = await oracle.validUntil();
+    log.trace(`New contract latest: ${new Date(Number(newLatest))}`);
   }
   catch (err: any) {
     log.error(err, "Error updating oracle");
@@ -184,18 +185,20 @@ function calculateNumBlocks(duration: number, blockTime: number) {
 }
 
 // Dup 3x, must be refactored
-const MinimumBloodsuckerFee = 30 * Math.pow(10, 9);
+// const MinimumBloodsuckerFee = 30 * Math.pow(10, 9);
 
-async function getOverrideFees(oracle: SpxCadOracle) {
-  const fees = await oracle.provider.getFeeData();
-  if (!fees.maxFeePerGas || !fees.maxPriorityFeePerGas) return undefined;
+// async function getOverrideFees(oracle: SpxCadOracle) {
+//   const fees = await oracle.runner?.provider?.getFeeData();
+//   if (!fees?.maxFeePerGas || !fees?.maxPriorityFeePerGas) {
+//     throw new Error("Failed to get fees");
+//   }
 
-  // calculate new maximums at least 10% higher than previously
-  const base = fees.maxFeePerGas.sub(fees.maxPriorityFeePerGas);
-  const newMinimumTip = MinimumBloodsuckerFee;
-  const tip = Math.max(fees.maxPriorityFeePerGas.toNumber(), newMinimumTip);
-  return {
-    maxFeePerGas: base.mul(2).add(tip),
-    maxPriorityFeePerGas: BigNumber.from(tip),
-  }
-}
+//   // calculate new maximums at least 10% higher than previously
+//   const base = fees.maxFeePerGas - fees.maxPriorityFeePerGas;
+//   const newMinimumTip = MinimumBloodsuckerFee;
+//   const tip = Math.max(fees.maxPriorityFeePerGas, newMinimumTip);
+//   return {
+//     maxFeePerGas: base.mul(2).add(tip),
+//     maxPriorityFeePerGas: BigNumber.from(tip),
+//   }
+// }

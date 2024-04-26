@@ -1,7 +1,7 @@
 import hre from 'hardhat';
 import { writePlugin } from '@thecointech/contract-plugins/writePlugin';
 import { log } from '@thecointech/logging';
-import '@nomiclabs/hardhat-ethers';
+import '@nomicfoundation/hardhat-ethers';
 import '@openzeppelin/hardhat-upgrades';
 import { getArguments } from './arguments';
 import { getDeploySigner } from '@thecointech/contract-tools/deploySigner';

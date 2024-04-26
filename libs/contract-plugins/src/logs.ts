@@ -1,11 +1,9 @@
-import BasePluginSpec from './codegen/contracts/BasePlugin.sol/BasePlugin.json' assert {type: "json"};
-import { BasePlugin } from './codegen/contracts/BasePlugin';
-import { Contract } from 'ethers';
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import { ContractState } from './types';
-import { last } from '@thecointech/utilities';
+import { isDefined, last } from '@thecointech/utilities';
 import type { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
+import { BasePlugin__factory } from './codegen';
 
 type BaseLogs = {
   timestamp: DateTime,
@@ -15,7 +13,7 @@ type BaseLogs = {
 }
 
 export async function getPluginLogs(address: string, user: string, provider: Erc20Provider, fromBlock: number) : Promise<BaseLogs[]> {
-  const contract = new Contract(address, BasePluginSpec.abi, provider) as BasePlugin;
+  const contract = BasePlugin__factory.connect(address, provider);
   const filter = contract.filters.ValueChanged(user);
   const logs = await provider.getEtherscanLogs({
     ...filter,
@@ -23,7 +21,8 @@ export async function getPluginLogs(address: string, user: string, provider: Erc
   }, "and");
 
   return logs
-  .map(log => contract.interface.parseLog(log).args)
+  .map(log => contract.interface.parseLog(log)?.args)
+  .filter(isDefined)
   .map(args => ({
     user: args.user,
     timestamp: DateTime.fromMillis(args.msTime.toNumber()),

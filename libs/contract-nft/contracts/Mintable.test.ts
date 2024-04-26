@@ -2,7 +2,7 @@ import hre from 'hardhat';
 import { jest } from '@jest/globals';
 import { getTokenClaimCode, getTokenClaimSig } from '../src/tokenCodes';
 import type { TheGreenNFTL2 } from '../src/codegen';
-import '@nomiclabs/hardhat-ethers';
+import '@nomicfoundation/hardhat-ethers';
 
 const [
   owner,  // Deploys the smart contract

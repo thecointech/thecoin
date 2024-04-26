@@ -52,10 +52,10 @@ describe('manual test', () => {
       ]
     }
 
-    const contractHistoryAnd = await provider.getEtherscanLogs(filter, "and");
+    const contractHistoryAnd = await provider.doGetEtherscanLogs(filter, "and");
     expect(contractHistoryAnd.length).toEqual(10);
 
-    const contractHistoryOr = await provider.getEtherscanLogs(filter, "or");
+    const contractHistoryOr = await provider.doGetEtherscanLogs(filter, "or");
     expect(contractHistoryOr.length).toEqual(37);
   });
 }, prodVars.POLYGONSCAN_API_KEY != undefined)

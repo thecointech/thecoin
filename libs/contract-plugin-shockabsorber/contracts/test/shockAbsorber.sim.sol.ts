@@ -1,5 +1,5 @@
 import hre from 'hardhat';
-import '@nomiclabs/hardhat-ethers';
+import '@nomicfoundation/hardhat-ethers';
 import { createAndInitOracle, setOracleValueRepeat } from '@thecointech/contract-oracle/testHelpers.ts';
 import { initAccounts, createAndInitTheCoin } from '@thecointech/contract-core/testHelpers.ts';
 import { ShockAbsorber } from '../../src';

@@ -20,10 +20,11 @@ async function main() {
   const contractArgs = await getArguments(network)
   const TheCoin = await hre.ethers.getContractFactory(name, owner);
   const theCoin = await hre.upgrades.deployProxy(TheCoin, contractArgs, { initializer: 'initialize(address _sender, address depositor)'});
-  log.info(`Deployed ${name} at ${theCoin.address}`);
+  const deployAddress = await theCoin.getAddress();
+  log.info(`Deployed ${name} at ${deployAddress}`);
 
   // Serialize our contract addresses
-  storeContractAddress(new URL(import.meta.url), "polygon", theCoin.address);
+  storeContractAddress(new URL(import.meta.url), "polygon", deployAddress);
 }
 
 const getName = (network: string) =>

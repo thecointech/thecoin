@@ -2,7 +2,7 @@ import hre from 'hardhat';
 import { getSigner } from '@thecointech/signers';
 import { writePlugin } from '@thecointech/contract-plugins/writePlugin';
 import { log } from '@thecointech/logging';
-import '@nomiclabs/hardhat-ethers';
+import '@nomicfoundation/hardhat-ethers';
 import '@openzeppelin/hardhat-upgrades';
 import { getContract as getOracle } from "@thecointech/contract-oracle"
 

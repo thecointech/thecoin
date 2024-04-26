@@ -1,12 +1,9 @@
 import { Signer } from 'ethers';
 import { DateTime } from 'luxon';
-import { keccak256 } from 'ethers';
-import { verifyMessage } from 'ethers';
-import { arrayify } from 'ethers';
+import { solidityPackedKeccak256, verifyMessage, getBytes, type Overrides } from 'ethers';
 import { sign } from "@thecointech/utilities/SignedMessages";
 import type { IPluggable } from './codegen/contracts';
 import type { RemovePluginRequest } from '@thecointech/types';
-import type { Overrides } from 'ethers';
 // export type RemovePluginRequest = {
 //   user: string;
 //   chainId: number;
@@ -16,7 +13,7 @@ import type { Overrides } from 'ethers';
 // }
 
 function getRemovePluginBuffer(request: Omit<RemovePluginRequest, 'signature'>) {
-  const hash = keccak256(
+  const hash = solidityPackedKeccak256(
     ["uint", "uint", "uint"],
     [
       request.chainId,
@@ -24,7 +21,7 @@ function getRemovePluginBuffer(request: Omit<RemovePluginRequest, 'signature'>) 
       request.signedAt.toMillis()
     ]
   );
-  return arrayify(hash);
+  return getBytes(hash);
 }
 
 export async function buildRemovePluginRequest(
