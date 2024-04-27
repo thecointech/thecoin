@@ -1,13 +1,12 @@
-import type { ContractTransaction } from 'ethers';
 import * as Src from '.';
 
 export class ShockAbsorber implements Pick<Src.ShockAbsorber, 'preWithdraw'> {
 
   address = "0xAB00000000000000000000000000000000000000";
 
-  preWithdraw(): Promise<ContractTransaction> {
+  preWithdraw = (() => {
     throw new Error('Method not implemented.');
-  }
+  }) as any
 }
 
 export const getContract: typeof Src.getContract = () => new ShockAbsorber() as any;

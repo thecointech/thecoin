@@ -4,12 +4,12 @@ import { ALL_PERMISSIONS, assignPlugin, buildAssignPluginRequest } from '@thecoi
 import { log } from '@thecointech/logging';
 import { getContract } from '@thecointech/contract-plugin-shockabsorber';
 import { DateTime } from 'luxon';
-import { getContract as getOracle } from '@thecointech/contract-oracle';
-import { getDeploySigner, getOverrideFees } from '@thecointech/contract-tools/deploySigner';
+import { getDeploySigner } from '@thecointech/contract-tools/deploySigner';
 import { getProvider } from '@thecointech/ethers-provider';
 import { fetchRate, weSellAt } from '@thecointech/fx-rates';
 import { toCoinDecimal } from '@thecointech/utilities';
 import Decimal from 'decimal.js-light';
+import { getOverrideFees } from '@thecointech/contract-base/overrides';
 // Assume devlive
 if (process.env.CONFIG_NAME !== 'devlive') throw new Error('Not Sufficiently Tested');
 
@@ -30,15 +30,15 @@ async function main() {
   );
 
   const overrides = await getOverrideFees(getProvider());
-  await bcCore.exactTransfer(shockAbsorber.address, coin.toNumber(), now.getTime(), overrides);
+  await bcCore.exactTransfer(shockAbsorber, coin.toNumber(), now.getTime(), overrides);
 
   // In DevLive, we assign the converter to uberTester
   const tester = await getSigner("saTester");
   const ts = DateTime.now().minus({ months: 11});
-  const request = await buildAssignPluginRequest(tester, shockAbsorber.address, ALL_PERMISSIONS, ts);
+  const request = await buildAssignPluginRequest(tester, shockAbsorber, ALL_PERMISSIONS, ts);
   await assignPlugin(bcCore, request);
 
-  await bcCore.exactTransfer(await tester.getAddress(), 200e6, ts.toMillis());
+  await bcCore.exactTransfer(tester, 200e6, ts.toMillis());
 }
 
 main();

@@ -12,11 +12,12 @@ async function main() {
   const deployArgs = await getArguments();
   const ShockAbsorber = await hre.ethers.getContractFactory('ShockAbsorber', brokerCAD);
   const shockAbsorber = await hre.upgrades.deployProxy(ShockAbsorber, deployArgs);
-  log.info(`Deployed ShockAbsorber at ${shockAbsorber.address} with args: ${deployArgs}`);
+  const shockAbsorberAddress = await shockAbsorber.getAddress();
+  log.info(`Deployed ShockAbsorber at ${shockAbsorberAddress} with args: ${deployArgs}`);
 
   // Serialize our contract addresses
   const contractUrl = new URL('../contracts/ShockAbsorber.sol', import.meta.url);
-  writePlugin(shockAbsorber.address, contractUrl);
+  writePlugin(shockAbsorberAddress, contractUrl);
 }
 
 main().catch((error) => {

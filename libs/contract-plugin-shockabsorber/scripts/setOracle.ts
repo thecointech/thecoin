@@ -7,7 +7,7 @@ const brokerCAD = await getDeploySigner("BrokerCAD");
 const shockAbsorber = await getContract();
 const contract = await getOracle();
 
-const r = await shockAbsorber.connect(brokerCAD).setOracle(contract.address);
+const r = await shockAbsorber.connect(brokerCAD).setOracle(contract);
 console.log(`Updated Oracle: ${r.hash}`);
 await r.wait(2);
 console.log("Complete")
