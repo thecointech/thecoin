@@ -1,4 +1,4 @@
-import { BigNumberish, ContractTransaction } from "ethers";
+import { BigNumberish } from "ethers";
 
 
 export const genRandHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
@@ -15,6 +15,7 @@ export const genReceipt = (prefix: string = '0', opts?: any, txval?: BigNumberis
       wait: () => { },
       hash: generateHash(prefix),
       ...opts,
+      confirmations: () => 3,
       nonce,
-    } as any as ContractTransaction
+    } as any// as ContractTransaction
   }

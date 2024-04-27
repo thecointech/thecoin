@@ -1,6 +1,6 @@
 import hre from 'hardhat';
 import { log } from '@thecointech/logging';
-import '@nomicfoundation/hardhat-ethers';
+import '@nomiclabs/hardhat-ethers';
 import '@openzeppelin/hardhat-upgrades';
 import { getContractAddress } from '../src';
 import { getDeploySigner } from '@thecointech/contract-tools/deploySigner';

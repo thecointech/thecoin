@@ -10,8 +10,8 @@ export const ignoredTxParams = ["data", "value", "accessList", "raw", "r", "s", 
 export const convertBN = (key: string, val: any) => (
   ignoredTxParams.includes(key) || !val
     ? undefined
-    : (val.type == "BigInt" && val.hex)
-      ? Number(val.hex)
+    : (typeof val == "bigint")
+      ? Number(val)
       : val
 );
 
@@ -20,8 +20,6 @@ export const toDelta = (tx: TransactionResponse) => {
     error: "Missing transaction hash",
     hash: undefined,
   }
-
-  debugger; // test convertBN
 
   try {
     return {

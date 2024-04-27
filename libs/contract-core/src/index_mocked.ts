@@ -29,10 +29,10 @@ export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugin
 
   mintCoins = () => this.genReceipt();
   burnCoins = () => this.genReceipt();
-  exactTransfer = makeFn((_: AddressLike, _value: BigNumberish, _t: any) => {}, "nonpayable");
+  exactTransfer = makeFn((_: AddressLike, value: BigNumberish, _t: any) => this.genReceipt('c', { confirmations: 1 }, value), "nonpayable");
   balanceOf = makeFn((_: AddressLike) => 995000000n, "view");
-  certifiedTransfer = makeFn((..._args: any[]) => {}, "nonpayable") //this.genReceipt('c', { confirmations: 1 }, args[3]), "nonpayable");
-  uberTransfer = makeFn((..._args: any[]) => {}, "nonpayable") //this.genReceipt('c', { confirmations: 1 }))
+  certifiedTransfer = makeFn((...args: any[]) => this.genReceipt('c', { confirmations: 1 }, args[3]), "nonpayable")
+  uberTransfer = makeFn((..._args: any[]) => this.genReceipt('c', { confirmations: 1 }), "nonpayable")
   // Run during testing.  Remove once deployement is secure.
   runCloneTransfer = () => this.genReceipt();
   getUsersPlugins = makeFn((_s: AddressLike) => [{
@@ -41,37 +41,40 @@ export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugin
   } as PluginAndPermissionsStructOutput]
   , "view");
 
-  provider = {
-    waitForTransaction: (hash: string) => Promise.resolve({
-      confirmations: confirmations++,
-      status: 1,
-      logs: [{
-        transactionHash: hash,
-        logIndex: "0x1",
-        transactionIndex: "0x0",
-        blockHash: "0x69c0f8b66f0479886348db0859468527d154e3bd6bdac90db989b0092c130a07",
-        blockNumber: "0x14",
-        address: process.env.WALLET_BrokerCAD_ADDRESS,
-        data: "0x0000000000000000000000000000000000000000000000000000000003a39dbd00000000000000000000000000000000000000000000000000000179e00cb316",
-        topics: [
-          "0x53abef67a06a7d88762ab2558635c2ccf615af355d42c5a0c98715be5fb39e75",
-          "client",
-          "broker"
-        ],
-        type: "mined"
-      }]
-    }),
-    getLogs: () => Promise.resolve([]),
-    getBlockNumber: () => Promise.resolve(12345),
-    getTransaction: () => Promise.resolve({ wait: () => sleep(2000) }),
-    getTransactionReceipt: () => Promise.resolve({ blockNumber: 123, blockHash: "0x45678" }),
-    getTransactionCount: () => Promise.resolve(1),
-    getFeeData: () => Promise.resolve({
-      maxFeePerGas: 1000n,
-      maxPriorityFeePerGas: 1000n,
-      gasPrice: 1000n,
-    })
+  runner = {
+    provider: {
+      waitForTransaction: (hash: string) => Promise.resolve({
+        confirmations: () => confirmations++,
+        status: 1,
+        logs: [{
+          transactionHash: hash,
+          logIndex: "0x1",
+          transactionIndex: "0x0",
+          blockHash: "0x69c0f8b66f0479886348db0859468527d154e3bd6bdac90db989b0092c130a07",
+          blockNumber: "0x14",
+          address: process.env.WALLET_BrokerCAD_ADDRESS,
+          data: "0x0000000000000000000000000000000000000000000000000000000003a39dbd00000000000000000000000000000000000000000000000000000179e00cb316",
+          topics: [
+            "0x53abef67a06a7d88762ab2558635c2ccf615af355d42c5a0c98715be5fb39e75",
+            "client",
+            "broker"
+          ],
+          type: "mined"
+        }]
+      }),
+      getLogs: () => Promise.resolve([]),
+      getBlockNumber: () => Promise.resolve(12345),
+      getTransaction: () => Promise.resolve({ wait: () => sleep(2000) }),
+      getTransactionReceipt: () => Promise.resolve({ blockNumber: 123, blockHash: "0x45678" }),
+      getTransactionCount: () => Promise.resolve(1),
+      getFeeData: () => Promise.resolve({
+        maxFeePerGas: 1000n,
+        maxPriorityFeePerGas: 1000n,
+        gasPrice: 1000n,
+      })
+    }
   }
+
   estimate = {
     certifiedTransfer: () => Promise.resolve(1000)
   }
