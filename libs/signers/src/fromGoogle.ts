@@ -1,6 +1,7 @@
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
 import { Wallet } from 'ethers';
 import type { AccountName } from './names';
+import { getProvider } from '@thecointech/ethers-provider';
 
 // If running on GAE, check in secrets manager
 const PrivilegedEnv = () => process.env["GAE_ENV"] || process.env["GOOGLE_APPLICATION_CREDENTIALS"];
@@ -22,5 +23,6 @@ export async function loadFromGoogle(name: AccountName) {
   if (!privatekey)
     throw new Error(`Wallet ${name} not found in secrets`);
 
-  return new Wallet(privatekey);
+  const wallet =  new Wallet(privatekey);
+  return wallet.connect(getProvider());
 }

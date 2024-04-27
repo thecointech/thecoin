@@ -1,5 +1,4 @@
 import { GetContract } from '../signer/Wallet';
-import { TransactionResponse } from '@ethersproject/providers';
 import { CertifiedTransferRequest } from '@thecointech/types';
 import { log } from '@thecointech/logging';
 import { validateTransfer } from './CertifiedActionVerify';
@@ -12,8 +11,8 @@ export async function certifiedTransfer(transfer: CertifiedTransferRequest) {
   await validateTransfer(transfer);
 
   const tc = await GetContract();
-  const tx: TransactionResponse = await tc.certifiedTransfer(chainId, from, to, value, fee, timestamp, transfer.signature);
-  if (!tx?.hash) {
+  const tx = await tc.certifiedTransfer(chainId, from, to, value, fee, timestamp, transfer.signature);
+  if (!tx.hash) {
     log.error({user: from, initialId: signature}, `Transfer {initialId} for {user} returned null `);
     throw new Error('Unknown transaction state');
   }

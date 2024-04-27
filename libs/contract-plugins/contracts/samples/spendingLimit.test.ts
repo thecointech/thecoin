@@ -3,7 +3,7 @@ import { jest } from '@jest/globals';
 // import { createAndInitTheCoin, initAccounts } from '@thecointech/contract-core/testHelpers.ts';
 // import { ALL_PERMISSIONS } from '../../src/constants';
 // import hre from 'hardhat';
-// import '@nomiclabs/hardhat-ethers';
+// import '@nomicfoundation/hardhat-ethers';
 
 jest.setTimeout(5 * 60 * 1000);
 

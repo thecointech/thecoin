@@ -1,10 +1,10 @@
-import { Web3Provider } from 'ethers';
+import { BrowserProvider } from 'ethers';
 import { GetContract } from '@thecointech/contract-core';
 import { getWeb3Type } from '../../utils/detection';
 
 async function AddTheCoin(ethereum: any) {
   const contract = await GetContract();
-  const tokenAddress = contract.address
+  const tokenAddress = await contract.getAddress()
   const tokenSymbol = 'THE'
   const tokenDecimals = 6
   const tokenImage = 'https://thecoin.io/favicon.ico'
@@ -52,8 +52,8 @@ export async function ConnectWeb3() {
       // Request account access if needed
       await ethereum.enable();
       console.log("Ethereum Enabled");
-      var provider = new Web3Provider(web3.currentProvider);
-      var signer = provider.getSigner();
+      var provider = new BrowserProvider(web3.currentProvider);
+      var signer = await provider.getSigner();
       console.log(`Connecting to signer: ${signer}`);
       if (type === 'Metamask') {
         // add The Coin to the list of tokens displayed by MetaMask

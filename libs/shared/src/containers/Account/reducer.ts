@@ -46,7 +46,7 @@ function AccountReducer(address: string, initialState: AccountState) {
       const { signer } = this.state;
       // Connect to the contract
       const contract = yield call(ConnectContract, signer);
-      const plugins = yield call(getPluginDetails, contract);
+      const plugins = yield call(getPluginDetails, contract, signer);
       // store the contract prior to trying update history.
       yield this.storeValues({ contract, plugins });
       // Load history info by default
@@ -182,7 +182,8 @@ function AccountReducer(address: string, initialState: AccountState) {
       // Take current balance and use it plus Tx to reconstruct historical balances.
       calculateTxBalances(balance, newHistory);
       // Get the current block (save it so we know where we were up to in the future.)
-      const currentBlock = yield call(contract.provider.getBlockNumber.bind(contract.provider))
+      const provider = contract.runner?.provider;
+      const currentBlock = yield call(provider!.getBlockNumber.bind(provider))
 
       yield this.storeValues({
         history: mergeTransactions(oldHistory, newHistory),

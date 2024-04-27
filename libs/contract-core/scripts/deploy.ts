@@ -3,7 +3,7 @@ import { storeContractAddress } from '@thecointech/contract-tools/writeContract'
 import { getSigner } from '@thecointech/signers';
 import { log } from '@thecointech/logging';
 import { getArguments } from './arguments';
-import '@nomiclabs/hardhat-ethers';
+import '@nomicfoundation/hardhat-ethers';
 import '@openzeppelin/hardhat-upgrades';
 import { getProvider } from '@thecointech/ethers-provider';
 

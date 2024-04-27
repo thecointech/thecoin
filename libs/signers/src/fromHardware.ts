@@ -13,5 +13,7 @@ export async function loadHardware(name: AccountName) {
   if (address != process.env[`WALLET_${name}_ADDRESS`]) {
     throw new Error(`Cannot load ${name} - matching hardware device is not connected`);
   }
+
+  // TO CHECK: Do we want to connect to provider here?
   return signer; //.connect(getProvider());
 }
