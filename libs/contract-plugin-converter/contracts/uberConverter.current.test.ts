@@ -7,6 +7,7 @@ import { buildUberTransfer } from '@thecointech/utilities/UberTransfer';
 import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
 import '@nomicfoundation/hardhat-ethers';
+import { EventLog } from 'ethers';
 
 const timeout = 10 * 60 * 1000;
 jest.setTimeout(timeout);
@@ -19,26 +20,26 @@ it('converts fiat to TheCoin for current transfers', async () => {
   const oracle = await createAndInitOracle(signers.OracleUpdater);
 
   // pass some $$$ to client1
-  await tcCore.mintCoins(10000e6, signers.Owner.address, Date.now());
-  await tcCore.transfer(signers.client1.address, 1000e6);
+  await tcCore.mintCoins(10000e6, signers.Owner, Date.now());
+  await tcCore.transfer(signers.client1, 1000e6);
 
   // Create plugin
   const uber = await UberConverter.deploy();
-  await uber.initialize(tcCore.address, oracle.address);
+  await uber.initialize(tcCore, oracle);
 
   // Assign to user, grant all permissions
-  const request = await buildAssignPluginRequest(signers.client1, uber.address, ALL_PERMISSIONS);
+  const request = await buildAssignPluginRequest(signers.client1, uber, ALL_PERMISSIONS);
   await assignPlugin(tcCore, request);
 
   // Transfer $100 now.
   const transfer = await buildUberTransfer(
     signers.client1,
-    signers.client2.address,
+    signers.client2,
     new Decimal(100),
     124,
     DateTime.now(),
   )
-  const initBalance = await tcCore.balanceOf(signers.client1.address);
+  const initBalance = await tcCore.balanceOf(signers.client1);
   const r = await tcCore.uberTransfer(
     transfer.chainId,
     transfer.from,
@@ -50,14 +51,14 @@ it('converts fiat to TheCoin for current transfers', async () => {
     transfer.signature,
   );
   const receipt = await r.wait();
-  const client1Balance = await tcCore.balanceOf(signers.client1.address);
+  const client1Balance = await tcCore.balanceOf(signers.client1);
   // If we transferred $100, that should have equalled 50C
-  expect(initBalance.sub(client1Balance).toNumber()).toEqual(50e6);
+  expect(Number(initBalance - client1Balance)).toEqual(50e6);
   // client2Balance should be the remainder
-  const client2Balance = await tcCore.balanceOf(signers.client2.address);
-  expect(client2Balance.toNumber()).toEqual(50e6);
+  const client2Balance = await tcCore.balanceOf(signers.client2);
+  expect(Number(client2Balance)).toEqual(50e6);
 
   // The money was transferred, there should be logs!
-  expect(receipt.events?.filter(e => e.event == "Transfer").length).toEqual(1);
-  expect(receipt.events?.filter(e => e.event == "ExactTransfer").length).toEqual(1);
+  expect(receipt.logs?.filter((e: EventLog) => e.eventName == "Transfer").length).toEqual(1);
+  expect(receipt.logs?.filter((e: EventLog) => e.eventName == "ExactTransfer").length).toEqual(1);
 }, timeout);

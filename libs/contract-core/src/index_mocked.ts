@@ -4,13 +4,12 @@ import { sleep } from '@thecointech/async'
 import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
 import { PluginAndPermissionsStructOutput } from './codegen/contracts/TheCoinL1';
 import { StateMutability, TypedContractMethod } from './codegen/common';
+import { genReceipt } from '@thecointech/contract-tools/mockContractUtils';
 export * from './constants';
 
-const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
 let nonce = 12;
 let confirmations = 1;
 let lastTxVal: BigNumberish|undefined = undefined;
-
 
 const makeFn = <
 A extends Array<any> = Array<any>,
@@ -26,16 +25,7 @@ export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugin
   // prefix is (e) for exactTransfer and (c) for certifiedTransfer, and (0) for other
   // We embed this in the identifier so we can tell through the rest of the mock
   // what kind of transaction it represented
-  genReceipt = (prefix: string = '0', opts?: any, txval?: BigNumberish) => {
-    confirmations = 2;
-    lastTxVal = txval;
-    return {
-      wait: () => { },
-      hash: `0x${prefix}${genRanHex(63)}`,
-      ...opts,
-      nonce: nonce++,
-    } as any as ContractTransaction
-  }
+  genReceipt = genReceipt;
 
   mintCoins = () => this.genReceipt();
   burnCoins = () => this.genReceipt();

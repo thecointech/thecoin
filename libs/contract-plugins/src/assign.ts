@@ -1,4 +1,4 @@
-import { Signer } from 'ethers';
+import { AddressLike, Signer, resolveAddress } from 'ethers';
 import { DateTime } from 'luxon';
 import { solidityPackedKeccak256, verifyMessage, getBytes, type Overrides } from 'ethers';
 import { sign } from "@thecointech/utilities/SignedMessages";
@@ -29,10 +29,14 @@ function getAssignPluginBuffer(request: Omit<AssignPluginRequest, 'signature'>) 
   return getBytes(hash);
 }
 
+// function resolveAddress(address: AddressLike) {
+
+// }
+
 // Our official implementation does not allow for arbitrary timeMs parameter (we only use signedAt)
 export async function buildAssignPluginRequest(
   user: Signer,
-  plugin: string,
+  plugin: AddressLike,
   permissions: bigint,
   timeMs?: DateTime)
 : Promise<AssignPluginRequest>
@@ -43,7 +47,7 @@ export async function buildAssignPluginRequest(
   var r = {
     chainId,
     user: address,
-    plugin,
+    plugin: await resolveAddress(plugin),
     permissions,
     signedAt,
     timeMs: timeMs ?? signedAt,

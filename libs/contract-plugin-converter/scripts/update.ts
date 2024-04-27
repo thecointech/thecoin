@@ -9,5 +9,5 @@ const owner = await getDeploySigner("Owner");
 const existing = await getContract();
 
 const UberConverter = await hre.ethers.getContractFactory('UberConverter', owner);
-const uberConverter = await hre.upgrades.upgradeProxy(existing.address, UberConverter);
+const uberConverter = await hre.upgrades.upgradeProxy(existing, UberConverter);
 log.info(`Updated UberConverter at ${uberConverter.address}`);

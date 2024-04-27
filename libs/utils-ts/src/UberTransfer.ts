@@ -1,5 +1,5 @@
 import { sign } from "./SignedMessages";
-import { solidityPackedKeccak256, verifyMessage, type Signer, getBytes } from 'ethers';
+import { solidityPackedKeccak256, verifyMessage, type Signer, getBytes, AddressLike, resolveAddress } from 'ethers';
 import type Decimal from 'decimal.js-light';
 import type { AnyTransfer, UberTransfer } from "@thecointech/types";
 import { DateTime } from 'luxon';
@@ -46,7 +46,7 @@ export function getTransferSigner(
 /// Build the structure to be passed to the coin servers
 export async function buildUberTransfer(
   from: Signer,
-  to: string,
+  to: AddressLike,
   amount: Decimal,
   currency: number,
   transferTime: DateTime,
@@ -55,14 +55,15 @@ export async function buildUberTransfer(
   const chainId = parseInt(process.env.DEPLOY_POLYGON_NETWORK_ID!);
   const signedTime = DateTime.now();
   const address = await from.getAddress();
+  const toAddress = await resolveAddress(to);
   const transferMillis = transferTime.toMillis();
   const signedMillis = signedTime.toMillis();
   const amountAdj = amount.mul(100).toInteger().toNumber();
-  const signature = await signUberTransfer(chainId, from, to, amountAdj, currency, transferMillis, signedMillis);
+  const signature = await signUberTransfer(chainId, from, toAddress, amountAdj, currency, transferMillis, signedMillis);
   const r: UberTransfer = {
     chainId,
     from: address,
-    to,
+    to: toAddress,
     amount: amountAdj,
     currency,
     transferMillis,

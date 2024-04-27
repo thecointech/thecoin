@@ -15,11 +15,12 @@ async function main() {
   const uberConverter = await hre.upgrades.deployProxy(UberConverter, deployArgs, {
     timeout: 5 * 60 * 1000
   });
-  log.info(`Deployed UberConverter at ${uberConverter.address} with args: ${deployArgs}`);
+  const contractAddress = await uberConverter.getAddress();
+  log.info(`Deployed UberConverter at ${contractAddress} with args: ${deployArgs}`);
 
   // Serialize our contract addresses
   const contractUrl = new URL('../contracts/UberConverter.sol', import.meta.url);
-  writePlugin(uberConverter.address, contractUrl);
+  writePlugin(contractAddress, contractUrl);
 }
 
 main().catch((error) => {
