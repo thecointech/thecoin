@@ -72,7 +72,7 @@ export function updateCoinBalance(container: AnyActionContainer, receipt: Transa
     // (It is legal to have 0 transfers with UberConverter)
     if (exactTransfers.length !== 0) {
       log.error(
-        { initialId: container.action.data.initialId, hash: receipt.transactionHash },
+        { initialId: container.action.data.initialId, hash: receipt.hash },
         "ExactTransfer found for {initialId} in {hash}, but it does not match Broker address"
       );
       // We have no idea what is going on here, so hard-stop
@@ -94,7 +94,7 @@ export function updateCoinBalance(container: AnyActionContainer, receipt: Transa
     balance = balance.minus(transfer.args.amount.toNumber());
   }
   else {
-    log.error({ initialId: container.action.data.initialId, hash: receipt.transactionHash },
+    log.error({ initialId: container.action.data.initialId, hash: receipt.hash },
       "Could not find address for {initialId} in {hash}")
     throw new Error("Missing address, cannot")
   }
@@ -103,22 +103,24 @@ export function updateCoinBalance(container: AnyActionContainer, receipt: Transa
 
 //
 // Poll the provider to see if the transaction here has been mined.
-export async function waitTransaction(contract: TheCoin, hash: string, confirmations: number = 3) : Promise<TransactionReceipt|null> {
+export async function waitTransaction(contract: TheCoin, hash: string, requiredConfirmations: number = 3) : Promise<TransactionReceipt|null> {
 
   // Wait up to 60 seconds for this transaction to finish
   // Our volume is so low it's nice to complete tx's asap,
   // and we should give them a little time to complete in one run.
   for (let i = 0; i < 6; i++) {
     log.trace({hash}, `Awaiting transfer: {hash}`);
-    const receipt = await contract.provider.waitForTransaction(hash, 0);
+    const provider = contract.runner!.provider!;
+    const receipt = await provider.waitForTransaction(hash, 0);
 
     // If this tx has been successfully mined, continue
-    if (receipt?.status == 1 && receipt.confirmations >= confirmations) {
+    const confirmations = await receipt?.confirmations() ?? 0;
+    if (receipt?.status == 1 && confirmations >= requiredConfirmations) {
       log.trace({hash}, `Transfer complete: {hash}`);
       return receipt;
     }
 
-    log.trace({hash}, `Waited ${i} times with ${receipt?.confirmations} confirmations: tx has not been mined. Status ${receipt?.status} : {hash}`);
+    log.trace({hash}, `Waited ${i} times with ${confirmations} confirmations: tx has not been mined. Status ${receipt?.status} : {hash}`);
     await sleep(10000);
   }
   log.warn({hash}, `Timed out - tx has not been mined: {hash}`);

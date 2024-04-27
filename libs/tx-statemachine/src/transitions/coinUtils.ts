@@ -1,22 +1,17 @@
-import { TransactionResponse } from "ethers";
-import { BigNumber } from 'ethers';
 import { log } from '@thecointech/logging';
 import { AnyActionContainer, NamedTransition } from '../types';
 import { last } from '@thecointech/utilities';
-import type { Overrides } from 'ethers';
-import type { Transaction } from 'ethers';
 import { ActionType } from "@thecointech/broker-db";
-
-// It does not seem that any transactions submitted with less then 30Gwei are accepted
-const MinimumBloodsuckerFee = 30 * Math.pow(10, 9);
+import { getOverrideFees } from "@thecointech/contract-base/overrides";
+import type { Overrides, Transaction, TransactionResponse } from 'ethers';
 
 // Don't log the actual transaction details
 export const ignoredTxParams = ["data", "value", "accessList", "raw", "r", "s", "v"];
 export const convertBN = (key: string, val: any) => (
   ignoredTxParams.includes(key) || !val
     ? undefined
-    : (val.type == "BigNumber" && val.hex)
-      ? BigNumber.from(val.hex).toNumber()
+    : (val.type == "BigInt" && val.hex)
+      ? Number(val.hex)
       : val
 );
 
@@ -25,6 +20,8 @@ export const toDelta = (tx: TransactionResponse) => {
     error: "Missing transaction hash",
     hash: undefined,
   }
+
+  debugger; // test convertBN
 
   try {
     return {
@@ -45,7 +42,7 @@ export const toDelta = (tx: TransactionResponse) => {
 export async function calculateOverrides<Type extends ActionType=ActionType>(container: AnyActionContainer, transition: NamedTransition<Type>) : Promise<Overrides> {
   const prior = findPriorAttempt(container, transition);
   const nonce = await getNonce(prior);
-  const fees = await getOverrideFees(container, prior)
+  const fees = await getOverrideFees(container.contract, prior)
   return {
     nonce,
     ...fees,
@@ -60,9 +57,9 @@ function findPriorAttempt<Type extends ActionType=ActionType>(container: AnyActi
     try {
       const priorTx = JSON.parse(prior.delta.meta);
       const nonce = Number(priorTx.nonce);
-      const maxFeePerGas = BigNumber.from(priorTx.maxFeePerGas);
-      const maxPriorityFeePerGas = BigNumber.from(priorTx.maxPriorityFeePerGas);
-      if (!isNaN(nonce) && maxFeePerGas.gt(0) && maxPriorityFeePerGas.gt(0)) {
+      const maxFeePerGas = Number(priorTx.maxFeePerGas);
+      const maxPriorityFeePerGas = Number(priorTx.maxPriorityFeePerGas);
+      if (!isNaN(nonce) && maxFeePerGas > 0 && maxPriorityFeePerGas > 0) {
         log.debug({hash: priorTx.hash}, "Found prior tx {hash}");
         return priorTx;
       }
@@ -72,21 +69,21 @@ function findPriorAttempt<Type extends ActionType=ActionType>(container: AnyActi
   return undefined;
 }
 
-async function getOverrideFees(container: AnyActionContainer, prior?: Transaction) {
-  const fees = await container.contract.provider.getFeeData();
-  log.debug(`Current Fees: ${JSON.stringify(fees, convertBN)}`);
-  if (!fees.maxFeePerGas || !fees.maxPriorityFeePerGas) return undefined;
+// async function getOverrideFees(container: AnyActionContainer, prior?: Transaction) {
+//   const fees = await container.contract.provider.getFeeData();
+//   log.debug(`Current Fees: ${JSON.stringify(fees, convertBN)}`);
+//   if (!fees.maxFeePerGas || !fees.maxPriorityFeePerGas) return undefined;
 
-  // calculate new maximums at least 10% higher than previously
-  const base = fees.maxFeePerGas.sub(fees.maxPriorityFeePerGas);
-  const priorTip = prior?.maxPriorityFeePerGas?.toNumber();
-  const newMinimumTip = priorTip ? Math.floor(priorTip * 1.1) : MinimumBloodsuckerFee;
-  const tip = Math.max(fees.maxPriorityFeePerGas.toNumber(), newMinimumTip);
-  return {
-    maxFeePerGas: base.mul(2).add(tip),
-    maxPriorityFeePerGas: BigNumber.from(tip),
-  }
-}
+//   // calculate new maximums at least 10% higher than previously
+//   const base = fees.maxFeePerGas.sub(fees.maxPriorityFeePerGas);
+//   const priorTip = prior?.maxPriorityFeePerGas?.toNumber();
+//   const newMinimumTip = priorTip ? Math.floor(priorTip * 1.1) : MinimumBloodsuckerFee;
+//   const tip = Math.max(fees.maxPriorityFeePerGas.toNumber(), newMinimumTip);
+//   return {
+//     maxFeePerGas: base.mul(2).add(tip),
+//     maxPriorityFeePerGas: BigNumber.from(tip),
+//   }
+// }
 
 async function getNonce(prior?: Transaction) {
   if (prior?.nonce) return prior.nonce;

@@ -38,7 +38,7 @@ const depositCertifiedTransfer = async (container: AnyActionContainer, transfer:
   // We check balance in the initial steps as well, but this is for scenarios
   // where the deposit is delayed for any reason (eg - server crash etc);
   const balance = await tc.balanceOf(from);
-  if (balance.lte(fee + value))
+  if (balance <= (fee + value))
     return { error: 'Insufficient funds'};
 
 

@@ -1,6 +1,5 @@
 import { isInternalAddress, Transaction } from "./types";
 import type { TheCoin } from '@thecointech/contract-core';
-import { BigNumber } from "ethers";
 import { DateTime } from "luxon";
 import Decimal from 'decimal.js-light';;
 import { log } from '@thecointech/logging';
@@ -14,12 +13,12 @@ export function mergeTransactions(history: Transaction[], moreHistory: Transacti
   return mergedHistory;
 }
 
-function toDecimal(v: BigNumber) : Decimal;
-function toDecimal(v?: BigNumber) { return v ? new Decimal(v.toString()) : undefined; }
+function toDecimal(v: BigInt) : Decimal;
+function toDecimal(v?: BigInt) { return v ? new Decimal(v.toString()) : undefined; }
 const toTransaction = (tx: ERC20Response): Transaction => ({
   txHash: tx.hash,
   balance: 0,
-  change: tx.value.toNumber(),
+  change: Number(tx.value),
   counterPartyAddress: NormalizeAddress(tx.from),
   date: DateTime.fromSeconds(tx.timestamp),
   from: NormalizeAddress(tx.from),
@@ -30,7 +29,7 @@ const toTransaction = (tx: ERC20Response): Transaction => ({
 export async function loadAndMergeHistory(fromBlock: number, contract: TheCoin, address?: string) {
 
   try {
-    const contractAddress = contract.address;
+    const contractAddress = await contract.getAddress();
     const provider = new Erc20Provider();
     const allTxs = await provider.getERC20History({address, contractAddress, fromBlock});
 
@@ -56,7 +55,7 @@ export async function loadAndMergeHistory(fromBlock: number, contract: TheCoin, 
     }
     const history = Object.values(converted).sort((a, b) => a.date.toMillis() - b.date.toMillis());
 
-    let exact = await fetchExactTimestamps(contract, provider, fromBlock, address);
+    let exact = await fetchExactTimestamps(contract, fromBlock, address);
     for (const tx of history) {
       if (exact[tx.txHash]) {
         tx.date = DateTime.fromMillis(exact[tx.txHash]);
@@ -74,13 +73,13 @@ export async function loadAndMergeHistory(fromBlock: number, contract: TheCoin, 
   return [];
 }
 
-async function fetchExactTimestamps(contract: TheCoin, provider: Erc20Provider, fromBlock: number, address?: string) {
+async function fetchExactTimestamps(contract: TheCoin, fromBlock: number, address?: string) {
   if (!address) {
-    return await filterExactTransfers(contract, provider, fromBlock, [null, null]);
+    return await filterExactTransfers(contract, fromBlock, [undefined, undefined]);
   }
   else {
-    const exactFrom = await filterExactTransfers(contract, provider, fromBlock, [address, null]);
-    const exactTo = await filterExactTransfers(contract, provider, fromBlock, [null, address]);
+    const exactFrom = await filterExactTransfers(contract, fromBlock, [address, undefined]);
+    const exactTo = await filterExactTransfers(contract, fromBlock, [undefined, address]);
     return {
       ...exactTo,
       ...exactFrom
@@ -88,24 +87,21 @@ async function fetchExactTimestamps(contract: TheCoin, provider: Erc20Provider, 
   }
 }
 
-async function filterExactTransfers(contract: TheCoin, provider: Erc20Provider, fromBlock: number, addresses: [string|null, string|null]) {
+async function filterExactTransfers(contract: TheCoin, fromBlock: number, addresses: [string|undefined, string|undefined]) {
   const filter = contract.filters.ExactTransfer(...addresses);
-  const logs = await provider.getEtherscanLogs({
-    ...filter,
-    fromBlock
-  }, "and");
-  return  logs.reduce((acc, item) => ({
+  const logs = await contract.queryFilter(filter, fromBlock);
+  return logs.reduce((acc, item) => ({
     ...acc,
-    [item.transactionHash]: contract.interface.parseLog(item).args.timestamp.toNumber()
+    [item.transactionHash]: Number(item.args.timestamp)
   }), {} as Record<string, number>);
 }
 
-export function calculateTxBalances(currentBalance: BigNumber, history: Transaction[]) {
+export function calculateTxBalances(currentBalance: bigint, history: Transaction[]) {
   // history is sorted - oldest first.
   let balance = currentBalance;
   for (let i = history.length - 1; i >= 0; i--) {
     const tx = history[i];
-    tx.balance = balance.toNumber();
-    balance = balance.sub(tx.change);
+    tx.balance = Number(balance);
+    balance = balance - BigInt(tx.change);
   }
 }

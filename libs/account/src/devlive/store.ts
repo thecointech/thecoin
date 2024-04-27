@@ -16,7 +16,7 @@ const addRemoteAccount = async (name: AccountName, active: boolean) => {
   const signer = await getSigner(name);
   const address = NormalizeAddress(await signer.getAddress());
   const contract = await ConnectContract(signer);
-  const plugins = await getPluginDetails(contract);
+  const plugins = await getPluginDetails(contract, address);
 
   _devWallets[address] = {
     ...buildNewAccount(name, address, signer),

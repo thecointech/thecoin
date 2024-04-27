@@ -21,7 +21,7 @@ async function initDevWallets() {
   const randomAccount = buildNewAccount("Random Test", randomWallet.address, randomWallet);
   // connect to mocked services - normally this is done by "connect" call
   randomAccount.contract = await ConnectContract(randomAccount.signer);
-  randomAccount.plugins = await getPluginDetails(randomAccount.contract);
+  randomAccount.plugins = await getPluginDetails(randomAccount.contract, randomWallet.address);
   randomAccount.idx = await getComposeDB(randomAccount.signer);
 
   _devAccounts[randomAccount.address] = randomAccount

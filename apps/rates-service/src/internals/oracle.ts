@@ -18,9 +18,8 @@ export async function updateOracle(timestamp: number) {
     log.debug(
       {
         date: toDateStr(timestamp),
-        address: oracle.address,
       },
-      'Updating Oracle {address} at {date}'
+      'Updating Oracle at {date}'
     );
 
     // Our oracle operates in milliseconds
@@ -43,7 +42,7 @@ export async function updateOracle(timestamp: number) {
     })
 
     const validTo = await oracle.validUntil();
-    const validToDate = DateTime.fromMillis(validTo.toNumber());
+    const validToDate = DateTime.fromMillis(Number(validTo));
     if (validToDate > DateTime.now().plus({ hours: 6 })) {
       // Ignore this in develop (the duration of a rate is longer than 6h)
       if (process.env.NODE_ENV !== "development") {
