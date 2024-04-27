@@ -19,6 +19,7 @@ import type { AccountMapStore } from '../AccountMap';
 import type { DecryptCallback, IActions } from './types';
 import type { Dictionary } from 'lodash';
 import { getPluginDetails } from '@thecointech/contract-plugins';
+import { getProvider } from '@thecointech/ethers-provider';
 
 const KycPollingInterval = (process.env.NODE_ENV === 'production')
   ? 5 * 60 * 1000 // 5 minutes
@@ -34,7 +35,8 @@ function AccountReducer(address: string, initialState: AccountState) {
     }
 
     *setSigner(signer: Signer) {
-      yield this.storeValues({ signer });
+      const connected = signer.connect(getProvider());
+      yield this.storeValues({ signer: connected });
       yield delay(10);
       yield this.sendValues(this.actions.connect);
     }

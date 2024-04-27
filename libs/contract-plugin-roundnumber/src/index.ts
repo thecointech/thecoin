@@ -5,8 +5,8 @@ import { RoundNumber } from './codegen';
 export * from './contract';
 export type { RoundNumber} from './codegen/contracts/RoundNumber';
 
-export async function connectConverter(signer: Signer, onFailure?: (err: Error) => void): Promise<RoundNumber> {
+export async function connectConverter(signer: Signer): Promise<RoundNumber> {
   // First fetch contract
   const contract = await getContract();
-  return connect(signer, contract, onFailure);
+  return connect(signer, contract);
 }
