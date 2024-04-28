@@ -113,7 +113,7 @@ export function useSidebar() {
     let showSidebar = !!(
       active &&
       (
-        (isLocal(active.signer) && active.signer.mnemonic) ||
+        (isLocal(active.signer) && active.signer.signingKey) ||
         (active.signer.provider)
       )
     );

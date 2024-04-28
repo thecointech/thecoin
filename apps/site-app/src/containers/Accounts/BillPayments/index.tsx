@@ -180,16 +180,16 @@ export const BillPayments = () => {
       ...translations.step3,
       values: {
         link: (
-          <a target="_blank" href={`https://ropsten.etherscan.io/tx/${hash}`}>here</a>
+          <a target="_blank" href={`https://${process.env.POLYGONSCAN_WEB_URL}/tx/${hash}`}>here</a>
         ),
       }
     });
     setPercentComplete(0.5);
-    const tx = await contract.provider.getTransaction(hash);
+    const tx = await contract.runner?.provider?.getTransaction(hash);
     // Wait at least 2 confirmations
-    tx.wait(2);
+    const r = await tx?.wait(2, 3 * 1000);
     setPercentComplete(1);
-    return true;
+    return r?.status == 1;
   }
 
 

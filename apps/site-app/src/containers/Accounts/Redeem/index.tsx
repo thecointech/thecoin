@@ -126,22 +126,16 @@ export const Redeem = () => {
       ...translations.step3,
       values: {
         link: (
-          <a target="_blank" href={`https://${process.env.DEPLOY_NETWORK}.etherscan.io/tx/${response.data.hash}`}> here </a>),
+          <a target="_blank" href={`https://${process.env.POLYGONSCAN_WEB_URL}/tx/${response.data.hash}`}> here </a>),
       },
     });
     setPercentComplete(0.5);
 
-    const tx = await contract.provider.getTransaction(response.data.hash);
-    if (tx) {
-      // Wait at least 2 confirmations
-      await tx.wait(2);
-    } else {
-      // tx registered, but may not be visible on the blockchain.  Show link anyway
-      await sleep(2500);
-    }
-
+    //const tx = await contract.provider.getTransaction(response.data.hash);
+    const tx = await contract.runner?.provider?.getTransaction(response.data.hash);
+    const r = await tx?.wait(2, 3 * 1000);
     setPercentComplete(1);
-    return true;
+    return r?.status == 1;
   };
 
   const onSubmit = async (e: React.MouseEvent<HTMLElement>) => {
@@ -198,5 +192,3 @@ export const Redeem = () => {
     />
   );
 };
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

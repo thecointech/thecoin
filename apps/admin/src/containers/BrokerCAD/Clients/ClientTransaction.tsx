@@ -55,7 +55,7 @@ const TransactionEntryHash = ({delta}: {delta: TransitionDelta}) => (
   delta.hash
     ? <div>
         &nbsp;&nbsp;&nbsp; - hash:
-        <a target="_blank" href={`https://polygonscan.com/tx/${delta.hash}`}>{delta.hash}</a>
+        <a target="_blank" href={`${process.env.POLYGONSCAN_WEB_URL}/tx/${delta.hash}`}>{delta.hash}</a>
       </div>
     : null
 )

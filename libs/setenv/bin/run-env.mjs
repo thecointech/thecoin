@@ -56,7 +56,7 @@ if (executable != "node") {
 const proc = spawn(
   executable,
   args,
-  { stdio: 'inherit', cwd: process.cwd(), env }
+  { stdio: 'inherit', shell: true, cwd: process.cwd(), env }
 )
 
 // Liberally inspired by cross-env: https://github.com/kentcdodds/cross-env/blob/master/src/index.js
