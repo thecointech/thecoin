@@ -55,7 +55,6 @@
     "@composedb/devtools": "^0.7.1",
     "@composedb/devtools-node": "^0.7.1",
     "@composedb/types": "^0.7.1",
-    "@glazed/devtools": "^0.2.0",
     "@thecointech/setenv": "workspace:^"
   },
   "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
