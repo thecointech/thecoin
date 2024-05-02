@@ -5,12 +5,11 @@ import gmail from '@thecointech/tx-gmail';
 import { ConfigStore } from "@thecointech/store";
 import { getSigner } from '@thecointech/signers';
 import { ConnectContract, TheCoin } from '@thecointech/contract-core';
-import { formatEther, parseUnits } from "@ethersproject/units";
 import { SendMail } from "@thecointech/email";
 import { weSellAt, fetchRate } from '@thecointech/fx-rates';
-import type { Signer } from "@ethersproject/abstract-signer";
 import { toHuman } from "@thecointech/utilities";
 import { sleep } from '@thecointech/async';
+import { Signer, formatEther, parseUnits } from "ethers";
 
 export async function initialize() {
   log.debug(' --- Initializing processing --- ');
@@ -26,9 +25,9 @@ export async function initialize() {
     throw new Error("Couldn't initialize contract")
   }
 
-  await verifyEtherReserves(contract.signer);
+  await verifyEtherReserves(signer);
   await verifyCoinReserves(signer, contract);
-  log.debug(`Initialized contract to address: ${contract.address}`);
+  log.debug(`Initialized contract to address: ${await contract.getAddress()}`);
 
   // Set to broker service account for Firestore Access
   // Must be done after connecting the signer abov
@@ -49,15 +48,15 @@ export async function initialize() {
 
 // Verify we have enough gas to run processing
 async function verifyEtherReserves(signer: Signer) {
-  const signerBalance = await signer.getBalance();
+  const signerBalance = await signer.provider?.getBalance(signer) ?? 0n;
   const minimumBalance = parseUnits('0.2', "ether");
   log.debug({ Balance: formatEther(signerBalance) }, "Processing with eth reserves: ${Balance}")
-  if (signerBalance.lt(minimumBalance)) {
+  if (signerBalance < minimumBalance) {
     log.error(
       { Balance: formatEther(signerBalance), MinimumBalance: formatEther(minimumBalance), Signer: 'BrokerCAD' },
       `Signer {Signer} ether balance too low {Balance} < {MinimumBalance}`
     );
-    await SendMail(`WARNING: Signer balance too low ${formatEther(signerBalance)}`, `Signer balance too low ${formatEther(signerBalance)}\nMinimum balance required: ${minimumBalance.toString()}`);
+    await SendMail(`WARNING: Signer balance too low ${formatEther(signerBalance)}`, `Signer balance too low ${formatEther(signerBalance)}\nMinimum balance required: ${minimumBalance}`);
     // If anyone is watching, give them time to react
     await sleep(10_000);
   }
@@ -74,7 +73,7 @@ async function verifyCoinReserves(signer: Signer, contract: TheCoin) {
     return;
   }
   const reservesCad = toHuman(
-    reservesCoin.toNumber() * weSellAt([rate], now),
+    Number(reservesCoin) * weSellAt([rate], now),
     true
   );
   log.debug({ Balance: reservesCad }, "Processing with $ reserves: ${Balance}")
