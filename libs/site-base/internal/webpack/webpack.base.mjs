@@ -21,7 +21,7 @@ const version = require(packageFile).version;
 
 
 export default {
-  externals: ['dtrace-provider', 'mv', 'os', 'source-map-support', 'secret-manager'],
+  externals: ['dtrace-provider', 'mv', 'os', 'source-map-support', 'secret-manager', 'http'],
   output: {
     path: _resolve(projectRoot, 'build'),
     publicPath: '/',

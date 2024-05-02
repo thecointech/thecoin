@@ -8,7 +8,6 @@ import { Editor } from './Editor';
 import { TokenIdSelect } from './TokenIdSelect';
 import { OptionToggles } from './OptionToggles';
 import { getContract } from '@thecointech/contract-nft';
-import { BigNumber } from 'ethers';
 import { Options } from './types';
 import { log } from '@thecointech/logging';
 import { ImageEditorComponent } from '@toast-ui/react-image-editor';
@@ -63,7 +62,7 @@ async function getYears(tokenIds: number[]): Promise<[number, number] | undefine
   const validBN = await Promise.all(
     tokenIds.map(id => nft.validity(id))
   );
-  const valids = validBN.map(([start, end]: [BigNumber, BigNumber]) => [start.toNumber(), end.gt(9999) ? 9999 : end.toNumber()]);
+  const valids = validBN.map(([start, end]: [bigint, bigint]) => [Number(start), end > 9999n ? 9999 : Number(end)]);
 
   // get current year, walk backwards
   // TODO: This code must be revised prior to 2024
