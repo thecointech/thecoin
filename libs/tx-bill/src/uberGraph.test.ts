@@ -38,14 +38,14 @@ it('processes pending', async () => {
   }
 
   // First transfer doesn't actually do any transfers, so no logs
-  // const provider = container.contract.runner.provider
-  // const oldWait = provider.waitForTransaction
-  // //@ts-ignore
-  // provider.waitForTransaction = jest.fn(() => Promise.resolve({
-  //   confirmations: 3,
-  //   status: 1,
-  //   logs: [],
-  // }));
+  const provider = container.contract.runner.provider
+  const oldWait = provider.waitForTransaction
+  //@ts-ignore
+  provider.waitForTransaction = jest.fn(() => Promise.resolve({
+    confirmations: () => 3,
+    status: 1,
+    logs: [],
+  }));
 
   // Register pending transaction
   expect(state.name).toBe("initial");
@@ -66,7 +66,7 @@ it('processes pending', async () => {
   expect(state.name).toBe("tcWaitToFinalize");
 
   // Wait a day, run again.  This time we clear the pending transfer
-  // provider.waitForTransaction = oldWait;
+  provider.waitForTransaction = oldWait;
   jest.setSystemTime(date.plus({ days: 1 }).toJSDate());
   await incrementState();
   expect(state.name).toBe("tcFinalizeInitial");

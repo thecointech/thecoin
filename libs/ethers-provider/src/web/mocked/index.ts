@@ -17,6 +17,10 @@ export class Erc20Provider extends AbstractProvider {
     }
   }
 
+  async getBalance(): Promise<bigint> {
+    return 100_000_000_000_000_000_000n; // 100Eth
+  }
+
   //
   // In devlive, we do not have access to Etherscans advanced api
   // but we can replicate using just events

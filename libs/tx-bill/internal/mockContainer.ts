@@ -14,8 +14,8 @@ export const getMockContainer = async (date: DateTime) : Promise<TypedActionCont
       initial: {
         transfer: {
           from: '0x445758E37F47B44E05E74EE4799F3469DE62A2CB',
-          to: '0x23544d1596b2d8f608d1fd441131e719e0c5a685',
-          amount: 100,
+          to: await (await getSigner("BrokerCAD")).getAddress(),
+          amount: 100_000_000,
           currency: 124,
           signedMillis: date.toMillis(),
           transferMillis: date.plus({ days: 1 }).toMillis(),
