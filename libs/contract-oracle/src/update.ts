@@ -14,7 +14,7 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
   const factor = Math.pow(10, Number(decimals));
   const from = Number(await oracle.validUntil());
   const blockTime = Number(await oracle.BLOCK_TIME());
-  const lastOffsetFrom = await oracle.lastOffsetFrom();
+  const lastOffsetFrom = Number(await oracle.lastOffsetFrom());
   let priorOffset = Number(await oracle.getOffset(from));
   let timestamp = from;
 

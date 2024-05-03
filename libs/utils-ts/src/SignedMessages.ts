@@ -1,6 +1,6 @@
 import { SignedMessage } from "@thecointech/types";
 import { solidityPackedKeccak256, verifyMessage, type BytesLike, getBytes } from 'ethers';
-import type { JsonRpcSigner } from "ethers";
+// import type { JsonRpcSigner } from "ethers";
 import type { Signer } from "ethers";
 
 export function GetHash(
@@ -37,13 +37,14 @@ export async function GetSigner(signedMessage: SignedMessage) {
 // the standard, and quietly curse the fragmented landscape that makes this possible.
 // https://ethereum.stackexchange.com/questions/76810/sign-message-with-web3-and-verify-with-openzeppelin-solidity-ecdsa-sol
 export async function sign(message: BytesLike, signer: Signer) {
-  const rpcSigner: JsonRpcSigner = signer as any;
+  // const rpcSigner: JsonRpcSigner = signer as any;
   // Ethers 5.5 updated from using eth_sign to personal_sign
   // Ganache in Truffle 5 doesn't support personal_sign.
   // Sigh.... https://github.com/trufflesuite/ganache/issues/540
-  const signature: string = (rpcSigner._legacySignMessage)
-    ? await rpcSigner._legacySignMessage(message)
-    : await signer.signMessage(message)
+  const signature = await signer.signMessage(message);
+  // const signature: string = (rpcSigner._legacySignMessage)
+  //   ? await rpcSigner._legacySignMessage(message)
+  //   : await signer.signMessage(message)
 
   // We expect sig to either be 0-1, or 27-28.  Normalize to 27-28 by
   // adding 27 if the value < 16 (ie, higher 4 bits are 0)

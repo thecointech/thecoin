@@ -7,7 +7,7 @@ export async function getArguments() : Promise<[AddressLike, AddressLike]> {
   const tcCore = await getCore();
   const oracle = await getOracle();
   return [
-    tcCore,
-    oracle,
+    await tcCore.getAddress(),
+    await oracle.getAddress(),
   ]
 }

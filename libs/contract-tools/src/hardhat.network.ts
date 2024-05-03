@@ -30,5 +30,8 @@ export function getNetworks() {
     : {
         polygon: getDevNetwork(),
         localhost: getDevNetwork(),
+        hardhat: {
+          loggingEnabled: false,
+        }
       }
 }
