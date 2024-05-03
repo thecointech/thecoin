@@ -1,5 +1,5 @@
 import * as Src from '.';
-import { AddressLike, BigNumberish, ContractTransaction, Signer } from 'ethers'
+import { AddressLike, BigNumberish, Signer, resolveAddress } from 'ethers'
 import { sleep } from '@thecointech/async'
 import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
 import { PluginAndPermissionsStructOutput } from './codegen/contracts/TheCoinL1';
@@ -7,34 +7,53 @@ import { StateMutability, TypedContractMethod } from './codegen/common';
 import { genReceipt } from '@thecointech/contract-tools/mockContractUtils';
 export * from './constants';
 
-let nonce = 12;
-let confirmations = 1;
-let lastTxVal: BigNumberish|undefined = undefined;
+let lastTx = undefined as undefined| {
+  confirmations: number,
+  value: BigNumberish,
+  from: string,
+  to: string,
+}
+
+const setLastTx = async (from: AddressLike, to: AddressLike, value: BigNumberish) => {
+  lastTx = {
+    confirmations: 1,
+    from: await resolveAddress(from),
+    to: await resolveAddress(to),
+    value: value,
+  }
+  return genReceipt()
+}
+
+type MockedCoin = Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugins'|'exactTransfer' | 'balanceOf' | 'certifiedTransfer'>
 
 const makeFn = <
 A extends Array<any> = Array<any>,
 R = any,
 S extends StateMutability = "payable"
 >(r: (...a: A) => R, _s?: S) => r as any as TypedContractMethod<A, [Awaited<R>], S>;
-export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugins'|'exactTransfer' | 'balanceOf' | 'certifiedTransfer'>{
+export class TheCoin implements MockedCoin {
 
   signer?: Signer;
   constructor(signer?: Signer) {
     this.signer = signer;
   }
-  // prefix is (e) for exactTransfer and (c) for certifiedTransfer, and (0) for other
-  // We embed this in the identifier so we can tell through the rest of the mock
-  // what kind of transaction it represented
-  genReceipt = genReceipt;
-
-  mintCoins = () => this.genReceipt();
-  burnCoins = () => this.genReceipt();
-  exactTransfer = makeFn((_: AddressLike, value: BigNumberish, _t: any) => this.genReceipt('c', { confirmations: 1 }, value), "nonpayable");
+  mintCoins = () => genReceipt();
+  burnCoins = () => genReceipt();
   balanceOf = makeFn((_: AddressLike) => 995000000n, "view");
-  certifiedTransfer = makeFn((...args: any[]) => this.genReceipt('c', { confirmations: 1 }, args[3]), "nonpayable")
-  uberTransfer = makeFn((..._args: any[]) => this.genReceipt('c', { confirmations: 1 }), "nonpayable")
+  exactTransfer = makeFn(
+    async (to: AddressLike, value: BigNumberish, _timestamp: BigNumberish) => await setLastTx(this.signer!, to, value),
+    "nonpayable"
+  )
+  certifiedTransfer = makeFn(
+    async (_chainId: BigNumberish, from: AddressLike, to: AddressLike, value: BigNumberish, ..._args: any[]) => await setLastTx(from, to, value),
+    "nonpayable"
+  )
+  uberTransfer = makeFn(
+    async (_chainId: BigNumberish, from: AddressLike, to: AddressLike, value: BigNumberish, ..._args: any[]) => await setLastTx(from, to, value),
+    "nonpayable"
+  )
   // Run during testing.  Remove once deployement is secure.
-  runCloneTransfer = () => this.genReceipt();
+  runCloneTransfer = () => genReceipt();
   getUsersPlugins = makeFn((_s: AddressLike) => [{
     plugin: "RoundNumber",
     permissions: ALL_PERMISSIONS,
@@ -44,7 +63,7 @@ export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugin
   runner = {
     provider: {
       waitForTransaction: (hash: string) => Promise.resolve({
-        confirmations: () => confirmations++,
+        confirmations: () => lastTx!.confirmations++,
         status: 1,
         logs: [{
           transactionHash: hash,
@@ -71,7 +90,8 @@ export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugin
         maxFeePerGas: 1000n,
         maxPriorityFeePerGas: 1000n,
         gasPrice: 1000n,
-      })
+      }),
+      getBalance: () => Promise.resolve(1000n),
     }
   }
 
@@ -81,16 +101,13 @@ export class TheCoin implements Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugin
   interface = {
     // Only used by fetchExactTimestamps
     parseLog: (item: any) => {
-      const isOut = item.transactionHash[2] == 'c';
-      const to = isOut ? process.env.WALLET_BrokerCAD_ADDRESS : '0x445758E37F47B44E05E74EE4799F3469DE62A2CB';
-      const from = isOut ? '0x445758E37F47B44E05E74EE4799F3469DE62A2CB' : process.env.WALLET_BrokerCAD_ADDRESS;
       return {
         name: "ExactTransfer",
         args: {
           timestamp: BigInt(`0x${item.data.slice(66)}`),
-          from, // random address, currently ignored
-          to,
-          amount: BigInt(lastTxVal ?? 20000000),
+          from: lastTx!.from, // random address, currently ignored
+          to: lastTx!.to,
+          amount: BigInt(lastTx!.value),
         }
       }
     },

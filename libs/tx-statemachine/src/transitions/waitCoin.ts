@@ -88,10 +88,10 @@ export function updateCoinBalance(container: AnyActionContainer, receipt: Transa
 
   let balance = getCurrentState(container).data.coin ?? new Decimal(0);
   if (NormalizeAddress(transfer.args.from) == container.action.address) {
-    balance = balance.plus(transfer.args.amount.toNumber());
+    balance = balance.plus(transfer.args.amount.toString());
   }
   else if (NormalizeAddress(transfer.args.to) == container.action.address) {
-    balance = balance.minus(transfer.args.amount.toNumber());
+    balance = balance.minus(transfer.args.amount.toString());
   }
   else {
     log.error({ initialId: container.action.data.initialId, hash: receipt.hash },
