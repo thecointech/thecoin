@@ -16,7 +16,7 @@ export class TransferLimit implements ProcessingStage {
 
   async process(data: HarvestData) {
     if (data.state.toETransfer) {
-      if (this.limit < data.state.toETransfer) {
+      if (this.limit.value < data.state.toETransfer.value) {
         log.warn(`Requested e-transfer is too large: ${data.state.toETransfer}, max ${this.limit}`);
         return {
           toETransfer: this.limit,
