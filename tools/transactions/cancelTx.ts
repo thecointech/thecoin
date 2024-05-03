@@ -1,4 +1,4 @@
-import { Wallet } from '@ethersproject/wallet';
+import { Wallet } from 'ethers';
 import { readFileSync } from 'fs';
 import { DateTime } from 'luxon';
 import { getProvider } from '@thecointech/ethers-provider';
