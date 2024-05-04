@@ -23,7 +23,7 @@ const contract = await GetContract();
 async function getRoles(name: string, role: string) {
   const numRoles = await contract.getRoleMemberCount(role);
   console.log(`${name} has ${numRoles} members`);
-  for (let i = 0; i < numRoles.toNumber(); i++) {
+  for (let i = 0n; i < numRoles; i++) {
     const address = await contract.getRoleMember(role, i);
     console.log(`${i}: ${address}`);
   }
