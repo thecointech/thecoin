@@ -37,7 +37,6 @@ export class PluginsController extends Controller {
     assignPlugin(@Body() request: APR) : Promise<boolean> {
       return assignPlugin({
         ...request,
-        permissions: BigInt(request.permissions),
         timeMs: DateTime.fromMillis(request.timeMs),
         signedAt: DateTime.fromMillis(request.signedAt),
       });

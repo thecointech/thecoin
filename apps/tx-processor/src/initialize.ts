@@ -57,8 +57,7 @@ async function verifyEtherReserves(signer: Signer) {
       `Signer {Signer} ether balance too low {Balance} < {MinimumBalance}`
     );
     await SendMail(`WARNING: Signer balance too low ${formatEther(signerBalance)}`, `Signer balance too low ${formatEther(signerBalance)}\nMinimum balance required: ${minimumBalance}`);
-    // If anyone is watching, give them time to react
-    await sleep(10_000);
+    await maybeSleep();
   }
 }
 
@@ -84,6 +83,11 @@ async function verifyCoinReserves(signer: Signer, contract: TheCoin) {
       `Signer {Signer} $ balance too low {Balance} < {MinimumBalance}`
     );
     log.error(`Not enough coin reserves: ${formatEther(reservesCad)} CAD`);
+    await maybeSleep();
+  }
+}
+async function maybeSleep() {
+  if (process.env.NODE_ENV !== "development") {
     // If anyone is watching, give them time to react
     await sleep(10_000);
   }

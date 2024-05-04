@@ -2,15 +2,17 @@ import { BlockTag, Filter, JsonRpcProvider, Log, TransactionReceipt, zeroPadValu
 import { sleep } from '@thecointech/async'
 import { ERC20Response } from '../erc20response';
 import { getSourceCode } from '../plugins_devlive';
+import { log } from '@thecointech/logging';
 
 export class Erc20Provider extends JsonRpcProvider {
 
   constructor() {
     super(`http://localhost:${process.env.DEPLOY_NETWORK_PORT}`);
+    this.pollingInterval = 250;
   }
 
   override async waitForTransaction(transactionHash: string, confirmations?: number | undefined, timeout?: number | undefined): Promise<null | TransactionReceipt> {
-    this.autoMine(confirmations);
+    this.autoMine(transactionHash, confirmations);
     return await super.waitForTransaction(transactionHash, confirmations, timeout);
   }
 
@@ -60,18 +62,26 @@ export class Erc20Provider extends JsonRpcProvider {
   }
 
   blockchainAdvance: Promise<void>|null = null;
-  autoMine(confirmations: number = 1) {
-    // Every time we wait, advance the block number
-    // to prevent deadlocking when waiting for confirmations
-    this.blockchainAdvance ??= new Promise<void>(async resolve => {
-      for (let i = 0; i < confirmations; i++) {
-        await this.send("evm_mine", []);
-        await sleep(1000);
+  async autoMine(hash: string, confirmations: number = 1) {
+    if (!this.blockchainAdvance) {
+
+      // How many confirmations do we already have?
+      const tx = await this.getTransaction(hash);
+      const txConfirmed = await tx?.confirmations();
+      const required = confirmations - (txConfirmed ?? 0);
+      if (required > 0) {
+        // switch to automine to avoid deadlocking
+        this.blockchainAdvance ??= new Promise<void>(async resolve => {
+          await this.send("evm_setIntervalMining", [100]);
+          await sleep((confirmations + 1) * 100);
+          await this.send("evm_setAutomine", [true]);
+
+          // Clear this promise
+          this.blockchainAdvance = null;
+          resolve();
+        })
       }
-      // Clear this promise
-      this.blockchainAdvance = null;
-      resolve();
-    })
+    }
   }
 }
 

@@ -48,7 +48,7 @@ export async function buildAssignPluginRequest(
     chainId,
     user: address,
     plugin: await resolveAddress(plugin),
-    permissions,
+    permissions: permissions.toString(),
     signedAt,
     timeMs: timeMs ?? signedAt,
   };

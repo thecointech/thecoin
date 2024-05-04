@@ -4,7 +4,6 @@ import { AnyActionContainer, getCurrentState } from "../types";
 import { TransactionReceipt } from 'ethers'
 import Decimal from 'decimal.js-light';
 import { NormalizeAddress } from '@thecointech/utilities';
-import { sleep } from '@thecointech/async';
 import { makeTransition } from '../makeTransition';
 
 //
@@ -103,27 +102,33 @@ export function updateCoinBalance(container: AnyActionContainer, receipt: Transa
 
 //
 // Poll the provider to see if the transaction here has been mined.
-export async function waitTransaction(contract: TheCoin, hash: string, requiredConfirmations: number = 3) : Promise<TransactionReceipt|null> {
+export async function waitTransaction(contract: TheCoin, hash: string, requiredConfirmations: number = 3, timeout = 60_000) : Promise<TransactionReceipt|null> {
 
   // Wait up to 60 seconds for this transaction to finish
   // Our volume is so low it's nice to complete tx's asap,
   // and we should give them a little time to complete in one run.
-  for (let i = 0; i < 6; i++) {
-    log.trace({hash}, `Awaiting transfer: {hash}`);
-    const provider = contract.runner!.provider!;
-    const receipt = await provider.waitForTransaction(hash, 0);
-
-    // If this tx has been successfully mined, continue
-    const confirmations = await receipt?.confirmations() ?? 0;
-    if (receipt?.status == 1 && confirmations >= requiredConfirmations) {
-      log.trace({hash}, `Transfer complete: {hash}`);
+  try {
+    log.info({hash}, `Waiting up to ${timeout / 1000} seconds for tx {hash}`);
+    const receipt = await contract.runner?.provider?.waitForTransaction(hash, requiredConfirmations, timeout);
+    if (receipt?.status == 1) {
+      log.info({hash, receiptStatus: receipt?.status}, 'Transaction {hash} mined with status: {receiptStatus}');
       return receipt;
     }
-
-    log.trace({hash}, `Waited ${i} times with ${confirmations} confirmations: tx has not been mined. Status ${receipt?.status} : {hash}`);
-    await sleep(10000);
+    else {
+      log.error({hash, receiptStatus: receipt?.status}, 'Transaction {hash} not mined with status: {receiptStatus}');
+    }
   }
-  log.warn({hash}, `Timed out - tx has not been mined: {hash}`);
-
+  catch (e: any) {
+    // First, can we see what is going wrong here?
+    log.error(e, {hash}, `Error waiting for tx {hash}`);
+    try {
+      const receipt = await contract.runner?.provider?.getTransaction(hash);
+      if (receipt) {
+        log.info({hash}, `Transaction {hash} found with with ${await receipt.confirmations()} confirmations`);
+      }
+    }
+    catch (_) { /* ignore */ }
+  }
   return null;
+
 }

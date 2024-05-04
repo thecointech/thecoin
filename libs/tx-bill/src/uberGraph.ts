@@ -2,6 +2,7 @@ import { transitionTo, NamedTransition, StateGraph } from "@thecointech/tx-state
 import * as core from '@thecointech/tx-statemachine/transitions';
 import * as bills from './transitions';
 import type { ActionType } from "@thecointech/broker-db";
+import { retryRegisterTx } from "./transitions/retryRegisterTx";
 
 export type ActionStates =
   "initial" |
@@ -11,6 +12,9 @@ export type ActionStates =
   // but the transfer will not complete
   "tcRegisterReady" |
   "tcRegisterWaiting" |
+
+  // Error handling
+  "retryRegisterTx" |
 
   // Tx is registered.  Wait for timestamp transferMillis
   "tcWaitToFinalize" |
@@ -47,11 +51,18 @@ export const rawGraph: GraphTransitions<'Bill', ActionStates>  = {
   tcRegisterReady: {
     action: core.uberDepositCoin,
     next: "tcRegisterWaiting",
-    onError: core.requestManual,
+    onError: retryRegisterTx,
   },
   tcRegisterWaiting: {
     action: core.waitCoin,
     next: "tcWaitToFinalize",
+    onError: retryRegisterTx,
+  },
+
+  // Error handling
+  retryRegisterTx: {
+    action: retryRegisterTx,
+    next: "initial",
     onError: core.requestManual,
   },
 
@@ -113,9 +124,12 @@ export const uberGraph = {
   ...Object.fromEntries(Object.entries(rawGraph).map(
     ([name, state]) => [name, {
       next: transitionTo<States, "Bill">(state.action, state.next),
-      onError: state.onError ? transitionTo<States, "Bill">(state.onError, 'error') : undefined,
+      onError: state.onError ? transitionTo<States, "Bill">(state.onError, (state.onError.transitionName) as States) : undefined,
     }])
   ),
+  requestManual: {
+    next: core.manualOverride,
+  },
   error: {
     next: core.manualOverride,
   },

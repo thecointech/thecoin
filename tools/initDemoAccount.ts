@@ -11,6 +11,7 @@ import { CurrencyCode } from "@thecointech/fx-rates";
 import { SendFakeDeposit, emailCacheFile } from '@thecointech/email-fake-deposit';
 import { writeFileSync } from "fs";
 import { loadAndMergeHistory } from '@thecointech/tx-blockchain';
+import { AddressLike } from "ethers";
 
 // Always delete any existing emails
 //execSync("yarn dev:live", { stdio: "inherit", cwd: "../libs/email-fake-deposit" });
@@ -71,12 +72,12 @@ if (plugins.length == 0) {
 
   console.log("Assigning plugins to account...");
 
-  const assignPlugin = async (pluginAddress: string, minutesBack: number) => {
+  const assignPlugin = async (plugin: AddressLike, minutesBack: number) => {
     const api = GetPluginsApi();
     DateTime.now = () => startDate.minus({minute: minutesBack})
     const request = await buildAssignPluginRequest(
       signer,
-      pluginAddress,
+      plugin,
       ALL_PERMISSIONS,
     );
     await api.assignPlugin({
@@ -88,11 +89,11 @@ if (plugins.length == 0) {
   const converter = await getUberContract();
   const shockAbsorber = await getShockAbsorberContract();
 
-  await assignPlugin(converter.address, 10);
-  await assignPlugin(shockAbsorber.address, 5);
+  await assignPlugin(converter, 10);
+  await assignPlugin(shockAbsorber, 5);
 
   DateTime.now = oldNow
-  process.exit(0);
+  // process.exit(0);
 }
 
 const payBillApi = GetBillPaymentsApi();
