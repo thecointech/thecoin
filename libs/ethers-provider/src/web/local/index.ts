@@ -2,7 +2,6 @@ import { BlockTag, Filter, JsonRpcProvider, Log, TransactionReceipt, zeroPadValu
 import { sleep } from '@thecointech/async'
 import { ERC20Response } from '../erc20response';
 import { getSourceCode } from '../plugins_devlive';
-import { log } from '@thecointech/logging';
 
 export class Erc20Provider extends JsonRpcProvider {
 

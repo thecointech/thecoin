@@ -31,7 +31,7 @@ export type ActionStates =
   "billReady" |
   "billResult";
 
-export type States = ActionStates|"error"|"complete"|"cancelled";
+export type States = ActionStates|"complete"|"cancelled";
 
 // TODO: Can this be defined as pure data?
 // Yes, yes it can...
@@ -39,7 +39,7 @@ type GraphTransitions<Type extends ActionType, States extends string> = {
   [P in States]: {
     action: NamedTransition<Type>,
     onError?: NamedTransition<Type>,
-    next: States|"error"|"complete",
+    next: States|"complete",
   }
 }
 export const rawGraph: GraphTransitions<'Bill', ActionStates>  = {
@@ -130,9 +130,9 @@ export const uberGraph = {
   requestManual: {
     next: core.manualOverride,
   },
-  error: {
-    next: core.manualOverride,
-  },
+  // error: {
+  //   next: core.manualOverride,
+  // },
   cancelled: {
     next: transitionTo<States, "Bill">(core.markComplete, 'complete'),
   },
