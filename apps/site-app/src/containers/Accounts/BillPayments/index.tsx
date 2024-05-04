@@ -18,6 +18,7 @@ import type { MessageWithValues } from '@thecointech/shared/types';
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
+import { waitTx } from '../txutils';
 
 const translations = defineMessages({
   description: {
@@ -40,6 +41,9 @@ const translations = defineMessages({
     defaultMessage: 'We have encountered an error. Don\'t worry, your money is safe, but please contact support@thecoin.io and describe what happened',
     description: 'app.accounts.billPayments.form.errorForm: Message for the form the make a payment page / bill payment tab'
   },
+  timeoutMessage: {
+    defaultMessage: 'The transaction is in the queue, but processing it is taking longer than usual. Please be patient, the order will be processed shortly.',
+    description: 'app.accounts.billpayment.timeout: Timeout for billpayment'},
   successForm: {
     defaultMessage: 'Order received. Your bill payment will be processed in the next 1-2 business days. Please note that bill payments can take several days to settle,\nso paying a few days early ensures that payments are recieved on time',
     description: 'app.accounts.billPayments.form.successForm: Message for the form the make a payment page / bill payment tab'
@@ -90,6 +94,7 @@ export const BillPayments = () => {
 
   const [successHidden, setSuccessHidden] = useState(true);
   const [errorHidden, setErrorHidden] = useState(true);
+  const [timedout, setTimedOut] = useState(false);
 
   const asCoin = !account?.plugins?.length;
   if (!asCoin) {
@@ -99,6 +104,7 @@ export const BillPayments = () => {
     setCoinToSell(null);
     setResetDefault(Date.now());
     setForceValidate(false);
+    setTimedOut(false)
   }
 
   function onCancelTransfer() {
@@ -119,11 +125,6 @@ export const BillPayments = () => {
     // First, get the brokers fee
     const statusApi = GetStatusApi();
     var { data } = await statusApi.status();
-    // Check out if we have the right values
-    // if (!data?.certifiedFee) {
-    //   setErrorHidden(false);
-    //   return false;
-    // }
 
     if (doCancel)
       return false;
@@ -184,12 +185,8 @@ export const BillPayments = () => {
         ),
       }
     });
-    setPercentComplete(0.5);
-    const tx = await contract.runner?.provider?.getTransaction(hash);
-    // Wait at least 2 confirmations
-    const r = await tx?.wait(2, 3 * 1000);
-    setPercentComplete(1);
-    return r?.status == 1;
+
+    return await waitTx(contract.runner?.provider, hash, setTimedOut, setPercentComplete);
   }
 
 
@@ -201,6 +198,7 @@ export const BillPayments = () => {
     setForceValidate(true);
     setErrorHidden(true);
     setSuccessHidden(true);
+    setTimedOut(false);
 
     try {
       const results = await doBillPayment();
@@ -229,6 +227,9 @@ export const BillPayments = () => {
         </Message>
         <Message hidden={errorHidden} negative>
           <FormattedMessage {...translations.errorForm} />
+        </Message>
+        <Message hidden={!timedout}>
+          <FormattedMessage {...translations.timeoutMessage} />
         </Message>
 
         <FilterPayee />

@@ -9,6 +9,7 @@ import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { TransferWidget } from './TransferWidget';
 import { log } from '@thecointech/logging';
 import { MessageWithValues } from '@thecointech/shared/types';
+import { waitTx } from '../txutils';
 
 const translations = defineMessages({
   errorMessage : {
@@ -17,6 +18,9 @@ const translations = defineMessages({
   successMessage : {
       defaultMessage: 'Order received.\nYou should receive the transfer in 1-2 business days.',
       description: 'app.accounts.transfer.successMessage: Success Message for the make a payment page / etransfer tab'},
+  timeoutMessage: {
+      defaultMessage: 'The transaction is in the queue, but processing it is taking longer than usual. Please be patient, the order will be processed shortly.',
+      description: 'app.accounts.transfer.timeout: Direct transfer Timeout'},
   description : {
       defaultMessage: 'Transfer directly to another account with TheCoin.',
       description: 'app.accounts.transfer.description: Description for the make a payment page / transfer tab'},
@@ -58,6 +62,7 @@ export const Transfer = () => {
 
   const [successHidden, setSuccessHidden] = useState(true);
   const [errorHidden, setErrorHidden] = useState(true);
+  const [infoMessage, setInfoMessage] = useState<MessageWithValues>();
 
   const account = AccountMap.useActive();
   const { rates } = useFxRates();
@@ -74,6 +79,7 @@ export const Transfer = () => {
       log.info("Cannot transfer: missing required field");
       return;
     }
+    log.info(`Transfer: ${coinTransfer} ${toAddress}`);
     // Init messages
     setTransferMessage(translations.step1);
     setPercentComplete(0.0);
@@ -82,7 +88,7 @@ export const Transfer = () => {
     const statusApi = GetStatusApi();
     var { data } = await statusApi.status();
     // Check out if we have the right values
-    if (!data.certifiedFee) {
+    if (!data.address) {
       setErrorHidden(false)
       return false;
     }
@@ -122,13 +128,16 @@ export const Transfer = () => {
           <a target="_blank" href={`https://${process.env.POLYGONSCAN_WEB_URL}/tx/${response.data.hash}`}> here </a>),
       }
     });
-    setPercentComplete(0.5);
 
-    // const tx = await contract.provider.getTransaction(response.data.hash);
-    const tx = await contract.runner?.provider?.getTransaction(response.data.hash);
-    const r = await tx?.wait(2, 3 * 1000); 
-    setPercentComplete(1);
-    return r?.status == 1;
+    // TODO: Refactor transfers (this is kinda a meses)!
+    return await waitTx(contract.runner?.provider, response.data.hash, (b: boolean) => {
+      if (b) {
+        setInfoMessage(translations.timeoutMessage);
+      }
+      else {
+        setInfoMessage(undefined);
+      }
+    }, setPercentComplete);
   }
 
   const onSubmit = async (e: React.MouseEvent<HTMLElement>) => {
@@ -148,7 +157,7 @@ export const Transfer = () => {
         resetForm();
       }
     } catch (e: any) {
-      log.error(`Exception on Submit eTransfer: ${e.message}`);
+      log.error(`Exception on Submit direct transfer: ${e.message}`);
       setErrorHidden(false);
     }
     setDoCancel(false);
@@ -161,6 +170,7 @@ export const Transfer = () => {
       errorHidden={errorHidden}
       successMessage={translations.successMessage}
       successHidden={successHidden}
+      infoMessage={infoMessage}
 
       description={translations.description}
       onValueChange={setCoinTransfer}

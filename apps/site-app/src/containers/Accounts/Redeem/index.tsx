@@ -10,6 +10,7 @@ import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import type { MessageWithValues } from '@thecointech/shared/types';
 import { log } from '@thecointech/logging';
 import { RedeemWidget } from './RedeemWidget';
+import { waitTx } from '../txutils';
 
 const translations = defineMessages({
   step1: {
@@ -46,6 +47,7 @@ export const Redeem = () => {
 
   const [successHidden, setSuccessHidden] = useState(true);
   const [errorHidden, setErrorHidden] = useState(true);
+  const [timedout, setTimedOut] = useState(false);
 
   const account = AccountMap.useActive();
   const { rates } = useFxRates();
@@ -129,13 +131,8 @@ export const Redeem = () => {
           <a target="_blank" href={`https://${process.env.POLYGONSCAN_WEB_URL}/tx/${response.data.hash}`}> here </a>),
       },
     });
-    setPercentComplete(0.5);
 
-    //const tx = await contract.provider.getTransaction(response.data.hash);
-    const tx = await contract.runner?.provider?.getTransaction(response.data.hash);
-    const r = await tx?.wait(2, 3 * 1000);
-    setPercentComplete(1);
-    return r?.status == 1;
+    return await waitTx(contract.runner?.provider, response.data.hash, setTimedOut, setPercentComplete);
   };
 
   const onSubmit = async (e: React.MouseEvent<HTMLElement>) => {
@@ -146,6 +143,7 @@ export const Redeem = () => {
     setForceValidate(true);
     setErrorHidden(true);
     setSuccessHidden(true);
+    setTimedOut(false);
 
     try {
       const results = await doSale();
@@ -169,6 +167,7 @@ export const Redeem = () => {
     <RedeemWidget
       errorHidden={errorHidden}
       successHidden={successHidden}
+      timedout={timedout}
 
       coinToSell={coinToSell}
       onValueChange={setCoinToSell}

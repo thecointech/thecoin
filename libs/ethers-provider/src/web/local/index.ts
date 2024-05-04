@@ -1,6 +1,5 @@
-import { BlockTag, Filter, JsonRpcProvider, Log, TransactionReceipt } from 'ethers';
-import { zeroPadValue } from "ethers";
-import { id } from "ethers";
+import { BlockTag, Filter, JsonRpcProvider, Log, TransactionReceipt, zeroPadValue, id } from 'ethers';
+import { sleep } from '@thecointech/async'
 import { ERC20Response } from '../erc20response';
 import { getSourceCode } from '../plugins_devlive';
 
@@ -10,12 +9,9 @@ export class Erc20Provider extends JsonRpcProvider {
     super(`http://localhost:${process.env.DEPLOY_NETWORK_PORT}`);
   }
 
-  async waitForTransaction(transactionHash: string, confirmations?: number | undefined, timeout?: number | undefined): Promise<null | TransactionReceipt> {
-    const r = await super.waitForTransaction(transactionHash, confirmations, timeout);
-    // Every time we wait, advance the block number
-    // to prevent deadlocking when waiting for confirmations
-    await this.send("evm_mine", []);
-    return r;
+  override async waitForTransaction(transactionHash: string, confirmations?: number | undefined, timeout?: number | undefined): Promise<null | TransactionReceipt> {
+    this.autoMine(confirmations);
+    return await super.waitForTransaction(transactionHash, confirmations, timeout);
   }
 
   //
@@ -61,6 +57,21 @@ export class Erc20Provider extends JsonRpcProvider {
 
   getSourceCode(address: string) {
     return getSourceCode({address});
+  }
+
+  blockchainAdvance: Promise<void>|null = null;
+  autoMine(confirmations: number = 1) {
+    // Every time we wait, advance the block number
+    // to prevent deadlocking when waiting for confirmations
+    this.blockchainAdvance ??= new Promise<void>(async resolve => {
+      for (let i = 0; i < confirmations; i++) {
+        await this.send("evm_mine", []);
+        await sleep(1000);
+      }
+      // Clear this promise
+      this.blockchainAdvance = null;
+      resolve();
+    })
   }
 }
 
