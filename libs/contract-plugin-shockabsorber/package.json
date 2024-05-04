@@ -26,7 +26,7 @@
     "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
     "clean": "run -T run-p 'clean:*'",
     "clean:src": "rimraf ./build",
-    "clean:contracts": "rimraf ./src/codegen",
+    "clean:contracts": "rimraf ./src/codegen && run -T rimraf ./.hardhat",
     "test": "yarn run :jest",
     "dev:live": "cross-env CONFIG_NAME=devlive run-s _deploy",
     "dev:live:finalize": "yarn _seed",
