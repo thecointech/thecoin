@@ -37,9 +37,7 @@ export class Erc20Provider extends JsonRpcProvider {
     const to = await this.getLogs(buildFilter([null, args.address!]));
     const result = [...from, ...to].sort((a, b) => a.blockNumber - b.blockNumber);
 
-    debugger;
-    return result.map((tx: any) : ERC20Response => {
-      if (!tx.timestamp) tx.timestamp = tx.timeStamp
+    return result.map((tx: any) => {
       const result: ERC20Response = {
         ...tx,
         // Not present on this
@@ -47,9 +45,8 @@ export class Erc20Provider extends JsonRpcProvider {
         hash: tx.transactionHash,
         contractAddress: tx.address,
 
-        // Used to be hexStripZeros(tx.topics[1]),
-        from: tx.topics[1],
-        to: tx.topics[2],
+        from: toAddress(tx.topics[1]),
+        to: toAddress(tx.topics[2]),
         value: BigInt(tx.data),
       };
       return result;
@@ -66,5 +63,7 @@ export class Erc20Provider extends JsonRpcProvider {
     return getSourceCode({address});
   }
 }
+
+const toAddress = (x: string) => x.replace(/^(0x)?0+(.{40})$/, '$1$2');
 
 export const getProvider = () => new Erc20Provider();

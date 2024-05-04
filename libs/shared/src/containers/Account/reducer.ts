@@ -155,7 +155,7 @@ function AccountReducer(address: string, initialState: AccountState) {
       }
       try {
         const balance = yield call(contract.balanceOf, address);
-        yield this.storeValues({ balance: balance.toNumber() });
+        yield this.storeValues({ balance: Number(balance) });
       } catch (err: any) {
         log.error(err, "Update balance failed")
       }
@@ -174,7 +174,7 @@ function AccountReducer(address: string, initialState: AccountState) {
 
       // First, fetch the account balance toasty-fresh
       const balance = yield call(contract.balanceOf, address);
-      yield this.storeValues({ balance: balance.toNumber(), historyLoading: true });
+      yield this.storeValues({ balance: Number(balance), historyLoading: true });
 
       log.trace(`Updating from ${historyEnd ?? from} -> ${until}`);
       const oldHistory = this.state.history;

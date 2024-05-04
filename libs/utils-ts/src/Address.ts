@@ -1,13 +1,18 @@
 
 import base32 from 'base32';
 import { sign } from "./SignedMessages";
-import { solidityPackedKeccak256, type Signer, getBytes } from 'ethers';
+import { solidityPackedKeccak256, type Signer, getBytes, isAddress } from 'ethers';
 
 export function IsValidAddress(address: string) {
 	return /^(0x)?[a-fA-F0-9]{40}$/.test(address);
 }
 
 export function NormalizeAddress(address: string) {
+  if (!isAddress(address)) {
+    throw new Error("Cannot normalize address: " + address);
+  }
+  // TODO: This discards the checksum in the address,
+  // consider changing this to return the checksumed address instead
 	return address.length === 40 ? `0x${address.toUpperCase()}` : `0x${address.slice(2).toUpperCase()}`
 }
 
