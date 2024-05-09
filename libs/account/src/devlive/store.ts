@@ -39,6 +39,7 @@ export const getAllAccounts = async () => {
     await addRemoteAccount('client2', false);
     await addRemoteAccount('uberTester', false);
     await addRemoteAccount('saTester', false);
+    await addRemoteAccount('testDemoAccount', false);
   }
   return _devWallets;
 }

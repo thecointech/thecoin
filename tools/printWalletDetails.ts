@@ -1,14 +1,13 @@
 import { getSigner, AccountName } from '@thecointech/signers';
 import { getProvider } from '@thecointech/ethers-provider';
-import { Wallet } from 'ethers';
+import { HDNodeWallet } from 'ethers';
 
 const provider = getProvider();
 async function printDetails(name: AccountName) {
-  const raw = await getSigner(name);
-  const signer = raw.connect(provider);
+  const signer = await getSigner(name);
   const address = await signer.getAddress();
-  const balance = await signer.getBalance();
-  const asWallet = signer as Wallet;
+  const balance = await signer.provider?.getBalance(address);
+  const asWallet = signer as HDNodeWallet;
   console.log(`Wallet: ${name} ${address} ${balance} ${asWallet.mnemonic?.phrase}`);
 }
 
