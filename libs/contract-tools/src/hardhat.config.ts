@@ -30,10 +30,27 @@ const config: HardhatUserConfig = {
   defaultNetwork,
   networks: getNetworks(),
   etherscan: {
-    apiKey: defaultNetwork == "polygon"
-      ? process.env.POLYGONSCAN_API_KEY
-      : process.env.ETHERSCAN_API_KEY
+    // apiKey: defaultNetwork == "polygon"
+    //   ? process.env.POLYGONSCAN_API_KEY
+    //   : process.env.ETHERSCAN_API_KEY,
+    apiKey: {
+      polygon: process.env.POLYGONSCAN_API_KEY!,
+    }
   },
+}
+
+// Add support for polygonAmoy verification
+if (process.env.CONFIG_NAME === "prodtest") {
+  config.etherscan!.customChains = [
+    {
+      network: "polygon",
+      chainId: 80002,
+      urls: {
+        apiURL: "https://api-amoy.polygonscan.com/api",
+        browserURL: "https://amoy.polygonscan.com"
+      },
+    }
+  ]
 }
 
 export default config;

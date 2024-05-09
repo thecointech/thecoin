@@ -5,7 +5,7 @@ function getLiveNetwork(_type: Network) {
   // TODO: Revert to using providers if/when HardHat allows ESM modules for config files.
   // NOTE: These URLs won't work, they should be Infura urls similar to https://hardhat.org/hardhat-runner/docs/config
   const url = process.env.CONFIG_NAME === "prodtest"
-   ? 'https://polygon-mumbai.infura.io/v3/'
+   ? 'https://polygon-amoy.infura.io/v3/'
    : "https://polygon-mainnet.infura.io/v3/"
 
   return {
