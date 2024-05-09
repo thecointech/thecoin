@@ -1,12 +1,13 @@
 import { log } from '@thecointech/logging';
 import { SpxCadOracle } from './codegen';
 import { getOverrideFees } from '@thecointech/contract-base';
-import { DateTime, Duration } from 'luxon';
+// import { DateTime, Duration } from 'luxon';
 
 type RateFactory = (millis: number) => Promise<{rate: number, from: number, to: number}|null>;
 
 const MAX_LENGTH = 1000;
 const ONE_HR = 1000 * 60 * 60;
+const ONE_MONTH = ONE_HR * 24 * 30;
 
 export async function updateRates(oracle: SpxCadOracle, till: number, rateFactory: RateFactory) {
 
@@ -31,6 +32,7 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
 
   const rates: number[] = [];
   const offsets: {from: number, offset: number}[] = [];
+  let lastMessagePosted = from;
   while (timestamp < till) {
     const r = await rateFactory(timestamp);
     if (!r) {
@@ -86,10 +88,13 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
 
     timestamp = r.to;
 
-    log.debug(
-      { timestamp: new Date(timestamp), length: rates.length },
-      '{length} rates fetched reaches {timestamp}'
-    )
+    if (timestamp - lastMessagePosted > ONE_MONTH) {
+      log.debug(
+        { timestamp: new Date(timestamp), length: rates.length },
+        '{length} rates fetched reaches {timestamp}'
+      )
+      lastMessagePosted = timestamp
+    }
   }
 
   log.info(

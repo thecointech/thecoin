@@ -25,10 +25,10 @@ export async function updateOracle(timestamp: number) {
     // Our oracle operates in milliseconds
     await updateRates(oracle, timestamp, async (ts) => {
 
-      log.trace(
-        { date: toDateStr(ts) },
-        'Fetching rate for oracle at {date}'
-      )
+      // log.trace(
+      //   { date: toDateStr(ts) },
+      //   'Fetching rate for oracle at {date}'
+      // )
       // do we have a data for this time?
       const rates = await getCombinedRates(ts);
       if (!rates) return null;
@@ -73,33 +73,37 @@ export async function guardFn<T extends Function>(fn: T) {
     return;
   }
 
-  const now = DateTime.now();
-  const maxTimeout = now.plus({ hour: 1});
+  // NOTE: KeepAlive was causing errors to be thrown
+  // when trying to re-deploy prod:test.  It is probably
+  // not valuable any other time, so we could probably just
+  // remove it.
+  // const now = DateTime.now();
+  // const maxTimeout = now.plus({ hour: 1});
 
   // Ping our service every 5 minutes to
   // prevent GAE from killing us prematurely
-  let polling = setInterval(() => {
-    if (DateTime.now() > maxTimeout) {
-      clearInterval(polling);
-      log.error("UpdateOracle timed out");
-      return;
-    }
-    const myUrl = process.env['URL_SERVICE_RATES']
-    console.log(`KeepAlive polling ${myUrl}...`);
-    if (!myUrl) return;
-    try {
-      Axios.get(myUrl);
-    }
-    catch(err) {
-      log.error(err, "KeepAlive failed");
-    }
-  }, Duration.fromObject({ minutes: 5 }).toMillis())
+  // let polling = setInterval(() => {
+  //   if (DateTime.now() > maxTimeout) {
+  //     clearInterval(polling);
+  //     log.error("UpdateOracle timed out");
+  //     return;
+  //   }
+  //   const myUrl = `${process.env['URL_SERVICE_RATES']}/keepAlive`;
+  //   console.log(`KeepAlive polling ${myUrl}...`);
+  //   if (!myUrl) return;
+  //   try {
+  //     Axios.get(myUrl);
+  //   }
+  //   catch(err) {
+  //     log.error(err, "KeepAlive failed");
+  //   }
+  // }, Duration.fromObject({ minutes: 5 }).toMillis())
 
   try {
     await fn();
   }
   finally {
-    clearInterval(polling);
+    // clearInterval(polling);
     await exitCS(guard);
   }
 }
