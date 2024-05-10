@@ -1,9 +1,8 @@
-import hre from 'hardhat';
-import { getDeploySigner } from '@thecointech/contract-tools/deploySigner';
+import { getSigner } from '@thecointech/signers';
 import { getContract } from '../src';
 import { getContract as getOracle } from '@thecointech/contract-oracle';
 
-const brokerCAD = await getDeploySigner("BrokerCAD");
+const brokerCAD = await getSigner("BrokerCAD");
 const shockAbsorber = await getContract();
 const contract = await getOracle();
 

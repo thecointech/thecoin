@@ -3,9 +3,9 @@ import { log } from '@thecointech/logging';
 import '@nomicfoundation/hardhat-ethers';
 import '@openzeppelin/hardhat-upgrades';
 import { getContract } from '../src';
-import { getDeploySigner } from '@thecointech/contract-tools/deploySigner';
+import { getSigner } from '@thecointech/signers';
 
-const brokerCAD = await getDeploySigner("BrokerCAD");
+const brokerCAD = await getSigner("BrokerCAD");
 const existing = await getContract();
 
 const ShockAbsorber = await hre.ethers.getContractFactory('ShockAbsorber', brokerCAD);

@@ -4,7 +4,6 @@ import { ALL_PERMISSIONS, assignPlugin, buildAssignPluginRequest } from '@thecoi
 import { log } from '@thecointech/logging';
 import { getContract } from '@thecointech/contract-plugin-shockabsorber';
 import { DateTime } from 'luxon';
-import { getDeploySigner } from '@thecointech/contract-tools/deploySigner';
 import { getProvider } from '@thecointech/ethers-provider';
 import { fetchRate, weSellAt } from '@thecointech/fx-rates';
 import { toCoinDecimal } from '@thecointech/utilities';
@@ -16,7 +15,7 @@ if (process.env.CONFIG_NAME !== 'devlive') throw new Error('Not Sufficiently Tes
 log.debug('Seeding ShockAbsorber');
 async function main() {
   // BrokerCAD directly owns this contract (and associated benefits)
-  const brokerCAD = await getDeploySigner("BrokerCAD");
+  const brokerCAD = await getSigner("BrokerCAD");
   const shockAbsorber = await getContract();
   const bcCore = await ConnectContract(brokerCAD);
 

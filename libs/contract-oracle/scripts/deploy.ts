@@ -1,6 +1,5 @@
 import hre from 'hardhat';
 import { storeContractAddress } from '@thecointech/contract-tools/writeContract';
-// import { getDeploySigner } from '@thecointech/contract-tools/deploySigner';
 import { log } from '@thecointech/logging';
 import { getArguments } from './arguments';
 import '@nomicfoundation/hardhat-ethers';
