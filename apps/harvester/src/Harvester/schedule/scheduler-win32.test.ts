@@ -1,5 +1,5 @@
 import { defaultDays, defaultTime } from '../../types'
-import { getHarvesterExecutable, setSchedule } from './scheduler'
+import { getHarvesterExecutable, setSchedule } from './scheduler-win32'
 import { describe, IsManualRun} from '@thecointech/jestutils';
 
 describe('Scheduler', () => {

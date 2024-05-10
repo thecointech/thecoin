@@ -1,5 +1,5 @@
 import hre from 'hardhat';
-import '@nomiclabs/hardhat-ethers';
+import '@nomicfoundation/hardhat-ethers';
 import { createAndInitOracle, setOracleValueRepeat } from '@thecointech/contract-oracle/testHelpers.ts';
 import { initAccounts, createAndInitTheCoin } from '@thecointech/contract-core/testHelpers.ts';
 import { ShockAbsorber } from '../../src';
@@ -9,6 +9,7 @@ import { time } from "@nomicfoundation/hardhat-network-helpers";
 import { ALL_PERMISSIONS, assignPlugin, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 import { TheCoin } from '@thecointech/contract-core';
 import { Duration } from 'luxon';
+import { AddressLike } from 'ethers';
 
 export class AbsorberSol {
   user: string;
@@ -56,26 +57,26 @@ export class AbsorberSol {
     this.oracle = {
       contract: oracle,
       rate: 100,
-      validUntil: (await oracle.validUntil()).toNumber(),
+      validUntil: Number(await oracle.validUntil()),
     }
     await this.updateUser();
   }
 
   async updateUser() {
     const cushion = await this.absorber.getCushion(this.user);
-    this.fiatPrincipal = cushion.fiatPrincipal.toNumber() / 100;
-    this.coinAdjustment = cushion.coinAdjustment.toNumber();
-    this.maxCovered = cushion.maxCovered.toNumber();
-    this.reserved = cushion.reserved.toNumber();
-    this.lastDrawDownTime = cushion.lastDrawDownTime.toNumber();
-    this.avgFiatPrincipal = cushion.avgFiatPrincipal.toNumber() / 100;
-    this.avgCoinPrincipal = cushion.avgCoinPrincipal.toNumber();
-    this.lastAvgAdjustTime = cushion.lastAvgAdjustTime.toNumber();
-    this.maxCoverAdjust = cushion.maxCoverAdjust.toNumber();
-    this.initMs = cushion.initTime.toNumber();
+    this.fiatPrincipal = Number(cushion.fiatPrincipal) / 100;
+    this.coinAdjustment = Number(cushion.coinAdjustment);
+    this.maxCovered = Number(cushion.maxCovered);
+    this.reserved = Number(cushion.reserved);
+    this.lastDrawDownTime = Number(cushion.lastDrawDownTime);
+    this.avgFiatPrincipal = Number(cushion.avgFiatPrincipal) / 100;
+    this.avgCoinPrincipal = Number(cushion.avgCoinPrincipal);
+    this.lastAvgAdjustTime = Number(cushion.lastAvgAdjustTime);
+    this.maxCoverAdjust = Number(cushion.maxCoverAdjust);
+    this.initMs = Number(cushion.initTime);
 
     const balance = await this.tcCore.balanceOf(this.user);
-    this.coinCurrent = balance.toNumber();
+    this.coinCurrent = Number(balance);
     const lastBlock = await hre.ethers.provider.getBlock("latest");
     this.timeMs = (lastBlock.timestamp * 1000) - this.initMs;
   }
@@ -96,7 +97,7 @@ export class AbsorberSol {
       await setOracleValueRepeat(this.oracle.contract, rate, toAdvance);
       // Update cache
       this.oracle.rate = rate;
-      this.oracle.validUntil = (await this.oracle.contract.validUntil()).toNumber();
+      this.oracle.validUntil = Number(await this.oracle.contract.validUntil());
     } else {
       // Have we moved forward in time?
       if (this.timeMs < timeInMs) {
@@ -121,13 +122,13 @@ export class AbsorberSol {
     const currMs = await this.setRate(rate, year * yearInMs);
     const r = await this.absorber.calcCushionUp(this.user, this.coinCurrent, currMs);
     await this.updateUser();
-    return r.toNumber();
+    return Number(r);
   };
   cushionDown = async (rate: number, year=0) => {
     const currMs = await this.setRate(rate, year * yearInMs);
     const r = await this.absorber.calcCushionDown(this.user, this.coinCurrent, currMs);
     await this.updateUser();
-    return r.toNumber();
+    return Number(r);
   };
 
   deposit = async (fiat: number, rate: number, timeMs: number) => {
@@ -143,12 +144,12 @@ export class AbsorberSol {
     await this.tcUser.transfer(this.owner, coin);
     await this.updateUser();
     const postBalance = await this.tcCore.balanceOf(this.owner);
-    return postBalance.sub(preBalance).toNumber();
+    return Number(postBalance - preBalance);
   }
 
   getAvgFiatPrincipal = async (timeMs: number) => {
     const r = await this.absorber.getAvgFiatPrincipal(this.user, timeMs + this.initMs);
-    return r.toNumber() / 100;
+    return Number(r) / 100;
   }
 
   drawDownCushion = async (timeMs: number) => {
@@ -161,7 +162,7 @@ export class AbsorberSol {
 }
 
 
-export async function setupAbsorber(tcCoreAddress?: string, oracleAddress?: string) {
+export async function setupAbsorber(tcCoreAddress?: AddressLike, oracleAddress?: AddressLike) {
   const ShockAbsorber = await hre.ethers.getContractFactory('ShockAbsorber');
   const absorber = await ShockAbsorber.deploy();
   const zeroAddress = '0x0000000000000000000000000000000000000000';
@@ -173,7 +174,7 @@ export async function createAndInitAbsorber(blockTime?: number) {
   const { Owner, client1, OracleUpdater } = initAccounts(await hre.ethers.getSigners());
   const tcCore = await createAndInitTheCoin(Owner);
   const oracle = await createAndInitOracle(OracleUpdater, 100, blockTime);
-  const {absorber} = await setupAbsorber(tcCore.address, oracle.address);
+  const {absorber} = await setupAbsorber(tcCore, oracle);
   return { absorber, tcCore, oracle, client1, Owner };
 }
 
@@ -187,11 +188,11 @@ async function setupLive(initFiat: number, blockTime?: number) {
   const initCoin = toCoin(initFiat, 100);
   await tcCore.transfer(client1.address, initCoin);
 
-    const request = await buildAssignPluginRequest(client1, absorber.address, ALL_PERMISSIONS);
+    const request = await buildAssignPluginRequest(client1, absorber, ALL_PERMISSIONS);
   await assignPlugin(tcCore, request);
 
   // absorber needs funds - start with $100K
-  await tcCore.transfer(absorber.address, toCoin(100_000, 100));
+  await tcCore.transfer(absorber, toCoin(100_000, 100));
 
   return { absorber, client1, oracle, tcCore, Owner };
 }

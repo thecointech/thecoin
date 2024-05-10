@@ -1,4 +1,3 @@
-import { getDeploySigner } from '@thecointech/contract-tools/deploySigner';
 import { connectOracle } from '../src';
 import { log } from '@thecointech/logging';
 import { getSigner } from '@thecointech/signers';
@@ -7,7 +6,7 @@ import hre from 'hardhat';
 // Oracle originally used a live wallet as both updater & owner
 // Split owner privleges into cold wallet.
 
-const updater = await getDeploySigner("OracleUpdater")
+const updater = await getSigner("OracleUpdater")
 const newOwner = await getSigner("OracleOwner");
 const existing = await connectOracle(updater);
 const newOwnerAddress = await newOwner.getAddress();

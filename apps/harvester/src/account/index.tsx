@@ -9,6 +9,7 @@ import { getContract as getUberContract } from '@thecointech/contract-plugin-con
 import styles from './index.module.less';
 
 const converter = await getUberContract();
+const converterAddress = await converter.getAddress();
 
 export const Account = () => {
 
@@ -28,7 +29,7 @@ export const Account = () => {
   }, []);
   const isUploaded = !!active;
   const isLoggedIn = !!active?.contract;
-  const hasPlugins = !!active?.plugins.some(p => p.address === converter.address);
+  const hasPlugins = !!active?.plugins.some(p => p.address === converterAddress);
   return (
     <div>
       <Step.Group ordered>

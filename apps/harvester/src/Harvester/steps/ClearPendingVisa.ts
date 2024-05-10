@@ -8,6 +8,8 @@ import { notify } from '../notify';
 // Detect when a visa payment has cleared and reduce the harvester balance to match
 export class ClearPendingVisa implements ProcessingStage {
 
+  readonly name = 'ClearPendingVisa';
+
   async process(data: HarvestData) {
     // Do we have a payment pending?
     let pending = data.state.toPayVisa;
@@ -19,9 +21,9 @@ export class ClearPendingVisa implements ProcessingStage {
       if (lastPaymentSettled(data, pending, pendingDate)) {
         // Payment completed: reduce harvester balance
         harvesterBalance = harvesterBalance.subtract(pending);
+        log.info(`TransferVisaOwing: Pending payment ${pending} settled, new balance: ${harvesterBalance}`);
         pending = undefined;
         pendingDate = undefined;
-        log.info(`TransferVisaOwing: Pending payment ${pending} settled, new balance: ${harvesterBalance}`);
 
         notify({
           title: 'Scheduled Payment Completed',
@@ -54,7 +56,7 @@ function lastPaymentSettled(data: HarvestData, pending: currency, pendingDate: D
   const payments = data.visa.history
     .filter(r => r.date >= pendingClean)
     .filter(r => r.credit?.intValue);
-  log.info(`TransferVisaOwing: Found ${payments.length} credits`);
+  log.info(`TransferVisaOwing: Found ${payments.length} credits, first ${payments[0]?.credit?.value}`);
   const pendingPayment = payments.filter(r => r.credit!.value == pending.value);
   if (pendingPayment.length > 0) {
     log.info(`TransferVisaOwing: Found matching credit for pending payment: ${pending}`);

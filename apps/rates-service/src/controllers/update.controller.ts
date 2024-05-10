@@ -22,11 +22,11 @@ export class UpdateController extends Controller {
     }
 
     /**
-     * Test exception emailing
-     */
-    @Get('throwError')
-    @Response('500', 'always throws')
-    async throwError() {
-      throw new Error('Testing Error Handling')
+    * Test exception emailing
+    */
+    @Get('keepAlive')
+    @Response('204', 'Success')
+    async keepAlive() {
+      return "Ok";
     }
 }

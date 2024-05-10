@@ -6,13 +6,13 @@ import { warmup } from './scraper/warmup';
 import { actions, ScraperBridgeApi } from './scraper_actions';
 import { toBridge } from './scraper_bridge_conversions';
 import { getHarvestConfig, getProcessConfig, getWalletAddress, hasCreditDetails, setCreditDetails, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
-import type { Mnemonic } from '@ethersproject/hdnode';
-import { HarvestConfig } from './types';
+import { HarvestConfig, Mnemonic } from './types';
 import { CreditDetails } from './Harvester/types';
-import { exec } from 'child_process';
-import { exportResults, getState } from './Harvester/db';
+import { spawn } from 'child_process';
+import { exportResults, getState, setOverrides } from './Harvester/db';
 import { harvest } from './Harvester';
 import { logsFolder } from './paths';
+import { platform } from 'node:os';
 
 async function guard<T>(cb: () => Promise<T>) {
   try {
@@ -34,6 +34,10 @@ const api: ScraperBridgeApi = {
   learnValue: (valueName, valueType) => guard(async () => {
     const instance = await Recorder.instance();
     return instance.setRequiredValue(valueName, valueType);
+  }),
+  setDynamicInput: (name, value) => guard(async () => {
+    const instance = await Recorder.instance();
+    return instance.setDynamicInput(name, value);
   }),
   finishAction: (actionName) => guard(() => Recorder.release(actionName)),
 
@@ -59,13 +63,21 @@ const api: ScraperBridgeApi = {
   }),
 
   openLogsFolder: () => guard(async () => {
-    exec(`start "" "${logsFolder}"`);
+    openFolder(logsFolder);
     return true;
   }),
-  getArgv: () => guard(() => Promise.resolve(JSON.stringify({
+  getArgv: () => guard(() => Promise.resolve({
     argv: process.argv,
-    broker: process.env.WALLET_BrokerCAD_ADDRESS
-  }))),
+    broker: process.env.WALLET_BrokerCAD_ADDRESS,
+    saveDump: process.env.HARVESTER_SAVE_DUMP,
+    env: {
+      ...process.env
+    },
+    logsFolder,
+  })),
+
+  allowOverrides: () => guard(() => Promise.resolve(process.env.HARVESTER_ALLOW_OVERRIDES === "true")),
+  setOverrides: (balance, pendingAmt, pendingDate) => guard(() => setOverrides(balance, pendingAmt, pendingDate)),
 }
 
 export function initScraping() {
@@ -74,11 +86,14 @@ export function initScraping() {
     return api.warmup(url);
   }),
 
-  ipcMain.handle(actions.start, async (_event, actionName: ActionTypes, url: string, dynamicValues: Record<string, string>) => {
+  ipcMain.handle(actions.start, async (_event, actionName: ActionTypes, url: string, dynamicValues?: string[]) => {
     return api.start(actionName, url, dynamicValues);
   })
   ipcMain.handle(actions.learnValue, async (_event, valueName: string, valueType: ValueType) => {
     return api.learnValue(valueName, valueType);
+  })
+  ipcMain.handle(actions.setDynamicInput, async (_event, name: string, value: ValueType) => {
+    return api.setDynamicInput(name, value);
   })
   ipcMain.handle(actions.finishAction, async (_event, actionName: ActionTypes) => {
     return api.finishAction(actionName);
@@ -128,4 +143,22 @@ export function initScraping() {
   ipcMain.handle(actions.getArgv, async (_event) => {
     return api.getArgv();
   })
+
+  ipcMain.handle(actions.allowOverrides, async (_event) => {
+    return api.allowOverrides();
+  })
+  ipcMain.handle(actions.setOverrides, async (_event, balance: number, pendingAmt: number|null, pendingDate: string|null) => {
+    return api.setOverrides(balance, pendingAmt, pendingDate);
+  })
+}
+
+
+const openFolder = (path: string) => {
+  let explorer = '';
+  switch (platform()) {
+      case "win32": explorer = "explorer"; break;
+      case "linux": explorer = "xdg-open"; break;
+      case "darwin": explorer = "open"; break;
+  }
+  spawn(explorer, [path], { detached: true }).unref();
 }

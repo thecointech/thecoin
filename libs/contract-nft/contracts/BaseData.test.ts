@@ -15,7 +15,7 @@ it('Returns relevant validity', async () => {
     // so cast to 'any' and away we go
     ids.map(id => nft.validity(id))
   );
-  const asNums =validities.map((vals) => [vals[0].toNumber(), vals[1].toString()]);
+  const asNums =validities.map((vals) => [Number(vals[0]), vals[1].toString()]);
   const maxInt = "115792089237316195423570985008687907853269984665640564039457584007913129639935";
   const expected = [maxInt, "2050", "2050", "2005", "2001"];
   asNums.forEach(([start, end], idx) => {

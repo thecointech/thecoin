@@ -4,6 +4,9 @@ import { StoredData, fromDb, toDb } from './db_translate';
 import path from 'path';
 import { log } from '@thecointech/logging';
 import { rootFolder } from '../paths';
+import currency from 'currency.js';
+import { DateTime } from 'luxon';
+import { PayVisaKey } from './steps/PayVisa';
 
 const db_path = path.join(rootFolder, 'harvester.db');
 
@@ -58,6 +61,54 @@ export async function getCurrentState() {
     ...state
   } = r;
   return fromDb(state);
+}
+
+// Override the harvesters current balance
+export async function setOverrides(balance: number, pendingAmount: number|null, pendingDate: string|null|undefined) {
+  log.warn(`Overriding harvester balance: ${balance}, pending amount: ${pendingAmount}, pending date: ${pendingDate}`);
+
+  const pendingOverride = pendingAmount != null && pendingDate != null
+  ? {
+    toPayVisa: currency(pendingAmount),
+    toPayVisaDate: DateTime.fromISO(pendingDate),
+    stepData: {
+      [PayVisaKey]: pendingDate,
+    }
+  }
+  : {};
+
+  const current = (await getCurrentState()) ?? {
+    chq: {
+      balance: currency(0), // What to put here?
+    },
+    visa: {
+      balance: currency(0),
+      dueAmount: currency(0),
+      dueDate: DateTime.fromMillis(0),
+      history: [],
+    },
+    date: DateTime.now(),
+    state: {},
+    delta: [],
+  };
+
+  await setCurrentState({
+    ...current,
+    state: {
+      ...current.state,
+      harvesterBalance: currency(balance),
+      ...pendingOverride,
+    },
+    delta: [
+      ...current.delta,
+      {
+        harvesterBalance: currency(balance),
+        ...pendingOverride,
+      }
+    ]
+  });
+
+  return true;
 }
 
 // Export all results as CSV string

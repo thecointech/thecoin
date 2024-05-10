@@ -17,7 +17,7 @@ export async function randomDistribution() {
 
   const tcAddr = await theCoin.getAddress();
   const tcBal = await tcCore.balanceOf(tcAddr);
-  if (tcBal.toNumber() === 0) {
+  if (tcBal === 0n) {
     await mtCore.mintCoins(100000 * COIN_EXP, tcAddr, Date.now());
   }
 
@@ -49,7 +49,7 @@ async function seedAccount(tcAddr: string, client: string, onlyBuy=false) {
     const amount = Math.floor(Math.random() * 100 * COIN_EXP);
     const balance = await tcCore.balanceOf(client);
     const timestamp = Math.floor(ts.toMillis());
-    if (onlyBuy || balance.toNumber() <= amount || Math.random() < 0.6) {
+    if (onlyBuy || balance <= amount || Math.random() < 0.6) {
       await tcCore.runCloneTransfer(tcAddr, client, amount, 0, timestamp);
     }
     else {
@@ -61,7 +61,7 @@ async function seedAccount(tcAddr: string, client: string, onlyBuy=false) {
 }
 
 const contract = await GetContract();
-log.info(`Initializing core: ${contract.address} with random values`);
+log.info(`Initializing core: ${await contract.getAddress()} with random values`);
 
 await assignRoles(contract);
 await randomDistribution();

@@ -4,7 +4,7 @@ import { updateRates } from './update';
 import { createOracle } from '../internal/testHelpers';
 import { SpxCadOracleMocked } from './index_mocked';
 import hre from 'hardhat';
-import '@nomiclabs/hardhat-ethers';
+import '@nomicfoundation/hardhat-ethers';
 import { DateTime } from 'luxon';
 import { SpxCadOracle } from './codegen';
 import { log } from '@thecointech/logging';
@@ -16,8 +16,8 @@ describe('Really long & old test', () => {
   it('basic update functions', async () => {
     const [owner] = await hre.ethers.getSigners();
     const oracle = await createOracle(owner, 366);
-    const initial = (await oracle.INITIAL_TIMESTAMP()).toNumber();
-    const blockTime = (await oracle.BLOCK_TIME()).toNumber();
+    const initial = Number(await oracle.INITIAL_TIMESTAMP());
+    const blockTime = Number(await oracle.BLOCK_TIME());
     const oneYearInMs = 365 * 24 * 60 * 60 * 1000;
 
     const ratesFactory = await getRatesFactory(oracle);
@@ -26,7 +26,7 @@ describe('Really long & old test', () => {
     const runTest = async (timestamp: number) => {
       const exp = Math.floor(timestamp / blockTime) * blockTime;
       const r1 = await oracle.getRoundFromTimestamp(initial + timestamp);
-      expect(r1.toNumber()).toEqual(exp);
+      expect(r1).toEqual(exp);
     }
 
     await runTest(0);
@@ -88,9 +88,9 @@ it ('Handles random offsets JS', async () => {
 
   await updateSimpleRates(mocked, rates);
 
-  const factor = Math.pow(10, await mocked.decimals());
+  const factor = Math.pow(10, Number(await mocked.decimals()));
   const oInit = await mocked.getRoundFromTimestamp(start.toMillis());
-  expect(oInit.toNumber()).toEqual(1 * factor);
+  expect(Number(oInit)).toEqual(1 * factor);
 
   await validateResults(mocked, rates);
 })
@@ -105,17 +105,17 @@ it ('Handles random offsets SOL', async () => {
 
   await updateSimpleRates(oracle, rates);
 
-  const factor = Math.pow(10, await oracle.decimals());
+  const factor = Math.pow(10, Number(await oracle.decimals()));
   const oInit = await oracle.getRoundFromTimestamp(start.toMillis());
-  expect(oInit.toNumber()).toEqual(1 * factor);
+  expect(Number(oInit)).toEqual(1 * factor);
 
   await validateResults(oracle, rates);
 })
 
 const getRatesFactory = async (oracle: SpxCadOracleMocked|SpxCadOracle) => {
-  const initial = (await oracle.INITIAL_TIMESTAMP()).toNumber();
-  const blockTime = (await oracle.BLOCK_TIME()).toNumber();
-  const factor = Math.pow(10, await oracle.decimals());
+  const initial = Number(await oracle.INITIAL_TIMESTAMP());
+  const blockTime = Number(await oracle.BLOCK_TIME());
+  const factor = Math.pow(10, Number(await oracle.decimals()));
 
   return async (timestamp: number) => {
     const from = DateTime.fromMillis(timestamp);
@@ -143,7 +143,7 @@ const generateSimpleOracle = async (hours: number[], asJs?: boolean) => {
   const requiredDays = 1 + hours.reduce((a, b) => a + b, 0) / 24
   const oracle = await createSimpleOracle(requiredDays, asJs)
   // const mocked = new SpxCadOracleMocked();
-  const start = DateTime.fromMillis((await oracle.INITIAL_TIMESTAMP()).toNumber());
+  const start = DateTime.fromMillis(Number(await oracle.INITIAL_TIMESTAMP()));
   const rates = []
   let from = start;
   for (let i = 0; i < hours.length; i++) {
@@ -175,12 +175,12 @@ const updateSimpleRates = (mocked: SpxCadOracleMocked|SpxCadOracle, rates: any[]
   )
 
 const validateResults = async (mocked: SpxCadOracleMocked|SpxCadOracle, rates: any[]) => {
-  const factor = Math.pow(10, await mocked.decimals());
+  const factor = Math.pow(10, Number(await mocked.decimals()));
   for (const r of rates) {
     const oStart = await mocked.getRoundFromTimestamp(r.from.toMillis());
-    expect(oStart.toNumber()).toEqual(r.rate * factor);
+    expect(Number(oStart)).toEqual(r.rate * factor);
     const oTo = await mocked.getRoundFromTimestamp(r.to.toMillis() - 1);
-    expect(oTo.toNumber()).toEqual(r.rate * factor);
+    expect(Number(oTo)).toEqual(r.rate * factor);
   }
 }
 

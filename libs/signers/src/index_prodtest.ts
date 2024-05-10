@@ -1,12 +1,14 @@
-import { Wallet } from '@ethersproject/wallet';
+import { Wallet } from 'ethers';
 import { getAndCacheSigner } from './cache';
 import type { AccountName } from "./names";
+import { getProvider } from '@thecointech/ethers-provider';
 
 function loadFromPK(name: AccountName) {
   const pk = process.env[`WALLET_${name}_KEY`];
   if (!pk)
     throw new Error(`Cannot find process.env.WALLET_${name}_KEY: ensure all accounts are exposed`);
-  return new Wallet(pk);
+  const wallet = new Wallet(pk);
+  return wallet.connect(getProvider());
 }
 
 //

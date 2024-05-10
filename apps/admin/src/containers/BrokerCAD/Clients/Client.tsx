@@ -8,7 +8,7 @@ import { ClientTransaction } from './ClientTransaction';
 import { UserData } from './data';
 import { toCAD } from './toCAD';
 import { buildUniqueId } from '@thecointech/utilities/Verify';
-import { verifyMessage } from '@ethersproject/wallet';
+import { verifyMessage } from 'ethers';
 import { AddressMatches } from '@thecointech/utilities/Address';
 
 export type Props = UserData;

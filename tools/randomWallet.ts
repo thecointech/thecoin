@@ -1,4 +1,4 @@
-import { Wallet } from "@ethersproject/wallet";
+import { Wallet } from "ethers";
 import { writeFileSync } from 'fs';
 
 const password = "0nC927z!Vkka";

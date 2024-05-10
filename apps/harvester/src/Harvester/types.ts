@@ -1,8 +1,8 @@
 import currency from 'currency.js'
 import { DateTime } from 'luxon'
 import type { ChequeBalanceResult, VisaBalanceResult } from '../scraper/types'
-import { Signer } from '@ethersproject/abstract-signer';
 import type { Replay } from '../scraper/replay';
+import type { Signer } from 'ethers';
 
 export type HarvestDelta = {
   // The fiat balance of the harvesters
@@ -47,6 +47,7 @@ export type CreditDetails = {
 }
 
 export interface ProcessingStage {
+  readonly name: string;
   process: (data: HarvestData, user: UserData, lastState?: HarvestData) => Promise<HarvestDelta>;
 }
 

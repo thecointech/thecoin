@@ -1,16 +1,15 @@
 import PouchDB from 'pouchdb';
 import memory from 'pouchdb-adapter-memory'
 import comdb from 'comdb';
-import { Wallet } from '@ethersproject/wallet';
-import { Mnemonic } from '@ethersproject/hdnode';
-import { defaultDays, defaultTime, HarvestConfig } from '../types';
+import { defaultDays, defaultTime, HarvestConfig, Mnemonic } from '../types';
 import { createStep } from './steps';
 import { CreditDetails } from './types';
-import { setSchedule } from './schedule/scheduler';
+import { setSchedule } from './schedule';
 import path from 'path';
 import { log } from '@thecointech/logging';
 import { ActionTypes, AnyEvent } from '../scraper/types';
 import { rootFolder } from '../paths';
+import { HDNodeWallet } from 'ethers';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
@@ -37,7 +36,7 @@ export type ConfigShape = {
 const ConfigKey = "config";
 
 let __config = null as unknown as PouchDB.Database<ConfigShape>;
-async function getConfig(password?: string) {
+export async function getConfig(password?: string) {
   if (!__config) {
     __config = new PouchDB<ConfigShape>(db_path, {adapter: 'memory'});
     log.info(`Initializing ${process.env.NODE_ENV} config database at ${db_path}`);
@@ -57,7 +56,8 @@ async function getConfig(password?: string) {
 export async function getProcessConfig() {
   try {
     const db = await getConfig();
-    return db.get<ConfigShape>(ConfigKey, { revs_info: true });
+    const doc = await db.get<ConfigShape>(ConfigKey, { revs_info: true });
+    return doc;
   }
   catch (err) {
     return undefined;
@@ -98,7 +98,7 @@ export async function setWalletMnemomic(mnemonic: Mnemonic) {
 export async function getWallet() {
   const cfg = await getProcessConfig();
   if (cfg?.wallet) {
-    return Wallet.fromMnemonic(cfg.wallet.phrase, cfg.wallet.path);
+    return HDNodeWallet.fromPhrase(cfg.wallet.phrase, undefined, cfg.wallet.path);
   }
   return null;
 }

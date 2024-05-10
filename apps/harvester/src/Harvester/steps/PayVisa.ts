@@ -6,10 +6,13 @@ import { DateTime } from 'luxon';
 import currency from 'currency.js';
 import { log } from '@thecointech/logging';
 import { notify, notifyError } from '../notify';
+import type { UberTransferAction } from '@thecointech/types';
 
 export const PayVisaKey = "PayVisa";
 
 export class PayVisa implements ProcessingStage {
+
+  readonly name = 'PayVisa';
 
   // How many days prior to the due date should we pay the visa?
   daysPrior = 3;
@@ -17,13 +20,18 @@ export class PayVisa implements ProcessingStage {
     if (config?.daysPrior) {
       this.daysPrior = Number(config.daysPrior);
     }
+    // We started running prodtest with 0 offset, continue
+    else if (process.env.CONFIG_NAME==='prodtest') {
+      this.daysPrior = 0;
+    }
   }
-
 
   async process(data: HarvestData, { wallet, creditDetails }: UserData) : Promise<HarvestDelta> {
     // Do we have a new due amount?  If so, we better pay it.
 
     log.info('Processing PayVisa');
+    // Note, we use the date from stepData, as the date recorded as
+    // state.toPayVisaDate is the date of the payment, not the due date
     const lastDueDate = getDataAsDate(PayVisaKey, data.state.stepData);
 
     if (!lastDueDate || (data.visa.dueDate > lastDueDate)) {
@@ -40,8 +48,8 @@ export class PayVisa implements ProcessingStage {
         // TODO: perhaps turn toPay into an array?
       }
 
+      // Send payment request
       // transfer visa dueAmount on dateToPay
-      const api = GetBillPaymentsApi();
       const payment = await BuildUberAction(
         creditDetails,
         wallet,
@@ -50,7 +58,7 @@ export class PayVisa implements ProcessingStage {
         124,
         dateToPay,
       )
-      const r = await api.uberBillPayment(payment);
+      const r = await sendVisaPayment(payment);
       if (r.status !== 200) {
         log.error("Error on uberBillPayment: ", r.data.message);
 
@@ -94,4 +102,20 @@ export function getDateToPay(dateToPay: DateTime, daysPrior: number) {
     }
   }
   return dateToPay;
+}
+
+async function sendVisaPayment(payment: UberTransferAction) {
+  if (process.env.HARVESTER_DRY_RUN) {
+    return {
+      status: 200,
+      data: {
+        message: "DRY RUN: Visa payment not sent",
+      }
+    }
+  }
+  // Send payment request
+  // transfer visa dueAmount on dateToPay
+  const api = GetBillPaymentsApi();
+  const r = await api.uberBillPayment(payment);
+  return r;
 }

@@ -4,23 +4,23 @@ import { HarvestStepType } from '../types';
 import { ConfigReducer } from './state/reducer';
 import { safeParseFloat } from './state/utils';
 
-export const TransferLimit = () => {
+export const ChequeMinimum = () => {
 
   const data = ConfigReducer.useData();
   const api = ConfigReducer.useApi();
-  const xferLimit = data.steps.find(step => step.type === HarvestStepType.TransferLimit);
+  const xferLimit = data.steps.find(step => step.type === HarvestStepType.ChequeMinimum);
 
   const [enabled, setEnabled] = useState(!!xferLimit ?? false);
   const [limit, setLimit] = useState(xferLimit?.args?.['limit'] ?? 250);
 
   useEffect(() => {
     if (enabled) {
-      api.setStep(HarvestStepType.TransferLimit, {
+      api.setStep(HarvestStepType.ChequeMinimum, {
         limit
       });
     }
     else {
-      api.clearStep(HarvestStepType.TransferLimit);
+      api.clearStep(HarvestStepType.ChequeMinimum);
     }
   }, [enabled, limit]);
 

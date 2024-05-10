@@ -11,12 +11,14 @@ jest.unstable_mockModule('./config', () => ({
   hydrateProcessor: async () => {
     const { TransferVisaOwing } = await import('./steps/TransferVisaOwing');
     const { RoundUp } = await import('./steps/RoundUp');
+    const { TransferLimit } = await import('./steps/TransferLimit');
     const { SendETransfer } = await import('./steps/SendETransfer');
     const { PayVisa } = await import('./steps/PayVisa');
     const { TopUp } = await import('./steps/TopUp');
     return [
       new TransferVisaOwing(),
       new RoundUp(),
+      new TransferLimit({limit: 2500}),
       new TopUp(),
       new SendETransfer(),
       new PayVisa(),

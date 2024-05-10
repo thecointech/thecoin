@@ -5,7 +5,7 @@ import { AccountName } from '../names';
 import { log } from '@thecointech/logging';
 import { getProvider } from '@thecointech/ethers-provider';
 import type { IpcMain } from '@thecointech/electron-utils/types/ipc';
-import type { Signer } from '@ethersproject/abstract-signer';
+import type { Signer } from 'ethers';
 
 //
 // This is exclusively running in node process on production environments

@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/idx",
-  "version": "0.2.123",
+  "version": "0.2.125",
   "description": "TheCoin: Interface to IDX backend for accounts",
   "type": "module",
   "keywords": [
@@ -43,19 +43,18 @@
   },
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@composedb/client": "^0.4.4",
-    "@didtools/pkh-ethereum": "^0.3.0",
-    "@thecointech/logging": "^0.2.123",
-    "@thecointech/utilities": "^0.2.123",
-    "did-session": "^2.0.1"
+    "@composedb/client": "^0.7.1",
+    "@didtools/pkh-ethereum": "^0.5.0",
+    "@thecointech/logging": "^0.2.125",
+    "@thecointech/utilities": "^0.2.125",
+    "did-session": "^3.1.0"
   },
   "devDependencies": {
-    "@ceramicnetwork/cli": "^2.29.0",
-    "@composedb/cli": "^0.4.4",
-    "@composedb/devtools": "^0.4.4",
-    "@composedb/devtools-node": "^0.4.4",
-    "@composedb/types": "^0.4.4",
-    "@glazed/devtools": "^0.2.0",
+    "@ceramicnetwork/cli": "^5.9.0",
+    "@composedb/cli": "^0.7.1",
+    "@composedb/devtools": "^0.7.1",
+    "@composedb/devtools-node": "^0.7.1",
+    "@composedb/types": "^0.7.1",
     "@thecointech/setenv": "workspace:^"
   },
   "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"

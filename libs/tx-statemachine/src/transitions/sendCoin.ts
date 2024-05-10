@@ -8,7 +8,7 @@ import { toCoin } from "./toCoin";
 import { calculateOverrides, convertBN, toDelta } from './coinUtils';
 import { last } from '@thecointech/utilities';
 import type { TheCoin } from '@thecointech/contract-core';
-import type { Overrides } from '@ethersproject/contracts';
+import type { Overrides } from 'ethers';
 
 //
 // Send the current balance to the client.  If successful,

@@ -1,5 +1,5 @@
 import { AccountState, AccountMap} from '@thecointech/account';
-import { Signer } from '@ethersproject/abstract-signer';
+import { Signer } from 'ethers';
 
 export type AccountMapState =  {
   active: string|null;

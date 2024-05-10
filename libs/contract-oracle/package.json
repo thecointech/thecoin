@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-oracle",
-  "version": "0.2.123",
+  "version": "0.2.125",
   "description": "The Coin: Price Oracles for TheCoin",
   "type": "module",
   "keywords": [
@@ -26,7 +26,7 @@
     "build:copy": "run -T cpx \"./src/deployed/**\" ./build/deployed",
     "clean": "run -T run-p 'clean:*'",
     "clean:src": "run -T rimraf ./build",
-    "clean:contracts": "run -T rimraf ./src/codegen && run -T rimraf ./src/types",
+    "clean:contracts": "run -T rimraf ./src/codegen && run -T rimraf ./src/types && run -T rimraf ./.hardhat",
     "test": "run :jest $@",
     "validate:prod": "run -T cross-env CONFIG_NAME=prod yarn _hardhat ./scripts/validate.ts",
     "validate:localprod": "run -T cross-env CONFIG_NAME=prod URL_SERVICE_RATES=http://localhost:7001/api/v1 yarn _hardhat ./scripts/validate.ts",
@@ -68,13 +68,13 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "^0.2.123",
-    "@thecointech/contract-tools": "^0.2.123",
-    "@thecointech/jestutils": "^0.2.123",
-    "@thecointech/setenv": "^0.2.123"
+    "@thecointech/async": "^0.2.125",
+    "@thecointech/contract-tools": "^0.2.125",
+    "@thecointech/jestutils": "^0.2.125",
+    "@thecointech/setenv": "^0.2.125"
   },
   "dependencies": {
-    "@thecointech/contract-base": "^0.2.123"
+    "@thecointech/contract-base": "^0.2.125"
   },
   "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
 }

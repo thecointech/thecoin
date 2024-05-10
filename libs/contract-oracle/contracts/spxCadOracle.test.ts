@@ -5,7 +5,7 @@ import { updateRates } from '../src/update';
 import { getContract } from '../src/index_mocked';
 import { getOracleFactory } from '../src';
 import hre from 'hardhat';
-import '@nomiclabs/hardhat-ethers';
+import '@nomicfoundation/hardhat-ethers';
 import { existsSync, readFileSync } from 'fs';
 import { DateTime, Duration } from 'luxon';
 import { createAndInitOracle } from '../internal/testHelpers';
@@ -37,7 +37,7 @@ describe('Oracle Tests', () => {
       const test = async (t: number) => {
         const s = await oracle.getRoundFromTimestamp(t);
         const expected = Math.round(r.rate * factor);
-        expect(s.toNumber()).toEqual(expected);
+        expect(Number(s)).toEqual(expected);
       }
       const from = r.from;
       const to = Math.min(r.to, Date.now());
@@ -75,7 +75,7 @@ describe('Oracle Tests', () => {
       const test = async (t: number) => {
         const s = await oracle.getRoundFromTimestamp(t);
         const expected = Math.round(r.rate * factor);
-        expect(s.toNumber()).toEqual(expected);
+        expect(Number(s)).toEqual(expected);
       }
       await test(r.from);
       await test(r.to - 1);
@@ -99,27 +99,27 @@ it ("Does not add too many rates", async () => {
   const toInsert = Array(6).fill(100);
   await oracle.bulkUpdate(toInsert);
 
-  const firstValid = (await oracle.validUntil()).toNumber();
+  const firstValid = (await oracle.validUntil());
   // This should fail.
   await expect(oracle.bulkUpdate(toInsert))
     .rejects.toThrow();
 
-  const secondValid = (await oracle.validUntil()).toNumber();
+  const secondValid = (await oracle.validUntil());
   expect (secondValid).toEqual(firstValid);
 
-  await oracle.updateOffset({from: now.toMillis(), offset: -(60 * 60 * 1000)});
+  await oracle.updateOffset({from: now.toMillis(), offset: -(65 * 60 * 1000)});
 
   // But we still should be able to push two more updates?
   await oracle.bulkUpdate(toInsert.slice(0, 2));
-  const lastValid = (await oracle.validUntil()).toNumber();
+  const lastValid = (await oracle.validUntil());
   expect(lastValid).toBeGreaterThanOrEqual(Date.now());
 })
 
 it ("Can reset to point-in-time", async () => {
   const [owner] = await hre.ethers.getSigners();
   const oracle = await createAndInitOracle(owner, 2, blockTime, 100);
-  const initial = (await oracle.INITIAL_TIMESTAMP()).toNumber();
-  const validUntil = (await oracle.validUntil()).toNumber();
+  const initial = Number(await oracle.INITIAL_TIMESTAMP());
+  const validUntil = Number(await oracle.validUntil());
   // Add some offsets evenly spaced in the time
   for (let i = 1; i < 10; i++) {
     const from = initial + (validUntil - initial) * (i / 10);
@@ -138,16 +138,16 @@ it ("Can reset to point-in-time", async () => {
   const postRates = await oracle.getRates();
   const postOffsets = await oracle.getOffsets();
 
-  const postValid = (await oracle.validUntil()).toNumber();
+  const postValid = (await oracle.validUntil());
   expect(postValid).toBeGreaterThan(middle);
   expect(postValid).toBeLessThan(middle + blockTime);
 
   for (let i = 0; i < preOffsets.length; i++) {
     if (i < postOffsets.length) {
-      expect(preOffsets[i].from.toNumber()).toBeLessThanOrEqual(middle);
+      expect(preOffsets[i].from).toBeLessThanOrEqual(middle);
     }
     else {
-      expect(preOffsets[i].from.toNumber()).toBeGreaterThan(middle);
+      expect(preOffsets[i].from).toBeGreaterThan(middle);
     }
   }
 })

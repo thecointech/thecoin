@@ -1,44 +1,49 @@
-import { Provider, TransactionRequest, TransactionResponse } from '@ethersproject/abstract-provider';
 import { FirestoreAdmin, Timestamp, getFirestore } from '@thecointech/firestore';
 import { log } from '@thecointech/logging';
-import { Bytes, Signer, utils } from 'ethers';
+import { AbstractSigner, BytesLike, Provider, Signer, TransactionRequest, TransactionResponse, TypedDataDomain, TypedDataField } from 'ethers';
 import { DateTime } from 'luxon';
 import { sleep } from '@thecointech/async';
 
-export class ManagedNonceSigner extends Signer {
+export class ManagedNonceSigner extends AbstractSigner {
+
   private baseSigner: Signer;
   // _isSigner: boolean;
 
   constructor(signer: Signer) {
-    super();
+    super(signer.provider);
     this.baseSigner = signer;
-    this.provider = signer.provider;
   }
-  provider?: Provider | undefined;
+
   // Required overrides
-  getAddress(): Promise<string> {
+  override getAddress(): Promise<string> {
     return this.baseSigner.getAddress();
   }
-  signMessage(message: string | Bytes): Promise<string> {
+  override signMessage(message: BytesLike): Promise<string> {
     return this.baseSigner.signMessage(message);
   }
-  signTransaction(transaction: utils.Deferrable<TransactionRequest>): Promise<string> {
+
+  override signTypedData(domain: TypedDataDomain, types: Record<string, TypedDataField[]>, value: Record<string, any>): Promise<string> {
+    return this.baseSigner.signTypedData(domain, types, value);
+  }
+  override signTransaction(transaction: TransactionRequest): Promise<string> {
     return this.baseSigner.signTransaction(transaction);
   }
-  connect(provider: Provider): Signer {
+  override connect(provider: Provider): Signer {
     return new ManagedNonceSigner(this.baseSigner.connect(provider));
   }
 
   // Optional overrides
 
-  sendTransaction(transaction: utils.Deferrable<TransactionRequest>): Promise<TransactionResponse> {
+  override sendTransaction(transaction: TransactionRequest): Promise<TransactionResponse> {
     if (transaction.nonce == undefined) {
       // Because there are multiple versions of this service running, we
       // need to lock the nonce while in-use and ensure it is always up-to-date
       return guardFn<TransactionResponse>(async (lastNonce) => {
         if (lastNonce !== undefined) {
-          transaction = utils.shallowCopy(transaction);
-          const pendingNonce = await this.getTransactionCount("pending")
+          transaction = {
+            ...transaction
+          }
+          const pendingNonce = await this.baseSigner.getNonce();
           transaction.nonce = Math.max(pendingNonce, lastNonce + 1);
         }
         return await this.baseSigner.sendTransaction(transaction);
