@@ -2,10 +2,9 @@ import { connectOracle, updateRates } from '@thecointech/contract-oracle';
 import { getSigner } from '@thecointech/signers';
 import { getCombinedRates } from './rates';
 import { log } from '@thecointech/logging';
-import { DateTime, Duration } from 'luxon';
+import { DateTime } from 'luxon';
 import { FirestoreAdmin, Timestamp, getFirestore } from '@thecointech/firestore';
 import { toDateStr } from '../utils/date';
-import Axios from 'axios';
 
 
 export async function updateOracle(timestamp: number) {
