@@ -1,5 +1,5 @@
 import { AccountId } from '@thecointech/signers';
-import { Wallet } from "@ethersproject/wallet";
+import { Wallet } from "ethers";
 import { writeFileSync, existsSync, mkdirSync, readFile, readFileSync } from 'fs';
 import { resolve } from 'path';
 

@@ -17,8 +17,9 @@ export async function getHistory(
     account,
     model: definition.models.EncryptedProfile.id
   }
+  debugger;
   // Get the latest record, this comes with a list of commits.
-  const single = await client.context.querySingle(params);
+  const single = await (client.context as any).querySingle(params);
   if (single) {
     // Load prior commits
     const ids = single.allCommitIds;

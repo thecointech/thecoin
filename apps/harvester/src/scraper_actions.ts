@@ -1,5 +1,4 @@
-import { Mnemonic } from '@ethersproject/hdnode';
-import { HarvestConfig } from './types';
+import type { HarvestConfig, Mnemonic } from './types';
 import type {ActionTypes, ValueResult, ValueType} from "./scraper/types";
 import type { CreditDetails } from './Harvester/types';
 import type { StoredData } from './Harvester/db_translate';

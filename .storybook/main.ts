@@ -58,6 +58,7 @@ const config: StorybookConfig = {
           alias: {
             "fs": false,
             "path": false,
+            "http": false,
           },
           modules: [mocksFolder],
         },

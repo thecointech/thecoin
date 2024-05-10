@@ -1,5 +1,5 @@
 import testWallet from './testAccount1.json' assert {type: "json"};
-import { Wallet } from '@ethersproject/wallet';
+import { Wallet } from 'ethers';
 import { ConnectContract } from '@thecointech/contract-core';
 import { getPluginDetails } from '@thecointech/contract-plugins';
 import { AccountMap } from '../map';
@@ -21,7 +21,7 @@ async function initDevWallets() {
   const randomAccount = buildNewAccount("Random Test", randomWallet.address, randomWallet);
   // connect to mocked services - normally this is done by "connect" call
   randomAccount.contract = await ConnectContract(randomAccount.signer);
-  randomAccount.plugins = await getPluginDetails(randomAccount.contract);
+  randomAccount.plugins = await getPluginDetails(randomAccount.contract, randomWallet.address);
   randomAccount.idx = await getComposeDB(randomAccount.signer);
 
   _devAccounts[randomAccount.address] = randomAccount

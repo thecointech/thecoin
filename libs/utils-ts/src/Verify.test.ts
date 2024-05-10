@@ -1,8 +1,8 @@
 import { it } from "@jest/globals";
 import { sign } from './SignedMessages';
-import { Wallet } from '@ethersproject/wallet'
+import { Wallet } from 'ethers'
 import { buildUniqueId } from './Verify';
-import { verifyMessage } from '@ethersproject/wallet';
+import { verifyMessage } from 'ethers';
 
 it ("generates appropriate tests", async () => {
   const data = {

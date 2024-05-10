@@ -2,8 +2,8 @@ import { DID } from 'dids'
 import { getResolver } from 'key-did-resolver'
 import { Ed25519Provider } from 'key-did-provider-ed25519'
 import { fromString } from 'uint8arrays/from-string'
-import { keccak256 } from '@ethersproject/keccak256';
-import { Signer } from '@ethersproject/abstract-signer';
+import { keccak256 } from 'ethers';
+import { Signer } from 'ethers';
 import { ComposeClient } from '@composedb/client';
 
 // create a one-off DID for encrypting profile data.

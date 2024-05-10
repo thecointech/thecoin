@@ -1,11 +1,10 @@
-import BasePluginSpec from './codegen/contracts/BasePlugin.sol/BasePlugin.json' assert {type: "json"};
-import { BasePlugin } from './codegen/contracts/BasePlugin';
-import { Contract } from '@ethersproject/contracts';
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import { ContractState } from './types';
-import { last } from '@thecointech/utilities';
+import { isDefined, last } from '@thecointech/utilities';
 import type { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
+import { BasePlugin__factory } from './codegen';
+import { AddressLike } from 'ethers';
 
 type BaseLogs = {
   timestamp: DateTime,
@@ -14,21 +13,19 @@ type BaseLogs = {
   amnt: Decimal
 }
 
-export async function getPluginLogs(address: string, user: string, provider: Erc20Provider, fromBlock: number) : Promise<BaseLogs[]> {
-  const contract = new Contract(address, BasePluginSpec.abi, provider) as BasePlugin;
+export async function getPluginLogs(address: string, user: AddressLike, provider: Erc20Provider, fromBlock: number) : Promise<BaseLogs[]> {
+  const contract = BasePlugin__factory.connect(address, provider);
   const filter = contract.filters.ValueChanged(user);
-  const logs = await provider.getEtherscanLogs({
-    ...filter,
-    fromBlock
-  }, "and");
+  const logs = await contract.queryFilter(filter, fromBlock);
 
   return logs
-  .map(log => contract.interface.parseLog(log).args)
-  .map(args => ({
-    user: args.user,
-    timestamp: DateTime.fromMillis(args.msTime.toNumber()),
-    path: args.path,
-    amnt: new Decimal(args.change.toString()),
+    .map(log => log?.args)
+    .filter(isDefined)
+    .map(args => ({
+      user: args.user,
+      timestamp: DateTime.fromMillis(Number(args.msTime)),
+      path: args.path,
+      amnt: new Decimal(args.change.toString()),
   }))
 }
 

@@ -1,9 +1,7 @@
 import PouchDB from 'pouchdb';
 import memory from 'pouchdb-adapter-memory'
 import comdb from 'comdb';
-import { Wallet } from '@ethersproject/wallet';
-import { Mnemonic } from '@ethersproject/hdnode';
-import { defaultDays, defaultTime, HarvestConfig } from '../types';
+import { defaultDays, defaultTime, HarvestConfig, Mnemonic } from '../types';
 import { createStep } from './steps';
 import { CreditDetails } from './types';
 import { setSchedule } from './schedule';
@@ -11,6 +9,7 @@ import path from 'path';
 import { log } from '@thecointech/logging';
 import { ActionTypes, AnyEvent } from '../scraper/types';
 import { rootFolder } from '../paths';
+import { HDNodeWallet } from 'ethers';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
@@ -99,7 +98,7 @@ export async function setWalletMnemomic(mnemonic: Mnemonic) {
 export async function getWallet() {
   const cfg = await getProcessConfig();
   if (cfg?.wallet) {
-    return Wallet.fromMnemonic(cfg.wallet.phrase, cfg.wallet.path);
+    return HDNodeWallet.fromPhrase(cfg.wallet.phrase, undefined, cfg.wallet.path);
   }
   return null;
 }

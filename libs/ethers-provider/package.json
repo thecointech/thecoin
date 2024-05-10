@@ -71,8 +71,8 @@
     }
   },
   "dependencies": {
-    "@ethersproject/providers": "^5.7.0",
-    "@thecointech/logging": "^0.2.125"
+    "@thecointech/logging": "^0.2.125",
+    "ethers": "6.12.0"
   },
   "devDependencies": {
     "@thecointech/jestutils": "^0.2.125",

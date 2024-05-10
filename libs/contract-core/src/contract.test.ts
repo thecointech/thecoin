@@ -5,7 +5,7 @@ import { getEnvVars } from "@thecointech/setenv";
 import { NormalizeAddress } from '@thecointech/utilities';
 import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider/web';
 
-const prodVars = getEnvVars('prodtest');
+const prodVars = getEnvVars('prod');
 jest.setTimeout(60000);
 
 describe('Testing provider', () => {
@@ -16,22 +16,22 @@ describe('Testing provider', () => {
 
   it ('can fetch logs', async () => {
 
-    const contract = await GetContract();
     const provider = new Erc20Provider();
+    const contract = await GetContract(provider);
 
     const address = NormalizeAddress(prodVars.WALLET_BrokerCAD_ADDRESS);
-    const contractAddress = contract.address;
+    const contractAddress = await contract.getAddress();
 
+    const fromBlock = parseInt(prodVars.INITIAL_COIN_BLOCK);
     const allTxs = await provider.getERC20History({address, contractAddress});
-    const filter = contract.filters.ExactTransfer(null, address);
-    (filter as any).fromBlock = parseInt(prodVars.INITIAL_COIN_BLOCK);
-    const logs1 = await provider.getEtherscanLogs(filter, "and");
-    const filter2 = contract.filters.ExactTransfer(address, null);
-    (filter2 as any).fromBlock = parseInt(prodVars.INITIAL_COIN_BLOCK);
-    const logs2 = await provider.getEtherscanLogs(filter2, "and");
+    const filter = contract.filters.Transfer(null, address);
+    const logs1 = await contract.queryFilter(filter, fromBlock);
+    const filter2 = contract.filters.Transfer(address, null);
+    const logs2 = await contract.queryFilter(filter2, fromBlock);
     const logs = [...logs1, ...logs2];
 
     expect(logs.length).toEqual(allTxs.length);
+    expect(logs[0].args.value).toEqual(allTxs[0].value);
   })
 
 }, prodVars.POLYGONSCAN_API_KEY != undefined);

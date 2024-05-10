@@ -1,6 +1,6 @@
 import Crypto from "crypto";
 import { CertifiedTransferRequest, UberTransfer } from "@thecointech/types";
-import { keccak256 } from '@ethersproject/solidity';
+import { getBytes, solidityPackedKeccak256 } from 'ethers';
 import { log } from "@thecointech/logging";
 
 export type EncryptedPacket = {
@@ -73,12 +73,14 @@ export function GetHash(
   encryptedPayee: EncryptedPacket,
   transfer: CertifiedTransferRequest|UberTransfer
 ) {
-  return keccak256(
-    ["string", "string", "string"],
-    [
-      transfer.signature,
-      encryptedPayee.encryptedPacket,
-      encryptedPayee.version
-    ]
+  return getBytes(
+    solidityPackedKeccak256(
+      ["string", "string", "string"],
+      [
+        transfer.signature,
+        encryptedPayee.encryptedPacket,
+        encryptedPayee.version
+      ]
+    )
   );
 }

@@ -1,6 +1,6 @@
 import { getCurrentState, TransitionCallback, TypedActionContainer } from "../types";
 import { verifyPreTransfer } from "./verifyPreTransfer";
-import { TransactionResponse } from '@ethersproject/providers';
+import { TransactionResponse } from 'ethers';
 import { calculateOverrides, convertBN, toDelta } from './coinUtils';
 import { log } from '@thecointech/logging';
 import { makeTransition  } from '../makeTransition';

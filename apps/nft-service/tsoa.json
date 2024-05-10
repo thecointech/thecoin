@@ -10,7 +10,8 @@
   "routes": {
     "basePath": "/api/v1",
     "routesDir": "./src/routes",
-    "middleware": "express"
+    "middleware": "express",
+    "esm": true
   },
   "ignore": [
     "**/node_modules/**",

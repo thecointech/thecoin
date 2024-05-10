@@ -1,5 +1,5 @@
-import type { Signer } from '@ethersproject/abstract-signer';
-import { arrayify } from '@ethersproject/bytes';
+import type { Signer } from 'ethers';
+import { getBytes } from 'ethers';
 
 type Web3Send = {
   method: string,
@@ -24,7 +24,7 @@ export class Ethers3Web3Converter {
         // but our signMessage function expects the raw string
         // prevent that change by pre-converting to array
         const hexString = params[0];
-        const asArray = arrayify(hexString);
+        const asArray = getBytes(hexString);
         const signature = await this.signer.signMessage(asArray);
         callback(null, {result: signature});
     }

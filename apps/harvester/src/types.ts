@@ -1,4 +1,9 @@
 
+export interface Mnemonic {
+  readonly phrase: string;
+  readonly path: string;
+  readonly locale: string;
+};
 
 export type DaysArray = [boolean, boolean, boolean, boolean, boolean, boolean, boolean];
 export const defaultDays: DaysArray = [

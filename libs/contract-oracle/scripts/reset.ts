@@ -1,7 +1,6 @@
 import { getSigner } from '@thecointech/signers';
 import { connectOracle } from '../src';
-import { getOverrideFees } from '@thecointech/contract-tools/deploySigner';
-import fetch from 'node-fetch';
+import { getOverrideFees } from '@thecointech/contract-base';
 import { DateTime } from 'luxon';
 
 // ----------------------------------------------------------------
@@ -13,7 +12,7 @@ const oracle = await connectOracle(signer);
 const resetTime = DateTime.fromISO('2023-06-27T12:00:00')
 console.log("Resetting Oracle to time: ")
 
-const overrides = await getOverrideFees(oracle.provider);
+const overrides = await getOverrideFees(oracle.runner.provider);
 const tx = await oracle.resetTo(resetTime.toMillis(), overrides);
 // const tx = await oracle.clearAllData(overrides);
 

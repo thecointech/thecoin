@@ -1,6 +1,6 @@
 import { AnyActionContainer, getCurrentState, TransitionCallback, TypedActionContainer } from "../types";
 import { verifyPreTransfer } from "./verifyPreTransfer";
-import { TransactionResponse } from '@ethersproject/providers';
+import { TransactionResponse } from 'ethers';
 import { calculateOverrides, convertBN, toDelta } from './coinUtils';
 import { log } from '@thecointech/logging';
 import { makeTransition  } from '../makeTransition';
@@ -38,7 +38,7 @@ const depositCertifiedTransfer = async (container: AnyActionContainer, transfer:
   // We check balance in the initial steps as well, but this is for scenarios
   // where the deposit is delayed for any reason (eg - server crash etc);
   const balance = await tc.balanceOf(from);
-  if (balance.lte(fee + value))
+  if (balance <= (fee + value))
     return { error: 'Insufficient funds'};
 
 

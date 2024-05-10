@@ -4,7 +4,7 @@ import { ActionsType, BaseSagaInterface } from '../../store/immerReducer';
 import { GetSignedMessage } from '@thecointech/utilities/SignedMessages';
 import { log } from '@thecointech/logging';
 import type { SagaIterator } from '@redux-saga/core';
-import type { Signer } from '@ethersproject/abstract-signer';
+import type { Signer } from 'ethers';
 import type { IActions } from '../Account/types';
 import type { AccountState, AccountDetails } from '@thecointech/account';
 

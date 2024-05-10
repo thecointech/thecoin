@@ -4,7 +4,7 @@ import { getContract } from './contract';
 import { getGasPrice } from './pricing';
 
 export async function grantSuperPermissions() {
-  const tcCore = await getContract("TheCoin");
+  const { tcCore } = await getContract("TheCoin");
   const xaAddress = process.env.WALLET_BrokerTransferAssistant_ADDRESS!;
   // We use xa to do all clone transfers, so temporarily grant super-privilges
   if (!await tcCore.hasRole(THECOIN_ROLE, xaAddress)) {
@@ -17,7 +17,7 @@ export async function grantSuperPermissions() {
 }
 
 export async function revokeSuperPermissions() {
-  const tcCore = await getContract("TheCoin");
+  const { tcCore } = await getContract("TheCoin");
   const xaAddress = process.env.WALLET_BrokerTransferAssistant_ADDRESS!;
   const fees = await getGasPrice();
   const revoking = await tcCore.revokeRole(THECOIN_ROLE, xaAddress, fees);

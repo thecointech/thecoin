@@ -23,7 +23,6 @@
   "exports": {
     ".": {
       "development": "./build/async_mocked.js",
-      "devlive": "./build/async_mocked.js",
       "default": "./build/index.js"
     }
   },

@@ -1,4 +1,4 @@
-import { Wallet } from "@ethersproject/wallet";
+import { Wallet } from "ethers";
 import { BuildVerifiedSale } from "./VerifiedSale";
 import { getSigner } from "./VerifiedAction";
 import type { ETransferPacket } from "@thecointech/types";

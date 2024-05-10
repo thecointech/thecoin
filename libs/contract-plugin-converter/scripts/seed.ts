@@ -28,7 +28,7 @@ async function main() {
   const ownConvert = connect(owner, converter);
 
   // In DevLive, we assign the converter to uberTester
-  const request = await buildAssignPluginRequest(tester, converter.address, ALL_PERMISSIONS);
+  const request = await buildAssignPluginRequest(tester, converter, ALL_PERMISSIONS);
   await assignPlugin(bcCore, request);
 
   // We cannot know if the rates service has finished initializing yet
