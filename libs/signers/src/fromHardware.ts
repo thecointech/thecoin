@@ -1,7 +1,7 @@
 import { LedgerSigner } from "@ethers-ext/signer-ledger";
 import HIDTransport from "@ledgerhq/hw-transport-node-hid";
 import { log } from "@thecointech/logging";
-// import { getProvider } from "@thecointech/ethers-provider";
+import { getProvider } from "@thecointech/ethers-provider";
 import type { AccountName } from './names';
 
 export async function loadHardware(name: AccountName) {
@@ -14,6 +14,5 @@ export async function loadHardware(name: AccountName) {
     throw new Error(`Cannot load ${name} - matching hardware device is not connected`);
   }
 
-  // TO CHECK: Do we want to connect to provider here?
-  return signer; //.connect(getProvider());
+  return signer.connect(getProvider());
 }

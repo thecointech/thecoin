@@ -23,7 +23,6 @@
   "exports": {
     "./hardhat.config": "./build/hardhat.config.js",
     "./writeContract": "./build/writeContract.js",
-    "./deploySigner": "./build/deploySigner.js",
     "./mockContractUtils": "./build/mockContractUtils.js"
   },
   "typesVersions": {
