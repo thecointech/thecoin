@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.126](https://github.com/thecointech/thecoin/compare/v0.2.125...v0.2.126) (2024-05-10)
+
+
+### Bug Fixes
+
+* libs/utils-ts/package.json to reduce vulnerabilities ([792b738](https://github.com/thecointech/thecoin/commit/792b738ce144aaea87b344bb858f8c5bf229af74))
+
+
+
+
+
 ## [0.2.125](https://github.com/thecointech/thecoin/compare/v0.2.124...v0.2.125) (2024-04-11)
 
 **Note:** Version bump only for package @thecointech/utilities
