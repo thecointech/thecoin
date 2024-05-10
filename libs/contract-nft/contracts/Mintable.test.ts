@@ -2,7 +2,8 @@ import hre from 'hardhat';
 import { jest } from '@jest/globals';
 import { getTokenClaimCode, getTokenClaimSig } from '../src/tokenCodes';
 import type { TheGreenNFTL2 } from '../src/codegen';
-import '@nomiclabs/hardhat-ethers';
+import '@nomicfoundation/hardhat-ethers';
+import { EventLog } from 'ethers';
 
 const [
   owner,  // Deploys the smart contract
@@ -18,7 +19,7 @@ it("Mints tokens", async () => {
   // Create a list of tokens
   const r = await mintTokens(nft, 10);
   const receipt = await r.wait();
-  expect(receipt.events?.length).toEqual(10);
+  expect(receipt.logs?.length).toEqual(10);
 })
 
 it("Can claim tokens", async () => {
@@ -35,9 +36,10 @@ it("Can claim tokens", async () => {
     // Use it to mint
   const r = await nft.claimToken(13, users[1].address, sig);
   const receipt = await r.wait();
-  expect(receipt.events?.length).toEqual(1); // Approval & Transfer
-  expect(receipt.events[0].event).toEqual("Transfer");
-  expect(receipt.events[0].args.to).toEqual(users[1].address);
+  const logs = receipt.logs as EventLog[]
+  expect(logs?.length).toEqual(1); // Approval & Transfer
+  expect(logs[0].eventName).toEqual("Transfer");
+  expect(logs[0].args.to).toEqual(users[1].address);
   // check ownership transfered
   const owner = await nft.ownerOf(13);
   expect(owner).toEqual(users[1].address);

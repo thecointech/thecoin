@@ -63,14 +63,6 @@ export class SendETransfer implements ProcessingStage {
 }
 
 const getTransferAmount = (toETransfer: currency, balance: currency) => {
-  // Limit the amount we send to $3000
-  const toETransferLimit = currency(3000);
-  if (toETransfer.value > toETransferLimit.value) {
-    // If the e-transfer is limited, that's mostly fine,
-    // the next time we run the missing balance will get picked up.
-    log.warn(`Requested e-transfer is too large: ${toETransfer}, max ${toETransferLimit}`);
-    toETransfer = toETransferLimit;
-  }
 
   // Always leave _something_ in the chequing account
   // Not sure we ever want to leave a balance of $0

@@ -87,11 +87,19 @@ export type ClickEvent = {
   // text: string,
 } & BaseEvent & ElementData;
 
+// Static input event.  Will be the same every run
 export type InputEvent = {
   type: "input",
-  dynamicName?: string,
-  value?: string,
+  value: string,
   hitEnter?: boolean,
+  valueChange?: boolean,
+} & BaseEvent & ElementData;
+
+// Dynamic input event.  Value is supplied each run
+// Used for things like `amount`
+export type DynamicInputEvent = {
+  type: "dynamicInput",
+  dynamicName: string,
   valueChange?: boolean,
 } & BaseEvent & ElementData;
 
@@ -104,4 +112,4 @@ export type ValueEvent = {
 } & BaseEvent & ElementData;
 
 
-export type AnyEvent = NavigationEvent|ClickEvent|InputEvent|UnloadEvent|LoadEvent|ValueEvent;
+export type AnyEvent = NavigationEvent|ClickEvent|InputEvent|DynamicInputEvent|UnloadEvent|LoadEvent|ValueEvent;

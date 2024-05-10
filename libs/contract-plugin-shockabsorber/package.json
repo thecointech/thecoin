@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-plugin-shockabsorber",
-  "version": "0.2.124",
+  "version": "0.2.125",
   "description": "The Coin: ShockAbsorber protects accounts from market moves",
   "type": "module",
   "keywords": [
@@ -26,12 +26,12 @@
     "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
     "clean": "run -T run-p 'clean:*'",
     "clean:src": "rimraf ./build",
-    "clean:contracts": "rimraf ./src/codegen",
+    "clean:contracts": "rimraf ./src/codegen && run -T rimraf ./.hardhat",
     "test": "yarn run :jest",
     "dev:live": "cross-env CONFIG_NAME=devlive run-s _deploy",
     "dev:live:finalize": "yarn _seed",
-    "deploy:prodtest": "cross-env CONFIG_NAME=prodtest yarn _deploy",
-    "deploy:prod": "cross-env CONFIG_NAME=prod yarn _deploy",
+    "deploy:prodtest": "run -T cross-env CONFIG_NAME=prodtest yarn _deploy",
+    "deploy:prod": "run -T cross-env CONFIG_NAME=prod yarn _deploy",
     "_deploy": "run-s _deploy:deploy _deploy:verify",
     "_deploy:deploy": "yarn _hardhat ./scripts/deploy.ts",
     "_deploy:verify": "yarn _hardhat ./scripts/verify.ts",
@@ -51,17 +51,17 @@
   },
   "types": "./build/index.d.ts",
   "devDependencies": {
-    "@nomicfoundation/hardhat-network-helpers": "^1.0.8",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.10",
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "^0.2.124",
-    "@thecointech/contract-core": "^0.2.124",
-    "@thecointech/contract-plugin-converter": "^0.2.124",
-    "@thecointech/contract-tools": "^0.2.124",
-    "@thecointech/setenv": "^0.2.124"
+    "@thecointech/async": "^0.2.125",
+    "@thecointech/contract-core": "^0.2.125",
+    "@thecointech/contract-plugin-converter": "^0.2.125",
+    "@thecointech/contract-tools": "^0.2.125",
+    "@thecointech/setenv": "^0.2.125"
   },
   "dependencies": {
-    "@thecointech/contract-oracle": "^0.2.124",
-    "@thecointech/contract-plugins": "^0.2.124"
+    "@thecointech/contract-oracle": "^0.2.125",
+    "@thecointech/contract-plugins": "^0.2.125"
   },
   "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
 }

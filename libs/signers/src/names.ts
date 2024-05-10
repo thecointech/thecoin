@@ -1,5 +1,5 @@
-import { Wallet } from '@ethersproject/wallet';
-import type { Signer } from '@ethersproject/abstract-signer';
+import { Wallet } from 'ethers';
+import type { Signer } from 'ethers';
 
 export enum AccountId {
   Owner,
@@ -33,4 +33,4 @@ export type NamedAccounts = Record<AccountName, Signer>;
 
 // Better names for these functions would be isLocal/isRemote
 export const isRemote = (signer?: Signer): signer is Signer => !isLocal(signer);
-export const isLocal = (signer?: Signer): signer is Wallet => !!(signer as Wallet)?.address;
+export const isLocal = (signer?: Signer): signer is Wallet => !!(signer as Wallet)?.encrypt || (signer && !signer.getAddress);

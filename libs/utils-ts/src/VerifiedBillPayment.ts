@@ -1,6 +1,6 @@
 import { BillPayeePacket, CertifiedTransfer } from "@thecointech/types";
 import { BuildVerifiedAction } from "./VerifiedAction";
-import type { Signer } from "@ethersproject/abstract-signer";
+import type { Signer } from "ethers";
 
 export const BuildVerifiedBillPayment = async (
   payee: BillPayeePacket,

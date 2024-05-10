@@ -1,6 +1,6 @@
 import { DateTime, Duration } from 'luxon';
 import { getOracleFactory } from '../src/contract';
-import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
+import type { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/dist/src/signer-with-address";
 import type { SpxCadOracle } from '../src';
 
 export async function createOracle(owner: SignerWithAddress, daysAgo = 6, blockTime?: number) {

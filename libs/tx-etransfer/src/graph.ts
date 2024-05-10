@@ -15,7 +15,8 @@ type States =
   "eTransferResult" |
 
   "error" |
-  "complete";
+  "complete" |
+  "cancelled";
 //"refunding" |
 //"refundReady";
 
@@ -60,6 +61,9 @@ export const graph : StateGraph<States, "Sell"> = {
   // },
   error: {
     next: core.manualOverride,
+  },
+  cancelled: {
+    next: transitionTo<States>(core.markComplete, 'complete'),
   },
   complete: null,
 }

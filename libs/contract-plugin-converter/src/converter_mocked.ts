@@ -1,19 +1,20 @@
 import * as Src from '.';
+import { genReceipt } from '@thecointech/contract-tools/mockContractUtils';
+import { StateMutability, TypedContractMethod } from './codegen/common';
 
-const genRanHex = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+const makeFn = <
+A extends Array<any> = Array<any>,
+R = any,
+S extends StateMutability = "payable"
+>(r: (...a: A) => R, _s?: S) => r as any as TypedContractMethod<A, [Awaited<R>], S>;
+
 export class UberConverter implements Pick<Src.UberConverter, 'processPending'> {
 
   address = "0xC000000000000000000000000000000000000000";
   // "0xC0"
   // prefix is (c) for sending to the coin
-  genReceipt = (prefix: string = '0') => {
-    return Promise.resolve({
-      wait: () => { },
-      hash: `0x${prefix}${genRanHex(63)}`,
-    } as any)
-  }
-
-  processPending = () => this.genReceipt('c');
+  genReceipt = genReceipt;
+  processPending = (() => this.genReceipt('c')) as any
 }
 
 export const getContract: typeof Src.getContract = () => new UberConverter() as any;

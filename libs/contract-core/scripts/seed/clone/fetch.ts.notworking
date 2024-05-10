@@ -3,10 +3,11 @@ import { getAllUsers, getAllActions } from "@thecointech/broker-db";
 import { init } from "@thecointech/firestore";
 import { writeFileSync } from 'fs';
 import { cacheFile } from './load';
-import { EtherscanProvider, TransactionResponse } from '@ethersproject/providers';
+import { EtherscanProvider, TransactionResponse } from 'ethers';
 import { GetContract } from '@thecointech/contract-core';
 import { isPresent, NormalizeAddress } from '@thecointech/utilities';
 import { toIgnore } from './changes';
+import { Erc20Provider } from "@thecointech/ethers-provider/Erc20Provider";
 
 export async function fetchDB() {
   process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.BROKER_SERVICE_ACCOUNT;
@@ -17,7 +18,7 @@ export async function fetchDB() {
 }
 
 const contract = await GetContract();
-const provider = new EtherscanProvider("ropsten", process.env.ETHERSCAN_API_KEY);
+const provider = new Erc20Provider();
 
 async function buildTransaction(resp:  TransactionResponse) {
   // Ignore everything to do with this early account
@@ -25,9 +26,10 @@ async function buildTransaction(resp:  TransactionResponse) {
     return false;
 
   const reciept = await provider.getTransactionReceipt(resp.hash);
+  const block = await provider.getBlock(resp.blockHash!);
   return {
     hash: resp.hash,
-    timestamp: resp.timestamp,
+    timestamp: block.timestamp,
     transfers: reciept.logs.map(log => {
       if (!log.topics.includes('0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'))
         return false
@@ -36,14 +38,14 @@ async function buildTransaction(resp:  TransactionResponse) {
       return {
         from: NormalizeAddress(extra.args.from),
         to: NormalizeAddress(extra.args.to),
-        value: extra.args.value.toNumber(),
+        value: Number(extra.args.value),
       }
     }).filter(tr => tr)
   }
 }
 
 export async function fetchHistory() {
-  const allTxs = await provider.getHistory("0x6ff8a26a831c15b316671ffc8e2b2cfa7d918530");
+  const allTxs = await provider.getERC20History({ contractAddress: "0x6ff8a26a831c15b316671ffc8e2b2cfa7d918530"} );
 
   const r = [] as any[];
   for (let i = 0; i < allTxs.length; i++) {
@@ -58,10 +60,10 @@ export async function fetchHistory() {
 }
 
 async function fetchBalances(users: string[]) {
-  const contract = GetContract();
-  const r: Record<string, number> = {};
+  const contract = await GetContract();
+  const r: Record<string, bigint> = {};
   for (const user of users) {
-    r[user] = (await contract.balanceOf(user)).toNumber();
+    r[user] = (await contract.balanceOf(user));
   }
   return r;
 }

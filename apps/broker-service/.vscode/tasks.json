@@ -6,10 +6,7 @@
     {
       "type": "npm",
       "script": "build:src",
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
+      "group": "build",
       "problemMatcher": [],
       "label": "build src:broker-service",
       "detail": "run -T tsc --build"

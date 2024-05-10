@@ -22,6 +22,9 @@
 		}
 	],
 	"settings": {
-		"typescript.tsdk": "harvester\\node_modules\\typescript\\lib"
+		"typescript.tsdk": "harvester\\node_modules\\typescript\\lib",
+		"logViewer.watch": [
+			"${userHome}/AppData/Roaming/harvester/logs/harvest.log"
+		]
 	}
 }

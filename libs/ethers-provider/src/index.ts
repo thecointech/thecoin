@@ -1,4 +1,4 @@
-import type { JsonRpcProvider } from '@ethersproject/providers';
+import type { JsonRpcProvider } from 'ethers';
 import type { Network } from './types';
 export type { Network } from './types';
 

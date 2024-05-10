@@ -3,7 +3,7 @@ import { EthereumWebAuth, getAccountId } from '@didtools/pkh-ethereum'
 import { ComposeClient }from '@composedb/client'
 import { getDefintions } from './definition';
 import { Ethers3Web3Converter } from './ethers2web3';
-import type { Signer } from "@ethersproject/abstract-signer";
+import type { Signer } from "ethers";
 import { setSigner } from './oneOffDid';
 
 export async function getComposeDB(signer: Signer) {

@@ -327,7 +327,7 @@ export class Processor {
 
     // if from has no money, it hasn't processed yet, so run it instead
     const fromBalance = await this.xaCore.balanceOf(redirFrom);
-    if (fromBalance.toNumber() == 0) {
+    if (fromBalance == 0n) {
       await this.processAddress(redirFrom);
       // check that 'from' processed original correctly
       if (bcHistory.indexOf(initial) >= 0) {
@@ -369,7 +369,7 @@ export class Processor {
             debugger;
             throw new Error(`Cannot find tx for ${action.type}: ${delta.hash}`);
           } else {
-            amount = new Decimal(balance.toNumber());
+            amount = new Decimal(balance.toString());
             delta.coin = amount;
             to = this.brokerAddress;
           }
@@ -392,7 +392,7 @@ export class Processor {
 
 
         // if (balance.lt(amount.toNumber())) {
-        //   log.warn(`Address ${from} with balance ${balance.toNumber()} is xfer: ${amount.toNumber()}`)
+        //   log.warn(`Address ${from} with balance ${balance.toString()} is xfer: ${amount.toNumber()}`)
         //   debugger;
         // }
 

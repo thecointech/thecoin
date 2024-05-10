@@ -1,6 +1,5 @@
-import { Contract } from '@ethersproject/contracts';
-import { TheCoin } from './codegen';
-import TheCoinSpec from './codegen/contracts/TheCoin.sol/TheCoin.json' assert {type: "json"};
+import { Provider } from 'ethers';
+import { TheCoin, TheCoin__factory } from './codegen';
 import { getProvider } from '@thecointech/ethers-provider';
 
 //
@@ -8,7 +7,6 @@ import { getProvider } from '@thecointech/ethers-provider';
 // (used in fetching history to prevent searching too far back!)
 export const InitialCoinBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0", 10);
 
-const getAbi = () => TheCoinSpec.abi;
 export const getContractAddress = async () : Promise<string> => {
 
   const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME;
@@ -20,20 +18,23 @@ export const getContractAddress = async () : Promise<string> => {
   return deployment.default.contract;
 }
 
-const buildContract = async () =>
-  new Contract(
-    await getContractAddress(),
-    getAbi(),
-    getProvider()
-  ) as TheCoin
-
 declare module globalThis {
   let __contract: TheCoin|undefined;
 }
 
-export async function GetContract() : Promise<TheCoin> {
-  if (!globalThis.__contract) {
-    globalThis.__contract= await buildContract();
+export async function GetContract(provider: Provider = getProvider()) : Promise<TheCoin> {
+  const v = globalThis.__contract ??= TheCoin__factory.connect(
+    await getContractAddress(),
+    provider
+  );
+  // Security check - we should -never- try to create a contract with different
+  // networks, but just in case...
+  if (process.env.NODE_ENV == "development" || process.env.JEST_WORKER_ID) {
+    const running = await v.runner?.provider?.getNetwork();
+    const passed = await provider.getNetwork();
+    if (running?.chainId != passed.chainId) {
+      throw new Error("Mismatched network");
+    }
   }
-  return globalThis.__contract;
+  return v;
 }

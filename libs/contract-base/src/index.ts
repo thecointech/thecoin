@@ -6,3 +6,4 @@ export type Network = "POLYGON"|"ETHEREUM";
 export const COIN_EXP = 1000000;
 
 export * from './connect';
+export * from './overrides';

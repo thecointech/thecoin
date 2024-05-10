@@ -14,14 +14,12 @@ export const ClientTransaction = (props: AnyTxAction) => {
   const fiat = history.find(r => r.fiat)?.fiat ?? "NO FIAT";
   const coin = history.find(r => r.coin)?.coin ?? "NO COIN";
 
-  // TODO: Obvs not gonna work in release
-  const project = "tccc-testing";
-  const firestorePath = `https://console.cloud.google.com/firestore/databases/-default-/data/panel/User/${props.address}/${props.type}/${props.doc.id}?project=${project}&pli=1`;
+  const firestorePath = `https://console.cloud.google.com/firestore/databases/-default-/data/panel/User/${props.address}/${props.type}/${props.doc.id}?project=${getGaeProject()}&pli=1`;
 
   return (
     <List.Item key={props.data.initialId}>
       <TransactionIcon type={final?.type} />
-      {`${date.toISODate()} ${final?.type ?? props.type} - ${fiat} : ${coin}`}
+      {props.type} {`${date.toISODate()} ${final?.type ?? props.type} - ${fiat} : ${coin}`}
       <a href={firestorePath}>{props.data.initialId.slice(0, 10)}</a>
       <TransactionPath {...props.doc} />
       {final?.type == "markComplete"
@@ -57,7 +55,7 @@ const TransactionEntryHash = ({delta}: {delta: TransitionDelta}) => (
   delta.hash
     ? <div>
         &nbsp;&nbsp;&nbsp; - hash:
-        <a target="_blank" href={`https://polygonscan.com/tx/${delta.hash}`}>{delta.hash}</a>
+        <a target="_blank" href={`${process.env.POLYGONSCAN_WEB_URL}/tx/${delta.hash}`}>{delta.hash}</a>
       </div>
     : null
 )
@@ -67,3 +65,12 @@ const TransactionEntryItem = ({delta, item}: {delta: TransitionDelta, item: keyo
     ? <div>&nbsp;&nbsp;&nbsp;{` - ${item}: ${delta[item]?.toString().slice(0, 50)}`}</div>
     : null
 )
+
+const getGaeProject = () => {
+  switch(process.env.CONFIG_NAME) {
+    case "prodtest": return "tccc-release";
+    case "prod": return "tccc-release";
+    case "prodtest": return "tccc-testing";
+    default: return "NOT-GONNA-WORK";
+  }
+}

@@ -42,7 +42,7 @@ const isTimeLocked = async (contract: TheGreenNFT, tokenId: number) => {
 
 const isReplay = async (contract: TheGreenNFT, request: GasslessUpdateRequest) => {
   const lastUpdate = await contract.lastUpdate(request.tokenId);
-  if (lastUpdate != request.lastUpdate) {
+  if (Number(lastUpdate) != request.lastUpdate) {
     log.warn({TokenID: request.tokenId}, `Invalid request to update {TokenID}: lastUpdate (${request.lastUpdate}) does not match blockchain value`);
     return true;
   }

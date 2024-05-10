@@ -1,9 +1,9 @@
 import { DIDSession } from 'did-session'
 import { EthereumNodeAuth, getAccountId } from '@didtools/pkh-ethereum'
 import { ComposeClient }from '@composedb/client'
-import { Wallet } from "@ethersproject/wallet";
+import { Wallet } from "ethers";
 import { getDefintions } from '../src/definition';
-import { JsonRpcProvider } from "@ethersproject/providers";
+import { JsonRpcProvider } from "ethers";
 import { Ethers3Web3Converter } from '../src/ethers2web3';
 import { setEncrypted, loadEncrypted } from '../src/encrypted';
 import type { JWE } from 'did-jwt';
