@@ -8,12 +8,14 @@ R = any,
 S extends StateMutability = "payable"
 >(r: (...a: A) => R, _s?: S) => r as any as TypedContractMethod<A, [Awaited<R>], S>;
 
-export class UberConverter implements Pick<Src.UberConverter, 'processPending'> {
+export class UberConverter implements Pick<Src.UberConverter, 'processPending'|'getAddress'> {
 
   address = "0xC000000000000000000000000000000000000000";
+
   // "0xC0"
   // prefix is (c) for sending to the coin
   genReceipt = genReceipt;
+  getAddress = () => Promise.resolve(this.address);
   processPending = (() => this.genReceipt('c')) as any
 }
 

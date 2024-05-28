@@ -1,6 +1,5 @@
 {
   "name": "harvester",
-  "productName": "harvester",
   "version": "0.2.125",
   "private": true,
   "description": "Automatically harvest TheCoin",
@@ -72,7 +71,7 @@
     "electron-squirrel-startup": "^1.0.0",
     "node-notifier": "^10.0.0",
     "pouchdb": "^8.0.1",
-    "puppeteer": "^21.7.0",
+    "puppeteer": "^22.10.0",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
     "react-router-dom": "^5.1.2",

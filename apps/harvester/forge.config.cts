@@ -14,6 +14,8 @@ import { DefinePlugin } from 'webpack';
 
 const ForgeExternalsPlugin = require('@timfish/forge-externals-plugin')
 
+const isBuild = process.env.npm_lifecycle_event != 'dev'
+
 const mainConfigMerged = mainConfig({
   plugins: [
     new DefinePlugin({
@@ -21,13 +23,29 @@ const mainConfigMerged = mainConfig({
       ['process.env.URL_SEQ_LOGGING']: JSON.stringify("false"),
     })
   ],
+  resolve: {
+    fallback: {
+      'bufferutil': false,
+      'utf-8-validate': false,
+    }
+  },
   externals: [
     'leveldown',
     'onnxruntime-node',
     'sharp',
     'puppeteer',
+    'puppeteer-extra',
+    // '@puppeteer/browsers',
+    // "yargs",
+    // "yargs/yargs",
   ],
 })
+
+if (!isBuild) {
+  // Not entirely sure why, but when code uses '@puppeteer/browsers'
+  // it somehow gets included back in the webpack code (ca n'est marche pas)
+  mainConfigMerged.externals.push("yargs/yargs")
+}
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -70,11 +88,17 @@ const config: ForgeConfig = {
       port: 3004,
       loggerPort: 9004,
     }),
+  ],
+};
+
+// Only add in externals if packaging
+if (process.env.npm_lifecycle_event != 'dev') {
+  config.plugins.push(
     new ForgeExternalsPlugin({
       externals: mainConfigMerged.externals,
       includeDeps: true,
     })
-  ],
-};
+  )
+}
 
 export default config;

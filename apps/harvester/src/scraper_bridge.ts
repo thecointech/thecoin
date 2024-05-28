@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron';
+import { IpcMainInvokeEvent, ipcMain } from 'electron';
 import { Recorder } from './scraper/record';
 import { replay } from './scraper/replay';
 import { ActionTypes, ValueType } from './scraper/types';
@@ -13,6 +13,8 @@ import { exportResults, getState, setOverrides } from './Harvester/db';
 import { harvest } from './Harvester';
 import { logsFolder } from './paths';
 import { platform } from 'node:os';
+import { getLocalBrowserPath, getSystemBrowserPath, installChrome } from './scraper/puppeteer/browser';
+import { log } from '@thecointech/logging';
 
 async function guard<T>(cb: () => Promise<T>) {
   try {
@@ -24,7 +26,15 @@ async function guard<T>(cb: () => Promise<T>) {
   }
 }
 
-const api: ScraperBridgeApi = {
+const api: Omit<ScraperBridgeApi, "installBrowser"|"onBrowserDownloadProgress"> = {
+  hasInstalledBrowser: () => guard(async () => {
+    const p = await getLocalBrowserPath();
+    return !!p;
+  }),
+  hasCompatibleBrowser: () => guard(async () => {
+    const p = await getSystemBrowserPath();
+    return !!p;
+  }),
 
   warmup: (url) => guard(() => warmup(url)),
   start: (actionName, url, dynamicValues) => guard(async () => {
@@ -81,6 +91,10 @@ const api: ScraperBridgeApi = {
 }
 
 export function initScraping() {
+
+  ipcMain.handle(actions.installBrowser, installBrowser);
+  ipcMain.handle(actions.hasInstalledBrowser, api.hasInstalledBrowser);
+  ipcMain.handle(actions.hasCompatibleBrowser, api.hasCompatibleBrowser);
 
   ipcMain.handle(actions.warmup, async (_event, url: string) => {
     return api.warmup(url);
@@ -161,4 +175,25 @@ const openFolder = (path: string) => {
       case "darwin": explorer = "open"; break;
   }
   spawn(explorer, [path], { detached: true }).unref();
+}
+
+
+async function installBrowser(event: IpcMainInvokeEvent) {
+  log.info('Installing browser');
+  let lastLoggedPercent = 0;
+  try {
+    await installChrome((bytes, total) => {
+      const percent = Math.round((bytes / total) * 100);
+      if (percent - lastLoggedPercent > 10) {
+        log.info(`Downloaded: ${percent}%`);
+        lastLoggedPercent = percent;
+      }
+      event.sender.send(actions.browserDownloadProgress, { percent });
+    });
+    event.sender.send(actions.browserDownloadProgress, { completed: true });
+  }
+  catch (e) {
+    log.error(e);
+    event.sender.send(actions.browserDownloadProgress, { error: e })
+  }
 }

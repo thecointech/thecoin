@@ -1,24 +1,27 @@
-import puppeteerVanilla, { executablePath } from 'puppeteer';
+import puppeteerVanilla, { type Browser } from 'puppeteer';
 import { addExtra } from 'puppeteer-extra';
-import { getPlugins } from './puppeteer-plugins';
-import { rootFolder } from '../paths';
-import path from "path";
-import { registerElementAttrFns } from './elements';
+import { getPlugins } from './plugins';
+import { registerElementAttrFns } from '../elements';
+import { getBrowserPath, getUserDataDir } from './browser';
 
 const puppeteer = addExtra(puppeteerVanilla);
 const plugins = getPlugins();
-const userDataDir = path.join(rootFolder, 'chrome_data');
 
-let _browser: any;
+let _browser: Browser|undefined;
 export async function startPuppeteer(headless?: boolean) {
 
+  if (_browser) {
+    return { browser: _browser, page: await _browser.newPage() };
+  }
+
   const shouldBeHeadless = headless ?? process.env.RUN_SCRAPER_HEADLESS !== 'false';
-  const expath = executablePath();
   const browser = await puppeteer.launch({
     headless: shouldBeHeadless,
-    executablePath: expath,
+    executablePath: await getBrowserPath(),
+    userDataDir: getUserDataDir()
     // After install this appears in the AppData directory
-    userDataDir,
+    // userDataDir,
+    // ...(await getChromeParams())
   })
 
   for (const plugin of plugins) {

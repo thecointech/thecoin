@@ -48,7 +48,7 @@
     "@thecointech/utilities": "^0.2.125",
     "csvtojson": "^2.0.10",
     "promise.any": "^2.0.4",
-    "puppeteer": "^21.7.0",
+    "puppeteer": "^22.10.0",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
