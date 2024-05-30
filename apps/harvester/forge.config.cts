@@ -35,17 +35,15 @@ const mainConfigMerged = mainConfig({
     'sharp',
     'puppeteer',
     'puppeteer-extra',
-    // '@puppeteer/browsers',
-    // "yargs",
-    // "yargs/yargs",
   ],
 })
 
-if (!isBuild) {
-  // Not entirely sure why, but when code uses '@puppeteer/browsers'
-  // it somehow gets included back in the webpack code (ca n'est marche pas)
-  mainConfigMerged.externals.push("yargs/yargs")
-}
+// @puppeteer/browsers needs to be expressly ignored because
+// it will be copied by ForgeEternalsPlugin (as a dependency)
+// but
+const toCopy = [...mainConfigMerged.externals];
+mainConfigMerged.externals.push( '@puppeteer/browsers')
+
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -95,7 +93,7 @@ const config: ForgeConfig = {
 if (process.env.npm_lifecycle_event != 'dev') {
   config.plugins.push(
     new ForgeExternalsPlugin({
-      externals: mainConfigMerged.externals,
+      externals: toCopy,
       includeDeps: true,
     })
   )
