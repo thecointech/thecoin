@@ -42,27 +42,27 @@ const DownloadBrowserMessage = () => {
     )
   }
   else {
-    if (browserData.hasCompatibleBrowser) {
-      return (
-        <>
-          <Message>
-            No harvester-specific browser found, falling back to system browser
-          </Message>
-          <Message positive>
-              Your system browser is compatible with this harvester.  Most of the time
-              this is all you need, but if your harvester throws errors during harvesting,
-              it may help to install the exact version we've tested against.
-          </Message>
-        </>
-      )
-    }
-    else {
+    // if (browserData.hasCompatibleBrowser) {
+    //   return (
+    //     <>
+    //       <Message>
+    //         No harvester-specific browser found, falling back to system browser
+    //       </Message>
+    //       <Message positive>
+    //           Your system browser is compatible with this harvester.  Most of the time
+    //           this is all you need, but if your harvester throws errors during harvesting,
+    //           it may help to install the exact version we've tested against.
+    //       </Message>
+    //     </>
+    //   )
+    // }
+    // else {
       return (
         <Message warning>
           Your system browser is not compatible with this harvester, click "Download" below to install a compatible version
         </Message>
       )
-    }
+    // }
   }
 }
 
