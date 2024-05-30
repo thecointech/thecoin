@@ -59,7 +59,8 @@ const DownloadBrowserMessage = () => {
     // else {
       return (
         <Message warning>
-          Your system browser is not compatible with this harvester, click "Download" below to install a compatible version
+          Your browser is not compatible with this harvester, click "Download" below and the harvester will download
+          it's own version.  This will not change the browser you use.
         </Message>
       )
     // }
