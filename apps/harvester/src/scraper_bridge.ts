@@ -63,7 +63,10 @@ const api: Omit<ScraperBridgeApi, "installBrowser"|"onBrowserDownloadProgress"> 
   getHarvestConfig: () => guard(() => getHarvestConfig()),
   setHarvestConfig: (config) => guard(() => setHarvestConfig(config)),
 
-  runHarvester: () => guard(() => harvest()),
+  runHarvester: (headless?: boolean) => guard(() => {
+    process.env.RUN_SCRAPER_HEADLESS = headless?.toString()
+    return harvest()
+  }),
   getCurrentState: () => guard(() => getState()),
 
   exportResults: () => guard(() => exportResults()),
@@ -137,8 +140,8 @@ export function initScraping() {
     return api.setHarvestConfig(config);
   })
 
-  ipcMain.handle(actions.runHarvester, async (_event) => {
-    return api.runHarvester();
+  ipcMain.handle(actions.runHarvester, async (_event, headless?: boolean) => {
+    return api.runHarvester(headless);
   })
   ipcMain.handle(actions.getCurrentState, async (_event) => {
     return api.getCurrentState();

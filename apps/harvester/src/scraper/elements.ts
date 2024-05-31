@@ -14,9 +14,11 @@ declare let window: Window & {
   getElementData: (el: HTMLElement, skipSibling?: boolean) => ElementData
 };
 
-export async function getElementForEvent(page: Page, event: ElementData, timeout=30000) {
+export async function getElementForEvent(page: Page, event: ElementData, timeout=30000, attempts=0) {
 
   const startTick = Date.now();
+
+  let failedCandidate;
 
   while (Date.now() < startTick + timeout) {
     const frame = await getFrame(page, event);
@@ -68,8 +70,21 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
       }
       return candidate;
     }
+    failedCandidate = candidate;
     // Continue waiting
     await sleep(500);
+  }
+
+  log.debug(' ** Failed Candidate ** ')
+  log.debug(`Text: ${event.text} - ${failedCandidate?.data?.text}`);
+  log.debug(`Label: ${event.label} - ${failedCandidate?.data?.label}`);
+  log.debug(`Coords: ${JSON.stringify(event.coords)} - ${JSON.stringify(failedCandidate?.data?.coords)}`);
+  log.debug(`Siblings: ${JSON.stringify(event.siblingText)} - ${JSON.stringify(failedCandidate?.data?.siblingText)}`);
+
+  // Special case - Tangerine keeps posting super-annoying surveys
+  if (attempts == 0 && await tryCloseSurvey(page)) {
+    // If it worked, take another crack
+    return await getElementForEvent(page, event, timeout, 1);
   }
 
   // Not found, throw
@@ -315,4 +330,24 @@ const fillOutSiblingText = (allElements: SearchElement[]) => {
     }
   }
   return bucketed.flat()
+}
+
+export async function tryCloseSurvey(page: Page) {
+  let hasClicked = false;
+  log.info("Testing for survey")
+  for (const frame of page.frames()) {
+    // The aria query very annoyingly locks up when
+    // run on an empty page.
+    const content = await frame.content();
+    if (content.includes("Survey")) {
+      const closeButtons = await frame.$$(`::-p-aria("Close Survey")`)
+      for (const close of closeButtons) {
+        // const props = await frame.evaluate(el => getElementProps(el as HTMLElement), close)
+        log.info("Attempting survey close")
+        await close.click();
+        hasClicked = true;
+      }
+    }
+  }
+  return hasClicked;
 }

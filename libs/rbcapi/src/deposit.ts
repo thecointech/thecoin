@@ -74,10 +74,10 @@ async function completeDeposit(prefix: string, url: string, code: string, progre
 
 //////////////////////////////////////////////////////////////////////////
 
-async function findConfirmationNumber(page: Page)
+export async function findConfirmationNumber(page: Page)
 {
   const xpath = `//TD[contains(text(),"Confirmation Number")]/following-sibling::td`;
-  const confirmationElement = await page.$x(xpath);
+  const confirmationElement = await page.$$(`::-p-xpath(${xpath})`)
   const elements = confirmationElement.map(async ce => await page.evaluate(el => el.textContent, ce) as string);
   const contents = await Promise.all(elements);
   for (const txt of contents) {

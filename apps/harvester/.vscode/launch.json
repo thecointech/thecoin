@@ -15,15 +15,15 @@
       "env": {
         // Breakpoints don't seem to be hit on startup, but the `debugger` statement does
         "BREAK_ON_STARTUP": "true",
-        "RUN_SCRAPER_HEADLESS": "false",
+        // "RUN_SCRAPER_HEADLESS": "false",
         "CONFIG_NAME": "prodbeta",
         "HARVESTER_ALLOW_OVERRIDES": "true",
         // DRY RUN
-        "HARVESTER_DRY_RUN": "true",
-        "HARVESTER_OVERRIDE_CHQ_BALANCE": "9000",
-        "HARVESTER_OVERRIDE_VISA_BALANCE": "{\"balance\":\"7699.11\",\"dueDate\":\"2024-04-12T00:00:00.000-05:00\",\"dueAmount\":\"4986.59\",\"history\":[]}",
+        // "HARVESTER_DRY_RUN": "true",
+        // "HARVESTER_OVERRIDE_CHQ_BALANCE": "asdf",
+        // "HARVESTER_OVERRIDE_VISA_BALANCE": "{\"balance\":\"7699.11\",\"dueDate\":\"2024-04-12T00:00:00.000-05:00\",\"dueAmount\":\"4986.59\",\"history\":[]}",
       },
-      
+
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal"
     },
@@ -42,14 +42,14 @@
       "env": {
         // Breakpoints don't seem to be hit on startup, but the `debugger` statement does
         "BREAK_ON_STARTUP": "true",
-        "RUN_SCRAPER_HEADLESS": "false",
+        // "RUN_SCRAPER_HEADLESS": "false",
         "CONFIG_NAME": "prodbeta",
         // DRY RUN
-        "HARVESTER_DRY_RUN": "true",
-        "HARVESTER_OVERRIDE_CHQ_BALANCE": "9000",
-        "HARVESTER_OVERRIDE_VISA_BALANCE": "{\"balance\":\"7699.11\",\"dueDate\":\"2024-04-12T00:00:00.000-05:00\",\"dueAmount\":\"4986.59\",\"history\":[]}",
+        // "HARVESTER_DRY_RUN": "true",
+        // "HARVESTER_OVERRIDE_CHQ_BALANCE": "9000",
+        // "HARVESTER_OVERRIDE_VISA_BALANCE": "{\"balance\":\"7699.11\",\"dueDate\":\"2024-04-12T00:00:00.000-05:00\",\"dueAmount\":\"4986.59\",\"history\":[]}",
       },
-      
+
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal"
     },
@@ -73,7 +73,7 @@
 
         "HARVESTER_DRY_RUN": "true",
       },
-      
+
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal"
     },

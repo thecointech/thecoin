@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, Dimmer, Loader, Segment } from 'semantic-ui-react'
+import { Button, Checkbox, Dimmer, Loader, Segment } from 'semantic-ui-react'
 import { HarvestData } from '../Harvester/types';
 import { fromDb } from '../Harvester/db_translate';
 import { DateTime } from 'luxon';
@@ -10,6 +10,7 @@ export const Results = () => {
 
   const [running, setRunning] = useState(false);
   const [state, setState] = useState<HarvestData|undefined>();
+  const [visible, setVisible] = useState<boolean>();
 
   useEffect(() => {
     log.info("Loading state");
@@ -26,7 +27,7 @@ export const Results = () => {
   const runImmediately = async () => {
     setRunning(true);
     log.info("Commencing manual run");
-    const r = await window.scraper.runHarvester();
+    const r = await window.scraper.runHarvester(!visible);
     if (r.error) {
       alert("Error - please check logs:\n " + r.error);
     }
@@ -92,6 +93,7 @@ export const Results = () => {
       </div>
       <div>
         <Button onClick={runImmediately}>Run Harvester Now</Button>
+        <Checkbox onClick={(_, {checked}) => setVisible(checked)} checked={visible} label="Visible" />
       </div>
     </Dimmer.Dimmable>
 

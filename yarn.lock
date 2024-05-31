@@ -11051,8 +11051,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/store@workspace:libs/store"
   dependencies:
-    "@thecointech/jestutils": "npm:^0.2.125"
-    "@thecointech/logging": "npm:^0.2.125"
+    "@thecointech/jestutils": "npm:^0.2.126"
+    "@thecointech/logging": "npm:^0.2.126"
     "@types/pouchdb": "npm:^6.4.2"
     "@types/pouchdb-upsert": "npm:^2.2.9"
     pouchdb: "npm:^8.0.1"

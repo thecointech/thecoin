@@ -54,7 +54,7 @@ export async function send(prefix: string, amount: number, name:string, packet: 
 async function isAutodeposit({page}: ApiAction) {
   // Check to see which kind of selector appears first
   const isAutodeposit = async () => {
-    await page.waitForXPath("//*[contains(., 'email address is registered for Autodeposit')]");
+    await page.waitForSelector("::-p-xpath(//*[contains(., 'email address is registered for Autodeposit')])");
     return true;
   }
   const isRegular = async () => {
