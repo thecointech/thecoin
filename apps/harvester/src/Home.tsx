@@ -22,7 +22,7 @@ export const Home = () => {
         You just need to give it more time.
       </h4>
       <div>
-        <Link to="/account/login">Get Started</Link>
+        <Link to="/browser">Get Started</Link>
       </div>
     </div>
   )

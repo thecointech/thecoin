@@ -1,6 +1,7 @@
 import styles from './browser.module.less'
 import { Button, Message, Progress } from 'semantic-ui-react'
 import { BrowserReducer } from './reducer';
+import { Link } from 'react-router-dom';
 
 export const Browser = () => {
 
@@ -25,6 +26,9 @@ export const Browser = () => {
       <DownloadProgress />
       <div>
         <Button onClick={startDownload}>Download</Button>
+      </div>
+      <div>
+        <Link to="/account/login">Setup your Account</Link>
       </div>
     </div>
   )
