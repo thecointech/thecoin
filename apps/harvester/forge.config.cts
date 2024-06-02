@@ -5,7 +5,6 @@ import { MakerDeb } from '@electron-forge/maker-deb';
 // import { MakerRpm } from '@electron-forge/maker-rpm';
 // import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives';
 import { WebpackPlugin } from '@electron-forge/plugin-webpack';
-
 import { mainConfig } from '@thecointech/electron-utils/webpack/webpack.main.config';
 import { rendererConfig } from '@thecointech/electron-utils/webpack/webpack.renderer.config';
 
@@ -14,7 +13,15 @@ import { DefinePlugin } from 'webpack';
 
 const ForgeExternalsPlugin = require('@timfish/forge-externals-plugin')
 
-const isBuild = process.env.npm_lifecycle_event != 'dev'
+// Native modules are marked as external and copied manually
+// in the ForgeExternalsPlugin below.
+const nativeModules = [
+  'leveldown',
+  'onnxruntime-node',
+  'sharp',
+  'puppeteer',
+  'puppeteer-extra',
+]
 
 const mainConfigMerged = mainConfig({
   plugins: [
@@ -29,21 +36,13 @@ const mainConfigMerged = mainConfig({
       'utf-8-validate': false,
     }
   },
-  externals: [
-    'leveldown',
-    'onnxruntime-node',
-    'sharp',
-    'puppeteer',
-    'puppeteer-extra',
-  ],
+  // The @puppeteer/browsers library will be copied
+  // (as a dendency of puppeteer), however passing it
+  // expressly results in errors being thrown.  We
+  // avoid adding it to nativeModules array, but still
+  // pass it here so webpack doesn't try and include it.
+  externals: nativeModules.concat('@puppeteer/browsers'),
 })
-
-// @puppeteer/browsers needs to be expressly ignored because
-// it will be copied by ForgeEternalsPlugin (as a dependency)
-// but
-const toCopy = [...mainConfigMerged.externals];
-mainConfigMerged.externals.push( '@puppeteer/browsers')
-
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -93,7 +92,7 @@ const config: ForgeConfig = {
 if (process.env.npm_lifecycle_event != 'dev') {
   config.plugins.push(
     new ForgeExternalsPlugin({
-      externals: toCopy,
+      externals: nativeModules,
       includeDeps: true,
     })
   )

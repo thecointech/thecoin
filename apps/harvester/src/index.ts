@@ -37,6 +37,13 @@ if (process.env.NODE_ENV === 'production')
   })
 }
 
+// We tweak the user data dir to get a clean sandbox in each configuration
+const prod = app.getPath('userData');
+app.setPath('userData', `${prod}/${process.env.CONFIG_NAME}`);
+if (process.env.NODE_ENV !== 'production' || process.env.CONFIG_NAME === 'prodtest') {
+  app.setPath('userData', `${prod}/${process.env.CONFIG_NAME}`);
+}
+
 log.info(`-----------------------------------------------------------------------------------`);
 log.info(`Started Harvester, ${process.env.CONFIG_NAME} v${__VERSION__} - ${__APP_BUILD_DATE__}`);
 log.info(`args: ${process.argv}`);

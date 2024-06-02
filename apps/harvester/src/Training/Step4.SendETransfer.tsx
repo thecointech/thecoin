@@ -59,7 +59,6 @@ export const SendETransfer = () => {
       <div>Remember, this is a deposit, not a purchase - you can withdraw it whenever you like</div>
       <div>
         <ul>
-          <li></li>
           <li><Button onClick={initScraper}>Start</Button> the webpage</li>
           <li>Navigate to your Send e-Transfer page</li>
           <li><Input value={amount} onChange={(_, {value}) => setAmount(parseFloat(value))} /> an amount here to send</li>
