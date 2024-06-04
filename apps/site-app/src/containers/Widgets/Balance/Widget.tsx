@@ -44,7 +44,7 @@ export const BalanceAndProfit = () => {
         <Header as="h5" className={"appTitles"}>
             <FormattedMessage {...translate.profitTitle} />
         </Header>
-        <div><Icon name='arrow up' />{profitDisplay}%</div>
+        <div><Icon name='arrow up' />{profitDisplay}$</div>
       </div>
     </div>
   )

@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import { ContractState } from './types';
-import { isDefined, last } from '@thecointech/utilities';
+import { isDefined, last, NormalizeAddress } from '@thecointech/utilities';
 import type { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
 import { BasePlugin__factory } from './codegen';
 import { AddressLike } from 'ethers';
@@ -22,7 +22,7 @@ export async function getPluginLogs(address: string, user: AddressLike, provider
     .map(log => log?.args)
     .filter(isDefined)
     .map(args => ({
-      user: args.user,
+      user: NormalizeAddress(args.user),
       timestamp: DateTime.fromMillis(Number(args.msTime)),
       path: args.path,
       amnt: new Decimal(args.change.toString()),

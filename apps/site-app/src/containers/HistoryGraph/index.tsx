@@ -32,8 +32,14 @@ export const HistoryGraph = () => {
 
   const account = AccountMap.useActive();
   const txs = account?.history ?? [];
+  // const to = DateTime.fromObject({
+  //   year: 2023,
+  //   month: 5,
+  //   day: 1
+  // })
+  const to = DateTime.local();
   const from = Number.isFinite(duration)
-    ? DateTime.local().minus({days: duration})
+    ? to.minus({days: duration})
     : undefined;
 
   const modifiers = account?.plugins
@@ -48,6 +54,7 @@ export const HistoryGraph = () => {
         plugins={modifiers}
         txs={txs}
         from={from}
+        to={to}
         theme={theme}
         height={275}
         tooltip={Tooltip}
