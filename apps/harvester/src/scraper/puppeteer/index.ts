@@ -1,25 +1,28 @@
-import puppeteerVanilla, { executablePath } from 'puppeteer';
+import puppeteerVanilla, { type Browser } from 'puppeteer';
 import { addExtra } from 'puppeteer-extra';
-import { getPlugins } from './puppeteer-plugins';
-import { rootFolder } from '../paths';
-import path from "path";
-import { registerElementAttrFns } from './elements';
+import { getPlugins } from './plugins';
+import { registerElementAttrFns } from '../elements';
+import { getBrowserPath, getUserDataDir } from './browser';
+import { log } from '@thecointech/logging';
 
 const puppeteer = addExtra(puppeteerVanilla);
 const plugins = getPlugins();
-const userDataDir = path.join(rootFolder, 'chrome_data');
 
-let _browser: any;
+let _browser: Browser|undefined;
 export async function startPuppeteer(headless?: boolean) {
 
+  if (_browser) {
+    return { browser: _browser, page: await _browser.newPage() };
+  }
+
+  const executablePath = await getBrowserPath();
+  log.debug(`Starting Puppeteer using executable path: ${executablePath}`);
   const shouldBeHeadless = headless ?? process.env.RUN_SCRAPER_HEADLESS !== 'false';
-  const expath = executablePath();
   const browser = await puppeteer.launch({
     headless: shouldBeHeadless,
-    executablePath: expath,
-    // After install this appears in the AppData directory
-    userDataDir,
-  })
+    executablePath,
+    userDataDir: getUserDataDir()
+  });
 
   for (const plugin of plugins) {
     await plugin.onBrowser(browser);
@@ -40,6 +43,11 @@ export async function startPuppeteer(headless?: boolean) {
 
   // Always inject helper functions
   await registerElementAttrFns(page);
+
+  _browser.on('disconnected', () => {
+    log.debug(" ** Browser disconnected");
+    _browser = undefined
+  });
 
   return { browser, page };
 }

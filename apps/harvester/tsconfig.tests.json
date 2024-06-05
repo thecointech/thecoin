@@ -1,8 +1,4 @@
 {
-  "extends": "../tsconfig.apps.json",
-  "compilerOptions": {
-    "noEmit": true,
-    "tsBuildInfoFile": "./build/.tests.buildinfo",
-  },
+  "extends": "../../tsconfig.tests.json",
   "include": ["./*.cts", "./*.cjs", "**/*.test.*", "**/*.d.ts"],
 }

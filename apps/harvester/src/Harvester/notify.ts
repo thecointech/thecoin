@@ -8,7 +8,7 @@ export const appID = 'com.squirrel.harvester.harvester';
 export const notifyError = <T extends string[]>(props: {
   title: string
   message: string
-  readonly actions?: T 
+  readonly actions?: T
 }) => notify({
   ...props,
   wait: true,
@@ -23,7 +23,7 @@ export const notify = <T extends string[]>(props: {
   message: string
   wait?: boolean
   icon?: string
-  readonly actions?: T 
+  readonly actions?: T
 }) => {
   // Don't post a bazzilion of these things each test run
   if (process.env.JEST_WORKER_ID) {
@@ -63,8 +63,9 @@ export const notify = <T extends string[]>(props: {
 
 const getAsset = (assetName?: string) => {
   if (!assetName) return;
-  const basePath = (process.env.NODE_ENV === 'development')
-    ? fileURLToPath(new URL('../../', import.meta.url))
-    : process.resourcesPath;
-  return path.join(basePath, 'assets', assetName);
+  // const basePath = "should not see this";
+  return (process.env.NODE_ENV === 'development')
+    ? fileURLToPath(new URL(`../../assets/${assetName}`, import.meta.url))
+    : path.join(process.resourcesPath, 'assets', assetName);
+  // return path.join(basePath, 'assets', assetName);
 }

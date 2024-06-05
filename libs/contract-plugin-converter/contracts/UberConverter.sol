@@ -103,7 +103,6 @@ contract UberConverter is BasePlugin, OracleClient, OwnableUpgradeable, Permissi
     if (currency == CurrencyCode) {
 
       // If this is scheduled to happen in the future?
-      // TEMP ONLY - REMOVE AFTER CREATING DEMO ACCOUNT
       if (msTransferAt > msNow()) {
         pending[from].transfers[to][msTransferAt] = pending[from].transfers[to][msTransferAt] + amount;
         pending[from].total = pending[from].total + amount;

@@ -10,11 +10,11 @@ import fs from 'fs';
 
 const TaskName = "thecoin-harvest";
 export async function setSchedule(schedule: HarvestSchedule, _existing?: HarvestSchedule) {
-  // if (JSON.stringify(existing) == JSON.stringify(schedule)) {
-  //   // no change
-  //   log.info(`No change to schedule: ${JSON.stringify(schedule)} - skipping update`);
-  //   return;
-  // }
+  // Don't schedule if we're in dev mode
+  if (process.env.NODE_ENV === 'development') {
+    return;
+  }
+
   log.info(`Creating schedule: ${JSON.stringify(schedule)}`);
 
   try {

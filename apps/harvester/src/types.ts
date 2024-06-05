@@ -20,6 +20,7 @@ export const defaultTime = "08:00";
 export enum HarvestStepType {
   // ReadVisaOwing,
   ClearPendingVisa = "ClearPendingVisa",
+  ProcessPercent = "ProcessPercent",
   TransferVisaOwing = "TransferVisaOwing",
   RoundUp = "RoundUp",
   TransferEverything = "TransferEverything",

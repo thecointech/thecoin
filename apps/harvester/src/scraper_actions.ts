@@ -9,6 +9,11 @@ export type Result<T> = {
 }
 
 export type ScraperBridgeApi = {
+  installBrowser(): Promise<void>;
+  hasInstalledBrowser(): Promise<Result<boolean>>;
+  hasCompatibleBrowser(): Promise<Result<boolean>>;
+  onBrowserDownloadProgress: (value: any) => void;
+
   // Declare a `readFile` function that will return a promise. This promise
   // will contain the data of the file read from the main process.
   warmup: (url: string) => Promise<Result<boolean>>,
@@ -33,7 +38,7 @@ export type ScraperBridgeApi = {
   getHarvestConfig(): Promise<Result<HarvestConfig|undefined>>,
   setHarvestConfig(config: HarvestConfig): Promise<Result<boolean>>,
 
-  runHarvester(): Promise<Result<void>>,
+  runHarvester(headless?: boolean): Promise<Result<void>>,
   getCurrentState(): Promise<Result<StoredData>>,
 
   exportResults(): Promise<Result<string>>
@@ -48,6 +53,11 @@ export type ScraperBridgeApi = {
 
 
 export const actions = {
+  installBrowser: "browser:installBrowser",
+  hasInstalledBrowser: "browser:hasInstalledBrowser",
+  hasCompatibleBrowser: "browser:hasCompatibleBrowser",
+  browserDownloadProgress: "browser:browserDownloadProgress",
+
   warmup: 'scraper:warmup',
   start: 'scraper:start',
   learnValue: 'scraper:learnValue',

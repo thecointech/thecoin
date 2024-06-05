@@ -34,6 +34,7 @@ const sendAssignRequest = async (signer: Signer, pluginAddress: AddressLike) => 
 export const Plugins = () => {
   const active = AccountMap.useActive();
   const [requestSent, setRequestSent] = useState(false);
+  const [isSending, setIsSending] = useState(false);
 
   const [hasConverter, setHasConverter] = useState(false);
   const [hasShockAbsorber, setHasShockAbsorber] = useState(false);
@@ -63,6 +64,7 @@ export const Plugins = () => {
     if (!active) {
       throw new Error('No active account');
     }
+    setIsSending(true);
     if (!cnvrtRequested) {
       await sendAssignRequest(active.signer, converter);
       setData(Key.pluginCnvrtRequested, "true");
@@ -74,6 +76,7 @@ export const Plugins = () => {
       setData(Key.pluginAbsrbRequested, "true");
     }
     setRequestSent(true);
+    setIsSending(false);
   }
   return (
     <Container>
@@ -99,7 +102,7 @@ export const Plugins = () => {
       <div>
         You have {active?.plugins.length} plugins installed
       </div>
-      <Button onClick={onInstallPlugins}>Install</Button>
+      <Button onClick={onInstallPlugins} loading={isSending} disabled={requestSent || isSending}>Install</Button>
       <Message hidden={!requestSent}>
         Your selected plugins are in the process of being installed.
         This can take up to an hour, in the meantime lets setup

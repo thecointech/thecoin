@@ -111,8 +111,12 @@ while (currDate < endDate) {
     if (currDate >= pausedDate) {
       console.log(`Running Harvester for ${currDate.weekdayShort} ${currDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
       numSent++;
-       // We always do our transfer
-      const r = await SendFakeDeposit(testAddress, harvestSends, currDate);
+       // Send the transfer slightly earlier than the current date
+       // This ensures it is processed first in the tx-processor,
+       // which is important because deposits need to be present
+       // before the bill is processed if the bill is processed
+       // immediately (which in the past, it is)
+      const r = await SendFakeDeposit(testAddress, harvestSends, currDate.minus({minutes: 1}));
       if (!r) {
         console.log("Failed to send mail");
         break;

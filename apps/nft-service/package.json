@@ -27,8 +27,8 @@
     "clean": "run-p 'clean:*'",
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
-    "test:summary": "jest --coverage > ./coverage/summary.txt",
-    "test": "run :jest",
+    "_test:summary": "jest --coverage > ./coverage/summary.txt",
+    "_test": "run :jest",
     "gcp-build": ""
   },
   "engines": {

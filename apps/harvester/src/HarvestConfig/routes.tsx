@@ -5,8 +5,9 @@ import { RoundUp } from './Step2.RoundUp';
 import { TopUp } from './Step3.TopUp';
 import { ChequeMinimum } from './Step4.ChequeMinimum';
 import { TransferLimit } from './Step5.TransferLimit';
-import { Complete } from './Step6.Complete';
-import { OverrideInitialBalance } from './Step6.OverrideInitialBalance';
+import { ProcessPercent } from './Step6.Percent';
+import { Complete } from './Step7.Complete';
+import { OverrideInitialBalance } from './Step7.OverrideInitialBalance';
 
 export const routes = [
   {
@@ -33,6 +34,11 @@ export const routes = [
     component: TransferLimit,
     title: "Limits",
     description: "Upper Limit",
+  },
+  {
+    component: ProcessPercent,
+    title: "Percent",
+    description: "Percent Used",
   },
   {
     component: Complete,

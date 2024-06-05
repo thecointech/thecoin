@@ -26,7 +26,7 @@ export async function randomDistribution() {
   const ts = DateTime.now().minus({ years: 1}).toMillis();
   await tcCore.runCloneTransfer(tcAddr, await client1.getAddress(), 200e6, 0, Math.floor(ts));
   // Transfer a random amount to client 2
-  if (client2) await seedAccount(tcAddr, await client2.getAddress());
+  await seedAccount(tcAddr, await client2.getAddress());
   // Also seed TestAccNoT so we can test tx's with a wallet vs a signer
   await seedAccount(tcAddr, "0x445758e37f47b44e05e74ee4799f3469de62a2cb", true);
 
@@ -43,7 +43,7 @@ async function seedAccount(tcAddr: string, client: string, onlyBuy=false) {
   for (
     let ts = now.minus({ years: 1 });
     ts < now;
-    ts = ts.plus({ days: 45 * Math.random() })
+    ts = ts.plus({ days: 65 * Math.random() })
   ) {
     // either purchase or sell up to 100 coins
     const amount = Math.floor(Math.random() * 100 * COIN_EXP);
