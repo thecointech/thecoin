@@ -13,7 +13,7 @@ export const HarvestConfig = () => {
   const m = curr.match(/\/step([0-9])$/)
 
   // Disable "next" button if we're on the last step
-  const buttonDisplay = m?.[1] == "5"
+  const buttonDisplay = m?.[1] == "6"
     ? "none"
     : undefined;
 

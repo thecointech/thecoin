@@ -8,13 +8,13 @@ import { setSchedule } from './schedule';
 import path from 'path';
 import { log } from '@thecointech/logging';
 import { ActionTypes, AnyEvent } from '../scraper/types';
-import { rootFolder } from '../paths';
+import { dbSuffix, rootFolder } from '../paths';
 import { HDNodeWallet } from 'ethers';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
 
-const db_path = path.join(rootFolder, 'config.db');
+const db_path = path.join(rootFolder, `config${dbSuffix()}.db`);
 
 export type ConfigShape = {
   // Store the account Mnemomic

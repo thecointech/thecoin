@@ -3,12 +3,12 @@ import pouchdb from 'pouchdb';
 import { StoredData, fromDb, toDb } from './db_translate';
 import path from 'path';
 import { log } from '@thecointech/logging';
-import { rootFolder } from '../paths';
+import { dbSuffix, rootFolder } from '../paths';
 import currency from 'currency.js';
 import { DateTime } from 'luxon';
 import { PayVisaKey } from './steps/PayVisa';
 
-const db_path = path.join(rootFolder, 'harvester.db');
+const db_path = path.join(rootFolder, `harvester${dbSuffix()}.db`);
 
 function initState(options?: { adapter: string }) {
   if (process.env.NODE_ENV === 'development') {

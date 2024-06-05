@@ -21,7 +21,8 @@ const outFolder = new URL("../data/", import.meta.url);
 const outFile = new URL("rates.json", outFolder);
 
 // We only fetch the last 14 months
-let start = DateTime.now().minus({ months: 14});
+// let start = DateTime.now().minus({ months: 14});
+let start = DateTime.fromObject({year: 2023});
 
 let existing: any = null;
 if (!existsSync(outFolder)) {

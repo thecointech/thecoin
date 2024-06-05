@@ -7,7 +7,6 @@ export function warmup(url: string) {
       .then(async ({browser, page}) => {
         page.goto(url);
         browser.on('disconnected', () => {
-          console.log('disconnected');
           resolve(true);
         })
       })

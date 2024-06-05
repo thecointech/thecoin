@@ -28,6 +28,7 @@ export async function processTransfers(tcCore: TheCoin, bank: RbcApi) {
 
   const r: AnyActionContainer[] = [];
 
+  // TODO!  https://github.com/thecointech/thecoin/issues/558
   for (const action of allActions) {
     try {
       const executed = await processAction(action, tcCore, bank);
