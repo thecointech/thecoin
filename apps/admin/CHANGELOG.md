@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.127](https://github.com/thecointech/thecoin/compare/v0.2.126...v0.2.127) (2024-06-05)
+
+**Note:** Version bump only for package thecoin-admin
+
+
+
+
+
 ## [0.2.126](https://github.com/thecointech/thecoin/compare/v0.2.125...v0.2.126) (2024-05-10)
 
 **Note:** Version bump only for package thecoin-admin
