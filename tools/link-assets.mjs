@@ -36,8 +36,8 @@ for (const f of glob.sync(path.join(rootDir, typesGlob)))
     fs.unlinkSync(outpath);
   } catch (e) {}
 
-  const absf = path.join(process.cwd(), f);
-  fs.symlinkSync(absf, outpath);
+  const relativef = path.relative(dpath, f);
+  fs.symlinkSync(relativef, outpath);
 }
 
 
