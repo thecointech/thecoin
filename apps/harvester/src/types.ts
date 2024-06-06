@@ -52,6 +52,7 @@ export type HarvestConfig = {
 // Until we have a proper graph, just explicitly set an order
 export const HarvestStepOrder = [
   HarvestStepType.ClearPendingVisa,
+  HarvestStepType.ProcessPercent,
   HarvestStepType.TransferVisaOwing,
   HarvestStepType.RoundUp,
   HarvestStepType.TransferEverything,
