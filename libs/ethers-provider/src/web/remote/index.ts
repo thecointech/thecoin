@@ -93,8 +93,21 @@ export class Erc20Provider extends EtherscanProvider {
     }
 
     const result = await this.fetch("logs", params);
+
+    // Patch bad indices returned by Amoy
+    if (this.network.name == "matic-amoy") {
+      if (Array.isArray(result)) {
+        result.forEach(p => {
+          if (p.transactionIndex == "0x") {
+            p.transactionIndex = "0x0"
+          }
+          if (p.logIndex === '0x') {
+            p.logIndex = "0x0"
+          }
+        })
+      }
+    }
     return result;
-    // return Formatter.arrayOf(this.formatter.filterLog.bind(this.formatter))(result);
   }
 
   // Provide an implementation for the getLogs method
