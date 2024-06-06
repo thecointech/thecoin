@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.128](https://github.com/thecointech/thecoin/compare/v0.2.127...v0.2.128) (2024-06-06)
+
+**Note:** Version bump only for package @thecointech/nft
+
+
+
+
+
 ## [0.2.127](https://github.com/thecointech/thecoin/compare/v0.2.126...v0.2.127) (2024-06-05)
 
 **Note:** Version bump only for package @thecointech/nft
