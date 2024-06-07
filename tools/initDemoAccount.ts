@@ -21,7 +21,7 @@ if (process.env.CONFIG_NAME == "devlive") {
 }
 
 /////////////////////////////////////////////
-const monthsToRun = 3;
+const monthsToRun = 9999;
 /////////////////////////////////////////////
 
 // Init/Demo account
