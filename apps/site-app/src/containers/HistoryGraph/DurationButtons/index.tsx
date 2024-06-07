@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import { defineMessages, FormattedMessage } from "react-intl";
 import { Button, ButtonProps } from "semantic-ui-react";
+import { DateTime } from 'luxon';
 import styles from "./styles.module.less";
 
 const translations = defineMessages({
@@ -24,21 +25,32 @@ const Durations = {
   365: translations.year,
   [Number.POSITIVE_INFINITY]: translations.all,
 }
-export type Duration = keyof typeof Durations;
+type DateTimeState = [DateTime, (v: DateTime) => void];
 export type GraphButtonsProps = {
-  duration: Duration,
-  setDuration: (duration: Duration) => void;
+  fromDate: DateTimeState,
+  toDate: DateTimeState,
 }
 
 export const DurationButtons = (props: GraphButtonsProps) => {
+
   const onClick = useCallback((_event: React.MouseEvent<HTMLButtonElement, MouseEvent>, data: ButtonProps) => {
-    props.setDuration(Number(data.days) as Duration);
+    const duration = Number(data.days)
+    const to = DateTime.local();
+    props.toDate[1](DateTime.local())
+    props.fromDate[1](
+      Number.isFinite(duration)
+        ? to.minus({days: duration})
+        : DateTime.fromMillis(0)
+    )
   }, []);
+
+  const duration = getDuration(props.fromDate[0], props.toDate[0]);
+
   return (
     <div id={styles.buttons}>
       {
         Object.entries(Durations).map(([days, message]) => (
-          <GraphButton key={days} days={days} active={props.duration === Number(days)} onClick={onClick}>
+          <GraphButton key={days} days={days} active={duration === Number(days)} onClick={onClick}>
             <FormattedMessage {...message} />
           </GraphButton>
         ))
@@ -49,3 +61,17 @@ export const DurationButtons = (props: GraphButtonsProps) => {
 
 const GraphButton: React.FC<ButtonProps> = (props) =>
   <Button {...props} inverted className={styles.button} />
+
+function getDuration(from: DateTime, to: DateTime) {
+  // If not ending today, does not match
+  if (to.diffNow().as("days") > 1) {
+    return null;
+  }
+
+  // DateTime(0) is infinite
+  if (from.equals(DateTime.fromMillis(0))) {
+    return Number.POSITIVE_INFINITY;
+  }
+  const diff = to.diff(from);
+  return Math.round(diff.as("days"));
+}
