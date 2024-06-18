@@ -2,6 +2,7 @@ import type { ForgeConfig } from '@electron-forge/shared-types';
 import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { MakerZIP } from '@electron-forge/maker-zip';
 import { MakerDeb } from '@electron-forge/maker-deb';
+import { utils } from '@electron-forge/core';
 // import { MakerRpm } from '@electron-forge/maker-rpm';
 // import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives';
 import { WebpackPlugin } from '@electron-forge/plugin-webpack';
@@ -45,12 +46,14 @@ const mainConfigMerged = mainConfig({
 })
 
 const config: ForgeConfig = {
+  buildIdentifier: process.env.CONFIG_NAME,
   packagerConfig: {
     asar: false,
     // asar: {
     //   unpack: './node_modules/node-notifier/**/*'
     // },
-    // icon: 'assets/appicon',
+    icon: 'assets/appicon',
+    appBundleId: utils.fromBuildIdentifier({ beta: 'com.beta.harvester', prod: 'com.harvester' }) as unknown as string
     // extraResource: [
     //   // Include our assets outside of the asar
     //   // file so we can reference them by absolute path
