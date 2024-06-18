@@ -14,23 +14,28 @@ jest.setTimeout(timeout);
 
 it('Appropriately delays a transfer, and converts an appropriate amount at time', async () => {
 
+  console.log("Start")
   const signers = initAccounts(await hre.ethers.getSigners());
   const UberConverter = await hre.ethers.getContractFactory('UberConverter');
   const tcCore = await createAndInitTheCoin(signers.Owner);
   const oracle = await createAndInitOracle(signers.OracleUpdater);
+  console.log("Init Complete")
 
   // pass some $$$ to client1
   const initAmount = 10000e6;
   await tcCore.mintCoins(initAmount, signers.Owner, Date.now());
   await tcCore.transfer(signers.client1, initAmount);
+  console.log("Xfer Complete")
 
   // Create plugin
   const uber = await UberConverter.deploy();
   await uber.initialize(tcCore, oracle);
+  console.log("Deploy Complete")
 
   // Assign to user, grant all permissions
   const request = await buildAssignPluginRequest(signers.client1, uber, ALL_PERMISSIONS);
   await assignPlugin(tcCore, request);
+  console.log("Plugin Complete")
 
   // Transfer $100 in 1 weeks time.
   const delay = Duration.fromObject({day: 7});
@@ -53,6 +58,7 @@ it('Appropriately delays a transfer, and converts an appropriate amount at time'
     transfer.signature,
   );
   const receipt = await r.wait();
+  console.log("Uber Complete")
   const interim1Balance = await tcCore.pl_balanceOf(signers.client1);
   // If we transferred $100, that should have equalled 50C
   expect(initAmount - Number(interim1Balance)).toEqual(50e6);
@@ -72,13 +78,17 @@ it('Appropriately delays a transfer, and converts an appropriate amount at time'
     tcClient1.transfer(signers.BrokerCAD, initAmount)
   ) .rejects
     .toThrow()
+  console.log("Test Failed Xfer Complete")
 
   // Now advance time so that that client2 can claim the transfer
   // Note, we need the additional day as times around midnight seem to fail otherwise
   await hre.network.provider.send("evm_increaseTime", [delay.plus({day: 1}).as("seconds")]);
+  console.log("Evm Time Increase complete")
 
   // TheCoin rate is now $4
   await setOracleValueRepeat(oracle, 4, 8);
+  console.log("Oracle Update complete")
+
   const validTill = await oracle.validUntil();
   expect(Number(validTill)).toBeGreaterThan(transfer.transferMillis);
   // Assert that the pending transfer reflects the new value
@@ -88,6 +98,7 @@ it('Appropriately delays a transfer, and converts an appropriate amount at time'
   // Process pending transactions
   const p = await uber.processPending(transfer.from, transfer.to, transfer.transferMillis);
   const preceipt = await p.wait();
+  console.log("Process Complete")
 
   const final1Balance = await tcCore.pl_balanceOf(signers.client1);
   // If we transferred $100, that should have equalled 25C

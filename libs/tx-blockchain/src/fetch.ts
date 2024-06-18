@@ -53,8 +53,8 @@ export async function loadAndMergeHistory(fromBlock: number, contract: TheCoin, 
         converted[tx.hash].fee = toDecimal(tx.value);
       }
     }
-    const history = Object.values(converted).sort((a, b) => a.date.toMillis() - b.date.toMillis());
-
+    // Apply exact timestamps
+    const history = Object.values(converted)
     let exact = await fetchExactTimestamps(contract, fromBlock, address);
     for (const tx of history) {
       if (exact[tx.txHash]) {
@@ -64,8 +64,8 @@ export async function loadAndMergeHistory(fromBlock: number, contract: TheCoin, 
         tx.change = -tx.change;
       }
     }
-
-    return history;
+    const sorted = history.sort((a, b) => a.date.toMillis() - b.date.toMillis());
+    return sorted;
   }
   catch (err: any) {
     log.error(err, err.message);

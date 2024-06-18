@@ -71,13 +71,15 @@ const useCalcLimitedFetchSerie = (props: GraphHistoryProps) => {
   useEffect(() => {
     const d = getAccountSerie(props, rates, ratesApi);
     setDatum(d);
-  }, [props.from?.toMillis()]);
+  }, [props.from?.toMillis(), props.to?.toMillis()]);
 
   // On subsequent runs, do not pass in ratesApi
   // so we do not re-query the same rates
   useEffect(() => {
-    const d = getAccountSerie(props, rates);
-    setDatum(d);
+    if (rates.length != 0) {
+      const d = getAccountSerie(props, rates);
+      setDatum(d);
+    }
   }, [rates.length]);
 
   return fetching > 0
