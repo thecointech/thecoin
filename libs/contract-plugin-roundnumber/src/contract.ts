@@ -1,9 +1,7 @@
-import { Contract } from '@ethersproject/contracts';
-import { RoundNumber } from './types';
-import RoundNumberSpec from './contracts/contracts/RoundNumber.sol/RoundNumber.json' assert {type: "json"};
+import { Provider } from 'ethers';
+import { RoundNumber, RoundNumber__factory } from './codegen';
 import { getProvider } from '@thecointech/ethers-provider';
 
-const getAbi = () => RoundNumberSpec.abi;
 const getContractAddress = async () => {
 
   const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME;
@@ -15,20 +13,13 @@ const getContractAddress = async () => {
   return deployment.default.contract;
 }
 
-const buildContract = async () =>
-  new Contract(
-    await getContractAddress(),
-    getAbi(),
-    getProvider()
-  ) as RoundNumber
-
 declare module globalThis {
   let __roundnumber: RoundNumber|undefined;
 }
 
-export async function getContract() : Promise<RoundNumber> {
-  if (!globalThis.__roundnumber) {
-    globalThis.__roundnumber= await buildContract();
-  }
-  return globalThis.__roundnumber;
+export async function getContract(provider: Provider = getProvider()) : Promise<RoundNumber> {
+  return globalThis.__roundnumber ??= RoundNumber__factory.connect(
+    await getContractAddress(),
+    provider
+  )
 }

@@ -1,4 +1,5 @@
 import { Home } from './Home';
+import { Browser } from './Browser';
 import { Account } from './account';
 import { Training } from './Training';
 import { Route, Switch } from 'react-router-dom';
@@ -8,6 +9,7 @@ import { Results } from './results';
 export const Routes = () => (
   <Switch>
     <Route exact path='/' component={Home} />
+    <Route path='/browser' component={Browser} />
     <Route path='/account' component={Account} />
     <Route path='/train' component={Training} />
     <Route path='/config' component={HarvestConfig} />

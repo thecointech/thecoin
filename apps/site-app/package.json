@@ -2,7 +2,7 @@
   "name": "@thecointech/site-app",
   "productName": "THECoin: Website - App",
   "private": true,
-  "version": "0.2.114",
+  "version": "0.2.128",
   "description": "THECoin: Future-proof currency",
   "type": "module",
   "repository": {
@@ -10,24 +10,25 @@
     "url": "git://github.com/thecointech/thecoin.git"
   },
   "author": "Stephen Taylor",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "preanalyze": "yarn clean:analyze",
     "analyze": "node ./internals/scripts/analyze.js",
-    "prebuild": "run-p build:semantic build:i18n",
-    "build": "yarn run-env exec=webpack --config ../../libs/site-base/internal/webpack/webpack.prod.mjs --progress",
-    "build:semantic": "node ./internals/buildSemantic.mjs",
-    "build:i18n": "run-s extract compile",
-    "clean": "run-p clean:*",
+    "build": "run -T run-s prebuild build:src",
+    "build:src": "run-env exec=webpack --config ../../libs/site-base/internal/webpack/webpack.prod.mjs --progress",
+    "prebuild": "run -T run-p 'prebuild:*'",
+    "prebuild:semantic": "node ./internals/buildSemantic.mjs",
+    "prebuild:i18n": "run-s extract compile",
+    "clean": "run-p 'clean:*'",
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
     "clean:analyze": "rimraf stats.json",
     "deploy:rebuild": "yarn build",
     "deploy": "yarn run-env ./deploy.ts",
-    "dev": "cross-env NODE_ENV=development run-env internals/server.mjs",
-    "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
-    "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
-    "prod:beta": "cross-env CONFIG_NAME=prodbeta yarn dev",
+    "dev": "run -T cross-env NODE_ENV=development run-env internals/server.mjs",
+    "dev:live": "run -T cross-env CONFIG_NAME=devlive yarn dev",
+    "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn dev",
+    "prod:beta": "run -T cross-env CONFIG_NAME=prodbeta yarn dev",
     "start": "firebase emulators:start --only hosting",
     "lint": "yarn lint:src && yarn lint:css",
     "lint:css": "stylelint './src/**/*.{js,ts}'",
@@ -35,12 +36,11 @@
     "lint:src:fix": "eslint --fix",
     "typecheck": "tsc --noEmit",
     "pretest": "yarn clean:test",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
-    "test:watch": "cross-env NODE_ENV=test jest --watchAll",
+    "test": "run :jest",
+    "test:watch": "run -T cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "extract": "formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern [sha512:contenthash:base64:6]",
-    "compile": "formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json"
+    "extract": "run -T formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
+    "compile": "run -T formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -53,10 +53,10 @@
   },
   "dependencies": {
     "@artsy/fresnel": "^1.2.2",
-    "@thecointech/blockpass": "^0.2.114",
-    "@thecointech/shared": "^0.2.114",
-    "@thecointech/site-base": "^0.2.114",
-    "@thecointech/utilities": "^0.2.114",
+    "@thecointech/blockpass": "^0.2.128",
+    "@thecointech/shared": "^0.2.128",
+    "@thecointech/site-base": "^0.2.128",
+    "@thecointech/utilities": "^0.2.128",
     "card-validator": "^6.2.0",
     "compression": "1.7.4",
     "connected-react-router": "^6.6.1",
@@ -73,6 +73,7 @@
     "sanitize.css": "10.0.0"
   },
   "devDependencies": {
+    "@thecointech/setenv": "^0.2.128",
     "@types/card-validator": "^4.1.0",
     "@types/expect": "1.20.4",
     "@types/file-saver": "^2.0.1",
@@ -82,13 +83,11 @@
     "@types/react-test-renderer": "^16.9.0",
     "@types/systemjs": "0.20.6",
     "coveralls": "3.0.4",
-    "jest": "*",
     "ngrok": "3.2.1",
     "node-plop": "0.19.0",
     "plop": "2.4.0",
     "react-app-polyfill": "1.0.1",
     "react-test-renderer": "16.8.6",
-    "shelljs": "0.8.3",
     "whatwg-fetch": "3.0.0"
   }
 }

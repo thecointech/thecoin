@@ -9,6 +9,14 @@
 **/.vs/
 **/.webpack/
 
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 !**/summary.txt
 **/*.module.css.map
 **/.dccache
@@ -55,8 +63,7 @@
 libs/*/.openzeppelin/unknown-1337.json
 libs/*/.openzeppelin/unknown-31337.json
 libs/contract-*/.hardhat/cache
-libs/contract-*/src/contracts
-libs/contract-*/src/types
+libs/contract-*/src/codegen
 libs/contract-*/migrations/types
 libs/contract-*/src/deployed/*-fork.json
 libs/contract-*/**/devlive-polygon*
@@ -77,3 +84,5 @@ storybook-static/
 /data/
 exported/
 /harvester/harvester/
+.nx/cache
+apps/harvester/root_temp

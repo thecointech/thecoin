@@ -1,0 +1,56 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [0.2.128](https://github.com/thecointech/thecoin/compare/v0.2.127...v0.2.128) (2024-06-06)
+
+**Note:** Version bump only for package @thecointech/email-fake-deposit
+
+
+
+
+
+## [0.2.127](https://github.com/thecointech/thecoin/compare/v0.2.126...v0.2.127) (2024-06-05)
+
+**Note:** Version bump only for package @thecointech/email-fake-deposit
+
+
+
+
+
+## [0.2.126](https://github.com/thecointech/thecoin/compare/v0.2.125...v0.2.126) (2024-05-10)
+
+**Note:** Version bump only for package @thecointech/email-fake-deposit
+
+
+
+
+
+## [0.2.125](https://github.com/thecointech/thecoin/compare/v0.2.124...v0.2.125) (2024-04-11)
+
+**Note:** Version bump only for package @thecointech/email-fake-deposit
+
+
+
+
+
+## [0.2.124](https://github.com/thecointech/thecoin/compare/v0.2.123...v0.2.124) (2024-04-08)
+
+**Note:** Version bump only for package @thecointech/email-fake-deposit
+
+
+
+
+
+## [0.2.123](https://github.com/thecointech/thecoin/compare/v0.2.122...v0.2.123) (2024-03-17)
+
+**Note:** Version bump only for package @thecointech/email-fake-deposit
+
+
+
+
+
+## [0.2.122](https://github.com/thecointech/thecoin/compare/v0.2.121...v0.2.122) (2024-03-14)
+
+**Note:** Version bump only for package @thecointech/email-fake-deposit

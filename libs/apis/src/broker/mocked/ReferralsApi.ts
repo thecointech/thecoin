@@ -1,4 +1,4 @@
-import type { ReferralsApi as SrcApi, ReferralCreateBody } from "@thecointech/broker-cad";
+import type { ReferralsApi as SrcApi, ReferralCreateRequest } from "@thecointech/broker-cad";
 import { buildResponse } from "../../axios-utils";
 import { sleep } from '@thecointech/async';
 
@@ -12,7 +12,7 @@ export class ReferralsApi implements Pick<SrcApi, keyof SrcApi>
      * @throws {RequiredError}
      * @memberof ReferralsApi
      */
-    async referralCreate(_referral: ReferralCreateBody, _options?: any)
+    async referralCreate(_referral: ReferralCreateRequest, _options?: any)
     {
       await sleep(250);
       return buildResponse({

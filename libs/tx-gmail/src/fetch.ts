@@ -23,6 +23,12 @@ export async function initializeApi(auth: OAuth2Client) {
 
   __gmail = google.gmail({ version: 'v1', auth });
 
+  const profile = await __gmail.users.getProfile({ userId: "me" });
+  const expectedAddress = `autodeposit@${process.env.TX_GMAIL_DEPOSIT_DOMAIN}`;
+  if (profile.data.emailAddress !== expectedAddress) {
+    throw new Error(`Expected ${profile.data.emailAddress} to be ${expectedAddress}`);
+  }
+
   const response = await __gmail.users.labels.list({
     userId: "me"
   })
@@ -38,7 +44,7 @@ export async function initializeApi(auth: OAuth2Client) {
       __labels[kf] = label.id ?? null;
     }
   }
-  log.trace(`Gmail API initialized`);
+  log.trace(`Gmail API initialized for ${profile.data.emailAddress} with ${profile.data.messagesTotal} messages`);
 }
 
 // Query gmail for emails matching q query string

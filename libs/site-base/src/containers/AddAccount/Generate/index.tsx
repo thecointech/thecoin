@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Wallet } from 'ethers';
+import { BaseWallet, Wallet } from 'ethers';
 import { Header, Form } from 'semantic-ui-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
@@ -41,7 +41,7 @@ export const Generate = () => {
   const [progress, setProgress] = useState(undefined as MaybeNumber);
   const [forceValidate, setForceValidate] = useState(false);
 
-  const [wallet, setWallet] = useState<Wallet|undefined>();
+  const [wallet, setWallet] = useState<BaseWallet|undefined>();
 
   ////////////////////////////////
   // Callback to actually generate the account
@@ -118,7 +118,7 @@ const generateNewWallet = async (password: string, setProgress: (v: number) => v
   setProgress(0);
 
   const newWallet = Wallet.createRandom();
-  var asStr = await newWallet.encrypt(password, (percent: number) => {
+  const asStr = await newWallet.encrypt(password, (percent: number) => {
     // To break out of this callback, we need to throw
     if (_isCancelled)
       throw 'User Cancelled';

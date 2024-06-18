@@ -7,7 +7,6 @@ import iconThecoin from "./images/icon_thecoin.svg";
 import iconCard from "./images/icon_card.svg";
 import styles from './styles.module.less';
 import { Transaction } from '@thecointech/tx-blockchain';
-import { useState } from 'react';
 import { AccountMap } from '../AccountMap';
 import { useSelector } from 'react-redux';
 import { selectLocale } from '../LanguageProvider/selector';
@@ -17,33 +16,30 @@ import { Filters } from './Filters';
 import { TransactionLine } from './TransactionLine';
 import { NormalizeAddress } from '@thecointech/utilities';
 
+type DateTimeState = [DateTime, (v: DateTime) => void];
 type MyProps = {
   rates: FXRate[];
+  fromDate: DateTimeState,
+  toDate: DateTimeState,
 }
 
 const translate = defineMessages({
         sent : {
-          id: "shared.transactionList.sent",
           defaultMessage:"Sent",
           description:"shared.transactionList.sent: For title in comment section for the transaction history"},
         received : {
-          id: "shared.transactionList.received",
           defaultMessage:"Received",
           description:"shared.transactionList.received: For title in comment section for the transaction history"},
         to : {
-          id: "shared.transactionList.to",
           defaultMessage:"To",
           description:"shared.transactionList.to: For description in comment section for the transaction history"},
         from : {
-          id: "shared.transactionList.from",
           defaultMessage:"From",
           description:"shared.transactionList.from: For description in comment section for the transaction history"},
         notransactions : {
-          id: "shared.transactionList.notransactions",
           defaultMessage:"We don't have any transactions matching your query.",
           description:"app.transactionList.notransactions: For when we have no transactions to display for the transaction history"},
         loading : {
-          id: "shared.transactionList.loading",
           defaultMessage:"Loading...",
           description:"shared.transactionList.loading: For loading in comment section for the transaction history"}});
 
@@ -77,28 +73,16 @@ function buildPagination(transactions: Transaction[], maxRowCount: number, curre
 }
 
 
-export const TransactionList = (props: MyProps) => {
+export const TransactionList = ({fromDate, toDate, rates}: MyProps) => {
 
-  const [fromDate, setFromDate] = useState(DateTime.now());
-  const [untilDate, setUntilDate] = useState(DateTime.now());
-
-
-  function onDateRangeChange(from: Date, until: Date) {
-    // Show all txs for a given day
-    const roundedFrom = DateTime.fromJSDate(from).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-    const roundedTo = DateTime.fromJSDate(until).set({ hour: 23, minute: 59, second: 59, millisecond: 999 });
-    setFromDate(roundedFrom);
-    setUntilDate(roundedTo);
-  }
   const { locale } = useSelector(selectLocale);
 
   const maxRowCount = 50;
-  const { rates } = props;
   const account = AccountMap.useActive();
   const transactions = account!.history;
   const transactionLoading = account?.historyLoading;
 
-  let filteredTx = transactions.filter((tx) => tx.date.toMillis() >= fromDate.toMillis() && tx.date.toMillis() <= untilDate.toMillis())
+  let filteredTx = transactions.filter((tx) => tx.date.toMillis() >= fromDate[0].toMillis() && tx.date.toMillis() <= toDate[0].toMillis())
   filteredTx.reverse();
   // Don't display the fee's
   const xferAssistAddress = process.env.WALLET_BrokerTransferAssistant_ADDRESS;
@@ -153,7 +137,7 @@ export const TransactionList = (props: MyProps) => {
 
   return (
     <React.Fragment>
-      <Filters onDateRangeChange={onDateRangeChange} />
+      <Filters fromDate={fromDate} toDate={toDate} />
 
       <Dimmer.Dimmable>
         <Dimmer active={transactionLoading}><FormattedMessage {...translate.loading} /></Dimmer>

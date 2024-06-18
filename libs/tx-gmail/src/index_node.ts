@@ -4,7 +4,7 @@ import { functions } from './index_common';
 import { queryETransfers, queryNewDepositEmails } from './query';
 import { getNewTokens } from './token';
 import { log } from '@thecointech/logging';
-import type { IpcMain } from './electron_types';
+import type { IpcMain } from '@thecointech/electron-utils/types/ipc';
 
 const fns: functions = {
   bridge: (ipc) => { registerIpcListeners(ipc as IpcMain); },

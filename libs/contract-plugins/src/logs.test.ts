@@ -1,15 +1,33 @@
 import { jest } from '@jest/globals';
-// import hre from 'hardhat';
-// import { createAndInitOracle } from '@thecointech/contract-oracle/testHelpers.ts';
-// import { getPluginLogs, updateState } from './logs';
-// import { DateTime } from 'luxon';
-// import { RoundNumber } from './types';
+import { describe } from '@thecointech/jestutils';
+import { getPluginLogs } from './logs';
+import { getEnvVars } from '@thecointech/setenv';
+import { getProvider } from '@thecointech/ethers-provider/Erc20Provider/web';
+
+const oldVars = {...process.env};
+const prodVars = getEnvVars("prod");
 
 jest.setTimeout(30 * 1000);
 
 // TODO: Update this test to use SpendingLimit (or something) instead
+describe('Live data fetches', () => {
+  it ('fetches logs', async () => {
+    process.env = {
+      ...oldVars,
+      ...prodVars
+    }
+    const address = "0x70da7D05Ee936E583A5165c62A1DEd3Cb0A07C82"; // Converter-Prod
+    const user = "0xCA8EEA33826F9ADA044D58CAC4869D0A6B4E90E4"; // ME
+    const fromBlock = 0;
+    const provider = getProvider();
+    const r = await getPluginLogs(address, user, provider, fromBlock);
+    expect(r.length).toBeGreaterThan(1);
+    const r2 = await getPluginLogs(address, user, provider, 44132093);
+    expect(r.length - r2.length).toBe(1);
+  })
+}, prodVars.POLYGONSCAN_API_KEY != undefined);
 
-it ('fetches logs for ', async () => {})
+// it ('fetches logs for ', async () => {
 //   const {owner, contract} = await deployContract()
 //   await setRoundPoint(contract, 50e2, DateTime.now());
 //   const logs = await getPluginLogs(contract.address, owner.address, contract.provider, 0);

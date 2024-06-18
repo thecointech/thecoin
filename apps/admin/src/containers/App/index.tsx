@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Routes } from './Routes';
 import { Segment, Sidebar } from 'semantic-ui-react';
 import { PageSidebar } from '@thecointech/shared/containers/PageSidebar';

@@ -8,7 +8,7 @@ import { mappedReducer, splitAccountFromRest } from "./mappedReducer";
 import { useSelector } from 'react-redux';
 import { activeAccountSelector, selectAccountArray } from './selectors';
 import { log } from '@thecointech/logging';
-import type { Signer } from '@ethersproject/abstract-signer';
+import type { Signer } from 'ethers';
 import type { ReducersMapObject } from "redux";
 
 export class AccountMap extends BaseReducer<IAccountStoreAPI, AccountMapState>('accounts', initialState) implements IAccountStoreAPI {

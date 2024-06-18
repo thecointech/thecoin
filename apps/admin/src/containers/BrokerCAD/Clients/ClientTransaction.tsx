@@ -1,6 +1,5 @@
-import React from "react"
 import { AnyTxAction, TransitionDelta } from '@thecointech/broker-db'
-import { RefundButton } from "containers/Refund"
+import { RefundButton } from "../../Refund"
 import { DateTime } from 'luxon'
 import { Icon, List } from "semantic-ui-react";
 import { ManualOverride } from './ManualOverride';
@@ -15,12 +14,15 @@ export const ClientTransaction = (props: AnyTxAction) => {
   const fiat = history.find(r => r.fiat)?.fiat ?? "NO FIAT";
   const coin = history.find(r => r.coin)?.coin ?? "NO COIN";
 
+  const firestorePath = `https://console.cloud.google.com/firestore/databases/-default-/data/panel/User/${props.address}/${props.type}/${props.doc.id}?project=${getGaeProject()}&pli=1`;
+
   return (
     <List.Item key={props.data.initialId}>
-      <TransactionIcon type={final.type} />
-      {`${date.toISODate()} ${final.type} - ${fiat} : ${coin}`}
+      <TransactionIcon type={final?.type} />
+      {props.type} {`${date.toISODate()} ${final?.type ?? props.type} - ${fiat} : ${coin}`}
+      <a href={firestorePath}>{props.data.initialId.slice(0, 10)}</a>
       <TransactionPath {...props.doc} />
-      {final.type == "markComplete"
+      {final?.type == "markComplete"
         ? undefined
         : <RefundButton action={props} />
       }
@@ -30,7 +32,7 @@ export const ClientTransaction = (props: AnyTxAction) => {
   )
 }
 
-const TransactionIcon = ({ type }: { type: string }) => {
+const TransactionIcon = ({ type }: { type?: string }) => {
   switch (type) {
     case "markComplete": return <Icon name="check circle outline" color='green' />
     case "error": return <Icon name="times circle outline" color='red' />
@@ -46,19 +48,29 @@ const TransactionEntry = (props: TransitionDelta) =>
     <TransactionEntryHash delta={props} />
     <TransactionEntryItem delta={props} item="date" />
     <TransactionEntryItem delta={props} item="meta" />
+    <TransactionEntryItem delta={props} item="error" />
   </li>
 
 const TransactionEntryHash = ({delta}: {delta: TransitionDelta}) => (
   delta.hash
     ? <div>
         &nbsp;&nbsp;&nbsp; - hash:
-        <a target="_blank" href={`https://polygonscan.com/tx/${delta.hash}`}>{delta.hash}</a>
+        <a target="_blank" href={`${process.env.POLYGONSCAN_WEB_URL}/tx/${delta.hash}`}>{delta.hash}</a>
       </div>
     : null
 )
 
 const TransactionEntryItem = ({delta, item}: {delta: TransitionDelta, item: keyof TransitionDelta}) => (
   delta[item]
-    ? <div>&nbsp;&nbsp;&nbsp;{` - ${item}: ${delta[item]?.toString()}`}</div>
+    ? <div>&nbsp;&nbsp;&nbsp;{` - ${item}: ${delta[item]?.toString().slice(0, 50)}`}</div>
     : null
 )
+
+const getGaeProject = () => {
+  switch(process.env.CONFIG_NAME) {
+    case "prodtest": return "tccc-release";
+    case "prod": return "tccc-release";
+    case "prodtest": return "tccc-testing";
+    default: return "NOT-GONNA-WORK";
+  }
+}

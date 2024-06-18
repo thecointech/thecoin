@@ -32,7 +32,7 @@ function searchBackForBoundary(init: DateTime, iterator: DateTime, interval: num
     if (lastDst != iterator.isInDST)
       iterator = fixDst(iterator, lastDst);
 
-    if (iterator < init)
+    if (iterator <= init)
       return r.toMillis();
     r = iterator;
   } while (iterator.day == init.day);

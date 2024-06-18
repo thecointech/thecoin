@@ -1264,6 +1264,196 @@
             "label": "offsets",
             "offset": 0,
             "slot": "204",
+            "type": "t_array(t_struct(MilliSecondsOffset)1223_storage)dyn_storage",
+            "contract": "SpxCadOracle",
+            "src": "contracts\\SpxCadOracle.sol:47"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_struct(MilliSecondsOffset)1223_storage)dyn_storage": {
+            "label": "struct SpxCadOracle.MilliSecondsOffset[]",
+            "numberOfBytes": "32"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_array(t_uint64)dyn_storage": {
+            "label": "uint64[]",
+            "numberOfBytes": "32"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_int256": {
+            "label": "int256",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)34_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(MilliSecondsOffset)1223_storage": {
+            "label": "struct SpxCadOracle.MilliSecondsOffset",
+            "members": [
+              {
+                "label": "from",
+                "type": "t_int256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "offset",
+                "type": "t_int256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_struct(RoleData)34_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          }
+        }
+      }
+    },
+    "34b94415c10f0c6c1e8dfcfe4c6e73eb894d78c1931d0f75fbb3f27e5e52885c": {
+      "address": "0x459bfe81652AF07B1016A8b6bE0c874626dDF9e1",
+      "txHash": "0xf023cc7dbee1dd2372c372b356f01e4b45a617fe4a7957bab20f1b2d225d0114",
+      "layout": {
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:39"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:44"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:22"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "52",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:87"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ERC165Upgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:41"
+          },
+          {
+            "label": "_roles",
+            "offset": 0,
+            "slot": "151",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)34_storage)",
+            "contract": "AccessControlUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:61"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "152",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "AccessControlUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:235"
+          },
+          {
+            "label": "rates",
+            "offset": 0,
+            "slot": "201",
+            "type": "t_array(t_uint64)dyn_storage",
+            "contract": "SpxCadOracle",
+            "src": "contracts\\SpxCadOracle.sol:27"
+          },
+          {
+            "label": "INITIAL_TIMESTAMP",
+            "offset": 0,
+            "slot": "202",
+            "type": "t_int256",
+            "contract": "SpxCadOracle",
+            "src": "contracts\\SpxCadOracle.sol:29"
+          },
+          {
+            "label": "BLOCK_TIME",
+            "offset": 0,
+            "slot": "203",
+            "type": "t_int256",
+            "contract": "SpxCadOracle",
+            "src": "contracts\\SpxCadOracle.sol:31"
+          },
+          {
+            "label": "offsets",
+            "offset": 0,
+            "slot": "204",
             "type": "t_array(t_struct(MilliSecondsOffset)1356_storage)dyn_storage",
             "contract": "SpxCadOracle",
             "src": "contracts\\SpxCadOracle.sol:47"

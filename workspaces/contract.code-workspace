@@ -35,6 +35,9 @@
     {
       "name": "contract-plugins",
       "path": "../libs/contract-plugins"
+    },
+    {
+      "path": "../libs/ethers-provider"
     }
   ],
 	"settings": {

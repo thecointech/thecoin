@@ -58,7 +58,7 @@ export async function getAllUserData(account: AccountState) {
       Sell: data.Sell[user],
       Bill: data.Bill[user],
       Plugin: [],
-      balanceCoin: new Decimal(balances[idx].toNumber()),
+      balanceCoin: new Decimal(balances[idx].toString()),
       // details: details[idx] ?? {},
     }
   ]), [] as UserData[])

@@ -1,22 +1,20 @@
 import PouchDB from 'pouchdb';
 import memory from 'pouchdb-adapter-memory'
 import comdb from 'comdb';
-import { Wallet } from '@ethersproject/wallet';
-import { Mnemonic } from '@ethersproject/hdnode';
-import { defaultDays, HarvestConfig } from '../types';
+import { defaultDays, defaultTime, HarvestConfig, Mnemonic } from '../types';
 import { createStep } from './steps';
 import { CreditDetails } from './types';
-import { setSchedule } from './schedule/scheduler';
+import { setSchedule } from './schedule';
 import path from 'path';
 import { log } from '@thecointech/logging';
 import { ActionTypes, AnyEvent } from '../scraper/types';
-import { rootFolder } from '../paths';
-import { ClearPendingVisa } from './steps/ClearPendingVisa';
+import { dbSuffix, rootFolder } from '../paths';
+import { HDNodeWallet } from 'ethers';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
 
-const db_path = path.join(rootFolder, 'config.db');
+const db_path = path.join(rootFolder, `config${dbSuffix()}.db`);
 
 export type ConfigShape = {
   // Store the account Mnemomic
@@ -37,10 +35,10 @@ export type ConfigShape = {
 // NOTE: Not sure this works with ComDB
 const ConfigKey = "config";
 
-let _config = null as unknown as PouchDB.Database<ConfigShape>;
-export async function initConfig(password?: string) {
-  if (!_config) {
-    _config = new PouchDB<ConfigShape>(db_path, {adapter: 'memory'});
+let __config = null as unknown as PouchDB.Database<ConfigShape>;
+export async function getConfig(password?: string) {
+  if (!__config) {
+    __config = new PouchDB<ConfigShape>(db_path, {adapter: 'memory'});
     log.info(`Initializing ${process.env.NODE_ENV} config database at ${db_path}`);
     if (process.env.NODE_ENV !== "development") {
       log.info(`Encrypting config DB`);
@@ -48,15 +46,18 @@ export async function initConfig(password?: string) {
       // Yes, this is a hard-coded password.
       // Will fix ASAP with dynamically
       // generated code (Apr 04 2023)
-      await _config.setPassword(password ?? "hF,835-/=Pw\\nr6r");
-      await _config.loadEncrypted();
+      await __config.setPassword(password ?? "hF,835-/=Pw\\nr6r");
+      await __config.loadEncrypted();
     }
   }
+  return __config;
 }
 
 export async function getProcessConfig() {
   try {
-    return await _config.get<ConfigShape>(ConfigKey, { revs_info: true });
+    const db = await getConfig();
+    const doc = await db.get<ConfigShape>(ConfigKey, { revs_info: true });
+    return doc;
   }
   catch (err) {
     return undefined;
@@ -64,12 +65,15 @@ export async function getProcessConfig() {
 }
 
 export async function setProcessConfig(config: Partial<ConfigShape>) {
-  await initConfig();
   log.info("Setting config file...");
   const lastCfg = await getProcessConfig();
-  await _config.put({
+  const db = await getConfig();
+  await db.put({
     steps: config.steps ?? lastCfg?.steps ?? [],
-    daysToRun: config.daysToRun ?? lastCfg?.daysToRun ?? defaultDays,
+    schedule: {
+      daysToRun: config.schedule?.daysToRun ?? lastCfg?.schedule?.daysToRun ?? defaultDays,
+      timeToRun: config.schedule?.timeToRun ?? lastCfg?.schedule?.timeToRun ?? defaultTime,
+    },
     stateKey: config.stateKey ?? lastCfg?.stateKey,
     wallet: config.wallet ?? lastCfg?.wallet,
     creditDetails: config.creditDetails ?? lastCfg?.creditDetails,
@@ -80,7 +84,7 @@ export async function setProcessConfig(config: Partial<ConfigShape>) {
     _id: ConfigKey,
     _rev: lastCfg?._rev,
   })
-  await _config.loadDecrypted();
+  await db.loadDecrypted();
 }
 
 export async function setWalletMnemomic(mnemonic: Mnemonic) {
@@ -94,7 +98,7 @@ export async function setWalletMnemomic(mnemonic: Mnemonic) {
 export async function getWallet() {
   const cfg = await getProcessConfig();
   if (cfg?.wallet) {
-    return Wallet.fromMnemonic(cfg.wallet.phrase, cfg.wallet.path);
+    return HDNodeWallet.fromPhrase(cfg.wallet.phrase, undefined, cfg.wallet.path);
   }
   return null;
 }
@@ -114,12 +118,7 @@ export async function hydrateProcessor() {
     .filter(step => !!step)
     .map(createStep)
 
-  log.warn("HACK ALERT: Manually adding ClearPendingVisa step");
-
-  return [
-    new ClearPendingVisa(),
-    ...steps
-  ]
+  return steps;
 }
 
 export async function setEvents(type: ActionTypes, events: AnyEvent[]) {
@@ -152,15 +151,15 @@ export async function getHarvestConfig() {
   const config = await getProcessConfig();
   return config?.steps
     ? {
-        steps: config?.steps,
-        daysToRun: config?.daysToRun,
+        steps: config.steps,
+        schedule: config.schedule,
       }
     : undefined;
 }
 
 export async function setHarvestConfig(config: HarvestConfig) {
   const existing = await getHarvestConfig();
-  await setSchedule(config.daysToRun, existing?.daysToRun);
+  await setSchedule(config.schedule, existing?.schedule);
   await setProcessConfig(config)
   return true;
 }

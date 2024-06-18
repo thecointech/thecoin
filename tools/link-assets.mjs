@@ -4,8 +4,8 @@ import path from 'path';
 
 function readTsConfig() {
   try {
-    if (fs.existsSync('./tsconfig.json')) {
-      const cfgString = fs.readFileSync('./tsconfig.json');
+    if (fs.existsSync('./tsconfig.build.json')) {
+      const cfgString = fs.readFileSync('./tsconfig.build.json');
       return JSON.parse(cfgString).compilerOptions;
     }
   }
@@ -36,8 +36,8 @@ for (const f of glob.sync(path.join(rootDir, typesGlob)))
     fs.unlinkSync(outpath);
   } catch (e) {}
 
-  const absf = path.join(process.cwd(), f);
-  fs.symlinkSync(absf, outpath);
+  const relativef = path.relative(dpath, f);
+  fs.symlinkSync(relativef, outpath);
 }
 
 

@@ -28,17 +28,23 @@ async function doDeposit(container: BuyActionContainer) {
   const {bank} = container;
   if (!bank) return { error: 'Cannot deposit fiat, no bank API present'};
 
-  const result = await depositInBank(etransfer, bank, log.trace);
-  if (result.code != ETransferErrorCode.Success || !result.confirmation)
-  {
-    return { error: result.message };
+  try {
+    const result = await depositInBank(etransfer, bank, log.trace);
+    if (result.code != ETransferErrorCode.Success || !result.confirmation)
+    {
+      return { error: result.message };
+    }
+    // Return new balance of transaction
+    return {
+      fiat: new Decimal(etransfer.cad),
+      meta: result.confirmation.toString(),
+      date: DateTime.now(),
+    }
   }
-  // Return new balance of transaction
-  return {
-    fiat: new Decimal(etransfer.cad),
-    meta: result.confirmation.toString(),
-    date: DateTime.now(),
+  catch (err) {
+    return { error: `${err}` };
   }
+
 }
 
 async function depositInBank(etransfer: eTransferData, bank: IBank, progressCb: (v: string) => void) : Promise<DepositResult> {

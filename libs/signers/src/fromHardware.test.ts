@@ -24,6 +24,6 @@ describe("Hardware connection", () => {
       gasPrice: 10,
       nonce: 1,
     });
-    tx;
+    expect(tx).toBeTruthy();
   })
 }, IsManualRun)

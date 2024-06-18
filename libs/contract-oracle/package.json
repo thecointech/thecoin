@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-oracle",
-  "version": "0.2.114",
+  "version": "0.2.128",
   "description": "The Coin: Price Oracles for TheCoin",
   "type": "module",
   "keywords": [
@@ -9,7 +9,7 @@
   ],
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
@@ -19,31 +19,30 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-s build:contracts build:copy build:src",
+    "prepublishOnly": "run -T rimraf ./build/.buildinfo",
+    "build": "run -T run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
-    "build:src": "yarn tsc -b",
-    "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
-    "clean": "run-p clean:*",
-    "clean:src": "rimraf ./build",
-    "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
-    "validate:prod": "cross-env CONFIG_NAME=prod yarn _hardhat ./scripts/validate.ts",
-    "validate:localprod": "cross-env CONFIG_NAME=prod URL_SERVICE_RATES=http://localhost:7001/api/v1 yarn _hardhat ./scripts/validate.ts",
-    "reset:localprod": "cross-env CONFIG_NAME=prod URL_SERVICE_RATES=http://localhost:7001/api/v1 yarn _hardhat ./scripts/reset.ts",
-    "dev:live": "yarn wait-port 9545 && cross-env CONFIG_NAME=devlive yarn deploy:polygon",
-    "deploy:prod": "cross-env CONFIG_NAME=prod yarn deploy:polygon",
-    "deploy:prodtest": "cross-env CONFIG_NAME=prodtest yarn deploy:polygon",
+    "build:src": "run -T tsc -b",
+    "build:copy": "run -T cpx \"./src/deployed/**\" ./build/deployed",
+    "clean": "run -T run-p 'clean:*'",
+    "clean:src": "run -T rimraf ./build",
+    "clean:contracts": "run -T rimraf ./src/codegen && run -T rimraf ./src/types && run -T rimraf ./.hardhat",
+    "test": "run :jest $@",
+    "validate:prod": "run -T cross-env CONFIG_NAME=prod yarn _hardhat ./scripts/validate.ts",
+    "validate:localprod": "run -T cross-env CONFIG_NAME=prod URL_SERVICE_RATES=http://localhost:7001/api/v1 yarn _hardhat ./scripts/validate.ts",
+    "reset:localprod": "run -T cross-env CONFIG_NAME=prod URL_SERVICE_RATES=http://localhost:7001/api/v1 yarn _hardhat ./scripts/reset.ts",
+    "dev:live": "run -T wait-port 9545 && run -T cross-env CONFIG_NAME=devlive yarn deploy:polygon",
+    "deploy:prod": "run -T cross-env CONFIG_NAME=prod yarn deploy:polygon",
+    "deploy:prodtest": "run -T cross-env CONFIG_NAME=prodtest yarn deploy:polygon",
     "deploy:both": "yarn deploy:polygon && yarn deploy:ethereum",
-    "deploy:polygon": "cross-env HARDHAT_NETWORK=polygon yarn _deploy",
-    "deploy:ethereum": "cross-env HARDHAT_NETWORK=ethereum yarn _deploy",
-    "update:prod": "cross-env CONFIG_NAME=prod yarn _update",
+    "deploy:polygon": "run -T cross-env HARDHAT_NETWORK=polygon yarn _deploy",
+    "deploy:ethereum": "run -T cross-env HARDHAT_NETWORK=ethereum yarn _deploy",
+    "update:prod": "run -T cross-env CONFIG_NAME=prod yarn _update",
     "_deploy": "run-s _deploy:deploy _deploy:verify",
     "_deploy:deploy": "yarn _hardhat ./scripts/deploy.ts",
     "_deploy:verify": "yarn _hardhat ./scripts/verify.ts",
     "_update": "yarn build && yarn _hardhat ./scripts/update.ts && yarn _deploy:verify",
-    "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
+    "_hardhat": "run -T cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
   },
   "files": [
     "build/**/*"
@@ -69,11 +68,13 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "^0.2.114",
-    "@thecointech/contract-tools": "^0.2.114",
-    "jest": "*"
+    "@thecointech/async": "^0.2.128",
+    "@thecointech/contract-tools": "^0.2.128",
+    "@thecointech/jestutils": "^0.2.128",
+    "@thecointech/setenv": "^0.2.128"
   },
   "dependencies": {
-    "@thecointech/contract-base": "^0.2.114"
-  }
+    "@thecointech/contract-base": "^0.2.128"
+  },
+  "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
 }

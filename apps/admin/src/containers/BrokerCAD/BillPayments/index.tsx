@@ -1,5 +1,4 @@
-import React from "react";
-import { EncryptedList } from "containers/EncryptedList";
+import { EncryptedList } from "../../EncryptedList";
 import { Segment } from "semantic-ui-react";
 import { BillActionContainer } from '@thecointech/tx-statemachine';
 

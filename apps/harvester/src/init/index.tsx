@@ -10,12 +10,7 @@ export async function initialize() {
     // initialize logging first
     log.info(`Loading App: ${__VERSION__} - ${process.env.CONFIG_NAME}`);
 
-    // ConfigStore.initialize();
-
-    // initSidebar();
     await initAccounts();
-    // await initFirestore();
-    // await initGmail();
 
     log.trace("Initialization complete");
     return configureHarversterStore();

@@ -5,7 +5,7 @@ import styles from './styles.module.less';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import {useDropzone, FileRejection} from 'react-dropzone';
 import { log } from '@thecointech/logging';
-import { Wallet } from '@ethersproject/wallet';
+import { Wallet } from 'ethers';
 
 const translate = defineMessages({
   aboveTheTitle: {

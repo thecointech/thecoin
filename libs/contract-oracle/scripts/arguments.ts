@@ -6,7 +6,7 @@ async function getDevLiveArguments() {
   const updater = await getSigner("OracleUpdater");
   const from = DateTime
   .local()
-  .minus({ years: 1.1 })
+  .minus({ years: 1.5 })
   .setZone("America/New_York")
   .set({
     hour: 9,

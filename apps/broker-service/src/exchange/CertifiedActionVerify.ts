@@ -6,7 +6,7 @@ import { GetTransferSigner } from '@thecointech/utilities/VerifiedTransfer'
 import { ValidateError } from '@tsoa/runtime';
 import { getBrokerCADAddress } from '../status';
 import constants from '../status/constant.json' assert { type: 'json' };
-import { GetContract } from './Wallet';
+import { GetContract } from '../signer/Wallet';
 
 type AnyAction = CertifiedTransfer | UberTransferAction;
 
@@ -14,7 +14,7 @@ type AnyAction = CertifiedTransfer | UberTransferAction;
 const validBalance = async (transfer: CertifiedTransferRequest) => {
   const contract = await GetContract();
   const userBalance = await contract.balanceOf(transfer.from);
-  return userBalance.toNumber() >= (transfer.fee + transfer.value);
+  return userBalance >= (transfer.fee + transfer.value);
 }
 
 const validDestination = (action: AnyAction, brokerCAD: string) => NormalizeAddress(action.transfer.to) === NormalizeAddress(brokerCAD);

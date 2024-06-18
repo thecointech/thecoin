@@ -1,7 +1,7 @@
 {
   "name": "@thecointech/tx-processor",
-  "version": "0.2.114",
-  "private": "true",
+  "version": "0.2.128",
+  "private": true,
   "type": "module",
   "description": "The Coin: A command-line app for completing transactions",
   "keywords": [
@@ -9,17 +9,16 @@
   ],
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "scripts": {
-    "build": "yarn tsc -b tsconfig.build.json",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
     "dev": "run-env ./src/main.ts",
-    "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
-    "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
-    "prod": "cross-env CONFIG_NAME=prod yarn start",
-    "start": "cross-env CONFIG_NAME=prod yarn run-env ./build/main.js",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
+    "dev:live": "run -T cross-env CONFIG_NAME=devlive yarn dev",
+    "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn dev",
+    "prod": "run -T cross-env CONFIG_NAME=prod yarn start",
+    "start": "run -T cross-env CONFIG_NAME=prod yarn run-env ./build/main.js",
+    "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [
@@ -30,16 +29,15 @@
     ".": "./build/index.js"
   },
   "dependencies": {
-    "@thecointech/logging": "^0.2.114",
-    "@thecointech/setenv": "^0.2.114",
-    "@thecointech/tx-bill": "^0.2.114",
-    "@thecointech/tx-deposit": "^0.2.114",
-    "@thecointech/tx-etransfer": "^0.2.114",
-    "@thecointech/tx-plugins": "^0.2.114",
+    "@thecointech/logging": "^0.2.128",
+    "@thecointech/setenv": "^0.2.128",
+    "@thecointech/tx-bill": "^0.2.128",
+    "@thecointech/tx-deposit": "^0.2.128",
+    "@thecointech/tx-etransfer": "^0.2.128",
+    "@thecointech/tx-plugins": "^0.2.128",
     "open": "^8.2.1"
   },
   "devDependencies": {
-    "@thecointech/site-app": "^0.2.114",
-    "jest": "*"
+    "@thecointech/site-app": "^0.2.128"
   }
 }

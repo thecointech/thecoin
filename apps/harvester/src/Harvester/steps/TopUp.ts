@@ -6,6 +6,8 @@ import { log } from '@thecointech/logging';
 const TopUpKey = 'TopUp';
 export class TopUp implements ProcessingStage {
 
+  readonly name = 'TopUp';
+
   topUp = 10;
 
   constructor(config?: Record<string, string|number>) {

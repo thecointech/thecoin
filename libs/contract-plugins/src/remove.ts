@@ -1,12 +1,9 @@
-import { Signer } from '@ethersproject/abstract-signer';
+import { Signer } from 'ethers';
 import { DateTime } from 'luxon';
-import { keccak256 } from '@ethersproject/solidity';
-import { verifyMessage } from '@ethersproject/wallet';
-import { arrayify } from '@ethersproject/bytes';
+import { solidityPackedKeccak256, verifyMessage, getBytes, type Overrides } from 'ethers';
 import { sign } from "@thecointech/utilities/SignedMessages";
-import type { IPluggable } from './types/contracts';
+import type { IPluggable } from './codegen/contracts';
 import type { RemovePluginRequest } from '@thecointech/types';
-import type { Overrides } from 'ethers';
 // export type RemovePluginRequest = {
 //   user: string;
 //   chainId: number;
@@ -16,7 +13,7 @@ import type { Overrides } from 'ethers';
 // }
 
 function getRemovePluginBuffer(request: Omit<RemovePluginRequest, 'signature'>) {
-  const hash = keccak256(
+  const hash = solidityPackedKeccak256(
     ["uint", "uint", "uint"],
     [
       request.chainId,
@@ -24,7 +21,7 @@ function getRemovePluginBuffer(request: Omit<RemovePluginRequest, 'signature'>) 
       request.signedAt.toMillis()
     ]
   );
-  return arrayify(hash);
+  return getBytes(hash);
 }
 
 export async function buildRemovePluginRequest(
@@ -50,7 +47,7 @@ export async function buildRemovePluginRequest(
   };
 }
 
-export async function removePlugin(contract: IPluggable, request: RemovePluginRequest, overrides?: Overrides) {
+export async function removePlugin(contract: IPluggable, request: RemovePluginRequest, overrides: Overrides = {}) {
   const tx = await contract.pl_removePlugin({
     ...request,
     msSignedAt: request.signedAt.toMillis(),
