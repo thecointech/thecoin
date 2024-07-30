@@ -40,7 +40,8 @@ const startDate = DateTime.fromObject({
 })
 
 // Get date of last transaction
-const tx = await loadAndMergeHistory(0, tcCore, testAddress);
+const initBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0", 10);
+const tx = await loadAndMergeHistory(initBlock, tcCore, testAddress);
 const lastTxDate = tx[tx.length - 1]?.date ?? startDate;
 console.log(`Last tx: ${lastTxDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
 
