@@ -1,5 +1,5 @@
 import { AnyAction, getIncompleteActions, isType } from '@thecointech/broker-db';
-import { TheCoin } from '@thecointech/contract-core/*';
+import { TheCoin } from '@thecointech/contract-core';
 import { RbcApi } from '@thecointech/rbcapi';
 import { Processor as BillProcessor } from '@thecointech/tx-bill';
 import { Processor as PluginProcessor } from '@thecointech/tx-plugins';
@@ -14,6 +14,23 @@ import { isUberTransfer } from '@thecointech/utilities/UberTransfer'
 export async function processTransfers(tcCore: TheCoin, bank: RbcApi) {
   log.debug('Processing All Transfers');
 
+  const allActions = await fetchTransfers();
+  const results = await processActions(allActions, tcCore, bank);
+
+  const completed = results.filter(a => getCurrentState(a).name == 'complete');
+  log.info(
+    {
+      total: allActions.length,
+      completed: completed.length,
+      skipped: results.length - completed.length
+    },
+    `Processed {total} transactions, completed {completed}, skipped {skipped}`
+  );
+  return results;
+}
+
+
+async function fetchTransfers() {
   let bills = await getIncompleteActions("Bill");
   let plugins = await getIncompleteActions("Plugin");
   let etransfers = await getIncompleteActions("Sell");
@@ -25,25 +42,44 @@ export async function processTransfers(tcCore: TheCoin, bank: RbcApi) {
     ...purchases.map(b => ({ ...b, executeDate: b.data.date.toMillis() })),
   ];
   allActions.sort((a, b) => a.executeDate - b.executeDate);
+  return allActions;
+}
 
+
+export async function processActions(allActions: AnyAction[], tcCore: TheCoin, bank: RbcApi) {
   const r: AnyActionContainer[] = [];
+
+  const usersWithFailedTxs = new Set<string>();
 
   // TODO!  https://github.com/thecointech/thecoin/issues/558
   for (const action of allActions) {
+    if (usersWithFailedTxs.has(action.address)) {
+      log.debug({ initialId: action.data.initialId, address: action.address }, "Skipping {initialId} for {address} due to prior failure");
+      continue;
+    }
     try {
       const executed = await processAction(action, tcCore, bank);
       r.push(executed);
+
+      // Always process deposits.
+      if (action.type !== 'Buy') {
+        // If the last transition resulted in an error, mark the
+        // user as having a failed transaction
+        if (getCurrentState(executed).name == 'error') {
+          usersWithFailedTxs.add(action.address);
+        }
+      }
     }
-    catch (e: any) {
-      // Do not let a failed transaction derail the whole party
-      log.error(e, 'Unknown error processing {initialId}', { initialId: action.data.initialId });
+    catch (err: any) {
+      // Prevent this user from continuing processing
+      log.error({ initialId: action.data.initialId, err }, 'Unknown error processing {initialId}', );
+      usersWithFailedTxs.add(action.address);
     }
   }
 
-  const completed = r.filter(a => getCurrentState(a).name == 'complete');
-  log.info(`Processed ${allActions.length} transactions, completed ${completed.length}`);
   return r;
 }
+
 
 async function processAction(action: AnyAction, tcCore: TheCoin, bank: RbcApi) {
   if (isType(action, 'Bill')) {
@@ -75,6 +111,7 @@ async function processAction(action: AnyAction, tcCore: TheCoin, bank: RbcApi) {
     throw new Error(`Unknown action type: ${action.type}`);
   }
 }
+
 
 async function getAllPurchaseActions() {
   let incomplete = await getIncompleteActions("Buy");

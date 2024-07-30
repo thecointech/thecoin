@@ -28,7 +28,7 @@
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
     "build": "run -T tsc -b",
-    "test": "yarn :jest",
+    "test": "run :jest",
     "scraper:record": "yarn run-env ./src/scraper/main.ts --record"
   },
   "devDependencies": {
