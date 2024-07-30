@@ -21,65 +21,52 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
   let failedCandidate;
 
   while (Date.now() < startTick + timeout) {
-    const frame = await getFrame(page, event);
+    const frames = page.frames();
+    for (const frame of frames) {
 
-    const elements = await getAllElements(frame);
-    const withSiblings = fillOutSiblingText(elements);
+      // Get all elements in frame
+      const candidates = await getCandidates(frame, event);
+      if (candidates.length == 0) {
+        continue;
+      }
 
-    const candidates: FoundElement[] = [];
-    for (const el of withSiblings) {
-      const score = await scoreElement(el.data, event);
-      if (score > 0) {
-        candidates.push({
-          ...el,
-          score
-        })
+      // Sort by score to see if any element is close enough
+      const sorted = candidates.sort((a, b) => b.score - a.score);
+      log.debug(`Found ${sorted.length} candidates, best: ${sorted[0]?.score}, second best: ${sorted[1]?.score}`);
+      const candidate = sorted[0];
+
+      // Extra debugging
+      if (process.env.HARVESTER_VERBOSE_SCRAPER) {
+        dbgPrintCandidate(candidate, event);
+      }
+
+      const elapsed = Date.now() - startTick;
+      log.info(`Search took: ${(elapsed / 1000).toFixed(2)}s`)
+
+      // Max score is 125.  70 is chosen arbitrarily, but
+      // works for selector + location + tagName, or
+      // location + siblings + tagName + text + font
+      if (candidate?.score >= 70) {
+        // Do we need to worry about multiple candidates?
+        if (sorted[1]?.score / candidate.score > 0.9) {
+          log.warn(`Second best candidate has  ${sorted[1].score} score`);
+        }
+        return candidate;
+      }
+
+      // remember best candidate for debugging purposes
+      if (candidate.score > (failedCandidate?.score ?? 0)) {
+        failedCandidate = candidate;
       }
     }
-    // const candidates = withSiblings.reduce((acc, el) => {
-    //   acc.push({
-    //     ...el,
-    //     score: await scoreElement(el.data, event),
-    //   })
-    //   return acc;
-    // }, [] as FoundElement[]);
-
-    // Sort by score to see if any element is close enough
-    const sorted = candidates.sort((a, b) => b.score - a.score);
-    log.debug(`Found ${sorted.length} candidates, best: ${sorted[0]?.score}, second best: ${sorted[1]?.score}`);
-    const candidate = sorted[0];
-
-    // Extra debugging
-    if (process.env.HARVESTER_VERBOSE_SCRAPER) {
-      log.debug(`Text: ${event.text} - ${candidate?.data?.text}`);
-      log.debug(`Label: ${event.label} - ${candidate?.data?.label}`);
-      log.debug(`Coords: ${JSON.stringify(event.coords)} - ${JSON.stringify(candidate?.data?.coords)}`);
-      log.debug(`Siblings: ${JSON.stringify(event.siblingText)} - ${JSON.stringify(candidate?.data?.siblingText)}`);
-    }
-
-    const elapsed = Date.now() - startTick;
-    log.info(`Search took: ${(elapsed / 1000).toFixed(2)}ms`)
-
-    // Max score is 125.  70 is chosen arbitrarily, but
-    // works for selector + location + tagName, or
-    // location + siblings + tagName + text + font
-    if (candidate?.score >= 70) {
-      // Do we need to worry about multiple candidates?
-      if (sorted[1]?.score / candidate.score > 0.9) {
-        log.warn(`Second best candidate has  ${sorted[1].score} score`);
-      }
-      return candidate;
-    }
-    failedCandidate = candidate;
     // Continue waiting
     await sleep(500);
   }
 
-  log.debug(' ** Failed Candidate ** ')
-  log.debug(`Text: ${event.text} - ${failedCandidate?.data?.text}`);
-  log.debug(`Label: ${event.label} - ${failedCandidate?.data?.label}`);
-  log.debug(`Coords: ${JSON.stringify(event.coords)} - ${JSON.stringify(failedCandidate?.data?.coords)}`);
-  log.debug(`Siblings: ${JSON.stringify(event.siblingText)} - ${JSON.stringify(failedCandidate?.data?.siblingText)}`);
+  if (failedCandidate) {
+    log.debug(' ** Failed Candidate ** ')
+    dbgPrintCandidate(failedCandidate, event);
+  }
 
   // Special case - Tangerine keeps posting super-annoying surveys
   if (attempts == 0 && await tryCloseSurvey(page)) {
@@ -91,21 +78,46 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
   throw new Error(`Element not found: ${event.selector}`);
 }
 
-async function getFrame(page: Page, click: ElementData) {
-  if (!click.frame) {
-    return page;
-  }
-  // wait for any iframe to load
-  for (let i = 0; i < 20; i++) {
-    const maybe = page.frames().find(f => f.name() == click.frame);
-    if (maybe) return maybe;
+async function getCandidates(frame: Frame, event: ElementData) {
+  const elements = await getAllElements(frame);
+  const withSiblings = fillOutSiblingText(elements);
 
-    // back-off and retry
-    await sleep(1000);
+  const candidates: FoundElement[] = [];
+  for (const el of withSiblings) {
+    const score = await scoreElement(el.data, event);
+    if (score > 0) {
+      candidates.push({
+        ...el,
+        score
+      })
+    }
   }
-  // return page.  Who knows, maybe it'll work?
-  return page;
+  return candidates;
 }
+
+async function dbgPrintCandidate(candidate: FoundElement, event: ElementData, ) {
+  log.debug(`Text: ${event.text} - ${candidate?.data?.text}`);
+  log.debug(`Label: ${event.label} - ${candidate?.data?.label}`);
+  log.debug(`Coords: ${JSON.stringify(event.coords)} - ${JSON.stringify(candidate?.data?.coords)}`);
+  log.debug(`Siblings: ${JSON.stringify(event.siblingText)} - ${JSON.stringify(candidate?.data?.siblingText)}`);
+}
+
+
+// async function getFrame(page: Page, click: ElementData) {
+//   if (!click.frame) {
+//     return page;
+//   }
+//   // wait for any iframe to load
+//   for (let i = 0; i < 20; i++) {
+//     const maybe = page.frames().find(f => f.name() == click.frame);
+//     if (maybe) return maybe;
+
+//     // back-off and retry
+//     await sleep(1000);
+//   }
+//   // return page.  Who knows, maybe it'll work?
+//   return page;
+// }
 
 export async function registerElementAttrFns(page: Page) {
   await page.evaluateOnNewDocument((fns) => {
@@ -267,9 +279,12 @@ export const getAllElements = async (frame: Page|Frame) => {
   const allData: (ElementData|null)[] = await frame.evaluate(
     (...els) => els.map(el =>
       (
-        el instanceof HTMLElement
+        el instanceof HTMLElement &&
+        // Most irrelevant elements (eg header, script) are skipped
+        // due the `instanceof HTMLElement` check, but HTLM & body are not
+        !["HTML", "BODY"].includes(el.tagName) &&
         //@ts-ignore
-        && el.checkVisibility({
+        el.checkVisibility({
           checkOpacity: true,  // Check CSS opacity property too
           checkVisibilityCSS: true // Check CSS visibility property too
         })
@@ -279,15 +294,16 @@ export const getAllElements = async (frame: Page|Frame) => {
     ...allElements
   )
 
-  return allData.reduce((r, data, i) => {
-    // If it's off the edge of the page ignore it
-    if (!data || data.coords.left < 0 || data.coords.top < 0) return r
-    r.push({
-      element: allElements[i] as ElementHandle<HTMLElement>,
-      data
-    })
-    return r
-  }, [] as SearchElement[])
+  return allData
+    .reduce((r, data, i) => {
+      // If it's off the edge of the page ignore it
+      if (!data || data.coords.left < 0 || data.coords.top < 0) return r
+      r.push({
+        element: allElements[i] as ElementHandle<HTMLElement>,
+        data
+      })
+      return r
+    }, [] as SearchElement[])
 }
 
 const BUCKET_PIXELS = 10

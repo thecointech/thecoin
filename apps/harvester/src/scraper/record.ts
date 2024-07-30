@@ -5,7 +5,7 @@ import { debounce } from './debounce';
 import { startElementHighlight } from './highlighter';
 import { getTableData } from './table';
 import { startPuppeteer } from './puppeteer';
-import { ActionTypes, AnyEvent, InputEvent, ValueResult, ValueType } from './types';
+import { ActionTypes, AnyEvent, getSelector, InputEvent, ValueResult, ValueType } from './types';
 import { getValueParsing } from './valueParsing';
 import { log } from '@thecointech/logging';
 import { setEvents } from '../Harvester/config';
@@ -41,7 +41,7 @@ export class Recorder {
   events: AnyEvent[] = [];
 
   // inputs can either be static (ie - constant every time)
-  // or dynamic (ie - supplied each run).  We set the 
+  // or dynamic (ie - supplied each run).  We set the
   // required dynamic inputs in the constructor, and the
   // recording will not be successful if they are not captured.
   dynamicInputs: Record<string, boolean>;
@@ -56,7 +56,6 @@ export class Recorder {
 
   private lastInputEvent: InputEvent | undefined;
 
-
   private constructor(name: ActionTypes, dynamicInputs?: string[]) {
     this.name = name;
     this.screenshotFolder = path.join(outFolder, this.name);
@@ -66,6 +65,7 @@ export class Recorder {
     ) ?? []);
     log.info(`Recording ${this.name} with dynamic inputs: ${dynamicInputs?.join(', ') ?? 'none'}`);
   }
+
   private async initialize(url: string) {
     const { browser, page } = await startPuppeteer(false);
     this.browser = browser;
@@ -177,6 +177,14 @@ export class Recorder {
 
   // Record the stream of events from the browser.
   eventHandler = async (event: AnyEvent) => {
+    // convert URL to frame name
+    if ("frame" in event && event.frame) {
+      event.frame = this.urlToFrameName[event.frame] ?? event.frame;
+    }
+    // Skip duplicate events
+    if (this.isDuplicate(event)) {
+      return;
+    }
     log.debug("event name: " + event.type);
     if (event.type == 'navigation') {
       if (event.to == 'about:blank') {
@@ -222,9 +230,6 @@ export class Recorder {
         log.error("DYNAMIC INPUT MARK WITH NO CB");
         throw new Error();
       }
-      if (event.frame) {
-        event.frame = this.urlToFrameName[event.frame]
-      }
       event.dynamicName = this.onInput.name;
       // Set the input in the webpage
       // clear existing value
@@ -233,7 +238,7 @@ export class Recorder {
       await element?.focus();
       await this.page.keyboard.type(this.onInput.value, { delay: 20 });
       await this.page.evaluate(el => (el as HTMLInputElement).blur(), element);
-      
+
       // await this.page.$eval(event.selector, (el, value) => (el as HTMLInputElement).value = value, this.onInput.value);
       // Mark this input as successfully captured
       this.dynamicInputs[this.onInput.name] = true;
@@ -246,9 +251,6 @@ export class Recorder {
       if (!this.onValue) {
         log.error("VALUE MARK WITH NO CB");
         throw new Error();
-      }
-      if (event.frame) {
-        event.frame = this.urlToFrameName[event.frame]
       }
       event.name = this.onValue.name;
       const text = await this.page.$eval(event.selector, (el => (el as HTMLElement).innerText));
@@ -275,12 +277,12 @@ export class Recorder {
       this.onValue = undefined;
     }
 
-    if (event.type == 'click') {
-      // Dig through any frames on the page to find our element
-      if (event.frame) {
-        event.frame = this.urlToFrameName[event.frame]
-      }
-    }
+    // if (event.type == 'click') {
+    //   // Dig through any frames on the page to find our element
+    //   if (event.frame) {
+    //     event.frame = this.urlToFrameName[event.frame]
+    //   }
+    // }
 
     // If we have a pending input event, add it to the list first
     if (this.lastInputEvent) {
@@ -293,6 +295,26 @@ export class Recorder {
     this.events.push(event);
   }
 
+  isDuplicate(event: AnyEvent) {
+    const lastEvent = this.events[this.events.length - 1];
+    if (
+      lastEvent?.type === event.type &&
+      lastEvent?.timestamp === event.timestamp &&
+      getSelector(lastEvent) === getSelector(event)
+    ) {
+      // Most duplicates are due to multiple events being sent, one with a frame and one without
+      // We don't want to log them twice, but we do want to keep the frame (even if not currently used)
+      if ("frame" in lastEvent && "frame" in event) {
+        if (!lastEvent.frame && event.frame) {
+          lastEvent.frame = event.frame;
+        }
+      }
+      // All duplicates are dropped
+      console.log("Duplicate event");
+      return true;
+    }
+    return false;
+  }
   logEvent(event: AnyEvent) {
     // strip value out to prevent logging sensitive info
     const { value, ...sanitized } = event as any;

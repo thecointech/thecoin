@@ -116,7 +116,7 @@ export async function replayEvents(page: Page, actionName: ActionTypes, events: 
         case 'input': {
           log.debug(`Entering value: ############## into ${event.selector}`);
           await enterValue(page, event, event.value);
-        
+
           // If the user pressed enter, simulate this too
           if (event.hitEnter) {
             if (events[i + 1]?.type == "navigation") {
