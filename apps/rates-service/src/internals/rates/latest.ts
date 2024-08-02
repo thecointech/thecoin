@@ -14,23 +14,23 @@ import { toDateStr } from '../../utils/date';
 //
 // A cached list of all supported exchanges.
 //
+const zeroCoin: CoinRate = {
+  buy: 0,
+  sell: 0,
+  validFrom: 0,
+  validTill: 0,
+}
+const zeroFx: FxRates = {
+  validFrom: 0,
+  validTill: 0,
+  [CurrencyCode.CAD]: 0
+} as any;
+
 const latest = {
   // Initialize with an empty rate (this will never be seen)
-  Coin: {
-    buy: 0,
-    sell: 0,
-    validFrom: 0,
-    validTill: 0,
-  } as CoinRate, // Explicitly label so typescript knows the type when accessing this directly
-
-  FxRates: {
-    validFrom: 0,
-    validTill: 0,
-  } as any as FxRates,
+  Coin: zeroCoin, // Explicitly label so typescript knows the type when accessing this directly
+  FxRates: zeroFx,
 };
-
-// explicitly initialize our supported rates
-latest.FxRates[CurrencyCode.CAD] = 0;
 
 export const updateLatest = (key: RateKey, newRate: RateType) => checkValidity(key, newRate)
   && setNewLatest(key, newRate);
@@ -121,4 +121,10 @@ function checkValidity(key: RateKey, newRate: RateType) {
 export const initLatest = async () => {
   latest.Coin = (await getLatestStored('Coin') ?? latest.Coin) as CoinRate;
   latest.FxRates = (await getLatestStored('FxRates') ?? latest.FxRates) as FxRates;
+};
+
+// Used by testing to reset in between tests
+export const clearLatest = () => {
+  latest.Coin = zeroCoin;
+  latest.FxRates = zeroFx;
 };
