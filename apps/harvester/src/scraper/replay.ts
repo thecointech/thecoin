@@ -150,7 +150,7 @@ export async function replayEvents(page: Page, actionName: ActionTypes, events: 
             const tryReadTable = async () => {
               for (let i = 0; i < 15; i++) {
                 try {
-                  const value = await getTableData(page, event.font);
+                  const value = await getTableData(page, event.font!);
                   if (value.length > 0) {
                     values[event.name ?? 'defaultValue'] = value;
                     return true;
@@ -170,7 +170,7 @@ export async function replayEvents(page: Page, actionName: ActionTypes, events: 
             // All good, continue
             break;
           } else {
-            log.debug(`Reading value: ${event.selector}`);
+            log.debug({name: event.name}, `Reading value: {name}`);
             // The 15 second wait is to compensate for SPA
             // websites who don't have load/navigation events
             // (thanks again tangerine ya bastard!)

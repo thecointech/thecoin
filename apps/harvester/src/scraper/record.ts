@@ -5,7 +5,7 @@ import { debounce } from './debounce';
 import { startElementHighlight } from './highlighter';
 import { getTableData } from './table';
 import { startPuppeteer } from './puppeteer';
-import { ActionTypes, AnyEvent, BaseEvent, getSelector, InputEvent, ValueResult, ValueType } from './types';
+import { ActionTypes, AnyEvent, InputEvent, ValueResult, ValueType } from './types';
 import { getValueParsing } from './valueParsing';
 import { log } from '@thecointech/logging';
 import { setEvents } from '../Harvester/config';
@@ -297,11 +297,7 @@ export class Recorder {
 
   isDuplicate(event: AnyEvent) {
     const lastEvent = this.events[this.events.length - 1];
-    if (
-      lastEvent?.type === event.type &&
-      lastEvent?.timestamp === event.timestamp &&
-      getSelector(lastEvent) === getSelector(event)
-    ) {
+    if (lastEvent?.id == event.id) {
       // Most duplicates are due to multiple events being sent, one with a frame and one without
       // We don't want to log them twice, but we do want to keep the frame (even if not currently used)
       if ("frame" in lastEvent && "frame" in event) {
@@ -389,27 +385,32 @@ function onNewDocument() {
       if (target) {
         // Get local copies of the data to ensure we don't care
         // about any changes that may be made during the click
-        const sendType = __clickAction;
         const data = window.getElementData(target);
-        const sendEvent = () => {
-          __onAnyEvent({
-            type: sendType,
-            timestamp: Date.now(),
-            id: crypto.randomUUID(),
-            clickX: ev.pageX,
-            clickY: ev.pageY,
-            ...data
-          });
+        const evt = {
+          timestamp: Date.now(),
+          id: crypto.randomUUID(),
+          clickX: ev.pageX,
+          clickY: ev.pageY,
+          ...data
         }
 
         if (__clickAction == "dynamicInput") {
           // Allow any events to process before
           // we take over the execution of the click
-          setTimeout(sendEvent, 1000);
+          setTimeout(() => {
+            __onAnyEvent({
+              type: "dynamicInput",
+              dynamicName: "--UNSET--",
+              ...evt
+            })
+          }, 750);
         }
         else {
           // Send immediately
-          sendEvent();
+          __onAnyEvent({
+            type: __clickAction,
+            ...evt
+          });
         }
 
         // Take no action if reading value

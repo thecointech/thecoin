@@ -1,3 +1,4 @@
+import { sleep } from '@thecointech/async';
 import { startPuppeteer } from './puppeteer';
 import { Recorder } from './record';
 import { replayEvents } from './replay';
@@ -13,10 +14,11 @@ let doReplay = true;
 
 const recorder =  await Recorder.instance("chqBalance", "https://www.td.com/ca/en/personal-banking");
 // const recorder =  await Recorder.instance("chqBalance", "https://www.google.com", ["SearchFor"]);
-await new Promise(resolve => setTimeout(resolve, 3 * 1000));
+// const recorder =  await Recorder.instance("chqBalance", "https://www.google.com");
+await sleep(3000);
 const selected = await recorder.setRequiredValue("SearchFor");
 console.log("Value " + selected.text);
-// // Now try and auto-input value
+// Now try and auto-input value
 // await new Promise(resolve => setTimeout(resolve, 2 * 1000));
 // const r = await recorder.setDynamicInput("SearchFor", "Chicken");
 // console.log("Selector " + r)

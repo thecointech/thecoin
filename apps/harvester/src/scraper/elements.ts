@@ -15,9 +15,6 @@ declare global {
     getElementData: (el: HTMLElement, skipSibling?: boolean) => ElementData;
   }
 }
-// declare let window: Window & {
-//   getElementData: (el: HTMLElement, skipSibling?: boolean) => ElementData
-// };
 
 export async function getElementForEvent(page: Page, event: ElementData, timeout=30000, attempts=0) {
 
@@ -106,23 +103,6 @@ async function dbgPrintCandidate(candidate: FoundElement, event: ElementData, ) 
   log.debug(`Coords: ${JSON.stringify(event.coords)} - ${JSON.stringify(candidate?.data?.coords)}`);
   log.debug(`Siblings: ${JSON.stringify(event.siblingText)} - ${JSON.stringify(candidate?.data?.siblingText)}`);
 }
-
-
-// async function getFrame(page: Page, click: ElementData) {
-//   if (!click.frame) {
-//     return page;
-//   }
-//   // wait for any iframe to load
-//   for (let i = 0; i < 20; i++) {
-//     const maybe = page.frames().find(f => f.name() == click.frame);
-//     if (maybe) return maybe;
-
-//     // back-off and retry
-//     await sleep(1000);
-//   }
-//   // return page.  Who knows, maybe it'll work?
-//   return page;
-// }
 
 export async function registerElementAttrFns(page: Page) {
   await page.evaluateOnNewDocument((fns) => {

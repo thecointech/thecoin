@@ -113,5 +113,3 @@ export type ValueEvent = {
 
 
 export type AnyEvent = NavigationEvent|ClickEvent|InputEvent|DynamicInputEvent|UnloadEvent|LoadEvent|ValueEvent;
-
-export const getSelector = (event: AnyEvent) => "selector" in event ? event.selector : undefined;
