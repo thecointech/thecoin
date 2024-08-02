@@ -127,7 +127,7 @@ function enterCS() {
       // Check if someone else currently holds the lock
       if (startKey?.toMillis() != completeKey?.toMillis()) {
 
-        if (completeKey?.toMillis() < DateTime.now().minus({hours: 6}).toMillis()) {
+        if (startKey?.toMillis() < DateTime.now().minus({hours: 6}).toMillis()) {
           // We assume that a 6-hr gap means that someone else has crashed
           log.error("Expired lock detected, ignoring");
         }
