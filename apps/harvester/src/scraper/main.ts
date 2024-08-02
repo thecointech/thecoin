@@ -1,3 +1,4 @@
+import { sleep } from '@thecointech/async';
 import { startPuppeteer } from './puppeteer';
 import { Recorder } from './record';
 import { replayEvents } from './replay';
@@ -11,22 +12,24 @@ let doReplay = true;
 //    const config = await getProcessConfig();
 //    let events: AnyEvent[] = config?.scraping?.chqBalance ?? [];
 
-const recorder =  await Recorder.instance("chqBalance", "https://www.google.com", ["SearchFor"]);
-await new Promise(resolve => setTimeout(resolve, 3 * 1000));
+const recorder =  await Recorder.instance("chqBalance", "https://www.td.com/ca/en/personal-banking");
+// const recorder =  await Recorder.instance("chqBalance", "https://www.google.com", ["SearchFor"]);
+// const recorder =  await Recorder.instance("chqBalance", "https://www.google.com");
+await sleep(3000);
 const selected = await recorder.setRequiredValue("SearchFor");
 console.log("Value " + selected.text);
 // Now try and auto-input value
-await new Promise(resolve => setTimeout(resolve, 2 * 1000));
-const r = await recorder.setDynamicInput("SearchFor", "Chicken");
-console.log("Selector " + r)
+// await new Promise(resolve => setTimeout(resolve, 2 * 1000));
+// const r = await recorder.setDynamicInput("SearchFor", "Chicken");
+// console.log("Selector " + r)
 
-// Check result
-await new Promise(resolve => setTimeout(resolve, 3 * 1000));
-const result = await recorder.setRequiredValue("SearchResult");
-console.log("Result " + result.text);
+// // Check result
+// await new Promise(resolve => setTimeout(resolve, 3 * 1000));
+// const result = await recorder.setRequiredValue("SearchResult");
+// console.log("Result " + result.text);
 
 const events = recorder.events;
-await Recorder.release("chqBalance");
+// await Recorder.release("chqBalance");
 await recorder.disconnected;
 
 if (doReplay) {

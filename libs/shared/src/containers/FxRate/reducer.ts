@@ -4,6 +4,7 @@ import { sendValues } from '../../store/sagas';
 import { fetchRate, FXRate } from '@thecointech/fx-rates';
 import type { ApplicationBaseState } from '../../types';
 import type { FxRatesState, IFxRates } from './types';
+import { log } from "@thecointech/logging";
 
 const FXRATES_KEY: keyof ApplicationBaseState = "fxRates";
 
@@ -52,7 +53,7 @@ export class FxRateReducer extends SagaReducer<IFxRates, FxRatesState>(FXRATES_K
         newState.rates = [newFxRate];
     }
     catch (err) {
-      console.error(err);
+      log.error(err, "Failed to fetch rates at date: ", date);
     }
     // Even in the case of the throw, we store values to decrement our counter
     yield this.storeValues(newState);

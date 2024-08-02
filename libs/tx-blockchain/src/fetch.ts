@@ -30,8 +30,10 @@ export async function loadAndMergeHistory(fromBlock: number, contract: TheCoin, 
 
   try {
     const contractAddress = await contract.getAddress();
+    // Fetching data requires etherscan (Infura limits logs length to 149)
     const provider = new Erc20Provider();
     const allTxs = await provider.getERC20History({address, contractAddress, fromBlock});
+    const contractClean = contract.connect(provider);
 
     // Fee's are listed separately here, but treated as a single TX in the rest of TheCoin
     //const xferAssist = NormalizeAddress(process.env.WALLET_BrokerTransferAssistant_ADDRESS!);
@@ -53,19 +55,20 @@ export async function loadAndMergeHistory(fromBlock: number, contract: TheCoin, 
         converted[tx.hash].fee = toDecimal(tx.value);
       }
     }
-    const history = Object.values(converted).sort((a, b) => a.date.toMillis() - b.date.toMillis());
-
-    let exact = await fetchExactTimestamps(contract, fromBlock, address);
+    // Apply exact timestamps
+    const normalizedAddress = address ? NormalizeAddress(address) : address;
+    const history = Object.values(converted)
+    const exact = await fetchExactTimestamps(contractClean, fromBlock, address);
     for (const tx of history) {
       if (exact[tx.txHash]) {
         tx.date = DateTime.fromMillis(exact[tx.txHash]);
       }
-      if (NormalizeAddress(tx.from) == address) {
+      if (NormalizeAddress(tx.from) == normalizedAddress) {
         tx.change = -tx.change;
       }
     }
-
-    return history;
+    const sorted = history.sort((a, b) => a.date.toMillis() - b.date.toMillis());
+    return sorted;
   }
   catch (err: any) {
     log.error(err, err.message);
@@ -87,13 +90,39 @@ async function fetchExactTimestamps(contract: TheCoin, fromBlock: number, addres
   }
 }
 
-async function filterExactTransfers(contract: TheCoin, fromBlock: number, addresses: [string|undefined, string|undefined]) {
+async function filterExactTransfers(contract: TheCoin, fromBlock: number|string, addresses: [string|undefined, string|undefined], toBlock?: number|string) : Promise<Record<string, number>> {
   const filter = contract.filters.ExactTransfer(...addresses);
-  const logs = await contract.queryFilter(filter, fromBlock);
-  return logs.reduce((acc, item) => ({
-    ...acc,
-    [item.transactionHash]: Number(item.args.timestamp)
-  }), {} as Record<string, number>);
+  try {
+    const logs = await contract.queryFilter(filter, fromBlock, toBlock);
+    return logs.reduce((acc, item) => ({
+      ...acc,
+      [item.transactionHash]: Number(item.args.timestamp)
+    }), {} as Record<string, number>);
+  }
+  catch (err: unknown) {
+    // NOTE: This catch was implemented for infura, however it turned out to be
+    // much simpler to simply use etherscan.  Leaving this here for reference
+    // but it should not be relied on as working code
+    if (err instanceof Error) {
+      // Ethers wraps the error we actually want
+      const error = (err as any).error;
+      if (error?.code === -32005) {
+        // query returned more than XXX results, split & re-query
+        const { from, to } = error.data;
+        if (from && to) {
+          // If we have this error, we can split & re-query
+          console.log(`Split query: ${from} - ${to}`);
+          const first = await filterExactTransfers(contract, from, addresses, to);
+          const second = await filterExactTransfers(contract, to, addresses);
+          return {
+            ...first,
+            ...second
+          }
+        }
+      }
+    }
+    throw err;
+  }
 }
 
 export function calculateTxBalances(currentBalance: bigint, history: Transaction[]) {

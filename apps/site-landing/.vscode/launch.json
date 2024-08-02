@@ -1,9 +1,6 @@
 {
-	// Use IntelliSense to learn about possible attributes.
-	// Hover to view descriptions of existing attributes.
-	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-	"version": "0.2.0",
-	"configurations": [
+  "version": "0.2.0",
+  "configurations": [
     {
       "name": "Run Simulation",
       "request": "launch",
@@ -25,23 +22,26 @@
       "type": "pwa-chrome",
       "url": "http://localhost:3000",
       "sourceMaps": true,
-      "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }",
-    },
-    {
-      "type": "pwa-node",
-      "name": "vscode-jest-tests",
-      "request": "launch",
-      "program": "${workspaceFolder}/../../node_modules/jest/bin/jest",
-      "args": [
-        "${fileBasename}",
-        "--runInBand",
-        "--config",
-        "jest.config.js"
-      ],
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
       "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }"
     },
-	]
+    {
+      "type": "node",
+      "name": "vscode-jest-tests.v2",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "yarn",
+      "args": [
+        "test",
+        "--runInBand",
+        "--watchAll=false",
+        "--testNamePattern",
+        "${jest.testNamePattern}",
+        "--runTestsByPath",
+        "${jest.testFile}"
+      ],
+      "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }"
+    }
+  ]
 }

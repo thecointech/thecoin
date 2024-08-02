@@ -10412,56 +10412,56 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/account@npm:^0.2.128, @thecointech/account@workspace:libs/account":
+"@thecointech/account@npm:^0.2.129, @thecointech/account@workspace:libs/account":
   version: 0.0.0-use.local
   resolution: "@thecointech/account@workspace:libs/account"
   dependencies:
-    "@thecointech/contract-core": "npm:^0.2.128"
-    "@thecointech/fx-rates": "npm:^0.2.128"
-    "@thecointech/idx": "npm:^0.2.128"
-    "@thecointech/logging": "npm:^0.2.128"
-    "@thecointech/signers": "npm:^0.2.128"
-    "@thecointech/tx-blockchain": "npm:^0.2.128"
-    "@thecointech/utilities": "npm:^0.2.128"
+    "@thecointech/contract-core": "npm:^0.2.129"
+    "@thecointech/fx-rates": "npm:^0.2.129"
+    "@thecointech/idx": "npm:^0.2.129"
+    "@thecointech/logging": "npm:^0.2.129"
+    "@thecointech/signers": "npm:^0.2.129"
+    "@thecointech/tx-blockchain": "npm:^0.2.129"
+    "@thecointech/utilities": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/apis@npm:^0.2.128, @thecointech/apis@workspace:libs/apis":
+"@thecointech/apis@npm:^0.2.129, @thecointech/apis@workspace:libs/apis":
   version: 0.0.0-use.local
   resolution: "@thecointech/apis@workspace:libs/apis"
   dependencies:
-    "@thecointech/async": "npm:^0.2.128"
-    "@thecointech/broker-cad": "npm:^0.2.128"
-    "@thecointech/nft": "npm:^0.2.128"
-    "@thecointech/pricing": "npm:^0.2.128"
+    "@thecointech/async": "npm:^0.2.129"
+    "@thecointech/broker-cad": "npm:^0.2.129"
+    "@thecointech/nft": "npm:^0.2.129"
+    "@thecointech/pricing": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/async@npm:^0.2.128, @thecointech/async@workspace:libs/async":
+"@thecointech/async@npm:^0.2.129, @thecointech/async@workspace:libs/async":
   version: 0.0.0-use.local
   resolution: "@thecointech/async@workspace:libs/async"
   languageName: unknown
   linkType: soft
 
-"@thecointech/bank-interface@npm:^0.2.128, @thecointech/bank-interface@workspace:libs/bank-interface":
+"@thecointech/bank-interface@npm:^0.2.129, @thecointech/bank-interface@workspace:libs/bank-interface":
   version: 0.0.0-use.local
   resolution: "@thecointech/bank-interface@workspace:libs/bank-interface"
   dependencies:
-    "@thecointech/types": "npm:^0.2.128"
+    "@thecointech/types": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/blockpass@npm:^0.2.128, @thecointech/blockpass@workspace:libs/blockpass":
+"@thecointech/blockpass@npm:^0.2.129, @thecointech/blockpass@workspace:libs/blockpass":
   version: 0.0.0-use.local
   resolution: "@thecointech/blockpass@workspace:libs/blockpass"
   dependencies:
-    "@thecointech/async": "npm:^0.2.128"
-    "@thecointech/broker-cad": "npm:^0.2.128"
-    "@thecointech/shared": "npm:^0.2.128"
+    "@thecointech/async": "npm:^0.2.129"
+    "@thecointech/broker-cad": "npm:^0.2.129"
+    "@thecointech/shared": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/broker-cad@npm:^0.2.128, @thecointech/broker-cad@workspace:apis/broker/ts":
+"@thecointech/broker-cad@npm:^0.2.129, @thecointech/broker-cad@workspace:apis/broker/ts":
   version: 0.0.0-use.local
   resolution: "@thecointech/broker-cad@workspace:apis/broker/ts"
   dependencies:
@@ -10469,12 +10469,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/broker-db@npm:^0.2.128, @thecointech/broker-db@workspace:libs/broker-db":
+"@thecointech/broker-db@npm:^0.2.129, @thecointech/broker-db@workspace:libs/broker-db":
   version: 0.0.0-use.local
   resolution: "@thecointech/broker-db@workspace:libs/broker-db"
   dependencies:
-    "@thecointech/firestore": "npm:^0.2.128"
-    "@thecointech/utilities": "npm:^0.2.128"
+    "@thecointech/firestore": "npm:^0.2.129"
+    "@thecointech/utilities": "npm:^0.2.129"
     fast-deep-equal: "npm:3.1.3"
   languageName: unknown
   linkType: soft
@@ -10485,17 +10485,17 @@ __metadata:
   dependencies:
     "@google-cloud/firestore": "npm:4.12.3"
     "@google-cloud/storage": "npm:^7.7.0"
-    "@thecointech/async": "npm:^0.2.128"
-    "@thecointech/contract-core": "npm:^0.2.128"
-    "@thecointech/contract-plugins": "npm:^0.2.128"
-    "@thecointech/email": "npm:^0.2.128"
-    "@thecointech/logging": "npm:^0.2.128"
-    "@thecointech/pricing": "npm:^0.2.128"
-    "@thecointech/setenv": "npm:^0.2.128"
-    "@thecointech/signers": "npm:^0.2.128"
-    "@thecointech/tx-bill": "npm:^0.2.128"
-    "@thecointech/tx-etransfer": "npm:^0.2.128"
-    "@thecointech/utilities": "npm:^0.2.128"
+    "@thecointech/async": "npm:^0.2.129"
+    "@thecointech/contract-core": "npm:^0.2.129"
+    "@thecointech/contract-plugins": "npm:^0.2.129"
+    "@thecointech/email": "npm:^0.2.129"
+    "@thecointech/logging": "npm:^0.2.129"
+    "@thecointech/pricing": "npm:^0.2.129"
+    "@thecointech/setenv": "npm:^0.2.129"
+    "@thecointech/signers": "npm:^0.2.129"
+    "@thecointech/tx-bill": "npm:^0.2.129"
+    "@thecointech/tx-etransfer": "npm:^0.2.129"
+    "@thecointech/utilities": "npm:^0.2.129"
     "@tsoa/runtime": "npm:6.2.0"
     "@types/cors": "npm:^2.8.10"
     "@types/swagger-ui-express": "npm:^4.1.1"
@@ -10510,71 +10510,71 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/contract-base@npm:^0.2.128, @thecointech/contract-base@workspace:libs/contract-base":
+"@thecointech/contract-base@npm:^0.2.129, @thecointech/contract-base@workspace:libs/contract-base":
   version: 0.0.0-use.local
   resolution: "@thecointech/contract-base@workspace:libs/contract-base"
   dependencies:
-    "@thecointech/signers": "npm:^0.2.128"
-    "@thecointech/utilities": "npm:^0.2.128"
+    "@thecointech/signers": "npm:^0.2.129"
+    "@thecointech/utilities": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/contract-core@npm:^0.2.128, @thecointech/contract-core@workspace:libs/contract-core":
+"@thecointech/contract-core@npm:^0.2.129, @thecointech/contract-core@workspace:libs/contract-core":
   version: 0.0.0-use.local
   resolution: "@thecointech/contract-core@workspace:libs/contract-core"
   dependencies:
     "@openzeppelin/contracts-upgradeable": "npm:^4.5.2"
     "@solidity-parser/parser": "npm:^0.14.5"
-    "@thecointech/async": "npm:^0.2.128"
-    "@thecointech/contract-base": "npm:^0.2.128"
-    "@thecointech/contract-oracle": "npm:^0.2.128"
-    "@thecointech/contract-plugins": "npm:^0.2.128"
-    "@thecointech/contract-tools": "npm:^0.2.128"
-    "@thecointech/fx-rates": "npm:^0.2.128"
-    "@thecointech/setenv": "npm:^0.2.128"
+    "@thecointech/async": "npm:^0.2.129"
+    "@thecointech/contract-base": "npm:^0.2.129"
+    "@thecointech/contract-oracle": "npm:^0.2.129"
+    "@thecointech/contract-plugins": "npm:^0.2.129"
+    "@thecointech/contract-tools": "npm:^0.2.129"
+    "@thecointech/fx-rates": "npm:^0.2.129"
+    "@thecointech/setenv": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/contract-nft@npm:^0.2.128, @thecointech/contract-nft@workspace:libs/contract-nft":
+"@thecointech/contract-nft@npm:^0.2.129, @thecointech/contract-nft@workspace:libs/contract-nft":
   version: 0.0.0-use.local
   resolution: "@thecointech/contract-nft@workspace:libs/contract-nft"
   dependencies:
     "@openzeppelin/contracts": "npm:^4.5.0"
-    "@thecointech/contract-base": "npm:^0.2.128"
-    "@thecointech/contract-core": "npm:^0.2.128"
-    "@thecointech/contract-tools": "npm:^0.2.128"
-    "@thecointech/setenv": "npm:^0.2.128"
-    "@thecointech/signers": "npm:^0.2.128"
-    "@thecointech/utilities": "npm:^0.2.128"
+    "@thecointech/contract-base": "npm:^0.2.129"
+    "@thecointech/contract-core": "npm:^0.2.129"
+    "@thecointech/contract-tools": "npm:^0.2.129"
+    "@thecointech/setenv": "npm:^0.2.129"
+    "@thecointech/signers": "npm:^0.2.129"
+    "@thecointech/utilities": "npm:^0.2.129"
     "@types/bs58": "npm:^4.0.1"
     bs58: "npm:^4.0.1"
   languageName: unknown
   linkType: soft
 
-"@thecointech/contract-oracle@npm:^0.2.128, @thecointech/contract-oracle@workspace:libs/contract-oracle":
+"@thecointech/contract-oracle@npm:^0.2.129, @thecointech/contract-oracle@workspace:libs/contract-oracle":
   version: 0.0.0-use.local
   resolution: "@thecointech/contract-oracle@workspace:libs/contract-oracle"
   dependencies:
     "@openzeppelin/contracts-upgradeable": "npm:^4.5.2"
-    "@thecointech/async": "npm:^0.2.128"
-    "@thecointech/contract-base": "npm:^0.2.128"
-    "@thecointech/contract-tools": "npm:^0.2.128"
-    "@thecointech/jestutils": "npm:^0.2.128"
-    "@thecointech/setenv": "npm:^0.2.128"
+    "@thecointech/async": "npm:^0.2.129"
+    "@thecointech/contract-base": "npm:^0.2.129"
+    "@thecointech/contract-tools": "npm:^0.2.129"
+    "@thecointech/jestutils": "npm:^0.2.129"
+    "@thecointech/setenv": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/contract-plugin-converter@npm:^0.2.128, @thecointech/contract-plugin-converter@workspace:libs/contract-plugin-converter":
+"@thecointech/contract-plugin-converter@npm:^0.2.129, @thecointech/contract-plugin-converter@workspace:libs/contract-plugin-converter":
   version: 0.0.0-use.local
   resolution: "@thecointech/contract-plugin-converter@workspace:libs/contract-plugin-converter"
   dependencies:
     "@openzeppelin/contracts-upgradeable": "npm:^4.5.2"
-    "@thecointech/async": "npm:^0.2.128"
-    "@thecointech/contract-core": "npm:^0.2.128"
-    "@thecointech/contract-oracle": "npm:^0.2.128"
-    "@thecointech/contract-plugins": "npm:^0.2.128"
-    "@thecointech/contract-tools": "npm:^0.2.128"
-    "@thecointech/setenv": "npm:^0.2.128"
+    "@thecointech/async": "npm:^0.2.129"
+    "@thecointech/contract-core": "npm:^0.2.129"
+    "@thecointech/contract-oracle": "npm:^0.2.129"
+    "@thecointech/contract-plugins": "npm:^0.2.129"
+    "@thecointech/contract-tools": "npm:^0.2.129"
+    "@thecointech/setenv": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
@@ -10583,51 +10583,51 @@ __metadata:
   resolution: "@thecointech/contract-plugin-roundnumber@workspace:libs/contract-plugin-roundnumber"
   dependencies:
     "@openzeppelin/contracts": "npm:^4.8.0"
-    "@thecointech/async": "npm:^0.2.128"
-    "@thecointech/contract-core": "npm:^0.2.128"
-    "@thecointech/contract-oracle": "npm:^0.2.128"
-    "@thecointech/contract-plugins": "npm:^0.2.128"
-    "@thecointech/contract-tools": "npm:^0.2.128"
-    "@thecointech/setenv": "npm:^0.2.128"
+    "@thecointech/async": "npm:^0.2.129"
+    "@thecointech/contract-core": "npm:^0.2.129"
+    "@thecointech/contract-oracle": "npm:^0.2.129"
+    "@thecointech/contract-plugins": "npm:^0.2.129"
+    "@thecointech/contract-tools": "npm:^0.2.129"
+    "@thecointech/setenv": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/contract-plugin-shockabsorber@npm:^0.2.128, @thecointech/contract-plugin-shockabsorber@workspace:libs/contract-plugin-shockabsorber":
+"@thecointech/contract-plugin-shockabsorber@npm:^0.2.129, @thecointech/contract-plugin-shockabsorber@workspace:libs/contract-plugin-shockabsorber":
   version: 0.0.0-use.local
   resolution: "@thecointech/contract-plugin-shockabsorber@workspace:libs/contract-plugin-shockabsorber"
   dependencies:
     "@nomicfoundation/hardhat-network-helpers": "npm:^1.0.10"
     "@openzeppelin/contracts-upgradeable": "npm:^4.5.2"
-    "@thecointech/async": "npm:^0.2.128"
-    "@thecointech/contract-core": "npm:^0.2.128"
-    "@thecointech/contract-oracle": "npm:^0.2.128"
-    "@thecointech/contract-plugin-converter": "npm:^0.2.128"
-    "@thecointech/contract-plugins": "npm:^0.2.128"
-    "@thecointech/contract-tools": "npm:^0.2.128"
-    "@thecointech/setenv": "npm:^0.2.128"
+    "@thecointech/async": "npm:^0.2.129"
+    "@thecointech/contract-core": "npm:^0.2.129"
+    "@thecointech/contract-oracle": "npm:^0.2.129"
+    "@thecointech/contract-plugin-converter": "npm:^0.2.129"
+    "@thecointech/contract-plugins": "npm:^0.2.129"
+    "@thecointech/contract-tools": "npm:^0.2.129"
+    "@thecointech/setenv": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/contract-plugins@npm:^0.2.128, @thecointech/contract-plugins@workspace:libs/contract-plugins":
+"@thecointech/contract-plugins@npm:^0.2.129, @thecointech/contract-plugins@workspace:libs/contract-plugins":
   version: 0.0.0-use.local
   resolution: "@thecointech/contract-plugins@workspace:libs/contract-plugins"
   dependencies:
     "@openzeppelin/contracts-upgradeable": "npm:^4.5.2"
-    "@thecointech/async": "npm:^0.2.128"
-    "@thecointech/contract-oracle": "npm:^0.2.128"
-    "@thecointech/contract-tools": "npm:^0.2.128"
-    "@thecointech/setenv": "npm:^0.2.128"
+    "@thecointech/async": "npm:^0.2.129"
+    "@thecointech/contract-oracle": "npm:^0.2.129"
+    "@thecointech/contract-tools": "npm:^0.2.129"
+    "@thecointech/setenv": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/contract-tools@npm:^0.2.128, @thecointech/contract-tools@workspace:libs/contract-tools":
+"@thecointech/contract-tools@npm:^0.2.129, @thecointech/contract-tools@workspace:libs/contract-tools":
   version: 0.0.0-use.local
   resolution: "@thecointech/contract-tools@workspace:libs/contract-tools"
   dependencies:
     "@nomicfoundation/hardhat-ethers": "npm:^3.0.5"
     "@nomicfoundation/hardhat-verify": "npm:^2.0.6"
     "@openzeppelin/hardhat-upgrades": "npm:^3.1.0"
-    "@thecointech/signers": "npm:^0.2.128"
+    "@thecointech/signers": "npm:^0.2.129"
     "@typechain/ethers-v6": "npm:^0.5.1"
     "@typechain/hardhat": "npm:^9.1.0"
     hardhat: "npm:^2.22.3"
@@ -10635,11 +10635,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/electron-utils@npm:^0.2.128, @thecointech/electron-utils@workspace:libs/electron-utils":
+"@thecointech/electron-utils@npm:^0.2.129, @thecointech/electron-utils@workspace:libs/electron-utils":
   version: 0.0.0-use.local
   resolution: "@thecointech/electron-utils@workspace:libs/electron-utils"
   dependencies:
-    "@thecointech/setenv": "npm:^0.2.128"
+    "@thecointech/setenv": "npm:^0.2.129"
     "@vercel/webpack-asset-relocator-loader": "npm:1.7.3"
     css-loader: "npm:^6.0.0"
     fork-ts-checker-webpack-plugin: "npm:^7.2.13"
@@ -10649,42 +10649,42 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/email-fake-deposit@npm:^0.2.128, @thecointech/email-fake-deposit@workspace:libs/email-fake-deposit":
+"@thecointech/email-fake-deposit@npm:^0.2.129, @thecointech/email-fake-deposit@workspace:libs/email-fake-deposit":
   version: 0.0.0-use.local
   resolution: "@thecointech/email-fake-deposit@workspace:libs/email-fake-deposit"
   dependencies:
-    "@thecointech/email": "npm:^0.2.128"
-    "@thecointech/setenv": "npm:^0.2.128"
+    "@thecointech/email": "npm:^0.2.129"
+    "@thecointech/setenv": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/email@npm:^0.2.128, @thecointech/email@workspace:libs/email":
+"@thecointech/email@npm:^0.2.129, @thecointech/email@workspace:libs/email":
   version: 0.0.0-use.local
   resolution: "@thecointech/email@workspace:libs/email"
   dependencies:
-    "@thecointech/jestutils": "npm:^0.2.128"
-    "@thecointech/logging": "npm:^0.2.128"
+    "@thecointech/jestutils": "npm:^0.2.129"
+    "@thecointech/logging": "npm:^0.2.129"
     node-mailjet: "npm:^4.0.1"
   languageName: unknown
   linkType: soft
 
-"@thecointech/ethers-provider@npm:^0.2.128, @thecointech/ethers-provider@workspace:libs/ethers-provider":
+"@thecointech/ethers-provider@npm:^0.2.129, @thecointech/ethers-provider@workspace:libs/ethers-provider":
   version: 0.0.0-use.local
   resolution: "@thecointech/ethers-provider@workspace:libs/ethers-provider"
   dependencies:
-    "@thecointech/jestutils": "npm:^0.2.128"
-    "@thecointech/logging": "npm:^0.2.128"
-    "@thecointech/setenv": "npm:^0.2.128"
+    "@thecointech/jestutils": "npm:^0.2.129"
+    "@thecointech/logging": "npm:^0.2.129"
+    "@thecointech/setenv": "npm:^0.2.129"
     ethers: "npm:6.12.0"
   languageName: unknown
   linkType: soft
 
-"@thecointech/firestore@npm:^0.2.128, @thecointech/firestore@workspace:libs/firestore":
+"@thecointech/firestore@npm:^0.2.129, @thecointech/firestore@workspace:libs/firestore":
   version: 0.0.0-use.local
   resolution: "@thecointech/firestore@workspace:libs/firestore"
   dependencies:
-    "@thecointech/jestutils": "npm:^0.2.128"
-    "@thecointech/logging": "npm:^0.2.128"
+    "@thecointech/jestutils": "npm:^0.2.129"
+    "@thecointech/logging": "npm:^0.2.129"
     firestore-jest-mock: "https://github.com/thecointech/firestore-jest-mock#f4145e6f28c02419ec5e338a6f5a424ab189986c"
   peerDependencies:
     "@google-cloud/firestore": "*"
@@ -10692,16 +10692,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/fx-rates@npm:^0.2.128, @thecointech/fx-rates@workspace:libs/fx-rates":
+"@thecointech/fx-rates@npm:^0.2.129, @thecointech/fx-rates@workspace:libs/fx-rates":
   version: 0.0.0-use.local
   resolution: "@thecointech/fx-rates@workspace:libs/fx-rates"
   dependencies:
-    "@thecointech/apis": "npm:^0.2.128"
-    "@thecointech/logging": "npm:^0.2.128"
+    "@thecointech/apis": "npm:^0.2.129"
+    "@thecointech/logging": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/idx@npm:^0.2.128, @thecointech/idx@workspace:libs/IDX":
+"@thecointech/idx@npm:^0.2.129, @thecointech/idx@workspace:libs/IDX":
   version: 0.0.0-use.local
   resolution: "@thecointech/idx@workspace:libs/IDX"
   dependencies:
@@ -10712,23 +10712,20 @@ __metadata:
     "@composedb/devtools-node": "npm:^0.7.1"
     "@composedb/types": "npm:^0.7.1"
     "@didtools/pkh-ethereum": "npm:^0.5.0"
-    "@thecointech/logging": "npm:^0.2.128"
+    "@thecointech/logging": "npm:^0.2.129"
     "@thecointech/setenv": "workspace:^"
-    "@thecointech/utilities": "npm:^0.2.128"
+    "@thecointech/utilities": "npm:^0.2.129"
     did-session: "npm:^3.1.0"
   languageName: unknown
   linkType: soft
 
-"@thecointech/jestutils@npm:^0.2.128, @thecointech/jestutils@workspace:libs/jestutils":
+"@thecointech/jestutils@npm:^0.2.129, @thecointech/jestutils@workspace:libs/jestutils":
   version: 0.0.0-use.local
   resolution: "@thecointech/jestutils@workspace:libs/jestutils"
-  bin:
-    run-jest: ./bin/run-jest.cjs
-    run-jest-nix: ./bin/run-jest-nix.cjs
   languageName: unknown
   linkType: soft
 
-"@thecointech/logging@npm:^0.2.128, @thecointech/logging@workspace:libs/logging":
+"@thecointech/logging@npm:^0.2.129, @thecointech/logging@workspace:libs/logging":
   version: 0.0.0-use.local
   resolution: "@thecointech/logging@workspace:libs/logging"
   dependencies:
@@ -10740,12 +10737,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/market-status@npm:^0.2.128, @thecointech/market-status@workspace:libs/market-status":
+"@thecointech/market-status@npm:^0.2.129, @thecointech/market-status@workspace:libs/market-status":
   version: 0.0.0-use.local
   resolution: "@thecointech/market-status@workspace:libs/market-status"
   dependencies:
-    "@thecointech/jestutils": "npm:^0.2.128"
-    "@thecointech/logging": "npm:^0.2.128"
+    "@thecointech/jestutils": "npm:^0.2.129"
+    "@thecointech/logging": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
@@ -10754,11 +10751,11 @@ __metadata:
   resolution: "@thecointech/nft-service@workspace:apps/nft-service"
   dependencies:
     "@pinata/sdk": "npm:1.1.23"
-    "@thecointech/contract-nft": "npm:^0.2.128"
-    "@thecointech/logging": "npm:^0.2.128"
-    "@thecointech/setenv": "npm:^0.2.128"
-    "@thecointech/signers": "npm:^0.2.128"
-    "@thecointech/utilities": "npm:^0.2.128"
+    "@thecointech/contract-nft": "npm:^0.2.129"
+    "@thecointech/logging": "npm:^0.2.129"
+    "@thecointech/setenv": "npm:^0.2.129"
+    "@thecointech/signers": "npm:^0.2.129"
+    "@thecointech/utilities": "npm:^0.2.129"
     "@tsoa/runtime": "npm:6.2.0"
     "@types/multer": "npm:^1.4.5"
     "@types/swagger-ui-express": "npm:^4.1.1"
@@ -10775,7 +10772,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/nft@npm:^0.2.128, @thecointech/nft@workspace:apis/nft/ts":
+"@thecointech/nft@npm:^0.2.129, @thecointech/nft@workspace:apis/nft/ts":
   version: 0.0.0-use.local
   resolution: "@thecointech/nft@workspace:apis/nft/ts"
   dependencies:
@@ -10783,7 +10780,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/pricing@npm:^0.2.128, @thecointech/pricing@workspace:apis/rates/ts":
+"@thecointech/pricing@npm:^0.2.129, @thecointech/pricing@workspace:apis/rates/ts":
   version: 0.0.0-use.local
   resolution: "@thecointech/pricing@workspace:apis/rates/ts"
   dependencies:
@@ -10796,17 +10793,17 @@ __metadata:
   resolution: "@thecointech/rates-service@workspace:apps/rates-service"
   dependencies:
     "@google-cloud/firestore": "npm:4.12.3"
-    "@thecointech/async": "npm:^0.2.128"
-    "@thecointech/contract-oracle": "npm:^0.2.128"
-    "@thecointech/email": "npm:^0.2.128"
-    "@thecointech/firestore": "npm:^0.2.128"
-    "@thecointech/fx-rates": "npm:^0.2.128"
-    "@thecointech/logging": "npm:^0.2.128"
-    "@thecointech/market-status": "npm:^0.2.128"
-    "@thecointech/pricing": "npm:^0.2.128"
-    "@thecointech/setenv": "npm:^0.2.128"
-    "@thecointech/signers": "npm:^0.2.128"
-    "@thecointech/utilities": "npm:^0.2.128"
+    "@thecointech/async": "npm:^0.2.129"
+    "@thecointech/contract-oracle": "npm:^0.2.129"
+    "@thecointech/email": "npm:^0.2.129"
+    "@thecointech/firestore": "npm:^0.2.129"
+    "@thecointech/fx-rates": "npm:^0.2.129"
+    "@thecointech/logging": "npm:^0.2.129"
+    "@thecointech/market-status": "npm:^0.2.129"
+    "@thecointech/pricing": "npm:^0.2.129"
+    "@thecointech/setenv": "npm:^0.2.129"
+    "@thecointech/signers": "npm:^0.2.129"
+    "@thecointech/utilities": "npm:^0.2.129"
     "@tsoa/runtime": "npm:6.2.0"
     "@types/swagger-ui-express": "npm:^4.1.1"
     axios: "npm:1.6.5"
@@ -10823,12 +10820,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/rbcapi@workspace:libs/rbcapi"
   dependencies:
-    "@thecointech/bank-interface": "npm:^0.2.128"
-    "@thecointech/jestutils": "npm:^0.2.128"
-    "@thecointech/logging": "npm:^0.2.128"
-    "@thecointech/store": "npm:^0.2.128"
-    "@thecointech/types": "npm:^0.2.128"
-    "@thecointech/utilities": "npm:^0.2.128"
+    "@thecointech/bank-interface": "npm:^0.2.129"
+    "@thecointech/jestutils": "npm:^0.2.129"
+    "@thecointech/logging": "npm:^0.2.129"
+    "@thecointech/store": "npm:^0.2.129"
+    "@thecointech/types": "npm:^0.2.129"
+    "@thecointech/utilities": "npm:^0.2.129"
     "@types/promise.any": "npm:^2.0.0"
     csvtojson: "npm:^2.0.10"
     promise.any: "npm:^2.0.4"
@@ -10842,11 +10839,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/service-tapcap-supplier@workspace:apps/tapcap-supplier"
   dependencies:
-    "@thecointech/pricing": "npm:^0.2.128"
+    "@thecointech/pricing": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/setenv@npm:^0.2.125, @thecointech/setenv@npm:^0.2.128, @thecointech/setenv@workspace:^, @thecointech/setenv@workspace:libs/setenv":
+"@thecointech/setenv@npm:^0.2.125, @thecointech/setenv@npm:^0.2.129, @thecointech/setenv@workspace:^, @thecointech/setenv@workspace:libs/setenv":
   version: 0.0.0-use.local
   resolution: "@thecointech/setenv@workspace:libs/setenv"
   dependencies:
@@ -10856,7 +10853,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/shared@npm:^0.2.128, @thecointech/shared@workspace:libs/shared":
+"@thecointech/shared@npm:^0.2.129, @thecointech/shared@workspace:libs/shared":
   version: 0.0.0-use.local
   resolution: "@thecointech/shared@workspace:libs/shared"
   dependencies:
@@ -10865,13 +10862,13 @@ __metadata:
     "@nivo/core": "npm:0.81.0"
     "@nivo/line": "npm:0.81.0"
     "@nivo/tooltip": "npm:0.81.0"
-    "@thecointech/account": "npm:^0.2.128"
-    "@thecointech/fx-rates": "npm:^0.2.128"
-    "@thecointech/logging": "npm:^0.2.128"
-    "@thecointech/site-semantic-theme": "npm:^0.2.128"
-    "@thecointech/tx-blockchain": "npm:^0.2.128"
-    "@thecointech/types": "npm:^0.2.128"
-    "@thecointech/utilities": "npm:^0.2.128"
+    "@thecointech/account": "npm:^0.2.129"
+    "@thecointech/fx-rates": "npm:^0.2.129"
+    "@thecointech/logging": "npm:^0.2.129"
+    "@thecointech/site-semantic-theme": "npm:^0.2.129"
+    "@thecointech/tx-blockchain": "npm:^0.2.129"
+    "@thecointech/types": "npm:^0.2.129"
+    "@thecointech/utilities": "npm:^0.2.129"
     "@types/d3-scale-chromatic": "npm:^2.0.0"
     "@types/d3-shape": "npm:^2.0.0"
     "@types/history": "npm:^4.7.3"
@@ -10889,29 +10886,29 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/signers@npm:^0.2.128, @thecointech/signers@workspace:libs/signers":
+"@thecointech/signers@npm:^0.2.129, @thecointech/signers@workspace:libs/signers":
   version: 0.0.0-use.local
   resolution: "@thecointech/signers@workspace:libs/signers"
   dependencies:
     "@ethers-ext/signer-ledger": "npm:^6.0.0-beta.1"
     "@google-cloud/secret-manager": "npm:^5.3.0"
     "@ledgerhq/hw-transport-node-hid": "npm:^6.28.6"
-    "@thecointech/electron-utils": "npm:^0.2.128"
-    "@thecointech/ethers-provider": "npm:^0.2.128"
-    "@thecointech/logging": "npm:^0.2.128"
+    "@thecointech/electron-utils": "npm:^0.2.129"
+    "@thecointech/ethers-provider": "npm:^0.2.129"
+    "@thecointech/logging": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/site-app@npm:^0.2.128, @thecointech/site-app@workspace:apps/site-app":
+"@thecointech/site-app@npm:^0.2.129, @thecointech/site-app@workspace:apps/site-app":
   version: 0.0.0-use.local
   resolution: "@thecointech/site-app@workspace:apps/site-app"
   dependencies:
     "@artsy/fresnel": "npm:^1.2.2"
-    "@thecointech/blockpass": "npm:^0.2.128"
-    "@thecointech/setenv": "npm:^0.2.128"
-    "@thecointech/shared": "npm:^0.2.128"
-    "@thecointech/site-base": "npm:^0.2.128"
-    "@thecointech/utilities": "npm:^0.2.128"
+    "@thecointech/blockpass": "npm:^0.2.129"
+    "@thecointech/setenv": "npm:^0.2.129"
+    "@thecointech/shared": "npm:^0.2.129"
+    "@thecointech/site-base": "npm:^0.2.129"
+    "@thecointech/utilities": "npm:^0.2.129"
     "@types/card-validator": "npm:^4.1.0"
     "@types/expect": "npm:1.20.4"
     "@types/file-saver": "npm:^2.0.1"
@@ -10944,16 +10941,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/site-base@npm:^0.2.128, @thecointech/site-base@workspace:libs/site-base":
+"@thecointech/site-base@npm:^0.2.129, @thecointech/site-base@workspace:libs/site-base":
   version: 0.0.0-use.local
   resolution: "@thecointech/site-base@workspace:libs/site-base"
   dependencies:
     "@formatjs/intl-pluralrules": "npm:^1.4.1"
-    "@thecointech/apis": "npm:^0.2.128"
-    "@thecointech/setenv": "npm:^0.2.128"
-    "@thecointech/shared": "npm:^0.2.128"
-    "@thecointech/site-semantic-theme": "npm:^0.2.128"
-    "@thecointech/utilities": "npm:^0.2.128"
+    "@thecointech/apis": "npm:^0.2.129"
+    "@thecointech/setenv": "npm:^0.2.129"
+    "@thecointech/shared": "npm:^0.2.129"
+    "@thecointech/site-semantic-theme": "npm:^0.2.129"
+    "@thecointech/utilities": "npm:^0.2.129"
     "@types/dotenv-webpack": "npm:^7.0.3"
     "@types/intl": "npm:^1.2.0"
     "@types/react-measure": "npm:^2.0.5"
@@ -10982,11 +10979,11 @@ __metadata:
   dependencies:
     "@prismicio/client": "npm:^6.6.2"
     "@prismicio/react": "npm:^2.4.3"
-    "@thecointech/setenv": "npm:^0.2.128"
-    "@thecointech/shared": "npm:^0.2.128"
-    "@thecointech/site-base": "npm:^0.2.128"
-    "@thecointech/site-semantic-theme": "npm:^0.2.128"
-    "@thecointech/utilities": "npm:^0.2.128"
+    "@thecointech/setenv": "npm:^0.2.129"
+    "@thecointech/shared": "npm:^0.2.129"
+    "@thecointech/site-base": "npm:^0.2.129"
+    "@thecointech/site-semantic-theme": "npm:^0.2.129"
+    "@thecointech/utilities": "npm:^0.2.129"
     "@types/papaparse": "npm:^5.0.3"
     "@types/react-helmet": "npm:^6.1.5"
     "@types/react-test-renderer": "npm:^16.9.0"
@@ -11017,17 +11014,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/site-nft@workspace:apps/site-nft"
   dependencies:
-    "@thecointech/contract-nft": "npm:^0.2.128"
-    "@thecointech/nft": "npm:^0.2.128"
-    "@thecointech/setenv": "npm:^0.2.128"
-    "@thecointech/shared": "npm:^0.2.128"
-    "@thecointech/site-base": "npm:^0.2.128"
+    "@thecointech/contract-nft": "npm:^0.2.129"
+    "@thecointech/nft": "npm:^0.2.129"
+    "@thecointech/setenv": "npm:^0.2.129"
+    "@thecointech/shared": "npm:^0.2.129"
+    "@thecointech/site-base": "npm:^0.2.129"
     "@toast-ui/react-image-editor": "npm:^3.15.2"
     exif-library: "https://github.com/FrozenKiwi/exif-library#cf25837936add5820fcc25d36e18ed1d39f79bc6"
   languageName: unknown
   linkType: soft
 
-"@thecointech/site-semantic-theme@npm:^0.2.128, @thecointech/site-semantic-theme@workspace:libs/site-semantic-theme":
+"@thecointech/site-semantic-theme@npm:^0.2.129, @thecointech/site-semantic-theme@workspace:libs/site-semantic-theme":
   version: 0.0.0-use.local
   resolution: "@thecointech/site-semantic-theme@workspace:libs/site-semantic-theme"
   dependencies:
@@ -11041,18 +11038,18 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/site-test-deposit@workspace:apps/site-fake-deposit"
   dependencies:
-    "@thecointech/email-fake-deposit": "npm:^0.2.128"
-    "@thecointech/setenv": "npm:^0.2.128"
-    "@thecointech/site-base": "npm:^0.2.128"
+    "@thecointech/email-fake-deposit": "npm:^0.2.129"
+    "@thecointech/setenv": "npm:^0.2.129"
+    "@thecointech/site-base": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/store@npm:^0.2.128, @thecointech/store@workspace:libs/store":
+"@thecointech/store@npm:^0.2.129, @thecointech/store@workspace:libs/store":
   version: 0.0.0-use.local
   resolution: "@thecointech/store@workspace:libs/store"
   dependencies:
-    "@thecointech/jestutils": "npm:^0.2.128"
-    "@thecointech/logging": "npm:^0.2.128"
+    "@thecointech/jestutils": "npm:^0.2.129"
+    "@thecointech/logging": "npm:^0.2.129"
     "@types/pouchdb": "npm:^6.4.2"
     "@types/pouchdb-upsert": "npm:^2.2.9"
     pouchdb: "npm:^8.0.1"
@@ -11071,7 +11068,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/storybookutils@workspace:libs/storybookutils"
   dependencies:
-    "@thecointech/shared": "npm:^0.2.128"
+    "@thecointech/shared": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
@@ -11139,7 +11136,7 @@ __metadata:
     firebase: "npm:^8.10.1"
     firebase-tools: "npm:^13.0.2"
     fork-ts-checker-webpack-plugin: "npm:^7.2.13"
-    glob: "npm:^7.1.6"
+    glob: "npm:^11.0.0"
     html-loader: "npm:2.1.2"
     html-webpack-plugin: "npm:^5.5.0"
     husky: "npm:3.0.0"
@@ -11207,64 +11204,64 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/tools@workspace:tools"
   dependencies:
-    "@thecointech/setenv": "npm:^0.2.128"
+    "@thecointech/setenv": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/tx-bill@npm:^0.2.128, @thecointech/tx-bill@workspace:libs/tx-bill":
+"@thecointech/tx-bill@npm:^0.2.129, @thecointech/tx-bill@workspace:libs/tx-bill":
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-bill@workspace:libs/tx-bill"
   dependencies:
-    "@thecointech/tx-statemachine": "npm:^0.2.128"
+    "@thecointech/tx-statemachine": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/tx-blockchain@npm:^0.2.128, @thecointech/tx-blockchain@workspace:libs/tx-blockchain":
+"@thecointech/tx-blockchain@npm:^0.2.129, @thecointech/tx-blockchain@workspace:libs/tx-blockchain":
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-blockchain@workspace:libs/tx-blockchain"
   dependencies:
-    "@thecointech/contract-core": "npm:^0.2.128"
-    "@thecointech/utilities": "npm:^0.2.128"
+    "@thecointech/contract-core": "npm:^0.2.129"
+    "@thecointech/utilities": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/tx-deposit@npm:^0.2.128, @thecointech/tx-deposit@workspace:libs/tx-deposit":
+"@thecointech/tx-deposit@npm:^0.2.129, @thecointech/tx-deposit@workspace:libs/tx-deposit":
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-deposit@workspace:libs/tx-deposit"
   dependencies:
-    "@thecointech/bank-interface": "npm:^0.2.128"
-    "@thecointech/tx-gmail": "npm:^0.2.128"
-    "@thecointech/tx-statemachine": "npm:^0.2.128"
+    "@thecointech/bank-interface": "npm:^0.2.129"
+    "@thecointech/tx-gmail": "npm:^0.2.129"
+    "@thecointech/tx-statemachine": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/tx-etransfer@npm:^0.2.128, @thecointech/tx-etransfer@workspace:libs/tx-etransfer":
+"@thecointech/tx-etransfer@npm:^0.2.129, @thecointech/tx-etransfer@workspace:libs/tx-etransfer":
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-etransfer@workspace:libs/tx-etransfer"
   dependencies:
-    "@thecointech/bank-interface": "npm:^0.2.128"
-    "@thecointech/tx-statemachine": "npm:^0.2.128"
+    "@thecointech/bank-interface": "npm:^0.2.129"
+    "@thecointech/tx-statemachine": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/tx-gmail@npm:^0.2.128, @thecointech/tx-gmail@workspace:libs/tx-gmail":
+"@thecointech/tx-gmail@npm:^0.2.129, @thecointech/tx-gmail@workspace:libs/tx-gmail":
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-gmail@workspace:libs/tx-gmail"
   dependencies:
-    "@thecointech/electron-utils": "npm:^0.2.128"
-    "@thecointech/utilities": "npm:^0.2.128"
+    "@thecointech/electron-utils": "npm:^0.2.129"
+    "@thecointech/utilities": "npm:^0.2.129"
     currency.js: "npm:^2.0.4"
     googleapis: "npm:^129.0.0"
     js-base64: "npm:^3.7.6"
   languageName: unknown
   linkType: soft
 
-"@thecointech/tx-plugins@npm:^0.2.128, @thecointech/tx-plugins@workspace:libs/tx-plugins":
+"@thecointech/tx-plugins@npm:^0.2.129, @thecointech/tx-plugins@workspace:libs/tx-plugins":
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-plugins@workspace:libs/tx-plugins"
   dependencies:
-    "@thecointech/contract-plugins": "npm:^0.2.128"
-    "@thecointech/tx-statemachine": "npm:^0.2.128"
+    "@thecointech/contract-plugins": "npm:^0.2.129"
+    "@thecointech/tx-statemachine": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
@@ -11272,13 +11269,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-processor@workspace:apps/tx-processor"
   dependencies:
-    "@thecointech/logging": "npm:^0.2.128"
-    "@thecointech/setenv": "npm:^0.2.128"
-    "@thecointech/site-app": "npm:^0.2.128"
-    "@thecointech/tx-bill": "npm:^0.2.128"
-    "@thecointech/tx-deposit": "npm:^0.2.128"
-    "@thecointech/tx-etransfer": "npm:^0.2.128"
-    "@thecointech/tx-plugins": "npm:^0.2.128"
+    "@thecointech/logging": "npm:^0.2.129"
+    "@thecointech/setenv": "npm:^0.2.129"
+    "@thecointech/site-app": "npm:^0.2.129"
+    "@thecointech/tx-bill": "npm:^0.2.129"
+    "@thecointech/tx-deposit": "npm:^0.2.129"
+    "@thecointech/tx-etransfer": "npm:^0.2.129"
+    "@thecointech/tx-plugins": "npm:^0.2.129"
     open: "npm:^8.2.1"
   languageName: unknown
   linkType: soft
@@ -11287,35 +11284,35 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-reconciliation@workspace:libs/tx-reconciliation"
   dependencies:
-    "@thecointech/bank-interface": "npm:^0.2.128"
-    "@thecointech/broker-db": "npm:^0.2.128"
-    "@thecointech/shared": "npm:^0.2.128"
-    "@thecointech/tx-blockchain": "npm:^0.2.128"
-    "@thecointech/tx-gmail": "npm:^0.2.128"
-    "@thecointech/utilities": "npm:^0.2.128"
+    "@thecointech/bank-interface": "npm:^0.2.129"
+    "@thecointech/broker-db": "npm:^0.2.129"
+    "@thecointech/shared": "npm:^0.2.129"
+    "@thecointech/tx-blockchain": "npm:^0.2.129"
+    "@thecointech/tx-gmail": "npm:^0.2.129"
+    "@thecointech/utilities": "npm:^0.2.129"
     fastest-levenshtein: "npm:^1.0.12"
   languageName: unknown
   linkType: soft
 
-"@thecointech/tx-statemachine@npm:^0.2.128, @thecointech/tx-statemachine@workspace:libs/tx-statemachine":
+"@thecointech/tx-statemachine@npm:^0.2.129, @thecointech/tx-statemachine@workspace:libs/tx-statemachine":
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-statemachine@workspace:libs/tx-statemachine"
   dependencies:
-    "@thecointech/async": "npm:^0.2.128"
-    "@thecointech/bank-interface": "npm:^0.2.128"
-    "@thecointech/broker-db": "npm:^0.2.128"
-    "@thecointech/contract-core": "npm:^0.2.128"
-    "@thecointech/contract-plugin-converter": "npm:^0.2.128"
-    "@thecointech/email": "npm:^0.2.128"
-    "@thecointech/fx-rates": "npm:^0.2.128"
-    "@thecointech/logging": "npm:^0.2.128"
-    "@thecointech/market-status": "npm:^0.2.128"
-    "@thecointech/tx-gmail": "npm:^0.2.128"
-    "@thecointech/utilities": "npm:^0.2.128"
+    "@thecointech/async": "npm:^0.2.129"
+    "@thecointech/bank-interface": "npm:^0.2.129"
+    "@thecointech/broker-db": "npm:^0.2.129"
+    "@thecointech/contract-core": "npm:^0.2.129"
+    "@thecointech/contract-plugin-converter": "npm:^0.2.129"
+    "@thecointech/email": "npm:^0.2.129"
+    "@thecointech/fx-rates": "npm:^0.2.129"
+    "@thecointech/logging": "npm:^0.2.129"
+    "@thecointech/market-status": "npm:^0.2.129"
+    "@thecointech/tx-gmail": "npm:^0.2.129"
+    "@thecointech/utilities": "npm:^0.2.129"
   languageName: unknown
   linkType: soft
 
-"@thecointech/types@npm:^0.2.128, @thecointech/types@workspace:libs/types":
+"@thecointech/types@npm:^0.2.129, @thecointech/types@workspace:libs/types":
   version: 0.0.0-use.local
   resolution: "@thecointech/types@workspace:libs/types"
   dependencies:
@@ -11324,13 +11321,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/utilities@npm:^0.2.128, @thecointech/utilities@workspace:libs/utils-ts":
+"@thecointech/utilities@npm:^0.2.129, @thecointech/utilities@workspace:libs/utils-ts":
   version: 0.0.0-use.local
   resolution: "@thecointech/utilities@workspace:libs/utils-ts"
   dependencies:
-    "@thecointech/jestutils": "npm:^0.2.128"
-    "@thecointech/logging": "npm:^0.2.128"
-    "@thecointech/types": "npm:^0.2.128"
+    "@thecointech/jestutils": "npm:^0.2.129"
+    "@thecointech/logging": "npm:^0.2.129"
+    "@thecointech/types": "npm:^0.2.129"
     base32: "npm:^0.0.7"
     decimal.js-light: "npm:^2.5.1"
     ethers: "npm:6.12.0"
@@ -23783,6 +23780,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"glob@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "glob@npm:11.0.0"
+  dependencies:
+    foreground-child: "npm:^3.1.0"
+    jackspeak: "npm:^4.0.1"
+    minimatch: "npm:^10.0.0"
+    minipass: "npm:^7.1.2"
+    package-json-from-dist: "npm:^1.0.0"
+    path-scurry: "npm:^2.0.0"
+  bin:
+    glob: dist/esm/bin.mjs
+  checksum: 419866015d8795258a8ac51de5b9d1a99c72634fc3ead93338e4da388e89773ab21681e494eac0fbc4250b003451ca3110bb4f1c9393d15d14466270094fdb4e
+  languageName: node
+  linkType: hard
+
 "glob@npm:^6.0.1":
   version: 6.0.4
   resolution: "glob@npm:6.0.4"
@@ -24556,19 +24569,19 @@ __metadata:
     "@electron-forge/maker-zip": "npm:^7.2.0"
     "@electron-forge/plugin-auto-unpack-natives": "npm:^7.2.0"
     "@electron-forge/plugin-webpack": "npm:^7.2.0"
-    "@thecointech/account": "npm:^0.2.128"
-    "@thecointech/apis": "npm:^0.2.128"
-    "@thecointech/async": "npm:^0.2.128"
-    "@thecointech/contract-plugin-converter": "npm:^0.2.128"
-    "@thecointech/contract-plugin-shockabsorber": "npm:^0.2.128"
-    "@thecointech/contract-plugins": "npm:^0.2.128"
-    "@thecointech/fx-rates": "npm:^0.2.128"
-    "@thecointech/jestutils": "npm:^0.2.128"
-    "@thecointech/logging": "npm:^0.2.128"
+    "@thecointech/account": "npm:^0.2.129"
+    "@thecointech/apis": "npm:^0.2.129"
+    "@thecointech/async": "npm:^0.2.129"
+    "@thecointech/contract-plugin-converter": "npm:^0.2.129"
+    "@thecointech/contract-plugin-shockabsorber": "npm:^0.2.129"
+    "@thecointech/contract-plugins": "npm:^0.2.129"
+    "@thecointech/fx-rates": "npm:^0.2.129"
+    "@thecointech/jestutils": "npm:^0.2.129"
+    "@thecointech/logging": "npm:^0.2.129"
     "@thecointech/setenv": "workspace:^"
-    "@thecointech/shared": "npm:^0.2.128"
-    "@thecointech/signers": "npm:^0.2.128"
-    "@thecointech/utilities": "npm:^0.2.128"
+    "@thecointech/shared": "npm:^0.2.129"
+    "@thecointech/signers": "npm:^0.2.129"
+    "@thecointech/utilities": "npm:^0.2.129"
     "@timfish/forge-externals-plugin": "https://github.com/FrozenKiwi/forge-externals-plugin-monorepo"
     "@types/node-notifier": "npm:^8.0.2"
     "@types/pouchdb": "npm:^6.4.0"
@@ -27508,6 +27521,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jackspeak@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "jackspeak@npm:4.0.1"
+  dependencies:
+    "@isaacs/cliui": "npm:^8.0.2"
+    "@pkgjs/parseargs": "npm:^0.11.0"
+  dependenciesMeta:
+    "@pkgjs/parseargs":
+      optional: true
+  checksum: c87997d9c9c5b7366259b1f2a444ef148692f8eedad5307caca939babbb60af2b47d306e5c63bf9d5fefbab2ab48d4da275188c3de525d0e716cc21b784bbccb
+  languageName: node
+  linkType: hard
+
 "jake@npm:^10.8.5":
   version: 10.8.7
   resolution: "jake@npm:10.8.7"
@@ -30328,6 +30354,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lru-cache@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "lru-cache@npm:11.0.0"
+  checksum: 827ff0e0739f9b0f30f92f5a5fc97c6a2bd3ae32c0452bc58cb7411d6c589d49536073027293f2d1f02d0c2e72b63b162f238df7e9ff6f4cc0345f92afec4d1d
+  languageName: node
+  linkType: hard
+
 "lru-cache@npm:^4.0.1":
   version: 4.1.5
   resolution: "lru-cache@npm:4.1.5"
@@ -31196,6 +31229,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"minimatch@npm:^10.0.0":
+  version: 10.0.1
+  resolution: "minimatch@npm:10.0.1"
+  dependencies:
+    brace-expansion: "npm:^2.0.1"
+  checksum: e6c29a81fe83e1877ad51348306be2e8aeca18c88fdee7a99df44322314279e15799e41d7cb274e4e8bb0b451a3bc622d6182e157dfa1717d6cda75e9cd8cd5d
+  languageName: node
+  linkType: hard
+
 "minimatch@npm:^5.0.1, minimatch@npm:^5.1.0":
   version: 5.1.6
   resolution: "minimatch@npm:5.1.6"
@@ -31387,6 +31429,13 @@ __metadata:
   version: 7.0.4
   resolution: "minipass@npm:7.0.4"
   checksum: 6c7370a6dfd257bf18222da581ba89a5eaedca10e158781232a8b5542a90547540b4b9b7e7f490e4cda43acfbd12e086f0453728ecf8c19e0ef6921bc5958ac5
+  languageName: node
+  linkType: hard
+
+"minipass@npm:^7.1.2":
+  version: 7.1.2
+  resolution: "minipass@npm:7.1.2"
+  checksum: b0fd20bb9fb56e5fa9a8bfac539e8915ae07430a619e4b86ff71f5fc757ef3924b23b2c4230393af1eda647ed3d75739e4e0acb250a6b1eb277cf7f8fe449557
   languageName: node
   linkType: hard
 
@@ -33764,6 +33813,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"package-json-from-dist@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "package-json-from-dist@npm:1.0.0"
+  checksum: e3ffaf6ac1040ab6082a658230c041ad14e72fabe99076a2081bb1d5d41210f11872403fc09082daf4387fc0baa6577f96c9c0e94c90c394fd57794b66aa4033
+  languageName: node
+  linkType: hard
+
 "packet-reader@npm:1.0.0":
   version: 1.0.0
   resolution: "packet-reader@npm:1.0.0"
@@ -34203,6 +34259,16 @@ __metadata:
     lru-cache: "npm:^9.1.1 || ^10.0.0"
     minipass: "npm:^5.0.0 || ^6.0.2 || ^7.0.0"
   checksum: e5dc78a7348d25eec61ab166317e9e9c7b46818aa2c2b9006c507a6ff48c672d011292d9662527213e558f5652ce0afcc788663a061d8b59ab495681840c0c1e
+  languageName: node
+  linkType: hard
+
+"path-scurry@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "path-scurry@npm:2.0.0"
+  dependencies:
+    lru-cache: "npm:^11.0.0"
+    minipass: "npm:^7.1.2"
+  checksum: 3da4adedaa8e7ef8d6dc4f35a0ff8f05a9b4d8365f2b28047752b62d4c1ad73eec21e37b1579ef2d075920157856a3b52ae8309c480a6f1a8bbe06ff8e52b33c
   languageName: node
   linkType: hard
 
@@ -40844,12 +40910,12 @@ __metadata:
     "@electron-forge/maker-zip": "npm:^7.2.0"
     "@electron-forge/plugin-auto-unpack-natives": "npm:^7.2.0"
     "@electron-forge/plugin-webpack": "npm:^7.2.0"
-    "@thecointech/contract-core": "npm:^0.2.128"
-    "@thecointech/shared": "npm:^0.2.128"
-    "@thecointech/tx-bill": "npm:^0.2.128"
-    "@thecointech/tx-deposit": "npm:^0.2.128"
-    "@thecointech/tx-etransfer": "npm:^0.2.128"
-    "@thecointech/tx-statemachine": "npm:^0.2.128"
+    "@thecointech/contract-core": "npm:^0.2.129"
+    "@thecointech/shared": "npm:^0.2.129"
+    "@thecointech/tx-bill": "npm:^0.2.129"
+    "@thecointech/tx-deposit": "npm:^0.2.129"
+    "@thecointech/tx-etransfer": "npm:^0.2.129"
+    "@thecointech/tx-statemachine": "npm:^0.2.129"
     "@typescript-eslint/eslint-plugin": "npm:^5.0.0"
     "@typescript-eslint/parser": "npm:^5.0.0"
     electron: "npm:28.1.3"

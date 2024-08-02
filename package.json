@@ -61,6 +61,7 @@
     "clean:apis": "git clean -qfdx ./apis",
     "clean:storybook": "rimraf ./storybook-static",
     "test": "lerna run test --",
+    "test-single": "yarn node --experimental-vm-modules $(yarn bin jest) ",
     "storybook": "storybook dev -p 6006",
     "dedup": "yarn yarn-deduplicate -s fewer",
     "check-changes": "git diff-index --patch-with-stat HEAD && git diff-index --quiet HEAD -- "
@@ -143,7 +144,7 @@
     "file-loader": "^6.2.0",
     "firebase-tools": "^13.0.2",
     "fork-ts-checker-webpack-plugin": "^7.2.13",
-    "glob": "^7.1.6",
+    "glob": "^11.0.0",
     "html-loader": "2.1.2",
     "html-webpack-plugin": "^5.5.0",
     "husky": "3.0.0",

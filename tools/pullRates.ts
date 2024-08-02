@@ -10,7 +10,7 @@ import { log } from '@thecointech/logging';
 // historical data.
 
 // If we don't have access to the Firestore, fuggetaboutit
-if (!process.env.RATES_SERVICE_ACCOUNT) {
+if (!process.env.RATES_SERVICE_ACCOUNT || !existsSync(process.env.RATES_SERVICE_ACCOUNT)) {
   log.fatal('Requires rates firestore access config');
   exit(0)
 }

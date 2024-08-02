@@ -20,9 +20,9 @@ if (process.env.CONFIG_NAME == "devlive") {
   writeFileSync(emailCacheFile, "[]");
 }
 
-// TODO: Use the account itself to set an initial date
-const pausedAfterMonths = 0;
-const monthsToRun = 50;
+/////////////////////////////////////////////
+const monthsToRun = 9999;
+/////////////////////////////////////////////
 
 // Init/Demo account
 // Starting from Jan 1 2022
@@ -40,13 +40,14 @@ const startDate = DateTime.fromObject({
 })
 
 // Get date of last transaction
-const tx = await loadAndMergeHistory(0, tcCore, testAddress);
+const initBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0", 10);
+const tx = await loadAndMergeHistory(initBlock, tcCore, testAddress);
 const lastTxDate = tx[tx.length - 1]?.date ?? startDate;
 console.log(`Last tx: ${lastTxDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
 
-const pausedDate = lastTxDate.plus({ hour: 1}); // startDate.plus({month: pausedAfterMonths});
+const pausedDate = lastTxDate.plus({ hour: 1});
 const endDate = DateTime.min(
-  startDate.plus({month: pausedAfterMonths + monthsToRun}),
+  pausedDate.plus({month: monthsToRun}),
   DateTime.now()
 );
 const visaStep = Duration.fromObject({week: 4});

@@ -41,7 +41,7 @@ export class Recorder {
   events: AnyEvent[] = [];
 
   // inputs can either be static (ie - constant every time)
-  // or dynamic (ie - supplied each run).  We set the 
+  // or dynamic (ie - supplied each run).  We set the
   // required dynamic inputs in the constructor, and the
   // recording will not be successful if they are not captured.
   dynamicInputs: Record<string, boolean>;
@@ -56,7 +56,6 @@ export class Recorder {
 
   private lastInputEvent: InputEvent | undefined;
 
-
   private constructor(name: ActionTypes, dynamicInputs?: string[]) {
     this.name = name;
     this.screenshotFolder = path.join(outFolder, this.name);
@@ -66,6 +65,7 @@ export class Recorder {
     ) ?? []);
     log.info(`Recording ${this.name} with dynamic inputs: ${dynamicInputs?.join(', ') ?? 'none'}`);
   }
+
   private async initialize(url: string) {
     const { browser, page } = await startPuppeteer(false);
     this.browser = browser;
@@ -177,6 +177,14 @@ export class Recorder {
 
   // Record the stream of events from the browser.
   eventHandler = async (event: AnyEvent) => {
+    // convert URL to frame name
+    if ("frame" in event && event.frame) {
+      event.frame = this.urlToFrameName[event.frame] ?? event.frame;
+    }
+    // Skip duplicate events
+    if (this.isDuplicate(event)) {
+      return;
+    }
     log.debug("event name: " + event.type);
     if (event.type == 'navigation') {
       if (event.to == 'about:blank') {
@@ -222,9 +230,6 @@ export class Recorder {
         log.error("DYNAMIC INPUT MARK WITH NO CB");
         throw new Error();
       }
-      if (event.frame) {
-        event.frame = this.urlToFrameName[event.frame]
-      }
       event.dynamicName = this.onInput.name;
       // Set the input in the webpage
       // clear existing value
@@ -233,7 +238,7 @@ export class Recorder {
       await element?.focus();
       await this.page.keyboard.type(this.onInput.value, { delay: 20 });
       await this.page.evaluate(el => (el as HTMLInputElement).blur(), element);
-      
+
       // await this.page.$eval(event.selector, (el, value) => (el as HTMLInputElement).value = value, this.onInput.value);
       // Mark this input as successfully captured
       this.dynamicInputs[this.onInput.name] = true;
@@ -247,13 +252,10 @@ export class Recorder {
         log.error("VALUE MARK WITH NO CB");
         throw new Error();
       }
-      if (event.frame) {
-        event.frame = this.urlToFrameName[event.frame]
-      }
       event.name = this.onValue.name;
       const text = await this.page.$eval(event.selector, (el => (el as HTMLElement).innerText));
       if (this.onValue.type == "table") {
-        const table = await getTableData(this.page, event.font);
+        const table = await getTableData(this.page, event.font!);
         event.parsing = {
           type: "table",
           format: null,
@@ -275,12 +277,12 @@ export class Recorder {
       this.onValue = undefined;
     }
 
-    if (event.type == 'click') {
-      // Dig through any frames on the page to find our element
-      if (event.frame) {
-        event.frame = this.urlToFrameName[event.frame]
-      }
-    }
+    // if (event.type == 'click') {
+    //   // Dig through any frames on the page to find our element
+    //   if (event.frame) {
+    //     event.frame = this.urlToFrameName[event.frame]
+    //   }
+    // }
 
     // If we have a pending input event, add it to the list first
     if (this.lastInputEvent) {
@@ -293,6 +295,22 @@ export class Recorder {
     this.events.push(event);
   }
 
+  isDuplicate(event: AnyEvent) {
+    const lastEvent = this.events[this.events.length - 1];
+    if (lastEvent?.id == event.id) {
+      // Most duplicates are due to multiple events being sent, one with a frame and one without
+      // We don't want to log them twice, but we do want to keep the frame (even if not currently used)
+      if ("frame" in lastEvent && "frame" in event) {
+        if (!lastEvent.frame && event.frame) {
+          lastEvent.frame = event.frame;
+        }
+      }
+      // All duplicates are dropped
+      console.log("Duplicate event");
+      return true;
+    }
+    return false;
+  }
   logEvent(event: AnyEvent) {
     // strip value out to prevent logging sensitive info
     const { value, ...sanitized } = event as any;
@@ -302,7 +320,8 @@ export class Recorder {
 }
 
 function onNewDocument() {
-  __onAnyEvent({ type: "navigation", to: window.location.href, timestamp: Date.now() });
+
+  __onAnyEvent({ type: "navigation", to: window.location.href, timestamp: Date.now(), id: crypto.randomUUID() });
 
   globalThis.__clickAction = "click";
   globalThis.__clickTypeFilter = undefined;
@@ -321,14 +340,16 @@ function onNewDocument() {
     window.addEventListener("load", () => {
       __onAnyEvent({
         type: 'load',
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        id: crypto.randomUUID()
       })
     });
 
     window.addEventListener("DOMContentLoaded", () => {
       __onAnyEvent({
         type: 'load',
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        id: crypto.randomUUID(),
       })
     });
 
@@ -364,27 +385,32 @@ function onNewDocument() {
       if (target) {
         // Get local copies of the data to ensure we don't care
         // about any changes that may be made during the click
-        const sendType = __clickAction;
-        // @ts-ignore
         const data = window.getElementData(target);
-        const sendEvent = () => {
-          __onAnyEvent({
-            type: sendType,
-            timestamp: Date.now(),
-            clickX: ev.pageX,
-            clickY: ev.pageY,
-            ...data
-          });
+        const evt = {
+          timestamp: Date.now(),
+          id: crypto.randomUUID(),
+          clickX: ev.pageX,
+          clickY: ev.pageY,
+          ...data
         }
 
         if (__clickAction == "dynamicInput") {
           // Allow any events to process before
           // we take over the execution of the click
-          setTimeout(sendEvent, 1000);
+          setTimeout(() => {
+            __onAnyEvent({
+              type: "dynamicInput",
+              dynamicName: "--UNSET--",
+              ...evt
+            })
+          }, 750);
         }
         else {
           // Send immediately
-          sendEvent();
+          __onAnyEvent({
+            type: __clickAction,
+            ...evt
+          });
         }
 
         // Take no action if reading value
@@ -418,10 +444,10 @@ function onNewDocument() {
       __onAnyEvent({
         type: "input",
         timestamp: Date.now(),
-        valueChanged: true,
+        id: crypto.randomUUID(),
+        valueChange: true,
         value: target?.value,
-          // @ts-ignore
-          ...window.getElementData(ev.target)
+          ...window.getElementData(target)
       })
     }, opts);
 
@@ -436,19 +462,19 @@ function onNewDocument() {
           __onAnyEvent({
             type: "input",
             timestamp: Date.now(),
+            id: crypto.randomUUID(),
             hitEnter: true,
             value: (ev.target as HTMLInputElement)?.value,
-            // @ts-ignore
-            ...window.getElementData(ev.target)
+            ...window.getElementData(ev.target as HTMLElement)
           })
         }
         else {
           __onAnyEvent({
             type: "input",
             timestamp: Date.now(),
+            id: crypto.randomUUID(),
             value: (ev.target as HTMLInputElement)?.value + ev.key,
-              // @ts-ignore
-              ...window.getElementData(ev.target)
+              ...window.getElementData(ev.target as HTMLElement)
           })
         }
       }

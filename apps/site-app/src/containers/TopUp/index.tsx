@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import illustration from './images/icon_topup_big.svg';
 import { RecentTransactions } from '@thecointech/shared/containers/RecentTransactions';
 import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContainers';
@@ -6,6 +6,7 @@ import { Tab } from 'semantic-ui-react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Purchase } from 'containers/TopUp/Purchase';
 import { PageHeader } from 'components/PageHeader';
+import { DateTime } from 'luxon'
 
 const translations = defineMessages({
   title : {
@@ -23,6 +24,9 @@ const translations = defineMessages({
 });
 
 export const Topup = () => {
+  const fromDate = useState(DateTime.now().minus({years: 1}));
+  const toDate = useState(DateTime.now());
+
   const intl = useIntl();
   const panes = [
     { menuItem: intl.formatMessage({...translations.etransfer}), render: () => <AppContainerForTabs><Purchase /></AppContainerForTabs> },
@@ -37,7 +41,7 @@ export const Topup = () => {
       />
       <Tab panes={panes} renderActiveOnly={true} className={ `x6spaceAfter` } />
       <AppContainerWithShadow>
-        <RecentTransactions />
+        <RecentTransactions fromDate={fromDate} toDate={toDate} />
       </AppContainerWithShadow>
     </React.Fragment>
   );
