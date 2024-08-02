@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-plugins",
-  "version": "0.2.129",
+  "version": "0.2.130",
   "description": "The Coin: Handles plugin change requests",
   "type": "module",
   "keywords": [
@@ -30,8 +30,8 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/contract-plugins": "^0.2.129",
-    "@thecointech/tx-statemachine": "^0.2.129"
+    "@thecointech/contract-plugins": "^0.2.130",
+    "@thecointech/tx-statemachine": "^0.2.130"
   },
   "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
 }
