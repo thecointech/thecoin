@@ -5,7 +5,7 @@ import { debounce } from './debounce';
 import { startElementHighlight } from './highlighter';
 import { getTableData } from './table';
 import { startPuppeteer } from './puppeteer';
-import { ActionTypes, AnyEvent, getSelector, InputEvent, ValueResult, ValueType } from './types';
+import { ActionTypes, AnyEvent, BaseEvent, getSelector, InputEvent, ValueResult, ValueType } from './types';
 import { getValueParsing } from './valueParsing';
 import { log } from '@thecointech/logging';
 import { setEvents } from '../Harvester/config';
@@ -255,7 +255,7 @@ export class Recorder {
       event.name = this.onValue.name;
       const text = await this.page.$eval(event.selector, (el => (el as HTMLElement).innerText));
       if (this.onValue.type == "table") {
-        const table = await getTableData(this.page, event.font);
+        const table = await getTableData(this.page, event.font!);
         event.parsing = {
           type: "table",
           format: null,
@@ -324,7 +324,8 @@ export class Recorder {
 }
 
 function onNewDocument() {
-  __onAnyEvent({ type: "navigation", to: window.location.href, timestamp: Date.now() });
+
+  __onAnyEvent({ type: "navigation", to: window.location.href, timestamp: Date.now(), id: crypto.randomUUID() });
 
   globalThis.__clickAction = "click";
   globalThis.__clickTypeFilter = undefined;
@@ -343,14 +344,16 @@ function onNewDocument() {
     window.addEventListener("load", () => {
       __onAnyEvent({
         type: 'load',
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        id: crypto.randomUUID()
       })
     });
 
     window.addEventListener("DOMContentLoaded", () => {
       __onAnyEvent({
         type: 'load',
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        id: crypto.randomUUID(),
       })
     });
 
@@ -387,12 +390,12 @@ function onNewDocument() {
         // Get local copies of the data to ensure we don't care
         // about any changes that may be made during the click
         const sendType = __clickAction;
-        // @ts-ignore
         const data = window.getElementData(target);
         const sendEvent = () => {
           __onAnyEvent({
             type: sendType,
             timestamp: Date.now(),
+            id: crypto.randomUUID(),
             clickX: ev.pageX,
             clickY: ev.pageY,
             ...data
@@ -440,10 +443,10 @@ function onNewDocument() {
       __onAnyEvent({
         type: "input",
         timestamp: Date.now(),
-        valueChanged: true,
+        id: crypto.randomUUID(),
+        valueChange: true,
         value: target?.value,
-          // @ts-ignore
-          ...window.getElementData(ev.target)
+          ...window.getElementData(target)
       })
     }, opts);
 
@@ -458,19 +461,19 @@ function onNewDocument() {
           __onAnyEvent({
             type: "input",
             timestamp: Date.now(),
+            id: crypto.randomUUID(),
             hitEnter: true,
             value: (ev.target as HTMLInputElement)?.value,
-            // @ts-ignore
-            ...window.getElementData(ev.target)
+            ...window.getElementData(ev.target as HTMLElement)
           })
         }
         else {
           __onAnyEvent({
             type: "input",
             timestamp: Date.now(),
+            id: crypto.randomUUID(),
             value: (ev.target as HTMLInputElement)?.value + ev.key,
-              // @ts-ignore
-              ...window.getElementData(ev.target)
+              ...window.getElementData(ev.target as HTMLElement)
           })
         }
       }

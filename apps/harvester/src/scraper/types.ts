@@ -35,6 +35,7 @@ export type ValueResult = {
 
 export type BaseEvent = {
   timestamp: number,
+  id: string,
 }
 
 export type Coords = {
@@ -106,7 +107,6 @@ export type DynamicInputEvent = {
 // Not really an event, but something to read later
 export type ValueEvent = {
   type: "value",
-  font: Font,
   name?: string,
   parsing?: ValueParsing
 } & BaseEvent & ElementData;

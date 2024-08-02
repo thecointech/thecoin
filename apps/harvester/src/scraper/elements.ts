@@ -10,9 +10,14 @@ type FoundElement = {
   data: ElementData
 }
 
-declare let window: Window & {
-  getElementData: (el: HTMLElement, skipSibling?: boolean) => ElementData
-};
+declare global {
+  interface Window {
+    getElementData: (el: HTMLElement, skipSibling?: boolean) => ElementData;
+  }
+}
+// declare let window: Window & {
+//   getElementData: (el: HTMLElement, skipSibling?: boolean) => ElementData
+// };
 
 export async function getElementForEvent(page: Page, event: ElementData, timeout=30000, attempts=0) {
 
