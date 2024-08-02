@@ -13,7 +13,7 @@ import { fileURLToPath } from 'url';
 import { getLatestStored, setRate } from '../internals/rates/db';
 import { CoinRate, FxRates } from '../internals/rates/types';
 import { update } from '../internals/rates/UpdateDb';
-import { getLatest, initLatest, updateLatest } from '../internals/rates/latest';
+import { getLatest, updateLatest } from '../internals/rates/latest';
 
 export async function seed() {
   log.trace('--- Seeding DB ---');
