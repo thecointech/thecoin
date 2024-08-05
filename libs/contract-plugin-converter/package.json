@@ -60,5 +60,6 @@
   "dependencies": {
     "@thecointech/contract-oracle": "^0.2.130",
     "@thecointech/contract-plugins": "^0.2.130"
-  }
+  },
+  "gitHead": "6c91d925570c1132080f3098b510a3a42180e429"
 }

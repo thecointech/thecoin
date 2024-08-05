@@ -10713,7 +10713,7 @@ __metadata:
     "@composedb/types": "npm:^0.7.1"
     "@didtools/pkh-ethereum": "npm:^0.5.0"
     "@thecointech/logging": "npm:^0.2.130"
-    "@thecointech/setenv": "workspace:^"
+    "@thecointech/setenv": "npm:^0.2.130"
     "@thecointech/utilities": "npm:^0.2.130"
     did-session: "npm:^3.1.0"
   languageName: unknown
@@ -11098,7 +11098,7 @@ __metadata:
     "@types/less": "npm:^3.0.1"
     "@types/lodash": "npm:^4.14.170"
     "@types/luxon": "npm:3.3.0"
-    "@types/node": "npm:18.17.1"
+    "@types/node": "npm:20.11.0"
     "@types/prop-types": "npm:15.7.1"
     "@types/react": "npm:16.14.0"
     "@types/react-dom": "npm:16.9.14"
@@ -12356,10 +12356,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.17.1":
-  version: 18.17.1
-  resolution: "@types/node@npm:18.17.1"
-  checksum: 15b9d2d5de2e8607ea0c83286de437086467223c060b6165a2c8cb7b82caf46a4d8851489220adaa93dd525d62f014047ac005a7445be795581539436fc5e08e
+"@types/node@npm:20.11.0":
+  version: 20.11.0
+  resolution: "@types/node@npm:20.11.0"
+  dependencies:
+    undici-types: "npm:~5.26.4"
+  checksum: 560aa850dfccb83326f9cba125459f6c3fb0c71ec78f22c61e4d248f1df78bd25fd6792cef573dfbdc49c882f8e38bb1a82ca87e0e28ff2513629c704c2b02af
   languageName: node
   linkType: hard
 

@@ -49,5 +49,5 @@
     "@thecointech/jestutils": "^0.2.130",
     "firestore-jest-mock": "https://github.com/thecointech/firestore-jest-mock#f4145e6f28c02419ec5e338a6f5a424ab189986c"
   },
-  "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
+  "gitHead": "6c91d925570c1132080f3098b510a3a42180e429"
 }
