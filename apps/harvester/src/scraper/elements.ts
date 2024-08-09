@@ -25,6 +25,7 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
   while (Date.now() < startTick + timeout) {
     const frames = page.frames();
     for (const frame of frames) {
+      log.info(`Searching frame: ${await frame.title()} - ${frame.url()}`);
 
       // Get all elements in frame
       const candidates = await getCandidates(frame, event);
@@ -81,6 +82,15 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
 }
 
 async function getCandidates(frame: Frame, event: ElementData) {
+  // We are getting the occasional issue where getElementProps
+  // is undefined.  This could potentially be a race condition
+  // if this fn evaluates before evaluateOnNewDocument (?)
+  const hasHooks = await frame.evaluate(() => !!window.getElementData)
+  if (!hasHooks) {
+    log.warn("getElementData not yet hooked: skipping");
+    return [];
+  };
+
   const elements = await getAllElements(frame);
   const withSiblings = fillOutSiblingText(elements);
 
@@ -259,9 +269,9 @@ type SearchElement = {
 }
 
 export const getAllElements = async (frame: Page|Frame) => {
-  // const allElements = await frame.$x("//text()")
   const allElements = await frame.$$("*")
-  const allData: (ElementData|null)[] = await frame.evaluate(
+  log.info("Found elements: ", allElements.length);
+  const allData = await frame.evaluate(
     (...els) => els.map(el =>
       (
         el instanceof HTMLElement &&
@@ -273,7 +283,7 @@ export const getAllElements = async (frame: Page|Frame) => {
           checkOpacity: true,  // Check CSS opacity property too
           checkVisibilityCSS: true // Check CSS visibility property too
         })
-      ) ? getElementProps(el)
+      ) ? getElementProps?.(el)
         : null
     ),
     ...allElements
