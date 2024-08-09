@@ -1,11 +1,11 @@
 import { Route, Switch } from 'react-router';
 import { Step0 } from './Step0.Intro';
 import { CreditDetails } from './Step1.CreditDetails';
-import { Warmup } from './Step1.Warmup';
-import { ChequingBalance } from './Step2.ChequingBalance';
-import { VisaBalance } from './Step3.VisaBalance';
-import { SendETransfer } from './Step4.SendETransfer';
-import { Complete } from './Step5.Complete';
+import { Warmup } from './Step2.Warmup';
+import { ChequingBalance } from './Step3.ChequingBalance';
+import { VisaBalance } from './Step4.VisaBalance';
+import { SendETransfer } from './Step5.SendETransfer';
+import { Complete } from './Step6.Complete';
 
 export const TrainingRouter = () => (
   <Switch>
