@@ -17,6 +17,7 @@
         "BREAK_ON_STARTUP": "true",
         "CONFIG_NAME": "development",
         "HARVESTER_ALLOW_OVERRIDES": "true",
+        "HARVESTER_PROFILE_FOLDER": "${workspaceFolder}/profile",
       },
 
       "cwd": "${workspaceFolder}",

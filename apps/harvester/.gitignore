@@ -91,6 +91,4 @@ out/
 // My stuff
 myChromeSession
 output
-temp
-config-encrypted
-chrome_data
+profile
