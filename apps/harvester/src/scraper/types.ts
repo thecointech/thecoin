@@ -41,6 +41,7 @@ export type BaseEvent = {
 export type Coords = {
   top: number,
   left: number,
+  centerY: number,
   height: number,
   width: number,
 }

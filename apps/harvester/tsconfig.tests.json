@@ -1,4 +1,7 @@
 {
   "extends": "../../tsconfig.tests.json",
+  "compilerOptions": {
+    "lib": ["es2023"]
+  },
   "include": ["./*.cts", "./*.cjs", "**/*.test.*", "**/*.d.ts"],
 }

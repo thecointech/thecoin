@@ -216,11 +216,20 @@ export function getSelector(elem: Element) {
 
 const getCoords = (elem: Element) => {
   const box = elem.getBoundingClientRect();
+  const styles = elem.computedStyleMap();
+  //@ts-ignore `value` is not part of the spec, but it appears to always be there in px
+  const paddingTop = styles.get("padding-top")?.value || 0;
+  //@ts-ignore
+  const paddingLeft = styles.get("padding-left")?.value || 0;
+  //@ts-ignore
+  const paddingRight = styles.get("padding-right")?.value || 0;
   return {
-    top: box.top + window.scrollY,
-    left: box.left + window.scrollX,
+    top: box.top + window.scrollY + paddingTop,
+    left: box.left + window.scrollX + paddingLeft,
+    centerY: box.top + window.scrollY + (box.height / 2),
     height: box.height,
-    width: box.width,
+    // We want the width of the content, so ignore padding
+    width: box.width - (paddingRight + paddingLeft),
   };
 }
 
@@ -256,10 +265,8 @@ const getSiblingText = (elcoords: Coords, allText: Pick<ElementData, 'coords'|'n
     // If it's too large ignore it
     if (rowcoords.height > (elcoords.height * 3)) return false;
     // Is it centered on this node?
-    const rowCenter = rowcoords.top + (rowcoords.height / 2)
-    const elCenter = elcoords.top + (elcoords.height / 2)
     // We allow for slight offsets of generally 2/3 pixels
-    return Math.abs(rowCenter - elCenter) < 2
+    return Math.abs(rowcoords.centerY - elcoords.centerY) < 2
   })
   .map(c => c.nodeValue) as string[];
 
