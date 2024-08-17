@@ -83,7 +83,6 @@
     "@types/react-test-renderer": "^16.9.0",
     "@types/systemjs": "0.20.6",
     "coveralls": "3.0.4",
-    "ngrok": "3.2.1",
     "node-plop": "0.19.0",
     "plop": "2.4.0",
     "react-app-polyfill": "1.0.1",
