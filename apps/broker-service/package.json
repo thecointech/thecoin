@@ -39,7 +39,7 @@
   "main": "./build/main.js",
   "dependencies": {
     "@google-cloud/firestore": "4.12.3",
-    "@google-cloud/storage": "^7.7.0",
+    "@google-cloud/storage": "^7.12.1",
     "@thecointech/async": "^0.2.130",
     "@thecointech/contract-core": "^0.2.130",
     "@thecointech/contract-plugins": "^0.2.130",
@@ -52,7 +52,7 @@
     "@thecointech/tx-etransfer": "^0.2.130",
     "@thecointech/utilities": "^0.2.130",
     "@tsoa/runtime": "6.2.0",
-    "axios": "1.6.5",
+    "axios": "1.6.8",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "googleapis": "^129.0.0",
