@@ -54,7 +54,7 @@
     "@tsoa/runtime": "6.2.0",
     "axios": "1.6.5",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
+    "express": "^4.20.0",
     "googleapis": "^129.0.0",
     "luxon": "3.3.0",
     "openapi-types": "^7.2.3",
