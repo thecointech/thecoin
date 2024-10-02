@@ -59,15 +59,17 @@ export function getRawTxData(rawText: ElementData[]) : HistoryRow[] {
 
   // We don't care what the data -is-.  We just need the date & value
   // Return all currencies associated with the nearest date
-  return Object.entries(rows).map(([centerY, row]) => {
-    // Compare vs center to ensure we don't get thrown by small differences in top
-    const dateDistances = dateCol.map(el => Math.abs(el.raw.coords.centerY - Number(centerY)));
-    const closestIdx = indexOfMinValue(dateDistances);
-    const date = dateCol[closestIdx];
+  return Object.entries(rows)
+    .map(([centerY, row]) => {
+      // Compare vs center to ensure we don't get thrown by small differences in top
+      const dateDistances = dateCol.map(el => Math.abs(el.raw.coords.centerY - Number(centerY)));
+      const closestIdx = indexOfMinValue(dateDistances);
+      const date = dateCol[closestIdx];
 
-    const currencies = row.filter(el => Object.hasOwn(el, "currency")) as typeof allCurrencies;
-    return { date: date.date, values: currencies.map(el => el.currency) };
-  })
+      const currencies = row.filter(el => Object.hasOwn(el, "currency")) as typeof allCurrencies;
+      return { date: date.date, values: currencies.map(el => el.currency) };
+    })
+    .sort((a, b) => b.date.valueOf() - a.date.valueOf());
 }
 
 function indexOfMinValue(arr: number[]) {
