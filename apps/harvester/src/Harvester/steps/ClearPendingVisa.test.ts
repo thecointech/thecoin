@@ -39,34 +39,28 @@ it ('clearsPending using visa history', async () => {
   state.state.toPayVisaDate = DateTime.now().minus({ days: 1 });
   const d3 = await clearPending.process(state);
   expect(d3.harvesterBalance).toEqual(currency(500));
-  expect(logStatements[1]).toContain("Found 0 credits");
+  expect(logStatements[1]).toContain("Found 0 txs");
   expect(logStatements[2]).toContain("still waiting for pending payment"); // did nothing
 
   // Log some dummy transactions
-  state.visa.history.push({
-    credit: currency(10),
-    description: 'dummy',
+  state.visa.txs = [{
+    values: [currency(10)],
     date: DateTime.now().minus({ days: 2 }), // invalid, happens prior to settlement
   }, {
-    debit: currency(10),
-    credit: currency(0),
-    description: 'dummy',
+    values: [currency(0)],
     date: DateTime.now(),
   }, {
-    debit: currency(0),
-    credit: currency(5),
-    description: 'dummy',
+    values: [currency(5)],
     date: DateTime.now(),
-  })
+  }]
 
   const d4 = await clearPending.process(state);
   expect(d4.harvesterBalance).toEqual(currency(500));
-  expect(logStatements[3]).toContain("Found 1 credits");
+  expect(logStatements[3]).toContain("Found 2 txs");
   expect(logStatements[4]).toContain("still waiting for pending payment"); // did nothing
 
-  state.visa.history.push({
-    credit: currency(10),
-    description: 'clear it',
+  state.visa.txs?.push({
+    values: [currency(10)],
     date: DateTime.now(),
   })
 
@@ -74,7 +68,7 @@ it ('clearsPending using visa history', async () => {
   expect(d5.harvesterBalance).toEqual(currency(490));
   expect(d5.toPayVisa).toBeUndefined();
   expect(d5.toPayVisaDate).toBeUndefined();
-  expect(logStatements[5]).toContain("Found 2 credits");
+  expect(logStatements[5]).toContain("Found 3 txs");
   expect(logStatements[6]).toContain("Found matching credit for pending payment"); // did nothing
 })
 

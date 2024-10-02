@@ -10924,7 +10924,6 @@ __metadata:
     file-saver: "npm:^2.0.2"
     intl: "npm:^1.2.5"
     ip: "npm:1.1.5"
-    ngrok: "npm:3.2.1"
     node-plop: "npm:0.19.0"
     papaparse: "npm:^5.1.1"
     plop: "npm:2.4.0"
@@ -11787,6 +11786,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/density-clustering@npm:^1.3.3":
+  version: 1.3.3
+  resolution: "@types/density-clustering@npm:1.3.3"
+  checksum: c3870ab7521be42f8299ebc66753b0f90b48d477b125a41fa3c6744eb32daa4c915dd04fb3b487cb8c687f221b7ec674f167d00f2292b71c49865a3e06baa853
+  languageName: node
+  linkType: hard
+
 "@types/detect-port@npm:^1.3.0":
   version: 1.3.5
   resolution: "@types/detect-port@npm:1.3.5"
@@ -12371,13 +12377,6 @@ __metadata:
   dependencies:
     undici-types: "npm:~5.26.4"
   checksum: 6cfffb738124d43bc240d21f3196270c15b9a4137644eee35a7e75460fda8df881630e350d00fcfd66caa37bf1ed80771f2da0d4c7cd0016c9f616934a2377c5
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^8.10.30":
-  version: 8.10.66
-  resolution: "@types/node@npm:8.10.66"
-  checksum: 425e0fca5bad0d6ff14336946a1e3577750dcfbb7449614786d3241ca78ff44e3beb43eace122682de1b9d8e25cf2a0456a0b3e500d78cb55cab68f892e38141
   languageName: node
   linkType: hard
 
@@ -18931,23 +18930,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"decompress-zip@npm:^0.3.2":
-  version: 0.3.3
-  resolution: "decompress-zip@npm:0.3.3"
-  dependencies:
-    binary: "npm:^0.3.0"
-    graceful-fs: "npm:^4.1.3"
-    mkpath: "npm:^0.1.0"
-    nopt: "npm:^3.0.1"
-    q: "npm:^1.1.2"
-    readable-stream: "npm:^1.1.8"
-    touch: "npm:0.0.3"
-  bin:
-    decompress-zip: bin/decompress-zip
-  checksum: f8c3c6c62fdd23fd6dd4a963bb2bf54e4700baf1bc1a3ad2a28fdbdb6506e1cfa17f8654dc1c2d17ff348e5ffb16f685148a01c227cd045795c409f70e2a1219
-  languageName: node
-  linkType: hard
-
 "decompress@npm:^4.0.0, decompress@npm:^4.2.0":
   version: 4.2.1
   resolution: "decompress@npm:4.2.1"
@@ -19260,6 +19242,13 @@ __metadata:
   version: 1.0.0
   resolution: "delegates@npm:1.0.0"
   checksum: ba05874b91148e1db4bf254750c042bf2215febd23a6d3cda2e64896aef79745fbd4b9996488bd3cafb39ce19dbce0fd6e3b6665275638befffe1c9b312b91b5
+  languageName: node
+  linkType: hard
+
+"density-clustering@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "density-clustering@npm:1.3.0"
+  checksum: de574f82cfb677f0a8968a7a191a8105c846cada78654dff450e712fed96b338c3bb056f06320834d362347c03037b0512d0f46004e3fcdaf3e54986fc0b5ba1
   languageName: node
   linkType: hard
 
@@ -24301,7 +24290,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graceful-fs@npm:4.2.11, graceful-fs@npm:^4.1.10, graceful-fs@npm:^4.1.11, graceful-fs@npm:^4.1.15, graceful-fs@npm:^4.1.2, graceful-fs@npm:^4.1.3, graceful-fs@npm:^4.1.6, graceful-fs@npm:^4.1.9, graceful-fs@npm:^4.2.0, graceful-fs@npm:^4.2.2, graceful-fs@npm:^4.2.4, graceful-fs@npm:^4.2.6, graceful-fs@npm:^4.2.9":
+"graceful-fs@npm:4.2.11, graceful-fs@npm:^4.1.10, graceful-fs@npm:^4.1.11, graceful-fs@npm:^4.1.15, graceful-fs@npm:^4.1.2, graceful-fs@npm:^4.1.6, graceful-fs@npm:^4.1.9, graceful-fs@npm:^4.2.0, graceful-fs@npm:^4.2.2, graceful-fs@npm:^4.2.4, graceful-fs@npm:^4.2.6, graceful-fs@npm:^4.2.9":
   version: 4.2.11
   resolution: "graceful-fs@npm:4.2.11"
   checksum: 386d011a553e02bc594ac2ca0bd6d9e4c22d7fa8cfbfc448a6d148c59ea881b092db9dbe3547ae4b88e55f1b01f7c4a2ecc53b310c042793e63aa44cf6c257f2
@@ -24585,6 +24574,7 @@ __metadata:
     "@thecointech/signers": "npm:^0.2.130"
     "@thecointech/utilities": "npm:^0.2.130"
     "@timfish/forge-externals-plugin": "https://github.com/FrozenKiwi/forge-externals-plugin-monorepo"
+    "@types/density-clustering": "npm:^1.3.3"
     "@types/node-notifier": "npm:^8.0.2"
     "@types/pouchdb": "npm:^6.4.0"
     "@typescript-eslint/eslint-plugin": "npm:^5.0.0"
@@ -24593,6 +24583,7 @@ __metadata:
     comdb: "npm:^6.0.0-beta"
     crontab: "npm:^1.4.2"
     currency.js: "npm:^2.0.4"
+    density-clustering: "npm:^1.3.0"
     electron: "npm:28.1.3"
     electron-context-menu: "npm:^3.6.1"
     electron-squirrel-startup: "npm:^1.0.0"
@@ -31495,13 +31486,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mkpath@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "mkpath@npm:0.1.0"
-  checksum: e210586a30053f93817e03cc6ea6a7d818539a56b56065106886caee179fbc77115ecd96373fd99ad3ee921d24156cfa8b637e3c88c6d689ce604ae5b2e12039
-  languageName: node
-  linkType: hard
-
 "mnemonist@npm:^0.38.0":
   version: 0.38.5
   resolution: "mnemonist@npm:0.38.5"
@@ -32065,21 +32049,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ngrok@npm:3.2.1":
-  version: 3.2.1
-  resolution: "ngrok@npm:3.2.1"
-  dependencies:
-    "@types/node": "npm:^8.10.30"
-    decompress-zip: "npm:^0.3.2"
-    request: "npm:^2.88.0"
-    request-promise-native: "npm:^1.0.5"
-    uuid: "npm:^3.3.2"
-  bin:
-    ngrok: ./bin/ngrok
-  checksum: e7136feb0da7243322422fb8910c880f2fb9aea571a5eda908f705464459c6b923ee02ed93feacf1260b07a018dfd1ed9013d272248d3ac8688ca5f1e1700fbc
-  languageName: node
-  linkType: hard
-
 "nice-try@npm:^1.0.4":
   version: 1.0.5
   resolution: "nice-try@npm:1.0.5"
@@ -32432,17 +32401,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nopt@npm:^3.0.1":
-  version: 3.0.6
-  resolution: "nopt@npm:3.0.6"
-  dependencies:
-    abbrev: "npm:1"
-  bin:
-    nopt: ./bin/nopt.js
-  checksum: f4414223c392dd215910942268d9bdc101ab876400f2c0626b88b718254f5c730dbab5eda58519dc4ea05b681ed8f09c147570ed273ade7fc07757e2e4f12c3d
-  languageName: node
-  linkType: hard
-
 "nopt@npm:^5.0.0":
   version: 5.0.0
   resolution: "nopt@npm:5.0.0"
@@ -32473,17 +32431,6 @@ __metadata:
   bin:
     nopt: bin/nopt.js
   checksum: 9bd7198df6f16eb29ff16892c77bcf7f0cc41f9fb5c26280ac0def2cf8cf319f3b821b3af83eba0e74c85807cc430a16efe0db58fe6ae1f41e69519f585b6aff
-  languageName: node
-  linkType: hard
-
-"nopt@npm:~1.0.10":
-  version: 1.0.10
-  resolution: "nopt@npm:1.0.10"
-  dependencies:
-    abbrev: "npm:1"
-  bin:
-    nopt: ./bin/nopt.js
-  checksum: ddfbd892116a125fd68849ef564dd5b1f0a5ba0dbbf18782e9499e2efad8f4d3790635b47c6b5d3f7e014069e7b3ce5b8112687e9ae093fcd2678188c866fe28
   languageName: node
   linkType: hard
 
@@ -35973,13 +35920,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"q@npm:^1.1.2":
-  version: 1.5.1
-  resolution: "q@npm:1.5.1"
-  checksum: 7855fbdba126cb7e92ef3a16b47ba998c0786ec7fface236e3eb0135b65df36429d91a86b1fff3ab0927b4ac4ee88a2c44527c7c3b8e2a37efbec9fe34803df4
-  languageName: node
-  linkType: hard
-
 "qr.js@npm:0.0.0":
   version: 0.0.0
   resolution: "qr.js@npm:0.0.0"
@@ -36989,7 +36929,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:1.1.14, readable-stream@npm:1.1.x, readable-stream@npm:^1.1.8":
+"readable-stream@npm:1.1.14, readable-stream@npm:1.1.x":
   version: 1.1.14
   resolution: "readable-stream@npm:1.1.14"
   dependencies:
@@ -37550,7 +37490,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"request-promise-native@npm:^1.0.5, request-promise-native@npm:^1.0.7":
+"request-promise-native@npm:^1.0.7":
   version: 1.0.9
   resolution: "request-promise-native@npm:1.0.9"
   dependencies:
@@ -41178,15 +41118,6 @@ __metadata:
   version: 1.1.0
   resolution: "totalist@npm:1.1.0"
   checksum: 2adbd4501c8290c2a96617a83dc67dfdd02bcbd360032017e27ccf27bbb09649bbe8dad1c45d97be6874281178aca5b3f62ed059d1eeda77c479cfb8eb3a9266
-  languageName: node
-  linkType: hard
-
-"touch@npm:0.0.3":
-  version: 0.0.3
-  resolution: "touch@npm:0.0.3"
-  dependencies:
-    nopt: "npm:~1.0.10"
-  checksum: 9f3f4344c993e7193c7381f2576b17b905c177ffae82aa96b113b270b848aa9d7c48f40c20a5dac9dc76a40f6afd7f31cc01536b662f7bc4737aabe89643ddca
   languageName: node
   linkType: hard
 

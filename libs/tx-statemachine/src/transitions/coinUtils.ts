@@ -2,7 +2,7 @@ import { log } from '@thecointech/logging';
 import { AnyActionContainer, NamedTransition } from '../types';
 import { last } from '@thecointech/utilities';
 import { ActionType } from "@thecointech/broker-db";
-import { getOverrideFees } from "@thecointech/contract-base/overrides";
+// import { getOverrideFees } from "@thecointech/contract-base/overrides";
 import type { Overrides, Transaction, TransactionResponse } from 'ethers';
 
 // Don't log the actual transaction details
@@ -40,10 +40,10 @@ export const toDelta = (tx: TransactionResponse) => {
 export async function calculateOverrides<Type extends ActionType=ActionType>(container: AnyActionContainer, transition: NamedTransition<Type>) : Promise<Overrides> {
   const prior = findPriorAttempt(container, transition);
   const nonce = await getNonce(prior);
-  const fees = await getOverrideFees(container.contract, prior)
+  // const fees = await getOverrideFees(container.contract, prior)
   return {
     nonce,
-    ...fees,
+    // ...fees,
   };
 }
 

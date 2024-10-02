@@ -53,19 +53,18 @@ function lastPaymentSettled(data: HarvestData, pending: currency, pendingDate: D
   // The date has passed, is there a matching credit amount?
   // Note, we only have date, no time, so remove pending time
   const pendingClean = pendingDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-  const payments = data.visa.history
-    .filter(r => r.date >= pendingClean)
-    .filter(r => r.credit?.intValue);
-  log.info(`TransferVisaOwing: Found ${payments.length} credits, first ${payments[0]?.credit?.value}`);
-  const pendingPayment = payments.filter(r => r.credit!.value == pending.value);
-  if (pendingPayment.length > 0) {
+  const txs = data.visa.txs?.filter(r => r.date >= pendingClean)
+  log.info(`TransferVisaOwing: Found ${txs?.length ?? 0} txs`);
+  const matchingTx = txs?.find(r => r.values.find(v => v?.value == pending.value));
+  if (matchingTx) {
     log.info(`TransferVisaOwing: Found matching credit for pending payment: ${pending}`);
     return true;
   }
 
   // If it's been 6 days, it's probably settled and we must have missed it
+  // Send a warning though so it can be checked
   if (pendingDate < DateTime.now().minus({ days: 6 })) {
-    log.info(`TransferVisaOwing: 6 days since pendingDate, assuming ${pending} settled`);
+    log.warn(`TransferVisaOwing: 6 days since pendingDate, assuming ${pending} settled`);
     return true;
   }
 

@@ -29,7 +29,6 @@ it ('can process on first run', async () => {
       balance: currency(325),
       dueAmount: currency(100),
       dueDate: DateTime.now().plus({ weeks: 1 }),
-      history: [],
     },
     date: DateTime.now(),
 

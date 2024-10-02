@@ -255,15 +255,15 @@ export class Recorder {
       event.name = this.onValue.name;
       const text = await this.page.$eval(event.selector, (el => (el as HTMLElement).innerText));
       if (this.onValue.type == "table") {
-        const table = await getTableData(this.page, event.font!);
+        const table = await getTableData(this.page);
         event.parsing = {
           type: "table",
           format: null,
         }
         // Return the most recent payment
-        const mostRecentPayment = table.find(row => row.credit?.intValue)?.credit;
+        // const mostRecentPayment = table.find(row => row.credit?.intValue)?.credit;
         this.onValue.resolve({
-          text: "Your most recent payment was: " + mostRecentPayment,
+          text: "Your most recent tx was on: " + table?.[0].date.toSQLDate(),
           parsing: { type: "text", format: null },
         });
       }

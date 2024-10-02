@@ -8,7 +8,7 @@ export type VisaBalanceResult = {
   balance: currency;
   dueDate: DateTime;
   dueAmount: currency;
-  history: HistoryRow[];
+  txs?: HistoryRow[]; // NOT SAVED
 }
 
 export type ChequeBalanceResult = {

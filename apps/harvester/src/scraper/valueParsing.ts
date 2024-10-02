@@ -33,7 +33,7 @@ const StringTokens = [
 const NumberTokens = [
   "d",  // Matches 3 && 03
   "M",  // Matches 3 && 03
-  "y",  // Matches  1-6 numbers
+  "yy", // Matches  2 or 4 numbers (eg '21' or '2021')
 ]
 const tokenSplitter = /([0-9a-zA-Z]+)|([^0-9a-zA-Z]+)/gm
 
@@ -52,6 +52,8 @@ export function guessDateFormat(value?: string, locale?: string) {
   // split string into tokens of date-kind & separator
   const splits = value.match(tokenSplitter);
   if (!splits) return null;
+  // Early-exit, skip all currencies
+  if (splits.includes('$')) return null;
   // Search through the splits find potential values vs padding
   const matchers = getMatchers(splits);
 
@@ -110,7 +112,12 @@ export function guessDateFormat(value?: string, locale?: string) {
     }).join('');
     const dt = DateTime.fromFormat(value, candidate, { locale });
     if (dt.isValid) {
-      return candidate;
+      // Limit to semi-reasonable dates.  This should filter out most of the
+      // random number combinations (it's OK if a few get through)
+      // (1960 is the 2-digit cutoff year in Luxon)
+      if (dt.year > 1960 && dt.year < DateTime.now().year + 2) {
+        return candidate;
+      };
     }
   }
   return null;

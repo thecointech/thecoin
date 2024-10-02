@@ -1,322 +1,141 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import currency from 'currency.js';
 import { DateTime } from 'luxon';
 import { Page, } from 'puppeteer';
-import { ElementData, Font } from './types';
-import { getCurrencyConverter, guessCurrencyFormat, guessDateFormat } from './valueParsing';
+import { ElementData } from './types';
+import { CurrencyType, getCurrencyConverter, guessCurrencyFormat, guessDateFormat } from './valueParsing';
 import { getAllElements } from './elements';
-import { log } from '@thecointech/logging';
+import currency from 'currency.js';
 
 export type HistoryRow = {
-  date: DateTime,
-  description: string,
-  debit?: currency,
-  credit?: currency,
-  balance?: currency,
+  date: DateTime;
+  values: (currency | undefined)[];
 }
 
-export async function getTableData(page: Page, font: Font) {
+export async function getTableData(page: Page) {
   const rawText = await getTextNodeData(page);
-  const rawTable = getRawTable(rawText);
-  return mapColumnsToTypes(rawTable);
+  const rawTable = getRawTxData(rawText);
+  return rawTable;
 }
 
-const groupBy = <T>(array: T[], predicate: (value: T, index: number, array: T[]) => string|number) =>
+const groupBy = <T, Key extends string|number>(array: T[], predicate: (value: T, index: number, array: T[]) => Key) =>
   array.reduce((acc, value, index, array) => {
     (acc[predicate(value, index, array)] ||= []).push(value);
     return acc;
-  }, {} as { [key: string]: T[] });
+  }, [] as Record<Key, T[]>);
 
-export function getRawTable(rawText: ElementData[]) : string[][] {
-  // group all content into rows
-  const rows = groupBy(rawText, el => el.coords.centerY);
-  // remove all rows that are too small (we need 3 at least)
-  const tableRows = Object.entries(rows).filter(r => r[1].length > 2);
-  // Ensure their in the right order
-  const sortedTableRows = tableRows.sort((a, b) => a[1][0].coords.centerY - b[1][0].coords.centerY);
-  const tables = groupBy(sortedTableRows, row => row[1][0].coords.left);
-  const sortedtables = Object.entries(tables).sort((l, r) => r[1].length - l[1].length);
+// I can't get 100% reliable table detection to work
+// It's not important for now, so just return all rows
+// and let the caller deal with it
 
-  const allMatches = sortedtables.map(([ , rows]) => {
-    // Now match up all the columns
-    const columns: ColumnData[] = getRawColumns(rows);
-    // We may have picked up a number of tables with slightly varying columns
-    // (ie, multiple tables grouping transactions).
-    // Our next step is to merge overlapping columns together where appropriate
-    const mergedColumns = mergeColumns(columns);
-    // data is organized, but we understand it much better in table form
-    // Turn it back into a 2D array
-    return columnsToTable(mergedColumns, rows.length);
-  });
-  // Return the tables with the most matches
-  allMatches.sort((a, b) => b.length - a.length);
-  return allMatches[0];
-}
+export function getRawTxData(rawText: ElementData[]) : HistoryRow[] {
 
-type ColumnData = {
-  left: number,
-  right: number,
-  entries: ElementData[],
-}
+  // Get all dates as LH columns
+  const allDates = getAllDates(rawText);
+  const dateColumns = groupBy(allDates, el => el.raw.coords.left);
 
-function columnsToTable(columns: ColumnData[], numRows: number) {
-  const rowsAligned = new Array(numRows);
-  for (let i = 0; i < numRows; i++) {
-    rowsAligned[i] = new Array(columns.length);
-    for (let j = 0; j < columns.length; j++) {
-      rowsAligned[i][j] = columns[j].entries[i]?.text;
-    }
-  }
-  return rowsAligned;
-}
+  // Get all currencies as RH columns
+  const allCurrencies = getAllCurrencies(rawText);
+  // const currencyColumns = groupBy(allCurrencies, el => el.raw.coords.left + el.raw.coords.width);
 
-function getRawColumns(rows: [string, ElementData[]][]) {
-  const columns: ColumnData[] = [];
-  // Map rows into their appropriate columns
-  for (let i = 0; i < rows.length; i++) {
-    const row = rows[i];
-    for (const el of row[1]) {
-      // Add this element to it's column
-      const elRight = Math.round(el.coords.left + el.coords.width);
-      const column = getColumn(columns, el.coords.left, elRight);
-      column.entries[i] = el;
-    }
-  }
-  return columns.sort((a, b) => a.left - b.left);
-}
+  // Find the best date column.
+  const dates = Object.entries(dateColumns).sort((a, b) => b[1].length - a[1].length);
+  const dateCol = dates[0][1].sort((a, b) => a.raw.coords.centerY - b.raw.coords.centerY);
+  const firstDate = dateCol[0];
 
-function mergeColumns(columns: ColumnData[]) {
-  const mergedColumns = [];
-  for (let i = 0; i < columns.length - 1; i++) {
-    // Does this column overlap with the next one?
-    const l = columns[i];
-    const r = columns[i + 1];
+  // Get all elements that are below-right of this point
+  const allElements = [...allDates, ...allCurrencies];
+  const smallestHeight = Math.min(...allElements.map(el => el.raw.coords.height));
 
-    const merged = getMergedColumn(l, r);
-    if (merged) {
-      // If the columns were merged, we replace R with the
-      // merged column and re-run the merge again. This
-      // way we can merge multiple columns together
-      columns[i + 1] = merged;
-    }
-    else {
-      mergedColumns.push(l);
-    }
-  }
-  // The last column may not have been merged
-  mergedColumns.push(columns[columns.length - 1]);
-  return mergedColumns;
-}
+  // This is the top-left of the table(s)
+  const topLeftCoords = firstDate.raw.coords;
+  const top = topLeftCoords.top - smallestHeight; // Allow some offset
+  const left = topLeftCoords.left;;
+  const bounded = allElements.filter(el => (
+    el.raw.coords.left >= left &&
+    el.raw.coords.centerY >= top
+  )).sort((a, b) => a.raw.coords.centerY - b.raw.coords.centerY);
 
-function getMergedColumn(l: ColumnData, r: ColumnData) {
-  const overlap = Math.max(0, Math.min(l.right, r.right) - l.left);
-  if (overlap / (l.right - l.left) > 0.75) {
-    // no value overlap
-    const newEntries = new Array(Math.max(l.entries.length, r.entries.length));
-    for (let j = 0; j < newEntries.length; j++) {
-      // If both columns have entries, they cannot be merged
-      if (l.entries[j] && r.entries[j]) {
-        return false;
-      }
-      newEntries[j] = l.entries[j] || r.entries[j];
-    }
-    return {
-      left: l.left,
-      right: r.right,
-      entries: newEntries
-    };
-  }
-  return false;
-}
+  // Group into rows
+  const rows = groupBy(bounded, el => el.raw.coords.centerY);
 
-function getColumn(columns: ColumnData[], left: number, right: number) {
-  const column = columns.find(c => c.left == left || c.right == right);
-  if (column) {
-    column.right = Math.max(column.right, right);
-    return column;
-  }
+  // We don't care what the data -is-.  We just need the date & value
+  // Return all currencies associated with the nearest date
+  return Object.entries(rows).map(([centerY, row]) => {
+    // Compare vs center to ensure we don't get thrown by small differences in top
+    const dateDistances = dateCol.map(el => Math.abs(el.raw.coords.centerY - Number(centerY)));
+    const closestIdx = indexOfMinValue(dateDistances);
+    const date = dateCol[closestIdx];
 
-  // Create a new column
-  const newIdx = columns.push({
-    left: left,
-    right: right,
-    entries: []
-  });
-  return columns[newIdx - 1];
-}
-
-type HistoryRowPartial = Partial<HistoryRow> & { row: string[] };
-
-// For now, we assume [DateTime, desc, debit, credit, balance]
-function mapColumnsToTypes(rows: string[][]) : HistoryRow[] {
-  const processing = rows.map<HistoryRowPartial>(r => ({ row: r }));
-  const withDates = processDates(processing);
-  const withValues = processCurrencies(withDates);
-
-  return withValues;
-}
-
-function getCurrencyFormat(processing: HistoryRowPartial[]) {
-  for (let i = 0; i < processing.length - 1; i++) {
-    const row = processing[i].row;
-    for (let j = 0; j < row.length; j++) {
-      const format = guessCurrencyFormat(row[j]);
-      if (format) return format
-    }
-  }
-  throw new Error(`Couldn't find any currencies in rows`);
-}
-
-function processDates(processing: HistoryRowPartial[]) {
-  const fmt = findDateFormat(processing);
-  // Find all valid dates
-  const allDates = processing.map(r => {
-    return r.row.map(v => v ? DateTime.fromFormat(v, fmt) : undefined)
-  });
-  // Count how many dates are in each column
-  const colsWithDate = allDates.reduce((acc, row) => {
-    return row.map((cell, i) => (cell?.isValid ? 1 : 0) + (acc[i] || 0))
-  }, [] as number[]);
-  // The date column should have the most dates in it
-  const max = Math.max(...colsWithDate)
-  if (max == 0) throw new Error("No dates found");
-  const rowIdx = colsWithDate.indexOf(max);
-
-  // Assign date to processing
-  const assigned = processing.map((r, i) => {
-    const d = allDates[i][rowIdx];
-    // If the row has a value, but it isn't a date, remove it.
-    if (!d?.isValid) return null;
-    // Assign and remove from row
-    r.date = d;
-    r.row.splice(rowIdx, 1);
-    return r;
+    const currencies = row.filter(el => Object.hasOwn(el, "currency")) as typeof allCurrencies;
+    return { date: date.date, values: currencies.map(el => el.currency) };
   })
-
-  const filtered = assigned.filter(r => !!r);
-  // enforce earliest => latest ordering
-  const firstDate = filtered.find(r => r.date)?.date;
-  const lastDate = [...filtered].reverse().find(r => r.date)?.date;
-  // This should never happen (we should have thrown already)
-  if (!firstDate || !lastDate) throw new Error("No dates found");
-  // ensure array is descending (first date at end)
-  const sorted = (firstDate < lastDate) ? filtered.reverse() : filtered;
-  return sorted;
 }
 
-function findDateFormat(processing: HistoryRowPartial[]) {
-  // Search the first 5 rows for a date
-  for (let i = 0; i < processing.length; i++) {
-    const row = processing[i].row;
-    for (let j = 0; j < row.length; j++) {
-      const fmt = guessDateFormat(row[j]);
-      if (fmt) {
-        log.info(`Found date format ${fmt} from ${row[j]}`);
-        return fmt;
-      }
+function indexOfMinValue(arr: number[]) {
+  if (arr.length === 0) {
+    return -1;
+  }
+  let min = arr[0];
+  let minIndex = 0;
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] < min) {
+      minIndex = i;
+      min = arr[i];
     }
   }
-  throw new Error("Date format not guessed");
+  return minIndex;
 }
 
-function processCurrencies(processing: HistoryRowPartial[]) {
-  const fmt = getCurrencyFormat(processing);
+function getAllDates(rawText: ElementData[]) {
+  const dateFmts: Record<string, number> = {}
+  for (const row of rawText) {
+    const fmt = guessDateFormat(row.text)
+    if (fmt) {
+      dateFmts[fmt] = (dateFmts[fmt] || 0) + 1;
+    }
+  }
+  // Find the record with the most matches
+  const entries = Object.entries(dateFmts);
+  if (entries.length === 0) {
+    throw new Error(`Couldn't find any dates in rows`);
+  };
+  const [fmt] = entries.sort((a, b) => b[1] - a[1])[0];
+  // Now return all dates that can be converted to this format
+  return rawText
+    .map(el => ({
+      date: DateTime.fromFormat(el.text, fmt),
+      raw: el
+    }))
+    .filter(el => el.date.isValid)
+}
+
+// Find all the nodes that contain a currency
+function getAllCurrencies(rawText: ElementData[]) {
+  const currencyFmts: Record<CurrencyType, number> = {
+    CAD_en: 0,
+    CAD_fr: 0
+  }
+  for (const row of rawText) {
+    const fmt = guessCurrencyFormat(row.text)
+    if (fmt) {
+      currencyFmts[fmt] = currencyFmts[fmt] + 1;
+    }
+  }
+  // Find the record with the most matches
+  const fmt = currencyFmts['CAD_en'] > currencyFmts['CAD_fr'] ? 'CAD_en' : 'CAD_fr';
+  if (currencyFmts[fmt] === 0) {
+    throw new Error(`Couldn't find any currencies in rows`);
+  };
+  // Now return all currencies that can be converted to this format
   const converter = getCurrencyConverter(fmt);
-  const allCurrencies = processing.map(r => r.row.map(converter));
-  // Count how many currencies are in each column
-  const currencyCounts = allCurrencies.reduce((acc, row) => {
-    return row.map((cell, i) => (cell ? 1 : 0) + (acc[i] || 0))
-  }, [] as number[]);
-
-  // The last column should be balance
-  const colBalance = currencyCounts.findLastIndex(c => c > 0);
-
-  // Now, we need to figure out debit/credit columns
-  // Get our first & last balances
-  const firstBalanceRow = allCurrencies.findIndex(r => r[colBalance]);
-  const lastBalanceRow = allCurrencies.findLastIndex(r => r[colBalance]);
-  const rowsToTest = allCurrencies.slice(firstBalanceRow, lastBalanceRow + 1);
-
-  // enumerate all possible combinations of debit/credit
-  const combos = [] as [number, number][];
-
-  for (let cidx = 0; cidx < currencyCounts.length; cidx++) {
-    if (currencyCounts[cidx] === 0 || cidx === colBalance) continue;
-    for (let didx = cidx + 1; didx < currencyCounts.length; didx++) {
-      if (currencyCounts[didx] === 0 || didx === colBalance) continue;
-      combos.push([cidx, didx]);
-      combos.push([didx, cidx]);
-    }
-  }
-
-  const matches = getMatchesForCombos(combos, rowsToTest, colBalance);
-  const scores = matches.map(m => {
-    return m.filter(r => r.credit || r.debit).length
-  })
-  const maxScore = Math.max(...scores);
-  const bestResults = matches[scores.indexOf(maxScore)];
-
-  // copy back to processing
-  return processing.map<HistoryRow>((r, i) => ({
-    date: r.date!,
-    description: r.row[0],
-    credit: bestResults[i - firstBalanceRow]?.credit,
-    debit: bestResults[i - firstBalanceRow]?.debit,
-    balance: bestResults[i - firstBalanceRow]?.balance,
-  }))
-}
-
-function getMatchesForCombos(combos: [number, number][], rowsToTest: (currency|undefined)[][], balanceColumn: number) {
-  const results = [];
-  for (const combo of combos) {
-    results.push(findColumnMatches(combo[0], combo[1], balanceColumn, rowsToTest, false));
-    results.push(findColumnMatches(combo[0], combo[1], balanceColumn, rowsToTest, true));
-  }
-  return results;
-}
-
-function findColumnMatches(credit: number, debit: number, colBalance: number, rows: (currency|undefined)[][], negate: boolean) {
-  const lastRow = rows[rows.length - 1];
-  let lastBalance = lastRow[colBalance]!;
-  // We initialize with the values in the last row
-  // This is because there is no preceding balance
-  // so we cannot know if they are correct or not,
-  // so we just assume they are and incorrect indices will be ignored
-  const matched = [{
-    credit: negate ? lastRow[credit]?.multiply(-1) : lastRow[credit],
-    debit: lastRow[debit],
-    balance: lastRow[colBalance],
-  }];
-  const blockMatched = [];
-  for (let i = rows.length - 2; i >= 0; i--) {
-    const currentCredit = negate ? rows[i][credit]?.multiply(-1) : rows[i][credit];
-    const currentDebit = rows[i][debit];
-    const testBalance = lastBalance.add(currentCredit ?? 0).add(currentDebit ?? 0)
-
-    const newBalance = rows[i][colBalance];
-    if (newBalance) {
-      // If we have a balance, check it against the official total
-      // If it matches, copy the matched values into the full total
-      if (testBalance.value === newBalance.value) {
-        matched.push(...blockMatched, {credit: currentCredit, debit: currentDebit, balance: testBalance});
-      }
-      else {
-        // It doesn't match, but matched needs to have an
-        // entry for every entry in rows, so push empty values
-        matched.length += blockMatched.length + 1;
-      }
-      blockMatched.length = 0;
-      lastBalance = testBalance;
-    }
-    else {
-      // Not every row has a balance,
-      // in this case we keep a running count
-      blockMatched.push({credit: currentCredit, debit: currentDebit, balance: testBalance});
-      lastBalance = testBalance
-    }
-  }
-  // We reverse-iterate to fill this, so reverse the result back to original order
-  return matched.reverse();
+  return rawText
+    .map(el => ({
+      currency: converter(el.text),
+      raw: el
+    }))
+    .filter(el => el.currency)
+    .map(el => {
+      return { currency: currency(Math.abs(el.currency!.value)), raw: el.raw }
+    })
 }
 
 async function getTextNodeData(page: Page) : Promise<ElementData[]> {

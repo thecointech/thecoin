@@ -150,7 +150,7 @@ export async function replayEvents(page: Page, actionName: ActionTypes, events: 
             const tryReadTable = async () => {
               for (let i = 0; i < 15; i++) {
                 try {
-                  const value = await getTableData(page, event.font!);
+                  const value = await getTableData(page);
                   if (value.length > 0) {
                     values[event.name ?? 'defaultValue'] = value;
                     return true;

@@ -84,7 +84,10 @@ export async function setProcessConfig(config: Partial<ConfigShape>) {
     _id: ConfigKey,
     _rev: lastCfg?._rev,
   })
-  await db.loadDecrypted();
+  // When calling this in test env it throws a (non-consequential) error
+  if (process.env.NODE_ENV !== "development") {
+    await db.loadEncrypted();
+  }
 }
 
 export async function setWalletMnemomic(mnemonic: Mnemonic) {
