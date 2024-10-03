@@ -20,46 +20,57 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
 
   const startTick = Date.now();
 
+  log.info(`Searching for: ${event.tagName} - ${event.text} - ${event.siblingText} - ${event.selector}`);
+
   let failedCandidate;
 
   while (Date.now() < startTick + timeout) {
     const frames = page.frames();
     for (const frame of frames) {
-      log.info(`Searching frame: ${await frame.title()} - ${frame.url()}`);
 
-      // Get all elements in frame
-      const candidates = await getCandidates(frame, event);
-      if (candidates.length == 0) {
-        continue;
-      }
-
-      // Sort by score to see if any element is close enough
-      const sorted = candidates.sort((a, b) => b.score - a.score);
-      log.debug(`Found ${sorted.length} candidates, best: ${sorted[0]?.score}, second best: ${sorted[1]?.score}`);
-      const candidate = sorted[0];
-
-      // Extra debugging
-      if (process.env.HARVESTER_VERBOSE_SCRAPER) {
-        dbgPrintCandidate(candidate, event);
-      }
-
-      const elapsed = Date.now() - startTick;
-      log.info(`Search took: ${(elapsed / 1000).toFixed(2)}s`)
-
-      // Max score is 125.  70 is chosen arbitrarily, but
-      // works for selector + location + tagName, or
-      // location + siblings + tagName + text + font
-      if (candidate?.score >= 70) {
-        // Do we need to worry about multiple candidates?
-        if (sorted[1]?.score / candidate.score > 0.9) {
-          log.warn(`Second best candidate has  ${sorted[1].score} score`);
+      try {
+        // Get all elements in frame
+        const candidates = await getCandidates(frame, event);
+        if (candidates.length == 0) {
+          continue;
         }
-        return candidate;
-      }
+        log.info(`Searching frame: ${await frame.title()} - ${frame.url()}`);
 
-      // remember best candidate for debugging purposes
-      if (candidate.score > (failedCandidate?.score ?? 0)) {
-        failedCandidate = candidate;
+        // Sort by score to see if any element is close enough
+        const sorted = candidates.sort((a, b) => b.score - a.score);
+        log.debug(`Found ${sorted.length} candidates, best: ${sorted[0]?.score}, second best: ${sorted[1]?.score}`);
+        const candidate = sorted[0];
+
+        // Extra debugging
+        if (process.env.HARVESTER_VERBOSE_SCRAPER) {
+          dbgPrintCandidate(candidate, event);
+        }
+
+        const elapsed = Date.now() - startTick;
+        log.info(`Search took: ${(elapsed / 1000).toFixed(2)}s`)
+
+        // Max score is 125.  70 is chosen via trial/error, but
+        // works for selector + location + tagName, or
+        // location + siblings + tagName + text + font
+        if (candidate?.score >= 70) {
+          // Do we need to worry about multiple candidates?
+          if (sorted[1]?.score / candidate.score > 0.9) {
+            log.warn(` ** Second best candidate has  ${sorted[1].score} score`);
+            dbgPrintCandidate(sorted[1], event);
+            log.info(" ** best candidate ** ");
+            dbgPrintCandidate(candidate, event);
+          }
+          return candidate;
+        }
+
+        // remember best candidate for debugging purposes
+        if (candidate.score > (failedCandidate?.score ?? 0)) {
+          failedCandidate = candidate;
+        }
+      }
+      catch (e) {
+        log.error(e, `Error searching frame: ${await frame.title()} - ${frame.url()}`);
+        throw e;
       }
     }
     // Continue waiting
@@ -87,11 +98,14 @@ async function getCandidates(frame: Frame, event: ElementData) {
   // if this fn evaluates before evaluateOnNewDocument (?)
   const hasHooks = await frame.evaluate(() => !!window.getElementData)
   if (!hasHooks) {
-    log.warn("getElementData not yet hooked: skipping");
+    // This is spamming the logs searching frames that are obviously unnecessary.
+    // Leave it out for now.
+    // log.warn("getElementData not yet hooked: skipping");
     return [];
   };
 
   const elements = await getAllElements(frame);
+  log.info(`Got ${elements.length} elements`);
   const withSiblings = fillOutSiblingText(elements);
 
   const candidates: FoundElement[] = [];
@@ -108,6 +122,8 @@ async function getCandidates(frame: Frame, event: ElementData) {
 }
 
 async function dbgPrintCandidate(candidate: FoundElement, event: ElementData, ) {
+  log.debug(`Tag: ${event.tagName} - ${candidate?.data?.tagName}`);
+  log.debug(`Selector: ${event.selector} - ${candidate?.data?.selector}`);
   log.debug(`Text: ${event.text} - ${candidate?.data?.text}`);
   log.debug(`Label: ${event.label} - ${candidate?.data?.label}`);
   log.debug(`Coords: ${JSON.stringify(event.coords)} - ${JSON.stringify(candidate?.data?.coords)}`);
@@ -220,16 +236,20 @@ const getCoords = (elem: Element) => {
   //@ts-ignore `value` is not part of the spec, but it appears to always be there in px
   const paddingTop = styles.get("padding-top")?.value || 0;
   //@ts-ignore
+  const paddingBottom = styles.get("padding-bottom")?.value || 0;
+  //@ts-ignore
   const paddingLeft = styles.get("padding-left")?.value || 0;
   //@ts-ignore
   const paddingRight = styles.get("padding-right")?.value || 0;
+  // We want the height/width of the content, so ignore padding
+  const height = box.height - (paddingTop + paddingBottom);
+  const width = box.width - (paddingRight + paddingLeft);
   return {
     top: box.top + window.scrollY + paddingTop,
     left: box.left + window.scrollX + paddingLeft,
-    centerY: box.top + window.scrollY + (box.height / 2),
-    height: box.height,
-    // We want the width of the content, so ignore padding
-    width: box.width - (paddingRight + paddingLeft),
+    centerY: box.top + window.scrollY + paddingTop + (height / 2),
+    height,
+    width,
   };
 }
 
@@ -277,7 +297,6 @@ type SearchElement = {
 
 export const getAllElements = async (frame: Page|Frame) => {
   const allElements = await frame.$$("*")
-  log.info("Found elements: ", allElements.length);
   const allData = await frame.evaluate(
     (...els) => els.map(el =>
       (
@@ -309,10 +328,7 @@ export const getAllElements = async (frame: Page|Frame) => {
 }
 
 const BUCKET_PIXELS = 10
-const getBuckets = (coords: Coords) => {
-  const center = coords.top + (coords.height / 2);
-  return Math.floor(center / BUCKET_PIXELS);
-}
+const getBucketIdx = (coords: Coords) => Math.floor(coords.centerY / BUCKET_PIXELS);
 
 // fill out sibling text for each element in the tree.
 // This is an O(n^2) operation, so we use a bucketing approach
@@ -321,9 +337,9 @@ const fillOutSiblingText = (allElements: SearchElement[]) => {
   const bucketed: SearchElement[][] = [];
   for (let i = 0; i < allElements.length; i++) {
     const el = allElements[i];
-    const bucket = getBuckets(el.data.coords);
-    if (!bucketed[bucket]) bucketed[bucket] = [el]
-    else bucketed[bucket].push(el)
+    const idx = getBucketIdx(el.data.coords);
+    if (!bucketed[idx]) bucketed[idx] = [el]
+    else bucketed[idx].push(el)
   }
 
   // Now fill out the siblings
@@ -334,8 +350,7 @@ const fillOutSiblingText = (allElements: SearchElement[]) => {
     for (let i = 0; i < bucket.length; i++) {
       const el = bucket[i];
       const elcoords = el.data.coords;
-      const center = elcoords.top + (elcoords.height / 2)
-      const neighbours = (center % BUCKET_PIXELS)  < (BUCKET_PIXELS / 2)
+      const neighbours = (elcoords.centerY % BUCKET_PIXELS)  < (BUCKET_PIXELS / 2)
         ? bucketed[bidx - 1]
         : bucketed[bidx + 1]
 
