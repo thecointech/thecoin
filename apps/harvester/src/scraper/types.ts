@@ -8,7 +8,7 @@ export type VisaBalanceResult = {
   balance: currency;
   dueDate: DateTime;
   dueAmount: currency;
-  history: HistoryRow[];
+  txs?: HistoryRow[]; // NOT SAVED
 }
 
 export type ChequeBalanceResult = {
@@ -41,6 +41,7 @@ export type BaseEvent = {
 export type Coords = {
   top: number,
   left: number,
+  centerY: number,
   height: number,
   width: number,
 }

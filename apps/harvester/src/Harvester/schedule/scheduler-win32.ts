@@ -10,10 +10,6 @@ import fs from 'fs';
 
 const TaskName = "thecoin-harvest";
 export async function setSchedule(schedule: HarvestSchedule, _existing?: HarvestSchedule) {
-  // Don't schedule if we're in dev mode
-  if (process.env.NODE_ENV === 'development') {
-    return;
-  }
 
   log.info(`Creating schedule: ${JSON.stringify(schedule)}`);
 

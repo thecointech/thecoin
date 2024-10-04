@@ -32,6 +32,9 @@ export type HarvestData = {
   delta: HarvestDelta[],
   // are cumulatively applied to state
   state: HarvestDelta;
+
+  // Errors for the current run only (indexed by step name)
+  errors?: Record<string, string>,
 }
 
 export type UserData = {

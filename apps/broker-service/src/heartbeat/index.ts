@@ -11,17 +11,30 @@ export type Heartbeat = {
 const FiveMins = 5 * 60 * 1000;
 
 export async function heartbeat(request: Heartbeat) {
-  const now = Date.now();
-  if (request.timeMs < (now - FiveMins)) {
-    log.error({signedTime: request.timeMs, now}, 'Heartbeat too old: {signedTime}, now: {now}')
-    return false;
-  }
+
   const signer = await GetSigner({
     message: request.result + request.timeMs,
     signature: request.signature,
   });
 
-  log.info({signer}, 'Heartbeat From: {signer}')
+  const now = Date.now();
+  if (request.timeMs < (now - FiveMins)) {
+    log.error(
+      {signedTime: request.timeMs, now, address: signer},
+      'Heartbeat too old: {signedTime}, now: {now} - {address}'
+    )
+    return false;
+  }
+
+  if (request.result != "success") {
+    log.error(
+      {address: signer, result: request.result},
+      'Heartbeat Reported Error: {address}, {result}'
+    )
+  }
+  else {
+    log.info({address: signer}, 'Heartbeat From: {address}')
+  }
   await setHeartbeat(signer, request.result)
   return true;
 }

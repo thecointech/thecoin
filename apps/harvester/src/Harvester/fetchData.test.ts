@@ -52,7 +52,7 @@ it ('emulates appropriate history', () => {
         );
         expect(history.length).toEqual(1);
         expect(history[0].date.toSQLDate()).toEqual('2024-03-18');
-        expect(history[0].credit?.value).toEqual(1400);
+        expect(history[0].values[0].value).toEqual(1400);
     }
     testHistory('2024-03-18', '2024-03-14'); // Runs on clearance day
     testHistory('2024-03-19', '2024-03-14'); // Runs after clearance day

@@ -29,7 +29,8 @@ export async function initialize() {
   }
 
   // Initialize data (do we want anything from last state?)
-  const lastTxDate = lastRun?.visa.history.slice(-1)?.[0]?.date;
+  // Sub 1 week to ensure payments posted after last run are all counted
+  const lastTxDate = lastRun?.date.minus({ week: 1 });
   const chq = await getChequingData();
   const visa = await getVisaData(lastTxDate)
   let state: HarvestData = {

@@ -16,6 +16,8 @@ PouchDB.plugin(comdb)
 
 const db_path = path.join(rootFolder, `config${dbSuffix()}.db`);
 
+const PERSIST_DB = process.env.NODE_ENV !== "development" || process.env.CONFIG_NAME === "devlive"
+
 export type ConfigShape = {
   // Store the account Mnemomic
   wallet?: Mnemonic,
@@ -40,7 +42,8 @@ export async function getConfig(password?: string) {
   if (!__config) {
     __config = new PouchDB<ConfigShape>(db_path, {adapter: 'memory'});
     log.info(`Initializing ${process.env.NODE_ENV} config database at ${db_path}`);
-    if (process.env.NODE_ENV !== "development") {
+
+    if (PERSIST_DB) {
       log.info(`Encrypting config DB`);
       // initialize the config db
       // Yes, this is a hard-coded password.
@@ -84,7 +87,10 @@ export async function setProcessConfig(config: Partial<ConfigShape>) {
     _id: ConfigKey,
     _rev: lastCfg?._rev,
   })
-  await db.loadDecrypted();
+  // When calling this in test env it throws a (non-consequential) error
+  if (PERSIST_DB) {
+    await db.loadEncrypted();
+  }
 }
 
 export async function setWalletMnemomic(mnemonic: Mnemonic) {

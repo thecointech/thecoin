@@ -40,9 +40,10 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
   }
   catch (err) {
     const saveDump = process.env.HARVESTER_SAVE_DUMP;
-    log.error(`Failed to replay ${actionName}, doing dump: ${saveDump ?? false}`);
+    log.error(err, `Failed to replay ${actionName}, doing dump: ${saveDump ?? false}`);
     if (saveDump) {
-      const dumpFolder = path.join(logsFolder, "dumps", `${actionName}-${DateTime.now().toSQLDate()}`);
+      const now = DateTime.now();
+      const dumpFolder = path.join(logsFolder, "dumps", `${now.toSQLDate()}-${actionName}`, now.toFormat("HH-mm-ss"));
       await dumpPage(page, dumpFolder);
     }
     throw err;
@@ -80,11 +81,11 @@ export async function replayEvents(page: Page, actionName: ActionTypes, events: 
 
     for (let i = 0; i < events.length; i++) {
       const event = events[i];
+      log.info(` - Processing event: ${event.type} - ${event.id}`);
       // Keep a slight delay on events, time is not a priority here
       await sleep(delay);
       switch (event.type) {
         case 'navigation': {
-          log.debug('Waiting navigation');
           // Only directly navigate on the first item
           // The rest of the time all navigations
           // must be from clicking links etc
@@ -99,7 +100,6 @@ export async function replayEvents(page: Page, actionName: ActionTypes, events: 
           break;
         }
         case 'click': {
-          log.debug(`Clicking on: ${event.text}`);
           // If this click caused a navigation?
           const { element } = await getElementForEvent(page, event);
           if (events[i + 1]?.type == "navigation") {
@@ -114,7 +114,6 @@ export async function replayEvents(page: Page, actionName: ActionTypes, events: 
           break;
         }
         case 'input': {
-          log.debug(`Entering value: ############## into ${event.selector}`);
           await enterValue(page, event, event.value);
 
           // If the user pressed enter, simulate this too
@@ -150,7 +149,7 @@ export async function replayEvents(page: Page, actionName: ActionTypes, events: 
             const tryReadTable = async () => {
               for (let i = 0; i < 15; i++) {
                 try {
-                  const value = await getTableData(page, event.font!);
+                  const value = await getTableData(page);
                   if (value.length > 0) {
                     values[event.name ?? 'defaultValue'] = value;
                     return true;

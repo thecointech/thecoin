@@ -35,6 +35,14 @@ export async function harvest() {
     }
     const nextState = await processState(stages, state, user);
 
+    if (nextState.errors) {
+      const errorSteps = Object.keys(nextState.errors).join(', ');
+      await notifyError({
+        title: 'Harvester Error',
+        message: `Something went wrong in steps: ${errorSteps}.  Please contact support.`,
+      });
+    }
+
     if (!process.env.HARVESTER_DRY_RUN) {
       await setCurrentState(nextState);
     }
@@ -50,7 +58,7 @@ export async function harvest() {
     }
     const res = await notifyError({
       title: 'Harvester Error',
-      message: 'Harvesting failed.  Please contact support.',
+      message: `Harvesting failed.  Please contact support.`,
       actions: ["Start App"],
     })
     if (res == "Start App") {
