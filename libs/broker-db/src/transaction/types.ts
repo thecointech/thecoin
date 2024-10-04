@@ -62,7 +62,7 @@ export type ActionDataTypes = {
   // Not an action, but lets store it here anyway
   Heartbeat: {
     date: DateTime;
-    result: string;
+    errors?: string[];
     // Not currently used
     initialId?: unknown;
     initial?: unknown;

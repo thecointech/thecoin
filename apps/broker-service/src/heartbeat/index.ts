@@ -5,7 +5,7 @@ import { GetSigner } from '@thecointech/utilities/SignedMessages';
 export type Heartbeat = {
   timeMs: number;
   signature: string;
-  result: string;
+  errors?: string[];
 }
 
 const FiveMins = 5 * 60 * 1000;
@@ -13,7 +13,7 @@ const FiveMins = 5 * 60 * 1000;
 export async function heartbeat(request: Heartbeat) {
 
   const signer = await GetSigner({
-    message: request.result + request.timeMs,
+    message: (request.errors?.join() ?? "") + request.timeMs,
     signature: request.signature,
   });
 
@@ -26,15 +26,15 @@ export async function heartbeat(request: Heartbeat) {
     return false;
   }
 
-  if (request.result != "success") {
+  if (request.errors?.length) {
     log.error(
-      {address: signer, result: request.result},
-      'Heartbeat Reported Error: {address}, {result}'
+      {address: signer, errors: request.errors},
+      'Heartbeat Reported Error: {address}, {errors}'
     )
   }
   else {
     log.info({address: signer}, 'Heartbeat From: {address}')
   }
-  await setHeartbeat(signer, request.result)
+  await setHeartbeat(signer, request.errors)
   return true;
 }

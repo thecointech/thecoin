@@ -73,11 +73,19 @@ export async function getUserVerified(address: string) {
 	return userData?.status == "approved";
 }
 
-export async function setHeartbeat(address: string, result: string) {
+export async function setHeartbeat(address: string, errors?: string[]) {
   // always push a new entry
   const doc = getActionDoc(address, "Heartbeat");
-  await doc.set({
-    date: DateTime.now(),
-    result,
-  })
+  if (errors?.length) {
+    // Annoyingly, firestore won't let us pass undefined entries
+    await doc.set({
+      date: DateTime.now(),
+      errors,
+    })
+  }
+  else {
+    await doc.set({
+      date: DateTime.now(),
+    })
+  }
 }
