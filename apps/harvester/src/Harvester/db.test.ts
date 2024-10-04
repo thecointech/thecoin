@@ -47,7 +47,7 @@ it ('can override balance', async () => {
     date: now,
     values: [currency(1400)],
   }]
-  const clearDelta = await new ClearPendingVisa().process(r!);
+  const clearDelta = await new ClearPendingVisa().process(r, {} as any);
   expect(clearDelta.toPayVisa).toBeUndefined();
   expect(clearDelta.toPayVisaDate).toBeUndefined();
 })

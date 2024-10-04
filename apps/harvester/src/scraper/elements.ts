@@ -38,8 +38,8 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
 
         // Sort by score to see if any element is close enough
         const sorted = candidates.sort((a, b) => b.score - a.score);
-        log.debug(`Found ${sorted.length} candidates, best: ${sorted[0]?.score}, second best: ${sorted[1]?.score}`);
         const candidate = sorted[0];
+        log.debug(`Found ${sorted.length} candidates, best: ${candidate?.score} (${candidate?.data?.selector}), second best: ${sorted[1]?.score}`);
 
         // Extra debugging
         if (process.env.HARVESTER_VERBOSE_SCRAPER) {
@@ -55,7 +55,7 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
         if (candidate?.score >= 70) {
           // Do we need to worry about multiple candidates?
           if (sorted[1]?.score / candidate.score > 0.9) {
-            log.warn(` ** Second best candidate has  ${sorted[1].score} score`);
+            log.warn(` ** Second best candidate has  ${sorted[1]?.score} score`);
             dbgPrintCandidate(sorted[1], event);
             log.info(" ** best candidate ** ");
             dbgPrintCandidate(candidate, event);

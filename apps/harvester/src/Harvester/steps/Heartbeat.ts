@@ -8,7 +8,7 @@ export class Heartbeat implements ProcessingStage {
 
   readonly name = 'Heartbeat';
 
-  async process(_data: HarvestData) {
+  async process(data: HarvestData) {
 
     log.info("Sending Heartbeat");
 
@@ -17,17 +17,20 @@ export class Heartbeat implements ProcessingStage {
       return {};
     }
 
+    const result = data.errors
+      ? "Errors: " + Object.keys(data.errors).join(', ')
+      : 'success';
+
     const wallet = await getWallet();
     const serverTimestamp = await GetStatusApi().timestamp();
-    const result = "success";
     const signedPacket = await GetSignedMessage(
       result + serverTimestamp.data,
       wallet!,
     )
     const r = await GetHarvesterApi().heartbeat({
       timeMs: serverTimestamp.data,
-      result: "success",
       signature: signedPacket.signature,
+      result,
     });
     log.info(`Sent Heartbeat: ${r.statusText}`);
 

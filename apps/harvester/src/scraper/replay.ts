@@ -40,10 +40,10 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
   }
   catch (err) {
     const saveDump = process.env.HARVESTER_SAVE_DUMP;
-    log.error(`Failed to replay ${actionName}, doing dump: ${saveDump ?? false}`);
+    log.error(err, `Failed to replay ${actionName}, doing dump: ${saveDump ?? false}`);
     if (saveDump) {
       const now = DateTime.now();
-      const dumpFolder = path.join(logsFolder, "dumps", `${actionName}-${now.toSQLDate()}`, now.toFormat("HH-mm-ss"));
+      const dumpFolder = path.join(logsFolder, "dumps", `${now.toSQLDate()}-${actionName}`, now.toFormat("HH-mm-ss"));
       await dumpPage(page, dumpFolder);
     }
     throw err;
