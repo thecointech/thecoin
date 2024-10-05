@@ -17,20 +17,20 @@ export class Heartbeat implements ProcessingStage {
       return {};
     }
 
-    const result = data.errors
-      ? "Errors: " + Object.keys(data.errors).join(', ')
-      : 'success';
+    const errors = data.errors
+      ? Object.keys(data.errors)
+      : undefined;
 
     const wallet = await getWallet();
     const serverTimestamp = await GetStatusApi().timestamp();
     const signedPacket = await GetSignedMessage(
-      result + serverTimestamp.data,
+      (errors?.join() ?? "") + serverTimestamp.data,
       wallet!,
     )
     const r = await GetHarvesterApi().heartbeat({
       timeMs: serverTimestamp.data,
       signature: signedPacket.signature,
-      result,
+      errors,
     });
     log.info(`Sent Heartbeat: ${r.statusText}`);
 
