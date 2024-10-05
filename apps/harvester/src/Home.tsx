@@ -8,7 +8,7 @@ export const Home = () => {
         Introducing The Harvester
       </h2>
       <h4>
-        This app will create an automated bot that automatically optimizes
+        This app creates a custom AI agent that automatically optimizes
         your personal finances to earn you money.
       </h4>
       <div>
@@ -22,7 +22,7 @@ export const Home = () => {
         You just need to give it more time.
       </h4>
       <div>
-        <Link to="/account/login">Get Started</Link>
+        <Link to="/browser">Get Started</Link>
       </div>
     </div>
   )

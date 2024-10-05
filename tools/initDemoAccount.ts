@@ -11,6 +11,7 @@ import { CurrencyCode } from "@thecointech/fx-rates";
 import { SendFakeDeposit, emailCacheFile } from '@thecointech/email-fake-deposit';
 import { writeFileSync } from "fs";
 import { loadAndMergeHistory } from '@thecointech/tx-blockchain';
+import { AddressLike } from "ethers";
 
 // Always delete any existing emails
 //execSync("yarn dev:live", { stdio: "inherit", cwd: "../libs/email-fake-deposit" });
@@ -19,9 +20,9 @@ if (process.env.CONFIG_NAME == "devlive") {
   writeFileSync(emailCacheFile, "[]");
 }
 
-// TODO: Use the account itself to set an initial date
-const pausedAfterMonths = 0;
-const monthsToRun = 50;
+/////////////////////////////////////////////
+const monthsToRun = 9999;
+/////////////////////////////////////////////
 
 // Init/Demo account
 // Starting from Jan 1 2022
@@ -39,13 +40,14 @@ const startDate = DateTime.fromObject({
 })
 
 // Get date of last transaction
-const tx = await loadAndMergeHistory(0, tcCore, testAddress);
+const initBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0", 10);
+const tx = await loadAndMergeHistory(initBlock, tcCore, testAddress);
 const lastTxDate = tx[tx.length - 1]?.date ?? startDate;
 console.log(`Last tx: ${lastTxDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
 
-const pausedDate = lastTxDate.plus({ hour: 1}); // startDate.plus({month: pausedAfterMonths});
+const pausedDate = lastTxDate.plus({ hour: 1});
 const endDate = DateTime.min(
-  startDate.plus({month: pausedAfterMonths + monthsToRun}),
+  pausedDate.plus({month: monthsToRun}),
   DateTime.now()
 );
 const visaStep = Duration.fromObject({week: 4});
@@ -71,12 +73,12 @@ if (plugins.length == 0) {
 
   console.log("Assigning plugins to account...");
 
-  const assignPlugin = async (pluginAddress: string, minutesBack: number) => {
+  const assignPlugin = async (plugin: AddressLike, minutesBack: number) => {
     const api = GetPluginsApi();
     DateTime.now = () => startDate.minus({minute: minutesBack})
     const request = await buildAssignPluginRequest(
       signer,
-      pluginAddress,
+      plugin,
       ALL_PERMISSIONS,
     );
     await api.assignPlugin({
@@ -88,11 +90,11 @@ if (plugins.length == 0) {
   const converter = await getUberContract();
   const shockAbsorber = await getShockAbsorberContract();
 
-  await assignPlugin(converter.address, 10);
-  await assignPlugin(shockAbsorber.address, 5);
+  await assignPlugin(converter, 10);
+  await assignPlugin(shockAbsorber, 5);
 
   DateTime.now = oldNow
-  process.exit(0);
+  // process.exit(0);
 }
 
 const payBillApi = GetBillPaymentsApi();
@@ -110,8 +112,12 @@ while (currDate < endDate) {
     if (currDate >= pausedDate) {
       console.log(`Running Harvester for ${currDate.weekdayShort} ${currDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
       numSent++;
-       // We always do our transfer
-      const r = await SendFakeDeposit(testAddress, harvestSends, currDate);
+       // Send the transfer slightly earlier than the current date
+       // This ensures it is processed first in the tx-processor,
+       // which is important because deposits need to be present
+       // before the bill is processed if the bill is processed
+       // immediately (which in the past, it is)
+      const r = await SendFakeDeposit(testAddress, harvestSends, currDate.minus({minutes: 1}));
       if (!r) {
         console.log("Failed to send mail");
         break;

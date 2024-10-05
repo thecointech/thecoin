@@ -26,9 +26,15 @@ export const initialState: HarvestConfig = stored.value ?? {
       },
     },
     {
-      type: HarvestStepType.TransferLimit,
+      type: HarvestStepType.ChequeMinimum,
       args: {
         limit: 200,
+      },
+    },
+    {
+      type: HarvestStepType.TransferLimit,
+      args: {
+        limit: 2500,
       },
     },
     { type: HarvestStepType.SendETransfer },

@@ -1,6 +1,5 @@
 import { isInternalAddress, Transaction } from "./types";
 import type { TheCoin } from '@thecointech/contract-core';
-import { BigNumber } from "@ethersproject/bignumber";
 import { DateTime } from "luxon";
 import Decimal from 'decimal.js-light';;
 import { log } from '@thecointech/logging';
@@ -14,12 +13,12 @@ export function mergeTransactions(history: Transaction[], moreHistory: Transacti
   return mergedHistory;
 }
 
-function toDecimal(v: BigNumber) : Decimal;
-function toDecimal(v?: BigNumber) { return v ? new Decimal(v.toString()) : undefined; }
+function toDecimal(v: BigInt) : Decimal;
+function toDecimal(v?: BigInt) { return v ? new Decimal(v.toString()) : undefined; }
 const toTransaction = (tx: ERC20Response): Transaction => ({
   txHash: tx.hash,
   balance: 0,
-  change: tx.value.toNumber(),
+  change: Number(tx.value),
   counterPartyAddress: NormalizeAddress(tx.from),
   date: DateTime.fromSeconds(tx.timestamp),
   from: NormalizeAddress(tx.from),
@@ -30,9 +29,11 @@ const toTransaction = (tx: ERC20Response): Transaction => ({
 export async function loadAndMergeHistory(fromBlock: number, contract: TheCoin, address?: string) {
 
   try {
-    const contractAddress = contract.address;
+    const contractAddress = await contract.getAddress();
+    // Fetching data requires etherscan (Infura limits logs length to 149)
     const provider = new Erc20Provider();
     const allTxs = await provider.getERC20History({address, contractAddress, fromBlock});
+    const contractClean = contract.connect(provider);
 
     // Fee's are listed separately here, but treated as a single TX in the rest of TheCoin
     //const xferAssist = NormalizeAddress(process.env.WALLET_BrokerTransferAssistant_ADDRESS!);
@@ -54,19 +55,20 @@ export async function loadAndMergeHistory(fromBlock: number, contract: TheCoin, 
         converted[tx.hash].fee = toDecimal(tx.value);
       }
     }
-    const history = Object.values(converted).sort((a, b) => a.date.toMillis() - b.date.toMillis());
-
-    let exact = await fetchExactTimestamps(contract, provider, fromBlock, address);
+    // Apply exact timestamps
+    const normalizedAddress = address ? NormalizeAddress(address) : address;
+    const history = Object.values(converted)
+    const exact = await fetchExactTimestamps(contractClean, fromBlock, address);
     for (const tx of history) {
       if (exact[tx.txHash]) {
         tx.date = DateTime.fromMillis(exact[tx.txHash]);
       }
-      if (NormalizeAddress(tx.from) == address) {
+      if (NormalizeAddress(tx.from) == normalizedAddress) {
         tx.change = -tx.change;
       }
     }
-
-    return history;
+    const sorted = history.sort((a, b) => a.date.toMillis() - b.date.toMillis());
+    return sorted;
   }
   catch (err: any) {
     log.error(err, err.message);
@@ -74,13 +76,13 @@ export async function loadAndMergeHistory(fromBlock: number, contract: TheCoin, 
   return [];
 }
 
-async function fetchExactTimestamps(contract: TheCoin, provider: Erc20Provider, fromBlock: number, address?: string) {
+async function fetchExactTimestamps(contract: TheCoin, fromBlock: number, address?: string) {
   if (!address) {
-    return await filterExactTransfers(contract, provider, fromBlock, [null, null]);
+    return await filterExactTransfers(contract, fromBlock, [undefined, undefined]);
   }
   else {
-    const exactFrom = await filterExactTransfers(contract, provider, fromBlock, [address, null]);
-    const exactTo = await filterExactTransfers(contract, provider, fromBlock, [null, address]);
+    const exactFrom = await filterExactTransfers(contract, fromBlock, [address, undefined]);
+    const exactTo = await filterExactTransfers(contract, fromBlock, [undefined, address]);
     return {
       ...exactTo,
       ...exactFrom
@@ -88,24 +90,47 @@ async function fetchExactTimestamps(contract: TheCoin, provider: Erc20Provider, 
   }
 }
 
-async function filterExactTransfers(contract: TheCoin, provider: Erc20Provider, fromBlock: number, addresses: [string|null, string|null]) {
+async function filterExactTransfers(contract: TheCoin, fromBlock: number|string, addresses: [string|undefined, string|undefined], toBlock?: number|string) : Promise<Record<string, number>> {
   const filter = contract.filters.ExactTransfer(...addresses);
-  const logs = await provider.getEtherscanLogs({
-    ...filter,
-    fromBlock
-  }, "and");
-  return  logs.reduce((acc, item) => ({
-    ...acc,
-    [item.transactionHash]: contract.interface.parseLog(item).args.timestamp.toNumber()
-  }), {} as Record<string, number>);
+  try {
+    const logs = await contract.queryFilter(filter, fromBlock, toBlock);
+    return logs.reduce((acc, item) => ({
+      ...acc,
+      [item.transactionHash]: Number(item.args.timestamp)
+    }), {} as Record<string, number>);
+  }
+  catch (err: unknown) {
+    // NOTE: This catch was implemented for infura, however it turned out to be
+    // much simpler to simply use etherscan.  Leaving this here for reference
+    // but it should not be relied on as working code
+    if (err instanceof Error) {
+      // Ethers wraps the error we actually want
+      const error = (err as any).error;
+      if (error?.code === -32005) {
+        // query returned more than XXX results, split & re-query
+        const { from, to } = error.data;
+        if (from && to) {
+          // If we have this error, we can split & re-query
+          console.log(`Split query: ${from} - ${to}`);
+          const first = await filterExactTransfers(contract, from, addresses, to);
+          const second = await filterExactTransfers(contract, to, addresses);
+          return {
+            ...first,
+            ...second
+          }
+        }
+      }
+    }
+    throw err;
+  }
 }
 
-export function calculateTxBalances(currentBalance: BigNumber, history: Transaction[]) {
+export function calculateTxBalances(currentBalance: bigint, history: Transaction[]) {
   // history is sorted - oldest first.
   let balance = currentBalance;
   for (let i = history.length - 1; i >= 0; i--) {
     const tx = history[i];
-    tx.balance = balance.toNumber();
-    balance = balance.sub(tx.change);
+    tx.balance = Number(balance);
+    balance = balance - BigInt(tx.change);
   }
 }

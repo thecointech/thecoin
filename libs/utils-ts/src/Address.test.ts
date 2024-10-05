@@ -1,5 +1,5 @@
 import { IsValidAddress, NormalizeAddress, IsValidShortCode, getAddressShortCode, AddressMatches, getShortCode } from './Address';
-import { Wallet } from "@ethersproject/wallet";
+import { Wallet } from "ethers";
 
 test('basic', () => {
 
@@ -55,7 +55,8 @@ test('basic', () => {
 // Test Fix - failed deposits due to changed short-code
 it("generates consistent short code", async () => {
     // Use a random wallet to test code generation
-    const wallet = Wallet.fromMnemonic('payment moment extend talk annual shell dry speak cluster vacant afford luggage');
+    const wallet = Wallet.fromPhrase('payment moment extend talk annual shell dry speak cluster vacant afford luggage');
+    console.log(wallet.address)
     const shortCode = await getAddressShortCode(wallet.address, wallet);
     expect(shortCode).toEqual('xd9p8v');
 })

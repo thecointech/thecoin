@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/async",
-  "version": "0.2.125",
+  "version": "0.2.130",
   "description": "TheCoin: utility functions for async control",
   "type": "module",
   "keywords": [
@@ -23,10 +23,9 @@
   "exports": {
     ".": {
       "development": "./build/async_mocked.js",
-      "devlive": "./build/async_mocked.js",
       "default": "./build/index.js"
     }
   },
   "types": "./build/index.d.ts",
-  "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
+  "gitHead": "6c91d925570c1132080f3098b510a3a42180e429"
 }

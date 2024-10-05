@@ -22,6 +22,7 @@ const baseOptions: Configuration = {
       "crypto": require.resolve("crypto-browserify"),
       "stream": require.resolve("stream-browserify"),
       "path": require.resolve("path-browserify"),
+      "http": false,
       "fs": false,
       "vm": false,
     },

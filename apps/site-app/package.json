@@ -2,7 +2,7 @@
   "name": "@thecointech/site-app",
   "productName": "THECoin: Website - App",
   "private": true,
-  "version": "0.2.125",
+  "version": "0.2.130",
   "description": "THECoin: Future-proof currency",
   "type": "module",
   "repository": {
@@ -53,10 +53,10 @@
   },
   "dependencies": {
     "@artsy/fresnel": "^1.2.2",
-    "@thecointech/blockpass": "^0.2.125",
-    "@thecointech/shared": "^0.2.125",
-    "@thecointech/site-base": "^0.2.125",
-    "@thecointech/utilities": "^0.2.125",
+    "@thecointech/blockpass": "^0.2.130",
+    "@thecointech/shared": "^0.2.130",
+    "@thecointech/site-base": "^0.2.130",
+    "@thecointech/utilities": "^0.2.130",
     "card-validator": "^6.2.0",
     "compression": "1.7.4",
     "connected-react-router": "^6.6.1",
@@ -73,7 +73,7 @@
     "sanitize.css": "10.0.0"
   },
   "devDependencies": {
-    "@thecointech/setenv": "^0.2.125",
+    "@thecointech/setenv": "^0.2.130",
     "@types/card-validator": "^4.1.0",
     "@types/expect": "1.20.4",
     "@types/file-saver": "^2.0.1",
@@ -83,7 +83,6 @@
     "@types/react-test-renderer": "^16.9.0",
     "@types/systemjs": "0.20.6",
     "coveralls": "3.0.4",
-    "ngrok": "3.2.1",
     "node-plop": "0.19.0",
     "plop": "2.4.0",
     "react-app-polyfill": "1.0.1",

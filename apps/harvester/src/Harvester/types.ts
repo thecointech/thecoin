@@ -1,8 +1,8 @@
 import currency from 'currency.js'
 import { DateTime } from 'luxon'
 import type { ChequeBalanceResult, VisaBalanceResult } from '../scraper/types'
-import { Signer } from '@ethersproject/abstract-signer';
 import type { Replay } from '../scraper/replay';
+import type { Signer } from 'ethers';
 
 export type HarvestDelta = {
   // The fiat balance of the harvesters
@@ -32,6 +32,9 @@ export type HarvestData = {
   delta: HarvestDelta[],
   // are cumulatively applied to state
   state: HarvestDelta;
+
+  // Errors for the current run only (indexed by step name)
+  errors?: Record<string, string>,
 }
 
 export type UserData = {

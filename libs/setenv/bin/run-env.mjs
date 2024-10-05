@@ -43,9 +43,10 @@ env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --loader=${loader} --es-module-speci
 // If this is yarn script?
 if (executable != "node") {
   // Is this a command in .bin folder (ie - is it webpack?)
-  const binUrl = new URL(`../../../node_modules/.bin/${executable}`, import.meta.url);
+  const binFolder = new URL(`../../../node_modules/.bin`, import.meta.url);
+  const binUrl = new URL(executable, binFolder);
   if (existsSync(binUrl)) {
-    executable = fileURLToPath(binUrl);
+    env.PATH = `${fileURLToPath(binFolder)}:${env.PATH}`
     if (process.platform == "win32") {
       // On windows we target the .cmd version
       executable = executable + ".cmd";
@@ -56,7 +57,7 @@ if (executable != "node") {
 const proc = spawn(
   executable,
   args,
-  { stdio: 'inherit', cwd: process.cwd(), env }
+  { stdio: 'inherit', shell: true, cwd: process.cwd(), env }
 )
 
 // Liberally inspired by cross-env: https://github.com/kentcdodds/cross-env/blob/master/src/index.js

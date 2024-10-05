@@ -27,7 +27,7 @@ abstract contract Mintable is ExactDateable {
     onlyMinter
   {
     // We can only mint coins to the TC address
-    hasRole(THECOIN_ROLE, to);
+    require(hasRole(THECOIN_ROLE, to), "Action requires TheCoin role");
     _mint(to, amount);
     emit ExactTransfer(address(0), to, amount, timestamp);
   }

@@ -177,7 +177,7 @@ export async function getIncompleteActions<Type extends ActionType>(type: Type) 
     const { address, id } = decomposeActionPath(path);
     return getAction(address, type, id);
   });
-  log.debug({ action: type, length: fetchAll.length }, 'Fetched {fetchAll.length} actions of type: {action}')
+  log.debug({ action: type, length: fetchAll.length }, 'Fetched {length} actions of type: {action}')
   const all = await Promise.all(fetchAll);
   // ensure actions are sorted by date
   all.sort((a, b) => a.data.date.toMillis() - b.data.date.toMillis());
@@ -202,14 +202,14 @@ export async function removeIncomplete(type: ActionType, doc: DocumentReference)
 
   switch(docs.length) {
     case 0:
-      log.warn({ action: type }, `No records found when removing incomplete {type} action with path: ${doc.path}`)
+      log.warn({ action: type, path: doc.path }, `No records found when removing incomplete {action} action with path: {path}`)
       break;
     case 1:
-      log.debug({ action: type }, `Marking {type} action complete for path: ${doc.path}`)
+      log.debug({ action: type, path: doc.path }, `Marking {action} action complete for path: {path}`)
       await docs[0].ref.delete();
       break;
     default:
-      log.error({ action: type }, `Multiple incomplete {type} actions found with path ${doc.path}`);
+      log.error({ action: type, path: doc.path }, `Multiple incomplete {action} actions found with path {path}`);
       // Do not delete multiples
       throw new Error(`removeIncomplete failed`)
   }

@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.130](https://github.com/thecointech/thecoin/compare/v0.2.129...v0.2.130) (2024-08-02)
+
+**Note:** Version bump only for package @thecointech/signers
+
+
+
+
+
+## [0.2.129](https://github.com/thecointech/thecoin/compare/v0.2.128...v0.2.129) (2024-06-18)
+
+**Note:** Version bump only for package @thecointech/signers
+
+
+
+
+
+## [0.2.128](https://github.com/thecointech/thecoin/compare/v0.2.127...v0.2.128) (2024-06-06)
+
+**Note:** Version bump only for package @thecointech/signers
+
+
+
+
+
+## [0.2.127](https://github.com/thecointech/thecoin/compare/v0.2.126...v0.2.127) (2024-06-05)
+
+**Note:** Version bump only for package @thecointech/signers
+
+
+
+
+
+## [0.2.126](https://github.com/thecointech/thecoin/compare/v0.2.125...v0.2.126) (2024-05-10)
+
+
+### Bug Fixes
+
+* libs/signers/package.json to reduce vulnerabilities ([befca2d](https://github.com/thecointech/thecoin/commit/befca2db9365d5a5c9d2bf4dbbca1b53a2274ca9))
+
+
+
+
+
 ## [0.2.125](https://github.com/thecointech/thecoin/compare/v0.2.124...v0.2.125) (2024-04-11)
 
 **Note:** Version bump only for package @thecointech/signers

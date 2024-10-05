@@ -1,7 +1,7 @@
 import { PLUGINMGR_ROLE, MINTER_ROLE, BROKER_ROLE } from '../src/constants'
 import { AccountId, AccountName } from "@thecointech/signers";
 import { initCache } from "@thecointech/signers/cache";
-import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
+import type { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/dist/src/signer-with-address";
 import { TheCoin__factory } from '../src/codegen/factories/contracts';
 
 // Basic function to create & init TheCoin contract with all roles set to address

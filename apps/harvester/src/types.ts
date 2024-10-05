@@ -1,4 +1,9 @@
 
+export interface Mnemonic {
+  readonly phrase: string;
+  readonly path: string;
+  readonly locale: string;
+};
 
 export type DaysArray = [boolean, boolean, boolean, boolean, boolean, boolean, boolean];
 export const defaultDays: DaysArray = [
@@ -15,10 +20,12 @@ export const defaultTime = "08:00";
 export enum HarvestStepType {
   // ReadVisaOwing,
   ClearPendingVisa = "ClearPendingVisa",
+  ProcessPercent = "ProcessPercent",
   TransferVisaOwing = "TransferVisaOwing",
   RoundUp = "RoundUp",
   TransferEverything = "TransferEverything",
   TopUp = "TopUp",
+  ChequeMinimum = "ChequeMinimum",
   TransferLimit = "TransferLimit",
   SendETransfer = "SendETransfer",
   PayVisa = "PayVisa",
@@ -45,10 +52,12 @@ export type HarvestConfig = {
 // Until we have a proper graph, just explicitly set an order
 export const HarvestStepOrder = [
   HarvestStepType.ClearPendingVisa,
+  HarvestStepType.ProcessPercent,
   HarvestStepType.TransferVisaOwing,
   HarvestStepType.RoundUp,
   HarvestStepType.TransferEverything,
   HarvestStepType.TopUp,
+  HarvestStepType.ChequeMinimum,
   HarvestStepType.TransferLimit,
   HarvestStepType.SendETransfer,
   HarvestStepType.PayVisa,

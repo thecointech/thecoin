@@ -1,8 +1,7 @@
 {
-  "extends": "../tsconfig.apps.json",
+  "extends": "../../tsconfig.tests.json",
   "compilerOptions": {
-    "noEmit": true,
-    "tsBuildInfoFile": "./build/.tests.buildinfo",
+    "lib": ["es2023"]
   },
   "include": ["./*.cts", "./*.cjs", "**/*.test.*", "**/*.d.ts"],
 }

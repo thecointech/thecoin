@@ -1,5 +1,5 @@
 import { AccountId } from '@thecointech/signers';
-import { Wallet } from "@ethersproject/wallet";
+import { Wallet } from "ethers";
 import { writeFileSync, existsSync, mkdirSync, readFile, readFileSync } from 'fs';
 import { resolve } from 'path';
 
@@ -28,7 +28,7 @@ writeFileSync(resolve(outputFolder, filename), encrypted);
 
 generatedDeets.push(`WALLET_${name}_PATH=${filepath}`)
 generatedDeets.push(`WALLET_${name}_PWD=${password}`)
-generatedDeets.push(`WALLET_${name}_KEY=${wallet._signingKey().privateKey}`)
+generatedDeets.push(`WALLET_${name}_KEY=${wallet.signingKey.privateKey}`)
 
 // read existing wallets
 const envFile = resolve(prodtestFolder, "wallets.env");

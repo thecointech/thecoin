@@ -8,7 +8,7 @@ export type VisaBalanceResult = {
   balance: currency;
   dueDate: DateTime;
   dueAmount: currency;
-  history: HistoryRow[];
+  txs?: HistoryRow[]; // NOT SAVED
 }
 
 export type ChequeBalanceResult = {
@@ -35,11 +35,13 @@ export type ValueResult = {
 
 export type BaseEvent = {
   timestamp: number,
+  id: string,
 }
 
 export type Coords = {
   top: number,
   left: number,
+  centerY: number,
   height: number,
   width: number,
 }
@@ -87,21 +89,28 @@ export type ClickEvent = {
   // text: string,
 } & BaseEvent & ElementData;
 
+// Static input event.  Will be the same every run
 export type InputEvent = {
   type: "input",
-  dynamicName?: string,
-  value?: string,
+  value: string,
   hitEnter?: boolean,
+  valueChange?: boolean,
+} & BaseEvent & ElementData;
+
+// Dynamic input event.  Value is supplied each run
+// Used for things like `amount`
+export type DynamicInputEvent = {
+  type: "dynamicInput",
+  dynamicName: string,
   valueChange?: boolean,
 } & BaseEvent & ElementData;
 
 // Not really an event, but something to read later
 export type ValueEvent = {
   type: "value",
-  font: Font,
   name?: string,
   parsing?: ValueParsing
 } & BaseEvent & ElementData;
 
 
-export type AnyEvent = NavigationEvent|ClickEvent|InputEvent|UnloadEvent|LoadEvent|ValueEvent;
+export type AnyEvent = NavigationEvent|ClickEvent|InputEvent|DynamicInputEvent|UnloadEvent|LoadEvent|ValueEvent;

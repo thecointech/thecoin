@@ -4,6 +4,7 @@ import { Redirect } from 'react-router';
 import { useEffect, useState } from 'react';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { isLocal } from '@thecointech/signers';
+import { BaseWallet, HDNodeWallet } from "ethers";
 
 export const Login = ({account}: {account: AccountState}) => {
   // Start the account store (redux etc)
@@ -21,7 +22,13 @@ export const Login = ({account}: {account: AccountState}) => {
 
     // pass the unlocked account to scraper.  This will
     // need some hard-core protection in time...
-    window.scraper.setWalletMnemomic(signer.mnemonic)
+    const hdWallet = signer as BaseWallet as HDNodeWallet;
+    const mnemonic = {
+      phrase: hdWallet.mnemonic!.phrase,
+      path: hdWallet.path!,
+      locale: hdWallet.mnemonic!.wordlist!.locale,
+    }
+    window.scraper.setWalletMnemomic(mnemonic)
       .then(() => {
         setComplete(true)
       });

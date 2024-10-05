@@ -1,13 +1,13 @@
 import { SimilarityPipeline } from "./similarity";
 import { Coords, ElementData } from "./types";
 
-// This scoring function reaaaaally needs to be replaced with 
-// a computed (learned) model, because manually scoring is just 
+// This scoring function reaaaaally needs to be replaced with
+// a computed (learned) model, because manually scoring is just
 // too easy to bias to right-nows problems
 export async function scoreElement(potential: ElementData, original: ElementData) {
   let score = 0;
   if (potential.tagName == original.tagName) score = score + 20;
-  if (potential.selector == original.selector) score = score + 10;
+  if (potential.selector == original.selector) score = score + 25;
   if (potential.font?.color == original.font?.color) score = score + 5;
   if (potential.font?.font == original.font?.font) score = score + 5;
   if (potential.font?.size == original.font?.size) score = score + 5;
@@ -22,7 +22,7 @@ export async function scoreElement(potential: ElementData, original: ElementData
   score += 40 * await getNodeValueScore(potential, original);
   score += 30 * await getSiblingScore(potential.siblingText, original.siblingText);
 
-  // max score is 180
+  // max score is 195
   return score;
 }
 
@@ -53,7 +53,7 @@ export async function getSiblingScore(potentialSiblings?: string[], originalSibl
       originalSiblings.join(' '),
       [potentialSiblings.join(' ')]
     )
-    
+
     return Math.max(simpleSimilarity, weightedSimilarity)
   }
 
@@ -62,7 +62,7 @@ export async function getSiblingScore(potentialSiblings?: string[], originalSibl
     return 0.5;
   }
   // Downvote if one has siblings and the other doesn't
-  return -0.5;
+  return -0.25;
 }
 
 async function getLabelScore(potential: ElementData, original: ElementData) {
@@ -75,8 +75,8 @@ async function getLabelScore(potential: ElementData, original: ElementData) {
 
 function getRoleScore(potential: ElementData, original: ElementData) {
   if (potential.role && original.role) {
-    return (potential.role == original.role) 
-      ? 1 
+    return (potential.role == original.role)
+      ? 1
       : -1; // Differing roles is a pretty bad sign
   }
   return 0;

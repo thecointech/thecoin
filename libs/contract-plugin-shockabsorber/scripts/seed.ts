@@ -4,19 +4,16 @@ import { ALL_PERMISSIONS, assignPlugin, buildAssignPluginRequest } from '@thecoi
 import { log } from '@thecointech/logging';
 import { getContract } from '@thecointech/contract-plugin-shockabsorber';
 import { DateTime } from 'luxon';
-import { getContract as getOracle } from '@thecointech/contract-oracle';
-import { getDeploySigner, getOverrideFees } from '@thecointech/contract-tools/deploySigner';
 import { getProvider } from '@thecointech/ethers-provider';
 import { fetchRate, weSellAt } from '@thecointech/fx-rates';
 import { toCoinDecimal } from '@thecointech/utilities';
 import Decimal from 'decimal.js-light';
-// Assume devlive
-if (process.env.CONFIG_NAME !== 'devlive') throw new Error('Not Sufficiently Tested');
+import { getOverrideFees } from '@thecointech/contract-base/overrides';
 
 log.debug('Seeding ShockAbsorber');
 async function main() {
   // BrokerCAD directly owns this contract (and associated benefits)
-  const brokerCAD = await getDeploySigner("BrokerCAD");
+  const brokerCAD = await getSigner("BrokerCAD");
   const shockAbsorber = await getContract();
   const bcCore = await ConnectContract(brokerCAD);
 
@@ -29,16 +26,21 @@ async function main() {
     new Decimal(10_000).div(sellRate)
   );
 
-  const overrides = await getOverrideFees(getProvider());
-  await bcCore.exactTransfer(shockAbsorber.address, coin.toNumber(), now.getTime(), overrides);
+  await bcCore.exactTransfer(shockAbsorber, coin.toNumber(), now.getTime());
 
-  // In DevLive, we assign the converter to uberTester
-  const tester = await getSigner("saTester");
-  const ts = DateTime.now().minus({ months: 11});
-  const request = await buildAssignPluginRequest(tester, shockAbsorber.address, ALL_PERMISSIONS, ts);
-  await assignPlugin(bcCore, request);
+  if (process.env.CONFIG_NAME == 'devlive') {
+    const tester = await getSigner("saTester");
+    const ts = DateTime.fromObject({
+      year: 2023,
+      month: 7,
+      day: 31,
+      hour: 10
+    })
+    const request = await buildAssignPluginRequest(tester, shockAbsorber, ALL_PERMISSIONS, ts);
+    await assignPlugin(bcCore, request);
 
-  await bcCore.exactTransfer(await tester.getAddress(), 200e6, ts.toMillis());
+    await bcCore.exactTransfer(tester, 200e6, ts.toMillis());
+  }
 }
 
 main();

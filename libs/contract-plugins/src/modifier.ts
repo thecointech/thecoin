@@ -10,16 +10,17 @@ import type { BaseASTNode, ContractDefinition, FunctionDefinition, StateVariable
 import type { ContractState, PluginBalanceMod } from './types';
 import { getPluginLogs, updateState } from './logs';
 import { log } from '@thecointech/logging';
+import { AddressLike } from 'ethers';
 
 const RETURN_KEY = "__$return";
 
-export async function getPluginModifier(user: string, {plugin, permissions}: PluginAndPermissionsStructOutput, _provider?: Erc20Provider) : Promise<PluginBalanceMod|null> {
+export async function getPluginModifier(user: AddressLike, {plugin, permissions}: PluginAndPermissionsStructOutput, _provider?: Erc20Provider) : Promise<PluginBalanceMod|null> {
 
   // Allow passing in a provider so we can mock it in testing
   const provider = _provider ?? new Erc20Provider();
 
   // if this doesn't modify the balance, we don't need to emulate it
-  if (permissions.mask(PERMISSION_BALANCE).eq(0)) {
+  if ((permissions & PERMISSION_BALANCE) == 0n) {
     return null;
   }
 

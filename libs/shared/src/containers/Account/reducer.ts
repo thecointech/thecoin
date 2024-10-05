@@ -19,6 +19,7 @@ import type { AccountMapStore } from '../AccountMap';
 import type { DecryptCallback, IActions } from './types';
 import type { Dictionary } from 'lodash';
 import { getPluginDetails } from '@thecointech/contract-plugins';
+import { getProvider } from '@thecointech/ethers-provider';
 
 const KycPollingInterval = (process.env.NODE_ENV === 'production')
   ? 5 * 60 * 1000 // 5 minutes
@@ -34,7 +35,8 @@ function AccountReducer(address: string, initialState: AccountState) {
     }
 
     *setSigner(signer: Signer) {
-      yield this.storeValues({ signer });
+      const connected = signer.connect(getProvider());
+      yield this.storeValues({ signer: connected });
       yield delay(10);
       yield this.sendValues(this.actions.connect);
     }
@@ -46,7 +48,7 @@ function AccountReducer(address: string, initialState: AccountState) {
       const { signer } = this.state;
       // Connect to the contract
       const contract = yield call(ConnectContract, signer);
-      const plugins = yield call(getPluginDetails, contract);
+      const plugins = yield call(getPluginDetails, contract, signer);
       // store the contract prior to trying update history.
       yield this.storeValues({ contract, plugins });
       // Load history info by default
@@ -153,7 +155,7 @@ function AccountReducer(address: string, initialState: AccountState) {
       }
       try {
         const balance = yield call(contract.balanceOf, address);
-        yield this.storeValues({ balance: balance.toNumber() });
+        yield this.storeValues({ balance: Number(balance) });
       } catch (err: any) {
         log.error(err, "Update balance failed")
       }
@@ -172,7 +174,7 @@ function AccountReducer(address: string, initialState: AccountState) {
 
       // First, fetch the account balance toasty-fresh
       const balance = yield call(contract.balanceOf, address);
-      yield this.storeValues({ balance: balance.toNumber(), historyLoading: true });
+      yield this.storeValues({ balance: Number(balance), historyLoading: true });
 
       log.trace(`Updating from ${historyEnd ?? from} -> ${until}`);
       const oldHistory = this.state.history;
@@ -182,7 +184,8 @@ function AccountReducer(address: string, initialState: AccountState) {
       // Take current balance and use it plus Tx to reconstruct historical balances.
       calculateTxBalances(balance, newHistory);
       // Get the current block (save it so we know where we were up to in the future.)
-      const currentBlock = yield call(contract.provider.getBlockNumber.bind(contract.provider))
+      const provider = contract.runner?.provider;
+      const currentBlock = yield call(provider!.getBlockNumber.bind(provider))
 
       yield this.storeValues({
         history: mergeTransactions(oldHistory, newHistory),
@@ -194,6 +197,7 @@ function AccountReducer(address: string, initialState: AccountState) {
       });
 
       // Ensure we have fx value for each tx in this list
+      log.trace({count: newHistory.length}, "Updating {count} FX values for new history");
       for (var i = 0; i < newHistory.length; i++) {
         yield this.sendValues(FxRateReducer.actions.fetchRateAtDate, newHistory[i].date.toJSDate());
       }

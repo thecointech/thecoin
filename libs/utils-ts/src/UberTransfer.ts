@@ -1,9 +1,6 @@
 import { sign } from "./SignedMessages";
-import { keccak256 } from '@ethersproject/solidity';
-import { arrayify } from '@ethersproject/bytes';
-import { verifyMessage } from '@ethersproject/wallet';
+import { solidityPackedKeccak256, verifyMessage, type Signer, getBytes, AddressLike, resolveAddress } from 'ethers';
 import type Decimal from 'decimal.js-light';
-import type { Signer } from "@ethersproject/abstract-signer";
 import type { AnyTransfer, UberTransfer } from "@thecointech/types";
 import { DateTime } from 'luxon';
 
@@ -16,11 +13,12 @@ function getHash(
   transferTime: number,
   signedTime: number,
 ) {
-  const ethersHash = keccak256(
-    ["uint", "address", "address", "uint", "uint16", "uint", "uint"],
-    [chainId, from, to, amount, currency, transferTime, signedTime]
-  );
-  return arrayify(ethersHash);
+  return getBytes(
+    solidityPackedKeccak256(
+      ["uint", "address", "address", "uint", "uint16", "uint", "uint"],
+      [chainId, from, to, amount, currency, transferTime, signedTime]
+    )
+  )
 }
 
 export async function signUberTransfer(
@@ -48,7 +46,7 @@ export function getTransferSigner(
 /// Build the structure to be passed to the coin servers
 export async function buildUberTransfer(
   from: Signer,
-  to: string,
+  to: AddressLike,
   amount: Decimal,
   currency: number,
   transferTime: DateTime,
@@ -57,14 +55,15 @@ export async function buildUberTransfer(
   const chainId = parseInt(process.env.DEPLOY_POLYGON_NETWORK_ID!);
   const signedTime = DateTime.now();
   const address = await from.getAddress();
+  const toAddress = await resolveAddress(to);
   const transferMillis = transferTime.toMillis();
   const signedMillis = signedTime.toMillis();
   const amountAdj = amount.mul(100).toInteger().toNumber();
-  const signature = await signUberTransfer(chainId, from, to, amountAdj, currency, transferMillis, signedMillis);
+  const signature = await signUberTransfer(chainId, from, toAddress, amountAdj, currency, transferMillis, signedMillis);
   const r: UberTransfer = {
     chainId,
     from: address,
-    to,
+    to: toAddress,
     amount: amountAdj,
     currency,
     transferMillis,

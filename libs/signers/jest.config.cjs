@@ -5,6 +5,5 @@ module.exports = {
   // Disable fromHardware until we get proper support of ESM modules
   testPathIgnorePatterns: [
     "/node_modules/",
-    "fromHardware.test.ts",
   ]
 };

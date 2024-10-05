@@ -1,4 +1,4 @@
-import { utils, Signer } from 'ethers';
+import { Signer, getBytes, solidityPackedKeccak256, verifyMessage } from 'ethers';
 import { sign } from "@thecointech/utilities/SignedMessages";
 
 export type GasslessUpdateRequest = {
@@ -12,7 +12,7 @@ export type GasslessUpdateRequest = {
 
 export function getGasslessUpdateBuffer(tokenId: number, lastUpdate: number, prefix: string, digest: string) {
   // The concatenation for the signature is id, lastUpdate, prefix, hash
-  const hash = utils.solidityKeccak256(
+  const hash = solidityPackedKeccak256(
     ["uint256", "uint40", "uint16", "bytes32"],
     [
       tokenId,
@@ -21,7 +21,7 @@ export function getGasslessUpdateBuffer(tokenId: number, lastUpdate: number, pre
       digest,
     ]
   );
-  return utils.arrayify(hash);
+  return getBytes(hash);
 }
 
 //
@@ -42,5 +42,5 @@ export async function signGasslessUpdate(signer: Signer, tokenId: number, lastUp
 export function getGasslessSigner(transfer: GasslessUpdateRequest) {
   const { tokenId, lastUpdate, prefix, digest, signature } = transfer;
   const hash = getGasslessUpdateBuffer(tokenId, lastUpdate, prefix, digest);
-  return utils.verifyMessage(hash, signature);
+  return verifyMessage(hash, signature);
 }

@@ -13,7 +13,13 @@ const translate = defineMessages({
         defaultMessage:"Recent Operations",
         description:"shared.balance.title: Title for the congratulations page"}});
 
-export const RecentTransactions = () => {
+type DateTimeState = [DateTime, (v: DateTime) => void];
+type Props = {
+  fromDate: DateTimeState,
+  toDate: DateTimeState,
+}
+
+export const RecentTransactions = ({ fromDate, toDate}: Props) => {
 
   const active = AccountMap.useActive()
   const api = Account(active!.address).useApi();
@@ -29,6 +35,8 @@ export const RecentTransactions = () => {
         <Header as="h5"><FormattedMessage {...translate.title} /></Header>
 
         <TransactionList
+          fromDate={fromDate}
+          toDate={toDate}
           rates={rates}
         />
       </div>
