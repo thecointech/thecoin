@@ -28,6 +28,11 @@ it('seeds the DB appropriately', async () => {
     let ts = from;
     do {
       const entry = await db.collection(type).doc(ts.toMillis().toString()).get();
+      if (!entry.exists) {
+        // Should always fail, then log
+        console.log(`Missing ${type} at ${ts.toMillis()}, from ${from.toMillis()}`);
+        expect(ts.toMillis()).toEqual(now.toMillis());
+      }
       expect(entry.exists).toBeTruthy();
       ts = ts.plus(validityInterval);
 
