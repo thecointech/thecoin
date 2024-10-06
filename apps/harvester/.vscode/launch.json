@@ -128,9 +128,8 @@
         "--harvest",
       ],
       "env": {
-        // Breakpoints don't seem to be hit on startup, but the `debugger` statement does
         "BREAK_ON_STARTUP": "true",
-        "RUN_SCRAPER_HEADLESS": "false",
+        "HARVESTER_PROFILE_FOLDER": "${workspaceFolder}/profile",
         "CONFIG_NAME": "devlive",
       },
 

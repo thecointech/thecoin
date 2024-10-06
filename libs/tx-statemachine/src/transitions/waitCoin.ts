@@ -25,9 +25,10 @@ export const waitCoin = makeTransition("waitCoin", async (container) => {
   }
 
   const receipt = await waitTransaction(container.contract, hash);
+  const confirmations = await receipt?.confirmations();
   return receipt
     ? {
-        meta: `confirmations: ${receipt.confirmations}`,
+        meta: `confirmations: ${confirmations}`,
         ...updateCoinBalance(container, receipt),
         // Prevent this tx from being used again
         hash: ""
