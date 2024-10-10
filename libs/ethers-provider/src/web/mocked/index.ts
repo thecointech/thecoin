@@ -28,7 +28,7 @@ export class Erc20Provider extends AbstractProvider {
   }
   override async broadcastTransaction(signedTx: string) {
     const tx = Transaction.from(signedTx)
-    const address = tx.from;
+    const address = tx.from!;
     this.txs[address] = (this.txs[address] || 0) + 1;
     return Promise.resolve<any>("0x" + "00".repeat(64));
   }
