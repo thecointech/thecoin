@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.132](https://github.com/thecointech/thecoin/compare/v0.2.131...v0.2.132) (2024-10-10)
+
+**Note:** Version bump only for package @thecointech/site-landing
+
+
+
+
+
 ## [0.2.131](https://github.com/thecointech/thecoin/compare/v0.2.130...v0.2.131) (2024-10-05)
 
 **Note:** Version bump only for package @thecointech/site-landing
