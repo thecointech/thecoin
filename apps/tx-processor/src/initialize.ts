@@ -50,7 +50,7 @@ export async function initialize() {
 async function verifyEtherReserves(signer: Signer) {
   const signerBalance = await signer.provider?.getBalance(signer) ?? 0n;
   const minimumBalance = parseUnits('0.2', "ether");
-  log.debug({ Balance: formatEther(signerBalance) }, "Processing with eth reserves: ${Balance}")
+  log.debug({ Balance: formatEther(signerBalance) }, "Processing with eth reserves: {Balance}")
   if (signerBalance < minimumBalance) {
     log.error(
       { Balance: formatEther(signerBalance), MinimumBalance: formatEther(minimumBalance), Signer: 'BrokerCAD' },
@@ -75,7 +75,7 @@ async function verifyCoinReserves(signer: Signer, contract: TheCoin) {
     Number(reservesCoin) * weSellAt([rate], now),
     true
   );
-  log.debug({ Balance: reservesCad }, "Processing with $ reserves: ${Balance}")
+  log.debug({ Balance: reservesCad }, "Processing with $ reserves: {Balance}")
   const minimumBalance = 10_000;
   if (reservesCad < minimumBalance) {
     log.error(

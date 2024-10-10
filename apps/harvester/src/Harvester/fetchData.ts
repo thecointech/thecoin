@@ -31,7 +31,6 @@ export async function getVisaData(lastTxDate?: DateTime) : Promise<VisaBalanceRe
       balance: currency(data.balance ?? 0),
       dueDate: DateTime.fromISO(data.dueDate),
       dueAmount: currency(data.dueAmount),
-      history: [],
     }
   }
   switch (process.env.CONFIG_NAME) {
@@ -43,12 +42,12 @@ export async function getVisaData(lastTxDate?: DateTime) : Promise<VisaBalanceRe
       const data = await replay('visaBalance');
       // Only keep the new transactions from history
       const newTransactions = lastTxDate
-        ? data.history.filter(row => row.date > lastTxDate)
-        : data.history;
+        ? data.txs?.filter(row => row.date > lastTxDate)
+        : data.txs;
 
       return {
         ...data,
-        history: newTransactions,
+        txs: newTransactions,
       }
   }
 }
@@ -99,9 +98,10 @@ export function getEmulatedVisaHistory(repayments: number, balance: number, last
     ? [
       {
         date: clearanceDate,
-        description: "Payment",
-        credit: currency(dueAmount),
-        balance: currency(balance),
+        values: [currency(dueAmount), currency(balance)],
+        // description: "Payment",
+        // credit: currency(dueAmount),
+        // balance: currency(balance),
       }
     ]
     : []

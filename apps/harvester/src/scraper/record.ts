@@ -55,6 +55,7 @@ export class Recorder {
   private static __instance?: Recorder;
 
   private lastInputEvent: InputEvent | undefined;
+  private seenEvents = new Set();
 
   private constructor(name: ActionTypes, dynamicInputs?: string[]) {
     this.name = name;
@@ -185,7 +186,10 @@ export class Recorder {
     if (this.isDuplicate(event)) {
       return;
     }
-    log.debug("event name: " + event.type);
+    // Cache all event ID's to ensure that we never duplicate an event
+    this.seenEvents.add(event.id);
+
+    // log.debug("event name: " + event.type);
     if (event.type == 'navigation') {
       if (event.to == 'about:blank') {
         return;
@@ -255,15 +259,15 @@ export class Recorder {
       event.name = this.onValue.name;
       const text = await this.page.$eval(event.selector, (el => (el as HTMLElement).innerText));
       if (this.onValue.type == "table") {
-        const table = await getTableData(this.page, event.font!);
+        const table = await getTableData(this.page);
         event.parsing = {
           type: "table",
           format: null,
         }
         // Return the most recent payment
-        const mostRecentPayment = table.find(row => row.credit?.intValue)?.credit;
+        // const mostRecentPayment = table.find(row => row.credit?.intValue)?.credit;
         this.onValue.resolve({
-          text: "Your most recent payment was: " + mostRecentPayment,
+          text: "Your most recent tx was on: " + table?.[0].date.toSQLDate(),
           parsing: { type: "text", format: null },
         });
       }
@@ -296,17 +300,17 @@ export class Recorder {
   }
 
   isDuplicate(event: AnyEvent) {
-    const lastEvent = this.events[this.events.length - 1];
-    if (lastEvent?.id == event.id) {
+    if (this.seenEvents.has(event.id)) {
+      const lastEvent = this.events.find(e => e.id == event.id);
       // Most duplicates are due to multiple events being sent, one with a frame and one without
       // We don't want to log them twice, but we do want to keep the frame (even if not currently used)
-      if ("frame" in lastEvent && "frame" in event) {
+      if (lastEvent && "frame" in lastEvent && "frame" in event) {
         if (!lastEvent.frame && event.frame) {
           lastEvent.frame = event.frame;
         }
       }
       // All duplicates are dropped
-      console.log("Duplicate event");
+      // console.log("Duplicate event");
       return true;
     }
     return false;

@@ -25,9 +25,10 @@ export const waitCoin = makeTransition("waitCoin", async (container) => {
   }
 
   const receipt = await waitTransaction(container.contract, hash);
+  const confirmations = await receipt?.confirmations();
   return receipt
     ? {
-        meta: `confirmations: ${receipt.confirmations}`,
+        meta: `confirmations: ${confirmations}`,
         ...updateCoinBalance(container, receipt),
         // Prevent this tx from being used again
         hash: ""
@@ -108,7 +109,7 @@ export async function waitTransaction(contract: TheCoin, hash: string, requiredC
   // Our volume is so low it's nice to complete tx's asap,
   // and we should give them a little time to complete in one run.
   try {
-    log.info({hash}, `Waiting up to ${timeout / 1000} seconds for tx {hash}`);
+    log.info({hash, timeout: timeout / 1000}, 'Waiting up to {timeout} seconds for tx {hash}');
     const receipt = await contract.runner?.provider?.waitForTransaction(hash, requiredConfirmations, timeout);
     if (receipt?.status == 1) {
       log.info({hash, receiptStatus: receipt?.status}, 'Transaction {hash} mined with status: {receiptStatus}');
@@ -120,11 +121,14 @@ export async function waitTransaction(contract: TheCoin, hash: string, requiredC
   }
   catch (e: any) {
     // First, can we see what is going wrong here?
-    log.error(e, {hash}, `Error waiting for tx {hash}`);
+    log.error({ err: e, hash}, "Error waiting for tx {hash}");
     try {
       const receipt = await contract.runner?.provider?.getTransaction(hash);
       if (receipt) {
-        log.info({hash}, `Transaction {hash} found with with ${await receipt.confirmations()} confirmations`);
+        log.info({
+          hash,
+          confirmations: await receipt.confirmations(),
+        }, "Transaction {hash} found with with {confirmations} confirmations");
       }
     }
     catch (_) { /* ignore */ }

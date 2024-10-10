@@ -61,11 +61,12 @@ export async function processActions(allActions: AnyAction[], tcCore: TheCoin, b
       const executed = await processAction(action, tcCore, bank);
       r.push(executed);
 
-      // Always process deposits.
-      if (action.type !== 'Buy') {
-        // If the last transition resulted in an error, mark the
-        // user as having a failed transaction
-        if (getCurrentState(executed).name == 'error') {
+
+      // If the last transition resulted in an error, mark the
+      // user as having a failed transaction
+      if (getCurrentState(executed).name == 'error') {
+        // Always process deposits.
+        if (action.type !== 'Buy') {
           usersWithFailedTxs.add(action.address);
         }
       }

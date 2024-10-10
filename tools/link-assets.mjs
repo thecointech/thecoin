@@ -21,10 +21,11 @@ function readTsConfig() {
 
 const { rootDir, outDir } = readTsConfig();
 const typesGlob = process.argv[2] ?? "./**/*.+(svg|png|module.less)";
-for (const f of globSync(path.join(rootDir, typesGlob))) {
+for (const f of globSync(typesGlob, {
+  cwd: path.join(process.cwd(), rootDir),
+})) {
   const { base, dir } = path.parse(f);
-  const rpath = path.relative(rootDir, dir);
-  const dpath = path.join(outDir, rpath);
+  const dpath = path.join(outDir, dir);
   const outpath = path.join(dpath, base);
 
   try {
@@ -34,6 +35,6 @@ for (const f of globSync(path.join(rootDir, typesGlob))) {
     fs.unlinkSync(outpath);
   } catch (e) {}
 
-  const relativef = path.relative(dpath, f);
+  const relativef = path.relative(dpath, path.join(rootDir, f));
   fs.symlinkSync(relativef, outpath);
 }

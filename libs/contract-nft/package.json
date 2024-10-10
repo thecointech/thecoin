@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-nft",
-  "version": "0.2.130",
+  "version": "0.2.131",
   "description": "The Coin: Solidity contract for TheCoin NFT",
   "type": "module",
   "keywords": [
@@ -29,9 +29,9 @@
     "clean": "run -T run-p 'clean:*'",
     "clean:src": "run -T rimraf ./build",
     "clean:contracts": "run -T rimraf ./src/codegen && run -T rimraf ./.hardhat",
-    "test": "run :jest",
+    "_test": "run :jest",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn deploy:both",
-    "dev:live": "run -T wait-port 9545 && run -T cross-env CONFIG_NAME=devlive yarn deploy:polygon",
+    "_dev:live": "run -T wait-port 9545 && run -T cross-env CONFIG_NAME=devlive yarn deploy:polygon",
     "deploy:both": "yarn deploy:polygon && yarn deploy:ethereum",
     "deploy:polygon": "cross-env HARDHAT_NETWORK=polygon yarn _deploy",
     "deploy:ethereum": "cross-env HARDHAT_NETWORK=ethereum yarn _deploy",
@@ -54,10 +54,10 @@
   "types": "./build/index.d.ts",
   "devDependencies": {
     "@openzeppelin/contracts": "^4.5.0",
-    "@thecointech/contract-core": "^0.2.130",
-    "@thecointech/contract-tools": "^0.2.130",
-    "@thecointech/setenv": "^0.2.130",
-    "@thecointech/signers": "^0.2.130",
+    "@thecointech/contract-core": "^0.2.131",
+    "@thecointech/contract-tools": "^0.2.131",
+    "@thecointech/setenv": "^0.2.131",
+    "@thecointech/signers": "^0.2.131",
     "@types/bs58": "^4.0.1"
   },
   "dependenciesComments": {
@@ -68,8 +68,8 @@
     ]
   },
   "dependencies": {
-    "@thecointech/contract-base": "^0.2.130",
-    "@thecointech/utilities": "^0.2.130",
+    "@thecointech/contract-base": "^0.2.131",
+    "@thecointech/utilities": "^0.2.131",
     "bs58": "^4.0.1"
   },
   "gitHead": "6c91d925570c1132080f3098b510a3a42180e429"

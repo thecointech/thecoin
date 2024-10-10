@@ -1,6 +1,6 @@
 import { Signer } from 'ethers';
 import { DateTime } from 'luxon';
-import { solidityPackedKeccak256, verifyMessage, getBytes, type Overrides } from 'ethers';
+import { solidityPackedKeccak256, verifyMessage, getBytes } from 'ethers';
 import { sign } from "@thecointech/utilities/SignedMessages";
 import type { IPluggable } from './codegen/contracts';
 import type { RemovePluginRequest } from '@thecointech/types';
@@ -47,11 +47,11 @@ export async function buildRemovePluginRequest(
   };
 }
 
-export async function removePlugin(contract: IPluggable, request: RemovePluginRequest, overrides: Overrides = {}) {
+export async function removePlugin(contract: IPluggable, request: RemovePluginRequest) {
   const tx = await contract.pl_removePlugin({
     ...request,
     msSignedAt: request.signedAt.toMillis(),
-  }, overrides);
+  });
   return tx;
 }
 

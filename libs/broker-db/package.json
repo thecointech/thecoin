@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/broker-db",
-  "version": "0.2.130",
+  "version": "0.2.131",
   "description": "The Coin: Access BrokerCAD Firestore DB",
   "type": "module",
   "keywords": [
@@ -49,8 +49,8 @@
     }
   },
   "dependencies": {
-    "@thecointech/firestore": "^0.2.130",
-    "@thecointech/utilities": "^0.2.130",
+    "@thecointech/firestore": "^0.2.131",
+    "@thecointech/utilities": "^0.2.131",
     "fast-deep-equal": "3.1.3"
   },
   "gitHead": "6c91d925570c1132080f3098b510a3a42180e429"
