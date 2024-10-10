@@ -1,6 +1,6 @@
 import { AddressLike, Signer, resolveAddress } from 'ethers';
 import { DateTime } from 'luxon';
-import { solidityPackedKeccak256, verifyMessage, getBytes, type Overrides } from 'ethers';
+import { solidityPackedKeccak256, verifyMessage, getBytes } from 'ethers';
 import { sign } from "@thecointech/utilities/SignedMessages";
 import type { IPluggable } from './codegen/contracts';
 import type { AssignPluginRequest } from '@thecointech/types';
