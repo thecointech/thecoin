@@ -61,14 +61,13 @@ export async function buildAssignPluginRequest(
   };
 }
 
-export async function assignPlugin(contract: IPluggable, request: AssignPluginRequest, overrides: Overrides = {}) {
+export async function assignPlugin(contract: IPluggable, request: AssignPluginRequest) {
   const tx = await contract.pl_assignPlugin(
     {
       ...request,
       timeMs: request.timeMs.toMillis(),
       msSignedAt: request.signedAt.toMillis(),
     },
-    overrides,
   );
   return tx;
 }
