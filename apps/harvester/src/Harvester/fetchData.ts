@@ -31,7 +31,6 @@ export async function getVisaData(lastTxDate?: DateTime) : Promise<VisaBalanceRe
       balance: currency(data.balance ?? 0),
       dueDate: DateTime.fromISO(data.dueDate),
       dueAmount: currency(data.dueAmount),
-      txs: [],
     }
   }
   switch (process.env.CONFIG_NAME) {
