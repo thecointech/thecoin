@@ -55,7 +55,7 @@
     "@tsoa/runtime": "6.2.0",
     "axios": "1.6.5",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
+    "express": "^4.21.0",
     "js-yaml": "^3.13.1",
     "luxon": "3.3.0",
     "swagger-tools": "^0.10.4",
