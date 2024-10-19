@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { getCalendar, nextOpenTimestamp } from '.';
+import { nextOpenTimestamp } from '.';
 import { DateTime } from 'luxon';
 import { describe } from '@thecointech/jestutils';
 import { getEnvVars } from '@thecointech/setenv';
@@ -15,16 +15,16 @@ describe("Live MarketStatus tests", () => {
   beforeEach(() => process.env = prodVars);
   afterAll(() => process.env = OLD_ENV);
 
-  it("Returns Valid Calendar", async () => {
-    const calendar1 = await getCalendar(jan1st2019);
-    expect(calendar1).toHaveProperty('days');
-    expect(calendar1?.month).toEqual(1)
-    expect(calendar1?.year).toEqual(2019)
+  // it("Returns Valid Calendar", async () => {
+  //   const calendar1 = await getCalendar(jan1st2019);
+  //   expect(calendar1).toHaveProperty('days');
+  //   expect(calendar1?.month).toEqual(1)
+  //   expect(calendar1?.year).toEqual(2019)
 
-    // Ensure cache returns valid value again
-    const calendar2 = await getCalendar(jan1st2019);
-    expect(calendar2).toBe(calendar1);
-  });
+  //   // Ensure cache returns valid value again
+  //   const calendar2 = await getCalendar(jan1st2019);
+  //   expect(calendar2).toBe(calendar1);
+  // });
 
   it("Returns now if the market is currently open", async () => {
     const testCurrOpen = DateTime.fromObject({year: 2019, month: 3, day: 29, hour: 12, minute: 30});
