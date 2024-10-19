@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/ethers-provider",
-  "version": "0.2.132",
+  "version": "0.2.133",
   "description": "TheCoin: A custom ethers.js provider with access to Polygon and improved Etherscan support",
   "keywords": [
     "ethereum",
@@ -71,12 +71,12 @@
     }
   },
   "dependencies": {
-    "@thecointech/logging": "^0.2.132",
+    "@thecointech/logging": "^0.2.133",
     "ethers": "6.12.0"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.2.132",
-    "@thecointech/setenv": "^0.2.132"
+    "@thecointech/jestutils": "^0.2.133",
+    "@thecointech/setenv": "^0.2.133"
   },
   "gitHead": "6c91d925570c1132080f3098b510a3a42180e429"
 }

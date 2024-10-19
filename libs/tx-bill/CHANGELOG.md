@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.133](https://github.com/thecointech/thecoin/compare/v0.2.132...v0.2.133) (2024-10-19)
+
+**Note:** Version bump only for package @thecointech/tx-bill
+
+
+
+
+
 ## [0.2.132](https://github.com/thecointech/thecoin/compare/v0.2.131...v0.2.132) (2024-10-10)
 
 **Note:** Version bump only for package @thecointech/tx-bill
