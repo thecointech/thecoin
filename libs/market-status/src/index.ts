@@ -1,66 +1,8 @@
-import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
-import axios from 'axios';
+import type { DayData } from './types';
+import { getCalendar } from './getCalendar';
 
-const ENDPOINT = 'https://sandbox.tradier.com/v1/markets/calendar';
 const MarketTZ = "America/New_York";
-
-type DayData = {
-  open: {
-    start: string,
-    end: string,
-  }
-  date: string
-}
-type Calendar = {
-  days: {
-    day: DayData[];
-  },
-  month: number,
-  year: number,
-}
-type TradierResponse = {
-  calendar: Calendar
-}
-
-// Cache accesses to reduce hits on the API
-const _cache = new Map<string, Calendar>();
-
-async function queryCalendar(url: string) {
-  try {
-    const r = await axios.get<TradierResponse>(url, {
-      headers: {
-        Authorization: process.env.TRADIER_API_KEY!,
-        Accept: 'application/json'
-      }
-    });
-    if (r.status == 200) {
-      return r.data;
-    }
-    log.error(r.statusText);
-  } catch (err: any) {
-    log.error(err, `Calendar query failed`);
-  }
-  return null;
-}
-
-
-export async function getCalendar(date: DateTime) {
-  const uriArgs = `month=${date.month}&year=${date.year}`;
-  const exists = _cache.get(uriArgs);
-  if (exists)
-    return exists;
-
-  const data = await queryCalendar(`${ENDPOINT}?${uriArgs}`);
-
-  if (data) {
-    log.trace(`Loaded Calendar for: ${date.month}-${date.year}, (${_cache.size} cached)`);
-    const { calendar } = data;
-    _cache.set(uriArgs, calendar);
-    return calendar;
-  }
-  return null;
-}
 
 //////////////////////////////////////////////////////////////////////////
 //  Returns timestamp of next time market will be open
@@ -93,9 +35,6 @@ export async function nextOpenTimestamp(date: DateTime, offset: number = 120 * 1
   const ts = local.toMillis();
   for (let dt = local, i = 0; i < 100; dt = dt.plus({ days: 1 }), i++) {
     const calendar = await getCalendar(dt);
-    if (calendar == null)
-      continue;
-
     const { day } = calendar.days;
     let data = day[dt.day - 1];
     if (data.open) {
