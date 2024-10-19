@@ -24,7 +24,7 @@ export const App = () => {
 
   return (
     <div className={styles.app}>
-      <div>
+      <div className={styles.menu}>
         <Menu pointing secondary vertical size="small">
           <Menu.Item header>TheCoin - Harvester</Menu.Item>
           <Menu.Item
@@ -68,9 +68,9 @@ export const App = () => {
             onClick={openLogs}
           />
         </Menu>
-        {location.pathname}
+        {/* {location.pathname} */}
       </div>
-      <div>
+      <div className={styles.content}>
         <Routes />
       </div>
     </div>

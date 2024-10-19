@@ -37,7 +37,7 @@ it ('clearsPending using visa history', async () => {
   expect(logStatements[2]).toContain("still waiting for pending payment"); // did nothing
 
   // Log some dummy transactions
-  state.visa.txs = [{
+  state.visa.history = [{
     values: [currency(10)],
     date: DateTime.now().minus({ days: 2 }), // invalid, happens prior to settlement
   }, {
@@ -53,7 +53,7 @@ it ('clearsPending using visa history', async () => {
   expect(logStatements[3]).toContain("Found 2 txs");
   expect(logStatements[4]).toContain("still waiting for pending payment"); // did nothing
 
-  state.visa.txs?.push({
+  state.visa.history?.push({
     values: [currency(10)],
     date: DateTime.now(),
   })

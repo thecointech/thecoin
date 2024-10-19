@@ -21,6 +21,7 @@
     "dev": "run-env --inspect=9231 ./src/main.ts",
     "dev:live": "run -T cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn dev",
+    "prod": "run -T cross-env CONFIG_NAME=prod yarn dev",
     "prod:beta": "run -T cross-env CONFIG_NAME=prodbeta yarn dev",
     "deploy": "yarn run-env ./deploy.ts",
     "build": "run -T tsc -b",

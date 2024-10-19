@@ -136,7 +136,7 @@ export async function update() {
       return true;
     }
     catch (err: any) {
-        log.error(err);
+        log.warn(err, "error in EnsureLatest");
     }
     return false;
 }
@@ -144,12 +144,14 @@ export async function update() {
 export async function updateRates() {
   for (let i = 0; i < 5; i++) {
     // incremental back-off
+    // TO FIX: This conflates two waits,
+    // waiting for values to valid, and back-off-retry
     await waitTillBuffer(i * 5000);
     // & retry
     if(await update())
       return true;
   }
-  log.error("Failed to update rates");
+  log.fatal("Failed to update rates");
   return false;
 }
 

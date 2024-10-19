@@ -1,4 +1,4 @@
-import { Home } from './Home';
+import { Home } from './home';
 import { Browser } from './Browser';
 import { Account } from './account';
 import { Training } from './Training';

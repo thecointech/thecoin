@@ -43,7 +43,7 @@ it ('can override balance', async () => {
   expect(payDelta).toEqual({});
 
   // Check that ClearVisa recognizes the override
-  r!.visa.txs = [{
+  r!.visa.history = [{
     date: now,
     values: [currency(1400)],
   }]
