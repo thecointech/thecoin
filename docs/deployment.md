@@ -6,6 +6,8 @@ Our system is built to be deployed on Google App Engine (GAE).  The services are
 
 Each deployment app (rates/broker/site/nft) needs a GAE configuration for each environment (test/beta|prod).  The GAE configuration is used to set the deployment target for all the apps, deploying at the same time. See https://medium.com/google-cloud/how-to-use-multiple-accounts-with-gcloud-848fdb53a39a for how to create new configs.
 
+You also need to login to firebase.  Navigate to root folder and run `yarn firebase login`
+
 #### Caveate BETA|PROD:
 Our BETA services (rates/broker) are assigned a specific version to differentiate them from prod.  Unfortunately, we cannot specify a version using configs on GAE.   The beta environments are deployed to prod and the version is specified within the `deploy.ts` deployment scripts.
 
@@ -43,6 +45,13 @@ The deployment happens in 2 stages:
 
 First, the libraries are deployed.
 
+### Publishing Packages
+
+We publish to Github Packages
+ 1. Authenticate with Github
+   a. Generate a PAT (classic)
+   b. Lerna doesn't appear to use yarn for publishing, so set auth in `~/.npmrc` (NOTE - this doesn't appear to work for linux, use the PAT as password with asked for login credentials)
+
 Next, the apps are deployed.
 ## Things to Deploy
 
@@ -74,7 +83,7 @@ https://docs.github.com/en/packages/working-with-a-github-packages-registry/work
 
 To upload to Github Packages, add your GH PAT token to your global .npmrc file
 
-The GAE apps need an .npmrc file co-located with the app to allow installing from GitHub packages (from GAE).  To ease maintenance, we store a single .npmrc file with no secret in /tools/.npmrc.  The deployer should fill this in with their deployment key.  This file is then copied to the deploying folder, and the secret injected into the file prior to publishing.
+The GAE apps need an .npmrc file co-located with the app to allow installing from GitHub packages (from GAE).  To ease maintenance, we store a single .npmrc file with no secret in /tools/.npmrc.  The deployment automatically fills this in with the set key.  This file is then copied to the deploying folder, and the secret injected into the file prior to publishing.
 
 These files are then ignored, so we do not have any files committed into Git that could at any point have our secrets exposed.
 

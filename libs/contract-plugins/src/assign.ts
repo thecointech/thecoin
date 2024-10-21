@@ -1,12 +1,9 @@
-import { Signer } from '@ethersproject/abstract-signer';
+import { AddressLike, Signer, resolveAddress } from 'ethers';
 import { DateTime } from 'luxon';
-import { keccak256 } from '@ethersproject/solidity';
-import { verifyMessage } from '@ethersproject/wallet';
-import { arrayify } from '@ethersproject/bytes';
+import { solidityPackedKeccak256, verifyMessage, getBytes } from 'ethers';
 import { sign } from "@thecointech/utilities/SignedMessages";
-import type { IPluggable } from './types/contracts';
+import type { IPluggable } from './codegen/contracts';
 import type { AssignPluginRequest } from '@thecointech/types';
-import type { Overrides } from 'ethers';
 
 // export type AssignPluginRequest = {
 //   chainId: number;
@@ -19,7 +16,7 @@ import type { Overrides } from 'ethers';
 
 function getAssignPluginBuffer(request: Omit<AssignPluginRequest, 'signature'>) {
   // The concatenation for the signature is id, lastUpdate, prefix, hash
-  const hash = keccak256(
+  const hash = solidityPackedKeccak256(
     ["uint", "address", "uint", "uint96", "uint"],
     [
       request.chainId,
@@ -29,14 +26,18 @@ function getAssignPluginBuffer(request: Omit<AssignPluginRequest, 'signature'>) 
       request.signedAt.toMillis()
     ]
   );
-  return arrayify(hash);
+  return getBytes(hash);
 }
+
+// function resolveAddress(address: AddressLike) {
+
+// }
 
 // Our official implementation does not allow for arbitrary timeMs parameter (we only use signedAt)
 export async function buildAssignPluginRequest(
   user: Signer,
-  plugin: string,
-  permissions: string,
+  plugin: AddressLike,
+  permissions: bigint,
   timeMs?: DateTime)
 : Promise<AssignPluginRequest>
 {
@@ -46,8 +47,8 @@ export async function buildAssignPluginRequest(
   var r = {
     chainId,
     user: address,
-    plugin,
-    permissions,
+    plugin: await resolveAddress(plugin),
+    permissions: permissions.toString(),
     signedAt,
     timeMs: timeMs ?? signedAt,
   };
@@ -60,14 +61,13 @@ export async function buildAssignPluginRequest(
   };
 }
 
-export async function assignPlugin(contract: IPluggable, request: AssignPluginRequest, overrides?: Overrides) {
+export async function assignPlugin(contract: IPluggable, request: AssignPluginRequest) {
   const tx = await contract.pl_assignPlugin(
     {
       ...request,
       timeMs: request.timeMs.toMillis(),
       msSignedAt: request.signedAt.toMillis(),
     },
-    overrides,
   );
   return tx;
 }

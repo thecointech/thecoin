@@ -1,7 +1,7 @@
 import { getCurrentState, TransitionCallback, TypedActionContainer } from "../types";
 import { verifyPreTransfer } from "./verifyPreTransfer";
-import { TransactionResponse } from '@ethersproject/providers';
-import { calculateOverrides, convertBN, toDelta } from './coinUtils';
+import { TransactionResponse } from 'ethers';
+import { toDelta } from './coinUtils';
 import { log } from '@thecointech/logging';
 import { makeTransition  } from '../makeTransition';
 import type { UberTransfer } from '@thecointech/types';
@@ -44,9 +44,15 @@ const depositUberTransfer = async (container: TypedActionContainer<BSActionTypes
   // if (balance.lte(amount))
   //   return { error: 'Insufficient funds'};
 
-  const overrides = await calculateOverrides(container, uberDepositCoin);
-  log.debug({address: from}, `UberTransfer of ${amount.toString()} from {address} with overrides ${JSON.stringify(overrides, convertBN)}`);
-  const tx: TransactionResponse = await tc.uberTransfer(chainId, from, to, amount, currency, transferMillis, signedMillis, signature, overrides);
+  log.debug(
+    {address: from, amount: amount.toString(), initialId: container.action.data.initialId },
+    'UberTransfer of {amount} from {address}'
+  );
+  const tx: TransactionResponse = await tc.uberTransfer(chainId, from, to, amount, currency, transferMillis, signedMillis, signature);
+  log.debug(
+    {address: from, nonce: tx.nonce, initialId: container.action.data.initialId },
+    'UberTransfer complete with nonce: {nonce}'
+  );
   return toDelta(tx);
 }
 

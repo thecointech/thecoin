@@ -46,6 +46,8 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
   // All historical offsets from then until now.
   MilliSecondsOffset[] offsets;
 
+  //////////////////////////////////////////////////////////////////////////
+  // Constructor
   function initialize(address updater, int initialTimestamp, int blockTime) public initializer {
     __Ownable_init();
     __AccessControl_init();
@@ -61,20 +63,38 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
     // TODO: http://zxstudio.org/blog/2018/09/11/effectively-storing-arrays-in-solidity/
 
     // check that there aren't too many new values...
-    int pushValidUntil = INITIAL_TIMESTAMP + (int(newValues.length) * BLOCK_TIME);
-    int maxValidUntil = int(msNow()) + (BLOCK_TIME);
+    uint pushValidUntil = validUntil() + (newValues.length * uint(BLOCK_TIME));
+    uint maxValidUntil = msNow() + uint(BLOCK_TIME);
     require(pushValidUntil <= maxValidUntil, "Too many updates");
     for (uint i = 0; i < newValues.length; i++) {
       rates.push(newValues[i]);
     }
   }
 
-  function clearAllData() public onlyUpdater{
+  //
+  // Clear all data after millis, effectively
+  // restoring the contract to that point in time
+  function resetTo(uint64 millis) public onlyOwner {
+    // Clear rates
+    uint targetLength = getBlockIndexFor(millis) + 1;
+    while (rates.length > targetLength) {
+      rates.pop();
+    }
+
+    // Clear offsets (note, will crash if 0 offsets)
+    int64 imillis = int64(millis);
+    for (int i = int(offsets.length) - 1; i >= 0; i--) {
+      if (offsets[uint(i)].from <= imillis) {
+        break;
+      }
+      offsets.pop();
+    }
+  }
+
+  function clearAllData() public onlyOwner {
     delete rates;
     delete offsets;
   }
-
-  function msNow() public view returns(uint) { return block.timestamp * 1000; }
 
   //
   // Add a new rate to the end of the list.
@@ -186,12 +206,18 @@ contract SpxCadOracle is AggregatorV3Interface, OwnableUpgradeable, AccessContro
     // Search backwards for the correct offset
     // This assumes most queries will be for current time
     for (int i = int(offsets.length) - 1; i >= 0; i--) {
-      if (offsets[uint(i)].from < int(millis)) {
+      if (offsets[uint(i)].from <= int(millis)) {
         return offsets[uint(i)].offset;
       }
     }
     return 0;
   }
+
+  // Accessors
+  function getRates() public view returns (uint64[] memory) { return rates; }
+  function getOffsets() public view returns (MilliSecondsOffset[] memory) { return offsets; }
+
+  function msNow() public view returns(uint) { return block.timestamp * 1000; }
 
   //-- Un-interesting functions below
 

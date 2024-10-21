@@ -71,7 +71,7 @@ export function loadMinting() : MintData[]|undefined {
     return undefined;
 
   const raw = readFileSync(mintFile, 'utf8');
-  const csv = Papa.parse(raw, {
+  const csv = Papa.parse<MintData>(raw, {
     header: true,
     transform: transformData,
   });

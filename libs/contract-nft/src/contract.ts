@@ -1,14 +1,11 @@
-import { Contract } from '@ethersproject/contracts';
-import { TheGreenNFT } from '.';
 import { getProvider, Network } from '@thecointech/ethers-provider';
-import TheGreenNFT1Spec from './contracts/contracts/ethereum/TheGreenNFTL1.sol/TheGreenNFTL1.json' assert {type: "json"};
-import TheGreenNFT2Spec from './contracts/contracts/polygon/TheGreenNFTL2.sol/TheGreenNFTL2.json' assert {type: "json"};
+import { TheGreenNFTL2, TheGreenNFTL2__factory } from './codegen';
 
-const getAbi = (network: Network) => {
-  return network == "POLYGON"
-    ? TheGreenNFT2Spec.abi
-    : TheGreenNFT1Spec.abi;
-}
+// const getAbi = (network: Network) => {
+//   return network == "POLYGON"
+//     ? TheGreenNFT2Spec.abi
+//     : TheGreenNFT1Spec.abi;
+// }
 
 const getContractAddress = async (network: Network) => {
   const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME
@@ -20,18 +17,14 @@ const getContractAddress = async (network: Network) => {
   return deployment.default.contract;
 }
 
-const buildContract = async (network: Network) =>
-  new Contract(
-    await getContractAddress(network),
-    getAbi(network),
-    getProvider(),
-  ) as TheGreenNFT
-
 declare module globalThis {
-  let __contractNFT: TheGreenNFT | undefined;
+  let __contractNFT: TheGreenNFTL2 | undefined;
 }
 
-export async function getContract(network: Network = "POLYGON"): Promise<TheGreenNFT> {
-  globalThis.__contractNFT = globalThis.__contractNFT ?? await buildContract(network);
+export async function getContract(network: Network = "POLYGON") {
+  globalThis.__contractNFT ??= TheGreenNFTL2__factory.connect(
+    await getContractAddress(network),
+    getProvider()
+  );
   return globalThis.__contractNFT!;
 }

@@ -5,21 +5,22 @@ import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import parser from '@solidity-parser/parser'
-import type { PluginAndPermissionsStructOutput } from './types/contracts/IPluggable';
+import type { PluginAndPermissionsStructOutput } from './codegen/contracts/IPluggable';
 import type { BaseASTNode, ContractDefinition, FunctionDefinition, StateVariableDeclaration, VariableDeclarationStatement, VariableDeclaration, FunctionCall, MemberAccess, Identifier, Expression, BinaryOperation, TupleExpression, ReturnStatement, IndexAccess, IfStatement, ExpressionStatement, Block } from '@solidity-parser/parser/dist/src/ast-types';
 import type { ContractState, PluginBalanceMod } from './types';
 import { getPluginLogs, updateState } from './logs';
 import { log } from '@thecointech/logging';
+import { AddressLike } from 'ethers';
 
 const RETURN_KEY = "__$return";
 
-export async function getPluginModifier(user: string, {plugin, permissions}: PluginAndPermissionsStructOutput, _provider?: Erc20Provider) : Promise<PluginBalanceMod|null> {
+export async function getPluginModifier(user: AddressLike, {plugin, permissions}: PluginAndPermissionsStructOutput, _provider?: Erc20Provider) : Promise<PluginBalanceMod|null> {
 
   // Allow passing in a provider so we can mock it in testing
   const provider = _provider ?? new Erc20Provider();
 
   // if this doesn't modify the balance, we don't need to emulate it
-  if (permissions.mask(PERMISSION_BALANCE).eq(0)) {
+  if ((permissions & PERMISSION_BALANCE) == 0n) {
     return null;
   }
 

@@ -1,26 +1,31 @@
-import { ContractTransaction } from 'ethers';
-import { BigNumber, BigNumberish } from 'ethers';
+import { AddressLike, ContractTransaction, resolveAddress } from 'ethers';
+import { BigNumberish } from 'ethers';
 import type { TheGreenNFT } from '.';
+import { StateMutability, TypedContractMethod } from './codegen/common';
+import { genReceipt } from '@thecointech/contract-tools/mockContractUtils';
 
 export * from "./gassless";
 export * from "./tokenCodes";
 
+const makeFn = <
+A extends Array<any> = Array<any>,
+R = any,
+S extends StateMutability = "payable"
+>(r: (...a: A) => R, _s?: S) => r as any as TypedContractMethod<A, [Awaited<R>], S>;
+
+
 class MockNFT implements Pick<TheGreenNFT, "balanceOf"|"claimToken"> {
   tokens: string[] = [];
 
-  balanceOf(owner: string): Promise<BigNumber> {
-    return Promise.resolve(BigNumber.from(
+  balanceOf = makeFn((owner: AddressLike) => {
+    return Promise.resolve(BigInt(
       this.tokens.filter(t => t === owner).length
     ))
-  }
-  claimToken(tokenId: BigNumberish, claimant: string): Promise<ContractTransaction> {
-    this.tokens[BigNumber.from(tokenId).toNumber()] = claimant;
-    return Promise.resolve({
-      wait: () => {},
-      confirmations: 2,
-      hash: "0x12345"
-    } as unknown as ContractTransaction)
-  }
+  }, "view")
+  claimToken = makeFn(async (tokenId: BigNumberish, claimant: AddressLike, _sig: any) => {
+    this.tokens[Number(tokenId)] = await resolveAddress(claimant);
+    return genReceipt() as any;
+  }, "nonpayable")
 }
 
 export function getContract() {

@@ -8,8 +8,6 @@ nginx - reverse proxy to turn HTTPS into HTTP for ceramic
 
 The services are all within a single `docker-compose.yaml` file.
 
-nginx turns port 443 into port 7007 for Ceramic
-
 Important folders:
 /srv/ceramic/ - Holds the daemon.config.json file for ceramic
 /etc/letsencrypt/ - where LetSEncrypt outputs it's certificate files.
@@ -24,9 +22,4 @@ Honestly, have a beer mon amie, this whole thing is a big basket of shit.
 
 Certificate is issued from LetsEncrypt.  LetsEncrypt connects to Google Domains directly to do the DNS validation and then issue a certificate, which is very handy, lets keep doing that.
 
-This time I used a docker container from https://github.com/aaomidi/certbot-dns-google-domains, but this should be changed to use the python version.
-
-TODO:
- - renewal isn't automated yet.  THAT NEEDS TO HAPPEN PRIOR TO AUG 10
- possible track - setup cronjob to run python version of google plugin (remove current certbot install)
- - Is restart automated?  Test this!  This whole thing is such a bad idea...
+This time I used a docker container from https://github.com/aaomidi/certbot-dns-google-domains

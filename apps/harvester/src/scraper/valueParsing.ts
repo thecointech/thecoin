@@ -33,7 +33,7 @@ const StringTokens = [
 const NumberTokens = [
   "d",  // Matches 3 && 03
   "M",  // Matches 3 && 03
-  "y",  // Matches  1-6 numbers
+  "yy", // Matches  2 or 4 numbers (eg '21' or '2021')
 ]
 const tokenSplitter = /([0-9a-zA-Z]+)|([^0-9a-zA-Z]+)/gm
 
@@ -47,10 +47,13 @@ const getMatchers = (splits: RegExpMatchArray) => {
   })
 }
 
-export function guessDateFormat(value: string, locale?: string) {
+export function guessDateFormat(value?: string, locale?: string) {
+  if (!value) return null;
   // split string into tokens of date-kind & separator
   const splits = value.match(tokenSplitter);
   if (!splits) return null;
+  // Early-exit, skip all currencies
+  if (splits.includes('$')) return null;
   // Search through the splits find potential values vs padding
   const matchers = getMatchers(splits);
 
@@ -66,7 +69,7 @@ export function guessDateFormat(value: string, locale?: string) {
       if (rest.length) {
         for (const perm of permutations(rest)) {
           yield [null, ...perm];
-        }  
+        }
       }
       return;
     }
@@ -89,7 +92,7 @@ export function guessDateFormat(value: string, locale?: string) {
         const childPermutations = permutations(childMatchers);
         for (const perm of childPermutations) {
           yield [matcher, ...perm];
-        }  
+        }
       }
       else {
         yield [matcher];
@@ -109,31 +112,46 @@ export function guessDateFormat(value: string, locale?: string) {
     }).join('');
     const dt = DateTime.fromFormat(value, candidate, { locale });
     if (dt.isValid) {
-      return candidate;
+      // Limit to semi-reasonable dates.  This should filter out most of the
+      // random number combinations (it's OK if a few get through)
+      // (1960 is the 2-digit cutoff year in Luxon)
+      if (dt.year > 1960 && dt.year < DateTime.now().year + 2) {
+        return candidate;
+      };
     }
   }
   return null;
 }
 
+const convert = (value: string|undefined, options: currency.Options) => {
+  if (!value) return undefined;
+  const r = currency(value, options);
+  // Ignore 0 values (probably incompatible string)
+  if (r.intValue === 0 || Number.isNaN(r.value)) return undefined;
+  return r;
+}
+
 const Currencies = {
-  CAD_fr: (value: string) => currency(value, { symbol: "$", precision: 2, separator: '.', decimal: ',', pattern: '#!'}),
-  CAD_en: (value: string) => currency(value, { symbol: "$", precision: 2 }),
+  CAD_fr: (value?: string) => convert(value, { symbol: "$", precision: 2, separator: '.', decimal: ',', pattern: '#!'}),
+  CAD_en: (value?: string) => convert(value, { symbol: "$", precision: 2 }),
 }
 
 export type CurrencyType = keyof typeof Currencies;
+export type CurrencyConverter = typeof Currencies["CAD_en"];
 
-export function guessCurrencyFormat(value: string) : CurrencyType|null {
+export function guessCurrencyFormat(value?: string) : CurrencyType|null {
+  if (!value) return null;
   // What is the bare number here?
   const bareCents = value.replace(/[^0-9]/g, '');
   // strip out additional spaces
   const noSpace = value.replace(/\s/g, '');
-  if (Currencies.CAD_fr(noSpace).format({ symbol: '', separator: '', decimal: ''}) === bareCents)
+  if (Currencies.CAD_fr(noSpace)?.format({ symbol: '', separator: '', decimal: ''}) === bareCents)
     return "CAD_fr";
-  if (Currencies.CAD_en(noSpace).format({ symbol: '', separator: '', decimal: ''}) === bareCents)
+  if (Currencies.CAD_en(noSpace)?.format({ symbol: '', separator: '', decimal: ''}) === bareCents)
     return "CAD_en";
   return null;
 }
 
-export function getCurrencyConverter(fmt: CurrencyType) {
+export function getCurrencyConverter(fmt: CurrencyType): CurrencyConverter {
   return Currencies[fmt];
 }

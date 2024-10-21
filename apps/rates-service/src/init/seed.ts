@@ -21,27 +21,38 @@ export async function seed() {
   const oldLevels = log.levels();
   oldLevels.forEach((_lvl, idx) => log.levels(idx, 50));
 
+  const latest = await getLatestStored("FxRates");
   // Seed our DB for a year, values set for a day.
-  const from = DateTime
-    .local()
-    .minus({ years: 1 })
-    .set({
-      hour: 9,
-      minute: 31,
-      second: 30,
-      millisecond: 0,
-    });
+  const from = latest?.validTill
+    ? DateTime.fromMillis(latest.validTill)
+    : DateTime
+      .local()
+      .minus({ years: 1.5 })
+      .set({
+        hour: 9,
+        minute: 31,
+        second: 30,
+        millisecond: 0,
+      });
+  // do not overwrite existing values
   const validityInterval = Duration.fromObject({ days: 1 });
 
   // Always seed with live rates (falls back to random)
   await seedRates(from, validityInterval);
 
-  // re-enable logging
-  oldLevels.forEach((lvl, idx) => log.levels(idx, lvl));
+  // warm up our cache of latest data.
+  // -- NOTE -- this doesn't work in testing,
+  // the mocked DB does not order results so
+  // getLatestStored returns the wrong results...
+  // Test in dev:live etc then perhaps remove this line
+  // await initLatest();
 
   // Triggering an update ensures the oracle is updated
   // before we re-enable logging
   await update();
+
+  // re-enable logging
+  oldLevels.forEach((lvl, idx) => log.levels(idx, lvl));
 
   log.trace(`Seeding complete from ${from.toLocaleString(DateTime.DATETIME_MED)}`);
 
@@ -82,7 +93,9 @@ export function readLiveSeedRates() : LiveRate[]|null {
 }
 
 async function setRateForTime(from: DateTime, validityInterval: Duration, rates: LiveRate[]) {
-  const rate = rates.find((r) => r.from <= from.toMillis() && r.to > from.toMillis());
+  // Find the first rate that ends after from.  This will duplicate
+  // rates if there are any missing spaces
+  const rate = rates.find((r) => r.to > from.toMillis());
   if (!rate) {
     return false;
   }
@@ -137,7 +150,7 @@ export async function seedWithRandomRates(from: DateTime, validityInterval: Dura
   const now = Date.now();
   let rate = latest?.buy ?? 1;
   for (
-    let ts = latest?.validTill ?? from.toMillis();
+    let ts = latest?.validTill || from.toMillis();
     ts < now;
     ts += msValidityInterval) {
     const validity = {

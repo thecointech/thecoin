@@ -6,6 +6,9 @@ We use formatjs/react-intl to support multi-lingual.
 
 Projects need to setup `ts-transformer` or equivalent in their webpack/babel setup.
 
+Typescript needs to be patched using `ts-patch`.  Currently this is achieved
+with the `postinstal` script.
+
 ### Defining messages In-Code
 
 How to define messages:

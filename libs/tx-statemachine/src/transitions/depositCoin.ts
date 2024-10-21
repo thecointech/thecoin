@@ -1,7 +1,7 @@
 import { AnyActionContainer, getCurrentState, TransitionCallback, TypedActionContainer } from "../types";
 import { verifyPreTransfer } from "./verifyPreTransfer";
-import { TransactionResponse } from '@ethersproject/providers';
-import { calculateOverrides, convertBN, toDelta } from './coinUtils';
+import { TransactionResponse } from 'ethers';
+import { toDelta } from './coinUtils';
 import { log } from '@thecointech/logging';
 import { makeTransition  } from '../makeTransition';
 import type { CertifiedTransferRequest, UberTransfer } from '@thecointech/types';
@@ -38,13 +38,12 @@ const depositCertifiedTransfer = async (container: AnyActionContainer, transfer:
   // We check balance in the initial steps as well, but this is for scenarios
   // where the deposit is delayed for any reason (eg - server crash etc);
   const balance = await tc.balanceOf(from);
-  if (balance.lte(fee + value))
+  if (balance <= (fee + value))
     return { error: 'Insufficient funds'};
 
 
-  const overrides = await calculateOverrides(container, depositCoin);
-  log.debug({address: from}, `CertTransfer of ${value.toString()} from {address} with overrides ${JSON.stringify(overrides, convertBN)}`);
-  const tx: TransactionResponse = await tc.certifiedTransfer(chainId, from, to, value, fee, timestamp, signature, overrides);
+  log.debug({address: from, amount: value.toString()}, `CertTransfer of {amount} from {address}`);
+  const tx: TransactionResponse = await tc.certifiedTransfer(chainId, from, to, value, fee, timestamp, signature);
   return toDelta(tx);
 }
 
@@ -60,9 +59,8 @@ const depositUberTransfer = async (container: TypedActionContainer<BSActionTypes
   // if (balance.lte(amount))
   //   return { error: 'Insufficient funds'};
 
-  const overrides = await calculateOverrides(container, depositCoin);
-  log.debug({address: from}, `UberTransfer of ${amount.toString()} from {address} with overrides ${JSON.stringify(overrides, convertBN)}`);
-  const tx: TransactionResponse = await tc.uberTransfer(chainId, from, to, amount, currency, transferMillis, signedMillis, signature, overrides);
+  log.debug({address: from, amount: amount.toString()}, 'UberTransfer of {amount} from {address}');
+  const tx: TransactionResponse = await tc.uberTransfer(chainId, from, to, amount, currency, transferMillis, signedMillis, signature);
   return toDelta(tx);
 }
 

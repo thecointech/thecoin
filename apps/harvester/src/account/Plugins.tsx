@@ -8,15 +8,15 @@ import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { getFxRate } from '@thecointech/fx-rates';
 import { toHuman } from "@thecointech/utilities";
 import { sleep } from "@thecointech/async";
-import { Signer } from '@ethersproject/abstract-signer';
 import { getData, Key, setData } from '../Training/data';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import type { AddressLike, Signer } from 'ethers';
 
 const converter = await getUberContract();
 const shockAbsorber = await getShockAbsorberContract();
 
-const sendAssignRequest = async (signer: Signer, pluginAddress: string) =>  {
+const sendAssignRequest = async (signer: Signer, pluginAddress: AddressLike) =>  {
   const api = GetPluginsApi();
   const convRequest = await buildAssignPluginRequest(
     signer,
@@ -25,6 +25,7 @@ const sendAssignRequest = async (signer: Signer, pluginAddress: string) =>  {
   );
   await api.assignPlugin({
     ...convRequest,
+    permissions: convRequest.permissions.toString(),
     timeMs: convRequest.timeMs.toMillis(),
     signedAt: convRequest.signedAt.toMillis(),
   });
@@ -33,9 +34,22 @@ const sendAssignRequest = async (signer: Signer, pluginAddress: string) =>  {
 export const Plugins = () => {
   const active = AccountMap.useActive();
   const [requestSent, setRequestSent] = useState(false);
+  const [isSending, setIsSending] = useState(false);
 
-  const hasConverter = active?.plugins.some(plugin => plugin.address === converter.address);
-  const hasShockAbsorber = active?.plugins.some(plugin => plugin.address === shockAbsorber.address);
+  const [hasConverter, setHasConverter] = useState(false);
+  const [hasShockAbsorber, setHasShockAbsorber] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const converterAddress = await converter.getAddress();
+      const shockAbsorberAddress = await shockAbsorber.getAddress();
+      setHasConverter(active?.plugins.some(plugin => plugin.address === converterAddress) ?? false);
+      setHasShockAbsorber(active?.plugins.some(plugin => plugin.address === shockAbsorberAddress) ?? false);
+    })()
+  }, [active?.plugins]);
+
+  // const hasConverter = active?.plugins.some(plugin => plugin.address === converterAddress);
+  // const hasShockAbsorber = active?.plugins.some(plugin => plugin.address === shockAbsorberAddress);
 
   const { rates } = useFxRates();
   const { buy, fxRate } = getFxRate(rates, 0);
@@ -50,17 +64,19 @@ export const Plugins = () => {
     if (!active) {
       throw new Error('No active account');
     }
+    setIsSending(true);
     if (!cnvrtRequested) {
-      await sendAssignRequest(active.signer, converter.address);
+      await sendAssignRequest(active.signer, converter);
       setData(Key.pluginCnvrtRequested, "true");
     }
     // ensure the timestamp increases...
     await sleep(250);
     if (!absrbRequested) {
-      await sendAssignRequest(active.signer, shockAbsorber.address);
+      await sendAssignRequest(active.signer, shockAbsorber);
       setData(Key.pluginAbsrbRequested, "true");
     }
     setRequestSent(true);
+    setIsSending(false);
   }
   return (
     <Container>
@@ -86,7 +102,7 @@ export const Plugins = () => {
       <div>
         You have {active?.plugins.length} plugins installed
       </div>
-      <Button onClick={onInstallPlugins}>Install</Button>
+      <Button onClick={onInstallPlugins} loading={isSending} disabled={requestSent || isSending}>Install</Button>
       <Message hidden={!requestSent}>
         Your selected plugins are in the process of being installed.
         This can take up to an hour, in the meantime lets setup

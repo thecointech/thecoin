@@ -1,19 +1,30 @@
 {
 	"folders": [
 		{
+			"name": "harvester",
 			"path": "../apps/harvester"
 		},
 		{
+			"name": "electron-utils",
+			"path": "../libs/electron-utils"
+		},
+		{
+			"name": "broker-service",
 			"path": "../apps/broker-service"
 		},
 		{
+			"name": "shared",
 			"path": "../libs/shared"
 		},
 		{
+			"name": "contract-plugins",
 			"path": "../libs/contract-plugins"
 		}
 	],
 	"settings": {
-		"typescript.tsdk": "harvester\\node_modules\\typescript\\lib"
+		"typescript.tsdk": "harvester\\node_modules\\typescript\\lib",
+		"logViewer.watch": [
+			"${userHome}/AppData/Roaming/harvester/logs/harvest.log"
+		]
 	}
 }

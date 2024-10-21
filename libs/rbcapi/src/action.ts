@@ -2,7 +2,7 @@ import type {ElementHandle, HTTPResponse, Page, WaitForOptions} from 'puppeteer'
 import fs, { readFileSync } from 'fs';
 import { log } from '@thecointech/logging';
 import { AuthOptions, Credentials, isCredentials } from './types';
-import { getPage } from './puppeteer';
+import { getPage } from './scraper';
 
 ////////////////////////////////////////////////////////////////
 // API action, a single-shot action created by the API.
@@ -128,7 +128,7 @@ export class ApiAction {
   }
 
   async findPVQuestion(answer: ElementHandle<Element>) {
-    const pvqQuestion = await answer.$x("//INPUT[@id='pvqAnswer']/../../preceding-sibling::TR/TD[2]");
+    const pvqQuestion = await answer.$$("::-p-xpath(//INPUT[@id='pvqAnswer']/../../preceding-sibling::TR/TD[2])");
     if (pvqQuestion == null || pvqQuestion.length == 0) {
       log.error("Cannot find PVQ question");
       return null;
@@ -162,7 +162,7 @@ export class ApiAction {
   }
 
   async findElementsWithText<K extends keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap>(elementType: K, searchText: string) {
-    const nodes = await this.page.$x(`//${elementType}[contains(., '${searchText}')]`);
+    const nodes = await this.page.$$(`::-p-xpath(//${elementType}[contains(., '${searchText}')])`);
     return Promise.all(
       nodes.map(node => {
         try {

@@ -6,6 +6,8 @@ import { closeBrowser } from '../scraper/puppeteer';
 import { DateTime } from 'luxon';
 import { getDataAsDate } from './types';
 import { PayVisaKey } from './steps/PayVisa';
+import { notifyError } from './notify';
+import { exec } from 'child_process';
 
 export async function harvest() {
 
@@ -33,7 +35,17 @@ export async function harvest() {
     }
     const nextState = await processState(stages, state, user);
 
-    await setCurrentState(nextState);
+    if (nextState.errors) {
+      const errorSteps = Object.keys(nextState.errors).join(', ');
+      await notifyError({
+        title: 'Harvester Error',
+        message: `Something went wrong in steps: ${errorSteps}.  Please contact support.`,
+      });
+    }
+
+    if (!process.env.HARVESTER_DRY_RUN) {
+      await setCurrentState(nextState);
+    }
 
     log.info(`Harvest complete`);
   }
@@ -44,9 +56,17 @@ export async function harvest() {
     else {
       log.fatal(`Error in harvest: ${err}`);
     }
-    // TODO: Launch app but notify of error (???)
-
+    const res = await notifyError({
+      title: 'Harvester Error',
+      message: `Harvesting failed.  Please contact support.`,
+      actions: ["Start App"],
+    })
+    if (res == "Start App") {
+      exec(process.argv0);
+    }
     // throw err;
   }
-  await closeBrowser();
+  finally {
+    await closeBrowser();
+  }
 }

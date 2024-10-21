@@ -7,8 +7,8 @@ import { log } from '@thecointech/logging';
 import icon from './images/icon_topup_big.svg';
 import { Upload } from '../Upload';
 import { getHash, readExif } from '../ProfileBuilder/SignAndUpload/sign';
-import { utils  } from 'ethers';
 import { getContract } from '@thecointech/contract-nft';
+import { verifyMessage } from 'ethers';
 
 const title = defineMessage({ defaultMessage: "Validate Image", description: "page title" });
 const description = defineMessage({ defaultMessage: "Validate the images cryptographic signature", description: "page instructions" });
@@ -68,9 +68,9 @@ async function isValid(blob: Blob): Promise<boolean> {
 
   // Does the signature owner own any tokens?
   const nft = await getContract();
-  const owner = utils.verifyMessage(hash, meta.signature);
+  const owner = verifyMessage(hash, meta.signature);
   const balance = await nft.balanceOf(owner);
-  if (balance.isZero())
+  if (balance == 0n)
     return false;
 
   return true;

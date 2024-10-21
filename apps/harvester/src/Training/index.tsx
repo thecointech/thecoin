@@ -48,15 +48,12 @@ export const Training = () => {
     const curr = location.pathname;
     // Page is last number
     const m = curr.match(/\/step([0-9])$/)
-    if (m) {
-      if (m[1] == "6") {
-        navigate.push("/config/step0");
-      }
-      else {
-        navigate.push("/train/step" + (parseInt(m[1]) + 1));
-      }
-    } else {
-      navigate.push("/train/step0");
+    const pageNumber = m ? parseInt(m[1]) : 0;
+    if (pageNumber == 6) {
+      navigate.push("/config/step0");
+    }
+    else {
+      navigate.push("/train/step" + (pageNumber + 1));
     }
   }
 

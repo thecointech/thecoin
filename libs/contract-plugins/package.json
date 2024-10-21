@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-plugins",
-  "version": "0.2.111",
+  "version": "0.2.133",
   "description": "The Coin: Plugin functionality for contract-core",
   "type": "module",
   "keywords": [
@@ -9,7 +9,7 @@
   ],
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
@@ -19,15 +19,14 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-s build:contracts build:copy build:src",
+    "prepublishOnly": "run -T rimraf ./build/.buildinfo",
+    "build": "run -T run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
-    "build:src": "yarn tsc -b",
-    "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
-    "clean": "rimraf ./build",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
-    "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
+    "build:src": "run -T tsc -b",
+    "build:copy": "run -T cpx \"./src/deployed/**\" ./build/deployed",
+    "clean": "run -T rimraf ./build && run -T rimraf ./src/codegen && run -T rimraf ./.hardhat",
+    "test": "run :jest",
+    "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts run-env"
   },
   "files": [
     "build/**/*"
@@ -50,11 +49,12 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "^0.2.111",
-    "@thecointech/contract-tools": "^0.2.111",
-    "jest": "*"
+    "@thecointech/async": "^0.2.133",
+    "@thecointech/contract-tools": "^0.2.133",
+    "@thecointech/setenv": "^0.2.133"
   },
   "dependencies": {
-    "@thecointech/contract-oracle": "^0.2.111"
-  }
+    "@thecointech/contract-oracle": "^0.2.133"
+  },
+  "gitHead": "6c91d925570c1132080f3098b510a3a42180e429"
 }

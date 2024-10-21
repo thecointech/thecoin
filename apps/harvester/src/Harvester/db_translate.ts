@@ -17,7 +17,7 @@ const toDbVisa = (visa: HarvestData['visa']) => ({
   balance: visa.balance.toString(),
   dueDate: visa.dueDate.toISO()!,
   dueAmount: visa.dueAmount.toString(),
-  history: visa.history.map(toDbHistory),
+  // history: visa.history.map(toDbHistory),
 })
 
 const toDbChequing = (chq: HarvestData['chq']) => ({
@@ -28,16 +28,17 @@ const toDbDelta = (delta: HarvestDelta) => ({
   harvesterBalance: delta.harvesterBalance?.toString(),
   toETransfer: delta.toETransfer?.toString(),
   toPayVisa: delta.toPayVisa?.toString(),
+  toPayVisaDate: delta.toPayVisaDate?.toISO(),
   stepData: delta.stepData,
 })
 
-const toDbHistory = (history: HarvestData['visa']['history'][number]) => ({
-  date: history.date.toISO()!,
-  description: history.description,
-  debit: history.debit?.toString(),
-  credit: history.credit?.toString(),
-  balance: history.balance?.toString(),
-})
+// const toDbHistory = (history: HarvestData['visa']['history'][number]) => ({
+//   date: history.date.toISO()!,
+//   description: history.description,
+//   debit: history.debit?.toString(),
+//   credit: history.credit?.toString(),
+//   balance: history.balance?.toString(),
+// })
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -53,7 +54,7 @@ const fromDbVisa = (data: StoredData['visa']) => ({
   balance: new currency(data.balance),
   dueDate: DateTime.fromISO(data.dueDate),
   dueAmount: new currency(data.dueAmount),
-  history: data.history.map(fromDbHistory),
+  // history: data.history.map(fromDbHistory),
 })
 
 const fromDbChequing = (data: StoredData['chq']) => ({
@@ -61,28 +62,30 @@ const fromDbChequing = (data: StoredData['chq']) => ({
 })
 
 const maybeCurrency = (v: string | undefined) => v ? new currency(v) : undefined;
+const maybeDate = (v: string | undefined | null) => v ? DateTime.fromISO(v) : undefined;
 
 const fromDbDelta = (data: StoredData['delta'][number]) => ({
   harvesterBalance: maybeCurrency(data.harvesterBalance),
   toETransfer: maybeCurrency(data.toETransfer),
   toPayVisa: maybeCurrency(data.toPayVisa),
+  toPayVisaDate: maybeDate(data.toPayVisaDate),
   stepData: data.stepData,
 })
 
-const fromDbHistory = (data: StoredData['visa']['history'][number]) => ({
-  date: DateTime.fromISO(data.date),
-  description: data.description,
-  debit: maybeCurrency(data.debit),
-  credit: maybeCurrency(data.credit),
-  balance: maybeCurrency(data.balance),
-})
+// const fromDbHistory = (data: StoredData['visa']['history'][number]) => ({
+//   date: DateTime.fromISO(data.date),
+//   description: data.description,
+//   debit: maybeCurrency(data.debit),
+//   credit: maybeCurrency(data.credit),
+//   balance: maybeCurrency(data.balance),
+// })
 
 // Remove all undefined parameters from the object recursively
 
-function cleanseObject(obj: any) {
-  for (const [key, value] of Object.entries(obj)) {
+function cleanseObject<T>(obj: T) {
+  for (const [key, value] of Object.entries(obj as any)) {
     if (value === undefined || value == null) {
-      delete obj[key]
+      delete (obj as any)[key]
     }
     else if (DateTime.isDateTime(value) || (value as any).intValue) {
       // do nothing

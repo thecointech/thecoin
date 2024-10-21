@@ -10,7 +10,7 @@ import { log } from '@thecointech/logging';
 // historical data.
 
 // If we don't have access to the Firestore, fuggetaboutit
-if (!process.env.RATES_SERVICE_ACCOUNT) {
+if (!process.env.RATES_SERVICE_ACCOUNT || !existsSync(process.env.RATES_SERVICE_ACCOUNT)) {
   log.fatal('Requires rates firestore access config');
   exit(0)
 }
@@ -21,7 +21,8 @@ const outFolder = new URL("../data/", import.meta.url);
 const outFile = new URL("rates.json", outFolder);
 
 // We only fetch the last 14 months
-let start = DateTime.now().minus({ months: 14});
+// let start = DateTime.now().minus({ months: 14});
+let start = DateTime.fromObject({year: 2023});
 
 let existing: any = null;
 if (!existsSync(outFolder)) {

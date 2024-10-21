@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { AccountId } from '@thecointech/signers';
 import { AccountBase } from '../AccountBase';
 import { BrokerCADRoutes } from './Routes';

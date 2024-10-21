@@ -8,7 +8,7 @@ export type VisaBalanceResult = {
   balance: currency;
   dueDate: DateTime;
   dueAmount: currency;
-  history: HistoryRow[];
+  history?: HistoryRow[]; // NOT SAVED
 }
 
 export type ChequeBalanceResult = {
@@ -35,13 +35,15 @@ export type ValueResult = {
 
 export type BaseEvent = {
   timestamp: number,
+  id: string,
 }
 
 export type Coords = {
   top: number,
   left: number,
-  bottom: number,
-  right: number,
+  centerY: number,
+  height: number,
+  width: number,
 }
 export type Font = {
   font: string,
@@ -53,9 +55,14 @@ export type ElementData = {
   // The frames to dereference on our way to the data
   frame?: string
   tagName: string,
+  role: string|null,
   selector: string,
   coords: Coords,
-  siblingText?: string,
+  label: string|null,
+  text: string,
+  nodeValue?: string|null,
+  font?: Font,
+  siblingText?: string[],
 }
 
 export type NavigationEvent = BaseEvent & {
@@ -78,23 +85,32 @@ export type ClickEvent = {
   type: "click",
   clickX: number,
   clickY: number,
-  font: Font,
-  text: string,
+  // font: Font,
+  // text: string,
 } & BaseEvent & ElementData;
 
+// Static input event.  Will be the same every run
 export type InputEvent = {
   type: "input",
-  dynamicName?: string,
-  value?: string,
+  value: string,
+  hitEnter?: boolean,
+  valueChange?: boolean,
+} & BaseEvent & ElementData;
+
+// Dynamic input event.  Value is supplied each run
+// Used for things like `amount`
+export type DynamicInputEvent = {
+  type: "dynamicInput",
+  dynamicName: string,
+  valueChange?: boolean,
 } & BaseEvent & ElementData;
 
 // Not really an event, but something to read later
 export type ValueEvent = {
   type: "value",
-  font: Font,
   name?: string,
   parsing?: ValueParsing
 } & BaseEvent & ElementData;
 
 
-export type AnyEvent = NavigationEvent|ClickEvent|InputEvent|UnloadEvent|LoadEvent|ValueEvent;
+export type AnyEvent = NavigationEvent|ClickEvent|InputEvent|DynamicInputEvent|UnloadEvent|LoadEvent|ValueEvent;

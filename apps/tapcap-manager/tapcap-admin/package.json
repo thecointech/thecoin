@@ -1,7 +1,7 @@
 {
 	"name": "tapcap-admin-root",
 	"version": "1.0.0",
-  "private": "true",
+  "private": true,
 	"scripts": {
 	  "client": "cd client && yarn start",
 	  "server": "nodemon server/src/server.js",

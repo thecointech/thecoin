@@ -51,24 +51,26 @@ def checkout():
 
   # check no existing checkout
   if new_deploy.exists():
-      logger.error("Cannot deploy: existing installation found")
-      exit(1)
+      logger.error("warning: existing installation found")
+      shutil.rmtree(new_deploy, onerror=remove_readonly)
+      input("Press Enter to continue...")
+      #exit(1)
+  else:
+    # First, create a new checkout,
+    new_deploy.mkdir(parents=True, exist_ok=True)
+    os.chdir(new_deploy)
+    os.system('git clone https://github.com/thecointech/thecoin.git .') # Cloning
 
-  # First, create a new checkout,
-  new_deploy.mkdir(parents=True, exist_ok=True)
-  os.chdir(new_deploy)
-  os.system('git clone https://github.com/thecointech/thecoin.git .') # Cloning
+    # switch to publish/Test
+    os.system(f'git checkout publish/{config_name}')
 
-  # switch to publish/Test
-  os.system(f'git checkout publish/{config_name}')
+    # Merge in latest changes
+    success = os.system('git merge origin/dev --no-ff --no-edit')
+    if success != 0:
+        logger.error("Merge Failed")
+        exit(1)
 
-  # Merge in latest changes
-  success = os.system('git merge origin/dev --no-ff --no-edit')
-  if success != 0:
-      logger.error("Merge Failed")
-      exit(1)
-
-  logger.info("Checkout Complete")
+    logger.info("Checkout Complete")
   return True
 
 #

@@ -1,4 +1,4 @@
-import { JsonRpcProvider } from "@ethersproject/providers";
+import { JsonRpcProvider } from "ethers";
 
 // I am not entirely sure why we do not just use the web version?
 export class AutoAdvanceProvider extends JsonRpcProvider {

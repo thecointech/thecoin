@@ -15,6 +15,7 @@ type VisualProps={
   errorHidden: boolean,
   successMessage: MessageDescriptor,
   successHidden: boolean,
+  infoMessage?: MessageDescriptor,
 
   description:MessageDescriptor,
   onValueChange: (value: number) => void,
@@ -56,6 +57,13 @@ export const TransferWidget = (props: VisualProps) => {
         <Message hidden={props.errorHidden} negative>
           <FormattedMessage {...props.errorMessage} />
         </Message>
+        {
+          props.infoMessage &&
+          <Message>
+            <FormattedMessage {...props.infoMessage} />
+          </Message>
+        }
+
 
         <DualFxInput
           onChange={props.onValueChange}

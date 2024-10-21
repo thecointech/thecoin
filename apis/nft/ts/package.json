@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/nft",
-  "version": "0.2.111",
+  "version": "0.2.133",
   "description": "OpenAPI client for @thecointech/nft",
   "author": "OpenAPI-Generator Contributors",
   "type": "module",
@@ -16,7 +16,7 @@
     "openapi-generator",
     "@thecointech/nft"
   ],
-  "license": "Unlicense",
+  "license": "GPL-3.0-or-later",
   "main": "./dist/esm/index.js",
   "typings": "./dist/esm/index.d.ts",
   "sideEffects": false,
@@ -25,10 +25,10 @@
     "prepare": "npm run build"
   },
   "dependencies": {
-    "axios": "^0.26.1"
+    "axios": "1.6.5"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
-  "gitHead": "6748a626f205f5a4cfeadf96ece7a76633177136"
+  "gitHead": "6c91d925570c1132080f3098b510a3a42180e429"
 }

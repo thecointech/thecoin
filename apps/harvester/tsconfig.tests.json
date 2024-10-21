@@ -1,12 +1,7 @@
 {
+  "extends": "../../tsconfig.tests.json",
   "compilerOptions": {
-    "noEmit": true,
-    "module": "Node16",
-    "target": "ES2017",
-    "esModuleInterop": true,
-    "moduleResolution": "Node",
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
+    "lib": ["es2023"]
   },
-  "include": ["**/*.test.*", "**/*.d.ts"],
+  "include": ["./*.cts", "./*.cjs", "**/*.test.*", "**/*.d.ts"],
 }

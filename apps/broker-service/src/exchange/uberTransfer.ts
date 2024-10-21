@@ -1,7 +1,6 @@
-import { TransactionResponse } from '@ethersproject/providers';
 import { log } from '@thecointech/logging';
 import type { UberTransfer } from '@thecointech/types';
-import { GetContract } from './Wallet';
+import { GetContract } from '../signer/Wallet';
 import { getBrokerCADAddress } from '../status';
 
 // Do we want to keep a record of this?
@@ -17,7 +16,7 @@ export async function uberTransfer(transfer: UberTransfer) {
     throw new Error(`Invalid destination address: ${transfer.to}`);
 
   const tc = await GetContract();
-  const tx: TransactionResponse = await tc.uberTransfer(
+  const tx = await tc.uberTransfer(
     chainId, from, to, amount, currency, transferMillis, signedMillis, signature,
   );
   if (!tx?.hash) {

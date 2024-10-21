@@ -7,13 +7,17 @@ import { DateTime } from 'luxon';
 import { Wallet } from 'ethers';
 import { processState } from './processState';
 import { PayVisa } from './steps/PayVisa';
+import { ClearPendingVisa } from './steps/ClearPendingVisa';
+import { TransferLimit } from './steps/TransferLimit';
 
 it ('can process on first run', async () => {
 
   // Simple runnable config
   const stages = [
+    new ClearPendingVisa(),
     new TransferVisaOwing(),
     new RoundUp(),
+    new TransferLimit({limit: 150}),
     new SendETransfer(),
     new PayVisa(),
   ];
@@ -25,7 +29,6 @@ it ('can process on first run', async () => {
       balance: currency(325),
       dueAmount: currency(100),
       dueDate: DateTime.now().plus({ weeks: 1 }),
-      history: [],
     },
     date: DateTime.now(),
 
@@ -45,9 +48,9 @@ it ('can process on first run', async () => {
 
   const nextState = await processState(stages, state, user);
 
-  expect(nextState.delta.length).toEqual(4);
-  // money to be etransfered should be gone
-  expect(nextState.state.harvesterBalance).toEqual(currency(500));
+  expect(nextState.delta.length).toEqual(stages.length);
+  // harvester balance should exceed visa balance
+  expect(nextState.state.harvesterBalance).toEqual(currency(350));
   expect(nextState.state.toPayVisa).toEqual(currency(100));
   expect(nextState.state.toETransfer).toBeUndefined();
 })

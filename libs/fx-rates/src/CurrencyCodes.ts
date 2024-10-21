@@ -6,7 +6,7 @@ export enum CurrencyCode {
 
 	AED = 784, //United Arab Emirates dirham
 	AFN = 971, //Afghan afghani
-	ALL = 08,  //Albanian lek
+	ALL = 8,  //Albanian lek
 	AMD = 51,  //Armenian dram
 	ANG = 532, //Netherlands Antillean guilder
 	AOA = 973, //Angolan kwanza

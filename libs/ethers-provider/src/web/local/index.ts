@@ -1,36 +1,32 @@
-import { BlockTag, Filter, JsonRpcProvider, Log, TransactionReceipt } from '@ethersproject/providers';
-import { hexZeroPad, hexStripZeros } from "@ethersproject/bytes";
-import { id } from "@ethersproject/hash";
-import { BigNumber } from "@ethersproject/bignumber";
+import { BlockTag, Filter, JsonRpcProvider, Log, TransactionReceipt, zeroPadValue, id } from 'ethers';
+import { sleep } from '@thecointech/async'
 import { ERC20Response } from '../erc20response';
 import { getSourceCode } from '../plugins_devlive';
 
 export class Erc20Provider extends JsonRpcProvider {
 
   constructor() {
-    super(`http://localhost:${process.env.DEPLOY_NETWORK_PORT}`);
+    super(`http://127.0.0.1:${process.env.DEPLOY_NETWORK_PORT}`);
+    this.pollingInterval = 250;
   }
 
-  async waitForTransaction(transactionHash: string, confirmations?: number | undefined, timeout?: number | undefined): Promise<TransactionReceipt> {
-    const r = await super.waitForTransaction(transactionHash, confirmations, timeout);
-    // Every time we wait, advance the block number
-    // to prevent deadlocking when waiting for confirmations
-    await this.send("evm_mine", []);
-    return r;
+  override async waitForTransaction(transactionHash: string, confirmations?: number | undefined, timeout?: number | undefined): Promise<null | TransactionReceipt> {
+    this.autoMine(transactionHash, confirmations);
+    return await super.waitForTransaction(transactionHash, confirmations, timeout);
   }
 
   //
   // In devlive, we do not have access to Etherscans advanced api
   // but we can replicate using just events
-  async getERC20History(args: {address?: string, contractAddress?: string, startBlock?: BlockTag, endBlock?: BlockTag}) {
+  async getERC20History(args: {address?: string, contractAddress?: string, fromBlock?: BlockTag, toBlock?: BlockTag}) {
     const buildFilter = ([t1, t2]: [string|null, string|null]) => ({
       address: args.contractAddress,
-      fromBlock: args.startBlock,
-      toBlock: args.endBlock,
+      fromBlock: args.fromBlock,
+      toBlock: args.toBlock,
       topics: [
         id('Transfer(address,address,uint256)'),
-        t1 ? hexZeroPad(args.address!, 32) : null,
-        t2 ? hexZeroPad(args.address!, 32) : null,
+        t1 ? zeroPadValue(args.address!, 32) : null,
+        t2 ? zeroPadValue(args.address!, 32) : null,
       ]
     })
 
@@ -38,21 +34,18 @@ export class Erc20Provider extends JsonRpcProvider {
     const to = await this.getLogs(buildFilter([null, args.address!]));
     const result = [...from, ...to].sort((a, b) => a.blockNumber - b.blockNumber);
 
-    return result.map((tx: any) : ERC20Response => {
-      if (!tx.timestamp) tx.timestamp = tx.timeStamp
+    return result.map((tx: any) => {
       const result: ERC20Response = {
-        blockNumber: Number(tx.blockNumber),
+        ...tx,
         // Not present on this
         timestamp: Number(tx.blockNumber),
         hash: tx.transactionHash,
-        blockHash: tx.blockHash,
         contractAddress: tx.address,
-        transactionIndex: tx.transactionIndex,
 
-        from: hexStripZeros(tx.topics[1]),
-        to: hexStripZeros(tx.topics[2]),
-        value: BigNumber.from(tx.data),
-      } as any;
+        from: toAddress(tx.topics[1]),
+        to: toAddress(tx.topics[2]),
+        value: BigInt(tx.data),
+      };
       return result;
     });
   }
@@ -66,6 +59,31 @@ export class Erc20Provider extends JsonRpcProvider {
   getSourceCode(address: string) {
     return getSourceCode({address});
   }
+
+  blockchainAdvance: Promise<void>|null = null;
+  async autoMine(hash: string, confirmations: number = 1) {
+    if (!this.blockchainAdvance) {
+
+      // How many confirmations do we already have?
+      const tx = await this.getTransaction(hash);
+      const txConfirmed = await tx?.confirmations();
+      const required = confirmations - (txConfirmed ?? 0);
+      if (required > 0) {
+        // switch to automine to avoid deadlocking
+        this.blockchainAdvance ??= new Promise<void>(async resolve => {
+          await this.send("evm_setIntervalMining", [100]);
+          await sleep((confirmations + 1) * 100);
+          await this.send("evm_setAutomine", [true]);
+
+          // Clear this promise
+          this.blockchainAdvance = null;
+          resolve();
+        })
+      }
+    }
+  }
 }
+
+const toAddress = (x: string) => x.replace(/^(0x)?0+(.{40})$/, '$1$2');
 
 export const getProvider = () => new Erc20Provider();

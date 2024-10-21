@@ -6,21 +6,31 @@ import { GetSignedMessage } from '@thecointech/utilities/SignedMessages';
 
 export class Heartbeat implements ProcessingStage {
 
-  async process(_data: HarvestData) {
+  readonly name = 'Heartbeat';
+
+  async process(data: HarvestData) {
 
     log.info("Sending Heartbeat");
 
+    if (process.env.HARVESTER_DRY_RUN) {
+      log.info(`Skipping Heartbeat: DRY_RUN`);
+      return {};
+    }
+
+    const errors = data.errors
+      ? Object.keys(data.errors)
+      : undefined;
+
     const wallet = await getWallet();
     const serverTimestamp = await GetStatusApi().timestamp();
-    const result = "success";
     const signedPacket = await GetSignedMessage(
-      result + serverTimestamp.data,
+      (errors?.join() ?? "") + serverTimestamp.data,
       wallet!,
     )
     const r = await GetHarvesterApi().heartbeat({
       timeMs: serverTimestamp.data,
-      result: "success",
       signature: signedPacket.signature,
+      errors,
     });
     log.info(`Sent Heartbeat: ${r.statusText}`);
 

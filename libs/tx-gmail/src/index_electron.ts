@@ -1,6 +1,6 @@
 
 import { functions, messages } from './index_common';
-import { IpcRenderer } from './electron_types';
+import { IpcRenderer } from '@thecointech/electron-utils/types/ipc';
 import { log } from '@thecointech/logging';
 
 //
