@@ -4369,15 +4369,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@google-cloud/firestore@npm:4.12.3":
-  version: 4.12.3
-  resolution: "@google-cloud/firestore@npm:4.12.3"
+"@google-cloud/firestore@npm:6.0.0":
+  version: 6.0.0
+  resolution: "@google-cloud/firestore@npm:6.0.0"
   dependencies:
     fast-deep-equal: "npm:^3.1.1"
     functional-red-black-tree: "npm:^1.0.1"
-    google-gax: "npm:^2.12.0"
-    protobufjs: "npm:^6.8.6"
-  checksum: 73d0c5cc1fbfc1bf1f41724a2bc2af15d97daa1d678435f16c0d0095d0c4ec43deca7e8b19ec210af11399c94c960beb6d920d7843002a30a726dc91e31f4f67
+    google-gax: "npm:^3.0.1"
+    protobufjs: "npm:^7.0.0"
+  checksum: d1d93ebdb143aa7f699c20898d976cdcdba7e1bb09077c5914401ef50229e2b6ff2e2565e82e9f234a1fdfac7052279029d6422dbcbe11a83501af50bf8fe289
   languageName: node
   linkType: hard
 
@@ -4690,16 +4690,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grpc/grpc-js@npm:~1.6.0":
-  version: 1.6.12
-  resolution: "@grpc/grpc-js@npm:1.6.12"
-  dependencies:
-    "@grpc/proto-loader": "npm:^0.7.0"
-    "@types/node": "npm:>=12.12.47"
-  checksum: ced40af0c04a48a0f383538c7312f958f5dbba2cea5587b6c36288d27e6f32954dfab9eb0b411c97ecdce0491be1c9882c574526b3a65469260f2450714333fe
-  languageName: node
-  linkType: hard
-
 "@grpc/grpc-js@npm:~1.8.0":
   version: 1.8.21
   resolution: "@grpc/grpc-js@npm:1.8.21"
@@ -4710,7 +4700,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grpc/proto-loader@npm:^0.6.0, @grpc/proto-loader@npm:^0.6.12":
+"@grpc/proto-loader@npm:^0.6.0":
   version: 0.6.13
   resolution: "@grpc/proto-loader@npm:0.6.13"
   dependencies:
@@ -10483,7 +10473,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/broker-service@workspace:apps/broker-service"
   dependencies:
-    "@google-cloud/firestore": "npm:4.12.3"
+    "@google-cloud/firestore": "npm:6.0.0"
     "@google-cloud/storage": "npm:^7.7.0"
     "@thecointech/async": "npm:^0.2.133"
     "@thecointech/contract-core": "npm:^0.2.133"
@@ -10793,7 +10783,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/rates-service@workspace:apps/rates-service"
   dependencies:
-    "@google-cloud/firestore": "npm:4.12.3"
+    "@google-cloud/firestore": "npm:6.0.0"
     "@thecointech/async": "npm:^0.2.133"
     "@thecointech/contract-oracle": "npm:^0.2.133"
     "@thecointech/email": "npm:^0.2.133"
@@ -24039,7 +24029,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"google-auth-library@npm:^7.11.0, google-auth-library@npm:^7.14.0":
+"google-auth-library@npm:^7.11.0":
   version: 7.14.1
   resolution: "google-auth-library@npm:7.14.1"
   dependencies:
@@ -24087,30 +24077,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"google-gax@npm:^2.12.0":
-  version: 2.30.5
-  resolution: "google-gax@npm:2.30.5"
-  dependencies:
-    "@grpc/grpc-js": "npm:~1.6.0"
-    "@grpc/proto-loader": "npm:^0.6.12"
-    "@types/long": "npm:^4.0.0"
-    abort-controller: "npm:^3.0.0"
-    duplexify: "npm:^4.0.0"
-    fast-text-encoding: "npm:^1.0.3"
-    google-auth-library: "npm:^7.14.0"
-    is-stream-ended: "npm:^0.1.4"
-    node-fetch: "npm:^2.6.1"
-    object-hash: "npm:^3.0.0"
-    proto3-json-serializer: "npm:^0.1.8"
-    protobufjs: "npm:6.11.3"
-    retry-request: "npm:^4.0.0"
-  bin:
-    compileProtos: build/tools/compileProtos.js
-  checksum: 956c82f4b1cc025940fa5ccacedaf46590b617e1cb75d7b5f75d71fc958291e075c17784aa34a2d60a1328eb4cef10fd25a607ac42d15732fdede649b2ad16f2
-  languageName: node
-  linkType: hard
-
-"google-gax@npm:^3.6.1":
+"google-gax@npm:^3.0.1, google-gax@npm:^3.6.1":
   version: 3.6.1
   resolution: "google-gax@npm:3.6.1"
   dependencies:
@@ -35460,15 +35427,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"proto3-json-serializer@npm:^0.1.8":
-  version: 0.1.9
-  resolution: "proto3-json-serializer@npm:0.1.9"
-  dependencies:
-    protobufjs: "npm:^6.11.2"
-  checksum: 55afe22d9214473cf061cc3d592c6292080c4ca44a3dddf5156de610bca1ff847f66955c982b2a90ffa2930066dd5f0ff3ab2a7bf4d23c49c3b0180ea02a524e
-  languageName: node
-  linkType: hard
-
 "proto3-json-serializer@npm:^1.0.0":
   version: 1.1.1
   resolution: "proto3-json-serializer@npm:1.1.1"
@@ -35507,30 +35465,6 @@ __metadata:
     pbjs: bin/pbjs
     pbts: bin/pbts
   checksum: 50ab15abf741e7008d2bd88881ac5760d33c07bbe1b28f5460bf74722c2f152c35671b77b5365fc3e6b83e392b44c2e354b227c307fdd870598d7220214b5f87
-  languageName: node
-  linkType: hard
-
-"protobufjs@npm:6.11.3":
-  version: 6.11.3
-  resolution: "protobufjs@npm:6.11.3"
-  dependencies:
-    "@protobufjs/aspromise": "npm:^1.1.2"
-    "@protobufjs/base64": "npm:^1.1.2"
-    "@protobufjs/codegen": "npm:^2.0.4"
-    "@protobufjs/eventemitter": "npm:^1.1.0"
-    "@protobufjs/fetch": "npm:^1.1.0"
-    "@protobufjs/float": "npm:^1.0.2"
-    "@protobufjs/inquire": "npm:^1.1.0"
-    "@protobufjs/path": "npm:^1.1.2"
-    "@protobufjs/pool": "npm:^1.1.0"
-    "@protobufjs/utf8": "npm:^1.1.0"
-    "@types/long": "npm:^4.0.1"
-    "@types/node": "npm:>=13.7.0"
-    long: "npm:^4.0.0"
-  bin:
-    pbjs: bin/pbjs
-    pbts: bin/pbts
-  checksum: 76cd3d45242d346ac60cdd16a03b347d61cd2eaaa2d0f152f3a19af19ce328562e800547e562ee136bc99a3465c48a35246274117f0acfb7dfaa8ff555ea045a
   languageName: node
   linkType: hard
 
@@ -35574,7 +35508,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"protobufjs@npm:^6.11.2, protobufjs@npm:^6.11.3, protobufjs@npm:^6.8.6, protobufjs@npm:^6.8.8":
+"protobufjs@npm:^6.11.3, protobufjs@npm:^6.8.8":
   version: 6.11.4
   resolution: "protobufjs@npm:6.11.4"
   dependencies:
@@ -37794,16 +37728,6 @@ __metadata:
   version: 3.0.0
   resolution: "retimer@npm:3.0.0"
   checksum: dc3e07997c77c2b9113072bc57bcad9898a388a5cdf59a07a9fb3974f1dd8958e371c97ac93eb312b184d63d907faa5430bb5ff859a8b2d285f4db1082beb96a
-  languageName: node
-  linkType: hard
-
-"retry-request@npm:^4.0.0":
-  version: 4.2.2
-  resolution: "retry-request@npm:4.2.2"
-  dependencies:
-    debug: "npm:^4.1.1"
-    extend: "npm:^3.0.2"
-  checksum: 16d6504a9d7a4ac74fc61adb1f670e17bfd5985dd626b7b817ff9b734c40c82afa73cf098081e3f6bc3fb733aee93b4a37cabdde8aaeca053db0f337f0ad8415
   languageName: node
   linkType: hard
 
