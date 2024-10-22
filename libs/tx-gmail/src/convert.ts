@@ -144,15 +144,21 @@ function getSubject(email: gmail_v1.Schema$Message) {
     return null;
 
   const parsed = getSubjectAnglais(subject) ?? getSubjectFrancais(subject);
-  if (!parsed)
+  if (!parsed) {
     log.error(`Unknown deposit type: ${subject}`);
+  }
 
   return parsed;
 }
 
 function getSubjectAnglais(subject: string) {
   const redirectHeader = "INTERAC e-Transfer: "
-  if (!subject.endsWith("sent you money.") || !subject.startsWith(redirectHeader)) {
+  const validSubject = [
+    "sent you money.",
+    "Claim your deposit!"
+  ].find(s => subject.endsWith(s))
+
+  if (!validSubject || !subject.startsWith(redirectHeader)) {
     return null;
   }
   return subject.substring(redirectHeader.length);

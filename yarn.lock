@@ -11276,7 +11276,6 @@ __metadata:
   dependencies:
     "@thecointech/bank-interface": "npm:^0.2.133"
     "@thecointech/broker-db": "npm:^0.2.133"
-    "@thecointech/shared": "npm:^0.2.133"
     "@thecointech/tx-blockchain": "npm:^0.2.133"
     "@thecointech/tx-gmail": "npm:^0.2.133"
     "@thecointech/utilities": "npm:^0.2.133"

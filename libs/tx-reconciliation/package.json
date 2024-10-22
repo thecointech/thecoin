@@ -38,7 +38,6 @@
   },
   "dependencies": {
     "@thecointech/broker-db": "^0.2.133",
-    "@thecointech/shared": "^0.2.133",
     "@thecointech/tx-blockchain": "^0.2.133",
     "@thecointech/tx-gmail": "^0.2.133",
     "@thecointech/utilities": "^0.2.133",
