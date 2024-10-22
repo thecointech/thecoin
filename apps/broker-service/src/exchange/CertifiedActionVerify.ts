@@ -24,9 +24,15 @@ const validDestination = (action: AnyAction, brokerCAD: string) => NormalizeAddr
 const validFee = (transfer: CertifiedTransferRequest) => transfer.fee === constants.certifiedFee;
 const validTransferSigners = (transfer: CertifiedTransferRequest) => NormalizeAddress(GetTransferSigner(transfer)) === NormalizeAddress(transfer.from);
 const validActionSigners = (action: AnyAction) => NormalizeAddress(getSigner(action)) === NormalizeAddress(action.transfer.from);
-const validUberTransferTime = (transfer: UberTransferAction) => transfer.transfer.transferMillis >= DateTime.now().minus(AllowedUberOverlap).toMillis();
 const validUberTransferSigners = (uber: UberTransferAction) => NormalizeAddress(UberSigner(uber.transfer)) === NormalizeAddress(uber.transfer.from);
 const throwError = <T>(src: T, key: keyof T, message: string) => { throw new ValidateError({[key]: {message, value: src[key]}}, "Transfer validation failed") }
+const validUberTransferTime = (transfer: UberTransferAction) => (
+  ( // This is purely to allow initDemoAccount to work in devlive
+    process.env.CONFIG_NAME === "devlive" &&
+    transfer.transfer.from === process.env.WALLET_testDemoAccount_ADDRESS
+  ) ||
+  transfer.transfer.transferMillis >= DateTime.now().minus(AllowedUberOverlap).toMillis()
+)
 
 export async function validateTransfer(request: CertifiedTransferRequest) {
   if (!validFee(request))
