@@ -1,6 +1,6 @@
 import { AddressLike, Signer, resolveAddress } from 'ethers';
 import { DateTime } from 'luxon';
-import { solidityPackedKeccak256, verifyMessage, getBytes, type Overrides } from 'ethers';
+import { solidityPackedKeccak256, verifyMessage, getBytes } from 'ethers';
 import { sign } from "@thecointech/utilities/SignedMessages";
 import type { IPluggable } from './codegen/contracts';
 import type { AssignPluginRequest } from '@thecointech/types';
@@ -61,14 +61,13 @@ export async function buildAssignPluginRequest(
   };
 }
 
-export async function assignPlugin(contract: IPluggable, request: AssignPluginRequest, overrides: Overrides = {}) {
+export async function assignPlugin(contract: IPluggable, request: AssignPluginRequest) {
   const tx = await contract.pl_assignPlugin(
     {
       ...request,
       timeMs: request.timeMs.toMillis(),
       msSignedAt: request.signedAt.toMillis(),
     },
-    overrides,
   );
   return tx;
 }

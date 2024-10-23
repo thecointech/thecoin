@@ -15,13 +15,12 @@ export const Step0 = () => {
         <SyncedInput bank="visa" param="url" placeholder="https://www.YourVisaBank.com/" />
       </Container>
 
-      {/* <video width="320" height="240" controls>
+      <video width="320" height="240" controls>
         <source
-          src="https://storage.googleapis.com/tccc-releases/Tutorials/Training-1-EnterURLs.mp4"
+          src="https://storage.googleapis.com/tccc-releases/Tutorials/Tutorial%20-%201%20-%20Enter%20URLs.mp4"
           type="video/mp4"
-
         />
-      </video> */}
+      </video>
     </div>
   )
 }

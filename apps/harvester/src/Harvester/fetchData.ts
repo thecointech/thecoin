@@ -31,7 +31,6 @@ export async function getVisaData(lastTxDate?: DateTime) : Promise<VisaBalanceRe
       balance: currency(data.balance ?? 0),
       dueDate: DateTime.fromISO(data.dueDate),
       dueAmount: currency(data.dueAmount),
-      txs: [],
     }
   }
   switch (process.env.CONFIG_NAME) {
@@ -43,12 +42,12 @@ export async function getVisaData(lastTxDate?: DateTime) : Promise<VisaBalanceRe
       const data = await replay('visaBalance');
       // Only keep the new transactions from history
       const newTransactions = lastTxDate
-        ? data.txs?.filter(row => row.date > lastTxDate)
-        : data.txs;
+        ? data.history?.filter(row => row.date > lastTxDate)
+        : data.history;
 
       return {
         ...data,
-        txs: newTransactions,
+        history: newTransactions,
       }
   }
 }

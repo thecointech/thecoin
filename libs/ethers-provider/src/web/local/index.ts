@@ -6,7 +6,7 @@ import { getSourceCode } from '../plugins_devlive';
 export class Erc20Provider extends JsonRpcProvider {
 
   constructor() {
-    super(`http://localhost:${process.env.DEPLOY_NETWORK_PORT}`);
+    super(`http://127.0.0.1:${process.env.DEPLOY_NETWORK_PORT}`);
     this.pollingInterval = 250;
   }
 

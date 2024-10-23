@@ -101,15 +101,27 @@ export async function replayEvents(page: Page, actionName: ActionTypes, events: 
         }
         case 'click': {
           // If this click caused a navigation?
-          const { element } = await getElementForEvent(page, event);
+          const found = await getElementForEvent(page, event);
+          const tryClicking = async () => {
+            try {
+              await found.element.click();
+            }
+            catch (err) {
+              // We seem to be getting issues with clicking buttons:
+              // https://github.com/puppeteer/puppeteer/issues/3496 suggests
+              // using eval instead.
+              log.debug(`Click failed, retrying on ${found.data.selector} - ${err}`);
+              await page.$eval(found.data.selector, (el) => (el as HTMLElement).click())
+            }
+          }
           if (events[i + 1]?.type == "navigation") {
             await Promise.all([
-              element.click(),
+              tryClicking(),
               page.waitForNavigation({ waitUntil: 'networkidle2' })
             ])
           }
           else {
-            await element.click();
+            await tryClicking();
           }
           break;
         }

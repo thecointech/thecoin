@@ -31,14 +31,15 @@ export class ClearPendingVisa implements ProcessingStage {
         // Payment completed: reduce harvester balance
         harvesterBalance = harvesterBalance.subtract(pending);
         log.info(`TransferVisaOwing: Pending payment ${pending} settled, new balance: ${harvesterBalance}`);
-        pending = undefined;
-        pendingDate = undefined;
 
         notify({
           title: 'Scheduled Payment Completed',
-          message: `Your payment of ${pending} has been settled.`,
+          message: `Your payment of ${pending.format()} has been settled.`,
           icon: "money.png",
         })
+
+        pending = undefined;
+        pendingDate = undefined;
       }
     }
 
@@ -62,7 +63,7 @@ function lastPaymentSettled(data: HarvestData, pending: currency, pendingDate: D
   // The date has passed, is there a matching credit amount?
   // Note, we only have date, no time, so remove pending time
   const pendingClean = pendingDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-  const txs = data.visa.txs?.filter(r => r.date >= pendingClean)
+  const txs = data.visa.history?.filter(r => r.date >= pendingClean)
   log.info(`TransferVisaOwing: Found ${txs?.length ?? 0} txs`);
   const matchingTx = txs?.find(r => r.values.find(v => v?.value == pending.value));
   if (matchingTx) {

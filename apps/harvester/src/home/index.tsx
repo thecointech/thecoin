@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import styles from './home.module.less'
+import styles from './index.module.less'
+import { Button } from 'semantic-ui-react'
 
 export const Home = () => {
   return (
@@ -21,9 +22,9 @@ export const Home = () => {
       <h4>
         You just need to give it more time.
       </h4>
-      <div>
-        <Link to="/browser">Get Started</Link>
-      </div>
+      <Button as={Link} to="/browser" primary>Get Started</Button>
+        {/* <Link to="/browser">Get Started</Link> */}
+      {/* </div> */}
     </div>
   )
 }
