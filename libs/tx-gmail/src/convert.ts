@@ -106,7 +106,7 @@ function getUserInfo(email: gmail_v1.Schema$Message) {
   };
 }
 
-const getAmount = (body: string) => getAmountAnglais(body) ?? getAmountFrancais(body);
+const getAmount = (body: string) => getAmountAnglaisNew(body) ?? getAmountAnglais(body) ?? getAmountFrancais(body);
 
 function getAmountAnglais(body: string) {
   const amountRes = /transfer for the amount of \$([0-9.,]+) \(CAD\)/.exec(body);
@@ -118,6 +118,14 @@ function getAmountFrancais(body: string) {
   const amountRes = /vous a envoyé un virement de ([ 0-9,]+) \$ \(CAD\)/.exec(body)
   return (amountRes)
     ? currency(amountRes[1], {decimal: ','}).value
+    : undefined;
+}
+// I clearly need better metrics for this...
+// Maybe time to use an LLM?
+function getAmountAnglaisNew(body: string) {
+  const amountRes = /amount: \$([0-9.,]+) \(CAD\)/i.exec(body);
+  return (amountRes)
+    ? currency(amountRes[1]).value
     : undefined;
 }
 
@@ -152,21 +160,23 @@ function getSubject(email: gmail_v1.Schema$Message) {
 }
 
 function getSubjectAnglais(subject: string) {
-  const redirectHeader = "INTERAC e-Transfer: "
+  const sublower = subject.toLowerCase();
+  const redirectHeader = "interac e-transfer: "
   const validSubject = [
     "sent you money.",
-    "Claim your deposit!"
-  ].find(s => subject.endsWith(s))
+    "claim your deposit!"
+  ].find(s => sublower.endsWith(s))
 
-  if (!validSubject || !subject.startsWith(redirectHeader)) {
+  if (!validSubject || !sublower.startsWith(redirectHeader)) {
     return null;
   }
   return subject.substring(redirectHeader.length);
 }
 
 function getSubjectFrancais(subject: string) {
-  const redirectHeader = "Virement INTERAC"
-  if (!subject.endsWith("vous a envoyé des fonds.") || !subject.startsWith(redirectHeader)) {
+  const redirectHeader = "virement interac"
+  const sublower = subject.toLowerCase();
+  if (!sublower.endsWith("vous a envoyé des fonds.") || !sublower.startsWith(redirectHeader)) {
     return null;
   }
   return subject.substring(redirectHeader.length);
