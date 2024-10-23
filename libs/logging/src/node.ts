@@ -6,7 +6,7 @@ import { getSeqStream } from './seqstream';
 const getStreams = (name: string, level?: number) => {
   const streams = [getConsoleStream(level)];
   // Are we testing with jest?
-  if (process.env.JEST_WORKER_ID === undefined) {
+  if (process.env.IS_TESTING === undefined) {
     // Do we have a output folder specifed?
     if (process.env.TC_LOG_FOLDER && process.env.TC_LOG_FOLDER !== 'false')
     {
