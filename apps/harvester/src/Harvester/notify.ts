@@ -26,7 +26,7 @@ export const notify = <T extends string[]>(props: {
   readonly actions?: T
 }) => {
   // Don't post a bazzilion of these things each test run
-  if (process.env.JEST_WORKER_ID) {
+  if (process.env.IS_TESTING) {
     return Promise.resolve('timeout');
   }
 

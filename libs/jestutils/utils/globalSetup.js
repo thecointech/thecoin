@@ -40,6 +40,7 @@ const globalSetup = async () => {
 
   process.env = {
     HARDHAT_CONFIG: join(__dirname, '../../contract-tools/build/hardhat.config.js'),
+    IS_TESTING: 'true',
     ...process.env,
     ...config,
   };
