@@ -23,8 +23,8 @@ export class Erc20Provider extends BaseProvider {
 
 function getBaseUrl() {
   let baseUrl = new URL(import.meta.url);
-  while (!baseUrl.pathname.toLowerCase().endsWith('thecoin/')) {
+  while (!baseUrl.pathname.toLowerCase().endsWith('ethers-provider/')) {
     baseUrl = new URL('..', baseUrl);
   }
-  return baseUrl;
+  return new URL('../..', baseUrl);
 }
