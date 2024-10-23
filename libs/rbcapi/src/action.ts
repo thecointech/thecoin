@@ -180,8 +180,10 @@ export class ApiAction {
     if (!link)
       throw (`Could not find element ${type} with text: ${text}`)
 
-    await link.click();
-    await this.page.waitForNavigation();
+    await Promise.all([
+      this.page.evaluate(el => (el as HTMLElement).click(), link),
+      this.page.waitForNavigation(),
+    ])
     if (waitElement) {
       await this.page.waitForSelector(waitElement);
     }
