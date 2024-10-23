@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-nft",
-  "version": "0.2.134",
+  "version": "0.2.135",
   "description": "The Coin: Solidity contract for TheCoin NFT",
   "type": "module",
   "keywords": [
@@ -54,10 +54,10 @@
   "types": "./build/index.d.ts",
   "devDependencies": {
     "@openzeppelin/contracts": "^4.5.0",
-    "@thecointech/contract-core": "^0.2.134",
-    "@thecointech/contract-tools": "^0.2.134",
-    "@thecointech/setenv": "^0.2.134",
-    "@thecointech/signers": "^0.2.134",
+    "@thecointech/contract-core": "^0.2.135",
+    "@thecointech/contract-tools": "^0.2.135",
+    "@thecointech/setenv": "^0.2.135",
+    "@thecointech/signers": "^0.2.135",
     "@types/bs58": "^4.0.1"
   },
   "dependenciesComments": {
@@ -68,8 +68,8 @@
     ]
   },
   "dependencies": {
-    "@thecointech/contract-base": "^0.2.134",
-    "@thecointech/utilities": "^0.2.134",
+    "@thecointech/contract-base": "^0.2.135",
+    "@thecointech/utilities": "^0.2.135",
     "bs58": "^4.0.1"
   },
   "gitHead": "6c91d925570c1132080f3098b510a3a42180e429"
