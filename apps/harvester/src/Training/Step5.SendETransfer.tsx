@@ -5,6 +5,10 @@ import { TrainingReducer } from './state/reducer';
 
 const pageAction = "chqETransfer";
 
+// Some banks (TD) will show a warning for duplicate transfers
+// We add 10c to the amount to avoid this during validation
+const validateAmount = (amount: number) => (amount + 0.1).toString();
+
 export const SendETransfer = () => {
 
   const data = TrainingReducer.useData();
@@ -34,7 +38,7 @@ export const SendETransfer = () => {
     }
     setValidating(true);
     const r = await window.scraper.testAction(pageAction, {
-      amount: amount.toString(),
+      amount: validateAmount(amount),
     });
     if (r.error) alert(r.error)
     if (r.value?.confirm) {
