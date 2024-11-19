@@ -2,6 +2,12 @@ import type currency from 'currency.js';
 import type { DateTime } from 'luxon';
 import type { HistoryRow } from './table';
 
+export type ReplayProgress = {
+  step: number,
+  total: number,
+}
+export type ReplayProgressCallback = (progress: ReplayProgress) => void;
+
 export type ActionTypes = 'visaBalance'|'chqBalance'|'chqETransfer';
 
 export type VisaBalanceResult = {
@@ -59,7 +65,9 @@ export type ElementData = {
   selector: string,
   coords: Coords,
   label: string|null,
+  // inner text
   text: string,
+  // value of the actual node
   nodeValue?: string|null,
   font?: Font,
   siblingText?: string[],

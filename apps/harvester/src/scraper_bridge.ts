@@ -1,7 +1,7 @@
 import { IpcMainInvokeEvent, ipcMain } from 'electron';
 import { Recorder } from './scraper/record';
 import { replay } from './scraper/replay';
-import { ActionTypes, ValueType } from './scraper/types';
+import { ActionTypes, ReplayProgress, ValueType } from './scraper/types';
 import { warmup } from './scraper/warmup';
 import { actions, ScraperBridgeApi } from './scraper_actions';
 import { toBridge } from './scraper_bridge_conversions';
@@ -26,7 +26,7 @@ async function guard<T>(cb: () => Promise<T>) {
   }
 }
 
-const api: Omit<ScraperBridgeApi, "installBrowser"|"onBrowserDownloadProgress"> = {
+const api: Omit<ScraperBridgeApi, "testAction"|"installBrowser"|"onBrowserDownloadProgress"|"onReplayProgress"> = {
   hasInstalledBrowser: () => guard(async () => {
     const p = await getLocalBrowserPath();
     return !!p;
@@ -52,7 +52,10 @@ const api: Omit<ScraperBridgeApi, "installBrowser"|"onBrowserDownloadProgress"> 
   finishAction: (actionName) => guard(() => Recorder.release(actionName)),
 
   // We can only pass POD back through the renderer, use toBridge to convert
-  testAction: (actionName, dynamicValues) => guard(async () => toBridge(await replay(actionName, dynamicValues))),
+  // testAction: (actionName, dynamicValues) => guard(async () => {
+  //   const callback = (progress: ReplayProgress) => ipcMain.emit(actions.onReplayProgress, toBridge(progress));
+  //   return toBridge(await replay(actionName, dynamicValues));
+  // }),
 
   setWalletMnemomic: (mnemonic) => guard(() => setWalletMnemomic(mnemonic)),
   getWalletAddress: () => guard(() => getWalletAddress()),
@@ -115,9 +118,7 @@ export function initScraping() {
   ipcMain.handle(actions.finishAction, async (_event, actionName: ActionTypes) => {
     return api.finishAction(actionName);
   })
-  ipcMain.handle(actions.testAction, async (_event, actionName: ActionTypes, dynamicValues: Record<string, string>) => {
-    return api.testAction(actionName, dynamicValues);
-  })
+  ipcMain.handle(actions.testAction, testAction);
 
   ipcMain.handle(actions.setWalletMnemomic, async (_event, mnemonic: Mnemonic) => {
     return api.setWalletMnemomic(mnemonic as any);
@@ -169,6 +170,11 @@ export function initScraping() {
   })
 }
 
+async function testAction(event: IpcMainInvokeEvent, actionName: ActionTypes, dynamicValues: Record<string, string>) {
+  const callback = (progress: ReplayProgress) => event.sender.send(actions.replayProgress, progress);
+  const r = await replay(actionName, callback, dynamicValues);
+  return toBridge(r);
+}
 
 const openFolder = (path: string) => {
   let explorer = '';

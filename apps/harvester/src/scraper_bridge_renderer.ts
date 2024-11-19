@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { actions, ScraperBridgeApi } from './scraper_actions';
+import { ReplayProgress } from './scraper/types';
 
 const api : ScraperBridgeApi = {
   installBrowser: () => ipcRenderer.invoke(actions.installBrowser),
@@ -17,6 +18,9 @@ const api : ScraperBridgeApi = {
   finishAction: (actionName) => ipcRenderer.invoke(actions.finishAction, actionName),
 
   testAction: (actionName, dynamicValues) => ipcRenderer.invoke(actions.testAction, actionName, dynamicValues),
+  onReplayProgress: (callback: (value: ReplayProgress) => void) => {
+    ipcRenderer.on(actions.replayProgress, (_event, value) => callback(value))
+  },
 
   setWalletMnemomic: (mnemonic) => ipcRenderer.invoke(actions.setWalletMnemomic, mnemonic),
   getWalletAddress: () => ipcRenderer.invoke(actions.getWalletAddress),

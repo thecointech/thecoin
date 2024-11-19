@@ -89,7 +89,7 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
   }
 
   // Not found, throw
-  throw new Error(`Element not found: ${event.selector}`);
+  throw new Error(`Element ${event.tagName} not found with text: "${event.text}" and siblings: "${event.siblingText?.join(', ')}"`);
 }
 
 async function getCandidates(frame: Frame, event: ElementData) {

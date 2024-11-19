@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Container, Button, Icon, Input } from 'semantic-ui-react'
 import { useLearnValue } from './learnValue';
 import { TrainingReducer } from './state/reducer';
+import { ReplayProgressBar } from '../ReplayProgress';
 
 const pageAction = "chqETransfer";
 
@@ -19,6 +20,12 @@ export const SendETransfer = () => {
   const [confirmation, learnConfirmation] = useLearnValue("confirm", "text");
 
   const url = data.chequing.url;
+
+  useEffect(() => {
+    if (confirmation) {
+      window.scraper.finishAction(pageAction);
+    }
+  }, [confirmation])
 
   const initScraper = async () => {
     if (!url) alert("ERROR: Needs data")
@@ -74,6 +81,7 @@ export const SendETransfer = () => {
           </ul>
         </div>
         <Button onClick={validate} loading={validating}>Test Learning</Button>
+        <ReplayProgressBar />
         {data.chequing.eTransferPassed && <Icon name='check circle' color="green" />}
         <div>Your AI read:
           <ul>
