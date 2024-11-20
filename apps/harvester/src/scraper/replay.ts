@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import type { Page } from 'puppeteer';
 import { startPuppeteer } from './puppeteer';
 import { getTableData, HistoryRow } from './table';
-import { AnyEvent, ValueEvent, ActionTypes, ChequeBalanceResult, VisaBalanceResult, ReplayResult, ETransferResult, ElementData } from './types';
+import { AnyEvent, ValueEvent, ActionTypes, ChequeBalanceResult, VisaBalanceResult, ReplayResult, ETransferResult, ElementData, ReplayProgressCallback } from './types';
 import { CurrencyType, getCurrencyConverter } from './valueParsing';
 import { getEvents } from '../Harvester/config';
 import { log } from '@thecointech/logging';
@@ -19,11 +19,11 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export type Replay = typeof replay;
 
-export async function replay(actionName: 'chqBalance'): Promise<ChequeBalanceResult>;
-export async function replay(actionName: 'visaBalance'): Promise<VisaBalanceResult>;
-export async function replay(actionName: 'chqETransfer', dynamicValues: { amount: string }): Promise<ETransferResult>;
-export async function replay(actionName: ActionTypes, dynamicValues?: Record<string, string>, delay?: number): Promise<ReplayResult>
-export async function replay(actionName: ActionTypes, dynamicValues?: Record<string, string>, delay = 1000) {
+export async function replay(actionName: 'chqBalance', progress?: ReplayProgressCallback): Promise<ChequeBalanceResult>;
+export async function replay(actionName: 'visaBalance', progress?: ReplayProgressCallback): Promise<VisaBalanceResult>;
+export async function replay(actionName: 'chqETransfer', progress: ReplayProgressCallback|undefined, dynamicValues: { amount: string }): Promise<ETransferResult>;
+export async function replay(actionName: ActionTypes, progress?: ReplayProgressCallback, dynamicValues?: Record<string, string>, delay?: number): Promise<ReplayResult>
+export async function replay(actionName: ActionTypes, progress?: ReplayProgressCallback, dynamicValues?: Record<string, string>, delay = 1000) {
   // read events
   const events = await getEvents(actionName);
   log.debug(`Replaying ${actionName} with ${events?.length} events`);
@@ -32,10 +32,13 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
     throw new Error(`No events found for ${actionName}`);
   }
 
+  // Progress started
+  progress?.({ step: 0, total: events.length });
+
   const { page, browser } = await startPuppeteer();
 
   try {
-    const r = await replayEvents(page, actionName, events, dynamicValues, delay);
+    const r = await replayEvents(page, actionName, events, progress, dynamicValues, delay);
     return r;
   }
   catch (err) {
@@ -54,7 +57,7 @@ export async function replay(actionName: ActionTypes, dynamicValues?: Record<str
   }
 }
 
-export async function replayEvents(page: Page, actionName: ActionTypes, events: AnyEvent[], dynamicValues?: Record<string, string>, delay = 1000) {
+export async function replayEvents(page: Page, actionName: ActionTypes, events: AnyEvent[], progress?: ReplayProgressCallback, dynamicValues?: Record<string, string>, delay = 1000) {
 
   const values: Record<string, string | DateTime | currency | HistoryRow[]> = {}
 
@@ -82,6 +85,7 @@ export async function replayEvents(page: Page, actionName: ActionTypes, events: 
     for (let i = 0; i < events.length; i++) {
       const event = events[i];
       log.info(` - Processing event: ${event.type} - ${event.id}`);
+
       // Keep a slight delay on events, time is not a priority here
       await sleep(delay);
       switch (event.type) {
@@ -211,6 +215,9 @@ export async function replayEvents(page: Page, actionName: ActionTypes, events: 
           }
         }
       }
+
+      // Mark progress complete
+      progress?.({ step: i + 1, total: events.length });
     }
   }
 

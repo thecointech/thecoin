@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Container, Button, Icon } from 'semantic-ui-react'
 import { useLearnValue } from './learnValue';
 import { TrainingReducer } from './state/reducer';
+import { ReplayProgressBar } from '../ReplayProgress';
 
 
 
@@ -61,6 +62,7 @@ export const VisaBalance = () => {
           </ul>
         </div>
         <Button onClick={validate} loading={validating}>Test Learning</Button>
+        <ReplayProgressBar />
         {data.visa.testPassed && <Icon name='check circle' color="green" />}
         <div>Your AI read:
           <ul>

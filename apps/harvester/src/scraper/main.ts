@@ -34,7 +34,7 @@ await recorder.disconnected;
 
 if (doReplay) {
     const { page, browser } = await startPuppeteer();
-    const r = await replayEvents(page, "chqBalance", events, {
+    const r = await replayEvents(page, "chqBalance", events, undefined, {
         SearchFor: "Chicken",
     })
     console.log(JSON.stringify(r));

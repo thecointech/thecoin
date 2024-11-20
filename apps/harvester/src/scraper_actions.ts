@@ -1,5 +1,5 @@
 import type { HarvestConfig, Mnemonic } from './types';
-import type {ActionTypes, ValueResult, ValueType} from "./scraper/types";
+import type {ActionTypes, ReplayProgressCallback, ValueResult, ValueType} from "./scraper/types";
 import type { CreditDetails } from './Harvester/types';
 import type { StoredData } from './Harvester/db_translate';
 
@@ -28,6 +28,7 @@ export type ScraperBridgeApi = {
 
   // A test of an action
   testAction(actionName: ActionTypes, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,
+  onReplayProgress: (progress: ReplayProgressCallback) => void,
 
   setWalletMnemomic(mnemonic: Mnemonic): Promise<Result<boolean>>,
   getWalletAddress(): Promise<Result<string|null>>,
@@ -65,6 +66,7 @@ export const actions = {
   finishAction: 'scraper:finishAction',
 
   testAction: 'scraper.testAction',
+  replayProgress: 'scraper.progress',
 
   // Not really scraper, but meh
   setWalletMnemomic: 'scraper:setWalletMnemomic',
