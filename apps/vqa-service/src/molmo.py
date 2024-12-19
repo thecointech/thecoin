@@ -18,8 +18,10 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map='auto'
 )
 
-def runQuery(prompt, image, max_length=100):
+def runQuery(prompt, image, max_length=200):
     start = timer()
+
+    print(f"Running Prompt: {prompt}")
 
     try:
         # process the image and text
@@ -34,7 +36,7 @@ def runQuery(prompt, image, max_length=100):
         # generate output; maximum 200 new tokens
         output = model.generate_from_batch(
             inputs,
-            GenerationConfig(max_new_tokens=200, stop_strings="<|endoftext|>"),
+            GenerationConfig(max_new_tokens=max_length, stop_strings="<|endoftext|>"),
             tokenizer=processor.tokenizer
         )
 

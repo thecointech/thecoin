@@ -20,6 +20,9 @@ class PageType(str, Enum):
     ACCOUNT_DETAILS = 'AccountDetails'
     PAY_BILL = 'PayBill'
     SEND_TRANSFER = 'SendTransfer'
+    # Other kinds of pages
+    MODAL_DIALOG = 'ModalDialog'
+    ERROR_MESSAGE = 'ErrorMessage'
 
 # Define models for Swagger documentation
 response_model = api.model('Response', {
