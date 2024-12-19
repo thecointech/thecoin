@@ -11323,6 +11323,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@thecointech/vqa-service@workspace:apps/vqa-service":
+  version: 0.0.0-use.local
+  resolution: "@thecointech/vqa-service@workspace:apps/vqa-service"
+  languageName: unknown
+  linkType: soft
+
 "@thecointech/vqa@workspace:apis/vqa/ts":
   version: 0.0.0-use.local
   resolution: "@thecointech/vqa@workspace:apis/vqa/ts"

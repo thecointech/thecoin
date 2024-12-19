@@ -1,0 +1,21 @@
+{
+  "name": "@thecointech/vqa-service",
+  "private": true,
+  "version": "0.2.135",
+  "description": "VQA Assistant for the Harvester",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/thecointech/thecoin.git"
+  },
+  "author": "Stephen Taylor",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/thecointech/thecoin/issues"
+  },
+  "homepage": "https://thecointech.com",
+  "scripts": {
+    "build": "venv/Scripts/python api/generate_swagger.py",
+    "start": "venv/Scripts/python src/app.py"
+  }
+}
