@@ -86,3 +86,4 @@ exported/
 /harvester/harvester/
 .nx/cache
 apps/harvester/root_temp
+apps/vqa-service/swagger.json

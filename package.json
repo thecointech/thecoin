@@ -28,6 +28,7 @@
     "_gen:api:rates-cs": "openapi-generator-cli generate -i apps/rates-service/src/api/swagger.json -g csharp-netcore -o apis/rates/cs -c apis/rates/client-cs-spec.json",
     "gen:api:broker": "openapi-generator-cli generate -i apps/broker-service/src/api/swagger.json -g typescript-axios -o apis/broker/ts -c apis/broker/client-ts-spec.json",
     "gen:api:nft": "openapi-generator-cli generate -i apps/nft-service/src/api/swagger.json -g typescript-axios -o apis/nft/ts -c apis/nft/client-ts-spec.json",
+    "gen:api:vqa": "openapi-generator-cli generate -i apps/vqa-service/swagger.json -g typescript-axios -o apis/vqa/ts -c apis/vqa/client-ts-spec.json",
     "gen:api": "run-p 'gen:api:*'",
     "genapis": "lerna run gen:swagger && cross-env JAVA_OPTS=\"-Dlog.level=warn\" run-s gen:pre gen:api",
     "build:src": "lerna run build",
