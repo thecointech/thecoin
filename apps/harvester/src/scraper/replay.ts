@@ -10,12 +10,10 @@ import { log } from '@thecointech/logging';
 import { debounce } from './debounce';
 import path from 'path';
 import { mkdirSync } from 'fs';
-import { logsFolder, outFolder } from '../paths';
+import { outFolder } from '../paths';
 import { getElementForEvent } from './elements';
-import { writeFileSync } from 'node:fs';
-
-
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+import { dumpPage, initializeDumper } from './dumper';
+import { sleep } from '@thecointech/async';
 
 export type Replay = typeof replay;
 
@@ -32,6 +30,7 @@ export async function replay(actionName: ActionTypes, progress?: ReplayProgressC
     throw new Error(`No events found for ${actionName}`);
   }
 
+  initializeDumper(actionName);
   // Progress started
   progress?.({ step: 0, total: events.length });
 
@@ -45,9 +44,7 @@ export async function replay(actionName: ActionTypes, progress?: ReplayProgressC
     const saveDump = process.env.HARVESTER_SAVE_DUMP;
     log.error(err, `Failed to replay ${actionName}, doing dump: ${saveDump ?? false}`);
     if (saveDump) {
-      const now = DateTime.now();
-      const dumpFolder = path.join(logsFolder, "dumps", `${now.toSQLDate()}-${actionName}`, now.toFormat("HH-mm-ss"));
-      await dumpPage(page, dumpFolder);
+      await dumpPage(page, "failed");
     }
     throw err;
   }
@@ -263,17 +260,4 @@ function parseValue(value: string, event: ValueEvent) {
     }
   }
   return value;
-}
-
-export async function dumpPage(page: Page, dumpFolder: string) {
-  mkdirSync(dumpFolder, { recursive: true });
-  // Save screenshot
-  await page.screenshot({ path: path.join(dumpFolder, `screenshot.png`) });
-  // Save content
-  const content = await page.content();
-  writeFileSync(path.join(dumpFolder, `content.html`), content);
-  // Lastly, try for MHTML
-  const cdp = await page.target().createCDPSession();
-  const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
-  writeFileSync(path.join(dumpFolder, 'snapshot.mhtml'), data);
 }

@@ -4,6 +4,7 @@ import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
 import { scoreElement } from './elements.score';
 import { GetVqaApi } from '@thecointech/apis/vqa';
+import { dumpPage } from './dumper';
 
 type FoundElement = {
   element: ElementHandle<Element>,
@@ -367,20 +368,28 @@ const fillOutSiblingText = (allElements: SearchElement[]) => {
 }
 
 export async function maybeCloseModal(page: Page) {
+  log.info('Autodetecting modal on page...');
   try {
     // Take screenshot of the page as PNG buffer
     const screenshot = await page.screenshot({ fullPage: true, type: 'png' });
     // Convert buffer to File
     const screenshotFile = new File([screenshot], 'screenshot.png', { type: 'image/png' });
+    if (process.env.HARVESTER_VERBOSE_SCRAPER) {
+      dumpPage(page, "modal");
+    }
     const api = GetVqaApi();
 
     // First check if this is a modal dialog
     const isModal = await api.postQueryPageIntent(screenshotFile);
     if (isModal?.data.type != "ModalDialog") return false;
 
+    log.debug('Modal detected, attempting to close...');
+
     // If it is a modal, find the close button
     const { data: closeButton } = await api.postQueryElement('CloseModal', screenshotFile);
     if (!closeButton) return false;
+
+    log.debug('Close button found, attempting to click...');
 
     // Try to find and click the close button
     const elementData: ElementDataMin = {
@@ -398,10 +407,14 @@ export async function maybeCloseModal(page: Page) {
 
     await element.element.click();
     await sleep(500); // Give the modal time to close
+    log.info('Clicked close button, modal closed.');
     return true;
   }
   catch (err) {
     log.warn({ err }, 'Error attempting to close modal:');
     return false;
+  }
+  finally {
+    log.info('Modal detection complete.');
   }
 }
