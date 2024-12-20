@@ -42,14 +42,22 @@ env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --loader=${loader} --es-module-speci
 
 // If this is yarn script?
 if (executable != "node") {
-  // Is this a command in .bin folder (ie - is it webpack?)
-  const binFolder = new URL(`../../../node_modules/.bin`, import.meta.url);
-  const binUrl = new URL(executable, binFolder);
-  if (existsSync(binUrl)) {
-    env.PATH = `${fileURLToPath(binFolder)}:${env.PATH}`
+  if (executable.includes("python")) {
     if (process.platform == "win32") {
       // On windows we target the .cmd version
-      executable = executable + ".cmd";
+      executable = executable.replaceAll("/", "\\");
+    }
+  }
+  else {
+    // Is this a command in .bin folder (ie - is it webpack?)
+    const binFolder = new URL(`../../../node_modules/.bin`, import.meta.url);
+    const binUrl = new URL(executable, binFolder);
+    if (existsSync(binUrl)) {
+      env.PATH = `${fileURLToPath(binFolder)}:${env.PATH}`
+      if (process.platform == "win32") {
+        // On windows we target the .cmd version
+        executable = executable + ".cmd";
+      }
     }
   }
 }

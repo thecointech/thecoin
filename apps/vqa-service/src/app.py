@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_restx import Api, Resource, fields
 from PIL import Image
+import os
 import io
 import werkzeug
 from enum import Enum
@@ -9,13 +10,15 @@ import json
 
 app = Flask(__name__)
 api = Api(app, version='1.0', title='VQA Service API',
-          description='A simple API for Visual Question Answering')
+          description='A simple API for Visual Question Answering',
+          default='vqa',
+          default_label='VQA Operations')
 
 # Define namespace
-ns = api.namespace('api', description='VQA operations')
+ns = api.namespace('vqa', description='VQA operations')
 
 class PageType(str, Enum):
-    FRONT = 'Front'
+    LANDING = 'Landing'
     LOGIN = 'Login'
     ACCOUNT_SELECT = 'AccountSelect'
     ACCOUNT_DETAILS = 'AccountDetails'
@@ -36,7 +39,7 @@ page_response_model = api.model('PageResponse', {
     'type': fields.String(required=True,
                          description='Type of the page',
                          enum=[e.value for e in PageType],
-                         example=PageType.FRONT.value)
+                         example="option")
 })
 
 element_response_model = api.model('ElementResponse', {
@@ -101,8 +104,9 @@ class QueryPageIntent(Resource):
             image_bytes = image_file.read()
             image = Image.open(io.BytesIO(image_bytes))
 
+            typesStr = ", ".join([e.value for e in PageType])
             response = runQuery(
-              prompt="From the following options, select the one that best describes the given webpage: " + ", ".join([e.value for e in PageType]) + ". Return the data in the following JSON format: { 'type': 'option' }",
+              prompt=f"From the following options, select the one that best describes the given webpage: {typesStr}. Return only valid JSON data in the following format: {get_model_example(page_response_model)}",
               image=image
             )
 
@@ -175,4 +179,5 @@ class QueryElement(Resource):
             api.abort(400, str(e))
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+  port = int(os.environ.get('PORT', os.environ.get('PORT_SERVICE_VQA', 7004)))
+  app.run(host='0.0.0.0', port=port, debug=True)

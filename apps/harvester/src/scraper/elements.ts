@@ -3,7 +3,7 @@ import type { Coords, ElementData, ElementDataMin } from './types';
 import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
 import { scoreElement } from './elements.score';
-import { ApiApi } from '@thecointech/vqa';
+import { GetVqaApi } from '@thecointech/apis/vqa';
 
 type FoundElement = {
   element: ElementHandle<Element>,
@@ -366,33 +366,13 @@ const fillOutSiblingText = (allElements: SearchElement[]) => {
   return bucketed.flat()
 }
 
-// export async function tryCloseSurvey(page: Page) {
-//   let hasClicked = false;
-//   log.info("Testing for survey")
-//   for (const frame of page.frames()) {
-//     // The aria query very annoyingly locks up when
-//     // run on an empty page.
-//     const content = await frame.content();
-//     if (content.includes("Survey")) {
-//       const closeButtons = await frame.$$(`::-p-aria("Close Survey")`)
-//       for (const close of closeButtons) {
-//         // const props = await frame.evaluate(el => getElementProps(el as HTMLElement), close)
-//         log.info("Attempting survey close")
-//         await close.click();
-//         hasClicked = true;
-//       }
-//     }
-//   }
-//   return hasClicked;
-// }
-
 export async function maybeCloseModal(page: Page) {
   try {
     // Take screenshot of the page as PNG buffer
     const screenshot = await page.screenshot({ fullPage: true, type: 'png' });
     // Convert buffer to File
     const screenshotFile = new File([screenshot], 'screenshot.png', { type: 'image/png' });
-    const api = new ApiApi();
+    const api = GetVqaApi();
 
     // First check if this is a modal dialog
     const isModal = await api.postQueryPageIntent(screenshotFile);
