@@ -1,10 +1,10 @@
 import { SimilarityPipeline } from "./similarity";
-import { Coords, ElementData } from "./types";
+import { Coords, ElementData, ElementDataMin } from "./types";
 
 // This scoring function reaaaaally needs to be replaced with
 // a computed (learned) model, because manually scoring is just
 // too easy to bias to right-nows problems
-export async function scoreElement(potential: ElementData, original: ElementData) {
+export async function scoreElement(potential: ElementData, original: ElementDataMin) {
   let score = 0;
   if (potential.tagName == original.tagName) score = score + 20;
   if (potential.selector == original.selector) score = score + 25;
@@ -14,9 +14,15 @@ export async function scoreElement(potential: ElementData, original: ElementData
   if (potential.font?.style == original.font?.style) score = score + 5;
 
   // metadata can be very helpful
-  score += 20 * getRoleScore(potential, original);
-  score += 20 * await getLabelScore(potential, original);
-  score += 20 * getPositionScore(potential.coords, original);
+  if (original.role !== undefined) {
+    score += 20 * getRoleScore(potential.role, original.role);
+  }
+  if (original.label !== undefined) {
+    score += 20 * await getLabelScore(potential.label, original.label);
+  }
+  if (original.coords !== undefined) {
+    score += 20 * getPositionScore(potential.coords, original.coords);
+  }
 
   // Actual data is the most valuable
   score += 40 * await getNodeValueScore(potential, original);
@@ -65,34 +71,44 @@ export async function getSiblingScore(potentialSiblings?: string[], originalSibl
   return -0.25;
 }
 
-async function getLabelScore(potential: ElementData, original: ElementData) {
-  if (potential.label && original.label) {
-    const [score] = await SimilarityPipeline.calculateSimilarity(original.label, [potential.label])
+async function getLabelScore(potential: string|null, original: string|null) {
+  if (potential && original) {
+    const [score] = await SimilarityPipeline.calculateSimilarity(original, [potential])
     return score;
   }
   return 0;
 }
 
-function getRoleScore(potential: ElementData, original: ElementData) {
-  if (potential.role && original.role) {
-    return (potential.role == original.role)
+function getRoleScore(potential: string|null, original: string|null) {
+  if (potential || original) {
+    return (potential == original)
       ? 1
       : -1; // Differing roles is a pretty bad sign
   }
   return 0;
 }
 
-function getPositionScore(coords: Coords, event: ElementData) {
-  const tops = Math.abs(event.coords.top - coords.top)
-  const heights = Math.abs(event.coords.height - coords.height)
-  const widths = Math.abs(event.coords.width - coords.width)
-  const lefts = Math.abs(event.coords.left - coords.left)
-  const diff = tops + heights + widths + lefts;
+function getPositionScore(potential: Coords, original: Coords) {
+  const originalCenterX = original.left + (original.width / 2);
+  const potentialCenterX = potential.left + (potential.width / 2);
+  const diffX = Math.abs(originalCenterX - potentialCenterX);
+  const diffY = Math.abs(original.centerY - potential.centerY);
 
-  return Math.max(0, 1 - (diff / 100))
+  // Distance between centers, scaled by potential width/height
+  // Should be between 0 and 1 if original is within potential, -ve outside it
+  const scoreCenterX = 1 - (diffX / (potential.width / 2));
+  const scoreCenterY = 1 - (diffY / (potential.height / 2));
+  const scoreCenter = (scoreCenterX + scoreCenterY) / 2;
+
+  // Score potential width/height, scaled by original width/height
+  const scoreWidth = 1 - Math.abs(potential.width - original.width) / Math.max(potential.width, original.width);
+  const scoreHeight = 1 - Math.abs(potential.height - original.height) / Math.max(potential.height, original.height);
+  const scoreSize = (scoreWidth + scoreHeight) / 2;
+
+  return Math.max(0, (scoreCenter + scoreSize) / 2);
 }
 
-async function getNodeValueScore(potential: ElementData, original: ElementData) {
+async function getNodeValueScore(potential: ElementData, original: ElementDataMin) {
   if (potential.nodeValue && original.nodeValue) {
     // If both are $amounts, that's a pretty good sign
     if (

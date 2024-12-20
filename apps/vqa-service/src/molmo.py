@@ -47,13 +47,15 @@ def runQuery(prompt, image, max_length=200):
         # Parse the generated text as JSON
         try:
             return json.loads(generated_text)
-        except json.JSONDecodeError:
-            # If the model didn't return valid JSON, try to extract the type
-            import re
-            match = re.search(r"'type':\s*'([^']*)'", generated_text)
-            if match:
-                return {'type': match.group(1)}
-            raise ValueError("Could not parse model output as JSON")
+        except json.JSONDecodeError as e:
+          print("Raised JSONDecodeError: ", e)
+          # If the model didn't return valid JSON, try to extract the type
+          import re
+          match = re.search(r"'type':\s*'([^']*)'", generated_text)
+          if match:
+              return {'type': match.group(1)}
+          print("Could not parse model output as JSON: ", generated_text)
+          raise ValueError("Could not parse model output as JSON")
 
     except Exception as e:
         print(f"Error in runQuery: {str(e)}")

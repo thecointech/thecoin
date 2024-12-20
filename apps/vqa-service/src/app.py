@@ -5,6 +5,7 @@ import io
 import werkzeug
 from enum import Enum
 from molmo import runQuery
+import json
 
 app = Flask(__name__)
 api = Api(app, version='1.0', title='VQA Service API',
@@ -44,7 +45,9 @@ element_response_model = api.model('ElementResponse', {
     'background_color': fields.String(required=False, description='Background color of the element', example='#color'),
     'neighbour_text': fields.String(required=False, description='Neighbour text of the element', example='text'),
     'position_x': fields.Float(required=False, description='X-position of the element in percent', example='number'),
-    'position_y': fields.Float(required=False, description='Y-position of the element in percent', example='number')
+    'position_y': fields.Float(required=False, description='Y-position of the element in percent', example='number'),
+    # 'width': fields.Float(required=False, description='Width of the element in percent', example='number'),
+    # 'height': fields.Float(required=False, description='Height of the element in percent', example='number')
 })
 
 # File upload parser
@@ -76,7 +79,8 @@ def get_model_example(model):
     for field_name, field_obj in model.items():
         if hasattr(field_obj, 'example'):
             example[field_name] = field_obj.example
-    return example
+    # Convert to valid JSON
+    return json.dumps(example)
 
 @ns.route('/query-page-intent')
 class QueryPageIntent(Resource):
@@ -143,12 +147,27 @@ class QueryElement(Resource):
                     prompt += f" containing '{details}'"
 
             if (element_type == ElementType.CLOSE_MODAL):
-              prompt = f"In the provided webpage, describe the element that will close the modal dialog without permanent side-effects.  Include neighbouring text immediately above or beside the element. Return only JSON data in the following format: {get_model_example(element_response_model)}"
+              prompt = f"In the provided webpage, describe the element that will close the modal dialog without permanent side-effects.  Return only valid JSON data in the following format: {get_model_example(element_response_model)}"
 
             response = runQuery(
                 prompt=prompt,
                 image=image,
             )
+
+            print("Response: " + str(response))
+
+            def cast_value(response, key, scale):
+              if key in response:
+                try:
+                  response[key] = round(scale * float(response[key]) / 100)
+                except ValueError:
+                  print("Invalid value for " + key + ": " + response[key])
+                  response[key] = None
+
+            cast_value(response, "position_x", image.width)
+            cast_value(response, "position_y", image.height)
+            # cast_value(response, "width", image.width)
+            # cast_value(response, "height", image.height)
 
             return response
 

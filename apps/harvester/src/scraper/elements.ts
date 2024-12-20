@@ -1,8 +1,9 @@
 import type { ElementHandle, Frame, Page } from 'puppeteer';
-import type { Coords, ElementData } from './types';
+import type { Coords, ElementData, ElementDataMin } from './types';
 import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
 import { scoreElement } from './elements.score';
+import { ApiApi } from '@thecointech/vqa';
 
 type FoundElement = {
   element: ElementHandle<Element>,
@@ -16,7 +17,7 @@ declare global {
   }
 }
 
-export async function getElementForEvent(page: Page, event: ElementData, timeout=30000, attempts=0) {
+export async function getElementForEvent(page: Page, event: ElementDataMin, timeout=30000, attempts=0) {
 
   const startTick = Date.now();
 
@@ -83,7 +84,7 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
   }
 
   // Special case - Tangerine keeps posting super-annoying surveys
-  if (attempts == 0 && await tryCloseSurvey(page)) {
+  if (attempts == 0 && await maybeCloseModal(page)) {
     // If it worked, take another crack
     return await getElementForEvent(page, event, timeout, 1);
   }
@@ -92,7 +93,7 @@ export async function getElementForEvent(page: Page, event: ElementData, timeout
   throw new Error(`Element ${event.tagName} not found with text: "${event.text}" and siblings: "${event.siblingText?.join(', ')}"`);
 }
 
-async function getCandidates(frame: Frame, event: ElementData) {
+async function getCandidates(frame: Frame, event: ElementDataMin) {
   // We are getting the occasional issue where getElementProps
   // is undefined.  This could potentially be a race condition
   // if this fn evaluates before evaluateOnNewDocument (?)
@@ -121,7 +122,7 @@ async function getCandidates(frame: Frame, event: ElementData) {
   return candidates;
 }
 
-async function dbgPrintCandidate(candidate: FoundElement, event: ElementData, ) {
+async function dbgPrintCandidate(candidate: FoundElement, event: ElementDataMin) {
   log.debug(`Tag: ${event.tagName} - ${candidate?.data?.tagName}`);
   log.debug(`Selector: ${event.selector} - ${candidate?.data?.selector}`);
   log.debug(`Text: ${event.text} - ${candidate?.data?.text}`);
@@ -365,22 +366,62 @@ const fillOutSiblingText = (allElements: SearchElement[]) => {
   return bucketed.flat()
 }
 
-export async function tryCloseSurvey(page: Page) {
-  let hasClicked = false;
-  log.info("Testing for survey")
-  for (const frame of page.frames()) {
-    // The aria query very annoyingly locks up when
-    // run on an empty page.
-    const content = await frame.content();
-    if (content.includes("Survey")) {
-      const closeButtons = await frame.$$(`::-p-aria("Close Survey")`)
-      for (const close of closeButtons) {
-        // const props = await frame.evaluate(el => getElementProps(el as HTMLElement), close)
-        log.info("Attempting survey close")
-        await close.click();
-        hasClicked = true;
-      }
+// export async function tryCloseSurvey(page: Page) {
+//   let hasClicked = false;
+//   log.info("Testing for survey")
+//   for (const frame of page.frames()) {
+//     // The aria query very annoyingly locks up when
+//     // run on an empty page.
+//     const content = await frame.content();
+//     if (content.includes("Survey")) {
+//       const closeButtons = await frame.$$(`::-p-aria("Close Survey")`)
+//       for (const close of closeButtons) {
+//         // const props = await frame.evaluate(el => getElementProps(el as HTMLElement), close)
+//         log.info("Attempting survey close")
+//         await close.click();
+//         hasClicked = true;
+//       }
+//     }
+//   }
+//   return hasClicked;
+// }
+
+export async function maybeCloseModal(page: Page) {
+  try {
+    // Take screenshot of the page as PNG buffer
+    const screenshot = await page.screenshot({ fullPage: true, type: 'png' });
+    // Convert buffer to File
+    const screenshotFile = new File([screenshot], 'screenshot.png', { type: 'image/png' });
+    const api = new ApiApi();
+
+    // First check if this is a modal dialog
+    const isModal = await api.postQueryPageIntent(screenshotFile);
+    if (isModal?.data.type != "ModalDialog") return false;
+
+    // If it is a modal, find the close button
+    const { data: closeButton } = await api.postQueryElement('CloseModal', screenshotFile);
+    if (!closeButton) return false;
+
+    // Try to find and click the close button
+    const elementData: ElementDataMin = {
+      text: closeButton.content!,
+      coords: {
+        top: closeButton.position_y!,
+        left: closeButton.position_x!,
+        height: 16, // Just guess based on font size
+        width: (closeButton.content ?? "").length * 8,
+        centerY: closeButton.position_y!,
+      },
     }
+    const element = await getElementForEvent(page, elementData, 5000, 1);
+    if (!element) return false;
+
+    await element.element.click();
+    await sleep(500); // Give the modal time to close
+    return true;
   }
-  return hasClicked;
+  catch (err) {
+    log.warn({ err }, 'Error attempting to close modal:');
+    return false;
+  }
 }

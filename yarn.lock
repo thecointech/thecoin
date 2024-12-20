@@ -11333,9 +11333,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/vqa@workspace:apis/vqa/ts"
   dependencies:
-    "@types/node": "npm:12.11.5 - 12.20.42"
-    axios: "npm:^1.6.1"
-    typescript: "npm:^4.0 || ^5.0"
+    axios: "npm:^1.6.5"
   languageName: unknown
   linkType: soft
 
@@ -12337,13 +12335,6 @@ __metadata:
   version: 11.11.6
   resolution: "@types/node@npm:11.11.6"
   checksum: 8a04d16475dc8b88031b8d9d97cbf11612802940c0514ea661c41ae02190e30fb3c69a870a523b9918477169f8c7e0d01df85d4648b9fe873d087d502fd7ba7e
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:12.11.5 - 12.20.42":
-  version: 12.20.42
-  resolution: "@types/node@npm:12.20.42"
-  checksum: f5963e2401f13eb360ee82389eec10c68f5931313d72dfb73702fe45b10bbacbe47a529509c9baa1af40d85368253509d2b95ef1a444b7237926fd1ed14dd0db
   languageName: node
   linkType: hard
 
@@ -41826,16 +41817,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.0 || ^5.0":
-  version: 5.7.2
-  resolution: "typescript@npm:5.7.2"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: a873118b5201b2ef332127ef5c63fb9d9c155e6fdbe211cbd9d8e65877283797cca76546bad742eea36ed7efbe3424a30376818f79c7318512064e8625d61622
-  languageName: node
-  linkType: hard
-
 "typescript@patch:typescript@npm%3A5#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A>=3 < 6#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.3.3#optional!builtin<compat/typescript>":
   version: 5.3.3
   resolution: "typescript@patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"
@@ -41843,16 +41824,6 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 1d0a5f4ce496c42caa9a30e659c467c5686eae15d54b027ee7866744952547f1be1262f2d40de911618c242b510029d51d43ff605dba8fb740ec85ca2d3f9500
-  languageName: node
-  linkType: hard
-
-"typescript@patch:typescript@npm%3A^4.0 || ^5.0#optional!builtin<compat/typescript>":
-  version: 5.7.2
-  resolution: "typescript@patch:typescript@npm%3A5.7.2#optional!builtin<compat/typescript>::version=5.7.2&hash=e012d7"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: c891ccf04008bc1305ba34053db951f8a4584b4a1bf2f68fd972c4a354df3dc5e62c8bfed4f6ac2d12e5b3b1c49af312c83a651048f818cd5b4949d17baacd79
   languageName: node
   linkType: hard
 

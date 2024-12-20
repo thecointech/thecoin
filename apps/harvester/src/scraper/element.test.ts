@@ -78,6 +78,9 @@ describe ('Element tests', () => {
 
     await browser.close()
   })
+
+  it ('will close modals automagically', async () => {
+  })
 }, IsManualRun)
 
 // To review - This isn't the best evaluation,

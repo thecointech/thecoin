@@ -73,6 +73,8 @@ export type ElementData = {
   siblingText?: string[],
 }
 
+export type ElementDataMin = Partial<ElementData>;
+
 export type NavigationEvent = BaseEvent & {
   type: "navigation",
   to: string,

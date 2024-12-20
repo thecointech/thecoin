@@ -6,7 +6,8 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git://github.com/thecointech/thecoin.git"
+    "url": "git://github.com/thecointech/thecoin.git",
+    "directory": "apps/vqa-service"
   },
   "author": "Stephen Taylor",
   "license": "GPL-3.0-or-later",
@@ -15,7 +16,7 @@
   },
   "homepage": "https://thecointech.com",
   "scripts": {
-    "build": "venv/Scripts/python api/generate_swagger.py",
+    "gen:swagger": "venv/Scripts/python api/generate_swagger.py",
     "start": "venv/Scripts/python src/app.py"
   }
 }
