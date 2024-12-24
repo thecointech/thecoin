@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_restx import Api, Resource, fields
 from PIL import Image
-import os
+from port import get_port, get_version
 import io
 import werkzeug
 from enum import Enum
@@ -9,10 +9,14 @@ from molmo import runQuery
 import json
 
 app = Flask(__name__)
-api = Api(app, version='1.0', title='VQA Service API',
-          description='A simple API for Visual Question Answering',
-          default='vqa',
-          default_label='VQA Operations')
+api = Api(app,
+    version=get_version(),
+    title='VQA Service API',
+    description='A simple API for Visual Question Answering',
+    default='vqa',
+    default_label='VQA Operations',
+    doc='/docs',
+)
 
 # Define namespace
 ns = api.namespace('vqa', description='VQA operations')
@@ -179,5 +183,4 @@ class QueryElement(Resource):
             api.abort(400, str(e))
 
 if __name__ == '__main__':
-  port = int(os.environ.get('PORT', os.environ.get('PORT_SERVICE_VQA', 7004)))
-  app.run(host='0.0.0.0', port=port, debug=True)
+  app.run(host='0.0.0.0', port=get_port(), debug=True)

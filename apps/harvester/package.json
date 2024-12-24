@@ -65,6 +65,7 @@
     "@thecointech/shared": "^0.2.135",
     "@thecointech/signers": "^0.2.135",
     "@thecointech/utilities": "^0.2.135",
+    "@web-std/file": "^3.0.3",
     "@xenova/transformers": "^2.14.0",
     "comdb": "^6.0.0-beta",
     "crontab": "^1.4.2",

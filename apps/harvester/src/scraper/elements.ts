@@ -5,10 +5,10 @@ import { sleep } from '@thecointech/async';
 import { scoreElement } from './elements.score';
 import { GetVqaApi } from '@thecointech/apis/vqa';
 import { dumpPage } from './dumper';
-import { ElementResponse, PageResponse } from '@thecointech/vqa';
+import { ElementResponse } from '@thecointech/vqa';
 import { notify } from '../Harvester/notify';
 import { DateTime } from 'luxon';
-import FormData from 'form-data';
+import { File } from '@web-std/file';
 
 type FoundElement = {
   element: ElementHandle<Element>,
@@ -380,28 +380,24 @@ export async function maybeCloseModal(page: Page) {
   try {
 
     if (process.env.NOTIFY_ON_MODAL_ENCOUNTER) {
-      await dumpPage(page, "modal");
+      dumpPage(page, "modal" + DateTime.now().toSQLTime()?.replaceAll(":", "-"));
     }
 
     // Take screenshot of the page as PNG buffer
     const screenshot = await page.screenshot({ fullPage: true, type: 'png' });
-    // Create form data with the screenshot
-    const formDataWithType = new FormData();
-    formDataWithType.append('image', Buffer.from(screenshot), {
-      filename: 'screenshot.png',
-      contentType: 'image/png'
-    });
-    formDataWithType.append('elementType', 'CloseModal');
+    // Create a simple object that matches what the API expects
+    const screenshotFile = new File([screenshot], "screenshot.png", { type: "image/png" });
+
     const api = GetVqaApi();
 
     // First check if this is a modal dialog
-    const isModal = await api.postQueryPageIntent(formDataWithType);
-    if (isModal?.body.type != PageResponse.TypeEnum.ModalDialog) return false;
+    const isModal = await api.postQueryPageIntent(screenshotFile);
+    if (isModal?.data.type != "ModalDialog") return false;
 
     log.debug('Modal detected, attempting to close...');
 
     // If it is a modal, find the close button
-    const { body: closeButton } = await api.postQueryElement(formDataWithType);
+    const { data: closeButton } = await api.postQueryElement('CloseModal', screenshotFile);
     if (!closeButton) return false;
 
     log.debug('Close button found, attempting to click...');
@@ -457,11 +453,11 @@ function responseToElementData(closeButton: ElementResponse): ElementDataMin {
     text: closeButton.content!,
     nodeValue: closeButton.content!,
     coords: {
-      top: closeButton.positionY! - height / 2,
-      left: closeButton.positionX! - width / 2,
+      top: closeButton.position_y! - height / 2,
+      left: closeButton.position_x! - width / 2,
       height,
       width,
-      centerY: closeButton.positionY!,
+      centerY: closeButton.position_y!,
     },
   };
 }
