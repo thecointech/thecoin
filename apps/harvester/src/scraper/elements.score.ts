@@ -8,10 +8,11 @@ export async function scoreElement(potential: ElementData, original: ElementData
   let score = 0;
   if (potential.tagName == original.tagName) score = score + 20;
   if (potential.selector == original.selector) score = score + 25;
-  if (potential.font?.color == original.font?.color) score = score + 5;
+
   if (potential.font?.font == original.font?.font) score = score + 5;
   if (potential.font?.size == original.font?.size) score = score + 5;
   if (potential.font?.style == original.font?.style) score = score + 5;
+  if (potential.font?.color == original.font?.color) score = score + 5;
 
   // metadata can be very helpful
   if (original.role !== undefined) {
@@ -21,12 +22,19 @@ export async function scoreElement(potential: ElementData, original: ElementData
     score += 20 * await getLabelScore(potential.label, original.label);
   }
   if (original.coords !== undefined) {
-    score += 20 * getPositionScore(potential.coords, original.coords);
+    const sizeScore = getSizeScore(potential.coords, original.coords);
+    const positionScore = getPositionScore(potential.coords, original.coords);
+    const totalScore = original.estimated
+      // In an estimated run, we score higher on position, but position mis-matches introdue a negative penalty
+      ? sizeScore + positionScore
+      // In a regular run, we do not penalize position changes, but rely less on the position overall
+      : (Math.max(sizeScore, 0) + Math.max(positionScore, 0)) / 2;
+    score += 20 * totalScore;
   }
 
   // Actual data is the most valuable
   score += 40 * await getNodeValueScore(potential, original);
-  score += 30 * await getSiblingScore(potential.siblingText, original.siblingText);
+  score += 30 * await getSiblingScore(potential, original);
 
   // max score is 195
   return score;
@@ -34,7 +42,10 @@ export async function scoreElement(potential: ElementData, original: ElementData
 
 //
 // Get a score based on similarity of the potential's siblings to the original
-export async function getSiblingScore(potentialSiblings?: string[], originalSiblings?: string[]) {
+export async function getSiblingScore(potential: ElementData, original: ElementDataMin) {
+  const potentialSiblings = potential.siblingText;
+  const originalSiblings = original.siblingText;
+  // If both have siblings
   if (potentialSiblings?.length && originalSiblings?.length) {
 
     // For each sibling in original, get the most similar of potential
@@ -67,6 +78,11 @@ export async function getSiblingScore(potentialSiblings?: string[], originalSibl
   else if (potentialSiblings?.length == originalSiblings?.length) {
     return 0.5;
   }
+  else if (original.estimated && potentialSiblings?.length == 0) {
+    // Estimates will pick up siblings that are not precisely in-line
+    // So do not penalize if the potential ones are not there.
+    return 0;
+  }
   // Downvote if one has siblings and the other doesn't
   return -0.25;
 }
@@ -88,24 +104,30 @@ function getRoleScore(potential: string|null, original: string|null) {
   return 0;
 }
 
+// Center score the difference between the two centers, scaled by the max
+// Basically, as long as the center is within the largest bounding box, it
+// should give some points.  The score drops below zero if the center moves
+// outside the radius of the oval defined by the two boxes
 function getPositionScore(potential: Coords, original: Coords) {
   const originalCenterX = original.left + (original.width / 2);
   const potentialCenterX = potential.left + (potential.width / 2);
   const diffX = Math.abs(originalCenterX - potentialCenterX);
   const diffY = Math.abs(original.centerY - potential.centerY);
 
-  // Distance between centers, scaled by potential width/height
-  // Should be between 0 and 1 if original is within potential, -ve outside it
-  const scoreCenterX = 1 - (diffX / (potential.width / 2));
-  const scoreCenterY = 1 - (diffY / (potential.height / 2));
-  const scoreCenter = (scoreCenterX + scoreCenterY) / 2;
+  const maxWidth = Math.max(original.width, potential.width);
+  const maxHeight = Math.max(original.height, potential.height);
+  const scoreCenterX = 1 - (diffX / (maxWidth / 2));
+  const scoreCenterY = 1 - (diffY / (maxHeight / 2));
+  return (scoreCenterX + scoreCenterY) / 2;
+}
 
-  // Score potential width/height, scaled by original width/height
-  const scoreWidth = 1 - Math.abs(potential.width - original.width) / Math.max(potential.width, original.width);
-  const scoreHeight = 1 - Math.abs(potential.height - original.height) / Math.max(potential.height, original.height);
-  const scoreSize = (scoreWidth + scoreHeight) / 2;
-
-  return Math.max(0, (scoreCenter + scoreSize) / 2);
+// Size score is the similarity between the two boxes
+function getSizeScore(potential: Coords, original: Coords) {
+  const maxWidth = Math.max(potential.width, original.width);
+  const maxHeight = Math.max(potential.height, original.height);
+  const scoreWidth = 1 - Math.abs(potential.width - original.width) / maxWidth;
+  const scoreHeight = 1 - Math.abs(potential.height - original.height) / maxHeight;
+  return (scoreWidth + scoreHeight) / 2;
 }
 
 async function getNodeValueScore(potential: ElementData, original: ElementDataMin) {
@@ -126,6 +148,11 @@ async function getNodeValueScore(potential: ElementData, original: ElementDataMi
   // Else, if both have no value, that's still a good sign
   else if (potential.nodeValue == original.nodeValue) {
     return .25;
+  }
+  else if (original.estimated) {
+    // Do not penalize, as estimates can return
+    // text from images or icons that aren't present in the page.
+    return 0;
   }
   // If one has a value and the other doesn't, very bad sign...
   return -.5;

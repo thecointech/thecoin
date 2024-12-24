@@ -5,6 +5,10 @@ import { sleep } from '@thecointech/async';
 import { scoreElement } from './elements.score';
 import { GetVqaApi } from '@thecointech/apis/vqa';
 import { dumpPage } from './dumper';
+import { ElementResponse, PageResponse } from '@thecointech/vqa';
+import { notify } from '../Harvester/notify';
+import { DateTime } from 'luxon';
+import FormData from 'form-data';
 
 type FoundElement = {
   element: ElementHandle<Element>,
@@ -18,80 +22,78 @@ declare global {
   }
 }
 
-export async function getElementForEvent(page: Page, event: ElementDataMin, timeout=30000, attempts=0) {
+export async function getElementForEvent(page: Page, event: ElementDataMin, timeout=30000, minScore=70) {
 
   const startTick = Date.now();
 
-  log.info(`Searching for: ${event.tagName} - ${event.text} - ${event.siblingText} - ${event.selector}`);
-
-  let failedCandidate;
+  const title = await page.title();
+  log.info(`Searching ${title} for: ${event.tagName} - ${event.text} - ${event.siblingText} - ${event.selector}`);
 
   while (Date.now() < startTick + timeout) {
-    const frames = page.frames();
-    for (const frame of frames) {
 
-      try {
-        // Get all elements in frame
-        const candidates = await getCandidates(frame, event);
-        if (candidates.length == 0) {
-          continue;
-        }
-        log.info(`Searching frame: ${await frame.title()} - ${frame.url()}`);
+    const candidates = await fetchAllCandidates(page, event);
+    const candidate = await getBestCandidate(candidates, event, minScore);
 
-        // Sort by score to see if any element is close enough
-        const sorted = candidates.sort((a, b) => b.score - a.score);
-        const candidate = sorted[0];
-        log.debug(`Found ${sorted.length} candidates, best: ${candidate?.score} (${candidate?.data?.selector}), second best: ${sorted[1]?.score}`);
-
-        // Extra debugging
-        if (process.env.HARVESTER_VERBOSE_SCRAPER) {
-          dbgPrintCandidate(candidate, event);
-        }
-
-        const elapsed = Date.now() - startTick;
-        log.info(`Search took: ${(elapsed / 1000).toFixed(2)}s`)
-
-        // Max score is 125.  70 is chosen via trial/error, but
-        // works for selector + location + tagName, or
-        // location + siblings + tagName + text + font
-        if (candidate?.score >= 70) {
-          // Do we need to worry about multiple candidates?
-          if (sorted[1]?.score / candidate.score > 0.9) {
-            log.warn(` ** Second best candidate has  ${sorted[1]?.score} score`);
-            dbgPrintCandidate(sorted[1], event);
-            log.info(" ** best candidate ** ");
-            dbgPrintCandidate(candidate, event);
-          }
-          return candidate;
-        }
-
-        // remember best candidate for debugging purposes
-        if (candidate.score > (failedCandidate?.score ?? 0)) {
-          failedCandidate = candidate;
-        }
-      }
-      catch (e) {
-        log.error(e, `Error searching frame: ${await frame.title()} - ${frame.url()}`);
-        throw e;
-      }
+    if (candidate) {
+      return candidate;
     }
+
     // Continue waiting
     await sleep(500);
   }
 
-  if (failedCandidate) {
-    log.debug(' ** Failed Candidate ** ')
-    dbgPrintCandidate(failedCandidate, event);
-  }
-
-  // Special case - Tangerine keeps posting super-annoying surveys
-  if (attempts == 0 && await maybeCloseModal(page)) {
-    // If it worked, take another crack
-    return await getElementForEvent(page, event, timeout, 1);
-  }
+  // // Not found, what candidate failed?
+  // log.debug(' ** Failed Candidate ** ')
+  // dbgPrintCandidate(candidate, event);
 
   // Not found, throw
   throw new Error(`Element ${event.tagName} not found with text: "${event.text}" and siblings: "${event.siblingText?.join(', ')}"`);
+}
+
+async function fetchAllCandidates(page: Page, event: ElementDataMin) {
+  const candidates: FoundElement[] = [];
+  const frames = page.frames();
+  for (const frame of frames) {
+
+    try {
+      // Get all elements in frame
+      const frameCandidates = await getCandidates(frame, event);
+      candidates.push(...frameCandidates);
+    }
+    catch (e) {
+      log.error(e, `Error searching frame: ${await frame.title()} - ${frame.url()}`);
+      throw e;
+    }
+  }
+  return candidates;
+}
+
+async function getBestCandidate(candidates: FoundElement[], event: ElementDataMin, minScore: number) {
+  // Sort by score to see if any element is close enough
+  const sorted = candidates.sort((a, b) => b.score - a.score);
+  const candidate = sorted[0];
+  log.debug(`Found ${sorted.length} candidates, best: ${candidate?.score} (${candidate?.data?.selector}), second best: ${sorted[1]?.score}`);
+
+  // Extra debugging
+  if (process.env.HARVESTER_VERBOSE_SCRAPER) {
+    dbgPrintCandidate(candidate, event);
+  }
+
+  // Max score is 125.  70 is chosen via trial/error, but
+  // works for selector + location + tagName, or
+  // location + siblings + tagName + text + font
+  if (candidate?.score >= minScore) {
+    // Do we need to worry about multiple candidates?
+    if (sorted[1]?.score / candidate.score > 0.9) {
+      log.warn(` ** Second best candidate has  ${sorted[1]?.score} score`);
+      dbgPrintCandidate(sorted[1], event);
+      log.info(" ** best candidate ** ");
+      dbgPrintCandidate(candidate, event);
+    }
+    return candidate;
+  }
+
+  return null;
 }
 
 async function getCandidates(frame: Frame, event: ElementDataMin) {
@@ -123,7 +125,13 @@ async function getCandidates(frame: Frame, event: ElementDataMin) {
   return candidates;
 }
 
+let lastDbgPrintCandidateSelector: string;
 async function dbgPrintCandidate(candidate: FoundElement, event: ElementDataMin) {
+  if (lastDbgPrintCandidateSelector == candidate.data.selector) {
+    // Do not spam with lotsa logging
+    return;
+  }
+  lastDbgPrintCandidateSelector = candidate.data.selector;
   log.debug(`Tag: ${event.tagName} - ${candidate?.data?.tagName}`);
   log.debug(`Selector: ${event.selector} - ${candidate?.data?.selector}`);
   log.debug(`Text: ${event.text} - ${candidate?.data?.text}`);
@@ -370,51 +378,90 @@ const fillOutSiblingText = (allElements: SearchElement[]) => {
 export async function maybeCloseModal(page: Page) {
   log.info('Autodetecting modal on page...');
   try {
+
+    if (process.env.NOTIFY_ON_MODAL_ENCOUNTER) {
+      await dumpPage(page, "modal");
+    }
+
     // Take screenshot of the page as PNG buffer
     const screenshot = await page.screenshot({ fullPage: true, type: 'png' });
-    // Convert buffer to File
-    const screenshotFile = new File([screenshot], 'screenshot.png', { type: 'image/png' });
-    if (process.env.HARVESTER_VERBOSE_SCRAPER) {
-      dumpPage(page, "modal");
-    }
+    // Create form data with the screenshot
+    const formDataWithType = new FormData();
+    formDataWithType.append('image', Buffer.from(screenshot), {
+      filename: 'screenshot.png',
+      contentType: 'image/png'
+    });
+    formDataWithType.append('elementType', 'CloseModal');
     const api = GetVqaApi();
 
     // First check if this is a modal dialog
-    const isModal = await api.postQueryPageIntent(screenshotFile);
-    if (isModal?.data.type != "ModalDialog") return false;
+    const isModal = await api.postQueryPageIntent(formDataWithType);
+    if (isModal?.body.type != PageResponse.TypeEnum.ModalDialog) return false;
 
     log.debug('Modal detected, attempting to close...');
 
     // If it is a modal, find the close button
-    const { data: closeButton } = await api.postQueryElement('CloseModal', screenshotFile);
+    const { body: closeButton } = await api.postQueryElement(formDataWithType);
     if (!closeButton) return false;
 
     log.debug('Close button found, attempting to click...');
 
-    // Try to find and click the close button
-    const elementData: ElementDataMin = {
-      text: closeButton.content!,
-      coords: {
-        top: closeButton.position_y!,
-        left: closeButton.position_x!,
-        height: 16, // Just guess based on font size
-        width: (closeButton.content ?? "").length * 8,
-        centerY: closeButton.position_y!,
-      },
-    }
-    const element = await getElementForEvent(page, elementData, 5000, 1);
-    if (!element) return false;
-
-    await element.element.click();
-    await sleep(500); // Give the modal time to close
-    log.info('Clicked close button, modal closed.');
-    return true;
+    return await closeModal(page, closeButton);
   }
   catch (err) {
-    log.warn({ err }, 'Error attempting to close modal:');
-    return false;
+    log.warn(err, 'Error attempting to close modal');
   }
   finally {
     log.info('Modal detection complete.');
   }
+  return false;
+}
+
+export async function closeModal(page: Page, closeButton: ElementResponse) {
+  // Try to find and click the close button
+  const elementData = responseToElementData(closeButton);
+  // We have a lower minScore because the only data we have is text + position + neighbours
+  // Which has a maximum value of 40 (text) + 20 (position) + 20 (neighbours)
+  // So basically, if there is even one things matches, then it's good enough,
+  const found = await getElementForEvent(page, elementData, 5000, 20);
+  if (!found) return false;
+
+  try {
+    await found.element.click();
+  }
+  catch (err) {
+    // We seem to be getting issues with clicking buttons:
+    // https://github.com/puppeteer/puppeteer/issues/3496 suggests
+    // using eval instead.
+    log.debug(`Click failed, retrying on ${found.data.selector} - ${err}`);
+    await page.$eval(found.data.selector, (el) => (el as HTMLElement).click())
+  }
+  await sleep(500); // Give the modal time to close
+  log.info('Clicked close button, modal closed.');
+
+  // Validation - does this work on live runs?
+  if (process.env.NOTIFY_ON_MODAL_ENCOUNTER) {
+    notify({
+      title: 'Modal Successfully Closed',
+      message: "Closed Modal on page: " + page.url(),
+    })
+  }
+  return true;
+}
+
+function responseToElementData(closeButton: ElementResponse): ElementDataMin {
+  const width = (closeButton.content ?? "").length * 8;
+  const height = 16; // Just guess based on avg font size
+  return {
+    estimated: true,
+    text: closeButton.content!,
+    nodeValue: closeButton.content!,
+    coords: {
+      top: closeButton.positionY! - height / 2,
+      left: closeButton.positionX! - width / 2,
+      height,
+      width,
+      centerY: closeButton.positionY!,
+    },
+  };
 }

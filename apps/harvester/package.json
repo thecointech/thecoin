@@ -25,6 +25,7 @@
     "package": "electron-forge package",
     "make:prod": "yarn run -T cross-env CONFIG_NAME=prodbeta electron-forge make",
     "make:prodtest": "yarn run -T cross-env CONFIG_NAME=prodtest electron-forge make",
+    "make:validation": "yarn run -T cross-env CONFIG_NAME=prodbeta NOTIFY_ON_MODAL_ENCOUNTER=true electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
     "build": "run -T tsc -b",

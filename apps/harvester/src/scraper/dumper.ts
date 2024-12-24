@@ -12,7 +12,10 @@ export function initializeDumper(actionName: string) {
 }
 
 export async function dumpPage(page: Page, name="") {
-  log.debug('Dumping page to disk...');
+  if (!dumpFolder) {
+    return;
+  }
+  log.debug(`Dumping page to ${dumpFolder}`);
 
   mkdirSync(dumpFolder, { recursive: true });
   // Save screenshot

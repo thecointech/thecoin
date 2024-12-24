@@ -71,6 +71,10 @@ export type ElementData = {
   nodeValue?: string|null,
   font?: Font,
   siblingText?: string[],
+
+  // Set to true if we are searching for an element
+  // based on estimated data (eg from VQA service)
+  estimated?: boolean,
 }
 
 export type ElementDataMin = Partial<ElementData>;
