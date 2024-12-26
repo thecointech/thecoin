@@ -229,6 +229,10 @@ export async function replayEvents(page: Page, actionName: ActionTypes, events: 
           // If it worked, take another crack
           await processEvent(event, i)
         }
+        else {
+          // If it didn't work, throw
+          throw err
+        }
       }
 
       // Mark progress complete

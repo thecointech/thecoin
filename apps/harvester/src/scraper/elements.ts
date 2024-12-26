@@ -68,11 +68,19 @@ async function fetchAllCandidates(page: Page, event: ElementDataMin) {
   return candidates;
 }
 
+let lastDbgLogMessage: string;
+
 async function getBestCandidate(candidates: FoundElement[], event: ElementDataMin, minScore: number) {
   // Sort by score to see if any element is close enough
   const sorted = candidates.sort((a, b) => b.score - a.score);
   const candidate = sorted[0];
-  log.debug(`Found ${sorted.length} candidates, best: ${candidate?.score} (${candidate?.data?.selector}), second best: ${sorted[1]?.score}`);
+  const logMessage = `Found ${sorted.length} candidates, best: ${candidate?.score} (${candidate?.data?.selector}), second best: ${sorted[1]?.score}`;
+
+  // Print only if we have a new message
+  if (lastDbgLogMessage != logMessage) {
+    log.debug(logMessage);
+    lastDbgLogMessage = logMessage;
+  }
 
   // Extra debugging
   if (process.env.HARVESTER_VERBOSE_SCRAPER) {
@@ -392,6 +400,7 @@ export async function maybeCloseModal(page: Page) {
 
     // First check if this is a modal dialog
     const isModal = await api.postQueryPageIntent(screenshotFile);
+    log.debug(`Page detected as type: ${isModal.data.type}`);
     if (isModal?.data.type != "ModalDialog") return false;
 
     log.debug('Modal detected, attempting to close...');
