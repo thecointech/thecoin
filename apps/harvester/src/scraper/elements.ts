@@ -27,7 +27,7 @@ export async function getElementForEvent(page: Page, event: ElementDataMin, time
   const startTick = Date.now();
 
   const title = await page.title();
-  log.info(`Searching ${title} for: ${event.tagName} - ${event.text} - ${event.siblingText} - ${event.selector}`);
+  log.info(`Searching \"${title}\" for: ${event.tagName} - ${event.text} - ${event.siblingText} - ${event.selector}`);
 
   while (Date.now() < startTick + timeout) {
 
@@ -53,34 +53,44 @@ export async function getElementForEvent(page: Page, event: ElementDataMin, time
 async function fetchAllCandidates(page: Page, event: ElementDataMin) {
   const candidates: FoundElement[] = [];
   const frames = page.frames();
+  const nFrames = frames.length;
+  let nErrors = 0;
+  log.info(`Searching ${nFrames} frames`);
   for (const frame of frames) {
-
+    log.trace("Getting candidates in frame");
     try {
       // Get all elements in frame
       const frameCandidates = await getCandidates(frame, event);
       candidates.push(...frameCandidates);
     }
     catch (e) {
-      log.error(e, `Error searching frame: ${await frame.title()} - ${frame.url()}`);
-      throw e;
+      // Something went wrong, log the error and throw
+      log.error(e, `Error searching frame`);
+      // DO NOT THROW.  We don't know what went wrong and there is a good
+      // chance it's some frame-specific issue and we could just continue
+      nErrors++;
     }
   }
+  if (nErrors == nFrames) {
+    // If all frames errored, this is probably non-recoverable
+    throw new Error("Could not search any frames");
+  }
+  log.info(`Got ${candidates.length} candidates`);
   return candidates;
 }
 
 let lastDbgLogMessage: string;
+function maybeLogMessage(message: string) {
+  if (lastDbgLogMessage != message) {
+    log.debug(message);
+    lastDbgLogMessage = message;
+  }
+}
 
 async function getBestCandidate(candidates: FoundElement[], event: ElementDataMin, minScore: number) {
   // Sort by score to see if any element is close enough
   const sorted = candidates.sort((a, b) => b.score - a.score);
   const candidate = sorted[0];
-  const logMessage = `Found ${sorted.length} candidates, best: ${candidate?.score} (${candidate?.data?.selector}), second best: ${sorted[1]?.score}`;
-
-  // Print only if we have a new message
-  if (lastDbgLogMessage != logMessage) {
-    log.debug(logMessage);
-    lastDbgLogMessage = logMessage;
-  }
 
   // Extra debugging
   if (process.env.HARVESTER_VERBOSE_SCRAPER) {
@@ -91,6 +101,7 @@ async function getBestCandidate(candidates: FoundElement[], event: ElementDataMi
   // works for selector + location + tagName, or
   // location + siblings + tagName + text + font
   if (candidate?.score >= minScore) {
+    maybeLogMessage(`Found candidate with score: ${candidate?.score} (${candidate?.data?.selector}), second best: ${sorted[1]?.score}`);
     // Do we need to worry about multiple candidates?
     if (sorted[1]?.score / candidate.score > 0.9) {
       log.warn(` ** Second best candidate has  ${sorted[1]?.score} score`);
@@ -100,7 +111,7 @@ async function getBestCandidate(candidates: FoundElement[], event: ElementDataMi
     }
     return candidate;
   }
-
+  maybeLogMessage(`Candidate with score: ${candidate?.score} (${candidate?.data?.selector}) did not meet score >= ${minScore}`);
   return null;
 }
 
@@ -116,8 +127,8 @@ async function getCandidates(frame: Frame, event: ElementDataMin) {
     return [];
   };
 
+  log.trace("Getting all elements");
   const elements = await getAllElements(frame);
-  log.info(`Got ${elements.length} elements`);
   const withSiblings = fillOutSiblingText(elements);
 
   const candidates: FoundElement[] = [];

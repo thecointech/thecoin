@@ -55,5 +55,6 @@ export async function startPuppeteer(headless?: boolean) {
 export async function closeBrowser() {
   if (_browser) {
     await _browser.close();
+    _browser = undefined
   }
 }

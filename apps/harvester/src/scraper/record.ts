@@ -1,10 +1,10 @@
 import { existsSync, mkdirSync } from 'fs';
 import path from 'path';
-import type { Browser, Page } from 'puppeteer';
+import type { Page } from 'puppeteer';
 import { debounce } from './debounce';
 import { startElementHighlight } from './highlighter';
 import { getTableData } from './table';
-import { startPuppeteer } from './puppeteer';
+import { closeBrowser, startPuppeteer } from './puppeteer';
 import { ActionTypes, AnyEvent, InputEvent, ValueResult, ValueType } from './types';
 import { getValueParsing } from './valueParsing';
 import { log } from '@thecointech/logging';
@@ -49,13 +49,14 @@ export class Recorder {
   urlToFrameName: Record<string, string> = {};
 
   private page!: Page;
-  private browser!: Browser;
   private onValue?: ValueWaiter;
   private onInput?: DynamicInputWaiter;
   private static __instance?: Recorder;
 
   private lastInputEvent: InputEvent | undefined;
   private seenEvents = new Set();
+
+  public getPage = () => this.page;
 
   private constructor(name: ActionTypes, dynamicInputs?: string[]) {
     this.name = name;
@@ -69,7 +70,6 @@ export class Recorder {
 
   private async initialize(url: string) {
     const { browser, page } = await startPuppeteer(false);
-    this.browser = browser;
     this.page = page;
 
     if (!existsSync(this.screenshotFolder)) {
@@ -80,7 +80,9 @@ export class Recorder {
 
     await page.evaluateOnNewDocument(onNewDocument);
 
-    await page.goto(url);
+    if (url != "about:blank") {
+      await page.goto(url);
+    }
 
     this.disconnected = new Promise((resolve, reject) => {
       browser.on('disconnected', async () => {
@@ -128,7 +130,8 @@ export class Recorder {
     if (Recorder.__instance) {
       if (!name || Recorder.__instance.name == name) {
         // This should take care of all the cleanup
-        Recorder.__instance.browser.close();
+        await closeBrowser();
+        Recorder.__instance = undefined;
         return true;
       }
     }
@@ -358,7 +361,7 @@ function onNewDocument() {
     });
 
     const getFilteredTarget = (ev: MouseEvent): HTMLElement|null => {
-      console.log(`GettingFiltered: ${(ev.target as any)?.nodeName}, id: ${(ev.target as any)?.id}, x: ${ev.pageX}, y: ${ev.pageY}`);
+      //console.log(`GettingFiltered: ${(ev.target as any)?.nodeName}, id: ${(ev.target as any)?.id}, x: ${ev.pageX}, y: ${ev.pageY}`);
 
       if (ev.target instanceof HTMLElement) {
         if (!__clickTypeFilter) {
@@ -419,7 +422,7 @@ function onNewDocument() {
 
         // Take no action if reading value
         if (__clickAction == "value") {
-          console.log("Reading Value: " + target.innerText);
+          //console.log("Reading Value: " + target.innerText);
           ev.preventDefault();
           ev.stopImmediatePropagation();
         }
@@ -428,7 +431,7 @@ function onNewDocument() {
       }
       else {
         // Do not capture clicks on unrelated elements
-        console.log("Skipping click");
+        //console.log("Skipping click");
         ev.preventDefault();
         ev.stopImmediatePropagation();
       }
@@ -436,7 +439,7 @@ function onNewDocument() {
     window.addEventListener("click", clickEventListener, { capture: true });
     // Allow our hooks to supersede anything being applied by the page
     globalThis.__rehookEvents = () => {
-      console.log("Rehooking Events");
+      //console.log("Rehooking Events");
       window.removeEventListener("click", clickEventListener, { capture: true });
       window.addEventListener("click", clickEventListener, { capture: true });
     }
@@ -456,7 +459,7 @@ function onNewDocument() {
     }, opts);
 
     window.addEventListener('submit', (ev) => {
-      console.log("Submitting: ", ev.target);
+      //console.log("Submitting: ", ev.target);
     });
 
     const enterEventListener = (ev: Event) => {
@@ -486,13 +489,13 @@ function onNewDocument() {
 
     window.addEventListener('focusin', (ev) => {
       // Is this an input?
-      console.log("Focusin: ", ev.target);
+      //console.log("Focusin: ", ev.target);
       if (ev.target instanceof HTMLInputElement || ev.target instanceof HTMLTextAreaElement) {
         ev.target.addEventListener('keydown', enterEventListener, opts)
       }
     })
     window.addEventListener('focusout', ev => {
-      console.log("Focusout: ", ev.target);
+      //console.log("Focusout: ", ev.target);
       if (ev.target instanceof HTMLInputElement || ev.target instanceof HTMLTextAreaElement) {
         ev.target?.removeEventListener('keydown', enterEventListener)
       }

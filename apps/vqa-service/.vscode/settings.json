@@ -1,0 +1,14 @@
+{
+    "flake8.args": [
+        "--ignore=E501,W504"
+    ],
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./tests",
+        "-p",
+        "*test*.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": true
+}

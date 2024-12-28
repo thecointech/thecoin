@@ -2,7 +2,7 @@ from flask_restx import Resource, fields
 from PIL import Image
 import io
 from enum import Enum
-from molmo import runQuery
+from query import runQuery
 from helpers import get_model_example
 import werkzeug
 

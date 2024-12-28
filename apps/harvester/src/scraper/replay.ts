@@ -228,6 +228,7 @@ export async function replayEvents(page: Page, actionName: ActionTypes, events: 
         if (await maybeCloseModal(page)) {
           // If it worked, take another crack
           await processEvent(event, i)
+          log.info(` - Resolved Modal, continue processing`);
         }
         else {
           // If it didn't work, throw

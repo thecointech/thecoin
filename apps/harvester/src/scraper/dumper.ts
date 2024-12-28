@@ -15,16 +15,21 @@ export async function dumpPage(page: Page, name="") {
   if (!dumpFolder) {
     return;
   }
-  log.debug(`Dumping page to ${dumpFolder}`);
+  log.debug(`Dumping page to ${dumpFolder}: ${name}`);
 
-  mkdirSync(dumpFolder, { recursive: true });
-  // Save screenshot
-  await page.screenshot({ fullPage: true, path: path.join(dumpFolder, `screenshot-${name}.png`) });
-  // Save content
-  const content = await page.content();
-  writeFileSync(path.join(dumpFolder, `content-${name}.html`), content);
-  // Lastly, try for MHTML
-  const cdp = await page.createCDPSession();
-  const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
-  writeFileSync(path.join(dumpFolder, `snapshot-${name}.mhtml`), data);
+  try {
+    mkdirSync(dumpFolder, { recursive: true });
+    // Save screenshot
+    await page.screenshot({ fullPage: true, path: path.join(dumpFolder, `screenshot-${name}.png`) });
+    // Save content
+    const content = await page.content();
+    writeFileSync(path.join(dumpFolder, `content-${name}.html`), content);
+    // Lastly, try for MHTML
+    const cdp = await page.createCDPSession();
+    const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
+    writeFileSync(path.join(dumpFolder, `snapshot-${name}.mhtml`), data);
+  }
+  catch (err) {
+    log.error(err, "Failed to dump page");
+  }
 }

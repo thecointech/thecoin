@@ -30,7 +30,8 @@
     "lint": "eslint --ext .ts,.tsx .",
     "build": "run -T tsc -b",
     "test": "yarn run :jest",
-    "scraper:record": "yarn run-env ./src/scraper/main.ts --record"
+    "scraper:record": "yarn run-env ./src/scraper/main.ts --record",
+    "vqa:landings": "yarn run -T run-env ./src/scraper/puppeteer/fetchLandings.ts"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.2.0",
