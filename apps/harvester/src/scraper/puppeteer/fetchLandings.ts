@@ -1,6 +1,6 @@
 import { sleep } from "@thecointech/async";
 import path from "path";
-import { existsSync, mkdirSync, readFileSync, write, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { getElementForEvent } from "../elements";
 import { Recorder } from "../record";
 import { ClickEvent } from "../types";
@@ -10,11 +10,11 @@ import { Page } from "puppeteer";
 const urls = {
   // TD: "https://www.td.com/ca/en/personal-banking",
   // Scotia: "https://www.scotiabank.com/ca/en/personal.html",
-  // BMO: "https://www.bmo.com/en-ca/main/personal/",
+  BMO: "https://www.bmo.com/en-ca/main/personal/",
   // CIBC: "https://www.cibc.com/en/personal-banking.html",
-  Tangerine: "https://www.tangerine.ca/en/personal",
-  RBC: "https://www.rbcroyalbank.com/personal.html",
-  Random: "https://en.wikipedia.org/"
+  // Tangerine: "https://www.tangerine.ca/en/personal",
+  // RBC: "https://www.rbcroyalbank.com/personal.html",
+  // Random: "https://en.wikipedia.org/"
 }
 
 if (!process.env.PRIVATE_TESTING_PAGES) {
@@ -100,6 +100,12 @@ for (const [bank, url] of Object.entries(urls)) {
   // Navigate to the right page
   debugger;
 
+  // await takeScreenshot(page, bank, "2fa");
+
+  // await doEvent(recorder, bank, "Login", "2fa-input");
+  // await doEvent(recorder, bank, "Login", "2fa-skip");
+  // await doEvent(recorder, bank, "Login", "2fa-submit");
+
   await takeScreenshot(page, bank);
 
   if (bank == "RBC" || bank == "Tangerine") {
@@ -107,7 +113,7 @@ for (const [bank, url] of Object.entries(urls)) {
     await doEvent(recorder, bank, "Login", "rememberme1");
     await doEvent(recorder, bank, "Login", "continue");
     debugger; // User manually advances
-    await takeScreenshot(page, bank);
+    await takeScreenshot(page, bank, "1");
 
     await doEvent(recorder, bank, "Login", "password");
     await doEvent(recorder, bank, "Login", "login");

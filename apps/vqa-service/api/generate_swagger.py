@@ -6,8 +6,6 @@ import sys
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, 'src'))
 
-from app import api, app
-from port import get_port
 
 if __name__ == '__main__':
     # Configure the application
