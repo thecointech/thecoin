@@ -4,7 +4,7 @@ from testdata import get_test_data
 from runQuery import runQuery  # noqa: E402
 from helpers import normalize
 
-query_intent = " From the following options, select the one that best describes the given webpage: Landing, Login, AccountSelect, AccountDetails, PayBill, SendTransfer, ModalDialog, ErrorMessage. Return only valid JSON data in the following format: {\"type\": \"option\"}"
+query_intent = "From the following options, select the one that best describes the given webpage: Landing, Login, AccountSelect, AccountDetails, PayBill, SendTransfer, ModalDialog, ErrorMessage. Return only valid JSON data in the following format: {\"type\": \"option\"}"
 
 
 class QueryLoginIntentTests(unittest.TestCase):

@@ -2,10 +2,12 @@ import json
 import os
 from PIL import Image
 from typing import NamedTuple
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class TestData(NamedTuple):
-    image: Image
+    image: Image.Image
     original: dict
 
 

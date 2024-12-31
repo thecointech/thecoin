@@ -1,3 +1,4 @@
+import torch
 from transformers import GenerationConfig
 import json
 from timeit import default_timer as timer
@@ -22,12 +23,20 @@ def runQuery(prompt, image, max_length=200):
         # move inputs to the correct device and make a batch of size 1
         inputs = {k: v.to(model.device).unsqueeze(0) for k, v in inputs.items()}
 
+        inputs["images"] = inputs["images"].to(torch.bfloat16)
+        with torch.autocast(device_type="cuda", enabled=True, dtype=torch.bfloat16):
+            output = model.generate_from_batch(
+                inputs,
+                GenerationConfig(max_new_tokens=200, stop_strings="<|endoftext|>"),
+                tokenizer=processor.tokenizer
+            )
+
         # generate output; maximum 200 new tokens
-        output = model.generate_from_batch(
-            inputs,
-            GenerationConfig(max_new_tokens=max_length, stop_strings="<|endoftext|>"),
-            tokenizer=processor.tokenizer,
-        )
+        # output = model.generate_from_batch(
+        #     inputs,
+        #     GenerationConfig(max_new_tokens=max_length, stop_strings="<|endoftext|>"),
+        #     tokenizer=processor.tokenizer,
+        # )
 
         # only get generated tokens; decode them to text
         generated_tokens = output[0, inputs["input_ids"].size(1):]

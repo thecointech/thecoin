@@ -1,5 +1,6 @@
 
 from transformers import AutoModelForCausalLM, AutoProcessor
+import torch
 
 _processor = None
 def get_processor():
@@ -8,7 +9,7 @@ def get_processor():
         _processor = AutoProcessor.from_pretrained(
             'allenai/Molmo-7B-D-0924',
             trust_remote_code=True,
-            torch_dtype='auto',
+            torch_dtype=torch.bfloat16,
             device_map='auto'
         )
     return _processor
@@ -20,7 +21,9 @@ def get_model():
         _model = AutoModelForCausalLM.from_pretrained(
             'allenai/Molmo-7B-D-0924',
             trust_remote_code=True,
-            torch_dtype='auto',
+            torch_dtype=torch.bfloat16,
             device_map='auto'
         )
+        _model.to(dtype=torch.bfloat16)
+
     return _model
