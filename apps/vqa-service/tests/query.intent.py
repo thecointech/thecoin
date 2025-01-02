@@ -1,11 +1,9 @@
 
 import unittest
 from testdata import get_test_data
-from runQuery import runQuery  # noqa: E402
-from helpers import normalize
-
-query_intent = "From the following options, select the one that best describes the given webpage: Landing, Login, AccountSelect, AccountDetails, PayBill, SendTransfer, ModalDialog, ErrorMessage. Return only valid JSON data in the following format: {\"type\": \"option\"}"
-
+from queries import runQuery
+from validate import normalize
+from query_page_intent import intent_prompt  # noqa: E402
 
 class QueryLoginIntentTests(unittest.TestCase):
     def test_detect_login_page(self):
@@ -17,7 +15,7 @@ class QueryLoginIntentTests(unittest.TestCase):
             if ("failed" in key or "Random" in key):
                 continue
             print("Testing Login intent for: " + key)
-            intent = runQuery(query_intent, image)
+            intent = runQuery(intent_prompt, image)
             self.assertEqual(normalize(intent["type"]), "login")
 
 

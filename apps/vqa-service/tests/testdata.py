@@ -14,14 +14,15 @@ class TestData(NamedTuple):
 def get_image_and_json(image_file: str, json_type: str):
     with Image.open(image_file) as image:
         image.load()
-    json_file = image_file.replace(".png", f"-{json_type}.json")
     if (json_type):
-        try:
-            with open(json_file, "rb") as f:
-                json_data = json.load(f)
-            return TestData(image, json_data)
-        except Exception:
-            pass  # means it's not there, which... is fine
+        json_type = f"-{json_type}"
+    json_file = image_file.replace(".png", f"{json_type}.json")
+    try:
+        with open(json_file, "rb") as f:
+            json_data = json.load(f)
+        return TestData(image, json_data)
+    except Exception:
+        pass  # means it's not there, which... is fine
     return TestData(image, None)
     # TEST - Do coords work better if cropped?
 

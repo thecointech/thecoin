@@ -1,9 +1,8 @@
 import unittest
 from PIL import Image
 
-request_json = "Return only valid JSON data in the following format:"
+request_json = "Generate JSON data that strictly conforms to the following schema: "
 element_desc = '{"content": "text", "font_color": "#color", "background_color": "#color", "neighbour_text": "text", "position_x": "number", "position_y": "number"}'
-
 
 def normalize(str: str):
     str = str.lower()

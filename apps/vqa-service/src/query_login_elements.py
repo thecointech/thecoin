@@ -1,17 +1,41 @@
-from enum import Enum
-from PIL import Image
-from flask_restx import Resource, fields
-from query import runQuery
-from helpers import get_instruct_json_respose, element_schema
+
 import io
+from flask_restx import Resource
 import werkzeug
+from helpers import cast_value, get_instruct_json_respose, element_schema
+from query import runQuery
+from query_element import ElementType
+from PIL import Image
 
+pwd_input_schema = {
+	"type": "object",
+    "properties": {
+        "password_input_detected": {
+            "type": "boolean",
+        },
+    },
+}
 
-class ElementType(str, Enum):
-    CLOSE_MODAL = 'CloseModal'
-    BUTTON = 'Button'
-    INPUT = 'Input'
-    TEXT = 'Text'
+error_message_schema = {
+    "type": "object",
+    "properties": {
+        "error_message_detected": {
+            "type": "boolean",
+        },
+        "error_message": {
+            "type": "string",
+            "description": "Optionally contains error message only if error_message_detected is true"
+        },
+    },
+}
+
+query_username_element = f"Analyze the provided webpage. Describe the input for the username or cardnumber. {get_instruct_json_respose(element_schema)}"
+query_password_element = f"Describe the password text input in this webpage. {get_instruct_json_respose(element_schema)}"
+query_pwd_exists = f"Is there a password input? {get_instruct_json_respose(pwd_input_schema)}"
+query_continue_button = f"Analyze the provided webpage. Describe the element to proceed to the next step. {get_instruct_json_respose(element_schema)}"
+query_login_button = f"Describe the login button on this webpage. It should be near the username and password inputs.  {get_instruct_json_respose(element_schema)}"
+query_error_message = f"Analyze the provided webpage. If an error message that is preventing login is present, describe it. {get_instruct_json_respose(error_message_schema)}"
+
 
 def setup_query_element(ns, api):
 
@@ -36,7 +60,7 @@ def setup_query_element(ns, api):
                                 help='Additional details for the search (e.g., button text)')
 
     @ns.route('/query-element')
-    class QueryElement(Resource):
+    class QueryLoginElement(Resource):
         @ns.expect(element_parser)
         @ns.response(200, 'Success', element_response_model)
         @ns.response(400, 'Validation Error')
@@ -76,24 +100,12 @@ def setup_query_element(ns, api):
 
                 print("Response: " + str(response))
 
-                def cast_value(response, key, scale):
-                    if key in response:
-                        try:
-                            response[key] = round(
-                                scale * float(response[key]) / 100)
-                        except ValueError:
-                            print("Invalid value for " +
-                                  key + ": " + response[key])
-                            response[key] = None
-
                 cast_value(response, "position_x", image.width)
                 cast_value(response, "position_y", image.height)
-                # cast_value(response, "width", image.width)
-                # cast_value(response, "height", image.height)
 
                 return response
 
             except Exception as e:
                 api.abort(400, str(e))
 
-    return QueryElement
+    return QueryLoginElement

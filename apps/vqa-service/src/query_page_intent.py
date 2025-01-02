@@ -3,7 +3,7 @@ from PIL import Image
 import io
 from enum import Enum
 from query import runQuery
-from helpers import get_model_example
+from helpers import get_instruct_json_respose, get_model_example
 import werkzeug
 
 
@@ -17,6 +17,20 @@ class PageType(str, Enum):
     MODAL_DIALOG = 'ModalDialog'
     ERROR_MESSAGE = 'ErrorMessage'
 
+element_schema = {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://vqa.thecoin.io/element.schema.json",
+	"type": "object",
+    "properties": {
+        "type": {
+            "type": "string", 
+            "example": "option",
+            "enum": [e.value for e in PageType]
+        },
+    },
+}
+typesStr = ", ".join([e.value for e in PageType])
+intent_prompt = f"From the following options, select the one that best describes the given webpage: {typesStr}. {get_instruct_json_respose(element_schema)}"
 
 def setup_query_page_intent(ns, api):
 
@@ -54,9 +68,8 @@ def setup_query_page_intent(ns, api):
                 image_bytes = image_file.read()
                 image = Image.open(io.BytesIO(image_bytes))
 
-                typesStr = ", ".join([e.value for e in PageType])
                 response = runQuery(
-                    prompt=f"From the following options, select the one that best describes the given webpage: {typesStr}. Return only valid JSON data in the following format: {get_model_example(page_response_model)}",
+                    prompt=intent_prompt,
                     image=image
                 )
 
