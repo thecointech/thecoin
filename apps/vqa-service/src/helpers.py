@@ -14,7 +14,7 @@ element_schema = {
     },
 }
 
-request_json = "Generate JSON data that strictly conforms to the following schema: "
+request_json = "Return only JSON in the following format: "
 
 def get_model_example(schema):
     """
@@ -32,7 +32,7 @@ def get_model_example(schema):
     return json.dumps(example)
 
 def get_instruct_json_respose(schema):
-    return request_json + json.dumps(get_model_example(schema))
+    return request_json + get_model_example(schema)
 
 def cast_value(response, key, scale):
     if key in response:

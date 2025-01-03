@@ -10,6 +10,7 @@ import werkzeug
 class PageType(str, Enum):
     LANDING = 'Landing'
     LOGIN = 'Login'
+    TWO_FACTOR_AUTH = 'TwoFactorAuth'
     ACCOUNT_SELECT = 'AccountSelect'
     ACCOUNT_DETAILS = 'AccountDetails'
     PAY_BILL = 'PayBill'

@@ -1,49 +1,84 @@
 import json
 import os
 from PIL import Image
-from typing import NamedTuple
+from typing import NamedTuple, TypedDict
 from dotenv import load_dotenv
 
 load_dotenv()
 
+class JsonDatum(TypedDict):
+    name: str
+    data: object
+
 class TestData(NamedTuple):
+    key: str
     image: Image.Image
-    original: dict
+    elements: JsonDatum
+    # page_type: str
 
+class SingleTestDatum(NamedTuple):
+    key: str
+    image: Image.Image
+    element: object
+    # page_type: str
+    # element_type: str
 
-def get_image_and_json(image_file: str, json_type: str):
-    with Image.open(image_file) as image:
-        image.load()
-    if (json_type):
-        json_type = f"-{json_type}"
-    json_file = image_file.replace(".png", f"{json_type}.json")
+def load_json(json_file: str):
     try:
         with open(json_file, "rb") as f:
-            json_data = json.load(f)
-        return TestData(image, json_data)
-    except Exception:
-        pass  # means it's not there, which... is fine
-    return TestData(image, None)
-    # TEST - Do coords work better if cropped?
+            return json.load(f)
+    except FileNotFoundError:
+        return None
+
+
+def get_elements(image_file: str):
+    image_folder = os.path.dirname(image_file)
+    base_name = get_basename(image_file)
+    json_paths = [
+        os.path.join(image_folder, f)
+        for f in os.listdir(image_folder)
+        if f.endswith(".json") and f.startswith(base_name)
+    ]
+    return {get_element_type(f): load_json(f) for f in json_paths}
+
+
+def load_image(image_file: str):
+    with Image.open(image_file) as image:
+        # NOTE: Position detection works better if image is cropped
+        # However it's not always true that the element being searched
+        # is above the fold, so we may need to create a tiling search approach
+        image.load()
+    return image
 
 
 def get_basename(image_file: str):
     return os.path.basename(image_file).split(".")[0]
 
 
-def get_test_data(page_type: str, json_type=None) -> dict[str, TestData]:
+def get_element_type(json_file: str):
+    parts = get_basename(json_file).split("-")
+    return "-".join(parts[1:])
+
+
+def get_test_data(test_type: str, page_type: str) -> dict[str, TestData]:
     # get the private testing folder from the environment
     test_folder = os.environ.get("PRIVATE_TESTING_PAGES", None)
     if test_folder is None:
         return []
 
     # list all files in the folder
-    samples_folder = os.path.join(test_folder, "unit-tests", page_type)
+    samples_folder = os.path.join(test_folder, "unit-tests", test_type, page_type)
     image_files = [
         os.path.join(samples_folder, f)
         for f in os.listdir(samples_folder)
         if f.endswith(".png")
     ]
 
-    # return a dictionary where the key is the basename and the value is image & json dataa
-    return {get_basename(f): get_image_and_json(f, json_type) for f in image_files}
+    # elements = {f: get_elements(f) for f in image_files}
+    # only_valid = {k: v for k, v in elements.items() if v is not None}
+    return [TestData(get_basename(f), load_image(f), get_elements(f)) for f in image_files]
+
+
+def get_single_test_element(test_type: str, page_type: str, data_type: str):
+    all_data = get_test_data(test_type, page_type)
+    return [SingleTestDatum(v.key, v.image, v.elements[data_type]) for v in all_data if data_type in v.elements]

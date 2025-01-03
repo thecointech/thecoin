@@ -1,0 +1,108 @@
+
+from TestBase import TestBase, runQuery
+from testdata import get_test_data, get_single_test_element
+
+from query_login_elements import *
+from query_page_intent import intent_prompt
+
+detect_error_schema = {
+    "type": "object",
+    "properties": {
+        "error_message_detected": {
+            "type": "boolean",
+        },
+    },
+}
+error_message_schema = {
+    "type": "object",
+    "properties": {
+        "error_message": {
+            "type": "string",
+            "description": "The error message"
+        },
+    },
+}
+
+class TestLoginProcess(TestBase):
+
+    # All initial pages must pass intent
+    def test_intent(self):
+        test_data = get_test_data("login", "initial")
+        for key, image, _ in test_data:
+            intent = runQuery(intent_prompt, image)
+            self.assertEqual(intent["type"], "login", "Login intent failed for " + key)
+
+    def test_detect_username_input(self):
+        test_data = get_single_test_element("login", "initial", "username")
+        for key, image, expected in test_data:
+            element = runQuery(query_username_element, image)
+            self.assertResponse(element, image, expected, key)
+    
+    # All pages must be able to detect if password is present
+    def test_detect_password_exists(self):
+        # does it have a password input?
+        # test_data = (
+        #     get_test_data("login", "initial") + 
+        #     get_test_data("login", "password") + 
+        #     get_test_data("login", "failed")
+        # )
+        test_data = get_test_data("login", "initial")
+        for key, image, expected in test_data:
+            element = runQuery(query_pwd_exists, image)
+            exists = "password" in expected
+            self.assertEqual(element["password_input_detected"], exists, "Password exists failed for " + key)
+
+            if (exists):
+                element = runQuery(query_password_element, image)
+                self.assertResponse(element, image, expected["password"], key)
+
+    def test_continue(self):
+        test_data = get_single_test_element("login", "initial", "continue")
+        for key, image, expected in test_data:
+            element = runQuery(query_continue_button, image)
+            self.assertResponse(element, image, expected, key)
+
+    # What is the password input?
+    # def test_detect_password_input(self):
+    #     test_data = (
+    #         get_single_test_element("login", "initial", "password") + 
+    #         get_single_test_element("login", "password", "password") + 
+    #         get_single_test_element("login", "failed", "password")
+    #     )
+    #     for key, image, expected in test_data:
+    #         element = runQuery(query_password_element, image)
+    #         self.assertResponse(element, image, expected, key)
+
+    # # All passed
+    def test_detect_login_input(self):
+        test_data = (
+            get_single_test_element("login", "initial", "login") + 
+            get_single_test_element("login", "password", "login") + 
+            get_single_test_element("login", "failed", "login")
+        )
+        for key, image, expected in test_data:
+            element = runQuery(query_login_button, image)
+            self.assertResponse(element, image, expected, key)
+
+    # While this test is passing, it's probably not reliable enough yet to have directly in our harvesting setup.
+    # It detects correctly, but also has too many false positives
+    # False positives
+    # Random has "please donate" message in Wikipedia which is formatted in Red, so is picked up
+    # CIBC has postal service message which is picked up
+    # Tangerine1 has a link to change username which is picked up as error
+    # RBC has red outline on it's dialogs (from clicking during scraping thingy) which is probably the issue.  (We could fix this with better recording in Harvester)
+    # Leaving it in here, but it will probably get adjusted/fixed later when we have to deal with errors properly
+    def test_errors(self):
+        test_data = get_single_test_element("login", "failed", "failed")
+        for key, image, expected in test_data:
+
+            query_error_message = f"Is there an error message on this web page? {get_instruct_json_respose(detect_error_schema)}"
+            detect = runQuery(query_error_message, image)
+            self.assertEqual(detect["error_message_detected"], True, "Error message detection failed for " + key)
+            query_error_text = f"What is the error message on this web page? {get_instruct_json_respose(error_message_schema)}"
+            error_message = runQuery(query_error_text, image)
+            self.assertEqual(error_message["error_message"], expected["text"], "Error message failed for " + key)
+
+
+if __name__ == "__main__":
+    unittest.main()

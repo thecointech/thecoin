@@ -33,7 +33,7 @@ query_username_element = f"Analyze the provided webpage. Describe the input for 
 query_password_element = f"Describe the password text input in this webpage. {get_instruct_json_respose(element_schema)}"
 query_pwd_exists = f"Is there a password input? {get_instruct_json_respose(pwd_input_schema)}"
 query_continue_button = f"Analyze the provided webpage. Describe the element to proceed to the next step. {get_instruct_json_respose(element_schema)}"
-query_login_button = f"Describe the login button on this webpage. It should be near the username and password inputs.  {get_instruct_json_respose(element_schema)}"
+query_login_button = f"Describe the button to complete login on this webpage. It should be near the username and password inputs.  {get_instruct_json_respose(element_schema)}"
 query_error_message = f"Analyze the provided webpage. If an error message that is preventing login is present, describe it. {get_instruct_json_respose(error_message_schema)}"
 
 
