@@ -73,5 +73,16 @@ class TestOverview(TestBase):
             self.assertResponse(response, image, expected, key)
 
     @repeat_on_fail
-    def test_find_link_to_account(self):
-        pass
+    def test_find_navigate_to_account(self):
+        test_datum = get_single_test_element("overview", "", "navigate")
+           
+        # check all landing pages
+        for key, image, expected in test_datum:
+            account_number = get_extra(expected, "accountNumber")
+            json_part = get_instruct_json_respose(element_schema)
+            find_navigation_query = f"Analyze the provided webpage. For account \"{account_number}\", describe the link to navigate to it's details page. {json_part}"
+         
+            # lets assume we can find the account element on this page
+            image = self.cropToElements(image, [expected])
+            response = runQuery(find_navigation_query, image)
+            self.assertResponse(response, image, expected, key)
