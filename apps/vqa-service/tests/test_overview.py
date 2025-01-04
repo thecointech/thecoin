@@ -1,5 +1,5 @@
 from TestBase import TestBase, repeat_on_fail
-from testdata import get_test_data, get_single_test_element, get_nested
+from testdata import get_test_data, get_single_test_element, get_extra
 from helpers import get_instruct_json_respose, element_schema, get_model_example, request_json, cast_value
 from query import runQuery
 from query_page_intent import intent_prompt
@@ -44,7 +44,7 @@ class TestOverview(TestBase):
                 # improves if/when we get to use a higher-precision model
                 self.assertGreaterEqual(score, 30, "Did not find account number in list accounts " + key)   
                 self.assertIn(account["balance"], vacc["siblingText"], "Did not find balance in list accounts " + key)
-                accountType = get_nested(vacc, "extra", "accountType")
+                accountType = get_extra(vacc, "accountType")
                 if (accountType):
                     self.assertEqual(account["account_type"], accountType, "Account type not matched in list accounts " + key)
                 else:
@@ -56,6 +56,21 @@ class TestOverview(TestBase):
                 # self.assertPosition(account, image, vacc, key)
                 validations.remove(vacc)
             print("All accounts matched in list accounts " + key)
+
+    @repeat_on_fail
+    def test_find_account_balance(self):
+        test_datum = get_single_test_element("overview", "", "balance")
+           
+        # check all landing pages
+        for key, image, expected in test_datum:
+            account_number = get_extra(expected, "accountNumber")
+            json_part = get_instruct_json_respose(element_schema)
+            find_account_balance_query = f"Analyze the provided webpage. Describe the element that contains the balance for this account \"{account_number}\". {json_part}"
+         
+            # lets assume we can find the account element on this page
+            image = self.cropToElements(image, [expected])
+            response = runQuery(find_account_balance_query, image)
+            self.assertResponse(response, image, expected, key)
 
     @repeat_on_fail
     def test_find_link_to_account(self):

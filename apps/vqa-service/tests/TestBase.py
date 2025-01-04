@@ -3,6 +3,7 @@ import os
 import sys
 import re
 from PIL import Image
+import time
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, 'src'))
@@ -65,11 +66,29 @@ class TestBase(unittest.TestCase):
 
     # Processing the larger screenshot can result in errors reading small text.
     # This function will focus in on the area containing the elements (vertically only)
-    def cropToElements(self, image, elements, buffer=200):
-        all_posY = [cast_value(acc, "position_y", image.height) for acc in elements]
+    def getCropFromElements(self, image, elements, buffer=200):
+        all_posY = [el["coords"]["centerY"] for el in elements]
         max_posY = max(all_posY)
         min_posY = min(all_posY)
-        return image.crop((0, min_posY - buffer, image.width, max_posY + buffer))
+        return (0, min_posY - buffer, image.width, max_posY + buffer)
+
+    def adjustElementsToCrop(self, elements, crop):
+        (x, y, w, h) = crop
+        for el in elements:
+            el["coords"]["centerY"] = el["coords"]["centerY"] - y
+            el["coords"]["top"] = el["coords"]["top"] - y
+            el["coords"]["left"] = el["coords"]["left"] - x
+
+    # Processing the larger screenshot can result in errors reading small text.
+    # This function will focus in on the area containing the elements (vertically only)
+    def cropToElements(self, image, elements, buffer=200):
+        crop = self.getCropFromElements(image, elements, buffer)
+        self.adjustElementsToCrop(elements, crop)
+        return image.crop(crop)
+
+    # NOTE: Not tested (not used anymore)
+    # def cropToResponse(self, image, response, buffer=200):
+    #     pass
 
 
 def normalize(str: str):

@@ -91,6 +91,9 @@ def get_single_test_element(test_type: str, page_type: str, data_type: str):
 
 
 # Doesn't belong here, perhaps need utils file
+def get_extra(obj, *path, default=None):
+    return get_nested(obj, *("extra", *path), default=default)
+
 def get_nested(obj, *path, default=None):
     if len(path) == 0:
         return obj or default
