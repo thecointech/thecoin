@@ -37,9 +37,11 @@ def get_instruct_json_respose(schema):
 def cast_value(response, key, scale):
     if key in response:
         try:
-            response[key] = round(
-                scale * float(response[key]) / 100)
+            response[key] = round(scale * float(response[key]) / 100)
         except ValueError:
-            print("Invalid value for " +
-                    key + ": " + response[key])
+            print(f"Invalid value for {key}: {response[key]}")
             response[key] = None
+
+        return response[key]
+
+    return None
