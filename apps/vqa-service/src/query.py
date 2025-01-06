@@ -43,27 +43,7 @@ def runQueryRaw(prompt, image, max_length=200):
         generated_text = processor.tokenizer.decode(
             generated_tokens, skip_special_tokens=True
         )
-
-        # Parse the generated text as JSON
-        try:
-            return json.loads(generated_text)
-        except json.JSONDecodeError as e:
-            print("Raw Raised JSONDecodeError: ", e)
-            # we sometimes get the following invalid json output "option":="value"
-            cleaned = generated_text.replace('":="', '": "')
-            try:
-                return json.loads(cleaned)
-            except json.JSONDecodeError as e:
-                print("Cleaned Raised JSONDecodeError: ", e)
-                # If the model didn't return valid JSON, try to extract the type
-                import re
-
-                # Try finding everything in between brackets
-                match = re.search(r"(\{[\w\W]*\})", generated_text)
-                if match:
-                    return json.loads(match.group(1))
-                print("Could not parse model output as JSON: ", generated_text)
-                raise ValueError("Could not parse model output as JSON")
+        return generated_text
 
     except Exception as e:
         print(f"Error in runQuery: {str(e)}")
@@ -74,8 +54,32 @@ def runQueryRaw(prompt, image, max_length=200):
         print(f"Query took {end - start} seconds")
 
 
-def runQuery(query, image, max_length=200): 
+def runQueryToJson(query, image, max_length=200):
     response = runQueryRaw(query, image, max_length)
+    # Parse the generated text as JSON
+    try:
+        return json.loads(response)
+    except json.JSONDecodeError as e:
+        # print("Raw Raised JSONDecodeError: ", e)
+        # we sometimes get the following invalid json output "option":="value"
+        cleaned = response.replace('":="', '": "')
+        try:
+            return json.loads(cleaned)
+        except json.JSONDecodeError as e:
+            print("Cleaned Raised JSONDecodeError: ", e)
+            # If the model didn't return valid JSON, try to extract the type
+            import re
+
+            # Try finding everything in between brackets
+            match = re.search(r"(\{[\w\W]*\})", cleaned)
+            if match:
+                return json.loads(match.group(1))
+            print("Could not parse model output as JSON: ", response)
+            raise ValueError("Could not parse model output as JSON")
+
+
+def runQuery(query, image, max_length=200): 
+    response = runQueryToJson(query, image, max_length)
     cast_value(response, "position_x", image.width)
     cast_value(response, "position_y", image.height)
     return response
