@@ -11,7 +11,7 @@ class PageType(str, Enum):
     LANDING = 'Landing'
     LOGIN = 'Login'
     TWO_FACTOR_AUTH = 'TwoFactorAuth'
-    ACCOUNT_SELECT = 'AccountSelect'
+    ACCOUNTS_SUMMARY = 'AccountsSummary'
     ACCOUNT_DETAILS = 'AccountDetails'
     PAY_BILL = 'PayBill'
     SEND_TRANSFER = 'SendTransfer'

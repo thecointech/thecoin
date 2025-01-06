@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+MAX_HEIGHT = 1440
+
 class JsonDatum(TypedDict):
     name: str
     data: object
@@ -48,6 +50,10 @@ def load_image(image_file: str):
         # However it's not always true that the element being searched
         # is above the fold, so we may need to create a tiling search approach
         image.load()
+
+    if (image.height > MAX_HEIGHT):
+        image.crop((0, 0, image.width, MAX_HEIGHT))
+
     return image
 
 
@@ -82,3 +88,17 @@ def get_test_data(test_type: str, page_type: str) -> dict[str, TestData]:
 def get_single_test_element(test_type: str, page_type: str, data_type: str):
     all_data = get_test_data(test_type, page_type)
     return [SingleTestDatum(v.key, v.image, v.elements[data_type]) for v in all_data if data_type in v.elements]
+
+
+# Doesn't belong here, perhaps need utils file
+def get_extra(obj, *path, default=None):
+    return get_nested(obj, *("extra", *path), default=default)
+
+def get_nested(obj, *path, default=None):
+    if len(path) == 0:
+        return obj or default
+
+    if path[0] in obj:
+        return get_nested(obj[path[0]], *path[1:], default=default)
+
+    return default

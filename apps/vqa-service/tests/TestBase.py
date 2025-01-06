@@ -3,11 +3,13 @@ import os
 import sys
 import re
 from PIL import Image
+import time
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, 'src'))
 
 from query import runQuery  # noqa: E402
+from helpers import cast_value
 
 class TestBase(unittest.TestCase):
 
@@ -18,14 +20,7 @@ class TestBase(unittest.TestCase):
         else:
             super().assertEqual(str1, str2, msg)
 
-
-    def assertResponse(self, response: dict, image: Image, expected: dict, key: str = None):
-        textOverlap = (
-            normalize(expected["text"]) in normalize(response["content"]) or
-            normalize(response["content"]) in normalize(expected["text"])
-        )
-        self.assertTrue(textOverlap, f"Text: {response['content']} does not match expected: {expected['text']} in {key}")
-
+    def assertPosition(self, response: dict, image: Image, expected: dict, key: str = None):
         o_width = expected["coords"]["width"]
         o_height = expected["coords"]["height"]
         o_left = expected["coords"]["left"]
@@ -49,19 +44,14 @@ class TestBase(unittest.TestCase):
             msg=f"Y: {e_posY} does not match expected: {o_centerY} with height: {o_height} in {key}"
         )
 
-        # The bounding box is not guaranteed to be perfect, so
-        # be very generous with the bounds.  It should score points if there is
-        # any potential overlap of the two bounding boxes
-        xValid = (
-            response["position_x"] > (o_left - o_width * 0.2) and
-            response["position_x"] < (o_left + o_width * 1.2)
+    def assertResponse(self, response: dict, image: Image, expected: dict, key: str = None):
+        textOverlap = (
+            normalize(expected["text"]) in normalize(response["content"]) or
+            normalize(response["content"]) in normalize(expected["text"])
         )
-        yValid = (
-            response["position_y"] > (o_top - o_height * 0.2) and
-            response["position_y"] < (o_top + o_height * 1.2)
-        )
-        self.assertTrue(xValid, f"X: {response['position_x']} does not match expected: {o_left} with width: {o_width} in {key}")
-        self.assertTrue(yValid, f"Y: {response['position_y']} does not match expected: {o_top} with height: {o_height} in {key}")
+        self.assertTrue(textOverlap, f"Text: {response['content']} does not match expected: {expected['text']} in {key}")
+
+        self.assertPosition(response, image, expected, key)
 
         # siblingText is quite restrictive, so it may not have any values
         # if it does, then there should be a match (except in Scotiabank)
@@ -74,6 +64,32 @@ class TestBase(unittest.TestCase):
 
         print("Element Found Correctly")
 
+    # Processing the larger screenshot can result in errors reading small text.
+    # This function will focus in on the area containing the elements (vertically only)
+    def getCropFromElements(self, image, elements, buffer=200):
+        all_posY = [el["coords"]["centerY"] for el in elements]
+        max_posY = max(all_posY)
+        min_posY = min(all_posY)
+        return (0, min_posY - buffer, image.width, max_posY + buffer)
+
+    def adjustElementsToCrop(self, elements, crop):
+        (x, y, w, h) = crop
+        for el in elements:
+            el["coords"]["centerY"] = el["coords"]["centerY"] - y
+            el["coords"]["top"] = el["coords"]["top"] - y
+            el["coords"]["left"] = el["coords"]["left"] - x
+
+    # Processing the larger screenshot can result in errors reading small text.
+    # This function will focus in on the area containing the elements (vertically only)
+    def cropToElements(self, image, elements, buffer=200):
+        crop = self.getCropFromElements(image, elements, buffer)
+        self.adjustElementsToCrop(elements, crop)
+        return image.crop(crop)
+
+    # NOTE: Not tested (not used anymore)
+    # def cropToResponse(self, image, response, buffer=200):
+    #     pass
+
 
 def normalize(str: str):
     str = str.lower()
@@ -81,13 +97,16 @@ def normalize(str: str):
     return str
 
 
-def cast_value(response, key, scale):
-    if key in response:
-        try:
-            response[key] = round(scale * float(response[key]) / 100)
-        except ValueError:
-            print("Invalid value for " + key + ": " + response[key])
-            response[key] = None
-
-        return response[key]
-
+# default timeout of 1hr
+def repeat_on_fail(func, timeout = 3600):
+    def wrapper(*args, **kwargs):
+        # Keep trying until time is up
+        start_time = time.time()
+        while True:
+            try:
+                return func(*args, **kwargs)
+            except Exception as e:
+                print(e)
+            if time.time() - start_time > timeout:
+                raise Exception("Timeout")
+    return wrapper

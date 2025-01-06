@@ -2,6 +2,14 @@
 from transformers import AutoModelForCausalLM, AutoProcessor
 import torch
 
+#
+# Some thoughts on Molmo.
+#
+# Position can be quite far out with large pages (eg big, or with very skewed aspect ratios)
+#
+# Does very poorly with negative prompts (eg, "Ignore text with XYZ").  
+# Positive prompts tend to do better: "Find the text without XYZ"
+#
 _processor = None
 def get_processor():
     global _processor
