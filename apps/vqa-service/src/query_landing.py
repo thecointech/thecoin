@@ -2,7 +2,7 @@ from PIL import Image
 from flask_restx import Resource, fields
 from query import runQuery
 from helpers import get_instruct_json_respose
-from data_landing import query_cookie_exists, cookie_exists_schema, element_schema
+from landing_data import query_cookie_exists, cookie_exists_schema, element_schema
 import io
 import werkzeug
 

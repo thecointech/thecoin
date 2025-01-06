@@ -2,15 +2,8 @@
 from TestBase import TestBase
 from testdata import get_test_data, get_single_test_element
 from query import runQuery  # noqa: E402
-from query_page_intent import intent_prompt
-from data_landing import *
-
-# request_json = "Return only valid JSON data in the following format:"
-# element_desc = '{"content": "text", "font_color": "#color", "background_color": "#color", "neighbour_text": "text", "position_x": "number", "position_y": "number"}'
-# query_cookie_exists = "Analyze the provided screenshot of a webpage. Determine if a cookie banner is present. The cookie banner must contain a button that includes the word \"Accept\". Return a JSON object with the following structure: {{ \"cookie_banner_detected\": \"boolean\" }}"
-# query_cookie_accept = f"Analyze the provided webpage. Describe the button to accept cookies and continue. {request_json} {element_desc}"
-# query_cookie_exists = "Is there a cookie banner? Return a JSON object with the following structure: {{ \"cookie_banner_detected\": \"boolean\" }}"
-# query_navigate_to_login = 'In the provided webpage, describe the element that will navigate to the login page.  Return only valid JSON data in the following format: {"type": "option", "content": "text", "font_color": "#color", "background_color": "#color", "neighbour_text": "text", "position_x": "number", "position_y": "number"}'
+from landing_data import *
+from intent_data import query_page_intent
 
 # Our process goes
 # 1. Is Cookie banner present?
@@ -22,7 +15,6 @@ from data_landing import *
 
 class TestLanding(TestBase):
 
-    # Tested: working
     def test_landing_page_intent(self):
         # get landing pages
         # All pages are required to have an intent, so don't filter them out here
@@ -31,25 +23,23 @@ class TestLanding(TestBase):
         # check all landing pages
         for key, image, expected in test_datum:
             print("Testing intent for: " + key)
-            intent = runQuery(intent_prompt, image)
+            intent = runQuery(image, query_page_intent)
             self.assertEqual(intent["type"], expected["intent"]["intent"])
 
-    # Tested: working
     def test_cookie_banner_exists(self):
         test_datum = get_test_data("landings", "initial")
         # check all landing pages
         for key, image, expected in test_datum:
             print("Is there a cookie cookie banner: " + key)
-            banner = runQuery(query_cookie_exists, image)
+            banner = runQuery(image, query_cookie_exists)
             self.assertEqual(banner["cookie_banner_detected"], "cookie-accept" in expected)
 
-    # Tested: working
     def test_cookie_accept(self):
         test_datum = get_single_test_element("landings", "initial", "cookie-accept")
         # check all landing pages
         for key, image, expected in test_datum:
             print("Find cookie accept button in: " + key)
-            banner = runQuery(query_cookie_accept, image)
+            banner = runQuery(image, query_cookie_accept)
             self.assertResponse(banner, image, expected, key)
 
     def test_molmo_finds_login_button(self):
@@ -57,7 +47,7 @@ class TestLanding(TestBase):
         # check all landing pages
         for key, image, original in test_datum:
             print("Testing Login Navigation for: " + key)
-            element = runQuery(query_navigate_to_login, image)
+            element = runQuery(image, query_navigate_to_login)
             self.assertResponse(element, image, original, key)
 
 

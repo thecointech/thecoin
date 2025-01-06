@@ -2,26 +2,10 @@
 from TestBase import TestBase, runQuery
 from testdata import get_test_data, get_single_test_element
 
-from query_login_elements import *
-from query_page_intent import intent_prompt
+from intent_data import query_page_intent
+from error_data import query_error_message, query_error_text
+from login_data import *
 
-detect_error_schema = {
-    "type": "object",
-    "properties": {
-        "error_message_detected": {
-            "type": "boolean",
-        },
-    },
-}
-error_message_schema = {
-    "type": "object",
-    "properties": {
-        "error_message": {
-            "type": "string",
-            "description": "The error message"
-        },
-    },
-}
 
 class TestLoginProcess(TestBase):
 
@@ -29,13 +13,13 @@ class TestLoginProcess(TestBase):
     def test_intent(self):
         test_data = get_test_data("login", "initial")
         for key, image, _ in test_data:
-            intent = runQuery(intent_prompt, image)
+            intent = runQuery(image, query_page_intent)
             self.assertEqual(intent["type"], "login", "Login intent failed for " + key)
 
     def test_detect_username_input(self):
         test_data = get_single_test_element("login", "initial", "username")
         for key, image, expected in test_data:
-            element = runQuery(query_username_element, image)
+            element = runQuery(image, query_username_element)
             self.assertResponse(element, image, expected, key)
     
     # All pages must be able to detect if password is present
@@ -48,18 +32,18 @@ class TestLoginProcess(TestBase):
         # )
         test_data = get_test_data("login", "initial")
         for key, image, expected in test_data:
-            element = runQuery(query_pwd_exists, image)
+            element = runQuery(image, query_pwd_exists)
             exists = "password" in expected
             self.assertEqual(element["password_input_detected"], exists, "Password exists failed for " + key)
 
             if (exists):
-                element = runQuery(query_password_element, image)
+                element = runQuery(image, query_password_element)
                 self.assertResponse(element, image, expected["password"], key)
 
     def test_continue(self):
         test_data = get_single_test_element("login", "initial", "continue")
         for key, image, expected in test_data:
-            element = runQuery(query_continue_button, image)
+            element = runQuery(image, query_continue_button)
             self.assertResponse(element, image, expected, key)
 
     # What is the password input?
@@ -81,7 +65,7 @@ class TestLoginProcess(TestBase):
             get_single_test_element("login", "failed", "login")
         )
         for key, image, expected in test_data:
-            element = runQuery(query_login_button, image)
+            element = runQuery(image, query_login_button)
             self.assertResponse(element, image, expected, key)
 
     # While this test is passing, it's probably not reliable enough yet to have directly in our harvesting setup.
@@ -96,11 +80,9 @@ class TestLoginProcess(TestBase):
         test_data = get_single_test_element("login", "failed", "failed")
         for key, image, expected in test_data:
 
-            query_error_message = f"Is there an error message on this web page? {get_instruct_json_respose(detect_error_schema)}"
-            detect = runQuery(query_error_message, image)
+            detect = runQuery(image, query_error_message)
             self.assertEqual(detect["error_message_detected"], True, "Error message detection failed for " + key)
-            query_error_text = f"What is the error message on this web page? {get_instruct_json_respose(error_message_schema)}"
-            error_message = runQuery(query_error_text, image)
+            error_message = runQuery(image, query_error_text)
             self.assertEqual(error_message["error_message"], expected["text"], "Error message failed for " + key)
 
 

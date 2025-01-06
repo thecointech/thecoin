@@ -1,11 +1,6 @@
 from enum import Enum
 from pydantic import BaseModel, Field
 
-class ElementType(str, Enum):
-    CLOSE_MODAL = 'CloseModal'
-    BUTTON = 'Button'
-    INPUT = 'Input'
-    TEXT = 'Text'
 
 element_schema = {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -29,15 +24,15 @@ class ElementResponse(BaseModel):
     position_x: float = Field(..., description="number")
     position_y: float = Field(..., description="number")
 
-def get_exists_schema(prop_name="exists", description: str = None):
-    exists_schema = {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://vqa.thecoin.io/exists.schema.json",
-        "type": "object",
-        "properties": {
-            prop_name: {"type": "boolean" },
-        },
-    }
-    if (description):
-        exists_schema["properties"][prop_name]["description"] = description
-    return exists_schema
+# def get_exists_schema(prop_name="exists", description: str = None):
+#     exists_schema = {
+#         "$schema": "https://json-schema.org/draft/2020-12/schema",
+#         "$id": "https://vqa.thecoin.io/exists.schema.json",
+#         "type": "object",
+#         "properties": {
+#             prop_name: {"type": "boolean" },
+#         },
+#     }
+#     if (description):
+#         exists_schema["properties"][prop_name]["description"] = description
+#     return exists_schema

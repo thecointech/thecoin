@@ -31,3 +31,4 @@ def cast_value(response, key, scale):
         return response[key]
 
     return None
+

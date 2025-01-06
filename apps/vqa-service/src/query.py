@@ -1,9 +1,10 @@
+from PIL.Image import Image
 import torch
 from transformers import GenerationConfig
 import json
 from timeit import default_timer as timer
 from singleton import get_model, get_processor
-from helpers import cast_value
+from helpers import cast_value, get_instruct_json_respose
 
 def runQueryRaw(prompt, image, max_length=200):
     start = timer()
@@ -78,8 +79,9 @@ def runQueryToJson(query, image, max_length=200):
             raise ValueError("Could not parse model output as JSON")
 
 
-def runQuery(query, image, max_length=200): 
-    response = runQueryToJson(query, image, max_length)
+def runQuery(image: Image, query_data: tuple[str, type], max_length=200):
+    prompt = f"{query_data[0]} {get_instruct_json_respose(query_data[1].schema())}"
+    response = runQueryToJson(prompt, image, max_length)
     cast_value(response, "position_x", image.width)
     cast_value(response, "position_y", image.height)
     return response
@@ -90,5 +92,5 @@ if __name__ == "__main__":
     import PIL.Image
 
     image = PIL.Image.open(sys.argv[1])
-    response = runQuery(sys.argv[2], image)
+    response = runQueryRaw(sys.argv[2], image)
     print(json.dumps(response))
