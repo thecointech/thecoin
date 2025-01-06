@@ -8,3 +8,4 @@ torchvision==0.20.1
 transformers==4.47.0
 einops==0.8.0
 accelerate==1.2.0
+"fastapi[standard]"==0.115.6
