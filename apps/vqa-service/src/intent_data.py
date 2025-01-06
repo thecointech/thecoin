@@ -1,6 +1,7 @@
 from enum import Enum
 from pydantic import BaseModel, Field
 
+
 class PageType(str, Enum):
     LANDING = 'Landing'
     LOGIN = 'Login'
@@ -12,8 +13,10 @@ class PageType(str, Enum):
     MODAL_DIALOG = 'ModalDialog'
     ERROR_MESSAGE = 'ErrorMessage'
 
+
 class IntentResponse(BaseModel):
     type: PageType = Field(..., description="option")
+
 
 typesStr = ", ".join([e.value for e in PageType])
 intent_prompt = f"From the following options, select the one that best describes the given webpage: {typesStr}."

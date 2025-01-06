@@ -1,10 +1,10 @@
 from data_elements import ElementResponse
-from helpers import get_instruct_json_respose
 from pydantic import BaseModel
 
 
 class ExistsResponse(BaseModel):
     cookie_banner_detected: bool
+
 
 query_cookie_exists = (
     "Analyze the provided screenshot of a webpage. Determine if a cookie banner is present. The cookie banner must contain a button that includes the word \"Accept\".",

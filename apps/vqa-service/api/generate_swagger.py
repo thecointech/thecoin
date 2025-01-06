@@ -7,7 +7,7 @@ from fastapi.openapi.utils import get_openapi
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, 'src'))
 
-from main import app
+from main import app  # noqa: E402
 
 if __name__ == '__main__':
 
