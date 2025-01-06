@@ -36,7 +36,10 @@ export async function startPuppeteer(headless?: boolean) {
 
   await page.setViewport({
     width: 1280,
-    height: 720,
+    // 720 x 2, because sometimes important info gets pushed beneath the fold
+    // and some sites don't won't take full screenshots properly
+    // (eg with warnings/messages at the top of the page)
+    height: 1440,
     deviceScaleFactor: 1,
   });
   _browser = browser;

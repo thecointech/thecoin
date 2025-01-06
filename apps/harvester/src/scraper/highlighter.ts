@@ -1,4 +1,3 @@
-
 // Start highlighting the element under the mouse
 export function startElementHighlight() {
 
@@ -111,4 +110,15 @@ export function startElementHighlight() {
     }
   }
   window.addEventListener("mousemove", listener);
+  // When capturing values, do not propagate clicks
+
+  const stopPropagation = (ev: MouseEvent) => {
+    if (__clickAction == "value") {
+      ev.stopPropagation();
+      ev.stopImmediatePropagation();
+      ev.preventDefault();
+    }
+    window.removeEventListener("click", stopPropagation, true);
+  }
+  window.addEventListener("click", stopPropagation, true);
 }
