@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from src.data_elements import ElementResponse
+from data_elements import ElementResponse
 
 
 class PasswordDetectedResponse(BaseModel):
