@@ -1,19 +1,5 @@
 import json
 
-element_schema = {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://vqa.thecoin.io/element.schema.json",
-	"type": "object",
-    "properties": {
-        "content": {"type": "string", "description": "Content of the element"},
-        "neighbour_text": {"type": "string", "description": "Text immediately beside or above the element"},
-        "font_color": {"type": "string", "description": "Hexadecimal color of the font", "example": "#FFFFFF"},
-        "background_color": {"type": "string", "description": "Hexadecimal color of the background", "example": "#FFFFFF"},
-        "position_x": {"type": "number" },
-        "position_y": {"type": "number" },
-    },
-}
-
 request_json = "Return only JSON in the following format: "
 
 def get_model_example(schema):

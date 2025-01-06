@@ -2,9 +2,9 @@
 import io
 from flask_restx import Resource
 import werkzeug
-from helpers import cast_value, get_instruct_json_respose, element_schema
+from helpers import cast_value, get_instruct_json_respose
+from data_elements import element_schema, ElementType
 from query import runQuery
-from query_element import ElementType
 from PIL import Image
 
 pwd_input_schema = {

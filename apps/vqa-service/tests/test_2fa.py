@@ -1,7 +1,7 @@
 from TestBase import TestBase, runQuery
-from helpers import get_instruct_json_respose, element_schema, get_model_example, request_json
+from helpers import get_instruct_json_respose, get_model_example, request_json
 from testdata import get_test_data, get_single_test_element
-from query_page_intent import intent_prompt
+from data_elements import element_schema
 
 detect_2fa_schema = {
     "type": "object",

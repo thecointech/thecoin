@@ -3,9 +3,9 @@ from transformers import GenerationConfig
 import json
 from timeit import default_timer as timer
 from singleton import get_model, get_processor
+from helpers import cast_value
 
-
-def runQuery(prompt, image, max_length=200):
+def runQueryRaw(prompt, image, max_length=200):
     start = timer()
 
     processor = get_processor()
@@ -27,7 +27,7 @@ def runQuery(prompt, image, max_length=200):
         with torch.autocast(device_type="cuda", enabled=True, dtype=torch.bfloat16):
             output = model.generate_from_batch(
                 inputs,
-                GenerationConfig(max_new_tokens=200, stop_strings="<|endoftext|>"),
+                GenerationConfig(max_new_tokens=max_length, stop_strings="<|endoftext|>"),
                 tokenizer=processor.tokenizer
             )
 
@@ -72,6 +72,13 @@ def runQuery(prompt, image, max_length=200):
     finally:
         end = timer()
         print(f"Query took {end - start} seconds")
+
+
+def runQuery(query, image, max_length=200): 
+    response = runQueryRaw(query, image, max_length)
+    cast_value(response, "position_x", image.width)
+    cast_value(response, "position_y", image.height)
+    return response
 
 
 if __name__ == "__main__":

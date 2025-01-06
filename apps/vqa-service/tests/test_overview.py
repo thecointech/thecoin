@@ -1,6 +1,7 @@
 from TestBase import TestBase, repeat_on_fail
 from testdata import get_test_data, get_single_test_element, get_extra
-from helpers import get_instruct_json_respose, element_schema, get_model_example, request_json, cast_value
+from helpers import get_instruct_json_respose, request_json
+from data_elements import element_schema
 from query import runQuery
 from query_page_intent import intent_prompt
 from thefuzz import fuzz
@@ -57,7 +58,6 @@ class TestOverview(TestBase):
                 validations.remove(vacc)
             print("All accounts matched in list accounts " + key)
 
-    @repeat_on_fail
     def test_find_account_balance(self):
         test_datum = get_single_test_element("overview", "", "balance")
            
@@ -72,7 +72,6 @@ class TestOverview(TestBase):
             response = runQuery(find_account_balance_query, image)
             self.assertResponse(response, image, expected, key)
 
-    @repeat_on_fail
     def test_find_navigate_to_account(self):
         test_datum = get_single_test_element("overview", "", "navigate")
            

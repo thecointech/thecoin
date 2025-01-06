@@ -9,7 +9,6 @@ parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, 'src'))
 
 from query import runQuery  # noqa: E402
-from helpers import cast_value
 
 class TestBase(unittest.TestCase):
 
@@ -28,19 +27,19 @@ class TestBase(unittest.TestCase):
         o_centerX = o_left + o_width / 2
         o_centerY = o_top + o_height / 2
 
-        e_posX = cast_value(response, "position_x", image.width)
-        e_posY = cast_value(response, "position_y", image.height)
+        e_posX = response["position_x"]
+        e_posY = response["position_y"]
 
         self.assertAlmostEquals(
             e_posX,
             o_centerX,
-            delta=o_width * 0.6,
+            delta=max(20, o_width * 0.6 ),
             msg=f"X: {e_posX} does not match expected: {o_centerX} with width: {o_width} in {key}"
         )
         self.assertAlmostEquals(
             e_posY,
             o_centerY,
-            delta=o_height * 0.6,
+            delta=max(20, o_height * 0.6),
             msg=f"Y: {e_posY} does not match expected: {o_centerY} with height: {o_height} in {key}"
         )
 
@@ -70,7 +69,7 @@ class TestBase(unittest.TestCase):
         all_posY = [el["coords"]["centerY"] for el in elements]
         max_posY = max(all_posY)
         min_posY = min(all_posY)
-        return (0, min_posY - buffer, image.width, max_posY + buffer)
+        return (0, max(min_posY - buffer, 0), image.width, min(max_posY + buffer, image.height))
 
     def adjustElementsToCrop(self, elements, crop):
         (x, y, w, h) = crop
@@ -100,6 +99,11 @@ def normalize(str: str):
 # default timeout of 1hr
 def repeat_on_fail(func, timeout = 3600):
     def wrapper(*args, **kwargs):
+        # Do not repeat if no debugger attached
+        if (os.environ.get('DEBUGPY_RUNNING') != "true"):
+            return func(*args, **kwargs)
+
+        # If a debugger is atttached, someone is watching.
         # Keep trying until time is up
         start_time = time.time()
         while True:

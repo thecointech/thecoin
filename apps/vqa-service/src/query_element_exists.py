@@ -2,7 +2,7 @@ from PIL import Image
 from flask_restx import Resource, fields
 from query import runQuery
 from helpers import get_instruct_json_respose
-from data_elements import ElementType, element_schema
+from data_element import ElementType, element_schema
 import io
 import werkzeug
 
@@ -24,13 +24,9 @@ def setup_query_element(ns, api):
                                 required=True,
                                 choices=[e.value for e in ElementType],
                                 help='Type of element to search for')
-    element_parser.add_argument('details',
-                                type=str,
-                                required=False,
-                                help='Additional details for the search (e.g., button text)')
 
-    @ns.route('/query-element')
-    class QueryElement(Resource):
+    @ns.route('/query-element-exists')
+    class QueryElementExists(Resource):
         @ns.expect(element_parser)
         @ns.response(200, 'Success', element_response_model)
         @ns.response(400, 'Validation Error')
@@ -52,13 +48,7 @@ def setup_query_element(ns, api):
 
                 # Construct prompt based on element type and details
                 prompt = f"Find the {element_type.lower()}"
-                if details:
-                    if element_type == ElementType.BUTTON:
-                        prompt += f" with text '{details}'"
-                    elif element_type == ElementType.INPUT:
-                        prompt += f" for {details}"
-                    elif element_type == ElementType.TEXT:
-                        prompt += f" containing '{details}'"
+
 
                 if (element_type == ElementType.CLOSE_MODAL):
                     prompt = f"In the provided webpage, describe the element that will close the modal dialog without permanent side-effects.  {get_instruct_json_respose(element_schema)}"
@@ -90,4 +80,4 @@ def setup_query_element(ns, api):
             except Exception as e:
                 api.abort(400, str(e))
 
-    return QueryElement
+    return QueryElementExists

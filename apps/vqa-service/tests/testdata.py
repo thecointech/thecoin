@@ -44,15 +44,15 @@ def get_elements(image_file: str):
     return {get_element_type(f): load_json(f) for f in json_paths}
 
 
-def load_image(image_file: str):
+def load_image(image_file: str, max_height: int = MAX_HEIGHT):
     with Image.open(image_file) as image:
         # NOTE: Position detection works better if image is cropped
         # However it's not always true that the element being searched
         # is above the fold, so we may need to create a tiling search approach
         image.load()
 
-    if (image.height > MAX_HEIGHT):
-        image.crop((0, 0, image.width, MAX_HEIGHT))
+    if (image.height > max_height):
+        image = image.crop((0, 0, image.width, max_height))
 
     return image
 
@@ -66,7 +66,7 @@ def get_element_type(json_file: str):
     return "-".join(parts[1:])
 
 
-def get_test_data(test_type: str, page_type: str) -> dict[str, TestData]:
+def get_test_data(test_type: str, page_type: str, max_height: int = MAX_HEIGHT) -> dict[str, TestData]:
     # get the private testing folder from the environment
     test_folder = os.environ.get("PRIVATE_TESTING_PAGES", None)
     if test_folder is None:
@@ -82,11 +82,11 @@ def get_test_data(test_type: str, page_type: str) -> dict[str, TestData]:
 
     # elements = {f: get_elements(f) for f in image_files}
     # only_valid = {k: v for k, v in elements.items() if v is not None}
-    return [TestData(get_basename(f), load_image(f), get_elements(f)) for f in image_files]
+    return [TestData(get_basename(f), load_image(f, max_height), get_elements(f)) for f in image_files]
 
 
-def get_single_test_element(test_type: str, page_type: str, data_type: str):
-    all_data = get_test_data(test_type, page_type)
+def get_single_test_element(test_type: str, page_type: str, data_type: str, max_height: int = MAX_HEIGHT):
+    all_data = get_test_data(test_type, page_type, max_height)
     return [SingleTestDatum(v.key, v.image, v.elements[data_type]) for v in all_data if data_type in v.elements]
 
 
