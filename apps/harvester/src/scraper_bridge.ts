@@ -1,11 +1,10 @@
 import { IpcMainInvokeEvent, ipcMain } from 'electron';
-import { Recorder } from './scraper/record';
-import { replay } from './scraper/replay';
-import { ActionTypes, ReplayProgress, ValueType } from './scraper/types';
-import { warmup } from './scraper/warmup';
+import { Recorder } from '@thecointech/scraper/record';
+import { ValueType } from '@thecointech/scraper/types';
+import { warmup } from '@thecointech/scraper/warmup';
 import { actions, ScraperBridgeApi } from './scraper_actions';
 import { toBridge } from './scraper_bridge_conversions';
-import { getHarvestConfig, getProcessConfig, getWalletAddress, hasCreditDetails, setCreditDetails, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
+import { getHarvestConfig, getProcessConfig, getWalletAddress, hasCreditDetails, setCreditDetails, setEvents, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
 import { HarvestConfig, Mnemonic } from './types';
 import { CreditDetails } from './Harvester/types';
 import { spawn } from 'child_process';
@@ -13,8 +12,10 @@ import { exportResults, getState, setOverrides } from './Harvester/db';
 import { harvest } from './Harvester';
 import { logsFolder } from './paths';
 import { platform } from 'node:os';
-import { getLocalBrowserPath, getSystemBrowserPath, installChrome } from './scraper/puppeteer/browser';
+import { getLocalBrowserPath, getSystemBrowserPath, installChrome } from '@thecointech/scraper/puppeteer';
 import { log } from '@thecointech/logging';
+import { getValues, ActionTypes } from './Harvester/scraper';
+
 
 async function guard<T>(cb: () => Promise<T>) {
   try {
@@ -37,8 +38,15 @@ const api: Omit<ScraperBridgeApi, "testAction"|"installBrowser"|"onBrowserDownlo
   }),
 
   warmup: (url) => guard(() => warmup(url)),
-  start: (actionName, url, dynamicValues) => guard(async () => {
-    const instance = await Recorder.instance(actionName, url, dynamicValues);
+  start: (actionName, url, dynamicInputs) => guard(async () => {
+    const instance = await Recorder.instance({
+      name: actionName,
+      url,
+      dynamicInputs,
+      onComplete: async (events) => {
+        await setEvents(actionName, events);
+      }
+    });
     return !!instance;
   }),
   learnValue: (valueName, valueType) => guard(async () => {
@@ -49,7 +57,7 @@ const api: Omit<ScraperBridgeApi, "testAction"|"installBrowser"|"onBrowserDownlo
     const instance = await Recorder.instance();
     return instance.setDynamicInput(name, value);
   }),
-  finishAction: (actionName) => guard(() => Recorder.release(actionName)),
+  finishAction: () => guard(() => Recorder.release()),
 
   // We can only pass POD back through the renderer, use toBridge to convert
   // testAction: (actionName, dynamicValues) => guard(async () => {
@@ -115,8 +123,8 @@ export function initScraping() {
   ipcMain.handle(actions.setDynamicInput, async (_event, name: string, value: ValueType) => {
     return api.setDynamicInput(name, value);
   })
-  ipcMain.handle(actions.finishAction, async (_event, actionName: ActionTypes) => {
-    return api.finishAction(actionName);
+  ipcMain.handle(actions.finishAction, async (_event) => {
+    return api.finishAction();
   })
   ipcMain.handle(actions.testAction, testAction);
 
@@ -171,8 +179,9 @@ export function initScraping() {
 }
 
 async function testAction(event: IpcMainInvokeEvent, actionName: ActionTypes, dynamicValues: Record<string, string>) {
-  const callback = (progress: ReplayProgress) => event.sender.send(actions.replayProgress, progress);
-  const r = await replay(actionName, callback, dynamicValues);
+  const r = await getValues(actionName, {
+    onProgress: (progress) => event.sender.send(actions.replayProgress, progress)
+  }, dynamicValues);
   return toBridge(r);
 }
 

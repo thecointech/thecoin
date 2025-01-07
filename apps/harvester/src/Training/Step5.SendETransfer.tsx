@@ -23,7 +23,7 @@ export const SendETransfer = () => {
 
   useEffect(() => {
     if (confirmation) {
-      window.scraper.finishAction(pageAction);
+      window.scraper.finishAction();
     }
   }, [confirmation])
 

@@ -2,7 +2,7 @@ import { setCurrentState } from './db';
 import { log } from '@thecointech/logging';
 import { processState } from './processState';
 import { initialize } from './initialize';
-import { closeBrowser } from '../scraper/puppeteer';
+import { closeBrowser } from '@thecointech/scraper/puppeteer';
 import { DateTime } from 'luxon';
 import { getDataAsDate } from './types';
 import { PayVisaKey } from './steps/PayVisa';

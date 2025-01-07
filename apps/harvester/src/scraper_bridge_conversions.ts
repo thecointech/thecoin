@@ -1,4 +1,4 @@
-import { ReplayResult } from './scraper/types';
+import { ReplayResult } from '@thecointech/scraper/types';
 
 export function toBridge(value: ReplayResult) {
   if (value) {

@@ -1,45 +1,22 @@
 import puppeteer, { type Browser } from "puppeteer"
 import { jest } from "@jest/globals"
 import { describe, IsManualRun } from '@thecointech/jestutils';
-import { closeModal, getElementForEvent, maybeCloseModal, registerElementAttrFns } from "./elements";
+import { getElementForEvent, registerElementAttrFns } from "./elements";
 import { getSiblingScore  } from "./elements.score";
-import { patchOnnxForJest } from '../../internal/jestPatch'
-import { readFileSync } from "node:fs";
+import { patchOnnxForJest } from '../internal/jestPatch'
+import { getTestPage, getTestInfo, testFileFolder, useTestBrowser } from '../internal/testInfo'
 
 jest.setTimeout(10 * 60 * 1000);
 
-const testFileFolder = process.env.PRIVATE_TESTING_PAGES
-const getTestPage = (type: string, name: string) => `file:///${testFileFolder}/${type}/${name}`
-const getTestInfo = (type: string, name: string) => JSON.parse(
-  readFileSync(`${testFileFolder}/${type}/${name}`, 'utf-8')
-)
+const { getPage } = useTestBrowser();
+
 
 describe ('Element tests', () => {
 
-  let browser: Browser;
-  beforeAll(async () => {
-    patchOnnxForJest();
-    browser = await puppeteer.launch({ headless: false });
-  })
-
-  afterAll(async () => {
-    await browser.close();
-  })
-
-  const getPage = async () => {
-    const page = await browser.newPage()
-    await page.setViewport({
-      width: 1920,
-      height: 1080,
-      deviceScaleFactor: 1,
-    });
-    await registerElementAttrFns(page);
-    page.setBypassCSP(true);
-    return page;
-  }
 
 
   it('Generates element data', async () => {
+
     const page = await getPage();
 
     let resolve: Function | null = null;
@@ -76,6 +53,7 @@ describe ('Element tests', () => {
     const sample = getTestPage("page", "sample1.html");
     const click = getTestInfo("page", "sample1-click.json");
 
+    const { getPage, browser } = useTestBrowser();
     const page = await getPage();
     await page.goto(sample);
 
@@ -87,31 +65,12 @@ describe ('Element tests', () => {
     await browser.close()
   })
 
-  it ('will close modals automagically', async () => {
-
-    const page = await getPage();
-    await page.goto(getTestPage("modal-tests", "test-2.mhtml"));
-
-    const r = await maybeCloseModal(page);
-    expect(r).toBeTruthy();
-  })
-
-  it ('closes another modal', async () => {
-    const page = await getPage();
-    await page.goto(getTestPage("modal-tests", "test-1.mhtml"));
-    const vqa = getTestInfo("modal-tests", "test-1-vqa.json");
-
-    const r1 = await maybeCloseModal(page);
-    const r = await closeModal(page, vqa);
-    expect(r).toBeTruthy();
-  })
 }, IsManualRun && !!testFileFolder)
 
 // To review - This isn't the best evaluation,
 // We probably need to improve the semantic
 // analysis to get more context for a given element
 it('scores siblings', async () => {
-  patchOnnxForJest()
 
   // Should be pretty close to 1
   const baseline = await getSiblingScore(

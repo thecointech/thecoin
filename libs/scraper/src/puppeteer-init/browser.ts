@@ -1,5 +1,5 @@
 import path from "path"
-import { rootFolder } from "../../paths"
+// import { rootFolder } from "../../paths"
 import { Browser, ChromeReleaseChannel, computeExecutablePath, computeSystemExecutablePath, detectBrowserPlatform, install, resolveBuildId } from "@puppeteer/browsers"
 import os from "node:os"
 import { existsSync, promises as fs } from "node:fs"
@@ -8,7 +8,15 @@ import { existsSync, promises as fs } from "node:fs"
 // Allow user to download chrome to cacheDir
 // Save path (do we need to?)
 
-const cacheDir = path.join(rootFolder, 'browser')
+
+let rootFolder: string;
+let cacheDir: string;
+export function setRootFolder(folder: string) {
+  rootFolder = folder;
+  cacheDir = path.join(rootFolder, 'browser')
+}
+// By default, we initialize to CWD
+setRootFolder(process.cwd())
 const buildIdAlias = 'downloaded'
 
 export async function installChrome(progress?: (bytes: number, total: number) => void) {

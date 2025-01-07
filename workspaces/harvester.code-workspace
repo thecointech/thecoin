@@ -5,6 +5,10 @@
 			"path": "../apps/harvester"
 		},
 		{
+			"name": "scraper",
+			"path": "../libs/scraper"
+		},
+		{
 			"name": "electron-utils",
 			"path": "../libs/electron-utils"
 		},

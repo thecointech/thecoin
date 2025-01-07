@@ -3,7 +3,7 @@ import { hydrateProcessor, getWallet, getCreditDetails } from './config';
 import { getCurrentState } from './db';
 import { getChequingData, getVisaData } from './fetchData';
 import { HarvestData } from './types';
-import { replay } from '../scraper/replay';
+import { replay } from '@thecointech/scraper/replay';
 
 export async function initialize() {
 

@@ -1,7 +1,6 @@
 import currency from 'currency.js'
 import { DateTime } from 'luxon'
-import type { ChequeBalanceResult, VisaBalanceResult } from '../scraper/types'
-import type { Replay } from '../scraper/replay';
+import type { ChequeBalanceResult, VisaBalanceResult } from './scraper';
 import type { Signer } from 'ethers';
 
 export type HarvestDelta = {
@@ -40,9 +39,7 @@ export type HarvestData = {
 export type UserData = {
   creditDetails: CreditDetails;
   wallet: Signer;
-  replay: Replay;
 }
-export type { Replay } from '../scraper/replay';
 
 export type CreditDetails = {
   payee: string,
