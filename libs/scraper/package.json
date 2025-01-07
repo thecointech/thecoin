@@ -1,0 +1,39 @@
+{
+  "name": "@thecointech/scraper",
+  "version": "0.2.135",
+  "private": true,
+  "description": "The Coin: Automated scraper for TheCoin",
+  "keywords": [
+    "TheCoin",
+    "ethereum"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/scraper"
+  },
+  "scripts": {
+    "build": "run -T tsc -b",
+    "clean": "rimraf ./build && rimraf ./coverage",
+    "test": "run :jest"
+    },
+  "files": [
+    "build/**/*"
+  ],
+  "exports": {
+    ".": "./build/index.js",
+    "./config": "./utils/base.config.js",
+    "./styleMock": "./utils/styleMock.js",
+    "./*": "./build/*.js"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "build/*.d.ts"
+      ]
+    }
+  }
+}
