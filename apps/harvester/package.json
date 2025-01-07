@@ -31,7 +31,8 @@
     "build": "run -T tsc -b",
     "test": "yarn run :jest",
     "scraper:record": "yarn run-env ./src/scraper/main.ts --record",
-    "vqa:landings": "yarn run -T run-env ./src/scraper/puppeteer/fetchLandings.ts"
+    "vqa:landings": "yarn run -T run-env ./src/scraper/puppeteer/fetchLandings.ts",
+    "vqa:automap": "yarn run -T run-env ./src/automap/main.ts"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.2.0",

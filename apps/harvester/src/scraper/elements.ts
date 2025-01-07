@@ -3,12 +3,13 @@ import type { Coords, ElementData, ElementDataMin } from './types';
 import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
 import { scoreElement } from './elements.score';
-import { GetVqaApi } from '@thecointech/apis/vqa';
+// import { GetVqaApi } from '@thecointech/apis/vqa';
 import { dumpPage } from './dumper';
 import { ElementResponse } from '@thecointech/vqa';
 import { notify } from '../Harvester/notify';
 import { DateTime } from 'luxon';
 import { File } from '@web-std/file';
+import { GetIntentApi, GetModalApi } from '@thecointech/apis/vqa';
 
 type FoundElement = {
   element: ElementHandle<Element>,
@@ -115,12 +116,23 @@ async function getBestCandidate(candidates: FoundElement[], event: ElementDataMi
   return null;
 }
 
-async function getCandidates(frame: Frame, event: ElementDataMin) {
+async function getCandidates(frame: Frame, event: ElementDataMin, timeout=300) {
   // We are getting the occasional issue where getElementProps
   // is undefined.  This could potentially be a race condition
   // if this fn evaluates before evaluateOnNewDocument (?)
-  const hasHooks = await frame.evaluate(() => !!window.getElementData)
+
+  // This function may hang on pages with many frames
+  // It should be near-instant, so after 1 second we give up
+  const hasHooks = await Promise.race([
+    new Promise<undefined>((resolve) => setTimeout(() => resolve(undefined), timeout)),
+    frame.evaluate(() => !!window.getElementData)
+  ])
+
+  // const hasHooks = await frame.evaluate(() => !!window.getElementData)
   if (!hasHooks) {
+    if (hasHooks === undefined) {
+      log.warn("Frame timed out when testing for getElementData hook");
+    }
     // This is spamming the logs searching frames that are obviously unnecessary.
     // Leave it out for now.
     // log.warn("getElementData not yet hooked: skipping");
@@ -407,17 +419,16 @@ export async function maybeCloseModal(page: Page) {
     // Create a simple object that matches what the API expects
     const screenshotFile = new File([screenshot], "screenshot.png", { type: "image/png" });
 
-    const api = GetVqaApi();
 
     // First check if this is a modal dialog
-    const isModal = await api.postQueryPageIntent(screenshotFile);
-    log.debug(`Page detected as type: ${isModal.data.type}`);
-    if (isModal?.data.type != "ModalDialog") return false;
+    const { data: intent } = await GetIntentApi().pageIntent(screenshotFile);
+    log.debug(`Page detected as type: ${intent.type}`);
+    if (intent.type != "ModalDialog") return false;
 
     log.debug('Modal detected, attempting to close...');
 
     // If it is a modal, find the close button
-    const { data: closeButton } = await api.postQueryElement('CloseModal', screenshotFile);
+    const { data: closeButton } = await GetModalApi().modalClose(screenshotFile);
     if (!closeButton) return false;
 
     log.debug('Close button found, attempting to click...');
