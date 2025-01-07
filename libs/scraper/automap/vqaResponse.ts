@@ -1,5 +1,5 @@
 import type { ElementResponse } from "@thecointech/vqa";
-import type { ElementDataMin } from "../scraper/types";
+import type { ElementDataMin } from ".@thecointech/scraper/types";
 import type { Page } from "puppeteer";
 import { getElementForEvent } from "../scraper/elements";
 import { sleep } from "@thecointech/async";

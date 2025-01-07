@@ -2,12 +2,10 @@ import type { Page } from 'puppeteer';
 import { debounce } from './debounce';
 import { startElementHighlight } from './highlighter';
 import { getTableData } from './table';
-import { closeBrowser, startPuppeteer } from './puppeteer-init';
+import { closeBrowser, startPuppeteer } from './puppeteer-init/init';
 import { AnyEvent, InputEvent, ValueResult, ValueType } from './types';
 import { getValueParsing } from './valueParsing';
 import { log } from '@thecointech/logging';
-// import { setEvents } from '../Harvester/config';
-// import { outFolder } from '../paths';
 
 // types injected into window
 declare global {
@@ -30,10 +28,19 @@ type DynamicInputWaiter = {
   resolve: (value: string) => void;
 }
 
-type ProgressCallback = {
+type RecorderOptions = {
+  // A key to identify this sessions
+  name: string
+  // An initial url to load
+  url?: string
+  // A callback to report progress
   onProgress?: (progress: number) => void
+  // A callback to run when scraping is complete
   onComplete: (events: AnyEvent[]) => Promise<void>
+  // A callback to run when a screenshot should be taken
   onScreenshot?: (page: Page, step: number) => void
+  // An array of selectors to monitor for dynamic input
+  dynamicInputs?: string[];
 }
 
 export class Recorder {
@@ -53,7 +60,7 @@ export class Recorder {
 
   urlToFrameName: Record<string, string> = {};
 
-  private callbacks: ProgressCallback;
+  private options: RecorderOptions;
 
   private page!: Page;
   private onValue?: ValueWaiter;
@@ -65,11 +72,11 @@ export class Recorder {
 
   public getPage = () => this.page;
 
-  private constructor(callbacks: ProgressCallback, dynamicInputs?: string[]) {
+  private constructor(options: RecorderOptions, dynamicInputs?: string[]) {
     // this.name = name;
     // this.screenshotFolder = "TODO"; //path.join(outFolder, this.name);
 
-    this.callbacks = callbacks;
+    this.options = options;
     this.dynamicInputs = Object.fromEntries(
       dynamicInputs?.map(name => [name, false]
     ) ?? []);
@@ -105,7 +112,7 @@ export class Recorder {
           }
         }
 
-        await this.callbacks.onComplete(this.events);
+        await this.options.onComplete(this.events);
         // await setEvents(this.name, this.events);
 
         // Cleanup
@@ -118,21 +125,21 @@ export class Recorder {
     return page;
   }
 
-  static async instance(callbacks: ProgressCallback, url?: string) {
+  static async instance(options?: RecorderOptions) {
     // Should we re?
     if (Recorder.__instance) {
-      // if (!name || Recorder.__instance.name == name) return Recorder.__instance
-      // else {
-      //   throw new Error("Cannot start recording new session without closing prior session")
-      // }
-      return Recorder.__instance
+      if (!options?.name || Recorder.__instance.options?.name == options.name) {
+        return Recorder.__instance
+      } else {
+        throw new Error("Cannot start recording new session without closing prior session")
+      }
     }
     // We have no instance, we need a name & url
-    if (!url) {
+    if (!options?.url || !options.name) {
       throw new Error("Cannot fetch existing session - none running")
     }
-    Recorder.__instance = new Recorder(callbacks);
-    await Recorder.__instance.initialize(url);
+    Recorder.__instance = new Recorder(options);
+    await Recorder.__instance.initialize(options.url);
     return Recorder.__instance;
   }
 
@@ -332,7 +339,7 @@ export class Recorder {
     log.debug(`Received event: ${JSON.stringify(sanitized)}`)
   }
   saveScreenshot = debounce((page: Page, step: number) =>
-    this.callbacks.onScreenshot?.(page, step))
+    this.options.onScreenshot?.(page, step))
 }
 
 function onNewDocument() {

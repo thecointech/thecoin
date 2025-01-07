@@ -22,22 +22,24 @@
   },
   "dependencies": {
     "@web-std/file": "^3.0.3",
+    "@xenova/transformers": "^2.14.0",
     "puppeteer": "^22.10.0",
     "puppeteer-extra": "^3.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2",
-    "@xenova/transformers": "^2.14.0"
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
   "files": [
     "build/**/*"
   ],
   "exports": {
     ".": "./build/index.js",
-    "./config": "./utils/base.config.js",
-    "./styleMock": "./utils/styleMock.js",
+    "./puppeteer": "./build/puppeteer-init/index.js",
     "./*": "./build/*.js"
   },
   "typesVersions": {
     "*": {
+      "puppeteer": [
+        "build/puppeteer-init/index.d.ts"
+      ],
       "*": [
         "build/*.d.ts"
       ]

@@ -1,8 +1,7 @@
 import { DateTime } from 'luxon';
-import { replay } from '../scraper/replay';
-import { ChequeBalanceResult, VisaBalanceResult } from '../scraper/types';
 import currency from 'currency.js';
-import { HistoryRow } from '../scraper/table';
+import { ChequeBalanceResult, getValues, VisaBalanceResult } from './scraper';
+import { HistoryRow } from '@thecointech/scraper/types';
 
 export async function getChequingData() : Promise<ChequeBalanceResult> {
   if (process.env.HARVESTER_OVERRIDE_CHQ_BALANCE) {
@@ -20,7 +19,7 @@ export async function getChequingData() : Promise<ChequeBalanceResult> {
         balance: currency(balance),
       };
     default:
-      return await replay('chqBalance');
+      return await getValues('chqBalance');
   }
 }
 
@@ -39,7 +38,7 @@ export async function getVisaData(lastTxDate?: DateTime) : Promise<VisaBalanceRe
     case 'prodtest':
       return getEmulatedVisaData(DateTime.now(), lastTxDate);
     default:
-      const data = await replay('visaBalance');
+      const data = await getValues('visaBalance');
       // Only keep the new transactions from history
       const newTransactions = lastTxDate
         ? data.history?.filter(row => row.date > lastTxDate)

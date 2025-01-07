@@ -7,9 +7,10 @@ import { CreditDetails } from './types';
 import { setSchedule } from './schedule';
 import path from 'path';
 import { log } from '@thecointech/logging';
-import { ActionTypes, AnyEvent } from '../scraper/types';
+import { AnyEvent } from '@thecointech/scraper/types';
 import { dbSuffix, rootFolder } from '../paths';
 import { HDNodeWallet } from 'ethers';
+import { ActionTypes } from './scraper';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)

@@ -1,7 +1,7 @@
 import currency from 'currency.js';
 import { RoundUp } from './steps/RoundUp'
 import { TransferVisaOwing } from './steps/TransferVisaOwing'
-import { HarvestData, Replay } from './types';
+import { HarvestData } from './types';
 import { SendETransfer } from './steps/SendETransfer';
 import { DateTime } from 'luxon';
 import { Wallet } from 'ethers';
@@ -39,7 +39,6 @@ it ('can process on first run', async () => {
   }
   const user = {
     wallet: Wallet.createRandom(),
-    replay: (() => Promise.resolve({ confirm: "1234" })) as any as Replay,
     creditDetails: {
       payee: 'payee',
       accountNumber: "12345"

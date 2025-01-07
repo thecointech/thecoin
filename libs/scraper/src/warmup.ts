@@ -1,4 +1,4 @@
-import { startPuppeteer } from './puppeteer-init';
+import { startPuppeteer } from './puppeteer-init/init';
 
 // Start a new instance, wait for it to complete
 export function warmup(url: string) {

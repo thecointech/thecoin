@@ -1,7 +1,8 @@
 import type { HarvestConfig, Mnemonic } from './types';
-import type {ActionTypes, ReplayProgressCallback, ValueResult, ValueType} from "./scraper/types";
+import type { ReplayProgressCallback, ValueResult, ValueType} from "@thecointech/scraper/types";
 import type { CreditDetails } from './Harvester/types';
 import type { StoredData } from './Harvester/db_translate';
+import { ActionTypes } from './Harvester/scraper';
 
 export type Result<T> = {
   error?: string;
@@ -18,13 +19,13 @@ export type ScraperBridgeApi = {
   // will contain the data of the file read from the main process.
   warmup: (url: string) => Promise<Result<boolean>>,
 
-  start: (actionName: ActionTypes, url: string, dynamicValues?: string[]) => Promise<Result<boolean>>,
+  start: (actionName: ActionTypes, url: string, dynamicInputs?: string[]) => Promise<Result<boolean>>,
 
   learnValue: (valueName: string, valueType: ValueType) => Promise<Result<ValueResult>>,
   setDynamicInput: (name: string, value: string) => Promise<Result<string>>,
 
   // Finish Recording
-  finishAction: (actionName: ActionTypes) => Promise<Result<boolean>>,
+  finishAction: () => Promise<Result<boolean>>,
 
   // A test of an action
   testAction(actionName: ActionTypes, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,

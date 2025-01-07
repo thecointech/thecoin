@@ -3,35 +3,22 @@ import type { DateTime } from 'luxon';
 import type { HistoryRow } from './table';
 import type { Page } from 'puppeteer';
 
+export type { HistoryRow };
+
 export type ReplayProgress = {
   step: number,
   total: number,
 }
+
+export type ReplayProgressCallback = (progress: ReplayProgress) => void;
 export type ReplayCallbacks = {
   onError?: (page: Page, error: unknown) => Promise<void>,
-  onProgress?: (progress: ReplayProgress) => Promise<void>,
+  onProgress?: ReplayProgressCallback,
   onScreenshot?: (page: Page) => Promise<void>,
 }
 
-export type ActionTypes = 'visaBalance'|'chqBalance'|'chqETransfer';
-
-export type VisaBalanceResult = {
-  balance: currency;
-  dueDate: DateTime;
-  dueAmount: currency;
-  history?: HistoryRow[]; // NOT SAVED
-}
-
-export type ChequeBalanceResult = {
-  balance: currency;
-}
-
-export type ETransferResult = {
-  confirm: string,
-}
-
 // Generic result encompasses all of the above
-export type ReplayResult = Record<string, string|currency|DateTime>;
+export type ReplayResult = Record<string, string | DateTime | currency | HistoryRow[]>
 
 export type ValueType = "date"|"currency"|"text"|"table";
 

@@ -19,7 +19,7 @@ export const ChequingBalance = () => {
 
   useEffect(() => {
     if (balance) {
-      window.scraper.finishAction(pageAction);
+      window.scraper.finishAction();
     }
   }, [balance])
 

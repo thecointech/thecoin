@@ -4,6 +4,7 @@ import currency from 'currency.js';
 import { notify, notifyError } from '../notify';
 import { SendFakeDeposit } from '@thecointech/email-fake-deposit';
 import { DateTime } from 'luxon';
+import { getValues } from '../scraper';
 
 export class SendETransfer implements ProcessingStage {
 
@@ -74,14 +75,14 @@ const getTransferAmount = (toETransfer: currency, balance: currency) => {
   return toETransfer;
 }
 
-async function sendETransfer(amount: currency, {replay, wallet}: UserData) {
+async function sendETransfer(amount: currency, {wallet}: UserData) {
   if (process.env.HARVESTER_DRY_RUN) {
     return {
       confirm: "DRYRUN"
     }
   }
   else if (process.env.CONFIG_NAME == "prod" || process.env.CONFIG_NAME == "prodbeta") {
-    return replay('chqETransfer', undefined, { amount: amount.toString() })
+    return getValues('chqETransfer', undefined, { amount: amount.toString() })
   }
   else {
     // We still send in testing environments

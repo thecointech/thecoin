@@ -1,6 +1,6 @@
 import { IsManualRun, describe } from "@thecointech/jestutils";
 import { Dumper } from "./dumper";
-import { startPuppeteer, closeBrowser } from "./puppeteer-init";
+import { startPuppeteer, closeBrowser } from "./puppeteer-init/init";
 import path from "path";
 
 

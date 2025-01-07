@@ -22,7 +22,7 @@ export const VisaBalance = () => {
 
   useEffect(() => {
     if (balance && dueAmount && dueDate && history) {
-      window.scraper.finishAction(pageAction);
+      window.scraper.finishAction();
     }
   }, [balance, dueAmount, dueDate, history])
 

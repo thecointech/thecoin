@@ -1,17 +1,14 @@
-import currency from 'currency.js';
 import { DateTime } from 'luxon';
 import type { Page } from 'puppeteer';
-import { startPuppeteer } from './puppeteer-init';
-import { getTableData, HistoryRow } from './table';
-import { AnyEvent, ValueEvent, ElementData, ReplayCallbacks } from './types';
+import { startPuppeteer } from './puppeteer-init/init';
+import { getTableData } from './table';
+import { AnyEvent, ValueEvent, ElementData, ReplayCallbacks, ReplayResult } from './types';
 import { CurrencyType, getCurrencyConverter } from './valueParsing';
 import { log } from '@thecointech/logging';
 import { debounce } from './debounce';
 import { getElementForEvent } from './elements';
 import { sleep } from '@thecointech/async';
 import { maybeCloseModal } from './modal';
-
-export type Replay = typeof replay;
 
 // export async function replay(actionName: 'chqBalance', progress?: ReplayProgressCallback): Promise<ChequeBalanceResult>;
 // export async function replay(actionName: 'visaBalance', progress?: ReplayProgressCallback): Promise<VisaBalanceResult>;
@@ -49,7 +46,8 @@ export async function replay(events: AnyEvent[], callbacks?: ReplayCallbacks, dy
 
 export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: ReplayCallbacks, dynamicValues?: Record<string, string>, delay = 1000) {
 
-  const values: Record<string, string | DateTime | currency | HistoryRow[]> = {}
+  const values: ReplayResult = {}
+  // const values: Record<string, string | DateTime | currency | HistoryRow[]> = {}
 
   // Security: limit this session to a single domain.
   // TODO: This triggers on safe routes, disable until we have a better view

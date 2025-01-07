@@ -1,8 +1,8 @@
 import { sleep } from '@thecointech/async';
-import { startPuppeteer } from './puppeteer-init';
-import { Recorder } from './record';
-import { replayEvents } from './replay';
-import { AnyEvent } from 'types';
+import { startPuppeteer } from '../src/puppeteer-init/init';
+import { Recorder } from '../src/record';
+import { replayEvents } from '../src/replay';
+import { AnyEvent } from '../src/types';
 
 console.log("Testing stuff");
 
@@ -16,11 +16,14 @@ let doReplay = true;
 const events: AnyEvent[] = [];
 
 const recorder =  await Recorder.instance({
+  name: "chqBalance",
+  url: "https://www.google.com",
+  dynamicInputs: ["SearchFor"],
   onComplete: async (events) => {
     console.log("Completed");
     events.push(...events);
   }
-}, "https://www.td.com/ca/en/personal-banking");
+});
 // const recorder =  await Recorder.instance("chqBalance", "https://www.google.com", ["SearchFor"]);
 // const recorder =  await Recorder.instance("chqBalance", "https://www.google.com");
 await sleep(3000);
