@@ -1,7 +1,8 @@
 import { sleep } from '@thecointech/async';
-import { startPuppeteer } from './puppeteer';
+import { startPuppeteer } from './puppeteer-init';
 import { Recorder } from './record';
 import { replayEvents } from './replay';
+import { AnyEvent } from 'types';
 
 console.log("Testing stuff");
 
@@ -12,7 +13,14 @@ let doReplay = true;
 //    const config = await getProcessConfig();
 //    let events: AnyEvent[] = config?.scraping?.chqBalance ?? [];
 
-const recorder =  await Recorder.instance("chqBalance", "https://www.td.com/ca/en/personal-banking");
+const events: AnyEvent[] = [];
+
+const recorder =  await Recorder.instance({
+  onComplete: async (events) => {
+    console.log("Completed");
+    events.push(...events);
+  }
+}, "https://www.td.com/ca/en/personal-banking");
 // const recorder =  await Recorder.instance("chqBalance", "https://www.google.com", ["SearchFor"]);
 // const recorder =  await Recorder.instance("chqBalance", "https://www.google.com");
 await sleep(3000);
@@ -28,13 +36,13 @@ console.log("Value " + selected.text);
 // const result = await recorder.setRequiredValue("SearchResult");
 // console.log("Result " + result.text);
 
-const events = recorder.events;
+// const events = recorder.events;
 // await Recorder.release("chqBalance");
 await recorder.disconnected;
 
 if (doReplay) {
     const { page, browser } = await startPuppeteer();
-    const r = await replayEvents(page, "chqBalance", events, undefined, {
+    const r = await replayEvents(page, events, undefined, {
         SearchFor: "Chicken",
     })
     console.log(JSON.stringify(r));

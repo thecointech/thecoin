@@ -10827,6 +10827,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@thecointech/scraper@workspace:libs/scraper":
+  version: 0.0.0-use.local
+  resolution: "@thecointech/scraper@workspace:libs/scraper"
+  dependencies:
+    "@web-std/file": "npm:^3.0.3"
+    puppeteer: "npm:^22.10.0"
+    puppeteer-extra: "npm:^3.3.6"
+    puppeteer-extra-plugin-stealth: "npm:^2.11.2"
+  languageName: unknown
+  linkType: soft
+
 "@thecointech/service-tapcap-supplier@workspace:apps/tapcap-supplier":
   version: 0.0.0-use.local
   resolution: "@thecointech/service-tapcap-supplier@workspace:apps/tapcap-supplier"

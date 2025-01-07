@@ -1,15 +1,13 @@
-import { existsSync, mkdirSync } from 'fs';
-import path from 'path';
 import type { Page } from 'puppeteer';
 import { debounce } from './debounce';
 import { startElementHighlight } from './highlighter';
 import { getTableData } from './table';
-import { closeBrowser, startPuppeteer } from './puppeteer';
-import { ActionTypes, AnyEvent, InputEvent, ValueResult, ValueType } from './types';
+import { closeBrowser, startPuppeteer } from './puppeteer-init';
+import { AnyEvent, InputEvent, ValueResult, ValueType } from './types';
 import { getValueParsing } from './valueParsing';
 import { log } from '@thecointech/logging';
-import { setEvents } from '../Harvester/config';
-import { outFolder } from '../paths';
+// import { setEvents } from '../Harvester/config';
+// import { outFolder } from '../paths';
 
 // types injected into window
 declare global {
@@ -32,11 +30,18 @@ type DynamicInputWaiter = {
   resolve: (value: string) => void;
 }
 
+type ProgressCallback = {
+  onProgress?: (progress: number) => void
+  onComplete: (events: AnyEvent[]) => Promise<void>
+  onScreenshot?: (page: Page, step: number) => void
+}
+
 export class Recorder {
 
-  readonly name: ActionTypes;
-  readonly screenshotFolder: string;
+  // readonly name: ActionTypes;
+  // readonly screenshotFolder: string;
   disconnected?: Promise<boolean>;
+  // Each new page loaded is a new step
   step = 0;
   events: AnyEvent[] = [];
 
@@ -48,6 +53,8 @@ export class Recorder {
 
   urlToFrameName: Record<string, string> = {};
 
+  private callbacks: ProgressCallback;
+
   private page!: Page;
   private onValue?: ValueWaiter;
   private onInput?: DynamicInputWaiter;
@@ -58,23 +65,24 @@ export class Recorder {
 
   public getPage = () => this.page;
 
-  private constructor(name: ActionTypes, dynamicInputs?: string[]) {
-    this.name = name;
-    this.screenshotFolder = path.join(outFolder, this.name);
+  private constructor(callbacks: ProgressCallback, dynamicInputs?: string[]) {
+    // this.name = name;
+    // this.screenshotFolder = "TODO"; //path.join(outFolder, this.name);
 
+    this.callbacks = callbacks;
     this.dynamicInputs = Object.fromEntries(
       dynamicInputs?.map(name => [name, false]
     ) ?? []);
-    log.info(`Recording ${this.name} with dynamic inputs: ${dynamicInputs?.join(', ') ?? 'none'}`);
+    log.info(`Recording with dynamic inputs: ${dynamicInputs?.join(', ') ?? 'none'}`);
   }
 
   private async initialize(url: string) {
     const { browser, page } = await startPuppeteer(false);
     this.page = page;
 
-    if (!existsSync(this.screenshotFolder)) {
-      mkdirSync(this.screenshotFolder, { recursive: true })
-    }
+    // if (!existsSync(this.screenshotFolder)) {
+    //   mkdirSync(this.screenshotFolder, { recursive: true })
+    // }
 
     await page.exposeFunction('__onAnyEvent', this.eventHandler);
 
@@ -97,7 +105,8 @@ export class Recorder {
           }
         }
 
-        await setEvents(this.name, this.events);
+        await this.callbacks.onComplete(this.events);
+        // await setEvents(this.name, this.events);
 
         // Cleanup
         delete Recorder.__instance;
@@ -109,31 +118,30 @@ export class Recorder {
     return page;
   }
 
-  static async instance(name?: ActionTypes, url?: string, capture?: string[]) {
+  static async instance(callbacks: ProgressCallback, url?: string) {
     // Should we re?
     if (Recorder.__instance) {
-      if (!name || Recorder.__instance.name == name) return Recorder.__instance
-      else {
-        throw new Error("Cannot start recording new session without closing prior session")
-      }
+      // if (!name || Recorder.__instance.name == name) return Recorder.__instance
+      // else {
+      //   throw new Error("Cannot start recording new session without closing prior session")
+      // }
+      return Recorder.__instance
     }
     // We have no instance, we need a name & url
-    if (!name || !url) {
+    if (!url) {
       throw new Error("Cannot fetch existing session - none running")
     }
-    Recorder.__instance = new Recorder(name, capture);
+    Recorder.__instance = new Recorder(callbacks);
     await Recorder.__instance.initialize(url);
     return Recorder.__instance;
   }
 
-  static async release(name?: string) {
+  static async release() {
     if (Recorder.__instance) {
-      if (!name || Recorder.__instance.name == name) {
-        // This should take care of all the cleanup
-        await closeBrowser();
-        Recorder.__instance = undefined;
-        return true;
-      }
+      // This should take care of all the cleanup
+      await closeBrowser();
+      Recorder.__instance = undefined;
+      return true;
     }
     return false;
   }
@@ -201,7 +209,7 @@ export class Recorder {
     }
     else if (event.type == 'load') {
       // Debounce this as we get multiple page-loads for the same step
-      this.saveScreenshot(this.page, `record-${this.step}.png`);
+      this.saveScreenshot(this.page, this.step);
 
       // We keep track of the iframes, and their related URLs
       const frames = this.page.frames()
@@ -323,7 +331,8 @@ export class Recorder {
     const { value, ...sanitized } = event as any;
     log.debug(`Received event: ${JSON.stringify(sanitized)}`)
   }
-  saveScreenshot = debounce((page: Page, fileName: string) => page.screenshot({ path: path.join(this.screenshotFolder, fileName) }))
+  saveScreenshot = debounce((page: Page, step: number) =>
+    this.callbacks.onScreenshot?.(page, step))
 }
 
 function onNewDocument() {
@@ -458,9 +467,9 @@ function onNewDocument() {
       })
     }, opts);
 
-    window.addEventListener('submit', (ev) => {
-      //console.log("Submitting: ", ev.target);
-    });
+    // window.addEventListener('submit', (ev) => {
+    //   //console.log("Submitting: ", ev.target);
+    // });
 
     const enterEventListener = (ev: Event) => {
       if (ev instanceof KeyboardEvent) {

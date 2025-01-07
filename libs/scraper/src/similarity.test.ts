@@ -1,16 +1,16 @@
 import { jest } from '@jest/globals'
 import { SimilarityPipeline } from './similarity';
-import { patchOnnxForJest } from '../../internal/jestPatch';
+import { patchOnnxForJest } from '../internal/jestPatch';
 
 patchOnnxForJest();
 
 jest.setTimeout(60 * 1000);
 it('computes similarity', async () => {
     const similarities = await SimilarityPipeline.calculateSimilarity(
-        'King', 
+        'King',
         [
             'Queen',
-            'Kind', 
+            'Kind',
             'Chess',
             'Chest'
         ]

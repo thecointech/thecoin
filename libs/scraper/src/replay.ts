@@ -1,51 +1,44 @@
 import currency from 'currency.js';
 import { DateTime } from 'luxon';
 import type { Page } from 'puppeteer';
-import { startPuppeteer } from './puppeteer';
+import { startPuppeteer } from './puppeteer-init';
 import { getTableData, HistoryRow } from './table';
-import { AnyEvent, ValueEvent, ActionTypes, ChequeBalanceResult, VisaBalanceResult, ReplayResult, ETransferResult, ElementData, ReplayProgressCallback } from './types';
+import { AnyEvent, ValueEvent, ElementData, ReplayCallbacks } from './types';
 import { CurrencyType, getCurrencyConverter } from './valueParsing';
-import { getEvents } from '../Harvester/config';
 import { log } from '@thecointech/logging';
 import { debounce } from './debounce';
-import path from 'path';
-import { mkdirSync } from 'fs';
-import { outFolder } from '../paths';
-import { getElementForEvent, maybeCloseModal } from './elements';
-import { dumpPage, initializeDumper } from './dumper';
+import { getElementForEvent } from './elements';
 import { sleep } from '@thecointech/async';
+import { maybeCloseModal } from './modal';
 
 export type Replay = typeof replay;
 
-export async function replay(actionName: 'chqBalance', progress?: ReplayProgressCallback): Promise<ChequeBalanceResult>;
-export async function replay(actionName: 'visaBalance', progress?: ReplayProgressCallback): Promise<VisaBalanceResult>;
-export async function replay(actionName: 'chqETransfer', progress: ReplayProgressCallback|undefined, dynamicValues: { amount: string }): Promise<ETransferResult>;
-export async function replay(actionName: ActionTypes, progress?: ReplayProgressCallback, dynamicValues?: Record<string, string>, delay?: number): Promise<ReplayResult>
-export async function replay(actionName: ActionTypes, progress?: ReplayProgressCallback, dynamicValues?: Record<string, string>, delay = 1000) {
+// export async function replay(actionName: 'chqBalance', progress?: ReplayProgressCallback): Promise<ChequeBalanceResult>;
+// export async function replay(actionName: 'visaBalance', progress?: ReplayProgressCallback): Promise<VisaBalanceResult>;
+// export async function replay(actionName: 'chqETransfer', progress: ReplayProgressCallback|undefined, dynamicValues: { amount: string }): Promise<ETransferResult>;
+// export async function replay(actionName: ActionTypes, progress?: ReplayProgressCallback, dynamicValues?: Record<string, string>, delay?: number): Promise<ReplayResult>
+export async function replay(events: AnyEvent[], callbacks?: ReplayCallbacks, dynamicValues?: Record<string, string>, delay = 1000) {
   // read events
-  const events = await getEvents(actionName);
-  log.debug(`Replaying ${actionName} with ${events?.length} events`);
+  // const events = await getEvents(actionName);
+  log.debug(`Replaying ${events?.length} events`);
 
-  if (!events) {
-    throw new Error(`No events found for ${actionName}`);
-  }
-
-  initializeDumper(actionName);
+  // initializeDumper(actionName);
   // Progress started
-  progress?.({ step: 0, total: events.length });
+  callbacks?.onProgress?.({ step: 0, total: events.length });
 
   const { page, browser } = await startPuppeteer();
 
   try {
-    const r = await replayEvents(page, actionName, events, progress, dynamicValues, delay);
+    const r = await replayEvents(page, events, callbacks, dynamicValues, delay);
     return r;
   }
   catch (err) {
-    const saveDump = process.env.HARVESTER_SAVE_DUMP;
-    log.error(err, `Failed to replay ${actionName}, doing dump: ${saveDump ?? false}`);
-    if (saveDump) {
-      await dumpPage(page, "failed");
-    }
+    await callbacks?.onError?.(page, err);
+    // const saveDump = process.env.HARVESTER_SAVE_DUMP;
+    // log.error(err, `Failed to replay, doing dump: ${saveDump ?? false}`);
+    // if (saveDump) {
+    //   await dumpPage(page, "failed");
+    // }
     throw err;
   }
   finally {
@@ -54,7 +47,7 @@ export async function replay(actionName: ActionTypes, progress?: ReplayProgressC
   }
 }
 
-export async function replayEvents(page: Page, actionName: ActionTypes, events: AnyEvent[], progress?: ReplayProgressCallback, dynamicValues?: Record<string, string>, delay = 1000) {
+export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: ReplayCallbacks, dynamicValues?: Record<string, string>, delay = 1000) {
 
   const values: Record<string, string | DateTime | currency | HistoryRow[]> = {}
 
@@ -69,13 +62,15 @@ export async function replayEvents(page: Page, actionName: ActionTypes, events: 
   //   };
   // }, hostname);
 
-  const screenshotFolder = path.join(outFolder, actionName);
-  mkdirSync(screenshotFolder, { recursive: true });
-  const doSaveScreenshot = async (page: Page, fileName: string) => {
-    const outfile = path.join(screenshotFolder, fileName);
-    await page.screenshot({ path: outfile })
-  }
-  const saveScreenshot = debounce(doSaveScreenshot);
+  // const screenshotFolder = "TODO"; //path.join(outFolder, actionName);
+  // mkdirSync(screenshotFolder, { recursive: true });
+  // const doSaveScreenshot = async (page: Page, fileName: string) => {
+  //   const outfile = path.join(screenshotFolder, fileName);
+  //   await page.screenshot({ path: outfile })
+  // }
+  // const saveScreenshot = debounce(doSaveScreenshot);
+
+  const saveScreenshot = debounce(callbacks?.onScreenshot ?? (() => { }));
 
   async function processEvent(event: AnyEvent, i: number) {
     log.info(` - Processing event: ${event.type} - ${event.id}`);
@@ -237,7 +232,7 @@ export async function replayEvents(page: Page, actionName: ActionTypes, events: 
       }
 
       // Mark progress complete
-      progress?.({ step: i + 1, total: events.length });
+      callbacks?.onProgress?.({ step: i + 1, total: events.length });
     }
   }
 
@@ -258,7 +253,7 @@ async function enterValue(page: Page, event: ElementData, value: string) {
   await element.focus();
   if (event.tagName == "INPUT" || event.tagName == "TEXTAREA") {
     // clear existing value
-    await page.evaluate((el) => (el as HTMLInputElement).value = "", element);
+    await page.evaluate(el => (el as HTMLInputElement).value = "", element);
     // Simulate typing to mimic input actions
     await page.keyboard.type(value, { delay: 20 });
   }

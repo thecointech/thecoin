@@ -1,12 +1,17 @@
 import type currency from 'currency.js';
 import type { DateTime } from 'luxon';
 import type { HistoryRow } from './table';
+import type { Page } from 'puppeteer';
 
 export type ReplayProgress = {
   step: number,
   total: number,
 }
-export type ReplayProgressCallback = (progress: ReplayProgress) => void;
+export type ReplayCallbacks = {
+  onError?: (page: Page, error: unknown) => Promise<void>,
+  onProgress?: (progress: ReplayProgress) => Promise<void>,
+  onScreenshot?: (page: Page) => Promise<void>,
+}
 
 export type ActionTypes = 'visaBalance'|'chqBalance'|'chqETransfer';
 
