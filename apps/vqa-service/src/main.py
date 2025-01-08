@@ -7,12 +7,21 @@ from singleton import get_model
 from port import get_version, get_port
 from fastapi_tweak import use_route_names_as_operation_ids
 
+from starlette.middleware.base import BaseHTTPMiddleware
+class KeepAliveMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        response = await call_next(request)
+        response.headers['Connection'] = 'keep-alive'
+        response.headers['Keep-Alive'] = 'timeout=60'
+        return response
+
 app = FastAPI(
     title="Harvester VQA Service API",
     version=get_version(),
     port=get_port(),
 )
 
+app.add_middleware(KeepAliveMiddleware)
 
 @app.get("/warmup")
 def warmup():
