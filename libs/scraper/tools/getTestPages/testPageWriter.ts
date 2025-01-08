@@ -64,6 +64,10 @@ export class IntentWriter {
     // Always get the latest screenshot
     const image = await this.getImage(fullPage);
     const { data: r } = await (api[fnName] as ApiFn)(image);
+    return await this.completeInteraction(r, elementName, interaction, thenWaitFor);
+  }
+
+  async completeInteraction(r: ElementResponse, elementName: string, interaction: (found: FoundElement) => Promise<void>, thenWaitFor: number = 3000) {
     const found = await responseToElement(this.page, r);
     if (found) {
       this.saveElement(found.data, elementName);
@@ -98,13 +102,16 @@ export class IntentWriter {
 
   saveElement(data: ElementData, eventName: string) {
     // Remove variable data
-    const toWrite = {
+    this.saveJson({
       intent: this.intent,
       ...data,
-    }
+    }, eventName)
+  }
+
+  saveJson(data: any, eventName: string) {
     // Add intent & write to disk
     const jsonFile = this.outputFilename(`${this.name}-${eventName}.json`)
-    writeFileSync(jsonFile, JSON.stringify(toWrite, null, 2));
+    writeFileSync(jsonFile, JSON.stringify(data, null, 2));
     log.trace(`Element data saved to: ${jsonFile}`);
   }
 

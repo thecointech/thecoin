@@ -5,9 +5,9 @@ from testdata import get_test_data, get_single_test_element, get_extra
 from query import runQuery
 from intent_data import query_page_intent
 from thefuzz import fuzz
-from overview_data import get_query_account_balance, get_query_navigation, list_accounts_query
+from summary_data import get_query_account_balance, get_query_navigation, list_accounts_query
 
-class TestOverview(TestBase):
+class TestSummary(TestBase):
 
     # Tested: working
     def test_overview_page_intent(self):
@@ -24,7 +24,7 @@ class TestOverview(TestBase):
         # get landing pages
         # All pages are required to have an intent, so don't filter them out here
         test_datum = get_single_test_element("overview", "", "list-accounts")
-              
+
         # check all landing pages
         for key, image, expected in test_datum:
             rough_response = runQuery(image, list_accounts_query)
@@ -41,7 +41,7 @@ class TestOverview(TestBase):
 
                 # Validate basic data.  Keep a very low score, as we don't really care.  Hopefully the accuracy
                 # improves if/when we get to use a higher-precision model
-                self.assertGreaterEqual(score, 30, "Did not find account number in list accounts " + key)   
+                self.assertGreaterEqual(score, 30, "Did not find account number in list accounts " + key)
                 siblings = [normalize(s) for s in vacc["siblingText"]]
                 self.assertIn(normalize(account["balance"]), siblings, "Did not find balance in list accounts " + key)
                 accountType = get_extra(vacc, "accountType")
@@ -59,12 +59,12 @@ class TestOverview(TestBase):
 
     def test_find_account_balance(self):
         test_datum = get_single_test_element("overview", "", "balance")
-           
+
         # check all landing pages
         for key, image, expected in test_datum:
             account_number = get_extra(expected, "accountNumber")
             balance_query = get_query_account_balance(account_number)
-         
+
             # lets assume we can find the account element on this page
             image = self.cropToElements(image, [expected])
             response = runQuery(image, balance_query)
@@ -72,7 +72,7 @@ class TestOverview(TestBase):
 
     def test_find_navigate_to_account(self):
         test_datum = get_single_test_element("overview", "", "navigate")
-           
+
         # check all landing pages
         for key, image, expected in test_datum:
             account_number = get_extra(expected, "accountNumber")

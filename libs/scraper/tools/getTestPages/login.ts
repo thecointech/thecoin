@@ -1,5 +1,5 @@
 import type { Page } from "puppeteer";
-import { GetLandingApi, GetIntentApi, GetLoginApi } from "@thecointech/apis/vqa";
+import { GetLoginApi, GetTwofaApi } from "@thecointech/apis/vqa";
 import { IntentWriter } from "./testPageWriter";
 import { log } from "@thecointech/logging";
 import type { BankConfig } from "./config";
@@ -15,9 +15,6 @@ export class LoginWriter extends IntentWriter {
     await writer.enterUsername(config.username!);
     await writer.enterPassword(config.password!);
     await writer.clickLogin();
-    if (writer.currentPageIntent == "TwoFactorAuth") {
-      await writer.complete2FA();
-    }
     return writer.currentPageIntent;
   }
 
@@ -62,14 +59,6 @@ export class LoginWriter extends IntentWriter {
     await this.waitForPageLoaded();
 
     const intent = await this.updatePageIntent();
-  }
-
-  async complete2FA() {
-    const api = GetLoginApi();
-    const clickedLogin = await this.tryClick(api, "", "2fa");
-    if (!clickedLogin) {
-      throw new Error("Failed to click 2FA");
-    }
   }
 }
 
