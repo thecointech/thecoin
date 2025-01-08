@@ -1,10 +1,11 @@
-from TestBase import TestBase, repeat_on_fail
+from TestBase import TestBase, normalize
 from testdata import get_test_data, get_single_test_element, get_extra
-from helpers import get_instruct_json_respose, request_json
-from data_elements import element_schema
+# from helpers import get_instruct_json_respose, request_json
+# from data_elements import element_schema
 from query import runQuery
-from query_page_intent import intent_prompt
+from intent_data import query_page_intent
 from thefuzz import fuzz
+from overview_data import get_query_account_balance, get_query_navigation, list_accounts_query
 
 class TestOverview(TestBase):
 
@@ -16,20 +17,17 @@ class TestOverview(TestBase):
 
         # check all landing pages
         for key, image, expected in test_datum:
-            intent = runQuery(intent_prompt, image)
+            intent = runQuery(image, query_page_intent)
             self.assertEqual(intent["type"], expected["intent"]["intent"], "Overview intent failed for " + key)
 
     def test_overview_list_accounts(self):
         # get landing pages
         # All pages are required to have an intent, so don't filter them out here
         test_datum = get_single_test_element("overview", "", "list-accounts")
-
-        json_part = request_json + f"{{ \"num_accounts\": \"number\", \"accounts\": [{{\"account_type\": \"Chequing|Savings|Credit\", \"account_number\": \"string\", \"balance\": \"string\", \"position_x\": \"number\", \"position_y\": \"number\" }}] }}"
-        list_accounts_query = f"Analyze the provided webpage. How many bank accounts with a balance does the user have? {json_part}"
-                    
+              
         # check all landing pages
         for key, image, expected in test_datum:
-            rough_response = runQuery(list_accounts_query, image)
+            rough_response = runQuery(image, list_accounts_query)
             self.assertEqual(rough_response["num_accounts"], len(expected), "Mismatched accounts length in list accounts " + key)
 
             accounts = rough_response["accounts"]
@@ -44,7 +42,8 @@ class TestOverview(TestBase):
                 # Validate basic data.  Keep a very low score, as we don't really care.  Hopefully the accuracy
                 # improves if/when we get to use a higher-precision model
                 self.assertGreaterEqual(score, 30, "Did not find account number in list accounts " + key)   
-                self.assertIn(account["balance"], vacc["siblingText"], "Did not find balance in list accounts " + key)
+                siblings = [normalize(s) for s in vacc["siblingText"]]
+                self.assertIn(normalize(account["balance"]), siblings, "Did not find balance in list accounts " + key)
                 accountType = get_extra(vacc, "accountType")
                 if (accountType):
                     self.assertEqual(account["account_type"], accountType, "Account type not matched in list accounts " + key)
@@ -64,12 +63,11 @@ class TestOverview(TestBase):
         # check all landing pages
         for key, image, expected in test_datum:
             account_number = get_extra(expected, "accountNumber")
-            json_part = get_instruct_json_respose(element_schema)
-            find_account_balance_query = f"Analyze the provided webpage. Describe the element that contains the balance for this account \"{account_number}\". {json_part}"
+            balance_query = get_query_account_balance(account_number)
          
             # lets assume we can find the account element on this page
             image = self.cropToElements(image, [expected])
-            response = runQuery(find_account_balance_query, image)
+            response = runQuery(image, balance_query)
             self.assertResponse(response, image, expected, key)
 
     def test_find_navigate_to_account(self):
@@ -78,10 +76,8 @@ class TestOverview(TestBase):
         # check all landing pages
         for key, image, expected in test_datum:
             account_number = get_extra(expected, "accountNumber")
-            json_part = get_instruct_json_respose(element_schema)
-            find_navigation_query = f"Analyze the provided webpage. For account \"{account_number}\", describe the link to navigate to it's details page. {json_part}"
-         
+            navigation_query = get_query_navigation(account_number)
             # lets assume we can find the account element on this page
             image = self.cropToElements(image, [expected])
-            response = runQuery(find_navigation_query, image)
+            response = runQuery(image, navigation_query)
             self.assertResponse(response, image, expected, key)

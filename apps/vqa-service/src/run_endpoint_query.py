@@ -6,7 +6,7 @@ from typing import TypeVar
 
 T = TypeVar('T')
 # type QueryData = tuple[str, Type[T]] # Can we update to Python 3.12?
-async def run_endpoint_query(image: UploadFile, query: tuple[str, T]) -> T:
+async def run_endpoint_query(image: UploadFile, data: tuple[str, T]) -> T:
     # Validate file type
     # if not image.filename or '.' not in image.filename:
     #     raise HTTPException(status_code=400, detail="Invalid file format")
@@ -16,7 +16,7 @@ async def run_endpoint_query(image: UploadFile, query: tuple[str, T]) -> T:
     image = Image.open(io.BytesIO(image_data))
 
     response = runQuery(
-        query=query,
+        query_data=data,
         image=image,
     )
-    return query[1](**response)
+    return data[1](**response)

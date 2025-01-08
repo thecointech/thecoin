@@ -92,7 +92,7 @@ class TestBase(unittest.TestCase):
 
 def normalize(str: str):
     str = str.lower()
-    str = re.sub(r'[.,-\/\s]', '', str)  # login == log in (etc)
+    str = re.sub(r'[$.,-\/\s]', '', str)  # login == log in (etc)
     return str
 
 
