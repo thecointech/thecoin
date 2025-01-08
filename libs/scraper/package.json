@@ -2,6 +2,7 @@
   "name": "@thecointech/scraper",
   "version": "0.2.135",
   "private": true,
+  "type": "module",
   "description": "The Coin: Automated scraper for TheCoin",
   "keywords": [
     "TheCoin",
@@ -18,7 +19,8 @@
   "scripts": {
     "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "run :jest"
+    "test": "run :jest",
+    "getTestPages": "yarn run -T run-env tools/getTestPages/main.ts"
   },
   "dependencies": {
     "@web-std/file": "^3.0.3",

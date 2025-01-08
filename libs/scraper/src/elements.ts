@@ -4,7 +4,7 @@ import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
 import { scoreElement } from './elements.score';
 
-type FoundElement = {
+export type FoundElement = {
   element: ElementHandle<Element>,
   score: number,
   data: ElementData

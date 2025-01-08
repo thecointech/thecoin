@@ -40,7 +40,7 @@ export async function startPuppeteer(headless?: boolean) {
     // and some sites don't won't take full screenshots properly
     // (eg with warnings/messages at the top of the page)
     // height: 1440,
-    height: 720,
+    height: parseInt(process.env.PUPPETEER_SCREENSHOT_HEIGHT || '1080'),
     deviceScaleFactor: 1,
   });
   _browser = browser;

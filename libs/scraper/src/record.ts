@@ -36,17 +36,19 @@ type RecorderOptions = {
   // A callback to report progress
   onProgress?: (progress: number) => void
   // A callback to run when scraping is complete
-  onComplete: (events: AnyEvent[]) => Promise<void>
-  // A callback to run when a screenshot should be taken
-  onScreenshot?: (page: Page, step: number) => void
+  onComplete?: (events: AnyEvent[]) => Promise<void>
+
+  // Callback when new page is finished loading
+  onNavigation?: (page: Page, step: number) => void
+
+  // Callback allows us to filter events we don't want to remember
+  eventFilter?: (event: AnyEvent) => boolean
   // An array of selectors to monitor for dynamic input
   dynamicInputs?: string[];
 }
 
 export class Recorder {
 
-  // readonly name: ActionTypes;
-  // readonly screenshotFolder: string;
   disconnected?: Promise<boolean>;
   // Each new page loaded is a new step
   step = 0;
@@ -72,24 +74,18 @@ export class Recorder {
 
   public getPage = () => this.page;
 
-  private constructor(options: RecorderOptions, dynamicInputs?: string[]) {
-    // this.name = name;
-    // this.screenshotFolder = "TODO"; //path.join(outFolder, this.name);
+  private constructor(options: RecorderOptions) {
 
     this.options = options;
     this.dynamicInputs = Object.fromEntries(
-      dynamicInputs?.map(name => [name, false]
+      options.dynamicInputs?.map(name => [name, false]
     ) ?? []);
-    log.info(`Recording with dynamic inputs: ${dynamicInputs?.join(', ') ?? 'none'}`);
+    log.info(`Recording with dynamic inputs: ${options.dynamicInputs?.join(', ') ?? 'none'}`);
   }
 
   private async initialize(url: string) {
     const { browser, page } = await startPuppeteer(false);
     this.page = page;
-
-    // if (!existsSync(this.screenshotFolder)) {
-    //   mkdirSync(this.screenshotFolder, { recursive: true })
-    // }
 
     await page.exposeFunction('__onAnyEvent', this.eventHandler);
 
@@ -112,7 +108,7 @@ export class Recorder {
           }
         }
 
-        await this.options.onComplete(this.events);
+        await this.options.onComplete?.(this.events);
         // await setEvents(this.name, this.events);
 
         // Cleanup
@@ -216,7 +212,7 @@ export class Recorder {
     }
     else if (event.type == 'load') {
       // Debounce this as we get multiple page-loads for the same step
-      this.saveScreenshot(this.page, this.step);
+      this.onNavigation?.(this.page, this.step);
 
       // We keep track of the iframes, and their related URLs
       const frames = this.page.frames()
@@ -299,22 +295,20 @@ export class Recorder {
       this.onValue = undefined;
     }
 
-    // if (event.type == 'click') {
-    //   // Dig through any frames on the page to find our element
-    //   if (event.frame) {
-    //     event.frame = this.urlToFrameName[event.frame]
-    //   }
-    // }
-
     // If we have a pending input event, add it to the list first
     if (this.lastInputEvent) {
-      this.events.push(this.lastInputEvent);
-      this.logEvent(this.lastInputEvent);
+      this.saveEvent(this.lastInputEvent);
       this.lastInputEvent = undefined;
     }
 
+    this.saveEvent(event);
+  }
+
+  saveEvent(event: AnyEvent) {
     this.logEvent(event);
-    this.events.push(event);
+    if(this.options.eventFilter?.(event) !== false) {
+      this.events.push(event);
+    }
   }
 
   isDuplicate(event: AnyEvent) {
@@ -338,8 +332,8 @@ export class Recorder {
     const { value, ...sanitized } = event as any;
     log.debug(`Received event: ${JSON.stringify(sanitized)}`)
   }
-  saveScreenshot = debounce((page: Page, step: number) =>
-    this.options.onScreenshot?.(page, step))
+  onNavigation = debounce((page: Page, step: number) =>
+    this.options.onNavigation?.(page, step))
 }
 
 function onNewDocument() {

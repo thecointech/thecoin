@@ -1,8 +1,7 @@
 import type { ElementResponse } from "@thecointech/vqa";
-import type { ElementDataMin } from ".@thecointech/scraper/types";
+import type { ElementDataMin } from "../../src/types";
 import type { Page } from "puppeteer";
-import { getElementForEvent } from "../scraper/elements";
-import { sleep } from "@thecointech/async";
+import { FoundElement, getElementForEvent } from "../../src/elements";
 
 export function responseToElementData(closeButton: ElementResponse): ElementDataMin {
   const width = (closeButton.content ?? "").length * 8;
@@ -22,7 +21,7 @@ export function responseToElementData(closeButton: ElementResponse): ElementData
 }
 
 
-export async function clickResponseElement(page: Page, e: ElementResponse) {
+export async function responseToElement(page: Page, e: ElementResponse) {
   // Try to find and click the close button
   const elementData = responseToElementData(e);
 
@@ -31,17 +30,18 @@ export async function clickResponseElement(page: Page, e: ElementResponse) {
   // So basically, if there is even one things matches, then it's good enough,
   const found = await getElementForEvent(page, elementData, 5000, 20);
   if (!found) return false;
+}
 
+
+export async function clickElement(page: Page, element: FoundElement) {
   try {
-    await found.element.click();
+    await element.element.click();
   }
   catch (err) {
     // We seem to be getting issues with clicking buttons:
     // https://github.com/puppeteer/puppeteer/issues/3496 suggests
     // using eval instead.
     // log.debug(`Click failed, retrying on ${found.data.selector} - ${err}`);
-    await page.$eval(found.data.selector, (el) => (el as HTMLElement).click())
+    await page.$eval(element.data.selector, (el) => (el as HTMLElement).click())
   }
-
-  await sleep(500); // Give the modal time to close
 }
