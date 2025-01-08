@@ -28,8 +28,7 @@ export async function responseToElement(page: Page, e: ElementResponse) {
   // We have a lower minScore because the only data we have is text + position + neighbours
   // Which has a maximum value of 40 (text) + 20 (position) + 20 (neighbours)
   // So basically, if there is even one things matches, then it's good enough,
-  const found = await getElementForEvent(page, elementData, 5000, 20);
-  if (!found) return false;
+  return await getElementForEvent(page, elementData, 5000, 20);
 }
 
 

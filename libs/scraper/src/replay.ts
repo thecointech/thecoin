@@ -1,12 +1,12 @@
 import { DateTime } from 'luxon';
-import type { Page } from 'puppeteer';
+import type { ElementHandle, Page } from 'puppeteer';
 import { startPuppeteer } from './puppeteer-init/init';
 import { getTableData } from './table';
 import { AnyEvent, ValueEvent, ElementData, ReplayCallbacks, ReplayResult } from './types';
 import { CurrencyType, getCurrencyConverter } from './valueParsing';
 import { log } from '@thecointech/logging';
 import { debounce } from './debounce';
-import { getElementForEvent } from './elements';
+import { FoundElement, getElementForEvent } from './elements';
 import { sleep } from '@thecointech/async';
 import { maybeCloseModal } from './modal';
 
@@ -246,17 +246,21 @@ export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: R
   return values;
 }
 
-async function enterValue(page: Page, event: ElementData, value: string) {
-  const { element } = await getElementForEvent(page, event);
-  await element.focus();
-  if (event.tagName == "INPUT" || event.tagName == "TEXTAREA") {
+export async function enterValue(page: Page, event: ElementData, value: string) {
+  const found = await getElementForEvent(page, event);
+  return await enterValueIntoFound(page, found, value);
+}
+
+export async function enterValueIntoFound(page: Page, found: FoundElement, value: string) {
+  await found.element.focus();
+  if (found.data.tagName == "INPUT" || found.data.tagName == "TEXTAREA") {
     // clear existing value
-    await page.evaluate(el => (el as HTMLInputElement).value = "", element);
+    await page.evaluate(el => (el as HTMLInputElement).value = "", found.element);
     // Simulate typing to mimic input actions
     await page.keyboard.type(value, { delay: 20 });
   }
-  else if (event.tagName == "SELECT") {
-    await element.evaluate((v, value) => (v as HTMLSelectElement).value = value, value);
+  else if (found.data.tagName == "SELECT") {
+    await found.element.evaluate((v, value) => (v as HTMLSelectElement).value = value, value);
   }
 }
 

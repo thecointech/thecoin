@@ -1,26 +1,23 @@
-import readline from 'node:readline/promises';
 import { Recorder } from '../../src/record';
-import { GetIntentApi } from '@thecointech/apis/vqa';
 import { LandingWriter } from './landing';
+import { init } from './init';
+import { sleep } from '@thecointech/async';
+import { getConfig } from './config';
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+const { baseFolder, config } = getConfig();
+await init(baseFolder)
 
-const bankUrl = "https://www.rbcroyalbank.com/personal.html"; //await rl.question('Enter bank URL: ');``
-
-const vqa = GetIntentApi();
-
+const name = "RBC";
 const recorder = await Recorder.instance({
   name: "autorecord",
-  url: bankUrl,
+  url: config[name].url,
 });
+// Wait an additional 5 seconds because these pages take _forever_ to load
+await sleep(5000);
 const page = recorder.getPage();
 
-const baseFolder = "/src/testing_pages/unit-tests";
+await LandingWriter.process(page, name);
 
-await LandingWriter.process(page, baseFolder, "RBC");
-
+await Recorder.release();
 
 // This should navigate to the bank page

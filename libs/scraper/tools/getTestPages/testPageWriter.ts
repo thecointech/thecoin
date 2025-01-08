@@ -1,5 +1,5 @@
 import { Page } from "puppeteer";
-import { AnyEvent } from "../../src/types";
+import { ElementData } from "../../src/types";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { File } from '@web-std/file';
@@ -9,23 +9,29 @@ import { ElementResponse, PageType } from "@thecointech/vqa";
 import { clickElement, responseToElement } from "./vqaResponse";
 import { sleep } from "@thecointech/async";
 import { GetIntentApi } from "@thecointech/apis/vqa";
-import { String } from "lodash";
+import { log } from "@thecointech/logging";
+import { enterValueIntoFound } from "../../src/replay";
+import { FoundElement } from "../../src/elements";
 
 type ApiFn = (image: File) => Promise<AxiosResponse<ElementResponse>>
 
+type ApiFnName<T> = keyof {
+  [K in keyof T as T[K] extends ApiFn ? K : never]: T[K]
+}
+
 export class IntentWriter {
-  baseFolder: string
+
+  static baseFolder: string
   name: string
   intent: string
   state: string = "initial"
 
   page: Page
-  currentPageImage: Buffer
+  // currentPageImage: Buffer
   currentPageIntent: PageType;
 
-  protected constructor(page: Page, baseFolder: string, name: string, intent: string) {
+  protected constructor(page: Page, name: string, intent: string) {
     this.page = page
-    this.baseFolder = baseFolder
     this.name = name
     this.intent = intent
   }
@@ -33,90 +39,124 @@ export class IntentWriter {
   // This should be called after every navigation
   async setNewState(state: string) {
     this.state = state
-    await this.saveScreenshot(true);
+    await this.saveScreenshot();
     await this.updatePageIntent()
   }
 
   // Functions for interacting with the webpage
-  async tryClick<T extends object>(
+  async tryClick<T extends object>(api: T, fnName: ApiFnName<T>, elementName: string, thenWaitFor: number = 3000, fullPage: boolean = false) {
+    return await this.doInteraction(api, fnName, elementName, (found) => clickElement(this.page, found), thenWaitFor, fullPage);
+  }
+
+  // Functions for interacting with the webpage
+  async tryEnterText<T extends object>(api: T, fnName: ApiFnName<T>, text: string, elementName: string, thenWaitFor: number = 3000, fullPage: boolean = false) {
+    return await this.doInteraction(api, fnName, elementName, (found) => enterValueIntoFound(this.page, found, text), thenWaitFor, fullPage);
+  }
+
+  async doInteraction<T extends object>(
     api: T,
-    fnName: keyof {
-      [K in keyof T as T[K] extends ApiFn ? K : never]: T[K]
-    },
+    fnName: ApiFnName<T>,
     elementName: string,
-    thenWaitFor: number = 1000
+    interaction: (found: FoundElement) => Promise<void>,
+    thenWaitFor: number = 3000,
+    fullPage: boolean = false
   ) {
-      //@ts-ignore Basically, the typechecking on fnName should guarantee this is correct
-      const fn = api[fnName].bind(api);
-      const { data: r } = await fn(this.getImage());
-      const element = await responseToElement(this.page, r);
-      if (element) {
-        this.saveElement(element, elementName);
-        await clickElement(this.page, element);
-        await sleep(thenWaitFor);
-        return true;
-      }
+    // Always get the latest screenshot
+    const image = await this.getImage(fullPage);
+    const { data: r } = await (api[fnName] as ApiFn)(image);
+    const found = await responseToElement(this.page, r);
+    if (found) {
+      this.saveElement(found.data, elementName);
+      await interaction(found);
+      await sleep(thenWaitFor);
+      return true;
+    }
   }
 
   async updatePageIntent() {
-    const { data: intent } = await GetIntentApi().pageIntent(this.getImage());
+    const image = await this.getImage();
+    const { data: intent } = await GetIntentApi().pageIntent(image);
     this.currentPageIntent = intent.type;
+    log.trace(`Page detected as type: ${intent.type}`);
     return intent.type;
   }
-
-  async updateScreenshotImage(fullPage: boolean = false, path?: string) {
-    this.currentPageImage = await this.page.screenshot({ type: 'png', path, fullPage });
-  }
-
 
   async saveScreenshot(fullPage: boolean = false) {
     // Save screenshot
     const outScFile = this.outputFilename(`${this.name}.png`);
-    await this.updateScreenshotImage(fullPage, outScFile);
+    const screenshot = await this.page.screenshot({ type: 'png', fullPage });
+    writeFileSync(outScFile, screenshot);
     // Also try for MHTML
     const outMhtml = this.outputFilename(`${this.name}.mhtml`);
     const cdp = await this.page.createCDPSession();
     const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
     writeFileSync(outMhtml, data);
+
+    log.trace(`Page screenshot saved to: ${outScFile}`);
   }
 
 
-  saveElement(event: AnyEvent, eventName: string) {
+  saveElement(data: ElementData, eventName: string) {
     // Remove variable data
-    const {
-      timestamp,
-      id,
-      clickX,
-      clickY,
-      parsing,
-      type,
-      ...trimmed
-    } = event as any;
     const toWrite = {
       intent: this.intent,
-      ...trimmed,
+      ...data,
     }
     // Add intent & write to disk
     const jsonFile = this.outputFilename(`${this.name}-${eventName}.json`)
     writeFileSync(jsonFile, JSON.stringify(toWrite, null, 2));
+    log.trace(`Element data saved to: ${jsonFile}`);
   }
 
 
-  getImage() {
-    if (!this.currentPageImage) {
-      throw new Error("No image")
+  waitForPageLoaded() {
+    // different loading thingies
+    const aborter = new AbortController();
+    return Promise.all([
+      this.waitForPageStable(10000, aborter.signal),
+      this.waitForNetworkIdle(10000, aborter.signal)
+    ])
+  }
+
+  async waitForPageStable(timeout = 5000, signal: AbortSignal) {
+    try {
+      let initialContent = await this.page.content();
+      let contentChanged = true;
+      let maxTime = Date.now() + timeout;
+
+      while (Date.now() < maxTime && signal?.aborted === false) {
+        await sleep(250); // Check every 250ms
+        const newContent = await this.page.content();
+        contentChanged = initialContent !== newContent;
+        initialContent = newContent;
+      }
     }
-    return screenshotToFile(this.currentPageImage)
+    catch (error) {
+      console.log("Error waiting for page to be stable", error);
+    }
+  }
+
+  async waitForNetworkIdle(timeout = 5000, _signal: AbortSignal) {
+    const maxTime = Date.now() + timeout;
+    try {
+      await this.page.waitForNetworkIdle({ idleTime: 500, timeout });
+    } catch (error) {}
+  }
+
+
+  async getImage(fullPage: boolean = false, path?: string) {
+    const screenshot = await this.page.screenshot({ type: 'png', fullPage, path });
+    return new File([screenshot], "screenshot.png", { type: "image/png" });
   }
   outputFilename(name: string) {
-    const outputFolder = path.join(this.baseFolder, this.intent, this.state);
+    const outputFolder = path.join(IntentWriter.baseFolder, this.intent, this.state);
     mkdirSync(outputFolder, { recursive: true });
     return path.join(outputFolder, name);
   }
 }
 
 // Create a simple object that matches what the API expects
-export const screenshotToFile = (screenshot: Buffer) => {
-  const copy = Buffer.from(screenshot);
-  return new File([copy], "screenshot.png", { type: "image/png" });
-}
+// export const screenshotToFile = (screenshot: Buffer) => {
+//   const copy = Buffer.from(screenshot);
+//   return new File([copy], "screenshot.png", { type: "image/png" });
+// }

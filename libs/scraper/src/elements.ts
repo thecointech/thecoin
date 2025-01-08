@@ -51,7 +51,6 @@ async function fetchAllCandidates(page: Page, event: ElementDataMin) {
   let nErrors = 0;
   log.info(`Searching ${nFrames} frames`);
   for (const frame of frames) {
-    log.trace("Getting candidates in frame");
     try {
       // Get all elements in frame
       const frameCandidates = await getCandidates(frame, event);
@@ -114,39 +113,54 @@ async function getCandidates(frame: Frame, event: ElementDataMin, timeout=300) {
   // is undefined.  This could potentially be a race condition
   // if this fn evaluates before evaluateOnNewDocument (?)
 
-  // This function may hang on pages with many frames
-  // It should be near-instant, so after 1 second we give up
-  const hasHooks = await Promise.race([
-    new Promise<undefined>((resolve) => setTimeout(() => resolve(undefined), timeout)),
-    frame.evaluate(() => !!window.getElementData)
-  ])
+  let messageToLogOnTimeout = "Getting candidates for frame";
+  // Instead of spamming, do intermittent logging so we can see if we truly have locked up
+  const intervalLogger = setInterval(() => {
+    log.trace(messageToLogOnTimeout);
+  }, 1500);
 
-  // const hasHooks = await frame.evaluate(() => !!window.getElementData)
-  if (!hasHooks) {
-    if (hasHooks === undefined) {
-      log.warn("Frame timed out when testing for getElementData hook");
+  try {
+    // This function may hang on pages with many frames
+    // It should be near-instant, so after 1 second we give up
+    const hasHooks = await Promise.race([
+      new Promise<undefined>((resolve) => setTimeout(() => resolve(undefined), timeout)),
+      frame.evaluate(() => !!window.getElementData)
+    ])
+
+    // const hasHooks = await frame.evaluate(() => !!window.getElementData)
+    if (!hasHooks) {
+      if (hasHooks === undefined) {
+        log.warn("Frame timed out when testing for getElementData hook");
+      }
+      // This is spamming the logs searching frames that are obviously unnecessary.
+      // Leave it out for now.
+      // log.warn("getElementData not yet hooked: skipping");
+      return [];
+    };
+
+    messageToLogOnTimeout = "Getting elements for frame";
+    const elements = await getAllElements(frame);
+    messageToLogOnTimeout = "Filling out siblings for frame with " + elements.length + " elements";
+    const withSiblings = fillOutSiblingText(elements);
+    messageToLogOnTimeout = "Scoring frame with " + withSiblings.length + " elements";
+
+    const candidates: FoundElement[] = [];
+    for (let i = 0; i < withSiblings.length; i++) {
+      messageToLogOnTimeout = `Scoring element: ${i} of ${withSiblings.length}`;
+      const el = withSiblings[i];
+      const score = await scoreElement(el.data, event);
+      if (score > 0) {
+        candidates.push({
+          ...el,
+          score
+        })
+      }
     }
-    // This is spamming the logs searching frames that are obviously unnecessary.
-    // Leave it out for now.
-    // log.warn("getElementData not yet hooked: skipping");
-    return [];
-  };
-
-  log.trace("Getting all elements");
-  const elements = await getAllElements(frame);
-  const withSiblings = fillOutSiblingText(elements);
-
-  const candidates: FoundElement[] = [];
-  for (const el of withSiblings) {
-    const score = await scoreElement(el.data, event);
-    if (score > 0) {
-      candidates.push({
-        ...el,
-        score
-      })
-    }
+    return candidates;
   }
-  return candidates;
+  finally {
+    clearInterval(intervalLogger);
+  }
 }
 
 let lastDbgPrintCandidateSelector: string;
