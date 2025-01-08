@@ -3,27 +3,30 @@ import type { ElementDataMin } from "../../src/types";
 import type { Page } from "puppeteer";
 import { FoundElement, getElementForEvent } from "../../src/elements";
 
-export function responseToElementData(closeButton: ElementResponse): ElementDataMin {
-  const width = (closeButton.content ?? "").length * 8;
-  const height = 16; // Just guess based on avg font size
+export function responseToElementData(response: ElementResponse): ElementDataMin {
+  const width = (response.content ?? "").length * 8;
+  const height = 20; // Just guess based on avg font size
   return {
     estimated: true,
-    text: closeButton.content!,
-    nodeValue: closeButton.content!,
+    text: response.content!,
+    nodeValue: response.content!,
     coords: {
-      top: closeButton.position_y! - height / 2,
-      left: closeButton.position_x! - width / 2,
+      top: response.position_y! - height / 2,
+      left: response.position_x! - width / 2,
       height,
       width,
-      centerY: closeButton.position_y!,
+      centerY: response.position_y!,
     },
   };
 }
 
 
-export async function responseToElement(page: Page, e: ElementResponse) {
+export async function responseToElement(page: Page, e: ElementResponse, htmlType?: string) {
   // Try to find and click the close button
   const elementData = responseToElementData(e);
+  if (htmlType) {
+    elementData.tagName = htmlType;
+  }
 
   // We have a lower minScore because the only data we have is text + position + neighbours
   // Which has a maximum value of 40 (text) + 20 (position) + 20 (neighbours)

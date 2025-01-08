@@ -21,7 +21,8 @@ export class LandingWriter extends IntentWriter {
     const detected = await this.cookieBannerDetected()
     log.trace(`LandingWriter: Cookie banner detected: ${detected}`);
     if (detected) {
-      if (await this.tryClick(GetLandingApi(), "cookieBannerAccept", "cookie-banner-accept")) {
+      const didClose = await this.tryClick(GetLandingApi(), "cookieBannerAccept", "cookie-accept")
+      if (didClose) {
         await this.setNewState("no-cookie");
       }
     }
@@ -41,13 +42,13 @@ export class LandingWriter extends IntentWriter {
   async navigateToLogin() {
     const api = GetLandingApi();
     log.trace(`LandingWriter: Navigating to login`);
-    const didNavigate = await this.tryClick(api, "navigateToLogin", "login", 5000);
+    const didNavigate = await this.tryClick(api, "navigateToLogin", "login", "", 5000);
     if (!didNavigate) {
       console.error("Failed to navigate to login");
       throw new Error("Failed to navigate to login");
     }
     log.trace(`LandingWriter: Waiting for page to load`);
-    await this.waitForPageLoaded();
+    // await this.waitForPageLoaded();
 
     let intent = await this.updatePageIntent();
 
@@ -55,12 +56,12 @@ export class LandingWriter extends IntentWriter {
       // Now, if we are still on the landing page, it may mean that there
       // is a menu open.  Try and find the login link (again) and click it
       await this.setNewState("menu");
-      const didMenu = await this.tryClick(api, "navigateToLogin", "login", 5000);
+      const didMenu = await this.tryClick(api, "navigateToLogin", "login", "", 5000);
       if (!didMenu) {
         console.error("Failed to navigate via menu to login");
         throw new Error("Failed to navigate via menu to login");
       }
-      await this.waitForPageLoaded();
+      // await this.waitForPageLoaded();
       intent = await this.updatePageIntent();
     }
 

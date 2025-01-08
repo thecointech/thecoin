@@ -44,13 +44,13 @@ export class IntentWriter {
   }
 
   // Functions for interacting with the webpage
-  async tryClick<T extends object>(api: T, fnName: ApiFnName<T>, elementName: string, thenWaitFor: number = 3000, fullPage: boolean = false) {
-    return await this.doInteraction(api, fnName, elementName, (found) => clickElement(this.page, found), thenWaitFor, fullPage);
+  async tryClick<T extends object>(api: T, fnName: ApiFnName<T>, elementName: string, htmlType: string = "input", thenWaitFor: number = 3000, fullPage: boolean = false) {
+    return await this.doInteraction(api, fnName, elementName, (found) => clickElement(this.page, found), htmlType, thenWaitFor, fullPage);
   }
 
   // Functions for interacting with the webpage
-  async tryEnterText<T extends object>(api: T, fnName: ApiFnName<T>, text: string, elementName: string, thenWaitFor: number = 3000, fullPage: boolean = false) {
-    return await this.doInteraction(api, fnName, elementName, (found) => enterValueIntoFound(this.page, found, text), thenWaitFor, fullPage);
+  async tryEnterText<T extends object>(api: T, fnName: ApiFnName<T>, text: string, elementName: string, htmlType: string = "input", thenWaitFor: number = 3000, fullPage: boolean = false) {
+    return await this.doInteraction(api, fnName, elementName, (found) => enterValueIntoFound(this.page, found, text), htmlType, thenWaitFor, fullPage);
   }
 
   async doInteraction<T extends object>(
@@ -58,17 +58,18 @@ export class IntentWriter {
     fnName: ApiFnName<T>,
     elementName: string,
     interaction: (found: FoundElement) => Promise<void>,
+    htmlType: string = "",
     thenWaitFor: number = 3000,
     fullPage: boolean = false
   ) {
     // Always get the latest screenshot
     const image = await this.getImage(fullPage);
     const { data: r } = await (api[fnName] as ApiFn)(image);
-    return await this.completeInteraction(r, elementName, interaction, thenWaitFor);
+    return await this.completeInteraction(r, elementName, interaction, htmlType, thenWaitFor);
   }
 
-  async completeInteraction(r: ElementResponse, elementName: string, interaction: (found: FoundElement) => Promise<void>, thenWaitFor: number = 3000) {
-    const found = await responseToElement(this.page, r);
+  async completeInteraction(r: ElementResponse, elementName: string, interaction: (found: FoundElement) => Promise<void>, htmlType: string = "", thenWaitFor: number = 3000) {
+    const found = await responseToElement(this.page, r, htmlType);
     if (found) {
       this.saveElement(found.data, elementName);
       await interaction(found);
@@ -88,8 +89,8 @@ export class IntentWriter {
   async saveScreenshot(fullPage: boolean = false) {
     // Save screenshot
     const outScFile = this.outputFilename(`${this.name}.png`);
-    const screenshot = await this.page.screenshot({ type: 'png', fullPage });
-    writeFileSync(outScFile, screenshot);
+    await this.page.screenshot({ type: 'png', fullPage, path: outScFile });
+
     // Also try for MHTML
     const outMhtml = this.outputFilename(`${this.name}.mhtml`);
     const cdp = await this.page.createCDPSession();
@@ -102,9 +103,13 @@ export class IntentWriter {
 
   saveElement(data: ElementData, eventName: string) {
     // Remove variable data
+    const {
+      frame,
+      ...trimmed
+    } = data;
     this.saveJson({
       intent: this.intent,
-      ...data,
+      ...trimmed,
     }, eventName)
   }
 

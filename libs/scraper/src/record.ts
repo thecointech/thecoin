@@ -29,6 +29,8 @@ type DynamicInputWaiter = {
 }
 
 type RecorderOptions = {
+  // Whether to run puppeteer in headless mode
+  headless?: boolean
   // A key to identify this sessions
   name: string
   // An initial url to load
@@ -84,7 +86,7 @@ export class Recorder {
   }
 
   private async initialize(url: string) {
-    const { browser, page } = await startPuppeteer(false);
+    const { browser, page } = await startPuppeteer(this.options.headless);
     this.page = page;
 
     await page.exposeFunction('__onAnyEvent', this.eventHandler);
