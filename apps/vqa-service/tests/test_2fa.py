@@ -1,6 +1,6 @@
 from TestBase import TestBase, runQuery
 from testdata import get_test_data, get_single_test_element
-from twofa_data import query_page_login_result, query_page_2fa_action, query_page_2fa_destinations, get_2fa_elements_for_phone, query_2fa_input_element, query_2fa_skip_element, query_2fa_submit_element
+from twofa_data import query_login_result, query_page_2fa_action, query_page_2fa_destinations, get_2fa_elements_for_phone, query_2fa_input_element, query_2fa_skip_element, query_2fa_submit_element
 
 # detect_2fa_schema = {
 #     "type": "object",
@@ -62,7 +62,7 @@ class Query2faTests(TestBase):
         def test_vs_expected(data, expected):
             for key, image, _ in data:
                 print(f"Testing {key} for {expected}")
-                detected = runQuery(image, query_page_login_result)
+                detected = runQuery(image, query_login_result)
                 self.assertEqual(detected["intent"], expected)
 
         test_vs_expected(get_test_data("2fa", "initial"), "TwoFactorAuth")

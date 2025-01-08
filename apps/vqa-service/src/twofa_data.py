@@ -14,7 +14,7 @@ class LoginResultResponse(BaseModel):
 loginTypesStr = ", ".join([e.value for e in LoginResult])
 login_result_prompt = f"From the following options, select the one that best describes the given webpage: [{loginTypesStr}]"
 
-query_page_login_result = (
+query_login_result = (
     login_result_prompt,
     LoginResultResponse
 )
@@ -39,7 +39,7 @@ query_page_2fa_action = (
 
 # action_prompt = f"From the following options, select the one that best describes the action required in the given webpage [SelectDestination, InputCode, ApproveInApp, Error] {get_instruct_json_respose(detect_2fa_action)}"
 
-class TwoFactorDestination(BaseModel):
+class TwoFactorDestinationsResponse(BaseModel):
     phone_nos: list[str] = Field(..., description="array of phone numbers")
     emails: list[str] = Field(..., description="array of emails")
 
@@ -47,23 +47,23 @@ get_destinations_prompt = f"Analyze the provided webpage. How many phone numbers
 
 query_page_2fa_destinations = (
     get_destinations_prompt,
-    TwoFactorDestination
+    TwoFactorDestinationsResponse
 )       
 
 #get_options_query = f"Analyze the provided webpage. Describe all the elements that will send a two-factor authentication code to {phone}.}"
-class TwoFactorElements(BaseModel):
+class TwoFactorElementsResponse(BaseModel):
     elements: list[ElementResponse]
 
 get_elements_prompt = "Analyze the provided webpage. Describe all the elements that will send a two-factor authentication code to "
 # query_page_2fa_elements = (
 #     get_destinations_prompt,
-#     TwoFactorElements
+#     TwoFactorElementsResponse
 # )       
 
 def get_2fa_elements_for_phone(phone: str):
     return (
         get_elements_prompt + phone + ".",
-        TwoFactorElements
+        TwoFactorElementsResponse
     )
 
 # query_2fa_input_element = f"Analyze the provided webpage. Describe the input for auth code. {get_instruct_json_respose(element_schema)}"

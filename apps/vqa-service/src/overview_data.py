@@ -12,7 +12,7 @@ class AccountType(Enum):
     CREDIT = "Credit"
 
 class AccountResponse(BaseModel):
-    type: AccountType
+    account_type: AccountType
     account_number: str
     balance: str
     position_x: float
