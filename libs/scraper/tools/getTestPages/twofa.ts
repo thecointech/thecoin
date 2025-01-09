@@ -2,7 +2,6 @@ import type { Page } from "puppeteer";
 import { GetTwofaApi } from "@thecointech/apis/vqa";
 import { IntentWriter } from "./testPageWriter";
 import { log } from "@thecointech/logging";
-import type { ElementResponse } from "@thecointech/vqa";
 import { clickElement } from "./vqaResponse";
 import { ElementOptions, IAskUser } from "./askUser";
 
@@ -82,7 +81,7 @@ export class TwoFAWriter extends IntentWriter {
       const pageIntentPromise = new Promise<void>(resolve => {
         let updateInterval = setInterval(async () => {
           try {
-            if (Date.now() > maxTime || await this.updatePageIntent() != "TwoFactorAuth") {
+            if (Date.now() > maxTime || await this.updatePageIntent() != "Login") {
               clearInterval(updateInterval);
               resolve();
             }
@@ -127,7 +126,7 @@ export class TwoFAWriter extends IntentWriter {
 
   async askUserForDestination(destinations: ElementOptions) {
     // TODO: Query the page for the actual 2FA message
-    return this.askUser.selectOption("Select where to send the code: ", destinations);
+    return this.askUser.selectOption("Select where to send the code: ", destinations, "content");
   }
 }
 

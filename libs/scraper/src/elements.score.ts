@@ -6,7 +6,15 @@ import { Coords, ElementData, ElementDataMin } from "./types";
 // too easy to bias to right-nows problems
 export async function scoreElement(potential: ElementData, original: ElementDataMin) {
   let score = 0;
-  if (potential.tagName == original.tagName) score = score + 20;
+  if (potential.tagName == original.tagName) {
+    score = score + 20;
+    // If estimated, the tagname matters much more because
+    // the tagName will not be confused by minor changes (eg Div -> Span)
+    // and if specified (eg, input) it's a much higher priority
+    if (original.estimated) {
+      score = score * 2;
+    }
+  }
   if (potential.selector == original.selector) score = score + 25;
 
   if (potential.font?.font == original.font?.font) score = score + 5;

@@ -1,11 +1,15 @@
 import { ElementResponse } from "@thecointech/vqa";
 import readline from 'readline/promises';
 
-export type ElementOptions = Record<string, ElementResponse[]>;
+export type User2DChoice<T> = Record<string, T[]>
+export type ElementOptions = User2DChoice<ElementResponse>;
+type ChoiceText<T> = keyof {
+  [K in keyof T as T[K] extends string ? K : never]: T[K]
+}
 
 export interface IAskUser {
   forValue(question: string): Promise<string>;
-  selectOption(question: string, options: ElementOptions): Promise<ElementResponse>;
+  selectOption<T extends object>(question: string, options: User2DChoice<T>, z: ChoiceText<T>): Promise<T>;
 }
 
 export class AskUser implements IAskUser {
@@ -21,17 +25,18 @@ export class AskUser implements IAskUser {
   }
 
   async forValue(question: string): Promise<string> {
-    return this.rlp.question(question);
+    return this.rlp.question(`${question}: `);
   }
-  async selectOption(question: string, options: ElementOptions): Promise<ElementResponse> {
+  async selectOption<T extends object>(question: string, options: User2DChoice<T>, z: ChoiceText<T> ): Promise<T> {
     this.rlp.write(`\n${question}\n`);
     const entries = Object.entries(options);
-    for (let i = 0; i < entries.length; i++) {
-      const [key, value] = entries[i];
-      this.rlp.write(`[${i}] ${key}: ${value[0].content}\n`);
+    const flatEntries = entries.flatMap(([k, arr]) => arr.map((v) => [k, v] as const));
+    for (let i = 0; i < flatEntries.length; i++) {
+      const [key, value] = flatEntries[i];
+      this.rlp.write(`[${i}] ${key}: ${value[z]}\n`);
     }
-    const option = await this.forValue("Select an option: ");
-    return entries[parseInt(option)][1][0];
+    const option = await this.forValue("Select an option");
+    return flatEntries[parseInt(option)][1];
   }
 
   [Symbol.dispose]() {
