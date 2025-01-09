@@ -113,7 +113,7 @@ export class TwoFAWriter extends IntentWriter {
 
   async clickSubmit() {
     const api = GetTwofaApi();
-    const clickedSubmit = await this.tryClick(api, "getSubmitInput", "login");
+    const clickedSubmit = await this.tryClick(api, "getSubmitInput", "submit");
     if (!clickedSubmit) {
       throw new Error("Failed to click submit");
     }

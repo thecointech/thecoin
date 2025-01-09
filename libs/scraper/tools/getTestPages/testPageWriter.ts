@@ -40,7 +40,12 @@ export class IntentWriter {
   async setNewState(state: string) {
     this.state = state
     await this.saveScreenshot();
-    await this.updatePageIntent()
+    const intent = await this.updatePageIntent()
+    // Save out the inferred intent when loading the page
+    // (This may be different from the stated intent)
+    this.saveJson({
+      intent,
+    }, "intent");
   }
 
   async getImage(fullPage: boolean = false) {
