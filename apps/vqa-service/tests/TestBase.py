@@ -44,11 +44,16 @@ class TestBase(unittest.TestCase):
         )
 
     def assertResponse(self, response: dict, image: Image, expected: dict, key: str = None):
-        textOverlap = (
-            normalize(expected["text"]) in normalize(response["content"]) or
-            normalize(response["content"]) in normalize(expected["text"])
-        )
-        self.assertTrue(textOverlap, f"Text: {response['content']} does not match expected: {expected['text']} in {key}")
+        if (expected["text"] == ""):
+            # If no text expected, then response should be empty
+            self.assertEqual(response["content"], "", "Text: " + response["content"] + " does not match expected: " + expected["text"] + " in " + key)
+        else:
+            # Else, just check they overlap in some way
+            textOverlap = (
+                normalize(expected["text"]) in normalize(response["content"]) or
+                normalize(response["content"]) in normalize(expected["text"])
+            )
+            self.assertTrue(textOverlap, f"Text: {response['content']} does not match expected: {expected['text']} in {key}")
 
         self.assertPosition(response, image, expected, key)
 

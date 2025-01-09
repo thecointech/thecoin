@@ -19,4 +19,8 @@ async def run_endpoint_query(image: UploadFile, data: tuple[str, T]) -> T:
         query_data=data,
         image=image,
     )
-    return data[1](**response)
+    try:
+        return data[1](**response)
+    except Exception as e:
+        print(f"Error parsing response: {response}")
+        raise e

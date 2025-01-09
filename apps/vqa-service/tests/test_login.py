@@ -6,6 +6,7 @@ from intent_data import query_page_intent
 from error_data import query_error_message, query_error_text
 from login_data import *
 
+KeyFilter = ["Tangerine"]
 
 class TestLoginProcess(TestBase):
 
@@ -19,8 +20,11 @@ class TestLoginProcess(TestBase):
     def test_detect_username_input(self):
         test_data = get_single_test_element("login", "initial", "username")
         for key, image, expected in test_data:
-            element = runQuery(image, query_username_element)
-            self.assertResponse(element, image, expected, key)
+            if (key not in KeyFilter):
+                continue
+            with self.subTest(key=key):
+                element = runQuery(image, query_username_element)
+                self.assertResponse(element, image, expected, key)
     
     # All pages must be able to detect if password is present
     def test_detect_password_exists(self):

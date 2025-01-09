@@ -13,7 +13,7 @@ class TestSummary(TestBase):
     def test_overview_page_intent(self):
         # get landing pages
         # All pages are required to have an intent, so don't filter them out here
-        test_datum = get_test_data("overview", "")
+        test_datum = get_test_data("AccountSummary", "")
 
         # check all landing pages
         for key, image, expected in test_datum:
@@ -23,7 +23,7 @@ class TestSummary(TestBase):
     def test_overview_list_accounts(self):
         # get landing pages
         # All pages are required to have an intent, so don't filter them out here
-        test_datum = get_single_test_element("overview", "", "list-accounts")
+        test_datum = get_single_test_element("AccountSummary", "", "list-accounts")
 
         # check all landing pages
         for key, image, expected in test_datum:
@@ -58,7 +58,7 @@ class TestSummary(TestBase):
             print("All accounts matched in list accounts " + key)
 
     def test_find_account_balance(self):
-        test_datum = get_single_test_element("overview", "", "balance")
+        test_datum = get_single_test_element("AccountSummary", "", "balance")
 
         # check all landing pages
         for key, image, expected in test_datum:
@@ -71,7 +71,7 @@ class TestSummary(TestBase):
             self.assertResponse(response, image, expected, key)
 
     def test_find_navigate_to_account(self):
-        test_datum = get_single_test_element("overview", "", "navigate")
+        test_datum = get_single_test_element("AccountSummary", "", "navigate")
 
         # check all landing pages
         for key, image, expected in test_datum:

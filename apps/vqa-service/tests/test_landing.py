@@ -18,7 +18,7 @@ class TestLanding(TestBase):
     def test_landing_page_intent(self):
         # get landing pages
         # All pages are required to have an intent, so don't filter them out here
-        test_datum = get_test_data("landings", "initial")
+        test_datum = get_test_data("Landing", "initial")
 
         # check all landing pages
         for key, image, expected in test_datum:
@@ -27,7 +27,7 @@ class TestLanding(TestBase):
             self.assertEqual(intent["type"], expected["intent"]["intent"])
 
     def test_cookie_banner_exists(self):
-        test_datum = get_test_data("landings", "initial")
+        test_datum = get_test_data("Landing", "initial")
         # check all landing pages
         for key, image, expected in test_datum:
             print("Is there a cookie cookie banner: " + key)
@@ -35,7 +35,7 @@ class TestLanding(TestBase):
             self.assertEqual(banner["cookie_banner_detected"], "cookie-accept" in expected)
 
     def test_cookie_accept(self):
-        test_datum = get_single_test_element("landings", "initial", "cookie-accept")
+        test_datum = get_single_test_element("Landing", "initial", "cookie-accept")
         # check all landing pages
         for key, image, expected in test_datum:
             print("Find cookie accept button in: " + key)
@@ -43,7 +43,7 @@ class TestLanding(TestBase):
             self.assertResponse(banner, image, expected, key)
 
     def test_molmo_finds_login_button(self):
-        test_datum = get_single_test_element("landings", "initial", "login")
+        test_datum = get_single_test_element("Landing", "initial", "login")
         # check all landing pages
         for key, image, original in test_datum:
             print("Testing Login Navigation for: " + key)

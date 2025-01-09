@@ -6,7 +6,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-MAX_HEIGHT = 1440
+# TODO: Make this configurable?  A larger LLM may be able to handle bigger images
+MAX_HEIGHT = 770 #1440
 
 class JsonDatum(TypedDict):
     name: str

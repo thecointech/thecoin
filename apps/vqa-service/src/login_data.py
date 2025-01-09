@@ -11,7 +11,7 @@ class ErrorResponse(BaseModel):
     error_message: str = Field(..., optional=True, description="Optionally contains error message only if error_message_detected is true")
 
 class InputElementResponse(ElementResponse):
-    content: Optional[str] = Field(..., description="placeholder text or empty string")
+    content: Optional[str] = Field(..., description="placeholder text inside the element or empty string")
 
 query_username_element = (
     "Analyze the provided webpage. Describe the input for the username or cardnumber.",
