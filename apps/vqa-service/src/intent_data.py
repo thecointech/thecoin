@@ -11,6 +11,7 @@ class PageType(str, Enum):
     PAY_BILL = 'PayBill'
     SEND_TRANSFER = 'SendTransfer'
     MODAL_DIALOG = 'ModalDialog'
+    LOADING = 'Loading'
     ERROR_MESSAGE = 'ErrorMessage'
 
 
