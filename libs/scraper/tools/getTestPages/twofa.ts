@@ -10,7 +10,7 @@ export class TwoFAWriter extends IntentWriter {
 
   static async process(page: Page, name: string, askUser: IAskUser) {
     log.trace("TwoFAWriter: begin processing");
-    const writer = new TwoFAWriter(page, name, "Login", askUser);
+    const writer = new TwoFAWriter(page, name, "2FA", askUser);
     await writer.setNewState("initial");
     // There should always be a username here
     await writer.complete2FA();
@@ -51,7 +51,7 @@ export class TwoFAWriter extends IntentWriter {
       }
     }
     const dest = await this.askUserForDestination(allOptions);
-    const clickedOption = await this.completeInteraction(dest, "destination", (found) => clickElement(this.page, found), 3000);
+    const clickedOption = await this.completeInteraction(dest, "destination", (found) => clickElement(this.page, found), "", 3000);
     if (!clickedOption) {
       throw new Error("Failed to click destination");
     }

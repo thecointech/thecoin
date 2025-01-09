@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import type { ElementHandle, Page } from 'puppeteer';
+import type { Page } from 'puppeteer';
 import { startPuppeteer } from './puppeteer-init/init';
 import { getTableData } from './table';
 import { AnyEvent, ValueEvent, ElementData, ReplayCallbacks, ReplayResult } from './types';

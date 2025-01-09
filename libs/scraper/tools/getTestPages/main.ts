@@ -6,6 +6,7 @@ import { getConfig } from './config';
 import { TwoFAWriter } from './twofa';
 import { AskUser } from './askUser';
 import { AccountSummaryWriter } from './accountSummary';
+import { LoginWriter } from './login';
 
 const { baseFolder, config } = getConfig();
 await init(baseFolder)
@@ -14,6 +15,7 @@ const name = Object.keys(config)[0]; // Get first config
 const recorder = await Recorder.instance({
   name: "autorecord",
   url: config[name].url,
+  headless: false
 });
 // Wait an additional 5 seconds because these pages take _forever_ to load
 await sleep(5000);
@@ -21,6 +23,10 @@ const page = recorder.getPage();
 
 const askUser = new AskUser();
 let nextIntent = await LandingWriter.process(page, name);
+if (nextIntent != "Login") {
+  throw new Error("Failed to get to Login");
+}
+nextIntent = await LoginWriter.process(page, name, config[name]);
 if (nextIntent == "TwoFactorAuth") {
   nextIntent = await TwoFAWriter.process(page, name, askUser);
 }

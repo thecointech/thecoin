@@ -2,16 +2,16 @@ import type { Page } from "puppeteer";
 import { GetAccountSummaryApi } from "@thecointech/apis/vqa";
 import { IntentWriter } from "./testPageWriter";
 import { log } from "@thecointech/logging";
-import { IAskUser } from "./askUser";
 import { responseToElement } from "./vqaResponse";
 import { ElementData } from "../../src/types";
 import { ElementResponse } from "@thecointech/vqa";
+import { extractFuzzyMatch } from "./extractFuzzyMatch";
 
 export class AccountSummaryWriter extends IntentWriter {
 
   static async process(page: Page, name: string) {
     log.trace("AccountSummaryWriter: begin processing");
-    const writer = new AccountSummaryWriter(page, name, "Login");
+    const writer = new AccountSummaryWriter(page, name, "AccountSummary");
     await writer.setNewState("initial");
     // Currently, we don't actually do anything, just list the accounts and move on...
     await writer.listAccounts();
@@ -25,10 +25,19 @@ export class AccountSummaryWriter extends IntentWriter {
     // Click on each account
     const allAccounts: ElementData[] = [];
     for (const account of accounts.accounts) {
-      console.log(account);
-      // Find the balance element for this account
-      const { data: balance } = await api.accountBalanceElement(account.account_number, await this.getImage());
-      const found = await responseToElement(this.page, balance);
+
+      log.trace(`Processing account: ${account.account_number} - ${account.account_type} - ${account.balance}`);
+      // Find the most likely element describing this account
+      const found = await responseToElement(this.page, {
+        position_x: account.position_x,
+        position_y: account.position_y,
+        background_color: "#f0f0f0",
+        font_color: "#000000",
+        neighbour_text: `${account.account_type}, ${account.account_number}, ${account.balance}`,
+        content: `${account.account_type} ${account.account_number} ${account.balance}`,
+      });
+
+      // const found = await responseToElement(this.page, balance);
       if (found) {
         const data = {
           ...found.data,
@@ -42,7 +51,10 @@ export class AccountSummaryWriter extends IntentWriter {
     this.saveJson(allAccounts, "list-accounts");
 
     // Just use the first account (maybe later we'll store them all)
-    const accountNumber = accounts.accounts[0].account_number;
+    const inferredAccountNumber = accounts.accounts[0].account_number;
+    const realAccountText = allAccounts[0].text;
+    // The inferred number may be off by a few digits
+    const { match: accountNumber } = extractFuzzyMatch(inferredAccountNumber, realAccountText);
     await this.saveBalanceElement(accountNumber);
     await this.saveAccountNavigation(accountNumber);
   }
