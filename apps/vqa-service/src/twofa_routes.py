@@ -1,9 +1,7 @@
 from fastapi import UploadFile
 from data_elements import ElementResponse
 from run_endpoint_query import run_endpoint_query
-from twofa_data import LoginResultResponse, TwoFactorActionRequiredResponse, TwoFactorDestinationsResponse, TwoFactorElementsResponse
-from twofa_data import query_login_result, query_page_2fa_action, get_2fa_elements_for_phone, query_page_2fa_destinations, query_2fa_input_element, query_2fa_skip_element, query_2fa_submit_element
-
+from twofa_data import *
 
 def add_twofa_routes(app):
 
