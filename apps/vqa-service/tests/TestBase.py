@@ -10,6 +10,7 @@ sys.path.append(os.path.join(parent_dir, 'src'))
 
 from query import runQuery  # noqa: E402
 
+
 class TestBase(unittest.TestCase):
 
     def assertEqual(self, str1, str2, msg=None):

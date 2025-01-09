@@ -7,10 +7,6 @@ from twofa_data import query_login_result, query_page_2fa_action, get_2fa_elemen
 
 def add_twofa_routes(app):
 
-    @app.post("/twofa/login-result", tags=["twofa"])
-    async def detect_login_result(image: UploadFile) -> LoginResultResponse:
-        return await run_endpoint_query(image, query_login_result)
-
     @app.post("/twofa/detect-action-required", tags=["twofa"])
     async def detect_action_required(image: UploadFile) -> TwoFactorActionRequiredResponse:
         return await run_endpoint_query(image, query_page_2fa_action)

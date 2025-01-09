@@ -9,6 +9,11 @@ load_dotenv()
 # TODO: Make this configurable?  A larger LLM may be able to handle bigger images
 MAX_HEIGHT = 770 #1440
 
+# Only run tests with this key
+# KeyFilter = ["Tangerine"]
+KeyFilter = []
+
+
 class JsonDatum(TypedDict):
     name: str
     data: object
@@ -81,9 +86,12 @@ def get_test_data(test_type: str, page_type: str, max_height: int = MAX_HEIGHT) 
         if f.endswith(".png")
     ]
 
-    # elements = {f: get_elements(f) for f in image_files}
-    # only_valid = {k: v for k, v in elements.items() if v is not None}
-    return [TestData(get_basename(f), load_image(f, max_height), get_elements(f)) for f in image_files]
+    test_data = [TestData(get_basename(f), load_image(f, max_height), get_elements(f)) for f in image_files]
+    # In DEBUG mode, allow filtering only to a single key
+    # this allows us to focus on a single target
+    if (os.environ.get('DEBUGPY_RUNNING') == "true" and len(KeyFilter) > 0):
+        test_data = [v for v in test_data if v.key in KeyFilter]
+    return test_data
 
 
 def get_single_test_element(test_type: str, page_type: str, data_type: str, max_height: int = MAX_HEIGHT):

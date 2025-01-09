@@ -1,7 +1,7 @@
 from TestBase import TestBase, runQuery
 from testdata import get_test_data, get_single_test_element
-from twofa_data import query_login_result, query_page_2fa_action, query_page_2fa_destinations, get_2fa_elements_for_phone, query_2fa_input_element, query_2fa_skip_element, query_2fa_submit_element
-
+from twofa_data import query_page_2fa_action, query_page_2fa_destinations, get_2fa_elements_for_phone, query_2fa_input_element, query_2fa_skip_element, query_2fa_submit_element
+import os
 # detect_2fa_schema = {
 #     "type": "object",
 #     "properties": {
@@ -57,16 +57,18 @@ from twofa_data import query_login_result, query_page_2fa_action, query_page_2fa
 class Query2faTests(TestBase):
 
     # Can we tell the difference between failed login & 2FA required pages?
-    # Working Jan2
-    def test_2fa_page_intent(self):
-        def test_vs_expected(data, expected):
-            for key, image, _ in data:
-                print(f"Testing {key} for {expected}")
-                detected = runQuery(image, query_login_result)
-                self.assertEqual(detected["intent"], expected)
+    # Working Jan2 (note, not general-purpose intent detection)
+    # def test_2fa_page_intent(self):
+    #     def test_vs_expected(data, expected):
+    #         for key, image, _ in data:
+    #             if filter_test(key):
+    #                 continue
+    #             with self.subTest(key=key):
+    #                 detected = runQuery(image, query_login_result)
+    #                 self.assertEqual(detected["intent"], expected)
 
-        test_vs_expected(get_test_data("2fa", "initial"), "TwoFactorAuth")
-        test_vs_expected(get_test_data("login", "failed"), "LoginError")
+    #     test_vs_expected(get_test_data("2fa", "initial"), "TwoFactorAuth")
+    #     test_vs_expected(get_test_data("login", "failed"), "LoginError")
 
     # Are there multiple 2fa options to choose from
     # Working Jan2

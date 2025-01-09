@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, Field
 from data_elements import ElementResponse
-
+from enum import Enum
 
 class PasswordDetectedResponse(BaseModel):
     password_input_detected: bool
@@ -38,3 +38,21 @@ query_error_message = (
     ErrorResponse
 )
 
+class LoginResult(str, Enum):
+    LOGIN_SUCCESS = 'LoginSuccess'
+    TWO_FACTOR_AUTH = 'TwoFactorAuth'
+    LOGIN_ERROR = 'LoginError'
+    OTHER_ERROR = 'OtherError'
+
+loginTypesStr = ", ".join([e.value for e in LoginResult])
+login_result_prompt = f"From the following options, select the one that best describes the login result for the given webpage: [{loginTypesStr}]"
+loginResultEnumStr = "|".join([e.value for e in LoginResult])
+class LoginResultResponse(BaseModel):
+    result: LoginResult = Field(..., description=loginResultEnumStr)
+    # error_message: Optional[str] = Field(..., description="error message only if result is LoginError")
+
+
+query_login_result = (
+    login_result_prompt,
+    LoginResultResponse
+)

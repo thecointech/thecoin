@@ -3,22 +3,6 @@ from data_elements import ElementResponse
 from enum import Enum
 
 
-class LoginResult(str, Enum):
-    LOGIN_ERROR = 'LoginError'
-    TWO_FACTOR_AUTH = 'TwoFactorAuth'
-    UNKNOWN = 'Unknown'
-
-class LoginResultResponse(BaseModel):
-    intent: LoginResult = Field(..., description="option")
-
-loginTypesStr = ", ".join([e.value for e in LoginResult])
-login_result_prompt = f"From the following options, select the one that best describes the given webpage: [{loginTypesStr}]"
-
-query_login_result = (
-    login_result_prompt,
-    LoginResultResponse
-)
-
 class TwoFactorActions(str, Enum):
     SELECT_DESTINATION = 'SelectDestination'
     INPUT_CODE = 'InputCode'

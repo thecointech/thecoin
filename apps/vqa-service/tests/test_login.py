@@ -6,7 +6,6 @@ from intent_data import query_page_intent
 from error_data import query_error_message, query_error_text
 from login_data import *
 
-KeyFilter = ["Tangerine"]
 
 class TestLoginProcess(TestBase):
 
@@ -72,6 +71,17 @@ class TestLoginProcess(TestBase):
             element = runQuery(image, query_login_button)
             self.assertResponse(element, image, expected, key)
 
+
+    def test_login_result_success(self):
+        test_login_result(self, "AccountSummary", "initial", "LoginSuccess")
+
+    def test_login_result_failed(self):
+        test_login_result(self, "login", "failed", "LoginError")
+
+    def test_login_result_2fa(self):
+        test_login_result(self, "2fa", "initial", "TwoFactorAuth")
+
+        
     # While this test is passing, it's probably not reliable enough yet to have directly in our harvesting setup.
     # It detects correctly, but also has too many false positives
     # False positives
@@ -88,6 +98,14 @@ class TestLoginProcess(TestBase):
             self.assertEqual(detect["error_message_detected"], True, "Error message detection failed for " + key)
             error_message = runQuery(image, query_error_text)
             self.assertEqual(error_message["error_message"], expected["text"], "Error message failed for " + key)
+
+
+def test_login_result(test, intent, state, expected):
+    test_data = get_test_data(intent, state)
+    for key, image, _ in test_data:
+        with test.subTest(key=f"{expected}-{key}"):
+            detect = runQuery(image, query_login_result)
+            test.assertEqual(detect["result"], expected, "Login result failed for " + key)
 
 
 if __name__ == "__main__":

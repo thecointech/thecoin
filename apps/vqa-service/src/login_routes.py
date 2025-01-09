@@ -30,4 +30,8 @@ def add_login_routes(app):
     async def detect_login_error(image: UploadFile) -> ErrorResponse:
         return await run_endpoint_query(image, query_error_message)
 
+    @app.post("/login/detect-login-result", tags=["login"])
+    async def detect_login_result(image: UploadFile) -> LoginResultResponse:
+        return await run_endpoint_query(image, query_login_result)
+
     # Errors: TODO: Can we not create a generic endpoint for this?

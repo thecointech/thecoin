@@ -5,7 +5,11 @@ from pydantic import BaseModel, Field
 class PageType(str, Enum):
     LANDING = 'Landing'
     LOGIN = 'Login'
-    TWO_FACTOR_AUTH = 'TwoFactorAuth'
+    # It seems we can't reliably detect the
+    # difference between login & 2FA when executed
+    # like this, so that detection is split
+    # into it's own distinct test
+    # TWO_FACTOR_AUTH = 'TwoFactorAuth'
     ACCOUNTS_SUMMARY = 'AccountsSummary'
     ACCOUNT_DETAILS = 'AccountDetails'
     PAY_BILL = 'PayBill'
