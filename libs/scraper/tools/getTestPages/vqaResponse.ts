@@ -3,13 +3,17 @@ import type { ElementDataMin } from "../../src/types";
 import type { Page } from "puppeteer";
 import { FoundElement, getElementForEvent } from "../../src/elements";
 
-export function responseToElementData(response: ElementResponse): ElementDataMin {
+export function responseToElementData(response: ElementResponse, htmlType?: string): ElementDataMin {
   const width = (response.content ?? "").length * 8;
   const height = 20; // Just guess based on avg font size
   return {
     estimated: true,
+    tagName: htmlType?.toUpperCase(),
     text: response.content!,
     nodeValue: response.content!,
+    label: response.content!,
+    // Include original text in neighbour text, LLM isn't known for being precise
+    siblingText: [response.neighbour_text, response.content].filter(t => !!t),
     coords: {
       top: response.position_y! - height / 2,
       left: response.position_x! - width / 2,
@@ -23,10 +27,7 @@ export function responseToElementData(response: ElementResponse): ElementDataMin
 
 export async function responseToElement(page: Page, e: ElementResponse, htmlType?: string) {
   // Try to find and click the close button
-  const elementData = responseToElementData(e);
-  if (htmlType) {
-    elementData.tagName = htmlType;
-  }
+  const elementData = responseToElementData(e, htmlType);
 
   // We have a lower minScore because the only data we have is text + position + neighbours
   // Which has a maximum value of 40 (text) + 20 (position) + 20 (neighbours)

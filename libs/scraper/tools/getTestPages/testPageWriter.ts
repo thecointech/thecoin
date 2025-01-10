@@ -40,11 +40,25 @@ export class IntentWriter {
   async setNewState(state: string) {
     this.state = state
     await this.saveScreenshot();
-    await this.updatePageIntent()
+    const intent = await this.updatePageIntent()
+    // Save out the inferred intent when loading the page
+    // (This may be different from the stated intent)
+    this.saveJson({
+      intent,
+    }, "intent");
+  }
+
+  async getImage(fullPage: boolean = false) {
+    return await getImage(this.page, fullPage);
+  }
+
+  async updatePageIntent() {
+    this.currentPageIntent = await getPageIntent(this.page);
+    return this.currentPageIntent;
   }
 
   // Functions for interacting with the webpage
-  async tryClick<T extends object>(api: T, fnName: ApiFnName<T>, elementName: string, htmlType: string = "input", thenWaitFor: number = 3000, fullPage: boolean = false) {
+  async tryClick<T extends object>(api: T, fnName: ApiFnName<T>, elementName: string, htmlType: string = "", thenWaitFor: number = 3000, fullPage: boolean = false) {
     return await this.doInteraction(api, fnName, elementName, (found) => clickElement(this.page, found), htmlType, thenWaitFor, fullPage);
   }
 
@@ -63,7 +77,7 @@ export class IntentWriter {
     fullPage: boolean = false
   ) {
     // Always get the latest screenshot
-    const image = await this.getImage(fullPage);
+    const image = await getImage(this.page, fullPage);
     const { data: r } = await (api[fnName] as ApiFn)(image);
     return await this.completeInteraction(r, elementName, interaction, htmlType, thenWaitFor);
   }
@@ -76,14 +90,6 @@ export class IntentWriter {
       await sleep(thenWaitFor);
       return true;
     }
-  }
-
-  async updatePageIntent() {
-    const image = await this.getImage();
-    const { data: intent } = await GetIntentApi().pageIntent(image);
-    this.currentPageIntent = intent.type;
-    log.trace(`Page detected as type: ${intent.type}`);
-    return intent.type;
   }
 
   async saveScreenshot(fullPage: boolean = false) {
@@ -156,10 +162,6 @@ export class IntentWriter {
   }
 
 
-  async getImage(fullPage: boolean = false, path?: string) {
-    const screenshot = await this.page.screenshot({ type: 'png', fullPage, path });
-    return new File([screenshot], "screenshot.png", { type: "image/png" });
-  }
   outputFilename(name: string) {
     const outputFolder = path.join(IntentWriter.baseFolder, this.intent, this.state);
     mkdirSync(outputFolder, { recursive: true });
@@ -172,3 +174,16 @@ export class IntentWriter {
 //   const copy = Buffer.from(screenshot);
 //   return new File([copy], "screenshot.png", { type: "image/png" });
 // }
+
+export async function getImage(page: Page, fullPage: boolean = false, path?: string) {
+  const screenshot = await page.screenshot({ type: 'png', fullPage, path });
+  return new File([screenshot], "screenshot.png", { type: "image/png" });
+}
+
+
+export async function getPageIntent(page: Page) {
+  const image = await getImage(page);
+  const { data: intent } = await GetIntentApi().pageIntent(image);
+  log.trace(`Page detected as type: ${intent.type}`);
+  return intent.type;
+}
