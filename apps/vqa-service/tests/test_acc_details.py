@@ -1,7 +1,5 @@
-from TestBase import TestBase, repeat_on_fail
+from TestBase import TestBase
 import unittest
-
-from helpers import get_instruct_json_respose, request_json
 from query import runQuery
 from tests.testdata import get_single_test_element, get_test_data
 # from data_elements import element_schema
@@ -23,43 +21,33 @@ class TestReadAccountDetails(TestBase):
 
     def test_find_current_balance(self):
         test_data = get_single_test_element("details", "", "balance", 800)
-        # json_part = get_instruct_json_respose(element_schema)
-        # check all landing pages
         for key, image, expected in test_data:
-            # find_current_balance_query = f"Analyze this credit card account. Describe the element that contains the current balance amount. {json_part}"
-            response = runQuery(image, query_current_balance_element)
-            self.assertResponse(response, image, expected, f"Current balance {key}")
+            with self.subTest(key=key):
+                response = runQuery(image, query_current_balance_element)
+                self.assertResponse(response, image, expected, f"Current balance {key}")
 
     def test_find_pending_amount(self):
         test_data = get_single_test_element("details", "", "pending", 800)
-        # json_part = get_instruct_json_respose(element_schema)
-        # check all landing pages
         for key, image, expected in test_data:
-            # pending_json_part = request_json + f"{{ \"pending_exists\": \"boolean\", \"pending_element\": {{ \"content\": \"dollar amount\", \"neighbour_text\": \"Text immediately beside or above the element\", \"font_color\": \"#FFFFFF\", \"background_color\": \"#FFFFFF\", \"position_x\": \"number\", \"position_y\": \"number\"}} }}"
-            # find_pending_balance_query = f"Analyze the provided credit card details webpage. Is there an amount pending? {pending_json_part}"
-            response = runQuery(image, query_pending_balance_element)
-            self.assertEqual(response["pending_exists"], True, "Pending exists not matched for " + key)
-            if response["pending_exists"]:
-                self.assertResponse(response["pending_element"], image, expected, f"Pending {key}")
-        
+            with self.subTest(key=key):
+                response = runQuery(image, query_pending_balance_element)
+                self.assertEqual(response["pending_exists"], True, "Pending exists not matched for " + key)
+                if response["pending_exists"]:
+                    self.assertResponse(response["pending_element"], image, expected, f"Pending {key}")
+
     def test_find_due_amount(self):
         test_data = get_single_test_element("details", "", "due-amount", 800)
-        # json_part = get_instruct_json_respose(element_schema)
-        # check all landing pages
         for key, image, expected in test_data:
-            # find_due_amount_query = f"Analyze the provided credit card details webpage. Describe amount due for the previous period. {json_part}"
-            response = runQuery(image, query_due_amount_element)
-            self.assertResponse(response, image, expected, f"Due amount {key}")
+            with self.subTest(key=key):
+                response = runQuery(image, query_due_amount_element)
+                self.assertResponse(response, image, expected, f"Due amount {key}")
 
     def test_find_due_date(self):
         test_data = get_single_test_element("details", "", "due-date", 800)
-        #json_part = get_instruct_json_respose(element_schema)
-        #json_part = request_json + f"{{ \"content\": \"date string\", \"neighbour_text\": \"Text immediately beside or above the element\", \"font_color\": \"#FFFFFF\", \"background_color\": \"#FFFFFF\", \"position_x\": \"number\", \"position_y\": \"number\"}}"
-        # check all landing pages
         for key, image, expected in test_data:
-            # find_due_date_query = f"Analyze the provided credit card details webpage. Describe the element that contains the due date. {json_part}"
-            response = runQuery(image, query_due_date_element)
-            self.assertResponse(response, image, expected, f"Due date {key}")
+            with self.subTest(key=key):
+                response = runQuery(image, query_due_date_element)
+                self.assertResponse(response, image, expected, f"Due date {key}")
 
     # Reading history is super-complicated.  We should try and use the download function instead
     # @repeat_on_fail

@@ -45,16 +45,19 @@ class TestBase(unittest.TestCase):
         )
 
     def assertResponse(self, response: dict, image: Image, expected: dict, key: str = None):
-        if (expected["text"] == ""):
-            # If no text expected, then response should be empty
-            self.assertEqual(response["content"], "", "Text: " + response["content"] + " does not match expected: " + expected["text"] + " in " + key)
-        else:
-            # Else, just check they overlap in some way
-            textOverlap = (
-                normalize(expected["text"]) in normalize(response["content"]) or
-                normalize(response["content"]) in normalize(expected["text"])
-            )
-            self.assertTrue(textOverlap, f"Text: {response['content']} does not match expected: {expected['text']} in {key}")
+        # We can't reliably check this, the actual scraped may result in 
+        # elements that contain text visually but are not children in the DOM
+        # For example, inputs with labels etc
+        # if (expected["text"] == ""):
+        #     # If no text expected, then response should be empty
+        #     self.assertEqual(response["content"], "", "Text: " + response["content"] + " does not match expected: " + expected["text"] + " in " + key)
+        # else:
+        # Else, just check they overlap in some way
+        textOverlap = (
+            normalize(expected["text"]) in normalize(response["content"]) or
+            normalize(response["content"]) in normalize(expected["text"])
+        )
+        self.assertTrue(textOverlap, f"Text: {response['content']} does not match expected: {expected['text']} in {key}")
 
         self.assertPosition(response, image, expected, key)
 
@@ -100,23 +103,3 @@ def normalize(str: str):
     str = str.lower()
     str = re.sub(r'[$.,-\/\s]', '', str)  # login == log in (etc)
     return str
-
-
-# default timeout of 1hr
-def repeat_on_fail(func, timeout = 3600):
-    def wrapper(*args, **kwargs):
-        # Do not repeat if no debugger attached
-        if (os.environ.get('DEBUGPY_RUNNING') != "true"):
-            return func(*args, **kwargs)
-
-        # If a debugger is atttached, someone is watching.
-        # Keep trying until time is up
-        start_time = time.time()
-        while True:
-            try:
-                return func(*args, **kwargs)
-            except Exception as e:
-                print(e)
-            if time.time() - start_time > timeout:
-                raise Exception("Timeout")
-    return wrapper

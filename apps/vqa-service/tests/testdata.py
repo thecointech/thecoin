@@ -7,11 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # TODO: Make this configurable?  A larger LLM may be able to handle bigger images
-MAX_HEIGHT = 770 #1440
-
-# Only run tests with this key
-# KeyFilter = ["Tangerine"]
-KeyFilter = []
+MAX_HEIGHT = 1440
 
 
 class JsonDatum(TypedDict):
@@ -71,6 +67,10 @@ def get_element_type(json_file: str):
     parts = get_basename(json_file).split("-")
     return "-".join(parts[1:])
 
+
+# Only run tests with this key
+KeyFilter = []
+KeyFilter = ["CIBC"]
 
 def get_test_data(test_type: str, page_type: str, max_height: int = MAX_HEIGHT) -> dict[str, TestData]:
     # get the private testing folder from the environment

@@ -5,6 +5,7 @@ from testdata import get_test_data, get_single_test_element
 from intent_data import query_page_intent
 from error_data import query_error_message, query_error_text
 from login_data import *
+from tests.repeat_on_failure import repeat_on_fail
 
 
 class TestLoginProcess(TestBase):
@@ -13,52 +14,49 @@ class TestLoginProcess(TestBase):
     def test_intent(self):
         test_data = get_test_data("login", "initial")
         for key, image, _ in test_data:
-            intent = runQuery(image, query_page_intent)
-            self.assertEqual(intent["type"], "login", "Login intent failed for " + key)
+            with self.subTest(key=key):
+                intent = runQuery(image, query_page_intent)
+                self.assertEqual(intent["type"], "login", "Login intent failed for " + key)
 
     def test_detect_username_input(self):
         test_data = get_single_test_element("login", "initial", "username")
         for key, image, expected in test_data:
-            if (key not in KeyFilter):
-                continue
             with self.subTest(key=key):
                 element = runQuery(image, query_username_element)
                 self.assertResponse(element, image, expected, key)
     
     # All pages must be able to detect if password is present
     def test_detect_password_exists(self):
-        # does it have a password input?
-        # test_data = (
-        #     get_test_data("login", "initial") + 
-        #     get_test_data("login", "password") + 
-        #     get_test_data("login", "failed")
-        # )
-        test_data = get_test_data("login", "initial")
+        test_data = (
+            get_test_data("login", "initial") + 
+            get_test_data("Landing", "initial") + 
+            get_test_data("login", "password")
+        )
         for key, image, expected in test_data:
-            element = runQuery(image, query_pwd_exists)
-            exists = "password" in expected
-            self.assertEqual(element["password_input_detected"], exists, "Password exists failed for " + key)
+            with self.subTest(key=key):
+                element = runQuery(image, query_pwd_exists)
+                exists = "password" in expected
+                self.assertEqual(element["password_input_detected"], exists, "Password exists failed for " + key)
 
-            if (exists):
+    # What is the password input?
+    @repeat_on_fail
+    def test_detect_password_input(self):
+        test_data = (
+            get_single_test_element("login", "initial", "password") + 
+            get_single_test_element("login", "password", "password") + 
+            get_single_test_element("login", "failed", "password")
+        )
+        for key, image, expected in test_data:
+            with self.subTest(key=key):
                 element = runQuery(image, query_password_element)
-                self.assertResponse(element, image, expected["password"], key)
+                self.assertResponse(element, image, expected, key)
 
     def test_continue(self):
         test_data = get_single_test_element("login", "initial", "continue")
         for key, image, expected in test_data:
-            element = runQuery(image, query_continue_button)
-            self.assertResponse(element, image, expected, key)
-
-    # What is the password input?
-    # def test_detect_password_input(self):
-    #     test_data = (
-    #         get_single_test_element("login", "initial", "password") + 
-    #         get_single_test_element("login", "password", "password") + 
-    #         get_single_test_element("login", "failed", "password")
-    #     )
-    #     for key, image, expected in test_data:
-    #         element = runQuery(query_password_element, image)
-    #         self.assertResponse(element, image, expected, key)
+            with self.subTest(key=key):
+                element = runQuery(image, query_continue_button)
+                self.assertResponse(element, image, expected, key)
 
     # # All passed
     def test_detect_login_input(self):
@@ -68,8 +66,9 @@ class TestLoginProcess(TestBase):
             get_single_test_element("login", "failed", "login")
         )
         for key, image, expected in test_data:
-            element = runQuery(image, query_login_button)
-            self.assertResponse(element, image, expected, key)
+            with self.subTest(key=key):
+                element = runQuery(image, query_login_button)
+                self.assertResponse(element, image, expected, key)
 
 
     def test_login_result_success(self):
@@ -81,7 +80,7 @@ class TestLoginProcess(TestBase):
     def test_login_result_2fa(self):
         test_login_result(self, "2fa", "initial", "TwoFactorAuth")
 
-        
+
     # While this test is passing, it's probably not reliable enough yet to have directly in our harvesting setup.
     # It detects correctly, but also has too many false positives
     # False positives

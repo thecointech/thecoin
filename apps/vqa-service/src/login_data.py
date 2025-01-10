@@ -18,11 +18,11 @@ query_username_element = (
     InputElementResponse
 )
 query_password_element = (
-    "Describe the password text input in this webpage.",
+    "Analyze the provided webpage. Describe the input for the users password.",
     InputElementResponse
 )
 query_pwd_exists = (
-    "Is there a password input?",
+    "Analyze the provided webpage. Is there a password input?",
     PasswordDetectedResponse
 )
 query_continue_button = (

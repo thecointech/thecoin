@@ -15,6 +15,6 @@ query_cookie_accept = (
     ElementResponse
 )
 query_navigate_to_login = (
-    "In the provided webpage, describe the element that will navigate to the login page.",
+    "In the provided webpage, describe the button or menu item that will login to the users online banking.",
     ElementResponse
 )
