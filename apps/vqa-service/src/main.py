@@ -5,6 +5,7 @@ from login_routes import add_login_routes
 from modal_routes import add_modal_routes
 from twofa_routes import add_twofa_routes
 from summary_routes import add_summary_routes
+from credit_details_routes import add_credit_details_routes
 from warmup import add_warmup_routes
 from port import get_version, get_port
 from fastapi_tweak import use_route_names_as_operation_ids
@@ -30,6 +31,7 @@ add_landing_routes(app)
 add_login_routes(app)
 add_twofa_routes(app)
 add_summary_routes(app)
+add_credit_details_routes(app)
 add_modal_routes(app)
 add_warmup_routes(app)
 
