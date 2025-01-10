@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from data_elements import ElementResponse
 from enum import Enum
 
@@ -13,7 +13,8 @@ class AccountType(Enum):
 
 class AccountResponse(BaseModel):
     account_type: AccountType
-    account_number: str
+    account_name: str
+    account_number: str = Field(..., description="Account number with any stars or asterisks")
     balance: str
     position_x: float
     position_y: float
