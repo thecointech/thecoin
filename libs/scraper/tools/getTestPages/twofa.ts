@@ -50,7 +50,7 @@ export class TwoFAWriter extends IntentWriter {
       }
     }
     const dest = await this.askUserForDestination(allOptions);
-    const clickedOption = await this.completeInteraction(dest, "destination", (found) => clickElement(this.page, found), "", 3000);
+    const clickedOption = await this.completeInteraction(dest, "destination", (found) => clickElement(this.page, found), "button", "", 3000);
     if (!clickedOption) {
       throw new Error("Failed to click destination");
     }
@@ -104,7 +104,7 @@ export class TwoFAWriter extends IntentWriter {
 
   async clickRemember() {
     const api = GetTwofaApi();
-    const clickedSkip = await this.tryClick(api, "getSkipInput", "remember");
+    const clickedSkip = await this.tryClick(api, "getSkipInput", "remember", "input", "checkbox", 1000);
     if (!clickedSkip) {
       // It's possible that there is no remember checkbox
       log.warn("Failed to click remember");
@@ -113,7 +113,7 @@ export class TwoFAWriter extends IntentWriter {
 
   async clickSubmit() {
     const api = GetTwofaApi();
-    const clickedSubmit = await this.tryClick(api, "getSubmitInput", "submit");
+    const clickedSubmit = await this.tryClick(api, "getSubmitInput", "submit", "button");
     if (!clickedSubmit) {
       throw new Error("Failed to click submit");
     }

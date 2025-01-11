@@ -42,7 +42,7 @@ export class LandingWriter extends IntentWriter {
   async navigateToLogin() {
     const api = GetLandingApi();
     log.trace(`LandingWriter: Navigating to login`);
-    const didNavigate = await this.tryClick(api, "navigateToLogin", "login", "", 5000);
+    const didNavigate = await this.tryClick(api, "navigateToLogin", "login", "button", "", 5000);
     if (!didNavigate) {
       console.error("Failed to navigate to login");
       throw new Error("Failed to navigate to login");
@@ -56,7 +56,7 @@ export class LandingWriter extends IntentWriter {
       // Now, if we are still on the landing page, it may mean that there
       // is a menu open.  Try and find the login link (again) and click it
       await this.setNewState("menu");
-      const didMenu = await this.tryClick(api, "navigateToLogin", "login", "", 5000);
+      const didMenu = await this.tryClick(api, "navigateToLogin", "login", "a", "", 5000);
       if (!didMenu) {
         console.error("Failed to navigate via menu to login");
         throw new Error("Failed to navigate via menu to login");

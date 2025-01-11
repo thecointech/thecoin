@@ -8,6 +8,7 @@ import { AskUser } from './askUser';
 import { AccountSummaryWriter } from './accountSummary';
 import { LoginWriter } from './login';
 import { PageType } from '@thecointech/vqa';
+import { AccountDetailsWriter } from './accountDetails';
 
 const { baseFolder, config } = getConfig();
 await init(baseFolder)
@@ -15,7 +16,7 @@ const askUser = new AskUser();
 type PageIntentAug = PageType | "TwoFactorAuth";
 
 try {
-  const name = Object.keys(config)[1]; // Get first config
+  const name = "TD" //Object.keys(config)[1]; // Get first config
   const recorder = await Recorder.instance({
     name: "autorecord",
     url: config[name].url,
@@ -38,7 +39,17 @@ try {
   if (nextIntent != "AccountsSummary") {
     throw new Error("Failed to get to AccountsSummary");
   }
-  nextIntent = await AccountSummaryWriter.process(page, name);
+
+  const accounts = await AccountSummaryWriter.process(page, name);
+  for (const account of accounts) {
+    if (account.account_type == "Credit") {
+      // NOTE! This means we can only support 1 credit account at a time
+      // (Which is fine for the use case)
+      const details = await AccountDetailsWriter.process(page, name, account);
+
+    }
+  }
+
 } finally {
   askUser[Symbol.dispose]();
   await Recorder.release();

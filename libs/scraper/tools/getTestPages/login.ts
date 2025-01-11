@@ -22,7 +22,7 @@ export class LoginWriter extends IntentWriter {
 
   async enterUsername(username: string) {
     const api = GetLoginApi();
-    const didEnter = await this.tryEnterText(api, "detectUsernameInput", username, "username");
+    const didEnter = await this.tryEnterText(api, "detectUsernameInput", username, "username", "input", "text");
     if (!didEnter) {
       throw new Error("Failed to enter username");
     }
@@ -45,7 +45,7 @@ export class LoginWriter extends IntentWriter {
       await this.setNewState("password");
     }
 
-    const didEnter = await this.tryEnterText(api, "detectPasswordInput", password, "password");
+    const didEnter = await this.tryEnterText(api, "detectPasswordInput", password, "password", "input", "password");
     if (!didEnter) {
       throw new Error("Failed to enter password");
     }

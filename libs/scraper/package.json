@@ -19,8 +19,9 @@
   "scripts": {
     "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "yarn run -T :jest",
-    "getTestPages": "yarn run -T cross-env CONFIG_NAME=prod URL_SEQ_LOGGING=false TC_LOG_FOLDER=false run-env tools/getTestPages/main.ts"
+    "test": "run :jest",
+    "getTestPages": "yarn run -T cross-env CONFIG_NAME=prod URL_SEQ_LOGGING=false TC_LOG_FOLDER=false run-env tools/getTestPages/main.ts",
+    "testFailure": "yarn run -T cross-env CONFIG_NAME=prod URL_SEQ_LOGGING=false TC_LOG_FOLDER=false run-env tools/testFailure/main.ts"
   },
   "dependencies": {
     "@web-std/file": "^3.0.3",

@@ -53,18 +53,27 @@ export class IntentWriter {
   }
 
   async updatePageIntent() {
-    this.currentPageIntent = await getPageIntent(this.page);
-    return this.currentPageIntent;
+    // TODO: WE really need polly instead of hard-coded attempts for this
+    for (let i = 0; i < 5; i++) {
+      try {
+        this.currentPageIntent = await getPageIntent(this.page);
+        return this.currentPageIntent;
+      }
+      catch (e) {
+        log.error(`Couldn't get page intent: ${e}`);
+      }
+      await sleep(1000);
+    }
   }
 
   // Functions for interacting with the webpage
-  async tryClick<T extends object>(api: T, fnName: ApiFnName<T>, elementName: string, htmlType: string = "", thenWaitFor: number = 3000, fullPage: boolean = false) {
-    return await this.doInteraction(api, fnName, elementName, (found) => clickElement(this.page, found), htmlType, thenWaitFor, fullPage);
+  async tryClick<T extends object>(api: T, fnName: ApiFnName<T>, elementName: string, htmlType = "button", inputType: string = undefined, thenWaitFor = 3000, fullPage = false) {
+    return await this.doInteraction(api, fnName, elementName, (found) => clickElement(this.page, found), htmlType, inputType, thenWaitFor, fullPage);
   }
 
   // Functions for interacting with the webpage
-  async tryEnterText<T extends object>(api: T, fnName: ApiFnName<T>, text: string, elementName: string, htmlType: string = "input", thenWaitFor: number = 3000, fullPage: boolean = false) {
-    return await this.doInteraction(api, fnName, elementName, (found) => enterValueIntoFound(this.page, found, text), htmlType, thenWaitFor, fullPage);
+  async tryEnterText<T extends object>(api: T, fnName: ApiFnName<T>, text: string, elementName: string, htmlType = "input", inputType = "text", thenWaitFor = 3000, fullPage = false) {
+    return await this.doInteraction(api, fnName, elementName, (found) => enterValueIntoFound(this.page, found, text), htmlType, inputType, thenWaitFor, fullPage);
   }
 
   async doInteraction<T extends object>(
@@ -72,23 +81,35 @@ export class IntentWriter {
     fnName: ApiFnName<T>,
     elementName: string,
     interaction: (found: FoundElement) => Promise<void>,
-    htmlType: string = "",
-    thenWaitFor: number = 3000,
-    fullPage: boolean = false
+    htmlType = "",
+    inputType: string = undefined,
+    thenWaitFor = 3000,
+    fullPage = false
   ) {
     // Always get the latest screenshot
     const image = await getImage(this.page, fullPage);
     const { data: r } = await (api[fnName] as ApiFn)(image);
-    return await this.completeInteraction(r, elementName, interaction, htmlType, thenWaitFor);
+    return await this.completeInteraction(r, elementName, interaction, htmlType, inputType, thenWaitFor);
   }
 
-  async completeInteraction(r: ElementResponse, elementName: string, interaction: (found: FoundElement) => Promise<void>, htmlType: string = "", thenWaitFor: number = 3000) {
-    const found = await responseToElement(this.page, r, htmlType);
-    if (found) {
+  async completeInteraction(r: ElementResponse, elementName: string, interaction: (found: FoundElement) => Promise<void>, htmlType = "", inputType: string = undefined, thenWaitFor = 3000) {
+    try {
+      // First, save the response so we can test the response search
+      this.saveJson(r, `vqa-${elementName}`);
+      // Now, find the element
+      const found = await responseToElement(this.page, r, htmlType, inputType);
+      // Finally, save the found element so we can test VQA
       this.saveElement(found.data, elementName);
       await interaction(found);
       await sleep(thenWaitFor);
       return true;
+    } catch (e) {
+      // Save out page/JSON to allow easy debugging
+      this.intent = "debug";
+      this.state = "";
+      await this.saveScreenshot();
+      this.saveJson(r, "debug");
+      throw e;
     }
   }
 

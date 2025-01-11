@@ -7,6 +7,7 @@ import { scoreElement } from './elements.score';
 export type FoundElement = {
   element: ElementHandle<Element>,
   score: number,
+  components: Record<string, number>,
   data: ElementData
 }
 
@@ -16,7 +17,7 @@ declare global {
   }
 }
 
-export async function getElementForEvent(page: Page, event: ElementDataMin, timeout=30000, minScore=70) {
+export async function getElementForEvent(page: Page, event: ElementDataMin, timeout=30000, minScore=70, maxTop=Number.MAX_VALUE) {
 
   const startTick = Date.now();
 
@@ -25,7 +26,7 @@ export async function getElementForEvent(page: Page, event: ElementDataMin, time
 
   while (Date.now() < startTick + timeout) {
 
-    const candidates = await fetchAllCandidates(page, event);
+    const candidates = await fetchAllCandidates(page, event, maxTop);
     const candidate = await getBestCandidate(candidates, event, minScore);
 
     if (candidate) {
@@ -34,6 +35,10 @@ export async function getElementForEvent(page: Page, event: ElementDataMin, time
 
     // Continue waiting
     await sleep(500);
+    if (Date.now() > startTick + timeout) {
+      // Are you watching?  Take care of this
+      debugger;
+    }
   }
 
   // // Not found, what candidate failed?
@@ -44,7 +49,7 @@ export async function getElementForEvent(page: Page, event: ElementDataMin, time
   throw new Error(`Element ${event.tagName} not found with text: "${event.text}" and siblings: "${event.siblingText?.join(', ')}"`);
 }
 
-async function fetchAllCandidates(page: Page, event: ElementDataMin) {
+async function fetchAllCandidates(page: Page, event: ElementDataMin, maxTop: number) {
   const candidates: FoundElement[] = [];
   const frames = page.frames();
   const nFrames = frames.length;
@@ -53,7 +58,7 @@ async function fetchAllCandidates(page: Page, event: ElementDataMin) {
   for (const frame of frames) {
     try {
       // Get all elements in frame
-      const frameCandidates = await getCandidates(frame, event);
+      const frameCandidates = await getCandidates(frame, event, maxTop);
       candidates.push(...frameCandidates);
     }
     catch (e) {
@@ -108,7 +113,7 @@ async function getBestCandidate(candidates: FoundElement[], event: ElementDataMi
   return null;
 }
 
-async function getCandidates(frame: Frame, event: ElementDataMin, timeout=300) {
+async function getCandidates(frame: Frame, event: ElementDataMin, maxTop: number, timeout=300) {
   // We are getting the occasional issue where getElementProps
   // is undefined.  This could potentially be a race condition
   // if this fn evaluates before evaluateOnNewDocument (?)
@@ -139,7 +144,7 @@ async function getCandidates(frame: Frame, event: ElementDataMin, timeout=300) {
     };
 
     messageToLogOnTimeout = "Getting elements for frame";
-    const elements = await getAllElements(frame);
+    const elements = await getAllElements(frame, maxTop);
     messageToLogOnTimeout = "Filling out siblings for frame with " + elements.length + " elements";
     const withSiblings = fillOutSiblingText(elements);
     messageToLogOnTimeout = "Scoring frame with " + withSiblings.length + " elements";
@@ -149,10 +154,11 @@ async function getCandidates(frame: Frame, event: ElementDataMin, timeout=300) {
       messageToLogOnTimeout = `Scoring element: ${i} of ${withSiblings.length}`;
       const el = withSiblings[i];
       const score = await scoreElement(el.data, event);
-      if (score > 0) {
+      // NaN can't sort, so if one slips through, ditch it.
+      if (!Number.isNaN(score.score)) {
         candidates.push({
           ...el,
-          score
+          ...score
         })
       }
     }
@@ -224,12 +230,15 @@ export async function registerElementAttrFns(page: Page) {
 const getElementProps = (el: HTMLElement) => ({
   frame: getFrameUrl(),
   tagName: el.tagName,
+  inputType: el.getAttribute("type") ?? undefined,
   role: el.getAttribute("role"),
   selector: getSelector(el),
   coords: getCoords(el),
   font: getFontData(el),
   label: el.getAttribute("aria-label"),
-  text: el.innerText,
+  // Placeholder text gets picked up by the VQA service, so we
+  // need to include it here (as it's most like a text descendent)
+  text: el.innerText + (el.getAttribute("placeholder") || ""),
   nodeValue: getElementText(el),
 })
 
@@ -343,7 +352,7 @@ type SearchElement = {
   data: ElementData
 }
 
-export const getAllElements = async (frame: Page|Frame) => {
+export const getAllElements = async (frame: Page|Frame, maxTop: number) => {
   const allElements = await frame.$$("*")
   const allData = await frame.evaluate(
     (...els) => els.map(el =>
@@ -367,6 +376,10 @@ export const getAllElements = async (frame: Page|Frame) => {
     .reduce((r, data, i) => {
       // If it's off the edge of the page ignore it
       if (!data || data.coords.left < 0 || data.coords.top < 0) return r
+      // If its zero-sized, ignore it
+      if (data.coords.width <= 0 || data.coords.height <= 0) return r
+      // If it's off the bottom of the area we care about, ignore it
+      if (data.coords.top > maxTop) return r
       r.push({
         element: allElements[i] as ElementHandle<HTMLElement>,
         data

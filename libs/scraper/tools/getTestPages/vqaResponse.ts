@@ -3,14 +3,15 @@ import type { ElementDataMin } from "../../src/types";
 import type { Page } from "puppeteer";
 import { FoundElement, getElementForEvent } from "../../src/elements";
 
-export function responseToElementData(response: ElementResponse, htmlType?: string): ElementDataMin {
+export function responseToElementData(response: ElementResponse, htmlType?: string, inputType?: string): ElementDataMin {
   const width = (response.content ?? "").length * 8;
   const height = 20; // Just guess based on avg font size
   return {
     estimated: true,
     tagName: htmlType?.toUpperCase(),
+    inputType: inputType?.toLowerCase(),
     text: response.content!,
-    nodeValue: response.content!,
+    // nodeValue: response.content!,
     label: response.content!,
     // Include original text in neighbour text, LLM isn't known for being precise
     siblingText: [response.neighbour_text, response.content].filter(t => !!t),
@@ -25,14 +26,14 @@ export function responseToElementData(response: ElementResponse, htmlType?: stri
 }
 
 
-export async function responseToElement(page: Page, e: ElementResponse, htmlType?: string) {
+export async function responseToElement(page: Page, e: ElementResponse, htmlType?: string, inputType?: string, timeout?: number): Promise<FoundElement> {
   // Try to find and click the close button
-  const elementData = responseToElementData(e, htmlType);
+  const elementData = responseToElementData(e, htmlType, inputType);
 
   // We have a lower minScore because the only data we have is text + position + neighbours
   // Which has a maximum value of 40 (text) + 20 (position) + 20 (neighbours)
   // So basically, if there is even one things matches, then it's good enough,
-  return await getElementForEvent(page, elementData, 5000, 20);
+  return await getElementForEvent(page, elementData, timeout ?? 5000, 20);
 }
 
 
