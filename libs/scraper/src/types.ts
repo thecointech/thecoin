@@ -53,6 +53,8 @@ export type ElementData = {
   // The frames to dereference on our way to the data
   frame?: string
   tagName: string,
+  // If tagName is INPUT, this will be the type
+  inputType?: string,
   role: string|null,
   selector: string,
   coords: Coords,

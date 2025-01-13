@@ -5,6 +5,7 @@ export type BankConfig = {
   url: string,
   username?: string,
   password?: string,
+  refresh?: boolean,
 }
 export type TestConfig = Record<string, BankConfig>;
 

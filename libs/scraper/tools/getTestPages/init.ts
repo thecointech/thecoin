@@ -4,8 +4,7 @@ import { SimilarityPipeline } from "../../src/similarity";
 import path from "path";
 import { IntentWriter } from "./testPageWriter";
 
-export async function init(baseFolder: string) {
-  IntentWriter.baseFolder = baseFolder;
+export async function init() {
   const tempDir = "./.temp";
   setRootFolder(tempDir);
   let lastLogMessage = 0;

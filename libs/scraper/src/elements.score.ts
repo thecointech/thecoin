@@ -1,51 +1,107 @@
+import { log } from "@thecointech/logging";
 import { SimilarityPipeline } from "./similarity";
-import { Coords, ElementData, ElementDataMin } from "./types";
+import { Coords, ElementData, ElementDataMin, Font } from "./types";
+import levenshtein from 'fastest-levenshtein';
+
+const EquivalentInputTypes = [
+  // All of the following attributes tend to show up looking the same on the page
+  ['text', 'date', 'datetime', 'datetime-local', 'email', 'month', 'number', 'search', 'tel', 'time', 'url', 'week'],
+  ['checkbox', 'radio'],
+  ['submit', 'reset', 'button'],
+]
+
+const EquivalentTags = [
+  // Interactive elements that act as buttons
+  ['button', 'a', 'input'],
+  // Input text elements
+  ['input', 'textarea'],
+  // Input select elements
+  ['input', 'select'],
+]
 
 // This scoring function reaaaaally needs to be replaced with
 // a computed (learned) model, because manually scoring is just
 // too easy to bias to right-nows problems
 export async function scoreElement(potential: ElementData, original: ElementDataMin) {
-  let score = 0;
-  if (potential.tagName == original.tagName) {
-    score = score + 20;
-    // If estimated, the tagname matters much more because
-    // the tagName will not be confused by minor changes (eg Div -> Span)
-    // and if specified (eg, input) it's a much higher priority
-    if (original.estimated) {
-      score = score * 2;
-    }
-  }
-  if (potential.selector == original.selector) score = score + 25;
-
-  if (potential.font?.font == original.font?.font) score = score + 5;
-  if (potential.font?.size == original.font?.size) score = score + 5;
-  if (potential.font?.style == original.font?.style) score = score + 5;
-  if (potential.font?.color == original.font?.color) score = score + 5;
-
-  // metadata can be very helpful
-  if (original.role !== undefined) {
-    score += 20 * getRoleScore(potential.role, original.role);
-  }
-  if (original.label !== undefined) {
-    score += 20 * await getLabelScore(potential.label, original.label);
-  }
-  if (original.coords !== undefined) {
-    const sizeScore = getSizeScore(potential.coords, original.coords);
-    const positionScore = getPositionScore(potential.coords, original.coords);
-    const totalScore = original.estimated
-      // In an estimated run, we score higher on position, but position mis-matches introdue a negative penalty
-      ? sizeScore + positionScore
-      // In a regular run, we do not penalize position changes, but rely less on the position overall
-      : (Math.max(sizeScore, 0) + Math.max(positionScore, 0)) / 2;
-    score += 20 * totalScore;
-  }
-
-  // Actual data is the most valuable
-  score += 40 * await getNodeValueScore(potential, original);
-  score += 30 * await getSiblingScore(potential, original);
+  const components: Record<string, number> = {
+    selector:         30 * getSelectorScore(potential.selector, original.selector),
+    tag:              20 * getTagScore(potential, original),
+    // Input type can be very important, as it doubles for a decent tag filter
+    inputType:        50 * getInputTypeScore(potential, original),
+    // Mostly useless, fonts are all over the place
+    font:             10 * getFontScore(potential.font, original.font),
+    // Label is important only when it matche, otherwise useles
+    label:            20 * await getLabelScore(potential.label, original.label),
+    role:             20 * getRoleScore(potential, original),
+    positionAndSize:  20 * getPositionAndSizeScore(potential, original), // Can be 2 if both match perfectly
+    nodeValue:        40 * await getNodeValueScore(potential, original),
+    siblings:         30 * await getSiblingScore(potential, original),
+    estimatedText:    40 * getEstimatedTextScore(potential, original)
+  };
 
   // max score is 195
-  return score;
+  const score = Object.values(components).reduce((sum, score) => sum + score, 0);
+  if (Number.isNaN(score)) {
+    log.fatal(`NaN score on ${potential.selector} - ${potential.text}`, JSON.stringify(components));
+    // This is terrible, but it's not necessary to crash.  Just ensure it's not picked.
+    return { score: -1000, components };
+  }
+  return { score, components };
+}
+
+// Selectors are great when a perfect match is found, useless otherwise
+function getSelectorScore(potential: string, original: string | undefined) {
+  return potential == original ? 1 : 0;
+}
+
+// Tags aren't great filters, even for things like buttons
+function getTagScore(potential: ElementData, original: Partial<ElementData>) {
+  if (potential.tagName == original.tagName) {
+    return 1;
+  } else {
+    // Some kinds of elemements can be interchangeable
+    if (EquivalentTags.find(t => t.includes(original.tagName!) && t.includes(potential.tagName!))) {
+      // We could also score input[button] higher etc, but that's getting a bit too complicated,
+      // and shouldn't be necessary.  Instead we will transition to a learned model soon
+      return 0.5;
+    }
+  }
+  return 0;
+}
+
+function getInputTypeScore(potential: ElementData, original: ElementDataMin): number {
+  if (original.tagName !== 'INPUT' || potential.tagName !== 'INPUT') return 0;
+
+  const originalType = original.inputType ?? 'text';
+  const potentialType = potential.inputType ?? 'text';
+
+  if (potentialType === originalType) return 1;
+  if (EquivalentInputTypes.find(t => t.includes(potentialType) && t.includes(originalType))) {
+    return 0.5;
+  }
+  return 0;
+}
+
+function getFontScore(potential: Font | undefined, original: Font | undefined) {
+  return (
+    (potential?.color == original?.color ? 0.25 : 0) +
+    (potential?.font == original?.font ? 0.25 : 0) +
+    (potential?.size == original?.size ? 0.25 : 0) +
+    (potential?.style == original?.style ? 0.25 : 0)
+  )
+}
+
+function getPositionAndSizeScore(potential: ElementData, original: ElementDataMin): number {
+  if (!potential.coords || !original.coords) return 0;
+
+  const sizeScore = getSizeScore(potential.coords, original.coords);
+  const positionScore = getPositionScore(potential.coords, original.coords);
+  const totalScore = original.estimated
+    // In an estimated run, we score higher on position, but position mis-matches introdue a negative penalty
+    ? sizeScore + positionScore
+    // In a regular run, we do not penalize position changes, but rely less on the position overall
+    : (Math.max(sizeScore, 0) + Math.max(positionScore, 0)) / 2;
+  return totalScore;
 }
 
 //
@@ -95,7 +151,7 @@ export async function getSiblingScore(potential: ElementData, original: ElementD
   return -0.25;
 }
 
-async function getLabelScore(potential: string|null, original: string|null) {
+async function getLabelScore(potential: string|null, original: string|null|undefined) {
   if (potential && original) {
     const [score] = await SimilarityPipeline.calculateSimilarity(original, [potential])
     return score;
@@ -103,9 +159,9 @@ async function getLabelScore(potential: string|null, original: string|null) {
   return 0;
 }
 
-function getRoleScore(potential: string|null, original: string|null) {
-  if (potential || original) {
-    return (potential == original)
+function getRoleScore(potential: ElementData, original: ElementDataMin) {
+  if (!original.estimated && (potential.role || original.role)) {
+    return (potential.role == original.role)
       ? 1
       : -1; // Differing roles is a pretty bad sign
   }
@@ -164,4 +220,30 @@ async function getNodeValueScore(potential: ElementData, original: ElementDataMi
   }
   // If one has a value and the other doesn't, very bad sign...
   return -.5;
+}
+
+// Our text score is different from nodeValue, nodeValue is required to survive
+// website refactoring, but text is always estimated directly from the current page
+// Because of this, we prefer the levenstein distance to the similarity score
+function getEstimatedTextScore(potential: ElementData, original: ElementDataMin): number {
+  if (!original.estimated) return 0;
+  if (potential.text && original.text) {
+    // Strip whitespace
+    const cleanPotential = potential.text.replace(/\s+/g, ' ').toLowerCase();
+    const cleanOriginal = original.text.replace(/\s+/g, ' ').toLowerCase();
+
+    const distance = levenshtein.distance(cleanOriginal, cleanPotential);
+
+    // Our scoring is non-linear.  If the original length is less than 5, then
+    // even a few mis-matches can be a big penalty (eg, $0 => $0.00).  For this length, we simply lose
+    // 10% for each change made
+    if (cleanOriginal.length < 5) {
+      return Math.max(-0.5, 1 - (distance / 5));
+    }
+    // For longer strings, we just
+    else {
+      return Math.max(-0.5, 1 - (distance / cleanOriginal.length));
+    }
+  }
+  return 0;
 }

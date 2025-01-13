@@ -4,22 +4,16 @@ import { IntentWriter } from "./testPageWriter";
 import { log } from "@thecointech/logging";
 import { clickElement } from "./vqaResponse";
 import { ElementOptions, IAskUser } from "./askUser";
+import { ProcessConfig } from "./types";
 
 export class TwoFAWriter extends IntentWriter {
 
-  static async process(page: Page, name: string, askUser: IAskUser) {
+  static async process(config: ProcessConfig) {
     log.trace("TwoFAWriter: begin processing");
-    const writer = new TwoFAWriter(page, name, "2FA", askUser);
-    await writer.setNewState("initial");
+    const writer = new TwoFAWriter(config, "TwoFactorAuth");
     // There should always be a username here
     await writer.complete2FA();
-    return await writer.updatePageIntent();
-  }
-
-  askUser: IAskUser;
-  constructor(page: Page, name: string, intent: string, askUser: IAskUser) {
-    super(page, name, intent);
-    this.askUser = askUser;
+    return await writer.getPageIntent();
   }
 
   async complete2FA() {
@@ -50,11 +44,11 @@ export class TwoFAWriter extends IntentWriter {
       }
     }
     const dest = await this.askUserForDestination(allOptions);
-    const clickedOption = await this.completeInteraction(dest, "destination", (found) => clickElement(this.page, found), "", 3000);
+    const clickedOption = await this.completeInteraction(dest, "destination", (found) => clickElement(this.page, found), "button", "", 3000);
     if (!clickedOption) {
       throw new Error("Failed to click destination");
     }
-    this.setNewState("code");
+    await this.updatePageName("code");
     await this.enterCode();
   }
 
@@ -67,6 +61,7 @@ export class TwoFAWriter extends IntentWriter {
     }
     await this.clickRemember();
     await this.clickSubmit();
+    await this.waitForPageLoaded();
   }
 
   async approveInApp() {
@@ -81,7 +76,7 @@ export class TwoFAWriter extends IntentWriter {
       const pageIntentPromise = new Promise<void>(resolve => {
         let updateInterval = setInterval(async () => {
           try {
-            if (Date.now() > maxTime || await this.updatePageIntent() != "Login") {
+            if (Date.now() > maxTime || await this.getPageIntent() != "Login") {
               clearInterval(updateInterval);
               resolve();
             }
@@ -104,7 +99,7 @@ export class TwoFAWriter extends IntentWriter {
 
   async clickRemember() {
     const api = GetTwofaApi();
-    const clickedSkip = await this.tryClick(api, "getSkipInput", "remember");
+    const clickedSkip = await this.tryClick(api, "getSkipInput", "remember", "input", "checkbox", 1000);
     if (!clickedSkip) {
       // It's possible that there is no remember checkbox
       log.warn("Failed to click remember");
@@ -113,7 +108,7 @@ export class TwoFAWriter extends IntentWriter {
 
   async clickSubmit() {
     const api = GetTwofaApi();
-    const clickedSubmit = await this.tryClick(api, "getSubmitInput", "submit");
+    const clickedSubmit = await this.tryClick(api, "getSubmitInput", "submit", "button");
     if (!clickedSubmit) {
       throw new Error("Failed to click submit");
     }

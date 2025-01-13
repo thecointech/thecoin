@@ -1,51 +1,88 @@
 import type { Page } from "puppeteer";
-import { GetLoginApi, GetTwofaApi } from "@thecointech/apis/vqa";
+import { GetLoginApi } from "@thecointech/apis/vqa";
 import { IntentWriter } from "./testPageWriter";
 import { log } from "@thecointech/logging";
-import type { BankConfig } from "./config";
-import { sleep } from "@thecointech/async";
-import { TwoFAWriter } from "./twofa";
+import { ProcessConfig } from "./types";
+import { ITestSerializer, TestElement, TestState } from "./testSerializer";
+import { IAskUser, User2DChoice } from "./askUser";
 
 
 export class LoginWriter extends IntentWriter {
 
-  static async process(page: Page, name: string, config: BankConfig) {
+  static async process(config: ProcessConfig) {
     log.trace("LoginWriter: begin processing");
-    const writer = new LoginWriter(page, name, "Login");
-    await writer.setNewState("initial");
-    // There should always be a username here
-    await writer.enterUsername(config.username!);
-    await writer.enterPassword(config.password!);
-    await writer.clickLogin();
-    return await writer.waitLoginOutcome();
+    const page = config.recorder.getPage();
+    const loginUrl = page.url();
+
+    // Our first run uses dummy data & should fail,
+    {
+      const writer = new LoginWriter({
+        ...config,
+        askUser: new DummyAskUser(),
+      }, "Login");
+      // There should always be a username here
+      const outcome = await writer.login();
+      if (outcome != "LoginError") {
+        throw new Error("Login should have failed");
+      }
+    }
+
+    // If we have details, we do a real login attempt
+    if (await config.askUser.forUsername()) {
+      // reset the login page
+      await page.goto(loginUrl);
+      // Now try again with the correct data,
+      // but don't overwrite existing data ()
+      const writer = new LoginWriter({
+        ...config,
+        writer: new DummySerializer()
+      }, "Login");
+      return await writer.login();
+    }
+    return "LoginError";
   }
 
-  async enterUsername(username: string) {
+  async login() {
+    // We have to detect the password before entering
+    // the username.  The extra data of the username
+    // entered into the username field can confuse the vLLM
     const api = GetLoginApi();
-    const didEnter = await this.tryEnterText(api, "detectUsernameInput", username, "username");
+    const { data: hasPassword } = await api.detectPasswordExists(await this.getImage());
+
+    await this.enterUsername();
+    await this.enterPassword(hasPassword.password_input_detected);
+    await this.clickLogin();
+    return await this.loginOutcome();
+  }
+
+  async enterUsername() {
+    const username = await this.askUser.forUsername();
+    const api = GetLoginApi();
+    const didEnter = await this.tryEnterText(api, "detectUsernameInput", username, "username", "input", "text");
     if (!didEnter) {
       throw new Error("Failed to enter username");
     }
   }
 
-  async enterPassword(password: string) {
+  async enterPassword(hasPassword: boolean) {
+    const password = await this.askUser.forPassword();
     const api = GetLoginApi();
-    const { data: hasPassword } = await api.detectPasswordExists(await this.getImage());
     // If no password input detected, it may be on the next page.
-    if (!hasPassword.password_input_detected) {
+    if (!hasPassword) {
       const clickedContinue = await this.tryClick(api, "detectContinueElement", "continue");
       if (!clickedContinue) {
         throw new Error("Failed to click continue");
       }
+      await this.waitForPageLoaded();
       const { data: hasPassword } = await api.detectPasswordExists(await this.getImage());
       if (!hasPassword.password_input_detected) {
         throw new Error("Failed to detect password input");
       }
 
-      await this.setNewState("password");
+      await this.updatePageName("password");
     }
 
-    const didEnter = await this.tryEnterText(api, "detectPasswordInput", password, "password");
+    const didEnter = await this.tryEnterText(api, "detectPasswordInput", password, "password", "input", "password");
     if (!didEnter) {
       throw new Error("Failed to enter password");
     }
@@ -57,36 +94,57 @@ export class LoginWriter extends IntentWriter {
     if (!clickedLogin) {
       throw new Error("Failed to click login");
     }
-
     await this.waitForPageLoaded();
   }
 
-  async waitLoginOutcome() {
-    // Wait a few extra seconds to ensure page is fully loaded
-    for (let i = 0; i < 5; i++) {
-      await sleep(2500);
-      const { data: loginResult } = await GetLoginApi().detectLoginResult(await this.getImage());
+  async loginOutcome() {
+    const { data: loginResult } = await GetLoginApi().detectLoginResult(await this.getImage());
 
-      switch(loginResult.result) {
+    switch (loginResult.result) {
       case "LoginSuccess":
-        return await this.updatePageIntent();
-      case "TwoFactorAuth":
-        return "TwoFactorAuth"; // How to handle this?
+        // await this.updatePageIntent();
+        break;
+      // case "TwoFactorAuth":
+      //   return "TwoFactorAuth"; // How to handle this?
       case "LoginError":
-        await this.setNewState("failed");
+        await this.updatePageName("failed");
         // If we are still on a login page, is there an error message?
         const { data: hasError } = await GetLoginApi().detectLoginError(await this.getImage());
         if (hasError.error_message_detected) {
-          await this.setNewState("failed");
-          this.saveJson({
+          this.writeJson({
             text: hasError.error_message,
           }, "failed");
-          throw new Error("LoginWriter: Login failed: " + hasError.error_message);
         }
-      }
+        break;
     }
+    return loginResult.result;
   }
 }
 
 
 
+class DummyAskUser implements IAskUser {
+  forValue(question: string): Promise<string> {
+    throw new Error("Method not implemented.");
+  }
+  selectOption<T extends object>(question: string, options: User2DChoice<T>, z: keyof { [K in keyof T as T[K] extends string ? K : never]: T[K]; }): Promise<T> {
+    throw new Error("Method not implemented.");
+  }
+  forUsername(): Promise<string> {
+    return Promise.resolve("1234567812345678");
+  }
+  forPassword(): Promise<string> {
+    // Banks give different errors depending on the password strength
+    return Promise.resolve("1234oIOHHS!lyL");
+  }
+}
+
+class DummySerializer implements ITestSerializer {
+  async writeScreenshot(page: Page, state: TestState): Promise<void> {
+    log.trace("DummySerializer: writeScreenshot");
+  }
+  writeJson(data: any, test: TestElement): void {
+    log.trace("DummySerializer: writeJson");
+  }
+
+}
