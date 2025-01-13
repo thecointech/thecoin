@@ -1,9 +1,9 @@
 from pydantic import BaseModel, Field
 from data_elements import ElementResponse
-from enum import Enum
+from case_insensitive_enum import CaseInsensitiveEnum
 
 
-class TwoFactorActions(str, Enum):
+class TwoFactorActions(CaseInsensitiveEnum):
     SELECT_DESTINATION = 'SelectDestination'
     INPUT_CODE = 'InputCode'
     APPROVE_IN_APP = 'ApproveInApp'

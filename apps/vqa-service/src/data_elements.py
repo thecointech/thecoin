@@ -16,13 +16,19 @@ from pydantic import BaseModel, Field
 #     },
 # }
 
-class ElementResponse(BaseModel):
-    content: str = Field(..., description="Content of the element")
-    neighbour_text: str = Field(..., description="Text immediately beside or above the element")
-    font_color: str = Field(..., description="Hexadecimal color of the font", example="#FFFFFF")
-    background_color: str = Field(..., description="Hexadecimal color of the background", example="#FFFFFF")
+# Position-only response seems to be more accurate for inputs
+class PositionResponse(BaseModel):
     position_x: float
     position_y: float
+
+
+class ElementResponse(PositionResponse):
+    content: str = Field(..., description="Content of the element")
+    neighbour_text: str = Field(..., description="Text immediately beside or above the element")
+    # font_color: str = Field(..., description="Hexadecimal color of the font", example="#FFFFFF")
+    # background_color: str = Field(..., description="Hexadecimal color of the background", example="#FFFFFF")
+    # position_x: float
+    # position_y: float
 
 # def get_exists_schema(prop_name="exists", description: str = None):
 #     exists_schema = {

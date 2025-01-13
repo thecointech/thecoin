@@ -1,8 +1,8 @@
-from enum import Enum
 from pydantic import BaseModel, Field
+from case_insensitive_enum import CaseInsensitiveEnum
 
 
-class PageType(str, Enum):
+class PageType(CaseInsensitiveEnum):
     LANDING = 'Landing'
     LOGIN = 'Login'
     # It seems we can't reliably detect the
@@ -14,7 +14,8 @@ class PageType(str, Enum):
     ACCOUNT_DETAILS = 'AccountDetails'
     PAY_BILL = 'PayBill'
     SEND_TRANSFER = 'SendTransfer'
-    MODAL_DIALOG = 'ModalDialog'
+    MODAL_DIALOG = 'ModalDialog'   # Is there a modal dialog that needs to be closed?
+    MENU_SELECT = 'MenuSelect'     # Is there a menu select with a choise to be chosen?
     LOADING = 'Loading'
     ERROR_MESSAGE = 'ErrorMessage'
 

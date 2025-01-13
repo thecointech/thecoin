@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, Field
-from data_elements import ElementResponse
-from enum import Enum
+from data_elements import ElementResponse, PositionResponse
+from case_insensitive_enum import CaseInsensitiveEnum
 
 class PasswordDetectedResponse(BaseModel):
     password_input_detected: bool
@@ -10,19 +10,19 @@ class ErrorResponse(BaseModel):
     error_message_detected: bool = Field(..., description="boolean")
     error_message: str = Field(..., optional=True, description="Optionally contains error message only if error_message_detected is true")
 
-class InputElementResponse(ElementResponse):
-    content: Optional[str] = Field(..., description="placeholder text inside the element or empty string")
+class InputElementResponse(PositionResponse):
+    placeholder_text: Optional[str] = Field(..., description="placeholder text inside the element or empty string")
 
 query_username_element = (
-    "Analyze the provided webpage. Describe the input for the username or cardnumber.",
+    "Analyze the provided webpage. Describe the text input where the user can enter their username or card number. ",
     InputElementResponse
 )
 query_password_element = (
-    "Analyze the provided webpage. Describe the input for the users password.",
+    "Analyze the provided webpage. Describe the text input where the user can enter their password. ",
     InputElementResponse
 )
 query_pwd_exists = (
-    "Analyze the provided webpage. Is there a password input?",
+    "Analyze the provided webpage. Is there a password input present?",
     PasswordDetectedResponse
 )
 query_continue_button = (
@@ -38,7 +38,7 @@ query_error_message = (
     ErrorResponse
 )
 
-class LoginResult(str, Enum):
+class LoginResult(CaseInsensitiveEnum):
     LOGIN_SUCCESS = 'LoginSuccess'
     TWO_FACTOR_AUTH = 'TwoFactorAuth'
     LOGIN_ERROR = 'LoginError'

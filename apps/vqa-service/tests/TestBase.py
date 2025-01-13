@@ -4,6 +4,7 @@ import sys
 import re
 from PIL import Image
 import time
+from dateparser import parse
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, 'src'))
@@ -20,7 +21,7 @@ class TestBase(unittest.TestCase):
         else:
             super().assertEqual(str1, str2, msg)
 
-    def assertPosition(self, response: dict, image: Image, expected: dict, key: str = None):
+    def assertPosition(self, response: dict, expected: dict, key: str = None):
         o_width = expected["coords"]["width"]
         o_height = expected["coords"]["height"]
         o_left = expected["coords"]["left"]
@@ -44,7 +45,13 @@ class TestBase(unittest.TestCase):
             msg=f"Y: {e_posY} does not match expected: {o_centerY} with height: {o_height} in {key}"
         )
 
-    def assertResponse(self, response: dict, image: Image, expected: dict, key: str = None):
+    def assertContent(self, response: dict, expected: dict, key: str = None):
+        if ("content" not in response and "placeholder_text" not in response):
+            return
+
+        text = normalize(
+            response["content"] if "content" in response else response["placeholder_text"]
+        )
         # We can't reliably check this, the actual scraped may result in 
         # elements that contain text visually but are not children in the DOM
         # For example, inputs with labels etc
@@ -54,13 +61,14 @@ class TestBase(unittest.TestCase):
         # else:
         # Else, just check they overlap in some way
         textOverlap = (
-            normalize(expected["text"]) in normalize(response["content"]) or
-            normalize(response["content"]) in normalize(expected["text"])
+            normalize(expected["text"]) in text or
+            text in normalize(expected["text"])
         )
-        self.assertTrue(textOverlap, f"Text: {response['content']} does not match expected: {expected['text']} in {key}")
+        self.assertTrue(textOverlap, f"Text: {text} does not match expected: {expected['text']} in {key}")
 
-        self.assertPosition(response, image, expected, key)
-
+    def assertNeighbours(self, response: dict, expected: dict, key: str = None):
+        if ("neighbour_text" not in response):
+            return
         # siblingText is quite restrictive, so it may not have any values
         # if it does, then there should be a match (except in Scotiabank)
         o_neigbours = [normalize(s) for s in expected["siblingText"]]
@@ -70,6 +78,24 @@ class TestBase(unittest.TestCase):
             # test.assertIn(normalize(response["neighbour_text"]), o_neigbours)
             print("Found: " + normalize(response["neighbour_text"]) + " in " + str(o_neigbours))
 
+    # The LLM seems to return the date in a different format from
+    # whats on the page.  The scraper can handle the difference, so
+    # we just check that the dates match, and the format is not important
+    def assertDate(self, response: dict, expected: dict, key: str = None):
+        responseDate = parse(response["content"])
+        expectedDate = parse(expected["text"])
+        self.assertEqual(responseDate, expectedDate, f"Date: {responseDate} does not match expected: {expectedDate} in {key}")
+
+    def assertResponse(self, response: dict, expected: dict, key: str = None):
+        self.assertContent(response, expected, key)
+        self.assertPosition(response, expected, key)
+        self.assertNeighbours(response, expected, key)
+        print("Element Found Correctly")
+
+    def assertDateResponse(self, response: dict, expected: dict, key: str = None):
+        self.assertDate(response, expected, key)
+        self.assertPosition(response, expected, key)
+        self.assertNeighbours(response, expected, key)
         print("Element Found Correctly")
 
     # Processing the larger screenshot can result in errors reading small text.

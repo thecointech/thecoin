@@ -68,7 +68,7 @@ class TestSummary(TestBase):
             # lets assume we can find the account element on this page
             image = self.cropToElements(image, [expected])
             response = runQuery(image, balance_query)
-            self.assertResponse(response, image, expected, key)
+            self.assertResponse(response, expected, key)
 
     def test_find_navigate_to_account(self):
         test_datum = get_single_test_element("AccountSummary", "", "navigate")
@@ -80,4 +80,4 @@ class TestSummary(TestBase):
             # lets assume we can find the account element on this page
             image = self.cropToElements(image, [expected])
             response = runQuery(image, navigation_query)
-            self.assertResponse(response, image, expected, key)
+            self.assertResponse(response, expected, key)

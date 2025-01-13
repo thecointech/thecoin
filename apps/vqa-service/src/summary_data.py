@@ -1,12 +1,12 @@
 from pydantic import BaseModel, Field
 from data_elements import ElementResponse
-from enum import Enum
+from case_insensitive_enum import CaseInsensitiveEnum
 
 #json_part = request_json + f"{{ \"num_accounts\": \"number\", \"accounts\": [{{\"account_type\": \"Chequing|Savings|Credit\", \"account_number\": \"string\", \"balance\": \"string\", \"position_x\": \"number\", \"position_y\": \"number\" }}] }}"
 # list_accounts_query = f"Analyze the provided webpage. How many bank accounts with a balance does the user have? {json_part}"
 
 
-class AccountType(Enum):
+class AccountType(CaseInsensitiveEnum):
     CHEQUING = "Chequing"
     SAVINGS = "Savings"
     CREDIT = "Credit"
