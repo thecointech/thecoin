@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, Field
 from data_elements import ElementResponse
-from enum import Enum
+from case_insensitive_enum import CaseInsensitiveEnum
 
 class PasswordDetectedResponse(BaseModel):
     password_input_detected: bool
@@ -38,7 +38,7 @@ query_error_message = (
     ErrorResponse
 )
 
-class LoginResult(str, Enum):
+class LoginResult(CaseInsensitiveEnum):
     LOGIN_SUCCESS = 'LoginSuccess'
     TWO_FACTOR_AUTH = 'TwoFactorAuth'
     LOGIN_ERROR = 'LoginError'

@@ -1,8 +1,8 @@
-from enum import Enum
 from pydantic import BaseModel, Field
+from case_insensitive_enum import CaseInsensitiveEnum
 
 
-class PageType(str, Enum):
+class PageType(CaseInsensitiveEnum):
     LANDING = 'Landing'
     LOGIN = 'Login'
     # It seems we can't reliably detect the
