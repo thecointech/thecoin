@@ -20,28 +20,26 @@ class TestLanding(TestBase):
         # get landing pages
         # All pages are required to have an intent, so don't filter them out here
         test_datum = get_test_data("Landing", "initial")
-
-        # check all landing pages
         for key, image, expected in test_datum:
             with self.subTest(key=key):
-                intent = runQuery(image, query_page_intent)
-                self.assertEqual(intent["type"], expected["intent"]["intent"])
+                response = runQuery(image, query_page_intent)
+                self.assertEqual(response["type"], expected["intent"]["intent"])
 
     def test_cookie_banner_exists(self):
         test_datum = get_test_data("Landing", "initial")
         # check all landing pages
         for key, image, expected in test_datum:
             with self.subTest(key=key):
-                banner = runQuery(image, query_cookie_exists)
-                self.assertEqual(banner["cookie_banner_detected"], "cookie-accept" in expected)
+                response = runQuery(image, query_cookie_exists)
+                self.assertEqual(response["cookie_banner_detected"], "cookie-accept" in expected)
 
     def test_cookie_accept(self):
         test_datum = get_single_test_element("Landing", "initial", "cookie-accept")
         # check all landing pages
         for key, image, expected in test_datum:
             with self.subTest(key=key):
-                banner = runQuery(image, query_cookie_accept)
-                self.assertResponse(banner, image, expected, key)
+                response = runQuery(image, query_cookie_accept)
+                self.assertResponse(response, expected, key)
 
     @repeat_on_fail
     def test_finds_login_button(self):
@@ -49,8 +47,19 @@ class TestLanding(TestBase):
         # check all landing pages
         for key, image, original in test_datum:
             with self.subTest(key=key):
-                element = runQuery(image, query_navigate_to_login)
-                self.assertResponse(element, image, original, key)
+                response = runQuery(image, query_navigate_to_login)
+                self.assertResponse(response, original, key)
+
+    @repeat_on_fail
+    def test_finds_login_button_in_menu(self):
+        test_datum = get_single_test_element("Landing", "menu", "login")
+        # check all landing pages
+        for key, image, original in test_datum:
+            with self.subTest(key=key):
+                intent = runQuery(image, query_page_intent)
+                self.assertEqual(intent["type"], "MenuSelect", "Login intent failed for " + key)
+                response = runQuery(image, query_navigate_to_login_menu)
+                self.assertResponse(response, original, key)
 
 
 

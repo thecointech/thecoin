@@ -50,7 +50,7 @@ class Query2faTests(TestBase):
                         passed = False
                         for o in validations:
                             try:
-                                self.assertResponse(element, image, o, key)
+                                self.assertResponse(element, o, key)
                                 passed = True
                                 validations.remove(o)
                                 break
@@ -72,7 +72,7 @@ def test_element_type(test: TestBase, element_type: str, query, datum):
             continue
         with test.subTest(key=key, element_type=element_type):
             element = runQuery(image, query)
-            test.assertResponse(element, image, elements[element_type], key)
+            test.assertResponse(element, elements[element_type], key)
         
 if __name__ == "__main__":
     unittest.main()

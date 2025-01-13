@@ -14,7 +14,8 @@ class PageType(CaseInsensitiveEnum):
     ACCOUNT_DETAILS = 'AccountDetails'
     PAY_BILL = 'PayBill'
     SEND_TRANSFER = 'SendTransfer'
-    MODAL_DIALOG = 'ModalDialog'
+    MODAL_DIALOG = 'ModalDialog'   # Is there a modal dialog that needs to be closed?
+    MENU_SELECT = 'MenuSelect'     # Is there a menu select with a choise to be chosen?
     LOADING = 'Loading'
     ERROR_MESSAGE = 'ErrorMessage'
 
