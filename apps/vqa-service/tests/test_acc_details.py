@@ -51,7 +51,7 @@ class TestReadAccountDetails(TestBase):
         for key, image, expected in test_data:
             with self.subTest(key=key):
                 response = runQuery(image, query_due_date_element)
-                self.assertDateResponse(response, image, expected)
+                self.assertDateResponse(response, expected)
 
     # Reading history is super-complicated.  We should try and use the download function instead
     # @repeat_on_fail
