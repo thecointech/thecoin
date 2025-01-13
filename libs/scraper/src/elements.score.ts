@@ -27,7 +27,7 @@ export async function scoreElement(potential: ElementData, original: ElementData
     selector:         30 * getSelectorScore(potential.selector, original.selector),
     tag:              20 * getTagScore(potential, original),
     // Input type can be very important, as it doubles for a decent tag filter
-    inputType:        25 * getInputTypeScore(potential, original),
+    inputType:        50 * getInputTypeScore(potential, original),
     // Mostly useless, fonts are all over the place
     font:             10 * getFontScore(potential.font, original.font),
     // Label is important only when it matche, otherwise useles

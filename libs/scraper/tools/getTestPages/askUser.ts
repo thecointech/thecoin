@@ -1,5 +1,6 @@
 import { ElementResponse } from "@thecointech/vqa";
 import readline from 'readline/promises';
+import { BankConfig, TestConfig } from "./config";
 
 export type User2DChoice<T> = Record<string, T[]>
 export type ElementOptions = User2DChoice<ElementResponse>;
@@ -10,18 +11,29 @@ type ChoiceText<T> = keyof {
 export interface IAskUser {
   forValue(question: string): Promise<string>;
   selectOption<T extends object>(question: string, options: User2DChoice<T>, z: ChoiceText<T>): Promise<T>;
+
+  forUsername(): Promise<string | undefined>;
+  forPassword(): Promise<string | undefined>;
 }
 
 export class AskUser implements IAskUser {
 
   private rlp: readline.Interface;
+  private config: BankConfig
 
-  constructor() {
+  constructor(config: BankConfig) {
+    this.config = config;
     // In NodeJS
     this.rlp = readline.createInterface({
       input: process.stdin,
       output: process.stdout
     });
+  }
+  async forUsername(): Promise<string|undefined> {
+    return this.config.username;
+  }
+  async forPassword(): Promise<string|undefined> {
+    return this.config.password;
   }
 
   async forValue(question: string): Promise<string> {

@@ -7,51 +7,94 @@ import { TwoFAWriter } from './twofa';
 import { AskUser } from './askUser';
 import { AccountSummaryWriter } from './accountSummary';
 import { LoginWriter } from './login';
-import { PageType } from '@thecointech/vqa';
 import { AccountDetailsWriter } from './accountDetails';
+import { PageIntentAug } from './types';
+import { TestSerializer } from './testSerializer';
+import { log } from '@thecointech/logging';
+import { _getPageIntent } from './testPageWriter';
 
 const { baseFolder, config } = getConfig();
-await init(baseFolder)
-const askUser = new AskUser();
-type PageIntentAug = PageType | "TwoFactorAuth";
+await init()
 
-try {
-  const name = "TD" //Object.keys(config)[1]; // Get first config
+for (const [name, bankConfig] of Object.entries(config)) {
+
+  log.info(`Processing ${name}`);
+
   const recorder = await Recorder.instance({
     name: "autorecord",
-    url: config[name].url,
+    url: bankConfig.url,
     headless: false
   });
-  // Wait an additional 5 seconds because these pages take _forever_ to load
-  await sleep(5000);
-  const page = recorder.getPage();
+  const askUser = new AskUser(bankConfig);
 
-  let nextIntent: PageIntentAug = await LandingWriter.process(page, name);
-  if (nextIntent != "Login") {
-    throw new Error("Failed to get to Login");
-  }
-  nextIntent = await LoginWriter.process(page, name, config[name]);
+  try {
 
-  if (nextIntent == "TwoFactorAuth") {
-    nextIntent = await TwoFAWriter.process(page, name, askUser);
-  }
-  // Next intent should be "AccountsSummary"
-  if (nextIntent != "AccountsSummary") {
-    throw new Error("Failed to get to AccountsSummary");
-  }
+    // Wait an additional 5 seconds because these pages take _forever_ to load
+    await sleep(5000);
+    const page = recorder.getPage();
 
-  const accounts = await AccountSummaryWriter.process(page, name);
-  for (const account of accounts) {
-    if (account.account_type == "Credit") {
-      // NOTE! This means we can only support 1 credit account at a time
-      // (Which is fine for the use case)
-      const details = await AccountDetailsWriter.process(page, name, account);
-
+    if (bankConfig.refresh) {
+      // How are we going to handle this in the app?
+      await page.reload({ waitUntil: "networkidle2" });
     }
-  }
 
-} finally {
-  askUser[Symbol.dispose]();
-  await Recorder.release();
+    const testConfig = {
+      recorder,
+      writer: new TestSerializer(name, baseFolder),
+      askUser: askUser
+    }
+
+    let nextIntent: PageIntentAug = await LandingWriter.process(testConfig);
+    if (nextIntent != "Login") {
+      throw new Error("Failed to get to Login");
+    }
+    // First, test a failed login
+    const loginOutcome = await LoginWriter.process(testConfig);
+
+    switch(loginOutcome) {
+      case "LoginError":
+        // That's fine, we don't have the details.
+        continue;
+      case "TwoFactorAuth":
+        nextIntent = await TwoFAWriter.process(testConfig);
+        break;
+      default:
+        nextIntent = await _getPageIntent(page);
+    }
+
+    // Next intent should be "AccountsSummary"
+    if (nextIntent != "AccountsSummary") {
+      const choice = await askUser.selectOption(`Expected to be on AccountsSummary, got ${nextIntent}. Should we continue?`, {
+        "Skip": [{ "cont": "Skip" }],
+        "Continue": [{ "cont": "Ignore" }],
+        "Throw": [{ "cont": "Throw" }]
+      }, "cont");
+      switch (choice.cont) {
+        case "Skip":
+          continue;
+        case "Throw":
+          throw new Error("Failed to get to AccountsSummary");
+      }
+    }
+
+    const summary = await AccountSummaryWriter.process(testConfig);
+    const summaryUrl = page.url();
+    for (const account of summary) {
+      if (account.account.account_type == "Credit") {
+        // If processing multiple accounts, we need to navigate back to the summary page
+        await page.goto(summaryUrl);
+        await AccountDetailsWriter.process(testConfig, account.nav.data);
+      }
+      else if (account.account.account_type == "Chequing") {
+        // TODO: Chequing
+      }
+    }
+
+    log.info(`Finished ${name}`);
+
+  } finally {
+    askUser[Symbol.dispose]();
+    await Recorder.release();
+  }
 }
 
