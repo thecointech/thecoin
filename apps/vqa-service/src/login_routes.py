@@ -7,7 +7,7 @@ from run_endpoint_query import run_endpoint_query
 def add_login_routes(app):
 
     @app.post("/login/detect-username-input", tags=["login"])
-    async def detect_username_input(image: UploadFile) -> ElementResponse:
+    async def detect_username_input(image: UploadFile) -> InputElementResponse:
         return await run_endpoint_query(image, query_username_element)
 
     @app.post("/login/detect-password-exists", tags=["login"])
@@ -15,7 +15,7 @@ def add_login_routes(app):
         return await run_endpoint_query(image, query_pwd_exists)
 
     @app.post("/login/detect-password-input", tags=["login"])
-    async def detect_password_input(image: UploadFile) -> ElementResponse:
+    async def detect_password_input(image: UploadFile) -> InputElementResponse:
         return await run_endpoint_query(image, query_password_element)
 
     @app.post("/login/detect-continue-element", tags=["login"])
