@@ -1,5 +1,5 @@
 from fastapi import UploadFile
-from landing_data import ExistsResponse, query_cookie_exists, query_cookie_accept, query_navigate_to_login
+from landing_data import *
 from data_elements import ElementResponse
 from run_endpoint_query import run_endpoint_query
 
@@ -17,3 +17,7 @@ def add_landing_routes(app):
     @app.post("/landing/navigate-to-login", tags=["landing"])
     async def navigate_to_login(image: UploadFile) -> ElementResponse:
         return await run_endpoint_query(image, query_navigate_to_login)
+
+    @app.post("/landing/navigate-to-login-menu", tags=["landing"])
+    async def navigate_to_login_menu(image: UploadFile) -> ElementResponse:
+        return await run_endpoint_query(image, query_navigate_to_login_menu)
