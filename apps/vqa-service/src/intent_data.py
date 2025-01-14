@@ -11,7 +11,7 @@ class PageType(CaseInsensitiveEnum):
     # into it's own distinct test
     # TWO_FACTOR_AUTH = 'TwoFactorAuth'
     ACCOUNTS_SUMMARY = 'AccountsSummary'
-    ACCOUNT_DETAILS = 'AccountDetails'
+    CREDIT_ACCOUNT_DETAILS = 'CreditAccountDetails'
     PAY_BILL = 'PayBill'
     SEND_TRANSFER = 'SendTransfer'
     MODAL_DIALOG = 'ModalDialog'   # Is there a modal dialog that needs to be closed?

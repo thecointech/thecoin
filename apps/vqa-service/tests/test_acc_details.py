@@ -1,6 +1,7 @@
 from TestBase import TestBase
 import unittest
 from query import runQuery
+from intent_data import query_page_intent
 from tests.repeat_on_failure import repeat_on_fail
 from tests.testdata import get_single_test_element, get_test_data
 # from data_elements import element_schema
@@ -19,6 +20,13 @@ class TestReadAccountDetails(TestBase):
     #         find_details_area_query = f"Analyze this credit card account. Describe the area that contains account details like balance, due date, and due amount. {json_part}"
     #         response = runQuery(find_details_area_query, image)
     #         self.assertResponse(response, expected, f"Current balance {key}")
+
+    def test_intent(self):
+        test_data = get_single_test_element("AccountDetails", "initial", "intent")
+        for key, image, expected in test_data:
+            with self.subTest(key=key):
+                intent = runQuery(image, query_page_intent)
+                self.assertEqual(intent["type"], expected["intent"])
 
     @repeat_on_fail
     def test_find_current_balance(self):
