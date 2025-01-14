@@ -16,8 +16,9 @@ class PageType(CaseInsensitiveEnum):
     SEND_TRANSFER = 'SendTransfer'
     MODAL_DIALOG = 'ModalDialog'   # Is there a modal dialog that needs to be closed?
     MENU_SELECT = 'MenuSelect'     # Is there a menu select with a choise to be chosen?
-    LOADING = 'Loading'
-    ERROR_MESSAGE = 'ErrorMessage'
+    BLANK = 'Blank'                # If the page hasn't loaded anything yet.
+    LOADING = 'Loading'            # If the page has a loading indicator up
+    # ERROR_MESSAGE = 'ErrorMessage' # TODO: Add error message detection
 
 
 class IntentResponse(BaseModel):
