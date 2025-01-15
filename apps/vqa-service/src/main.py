@@ -1,12 +1,12 @@
 from fastapi import FastAPI
-from landing_routes import add_landing_routes
-from intent_routes import add_intent_routes
-from login_routes import add_login_routes
-from modal_routes import add_modal_routes
-from twofa_routes import add_twofa_routes
-from summary_routes import add_summary_routes
-from credit_details_routes import add_credit_details_routes
-from warmup import add_warmup_routes
+from warmup import router as warmup_router
+from landing_routes import router as landing_router
+from intent_routes import router as intent_router
+from login_routes import router as login_router
+from twofa_routes import router as twofa_router
+from summary_routes import router as summary_router
+from credit_details_routes import router as credit_details_router
+from modal_routes import router as modal_router
 from port import get_version, get_port
 from fastapi_tweak import use_route_names_as_operation_ids
 
@@ -26,13 +26,15 @@ app = FastAPI(
 
 app.add_middleware(KeepAliveMiddleware)
 
-add_intent_routes(app)
-add_landing_routes(app)
-add_login_routes(app)
-add_twofa_routes(app)
-add_summary_routes(app)
-add_credit_details_routes(app)
-add_modal_routes(app)
-add_warmup_routes(app)
+# Add all routers
+app.include_router(warmup_router)
+app.include_router(landing_router)
+app.include_router(intent_router)
+app.include_router(login_router)
+app.include_router(twofa_router)
+app.include_router(summary_router)
+app.include_router(credit_details_router)
+app.include_router(modal_router)
 
+# Tweak operation IDs
 use_route_names_as_operation_ids(app)
