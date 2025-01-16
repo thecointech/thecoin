@@ -6,7 +6,7 @@ from twofa_routes import (
     detect_destinations,
     get_destination_elements,
     get_auth_input,
-    get_skip_input,
+    get_remember_input,
     get_submit_input
 )
 
@@ -71,8 +71,8 @@ class Query2faTests(TestBase):
     async def test_2fa_input_element(self):
         await test_element_type(self, "input", get_auth_input)
 
-    async def test_2fa_skip_element(self):
-        await test_element_type(self, "skip", get_skip_input)
+    async def test_2fa_remember_element(self):
+        await test_element_type(self, "remember", get_remember_input)
 
     async def test_2fa_submit_element(self):
         await test_element_type(self, "submit", get_submit_input)

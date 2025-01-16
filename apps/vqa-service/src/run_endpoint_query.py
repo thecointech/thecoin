@@ -5,22 +5,15 @@ import io
 from starlette.datastructures import UploadFile
 from query import runQueryToJson
 from typing import TypeVar, Union
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 MAX_RESOLUTION = 2 ** 16
 class Crop(BaseModel):
-    left: int = 0
-    top: int = 0
-    right: int = MAX_RESOLUTION
-    bottom: int = MAX_RESOLUTION
-
-    def __init__(self, left, top, right, bottom):
-        super().__init__()
-        self.left = left
-        self.top = top
-        self.right = right
-        self.bottom = bottom
+    left: int = Field(default=0)
+    top: int = Field(default=0)
+    right: int = Field(default=MAX_RESOLUTION)
+    bottom: int = Field(default=MAX_RESOLUTION)
 
 
 T = TypeVar('T')
@@ -60,7 +53,7 @@ async def get_image(image: Union[UploadFile, Image.Image], crop: Crop=None) -> I
         bottom = min(crop.bottom, image.height)
         image = image.crop((left, top, right, bottom))
 
-    return (image, Crop(left, top, right, bottom))
+    return (image, Crop(left=left, top=top, right=right, bottom=bottom))
 
 
 def position_to_pixels(r, crop):

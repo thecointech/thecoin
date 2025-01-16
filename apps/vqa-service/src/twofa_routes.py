@@ -22,9 +22,9 @@ async def get_destination_elements(image: UploadFile, phone: str) -> TwoFactorEl
 async def get_auth_input(image: UploadFile) -> ElementResponse:
     return await run_endpoint_query(image, query_2fa_input_element)
 
-@router.post("/twofa/get-skip-input", tags=["twofa"])
-async def get_skip_input(image: UploadFile) -> ElementResponse:
-    return await run_endpoint_query(image, query_2fa_skip_element)
+@router.post("/twofa/get-remember-input", tags=["twofa"])
+async def get_remember_input(image: UploadFile) -> ElementResponse:
+    return await run_endpoint_query(image, query_2fa_remember_element)
 
 @router.post("/twofa/get-submit-input", tags=["twofa"])
 async def get_submit_input(image: UploadFile) -> ElementResponse:
