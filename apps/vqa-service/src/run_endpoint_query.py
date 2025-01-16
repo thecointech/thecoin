@@ -1,9 +1,10 @@
 from PIL import Image
 import io
-from fastapi import UploadFile
+# NOTE - Don't use the instance from fastapi,
+# as the isinstance check will fail with this type
+from starlette.datastructures import UploadFile
 from query import runQueryToJson
 from typing import TypeVar, Union
-from collections import namedtuple
 from pydantic import BaseModel
 
 
