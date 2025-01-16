@@ -190,6 +190,7 @@ export async function registerElementAttrFns(page: Page) {
     eval(`window.getFrameUrl = ${fns.getFrameUrl};`)
     eval(`window.getSelector = ${fns.getSelector};`)
     eval(`window.getFontData = ${fns.getFontData};`)
+    eval(`window.getLabelData = ${fns.getLabelData};`)
     eval(`window.getElementText = ${fns.getElementText};`)
     eval(`window.getSiblingText = ${fns.getSiblingText};`)
     eval(`window.getCoords = ${fns.getCoords};`)
@@ -221,6 +222,7 @@ export async function registerElementAttrFns(page: Page) {
     getFrameUrl: getFrameUrl.toString(),
     getSelector: getSelector.toString(),
     getFontData: getFontData.toString(),
+    getLabelData: getLabelData.toString(),
     getElementText: getElementText.toString(),
     getSiblingText: getSiblingText.toString(),
     getCoords: getCoords.toString(),
@@ -235,7 +237,7 @@ const getElementProps = (el: HTMLElement) => ({
   selector: getSelector(el),
   coords: getCoords(el),
   font: getFontData(el),
-  label: el.getAttribute("aria-label"),
+  label: getLabelData(el),
   // Placeholder text gets picked up by the VQA service, so we
   // need to include it here (as it's most like a text descendent)
   text: el.innerText + (el.getAttribute("placeholder") || ""),
@@ -321,6 +323,17 @@ export function getFontData(elem: Element) {
     }
   }
   return _getFontData(elem)
+}
+
+export function getLabelData(elem: Element) {
+  const _getLabelData = (elem: Element) => {
+    const labels = Array.from(document.querySelectorAll(`label[for="${elem.id}"]`));
+    if (labels.length == 0) {
+      return elem.getAttribute("aria-label") || ""
+    }
+    return labels.map(l => (l as HTMLLabelElement).innerText).join(", ")
+  }
+  return _getLabelData(elem)
 }
 
 function getElementText(elem: Element) {

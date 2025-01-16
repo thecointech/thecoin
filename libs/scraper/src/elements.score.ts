@@ -30,13 +30,13 @@ export async function scoreElement(potential: ElementData, original: ElementData
     inputType:        50 * getInputTypeScore(potential, original),
     // Mostly useless, fonts are all over the place
     font:             10 * getFontScore(potential.font, original.font),
-    // Label is important only when it matche, otherwise useles
-    label:            20 * await getLabelScore(potential.label, original.label),
+    // Includes aria-label & <label>.  Is a good boost to <input> types
+    label:            25 * await getLabelScore(potential.label, original.label),
     role:             20 * getRoleScore(potential, original),
     positionAndSize:  20 * getPositionAndSizeScore(potential, original), // Can be 2 if both match perfectly
     nodeValue:        40 * await getNodeValueScore(potential, original),
     siblings:         30 * await getSiblingScore(potential, original),
-    estimatedText:    40 * getEstimatedTextScore(potential, original)
+    estimatedText:    25 * getEstimatedTextScore(potential, original)
   };
 
   // max score is 195

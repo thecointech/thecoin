@@ -258,10 +258,13 @@ export async function enterValueIntoFound(page: Page, found: FoundElement, value
     await page.evaluate(el => (el as HTMLInputElement).value = "", found.element);
     // Simulate typing to mimic input actions
     await page.keyboard.type(value, { delay: 20 });
+    return true;
   }
   else if (found.data.tagName == "SELECT") {
     await found.element.evaluate((v, value) => (v as HTMLSelectElement).value = value, value);
+    return true;
   }
+  return false;
 }
 
 function parseValue(value: string, event: ValueEvent) {

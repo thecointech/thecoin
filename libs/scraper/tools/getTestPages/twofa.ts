@@ -44,24 +44,32 @@ export class TwoFAWriter extends IntentWriter {
       }
     }
     const dest = await this.askUserForDestination(allOptions);
-    const clickedOption = await this.completeInteraction(dest, "destination", (found) => clickElement(this.page, found), "button", "", 3000);
+    const clickedOption = await this.completeInteraction(dest, (found) => clickElement(this.page, found), {
+      name: "destination",
+      htmlType: "button",
+    });
     if (!clickedOption) {
       throw new Error("Failed to click destination");
     }
-    await this.updatePageName("code");
+    await this.updatePageName("input");
     await this.enterCode();
   }
 
   async enterCode() {
     const api = GetTwofaApi();
     const code = await this.askUserForCode();
-    const didEnter = await this.tryEnterText(api, "getAuthInput", code, "code");
+    const didEnter = await this.tryEnterText(api, "getAuthInput", {
+      text: code,
+      name: "input",
+      htmlType: "input",
+      inputType: "text",
+    });
     if (!didEnter) {
       throw new Error("Failed to enter code");
     }
     await this.clickRemember();
     await this.clickSubmit();
-    await this.waitForPageLoaded();
+    // await this.waitForPageLoaded();
   }
 
   async approveInApp() {
@@ -99,7 +107,13 @@ export class TwoFAWriter extends IntentWriter {
 
   async clickRemember() {
     const api = GetTwofaApi();
-    const clickedSkip = await this.tryClick(api, "getSkipInput", "remember", "input", "checkbox", 1000);
+    const clickedSkip = await this.tryClick(api, "getSkipInput", {
+      name: "remember",
+      noNavigate: true,
+      htmlType: "input",
+      inputType: "checkbox",
+      minPixelsChanged: 10, // This is a very low value because checkboxes are small
+    });
     if (!clickedSkip) {
       // It's possible that there is no remember checkbox
       log.warn("Failed to click remember");
@@ -108,7 +122,7 @@ export class TwoFAWriter extends IntentWriter {
 
   async clickSubmit() {
     const api = GetTwofaApi();
-    const clickedSubmit = await this.tryClick(api, "getSubmitInput", "submit", "button");
+    const clickedSubmit = await this.tryClick(api, "getSubmitInput", { name: "submit", htmlType: "button", inputType: "submit" });
     if (!clickedSubmit) {
       throw new Error("Failed to click submit");
     }

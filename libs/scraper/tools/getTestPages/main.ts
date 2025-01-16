@@ -12,9 +12,15 @@ import { PageIntentAug } from './types';
 import { TestSerializer } from './testSerializer';
 import { log } from '@thecointech/logging';
 import { _getPageIntent } from './testPageWriter';
+import { mkdirSync } from 'fs';
+import { DateTime } from 'luxon';
+import { DummyAskUser } from './dummyAskUser';
 
 const { baseFolder, config } = getConfig();
 await init()
+
+let successful = [];
+let errored = [];
 
 for (const [name, bankConfig] of Object.entries(config)) {
 
@@ -28,15 +34,21 @@ for (const [name, bankConfig] of Object.entries(config)) {
   const askUser = new AskUser(bankConfig);
 
   try {
-
     // Wait an additional 5 seconds because these pages take _forever_ to load
-    await sleep(5000);
-    const page = recorder.getPage();
 
-    if (bankConfig.refresh) {
-      // How are we going to handle this in the app?
-      await page.reload({ waitUntil: "networkidle2" });
+    // CIBC/BMO somehow seem to fail when opening the first time
+    const page = recorder.getPage();
+    await page.reload({ waitUntil: "networkidle2" });
+    // There seems to be some back-and-forth between
+    // puppeteer and the page that can get blocked if
+    // we don't have multiple sleeps (?)
+    for (let i = 0; i < 15; i++) {
+      await sleep(500);
     }
+    // if (bankConfig.refresh) {
+    //   // How are we going to handle this in the app?
+    //   await page.reload({ waitUntil: "networkidle2" });
+    // }
 
     const testConfig = {
       recorder,
@@ -48,9 +60,27 @@ for (const [name, bankConfig] of Object.entries(config)) {
     if (nextIntent != "Login") {
       throw new Error("Failed to get to Login");
     }
-    // First, test a failed login
-    const loginOutcome = await LoginWriter.process(testConfig);
 
+    // First, test a failed login
+    const loginUrl = page.url();
+    let loginOutcome = await LoginWriter.process({
+      ...testConfig,
+      askUser: new DummyAskUser(bankConfig.bad_credentials)
+    });
+    if (loginOutcome != "LoginError") {
+      throw new Error("Failed to get to LoginError");
+    }
+    if (!bankConfig.username || !bankConfig.password) {
+      // We don't have details, so we're done.
+      continue;
+    }
+
+    // Next, test a successful login
+    await page.goto(loginUrl, { waitUntil: "networkidle2" });
+    loginOutcome = await LoginWriter.process({
+      ...testConfig,
+      writer: new TestSerializer(name, baseFolder + "login-retry"),
+    });
     switch(loginOutcome) {
       case "LoginError":
         // That's fine, we don't have the details.
@@ -92,9 +122,21 @@ for (const [name, bankConfig] of Object.entries(config)) {
 
     log.info(`Finished ${name}`);
 
+  } catch (e) {
+    log.error(e, `Failed to process ${name}`);
+    errored.push(name);
+    const date = DateTime.now().toFormat("yyyy-MM-dd");
+    const errorFolder = `${baseFolder}/errors/${date}/`;
+    mkdirSync(errorFolder, { recursive: true });
+    await recorder.getPage().screenshot({ path: `${errorFolder}/${name}.png` });
   } finally {
     askUser[Symbol.dispose]();
     await Recorder.release();
+    if (!errored.includes(name)) {
+      successful.push(name);
+    }
   }
 }
 
+log.info(`Successful: ${successful.join(", ")}`);
+log.info(`Failed: ${errored.join(", ")}`);

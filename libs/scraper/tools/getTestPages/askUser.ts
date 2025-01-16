@@ -4,7 +4,7 @@ import { BankConfig, TestConfig } from "./config";
 
 export type User2DChoice<T> = Record<string, T[]>
 export type ElementOptions = User2DChoice<ElementResponse>;
-type ChoiceText<T> = keyof {
+export type ChoiceText<T> = keyof {
   [K in keyof T as T[K] extends string ? K : never]: T[K]
 }
 

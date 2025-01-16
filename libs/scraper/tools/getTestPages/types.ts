@@ -1,6 +1,5 @@
 import type { AccountResponse, PageType } from "@thecointech/vqa";
 import { ElementData } from "../../src/types";
-import { Page } from "puppeteer";
 import { IAskUser } from "./askUser";
 import { ITestSerializer } from "./testSerializer";
 import { Recorder } from "../../src/record";

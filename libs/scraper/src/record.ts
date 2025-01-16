@@ -94,7 +94,7 @@ export class Recorder {
     await page.evaluateOnNewDocument(onNewDocument);
 
     if (url != "about:blank") {
-      await page.goto(url);
+      await page.goto(url, { waitUntil: "networkidle2" });
     }
 
     this.disconnected = new Promise((resolve, reject) => {

@@ -141,7 +141,7 @@ function getAllCurrencies(rawText: ElementData[]) {
 }
 
 async function getTextNodeData(page: Page) : Promise<ElementData[]> {
-  const allElements = await getAllElements(page);
+  const allElements = await getAllElements(page, Number.MAX_SAFE_INTEGER);
   return allElements
     .filter(el => el.data.nodeValue)
     .map(se => se.data)

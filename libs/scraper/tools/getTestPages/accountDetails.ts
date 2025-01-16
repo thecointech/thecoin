@@ -1,5 +1,5 @@
 import { GetCreditDetailsApi } from "@thecointech/apis/vqa";
-import { IntentWriter } from "./testPageWriter";
+import { _getPageIntent, IntentWriter } from "./testPageWriter";
 import { log } from "@thecointech/logging";
 import { ElementData, ProcessConfig } from "./types";
 import { clickElement } from "./vqaResponse";
@@ -12,6 +12,8 @@ export class AccountDetailsWriter extends IntentWriter {
     log.trace("AccountDetailsWriter: begin processing");
 
     // First, we have to navigate to the page...
+    // Keep this separate, as the IntentWriters assume
+    // they start on their initial page.
     await navigateToAccountDetails(config.recorder.getPage(), navData);
 
     const writer = new AccountDetailsWriter(config, "AccountDetails");
@@ -54,7 +56,11 @@ async function navigateToAccountDetails(page: Page, navData: ElementData) {
   const navElement = await getElementForEvent(page, navData);
 
   // First, we have to navigate to the page...
-  const navigate = page.waitForNavigation({ waitUntil: "networkidle2" });
   await clickElement(page, navElement);
-  await navigate;
+
+  // Check that we are on the correct page
+  const intent = await _getPageIntent(page);
+  if (intent != "CreditAccountDetails") {
+    log.error(`Navigated to wrong page: ${intent}`);
+  }
 }

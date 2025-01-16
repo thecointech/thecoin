@@ -1,7 +1,7 @@
-import { Page } from "puppeteer";
+import { Page, TimeoutError } from "puppeteer";
 import { File } from '@web-std/file';
 import type { AxiosResponse } from "axios";
-import { clickElement, responseToElement } from "./vqaResponse";
+import { AnyResponse, clickElement, responseToElement } from "./vqaResponse";
 import { sleep } from "@thecointech/async";
 import { GetIntentApi } from "@thecointech/apis/vqa";
 import { log } from "@thecointech/logging";
@@ -9,13 +9,29 @@ import { enterValueIntoFound } from "../../src/replay";
 import { FoundElement } from "../../src/elements";
 import { ITestSerializer, TestState } from "./testSerializer";
 import { DateTime } from "luxon";
-import type { ElementResponse, ProcessConfig } from "./types";
+import type { ProcessConfig } from "./types";
 import type { IAskUser } from "./askUser";
 
-type ApiFn = (image: File) => Promise<AxiosResponse<ElementResponse>>
+type ApiFn = (image: File) => Promise<AxiosResponse<AnyResponse>>
 
 type ApiFnName<T> = keyof {
   [K in keyof T as T[K] extends ApiFn ? K : never]: T[K]
+}
+
+type InteractionOptions = {
+  name: string
+  htmlType?: string
+  inputType?: string
+  fullPage?: boolean
+}
+
+type ClickInteractionOptions = InteractionOptions & {
+  noNavigate?: boolean,
+  minPixelsChanged?: number
+}
+
+type InputInteractionOptions = InteractionOptions & {
+  text: string
 }
 
 export class IntentWriter {
@@ -26,7 +42,7 @@ export class IntentWriter {
 
   state: TestState;
 
-  lastNavigateTime = Date.now();
+  // lastNavigateTime = Date.now();
 
   protected constructor(config: ProcessConfig, intent: string) {
     this.page = config.recorder.getPage();
@@ -37,12 +53,12 @@ export class IntentWriter {
       page: ""
     }
 
-    this.page.on('load', () => {
-      this.lastNavigateTime = Date.now();
-    });
-    this.page.on('domcontentloaded', () => {
-      this.lastNavigateTime = Date.now();
-    });
+    // this.page.on('load', () => {
+    //   this.lastNavigateTime = Date.now();
+    // });
+    // this.page.on('domcontentloaded', () => {
+    //   this.lastNavigateTime = Date.now();
+    // });
   }
 
   async initialize() {
@@ -83,46 +99,39 @@ export class IntentWriter {
   }
 
   // Functions for interacting with the webpage
-  async tryClick<T extends object>(api: T, fnName: ApiFnName<T>, elementName: string, htmlType = "button", inputType: string = undefined, thenWaitFor = 3000, fullPage = false) {
+  async tryClick<T extends object>(api: T, fnName: ApiFnName<T>, options: ClickInteractionOptions) {
     // It may not be a navigation, but if it does trigger a navigation this
     // will help us await it.
-    this.lastNavigateTime = Date.now();
-    return await this.doInteraction(api, fnName, elementName, (found) => clickElement(this.page, found), htmlType, inputType, thenWaitFor, fullPage);
+    return await this.doInteraction(api, fnName, (found) => clickElement(this.page, found, options.noNavigate, options.minPixelsChanged), options);
   }
 
   // Functions for interacting with the webpage
-  async tryEnterText<T extends object>(api: T, fnName: ApiFnName<T>, text: string, elementName: string, htmlType = "input", inputType = "text", thenWaitFor = 3000, fullPage = false) {
-    return await this.doInteraction(api, fnName, elementName, (found) => enterValueIntoFound(this.page, found, text), htmlType, inputType, thenWaitFor, fullPage);
+  async tryEnterText<T extends object>(api: T, fnName: ApiFnName<T>, options: InputInteractionOptions) {
+    return await this.doInteraction(api, fnName, (found) => enterValueIntoFound(this.page, found, options.text), options);
   }
 
   async doInteraction<T extends object>(
     api: T,
     fnName: ApiFnName<T>,
-    elementName: string,
-    interaction: (found: FoundElement) => Promise<void>,
-    htmlType = "",
-    inputType: string = undefined,
-    thenWaitFor = 3000,
-    fullPage = false
+    interaction: (found: FoundElement) => Promise<boolean>,
+    options: InteractionOptions,
   ) {
     // Always get the latest screenshot
-    const image = await this.getImage(fullPage);
+    const image = await this.getImage(options.fullPage);
     const { data: r } = await (api[fnName] as ApiFn)(image);
-    return await this.completeInteraction(r, elementName, interaction, htmlType, inputType, thenWaitFor);
+    return await this.completeInteraction(r, interaction, options);
   }
 
-  async completeInteraction(r: ElementResponse, elementName: string, interaction: (found: FoundElement) => Promise<void>, htmlType = "", inputType: string = undefined, thenWaitFor = 3000) {
+  async completeInteraction(r: AnyResponse, interaction: (found: FoundElement) => Promise<boolean>, options: InteractionOptions) {
     try {
-      const found = await this.toElement(r, elementName,htmlType, inputType);
-      await interaction(found);
-      await sleep(thenWaitFor);
-      return true;
+      const found = await this.toElement(r, options.name, options.htmlType, options.inputType);
+      return await interaction(found);
     } catch (e) {
       // Save out page/JSON to allow easy debugging
       const debugState = {
         intent: "debug",
-        page: `${elementName}-${DateTime.now().toFormat("yyyy-MM-dd-HH-mm-ss")}`,
-        name: elementName
+        page: `${options.name}-${DateTime.now().toFormat("yyyy-MM-dd-HH-mm-ss")}`,
+        name: options.name
       };
       await this.writer.writeScreenshot(this.page, debugState);
       this.writer.writeJson(r, debugState);
@@ -130,61 +139,68 @@ export class IntentWriter {
     }
   }
 
-  async waitForPageLoaded() {
+  // async waitForPageLoaded() {
 
-    // Poll for navigation happening
-    await this.waitForNavigationStable();
+  //   // Poll for navigation happening
+  //   await this.waitForNavigationStable();
 
-    // Now wait for the page to settle down
-    const aborter = new AbortController();
-    return Promise.all([
-      this.waitForPageStable(aborter.signal),
-      this.waitForNetworkIdle(aborter.signal)
-    ])
-  }
+  //   // Now wait for the page to settle down
+  //   const aborter = new AbortController();
+  //   return Promise.all([
+  //     this.waitForPageStable(aborter.signal),
+  //     this.waitForNetworkIdle(aborter.signal)
+  //   ])
+  // }
 
-  async waitForNavigationStable(pollInterval = 2000) {
-    let lastUrl = this.page.url();
-    do {
-      await sleep(pollInterval);
-      const currentUrl = this.page.url();
-      if (currentUrl !== lastUrl) {
-        this.lastNavigateTime = Date.now();
-        lastUrl = currentUrl;
-      }
-    } while (Date.now() < this.lastNavigateTime + pollInterval);
-  }
+  // async waitForNavigationStable(pollInterval = 2000, timeout = 10_000) {
+  //   const maxTime = Date.now() + timeout;
+  //   let lastUrl = this.page.url();
+  //   do {
+  //     await sleep(pollInterval);
+  //     const currentUrl = this.page.url();
+  //     if (currentUrl !== lastUrl) {
+  //       // Last navigate time will be updated whenever a page is loaded
+  //       // But we might catch a URL change a little earlier than that
+  //       this.lastNavigateTime = Date.now();
+  //       lastUrl = currentUrl;
+  //     }
+  //   } while (Date.now() < this.lastNavigateTime + pollInterval && Date.now() < maxTime);
+  // }
 
-  async waitForPageStable(signal: AbortSignal, timeout = 5000) {
-    try {
-      let initialContent = await this.page.content();
-      let contentChanged = true;
-      let maxTime = Date.now() + timeout;
+  // async waitForPageStable(signal: AbortSignal, timeout = 5000) {
+  //   try {
+  //     let initialContent = await this.page.content();
+  //     let contentChanged = true;
+  //     const initTime = Date.now();
+  //     let maxTime = Date.now() + timeout;
 
-      while (Date.now() < maxTime && signal?.aborted === false) {
-        await sleep(500); // Check every 250ms
-        const newContent = await this.page.content();
-        contentChanged = initialContent !== newContent;
-        initialContent = newContent;
-      }
-      log.trace(`Page stable after ${maxTime - Date.now()}ms`);
-    }
-    catch (error) {
-      log.debug("Error waiting for page to be stable", error);
-    }
-  }
+  //     while (Date.now() < maxTime && signal?.aborted === false) {
+  //       await sleep(500); // Check every 250ms
+  //       const newContent = await this.page.content();
+  //       contentChanged = initialContent !== newContent;
+  //       initialContent = newContent;
+  //     }
+  //     log.trace(`Page stable after ${Date.now() - initTime}ms`);
+  //   }
+  //   catch (error) {
+  //     log.debug("Error waiting for page to be stable", error);
+  //   }
+  // }
 
   async waitForNetworkIdle(signal: AbortSignal, timeout = 5000) {
-    const maxTime = Date.now() + timeout;
+    const initTime = Date.now();
+    const maxTime = initTime + timeout;
     try {
-      await this.page.waitForNetworkIdle({ idleTime: 500, timeout });
-      log.trace(`Network idle after ${maxTime - Date.now()}ms`);
+      await this.page.waitForNetworkIdle({ concurrency: 2, idleTime: 500, timeout });
+      log.trace(`Network idle after ${Date.now() - initTime}ms`);
     } catch (error) {
-      log.debug("Error waiting for network to be idle", error);
+      if (!(error instanceof TimeoutError)) {
+        log.debug("Error waiting for network to be idle", error);
+      }
     }
   }
 
-  async toElement(response: ElementResponse, eventName: string, htmlType?: string, inputType?: string, extra?: any) {
+  async toElement(response: AnyResponse, eventName: string, htmlType?: string, inputType?: string, extra?: any) {
     // First, record the response from the API
     this.writeJson(response, `vqa-${eventName}`);
     // Find the element in the page
@@ -193,8 +209,10 @@ export class IntentWriter {
       throw new Error("Failed to find element for " + eventName);
     }
     // Finally, record what we found
+    // Do not include data that is likely to change
+    const { frame, ...trimmed } = found.data;
     this.writeJson({
-      ...found.data,
+      ...trimmed,
       ...(extra ? { extra } : {})
     }, eventName);
     return found;

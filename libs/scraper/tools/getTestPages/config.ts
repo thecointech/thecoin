@@ -6,6 +6,10 @@ export type BankConfig = {
   username?: string,
   password?: string,
   refresh?: boolean,
+  bad_credentials?: {
+    username?: string,
+    password?: string
+  }
 }
 export type TestConfig = Record<string, BankConfig>;
 

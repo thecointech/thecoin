@@ -1,20 +1,28 @@
-import type { AccountResponse, ElementResponse } from "@thecointech/vqa";
+import type { AccountResponse, ElementResponse, InputElementResponse, MoneyElementResponse } from "@thecointech/vqa";
 import type { ElementDataMin } from "../../src/types";
-import type { Page } from "puppeteer";
+import { TimeoutError, type Page } from "puppeteer";
 import { FoundElement, getElementForEvent } from "../../src/elements";
+import pixelmatch from "pixelmatch";
+import { log } from "@thecointech/logging";
+import { sleep } from "@thecointech/async";
+import { PNG } from "pngjs";
+import { _getPageIntent } from "./testPageWriter";
 
-export function responseToElementData(response: ElementResponse, htmlType?: string, inputType?: string): ElementDataMin {
-  const width = (response.content ?? "").length * 8;
+export type AnyResponse = ElementResponse | InputElementResponse | MoneyElementResponse;
+
+export function responseToElementData(response: AnyResponse, htmlType?: string, inputType?: string): ElementDataMin {
+  const text = getContent(response);
+  const width = text.length * 8;
   const height = 20; // Just guess based on avg font size
   return {
     estimated: true,
     tagName: htmlType?.toUpperCase(),
     inputType: inputType?.toLowerCase(),
-    text: response.content!,
+    text,
     // nodeValue: response.content!,
-    label: response.content!,
+    label: text,
     // Include original text in neighbour text, LLM isn't known for being precise
-    siblingText: [response.neighbour_text, response.content].filter(t => !!t),
+    siblingText: [getNeighbourText(response), text].filter(t => !!t),
     coords: {
       top: response.position_y! - height / 2,
       left: response.position_x! - width / 2,
@@ -36,7 +44,7 @@ export const accountToElementResponse = (account: AccountResponse) => ({
 });
 
 
-export async function responseToElement(page: Page, e: ElementResponse, htmlType?: string, inputType?: string, timeout?: number): Promise<FoundElement> {
+export async function responseToElement(page: Page, e: AnyResponse, htmlType?: string, inputType?: string, timeout?: number): Promise<FoundElement> {
   // Try to find and click the close button
   const elementData = responseToElementData(e, htmlType, inputType);
 
@@ -47,31 +55,158 @@ export async function responseToElement(page: Page, e: ElementResponse, htmlType
   return await getElementForEvent(page, elementData, timeout ?? 5000, 20, maxHeight);
 }
 
+// 50 * 50 = 2500 which is 0.1% of the viewport.  This is a pretty small area to detect a change in a page
+const MIN_PIXELS_CHANGED = parseInt(process.env.SCRAPER_CLICK_MIN_PIXELS_CHANGED || "2500");
+export async function clickElement(page: Page, element: FoundElement, noNavigate?: boolean, minPixelsChanged?: number) {
+  if (!minPixelsChanged) {
+    minPixelsChanged = MIN_PIXELS_CHANGED;
+  }
+  const before = await page.screenshot();
 
-export async function clickElement(page: Page, element: FoundElement) {
+  // Shortcut - this is true IF AND ONLY IF there is no navigation from this click.
+  // For example, clicking checkboxes & the "Accept Cookies" buttons.
+  if (noNavigate) {
+    const didChange = await clickElementCoords(page, before, element, minPixelsChanged);
+    if (didChange) {
+      return true;
+    }
+  }
 
+  // If nothing changed, fallback to the navigation version
   try {
-    const coords = element.data.coords;
-    await page.mouse.click(coords.left + coords.width / 2, coords.centerY);
+    await Promise.all([
+      // This will timeout slowly if a navigation is triggered
+      page.waitForNavigation({ waitUntil: "networkidle2", timeout: 30_000 }),
+      // This will timeout quickly if no navigation is triggered
+      page.waitForRequest(req=> {
+        return req.isNavigationRequest();
+      }, { timeout: 5000 }),
+      clickElementDirectly(page, element),
+    ]);
+    // Post-navigation, wait until we have some sort of idea what the page is about
+    await waitForValidIntent(page);
+    // Even after we've got an intent, wait for animations to finish
+    await waitPageStable(page);
+    return true;
+  }
+  catch (err) {
+    if (err instanceof TimeoutError) {
+      // If there was no navigation, let's check to see if the page has a significant update
+      const viewport = page.viewport();
+      // If 1% of the viewport have changed, we'll consider it a successful update
+      const minSigPixels = 0.01 * viewport.width * viewport.height;
+      if (await pageDidChange(page, before, minSigPixels)) {
+        await waitPageStable(page);
+        return true;
+      }
 
-    // await element.element.click();
+      // If no update has happened, then the click probably failed.
+      // Try clicking the spot directly and then wait for the page to be stable
+      // This should catch the extremely rare case where an element click does not
+      // trigger appropriate action because we've selected the wrong element.
+      // (I Think this happens for BMO)
+      log.debug(`No navigation triggered after clicking ${element.data.selector}, retrying`);
+      const didChange = await clickElementCoords(page, before, element, minPixelsChanged);
+      if (didChange) {
+        await waitPageStable(page);
+        return true;
+      }
+    }
+    throw err;
+  }
+}
+
+async function clickElementCoords(page: Page, before: Buffer, found: FoundElement, minPixelsChanged: number) {
+
+  // Simulate a user clicking on the element
+  const coords = found.data.coords;
+  await page.mouse.click(coords.left + coords.width / 2, coords.centerY);
+  await sleep(500);
+  return await pageDidChange(page, before, minPixelsChanged);
+}
+
+async function pageDidChange(page: Page, before: Buffer, minPixelsChanged: number) {
+  const after = await page.screenshot();
+  const changed = doPixelMatch(before, after);
+
+  if (changed < minPixelsChanged) {
+    // If nothing has changed, lets try a click at that location
+    // This is because we may have picked up the wrong element
+    // for capturing the click.  In this case, our fallback is to
+    // click that location directly.  We don't do this from the
+    // start because it seems to fail when clicking "Submit" in Tangerine
+    log.debug(`Only ${changed} < ${minPixelsChanged} pixels changed when clicking`);
+    return false;
+  }
+  return true;
+}
+
+async function clickElementDirectly(page: Page, found: FoundElement) {
+  try {
+    await found.element.click();
   }
   catch (err) {
     // We seem to be getting issues with clicking buttons:
     // https://github.com/puppeteer/puppeteer/issues/3496 suggests
     // using eval instead.
-    // log.debug(`Click failed, retrying on ${found.data.selector} - ${err}`);
-    // HOWEVER: We can't directly use the selector, because it might have
-    // changed since we found it.
-    try {
-      // await page.$eval(element.data.selector, (el) => (el as HTMLElement).click())
-      await page.evaluate((el) => (el as HTMLElement).click(), element.element);
-    }
-    catch (err) {
-      // and if this is still failing, lets try a click at that location
-      const coords = element.data.coords;
-      await page.mouse.click(coords.left + coords.width / 2, coords.centerY);
-      // and if this fails, we give up
-    }
+    await page.$eval(found.data.selector, (el) => (el as HTMLElement).click())
   }
 }
+
+// Polls the webpage and will wait until
+async function waitForValidIntent(page: Page, interval = 1000, timeout = 30_000) {
+  const maxTime = Date.now() + timeout;
+  do {
+    const intent = await _getPageIntent(page);
+    log.debug(`Waiting For Valid Intent: detected as type '${intent}'`);
+    // If the page has some kind of intent, then we can stop
+    if (intent != "Loading" && intent != "Blank") {
+      return;
+    }
+    await sleep(interval);
+  } while (Date.now() < maxTime);
+}
+
+async function waitPageStable(page: Page, timeout: number = 10_000) {
+  let before = await page.screenshot();
+  const maxTime = Date.now() + timeout;
+  do {
+    sleep(500);
+    const after = await page.screenshot();
+    const changed = doPixelMatch(before, after);
+    // This changed test sticks to the default has-the-page-changed value
+    // for minPixelsChanged because we don't want to hang up page stability
+    // on small changes
+    if (changed < MIN_PIXELS_CHANGED) {
+      return;
+    }
+    before = after;
+  } while (Date.now() < maxTime);
+
+  log.error("Page has not been stable for 10 seconds");
+  throw new TimeoutError("Timed out waiting for page to be stable");
+}
+
+function doPixelMatch(before: Buffer, after: Buffer) {
+  const img1 = PNG.sync.read(before);
+  const img2 = PNG.sync.read(after);
+  return pixelmatch(img1.data, img2.data, null, img1.width, img1.height);
+}
+
+function getContent(r: AnyResponse) {
+  if ("content" in r) {
+    return r.content;
+  }
+  else if ("placeholder_text" in r) {
+    return r.placeholder_text;
+  }
+  return "";
+}
+
+function getNeighbourText(r: AnyResponse) {
+  if ("neighbour_text" in r) {
+    return r.neighbour_text;
+  }
+  return undefined;
+}
+
