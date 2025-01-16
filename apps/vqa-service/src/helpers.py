@@ -59,24 +59,3 @@ def get_model_example(schema):
 def get_instruct_json_respose(schema):
     return request_json + get_model_example(schema)
 
-def cast_value(response, key, scale):
-    if key in response:
-        try:
-            response[key] = round(scale * float(response[key]) / 100)
-        except ValueError:
-            print(f"Invalid value for {key}: {response[key]}")
-            response[key] = None
-
-        return response[key]
-
-    # search recursively through the object
-    if isinstance(response, dict):
-        for k, v in response.items():
-            if isinstance(v, dict):
-                cast_value(v, key, scale)
-            elif (isinstance(v, list)):
-                for item in v:
-                    cast_value(item, key, scale)
-
-    return None
-

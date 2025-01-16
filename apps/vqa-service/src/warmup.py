@@ -7,5 +7,5 @@ router = APIRouter()
 @router.get("/warmup")
 def warmup():
     image = Image.new('RGB', (100, 100), (228, 150, 150))
-    runQueryRaw("What color is this image?", image)
+    runQueryRaw(image, "What color is this image?")
     return {"Hello": "World"}

@@ -4,9 +4,9 @@ from transformers import GenerationConfig
 import json
 from timeit import default_timer as timer
 from singleton import get_model, get_processor
-from helpers import cast_value, get_instruct_json_respose
+from helpers import get_instruct_json_respose
 
-def runQueryRaw(prompt, image, max_length=200):
+def runQueryRaw(image, prompt, max_length=200):
     start = timer()
 
     processor = get_processor()
@@ -55,8 +55,10 @@ def runQueryRaw(prompt, image, max_length=200):
         print(f"Query took {end - start} seconds")
 
 
-def runQueryToJson(query, image, max_length=200):
-    response = runQueryRaw(query, image, max_length)
+def runQueryToJson(image: Image, query_data: tuple[str, type], max_length=200):
+    prompt = f"{query_data[0]} {get_instruct_json_respose(query_data[1].schema())}"
+
+    response = runQueryRaw(image, prompt, max_length)
     # Parse the generated text as JSON
     try:
         return json.loads(response)
@@ -79,18 +81,10 @@ def runQueryToJson(query, image, max_length=200):
             raise ValueError("Could not parse model output as JSON")
 
 
-def runQuery(image: Image, query_data: tuple[str, type], max_length=200):
-    prompt = f"{query_data[0]} {get_instruct_json_respose(query_data[1].schema())}"
-    response = runQueryToJson(prompt, image, max_length)
-    cast_value(response, "position_x", image.width)
-    cast_value(response, "position_y", image.height)
-    return response
-
-
 if __name__ == "__main__":
     import sys
     import PIL.Image
 
     image = PIL.Image.open(sys.argv[1])
-    response = runQueryRaw(sys.argv[2], image)
+    response = runQueryRaw(image, sys.argv[2])
     print(json.dumps(response))

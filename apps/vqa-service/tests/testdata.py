@@ -49,19 +49,6 @@ def get_elements(image_file: str):
     return {get_element_type(f): load_json(f) for f in json_paths}
 
 
-def pil_to_upload_file(pil_image, filename="test.png"):
-    # Convert PIL Image to bytes
-    img_byte_arr = io.BytesIO()
-    pil_image.save(img_byte_arr, format='PNG')
-    img_byte_arr.seek(0)
-    
-    # Create UploadFile
-    return UploadFile(
-        file=img_byte_arr,
-        filename=filename,
-    )
-
-
 def load_image(image_file: str, max_height: int = MAX_HEIGHT):
     with Image.open(image_file) as image:
         # NOTE: Position detection works better if image is cropped
@@ -72,7 +59,7 @@ def load_image(image_file: str, max_height: int = MAX_HEIGHT):
     if (image.height > max_height):
         image = image.crop((0, 0, image.width, max_height))
 
-    return pil_to_upload_file(image)
+    return image
 
 
 def get_basename(image_file: str):

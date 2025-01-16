@@ -58,10 +58,13 @@ class Query2faTests(TestBase):
                         # one of these should pass, but we don't know which
                         passed = False
                         for o in validations:
-                            if self.assertElementMatch(element, o, key):
+                            try:
+                                self.assertResponse(element, o, key)
                                 passed = True
                                 validations.remove(o)
                                 break
+                            except AssertionError:
+                                pass
                         self.assertTrue(passed, f"Failed to match element {element} in {key}")
                 self.assertEqual(len(validations), 0, f"Failed to match all elements in {key}")
 
