@@ -27,7 +27,7 @@ class RepeatSubTestContextManager:
 
 def repeat_on_fail(func, timeout=3600):
     """Decorator that repeats a test on failure"""
-    def wrapper(*args, **kwargs):
+    async def wrapper(*args, **kwargs):
         # Do not repeat if no debugger attached
         if (os.environ.get('DEBUGPY_RUNNING') != "true"):
             return func(*args, **kwargs)
@@ -43,7 +43,7 @@ def repeat_on_fail(func, timeout=3600):
             start_time = time.time()
             # args[0] is self (the test class instance)
             try:
-                r = func(*args, **kwargs)
+                r = await func(*args, **kwargs)
                 args[0].subTest = oldSubTest
                 return r
             except Exception as e:

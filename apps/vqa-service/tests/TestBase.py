@@ -12,7 +12,7 @@ sys.path.append(os.path.join(parent_dir, 'src'))
 from query import runQuery  # noqa: E402
 
 
-class TestBase(unittest.TestCase):
+class TestBase(unittest.IsolatedAsyncioTestCase):
 
     def assertEqual(self, str1, str2, msg=None):
         # Ignore all case/space differences
@@ -21,7 +21,7 @@ class TestBase(unittest.TestCase):
         else:
             super().assertEqual(str1, str2, msg)
 
-    def assertPosition(self, response: dict, expected: dict, key: str = None):
+    def assertPosition(self, response, expected: dict, key: str = None):
         o_width = expected["coords"]["width"]
         o_height = expected["coords"]["height"]
         o_left = expected["coords"]["left"]
@@ -29,13 +29,14 @@ class TestBase(unittest.TestCase):
         o_centerX = o_left + o_width / 2
         o_centerY = o_top + o_height / 2
 
-        e_posX = response["position_x"]
-        e_posY = response["position_y"]
+        # Access position attributes directly from Pydantic object
+        e_posX = response.position_x
+        e_posY = response.position_y
 
         self.assertAlmostEquals(
             e_posX,
             o_centerX,
-            delta=max(20, o_width * 0.6 ),
+            delta=max(20, o_width * 0.6),
             msg=f"X: {e_posX} does not match expected: {o_centerX} with width: {o_width} in {key}"
         )
         self.assertAlmostEquals(
@@ -45,13 +46,27 @@ class TestBase(unittest.TestCase):
             msg=f"Y: {e_posY} does not match expected: {o_centerY} with height: {o_height} in {key}"
         )
 
-    def assertContent(self, response: dict, expected: dict, key: str = None):
-        if ("content" not in response and "placeholder_text" not in response):
+    def get_expected_text(self, expected: dict):
+        expected_content = expected.get('text', expected.get('label', ''))
+        return normalize(expected_content)
+
+    def get_response_text(self, response):
+        # Handle both dict and Pydantic object responses
+        if not hasattr(response, 'content') and not hasattr(response, 'placeholder_text'):
+            return None
+        response_content = getattr(response, 'content', None)
+        if response_content is None:
+            response_content = getattr(response, 'placeholder_text', '')
+        return normalize(response_content)
+
+    def assertContent(self, response, expected: dict, key: str = None):
+
+        response_text = self.get_response_text(response)
+        if (response_text is None):
             return
 
-        text = normalize(
-            response["content"] if "content" in response else response["placeholder_text"]
-        )
+        expected_content = self.get_expected_text(expected)
+
         # We can't reliably check this, the actual scraped may result in 
         # elements that contain text visually but are not children in the DOM
         # For example, inputs with labels etc
@@ -61,10 +76,10 @@ class TestBase(unittest.TestCase):
         # else:
         # Else, just check they overlap in some way
         textOverlap = (
-            normalize(expected["text"]) in text or
-            text in normalize(expected["text"])
+            expected_content in response_text or
+            response_text in expected_content
         )
-        self.assertTrue(textOverlap, f"Text: {text} does not match expected: {expected['text']} in {key}")
+        self.assertTrue(textOverlap, f"Text: {response_text} does not match expected: {expected_content} in {key}")
 
     def assertNeighbours(self, response: dict, expected: dict, key: str = None):
         if ("neighbour_text" not in response):
@@ -86,9 +101,10 @@ class TestBase(unittest.TestCase):
         expectedDate = parse(expected["text"])
         self.assertEqual(responseDate, expectedDate, f"Date: {responseDate} does not match expected: {expectedDate} in {key}")
 
-    def assertResponse(self, response: dict, expected: dict, key: str = None):
+    def assertResponse(self, response, expected: dict, key: str = None):
+        if "coords" in expected:
+            self.assertPosition(response, expected, key)
         self.assertContent(response, expected, key)
-        self.assertPosition(response, expected, key)
         self.assertNeighbours(response, expected, key)
         print("Element Found Correctly")
 

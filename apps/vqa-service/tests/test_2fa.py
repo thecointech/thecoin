@@ -1,6 +1,14 @@
-from TestBase import TestBase, runQuery
+from TestBase import TestBase
 from testdata import get_test_data, get_single_test_element
-from twofa_data import query_page_2fa_action, query_page_2fa_destinations, get_2fa_elements_for_phone, query_2fa_input_element, query_2fa_skip_element, query_2fa_submit_element
+from twofa_data import TwoFactorActions
+from twofa_routes import (
+    detect_action_required,
+    detect_destinations,
+    get_destination_elements,
+    get_auth_input,
+    get_skip_input,
+    get_submit_input
+)
 
 # General flow
 # Detect Login
@@ -18,61 +26,63 @@ from twofa_data import query_page_2fa_action, query_page_2fa_destinations, get_2
 class Query2faTests(TestBase):
 
     # What is the action be requested of the user here?
-    def test_2fa_action_type(self):
-        twofa_datum = get_test_data("2fa", "initial")
+    async def test_2fa_action_type(self):
+        twofa_datum = get_test_data("TwoFactorAuth", "initial")
         for key, image, expected in twofa_datum:
             with self.subTest(key=key):
-                detected = runQuery(image, query_page_2fa_action)
-                expectedAction = "InputCode" if "code" in expected else "SelectDestination" if "select" in expected else "ApproveInApp"
-                self.assertEqual(detected["action"], expectedAction)
+                response = await detect_action_required(image)
+                expected_action = (
+                    TwoFactorActions.INPUT_CODE if "input" in expected 
+                    else TwoFactorActions.SELECT_DESTINATION if "select" in expected 
+                    else TwoFactorActions.APPROVE_IN_APP
+                )
+                self.assertEqual(response.action, expected_action)
 
     # If "SelectDestination" is chosen, are there multiple options to choose from
-    def test_2fa_select_dest(self):
-        twofa_datum = get_single_test_element("2fa", "initial", "select")
+    async def test_2fa_select_dest(self):
+        twofa_datum = get_single_test_element("TwoFactorAuth", "initial", "select")
         for key, image, expected in twofa_datum:
             with self.subTest(key=key):
-                # Can queries return an array of elements?
-                detected = runQuery(image, query_page_2fa_destinations)
-
-                # Single option (for now)
-                phones = detected["phone_nos"]
+                # Get available phone numbers
+                response = await detect_destinations(image)
+                phones = response.phone_nos
                 self.assertEqual(len(phones), 2)
 
                 # copy originals
                 validations = expected.copy()
                 for phone in phones:
-                    #get_options_query = f"Analyze the provided webpage. Describe all the elements that will send a two-factor authentication code to {phone}. {json_part}"
-                    get_options_query = get_2fa_elements_for_phone(phone)
-                    detected = runQuery(image, get_options_query)
+                    # Get elements for each phone number
+                    elements_response = await get_destination_elements(image, phone)
                     # How to validate these?
-                    for element in detected["elements"]:
+                    for element in elements_response.elements:
                         # one of these should pass, but we don't know which
                         passed = False
                         for o in validations:
-                            try:
-                                self.assertResponse(element, o, key)
+                            if self.assertElementMatch(element, o, key):
                                 passed = True
                                 validations.remove(o)
                                 break
-                            except:
-                                pass
-                        self.assertTrue(passed)
-                    
-    def test_2fa_input_page(self):
-        # (remember, data has changed for these and not yet been validated)
-        twofa_datum = get_test_data("2fa", "input") + get_test_data("2fa", "initial")
-        test_element_type(self, "code", query_2fa_input_element, twofa_datum)
-        test_element_type(self, "remember", query_2fa_skip_element, twofa_datum)
-        test_element_type(self, "submit", query_2fa_submit_element, twofa_datum)
+                        self.assertTrue(passed, f"Failed to match element {element} in {key}")
+                self.assertEqual(len(validations), 0, f"Failed to match all elements in {key}")
+
+    async def test_2fa_input_element(self):
+        await test_element_type(self, "input", get_auth_input)
+
+    async def test_2fa_skip_element(self):
+        await test_element_type(self, "skip", get_skip_input)
+
+    async def test_2fa_submit_element(self):
+        await test_element_type(self, "submit", get_submit_input)
 
 
-def test_element_type(test: TestBase, element_type: str, query, datum):
-    for key, image, elements in datum:
-        if (element_type not in elements):
+async def test_element_type(test: TestBase, element_type: str, endpoint):
+    data = get_test_data("TwoFactorAuth", "initial") + get_test_data("TwoFactorAuth", "input")
+    for key, image, expected in data:
+        if (element_type not in expected):
             continue
-        with test.subTest(key=key, element_type=element_type):
-            element = runQuery(image, query)
-            test.assertResponse(element, elements[element_type], key)
-        
+        with test.subTest(key=key):
+            response = await endpoint(image)
+            test.assertResponse(response, expected[element_type], key)
+
 if __name__ == "__main__":
     unittest.main()

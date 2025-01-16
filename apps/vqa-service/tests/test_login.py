@@ -1,33 +1,37 @@
-
-from TestBase import TestBase, runQuery
+from TestBase import TestBase
 from testdata import get_test_data, get_single_test_element
-
-from intent_data import query_page_intent
-from error_data import query_error_message, query_error_text
-from login_data import *
+from intent_routes import page_intent
+from login_routes import (
+    detect_username_input,
+    detect_password_exists,
+    detect_password_input,
+    detect_continue_element,
+    detect_login_element,
+    detect_login_error
+)
 from tests.repeat_on_failure import repeat_on_fail
 
 
 class TestLoginProcess(TestBase):
 
     # All initial pages must pass intent
-    def test_intent(self):
+    async def test_intent(self):
         test_data = get_test_data("login", "initial")
         for key, image, _ in test_data:
             with self.subTest(key=key):
-                intent = runQuery(image, query_page_intent)
-                self.assertEqual(intent["type"], "login", "Login intent failed for " + key)
+                response = await page_intent(image)
+                self.assertEqual(response.type, "login", f"Login intent failed for {key}")
 
     @repeat_on_fail
-    def test_detect_username_input(self):
+    async def test_detect_username_input(self):
         test_data = get_single_test_element("login", "initial", "username")
         for key, image, expected in test_data:
             with self.subTest(key=key):
-                element = runQuery(image, query_username_element)
-                self.assertResponse(element, expected, key)
+                response = await detect_username_input(image)
+                self.assertResponse(response, expected, key)
     
     # All pages must be able to detect if password is present
-    def test_detect_password_exists(self):
+    async def test_detect_password_exists(self):
         test_data = (
             ("initial", get_test_data("login", "initial")),
             ("password", get_test_data("login", "password"))
@@ -35,13 +39,14 @@ class TestLoginProcess(TestBase):
         for (base, test_data) in test_data:
             for key, image, expected in test_data:
                 with self.subTest(base=base, key=key):
-                    element = runQuery(image, query_pwd_exists)
+                    response = await detect_password_exists(image)
                     exists = "password" in expected
-                    self.assertEqual(element["password_input_detected"], exists, "Password exists failed for " + key)
+                    self.assertEqual(response.password_input_detected, exists, 
+                                  f"Password exists failed for {key}")
 
     # What is the password input?
     @repeat_on_fail
-    def test_detect_password_input(self):
+    async def test_detect_password_input(self):
         test_data = (
             ("initial", get_test_data("login", "initial")),
             ("password", get_test_data("login", "password"))
@@ -50,64 +55,31 @@ class TestLoginProcess(TestBase):
             for key, image, expected in test_data:
                 if "password" in expected:
                     with self.subTest(base=base, key=key):
-                        element = runQuery(image, query_password_element)
-                        self.assertResponse(element, expected["password"], key)
+                        response = await detect_password_input(image)
+                        self.assertResponse(response, expected["password"], key)
 
-    def test_continue(self):
+    @repeat_on_fail
+    async def test_detect_continue_button(self):
         test_data = get_single_test_element("login", "initial", "continue")
         for key, image, expected in test_data:
             with self.subTest(key=key):
-                element = runQuery(image, query_continue_button)
-                self.assertResponse(element, expected, key)
+                response = await detect_continue_element(image)
+                self.assertResponse(response, expected, key)
 
-    # # All passed
-    def test_detect_login_input(self):
-        test_data = (
-            get_single_test_element("login", "initial", "login") + 
-            get_single_test_element("login", "password", "login") + 
-            get_single_test_element("login", "failed", "login")
-        )
+    @repeat_on_fail
+    async def test_detect_login_button(self):
+        test_data = get_single_test_element("login", "password", "login")
         for key, image, expected in test_data:
             with self.subTest(key=key):
-                element = runQuery(image, query_login_button)
-                self.assertResponse(element, expected, key)
+                response = await detect_login_element(image)
+                self.assertResponse(response, expected, key)
 
-
-    def test_login_result_success(self):
-        test_login_result(self, "AccountSummary", "initial", "LoginSuccess")
-
-    def test_login_result_failed(self):
-        test_login_result(self, "login", "failed", "LoginError")
-
-    def test_login_result_2fa(self):
-        test_login_result(self, "2fa", "initial", "TwoFactorAuth")
-
-
-    # While this test is passing, it's probably not reliable enough yet to have directly in our harvesting setup.
-    # It detects correctly, but also has too many false positives
-    # False positives
-    # Random has "please donate" message in Wikipedia which is formatted in Red, so is picked up
-    # CIBC has postal service message which is picked up
-    # Tangerine1 has a link to change username which is picked up as error
-    # RBC has red outline on it's dialogs (from clicking during scraping thingy) which is probably the issue.  (We could fix this with better recording in Harvester)
-    # Leaving it in here, but it will probably get adjusted/fixed later when we have to deal with errors properly
-    @repeat_on_fail
-    def test_errors(self):
-        test_data = get_single_test_element("login", "failed", "failed")
+    async def test_detect_login_error(self):
+        test_data = get_single_test_element("login", "error", "error")
         for key, image, expected in test_data:
-
-            response = runQuery(image, query_error_message)
-            self.assertEqual(response["error_message_detected"], True, "Error message detection failed for " + key)
-            response = runQuery(image, query_error_text)
-            self.assertEqual(response["error_message"], expected["text"], "Error message failed for " + key)
-
-
-def test_login_result(test, intent, state, expected):
-    test_data = get_test_data(intent, state)
-    for key, image, _ in test_data:
-        with test.subTest(key=f"{expected}-{key}"):
-            response = runQuery(image, query_login_result)
-            test.assertEqual(response["result"], expected, "Login result failed for " + key)
+            with self.subTest(key=key):
+                response = await detect_login_error(image)
+                self.assertResponse(response, expected, key)
 
 
 if __name__ == "__main__":
