@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from data_elements import ElementResponse
+from data_elements import ElementResponse, MoneyElementResponse
 from case_insensitive_enum import CaseInsensitiveEnum
 
 #json_part = request_json + f"{{ \"num_accounts\": \"number\", \"accounts\": [{{\"account_type\": \"Chequing|Savings|Credit\", \"account_number\": \"string\", \"balance\": \"string\", \"position_x\": \"number\", \"position_y\": \"number\" }}] }}"
@@ -37,7 +37,7 @@ find_account_balance_prompt = "Analyze the provided webpage. Describe the elemen
 def get_query_account_balance(account_number: str):
     return (
         find_account_balance_prompt.format(account_number=account_number),
-        ElementResponse
+        MoneyElementResponse
     )
 
 # json_part = get_instruct_json_respose(element_schema)

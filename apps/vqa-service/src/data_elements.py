@@ -25,10 +25,14 @@ class PositionResponse(BaseModel):
 class ElementResponse(PositionResponse):
     content: str = Field(..., description="Content of the element")
     neighbour_text: str = Field(..., description="Text immediately beside or above the element")
-    # font_color: str = Field(..., description="Hexadecimal color of the font", example="#FFFFFF")
-    # background_color: str = Field(..., description="Hexadecimal color of the background", example="#FFFFFF")
-    # position_x: float
-    # position_y: float
+
+
+class MoneyElementResponse(ElementResponse):
+    content: str = Field(..., description="dollar amount as string")
+
+
+class DateElementResponse(ElementResponse):
+    content: str = Field(..., description="date string")
 
 # def get_exists_schema(prop_name="exists", description: str = None):
 #     exists_schema = {

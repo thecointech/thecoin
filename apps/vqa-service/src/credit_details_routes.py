@@ -1,5 +1,5 @@
 from fastapi import UploadFile, APIRouter
-from data_elements import ElementResponse
+from data_elements import MoneyElementResponse, DateElementResponse
 from run_endpoint_query import run_endpoint_query
 from credit_details_data import *
 

@@ -1,10 +1,7 @@
 
 from pydantic import BaseModel, Field
-from data_elements import ElementResponse
+from data_elements import DateElementResponse, MoneyElementResponse
 
-
-class MoneyElementResponse(ElementResponse):
-    content: str = Field(..., description="dollar amount as string")
 
 #find_current_balance_query = f"Analyze this credit card account. Describe the element that contains the current balance amount. {json_part}"
 #json_part = get_instruct_json_respose(element_schema)   
@@ -35,12 +32,7 @@ query_due_amount_element = (
 )
 
 # find_due_date_query = f"Analyze the provided credit card details webpage. Describe the element that contains the due date. {json_part}"
-
-class DateElementResponse(ElementResponse):
-    content: str = Field(..., description="date string")
-
 query_due_date_element = (
     'Analyze the provided credit card details webpage. What is the element that contains the date payment is due?',
-    # "Analyze the provided credit card details webpage. Describe the element that contains the due date.",
     DateElementResponse
 )
