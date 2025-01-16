@@ -7,6 +7,7 @@ from dateparser import parse
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, 'src'))
 
+from run_endpoint_query import Crop
 
 class TestBase(unittest.IsolatedAsyncioTestCase):
 
@@ -116,25 +117,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         all_posY = [el["coords"]["centerY"] for el in elements]
         max_posY = round(max(all_posY))
         min_posY = round(min(all_posY))
-        return (0, max(min_posY - buffer, 0), image.width, min(max_posY + buffer, image.height))
-
-    # def adjustElementsToCrop(self, elements, crop):
-    #     (x, y, w, h) = crop
-    #     for el in elements:
-    #         el["coords"]["centerY"] = el["coords"]["centerY"] - y
-    #         el["coords"]["top"] = el["coords"]["top"] - y
-    #         el["coords"]["left"] = el["coords"]["left"] - x
-
-    # # Processing the larger screenshot can result in errors reading small text.
-    # # This function will focus in on the area containing the elements (vertically only)
-    # def cropToElements(self, image, elements, buffer=200):
-    #     crop = self.getCropFromElements(image, elements, buffer)
-    #     self.adjustElementsToCrop(elements, crop)
-    #     return image.crop(crop)
-
-    # NOTE: Not tested (not used anymore)
-    # def cropToResponse(self, image, response, buffer=200):
-    #     pass
+        return Crop(0, max(min_posY - buffer, 0), image.width, min(max_posY + buffer, image.height))
 
 
 def normalize(str: str):

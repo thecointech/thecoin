@@ -4,17 +4,29 @@ from fastapi import UploadFile
 from query import runQueryToJson
 from typing import TypeVar, Union
 from collections import namedtuple
+from pydantic import BaseModel
 
 
 MAX_RESOLUTION = 2 ** 16
-Crop = namedtuple('Crop', ['left', 'top', 'right', 'bottom'], defaults=[0, 0, MAX_RESOLUTION, MAX_RESOLUTION])
+class Crop(BaseModel):
+    left: int = 0
+    top: int = 0
+    right: int = MAX_RESOLUTION
+    bottom: int = MAX_RESOLUTION
+
+    def __init__(self, left, top, right, bottom):
+        super().__init__()
+        self.left = left
+        self.top = top
+        self.right = right
+        self.bottom = bottom
 
 
 T = TypeVar('T')
 # type QueryData = tuple[str, Type[T]] # Can we update to Python 3.12?
 async def run_endpoint_query(image: Union[UploadFile, Image.Image], data: tuple[str, T], crop: Crop = None) -> T:
 
-    (image, dim) = await get_image(image, crop)
+    (image, crop) = await get_image(image, crop)
     # Run query with PIL Image
     response = runQueryToJson(
         image=image,
@@ -22,7 +34,7 @@ async def run_endpoint_query(image: Union[UploadFile, Image.Image], data: tuple[
     )
 
     try:
-        position_to_pixels(response, dim)
+        position_to_pixels(response, crop)
         return data[1](**response)
 
     except Exception as e:
@@ -41,11 +53,10 @@ async def get_image(image: Union[UploadFile, Image.Image], crop: Crop=None) -> I
     
         # If crop is provided, crop the image
     if crop is not None:
-        (left, top, right, bottom) = crop
-        if right > image.width:
-            right = image.width
-        if bottom > image.height:
-            bottom = image.height
+        left = crop.left
+        top = crop.top
+        right = min(crop.right, image.width)
+        bottom = min(crop.bottom, image.height)
         image = image.crop((left, top, right, bottom))
 
     return (image, Crop(left, top, right, bottom))
