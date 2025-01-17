@@ -117,7 +117,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         all_posY = [el["coords"]["centerY"] for el in elements]
         max_posY = round(max(all_posY))
         min_posY = round(min(all_posY))
-        return Crop(0, max(min_posY - buffer, 0), image.width, min(max_posY + buffer, image.height))
+        return (max(min_posY - buffer, 0), min(max_posY + buffer, image.height))
 
 
 def normalize(str: str):

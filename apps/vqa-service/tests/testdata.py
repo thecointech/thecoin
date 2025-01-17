@@ -73,7 +73,7 @@ def get_element_type(json_file: str):
 
 # Only run tests with this key
 KeyFilter = []
-# KeyFilter = ["TD"]
+KeyFilter = ["Tangerine"]
 
 def get_test_data(test_type: str, page_type: str, max_height: int = MAX_HEIGHT) -> dict[str, TestData]:
     # get the private testing folder from the environment

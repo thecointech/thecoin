@@ -50,24 +50,17 @@ def get_2fa_elements_for_phone(phone: str):
         TwoFactorElementsResponse
     )
 
-# query_2fa_input_element = f"Analyze the provided webpage. Describe the input for auth code. {get_instruct_json_respose(element_schema)}"
-get_2fa_input_prompt = "Analyze the provided webpage. Describe the input for auth code."
-
 query_2fa_input_element = (
-    get_2fa_input_prompt,
+    "Analyze the provided webpage. Describe the input for auth code.",
     ElementResponse
 )
 
-# query_2fa_submit_element = f"Analyze the provided webpage. Describe the checkbox to remember the authentication code and skip next time. {get_instruct_json_respose(element_schema)}"
-get_2fa_skip_element = "Analyze the provided webpage. Describe the checkbox to remember the authentication code and skip next time."
-query_2fa_skip_element = (
-    get_2fa_skip_element,
+query_2fa_remember_element = (
+    "Analyze the provided webpage. Describe the checkbox to remember the authentication code and skip next time.",
     ElementResponse
 )
 
-#query_2fa_skip_element = f"Analyze the provided webpage. Describe the button to submit the authentication code. {get_instruct_json_respose(element_schema)}"
-get_2fa_submit_element = "Analyze the provided webpage. Describe the button to submit the authentication code."
 query_2fa_submit_element = (
-    get_2fa_submit_element,
+    "Analyze the provided webpage. Describe the button to submit the authentication code.",
     ElementResponse
 )

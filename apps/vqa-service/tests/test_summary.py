@@ -64,7 +64,7 @@ class TestSummary(TestBase):
             with self.subTest(key=key):
                 account_number = get_extra(expected, "accountNumber")
                 crop = self.getCropFromElements(image, [expected])
-                response = await account_balance_element(image, account_number, crop)
+                response = await account_balance_element(image, account_number, *crop)
                 self.assertResponse(response, expected, key)
 
     async def test_find_navigate_to_account(self):
@@ -75,5 +75,5 @@ class TestSummary(TestBase):
             with self.subTest(key=key):
                 account_number = get_extra(expected, "accountNumber")
                 crop = self.getCropFromElements(image, [expected])
-                response = await account_navigate_element(image, account_number, crop)
+                response = await account_navigate_element(image, account_number, *crop)
                 self.assertResponse(response, expected, key)
