@@ -36,7 +36,7 @@ class TestSummary(TestBase):
                 validations = expected.copy()
                 for account in accounts:
                     # Find the closest from src data
-                    scored_valid = [(valid, fuzz.partial_ratio(account.account_number, valid.text)) for valid in validations]
+                    scored_valid = [(valid, fuzz.partial_ratio(account.account_number, valid["text"])) for valid in validations]
                     (vacc, score) = max(scored_valid, key=lambda x: x[1])
 
                     # Validate basic data.  Keep a very low score, as we don't really care.  Hopefully the accuracy
