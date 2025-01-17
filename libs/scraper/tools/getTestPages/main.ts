@@ -1,7 +1,6 @@
 import { Recorder } from '../../src/record';
 import { LandingWriter } from './landing';
 import { init } from './init';
-import { sleep } from '@thecointech/async';
 import { getConfig } from './config';
 import { TwoFAWriter } from './twofa';
 import { AskUser } from './askUser';
@@ -15,6 +14,7 @@ import { _getPageIntent } from './testPageWriter';
 import { mkdirSync } from 'fs';
 import { DateTime } from 'luxon';
 import { DummyAskUser } from './dummyAskUser';
+import { triggerNavigateAndWait } from './vqaResponse';
 
 const { baseFolder, config } = getConfig();
 await init()
@@ -36,19 +36,10 @@ for (const [name, bankConfig] of Object.entries(config)) {
   try {
     // Wait an additional 5 seconds because these pages take _forever_ to load
 
-    // CIBC/BMO somehow seem to fail when opening the first time
     const page = recorder.getPage();
-    await page.reload({ waitUntil: "networkidle2" });
-    // There seems to be some back-and-forth between
-    // puppeteer and the page that can get blocked if
-    // we don't have multiple sleeps (?)
-    for (let i = 0; i < 15; i++) {
-      await sleep(500);
-    }
-    // if (bankConfig.refresh) {
-    //   // How are we going to handle this in the app?
-    //   await page.reload({ waitUntil: "networkidle2" });
-    // }
+
+    // CIBC/BMO somehow seem to fail when opening the first time
+    await triggerNavigateAndWait(page, () => page.reload({ waitUntil: "networkidle2" }));
 
     const testConfig = {
       recorder,
@@ -76,7 +67,7 @@ for (const [name, bankConfig] of Object.entries(config)) {
     }
 
     // Next, test a successful login
-    await page.goto(loginUrl, { waitUntil: "networkidle2" });
+    await triggerNavigateAndWait(page, () => page.goto(loginUrl, { waitUntil: "networkidle2" }));
     loginOutcome = await LoginWriter.process({
       ...testConfig,
       writer: new TestSerializer(name, baseFolder + "login-retry"),
@@ -109,11 +100,15 @@ for (const [name, bankConfig] of Object.entries(config)) {
 
     const summary = await AccountSummaryWriter.process(testConfig);
     const summaryUrl = page.url();
+    let needsRefresh = false;
     for (const account of summary) {
       if (account.account.account_type == "Credit") {
         // If processing multiple accounts, we need to navigate back to the summary page
-        await page.goto(summaryUrl);
+        if (needsRefresh) {
+          await triggerNavigateAndWait(page, () => page.goto(summaryUrl, { waitUntil: "networkidle2" }));
+        }
         await AccountDetailsWriter.process(testConfig, account.nav.data);
+        needsRefresh = true;
       }
       else if (account.account.account_type == "Chequing") {
         // TODO: Chequing

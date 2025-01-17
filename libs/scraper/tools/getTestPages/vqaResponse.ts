@@ -19,7 +19,9 @@ export function responseToElementData(response: AnyResponse, htmlType?: string, 
     tagName: htmlType?.toUpperCase(),
     inputType: inputType?.toLowerCase(),
     text,
-    // nodeValue: response.content!,
+    // We use a specific text-text scorer, so do not duplicate with nodeValue as that
+    // may skew results and overpower the tagName/inputType scores
+    // nodeValue: text,
     label: text,
     // Include original text in neighbour text, LLM isn't known for being precise
     siblingText: [getNeighbourText(response), text].filter(t => !!t),
@@ -74,19 +76,7 @@ export async function clickElement(page: Page, element: FoundElement, noNavigate
 
   // If nothing changed, fallback to the navigation version
   try {
-    await Promise.all([
-      // This will timeout slowly if a navigation is triggered
-      page.waitForNavigation({ waitUntil: "networkidle2", timeout: 30_000 }),
-      // This will timeout quickly if no navigation is triggered
-      page.waitForRequest(req=> {
-        return req.isNavigationRequest();
-      }, { timeout: 5000 }),
-      clickElementDirectly(page, element),
-    ]);
-    // Post-navigation, wait until we have some sort of idea what the page is about
-    await waitForValidIntent(page);
-    // Even after we've got an intent, wait for animations to finish
-    await waitPageStable(page);
+    await triggerNavigateAndWait(page, () => clickElementDirectly(page, element));
     return true;
   }
   catch (err) {
@@ -153,37 +143,83 @@ async function clickElementDirectly(page: Page, found: FoundElement) {
   }
 }
 
+async function tryActionAndWait<T>(page: Page, trigger: () => Promise<T>) : Promise<T|null> {
+  // Wrap the action in try/catch in case it does not actually trigger a navigation
+  try {
+    const r = await Promise.all([
+      // This will timeout slowly if a navigation is triggered
+      page.waitForNavigation({ waitUntil: "networkidle2", timeout: 30_000 }),
+      // This will timeout quickly if no navigation is triggered
+      page.waitForRequest(req=> {
+        return req.isNavigationRequest();
+      }, { timeout: 5000 }),
+      trigger(),
+    ]);
+    log.info(`Navigated to: ${page.url()}`);
+    return r[2];
+  }
+  catch (err) {
+    if (err instanceof TimeoutError) {
+      log.info(`Timed out waiting for navigation`);
+      // Maybe there just was no navigation?  Continue and see what happens
+      return null;
+    }
+    throw err;
+  }
+}
+
+export async function triggerNavigateAndWait<T>(page: Page, trigger: () => Promise<T>) : Promise<T|null> {
+
+  const r = await tryActionAndWait(page, trigger);
+  // Post-navigation, wait until we have some sort of idea what the page is about
+  await waitForValidIntent(page);
+  // Even after we've got an intent, wait for animations to finish
+  await waitPageStable(page);
+  // Return whatever-this-is in case someone needs it someday
+  return r;
+}
+
+const elapsedSeconds = (start: number) => {
+  const elapsed = Date.now() - start;
+  return (elapsed / 1000).toFixed(2);
+}
+
 // Polls the webpage and will wait until
 async function waitForValidIntent(page: Page, interval = 1000, timeout = 30_000) {
-  const maxTime = Date.now() + timeout;
+  const start = Date.now();
+  const maxTime = start + timeout;
   do {
     const intent = await _getPageIntent(page);
     log.debug(`Waiting For Valid Intent: detected as type '${intent}'`);
     // If the page has some kind of intent, then we can stop
     if (intent != "Loading" && intent != "Blank") {
+      log.info(`Detected intent: ${intent} after ${elapsedSeconds(start)} seconds`);
       return;
     }
-    await sleep(interval);
+    await sleep(interval)
   } while (Date.now() < maxTime);
+  log.error(`Valid intent not detected in ${timeout / 1000} seconds`);
 }
 
 async function waitPageStable(page: Page, timeout: number = 10_000) {
   let before = await page.screenshot();
-  const maxTime = Date.now() + timeout;
+  const start = Date.now();
+  const maxTime = start + timeout;
   do {
-    sleep(500);
+    await sleep(500);
     const after = await page.screenshot();
     const changed = doPixelMatch(before, after);
     // This changed test sticks to the default has-the-page-changed value
     // for minPixelsChanged because we don't want to hang up page stability
     // on small changes
     if (changed < MIN_PIXELS_CHANGED) {
+      log.debug(`Page stable,Only ${changed} < ${MIN_PIXELS_CHANGED} pixels changed after ${elapsedSeconds(start)} seconds`);
       return;
     }
     before = after;
   } while (Date.now() < maxTime);
 
-  log.error("Page has not been stable for 10 seconds");
+  log.error(`Page has not been stable for ${timeout / 1000} seconds`);
   throw new TimeoutError("Timed out waiting for page to be stable");
 }
 

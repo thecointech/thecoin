@@ -36,7 +36,7 @@ export async function scoreElement(potential: ElementData, original: ElementData
     positionAndSize:  20 * getPositionAndSizeScore(potential, original), // Can be 2 if both match perfectly
     nodeValue:        40 * await getNodeValueScore(potential, original),
     siblings:         30 * await getSiblingScore(potential, original),
-    estimatedText:    25 * getEstimatedTextScore(potential, original)
+    estimatedText:    40 * getEstimatedTextScore(potential, original)
   };
 
   // max score is 195
@@ -232,7 +232,13 @@ function getEstimatedTextScore(potential: ElementData, original: ElementDataMin)
     const cleanPotential = potential.text.replace(/\s+/g, ' ').toLowerCase();
     const cleanOriginal = original.text.replace(/\s+/g, ' ').toLowerCase();
 
-    const distance = levenshtein.distance(cleanOriginal, cleanPotential);
+    const distance = Math.min(
+      levenshtein.distance(cleanOriginal, cleanPotential),
+      // The vLLM may omit decimals for $ if they are zero
+      // Check with them added back in cause they'll only
+      // help when it's actually helpful
+      levenshtein.distance(cleanOriginal + ".00", cleanPotential)
+    );
 
     // Our scoring is non-linear.  If the original length is less than 5, then
     // even a few mis-matches can be a big penalty (eg, $0 => $0.00).  For this length, we simply lose

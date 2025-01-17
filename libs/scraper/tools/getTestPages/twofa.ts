@@ -107,7 +107,7 @@ export class TwoFAWriter extends IntentWriter {
 
   async clickRemember() {
     const api = GetTwofaApi();
-    const clickedSkip = await this.tryClick(api, "getSkipInput", {
+    const clickedSkip = await this.tryClick(api, "getRememberInput", {
       name: "remember",
       noNavigate: true,
       htmlType: "input",

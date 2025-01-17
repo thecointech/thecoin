@@ -51,13 +51,7 @@ export class AccountSummaryWriter extends IntentWriter {
       // Just use the first account (maybe later we'll store them all)
       const inferred = accounts.accounts[i];
       const scraped = allAccounts[i];
-      const inferredAccountNumber = inferred.account_number;
-      const realAccountText = scraped.text;
-      // The inferred number may be off by a few digits
-      const { match: accountNumber } = extractFuzzyMatch(inferredAccountNumber, realAccountText);
-      // Update original
-      log.trace(`Updating account number from inferred: ${inferredAccountNumber} to ${accountNumber}`);
-      inferred.account_number = accountNumber;
+      const accountNumber = updateAccountNumber(inferred, scraped);
 
       // Crop to just the area of the account in the list.  This is because
       // VQA needs a bit of help focusing on the account
@@ -78,21 +72,31 @@ export class AccountSummaryWriter extends IntentWriter {
     return r;
   }
 
-
   async saveBalanceElement(account_number: string, crop: Crop) {
     // Don't search the whole page, just the area around the account listing
-    const { data: balance } = await GetAccountSummaryApi().accountBalanceElement(account_number, await this.getImage(), crop);
+    const { data: balance } = await GetAccountSummaryApi().accountBalanceElement(account_number, await this.getImage(), crop.top, crop.bottom);
     await this.toElement(balance, "balance", undefined, undefined, {
       accountNumber: account_number,
     });
   }
 
   async saveAccountNavigation(account_number: string, crop: Crop) {
-    const { data: nav } = await GetAccountSummaryApi().accountNavigateElement(account_number, await this.getImage(), crop);
+    const { data: nav } = await GetAccountSummaryApi().accountNavigateElement(account_number, await this.getImage(), crop.top, crop.bottom);
     return await this.toElement(nav, "navigate", "a", undefined, {
       accountNumber: account_number,
     });
   }
+}
+
+export function updateAccountNumber(inferred: AccountResponse, scraped: ElementData) {
+  const inferredAccountNumber = inferred.account_number;
+  const realAccountText = scraped.text;
+  // The inferred number may be off by a few digits
+  const { match: accountNumber } = extractFuzzyMatch(inferredAccountNumber, realAccountText);
+  // Update original
+  log.trace(`Updating account number from inferred: ${inferredAccountNumber} to ${accountNumber}`);
+  inferred.account_number = accountNumber;
+  return accountNumber;
 }
 
 // type Crop = [left: number, top: number, right: number, bottom: number];
