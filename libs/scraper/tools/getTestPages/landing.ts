@@ -6,11 +6,13 @@ import { ProcessConfig } from "./types";
 
 export class LandingWriter extends IntentWriter {
 
-  static async process(config: ProcessConfig) {
+  static async process(config: ProcessConfig, clean: boolean) {
     log.trace("LandingWriter: begin processing");
     const writer = new LandingWriter(config, "Landing");
     // Attempt to close cookie banner that should be present
-    await writer.closeCookieBanner();
+    if (clean) {
+      await writer.closeCookieBanner();
+    }
     // Navigate to the login page
     return writer.navigateToLogin();
   }
@@ -28,7 +30,7 @@ export class LandingWriter extends IntentWriter {
         // await sleep(500);
         // await this.page.reload({ waitUntil: "networkidle2" });
         // await this.waitForPageLoaded();
-        // await this.updatePageName("no-cookie");
+        await this.updatePageName("no-cookie");
       }
     }
 

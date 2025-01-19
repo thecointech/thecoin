@@ -30,7 +30,7 @@ async def process_image_query(image: UploadFile, prompt: str, json_description: 
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/api/multi-image-query")
-async def process_image_query(images: list[UploadFile], prompt: str, json_description: str=None, crop_top: int=None, crop_height: int=None) -> ImageQueryResponse:
+async def process_multi_image_query(images: list[UploadFile], prompt: str, json_description: str=None, crop_top: int=None, crop_height: int=None) -> ImageQueryResponse:
     try:
         crop_top = crop_top or 0
         crop_height = crop_height or MAX_RESOLUTION
@@ -41,7 +41,7 @@ async def process_image_query(images: list[UploadFile], prompt: str, json_descri
         for image in rest:
             [qimage, crop] = await get_image(image, crop)
             inputImages.append(qimage)
-            
+
         if (json_description):
             prompt = f"{prompt} {request_json} {json_description}"
         response = runQueryRaw(inputImages, prompt)
