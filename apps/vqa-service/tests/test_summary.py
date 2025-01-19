@@ -43,7 +43,11 @@ class TestSummary(TestBase):
                     # improves if/when we get to use a higher-precision model
                     self.assertGreaterEqual(score, 30, "Did not find account number in list accounts " + key)
                     siblings = [normalize(s) for s in vacc["siblingText"]]
-                    self.assertIn(normalize(account.balance), siblings, "Did not find balance in list accounts " + key)
+                    balanceMatched = (
+                        normalize(account.balance) in siblings or 
+                        normalize(account.balance + ".00") in siblings # Handle LLM shortning $200.00 to $200
+                    )
+                    self.assertTrue(balanceMatched, f"Did not find {account.balance} in {siblings}")
                     accountType = get_extra(vacc, "accountType")
                     if (accountType):
                         self.assertEqual(account.account_type, accountType, "Account type not matched in list accounts " + key)
