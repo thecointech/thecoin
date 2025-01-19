@@ -15,16 +15,19 @@ def runQueryRaw(image, prompt, max_length=200):
     print(f"Running Prompt: {prompt}")
 
     try:
+        images = image if isinstance(image, list) else [image] if image is not None else None
         # process the image and text
         inputs = processor.process(
-            images=[image],
+            images=images,
             text=prompt,
         )
 
         # move inputs to the correct device and make a batch of size 1
         inputs = {k: v.to(model.device).unsqueeze(0) for k, v in inputs.items()}
 
-        inputs["images"] = inputs["images"].to(torch.bfloat16)
+        if image is not None:
+            inputs["images"] = inputs["images"].to(torch.bfloat16)
+
         with torch.autocast(device_type="cuda", enabled=True, dtype=torch.bfloat16):
             output = model.generate_from_batch(
                 inputs,
@@ -59,6 +62,10 @@ def runQueryToJson(image: Image, query_data: tuple[str, type], max_length=200):
     prompt = f"{query_data[0]} {get_instruct_json_respose(query_data[1].schema())}"
 
     response = runQueryRaw(image, prompt, max_length)
+
+    return tryConvertToJSON(response)
+
+def tryConvertToJSON(response):
     # Parse the generated text as JSON
     try:
         return json.loads(response)

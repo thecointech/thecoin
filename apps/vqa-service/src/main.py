@@ -7,6 +7,7 @@ from twofa_routes import router as twofa_router
 from summary_routes import router as summary_router
 from credit_details_routes import router as credit_details_router
 from modal_routes import router as modal_router
+from image_query_routes import router as image_query_router
 from port import get_version, get_port
 from fastapi_tweak import use_route_names_as_operation_ids
 
@@ -35,6 +36,8 @@ app.include_router(twofa_router)
 app.include_router(summary_router)
 app.include_router(credit_details_router)
 app.include_router(modal_router)
+
+app.include_router(image_query_router)
 
 # Tweak operation IDs
 use_route_names_as_operation_ids(app)

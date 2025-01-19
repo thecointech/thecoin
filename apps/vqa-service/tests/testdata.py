@@ -73,7 +73,7 @@ def get_element_type(json_file: str):
 
 # Only run tests with this key
 KeyFilter = []
-KeyFilter = ["Tangerine"]
+# KeyFilter = ["Tangerine"]
 
 def get_test_data(test_type: str, page_type: str, max_height: int = MAX_HEIGHT) -> dict[str, TestData]:
     # get the private testing folder from the environment
@@ -82,7 +82,7 @@ def get_test_data(test_type: str, page_type: str, max_height: int = MAX_HEIGHT) 
         return []
 
     # list all files in the folder
-    samples_folder = os.path.join(test_folder, "unit-tests", test_type, page_type)
+    samples_folder = os.path.join(test_folder, "unit-tests", "gold", test_type, page_type)
     image_files = [
         os.path.join(samples_folder, f)
         for f in os.listdir(samples_folder)
