@@ -26,6 +26,7 @@ class TestIntentProcess(TestBase):
 
       for box in test_data['parentCoords']:
         highlighted_image = overlay_image(test_image, [box])
+        (highlighted_image, box['left'], box['top'], box['width'], box['height'])
 
 def overlay_image(image, boxes):
     # Convert to RGBA if not already
