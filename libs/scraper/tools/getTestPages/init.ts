@@ -4,7 +4,7 @@ import { SimilarityPipeline } from "../../src/similarity";
 import path from "path";
 import { IntentWriter } from "./testPageWriter";
 
-export async function init() {
+export async function init(cleanRun?: boolean) {
   const tempDir = "./.temp";
   setRootFolder(tempDir);
   let lastLogMessage = 0;
@@ -34,9 +34,11 @@ export async function init() {
     }
   });
 
-  // Remove existing chrome data so we start fresh (eg, with cookie banners)
-  const chromeData = path.join(tempDir, "chrome_data");
-  if (existsSync(chromeData)) {
-    rmSync(chromeData, { recursive: true, force: true });
+  if (cleanRun) {
+    // Remove existing chrome data so we start fresh (eg, with cookie banners)
+    const chromeData = path.join(tempDir, "chrome_data");
+    if (existsSync(chromeData)) {
+      rmSync(chromeData, { recursive: true, force: true });
+    }
   }
 }

@@ -77,6 +77,7 @@ export class IntentWriter {
     // (This may be different from the stated intent)
     this.writeJson({
       intent,
+      title: this.page.title(),
     }, "intent");
   }
 
@@ -229,7 +230,8 @@ export async function _getImage(page: Page, fullPage: boolean = false, path?: st
 
 export async function _getPageIntent(page: Page) {
   const image = await _getImage(page);
-  const { data: intent } = await GetIntentApi().pageIntent(image);
+  const title = await page.title();
+  const { data: intent } = await GetIntentApi().pageIntent(title, image);
   log.trace(`Page detected as type: ${intent.type}`);
   return intent.type;
 }

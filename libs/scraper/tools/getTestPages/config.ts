@@ -19,7 +19,7 @@ export function getConfig() {
   }
   const baseFolder = path.join(process.env.PRIVATE_TESTING_PAGES, "unit-tests");
   return {
-    baseFolder,
+    baseFolder: path.join(baseFolder, "test"),
     config: JSON.parse(
       readFileSync(
         path.join(baseFolder, "config.json"),

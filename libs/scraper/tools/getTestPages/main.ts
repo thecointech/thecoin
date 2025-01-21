@@ -11,19 +11,29 @@ import { PageIntentAug } from './types';
 import { TestSerializer } from './testSerializer';
 import { log } from '@thecointech/logging';
 import { _getPageIntent } from './testPageWriter';
-import { mkdirSync } from 'fs';
+import { mkdirSync, writeFileSync } from 'fs';
 import { DateTime } from 'luxon';
 import { DummyAskUser } from './dummyAskUser';
 import { triggerNavigateAndWait } from './vqaResponse';
 
 const { baseFolder, config } = getConfig();
-await init()
+
+const clean = process.argv.includes("clean");
+const testFailedLogin = process.argv.includes("test-fail-login");
+const record = process.argv.includes("record");
+const target = process.argv.includes("--target") ? process.argv[process.argv.indexOf("--target") + 1] : undefined;
+
+await init(clean);
+
 
 let successful = [];
 let errored = [];
 
 for (const [name, bankConfig] of Object.entries(config)) {
 
+  if (target && target != name) {
+    continue;
+  }
   log.info(`Processing ${name}`);
 
   const recorder = await Recorder.instance({
@@ -38,8 +48,10 @@ for (const [name, bankConfig] of Object.entries(config)) {
 
     const page = recorder.getPage();
 
-    // CIBC/BMO somehow seem to fail when opening the first time
-    await triggerNavigateAndWait(page, () => page.reload({ waitUntil: "networkidle2" }));
+    if (clean) {
+      // CIBC/BMO somehow seem to fail when opening the first time
+      await triggerNavigateAndWait(page, () => page.reload({ waitUntil: "networkidle2" }));
+    }
 
     const testConfig = {
       recorder,
@@ -47,28 +59,32 @@ for (const [name, bankConfig] of Object.entries(config)) {
       askUser: askUser
     }
 
-    let nextIntent: PageIntentAug = await LandingWriter.process(testConfig);
+    let nextIntent: PageIntentAug = await LandingWriter.process(testConfig, clean);
     if (nextIntent != "Login") {
       throw new Error("Failed to get to Login");
     }
 
     // First, test a failed login
     const loginUrl = page.url();
-    let loginOutcome = await LoginWriter.process({
-      ...testConfig,
-      askUser: new DummyAskUser(bankConfig.bad_credentials)
-    });
-    if (loginOutcome != "LoginError") {
-      throw new Error("Failed to get to LoginError");
+    if (testFailedLogin) {
+      let loginOutcome = await LoginWriter.process({
+        ...testConfig,
+        askUser: new DummyAskUser(bankConfig.bad_credentials)
+      });
+      if (loginOutcome != "LoginError") {
+        throw new Error("Failed to get to LoginError");
+      }
     }
     if (!bankConfig.username || !bankConfig.password) {
       // We don't have details, so we're done.
       continue;
     }
 
+    if (testFailedLogin) {
+      await triggerNavigateAndWait(page, () => page.goto(loginUrl, { waitUntil: "networkidle2" }));
+    }
     // Next, test a successful login
-    await triggerNavigateAndWait(page, () => page.goto(loginUrl, { waitUntil: "networkidle2" }));
-    loginOutcome = await LoginWriter.process({
+    let loginOutcome = await LoginWriter.process({
       ...testConfig,
       writer: new TestSerializer(name, baseFolder + "login-retry"),
     });
@@ -116,6 +132,28 @@ for (const [name, bankConfig] of Object.entries(config)) {
     }
 
     log.info(`Finished ${name}`);
+
+    let numScreenshots = 1;
+    let recordMore = record;
+    while (recordMore) {
+      const choice = await askUser.selectOption("Select Choice (q to quit): ", {
+        "Screenshot": [{ "cont": "Screenshot" }],
+        "Dump Links": [{ "cont": "DumpLinks" }],
+        "Quit": [{ "cont": "Quit" }],
+      }, "cont");
+      switch (choice.cont) {
+        case "Screenshot":
+          await page.screenshot({ path: `${baseFolder}/${name}-${numScreenshots++}.png`, fullPage: true });
+          break;
+        case "DumpLinks":
+          const allLinks = await page.$$eval('a', (links) => links.map((link) => link.innerText));
+          writeFileSync(`${baseFolder}/${name}-links.txt`, JSON.stringify(allLinks));
+          break;
+        case "Quit":
+          recordMore = false;
+          break;
+      }
+    }
 
   } catch (e) {
     log.error(e, `Failed to process ${name}`);
