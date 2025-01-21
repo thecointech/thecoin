@@ -7,8 +7,6 @@ from dateparser import parse
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, 'src'))
 
-from run_endpoint_query import Crop
-
 class TestBase(unittest.IsolatedAsyncioTestCase):
 
     def assertEqual(self, str1, str2, msg=None):

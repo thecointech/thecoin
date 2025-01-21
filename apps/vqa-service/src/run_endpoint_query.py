@@ -1,3 +1,4 @@
+import re
 from PIL import Image
 import io
 # NOTE - Don't use the instance from fastapi,
@@ -61,15 +62,15 @@ def position_to_pixels(r, crop):
     width = crop.right - crop.left
     height = crop.bottom - crop.top
 
-    cast_value(r, "position_x", width, crop.left)
-    cast_value(r, "position_y", height, crop.top)
+    cast_value(r, "position_x", width / 100, crop.left)
+    cast_value(r, "position_y", height / 100, crop.top)
 
     return r
 
 def cast_value(response, key, scale, adjust=0):
     if key in response:
         try:
-            response[key] = round(scale * float(response[key]) / 100) + adjust
+            response[key] = round(scale * float(response[key])) + adjust
         except ValueError:
             print(f"Invalid value for {key}: {response[key]}")
             response[key] = None
@@ -87,3 +88,14 @@ def cast_value(response, key, scale, adjust=0):
 
     return None
 
+def pixels_to_position(prompt, crop):
+
+    width = crop.right - crop.left
+    height = crop.bottom - crop.top
+
+    scale_width = lambda v: round((float(v) * 100 / width) - (crop.left * 100 / width), 1)
+    scale_height = lambda v: round((float(v) * 100 / height) - (crop.top * 100 / height), 1)
+    result = re.sub(r'position_x=([\d]+)', lambda m: f'position_x={scale_width(m.group(1))}', prompt, 0)
+    result = re.sub(r'position_y=([\d]+)', lambda m: f'position_y={scale_height(m.group(1))}', result, 0)
+
+    return result

@@ -2,6 +2,7 @@ from PIL.Image import Image
 import torch
 from transformers import GenerationConfig
 import json
+import re
 from timeit import default_timer as timer
 from singleton import get_model, get_processor
 from helpers import get_instruct_json_respose
@@ -73,12 +74,13 @@ def tryConvertToJSON(response):
         # print("Raw Raised JSONDecodeError: ", e)
         # we sometimes get the following invalid json output "option":="value"
         cleaned = response.replace('":="', '": "')
+        # In longer JSON am seeing eg: "position_y="43.5",
+        cleaned = re.sub(r'=\"([\d\.]+)\"', r'": \g<1>', cleaned)
         try:
             return json.loads(cleaned)
         except json.JSONDecodeError as e:
             print("Cleaned Raised JSONDecodeError: ", e)
             # If the model didn't return valid JSON, try to extract the type
-            import re
 
             # Try finding everything in between brackets
             match = re.search(r"(\{[\w\W]*\})", cleaned)
