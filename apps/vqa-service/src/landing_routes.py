@@ -1,7 +1,7 @@
 from fastapi import UploadFile, APIRouter
 from landing_data import *
 from data_elements import ElementResponse
-from run_endpoint_query import run_endpoint_query, Crop
+from run_endpoint_query import run_endpoint_query, Box
 
 router = APIRouter()
 
@@ -18,5 +18,5 @@ async def navigate_to_login(image: UploadFile) -> ElementResponse:
     return await run_endpoint_query(image, query_navigate_to_login)
 
 @router.post("/landing/navigate-to-login-menu", tags=["landing"])
-async def navigate_to_login_menu(image: UploadFile, crop: Crop = None) -> ElementResponse:
+async def navigate_to_login_menu(image: UploadFile, crop: Box = None) -> ElementResponse:
     return await run_endpoint_query(image, query_navigate_to_login_menu, crop)

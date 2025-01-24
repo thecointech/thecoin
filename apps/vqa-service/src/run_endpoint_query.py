@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field
 
 
 MAX_RESOLUTION = 2 ** 16
-class Crop(BaseModel):
+class Box(BaseModel):
     left: int = Field(default=0)
     top: int = Field(default=0)
     right: int = Field(default=MAX_RESOLUTION)
@@ -19,7 +19,7 @@ class Crop(BaseModel):
 
 T = TypeVar('T')
 # type QueryData = tuple[str, Type[T]] # Can we update to Python 3.12?
-async def run_endpoint_query(image: Union[UploadFile, Image.Image], data: tuple[str, T], crop: Crop = None) -> T:
+async def run_endpoint_query(image: Union[UploadFile, Image.Image], data: tuple[str, T], crop: Box = None) -> T:
 
     (image, crop) = await get_image(image, crop)
     # Run query with PIL Image
@@ -33,11 +33,11 @@ async def run_endpoint_query(image: Union[UploadFile, Image.Image], data: tuple[
         return data[1](**response)
 
     except Exception as e:
-        print(f"Error parsing response: {response}")
+        print(f" *** Error parsing response: {response} ***")
         raise e
 
 
-async def get_image(image: Union[UploadFile, Image.Image], crop: Crop=None) -> Image.Image:
+async def get_image(image: Union[UploadFile, Image.Image], crop: Box=None) -> Image.Image:
         # If image is UploadFile, convert to PIL Image
     if isinstance(image, UploadFile):
         # read image data
@@ -54,7 +54,7 @@ async def get_image(image: Union[UploadFile, Image.Image], crop: Crop=None) -> I
         bottom = min(crop.bottom, image.height)
         image = image.crop((left, top, right, bottom))
 
-    return (image, Crop(left=left, top=top, right=right, bottom=bottom))
+    return (image, Box(left=left, top=top, right=right, bottom=bottom))
 
 
 def position_to_pixels(r, crop):

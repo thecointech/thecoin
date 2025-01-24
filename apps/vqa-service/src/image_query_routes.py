@@ -2,7 +2,7 @@ import json
 from fastapi import APIRouter, HTTPException, UploadFile
 from image_query_data import ImageQueryResponse
 from query import runQueryRaw, tryConvertToJSON
-from run_endpoint_query import MAX_RESOLUTION, Crop, get_image, pixels_to_position, position_to_pixels
+from run_endpoint_query import MAX_RESOLUTION, Box, get_image, pixels_to_position, position_to_pixels
 from helpers import request_json
 from fastapi.responses import JSONResponse
 
@@ -15,7 +15,7 @@ async def process_image_query(image: UploadFile, prompt: str, json_description: 
 
         crop_top = crop_top or 0
         crop_height = crop_height or MAX_RESOLUTION
-        crop = Crop(top=crop_top, bottom=crop_top + crop_height)
+        crop = Box(top=crop_top, bottom=crop_top + crop_height)
         [qimage, crop] = await get_image(image, crop)
         prompt = pixels_to_position(prompt, crop)
         if (json_description):
@@ -36,7 +36,7 @@ async def process_multi_image_query(images: list[UploadFile], prompt: str, json_
     try:
         crop_top = crop_top or 0
         crop_height = crop_height or MAX_RESOLUTION
-        crop = Crop(top=crop_top, bottom=crop_top + crop_height)
+        crop = Box(top=crop_top, bottom=crop_top + crop_height)
         [qimage, crop] = await get_image(images[0], crop)
         inputImages = [qimage]
         rest = images[1:]

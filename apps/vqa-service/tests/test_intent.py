@@ -2,7 +2,7 @@ from TestBase import TestBase
 from intent_data import PageType, IntentResponse
 from testdata import get_test_data
 from intent_routes import page_intent
-from run_endpoint_query import MAX_RESOLUTION, Crop
+from run_endpoint_query import MAX_RESOLUTION, Box
 
 class TestIntentProcess(TestBase):
 
@@ -14,9 +14,9 @@ class TestIntentProcess(TestBase):
         assert IntentResponse(type="LaNdInG").type == PageType.LANDING
 
     def test_crop(self):
-        crop = Crop(bottom=770)
+        crop = Box(bottom=770)
         assert crop.right == MAX_RESOLUTION
-        crop = Crop(left=1, top=2, right=3, bottom=4)
+        crop = Box(left=1, top=2, right=3, bottom=4)
         assert crop.top == 2
 
 
