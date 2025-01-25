@@ -11,10 +11,10 @@ from pydantic import BaseModel, Field
 
 MAX_RESOLUTION = 2 ** 16
 class Box(BaseModel):
-    left: int = Field(default=0)
-    top: int = Field(default=0)
-    right: int = Field(default=MAX_RESOLUTION)
-    bottom: int = Field(default=MAX_RESOLUTION)
+    left: float = Field(default=0.0)
+    top: float = Field(default=0.0)
+    right: float = Field(default=MAX_RESOLUTION)
+    bottom: float = Field(default=MAX_RESOLUTION)
 
 
 T = TypeVar('T')

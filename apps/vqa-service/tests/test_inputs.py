@@ -1,16 +1,18 @@
 import json
 import re
 from TestBase import TestBase
+from image_query_data import get_points
 from query import runQueryRaw
 from testdata import load_image, load_json
 from run_endpoint_query import MAX_RESOLUTION, Box, run_endpoint_query
 from PIL import ImageDraw, Image
 import os
-from etransfer_data import InputTypeResponse, query_input_type, typesStr
+from etransfer_data import InputType, InputTypeResponse, query_input_type, typesStr
 
 
 test_folder = os.environ.get("PRIVATE_TESTING_PAGES", "~/")
-samples_folder = os.path.join(test_folder, "unit-tests", "samples", "RBC")
+test_target = os.environ.get("PRIVATE_TESTING_TARGET", "target")
+samples_folder = os.path.join(test_folder, "unit-tests", "samples", test_target)
 
 
 class TestInputsProcess(TestBase):
@@ -100,7 +102,7 @@ class TestInputsProcess(TestBase):
   #     validation_data = load_json(samples_folder + f"/{i}-inputs.json")
 
   #     response = runQueryRaw(test_image, "Point to the inputs on this webpage", 1000)
-  #     coords = get_coords(response)
+  #     coords = get_points(response)
 
   #     annotated = draw_points(test_image, coords)
   #     annotated.show()
@@ -108,7 +110,7 @@ class TestInputsProcess(TestBase):
   #     print("Done")
 
   async def test_isolate_form(self):
-    for i in range(1, 6):
+    for i in range(4, 6):
       test_data = load_json(samples_folder + f"/{i}-page-inputs.json")
       test_image = load_image(samples_folder + f"/{i}-page.png", MAX_RESOLUTION)
       validation_data = load_json(samples_folder + f"/{i}-inputs.json")
@@ -117,17 +119,24 @@ class TestInputsProcess(TestBase):
       parentCoords = test_data['parentCoords']
       validations = validation_data['inputs']
 
+      return_types = [None] * len(elements)
+
       grouping = calculate_element_groups(elements, parentCoords)
       boxes = calculate_group_boxes(grouping, parentCoords)
 
       # First, trim the image down to just the form
       response = runQueryRaw(test_image, "Point to the four corners of the \"Send etransfer\" form on this webpage", 1000)
-      form_coords = get_coords(test_image, response)
+      form_points = get_points(test_image, response)
 
-      top = min(map(lambda c: c[1], form_coords))
-      left = min(map(lambda c: c[0], form_coords))
-      right = max(map(lambda c: c[0], form_coords))
-      bottom = max(map(lambda c: c[1], form_coords))
+      top = min(map(lambda c: c[1], form_points))
+      left = min(map(lambda c: c[0], form_points))
+      right = max(map(lambda c: c[0], form_points))
+      bottom = max(map(lambda c: c[1], form_points))
+
+      # verify crop
+      cropped_image = test_image.crop((left, top, right, bottom))
+      cropped_image.show()
+      cropped_image.save(samples_folder + f"/{i}-cropped.png")
 
       crop = Box(left=left, top=top, right=right, bottom=bottom)
 
@@ -153,12 +162,117 @@ class TestInputsProcess(TestBase):
 
         # cropped.save(samples_folder + f"/{i}-single-{coordIdx}-highlight.png")
         # cropped.show()
+        for el_idx in group:
+          return_types[el_idx] = response.info
+
         group_validations = [validations[idx] for idx in group]
         print (f"Got {response.info}, expected {group_validations}")
 
-      print("Done")   
+      # Fix duplicates
+      fixed_types = await deduplicate_unique(return_types, test_image, elements, parentCoords, i)
+      matching = list(zip(fixed_types, validations))
+      print (matching)
 
 
+  async def test_deduplicate_entries(self):
+    for i in range(4, 5):
+      test_data = load_json(samples_folder + f"/{i}-page-inputs.json")
+      test_image = load_image(samples_folder + f"/{i}-page.png", MAX_RESOLUTION)
+      validation_data = load_json(samples_folder + f"/{i}-inputs.json")
+
+      elements = test_data['elements']
+      parentCoords = test_data['parentCoords']
+      validations = validation_data['inputs']
+
+      return_types = [
+        InputType.AMOUNT_TO_SEND, InputType.AMOUNT_TO_SEND, InputType.FROM_ACCOUNT, InputType.SECRET_ANSWER, InputType.SECRET_ANSWER
+      ]
+
+      fixed_types = await deduplicate_unique(return_types, test_image, elements, parentCoords, i)
+      matching = list(zip(fixed_types, validations))
+      print (matching)
+  
+
+async def deduplicate_unique(return_types: list[InputType], test_image: Image, elements: list[object], parentCoords: list[Box], page_idx: int):
+  # double-check duplicates
+  cannot_duplicate = [
+    InputType.AMOUNT_TO_SEND,
+    InputType.TO_RECIPIENT,
+    InputType.FROM_ACCOUNT,
+    InputType.SECRET_QUESTION,
+    InputType.SECRET_ANSWER,
+  ]
+
+  fixed_types = return_types.copy()
+
+  for unique_type in cannot_duplicate:
+    unique_type_idxs = [idx for idx, t in enumerate(fixed_types) if t == unique_type and elements[idx].get('inputType') != 'radio']
+    num_unique = len(unique_type_idxs)
+    if num_unique > 1:
+      print (f"Duplicate {unique_type} found at {unique_type_idxs} - verifying...")
+
+      # get boxes of the duplicates
+      dup_boxes = [standardize_coords(parentCoords[idx]) for idx in unique_type_idxs]
+      # if some of the boxes are overlapping, merge them
+      dup_boxes = merge_boxes(dup_boxes)
+
+      # find extents of this area of the form
+      top = min([get_prop(b, "top") for b in dup_boxes])
+      left = min([get_prop(b, "left") for b in dup_boxes])
+      right = max([get_prop(b, "right") for b in dup_boxes])
+      bottom = max([get_prop(b, "bottom") for b in dup_boxes])
+      padding = 200
+      crop = Box(left=(left - padding), top=(top - padding), right=(right + padding), bottom=(bottom + padding))
+      dup_image = test_image.crop((crop.left, crop.top, crop.right, crop.bottom))
+
+      # Apply crop to boxes
+      dup_boxes = [Box(left=b.left - crop.left, top=b.top - crop.top, right=b.right - crop.left, bottom=b.bottom - crop.top) for b in dup_boxes]
+
+      #####################
+      #
+      # CONTINUE HERE: APPLY CROP TO DUP_BOXES
+      #                TEST QUERY WITH "SHADED RED" INSTRUCTION
+      #                AND REFACTOR
+      #
+      #####################
+      dup_highlighted_image = overlay_image(dup_image, dup_boxes)
+      dup_highlighted_image.save(samples_folder + f"/{page_idx}-unique-{unique_type}-highlight.png")
+      dup_highlighted_image.show()
+
+      query = f"Point to the input shaded in red of type {unique_type}."
+      response = runQueryRaw(dup_highlighted_image, query, 1000)
+      best_points = get_points(dup_highlighted_image, response)
+
+      dup_annotated = draw_points(dup_highlighted_image, best_points)
+      dup_annotated.show()
+      dup_annotated.save(samples_folder + f"/{page_idx}-unique-{unique_type}-pointed-at.png")
+
+      # which of elements is this?  We use element coords 
+      # because it's possible for parent coords to overlap
+      dup_element_coords = [standardize_coords(elements[i]["coords"]) for i in unique_type_idxs]
+      # We should only have one response in best_points
+      best_point = best_points[0]
+      # Translate point back into original coord system
+      best_point = (best_point[0] + crop.left, best_point[1] + crop.top)
+      dup_distances = get_distance_from_point(dup_element_coords, best_point)
+
+      # get the index of the minimum distance
+      min_idx = dup_distances.index(min(dup_distances))
+
+      # Keep only the closest match, re-run the query for the others
+      correct_idx = unique_type_idxs[min_idx]
+      for idx in unique_type_idxs:
+        if idx != correct_idx:
+          # We use the parent coords here to scope the attention down to just this element
+          parent_coords = standardize_coords(parentCoords[idx])
+          highlighted_image = overlay_image(test_image, [parent_coords])
+          highlighted_image.save(samples_folder + f"/{page_idx}-unique-{unique_type}-{idx}-highlight.png")
+          query = get_query(elements[idx], unique_type)
+          response = await run_endpoint_query(highlighted_image, (query, InputTypeResponse))
+          fixed_types[idx] = response.info
+
+  return fixed_types
+  
 def get_element_props(element: dict):
   el_name = get_prop(element, "name", None)
   el_label = get_prop(element, "label", None)
@@ -206,9 +320,10 @@ def merge_element_props(all_props):
 def get_element_type(element: dict):
   el_tagName = get_prop(element, "tagName" , "input")
   el_inputType = get_prop(element, "inputType", None)
-  return el_inputType if (el_inputType is not None and el_inputType != "text") else el_tagName
+  best_type = el_inputType if (el_inputType is not None and el_inputType != "text" and el_inputType != "password") else el_tagName
+  return best_type.lower()
 
-def get_query(elements: list):
+def get_query(elements: list, filter_out_type: InputType = None):
   best_types = [get_element_type(el) for el in elements]
   best_type = best_types[0] if len(set(best_types)) == 1 else "inputs"
 
@@ -221,9 +336,10 @@ def get_query(elements: list):
 
   query_part = "What kind of information can be entered into {}?".format(it_them)
 
-  if (best_type == "radio" or best_type == "select"):
+  if ("radio" in best_type or "select" in best_type):
     query_part = "What kind of information can be chosen by {}?".format(it_them)
 
+  typesStr = ", ".join([e.value for e in InputType if e != filter_out_type])
   types_part = "Select from the following types: {}.".format(typesStr)
   unknown_part = "If there is no good match, return {\"info\":\"Unknown\"}."
   return " ".join([base_q, query_part, types_part, unknown_part])
@@ -440,13 +556,54 @@ def calculate_group_boxes(groups, parentCoords):
     for element_idx in group[1:]:
       coords = standardize_coords(parentCoords[element_idx])
       box = {
-        'top': min(box['top'], coords['top']),
-        'left': min(box['left'], coords['left']),
-        'bottom': max(box['bottom'], coords['bottom']),
-        'right': max(box['right'], coords['right'])
+        'top': min(get_prop(box, 'top'), get_prop(coords, 'top')),
+        'left': min(get_prop(box, 'left'), get_prop(coords, 'left')),
+        'bottom': max(get_prop(box, 'bottom'), get_prop(coords, 'bottom')),
+        'right': max(get_prop(box, 'right'), get_prop(coords, 'right'))
       }
     boxes.append(box)
   return boxes
+
+def merge_boxes(boxes):
+    if not boxes:
+        return []
+    
+    # Convert to list of lists for easier manipulation
+    boxes = [[get_prop(box, "left"), get_prop(box, "top"), get_prop(box, "right"), get_prop(box, "bottom")] for box in boxes]
+    
+    def boxes_overlap(box1, box2):
+        # Returns true if boxes overlap
+        return not (box1[2] < box2[0] or  # box1.right < box2.left
+                   box1[0] > box2[2] or  # box1.left > box2.right
+                   box1[3] < box2[1] or  # box1.bottom < box2.top
+                   box1[1] > box2[3])    # box1.top > box2.bottom
+    
+    def merge_two_boxes(box1, box2):
+        # Returns a new box that encompasses both input boxes
+        return [
+            min(box1[0], box2[0]),  # left
+            min(box1[1], box2[1]),  # top
+            max(box1[2], box2[2]),  # right
+            max(box1[3], box2[3])   # bottom
+        ]
+    
+    merged = []
+    while boxes:
+        current = boxes.pop(0)
+        merged_something = False
+        
+        # Try to merge with any existing merged boxes
+        for i, existing in enumerate(merged):
+            if boxes_overlap(current, existing):
+                merged[i] = merge_two_boxes(current, existing)
+                merged_something = True
+                break
+        
+        if not merged_something:
+            merged.append(current)
+    
+    # Convert back to Box objects
+    return [Box(left=box[0], top=box[1], right=box[2], bottom=box[3]) for box in merged]
 
 def overlay_image(image, boxes):
     # Convert to RGBA if not already
@@ -461,10 +618,10 @@ def overlay_image(image, boxes):
     border_width = 5
     border_padding = border_width + 5
     for box in boxes:
-        left = box['left'] - border_padding
-        top = box['top'] - border_padding
-        right = box['right'] + border_padding
-        bottom = box['bottom'] + border_padding
+        left = get_prop(box, 'left') - border_padding
+        top = get_prop(box, 'top') - border_padding
+        right = get_prop(box, 'right') + border_padding
+        bottom = get_prop(box, 'bottom') + border_padding
         # Draw rectangle with 50% opaque red (255, 0, 0, 128)
         draw.rectangle([(left, top), (right, bottom)], fill=(255, 0, 0, 64), width=border_width)
         #draw.rectangle([(left, top), (right, bottom)], outline=(255, 0, 0, 255), width=border_width)
@@ -485,8 +642,8 @@ def overlay_arrow(image, boxes):
     # Draw arrow on the right-hand side of the box
     border_width = 5
     for box in boxes:
-        right = box['right'] + 20
-        center_y = box['top'] + (box['bottom'] - box['top']) / 2
+        right = get_prop(box, 'right') + 20
+        center_y = get_prop(box, 'top') + (get_prop(box, 'bottom') - get_prop(box, 'top')) / 2
 
         # Draw an arrow pointing at the box from the right side
         draw.line([(right, center_y), (right + 100, center_y)], fill=(255, 0, 0, 128), width=border_width)
@@ -497,19 +654,19 @@ def overlay_arrow(image, boxes):
     return Image.alpha_composite(image, overlay)
 
 
-def get_coords(image, output_string):
-    h, w = image.size
-    if 'points' in output_string:
-        # Handle multiple coordinates
-        matches = re.findall(r'(x\d+)="([\d.]+)" (y\d+)="([\d.]+)"', output_string)
-        coordinates = [(round(float(x_val) / 100 * w), round(float(y_val) / 100 * h)) for _, x_val, _, y_val in matches]
-    else:
-        # Handle single coordinate
-        match = re.search(r'x="([\d.]+)" y="([\d.]+)"', output_string)
-        if match:
-            coordinates = [(round(float(match.group(1)) / 100 * w), round(float(match.group(2)) / 100 * h))]
+# def get_points(image, output_string):
+#     h, w = image.size
+#     if 'points' in output_string:
+#         # Handle multiple coordinates
+#         matches = re.findall(r'(x\d+)="([\d.]+)" (y\d+)="([\d.]+)"', output_string)
+#         coordinates = [(round(float(x_val) / 100 * w), round(float(y_val) / 100 * h)) for _, x_val, _, y_val in matches]
+#     else:
+#         # Handle single coordinate
+#         match = re.search(r'x="([\d.]+)" y="([\d.]+)"', output_string)
+#         if match:
+#             coordinates = [(round(float(match.group(1)) / 100 * w), round(float(match.group(2)) / 100 * h))]
             
-    return coordinates
+#     return coordinates
 
 def draw_points(image: Image.Image, points=None):
     # Convert to RGBA if not already
@@ -535,3 +692,28 @@ def draw_points(image: Image.Image, points=None):
         #     lineType=cv2.LINE_AA
         # )
     return Image.alpha_composite(image, overlay)
+
+def get_distance_from_point(coords_list, point):
+    """
+    Calculate distances from a point to each set of coordinates in coords_list.
+    Each coords in coords_list should be in format [x1, y1, x2, y2] (box coordinates).
+    Point should be in format [x, y].
+    Returns list of distances.
+    """
+    distances = []
+    point_x, point_y = point[0], point[1]
+    
+    for coords in coords_list:
+
+      if (is_contained_within(Box(left=point_x, top=point_y, right=point_x, bottom=point_y), coords)):
+        distances.append(0)
+      else:
+        # Convert box coordinates to center point
+        center_x = (coords["left"] + coords["right"]) / 2  # (x1 + x2) / 2
+        center_y = (coords["top"] + coords["bottom"]) / 2  # (y1 + y2) / 2
+        
+        # Calculate Euclidean distance
+        distance = ((point_x - center_x) ** 2 + (point_y - center_y) ** 2) ** 0.5
+        distances.append(distance)
+    
+    return distances
