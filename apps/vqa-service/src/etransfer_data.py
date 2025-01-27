@@ -5,6 +5,26 @@ from case_insensitive_enum import CaseInsensitiveEnum
 from data_elements import ElementResponse
 
 
+class FormPresentResponse(BaseModel):
+    etransfer_form_present: bool
+    reasoning: str = Field(..., description="Reasoning for the form presence")
+
+query_etransfer_form_present = (
+    "Analyze the provided screenshot of a webpage. Determine if a form for sending e-transfers is present.",
+    FormPresentResponse
+)
+
+
+class ETransferLinkResponse(BaseModel):
+    best_link: str
+    reasoning: str = Field(..., description="Reasoning for the best link")
+
+def get_find_etransfer_link_prompt(page_link_group: list[str]) -> tuple[str, ETransferLinkResponse]:
+    return (
+        "Which one of the following links is most likely to navigate to a page for sending an interac e-transfer? " + json.dumps(page_link_group),
+        ETransferLinkResponse
+    )
+
 class InputType(CaseInsensitiveEnum):
     AMOUNT_TO_SEND = 'AmountToSend'
     TO_RECIPIENT = 'ToRecipient'
