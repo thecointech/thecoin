@@ -2,6 +2,7 @@
 
 from pydantic import BaseModel, Field
 from case_insensitive_enum import CaseInsensitiveEnum
+from data_elements import ElementResponse
 
 
 class InputType(CaseInsensitiveEnum):
@@ -38,7 +39,7 @@ unique_input_types = [
     # (a) it can have multiple inputs, and 
     # (b) we don't chare
     InputType.TO_EMAIL
-  ]
+]
 
 class InputTypeResponse(BaseModel):
     info: InputType = Field(..., description="InputType")
@@ -48,7 +49,11 @@ class InputTypesResponse(BaseModel):
 
 typesStr = ", ".join([e.value for e in InputType])
 
-query_input_type = (
-    f"From the following options, select the one that best describes the input highlighted with red: {typesStr}.",
-    InputTypeResponse
+
+class ConfirmationCodeResponse(ElementResponse):
+    content: str = Field(..., description="the code that confirms successful etransfer")
+
+query_confirmation_code = (
+    "Describe the element that contains the confirmation code.",
+    ConfirmationCodeResponse
 )

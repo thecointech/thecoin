@@ -3,8 +3,10 @@ import json
 from PIL import Image
 from pydantic import BaseModel
 from TestBase import TestBase
+from data_elements import ElementResponse
 from geo_math import BBox
 from input_detection import deduplicate_unique, detect_input_types, get_form_bbox, overlay_image, calculate_element_groups, calculate_group_bbox, query_input_group_type
+from run_endpoint_query import run_endpoint_query
 from testdata import SampleData, get_private_folder, get_sample_data
 from etransfer_data import InputType
 
@@ -96,7 +98,6 @@ class TestInputsProcess(TestBase):
                         self.assertEqual(detected_type, verified_type)
 
     async def test_deduplicate_entries(self):
-
         etransfers = get_sample_data("etransfer")
         for key, pages in etransfers.items():
             for page in pages:
@@ -113,6 +114,25 @@ class TestInputsProcess(TestBase):
                     for detected_type, verified_type in zip(fixed_types, page.gold):
                         self.assertEqual(detected_type, verified_type)  
 
+    async def test_confirmation_code(self):
+        etransfers = get_sample_data("etransfer")
+        for key, pages in etransfers.items():
+            for page in pages:
+                # A page only has "raw" if there were duplicates
+                if "ConfirmationCode" not in page.gold:
+                    continue
+
+                with self.subTest(key=key, step=page.key):
+
+                    confirmation_code = await run_endpoint_query(
+                        page.image,
+                        (
+                            "Describe the code that identifies the successful e-transfer.",
+                            ElementResponse
+                        )
+                    )
+
+                    self.assertEqual(confirmation_code.content, page.gold["ConfirmationCode"])
 
 
 def dbg_output(page: SampleData, name: str):

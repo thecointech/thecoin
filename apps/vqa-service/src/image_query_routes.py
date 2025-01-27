@@ -1,10 +1,12 @@
 from fastapi import APIRouter, HTTPException, UploadFile
-from image_query_data import ImageQueryResponse, draw_points, get_points
+from geo_math import MAX_RESOLUTION, BBox
+from image_query_data import ImageQueryResponse
 from query import runQueryRaw, tryConvertToJSON
-from run_endpoint_query import MAX_RESOLUTION, BBox, get_image, pixels_to_position, position_to_pixels
+from run_endpoint_query import get_image, pixels_to_position, position_to_pixels
 from helpers import request_json
 from fastapi.responses import JSONResponse, Response
 import io
+from pointing import get_points, draw_points
 
 router = APIRouter()
 
