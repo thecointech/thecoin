@@ -1,6 +1,7 @@
 # A suite of tests for the Molmo VQA MLLM
+import unittest
 from TestBase import TestBase
-from run_endpoint_query import Box
+from geo_math import BBox
 from testdata import get_test_data, get_single_test_element
 from intent_routes import page_intent
 from landing_routes import (
@@ -9,7 +10,6 @@ from landing_routes import (
     navigate_to_login,
     navigate_to_login_menu
 )
-from tests.repeat_on_failure import repeat_on_fail
 
 # Our process goes
 # 1. Is Cookie banner present?
@@ -62,7 +62,7 @@ class TestLanding(TestBase):
             with self.subTest(key=key):
                 intent = await page_intent(image)
                 self.assertEqual(intent.type, "MenuSelect", "Login intent failed for " + key)
-                response = await navigate_to_login_menu(image, Box(bottom=770))
+                response = await navigate_to_login_menu(image, BBox(bottom=770))
                 self.assertResponse(response, original, key)
 
 

@@ -1,13 +1,15 @@
-from src.run_endpoint_query import pixels_to_position, position_to_pixels, cast_value, Box
+import unittest
+from geo_math import BBox
+from src.run_endpoint_query import pixels_to_position, position_to_pixels, cast_value
 from TestBase import TestBase
 
 class TestCastValue(TestBase):
     def setUp(self):
         # Create a sample crop with 100x100 dimensions for easy percentage calculations
-        self.crop = Box(left=0, top=0, right=100, bottom=100)
+        self.crop = BBox(left=0, top=0, right=100, bottom=100)
         
         # Create a sample crop with non-zero origin and different dimensions
-        self.complex_crop = Box(left=50, top=25, right=150, bottom=125)
+        self.complex_crop = BBox(left=50, top=25, right=150, bottom=125)
     
     def test_pixels_to_position_simple_crop(self):
         # Test with simple 100x100 crop starting at origin

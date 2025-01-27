@@ -9,3 +9,4 @@ transformers==4.47.0
 einops==0.8.0
 accelerate==1.2.0
 fastapi[standard]==0.115.6
+shapely==2.0.6

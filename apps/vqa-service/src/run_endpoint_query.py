@@ -6,20 +6,11 @@ import io
 from starlette.datastructures import UploadFile
 from query import runQueryToJson
 from typing import TypeVar, Union
-from pydantic import BaseModel, Field
-
-
-MAX_RESOLUTION = 2 ** 16
-class Box(BaseModel):
-    left: float = Field(default=0.0)
-    top: float = Field(default=0.0)
-    right: float = Field(default=MAX_RESOLUTION)
-    bottom: float = Field(default=MAX_RESOLUTION)
-
+from geo_math import BBox
 
 T = TypeVar('T')
 # type QueryData = tuple[str, Type[T]] # Can we update to Python 3.12?
-async def run_endpoint_query(image: Union[UploadFile, Image.Image], data: tuple[str, T], crop: Box = None) -> T:
+async def run_endpoint_query(image: Union[UploadFile, Image.Image], data: tuple[str, T], crop: BBox = None) -> T:
 
     (image, crop) = await get_image(image, crop)
     # Run query with PIL Image
@@ -37,7 +28,7 @@ async def run_endpoint_query(image: Union[UploadFile, Image.Image], data: tuple[
         raise e
 
 
-async def get_image(image: Union[UploadFile, Image.Image], crop: Box=None) -> Image.Image:
+async def get_image(image: Union[UploadFile, Image.Image], crop: BBox=None) -> tuple[Image.Image, BBox]:
         # If image is UploadFile, convert to PIL Image
     if isinstance(image, UploadFile):
         # read image data
@@ -54,7 +45,7 @@ async def get_image(image: Union[UploadFile, Image.Image], crop: Box=None) -> Im
         bottom = min(crop.bottom, image.height)
         image = image.crop((left, top, right, bottom))
 
-    return (image, Box(left=left, top=top, right=right, bottom=bottom))
+    return (image, BBox(left=left, top=top, right=right, bottom=bottom))
 
 
 def position_to_pixels(r, crop):
@@ -88,13 +79,15 @@ def cast_value(response, key, scale, adjust=0):
 
     return None
 
-def pixels_to_position(prompt, crop):
+def pixels_to_position(prompt, crop: BBox):
 
     width = crop.right - crop.left
     height = crop.bottom - crop.top
 
-    scale_width = lambda v: round((float(v) * 100 / width) - (crop.left * 100 / width), 1)
-    scale_height = lambda v: round((float(v) * 100 / height) - (crop.top * 100 / height), 1)
+    def scale_width(v):
+        return round((float(v) * 100 / width) - (crop.left * 100 / width), 1)
+    def scale_height(v):
+        return round((float(v) * 100 / height) - (crop.top * 100 / height), 1)
     result = re.sub(r'position_x=([\d]+)', lambda m: f'position_x={scale_width(m.group(1))}', prompt, 0)
     result = re.sub(r'position_y=([\d]+)', lambda m: f'position_y={scale_height(m.group(1))}', result, 0)
 

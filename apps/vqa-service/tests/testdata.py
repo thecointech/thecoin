@@ -3,8 +3,9 @@ import os
 from PIL import Image
 from typing import NamedTuple, TypedDict
 from dotenv import load_dotenv
-import io
-from fastapi import UploadFile
+from pathlib import Path
+
+from geo_math import BBox
 
 
 load_dotenv()
@@ -22,6 +23,15 @@ class TestData(NamedTuple):
     image: Image.Image
     elements: JsonDatum
     # page_type: str
+
+class SampleData(NamedTuple):
+    key: str
+    path: Path # Path to the folder containing image and json
+    image: Image.Image
+    elements: list[object]
+    parent_coords: list[BBox]
+    gold: list[str]
+    raw: list[str] = None
 
 class SingleTestDatum(NamedTuple):
     key: str
@@ -75,6 +85,10 @@ def get_element_type(json_file: str):
 KeyFilter = []
 # KeyFilter = ["Tangerine"]
 
+#
+# TODO! Fix that test data organization strategy once and for all!
+# No tests will work because we to codify the split between samples/gold/latest (or historical whateva)
+# 
 def get_test_data(test_type: str, page_type: str, max_height: int = MAX_HEIGHT) -> dict[str, TestData]:
     # get the private testing folder from the environment
     test_folder = os.environ.get("PRIVATE_TESTING_PAGES", None)
@@ -82,7 +96,7 @@ def get_test_data(test_type: str, page_type: str, max_height: int = MAX_HEIGHT) 
         return []
 
     # list all files in the folder
-    samples_folder = os.path.join(test_folder, "unit-tests", "gold", test_type, page_type)
+    samples_folder = os.path.join(test_folder, "unit-tests", test_type, page_type)
     image_files = [
         os.path.join(samples_folder, f)
         for f in os.listdir(samples_folder)
@@ -114,3 +128,65 @@ def get_nested(obj, *path, default=None):
         return get_nested(obj[path[0]], *path[1:], default=default)
 
     return default
+
+#
+# TODO: Deduplicate this with get_test_data
+#
+
+def get_private_folder(base_type: str, test_type: str) -> str:
+    base_folder = os.environ.get("PRIVATE_TESTING_PAGES", None)
+    if base_folder is None:
+        return None
+
+    return Path(base_folder, "unit-tests", base_type, test_type)
+
+def get_sample_data(test_type: str) -> dict[str, TestData]:
+    # get the private testing folder from the environment
+    samples_folder = get_private_folder("samples", test_type)
+    if samples_folder is None:
+        return []
+
+    # list all files in the folder
+    targets = [dir for dir in samples_folder.iterdir() if dir.is_dir()]
+    sample_data = {}
+    for target in targets:
+        image_files = [
+            os.path.join(target.absolute(), f)
+            for f in target.iterdir()
+            if f.name.endswith(".png")
+        ]
+        
+        images = [load_image(f) for f in image_files]
+        elements = [get_elements(f) for f in image_files]
+
+        inputs = [e['page-inputs'] for e in elements]
+        gold = [e['page-gold']['inputs'] for e in elements]
+        raw = [e['page-raw']['inputs'] if 'page-raw' in e else None for e in elements]
+
+        elements = [i["elements"] for i in inputs]
+        parent_coords = [i["parentCoords"] for i in inputs]
+
+        samples = [
+            SampleData(idx + 1, target, image, elements, [BBox.from_coords(coord) for coord in parent_coords], gold, raw)
+            for idx, (image, elements, parent_coords, gold, raw) in enumerate(zip(images, elements, parent_coords, gold, raw))
+        ]
+        sample_data[target.name] = samples
+
+    return sample_data
+        # # In DEBUG mode, allow filtering only to a single key
+        # # this allows us to focus on a single target
+        # if (os.environ.get('DEBUGPY_RUNNING') == "true" and len(KeyFilter) > 0):
+        #     test_data = [v for v in test_data if v.key in KeyFilter]
+        # return test_data
+
+        # test_data = get_test_data("samples", type)
+        # # number of tests is length of test data
+        # test_data = load_json(samples_folder + f"/{i}-page-inputs.json")
+        # test_image = load_image(samples_folder + f"/{i}-page.png", MAX_RESOLUTION)
+        # validation_data = load_json(samples_folder + f"/{i}-inputs.json")
+
+        # elements = test_data['elements']
+        # parent_coords = test_data['parentCoords']
+        # validations = validation_data['inputs']
+
+        # parent_coords = [BBox.from_coords(coord) for coord in parent_coords]
