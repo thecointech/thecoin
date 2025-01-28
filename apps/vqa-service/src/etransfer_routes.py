@@ -50,7 +50,8 @@ class InputData(BaseModel):
 @router.post("/detect-input-types", tags=["etransfer"]) 
 async def input_types(
     image: UploadFile, 
-    input_elements: str = Form(...)) -> list[dict]:
+    input_elements: str = Form(...)
+) -> list[InputType]:
 
     # Parse the JSON string into our Pydantic model
     input_model = InputData.model_validate_json(input_elements)
@@ -63,7 +64,9 @@ async def input_types(
         raw_types, image, input_model.elements, input_model.parent_coords
     )
 
-    return fixed_types
+    # Convert any "None" types to "other"
+    return_types = [t if t is not None else InputType.UNKNOWN for t in fixed_types]
+    return return_types
 
 @router.post("/detect-to-recipient", tags=["etransfer"])
 async def detect_to_recipient(image: UploadFile, recipient: str) -> ElementResponse:
