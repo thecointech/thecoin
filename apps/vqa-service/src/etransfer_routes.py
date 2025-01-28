@@ -1,5 +1,5 @@
-
-from fastapi import UploadFile, APIRouter
+from fastapi import Form, UploadFile, APIRouter
+from pydantic import BaseModel
 from data_elements import ElementResponse
 from geo_math import BBox
 from input_detection import deduplicate_unique, detect_input_types
@@ -26,7 +26,7 @@ async def best_etransfer_link(links: list[str]) -> ETransferLinkResponse:
 
         cleaned_links = best_links
 
-    return ETransferLinkResponse(best_link=cleaned_links[0])
+    return ETransferLinkResponse(best_link=cleaned_links[0], reasoning="redacted")
 
 
 @router.post("/detect-etransfer-stage", tags=["etransfer"])
@@ -39,16 +39,27 @@ async def detect_etransfer_form(image: UploadFile) -> ETransferLinkResponse:
     pass
 
 
-@router.post("/detect-input-types", tags=["etransfer"])
-async def input_types(image: UploadFile, elements: list[object], parent_coords: list[BBox]) -> list[InputType]:
+class InputData(BaseModel):
+    element: dict
+    parent_coords: BBox
 
+class InputElements(BaseModel):
+    inputs: list[InputData]
+    
+@router.post("/detect-input-types", tags=["etransfer"]) 
+async def input_types(
+    image: UploadFile, 
+    input_elements: str = Form(...)) -> list[InputType]:
+
+    # Parse the JSON string into our Pydantic model
+    input_elements = InputElements.model_validate(input_elements)
     (image, _) = await get_image(image)
     raw_types = await detect_input_types(
-        image, elements, parent_coords
+        image, input_elements.inputs, input_elements.parent_coords
     )
 
     fixed_types = await deduplicate_unique(
-        raw_types, image, elements, parent_coords
+        raw_types, image, input_elements.inputs, input_elements.parent_coords
     )
 
     return fixed_types
@@ -69,4 +80,3 @@ async def detect_next_button(image: UploadFile) -> ButtonResponse|None:
     if (exists.next_button_visible):
         return await run_endpoint_query(image, query_next_button)
     return None
-
