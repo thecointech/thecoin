@@ -2,12 +2,9 @@ import json
 
 from pydantic import BaseModel, Field
 from shapely import Point
-
 from TestBase import TestBase
 from data_elements import ElementResponse
 from geo_math import BBox, get_distance
-from query import runQueryRaw
-from run_endpoint_query import run_endpoint_query
 from testdata import get_private_folder, load_image
 from etransfer_routes import best_etransfer_link, detect_next_button, detect_to_recipient
 
