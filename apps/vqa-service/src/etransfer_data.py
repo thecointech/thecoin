@@ -26,6 +26,28 @@ def get_find_etransfer_link_prompt(page_link_group: list[str]) -> tuple[str, ETr
         ETransferLinkResponse
     )
 
+###################
+
+class ETransferStage(CaseInsensitiveEnum):
+    FILL_FORM = "FillForm"
+    REVIEW_DETAILS = "ReviewDetails"
+    TRANSFER_COMPLETE = "TransferComplete"
+    
+stageTypesStr = ", ".join([e.value for e in ETransferStage])
+
+class ETransferStageResponse(BaseModel):
+    stage: ETransferStage = Field(..., description="option")
+    # reasoning: str = Field(..., description="explain your reasoning")
+
+transfer_stage_prompt = "From the following options, select the one that best describes current stage of sending an e-transfer for the given webpage with the title \"{title}\": {stageTypesStr}."
+
+def query_etransfer_stage(title: str) -> tuple[str, ETransferStageResponse]:
+    return (
+        transfer_stage_prompt.format(title=title, stageTypesStr=stageTypesStr),
+        ETransferStageResponse
+    )
+
+####################
 class InputType(CaseInsensitiveEnum):
     AMOUNT_TO_SEND = 'AmountToSend'
     TO_RECIPIENT = 'ToRecipient'

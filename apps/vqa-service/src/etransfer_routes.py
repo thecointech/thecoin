@@ -3,7 +3,7 @@ from fastapi import UploadFile, APIRouter
 from data_elements import ElementResponse
 from geo_math import BBox
 from input_detection import deduplicate_unique, detect_input_types
-from etransfer_data import ButtonResponse, ETransferLinkResponse, ConfirmationCodeResponse, InputType, get_find_etransfer_link_prompt, query_confirmation_code, query_to_recipient, query_next_button_exists, query_next_button
+from etransfer_data import ButtonResponse, ETransferLinkResponse, ConfirmationCodeResponse, ETransferStageResponse, InputType, get_find_etransfer_link_prompt, query_confirmation_code, query_etransfer_stage, query_to_recipient, query_next_button_exists, query_next_button
 from query import runQueryToJson
 from run_endpoint_query import get_image, run_endpoint_query
 
@@ -29,9 +29,15 @@ async def best_etransfer_link(links: list[str]) -> ETransferLinkResponse:
     return ETransferLinkResponse(best_link=cleaned_links[0])
 
 
+@router.post("/detect-etransfer-stage", tags=["etransfer"])
+async def detect_etransfer_stage(image: UploadFile, title: str) -> ETransferStageResponse:
+    return await run_endpoint_query(image, query_etransfer_stage(title))
+
+
 @router.post("/detect-etransfer-form", tags=["etransfer"])
 async def detect_etransfer_form(image: UploadFile) -> ETransferLinkResponse:
     pass
+
 
 @router.post("/detect-input-types", tags=["etransfer"])
 async def input_types(image: UploadFile, elements: list[object], parent_coords: list[BBox]) -> list[InputType]:
@@ -63,5 +69,4 @@ async def detect_next_button(image: UploadFile) -> ButtonResponse|None:
     if (exists.next_button_visible):
         return await run_endpoint_query(image, query_next_button)
     return None
-
 

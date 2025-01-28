@@ -1,12 +1,15 @@
+import enum
 import json
 
 from pydantic import BaseModel, Field
 from shapely import Point
 from TestBase import TestBase
+from case_insensitive_enum import CaseInsensitiveEnum
 from data_elements import ElementResponse
 from geo_math import BBox, get_distance
+from run_endpoint_query import run_endpoint_query
 from testdata import get_private_folder, load_image
-from etransfer_routes import best_etransfer_link, detect_next_button, detect_to_recipient
+from etransfer_routes import best_etransfer_link, detect_etransfer_stage, detect_next_button, detect_to_recipient
 
 # General flow
 # Find ETransfer link
@@ -20,14 +23,16 @@ from etransfer_routes import best_etransfer_link, detect_next_button, detect_to_
 # Validate selection
 #   (Click on correct select option)
 
-class ButtonResponse(ElementResponse):
-    content: str = Field(..., description="button text")
-    enabled: bool
+# class ETransferStage(CaseInsensitiveEnum):
+#     FILL_FORM = "FillForm"
+#     REVIEW_DETAILS = "ReviewDetails"
+#     TRANSFER_COMPLETE = "TransferComplete"
     
-class NextStepExistsResponse(BaseModel):
-    next_button_visible: bool
-    reasoning: str = Field(..., description="explain your reasoning")
+# typesStr = ", ".join([e.value for e in ETransferStage])
 
+# class ETransferStageResponse(BaseModel):
+#     stage: ETransferStage = Field(..., description="option")
+#     # reasoning: str = Field(..., description="explain your reasoning")
     
 class TestETransfer(TestBase):
 
@@ -93,5 +98,28 @@ class TestETransfer(TestBase):
                     pointed = Point(detected.position_x, detected.position_y)
                     is_contained = get_distance(pointed, button_bbox) == 0
                     self.assertTrue(is_contained)
+
+
+    async def test_etransfer_status(self):
+        samples_folder = get_private_folder("samples", "etransfer")
+        all_json = samples_folder.glob("**/*-gold.json")
+        for json_file in all_json:
+            
+            image_file_stem = json_file.name.replace("-gold.json", ".png")
+            image_file = json_file.with_name(image_file_stem)
+            if not image_file.exists():
+                continue
+
+            key = image_file.parent.name
+            step = image_file.stem
+
+            with self.subTest(key=key, step=step):
+                gold = json.load(open(json_file))
+                image = load_image(str(image_file))
+
+                detected_stage = await detect_etransfer_stage(image, "Send Transfer") # NOTE: Need to fix this title
+
+                self.assertEqual(detected_stage.stage, gold['stage'])
+
             
         
