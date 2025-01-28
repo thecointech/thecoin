@@ -79,9 +79,28 @@ query_confirmation_code = (
     ConfirmationCodeResponse
 )
 
-
 def query_to_recipient(recipient: str) -> ElementResponse:
     return (
         f"Analyze the provided webpage. What is the combobox element that contains the recipient '{recipient}'?",
         ElementResponse
     )
+
+
+class ButtonResponse(ElementResponse):
+    content: str = Field(..., description="button text")
+    enabled: bool
+    
+class NextStepExistsResponse(BaseModel):
+    next_button_visible: bool
+    reasoning: str = Field(..., description="explain your reasoning")
+
+
+
+query_next_button_exists = (
+    "Is there a button clearly visible for proceeding to the next step of sending an e-transfer?",
+    NextStepExistsResponse
+)
+query_next_button = (
+    "Describe the button for proceeding to the next step of sending an e-transfer",
+    ButtonResponse
+)

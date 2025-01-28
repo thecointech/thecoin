@@ -3,9 +3,9 @@ from fastapi import UploadFile, APIRouter
 from data_elements import ElementResponse
 from geo_math import BBox
 from input_detection import deduplicate_unique, detect_input_types
-from etransfer_data import ETransferLinkResponse, ConfirmationCodeResponse, InputType, get_find_etransfer_link_prompt, query_confirmation_code, query_to_recipient
+from etransfer_data import ButtonResponse, ETransferLinkResponse, ConfirmationCodeResponse, InputType, get_find_etransfer_link_prompt, query_confirmation_code, query_to_recipient, query_next_button_exists, query_next_button
 from query import runQueryToJson
-from run_endpoint_query import run_endpoint_query
+from run_endpoint_query import get_image, run_endpoint_query
 
 router = APIRouter()
 
@@ -36,6 +36,7 @@ async def detect_etransfer_form(image: UploadFile) -> ETransferLinkResponse:
 @router.post("/detect-input-types", tags=["etransfer"])
 async def input_types(image: UploadFile, elements: list[object], parent_coords: list[BBox]) -> list[InputType]:
 
+    (image, _) = await get_image(image)
     raw_types = await detect_input_types(
         image, elements, parent_coords
     )
@@ -54,5 +55,13 @@ async def detect_to_recipient(image: UploadFile, recipient: str) -> ElementRespo
 @router.post("/detect-confirmation-code", tags=["etransfer"])
 async def detect_confirmation_code(image: UploadFile) -> ConfirmationCodeResponse:
     return await run_endpoint_query(image, query_confirmation_code)
+
+@router.post("/detect-next-button", tags=["etransfer"])
+async def detect_next_button(image: UploadFile) -> ButtonResponse|None:
+    (image, _)  = await get_image(image)
+    exists = await run_endpoint_query(image, query_next_button_exists)
+    if (exists.next_button_visible):
+        return await run_endpoint_query(image, query_next_button)
+    return None
 
 
