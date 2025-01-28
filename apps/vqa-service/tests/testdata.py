@@ -133,7 +133,7 @@ def get_nested(obj, *path, default=None):
 # TODO: Deduplicate this with get_test_data
 #
 
-def get_private_folder(base_type: str, test_type: str) -> str:
+def get_private_folder(base_type: str, test_type: str) -> Path:
     base_folder = os.environ.get("PRIVATE_TESTING_PAGES", None)
     if base_folder is None:
         return None

@@ -1,5 +1,6 @@
 
 
+import json
 from pydantic import BaseModel, Field
 from case_insensitive_enum import CaseInsensitiveEnum
 from data_elements import ElementResponse
@@ -77,3 +78,10 @@ query_confirmation_code = (
     "Describe the element that contains the confirmation code.",
     ConfirmationCodeResponse
 )
+
+
+def query_to_recipient(recipient: str) -> ElementResponse:
+    return (
+        f"Analyze the provided webpage. What is the combobox element that contains the recipient '{recipient}'?",
+        ElementResponse
+    )
