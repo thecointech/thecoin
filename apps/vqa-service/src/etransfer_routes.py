@@ -1,3 +1,4 @@
+import json
 from fastapi import Form, UploadFile, APIRouter
 from pydantic import BaseModel
 from data_elements import ElementResponse
@@ -40,26 +41,26 @@ async def detect_etransfer_form(image: UploadFile) -> ETransferLinkResponse:
 
 
 class InputData(BaseModel):
-    element: dict
-    parent_coords: BBox
+    elements: list[dict]
+    parent_coords: list[BBox]
 
-class InputElements(BaseModel):
-    inputs: list[InputData]
+# class InputElements(BaseModel):
+#     inputs: list[InputData]
     
 @router.post("/detect-input-types", tags=["etransfer"]) 
 async def input_types(
     image: UploadFile, 
-    input_elements: str = Form(...)) -> list[InputType]:
+    input_elements: str = Form(...)) -> list[dict]:
 
     # Parse the JSON string into our Pydantic model
-    input_elements = InputElements.model_validate(input_elements)
+    input_model = InputData.model_validate_json(input_elements)
     (image, _) = await get_image(image)
     raw_types = await detect_input_types(
-        image, input_elements.inputs, input_elements.parent_coords
+        image, input_model.elements, input_model.parent_coords
     )
 
     fixed_types = await deduplicate_unique(
-        raw_types, image, input_elements.inputs, input_elements.parent_coords
+        raw_types, image, input_model.elements, input_model.parent_coords
     )
 
     return fixed_types
