@@ -33,3 +33,16 @@ def query_page_intent(title: str):
         intent_prompt.format(title=title, typesStr=typesStr),
         IntentResponse
     )
+
+#####################
+
+
+class DetectErrorResponse(BaseModel):
+    error_message_detected: bool = Field(..., description="boolean")
+    error_message: str|None = Field(..., optional=True, description="Optionally contains error message only if error_message_detected is true")
+
+
+query_error_message = (
+    "Is there an error message on this web page?",
+    DetectErrorResponse
+)

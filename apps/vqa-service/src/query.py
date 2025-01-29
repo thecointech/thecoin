@@ -76,6 +76,9 @@ def tryConvertToJSON(response):
         cleaned = response.replace('":="', '": "')
         # In longer JSON am seeing eg: "position_y="43.5",
         cleaned = re.sub(r'=\"([\d\.]+)\"', r'": \g<1>', cleaned)
+        # The model has trouble when returning None options
+        # eg: {'error_message_detected': False, 'error_message': None}
+        cleaned = re.sub(r",?\s*['\"][^'\"]+['\"]: None", '', cleaned, flags=re.IGNORECASE)
         try:
             return json.loads(cleaned)
         except json.JSONDecodeError as e:

@@ -32,6 +32,7 @@ class ETransferStage(CaseInsensitiveEnum):
     FILL_FORM = "FillForm"
     REVIEW_DETAILS = "ReviewDetails"
     TRANSFER_COMPLETE = "TransferComplete"
+    ERRORED = "Errored"
     
 stageTypesStr = ", ".join([e.value for e in ETransferStage])
 
@@ -39,12 +40,29 @@ class ETransferStageResponse(BaseModel):
     stage: ETransferStage = Field(..., description="option")
     # reasoning: str = Field(..., description="explain your reasoning")
 
-transfer_stage_prompt = "From the following options, select the one that best describes current stage of sending an e-transfer for the given webpage with the title \"{title}\": {stageTypesStr}."
+transfer_stage_prompt = "Anaylze this online banking page with the the title \"{title}\". From the following options, select the one that best describes current stage of sending an e-transfer: {stageTypesStr}."
+transfer_error_prompt = " If any error messages are present, return { \"stage\": \"Errored\" }."
 
 def query_etransfer_stage(title: str) -> tuple[str, ETransferStageResponse]:
     return (
-        transfer_stage_prompt.format(title=title, stageTypesStr=stageTypesStr),
+        transfer_stage_prompt.format(title=title, stageTypesStr=stageTypesStr) + transfer_error_prompt,
         ETransferStageResponse
+    )
+
+####################
+
+class ETransferFormPresentResponse(BaseModel):
+    form_present: bool
+
+
+class HasAddRecipientButtonResponse(BaseModel):
+    button_present: bool
+    reasoning: str = Field(..., description="Reasoning for the form presence")
+    
+def query_add_recipient_present(title: str) -> tuple[str, HasAddRecipientButtonResponse]:
+    return (
+        f"Does this webpage; titled '{title}'; include a link or a button for adding an e-transfer recipient?",
+        HasAddRecipientButtonResponse
     )
 
 ####################
