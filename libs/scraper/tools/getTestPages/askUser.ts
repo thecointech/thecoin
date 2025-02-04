@@ -14,14 +14,16 @@ export interface IAskUser {
 
   forUsername(): Promise<string | undefined>;
   forPassword(): Promise<string | undefined>;
+
+  forETransferRecipient(): Promise<string | undefined>;
 }
 
 export class AskUser implements IAskUser {
 
   private rlp: readline.Interface;
-  private config: BankConfig
+  private config: Partial<BankConfig>
 
-  constructor(config: BankConfig) {
+  constructor(config: Partial<BankConfig> = {}) {
     this.config = config;
     // In NodeJS
     this.rlp = readline.createInterface({
@@ -34,6 +36,9 @@ export class AskUser implements IAskUser {
   }
   async forPassword(): Promise<string|undefined> {
     return this.config.password;
+  }
+  async forETransferRecipient(): Promise<string|undefined> {
+    return this.config.to_recipient;
   }
 
   async forValue(question: string): Promise<string> {

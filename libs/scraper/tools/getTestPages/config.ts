@@ -5,6 +5,7 @@ export type BankConfig = {
   url: string,
   username?: string,
   password?: string,
+  to_recipient?: string,
   refresh?: boolean,
   bad_credentials?: {
     username?: string,
@@ -19,7 +20,7 @@ export function getConfig() {
   }
   const baseFolder = path.join(process.env.PRIVATE_TESTING_PAGES, "unit-tests");
   return {
-    baseFolder: path.join(baseFolder, "test"),
+    baseFolder,
     config: JSON.parse(
       readFileSync(
         path.join(baseFolder, "config.json"),

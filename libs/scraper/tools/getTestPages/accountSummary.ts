@@ -4,10 +4,10 @@ import { IntentWriter } from "./testPageWriter";
 import { log } from "@thecointech/logging";
 import { accountToElementResponse, clickElement, responseToElement } from "./vqaResponse";
 import { ElementData } from "../../src/types";
-import { AccountResponse, Crop, ElementResponse } from "@thecointech/vqa";
+import { AccountResponse, BBox, ElementResponse } from "@thecointech/vqa";
 import { extractFuzzyMatch } from "./extractFuzzyMatch";
 import { ProcessConfig } from "./types";
-import { FoundElement } from "../../src/elements";
+import { FoundElement } from "../../src/types";
 
 export class AccountSummaryWriter extends IntentWriter {
 
@@ -72,7 +72,7 @@ export class AccountSummaryWriter extends IntentWriter {
     return r;
   }
 
-  async saveBalanceElement(account_number: string, crop: Crop) {
+  async saveBalanceElement(account_number: string, crop: BBox) {
     // Don't search the whole page, just the area around the account listing
     const { data: balance } = await GetAccountSummaryApi().accountBalanceElement(account_number, await this.getImage(), crop.top, crop.bottom);
     await this.toElement(balance, "balance", undefined, undefined, {
@@ -80,7 +80,7 @@ export class AccountSummaryWriter extends IntentWriter {
     });
   }
 
-  async saveAccountNavigation(account_number: string, crop: Crop) {
+  async saveAccountNavigation(account_number: string, crop: BBox) {
     const { data: nav } = await GetAccountSummaryApi().accountNavigateElement(account_number, await this.getImage(), crop.top, crop.bottom);
     return await this.toElement(nav, "navigate", "a", undefined, {
       accountNumber: account_number,

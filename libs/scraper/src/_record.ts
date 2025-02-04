@@ -2,7 +2,7 @@ import type { Page } from 'puppeteer';
 import { debounce } from './debounce';
 import { startElementHighlight } from './highlighter';
 import { getTableData } from './table';
-import { closeBrowser, startPuppeteer } from './puppeteer-init/init';
+import { closeBrowser, newPage } from './puppeteer-init/init';
 import { AnyEvent, InputEvent, ValueResult, ValueType } from './types';
 import { getValueParsing } from './valueParsing';
 import { log } from '@thecointech/logging';
@@ -37,6 +37,9 @@ type RecorderOptions = {
   url?: string
   // A callback to report progress
   onProgress?: (progress: number) => void
+
+  onEvent?: (event: AnyEvent) => Promise<void>
+
   // A callback to run when scraping is complete
   onComplete?: (events: AnyEvent[]) => Promise<void>
 
@@ -69,7 +72,7 @@ export class Recorder {
   private page!: Page;
   private onValue?: ValueWaiter;
   private onInput?: DynamicInputWaiter;
-  private static __instance?: Recorder;
+  // private static __instance?: Recorder;
 
   private lastInputEvent: InputEvent | undefined;
   private seenEvents = new Set();
@@ -86,7 +89,7 @@ export class Recorder {
   }
 
   private async initialize(url: string) {
-    const { browser, page } = await startPuppeteer(this.options.headless);
+    const { browser, page } = await newPage(this.options.headless);
     this.page = page;
 
     await page.exposeFunction('__onAnyEvent', this.eventHandler);
@@ -114,8 +117,8 @@ export class Recorder {
         // await setEvents(this.name, this.events);
 
         // Cleanup
-        delete Recorder.__instance;
-        Recorder.__instance = undefined;
+        // delete Recorder.__instance;
+        // Recorder.__instance = undefined;
         resolve(true);
       })
     })
@@ -405,6 +408,11 @@ function onNewDocument() {
         // Get local copies of the data to ensure we don't care
         // about any changes that may be made during the click
         const data = window.getElementData(target);
+        // This should _never_ happen
+        if (!data) {
+          throw new Error("Could not get element data");
+        };
+
         const evt = {
           timestamp: Date.now(),
           id: crypto.randomUUID(),
@@ -466,7 +474,7 @@ function onNewDocument() {
         id: crypto.randomUUID(),
         valueChange: true,
         value: target?.value,
-          ...window.getElementData(target)
+        ...window.getElementData(target)!
       })
     }, opts);
 
@@ -484,7 +492,7 @@ function onNewDocument() {
             id: crypto.randomUUID(),
             hitEnter: true,
             value: (ev.target as HTMLInputElement)?.value,
-            ...window.getElementData(ev.target as HTMLElement)
+            ...window.getElementData(ev.target as HTMLElement)!
           })
         }
         else {
@@ -493,7 +501,7 @@ function onNewDocument() {
             timestamp: Date.now(),
             id: crypto.randomUUID(),
             value: (ev.target as HTMLInputElement)?.value + ev.key,
-              ...window.getElementData(ev.target as HTMLElement)
+            ...window.getElementData(ev.target as HTMLElement)!
           })
         }
       }

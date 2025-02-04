@@ -11,6 +11,7 @@ export class LandingWriter extends IntentWriter {
     const writer = new LandingWriter(config, "Landing");
     // Attempt to close cookie banner that should be present
     if (clean) {
+      using _ = config.eventManager.pause();
       await writer.closeCookieBanner();
     }
     // Navigate to the login page

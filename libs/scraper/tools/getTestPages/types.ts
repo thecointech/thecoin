@@ -1,8 +1,9 @@
 import type { AccountResponse, PageType } from "@thecointech/vqa";
-import { ElementData } from "../../src/types";
-import { IAskUser } from "./askUser";
-import { ITestSerializer } from "./testSerializer";
-import { Recorder } from "../../src/record";
+import type { ElementData } from "../../src/types";
+import type { IAskUser } from "./askUser";
+import type { ITestSerializer } from "./testSerializer";
+import type { Recorder } from "../../src/record";
+import type { EventManager } from "./eventManager";
 export { ElementResponse } from "@thecointech/vqa";
 export { ElementData };
 
@@ -13,7 +14,8 @@ export type AccountSummary = AccountResponse & {
 };
 
 export type ProcessConfig = {
-  recorder: Recorder
+  recorder: Recorder,
   askUser: IAskUser,
-  writer: ITestSerializer
+  writer: ITestSerializer,
+  eventManager: EventManager,
 }

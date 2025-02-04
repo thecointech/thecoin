@@ -9,7 +9,7 @@ const puppeteer = addExtra(puppeteerVanilla);
 const plugins = getPlugins();
 
 let _browser: Browser|undefined;
-export async function startPuppeteer(headless?: boolean) {
+async function getPage(headless?: boolean) {
 
   if (_browser) {
     return { browser: _browser, page: await _browser.newPage() };
@@ -28,7 +28,21 @@ export async function startPuppeteer(headless?: boolean) {
     await plugin.onBrowser(browser);
   }
 
+  _browser = browser;
+
+  _browser.on('disconnected', () => {
+    log.debug(" ** Browser disconnected");
+    _browser = undefined
+  });
+
+  // On boot, return the default (blank) page
   const [page] = await browser.pages();
+  return { browser, page };
+}
+
+export async function newPage(headless?: boolean) {
+
+  const { page, browser } = await getPage(headless);
 
   for (const plugin of plugins) {
     await plugin.onPageCreated(page);
@@ -43,17 +57,11 @@ export async function startPuppeteer(headless?: boolean) {
     height: parseInt(process.env.PUPPETEER_SCREENSHOT_HEIGHT || '1080'),
     deviceScaleFactor: 1,
   });
-  _browser = browser;
 
   // Always inject helper functions
   await registerElementAttrFns(page);
 
-  _browser.on('disconnected', () => {
-    log.debug(" ** Browser disconnected");
-    _browser = undefined
-  });
-
-  return { browser, page };
+  return { page, browser };
 }
 
 export async function closeBrowser() {

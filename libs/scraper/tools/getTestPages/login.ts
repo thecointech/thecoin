@@ -8,7 +8,7 @@ export class LoginWriter extends IntentWriter {
 
   static async process(config: ProcessConfig) {
     log.trace("LoginWriter: begin processing");
-    const page = config.recorder.getPage();
+    const page = config.recorder.page;
 
     const writer = new LoginWriter(config, "Login");
     return await writer.login();

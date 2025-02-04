@@ -1,5 +1,4 @@
 import path from "path"
-// import { rootFolder } from "../../paths"
 import { Browser, ChromeReleaseChannel, computeExecutablePath, computeSystemExecutablePath, detectBrowserPlatform, install, resolveBuildId } from "@puppeteer/browsers"
 import os from "node:os"
 import { existsSync, promises as fs } from "node:fs"

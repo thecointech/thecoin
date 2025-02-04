@@ -116,7 +116,6 @@ async function takeScreenshot(page: Page, page_type: string, bank: Bank) {
 }
 
 for (const [bank, url] of Object.entries(urls) as [Bank, string][]) {
-  // const page = await browser.newPage();
   const recorder = await Recorder.instance('chqBalance', url);
   const page = recorder.getPage();
 

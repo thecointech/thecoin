@@ -16,11 +16,11 @@ export class DummyAskUser implements IAskUser {
       this.password = badValues.password;
     }
   }
-  forValue(question: string): Promise<string> {
+  forValue(_question: string): Promise<string> {
     throw new Error("Method not implemented.");
   }
 
-  selectOption<T extends object>(question: string, options: User2DChoice<T>, z: ChoiceText<T>): Promise<T> {
+  selectOption<T extends object>(_question: string, _options: User2DChoice<T>, _z: ChoiceText<T>): Promise<T> {
     throw new Error("Method not implemented.");
   }
   forUsername(): Promise<string> {
@@ -28,5 +28,8 @@ export class DummyAskUser implements IAskUser {
   }
   forPassword(): Promise<string> {
     return Promise.resolve(this.password);
+  }
+  forETransferRecipient(): Promise<string> {
+    return Promise.resolve("fake_address@thecoin.io");
   }
 }

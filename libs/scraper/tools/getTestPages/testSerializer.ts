@@ -5,8 +5,8 @@ import type { Page } from "puppeteer";
 
 export type TestState = {
   // name: string; // Name of the test
-  intent: string;
-  page: string;
+  intent?: string;
+  page?: string;
 }
 
 export type TestElement = {
@@ -15,11 +15,9 @@ export type TestElement = {
 
 export type OutputFilePath = {
   baseFolder: string;
-  intent: string;
-  page: string;
   source: string;
   filename: string;
-}
+} & TestState
 
 export interface ITestSerializer {
   writeScreenshot(page: Page, state: TestState): Promise<void>;
@@ -91,7 +89,7 @@ export class TestSerializer implements ITestSerializer {
 }
 
 function toPath(output: OutputFilePath) {
-  const outputFolder = path.join(output.baseFolder, output.intent, output.page);
+  const outputFolder = path.join(...[output.baseFolder, output.intent, output.page].filter(x => !!x));
   mkdirSync(outputFolder, { recursive: true });
   // For now, sticking with the old naming scheme
   return path.join(outputFolder, output.filename);

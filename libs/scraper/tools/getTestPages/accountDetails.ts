@@ -14,7 +14,7 @@ export class AccountDetailsWriter extends IntentWriter {
     // First, we have to navigate to the page...
     // Keep this separate, as the IntentWriters assume
     // they start on their initial page.
-    await navigateToAccountDetails(config.recorder.getPage(), navData);
+    await navigateToAccountDetails(config.recorder.page, navData);
 
     const writer = new AccountDetailsWriter(config, "AccountDetails");
     await writer.saveCurrentBalance();

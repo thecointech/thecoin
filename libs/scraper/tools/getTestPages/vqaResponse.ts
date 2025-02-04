@@ -1,7 +1,7 @@
 import type { AccountResponse, ElementResponse, InputElementResponse, MoneyElementResponse } from "@thecointech/vqa";
-import type { ElementDataMin } from "../../src/types";
+import type { ElementDataMin, FoundElement, SearchElement } from "../../src/types";
 import { TimeoutError, type Page } from "puppeteer";
-import { FoundElement, getElementForEvent } from "../../src/elements";
+import { getElementForEvent } from "../../src/elements";
 import pixelmatch from "pixelmatch";
 import { log } from "@thecointech/logging";
 import { sleep } from "@thecointech/async";
@@ -59,7 +59,7 @@ export async function responseToElement(page: Page, e: AnyResponse, htmlType?: s
 
 // 50 * 50 = 2500 which is 0.1% of the viewport.  This is a pretty small area to detect a change in a page
 const MIN_PIXELS_CHANGED = parseInt(process.env.SCRAPER_CLICK_MIN_PIXELS_CHANGED || "2500");
-export async function clickElement(page: Page, element: FoundElement, noNavigate?: boolean, minPixelsChanged?: number) {
+export async function clickElement(page: Page, element: SearchElement, noNavigate?: boolean, minPixelsChanged?: number) {
   if (!minPixelsChanged) {
     minPixelsChanged = MIN_PIXELS_CHANGED;
   }
@@ -72,9 +72,10 @@ export async function clickElement(page: Page, element: FoundElement, noNavigate
     if (didChange) {
       return true;
     }
+    // If nothing changed, fallback to the navigation version
   }
 
-  // If nothing changed, fallback to the navigation version
+
   try {
     await triggerNavigateAndWait(page, () => clickElementDirectly(page, element));
     return true;
@@ -106,7 +107,7 @@ export async function clickElement(page: Page, element: FoundElement, noNavigate
   }
 }
 
-async function clickElementCoords(page: Page, before: Buffer, found: FoundElement, minPixelsChanged: number) {
+async function clickElementCoords(page: Page, before: Uint8Array, found: SearchElement, minPixelsChanged: number) {
 
   // Simulate a user clicking on the element
   const coords = found.data.coords;
@@ -115,7 +116,7 @@ async function clickElementCoords(page: Page, before: Buffer, found: FoundElemen
   return await pageDidChange(page, before, minPixelsChanged);
 }
 
-async function pageDidChange(page: Page, before: Buffer, minPixelsChanged: number) {
+async function pageDidChange(page: Page, before: Uint8Array, minPixelsChanged: number) {
   const after = await page.screenshot();
   const changed = doPixelMatch(before, after);
 
@@ -131,7 +132,7 @@ async function pageDidChange(page: Page, before: Buffer, minPixelsChanged: numbe
   return true;
 }
 
-async function clickElementDirectly(page: Page, found: FoundElement) {
+async function clickElementDirectly(page: Page, found: SearchElement) {
   try {
     await found.element.click();
   }
@@ -223,9 +224,9 @@ async function waitPageStable(page: Page, timeout: number = 10_000) {
   throw new TimeoutError("Timed out waiting for page to be stable");
 }
 
-function doPixelMatch(before: Buffer, after: Buffer) {
-  const img1 = PNG.sync.read(before);
-  const img2 = PNG.sync.read(after);
+function doPixelMatch(before: Uint8Array, after: Uint8Array) {
+  const img1 = PNG.sync.read(Buffer.from(before));
+  const img2 = PNG.sync.read(Buffer.from(after));
   return pixelmatch(img1.data, img2.data, null, img1.width, img1.height);
 }
 

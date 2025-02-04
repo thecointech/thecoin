@@ -1,7 +1,7 @@
 import type currency from 'currency.js';
 import type { DateTime } from 'luxon';
 import type { HistoryRow } from './table';
-import type { Page } from 'puppeteer';
+import type { ElementHandle, Page } from 'puppeteer';
 
 export type { HistoryRow };
 
@@ -53,6 +53,12 @@ export type ElementData = {
   // The frames to dereference on our way to the data
   frame?: string
   tagName: string,
+  // Name is not used in scoring, but is helpful
+  // for grouping radio buttons together for VQA
+  name?: string,
+  // Options are not used in scoring, but are helpful
+  // for determining the intent of an select in VQA
+  options?: string[],
   // If tagName is INPUT, this will be the type
   inputType?: string,
   role: string|null,
@@ -72,6 +78,17 @@ export type ElementData = {
 }
 
 export type ElementDataMin = Partial<ElementData>;
+
+export type SearchElement = {
+  element: ElementHandle<HTMLElement>,
+  data: ElementData
+}
+
+export type FoundElement = SearchElement & {
+  score: number,
+  components: Record<string, number>,
+}
+
 
 export type NavigationEvent = BaseEvent & {
   type: "navigation",
