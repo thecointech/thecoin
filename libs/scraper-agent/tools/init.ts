@@ -1,8 +1,7 @@
 import { existsSync, rmSync } from "fs";
-import { setRootFolder } from "../../src/puppeteer-init/browser";
-import { SimilarityPipeline } from "../../src/similarity";
+import { setRootFolder } from "@thecointech/scraper/puppeteer-init/browser";
+import { SimilarityPipeline } from "@thecointech/scraper/similarity";
 import path from "path";
-import { IntentWriter } from "./testPageWriter";
 
 export async function init(cleanRun?: boolean) {
   const tempDir = "./.temp";

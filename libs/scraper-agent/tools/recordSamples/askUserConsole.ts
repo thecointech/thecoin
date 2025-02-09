@@ -1,24 +1,10 @@
-import { ElementResponse } from "@thecointech/vqa";
 import readline from 'readline/promises';
-import { BankConfig, TestConfig } from "./config";
+import { BankConfig } from "../config";
+import type { ChoiceText, IAskUser, User2DChoice } from "../../src/types";
 
-export type User2DChoice<T> = Record<string, T[]>
-export type ElementOptions = User2DChoice<ElementResponse>;
-export type ChoiceText<T> = keyof {
-  [K in keyof T as T[K] extends string ? K : never]: T[K]
-}
 
-export interface IAskUser {
-  forValue(question: string): Promise<string>;
-  selectOption<T extends object>(question: string, options: User2DChoice<T>, z: ChoiceText<T>): Promise<T>;
-
-  forUsername(): Promise<string | undefined>;
-  forPassword(): Promise<string | undefined>;
-
-  forETransferRecipient(): Promise<string | undefined>;
-}
-
-export class AskUser implements IAskUser {
+// Simple console input for data the user needs to provide
+export class AskUserConsole implements IAskUser {
 
   private rlp: readline.Interface;
   private config: Partial<BankConfig>
@@ -31,14 +17,14 @@ export class AskUser implements IAskUser {
       output: process.stdout
     });
   }
-  async forUsername(): Promise<string|undefined> {
-    return this.config.username;
+  async forUsername(): Promise<string> {
+    return this.config.username!;
   }
-  async forPassword(): Promise<string|undefined> {
-    return this.config.password;
+  async forPassword(): Promise<string> {
+    return this.config.password!;
   }
-  async forETransferRecipient(): Promise<string|undefined> {
-    return this.config.to_recipient;
+  async forETransferRecipient(): Promise<string> {
+    return this.config.to_recipient!;
   }
 
   async forValue(question: string): Promise<string> {

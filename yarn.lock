@@ -10827,6 +10827,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@thecointech/scraper-agent@workspace:libs/scraper-agent":
+  version: 0.0.0-use.local
+  resolution: "@thecointech/scraper-agent@workspace:libs/scraper-agent"
+  dependencies:
+    "@thecointech/apis": "npm:^0.2.135"
+    "@thecointech/jestutils": "npm:^0.2.135"
+    "@thecointech/scraper": "npm:^0.2.135"
+  languageName: unknown
+  linkType: soft
+
 "@thecointech/scraper@npm:^0.2.135, @thecointech/scraper@workspace:libs/scraper":
   version: 0.0.0-use.local
   resolution: "@thecointech/scraper@workspace:libs/scraper"

@@ -1,4 +1,3 @@
-import { distance } from 'fastest-levenshtein';
 
 // Modified Levenshtein that doesn't penalize insertions in the middle of the string
 export function modifiedLevenshtein(source: string, target: string): number {

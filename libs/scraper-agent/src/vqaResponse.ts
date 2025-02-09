@@ -1,12 +1,13 @@
 import type { AccountResponse, ElementResponse, InputElementResponse, MoneyElementResponse } from "@thecointech/vqa";
-import type { ElementDataMin, FoundElement, SearchElement } from "../../src/types";
+import type { ElementDataMin, FoundElement, SearchElement } from "@thecointech/scraper/types";
 import { TimeoutError, type Page } from "puppeteer";
-import { getElementForEvent } from "../../src/elements";
+import { getElementForEvent } from "@thecointech/scraper/elements";
 import pixelmatch from "pixelmatch";
 import { log } from "@thecointech/logging";
 import { sleep } from "@thecointech/async";
+import { isPresent } from "@thecointech/utilities/ArrayExtns";
 import { PNG } from "pngjs";
-import { _getPageIntent } from "./testPageWriter";
+import { _getPageIntent } from "./getPageIntent";
 
 export type AnyResponse = ElementResponse | InputElementResponse | MoneyElementResponse;
 
@@ -24,7 +25,7 @@ export function responseToElementData(response: AnyResponse, htmlType?: string, 
     // nodeValue: text,
     label: text,
     // Include original text in neighbour text, LLM isn't known for being precise
-    siblingText: [getNeighbourText(response), text].filter(t => !!t),
+    siblingText: [getNeighbourText(response), text].filter(isPresent),
     coords: {
       top: response.position_y! - height / 2,
       left: response.position_x! - width / 2,
@@ -50,7 +51,7 @@ export async function responseToElement(page: Page, e: AnyResponse, htmlType?: s
   // Try to find and click the close button
   const elementData = responseToElementData(e, htmlType, inputType);
 
-  const maxHeight = page.viewport().height + 100;
+  const maxHeight = page.viewport()!.height + 100;
   // We have a lower minScore because the only data we have is text + position + neighbours
   // Which has a maximum value of 40 (text) + 20 (position) + 20 (neighbours)
   // So basically, if there is even one things matches, then it's good enough,
@@ -85,7 +86,7 @@ export async function clickElement(page: Page, element: SearchElement, noNavigat
       // If there was no navigation, let's check to see if the page has a significant update
       const viewport = page.viewport();
       // If 1% of the viewport have changed, we'll consider it a successful update
-      const minSigPixels = 0.01 * viewport.width * viewport.height;
+      const minSigPixels = 0.01 * viewport!.width * viewport!.height;
       if (await pageDidChange(page, before, minSigPixels)) {
         await waitPageStable(page);
         return true;
@@ -224,9 +225,13 @@ async function waitPageStable(page: Page, timeout: number = 10_000) {
   throw new TimeoutError("Timed out waiting for page to be stable");
 }
 
-function doPixelMatch(before: Uint8Array, after: Uint8Array) {
+export function doPixelMatch(before: Uint8Array|ArrayBuffer, after: Uint8Array|ArrayBuffer) {
   const img1 = PNG.sync.read(Buffer.from(before));
   const img2 = PNG.sync.read(Buffer.from(after));
+  // With different size images, we cannot compute similarity so just say they are different
+  if (img1.width != img2.width || img1.height != img2.height) {
+    return img1.width * img1.height;
+  }
   return pixelmatch(img1.data, img2.data, null, img1.width, img1.height);
 }
 
@@ -235,7 +240,7 @@ function getContent(r: AnyResponse) {
     return r.content;
   }
   else if ("placeholder_text" in r) {
-    return r.placeholder_text;
+    return r.placeholder_text ?? "";
   }
   return "";
 }

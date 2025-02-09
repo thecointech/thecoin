@@ -18,9 +18,8 @@
   },
   "scripts": {
     "build": "run -T tsc -b",
-    "clean": "rimraf ./build && rimraf ./coverage",
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage",
     "test": "run :jest",
-    "getTestPages": "yarn run -T cross-env CONFIG_NAME=prod URL_SEQ_LOGGING=false TC_LOG_FOLDER=./logs run-env tools/getTestPages/main.ts",
     "testFailure": "yarn run -T cross-env CONFIG_NAME=prod URL_SEQ_LOGGING=false TC_LOG_FOLDER=false run-env tools/testFailure/main.ts",
     "recordSamples": "yarn run -T cross-env CONFIG_NAME=prod URL_SEQ_LOGGING=false TC_LOG_FOLDER=false run-env tools/recordSamples/recordSamples.ts"
   },
@@ -39,12 +38,16 @@
   "exports": {
     ".": "./build/index.js",
     "./puppeteer": "./build/puppeteer-init/index.js",
+    "./record": "./build/record/index.js",
     "./*": "./build/*.js"
   },
   "typesVersions": {
     "*": {
       "puppeteer": [
         "build/puppeteer-init/index.d.ts"
+      ],
+      "record": [
+        "build/record/index.d.ts"
       ],
       "*": [
         "build/*.d.ts"

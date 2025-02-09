@@ -1,11 +1,11 @@
-import { Recorder } from "../../src/record";
-import { AskUser } from "../getTestPages/askUser";
-import { init } from "../getTestPages/init";
-import { getConfig } from "../getTestPages/config";
-import { TestSerializer, TestState } from "../getTestPages/testSerializer";
-import { _getPageIntent } from "../getTestPages/testPageWriter";
+import { Recorder, Registry } from "@thecointech/scraper/record";
+import { AskUser } from "../../src/askUser";
+import { init } from "../../src/init";
+import { getConfig } from "../../src/config";
+import { TestSerializer, TestState } from "../../src/testSerializer";
+import { _getPageIntent } from "../../src/testPageWriter.js";
 import { getCoordsWithMargin, mapInputToParent } from "./highlighter";
-import { getAllElements } from "../../src/elements";
+import { getAllElements } from "@thecointech/scraper/elements";
 import { mkdirSync } from "fs";
 import path from "path";
 
@@ -21,16 +21,12 @@ const testState: TestState = {
   page: target
 }
 
-const askUser = new AskUser();
-const recorder = await Recorder.instance({
-  name: "autorecord",
-  url: "about:blank",
-  headless: false
-});
+using askUser = new AskUser();
+// await using recorder = await Registry.create({ name: "testing" });
 let numScreenshots = 1;
 const writer = new TestSerializer(numScreenshots.toString(), recordFolder);
 
-const page = recorder.getPage();
+const page = recorder.page;
 const newSC = async (hint: string) => {
   writer.source = (numScreenshots++).toString() + (hint ? `-${hint}` : "");
   await writer.writeScreenshot(page, testState, true);
@@ -88,6 +84,4 @@ while (recordMore) {
       break;
   }
 }
-console.log("Releasing Thingies");
-Recorder.release();
-askUser[Symbol.dispose]();
+console.log("All Done");

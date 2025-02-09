@@ -1,12 +1,12 @@
 import { IsManualRun, describe } from "@thecointech/jestutils";
 import { Dumper } from "./dumper";
-import { startPuppeteer, closeBrowser } from "./puppeteer-init/init";
+import { newPage, closeBrowser } from "./puppeteer-init/init";
 import path from "path";
 
 
 describe('dumper', () => {
   it("Dumps page to folder", async () => {
-    const { page } = await startPuppeteer(false);
+    const { page } = await newPage(false);
     const dumper = new Dumper(path.join('..', 'temp', "wikipedia"), "test");
     await page.goto("https://www.wikipedia.org/");
 
