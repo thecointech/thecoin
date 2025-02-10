@@ -1,4 +1,4 @@
-import { GetTwofaApi } from "@thecointech/apis/vqa";
+import { GetIntentApi, GetTwofaApi } from "@thecointech/apis/vqa";
 import { log } from "@thecointech/logging";
 import { clickElement } from "../vqaResponse";
 import type { ElementOptions } from "../types";
@@ -51,20 +51,40 @@ async function selectDestination(page: PageHandler, input: IAskUser) {
 }
 
 async function enterCode(page: PageHandler, input: IAskUser) {
+
   const api = GetTwofaApi();
-  const code = await askUserForCode(input);
-  const didEnter = await page.tryEnterText(api, "getAuthInput", {
-    text: code,
-    name: "input",
-    htmlType: "input",
-    inputType: "text",
-  });
-  if (!didEnter) {
-    throw new Error("Failed to enter code");
+  let code = await input.forValue("Enter the 2FA code: ");
+
+  for (let i = 0; i < 5; i++) {
+
+    const didEnter = await page.tryEnterText(api, "getAuthInput", {
+      text: code,
+      name: "input",
+      htmlType: "input",
+      inputType: "text",
+    });
+    if (!didEnter) {
+      throw new Error("Failed to enter code");
+    }
+    if (i == 0) {
+      // We assume that the remember checkbox remembers
+      // it's state on subsequent runs, so don't un-check it
+      await clickRemember(page);
+    }
+    await clickSubmit(page);
+
+    const pageIntent = await page.getPageIntent();
+    if (pageIntent != "Login") {
+      // Successfully logged in
+      return;
+    }
+    // Is there an error message?
+    const { data: error } = await GetIntentApi().pageError(await page.getImage());
+    if (error.error_message_detected && error.error_message) {
+      code = await input.forValue(error.error_message);
+    }
   }
-  await clickRemember(page);
-  await clickSubmit(page);
-  // await this.waitForPageLoaded();
+  throw new Error("Failed to enter 2FA code");
 }
 
 async function approveInApp(page: PageHandler, input: IAskUser) {
@@ -123,10 +143,6 @@ async function clickSubmit(page: PageHandler) {
   }
 }
 
-async function askUserForCode(input: IAskUser) {
-  // TODO: Query the page for the actual 2FA message
-  return input.forValue("Enter the 2FA code: ");
-}
 
 async function askUserForDestination(input: IAskUser, destinations: ElementOptions) {
   // TODO: Query the page for the actual 2FA message

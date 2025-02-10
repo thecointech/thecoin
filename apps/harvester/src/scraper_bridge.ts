@@ -1,10 +1,8 @@
 import { IpcMainInvokeEvent, ipcMain } from 'electron';
-import { Recorder } from '@thecointech/scraper/record';
 import { ValueType } from '@thecointech/scraper/types';
-import { warmup } from '@thecointech/scraper/warmup';
 import { actions, ScraperBridgeApi } from './scraper_actions';
 import { toBridge } from './scraper_bridge_conversions';
-import { getHarvestConfig, getProcessConfig, getWalletAddress, hasCreditDetails, setCreditDetails, setEvents, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
+import { getHarvestConfig, getProcessConfig, getWalletAddress, hasCreditDetails, setCreditDetails, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
 import { HarvestConfig, Mnemonic } from './types';
 import { CreditDetails } from './Harvester/types';
 import { spawn } from 'child_process';
@@ -37,27 +35,35 @@ const api: Omit<ScraperBridgeApi, "testAction"|"installBrowser"|"onBrowserDownlo
     return !!p;
   }),
 
-  warmup: (url) => guard(() => warmup(url)),
+  warmup: (url) => guard(async () => true /*warmup(url)*/),
+
+  autoProcess: (actionName, url) => guard(async () => {
+    return true;
+  }),
+
   start: (actionName, url, dynamicInputs) => guard(async () => {
-    const instance = await Recorder.instance({
-      name: actionName,
-      url,
-      dynamicInputs,
-      onComplete: async (events) => {
-        await setEvents(actionName, events);
-      }
-    });
-    return !!instance;
+    // const instance = await Recorder.instance({
+    //   name: actionName,
+    //   url,
+    //   dynamicInputs,
+    //   onComplete: async (events) => {
+    //     await setEvents(actionName, events);
+    //   }
+    // });
+    // return !!instance;
+    return false;
   }),
   learnValue: (valueName, valueType) => guard(async () => {
-    const instance = await Recorder.instance();
-    return instance.setRequiredValue(valueName, valueType);
+    // const instance = await Recorder.instance();
+    // return instance.setRequiredValue(valueName, valueType);
+    return { parsing: {type: "date", "format": ""}, text: ""};
   }),
   setDynamicInput: (name, value) => guard(async () => {
-    const instance = await Recorder.instance();
-    return instance.setDynamicInput(name, value);
+    // const instance = await Recorder.instance();
+    // return instance.setDynamicInput(name, value);
+    return "TODO";
   }),
-  finishAction: () => guard(() => Recorder.release()),
+  finishAction: () => guard(async () => true /*Recorder.release()*/ ),
 
   // We can only pass POD back through the renderer, use toBridge to convert
   // testAction: (actionName, dynamicValues) => guard(async () => {

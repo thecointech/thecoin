@@ -15,11 +15,14 @@ export type ScraperBridgeApi = {
   hasCompatibleBrowser(): Promise<Result<boolean>>;
   onBrowserDownloadProgress: (value: any) => void;
 
+  // Run the automatic configurator for the given action on the appropriate url
+  autoProcess: (actionName: ActionTypes, url: string) => Promise<Result<boolean>>;
+
   // Declare a `readFile` function that will return a promise. This promise
   // will contain the data of the file read from the main process.
-  warmup: (url: string) => Promise<Result<boolean>>,
+  warmup: (url: string) => Promise<Result<boolean>>;
 
-  start: (actionName: ActionTypes, url: string, dynamicInputs?: string[]) => Promise<Result<boolean>>,
+  start: (actionName: ActionTypes, url: string, dynamicInputs?: string[]) => Promise<Result<boolean>>;
 
   learnValue: (valueName: string, valueType: ValueType) => Promise<Result<ValueResult>>,
   setDynamicInput: (name: string, value: string) => Promise<Result<string>>,

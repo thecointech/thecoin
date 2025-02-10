@@ -1,4 +1,4 @@
-import { IAgentLogger, IAskUser } from './types';
+import { IAgentLogger, IAskUser, SectionName } from './types';
 import { log } from '@thecointech/logging';
 import { PageHandler } from './pageHandler';
 
@@ -8,7 +8,7 @@ import { sections } from './processors/types';
 
 export class Agent {
 
-  static async process(name: string, bankUrl: string, input: IAskUser, logger: IAgentLogger, onProgress?: ProgressCallback) {
+  static async process(name: string, bankUrl: string, input: IAskUser, logger: IAgentLogger, onProgress?: ProgressCallback, sectionsToSkip: SectionName[] = []) {
 
     log.info(`Processing ${name}`);
 
@@ -50,9 +50,11 @@ export class Agent {
     const accounts = await processSection(AccountsSummary, reporter, page);
     for (const account of accounts) {
       if (account.account.account_type == "Credit") {
+        if (sectionsToSkip.includes("CreditAccountDetails")) continue;
         await processSection(CreditAccountDetails, reporter, page, account.nav.data);
       }
       else if (account.account.account_type == "Chequing") {
+        if (sectionsToSkip.includes("SendETransfer")) continue;
         await processSection(SendETransfer, reporter, page, input, account.account.account_number);
       }
     }
@@ -61,8 +63,6 @@ export class Agent {
     return page.allEvents;
   }
 }
-
-// type Processor<Args extends any[] = any[], R = any> = (page: PageHandler, ...args: Args) => Promise<R>;
 
 async function processSection<Args extends any[], R>(
   processor: NamedProcessor<Args, R>,
@@ -74,7 +74,7 @@ async function processSection<Args extends any[], R>(
   log.debug(`Processing section: ${processor.processorName}`);
 
   // Notify we are starting a new section
-  reporter.currentSection = sections.indexOf(processor.processorName);
+  reporter.currentSection = sections.indexOf(processor.processorName) + 1;
   reporter.sectionReporter(0);
 
   await using section = processor.isolated
