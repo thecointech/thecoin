@@ -1,24 +1,34 @@
-import { GetLoginApi } from "@thecointech/apis/vqa";
 import { log } from "@thecointech/logging";
 import { PageHandler } from "../pageHandler";
 import { IAskUser } from "../types";
+import { GetLoginApi } from "@thecointech/apis/vqa";
+import { processorFn, SectionProgressCallback } from "./types";
 
-export async function Login(page: PageHandler, input: IAskUser) {
-  log.trace("LoginWriter: begin processing");
-  return await login(page, input);
-}
+export const Login = processorFn("Login", async (page: PageHandler, onProgress: SectionProgressCallback, input: IAskUser)  => {
+  return await login(page, onProgress, input);
+})
 
-async function login(page: PageHandler, input: IAskUser) {
+async function login(page: PageHandler, onProgress: SectionProgressCallback, input: IAskUser) {
   // We have to detect the password before entering
   // the username.  The extra data of the username
   // entered into the username field can confuse the vLLM
   const api = GetLoginApi();
+  onProgress(10);
+
   const { data: hasPassword } = await api.detectPasswordExists(await page.getImage());
+  onProgress(25);
 
   await enterUsername(page, input);
+  onProgress(50);
+
   await enterPassword(page, input, hasPassword.password_input_detected);
+  onProgress(75);
+
   await clickLogin(page);
-  return await loginOutcome(page);
+  const outcome = await loginOutcome(page);
+  onProgress(100);
+
+  return outcome;
 }
 
 async function enterUsername(page: PageHandler, input: IAskUser) {

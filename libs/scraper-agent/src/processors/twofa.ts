@@ -4,16 +4,17 @@ import { clickElement } from "../vqaResponse";
 import type { ElementOptions } from "../types";
 import type { PageHandler } from "../pageHandler";
 import type { IAskUser } from "./types";
+import { processorFn, SectionProgressCallback } from "./types";
 
-export async function TwoFA(page: PageHandler, input: IAskUser): Promise<void> {
-  log.trace("TwoFAWriter: begin processing");
+export const TwoFA = processorFn("TwoFA", async (page: PageHandler, onProgress: SectionProgressCallback, input: IAskUser) => {
   // There should always be a username here
-  await complete2FA(page, input);
-}
+  await complete2FA(page, onProgress, input);
+})
 
-async function complete2FA(page: PageHandler, input: IAskUser) {
+async function complete2FA(page: PageHandler, onProgress: SectionProgressCallback, input: IAskUser) {
   const api = GetTwofaApi();
   const { data: action } = await api.detectActionRequired(await page.getImage());
+  onProgress(50);
   switch (action.action) {
     case "SelectDestination":
       return await selectDestination(page, input);

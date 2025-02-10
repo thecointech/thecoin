@@ -4,18 +4,23 @@ import { PageHandler } from "../pageHandler";
 import { ElementData } from "../types";
 import { getElementForEvent } from "@thecointech/scraper/elements";
 import { clickElement } from "../vqaResponse";
+import { processorFn, SectionProgressCallback } from "./types";
 
-export async function CreditAccountDetails(page: PageHandler, navData: ElementData) {
+export const CreditAccountDetails = processorFn("CreditAccountDetails", async (page: PageHandler, onProgress: SectionProgressCallback, navData: ElementData) => {
   log.trace("AccountDetailsWriter: begin processing");
 
   // First, we have to navigate to the page...
   // they start on their initial page.
   await navigateToAccountDetails(page, navData);
+  onProgress(25);
   await saveCurrentBalance(page);
+  onProgress(50);
   await saveDueDate(page);
+  onProgress(75);
   await saveDueAmount(page);
+  onProgress(100);
   await savePending(page);
-}
+}, true);
 
 async function navigateToAccountDetails(page: PageHandler, navData: ElementData) {
   // Refresh the element, it's possible the page has navigated since it was found

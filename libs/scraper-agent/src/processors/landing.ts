@@ -1,13 +1,13 @@
 import { GetLandingApi } from "@thecointech/apis/vqa";
 import { log } from "@thecointech/logging";
 import { PageHandler } from "../pageHandler";
+import { processorFn, SectionProgressCallback } from "./types";
 
-export async function Landing(page: PageHandler): Promise<void> {
-  log.trace("LandingWriter: begin processing");
-  await navigateToLogin(page);
-}
+export const Landing = processorFn("Landing", async (page: PageHandler, progress: SectionProgressCallback) => {
+  await navigateToLogin(page, progress);
+})
 
-async function navigateToLogin(page: PageHandler) {
+async function navigateToLogin(page: PageHandler, progress: SectionProgressCallback) {
   // Handle pages that have login elements on the front page
   const api = GetLandingApi();
   log.trace(`LandingWriter: Navigating to login`);
@@ -18,11 +18,11 @@ async function navigateToLogin(page: PageHandler) {
   if (!didNavigate) {
     throw new Error("Failed to navigate to login");
   }
-  log.trace(`LandingWriter: Waiting for page to load`);
-  // await this.waitForPageLoaded();
+  progress(33);
 
   // Are we on a login page or did we just open a menu?
   let intent = await page.getPageIntent();
+  progress(50);
   if (intent == "MenuSelect") {
     // Now, if we are still on the landing page, it may mean that there
     // is a menu open.  Try and find the login link (again) and click it
@@ -31,6 +31,7 @@ async function navigateToLogin(page: PageHandler) {
       name: "login",
       htmlType: "a"
     });
+    progress(66);
     // It's find if this doesn't work, let's continue and hope for the best
     // await this.waitForPageLoaded();
 

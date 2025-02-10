@@ -1,13 +1,17 @@
 import type { AccountResponse, ElementResponse } from "@thecointech/vqa";
-import type { ElementData } from "@thecointech/scraper/types";
+import type { AnyEvent, ElementData } from "@thecointech/scraper/types";
 import type { Page } from 'puppeteer'
 import type { Recorder } from "@thecointech/scraper/record";
 import type { EventManager } from "./eventManager";
+import { SectionType } from "./processors/types";
 export type { ElementResponse } from "@thecointech/vqa";
 export type { ElementData };
-import type { SectionType } from "./processors";
 
 export type SectionName = SectionType | "Initial";
+export type EventSection = {
+  section: SectionName;
+  events: (AnyEvent|EventSection)[];
+}
 
 export type User2DChoice<T> = Record<string, T[]>;
 export type ElementOptions = User2DChoice<ElementResponse>;

@@ -7,12 +7,12 @@ import { FoundElement, ValueEvent, ValueType } from "@thecointech/scraper/types"
 import { Recorder, Registry } from "@thecointech/scraper/record";
 import { getValueParsing } from "@thecointech/scraper/valueParsing";
 import { EventManager, IEventSectionManager } from "./eventManager";
-import { SectionType } from "./processors";
 import { _getImage } from "./getImage";
 import { _getPageIntent } from "./getPageIntent";
 import { ElementResponse } from "@thecointech/vqa";
 import { IAgentLogger } from "./types";
 import crypto from "node:crypto";
+import { SectionType } from "./processors/types";
 
 type ApiFn = (image: File) => Promise<AxiosResponse<AnyResponse>>
 
@@ -82,10 +82,6 @@ export class PageHandler {
     }
   }
 
-  // pushSection(type: SectionType) {
-  //   this.eventManager.pushSection(type);
-  // }
-
   pushSection(subName: SectionType) {
     return this.eventManager.pushSection(subName);
   }
@@ -100,16 +96,9 @@ export class PageHandler {
     rs.push(await this.recorder.clone(subName));
     let events: IEventSectionManager|null = this.eventManager.pushSection(subName);
     return {
-      // By default, we cancel this section,
-      // so requires explicit confirmation
-      commit: () => {
-        // Dispose early to avoid default cancellation
-        events?.[Symbol.dispose]()
-        events = null;
-      },
+      cancel: () => events?.cancel(),
       async [Symbol.asyncDispose]() {
-        events?.cancel()
-        events?.[Symbol.dispose]()
+        await events?.[Symbol.asyncDispose]()
         await rs.pop()![Symbol.asyncDispose]();
       }
     }

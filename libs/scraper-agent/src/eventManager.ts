@@ -1,17 +1,16 @@
 import { log } from "@thecointech/logging";
 import type { AnyEvent } from "@thecointech/scraper/types";
 import type { Page } from "puppeteer";
-import type { SectionName } from "./types";
+import type { EventSection, SectionName } from "./types";
 
-export type EventSection = {
-  section: SectionName;
-  events: (AnyEvent|EventSection)[];
-}
-
-export interface IEventSectionManager {
+/**
+ * A manager for events that occur during a scrape.
+ * This class is responsible for keeping track of the current section and events.
+ * It also provides methods for pushing new events and sections.
+ */
+export interface IEventSectionManager extends AsyncDisposable {
   section: EventSection;
   cancel(): void;
-  [Symbol.dispose](): void;
 }
 
 export class EventManager {
@@ -21,10 +20,6 @@ export class EventManager {
   get currentSection() { return this.sectionStack.at(-1)?.section ?? this.allEvents; }
   get currentEvents() { return this.currentSection.events; }
 
-  // tempIntent: IntentEvents[] = [];
-  // get currentIntent() { return this.tempIntent.at(-1) ?? this.allIntents.at(-1)!; }
-  // get currentEvents() { return this.currentIntent.events; }
-
   pushEvent(event: AnyEvent) {
     this.currentEvents?.push(event);
   }
@@ -33,21 +28,6 @@ export class EventManager {
     const mgr = new EventManager.EventSectionMgr(this, section);
     return mgr;
   }
-
-  // pushPotentialIntent(intent: EventIntent) {
-  //   const temp = { intent, events: [] };
-  //   this.tempIntent.push(temp);
-  //   return temp;
-  // }
-
-  // confirmIntent(intent: IntentEvents) {
-  //   this.allIntents.push(intent);
-  //   this.clearTempIntent(intent);
-  // }
-
-  // clearTempIntent(intent: IntentEvents) {
-  //   this.tempIntent = this.tempIntent.filter(s => s != intent);
-  // }
 
   onEvent = async (event: AnyEvent, _page: Page, name: string, step: number) => {
     if (!this.currentEvents) throw new Error("No events list set!");
@@ -99,11 +79,11 @@ export class EventManager {
       this._parent.events.push(this.section);
       this._mgr.sectionStack.push(this);
     }
+    async [Symbol.asyncDispose]() {
+      this._mgr.sectionStack.pop();
+    }
     cancel() {
       this._parent.events.splice(this._parent.events.indexOf(this.section), 1);
-    }
-    [Symbol.dispose]() {
-      this._mgr.sectionStack.pop();
     }
   }
 }

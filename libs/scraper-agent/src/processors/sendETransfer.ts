@@ -12,6 +12,7 @@ import levenshtein from 'fastest-levenshtein';
 import { getCoordsWithMargin, mapInputToParent } from "../elementUtils";
 import { PageHandler } from "../pageHandler";
 import { IAskUser } from "../types";
+import { processorFn, SectionProgressCallback } from "./types";
 
 
 class CannotFindLinkError extends Error {
@@ -26,11 +27,35 @@ export class NotAnETransferPageError extends Error {
   }
 }
 
-export async function SendETransfer(page: PageHandler, input: IAskUser, accountNumber: string, attemptedLinks: Set<string>) {
-  log.trace("SendETransferWriter: begin processing");
-  await navigateToSendETransferPage(page, attemptedLinks);
-  await sendETransfer(page, input, accountNumber);
-}
+export const SendETransfer = processorFn("SendETransfer", async (page: PageHandler, progress: SectionProgressCallback, input: IAskUser, accountNumber: string) => {
+  const attemptedLinks = new Set<string>();
+  for (let i = 0; i < 5; i++) {
+    await using section = await page.pushIsolatedSection("SendETransfer");
+    try {
+      await navigateToSendETransferPage(page, attemptedLinks);
+      progress(10);
+      await sendETransfer(page, progress, input, accountNumber);
+      return true;
+    }
+    catch (e) {
+      section.cancel();
+      log.error(e);
+
+      // If we couldn't find the link, the whole thing is busted
+      // if (e instanceof CannotFindLinkError) {
+      //   throw e;
+      // }
+      if (e instanceof NotAnETransferPageError) {
+        // This could mean the original link was bad
+        // Otherwise, we go back to the start and try again
+        continue;
+      }
+      // Dunno, but probably best to give up
+      throw e;
+    }
+  }
+  return false;
+});
 
 async function navigateToSendETransferPage(page: PageHandler, attemptedLinks: Set<string>) {
   const allLinks = await getAllElements(page.page, Number.MAX_SAFE_INTEGER, 'a');
@@ -87,14 +112,14 @@ type InputTracker = {
   step: number
 }
 
-async function sendETransfer(page: PageHandler, input: IAskUser, accountNumber: string) {
+async function sendETransfer(page: PageHandler, progress: SectionProgressCallback, input: IAskUser, accountNumber: string) {
 
   log.trace("SendETransferWriter: sendETransfer");
   const api = GetETransferApi();
   // We don't know how many pages of steps there are, so we iterate until there is no more 'next' button
-  let step = 1;
+  // let step = 1;
 
-  const tracker: InputTracker = { step };
+  const tracker: InputTracker = { step: 1 };
   while (true) {
     const hasFilledAnyInput = await fillETransferDetails(page, input, tracker, accountNumber);
     const anyInputFilled = tracker.amount || tracker.fromAccount || tracker.toRecipient;
@@ -103,11 +128,14 @@ async function sendETransfer(page: PageHandler, input: IAskUser, accountNumber: 
     }
 
     // Navigate to the next page
-    const navigated = await gotoNextPage(page, step);
+    const navigated = await gotoNextPage(page, tracker.step);
     if (!navigated) {
       // await this.updatePageName(`form-error`);
       throw new NotAnETransferPageError("Failed to go to next page");
     }
+
+    // We don't know how long to go, so just increment something.  We can assume it'll be less than 10
+    progress(10 + (++tracker.step) * 10);
 
     // Check to see if there are any errors on the page
     const screenshot = await page.getImage(true);
@@ -120,19 +148,12 @@ async function sendETransfer(page: PageHandler, input: IAskUser, accountNumber: 
       //throw new NotAnETransferPageError(hasError.error_message);
     }
 
-    // So far, so successful, let's keep going...
-    // await this.updatePageName(`form-${++step}`);
-
     // We should/may have navigated, get details about the new page.
     const image = await page.getImage(true);
     const title = await page.page.title();
     const { data: currentStage } = await GetETransferApi().detectEtransferStage(title, image);
-    log.trace(`Sending step: ${step}, Current stage: ${currentStage.stage}`);
+    log.trace(`Sending step: ${tracker.step}, Current stage: ${currentStage.stage}`);
 
-    // const stepTrace = {
-    //   title,
-    //   stage: currentStage.stage
-    // }
     let confirmationElement;
 
     switch (currentStage.stage) {
@@ -151,15 +172,14 @@ async function sendETransfer(page: PageHandler, input: IAskUser, accountNumber: 
         const { data: confirmationCode } = await api.detectConfirmationCode(image);
         log.trace(`Confirmation code: ${confirmationCode.content}`);
         // Lets try and find this in the webpage
-        const found = page.pushValueEvent(confirmationCode, "confirmationCode", "text");
+        const found = await page.pushValueEvent(confirmationCode, "confirmationCode", "text");
         if (!found) {
           log.error("Could not find confirmation code in page");
         }
         confirmationElement = found;
+        progress(100);
         break;
     }
-
-    // this.writeJson(stepTrace, `step-${step}`);
 
     // If we are complete and have a confirmation code, we are done
     if (confirmationElement) {

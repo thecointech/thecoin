@@ -1,7 +1,7 @@
 
 import { log } from "@thecointech/logging";
 import { getConfig } from "../config.js";
-import { AutoScripting } from '../../src/process.js'
+import { Agent } from '../../src/agent.js'
 import { init } from "../init.js";
 import { AskUserConsole } from './askUserConsole.js'
 import { TestSerializer } from './testSerializer.js'
@@ -29,7 +29,9 @@ for (const [name, bankConfig] of Object.entries(config)) {
   const logger = new TestSerializer({baseFolder: recordFolder, target: name});
 
   try {
-    const events = await AutoScripting.process(name, bankConfig.url, askUser, logger);
+    const events = await Agent.process(name, bankConfig.url, askUser, logger, (progress) => {
+      console.log(`Step ${progress.section} of ${progress.totalSections}: ${progress.sectionPercent}`);
+    });
     successful.push(name);
 
     logger.logEvents(events);
