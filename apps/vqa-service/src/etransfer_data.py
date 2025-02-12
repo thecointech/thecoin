@@ -126,6 +126,15 @@ def query_to_recipient(recipient: str) -> ElementResponse:
         ElementResponse
     )
 
+class SimilarityResponse(BaseModel):
+    most_similar: str = Field(..., description="the option most similar to the target")
+    reasoning: str = Field(..., description="your reasoning")
+
+def query_most_similar(target: str, options: list[str]) -> SimilarityResponse:
+    return (
+        f"From this list of options: {json.dumps(options)}, which option is the most similar to this target '{target}'?",
+        SimilarityResponse
+    )
 
 class ButtonResponse(ElementResponse):
     content: str = Field(..., description="button text")

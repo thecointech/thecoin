@@ -1,16 +1,10 @@
-import enum
 import json
-
-from pydantic import BaseModel, Field
 from shapely import Point
 from TestBase import TestBase
-from case_insensitive_enum import CaseInsensitiveEnum
-from data_elements import ElementResponse
 from geo_math import BBox, get_distance
 from intent_routes import page_error
-from run_endpoint_query import run_endpoint_query
 from testdata import get_private_folder, load_image
-from etransfer_routes import best_etransfer_link, detect_etransfer_form, detect_etransfer_stage, detect_next_button, detect_to_recipient
+from etransfer_routes import best_etransfer_link, detect_etransfer_form, detect_etransfer_stage, detect_next_button, detect_to_recipient, detect_most_similar_option
 
 # General flow
 # Find ETransfer link
@@ -162,6 +156,11 @@ class TestETransfer(TestBase):
                 print(f"Detected error with key {key}: {detected_error.error_message_detected}, message: {detected_error.error_message}")
                 gold_error = "error" in key
                 self.assertEqual(detected_error.error_message_detected, gold_error)
+
+
+    async def test_similarity(self):
+        similarity = await detect_most_similar_option("Chequing Account: 1234567", ["Select an account", "Your Basic Chequing Account 123**** - $89.90"])
+        self.assertEqual(similarity.most_similar, "Your Basic Chequing Account 123**** - $89.90")
 
             
         

@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from data_elements import ElementResponse
 from geo_math import BBox
 from input_detection import deduplicate_unique, detect_input_types
-from etransfer_data import ButtonResponse, ETransferFormPresentResponse, ETransferLinkResponse, ConfirmationCodeResponse, ETransferStageResponse, InputType, get_find_etransfer_link_prompt, query_confirmation_code, query_etransfer_stage, query_to_recipient, query_next_button_exists, query_next_button, query_add_recipient_present
+from etransfer_data import ButtonResponse, ETransferFormPresentResponse, ETransferLinkResponse, ConfirmationCodeResponse, ETransferStageResponse, InputType, SimilarityResponse, get_find_etransfer_link_prompt, query_confirmation_code, query_etransfer_stage, query_most_similar, query_to_recipient, query_next_button_exists, query_next_button, query_add_recipient_present
 from query import runQueryToJson
 from run_endpoint_query import get_image, run_endpoint_query
 
@@ -80,10 +80,14 @@ async def input_types(
 async def detect_to_recipient(image: UploadFile, recipient: str) -> ElementResponse:
     return await run_endpoint_query(image, query_to_recipient(recipient))
 
-
 @router.post("/detect-confirmation-code", tags=["etransfer"])
 async def detect_confirmation_code(image: UploadFile) -> ConfirmationCodeResponse:
     return await run_endpoint_query(image, query_confirmation_code)
+
+@router.post("/detect-most-similar-option", tags=["etransfer"])
+async def detect_most_similar_option(target: str, options: list[str]) -> SimilarityResponse:
+    result = runQueryToJson(None, query_most_similar(target, options))
+    return SimilarityResponse(**result)
 
 @router.post("/detect-next-button", tags=["etransfer"])
 async def detect_next_button(image: UploadFile) -> ButtonResponse|None:
