@@ -1,5 +1,5 @@
 // Start highlighting the element under the mouse
-export function startElementHighlight() {
+export function startElementHighlight(color="yellow") {
 
   console.log("Starting highlighter");
   const body = document.body;
@@ -33,7 +33,7 @@ export function startElementHighlight() {
         //@ts-ignore
         el.style[css] = `${val}px`;
         el.style.position = "absolute";
-        el.style.background = "yellow";
+        el.style.background = color;
         this.outer.appendChild(el);
         return el;
       }

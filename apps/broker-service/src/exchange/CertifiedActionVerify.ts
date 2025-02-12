@@ -31,6 +31,10 @@ const validUberTransferTime = (transfer: UberTransferAction) => (
     process.env.CONFIG_NAME === "devlive" &&
     transfer.transfer.from === process.env.WALLET_testDemoAccount_ADDRESS
   ) ||
+  ( // This is purely to allow initDemoAccount to catch up in prodtest
+    process.env.CONFIG_NAME === "prodtest" &&
+    transfer.transfer.from === process.env.WALLET_testDemoAccount_ADDRESS
+  ) ||
   transfer.transfer.transferMillis >= DateTime.now().minus(AllowedUberOverlap).toMillis()
 )
 

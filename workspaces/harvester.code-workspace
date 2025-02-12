@@ -5,6 +5,10 @@
 			"path": "../apps/harvester"
 		},
 		{
+			"name": "scraper-agent",
+			"path": "../libs/scraper-agent"
+		},
+		{
 			"name": "scraper",
 			"path": "../libs/scraper"
 		},
@@ -16,7 +20,6 @@
 			"name": "electron-utils",
 			"path": "../libs/electron-utils"
 		}
-
 	],
 	"settings": {
 		"typescript.tsdk": "harvester\\node_modules\\typescript\\lib",

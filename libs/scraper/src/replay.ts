@@ -1,14 +1,14 @@
 import { DateTime } from 'luxon';
 import type { Page } from 'puppeteer';
-import { startPuppeteer } from './puppeteer-init/init';
 import { getTableData } from './table';
-import { AnyEvent, ValueEvent, ElementData, ReplayCallbacks, ReplayResult } from './types';
+import { AnyEvent, ValueEvent, ElementData, ReplayCallbacks, ReplayResult, SearchElement } from './types';
 import { CurrencyType, getCurrencyConverter } from './valueParsing';
 import { log } from '@thecointech/logging';
 import { debounce } from './debounce';
-import { FoundElement, getElementForEvent } from './elements';
+import { getElementForEvent } from './elements';
 import { sleep } from '@thecointech/async';
 import { maybeCloseModal } from './modal';
+import { newPage } from './puppeteer-init';
 
 // export async function replay(actionName: 'chqBalance', progress?: ReplayProgressCallback): Promise<ChequeBalanceResult>;
 // export async function replay(actionName: 'visaBalance', progress?: ReplayProgressCallback): Promise<VisaBalanceResult>;
@@ -23,7 +23,7 @@ export async function replay(events: AnyEvent[], callbacks?: ReplayCallbacks, dy
   // Progress started
   callbacks?.onProgress?.({ step: 0, total: events.length });
 
-  const { page, browser } = await startPuppeteer();
+  const { page, browser } = await newPage();
 
   try {
     const r = await replayEvents(page, events, callbacks, dynamicValues, delay);
@@ -251,7 +251,7 @@ export async function enterValue(page: Page, event: ElementData, value: string) 
   return await enterValueIntoFound(page, found, value);
 }
 
-export async function enterValueIntoFound(page: Page, found: FoundElement, value: string) {
+export async function enterValueIntoFound(page: Page, found: SearchElement, value: string) {
   await found.element.focus();
   if (found.data.tagName == "INPUT" || found.data.tagName == "TEXTAREA") {
     // clear existing value
@@ -261,7 +261,19 @@ export async function enterValueIntoFound(page: Page, found: FoundElement, value
     return true;
   }
   else if (found.data.tagName == "SELECT") {
-    await found.element.evaluate((v, value) => (v as HTMLSelectElement).value = value, value);
+    // We store/work with the human-visible value, so find the option by text that matches this
+    await found.element.evaluate((v, value) => {
+      const asSelect = v as HTMLSelectElement;
+      const options = Array.from(asSelect.options);
+      const option = options.find(o => o.text.includes(value) || o.value.includes(value));
+      if (option) {
+        asSelect.value = option.value;
+      }
+      else {
+        // Fall back to setting the value as a string
+        asSelect.value = value;
+      }
+    }, value);
     return true;
   }
   return false;

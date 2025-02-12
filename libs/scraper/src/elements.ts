@@ -1,19 +1,14 @@
 import type { ElementHandle, Frame, Page } from 'puppeteer';
-import type { Coords, ElementData, ElementDataMin } from './types';
+import type { Coords, ElementData, ElementDataMin, FoundElement, SearchElement } from './types';
 import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
 import { scoreElement } from './elements.score';
 
-export type FoundElement = {
-  element: ElementHandle<Element>,
-  score: number,
-  components: Record<string, number>,
-  data: ElementData
-}
 
 declare global {
   interface Window {
-    getElementData: (el: HTMLElement, skipSibling?: boolean) => ElementData;
+    getElementData: (el: HTMLElement, skipSibling?: boolean) => ElementData|null;
+    getCoords: (el: HTMLElement) => Coords;
   }
 }
 
@@ -195,7 +190,9 @@ export async function registerElementAttrFns(page: Page) {
     eval(`window.getSiblingText = ${fns.getSiblingText};`)
     eval(`window.getCoords = ${fns.getCoords};`)
     window.getElementData = (el: HTMLElement, skipSibling?: boolean) => {
-      const r: ElementData = getElementProps(el);
+      const rawProps = getElementProps(el);
+      if (!rawProps.selector) return null;
+      const r = rawProps as ElementData;
       if (!skipSibling) {
         const allNodes = document.querySelectorAll("*");
         const potentialSiblings = Array.from(allNodes)
@@ -232,6 +229,8 @@ export async function registerElementAttrFns(page: Page) {
 const getElementProps = (el: HTMLElement) => ({
   frame: getFrameUrl(),
   tagName: el.tagName,
+  name: el.getAttribute("name") ?? undefined,
+  options: (el as HTMLSelectElement)?.options ? Array.from((el as HTMLSelectElement).options).map(o => o.innerText) : undefined,
   inputType: el.getAttribute("type") ?? undefined,
   role: el.getAttribute("role"),
   selector: getSelector(el),
@@ -252,7 +251,7 @@ const getFrameUrl = () => {
 
 // Inspired by: https://stackoverflow.com/questions/42184322/javascript-get-element-unique-selector
 export function getSelector(elem: Element) {
-  const _getSelector = (elem: HTMLElement, descendentSelector = ''): string => {
+  const _getSelector = (elem: HTMLElement, descendentSelector = ''): string|null => {
     const {
       tagName,
       id,
@@ -265,12 +264,19 @@ export function getSelector(elem: Element) {
       ? `${tagName}#${CSS.escape(id)}`
       : tagName;
 
-    const selected = document.querySelectorAll(thisSel + descendentSelector);
-    if (selected.length == 1) return thisSel + descendentSelector;
-    if (selected.length == 0) {
-      console.error("Cannot find element with selector: " + thisSel + descendentSelector)
-      // Return a selector that still works
-      return descendentSelector.slice(2)
+    try {
+      const selected = document.querySelectorAll(thisSel + descendentSelector);
+      if (selected.length == 1) return thisSel + descendentSelector;
+      if (selected.length == 0) {
+        console.error("Cannot find element with selector: " + thisSel + descendentSelector)
+        // Return a selector that still works
+        return descendentSelector.slice(2)
+      }
+    }
+    catch (e) {
+      // We can have an invalid selector if there is a custom element
+      // that has invalid values (eg portal-logic:if)
+      return null;
     }
 
     let childIndex = 1;
@@ -360,13 +366,9 @@ const getSiblingText = (elcoords: Coords, allText: Pick<ElementData, 'coords'|'n
   })
   .map(c => c.nodeValue) as string[];
 
-type SearchElement = {
-  element: ElementHandle<HTMLElement>,
-  data: ElementData
-}
 
-export const getAllElements = async (frame: Page|Frame, maxTop: number) => {
-  const allElements = await frame.$$("*")
+export const getAllElements = async (frame: Page|Frame, maxTop: number, querySelector = "*") => {
+  const allElements = await frame.$$(querySelector)
   const allData = await frame.evaluate(
     (...els) => els.map(el =>
       (
@@ -393,9 +395,16 @@ export const getAllElements = async (frame: Page|Frame, maxTop: number) => {
       if (data.coords.width <= 0 || data.coords.height <= 0) return r
       // If it's off the bottom of the area we care about, ignore it
       if (data.coords.top > maxTop) return r
+      // If it's got no selector
+      const { selector } = data;
+      if (!selector) return r
+
       r.push({
         element: allElements[i] as ElementHandle<HTMLElement>,
-        data
+        data: {
+          ...data,
+          selector // Going the long way around to convince TS this is non-null
+        }
       })
       return r
     }, [] as SearchElement[])

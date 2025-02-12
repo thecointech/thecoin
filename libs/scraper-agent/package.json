@@ -1,0 +1,43 @@
+{
+  "name": "@thecointech/scraper-agent",
+  "version": "0.2.135",
+  "description": "TheCoin: AI Agent to automate the creation of scraping recorder scripts",
+  "type": "module",
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/scraper-agent"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "build": "run -T tsc -b",
+    "clean": "rimraf ./build && rimraf ./coverage",
+    "test": "run :jest",
+    "test:summary": "jest --coverage > ./coverage/summary.txt",
+    "autoRecord": "yarn run -T cross-env CONFIG_NAME=prod URL_SEQ_LOGGING=false TC_LOG_FOLDER=./logs run-env tools/recordSamples/autoRecord.ts"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "exports": {
+    ".": {
+      "development": "./build/index_mocked.js",
+      "devlive": "./build/index_mocked.js",
+      "default": "./build/index.js"
+    }
+  },
+  "types": "./build/index.d.ts",
+  "dependencies": {
+    "@thecointech/apis": "^0.2.135",
+    "@thecointech/scraper": "^0.2.135"
+  },
+  "devDependencies": {
+    "@thecointech/jestutils": "^0.2.135"
+  }
+}

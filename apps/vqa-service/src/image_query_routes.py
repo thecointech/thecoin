@@ -33,6 +33,7 @@ async def process_image_query(image: UploadFile, prompt: str, json_description: 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.post("/api/multi-image-query")
 async def process_multi_image_query(images: list[UploadFile], prompt: str, json_description: str=None, crop_top: int=None, crop_height: int=None) -> JSONResponse:
     try:
@@ -80,7 +81,7 @@ async def process_point_image_query(image: UploadFile, prompt: str, point_size: 
         global point_fill
         annotated = draw_points(qimage, points, point_fill, point_size)
         annotated.show()
-        
+
         # Convert PIL Image to bytes
         img_byte_arr = io.BytesIO()
         annotated.save(img_byte_arr, format='PNG')
