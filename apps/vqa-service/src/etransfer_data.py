@@ -31,6 +31,7 @@ def get_find_etransfer_link_prompt(page_link_group: list[str]) -> tuple[str, ETr
 class ETransferStage(CaseInsensitiveEnum):
     FILL_FORM = "FillForm"
     REVIEW_DETAILS = "ReviewDetails"
+    CONFIRM_DETAILS = "ConfirmDetails"
     TRANSFER_COMPLETE = "TransferComplete"
     ERRORED = "Errored"
     
