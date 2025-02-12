@@ -258,8 +258,7 @@ async function fillInputs(page: PageHandler, input: IAskUser, tracker: InputTrac
           break;
         case "ToRecipient":
           if (!tracker.toRecipient && element.data.inputType != "radio") {
-            const recipient = await input.forETransferRecipient();
-            await selectToRecipient(page, element, recipient);
+            await selectToRecipient(page, element, input);
             tracker.toRecipient = true;
             hasFilledInput = true;
           }
@@ -315,10 +314,22 @@ async function selectFromAccount(page: PageHandler, input: SearchElement, accoun
   return true;
 }
 
-async function selectToRecipient(page: PageHandler, input: SearchElement, recipient: string) {
+async function selectToRecipient(page: PageHandler, element: SearchElement, input: IAskUser) {
   log.trace("Filling input: ToRecipient");
-  await enterValueIntoFound(page.page, input, recipient);
-  if (input.data.tagName.toUpperCase() == "INPUT" || input.data.role?.toLowerCase() == "combobox") {
+  let recipient = await input.expectedETransferRecipient();
+
+  // If this is a select, double-check one of the options matches.
+  if (element.data.options?.length) {
+    const found = element.data.options.find(o => o == recipient);
+    if (!found) {
+      recipient = await input.selectString("ToRecipient", element.data.options);
+    }
+  }
+
+  await enterValueIntoFound(page.page, element, recipient);
+  // If it's not a select, then we can assume that expected
+  // will find the correct value and return it
+  if (element.data.tagName.toUpperCase() == "INPUT" || element.data.role?.toLowerCase() == "combobox") {
     // If this is a dropdown, we have to click the option
     const image = await page.getImage();
     const { data: r } = await GetETransferApi().detectToRecipient(recipient, image);

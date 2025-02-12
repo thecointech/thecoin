@@ -3,6 +3,9 @@ import type { ReplayProgressCallback, ValueResult, ValueType} from "@thecointech
 import type { CreditDetails } from './Harvester/types';
 import type { StoredData } from './Harvester/db_translate';
 import { ActionTypes } from './Harvester/scraper';
+import { BackgroundTaskCallback } from './BackgroundTask/types';
+import type { QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
+import type { AutoConfigParams } from './Harvester/agent';
 
 export type Result<T> = {
   error?: string;
@@ -15,8 +18,18 @@ export type ScraperBridgeApi = {
   hasCompatibleBrowser(): Promise<Result<boolean>>;
   onBrowserDownloadProgress: (value: any) => void;
 
+  // Generic update pathway for all long-running actions
+  onBackgroundTaskProgress: (progress: BackgroundTaskCallback) => void;
+
+  init(): Promise<Result<boolean>>;
+  // onInitProgress: (progress: ProgressCallback) => void;
+
   // Run the automatic configurator for the given action on the appropriate url
-  autoProcess: (actionName: ActionTypes, url: string) => Promise<Result<boolean>>;
+  autoProcess: (params: AutoConfigParams) => Promise<Result<boolean>>;
+  // onAgentProgress: (progress: ProgressCallback) => void;
+
+  onAskQuestion: (callback: (question: QuestionPacket) => void) => void;
+  replyQuestion: (response: ResponsePacket) => Promise<Result<boolean>>;
 
   // Declare a `readFile` function that will return a promise. This promise
   // will contain the data of the file read from the main process.
@@ -62,6 +75,17 @@ export const actions = {
   hasInstalledBrowser: "browser:hasInstalledBrowser",
   hasCompatibleBrowser: "browser:hasCompatibleBrowser",
   browserDownloadProgress: "browser:browserDownloadProgress",
+
+  onBackgroundTaskProgress: 'scraper:onBackgroundTaskProgress',
+
+  init: 'scraper:init',
+  // onInitProgress: 'scraper:onInitProgress',
+
+  autoProcess: 'scraper:autoProcess',
+  // onAgentProgress: 'scraper:onAgentProgress',
+
+  onAskQuestion: 'scraper:onAskQuestion',
+  replyQuestion: 'scraper:replyQuestion',
 
   warmup: 'scraper:warmup',
   start: 'scraper:start',

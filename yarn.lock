@@ -10827,7 +10827,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/scraper-agent@workspace:libs/scraper-agent":
+"@thecointech/scraper-agent@npm:^0.2.135, @thecointech/scraper-agent@workspace:libs/scraper-agent":
   version: 0.0.0-use.local
   resolution: "@thecointech/scraper-agent@workspace:libs/scraper-agent"
   dependencies:
@@ -24644,6 +24644,7 @@ __metadata:
     "@thecointech/jestutils": "npm:^0.2.135"
     "@thecointech/logging": "npm:^0.2.135"
     "@thecointech/scraper": "npm:^0.2.135"
+    "@thecointech/scraper-agent": "npm:^0.2.135"
     "@thecointech/setenv": "workspace:^"
     "@thecointech/shared": "npm:^0.2.135"
     "@thecointech/signers": "npm:^0.2.135"

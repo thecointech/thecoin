@@ -141,7 +141,13 @@ async function clickElementDirectly(page: Page, found: SearchElement) {
     // We seem to be getting issues with clicking buttons:
     // https://github.com/puppeteer/puppeteer/issues/3496 suggests
     // using eval instead.
-    await page.$eval(found.data.selector, (el) => (el as HTMLElement).click())
+    try {
+      await page.$eval(found.data.selector, (el) => (el as HTMLElement).click());
+    }
+    catch (err) {
+      log.error(err, `Failed to click element: ${found.data.selector}`);
+      throw err;
+    }
   }
 }
 
@@ -191,12 +197,18 @@ async function waitForValidIntent(page: Page, interval = 1000, timeout = 30_000)
   const start = Date.now();
   const maxTime = start + timeout;
   do {
-    const intent = await _getPageIntent(page);
-    log.debug(`Waiting For Valid Intent: detected as type '${intent}'`);
-    // If the page has some kind of intent, then we can stop
-    if (intent != "Loading" && intent != "Blank") {
-      log.info(`Detected intent: ${intent} after ${elapsedSeconds(start)} seconds`);
-      return;
+    try {
+      const intent = await _getPageIntent(page);
+      log.debug(`Waiting For Valid Intent: detected as type '${intent}'`);
+      // If the page has some kind of intent, then we can stop
+      if (intent != "Loading" && intent != "Blank") {
+        log.info(`Detected intent: ${intent} after ${elapsedSeconds(start)} seconds`);
+        return;
+      }
+    }
+    catch (err) {
+      log.warn(`Error occured while waiting for intent: ${err}`);
+      //
     }
     await sleep(interval)
   } while (Date.now() < maxTime);

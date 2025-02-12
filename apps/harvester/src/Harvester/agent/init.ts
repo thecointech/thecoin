@@ -1,42 +1,54 @@
 import { setRootFolder } from "@thecointech/scraper/puppeteer-init/browser";
 import { SimilarityPipeline } from "@thecointech/scraper/similarity";
+import { log } from "@thecointech/logging";
+import { BackgroundTaskCallback } from "@/BackgroundTask/types";
+import { rootFolder } from "@/paths";
+import path from "node:path";
+import { mkdirSync } from "node:fs";
 
-export async function init() {
-  // TODO!
-  const tempDir = "./.temp";
-  setRootFolder(tempDir);
-  let lastLogMessage = 0;
-  let logPeriod = 3000;
-  await SimilarityPipeline.init(tempDir, (progress) => {
+export async function initAgent(callback: BackgroundTaskCallback) {
+
+  log.info("Agent: Starting initialization");
+  mkdirSync(rootFolder, { recursive: true })
+  setRootFolder(rootFolder);
+
+  // TODO: This is where we should probably handle downloading puppeteer as well.
+
+  const similarityFolder = path.join(rootFolder, "similarity");
+  await SimilarityPipeline.init(similarityFolder, (progress) => {
     switch(progress.status) {
       case "progress":
-        if (lastLogMessage + logPeriod > Date.now()) return;
-        lastLogMessage = Date.now();
-        console.log(`${progress.file}: ${progress.progress}`);
+        callback({
+          taskId: "initAgent",
+          stepId: progress.file,
+          label: `Downloading: ${progress.name}`,
+          progress: progress.progress
+        })
         break;
       case "initiate":
-        // console.log(`Beginning download: ${progress.file}`);
+        callback({
+          taskId: "initAgent",
+          stepId: progress.file,
+          label: `Initiate download: ${progress.name}`,
+          progress: 0
+        })
+        log.debug(`Initiate download: ${progress.file}`);
         break;
       case "done":
-        // console.log(`Download complete: ${progress.file}`);
-        break;
-      case "download":
-        // console.log(`Downloading: ${progress.file}`);
+        callback({
+          taskId: "initAgent",
+          stepId: progress.file,
+          label: `Download complete: ${progress.name}`,
+          progress: 100
+        })
+        log.debug(`Download complete: ${progress.file}`);
         break;
       case "ready":
-        console.log(`Similarity pipeline ready`);
+        log.info(`Similarity pipeline ready`);
         break;
       default:
-        console.log(progress);
+        // console.log(progress);
         break;
     }
   });
-
-  // if (cleanRun) {
-  //   // Remove existing chrome data so we start fresh (eg, with cookie banners)
-  //   const chromeData = path.join(tempDir, "chrome_data");
-  //   if (existsSync(chromeData)) {
-  //     rmSync(chromeData, { recursive: true, force: true });
-  //   }
-  // }
 }

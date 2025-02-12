@@ -15,7 +15,7 @@
     "email": "stephen.taylor.dev@gmail.com"
   },
   "scripts": {
-    "dev": "yarn run -T cross-env RUN_SCRAPER_HEADLESS=false electron-forge start",
+    "dev": "yarn run -T cross-env RUN_SCRAPER_HEADLESS=false HARVESTER_PROFILE_FOLDER=\"./.cache/dev\" electron-forge start",
     "dev:harvest": "electron-forge start -- -- --harvest",
     "_dev:live": "yarn run -T cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "yarn run -T cross-env CONFIG_NAME=prodtest yarn dev",
@@ -65,6 +65,7 @@
     "@thecointech/fx-rates": "^0.2.135",
     "@thecointech/logging": "^0.2.135",
     "@thecointech/scraper": "^0.2.135",
+    "@thecointech/scraper-agent": "^0.2.135",
     "@thecointech/shared": "^0.2.135",
     "@thecointech/signers": "^0.2.135",
     "@thecointech/utilities": "^0.2.135",

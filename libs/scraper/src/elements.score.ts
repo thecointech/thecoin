@@ -1,7 +1,7 @@
 import { log } from "@thecointech/logging";
 import { SimilarityPipeline } from "./similarity";
 import { Coords, ElementData, ElementDataMin, Font } from "./types";
-import levenshtein from 'fastest-levenshtein';
+import { distance as levenshtein } from 'fastest-levenshtein';
 
 const EquivalentInputTypes = [
   // All of the following attributes tend to show up looking the same on the page
@@ -233,11 +233,11 @@ function getEstimatedTextScore(potential: ElementData, original: ElementDataMin)
     const cleanOriginal = original.text.replace(/\s+/g, ' ').toLowerCase();
 
     const distance = Math.min(
-      levenshtein.distance(cleanOriginal, cleanPotential),
+      levenshtein(cleanOriginal, cleanPotential),
       // The vLLM may omit decimals for $ if they are zero
       // Check with them added back in cause they'll only
       // help when it's actually helpful
-      levenshtein.distance(cleanOriginal + ".00", cleanPotential)
+      levenshtein(cleanOriginal + ".00", cleanPotential)
     );
 
     // Our scoring is non-linear.  If the original length is less than 5, then

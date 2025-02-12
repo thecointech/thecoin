@@ -27,7 +27,7 @@
   ],
   "exports": {
     ".": {
-      "development": "./build/index_mocked.js",
+      "development": "./build/index.js",
       "devlive": "./build/index_mocked.js",
       "default": "./build/index.js"
     }

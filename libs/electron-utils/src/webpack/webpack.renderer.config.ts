@@ -5,7 +5,7 @@ import path from 'path';
 import merge from 'webpack-merge';
 //@ts-ignore
 import getMocks from '@thecointech/setenv/webpack';
-import { env } from './webpack.common';
+import { env, commonBase } from './webpack.common';
 
 const rootPath = path.join(__dirname, '../../../..');
 
@@ -14,6 +14,9 @@ const baseOptions: Configuration = {
     rules,
   },
   plugins,
+  externals: {
+    electron: 'commonjs electron'
+  },
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
     conditionNames: [env.CONFIG_NAME, "electron", "browser", "webpack", "import", "default"],
@@ -38,4 +41,8 @@ const baseOptions: Configuration = {
   },
 };
 
-export const rendererConfig = merge(getMocks(env), baseOptions);
+export const rendererConfig = merge(
+  getMocks(env),
+  baseOptions,
+  commonBase
+);

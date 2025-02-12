@@ -12,6 +12,7 @@ import { _getPageIntent } from "./getPageIntent";
 import { ElementResponse } from "@thecointech/vqa";
 import { IAgentLogger } from "./types";
 import crypto from "node:crypto";
+import { File } from "@web-std/file";
 import { SectionType } from "./processors/types";
 
 type ApiFn = (image: File) => Promise<AxiosResponse<AnyResponse>>

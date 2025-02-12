@@ -1,6 +1,6 @@
-import { flatten } from './autoConfigure';
+import { flatten, stripDuplicateNavigations } from './autoConfigure';
 import type { EventSection, SectionName } from '@thecointech/scraper-agent';
-import type { AnyEvent } from '@thecointech/scraper/types';
+import type { AnyEvent, LoadEvent, NavigationEvent } from '@thecointech/scraper/types';
 
 describe('flatten', () => {
   // Helper to create a mock event
@@ -90,5 +90,64 @@ describe('flatten', () => {
 
     const result = flatten(section, ['Initial', 'Landing', 'Login']);
     expect(result).toEqual([event1, event2, createEvent(3)]);
+  });
+});
+
+describe('stripDuplicateNavigations', () => {
+
+  it('should handle empty array', () => {
+    const events: AnyEvent[] = [];
+    expect(stripDuplicateNavigations(events)).toEqual([]);
+  });
+
+  it('should keep single navigation event', () => {
+    const events: AnyEvent[] = [
+      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
+    ];
+    expect(stripDuplicateNavigations(events)).toEqual(events);
+  });
+
+  it('should remove consecutive duplicate navigation events', () => {
+    const events: AnyEvent[] = [
+      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
+      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
+      { type: 'load' } as LoadEvent,
+    ];
+    const expected: AnyEvent[] = [
+      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
+      { type: 'load' } as LoadEvent,
+    ];
+    expect(stripDuplicateNavigations(events)).toEqual(expected);
+  });
+
+  // it('should keep different consecutive navigation events', () => {
+  //   const events: AnyEvent[] = [
+  //     { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
+  //     { type: 'navigation', to: 'http://other.com' } as NavigationEvent,
+  //   ];
+  //   expect(stripDuplicateNavigations(events)).toEqual(events);
+  // });
+
+  it('should handle mixed event types', () => {
+    const events: AnyEvent[] = [
+      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
+      { type: 'load' } as LoadEvent,
+      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
+    ];
+    expect(stripDuplicateNavigations(events)).toEqual(events);
+  });
+
+  it('should remove multiple consecutive duplicates', () => {
+    const events: AnyEvent[] = [
+      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
+      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
+      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
+      { type: 'load' } as LoadEvent,
+    ];
+    const expected: AnyEvent[] = [
+      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
+      { type: 'load' } as LoadEvent,
+    ];
+    expect(stripDuplicateNavigations(events)).toEqual(expected);
   });
 });

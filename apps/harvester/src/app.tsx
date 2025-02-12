@@ -7,11 +7,14 @@ import styles from './app.module.less'
 import { BrowserDownloadState, BrowserReducer } from './Browser/reducer';
 import { useEffect } from 'react';
 import { ReplayProgressReducer } from './ReplayProgress/reducer';
+import { BackgroundTaskReducer } from './BackgroundTask/reducer';
 
 export const App = () => {
   FxRateReducer.useStore();
   BrowserReducer.useStore();
   ReplayProgressReducer.useStore();
+  BackgroundTaskReducer.useStore();
+
   const location = useLocation();
   const openLogs = async () => {
     await window.scraper.openLogsFolder()
@@ -19,12 +22,17 @@ export const App = () => {
 
   const browserApi = BrowserReducer.useApi();
   const replayProgressApi = ReplayProgressReducer.useApi();
+  const backgroundTaskApi = BackgroundTaskReducer.useApi();
+
   useEffect(() => {
     window.scraper.onBrowserDownloadProgress((progress: BrowserDownloadState) => {
       browserApi.setDownloadState(progress);
     })
     window.scraper.onReplayProgress(progress => {
       replayProgressApi.setReplayProgress(progress);
+    })
+    window.scraper.onBackgroundTaskProgress(progress => {
+      backgroundTaskApi.setTaskProgress(progress);
     })
   }, [])
 
@@ -50,6 +58,12 @@ export const App = () => {
             active={location.pathname.startsWith('/account')}
             as={Link}
             to='/account'
+          />
+          <Menu.Item
+            name='Agent'
+            active={location.pathname.startsWith('/agent')}
+            as={Link}
+            to='/agent'
           />
           <Menu.Item
             name='Training'

@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { actions, ScraperBridgeApi } from './scraper_actions';
-import type { ReplayProgress } from '@thecointech/scraper/types';
+import { BackgroundTaskCallback } from './BackgroundTask/types';
+
 
 const api : ScraperBridgeApi = {
   installBrowser: () => ipcRenderer.invoke(actions.installBrowser),
@@ -10,6 +11,24 @@ const api : ScraperBridgeApi = {
     ipcRenderer.on(actions.browserDownloadProgress, (_event, value) => callback(value))
   },
 
+  onBackgroundTaskProgress: (callback: BackgroundTaskCallback) => {
+    ipcRenderer.on(actions.onBackgroundTaskProgress, (_event, value) => callback(value))
+  },
+  init: () => ipcRenderer.invoke(actions.init),
+  // onInitProgress: (callback) => {
+  //   ipcRenderer.on(actions.onInitProgress, (_event, value) => callback(value))
+  // },
+
+  autoProcess: (params) => ipcRenderer.invoke(actions.autoProcess, params),
+  // onAgentProgress: (callback) => {
+  //   ipcRenderer.on(actions.onAgentProgress, (_event, value) => callback(value))
+  // },
+
+  onAskQuestion: (callback) => {
+    ipcRenderer.on(actions.onAskQuestion, (_event, value) => callback(value))
+  },
+  replyQuestion: (packet) => ipcRenderer.invoke(actions.replyQuestion, packet),
+
   warmup: (url) => ipcRenderer.invoke(actions.warmup, url),
   start: (actionName, url, dynamicValues) => ipcRenderer.invoke(actions.start, actionName, url, dynamicValues),
   learnValue: (valueName, valueType) => ipcRenderer.invoke(actions.learnValue, valueName, valueType),
@@ -18,7 +37,7 @@ const api : ScraperBridgeApi = {
   finishAction: () => ipcRenderer.invoke(actions.finishAction),
 
   testAction: (actionName, dynamicValues) => ipcRenderer.invoke(actions.testAction, actionName, dynamicValues),
-  onReplayProgress: (callback: (value: ReplayProgress) => void) => {
+  onReplayProgress: (callback) => {
     ipcRenderer.on(actions.replayProgress, (_event, value) => callback(value))
   },
 
