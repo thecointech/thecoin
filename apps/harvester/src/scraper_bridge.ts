@@ -1,10 +1,8 @@
 import { IpcMainInvokeEvent, ipcMain } from 'electron';
-import { Recorder } from '@thecointech/scraper/record';
 import { ValueType } from '@thecointech/scraper/types';
-import { warmup } from '@thecointech/scraper/warmup';
 import { actions, ScraperBridgeApi } from './scraper_actions';
 import { toBridge } from './scraper_bridge_conversions';
-import { getHarvestConfig, getProcessConfig, getWalletAddress, hasCreditDetails, setCreditDetails, setEvents, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
+import { getHarvestConfig, getProcessConfig, getWalletAddress, hasCreditDetails, setCreditDetails, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
 import { HarvestConfig, Mnemonic } from './types';
 import { CreditDetails } from './Harvester/types';
 import { spawn } from 'child_process';
@@ -15,19 +13,22 @@ import { platform } from 'node:os';
 import { getLocalBrowserPath, getSystemBrowserPath, installChrome } from '@thecointech/scraper/puppeteer';
 import { log } from '@thecointech/logging';
 import { getValues, ActionTypes } from './Harvester/scraper';
+import { AutoConfigParams, autoConfigure } from './Harvester/agent';
+import { initAgent } from './Harvester/agent/init';
+import { BackgroundTaskInfo } from './BackgroundTask';
+import { AskUserReact } from './Harvester/agent/askUser';
 
 
 async function guard<T>(cb: () => Promise<T>) {
   try {
     return { value: await cb() };
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   catch (err: any) {
     return { error: err.message };
   }
 }
 
-const api: Omit<ScraperBridgeApi, "testAction"|"installBrowser"|"onBrowserDownloadProgress"|"onReplayProgress"> = {
+const api: Omit<ScraperBridgeApi, "onAskQuestion"|"testAction"|"onReplayProgress"|"installBrowser"|"onBrowserDownloadProgress"|"init"|"onActionProgress"|"onBackgroundTaskProgress"|"autoProcess"|"onAgentProgress"> = {
   hasInstalledBrowser: () => guard(async () => {
     const p = await getLocalBrowserPath();
     return !!p;
@@ -37,27 +38,35 @@ const api: Omit<ScraperBridgeApi, "testAction"|"installBrowser"|"onBrowserDownlo
     return !!p;
   }),
 
-  warmup: (url) => guard(() => warmup(url)),
+  replyQuestion: (response) => guard(async () => {
+    AskUserReact.onResponse(response);
+    return true;
+  }),
+  warmup: (url) => guard(async () => true /*warmup(url)*/),
+
   start: (actionName, url, dynamicInputs) => guard(async () => {
-    const instance = await Recorder.instance({
-      name: actionName,
-      url,
-      dynamicInputs,
-      onComplete: async (events) => {
-        await setEvents(actionName, events);
-      }
-    });
-    return !!instance;
+    // const instance = await Recorder.instance({
+    //   name: actionName,
+    //   url,
+    //   dynamicInputs,
+    //   onComplete: async (events) => {
+    //     await setEvents(actionName, events);
+    //   }
+    // });
+    // return !!instance;
+    return false;
   }),
   learnValue: (valueName, valueType) => guard(async () => {
-    const instance = await Recorder.instance();
-    return instance.setRequiredValue(valueName, valueType);
+    // const instance = await Recorder.instance();
+    // return instance.setRequiredValue(valueName, valueType);
+    return { parsing: {type: "date", "format": ""}, text: ""};
   }),
   setDynamicInput: (name, value) => guard(async () => {
-    const instance = await Recorder.instance();
-    return instance.setDynamicInput(name, value);
+    // const instance = await Recorder.instance();
+    // return instance.setDynamicInput(name, value);
+    return "TODO";
   }),
-  finishAction: () => guard(() => Recorder.release()),
+  finishAction: () => guard(async () => true /*Recorder.release()*/ ),
 
   // We can only pass POD back through the renderer, use toBridge to convert
   // testAction: (actionName, dynamicValues) => guard(async () => {
@@ -110,9 +119,14 @@ export function initScraping() {
   ipcMain.handle(actions.hasInstalledBrowser, api.hasInstalledBrowser);
   ipcMain.handle(actions.hasCompatibleBrowser, api.hasCompatibleBrowser);
 
-  ipcMain.handle(actions.warmup, async (_event, url: string) => {
-    return api.warmup(url);
-  }),
+  ipcMain.handle(actions.init, init);
+
+  ipcMain.handle(actions.autoProcess, autoProcess);
+
+  // ipcMain.handle(actions.onAskQuestion, onAskQuestion);
+  ipcMain.handle(actions.replyQuestion, (_event, response) => api.replyQuestion(response));
+
+  ipcMain.handle(actions.warmup, async (_event, url: string) => api.warmup(url));
 
   ipcMain.handle(actions.start, async (_event, actionName: ActionTypes, url: string, dynamicValues?: string[]) => {
     return api.start(actionName, url, dynamicValues);
@@ -178,13 +192,6 @@ export function initScraping() {
   })
 }
 
-async function testAction(event: IpcMainInvokeEvent, actionName: ActionTypes, dynamicValues: Record<string, string>) {
-  const r = await getValues(actionName, {
-    onProgress: (progress) => event.sender.send(actions.replayProgress, progress)
-  }, dynamicValues);
-  return toBridge(r);
-}
-
 const openFolder = (path: string) => {
   let explorer = '';
   switch (platform()) {
@@ -215,3 +222,40 @@ async function installBrowser(event: IpcMainInvokeEvent) {
     event.sender.send(actions.browserDownloadProgress, { error: e })
   }
 }
+
+function onBackgroundTaskProgress(event: IpcMainInvokeEvent, progress: BackgroundTaskInfo) {
+  event.sender.send(actions.onBackgroundTaskProgress, progress);
+}
+
+
+async function init(event: IpcMainInvokeEvent) {
+  await initAgent((progress) => onBackgroundTaskProgress(event, progress));
+}
+
+async function autoProcess(event: IpcMainInvokeEvent, params: AutoConfigParams) {
+  await autoConfigure(params, (progress) => {
+    onBackgroundTaskProgress(event, progress);
+  });
+}
+
+async function testAction(event: IpcMainInvokeEvent, actionName: ActionTypes, dynamicValues: Record<string, string>) {
+  const r = await getValues(actionName, {
+    onProgress: (progress) => {
+      onBackgroundTaskProgress(event, {
+        taskId: "replay",
+        stepId: actionName,
+        progress: 100 * (progress.step / progress.total),
+        label: `Step ${progress.step + 1} of ${progress.total}`
+      });
+    },
+    onError: async (_page, error) => {
+      onBackgroundTaskProgress(event, {
+        taskId: "replay",
+        stepId: actionName,
+        error: error?.toString() ?? "Unknown error"
+      });
+    },
+  }, dynamicValues);
+  return toBridge(r);
+}
+

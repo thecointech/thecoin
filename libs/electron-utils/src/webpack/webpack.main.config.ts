@@ -3,7 +3,7 @@ import merge from 'webpack-merge';
 //@ts-ignore
 import getMocks from '@thecointech/setenv/webpack';
 import { rules } from './webpack.rules';
-import { env, commonPlugins } from './webpack.common';
+import { env, commonBase } from './webpack.common';
 
 export const baseOptions: Configuration = {
   /**
@@ -19,7 +19,6 @@ export const baseOptions: Configuration = {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
     conditionNames: [env.CONFIG_NAME, "node", "import", "default"],
   },
-  plugins: commonPlugins,
   experiments: {
     topLevelAwait: true,
   },
@@ -27,6 +26,7 @@ export const baseOptions: Configuration = {
 
 export const mainConfig = (custom: Configuration = {}) => merge(
   custom,
-  getMocks(env), 
+  getMocks(env),
   baseOptions,
+  commonBase,
 );

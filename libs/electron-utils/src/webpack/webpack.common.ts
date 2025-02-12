@@ -1,5 +1,5 @@
-import { DefinePlugin } from 'webpack';
-import { join } from 'path';
+import { Configuration, DefinePlugin } from 'webpack';
+import path, { join } from 'path';
 import { getEnvFiles, getEnvVars } from '@thecointech/setenv';
 import Dotenv from 'dotenv-webpack';
 import { fileURLToPath } from 'url';
@@ -11,13 +11,20 @@ const packageFile = join(projectRoot, 'package.json');
 const envFiles = getEnvFiles(configName);
 export const env = getEnvVars();
 
-export const commonPlugins = [
-  new DefinePlugin({
-    __VERSION__: JSON.stringify(require(packageFile).version),
-    __APP_BUILD_DATE__: JSON.stringify(new Date()),
-  }),
-  ...envFiles.map(p => new Dotenv({
-      path: fileURLToPath(p),
-      ignoreStub: true
-    })),
-]
+export const commonBase: Partial<Configuration> = {
+  plugins: [
+    new DefinePlugin({
+      __VERSION__: JSON.stringify(require(packageFile).version),
+      __APP_BUILD_DATE__: JSON.stringify(new Date()),
+    }),
+    ...envFiles.map(p => new Dotenv({
+        path: fileURLToPath(p),
+        ignoreStub: true
+      })),
+  ],
+  resolve: {
+    alias: {
+      '@': path.join(projectRoot, 'src'),
+    },
+  },
+};

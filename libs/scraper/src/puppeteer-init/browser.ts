@@ -2,21 +2,21 @@ import path from "path"
 import { Browser, ChromeReleaseChannel, computeExecutablePath, computeSystemExecutablePath, detectBrowserPlatform, install, resolveBuildId } from "@puppeteer/browsers"
 import os from "node:os"
 import { existsSync, promises as fs } from "node:fs"
+
 // Our process:
 // First, detect installed browsers
-// Allow user to download chrome to cacheDir
+// Allow user to download chrome to browserDownloadDir
 // Save path (do we need to?)
 
-
 let rootFolder: string;
-let cacheDir: string;
 export function setRootFolder(folder: string) {
   rootFolder = folder;
-  cacheDir = path.join(rootFolder, 'browser')
 }
 // By default, we initialize to CWD
 setRootFolder(process.cwd())
 const buildIdAlias = 'downloaded'
+
+const browserDownloadDir = () => path.join(rootFolder, 'browser')
 
 export async function installChrome(progress?: (bytes: number, total: number) => void) {
   // First, remove existing
@@ -33,7 +33,7 @@ export async function installChrome(progress?: (bytes: number, total: number) =>
   )
   const browser = await install({
     browser: Browser.CHROME,
-    cacheDir,
+    cacheDir: browserDownloadDir(),
     buildId,
     buildIdAlias,
     downloadProgressCallback: progress,
@@ -45,7 +45,7 @@ export async function installChrome(progress?: (bytes: number, total: number) =>
 export async function removeChrome() {
   const installed = await getLocalBrowserPath()
   if (installed) {
-    await fs.rm(cacheDir, { recursive: true })
+    await fs.rm(browserDownloadDir(), { recursive: true })
   }
 }
 
@@ -60,7 +60,7 @@ export async function getSystemBrowserPath() {
 export async function getLocalBrowserPath() {
   const path = computeExecutablePath({
     browser: Browser.CHROME,
-    cacheDir,
+    cacheDir: browserDownloadDir(),
     buildId: buildIdAlias,
   })
   // The above always returns a path,
@@ -78,5 +78,5 @@ export async function getBrowserPath() {
 }
 
 export function getUserDataDir() {
-  return path.join(rootFolder, 'chrome_data');
+  return path.join(rootFolder, 'chrome_userdata');
 }

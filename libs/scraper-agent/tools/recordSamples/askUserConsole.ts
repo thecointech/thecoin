@@ -13,8 +13,8 @@ export class AskUserConsole implements IAskUser {
     this.config = config;
     // In NodeJS
     this.rlp = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
+      input: process.stdin as NodeJS.ReadableStream,
+      output: process.stdout as NodeJS.WritableStream
     });
   }
   async forUsername(): Promise<string> {
@@ -23,10 +23,10 @@ export class AskUserConsole implements IAskUser {
   async forPassword(): Promise<string> {
     return this.config.password!;
   }
-  async forETransferRecipient(): Promise<string> {
+
+  async expectedETransferRecipient(): Promise<string> {
     return this.config.to_recipient!;
   }
-
   async forValue(question: string): Promise<string> {
     return this.rlp.question(`${question}: `);
   }
@@ -40,6 +40,15 @@ export class AskUserConsole implements IAskUser {
     }
     const option = await this.forValue("Select an option");
     return flatEntries[parseInt(option)][1];
+  }
+
+  async selectString(question: string, options: string[]): Promise<string> {
+    this.rlp.write(`\n${question}\n`);
+    for (let i = 0; i < options.length; i++) {
+      this.rlp.write(`[${i}] ${options[i]}\n`);
+    }
+    const option = await this.forValue("Select an option");
+    return options[parseInt(option)];
   }
 
   [Symbol.dispose]() {

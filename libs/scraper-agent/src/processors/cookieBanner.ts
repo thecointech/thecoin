@@ -12,16 +12,21 @@ async function closeCookieBanner(page: PageHandler, progress: SectionProgressCal
   log.trace(`LandingWriter: Cookie banner detected: ${detected}`);
   if (detected) {
     progress(33);
-    const didClose = await page.tryClick(GetLandingApi(), "cookieBannerAccept", {
-      noNavigate: true,
-      name: "cookie-accept"
-  })
-    if (didClose) {
-      // Reload the page seems to clean up some lost interactions (?)
-      // await sleep(500);
-      // await this.page.reload({ waitUntil: "networkidle2" });
-      // await this.waitForPageLoaded();
-      // await this.updatePageName("no-cookie");
+    try {
+      const didClose = await page.tryClick(GetLandingApi(), "cookieBannerAccept", {
+        noNavigate: true,
+        name: "cookie-accept"
+      });
+      if (didClose) {
+        // Reload the page seems to clean up some lost interactions (?)
+        // await sleep(500);
+        // await this.page.reload({ waitUntil: "networkidle2" });
+        // await this.waitForPageLoaded();
+        // await this.updatePageName("no-cookie");
+      }
+    }
+    catch (err) {
+      log.warn(`LandingWriter: Failed to close cookie banner: ${err}`);
     }
     progress(66);
   }

@@ -5,7 +5,7 @@ import type { ElementResponse } from "@thecointech/vqa";
 import { getElementForEvent } from "./elements";
 import type { Page } from "puppeteer";
 import type { ElementDataMin } from "./types";
-
+import { File } from "@web-std/file";
 
 
 export async function maybeCloseModal(page: Page) {

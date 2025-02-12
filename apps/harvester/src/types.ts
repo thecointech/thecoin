@@ -74,3 +74,4 @@ export function addStep(step: HarvestStep, steps: HarvestSteps) {
 export function removeStep (type: HarvestStepType, steps: HarvestSteps) {
   return steps.filter(s => s.type !== type);
 }
+

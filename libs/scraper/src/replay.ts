@@ -230,7 +230,7 @@ export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: R
       }
 
       // Mark progress complete
-      callbacks?.onProgress?.({ step: i + 1, total: events.length });
+      callbacks?.onProgress?.({ step: i, total: events.length });
     }
   }
 
