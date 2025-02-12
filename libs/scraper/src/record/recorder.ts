@@ -3,6 +3,7 @@ import { AnyEvent, InputEvent } from '../types';
 import { log } from '@thecointech/logging';
 import { RecorderOptions } from './types';
 import { Registry } from './registry';
+import { waitUntilLoadComplete } from './waitLoadComplete';
 
 
 export class Recorder implements AsyncDisposable {
@@ -39,6 +40,7 @@ export class Recorder implements AsyncDisposable {
 
     if (url && url != "about:blank") {
       await page.goto(url, { waitUntil: "networkidle2" });
+      await waitUntilLoadComplete(page);
     }
 
     return page;

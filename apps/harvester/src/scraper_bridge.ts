@@ -2,7 +2,7 @@ import { IpcMainInvokeEvent, ipcMain } from 'electron';
 import { ValueType } from '@thecointech/scraper/types';
 import { actions, ScraperBridgeApi } from './scraper_actions';
 import { toBridge } from './scraper_bridge_conversions';
-import { getHarvestConfig, getProcessConfig, getWalletAddress, hasCreditDetails, setCreditDetails, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
+import { getHarvestConfig, getProcessConfig, getWallet, getWalletAddress, hasCreditDetails, setCreditDetails, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
 import { HarvestConfig, Mnemonic } from './types';
 import { CreditDetails } from './Harvester/types';
 import { spawn } from 'child_process';
@@ -232,8 +232,17 @@ async function init(event: IpcMainInvokeEvent) {
   await initAgent((progress) => onBackgroundTaskProgress(event, progress));
 }
 
+// NOTE!  This is used in multiple places, deduplicate it at some point
+const getEmailAddress = (coinAddress: string) => `${coinAddress}@${process.env.TX_GMAIL_DEPOSIT_DOMAIN}`
+
 async function autoProcess(event: IpcMainInvokeEvent, params: AutoConfigParams) {
-  await autoConfigure(params, (progress) => {
+  // Get our coinETransferRecipient
+  const wallet = await getWallet();
+  if (!wallet) {
+    throw new Error("Wallet not configured");
+  }
+  const depositAddress = getEmailAddress(wallet.address);
+  await autoConfigure(params, depositAddress, (progress) => {
     onBackgroundTaskProgress(event, progress);
   });
 }

@@ -3,10 +3,10 @@ import { IAgentLogger, SectionName } from "@thecointech/scraper-agent/build/type
 import { Page } from "puppeteer";
 
 export class AgentLogger implements IAgentLogger {
-  logJson(intent: SectionName, name: string, data: any): void {
+  logJson(intent: SectionName, name: string, _data: any): void {
     log.info(`[${intent}] ${name}`);
   }
-  async logScreenshot(intent: SectionName, screenshot: Buffer | Uint8Array, page: Page): Promise<void> {
+  async logScreenshot(_intent: SectionName, _screenshot: Buffer | Uint8Array, _page: Page): Promise<void> {
     // TODO
   }
 

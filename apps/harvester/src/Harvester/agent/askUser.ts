@@ -5,6 +5,7 @@ import { randomUUID } from "crypto";
 
 export type QuestionPacket = {
   question: string;
+  options?: string[];
   sessionId: string;
   questionId: string;
 }
@@ -26,13 +27,22 @@ enum QuestionId {
 }
 export class AskUserReact implements IAskUser {
   sessionID = randomUUID();
+  depositAddress: string;
   responses: Record<string, DeferredPromise<string>> = {};
   static __instances: Record<string, AskUserReact> = {};
 
-  private constructor() {
+  private constructor(depositAddress: string) {
+    this.depositAddress = depositAddress;
     this.addDeferredResponse(QuestionId.Username);
     this.addDeferredResponse(QuestionId.Password);
     AskUserReact.__instances[this.sessionID] = this;
+  }
+
+  doNotCompleteETransfer(): boolean {
+    return process.env.CONFIG_NAME !== 'prod';
+  }
+  expectedETransferRecipient(): Promise<string> {
+    return Promise.resolve(this.depositAddress);
   }
 
   addDeferredResponse(questionId: string) {
@@ -75,16 +85,17 @@ export class AskUserReact implements IAskUser {
     this.responses[QuestionId.Password].resolve(password);
   }
 
-  forValue(question: string): Promise<string> {
+  forValue(question: string, options?: string[]): Promise<string> {
 
     const mainWindow = getMainWindow();
     const questionId = randomUUID();
     const responsePromise = this.addDeferredResponse(questionId);
-    const packet: QuestionPacket = { question, sessionId: this.sessionID, questionId };
+    const packet: QuestionPacket = { question, options, sessionId: this.sessionID, questionId };
     mainWindow!.webContents.send(actions.onAskQuestion, packet);
     return responsePromise;
   }
-  selectOption<T extends object>(question: string, options: User2DChoice<T>, z: ChoiceText<T>): Promise<T> {
+
+  selectOption<T extends object>(_question: string, _options: User2DChoice<T>, _z: ChoiceText<T>): Promise<T> {
     // TODO
     throw new Error("Method not implemented.");
   }
@@ -99,8 +110,8 @@ export class AskUserReact implements IAskUser {
     return this.responses['recipient'].promise;
   }
 
-  static newSession() {
-    const instance = new AskUserReact();
+  static newSession(depositAddress: string) {
+    const instance = new AskUserReact(depositAddress);
     return instance;
   }
   static getSession(id: string) {

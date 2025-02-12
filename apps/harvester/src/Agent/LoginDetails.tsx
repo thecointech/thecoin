@@ -1,25 +1,26 @@
 import { useState } from "react";
 import { Button, Dimmer, Input, Loader, Segment } from "semantic-ui-react";
 import type { BankData } from "./BankCard/data";
-import type { ActionTypes } from "@/Harvester/scraper";
 import { BackgroundTaskReducer } from "@/BackgroundTask/index";
 
 type Props = BankData & {
-  actionName: ActionTypes;
+  doCredit: boolean;
+  doChequing: boolean;
+  // actionName: ActionTypes;
 }
-export const LoginDetails: React.FC<Props> = ({ icon, name, url, actionName }) => {
+export const LoginDetails: React.FC<Props> = ({ icon, name, url, doCredit, doChequing }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const r = BackgroundTaskReducer.useData();
-  const task = r.tasks[actionName];
+  const task = r.tasks[name];
   const isTaskRunning = task && task.completed === undefined;
 
   const handleSubmit = () => {
     // TODO: Send command to start the agent process
     console.log('Starting agent with:', url);
     // api.setAgentProgress(undefined);
-    window.scraper.autoProcess({ actionName, url, username, password });
+    window.scraper.autoProcess({ name, url, doChequing, doCredit, username, password });
   };
   return (
     <Segment>

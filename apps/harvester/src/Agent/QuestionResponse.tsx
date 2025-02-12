@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { QuestionPacket } from "@/Harvester/agent/askUser";
-import { Button, Dimmer, Input, Loader, Segment } from "semantic-ui-react";
+import { Button, Dimmer, Input, Loader, Segment, Select } from "semantic-ui-react";
 
 export const QuestionResponse: React.FC<{
   setQuestionActive: () => void;
@@ -25,23 +25,30 @@ export const QuestionResponse: React.FC<{
     if (r.error) alert(r.error);
     if (r.value) {
       // setQuestion(undefined);
-      // setQuestionActive(false);
     }
     setHasSubmitted(true);
   }
 
   if (!question) return null;
-  return (
+  return !question.options ? (
     <Segment>
       <Dimmer active={hasSubmitted}>
         <Loader />
       </Dimmer>
       <div>{question.question}</div>
-      <Input value={answer} onChange={e => setAnswer(e.target.value)}
-      action={
-        <Button icon='check' color='green' onClick={onSubmit} />
-      }
-      />
+      <Input value={answer} onChange={e => setAnswer(e.target.value)} />
+      <Button color='green' onClick={onSubmit} content='Submit' />
+  </Segment>
+  ) : (
+    <Segment>
+      <Dimmer active={hasSubmitted}>
+        <Loader />
+      </Dimmer>
+      <div>{question.question}</div>
+      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+        <Select options={question.options.map((o,idx) => ({ key: idx, text: o, value: o }))} value={answer} onChange={(_, data) => setAnswer(data.value as string)} />
+        <Button color='green' onClick={onSubmit} content='Submit' />
+      </div>
   </Segment>
   )
 }

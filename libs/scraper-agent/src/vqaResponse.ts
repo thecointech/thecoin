@@ -2,6 +2,7 @@ import type { AccountResponse, ElementResponse, InputElementResponse, MoneyEleme
 import type { ElementDataMin, FoundElement, SearchElement } from "@thecointech/scraper/types";
 import { TimeoutError, type Page } from "puppeteer";
 import { getElementForEvent } from "@thecointech/scraper/elements";
+import { waitUntilLoadComplete } from "@thecointech/scraper/record/waitLoadComplete";
 import pixelmatch from "pixelmatch";
 import { log } from "@thecointech/logging";
 import { sleep } from "@thecointech/async";
@@ -163,6 +164,10 @@ async function tryActionAndWait<T>(page: Page, trigger: () => Promise<T>) : Prom
       }, { timeout: 5000 }),
       trigger(),
     ]);
+
+    // Add another wait for any further changes...
+    await waitUntilLoadComplete(page);
+
     log.info(`Navigated to: ${page.url()}`);
     return r[2];
   }

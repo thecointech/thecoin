@@ -8,7 +8,7 @@ import { enterValueIntoFound } from "@thecointech/scraper/replay";
 import { BBox } from "@thecointech/vqa";
 // Use regular levenshtein, not the modified version
 // in this case insertions are bad
-import levenshtein from 'fastest-levenshtein';
+import { distance } from 'fastest-levenshtein';
 import { getCoordsWithMargin, mapInputToParent } from "../elementUtils";
 import { PageHandler } from "../pageHandler";
 import { IAskUser } from "../types";
@@ -157,13 +157,19 @@ async function sendETransfer(page: PageHandler, progress: SectionProgressCallbac
     let confirmationElement;
 
     switch (currentStage.stage) {
+      case "ConfirmDetails":
       case "ReviewDetails":
         // Check we've entered what we need to?
         if (!tracker.amount || !tracker.toRecipient) {
           log.error("Detected stage 'ReviewDetails', but not all required fields are filled");
           // However, it could be a mis-detection, so we will continue
         }
+        // MOSTLY FOR TESTING
+        if (input.doNotCompleteETransfer()) {
+          return true;
+        }
         break;
+
       case "TransferComplete":
         if (!tracker.amount || !tracker.toRecipient) {
           log.error("Detected stage 'TransferComplete', but not all required fields are filled");
@@ -296,8 +302,14 @@ async function selectFromAccount(page: PageHandler, input: SearchElement, accoun
     if (selectedText.includes(account)) return true;
 
     // Else, find the most likely option
-    const options = await input.element.evaluate(el => Array.from((el as HTMLSelectElement).options).map(o => o.innerText));
-    const scored = options.map(o => levenshtein.distance(o, account));
+    const options = input.data.options;
+    if (!options) {
+      throw new Error("Expected options to be defined");
+    }
+    const { data: bestAccordingToLLM} = await GetETransferApi().detectMostSimilarOption(account, options);
+
+    // Now we can safely use Levenstein just in case the LLM changed some letters/punctuation
+    const scored = options.map(o => distance(bestAccordingToLLM.most_similar, o));
     const bestMatch = options[scored.indexOf(Math.min(...scored))];
     if (bestMatch) {
       await enterValueIntoFound(page.page, input, bestMatch);
@@ -322,7 +334,7 @@ async function selectToRecipient(page: PageHandler, element: SearchElement, inpu
   if (element.data.options?.length) {
     const found = element.data.options.find(o => o == recipient);
     if (!found) {
-      recipient = await input.selectString("ToRecipient", element.data.options);
+      recipient = await input.forValue("Select your coin account", element.data.options);
     }
   }
 

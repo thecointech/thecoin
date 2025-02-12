@@ -21,9 +21,12 @@ export type ChoiceText<T> = keyof {
 
 
 export interface IAskUser {
-  forValue(question: string): Promise<string>;
+  // FOR TESTING (move somewhere nice when not panicked)
+  doNotCompleteETransfer(): boolean;
+
+  forValue(question: string, options?: string[]): Promise<string>;
   selectOption<T extends object>(question: string, options: User2DChoice<T>, z: ChoiceText<T>): Promise<T>;
-  selectString(question: string, options: string[]): Promise<string>;
+  // selectString(question: string, options: string[]): Promise<string>;
 
   forUsername(): Promise<string>;
   forPassword(): Promise<string>;

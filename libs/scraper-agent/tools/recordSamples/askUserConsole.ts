@@ -17,6 +17,10 @@ export class AskUserConsole implements IAskUser {
       output: process.stdout as NodeJS.WritableStream
     });
   }
+
+  doNotCompleteETransfer(): boolean {
+    return true;
+  }
   async forUsername(): Promise<string> {
     return this.config.username!;
   }
@@ -27,9 +31,13 @@ export class AskUserConsole implements IAskUser {
   async expectedETransferRecipient(): Promise<string> {
     return this.config.to_recipient!;
   }
-  async forValue(question: string): Promise<string> {
-    return this.rlp.question(`${question}: `);
+
+  async forValue(question: string, options?: string[]): Promise<string> {
+    return options
+      ? this.selectString(question, options)
+      : this.rlp.question(`${question}: `);
   }
+
   async selectOption<T extends object>(question: string, options: User2DChoice<T>, z: ChoiceText<T> ): Promise<T> {
     this.rlp.write(`\n${question}\n`);
     const entries = Object.entries(options);

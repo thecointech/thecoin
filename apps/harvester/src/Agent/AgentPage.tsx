@@ -1,34 +1,40 @@
 import React, { useState } from 'react';
-import { Progress, Input, Button, Accordion, Icon, StrictAccordionTitleProps } from 'semantic-ui-react';
+import { Progress, Button, Accordion, Icon, StrictAccordionTitleProps } from 'semantic-ui-react';
 import { BackgroundTaskReducer, type BackgroundTaskInfo } from '@/BackgroundTask';
-import { BankData, banks } from './BankCard/data';
-import { BankCard } from './BankCard/BankCard';
+import { BankData} from './BankCard/data';
 import { QuestionResponse } from './QuestionResponse';
 import { LoginDetails } from './LoginDetails';
+import { BankSelect } from './BankSelect';
 
-const taskId = "chqBalance";
 
 export const AgentPage: React.FC = () => {
   const [chequingBank, setChequingBank] = useState<BankData>();
+  const [creditBank, setCreditBank] = useState<BankData>();
   const [activeIndex, setActiveIndex] = useState(0);
 
   const r = BackgroundTaskReducer.useData();
 
-  const task = r.tasks[taskId];
+  const task = r.tasks[chequingBank?.name ?? ''];
   const initTasks = Object.values(r.tasks).filter((t) => t.taskId === "initAgent");
   const replayTask = Object.values(r.tasks).find((t) => t.taskId === "replay");
 
-  const bankTitle = chequingBank?.name ?? 'Select Chequing Bank';
-
   const isTaskRunning = task && task.completed === undefined;
 
-  const handleSetBank = (bank: BankData) => {
+  const differentBanks = chequingBank && creditBank && chequingBank.name !== creditBank.name;
+
+  const handleSetChequingBank = (bank: BankData) => {
     setChequingBank(bank);
     setActiveIndex(i => i + 1);
   };
 
+  const handleSetCreditBank = (bank: BankData) => {
+    setCreditBank(bank);
+    setActiveIndex(i => i + 1);
+  };
+
+  const qaIndex = differentBanks ? 4 : 3;
   const setQuestionActive = () => {
-    setActiveIndex(2);
+    setActiveIndex(qaIndex);
   }
 
   const initAgent = async () => {
@@ -64,50 +70,63 @@ export const AgentPage: React.FC = () => {
             onClick={handleAccordionClick}
           >
             <Icon name="dropdown" />
-            {bankTitle}
+            {getTitle(chequingBank, 'Chequing')}
           </Accordion.Title>
           <Accordion.Content active={activeIndex === 0}>
-            <p>Select your chequing bank provider:</p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-              {
-                banks.map((bank, i) => (
-                  <BankCard key={i} {...bank} isSelected={bank.name === chequingBank?.name} onClick={handleSetBank} />
-                ))
-              }
-              </div>
-            <Input
-              visible={chequingBank === undefined}
-              disabled={chequingBank?.url !== undefined}
-              fluid
-              value={chequingBank?.url ?? ""}
-              // onChange={(e) => setUrl(e.target.value)}
-              placeholder="URL to process"
-              style={{ marginBottom: '1rem' }}
-            />
+            <BankSelect onSelectBank={handleSetChequingBank} type="chequing" />
           </Accordion.Content>
 
           <Accordion.Title
-            disabled={chequingBank === undefined}
             active={activeIndex === 1}
             index={1}
             onClick={handleAccordionClick}
           >
             <Icon name="dropdown" />
-            Login Details
+            {getTitle(creditBank, 'Credit')}
           </Accordion.Title>
           <Accordion.Content active={activeIndex === 1}>
-            <LoginDetails {...chequingBank!} actionName={taskId} />
+            <BankSelect onSelectBank={handleSetCreditBank} type="credit" />
           </Accordion.Content>
 
           <Accordion.Title
+            disabled={chequingBank === undefined || creditBank === undefined}
             active={activeIndex === 2}
             index={2}
             onClick={handleAccordionClick}
           >
           <Icon name="dropdown" />
-            Two Factor Authentication
+            Login Details: {chequingBank?.name}
           </Accordion.Title>
           <Accordion.Content active={activeIndex === 2}>
+            <LoginDetails {...chequingBank!} doChequing={true} doCredit={!differentBanks} />
+          </Accordion.Content>
+          {
+            (differentBanks) && (
+              <>
+                <Accordion.Title
+                  disabled={creditBank === undefined}
+                  active={activeIndex === 3}
+                  index={3}
+                  onClick={handleAccordionClick}
+                >
+                <Icon name="dropdown" />
+                  Login Details: {creditBank?.name}
+                </Accordion.Title>
+                <Accordion.Content active={activeIndex === 3}>
+                  <LoginDetails {...creditBank!} doChequing={false} doCredit={true} />
+                </Accordion.Content>
+              </>
+            )
+          }
+          <Accordion.Title
+            active={activeIndex === qaIndex}
+            index={qaIndex}
+            onClick={handleAccordionClick}
+          >
+          <Icon name="dropdown" />
+            Additional Info
+          </Accordion.Title>
+          <Accordion.Content active={activeIndex === qaIndex}>
             <QuestionResponse setQuestionActive={setQuestionActive} />
           </Accordion.Content>
         </Accordion>
@@ -164,7 +183,7 @@ export const AgentCompleted = ({task}: {task?: BackgroundTaskInfo}) => {
 
   const [result, setResult] = useState<Record<string, string> | undefined>(undefined);
   async function validate(): Promise<void> {
-    const r = await window.scraper.testAction(taskId);
+    const r = await window.scraper.testAction("chqBalance");
     if (r.error) alert(r.error);
     setResult(r.value);
   }
@@ -188,5 +207,10 @@ export const AgentCompleted = ({task}: {task?: BackgroundTaskInfo}) => {
   // }
   // return null;
 }
+
+const getTitle = (bank: BankData | undefined, type: 'Chequing' | 'Credit') =>
+  bank?.name
+    ? `${type}: ${bank.name}`
+    : `Select ${type} Bank`;
 
 export default AgentPage;

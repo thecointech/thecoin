@@ -230,7 +230,7 @@ const getElementProps = (el: HTMLElement) => ({
   frame: getFrameUrl(),
   tagName: el.tagName,
   name: el.getAttribute("name") ?? undefined,
-  options: (el as HTMLSelectElement)?.options ? Array.from((el as HTMLSelectElement).options).map(o => o.innerText) : undefined,
+  options: (el as HTMLSelectElement)?.options ? Array.from((el as HTMLSelectElement).options).map(o => o.text) : undefined,
   inputType: el.getAttribute("type") ?? undefined,
   role: el.getAttribute("role"),
   selector: getSelector(el),

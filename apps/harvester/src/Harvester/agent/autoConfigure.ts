@@ -1,4 +1,3 @@
-import { ActionTypes } from "../scraper/types";
 import { Agent, SectionName, EventSection, ProgressInfo } from '@thecointech/scraper-agent';
 import { AgentLogger } from "./agentLogger";
 import { AskUserReact } from "./askUser";
@@ -7,57 +6,67 @@ import { AnyEvent } from "@thecointech/scraper/types";
 import { log } from "@thecointech/logging";
 import type { BackgroundTaskCallback } from "@/BackgroundTask/types";
 import { initAgent } from "./init";
+import { ActionTypes } from '../scraper';
 
 export type AutoConfigParams = {
-  actionName: ActionTypes;
+  doChequing: boolean;
+  doCredit: boolean;
+  name: string;
   url: string;
   username: string;
   password: string;
 }
-export async function autoConfigure({ actionName, url, username, password }: AutoConfigParams, callback: BackgroundTaskCallback) {
+export async function autoConfigure({ doChequing, doCredit, name, url, username, password }: AutoConfigParams, depositAddress: string, callback: BackgroundTaskCallback) {
 
-  log.info(`Agent: Starting configuration for action: ${actionName}`);
+  log.info(`Agent: Starting configuration for action: autoConfigure`);
   // This should do nothing, but call it anyway
   await initAgent(callback);
 
   if (!username || !password) throw new Error("Username and password are required");
 
-  const inputBridge = AskUserReact.newSession();
+  const inputBridge = AskUserReact.newSession(depositAddress);
   inputBridge.setUsername(username);
   inputBridge.setPassword(password);
 
-  const toSkip = getSectionsToSkip(actionName);
+  const toSkip = getSectionsToSkip(doChequing, doCredit);
   const onProgress = (progress: ProgressInfo) => {
     const totalPercent = progress.sectionPercent + (progress.section * 100) / progress.totalSections;
     callback({
       taskId: "agent",
-      stepId: actionName,
+      stepId: name,
       progress: totalPercent,
       label: `Step ${progress.section + 1} of ${progress.totalSections}`
     })
   }
 
   try {
-    const baseNode = await Agent.process(actionName, url, inputBridge, AgentLogger.instance, onProgress, toSkip);
-    const sectionsToKeep: SectionName[]  = ["Initial", "Landing", "Login", "AccountsSummary", "CreditAccountDetails", "SendETransfer"]
-    log.info(`Agent: Events for ${actionName} collected`);
-    const events = flatten(baseNode, sectionsToKeep);
-    const strippedEvents = stripDuplicateNavigations(events);
-    await setEvents(actionName, strippedEvents);
+    const baseNode = await Agent.process(name, url, inputBridge, AgentLogger.instance, onProgress, toSkip);
+
+    // Store events in the old linear format (for now)
+    if (doChequing) {
+      await storeEvents(name, baseNode, "chqBalance");
+      await storeEvents(name, baseNode, "chqETransfer");
+    }
+
+    if (doCredit) {
+      await storeEvents(name, baseNode, "visaBalance");
+    }
+
     callback({
       taskId: "agent",
-      stepId: actionName,
+      stepId: name,
       progress: 100,
       completed: true
     })
-    log.info(`Agent: Finished configuring for action: ${actionName}`);
+
+    log.info(`Agent: Finished configuring for action: ${name}`);
   }
   catch (e) {
-    log.error(e, `Error configuring agent for action: ${actionName}`);
+    log.error(e, `Error configuring agent for action: ${name}`);
     const msg = e instanceof Error ? e.message : String(e);
     callback({
       taskId: "agent",
-      stepId: actionName,
+      stepId: name,
       completed: false,
       error: msg
     })
@@ -112,10 +121,34 @@ export function stripDuplicateNavigations(events: AnyEvent[]) {
   });
 }
 
-function getSectionsToSkip(actionName: ActionTypes) : SectionName[] {
-  switch(actionName) {
-    case "chqBalance": return ["SendETransfer", "CreditAccountDetails"];
-    case "chqETransfer": return ["CreditAccountDetails"];
-    case "visaBalance": return ["SendETransfer"];
+async function storeEvents(name: string, baseNode: EventSection, type: ActionTypes) {
+  const sectionsToKeep = getSectionsToKeep(type);
+  log.info(`Agent: Events for ${name} collected`);
+  const events = flatten(baseNode, sectionsToKeep);
+  const strippedEvents = stripDuplicateNavigations(events);
+  // TODO!!!
+  await setEvents(type, strippedEvents);
+}
+
+function getSectionsToSkip(doChequing: boolean, doCredit: boolean) : SectionName[] {
+  const sectionsToSkip: SectionName[] = [];
+  if (!doCredit) sectionsToSkip.push("CreditAccountDetails");
+  if (!doChequing) sectionsToSkip.push("SendETransfer");
+  return sectionsToSkip;
+}
+
+function getSectionsToKeep(actionType: ActionTypes) : SectionName[] {
+  const sectionsToKeep: SectionName[] = [];
+  switch (actionType) {
+    case "chqBalance":
+      sectionsToKeep.push("Initial", "Landing", "Login", "AccountsSummary");
+      break;
+    case "visaBalance":
+      sectionsToKeep.push("Initial", "Landing", "Login", "CreditAccountDetails");
+      break;
+    case "chqETransfer":
+      sectionsToKeep.push("Initial", "Landing", "Login", "SendETransfer");
+      break;
   }
+  return sectionsToKeep;
 }
