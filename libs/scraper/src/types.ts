@@ -12,6 +12,7 @@ export type ReplayProgress = {
 
 export type ReplayProgressCallback = (progress: ReplayProgress) => void;
 export type ReplayCallbacks = {
+  errorHandler?: (page: Page, event: AnyEvent, err: unknown) => Promise<boolean>,
   onError?: (page: Page, error: unknown) => Promise<void>,
   onProgress?: ReplayProgressCallback,
   onScreenshot?: (page: Page) => Promise<void>,

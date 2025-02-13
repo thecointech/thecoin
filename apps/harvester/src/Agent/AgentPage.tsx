@@ -5,6 +5,7 @@ import { BankData} from './BankCard/data';
 import { QuestionResponse } from './QuestionResponse';
 import { LoginDetails } from './LoginDetails';
 import { BankSelect } from './BankSelect';
+import { ActionTypes } from '@/Harvester/scraper/types';
 
 
 export const AgentPage: React.FC = () => {
@@ -133,7 +134,9 @@ export const AgentPage: React.FC = () => {
       </div>
 
       <AgentProgressBar task={task} />
-      <AgentCompleted task={task} />
+      <AgentCompleted task={task} type="chqBalance" />
+      <AgentCompleted task={task} type="chqETransfer" />
+      <AgentCompleted task={task} type="visaBalance" />
       <AgentProgressBar task={replayTask} />
     </div>
   );
@@ -179,12 +182,17 @@ export const AgentProgressBar = ({task}: {task?: BackgroundTaskInfo}) => {
   )
 }
 
-export const AgentCompleted = ({task}: {task?: BackgroundTaskInfo}) => {
+type AgentCompletedProps = {
+  task?: BackgroundTaskInfo
+  type: ActionTypes
+}
+export const AgentCompleted = ({task, type}: AgentCompletedProps) => {
 
   const [result, setResult] = useState<Record<string, string> | undefined>(undefined);
   async function validate(): Promise<void> {
-    const r = await window.scraper.testAction("chqBalance");
+    const r = await window.scraper.testAction(type);
     if (r.error) alert(r.error);
+    console.log('Validation result:', r.value);
     setResult(r.value);
   }
 
@@ -197,7 +205,7 @@ export const AgentCompleted = ({task}: {task?: BackgroundTaskInfo}) => {
     return (
       <>
       <div>
-        Agent completed <Button onClick={validate}>Validate</Button>
+        Agent completed <Button onClick={validate}>Validate {type}</Button>
       </div>
       <div color="darkgreen">
         {result && Object.entries(result).map(([k, v]) => <div key={k}>{k}: {v}</div>)}

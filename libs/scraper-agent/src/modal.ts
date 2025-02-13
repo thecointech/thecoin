@@ -2,9 +2,9 @@ import { GetIntentApi, GetModalApi } from "@thecointech/apis/vqa";
 import { sleep } from "@thecointech/async";
 import { log } from "@thecointech/logging";
 import type { ElementResponse } from "@thecointech/vqa";
-import { getElementForEvent } from "./elements";
+import { getElementForEvent } from "@thecointech/scraper/elements";
 import type { Page } from "puppeteer";
-import type { ElementDataMin } from "./types";
+import type { ElementDataMin } from "@thecointech/scraper/types";
 import { File } from "@web-std/file";
 
 

@@ -13,7 +13,7 @@ import { getCoordsWithMargin, mapInputToParent } from "../elementUtils";
 import { PageHandler } from "../pageHandler";
 import { IAskUser } from "../types";
 import { processorFn, SectionProgressCallback } from "./types";
-
+import { waitPageStable } from "../vqaResponse";
 
 class CannotFindLinkError extends Error {
   constructor() {
@@ -244,6 +244,15 @@ async function fillInputs(page: PageHandler, input: IAskUser, tracker: InputTrac
   const inputTypes = await callInputTypes(image, elements, parentCoords);
   log.trace("SendETransferWriter: inputTypes: " + JSON.stringify(inputTypes));
 
+  const shortWaitPageStable = async () => {
+    try {
+      await waitPageStable(page.page, 5_000);
+    } catch (e) {
+      // We don't care about any errors here
+      log.warn(e, "Error waiting for page to be stable");
+    }
+  }
+
   let hasFilledInput = false;
   try {
     for (const [element, elementType] of zip(elements, inputTypes)) {
@@ -251,6 +260,7 @@ async function fillInputs(page: PageHandler, input: IAskUser, tracker: InputTrac
         case "AmountToSend":
           if (!tracker.amount) {
             await fillAmountToSend(page, element, 5.23);
+            await shortWaitPageStable();
             tracker.amount = true;
             hasFilledInput = true;
           }
@@ -258,6 +268,7 @@ async function fillInputs(page: PageHandler, input: IAskUser, tracker: InputTrac
         case "FromAccount":
           if (!tracker.fromAccount) {
             await selectFromAccount(page, element, accountNumber);
+            await shortWaitPageStable();
             tracker.fromAccount = true;
             hasFilledInput = true;
           }
@@ -265,6 +276,7 @@ async function fillInputs(page: PageHandler, input: IAskUser, tracker: InputTrac
         case "ToRecipient":
           if (!tracker.toRecipient && element.data.inputType != "radio") {
             await selectToRecipient(page, element, input);
+            await shortWaitPageStable();
             tracker.toRecipient = true;
             hasFilledInput = true;
           }

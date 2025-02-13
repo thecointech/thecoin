@@ -82,8 +82,8 @@ export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: R
         // must be from clicking links etc
         if (i == 0) {
           await Promise.all([
+            page.waitForNavigation({ waitUntil: 'networkidle2' }),
             page.goto(event.to),
-            page.waitForNavigation({ waitUntil: 'networkidle2' })
           ])
         }
 
@@ -204,7 +204,7 @@ export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: R
     }
   }
 
-  async function processInstructions(events: AnyEvent[]) {
+  async function processInstructions(events: AnyEvent[], errorHandler?: (page: Page, event: AnyEvent, err: any) => Promise<boolean>) {
 
     for (let i = 0; i < events.length; i++) {
       const event = events[i];
@@ -218,7 +218,8 @@ export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: R
         log.error(err, `Failed to process event: ${event.type} - ${event.id}`);
 
         // For now, the only error handling we can do is to check if we can close a modal
-        if (await maybeCloseModal(page)) {
+        const wasHandled = await errorHandler?.(page, event, err);
+        if (wasHandled) {
           // If it worked, take another crack
           await processEvent(event, i)
           log.info(` - Resolved Modal, continue processing`);
@@ -234,7 +235,7 @@ export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: R
     }
   }
 
-  await processInstructions(events)
+  await processInstructions(events, callbacks?.errorHandler)
 
   // remove history (personal info) from logged info (TODO: remove this line entirely)
   const { history, ...sanitize } = values;
@@ -261,19 +262,35 @@ export async function enterValueIntoFound(page: Page, found: SearchElement, valu
     return true;
   }
   else if (found.data.tagName == "SELECT") {
-    // We store/work with the human-visible value, so find the option by text that matches this
-    await found.element.evaluate((v, value) => {
-      const asSelect = v as HTMLSelectElement;
+    // Click to open the select dropdown
+    await found.element.click();
+
+    // Find and click the matching option
+    const optionSelected = await found.element.evaluate((select, value) => {
+      const asSelect = select as HTMLSelectElement;
       const options = Array.from(asSelect.options);
       const option = options.find(o => o.text.includes(value) || o.value.includes(value));
+
       if (option) {
-        asSelect.value = option.value;
+        // Dispatch events that would occur during user interaction
+        option.selected = true;
+
+        // Create and dispatch necessary events
+        const changeEvent = new Event('change', { bubbles: true });
+        const inputEvent = new Event('input', { bubbles: true });
+
+        select.dispatchEvent(inputEvent);
+        select.dispatchEvent(changeEvent);
+
+        return true;
       }
-      else {
-        // Fall back to setting the value as a string
-        asSelect.value = value;
-      }
+      return false;
     }, value);
+
+    if (!optionSelected) {
+      console.warn(`Could not find option matching "${value}" in select element`);
+      return false;
+    }
     return true;
   }
   return false;

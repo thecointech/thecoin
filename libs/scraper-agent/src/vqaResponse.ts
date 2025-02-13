@@ -220,7 +220,7 @@ async function waitForValidIntent(page: Page, interval = 1000, timeout = 30_000)
   log.error(`Valid intent not detected in ${timeout / 1000} seconds`);
 }
 
-async function waitPageStable(page: Page, timeout: number = 10_000) {
+export async function waitPageStable(page: Page, timeout: number = 10_000) {
   let before = await page.screenshot();
   const start = Date.now();
   const maxTime = start + timeout;
