@@ -41,7 +41,7 @@ async function enterUsername(page: PageHandler, input: IAskUser) {
     inputType: "text",
   });
   if (!didEnter) {
-    throw new Error("Failed to enter username");
+    await page.maybeThrow(new Error("Failed to enter username"));
   }
 }
 
@@ -52,11 +52,11 @@ async function enterPassword(page: PageHandler, input: IAskUser, hasPassword: bo
   if (!hasPassword) {
     const clickedContinue = await page.tryClick(api, "detectContinueElement", { name: "continue", htmlType: "button" });
     if (!clickedContinue) {
-      throw new Error("Failed to click continue");
+      await page.maybeThrow(new Error("Failed to click continue"));
     }
     const { data: hasPassword } = await api.detectPasswordExists(await page.getImage());
     if (!hasPassword.password_input_detected) {
-      throw new Error("Failed to detect password input");
+      await page.maybeThrow(new Error("Failed to detect password input"));
     }
 
     // await this.updatePageName("password");
@@ -69,7 +69,7 @@ async function enterPassword(page: PageHandler, input: IAskUser, hasPassword: bo
     inputType: "password",
   });
   if (!didEnter) {
-    throw new Error("Failed to enter password");
+    await page.maybeThrow(new Error("Failed to enter password"));
   }
 }
 
@@ -77,7 +77,7 @@ async function clickLogin(page: PageHandler) {
   const api = GetLoginApi();
   const clickedLogin = await page.tryClick(api, "detectLoginElement", { name: "login", htmlType: "button" });
   if (!clickedLogin) {
-    throw new Error("Failed to click login");
+    await page.maybeThrow(new Error("Failed to click login"));
   }
 }
 

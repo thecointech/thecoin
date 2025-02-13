@@ -15,12 +15,12 @@
     "email": "stephen.taylor.dev@gmail.com"
   },
   "scripts": {
-    "dev": "yarn run -T cross-env RUN_SCRAPER_HEADLESS=false HARVESTER_PROFILE_FOLDER=\"./.cache/dev\" electron-forge start",
     "dev:harvest": "electron-forge start -- -- --harvest",
-    "_dev:live": "yarn run -T cross-env CONFIG_NAME=devlive yarn dev",
-    "prod:test": "yarn run -T cross-env CONFIG_NAME=prodtest yarn dev",
-    "prod:beta": "yarn run -T cross-env CONFIG_NAME=prodbeta NODE_ENV=development yarn dev",
-    "prod": "yarn run -T cross-env CONFIG_NAME=prod NODE_ENV=development yarn dev",
+    "dev": "yarn run -T cross-env CONFIG_NAME=development yarn _start:dbg",
+    "_dev:live": "yarn run -T cross-env CONFIG_NAME=devlive yarn _start:dbg",
+    "prod:test": "yarn run -T cross-env CONFIG_NAME=prodtest yarn _start:dbg",
+    "prod:beta": "yarn run -T cross-env CONFIG_NAME=prodbeta yarn _start:dbg",
+    "prod": "yarn run -T cross-env CONFIG_NAME=prod yarn _start:dbg",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make:prod": "yarn run -T cross-env CONFIG_NAME=prodbeta electron-forge make",
@@ -32,7 +32,8 @@
     "test": "yarn run :jest",
     "scraper:record": "yarn run-env ./src/scraper/main.ts --record",
     "vqa:landings": "yarn run -T run-env ./src/scraper/puppeteer/fetchLandings.ts",
-    "vqa:automap": "yarn run -T run-env ./src/automap/main.ts"
+    "vqa:automap": "yarn run -T run-env ./src/automap/main.ts",
+    "_start:dbg": "yarn run -T cross-env NODE_ENV=development RUN_SCRAPER_HEADLESS=false HARVESTER_PROFILE_FOLDER=\"./.cache/$CONFIG_NAME\" electron-forge start"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.2.0",

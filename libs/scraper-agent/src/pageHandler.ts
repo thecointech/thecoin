@@ -14,6 +14,7 @@ import { IAgentLogger } from "./types";
 import crypto from "node:crypto";
 import { File } from "@web-std/file";
 import { SectionType } from "./processors/types";
+import { agentErrorHandler } from "./agentErrorHandler";
 
 type ApiFn = (image: File) => Promise<AxiosResponse<AnyResponse>>
 
@@ -197,10 +198,12 @@ export class PageHandler {
     // First, record the response from the API
     this.logger?.logJson(this.currentSectionName, `vqa-${eventName}`, response);
     // Find the element in the page
-    const found = await responseToElement(this.page, response, htmlType, inputType);
+    let found = await responseToElement(this.page, response, htmlType, inputType);
     if (!found) {
-      throw new Error("Failed to find element for " + eventName);
+      await this.maybeThrow(new Error("Failed to find element for " + eventName));
+      found = await responseToElement(this.page, response, htmlType, inputType);
     }
+
     // Finally, record what we found
     // Do not include data that is likely to change
     const { frame, ...trimmed } = found.data;
@@ -209,6 +212,26 @@ export class PageHandler {
       // ...(extra ? { extra } : {})
     });
     return found;
+  }
+
+  async maybeThrow(err: Error|unknown) {
+
+    log.error(err, "Encoutered error, attempting to handle...");
+    // Can we handle this error?
+    // Right now, all we do is close modals,
+    // but this could be extended to handle
+    // a wide variety of issues.  It would probably
+    // pay to have include what the agent was
+    // doing and what we expected to happen when the
+    // error occurred.
+
+    // Do not record these actions (perhaps should have an error section instead?)
+    using _ = this.eventManager.pause();
+    const wasHandled = await agentErrorHandler(this.page, err);
+
+    log.info(` - Error handled: ${wasHandled}`);
+    // if not, throw the original error
+    if (!wasHandled) throw err;
   }
 
   // writeScreenshot = () => this.writer.writeScreenshot(this.page, this.state);

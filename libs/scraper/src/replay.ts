@@ -7,7 +7,6 @@ import { log } from '@thecointech/logging';
 import { debounce } from './debounce';
 import { getElementForEvent } from './elements';
 import { sleep } from '@thecointech/async';
-import { maybeCloseModal } from './modal';
 import { newPage } from './puppeteer-init';
 
 // export async function replay(actionName: 'chqBalance', progress?: ReplayProgressCallback): Promise<ChequeBalanceResult>;

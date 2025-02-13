@@ -16,7 +16,7 @@ async function navigateToLogin(page: PageHandler, progress: SectionProgressCallb
     htmlType: "button"
   });
   if (!didNavigate) {
-    throw new Error("Failed to navigate to login");
+    await page.maybeThrow(new Error("Failed to navigate to login"));
   }
   progress(33);
 
@@ -41,7 +41,7 @@ async function navigateToLogin(page: PageHandler, progress: SectionProgressCallb
 
   // We should now be on the login page
   if (intent != "Login") {
-    throw new Error("Failed to navigate to login page");
+    await page.maybeThrow(new Error("Failed to navigate to login page"));
   }
   // return intent;
 }

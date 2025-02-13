@@ -7,17 +7,17 @@ import { CreditDetails } from './types';
 import { setSchedule } from './schedule';
 import path from 'path';
 import { log } from '@thecointech/logging';
-import { AnyEvent } from '@thecointech/scraper/types';
 import { dbSuffix, rootFolder } from '../paths';
 import { HDNodeWallet } from 'ethers';
-import { ActionTypes } from './scraper';
+import { EventSection } from '@thecointech/scraper-agent';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
 
 const db_path = path.join(rootFolder, `config${dbSuffix()}.db`);
 
-const PERSIST_DB = process.env.NODE_ENV !== "development" || process.env.CONFIG_NAME === "devlive"
+// Dev loads fresh every time, devlive should... reset on devlive run?
+const PERSIST_DB = process.env.CONFIG_NAME !== "development"
 
 export type ConfigShape = {
   // Store the account Mnemomic
@@ -26,11 +26,17 @@ export type ConfigShape = {
   // This key should be derived from wallet mnemonic
   stateKey?: string,
 
+  // The payment details for the users visa card
   creditDetails?: CreditDetails,
 
+  // If the user has a single bank, we can use
+  // the same scraping config for both
   scraping?: {
-    [key in ActionTypes]?: AnyEvent[];
-  },
+    credit?: EventSection,
+    chequing?: EventSection
+  } | {
+    both: EventSection
+  }
 
 } & HarvestConfig;
 
@@ -72,6 +78,20 @@ export async function setProcessConfig(config: Partial<ConfigShape>) {
   log.info("Setting config file...");
   const lastCfg = await getProcessConfig();
   const db = await getConfig();
+  // Scraping is a bit different, as it can be either 'credit/chequing' or 'both'
+  let scraping = lastCfg?.scraping;
+  if (config.scraping) {
+    if ('both' in config.scraping) {
+      scraping = config.scraping;
+    } else {
+      const original = (scraping && !('both' in scraping)) ? scraping : {};
+      scraping = {
+        ...original,
+        ...config.scraping
+      }
+    }
+  }
+
   await db.put({
     steps: config.steps ?? lastCfg?.steps ?? [],
     schedule: {
@@ -81,10 +101,7 @@ export async function setProcessConfig(config: Partial<ConfigShape>) {
     stateKey: config.stateKey ?? lastCfg?.stateKey,
     wallet: config.wallet ?? lastCfg?.wallet,
     creditDetails: config.creditDetails ?? lastCfg?.creditDetails,
-    scraping: {
-      ...lastCfg?.scraping,
-      ...config.scraping,
-    },
+    scraping,
     _id: ConfigKey,
     _rev: lastCfg?._rev,
   })
@@ -126,19 +143,6 @@ export async function hydrateProcessor() {
     .map(createStep)
 
   return steps;
-}
-
-export async function setEvents(type: ActionTypes, events: AnyEvent[]) {
-  await setProcessConfig({
-    scraping: {
-      [type]: events
-    }
-  })
-}
-
-export async function getEvents(type: ActionTypes) {
-  const config = await getProcessConfig();
-  return config?.scraping?.[type];
 }
 
 export async function setCreditDetails(creditDetails: CreditDetails) {

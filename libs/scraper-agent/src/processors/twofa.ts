@@ -23,7 +23,8 @@ async function complete2FA(page: PageHandler, onProgress: SectionProgressCallbac
     case "ApproveInApp":
       return await approveInApp(page, input);
     case "Error":
-      throw new Error("2FA Error happened and we can't recover");
+      await page.maybeThrow(new Error("2FA Error happened and we can't recover"));
+      break;
     default:
       throw new Error("Failed to detect action");
   }
@@ -45,7 +46,7 @@ async function selectDestination(page: PageHandler, input: IAskUser) {
     htmlType: "button",
   });
   if (!clickedOption) {
-    throw new Error("Failed to click destination");
+    await page.maybeThrow(new Error("Failed to click destination"));
   }
   await enterCode(page, input);
 }
@@ -64,7 +65,7 @@ async function enterCode(page: PageHandler, input: IAskUser) {
       inputType: "text",
     });
     if (!didEnter) {
-      throw new Error("Failed to enter code");
+      await page.maybeThrow(new Error("Failed to enter code"));
     }
     if (i == 0) {
       // We assume that the remember checkbox remembers
@@ -84,7 +85,7 @@ async function enterCode(page: PageHandler, input: IAskUser) {
       code = await input.forValue(error.error_message);
     }
   }
-  throw new Error("Failed to enter 2FA code");
+  await page.maybeThrow(new Error("Failed to enter 2FA code"));
 }
 
 async function approveInApp(page: PageHandler, input: IAskUser) {
@@ -139,7 +140,7 @@ async function clickSubmit(page: PageHandler) {
   const api = GetTwofaApi();
   const clickedSubmit = await page.tryClick(api, "getSubmitInput", { name: "submit", htmlType: "button", inputType: "submit" });
   if (!clickedSubmit) {
-    throw new Error("Failed to click submit");
+    await page.maybeThrow(new Error("Failed to click submit"));
   }
 }
 

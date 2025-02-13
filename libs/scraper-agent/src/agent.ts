@@ -26,14 +26,15 @@ export class Agent {
     }
 
     if (pageIntent != "Login") {
-      throw new Error("Failed to get to Login");
+      await page.maybeThrow(new Error("Failed to get to Login"))
     }
 
     // Next, test a successful login
     const loginOutcome = await processSection(Login, reporter, page, input);
     switch(loginOutcome) {
       case "LoginError":
-        throw new Error("Failed to login");
+        await page.maybeThrow(new Error("Failed to login"))
+        break;
       case "TwoFactorAuth":
         await processSection(TwoFA, reporter, page, input);
         break;
@@ -44,7 +45,7 @@ export class Agent {
     pageIntent = await page.getPageIntent();
     if (pageIntent != "AccountsSummary") {
       log.error({ intent: pageIntent }, `Expected to be on AccountsSummary, got {intent}.`);
-      throw new Error("Failed to get to AccountsSummary");
+      await page.maybeThrow(new Error("Failed to get to AccountsSummary"))
     }
 
     const accounts = await processSection(AccountsSummary, reporter, page);
@@ -85,6 +86,8 @@ async function processSection<Args extends any[], R>(
   }
   catch (e) {
     section.cancel();
-    throw e;
+    await page.maybeThrow(e)
+    // If we got here, we possibly handled the error, let's try again
+    return await processSection(processor, reporter, page, ...args);
   }
 }

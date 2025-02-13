@@ -8,9 +8,9 @@ import { CreditDetails } from './Harvester/types';
 import { spawn } from 'child_process';
 import { exportResults, getState, setOverrides } from './Harvester/db';
 import { harvest } from './Harvester';
-import { logsFolder } from './paths';
+import { logsFolder, rootFolder } from './paths';
 import { platform } from 'node:os';
-import { getLocalBrowserPath, getSystemBrowserPath, installChrome } from '@thecointech/scraper/puppeteer';
+import { getLocalBrowserPath, getSystemBrowserPath, installChrome, setRootFolder } from '@thecointech/scraper/puppeteer';
 import { log } from '@thecointech/logging';
 import { getValues, ActionTypes } from './Harvester/scraper';
 import { AutoConfigParams, autoConfigure } from './Harvester/agent';
@@ -207,6 +207,7 @@ async function installBrowser(event: IpcMainInvokeEvent) {
   log.info('Installing browser');
   let lastLoggedPercent = 0;
   try {
+    setRootFolder(rootFolder);
     await installChrome((bytes, total) => {
       const percent = Math.round((bytes / total) * 100);
       if (percent - lastLoggedPercent > 10) {

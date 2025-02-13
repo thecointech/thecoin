@@ -1,6 +1,7 @@
-import { flatten, stripDuplicateNavigations } from './autoConfigure';
-import type { EventSection, SectionName } from '@thecointech/scraper-agent';
-import type { AnyEvent, LoadEvent, NavigationEvent } from '@thecointech/scraper/types';
+import { EventSection, SectionName } from "@thecointech/scraper-agent";
+import { flatten, setEvents, getEvents } from "./events";
+import { AnyEvent } from "@thecointech/scraper/types";
+import { setProcessConfig } from './config';
 
 describe('flatten', () => {
   // Helper to create a mock event
@@ -93,61 +94,41 @@ describe('flatten', () => {
   });
 });
 
-describe('stripDuplicateNavigations', () => {
+describe('setting/getting events', () => {
 
-  it('should handle empty array', () => {
-    const events: AnyEvent[] = [];
-    expect(stripDuplicateNavigations(events)).toEqual([]);
+  const creditSection: EventSection = { section: 'Initial', events: [{ type: 'click', id: 'credit'} as any] };
+  const chequingSection: EventSection = { section: 'Initial', events: [{ type: 'click', id: 'chequing'} as any] };
+
+  it('should set both events when both is set', async () => {
+    await setEvents("both", creditSection);
+    const credit = await getEvents("visaBalance");
+    expect(credit[0].id).toEqual("credit");
+    const chequing = await getEvents("chqBalance");
+    expect(chequing[0].id).toEqual("credit");
   });
 
-  it('should keep single navigation event', () => {
-    const events: AnyEvent[] = [
-      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
-    ];
-    expect(stripDuplicateNavigations(events)).toEqual(events);
+  it('should set only chequing events', async () => {
+    await setEvents("both", {} as any);
+    await setEvents("chequing", chequingSection);
+    const chequing = await getEvents("chqBalance");
+    expect(chequing[0].id).toEqual("chequing");
+    await expect(getEvents("visaBalance")).rejects.toThrow();
   });
 
-  it('should remove consecutive duplicate navigation events', () => {
-    const events: AnyEvent[] = [
-      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
-      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
-      { type: 'load' } as LoadEvent,
-    ];
-    const expected: AnyEvent[] = [
-      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
-      { type: 'load' } as LoadEvent,
-    ];
-    expect(stripDuplicateNavigations(events)).toEqual(expected);
+  it('should set only credit events', async () => {
+    await setEvents("both", {} as any);
+    await setEvents("credit", creditSection);
+    const credit = await getEvents("visaBalance");
+    expect(credit[0].id).toEqual("credit");
+    await expect(getEvents("chqBalance")).rejects.toThrow();
   });
 
-  // it('should keep different consecutive navigation events', () => {
-  //   const events: AnyEvent[] = [
-  //     { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
-  //     { type: 'navigation', to: 'http://other.com' } as NavigationEvent,
-  //   ];
-  //   expect(stripDuplicateNavigations(events)).toEqual(events);
-  // });
-
-  it('should handle mixed event types', () => {
-    const events: AnyEvent[] = [
-      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
-      { type: 'load' } as LoadEvent,
-      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
-    ];
-    expect(stripDuplicateNavigations(events)).toEqual(events);
-  });
-
-  it('should remove multiple consecutive duplicates', () => {
-    const events: AnyEvent[] = [
-      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
-      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
-      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
-      { type: 'load' } as LoadEvent,
-    ];
-    const expected: AnyEvent[] = [
-      { type: 'navigation', to: 'http://example.com' } as NavigationEvent,
-      { type: 'load' } as LoadEvent,
-    ];
-    expect(stripDuplicateNavigations(events)).toEqual(expected);
+  it('setting both overrides initial settings', async () => {
+    await setEvents("credit", creditSection);
+    await setEvents("both", chequingSection);
+    const credit = await getEvents("visaBalance");
+    expect(credit[0].id).toEqual("chequing");
+    const chequing = await getEvents("chqBalance");
+    expect(chequing[0].id).toEqual("chequing");
   });
 });

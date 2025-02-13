@@ -1,7 +1,7 @@
 import { replay } from '@thecointech/scraper/replay';
 import { ReplayResult, ReplayCallbacks } from '@thecointech/scraper/types';
 import { ChequeBalanceResult, VisaBalanceResult, ETransferResult, ActionTypes } from './types';
-import { getEvents } from '../config';
+import { getEvents } from '../events';
 
 export async function getValues(actionName: 'chqBalance', progress?: ReplayCallbacks): Promise<ChequeBalanceResult>;
 export async function getValues(actionName: 'visaBalance', progress?: ReplayCallbacks): Promise<VisaBalanceResult>;

@@ -23,8 +23,7 @@ export async function maybeCloseModal(page: Page) {
 
 
     // First check if this is a modal dialog
-    const title = await page.title();
-    const { data: intent } = await GetIntentApi().pageIntent(title, screenshotFile);
+    const { data: intent } = await GetIntentApi().pageIntent(screenshotFile);
     log.debug(`Page detected as type: ${intent.type}`);
     if (intent.type != "ModalDialog") return false;
 

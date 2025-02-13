@@ -99,7 +99,7 @@ export const AgentPage: React.FC = () => {
             Login Details: {chequingBank?.name}
           </Accordion.Title>
           <Accordion.Content active={activeIndex === 2}>
-            <LoginDetails {...chequingBank!} doChequing={true} doCredit={!differentBanks} />
+            <LoginDetails {...chequingBank!} type={differentBanks ? "chequing" : "both"} />
           </Accordion.Content>
           {
             (differentBanks) && (
@@ -114,7 +114,7 @@ export const AgentPage: React.FC = () => {
                   Login Details: {creditBank?.name}
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 3}>
-                  <LoginDetails {...creditBank!} doChequing={false} doCredit={true} />
+                  <LoginDetails {...creditBank!} type="credit" />
                 </Accordion.Content>
               </>
             )
