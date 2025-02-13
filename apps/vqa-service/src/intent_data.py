@@ -26,13 +26,12 @@ class IntentResponse(BaseModel):
 
 
 typesStr = ", ".join([e.value for e in PageType])
-intent_prompt = "From the following options, select the one that best describes the given webpage with the title \"{title}\": {typesStr}."
+intent_prompt = f"From the following options, select the one that best describes the given webpage: {typesStr}."
 
-def query_page_intent(title: str):
-    return (
-        intent_prompt.format(title=title, typesStr=typesStr),
-        IntentResponse
-    )
+query_page_intent = (
+    intent_prompt,
+    IntentResponse
+)
 
 #####################
 
