@@ -29,8 +29,8 @@ async def detect_input_types(page: Image.Image,elements: list[object], parent_co
         # !!!TO VERIFY!!!
         # The form detection seems robust, but needs verification
         # However, for now we are dropping inputs that aren't in the form
-        if not form_bbox.intersects(group_box):
-            continue
+        # if not form_bbox.intersects(group_box):
+        #     continue
 
         highlighted_image = overlay_image(page, [group_box])
         group_type = await query_input_group_type(highlighted_image, group_elements)
