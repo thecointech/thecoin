@@ -246,7 +246,9 @@ async function fillInputs(page: PageHandler, input: IAskUser, tracker: InputTrac
 
   const shortWaitPageStable = async () => {
     try {
-      await waitPageStable(page.page, 5_000);
+      // A short wait but with a very low threshold should
+      // catch most in-page updates but not penalize us for other things
+      await waitPageStable(page.page, 5_000, 25);
     } catch (e) {
       // We don't care about any errors here
       log.warn(e, "Error waiting for page to be stable");

@@ -17,7 +17,7 @@ async function listAccounts(page: PageHandler, progress: SectionProgressCallback
   // Get a list of all accounts
   const { data: accounts } = await api.listAccounts(await page.getImage());
   progress(25);
-  // this.writeJson(accounts, "vqa-list-accounts");
+  page.logger?.logJson("AccountsSummary", "list-accounts-vqa", accounts);
   log.trace(`Found ${accounts.accounts.length} accounts`);
   // Click on each account
   const allAccounts: ElementData[] = [];
@@ -39,7 +39,7 @@ async function listAccounts(page: PageHandler, progress: SectionProgressCallback
       allAccounts.push(data);
     }
   }
-  // this.writeJson(allAccounts, "list-accounts");
+  page.logger?.logJson("AccountsSummary", "list-accounts-elm", allAccounts);
 
   // Update inferred with the real account numbers, then save balance/navigation
   let r: { account: AccountResponse, nav: FoundElement }[] = [];
@@ -55,7 +55,10 @@ async function listAccounts(page: PageHandler, progress: SectionProgressCallback
     const crop = getCropFromElements([scraped], viewport);
     // Validate we can find the balance, as that is all some accounts need
 
-    await saveBalanceElement(page, accountNumber, crop);
+    if (inferred.account_type == "Chequing") {
+      await saveBalanceElement(page, accountNumber, crop);
+    }
+
     // Validate we can navigate (in case we need more)
     const nav = await saveAccountNavigation(page, accountNumber, crop);
     if (nav) {

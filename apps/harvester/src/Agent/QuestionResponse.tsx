@@ -1,21 +1,34 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { QuestionPacket } from "@/Harvester/agent/askUser";
 import { Button, Dimmer, Input, Loader, Segment, Select } from "semantic-ui-react";
 
 export const QuestionResponse: React.FC<{
   setQuestionActive: () => void;
-}> = ({ setQuestionActive }) => {
+  isTaskRunning: boolean;
+}> = ({ setQuestionActive, isTaskRunning }) => {
 
   const [question, setQuestion] = useState<QuestionPacket | undefined>()
   const [answer, setAnswer] = useState('')
   const [hasSubmitted, setHasSubmitted] = useState(false)
+  const setQuestionActiveRef = useRef(setQuestionActive);
+
+  useEffect(() => {
+    setQuestionActiveRef.current = setQuestionActive;
+  }, [setQuestionActive]);
+
   useEffect(() => {
     window.scraper.onAskQuestion((question: QuestionPacket) => {
       setQuestion(question);
-      setQuestionActive();
+      setQuestionActiveRef.current();
       setHasSubmitted(false);
     })
   }, []);
+
+  useEffect(() => {
+    if (!isTaskRunning) {
+      setQuestion(undefined);
+    }
+  }, [isTaskRunning])
 
   const onSubmit = async () => {
     const r = await window.scraper.replyQuestion({

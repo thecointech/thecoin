@@ -220,7 +220,7 @@ async function waitForValidIntent(page: Page, interval = 1000, timeout = 30_000)
   log.error(`Valid intent not detected in ${timeout / 1000} seconds`);
 }
 
-export async function waitPageStable(page: Page, timeout: number = 10_000) {
+export async function waitPageStable(page: Page, timeout: number = 10_000, maxPixelsChanged = MIN_PIXELS_CHANGED) {
   let before = await page.screenshot();
   const start = Date.now();
   const maxTime = start + timeout;
@@ -231,8 +231,8 @@ export async function waitPageStable(page: Page, timeout: number = 10_000) {
     // This changed test sticks to the default has-the-page-changed value
     // for minPixelsChanged because we don't want to hang up page stability
     // on small changes
-    if (changed < MIN_PIXELS_CHANGED) {
-      log.debug(`Page stable,Only ${changed} < ${MIN_PIXELS_CHANGED} pixels changed after ${elapsedSeconds(start)} seconds`);
+    if (changed < maxPixelsChanged) {
+      log.debug(`Page stable,Only ${changed} < ${maxPixelsChanged} pixels changed after ${elapsedSeconds(start)} seconds`);
       return;
     }
     before = after;

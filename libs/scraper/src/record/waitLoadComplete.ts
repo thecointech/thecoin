@@ -8,7 +8,6 @@ export async function waitUntilLoadComplete(page: Page, timeout = 30_000) {
   const firstLoadTime = Date.now();
   let lastLoadTime = Date.now();
   const updater = (type: string) => () => {
-    log.trace(`Got event: ${type}`);
     lastLoadTime = Date.now();
   }
   const updateWait = updater("load");

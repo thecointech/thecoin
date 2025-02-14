@@ -15,6 +15,7 @@ export type AutoConfigParams = {
   username: string;
   password: string;
 }
+
 export async function autoConfigure({ type, name, url, username, password }: AutoConfigParams, depositAddress: string, callback: BackgroundTaskCallback) {
 
   log.info(`Agent: Starting configuration for action: autoConfigure`);
@@ -28,28 +29,26 @@ export async function autoConfigure({ type, name, url, username, password }: Aut
   inputBridge.setPassword(password);
 
   const toSkip = getSectionsToSkip(type);
-  const onProgress = (progress: ProgressInfo) => {
+  const onProgress = (progress: ProgressInfo, completed?: boolean) => {
     const totalPercent = progress.sectionPercent + (progress.section * 100) / progress.totalSections;
     callback({
       taskId: "agent",
       stepId: name,
       progress: totalPercent,
-      label: `Step ${progress.section + 1} of ${progress.totalSections}`
+      label: `Step ${progress.section + 1} of ${progress.totalSections}`,
+      completed
     })
   }
 
+  const logger = new AgentLogger();
+
   try {
-    const baseNode = await Agent.process(name, url, inputBridge, AgentLogger.instance, onProgress, toSkip);
+    // Initialize at 0
+    onProgress({ section: 0, sectionPercent: 0, totalSections: 7 });
+    const baseNode = await Agent.process(name, url, inputBridge, logger, onProgress, toSkip);
 
     await storeEvents(type, baseNode);
-
-    callback({
-      taskId: "agent",
-      stepId: name,
-      progress: 100,
-      completed: true
-    })
-
+    onProgress({ section: 7, sectionPercent: 100, totalSections: 7 }, true);
     log.info(`Agent: Finished configuring for action: ${name}`);
   }
   catch (e) {

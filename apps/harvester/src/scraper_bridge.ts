@@ -140,7 +140,9 @@ export function initScraping() {
   ipcMain.handle(actions.finishAction, async (_event) => {
     return api.finishAction();
   })
-  ipcMain.handle(actions.testAction, testAction);
+  ipcMain.handle(actions.testAction, async (event, actionName: ActionTypes, inputValues: Record<string, string>) => {
+    return guard(() => testAction(event, actionName, inputValues));
+  });
 
   ipcMain.handle(actions.setWalletMnemomic, async (_event, mnemonic: Mnemonic) => {
     return api.setWalletMnemomic(mnemonic as any);
@@ -238,9 +240,16 @@ const getEmailAddress = (coinAddress: string) => `${coinAddress}@${process.env.T
 
 async function autoProcess(event: IpcMainInvokeEvent, params: AutoConfigParams) {
   // Get our coinETransferRecipient
-  const wallet = await getWallet();
+  let wallet = await getWallet();
   if (!wallet) {
-    throw new Error("Wallet not configured");
+    if (process.env.CONFIG_NAME === 'development') {
+      wallet = {
+        address: process.env.WALLET_BrokerCAD_ADDRESS!,
+      } as any
+    }
+    else {
+      throw new Error("Wallet not configured");
+    }
   }
   const depositAddress = getEmailAddress(wallet.address);
   await autoConfigure(params, depositAddress, (progress) => {
@@ -248,7 +257,7 @@ async function autoProcess(event: IpcMainInvokeEvent, params: AutoConfigParams) 
   });
 }
 
-async function testAction(event: IpcMainInvokeEvent, actionName: ActionTypes, dynamicValues: Record<string, string>) {
+async function testAction(event: IpcMainInvokeEvent, actionName: ActionTypes, inputValues: Record<string, string>) {
   const r = await getValues(actionName, {
     onProgress: (progress) => {
       onBackgroundTaskProgress(event, {
@@ -265,7 +274,7 @@ async function testAction(event: IpcMainInvokeEvent, actionName: ActionTypes, dy
         error: error?.toString() ?? "Unknown error"
       });
     },
-  }, dynamicValues);
+  }, inputValues);
   return toBridge(r);
 }
 

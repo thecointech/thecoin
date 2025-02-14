@@ -35,7 +35,7 @@ export class EventManager {
     // Can also do things like take a screenshot etc.
     if (event.type == "navigation") {
       // this.navigations++;
-      log.trace(`Navigation started`);
+      // log.trace(`Navigation started`);
     }
     else if (event.type == "load") {
       // if (--this.navigations == 0) {

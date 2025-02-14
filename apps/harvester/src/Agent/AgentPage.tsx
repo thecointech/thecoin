@@ -22,6 +22,7 @@ export const AgentPage: React.FC = () => {
   const isTaskRunning = task && task.completed === undefined;
 
   const differentBanks = chequingBank && creditBank && chequingBank.name !== creditBank.name;
+  const qaIndex = differentBanks ? 4 : 3;
 
   const handleSetChequingBank = (bank: BankData) => {
     setChequingBank(bank);
@@ -33,7 +34,6 @@ export const AgentPage: React.FC = () => {
     setActiveIndex(i => i + 1);
   };
 
-  const qaIndex = differentBanks ? 4 : 3;
   const setQuestionActive = () => {
     setActiveIndex(qaIndex);
   }
@@ -62,7 +62,6 @@ export const AgentPage: React.FC = () => {
       </div>
 
       <div style={{ marginBottom: '2rem' }}>
-
 
         <Accordion fluid styled>
           <Accordion.Title
@@ -128,7 +127,7 @@ export const AgentPage: React.FC = () => {
             Additional Info
           </Accordion.Title>
           <Accordion.Content active={activeIndex === qaIndex}>
-            <QuestionResponse setQuestionActive={setQuestionActive} />
+            <QuestionResponse setQuestionActive={setQuestionActive} isTaskRunning={isTaskRunning} />
           </Accordion.Content>
         </Accordion>
       </div>
