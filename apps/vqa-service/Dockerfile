@@ -32,8 +32,9 @@ ENV PYTHONPATH=/app
 ENV MODEL_CACHE_DIR=/app/.model_cache
 # ENV MODEL_URL=""
 
-# Create model cache directory
-# RUN mkdir -p /app/model_cache
+# Create mount point for model cache
+# This directory will be overlaid by the bind mount at runtime
+RUN mkdir -p /app/.model_cache
 
 # Expose the port the app runs on
 EXPOSE 7004
