@@ -20,6 +20,10 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Create necessary directories with appropriate permissions
+RUN mkdir -p /app/logs && \
+    chmod -R 777 /app/logs
+
 # Copy the rest of the application
 COPY . .
 
@@ -33,11 +37,10 @@ RUN if [ "$USE_SSL" = "true" ]; then \
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app
-ENV MODEL_CACHE_DIR=/app/.model_cache
+# ENV MODEL_CACHE_DIR=/app/.model_cache
 # ENV MODEL_URL=""
 
-# Create model cache directory
-RUN mkdir -p /app/.model_cache
+# Mount point /app/.model_cache will be created automatically by Docker bind mount
 
 # Expose the port the app runs on
 EXPOSE 7004
