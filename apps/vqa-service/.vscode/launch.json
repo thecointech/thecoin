@@ -13,6 +13,8 @@
             "args": [
                 "main:app",
                 "--reload",
+                "--reload-exclude",
+                "transformers_modules/*",
                 "--port",
                 "7004",
             ],

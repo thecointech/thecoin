@@ -26,6 +26,9 @@ RUN mkdir -p /app/logs && \
 # Copy the rest of the application
 COPY . .
 
+# Set up transformers modules in Python path
+ENV PYTHONPATH=/app:/app/src/transformers_modules:${PYTHONPATH}
+
 # Copy SSL certificates
 COPY ${SSL_CERT_FILE:-cert.pem} /app/cert.pem
 COPY ${SSL_KEY_FILE:-key.pem} /app/key.pem
@@ -33,6 +36,7 @@ COPY ${SSL_KEY_FILE:-key.pem} /app/key.pem
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app
+ENV MODEL_LOCAL_ONLY=1
 # ENV MODEL_CACHE_DIR=/app/.model_cache
 # ENV MODEL_URL=""
 

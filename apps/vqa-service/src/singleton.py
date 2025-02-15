@@ -26,8 +26,10 @@ def get_project_root():
 
 # Configuration for model paths
 MODEL_NAME = 'allenai/Molmo-7B-D-0924'
+MODEL_REVISION = '1721478b71306fb7dc671176d5c204dc7a4d27d7'
 MODEL_CACHE_DIR = os.getenv('MODEL_CACHE_DIR', str(get_project_root() / '.model_cache'))
 MODEL_URL = os.getenv('MODEL_URL', None)
+MODEL_LOCAL_ONLY = os.getenv('MODEL_LOCAL_ONLY', False)
 
 cache_path = Path(MODEL_CACHE_DIR)
 converted_model_path = cache_path / "model_bfloat16"
@@ -56,9 +58,11 @@ def get_processor():
         logger.info("Loading processor...")
         _processor = AutoProcessor.from_pretrained(
             MODEL_NAME,
+            revision=MODEL_REVISION,
             trust_remote_code=True,
             device_map='auto',
-            cache_dir=MODEL_CACHE_DIR
+            cache_dir=MODEL_CACHE_DIR,
+            local_files_only=MODEL_LOCAL_ONLY
         )
         logger.info("Processor loaded successfully")
     return _processor
@@ -74,10 +78,12 @@ def get_model():
             logger.info("Loading model from original source...")
             _model = AutoModelForCausalLM.from_pretrained(
                 MODEL_NAME,
+                revision=MODEL_REVISION,
                 trust_remote_code=True,
                 torch_dtype=torch.bfloat16,
                 device_map='auto',
-                cache_dir=MODEL_CACHE_DIR
+                cache_dir=MODEL_CACHE_DIR,
+                local_files_only=MODEL_LOCAL_ONLY
             )
             logger.info("Converting model to bfloat16...")
             _model.to(dtype=torch.bfloat16)
@@ -89,12 +95,14 @@ def get_model():
             logger.info("Model converted and saved successfully")
 
         else:
-            # Load from converted path but with original config
+            # Load from converted path
             logger.info(f"Loading converted model from: {model_path}")
             config = AutoConfig.from_pretrained(
                 MODEL_NAME,
+                revision=MODEL_REVISION,
                 trust_remote_code=True,
-                cache_dir=MODEL_CACHE_DIR
+                cache_dir=MODEL_CACHE_DIR,
+                local_files_only=MODEL_LOCAL_ONLY
             )
             _model = AutoModelForCausalLM.from_pretrained(
                 model_path,
