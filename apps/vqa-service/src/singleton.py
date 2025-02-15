@@ -2,7 +2,7 @@ from transformers import AutoModelForCausalLM, AutoProcessor, AutoConfig
 import torch
 import os
 from pathlib import Path
-from .logger import setup_logger
+from logger import setup_logger
 
 logger = setup_logger(__name__)
 
