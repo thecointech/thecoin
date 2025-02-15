@@ -18,6 +18,8 @@
   "scripts": {
     "gen:swagger": "venv/Scripts/python api/generate_swagger.py",
     "start": "run -T run-env exec=venv/Scripts/python src/app.py",
-    "_test": "run -T run-env exec=venv/Scripts/python tests/query.test.py"
+    "_test": "run -T run-env exec=venv/Scripts/python tests/query.test.py",
+
+    "build-docker": "run -T run-env exec=build-docker.ts"
   }
 }
