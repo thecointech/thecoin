@@ -29,6 +29,11 @@ COPY ${SSL_KEY_FILE:-key.pem} /app/key.pem
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app
+ENV MODEL_CACHE_DIR=/app/.model_cache
+# ENV MODEL_URL=""
+
+# Create model cache directory
+# RUN mkdir -p /app/model_cache
 
 # Expose the port the app runs on
 EXPOSE 7004
