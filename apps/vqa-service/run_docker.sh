@@ -1,7 +1,3 @@
-
-# TODO: We need a way to update the transforms module when updating the model
-cp -r .model_cache/models--allenai--Molmo-7B-D-0924/snapshots/1721478b71306fb7dc671176d5c204dc7a4d27d7/*.py src/transformers_modules/
-
 sudo docker run -d \
     --ipc=host \
     --shm-size 16G \

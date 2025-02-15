@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# TODO: We need a way to update the transforms module when updating the model
 # Create the target directory
 mkdir -p src/transformers_modules
 

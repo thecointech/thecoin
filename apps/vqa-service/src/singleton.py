@@ -31,6 +31,13 @@ MODEL_CACHE_DIR = os.getenv('MODEL_CACHE_DIR', str(get_project_root() / '.model_
 MODEL_URL = os.getenv('MODEL_URL', None)
 MODEL_LOCAL_ONLY = os.getenv('MODEL_LOCAL_ONLY', False)
 
+logger.info("Intialized Model params: ")
+logger.info(f"  - MODEL_NAME: {MODEL_NAME}")
+logger.info(f"  - MODEL_REVISION: {MODEL_REVISION}")
+logger.info(f"  - MODEL_CACHE_DIR: {MODEL_CACHE_DIR}")
+logger.info(f"  - MODEL_URL: {MODEL_URL}")
+logger.info(f"  - MODEL_LOCAL_ONLY: {MODEL_LOCAL_ONLY}")
+
 cache_path = Path(MODEL_CACHE_DIR)
 converted_model_path = cache_path / "model_bfloat16"
 
