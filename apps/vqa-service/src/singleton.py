@@ -2,6 +2,9 @@ from transformers import AutoModelForCausalLM, AutoProcessor, AutoConfig
 import torch
 import os
 from pathlib import Path
+from .logger import setup_logger
+
+logger = setup_logger(__name__)
 
 #
 # Some thoughts on Molmo.
@@ -32,13 +35,17 @@ converted_model_path = cache_path / "model_bfloat16"
 def _get_model_path():
     # If MODEL_URL is set, use it (for cloud storage)
     if MODEL_URL:
+        logger.info(f"Using model from URL: {MODEL_URL}")
         return MODEL_URL
     
     # Check local cache
+    logger.info(f"Checking for converted model in: {converted_model_path}")
     if converted_model_path.exists() and (converted_model_path / "config.json").exists():
+        logger.info("Found converted model in cache")
         return str(converted_model_path)
     
     # Ensure cache directory exists
+    logger.info(f"No converted model found, using original model: {MODEL_NAME}")
     os.makedirs(MODEL_CACHE_DIR, exist_ok=True)
     return MODEL_NAME
 
@@ -46,12 +53,14 @@ _processor = None
 def get_processor():
     global _processor
     if _processor is None:
+        logger.info("Loading processor...")
         _processor = AutoProcessor.from_pretrained(
             MODEL_NAME,
             trust_remote_code=True,
             device_map='auto',
             cache_dir=MODEL_CACHE_DIR
         )
+        logger.info("Processor loaded successfully")
     return _processor
 
 _model = None
@@ -62,6 +71,7 @@ def get_model():
         
         # If using original model, load and convert
         if model_path == MODEL_NAME:
+            logger.info("Loading model from original source...")
             _model = AutoModelForCausalLM.from_pretrained(
                 MODEL_NAME,
                 trust_remote_code=True,
@@ -69,14 +79,18 @@ def get_model():
                 device_map='auto',
                 cache_dir=MODEL_CACHE_DIR
             )
+            logger.info("Converting model to bfloat16...")
             _model.to(dtype=torch.bfloat16)
             
             # Save the converted model with its config
+            logger.info(f"Saving converted model to: {converted_model_path}")
             os.makedirs(converted_model_path, exist_ok=True)
             _model.save_pretrained(converted_model_path, safe_serialization=True, save_config=False)
+            logger.info("Model converted and saved successfully")
 
         else:
             # Load from converted path but with original config
+            logger.info(f"Loading converted model from: {model_path}")
             config = AutoConfig.from_pretrained(
                 MODEL_NAME,
                 trust_remote_code=True,
@@ -89,5 +103,6 @@ def get_model():
                 torch_dtype=torch.bfloat16,
                 device_map='auto'
             )
+            logger.info("Converted model loaded successfully")
     
     return _model
