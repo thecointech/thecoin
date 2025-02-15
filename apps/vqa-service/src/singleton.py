@@ -29,7 +29,7 @@ MODEL_NAME = 'allenai/Molmo-7B-D-0924'
 MODEL_REVISION = '1721478b71306fb7dc671176d5c204dc7a4d27d7'
 MODEL_CACHE_DIR = os.getenv('MODEL_CACHE_DIR', str(get_project_root() / '.model_cache'))
 MODEL_URL = os.getenv('MODEL_URL', None)
-MODEL_LOCAL_ONLY = os.getenv('MODEL_LOCAL_ONLY', False)
+MODEL_LOCAL_ONLY = os.getenv('MODEL_LOCAL_ONLY', "False") != "False"
 
 logger.info("Intialized Model params: ")
 logger.info(f"  - MODEL_NAME: {MODEL_NAME}")
