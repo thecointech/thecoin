@@ -36,9 +36,6 @@ COPY ${SSL_KEY_FILE:-key.pem}* /app/ssl/key.pem
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app:/app/src/transformers_modules
-ENV MODEL_LOCAL_ONLY=1
-# ENV MODEL_CACHE_DIR=/app/.model_cache
-# ENV MODEL_URL=""
 
 # Mount point /app/.model_cache will be created automatically by Docker bind mount
 

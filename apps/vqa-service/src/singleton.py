@@ -1,28 +1,9 @@
 from transformers import AutoModelForCausalLM, AutoProcessor, AutoConfig
 import torch
-import os
-from pathlib import Path
 from logger import setup_logger
-import converted_model_path, MODEL_LOCAL_ONLY, MODEL_CACHE_DIR, MODEL_URL, MODEL_REVISION
+from model_details import converted_model_path
 logger = setup_logger(__name__)
 
-
-# def _get_model_path():
-#     # If MODEL_URL is set, use it (for cloud storage)
-#     if MODEL_URL:
-#         logger.info(f"Using model from URL: {MODEL_URL}")
-#         return MODEL_URL
-
-#     # Check local cache
-#     logger.info(f"Checking for converted model in: {converted_model_path}")
-#     if converted_model_path.exists() and (converted_model_path / "config.json").exists():
-#         logger.info("Found converted model in cache")
-#         return str(converted_model_path)
-
-#     # Ensure cache directory exists
-#     logger.info(f"No converted model found, using original model: {MODEL_NAME}")
-#     os.makedirs(MODEL_CACHE_DIR, exist_ok=True)
-#     return MODEL_NAME
 
 _processor = None
 def get_processor():
@@ -31,7 +12,7 @@ def get_processor():
         logger.info("Loading processor...")
         _processor = AutoProcessor.from_pretrained(
             converted_model_path,
-            trust_remote_code=False,
+            trust_remote_code=True,
             device_map='auto',
             local_files_only=True
         )
@@ -46,13 +27,13 @@ def get_model():
         logger.info(f"Loading converted model from: {converted_model_path}")
         config = AutoConfig.from_pretrained(
             converted_model_path,
-            trust_remote_code=False,
+            trust_remote_code=True,
             local_files_only=True
         )
         _model = AutoModelForCausalLM.from_pretrained(
             converted_model_path,
             config=config,
-            trust_remote_code=False,
+            trust_remote_code=True,
             torch_dtype=torch.bfloat16,
             device_map='auto',
             local_files_only=True
