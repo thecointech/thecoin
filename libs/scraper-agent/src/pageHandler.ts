@@ -72,7 +72,6 @@ export class PageHandler {
     const eventManager = new EventManager();
     const recorder = await Registry.create({
       name,
-      headless: false,
       onEvent: eventManager.onEvent
     }, bankUrl);
     return new PageHandler(name, eventManager, recorder, logger);
