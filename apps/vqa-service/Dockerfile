@@ -1,9 +1,10 @@
 # Use Python 3.11 slim base image
 FROM rocm/pytorch:rocm6.2.3_ubuntu22.04_py3.10_pytorch_release_2.3.0
 
-# Define build arguments for certificate paths
+# Define build arguments for certificate paths and API key
 ARG SSL_CERT_FILE
 ARG SSL_KEY_FILE
+ARG API_ACCESS_KEY
 
 # Set working directory
 WORKDIR /app
@@ -36,6 +37,7 @@ COPY ${SSL_KEY_FILE:-key.pem}* /app/ssl/key.pem
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app:/app/src/transformers_modules
+ENV API_ACCESS_KEY=${API_ACCESS_KEY}
 
 # Mount point /app/.model_cache will be created automatically by Docker bind mount
 

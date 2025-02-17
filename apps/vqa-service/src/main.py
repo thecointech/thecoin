@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+import os
+from fastapi import FastAPI, Security, HTTPException, Depends
+from fastapi.security.api_key import APIKeyHeader
 from warmup import router as warmup_router
 from landing_routes import router as landing_router
 from intent_routes import router as intent_router
@@ -11,8 +13,9 @@ from etransfer_routes import router as etransfer_router
 from image_query_routes import router as image_query_router
 from port import get_version, get_port
 from fastapi_tweak import use_route_names_as_operation_ids
-
+from starlette.status import HTTP_403_FORBIDDEN
 from starlette.middleware.base import BaseHTTPMiddleware
+
 class KeepAliveMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
         response = await call_next(request)
@@ -20,10 +23,28 @@ class KeepAliveMiddleware(BaseHTTPMiddleware):
         response.headers['Keep-Alive'] = 'timeout=60'
         return response
 
+# API key authentication
+API_KEY = os.getenv('API_ACCESS_KEY', None)
+api_key_header = None
+dependencies = []
+
+if API_KEY is not None:
+    api_key_header = APIKeyHeader(name="X-API-Key", auto_error=True)
+
+    async def get_api_key(api_key_header: str = Security(api_key_header)):
+        if api_key_header != API_KEY:
+            raise HTTPException(
+                status_code=HTTP_403_FORBIDDEN, detail="Invalid API key"
+            )
+        return api_key_header
+    
+    dependencies = [Depends(get_api_key)]
+
 app = FastAPI(
     title="Harvester VQA Service API",
     version=get_version(),
     port=get_port(),
+    dependencies=dependencies
 )
 
 app.add_middleware(KeepAliveMiddleware)
