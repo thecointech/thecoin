@@ -42,9 +42,9 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"testAction"|"onReplayProgress
     AskUserReact.onResponse(response);
     return true;
   }),
-  warmup: (url) => guard(async () => true /*warmup(url)*/),
+  warmup: (_url) => guard(async () => true /*warmup(url)*/),
 
-  start: (actionName, url, dynamicInputs) => guard(async () => {
+  start: (_actionName, _url, _dynamicInputs) => guard(async () => {
     // const instance = await Recorder.instance({
     //   name: actionName,
     //   url,
@@ -56,12 +56,12 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"testAction"|"onReplayProgress
     // return !!instance;
     return false;
   }),
-  learnValue: (valueName, valueType) => guard(async () => {
+  learnValue: (_valueName, _valueType) => guard(async () => {
     // const instance = await Recorder.instance();
     // return instance.setRequiredValue(valueName, valueType);
     return { parsing: {type: "date", "format": ""}, text: ""};
   }),
-  setDynamicInput: (name, value) => guard(async () => {
+  setDynamicInput: (_name, _value) => guard(async () => {
     // const instance = await Recorder.instance();
     // return instance.setDynamicInput(name, value);
     return "TODO";
@@ -242,14 +242,15 @@ async function autoProcess(event: IpcMainInvokeEvent, params: AutoConfigParams) 
   // Get our coinETransferRecipient
   let wallet = await getWallet();
   if (!wallet) {
+    // Mock wallet for development
     if (process.env.CONFIG_NAME === 'development') {
       wallet = {
         address: process.env.WALLET_BrokerCAD_ADDRESS!,
       } as any
     }
-    else {
-      throw new Error("Wallet not configured");
-    }
+  }
+  if (!wallet) {
+    throw new Error("Wallet not configured");
   }
   const depositAddress = getEmailAddress(wallet.address);
   await autoConfigure(params, depositAddress, (progress) => {
