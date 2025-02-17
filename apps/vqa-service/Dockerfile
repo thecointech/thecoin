@@ -4,7 +4,6 @@ FROM rocm/pytorch:rocm6.2.3_ubuntu22.04_py3.10_pytorch_release_2.3.0
 # Define build arguments for certificate paths
 ARG SSL_CERT_FILE
 ARG SSL_KEY_FILE
-ARG USE_SSL=false
 
 # Set working directory
 WORKDIR /app
@@ -27,19 +26,16 @@ RUN mkdir -p /app/logs && \
 # Copy the rest of the application
 COPY . .
 
-# Set up transformers modules in Python path
-ENV PYTHONPATH=/app:/app/src/transformers_modules:${PYTHONPATH}
-
 # Copy SSL certificates only if they're provided
-RUN if [ "$USE_SSL" = "true" ]; then \
-    mkdir -p /app/ssl && \
-    cp ${SSL_CERT_FILE:-cert.pem} /app/ssl/cert.pem && \
-    cp ${SSL_KEY_FILE:-key.pem} /app/ssl/key.pem; \
-    fi
+
+RUN mkdir -p /app/ssl
+COPY ${SSL_CERT_FILE:-cert.pem}* /app/ssl/cert.pem
+COPY ${SSL_KEY_FILE:-key.pem}* /app/ssl/key.pem
+
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
-ENV PYTHONPATH=/app
+ENV PYTHONPATH=/app:/app/src/transformers_modules
 ENV MODEL_LOCAL_ONLY=1
 # ENV MODEL_CACHE_DIR=/app/.model_cache
 # ENV MODEL_URL=""
@@ -53,7 +49,7 @@ EXPOSE 7004
 WORKDIR /app/src
 
 # Command to run the application - conditional on SSL
-CMD if [ "$USE_SSL" = "true" ]; then \
+CMD if [ -f "/app/ssl/cert.pem" ]; then \
     uvicorn main:app --host 0.0.0.0 --port 7004 --ssl-keyfile /app/ssl/key.pem --ssl-certfile /app/ssl/cert.pem; \
     else \
     uvicorn main:app --host 0.0.0.0 --port 7004; \
