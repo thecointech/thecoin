@@ -1,14 +1,15 @@
 import { GetIntentApi, GetModalApi } from "@thecointech/apis/vqa";
-import { sleep } from "@thecointech/async";
 import { log } from "@thecointech/logging";
 import type { ElementResponse } from "@thecointech/vqa";
 import { getElementForEvent } from "@thecointech/scraper/elements";
 import type { Page } from "puppeteer";
 import type { ElementDataMin } from "@thecointech/scraper/types";
 import { File } from "@web-std/file";
+import { clickElement } from "./vqaResponse";
+import type { IAgentLogger } from "./types";
 
 
-export async function maybeCloseModal(page: Page) {
+export async function maybeCloseModal(page: Page, logger?: IAgentLogger) {
   log.info('Autodetecting modal on page...');
   try {
 
@@ -21,6 +22,7 @@ export async function maybeCloseModal(page: Page) {
     // Create a simple object that matches what the API expects
     const screenshotFile = new File([screenshot], "screenshot.png", { type: "image/png" });
 
+    logger?.logScreenshot("ModalDialog", screenshot, page);
 
     // First check if this is a modal dialog
     const { data: intent } = await GetIntentApi().pageIntent(screenshotFile);
@@ -33,9 +35,10 @@ export async function maybeCloseModal(page: Page) {
     const { data: closeButton } = await GetModalApi().modalClose(screenshotFile);
     if (!closeButton) return false;
 
+    logger?.logJson("ModalDialog", "close-vqa", closeButton);
     log.debug('Close button found, attempting to click...');
 
-    return await closeModal(page, closeButton);
+    return await closeModal(page, closeButton, logger);
   }
   catch (err) {
     log.warn(err, 'Error attempting to close modal');
@@ -46,7 +49,7 @@ export async function maybeCloseModal(page: Page) {
   return false;
 }
 
-export async function closeModal(page: Page, closeButton: ElementResponse) {
+export async function closeModal(page: Page, closeButton: ElementResponse, logger?: IAgentLogger) {
   // Try to find and click the close button
   const elementData = responseToElementData(closeButton);
   // We have a lower minScore because the only data we have is text + position + neighbours
@@ -54,19 +57,10 @@ export async function closeModal(page: Page, closeButton: ElementResponse) {
   // So basically, if there is even one things matches, then it's good enough,
   const found = await getElementForEvent(page, elementData, 5000, 20);
   if (!found) return false;
+  logger?.logJson("ModalDialog", "close-elm", found);
 
-  try {
-    await found.element.click();
-  }
-  catch (err) {
-    // We seem to be getting issues with clicking buttons:
-    // https://github.com/puppeteer/puppeteer/issues/3496 suggests
-    // using eval instead.
-    log.debug(`Click failed, retrying on ${found.data.selector} - ${err}`);
-    await page.$eval(found.data.selector, (el) => (el as HTMLElement).click())
-  }
-  await sleep(500); // Give the modal time to close
-  log.info('Clicked close button, modal closed.');
+  const didChange = await clickElement(page, found, true)
+  log.info('Clicked close button, modal closed: ' + didChange);
 
   // Validation - does this work on live runs?
   // if (process.env.NOTIFY_ON_MODAL_ENCOUNTER) {
@@ -75,7 +69,7 @@ export async function closeModal(page: Page, closeButton: ElementResponse) {
   //     message: "Closed Modal on page: " + page.url(),
   //   })
   // }
-  return true;
+  return didChange;
 }
 
 function responseToElementData(closeButton: ElementResponse): ElementDataMin {

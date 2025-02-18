@@ -343,9 +343,22 @@ export function getLabelData(elem: Element) {
 }
 
 function getElementText(elem: Element) {
-  return Array.from(elem.childNodes)
+  // Don't forget to include any CSS-defined content
+  const getCssContent = (prop: string) => {
+    const content = window.getComputedStyle(elem, "::" + prop).content
+    if (!content || content == "none" || content == "normal") {
+      return ""
+    }
+    return /^"(.*)"$/.exec(content)?.[1] || ""
+  }
+  const priorContent = getCssContent("before")
+  const postContent = getCssContent("after")
+  // The following finds all text nodes, and joins them into a single string
+  const nodeContent = Array.from(elem.childNodes)
     .filter(n => n.nodeType == 3)
-    .map(n => n.nodeValue)
+    .map(n => n.nodeValue);
+  const allContent = [priorContent, ...nodeContent, postContent].filter(c => !!c)
+  return allContent
     .join(" ")
     .replace(/\s+/, ' ')
     .trim()

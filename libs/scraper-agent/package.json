@@ -17,7 +17,7 @@
   "scripts": {
     "prepublishOnly": "rimraf ./build/.buildinfo",
     "build": "run -T tsc -b",
-    "clean": "rimraf ./build && rimraf ./coverage",
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage",
     "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
     "autoRecord": "yarn run -T cross-env CONFIG_NAME=prod URL_SEQ_LOGGING=false TC_LOG_FOLDER=./logs run-env tools/recordSamples/autoRecord.ts"

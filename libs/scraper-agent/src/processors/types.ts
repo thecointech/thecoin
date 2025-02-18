@@ -10,6 +10,8 @@ export enum Section {
   AccountsSummary = "AccountsSummary",
   CreditAccountDetails = "CreditAccountDetails",
   SendETransfer = "SendETransfer",
+  ModalDialog = "ModalDialog", // Handled by the agentErrorHandler
+
 }
 export type SectionType = keyof typeof Section;
 export const sections = Object.values(Section).filter(v => typeof v === 'string') as SectionType[];

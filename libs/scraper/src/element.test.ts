@@ -1,19 +1,14 @@
-import puppeteer, { type Browser } from "puppeteer"
 import { jest } from "@jest/globals"
 import { describe, IsManualRun } from '@thecointech/jestutils';
-import { getElementForEvent, registerElementAttrFns } from "./elements";
+import { getElementForEvent } from "./elements";
 import { getSiblingScore  } from "./elements.score";
-import { patchOnnxForJest } from '../internal/jestPatch'
-import { getTestPage, getTestInfo, testFileFolder, useTestBrowser } from '../internal/testInfo'
+import { getTestPage, getTestInfo, testFileFolder, useTestBrowser } from '../internal/testutils'
 
 jest.setTimeout(10 * 60 * 1000);
 
-const { getPage } = useTestBrowser();
-
-
 describe ('Element tests', () => {
 
-
+  const { getPage } = useTestBrowser();
 
   it('Generates element data', async () => {
 
@@ -53,7 +48,6 @@ describe ('Element tests', () => {
     const sample = getTestPage("page", "sample1.html");
     const click = getTestInfo("page", "sample1-click.json");
 
-    const { getPage, browser } = useTestBrowser();
     const page = await getPage();
     await page.goto(sample);
 
@@ -61,8 +55,6 @@ describe ('Element tests', () => {
     const element = await getElementForEvent(page, click);
 
     expect(element).toBeTruthy();
-
-    await browser.close()
   })
 
 }, IsManualRun && !!testFileFolder)

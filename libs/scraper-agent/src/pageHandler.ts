@@ -226,7 +226,7 @@ export class PageHandler {
 
     // Do not record these actions (perhaps should have an error section instead?)
     using _ = this.eventManager.pause();
-    const wasHandled = await agentErrorHandler(this.page, err);
+    const wasHandled = await agentErrorHandler(this.page, this.logger, err);
 
     log.info(` - Error handled: ${wasHandled}`);
     // if not, throw the original error
