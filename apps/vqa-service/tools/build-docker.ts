@@ -28,6 +28,11 @@ if (useSSL) {
   }
 }
 
+// TODO: This key should be supplied when creating the container, rather than at build time.
+if (process.env.VQA_API_KEY) {
+  buildArgs.push('--build-arg', `API_ACCESS_KEY=${process.env.VQA_API_KEY}`);
+}
+
 // Add the build context
 buildArgs.push('.');
 

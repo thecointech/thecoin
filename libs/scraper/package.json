@@ -44,6 +44,7 @@
     ".": "./build/index.js",
     "./puppeteer": "./build/puppeteer-init/index.js",
     "./record": "./build/record/index.js",
+    "./testutils": "./internal/testutils.ts",
     "./*": "./build/*.js"
   },
   "typesVersions": {
@@ -53,6 +54,9 @@
       ],
       "record": [
         "build/record/index.d.ts"
+      ],
+      "testutils": [
+        "internal/testutils.ts"
       ],
       "*": [
         "build/*.d.ts"

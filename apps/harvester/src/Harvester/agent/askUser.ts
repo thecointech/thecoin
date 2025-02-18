@@ -38,9 +38,19 @@ export class AskUserReact implements IAskUser {
     AskUserReact.__instances[this.sessionID] = this;
   }
 
+  // To prevent sending a gazillion ETransfers during dev/testing
   doNotCompleteETransfer(): boolean {
-    return process.env.CONFIG_NAME !== 'prod';
+    // Do not complete in any development build
+    if (process.env.NODE_ENV !== 'production') {
+      return true;
+    }
+    // Do not complete in any non-prod build
+    return (
+      process.env.CONFIG_NAME !== 'prod' &&
+      process.env.CONFIG_NAME !== 'prodbeta'
+    );
   }
+
   expectedETransferRecipient(): Promise<string> {
     return Promise.resolve(this.depositAddress);
   }

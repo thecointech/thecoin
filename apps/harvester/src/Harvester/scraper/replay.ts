@@ -26,6 +26,8 @@ export async function getValues(actionName: ActionTypes, progress?: ReplayCallba
 async function errorHandler(page: Page, _event: AnyEvent, error: unknown) {
   log.error(error, "Error in replay");
 
+  // TODO: We need to unify logging for a single system that
+  // handles record & replay & test generation
   const didClose = await maybeCloseModal(page);
   if (!didClose) {
     throw error;

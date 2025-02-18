@@ -1,5 +1,4 @@
 import { sleep } from "@thecointech/async";
-import { log } from "@thecointech/logging";
 import { TimeoutError, type Page } from "puppeteer";
 
 
@@ -7,7 +6,7 @@ export async function waitUntilLoadComplete(page: Page, timeout = 30_000) {
   // Now, wait a bit longer in case there are loads happening:
   const firstLoadTime = Date.now();
   let lastLoadTime = Date.now();
-  const updater = (type: string) => () => {
+  const updater = (_type: string) => () => {
     lastLoadTime = Date.now();
   }
   const updateWait = updater("load");

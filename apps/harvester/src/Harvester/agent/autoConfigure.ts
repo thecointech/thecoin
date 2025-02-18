@@ -47,6 +47,9 @@ export async function autoConfigure({ type, name, url, username, password }: Aut
     onProgress({ section: 0, sectionPercent: 0, totalSections: 7 });
     const baseNode = await Agent.process(name, url, inputBridge, logger, onProgress, toSkip);
 
+    // Ensure we have required info
+    throwIfAnyMissing(baseNode, type);
+
     await storeEvents(type, baseNode);
     onProgress({ section: 7, sectionPercent: 100, totalSections: 7 }, true);
     log.info(`Agent: Finished configuring for action: ${name}`);
@@ -88,4 +91,25 @@ function getSectionsToSkip(type: BankTypes) : SectionName[] {
       break;
   }
   return sectionsToSkip;
+}
+
+function throwIfAnyMissing(baseNode: EventSection, type: BankTypes) {
+  if (type != 'credit') {
+    if (!baseNode.events.find(s => (s as EventSection).section == 'SendETransfer')) {
+      const foundSections = baseNode.events
+        .map(s => (s as EventSection).section)
+        .filter(s => !!s);
+      log.info(`Agent: ${type} expected to find SendETransfer, but only found the following sections: ${foundSections.join(', ')}`);
+      throw new Error("SendETransfer not configured");
+    }
+  }
+  if (type != 'chequing') {
+    if (!baseNode.events.find(s => (s as EventSection).section == 'CreditAccountDetails')) {
+      const foundSections = baseNode.events
+        .map(s => (s as EventSection).section)
+        .filter(s => !!s);
+      log.info(`Agent: ${type} expected to find CreditAccountDetails, but only found the following sections: ${foundSections.join(', ')}`);
+      throw new Error("CreditAccountDetails not configured");
+    }
+  }
 }

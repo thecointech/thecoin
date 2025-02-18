@@ -11,6 +11,7 @@ import { rendererConfig } from '@thecointech/electron-utils/webpack/webpack.rend
 
 import { getCSP } from './config/csp';
 import { DefinePlugin } from 'webpack';
+import { getVqaCert } from './config/vqaCert';
 
 const ForgeExternalsPlugin = require('@timfish/forge-externals-plugin')
 
@@ -44,6 +45,13 @@ const mainConfigMerged = mainConfig({
   // pass it here so webpack doesn't try and include it.
   externals: nativeModules.concat('@puppeteer/browsers'),
 })
+
+const vqaCert = getVqaCert();
+if (vqaCert) {
+  mainConfigMerged.plugins.push(new DefinePlugin({
+    ['process.env.VQA_SSL_CERTIFICATE']: JSON.stringify(vqaCert),
+  }))
+}
 
 const config: ForgeConfig = {
   buildIdentifier: process.env.CONFIG_NAME,

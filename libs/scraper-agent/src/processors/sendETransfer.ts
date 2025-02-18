@@ -41,10 +41,6 @@ export const SendETransfer = processorFn("SendETransfer", async (page: PageHandl
       section.cancel();
       log.error(e);
 
-      // If we couldn't find the link, the whole thing is busted
-      // if (e instanceof CannotFindLinkError) {
-      //   throw e;
-      // }
       if (e instanceof NotAnETransferPageError) {
         // This could mean the original link was bad
         // Otherwise, we go back to the start and try again
@@ -68,6 +64,11 @@ async function navigateToSendETransferPage(page: PageHandler, attemptedLinks: Se
   const api = GetETransferApi();
   const { data } = await api.bestEtransferLink(linkTexts);
 
+  page.logger?.logJson("SendETransfer", "best-link", {
+    links: linkTexts,
+    vqa: data
+  });
+
   // These should all point to the same page...
   log.trace(`Best link: ${data.best_link}, attempting to navigate`);
   const matchingLinks = allLinks
@@ -82,16 +83,12 @@ async function navigateToSendETransferPage(page: PageHandler, attemptedLinks: Se
   const bestLink = matchingLinks[0];
   attemptedLinks.add(bestLink.data.text);
 
-  // Reset all flags
-  // this.hasSetAmount = this.hasSetFromAccount = this.hasSetToRecipient = false;
   // Go to the page
   const navigated = await clickElement(page.page, bestLink);
   if (!navigated) {
     log.error(`Clicking link for Send ETransfer: ${data.best_link} had no effect?`);
     throw new NotAnETransferPageError("Failed to click link");
   }
-
-  // await this.updatePageName("form-0");
 
   // verify the page is the right one
   const screenshot = await page.getImage(true);
@@ -243,7 +240,7 @@ async function fillInputs(page: PageHandler, input: IAskUser, tracker: InputTrac
 
   const inputTypes = await callInputTypes(image, elements, parentCoords);
   log.trace("SendETransferWriter: inputTypes: " + JSON.stringify(inputTypes));
-
+  page.logger?.logJson("SendETransfer", "input-types-vqa", inputTypes);
   const shortWaitPageStable = async () => {
     try {
       // A short wait but with a very low threshold should
@@ -303,6 +300,9 @@ async function fillInputs(page: PageHandler, input: IAskUser, tracker: InputTrac
 async function fillAmountToSend(page: PageHandler, input: SearchElement, amount: number) {
   // Do we need to do anything more than this?
   log.trace("Filling input: AmountToSend");
+
+  page.logger?.logJson("SendETransfer", "amount-elm", amount);
+
   await enterValueIntoFound(page.page, input, amount.toString());
   await sleep(500);
   // How can we verify this worked?
@@ -310,6 +310,9 @@ async function fillAmountToSend(page: PageHandler, input: SearchElement, amount:
 
 async function selectFromAccount(page: PageHandler, input: SearchElement, account: string) {
   log.trace("Filling input: FromAccount");
+
+  page.logger?.logJson("SendETransfer", "from-account-vqa", input.data);
+
   // First, check if the default is already entered
   if (input.data.tagName == "SELECT") {
     const selectedText = await input.element.evaluate(el => (el as HTMLSelectElement).selectedOptions[0].innerText);
@@ -342,6 +345,8 @@ async function selectFromAccount(page: PageHandler, input: SearchElement, accoun
 
 async function selectToRecipient(page: PageHandler, element: SearchElement, input: IAskUser) {
   log.trace("Filling input: ToRecipient");
+  page.logger?.logJson("SendETransfer", "to-recipient-vqa", element.data);
+
   let recipient = await input.expectedETransferRecipient();
 
   // If this is a select, double-check one of the options matches.
