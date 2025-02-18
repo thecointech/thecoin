@@ -52,6 +52,20 @@ def query_etransfer_stage(title: str) -> tuple[str, ETransferStageResponse]:
 
 ####################
 
+ 
+class ETransferCompleteResponse(BaseModel):
+    transfer_complete: bool
+
+transfer_stage_prompt = "Anaylze this online banking page with the the title \"{title}\". Is sending the etransfer complete?"
+
+def query_etransfer_complete(title: str) -> tuple[str, ETransferCompleteResponse]:
+    return (
+        transfer_stage_prompt.format(title=title) + transfer_error_prompt,
+        ETransferCompleteResponse
+    )
+
+####################
+
 class ETransferFormPresentResponse(BaseModel):
     form_present: bool
 

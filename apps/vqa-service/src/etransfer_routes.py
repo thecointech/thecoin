@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from data_elements import ElementResponse
 from geo_math import BBox
 from input_detection import deduplicate_unique, detect_input_types
-from etransfer_data import ButtonResponse, ETransferFormPresentResponse, ETransferLinkResponse, ConfirmationCodeResponse, ETransferStageResponse, InputType, SimilarityResponse, get_find_etransfer_link_prompt, query_confirmation_code, query_etransfer_stage, query_most_similar, query_to_recipient, query_next_button_exists, query_next_button, query_add_recipient_present
+from etransfer_data import ButtonResponse, ETransferCompleteResponse, ETransferFormPresentResponse, ETransferLinkResponse, ConfirmationCodeResponse, ETransferStageResponse, InputType, SimilarityResponse, get_find_etransfer_link_prompt, query_confirmation_code, query_etransfer_complete, query_etransfer_stage, query_most_similar, query_to_recipient, query_next_button_exists, query_next_button, query_add_recipient_present
 from query import runQueryToJson
 from run_endpoint_query import get_image, run_endpoint_query
 
@@ -34,6 +34,11 @@ async def best_etransfer_link(links: list[str]) -> ETransferLinkResponse:
 @router.post("/detect-etransfer-stage", tags=["etransfer"])
 async def detect_etransfer_stage(image: UploadFile, title: str) -> ETransferStageResponse:
     return await run_endpoint_query(image, query_etransfer_stage(title))
+
+
+@router.post("/detect-etransfer-complete", tags=["etransfer"])
+async def detect_etransfer_complete(image: UploadFile, title: str) -> ETransferCompleteResponse:
+    return await run_endpoint_query(image, query_etransfer_complete(title))
 
 
 @router.post("/detect-etransfer-form", tags=["etransfer"])
