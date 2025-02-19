@@ -55,9 +55,12 @@ query_2fa_input_element = (
     ElementResponse
 )
 
+class RememberMeElementResponse(ElementResponse):
+    is_checked: bool = Field(..., description="Is the checkbox checked?")
+    
 query_2fa_remember_element = (
     "Analyze the provided webpage. Describe the checkbox to remember the authentication code and skip next time.",
-    ElementResponse
+    RememberMeElementResponse
 )
 
 query_2fa_submit_element = (
