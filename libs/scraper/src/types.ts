@@ -1,22 +1,9 @@
 import type currency from 'currency.js';
 import type { DateTime } from 'luxon';
 import type { HistoryRow } from './table';
-import type { ElementHandle, Page } from 'puppeteer';
+import type { ElementHandle } from 'puppeteer';
 
 export type { HistoryRow };
-
-export type ReplayProgress = {
-  step: number,
-  total: number,
-}
-
-export type ReplayProgressCallback = (progress: ReplayProgress) => void;
-export type ReplayCallbacks = {
-  errorHandler?: (page: Page, event: AnyEvent, err: unknown) => Promise<boolean>,
-  onError?: (page: Page, error: unknown) => Promise<void>,
-  onProgress?: ReplayProgressCallback,
-  onScreenshot?: (page: Page) => Promise<void>,
-}
 
 // Generic result encompasses all of the above
 export type ReplayResult = Record<string, string | DateTime | currency | HistoryRow[]>
@@ -106,14 +93,14 @@ export type UnloadEvent = {
 } & BaseEvent;
 
 
-
+export type BaseEventData =  BaseEvent & ElementData;
 export type ClickEvent = {
   type: "click",
   clickX: number,
   clickY: number,
   // font: Font,
   // text: string,
-} & BaseEvent & ElementData;
+} & BaseEventData;
 
 // Static input event.  Will be the same every run
 export type InputEvent = {
@@ -121,7 +108,7 @@ export type InputEvent = {
   value: string,
   hitEnter?: boolean,
   valueChange?: boolean,
-} & BaseEvent & ElementData;
+} & BaseEventData;
 
 // Dynamic input event.  Value is supplied each run
 // Used for things like `amount`
@@ -129,14 +116,14 @@ export type DynamicInputEvent = {
   type: "dynamicInput",
   dynamicName: string,
   valueChange?: boolean,
-} & BaseEvent & ElementData;
+} & BaseEventData;
 
 // Not really an event, but something to read later
 export type ValueEvent = {
   type: "value",
   name?: string,
   parsing?: ValueParsing
-} & BaseEvent & ElementData;
+} & BaseEventData;
 
 
 export type AnyEvent = NavigationEvent|ClickEvent|InputEvent|DynamicInputEvent|UnloadEvent|LoadEvent|ValueEvent;

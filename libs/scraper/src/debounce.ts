@@ -1,15 +1,16 @@
-
-// debounce applied per-argument
-export function debounce<T, U>(func: (a: T, b: U) => void, timeout = 300){
+// debounce applied per-argument with support for any function
+export function debounce<F extends (...args: any[]) => void>(
+  func: F,
+  timeout = 300
+): (...args: Parameters<F>) => void {
   let timer: NodeJS.Timeout;
-  let lastA: T;
-  let lastB: U;
-  return (a: T, b: U) => {
-    if (a == lastA && b == lastB) {
+  let lastArgs: Parameters<F> | undefined;
+
+  return (...args: Parameters<F>) => {
+    if (lastArgs && args.every((arg, i) => arg === lastArgs![i])) {
       clearTimeout(timer);
     }
-    lastA = a;
-    lastB = b;
-    timer = setTimeout(() => func(a, b), timeout);
+    lastArgs = args;
+    timer = setTimeout(() => func(...args), timeout);
   };
 }

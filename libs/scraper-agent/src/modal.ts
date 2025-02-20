@@ -6,10 +6,10 @@ import type { Page } from "puppeteer";
 import type { ElementDataMin } from "@thecointech/scraper/types";
 import { File } from "@web-std/file";
 import { clickElement } from "./vqaResponse";
-import type { IAgentLogger } from "./types";
+import { IScraperCallbacks } from "@thecointech/scraper";
 
 
-export async function maybeCloseModal(page: Page, logger?: IAgentLogger) {
+export async function maybeCloseModal(page: Page, callbacks?: IScraperCallbacks) {
   log.info('Autodetecting modal on page...');
   try {
 
@@ -22,7 +22,7 @@ export async function maybeCloseModal(page: Page, logger?: IAgentLogger) {
     // Create a simple object that matches what the API expects
     const screenshotFile = new File([screenshot], "screenshot.png", { type: "image/png" });
 
-    logger?.logScreenshot("ModalDialog", screenshot, page);
+    callbacks?.onScreenshot?.("ModalDialog", screenshot, page);
 
     // First check if this is a modal dialog
     const { data: intent } = await GetIntentApi().pageIntent(screenshotFile);
@@ -35,10 +35,10 @@ export async function maybeCloseModal(page: Page, logger?: IAgentLogger) {
     const { data: closeButton } = await GetModalApi().modalClose(screenshotFile);
     if (!closeButton) return false;
 
-    logger?.logJson("ModalDialog", "close-vqa", closeButton);
+    callbacks?.logJson?.("ModalDialog", "close-vqa", closeButton);
     log.debug('Close button found, attempting to click...');
 
-    return await closeModal(page, closeButton, logger);
+    return await closeModal(page, closeButton, callbacks);
   }
   catch (err) {
     log.warn(err, 'Error attempting to close modal');
@@ -49,7 +49,7 @@ export async function maybeCloseModal(page: Page, logger?: IAgentLogger) {
   return false;
 }
 
-export async function closeModal(page: Page, closeButton: ElementResponse, logger?: IAgentLogger) {
+export async function closeModal(page: Page, closeButton: ElementResponse, cbs?: IScraperCallbacks) {
   // Try to find and click the close button
   const elementData = responseToElementData(closeButton);
   // We have a lower minScore because the only data we have is text + position + neighbours
@@ -57,18 +57,11 @@ export async function closeModal(page: Page, closeButton: ElementResponse, logge
   // So basically, if there is even one things matches, then it's good enough,
   const found = await getElementForEvent(page, elementData, 5000, 20);
   if (!found) return false;
-  logger?.logJson("ModalDialog", "close-elm", found);
+  cbs?.logJson?.("ModalDialog", "close-elm", found);
 
   const didChange = await clickElement(page, found, true)
   log.info('Clicked close button, modal closed: ' + didChange);
 
-  // Validation - does this work on live runs?
-  // if (process.env.NOTIFY_ON_MODAL_ENCOUNTER) {
-  //   notify({
-  //     title: 'Modal Successfully Closed',
-  //     message: "Closed Modal on page: " + page.url(),
-  //   })
-  // }
   return didChange;
 }
 

@@ -37,9 +37,9 @@ const api : ScraperBridgeApi = {
   finishAction: () => ipcRenderer.invoke(actions.finishAction),
 
   testAction: (actionName, dynamicValues) => ipcRenderer.invoke(actions.testAction, actionName, dynamicValues),
-  onReplayProgress: (callback) => {
-    ipcRenderer.on(actions.replayProgress, (_event, value) => callback(value))
-  },
+  // onReplayProgress: (callback) => {
+  //   ipcRenderer.on(actions.replayProgress, (_event, value) => callback(value))
+  // },
 
   setWalletMnemomic: (mnemonic) => ipcRenderer.invoke(actions.setWalletMnemomic, mnemonic),
   getWalletAddress: () => ipcRenderer.invoke(actions.getWalletAddress),

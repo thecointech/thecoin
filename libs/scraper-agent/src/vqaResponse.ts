@@ -72,6 +72,7 @@ export async function clickElement(page: Page, element: SearchElement, noNavigat
   if (noNavigate) {
     const didChange = await clickElementCoords(page, before, element, minPixelsChanged);
     if (didChange) {
+      await waitPageStable(page, 5000, minPixelsChanged);
       return true;
     }
     // If nothing changed, fallback to the navigation version
@@ -114,7 +115,8 @@ async function clickElementCoords(page: Page, before: Uint8Array, found: SearchE
   // Simulate a user clicking on the element
   const coords = found.data.coords;
   await page.mouse.click(coords.left + coords.width / 2, coords.centerY);
-  await sleep(500);
+  // Give enough time for the page to update.  1s is just a guess
+  await sleep(1000);
   return await pageDidChange(page, before, minPixelsChanged);
 }
 

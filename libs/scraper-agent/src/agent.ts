@@ -1,27 +1,23 @@
-import { IAgentLogger, IAskUser, SectionName } from './types';
+import { IAskUser, SectionName } from './types';
 import { log } from '@thecointech/logging';
 import { PageHandler } from './pageHandler';
-
-import { ProgressCallback, ProgressReporter } from './progressReporting';
+import { IScraperCallbacks } from '@thecointech/scraper';
 import { AccountsSummary, CookieBanner, CreditAccountDetails, Landing, Login, NamedProcessor, TwoFA, SendETransfer } from './processors';
-import { sections } from './processors/types';
 
 export class Agent {
 
-  static async process(name: string, bankUrl: string, input: IAskUser, logger: IAgentLogger, onProgress?: ProgressCallback, sectionsToSkip: SectionName[] = []) {
+  static async process(name: string, bankUrl: string, input: IAskUser, callbacks?: IScraperCallbacks, sectionsToSkip: SectionName[] = []) {
 
     log.info(`Processing ${name}`);
 
-    const reporter = new ProgressReporter(onProgress);
-
-    await using page = await PageHandler.create(name, bankUrl, logger);
+    await using page = await PageHandler.create(name, bankUrl, callbacks);
 
     // First, clear out cookie banner
-    await processSection(CookieBanner, reporter, page);
+    await processSection(CookieBanner, page);
 
     let pageIntent = await page.getPageIntent();
     if (pageIntent == "Landing") {
-      await processSection(Landing, reporter, page);
+      await processSection(Landing, page);
       pageIntent = await page.getPageIntent();
     }
 
@@ -30,13 +26,13 @@ export class Agent {
     }
 
     // Next, test a successful login
-    const loginOutcome = await processSection(Login, reporter, page, input);
+    const loginOutcome = await processSection(Login, page, input);
     switch(loginOutcome) {
       case "LoginError":
         await page.maybeThrow(new Error("Failed to login"))
         break;
       case "TwoFactorAuth":
-        await processSection(TwoFA, reporter, page, input);
+        await processSection(TwoFA, page, input);
         break;
       default:
     }
@@ -48,15 +44,15 @@ export class Agent {
       await page.maybeThrow(new Error("Failed to get to AccountsSummary"))
     }
 
-    const accounts = await processSection(AccountsSummary, reporter, page);
+    const accounts = await processSection(AccountsSummary, page);
     for (const account of accounts) {
       if (account.account.account_type == "Credit") {
         if (sectionsToSkip.includes("CreditAccountDetails")) continue;
-        await processSection(CreditAccountDetails, reporter, page, account.nav.data);
+        await processSection(CreditAccountDetails, page, account.nav.data);
       }
       else if (account.account.account_type == "Chequing") {
         if (sectionsToSkip.includes("SendETransfer")) continue;
-        await processSection(SendETransfer, reporter, page, input, account.account.account_number);
+        await processSection(SendETransfer, page, input, account.account.account_number);
       }
     }
 
@@ -67,27 +63,22 @@ export class Agent {
 
 async function processSection<Args extends any[], R>(
   processor: NamedProcessor<Args, R>,
-  reporter: ProgressReporter,
   page: PageHandler,
   ...args: Args
 ): Promise<R> {
 
   log.debug(`Processing section: ${processor.processorName}`);
 
-  // Notify we are starting a new section
-  reporter.currentSection = sections.indexOf(processor.processorName) + 1;
-  reporter.sectionReporter(0);
-
   await using section = processor.isolated
     ? await page.pushIsolatedSection(processor.processorName)
     : page.pushSection(processor.processorName);
   try {
-    return await processor(page, reporter.sectionReporter, ...args);
+    return await processor(page, ...args);
   }
   catch (e) {
     section.cancel();
     await page.maybeThrow(e)
     // If we got here, we possibly handled the error, let's try again
-    return await processSection(processor, reporter, page, ...args);
+    return await processSection(processor, page, ...args);
   }
 }

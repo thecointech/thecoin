@@ -78,9 +78,10 @@
         // Breakpoints don't seem to be hit on startup, but the `debugger` statement does
         "BREAK_ON_STARTUP": "true",
         // "RUN_SCRAPER_HEADLESS": "false",
+        "NODE_ENV": "development",
+        "DO_NOT_SEND_ETRANSFER": "true",
         "CONFIG_NAME": "prodbeta",
         "HARVESTER_ALLOW_OVERRIDES": "true",
-        "NODE_ENV": "development",
         "NOTIFY_ON_MODAL_ENCOUNTER": "true",
         "HARVESTER_PROFILE_FOLDER": "${workspaceFolder}/.cache/prod",
         // DRY RUN

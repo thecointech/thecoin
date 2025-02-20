@@ -1,20 +1,20 @@
 import { GetIntentApi, GetTwofaApi } from "@thecointech/apis/vqa";
 import { log } from "@thecointech/logging";
 import { clickElement } from "../vqaResponse";
-import type { ElementOptions } from "../types";
+import type { ElementResponse } from "../types";
 import type { PageHandler } from "../pageHandler";
 import type { IAskUser } from "./types";
-import { processorFn, SectionProgressCallback } from "./types";
+import { processorFn } from "./types";
 
-export const TwoFA = processorFn("TwoFA", async (page: PageHandler, onProgress: SectionProgressCallback, input: IAskUser) => {
+export const TwoFA = processorFn("TwoFA", async (page: PageHandler, input: IAskUser) => {
   // There should always be a username here
-  await complete2FA(page, onProgress, input);
+  await complete2FA(page, input);
 })
 
-async function complete2FA(page: PageHandler, onProgress: SectionProgressCallback, input: IAskUser) {
+async function complete2FA(page: PageHandler, input: IAskUser) {
   const api = GetTwofaApi();
   const { data: action } = await api.detectActionRequired(await page.getImage());
-  onProgress(50);
+  page.onProgress(10);
   switch (action.action) {
     case "SelectDestination":
       return await selectDestination(page, input);
@@ -33,11 +33,11 @@ async function complete2FA(page: PageHandler, onProgress: SectionProgressCallbac
 async function selectDestination(page: PageHandler, input: IAskUser) {
   const api = GetTwofaApi();
   const { data: destinations } = await api.detectDestinations(await page.getImage());
-  const allOptions: ElementOptions = {}
+  const allOptions = []
   if (destinations) {
     for (const d of destinations.phone_nos) {
       const { data: options } = await api.getDestinationElements(d, await page.getImage());
-      allOptions[d] = options.elements;
+      allOptions.push({ name: d, options: options.elements });
     }
   }
   const dest = await askUserForDestination(input, allOptions);
@@ -144,10 +144,16 @@ async function clickSubmit(page: PageHandler) {
   }
 }
 
-
-async function askUserForDestination(input: IAskUser, destinations: ElementOptions) {
-  // TODO: Query the page for the actual 2FA message
-  return input.selectOption("Select where to send the code: ", destinations, "content");
+type NamedResponses = { name: string; options: ElementResponse[]; };
+async function askUserForDestination(input: IAskUser, destinations: NamedResponses[]) {
+  const queryOptions = destinations.map(d => ({
+    name: d.name,
+    options: d.options.map(o => o.content)
+  }));
+  const {name, option} = await input.selectOption("Select where to send the code: ", queryOptions);
+  return destinations
+    .find(d => d.name === name)!
+    .options.find(o => o.content === option)!;
 }
 
 

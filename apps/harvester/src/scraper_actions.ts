@@ -1,11 +1,12 @@
 import type { HarvestConfig, Mnemonic } from './types';
-import type { ReplayProgressCallback, ValueResult, ValueType} from "@thecointech/scraper/types";
+import type { ValueResult, ValueType} from "@thecointech/scraper/types";
 import type { CreditDetails } from './Harvester/types';
 import type { StoredData } from './Harvester/db_translate';
 import { ActionTypes } from './Harvester/scraper';
 import { BackgroundTaskCallback } from './BackgroundTask/types';
-import type { QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
+import type { OptionPacket, QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
 import type { AutoConfigParams } from './Harvester/agent';
+// import { ScraperProgressCallback } from '@thecointech/scraper';
 
 export type Result<T> = {
   error?: string;
@@ -28,7 +29,7 @@ export type ScraperBridgeApi = {
   autoProcess: (params: AutoConfigParams) => Promise<Result<boolean>>;
   // onAgentProgress: (progress: ProgressCallback) => void;
 
-  onAskQuestion: (callback: (question: QuestionPacket) => void) => void;
+  onAskQuestion: (callback: (question: QuestionPacket|OptionPacket) => void) => void;
   replyQuestion: (response: ResponsePacket) => Promise<Result<boolean>>;
 
   // Declare a `readFile` function that will return a promise. This promise
@@ -45,7 +46,7 @@ export type ScraperBridgeApi = {
 
   // A test of an action
   testAction(actionName: ActionTypes, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,
-  onReplayProgress: (progress: ReplayProgressCallback) => void,
+  // onReplayProgress: (progress: ScraperProgressCallback) => void,
 
   setWalletMnemomic(mnemonic: Mnemonic): Promise<Result<boolean>>,
   getWalletAddress(): Promise<Result<string|null>>,
@@ -94,7 +95,7 @@ export const actions = {
   finishAction: 'scraper:finishAction',
 
   testAction: 'scraper.testAction',
-  replayProgress: 'scraper.progress',
+  // replayProgress: 'scraper.progress',
 
   // Not really scraper, but meh
   setWalletMnemomic: 'scraper:setWalletMnemomic',

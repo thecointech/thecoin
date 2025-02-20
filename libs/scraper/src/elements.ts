@@ -3,7 +3,7 @@ import type { Coords, ElementData, ElementDataMin, FoundElement, SearchElement }
 import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
 import { scoreElement } from './elements.score';
-
+import { ElementNotFoundError, PageNotInteractableError } from './errors';
 
 declare global {
   interface Window {
@@ -19,6 +19,7 @@ export async function getElementForEvent(page: Page, event: ElementDataMin, time
   const title = await page.title();
   log.info(`Searching \"${title}\" for: ${event.tagName} - ${event.text} - ${event.siblingText} - ${event.selector}`);
 
+  let bestCandidate: FoundElement|null = null;
   while (Date.now() < startTick + timeout) {
 
     const candidates = await fetchAllCandidates(page, event, maxTop);
@@ -28,20 +29,17 @@ export async function getElementForEvent(page: Page, event: ElementDataMin, time
       return candidate;
     }
 
+    const thisRunsBest = candidates[0]
+    if (thisRunsBest && thisRunsBest.score > (bestCandidate?.score ?? 0)) {
+      bestCandidate = thisRunsBest;
+    }
+
     // Continue waiting
     await sleep(500);
-    if (Date.now() > startTick + timeout) {
-      // Are you watching?  Take care of this
-      debugger;
-    }
   }
 
-  // // Not found, what candidate failed?
-  // log.debug(' ** Failed Candidate ** ')
-  // dbgPrintCandidate(candidate, event);
-
   // Not found, throw
-  throw new Error(`Element ${event.tagName} not found with text: "${event.text}" and siblings: "${event.siblingText?.join(', ')}"`);
+  throw new ElementNotFoundError(event, bestCandidate);
 }
 
 async function fetchAllCandidates(page: Page, event: ElementDataMin, maxTop: number) {
@@ -50,6 +48,7 @@ async function fetchAllCandidates(page: Page, event: ElementDataMin, maxTop: num
   const nFrames = frames.length;
   let nErrors = 0;
   log.info(`Searching ${nFrames} frames`);
+  const errors: unknown[] = [];
   for (const frame of frames) {
     try {
       // Get all elements in frame
@@ -62,11 +61,12 @@ async function fetchAllCandidates(page: Page, event: ElementDataMin, maxTop: num
       // DO NOT THROW.  We don't know what went wrong and there is a good
       // chance it's some frame-specific issue and we could just continue
       nErrors++;
+      errors.push(e);
     }
   }
   if (nErrors == nFrames) {
     // If all frames errored, this is probably non-recoverable
-    throw new Error("Could not search any frames");
+    throw new PageNotInteractableError(errors);
   }
   log.info(`Got ${candidates.length} candidates`);
   return candidates;

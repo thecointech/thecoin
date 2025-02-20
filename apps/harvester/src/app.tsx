@@ -6,13 +6,13 @@ import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
 import styles from './app.module.less'
 import { BrowserDownloadState, BrowserReducer } from './Browser/reducer';
 import { useEffect } from 'react';
-import { ReplayProgressReducer } from './ReplayProgress/reducer';
+// import { ReplayProgressReducer } from './ReplayProgress/reducer';
 import { BackgroundTaskReducer } from './BackgroundTask/reducer';
 
 export const App = () => {
   FxRateReducer.useStore();
   BrowserReducer.useStore();
-  ReplayProgressReducer.useStore();
+  // ReplayProgressReducer.useStore();
   BackgroundTaskReducer.useStore();
 
   const location = useLocation();
@@ -21,16 +21,16 @@ export const App = () => {
   }
 
   const browserApi = BrowserReducer.useApi();
-  const replayProgressApi = ReplayProgressReducer.useApi();
+  // const replayProgressApi = ReplayProgressReducer.useApi();
   const backgroundTaskApi = BackgroundTaskReducer.useApi();
 
   useEffect(() => {
     window.scraper.onBrowserDownloadProgress((progress: BrowserDownloadState) => {
       browserApi.setDownloadState(progress);
     })
-    window.scraper.onReplayProgress(progress => {
-      replayProgressApi.setReplayProgress(progress);
-    })
+    // window.scraper.onReplayProgress(progress => {
+    //   replayProgressApi.setReplayProgress(progress);
+    // })
     window.scraper.onBackgroundTaskProgress(progress => {
       backgroundTaskApi.setTaskProgress(progress);
     })

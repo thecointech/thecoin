@@ -226,7 +226,7 @@ function onNewDocument() {
         // Get local copies of the data to ensure we don't care
         // about any changes that may be made during the click
         const data = window.getElementData(target);
-        // This should _never_ happen
+        // This executes inside the page, so should _never_ happen
         if (!data) {
           throw new Error("Could not get element data");
         };

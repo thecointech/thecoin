@@ -1,24 +1,19 @@
 import { DateTime } from 'luxon';
 import type { Page } from 'puppeteer';
 import { getTableData } from './table';
-import { AnyEvent, ValueEvent, ElementData, ReplayCallbacks, ReplayResult, SearchElement } from './types';
+import { AnyEvent, ValueEvent, ElementData, ReplayResult, SearchElement } from './types';
 import { CurrencyType, getCurrencyConverter } from './valueParsing';
 import { log } from '@thecointech/logging';
-import { debounce } from './debounce';
 import { getElementForEvent } from './elements';
 import { sleep } from '@thecointech/async';
 import { newPage } from './puppeteer-init';
+import { IScraperCallbacks } from './callbacks';
+import { DynamicValueError, ValueEventError } from './errors';
 
-// export async function replay(actionName: 'chqBalance', progress?: ReplayProgressCallback): Promise<ChequeBalanceResult>;
-// export async function replay(actionName: 'visaBalance', progress?: ReplayProgressCallback): Promise<VisaBalanceResult>;
-// export async function replay(actionName: 'chqETransfer', progress: ReplayProgressCallback|undefined, dynamicValues: { amount: string }): Promise<ETransferResult>;
-// export async function replay(actionName: ActionTypes, progress?: ReplayProgressCallback, dynamicValues?: Record<string, string>, delay?: number): Promise<ReplayResult>
-export async function replay(events: AnyEvent[], callbacks?: ReplayCallbacks, dynamicValues?: Record<string, string>, delay = 1000) {
-  // read events
-  // const events = await getEvents(actionName);
+export async function replay(events: AnyEvent[], callbacks?: IScraperCallbacks, dynamicValues?: Record<string, string>, delay = 1000) {
+
   log.debug(`Replaying ${events?.length} events`);
 
-  // initializeDumper(actionName);
   // Progress started
   callbacks?.onProgress?.({ step: 0, total: events.length });
 
@@ -30,12 +25,8 @@ export async function replay(events: AnyEvent[], callbacks?: ReplayCallbacks, dy
   }
   catch (err) {
     await callbacks?.onError?.(page, err);
-    // const saveDump = process.env.HARVESTER_SAVE_DUMP;
-    // log.error(err, `Failed to replay, doing dump: ${saveDump ?? false}`);
-    // if (saveDump) {
-    //   await dumpPage(page, "failed");
-    // }
-    throw err;
+    // We don't have a return value, so just rethrow
+    throw err
   }
   finally {
     await page.close();
@@ -43,7 +34,7 @@ export async function replay(events: AnyEvent[], callbacks?: ReplayCallbacks, dy
   }
 }
 
-export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: ReplayCallbacks, dynamicValues?: Record<string, string>, delay = 1000) {
+export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: IScraperCallbacks, dynamicValues?: Record<string, string>, delay = 1000) {
 
   const values: ReplayResult = {}
   // const values: Record<string, string | DateTime | currency | HistoryRow[]> = {}
@@ -58,16 +49,6 @@ export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: R
   //     debugger;
   //   };
   // }, hostname);
-
-  // const screenshotFolder = "TODO"; //path.join(outFolder, actionName);
-  // mkdirSync(screenshotFolder, { recursive: true });
-  // const doSaveScreenshot = async (page: Page, fileName: string) => {
-  //   const outfile = path.join(screenshotFolder, fileName);
-  //   await page.screenshot({ path: outfile })
-  // }
-  // const saveScreenshot = debounce(doSaveScreenshot);
-
-  const saveScreenshot = debounce(callbacks?.onScreenshot ?? (() => { }));
 
   async function processEvent(event: AnyEvent, i: number) {
     log.info(` - Processing event: ${event.type} - ${event.id}`);
@@ -85,13 +66,12 @@ export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: R
             page.goto(event.to),
           ])
         }
-
-        saveScreenshot(page, `replay-${i}.png`)
         break;
       }
       case 'click': {
         // If this click caused a navigation?
         const found = await getElementForEvent(page, event);
+
         const tryClicking = async () => {
           try {
             await found.element.click();
@@ -136,7 +116,7 @@ export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: R
         log.debug(`Entering dynamicValue : ${event.dynamicName} into ${event.selector}`);
         const value = dynamicValues?.[event.dynamicName];
         if (!value) {
-          throw new Error(`Dynamic value not supplied: ${event.dynamicName}`);
+          throw new DynamicValueError(event);
         }
 
         await enterValue(page, event, value);
@@ -166,7 +146,7 @@ export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: R
           }
           if (!await tryReadTable()) {
             // Couldn't read value
-            throw new Error("Couldn't find table!")
+            throw new ValueEventError(event)
           }
           // All good, continue
           break;
@@ -194,7 +174,7 @@ export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: R
           }
           if (!await tryReadValue()) {
             // Couldn't read value
-            throw new Error("Couldn't find value!")
+            throw new ValueEventError(event)
           }
           // All good, continue
           break;
@@ -203,21 +183,27 @@ export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: R
     }
   }
 
-  async function processInstructions(events: AnyEvent[], errorHandler?: (page: Page, event: AnyEvent, err: any) => Promise<boolean>) {
+  async function processInstructions(events: AnyEvent[]) {
 
+    const onScreenshot = getOnScreenshot(callbacks);
     for (let i = 0; i < events.length; i++) {
       const event = events[i];
 
       // TODO: We're going to need to refactor this
       try {
         await processEvent(event, i);
+
+        // Take a screenshot on success
+        // We do this after the loop because the loading
+        // delay is handled by fetching the element
+        await onScreenshot?.(page, event);
       }
       catch (err) {
         // On failed, lets check whats going on
         log.error(err, `Failed to process event: ${event.type} - ${event.id}`);
 
         // For now, the only error handling we can do is to check if we can close a modal
-        const wasHandled = await errorHandler?.(page, event, err);
+        const wasHandled = await callbacks?.onError?.(page, err, event);
         if (wasHandled) {
           // If it worked, take another crack
           await processEvent(event, i)
@@ -234,7 +220,7 @@ export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: R
     }
   }
 
-  await processInstructions(events, callbacks?.errorHandler)
+  await processInstructions(events)
 
   // remove history (personal info) from logged info (TODO: remove this line entirely)
   const { history, ...sanitize } = values;
@@ -310,4 +296,15 @@ function parseValue(value: string, event: ValueEvent) {
     }
   }
   return value;
+}
+
+function getOnScreenshot(callbacks?: IScraperCallbacks) {
+  return callbacks?.onScreenshot
+    ? async (page: Page, event: AnyEvent) => {
+      const screenshot = await page.screenshot({ fullPage: true, type: 'png' });
+      const asData = event as ElementData;
+      const name = `${event.type}-${asData.nodeValue || asData.label || asData.name || event.type || ""}`;
+      callbacks.onScreenshot!(name, screenshot, page)
+    }
+    : undefined;
 }

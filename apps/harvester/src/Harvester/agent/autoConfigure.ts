@@ -1,5 +1,5 @@
-import { Agent, SectionName, EventSection, ProgressInfo } from '@thecointech/scraper-agent';
-import { AgentLogger } from "./agentLogger";
+import { Agent, SectionName, EventSection } from '@thecointech/scraper-agent';
+import { ScraperCallbacks } from "../scraper/callbacks";
 import { AskUserReact } from "./askUser";
 import { log } from "@thecointech/logging";
 import type { BackgroundTaskCallback } from "@/BackgroundTask/types";
@@ -7,6 +7,7 @@ import { initAgent } from "./init";
 import { setEvents } from '../events';
 import { BankTypes } from '../scraper';
 import { stripDuplicateNavigationsSection } from './stripDuplicateEvents';
+import { sleep } from '@thecointech/async';
 
 export type AutoConfigParams = {
   type: BankTypes;
@@ -29,40 +30,33 @@ export async function autoConfigure({ type, name, url, username, password }: Aut
   inputBridge.setPassword(password);
 
   const toSkip = getSectionsToSkip(type);
-  const onProgress = (progress: ProgressInfo, completed?: boolean) => {
-    const totalPercent = progress.sectionPercent + (progress.section * 100) / progress.totalSections;
-    callback({
-      taskId: "agent",
-      stepId: name,
-      progress: totalPercent,
-      label: `Step ${progress.section + 1} of ${progress.totalSections}`,
-      completed
-    })
-  }
-
-  const logger = new AgentLogger();
+  const logger = new ScraperCallbacks(name, callback);
 
   try {
     // Initialize at 0
-    onProgress({ section: 0, sectionPercent: 0, totalSections: 7 });
-    const baseNode = await Agent.process(name, url, inputBridge, logger, onProgress, toSkip);
+    logger.onProgress({ step: 0, stepPercent: 0, total: 7 });
+    // const baseNode = await Agent.process(name, url, inputBridge, logger, toSkip);
 
+    for (let i = 0; i < 7; i++) {
+      for (let j = 0; j < 10; j++) {
+        await sleep(3 * 1000);
+        logger.onProgress({ step: i, stepPercent: (j * 100), total: 7 });
+      }
+    }
     // Ensure we have required info
-    throwIfAnyMissing(baseNode, type);
+    // throwIfAnyMissing(baseNode, type);
 
-    await storeEvents(type, baseNode);
-    onProgress({ section: 7, sectionPercent: 100, totalSections: 7 }, true);
+    // await storeEvents(type, baseNode);
+    await sleep(30 * 1000);
+
+    logger.complete(true);
+
     log.info(`Agent: Finished configuring for action: ${name}`);
   }
   catch (e) {
     log.error(e, `Error configuring agent for action: ${name}`);
     const msg = e instanceof Error ? e.message : String(e);
-    callback({
-      taskId: "agent",
-      stepId: name,
-      completed: false,
-      error: msg
-    })
+    logger.complete(false, msg);
     throw e;
   }
 

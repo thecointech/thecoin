@@ -5,19 +5,19 @@ import { ElementData, FoundElement } from "@thecointech/scraper/types";
 import { AccountResponse, BBox } from "@thecointech/vqa";
 import { extractFuzzyMatch } from "../extractFuzzyMatch";
 import { PageHandler } from "../pageHandler";
-import { processorFn, SectionProgressCallback } from "./types";
+import { processorFn } from "./types";
 
-export const AccountsSummary = processorFn("AccountsSummary", async (page: PageHandler, progress: SectionProgressCallback) => {
+export const AccountsSummary = processorFn("AccountsSummary", async (page: PageHandler) => {
   // Currently, we don't actually do anything, just list the accounts and move on...
-  return await listAccounts(page, progress);
+  return await listAccounts(page);
 })
 
-async function listAccounts(page: PageHandler, progress: SectionProgressCallback) {
+async function listAccounts(page: PageHandler) {
   const api = GetAccountSummaryApi();
   // Get a list of all accounts
   const { data: accounts } = await api.listAccounts(await page.getImage());
-  progress(25);
-  page.logger?.logJson("AccountsSummary", "list-accounts-vqa", accounts);
+  page.onProgress(25);
+  page.logJson("AccountsSummary", "list-accounts-vqa", accounts);
   log.trace(`Found ${accounts.accounts.length} accounts`);
   // Click on each account
   const allAccounts: ElementData[] = [];
@@ -26,7 +26,7 @@ async function listAccounts(page: PageHandler, progress: SectionProgressCallback
     log.trace(`Processing account: ${account.account_number} - ${account.account_type} - ${account.balance}`);
     // Find the most likely element describing this account
     const found = await responseToElement(page.page, accountToElementResponse(account));
-    progress(25 + (50 * allAccounts.length / accounts.accounts.length));
+    page.onProgress(25 + (50 * allAccounts.length / accounts.accounts.length));
 
     // const found = await responseToElement(this.page, balance);
     if (found) {
@@ -39,7 +39,7 @@ async function listAccounts(page: PageHandler, progress: SectionProgressCallback
       allAccounts.push(data);
     }
   }
-  page.logger?.logJson("AccountsSummary", "list-accounts-elm", allAccounts);
+  page.logJson("AccountsSummary", "list-accounts-elm", allAccounts);
 
   // Update inferred with the real account numbers, then save balance/navigation
   let r: { account: AccountResponse, nav: FoundElement }[] = [];
@@ -67,7 +67,7 @@ async function listAccounts(page: PageHandler, progress: SectionProgressCallback
         nav
       });
     }
-    progress(75 + (25 * r.length / accounts.accounts.length));
+    page.onProgress(75 + (25 * r.length / accounts.accounts.length));
   }
   return r;
 }

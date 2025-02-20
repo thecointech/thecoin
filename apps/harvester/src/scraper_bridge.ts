@@ -8,15 +8,16 @@ import { CreditDetails } from './Harvester/types';
 import { spawn } from 'child_process';
 import { exportResults, getState, setOverrides } from './Harvester/db';
 import { harvest } from './Harvester';
-import { logsFolder, rootFolder } from './paths';
+import { logsFolder } from './paths';
 import { platform } from 'node:os';
-import { getLocalBrowserPath, getSystemBrowserPath, installChrome, setRootFolder } from '@thecointech/scraper/puppeteer';
+import { getLocalBrowserPath, getSystemBrowserPath, installChrome } from '@thecointech/scraper/puppeteer';
 import { log } from '@thecointech/logging';
 import { getValues, ActionTypes } from './Harvester/scraper';
 import { AutoConfigParams, autoConfigure } from './Harvester/agent';
 import { initAgent } from './Harvester/agent/init';
 import { BackgroundTaskInfo } from './BackgroundTask';
 import { AskUserReact } from './Harvester/agent/askUser';
+import { Registry } from '@thecointech/scraper';
 
 
 async function guard<T>(cb: () => Promise<T>) {
@@ -42,12 +43,17 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"testAction"|"onReplayProgress
     AskUserReact.onResponse(response);
     return true;
   }),
-  warmup: (_url) => guard(async () => true /*warmup(url)*/),
+  warmup: (url) => guard(async () => {
+     const instance = await Registry.create({
+      name: 'warmup',
+      headless: false,
+     }, url)
+     return !!instance;
+  }),
 
   start: (_actionName, _url, _dynamicInputs) => guard(async () => {
-    // const instance = await Recorder.instance({
+    // const instance = await Registry.create({
     //   name: actionName,
-    //   url,
     //   dynamicInputs,
     //   onComplete: async (events) => {
     //     await setEvents(actionName, events);
@@ -67,12 +73,6 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"testAction"|"onReplayProgress
     return "TODO";
   }),
   finishAction: () => guard(async () => true /*Recorder.release()*/ ),
-
-  // We can only pass POD back through the renderer, use toBridge to convert
-  // testAction: (actionName, dynamicValues) => guard(async () => {
-  //   const callback = (progress: ReplayProgress) => ipcMain.emit(actions.onReplayProgress, toBridge(progress));
-  //   return toBridge(await replay(actionName, dynamicValues));
-  // }),
 
   setWalletMnemomic: (mnemonic) => guard(() => setWalletMnemomic(mnemonic)),
   getWalletAddress: () => guard(() => getWalletAddress()),
@@ -209,7 +209,6 @@ async function installBrowser(event: IpcMainInvokeEvent) {
   log.info('Installing browser');
   let lastLoggedPercent = 0;
   try {
-    setRootFolder(rootFolder);
     await installChrome((bytes, total) => {
       const percent = Math.round((bytes / total) * 100);
       if (percent - lastLoggedPercent > 10) {
@@ -241,11 +240,11 @@ const getEmailAddress = (coinAddress: string) => `${coinAddress}@${process.env.T
 async function autoProcess(event: IpcMainInvokeEvent, params: AutoConfigParams) {
   // Get our coinETransferRecipient
   let wallet = await getWallet();
+  // Mock wallet for development
   if (!wallet) {
-    // Mock wallet for development
     if (process.env.CONFIG_NAME === 'development') {
       wallet = {
-        address: process.env.WALLET_BrokerCAD_ADDRESS!,
+        address: process.env.WALLET_testDemoAccount_ADDRESS!,
       } as any
     }
   }
@@ -259,23 +258,9 @@ async function autoProcess(event: IpcMainInvokeEvent, params: AutoConfigParams) 
 }
 
 async function testAction(event: IpcMainInvokeEvent, actionName: ActionTypes, inputValues: Record<string, string>) {
-  const r = await getValues(actionName, {
-    onProgress: (progress) => {
-      onBackgroundTaskProgress(event, {
-        taskId: "replay",
-        stepId: actionName,
-        progress: 100 * (progress.step / progress.total),
-        label: `Step ${progress.step + 1} of ${progress.total}`
-      });
-    },
-    onError: async (_page, error) => {
-      onBackgroundTaskProgress(event, {
-        taskId: "replay",
-        stepId: actionName,
-        error: error?.toString() ?? "Unknown error"
-      });
-    },
-  }, inputValues);
+  const r = await getValues(actionName, (progress) => {
+    onBackgroundTaskProgress(event, progress);
+  }, inputValues)
   return toBridge(r);
 }
 

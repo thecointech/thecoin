@@ -1,19 +1,34 @@
 import { getMainWindow } from "@/mainWindow";
 import { actions } from "@/scraper_actions";
-import { ChoiceText, IAskUser, User2DChoice } from "@thecointech/scraper-agent";
+import { IAskUser, NamedOptions, NamedResponse } from "@thecointech/scraper-agent";
 import { randomUUID } from "crypto";
 
+type BaseQuestionType = {
+  sessionId: string;
+  questionId: string;
+}
 export type QuestionPacket = {
   question: string;
-  options?: string[];
-  sessionId: string;
-  questionId: string;
-}
-export type ResponsePacket = {
-  response: string;
-  sessionId: string;
-  questionId: string;
-}
+} & BaseQuestionType;
+
+export type OptionPacket = {
+  options: string[];
+} & QuestionPacket
+
+export type Option2DPacket = {
+  question: string;
+  options2d: NamedOptions[];
+} & BaseQuestionType;
+export type ResponsePacket = ({
+  // Value is either the response for a question or a SelectOption
+  value: string | {
+    name: string;
+    option: string
+  }
+}) & BaseQuestionType;
+
+export type AnyQuestionPacket = QuestionPacket | OptionPacket | Option2DPacket;
+
 type DeferredPromise<T> = {
   promise: Promise<T>;
   resolve: (value: T) => void;
@@ -28,7 +43,7 @@ enum QuestionId {
 export class AskUserReact implements IAskUser {
   sessionID = randomUUID();
   depositAddress: string;
-  responses: Record<string, DeferredPromise<string>> = {};
+  responses: Record<string, DeferredPromise<any>> = {};
   static __instances: Record<string, AskUserReact> = {};
 
   private constructor(depositAddress: string) {
@@ -41,7 +56,7 @@ export class AskUserReact implements IAskUser {
   // To prevent sending a gazillion ETransfers during dev/testing
   doNotCompleteETransfer(): boolean {
     // Do not complete in any development build
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.DO_NOT_SEND_ETRANSFER) {
       return true;
     }
     // Do not complete in any non-prod build
@@ -55,13 +70,13 @@ export class AskUserReact implements IAskUser {
     return Promise.resolve(this.depositAddress);
   }
 
-  addDeferredResponse(questionId: string) {
-    const deferred: Partial<DeferredPromise<string>> = {}
-    deferred.promise = new Promise<string>((resolve, reject) => {
+  addDeferredResponse<T = string>(questionId: string) {
+    const deferred: Partial<DeferredPromise<T>> = {}
+    deferred.promise = new Promise<T>((resolve, reject) => {
       deferred.resolve = resolve;
       deferred.reject = reject;
     })
-    this.responses[questionId] = deferred as DeferredPromise<string>;
+    this.responses[questionId] = deferred as DeferredPromise<T>;
     return deferred.promise;
   }
 
@@ -74,7 +89,7 @@ export class AskUserReact implements IAskUser {
     if (!response) {
       throw new Error(`Response ${packet.questionId} not found`);
     }
-    response.resolve(packet.response);
+    response.resolve(packet.value);
   }
 
   clearUnresolved() {
@@ -100,14 +115,21 @@ export class AskUserReact implements IAskUser {
     const mainWindow = getMainWindow();
     const questionId = randomUUID();
     const responsePromise = this.addDeferredResponse(questionId);
-    const packet: QuestionPacket = { question, options, sessionId: this.sessionID, questionId };
+    const packet: QuestionPacket = { question, sessionId: this.sessionID, questionId };
+    if (options) {
+      (packet as OptionPacket).options = options;
+    }
     mainWindow!.webContents.send(actions.onAskQuestion, packet);
     return responsePromise;
   }
 
-  selectOption<T extends object>(_question: string, _options: User2DChoice<T>, _z: ChoiceText<T>): Promise<T> {
-    // TODO
-    throw new Error("Method not implemented.");
+  selectOption(question: string, options2d: NamedOptions[]): Promise<NamedResponse> {
+    const mainWindow = getMainWindow();
+    const questionId = randomUUID();
+    const responsePromise = this.addDeferredResponse<NamedResponse>(questionId);
+    const packet: Option2DPacket = { question, options2d, sessionId: this.sessionID, questionId };
+    mainWindow!.webContents.send(actions.onAskQuestion, packet);
+    return responsePromise;
   }
   forUsername(): Promise<string> {
     return this.responses[QuestionId.Username].promise;
