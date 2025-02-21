@@ -10,15 +10,11 @@ export enum Section {
   AccountsSummary = "AccountsSummary",
   CreditAccountDetails = "CreditAccountDetails",
   SendETransfer = "SendETransfer",
-  ModalDialog = "ModalDialog", // Handled by the agentErrorHandler
-
 }
 export type SectionType = keyof typeof Section;
 export const sections = Object.values(Section).filter(v => typeof v === 'string') as SectionType[];
 
-export type SectionProgressCallback = (sectionPercent: number) => void;
-
-export type Processor<Args extends any[], R> = (page: PageHandler, progress: SectionProgressCallback, ...args: Args) => Promise<R>;
+export type Processor<Args extends any[], R> = (page: PageHandler, ...args: Args) => Promise<R>;
 export interface NamedProcessor<Args extends any[], R> extends Processor<Args, R> {
   processorName: SectionType,
   isolated?: boolean

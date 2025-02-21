@@ -1,10 +1,12 @@
 import { log } from "@thecointech/logging";
-import { mkdirSync, WriteFileOptions, writeFileSync } from "fs";
+import { mkdirSync, writeFileSync } from "fs";
 import path from "path";
 import type { Page } from "puppeteer";
-import type { SectionName, IAgentLogger } from "../../src/types";
+import type { SectionName } from "../../src/types";
 import { isPresent } from "@thecointech/utilities/ArrayExtns";
 import { doPixelMatch } from "../../src/vqaResponse";
+import { IScraperCallbacks, ScraperProgress } from "@thecointech/scraper";
+import { AnyEvent } from "@thecointech/scraper/types";
 
 // How many pixels must change to consider it a new screenshot
 const MIN_PIXELS_CHANGED = 100;
@@ -21,7 +23,7 @@ const MIN_PIXELS_CHANGED = 100;
 //       {element-name}.json
 //       ...
 
-export class TestSerializer implements IAgentLogger {
+export class TestSerializer implements IScraperCallbacks {
 
   baseFolder: string
 
@@ -31,7 +33,7 @@ export class TestSerializer implements IAgentLogger {
   // The intent (updates as we navigate)
   // intent: EventIntent
 
-  _lastIntent: SectionName | undefined;
+  _lastIntent: string | undefined;
   sectionCount = 0;
   _lastScreenShot: Uint8Array | Buffer | undefined;
 
@@ -40,7 +42,22 @@ export class TestSerializer implements IAgentLogger {
     this.target = target
   }
 
-  maybeIncrementSection(intent: SectionName, screenshot: Buffer|Uint8Array) {
+  async onError(page: Page, error: unknown, event?: AnyEvent) {
+    log.error(error);
+    // Dump errors here.
+    return false;
+  }
+
+  async onProgress(progress: ScraperProgress) {
+    log.info(`Progress: ${progress}`);
+  }
+
+  async onScreenshot(intent: string, screenshot: Buffer|Uint8Array, page: Page) {
+    // Save screenshot
+    this.maybeIncrementSection(intent, screenshot);
+  }
+
+  maybeIncrementSection(intent: string, screenshot: Buffer|Uint8Array) {
     if (intent != this._lastIntent) {
       this._lastIntent = intent;
       this.sectionCount = 0;
@@ -66,8 +83,8 @@ export class TestSerializer implements IAgentLogger {
     writeFileSync(outMhtml, data);
   }
 
-  async logJson(intent?: SectionName, name?: string, data: any = {}): Promise<void> {
-    const path = this.toPath(intent, `${this.sectionCount}-${name}`, "json");
+  async logJson(intent?: string, name?: string, data: any = {}): Promise<void> {
+    const path = this.toPath(intent as SectionName, `${this.sectionCount}-${name}`, "json");
     writeFileSync(path, JSON.stringify(data, null, 2));
     log.trace(`Wrote: ${path}`);
   }

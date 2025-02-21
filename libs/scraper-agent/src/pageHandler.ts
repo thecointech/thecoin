@@ -10,11 +10,11 @@ import { EventManager, IEventSectionManager } from "./eventManager";
 import { _getImage } from "./getImage";
 import { _getPageIntent } from "./getPageIntent";
 import { ElementResponse } from "@thecointech/vqa";
-import { IAgentLogger } from "./types";
 import crypto from "node:crypto";
 import { File } from "@web-std/file";
-import { SectionType } from "./processors/types";
-import { agentErrorHandler } from "./agentErrorHandler";
+import { sections, SectionType } from "./processors/types";
+import { IScraperCallbacks } from "@thecointech/scraper";
+import { SectionName } from "./types";
 
 type ApiFn = (image: File) => Promise<AxiosResponse<AnyResponse>>
 
@@ -43,7 +43,7 @@ export class PageHandler {
   name: string;
   recorderStack: Recorder[]
   eventManager: EventManager
-  logger?: IAgentLogger
+  callbacks?: IScraperCallbacks
 
   get recorder() {
     return this.recorderStack.at(-1)!
@@ -61,20 +61,20 @@ export class PageHandler {
     return this.eventManager.allEvents;
   }
 
-  private constructor(name: string, eventManager: EventManager, recorder: Recorder, logger?: IAgentLogger) {
+  private constructor(name: string, eventManager: EventManager, recorder: Recorder, callbacks?: IScraperCallbacks) {
     this.recorderStack = [recorder];
     this.eventManager = eventManager;
     this.name = name;
-    this.logger = logger;
+    this.callbacks = callbacks;
   }
 
-  static async create(name: string, bankUrl: string, logger?: IAgentLogger) {
+  static async create(name: string, bankUrl: string, callbacks?: IScraperCallbacks) {
     const eventManager = new EventManager();
     const recorder = await Registry.create({
       name,
       onEvent: eventManager.onEvent
     }, bankUrl);
-    return new PageHandler(name, eventManager, recorder, logger);
+    return new PageHandler(name, eventManager, recorder, callbacks);
   }
 
   async [Symbol.asyncDispose]() {
@@ -83,7 +83,7 @@ export class PageHandler {
     }
   }
 
-  pushSection(subName: SectionType) {
+  pushSection(subName: SectionName) {
     return this.eventManager.pushSection(subName);
   }
 
@@ -134,7 +134,7 @@ export class PageHandler {
   async getImage(fullPage: boolean = false) {
 
     const image = await _getImage(this.page, fullPage);
-    this.logger?.logScreenshot(this.currentSectionName, image, this.page);
+    this.callbacks?.onScreenshot?.(this.currentSectionName, image, this.page);
     return new File([image], "screenshot.png", { type: "image/png" });
   }
 
@@ -177,25 +177,13 @@ export class PageHandler {
   }
 
   async completeInteraction(r: AnyResponse, interaction: (found: FoundElement) => Promise<boolean>, options: InteractionOptions) {
-    // try {
-      const found = await this.toElement(r, options.name, options.htmlType, options.inputType);
-      return await interaction(found);
-    // } catch (e) {
-      // Save out page/JSON to allow easy debugging
-    //   const debugState = {
-    //     intent: "debug",
-    //     page: `${options.name}-${DateTime.now().toFormat("yyyy-MM-dd-HH-mm-ss")}`,
-    //     name: options.name
-    //   };
-    //   await this.writer.writeScreenshot(this.page, debugState);
-    //   this.writer.writeJson(r, debugState);
-    //   throw e;
-    // }
+    const found = await this.toElement(r, options.name, options.htmlType, options.inputType);
+    return await interaction(found);
   }
 
   async toElement(response: AnyResponse, eventName: string, htmlType?: string, inputType?: string) {
     // First, record the response from the API
-    this.logger?.logJson(this.currentSectionName, `vqa-${eventName}`, response);
+    this.logJson(this.currentSectionName, `vqa-${eventName}`, response);
     // Find the element in the page
     let found = await responseToElement(this.page, response, htmlType, inputType);
     if (!found) {
@@ -206,7 +194,7 @@ export class PageHandler {
     // Finally, record what we found
     // Do not include data that is likely to change
     const { frame, ...trimmed } = found.data;
-    this.logger?.logJson(this.currentSectionName, `elm-${eventName}`, {
+    this.logJson(this.currentSectionName, `elm-${eventName}`, {
       ...trimmed,
       // ...(extra ? { extra } : {})
     });
@@ -226,13 +214,30 @@ export class PageHandler {
 
     // Do not record these actions (perhaps should have an error section instead?)
     using _ = this.eventManager.pause();
-    const wasHandled = await agentErrorHandler(this.page, this.logger, err);
+    const wasHandled = await this.callbacks?.onError?.(this.page, err);
 
     log.info(` - Error handled: ${wasHandled}`);
     // if not, throw the original error
     if (!wasHandled) throw err;
   }
 
-  // writeScreenshot = () => this.writer.writeScreenshot(this.page, this.state);
-  // writeJson = (data: any, eventName: string) => this.writer.writeJson(data, { ...this.state, name: eventName });
+  // Wrapping logging callbacks into here because I'm lazy
+
+  onNewSection() {
+    this.onProgress?.(0);
+  }
+  onProgress(progress: number) {
+    const currentName = this.currentSectionName;
+    // get index of current section in Section enum
+    const step = sections.indexOf(currentName as any);
+    this.callbacks?.onProgress?.({
+      step,
+      stepPercent: progress,
+      total: sections.length,
+    });
+  }
+
+  logJson(name: string, eventName: string, data: any) {
+    this.callbacks?.logJson?.(name, eventName, data);
+  }
 }

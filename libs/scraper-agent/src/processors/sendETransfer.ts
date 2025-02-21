@@ -12,7 +12,7 @@ import { distance } from 'fastest-levenshtein';
 import { getCoordsWithMargin, mapInputToParent } from "../elementUtils";
 import { PageHandler } from "../pageHandler";
 import { IAskUser } from "../types";
-import { processorFn, SectionProgressCallback } from "./types";
+import { processorFn } from "./types";
 import { waitPageStable } from "../vqaResponse";
 
 class CannotFindLinkError extends Error {
@@ -27,19 +27,32 @@ export class NotAnETransferPageError extends Error {
   }
 }
 
-export const SendETransfer = processorFn("SendETransfer", async (page: PageHandler, progress: SectionProgressCallback, input: IAskUser, accountNumber: string) => {
-  const attemptedLinks = new Set<string>();
+export const SendETransfer = processorFn("SendETransfer", async (page: PageHandler, input: IAskUser, accountNumber: string) => {
+  let attemptedLinks = new Set<string>();
   for (let i = 0; i < 5; i++) {
+    const priorLinks = new Set(attemptedLinks);
     await using section = await page.pushIsolatedSection("SendETransfer");
     try {
       await navigateToSendETransferPage(page, attemptedLinks);
-      progress(10);
-      await sendETransfer(page, progress, input, accountNumber);
+      page.onProgress(10);
+      await sendETransfer(page, input, accountNumber);
       return true;
     }
     catch (e) {
       section.cancel();
       log.error(e);
+
+      // Is this something that the page handler can handle?
+      try {
+        await page.maybeThrow(e);
+        // If it didn't throw, we try that one again...
+        attemptedLinks = priorLinks;
+        continue;
+      }
+      catch (e) {
+        // We don't care about any errors stemming from the auto-handling
+        log.warn(e, "Error handling page");
+      }
 
       if (e instanceof NotAnETransferPageError) {
         // This could mean the original link was bad
@@ -64,7 +77,7 @@ async function navigateToSendETransferPage(page: PageHandler, attemptedLinks: Se
   const api = GetETransferApi();
   const { data } = await api.bestEtransferLink(linkTexts);
 
-  page.logger?.logJson("SendETransfer", "best-link", {
+  page.logJson("SendETransfer", "best-link", {
     links: linkTexts,
     vqa: data
   });
@@ -109,13 +122,13 @@ type InputTracker = {
   step: number
 }
 
-async function sendETransfer(page: PageHandler, progress: SectionProgressCallback, input: IAskUser, accountNumber: string) {
+async function sendETransfer(page: PageHandler, input: IAskUser, accountNumber: string) {
 
   log.trace("SendETransferWriter: sendETransfer");
   const api = GetETransferApi();
   // We don't know how many pages of steps there are, so we iterate until there is no more 'next' button
   // let step = 1;
-
+  let hasReviewed = false;
   const tracker: InputTracker = { step: 1 };
   while (true) {
     const hasFilledAnyInput = await fillETransferDetails(page, input, tracker, accountNumber);
@@ -132,7 +145,7 @@ async function sendETransfer(page: PageHandler, progress: SectionProgressCallbac
     }
 
     // We don't know how long to go, so just increment something.  We can assume it'll be less than 10
-    progress(10 + (++tracker.step) * 10);
+    page.onProgress(10 + (++tracker.step) * 10);
 
     // Check to see if there are any errors on the page
     const screenshot = await page.getImage(true);
@@ -146,14 +159,11 @@ async function sendETransfer(page: PageHandler, progress: SectionProgressCallbac
     }
 
     // We should/may have navigated, get details about the new page.
-    const image = await page.getImage(true);
-    const title = await page.page.title();
-    const { data: currentStage } = await GetETransferApi().detectEtransferStage(title, image);
-    log.trace(`Sending step: ${tracker.step}, Current stage: ${currentStage.stage}`);
-
+    const currentStage = await getCurrentStage(page, hasReviewed);
+    log.trace(`Sending step: ${tracker.step}, Current stage: ${currentStage}`);
     let confirmationElement;
 
-    switch (currentStage.stage) {
+    switch (currentStage) {
       case "ConfirmDetails":
       case "ReviewDetails":
         // Check we've entered what we need to?
@@ -161,6 +171,8 @@ async function sendETransfer(page: PageHandler, progress: SectionProgressCallbac
           log.error("Detected stage 'ReviewDetails', but not all required fields are filled");
           // However, it could be a mis-detection, so we will continue
         }
+        // This is to check that we do not go into an infinite loop
+        hasReviewed = true;
         // MOSTLY FOR TESTING
         if (input.doNotCompleteETransfer()) {
           return true;
@@ -180,7 +192,7 @@ async function sendETransfer(page: PageHandler, progress: SectionProgressCallbac
           log.error("Could not find confirmation code in page");
         }
         confirmationElement = found;
-        progress(100);
+        page.onProgress(100);
         break;
     }
 
@@ -189,6 +201,23 @@ async function sendETransfer(page: PageHandler, progress: SectionProgressCallbac
       return true;
     }
   }
+}
+
+async function getCurrentStage(page: PageHandler, hasReviewed: boolean) {
+  const image = await page.getImage(true);
+  const title = await page.page.title();
+  // The difference between "review" & "complete" can be very small, they have
+  // mostly the same details and the LLM might not be able to tell the difference
+  // To deal with this, we add an extra check once we've passed review.  This should
+  // almost never be false, but we can't assume that.
+  if (hasReviewed) {
+    const { data: isComplete } = await GetETransferApi().detectEtransferComplete(title, image);
+    if (isComplete.transfer_complete) {
+      return "TransferComplete";
+    }
+  }
+  const { data: currentStage } = await GetETransferApi().detectEtransferStage(title, image);
+  return currentStage.stage;
 }
 
 async function fillETransferDetails(page: PageHandler, input: IAskUser, tracker: InputTracker, accountNumber: string) {
@@ -240,7 +269,7 @@ async function fillInputs(page: PageHandler, input: IAskUser, tracker: InputTrac
 
   const inputTypes = await callInputTypes(image, elements, parentCoords);
   log.trace("SendETransferWriter: inputTypes: " + JSON.stringify(inputTypes));
-  page.logger?.logJson("SendETransfer", "input-types-vqa", inputTypes);
+  page.logJson("SendETransfer", "input-types-vqa", inputTypes);
   const shortWaitPageStable = async () => {
     try {
       // A short wait but with a very low threshold should
@@ -301,7 +330,7 @@ async function fillAmountToSend(page: PageHandler, input: SearchElement, amount:
   // Do we need to do anything more than this?
   log.trace("Filling input: AmountToSend");
 
-  page.logger?.logJson("SendETransfer", "amount-elm", amount);
+  page.logJson("SendETransfer", "amount-elm", amount);
 
   await enterValueIntoFound(page.page, input, amount.toString());
   await sleep(500);
@@ -311,7 +340,7 @@ async function fillAmountToSend(page: PageHandler, input: SearchElement, amount:
 async function selectFromAccount(page: PageHandler, input: SearchElement, account: string) {
   log.trace("Filling input: FromAccount");
 
-  page.logger?.logJson("SendETransfer", "from-account-vqa", input.data);
+  page.logJson("SendETransfer", "from-account-vqa", input.data);
 
   // First, check if the default is already entered
   if (input.data.tagName == "SELECT") {
@@ -345,7 +374,7 @@ async function selectFromAccount(page: PageHandler, input: SearchElement, accoun
 
 async function selectToRecipient(page: PageHandler, element: SearchElement, input: IAskUser) {
   log.trace("Filling input: ToRecipient");
-  page.logger?.logJson("SendETransfer", "to-recipient-vqa", element.data);
+  page.logJson("SendETransfer", "to-recipient-vqa", element.data);
 
   let recipient = await input.expectedETransferRecipient();
 

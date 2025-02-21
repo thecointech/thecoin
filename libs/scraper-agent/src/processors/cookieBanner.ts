@@ -1,17 +1,17 @@
 import { GetLandingApi } from "@thecointech/apis/vqa";
 import { log } from "@thecointech/logging";
 import { PageHandler } from "../pageHandler";
-import { processorFn, SectionProgressCallback } from "./types";
+import { processorFn } from "./types";
 
-export const CookieBanner = processorFn("CookieBanner", async (page: PageHandler, progress: SectionProgressCallback) => {
-  await closeCookieBanner(page, progress);
+export const CookieBanner = processorFn("CookieBanner", async (page: PageHandler) => {
+  await closeCookieBanner(page);
 })
 
-async function closeCookieBanner(page: PageHandler, progress: SectionProgressCallback) {
+async function closeCookieBanner(page: PageHandler) {
   const detected = await cookieBannerDetected(page)
   log.trace(`LandingWriter: Cookie banner detected: ${detected}`);
   if (detected) {
-    progress(33);
+    page.onProgress(33);
     try {
       const didClose = await page.tryClick(GetLandingApi(), "cookieBannerAccept", {
         noNavigate: true,
@@ -28,7 +28,7 @@ async function closeCookieBanner(page: PageHandler, progress: SectionProgressCal
     catch (err) {
       log.warn(`LandingWriter: Failed to close cookie banner: ${err}`);
     }
-    progress(66);
+    page.onProgress(66);
   }
 
   // Being pedantic, did this work?
@@ -36,7 +36,6 @@ async function closeCookieBanner(page: PageHandler, progress: SectionProgressCal
     log.warn("LandingWriter: VQA still sees a cookie banner");
     // Not a big deal, could be a fake-positive
   }
-  progress(100);
 }
 
 async function cookieBannerDetected(page: PageHandler) {
