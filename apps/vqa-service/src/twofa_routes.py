@@ -1,6 +1,6 @@
 from fastapi import UploadFile, APIRouter
 from data_elements import ElementResponse
-from run_endpoint_query import run_endpoint_query
+from run_endpoint_query import get_image, run_endpoint_query
 from twofa_data import *
 
 router = APIRouter()
@@ -11,7 +11,10 @@ async def detect_action_required(image: UploadFile) -> TwoFactorActionRequiredRe
 
 @router.post("/twofa/detect-destinations", tags=["twofa"])
 async def detect_destinations(image: UploadFile) -> TwoFactorDestinationsResponse:
-    return await run_endpoint_query(image, query_page_2fa_destinations)
+    (image, _) = await get_image(image)
+    emails = await run_endpoint_query(image, query_2fa_email_destinations)
+    phones = await run_endpoint_query(image, query_2fa_phone_destinations)
+    return TwoFactorDestinationsResponse(phones=phones, emails=emails)
 
 @router.post("/twofa/get-destination-elements", tags=["twofa"])
 async def get_destination_elements(image: UploadFile, phone: str) -> TwoFactorElementsResponse:

@@ -23,16 +23,46 @@ query_page_2fa_action = (
 
 # action_prompt = f"From the following options, select the one that best describes the action required in the given webpage [SelectDestination, InputCode, ApproveInApp, Error] {get_instruct_json_respose(detect_2fa_action)}"
 
+# class TwoFactorDestinationsResponse(BaseModel):
+#     phone_nos: list[str] = Field(..., description="array of phone numbers")
+#     emails: list[str] = Field(..., description="array of emails")
+
+class PhoneNumberElements(BaseModel):
+    phone_number: str = Field(..., description="the exact text of the phone number")
+    position_x: float
+    position_y: float
+
+class PhoneDestinations(BaseModel):
+    num_phone_numbers: int
+    phone_nos: list[PhoneNumberElements]
+
+class EmailElements(BaseModel):
+    email: str = Field(..., description="the exact text of the email address")
+    position_x: float
+    position_y: float
+
+class EmailDestinations(BaseModel):
+    num_emails: int
+    emails: list[EmailElements]
+
 class TwoFactorDestinationsResponse(BaseModel):
-    phone_nos: list[str] = Field(..., description="array of phone numbers")
-    emails: list[str] = Field(..., description="array of emails")
+    phones: PhoneDestinations
+    emails: EmailDestinations
 
-get_destinations_prompt = f"Analyze the provided webpage. How many phone numbers or email addresses can we send two-factor codes to?"
+query_2fa_phone_destinations = (
+    "On this webpage, how many phone numbers are available as destinations to send the two-factor authentication code to?",
+    PhoneDestinations
+)
+query_2fa_email_destinations = (
+    "On this webpage, how many email addresses are available as destinations to send the two-factor authentication code to?",
+    EmailDestinations
+)
+# get_destinations_prompt = f"Analyze the provided webpage. How many phone numbers or email addresses can we send two-factor codes to?"
 
-query_page_2fa_destinations = (
-    get_destinations_prompt,
-    TwoFactorDestinationsResponse
-)       
+# query_page_2fa_destinations = (
+#     get_destinations_prompt,
+#     TwoFactorDestinationsResponse
+# )       
 
 #get_options_query = f"Analyze the provided webpage. Describe all the elements that will send a two-factor authentication code to {phone}.}"
 class TwoFactorElementsResponse(BaseModel):
