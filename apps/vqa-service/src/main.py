@@ -1,7 +1,7 @@
 import os
 from fastapi import FastAPI, Security, HTTPException, Depends
 from fastapi.security.api_key import APIKeyHeader
-from warmup import router as warmup_router
+from common_routes import router as common_router
 from landing_routes import router as landing_router
 from intent_routes import router as intent_router
 from login_routes import router as login_router
@@ -50,7 +50,7 @@ app = FastAPI(
 app.add_middleware(KeepAliveMiddleware)
 
 # Add all routers
-app.include_router(warmup_router)
+app.include_router(common_router)
 app.include_router(landing_router)
 app.include_router(intent_router)
 app.include_router(login_router)
