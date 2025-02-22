@@ -24,7 +24,7 @@ def query_most_similar(target: str, options: list[str]) -> SimilarityResponse:
         SimilarityResponse
     )
     
-@router.post("/detect-most-similar-option", tags=["etransfer"])
+@router.post("/detect-most-similar-option")
 async def detect_most_similar_option(target: str, options: list[str]) -> SimilarityResponse:
     result = runQueryToJson(None, query_most_similar(target, options))
     return SimilarityResponse(**result)
@@ -33,7 +33,7 @@ async def detect_most_similar_option(target: str, options: list[str]) -> Similar
 class CorrectedResponse(BaseModel):
     correct_value: str = Field(..., description="The correct value from source")
     
-@router.get("/correct-estimate")
+@router.post("/correct-estimate")
 async def correct_estimate(estimate: str, source: str, type: str="text") -> CorrectedResponse:
     r = runQueryToJson(None, (
         f"The estimated {type} \"{estimate}\" is present in the source text: \"{source}\". What is the correct value of the estimated {type}?",
