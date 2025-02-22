@@ -1,6 +1,8 @@
 from fastapi import UploadFile, APIRouter
 from data_elements import ElementResponse
+from helpers_image import overlay_image
 from run_endpoint_query import get_image, run_endpoint_query
+from geo_math import BBox
 from twofa_data import *
 
 router = APIRouter()
@@ -17,9 +19,12 @@ async def detect_destinations(image: UploadFile) -> TwoFactorDestinationsRespons
     return TwoFactorDestinationsResponse(phones=phones, emails=emails)
 
 @router.post("/twofa/get-destination-elements", tags=["twofa"])
-async def get_destination_elements(image: UploadFile, phone: str) -> TwoFactorElementsResponse:
+async def get_destination_elements(image: UploadFile, phone: str, top: float, left: float, width: float, height: float) -> TwoFactorElementsResponse:
     query = get_2fa_elements_for_phone(phone)
-    return await run_endpoint_query(image, query)
+    box = BBox(left=left, top=top, right=left+width, bottom=top+height)
+    (image, _) = await get_image(image)
+    highlighted_image = overlay_image(image, [box])
+    return await run_endpoint_query(highlighted_image, query)
 
 @router.post("/twofa/get-auth-input", tags=["twofa"])
 async def get_auth_input(image: UploadFile) -> ElementResponse:

@@ -66,17 +66,11 @@ query_2fa_email_destinations = (
 
 #get_options_query = f"Analyze the provided webpage. Describe all the elements that will send a two-factor authentication code to {phone}.}"
 class TwoFactorElementsResponse(BaseModel):
-    elements: list[ElementResponse]
-
-get_elements_prompt = "Analyze the provided webpage. Describe all the elements that will send a two-factor authentication code to "
-# query_page_2fa_elements = (
-#     get_destinations_prompt,
-#     TwoFactorElementsResponse
-# )       
+    buttons: list[ElementResponse]
 
 def get_2fa_elements_for_phone(phone: str):
     return (
-        get_elements_prompt + phone + ".",
+        f"In this webpage, the phone number \"{phone}\" is highlighted in red.  Describe the buttons that will send a code to this number",
         TwoFactorElementsResponse
     )
 

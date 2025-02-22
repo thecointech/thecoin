@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, UploadFile
 from geo_math import MAX_RESOLUTION, BBox
+from helpers_image import overlay_image
 from image_query_data import ImageQueryResponse
 from query import runQueryRaw, tryConvertToJSON
 from run_endpoint_query import get_image, pixels_to_position, position_to_pixels
@@ -95,5 +96,31 @@ async def process_point_image_query(image: UploadFile, prompt: str, point_size: 
 async def process_text_query(prompt: str) -> ImageQueryResponse:
     try:
         return ImageQueryResponse(result=runQueryRaw(None, prompt))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/api/draw-boxes", response_class=Response, responses={
+    200: {
+        "content": {"image/png": {}},
+        "description": "Returns the annotated image with boxes"
+    }
+})
+async def draw_boxes(image: UploadFile, top: float=None, height: float=None, left: float=None, width: float=None):
+    try:
+        draw_top = top or 0
+        draw_left = left or 0
+        draw_right = draw_left + width if width is not None else MAX_RESOLUTION
+        draw_bottom = draw_top + height if height is not None else MAX_RESOLUTION
+        draw = BBox(top=draw_top, bottom=draw_bottom, left=draw_left, right=draw_right)
+
+        [qimage, _] = await get_image(image)
+        annotated = overlay_image(qimage, [draw])
+
+        # Convert PIL Image to bytes
+        img_byte_arr = io.BytesIO()
+        annotated.save(img_byte_arr, format='PNG')
+        img_byte_arr = img_byte_arr.getvalue()
+        return Response(content=img_byte_arr, media_type="image/png")
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
