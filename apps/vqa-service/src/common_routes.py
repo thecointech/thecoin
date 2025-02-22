@@ -31,12 +31,12 @@ async def detect_most_similar_option(target: str, options: list[str]) -> Similar
 
 ########################
 class CorrectedResponse(BaseModel):
-    source_value: str = Field(..., description="The source portion that matches the estimated value")
+    correct_value: str = Field(..., description="The correct value from source")
     
 @router.get("/correct-estimate")
 async def correct_estimate(estimate: str, source: str, type: str="text") -> CorrectedResponse:
     r = runQueryToJson(None, (
-        f"The estimated {type} \"{estimate}\" is present in the source text: \"{source}\". What portion of the source text matches the estimated {type}?",
+        f"The estimated {type} \"{estimate}\" is present in the source text: \"{source}\". What is the correct value of the estimated {type}?",
         CorrectedResponse
     ))
     return CorrectedResponse(**r)
