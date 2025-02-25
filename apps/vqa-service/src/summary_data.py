@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from data_elements import ElementResponse, MoneyElementResponse
+from data_elements import ElementResponse, MoneyElementResponse, PositionResponse
 from case_insensitive_enum import CaseInsensitiveEnum
 
 #json_part = request_json + f"{{ \"num_accounts\": \"number\", \"accounts\": [{{\"account_type\": \"Chequing|Savings|Credit\", \"account_number\": \"string\", \"balance\": \"string\", \"position_x\": \"number\", \"position_y\": \"number\" }}] }}"
@@ -43,9 +43,17 @@ def get_query_account_balance(account_number: str):
 # json_part = get_instruct_json_respose(element_schema)
 # find_navigation_query = f"Analyze the provided webpage. For account \"{account_number}\", describe the link to navigate to it's details page. {json_part}"
 
-find_navigation_prompt = "Analyze the provided webpage. For account \"{account_number}\", describe the link to navigate to it's details page."
+# find_navigation_prompt = "Analyze the provided webpage. For account \"{account_number}\", describe the link to navigate to it's details page."
+# def get_query_navigation(account_number: str):
+#     return (
+#         find_navigation_prompt.format(account_number=account_number),
+#         ElementResponse
+#     )
+
+
+find_navigation_prompt = "Describe the link to navigate to account \"{account_number}\"."
 def get_query_navigation(account_number: str):
     return (
         find_navigation_prompt.format(account_number=account_number),
-        ElementResponse
+        PositionResponse
     )

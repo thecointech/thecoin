@@ -1,5 +1,5 @@
 from fastapi import UploadFile
-from data_elements import ElementResponse, MoneyElementResponse
+from data_elements import MoneyElementResponse, PositionResponse
 from geo_math import BBox
 from summary_data import list_accounts_query, OverviewResponse, get_query_account_balance, get_query_navigation
 from run_endpoint_query import run_endpoint_query
@@ -29,9 +29,6 @@ async def list_accounts(image: UploadFile) -> OverviewResponse:
     return await run_endpoint_query(image, list_accounts_query)
 
 @router.post("/summary/account-navigate-element", tags=["summary"])
-async def account_navigate_element(image: UploadFile, account_number: str, crop_top: int = None, crop_bottom: int = None) -> ElementResponse:
-    crop = None
-    if all(x is not None for x in [crop_top, crop_bottom]):
-        crop = BBox(top=crop_top, bottom=crop_bottom)
+async def account_navigate_element(image: UploadFile, account_number: str) -> PositionResponse:
     query = get_query_navigation(account_number)
-    return await run_endpoint_query(image, query, crop)
+    return await run_endpoint_query(image, query)
