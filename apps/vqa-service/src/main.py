@@ -15,6 +15,7 @@ from port import get_version, get_port
 from fastapi_tweak import use_route_names_as_operation_ids
 from starlette.status import HTTP_403_FORBIDDEN
 from starlette.middleware.base import BaseHTTPMiddleware
+from monitoring import ResourceMonitoringMiddleware
 
 class KeepAliveMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
@@ -47,6 +48,10 @@ app = FastAPI(
     dependencies=dependencies
 )
 
+# Setup monitoring middleware
+# Add resource monitoring to a FastAPI app
+app.add_middleware(ResourceMonitoringMiddleware)
+# Add the keep-alive middleware
 app.add_middleware(KeepAliveMiddleware)
 
 # Add all routers
