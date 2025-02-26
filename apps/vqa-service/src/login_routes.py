@@ -33,4 +33,13 @@ async def detect_login_error(image: UploadFile) -> ErrorResponse:
 async def detect_login_result(image: UploadFile) -> LoginResultResponse:
     return await run_endpoint_query(image, query_login_result)
 
+
+query_logout_element = (
+    "Describe the logout button in this page.",
+    ElementResponse
+)
+@router.post("/login/detect-logout-element", tags=["login"])
+async def detect_logout_element(image: UploadFile) -> ElementResponse:
+    return await run_endpoint_query(image, query_logout_element)
+
 # Errors: TODO: Can we not create a generic endpoint for this?
