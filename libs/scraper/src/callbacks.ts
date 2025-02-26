@@ -2,9 +2,10 @@ import type { Page } from "puppeteer";
 import type { AnyEvent } from "./types";
 
 export type ScraperProgress = {
-  step: number,
-  total: number,
-  stepPercent?: number
+  stage: string, // Name of the step
+  step: number, // Index of the step in total
+  total: number, // The total number of steps
+  stepPercent?: number // The percentage the current step is complete
 }
 
 export type ScraperProgressCallback = (progress: ScraperProgress) => void;

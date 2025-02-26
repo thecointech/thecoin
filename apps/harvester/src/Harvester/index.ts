@@ -8,14 +8,15 @@ import { getDataAsDate } from './types';
 import { PayVisaKey } from './steps/PayVisa';
 import { notifyError } from './notify';
 import { exec } from 'child_process';
+import { BackgroundTaskCallback } from '@/BackgroundTask';
 
-export async function harvest() {
+export async function harvest(callback?: BackgroundTaskCallback) {
 
   try {
 
     log.info(`Commencing Harvest`);
 
-    const { stages, state, user } = await initialize();
+    const { stages, state, user } = await initialize(callback);
 
     log.info(`Resume from last: harvesterBalance ${state.state.harvesterBalance}`);
 
@@ -30,7 +31,7 @@ export async function harvest() {
           'Skipping Harvest because {DueDate} is past {Cutoff}',
           { DueDate: state.visa.dueDate.toSQLDate(), Cutoff: cutoff.toSQLDate() }
         );
-        return;
+        return false;
       }
     }
     const nextState = await processState(stages, state, user);
@@ -48,6 +49,7 @@ export async function harvest() {
     }
 
     log.info(`Harvest complete`);
+    return true;
   }
   catch (err: unknown) {
     if (err instanceof Error) {
@@ -65,6 +67,7 @@ export async function harvest() {
       exec(process.argv0);
     }
     // throw err;
+    return false;
   }
   finally {
     await closeBrowser();

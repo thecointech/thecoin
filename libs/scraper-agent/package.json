@@ -20,9 +20,10 @@
     "clean": "run -T rimraf ./build && run -T rimraf ./coverage",
     "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
-    "autoRecord": "yarn run -T cross-env CONFIG_NAME=prod URL_SEQ_LOGGING=false TC_LOG_FOLDER=./logs run-env tools/recordSamples/autoRecord.ts"
-  },
+    "autoRecord": "yarn run -T cross-env CONFIG_NAME=devlive URL_SEQ_LOGGING=false TC_LOG_FOLDER=./logs run-env tools/recordSamples/autoRecord.ts",
+    "autoRecord:prod": "yarn run -T cross-env CONFIG_NAME=prodtest URL_SEQ_LOGGING=false TC_LOG_FOLDER=./logs run-env tools/recordSamples/autoRecord.ts"
 
+  },
   "dependencies": {
     "@thecointech/apis": "^0.2.135",
     "@thecointech/scraper": "^0.2.135"

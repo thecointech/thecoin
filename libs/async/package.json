@@ -24,8 +24,16 @@
     ".": {
       "development": "./build/async_mocked.js",
       "default": "./build/index.js"
-    }
+    },
+    "./sleep": "./build/index.js"
   },
   "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "build/index.d.ts"
+      ]
+    }
+  },
   "gitHead": "6c91d925570c1132080f3098b510a3a42180e429"
 }

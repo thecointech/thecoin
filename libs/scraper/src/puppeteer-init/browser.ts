@@ -2,25 +2,24 @@ import path from "path"
 import { Browser, ChromeReleaseChannel, computeExecutablePath, computeSystemExecutablePath, detectBrowserPlatform, install, resolveBuildId } from "@puppeteer/browsers"
 import os from "node:os"
 import { existsSync, promises as fs } from "node:fs"
+import { rootFolder } from "./rootFolder"
 
 // Our process:
 // First, detect installed browsers
 // Allow user to download chrome to browserDownloadDir
 // Save path (do we need to?)
 
-let rootFolder: string;
-export function setRootFolder(folder: string) {
-  rootFolder = folder;
-}
-// By default, we initialize to CWD
-setRootFolder(process.cwd())
 const buildIdAlias = 'downloaded'
 
-const browserDownloadDir = () => path.join(rootFolder, 'browser')
+const browserDownloadDir = () => path.join(rootFolder(), 'browser')
 
 export async function installChrome(progress?: (bytes: number, total: number) => void) {
-  // First, remove existing
-  await removeChrome();
+  const existing = await getLocalBrowserPath();
+  if (existing) {
+    // It is the responsibility of the caller to delete existing
+    // installations to force a re-install
+    return existing;
+  }
 
   const platform = detectBrowserPlatform();
   if (!platform) {
@@ -75,8 +74,4 @@ export async function getBrowserPath() {
     (await getLocalBrowserPath()) ||
     (await getSystemBrowserPath())
   )
-}
-
-export function getUserDataDir() {
-  return path.join(rootFolder, 'chrome_userdata');
 }

@@ -1,6 +1,6 @@
 import readline from 'readline/promises';
 import { BankConfig } from "../config";
-import type { ChoiceText, IAskUser, User2DChoice } from "../../src/types";
+import type { IAskUser, NamedOptions, NamedResponse } from "../../src/types";
 
 
 // Simple console input for data the user needs to provide
@@ -38,16 +38,19 @@ export class AskUserConsole implements IAskUser {
       : this.rlp.question(`${question}: `);
   }
 
-  async selectOption<T extends object>(question: string, options: User2DChoice<T>, z: ChoiceText<T> ): Promise<T> {
+  async selectOption(question: string, options: NamedOptions[]): Promise<NamedResponse> {
     this.rlp.write(`\n${question}\n`);
-    const entries = Object.entries(options);
-    const flatEntries = entries.flatMap(([k, arr]) => arr.map((v) => [k, v] as const));
+    // const entries = Object.entries(options);
+    const flatEntries = options.flatMap(o => o.options.map((v) => [o.name, v] as const));
     for (let i = 0; i < flatEntries.length; i++) {
       const [key, value] = flatEntries[i];
-      this.rlp.write(`[${i}] ${key}: ${value[z]}\n`);
+      this.rlp.write(`[${i}] ${key}: ${value}\n`);
     }
     const option = await this.forValue("Select an option");
-    return flatEntries[parseInt(option)][1];
+    return {
+      name: flatEntries[parseInt(option)][0],
+      option: flatEntries[parseInt(option)][1]
+    };
   }
 
   async selectString(question: string, options: string[]): Promise<string> {

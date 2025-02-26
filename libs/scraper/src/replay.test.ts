@@ -41,7 +41,7 @@ describe("needs more tests!", () => {
     // const { replay } = await import('./replay');
 
     // This should throw, because the selector is no longer valid
-    await expect(replay(events as AnyEvent[])).rejects.toThrow();
+    await expect(replay("test", events as AnyEvent[])).rejects.toThrow();
     // On throw, we should have written out the page
   })
 

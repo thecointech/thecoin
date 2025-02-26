@@ -1,5 +1,5 @@
 import type { AxiosResponse } from "axios";
-import { AnyResponse, clickElement, responseToElement } from "./vqaResponse";
+import { AnyResponse, clickElement, responseToElement, waitForValidIntent, waitPageStable } from "./vqaResponse";
 import { sleep } from "@thecointech/async";
 import { log } from "@thecointech/logging";
 import { enterValueIntoFound } from "@thecointech/scraper/replay";
@@ -95,6 +95,10 @@ export class PageHandler {
     using _ = this.eventManager.pause();
     const rs = this.recorderStack;
     rs.push(await this.recorder.clone(subName));
+    // Page should be loaded, but that doesn't mean it's ready.
+    // Take the extra wait here just to ensure we don't miss anything
+    await waitForValidIntent(this.page);
+    await waitPageStable(this.page);
     let events: IEventSectionManager|null = this.eventManager.pushSection(subName);
     return {
       cancel: () => events?.cancel(),
@@ -183,7 +187,7 @@ export class PageHandler {
 
   async toElement(response: AnyResponse, eventName: string, htmlType?: string, inputType?: string) {
     // First, record the response from the API
-    this.logJson(this.currentSectionName, `vqa-${eventName}`, response);
+    this.logJson(this.currentSectionName, `${eventName}-vqa`, response);
     // Find the element in the page
     let found = await responseToElement(this.page, response, htmlType, inputType);
     if (!found) {
@@ -194,7 +198,7 @@ export class PageHandler {
     // Finally, record what we found
     // Do not include data that is likely to change
     const { frame, ...trimmed } = found.data;
-    this.logJson(this.currentSectionName, `elm-${eventName}`, {
+    this.logJson(this.currentSectionName, `${eventName}-elm`, {
       ...trimmed,
       // ...(extra ? { extra } : {})
     });
@@ -234,6 +238,7 @@ export class PageHandler {
       step,
       stepPercent: progress,
       total: sections.length,
+      stage: currentName
     });
   }
 

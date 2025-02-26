@@ -1,10 +1,10 @@
 import { EventSection, SectionName } from "@thecointech/scraper-agent";
 import { getProcessConfig, setProcessConfig } from "./config";
-import { ActionTypes, BankTypes } from "./scraper";
+import { ActionType, BankType } from "./scraper";
 import { AnyEvent } from "@thecointech/scraper/types";
 
 
-export async function setEvents(type: BankTypes, events: EventSection) {
+export async function setEvents(type: BankType, events: EventSection) {
   await setProcessConfig({
     scraping: {
       [type]: events
@@ -12,7 +12,8 @@ export async function setEvents(type: BankTypes, events: EventSection) {
   })
 }
 
-export async function getEvents(type: ActionTypes) {
+export async function getEvents(type: ActionType) {
+
   const config = await getProcessConfig();
   if (!config?.scraping)  {
     throw new Error(`No base node found for ${type}`);
@@ -76,7 +77,7 @@ export function stripDuplicateNavigations(events: AnyEvent[]) {
   });
 }
 
-function getSectionsToKeep(actionType: ActionTypes) : SectionName[] {
+function getSectionsToKeep(actionType: ActionType) : SectionName[] {
   const sectionsToKeep: SectionName[] = [];
   switch (actionType) {
     case "chqBalance":

@@ -3,9 +3,7 @@ import { HarvestData, ProcessingStage, UserData } from '../types';
 import currency from 'currency.js';
 import { log } from '@thecointech/logging';
 import { notify } from '../notify';
-import { ConnectContract } from '@thecointech/contract-core';
-import { fetchRate, weSellAt } from '@thecointech/fx-rates';
-import { toHuman } from '@thecointech/utilities';
+import { getBalance } from './utils';
 
 //
 // Detect when a visa payment has cleared and reduce the harvester balance to match
@@ -82,19 +80,6 @@ function lastPaymentSettled(data: HarvestData, pending: currency, pendingDate: D
   return  false;
 }
 
-async function getBalance(user: UserData) {
-  const tcCore = await ConnectContract(user.wallet);
-  const address = await user.wallet.getAddress();
-  const balance = await tcCore.pl_balanceOf(address);
-  // What does this balance turn into?
-  const rate = await fetchRate();
-  return rate
-    ? toHuman(
-        Number(balance) * weSellAt([rate], new Date(rate.validFrom)),
-        true
-      )
-    : undefined;
-}
 
 async function notifyIfInsufficientBalance(pending: currency, user: UserData) {
   try {

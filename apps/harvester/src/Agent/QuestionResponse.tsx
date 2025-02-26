@@ -5,8 +5,8 @@ import { NamedResponse } from "@thecointech/scraper-agent/types";
 
 export const QuestionResponse: React.FC<{
   setQuestionActive: () => void;
-  isTaskRunning: boolean;
-}> = ({ setQuestionActive, isTaskRunning }) => {
+  isRecording: boolean;
+}> = ({ setQuestionActive, isRecording }) => {
 
   const [question, setQuestion] = useState<AnyQuestionPacket | undefined>()
   const [answer, setAnswer] = useState<string|NamedResponse>('')
@@ -26,10 +26,10 @@ export const QuestionResponse: React.FC<{
   }, []);
 
   useEffect(() => {
-    if (!isTaskRunning) {
+    if (!isRecording) {
       setQuestion(undefined);
     }
-  }, [isTaskRunning])
+  }, [isRecording])
 
   const onSubmit = async () => {
     const r = await window.scraper.replyQuestion({

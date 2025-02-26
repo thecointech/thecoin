@@ -1,4 +1,4 @@
-import { GetAccountSummaryApi } from "@thecointech/apis/vqa";
+import { GetAccountSummaryApi, GetBaseApi } from "@thecointech/apis/vqa";
 import { log } from "@thecointech/logging";
 import { accountToElementResponse, responseToElement } from "../vqaResponse";
 import { ElementData, FoundElement } from "@thecointech/scraper/types";
@@ -47,7 +47,7 @@ async function listAccounts(page: PageHandler) {
     // Just use the first account (maybe later we'll store them all)
     const inferred = accounts.accounts[i];
     const scraped = allAccounts[i];
-    const accountNumber = updateAccountNumber(inferred, scraped);
+    const accountNumber = await updateAccountNumber(inferred, scraped);
 
     // Crop to just the area of the account in the list.  This is because
     // VQA needs a bit of help focusing on the account
@@ -60,7 +60,7 @@ async function listAccounts(page: PageHandler) {
     }
 
     // Validate we can navigate (in case we need more)
-    const nav = await saveAccountNavigation(page, accountNumber, crop);
+    const nav = await saveAccountNavigation(page, inferred);
     if (nav) {
       r.push({
         account: inferred,
@@ -79,19 +79,27 @@ async function saveBalanceElement(page: PageHandler, account_number: string, cro
   // return await page.toElement(balance, "balance", undefined, undefined);
 }
 
-async function saveAccountNavigation(page: PageHandler, account_number: string, crop: BBox) {
-  const { data: nav } = await GetAccountSummaryApi().accountNavigateElement(account_number, await page.getImage(), crop.top, crop.bottom);
-  return await page.toElement(nav, "navigate", "a", undefined);
+async function saveAccountNavigation(page: PageHandler, account: AccountResponse) {
+  const { data: nav } = await GetAccountSummaryApi().accountNavigateElement(account.account_number, await page.getImage());
+  const asResponse = {
+    ...nav,
+    content: `${account.account_name} ${account.account_number}`,
+    neighbour_text: account.account_type
+  }
+  return await page.toElement(asResponse, `navigate-${account.account_type}`, "a", undefined);
 }
 
 
-export function updateAccountNumber(inferred: AccountResponse, scraped: ElementData) {
+export async function updateAccountNumber(inferred: AccountResponse, scraped: ElementData) {
   const inferredAccountNumber = inferred.account_number;
   const realAccountText = scraped.text;
   // The inferred number may be off by a few digits
-  const { match: accountNumber } = extractFuzzyMatch(inferredAccountNumber, realAccountText);
+  const { data: corrected } = await GetBaseApi().correctEstimate(inferredAccountNumber, realAccountText, "account number");
+  // This should be closer, but even it can be slightly off.  However
+  // we should be close enough that a simple fuzzy-match will capture the correct value
+  const { match: accountNumber } = extractFuzzyMatch(corrected.correct_value, realAccountText);
   // Update original
-  log.trace(`Updating account number from inferred: ${inferredAccountNumber} to ${accountNumber}`);
+  log.trace(`Updating account number from inferred: (${inferredAccountNumber}) to (${accountNumber})`);
   inferred.account_number = accountNumber;
   return accountNumber;
 }

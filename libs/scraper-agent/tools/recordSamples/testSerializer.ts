@@ -7,59 +7,83 @@ import { isPresent } from "@thecointech/utilities/ArrayExtns";
 import { doPixelMatch } from "../../src/vqaResponse";
 import { IScraperCallbacks, ScraperProgress } from "@thecointech/scraper";
 import { AnyEvent } from "@thecointech/scraper/types";
+import { TakeScreenshotError } from "../../src/getImage";
+import { maybeCloseModal } from "../../src/modal";
 
 // How many pixels must change to consider it a new screenshot
 const MIN_PIXELS_CHANGED = 100;
 
 // Our data output is in the following format:
 // (actually, it's not, but we will move to that)
-// intent/  <-- What are we trying to do
-//   page/  <-- For each navigation, write out the page
-//     source/  <-- The source of the image
-//       page.png <-- Every folder has a screenshot
-//       page.mhtml
-//       intent.json
-//       {element-name}.json
-//       {element-name}.json
+// target/  <-- The target being navigated (eg bank name)
+//   section/  <-- The over-all section (eg login/sendTransfer etc)
+//       0.png <-- Every folder has a screenshot
+//       0.mhtml
+//       0-vqa.json  <-- VQA output
+//       0-elm.json  <-- Element found in scraper
+//       1.png
+//       1.mhtml
+//       1-vqa.json
 //       ...
 
 export class TestSerializer implements IScraperCallbacks {
 
-  baseFolder: string
+  _baseFolder: string
 
   // The bank names (constant throughout an execution)
-  target: string
+  _target: string
 
-  // The intent (updates as we navigate)
-  // intent: EventIntent
-
-  _lastIntent: string | undefined;
+  _lastsection: string | undefined;
   sectionCount = 0;
   _lastScreenShot: Uint8Array | Buffer | undefined;
 
   constructor({baseFolder, target}: {baseFolder: string, target: string}) {
-    this.baseFolder = baseFolder
-    this.target = target
+    this._baseFolder = baseFolder
+    this._target = target
   }
 
   async onError(page: Page, error: unknown, event?: AnyEvent) {
-    log.error(error);
-    // Dump errors here.
+    const dumpFolder = this.toPath("error")
+    mkdirSync(dumpFolder, { recursive: true });
+    try {
+      if (error instanceof TakeScreenshotError) {
+        log.info(`Skipping screenshot due to error: ${error.message}`);
+        return false;
+      }
+
+      // If this is a modal, try and handle it automatically
+      const modalClosed = await maybeCloseModal(page);
+      if (modalClosed) {
+        log.info(`Modal closed`);
+        return true;
+      }
+
+      // We don't know what the error is, save out the page and debug it.
+      await page.screenshot({ path: path.join(dumpFolder, "error.png"), type: "png" });
+      // Save content might be helpful
+      const content = await page.content();
+      writeFileSync(path.join(dumpFolder, `error.html`), content);
+      // Lastly, try for MHTML
+      const cdp = await page.createCDPSession();
+      const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
+      writeFileSync(path.join(dumpFolder, `error.mhtml`), data);
+
+      // write the error out too, if possible
+      writeFileSync(path.join(dumpFolder, `error.json`), JSON.stringify(error));
+    }
+    catch (e) {
+      log.error(e, `Error dumping page in onError`);
+    }
     return false;
   }
 
   async onProgress(progress: ScraperProgress) {
-    log.info(`Progress: ${progress}`);
+    log.info(`Progress: ${progress.stage} - ${progress.stepPercent}%`);
   }
 
-  async onScreenshot(intent: string, screenshot: Buffer|Uint8Array, page: Page) {
-    // Save screenshot
-    this.maybeIncrementSection(intent, screenshot);
-  }
-
-  maybeIncrementSection(intent: string, screenshot: Buffer|Uint8Array) {
-    if (intent != this._lastIntent) {
-      this._lastIntent = intent;
+  maybeIncrementSection(section: string, screenshot: Buffer|Uint8Array) {
+    if (section != this._lastsection) {
+      this._lastsection = section;
       this.sectionCount = 0;
     } else {
       if (this._lastScreenShot) {
@@ -70,21 +94,29 @@ export class TestSerializer implements IScraperCallbacks {
     }
     this._lastScreenShot = screenshot;
   }
-  async logScreenshot(intent: SectionName, screenshot: Buffer|Uint8Array, page: Page): Promise<void> {
-    // Save screenshot
-    this.maybeIncrementSection(intent, screenshot);
-    const outScFile = this.toPath(intent, `${this.sectionCount}`, "png");
+
+  async onScreenshot(section: string, screenshot: Buffer|Uint8Array, page: Page): Promise<void> {
+    this.maybeIncrementSection(section, screenshot);
+
+    // Write out the buffer
+    const outScFile = this.toPath(section, `${this.sectionCount}`, "png");
     writeFileSync(outScFile, screenshot, { encoding: "binary" });
 
     // Also try for MHTML
-    const outMhtml = this.toPath(intent, `${this.sectionCount}`, "mhtml");
-    const cdp = await page.createCDPSession();
-    const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
-    writeFileSync(outMhtml, data);
+    try {
+      const outMhtml = this.toPath(section, `${this.sectionCount}`, "mhtml");
+      const cdp = await page.createCDPSession();
+      const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
+      writeFileSync(outMhtml, data);
+    }
+    catch (e) {
+      log.error(e);
+      // This is a pain, but it happens - let's move on anyway
+    }
   }
 
-  async logJson(intent?: string, name?: string, data: any = {}): Promise<void> {
-    const path = this.toPath(intent as SectionName, `${this.sectionCount}-${name}`, "json");
+  async logJson(section?: string, name?: string, data: any = {}): Promise<void> {
+    const path = this.toPath(section, `${this.sectionCount}-${name}`, "json");
     writeFileSync(path, JSON.stringify(data, null, 2));
     log.trace(`Wrote: ${path}`);
   }
@@ -95,47 +127,8 @@ export class TestSerializer implements IScraperCallbacks {
     log.trace(`Wrote EVents: ${path}`);
   }
 
-  // async writeScreenshot(page: Page, state: TestState, fullPage: boolean = false) {
-  //   // Save screenshot
-  //   const outScFile = this.fromState(state, "png");
-  //   const buffer = await page.screenshot({ type: 'png', fullPage });
-  //   this.write(buffer, outScFile, { encoding: "binary" });
-
-  //   // Also try for MHTML
-  //   const outMhtml = this.fromState(state, "mhtml");
-  //   const cdp = await page.createCDPSession();
-  //   const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
-  //   this.write(data, outMhtml);
-  // }
-
-  // writeJson(data: any, test: TestElement) {
-  //   this.write(JSON.stringify(data, null, 2), this.fromElement(test));
-  // }
-
-  // fromState(state: TestState, format: string): OutputFilePath {
-  //   return ({
-  //     baseFolder: this.baseFolder,
-  //     source: this.source,
-  //     ...state,
-  //     filename: `${this.source}.${format}`
-  //   });
-  // }
-  // fromElement(test: TestElement): OutputFilePath {
-  //   return ({
-  //     baseFolder: this.baseFolder,
-  //     source: this.source,
-  //     ...test,
-  //     filename: `${this.source}-${test.name}.json`
-  //   });
-  // }
-
-  // write(data: any, out: OutputFilePath, options?: WriteFileOptions) {
-  //   writeFileSync(toPath(out), data, options);
-  //   log.trace(`Wrote: ${toPath(out)}`);
-  // }
-
-  toPath(section?: SectionName, name?: string, extn?: string) {
-    const structure = [this.baseFolder, section, this.target]
+  toPath(section?: string, name?: string, extn?: string) {
+    const structure = [this._baseFolder, this._target, section]
     const outputFolder = path.join(...structure.filter(isPresent));
     mkdirSync(outputFolder, { recursive: true });
     return path.join(outputFolder, `${name}.${extn}`);

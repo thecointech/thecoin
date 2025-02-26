@@ -1,24 +1,29 @@
 import { useState } from "react";
 import { Button, Dimmer, Input, Loader, Segment } from "semantic-ui-react";
 import type { BankData } from "./BankCard/data";
-import { BackgroundTaskReducer } from "@/BackgroundTask/index";
-import type { BankTypes } from "@/Harvester/scraper";
+import { BackgroundTaskReducer, getTaskGroup } from "@/BackgroundTask/index";
+import { BankType } from "@/Harvester/scraper";
+import { log } from "@thecointech/logging";
 
 type Props = BankData & {
-  type: BankTypes;
-  // actionName: ActionTypes;
+  type: BankType;
+  isReplaying?: boolean;
 }
-export const LoginDetails: React.FC<Props> = ({ icon, name, url, type }) => {
+export const LoginDetails: React.FC<Props> = ({ icon, name, url, type, isReplaying }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const r = BackgroundTaskReducer.useData();
-  const task = r.tasks[name];
-  const isTaskRunning = task && task.completed === undefined;
+  const store = BackgroundTaskReducer.useData();
+  const group = getTaskGroup(store, "record");
+  const isTaskRunning = (group && group.completed === undefined) || isReplaying;
 
   const handleSubmit = () => {
+    if (isReplaying) {
+      log.info('Cannot launch process because we are replaying');
+      return;
+    }
     // TODO: Send command to start the agent process
-    console.log('Starting agent with:', url);
+    log.info('Starting agent with:', url);
     // api.setAgentProgress(undefined);
     window.scraper.autoProcess({ name, url, type, username, password });
   };
@@ -28,7 +33,11 @@ export const LoginDetails: React.FC<Props> = ({ icon, name, url, type }) => {
         <Loader />
       </Dimmer>
       <p style={{ display: 'flex', alignItems: 'center' }}>
-        <img style={{ width: '75px', height: '75px' }} src={icon} alt={name} />
+        {
+          icon && (
+            <img style={{ width: '75px', height: '75px' }} src={icon} alt={name} />
+          )
+        }
         Enter your login details:
       </p>
       <Input
@@ -44,7 +53,7 @@ export const LoginDetails: React.FC<Props> = ({ icon, name, url, type }) => {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Enter your password..."
       />
-      <Button onClick={handleSubmit}>Submit</Button>
+      <Button onClick={handleSubmit} loading={isTaskRunning}>Submit</Button>
   </Segment>
   )
 }

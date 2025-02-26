@@ -46,10 +46,12 @@ export class SendETransfer implements ProcessingStage {
         icon: 'seeds.png',
       });
 
+      // NOTE: This will mean the chqBalance is now incorrect, as the money
+      // transferred should have modified it
       return {
         toETransfer: undefined,
         harvesterBalance,
-      }
+      };
     } else {
       log.error(`Failed to transfer ${toTransfer} to TheCoin`);
       // TODO: Handle this case

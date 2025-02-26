@@ -8,7 +8,7 @@ import Tangerine from './Tangerine.svg';
 
 export type BankData = {
   name: string,
-  icon: string,
+  icon?: string,
   url: string
 }
 export const banks: BankData[] = [

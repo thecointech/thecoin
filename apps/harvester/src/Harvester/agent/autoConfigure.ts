@@ -1,16 +1,16 @@
-import { Agent, SectionName, EventSection } from '@thecointech/scraper-agent';
+import { SectionName, EventSection, Agent } from '@thecointech/scraper-agent';
 import { ScraperCallbacks } from "../scraper/callbacks";
 import { AskUserReact } from "./askUser";
 import { log } from "@thecointech/logging";
-import type { BackgroundTaskCallback } from "@/BackgroundTask/types";
-import { initAgent } from "./init";
+import { type BackgroundTaskCallback } from "@/BackgroundTask/types";
 import { setEvents } from '../events';
-import { BankTypes } from '../scraper';
 import { stripDuplicateNavigationsSection } from './stripDuplicateEvents';
-import { sleep } from '@thecointech/async';
+import { downloadRequired } from '@/Download/download';
+import { BankType } from '../scraper';
+import { sections } from '@thecointech/scraper-agent/processors/types';
 
 export type AutoConfigParams = {
-  type: BankTypes;
+  type: BankType;
   name: string;
   url: string;
   username: string;
@@ -21,7 +21,7 @@ export async function autoConfigure({ type, name, url, username, password }: Aut
 
   log.info(`Agent: Starting configuration for action: autoConfigure`);
   // This should do nothing, but call it anyway
-  await initAgent(callback);
+  await downloadRequired(callback);
 
   if (!username || !password) throw new Error("Username and password are required");
 
@@ -30,24 +30,16 @@ export async function autoConfigure({ type, name, url, username, password }: Aut
   inputBridge.setPassword(password);
 
   const toSkip = getSectionsToSkip(type);
-  const logger = new ScraperCallbacks(name, callback);
+  const toProcess = sections.filter(s => !toSkip.includes(s));
+  const logger = new ScraperCallbacks("record", callback, toProcess);
 
   try {
-    // Initialize at 0
-    logger.onProgress({ step: 0, stepPercent: 0, total: 7 });
-    // const baseNode = await Agent.process(name, url, inputBridge, logger, toSkip);
+    const baseNode = await Agent.process(name, url, inputBridge, logger, toSkip);
 
-    for (let i = 0; i < 7; i++) {
-      for (let j = 0; j < 10; j++) {
-        await sleep(3 * 1000);
-        logger.onProgress({ step: i, stepPercent: (j * 100), total: 7 });
-      }
-    }
     // Ensure we have required info
-    // throwIfAnyMissing(baseNode, type);
+    throwIfAnyMissing(baseNode, type);
 
-    // await storeEvents(type, baseNode);
-    await sleep(30 * 1000);
+    await storeEvents(type, baseNode);
 
     logger.complete(true);
 
@@ -64,14 +56,14 @@ export async function autoConfigure({ type, name, url, username, password }: Aut
   return true;
 }
 
-async function storeEvents(type: BankTypes, baseNode: EventSection) {
+async function storeEvents(type: BankType, baseNode: EventSection) {
   // const sectionsToKeep = getSectionsToKeep(type);
   // const events = flatten(baseNode, sectionsToKeep);
   const strippedNode = stripDuplicateNavigationsSection(baseNode);
   await setEvents(type, strippedNode);
 }
 
-function getSectionsToSkip(type: BankTypes) : SectionName[] {
+function getSectionsToSkip(type: BankType) : SectionName[] {
   const sectionsToSkip: SectionName[] = [];
   switch (type) {
     case "chequing":
@@ -87,7 +79,7 @@ function getSectionsToSkip(type: BankTypes) : SectionName[] {
   return sectionsToSkip;
 }
 
-function throwIfAnyMissing(baseNode: EventSection, type: BankTypes) {
+function throwIfAnyMissing(baseNode: EventSection, type: BankType) {
   if (type != 'credit') {
     if (!baseNode.events.find(s => (s as EventSection).section == 'SendETransfer')) {
       const foundSections = baseNode.events
