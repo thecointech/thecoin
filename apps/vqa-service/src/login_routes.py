@@ -1,7 +1,8 @@
 from fastapi import UploadFile, APIRouter
 from login_data import *
 from data_elements import ElementResponse
-from run_endpoint_query import run_endpoint_query
+from run_endpoint_query import get_image, run_endpoint_query
+from pydantic import BaseModel
 
 router = APIRouter()
 
@@ -33,7 +34,7 @@ async def detect_login_error(image: UploadFile) -> ErrorResponse:
 async def detect_login_result(image: UploadFile) -> LoginResultResponse:
     return await run_endpoint_query(image, query_login_result)
 
-
+##############################################################################
 query_logout_element = (
     "Describe the logout button in this page.",
     ElementResponse
@@ -41,5 +42,25 @@ query_logout_element = (
 @router.post("/login/detect-logout-element", tags=["login"])
 async def detect_logout_element(image: UploadFile) -> ElementResponse:
     return await run_endpoint_query(image, query_logout_element)
+
+##############################################################################
+class SessionTimeout(BaseModel):
+    timeout_warning_present: bool
+
+query_session_timout_exists = (
+    "Is the page warning the user their session is about to timeout?",
+    SessionTimeout
+)
+query_session_timeout_continue = (
+    "Describe the button to continue the session and keep the user signed in.",
+    ElementResponse
+)
+@router.post("/login/detect-session-timeout-element", tags=["login"])
+async def detect_session_timeout_element(image: UploadFile) -> ElementResponse|None:
+    (image, _) = await get_image(image)
+    timeout_warning = await run_endpoint_query(image, query_session_timout_exists)
+    if timeout_warning.timeout_warning_present:
+        return await run_endpoint_query(image, query_session_timeout_continue)
+    return None
 
 # Errors: TODO: Can we not create a generic endpoint for this?
