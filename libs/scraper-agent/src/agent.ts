@@ -1,7 +1,7 @@
 import { IAskUser, SectionName } from './types';
 import { log } from '@thecointech/logging';
 import { PageHandler } from './pageHandler';
-import { IScraperCallbacks } from '@thecointech/scraper';
+import { closeBrowser, IScraperCallbacks } from '@thecointech/scraper';
 import { AccountsSummary, CookieBanner, CreditAccountDetails, Landing, Login, NamedProcessor, TwoFA, SendETransfer } from './processors';
 
 export class Agent {
@@ -57,6 +57,8 @@ export class Agent {
     }
 
     log.info(`Finished ${name}`);
+
+    await closeBrowser();
     return page.allEvents;
   }
 }
@@ -73,7 +75,10 @@ async function processSection<Args extends any[], R>(
     ? await page.pushIsolatedSection(processor.processorName)
     : page.pushSection(processor.processorName);
   try {
-    return await processor(page, ...args);
+    page.onProgress(0);
+    const r = await processor(page, ...args);
+    page.onProgress(100);
+    return r;
   }
   catch (e) {
     section.cancel();

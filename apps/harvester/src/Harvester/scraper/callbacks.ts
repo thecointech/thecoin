@@ -6,25 +6,45 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { DateTime } from "luxon";
 import { IScraperCallbacks, ScraperProgress } from "@thecointech/scraper";
 import { AnyEvent } from "@thecointech/scraper/types";
-import { BackgroundTaskCallback } from "@/BackgroundTask";
+import { BackgroundTaskType, BackgroundTaskCallback } from "@/BackgroundTask";
 import { maybeCloseModal } from "@thecointech/scraper-agent/modal";
 import { notify } from "../notify";
 
 export class ScraperCallbacks implements IScraperCallbacks {
 
   counter = 0;
-  sessionId = DateTime.now().toSQL()!;
+  timestamp = Date.now();
+  private taskType: BackgroundTaskType;
+  // private actionType: string;
   private uiCallback?: BackgroundTaskCallback;
-  private actionName: string;
   get logsFolder() {
-    return path.join(rootFolder, "logs", this.sessionId.replaceAll(":", "-"));
+    const sessionId = DateTime.fromMillis(this.timestamp).toSQL()!.replaceAll(":", "-");
+    return path.join(rootFolder, "logs", sessionId);
   }
 
-  constructor(actionName: string, uiCallback?: BackgroundTaskCallback) {
-    this.actionName = actionName;
+  constructor(taskType: BackgroundTaskType, uiCallback?: BackgroundTaskCallback, sections?: string[]) {
+    // this.actionType = actionType;
+    this.taskType = taskType;
     this.uiCallback = uiCallback;
     mkdirSync(this.logsFolder, { recursive: true })
+
+    // Call to initialize the task group
+    this.uiCallback?.({
+      id: this.timestamp.toString(),
+      type: this.taskType,
+    })
+    // Initialize sub-tasks, this will give a
+    // visual indication of how much progress has been made
+    if (sections && this.uiCallback) {
+      for (const section of sections)
+        this.uiCallback?.({
+          parentId: this.timestamp.toString(),
+          type: this.taskType,
+          subTaskId: section,
+        })
+    }
   }
+
 
   async onError(page: Page, error: unknown, _event?: AnyEvent) {
     log.error(error, "Error in replay");
@@ -40,6 +60,11 @@ export class ScraperCallbacks implements IScraperCallbacks {
       }
     }
     else {
+      this.uiCallback?.({
+        id: this.timestamp.toString(),
+        type: this.taskType,
+        error: String(error),
+      })
       await this.dumpPage(page);
     }
     return didClose;
@@ -48,20 +73,21 @@ export class ScraperCallbacks implements IScraperCallbacks {
 
   async onProgress(progress: ScraperProgress) {
     const stepPercent = progress.stepPercent ?? 0;
-    const totalPercent = stepPercent + ((progress.step * 100) / progress.total);
+    const totalPercent = stepPercent + ((progress.step) / progress.total);
     this.uiCallback?.({
-      taskId: "agent",
-      stepId: this.actionName,
-      progress: totalPercent,
-      // Label probably should be defined client-side?
-      label: `Step ${progress.step + 1} of ${progress.total}`,
+      parentId: this.timestamp.toString(),
+      type: this.taskType,
+      subTaskId: progress.stage,
+      description: progress.stage,
+      percent: totalPercent,
     })
   }
+
   async complete(success: boolean, error?: string) {
+    // Update TaskGroup
     this.uiCallback?.({
-      taskId: "agent",
-      stepId: this.actionName,
-      label: `Completed`,
+      id: this.timestamp.toString(),
+      type: this.taskType,
       completed: success,
       error,
     })
@@ -71,7 +97,6 @@ export class ScraperCallbacks implements IScraperCallbacks {
     const outScFile = path.join(this.logsFolder, `${++this.counter}-${intent}.png`);
     writeFileSync(outScFile, screenshot, { encoding: "binary" });
   }
-
 
   logJson(intent: string, name: string, _data: any): void {
     log.info(`[${intent}] ${name}`);

@@ -20,6 +20,7 @@ export const defaultTime = "08:00";
 export enum HarvestStepType {
   // ReadVisaOwing,
   ClearPendingVisa = "ClearPendingVisa",
+  EnsureHarvesterBalance = "EnsureHarvesterBalance",
   ProcessPercent = "ProcessPercent",
   TransferVisaOwing = "TransferVisaOwing",
   RoundUp = "RoundUp",
@@ -52,6 +53,7 @@ export type HarvestConfig = {
 // Until we have a proper graph, just explicitly set an order
 export const HarvestStepOrder = [
   HarvestStepType.ClearPendingVisa,
+  HarvestStepType.EnsureHarvesterBalance,
   HarvestStepType.ProcessPercent,
   HarvestStepType.TransferVisaOwing,
   HarvestStepType.RoundUp,
@@ -75,3 +77,36 @@ export function removeStep (type: HarvestStepType, steps: HarvestSteps) {
   return steps.filter(s => s.type !== type);
 }
 
+export const defaultSteps: HarvestSteps = [
+  {
+    type: HarvestStepType.ClearPendingVisa,
+  },
+  {
+    type: HarvestStepType.EnsureHarvesterBalance,
+  },
+  {
+    type: HarvestStepType.TransferVisaOwing,
+  },
+  {
+    type: HarvestStepType.RoundUp,
+    args: {
+      roundPoint: 100,
+    },
+  },
+  {
+    type: HarvestStepType.ChequeMinimum,
+    args: {
+      limit: 200,
+    },
+  },
+  {
+    type: HarvestStepType.TransferLimit,
+    args: {
+      limit: 2500,
+    },
+  },
+  { type: HarvestStepType.SendETransfer },
+  { type: HarvestStepType.PayVisa },
+  // Heartbeat so we can be certain the harvester is alive when remote
+  { type: HarvestStepType.Heartbeat },
+]

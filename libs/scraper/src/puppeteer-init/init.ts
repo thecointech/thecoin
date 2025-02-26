@@ -1,18 +1,27 @@
-import puppeteerVanilla, { type Browser } from 'puppeteer';
+import puppeteerVanilla, { BrowserContext, type Browser } from 'puppeteer';
 import { addExtra } from 'puppeteer-extra';
 import { getPlugins } from './plugins';
 import { registerElementAttrFns } from '../elements';
-import { getBrowserPath, getUserDataDir } from './browser';
+import { getBrowserPath } from './browser';
 import { log } from '@thecointech/logging';
+// import { initDebuggingInfo } from './debugging';
+import { getUserDataDir } from './userProfile';
 
 const puppeteer = addExtra(puppeteerVanilla);
 const plugins = getPlugins();
 
-let _browser: Browser|undefined;
+declare global {
+  var __scraper__: {
+    browser: Browser;
+    context: BrowserContext;
+  } | undefined;
+}
+
 async function getPage(headless?: boolean) {
 
-  if (_browser) {
-    return { browser: _browser, page: await _browser.newPage() };
+  if (globalThis.__scraper__) {
+    const { browser, context } = globalThis.__scraper__;
+    return { browser, page: await context.newPage() };
   }
 
   const executablePath = await getBrowserPath();
@@ -21,28 +30,48 @@ async function getPage(headless?: boolean) {
   const browser = await puppeteer.launch({
     headless: shouldBeHeadless,
     executablePath,
-    userDataDir: getUserDataDir()
+    userDataDir: getUserDataDir(),
+    args: [
+      // "--disable-accelerated-2d-canvas",
+      // "--disable-gpu",
+      // We can safely disable site isolation as
+      // there is never more than a single site open
+      // in the browser (and we only browse the banks
+      // websites, which is explicitly trusted).
+      // "--disable-site-isolation-trials"
+    ],
   });
 
   for (const plugin of plugins) {
     await plugin.onBrowser(browser);
   }
 
-  _browser = browser;
+  const context = browser.defaultBrowserContext();
+  // const context = await browser.createBrowserContext();
+  globalThis.__scraper__ = {
+    browser,
+    context,
+  };
 
-  _browser.on('disconnected', () => {
+  browser.on('disconnected', () => {
     log.debug(" ** Browser disconnected");
-    _browser = undefined
+    globalThis.__scraper__ = undefined
   });
 
   // On boot, return the default (blank) page
-  const [page] = await browser.pages();
+  const page = await context.newPage();
   return { browser, page };
 }
 
 export async function newPage(headless?: boolean) {
 
   const { page, browser } = await getPage(headless);
+  // page.setBypassCSP(true);
+  // Additional settings that often help with CORS/CSP issues:
+  // await page.setExtraHTTPHeaders({
+  //   'Accept': '*/*',
+  //   'Access-Control-Allow-Origin': '*',
+  // });
 
   for (const plugin of plugins) {
     await plugin.onPageCreated(page);
@@ -60,13 +89,16 @@ export async function newPage(headless?: boolean) {
 
   // Always inject helper functions
   await registerElementAttrFns(page);
+  // if (process.env.CONFIG_NAME?.startsWith('dev')) {
+  //   initDebuggingInfo(page);
+  // }
 
   return { page, browser };
 }
 
 export async function closeBrowser() {
-  if (_browser) {
-    await _browser.close();
-    _browser = undefined
+  if (globalThis.__scraper__?.browser) {
+    await globalThis.__scraper__.browser.close();
+    globalThis.__scraper__ = undefined
   }
 }

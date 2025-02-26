@@ -9,12 +9,14 @@ import { processState } from './processState';
 import { PayVisa } from './steps/PayVisa';
 import { ClearPendingVisa } from './steps/ClearPendingVisa';
 import { TransferLimit } from './steps/TransferLimit';
+import { EnsureHarvesterBalance } from './steps/EnsureHarvesterBalance';
 
 it ('can process on first run', async () => {
 
   // Simple runnable config
   const stages = [
     new ClearPendingVisa(),
+    new EnsureHarvesterBalance(),
     new TransferVisaOwing(),
     new RoundUp(),
     new TransferLimit({limit: 150}),

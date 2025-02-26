@@ -10,6 +10,7 @@ import { log } from '@thecointech/logging';
 import { dbSuffix, rootFolder } from '../paths';
 import { HDNodeWallet } from 'ethers';
 import { EventSection } from '@thecointech/scraper-agent';
+import { getSeedConfig } from './config.seed';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
@@ -44,21 +45,31 @@ export type ConfigShape = {
 // NOTE: Not sure this works with ComDB
 const ConfigKey = "config";
 
-let __config = null as unknown as PouchDB.Database<ConfigShape>;
-export async function getConfig(password?: string) {
+let __config = null as null|Promise<PouchDB.Database<ConfigShape>>;
+export function getConfig(password?: string) {
   if (!__config) {
-    __config = new PouchDB<ConfigShape>(db_path, {adapter: 'memory'});
-    log.info(`Initializing ${process.env.NODE_ENV} config database at ${db_path}`);
+    __config = new Promise(async resolve => {
+      const db = new PouchDB<ConfigShape>(db_path, {adapter: 'memory'});
+      log.info(`Initializing ${process.env.NODE_ENV} config database at ${db_path}`);
 
-    if (PERSIST_DB) {
-      log.info(`Encrypting config DB`);
-      // initialize the config db
-      // Yes, this is a hard-coded password.
-      // Will fix ASAP with dynamically
-      // generated code (Apr 04 2023)
-      await __config.setPassword(password ?? "hF,835-/=Pw\\nr6r");
-      await __config.loadEncrypted();
-    }
+      if (PERSIST_DB) {
+        log.info(`Encrypting config DB`);
+        // initialize the config db
+        // Yes, this is a hard-coded password.
+        // Will fix ASAP with dynamically
+        // generated code (Apr 04 2023)
+        await db.setPassword(password ?? "hF,835-/=Pw\\nr6r");
+        await db.loadEncrypted();
+      }
+      else {
+        // Seed DB in development
+        await db.put({
+          _id: ConfigKey,
+          ...getSeedConfig()
+        })
+      }
+      resolve(db);
+    })
   }
   return __config;
 }

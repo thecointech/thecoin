@@ -1,7 +1,6 @@
 import { useState } from "react"
-import { BankCard } from "./BankCard/BankCard"
+import { BankCard, CustomBankCard } from "./BankCard/BankCard"
 import { BankData, banks } from "./BankCard/data"
-import { Input } from "semantic-ui-react"
 
 type Props = {
   type: 'chequing' | 'credit'
@@ -26,8 +25,9 @@ export const BankSelect = ({ type, onSelectBank }: Props) => {
             <BankCard key={i} {...bank} isSelected={bank.name === selectedBank?.name} onClick={handleSetBank} />
           ))
         }
+        <CustomBankCard isSelected={selectedBank?.name === "Custom"} onClick={handleSetBank} />
       </div>
-      <Input
+      {/* <Input
         visible={selectedBank === undefined}
         disabled={selectedBank?.url !== undefined}
         fluid
@@ -35,7 +35,7 @@ export const BankSelect = ({ type, onSelectBank }: Props) => {
         // onChange={(e) => setUrl(e.target.value)}
         placeholder="URL to process"
         style={{ marginBottom: '1rem' }}
-      />
+      /> */}
     </>
   )
 }

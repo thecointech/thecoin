@@ -38,14 +38,16 @@ export function modifiedLevenshtein(source: string, target: string): number {
   return matrix[sourceLen][targetLen];
 }
 
-export function extractFuzzyMatch(query: string, text: string, maxWindowSize=5) {
+export function extractFuzzyMatch(query: string, text: string, windowSize=5) {
   let bestDistance = Infinity;
   let bestMatch = '';
 
   // Try different window sizes to account for potential extra characters
-  for (let windowSize = query.length; windowSize <= query.length + maxWindowSize; windowSize++) {
-      for (let i = 0; i <= text.length - windowSize; i++) {
-          const sample = text.substring(i, i + windowSize);
+  const minWindowSize = Math.max(query.length - windowSize, 3);
+  const maxWindowSize = Math.min(query.length + windowSize, text.length);
+  for (let thisWindowSize = minWindowSize; thisWindowSize <= maxWindowSize; thisWindowSize++) {
+      for (let i = 0; i <= text.length - thisWindowSize; i++) {
+          const sample = text.substring(i, i + thisWindowSize);
           const dist = modifiedLevenshtein(query, sample);
           // Only update if distance is lower, or equal distance but shorter length
           if (dist < bestDistance || (dist === bestDistance && sample.length < bestMatch.length)) {

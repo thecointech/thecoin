@@ -1,10 +1,9 @@
 import { log } from "@thecointech/logging";
 import { PageHandler } from "../pageHandler";
 import { ElementData, IAskUser } from "../types";
-import { GetETransferApi, GetLoginApi, GetTwofaApi } from "@thecointech/apis/vqa";
+import { GetBaseApi, GetLoginApi } from "@thecointech/apis/vqa";
 import { processorFn } from "./types";
 import { enterValueIntoFound } from "@thecointech/scraper/replay";
-import { clickElement } from "../vqaResponse";
 import { FoundElement } from "@thecointech/scraper/types";
 
 export const Login = processorFn("Login", async (page: PageHandler, input: IAskUser)  => {
@@ -21,7 +20,8 @@ async function login(page: PageHandler, input: IAskUser) {
   const { data: hasPassword } = await api.detectPasswordExists(await page.getImage());
   page.onProgress(25);
 
-  await enterUsernameAndRemember(page, input);
+  // await enterUsernameAndRemember(page, input);
+  await enterUsername(page, input, await page.getImage());
   page.onProgress(50);
 
   await enterPassword(page, input, hasPassword.password_input_detected);
@@ -32,40 +32,44 @@ async function login(page: PageHandler, input: IAskUser) {
   return outcome;
 }
 
-async function enterUsernameAndRemember(page: PageHandler, input: IAskUser) {
-  // We keep this in it's own section,
-  // as on replay it shouldn't be necessary
-  // (the username field should already be filled in)
-  await using _ = page.pushSection("Username");
+// This was implemented as an experiment when struggling to bypass 2FA
+// However, it hasn't been successful, and complicates the login process.
+// Remove it for now, perhaps bring it back on day so leaving the comments
 
-  // First, has "remember me" been checked?
-  const image = await page.getImage();
-  const { data: rememberResponse } = await GetTwofaApi().getRememberInput(image);
+// async function enterUsernameAndRemember(page: PageHandler, input: IAskUser) {
+//   // We keep this in it's own section,
+//   // as on replay it shouldn't be necessary
+//   // (the username field should already be filled in)
+//   await using _ = page.pushSection("Username");
 
-  try {
-    // Even if "remember me" is checked, we still attempt to enter a username
-    // This should handle false-positives as well
-    await enterUsername(page, input, image);
+//   // First, has "remember me" been checked?
+//   const image = await page.getImage();
+//   const { data: rememberResponse } = await GetTwofaApi().getRememberInput(image);
 
-    if (!rememberResponse.is_checked) {
-      const found = await page.toElement(rememberResponse, "remember", "input", "checkbox");
-      const clickedRemember = await clickElement(page.page, found, true, 10);
-      if (!clickedRemember) {
-        // It's possible that there is no remember checkbox
-        log.warn("Failed to click remember");
-      }
-    }
-  }
-  catch (e) {
-    // If "remember me" was checked, then it could be a non-issue failure
-    if (rememberResponse.is_checked) {
-      log.warn("Failed to enter username, but remember me was checked - continuing");
-    }
-    else {
-      throw e;
-    }
-  }
-}
+//   try {
+//     // Even if "remember me" is checked, we still attempt to enter a username
+//     // This should handle false-positives as well
+//     await enterUsername(page, input, image);
+
+//     if (!rememberResponse.is_checked) {
+//       const found = await page.toElement(rememberResponse, "remember", "input", "checkbox");
+//       const clickedRemember = await clickElement(page.page, found, true, 10);
+//       if (!clickedRemember) {
+//         // It's possible that there is no remember checkbox
+//         log.warn("Failed to click remember");
+//       }
+//     }
+//   }
+//   catch (e) {
+//     // If "remember me" was checked, then it could be a non-issue failure
+//     if (rememberResponse.is_checked) {
+//       log.warn("Failed to enter username, but remember me was checked - continuing");
+//     }
+//     else {
+//       throw e;
+//     }
+//   }
+// }
 async function enterUsername(page: PageHandler, input: IAskUser, image: File) {
   const username = await input.forUsername();
   const { data: inputResponse } = await GetLoginApi().detectUsernameInput(image);
@@ -78,7 +82,7 @@ async function enterUsername(page: PageHandler, input: IAskUser, image: File) {
 async function getMostSimilarUsername(element: ElementData, username: string) {
   // If this is a drop-down, are there elements that mostly match the username?
   if (element.options) {
-    const { data: similar } = await GetETransferApi().detectMostSimilarOption(username, element.options);
+    const { data: similar } = await GetBaseApi().detectMostSimilarOption(username, element.options);
     // Super-simple check - the first letter at least should match...
     if (similar.most_similar[0] == username[0]) {
       return similar.most_similar;

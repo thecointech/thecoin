@@ -1,10 +1,10 @@
 import { existsSync, rmSync } from "fs";
-import { setRootFolder } from "@thecointech/scraper/puppeteer-init/browser";
+import { setRootFolder } from "@thecointech/scraper/puppeteer-init/rootFolder";
 import { SimilarityPipeline } from "@thecointech/scraper/similarity";
 import path from "path";
 
 export async function init(cleanRun?: boolean) {
-  const tempDir = "./.temp";
+  const tempDir = "./.cache";
   setRootFolder(tempDir);
   let lastLogMessage = 0;
   let logPeriod = 3000;

@@ -1,13 +1,11 @@
 import { Recorder, Registry } from "@thecointech/scraper/record";
-import { AskUser } from "../../src/askUser";
-import { init } from "../../src/init";
-import { getConfig } from "../../src/config";
-import { TestSerializer, TestState } from "../../src/testSerializer";
-import { _getPageIntent } from "../../src/testPageWriter.js";
-import { getCoordsWithMargin, mapInputToParent } from "./highlighter";
+import { init } from "../init";
+import { getConfig } from "../config";
+import { TestSerializer } from "./testSerializer";
 import { getAllElements } from "@thecointech/scraper/elements";
 import { mkdirSync } from "fs";
 import path from "path";
+import { AskUserConsole } from "./askUserConsole";
 
 await init();
 const { baseFolder } = getConfig();
@@ -16,17 +14,11 @@ const recordFolder = path.join(baseFolder, "record");
 mkdirSync(recordFolder, { recursive: true });
 
 const target = process.argv[2] ?? "Target";
-const testState: TestState = {
-  intent: "samples",
-  page: target
-}
+using askUser = new AskUserConsole();
 
-using askUser = new AskUser();
-// await using recorder = await Registry.create({ name: "testing" });
 let numScreenshots = 1;
 const writer = new TestSerializer(numScreenshots.toString(), recordFolder);
 
-const page = recorder.page;
 const newSC = async (hint: string) => {
   writer.source = (numScreenshots++).toString() + (hint ? `-${hint}` : "");
   await writer.writeScreenshot(page, testState, true);

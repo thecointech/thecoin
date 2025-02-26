@@ -1,4 +1,4 @@
-import { GetETransferApi, GetIntentApi } from "@thecointech/apis/vqa";
+import { GetBaseApi, GetETransferApi, GetIntentApi } from "@thecointech/apis/vqa";
 import { log } from "@thecointech/logging";
 import { clickElement } from "../vqaResponse";
 import { getAllElements } from "@thecointech/scraper/elements";
@@ -66,13 +66,16 @@ export const SendETransfer = processorFn("SendETransfer", async (page: PageHandl
   return false;
 });
 
+const stripUnicode = (str: string): string => str.replace(/[^\x00-\x7F]/g, '');
+
 async function navigateToSendETransferPage(page: PageHandler, attemptedLinks: Set<string>) {
   const allLinks = await getAllElements(page.page, Number.MAX_SAFE_INTEGER, 'a');
 
   // Find the most likely link for "Send ETransfer"
   const linkTexts = allLinks
-    .filter(l => !attemptedLinks.has(l.data.text))
-    .map(l => l.data.text);
+    .map(l => l.data.text)
+    .map(stripUnicode)
+    .filter(l => !attemptedLinks.has(l));
 
   const api = GetETransferApi();
   const { data } = await api.bestEtransferLink(linkTexts);
@@ -85,7 +88,7 @@ async function navigateToSendETransferPage(page: PageHandler, attemptedLinks: Se
   // These should all point to the same page...
   log.trace(`Best link: ${data.best_link}, attempting to navigate`);
   const matchingLinks = allLinks
-    .filter(l => l.data.text == data.best_link)
+    .filter(l => stripUnicode(l.data.text) == data.best_link)
     // Take the top-most one, in case there are multiple
     .sort((a, b) => a.data.coords.top - b.data.coords.top);
 
@@ -340,7 +343,7 @@ async function fillAmountToSend(page: PageHandler, input: SearchElement, amount:
 async function selectFromAccount(page: PageHandler, input: SearchElement, account: string) {
   log.trace("Filling input: FromAccount");
 
-  page.logJson("SendETransfer", "from-account-vqa", input.data);
+  page.logJson("SendETransfer", "from-account-elm", input.data);
 
   // First, check if the default is already entered
   if (input.data.tagName == "SELECT") {
@@ -352,7 +355,7 @@ async function selectFromAccount(page: PageHandler, input: SearchElement, accoun
     if (!options) {
       throw new Error("Expected options to be defined");
     }
-    const { data: bestAccordingToLLM} = await GetETransferApi().detectMostSimilarOption(account, options);
+    const { data: bestAccordingToLLM} = await GetBaseApi().detectMostSimilarOption(account, options);
 
     // Now we can safely use Levenstein just in case the LLM changed some letters/punctuation
     const scored = options.map(o => distance(bestAccordingToLLM.most_similar, o));
@@ -374,7 +377,7 @@ async function selectFromAccount(page: PageHandler, input: SearchElement, accoun
 
 async function selectToRecipient(page: PageHandler, element: SearchElement, input: IAskUser) {
   log.trace("Filling input: ToRecipient");
-  page.logJson("SendETransfer", "to-recipient-vqa", element.data);
+  page.logJson("SendETransfer", "to-recipient-elm", element.data);
 
   let recipient = await input.expectedETransferRecipient();
 

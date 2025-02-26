@@ -1,56 +1,38 @@
-import { DateTime } from 'luxon';
-import currency from 'currency.js';
-import { ChequeBalanceResult, getValues, VisaBalanceResult } from './scraper';
-import { HistoryRow } from '@thecointech/scraper/types';
-import { BackgroundTaskCallback } from '@/BackgroundTask';
+import { AnyEvent, HistoryRow } from "../src/types";
+import { IScraperCallbacks } from "../src/callbacks";
+import { sleep } from "@thecointech/async/sleep";
+import currency from "currency.js";
+import { DateTime } from "luxon";
 
-export async function getChequingData(callback?: BackgroundTaskCallback) : Promise<ChequeBalanceResult> {
-  if (process.env.HARVESTER_OVERRIDE_CHQ_BALANCE) {
+// TODO:
+// Decide where to place mocked implementations for scraping
+// This is currently duplicated with the harvester
+export async function replay(name: string, events: AnyEvent[], callbacks?: IScraperCallbacks, dynamicValues?: Record<string, string>, delay = 1000) {
+
+
+  // Progress started
+  callbacks?.onProgress?.({ step: 0, total: 1, stage: name, stepPercent: 0 });
+
+  for (let i = 0; i < events.length; i++) {
+    await sleep(delay);
+    const stepPercent = Math.round(100 * (i + 1) / events.length);
+    callbacks?.onProgress?.({ step: 0, total: 1, stage: name, stepPercent });
+  }
+
+  // Mock some more-or-less random return values
+  if (name == "chqBalance") {
+    const balance = (1000 + Math.random() * 500).toFixed(2);
     return {
-      balance: currency(process.env.HARVESTER_OVERRIDE_CHQ_BALANCE),
-    }
+      balance: currency(balance),
+    };
   }
-  switch (process.env.CONFIG_NAME) {
-    // case 'development':
-    // case 'devlive':
-    // case 'prodtest':
-    //   // Mock the values in non-prod environment
-    //   const balance = (1000 + Math.random() * 500).toFixed(2);
-    //   return {
-    //     balance: currency(balance),
-    //   };
-    default:
-      return await getValues('chqBalance', callback);
+  else if (name == "visaBalance") {
+    return getEmulatedVisaData(DateTime.now());
   }
+  return {};
 }
 
-export async function getVisaData(lastTxDate?: DateTime, callback?: BackgroundTaskCallback) : Promise<VisaBalanceResult> {
-  if (process.env.HARVESTER_OVERRIDE_VISA_BALANCE) {
-    const data = JSON.parse(process.env.HARVESTER_OVERRIDE_VISA_BALANCE);
-    return {
-      balance: currency(data.balance ?? 0),
-      dueDate: DateTime.fromISO(data.dueDate),
-      dueAmount: currency(data.dueAmount),
-    }
-  }
-  switch (process.env.CONFIG_NAME) {
-    // case 'development':
-    // case 'devlive':
-    // case 'prodtest':
-    //   return getEmulatedVisaData(DateTime.now(), lastTxDate);
-    default:
-      const data = await getValues('visaBalance', callback);
-      // Only keep the new transactions from history
-      const newTransactions = lastTxDate
-        ? data.history?.filter(row => row.date > lastTxDate)
-        : data.history;
 
-      return {
-        ...data,
-        history: newTransactions,
-      }
-  }
-}
 
 // The following is pretty similar to initDemoAccount
 // to consider: merging the logic?

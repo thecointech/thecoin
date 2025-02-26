@@ -5,6 +5,7 @@ import { fromDb } from '../Harvester/db_translate';
 import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
 import { Result } from '../scraper_actions';
+import { BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
 
 export const Results = () => {
 
@@ -73,30 +74,32 @@ export const Results = () => {
     window.URL.revokeObjectURL(a.href);
   }
   return (
-    <Dimmer.Dimmable as={Segment} dimmed={running}>
-      <Dimmer active={running} inverted>
-        <Loader>Running</Loader>
-      </Dimmer>
-      <div>
-        <h1>Current State</h1>
-        <p>Chq Balance: {state?.chq.balance.format() ?? 'N/A'}</p>
-        <p>Visa Balance: {state?.visa.balance.format() ?? 'N/A'}</p>
-        <p>Harvester Balance: {state?.state.harvesterBalance?.format() ?? 'N/A'}</p>
-        <p>Visa Payment Pending: {state?.state.toPayVisa?.format() ?? 'N/A'}</p>
-        <p>Last Run: {state?.date.toLocaleString(DateTime.DATETIME_SHORT) ?? 'N/A'}</p>
-      </div>
-      <div>
-        <Button onClick={exportResults}>Export Results</Button>
-      </div>
-      <div>
-        <Button onClick={exportConfig}>Export Config</Button>
-      </div>
-      <div>
-        <Button onClick={runImmediately}>Run Harvester Now</Button>
-        <Checkbox onClick={(_, {checked}) => setVisible(checked)} checked={visible} label="Visible" />
-      </div>
-    </Dimmer.Dimmable>
-
+    <>
+      <Dimmer.Dimmable as={Segment} dimmed={running}>
+        <Dimmer active={running} inverted>
+          <Loader>Running</Loader>
+        </Dimmer>
+        <div>
+          <h1>Current State</h1>
+          <p>Chq Balance: {state?.chq.balance.format() ?? 'N/A'}</p>
+          <p>Visa Balance: {state?.visa.balance.format() ?? 'N/A'}</p>
+          <p>Harvester Balance: {state?.state.harvesterBalance?.format() ?? 'N/A'}</p>
+          <p>Visa Payment Pending: {state?.state.toPayVisa?.format() ?? 'N/A'}</p>
+          <p>Last Run: {state?.date.toLocaleString(DateTime.DATETIME_SHORT) ?? 'N/A'}</p>
+        </div>
+        <div>
+          <Button onClick={exportResults}>Export Results</Button>
+        </div>
+        <div>
+          <Button onClick={exportConfig}>Export Config</Button>
+        </div>
+        <div>
+          <Button onClick={runImmediately}>Run Harvester Now</Button>
+          <Checkbox onClick={(_, {checked}) => setVisible(checked)} checked={visible} label="Visible" />
+        </div>
+      </Dimmer.Dimmable>
+      <BackgroundTaskProgressBar type='replay' />
+    </>
   )
 }
 

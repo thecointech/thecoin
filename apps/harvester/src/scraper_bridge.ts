@@ -1,4 +1,4 @@
-import { IpcMainInvokeEvent, ipcMain } from 'electron';
+import { BrowserWindow, ipcMain } from 'electron';
 import { ValueType } from '@thecointech/scraper/types';
 import { actions, ScraperBridgeApi } from './scraper_actions';
 import { toBridge } from './scraper_bridge_conversions';
@@ -10,14 +10,13 @@ import { exportResults, getState, setOverrides } from './Harvester/db';
 import { harvest } from './Harvester';
 import { logsFolder } from './paths';
 import { platform } from 'node:os';
-import { getLocalBrowserPath, getSystemBrowserPath, installChrome } from '@thecointech/scraper/puppeteer';
-import { log } from '@thecointech/logging';
-import { getValues, ActionTypes } from './Harvester/scraper';
+import { getLocalBrowserPath, getSystemBrowserPath } from '@thecointech/scraper/puppeteer-init/browser';
+import { getValues, ActionType } from './Harvester/scraper';
 import { AutoConfigParams, autoConfigure } from './Harvester/agent';
-import { initAgent } from './Harvester/agent/init';
 import { BackgroundTaskInfo } from './BackgroundTask';
 import { AskUserReact } from './Harvester/agent/askUser';
 import { Registry } from '@thecointech/scraper';
+import { downloadRequired } from './Download/download';
 
 
 async function guard<T>(cb: () => Promise<T>) {
@@ -29,7 +28,7 @@ async function guard<T>(cb: () => Promise<T>) {
   }
 }
 
-const api: Omit<ScraperBridgeApi, "onAskQuestion"|"testAction"|"onReplayProgress"|"installBrowser"|"onBrowserDownloadProgress"|"init"|"onActionProgress"|"onBackgroundTaskProgress"|"autoProcess"|"onAgentProgress"> = {
+const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"onAgentProgress"> = {
   hasInstalledBrowser: () => guard(async () => {
     const p = await getLocalBrowserPath();
     return !!p;
@@ -39,10 +38,32 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"testAction"|"onReplayProgress
     return !!p;
   }),
 
+  downloadLibraries: () => guard(async () => {
+    downloadRequired(onBgTaskMsg);
+    return true;
+  }),
+
   replyQuestion: (response) => guard(async () => {
     AskUserReact.onResponse(response);
     return true;
   }),
+
+  autoProcess: (params) => guard(async () => {
+    // Get our coinETransferRecipient
+    let wallet = await getWallet();
+    if (!wallet) {
+      throw new Error("Wallet not configured");
+    }
+    const depositAddress = getEmailAddress(wallet.address);
+    autoConfigure(params, depositAddress, onBgTaskMsg);
+    return true;
+  }),
+
+  validateAction: (actionName, inputValues) => guard(async () => {
+    const r = await getValues(actionName, onBgTaskMsg, inputValues)
+    return toBridge(r);
+  }),
+
   warmup: (url) => guard(async () => {
      const instance = await Registry.create({
       name: 'warmup',
@@ -85,7 +106,7 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"testAction"|"onReplayProgress
 
   runHarvester: (headless?: boolean) => guard(() => {
     process.env.RUN_SCRAPER_HEADLESS = headless?.toString()
-    return harvest()
+    return harvest(onBgTaskMsg)
   }),
   getCurrentState: () => guard(() => getState()),
 
@@ -113,22 +134,34 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"testAction"|"onReplayProgress
   setOverrides: (balance, pendingAmt, pendingDate) => guard(() => setOverrides(balance, pendingAmt, pendingDate)),
 }
 
+// const newBgTaskCb = (): BackgroundTaskCallbackInst => {
+//   const id = Date.now().toString();
+//   return (progress: BackgroundTaskInfoInst) => {
+//     ipcMain.emit(actions.onBackgroundTaskProgress, {id, ...progress});
+//   }
+// }
+const onBgTaskMsg = (progress: BackgroundTaskInfo) => {
+  // Use emit instead of handle for progress updates
+  ipcMain.emit(actions.onBackgroundTaskProgress, progress);
+}
+
 export function initScraping() {
 
-  ipcMain.handle(actions.installBrowser, installBrowser);
   ipcMain.handle(actions.hasInstalledBrowser, api.hasInstalledBrowser);
   ipcMain.handle(actions.hasCompatibleBrowser, api.hasCompatibleBrowser);
 
-  ipcMain.handle(actions.init, init);
+  ipcMain.handle(actions.downloadLibraries, api.downloadLibraries);
 
-  ipcMain.handle(actions.autoProcess, autoProcess);
+  ipcMain.handle(actions.autoProcess, (_event, params: AutoConfigParams) => api.autoProcess(params));
+  ipcMain.handle(actions.validateAction, async (_event, actionName: ActionType, inputValues: Record<string, string>) => {
+    return api.validateAction(actionName, inputValues);
+  });
 
-  // ipcMain.handle(actions.onAskQuestion, onAskQuestion);
   ipcMain.handle(actions.replyQuestion, (_event, response) => api.replyQuestion(response));
 
   ipcMain.handle(actions.warmup, async (_event, url: string) => api.warmup(url));
 
-  ipcMain.handle(actions.start, async (_event, actionName: ActionTypes, url: string, dynamicValues?: string[]) => {
+  ipcMain.handle(actions.start, async (_event, actionName: ActionType, url: string, dynamicValues?: string[]) => {
     return api.start(actionName, url, dynamicValues);
   })
   ipcMain.handle(actions.learnValue, async (_event, valueName: string, valueType: ValueType) => {
@@ -140,12 +173,9 @@ export function initScraping() {
   ipcMain.handle(actions.finishAction, async (_event) => {
     return api.finishAction();
   })
-  ipcMain.handle(actions.testAction, async (event, actionName: ActionTypes, inputValues: Record<string, string>) => {
-    return guard(() => testAction(event, actionName, inputValues));
-  });
 
   ipcMain.handle(actions.setWalletMnemomic, async (_event, mnemonic: Mnemonic) => {
-    return api.setWalletMnemomic(mnemonic as any);
+    return api.setWalletMnemomic(mnemonic);
   })
   ipcMain.handle(actions.getWalletAddress, async (_event) => {
     return api.getWalletAddress();
@@ -192,6 +222,16 @@ export function initScraping() {
   ipcMain.handle(actions.setOverrides, async (_event, balance: number, pendingAmt: number|null, pendingDate: string|null) => {
     return api.setOverrides(balance, pendingAmt, pendingDate);
   })
+
+  // Set up progress listener separately
+  ipcMain.on(actions.onBackgroundTaskProgress, (progress) => {
+    const windows = BrowserWindow.getAllWindows();
+    windows.forEach(window => {
+      if (!window.isDestroyed()) {
+        window.webContents.send(actions.onBackgroundTaskProgress, progress);
+      }
+    });
+  });
 }
 
 const openFolder = (path: string) => {
@@ -205,62 +245,47 @@ const openFolder = (path: string) => {
 }
 
 
-async function installBrowser(event: IpcMainInvokeEvent) {
-  log.info('Installing browser');
-  let lastLoggedPercent = 0;
-  try {
-    await installChrome((bytes, total) => {
-      const percent = Math.round((bytes / total) * 100);
-      if (percent - lastLoggedPercent > 10) {
-        log.info(`Downloaded: ${percent}%`);
-        lastLoggedPercent = percent;
-      }
-      event.sender.send(actions.browserDownloadProgress, { percent });
-    });
-    event.sender.send(actions.browserDownloadProgress, { completed: true });
-  }
-  catch (e) {
-    log.error(e);
-    event.sender.send(actions.browserDownloadProgress, { error: e })
-  }
-}
+// async function installBrowser(event: IpcMainInvokeEvent) {
+//   log.info('Installing browser');
+//   let lastLoggedPercent = 0;
+//   try {
+//     await installChrome((bytes, total) => {
+//       const percent = Math.round((bytes / total) * 100);
+//       if (percent - lastLoggedPercent > 10) {
+//         log.info(`Downloaded: ${percent}%`);
+//         lastLoggedPercent = percent;
+//       }
+//       event.sender.send(actions.browserDownloadProgress, { percent });
+//     });
+//     event.sender.send(actions.browserDownloadProgress, { completed: true });
+//   }
+//   catch (e) {
+//     log.error(e);
+//     event.sender.send(actions.browserDownloadProgress, { error: e })
+//   }
+// }
 
-function onBackgroundTaskProgress(event: IpcMainInvokeEvent, progress: BackgroundTaskInfo) {
-  event.sender.send(actions.onBackgroundTaskProgress, progress);
-}
+// async function downloadLibraries(event: IpcMainInvokeEvent) {
+//   await downloadRequired(progress => onBackgroundTaskProgress(event, progress))
+// }
+
+// function onBackgroundTaskProgress(event: IpcMainInvokeEvent, progress: BackgroundTaskInfo) {
+//   event.sender.send(actions.onBackgroundTaskProgress, progress);
+// }
 
 
-async function init(event: IpcMainInvokeEvent) {
-  await initAgent((progress) => onBackgroundTaskProgress(event, progress));
-}
+// async function init(event: IpcMainInvokeEvent) {
+//   await initAgent((progress) => onBackgroundTaskProgress(event, progress));
+// }
 
 // NOTE!  This is used in multiple places, deduplicate it at some point
 const getEmailAddress = (coinAddress: string) => `${coinAddress}@${process.env.TX_GMAIL_DEPOSIT_DOMAIN}`
 
-async function autoProcess(event: IpcMainInvokeEvent, params: AutoConfigParams) {
-  // Get our coinETransferRecipient
-  let wallet = await getWallet();
-  // Mock wallet for development
-  if (!wallet) {
-    if (process.env.CONFIG_NAME === 'development') {
-      wallet = {
-        address: process.env.WALLET_testDemoAccount_ADDRESS!,
-      } as any
-    }
-  }
-  if (!wallet) {
-    throw new Error("Wallet not configured");
-  }
-  const depositAddress = getEmailAddress(wallet.address);
-  await autoConfigure(params, depositAddress, (progress) => {
-    onBackgroundTaskProgress(event, progress);
-  });
-}
+// async function autoProcess(event: IpcMainInvokeEvent,
 
-async function testAction(event: IpcMainInvokeEvent, actionName: ActionTypes, inputValues: Record<string, string>) {
-  const r = await getValues(actionName, (progress) => {
-    onBackgroundTaskProgress(event, progress);
-  }, inputValues)
-  return toBridge(r);
-}
-
+// async function testAction(event: IpcMainInvokeEvent, actionName: ActionType, inputValues: Record<string, string>) {
+//   const r = await getValues(actionName, (progress) => {
+//     onBackgroundTaskProgress(event, progress);
+//   }, inputValues)
+//   return toBridge(r);
+// }

@@ -200,7 +200,7 @@ const elapsedSeconds = (start: number) => {
 }
 
 // Polls the webpage and will wait until
-async function waitForValidIntent(page: Page, interval = 1000, timeout = 30_000) {
+export async function waitForValidIntent(page: Page, interval = 1000, timeout = 30_000) {
   const start = Date.now();
   const maxTime = start + timeout;
   do {

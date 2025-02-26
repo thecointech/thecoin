@@ -2,7 +2,7 @@ import type { HarvestConfig, Mnemonic } from './types';
 import type { ValueResult, ValueType} from "@thecointech/scraper/types";
 import type { CreditDetails } from './Harvester/types';
 import type { StoredData } from './Harvester/db_translate';
-import { ActionTypes } from './Harvester/scraper';
+import { ActionType } from './Harvester/scraper';
 import { BackgroundTaskCallback } from './BackgroundTask/types';
 import type { OptionPacket, QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
 import type { AutoConfigParams } from './Harvester/agent';
@@ -14,20 +14,26 @@ export type Result<T> = {
 }
 
 export type ScraperBridgeApi = {
-  installBrowser(): Promise<void>;
+  // installBrowser(): Promise<void>;
   hasInstalledBrowser(): Promise<Result<boolean>>;
   hasCompatibleBrowser(): Promise<Result<boolean>>;
-  onBrowserDownloadProgress: (value: any) => void;
+  // onBrowserDownloadProgress: (value: any) => void;
+
+  // Trigger download of browser/similarity pipeline
+  downloadLibraries(): Promise<Result<boolean>>;
 
   // Generic update pathway for all long-running actions
   onBackgroundTaskProgress: (progress: BackgroundTaskCallback) => void;
 
-  init(): Promise<Result<boolean>>;
+  // init(): Promise<Result<boolean>>;
   // onInitProgress: (progress: ProgressCallback) => void;
 
   // Run the automatic configurator for the given action on the appropriate url
   autoProcess: (params: AutoConfigParams) => Promise<Result<boolean>>;
   // onAgentProgress: (progress: ProgressCallback) => void;
+
+  validateAction(actionName: ActionType, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,
+
 
   onAskQuestion: (callback: (question: QuestionPacket|OptionPacket) => void) => void;
   replyQuestion: (response: ResponsePacket) => Promise<Result<boolean>>;
@@ -36,7 +42,7 @@ export type ScraperBridgeApi = {
   // will contain the data of the file read from the main process.
   warmup: (url: string) => Promise<Result<boolean>>;
 
-  start: (actionName: ActionTypes, url: string, dynamicInputs?: string[]) => Promise<Result<boolean>>;
+  start: (actionName: ActionType, url: string, dynamicInputs?: string[]) => Promise<Result<boolean>>;
 
   learnValue: (valueName: string, valueType: ValueType) => Promise<Result<ValueResult>>,
   setDynamicInput: (name: string, value: string) => Promise<Result<string>>,
@@ -45,7 +51,7 @@ export type ScraperBridgeApi = {
   finishAction: () => Promise<Result<boolean>>,
 
   // A test of an action
-  testAction(actionName: ActionTypes, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,
+  // testAction(actionName: ActionType, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,
   // onReplayProgress: (progress: ScraperProgressCallback) => void,
 
   setWalletMnemomic(mnemonic: Mnemonic): Promise<Result<boolean>>,
@@ -72,17 +78,20 @@ export type ScraperBridgeApi = {
 
 
 export const actions = {
-  installBrowser: "browser:installBrowser",
+  // installBrowser: "browser:installBrowser",
   hasInstalledBrowser: "browser:hasInstalledBrowser",
   hasCompatibleBrowser: "browser:hasCompatibleBrowser",
-  browserDownloadProgress: "browser:browserDownloadProgress",
+  // browserDownloadProgress: "browser:browserDownloadProgress",
 
   onBackgroundTaskProgress: 'scraper:onBackgroundTaskProgress',
 
-  init: 'scraper:init',
+  downloadLibraries: 'scraper:downloadLibraries',
+
+  // init: 'scraper:init',
   // onInitProgress: 'scraper:onInitProgress',
 
   autoProcess: 'scraper:autoProcess',
+  validateAction: 'scraper:validateAction',
   // onAgentProgress: 'scraper:onAgentProgress',
 
   onAskQuestion: 'scraper:onAskQuestion',
@@ -94,7 +103,7 @@ export const actions = {
   setDynamicInput: 'scraper:setDynamicInput',
   finishAction: 'scraper:finishAction',
 
-  testAction: 'scraper.testAction',
+  // testAction: 'scraper.testAction',
   // replayProgress: 'scraper.progress',
 
   // Not really scraper, but meh

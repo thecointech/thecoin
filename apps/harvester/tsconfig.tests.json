@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.tests.json",
   "compilerOptions": {
     "lib": ["es2023"],
+    "allowImportingTsExtensions": true,
     "paths": {
       "@/*": ["./src/*"]
     }

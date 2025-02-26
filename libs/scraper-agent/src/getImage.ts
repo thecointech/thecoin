@@ -1,16 +1,34 @@
 
 import type { Page } from "puppeteer";
+import { sleep } from "@thecointech/async";
+import { log } from "@thecointech/logging";
 
-export async function _getImage(page: Page, fullPage: boolean = false, path?: string) {
+export class TakeScreenshotError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "TakeScreenshotError";
+  }
+}
+export async function _getImage(page: Page, fullPage: boolean = false, path?: string, retries = 3) {
+
   const existingViewport = page.viewport();
-  if (fullPage) {
-    await resizeViewportForPage(page);
+  for (let i = 0; i < retries; i++) {
+    try {
+      if (fullPage) {
+        await resizeViewportForPage(page);
+      }
+      const screenshot = await page.screenshot({ type: 'png', fullPage, path });
+      if (fullPage) {
+        await page.setViewport(existingViewport);
+      }
+      return screenshot;
+    }
+    catch (err) {
+      log.debug(err, "Encountered error when taking screenshot");
+      await sleep(1000);
+    }
   }
-  const screenshot = await page.screenshot({ type: 'png', fullPage, path });
-  if (fullPage) {
-    await page.setViewport(existingViewport);
-  }
-  return screenshot;
+  throw new Error("Could not take screenshot");
 }
 
 async function resizeViewportForPage(page: Page) {

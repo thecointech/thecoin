@@ -1,10 +1,11 @@
 import { GetIntentApi, GetTwofaApi } from "@thecointech/apis/vqa";
 import { log } from "@thecointech/logging";
-import { clickElement } from "../vqaResponse";
+import { clickElement, responseToElement } from "../vqaResponse";
 import type { ElementResponse } from "../types";
 import type { PageHandler } from "../pageHandler";
 import type { IAskUser } from "./types";
 import { processorFn } from "./types";
+import { PhoneNumberElements } from "@thecointech/vqa";
 
 export const TwoFA = processorFn("TwoFA", async (page: PageHandler, input: IAskUser) => {
   // There should always be a username here
@@ -32,14 +33,20 @@ async function complete2FA(page: PageHandler, input: IAskUser) {
 
 async function selectDestination(page: PageHandler, input: IAskUser) {
   const api = GetTwofaApi();
-  const { data: destinations } = await api.detectDestinations(await page.getImage());
+  const image = await page.getImage();
+  const { data: destinations } = await api.detectDestinations(image);
+  page.logJson("TwoFA", "destinations-vqa", destinations);
   const allOptions = []
   if (destinations) {
-    for (const d of destinations.phone_nos) {
-      const { data: options } = await api.getDestinationElements(d, await page.getImage());
-      allOptions.push({ name: d, options: options.elements });
+    for (const ph of destinations.phones.phone_nos) {
+      const found = await updateFromPage(page, ph);
+      const { text, coords } = found.data;
+      log.info(`Updated phone number: ${ph.phone_number} -> ${found.data.text}`);
+      const { data: options } = await api.getDestinationElements(text, coords.top, coords.left, coords.width, coords.height, await page.getImage());
+      allOptions.push({ name: found.data.text, options: options.buttons });
     }
   }
+  page.logJson("TwoFA", "destinations-elm", allOptions);
   const dest = await askUserForDestination(input, allOptions);
   const clickedOption = await page.completeInteraction(dest, (found) => clickElement(page.page, found), {
     name: "destination",
@@ -49,6 +56,17 @@ async function selectDestination(page: PageHandler, input: IAskUser) {
     await page.maybeThrow(new Error("Failed to click destination"));
   }
   await enterCode(page, input);
+}
+
+async function updateFromPage(page: PageHandler, response: PhoneNumberElements) {
+  const asResponse = {
+    content: response.phone_number,
+    position_x: response.position_x,
+    position_y: response.position_y,
+    neighbour_text: ""
+  }
+  const element = await responseToElement(page.page, asResponse);
+  return element;
 }
 
 async function enterCode(page: PageHandler, input: IAskUser) {
@@ -122,17 +140,24 @@ async function approveInApp(page: PageHandler, input: IAskUser) {
 }
 
 async function clickRemember(page: PageHandler) {
-  const api = GetTwofaApi();
-  const clickedSkip = await page.tryClick(api, "getRememberInput", {
-    name: "remember",
-    noNavigate: true,
-    htmlType: "input",
-    inputType: "checkbox",
-    minPixelsChanged: 10, // This is a very low value because checkboxes are small
-  });
-  if (!clickedSkip) {
-    // It's possible that there is no remember checkbox
-    log.warn("Failed to click remember");
+  try {
+    const api = GetTwofaApi();
+    const clickedSkip = await page.tryClick(api, "getRememberInput", {
+      name: "remember",
+      noNavigate: true,
+      htmlType: "input",
+      inputType: "checkbox",
+      minPixelsChanged: 10, // This is a very low value because checkboxes are small
+    });
+    if (!clickedSkip) {
+      // It's possible that there is no remember checkbox
+      log.warn("Failed to click remember");
+    }
+  }
+  catch (e) {
+    // Some pages may not have a remember checkbox,
+    // but we don't care, we just want to continue
+    log.warn(e, "Exception thrown when clicking remember");
   }
 }
 

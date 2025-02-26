@@ -10,17 +10,17 @@ import { newPage } from './puppeteer-init';
 import { IScraperCallbacks } from './callbacks';
 import { DynamicValueError, ValueEventError } from './errors';
 
-export async function replay(events: AnyEvent[], callbacks?: IScraperCallbacks, dynamicValues?: Record<string, string>, delay = 1000) {
+export async function replay(name: string, events: AnyEvent[], callbacks?: IScraperCallbacks, dynamicValues?: Record<string, string>, delay = 1000) {
 
   log.debug(`Replaying ${events?.length} events`);
 
   // Progress started
-  callbacks?.onProgress?.({ step: 0, total: events.length });
+  callbacks?.onProgress?.({ step: 0, total: 1, stage: name, stepPercent: 0 });
 
   const { page, browser } = await newPage();
 
   try {
-    const r = await replayEvents(page, events, callbacks, dynamicValues, delay);
+    const r = await replayEvents(page, name, events, callbacks, dynamicValues, delay);
     return r;
   }
   catch (err) {
@@ -34,7 +34,7 @@ export async function replay(events: AnyEvent[], callbacks?: IScraperCallbacks, 
   }
 }
 
-export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: IScraperCallbacks, dynamicValues?: Record<string, string>, delay = 1000) {
+export async function replayEvents(page: Page, name: string, events: AnyEvent[], callbacks?: IScraperCallbacks, dynamicValues?: Record<string, string>, delay = 1000) {
 
   const values: ReplayResult = {}
   // const values: Record<string, string | DateTime | currency | HistoryRow[]> = {}
@@ -215,8 +215,8 @@ export async function replayEvents(page: Page, events: AnyEvent[], callbacks?: I
         }
       }
 
-      // Mark progress complete
-      callbacks?.onProgress?.({ step: i, total: events.length });
+      const stepPercent = Math.round(100 * (i + 1) / events.length);
+      callbacks?.onProgress?.({ step: 0, total: 1, stage: name, stepPercent });
     }
   }
 
