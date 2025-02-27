@@ -29,7 +29,7 @@ export class Registry {
   }
 
   static async create(options: RecorderOptions, url?: string) {
-    const { browser, page } = await newPage(options.headless);
+    const { browser, page } = await newPage(options.context, options.headless);
 
     let r = Registry.__instance ??= new Registry(browser);
     // Check if we have a recorder with this name already

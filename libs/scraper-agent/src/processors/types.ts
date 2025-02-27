@@ -10,6 +10,7 @@ export enum Section {
   AccountsSummary = "AccountsSummary",
   CreditAccountDetails = "CreditAccountDetails",
   SendETransfer = "SendETransfer",
+  Logout = "Logout",
 }
 export type SectionType = keyof typeof Section;
 export const sections = Object.values(Section).filter(v => typeof v === 'string') as SectionType[];

@@ -67,6 +67,7 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
   warmup: (url) => guard(async () => {
      const instance = await Registry.create({
       name: 'warmup',
+      context: "default",
       headless: false,
      }, url)
      return !!instance;

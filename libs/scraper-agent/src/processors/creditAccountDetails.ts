@@ -1,7 +1,7 @@
 import { GetCreditDetailsApi } from "@thecointech/apis/vqa";
 import { log } from "@thecointech/logging";
 import { PageHandler } from "../pageHandler";
-import { ElementData } from "../types";
+import { ElementData, VisaBalanceResult } from "../types";
 import { getElementForEvent } from "@thecointech/scraper/elements";
 import { clickElement } from "../vqaResponse";
 import { processorFn } from "./types";
@@ -42,25 +42,25 @@ async function navigateToAccountDetails(page: PageHandler, navData: ElementData)
 async function saveCurrentBalance(page: PageHandler) {
   log.trace("AccountDetailsWriter: saving current balance");
   const { data: balance } = await GetCreditDetailsApi().currentBalance(await page.getImage());
-  await page.pushValueEvent(balance, "balance", "currency");
+  await page.pushValueEvent<VisaBalanceResult>(balance, "balance", "currency");
 }
 
 async function savePending(page: PageHandler) {
   log.trace("AccountDetailsWriter: saving pending");
   const { data: pending } = await GetCreditDetailsApi().currentPending(await page.getImage());
   if (pending.pending_exists) {
-    await page.pushValueEvent(pending.pending_element, "pending", "currency");
+    await page.pushValueEvent<VisaBalanceResult>(pending.pending_element, "pending", "currency");
   }
 }
 
 async function saveDueDate(page: PageHandler) {
   log.trace("AccountDetailsWriter: saving due date");
   const { data: dueDate } = await GetCreditDetailsApi().currentDueDate(await page.getImage());
-  await page.pushValueEvent(dueDate, "dueDate", "date");
+  await page.pushValueEvent<VisaBalanceResult>(dueDate, "dueDate", "date");
 }
 
 async function saveDueAmount(page: PageHandler) {
   log.trace("AccountDetailsWriter: saving due amount");
   const { data: dueAmount } = await GetCreditDetailsApi().currentDueAmount(await page.getImage());
-  await page.pushValueEvent(dueAmount, "dueAmount", "currency");
+  await page.pushValueEvent<VisaBalanceResult>(dueAmount, "dueAmount", "currency");
 }

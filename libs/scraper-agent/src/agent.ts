@@ -2,7 +2,7 @@ import { IAskUser, SectionName } from './types';
 import { log } from '@thecointech/logging';
 import { PageHandler } from './pageHandler';
 import { closeBrowser, IScraperCallbacks } from '@thecointech/scraper';
-import { AccountsSummary, CookieBanner, CreditAccountDetails, Landing, Login, NamedProcessor, TwoFA, SendETransfer } from './processors';
+import { AccountsSummary, CookieBanner, CreditAccountDetails, Landing, Login, NamedProcessor, TwoFA, SendETransfer, Logout } from './processors';
 
 export class Agent {
 
@@ -55,6 +55,9 @@ export class Agent {
         await processSection(SendETransfer, page, input, account.account.account_number);
       }
     }
+
+    // Once complete, logout politely
+    await processSection(Logout, page);
 
     log.info(`Finished ${name}`);
 

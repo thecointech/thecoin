@@ -6,6 +6,7 @@ import { AccountResponse, BBox } from "@thecointech/vqa";
 import { extractFuzzyMatch } from "../extractFuzzyMatch";
 import { PageHandler } from "../pageHandler";
 import { processorFn } from "./types";
+import { ChequeBalanceResult } from "../types";
 
 export const AccountsSummary = processorFn("AccountsSummary", async (page: PageHandler) => {
   // Currently, we don't actually do anything, just list the accounts and move on...
@@ -75,7 +76,7 @@ async function listAccounts(page: PageHandler) {
 async function saveBalanceElement(page: PageHandler, account_number: string, crop: BBox) {
   // Don't search the whole page, just the area around the account listing
   const { data: balance } = await GetAccountSummaryApi().accountBalanceElement(account_number, await page.getImage(), crop.top, crop.bottom);
-  await page.pushValueEvent(balance, "chqBalance", "currency");
+  await page.pushValueEvent<ChequeBalanceResult>(balance, "balance", "currency");
   // return await page.toElement(balance, "balance", undefined, undefined);
 }
 

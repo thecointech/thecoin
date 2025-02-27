@@ -45,7 +45,7 @@ export function useTestBrowser() {
   })
 
   const getPage = async () => {
-    const { page, browser } = await newPage(RunHeadless());
+    const { page, browser } = await newPage("default", RunHeadless());
     page.setBypassCSP(true);
     _browser = browser;
     return page;

@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import type { Page } from 'puppeteer';
+import { ProtocolError, type Page } from 'puppeteer';
 import { getTableData } from './table';
 import { AnyEvent, ValueEvent, ElementData, ReplayResult, SearchElement } from './types';
 import { CurrencyType, getCurrencyConverter } from './valueParsing';
@@ -17,7 +17,8 @@ export async function replay(name: string, events: AnyEvent[], callbacks?: IScra
   // Progress started
   callbacks?.onProgress?.({ step: 0, total: 1, stage: name, stepPercent: 0 });
 
-  const { page, browser } = await newPage();
+  // Every replay should execute from within it's own context.
+  const { page, browser } = await newPage(name);
 
   try {
     const r = await replayEvents(page, name, events, callbacks, dynamicValues, delay);
@@ -301,10 +302,22 @@ function parseValue(value: string, event: ValueEvent) {
 function getOnScreenshot(callbacks?: IScraperCallbacks) {
   return callbacks?.onScreenshot
     ? async (page: Page, event: AnyEvent) => {
-      const screenshot = await page.screenshot({ fullPage: true, type: 'png' });
-      const asData = event as ElementData;
-      const name = `${event.type}-${asData.nodeValue || asData.label || asData.name || event.type || ""}`;
-      callbacks.onScreenshot!(name, screenshot, page)
+      try {
+        const screenshot = await page.screenshot({ fullPage: true, type: 'png' });
+        const asData = event as ElementData;
+        const name = `${event.type}-${asData.nodeValue || asData.label || asData.name || event.type || ""}`;
+        callbacks.onScreenshot!(name, screenshot, page)
+      }
+      catch (err) {
+        if (err instanceof ProtocolError) {
+          // This can happen if we are in the middle of a navigation event.
+          // It's not a big deal, we must miss a screenshot
+          log.warn(err, `Failed to take screenshot`);
+        }
+        else {
+          throw err;
+        }
+      }
     }
     : undefined;
 }

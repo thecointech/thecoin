@@ -13,14 +13,24 @@ const plugins = getPlugins();
 declare global {
   var __scraper__: {
     browser: Browser;
-    context: BrowserContext;
+    contexts: Record<string, BrowserContext>;
   } | undefined;
 }
 
-async function getPage(headless?: boolean) {
+async function getPage(contextName = "default", headless?: boolean) {
+
+  // So... it seems that contexts are unusable because
+  // they do not load cookies etc from default (thanks for
+  // wasting my time Codieum ya bastard!)
+  contextName = "default";
 
   if (globalThis.__scraper__) {
-    const { browser, context } = globalThis.__scraper__;
+    const { browser, contexts } = globalThis.__scraper__;
+    let context = contexts[contextName];
+    if (!context) {
+      context = await browser.createBrowserContext();
+      contexts[contextName] = context;
+    }
     return { browser, page: await context.newPage() };
   }
 
@@ -46,11 +56,16 @@ async function getPage(headless?: boolean) {
     await plugin.onBrowser(browser);
   }
 
-  const context = browser.defaultBrowserContext();
-  // const context = await browser.createBrowserContext();
+  let contexts: Record<string, BrowserContext> = {
+    default: browser.defaultBrowserContext(),
+  }
+  if (contextName != "default") {
+    contexts[contextName] = await browser.createBrowserContext();
+  }
+  const context = contexts[contextName]!;
   globalThis.__scraper__ = {
     browser,
-    context,
+    contexts,
   };
 
   browser.on('disconnected', () => {
@@ -59,13 +74,16 @@ async function getPage(headless?: boolean) {
   });
 
   // On boot, return the default (blank) page
-  const page = await context.newPage();
-  return { browser, page };
+  const [page] = await context.pages();
+  return {
+    browser,
+    page: page ?? (await context.newPage())
+  };
 }
 
-export async function newPage(headless?: boolean) {
+export async function newPage(contextName?: string, headless?: boolean) {
 
-  const { page, browser } = await getPage(headless);
+  const { page, browser } = await getPage(contextName, headless);
   // page.setBypassCSP(true);
   // Additional settings that often help with CORS/CSP issues:
   // await page.setExtraHTTPHeaders({
@@ -94,6 +112,13 @@ export async function newPage(headless?: boolean) {
   // }
 
   return { page, browser };
+}
+
+export async function closeContext(contextName: string) {
+  if (globalThis.__scraper__?.contexts[contextName]) {
+    await globalThis.__scraper__.contexts[contextName].close();
+    delete globalThis.__scraper__.contexts[contextName];
+  }
 }
 
 export async function closeBrowser() {

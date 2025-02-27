@@ -28,6 +28,8 @@ export type DynamicInputWaiter = {
 export type RecorderOptions = {
   // A key to identify this sessions
   name: string
+  // The context to run Puppeteer in
+  context: string
   // Whether to run puppeteer in headless mode
   headless?: boolean
 

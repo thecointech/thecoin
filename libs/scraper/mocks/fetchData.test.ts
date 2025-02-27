@@ -1,8 +1,9 @@
 import { DateTime } from "luxon";
-import { getChequingData, getEmulatedVisaData } from "./fetchData";
+import { getEmulatedVisaData, replay } from "./mock_replay";
 
+// TODO: Update jest paths so this test runs...
 it ('has sufficient chq balance', async () => {
-    const chq = await getChequingData();
+    const chq = await replay('chqBalance', []);
     expect(chq.balance.intValue).toBeGreaterThan(1000);
 })
 

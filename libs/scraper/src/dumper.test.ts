@@ -6,7 +6,7 @@ import path from "path";
 
 describe('dumper', () => {
   it("Dumps page to folder", async () => {
-    const { page } = await newPage(false);
+    const { page } = await newPage("default", false);
     const dumper = new Dumper(path.join('..', 'temp', "wikipedia"), "test");
     await page.goto("https://www.wikipedia.org/");
 

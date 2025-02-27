@@ -7,8 +7,8 @@ import { DateTime } from "luxon";
 // TODO:
 // Decide where to place mocked implementations for scraping
 // This is currently duplicated with the harvester
+// THIS DEFINITELY SHOULD BE IN SCRAPER-BANKING specialization library
 export async function replay(name: string, events: AnyEvent[], callbacks?: IScraperCallbacks, dynamicValues?: Record<string, string>, delay = 1000) {
-
 
   // Progress started
   callbacks?.onProgress?.({ step: 0, total: 1, stage: name, stepPercent: 0 });
@@ -29,7 +29,9 @@ export async function replay(name: string, events: AnyEvent[], callbacks?: IScra
   else if (name == "visaBalance") {
     return getEmulatedVisaData(DateTime.now());
   }
-  return {};
+  return {
+
+  };
 }
 
 

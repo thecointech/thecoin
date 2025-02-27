@@ -1,0 +1,63 @@
+import { log } from "@thecointech/logging";
+import { PageHandler } from "../pageHandler";
+import { GetIntentApi, GetLoginApi } from "@thecointech/apis/vqa";
+import { processorFn } from "./types";
+
+export const Logout = processorFn("Logout", async (page: PageHandler)  => {
+  return await logout(page);
+})
+
+async function logout(page: PageHandler) {
+
+  const currUrl = page.page.url();
+
+  log.info(" ** Logout");
+  const api = GetLoginApi();
+  const didClick = await page.tryClick(api, "detectLogoutElement", { name: "logout" });
+  if (!didClick) {
+    await page.maybeThrow(new Error("Failed to click logout"));
+  }
+
+  if (!didLogOut(page, currUrl)) {
+    // If we are still logged in, try clicking again
+    try {
+      const clickedAgain = await page.tryClick(api, "detectLogoutElement", { name: "logout-menu" });
+      if (!clickedAgain) {
+        await page.maybeThrow(new Error("Failed to click logout again"));
+      }
+    }
+    catch (err) {
+      // This could be a false positive, so just log it and continue
+      log.warn(err, "Logout may have failed, URL did not update but could not click again")
+    }
+  }
+
+  // Log the intent.  This isn't really so much as to use it as a sanity check
+  // (also, it means we trigger a screenshot post-logout for the testing repo)
+  const { data: response } = await GetIntentApi().pageIntent(await page.getImage());
+  log.debug("Logout complete, detected type: " + response.type);
+  return true;
+}
+
+function didLogOut(page: PageHandler, currUrl: string) {
+  const newUrl = page.page.url();
+  // If the URL doesn't update we assume the logout isn't complete
+  if (newUrl === currUrl) {
+    return false;
+  }
+
+  // The URL should be a reliable indicator of whether we are logged out
+  // If it has changed, then we can assume we are logged out,
+  // if not, we cannot assume we have no matter what the detected intent
+  return true;
+  // // If the page did up
+  // const { data: response } = await GetIntentApi().pageIntent(await page.getImage());
+  // const intent = response.type;
+  // const loggedInPages: PageType[] = [
+  //   "AccountsSummary",
+  //   "CreditAccountDetails",
+  //   "PayBill",
+  //   "SendTransfer",
+  //   "MenuSelect",
+  // ];
+}

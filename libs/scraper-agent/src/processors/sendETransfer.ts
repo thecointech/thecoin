@@ -11,7 +11,7 @@ import { BBox } from "@thecointech/vqa";
 import { distance } from 'fastest-levenshtein';
 import { getCoordsWithMargin, mapInputToParent } from "../elementUtils";
 import { PageHandler } from "../pageHandler";
-import { IAskUser } from "../types";
+import { ETransferInput, IAskUser } from "../types";
 import { processorFn } from "./types";
 import { waitPageStable } from "../vqaResponse";
 
@@ -332,10 +332,7 @@ async function fillInputs(page: PageHandler, input: IAskUser, tracker: InputTrac
 async function fillAmountToSend(page: PageHandler, input: SearchElement, amount: number) {
   // Do we need to do anything more than this?
   log.trace("Filling input: AmountToSend");
-
-  page.logJson("SendETransfer", "amount-elm", amount);
-
-  await enterValueIntoFound(page.page, input, amount.toString());
+  await page.pushDynamicInputEvent<ETransferInput>(input, amount.toString(), "amount");
   await sleep(500);
   // How can we verify this worked?
 }

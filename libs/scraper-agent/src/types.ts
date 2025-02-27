@@ -1,10 +1,12 @@
 import type { AccountResponse } from "@thecointech/vqa";
-import type { AnyEvent, ElementData } from "@thecointech/scraper/types";
+import type { AnyEvent, ElementData, HistoryRow } from "@thecointech/scraper/types";
 import type { Recorder } from "@thecointech/scraper/record";
 import type { EventManager } from "./eventManager";
-import { SectionType } from "./processors/types";
+import type { SectionType } from "./processors/types";
+import type { DateTime } from "luxon";
 export type { ElementResponse } from "@thecointech/vqa";
 export type { ElementData };
+import type currency from "currency.js";
 
 // SectionName includes actions that require differentation from SectionType
 // but that do not have their own processors
@@ -33,16 +35,8 @@ export interface IAskUser {
   forUsername(): Promise<string>;
   forPassword(): Promise<string>;
 
-  // forETransferRecipient(): Promise<string>;
   expectedETransferRecipient(): Promise<string>;
 }
-
-// export interface IAgentLogger {
-//   // log(message: string): void;
-//   logJson(intent: SectionName, name: string,data: any): void;
-//   logScreenshot(intent: SectionName, screenshot: Buffer|Uint8Array, page: Page): Promise<void>;
-// }
-
 
 export type AccountSummary = AccountResponse & {
   navigation: ElementData;
@@ -51,6 +45,30 @@ export type AccountSummary = AccountResponse & {
 export type ProcessConfig = {
   recorder: Recorder,
   askUser: IAskUser,
-  // writer: ITestSerializer,
   eventManager: EventManager,
+}
+
+// Result Types. This is beginning to mix concerns,
+// this package should be specifically for automation
+// These types should be moved to a new package for
+// shaping the scraper around banking
+
+export type VisaBalanceResult = {
+  balance: currency;
+  dueDate: DateTime;
+  dueAmount: currency;
+  pending?: currency;
+  history?: HistoryRow[];
+}
+
+export type ChequeBalanceResult = {
+  balance: currency;
+}
+
+export type ETransferResult = {
+  confirm: string,
+}
+
+export type ETransferInput = {
+  amount: string,
 }

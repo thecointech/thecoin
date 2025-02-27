@@ -3,7 +3,7 @@ import { AnyResponse, clickElement, responseToElement, waitForValidIntent, waitP
 import { sleep } from "@thecointech/async";
 import { log } from "@thecointech/logging";
 import { enterValueIntoFound } from "@thecointech/scraper/replay";
-import { FoundElement, ValueEvent, ValueType } from "@thecointech/scraper/types";
+import { DynamicInputEvent, FoundElement, SearchElement, ValueEvent, ValueType } from "@thecointech/scraper/types";
 import { Recorder, Registry } from "@thecointech/scraper/record";
 import { getValueParsing } from "@thecointech/scraper/valueParsing";
 import { EventManager, IEventSectionManager } from "./eventManager";
@@ -15,6 +15,7 @@ import { File } from "@web-std/file";
 import { sections, SectionType } from "./processors/types";
 import { IScraperCallbacks } from "@thecointech/scraper";
 import { SectionName } from "./types";
+import { GetLoginApi } from "@thecointech/apis/vqa";
 
 type ApiFn = (image: File) => Promise<AxiosResponse<AnyResponse>>
 
@@ -72,6 +73,9 @@ export class PageHandler {
     const eventManager = new EventManager();
     const recorder = await Registry.create({
       name,
+      // Recording always happens in the "default" context
+      // as it's necessary to store 2FA credentials
+      context: "default",
       onEvent: eventManager.onEvent
     }, bankUrl);
     return new PageHandler(name, eventManager, recorder, callbacks);
@@ -93,8 +97,9 @@ export class PageHandler {
   async pushIsolatedSection(subName: SectionType) {
 
     using _ = this.eventManager.pause();
-    const rs = this.recorderStack;
-    rs.push(await this.recorder.clone(subName));
+    const cachedThis = this;
+    this.recorderStack.push(await this.recorder.clone(subName));
+
     // Page should be loaded, but that doesn't mean it's ready.
     // Take the extra wait here just to ensure we don't miss anything
     await waitForValidIntent(this.page);
@@ -104,13 +109,31 @@ export class PageHandler {
       cancel: () => events?.cancel(),
       async [Symbol.asyncDispose]() {
         await events?.[Symbol.asyncDispose]()
-        await rs.pop()![Symbol.asyncDispose]();
+        await cachedThis.recorderStack.pop()![Symbol.asyncDispose]();
+        // If we've left the main page for a little too long, ensure the session isn't timing out
+        await cachedThis.checkSessionLogin();
+      }
+    }
+  }
+
+  async checkSessionLogin() {
+    const { data: sessionTimeout } = await GetLoginApi().detectSessionTimeoutElement(await this.getImage());
+    if (sessionTimeout) {
+      using _ = this.eventManager.pause();
+      try {
+        const found = await this.toElement(sessionTimeout, "session-continue", "button");
+        if (found) {
+          await clickElement(this.page, found, true);
+        }
+      }
+      catch (e) {
+        log.error(e, "Error clicking session timeout");
       }
     }
   }
 
 
-  async pushValueEvent(element: ElementResponse, name: string, type: ValueType) {
+  async pushValueEvent<T>(element: ElementResponse, name: Extract<keyof T, string>, type: ValueType) {
     const found = await this.toElement(element, name);
     const event: ValueEvent = {
       type: "value",
@@ -129,6 +152,20 @@ export class PageHandler {
 
     this.eventManager.pushEvent(event);
     return event;
+  }
+
+  async pushDynamicInputEvent<T>(input: SearchElement, value: string, name: Extract<keyof T, string>) {
+    await using _ = this.eventManager.pause();
+    await enterValueIntoFound(this.page, input, value);
+    this.logJson("SendETransfer", name + "-elm", input.data);
+    const event: DynamicInputEvent = {
+      type: "dynamicInput",
+      timestamp: Date.now(),
+      id: crypto.randomUUID(),
+      dynamicName: name,
+      ...input.data,
+    };
+    this.eventManager.pushEvent(event);
   }
 
   async title() {

@@ -3,6 +3,7 @@ export { CookieBanner } from "./cookieBanner";
 export { CreditAccountDetails } from "./creditAccountDetails";
 export { Landing } from "./landing";
 export { Login } from "./login";
+export { Logout } from "./logout";
 export { SendETransfer } from "./sendETransfer";
 export { TwoFA } from "./twofa";
 export { Section } from "./types";

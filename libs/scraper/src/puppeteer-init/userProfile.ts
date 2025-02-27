@@ -3,7 +3,7 @@
 import os from 'node:os';
 import path from 'node:path';
 import { rootFolder } from './rootFolder';
-import { existsSync, readdirSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { copy } from 'fs-extra';
 import { log } from '@thecointech/logging';
 
@@ -35,17 +35,15 @@ export async function maybeCopyProfile() {
     const chromeProfilePath = getChromeProfilePath();
     if (existsSync(chromeProfilePath)) {
 
-      // list available profiles
-      const allcontents = readdirSync(chromeProfilePath, { withFileTypes: true });
-      const profiles = allcontents.filter((c) => !c.isDirectory()).map((c) => c.name);
-      const defaultProfile = profiles.find((p) => p.toLowerCase().includes('default')) ?? profiles[0];
+      // Copy all profiles
       try {
-        log.debug(`Copying Chrome profile: ${defaultProfile}`);
-        await copy(path.join(chromeProfilePath, defaultProfile), userDataDir, { dereference: false });
+        log.debug(`Copying Chrome profiles`);
+        await copy(chromeProfilePath, userDataDir, { dereference: false });
         log.debug(`Copy Chrome profile complete`);
       }
       catch (e) {
         log.error(e, `Failed to copy Chrome profile`);
+        throw e;
       }
     }
     else {

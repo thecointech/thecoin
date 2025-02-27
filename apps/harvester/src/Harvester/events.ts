@@ -81,13 +81,13 @@ function getSectionsToKeep(actionType: ActionType) : SectionName[] {
   const sectionsToKeep: SectionName[] = [];
   switch (actionType) {
     case "chqBalance":
-      sectionsToKeep.push("Initial", "Landing", "Login", "AccountsSummary");
+      sectionsToKeep.push("Initial", "Landing", "Login", "AccountsSummary", "Logout");
       break;
     case "visaBalance":
-      sectionsToKeep.push("Initial", "Landing", "Login", "CreditAccountDetails");
+      sectionsToKeep.push("Initial", "Landing", "Login", "CreditAccountDetails", "Logout");
       break;
     case "chqETransfer":
-      sectionsToKeep.push("Initial", "Landing", "Login", "SendETransfer");
+      sectionsToKeep.push("Initial", "Landing", "Login", "SendETransfer", "Logout");
       break;
   }
   return sectionsToKeep;
