@@ -60,6 +60,8 @@ const api : ScraperBridgeApi = {
 
   allowOverrides: () => ipcRenderer.invoke(actions.allowOverrides),
   setOverrides: (balance, pendingAmt, pendingDate) => ipcRenderer.invoke(actions.setOverrides, balance, pendingAmt, pendingDate),
+
+  importScraperScript: (config) => ipcRenderer.invoke(actions.importScraperScript, config),
 }
 
 export const connectRenderer = () => contextBridge.exposeInMainWorld('scraper', api)

@@ -2,7 +2,7 @@ import { BrowserWindow, ipcMain } from 'electron';
 import { ValueType } from '@thecointech/scraper/types';
 import { actions, ScraperBridgeApi } from './scraper_actions';
 import { toBridge } from './scraper_bridge_conversions';
-import { getHarvestConfig, getProcessConfig, getWallet, getWalletAddress, hasCreditDetails, setCreditDetails, setHarvestConfig, setWalletMnemomic } from './Harvester/config';
+import { getHarvestConfig, getProcessConfig, getWallet, getWalletAddress, hasCreditDetails, setCreditDetails, setHarvestConfig, setProcessConfig, setWalletMnemomic } from './Harvester/config';
 import { HarvestConfig, Mnemonic } from './types';
 import { CreditDetails } from './Harvester/types';
 import { spawn } from 'child_process';
@@ -17,6 +17,7 @@ import { BackgroundTaskInfo } from './BackgroundTask';
 import { AskUserReact } from './Harvester/agent/askUser';
 import { Registry } from '@thecointech/scraper';
 import { downloadRequired } from './Download/download';
+import { getScrapingScript } from './results/getScrapingScript';
 
 
 async function guard<T>(cb: () => Promise<T>) {
@@ -133,14 +134,19 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
 
   allowOverrides: () => guard(() => Promise.resolve(process.env.HARVESTER_ALLOW_OVERRIDES === "true")),
   setOverrides: (balance, pendingAmt, pendingDate) => guard(() => setOverrides(balance, pendingAmt, pendingDate)),
+
+  importScraperScript: (config) => guard(async () => {
+
+    // Extract the scraping configuration
+    const scraping = getScrapingScript(config);
+
+    // Set the configuration using the existing API
+    await setProcessConfig({scraping});
+
+    return true;
+  }),
 }
 
-// const newBgTaskCb = (): BackgroundTaskCallbackInst => {
-//   const id = Date.now().toString();
-//   return (progress: BackgroundTaskInfoInst) => {
-//     ipcMain.emit(actions.onBackgroundTaskProgress, {id, ...progress});
-//   }
-// }
 const onBgTaskMsg = (progress: BackgroundTaskInfo) => {
   // Use emit instead of handle for progress updates
   ipcMain.emit(actions.onBackgroundTaskProgress, progress);
@@ -224,6 +230,10 @@ export function initScraping() {
     return api.setOverrides(balance, pendingAmt, pendingDate);
   })
 
+  ipcMain.handle(actions.importScraperScript, async (_event, config) => {
+    return api.importScraperScript(config);
+  });
+
   // Set up progress listener separately
   ipcMain.on(actions.onBackgroundTaskProgress, (progress) => {
     const windows = BrowserWindow.getAllWindows();
@@ -245,48 +255,5 @@ const openFolder = (path: string) => {
   spawn(explorer, [path], { detached: true }).unref();
 }
 
-
-// async function installBrowser(event: IpcMainInvokeEvent) {
-//   log.info('Installing browser');
-//   let lastLoggedPercent = 0;
-//   try {
-//     await installChrome((bytes, total) => {
-//       const percent = Math.round((bytes / total) * 100);
-//       if (percent - lastLoggedPercent > 10) {
-//         log.info(`Downloaded: ${percent}%`);
-//         lastLoggedPercent = percent;
-//       }
-//       event.sender.send(actions.browserDownloadProgress, { percent });
-//     });
-//     event.sender.send(actions.browserDownloadProgress, { completed: true });
-//   }
-//   catch (e) {
-//     log.error(e);
-//     event.sender.send(actions.browserDownloadProgress, { error: e })
-//   }
-// }
-
-// async function downloadLibraries(event: IpcMainInvokeEvent) {
-//   await downloadRequired(progress => onBackgroundTaskProgress(event, progress))
-// }
-
-// function onBackgroundTaskProgress(event: IpcMainInvokeEvent, progress: BackgroundTaskInfo) {
-//   event.sender.send(actions.onBackgroundTaskProgress, progress);
-// }
-
-
-// async function init(event: IpcMainInvokeEvent) {
-//   await initAgent((progress) => onBackgroundTaskProgress(event, progress));
-// }
-
 // NOTE!  This is used in multiple places, deduplicate it at some point
 const getEmailAddress = (coinAddress: string) => `${coinAddress}@${process.env.TX_GMAIL_DEPOSIT_DOMAIN}`
-
-// async function autoProcess(event: IpcMainInvokeEvent,
-
-// async function testAction(event: IpcMainInvokeEvent, actionName: ActionType, inputValues: Record<string, string>) {
-//   const r = await getValues(actionName, (progress) => {
-//     onBackgroundTaskProgress(event, progress);
-//   }, inputValues)
-//   return toBridge(r);
-// }

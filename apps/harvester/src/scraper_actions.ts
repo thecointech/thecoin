@@ -6,7 +6,6 @@ import { ActionType } from './Harvester/scraper';
 import { BackgroundTaskCallback } from './BackgroundTask/types';
 import type { OptionPacket, QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
 import type { AutoConfigParams } from './Harvester/agent';
-// import { ScraperProgressCallback } from '@thecointech/scraper';
 
 export type Result<T> = {
   error?: string;
@@ -73,7 +72,10 @@ export type ScraperBridgeApi = {
   getArgv() : Promise<Result<Record<string, any>>>,
 
   allowOverrides(): Promise<Result<boolean>>,
-  setOverrides(balance: number, pendingAmt: number|null, pendingDate: string|null|undefined): Promise<Result<boolean>>
+  setOverrides(balance: number, pendingAmt: number|null, pendingDate: string|null|undefined): Promise<Result<boolean>>,
+
+  // Import a scraper script configuration
+  importScraperScript(config: any): Promise<Result<boolean>>;
 }
 
 
@@ -128,5 +130,6 @@ export const actions = {
 
   allowOverrides: 'scraper:allowOverrides',
   setOverrides: 'scraper:setOverrides',
+  importScraperScript: 'scraper:importScraperScript',
 }
 export type Action = keyof typeof actions
