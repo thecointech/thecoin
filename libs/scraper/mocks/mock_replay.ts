@@ -16,7 +16,10 @@ export async function replay(name: string, events: AnyEvent[], callbacks?: IScra
   for (let i = 0; i < events.length; i++) {
     await sleep(delay);
     const stepPercent = Math.round(100 * (i + 1) / events.length);
-    callbacks?.onProgress?.({ step: 0, total: 1, stage: name, stepPercent });
+    const continueLoop = callbacks?.onProgress?.({ step: 0, total: 1, stage: name, stepPercent, event: events[i] });
+    if (continueLoop === false) {
+      break;
+    }
   }
 
   // Mock some more-or-less random return values
@@ -30,7 +33,7 @@ export async function replay(name: string, events: AnyEvent[], callbacks?: IScra
     return getEmulatedVisaData(DateTime.now());
   }
   return {
-
+    confirmationCode: "1234",
   };
 }
 

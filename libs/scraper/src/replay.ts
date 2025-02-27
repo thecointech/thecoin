@@ -217,7 +217,10 @@ export async function replayEvents(page: Page, name: string, events: AnyEvent[],
       }
 
       const stepPercent = Math.round(100 * (i + 1) / events.length);
-      callbacks?.onProgress?.({ step: 0, total: 1, stage: name, stepPercent });
+      const continueLoop = callbacks?.onProgress?.({ step: 0, total: 1, stage: name, stepPercent, event });
+      if (continueLoop === false) {
+        break;
+      }
     }
   }
 

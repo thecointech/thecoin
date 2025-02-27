@@ -77,8 +77,9 @@ export class TestSerializer implements IScraperCallbacks {
     return false;
   }
 
-  async onProgress(progress: ScraperProgress) {
+  onProgress(progress: ScraperProgress) {
     log.info(`Progress: ${progress.stage} - ${progress.stepPercent}%`);
+    return true;
   }
 
   maybeIncrementSection(section: string, screenshot: Buffer|Uint8Array) {
@@ -124,7 +125,7 @@ export class TestSerializer implements IScraperCallbacks {
   async logEvents(events: any={}) {
     const path = this.toPath(undefined, "events", "json");
     writeFileSync(path, JSON.stringify(events, null, 2));
-    log.trace(`Wrote EVents: ${path}`);
+    log.trace(`Wrote Events: ${path}`);
   }
 
   toPath(section?: string, name?: string, extn?: string) {

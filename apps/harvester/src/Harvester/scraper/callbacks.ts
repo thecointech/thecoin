@@ -71,7 +71,7 @@ export class ScraperCallbacks implements IScraperCallbacks {
   }
 
 
-  async onProgress(progress: ScraperProgress) {
+  onProgress(progress: ScraperProgress) {
     const stepPercent = progress.stepPercent ?? 0;
     const totalPercent = stepPercent + ((progress.step) / progress.total);
     this.uiCallback?.({
@@ -81,6 +81,8 @@ export class ScraperCallbacks implements IScraperCallbacks {
       description: progress.stage,
       percent: totalPercent,
     })
+    // TODO: Allow cancellation
+    return true;
   }
 
   async complete(success: boolean, error?: string) {

@@ -50,7 +50,7 @@ export type ProcessConfig = {
 
 // Result Types. This is beginning to mix concerns,
 // this package should be specifically for automation
-// These types should be moved to a new package for
+// These types should be moved to a new package scraper-banking for
 // shaping the scraper around banking
 
 export type VisaBalanceResult = {

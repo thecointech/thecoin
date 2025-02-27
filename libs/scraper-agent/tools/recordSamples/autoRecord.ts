@@ -8,7 +8,7 @@ import { AskUserConsole } from './askUserConsole.js'
 import { TestSerializer } from './testSerializer.js'
 import path from "path";
 
-process.env.URL_SERVICE_VQA="http://127.0.0.1:7004";
+// process.env.URL_SERVICE_VQA="http://127.0.0.1:7004";
 
 const { baseFolder, config } = getConfig();
 

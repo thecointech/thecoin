@@ -13,6 +13,16 @@ export interface IEventSectionManager extends AsyncDisposable {
   cancel(): void;
 }
 
+/**
+ * A pauser prevents events from being collected while it is alive
+ * It contains the events that were collected while paused,
+ * mostly for debugging purposes.
+ */
+interface IPauser extends Disposable {
+  // Events collected while paused.
+  discards: AnyEvent[];
+}
+
 export class EventManager {
 
   allEvents: EventSection = { section: "Initial", events: [] }
@@ -20,6 +30,8 @@ export class EventManager {
   get currentSection() { return this.sectionStack.at(-1)?.section ?? this.allEvents; }
   get currentEvents() { return this.currentSection.events; }
 
+
+  // Manual event push.  Will push to current section, ignoring pausers.
   pushEvent(event: AnyEvent) {
     this.currentEvents?.push(event);
   }
@@ -31,6 +43,12 @@ export class EventManager {
 
   onEvent = async (event: AnyEvent, _page: Page, name: string, step: number) => {
     if (!this.currentEvents) throw new Error("No events list set!");
+
+    const pauser = this._eventPausers.at(-1);
+    if (pauser) {
+      pauser.discards.push(event);
+      return;
+    }
 
     // Can also do things like take a screenshot etc.
     if (event.type == "navigation") {
@@ -50,21 +68,24 @@ export class EventManager {
     this.currentEvents.push(event);
   }
 
-  private _pauseEvents = 0;
+  private _eventPausers: IPauser[] = [];
   pause() {
     return new EventManager.Pauser(this);
   }
 
-  private static Pauser = class {
+
+  private static Pauser = class implements IPauser {
     _mgr: EventManager;
+    // Track events captured while paused
+    discards: AnyEvent[] = [];
     constructor(mgr: EventManager) {
       this._mgr = mgr;
-      mgr._pauseEvents++;
-      log.trace(`Pausing Events: ${mgr._pauseEvents}`);
+      mgr._eventPausers.push(this);
+      log.trace(`Pausing Events: ${mgr._eventPausers.length}`);
     }
     [Symbol.dispose]() {
-      this._mgr._pauseEvents--;
-      log.trace(`Resuming Events: ${this._mgr._pauseEvents}`);
+      this._mgr._eventPausers.splice(this._mgr._eventPausers.indexOf(this), 1);
+      log.trace(`Resuming Events: ${this._mgr._eventPausers.length}, ${this.discards.length} events discarded`);
     }
   }
 

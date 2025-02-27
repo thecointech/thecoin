@@ -155,8 +155,29 @@ export class PageHandler {
   }
 
   async pushDynamicInputEvent<T>(input: SearchElement, value: string, name: Extract<keyof T, string>) {
-    await using _ = this.eventManager.pause();
+    await using pauser = this.eventManager.pause();
     await enterValueIntoFound(this.page, input, value);
+    // We've typed into the input, but the recorder hasn't yet registerd
+    // the event because it doesn't know the user is finished typing.
+    // This can be a problem because the pauser is only valid for this function.
+    // If the event is not completed now, it will be registered after
+    // the pauser is gone and override the dynamic input we create here.
+    // To work around this, we press Enter, which triggers the input completion
+    // and logs the event, and then blur for good measure.
+    await this.page.keyboard.press("Enter");
+    await input.element.evaluate(el => el.blur());
+    if (pauser.discards.length == 0) {
+      // A slightly more risky option
+      await this.page.$eval('img', el => el.focus())
+      if (pauser.discards.length == 0) {
+        log.error("Dynamic input event may be overridden by manual event");
+        // For now, we continue, we should never get here
+        // but even if we do we don't know for certain that
+        // the event will be recorded.  A possible
+        // workaround may be to check for duplicates once
+        // recording is complete.
+      }
+    }
     this.logJson("SendETransfer", name + "-elm", input.data);
     const event: DynamicInputEvent = {
       type: "dynamicInput",

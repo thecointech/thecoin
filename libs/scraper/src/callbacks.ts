@@ -6,9 +6,11 @@ export type ScraperProgress = {
   step: number, // Index of the step in total
   total: number, // The total number of steps
   stepPercent?: number // The percentage the current step is complete
+  event?: AnyEvent // Only filled out in replay
 }
 
-export type ScraperProgressCallback = (progress: ScraperProgress) => void;
+// Report progress, return false to stop/cancel
+export type ScraperProgressCallback = (progress: ScraperProgress) => boolean;
 export type IScraperCallbacks = {
   onError?: (page: Page, error: unknown, event?: AnyEvent) => Promise<boolean>;
   onProgress?: ScraperProgressCallback;
