@@ -11,7 +11,7 @@ import { BBox } from "@thecointech/vqa";
 import { distance } from 'fastest-levenshtein';
 import { getCoordsWithMargin, mapInputToParent } from "../elementUtils";
 import { PageHandler } from "../pageHandler";
-import { ETransferInput, IAskUser } from "../types";
+import { ETransferInput, ETransferResult, IAskUser } from "../types";
 import { processorFn } from "./types";
 import { waitPageStable } from "../vqaResponse";
 
@@ -190,7 +190,7 @@ async function sendETransfer(page: PageHandler, input: IAskUser, accountNumber: 
         const { data: confirmationCode } = await api.detectConfirmationCode(image);
         log.trace(`Confirmation code: ${confirmationCode.content}`);
         // Lets try and find this in the webpage
-        const found = await page.pushValueEvent(confirmationCode, "confirmationCode", "text");
+        const found = await page.pushValueEvent<ETransferResult>(confirmationCode, "confirmationCode", "text");
         if (!found) {
           log.error("Could not find confirmation code in page");
         }

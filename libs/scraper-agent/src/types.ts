@@ -66,7 +66,7 @@ export type ChequeBalanceResult = {
 }
 
 export type ETransferResult = {
-  confirm: string,
+  confirmationCode: string,
 }
 
 export type ETransferInput = {

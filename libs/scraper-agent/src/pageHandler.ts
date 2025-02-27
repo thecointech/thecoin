@@ -39,6 +39,10 @@ type InputInteractionOptions = InteractionOptions & {
   text: string
 }
 
+// Utility type to prevent type inference
+// NOTE!  This can be removed in TS5.4 (whenever we upgrade)
+type NoInfer<T> = [T][T extends any ? 0 : never];
+
 export class PageHandler {
 
   name: string;
@@ -133,7 +137,7 @@ export class PageHandler {
   }
 
 
-  async pushValueEvent<T>(element: ElementResponse, name: Extract<keyof T, string>, type: ValueType) {
+  async pushValueEvent<T>(element: ElementResponse, name: Extract<keyof NoInfer<T>, string>, type: ValueType) {
     const found = await this.toElement(element, name);
     const event: ValueEvent = {
       type: "value",
@@ -154,7 +158,7 @@ export class PageHandler {
     return event;
   }
 
-  async pushDynamicInputEvent<T>(input: SearchElement, value: string, name: Extract<keyof T, string>) {
+  async pushDynamicInputEvent<T>(input: SearchElement, value: string, name: Extract<keyof NoInfer<T>, string>) {
     await using pauser = this.eventManager.pause();
     await enterValueIntoFound(this.page, input, value);
     // We've typed into the input, but the recorder hasn't yet registerd

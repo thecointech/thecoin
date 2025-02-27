@@ -11,6 +11,7 @@ import { dbSuffix, rootFolder } from '../paths';
 import { HDNodeWallet } from 'ethers';
 import { getSeedConfig } from './config.seed';
 import { ScrapingConfig } from './scraper';
+import { getProvider } from '@thecointech/ethers-provider';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
@@ -153,7 +154,8 @@ export async function setWalletMnemomic(mnemonic: Mnemonic) {
 export async function getWallet() {
   const cfg = await getProcessConfig();
   if (cfg?.wallet) {
-    return HDNodeWallet.fromPhrase(cfg.wallet.phrase, undefined, cfg.wallet.path);
+    const wallet = HDNodeWallet.fromPhrase(cfg.wallet.phrase, undefined, cfg.wallet.path);
+    return wallet.connect(getProvider());
   }
   return null;
 }

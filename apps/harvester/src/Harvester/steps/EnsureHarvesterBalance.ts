@@ -22,6 +22,7 @@ export class EnsureHarvesterBalance implements ProcessingStage {
 
   async process(data: HarvestData, user: UserData) {
     if (!data.state.harvesterBalance) return {}
+
     // This balance will incorporate UberTransfer delay, however
     // our harvester balance does not.  This means to find an
     // accurate balance we subtract the pending visa payment

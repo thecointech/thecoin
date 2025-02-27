@@ -6,7 +6,7 @@ import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
 import { Result } from '../scraper_actions';
 import { BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
-import { getScrapingScript } from './getScrapingScript';
+// import { getScrapingScript } from './getScrapingScript';
 
 export const Results = () => {
 
@@ -92,9 +92,15 @@ export const Results = () => {
         const config = JSON.parse(text);
 
         // Validate that we can get a scraping config
-        getScrapingScript(config);
+        // getScrapingScript(config);
         // Set the process config
-        await window.scraper.importScraperScript(config);
+        const r = await window.scraper.importScraperScript(config);
+        if (r.error) {
+          alert("Error - please check logs:\n " + r.error);
+        }
+        else {
+          alert("Config imported successfully!");
+        }
       } catch (err) {
         console.error('Failed to import config:', err);
         alert('Failed to import configuration file. Please ensure it is a valid JSON file with scraping settings.');
