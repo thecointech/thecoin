@@ -4,7 +4,17 @@ import { GetIntentApi, GetLoginApi } from "@thecointech/apis/vqa";
 import { processorFn } from "./types";
 
 export const Logout = processorFn("Logout", async (page: PageHandler)  => {
-  return await logout(page);
+  await using mgr = page.pushSection("Logout");
+  try {
+    return await logout(page);
+  }
+  catch (err) {
+    // Logging out is nice, but not essential.  If it fails for any reason,
+    // cancel this section and move on.
+    log.warn(err, "Logout may have failed, URL did not update but could not click again")
+    mgr.cancel();
+  }
+  return false;
 })
 
 async function logout(page: PageHandler) {
@@ -12,7 +22,9 @@ async function logout(page: PageHandler) {
   const currUrl = page.page.url();
 
   log.info(" ** Logout");
+  log.info(" ** Logout");
   const api = GetLoginApi();
+
   const didClick = await page.tryClick(api, "detectLogoutElement", { name: "logout" });
   if (!didClick) {
     await page.maybeThrow(new Error("Failed to click logout"));

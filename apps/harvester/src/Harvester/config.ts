@@ -9,8 +9,8 @@ import path from 'path';
 import { log } from '@thecointech/logging';
 import { dbSuffix, rootFolder } from '../paths';
 import { HDNodeWallet } from 'ethers';
-import { EventSection } from '@thecointech/scraper-agent';
 import { getSeedConfig } from './config.seed';
+import { ScrapingConfig } from './scraper';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
@@ -32,12 +32,7 @@ export type ConfigShape = {
 
   // If the user has a single bank, we can use
   // the same scraping config for both
-  scraping?: {
-    credit?: EventSection,
-    chequing?: EventSection
-  } | {
-    both: EventSection
-  }
+  scraping?: ScrapingConfig
 
 } & HarvestConfig;
 
@@ -85,23 +80,48 @@ export async function getProcessConfig() {
   }
 }
 
+function cleanOriginalScraping(scraping: any) : ScrapingConfig {
+  // If nothing set, nothing to return.
+  if (!scraping) return {};
+  // If both were set, but both aren't set here
+  // we duplicate both into the components.
+  // This is only used when the new config is
+  // not 'both' so we know one of the components
+  // will be overridden before being set
+  if ('both' in scraping) return {
+    credit: scraping.both,
+    chequing: scraping.both
+  };
+  // Remove any other keys than what is expected
+  // (to clean any unexpected/old configs)
+  return {
+    credit: scraping.credit,
+    chequing: scraping.chequing
+  }
+}
+
+// Scraping is a bit different, as it can be either 'credit/chequing' or 'both'
+function getScrapingConfig(lastCfg?: ScrapingConfig, nextCfg?: ScrapingConfig) {
+  if (!nextCfg) return lastCfg;
+  if (!lastCfg) return nextCfg;
+
+  if ('both' in nextCfg) {
+    return nextCfg;
+  } else {
+    const original = cleanOriginalScraping(lastCfg);
+    return {
+      ...original,
+      ...nextCfg
+    }
+  }
+}
+
 export async function setProcessConfig(config: Partial<ConfigShape>) {
   log.info("Setting config file...");
   const lastCfg = await getProcessConfig();
   const db = await getConfig();
-  // Scraping is a bit different, as it can be either 'credit/chequing' or 'both'
-  let scraping = lastCfg?.scraping;
-  if (config.scraping) {
-    if ('both' in config.scraping) {
-      scraping = config.scraping;
-    } else {
-      const original = (scraping && !('both' in scraping)) ? scraping : {};
-      scraping = {
-        ...original,
-        ...config.scraping
-      }
-    }
-  }
+
+  let scraping = getScrapingConfig(lastCfg?.scraping, config.scraping);
 
   await db.put({
     steps: config.steps ?? lastCfg?.steps ?? [],
