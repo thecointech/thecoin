@@ -8,7 +8,6 @@ import { log } from '@thecointech/logging';
 import { dbSuffix, rootFolder } from '../paths';
 import { getSeedConfig } from './config.seed';
 import { ScrapingConfig } from './scraper';
-import { sleep } from '@thecointech/async';
 
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
