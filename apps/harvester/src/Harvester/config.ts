@@ -1,79 +1,18 @@
-import PouchDB from 'pouchdb';
-import memory from 'pouchdb-adapter-memory'
-import comdb from 'comdb';
 import { defaultDays, defaultTime, HarvestConfig, Mnemonic } from '../types';
 import { createStep } from './steps';
 import { CreditDetails } from './types';
 import { setSchedule } from './schedule';
-import path from 'path';
 import { log } from '@thecointech/logging';
-import { dbSuffix, rootFolder } from '../paths';
 import { HDNodeWallet } from 'ethers';
-import { getSeedConfig } from './config.seed';
 import { ScrapingConfig } from './scraper';
 import { getProvider } from '@thecointech/ethers-provider';
+import { ConfigShape, ConfigKey, getConfig } from './config.db';
 
-PouchDB.plugin(memory)
-PouchDB.plugin(comdb)
-
-const db_path = path.join(rootFolder, `config${dbSuffix()}.db`);
-
-// Dev loads fresh every time, devlive should... reset on devlive run?
-const PERSIST_DB = process.env.CONFIG_NAME !== "development"
-
-export type ConfigShape = {
-  // Store the account Mnemomic
-  wallet?: Mnemonic,
-  // Store a constant key for the account state DB
-  // This key should be derived from wallet mnemonic
-  stateKey?: string,
-
-  // The payment details for the users visa card
-  creditDetails?: CreditDetails,
-
-  // If the user has a single bank, we can use
-  // the same scraping config for both
-  scraping?: ScrapingConfig
-
-} & HarvestConfig;
-
-// We use pouchDB revisions to keep the prior state of documents
-// NOTE: Not sure this works with ComDB
-const ConfigKey = "config";
-
-let __config = null as null|Promise<PouchDB.Database<ConfigShape>>;
-export function getConfig(password?: string) {
-  if (!__config) {
-    __config = new Promise(async resolve => {
-      const db = new PouchDB<ConfigShape>(db_path, {adapter: 'memory'});
-      log.info(`Initializing ${process.env.NODE_ENV} config database at ${db_path}`);
-
-      if (PERSIST_DB) {
-        log.info(`Encrypting config DB`);
-        // initialize the config db
-        // Yes, this is a hard-coded password.
-        // Will fix ASAP with dynamically
-        // generated code (Apr 04 2023)
-        await db.setPassword(password ?? "hF,835-/=Pw\\nr6r");
-        await db.loadEncrypted();
-      }
-      else {
-        // Seed DB in development
-        await db.put({
-          _id: ConfigKey,
-          ...getSeedConfig()
-        })
-      }
-      resolve(db);
-    })
-  }
-  return __config;
-}
 
 export async function getProcessConfig() {
   try {
     const db = await getConfig();
-    const doc = await db.get<ConfigShape>(ConfigKey, { revs_info: true });
+    const doc = await db.get(ConfigKey, { revs_info: true, latest: true });
     return doc;
   }
   catch (err) {
@@ -137,10 +76,9 @@ export async function setProcessConfig(config: Partial<ConfigShape>) {
     _id: ConfigKey,
     _rev: lastCfg?._rev,
   })
-  // When calling this in test env it throws a (non-consequential) error
-  if (PERSIST_DB) {
-    await db.loadEncrypted();
-  }
+
+  // Load changes from the decrypted database into the encrypted one.
+  await db.loadDecrypted();
 }
 
 export async function setWalletMnemomic(mnemonic: Mnemonic) {
