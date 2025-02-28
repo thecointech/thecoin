@@ -38,8 +38,8 @@ async function runAndStoreTransition<Type extends ActionType>(container: TypedAc
 
   if (delta.error) {
     log.error(
-      { state: getCurrentState(container).name, error: delta.error, transition: transition.transitionName, initialId: container.action.data.initialId },
-      'Error on {state} => {transition} for {initialId}: {error}'
+      { state: getCurrentState(container).name, message: delta.error, transition: transition.transitionName, initialId: container.action.data.initialId },
+      'Error on {state} => {transition}: {message} (for {initialId})'
     );
   }
   log.trace({ delta, transition: transition.transitionName, initialId: container.action.data.initialId },
