@@ -16,9 +16,10 @@
   },
   "homepage": "https://thecointech.com",
   "scripts": {
-    "gen:swagger": "run -T cross-env API_ACCESS_KEY=DUMMY_KEY venv/Scripts/python api/generate_swagger.py",
-    "start": "run -T run-env exec=venv/Scripts/python src/app.py",
-    "_test": "run -T run-env exec=venv/Scripts/python tests/query.test.py",
+    "get-python": "node -e \"console.log(process.platform === 'win32' ? 'venv/Scripts/python' : 'venv/bin/python')\"",
+    "gen:swagger": "run -T cross-env API_ACCESS_KEY=DUMMY_KEY $(yarn get-python) api/generate_swagger.py",
+    "start": "run -T run-env exec=$(yarn get-python) src/app.py",
+    "_test": "run -T run-env exec=$(yarn get-python) tests/query.test.py",
     "build:dev": "run -T run-env tools/build-docker.ts",
     "build:prodtest": "run -T run-env cfg=prodtest tools/build-docker.ts"
   }
