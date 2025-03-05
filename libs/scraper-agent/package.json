@@ -22,6 +22,7 @@
     "test:summary": "jest --coverage > ./coverage/summary.txt",
     "autoRecord": "yarn run -T cross-env CONFIG_NAME=devlive URL_SEQ_LOGGING=false TC_LOG_FOLDER=./logs run-env tools/recordSamples/autoRecord.ts",
     "autoRecord:prod": "yarn run -T cross-env CONFIG_NAME=prodtest URL_SEQ_LOGGING=false TC_LOG_FOLDER=./logs run-env tools/recordSamples/autoRecord.ts",
+    "recordSamples": "yarn run -T cross-env CONFIG_NAME=prodtest URL_SEQ_LOGGING=false TC_LOG_FOLDER=./logs RUN_SCRAPER_HEADLESS=false run-env tools/recordSamples/recordSamples.ts",
     "replay": "yarn run -T cross-env CONFIG_NAME=devlive URL_SEQ_LOGGING=false TC_LOG_FOLDER=./logs run-env tools/replay/replay.ts",
     "replay:prod": "yarn run -T cross-env CONFIG_NAME=prodtest URL_SEQ_LOGGING=false TC_LOG_FOLDER=./logs run-env tools/replay/replay.ts"
 

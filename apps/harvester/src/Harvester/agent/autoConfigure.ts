@@ -15,9 +15,10 @@ export type AutoConfigParams = {
   url: string;
   username: string;
   password: string;
+  visible: boolean;
 }
 
-export async function autoConfigure({ type, name, url, username, password }: AutoConfigParams, depositAddress: string, callback: BackgroundTaskCallback) {
+export async function autoConfigure({ type, name, url, username, password, visible }: AutoConfigParams, depositAddress: string, callback: BackgroundTaskCallback) {
 
   log.info(`Agent: Starting configuration for action: autoConfigure`);
   // This should do nothing, but call it anyway
@@ -34,7 +35,10 @@ export async function autoConfigure({ type, name, url, username, password }: Aut
   const logger = new ScraperCallbacks("record", callback, toProcess);
 
   try {
+    const oldHeadless = process.env.RUN_SCRAPER_HEADLESS;
+    process.env.RUN_SCRAPER_HEADLESS = visible ? "false" : "true";
     const baseNode = await Agent.process(name, url, inputBridge, logger, toSkip);
+    process.env.RUN_SCRAPER_HEADLESS = oldHeadless;
 
     // Ensure we have required info
     throwIfAnyMissing(baseNode, type);

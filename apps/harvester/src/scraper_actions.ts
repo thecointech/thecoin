@@ -13,10 +13,8 @@ export type Result<T> = {
 }
 
 export type ScraperBridgeApi = {
-  // installBrowser(): Promise<void>;
   hasInstalledBrowser(): Promise<Result<boolean>>;
   hasCompatibleBrowser(): Promise<Result<boolean>>;
-  // onBrowserDownloadProgress: (value: any) => void;
 
   // Trigger download of browser/similarity pipeline
   downloadLibraries(): Promise<Result<boolean>>;
@@ -24,13 +22,10 @@ export type ScraperBridgeApi = {
   // Generic update pathway for all long-running actions
   onBackgroundTaskProgress: (progress: BackgroundTaskCallback) => void;
 
-  // init(): Promise<Result<boolean>>;
-  // onInitProgress: (progress: ProgressCallback) => void;
-
   // Run the automatic configurator for the given action on the appropriate url
   autoProcess: (params: AutoConfigParams) => Promise<Result<boolean>>;
-  // onAgentProgress: (progress: ProgressCallback) => void;
 
+  // Validate an action
   validateAction(actionName: ActionType, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,
 
 
@@ -48,10 +43,6 @@ export type ScraperBridgeApi = {
 
   // Finish Recording
   finishAction: () => Promise<Result<boolean>>,
-
-  // A test of an action
-  // testAction(actionName: ActionType, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,
-  // onReplayProgress: (progress: ScraperProgressCallback) => void,
 
   setWalletMnemomic(mnemonic: Mnemonic): Promise<Result<boolean>>,
   getWalletAddress(): Promise<Result<string|null>>,
@@ -80,21 +71,15 @@ export type ScraperBridgeApi = {
 
 
 export const actions = {
-  // installBrowser: "browser:installBrowser",
   hasInstalledBrowser: "browser:hasInstalledBrowser",
   hasCompatibleBrowser: "browser:hasCompatibleBrowser",
-  // browserDownloadProgress: "browser:browserDownloadProgress",
 
   onBackgroundTaskProgress: 'scraper:onBackgroundTaskProgress',
 
   downloadLibraries: 'scraper:downloadLibraries',
 
-  // init: 'scraper:init',
-  // onInitProgress: 'scraper:onInitProgress',
-
   autoProcess: 'scraper:autoProcess',
   validateAction: 'scraper:validateAction',
-  // onAgentProgress: 'scraper:onAgentProgress',
 
   onAskQuestion: 'scraper:onAskQuestion',
   replyQuestion: 'scraper:replyQuestion',
@@ -104,9 +89,6 @@ export const actions = {
   learnValue: 'scraper:learnValue',
   setDynamicInput: 'scraper:setDynamicInput',
   finishAction: 'scraper:finishAction',
-
-  // testAction: 'scraper.testAction',
-  // replayProgress: 'scraper.progress',
 
   // Not really scraper, but meh
   setWalletMnemomic: 'scraper:setWalletMnemomic',

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Dimmer, Input, Loader, Segment } from "semantic-ui-react";
+import { Button, Checkbox, Dimmer, Input, Loader, Segment } from "semantic-ui-react";
 import type { BankData } from "./BankCard/data";
 import { BackgroundTaskReducer, getTaskGroup } from "@/BackgroundTask/index";
 import { BankType } from "@/Harvester/scraper";
@@ -12,6 +12,7 @@ type Props = BankData & {
 export const LoginDetails: React.FC<Props> = ({ icon, name, url, type, isReplaying }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [visible, setVisible] = useState(false);
 
   const store = BackgroundTaskReducer.useData();
   const group = getTaskGroup(store, "record");
@@ -25,7 +26,7 @@ export const LoginDetails: React.FC<Props> = ({ icon, name, url, type, isReplayi
     // TODO: Send command to start the agent process
     log.info('Starting agent with:', url);
     // api.setAgentProgress(undefined);
-    window.scraper.autoProcess({ name, url, type, username, password });
+    window.scraper.autoProcess({ name, url, type, username, password, visible });
   };
   return (
     <Segment>
@@ -53,6 +54,7 @@ export const LoginDetails: React.FC<Props> = ({ icon, name, url, type, isReplayi
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Enter your password..."
       />
+      <Checkbox onChange={() => setVisible(!visible)} checked={visible} label='Visible' /><br />
       <Button onClick={handleSubmit} loading={isTaskRunning}>Submit</Button>
   </Segment>
   )
