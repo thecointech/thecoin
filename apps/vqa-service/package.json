@@ -1,0 +1,26 @@
+{
+  "name": "@thecointech/vqa-service",
+  "private": true,
+  "version": "0.2.135",
+  "description": "VQA Assistant for the Harvester",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/thecointech/thecoin.git",
+    "directory": "apps/vqa-service"
+  },
+  "author": "Stephen Taylor",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/thecointech/thecoin/issues"
+  },
+  "homepage": "https://thecointech.com",
+  "scripts": {
+    "get-python": "node -e \"console.log(process.platform === 'win32' ? 'venv/Scripts/python' : 'python')\"",
+    "gen:swagger": "run -T cross-env API_ACCESS_KEY=DUMMY_KEY $(yarn get-python) api/generate_swagger.py",
+    "start": "run -T run-env exec=$(yarn get-python) src/app.py",
+    "_test": "run -T run-env exec=$(yarn get-python) tests/query.test.py",
+    "build:dev": "run -T run-env tools/build-docker.ts",
+    "build:prodtest": "run -T run-env cfg=prodtest tools/build-docker.ts"
+  }
+}

@@ -4,6 +4,8 @@ import currency from 'currency.js';
 import { notify, notifyError } from '../notify';
 import { SendFakeDeposit } from '@thecointech/email-fake-deposit';
 import { DateTime } from 'luxon';
+import { getValues } from '../scraper';
+import { ETransferResult } from '@thecointech/scraper-agent/types';
 
 export class SendETransfer implements ProcessingStage {
 
@@ -33,7 +35,7 @@ export class SendETransfer implements ProcessingStage {
     const toTransfer = getTransferAmount(state.toETransfer, chq.balance);
     const confirm = await sendETransfer(toTransfer, user)
 
-    if (confirm.confirm) {
+    if (confirm.confirmationCode) {
       const harvesterBalance = (state.harvesterBalance ?? currency(0))
         .add(toTransfer);
 
@@ -45,10 +47,12 @@ export class SendETransfer implements ProcessingStage {
         icon: 'seeds.png',
       });
 
+      // NOTE: This will mean the chqBalance is now incorrect, as the money
+      // transferred should have modified it
       return {
         toETransfer: undefined,
         harvesterBalance,
-      }
+      };
     } else {
       log.error(`Failed to transfer ${toTransfer} to TheCoin`);
       // TODO: Handle this case
@@ -74,14 +78,14 @@ const getTransferAmount = (toETransfer: currency, balance: currency) => {
   return toETransfer;
 }
 
-async function sendETransfer(amount: currency, {replay, wallet}: UserData) {
+async function sendETransfer(amount: currency, {wallet}: UserData) : Promise<ETransferResult> {
   if (process.env.HARVESTER_DRY_RUN) {
     return {
-      confirm: "DRYRUN"
+      confirmationCode: "DRYRUN"
     }
   }
   else if (process.env.CONFIG_NAME == "prod" || process.env.CONFIG_NAME == "prodbeta") {
-    return replay('chqETransfer', undefined, { amount: amount.toString() })
+    return getValues('chqETransfer', undefined, { amount: amount.toString() })
   }
   else {
     // We still send in testing environments
@@ -90,7 +94,7 @@ async function sendETransfer(amount: currency, {replay, wallet}: UserData) {
       await SendFakeDeposit(address, amount.value, DateTime.now());
     }
     return {
-      confirm: "1234"
+      confirmationCode: "1234"
     }
   }
 }

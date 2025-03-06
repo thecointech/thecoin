@@ -21,7 +21,7 @@ export async function  ProcessBillPayment(sale: CertifiedTransfer) {
     initialId: sale.signature
   })
 
-  log.trace({ActionId: action.doc.id, initialId }, 'Created action {ActionID} for initialId {initialId}');
+  log.trace({ActionId: action.doc.id, initialId }, 'Created action {ActionId} for initialId {initialId}');
 
   // Process the sale
   const contract = await GetContract();

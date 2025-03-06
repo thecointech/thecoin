@@ -24,20 +24,28 @@ jest.unstable_mockModule('./config', () => ({
       new PayVisa(),
     ]
   },
+  getProcessConfig: jest.fn(() => {
+    return {
+      scraping: {
+        both: { section: "Initial", events: [{ type: 'click', id: 'credit'}] },
+      }
+    }
+  }),
+  setProcessConfig: jest.fn(),
   getWallet: () => Wallet.createRandom(),
   getCreditDetails: () => ({
     payee: 'payee',
     accountNumber: "12345"
   }),
-  getEvents: () => [],
 }));
 
 it ('runs the full stack', async () => {
 
   const { harvest } = await import('./index');
 
-  await harvest();
+  const r1 = await harvest();
+  expect(r1).toBe(true);
   // and again
-  await harvest();
-  // and again
+  const r2 = await harvest();
+  expect(r2).toBe(true);
 })

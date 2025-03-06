@@ -11,10 +11,12 @@ import { ChequeMinimum } from './ChequeMinimum';
 import { TransferLimit } from './TransferLimit';
 import { TransferVisaOwing } from './TransferVisaOwing';
 import { ProcessPercent } from './ProcessPercent';
+import { EnsureHarvesterBalance } from './EnsureHarvesterBalance';
 
 export const createStep = (step: HarvestStep) : ProcessingStage => {
   switch (step.type) {
     case HarvestStepType.ClearPendingVisa: return new ClearPendingVisa();
+    case HarvestStepType.EnsureHarvesterBalance: return new EnsureHarvesterBalance();
     case HarvestStepType.ProcessPercent: return new ProcessPercent(step.args);
     case HarvestStepType.TransferVisaOwing: return new TransferVisaOwing();
     case HarvestStepType.RoundUp: return new RoundUp(step.args);

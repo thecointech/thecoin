@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.libs.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "baseUrl": "./src/",
+    "outDir": "./build",
+    "tsBuildInfoFile": "./build/.buildinfo",
+    "target": "ES2022",
+    "lib": ["es2023", "DOM"]
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["**/*.test.*", "**/__mocks__/**", "**/*.stories.*"],
+}

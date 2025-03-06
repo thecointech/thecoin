@@ -20,7 +20,7 @@ export async function  ProcessUberBillPayment(sale: UberTransferAction) {
     date: DateTime.now(),
     initialId: sale.signature
   })
-  log.trace({ActionId: action.doc.id, initialId }, 'Created action {ActionID} for initialId {initialId}');
+  log.trace({ActionId: action.doc.id, initialId }, 'Created action {ActionId} for initialId {initialId}');
 
   // Process the sale
   const result = await process(action)

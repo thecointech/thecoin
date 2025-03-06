@@ -3,6 +3,7 @@ import { ReplayProgressReducer } from "./reducer";
 import { Progress } from "semantic-ui-react";
 
 // A progress bar that only displays if there is currently a replay in progress
+// TODO!!! Replace with BackgroundTaskProgressBar
 export const ReplayProgressBar = () => {
   const replayProgress = ReplayProgressReducer.useData();
   const api = ReplayProgressReducer.useApi();

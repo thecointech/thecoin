@@ -5,20 +5,20 @@
 			"path": "../apps/harvester"
 		},
 		{
+			"name": "scraper-agent",
+			"path": "../libs/scraper-agent"
+		},
+		{
+			"name": "scraper",
+			"path": "../libs/scraper"
+		},
+		{
+			"name": "vqa-service",
+			"path": "../apps/vqa-service"
+		},
+		{
 			"name": "electron-utils",
 			"path": "../libs/electron-utils"
-		},
-		{
-			"name": "broker-service",
-			"path": "../apps/broker-service"
-		},
-		{
-			"name": "shared",
-			"path": "../libs/shared"
-		},
-		{
-			"name": "contract-plugins",
-			"path": "../libs/contract-plugins"
 		}
 	],
 	"settings": {

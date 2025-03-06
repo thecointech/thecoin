@@ -19,7 +19,7 @@ export const ChequingBalance = () => {
 
   useEffect(() => {
     if (balance) {
-      window.scraper.finishAction(pageAction);
+      window.scraper.finishAction();
     }
   }, [balance])
 
@@ -32,7 +32,7 @@ export const ChequingBalance = () => {
   }
   const validate = async () => {
     setValidating(true);
-    const r = await window.scraper.testAction(pageAction);
+    const r = await window.scraper.validateAction(pageAction);
     if (r.error) alert(r.error)
     if (r.value?.balance) {
       api.setParameter("chequing", "testPassed", true);

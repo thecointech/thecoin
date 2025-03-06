@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "dump-firestore": "run-env cfg=devlive ./dumpFirestore.ts",
-    "cancel-tx": "run-env cfg=prod ./transactions/cancelTx.ts"
+    "cancel-tx": "run-env cfg=prod ./transactions/cancelTx.ts",
+    "initDemoAccount": "run-env cfg=prodtest ./initDemoAccount.ts"
   },
   "devDependencies": {
     "@thecointech/setenv": "^0.2.135"

@@ -1,0 +1,56 @@
+{
+  "name": "@thecointech/scraper-agent",
+  "version": "0.2.135",
+  "description": "TheCoin: AI Agent to automate the creation of scraping recorder scripts",
+  "type": "module",
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/scraper-agent"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "build": "run -T tsc -b",
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage",
+    "test": "run :jest",
+    "test:summary": "jest --coverage > ./coverage/summary.txt",
+    "autoRecord": "yarn run -T cross-env CONFIG_NAME=devlive URL_SEQ_LOGGING=false TC_LOG_FOLDER=./logs run-env tools/recordSamples/autoRecord.ts",
+    "autoRecord:prod": "yarn run -T cross-env CONFIG_NAME=prodtest URL_SEQ_LOGGING=false TC_LOG_FOLDER=./logs run-env tools/recordSamples/autoRecord.ts",
+    "recordSamples": "yarn run -T cross-env CONFIG_NAME=prodtest URL_SEQ_LOGGING=false TC_LOG_FOLDER=./logs RUN_SCRAPER_HEADLESS=false run-env tools/recordSamples/recordSamples.ts",
+    "replay": "yarn run -T cross-env CONFIG_NAME=devlive URL_SEQ_LOGGING=false TC_LOG_FOLDER=./logs run-env tools/replay/replay.ts",
+    "replay:prod": "yarn run -T cross-env CONFIG_NAME=prodtest URL_SEQ_LOGGING=false TC_LOG_FOLDER=./logs run-env tools/replay/replay.ts"
+
+  },
+  "dependencies": {
+    "@thecointech/apis": "^0.2.135",
+    "@thecointech/scraper": "^0.2.135"
+  },
+  "devDependencies": {
+    "@thecointech/jestutils": "^0.2.135"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "exports": {
+    ".": {
+      "development": "./build/index.js",
+      "devlive": "./build/index.js",
+      "default": "./build/index.js"
+    },
+    "./*": "./build/*.js"
+  },
+  "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "build/*.d.ts"
+      ]
+    }
+  }
+}

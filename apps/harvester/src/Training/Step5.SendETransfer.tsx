@@ -23,7 +23,7 @@ export const SendETransfer = () => {
 
   useEffect(() => {
     if (confirmation) {
-      window.scraper.finishAction(pageAction);
+      window.scraper.finishAction();
     }
   }, [confirmation])
 
@@ -44,7 +44,7 @@ export const SendETransfer = () => {
       return;
     }
     setValidating(true);
-    const r = await window.scraper.testAction(pageAction, {
+    const r = await window.scraper.validateAction(pageAction, {
       amount: validateAmount(amount),
     });
     if (r.error) alert(r.error)

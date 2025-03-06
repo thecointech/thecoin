@@ -23,6 +23,10 @@ export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
     if (existsSync(systemFile)) {
       files.push(systemFile);
     }
+    const commonFile = new URL(`common.private.env`, `file://${systemFolder}/`)
+    if (existsSync(commonFile)) {
+      files.push(commonFile);
+    }
   }
 
   // If none found, is there any in the local repo folder?

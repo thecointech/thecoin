@@ -1,65 +1,18 @@
-import PouchDB from 'pouchdb';
-import memory from 'pouchdb-adapter-memory'
-import comdb from 'comdb';
 import { defaultDays, defaultTime, HarvestConfig, Mnemonic } from '../types';
 import { createStep } from './steps';
 import { CreditDetails } from './types';
 import { setSchedule } from './schedule';
-import path from 'path';
 import { log } from '@thecointech/logging';
-import { ActionTypes, AnyEvent } from '../scraper/types';
-import { dbSuffix, rootFolder } from '../paths';
 import { HDNodeWallet } from 'ethers';
+import { ScrapingConfig } from './scraper';
+import { getProvider } from '@thecointech/ethers-provider';
+import { ConfigShape, ConfigKey, getConfig } from './config.db';
 
-PouchDB.plugin(memory)
-PouchDB.plugin(comdb)
-
-const db_path = path.join(rootFolder, `config${dbSuffix()}.db`);
-
-const PERSIST_DB = process.env.NODE_ENV !== "development" || process.env.CONFIG_NAME === "devlive"
-
-export type ConfigShape = {
-  // Store the account Mnemomic
-  wallet?: Mnemonic,
-  // Store a constant key for the account state DB
-  // This key should be derived from wallet mnemonic
-  stateKey?: string,
-
-  creditDetails?: CreditDetails,
-
-  scraping?: {
-    [key in ActionTypes]?: AnyEvent[];
-  },
-
-} & HarvestConfig;
-
-// We use pouchDB revisions to keep the prior state of documents
-// NOTE: Not sure this works with ComDB
-const ConfigKey = "config";
-
-let __config = null as unknown as PouchDB.Database<ConfigShape>;
-export async function getConfig(password?: string) {
-  if (!__config) {
-    __config = new PouchDB<ConfigShape>(db_path, {adapter: 'memory'});
-    log.info(`Initializing ${process.env.NODE_ENV} config database at ${db_path}`);
-
-    if (PERSIST_DB) {
-      log.info(`Encrypting config DB`);
-      // initialize the config db
-      // Yes, this is a hard-coded password.
-      // Will fix ASAP with dynamically
-      // generated code (Apr 04 2023)
-      await __config.setPassword(password ?? "hF,835-/=Pw\\nr6r");
-      await __config.loadEncrypted();
-    }
-  }
-  return __config;
-}
 
 export async function getProcessConfig() {
   try {
     const db = await getConfig();
-    const doc = await db.get<ConfigShape>(ConfigKey, { revs_info: true });
+    const doc = await db.get(ConfigKey, { revs_info: true, latest: true });
     return doc;
   }
   catch (err) {
@@ -67,10 +20,49 @@ export async function getProcessConfig() {
   }
 }
 
+function cleanOriginalScraping(scraping: any) : ScrapingConfig {
+  // If nothing set, nothing to return.
+  if (!scraping) return {};
+  // If both were set, but both aren't set here
+  // we duplicate both into the components.
+  // This is only used when the new config is
+  // not 'both' so we know one of the components
+  // will be overridden before being set
+  if ('both' in scraping) return {
+    credit: scraping.both,
+    chequing: scraping.both
+  };
+  // Remove any other keys than what is expected
+  // (to clean any unexpected/old configs)
+  return {
+    credit: scraping.credit,
+    chequing: scraping.chequing
+  }
+}
+
+// Scraping is a bit different, as it can be either 'credit/chequing' or 'both'
+function getScrapingConfig(lastCfg?: ScrapingConfig, nextCfg?: ScrapingConfig) {
+  if (!nextCfg) return lastCfg;
+  if (!lastCfg) return nextCfg;
+
+  if ('both' in nextCfg) {
+    return nextCfg;
+  } else {
+    const original = cleanOriginalScraping(lastCfg);
+    return {
+      ...original,
+      ...nextCfg
+    }
+  }
+}
+
 export async function setProcessConfig(config: Partial<ConfigShape>) {
   log.info("Setting config file...");
   const lastCfg = await getProcessConfig();
   const db = await getConfig();
+
+  let scraping = getScrapingConfig(lastCfg?.scraping, config.scraping);
+
   await db.put({
     steps: config.steps ?? lastCfg?.steps ?? [],
     schedule: {
@@ -80,17 +72,13 @@ export async function setProcessConfig(config: Partial<ConfigShape>) {
     stateKey: config.stateKey ?? lastCfg?.stateKey,
     wallet: config.wallet ?? lastCfg?.wallet,
     creditDetails: config.creditDetails ?? lastCfg?.creditDetails,
-    scraping: {
-      ...lastCfg?.scraping,
-      ...config.scraping,
-    },
+    scraping,
     _id: ConfigKey,
     _rev: lastCfg?._rev,
   })
-  // When calling this in test env it throws a (non-consequential) error
-  if (PERSIST_DB) {
-    await db.loadEncrypted();
-  }
+
+  // Load changes from the decrypted database into the encrypted one.
+  await db.loadDecrypted();
 }
 
 export async function setWalletMnemomic(mnemonic: Mnemonic) {
@@ -104,7 +92,8 @@ export async function setWalletMnemomic(mnemonic: Mnemonic) {
 export async function getWallet() {
   const cfg = await getProcessConfig();
   if (cfg?.wallet) {
-    return HDNodeWallet.fromPhrase(cfg.wallet.phrase, undefined, cfg.wallet.path);
+    const wallet = HDNodeWallet.fromPhrase(cfg.wallet.phrase, undefined, cfg.wallet.path);
+    return wallet.connect(getProvider());
   }
   return null;
 }
@@ -125,19 +114,6 @@ export async function hydrateProcessor() {
     .map(createStep)
 
   return steps;
-}
-
-export async function setEvents(type: ActionTypes, events: AnyEvent[]) {
-  await setProcessConfig({
-    scraping: {
-      [type]: events
-    }
-  })
-}
-
-export async function getEvents(type: ActionTypes) {
-  const config = await getProcessConfig();
-  return config?.scraping?.[type];
 }
 
 export async function setCreditDetails(creditDetails: CreditDetails) {
