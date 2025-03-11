@@ -1,6 +1,7 @@
 import { HarvestSchedule } from '../../types';
 import { setSchedule as setScheduleLinux } from './scheduler-linux';
 import { setSchedule as setScheduleWin32 } from './scheduler-win32';
+import { setSchedule as setScheduleDarwin } from './scheduler-darwin';
 
 export function setSchedule(schedule: HarvestSchedule, existing?: HarvestSchedule) {
   // Don't schedule if we're in dev mode
