@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from 'fs';
 import { projectUrl } from '@thecointech/setenv/projectUrl';
 import { fileURLToPath } from 'url';
 import de from 'dotenv';
+import dexpand from 'dotenv-expand'
 
 const projectRoot = process.cwd();
 const LOG_NAME = basename(projectRoot);
@@ -51,7 +52,11 @@ export function getEnvVars(cfgName?: string, onlyPublic?: boolean) : Record<stri
   return files
     .map(file => readFileSync(file))
     .reduce((acc, contents) => ({
-    ...de.parse(contents),
+    ...{
+      ...dexpand.expand({
+        parsed: de.parse(contents),
+      }).parsed
+    },
     ...acc, // later files have lower priority, do not overwrite existing values
   }), {
     LOG_NAME,
@@ -61,7 +66,9 @@ export function getEnvVars(cfgName?: string, onlyPublic?: boolean) : Record<stri
 export function loadEnvVars(cfgName?: string) {
   // Load all environment files.
   const files = getEnvFiles(cfgName);
-  files.forEach(path => de.config({path: fileURLToPath(path)}))
+  files.forEach(path => dexpand.expand(
+    de.config({path: fileURLToPath(path)})
+  ))
 
     //  Set default name for logging
   if (!process.env.LOG_NAME) {

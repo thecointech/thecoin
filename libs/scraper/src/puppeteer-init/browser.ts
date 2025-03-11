@@ -3,6 +3,7 @@ import { Browser, ChromeReleaseChannel, computeExecutablePath, computeSystemExec
 import os from "node:os"
 import { existsSync, promises as fs } from "node:fs"
 import { rootFolder } from "./rootFolder"
+import { log } from "@thecointech/logging"
 
 // Our process:
 // First, detect installed browsers
@@ -15,11 +16,15 @@ const browserDownloadDir = () => path.join(rootFolder(), 'browser')
 
 export async function installChrome(progress?: (bytes: number, total: number) => void) {
   const existing = await getLocalBrowserPath();
+
   if (existing) {
     // It is the responsibility of the caller to delete existing
     // installations to force a re-install
+    log.info(`Chrome install found at ${existing}`)
     return existing;
   }
+  const cacheDir = browserDownloadDir();
+  log.info(`Initiating download of Chrome to: ${cacheDir}`)
 
   const platform = detectBrowserPlatform();
   if (!platform) {
@@ -32,11 +37,13 @@ export async function installChrome(progress?: (bytes: number, total: number) =>
   )
   const browser = await install({
     browser: Browser.CHROME,
-    cacheDir: browserDownloadDir(),
+    cacheDir,
     buildId,
     buildIdAlias,
     downloadProgressCallback: progress,
   })
+
+  log.info(`Chrome installed to: ${browser.executablePath}`)
 
   return browser.executablePath
 }

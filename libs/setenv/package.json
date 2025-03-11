@@ -25,7 +25,8 @@
     "build": "run -T run-p 'build:*'",
     "build:cjs": "run -T tsc --project tsconfig.build.cjs.json && node ./postbuild.cjs",
     "build:mjs": "run -T tsc --project tsconfig.build.mjs.json",
-    "clean": "run -T rimraf ./build && run -T rimraf ./coverage"
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage",
+    "test": "run :jest"
   },
   "exports": {
     ".": {
@@ -42,7 +43,8 @@
   },
   "types": "./build/mjs/index.d.ts",
   "dependencies": {
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "dotenv-expand": "^12.0.1"
   },
   "gitHead": "6c91d925570c1132080f3098b510a3a42180e429"
 }
