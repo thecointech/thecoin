@@ -13,6 +13,8 @@ export function setSchedule(schedule: HarvestSchedule, existing?: HarvestSchedul
       return setScheduleLinux(schedule, existing);
     case "win32":
       return setScheduleWin32(schedule, existing);
+    case "darwin":
+      return setScheduleDarwin(schedule, existing);
     default:
       throw new Error("Unsupported platform");
   }
