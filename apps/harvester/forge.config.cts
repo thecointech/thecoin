@@ -73,6 +73,13 @@ const config: ForgeConfig = {
     new MakerSquirrel({
       setupIcon: 'assets/appicon.ico',
     }),
+    {
+      name: '@electron-forge/maker-dmg',
+      config: {
+        icon: 'assets/appicon.icns',
+        format: 'ULMO'
+      }
+    },
     new MakerZIP({}, ['darwin']), /*new MakerRpm({}),*/ new MakerDeb({})
   ],
   plugins: [
