@@ -1656,6 +1656,55 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bitwarden/sdk-napi-darwin-arm64@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@bitwarden/sdk-napi-darwin-arm64@npm:1.0.0"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@bitwarden/sdk-napi-darwin-x64@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@bitwarden/sdk-napi-darwin-x64@npm:1.0.0"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@bitwarden/sdk-napi-linux-x64-gnu@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@bitwarden/sdk-napi-linux-x64-gnu@npm:1.0.0"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@bitwarden/sdk-napi-win32-x64-msvc@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@bitwarden/sdk-napi-win32-x64-msvc@npm:1.0.0"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@bitwarden/sdk-napi@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@bitwarden/sdk-napi@npm:1.0.0"
+  dependencies:
+    "@bitwarden/sdk-napi-darwin-arm64": "npm:1.0.0"
+    "@bitwarden/sdk-napi-darwin-x64": "npm:1.0.0"
+    "@bitwarden/sdk-napi-linux-x64-gnu": "npm:1.0.0"
+    "@bitwarden/sdk-napi-win32-x64-msvc": "npm:1.0.0"
+  dependenciesMeta:
+    "@bitwarden/sdk-napi-darwin-arm64":
+      optional: true
+    "@bitwarden/sdk-napi-darwin-x64":
+      optional: true
+    "@bitwarden/sdk-napi-linux-x64-gnu":
+      optional: true
+    "@bitwarden/sdk-napi-win32-x64-msvc":
+      optional: true
+  checksum: 186bd725601f1eaee3c89972e07731dbe91a6adaf465dc7157d3f420a7918dd7734acf54568a04effd1f097ed87ca20b84749ad9928a100aa466485c77e01308
+  languageName: node
+  linkType: hard
+
 "@browser-bunyan/console-formatted-stream@npm:^1.8.0":
   version: 1.8.0
   resolution: "@browser-bunyan/console-formatted-stream@npm:1.8.0"
@@ -10987,6 +11036,16 @@ __metadata:
     puppeteer: "npm:^24.1.1"
     puppeteer-extra: "npm:^3.3.6"
     puppeteer-extra-plugin-stealth: "npm:^2.11.2"
+  languageName: unknown
+  linkType: soft
+
+"@thecointech/secrets@workspace:libs/secrets":
+  version: 0.0.0-use.local
+  resolution: "@thecointech/secrets@workspace:libs/secrets"
+  dependencies:
+    "@bitwarden/sdk-napi": "npm:^1.0.0"
+    "@types/bunyan": "npm:^1.8.6"
+    dotenv: "npm:^10.0.0"
   languageName: unknown
   linkType: soft
 
