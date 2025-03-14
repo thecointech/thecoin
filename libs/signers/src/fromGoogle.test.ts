@@ -12,6 +12,7 @@ describe("Can load fromGoogle", () => {
 
   it ('loads a secret', async () => {
 
+    // NOTE: If we ever run this test again, update to using secrets
     process.env.GOOGLE_APPLICATION_CREDENTIALS = prodVars.RATES_SERVICE_ACCOUNT
     process.env.GOOGLE_CLOUD_PROJECT = "rates-service-testing"
 

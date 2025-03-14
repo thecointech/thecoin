@@ -1,6 +1,51 @@
 import { SecretKeyType } from "./getSecrets";
 export { SecretNotFoundError } from "./getSecrets";
 
-export function getSecret(name: SecretKeyType) {
+export async function getSecret(name: SecretKeyType) {
+  // In development we still use the private key
+  if (name === "UserDataInstructionKeyPrivate") {
+    return Promise.resolve(mock_key);
+  }
   return Promise.resolve(`mock-${name}`);
 }
+
+const mock_key = `-----BEGIN RSA PRIVATE KEY-----
+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
+-----END RSA PRIVATE KEY-----
+`;
