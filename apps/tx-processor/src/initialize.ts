@@ -14,9 +14,6 @@ import { Signer, formatEther, parseUnits } from "ethers";
 export async function initialize() {
   log.debug(' --- Initializing processing --- ');
 
-  // We have to load (and cache) signers before setting
-  // the GOOGLE_APPLICATION_CREDENTIALS env variable below
-  // to ensure prodtest loads from the right location
   const signer = await getSigner('BrokerCAD');
   await getSigner('BrokerTransferAssistant');
 
@@ -30,11 +27,7 @@ export async function initialize() {
   log.debug(`Initialized contract to address: ${await contract.getAddress()}`);
 
   // Set to broker service account for Firestore Access
-  // Must be done after connecting the signer abov
-  if (process.env.BROKER_SERVICE_ACCOUNT)
-    process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.BROKER_SERVICE_ACCOUNT;
-
-  await FirestoreInit();
+  await FirestoreInit({ service: 'BrokerServiceAccount' });
   RbcStore.initialize();
   ConfigStore.initialize();
 
