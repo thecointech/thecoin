@@ -4,7 +4,6 @@
 **/coverage/
 **/dist/
 **/obj/
-/secrets
 **/vscode-chrome-debug-userdatadir
 **/.vs/
 **/.webpack/
@@ -25,8 +24,8 @@
 **/.DS_Store
 **/src/semantic/semantic
 **/semantic.css
-**/*secret*
 **/.firebase/hosting.*.cache
+**/*.secrets.*
 
 # VS cache files
 .dtbcache.v2

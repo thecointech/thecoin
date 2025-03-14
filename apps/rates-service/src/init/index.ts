@@ -9,10 +9,10 @@ export async function init() {
   // Init luxon to use the right timezone
   Settings.defaultZone = 'America/New_York';
   // connect to DB
-  if (process.env.RATES_SERVICE_ACCOUNT) {
-    process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.RATES_SERVICE_ACCOUNT;
-  }
-  await initdb({ project: 'rates-service' });
+  await initdb({
+    service: 'RatesServiceAccount',
+    project: 'rates-service'
+  });
 
   // Assume development is dev:live
   if (process.env.NODE_ENV === 'development') {

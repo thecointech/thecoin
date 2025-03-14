@@ -21,12 +21,6 @@ firebase.initializeApp({
   projectId: process.env.TCCC_FIRESTORE_PROJECT_ID,
 });
 
-
-export type BrowserInit = {
-  username: string,
-  password: string
-}
-
 export const init = async () =>
 {
   log.debug('Connecting client-side db');

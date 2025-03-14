@@ -2,6 +2,8 @@ import { getClient } from "./client";
 
 export enum SecretKey {
   VqaApiKey = "VqaApiKey",
+  RatesServiceAccount = "RatesServiceAccount",
+  BrokerServiceAccount = "BrokerServiceAccount",
 }
 export type SecretKeyType = keyof typeof SecretKey;
 
@@ -29,7 +31,7 @@ globalThis.__tc_secretCache = new Map<SecretKeyType, string>();
 export async function getSecret(name: SecretKeyType) {
   const client = await getClient();
   if (globalThis.__tc_secretCache.has(name)) {
-    return globalThis.__tc_secretCache.get(name);
+    return globalThis.__tc_secretCache.get(name)!;
   }
   const id = await nameToId(name);
   if (!id) {

@@ -39,6 +39,7 @@
   },
   "types": "./build/index_common.d.ts",
   "dependencies": {
+    "@thecointech/secrets": "^0.2.135",
     "@thecointech/logging": "^0.2.135"
   },
   "peerDependencies": {
