@@ -10,7 +10,6 @@ const params: ConfigurationParameters = {
 if (process.env.VQA_API_KEY) {
   params.apiKey = process.env.VQA_API_KEY;
 }
-else if (process.env.NODE_ENV === "production")
 
 // Add certificate to config if provided
 if (process.env.VQA_SSL_CERTIFICATE) {

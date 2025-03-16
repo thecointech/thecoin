@@ -3,10 +3,17 @@ export { SecretNotFoundError } from "./getSecrets";
 
 export async function getSecret(name: SecretKeyType) {
   // In development we still use the private key
-  if (name === "UserDataInstructionKeyPrivate") {
-    return Promise.resolve(mock_key);
+  switch (name) {
+    case "UserDataInstructionKeyPrivate":
+      return Promise.resolve(mock_key);
+    // No keys in development mode
+    case "VqaSslCertPublic":
+      return Promise.resolve("");
+    case "VqaSslCertPrivate":
+      return Promise.resolve("");
+    default:
+      return Promise.resolve(`mock-${name}`);
   }
-  return Promise.resolve(`mock-${name}`);
 }
 
 const mock_key = `-----BEGIN RSA PRIVATE KEY-----

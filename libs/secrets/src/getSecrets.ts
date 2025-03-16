@@ -4,7 +4,9 @@ export enum SecretKey {
   VqaApiKey = "VqaApiKey",
   RatesServiceAccount = "RatesServiceAccount",
   BrokerServiceAccount = "BrokerServiceAccount",
-  UserDataInstructionKeyPrivate = "UserDataInstructionKeyPrivate"
+  UserDataInstructionKeyPrivate = "UserDataInstructionKeyPrivate",
+  VqaSslCertPublic = "VqaSslCertPublic",
+  VqaSslCertPrivate = "VqaSslCertPrivate"
 }
 export type SecretKeyType = keyof typeof SecretKey;
 

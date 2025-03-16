@@ -90,3 +90,7 @@ out/
 
 # My stuff
 .cache/
+
+# VQA secrets
+vqa-secrets.json
+

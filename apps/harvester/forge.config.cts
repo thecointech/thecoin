@@ -11,9 +11,11 @@ import { rendererConfig } from '@thecointech/electron-utils/webpack/webpack.rend
 
 import { getCSP } from './config/csp';
 import { DefinePlugin } from 'webpack';
-import { getVqaCert } from './config/vqaCert';
+import { getVqaSecrets } from './config/vqa';
 
 const ForgeExternalsPlugin = require('@timfish/forge-externals-plugin')
+
+const secrets = getVqaSecrets();
 
 // Native modules are marked as external and copied manually
 // in the ForgeExternalsPlugin below.
@@ -30,6 +32,7 @@ const mainConfigMerged = mainConfig({
     new DefinePlugin({
       ['process.env.TC_LOG_FOLDER']: JSON.stringify("false"),
       ['process.env.URL_SEQ_LOGGING']: JSON.stringify("false"),
+      ['process.env.VQA_API_KEY']: JSON.stringify(secrets.vqaApiKey),
     })
   ],
   resolve: {
@@ -46,10 +49,10 @@ const mainConfigMerged = mainConfig({
   externals: nativeModules.concat('@puppeteer/browsers'),
 })
 
-const vqaCert = getVqaCert();
-if (vqaCert) {
+
+if (secrets.vqaCertificate) {
   mainConfigMerged.plugins.push(new DefinePlugin({
-    ['process.env.VQA_SSL_CERTIFICATE']: JSON.stringify(vqaCert),
+    ['process.env.VQA_SSL_CERTIFICATE']: JSON.stringify(secrets.vqaCertificate),
   }))
 }
 
