@@ -15,15 +15,17 @@ export const FieldValue = firebase.firestore.FieldValue;
 // Initialize Firebase
 // firebase.initializeApp(firebaseConfig);
 
-firebase.initializeApp({
-  apiKey: process.env.TCCC_FIRESTORE_API_KEY,
-  authDomain: process.env.TCCC_FIRESTORE_AUTH_DOMAIN,
-  projectId: process.env.TCCC_FIRESTORE_PROJECT_ID,
-});
+export type BrowserInit = {
+  apiKey: string;
+  authDomain: string;
+  projectId: string;
+}
 
-export const init = async () =>
+export const init = async (config: BrowserInit) =>
 {
   log.debug('Connecting client-side db');
+
+  firebase.initializeApp(config);
 
   const auth = firebase.auth();
   var provider = new firebase.auth.GoogleAuthProvider();

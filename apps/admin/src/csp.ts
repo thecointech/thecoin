@@ -1,3 +1,4 @@
+import { getFirebaseConfig } from "./firebaseConfig";
 
 const connectRates = new URL(process.env.URL_SERVICE_RATES ?? "https://localhost").origin
 const connectInfura = process.env.POLYGONSCAN_URL
@@ -8,15 +9,22 @@ const connectFirestore = "https://firestore.googleapis.com"
 //   ? "https://app.3idconnect.org/"
 //   : "https://app-clay.3idconnect.org/";
 
-const appCSP = `
-  default-src 'self';
-  img-src 'self' data: ;
-  script-src 'self' 'unsafe-eval' https://apis.google.com https://firestore.googleapis.com;
-  style-src 'self' 'unsafe-inline' fonts.googleapis.com;
-  connect-src 'self' data: https://oauth2.googleapis.com/token https://www.googleapis.com https://securetoken.googleapis.com ${connectCeramic} ${connectFirestore} ${connectInfura} ${connectRates};
-  font-src 'self' data: fonts.gstatic.com;
-  frame-src https://broker-cad.firebaseapp.com/ https://${process.env.TCCC_FIRESTORE_AUTH_DOMAIN}/;
-`;
+let appCSP = "";
+async function getAppCSP() {
+  // cache & return
+  if (appCSP) return appCSP;
+  const {authDomain} = await getFirebaseConfig();
+  appCSP = `
+    default-src 'self';
+    img-src 'self' data: ;
+    script-src 'self' 'unsafe-eval' https://apis.google.com https://firestore.googleapis.com;
+    style-src 'self' 'unsafe-inline' fonts.googleapis.com;
+    connect-src 'self' data: https://oauth2.googleapis.com/token https://www.googleapis.com https://securetoken.googleapis.com ${connectCeramic} ${connectFirestore} ${connectInfura} ${connectRates};
+    font-src 'self' data: fonts.gstatic.com;
+    frame-src https://broker-cad.firebaseapp.com/ https://${authDomain}/;
+  `;
+  return appCSP;
+}
 
 const devtoolsCSP = `
   default-src 'self';
@@ -29,9 +37,9 @@ const defaultCSP = `
   default-src 'self';
 `
 
-export function getCSP(url: URL) {
+export async function getCSP(url: URL) {
   switch (url.host) {
-    case `localhost:3002`: return appCSP;
+    case `localhost:3002`: return await getAppCSP();
     case 'devtools': return devtoolsCSP;
     default: return defaultCSP;
   }

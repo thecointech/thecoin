@@ -5,6 +5,7 @@
 import { NodeInit } from './index_node';
 import { EmulatorInit } from './index_emulator';
 import { MockedInit } from './index_mocked';
+import { BrowserInit } from './index_browser';
 
 export * from './types';
 export * from './store';
@@ -13,7 +14,8 @@ export * from './store';
 // exported are not defined by this file, but the platforms
 export { FieldValue, Timestamp } from '@google-cloud/firestore';
 
-export type InitParams = MockedInit|EmulatorInit|NodeInit;
+export type InitParams = MockedInit|EmulatorInit|NodeInit|BrowserInit;
+export type { BrowserInit } from './index_browser';
 
 // Define type of init function here, all versions must comply to this.
 export async function init(_params?: InitParams) { return false; }
