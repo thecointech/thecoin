@@ -2,6 +2,7 @@ import http from 'http';
 import { log } from '@thecointech/logging';
 import open from "open";
 import type { OAuth2Client } from 'google-auth-library';
+import { getAuthConfig } from './authConfig';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = [
@@ -24,7 +25,7 @@ export async function getNewTokens(oAuth2Client: OAuth2Client) {
 }
 
 /** Get code to be swapped for token */
-export function getCode(url: string) {
+export async function getCode(url: string) {
   log.debug(`Begin OAuth process: ${url}`);
   try {
     open(url);
@@ -32,13 +33,14 @@ export function getCode(url: string) {
   catch {
     log.debug(`Please go to:\n${url}`);
   }
+  const authConfig = await getAuthConfig();
 
   return new Promise<string>((resolve, reject) => {
 
     const server = http.createServer(async (req, res) => {
       if (!req.url)
         return;
-      const path = new URL(req.url, process.env.TX_GMAIL_CLIENT_URI);
+      const path = new URL(req.url, authConfig.Uri);
       if (path.pathname == '/gauth') {
         clearTimeout(serverTimeout);
         const code = path.searchParams.get('code');
@@ -52,13 +54,13 @@ export function getCode(url: string) {
         } else {
           log.debug('Auth Failed: No code present');
           res.end('Invalid code');
-          reject();
+          reject(new Error("Invalid code"));
         }
       } else {
         res.statusCode = 404;
         res.end();
       }
-    }).listen(Number(process.env.TX_GMAIL_CLIENT_LISTENER_PORT), "localhost", () => log.debug("Waiting for code"));
+    }).listen(authConfig.ListenerPort, "localhost", () => log.debug("Waiting for code"));
 
     // Give a 10 minute timeout, then throw
     const serverTimeout = setTimeout(() => {

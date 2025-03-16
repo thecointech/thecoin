@@ -14,6 +14,15 @@ import { Signer, formatEther, parseUnits } from "ethers";
 export async function initialize() {
   log.debug(' --- Initializing processing --- ');
 
+  // Set to broker service account for Firestore Access
+  await FirestoreInit({ service: 'BrokerServiceAccount' });
+  RbcStore.initialize();
+  ConfigStore.initialize();
+
+  let token = await ConfigStore.get("gmail.token");
+  token = await gmail.initialize(token);
+  await ConfigStore.set("gmail.token", token);
+
   const signer = await getSigner('BrokerCAD');
   await getSigner('BrokerTransferAssistant');
 
@@ -25,15 +34,6 @@ export async function initialize() {
   await verifyEtherReserves(signer);
   await verifyCoinReserves(signer, contract);
   log.debug(`Initialized contract to address: ${await contract.getAddress()}`);
-
-  // Set to broker service account for Firestore Access
-  await FirestoreInit({ service: 'BrokerServiceAccount' });
-  RbcStore.initialize();
-  ConfigStore.initialize();
-
-  let token = await ConfigStore.get("gmail.token");
-  token = await gmail.initialize(token);
-  await ConfigStore.set("gmail.token", token);
 
   log.debug('Init complete');
   return contract;
