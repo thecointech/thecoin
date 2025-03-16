@@ -1,7 +1,7 @@
 {
-  "name": "@thecointech/secrets",
+  "name": "@thecointech/secrets-google",
   "version": "0.2.135",
-  "description": "The Coin: Secrets Management",
+  "description": "The Coin: Secrets Management for GAE Cloud",
   "type": "module",
   "keywords": [
     "TheCoin",
@@ -13,7 +13,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
-    "directory": "libs/secrets"
+    "directory": "libs/secrets-google"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
@@ -31,19 +31,10 @@
       "development": "./build/index_mock.js",
       "devlive": "./build/index_mock.js",
       "default": "./build/index.js"
-    },
-    "./live": "./build/index.js"
-  },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./build/index.d.ts"
-      ]
     }
   },
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@bitwarden/sdk-napi": "^1.0.0",
-    "dotenv": "^10.0.0"
+    "@google-cloud/secret-manager": "^5.3.0"
   }
 }

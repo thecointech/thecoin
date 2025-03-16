@@ -10859,6 +10859,7 @@ __metadata:
   dependencies:
     "@thecointech/jestutils": "npm:^0.2.135"
     "@thecointech/logging": "npm:^0.2.135"
+    "@thecointech/secrets": "npm:^0.2.135"
     firestore-jest-mock: "https://github.com/thecointech/firestore-jest-mock#f4145e6f28c02419ec5e338a6f5a424ab189986c"
   peerDependencies:
     "@google-cloud/firestore": "*"
@@ -11039,12 +11040,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/secrets@workspace:libs/secrets":
+"@thecointech/secrets-google@workspace:libs/secrets-google":
+  version: 0.0.0-use.local
+  resolution: "@thecointech/secrets-google@workspace:libs/secrets-google"
+  dependencies:
+    "@google-cloud/secret-manager": "npm:^5.3.0"
+  languageName: unknown
+  linkType: soft
+
+"@thecointech/secrets@npm:^0.2.135, @thecointech/secrets@workspace:libs/secrets":
   version: 0.0.0-use.local
   resolution: "@thecointech/secrets@workspace:libs/secrets"
   dependencies:
     "@bitwarden/sdk-napi": "npm:^1.0.0"
-    "@types/bunyan": "npm:^1.8.6"
     dotenv: "npm:^10.0.0"
   languageName: unknown
   linkType: soft
@@ -11106,7 +11114,6 @@ __metadata:
   resolution: "@thecointech/signers@workspace:libs/signers"
   dependencies:
     "@ethers-ext/signer-ledger": "npm:^6.0.0-beta.1"
-    "@google-cloud/secret-manager": "npm:^5.3.0"
     "@ledgerhq/hw-transport-node-hid": "npm:^6.28.6"
     "@thecointech/electron-utils": "npm:^0.2.135"
     "@thecointech/ethers-provider": "npm:^0.2.135"
@@ -11540,6 +11547,7 @@ __metadata:
   dependencies:
     "@thecointech/jestutils": "npm:^0.2.135"
     "@thecointech/logging": "npm:^0.2.135"
+    "@thecointech/secrets": "npm:^0.2.135"
     "@thecointech/types": "npm:^0.2.135"
     base32: "npm:^0.0.7"
     decimal.js-light: "npm:^2.5.1"

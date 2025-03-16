@@ -12,12 +12,12 @@ declare global {
 }
 
 
-export async function getClient() {
+export async function getClient(config?: ConfigType) {
   if (globalThis.__tc_secretClient) {
     return globalThis.__tc_secretClient;
   }
   globalThis.__tc_secretClient = (async () => {
-    return await createClient();
+    return await createClient(config);
   })();
   return globalThis.__tc_secretClient;
 }
