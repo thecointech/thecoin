@@ -1,4 +1,4 @@
-import { getClient } from "./client";
+import { getClient } from "./client.js";
 
 export enum SecretKey {
   VqaApiKey = "VqaApiKey",

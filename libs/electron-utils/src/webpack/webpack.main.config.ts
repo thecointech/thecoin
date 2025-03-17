@@ -1,9 +1,9 @@
 import type { Configuration } from 'webpack';
-import merge from 'webpack-merge';
+import { merge } from 'webpack-merge';
 //@ts-ignore
 import getMocks from '@thecointech/setenv/webpack';
-import { rules } from './webpack.rules';
-import { env, commonBase } from './webpack.common';
+import { rules } from './webpack.rules.js';
+import { env, commonBase } from './webpack.common.js';
 
 export const baseOptions: Configuration = {
   /**

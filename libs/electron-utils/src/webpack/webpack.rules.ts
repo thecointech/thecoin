@@ -1,7 +1,7 @@
 import type { ModuleOptions } from 'webpack';
 //@ts-ignore
 import less_loaders from '@thecointech/site-semantic-theme/webpack.less';
-import { configFile } from './webpack.common';
+import { configFile } from './webpack.common.js';
 
 export const rules: Required<ModuleOptions>['rules'] = [
   // Add support for native node modules

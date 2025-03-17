@@ -1,22 +1,19 @@
-import type { ForgeConfig } from '@electron-forge/shared-types';
+// @ts-check
 import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { MakerZIP } from '@electron-forge/maker-zip';
 import { MakerDeb } from '@electron-forge/maker-deb';
 import { utils } from '@electron-forge/core';
-// import { MakerRpm } from '@electron-forge/maker-rpm';
-// import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives';
 import { WebpackPlugin } from '@electron-forge/plugin-webpack';
 import { mainConfig } from '@thecointech/electron-utils/webpack/webpack.main.config';
 import { rendererConfig } from '@thecointech/electron-utils/webpack/webpack.renderer.config';
+import { getCSP } from './config/csp.js';
+import webpack from 'webpack';
+import { getSecret } from '@thecointech/secrets';
+import path from 'path';
+import { writeFileSync } from 'fs';
+import ForgeExternalsPlugin from '@timfish/forge-externals-plugin';
 
-import { getCSP } from './config/csp';
-import { DefinePlugin } from 'webpack';
-import { getVqaSecrets } from './config/vqa';
-
-const ForgeExternalsPlugin = require('@timfish/forge-externals-plugin')
-
-const secrets = getVqaSecrets();
-
+console.log("Loading Webpack");
 // Native modules are marked as external and copied manually
 // in the ForgeExternalsPlugin below.
 const nativeModules = [
@@ -27,12 +24,14 @@ const nativeModules = [
   'puppeteer-extra',
 ]
 
+const vqaApiKey = await getSecret("VqaApiKey");
+
 const mainConfigMerged = mainConfig({
   plugins: [
-    new DefinePlugin({
+    new webpack.DefinePlugin({
       ['process.env.TC_LOG_FOLDER']: JSON.stringify("false"),
       ['process.env.URL_SEQ_LOGGING']: JSON.stringify("false"),
-      ['process.env.VQA_API_KEY']: JSON.stringify(secrets.vqaApiKey),
+      ['process.env.VQA_API_KEY']: JSON.stringify(vqaApiKey),
     })
   ],
   resolve: {
@@ -49,14 +48,14 @@ const mainConfigMerged = mainConfig({
   externals: nativeModules.concat('@puppeteer/browsers'),
 })
 
-
-if (secrets.vqaCertificate) {
-  mainConfigMerged.plugins.push(new DefinePlugin({
-    ['process.env.VQA_SSL_CERTIFICATE']: JSON.stringify(secrets.vqaCertificate),
+const vqaCertificate = await getSecret("VqaSslCertPublic");
+if (vqaCertificate) {
+  mainConfigMerged.plugins.push(new webpack.DefinePlugin({
+    ['process.env.VQA_SSL_CERTIFICATE']: JSON.stringify(vqaCertificate),
   }))
 }
 
-const config: ForgeConfig = {
+const config = {
   buildIdentifier: process.env.CONFIG_NAME,
   packagerConfig: {
     asar: false,
@@ -64,7 +63,7 @@ const config: ForgeConfig = {
     //   unpack: './node_modules/node-notifier/**/*'
     // },
     icon: 'assets/appicon',
-    appBundleId: utils.fromBuildIdentifier({ beta: 'com.beta.harvester', prod: 'com.harvester' }) as unknown as string
+    appBundleId: utils.fromBuildIdentifier({ beta: 'com.beta.harvester', prod: 'com.harvester' }),
     // extraResource: [
     //   // Include our assets outside of the asar
     //   // file so we can reference them by absolute path
@@ -107,16 +106,31 @@ const config: ForgeConfig = {
       loggerPort: 9004,
     }),
   ],
+  hooks: {
+    postStart: async (config) => {
+      console.log("postStart executing");
+      const mainPackageJsonPath = path.join(".webpack", 'main', 'package.json'); // Adjust as needed
+      writeFileSync(mainPackageJsonPath, JSON.stringify({ type: 'commonjs' }, null, 2));
+    },
+    // preStart: async (config) => {
+    //   console.log("preStart executing");
+    //   const mainPackageJsonPath = path.join(".webpack", 'main', 'package.json'); // Adjust as needed
+    //   writeFileSync(mainPackageJsonPath, JSON.stringify({ type: 'commonjs' }, null, 2));
+    // }
+  }
 };
 
 // Only add in externals if packaging
 if (process.env.npm_lifecycle_event != 'dev') {
   config.plugins.push(
+    //@ts-ignore
     new ForgeExternalsPlugin({
       externals: nativeModules,
       includeDeps: true,
     })
   )
 }
+
+console.log("Finished")
 
 export default config;
