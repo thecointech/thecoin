@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { GetContract } from './contract';
-import { describe } from '@thecointech/jestutils';
+import { describe, IfPolygonscanLive } from '@thecointech/jestutils';
 import { getEnvVars } from "@thecointech/setenv";
 import { NormalizeAddress } from '@thecointech/utilities';
 import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider/web';
@@ -34,4 +34,4 @@ describe('Testing provider', () => {
     expect(logs[0].args.value).toEqual(allTxs[0].value);
   })
 
-}, prodVars.POLYGONSCAN_API_KEY != undefined);
+}, await IfPolygonscanLive());

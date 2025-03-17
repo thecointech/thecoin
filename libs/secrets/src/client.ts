@@ -22,7 +22,7 @@ export async function getClient(config?: ConfigType) {
   return globalThis.__tc_secretClient;
 }
 
-type ConfigType = "prod"|"prodtest"
+export type ConfigType = "prod"|"prodtest"
 export async function createClient(config?: ConfigType) {
   const settings: ClientSettings = {
     apiUrl: "https://api.bitwarden.com",

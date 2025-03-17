@@ -11,12 +11,16 @@ const initBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0");
 export class Erc20Provider extends EtherscanProvider {
 
   constructor() {
-    // For now we exclusively use hte polygon network
+    // For now we exclusively use the polygon network
     const network = process.env.DEPLOY_POLYGON_NETWORK;
     const chainId = process.env.DEPLOY_POLYGON_NETWORK_ID;
+    //
     const apiKey = process.env.POLYGONSCAN_API_KEY;
 
-    if (!network || !apiKey || !chainId) throw new Error("Cannot use Provider without network & key");
+    if (!network || !apiKey || !chainId) {
+      // NOTE!  Check that POLYGONSCAN_API_KEY has been loaded
+      throw new Error("Cannot use Provider without network & key");
+    }
     if (network == "matic-amoy") {
       const override = new Network(network, BigInt(chainId))
       override.attachPlugin(

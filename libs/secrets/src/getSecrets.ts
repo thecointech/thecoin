@@ -8,7 +8,9 @@ export enum SecretKey {
   VqaSslCertPublic = "VqaSslCertPublic",
   VqaSslCertPrivate = "VqaSslCertPrivate",
   TxGmailClient = "TxGmailClient",
-  FirebaseConfig = "FirebaseConfig"
+  FirebaseConfig = "FirebaseConfig",
+  PolygonscanApiKey = "PolygonscanApiKey",
+  EtherscanApiKey = "EtherscanApiKey",
 }
 export type SecretKeyType = keyof typeof SecretKey;
 
