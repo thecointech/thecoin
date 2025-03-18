@@ -1,19 +1,33 @@
 import type { Configuration } from 'webpack';
-import { rules } from './webpack.rules';
-import { plugins } from './webpack.plugins';
+import { rules } from './webpack.rules.js';
+import { plugins } from './webpack.plugins.js';
 import path from 'path';
-import merge from 'webpack-merge';
-//@ts-ignore
+import { merge } from 'webpack-merge';
+//@ts-ignore (TODO: convert setenv to typescript/module)
 import getMocks from '@thecointech/setenv/webpack';
-import { env, commonBase } from './webpack.common';
+import { env, commonBase } from './webpack.common.js';
+import webpack from 'webpack';
+import { getSecret } from '@thecointech/secrets';
 
-const rootPath = path.join(__dirname, '../../../..');
+const rootPath = path.join(process.cwd(), '../..');
+
+function resolveModulePath(moduleSpecifier: string) {
+  const moduleUrl = import.meta.resolve(moduleSpecifier);
+  return new URL(moduleUrl).pathname; // Extract the pathname
+}
+
+const polygonScanApiKey = await getSecret("PolygonscanApiKey");
 
 const baseOptions: Configuration = {
   module: {
     rules,
   },
-  plugins,
+  plugins: [
+    ...plugins,
+    new webpack.DefinePlugin({
+      "process.env.POLYGONSCAN_API_KEY": JSON.stringify(polygonScanApiKey),
+    }),
+  ],
   externals: {
     electron: 'commonjs electron'
   },
@@ -22,9 +36,9 @@ const baseOptions: Configuration = {
     conditionNames: [env.CONFIG_NAME, "electron", "browser", "webpack", "import", "default"],
     modules: [path.resolve(process.cwd(), 'src'), 'node_modules'],
     fallback: {
-      "crypto": require.resolve("crypto-browserify"),
-      "stream": require.resolve("stream-browserify"),
-      "path": require.resolve("path-browserify"),
+      "crypto": resolveModulePath("crypto-browserify"),
+      "stream": resolveModulePath("stream-browserify"),
+      "path": resolveModulePath("path-browserify"),
       "http": false,
       "fs": false,
       "vm": false,

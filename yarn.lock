@@ -1656,6 +1656,55 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bitwarden/sdk-napi-darwin-arm64@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@bitwarden/sdk-napi-darwin-arm64@npm:1.0.0"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@bitwarden/sdk-napi-darwin-x64@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@bitwarden/sdk-napi-darwin-x64@npm:1.0.0"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@bitwarden/sdk-napi-linux-x64-gnu@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@bitwarden/sdk-napi-linux-x64-gnu@npm:1.0.0"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@bitwarden/sdk-napi-win32-x64-msvc@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@bitwarden/sdk-napi-win32-x64-msvc@npm:1.0.0"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@bitwarden/sdk-napi@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@bitwarden/sdk-napi@npm:1.0.0"
+  dependencies:
+    "@bitwarden/sdk-napi-darwin-arm64": "npm:1.0.0"
+    "@bitwarden/sdk-napi-darwin-x64": "npm:1.0.0"
+    "@bitwarden/sdk-napi-linux-x64-gnu": "npm:1.0.0"
+    "@bitwarden/sdk-napi-win32-x64-msvc": "npm:1.0.0"
+  dependenciesMeta:
+    "@bitwarden/sdk-napi-darwin-arm64":
+      optional: true
+    "@bitwarden/sdk-napi-darwin-x64":
+      optional: true
+    "@bitwarden/sdk-napi-linux-x64-gnu":
+      optional: true
+    "@bitwarden/sdk-napi-win32-x64-msvc":
+      optional: true
+  checksum: 186bd725601f1eaee3c89972e07731dbe91a6adaf465dc7157d3f420a7918dd7734acf54568a04effd1f097ed87ca20b84749ad9928a100aa466485c77e01308
+  languageName: node
+  linkType: hard
+
 "@browser-bunyan/console-formatted-stream@npm:^1.8.0":
   version: 1.8.0
   resolution: "@browser-bunyan/console-formatted-stream@npm:1.8.0"
@@ -10768,7 +10817,7 @@ __metadata:
     "@vercel/webpack-asset-relocator-loader": "npm:1.7.3"
     css-loader: "npm:^6.0.0"
     fork-ts-checker-webpack-plugin: "npm:^7.2.13"
-    node-loader: "npm:^2.0.0"
+    node-loader: "npm:^2.1.0"
     style-loader: "npm:^3.0.0"
     ts-loader: "npm:^9.2.2"
   languageName: unknown
@@ -10810,6 +10859,7 @@ __metadata:
   dependencies:
     "@thecointech/jestutils": "npm:^0.2.135"
     "@thecointech/logging": "npm:^0.2.135"
+    "@thecointech/secrets": "npm:^0.2.135"
     firestore-jest-mock: "https://github.com/thecointech/firestore-jest-mock#f4145e6f28c02419ec5e338a6f5a424ab189986c"
   peerDependencies:
     "@google-cloud/firestore": "*"
@@ -10990,6 +11040,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@thecointech/secrets-google@workspace:libs/secrets-google":
+  version: 0.0.0-use.local
+  resolution: "@thecointech/secrets-google@workspace:libs/secrets-google"
+  dependencies:
+    "@google-cloud/secret-manager": "npm:^5.3.0"
+  languageName: unknown
+  linkType: soft
+
+"@thecointech/secrets@npm:^0.2.135, @thecointech/secrets@workspace:libs/secrets":
+  version: 0.0.0-use.local
+  resolution: "@thecointech/secrets@workspace:libs/secrets"
+  dependencies:
+    "@bitwarden/sdk-napi": "npm:^1.0.0"
+    dotenv: "npm:^10.0.0"
+  languageName: unknown
+  linkType: soft
+
 "@thecointech/service-tapcap-supplier@workspace:apps/tapcap-supplier":
   version: 0.0.0-use.local
   resolution: "@thecointech/service-tapcap-supplier@workspace:apps/tapcap-supplier"
@@ -11003,7 +11070,6 @@ __metadata:
   resolution: "@thecointech/setenv@workspace:libs/setenv"
   dependencies:
     dotenv: "npm:^10.0.0"
-    dotenv-expand: "npm:^12.0.1"
   bin:
     run-env: ./bin/run-env.mjs
   languageName: unknown
@@ -11047,7 +11113,6 @@ __metadata:
   resolution: "@thecointech/signers@workspace:libs/signers"
   dependencies:
     "@ethers-ext/signer-ledger": "npm:^6.0.0-beta.1"
-    "@google-cloud/secret-manager": "npm:^5.3.0"
     "@ledgerhq/hw-transport-node-hid": "npm:^6.28.6"
     "@thecointech/electron-utils": "npm:^0.2.135"
     "@thecointech/ethers-provider": "npm:^0.2.135"
@@ -11253,7 +11318,7 @@ __metadata:
     "@types/less": "npm:^3.0.1"
     "@types/lodash": "npm:^4.14.170"
     "@types/luxon": "npm:3.3.0"
-    "@types/node": "npm:20.11.0"
+    "@types/node": "npm:22.13.10"
     "@types/prop-types": "npm:15.7.1"
     "@types/react": "npm:16.14.0"
     "@types/react-dom": "npm:16.9.14"
@@ -11481,6 +11546,7 @@ __metadata:
   dependencies:
     "@thecointech/jestutils": "npm:^0.2.135"
     "@thecointech/logging": "npm:^0.2.135"
+    "@thecointech/secrets": "npm:^0.2.135"
     "@thecointech/types": "npm:^0.2.135"
     base32: "npm:^0.0.7"
     decimal.js-light: "npm:^2.5.1"
@@ -12552,12 +12618,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:20.11.0":
-  version: 20.11.0
-  resolution: "@types/node@npm:20.11.0"
+"@types/node@npm:22.13.10":
+  version: 22.13.10
+  resolution: "@types/node@npm:22.13.10"
   dependencies:
-    undici-types: "npm:~5.26.4"
-  checksum: 560aa850dfccb83326f9cba125459f6c3fb0c71ec78f22c61e4d248f1df78bd25fd6792cef573dfbdc49c882f8e38bb1a82ca87e0e28ff2513629c704c2b02af
+    undici-types: "npm:~6.20.0"
+  checksum: a3865f9503d6f718002374f7b87efaadfae62faa499c1a33b12c527cfb9fd86f733e1a1b026b80c5a0e4a965701174bc3305595a7d36078aa1abcf09daa5dee9
   languageName: node
   linkType: hard
 
@@ -20153,15 +20219,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv-expand@npm:^12.0.1":
-  version: 12.0.1
-  resolution: "dotenv-expand@npm:12.0.1"
-  dependencies:
-    dotenv: "npm:^16.4.5"
-  checksum: 51996bfa670073d7a441b8fbed26ac991026fba2c05e9a937a898ce7d2a2e7166f7b6ec4eb8879e576defb5d1ad399ed1300db8f803d6977577fea55b4d82dac
-  languageName: node
-  linkType: hard
-
 "dotenv-webpack@npm:^7.0.3":
   version: 7.1.1
   resolution: "dotenv-webpack@npm:7.1.1"
@@ -20184,13 +20241,6 @@ __metadata:
   version: 16.3.2
   resolution: "dotenv@npm:16.3.2"
   checksum: a87d62cef0810b670cb477db1a24a42a093b6b428c9e65c185ce1d6368ad7175234b13547718ba08da18df43faae4f814180cc0366e11be1ded2277abc4dd22e
-  languageName: node
-  linkType: hard
-
-"dotenv@npm:^16.4.5":
-  version: 16.4.7
-  resolution: "dotenv@npm:16.4.7"
-  checksum: be9f597e36a8daf834452daa1f4cc30e5375a5968f98f46d89b16b983c567398a330580c88395069a77473943c06b877d1ca25b4afafcdd6d4adb549e8293462
   languageName: node
   linkType: hard
 
@@ -30111,7 +30161,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loader-utils@npm:^2.0.0, loader-utils@npm:^2.0.4, loader-utils@npm:~2.0.0":
+"loader-utils@npm:^2.0.0, loader-utils@npm:^2.0.3, loader-utils@npm:^2.0.4, loader-utils@npm:~2.0.0":
   version: 2.0.4
   resolution: "loader-utils@npm:2.0.4"
   dependencies:
@@ -32851,14 +32901,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-loader@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "node-loader@npm:2.0.0"
+"node-loader@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "node-loader@npm:2.1.0"
   dependencies:
-    loader-utils: "npm:^2.0.0"
+    loader-utils: "npm:^2.0.3"
   peerDependencies:
     webpack: ^5.0.0
-  checksum: ceacf34ccb05c5efe7fbed2224dfa42ec9dd8e5bd70e9dc90bb618ee6372cc1ff54edc60d1d71f4ff52c4b4db0ac410caa6ae74d90bbc68b88a70bba5f75c727
+  checksum: 9f641336a0f22ca9b239c101e0343c4111ece400bb40bcbbf92f48e062c5ba4cc657d0c321b8806d1d79edd0910b17507af84c6b0a7d00735f808263b262876b
   languageName: node
   linkType: hard
 
@@ -42713,6 +42763,13 @@ __metadata:
   version: 5.26.5
   resolution: "undici-types@npm:5.26.5"
   checksum: bb673d7876c2d411b6eb6c560e0c571eef4a01c1c19925175d16e3a30c4c428181fb8d7ae802a261f283e4166a0ac435e2f505743aa9e45d893f9a3df017b501
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~6.20.0":
+  version: 6.20.0
+  resolution: "undici-types@npm:6.20.0"
+  checksum: 68e659a98898d6a836a9a59e6adf14a5d799707f5ea629433e025ac90d239f75e408e2e5ff086afc3cace26f8b26ee52155293564593fbb4a2f666af57fc59bf
   languageName: node
   linkType: hard
 

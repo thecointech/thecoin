@@ -5,7 +5,7 @@ import { ConnectContract } from '@thecointech/contract-core';
 import { getCurrentState } from '@thecointech/tx-statemachine';
 import { DateTime } from 'luxon';
 import { getFirestore } from '@thecointech/firestore';
-import data from './withdraw.test.mockdb.json' assert {type: "json"};
+import data from './withdraw.test.mockdb.json' with { type: "json" }
 import { RbcApi } from '@thecointech/rbcapi';
 import { getSigner } from '@thecointech/signers';
 

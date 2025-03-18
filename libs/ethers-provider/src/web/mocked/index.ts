@@ -1,9 +1,9 @@
 import { BlockTag, Filter, AbstractProvider, Transaction, type LogParams, type Log, zeroPadValue } from 'ethers';
 import { ERC20Response } from '../erc20response';
-import transferFrom from './logs-transfer-from.json' assert { type: 'json' };
-import transferTo from './logs-transfer-to.json' assert { type: 'json' };
-import exactFrom from './logs-exact-from.json' assert { type: 'json' };
-import exactTo from './logs-exact-to.json' assert { type: 'json' };
+import transferFrom from './logs-transfer-from.json' with { type: 'json' };
+import transferTo from './logs-transfer-to.json' with { type: 'json' };
+import exactFrom from './logs-exact-from.json' with { type: 'json' };
+import exactTo from './logs-exact-to.json' with { type: 'json' };
 import { getSourceCode } from '../plugins_devlive';
 
 export class Erc20Provider extends AbstractProvider {

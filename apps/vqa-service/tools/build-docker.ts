@@ -1,36 +1,39 @@
 import { spawnSync } from 'child_process';
-import { copyFileSync, existsSync, mkdirSync, rmdirSync } from 'fs';
+import { existsSync, mkdirSync, rmdirSync, writeFileSync } from 'fs';
+import { getSecret, SecretNotFoundError } from '@thecointech/secrets';
 
 // Build arguments array
 const buildArgs = ['build', '-t', 'vqa-service'];
 
 // Check if SSL certificates are configured
-const useSSL = process.env.VQA_SSL_CERTIFICATE_FILE && process.env.VQA_SSL_KEY_FILE;
+const sslPublic = await getSecret("VqaSslCertPublic")
+const sslPrivate = await getSecret("VqaSslCertPrivate")
+const useSSL = !!(sslPublic && sslPrivate);
 console.log('Use SSL:', useSSL);
 
 if (useSSL) {
   // Create temporary copies of the certificates in the build context
-  const certFile = process.env.VQA_SSL_CERTIFICATE_FILE!;
-  const keyFile = process.env.VQA_SSL_KEY_FILE!;
+  // (NOTE: This hasn't been verified yet)
+  mkdirSync('./temp', { recursive: true });
+  writeFileSync('./temp/cert.pem', sslPublic);
+  writeFileSync('./temp/key.pem', sslPrivate);
 
-  if (existsSync(certFile) && existsSync(keyFile)) {
-    // Copy files to build context
-    mkdirSync('./temp', { recursive: true });
-    copyFileSync(certFile, './temp/cert.pem');
-    copyFileSync(keyFile, './temp/key.pem');
-
-    buildArgs.push(
-      '--build-arg', 'SSL_CERT_FILE=temp/cert.pem',
-      '--build-arg', 'SSL_KEY_FILE=temp/key.pem'
-    );
-  } else {
-    console.warn('SSL certificates not found:', { certFile, keyFile });
-  }
+  buildArgs.push(
+    '--build-arg', 'SSL_CERT_FILE=temp/cert.pem',
+    '--build-arg', 'SSL_KEY_FILE=temp/key.pem'
+  );
 }
 
 // TODO: This key should be supplied when creating the container, rather than at build time.
-if (process.env.VQA_API_KEY) {
-  buildArgs.push('--build-arg', `API_ACCESS_KEY=${process.env.VQA_API_KEY}`);
+try {
+  const apiKey = await getSecret('VqaApiKey');
+  buildArgs.push('--build-arg', `API_ACCESS_KEY=${apiKey}`);
+} catch (e) {
+  if (e instanceof SecretNotFoundError) {
+    console.warn('VQA API key not found');
+  } else {
+    throw e;
+  }
 }
 
 // Add the build context

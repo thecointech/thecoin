@@ -2,6 +2,7 @@
  * COMMON WEBPACK CONFIGURATION
  */
 import { getEnvFiles } from '@thecointech/setenv';
+import { getSecret } from '@thecointech/secrets';
 import { join, resolve as _resolve } from 'path';
 import webpack from 'webpack';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
@@ -18,7 +19,7 @@ const packageFile = join(projectRoot, 'package.json');
 
 const envFiles = getEnvFiles(configName);
 const version = require(packageFile).version;
-
+const polygonscanApiKey = await getSecret("PolygonscanApiKey");
 
 export default {
   externals: ['dtrace-provider', 'mv', 'os', 'source-map-support', 'secret-manager', 'http'],
@@ -70,6 +71,7 @@ export default {
     new webpack.DefinePlugin({
       __VERSION__: JSON.stringify(version),
       BROWSER: true,
+      'process.env.POLYGONSCAN_API_KEY': JSON.stringify(polygonscanApiKey),
     }),
     ...envFiles.map(path => new Dotenv({ path, ignoreStub: true })),
 

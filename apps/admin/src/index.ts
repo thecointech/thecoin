@@ -6,9 +6,10 @@ import { log } from '@thecointech/logging';
 import gmail from '@thecointech/tx-gmail';
 import * as signers from '@thecointech/signers/electron';
 import contextMenu from 'electron-context-menu';
-
 // We need to pull in environment vars to load signers
 import { getEnvVars } from '@thecointech/setenv';
+import { getFirebaseConfig } from './firebaseConfig';
+
 const vars = getEnvVars();
 process.env = {
   ...vars,
@@ -79,13 +80,25 @@ app.whenReady()
   // Initialize node-side tx-gmail
   gmail.bridge(ipcMain);
   signers.bridge(ipcMain);
+
+  // Set up secrets handler
+  ipcMain.handle('getFirebaseConfig', async (_event) => {
+    try {
+      return await getFirebaseConfig();
+    } catch (err) {
+      log.error(`Error getting secret FirebaseConfig:`, err);
+      throw err;
+    }
+  });
+
   log.info("App Ready");
 
-  session.defaultSession.webRequest.onHeadersReceived({ urls: ["*://localhost:*/*"] }, (details, callback) => {
+  session.defaultSession.webRequest.onHeadersReceived({ urls: ["*://localhost:*/*"] }, async (details, callback) => {
+    const csp = await getCSP(new URL(details.url))
     callback({
       responseHeaders: {
         ...details.responseHeaders,
-        "Content-Security-Policy": getCSP(new URL(details.url))
+        "Content-Security-Policy": csp
       }
     })
   })

@@ -1,0 +1,40 @@
+{
+  "name": "@thecointech/secrets-google",
+  "version": "0.2.135",
+  "description": "The Coin: Secrets Management for GAE Cloud",
+  "type": "module",
+  "keywords": [
+    "TheCoin",
+    "secrets"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/secrets-google"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "build": "run -T tsc -b",
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "exports": {
+    ".": {
+      "development": "./build/index_mock.js",
+      "devlive": "./build/index_mock.js",
+      "default": "./build/index.js"
+    }
+  },
+  "types": "./build/index.d.ts",
+  "dependencies": {
+    "@google-cloud/secret-manager": "^5.3.0"
+  }
+}

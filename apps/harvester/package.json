@@ -5,10 +5,7 @@
   "private": true,
   "description": "Automatically harvest TheCoin",
   "main": ".webpack/main",
-  "config": {
-    "forge": "./forge.config"
-  },
-  "type": "commonjs",
+  "type": "module",
   "keywords": [],
   "author": {
     "name": "Stephen Taylor",
@@ -21,19 +18,16 @@
     "prod:test": "yarn run -T cross-env CONFIG_NAME=prodtest yarn _start:dbg",
     "prod:beta": "yarn run -T cross-env CONFIG_NAME=prodbeta yarn _start:dbg",
     "prod": "yarn run -T cross-env CONFIG_NAME=prod yarn _start:dbg",
-    "start": "electron-forge start",
     "package": "electron-forge package",
-    "make:prod": "yarn run -T cross-env CONFIG_NAME=prodbeta electron-forge make",
-    "make:prodtest": "yarn run -T cross-env CONFIG_NAME=prodtest electron-forge make",
-    "make:validation": "yarn run -T cross-env CONFIG_NAME=prodbeta NOTIFY_ON_MODAL_ENCOUNTER=true electron-forge make",
+    "make:prod": "yarn run -T cross-env CONFIG_NAME=prodbeta yarn _make",
+    "make:prodtest": "yarn run -T cross-env CONFIG_NAME=prodtest yarn _make",
+    "make:validation": "yarn run -T cross-env CONFIG_NAME=prodbeta NOTIFY_ON_MODAL_ENCOUNTER=true yarn _make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
     "build": "run -T tsc -b",
     "test": "yarn run :jest",
-    "scraper:record": "yarn run-env ./src/scraper/main.ts --record",
-    "vqa:landings": "yarn run -T run-env ./src/scraper/puppeteer/fetchLandings.ts",
-    "vqa:automap": "yarn run -T run-env ./src/automap/main.ts",
-    "_start:dbg": "yarn run -T cross-env NODE_ENV=development RUN_SCRAPER_HEADLESS=false HARVESTER_PROFILE_FOLDER=\"./.cache/$CONFIG_NAME\" electron-forge start"
+    "_start:dbg": "yarn run -T cross-env NODE_ENV=development RUN_SCRAPER_HEADLESS=false HARVESTER_PROFILE_FOLDER=\"./.cache/$CONFIG_NAME\" yarn run-env $(yarn bin electron-forge) start",
+    "_make": "electron-forge make"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.2.0",

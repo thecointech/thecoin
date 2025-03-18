@@ -1,7 +1,7 @@
 import Crypto from "crypto";
 import { CertifiedTransferRequest, UberTransfer } from "@thecointech/types";
 import { getBytes, solidityPackedKeccak256 } from 'ethers';
-import { log } from "@thecointech/logging";
+import { getSecret } from "@thecointech/secrets";
 
 export type EncryptedPacket = {
   encryptedPacket: string;
@@ -51,20 +51,8 @@ export function decrypt(privateKey: string, value: string) {
 export async function decryptTo<T>(encrypted: EncryptedPacket): Promise<T|null>
 {
   // NOTE: server does not have private key, and will not pass this step
-  const privateKeyPath = process.env.USERDATA_INSTRUCTION_KEY_PRIVATE_FILE;
-  if (!privateKeyPath) {
-    return null;
-  }
-
-  // This file can be loaded within Admin electron browser, so
-  // we delay import (fs) to allow loading in that environment
-  const { readFileSync } = await import('fs');
-  const privateKey = readFileSync(privateKeyPath, 'utf8');
-  if (!privateKey) {
-    log.error("Attempting to decrypt instructions, but no private key is present");
-    return null;
-  }
-
+  // TODO!!!! Validate server behaves correctly!
+  const privateKey = await getSecret("UserDataInstructionKeyPrivate")
   const asString = decrypt(privateKey, encrypted.encryptedPacket);
   return JSON.parse(asString) as T;
 }

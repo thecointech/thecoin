@@ -8,17 +8,13 @@
   "homepage": "http://thecoin.io",
   "license": "GPL-3.0-or-later",
   "main": ".webpack/main",
-  "config": {
-    "forge": "./config.forge"
-  },
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "build": "run -T tsc -b",
     "dev": "yarn electron-forge start",
     "_dev:live": "run -T cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn dev",
     "prod:beta": "run -T cross-env CONFIG_NAME=prod yarn dev",
-    "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",

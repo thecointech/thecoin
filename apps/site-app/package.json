@@ -15,7 +15,7 @@
     "preanalyze": "yarn clean:analyze",
     "analyze": "node ./internals/scripts/analyze.js",
     "build": "run -T run-s prebuild build:src",
-    "build:src": "run-env exec=webpack --config ../../libs/site-base/internal/webpack/webpack.prod.mjs --progress",
+    "build:src": "run-env ./internals/build.ts",
     "prebuild": "run -T run-p 'prebuild:*'",
     "prebuild:semantic": "node ./internals/buildSemantic.mjs",
     "prebuild:i18n": "run-s extract compile",

@@ -6,7 +6,7 @@ import { GetTransferSigner } from '@thecointech/utilities/VerifiedTransfer'
 import { getTransferSigner as UberSigner } from '@thecointech/utilities/UberTransfer'
 import { ValidateError } from '@tsoa/runtime';
 import { getBrokerCADAddress } from '../status';
-import constants from '../status/constant.json' assert { type: 'json' };
+import constants from '../status/constant.json' with { type: 'json' };
 import { GetContract } from '../signer/Wallet';
 import { DateTime } from 'luxon';
 

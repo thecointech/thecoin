@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { describe } from '@thecointech/jestutils';
+import { describe, IfPolygonscanLive } from '@thecointech/jestutils';
 import { getEnvVars } from "@thecointech/setenv";
 import { getModifier } from '../internal/common';
 import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider/web';
@@ -24,4 +24,4 @@ describe('Works with remote plugins', () => {
     const rfiat = modifier(1000e2, 0);
     expect(rfiat.toNumber()).toBe(1000e2);
   });
-}, prodVars.POLYGONSCAN_API_KEY != undefined);
+}, await IfPolygonscanLive());

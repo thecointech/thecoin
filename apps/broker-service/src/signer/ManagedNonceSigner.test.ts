@@ -1,5 +1,4 @@
 import { guardFn, ManagedNonceSigner } from "./ManagedNonceSigner";
-import { getProvider } from "@thecointech/ethers-provider";
 import { init } from "@thecointech/firestore";
 import { Wallet } from 'ethers';
 import hre from 'hardhat';

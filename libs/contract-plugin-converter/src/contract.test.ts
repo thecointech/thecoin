@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { describe } from '@thecointech/jestutils';
+import { describe, IfPolygonscanLive } from '@thecointech/jestutils';
 import { getEnvVars } from "@thecointech/setenv";
 
 const prodVars = getEnvVars('prodtest');
@@ -31,4 +31,4 @@ describe('Testing provider', () => {
     // expect(logs.length).toEqual(allTxs.length);
   })
 
-}, prodVars.POLYGONSCAN_API_KEY != undefined);
+}, await IfPolygonscanLive());

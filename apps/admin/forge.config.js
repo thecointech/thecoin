@@ -1,4 +1,3 @@
-import type { ForgeConfig } from '@electron-forge/shared-types';
 import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { MakerZIP } from '@electron-forge/maker-zip';
 import { MakerDeb } from '@electron-forge/maker-deb';
@@ -7,8 +6,10 @@ import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-nati
 import { WebpackPlugin } from '@electron-forge/plugin-webpack';
 import { mainConfig } from '@thecointech/electron-utils/webpack/webpack.main.config';
 import { rendererConfig } from '@thecointech/electron-utils/webpack/webpack.renderer.config';
+import path from 'path';
+import { writeFileSync } from 'fs';
 
-const config: ForgeConfig = {
+const config = {
   packagerConfig: {
     asar: true,
   },
@@ -35,6 +36,13 @@ const config: ForgeConfig = {
       loggerPort: 9002,
     }),
   ],
+  hooks: {
+    postStart: async (config) => {
+      console.log("postStart executing");
+      const mainPackageJsonPath = path.join(".webpack", 'main', 'package.json'); // Adjust as needed
+      writeFileSync(mainPackageJsonPath, JSON.stringify({ type: 'commonjs' }, null, 2));
+    },
+  },
 };
 
 export default config;

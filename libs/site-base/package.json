@@ -36,6 +36,7 @@
   "exports": {
     ".": "./build/index.js",
     "./internal/server": "./internal/server/index.mjs",
+    "./internal/build": "./internal/build.ts",
     "./jest.config": "./jest.config.js",
     "./*": [
       "./build/*.js",

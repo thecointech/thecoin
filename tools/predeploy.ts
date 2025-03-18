@@ -4,8 +4,9 @@ import { readFileSync, writeFileSync } from "fs";
 import { spawn } from 'child_process';
 import { promisify } from 'util';
 import { exec as exec_cb } from 'child_process';
-const exec = promisify(exec_cb);
+import { getSecret } from "@thecointech/secrets";
 
+const exec = promisify(exec_cb);
 console.log(`Preparing deploy env: ${process.env.CONFIG_NAME}`);
 
 // If we are pre-deploy, we require an explicit environment
@@ -57,15 +58,17 @@ export function gCloudDeploy() {
   return ShellCmd(deploy);
 }
 
-export async function copyEnvVarsLocal(outYamlFile: string, additionalVars: Record<string, string> = {}) {
+export async function copyEnvVarsLocal(outYamlFile: string, additionalVars: Record<string, string> = {}, additionalSecrets: SecretKeyType[] = []) {
 
   // Get version from package.json
   const packageJson = JSON.parse(readFileSync(`${process.cwd()}/package.json`, 'utf8'));
 
+  const secrets = await Promise.all(additionalSecrets.map(key => getSecret(key)));
   const env = {
     TC_APP_VERSION: packageJson.version,
     ...getEnvVars(),
     ...additionalVars,
+    ...Object.fromEntries(secrets.map((s, i) => [additionalSecrets[i], s])),
   }
   const yamlVars = Object.entries(env)
     .filter(([key]) => !key.startsWith('#'))
@@ -87,7 +90,7 @@ export async function copyEnvVarsLocal(outYamlFile: string, additionalVars: Reco
 
 export async function copyNpmTokenHere(folder: URL) {
   // First, check we actually have a token
-  const token = process.env.GITHUB_PACKAGE_TOKEN;
+  const token = await getSecret("GithubPackageToken");
   if (!token) throw new Error('Cannot deploy without GH access token');
 
   const noToken = readFileSync(new URL('.npmrc', import.meta.url), 'utf8');

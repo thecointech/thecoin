@@ -1,6 +1,6 @@
 import { DefaultApi, LandingApi, LoginApi, TwofaApi, IntentApi, ModalApi, SummaryApi, CreditDetailsApi, EtransferApi, Configuration, ConfigurationParameters } from "@thecointech/vqa";
 import https from 'https';
-import fs from 'fs';
+
 
 // Create configuration object with optional certificate
 const params: ConfigurationParameters = {
