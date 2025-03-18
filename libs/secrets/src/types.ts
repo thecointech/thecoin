@@ -19,5 +19,9 @@ export enum SecretKey {
 
   PinataApiKey = "PinataApiKey",
   PinataApiSecret = "PinataApiSecret",
+
+  InfuraProjectId = "InfuraProjectId",
+
+  CeramicSeed = "CeramicSeed",
 }
 export type SecretKeyType = keyof typeof SecretKey;

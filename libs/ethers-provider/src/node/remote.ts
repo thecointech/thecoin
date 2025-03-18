@@ -15,19 +15,19 @@ function getInfuraNetwork(deployTo: Network) {
 
 async function getProjectId() {
   try {
-    return await getSecret("InfuraApiKey");
+    return await getSecret("InfuraProjectId");
   } catch (e) {
     // In some circumstances (CI) we do not have a projectId
     // There is a default one, so no real biggy
     return process.env.INFURA_PROJECT_ID;
   }
 }
+const projectId = await getProjectId();
 
 export const getProvider = (deployTo: Network = "POLYGON") => {
   const network = getInfuraNetwork(deployTo)
   if (!network)
     throw new Error("Missing deploy network, cannot connect to blockchain");
-  const projectId = await getProjectId();
   return new InfuraProvider(network, projectId);
 }
 
