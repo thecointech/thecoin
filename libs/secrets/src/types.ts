@@ -16,5 +16,8 @@ export enum SecretKey {
 
   MailjetApiKey = "MailjetApiKey",
   MailjetApiSecret = "MailjetApiSecret",
+
+  PinataApiKey = "PinataApiKey",
+  PinataApiSecret = "PinataApiSecret",
 }
 export type SecretKeyType = keyof typeof SecretKey;
