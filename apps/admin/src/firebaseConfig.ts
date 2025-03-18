@@ -6,14 +6,12 @@ export async function getFirebaseConfig(): Promise<BrowserInit> {
     // In development just return an empty object
     return {} as BrowserInit;
   }
-  console.log('Fetching Secrets');
   const raw = await getSecret("FirebaseConfig");
   const parsed = JSON.parse(raw);
   const { ApiKey, AuthDomain, ProjectId } = parsed;
   if (!ApiKey || !AuthDomain || !ProjectId) {
     throw new Error("Invalid FirebaseConfig");
   }
-  console.log('Fetched Secrets');
   return {
     apiKey: ApiKey,
     authDomain: AuthDomain,
