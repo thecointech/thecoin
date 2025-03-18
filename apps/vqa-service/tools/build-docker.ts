@@ -8,7 +8,7 @@ const buildArgs = ['build', '-t', 'vqa-service'];
 // Check if SSL certificates are configured
 const sslPublic = await getSecret("VqaSslCertPublic")
 const sslPrivate = await getSecret("VqaSslCertPrivate")
-const useSSL = sslPublic && sslPrivate;
+const useSSL = !!(sslPublic && sslPrivate);
 console.log('Use SSL:', useSSL);
 
 if (useSSL) {
