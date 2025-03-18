@@ -1,5 +1,5 @@
 import { spawnSync } from 'child_process';
-import { copyFileSync, existsSync, mkdirSync, rmdirSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, rmdirSync, writeFileSync } from 'fs';
 import { getSecret, SecretNotFoundError } from '@thecointech/secrets';
 
 // Build arguments array
