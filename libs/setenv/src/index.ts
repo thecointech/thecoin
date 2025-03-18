@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from 'fs';
 import { projectUrl } from '@thecointech/setenv/projectUrl';
 import { fileURLToPath } from 'url';
 import de from 'dotenv';
-import dexpand from 'dotenv-expand'
+import { expand } from './expand';
 
 const projectRoot = process.cwd();
 const LOG_NAME = basename(projectRoot);
@@ -47,28 +47,24 @@ export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
   return files;
 }
 
-export function getEnvVars(cfgName?: string, onlyPublic?: boolean) : Record<string, string> {
+export function getEnvVars(cfgName?: string, onlyPublic?: boolean) : Record<string, string|undefined> {
   const files = getEnvFiles(cfgName, onlyPublic);
-  return files
-    .map(file => readFileSync(file))
-    .reduce((acc, contents) => ({
-    ...{
-      ...dexpand.expand({
-        parsed: de.parse(contents),
-      }).parsed
-    },
+  const raw = files.map(file => readFileSync(file, "ascii"));
+  const parsed = raw.map(r => de.parse(r));
+  const combined = parsed.reduce((acc, ex) => ({
+    ...ex,
     ...acc, // later files have lower priority, do not overwrite existing values
   }), {
     LOG_NAME,
   });
+  return expand(combined);
 }
 
 export function loadEnvVars(cfgName?: string) {
   // Load all environment files.
   const files = getEnvFiles(cfgName);
-  files.forEach(path => dexpand.expand(
-    de.config({path: fileURLToPath(path)})
-  ))
+  files.forEach(path => de.config({path: fileURLToPath(path)}));
+  expand(process.env);
 
     //  Set default name for logging
   if (!process.env.LOG_NAME) {

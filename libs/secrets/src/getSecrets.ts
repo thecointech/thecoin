@@ -18,10 +18,16 @@ declare global {
 globalThis.__tc_secretCache = new Map<SecretKeyType, string>();
 
 export async function getSecret(name: SecretKeyType, config?: ConfigType) {
-  const client = await getClient(config);
+  // First, check if this secret has been added to env
+  if (process.env[name]) {
+    return process.env[name]!;
+  }
+  // next, check the cache
   if (globalThis.__tc_secretCache.has(name)) {
     return globalThis.__tc_secretCache.get(name)!;
   }
+  // finally, fetch from the server
+  const client = await getClient(config);
   const id = await nameToId(name);
   if (!id) {
     throw new SecretNotFoundError(name);
