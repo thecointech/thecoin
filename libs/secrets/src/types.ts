@@ -13,5 +13,8 @@ export enum SecretKey {
   EtherscanApiKey = "EtherscanApiKey",
   FinhubApiKey = "FinhubApiKey",
   TradierApiKey = "TradierApiKey",
+
+  MailjetApiKey = "MailjetApiKey",
+  MailjetApiSecret = "MailjetApiSecret",
 }
 export type SecretKeyType = keyof typeof SecretKey;
