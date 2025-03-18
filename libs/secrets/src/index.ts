@@ -1,2 +1,4 @@
-export * from "./client.js";
-export * from "./getSecrets.js";
+export * from "./client";
+export * from "./getSecrets";
+export * from "./types";
+export * from "./errors";

@@ -1,24 +1,6 @@
-import { getClient } from "./client.js";
-
-export enum SecretKey {
-  VqaApiKey = "VqaApiKey",
-  RatesServiceAccount = "RatesServiceAccount",
-  BrokerServiceAccount = "BrokerServiceAccount",
-  UserDataInstructionKeyPrivate = "UserDataInstructionKeyPrivate",
-  VqaSslCertPublic = "VqaSslCertPublic",
-  VqaSslCertPrivate = "VqaSslCertPrivate",
-  TxGmailClient = "TxGmailClient",
-  FirebaseConfig = "FirebaseConfig",
-  PolygonscanApiKey = "PolygonscanApiKey",
-  EtherscanApiKey = "EtherscanApiKey",
-}
-export type SecretKeyType = keyof typeof SecretKey;
-
-export class SecretNotFoundError extends Error {
-  constructor(name: SecretKeyType) {
-    super(`Secret ${name} not found`);
-  }
-}
+import { getClient } from "./client";
+import { SecretNotFoundError } from "./errors";
+import type { SecretKeyType, ConfigType } from "./types";
 
 // Note on projects
 // There is not an easy way to differentiate between
@@ -35,8 +17,8 @@ declare global {
 }
 globalThis.__tc_secretCache = new Map<SecretKeyType, string>();
 
-export async function getSecret(name: SecretKeyType) {
-  const client = await getClient();
+export async function getSecret(name: SecretKeyType, config?: ConfigType) {
+  const client = await getClient(config);
   if (globalThis.__tc_secretCache.has(name)) {
     return globalThis.__tc_secretCache.get(name)!;
   }

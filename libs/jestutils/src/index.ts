@@ -24,4 +24,4 @@ export { skippable_describe as describe }
 // (for example, heavy CPU work, billed resources, or sending emails etc)
 export const IsManualRun = process.argv.find(v => v === "--testNamePattern") !== undefined
 
-export { IfPolygonscanLive } from './polygonscan';
+export { IfPolygonscanLive, ifSecret } from './polygonscan';

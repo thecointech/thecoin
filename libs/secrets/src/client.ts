@@ -2,6 +2,8 @@ import { BitwardenClient, ClientSettings, DeviceType } from "@bitwarden/sdk-napi
 import path from "path";
 import { existsSync, readFileSync } from "fs";
 import dotenv from "dotenv";
+import { SecretClientEnvNotFound, SecretClientKeyNotFound } from "./errors";
+import type { ConfigType } from "./types";
 
 type BWClientWithOrgId = BitwardenClient & {
   organizationId: string;
@@ -22,7 +24,6 @@ export async function getClient(config?: ConfigType) {
   return globalThis.__tc_secretClient;
 }
 
-export type ConfigType = "prod"|"prodtest"
 export async function createClient(config?: ConfigType) {
   const settings: ClientSettings = {
     apiUrl: "https://api.bitwarden.com",
@@ -33,14 +34,14 @@ export async function createClient(config?: ConfigType) {
 
   const basePath = process.env.THECOIN_ENVIRONMENTS;
   if (!basePath) {
-    throw new Error("Missing THECOIN_ENVIRONMENTS environment variable");
+    throw new SecretClientEnvNotFound();
   }
   // Read our .env file
-  const envName = config || process.env.CONFIG_NAME || "dev";
+  const envName = config || process.env.CONFIG_NAME || "development";
   const envFileName = `bitwarden.${envName}.env`;
   const envPath = path.join(basePath, envFileName);
   if (!existsSync(envPath)) {
-    throw new Error(`Missing ${envFileName} file`);
+    throw new SecretClientKeyNotFound(envName as ConfigType);
   }
   const raw =  readFileSync(envPath, "utf-8");
   const parsed = dotenv.parse(raw);

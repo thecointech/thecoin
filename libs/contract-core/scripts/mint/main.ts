@@ -1,4 +1,4 @@
-import data from './mint.json' assert {type: "json"};
+import data from './mint.json' with { type: "json" }
 import { DateTime, Settings } from 'luxon';
 import Decimal from 'decimal.js-light';
 import { processItems } from './process';

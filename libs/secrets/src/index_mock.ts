@@ -1,5 +1,5 @@
-import { SecretKeyType } from "./getSecrets";
-export { SecretNotFoundError } from "./getSecrets";
+import type { SecretKeyType } from "./types";
+export * from './errors'
 
 export async function getSecret(name: SecretKeyType) {
   // In development we still use the private key

@@ -1,4 +1,5 @@
 import { jest } from "@jest/globals";
+import { SecretNotFoundError } from './errors';
 
 const mockSecrets = {
   get: jest.fn<any>(),
@@ -15,7 +16,7 @@ jest.unstable_mockModule('./client', () => ({
 }));
 
 // Import after mocking
-const { getSecret, SecretKey, SecretNotFoundError } = await import('./getSecrets');
+const { getSecret } = await import('./getSecrets');
 
 describe("verify secrets", () => {
   beforeEach(() => {
@@ -35,28 +36,28 @@ describe("verify secrets", () => {
 
   it("caches secret values", async () => {
     // First call should hit the API
-    const secret1 = await getSecret(SecretKey.VqaApiKey);
+    const secret1 = await getSecret("VqaApiKey");
     expect(secret1).toBe("test-secret-value");
     expect(mockSecrets.get).toHaveBeenCalledTimes(1);
     expect(mockSecrets.list).toHaveBeenCalledTimes(1);
 
     // Second call should use cache
-    const secret2 = await getSecret(SecretKey.VqaApiKey);
+    const secret2 = await getSecret("VqaApiKey");
     expect(secret2).toBe("test-secret-value");
     expect(mockSecrets.get).toHaveBeenCalledTimes(1); // No additional API calls
     expect(mockSecrets.list).toHaveBeenCalledTimes(1);
 
     // Verify cache contents
-    expect(global.__tc_secretCache.get(SecretKey.VqaApiKey)).toBe("test-secret-value");
+    expect(global.__tc_secretCache.get("VqaApiKey")).toBe("test-secret-value");
   });
 
   it("caches name to id mapping", async () => {
     // First call should fetch mapping
-    await getSecret(SecretKey.VqaApiKey);
+    await getSecret("VqaApiKey");
     expect(mockSecrets.list).toHaveBeenCalledTimes(1);
 
     // Second call should use cached mapping
-    await getSecret(SecretKey.VqaApiKey);
+    await getSecret("VqaApiKey");
     expect(mockSecrets.list).toHaveBeenCalledTimes(1); // No additional list calls
 
     // Verify mapping cache
@@ -69,7 +70,7 @@ describe("verify secrets", () => {
     mockSecrets.list.mockResolvedValue({ data: [] });
 
     // Should throw when secret not found in mapping
-    await expect(getSecret(SecretKey.VqaApiKey))
+    await expect(getSecret("VqaApiKey"))
       .rejects
       .toThrow(SecretNotFoundError);
   });
@@ -78,7 +79,7 @@ describe("verify secrets", () => {
     mockSecrets.get.mockRejectedValue(new Error("API Error"));
 
     // Should propagate API errors
-    await expect(getSecret(SecretKey.VqaApiKey))
+    await expect(getSecret("VqaApiKey"))
       .rejects
       .toThrow("API Error");
   });

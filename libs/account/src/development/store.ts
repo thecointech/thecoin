@@ -1,4 +1,4 @@
-import testWallet from './testAccount1.json' assert {type: "json"};
+import testWallet from './testAccount1.json' with { type: "json" }
 import { Wallet } from 'ethers';
 import { ConnectContract } from '@thecointech/contract-core';
 import { getPluginDetails } from '@thecointech/contract-plugins';
