@@ -1,7 +1,8 @@
 import { jest } from '@jest/globals';
 import { loadFromDisk } from './fromDisk';
-import { describe, ifSecret } from '@thecointech/jestutils';
+import { describe } from '@thecointech/jestutils';
 import { getEnvVars } from '@thecointech/setenv';
+import { ifSecret } from '@thecointech/secrets/jestutils';
 
 jest.setTimeout(5 * 60 * 1000);
 

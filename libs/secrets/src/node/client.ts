@@ -51,8 +51,6 @@ export async function createClient(config?: ConfigType) {
   const client = new BitwardenClient(settings, 2) as BWClientWithOrgId;
   client.organizationId = parsed.ORGANIZATION_ID;
 
-  console.log("loaded :", JSON.stringify(parsed));;
-
   // Authenticating using a machine account access token
   await client.auth().loginAccessToken(accessToken, stateFile);
   return client;

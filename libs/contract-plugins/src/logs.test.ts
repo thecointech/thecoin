@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { describe } from '@thecointech/jestutils';
-import { IfPolygonscanLive } from '@thecointech/jestutils/polygonscan';
+import { IfPolygonscanLive } from '@thecointech/secrets/jestutils';
 import { getPluginLogs } from './logs';
 import { getEnvVars } from '@thecointech/setenv';
 import { getProvider } from '@thecointech/ethers-provider/Erc20Provider/web';

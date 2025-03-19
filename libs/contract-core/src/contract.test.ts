@@ -1,8 +1,9 @@
 import { jest } from '@jest/globals';
 import { GetContract } from './contract';
-import { describe, IfPolygonscanLive } from '@thecointech/jestutils';
+import { describe } from '@thecointech/jestutils';
 import { getEnvVars } from "@thecointech/setenv";
 import { NormalizeAddress } from '@thecointech/utilities';
+import { IfPolygonscanLive } from '@thecointech/secrets/jestutils';
 import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider/web';
 
 const prodVars = getEnvVars('prod');

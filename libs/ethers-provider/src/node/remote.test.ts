@@ -1,14 +1,10 @@
-import { getEnvVars } from '@thecointech/setenv';
 import { describe } from '@thecointech/jestutils';
+import { IfPolygonscanLive } from "@thecointech/secrets/jestutils";
 import { getProvider } from './remote';
 
 describe('Node Remote provider', () => {
-  const oldEnv = process.env;
+
   it ('Connects to testnet', async () => {
-    process.env = {
-      ...oldEnv,
-      ...getEnvVars('prodtest')
-    };
     const provider = getProvider();
     expect(provider._network.name).toEqual("matic-amoy");
     // Try a connection
@@ -17,10 +13,6 @@ describe('Node Remote provider', () => {
   })
 
   it ('Connects to mainnet', async () => {
-    process.env = {
-      ...oldEnv,
-      ...getEnvVars('prod')
-    };
     const provider = getProvider();
     expect(provider._network.name).toEqual("matic");
     // Try a connection
@@ -41,4 +33,4 @@ describe('Node Remote provider', () => {
     expect(logs.length).toBeGreaterThan(0);
     expect(logs[0].topics[2]).toContain("2fe3cbf59a777e8f4be4e712945ffefc6612d46f");
   })
-}, !!process.env.THECOIN_ENVIRONMENTS)
+}, await IfPolygonscanLive())

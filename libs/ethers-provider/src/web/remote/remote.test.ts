@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { getEnvVars } from '@thecointech/setenv';
+import { IfPolygonscanLive } from "@thecointech/secrets/jestutils";
 import { describe } from '@thecointech/jestutils';
 import { getProvider } from './index';
 
@@ -7,18 +7,12 @@ const contractAddress = "0x34fA894d7fE1FA5FA9d109434345B47DBe3B01fc"
 const fromBlock = 22371135;
 const toBlock = 22371952;
 
-const oldEnv = process.env;
-const setEnv = (env: string) => {
-  process.env = {
-    ...oldEnv,
-    ...getEnvVars(env)
-  };
-}
-
 jest.setTimeout(60000);
 describe('Web Remote provider', () => {
   it ('Connects to testnet', async () => {
-    setEnv('prodtest');
+    if (!await IfPolygonscanLive("prodtest")) {
+      return;
+    }
     const provider = getProvider();
     expect(provider.network.name).toEqual("matic-amoy");
     // Try a connection
@@ -30,7 +24,9 @@ describe('Web Remote provider', () => {
   })
 
   it ('Connects to mainnet', async () => {
-    setEnv('prod');
+    if (!await IfPolygonscanLive("prod")) {
+      return;
+    }
     const provider = getProvider();
     expect(provider.network.name).toEqual("matic");
     // Try a connection
@@ -43,7 +39,9 @@ describe('Web Remote provider', () => {
 
   it ('fetches ERC20 history', async () => {
     // Fetch logs
-    setEnv('prod');
+    if (!await IfPolygonscanLive("prod")) {
+      return;
+    }
     const provider = getProvider();
     const logs = await provider.getERC20History({
       address: process.env.WALLET_BrokerCAD_ADDRESS,
@@ -57,7 +55,9 @@ describe('Web Remote provider', () => {
 
   it ('fetches logs from Etherscan', async () => {
     // Fetch logs
-    setEnv('prod');
+    if (!await IfPolygonscanLive("prod")) {
+      return;
+    }
     const provider = getProvider();
     const logsFrom = await provider.getLogs({
       address: contractAddress,
@@ -83,4 +83,4 @@ describe('Web Remote provider', () => {
     // This should be the same as GetERC20History results
     expect(logsFrom.length + logsTo.length).toEqual(10);
 })
-}, !!process.env.THECOIN_ENVIRONMENTS)
+},  await IfPolygonscanLive())
