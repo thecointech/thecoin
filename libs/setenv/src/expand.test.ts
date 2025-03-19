@@ -81,6 +81,46 @@ describe('expand', () => {
     });
   });
 
+  it ('can handle multiple expansions', () => {
+    const input = {
+      REPLACE: 'with',
+      FULL_VALUE: "some ${REPLACE} text replaced ${REPLACE} REPLACE"
+    };
+    expand(input);
+    expect(input).toEqual({
+      REPLACE: 'with',
+      FULL_VALUE: 'some with text replaced with REPLACE'
+    });
+  });
+
+  it('handles multiple replacements of varying lengths correctly', () => {
+    const input = {
+      SHORT: 'x',
+      LONG: 'something_much_longer',
+      TEST: '${SHORT} middle ${LONG} ${SHORT}'
+    };
+    expand(input);
+    expect(input).toEqual({
+      SHORT: 'x',
+      LONG: 'something_much_longer',
+      TEST: 'x middle something_much_longer x'
+    });
+  });
+
+  it ('handles nested variables correctly', () => {
+    const input = {
+      BASE: 'base',
+      OUTER: "${INNER} - ${BASE} - ${INNER}",
+      INNER: '${BASE}',
+    };
+    expand(input);
+    expect(input).toEqual({
+      INNER: 'base',
+      OUTER: 'base - base - base',
+      BASE: 'base',
+    });
+  });
+
   it('can expand directly onto process.env', () => {
     process.env.TEST_VAR = 'test-value';
     process.env.CONFIG_VALUE = '${TEST_VAR}';
