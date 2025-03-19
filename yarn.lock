@@ -10897,6 +10897,8 @@ __metadata:
 "@thecointech/jestutils@npm:^0.2.135, @thecointech/jestutils@workspace:libs/jestutils":
   version: 0.0.0-use.local
   resolution: "@thecointech/jestutils@workspace:libs/jestutils"
+  dependencies:
+    "@thecointech/secrets": "npm:*"
   languageName: unknown
   linkType: soft
 
@@ -11048,7 +11050,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/secrets@npm:^0.2.135, @thecointech/secrets@workspace:libs/secrets":
+"@thecointech/secrets@npm:*, @thecointech/secrets@npm:^0.2.135, @thecointech/secrets@workspace:libs/secrets":
   version: 0.0.0-use.local
   resolution: "@thecointech/secrets@workspace:libs/secrets"
   dependencies:
