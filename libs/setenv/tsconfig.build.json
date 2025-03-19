@@ -1,8 +1,15 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../tsconfig.libs.json",
   "compilerOptions": {
     "outDir": "./build/",
+    "tsBuildInfoFile": "./build/.buildinfo",
+    "rootDir": "./src/",
+    // This package is responsible for starting the node processes that other packages use
+    // This means that it can't use the custom file resolution we are using elsewhere to avoid
+    // moving to fully-specified files
     "module": "NodeNext",
     "moduleResolution": "nodenext",
   },
+  "include": ["src/**/*"],
+  "exclude": ["**/*.test.*", "**/__mocks__/**", "**/*.stories.*"],
 }
