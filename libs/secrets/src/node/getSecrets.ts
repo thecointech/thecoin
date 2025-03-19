@@ -1,6 +1,6 @@
 import { getClient } from "./client";
-import { SecretNotFoundError } from "./errors";
-import type { SecretKeyType, ConfigType } from "./types";
+import { SecretNotFoundError } from "../errors";
+import type { SecretKeyType, ConfigType } from "../types";
 
 // Note on projects
 // There is not an easy way to differentiate between

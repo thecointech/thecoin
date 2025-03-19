@@ -2,8 +2,8 @@ import { BitwardenClient, ClientSettings, DeviceType } from "@bitwarden/sdk-napi
 import path from "path";
 import { existsSync, readFileSync } from "fs";
 import dotenv from "dotenv";
-import { SecretClientEnvNotFound, SecretClientKeyNotFound } from "./errors";
-import type { ConfigType } from "./types";
+import { SecretClientEnvNotFound, SecretClientKeyNotFound } from "../errors";
+import type { ConfigType } from "../types";
 
 type BWClientWithOrgId = BitwardenClient & {
   organizationId: string;
@@ -50,6 +50,8 @@ export async function createClient(config?: ConfigType) {
 
   const client = new BitwardenClient(settings, 2) as BWClientWithOrgId;
   client.organizationId = parsed.ORGANIZATION_ID;
+
+  console.log("loaded :", JSON.stringify(parsed));;
 
   // Authenticating using a machine account access token
   await client.auth().loginAccessToken(accessToken, stateFile);

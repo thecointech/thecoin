@@ -33,7 +33,7 @@ const baseOptions: Configuration = {
   },
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
-    conditionNames: [env.CONFIG_NAME, "electron", "browser", "webpack", "import", "default"],
+    conditionNames: [env.CONFIG_NAME!, "electron", "browser", "webpack", "import", "default"],
     modules: [path.resolve(process.cwd(), 'src'), 'node_modules'],
     fallback: {
       "crypto": resolveModulePath("crypto-browserify"),

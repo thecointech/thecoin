@@ -1,4 +1,4 @@
-import { getEnvVars, loadEnvVars } from "./index"
+import { getEnvVars, loadEnvVars } from "./index.js"
 
 it ("correctly expands variables when read", () => {
     const env = getEnvVars("development");

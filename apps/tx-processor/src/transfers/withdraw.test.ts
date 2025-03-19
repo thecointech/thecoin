@@ -11,9 +11,11 @@ import { getSigner } from '@thecointech/signers';
 
 let ev: any = undefined;
 jest.unstable_mockModule('@thecointech/utilities/Encrypt', () => ({
+  encrypt: jest.fn(),
+}));
+jest.unstable_mockModule('@thecointech/utilities/Decrypt', () => ({
   GetHash: () => "12345678901234567890123456789012",
   decryptTo: jest.fn().mockImplementation(() => ev.decrypted),
-  encrypt: jest.fn(),
 }));
 
 jest.unstable_mockModule('@thecointech/tx-gmail', () => ({

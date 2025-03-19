@@ -24,6 +24,8 @@
     "recordSamples": "yarn run -T cross-env CONFIG_NAME=prod URL_SEQ_LOGGING=false TC_LOG_FOLDER=false run-env tools/recordSamples/recordSamples.ts"
   },
   "dependencies": {
+    "@thecointech/async": "^0.2.135",
+    "@thecointech/logging": "^0.2.135",
     "@web-std/file": "^3.0.3",
     "@xenova/transformers": "^2.14.0",
     "fastest-levenshtein": "^1.0.16",
@@ -35,6 +37,7 @@
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
   "devDependencies": {
+    "@thecointech/jestutils": "^0.2.135",
     "@types/fs-extra": "^11.0.4",
     "@types/pixelmatch": "^5.2.6",
     "@types/pngjs": "^6.0.5"

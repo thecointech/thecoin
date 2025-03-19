@@ -7,8 +7,8 @@ import {assignRoles} from './assignRoles';
 const theCoin = await getSigner("TheCoin");
 const minter = await getSigner("Minter");
 const brokerCAD = await getSigner("BrokerCAD");
-const client1 = await getSigner("client1");
-const client2 = await getSigner("client2");
+const Client1 = await getSigner("Client1");
+const Client2 = await getSigner("Client2");
 
 const tcCore = await ConnectContract(theCoin);
 const mtCore = await ConnectContract(minter);
@@ -21,12 +21,12 @@ export async function randomDistribution() {
     await mtCore.mintCoins(100000 * COIN_EXP, tcAddr, Date.now());
   }
 
-  // if (client1) await seedAccount(tcAddr, await client1.getAddress());
-  // Transfer a constant amount to client1
+  // if (Client1) await seedAccount(tcAddr, await Client1.getAddress());
+  // Transfer a constant amount to Client1
   const ts = DateTime.now().minus({ years: 1}).toMillis();
-  await tcCore.runCloneTransfer(tcAddr, await client1.getAddress(), 200e6, 0, Math.floor(ts));
+  await tcCore.runCloneTransfer(tcAddr, await Client1.getAddress(), 200e6, 0, Math.floor(ts));
   // Transfer a random amount to client 2
-  await seedAccount(tcAddr, await client2.getAddress());
+  await seedAccount(tcAddr, await Client2.getAddress());
   // Also seed TestAccNoT so we can test tx's with a wallet vs a signer
   await seedAccount(tcAddr, "0x445758e37f47b44e05e74ee4799f3469de62a2cb", true);
 

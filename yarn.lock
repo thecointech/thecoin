@@ -10813,6 +10813,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/electron-utils@workspace:libs/electron-utils"
   dependencies:
+    "@thecointech/secrets": "npm:^0.2.135"
     "@thecointech/setenv": "npm:^0.2.135"
     "@vercel/webpack-asset-relocator-loader": "npm:1.7.3"
     css-loader: "npm:^6.0.0"
@@ -10897,8 +10898,6 @@ __metadata:
 "@thecointech/jestutils@npm:^0.2.135, @thecointech/jestutils@workspace:libs/jestutils":
   version: 0.0.0-use.local
   resolution: "@thecointech/jestutils@workspace:libs/jestutils"
-  dependencies:
-    "@thecointech/secrets": "npm:*"
   languageName: unknown
   linkType: soft
 
@@ -10906,6 +10905,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/logging@workspace:libs/logging"
   dependencies:
+    "@thecointech/jestutils": "npm:^0.2.135"
+    "@thecointech/setenv": "npm:^0.2.135"
     "@types/bunyan": "npm:^1.8.6"
     browser-bunyan: "npm:^1.6.3"
     bunyan: "npm:^1.8.13"
@@ -11027,6 +11028,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/scraper@workspace:libs/scraper"
   dependencies:
+    "@thecointech/async": "npm:^0.2.135"
+    "@thecointech/jestutils": "npm:^0.2.135"
+    "@thecointech/logging": "npm:^0.2.135"
     "@types/fs-extra": "npm:^11.0.4"
     "@types/pixelmatch": "npm:^5.2.6"
     "@types/pngjs": "npm:^6.0.5"
@@ -11047,14 +11051,16 @@ __metadata:
   resolution: "@thecointech/secrets-google@workspace:libs/secrets-google"
   dependencies:
     "@google-cloud/secret-manager": "npm:^5.3.0"
+    "@thecointech/jestutils": "npm:^0.2.135"
   languageName: unknown
   linkType: soft
 
-"@thecointech/secrets@npm:*, @thecointech/secrets@npm:^0.2.135, @thecointech/secrets@workspace:libs/secrets":
+"@thecointech/secrets@npm:^0.2.135, @thecointech/secrets@workspace:libs/secrets":
   version: 0.0.0-use.local
   resolution: "@thecointech/secrets@workspace:libs/secrets"
   dependencies:
     "@bitwarden/sdk-napi": "npm:^1.0.0"
+    "@thecointech/jestutils": "npm:^0.2.135"
     dotenv: "npm:^10.0.0"
   languageName: unknown
   linkType: soft
@@ -11071,7 +11077,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/setenv@workspace:libs/setenv"
   dependencies:
-    dotenv: "npm:^10.0.0"
+    dotenv: "npm:^16.4.7"
   bin:
     run-env: ./bin/run-env.mjs
   languageName: unknown
@@ -20243,6 +20249,13 @@ __metadata:
   version: 16.3.2
   resolution: "dotenv@npm:16.3.2"
   checksum: a87d62cef0810b670cb477db1a24a42a093b6b428c9e65c185ce1d6368ad7175234b13547718ba08da18df43faae4f814180cc0366e11be1ded2277abc4dd22e
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:^16.4.7":
+  version: 16.4.7
+  resolution: "dotenv@npm:16.4.7"
+  checksum: be9f597e36a8daf834452daa1f4cc30e5375a5968f98f46d89b16b983c567398a330580c88395069a77473943c06b877d1ca25b4afafcdd6d4adb549e8293462
   languageName: node
   linkType: hard
 

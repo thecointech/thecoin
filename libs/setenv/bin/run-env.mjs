@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { getEnvVars } from "../build/mjs/index.js";
+import { getEnvVars } from "../build/index.js";
 import { spawn } from "child_process";
 import { existsSync } from 'fs';
 import { fileURLToPath } from "url";

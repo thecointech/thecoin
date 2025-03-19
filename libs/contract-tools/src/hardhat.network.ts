@@ -15,9 +15,9 @@ function getLiveNetwork(_type: Network) {
   // before we need to update any contracts
   // (an alternative in the future could also be to add a pre-load
   // script that loads the secrets into the environment)
-  if (!process.env.INFURA_PROJECT_ID) {
-    throw new Error("Missing Infura project ID");
-  }
+  // if (!process.env.INFURA_PROJECT_ID) {
+  //   throw new Error("Missing Infura project ID");
+  // }
   return {
     chainId: parseInt(process.env.DEPLOY_POLYGON_NETWORK_ID!),
     url: `${url}${process.env.INFURA_PROJECT_ID}`,

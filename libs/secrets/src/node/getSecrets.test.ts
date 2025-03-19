@@ -1,5 +1,5 @@
 import { jest } from "@jest/globals";
-import { SecretNotFoundError } from './errors';
+import { SecretNotFoundError } from '../errors';
 
 const mockSecrets = {
   get: jest.fn<any>(),

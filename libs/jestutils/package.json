@@ -38,8 +38,5 @@
         "build/*.d.ts"
       ]
     }
-  },
-  "dependencies": {
-    "@thecointech/secrets": "*"
   }
 }

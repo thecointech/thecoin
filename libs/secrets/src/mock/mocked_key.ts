@@ -1,25 +1,5 @@
-import type { SecretKeyType } from "./types";
-export * from './errors'
 
-export async function getSecret(name: SecretKeyType) {
-  // In development we still use the private key
-  switch (name) {
-    case "UserDataInstructionKeyPrivate":
-      return Promise.resolve(mock_key);
-    // No keys in development mode
-    case "VqaSslCertPublic":
-      return Promise.resolve("");
-    case "VqaSslCertPrivate":
-      return Promise.resolve("");
-    case "CeramicSeed":
-      // Used by devlive for self-hosted ceramic
-      return Promise.resolve("e663239643ed99d36a29bd048717c4e2b4be6c5629b997cae6de6184bf4e92a1")
-    default:
-      return Promise.resolve(`mock-${name}`);
-  }
-}
-
-const mock_key = `-----BEGIN RSA PRIVATE KEY-----
+export const mock_key = `-----BEGIN RSA PRIVATE KEY-----
 MIIG5AIBAAKCAYEArSf1ZxTtxxpaUkZVUm+GWOfMGa9NtjwDN81XgYY3jZ7OkxSK
 amzRFrHmBLgMt1MBrRiyvZfm84YLOIh/o5mV0xc0WHkCvZ4q1xKlME11tWSAsWl+
 yy6tMBWIAFSwp6cengdObbvD8YttUf9T1PoeCys89cOMugr5MBM47WvtulNg1dWO

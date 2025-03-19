@@ -28,9 +28,9 @@ const monthsToRun = 9999;
 // Starting from Jan 1 2022
 // Send a deposit email to
 const tcCore = await GetContract();
-const signer = await getSigner("testDemoAccount");
+const signer = await getSigner("TestDemoAccount");
 const testAddress = await signer.getAddress();
-if (testAddress != process.env.WALLET_testDemoAccount_ADDRESS) {
+if (testAddress != process.env.WALLET_TestDemoAccount_ADDRESS) {
   throw new Error("Invalid demo account address!");
 }
 const brokerAddress = process.env.WALLET_BrokerCAD_ADDRESS!;

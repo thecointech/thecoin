@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from 'fs';
 import { projectUrl } from '@thecointech/setenv/projectUrl';
 import { fileURLToPath } from 'url';
 import de from 'dotenv';
-import { expand } from './expand';
+import { expand } from './expand.js';
 
 const projectRoot = process.cwd();
 const LOG_NAME = basename(projectRoot);

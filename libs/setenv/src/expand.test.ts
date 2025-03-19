@@ -1,4 +1,4 @@
-import { expand } from './expand';
+import { expand } from './expand.js';
 
 describe('expand', () => {
   const originalEnv = process.env;

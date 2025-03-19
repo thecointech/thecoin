@@ -1,4 +1,5 @@
-import { decryptTo, encrypt } from './Encrypt';
+import { encrypt } from './Encrypt';
+import { decryptTo } from './Decrypt';
 
 const testData = {
   test: "data to encrypt"
