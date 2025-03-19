@@ -1,5 +1,5 @@
 import { init_node } from "./node";
-import { describe, IsManualRun } from "@thecointech/jestutils";
+import { describe } from "@thecointech/jestutils";
 import { getEnvVars } from "@thecointech/setenv";
 import { existsSync, rmSync } from "fs";
 import { tmpdir } from "os";
