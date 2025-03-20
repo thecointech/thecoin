@@ -119,4 +119,4 @@ async function getRemapping(clientAddress?: string) : Promise<Record<string, str
   }
 }
 
-export const getProvider = () => new Erc20Provider()
+export const getProvider = () => Promise.resolve(new Erc20Provider())
