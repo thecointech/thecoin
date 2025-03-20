@@ -6,9 +6,10 @@ import { getTestPage, getTestInfo, testFileFolder, useTestBrowser } from '../int
 
 jest.setTimeout(10 * 60 * 1000);
 
+const { getPage } = useTestBrowser();
+
 describe ('Element tests', () => {
 
-  const { getPage } = useTestBrowser();
 
   it('Generates element data', async () => {
 

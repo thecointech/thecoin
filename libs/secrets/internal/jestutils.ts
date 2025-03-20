@@ -20,7 +20,10 @@ export const ifSecrets = async (secrets: SecretKeyType[], config: ConfigType = "
     if (!globalThis.__loadedSecrets) {
       globalThis.__loadedSecrets = {};
       // Also load the environment for this config
-      const envVars = getEnvVars(config);
+      const envVars = {
+        ...process.env,
+        ...getEnvVars(config),
+      };
       const OLD_ENV = process.env;
       beforeEach(() => process.env = envVars);
       afterAll(() => process.env = OLD_ENV);
