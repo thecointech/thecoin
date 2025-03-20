@@ -1,11 +1,16 @@
 import { describe } from '@thecointech/jestutils';
-import { IfPolygonscanLive } from "@thecointech/secrets/jestutils";
+import { loadSecrets } from "@thecointech/secrets/jestutils";
 import { getProvider } from './remote';
+import { getEnvVars } from '@thecointech/setenv'
+
+const prodvars = getEnvVars("prod");
+const testvars = getEnvVars("prodtest");
 
 describe('Node Remote provider', () => {
 
   it ('Connects to testnet', async () => {
-    const provider = getProvider();
+    process.env.DEPLOY_POLYGON_NETWORK = testvars.DEPLOY_POLYGON_NETWORK;
+    const provider = await getProvider();
     expect(provider._network.name).toEqual("matic-amoy");
     // Try a connection
     const blockNumber = await provider.getBlockNumber();
@@ -13,7 +18,8 @@ describe('Node Remote provider', () => {
   })
 
   it ('Connects to mainnet', async () => {
-    const provider = getProvider();
+    process.env.DEPLOY_POLYGON_NETWORK = prodvars.DEPLOY_POLYGON_NETWORK;
+    const provider = await getProvider();
     expect(provider._network.name).toEqual("matic");
     // Try a connection
     const blockNumber = await provider.getBlockNumber();
@@ -33,4 +39,4 @@ describe('Node Remote provider', () => {
     expect(logs.length).toBeGreaterThan(0);
     expect(logs[0].topics[2]).toContain("2fe3cbf59a777e8f4be4e712945ffefc6612d46f");
   })
-}, await IfPolygonscanLive())
+}, await loadSecrets(["InfuraProjectId"]))

@@ -19,6 +19,8 @@ globalThis.__tc_secretCache = new Map<SecretKeyType, string>();
 
 export async function getSecret(name: SecretKeyType, config?: ConfigType) {
   // First, check if this secret has been added to env
+  // This is used on GAE to pass select secrets in without
+  // having to fetch them from the server.
   if (process.env[name]) {
     return process.env[name]!;
   }

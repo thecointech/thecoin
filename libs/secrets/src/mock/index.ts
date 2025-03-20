@@ -2,7 +2,16 @@ import type { SecretKeyType } from "../types";
 import { mock_key } from "./mocked_key";
 export * from '../errors'
 
+declare global {
+  var __loadedSecrets: Record<SecretKeyType, string> | undefined;
+}
 export async function getSecret(name: SecretKeyType) {
+  // Some tests use secrets (eg - etherscan).  A test
+  // may load secrets into the process.env to make
+  // them available to tests.
+  if (globalThis.__loadedSecrets?.[name]) {
+    return globalThis.__loadedSecrets[name];
+  }
   // In development we still use the private key
   switch (name) {
     case "UserDataInstructionKeyPrivate":

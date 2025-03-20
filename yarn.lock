@@ -11061,7 +11061,7 @@ __metadata:
   dependencies:
     "@bitwarden/sdk-napi": "npm:^1.0.0"
     "@thecointech/jestutils": "npm:^0.2.135"
-    dotenv: "npm:^10.0.0"
+    dotenv: "npm:^16.4.7"
   languageName: unknown
   linkType: soft
 
@@ -20235,13 +20235,6 @@ __metadata:
   peerDependencies:
     webpack: ^4 || ^5
   checksum: 49ffff039369c3192acfdf4a5c2d2fce5cef908e7ba56b5eb0dbc2e634eb3541ddba6242df2ed57ca42ab83a71bffd159e0352c8b26f017a8c44d41863995439
-  languageName: node
-  linkType: hard
-
-"dotenv@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "dotenv@npm:10.0.0"
-  checksum: 2d8d4ba64bfaff7931402aa5e8cbb8eba0acbc99fe9ae442300199af021079eafa7171ce90e150821a5cb3d74f0057721fbe7ec201a6044b68c8a7615f8c123f
   languageName: node
   linkType: hard
 

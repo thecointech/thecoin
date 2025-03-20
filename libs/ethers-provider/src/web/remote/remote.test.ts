@@ -1,19 +1,21 @@
 import { jest } from '@jest/globals';
-import { IfPolygonscanLive } from "@thecointech/secrets/jestutils";
+import { ifPolygonscan } from "@thecointech/secrets/jestutils";
 import { describe } from '@thecointech/jestutils';
 import { getProvider } from './index';
+import { getEnvVars } from '@thecointech/setenv';
 
 const contractAddress = "0x34fA894d7fE1FA5FA9d109434345B47DBe3B01fc"
 const fromBlock = 22371135;
 const toBlock = 22371952;
 
+const prodvars = getEnvVars("prod");
+const testvars = getEnvVars("prodtest");
+
 jest.setTimeout(60000);
 describe('Web Remote provider', () => {
   it ('Connects to testnet', async () => {
-    if (!await IfPolygonscanLive("prodtest")) {
-      return;
-    }
-    const provider = getProvider();
+    process.env = testvars;
+    const provider = await getProvider();
     expect(provider.network.name).toEqual("matic-amoy");
     // Try a connection
     const blockNumber = await provider.getBlockNumber();
@@ -24,10 +26,8 @@ describe('Web Remote provider', () => {
   })
 
   it ('Connects to mainnet', async () => {
-    if (!await IfPolygonscanLive("prod")) {
-      return;
-    }
-    const provider = getProvider();
+    process.env = prodvars;
+    const provider = await getProvider();
     expect(provider.network.name).toEqual("matic");
     // Try a connection
     const blockNumber = await provider.getBlockNumber();
@@ -39,10 +39,8 @@ describe('Web Remote provider', () => {
 
   it ('fetches ERC20 history', async () => {
     // Fetch logs
-    if (!await IfPolygonscanLive("prod")) {
-      return;
-    }
-    const provider = getProvider();
+    process.env = prodvars;
+    const provider = await getProvider();
     const logs = await provider.getERC20History({
       address: process.env.WALLET_BrokerCAD_ADDRESS,
       contractAddress,
@@ -55,10 +53,8 @@ describe('Web Remote provider', () => {
 
   it ('fetches logs from Etherscan', async () => {
     // Fetch logs
-    if (!await IfPolygonscanLive("prod")) {
-      return;
-    }
-    const provider = getProvider();
+    process.env = prodvars;
+    const provider = await getProvider();
     const logsFrom = await provider.getLogs({
       address: contractAddress,
       fromBlock,
@@ -83,4 +79,4 @@ describe('Web Remote provider', () => {
     // This should be the same as GetERC20History results
     expect(logsFrom.length + logsTo.length).toEqual(10);
 })
-},  await IfPolygonscanLive())
+},  await ifPolygonscan())
