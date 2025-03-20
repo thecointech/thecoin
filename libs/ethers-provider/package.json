@@ -72,6 +72,7 @@
   },
   "dependencies": {
     "@thecointech/logging": "^0.2.135",
+    "@thecointech/secrets": "^0.2.135",
     "ethers": "6.12.0"
   },
   "devDependencies": {

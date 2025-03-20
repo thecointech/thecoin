@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@thecointech/apis": "^0.2.135",
+    "@thecointech/utilities": "^0.2.135",
     "@thecointech/scraper": "^0.2.135"
   },
   "devDependencies": {

@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "@thecointech/logging": "^0.2.135",
+    "@thecointech/secrets": "^0.2.135",
     "node-mailjet": "^4.0.1"
   },
   "devDependencies": {
