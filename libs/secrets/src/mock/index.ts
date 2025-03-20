@@ -3,7 +3,7 @@ import { mock_key } from "./mocked_key";
 export * from '../errors'
 
 declare global {
-  var __loadedSecrets: Record<SecretKeyType, string> | undefined;
+  var __loadedSecrets: Partial<Record<SecretKeyType, string>> | undefined;
 }
 export async function getSecret(name: SecretKeyType) {
   // Some tests use secrets (eg - etherscan).  A test

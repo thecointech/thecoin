@@ -18,7 +18,7 @@ declare module globalThis {
   let __shockAbsorber: ShockAbsorber|undefined;
 }
 
-export async function getContract(provider = getProvider()) : Promise<ShockAbsorber> {
+export async function getContract(provider = await getProvider()) : Promise<ShockAbsorber> {
   return globalThis.__shockAbsorber ??= ShockAbsorber__factory.connect(
     await getContractAddress(),
     provider

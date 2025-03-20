@@ -1,18 +1,8 @@
 import { getSecret, SecretKeyType, getClient, ConfigType, SecretClientEnvNotFound, SecretClientKeyNotFound } from '../src/node';
+import { beforeEach, afterAll } from '@jest/globals';
+import { getEnvVars } from "@thecointech/setenv";
 
-export const ifSecret = async (secret: SecretKeyType, config?: ConfigType) => {
-  try {
-    // Initialize client first
-    await getClient(config ?? "prodtest");
-    // then get key
-    return await getSecret(secret);
-  }
-  catch(e) {
-    return false;
-  }
-}
-
-export const loadSecrets = async (secrets: SecretKeyType[], config: ConfigType = "prodtest") => {
+export const ifSecrets = async (secrets: SecretKeyType[], config: ConfigType = "prodtest"): Promise<boolean> => {
   // Initialize client first
   try {
     await getClient(config);
@@ -29,6 +19,11 @@ export const loadSecrets = async (secrets: SecretKeyType[], config: ConfigType =
     const loaded = await getSecret(secret);
     if (!globalThis.__loadedSecrets) {
       globalThis.__loadedSecrets = {};
+      // Also load the environment for this config
+      const envVars = getEnvVars(config);
+      const OLD_ENV = process.env;
+      beforeEach(() => process.env = envVars);
+      afterAll(() => process.env = OLD_ENV);
     }
     if (loaded) {
       globalThis.__loadedSecrets[secret] = loaded;
@@ -38,4 +33,5 @@ export const loadSecrets = async (secrets: SecretKeyType[], config: ConfigType =
 }
 
 // Shortcut for a common use case
-export const ifPolygonscan = async (config?: ConfigType) => loadSecrets(["PolygonscanApiKey"], config);
+export const ifSecret = async (secret: SecretKeyType, config?: ConfigType) => ifSecrets([secret], config);
+export const ifPolygonscan = async (config?: ConfigType) => ifSecret("PolygonscanApiKey", config);

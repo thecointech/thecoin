@@ -18,7 +18,7 @@ declare module globalThis {
   let __uberConverter: UberConverter|undefined;
 }
 
-export async function getContract(provider: Provider = getProvider()) : Promise<UberConverter> {
+export async function getContract(provider: Provider = await getProvider()) : Promise<UberConverter> {
   return globalThis.__uberConverter ??= UberConverter__factory.connect(
     await getContractAddress(),
     provider

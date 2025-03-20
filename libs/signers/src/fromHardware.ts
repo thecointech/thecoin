@@ -14,5 +14,5 @@ export async function loadHardware(name: AccountName) {
     throw new Error(`Cannot load ${name} - matching hardware device is not connected`);
   }
 
-  return signer.connect(getProvider());
+  return signer.connect(await getProvider());
 }

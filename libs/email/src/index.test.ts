@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon';
 import { SendMail, SendDepositConfirmation } from '.'
-import { describe, IsManualRun, ifSecret } from '@thecointech/jestutils';
+import { describe, IsManualRun } from '@thecointech/jestutils';
+import { ifSecret } from '@thecointech/secrets/jestutils';
 
 // I don't want to spam myself, so only run this test if manually requested
 // NOTE: This isn't currently working, as we load the mocked secrets
@@ -33,4 +34,4 @@ describe('Manual-Only: We can send emails', () => {
     expect(confirmation).toBeTruthy();
   })
 
-}, IsManualRun && !!(await ifSecret('MailjetApiKey')));
+}, IsManualRun && await ifSecret('MailjetApiKey'));

@@ -1,5 +1,5 @@
 import { describe } from '@thecointech/jestutils';
-import { loadSecrets } from "@thecointech/secrets/jestutils";
+import { ifSecret } from "@thecointech/secrets/jestutils";
 import { getProvider } from './remote';
 import { getEnvVars } from '@thecointech/setenv'
 
@@ -39,4 +39,4 @@ describe('Node Remote provider', () => {
     expect(logs.length).toBeGreaterThan(0);
     expect(logs[0].topics[2]).toContain("2fe3cbf59a777e8f4be4e712945ffefc6612d46f");
   })
-}, await loadSecrets(["InfuraProjectId"]))
+}, await ifSecret("InfuraProjectId"))

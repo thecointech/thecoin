@@ -35,7 +35,7 @@ function AccountReducer(address: string, initialState: AccountState) {
     }
 
     *setSigner(signer: Signer) {
-      const connected = signer.connect(getProvider());
+      const connected = signer.connect(await getProvider());
       yield this.storeValues({ signer: connected });
       yield delay(10);
       yield this.sendValues(this.actions.connect);

@@ -10,7 +10,7 @@ export async function loadFromDisk(name: AccountName, callback?: ProgressCallbac
   const encrypted = loadEncrypted(name);
   const key = await getPassword(name);
   const wallet = await Wallet.fromEncryptedJson(encrypted, key, callback);
-  return wallet.connect(getProvider());
+  return wallet.connect(await getProvider());
 }
 // or from file system if name is a path.
 function loadEncrypted(name: AccountName) {

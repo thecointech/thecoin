@@ -17,7 +17,8 @@ declare module globalThis {
   let __oracle: SpxCadOracle|undefined;
 }
 
-export async function getContract(provider: Provider = getProvider()) : Promise<SpxCadOracle> {
+export async function getContract(provider?: Provider) : Promise<SpxCadOracle> {
+  provider = provider ?? await getProvider();
   const v = globalThis.__oracle ??= SpxCadOracle__factory.connect(
     await getContractAddress(),
     provider
