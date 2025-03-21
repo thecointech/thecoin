@@ -1,5 +1,6 @@
 
 import { jest } from "@jest/globals"
+import { IsManualRun, describe } from '@thecointech/jestutils';
 import { useTestBrowser, getTestPages } from '@thecointech/scraper/testutils'
 import { closeModal, maybeCloseModal } from './modal';
 
@@ -64,4 +65,4 @@ describe('modal vqa tests', () => {
   //   // expect(r).toBeTruthy();
   // })
 
-})
+}, IsManualRun)

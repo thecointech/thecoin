@@ -10,5 +10,5 @@ export async function loadFromGoogle(name: AccountName) {
     throw new Error(`Wallet ${name} not found in secrets`);
 
   const wallet =  new Wallet(privatekey);
-  return wallet.connect(getProvider());
+  return wallet.connect(await getProvider());
 }

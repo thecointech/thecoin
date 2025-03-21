@@ -23,5 +23,3 @@ export { skippable_describe as describe }
 // integration tests that have significant side-effects that are not desired on every run
 // (for example, heavy CPU work, billed resources, or sending emails etc)
 export const IsManualRun = process.argv.find(v => v === "--testNamePattern") !== undefined
-
-export { IfPolygonscanLive, ifSecret } from './polygonscan';

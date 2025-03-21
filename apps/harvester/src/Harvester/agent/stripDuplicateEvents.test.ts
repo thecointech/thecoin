@@ -126,7 +126,7 @@ describe('stripDuplicateNavigationsSection', () => {
     ]);
   });
 });
-
+const timestamp = Date.now()
 const createEventSection = (events: (AnyEvent|EventSection)[] = []) => ({
   section: 'Initial',
   events
@@ -135,11 +135,11 @@ const createEventSection = (events: (AnyEvent|EventSection)[] = []) => ({
 const createNavEvent = (url: string): NavigationEvent => ({
   type: 'navigation',
   to: url,
-  timestamp: Date.now()
+  timestamp
 } as NavigationEvent);
 
 const createLoadEvent = (id: string): LoadEvent => ({
   type: 'load',
   id,
-  timestamp: Date.now()
+  timestamp
 } as LoadEvent);

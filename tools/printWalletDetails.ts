@@ -2,7 +2,7 @@ import { getSigner, AccountName } from '@thecointech/signers';
 import { getProvider } from '@thecointech/ethers-provider';
 import { HDNodeWallet } from 'ethers';
 
-const provider = getProvider();
+const provider = await getProvider();
 async function printDetails(name: AccountName) {
   const signer = await getSigner(name);
   const address = await signer.getAddress();

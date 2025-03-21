@@ -3,12 +3,12 @@ import { getAndCacheSigner } from './cache';
 import type { AccountName } from "./names";
 import { getProvider } from '@thecointech/ethers-provider';
 
-function loadFromPK(name: AccountName) {
+async function loadFromPK(name: AccountName) {
   const pk = process.env[`WALLET_${name}_KEY`];
   if (!pk)
     throw new Error(`Cannot find process.env.WALLET_${name}_KEY: ensure all accounts are exposed`);
   const wallet = new Wallet(pk);
-  return wallet.connect(getProvider());
+  return wallet.connect(await getProvider());
 }
 
 //

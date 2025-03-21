@@ -7,7 +7,7 @@ import args from './argv.mjs';
 import { port } from './port.mjs';
 import { setup } from './middlewares/frontendMiddleware.mjs';
 
-export async function run(clientSetup)
+export async function run(secrets, clientSetup)
 {
   const app = express();
 
@@ -17,10 +17,14 @@ export async function run(clientSetup)
   }
 
   // In production we need to pass these values in instead of relying on webpack
-  await setup(app, {
-    outputPath: resolve(process.cwd(), 'build'),
-    publicPath: '/',
-  });
+  await setup(
+    secrets,
+    app,
+    {
+      outputPath: resolve(process.cwd(), 'build'),
+      publicPath: '/',
+    }
+  );
 
   // get the intended host and port number, use localhost and port 3000 if not provided
   const customHost = args.host || process.env.HOST;

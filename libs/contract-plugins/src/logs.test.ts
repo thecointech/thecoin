@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { describe } from '@thecointech/jestutils';
-import { IfPolygonscanLive } from '@thecointech/jestutils/polygonscan';
+import { ifPolygonscan } from '@thecointech/secrets/jestutils';
 import { getPluginLogs } from './logs';
 import { getEnvVars } from '@thecointech/setenv';
 import { getProvider } from '@thecointech/ethers-provider/Erc20Provider/web';
@@ -20,13 +20,13 @@ describe('Live data fetches', () => {
     const address = "0x70da7D05Ee936E583A5165c62A1DEd3Cb0A07C82"; // Converter-Prod
     const user = "0xCA8EEA33826F9ADA044D58CAC4869D0A6B4E90E4";
     const fromBlock = 0;
-    const provider = getProvider();
+    const provider = await getProvider();
     const r = await getPluginLogs(address, user, provider, fromBlock);
     expect(r.length).toBeGreaterThan(1);
     const r2 = await getPluginLogs(address, user, provider, 44132093);
     expect(r.length - r2.length).toBe(1);
   })
-}, await IfPolygonscanLive());
+}, await ifPolygonscan("prod"));
 
 // it ('fetches logs for ', async () => {
 //   const {owner, contract} = await deployContract()

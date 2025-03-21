@@ -22,12 +22,11 @@ async function getProjectId() {
     return process.env.INFURA_PROJECT_ID;
   }
 }
-const projectId = await getProjectId();
 
-export const getProvider = (deployTo: Network = "POLYGON") => {
+export const getProvider = async (deployTo: Network = "POLYGON") => {
   const network = getInfuraNetwork(deployTo)
   if (!network)
     throw new Error("Missing deploy network, cannot connect to blockchain");
-  return new InfuraProvider(network, projectId);
+  return new InfuraProvider(network, await getProjectId());
 }
 

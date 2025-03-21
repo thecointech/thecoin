@@ -2,8 +2,8 @@ import { BitwardenClient, ClientSettings, DeviceType } from "@bitwarden/sdk-napi
 import path from "path";
 import { existsSync, readFileSync } from "fs";
 import dotenv from "dotenv";
-import { SecretClientEnvNotFound, SecretClientKeyNotFound } from "./errors";
-import type { ConfigType } from "./types";
+import { SecretClientEnvNotFound, SecretClientKeyNotFound } from "../errors";
+import type { ConfigType } from "../types";
 
 type BWClientWithOrgId = BitwardenClient & {
   organizationId: string;

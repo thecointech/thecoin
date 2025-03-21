@@ -1,4 +1,4 @@
-import { ImageEditorComponent } from '@toast-ui/react-image-editor';
+// import { ImageEditorComponent } from '@toast-ui/react-image-editor';
 import { Signer } from 'ethers';
 import { sign } from './sign';
 import { updateNft, uploadAvatar, uploadMetadata } from './updateNft';

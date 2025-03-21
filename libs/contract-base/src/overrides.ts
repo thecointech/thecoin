@@ -18,7 +18,7 @@ function getProvider(providerOrContract: Provider|BaseContract) {
 const MinimumBloodsuckerFee = BigInt(30 * Math.pow(10, 9));
 
 export async function getOverrideFees(providerOrContract: Provider|BaseContract, prior?: Transaction) {
-  const provider = getProvider(providerOrContract);
+  const provider = await getProvider(providerOrContract);
   const fees = await provider.getFeeData();
   if (!fees.maxFeePerGas || !fees.maxPriorityFeePerGas) {
     throw new Error("Fee data not available");

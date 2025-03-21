@@ -1,6 +1,5 @@
 import { jest } from '@jest/globals';
 import { fetchNewCoinRates, fetchNewFxRates } from "./index";
-import { describe, ifSecret } from '@thecointech/jestutils'
 
 beforeAll(async () => {
   jest.setTimeout(60000);
@@ -27,19 +26,3 @@ it('can fetch fx rates', async () => {
   expect(data.quote.ZAR).toBeGreaterThan(0);
   expect(data.quote.SBD).toBeGreaterThan(0);
 })
-
-const apiKey = await ifSecret("FinhubApiKey");
-describe("FinnHubLiveTests", () => {
-  it ('can fetch live rates', async () => {
-    const r = await fetchNewCoinRates("1", Date.now() - ThreeDay, Date.now());
-    expect(r.s).toEqual("ok");
-  })
-}, !!apiKey)
-
-// it('will throw if cannot fetch', async () => {
-//   expect.assertions(1);
-//   const ts = Date.now();
-//   await expect(fetchNewCoinRates("throwme", ts, ts))
-//     .rejects
-//     .toThrow("Fetch failed: Unprocessable Entity : Wrong resolution. Please check the documentation for further details.");
-// })

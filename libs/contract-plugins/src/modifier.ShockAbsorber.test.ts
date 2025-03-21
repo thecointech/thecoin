@@ -1,6 +1,6 @@
 
 import { jest } from '@jest/globals';
-import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
+import { getProvider } from '@thecointech/ethers-provider/Erc20Provider';
 import Decimal from 'decimal.js-light';
 
 jest.unstable_mockModule("./codegen", () => ({
@@ -34,7 +34,7 @@ jest.unstable_mockModule("./codegen", () => ({
 const { getModifier, user } = await import('../internal/common');
 
 it ('ShockAbsorber correctly accesses data', async () => {
-  const provider = new Erc20Provider();
+  const provider = await getProvider();
   const modifier = await getModifier("ShockAbsorber", provider);
   const rfiat = modifier(1000, 1); // User has $100 pending
   expect(rfiat.toNumber()).toBe(2000);

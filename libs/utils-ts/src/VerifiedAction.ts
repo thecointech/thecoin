@@ -1,5 +1,6 @@
 import { BuildVerifiedXfer } from "./VerifiedTransfer";
-import { encrypt, GetHash } from "./Encrypt";
+import { encrypt } from "./Encrypt";
+import { GetHash } from "./Decrypt";
 import { sign } from "./SignedMessages";
 import { verifyMessage } from 'ethers';
 import type { Signer } from "ethers";

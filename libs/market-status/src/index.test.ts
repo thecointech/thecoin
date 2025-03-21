@@ -1,13 +1,12 @@
 import { jest } from '@jest/globals';
 import { nextOpenTimestamp } from '.';
 import { DateTime } from 'luxon';
-import { describe, ifSecret } from '@thecointech/jestutils';
+import { describe } from '@thecointech/jestutils';
+import { ifSecret } from '@thecointech/secrets/jestutils';
 
 const jan1st2019 = DateTime.fromObject({year: 2019, month: 1, day: 1});
 
 jest.setTimeout(60000);
-
-const apiKey = await ifSecret("TradierApiKey");
 
 describe("Live MarketStatus tests", () => {
 
@@ -37,4 +36,4 @@ describe("Live MarketStatus tests", () => {
     const ndate = DateTime.fromMillis(nts);
     expect(ndate.toString()).toMatch("2019-04-01T09:32:00.000-04:00");
   });
-}, !!apiKey)
+}, await ifSecret("TradierApiKey"))

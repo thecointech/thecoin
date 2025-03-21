@@ -14,21 +14,26 @@ export const getTestInfo = (...parts: string[]) => JSON.parse(
 
 export const getTestPages = async (...parts: string[]) => {
   const testFolder = `${testFileFolder}/unit-tests/${parts.join('/')}`
-  const files = await readdir(testFolder);
-  // Find all mhtml files
-  const mhtmlFiles = files.filter(f => f.endsWith('.mhtml'));
-  return mhtmlFiles.map(f => {
-    const filename = path.basename(f, '.mhtml');
-    const jsonFiles = files.filter(jf => jf.startsWith(filename) && jf.endsWith('.json'));
-    return {
-      name: filename,
-      url: getTestPage(...parts, f),
-      json: jsonFiles.map(jf => ({
-        name: path.basename(jf, '.json').slice(filename.length + 1),
-        data: getTestInfo(...parts, jf),
-      }))
-    }
-  });
+  try {
+    const files = await readdir(testFolder);
+    // Find all mhtml files
+    const mhtmlFiles = files.filter(f => f.endsWith('.mhtml'));
+    return mhtmlFiles.map(f => {
+      const filename = path.basename(f, '.mhtml');
+      const jsonFiles = files.filter(jf => jf.startsWith(filename) && jf.endsWith('.json'));
+      return {
+        name: filename,
+        url: getTestPage(...parts, f),
+        json: jsonFiles.map(jf => ({
+          name: path.basename(jf, '.json').slice(filename.length + 1),
+          data: getTestInfo(...parts, jf),
+        }))
+      }
+    });  
+  }
+  catch (e) {
+    return [];
+  }
 }
 
 const RunHeadless = () => process.env.RUN_SCRAPER_HEADLESS ? process.env.RUN_SCRAPER_HEADLESS === 'false' : !IsManualRun;

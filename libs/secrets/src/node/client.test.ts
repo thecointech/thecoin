@@ -58,7 +58,7 @@ describe("verify created client", () => {
     const clientPromise2 = getClient();
     const clientPromise3 = getClient();
 
-    const [client1, client2, client3] = await Promise.all([
+    const [Client1, Client2, client3] = await Promise.all([
       clientPromise1,
       clientPromise2,
       clientPromise3
@@ -69,8 +69,8 @@ describe("verify created client", () => {
     expect(mockAuth.loginAccessToken).toHaveBeenCalledTimes(1);
 
     // Verify all promises resolved to the same instance
-    expect(client1).toBe(client2);
-    expect(client2).toBe(client3);
+    expect(Client1).toBe(Client2);
+    expect(Client2).toBe(client3);
   });
 
   it("sets organizationId correctly from env config", async () => {

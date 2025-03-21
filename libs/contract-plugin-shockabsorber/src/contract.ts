@@ -1,5 +1,6 @@
 import type { ShockAbsorber } from './codegen/contracts/ShockAbsorber';
 import { getProvider } from '@thecointech/ethers-provider';
+import type { Provider } from 'ethers';
 import { ShockAbsorber__factory } from './codegen';
 
 const getContractAddress = async () => {
@@ -18,7 +19,8 @@ declare module globalThis {
   let __shockAbsorber: ShockAbsorber|undefined;
 }
 
-export async function getContract(provider = getProvider()) : Promise<ShockAbsorber> {
+export async function getContract(provider?: Provider) : Promise<ShockAbsorber> {
+  provider = provider ?? (await getProvider());
   return globalThis.__shockAbsorber ??= ShockAbsorber__factory.connect(
     await getContractAddress(),
     provider

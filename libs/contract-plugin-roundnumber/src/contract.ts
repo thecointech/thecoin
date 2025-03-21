@@ -17,7 +17,8 @@ declare module globalThis {
   let __roundnumber: RoundNumber|undefined;
 }
 
-export async function getContract(provider: Provider = getProvider()) : Promise<RoundNumber> {
+export async function getContract(provider?: Provider) : Promise<RoundNumber> {
+  provider = provider ?? (await getProvider());
   return globalThis.__roundnumber ??= RoundNumber__factory.connect(
     await getContractAddress(),
     provider

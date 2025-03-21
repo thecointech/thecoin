@@ -22,7 +22,8 @@ declare module globalThis {
   let __contract: TheCoin|undefined;
 }
 
-export async function GetContract(provider: Provider = getProvider()) : Promise<TheCoin> {
+export async function GetContract(provider?: Provider) : Promise<TheCoin> {
+  provider = provider ?? await getProvider();
   const v = globalThis.__contract ??= TheCoin__factory.connect(
     await getContractAddress(),
     provider

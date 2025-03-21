@@ -17,7 +17,7 @@ export const baseOptions: Configuration = {
   },
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
-    conditionNames: [env.CONFIG_NAME, "node", "import", "default"],
+    conditionNames: [env.CONFIG_NAME!, "node", "import", "default"],
   },
   experiments: {
     topLevelAwait: true,

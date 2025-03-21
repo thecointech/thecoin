@@ -93,7 +93,7 @@ export async function getWallet() {
   const cfg = await getProcessConfig();
   if (cfg?.wallet) {
     const wallet = HDNodeWallet.fromPhrase(cfg.wallet.phrase, undefined, cfg.wallet.path);
-    return wallet.connect(getProvider());
+    return wallet.connect(await getProvider());
   }
   return null;
 }

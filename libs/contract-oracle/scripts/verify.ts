@@ -12,7 +12,7 @@ if (!process.env.CONFIG_NAME?.startsWith('prod'))
 
 const network = hre.config.defaultNetwork;
 const contract = await getContract();
-const provider = getProvider();
+const provider = await getProvider();
 
 // Make 5 attempts to verify.  This allows time for
 // contract to be picked up by etherscan

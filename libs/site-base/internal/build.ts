@@ -1,10 +1,10 @@
 import webpack from 'webpack';
-import path from 'path';
+import { getProdConfig } from "./webpack/webpack.prod.mjs";
+import type { SecretKeyType } from '@thecointech/secrets';
 
-import config from ".//webpack/webpack.prod.mjs";
-
-export function build() {
+export async function build(secrets: SecretKeyType[]=[]) {
   // Create compiler instance
+  const config = await getProdConfig(secrets);
   const compiler = webpack(config);
 
   // Add progress plugin
