@@ -1,6 +1,7 @@
 {
   "name": "@thecointech/scraper-agent",
   "version": "0.2.135",
+  "private": true,
   "description": "TheCoin: AI Agent to automate the creation of scraping recorder scripts",
   "type": "module",
   "author": "Stephen Taylor <stephen@thecoin.io>",

@@ -2,6 +2,17 @@ TheCoin is (currently) a series of micro-services connected together.
 
 ## System setup require prior to deployment
 
+First steps:
+install python (currently 3.11)
+install node (currently v22)
+install gcloud CLI and `gcloud auth login`
+use tools/deploy/create-deployer.sh: Generate service accounts for deploying to GAE, one for rates-service & one for broker-cad.  Run the script from outside the repository as it will cache service account files in a local/relative folder.
+
+setup yarn for publishing Github packages:
+  Login to Github, create a new PAT with 'write:packages' permission
+  Save the PAT to ~/.npmrc
+
+
 Our system is built to be deployed on Google App Engine (GAE).  The services are deployed as standard environment on GAE, and the websites are deployed to Firebase Hosting.
 
 Each deployment app (rates/broker/site/nft) needs a GAE configuration for each environment (test/beta|prod).  The GAE configuration is used to set the deployment target for all the apps, deploying at the same time. See https://medium.com/google-cloud/how-to-use-multiple-accounts-with-gcloud-848fdb53a39a for how to create new configs.
