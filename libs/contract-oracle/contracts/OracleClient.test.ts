@@ -1,8 +1,11 @@
+import { jest } from '@jest/globals';
 import { createOracle } from "../internal/testHelpers";
 import hre from 'hardhat';
 import '@nomicfoundation/hardhat-ethers';
 import { DateTime } from "luxon";
 import { OracleClientTest__factory } from "../src/codegen";
+
+jest.setTimeout(2 * 60 * 1000);
 
 it ('rounds correctly', async () => {
   const [owner] = await hre.ethers.getSigners();

@@ -31,6 +31,12 @@ const sendAssignRequest = async (signer: Signer, pluginAddress: AddressLike) => 
   });
 }
 
+const statusText = (hasPlugin: boolean, requestSent: boolean) => {
+  if (hasPlugin) return "Installed";
+  if (requestSent) return "Pending";
+  return "Not installed";
+}
+
 export const Plugins = () => {
   const active = AccountMap.useActive();
   const [requestSent, setRequestSent] = useState(false);
@@ -48,9 +54,6 @@ export const Plugins = () => {
     })()
   }, [active?.plugins]);
 
-  // const hasConverter = active?.plugins.some(plugin => plugin.address === converterAddress);
-  // const hasShockAbsorber = active?.plugins.some(plugin => plugin.address === shockAbsorberAddress);
-
   const { rates } = useFxRates();
   const { buy, fxRate } = getFxRate(rates, 0);
   const balance = active?.balance ?? 0;
@@ -65,19 +68,22 @@ export const Plugins = () => {
       throw new Error('No active account');
     }
     setIsSending(true);
-    if (!cnvrtRequested) {
+    if (!cnvrtRequested && !hasConverter) {
       await sendAssignRequest(active.signer, converter);
       setData(Key.pluginCnvrtRequested, "true");
     }
     // ensure the timestamp increases...
     await sleep(250);
-    if (!absrbRequested) {
+    if (!absrbRequested && !hasShockAbsorber) {
       await sendAssignRequest(active.signer, shockAbsorber);
       setData(Key.pluginAbsrbRequested, "true");
     }
     setRequestSent(true);
     setIsSending(false);
   }
+
+  const canInstallPlugins = requestSent || isSending || (hasConverter && hasShockAbsorber);
+
   return (
     <Container>
       <h1>Plugins</h1>
@@ -92,17 +98,17 @@ export const Plugins = () => {
       <div>
         <div>
           <Checkbox disabled defaultChecked label='UberConverter (required)' />
-          {hasConverter || cnvrtRequested ? "Pending" : ""}
+          {statusText(hasConverter, !!cnvrtRequested)}
         </div>
         <div>
           <Checkbox defaultChecked label='ShockAbsorber (recommended)' />
-          {hasShockAbsorber || absrbRequested ? "Pending" : ""}
+          {statusText(hasShockAbsorber, !!absrbRequested)}
         </div>
       </div>
       <div>
         You have {active?.plugins.length} plugins installed
       </div>
-      <Button onClick={onInstallPlugins} loading={isSending} disabled={requestSent || isSending}>Install</Button>
+      <Button onClick={onInstallPlugins} loading={isSending} disabled={canInstallPlugins}>Install</Button>
       <Message hidden={!requestSent}>
         Your selected plugins are in the process of being installed.
         This can take up to an hour, in the meantime lets setup

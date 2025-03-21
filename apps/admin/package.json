@@ -2,23 +2,19 @@
   "name": "thecoin-admin",
   "private": true,
   "productName": "thecoin-admin",
-  "version": "0.2.133",
+  "version": "0.2.135",
   "description": "Admin: audit TheCoin system ops",
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
   "license": "GPL-3.0-or-later",
   "main": ".webpack/main",
-  "config": {
-    "forge": "./config.forge"
-  },
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "build": "run -T tsc -b",
     "dev": "yarn electron-forge start",
     "_dev:live": "run -T cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn dev",
     "prod:beta": "run -T cross-env CONFIG_NAME=prod yarn dev",
-    "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
@@ -41,12 +37,12 @@
     "eslint-plugin-import": "^2.25.0"
   },
   "dependencies": {
-    "@thecointech/contract-core": "^0.2.133",
-    "@thecointech/shared": "^0.2.133",
-    "@thecointech/tx-bill": "^0.2.133",
-    "@thecointech/tx-deposit": "^0.2.133",
-    "@thecointech/tx-etransfer": "^0.2.133",
-    "@thecointech/tx-statemachine": "^0.2.133",
+    "@thecointech/contract-core": "^0.2.135",
+    "@thecointech/shared": "^0.2.135",
+    "@thecointech/tx-bill": "^0.2.135",
+    "@thecointech/tx-deposit": "^0.2.135",
+    "@thecointech/tx-etransfer": "^0.2.135",
+    "@thecointech/tx-statemachine": "^0.2.135",
     "electron-squirrel-startup": "^1.0.0",
     "semantic-ui-css": "^2.4.1"
   }

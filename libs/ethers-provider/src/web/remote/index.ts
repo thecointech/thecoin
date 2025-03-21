@@ -1,6 +1,7 @@
 import { BlockTag, EtherscanPlugin, EtherscanProvider, LogParams, Network } from 'ethers'
 import type { PerformActionFilter, PerformActionRequest, Signer } from 'ethers'
 import { format } from '../erc20response';
+import { getSecret } from '@thecointech/secrets';
 
 //
 // ATTRIBUTION:
@@ -10,13 +11,15 @@ const initBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0");
 
 export class Erc20Provider extends EtherscanProvider {
 
-  constructor() {
-    // For now we exclusively use hte polygon network
+  constructor(apiKey: string) {
+    // For now we exclusively use the polygon network
     const network = process.env.DEPLOY_POLYGON_NETWORK;
     const chainId = process.env.DEPLOY_POLYGON_NETWORK_ID;
-    const apiKey = process.env.POLYGONSCAN_API_KEY;
 
-    if (!network || !apiKey || !chainId) throw new Error("Cannot use Provider without network & key");
+    if (!network || !apiKey || !chainId) {
+      // NOTE!  Check that POLYGONSCAN_API_KEY has been loaded
+      throw new Error("Cannot use Provider without network & key");
+    }
     if (network == "matic-amoy") {
       const override = new Network(network, BigInt(chainId))
       override.attachPlugin(
@@ -169,5 +172,9 @@ type SrcCodeResponse = {
   SwarmSource: string; // ""
 }
 
-export const getProvider = () => new Erc20Provider();
+export const getProvider = async () => {
+  const apiKey = await getSecret("PolygonscanApiKey");
+  return new Erc20Provider(apiKey);
+}
+
 export type { ERC20Response } from '../erc20response';

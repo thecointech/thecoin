@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Container, Button, Icon } from 'semantic-ui-react'
 import { TrainingReducer } from './state/reducer';
 import { useLearnValue } from './learnValue';
+import { ReplayProgressBar } from '../ReplayProgress';
 
 const pageAction = "chqBalance";
 
@@ -18,7 +19,7 @@ export const ChequingBalance = () => {
 
   useEffect(() => {
     if (balance) {
-      window.scraper.finishAction(pageAction);
+      window.scraper.finishAction();
     }
   }, [balance])
 
@@ -31,7 +32,7 @@ export const ChequingBalance = () => {
   }
   const validate = async () => {
     setValidating(true);
-    const r = await window.scraper.testAction(pageAction);
+    const r = await window.scraper.validateAction(pageAction);
     if (r.error) alert(r.error)
     if (r.value?.balance) {
       api.setParameter("chequing", "testPassed", true);
@@ -52,6 +53,7 @@ export const ChequingBalance = () => {
         </ul>
         <div>Finally, check the value below to ensure your AI hasn't accidentally read the wrong value!</div>
         <Button onClick={validate} loading={validating}>Test Learning</Button>
+        <ReplayProgressBar />
         <div>Your AI read: {balance}
           {data.chequing.testPassed && <Icon name='check circle' color="green" />}
         </div>

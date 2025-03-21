@@ -9,7 +9,7 @@ import type { IpcMain } from '@thecointech/electron-utils/types/ipc';
 const fns: functions = {
   bridge: (ipc) => { registerIpcListeners(ipc as IpcMain); },
   initialize: async (token) => {
-    const auth = getAuthClient();
+    const auth = await getAuthClient();
     const credentials = getCredentials(token) ?? await getNewTokens(auth);
     auth.setCredentials(credentials);
     if (!credentials || !isValid(auth)) {

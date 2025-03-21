@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import { Erc20Provider as BaseProvider } from '../web/mocked';
-export { getProvider } from '../web/mocked';
+// export { getProvider } from '../web/mocked';
 
 // Add a local provider for jest
 export class Erc20Provider extends BaseProvider {
@@ -23,8 +23,10 @@ export class Erc20Provider extends BaseProvider {
 
 function getBaseUrl() {
   let baseUrl = new URL(import.meta.url);
-  while (!baseUrl.pathname.toLowerCase().endsWith('thecoin/')) {
+  while (!baseUrl.pathname.toLowerCase().endsWith('ethers-provider/')) {
     baseUrl = new URL('..', baseUrl);
   }
-  return baseUrl;
+  return new URL("../..", baseUrl);
 }
+
+export const getProvider = () => Promise.resolve(new Erc20Provider())

@@ -15,7 +15,7 @@ const getSigner = (name: AccountName) =>
     // Normally, connecting to the contract enforces the
     // right provider, but in this instance we don't have a provider
     const wallet = await loadFromDisk(name);
-    const provider = getProvider();
+    const provider = await getProvider();
     return wallet.connect(provider);
   });
 

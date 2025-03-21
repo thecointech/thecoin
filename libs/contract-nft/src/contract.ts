@@ -24,7 +24,7 @@ declare module globalThis {
 export async function getContract(network: Network = "POLYGON") {
   globalThis.__contractNFT ??= TheGreenNFTL2__factory.connect(
     await getContractAddress(network),
-    getProvider()
+    await getProvider()
   );
   return globalThis.__contractNFT!;
 }

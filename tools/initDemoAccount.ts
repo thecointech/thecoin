@@ -28,8 +28,11 @@ const monthsToRun = 9999;
 // Starting from Jan 1 2022
 // Send a deposit email to
 const tcCore = await GetContract();
-const signer = await getSigner("testDemoAccount");
+const signer = await getSigner("TestDemoAccount");
 const testAddress = await signer.getAddress();
+if (testAddress != process.env.WALLET_TestDemoAccount_ADDRESS) {
+  throw new Error("Invalid demo account address!");
+}
 const brokerAddress = process.env.WALLET_BrokerCAD_ADDRESS!;
 const startDate = DateTime.fromObject({
   year: 2023,
@@ -42,7 +45,9 @@ const startDate = DateTime.fromObject({
 // Get date of last transaction
 const initBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0", 10);
 const tx = await loadAndMergeHistory(initBlock, tcCore, testAddress);
-const lastTxDate = tx[tx.length - 1]?.date ?? startDate;
+// We start from the last deposit transaction
+const deposits = tx.filter(tx => tx.change > 0);
+const lastTxDate = deposits[deposits.length - 1]?.date ?? startDate;
 console.log(`Last tx: ${lastTxDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
 
 const pausedDate = lastTxDate.plus({ hour: 1});
@@ -105,6 +110,11 @@ DateTime.now = () => currDate
 
 let numSent = 0;
 while (currDate < endDate) {
+
+  // It seems our email can get overloaded
+  // if (numSent >= 100) {
+  //   break;
+  // }
 
   // If we run harvester on this day?
   if (harvestRunsOnDay.includes(currDate.weekday)) {

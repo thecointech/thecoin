@@ -29,7 +29,7 @@ async function main() {
   await bcCore.exactTransfer(shockAbsorber, coin.toNumber(), now.getTime());
 
   if (process.env.CONFIG_NAME == 'devlive') {
-    const tester = await getSigner("saTester");
+    const tester = await getSigner("SaTester");
     const ts = DateTime.fromObject({
       year: 2023,
       month: 7,

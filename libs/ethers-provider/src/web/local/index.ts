@@ -86,4 +86,4 @@ export class Erc20Provider extends JsonRpcProvider {
 
 const toAddress = (x: string) => x.replace(/^(0x)?0+(.{40})$/, '$1$2');
 
-export const getProvider = () => new Erc20Provider();
+export const getProvider = () => Promise.resolve(new Erc20Provider());

@@ -1,28 +1,14 @@
-import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
+import { getGoogleSecret } from '@thecointech/secrets-google';
 import { Wallet } from 'ethers';
 import type { AccountName } from './names';
 import { getProvider } from '@thecointech/ethers-provider';
 
-// If running on GAE, check in secrets manager
-const PrivilegedEnv = () => process.env["GAE_ENV"] || process.env["GOOGLE_APPLICATION_CREDENTIALS"];
-
-// Get Secrets.  Currently only used on TCCC Broker
-export async function getSecret(name: string) {
-  if (!PrivilegedEnv())
-    throw new Error('Cannot get signer outside PrivilegedEnv');
-  const client = new SecretManagerServiceClient();
-  const [accessResponse] = await client.accessSecretVersion({
-    name: `projects/${process.env.GOOGLE_CLOUD_PROJECT}/secrets/${name}/versions/latest`,
-  });
-  return accessResponse.payload?.data?.toString();
-}
-
 export async function loadFromGoogle(name: AccountName) {
 
-  const privatekey = await getSecret(`WALLET_${name}_KEY`);
+  const privatekey = await getGoogleSecret(`WALLET_${name}_KEY`);
   if (!privatekey)
     throw new Error(`Wallet ${name} not found in secrets`);
 
   const wallet =  new Wallet(privatekey);
-  return wallet.connect(getProvider());
+  return wallet.connect(await getProvider());
 }

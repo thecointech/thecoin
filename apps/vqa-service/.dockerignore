@@ -1,0 +1,10 @@
+venv/
+api/
+tests/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.env
+.vscode/

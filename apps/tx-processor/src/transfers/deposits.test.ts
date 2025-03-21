@@ -1,7 +1,8 @@
 import { jest } from '@jest/globals';
 import { init } from '@thecointech/firestore';
 import { ConnectContract } from '@thecointech/contract-core';
-import { ETransferErrorCode, RbcApi } from '@thecointech/rbcapi';
+// import { ETransferErrorCode, RbcApi } from '@thecointech/rbcapi';
+import { ETransferErrorCode } from '@thecointech/bank-interface';
 import gmail from '@thecointech/tx-gmail';
 import { getSigner } from '@thecointech/signers';
 import { BuyActionContainer } from '@thecointech/tx-statemachine';
@@ -19,11 +20,18 @@ jest.unstable_mockModule('@thecointech/logging', () => ({
         msg
           .replace(/{state}/g, args.state)
           .replace(/{error}/g, args.error)
+          .replace(/{message}/g, args.message)
           .replace(/{transition}/g, args.transition)
         )
     }),
   }
 }));
+jest.unstable_mockModule('@thecointech/rbcapi', () => ({
+  RbcApi: class {
+    depositETransfer = jest.fn()
+  }
+}));
+const { RbcApi } = await import('@thecointech/rbcapi');
 const { processTransfers } = await import('.')
 const { getCurrentState } = await import('@thecointech/tx-statemachine');
 
@@ -50,9 +58,9 @@ it("Can complete deposits", async () => {
   const results = deposits.map(getCurrentState);
   expect(results.map(r => r.name)).toEqual(['complete', 'error', 'error', 'error'])
   expect(errors).toEqual([
-    "Error on depositReady => depositFiat for {initialId}: Already Deposited",
-    "Error on depositReady => depositFiat for {initialId}: This transfer was cancelled",
-    "Error on depositReady => depositFiat for {initialId}: This transfer cannot be processed",
+    "Error on depositReady => depositFiat: Already Deposited (for {initialId})",
+    "Error on depositReady => depositFiat: This transfer was cancelled (for {initialId})",
+    "Error on depositReady => depositFiat: This transfer cannot be processed (for {initialId})",
   ])
 
   // If passed, balance is 0
@@ -81,8 +89,8 @@ it("Can complete deposits", async () => {
   }
 })
 
-function setupReturnValues(bank: RbcApi) {
-  const mockDeposit = bank.depositETransfer as jest.Mock;
+function setupReturnValues(bank: any) {
+  const mockDeposit = bank.depositETransfer;
   mockDeposit
     .mockReturnValueOnce(
       {

@@ -19,27 +19,27 @@ it('converts fiat to TheCoin for current transfers', async () => {
   const tcCore = await createAndInitTheCoin(signers.Owner);
   const oracle = await createAndInitOracle(signers.OracleUpdater);
 
-  // pass some $$$ to client1
+  // pass some $$$ to Client1
   await tcCore.mintCoins(10000e6, signers.Owner, Date.now());
-  await tcCore.transfer(signers.client1, 1000e6);
+  await tcCore.transfer(signers.Client1, 1000e6);
 
   // Create plugin
   const uber = await UberConverter.deploy();
   await uber.initialize(tcCore, oracle);
 
   // Assign to user, grant all permissions
-  const request = await buildAssignPluginRequest(signers.client1, uber, ALL_PERMISSIONS);
+  const request = await buildAssignPluginRequest(signers.Client1, uber, ALL_PERMISSIONS);
   await assignPlugin(tcCore, request);
 
   // Transfer $100 now.
   const transfer = await buildUberTransfer(
-    signers.client1,
-    signers.client2,
+    signers.Client1,
+    signers.Client2,
     new Decimal(100),
     124,
     DateTime.now(),
   )
-  const initBalance = await tcCore.balanceOf(signers.client1);
+  const initBalance = await tcCore.balanceOf(signers.Client1);
   const r = await tcCore.uberTransfer(
     transfer.chainId,
     transfer.from,
@@ -51,12 +51,12 @@ it('converts fiat to TheCoin for current transfers', async () => {
     transfer.signature,
   );
   const receipt = await r.wait();
-  const client1Balance = await tcCore.balanceOf(signers.client1);
+  const Client1Balance = await tcCore.balanceOf(signers.Client1);
   // If we transferred $100, that should have equalled 50C
-  expect(Number(initBalance - client1Balance)).toEqual(50e6);
-  // client2Balance should be the remainder
-  const client2Balance = await tcCore.balanceOf(signers.client2);
-  expect(Number(client2Balance)).toEqual(50e6);
+  expect(Number(initBalance - Client1Balance)).toEqual(50e6);
+  // Client2Balance should be the remainder
+  const Client2Balance = await tcCore.balanceOf(signers.Client2);
+  expect(Number(Client2Balance)).toEqual(50e6);
 
   // The money was transferred, there should be logs!
   expect(receipt.logs?.filter((e: EventLog) => e.eventName == "Transfer").length).toEqual(1);

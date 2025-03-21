@@ -2,7 +2,7 @@
   "name": "@thecointech/site-app",
   "productName": "THECoin: Website - App",
   "private": true,
-  "version": "0.2.133",
+  "version": "0.2.135",
   "description": "THECoin: Future-proof currency",
   "type": "module",
   "repository": {
@@ -15,7 +15,7 @@
     "preanalyze": "yarn clean:analyze",
     "analyze": "node ./internals/scripts/analyze.js",
     "build": "run -T run-s prebuild build:src",
-    "build:src": "run-env exec=webpack --config ../../libs/site-base/internal/webpack/webpack.prod.mjs --progress",
+    "build:src": "run-env ./internals/build.ts",
     "prebuild": "run -T run-p 'prebuild:*'",
     "prebuild:semantic": "node ./internals/buildSemantic.mjs",
     "prebuild:i18n": "run-s extract compile",
@@ -53,10 +53,10 @@
   },
   "dependencies": {
     "@artsy/fresnel": "^1.2.2",
-    "@thecointech/blockpass": "^0.2.133",
-    "@thecointech/shared": "^0.2.133",
-    "@thecointech/site-base": "^0.2.133",
-    "@thecointech/utilities": "^0.2.133",
+    "@thecointech/blockpass": "^0.2.135",
+    "@thecointech/shared": "^0.2.135",
+    "@thecointech/site-base": "^0.2.135",
+    "@thecointech/utilities": "^0.2.135",
     "card-validator": "^6.2.0",
     "compression": "1.7.4",
     "connected-react-router": "^6.6.1",
@@ -73,7 +73,7 @@
     "sanitize.css": "10.0.0"
   },
   "devDependencies": {
-    "@thecointech/setenv": "^0.2.133",
+    "@thecointech/setenv": "^0.2.135",
     "@types/card-validator": "^4.1.0",
     "@types/expect": "1.20.4",
     "@types/file-saver": "^2.0.1",

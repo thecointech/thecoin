@@ -16,7 +16,7 @@ export class SecureController extends Controller {
   @Response('200', 'Google authorization URL')
   @Response('400', 'Bad request')
   async googleAuthUrl(@Query() clientUri: string): Promise<GoogleAuthUrl> {
-    const url = getAuthUrl(clientUri);
+    const url = await getAuthUrl(clientUri);
     return { url };
   }
 

@@ -1,0 +1,6 @@
+__pycache__
+.model_cache
+.venv
+logs/
+temp/
+# src/transformers_modules/
