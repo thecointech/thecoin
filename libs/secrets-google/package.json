@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/secrets-google",
-  "version": "0.2.136",
+  "version": "0.2.137",
   "description": "The Coin: Secrets Management for GAE Cloud",
   "type": "module",
   "keywords": [
@@ -38,6 +38,7 @@
     "@google-cloud/secret-manager": "^5.3.0"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.2.136"
-  }
+    "@thecointech/jestutils": "^0.2.137"
+  },
+  "gitHead": "6f9e271377072de1bcc4c33c2c8eb838f8884719"
 }

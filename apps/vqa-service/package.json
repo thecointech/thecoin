@@ -1,7 +1,7 @@
 {
   "name": "@thecointech/vqa-service",
   "private": true,
-  "version": "0.2.136",
+  "version": "0.2.137",
   "description": "VQA Assistant for the Harvester",
   "type": "module",
   "repository": {

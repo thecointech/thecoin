@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/service-tapcap-supplier",
-  "version": "0.2.136",
+  "version": "0.2.137",
   "private": true,
   "description": "Basic JSON file to run build commands for tapcap-supplier",
   "license": "GPL-3.0-or-later",
@@ -9,6 +9,6 @@
     "_gen:swagger": "./bin/Release/net5.0/TapCapSupplier.exe --swagger ./api/swagger.json "
   },
   "dependencies": {
-    "@thecointech/pricing": "^0.2.136"
+    "@thecointech/pricing": "^0.2.137"
   }
 }
