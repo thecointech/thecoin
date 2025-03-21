@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/jestutils",
-  "version": "0.2.135",
+  "version": "0.2.136",
   "private": true,
   "type": "module",
   "description": "The Coin: Simple jest extentions",
