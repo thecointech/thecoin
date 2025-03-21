@@ -39,7 +39,10 @@ try {
   // Install requirements
   if (fs.existsSync(requirementsPath)) {
     console.log('Installing requirements...');
-    const pipPath = path.join(venvPath, 'bin', 'pip');
+    const pipPath = path.join(
+      venvPath, 
+      process.platform === 'win32' ? 'Scripts' : 'bin',
+      process.platform === 'win32' ? 'pip.exe' : 'pip');
     execSync(`${pipPath} install -r ${requirementsPath}`);
     console.log('Requirements installed.');
   } else {

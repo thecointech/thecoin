@@ -10820,6 +10820,7 @@ __metadata:
   dependencies:
     "@thecointech/jestutils": "npm:^0.2.135"
     "@thecointech/logging": "npm:^0.2.135"
+    "@thecointech/secrets": "npm:^0.2.135"
     node-mailjet: "npm:^4.0.1"
   languageName: unknown
   linkType: soft
@@ -10830,6 +10831,7 @@ __metadata:
   dependencies:
     "@thecointech/jestutils": "npm:^0.2.135"
     "@thecointech/logging": "npm:^0.2.135"
+    "@thecointech/secrets": "npm:^0.2.135"
     "@thecointech/setenv": "npm:^0.2.135"
     ethers: "npm:6.12.0"
   languageName: unknown
@@ -10902,6 +10904,7 @@ __metadata:
   dependencies:
     "@thecointech/jestutils": "npm:^0.2.135"
     "@thecointech/logging": "npm:^0.2.135"
+    "@thecointech/secrets": "npm:^0.2.135"
     cockatiel: "npm:^3.2.1"
   languageName: unknown
   linkType: soft
@@ -11002,6 +11005,7 @@ __metadata:
     "@thecointech/apis": "npm:^0.2.135"
     "@thecointech/jestutils": "npm:^0.2.135"
     "@thecointech/scraper": "npm:^0.2.135"
+    "@thecointech/utilities": "npm:^0.2.135"
   languageName: unknown
   linkType: soft
 
