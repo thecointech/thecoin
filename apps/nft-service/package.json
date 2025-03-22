@@ -21,7 +21,7 @@
     "dev": "yarn run-env --inspect=9233 ./src/main.ts",
     "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
-    "deploy": "yarn run-env ./deploy.ts",
+    "_deploy": "yarn run-env ./deploy.ts",
     "build": "run -T tsc -b",
     "gen:swagger": "run -T tsoa spec-and-routes",
     "clean": "run-p 'clean:*'",
