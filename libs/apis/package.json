@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/apis",
-  "version": "0.2.135",
+  "version": "0.2.141",
   "description": "TheCoin: Simple wrappers for swagger-generated APIs ensures correct URL",
   "type": "module",
   "keywords": [
@@ -59,13 +59,13 @@
     }
   },
   "dependencies": {
-    "@thecointech/broker-cad": "^0.2.135",
-    "@thecointech/nft": "^0.2.135",
-    "@thecointech/pricing": "^0.2.135",
-    "@thecointech/vqa": "^0.2.135"
+    "@thecointech/broker-cad": "^0.2.141",
+    "@thecointech/nft": "^0.2.141",
+    "@thecointech/pricing": "^0.2.141",
+    "@thecointech/vqa": "^0.2.141"
   },
   "devDependencies": {
-    "@thecointech/async": "^0.2.135"
+    "@thecointech/async": "^0.2.141"
   },
-  "gitHead": "6c91d925570c1132080f3098b510a3a42180e429"
+  "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

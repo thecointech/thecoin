@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/broker-cad",
-  "version": "0.2.135",
+  "version": "0.2.141",
   "description": "OpenAPI client for @thecointech/broker-cad",
   "author": "OpenAPI-Generator Contributors",
   "type": "module",
@@ -30,5 +30,5 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
-  "gitHead": "6c91d925570c1132080f3098b510a3a42180e429"
+  "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }
