@@ -34,22 +34,62 @@ if [ $retVal -ne 0 ]; then
 fi
 echo "Service Account Created"
 
-iam_member="serviceAccount:$agent_name@$project_name.iam.gserviceaccount.com"
-gcloud projects add-iam-policy-binding $project_name \
-    --member=$iam_member \
-    --role="roles/appengine.deployer"
+service_account="$agent_name@$project_name.iam.gserviceaccount.com"
+iam_member="serviceAccount:$service_account"
 
-gcloud projects add-iam-policy-binding $project_name \
-    --member $iam_member \
-    --role "roles/appengine.serviceAdmin"
+# Function to assign a role with retry logic
+assign_role_with_retry() {
+  local role="$1"
+  local retries=5
+  local delay=2
 
-gcloud projects add-iam-policy-binding $project_name \
-    --member $iam_member \
-    --role "roles/storage.objectAdmin"
+  while [[ $retries -gt 0 ]]; do
+    if gcloud iam service-accounts list --project="$project_name" --filter="email=$service_account" > /dev/null; then
+      echo "Service account found. Assigning role: $role"
+      gcloud projects add-iam-policy-binding "$project_name" \
+        --member=$iam_member \
+        --role="$role"
+      return 0 # Success
+    else
+      echo "Service account not found yet. Retrying in $delay seconds..."
+      sleep $delay
+      retries=$((retries - 1))
+    fi
+  done
 
-gcloud projects add-iam-policy-binding $project_name \
-    --member $iam_member \
-    --role "roles/cloudbuild.builds.editor"
+  echo "Failed to find service account after multiple retries for role: $role"
+  return 1 # Failure
+}
+
+# Assign roles using the retry function
+if ! assign_role_with_retry "roles/appengine.deployer"; then
+  exit 1
+fi
+if ! assign_role_with_retry "roles/appengine.serviceAdmin"; then
+  exit 1
+fi
+if ! assign_role_with_retry "roles/appengine.objectAdmin"; then
+  exit 1
+fi
+if ! assign_role_with_retry "roles/cloudbuild.builds.editor"; then
+  exit 1
+fi
+
+# gcloud projects add-iam-policy-binding $project_name \
+#     --member=$iam_member \
+#     --role="roles/appengine.deployer"
+
+# gcloud projects add-iam-policy-binding $project_name \
+#     --member $iam_member \
+#     --role "roles/appengine.serviceAdmin"
+
+# gcloud projects add-iam-policy-binding $project_name \
+#     --member $iam_member \
+#     --role "roles/storage.objectAdmin"
+
+# gcloud projects add-iam-policy-binding $project_name \
+#     --member $iam_member \
+#     --role "roles/cloudbuild.builds.editor"
 
 gcloud iam service-accounts add-iam-policy-binding \
     $project_name@appspot.gserviceaccount.com \
@@ -59,22 +99,28 @@ gcloud iam service-accounts add-iam-policy-binding \
 
 if [ $is_site ]; then
     echo " ---- Adding hosting ----\n\n"
-    gcloud projects add-iam-policy-binding $project_name \
-        --member $iam_member \
-        --role "roles/firebasehosting.admin"
+    if ! assign_role_with_retry "roles/firebasehosting.admin"; then
+        exit 1
+    fi
+    if ! assign_role_with_retry "roles/firebase.viewer"; then
+        exit 1
+    fi
+    # gcloud projects add-iam-policy-binding $project_name \
+    #     --member $iam_member \
+    #     --role "roles/firebasehosting.admin"
 
-    gcloud projects add-iam-policy-binding $project_name \
-        --member $iam_member \
-        --role "roles/firebase.viewer"
+    # gcloud projects add-iam-policy-binding $project_name \
+    #     --member $iam_member \
+    #     --role "roles/firebase.viewer"
 fi
 
-echo "\n --- Roles Assign ---\n"
+echo "\n --- Roles Assigned ---\n"
 
 # generate key file
 key_file="./service-accounts/$project_name.json"
 gcloud iam service-accounts keys create $key_file \
     --project=$project_name \
-    --iam-account="$agent_name@$project_name.iam.gserviceaccount.com"
+    --iam-account="$service_account"
 
 # create publishing config
 gcloud config configurations create $config_name
@@ -82,7 +128,7 @@ gcloud config configurations activate $config_name
 
 # activate new service account
 gcloud auth activate-service-account --key-file=$key_file
-gcloud config set account $agent_name@$project_name.iam.gserviceaccount.com
+gcloud config set account $service_account
 gcloud config set project $project_name
 
 # reset default
