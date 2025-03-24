@@ -20,7 +20,7 @@ NOTE:  Rather than add more env variables to find the service accounts, we have 
 
 setup yarn for publishing Github packages:
   Login to Github, create a new PAT with 'write:packages' permission
-  Save the PAT to ~/.npmrc
+  Save the PAT to ~/.npmrc (note: don't rely on an LLM for file format)
 
 Our system is built to be deployed on Google App Engine (GAE).  The services are deployed as standard environment on GAE, and the websites are deployed to Firebase Hosting.
 
