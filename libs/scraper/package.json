@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/scraper",
-  "version": "0.2.139",
+  "version": "0.2.140",
   "private": true,
   "type": "module",
   "description": "The Coin: Automated scraper for TheCoin",
@@ -24,8 +24,8 @@
     "recordSamples": "yarn run -T cross-env CONFIG_NAME=prod URL_SEQ_LOGGING=false TC_LOG_FOLDER=false run-env tools/recordSamples/recordSamples.ts"
   },
   "dependencies": {
-    "@thecointech/async": "^0.2.139",
-    "@thecointech/logging": "^0.2.139",
+    "@thecointech/async": "^0.2.140",
+    "@thecointech/logging": "^0.2.140",
     "@web-std/file": "^3.0.3",
     "@xenova/transformers": "^2.14.0",
     "fastest-levenshtein": "^1.0.16",
@@ -37,7 +37,7 @@
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.2.139",
+    "@thecointech/jestutils": "^0.2.140",
     "@types/fs-extra": "^11.0.4",
     "@types/pixelmatch": "^5.2.6",
     "@types/pngjs": "^6.0.5"
