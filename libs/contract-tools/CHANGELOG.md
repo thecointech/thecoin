@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.141](https://github.com/thecointech/thecoin/compare/v0.2.140...v0.2.141) (2025-03-24)
+
+**Note:** Version bump only for package @thecointech/contract-tools
+
+
+
+
+
 ## [0.2.140](https://github.com/thecointech/thecoin/compare/v0.2.139...v0.2.140) (2025-03-24)
 
 **Note:** Version bump only for package @thecointech/contract-tools

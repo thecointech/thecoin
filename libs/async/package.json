@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/async",
-  "version": "0.2.140",
+  "version": "0.2.141",
   "description": "TheCoin: utility functions for async control",
   "type": "module",
   "keywords": [
