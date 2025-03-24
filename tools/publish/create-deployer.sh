@@ -10,11 +10,17 @@ if [[ ${#agent_name} -gt 30 ]]; then
     agent_name="${agent_name:0:30}"
 fi
 echo $agent_name
-is_site=0
+
+is_site=false
+if [[ $config_name =~ "tccc-" ]]; then
+   is_site=true
+fi
+echo $is_site
 
 echo "Creating publishing agent for $config_name - $project_name with is_site: $is_site"
 printf "%s " "Press enter to continue"
 read ans
+
 
 gcloud iam service-accounts create "$agent_name" \
     --project=$project_name \
@@ -45,18 +51,22 @@ gcloud projects add-iam-policy-binding $project_name \
     --member $iam_member \
     --role "roles/cloudbuild.builds.editor"
 
-if [ $is_site -ne 0 ]; then
-    echo "Adding hosting"
-    gcloud projects add-iam-policy-binding $project_name \
-        --member $iam_member \
-        --role "roles/firebasehosting.admin"
-fi
-
 gcloud iam service-accounts add-iam-policy-binding \
     $project_name@appspot.gserviceaccount.com \
     --member=$iam_member \
     --role=roles/iam.serviceAccountUser \
     --project=$project_name
+
+if [ $is_site ]; then
+    echo " ---- Adding hosting ----\n\n"
+    gcloud projects add-iam-policy-binding $project_name \
+        --member $iam_member \
+        --role "roles/firebasehosting.admin"
+
+    gcloud projects add-iam-policy-binding $project_name \
+        --member $iam_member \
+        --role "roles/firebase.viewer"
+fi
 
 echo "\n --- Roles Assign ---\n"
 

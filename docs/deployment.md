@@ -9,11 +9,18 @@ install node (currently v22)
 install gcloud CLI and `gcloud auth login`
 use tools/deploy/create-deployer.sh: Generate service accounts for deploying to GAE, one for rates-service & one for broker-cad.  Run the script from outside the repository as it will cache service account files in a local/relative folder.
 
+The account for broker-service should be named `tccc-{testing|something}`, this name is detected to add the firestore deployment capability for the websites
+
+NOTE:  Rather than add more env variables to find the service accounts, we have hardcoded the service account locations to be:
+ - The directory structure should be
+  - <deploy-root>
+    - env (private env variables)
+    - service-accounts
+    - prod|prodtest (where the deployments run from)
+
 setup yarn for publishing Github packages:
   Login to Github, create a new PAT with 'write:packages' permission
   Save the PAT to ~/.npmrc
-
-You also need to login to firebase.  Navigate to root folder and run `yarn firebase login`
 
 Our system is built to be deployed on Google App Engine (GAE).  The services are deployed as standard environment on GAE, and the websites are deployed to Firebase Hosting.
 
