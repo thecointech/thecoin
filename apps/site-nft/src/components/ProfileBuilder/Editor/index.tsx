@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import 'tui-image-editor/dist/tui-image-editor.css';
+// import 'tui-image-editor/dist/tui-image-editor.css';
 // import ImageEditor, { ImageEditorComponent, ThemeConfig, EditorCore } from '@toast-ui/react-image-editor';
 import styles from './styles.module.less';
 

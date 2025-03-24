@@ -11,7 +11,7 @@ use tools/deploy/create-deployer.sh: Generate service accounts for deploying to 
 
 setup yarn for publishing Github packages:
   Login to Github, create a new PAT with 'write:packages' permission
-  Save the PAT to ~/.npmrc
+  Save the PAT to ~/.npmrc (note: don't rely on an LLM for file format)
 
 You also need to login to firebase.  Navigate to root folder and run `yarn firebase login`
 
