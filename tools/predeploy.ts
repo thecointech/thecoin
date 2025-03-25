@@ -1,6 +1,6 @@
 import { getEnvVars } from "@thecointech/setenv";
 import { exit } from "process";
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync, existsSync } from "fs";
 import { spawn } from 'child_process';
 import { promisify } from 'util';
 import { exec as exec_cb } from 'child_process';
@@ -39,8 +39,12 @@ async function SetFirecloudServiceAccount(envName: string) {
     'service-accounts',
     `${process.env[envName]}.json`
   )
-  process.env.GOOGLE_APPLICATION_CREDENTIALS=keyFilePath
-  //return ShellCmd(`yarn run -T firebase login --key-file ${keyFilePath}`);
+  if (!existsSync(keyFilePath)) {
+    throw new Error("Service Account not found at path: " + keyFilePath)
+  }
+  console.log("path: " + keyFilePath)
+  process.env.GOOGLE_APPLICATION_CREDENTIALS=keyFilePath;
+  // return ShellCmd(`yarn run -T firebase login --key-file ${keyFilePath}`);
 }
 
 //
