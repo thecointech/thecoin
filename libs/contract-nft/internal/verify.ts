@@ -5,7 +5,7 @@ async function verifyNft(network: string) {
   console.log(`Verifying TheGreenNFTL2 on ${network}`);
   const deployed = await import(
     `../src/deployed/${process.env.CONFIG_NAME}-${network}`,
-    { assert: { type: "json" } }
+    { with: { type: "json" } }
   );
   verify(network, "TheGreenNFTL2", deployed.default.contract)
 }
