@@ -5,6 +5,7 @@ import { spawn } from 'child_process';
 import { promisify } from 'util';
 import { exec as exec_cb } from 'child_process';
 import { getSecret } from "@thecointech/secrets";
+import { join } from 'path';
 
 const exec = promisify(exec_cb);
 console.log(`Preparing deploy env: ${process.env.CONFIG_NAME}`);
@@ -28,16 +29,18 @@ export function SetGCloudConfig(envName: string) {
   return ShellCmd(`gcloud config configurations activate ${process.env[envName]}`);
 }
 
-//
-// Set the GCLOUD_APPLICATION_CREDENTIAL env variable
-// Necessary for deploying to firebase with service accounts
-export function SetGCloudAppCred(envName: string) {
-  if (!process.env.GCLOUD_CREDENTIAL_STORE) {
-    console.warn("Not setting AppCred - missing store from env variables");
-  }
-  else {
-    process.env.GOOGLE_APPLICATION_CREDENTIALS=`${process.env.GCLOUD_CREDENTIAL_STORE}/${process.env[envName]}.json`;
-  }
+// Similar to SetGCloudConfig, but firestore doesn't support named configs
+async function SetFirecloudServiceAccount(envName: string) {
+  // Hard-coded path means service accounts must be co-located to the env folder
+  // Not ideal, but path of least resistance...
+  const keyFilePath = join(
+    process.env.THECOIN_ENVIRONMENTS!,
+    '..',
+    'service-accounts',
+    `${process.env[envName]}.json`
+  )
+  process.env.GOOGLE_APPLICATION_CREDENTIALS=keyFilePath
+  //return ShellCmd(`yarn run -T firebase login --key-file ${keyFilePath}`);
 }
 
 //
@@ -45,9 +48,9 @@ export function SetGCloudAppCred(envName: string) {
 // Set firebase to a profile matching the current config
 // Requires there be a matching profile defined in firebase.json
 export async function FirebaseDeploy(envName: string) {
-  SetGCloudAppCred(envName);
-  await ShellCmd(`firebase use ${process.env.CONFIG_NAME}`)
-  await ShellCmd("firebase deploy --only hosting");
+  await SetFirecloudServiceAccount(envName);
+  await ShellCmd(`yarn run -T firebase use ${process.env.CONFIG_NAME}`)
+  await ShellCmd("yarn run -T firebase deploy --only hosting");
 }
 
 //

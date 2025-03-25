@@ -7,7 +7,7 @@ install python (currently 3.11)
 install node (currently v22)
   run `corepack enable`
 install gcloud CLI and `gcloud auth login`
-use tools/deploy/create-deployer.sh: Generate service accounts for deploying to GAE, one for rates-service & one for broker-cad.  Run the script from outside the repository as it will cache service account files in a local/relative folder.
+use tools/deploy/create-deployer.sh: Generate service accounts for deploying to GAE, one for rates-service & one for broker-cad.  Run the script from outside the repository as it will cache service account files in a local/relative folder.  (Note, changes do take time to propagate, give it 5 mins)
 
 setup yarn for publishing Github packages:
   Login to Github, create a new PAT with 'write:packages' permission
