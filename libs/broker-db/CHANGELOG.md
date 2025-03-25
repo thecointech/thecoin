@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.142](https://github.com/thecointech/thecoin/compare/v0.2.141...v0.2.142) (2025-03-25)
+
+**Note:** Version bump only for package @thecointech/broker-db
+
+
+
+
+
 ## [0.2.141](https://github.com/thecointech/thecoin/compare/v0.2.140...v0.2.141) (2025-03-24)
 
 **Note:** Version bump only for package @thecointech/broker-db
