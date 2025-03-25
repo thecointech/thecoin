@@ -61,6 +61,8 @@
     }
   },
   "dependencies": {
+    "@thecointech/secrets": "^0.2.141",
+    "@thecointech/secrets-google": "^0.2.141",
     "@ethers-ext/signer-ledger": "^6.0.0-beta.1",
     "@ledgerhq/hw-transport-node-hid": "^6.28.6",
     "@thecointech/ethers-provider": "^0.2.141",

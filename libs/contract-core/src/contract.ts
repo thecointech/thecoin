@@ -10,7 +10,7 @@ export const InitialCoinBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0", 
 export const getContractAddress = async () : Promise<string> => {
 
   const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME;
-  const deployment = await import(`./deployed/${config_env}-polygon.json`, { assert: { type: 'json' } });
+  const deployment = await import(`./deployed/${config_env}-polygon.json`, { with: { type: 'json' } });
 
   if (!deployment) {
     throw new Error('Cannot create contract: missing deployment');
