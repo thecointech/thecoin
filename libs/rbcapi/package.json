@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/rbcapi",
-  "version": "0.2.141",
+  "version": "0.2.142",
   "private": true,
   "description": "The Coin: A puppeteer-based API for Royal Bank of Canada",
   "type": "module",
@@ -42,10 +42,10 @@
   },
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/bank-interface": "^0.2.141",
-    "@thecointech/logging": "^0.2.141",
-    "@thecointech/store": "^0.2.141",
-    "@thecointech/utilities": "^0.2.141",
+    "@thecointech/bank-interface": "^0.2.142",
+    "@thecointech/logging": "^0.2.142",
+    "@thecointech/store": "^0.2.142",
+    "@thecointech/utilities": "^0.2.142",
     "csvtojson": "^2.0.10",
     "promise.any": "^2.0.4",
     "puppeteer": "^24.1.1",
@@ -53,8 +53,8 @@
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.2.141",
-    "@thecointech/types": "^0.2.141",
+    "@thecointech/jestutils": "^0.2.142",
+    "@thecointech/types": "^0.2.142",
     "@types/promise.any": "^2.0.0"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
