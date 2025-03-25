@@ -11031,7 +11031,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/secrets-google@workspace:libs/secrets-google":
+"@thecointech/secrets-google@npm:^0.2.141, @thecointech/secrets-google@workspace:libs/secrets-google":
   version: 0.0.0-use.local
   resolution: "@thecointech/secrets-google@workspace:libs/secrets-google"
   dependencies:
@@ -11110,6 +11110,8 @@ __metadata:
     "@thecointech/electron-utils": "npm:^0.2.141"
     "@thecointech/ethers-provider": "npm:^0.2.141"
     "@thecointech/logging": "npm:^0.2.141"
+    "@thecointech/secrets": "npm:^0.2.141"
+    "@thecointech/secrets-google": "npm:^0.2.141"
   languageName: unknown
   linkType: soft
 
