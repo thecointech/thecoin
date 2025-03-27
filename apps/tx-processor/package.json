@@ -37,8 +37,6 @@
     "@thecointech/tx-etransfer": "^0.2.142",
     "@thecointech/tx-plugins": "^0.2.142",
     "@thecointech/rbcapi": "^0.2.142",
-    "luxon": "3.3.0",
-    "@google-cloud/firestore": "6.0.0",
     "open": "^8.2.1"
   },
   "devDependencies": {
