@@ -1,7 +1,6 @@
 {
   "name": "@thecointech/store",
   "version": "0.2.142",
-  "private": true,
   "description": "The Coin: Base storage mechanisms",
   "type": "module",
   "keywords": [

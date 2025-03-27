@@ -30,6 +30,8 @@ export enum SecretKey {
   BlockpassWebhookSecret = "BlockpassWebhookSecret",
   GCloudImageStorageBucket = "GCloudImageStorageBucket",
 
+  RbcApiCredentials = "RbcApiCredentials",
+
   SignerOwnerPwd = "SignerOwnerPwd",
   SignerTheCoinPwd = "SignerTheCoinPwd",
   SignerTCManagerPwd = "SignerTCManagerPwd",
@@ -46,6 +48,6 @@ export enum SecretKey {
   SignerClient2Pwd = "SignerClient2Pwd",
   SignerUberTesterPwd = "SignerUberTesterPwd",
   SignerSaTesterPwd = "SignerSaTesterPwd",
-  SignerTestDemoAccountPwd = "SignerTestDemoAccountPwd"
+  SignerTestDemoAccountPwd = "SignerTestDemoAccountPwd",
 }
 export type SecretKeyType = keyof typeof SecretKey;

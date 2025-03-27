@@ -107,6 +107,13 @@ These files are then ignored, so we do not have any files committed into Git tha
 
 ## Environment Vars
 
+THIS IS NO LONGER TRUE
+
+Secrets are stored in Bitwarden
+Env vars are stored in <root>/environments
+The local machine should have a THECOIN_SECRETS environment variable
+pointing to where it can find the bitwarden key file
+
 -All- configuration information is stored in env files. The location of the .env files is under a folder specified in the environment variable THECOIN_ENVIRONMENTS.  We also store example (spec) .env files under the folder `<root>/environments`.  When loading a .env file, we first query the external location, then the git folder for the file.  It should (may) be possible to do some actions (eg - build and test vs published data) by loading the git folder, but for publishing the engineer will need to fill in all the approriate keys etc.
 
 To select which config to use, we set the environment variable CONFIG_NAME.  Each build step (webpack, deploy etc) calls `@thecointech/setenv` to load the appropriate config from this variable, and ensures that the deployment goes to the correct app engine etc.

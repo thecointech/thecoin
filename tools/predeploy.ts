@@ -34,7 +34,7 @@ async function SetFirecloudServiceAccount(envName: string) {
   // Hard-coded path means service accounts must be co-located to the env folder
   // Not ideal, but path of least resistance...
   const keyFilePath = join(
-    process.env.THECOIN_ENVIRONMENTS!,
+    process.env.THECOIN_SECRETS!,
     '..',
     'service-accounts',
     `${process.env[envName]}.json`

@@ -17,9 +17,10 @@
     "dev:live": "run -T cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn dev",
     "prod": "run -T cross-env CONFIG_NAME=prod yarn start",
-    "start": "run -T cross-env CONFIG_NAME=prod yarn run-env ./build/main.js",
+    "start": "yarn run-env ./build/main.js",
     "test": "run :jest",
-    "test:summary": "jest --coverage > ./coverage/summary.txt"
+    "test:summary": "jest --coverage > ./coverage/summary.txt",
+    "build:docker": "run -T cross-env CONFIG_NAME=prod yarn run-env ./docker/build-docker.ts"
   },
   "files": [
     "build/**/*"
@@ -35,6 +36,9 @@
     "@thecointech/tx-deposit": "^0.2.142",
     "@thecointech/tx-etransfer": "^0.2.142",
     "@thecointech/tx-plugins": "^0.2.142",
+    "@thecointech/rbcapi": "^0.2.142",
+    "luxon": "3.3.0",
+    "@google-cloud/firestore": "6.0.0",
     "open": "^8.2.1"
   },
   "devDependencies": {

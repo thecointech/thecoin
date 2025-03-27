@@ -42,7 +42,7 @@ it("Can complete deposits", async () => {
 
   const brokerCad = await getSigner("BrokerCAD");
   const theContract = await ConnectContract(brokerCad);
-  const bank = new RbcApi();
+  const bank = await RbcApi.create();
 
   // We have 5 deposits, and
   setupReturnValues(bank)

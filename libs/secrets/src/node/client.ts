@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import { SecretClientEnvNotFound, SecretClientKeyNotFound } from "../errors";
 import type { ConfigType } from "../types";
 
-type BWClientWithOrgId = BitwardenClient & {
+export type BWClientWithOrgId = BitwardenClient & {
   organizationId: string;
 };
 
@@ -32,10 +32,39 @@ export async function createClient(config?: ConfigType) {
     deviceType: DeviceType.SDK,
   };
 
-  const basePath = process.env.THECOIN_ENVIRONMENTS;
+  const { accessToken, stateFile, organizationId } = getBwsVars(config);
+
+  const client = new BitwardenClient(settings, 2) as BWClientWithOrgId;
+  client.organizationId = organizationId;
+
+  // Authenticating using a machine account access token
+  await client.auth().loginAccessToken(accessToken, stateFile);
+
+  // Do we have access to the right project?
+  const projects = await client.projects().list(organizationId);
+  const matching = projects.data.find(p => p.name == process.env.CONFIG_NAME);
+  if (!matching) {
+    const projectNames = projects.data.map(p => p.name).join(', ');
+    throw new Error(`Secrets initialized for ${process.env.CONFIG_NAME} but only found projects: ${projectNames}`);
+  }
+  return client;
+}
+
+function getBwsVars(config?: ConfigType) {
+  // Is the key an environment variable?
+  if (process.env.BWS_ACCESS_TOKEN && process.env.ORGANIZATION_ID) {
+    return {
+      accessToken: process.env.BWS_ACCESS_TOKEN,
+      stateFile: process.env.BWS_STATE_FILE,
+      organizationId: process.env.ORGANIZATION_ID,
+    };
+  }
+
+  const basePath = process.env.THECOIN_SECRETS;
   if (!basePath) {
     throw new SecretClientEnvNotFound();
   }
+
   // Read our .env file
   const envName = config || process.env.CONFIG_NAME || "development";
   const envFileName = `bitwarden.${envName}.env`;
@@ -45,13 +74,9 @@ export async function createClient(config?: ConfigType) {
   }
   const raw =  readFileSync(envPath, "utf-8");
   const parsed = dotenv.parse(raw);
-  const accessToken = parsed.BWS_ACCESS_TOKEN;
-  const stateFile = parsed.BWS_STATE_FILE;
-
-  const client = new BitwardenClient(settings, 2) as BWClientWithOrgId;
-  client.organizationId = parsed.ORGANIZATION_ID;
-
-  // Authenticating using a machine account access token
-  await client.auth().loginAccessToken(accessToken, stateFile);
-  return client;
+  return {
+    accessToken: parsed.BWS_ACCESS_TOKEN,
+    stateFile: parsed.BWS_STATE_FILE,
+    organizationId: parsed.ORGANIZATION_ID,
+  };
 }
