@@ -70,7 +70,7 @@ async function initialize() {
   ConfigStore.initialize({
     adapter: "memory"
   })
-  api = new RbcApi({ authFile: process.env.RBCAPI_CREDENTIALS_PATH! });
+  api = await RbcApi.create({ authFile: process.env.RBCAPI_CREDENTIALS_PATH! });
 }
 
 async function release() {

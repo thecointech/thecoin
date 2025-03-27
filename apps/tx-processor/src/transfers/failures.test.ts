@@ -18,7 +18,7 @@ init({});
 log.level(100)
 const brokerCad = await getSigner("BrokerCAD");
 const theContract = await ConnectContract(brokerCad);
-const bank = new RbcApi();
+const bank = await RbcApi.create();
 const user = Wallet.createRandom();
 
 it("does not continue processing user with failed transactions", async () => {

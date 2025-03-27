@@ -3,6 +3,7 @@ import fs, { readFileSync } from 'fs';
 import { log } from '@thecointech/logging';
 import { AuthOptions, Credentials, isCredentials } from './types';
 import { getPage } from './scraper';
+import { getSecret } from '@thecointech/secrets';
 
 ////////////////////////////////////////////////////////////////
 // API action, a single-shot action created by the API.
@@ -13,7 +14,7 @@ export class ApiAction {
 
   static Credentials: Credentials;
 
-  static initCredentials(options?: AuthOptions) {
+  static async initCredentials(options?: AuthOptions) {
     if (isCredentials(options))
       ApiAction.Credentials = options;
     else if (options?.authFile) {
@@ -31,7 +32,8 @@ export class ApiAction {
       ApiAction.Credentials = JSON.parse(cred);
     }
     else {
-      throw new Error('Cannot use RbcApi without credentials');
+      const credentials = await getSecret("RbcApiCredentials");
+      ApiAction.Credentials = JSON.parse(credentials);
     }
   }
 

@@ -38,7 +38,7 @@ it('Succesfully Processes Sell', async ()=> {
 
   const signer = await getSigner("BrokerTransferAssistant")
   const contract = await ConnectContract(signer);
-  const bank = new RbcApi();
+  const bank = await RbcApi.create();
   const eTransfers = await processTransfers(contract, bank);
 
   for (const xfer of eTransfers)

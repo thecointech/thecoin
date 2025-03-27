@@ -42,6 +42,7 @@ async function getTokenBitwarden(url: string) {
   const uniqueId = randomUUID();
   await setTempSecret(getUniqueUrlKey(uniqueId), url);
   log.info(`Initialized token request with id: ${uniqueId}`);
+  log.info(`Please run: yarn token-cli ${process.env.CONFIG_NAME} ${uniqueId}`);
   const pollingInterval = 5000;
   const timeout = 5 * 60 * 1000;
   // now, poll for the token for up to 5 minutes
