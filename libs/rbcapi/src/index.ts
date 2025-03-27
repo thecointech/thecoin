@@ -13,10 +13,7 @@ export class RbcApi implements IBank {
 
   // Create new instance with authentication.  If options are not
   // specified, attempt to read the RBCAPI_CREDENTIALS environment variable
-  constructor(options?: AuthOptions)
-  {
-    this.initialize(options);
-  }
+  private constructor() {}
 
   depositETransfer = depositETransfer;
   fetchLatestTransactions = fetchLatestTransactions;
@@ -35,9 +32,10 @@ export class RbcApi implements IBank {
     return -1;
   }
 
-  initialize(options?: AuthOptions) {
-    ApiAction.initCredentials(options);
+  static async create(options?: AuthOptions) {
+    await ApiAction.initCredentials(options);
     RbcStore.Options = ApiAction.Credentials.timezone;
+    return new RbcApi();
   }
 }
 

@@ -1,7 +1,6 @@
 {
   "name": "@thecointech/tx-gmail",
   "version": "0.2.142",
-  "private": true,
   "description": "The Coin: Fetch e-transfer emails from GMail and convert to tx",
   "type": "module",
   "keywords": [
@@ -23,7 +22,8 @@
     "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "run :jest",
-    "test:summary": "jest --coverage > ./coverage/summary.txt"
+    "test:summary": "jest --coverage > ./coverage/summary.txt",
+    "token-cli": "run -T run-env ./tools/token-cli.ts"
   },
   "files": [
     "build/**/*"

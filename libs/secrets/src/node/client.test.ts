@@ -33,7 +33,7 @@ describe("verify created client", () => {
     jest.resetModules();
     process.env = {
       ...originalEnv,
-      THECOIN_ENVIRONMENTS: ".",
+      THECOIN_SECRETS: ".",
       CONFIG_NAME: "test"
     };
     global.__tc_secretClient = undefined;
@@ -82,10 +82,10 @@ describe("verify created client", () => {
   });
 
   it("propagates errors from createClient", async () => {
-    process.env.THECOIN_ENVIRONMENTS = undefined;
+    process.env.THECOIN_SECRETS = undefined;
 
     await expect(getClient())
       .rejects
-      .toThrow("Missing THECOIN_ENVIRONMENTS environment variable");
+      .toThrow("Missing THECOIN_SECRETS environment variable");
   });
 });
