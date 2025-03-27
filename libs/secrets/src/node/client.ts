@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import { SecretClientEnvNotFound, SecretClientKeyNotFound } from "../errors";
 import type { ConfigType } from "../types";
 
-type BWClientWithOrgId = BitwardenClient & {
+export type BWClientWithOrgId = BitwardenClient & {
   organizationId: string;
 };
 

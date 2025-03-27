@@ -1,5 +1,4 @@
-//
-// Moved into its balh
+import { existsSync } from "fs";
 
 export const projectUrl = () => {
   let baseUrl = new URL(`../../../`, new URL(import.meta.url));
