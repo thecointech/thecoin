@@ -1,7 +1,6 @@
 {
   "name": "@thecointech/tx-gmail",
   "version": "0.2.142",
-  "private": true,
   "description": "The Coin: Fetch e-transfer emails from GMail and convert to tx",
   "type": "module",
   "keywords": [

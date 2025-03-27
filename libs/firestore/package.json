@@ -40,10 +40,10 @@
   "types": "./build/index_common.d.ts",
   "dependencies": {
     "@thecointech/logging": "^0.2.142",
-    "@thecointech/secrets": "^0.2.142"
+    "@thecointech/secrets": "^0.2.142",
+    "@google-cloud/firestore": "6.0.0"
   },
   "peerDependencies": {
-    "@google-cloud/firestore": "*",
     "firebase": "*"
   },
   "devDependencies": {

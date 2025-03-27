@@ -45,7 +45,7 @@ const findTsConfig = async () => {
     const parentDir = dirname(currentDir);
     // Check if we've reached the root
     if (parentDir === currentDir) {
-      throw new Error('No tsconfig.json found in any parent directory');
+      return null;
     }
     currentDir = parentDir;
   }
