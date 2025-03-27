@@ -39,6 +39,14 @@ export async function createClient(config?: ConfigType) {
 
   // Authenticating using a machine account access token
   await client.auth().loginAccessToken(accessToken, stateFile);
+
+  // Do we have access to the right project?
+  const projects = await client.projects().list(organizationId);
+  const matching = projects.data.find(p => p.name == process.env.CONFIG_NAME);
+  if (!matching) {
+    const projectNames = projects.data.map(p => p.name).join(', ');
+    throw new Error(`Secrets initialized for ${process.env.CONFIG_NAME} but only found projects: ${projectNames}`);
+  }
   return client;
 }
 
@@ -52,7 +60,7 @@ function getBwsVars(config?: ConfigType) {
     };
   }
 
-  const basePath = process.env.THECOIN_ENVIRONMENTS;
+  const basePath = process.env.THECOIN_SECRETS;
   if (!basePath) {
     throw new SecretClientEnvNotFound();
   }

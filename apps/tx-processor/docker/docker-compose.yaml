@@ -4,16 +4,17 @@ services:
     build: .
     environment:
       - CONFIG_NAME=${CONFIG_NAME:-prod}
-      - RBCAPI_CREDENTIALS_PATH=/run/secrets/rbc_credentials
-      - FIRESTORE_CREDENTIALS_PATH=/run/secrets/firestore_credentials
-    secrets:
-      - source: rbc_credentials_runtime
-        target: rbc_credentials
-      - source: firestore_credentials_runtime
-        target: firestore_credentials
+    volumes:
+      # Persistent runtime data
+      - type: volume
+        source: tx-processor-data
+        target: /data
+      # Secrets from host machine (read-only)
+      - type: bind
+        source: ${THECOIN_SECRETS?THECOIN_SECRETS environment variable is required}
+        target: /secrets
+        read_only: true
 
-secrets:
-  rbc_credentials_runtime:
-    external: true
-  firestore_credentials_runtime:
-    external: true
+volumes:
+  tx-processor-data:
+    name: tx-processor-data-${CONFIG_NAME:-prod}

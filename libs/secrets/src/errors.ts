@@ -8,7 +8,7 @@ export class SecretNotFoundError extends Error {
 
 export class SecretClientEnvNotFound extends Error {
   constructor() {
-    super("Missing THECOIN_ENVIRONMENTS environment variable");
+    super("Missing THECOIN_SECRETS environment variable");
   }
 }
 

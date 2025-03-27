@@ -15,14 +15,14 @@ export async function loadFromDisk(name: AccountName, callback?: ProgressCallbac
 // or from file system if name is a path.
 function loadEncrypted(name: AccountName) {
 
-  if (!process.env.THECOIN_ENVIRONMENTS) {
-    throw new Error("THECOIN_ENVIRONMENTS not set");
+  if (!process.env.THECOIN_SECRETS) {
+    throw new Error("THECOIN_SECRETS not set");
   }
   if (!process.env.CONFIG_NAME) {
     throw new Error("CONFIG_NAME not set");
   }
   const walletPath = join(
-    process.env.THECOIN_ENVIRONMENTS,
+    process.env.THECOIN_SECRETS,
     process.env.CONFIG_NAME,
     "wallets",
     `${name}.json`

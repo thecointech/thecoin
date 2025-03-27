@@ -45,7 +45,7 @@ keep_count = 2 # Keep the 2 most recent deployments (not including todays)
 
 logger.info("Creating new version at: " + str(new_deploy))
 
-env_path = os.environ.get('THECOIN_ENVIRONMENTS')
+env_path = os.environ.get('THECOIN_SECRETS')
 if not env_path or not Path(env_path).exists():
     logger.error(f"Cannot deploy, environment \"{env_path}\" does not exist")
     exit(1)
@@ -182,7 +182,7 @@ def mergeBackIntoDev():
   if success != 0:
     logger.error("Merge Failed")
     exit(1)
-    
+
   # push changes back
   os.system('git push')
   # cleanup

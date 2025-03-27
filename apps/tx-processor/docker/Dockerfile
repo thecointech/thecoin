@@ -18,14 +18,11 @@ WORKDIR /apps/tx-processor
 RUN corepack enable
 
 # Set default environment & disable typescript processing
-# Note, THECOIN_ENVIRONMENTS is set to /data
-# because we want /environments to be controlled
-# by build-time only (updates to env files must be propagated)
-# but the data stored under TC_E is purely runtime data.
 ENV CONFIG_NAME=prod \
     NODE_ENV=production \
     TS_NODE_PROJECT=none \
-    THECOIN_ENVIRONMENTS=/data
+    THECOIN_DATA=/data \
+    THECOIN_SECRETS=/secrets
 
 # Copy workspace files
 COPY temp/package.json ./
@@ -39,20 +36,23 @@ RUN YARN_ENABLE_GLOBAL_CACHE=false yarn workspaces focus --production && \
 # Copy source code
 COPY build ./build
 
-# Setup environments structure
-# Config files in /environments
-# Runtime data in /data
+# Setup directory structure
+# - /environments for build-time config
+# - /data for runtime persistent data
+# - /secrets for sensitive credentials
 RUN mkdir -p /environments && \
     mkdir -p /data/dbs && \
-    mkdir -p /data/logs
+    mkdir -p /data/logs && \
+    mkdir -p /secrets && \
+    # Ensure secrets directory has restricted permissions
+    chmod 700 /secrets
+
+# Copy environment configs
 COPY temp/environments/*.env /environments/
 
-# Add entrypoint script
-COPY docker/docker-entrypoint.sh /
-RUN chmod +x /docker-entrypoint.sh
-
-# Create volume mount point for runtime data only
+# Create volume mount points
 VOLUME /data
+VOLUME /secrets
 
 # Hard-code the path to run-env to avoid issues with
 # Yarn not thinking it's been installed
