@@ -6,11 +6,10 @@ on:
   push:
     branches: [ dev ]
 
-this should throw an error, right?
 jobs:
   build:
-    uses: ../jobs/build.yml
+    uses: ./.github/actions/build.yml
 
   test:
     needs: build
-    uses: ../jobs/test.yml
+    uses: ./.github/actions/test.yml

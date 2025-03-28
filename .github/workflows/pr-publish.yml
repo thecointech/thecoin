@@ -8,17 +8,16 @@ on:
 
 jobs:
   build:
-    uses: ../jobs/build.yml
+    uses: ./.github/actions/build.yml
 
   test:
     needs: build
-    uses: ../jobs/test.yml
+    uses: ./.github/actions/test.yml
 
   publish-packages:
     needs: test
-    uses: ../jobs/publish-packages.yml
+    uses: ./.github/actions/publish-packages.yml
 
   docker-build:
     needs: publish-packages
-    uses: ../jobs/docker-build.yml
-
+    uses: ./.github/actions/docker-build.yml
