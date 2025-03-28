@@ -23,7 +23,7 @@
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
-    "token-cli": "run -T run-env ./tools/token-cli.ts"
+    "token-cli": "run -T run-env cfg=prod ./tools/token-cli.ts"
   },
   "files": [
     "build/**/*"
