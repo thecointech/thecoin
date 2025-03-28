@@ -6,6 +6,11 @@ on:
   push:
     branches: [ publish/* ]
 
+# Cancel any in-progress job or run
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     uses: ./.github/workflows/action-build.yml
@@ -16,8 +21,10 @@ jobs:
 
   publish-packages:
     needs: test
+    if: github.event_name == 'push'
     uses: ./.github/workflows/action-publish-packages.yml
 
   docker-build:
     needs: publish-packages
+    if: github.event_name == 'push'
     uses: ./.github/workflows/action-docker-build.yml

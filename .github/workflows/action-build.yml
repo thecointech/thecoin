@@ -55,9 +55,6 @@ jobs:
         NODE_OPTIONS: "--max-old-space-size=6144"
       run: yarn build
 
-    - name: Build Completed
-      run: echo "Build completed at $(date +'%Y-%m-%dT%H:%M:%S')"
-
     # Upload build artifacts for test and docker jobs
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
@@ -69,8 +66,13 @@ jobs:
           apps/*/build/
           libs/*/build/
           tools/*/build/
+          libs/contract-*/src/codegen/**
           package.json
           .yarnrc.yml
           yarn.lock
           environments/
           apps/tx-processor/docker/
+        retention-days: 1
+
+    - name: Build Completed
+      run: echo "Build completed at $(date +'%Y-%m-%dT%H:%M:%S')"
