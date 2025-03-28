@@ -11482,7 +11482,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-processor@workspace:apps/tx-processor"
   dependencies:
-    "@google-cloud/firestore": "npm:6.0.0"
     "@thecointech/logging": "npm:^0.2.143"
     "@thecointech/rbcapi": "npm:^0.2.143"
     "@thecointech/setenv": "npm:^0.2.143"
@@ -11491,7 +11490,6 @@ __metadata:
     "@thecointech/tx-deposit": "npm:^0.2.143"
     "@thecointech/tx-etransfer": "npm:^0.2.143"
     "@thecointech/tx-plugins": "npm:^0.2.143"
-    luxon: "npm:3.3.0"
     open: "npm:^8.2.1"
   languageName: unknown
   linkType: soft

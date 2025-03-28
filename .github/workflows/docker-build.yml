@@ -1,15 +1,16 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Images
 
 on:
   workflow_run:
-    workflows: ["Build", "Run Tests"]
+    workflows: ["Run Tests"]
     types:
       - completed
     branches: [ prod, prodtest ]
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/tx-processor
+  TX_PROCESSOR_IMAGE: ${{ github.repository }}/tx-processor
+  VQA_SERVICE_IMAGE: ${{ github.repository }}/vqa-service
 
 jobs:
   build-and-push:
@@ -20,18 +21,12 @@ jobs:
       packages: write
 
     steps:
+      - uses: actions/checkout@v4
+
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: .
-
-      - name: Prepare Docker context
-        run: |
-          # Move files to match Dockerfile expectations
-          mkdir -p temp
-          mv package.json .yarnrc.yml yarn.lock environments temp/
-          mv apps/tx-processor/build build/
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -44,21 +39,41 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract metadata for Docker
-        id: meta
+        id: meta-tx
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}
           tags: |
             type=ref,event=branch
             type=sha,format=long
 
-      - name: Build and push
+      - name: Extract metadata for VQA Service
+        id: meta-vqa
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.VQA_SERVICE_IMAGE }}
+          tags: |
+            type=ref,event=branch
+            type=sha,format=long
+
+      - name: Build and push tx-processor
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./apps/tx-processor/docker/Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: ${{ steps.meta-tx.outputs.tags }}
+          labels: ${{ steps.meta-tx.outputs.labels }}
+          cache-from: type=gha,scope=tx-processor
+          cache-to: type=gha,mode=max,scope=tx-processor
+
+      - name: Build and push vqa-service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./apps/vqa-service
+          file: ./apps/vqa-service/Dockerfile
+          push: true
+          tags: ${{ steps.meta-vqa.outputs.tags }}
+          labels: ${{ steps.meta-vqa.outputs.labels }}
+          cache-from: type=gha,scope=vqa-service
+          cache-to: type=gha,mode=max,scope=vqa-service
