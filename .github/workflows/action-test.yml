@@ -40,3 +40,4 @@ jobs:
       run: yarn test --ci
       env:
         JEST_CI: true
+        NODE_OPTIONS: --experimental-require-module --max_old_space_size=4096
