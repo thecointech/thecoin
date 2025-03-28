@@ -1,58 +1,77 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# This workflow will do a clean install of node dependencies, build the source code
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Build on PR
+name: Build
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ dev, prod, prodtest ]
   pull_request:
     branches: [ dev ]
+
+env:
+  YARN_CHECKSUM_BEHAVIOR: ignore
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      YARN_CHECKSUM_BEHAVIOR: ignore
     steps:
     - name: Run start date
       run: echo "Started at $(date +'%Y-%m-%dT%H:%M:%S')"
+
     - uses: actions/checkout@v4
-      # Java required for OpenAPI client generation
+
+    # Java required for OpenAPI client generation
     - uses: actions/setup-java@v2
       with:
         distribution: 'zulu'
         java-version: '11'
-        java-package: jre # optional (jdk, jre, jdk+fx or jre+fx) - defaults to jdk
-    # - uses: c-hive/gha-yarn-cache@v2
+        java-package: jre
+
     - run: corepack enable
+
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20.11'
+        node-version: '22.11'
         cache: 'yarn'
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
         cache: 'pip'
+
     - name: Install Python dependencies
       working-directory: ./apps/vqa-service
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+
     - name: Install dependencies
       run: yarn install --immutable
+
     - name: Build
       env:
          # Fix OOM in build admin
         NODE_OPTIONS: "--max-old-space-size=6144"
       run: yarn build
+
     - name: Build Completed
-      run: echo "Build done at $(date +'%Y-%m-%dT%H:%M:%S')"
-    #- name: Check no build outputs changing in git
-    #  run: yarn check-changes <-- this fails in CI, but we don't know why
-    - name: Test all
-      run: yarn test --ci
-      env:
-        JEST_CI: true
+      run: echo "Build completed at $(date +'%Y-%m-%dT%H:%M:%S')"
+
+    # Upload build artifacts for test and docker jobs
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifacts
+        path: |
+          apps/*/build/
+          libs/*/build/
+          tools/*/build/
+          package.json
+          .yarnrc.yml
+          yarn.lock
+          environments/
+          apps/tx-processor/docker/
+        retention-days: 1
