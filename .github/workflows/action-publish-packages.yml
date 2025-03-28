@@ -4,11 +4,11 @@ on:
   workflow_call:
 
 env:
+  YARN_CHECKSUM_BEHAVIOR: ignore
   PUPPETEER_SKIP_DOWNLOAD: true  # Skip downloading Chrome
 
 jobs:
   publish:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write  # For git operations and version bumps

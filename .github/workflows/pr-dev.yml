@@ -8,8 +8,8 @@ on:
 
 jobs:
   build:
-    uses: ./.github/actions/build.yml
+    uses: ./.github/workflows/action-build.yml
 
   test:
     needs: build
-    uses: ./.github/actions/test.yml
+    uses: ./.github/workflows/action-test.yml
