@@ -62,8 +62,6 @@
     "clean:apis": "git clean -qfdx ./apis",
     "clean:storybook": "rimraf ./storybook-static",
     "test": "lerna run test --",
-    "test:hm": "cross-env NODE_OPTIONS=\"--max-old-space-size=8192\" yarn test",
-    "test:debug": "cross-env NODE_OPTIONS=\"--max-old-space-size=8192 --inspect-brk\" yarn test",
     "test-single": "yarn node --experimental-vm-modules $(yarn bin jest) ",
     "storybook": "storybook dev -p 6006",
     "dedup": "yarn yarn-deduplicate -s fewer",

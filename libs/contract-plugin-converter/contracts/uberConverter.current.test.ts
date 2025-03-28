@@ -12,7 +12,9 @@ import { EventLog } from 'ethers';
 const timeout = 10 * 60 * 1000;
 jest.setTimeout(timeout);
 
-it('converts fiat to TheCoin for current transfers', async () => {
+// Currently duplicated into uberConverter.delay.test.ts
+// while we try to figure out why it randomly crashes.
+it.skip('converts fiat to TheCoin for current transfers', async () => {
 
   const signers = initAccounts(await hre.ethers.getSigners());
   const UberConverter = await hre.ethers.getContractFactory('UberConverter');
