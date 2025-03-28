@@ -26,13 +26,13 @@ jobs:
         java-version: '11'
         java-package: jre
 
-    - run: corepack enable
-
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '22.11'
         cache: 'yarn'
+
+    - run: corepack enable
 
     - name: Set up Python
       uses: actions/setup-python@v4

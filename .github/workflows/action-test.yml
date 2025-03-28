@@ -13,13 +13,13 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - run: corepack enable
-
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '22.11'
         cache: 'yarn'
+
+    - run: corepack enable
 
     # Restore yarn cache from artifacts
     - name: Download build artifacts
@@ -34,7 +34,7 @@ jobs:
 
     # This will be fast, using the cached dependencies
     - name: Install dependencies
-      run: yarn install --immutable --check-cache
+      run: yarn install --immutable
 
     - name: Run tests
       run: yarn test --ci
