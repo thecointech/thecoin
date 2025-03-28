@@ -4,10 +4,7 @@
 name: Build
 
 on:
-  push:
-    branches: [ dev, prod, prodtest ]
-  pull_request:
-    branches: [ dev ]
+  workflow_call:
 
 env:
   YARN_CHECKSUM_BEHAVIOR: ignore
@@ -67,6 +64,8 @@ jobs:
       with:
         name: build-artifacts
         path: |
+          .yarn/cache
+          .yarn/install-state.gz
           apps/*/build/
           libs/*/build/
           tools/*/build/
@@ -75,4 +74,3 @@ jobs:
           yarn.lock
           environments/
           apps/tx-processor/docker/
-        retention-days: 1

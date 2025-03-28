@@ -1,11 +1,7 @@
 name: Build and Push Docker Images
 
 on:
-  workflow_run:
-    workflows: ["Run Tests"]
-    types:
-      - completed
-    branches: [ prod, prodtest ]
+  workflow_call:
 
 env:
   REGISTRY: ghcr.io

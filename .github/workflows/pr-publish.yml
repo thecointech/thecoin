@@ -1,0 +1,22 @@
+name: Publish Everything
+
+on:
+  pull_request:
+    branches: [ publish/* ]
+
+jobs:
+  build:
+    uses: ./.github/actions/build.yml
+
+  test:
+    needs: build
+    uses: ./.github/actions/test.yml
+
+  publish-packages:
+    needs: test
+    uses: ./.github/actions/publish-packages.yml
+
+  docker-build:
+    needs: publish-packages
+    uses: ./.github/actions/docker-build.yml
+

@@ -1,17 +1,14 @@
 name: Run Tests
 
 on:
-  workflow_call:  # Allows this workflow to be called by other workflows
-  workflow_run:
-    workflows: ["Build"]
-    types:
-      - completed
+  workflow_call:
 
 env:
   PUPPETEER_SKIP_DOWNLOAD: true  # Skip downloading Chrome
 
 jobs:
   test:
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -21,16 +18,23 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20.11'
+        node-version: '22.11'
         cache: 'yarn'
 
-    - name: Install dependencies
-      run: yarn install --immutable
-
+    # Restore yarn cache from artifacts
     - name: Download build artifacts
       uses: actions/download-artifact@v4
       with:
         name: build-artifacts
+
+    - name: Restore yarn state
+      run: |
+        mkdir -p .yarn
+        mv .yarn/cache .yarn/install-state.gz .yarn/ || true
+
+    # This will be fast, using the cached dependencies
+    - name: Install dependencies
+      run: yarn install --immutable --check-cache
 
     - name: Run tests
       run: yarn test --ci

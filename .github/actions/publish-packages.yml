@@ -1,11 +1,7 @@
 name: Publish Packages
 
 on:
-  workflow_run:
-    workflows: ["Build", "Run Tests"]
-    types:
-      - completed
-    branches: [ 'publish/*' ]
+  workflow_call:
 
 env:
   PUPPETEER_SKIP_DOWNLOAD: true  # Skip downloading Chrome
@@ -37,6 +33,16 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
+
+      # Restore yarn cache from artifacts
+      - name: Restore yarn state
+        run: |
+          mkdir -p .yarn
+          mv .yarn/cache .yarn/install-state.gz .yarn/ || true
+
+      # This will be fast, using the cached dependencies
+      - name: Install dependencies
+        run: yarn install --immutable --check-cache
 
       - name: Set Git Config
         run: |
