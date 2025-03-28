@@ -26,10 +26,13 @@ jest.unstable_mockModule('@thecointech/logging', () => ({
     }),
   }
 }));
+
+class mockRbcApi {
+  depositETransfer = jest.fn()
+  static create = () => Promise.resolve(new mockRbcApi())
+}
 jest.unstable_mockModule('@thecointech/rbcapi', () => ({
-  RbcApi: class {
-    depositETransfer = jest.fn()
-  }
+  RbcApi: mockRbcApi
 }));
 const { RbcApi } = await import('@thecointech/rbcapi');
 const { processTransfers } = await import('.')
