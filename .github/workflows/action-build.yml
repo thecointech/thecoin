@@ -65,7 +65,7 @@ jobs:
           .yarn/install-state.gz
           apps/*/build/
           libs/*/build/
-          tools/*/build/
+          apis/**/dist/
           libs/contract-*/src/codegen/**
           package.json
           .yarnrc.yml
