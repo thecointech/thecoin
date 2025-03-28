@@ -42,10 +42,11 @@ export async function createClient(config?: ConfigType) {
 
   // Do we have access to the right project?
   const projects = await client.projects().list(organizationId);
-  const matching = projects.data.find(p => p.name == process.env.CONFIG_NAME);
+  const configName = config ?? process.env.CONFIG_NAME;
+  const matching = projects.data.find(p => p.name == configName);
   if (!matching) {
     const projectNames = projects.data.map(p => p.name).join(', ');
-    throw new Error(`Secrets initialized for ${process.env.CONFIG_NAME} but only found projects: ${projectNames}`);
+    throw new Error(`Secrets initialized for ${configName} but only found projects: ${projectNames}`);
   }
   return client;
 }
