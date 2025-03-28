@@ -3,20 +3,22 @@ name: Publish Everything
 on:
   pull_request:
     branches: [ publish/* ]
+  push:
+    branches: [ publish/* ]
 
 jobs:
   build:
-    uses: ./.github/actions/build.yml
+    uses: ./.github/jobs/build.yml
 
   test:
     needs: build
-    uses: ./.github/actions/test.yml
+    uses: ./.github/jobs/test.yml
 
   publish-packages:
     needs: test
-    uses: ./.github/actions/publish-packages.yml
+    uses: ./.github/jobs/publish-packages.yml
 
   docker-build:
     needs: publish-packages
-    uses: ./.github/actions/docker-build.yml
+    uses: ./.github/jobs/docker-build.yml
 
