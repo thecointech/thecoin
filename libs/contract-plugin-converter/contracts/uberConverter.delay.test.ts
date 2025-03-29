@@ -17,25 +17,55 @@ describe('Uberconverter delay tests', () => {
 
     console.log("Start")
     const signers = initAccounts(await hre.ethers.getSigners());
+    console.log("Signers initialized:", {
+      owner: signers.Owner.address,
+      client1: signers.Client1.address,
+      client2: signers.Client2.address
+    });
+
     const UberConverter = await hre.ethers.getContractFactory('UberConverter');
+    console.log("UberConverter factory created");
+
     const tcCore = await createAndInitTheCoin(signers.Owner);
+    console.log("TheCoin Core initialized at:", await tcCore.getAddress());
+
     const oracle = await createAndInitOracle(signers.OracleUpdater);
+    console.log("Oracle initialized at:", await oracle.getAddress());
     console.log("Init Complete")
 
     // pass some $$$ to Client1
     const initAmount = 10000e6;
     await tcCore.mintCoins(initAmount, signers.Owner, Date.now());
+    const ownerBalance = await tcCore.balanceOf(signers.Owner);
+    console.log("Owner balance after mint:", ownerBalance.toString());
+
     await tcCore.transfer(signers.Client1, initAmount);
+    const client1Balance = await tcCore.balanceOf(signers.Client1);
+    console.log("Client1 balance after transfer:", client1Balance.toString());
     console.log("Xfer Complete")
 
     // Create plugin
+    console.log("Deploying UberConverter...");
     const uber = await UberConverter.deploy();
+    console.log("UberConverter deployed at:", await uber.getAddress());
+
+    console.log("Initializing UberConverter with:", {
+      tcCore: await tcCore.getAddress(),
+      oracle: await oracle.getAddress()
+    });
     await uber.initialize(tcCore, oracle);
     console.log("Deploy Complete")
 
     // Assign to user, grant all permissions
     const request = await buildAssignPluginRequest(signers.Client1, uber, ALL_PERMISSIONS);
-    await assignPlugin(tcCore, request);
+    console.log("Plugin request built for Client1");
+    try {
+      await assignPlugin(tcCore, request);
+      console.log("Plugin assigned successfully");
+    } catch (error) {
+      console.error("Failed to assign plugin:", error);
+      throw error;
+    }
     console.log("Plugin Complete")
 
     // Transfer $100 in 1 weeks time.
@@ -48,17 +78,28 @@ describe('Uberconverter delay tests', () => {
       DateTime.now().plus(delay),
     );
 
-    const r = await tcCore.uberTransfer(
-      transfer.chainId,
-      transfer.from,
-      transfer.to,
-      transfer.amount,
-      transfer.currency,
-      transfer.transferMillis,
-      transfer.signedMillis,
-      transfer.signature,
-    );
-    const receipt = await r.wait();
+    let receipt;
+    try {
+      const r = await tcCore.uberTransfer(
+        transfer.chainId,
+        transfer.from,
+        transfer.to,
+        transfer.amount,
+        transfer.currency,
+        transfer.transferMillis,
+        transfer.signedMillis,
+        transfer.signature,
+      );
+      receipt = await r.wait();
+    } catch (error: any) {
+      console.error("Transfer failed:", {
+        error,
+        errorMessage: error.message,
+        data: error.data,
+        transaction: error.transaction,
+      });
+      throw error;
+    }
     console.log("Uber Complete")
     const interim1Balance = await tcCore.pl_balanceOf(signers.Client1);
     // If we transferred $100, that should have equalled 50C
