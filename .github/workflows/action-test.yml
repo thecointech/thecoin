@@ -42,9 +42,9 @@ jobs:
       run: yarn install
 
     # Force update of specific binaries that are needed
-    - name: Force build
-      run: |
-        yarn add sharp --force
+    # - name: Force build
+    #   run: |
+    #     yarn add sharp --force
 
     - name: Run tests
       run: yarn test --ci
