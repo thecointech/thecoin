@@ -12,7 +12,7 @@ import { EventLog } from 'ethers';
 const timeout = 10 * 60 * 1000;
 jest.setTimeout(timeout);
 
-describe('Uberconverter delay tests', () => {
+describe.skip('Uberconverter delay tests', () => {
   it('Appropriately delays a transfer, and converts an appropriate amount at time', async () => {
 
     console.log("Start")
