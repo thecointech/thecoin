@@ -46,13 +46,13 @@ jobs:
     #     python -m pip install --upgrade pip
     #     pip install -r requirements.txt
 
-    - name: Install build dependencies
-      run: |
-        sudo apt-get update &&
-        sudo apt-get install -y libudev-dev libusb-1.0-0-dev libusb-dev
+    # - name: Install build dependencies
+    #   run: |
+    #     sudo apt-get update &&
+    #     sudo apt-get install -y libudev-dev libusb-1.0-0-dev libusb-dev
 
     - name: Install dependencies
-      run: yarn install --immutable
+      run: yarn install --immutable --mode=skip-build
 
     - name: Build
       env:

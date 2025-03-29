@@ -39,7 +39,12 @@ jobs:
 
     # This will be fast, using the cached dependencies
     - name: Install dependencies
-      run: yarn install --immutable
+      run: yarn install --immutable --mode=skip-build
+
+    # Force update of specific binaries that are needed
+    - name: Force build
+      run: |
+        yarn install sharp --force
 
     - name: Run tests
       run: yarn test --ci
