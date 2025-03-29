@@ -19,14 +19,14 @@ export async function createAndInitTheCoin(signer: SignerWithAddress) {
 }
 
 const notNum = /^\D+/;
-export const initAccounts = (accounts: SignerWithAddress[]) => {
-  const r = Object.entries(AccountId)
-    .filter(k => notNum.test(k[0]))
-    .map(([k, v]) => { const r: [string, SignerWithAddress] = [k, accounts[v as number]]; return r })
-    .reduce((obj, [k, v]) => { obj[k as AccountName] = v; return obj }, {} as Record<AccountName, SignerWithAddress>)
-  initCache(r);
-  return r;
-}
+// export const initAccounts = (accounts: SignerWithAddress[]) => {
+//   const r = Object.entries(AccountId)
+//     .filter(k => notNum.test(k[0]))
+//     .map(([k, v]) => { const r: [string, SignerWithAddress] = [k, accounts[v as number]]; return r })
+//     .reduce((obj, [k, v]) => { obj[k as AccountName] = v; return obj }, {} as Record<AccountName, SignerWithAddress>)
+//   initCache(r);
+//   return r;
+// }
 
 const getSignerWithAddress = async (s: AccountName) => {
   const signer = await getSigner(s);
@@ -34,16 +34,13 @@ const getSignerWithAddress = async (s: AccountName) => {
 }
 
 export async function getSigners() {
-  const Owner = await getSignerWithAddress("Owner");
-  const OracleUpdater = await getSignerWithAddress("OracleUpdater");
-  const Client1 = await getSignerWithAddress("Client1");
-  const Client2 = await getSignerWithAddress("Client2");
-  const BrokerCAD = await getSignerWithAddress("BrokerCAD");
-  return {
-    Owner,
-    OracleUpdater,
-    Client1,
-    Client2,
-    BrokerCAD
-  };
+  const r = await Promise.all(
+    Object.entries(AccountId)
+      .filter(k => notNum.test(k[0]))
+      .map(async ([k]) => {
+        const r: [string, SignerWithAddress] = [k, await getSignerWithAddress(k as AccountName)]; return r })
+  );
+  const signers = r.reduce((obj, [k, v]) => { obj[k as AccountName] = v; return obj }, {} as Record<AccountName, SignerWithAddress>);
+  initCache(signers);
+  return signers;
 }
