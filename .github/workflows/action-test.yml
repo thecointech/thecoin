@@ -44,7 +44,7 @@ jobs:
     # Force update of specific binaries that are needed
     - name: Force build
       run: |
-        yarn install sharp --force
+        yarn add sharp --force
 
     - name: Run tests
       run: yarn test --ci
