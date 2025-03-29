@@ -19,15 +19,13 @@ export async function createAndInitTheCoin(signer: SignerWithAddress) {
 }
 
 const notNum = /^\D+/;
-// export const initAccounts = (accounts: SignerWithAddress[]) => {
-//   const r = Object.entries(AccountId)
-//     .filter(k => notNum.test(k[0]))
-//     .map(([k, v]) => { const r: [string, SignerWithAddress] = [k, accounts[v as number]]; return r })
-//     .reduce((obj, [k, v]) => { obj[k as AccountName] = v; return obj }, {} as Record<AccountName, SignerWithAddress>)
-//   initCache(r);
-//   return r;
-// }
 
+// This replaces the hre.ethers.getSigners() signers with
+// our own explicit (HDNode) signers.
+// For reasons we don't understand the original signers
+// would cause errors on linux when running the uberConverter
+// tests. (Error: Transaction reverted without a reason string)
+// at <UnrecognizedContract>.<unknown> (0x5fbd...)
 const getSignerWithAddress = async (s: AccountName) => {
   const signer = await getSigner(s);
   return signer.connect(hre.ethers.provider) as unknown as SignerWithAddress;
