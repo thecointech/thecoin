@@ -2,7 +2,7 @@ import hre from 'hardhat';
 import { jest } from '@jest/globals';
 import { createAndInitOracle } from '@thecointech/contract-oracle/testHelpers.ts';
 import { ALL_PERMISSIONS, assignPlugin, buildAssignPluginRequest } from '@thecointech/contract-plugins';
-import { initAccounts, createAndInitTheCoin } from '@thecointech/contract-core/testHelpers.ts';
+import { createAndInitTheCoin, getSigners } from '@thecointech/contract-core/testHelpers.ts';
 import { buildUberTransfer } from '@thecointech/utilities/UberTransfer';
 import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
@@ -14,9 +14,9 @@ jest.setTimeout(timeout);
 
 // Currently duplicated into uberConverter.delay.test.ts
 // while we try to figure out why it randomly crashes.
-it.skip('converts fiat to TheCoin for current transfers', async () => {
+it('converts fiat to TheCoin for current transfers', async () => {
 
-  const signers = initAccounts(await hre.ethers.getSigners());
+  const signers = await getSigners();
   const UberConverter = await hre.ethers.getContractFactory('UberConverter');
   const tcCore = await createAndInitTheCoin(signers.Owner);
   const oracle = await createAndInitOracle(signers.OracleUpdater);
