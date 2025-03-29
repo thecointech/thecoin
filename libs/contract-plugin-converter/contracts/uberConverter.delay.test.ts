@@ -7,7 +7,9 @@ import { buildUberTransfer } from '@thecointech/utilities/UberTransfer';
 import Decimal from 'decimal.js-light';
 import { DateTime, Duration } from 'luxon';
 import '@nomicfoundation/hardhat-ethers';
-import { EventLog } from 'ethers';
+import { EventLog, HDNodeWallet, Signer } from 'ethers';
+import { AccountName, getSigner } from '@thecointech/signers';
+import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
 
 const timeout = 10 * 60 * 1000;
 jest.setTimeout(timeout);
@@ -164,11 +166,30 @@ describe.skip('Uberconverter delay tests', () => {
   }, timeout);
 });
 
+const getSignerWithAddress = async (s: AccountName) => {
+  const signer = await getSigner(s);
+  return signer.connect(hre.ethers.provider) as unknown as SignerWithAddress;
+}
+const getSigners = async () => {
+  const Owner = await getSignerWithAddress("Owner");
+  const OracleUpdater = await getSignerWithAddress("OracleUpdater");
+  const Client1 = await getSignerWithAddress("Client1");
+  const Client2 = await getSignerWithAddress("Client2");
+  return {
+    Owner,
+    OracleUpdater,
+    Client1,
+    Client2
+  };
+}
+
 describe('Uberconverter current tests', () => {
 
   it('converts fiat to TheCoin for current transfers', async () => {
 
-    const signers = initAccounts(await hre.ethers.getSigners());
+    const oriSigners = await hre.ethers.getSigners();
+    console.log(oriSigners[0].address);
+    const signers = await getSigners();
     const UberConverter = await hre.ethers.getContractFactory('UberConverter');
     const tcCore = await createAndInitTheCoin(signers.Owner);
     const oracle = await createAndInitOracle(signers.OracleUpdater);
