@@ -21,6 +21,11 @@ jobs:
         node-version: '22.14'
         cache: 'yarn'
 
+    - name: Install build dependencies
+      run: |
+        sudo apt-get update &&
+        sudo apt-get install -y libudev-dev libusb-1.0-0-dev libusb-dev
+
     # Restore yarn cache from artifacts
     - name: Download build artifacts
       uses: actions/download-artifact@v4
