@@ -26,6 +26,9 @@ const notNum = /^\D+/;
 // would cause errors on linux when running the uberConverter
 // tests. (Error: Transaction reverted without a reason string)
 // at <UnrecognizedContract>.<unknown> (0x5fbd...)
+// NOTE: This appeared to improve things locally, but did
+// not improve things on CI.  Leaving it this way as it seems
+// like a nicer way to handle signers.
 const getSignerWithAddress = async (s: AccountName) => {
   const signer = await getSigner(s);
   return signer.connect(hre.ethers.provider) as unknown as SignerWithAddress;
