@@ -63,6 +63,7 @@ jobs:
         path: |
           .yarn/cache
           .yarn/install-state.gz
+          apps/**/translations/*.json
           apps/*/build/
           libs/*/build/
           apis/**/dist/
