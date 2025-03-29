@@ -14,11 +14,32 @@ import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
 const timeout = 10 * 60 * 1000;
 jest.setTimeout(timeout);
 
-describe.skip('Uberconverter delay tests', () => {
+
+const getSignerWithAddress = async (s: AccountName) => {
+  const signer = await getSigner(s);
+  return signer.connect(hre.ethers.provider) as unknown as SignerWithAddress;
+}
+const getSigners = async () => {
+  const Owner = await getSignerWithAddress("Owner");
+  const OracleUpdater = await getSignerWithAddress("OracleUpdater");
+  const Client1 = await getSignerWithAddress("Client1");
+  const Client2 = await getSignerWithAddress("Client2");
+  const BrokerCAD = await getSignerWithAddress("BrokerCAD");
+  return {
+    Owner,
+    OracleUpdater,
+    Client1,
+    Client2,
+    BrokerCAD
+  };
+}
+
+describe('Uberconverter delay tests', () => {
   it('Appropriately delays a transfer, and converts an appropriate amount at time', async () => {
 
     console.log("Start")
-    const signers = initAccounts(await hre.ethers.getSigners());
+    const signers = await getSigners();
+    // const signers = initAccounts(await hre.ethers.getSigners());
     console.log("Signers initialized:", {
       owner: signers.Owner.address,
       client1: signers.Client1.address,
@@ -166,22 +187,6 @@ describe.skip('Uberconverter delay tests', () => {
   }, timeout);
 });
 
-const getSignerWithAddress = async (s: AccountName) => {
-  const signer = await getSigner(s);
-  return signer.connect(hre.ethers.provider) as unknown as SignerWithAddress;
-}
-const getSigners = async () => {
-  const Owner = await getSignerWithAddress("Owner");
-  const OracleUpdater = await getSignerWithAddress("OracleUpdater");
-  const Client1 = await getSignerWithAddress("Client1");
-  const Client2 = await getSignerWithAddress("Client2");
-  return {
-    Owner,
-    OracleUpdater,
-    Client1,
-    Client2
-  };
-}
 
 describe('Uberconverter current tests', () => {
 
