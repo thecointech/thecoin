@@ -5,7 +5,6 @@ on:
 
 env:
   YARN_CHECKSUM_BEHAVIOR: ignore
-  PUPPETEER_SKIP_DOWNLOAD: true  # Skip downloading Chrome
 
 jobs:
   test:
