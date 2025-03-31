@@ -2,9 +2,8 @@ name: Publish Everything
 
 on:
   pull_request:
-    branches: [ publish/* ]
-  push:
-    branches: [ publish/* ]
+    types:
+      - closed
 
 # Cancel any in-progress job or run
 concurrency:
@@ -13,6 +12,7 @@ concurrency:
 
 jobs:
   build:
+    if: github.event.pull_request.merged == true
     uses: ./.github/workflows/action-build.yml
 
   test:

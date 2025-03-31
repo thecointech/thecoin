@@ -2,9 +2,7 @@ name: Build and Test
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
-    branches-ignore: ['**']
-    base: [ dev ]
+    branches: [ dev ]
   push:
     branches: [ dev ]
 
