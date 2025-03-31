@@ -1,0 +1,64 @@
+name: Publish Packages
+
+on:
+  workflow_call:
+
+env:
+  YARN_CHECKSUM_BEHAVIOR: ignore
+  PUPPETEER_SKIP_DOWNLOAD: true  # Skip downloading Chrome
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # For git operations and version bumps
+      packages: write  # For package publishing
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for correct versioning
+
+      - run: corepack enable
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14'
+          cache: 'yarn'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@thecointech'
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      # Restore yarn cache from artifacts
+      - name: Restore yarn state
+        run: |
+          mkdir -p .yarn
+          mv .yarn/cache .yarn/install-state.gz .yarn/ || true
+
+      # This will be fast, using the cached dependencies
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Set Git Config
+        run: |
+          git config --global user.name 'GitHub Actions Bot'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      # Version and publish
+      - name: Version and Publish
+        run: yarn lerna publish --yes
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Merge changes back to dev
+      - name: Merge to dev
+        run: |
+          git checkout dev
+          git merge ${{ github.ref_name }} -m "chore: merge ${{ github.ref_name }} changes to dev"
+          git push origin dev

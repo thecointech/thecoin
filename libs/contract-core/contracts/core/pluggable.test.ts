@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { ALL_PERMISSIONS, buildAssignPluginRequest, assignPlugin, buildRemovePluginRequest, removePlugin } from '@thecointech/contract-plugins';
-import { createAndInitTheCoin, initAccounts } from '../../internal/testHelpers';
+import { createAndInitTheCoin, getSigners } from '../../internal/testHelpers';
 import type { BaseContract, ContractTransactionResponse } from 'ethers';
 import hre from 'hardhat';
 
@@ -10,7 +10,7 @@ jest.setTimeout(5 * 60 * 1000);
 // means a circular dependency because the contract impl is here
 // Could fix by moving impl there?
 it ('can assign plugin', async () => {
-  const signers = initAccounts(await hre.ethers.getSigners());
+  const signers = await getSigners();
   const tcCore = await createAndInitTheCoin(signers.Owner);
   const DebugPrint = await hre.ethers.getContractFactory("DebugPrint");
   const logger = await DebugPrint.deploy();
@@ -24,7 +24,7 @@ it ('can assign plugin', async () => {
 // Try creating core
 it('Calls appropriate methods on a plugin', async () => {
 
-  const signers = initAccounts(await hre.ethers.getSigners());
+  const signers = await getSigners();
   const tcCore = await createAndInitTheCoin(signers.Owner);
   const DebugPrint = await hre.ethers.getContractFactory("DebugPrint");
   const logger = await DebugPrint.deploy();

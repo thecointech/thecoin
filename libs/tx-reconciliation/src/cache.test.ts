@@ -1,4 +1,10 @@
 import { jest } from '@jest/globals';
+// NOTE: Because we mock FS, we need to import
+// the logging module explicitly.  It
+// uses the FS module to find project root
+import { log } from "@thecointech/logging";
+
+log.level('error');
 
 // No going to disk
 const cacheName = "mocked.cache.json";

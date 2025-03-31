@@ -6,7 +6,7 @@ const mockAuth = {
 const mockBitwardenClient = jest.fn().mockImplementation(() => ({
   auth: () => mockAuth,
   projects: () => ({
-    list: jest.fn<any>().mockResolvedValue([])
+    list: jest.fn<any>().mockResolvedValue({ data: [{ name: "test"}] })
   }),
   secrets: () => ({
     list: jest.fn<any>().mockResolvedValue({ data: [] })

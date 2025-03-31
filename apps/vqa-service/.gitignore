@@ -4,3 +4,6 @@ __pycache__
 logs/
 temp/
 # src/transformers_modules/
+
+# This API is rarely modified, so commit it to improve build times in CI
+!api/swagger.json

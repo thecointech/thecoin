@@ -9,6 +9,10 @@ import { getUniqueUrlKey, getUniqueTokenKey, getTokenUrl } from '../src/token';
 
 async function main() {
 
+  // NOTE!  This tool is always started in the 'prod' environment,
+  // to ensure all library imports talk to live versions.  However,
+  // the environment is passed in here as an argument, and is used
+  // to reset the CONFIG_NAME so we load secrets from the right place.
   const envName = process.argv[2];
   const uniqueId = process.argv[3];
   if (!envName || !uniqueId) {

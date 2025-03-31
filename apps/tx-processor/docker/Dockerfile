@@ -21,6 +21,7 @@ RUN corepack enable
 ENV CONFIG_NAME=prod \
     NODE_ENV=production \
     TS_NODE_PROJECT=none \
+    THECOIN_CONSOLE_ONLY=true \
     THECOIN_DATA=/data \
     THECOIN_SECRETS=/secrets
 
