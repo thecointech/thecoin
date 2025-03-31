@@ -16,9 +16,9 @@
   },
   "homepage": "https://thecointech.com",
   "scripts": {
-    "postinstall": "node --experimental-strip-types ./tools/init-python.ts",
+    "_postinstall": "node --experimental-strip-types ./tools/init-python.ts",
     "get-python": "node -e \"console.log(process.platform === 'win32' ? './.venv/Scripts/python' : './.venv/bin/python')\"",
-    "gen:swagger": "run -T cross-env API_ACCESS_KEY=DUMMY_KEY $(yarn get-python) api/generate_swagger.py",
+    "_gen:swagger": "run -T cross-env API_ACCESS_KEY=DUMMY_KEY $(yarn get-python) api/generate_swagger.py",
     "start": "run -T run-env exec=$(yarn get-python) src/app.py",
     "_test": "run -T run-env exec=$(yarn get-python) tests/query.test.py",
     "build:dev": "run -T run-env tools/build-docker.ts",

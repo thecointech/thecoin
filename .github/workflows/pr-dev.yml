@@ -1,0 +1,20 @@
+name: Build and Test
+
+on:
+  pull_request:
+    branches: [ dev ]
+  push:
+    branches: [ dev ]
+
+# Cancel any in-progress job or run
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    uses: ./.github/workflows/action-build.yml
+
+  test:
+    needs: build
+    uses: ./.github/workflows/action-test.yml

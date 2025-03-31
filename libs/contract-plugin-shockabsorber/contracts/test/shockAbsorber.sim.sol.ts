@@ -1,7 +1,7 @@
 import hre from 'hardhat';
 import '@nomicfoundation/hardhat-ethers';
 import { createAndInitOracle, setOracleValueRepeat } from '@thecointech/contract-oracle/testHelpers.ts';
-import { initAccounts, createAndInitTheCoin } from '@thecointech/contract-core/testHelpers.ts';
+import { getSigners, createAndInitTheCoin } from '@thecointech/contract-core/testHelpers.ts';
 import { ShockAbsorber } from '../../src';
 import { yearInMs, toCoin } from './shockAbsorber.common'
 import type { SpxCadOracle } from '@thecointech/contract-oracle';
@@ -171,7 +171,7 @@ export async function setupAbsorber(tcCoreAddress?: AddressLike, oracleAddress?:
 }
 
 export async function createAndInitAbsorber(blockTime?: number) {
-  const { Owner, Client1, OracleUpdater } = initAccounts(await hre.ethers.getSigners());
+  const { Owner, Client1, OracleUpdater } = await getSigners();
   const tcCore = await createAndInitTheCoin(Owner);
   const oracle = await createAndInitOracle(OracleUpdater, 100, blockTime);
   const {absorber} = await setupAbsorber(tcCore, oracle);

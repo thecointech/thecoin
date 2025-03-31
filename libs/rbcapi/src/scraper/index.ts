@@ -15,12 +15,17 @@ export async function startPuppeteer() {
   const userDataDir = getUserDataDir();
   mkdirSync(userDataDir, { recursive: true });
 
+  const args = process.env.JEST_CI
+    ? ['--no-sandbox', '--disable-setuid-sandbox']
+    : [];
+
   const expath = executablePath();
   const browser = await puppeteer.launch({
     headless: process.env.RUN_SCRAPER_HEADLESS !== 'false',
     executablePath: expath,
     // After install this appears in the AppData directory
     userDataDir,
+    args,
   })
 
   return browser;
