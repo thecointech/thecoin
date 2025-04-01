@@ -1,5 +1,4 @@
 //
-// Moved into its balh
 const { existsSync } = require('fs');
 
 module.exports = {
