@@ -26,3 +26,9 @@ jobs:
   docker-build:
     needs: publish-packages
     uses: ./.github/workflows/action-docker-build.yml
+
+  publish-services:
+    needs: docker-build
+    uses: ./.github/workflows/action-publish-services.yml
+    with:
+      config_name: prodtest

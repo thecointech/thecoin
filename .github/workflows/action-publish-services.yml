@@ -8,9 +8,18 @@ on:
         type: string
         description: 'Environment to deploy to (e.g., prodtest, prod)'
     secrets:
-      GCP_SA_KEY:
+      GCP_SA_RATES_KEY:
         required: true
-        description: 'Google Cloud Service Account key'
+        description: 'Google Cloud Service Account key for rates-service'
+      GCP_RATES_PROJECT_KEY:
+        required: true
+        description: 'Google Cloud Project key for rates-service'
+      GCP_SA_BROKER_KEY:
+        required: true
+        description: 'Google Cloud Service Account key for broker-service'
+      GCP_BROKER_PROJECT_KEY:
+        required: true
+        description: 'Google Cloud Project key for broker-service'
 
 jobs:
   deploy-rates:
@@ -38,7 +47,9 @@ jobs:
       - id: deploy-rates
         uses: google-github-actions/deploy-appengine@v1
         with:
+          project_id: ${{ secrets.GCP_RATES_PROJECT_KEY }}
           working_directory: ./apps/rates-service
+          deliverables: app.yaml app.secrets.yaml
 
   deploy-broker:
     runs-on: ubuntu-latest
