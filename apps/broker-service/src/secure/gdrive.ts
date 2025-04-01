@@ -1,7 +1,7 @@
 import { google, drive_v3 } from 'googleapis';
 import { GoogleFileIdent, GoogleStoreAccount, GoogleToken, GoogleWalletItem } from '@thecointech/types';
 import { log } from '@thecointech/logging';
-import { getGoogleSecret } from '@thecointech/secrets-google';
+import { getSecret } from '@thecointech/secrets';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.appdata'];
@@ -11,8 +11,8 @@ const buildAuth = async (clientUri: string) => {
     throw new Error('Cannot Login to GDrive');
   }
 
-  const clientID = await getGoogleSecret('BrokerGDriveClientId');
-  const clientSecret = await getGoogleSecret('BrokerGDriveClientSecret');
+  const clientID = await getSecret('BrokerGDriveClientId');
+  const clientSecret = await getSecret('BrokerGDriveClientSecret');
   return new google.auth.OAuth2(
     clientID,
     clientSecret,

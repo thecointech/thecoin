@@ -1,27 +1,26 @@
-import { SetGCloudConfig, copyEnvVarsLocal, copyNpmTokenHere, gCloudDeploy, ShellCmd, removeOldAppVersions } from "../../tools/predeploy";
-import { SecretKeyType } from "@thecointech/secrets";
+import { copyEnvVarsLocal, copyNpmTokenHere } from "../../tools/predeploy";
 
 (async () => {
-  await SetGCloudConfig("GCLOUD_RATES_CONFIG");
+  // await SetGCloudConfig("GCLOUD_RATES_CONFIG");
   await copyEnvVarsLocal(
     "app.secrets.yaml",
     { RUNTIME_ENV: "gcloud" },
     [
       // Required for updating oracle
-      "InfuraProjectId",
+      // "InfuraProjectId",
       // Required for emailing-on-error
-      "MailjetApiKey",
-      "MailjetApiSecret",
+      // "MailjetApiKey",
+      // "MailjetApiSecret",
       // Required for Finhub
-      "FinhubApiKey",
+      // "FinhubApiKey",
       // Required for market-status
-      "TradierApiKey"
+      // "TradierApiKey"
     ]
   );
   await copyNpmTokenHere(new URL(import.meta.url));
-  await gCloudDeploy();
-  // Clean-up after
-  await removeOldAppVersions();
+  // await gCloudDeploy();
+  // // Clean-up after
+  // await removeOldAppVersions();
 
   // Don't forget to deploy our CRON file
   // if (process.env.SETTINGS != 'beta') {

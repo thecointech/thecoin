@@ -11,24 +11,14 @@ export enum SecretKey {
   FirebaseConfig = "FirebaseConfig",
   PolygonscanApiKey = "PolygonscanApiKey",
   EtherscanApiKey = "EtherscanApiKey",
-  FinhubApiKey = "FinhubApiKey",
-  TradierApiKey = "TradierApiKey",
 
-  MailjetApiKey = "MailjetApiKey",
-  MailjetApiSecret = "MailjetApiSecret",
 
   PinataApiKey = "PinataApiKey",
   PinataApiSecret = "PinataApiSecret",
 
-  InfuraProjectId = "InfuraProjectId",
-
   CeramicSeed = "CeramicSeed",
 
   GithubPackageToken = "GithubPackageToken",
-
-  BlockpassApiKey = "BlockpassApiKey",
-  BlockpassWebhookSecret = "BlockpassWebhookSecret",
-  GCloudImageStorageBucket = "GCloudImageStorageBucket",
 
   RbcApiCredentials = "RbcApiCredentials",
 
@@ -50,4 +40,28 @@ export enum SecretKey {
   SignerSaTesterPwd = "SignerSaTesterPwd",
   SignerTestDemoAccountPwd = "SignerTestDemoAccountPwd",
 }
-export type SecretKeyType = keyof typeof SecretKey;
+
+export enum SecretKeyGoogle {
+  // Used by broker
+  BrokerGDriveClientId = 'BrokerGDriveClientId',
+  BrokerGDriveClientSecret = 'BrokerGDriveClientSecret',
+
+  BlockpassApiKey = "BlockpassApiKey",
+  BlockpassWebhookSecret = "BlockpassWebhookSecret",
+  GCloudImageStorageBucket = "GCloudImageStorageBucket",
+
+  WALLET_BrokerTransferAssistant_KEY = "WALLET_BrokerTransferAssistant_KEY",
+
+  // Used by rates
+  WALLET_OracleUpdater_KEY = "WALLET_OracleUpdater_KEY",
+
+  FinhubApiKey = "FinhubApiKey",
+  TradierApiKey = "TradierApiKey",
+
+  // Used by both
+  MailjetApiKey = "MailjetApiKey",
+  MailjetApiSecret = "MailjetApiSecret",
+  InfuraProjectId = "InfuraProjectId",
+}
+
+export type SecretKeyType = keyof typeof SecretKey | keyof typeof SecretKeyGoogle;

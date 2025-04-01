@@ -1,5 +1,5 @@
 import { describe, IsManualRun } from "@thecointech/jestutils";
-import { getClient, type BWClientWithOrgId } from "./client";
+import { getClient, type BWClientWithOrgId } from "./bitwarden/client";
 import { getTempProjectId, getTempSecret, setTempSecret } from "./tempSecrets";
 
 describe('live temp-secret test', () => {

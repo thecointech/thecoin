@@ -1,23 +1,22 @@
-import { SetGCloudConfig, copyEnvVarsLocal, copyNpmTokenHere, gCloudDeploy, removeOldAppVersions } from "../../tools/predeploy";
-import { SecretKeyType } from "@thecointech/secrets";
+import { copyEnvVarsLocal, copyNpmTokenHere } from "../../tools/predeploy";
 
-await SetGCloudConfig("GCLOUD_BROKER_CONFIG");
+// await SetGCloudConfig("GCLOUD_BROKER_CONFIG");
 await copyEnvVarsLocal(
   "app.secrets.yaml",
   { RUNTIME_ENV: "gcloud" },
   [
     // Required for storing ID
-    "BlockpassApiKey",
-    "BlockpassWebhookSecret",
-    "GCloudImageStorageBucket",
+    // "BlockpassApiKey",
+    // "BlockpassWebhookSecret",
+    // "GCloudImageStorageBucket",
     // required for emailing-on-error
-    "MailjetApiKey",
-    "MailjetApiSecret",
+    // "MailjetApiKey",
+    // "MailjetApiSecret",
     // Required for talking to blockchain
-    "InfuraProjectId"
+    // "InfuraProjectId"
   ]
 );
 await copyNpmTokenHere(new URL(import.meta.url));
-await gCloudDeploy();
+// await gCloudDeploy();
 // Clean-up after
-await removeOldAppVersions();
+// await removeOldAppVersions();

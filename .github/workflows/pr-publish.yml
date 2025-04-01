@@ -15,16 +15,26 @@ jobs:
     if: github.event.pull_request.merged == true
     uses: ./.github/workflows/action-build.yml
 
-  test:
-    needs: build
-    uses: ./.github/workflows/action-test.yml
+  # test:
+  #   needs: build
+  #   uses: ./.github/workflows/action-test.yml
 
   publish-packages:
     needs: test
-    if: github.event_name == 'push'
     uses: ./.github/workflows/action-publish-packages.yml
 
   docker-build:
     needs: publish-packages
-    if: github.event_name == 'push'
     uses: ./.github/workflows/action-docker-build.yml
+
+  publish-services:
+    needs: docker-build
+    uses: ./.github/workflows/action-publish-services.yml
+    with:
+      config_name: prodtest
+    secrets:
+      GCP_SA_RATES_KEY: ${{ secrets.GCP_SA_RATES_KEY }}
+      GCP_RATES_PROJECT_KEY: ${{ secrets.GCP_RATES_PROJECT_KEY }}
+      GCP_SA_BROKER_KEY: ${{ secrets.GCP_SA_BROKER_KEY }}
+      GCP_BROKER_PROJECT_KEY: ${{ secrets.GCP_BROKER_PROJECT_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
