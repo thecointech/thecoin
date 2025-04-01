@@ -17,9 +17,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  permissions:
-    contents: write  # For git operations and version bumps
-    packages: write  # For package publishing
   build:
     if: github.event.pull_request.merged == true
     uses: ./.github/workflows/action-build.yml
@@ -29,6 +26,9 @@ jobs:
   #   uses: ./.github/workflows/action-test.yml
 
   publish-packages:
+    permissions:
+      contents: write  # For git operations and version bumps
+      packages: write  # For package publishing
     needs: build # TODO: Revert back to test
     uses: ./.github/workflows/action-publish-packages.yml
     secrets: inherit
