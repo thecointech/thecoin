@@ -7,22 +7,6 @@ on:
         required: true
         type: string
         description: 'Environment to deploy to (e.g., prodtest, prod)'
-    secrets:
-      GCP_SA_RATES_KEY:
-        required: true
-        description: 'Google Cloud Service Account key for rates-service'
-      GCP_RATES_PROJECT_KEY:
-        required: true
-        description: 'Google Cloud Project key for rates-service'
-      GCP_SA_BROKER_KEY:
-        required: true
-        description: 'Google Cloud Service Account key for broker-service'
-      GCP_BROKER_PROJECT_KEY:
-        required: true
-        description: 'Google Cloud Project key for broker-service'
-      GITHUB_TOKEN:
-        required: true
-        description: 'GitHub token for package installation'
 
 jobs:
   deploy-rates:
