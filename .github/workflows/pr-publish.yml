@@ -43,4 +43,5 @@ jobs:
     uses: ./.github/workflows/action-publish-services.yml
     with:
       config_name: prodtest
+      commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
     secrets: inherit
