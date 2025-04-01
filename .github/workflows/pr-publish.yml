@@ -20,7 +20,7 @@ jobs:
   #   uses: ./.github/workflows/action-test.yml
 
   publish-packages:
-    needs: test
+    needs: build # TODO: Revert back to test
     uses: ./.github/workflows/action-publish-packages.yml
 
   docker-build:
