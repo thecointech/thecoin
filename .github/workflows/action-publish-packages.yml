@@ -13,6 +13,8 @@ jobs:
     permissions:
       contents: write  # For git operations and version bumps
       packages: write  # For package publishing
+    outputs:
+      latest_sha: ${{ steps.get_sha.outputs.sha }}
 
     env:
       NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -22,6 +24,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Full history for correct versioning
+          ref: ${{ github.head_ref }}
 
       - run: corepack enable
 
@@ -72,9 +75,13 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Get Latest Commit SHA
+        id: get_sha
+        run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+
       # Merge changes back to dev
-      - name: Merge to dev
-        run: |
-          git checkout dev
-          git merge ${{ github.ref_name }} -m "chore: merge ${{ github.ref_name }} changes to dev"
-          git push origin dev
+      # - name: Merge to dev
+      #   run: |
+      #     git checkout dev
+      #     git merge ${{ github.ref_name }} -m "chore: merge ${{ github.ref_name }} changes to dev"
+      #     git push origin dev

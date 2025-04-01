@@ -2,6 +2,11 @@ name: Build and Push Docker Images
 
 on:
   workflow_call:
+    inputs:
+      commit_sha:
+        required: true
+        type: string
+        description: 'Commit SHA to build from'
 
 env:
   REGISTRY: ghcr.io
@@ -17,6 +22,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.commit_sha }}
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4

@@ -7,6 +7,10 @@ on:
         required: true
         type: string
         description: 'Environment to deploy to (e.g., prodtest, prod)'
+      commit_sha:
+        required: true
+        type: string
+        description: 'Commit SHA to build from'
 
 jobs:
   deploy-rates:
@@ -14,6 +18,8 @@ jobs:
     environment: ${{ inputs.config_name }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.commit_sha }}
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -44,6 +50,8 @@ jobs:
     environment: ${{ inputs.config_name }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.commit_sha }}
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
