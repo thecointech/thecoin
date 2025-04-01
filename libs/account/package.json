@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/account",
-  "version": "0.2.143",
+  "version": "0.2.144",
   "description": "TheCoin: Account definition & storage",
   "type": "module",
   "keywords": [
@@ -49,13 +49,13 @@
     }
   },
   "dependencies": {
-    "@thecointech/contract-core": "^0.2.143",
-    "@thecointech/fx-rates": "^0.2.143",
-    "@thecointech/idx": "^0.2.143",
-    "@thecointech/logging": "^0.2.143",
-    "@thecointech/signers": "^0.2.143",
-    "@thecointech/tx-blockchain": "^0.2.143",
-    "@thecointech/utilities": "^0.2.143"
+    "@thecointech/contract-core": "^0.2.144",
+    "@thecointech/fx-rates": "^0.2.144",
+    "@thecointech/idx": "^0.2.144",
+    "@thecointech/logging": "^0.2.144",
+    "@thecointech/signers": "^0.2.144",
+    "@thecointech/tx-blockchain": "^0.2.144",
+    "@thecointech/utilities": "^0.2.144"
   },
   "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

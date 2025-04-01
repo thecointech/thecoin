@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/firestore",
-  "version": "0.2.143",
+  "version": "0.2.144",
   "description": "The Coin: Environment-agnostic access to firestore",
   "type": "module",
   "keywords": [
@@ -40,8 +40,8 @@
   "types": "./build/index_common.d.ts",
   "dependencies": {
     "@google-cloud/firestore": "6.0.0",
-    "@thecointech/logging": "^0.2.143",
-    "@thecointech/secrets": "^0.2.143"
+    "@thecointech/logging": "^0.2.144",
+    "@thecointech/secrets": "^0.2.144"
   },
   "peerDependencies": {
     "firebase": "*"
