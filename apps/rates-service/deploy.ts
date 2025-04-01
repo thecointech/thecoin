@@ -1,4 +1,4 @@
-import { copyEnvVarsLocal } from "../../tools/predeploy";
+import { copyEnvVarsLocal, copyNpmTokenHere } from "../../tools/predeploy";
 
 (async () => {
   // await SetGCloudConfig("GCLOUD_RATES_CONFIG");
@@ -17,7 +17,7 @@ import { copyEnvVarsLocal } from "../../tools/predeploy";
       // "TradierApiKey"
     ]
   );
-  // await copyNpmTokenHere(new URL(import.meta.url));
+  await copyNpmTokenHere(new URL(import.meta.url));
   // await gCloudDeploy();
   // // Clean-up after
   // await removeOldAppVersions();

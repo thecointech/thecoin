@@ -1,5 +1,4 @@
-import { copyEnvVarsLocal } from "../../tools/predeploy";
-// import { SecretKeyType } from "@thecointech/secrets";
+import { copyEnvVarsLocal, copyNpmTokenHere } from "../../tools/predeploy";
 
 // await SetGCloudConfig("GCLOUD_BROKER_CONFIG");
 await copyEnvVarsLocal(
@@ -17,7 +16,7 @@ await copyEnvVarsLocal(
     // "InfuraProjectId"
   ]
 );
-// await copyNpmTokenHere(new URL(import.meta.url));
+await copyNpmTokenHere(new URL(import.meta.url));
 // await gCloudDeploy();
 // Clean-up after
 // await removeOldAppVersions();
