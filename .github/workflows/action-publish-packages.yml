@@ -33,20 +33,26 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           scope: '@thecointech'
 
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
+      # - name: Download build artifacts
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: build-artifacts
 
       # Restore yarn cache from artifacts
-      - name: Restore yarn state
-        run: |
-          mkdir -p .yarn
-          mv .yarn/cache .yarn/install-state.gz .yarn/ || true
+      # - name: Restore yarn state
+      #   run: |
+      #     mkdir -p .yarn
+      #     mv .yarn/cache .yarn/install-state.gz .yarn/ || true
 
       # This will be fast, using the cached dependencies
       - name: Install dependencies
         run: yarn install --immutable --mode=skip-build
+
+      # - name: Build
+      #   env:
+      #      # Fix OOM in build admin
+      #     NODE_OPTIONS: "--max-old-space-size=6144"
+      #   run: yarn re:build
 
       - name: Set Git Config
         run: |
