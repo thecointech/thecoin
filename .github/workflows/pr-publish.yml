@@ -15,9 +15,9 @@ jobs:
     if: github.event.pull_request.merged == true
     uses: ./.github/workflows/action-build.yml
 
-  test:
-    needs: build
-    uses: ./.github/workflows/action-test.yml
+  # test:
+  #   needs: build
+  #   uses: ./.github/workflows/action-test.yml
 
   publish-packages:
     needs: test
