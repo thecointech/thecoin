@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   build:
-    if: github.event.pull_request.merged == true
+    #### remember to redadd thisif: github.event.pull_request.merged == true
     uses: ./.github/workflows/action-build.yml
 
   # test:
