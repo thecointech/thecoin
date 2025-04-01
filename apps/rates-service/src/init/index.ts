@@ -1,6 +1,7 @@
 import { Settings } from 'luxon';
 import { log } from '@thecointech/logging';
 import { init as initdb } from '@thecointech/firestore';
+import { init as initSecrets } from '@thecointech/secrets';
 import { initLatest } from '../internals/rates/latest';
 import { update } from '../internals/rates/UpdateDb';
 import { seed } from './seed';
@@ -13,6 +14,9 @@ export async function init() {
     service: 'RatesServiceAccount',
     project: 'rates-service'
   });
+
+  // Init secrets
+  initSecrets('RatesServiceAccount');
 
   // Assume development is dev:live
   if (process.env.NODE_ENV === 'development') {

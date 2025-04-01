@@ -65,8 +65,7 @@
     "@ledgerhq/hw-transport-node-hid": "^6.28.6",
     "@thecointech/ethers-provider": "^0.2.143",
     "@thecointech/logging": "^0.2.143",
-    "@thecointech/secrets": "^0.2.143",
-    "@thecointech/secrets-google": "^0.2.143"
+    "@thecointech/secrets": "^0.2.143"
   },
   "devDependencies": {
     "@thecointech/electron-utils": "^0.2.143"

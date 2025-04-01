@@ -28,3 +28,5 @@ export async function getSecret(name: SecretKeyType) {
       return Promise.resolve(`mock-${name}`);
   }
 }
+
+export async function init() {}
