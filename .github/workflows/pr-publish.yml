@@ -21,10 +21,8 @@ jobs:
 
   publish-packages:
     needs: test
-    if: github.event_name == 'push'
     uses: ./.github/workflows/action-publish-packages.yml
 
   docker-build:
     needs: publish-packages
-    if: github.event_name == 'push'
     uses: ./.github/workflows/action-docker-build.yml

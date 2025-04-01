@@ -1,0 +1,68 @@
+name: Deploy to Google App Engine
+
+on:
+  workflow_call:
+    inputs:
+      config_name:
+        required: true
+        type: string
+        description: 'Environment to deploy to (e.g., prodtest, prod)'
+    secrets:
+      GCP_SA_KEY:
+        required: true
+        description: 'Google Cloud Service Account key'
+
+jobs:
+  deploy-rates:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.config_name }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      - name: Generate env file
+        env:
+          CONFIG_NAME: ${{ inputs.config_name }}
+        run: yarn run-env ./deploy.ts
+        working-directory: ./apps/rates-service
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_RATES_KEY }}
+
+      - id: deploy-rates
+        uses: google-github-actions/deploy-appengine@v1
+        with:
+          working_directory: ./apps/rates-service
+
+  deploy-broker:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.config_name }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      - name: Generate env file
+        env:
+          CONFIG_NAME: ${{ inputs.config_name }}
+        run: yarn run-env ./deploy.ts
+        working-directory: ./apps/broker-service
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_BROKER_KEY }}
+
+      - id: deploy-broker
+        uses: google-github-actions/deploy-appengine@v1
+        with:
+          working_directory: ./apps/broker-service

@@ -1,5 +1,5 @@
-import { getClient } from "./client";
-import { getMapping } from "./getSecrets";
+import { getClient } from "./bitwarden/client";
+import { getMapping } from "./bitwarden/getSecrets";
 
 const TempProjectName = "temp_secrets";
 
