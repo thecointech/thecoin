@@ -32,3 +32,9 @@ jobs:
     uses: ./.github/workflows/action-publish-services.yml
     with:
       config_name: prodtest
+    secrets:
+      GCP_SA_RATES_KEY: ${{ secrets.GCP_SA_RATES_KEY }}
+      GCP_RATES_PROJECT_KEY: ${{ secrets.GCP_RATES_PROJECT_KEY }}
+      GCP_SA_BROKER_KEY: ${{ secrets.GCP_SA_BROKER_KEY }}
+      GCP_BROKER_PROJECT_KEY: ${{ secrets.GCP_BROKER_PROJECT_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -20,6 +20,9 @@ on:
       GCP_BROKER_PROJECT_KEY:
         required: true
         description: 'Google Cloud Project key for broker-service'
+      GITHUB_TOKEN:
+        required: true
+        description: 'GitHub token for package installation'
 
 jobs:
   deploy-rates:
@@ -36,6 +39,7 @@ jobs:
       - name: Generate env file
         env:
           CONFIG_NAME: ${{ inputs.config_name }}
+          GithubPackageToken: ${{ secrets.GITHUB_TOKEN }}
         run: yarn run-env ./deploy.ts
         working-directory: ./apps/rates-service
 
@@ -45,7 +49,7 @@ jobs:
           credentials_json: ${{ secrets.GCP_SA_RATES_KEY }}
 
       - id: deploy-rates
-        uses: google-github-actions/deploy-appengine@v1
+        uses: google-github-actions/deploy-appengine@v2
         with:
           project_id: ${{ secrets.GCP_RATES_PROJECT_KEY }}
           working_directory: ./apps/rates-service
@@ -65,6 +69,7 @@ jobs:
       - name: Generate env file
         env:
           CONFIG_NAME: ${{ inputs.config_name }}
+          GithubPackageToken: ${{ secrets.GITHUB_TOKEN }}
         run: yarn run-env ./deploy.ts
         working-directory: ./apps/broker-service
 
@@ -74,6 +79,8 @@ jobs:
           credentials_json: ${{ secrets.GCP_SA_BROKER_KEY }}
 
       - id: deploy-broker
-        uses: google-github-actions/deploy-appengine@v1
+        uses: google-github-actions/deploy-appengine@v2
         with:
+          project_id: ${{ secrets.GCP_BROKER_PROJECT_KEY }}
           working_directory: ./apps/broker-service
+          deliverables: app.yaml app.secrets.yaml
