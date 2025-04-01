@@ -2,8 +2,12 @@ name: Publish Everything
 
 on:
   pull_request:
+    branches: [ publish/* ]
     types:
       - closed
+  push:
+    branches: [ publish/* ]
+
 
 # Cancel any in-progress job or run
 concurrency:
@@ -11,6 +15,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  permissions:
+    contents: write  # For git operations and version bumps
+    packages: write  # For package publishing
   build:
     if: github.event.pull_request.merged == true
     uses: ./.github/workflows/action-build.yml
@@ -22,6 +29,7 @@ jobs:
   publish-packages:
     needs: build # TODO: Revert back to test
     uses: ./.github/workflows/action-publish-packages.yml
+    secrets: inherit
 
   docker-build:
     needs: publish-packages
