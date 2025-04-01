@@ -2,13 +2,13 @@ name: Publish Everything
 
 on:
   pull_request:
-    branches: [ publish/* ]
+    branches: [ publish/prodtest ]
   # pull_request:
   #   branches: [ publish/* ]
   #   types:
   #     - closed
   push:
-    branches: [ publish/* ]
+    branches: [ publish/prodtest ]
 
 
 # Cancel any in-progress job or run
