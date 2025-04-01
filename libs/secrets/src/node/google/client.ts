@@ -5,14 +5,16 @@ export type ServiceAccountName = "RatesServiceAccount"|"BrokerServiceAccount";
 
 declare global {
   var __tc_serviceAccountName: ServiceAccountName | undefined;
+  var __tc_projectId: string | undefined;
   var __tc_googleSecretClient: Promise<SecretManagerServiceClient> | undefined;
 }
 
-export function initClient(service: ServiceAccountName) {
+export function initClient(service: ServiceAccountName, projectId?: string) {
   if (globalThis.__tc_serviceAccountName || globalThis.__tc_googleSecretClient) {
     throw new Error("Google client already initialized");
   }
   globalThis.__tc_serviceAccountName = service;
+  globalThis.__tc_projectId = projectId;
 }
 
 export async function getClient(): Promise<SecretManagerServiceClient> {

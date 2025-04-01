@@ -13,7 +13,6 @@ export async function getBitwardenSecret(name: SecretKeyType, config?: ConfigTyp
       throw new SecretNotFoundError(name);
     }
     const secret = await client.secrets().get(id);
-    globalThis.__tc_secretCache.set(name, secret.value);
     return secret.value;
 }
 

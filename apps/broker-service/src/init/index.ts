@@ -14,5 +14,5 @@ export async function init() {
   }
 
   // Init secrets
-  initSecrets('BrokerServiceAccount');
+  initSecrets('BrokerServiceAccount', process.env.GCLOUD_BROKER_SERVICE_NAME!);
 }

@@ -28,9 +28,9 @@ export async function getSecret(name: SecretKeyType, config?: ConfigType) {
     return globalThis.__tc_secretCache.get(name)!;
   }
   // Is this secret from google?
-  if (name in SecretKeyGoogle) {
-    return await getGoogleSecret(name, config);
-  }
-  // Else, it must be from bitwarden
-  return await getBitwardenSecret(name, config);
+  const secret = (name in SecretKeyGoogle)
+    ? await getGoogleSecret(name)
+    : await getBitwardenSecret(name, config);
+  globalThis.__tc_secretCache.set(name, secret);
+  return secret;
 }

@@ -16,7 +16,7 @@ export async function init() {
   });
 
   // Init secrets
-  initSecrets('RatesServiceAccount');
+  initSecrets('RatesServiceAccount', process.env.GCLOUD_RATES_SERVICE_NAME!);
 
   // Assume development is dev:live
   if (process.env.NODE_ENV === 'development') {
