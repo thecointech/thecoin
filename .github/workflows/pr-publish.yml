@@ -3,8 +3,10 @@ name: Publish Everything
 on:
   pull_request:
     branches: [ publish/* ]
-    types:
-      - closed
+  # pull_request:
+  #   branches: [ publish/* ]
+  #   types:
+  #     - closed
   push:
     branches: [ publish/* ]
 
