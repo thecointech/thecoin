@@ -2,8 +2,13 @@ name: Publish Everything
 
 on:
   pull_request:
-    types:
-      - closed
+    branches: [ publish/prodtest ]
+  # pull_request:
+  #   branches: [ publish/* ]
+  #   types:
+  #     - closed
+  push:
+    branches: [ publish/prodtest ]
 
 # Cancel any in-progress job or run
 concurrency:
@@ -12,7 +17,7 @@ concurrency:
 
 jobs:
   build:
-    if: github.event.pull_request.merged == true
+    #### remember to redadd thisif: github.event.pull_request.merged == true
     uses: ./.github/workflows/action-build.yml
 
   # test:
@@ -20,8 +25,12 @@ jobs:
   #   uses: ./.github/workflows/action-test.yml
 
   publish-packages:
+    permissions:
+      contents: write  # For git operations and version bumps
+      packages: write  # For package publishing
     needs: build # TODO: Revert back to test
     uses: ./.github/workflows/action-publish-packages.yml
+    secrets: inherit
 
   docker-build:
     needs: publish-packages
