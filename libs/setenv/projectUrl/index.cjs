@@ -1,4 +1,3 @@
-//
 const { existsSync } = require('fs');
 
 module.exports = {
