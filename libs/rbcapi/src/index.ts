@@ -27,6 +27,7 @@ export class RbcApi implements IBank {
     }
     catch (e: any) {
       //return getErrorResult(JSON.stringify(e))
+      // TODO: We need to be a bit more assertive about this error
       log.error(e, `Error sending etransfer - ${e}`)
     }
     return -1;
