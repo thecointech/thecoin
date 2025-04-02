@@ -1,4 +1,4 @@
-name: Publish Packages
+name: Publish NPM Packages
 
 on:
   workflow_call:
@@ -19,6 +19,7 @@ jobs:
     env:
       NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - uses: actions/checkout@v4
@@ -41,32 +42,18 @@ jobs:
         with:
           name: build-artifacts
 
-      # Restore yarn cache from artifacts
-      # - name: Restore yarn state
-      #   run: |
-      #     mkdir -p .yarn
-      #     mv .yarn/cache .yarn/install-state.gz .yarn/ || true
-
       # This will be fast, using the cached dependencies
       - name: Install dependencies
         run: yarn install --immutable --mode=skip-build
 
-      - name: Configure npm token
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Build
-      #   env:
-      #      # Fix OOM in build admin
-      #     NODE_OPTIONS: "--max-old-space-size=6144"
-      #   run: yarn re:build
-
-      - name: Set Git Config
+      - name: Configure Git and NPM
         run: |
           git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" > ~/.npmrc
+          echo "@thecointech:registry=https://npm.pkg.github.com" >> ~/.npmrc
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Version and publish
       - name: Version and Publish
