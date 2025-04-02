@@ -37,14 +37,17 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           scope: '@thecointech'
 
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
+      # - name: Download build artifacts
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: build-artifacts
 
       # This will be fast, using the cached dependencies
       - name: Install dependencies
-        run: yarn install --immutable --mode=skip-build
+        run: yarn install
+
+      - name: Build
+        run: yarn re:build
 
       - name: Configure Git and NPM
         run: |
