@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-plugin-roundnumber",
-  "version": "0.2.145",
+  "version": "0.2.146",
   "private": true,
   "description": "The Coin: A sample plugin rounds balance to nearest round number",
   "type": "module",
@@ -42,13 +42,13 @@
   "types": "./build/index.d.ts",
   "devDependencies": {
     "@thecointech/async": "^0.2.143",
-    "@thecointech/contract-tools": "^0.2.145",
-    "@thecointech/setenv": "^0.2.145"
+    "@thecointech/contract-tools": "^0.2.146",
+    "@thecointech/setenv": "^0.2.146"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.8.0",
-    "@thecointech/contract-core": "^0.2.145",
-    "@thecointech/contract-oracle": "^0.2.145",
-    "@thecointech/contract-plugins": "^0.2.145"
+    "@thecointech/contract-core": "^0.2.146",
+    "@thecointech/contract-oracle": "^0.2.146",
+    "@thecointech/contract-plugins": "^0.2.146"
   }
 }
