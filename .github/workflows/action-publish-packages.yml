@@ -23,9 +23,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Full history for correct versioning
-          ref: ${{ github.head_ref }}
+        # with:
+        #   fetch-depth: 0  # Full history for correct versioning
+        #   ref: ${{ github.head_ref }}
 
       - run: corepack enable
 
@@ -37,18 +37,6 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           scope: '@thecointech'
 
-      # - name: Download build artifacts
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: build-artifacts
-
-      # This will be fast, using the cached dependencies
-      - name: Install dependencies
-        run: yarn install
-
-      - name: Build
-        run: yarn re:build
-
       - name: Configure Git and NPM
         run: |
           git config --global user.name 'GitHub Actions Bot'
@@ -57,6 +45,21 @@ jobs:
           echo "@thecointech:registry=https://npm.pkg.github.com" >> ~/.npmrc
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Download build artifacts
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: build-artifacts
+
+      - name: Verify Lerna version
+        run: npx lerna --version
+
+      # This will be fast, using the cached dependencies
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Build
+        run: yarn re:build
 
       # Version and publish
       - name: Version and Publish
