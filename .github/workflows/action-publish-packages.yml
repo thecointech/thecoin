@@ -23,9 +23,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        # with:
-        #   fetch-depth: 0  # Full history for correct versioning
-        #   ref: ${{ github.head_ref }}
+        with:
+          fetch-depth: 0  # Full history for correct versioning
 
       - run: corepack enable
 
@@ -35,21 +34,20 @@ jobs:
           node-version: '22.14'
           cache: 'yarn'
           registry-url: 'https://npm.pkg.github.com'
-          scope: '@thecointech'
 
       - name: Configure Git and NPM
         run: |
-          git config --global user.name 'GitHub Actions Bot'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git config user.name 'GitHub Actions Bot'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
           echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" > ~/.npmrc
           echo "@thecointech:registry=https://npm.pkg.github.com" >> ~/.npmrc
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Download build artifacts
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: build-artifacts
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
 
       - name: Verify Lerna version
         run: npx lerna --version

@@ -51,50 +51,34 @@ jobs:
     #     sudo apt-get update &&
     #     sudo apt-get install -y libudev-dev libusb-1.0-0-dev libusb-dev
 
-    - name: Configure Git and NPM
-      run: |
-        git config --global user.name 'GitHub Actions Bot'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" > ~/.npmrc
-        echo "@thecointech:registry=https://npm.pkg.github.com" >> ~/.npmrc
+    - name: Install dependencies
+      run: yarn install --immutable --mode=skip-build
+
+    - name: Build
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         # Fix OOM in build admin
+        NODE_OPTIONS: "--max-old-space-size=6144"
+      run: yarn build
 
-    - name: Test commit & push
-      run: |
-        date > build-date.txt
-        git add .
-        git commit -m "chore: build artifacts"
-        git push origin HEAD:${{ github.ref }}
+    # Upload build artifacts for test and docker jobs
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifacts
+        path: |
+          .yarn/cache
+          .yarn/install-state.gz
+          apps/**/translations/*.json
+          apps/*/build/
+          libs/*/build/
+          apis/**/dist/
+          libs/contract-*/src/codegen/**
+          package.json
+          .yarnrc.yml
+          yarn.lock
+          environments/
+          apps/tx-processor/docker/
+        retention-days: 1
 
-    # - name: Install dependencies
-    #   run: yarn install --immutable --mode=skip-build
-
-    # - name: Build
-    #   env:
-    #      # Fix OOM in build admin
-    #     NODE_OPTIONS: "--max-old-space-size=6144"
-    #   run: yarn build
-
-    # # Upload build artifacts for test and docker jobs
-    # - name: Upload build artifacts
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: build-artifacts
-    #     path: |
-    #       .yarn/cache
-    #       .yarn/install-state.gz
-    #       apps/**/translations/*.json
-    #       apps/*/build/
-    #       libs/*/build/
-    #       apis/**/dist/
-    #       libs/contract-*/src/codegen/**
-    #       package.json
-    #       .yarnrc.yml
-    #       yarn.lock
-    #       environments/
-    #       apps/tx-processor/docker/
-    #     retention-days: 1
-
-    # - name: Build Completed
-    #   run: echo "Build completed at $(date +'%Y-%m-%dT%H:%M:%S')"
+    - name: Build Completed
+      run: echo "Build completed at $(date +'%Y-%m-%dT%H:%M:%S')"
