@@ -48,3 +48,11 @@ jobs:
       config_name: prodtest
       commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
     secrets: inherit
+
+  publish-sites:
+    needs: publish-packages
+    uses: ./.github/workflows/action-publish-sites.yml
+    with:
+      config_name: prodtest
+      commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
+    secrets: inherit

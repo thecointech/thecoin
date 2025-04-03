@@ -33,6 +33,9 @@ jobs:
         with:
           name: build-artifacts
 
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
       - name: rebuild site-app
         run: yarn build
         working-directory: ./apps/site-app
