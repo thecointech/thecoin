@@ -40,6 +40,7 @@ jobs:
       run: |
         git config user.name 'GitHub Actions Bot'
         git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+        echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" > ~/.npmrc
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

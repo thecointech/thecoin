@@ -9,6 +9,7 @@ import { depositETransfer } from './deposit';
 import { send } from './etransfer';
 import { payBill } from './bills';
 
+// TODO: We should deduplicate this with harvester
 export class RbcApi implements IBank {
 
   // Create new instance with authentication.  If options are not
