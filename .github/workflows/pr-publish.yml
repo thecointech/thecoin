@@ -42,7 +42,7 @@ jobs:
     secrets: inherit
 
   publish-services:
-    needs: docker-build
+    needs: publish-packages
     uses: ./.github/workflows/action-publish-services.yml
     with:
       config_name: prodtest

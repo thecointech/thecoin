@@ -38,8 +38,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install dependencies
-        run: yarn install --immutable --mode=skip-build
+      # - name: Install dependencies
+      #   run: yarn install --immutable --mode=skip-build
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -52,11 +52,11 @@ jobs:
       - name: Version and Publish
         run: |
           if [ "${{ github.base_ref }}" = "publish/prod" ]; then
-            yarn lerna version --conventional-commits --conventional-graduate --yes
+            npx lerna version --conventional-commits --conventional-graduate --yes
           else
-            yarn lerna version --conventional-commits --conventional-prerelease --preid beta --yes
+            npx lerna version --conventional-commits --conventional-prerelease --preid beta --yes
           fi
-          yarn lerna publish --yes
+          npx lerna publish --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
