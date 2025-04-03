@@ -24,24 +24,24 @@ jobs:
   #   needs: build
   #   uses: ./.github/workflows/action-test.yml
 
-  publish-packages:
-    permissions:
-      contents: write  # For git operations and version bumps
-      packages: write  # For package publishing
-    needs: build # TODO: Revert back to test
-    uses: ./.github/workflows/action-publish-packages.yml
-    secrets: inherit
+  # publish-packages:
+  #   permissions:
+  #     contents: write  # For git operations and version bumps
+  #     packages: write  # For package publishing
+  #   needs: build # TODO: Revert back to test
+  #   uses: ./.github/workflows/action-publish-packages.yml
+  #   secrets: inherit
 
-  docker-build:
-    needs: publish-packages
-    uses: ./.github/workflows/action-docker-build.yml
-    with:
-      commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
+  # docker-build:
+  #   needs: publish-packages
+  #   uses: ./.github/workflows/action-docker-build.yml
+  #   with:
+  #     commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
 
-  publish-services:
-    needs: docker-build
-    uses: ./.github/workflows/action-publish-services.yml
-    with:
-      config_name: prodtest
-      commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
-    secrets: inherit
+  # publish-services:
+  #   needs: docker-build
+  #   uses: ./.github/workflows/action-publish-services.yml
+  #   with:
+  #     config_name: prodtest
+  #     commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
+  #   secrets: inherit
