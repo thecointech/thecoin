@@ -42,6 +42,7 @@ jobs:
         env:
           CONFIG_NAME: ${{ inputs.config_name }}
           GithubPackageToken: ${{ secrets.GITHUB_TOKEN }}
+          PolygonscanApiKey: todo-api-key
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:

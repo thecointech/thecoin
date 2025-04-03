@@ -7,8 +7,12 @@ import { copyFileSync, mkdirSync, readFileSync, writeFileSync, cpSync } from 'fs
 // Get current directory
 // const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// Get the GitHub token
-// const githubToken = await getSecret('GithubPackageToken');
+// Verify token
+if (!process.env.GITHUB_TOKEN) {
+  throw new Error('GITHUB_TOKEN not found in environment');
+}
+const tokenPrefix = process.env.GITHUB_TOKEN.substring(0, 4);
+console.log(`Token prefix: ${tokenPrefix}... (length: ${process.env.GITHUB_TOKEN.length})`);
 
 // Create temp directory
 mkdirSync('./temp', { recursive: true });
@@ -37,6 +41,15 @@ const yarnConfig = {
     }
   }
 };
+console.log("Writing .yarnrc.yml with config:", {
+  ...yarnConfig,
+  npmScopes: {
+    thecointech: {
+      ...yarnConfig.npmScopes.thecointech,
+      npmAuthToken: '***' // Hide token in logs
+    }
+  }
+});
 writeFileSync("./temp/.yarnrc.yml", JSON.stringify(yarnConfig, null, 2));
 
 // // Build the Docker image

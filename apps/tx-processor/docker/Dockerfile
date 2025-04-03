@@ -30,6 +30,11 @@ COPY temp/package.json ./
 COPY temp/.yarnrc.yml ./
 COPY temp/yarn.lock ./
 
+# Debug: Check npm config and token presence
+RUN cat .yarnrc.yml && \
+    echo "=== Testing npm auth ===" && \
+    yarn npm whoami --registry https://npm.pkg.github.com
+
 # Install dependencies and cleanup sensitive files
 RUN YARN_ENABLE_GLOBAL_CACHE=false yarn workspaces focus --production && \
     rm -f .yarnrc.yml

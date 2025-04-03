@@ -86,6 +86,10 @@ jobs:
           push: true
           tags: ${{ steps.meta-tx.outputs.tags }}
           labels: ${{ steps.meta-tx.outputs.labels }}
+          build-args: |
+            GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          secrets: |
+            GIT_AUTH_TOKEN=${{ secrets.GITHUB_TOKEN }}
 
       # TODO: vqa-service is only run locally for now
       # - name: Prep vqa-service

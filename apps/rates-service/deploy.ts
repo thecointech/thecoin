@@ -1,4 +1,4 @@
-import { copyEnvVarsLocal, copyNpmTokenHere } from "../../tools/predeploy";
+import { copyEnvVarsLocal, copyNpmTokenHere } from "../../tools/predeploy.ts";
 
 (async () => {
   // await SetGCloudConfig("GCLOUD_RATES_CONFIG");
