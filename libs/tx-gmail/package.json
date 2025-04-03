@@ -23,7 +23,7 @@
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
-    "token-cli": "run -T run-env cfg=prod ./tools/token-cli.ts"
+    "token-cli": "run-env cfg=prod ./tools/token-cli.ts"
   },
   "files": [
     "build/**/*"
@@ -43,7 +43,8 @@
     "js-base64": "^3.7.6"
   },
   "devDependencies": {
-    "@thecointech/electron-utils": "^0.2.150-beta.1"
+    "@thecointech/electron-utils": "^0.2.150-beta.1",
+    "@thecointech/setenv": "^0.2.150-beta.1"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

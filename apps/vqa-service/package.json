@@ -19,9 +19,12 @@
     "_postinstall": "node --experimental-strip-types ./tools/init-python.ts",
     "get-python": "node -e \"console.log(process.platform === 'win32' ? './.venv/Scripts/python' : './.venv/bin/python')\"",
     "_gen:swagger": "run -T cross-env API_ACCESS_KEY=DUMMY_KEY $(yarn get-python) api/generate_swagger.py",
-    "start": "run -T run-env exec=$(yarn get-python) src/app.py",
-    "_test": "run -T run-env exec=$(yarn get-python) tests/query.test.py",
-    "build:dev": "run -T run-env tools/build-docker.ts",
-    "build:prodtest": "run -T run-env cfg=prodtest tools/build-docker.ts"
+    "start": "run-env exec=$(yarn get-python) src/app.py",
+    "_test": "run-env exec=$(yarn get-python) tests/query.test.py",
+    "build:dev": "run-env tools/build-docker.ts",
+    "build:prodtest": "run-env cfg=prodtest tools/build-docker.ts"
+  },
+  "devDependencies": {
+    "@thecointech/setenv": "^0.2.150-beta.1"
   }
 }

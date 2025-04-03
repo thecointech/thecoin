@@ -11394,6 +11394,7 @@ __metadata:
   resolution: "@thecointech/tx-gmail@workspace:libs/tx-gmail"
   dependencies:
     "@thecointech/electron-utils": "npm:^0.2.150-beta.1"
+    "@thecointech/setenv": "npm:^0.2.150-beta.1"
     "@thecointech/utilities": "npm:^0.2.150-beta.1"
     currency.js: "npm:^2.0.4"
     googleapis: "npm:^129.0.0"
@@ -11483,6 +11484,8 @@ __metadata:
 "@thecointech/vqa-service@workspace:apps/vqa-service":
   version: 0.0.0-use.local
   resolution: "@thecointech/vqa-service@workspace:apps/vqa-service"
+  dependencies:
+    "@thecointech/setenv": "npm:^0.2.150-beta.1"
   languageName: unknown
   linkType: soft
 
