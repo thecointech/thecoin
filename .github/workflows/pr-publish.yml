@@ -41,10 +41,10 @@ jobs:
       config_name: prodtest
     secrets: inherit
 
-  # publish-services:
-  #   needs: docker-build
-  #   uses: ./.github/workflows/action-publish-services.yml
-  #   with:
-  #     config_name: prodtest
-  #     commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
-  #   secrets: inherit
+  publish-services:
+    needs: docker-build
+    uses: ./.github/workflows/action-publish-services.yml
+    with:
+      config_name: prodtest
+      commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
+    secrets: inherit
