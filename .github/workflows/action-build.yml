@@ -65,7 +65,7 @@ jobs:
         date > build-date.txt
         git add .
         git commit -m "chore: build artifacts"
-        git push origin dev
+        git push
 
     # - name: Install dependencies
     #   run: yarn install --immutable --mode=skip-build
