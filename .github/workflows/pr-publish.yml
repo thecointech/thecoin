@@ -25,6 +25,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
+        ref: ${{ github.head_ref }}
         fetch-depth: 0  # Full history for correct versioning
 
     - run: corepack enable
@@ -35,13 +36,19 @@ jobs:
         node-version: '22.14'
         cache: 'yarn'
 
-    - name: Configure Git and NPM
+    - name: Configure Git
       run: |
         git config user.name 'GitHub Actions Bot'
-        git config user.email 'github-actions[bot]@users.noreply.github.com'
-        echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" > ~/.npmrc
+        git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Test push
+      run: |
+        date > generated.txt
+        git add generated.txt
+        git commit -m "Test push"
+        git push
 
     # Java required for OpenAPI client generation
     - uses: actions/setup-java@v2
