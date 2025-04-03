@@ -16,70 +16,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+
   build:
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/action-build.yml
+
+  publish-packages:
     permissions:
       contents: write  # For git operations and version bumps
       packages: write  # For package publishing
-
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        ref: ${{ github.head_ref }}
-        fetch-depth: 0  # Full history for correct versioning
-
-    - run: corepack enable
-
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '22.14'
-        cache: 'yarn'
-
-    - name: Configure Git
-      run: |
-        git config user.name 'GitHub Actions Bot'
-        git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-        echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" > ~/.npmrc
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Test push
-      run: |
-        date > generated.txt
-        git add generated.txt
-        git commit -m "Test push"
-        git push
-
-    # Java required for OpenAPI client generation
-    - uses: actions/setup-java@v2
-      with:
-        distribution: 'zulu'
-        java-version: '11'
-        java-package: jre
-
-    - name: Install dependencies
-      run: yarn install --immutable --mode=skip-build
-
-    - name: Build
-      env:
-        # Fix OOM in build admin
-        NODE_OPTIONS: "--max-old-space-size=6144"
-      run: yarn build
-
-    # Version and publish
-    - name: Version and Publish
-      run: yarn lerna publish --yes --no-verify-access
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  #   permissions:
-  #     contents: write  # For git operations and version bumps
-  #     packages: write  # For package publishing
-  #   needs: build # TODO: Revert back to test
-  #   uses: ./.github/workflows/action-publish-packages.yml
-  #   secrets: inherit
+    needs: build # TODO: Revert back to test
+    uses: ./.github/workflows/action-publish-packages.yml
+    secrets: inherit
 
   # docker-build:
   #   needs: publish-packages
