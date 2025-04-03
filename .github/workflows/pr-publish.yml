@@ -61,7 +61,7 @@ jobs:
 
     # Version and publish
     - name: Version and Publish
-      run: yarn lerna publish --yes --no-verify-access --from-git
+      run: yarn lerna publish --yes --no-verify-access
       env:
         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
