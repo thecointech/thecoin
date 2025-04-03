@@ -1,9 +1,8 @@
 import { getEnvVars } from "@thecointech/setenv";
 import { exit } from "process";
 import { readFileSync, writeFileSync, existsSync } from "fs";
-import { spawn } from 'child_process';
+import { spawn, exec as exec_cb } from 'child_process';
 import { promisify } from 'util';
-import { exec as exec_cb } from 'child_process';
 import { getSecret } from "@thecointech/secrets";
 import { join } from 'path';
 
