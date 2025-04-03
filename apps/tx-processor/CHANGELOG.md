@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.148](https://github.com/thecointech/thecoin/compare/v0.2.147...v0.2.148) (2025-04-03)
+
+**Note:** Version bump only for package @thecointech/tx-processor
+
+
+
+
+
 ## [0.2.147](https://github.com/thecointech/thecoin/compare/v0.2.146...v0.2.147) (2025-04-03)
 
 **Note:** Version bump only for package @thecointech/tx-processor
