@@ -3,6 +3,10 @@ name: Build and Push Docker Images
 on:
   workflow_call:
     inputs:
+      config_name:
+        required: true
+        type: string
+        description: 'Environment to build for (e.g., prodtest, prod)'
       commit_sha:
         required: true
         type: string
@@ -19,6 +23,8 @@ jobs:
     permissions:
       contents: read
       packages: write
+      attestations: write
+      id-token: write
 
     steps:
       - uses: actions/checkout@v4
@@ -40,7 +46,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata for Docker
+      - name: Extract metadata for tx-processor
         id: meta-tx
         uses: docker/metadata-action@v5
         with:
@@ -58,16 +64,20 @@ jobs:
             type=ref,event=branch
             type=sha,format=long
 
+      - name: Prep tx-processor
+        run: node --experimental-strip-types ./docker/build-docker.ts
+        working-directory: ./apps/tx-processor
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build and push tx-processor
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./apps/tx-processor
           file: ./apps/tx-processor/docker/Dockerfile
           push: true
           tags: ${{ steps.meta-tx.outputs.tags }}
           labels: ${{ steps.meta-tx.outputs.labels }}
-          cache-from: type=gha,scope=tx-processor
-          cache-to: type=gha,mode=max,scope=tx-processor
 
       - name: Build and push vqa-service
         uses: docker/build-push-action@v5

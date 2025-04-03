@@ -17,6 +17,11 @@ concurrency:
 
 jobs:
 
+  prebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
   build:
     uses: ./.github/workflows/action-build.yml
 
@@ -28,11 +33,13 @@ jobs:
     uses: ./.github/workflows/action-publish-packages.yml
     secrets: inherit
 
-  # docker-build:
-  #   needs: publish-packages
-  #   uses: ./.github/workflows/action-docker-build.yml
-  #   with:
-  #     commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
+  docker-build:
+    needs: publish-packages
+    uses: ./.github/workflows/action-docker-build.yml
+    with:
+      commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
+      config_name: prodtest
+    secrets: inherit
 
   # publish-services:
   #   needs: docker-build

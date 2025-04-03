@@ -9,6 +9,7 @@ import { depositETransfer } from './deposit';
 import { send } from './etransfer';
 import { payBill } from './bills';
 
+// One more forced publish
 export class RbcApi implements IBank {
 
   // Create new instance with authentication.  If options are not

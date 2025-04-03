@@ -1,14 +1,14 @@
-import { spawnSync } from 'child_process';
-import { getSecret } from '@thecointech/secrets';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { copyFileSync, rmSync, mkdirSync, readFileSync, writeFileSync, cpSync } from 'fs';
+// import { spawnSync } from 'child_process';
+// import { getSecret } from '@thecointech/secrets';
+// import { dirname } from 'path';
+// import { fileURLToPath } from 'url';
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync, cpSync } from 'fs';
 
 // Get current directory
-const __dirname = dirname(fileURLToPath(import.meta.url));
+// const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Get the GitHub token
-const githubToken = await getSecret('GithubPackageToken');
+// const githubToken = await getSecret('GithubPackageToken');
 
 // Create temp directory
 mkdirSync('./temp', { recursive: true });
@@ -33,29 +33,29 @@ const yarnConfig = {
   npmScopes: {
     thecointech: {
       npmRegistryServer: "https://npm.pkg.github.com",
-      npmAuthToken: githubToken
+      npmAuthToken: process.env.GITHUB_TOKEN
     }
   }
 };
 writeFileSync("./temp/.yarnrc.yml", JSON.stringify(yarnConfig, null, 2));
 
-// Build the Docker image
-const result = spawnSync('docker', [
-  'build',
-  '-t', 'tx-processor',
-  '--build-arg', `GITHUB_TOKEN=${githubToken}`,
-  '-f', `${__dirname}/Dockerfile`,
-  '--rm=false',
-  '..'  // Build context is the tx-processor directory
-], {
-  stdio: 'inherit',
-  cwd: __dirname  // Run from the docker directory
-});
+// // Build the Docker image
+// const result = spawnSync('docker', [
+//   'build',
+//   '-t', 'tx-processor',
+//   '--build-arg', `GITHUB_TOKEN=${githubToken}`,
+//   '-f', `${__dirname}/Dockerfile`,
+//   '--rm=false',
+//   '..'  // Build context is the tx-processor directory
+// ], {
+//   stdio: 'inherit',
+//   cwd: __dirname  // Run from the docker directory
+// });
 
-// Clean up temporary files
-rmSync('./temp', { recursive: true, force: true });
+// // Clean up temporary files
+// rmSync('./temp', { recursive: true, force: true });
 
-// Check if the build was successful
-if (result.status !== 0) {
-  throw new Error('Failed to build Docker image');
-}
+// // Check if the build was successful
+// if (result.status !== 0) {
+//   throw new Error('Failed to build Docker image');
+// }

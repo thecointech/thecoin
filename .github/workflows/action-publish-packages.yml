@@ -50,7 +50,13 @@ jobs:
         run: npx lerna --version
 
       - name: Version and Publish
-        run: yarn lerna publish --yes --no-verify-access
+        run: |
+          if [ "${{ github.base_ref }}" = "publish/prod" ]; then
+            yarn lerna version --conventional-commits --conventional-graduate --yes
+          else
+            yarn lerna version --conventional-commits --conventional-prerelease --preid beta --yes
+          fi
+          yarn lerna publish --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
