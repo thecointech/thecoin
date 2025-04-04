@@ -33,11 +33,14 @@ COPY temp/yarn.lock ./
 # Debug: Check npm config and token presence
 RUN cat .yarnrc.yml && \
     echo "=== Testing npm auth ===" && \
-    yarn npm whoami --publish
+    echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" > .npmrc && \
+    echo "@thecointech:registry=https://npm.pkg.github.com" >> .npmrc && \
+    cat .npmrc && \
+    npm whoami --registry https://npm.pkg.github.com
 
 # Install dependencies and cleanup sensitive files
-RUN YARN_ENABLE_GLOBAL_CACHE=false yarn workspaces focus --production && \
-    rm -f .yarnrc.yml
+RUN yarn workspaces focus --production && \
+    rm -f .yarnrc.yml .npmrc
 
 # Copy source code
 COPY build ./build

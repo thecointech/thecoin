@@ -8,11 +8,12 @@ import { copyFileSync, mkdirSync, readFileSync, writeFileSync, cpSync } from 'fs
 // const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Verify token
-if (!process.env.GITHUB_TOKEN) {
+const githubToken = process.env.GITHUB_TOKEN;
+if (!githubToken) {
   throw new Error('GITHUB_TOKEN not found in environment');
 }
-const tokenPrefix = process.env.GITHUB_TOKEN.substring(0, 4);
-console.log(`Token prefix: ${tokenPrefix}... (length: ${process.env.GITHUB_TOKEN.length})`);
+const tokenPrefix = githubToken.substring(0, 4);
+console.log(`Token prefix: ${tokenPrefix}... (length: ${githubToken.length})`);
 
 // Create temp directory
 mkdirSync('./temp', { recursive: true });
@@ -34,10 +35,13 @@ writeFileSync("./temp/package.json", JSON.stringify(packageJson, null, 2));
 const yarnConfig = {
   nodeLinker: "node-modules",
   checksumBehavior: "ignore",
+  npmRegistryServer: "https://npm.pkg.github.com",
+  npmAlwaysAuth: true,
   npmScopes: {
     thecointech: {
       npmRegistryServer: "https://npm.pkg.github.com",
-      npmAuthToken: process.env.GITHUB_TOKEN
+      npmAlwaysAuth: true,
+      npmAuthToken: githubToken
     }
   }
 };

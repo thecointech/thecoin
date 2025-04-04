@@ -80,6 +80,8 @@ jobs:
 
       - name: Build and push tx-processor
         uses: docker/build-push-action@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           context: ./apps/tx-processor
           file: ./apps/tx-processor/docker/Dockerfile
@@ -88,8 +90,8 @@ jobs:
           labels: ${{ steps.meta-tx.outputs.labels }}
           build-args: |
             GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
-          secrets: |
-            GIT_AUTH_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          secret: |
+            "github_token=${{ secrets.GITHUB_TOKEN }}"
 
       # TODO: vqa-service is only run locally for now
       # - name: Prep vqa-service
