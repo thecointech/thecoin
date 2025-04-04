@@ -29,17 +29,17 @@ ENV CONFIG_NAME=prod \
 COPY temp/package.json ./
 COPY temp/.yarnrc.yml ./
 COPY temp/yarn.lock ./
-COPY temp/.npmrc ./
+# COPY temp/.npmrc ./
 
 # Debug: Check npm config and token presence
-RUN cat .yarnrc.yml && \
-    echo "=== Testing npm auth ===" && \
-    cat .npmrc && \
-    npm whoami --registry https://npm.pkg.github.com
+# RUN cat .yarnrc.yml && \
+#     echo "=== Testing npm auth ===" && \
+#     cat .npmrc && \
+#     npm whoami --registry https://npm.pkg.github.com
 
 # Install dependencies and cleanup sensitive files
 RUN yarn workspaces focus --production && \
-    rm -f .yarnrc.yml .npmrc
+    rm -f .yarnrc.yml
 
 # Copy source code
 COPY build ./build

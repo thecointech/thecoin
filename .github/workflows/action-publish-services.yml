@@ -45,7 +45,7 @@ jobs:
         run: yarn run-env ./deploy.ts
         env:
           CONFIG_NAME: ${{ inputs.config_name }}
-          GithubPackageToken: ${{ secrets.GITHUB_TOKEN }}
+          GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
         working-directory: ./apps/rates-service
 
       - id: auth
@@ -87,7 +87,7 @@ jobs:
         run: yarn run-env ./deploy.ts
         env:
           CONFIG_NAME: ${{ inputs.config_name }}
-          GithubPackageToken: ${{ secrets.GITHUB_TOKEN }}
+          GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
         working-directory: ./apps/broker-service
 
       - id: auth

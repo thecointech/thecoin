@@ -8,11 +8,11 @@ import { copyFileSync, mkdirSync, readFileSync, writeFileSync, cpSync } from 'fs
 // const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Verify token
-const githubToken = process.env.GITHUB_TOKEN;
+const githubToken = process.env.GH_PACKAGES_READ;
 if (!githubToken) {
-  throw new Error('GITHUB_TOKEN not found in environment');
+  throw new Error('GH_PACKAGES_READ not found in environment');
 }
-const tokenPrefix = githubToken.substring(0, 4);
+const tokenPrefix = githubToken.substring(0, 6);
 console.log(`Token prefix: ${tokenPrefix}... (length: ${githubToken.length})`);
 
 // Create temp directory
@@ -35,8 +35,6 @@ writeFileSync("./temp/package.json", JSON.stringify(packageJson, null, 2));
 const yarnConfig = {
   nodeLinker: "node-modules",
   checksumBehavior: "ignore",
-  npmRegistryServer: "https://npm.pkg.github.com",
-  npmAlwaysAuth: true,
   npmScopes: {
     thecointech: {
       npmRegistryServer: "https://npm.pkg.github.com",
@@ -45,19 +43,11 @@ const yarnConfig = {
     }
   }
 };
-console.log("Writing .yarnrc.yml with config:", {
-  ...yarnConfig,
-  npmScopes: {
-    thecointech: {
-      ...yarnConfig.npmScopes.thecointech,
-      npmAuthToken: '***' // Hide token in logs
-    }
-  }
-});
+
 writeFileSync("./temp/.yarnrc.yml", JSON.stringify(yarnConfig, null, 2));
 
 // Add an npmrc as well why not?
-writeFileSync("./temp/.npmrc", `//npm.pkg.github.com/:_authToken=${githubToken}\n@thecointech:registry=https://npm.pkg.github.com`);
+// writeFileSync("./temp/.npmrc", `//npm.pkg.github.com/:_authToken=${githubToken}\n@thecointech:registry=https://npm.pkg.github.com`);
 
 // // Build the Docker image
 // const result = spawnSync('docker', [

@@ -20,13 +20,14 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      attestations: write
-      id-token: write
+    # permissions:
+    #   contents: read
+    #   packages: write
+    #   attestations: write
+    #   id-token: write
 
     steps:
+
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.commit_sha }}
@@ -76,22 +77,16 @@ jobs:
         run: node --experimental-strip-types ./docker/build-docker.ts
         working-directory: ./apps/tx-processor
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_PACKAGES_READ: ${{ secrets.GH_PACKAGES_READ }}
 
       - name: Build and push tx-processor
         uses: docker/build-push-action@v5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           context: ./apps/tx-processor
           file: ./apps/tx-processor/docker/Dockerfile
           push: true
           tags: ${{ steps.meta-tx.outputs.tags }}
           labels: ${{ steps.meta-tx.outputs.labels }}
-          build-args: |
-            GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
-          secret: |
-            "github_token=${{ secrets.GITHUB_TOKEN }}"
 
       # TODO: vqa-service is only run locally for now
       # - name: Prep vqa-service
