@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.150-beta.7](https://github.com/thecointech/thecoin/compare/v0.2.150-beta.6...v0.2.150-beta.7) (2025-04-04)
+
+**Note:** Version bump only for package @thecointech/tx-bill
+
+
+
+
+
 ## [0.2.150-beta.6](https://github.com/thecointech/thecoin/compare/v0.2.150-beta.5...v0.2.150-beta.6) (2025-04-04)
 
 **Note:** Version bump only for package @thecointech/tx-bill
