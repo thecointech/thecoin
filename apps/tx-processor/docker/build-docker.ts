@@ -56,6 +56,9 @@ console.log("Writing .yarnrc.yml with config:", {
 });
 writeFileSync("./temp/.yarnrc.yml", JSON.stringify(yarnConfig, null, 2));
 
+// Add an npmrc as well why not?
+writeFileSync("./temp/.npmrc", `//npm.pkg.github.com/:_authToken=${githubToken}\n@thecointech:registry=https://npm.pkg.github.com`);
+
 // // Build the Docker image
 // const result = spawnSync('docker', [
 //   'build',

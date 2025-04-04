@@ -29,12 +29,11 @@ ENV CONFIG_NAME=prod \
 COPY temp/package.json ./
 COPY temp/.yarnrc.yml ./
 COPY temp/yarn.lock ./
+COPY temp/.npmrc ~/
 
 # Debug: Check npm config and token presence
 RUN cat .yarnrc.yml && \
     echo "=== Testing npm auth ===" && \
-    echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" > .npmrc && \
-    echo "@thecointech:registry=https://npm.pkg.github.com" >> .npmrc && \
     cat .npmrc && \
     npm whoami --registry https://npm.pkg.github.com
 
