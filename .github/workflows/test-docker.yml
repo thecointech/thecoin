@@ -2,11 +2,6 @@ name: Build and Push Docker Images
 
 on:
   workflow_call:
-    inputs:
-      config_name:
-        required: true
-        type: string
-        description: 'Environment to build for (e.g., prodtest, prod)'
 
 env:
   REGISTRY: ghcr.io
@@ -54,15 +49,6 @@ jobs:
             type=ref,event=branch
             type=sha,format=long
 
-      # - name: Extract metadata for VQA Service
-      #   id: meta-vqa
-      #   uses: docker/metadata-action@v5
-      #   with:
-      #     images: ${{ env.REGISTRY }}/${{ env.VQA_SERVICE_IMAGE }}
-      #     tags: |
-      #       type=ref,event=branch
-      #       type=sha,format=long
-
       - name: Prep tx-processor
         run: node --experimental-strip-types ./docker/build-docker.ts
         working-directory: ./apps/tx-processor
@@ -83,24 +69,3 @@ jobs:
             GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
           secret: |
             "github_token=${{ secrets.GITHUB_TOKEN }}"
-
-      # TODO: vqa-service is only run locally for now
-      # - name: Prep vqa-service
-      #   run: node --experimental-strip-types ./tools/build-docker.ts
-      #   working-directory: ./apps/vqa-service
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     VqaSslCertPublic: ${{ secrets.VqaSslCertPublic }}
-      #     VqaSslCertPrivate: ${{ secrets.VqaSslCertPrivate }}
-      #     VqaApiKey: ${{ secrets.VqaApiKey }}
-
-      # - name: Build and push vqa-service
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: ./apps/vqa-service
-      #     file: ./apps/vqa-service/Dockerfile
-      #     push: true
-      #     tags: ${{ steps.meta-vqa.outputs.tags }}
-      #     labels: ${{ steps.meta-vqa.outputs.labels }}
-      #     cache-from: type=gha,scope=vqa-service
-      #     cache-to: type=gha,mode=max,scope=vqa-service
