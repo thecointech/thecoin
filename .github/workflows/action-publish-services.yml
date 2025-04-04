@@ -12,6 +12,10 @@ on:
         type: string
         description: 'Commit SHA to build from'
 
+# Already tested in build step
+env:
+  YARN_ENABLE_HARDENED_MODE: 0
+
 jobs:
   deploy-rates:
     runs-on: ubuntu-latest

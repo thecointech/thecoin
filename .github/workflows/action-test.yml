@@ -5,6 +5,7 @@ on:
 
 env:
   YARN_CHECKSUM_BEHAVIOR: ignore
+  YARN_ENABLE_HARDENED_MODE: 0
 
 jobs:
   test:
