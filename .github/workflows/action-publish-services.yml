@@ -29,13 +29,16 @@ jobs:
           node-version: '22.14'
           cache: 'yarn'
 
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
 
       - name: Generate env file
-        run: node --experimental-strip-types ./deploy.ts
+        run: yarn run-env ./deploy.ts
         env:
           CONFIG_NAME: ${{ inputs.config_name }}
           GithubPackageToken: ${{ secrets.GITHUB_TOKEN }}
@@ -69,13 +72,16 @@ jobs:
           node-version: '22.14'
           cache: 'yarn'
 
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
 
       - name: Generate env file
-        run: node --experimental-strip-types ./deploy.ts
+        run: yarn run-env ./deploy.ts
         env:
           CONFIG_NAME: ${{ inputs.config_name }}
           GithubPackageToken: ${{ secrets.GITHUB_TOKEN }}

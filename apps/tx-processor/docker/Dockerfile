@@ -33,7 +33,7 @@ COPY temp/yarn.lock ./
 # Debug: Check npm config and token presence
 RUN cat .yarnrc.yml && \
     echo "=== Testing npm auth ===" && \
-    yarn npm whoami --registry https://npm.pkg.github.com
+    yarn npm whoami --publish
 
 # Install dependencies and cleanup sensitive files
 RUN YARN_ENABLE_GLOBAL_CACHE=false yarn workspaces focus --production && \
