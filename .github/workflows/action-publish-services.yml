@@ -54,7 +54,6 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_RATES_PROJECT_KEY }}
           working_directory: ./apps/rates-service
-          deliverables: app.yaml app.secrets.yaml
 
   deploy-broker:
     runs-on: ubuntu-latest
@@ -97,4 +96,3 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_BROKER_PROJECT_KEY }}
           working_directory: ./apps/broker-service
-          deliverables: app.yaml app.secrets.yaml
