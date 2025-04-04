@@ -45,8 +45,8 @@ jobs:
           PolygonscanApiKey: todo-api-key
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
-        working-directory: ./apps/site-app
         with:
           firebaseServiceAccount: "${{ secrets.GCP_SA_BROKER_KEY }}"
           projectId: tccc-testing
           channelId: live
+          entryPoint: ./apps/site-app
