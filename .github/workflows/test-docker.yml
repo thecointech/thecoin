@@ -28,7 +28,7 @@ jobs:
           node-version: '22.14'
           cache: 'yarn'
 
-      - run: yarn install
+      - run: yarn install --immutable --mode=skip-build
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
