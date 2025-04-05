@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-etransfer",
-  "version": "0.2.150-beta.8",
+  "version": "0.2.150-test.0",
   "description": "The Coin: A library for processing eTransfer withdrawals",
   "type": "module",
   "keywords": [
@@ -29,7 +29,7 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/tx-statemachine": "^0.2.150-beta.8"
+    "@thecointech/tx-statemachine": "^0.2.150-test.0"
   },
   "devDependencies": {
     "@thecointech/bank-interface": "^0.2.150-beta.1"

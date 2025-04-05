@@ -2,7 +2,7 @@
   "name": "thecoin-admin",
   "private": true,
   "productName": "thecoin-admin",
-  "version": "0.2.150-beta.8",
+  "version": "0.2.150-test.0",
   "description": "Admin: audit TheCoin system ops",
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
@@ -39,10 +39,10 @@
   "dependencies": {
     "@thecointech/contract-core": "^0.2.150-beta.1",
     "@thecointech/shared": "^0.2.150-beta.1",
-    "@thecointech/tx-bill": "^0.2.150-beta.8",
-    "@thecointech/tx-deposit": "^0.2.150-beta.8",
-    "@thecointech/tx-etransfer": "^0.2.150-beta.8",
-    "@thecointech/tx-statemachine": "^0.2.150-beta.8",
+    "@thecointech/tx-bill": "^0.2.150-test.0",
+    "@thecointech/tx-deposit": "^0.2.150-test.0",
+    "@thecointech/tx-etransfer": "^0.2.150-test.0",
+    "@thecointech/tx-statemachine": "^0.2.150-test.0",
     "electron-squirrel-startup": "^1.0.0",
     "semantic-ui-css": "^2.4.1"
   }
