@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/apis",
-  "version": "0.2.150-beta.1",
+  "version": "0.2.150-test.2",
   "description": "TheCoin: Simple wrappers for swagger-generated APIs ensures correct URL",
   "type": "module",
   "keywords": [
@@ -65,7 +65,7 @@
     "@thecointech/vqa": "^0.2.150-beta.1"
   },
   "devDependencies": {
-    "@thecointech/async": "^0.2.150-beta.1"
+    "@thecointech/async": "^0.2.150-test.2"
   },
   "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }
