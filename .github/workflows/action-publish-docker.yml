@@ -7,6 +7,10 @@ on:
         required: true
         type: string
         description: 'Commit SHA to build from'
+      config_name:
+        required: true
+        type: string
+        description: 'Config name for environment-specific tags'
 
 env:
   REGISTRY: ghcr.io
@@ -56,8 +60,11 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}
+          flavor: |
+            latest=false
           tags: |
-            type=ref,event=branch
+            type=raw,value=${{ inputs.config_name }}-latest
+            type=raw,value=${{ inputs.config_name }}-{{sha}}
             type=sha,format=long
 
       # - name: Extract metadata for VQA Service
@@ -74,6 +81,7 @@ jobs:
         working-directory: ./apps/tx-processor
         env:
           GH_PACKAGES_READ: ${{ secrets.GH_PACKAGES_READ }}
+          CONFIG_NAME: ${{ inputs.config_name }}
 
       - name: Build and push tx-processor
         uses: docker/build-push-action@v5

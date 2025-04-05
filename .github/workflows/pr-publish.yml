@@ -45,6 +45,7 @@ jobs:
     needs: publish-packages
     uses: ./.github/workflows/action-publish-docker.yml
     with:
+      config_name: ${{ needs.get-config.outputs.config_name }}
       commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
     secrets: inherit
 

@@ -1,6 +1,7 @@
 services:
   tx-processor:
-    build: .
+    image: ghcr.io/thecointech/tx-processor:${CONFIG_NAME:-prod}-latest
+    pull_policy: always
     environment:
       - CONFIG_NAME=${CONFIG_NAME:-prod}
     volumes:
