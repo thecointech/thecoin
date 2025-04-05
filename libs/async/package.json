@@ -16,7 +16,7 @@
     "directory": "libs/async"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "prepublishOnly": "run -T rimraf ./build/.buildinfo",
     "build": "run -T tsc",
     "clean": "rimraf ./build"
   },

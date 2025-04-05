@@ -20,7 +20,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "prepublishOnly": "run -T rimraf ./build/.buildinfo",
     "build": "run -T tsc -b tsconfig.json",
     "clean": "rimraf ./build"
   },
