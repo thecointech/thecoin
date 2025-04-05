@@ -17,65 +17,68 @@ concurrency:
 
 jobs:
 
-  prebuild:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo " The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-
   get-config:
     runs-on: ubuntu-latest
     outputs:
-      config_name: ${{ steps.set-config.outputs.config }}
+      config_name: ${{ steps.set-config.outputs.config_name }}
     steps:
       - id: set-config
         run: |
           BASE="${{ github.base_ref }}"
           CONFIG=${BASE#publish/}
-          echo "config=$CONFIG" >> "$GITHUB_OUTPUT"
+          echo "config_name=$CONFIG" >> "$GITHUB_OUTPUT"
           echo "Config name extracted from $BASE: $CONFIG"
 
-  build:
-    needs: get-config
-    uses: ./.github/workflows/action-build.yml
-
-  publish-packages:
-    permissions:
-      contents: write  # For git operations and version bumps
-      packages: write  # For package publishing
-    needs: build # TODO: Revert back to test
-    uses: ./.github/workflows/action-publish-packages.yml
-    secrets: inherit
-
-  publish-docker:
-    needs: publish-packages
-    uses: ./.github/workflows/action-publish-docker.yml
-    with:
-      commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
-    secrets: inherit
-
-  publish-services:
-    needs: publish-packages
-    uses: ./.github/workflows/action-publish-services.yml
-    with:
-      config_name: ${{ needs.get-config.outputs.config_name }}
-      commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
-    secrets: inherit
-
-  publish-sites:
-    needs: publish-packages
-    uses: ./.github/workflows/action-publish-sites.yml
-    with:
-      config_name: ${{ needs.get-config.outputs.config_name }}
-      commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
-    secrets: inherit
-
-  merge-to-dev:
+  print_config:
     runs-on: ubuntu-latest
-    needs: [publish-services, publish-sites, publish-docker]
+    needs: get-config
     steps:
-      - uses: actions/checkout@v4
-      - name: Merge back to dev
+      - name: Print Config
         run: |
-          git checkout dev
-          git merge ${{ github.ref_name }} -m "chore: merge ${{ github.ref_name }} changes to dev"
-          git push origin dev
+          echo " --- Config name: ${{ needs.get-config.outputs.config_name }}"
+
+  # build:
+  #   needs: get-config
+  #   uses: ./.github/workflows/action-build.yml
+
+  # publish-packages:
+  #   permissions:
+  #     contents: write  # For git operations and version bumps
+  #     packages: write  # For package publishing
+  #   needs: build # TODO: Revert back to test
+  #   uses: ./.github/workflows/action-publish-packages.yml
+  #   secrets: inherit
+
+  # publish-docker:
+  #   needs: publish-packages
+  #   uses: ./.github/workflows/action-publish-docker.yml
+  #   with:
+  #     commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
+  #   secrets: inherit
+
+  # publish-services:
+  #   needs: publish-packages
+  #   uses: ./.github/workflows/action-publish-services.yml
+  #   with:
+  #     config_name: ${{ needs.get-config.outputs.config_name }}
+  #     commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
+  #   secrets: inherit
+
+  # publish-sites:
+  #   needs: publish-packages
+  #   uses: ./.github/workflows/action-publish-sites.yml
+  #   with:
+  #     config_name: ${{ needs.get-config.outputs.config_name }}
+  #     commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
+  #   secrets: inherit
+
+  # merge-to-dev:
+  #   runs-on: ubuntu-latest
+  #   needs: [publish-services, publish-sites, publish-docker]
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Merge back to dev
+  #       run: |
+  #         git checkout dev
+  #         git merge ${{ github.ref_name }} -m "chore: merge ${{ github.ref_name }} changes to dev"
+  #         git push origin dev
