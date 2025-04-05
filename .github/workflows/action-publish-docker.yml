@@ -3,10 +3,6 @@ name: Build and Push Docker Images
 on:
   workflow_call:
     inputs:
-      config_name:
-        required: true
-        type: string
-        description: 'Environment to build for (e.g., prodtest, prod)'
       commit_sha:
         required: true
         type: string

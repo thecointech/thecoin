@@ -38,9 +38,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Install dependencies
-      #   run: yarn install --immutable --mode=skip-build
-
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
@@ -51,10 +48,12 @@ jobs:
 
       - name: Version and Publish
         run: |
-          if [ "${{ github.base_ref }}" = "publish/prod" ]; then
-            npx lerna version --conventional-commits --conventional-graduate --yes
-          else
+          if [ "${{ github.base_ref }}" = "publish/prodtest" ]; then
+            npx lerna version --conventional-commits --conventional-prerelease --preid test --yes
+          elif [ "${{ github.base_ref }}" = "publish/prodbeta" ]; then
             npx lerna version --conventional-commits --conventional-prerelease --preid beta --yes
+          else
+            npx lerna version --conventional-commits --conventional-graduate --yes
           fi
           npx lerna publish from-git --yes
         env:
@@ -64,10 +63,3 @@ jobs:
       - name: Get Latest Commit SHA
         id: get_sha
         run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
-
-      # Merge changes back to dev
-      # - name: Merge to dev
-      #   run: |
-      #     git checkout dev
-      #     git merge ${{ github.ref_name }} -m "chore: merge ${{ github.ref_name }} changes to dev"
-      #     git push origin dev

@@ -62,7 +62,7 @@ jobs:
         run: node --experimental-strip-types ./docker/build-docker.ts
         working-directory: ./apps/tx-processor
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_PACKAGES_READ: ${{ secrets.GH_PACKAGES_READ }}
 
       - name: Build and push tx-processor
         uses: docker/build-push-action@v5

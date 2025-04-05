@@ -20,9 +20,22 @@ jobs:
   prebuild:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - run: echo " The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
+  get-config:
+    runs-on: ubuntu-latest
+    outputs:
+      config_name: ${{ steps.set-config.outputs.config }}
+    steps:
+      - id: set-config
+        run: |
+          BASE="${{ github.base_ref }}"
+          CONFIG=${BASE#publish/}
+          echo "config=$CONFIG" >> "$GITHUB_OUTPUT"
+          echo "Config name extracted from $BASE: $CONFIG"
 
   build:
+    needs: get-config
     uses: ./.github/workflows/action-build.yml
 
   publish-packages:
@@ -33,19 +46,18 @@ jobs:
     uses: ./.github/workflows/action-publish-packages.yml
     secrets: inherit
 
-  docker-build:
+  publish-docker:
     needs: publish-packages
-    uses: ./.github/workflows/action-docker-build.yml
+    uses: ./.github/workflows/action-publish-docker.yml
     with:
       commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
-      config_name: prodtest
     secrets: inherit
 
   publish-services:
     needs: publish-packages
     uses: ./.github/workflows/action-publish-services.yml
     with:
-      config_name: prodtest
+      config_name: ${{ needs.get-config.outputs.config_name }}
       commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
     secrets: inherit
 
@@ -53,6 +65,17 @@ jobs:
     needs: publish-packages
     uses: ./.github/workflows/action-publish-sites.yml
     with:
-      config_name: prodtest
+      config_name: ${{ needs.get-config.outputs.config_name }}
       commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
     secrets: inherit
+
+  merge-to-dev:
+    needs: publish-packages publish-services publish-sites publish-docker
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Merge back to dev
+        run: |
+          git checkout dev
+          git merge ${{ github.ref_name }} -m "chore: merge ${{ github.ref_name }} changes to dev"
+          git push origin dev

@@ -17,7 +17,7 @@
     "directory": "apps/rates-service"
   },
   "scripts": {
-    "start": "run-env ./build/main.js",
+    "start": "node ./build/main.js",
     "dev": "run-env --inspect=9231 ./src/main.ts",
     "dev:live": "run -T cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn dev",
