@@ -18,8 +18,7 @@ WORKDIR /apps/tx-processor
 RUN corepack enable
 
 # Set default environment & disable typescript processing
-ENV CONFIG_NAME=prod \
-    NODE_ENV=production \
+ENV NODE_ENV=production \
     TS_NODE_PROJECT=none \
     THECOIN_CONSOLE_ONLY=true \
     THECOIN_DATA=/data \
@@ -29,13 +28,6 @@ ENV CONFIG_NAME=prod \
 COPY temp/package.json ./
 COPY temp/.yarnrc.yml ./
 COPY temp/yarn.lock ./
-# COPY temp/.npmrc ./
-
-# Debug: Check npm config and token presence
-# RUN cat .yarnrc.yml && \
-#     echo "=== Testing npm auth ===" && \
-#     cat .npmrc && \
-#     npm whoami --registry https://npm.pkg.github.com
 
 # Install dependencies and cleanup sensitive files
 RUN yarn workspaces focus --production && \
