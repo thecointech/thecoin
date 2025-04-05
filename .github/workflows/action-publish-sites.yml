@@ -19,8 +19,6 @@ env:
 jobs:
   deploy_live_website:
     runs-on: ubuntu-latest
-    environment:
-      CONFIG_NAME: ${{ inputs.config_name }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -48,6 +46,8 @@ jobs:
       - name: rebuild site-landing
         run: yarn build
         working-directory: ./apps/site-landing
+        env:
+          CONFIG_NAME: ${{ inputs.config_name }}
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -60,6 +60,7 @@ jobs:
         run: yarn build
         working-directory: ./apps/site-app
         env:
+          CONFIG_NAME: ${{ inputs.config_name }}
           PolygonscanApiKey: ${{ secrets.POLYGONSCAN_API_KEY }}
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
