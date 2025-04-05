@@ -22,7 +22,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "run -T rimraf ./build/.buildinfo",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
     "_deploy": "yarn run-env ./scripts/deploy.ts",
     "emulator": "yarn ceramic daemon --config ./tools/daemon.inmemory.config.json",
     "graphql": "yarn run-env ./scripts/run-graphql.ts",

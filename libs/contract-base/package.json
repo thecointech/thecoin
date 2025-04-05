@@ -19,7 +19,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "run -T rimraf ./build/.buildinfo",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
     "build": "run -T tsc",
     "clean": "rimraf ./build"
   },
