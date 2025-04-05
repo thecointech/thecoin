@@ -19,6 +19,8 @@ env:
 jobs:
   deploy_live_website:
     runs-on: ubuntu-latest
+    environment:
+      CONFIG_NAME: ${{ inputs.config_name }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -43,12 +45,22 @@ jobs:
       - name: Ensure ts-patch
         run: yarn postinstall
 
+      - name: rebuild site-landing
+        run: yarn build
+        working-directory: ./apps/site-landing
+
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          firebaseServiceAccount: "${{ secrets.GCP_SA_BROKER_KEY }}"
+          projectId: tccc-testing
+          channelId: live
+          entryPoint: ./apps/site-landing
+
       - name: rebuild site-app
         run: yarn build
         working-directory: ./apps/site-app
         env:
-          CONFIG_NAME: ${{ inputs.config_name }}
-          PolygonscanApiKey: todo-api-key
+          PolygonscanApiKey: ${{ secrets.POLYGONSCAN_API_KEY }}
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
