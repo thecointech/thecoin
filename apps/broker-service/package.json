@@ -14,10 +14,10 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
-    "directory": "apps/rates-service"
+    "directory": "apps/broker-service"
   },
   "scripts": {
-    "start": "node ./build/main.js",
+    "start": "run-env ./build/main.js",
     "dev": "yarn run-env --inspect=9232 ./src/main.ts",
     "dev:live": "run -T cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn dev",

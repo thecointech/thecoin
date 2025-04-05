@@ -8,7 +8,7 @@ export const getConsoleStream = (level?: number) : Stream => (
   {
     level: level ?? 'trace',
     stream: debug_stream({
-      basepath: fileURLToPath(baseurl),
+      basepath: fileURLToPath(baseurl ?? "./"),
       forceColor: true,
     })
   }

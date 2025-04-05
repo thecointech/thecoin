@@ -5,7 +5,7 @@ export const projectUrl = () => {
   while (!existsSync(new URL("environments", baseUrl))) {
     const parentUrl = new URL(`..`, baseUrl);
     if (parentUrl.toString() == baseUrl.toString()) {
-      throw new Error("Could not find project root");
+      return null;
     }
     baseUrl = parentUrl;
   }
