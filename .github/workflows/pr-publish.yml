@@ -71,7 +71,7 @@ jobs:
 
   merge-to-dev:
     runs-on: ubuntu-latest
-    needs: publish-packages publish-services publish-sites publish-docker
+    needs: [publish-services, publish-sites, publish-docker]
     steps:
       - uses: actions/checkout@v4
       - name: Merge back to dev
