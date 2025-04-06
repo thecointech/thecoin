@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/utilities",
-  "version": "0.2.150-test.2",
+  "version": "0.2.150-test.3",
   "description": "The Coin: Utilities shared amongst typescript-based projects",
   "type": "module",
   "keywords": [
@@ -46,8 +46,8 @@
     }
   },
   "dependencies": {
-    "@thecointech/logging": "^0.2.150-test.2",
-    "@thecointech/secrets": "^0.2.150-test.2",
+    "@thecointech/logging": "^0.2.150-test.3",
+    "@thecointech/secrets": "^0.2.150-test.3",
     "base32": "^0.0.7",
     "decimal.js-light": "^2.5.1",
     "ethers": "6.12.0"
