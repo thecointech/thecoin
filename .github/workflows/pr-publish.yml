@@ -84,6 +84,6 @@ jobs:
         run: |
           git config user.name 'GitHub Actions Bot'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git fetch origin ${{ github.ref_name }}
-          git merge origin/${{ github.ref_name }} -m "chore: merge ${{ github.ref_name }} changes to dev"
+          git fetch origin ${{ github.event.pull_request.head.ref || github.ref_name }}
+          git merge origin/${{ github.event.pull_request.head.ref || github.ref_name }} -m "chore: merge ${{ github.event.pull_request.head.ref || github.ref_name }} changes to dev"
           git push origin dev
