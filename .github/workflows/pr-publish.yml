@@ -50,7 +50,7 @@ jobs:
     secrets: inherit
 
   publish-docker:
-    needs: publish-packages
+    needs: [get-config, publish-packages]
     uses: ./.github/workflows/action-publish-docker.yml
     with:
       config_name: ${{ needs.get-config.outputs.config_name }}
@@ -58,7 +58,7 @@ jobs:
     secrets: inherit
 
   publish-services:
-    needs: publish-packages
+    needs: [get-config, publish-packages]
     uses: ./.github/workflows/action-publish-services.yml
     with:
       config_name: ${{ needs.get-config.outputs.config_name }}
@@ -66,7 +66,7 @@ jobs:
     secrets: inherit
 
   publish-sites:
-    needs: publish-packages
+    needs: [get-config, publish-packages]
     uses: ./.github/workflows/action-publish-sites.yml
     with:
       config_name: ${{ needs.get-config.outputs.config_name }}
