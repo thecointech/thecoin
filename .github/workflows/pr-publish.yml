@@ -78,8 +78,12 @@ jobs:
     needs: [publish-services, publish-sites, publish-docker]
     steps:
       - uses: actions/checkout@v4
-      - name: Merge back to dev
+        with:
+          ref: dev
+      - name: Merge changes
         run: |
-          git checkout dev
-          git merge ${{ github.ref_name }} -m "chore: merge ${{ github.ref_name }} changes to dev"
+          git config user.name 'GitHub Actions Bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin ${{ github.ref_name }}
+          git merge origin/${{ github.ref_name }} -m "chore: merge ${{ github.ref_name }} changes to dev"
           git push origin dev
