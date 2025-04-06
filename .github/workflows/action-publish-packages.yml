@@ -38,24 +38,24 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
 
-      - name: Verify Lerna version
-        run: npx lerna --version
-
       - name: Version and Publish
         run: |
           if [ "${{ github.base_ref }}" = "publish/prodtest" ]; then
-            npx lerna version --conventional-commits --conventional-prerelease --preid test --yes
+            yarn lerna version --conventional-commits --conventional-prerelease --preid test --yes
           elif [ "${{ github.base_ref }}" = "publish/prodbeta" ]; then
-            npx lerna version --conventional-commits --conventional-prerelease --preid beta --yes
+            yarn lerna version --conventional-commits --conventional-prerelease --preid beta --yes
           else
-            npx lerna version --conventional-commits --conventional-graduate --yes
+            yarn lerna version --conventional-commits --conventional-graduate --yes
           fi
-          npx lerna publish from-git --yes
+          yarn lerna publish from-git --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
