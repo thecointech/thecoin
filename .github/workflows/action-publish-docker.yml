@@ -27,6 +27,8 @@ jobs:
     #   id-token: write
 
     steps:
+      - name: Output Inputs
+        run: echo "${{ toJSON(inputs) }}"
 
       - uses: actions/checkout@v4
         with:

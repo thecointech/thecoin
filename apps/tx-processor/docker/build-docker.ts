@@ -12,8 +12,6 @@ const githubToken = process.env.GH_PACKAGES_READ;
 if (!githubToken) {
   throw new Error('GH_PACKAGES_READ not found in environment');
 }
-const tokenPrefix = githubToken.substring(0, 6);
-console.log(`Token prefix: ${tokenPrefix}... (length: ${githubToken.length})`);
 
 // Create temp directory
 mkdirSync('./temp', { recursive: true });

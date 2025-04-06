@@ -29,6 +29,14 @@ jobs:
           echo "config_name=$CONFIG" >> "$GITHUB_OUTPUT"
           echo "Config name extracted from $BASE: $CONFIG"
 
+  print_config:
+    runs-on: ubuntu-latest
+    needs: get-config
+    steps:
+      - name: Print Config
+        run: |
+          echo " --- Config name: ${{ needs.get-config.outputs.config_name }}"
+
   build:
     needs: get-config
     uses: ./.github/workflows/action-build.yml
