@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.150-test.11](https://github.com/thecointech/thecoin/compare/v0.2.150-test.10...v0.2.150-test.11) (2025-04-07)
+
+**Note:** Version bump only for package thecoin-admin
+
+
+
+
+
 ## [0.2.150-test.10](https://github.com/thecointech/thecoin/compare/v0.2.150-test.9...v0.2.150-test.10) (2025-04-07)
 
 **Note:** Version bump only for package thecoin-admin
