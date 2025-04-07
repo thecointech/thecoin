@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/store",
-  "version": "0.2.150-test.8",
+  "version": "0.2.150-test.10",
   "description": "The Coin: Base storage mechanisms",
   "type": "module",
   "keywords": [
@@ -38,7 +38,7 @@
   },
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/logging": "^0.2.150-test.8",
+    "@thecointech/logging": "^0.2.150-test.10",
     "pouchdb": "^8.0.1",
     "pouchdb-upsert": "^2.2.0"
   },
