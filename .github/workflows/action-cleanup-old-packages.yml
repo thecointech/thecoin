@@ -1,0 +1,29 @@
+name: Cleanup Old Packages
+
+on:
+  workflow_dispatch:  # Allow manual triggers
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+
+    steps:
+      - name: Delete old tx-processor images
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: 'tx-processor'
+          package-type: 'container'
+          min-versions-to-keep: 5
+          ignore-versions: '^(?!prodtest-).*$'  # Only delete versions starting with prodtest-
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete old test npm packages
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: '@thecointech/*'
+          package-type: 'npm'
+          min-versions-to-keep: 5
+          ignore-versions: '^(?!.*-test).*$'  # Ignore versions that don't contain -test
+          token: ${{ secrets.GITHUB_TOKEN }}
