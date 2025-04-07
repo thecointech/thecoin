@@ -1,7 +1,7 @@
 name: Cleanup Old Packages
 
 on:
-  workflow_dispatch:  # Allow manual triggers
+  workflow_call:  # Allow manual triggers
 
 jobs:
   cleanup:
