@@ -6,7 +6,6 @@ import { initialize, release } from './initialize';
 import { processReferrals } from './referrals';
 import { processTransfers } from './transfers';
 
-
 async function Process() {
   const contract = await initialize();
   const bank = await RbcApi.create();

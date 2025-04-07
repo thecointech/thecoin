@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-blockchain",
-  "version": "0.2.150-test.7",
+  "version": "0.2.150-test.12",
   "private": true,
   "description": "The Coin: high-level interactions with the ethereum contract",
   "type": "module",
@@ -36,7 +36,7 @@
     }
   },
   "dependencies": {
-    "@thecointech/contract-core": "^0.2.150-test.7",
-    "@thecointech/utilities": "^0.2.150-test.7"
+    "@thecointech/contract-core": "^0.2.150-test.12",
+    "@thecointech/utilities": "^0.2.150-test.12"
   }
 }
