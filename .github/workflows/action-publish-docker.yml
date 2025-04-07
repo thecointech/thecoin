@@ -1,0 +1,116 @@
+name: Build and Push Docker Images
+
+on:
+  workflow_call:
+    inputs:
+      commit_sha:
+        required: true
+        type: string
+        description: 'Commit SHA to build from'
+      config_name:
+        required: true
+        type: string
+        description: 'Config name for environment-specific tags'
+
+env:
+  REGISTRY: ghcr.io
+  TX_PROCESSOR_IMAGE: ${{ github.repository }}/tx-processor
+  VQA_SERVICE_IMAGE: ${{ github.repository }}/vqa-service
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    # permissions:
+    #   contents: read
+    #   packages: write
+    #   attestations: write
+    #   id-token: write
+
+    steps:
+      - name: Output Inputs
+        run: echo "${{ toJSON(inputs) }}"
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.commit_sha }}
+
+      - run: corepack enable
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14'
+          cache: 'yarn'
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for tx-processor
+        id: meta-tx
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}
+          flavor: |
+            latest=false
+          tags: |
+            type=raw,value=${{ inputs.config_name }}-latest
+            type=raw,value=${{ inputs.config_name }}-{{sha}}
+            type=sha,format=long
+
+      # - name: Extract metadata for VQA Service
+      #   id: meta-vqa
+      #   uses: docker/metadata-action@v5
+      #   with:
+      #     images: ${{ env.REGISTRY }}/${{ env.VQA_SERVICE_IMAGE }}
+      #     tags: |
+      #       type=ref,event=branch
+      #       type=sha,format=long
+
+      - name: Prep tx-processor
+        run: node --experimental-strip-types ./docker/prep-docker.ts
+        working-directory: ./apps/tx-processor
+        env:
+          GH_PACKAGES_READ: ${{ secrets.GH_PACKAGES_READ }}
+          CONFIG_NAME: ${{ inputs.config_name }}
+
+      - name: Build and push tx-processor
+        uses: docker/build-push-action@v5
+        with:
+          context: ./apps/tx-processor
+          file: ./apps/tx-processor/docker/Dockerfile
+          push: true
+          tags: ${{ steps.meta-tx.outputs.tags }}
+          labels: ${{ steps.meta-tx.outputs.labels }}
+
+      # TODO: vqa-service is only run locally for now
+      # - name: Prep vqa-service
+      #   run: node --experimental-strip-types ./tools/build-docker.ts
+      #   working-directory: ./apps/vqa-service
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     VqaSslCertPublic: ${{ secrets.VqaSslCertPublic }}
+      #     VqaSslCertPrivate: ${{ secrets.VqaSslCertPrivate }}
+      #     VqaApiKey: ${{ secrets.VqaApiKey }}
+
+      # - name: Build and push vqa-service
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: ./apps/vqa-service
+      #     file: ./apps/vqa-service/Dockerfile
+      #     push: true
+      #     tags: ${{ steps.meta-vqa.outputs.tags }}
+      #     labels: ${{ steps.meta-vqa.outputs.labels }}
+      #     cache-from: type=gha,scope=vqa-service
+      #     cache-to: type=gha,mode=max,scope=vqa-service

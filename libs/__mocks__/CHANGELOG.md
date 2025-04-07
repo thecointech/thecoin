@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.150-beta.1](https://github.com/thecointech/thecoin/compare/v0.2.150-beta.0...v0.2.150-beta.1) (2025-04-03)
+
+**Note:** Version bump only for package @thecointech/--mocks--
+
+
+
+
+
 ## [0.2.143](https://github.com/thecointech/thecoin/compare/v0.2.142...v0.2.143) (2025-03-27)
 
 **Note:** Version bump only for package @thecointech/--mocks--

@@ -12,14 +12,13 @@ RUN apt-get update && apt-get install -y \
     libudev-dev \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /apps/tx-processor
+WORKDIR /tx-processor
 
 # Setup Yarn 4.x
 RUN corepack enable
 
 # Set default environment & disable typescript processing
-ENV CONFIG_NAME=prod \
-    NODE_ENV=production \
+ENV NODE_ENV=production \
     TS_NODE_PROJECT=none \
     THECOIN_CONSOLE_ONLY=true \
     THECOIN_DATA=/data \
@@ -31,7 +30,7 @@ COPY temp/.yarnrc.yml ./
 COPY temp/yarn.lock ./
 
 # Install dependencies and cleanup sensitive files
-RUN YARN_ENABLE_GLOBAL_CACHE=false yarn workspaces focus --production && \
+RUN yarn workspaces focus --production && \
     rm -f .yarnrc.yml
 
 # Copy source code
@@ -41,7 +40,7 @@ COPY build ./build
 # - /environments for build-time config
 # - /data for runtime persistent data
 # - /secrets for sensitive credentials
-RUN mkdir -p /environments && \
+RUN mkdir -p environments && \
     mkdir -p /data/dbs && \
     mkdir -p /data/logs && \
     mkdir -p /secrets && \
@@ -49,7 +48,7 @@ RUN mkdir -p /environments && \
     chmod 700 /secrets
 
 # Copy environment configs
-COPY temp/environments/*.env /environments/
+COPY temp/environments/*.env ./environments/
 
 # Create volume mount points
 VOLUME /data

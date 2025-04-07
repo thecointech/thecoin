@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/async",
-  "version": "0.2.143",
+  "version": "0.2.150-test.4",
   "description": "TheCoin: utility functions for async control",
   "type": "module",
   "keywords": [
@@ -16,7 +16,7 @@
     "directory": "libs/async"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
     "build": "run -T tsc",
     "clean": "rimraf ./build"
   },

@@ -9,6 +9,7 @@ import { depositETransfer } from './deposit';
 import { send } from './etransfer';
 import { payBill } from './bills';
 
+// One more forced publish
 export class RbcApi implements IBank {
 
   // Create new instance with authentication.  If options are not
@@ -27,6 +28,7 @@ export class RbcApi implements IBank {
     }
     catch (e: any) {
       //return getErrorResult(JSON.stringify(e))
+      // TODO: We need to be a bit more assertive about this error
       log.error(e, `Error sending etransfer - ${e}`)
     }
     return -1;

@@ -17,8 +17,8 @@ export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
       : "development"
   );
 
-  // Does the user have files on the system
-  if (!onlyPublic) {
+  // Load any system-local definitions
+  if (!onlyPublic && process.env.THECOIN_SECRETS) {
     const systemFolder = process.env.THECOIN_SECRETS;
     const systemFile = new URL(`${envName}.private.env`, `file://${systemFolder}/`)
     if (existsSync(systemFile)) {
@@ -30,8 +30,14 @@ export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
     }
   }
 
+  // If we cannot find the project root, there is no environments to load
+  const baseUrl = projectUrl();
+  if (!baseUrl) {
+    return files;
+  }
+
   // If none found, is there any in the local repo folder?
-  const repoUrl = new URL(`environments/${envName}.public.env`, projectUrl());
+  const repoUrl = new URL(`environments/${envName}.public.env`, baseUrl);
   if (existsSync(repoUrl)) {
     files.push(repoUrl);
   }

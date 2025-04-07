@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.150-test.4](https://github.com/thecointech/thecoin/compare/v0.2.150-test.3...v0.2.150-test.4) (2025-04-06)
+
+**Note:** Version bump only for package @thecointech/secrets
+
+
+
+
+
+## [0.2.150-test.3](https://github.com/thecointech/thecoin/compare/v0.2.150-test.2...v0.2.150-test.3) (2025-04-05)
+
+**Note:** Version bump only for package @thecointech/secrets
+
+
+
+
+
+## [0.2.150-test.2](https://github.com/thecointech/thecoin/compare/v0.2.150-test.1...v0.2.150-test.2) (2025-04-05)
+
+**Note:** Version bump only for package @thecointech/secrets
+
+
+
+
+
+## [0.2.150-test.1](https://github.com/thecointech/thecoin/compare/v0.2.150-test.0...v0.2.150-test.1) (2025-04-05)
+
+**Note:** Version bump only for package @thecointech/secrets
+
+
+
+
+
+## [0.2.150-beta.1](https://github.com/thecointech/thecoin/compare/v0.2.150-beta.0...v0.2.150-beta.1) (2025-04-03)
+
+**Note:** Version bump only for package @thecointech/secrets
+
+
+
+
+
 ## [0.2.144](https://github.com/thecointech/thecoin/compare/v0.2.143...v0.2.144) (2025-04-01)
 
 **Note:** Version bump only for package @thecointech/secrets

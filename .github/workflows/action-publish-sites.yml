@@ -1,0 +1,71 @@
+name: Deploy to sites
+
+on:
+  workflow_call:
+    inputs:
+      config_name:
+        required: true
+        type: string
+        description: 'Environment to build for (e.g., prodtest, prod)'
+      commit_sha:
+        required: true
+        type: string
+        description: 'Commit SHA to build from'
+
+# Already tested in build step
+env:
+  YARN_ENABLE_HARDENED_MODE: 0
+
+jobs:
+  deploy_live_website:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.commit_sha }}
+
+      - run: corepack enable
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14'
+          cache: 'yarn'
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Ensure ts-patch
+        run: yarn postinstall
+
+      - name: rebuild site-landing
+        run: yarn build
+        working-directory: ./apps/site-landing
+        env:
+          CONFIG_NAME: ${{ inputs.config_name }}
+
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          firebaseServiceAccount: "${{ secrets.GCP_SA_BROKER_KEY }}"
+          projectId: tccc-testing
+          channelId: live
+          entryPoint: ./apps/site-landing
+
+      - name: rebuild site-app
+        run: yarn build
+        working-directory: ./apps/site-app
+        env:
+          CONFIG_NAME: ${{ inputs.config_name }}
+          PolygonscanApiKey: ${{ secrets.POLYGONSCAN_API_KEY }}
+
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          firebaseServiceAccount: "${{ secrets.GCP_SA_BROKER_KEY }}"
+          projectId: tccc-testing
+          channelId: live
+          entryPoint: ./apps/site-app

@@ -1,5 +1,6 @@
 import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 import { getBitwardenSecret } from "../bitwarden/getSecrets";
+import { SecretGSMNotFound } from "../../errors";
 
 export type ServiceAccountName = "RatesServiceAccount"|"BrokerServiceAccount";
 
@@ -43,7 +44,7 @@ async function getCredentials() {
     return undefined;
 
   if (!globalThis.__tc_serviceAccountName) {
-    throw new Error("No service account specified");
+    throw new SecretGSMNotFound();
   }
 
 // Get credentials from secrets

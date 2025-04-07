@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-gmail",
-  "version": "0.2.144",
+  "version": "0.2.150-test.7",
   "description": "The Coin: Fetch e-transfer emails from GMail and convert to tx",
   "type": "module",
   "keywords": [
@@ -18,12 +18,12 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
     "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
-    "token-cli": "run -T run-env cfg=prod ./tools/token-cli.ts"
+    "token-cli": "run-env cfg=prod ./tools/token-cli.ts"
   },
   "files": [
     "build/**/*"
@@ -37,13 +37,14 @@
   },
   "types": "./build/index_common.d.ts",
   "dependencies": {
-    "@thecointech/utilities": "^0.2.144",
+    "@thecointech/utilities": "^0.2.150-test.7",
     "currency.js": "^2.0.4",
     "googleapis": "^129.0.0",
     "js-base64": "^3.7.6"
   },
   "devDependencies": {
-    "@thecointech/electron-utils": "^0.2.144"
+    "@thecointech/electron-utils": "^0.2.150-test.7",
+    "@thecointech/setenv": "^0.2.150-test.7"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

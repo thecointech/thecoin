@@ -3,6 +3,86 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.150-test.7](https://github.com/thecointech/thecoin/compare/v0.2.150-test.6...v0.2.150-test.7) (2025-04-07)
+
+**Note:** Version bump only for package @thecointech/contract-plugin-converter
+
+
+
+
+
+## [0.2.150-test.6](https://github.com/thecointech/thecoin/compare/v0.2.150-test.5...v0.2.150-test.6) (2025-04-06)
+
+**Note:** Version bump only for package @thecointech/contract-plugin-converter
+
+
+
+
+
+## [0.2.150-test.5](https://github.com/thecointech/thecoin/compare/v0.2.150-test.4...v0.2.150-test.5) (2025-04-06)
+
+**Note:** Version bump only for package @thecointech/contract-plugin-converter
+
+
+
+
+
+## [0.2.150-test.4](https://github.com/thecointech/thecoin/compare/v0.2.150-test.3...v0.2.150-test.4) (2025-04-06)
+
+**Note:** Version bump only for package @thecointech/contract-plugin-converter
+
+
+
+
+
+## [0.2.150-test.3](https://github.com/thecointech/thecoin/compare/v0.2.150-test.2...v0.2.150-test.3) (2025-04-05)
+
+**Note:** Version bump only for package @thecointech/contract-plugin-converter
+
+
+
+
+
+## [0.2.150-test.2](https://github.com/thecointech/thecoin/compare/v0.2.150-test.1...v0.2.150-test.2) (2025-04-05)
+
+**Note:** Version bump only for package @thecointech/contract-plugin-converter
+
+
+
+
+
+## [0.2.150-test.1](https://github.com/thecointech/thecoin/compare/v0.2.150-test.0...v0.2.150-test.1) (2025-04-05)
+
+**Note:** Version bump only for package @thecointech/contract-plugin-converter
+
+
+
+
+
+## [0.2.150-beta.1](https://github.com/thecointech/thecoin/compare/v0.2.150-beta.0...v0.2.150-beta.1) (2025-04-03)
+
+**Note:** Version bump only for package @thecointech/contract-plugin-converter
+
+
+
+
+
+## [0.2.146](https://github.com/thecointech/thecoin/compare/v0.2.145...v0.2.146) (2025-04-02)
+
+**Note:** Version bump only for package @thecointech/contract-plugin-converter
+
+
+
+
+
+## [0.2.145](https://github.com/thecointech/thecoin/compare/v0.2.144...v0.2.145) (2025-04-02)
+
+**Note:** Version bump only for package @thecointech/contract-plugin-converter
+
+
+
+
+
 ## [0.2.144](https://github.com/thecointech/thecoin/compare/v0.2.143...v0.2.144) (2025-04-01)
 
 **Note:** Version bump only for package @thecointech/contract-plugin-converter

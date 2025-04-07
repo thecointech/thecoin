@@ -7,6 +7,14 @@ on:
         required: true
         type: string
         description: 'Environment to deploy to (e.g., prodtest, prod)'
+      commit_sha:
+        required: true
+        type: string
+        description: 'Commit SHA to build from'
+
+# Already tested in build step
+env:
+  YARN_ENABLE_HARDENED_MODE: 0
 
 jobs:
   deploy-rates:
@@ -14,6 +22,19 @@ jobs:
     environment: ${{ inputs.config_name }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.commit_sha }}
+
+      - run: corepack enable
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -21,10 +42,10 @@ jobs:
           name: build-artifacts
 
       - name: Generate env file
+        run: yarn run-env ./deploy.ts
         env:
           CONFIG_NAME: ${{ inputs.config_name }}
-          GithubPackageToken: ${{ secrets.GITHUB_TOKEN }}
-        run: yarn run-env ./deploy.ts
+          GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
         working-directory: ./apps/rates-service
 
       - id: auth
@@ -37,13 +58,25 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_RATES_PROJECT_KEY }}
           working_directory: ./apps/rates-service
-          deliverables: app.yaml app.secrets.yaml
 
   deploy-broker:
     runs-on: ubuntu-latest
     environment: ${{ inputs.config_name }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.commit_sha }}
+
+      - run: corepack enable
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -51,10 +84,10 @@ jobs:
           name: build-artifacts
 
       - name: Generate env file
+        run: yarn run-env ./deploy.ts
         env:
           CONFIG_NAME: ${{ inputs.config_name }}
-          GithubPackageToken: ${{ secrets.GITHUB_TOKEN }}
-        run: yarn run-env ./deploy.ts
+          GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
         working-directory: ./apps/broker-service
 
       - id: auth
@@ -67,4 +100,3 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_BROKER_PROJECT_KEY }}
           working_directory: ./apps/broker-service
-          deliverables: app.yaml app.secrets.yaml

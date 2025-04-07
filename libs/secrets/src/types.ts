@@ -12,7 +12,6 @@ export enum SecretKey {
   PolygonscanApiKey = "PolygonscanApiKey",
   EtherscanApiKey = "EtherscanApiKey",
 
-
   PinataApiKey = "PinataApiKey",
   PinataApiSecret = "PinataApiSecret",
 

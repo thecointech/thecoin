@@ -17,3 +17,9 @@ export class SecretClientKeyNotFound extends Error {
     super(`Secret client key not found for config ${config}`);
   }
 }
+
+export class SecretGSMNotFound extends Error {
+  constructor() {
+    super("Missing service account for GSM client");
+  }
+}
