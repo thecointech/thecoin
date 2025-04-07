@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/nft",
-  "version": "0.2.150-test.8",
+  "version": "0.2.150-test.9",
   "description": "OpenAPI client for @thecointech/nft",
   "author": "OpenAPI-Generator Contributors",
   "type": "module",
