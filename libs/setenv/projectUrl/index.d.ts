@@ -1,2 +1,2 @@
 
-export function projectUrl() : URL | null;
+export function projectUrl() : URL;
