@@ -20,7 +20,7 @@
     "start": "yarn run-env ./build/main.js",
     "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
-    "build:docker": "run -T cross-env CONFIG_NAME=prod yarn run-env ./docker/build-docker.ts"
+    "build:docker": "run -T cross-env CONFIG_NAME=prodtest yarn run-env ./docker/build-docker.ts"
   },
   "files": [
     "build/**/*"

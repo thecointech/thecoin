@@ -79,7 +79,7 @@ jobs:
       #       type=sha,format=long
 
       - name: Prep tx-processor
-        run: node --experimental-strip-types ./docker/build-docker.ts
+        run: node --experimental-strip-types ./docker/prep-docker.ts
         working-directory: ./apps/tx-processor
         env:
           GH_PACKAGES_READ: ${{ secrets.GH_PACKAGES_READ }}
