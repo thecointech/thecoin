@@ -83,3 +83,9 @@ jobs:
           git fetch origin ${{ github.base_ref }}
           git merge origin/${{ github.base_ref }} -m "chore: merge ${{ github.base_ref }} changes to dev"
           git push origin dev
+
+  cleanup:
+    needs: [publish-services, publish-sites, publish-docker]
+    uses: ./.github/workflows/action-cleanup-old-packages.yml
+    secrets: inherit
+
