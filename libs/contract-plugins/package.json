@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-plugins",
-  "version": "0.2.150-test.7",
+  "version": "0.2.150-test.8",
   "description": "The Coin: Plugin functionality for contract-core",
   "type": "module",
   "keywords": [
@@ -49,12 +49,12 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "^0.2.150-test.4",
-    "@thecointech/contract-tools": "^0.2.150-test.7",
-    "@thecointech/setenv": "^0.2.150-test.7"
+    "@thecointech/async": "^0.2.150-test.8",
+    "@thecointech/contract-tools": "^0.2.150-test.8",
+    "@thecointech/setenv": "^0.2.150-test.8"
   },
   "dependencies": {
-    "@thecointech/contract-oracle": "^0.2.150-test.7"
+    "@thecointech/contract-oracle": "^0.2.150-test.8"
   },
   "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }
