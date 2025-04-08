@@ -14,5 +14,8 @@ export async function init() {
   }
 
   // Init secrets
-  initSecrets('BrokerServiceAccount', process.env.GCLOUD_BROKER_SERVICE_NAME!);
+  if (!process.env.GAE_ENV) {
+    process.env.GAE_LONG_APP_ID = process.env.GCLOUD_BROKER_SERVICE_NAME;
+  }
+  initSecrets('BrokerServiceAccount');
 }

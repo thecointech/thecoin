@@ -4,6 +4,7 @@ import { existsSync, readFileSync } from "fs";
 import dotenv from "dotenv";
 import { SecretClientEnvNotFound, SecretClientKeyNotFound } from "../../errors";
 import type { ConfigType } from "../../types";
+import { getGoogleSecret } from "../google/getSecrets";
 
 export type BWClientWithOrgId = BitwardenClient & {
   organizationId: string;
@@ -32,7 +33,7 @@ export async function createClient(config?: ConfigType) {
     deviceType: DeviceType.SDK,
   };
 
-  const { accessToken, stateFile, organizationId } = getBwsVars(config);
+  const { accessToken, stateFile, organizationId } = await getBwsVars(config);
 
   const client = new BitwardenClient(settings, 2) as BWClientWithOrgId;
   client.organizationId = organizationId;
@@ -51,7 +52,7 @@ export async function createClient(config?: ConfigType) {
   return client;
 }
 
-function getBwsVars(config?: ConfigType) {
+async function getBwsVars(config?: ConfigType) {
   // Is the key an environment variable?
   if (process.env.BWS_ACCESS_TOKEN && process.env.ORGANIZATION_ID) {
     return {
@@ -59,6 +60,12 @@ function getBwsVars(config?: ConfigType) {
       stateFile: process.env.BWS_STATE_FILE,
       organizationId: process.env.ORGANIZATION_ID,
     };
+  }
+
+  // If running on GAE, use the GAE secrets
+  if (process.env.GAE_ENV) {
+    const raw = await getGoogleSecret("BitwardenAccessToken");
+    return JSON.parse(raw) as { accessToken: string, stateFile: string, organizationId: string };
   }
 
   const basePath = process.env.THECOIN_SECRETS;

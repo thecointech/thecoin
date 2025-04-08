@@ -10,7 +10,10 @@ export async function getGoogleSecret(name: SecretKeyType) {
   // `gcloud auth application-default login`
   const client = await getClient();
 
-  const projectId = globalThis.__tc_projectId;
+  const projectId = process.env.GAE_LONG_APP_ID;
+  if (!projectId) {
+    throw new Error("GAE_LONG_APP_ID not set");
+  }
   const [accessResponse] = await client.accessSecretVersion({
     name: `projects/${projectId}/secrets/${name}/versions/latest`,
   });

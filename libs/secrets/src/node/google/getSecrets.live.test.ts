@@ -8,7 +8,8 @@ jest.setTimeout(150000);
 describe('live secrets test', () => {
   it('should get secrets', async () => {
     // Init to bitwarden
-    initClient("BrokerServiceAccount", "tccc-testing");
+    process.env.GAE_LONG_APP_ID = "tccc-testing";
+    initClient("BrokerServiceAccount");
     const client = await getClient("prodtest");
     expect(client).toBeDefined();
 
