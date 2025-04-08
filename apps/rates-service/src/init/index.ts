@@ -16,7 +16,10 @@ export async function init() {
   });
 
   // Init secrets
-  initSecrets('RatesServiceAccount', process.env.GCLOUD_RATES_SERVICE_NAME!);
+  if (!process.env.GAE_ENV) {
+    process.env.GAE_LONG_APP_ID = process.env.GCLOUD_RATES_SERVICE_NAME;
+  }
+  initSecrets('RatesServiceAccount');
 
   // Assume development is dev:live
   if (process.env.NODE_ENV === 'development') {
