@@ -2,7 +2,7 @@
 
 import { initClient, ServiceAccountName } from "./google/client";
 
-export function init(service: ServiceAccountName, projectId: string) {
+export function init(service: ServiceAccountName) {
   // Init our secrets for the service
-  initClient(service, projectId);
+  initClient(service);
 }
