@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/market-status",
-  "version": "0.2.150-test.12",
+  "version": "0.2.150-test.14",
   "description": "TheCoin: Basic library to check if/when the stock market is open",
   "type": "module",
   "keywords": [
@@ -38,7 +38,7 @@
   "types": "./build/index.d.ts",
   "dependencies": {
     "@thecointech/logging": "^0.2.150-test.12",
-    "@thecointech/secrets": "^0.2.150-test.12",
+    "@thecointech/secrets": "^0.2.150-test.14",
     "cockatiel": "^3.2.1"
   },
   "devDependencies": {
