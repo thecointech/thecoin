@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.150-test.17](https://github.com/thecointech/thecoin/compare/v0.2.150-test.16...v0.2.150-test.17) (2025-04-09)
+
+**Note:** Version bump only for package @thecointech/tx-plugins
+
+
+
+
+
 ## [0.2.150-test.16](https://github.com/thecointech/thecoin/compare/v0.2.150-test.15...v0.2.150-test.16) (2025-04-09)
 
 **Note:** Version bump only for package @thecointech/tx-plugins
