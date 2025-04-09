@@ -44,7 +44,7 @@ async function verifyEtherReserves(signer: Signer) {
   const signerBalance = await signer.provider?.getBalance(signer) ?? 0n;
   const signerAddress = await signer.getAddress();
   const balanceEth = formatEther(signerBalance);
-  verifyMinBalance(Number(balanceEth), 0.2, "BrokerCAD", signerAddress, "ether");
+  await verifyMinBalance(Number(balanceEth), 0.2, "BrokerCAD", signerAddress, "ether");
 }
 
 // Verify we have enough reserves to run processing
@@ -61,7 +61,7 @@ async function verifyCoinReserves(signer: Signer, contract: TheCoin) {
     Number(balanceCoin) * weSellAt([rate], now),
     true
   );
-  verifyMinBalance(balanceCad, 10_000, "BrokerCAD", signerAddress, "$CAD");
+  await verifyMinBalance(balanceCad, 10_000, "BrokerCAD", signerAddress, "$CAD");
 }
 
 async function verifyMinBalance(Balance: number, MinimumBalance: number, Signer: string, Address: string, currency: string) {
