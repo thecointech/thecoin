@@ -21,7 +21,7 @@ if (process.env.CONFIG_NAME == "devlive") {
 }
 
 /////////////////////////////////////////////
-const monthsToRun = 9999;
+const monthsToRun = 3;
 /////////////////////////////////////////////
 
 // Init/Demo account
@@ -47,7 +47,7 @@ const initBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0", 10);
 const tx = await loadAndMergeHistory(initBlock, tcCore, testAddress);
 // We start from the last deposit transaction
 const deposits = tx.filter(tx => tx.change > 0);
-const lastTxDate = deposits[deposits.length - 1]?.date ?? startDate;
+const lastTxDate = deposits[deposits.length - 1]?.date ?? startDate.minus({hour: 2});
 console.log(`Last tx: ${lastTxDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
 
 const pausedDate = lastTxDate.plus({ hour: 1});
