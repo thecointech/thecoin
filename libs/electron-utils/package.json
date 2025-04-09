@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/electron-utils",
-  "version": "0.2.150-test.14",
+  "version": "0.2.150-test.16",
   "private": true,
   "description": "The Coin: shared thingies for electron apps",
   "keywords": [
@@ -38,7 +38,7 @@
     }
   },
   "devDependencies": {
-    "@thecointech/secrets": "^0.2.150-test.14",
+    "@thecointech/secrets": "^0.2.150-test.16",
     "@thecointech/setenv": "^0.2.150-test.12",
     "@vercel/webpack-asset-relocator-loader": "1.7.3",
     "css-loader": "^6.0.0",
