@@ -67,8 +67,8 @@ export async function processActions(allActions: AnyAction[], tcCore: TheCoin, b
       const state = getCurrentState(executed);
       if (state.name == 'error' || state.name == 'requestManual' || state.delta.error) {
         log.error(
-          { initialId: action.data.initialId, type: action.type, date: action.data.date.toSQLDate(), err: state.delta.error },
-          'Detected error in action {type} from {date}'
+          { initialId: action.data.initialId, type: action.type, date: action.data.date.toSQLDate(), err: state.delta.error, address: action.address },
+          'Detected error in action {type} on {date} from {address}'
         );
         // Always process deposits.
         if (action.type !== 'Buy') {
