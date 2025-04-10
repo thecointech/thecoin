@@ -3,7 +3,7 @@
   "productName": "THECoin: NFT",
   "private": true,
   "type": "module",
-  "version": "0.2.150-test.17",
+  "version": "0.2.150-test.19",
   "description": "THECoin NFT: some neat tagline",
   "repository": {
     "type": "git",
@@ -51,10 +51,10 @@
     ]
   },
   "dependencies": {
-    "@thecointech/contract-nft": "^0.2.150-test.17",
+    "@thecointech/contract-nft": "^0.2.150-test.19",
     "@thecointech/nft": "^0.2.150-test.12",
-    "@thecointech/shared": "^0.2.150-test.17",
-    "@thecointech/site-base": "^0.2.150-test.17",
+    "@thecointech/shared": "^0.2.150-test.19",
+    "@thecointech/site-base": "^0.2.150-test.19",
     "exif-library": "https://github.com/FrozenKiwi/exif-library#cf25837936add5820fcc25d36e18ed1d39f79bc6"
   },
   "devDependencies": {

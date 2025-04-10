@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/electron-utils",
-  "version": "0.2.150-test.17",
+  "version": "0.2.150-test.19",
   "private": true,
   "description": "The Coin: shared thingies for electron apps",
   "keywords": [
