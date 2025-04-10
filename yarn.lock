@@ -41179,6 +41179,7 @@ __metadata:
     "@electron-forge/plugin-auto-unpack-natives": "npm:^7.2.0"
     "@electron-forge/plugin-webpack": "npm:^7.2.0"
     "@thecointech/contract-core": "npm:^0.2.150-test.17"
+    "@thecointech/setenv": "workspace:^"
     "@thecointech/shared": "npm:^0.2.150-test.17"
     "@thecointech/tx-bill": "npm:^0.2.150-test.17"
     "@thecointech/tx-deposit": "npm:^0.2.150-test.17"
