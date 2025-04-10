@@ -9,6 +9,13 @@ import { rendererConfig } from '@thecointech/electron-utils/webpack/webpack.rend
 import path from 'path';
 import { writeFileSync } from 'fs';
 
+
+const mainConfigMerged = mainConfig({
+  externals: [
+    '@bitwarden/sdk-napi',
+  ]
+});
+
 const config = {
   packagerConfig: {
     asar: true,
@@ -18,7 +25,7 @@ const config = {
   plugins: [
     new AutoUnpackNativesPlugin({}),
     new WebpackPlugin({
-      mainConfig: mainConfig(),
+      mainConfig: mainConfigMerged,
       renderer: {
         config: rendererConfig,
         entryPoints: [

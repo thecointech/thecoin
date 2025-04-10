@@ -16,7 +16,7 @@ function resolveModulePath(moduleSpecifier: string) {
   return new URL(moduleUrl).pathname; // Extract the pathname
 }
 
-const polygonScanApiKey = await getSecret("PolygonscanApiKey");
+const PolygonscanApiKey = await getSecret("PolygonscanApiKey");
 
 const baseOptions: Configuration = {
   module: {
@@ -24,8 +24,9 @@ const baseOptions: Configuration = {
   },
   plugins: [
     ...plugins,
+    // NOTE: This is used only by
     new webpack.DefinePlugin({
-      "process.env.POLYGONSCAN_API_KEY": JSON.stringify(polygonScanApiKey),
+      __COMPILER_REPLACE_SECRETS__: JSON.stringify({PolygonscanApiKey}),
     }),
   ],
   externals: {

@@ -11,14 +11,15 @@
   "type": "module",
   "scripts": {
     "build": "run -T tsc -b",
-    "dev": "yarn electron-forge start",
-    "_dev:live": "run -T cross-env CONFIG_NAME=devlive yarn dev",
-    "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn dev",
-    "prod:beta": "run -T cross-env CONFIG_NAME=prod yarn dev",
+    "dev": "yarn _start:dbg",
+    "_dev:live": "run -T cross-env CONFIG_NAME=devlive yarn _start:dbg",
+    "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn _start:dbg",
+    "prod:beta": "run -T cross-env CONFIG_NAME=prod yarn _start:dbg",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts ."
+    "lint": "eslint --ext .ts .",
+    "_start:dbg": "yarn run -T cross-env NODE_ENV=development yarn run-env $(yarn bin electron-forge) start"
   },
   "keywords": [],
   "devDependencies": {
@@ -29,6 +30,7 @@
     "@electron-forge/maker-zip": "^7.2.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.2.0",
     "@electron-forge/plugin-webpack": "^7.2.0",
+    "@thecointech/setenv": "workspace:^",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "electron": "28.1.3",
