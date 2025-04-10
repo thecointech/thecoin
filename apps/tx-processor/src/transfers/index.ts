@@ -66,10 +66,18 @@ export async function processActions(allActions: AnyAction[], tcCore: TheCoin, b
       // user as having a failed transaction
       const state = getCurrentState(executed);
       if (state.name == 'error' || state.name == 'requestManual' || state.delta.error) {
+        log.error(
+          { initialId: action.data.initialId, type: action.type, date: action.data.date.toSQLDate(), err: state.delta.error, address: action.address },
+          'Detected error in action {type} on {date} from {address}'
+        );
         // Always process deposits.
         if (action.type !== 'Buy') {
           usersWithFailedTxs.add(action.address);
         }
+      }
+      else {
+        log.trace({ initialId: action.data.initialId, type: action.type, date: action.data.date.toSQLDate(), address: action.address },
+          'Finished processing action {type} on {date} from {address}');
       }
     }
     catch (err: any) {

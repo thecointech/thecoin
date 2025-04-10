@@ -10,7 +10,7 @@ export * from './makeTransition';
 // Execute the transition. If we recieve a result, store it in the DB
 async function runAndStoreTransition<Type extends ActionType>(container: TypedActionContainer<Type>, transition: NamedTransition<Type>) : Promise<TransitionDelta|null> {
   log.trace({ transition: transition.transitionName, initialId: container.action.data.initialId },
-    `Calculating transition {transition} for {initialId}`);
+    `Calculating transition {transition}`);
 
   let delta : Partial<TransitionDelta>|null = null;
   try {
@@ -22,7 +22,7 @@ async function runAndStoreTransition<Type extends ActionType>(container: TypedAc
   catch (error: any) {
     // For any exception, we transition to an error state and await a manual fix.
     log.error({ transition: transition.transitionName, initialId: container.action.data.initialId, message: error.message, error},
-      "Error running {transition} on {initialId}: {message}");
+      "Error running {transition}: {message}");
     delta = { error: error.message }
   }
 
@@ -39,11 +39,11 @@ async function runAndStoreTransition<Type extends ActionType>(container: TypedAc
   if (delta.error) {
     log.error(
       { state: getCurrentState(container).name, message: delta.error, transition: transition.transitionName, initialId: container.action.data.initialId },
-      'Error on {state} => {transition}: {message} (for {initialId})'
+      'Error on {state} => {transition}: {message}'
     );
   }
   log.trace({ delta, transition: transition.transitionName, initialId: container.action.data.initialId },
-    `Storing delta {delta} for transition {transition} for {initialId}`);
+    `Storing delta {delta} for transition {transition}`);
 
   // Store the output in the cloud to allow replaying
   // the transition without executing it
@@ -64,7 +64,7 @@ export function transitionTo<States extends string, Type extends ActionType=Acti
     }
     else {
       log.info({ initialId: container.action.data.initialId, state: nextState, transition: transition.transitionName },
-        `{initialId} transitioning via {transition} to state {state}`);
+        `transitioning via {transition} to state {state}`);
     }
 
     // ensure that our transition matches the one being replayed.
@@ -90,6 +90,7 @@ export function transitionTo<States extends string, Type extends ActionType=Acti
     const delta = replay ?? await runAndStoreTransition<Type>(container, transition);
     return delta
       ? {
+        // To consider, are we really in this state if the prior transition had an error?
         name: nextState,
         delta,
         data: {
@@ -160,7 +161,7 @@ export class StateMachineProcessor<States extends string, Type extends ActionTyp
       if (state === breakOnState)
         break;
 
-      log.trace({ initialId, state }, `Action {initialId} processing state: {state}`);
+      log.trace({ initialId, state }, `Processing state: {state}`);
 
       // If no transitions registered, we cannot continue.  This should never happen
       if (!transitions) {
@@ -189,7 +190,7 @@ export class StateMachineProcessor<States extends string, Type extends ActionTyp
       // If this transaction (as a whole) has timed-out.  Not related to timeout
       // of individual actions.  Probably should be calculated in runTransition though
       else if (timeout && transitions.onTimeout) {
-        log.error({ initialId, state }, 'Action {initialId} timed out while in state: {state}');
+        log.error({ initialId, state }, 'Action timed out while in state: {state}');
         nextState = await transitions.onTimeout(container, currentState, replay);
       }
       else {
@@ -201,11 +202,11 @@ export class StateMachineProcessor<States extends string, Type extends ActionTyp
       // This can happen when a transition cannot be completed (eg, calling
       // tocoin before the tx has a chance to settle), but there is no error.
       if (!nextState) {
-        log.debug({ initialId, state },
-          'Pausing action {initialId}: Last transition did not generate a delta in state {state}');
+        log.debug({ initialId, state }, 'Pausing action: Last transition did not generate a delta in state {state}');
         break;
       }
 
+      log.trace({ initialId, state: nextState.name }, `Transitioned to {state}`);
       container.history.push(nextState);
       currentState = nextState as StateSnapshot<States>;
     }

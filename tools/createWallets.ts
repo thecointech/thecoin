@@ -27,6 +27,7 @@ const filepath = resolve(outputFolder, filename);
 writeFileSync(resolve(outputFolder, filename), encrypted);
 
 generatedDeets.push(`WALLET_${name}_PATH=${filepath}`)
+generatedDeets.push(`WALLET_${name}_ADDRESS=${wallet.address}`)
 generatedDeets.push(`WALLET_${name}_PWD=${password}`)
 generatedDeets.push(`WALLET_${name}_KEY=${wallet.signingKey.privateKey}`)
 
