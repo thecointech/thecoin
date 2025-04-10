@@ -10589,8 +10589,8 @@ __metadata:
     "@thecointech/pricing": "npm:^0.2.150-test.12"
     "@thecointech/setenv": "npm:^0.2.150-test.12"
     "@thecointech/signers": "npm:^0.2.150-test.19"
-    "@thecointech/tx-bill": "npm:^0.2.150-test.19"
-    "@thecointech/tx-etransfer": "npm:^0.2.150-test.19"
+    "@thecointech/tx-bill": "npm:^0.2.150-test.20"
+    "@thecointech/tx-etransfer": "npm:^0.2.150-test.20"
     "@thecointech/utilities": "npm:^0.2.150-test.17"
     "@tsoa/runtime": "npm:6.2.0"
     "@types/cors": "npm:^2.8.10"
@@ -11353,11 +11353,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/tx-bill@npm:^0.2.150-test.19, @thecointech/tx-bill@workspace:libs/tx-bill":
+"@thecointech/tx-bill@npm:^0.2.150-test.20, @thecointech/tx-bill@workspace:libs/tx-bill":
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-bill@workspace:libs/tx-bill"
   dependencies:
-    "@thecointech/tx-statemachine": "npm:^0.2.150-test.19"
+    "@thecointech/tx-statemachine": "npm:^0.2.150-test.20"
   languageName: unknown
   linkType: soft
 
@@ -11370,22 +11370,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/tx-deposit@npm:^0.2.150-test.19, @thecointech/tx-deposit@workspace:libs/tx-deposit":
+"@thecointech/tx-deposit@npm:^0.2.150-test.20, @thecointech/tx-deposit@workspace:libs/tx-deposit":
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-deposit@workspace:libs/tx-deposit"
   dependencies:
     "@thecointech/bank-interface": "npm:^0.2.150-test.12"
     "@thecointech/tx-gmail": "npm:^0.2.150-test.19"
-    "@thecointech/tx-statemachine": "npm:^0.2.150-test.19"
+    "@thecointech/tx-statemachine": "npm:^0.2.150-test.20"
   languageName: unknown
   linkType: soft
 
-"@thecointech/tx-etransfer@npm:^0.2.150-test.19, @thecointech/tx-etransfer@workspace:libs/tx-etransfer":
+"@thecointech/tx-etransfer@npm:^0.2.150-test.20, @thecointech/tx-etransfer@workspace:libs/tx-etransfer":
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-etransfer@workspace:libs/tx-etransfer"
   dependencies:
     "@thecointech/bank-interface": "npm:^0.2.150-test.12"
-    "@thecointech/tx-statemachine": "npm:^0.2.150-test.19"
+    "@thecointech/tx-statemachine": "npm:^0.2.150-test.20"
   languageName: unknown
   linkType: soft
 
@@ -11402,12 +11402,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/tx-plugins@npm:^0.2.150-test.19, @thecointech/tx-plugins@workspace:libs/tx-plugins":
+"@thecointech/tx-plugins@npm:^0.2.150-test.20, @thecointech/tx-plugins@workspace:libs/tx-plugins":
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-plugins@workspace:libs/tx-plugins"
   dependencies:
     "@thecointech/contract-plugins": "npm:^0.2.150-test.19"
-    "@thecointech/tx-statemachine": "npm:^0.2.150-test.19"
+    "@thecointech/tx-statemachine": "npm:^0.2.150-test.20"
   languageName: unknown
   linkType: soft
 
@@ -11419,10 +11419,10 @@ __metadata:
     "@thecointech/rbcapi": "npm:^0.2.150-test.17"
     "@thecointech/setenv": "npm:^0.2.150-test.12"
     "@thecointech/site-app": "npm:^0.2.150-test.19"
-    "@thecointech/tx-bill": "npm:^0.2.150-test.19"
-    "@thecointech/tx-deposit": "npm:^0.2.150-test.19"
-    "@thecointech/tx-etransfer": "npm:^0.2.150-test.19"
-    "@thecointech/tx-plugins": "npm:^0.2.150-test.19"
+    "@thecointech/tx-bill": "npm:^0.2.150-test.20"
+    "@thecointech/tx-deposit": "npm:^0.2.150-test.20"
+    "@thecointech/tx-etransfer": "npm:^0.2.150-test.20"
+    "@thecointech/tx-plugins": "npm:^0.2.150-test.20"
     open: "npm:^8.2.1"
   languageName: unknown
   linkType: soft
@@ -11440,7 +11440,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/tx-statemachine@npm:^0.2.150-test.19, @thecointech/tx-statemachine@workspace:libs/tx-statemachine":
+"@thecointech/tx-statemachine@npm:^0.2.150-test.20, @thecointech/tx-statemachine@workspace:libs/tx-statemachine":
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-statemachine@workspace:libs/tx-statemachine"
   dependencies:
@@ -41181,10 +41181,10 @@ __metadata:
     "@thecointech/contract-core": "npm:^0.2.150-test.19"
     "@thecointech/setenv": "workspace:^"
     "@thecointech/shared": "npm:^0.2.150-test.19"
-    "@thecointech/tx-bill": "npm:^0.2.150-test.19"
-    "@thecointech/tx-deposit": "npm:^0.2.150-test.19"
-    "@thecointech/tx-etransfer": "npm:^0.2.150-test.19"
-    "@thecointech/tx-statemachine": "npm:^0.2.150-test.19"
+    "@thecointech/tx-bill": "npm:^0.2.150-test.20"
+    "@thecointech/tx-deposit": "npm:^0.2.150-test.20"
+    "@thecointech/tx-etransfer": "npm:^0.2.150-test.20"
+    "@thecointech/tx-statemachine": "npm:^0.2.150-test.20"
     "@typescript-eslint/eslint-plugin": "npm:^5.0.0"
     "@typescript-eslint/parser": "npm:^5.0.0"
     electron: "npm:28.1.3"

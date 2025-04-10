@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tools",
-  "version": "0.2.150-test.18",
+  "version": "0.2.150-test.20",
   "type": "module",
   "private": true,
   "scripts": {

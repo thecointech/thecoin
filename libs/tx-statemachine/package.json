@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-statemachine",
-  "version": "0.2.150-test.19",
+  "version": "0.2.150-test.20",
   "description": "The Coin: The execution statemachine for processing coin transactions",
   "type": "module",
   "keywords": [
