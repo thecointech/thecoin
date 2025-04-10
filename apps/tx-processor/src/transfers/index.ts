@@ -75,6 +75,10 @@ export async function processActions(allActions: AnyAction[], tcCore: TheCoin, b
           usersWithFailedTxs.add(action.address);
         }
       }
+      else {
+        log.trace({ initialId: action.data.initialId, type: action.type, date: action.data.date.toSQLDate(), address: action.address },
+          'Finished processing action {type} on {date} from {address}');
+      }
     }
     catch (err: any) {
       // Prevent this user from continuing processing
