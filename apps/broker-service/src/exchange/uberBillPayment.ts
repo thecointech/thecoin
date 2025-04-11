@@ -7,6 +7,7 @@ import { getCurrentState } from '@thecointech/tx-statemachine';
 import { SendMail } from '@thecointech/email';
 import { log } from '@thecointech/logging';
 import type { UberTransferAction } from '@thecointech/types';
+import { NormalizeAddress } from '@thecointech/utilities';
 
 export async function  ProcessUberBillPayment(sale: UberTransferAction) {
   const user = sale.transfer.from;
@@ -67,9 +68,12 @@ async function processAction(action: TypedAction<"Bill">) {
 async function hasPendingTransactions(address: string, filterOutId: string) {
   const bills = await getIncompleteActions("Bill");
   const sales = await getIncompleteActions("Sell");
-  // We don't need "buy"/"plugin" as those actions are not initiated by address
-  const allActions = [...bills, ...sales];
-  return allActions.some(a => a.address === address && a.data.initialId !== filterOutId);
+  const normalizedAddress = NormalizeAddress(address);
+  // We don't need "buy"/"plugin" as those actions are not initiated by client address
+  const allActions = [...bills, ...sales]
+    .filter(a => a.data.initialId !== filterOutId)
+    .map(a => NormalizeAddress(a.address));
+  return allActions.some(a => a === normalizedAddress);
 }
 
 
