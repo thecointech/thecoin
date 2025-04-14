@@ -3,11 +3,11 @@ name: Build and Push Docker Images
 on:
   workflow_call:
     inputs:
-      commit_sha:
+      COMMIT_SHA:
         required: true
         type: string
         description: 'Commit SHA to build from'
-      config_name:
+      CONFIG_NAME:
         required: true
         type: string
         description: 'Config name for environment-specific tags'
@@ -32,7 +32,7 @@ jobs:
 
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.commit_sha }}
+          ref: ${{ inputs.COMMIT_SHA }}
 
       - run: corepack enable
 
@@ -65,8 +65,8 @@ jobs:
           flavor: |
             latest=false
           tags: |
-            type=raw,value=${{ inputs.config_name }}-latest
-            type=raw,value=${{ inputs.config_name }}-{{sha}}
+            type=raw,value=${{ inputs.CONFIG_NAME }}-latest
+            type=raw,value=${{ inputs.CONFIG_NAME }}-{{sha}}
             type=sha,format=long
 
       # - name: Extract metadata for VQA Service
@@ -83,7 +83,7 @@ jobs:
         working-directory: ./apps/tx-processor
         env:
           GH_PACKAGES_READ: ${{ secrets.GH_PACKAGES_READ }}
-          CONFIG_NAME: ${{ inputs.config_name }}
+          CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
 
       - name: Build and push tx-processor
         uses: docker/build-push-action@v5

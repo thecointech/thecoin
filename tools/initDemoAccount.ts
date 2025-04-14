@@ -21,7 +21,7 @@ if (process.env.CONFIG_NAME == "devlive") {
 }
 
 /////////////////////////////////////////////
-const monthsToRun = 3;
+const monthsToRun = 100;
 /////////////////////////////////////////////
 
 // Init/Demo account
@@ -139,8 +139,6 @@ while (currDate < endDate) {
 
       if (currDate >= pausedDate) {
 
-        console.log(`Sending BillPayment `);
-
         const dueDate = nextPayDate.plus(visaDuePeriod);
         const billPayment = await BuildUberAction(
           mockPayee,
@@ -150,6 +148,10 @@ while (currDate < endDate) {
           CurrencyCode.CAD,
           dueDate
         )
+        const signedAt = DateTime.fromMillis(billPayment.transfer.signedMillis).toLocaleString(DateTime.DATETIME_SHORT);
+        const dueAt = DateTime.fromMillis(billPayment.transfer.transferMillis).toLocaleString(DateTime.DATETIME_SHORT);
+        console.log(`Sending BillPayment: Signed ${signedAt} - Due ${dueAt}`);
+
         await payBillApi.uberBillPayment(billPayment);
       }
 

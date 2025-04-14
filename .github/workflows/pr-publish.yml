@@ -12,29 +12,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  get-config:
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    outputs:
-      config_name: ${{ steps.set-config.outputs.config_name }}
-    steps:
-      - id: set-config
-        run: |
-          BASE="${{ github.base_ref }}"
-          CONFIG=${BASE#publish/}
-          echo "config_name=$CONFIG" >> "$GITHUB_OUTPUT"
-          echo "Config name extracted from $BASE: $CONFIG"
-
-  print_config:
-    runs-on: ubuntu-latest
-    needs: get-config
-    steps:
-      - name: Print Config
-        run: |
-          echo " --- Config name: ${{ needs.get-config.outputs.config_name }}"
 
   build:
-    needs: get-config
     uses: ./.github/workflows/action-build.yml
 
   publish-packages:
@@ -46,27 +25,29 @@ jobs:
     secrets: inherit
 
   publish-docker:
-    needs: [get-config, publish-packages]
+    needs: publish-packages
     uses: ./.github/workflows/action-publish-docker.yml
     with:
-      config_name: ${{ needs.get-config.outputs.config_name }}
-      commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
+      CONFIG_NAME: ${{ env.CONFIG_NAME }}
+      COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
     secrets: inherit
 
   publish-services:
-    needs: [get-config, publish-packages]
+    needs: publish-packages
     uses: ./.github/workflows/action-publish-services.yml
     with:
-      config_name: ${{ needs.get-config.outputs.config_name }}
-      commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
+      CONFIG_NAME: ${{ env.CONFIG_NAME }}
+      GCP_RATES_PROJECT_ID: ${{ env.GCP_RATES_PROJECT_ID }}
+      GCP_BROKER_PROJECT_ID: ${{ env.GCP_BROKER_PROJECT_ID }}
+      COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
     secrets: inherit
 
   publish-sites:
-    needs: [get-config, publish-packages]
+    needs: publish-packages
     uses: ./.github/workflows/action-publish-sites.yml
     with:
-      config_name: ${{ needs.get-config.outputs.config_name }}
-      commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
+      CONFIG_NAME: ${{ env.CONFIG_NAME }}
+      COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
     secrets: inherit
 
   merge-to-dev:
