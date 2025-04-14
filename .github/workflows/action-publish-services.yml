@@ -3,11 +3,19 @@ name: Deploy to Google App Engine
 on:
   workflow_call:
     inputs:
-      config_name:
+      GCP_RATES_PROJECT_ID:
+        required: true
+        type: string
+        description: 'GCP project ID for rates service'
+      GCP_BROKER_PROJECT_ID:
+        required: true
+        type: string
+        description: 'GCP project ID for broker service'
+      CONFIG_NAME:
         required: true
         type: string
         description: 'Environment to deploy to (e.g., prodtest, prod)'
-      commit_sha:
+      COMMIT_SHA:
         required: true
         type: string
         description: 'Commit SHA to build from'
@@ -19,11 +27,11 @@ env:
 jobs:
   deploy-rates:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.config_name }}
+    environment: ${{ inputs.CONFIG_NAME }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.commit_sha }}
+          ref: ${{ inputs.COMMIT_SHA }}
 
       - run: corepack enable
 
@@ -44,7 +52,7 @@ jobs:
       - name: Generate env file
         run: yarn run-env ./deploy.ts
         env:
-          CONFIG_NAME: ${{ inputs.config_name }}
+          CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
           GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
         working-directory: ./apps/rates-service
 
@@ -56,16 +64,16 @@ jobs:
       - id: deploy-rates
         uses: google-github-actions/deploy-appengine@v2
         with:
-          project_id: ${{ secrets.GCP_RATES_PROJECT_KEY }}
+          project_id: ${{ env.GCP_RATES_PROJECT_ID }}
           working_directory: ./apps/rates-service
 
   deploy-broker:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.config_name }}
+    environment: ${{ inputs.CONFIG_NAME }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.commit_sha }}
+          ref: ${{ inputs.COMMIT_SHA }}
 
       - run: corepack enable
 
@@ -86,7 +94,7 @@ jobs:
       - name: Generate env file
         run: yarn run-env ./deploy.ts
         env:
-          CONFIG_NAME: ${{ inputs.config_name }}
+          CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
           GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
         working-directory: ./apps/broker-service
 
@@ -98,5 +106,5 @@ jobs:
       - id: deploy-broker
         uses: google-github-actions/deploy-appengine@v2
         with:
-          project_id: ${{ secrets.GCP_BROKER_PROJECT_KEY }}
+          project_id: ${{ env.GCP_BROKER_PROJECT_ID }}
           working_directory: ./apps/broker-service

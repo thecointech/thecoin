@@ -3,11 +3,11 @@ name: Deploy to sites
 on:
   workflow_call:
     inputs:
-      config_name:
+      CONFIG_NAME:
         required: true
         type: string
         description: 'Environment to build for (e.g., prodtest, prod)'
-      commit_sha:
+      COMMIT_SHA:
         required: true
         type: string
         description: 'Commit SHA to build from'
@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.commit_sha }}
+          ref: ${{ inputs.COMMIT_SHA }}
 
       - run: corepack enable
 
@@ -47,7 +47,7 @@ jobs:
         run: yarn build
         working-directory: ./apps/site-landing
         env:
-          CONFIG_NAME: ${{ inputs.config_name }}
+          CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -60,7 +60,7 @@ jobs:
         run: yarn build
         working-directory: ./apps/site-app
         env:
-          CONFIG_NAME: ${{ inputs.config_name }}
+          CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
           PolygonscanApiKey: ${{ secrets.POLYGONSCAN_API_KEY }}
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
