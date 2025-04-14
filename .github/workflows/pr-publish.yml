@@ -28,7 +28,7 @@ jobs:
     needs: publish-packages
     uses: ./.github/workflows/action-publish-docker.yml
     with:
-      CONFIG_NAME: ${{ env.CONFIG_NAME }}
+      CONFIG_NAME: ${{ vars.CONFIG_NAME }}
       COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
     secrets: inherit
 
@@ -36,9 +36,9 @@ jobs:
     needs: publish-packages
     uses: ./.github/workflows/action-publish-services.yml
     with:
-      CONFIG_NAME: ${{ env.CONFIG_NAME }}
-      GCP_RATES_PROJECT_ID: ${{ env.GCP_RATES_PROJECT_ID }}
-      GCP_BROKER_PROJECT_ID: ${{ env.GCP_BROKER_PROJECT_ID }}
+      CONFIG_NAME: ${{ vars.CONFIG_NAME }}
+      GCP_RATES_PROJECT_ID: ${{ vars.GCP_RATES_PROJECT_ID }}
+      GCP_BROKER_PROJECT_ID: ${{ vars.GCP_BROKER_PROJECT_ID }}
       COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
     secrets: inherit
 
@@ -46,7 +46,7 @@ jobs:
     needs: publish-packages
     uses: ./.github/workflows/action-publish-sites.yml
     with:
-      CONFIG_NAME: ${{ env.CONFIG_NAME }}
+      CONFIG_NAME: ${{ vars.CONFIG_NAME }}
       COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
     secrets: inherit
 
