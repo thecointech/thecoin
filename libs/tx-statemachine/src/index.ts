@@ -206,7 +206,6 @@ export class StateMachineProcessor<States extends string, Type extends ActionTyp
         break;
       }
 
-      log.trace({ initialId, state: nextState.name }, `Transitioned to {state}`);
       container.history.push(nextState);
       currentState = nextState as StateSnapshot<States>;
     }

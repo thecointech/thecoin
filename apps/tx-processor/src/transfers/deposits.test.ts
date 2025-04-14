@@ -61,9 +61,12 @@ it("Can complete deposits", async () => {
   const results = deposits.map(getCurrentState);
   expect(results.map(r => r.name)).toEqual(['complete', 'error', 'error', 'error'])
   expect(errors).toEqual([
-    "Error on depositReady => depositFiat: Already Deposited (for {initialId})",
-    "Error on depositReady => depositFiat: This transfer was cancelled (for {initialId})",
-    "Error on depositReady => depositFiat: This transfer cannot be processed (for {initialId})",
+    "Error on depositReady => depositFiat: Already Deposited",
+    "Detected error in action {type} from {address}",
+    "Error on depositReady => depositFiat: This transfer was cancelled",
+    "Detected error in action {type} from {address}",
+    "Error on depositReady => depositFiat: This transfer cannot be processed",
+    "Detected error in action {type} from {address}",
   ])
 
   // If passed, balance is 0
