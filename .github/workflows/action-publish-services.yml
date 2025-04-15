@@ -56,7 +56,7 @@ jobs:
       - id: deploy-rates
         uses: google-github-actions/deploy-appengine@v2
         with:
-          project_id: ${{ secrets.GCP_RATES_PROJECT_ID }}
+          project_id: ${{ vars.GCP_RATES_PROJECT_ID }}
           working_directory: ./apps/rates-service
 
   deploy-broker:
@@ -98,5 +98,5 @@ jobs:
       - id: deploy-broker
         uses: google-github-actions/deploy-appengine@v2
         with:
-          project_id: ${{ secrets.GCP_BROKER_PROJECT_ID }}
+          project_id: ${{ vars.GCP_BROKER_PROJECT_ID }}
           working_directory: ./apps/broker-service
