@@ -14,6 +14,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  validate-environment:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Validate environment
+        run: |
+          if [ "${{ inputs.environment }}" != "prodtest" ] && [ "${{ inputs.environment }}" != "prodbeta" ] && [ "${{ inputs.environment }}" != "prod" ]; then
+            echo "::error::Unknown environment: ${{ inputs.environment }}"
+            exit 1
+          fi
+
   build:
     uses: ./.github/workflows/action-build.yml
 

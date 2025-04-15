@@ -12,6 +12,7 @@ jobs:
     steps:
       - name: Delete old tx-processor images
         uses: actions/delete-package-versions@v5
+        continue-on-error: true
         with:
           package-name: 'thecoin/tx-processor'
           package-type: 'container'
@@ -25,11 +26,11 @@ jobs:
       packages: write
 
     steps:
-      - name: Delete old test npm packages
+      - name: Delete old packages
         uses: actions/delete-package-versions@v5
+        continue-on-error: true
         with:
-          package-name: '@thecointech/logging'
+          package-name: 'logging'
           package-type: 'npm'
           min-versions-to-keep: 10
           ignore-versions: '^(?!.*-test).*$'  # Ignore versions that don't contain -test
-          token: ${{ secrets.GITHUB_TOKEN }}
