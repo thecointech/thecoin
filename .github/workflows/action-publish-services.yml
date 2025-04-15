@@ -3,34 +3,14 @@ name: Deploy to Google App Engine
 on:
   workflow_call:
     inputs:
-      GCP_RATES_PROJECT_ID:
+      environment:
         required: true
         type: string
-        description: 'GCP project ID for rates service'
-      GCP_BROKER_PROJECT_ID:
-        required: true
-        type: string
-        description: 'GCP project ID for broker service'
-      CONFIG_NAME:
-        required: true
-        type: string
-        description: 'Environment to deploy to (e.g., prodtest, prod)'
+        description: 'Environment to deploy to (prodtest, prodbeta, prod)'
       COMMIT_SHA:
         required: true
         type: string
         description: 'Commit SHA to build from'
-      GH_PACKAGES_READ:
-        required: true
-        type: string
-        description: 'GitHub Packages read token'
-      GCP_SA_RATES_KEY:
-        required: true
-        type: string
-        description: 'GCP service account key for rates service'
-      GCP_SA_BROKER_KEY:
-        required: true
-        type: string
-        description: 'GCP service account key for broker service'
 
 # Already tested in build step
 env:
@@ -39,7 +19,7 @@ env:
 jobs:
   deploy-rates:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.CONFIG_NAME }}
+    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -64,24 +44,24 @@ jobs:
       - name: Generate env file
         run: yarn run-env ./deploy.ts
         env:
-          CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
-          GithubPackageToken: ${{ inputs.GH_PACKAGES_READ }}
+          CONFIG_NAME: ${{ var.CONFIG_NAME }}
+          GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
         working-directory: ./apps/rates-service
 
       - id: auth
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ inputs.GCP_SA_RATES_KEY }}
+          credentials_json: ${{ secrets.GCP_SA_RATES_KEY }}
 
       - id: deploy-rates
         uses: google-github-actions/deploy-appengine@v2
         with:
-          project_id: ${{ inputs.GCP_RATES_PROJECT_ID }}
+          project_id: ${{ secrets.GCP_RATES_PROJECT_ID }}
           working_directory: ./apps/rates-service
 
   deploy-broker:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.CONFIG_NAME }}
+    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -106,17 +86,17 @@ jobs:
       - name: Generate env file
         run: yarn run-env ./deploy.ts
         env:
-          CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
-          GithubPackageToken: ${{ inputs.GH_PACKAGES_READ }}
+          CONFIG_NAME: ${{ var.CONFIG_NAME }}
+          GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
         working-directory: ./apps/broker-service
 
       - id: auth
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ inputs.GCP_SA_BROKER_KEY }}
+          credentials_json: ${{ secrets.GCP_SA_BROKER_KEY }}
 
       - id: deploy-broker
         uses: google-github-actions/deploy-appengine@v2
         with:
-          project_id: ${{ inputs.GCP_BROKER_PROJECT_ID }}
+          project_id: ${{ secrets.GCP_BROKER_PROJECT_ID }}
           working_directory: ./apps/broker-service

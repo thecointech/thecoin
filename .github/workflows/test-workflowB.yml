@@ -1,0 +1,15 @@
+name: Workflow B
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+jobs:
+  call-workflowC:
+    uses: ./.github/workflows/test-workflowC.yml
+    secrets: inherit
+    with:
+      environment: ${{ inputs.environment }}

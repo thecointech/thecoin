@@ -7,14 +7,10 @@ on:
         required: true
         type: string
         description: 'Commit SHA to build from'
-      CONFIG_NAME:
+      environment:
         required: true
         type: string
-        description: 'Config name for environment-specific tags'
-      GH_PACKAGES_READ:
-        required: true
-        type: string
-        description: 'GitHub Packages read token'
+        description: 'Environment to deploy to (prodtest, prodbeta, prod)'
 
 env:
   REGISTRY: ghcr.io
@@ -31,8 +27,6 @@ jobs:
       id-token: write
 
     steps:
-      - name: Output Inputs
-        run: echo "${{ toJSON(inputs) }}"
 
       - uses: actions/checkout@v4
         with:
@@ -64,13 +58,14 @@ jobs:
       - name: Extract metadata for tx-processor
         id: meta-tx
         uses: docker/metadata-action@v5
+        environment: ${{ inputs.environment }}
         with:
           images: ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}
           flavor: |
             latest=false
           tags: |
-            type=raw,value=${{ inputs.CONFIG_NAME }}-latest
-            type=raw,value=${{ inputs.CONFIG_NAME }}-{{sha}}
+            type=raw,value=${{ vars.CONFIG_NAME }}-latest
+            type=raw,value=${{ vars.CONFIG_NAME }}-{{sha}}
             type=sha,format=long
 
       # - name: Extract metadata for VQA Service
@@ -85,9 +80,10 @@ jobs:
       - name: Prep tx-processor
         run: node --experimental-strip-types ./docker/prep-docker.ts
         working-directory: ./apps/tx-processor
+        environment: ${{ inputs.environment }}
         env:
-          GH_PACKAGES_READ: ${{ inputs.GH_PACKAGES_READ }}
-          CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
+          GH_PACKAGES_READ: ${{ secrets.GH_PACKAGES_READ }}
+          CONFIG_NAME: ${{ vars.CONFIG_NAME }}
 
       - name: Build and push tx-processor
         uses: docker/build-push-action@v5

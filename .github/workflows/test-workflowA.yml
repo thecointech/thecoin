@@ -1,0 +1,11 @@
+name: Test Workflow A
+
+on:
+  push
+
+jobs:
+  call-workflowB:
+    uses: ./.github/workflows/test-workflowB.yml
+    secrets: inherit
+    with:
+      environment: prodtest
