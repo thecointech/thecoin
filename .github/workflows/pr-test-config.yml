@@ -11,6 +11,7 @@ on:
 jobs:
   print-config:
     runs-on: ubuntu-latest
+    environment: prodtest  # or whatever environment name you've configured
     steps:
       - name: Output Inputs
         run: echo "${{ github.base_ref }}"
