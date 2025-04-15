@@ -16,3 +16,5 @@ jobs:
         run: echo "CONFIG_NAME=${{ vars.CONFIG_NAME }}"
       - name: Echo secrets
         run: echo "NOT_A_REAL_SECRET=${{ secrets.NOT_A_REAL_SECRET }}"
+      - name: Echo other thingy
+        run: echo "GCP_BROKER_PROJECT_ID=${{ vars.GCP_BROKER_PROJECT_ID }}"
