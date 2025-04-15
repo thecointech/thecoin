@@ -20,6 +20,7 @@ jobs:
       packages: write  # For package publishing
     outputs:
       latest_sha: ${{ steps.get_sha.outputs.sha }}
+    environment: ${{ inputs.environment }}
 
     steps:
       - uses: actions/checkout@v4
@@ -52,7 +53,6 @@ jobs:
           name: build-artifacts
 
       - name: Version and Publish
-        environment: ${{ inputs.environment }}
         run: |
           if [ "${{ vars.CONFIG_NAME }}" = "prodtest" ]; then
             yarn lerna version --conventional-commits --conventional-prerelease --preid test --yes
