@@ -15,4 +15,4 @@ jobs:
       - name: Use Project ID
         run: echo "CONFIG_NAME=${{ vars.CONFIG_NAME }}"
       - name: Echo secrets
-        run: echo "GITHUB_TOKEN=${{ secrets.GCP_SA_BROKER_KEY != '' && secrets.GCP_SA_BROKER_KEY[:9] || 'NOTFOUND' }}"
+        run: echo "NOT_A_REAL_SECRET=${{ secrets.NOT_A_REAL_SECRET }}"
