@@ -1,4 +1,4 @@
-name: Build and Test
+name: Test Config
 
 on:
   pull_request:
@@ -16,3 +16,5 @@ jobs:
         run: echo "${{ github.base_ref }}"
       - name: Output vars
         run: echo "${{ toJSON(vars) }}"
+      - name: Output CONFIG_NAME
+        run: echo "${{ vars.CONFIG_NAME }}"
