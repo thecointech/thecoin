@@ -52,8 +52,8 @@ jobs:
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          firebaseServiceAccount: "${{ inputs.GCP_SA_BROKER_KEY }}"
-          projectId: tccc-testing
+          firebaseServiceAccount: "${{ secrets.GCP_SA_BROKER_KEY }}"
+          projectId: "${{ vars.GCP_BROKER_PROJECT_ID }}"
           channelId: live
           entryPoint: ./apps/site-landing
 
@@ -67,6 +67,6 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           firebaseServiceAccount: "${{ secrets.GCP_SA_BROKER_KEY }}"
-          projectId: tccc-testing
+          projectId: "${{ vars.GCP_BROKER_PROJECT_ID }}"
           channelId: live
           entryPoint: ./apps/site-app
