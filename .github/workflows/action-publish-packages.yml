@@ -58,8 +58,11 @@ jobs:
             yarn lerna version --conventional-commits --conventional-prerelease --preid test --yes
           elif [ "${{ vars.CONFIG_NAME }}" = "prodbeta" ]; then
             yarn lerna version --conventional-commits --conventional-prerelease --preid beta --yes
-          else
+          elif [ "${{ vars.CONFIG_NAME }}" = "prod" ]; then
             yarn lerna version --conventional-commits --conventional-graduate --yes
+          else
+            echo "::error::Unknown environment: ${{ vars.CONFIG_NAME }}"
+            exit 1
           fi
           yarn lerna publish from-git --yes
         env:
