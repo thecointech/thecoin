@@ -11,6 +11,10 @@ on:
         required: true
         type: string
         description: 'Config name for environment-specific tags'
+      GH_PACKAGES_READ:
+        required: true
+        type: string
+        description: 'GitHub Packages read token'
 
 env:
   REGISTRY: ghcr.io
@@ -20,11 +24,11 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    # permissions:
-    #   contents: read
-    #   packages: write
-    #   attestations: write
-    #   id-token: write
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
 
     steps:
       - name: Output Inputs
@@ -82,7 +86,7 @@ jobs:
         run: node --experimental-strip-types ./docker/prep-docker.ts
         working-directory: ./apps/tx-processor
         env:
-          GH_PACKAGES_READ: ${{ secrets.GH_PACKAGES_READ }}
+          GH_PACKAGES_READ: ${{ inputs.GH_PACKAGES_READ }}
           CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
 
       - name: Build and push tx-processor

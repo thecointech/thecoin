@@ -11,6 +11,14 @@ on:
         required: true
         type: string
         description: 'Commit SHA to build from'
+      GCP_SA_BROKER_KEY:
+        required: true
+        type: string
+        description: 'GCP service account key for broker service'
+      POLYGONSCAN_API_KEY:
+        required: true
+        type: string
+        description: 'PolygonScan API key'
 
 # Already tested in build step
 env:
@@ -51,7 +59,7 @@ jobs:
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          firebaseServiceAccount: "${{ secrets.GCP_SA_BROKER_KEY }}"
+          firebaseServiceAccount: "${{ inputs.GCP_SA_BROKER_KEY }}"
           projectId: tccc-testing
           channelId: live
           entryPoint: ./apps/site-landing
@@ -61,11 +69,11 @@ jobs:
         working-directory: ./apps/site-app
         env:
           CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
-          PolygonscanApiKey: ${{ secrets.POLYGONSCAN_API_KEY }}
+          PolygonscanApiKey: ${{ inputs.POLYGONSCAN_API_KEY }}
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          firebaseServiceAccount: "${{ secrets.GCP_SA_BROKER_KEY }}"
+          firebaseServiceAccount: "${{ inputs.GCP_SA_BROKER_KEY }}"
           projectId: tccc-testing
           channelId: live
           entryPoint: ./apps/site-app
