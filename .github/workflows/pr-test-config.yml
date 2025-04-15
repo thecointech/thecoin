@@ -1,0 +1,18 @@
+name: Build and Test
+
+on:
+  pull_request:
+    branches: [ publish/* ]
+  push:
+    branches:
+      - publish/*
+      - '!refs/pull/*/merge'
+
+jobs:
+  print-config:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output Inputs
+        run: echo "${{ toJSON(inputs) }}"
+      - name: Output vars
+        run: echo "${{ toJSON(vars) }}"

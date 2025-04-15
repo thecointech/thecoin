@@ -23,6 +23,8 @@ jobs:
     needs: build # TODO: Revert back to test
     uses: ./.github/workflows/action-publish-packages.yml
     secrets: inherit
+    with:
+      CONFIG_NAME: ${{ vars.CONFIG_NAME }}
 
   publish-docker:
     needs: publish-packages
