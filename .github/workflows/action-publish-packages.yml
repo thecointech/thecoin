@@ -2,6 +2,11 @@ name: Publish NPM Packages
 
 on:
   workflow_call:
+    inputs:
+      CONFIG_NAME:
+        required: true
+        type: string
+        description: 'Config name for environment-specific tags'
 
 env:
   YARN_CHECKSUM_BEHAVIOR: ignore
@@ -48,9 +53,9 @@ jobs:
 
       - name: Version and Publish
         run: |
-          if [ "${{ github.base_ref }}" = "publish/prodtest" ]; then
+          if [ "${{ inputs.CONFIG_NAME }}" = "prodtest" ]; then
             yarn lerna version --conventional-commits --conventional-prerelease --preid test --yes
-          elif [ "${{ github.base_ref }}" = "publish/prodbeta" ]; then
+          elif [ "${{ inputs.CONFIG_NAME }}" = "prodbeta" ]; then
             yarn lerna version --conventional-commits --conventional-prerelease --preid beta --yes
           else
             yarn lerna version --conventional-commits --conventional-graduate --yes

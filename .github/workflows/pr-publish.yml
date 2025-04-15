@@ -1,10 +1,12 @@
-name: Publish Everything
+name: Publish Everything Base
 
 on:
-  pull_request:
-    branches: [ publish/* ]
-    types:
-      - closed
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        description: 'Environment to deploy to (prodtest, prodbeta, prod)'
 
 # Cancel any in-progress job or run
 concurrency:
@@ -12,7 +14,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-
   build:
     uses: ./.github/workflows/action-build.yml
 
@@ -20,12 +21,16 @@ jobs:
     permissions:
       contents: write  # For git operations and version bumps
       packages: write  # For package publishing
-    needs: build # TODO: Revert back to test
+    needs: build
+    environment: ${{ inputs.environment }}
     uses: ./.github/workflows/action-publish-packages.yml
     secrets: inherit
+    with:
+      CONFIG_NAME: ${{ vars.CONFIG_NAME }}
 
   publish-docker:
     needs: publish-packages
+    environment: ${{ inputs.environment }}
     uses: ./.github/workflows/action-publish-docker.yml
     with:
       CONFIG_NAME: ${{ vars.CONFIG_NAME }}
@@ -34,6 +39,7 @@ jobs:
 
   publish-services:
     needs: publish-packages
+    environment: ${{ inputs.environment }}
     uses: ./.github/workflows/action-publish-services.yml
     with:
       CONFIG_NAME: ${{ vars.CONFIG_NAME }}
@@ -44,6 +50,7 @@ jobs:
 
   publish-sites:
     needs: publish-packages
+    environment: ${{ inputs.environment }}
     uses: ./.github/workflows/action-publish-sites.yml
     with:
       CONFIG_NAME: ${{ vars.CONFIG_NAME }}
@@ -69,4 +76,3 @@ jobs:
     needs: [publish-services, publish-sites, publish-docker]
     uses: ./.github/workflows/action-cleanup-old-packages.yml
     secrets: inherit
-

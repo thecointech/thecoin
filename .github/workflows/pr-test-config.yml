@@ -1,0 +1,30 @@
+name: Test Config
+
+on:
+  pull_request:
+    branches: [ publish/* ]
+  push:
+    branches:
+      - publish/*
+      - '!refs/pull/*/merge'
+
+jobs:
+  print-config:
+    runs-on: ubuntu-latest
+    environment: prodtest  # or whatever environment name you've configured
+    steps:
+      - name: Output Inputs
+        run: echo "${{ github.base_ref }}"
+      - name: Output vars
+        run: echo "${{ toJSON(vars) }}"
+      - name: Output CONFIG_NAME
+        run: echo "${{ vars.CONFIG_NAME }}"
+  test-something:
+    needs: print-config
+    runs-on: ubuntu-latest
+    environment: prodtest  # or whatever environment name you've configured
+    steps:
+      - name: Test something
+        run: echo "Some Var - $SOME_VAR"
+    env:
+      SOME_VAR: ${{ vars.CONFIG_NAME }}
