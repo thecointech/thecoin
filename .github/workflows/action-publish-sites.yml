@@ -53,8 +53,7 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           firebaseServiceAccount: "${{ secrets.GCP_SA_BROKER_KEY }}"
-          target: "${{ vars.GCP_BROKER_PROJECT_ID }}"
-          projectId: "${{ vars.CONFIG_NAME }}"
+          target: "${{ vars.CONFIG_NAME }}"
           channelId: live
           entryPoint: ./apps/site-landing
 
