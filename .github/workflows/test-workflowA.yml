@@ -6,5 +6,6 @@ on:
 jobs:
   call-workflowB:
     uses: ./.github/workflows/test-workflowB.yml
+    secrets: inherit
     with:
       environment: prodtest

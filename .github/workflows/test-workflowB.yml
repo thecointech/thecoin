@@ -10,5 +10,6 @@ on:
 jobs:
   call-workflowC:
     uses: ./.github/workflows/test-workflowC.yml
+    secrets: inherit
     with:
       environment: ${{ inputs.environment }}
