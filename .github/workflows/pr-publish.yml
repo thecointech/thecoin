@@ -23,7 +23,6 @@ jobs:
       packages: write  # For package publishing
     needs: build
     environment: ${{ inputs.environment }}
-    secrets: inherit
     uses: ./.github/workflows/action-publish-packages.yml
     with:
       CONFIG_NAME: ${{ vars.CONFIG_NAME }}
@@ -35,7 +34,7 @@ jobs:
     with:
       CONFIG_NAME: ${{ vars.CONFIG_NAME }}
       COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
-    secrets: inherit
+      GH_PACKAGES_READ: ${{ vars.GH_PACKAGES_READ }}
 
   publish-services:
     needs: publish-packages
@@ -46,7 +45,9 @@ jobs:
       GCP_RATES_PROJECT_ID: ${{ vars.GCP_RATES_PROJECT_ID }}
       GCP_BROKER_PROJECT_ID: ${{ vars.GCP_BROKER_PROJECT_ID }}
       COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
-    secrets: inherit
+      GH_PACKAGES_READ: ${{ vars.GH_PACKAGES_READ }}
+      GCP_SA_RATES_KEY: ${{ vars.GCP_SA_RATES_KEY }}
+      GCP_SA_BROKER_KEY: ${{ vars.GCP_SA_BROKER_KEY }}
 
   publish-sites:
     needs: publish-packages
@@ -55,7 +56,8 @@ jobs:
     with:
       CONFIG_NAME: ${{ vars.CONFIG_NAME }}
       COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
-    secrets: inherit
+      GCP_SA_BROKER_KEY: ${{ vars.GCP_SA_BROKER_KEY }}
+      POLYGONSCAN_API_KEY: ${{ vars.POLYGONSCAN_API_KEY }}
 
   merge-to-dev:
     runs-on: ubuntu-latest
