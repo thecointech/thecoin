@@ -1,0 +1,18 @@
+name: Workflow C
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Use Project ID
+        run: echo "CONFIG_NAME=${{ vars.CONFIG_NAME }}"
+      - name: Echo secrets
+        run: echo "GITHUB_TOKEN=${{ secrets.GCP_SA_BROKER_KEY != '' && secrets.GCP_SA_BROKER_KEY[:9] || 'NOTFOUND' }}"

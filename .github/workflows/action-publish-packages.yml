@@ -3,10 +3,10 @@ name: Publish NPM Packages
 on:
   workflow_call:
     inputs:
-      CONFIG_NAME:
+      environment:
         required: true
         type: string
-        description: 'Config name for environment-specific tags'
+        description: 'Environment to deploy to (prodtest, prodbeta, prod)'
 
 env:
   YARN_CHECKSUM_BEHAVIOR: ignore
@@ -52,10 +52,11 @@ jobs:
           name: build-artifacts
 
       - name: Version and Publish
+        environment: ${{ inputs.environment }}
         run: |
-          if [ "${{ inputs.CONFIG_NAME }}" = "prodtest" ]; then
+          if [ "${{ vars.CONFIG_NAME }}" = "prodtest" ]; then
             yarn lerna version --conventional-commits --conventional-prerelease --preid test --yes
-          elif [ "${{ inputs.CONFIG_NAME }}" = "prodbeta" ]; then
+          elif [ "${{ vars.CONFIG_NAME }}" = "prodbeta" ]; then
             yarn lerna version --conventional-commits --conventional-prerelease --preid beta --yes
           else
             yarn lerna version --conventional-commits --conventional-graduate --yes

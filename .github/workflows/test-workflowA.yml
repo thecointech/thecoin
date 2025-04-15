@@ -1,0 +1,10 @@
+name: Test Workflow A
+
+on:
+  push
+
+jobs:
+  call-workflowB:
+    uses: ./.github/workflows/test-workflowB.yml
+    with:
+      environment: prodtest

@@ -22,14 +22,12 @@ jobs:
       contents: write  # For git operations and version bumps
       packages: write  # For package publishing
     needs: build
-    environment: ${{ inputs.environment }}
     uses: ./.github/workflows/action-publish-packages.yml
     with:
-      CONFIG_NAME: ${{ vars.CONFIG_NAME }}
+      environment: ${{ inputs.environment }}
 
   publish-docker:
     needs: publish-packages
-    environment: ${{ inputs.environment }}
     uses: ./.github/workflows/action-publish-docker.yml
     with:
       CONFIG_NAME: ${{ vars.CONFIG_NAME }}
@@ -38,20 +36,18 @@ jobs:
 
   publish-services:
     needs: publish-packages
-    environment: ${{ inputs.environment }}
     uses: ./.github/workflows/action-publish-services.yml
     with:
       CONFIG_NAME: ${{ vars.CONFIG_NAME }}
       GCP_RATES_PROJECT_ID: ${{ vars.GCP_RATES_PROJECT_ID }}
       GCP_BROKER_PROJECT_ID: ${{ vars.GCP_BROKER_PROJECT_ID }}
       COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
-      GH_PACKAGES_READ: ${{ vars.GH_PACKAGES_READ }}
-      GCP_SA_RATES_KEY: ${{ vars.GCP_SA_RATES_KEY }}
-      GCP_SA_BROKER_KEY: ${{ vars.GCP_SA_BROKER_KEY }}
+      GH_PACKAGES_READ: ${{ secrets.GH_PACKAGES_READ }}
+      GCP_SA_RATES_KEY: ${{ secrets.GCP_SA_RATES_KEY }}
+      GCP_SA_BROKER_KEY: ${{ secrets.GCP_SA_BROKER_KEY }}
 
   publish-sites:
     needs: publish-packages
-    environment: ${{ inputs.environment }}
     uses: ./.github/workflows/action-publish-sites.yml
     with:
       CONFIG_NAME: ${{ vars.CONFIG_NAME }}
