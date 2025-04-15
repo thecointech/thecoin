@@ -26,5 +26,5 @@ jobs:
     steps:
       - name: Test something
         run: echo "Some Var - $SOME_VAR"
-    with:
+    env:
       SOME_VAR: ${{ vars.CONFIG_NAME }}
