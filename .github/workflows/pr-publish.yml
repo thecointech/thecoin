@@ -23,8 +23,8 @@ jobs:
       packages: write  # For package publishing
     needs: build
     environment: ${{ inputs.environment }}
-    uses: ./.github/workflows/action-publish-packages.yml
     secrets: inherit
+    uses: ./.github/workflows/action-publish-packages.yml
     with:
       CONFIG_NAME: ${{ vars.CONFIG_NAME }}
 
