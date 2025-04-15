@@ -3,10 +3,18 @@ const path = require('path');
 
 module.exports = function (request, options) {
 
-  const maybeMocked = getMockedIfExists(request, options);
+  let maybeMocked = getMockedIfExists(request, options);
 
-  const isOurModule = request.startsWith("@thecointech");
-
+  // Strip suffix from setenv files.  This package is our entry point for all our
+  // scripts, but cannot itself alter file resolution.  This means it compiles with
+  // nodeResolution: NodeNext, and it's includes include suffices.  One day, the rest
+  // of the project will migrate to include suffixes (*.js) and we can drop this.
+  const hasSuffix = request.startsWith("./") && request.endsWith(".js");
+  const stripSuffix = hasSuffix && options.basedir.endsWith(path.join('setenv', 'src'))
+  if (stripSuffix) {
+    maybeMocked = maybeMocked.slice(0, -3);
+  }
+  
   try {
     return options.defaultResolver(maybeMocked, {
       ...options,
@@ -15,6 +23,7 @@ module.exports = function (request, options) {
       moduleDirectories: getModuleDirectories(request),
     })
   } catch (e) {
+    const isOurModule = request.startsWith("@thecointech");
     if (isOurModule) {
       // Jest resolver only resolves the first entry of an
       // `exports` object, so where we have multiple (site-base)
@@ -30,26 +39,6 @@ module.exports = function (request, options) {
     // If no match, re-throw the origianl exception
     throw e
   }
-
-  //   // Jest resolver only resolves the first entry of an
-  //   // `exports` object, so where we have multiple (site-base)
-  //   // it always returns the first one, even when it is the second
-  //   // that is valid
-  //   if (isOurModule) {
-  //     if (!existsSync(r)) {
-  //       // see if there is a folder & index.js here
-  //       const parsed = path.parse(r);
-  //       const index = path.join(parsed.dir, parsed.name, "index.js");
-  //       if (existsSync(index)) {
-  //         return index;
-  //       }
-  //     }
-  //   }
-  //   return r;
-
-  // } catch (e) {
-  //   throw e
-  // }
 }
 
 /*

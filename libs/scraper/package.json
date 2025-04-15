@@ -1,0 +1,74 @@
+{
+  "name": "@thecointech/scraper",
+  "version": "0.2.150-test.12",
+  "private": true,
+  "type": "module",
+  "description": "The Coin: Automated scraper for TheCoin",
+  "keywords": [
+    "TheCoin",
+    "ethereum"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/scraper"
+  },
+  "scripts": {
+    "build": "run -T tsc -b",
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage",
+    "test": "run :jest",
+    "testFailure": "yarn run -T cross-env CONFIG_NAME=prod URL_SEQ_LOGGING=false TC_LOG_FOLDER=false run-env tools/testFailure/main.ts",
+    "recordSamples": "yarn run -T cross-env CONFIG_NAME=prod URL_SEQ_LOGGING=false TC_LOG_FOLDER=false run-env tools/recordSamples/recordSamples.ts"
+  },
+  "dependencies": {
+    "@thecointech/async": "^0.2.150-test.12",
+    "@thecointech/logging": "^0.2.150-test.12",
+    "@web-std/file": "^3.0.3",
+    "@xenova/transformers": "^2.14.0",
+    "fastest-levenshtein": "^1.0.16",
+    "fs-extra": "^11.3.0",
+    "pixelmatch": "^6.0.0",
+    "pngjs": "^7.0.0",
+    "puppeteer": "^24.1.1",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
+  },
+  "devDependencies": {
+    "@thecointech/jestutils": "^0.2.150-test.12",
+    "@types/fs-extra": "^11.0.4",
+    "@types/pixelmatch": "^5.2.6",
+    "@types/pngjs": "^6.0.5"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "exports": {
+    ".": {
+      "development": "./mocks/index.ts",
+      "default": "./build/index.js"
+    },
+    "./puppeteer": "./build/puppeteer-init/index.js",
+    "./record": "./build/record/index.js",
+    "./testutils": "./internal/testutils.ts",
+    "./*": "./build/*.js"
+  },
+  "typesVersions": {
+    "*": {
+      "puppeteer": [
+        "build/puppeteer-init/index.d.ts"
+      ],
+      "record": [
+        "build/record/index.d.ts"
+      ],
+      "testutils": [
+        "internal/testutils.ts"
+      ],
+      "*": [
+        "build/*.d.ts"
+      ]
+    }
+  }
+}

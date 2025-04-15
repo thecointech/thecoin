@@ -53,7 +53,7 @@ export class Processor {
     const xferAssit = await getSigner("BrokerTransferAssistant");
     const minter = await getSigner("Minter");
 
-    const infura = getProvider("POLYGON");
+    const infura = await getProvider("POLYGON");
     this.xaAddress = NormalizeAddress(await xferAssit.getAddress());
     this.brokerAddress = NormalizeAddress(await brokerCad.getAddress());
     this.theCoinAddress = NormalizeAddress(await theCoin.getAddress());

@@ -35,6 +35,7 @@ module.exports = {
   moduleNameMapper: {
     "@thecointech/site-semantic-theme/variables": getTool('mockLessVars.mjs'),
     '\\.(css|less|svg)$': getTool('styleMock'),
+    "^@/(.*)$": "<rootDir>/src/$1"
   },
 
   roots: [

@@ -6,9 +6,13 @@ import { log } from '@thecointech/logging';
 import { validateImage, validateJson } from './validate';
 import type { MetadataJson } from '@thecointech/contract-nft';
 import { Readable } from 'stream';
+import { getSecret } from '@thecointech/secrets';
 
-const pinata = pinataSDK(process.env.PINATA_API_KEY!, process.env.PINATA_API_SECRET!);
-
+async function getPinataSDK() {
+  const apiKey = await getSecret("PinataApiKey");
+  const apiSecret = await getSecret("PinataApiSecret");
+  return pinataSDK(apiKey, apiSecret);
+}
 //
 // Upload buffer to IPFS, return upload hash
 export async function upload(file: Buffer, filename: string) {
@@ -18,6 +22,7 @@ export async function upload(file: Buffer, filename: string) {
   // Fixes upload issue: https://github.com/PinataCloud/Pinata-SDK/issues/28
   // ¡¡ THE HACK !!
   (stream as any).path = filename;
+  const pinata = await getPinataSDK();
   const r = await pinata.pinFileToIPFS(stream, {
     pinataOptions: {
       cidVersion: 0

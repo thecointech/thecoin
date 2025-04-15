@@ -1,8 +1,7 @@
 import currency from 'currency.js'
 import { DateTime } from 'luxon'
-import type { ChequeBalanceResult, VisaBalanceResult } from '../scraper/types'
-import type { Replay } from '../scraper/replay';
 import type { Signer } from 'ethers';
+import { ChequeBalanceResult, VisaBalanceResult } from '@thecointech/scraper-agent/types';
 
 export type HarvestDelta = {
   // The fiat balance of the harvesters
@@ -40,9 +39,7 @@ export type HarvestData = {
 export type UserData = {
   creditDetails: CreditDetails;
   wallet: Signer;
-  replay: Replay;
 }
-export type { Replay } from '../scraper/replay';
 
 export type CreditDetails = {
   payee: string,

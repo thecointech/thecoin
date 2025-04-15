@@ -9,14 +9,12 @@ import { depositETransfer } from './deposit';
 import { send } from './etransfer';
 import { payBill } from './bills';
 
+// One more forced publish
 export class RbcApi implements IBank {
 
   // Create new instance with authentication.  If options are not
   // specified, attempt to read the RBCAPI_CREDENTIALS environment variable
-  constructor(options?: AuthOptions)
-  {
-    this.initialize(options);
-  }
+  private constructor() {}
 
   depositETransfer = depositETransfer;
   fetchLatestTransactions = fetchLatestTransactions;
@@ -30,14 +28,16 @@ export class RbcApi implements IBank {
     }
     catch (e: any) {
       //return getErrorResult(JSON.stringify(e))
+      // TODO: We need to be a bit more assertive about this error
       log.error(e, `Error sending etransfer - ${e}`)
     }
     return -1;
   }
 
-  initialize(options?: AuthOptions) {
-    ApiAction.initCredentials(options);
+  static async create(options?: AuthOptions) {
+    await ApiAction.initCredentials(options);
     RbcStore.Options = ApiAction.Credentials.timezone;
+    return new RbcApi();
   }
 }
 

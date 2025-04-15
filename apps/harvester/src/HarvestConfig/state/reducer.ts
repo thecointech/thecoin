@@ -1,6 +1,6 @@
 
 import { BaseReducer } from '@thecointech/shared/store/immerReducer'
-import { HarvestConfig, defaultDays, DaysArray, HarvestStepType, HarvestArgs, addStep, removeStep, defaultTime } from '../../types';
+import { HarvestConfig, defaultDays, DaysArray, HarvestStepType, HarvestArgs, addStep, removeStep, defaultTime, defaultSteps } from '../../types';
 import { IActions } from './types';
 
 export const CONFIG_KEY = "config";
@@ -12,37 +12,8 @@ export const initialState: HarvestConfig = stored.value ?? {
     daysToRun: defaultDays,
     timeToRun: defaultTime,
   },
-  steps: [
-    {
-      type: HarvestStepType.ClearPendingVisa,
-    },
-    {
-      type: HarvestStepType.TransferVisaOwing,
-    },
-    {
-      type: HarvestStepType.RoundUp,
-      args: {
-        roundPoint: 100,
-      },
-    },
-    {
-      type: HarvestStepType.ChequeMinimum,
-      args: {
-        limit: 200,
-      },
-    },
-    {
-      type: HarvestStepType.TransferLimit,
-      args: {
-        limit: 2500,
-      },
-    },
-    { type: HarvestStepType.SendETransfer },
-    { type: HarvestStepType.PayVisa },
-    // Heartbeat so we can be certain the harvester is alive when remote
-    { type: HarvestStepType.Heartbeat },
-  ]
-};
+  steps: defaultSteps,
+}
 
 export class ConfigReducer extends BaseReducer<IActions, HarvestConfig>(CONFIG_KEY, initialState)
   implements IActions {

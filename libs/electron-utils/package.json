@@ -1,13 +1,13 @@
 {
   "name": "@thecointech/electron-utils",
-  "version": "0.2.135",
+  "version": "0.2.150-test.19",
   "private": true,
   "description": "The Coin: shared thingies for electron apps",
   "keywords": [
     "TheCoin",
     "electron"
   ],
-  "type": "commonjs",
+  "type": "module",
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
   "license": "GPL-3.0-or-later",
@@ -18,7 +18,7 @@
   },
   "scripts": {
     "build": "run -T tsc",
-    "clean": "rimraf ./build && rimraf ./coverage"
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage"
   },
   "files": [
     "build/**/*"
@@ -38,11 +38,12 @@
     }
   },
   "devDependencies": {
-    "@thecointech/setenv": "^0.2.135",
+    "@thecointech/secrets": "^0.2.150-test.17",
+    "@thecointech/setenv": "^0.2.150-test.12",
     "@vercel/webpack-asset-relocator-loader": "1.7.3",
     "css-loader": "^6.0.0",
     "fork-ts-checker-webpack-plugin": "^7.2.13",
-    "node-loader": "^2.0.0",
+    "node-loader": "^2.1.0",
     "style-loader": "^3.0.0",
     "ts-loader": "^9.2.2"
   }

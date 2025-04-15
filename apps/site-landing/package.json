@@ -3,7 +3,7 @@
   "productName": "THECoin: Website - Landing",
   "private": true,
   "type": "module",
-  "version": "0.2.135",
+  "version": "0.2.150-test.21",
   "description": "THECoin: Future-proof currency",
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
     "preanalyze": "yarn clean:analyze",
     "analyze": "node ./internals/scripts/analyze.js",
     "build": "run -T run-s build:pre build:src",
-    "build:src": "run-env exec=webpack --config ../../libs/site-base/internal/webpack/webpack.prod.mjs --progress",
+    "build:src": "run-env ./internals/build.ts",
     "build:pre": "run -T run-p 'build:pre:*'",
     "build:pre:semantic": "node ./internals/buildSemantic.mjs",
     "build:pre:i18n": "run -T run-s extract compile",
@@ -56,9 +56,9 @@
   "dependencies": {
     "@prismicio/client": "^6.6.2",
     "@prismicio/react": "^2.4.3",
-    "@thecointech/shared": "^0.2.135",
-    "@thecointech/site-base": "^0.2.135",
-    "@thecointech/utilities": "^0.2.135",
+    "@thecointech/shared": "^0.2.150-test.21",
+    "@thecointech/site-base": "^0.2.150-test.21",
+    "@thecointech/utilities": "^0.2.150-test.17",
     "connected-react-router": "^6.6.1",
     "papaparse": "^5.1.1",
     "react-ga": "^2.7.0",
@@ -67,8 +67,8 @@
     "sanitize.css": "10.0.0"
   },
   "devDependencies": {
-    "@thecointech/setenv": "^0.2.135",
-    "@thecointech/site-semantic-theme": "^0.2.135",
+    "@thecointech/setenv": "^0.2.150-test.12",
+    "@thecointech/site-semantic-theme": "^0.2.150-test.12",
     "@types/papaparse": "^5.0.3",
     "@types/react-helmet": "^6.1.5",
     "@types/react-test-renderer": "^16.9.0",

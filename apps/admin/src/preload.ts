@@ -7,6 +7,13 @@ contextBridge.exposeInMainWorld(
   {
     invoke: (channel: string, ...args: any[]) => {
       return ipcRenderer.invoke(channel, ...args);
-    }
+    },
+  }
+);
+
+contextBridge.exposeInMainWorld(
+  "secrets",
+  {
+    getFirebaseConfig: () => ipcRenderer.invoke("getFirebaseConfig")
   }
 );

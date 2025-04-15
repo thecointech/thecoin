@@ -1,7 +1,6 @@
 {
   "name": "@thecointech/tx-deposit",
-  "version": "0.2.135",
-  "private": true,
+  "version": "0.2.150-test.21",
   "description": "The Coin: A library for e-transfer deposits",
   "type": "module",
   "keywords": [
@@ -19,7 +18,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
     "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage"
   },
@@ -30,9 +29,9 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/bank-interface": "^0.2.135",
-    "@thecointech/tx-gmail": "^0.2.135",
-    "@thecointech/tx-statemachine": "^0.2.135"
+    "@thecointech/bank-interface": "^0.2.150-test.12",
+    "@thecointech/tx-gmail": "^0.2.150-test.19",
+    "@thecointech/tx-statemachine": "^0.2.150-test.21"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

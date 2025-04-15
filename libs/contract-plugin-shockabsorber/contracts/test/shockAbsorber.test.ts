@@ -367,33 +367,33 @@ describe('Withdrawals are cushioned', () => {
 // describe("It runs correcly live", () => {
 
 //   it ('runs correctly live', async () => {
-//     const { absorber, client1, oracle, tcCore } = await setupLive(10_000);
+//     const { absorber, Client1, oracle, tcCore } = await setupLive(10_000);
 //     const started = await absorber.msNow();
-//     await runAbsorber(client1, absorber, oracle, tcCore, 100, 10000e2);
-//     await runAbsorber(client1, absorber, oracle, tcCore, 110, 10918_71);
-//     await runAbsorber(client1, absorber, oracle, tcCore, 100, 10000e2);
-//     await runAbsorber(client1, absorber, oracle, tcCore, 90, 9500e2);
+//     await runAbsorber(Client1, absorber, oracle, tcCore, 100, 10000e2);
+//     await runAbsorber(Client1, absorber, oracle, tcCore, 110, 10918_71);
+//     await runAbsorber(Client1, absorber, oracle, tcCore, 100, 10000e2);
+//     await runAbsorber(Client1, absorber, oracle, tcCore, 90, 9500e2);
 
 //     await time.increase(aYear + aDay);
-//     await runAbsorber(client1, absorber, oracle, tcCore, 90, 9500e2);
-//     await runAbsorber(client1, absorber, oracle, tcCore, 110, 10839_80);
+//     await runAbsorber(Client1, absorber, oracle, tcCore, 90, 9500e2);
+//     await runAbsorber(Client1, absorber, oracle, tcCore, 110, 10839_80);
 
 //     // Draw down the first years cushion
 //     const msNow = await absorber.msNow();
-//     await absorber.drawDownCushion(client1.address);
+//     await absorber.drawDownCushion(Client1.address);
 //     // Should increase the contracts balance
 //     const balanceAb = await tcCore.balanceOf(absorber.address);
 //     // $75 @ 101.5 = 738916
 //     expect(balanceAb.toNumber()).toEqual(738916);
 //     // But the users balance doesn't (shouldn') actually change
-//     await runAbsorber(client1, absorber, oracle, tcCore, 110, 10838_03);
-//     await runAbsorber(client1, absorber, oracle, tcCore, 100, 10000e2);
-//     await runAbsorber(client1, absorber, oracle, tcCore, 90, 10000e2);
+//     await runAbsorber(Client1, absorber, oracle, tcCore, 110, 10838_03);
+//     await runAbsorber(Client1, absorber, oracle, tcCore, 100, 10000e2);
+//     await runAbsorber(Client1, absorber, oracle, tcCore, 90, 10000e2);
 
 //     // 3 more years, total reseerve is 75 * 5 = 375
 //     await time.increase(aYear * 3);
-//     await runAbsorber(client1, absorber, oracle, tcCore, 110, 10525e2);
-//     await absorber.drawDownCushion(client1.address);
-//     await runAbsorber(client1, absorber, oracle, tcCore, 110, 10525e2);
+//     await runAbsorber(Client1, absorber, oracle, tcCore, 110, 10525e2);
+//     await absorber.drawDownCushion(Client1.address);
+//     await runAbsorber(Client1, absorber, oracle, tcCore, 110, 10525e2);
 //   })
 // })

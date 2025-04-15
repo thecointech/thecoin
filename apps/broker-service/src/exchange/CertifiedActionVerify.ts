@@ -6,7 +6,7 @@ import { GetTransferSigner } from '@thecointech/utilities/VerifiedTransfer'
 import { getTransferSigner as UberSigner } from '@thecointech/utilities/UberTransfer'
 import { ValidateError } from '@tsoa/runtime';
 import { getBrokerCADAddress } from '../status';
-import constants from '../status/constant.json' assert { type: 'json' };
+import constants from '../status/constant.json' with { type: 'json' };
 import { GetContract } from '../signer/Wallet';
 import { DateTime } from 'luxon';
 
@@ -29,7 +29,11 @@ const throwError = <T>(src: T, key: keyof T, message: string) => { throw new Val
 const validUberTransferTime = (transfer: UberTransferAction) => (
   ( // This is purely to allow initDemoAccount to work in devlive
     process.env.CONFIG_NAME === "devlive" &&
-    transfer.transfer.from === process.env.WALLET_testDemoAccount_ADDRESS
+    transfer.transfer.from === process.env.WALLET_TestDemoAccount_ADDRESS
+  ) ||
+  ( // This is purely to allow initDemoAccount to catch up in prodtest
+    process.env.CONFIG_NAME === "prodtest"
+    // transfer.transfer.from === process.env.WALLET_TestDemoAccount_ADDRESS
   ) ||
   transfer.transfer.transferMillis >= DateTime.now().minus(AllowedUberOverlap).toMillis()
 )

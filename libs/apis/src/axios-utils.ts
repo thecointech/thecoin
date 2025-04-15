@@ -1,5 +1,6 @@
 import type { AxiosResponse } from "axios";
 
+
 export function buildResponse<T>(data: T): AxiosResponse<T> {
   return {
     data: deepCopy(data),

@@ -1,7 +1,6 @@
 {
   "name": "@thecointech/rbcapi",
-  "version": "0.2.135",
-  "private": true,
+  "version": "0.2.150-test.17",
   "description": "The Coin: A puppeteer-based API for Royal Bank of Canada",
   "type": "module",
   "keywords": [
@@ -23,7 +22,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
     "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "run :jest --runInBand --detectOpenHandles",
@@ -42,19 +41,20 @@
   },
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/bank-interface": "^0.2.135",
-    "@thecointech/logging": "^0.2.135",
-    "@thecointech/store": "^0.2.135",
-    "@thecointech/utilities": "^0.2.135",
+    "@thecointech/bank-interface": "^0.2.150-test.12",
+    "@thecointech/logging": "^0.2.150-test.12",
+    "@thecointech/store": "^0.2.150-test.12",
+    "@thecointech/utilities": "^0.2.150-test.17",
     "csvtojson": "^2.0.10",
+    "luxon": "3.3.0",
     "promise.any": "^2.0.4",
-    "puppeteer": "^22.10.0",
+    "puppeteer": "^24.1.1",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.2.135",
-    "@thecointech/types": "^0.2.135",
+    "@thecointech/jestutils": "^0.2.150-test.12",
+    "@thecointech/types": "^0.2.150-test.12",
     "@types/promise.any": "^2.0.0"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"

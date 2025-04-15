@@ -1,22 +1,44 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { actions, ScraperBridgeApi } from './scraper_actions';
+import { BackgroundTaskCallback } from './BackgroundTask/types';
+
 
 const api : ScraperBridgeApi = {
-  installBrowser: () => ipcRenderer.invoke(actions.installBrowser),
+  // installBrowser: () => ipcRenderer.invoke(actions.installBrowser),
   hasInstalledBrowser: () => ipcRenderer.invoke(actions.hasInstalledBrowser),
   hasCompatibleBrowser: () => ipcRenderer.invoke(actions.hasCompatibleBrowser),
-  onBrowserDownloadProgress: (callback: (value: any) => void) => {
-    ipcRenderer.on(actions.browserDownloadProgress, (_event, value) => callback(value))
+  // onBrowserDownloadProgress: (callback: (value: any) => void) => {
+  //   ipcRenderer.on(actions.browserDownloadProgress, (_event, value) => callback(value))
+  // },
+
+  downloadLibraries: () => ipcRenderer.invoke(actions.downloadLibraries),
+
+  onBackgroundTaskProgress: (callback: BackgroundTaskCallback) => {
+    ipcRenderer.on(actions.onBackgroundTaskProgress, (_event, value) => callback(value))
   },
+  // init: () => ipcRenderer.invoke(actions.init),
+  // onInitProgress: (callback) => {
+  //   ipcRenderer.on(actions.onInitProgress, (_event, value) => callback(value))
+  // },
+
+  autoProcess: (params) => ipcRenderer.invoke(actions.autoProcess, params),
+  validateAction: (actionName, inputValues) => ipcRenderer.invoke(actions.validateAction, actionName, inputValues),
+  // onAgentProgress: (callback) => {
+  //   ipcRenderer.on(actions.onAgentProgress, (_event, value) => callback(value))
+  // },
+
+  onAskQuestion: (callback) => {
+    ipcRenderer.on(actions.onAskQuestion, (_event, value) => callback(value))
+  },
+  replyQuestion: (packet) => ipcRenderer.invoke(actions.replyQuestion, packet),
 
   warmup: (url) => ipcRenderer.invoke(actions.warmup, url),
   start: (actionName, url, dynamicValues) => ipcRenderer.invoke(actions.start, actionName, url, dynamicValues),
   learnValue: (valueName, valueType) => ipcRenderer.invoke(actions.learnValue, valueName, valueType),
   setDynamicInput: (name, value) => ipcRenderer.invoke(actions.setDynamicInput, name, value),
 
-  finishAction: (actionName) => ipcRenderer.invoke(actions.finishAction, actionName),
+  finishAction: () => ipcRenderer.invoke(actions.finishAction),
 
-  testAction: (actionName, dynamicValues) => ipcRenderer.invoke(actions.testAction, actionName, dynamicValues),
 
   setWalletMnemomic: (mnemonic) => ipcRenderer.invoke(actions.setWalletMnemomic, mnemonic),
   getWalletAddress: () => ipcRenderer.invoke(actions.getWalletAddress),
@@ -38,6 +60,8 @@ const api : ScraperBridgeApi = {
 
   allowOverrides: () => ipcRenderer.invoke(actions.allowOverrides),
   setOverrides: (balance, pendingAmt, pendingDate) => ipcRenderer.invoke(actions.setOverrides, balance, pendingAmt, pendingDate),
+
+  importScraperScript: (config) => ipcRenderer.invoke(actions.importScraperScript, config),
 }
 
 export const connectRenderer = () => contextBridge.exposeInMainWorld('scraper', api)

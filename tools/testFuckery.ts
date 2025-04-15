@@ -18,5 +18,5 @@ const tryFetch = async (contract: TheCoin) => {
 }
 
 await tryFetch(contract);
-await tryFetch(contract.connect(getProvider()))
+await tryFetch(contract.connect(await getProvider()))
 await tryFetch(contract.connect(new JsonRpcProvider("https://cloudflare-eth.com", process.env.DEPLOY_POLYGON_NETWORK)))

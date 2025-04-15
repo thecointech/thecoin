@@ -36,12 +36,12 @@ writeFileSync(tokenFile, JSON.stringify(asJson));
 
 // In devlive simulate a token claiming
 if (config === 'devlive') {
-  log.info("Transfering test token to client1");
-  const client1 = await getSigner("client1");
+  log.info("Transfering test token to Client1");
+  const Client1 = await getSigner("Client1");
   const claimSig = getTokenClaimSig(asJson[10]);
-  const r = await nft.claimToken(10, client1, claimSig, { from: minterAddress });
+  const r = await nft.claimToken(10, Client1, claimSig, { from: minterAddress });
 
   // Double check it succeeded
   const newOwner = await nft.ownerOf(10);
-  log.info("Transferred: " + (newOwner === await client1.getAddress()))
+  log.info("Transferred: " + (newOwner === await Client1.getAddress()))
 }

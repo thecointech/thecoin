@@ -40,5 +40,5 @@ export const getMockContainer = async (date: DateTime) : Promise<TypedActionCont
   contract:  await ConnectContract(
     await getSigner("BrokerTransferAssistant")
   ),
-  bank: new RbcApi(),
+  bank: await RbcApi.create(),
 })

@@ -1,9 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Container, Button, Icon, Input } from 'semantic-ui-react'
 import { useLearnValue } from './learnValue';
 import { TrainingReducer } from './state/reducer';
+import { ReplayProgressBar } from '../ReplayProgress';
 
 const pageAction = "chqETransfer";
+
+// Some banks (TD) will show a warning for duplicate transfers
+// We add 10c to the amount to avoid this during validation
+const validateAmount = (amount: number) => (amount + 0.1).toString();
 
 export const SendETransfer = () => {
 
@@ -15,6 +20,12 @@ export const SendETransfer = () => {
   const [confirmation, learnConfirmation] = useLearnValue("confirm", "text");
 
   const url = data.chequing.url;
+
+  useEffect(() => {
+    if (confirmation) {
+      window.scraper.finishAction();
+    }
+  }, [confirmation])
 
   const initScraper = async () => {
     if (!url) alert("ERROR: Needs data")
@@ -33,8 +44,8 @@ export const SendETransfer = () => {
       return;
     }
     setValidating(true);
-    const r = await window.scraper.testAction(pageAction, {
-      amount: amount.toString(),
+    const r = await window.scraper.validateAction(pageAction, {
+      amount: validateAmount(amount),
     });
     if (r.error) alert(r.error)
     if (r.value?.confirm) {
@@ -70,6 +81,7 @@ export const SendETransfer = () => {
           </ul>
         </div>
         <Button onClick={validate} loading={validating}>Test Learning</Button>
+        <ReplayProgressBar />
         {data.chequing.eTransferPassed && <Icon name='check circle' color="green" />}
         <div>Your AI read:
           <ul>

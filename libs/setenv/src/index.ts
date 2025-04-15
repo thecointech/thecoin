@@ -3,6 +3,8 @@ import { existsSync, readFileSync } from 'fs';
 import { projectUrl } from '@thecointech/setenv/projectUrl';
 import { fileURLToPath } from 'url';
 import de from 'dotenv';
+import { expand } from './expand.js';
+
 
 const projectRoot = process.cwd();
 const LOG_NAME = basename(projectRoot);
@@ -16,17 +18,27 @@ export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
       : "development"
   );
 
-  // Does the user have files on the system
-  if (!onlyPublic) {
-    const systemFolder = process.env.THECOIN_ENVIRONMENTS;
+  // Load any system-local definitions
+  if (!onlyPublic && process.env.THECOIN_SECRETS) {
+    const systemFolder = process.env.THECOIN_SECRETS;
     const systemFile = new URL(`${envName}.private.env`, `file://${systemFolder}/`)
     if (existsSync(systemFile)) {
       files.push(systemFile);
     }
+    const commonFile = new URL(`common.private.env`, `file://${systemFolder}/`)
+    if (existsSync(commonFile)) {
+      files.push(commonFile);
+    }
+  }
+
+  // If we cannot find the project root, there is no environments to load
+  const baseUrl = projectUrl();
+  if (!baseUrl) {
+    return files;
   }
 
   // If none found, is there any in the local repo folder?
-  const repoUrl = new URL(`environments/${envName}.public.env`, projectUrl());
+  const repoUrl = new URL(`environments/${envName}.public.env`, baseUrl);
   if (existsSync(repoUrl)) {
     files.push(repoUrl);
   }
@@ -42,22 +54,24 @@ export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
   return files;
 }
 
-export function getEnvVars(cfgName?: string, onlyPublic?: boolean) : Record<string, string> {
+export function getEnvVars(cfgName?: string, onlyPublic?: boolean) : Record<string, string|undefined> {
   const files = getEnvFiles(cfgName, onlyPublic);
-  return files
-    .map(file => readFileSync(file))
-    .reduce((acc, contents) => ({
-    ...de.parse(contents),
+  const raw = files.map(file => readFileSync(file, "ascii"));
+  const parsed = raw.map(r => de.parse(r));
+  const combined = parsed.reduce((acc, ex) => ({
+    ...ex,
     ...acc, // later files have lower priority, do not overwrite existing values
   }), {
     LOG_NAME,
   });
+  return expand(combined);
 }
 
 export function loadEnvVars(cfgName?: string) {
   // Load all environment files.
   const files = getEnvFiles(cfgName);
-  files.forEach(path => de.config({path: fileURLToPath(path)}))
+  files.forEach(path => de.config({path: fileURLToPath(path)}));
+  expand(process.env);
 
     //  Set default name for logging
   if (!process.env.LOG_NAME) {
