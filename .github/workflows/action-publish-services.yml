@@ -44,7 +44,7 @@ jobs:
       - name: Generate env file
         run: yarn run-env ./deploy.ts
         env:
-          CONFIG_NAME: ${{ var.CONFIG_NAME }}
+          CONFIG_NAME: ${{ vars.CONFIG_NAME }}
           GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
         working-directory: ./apps/rates-service
 
@@ -86,7 +86,7 @@ jobs:
       - name: Generate env file
         run: yarn run-env ./deploy.ts
         env:
-          CONFIG_NAME: ${{ var.CONFIG_NAME }}
+          CONFIG_NAME: ${{ vars.CONFIG_NAME }}
           GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
         working-directory: ./apps/broker-service
 
