@@ -19,3 +19,12 @@ jobs:
         run: echo "${{ toJSON(vars) }}"
       - name: Output CONFIG_NAME
         run: echo "${{ vars.CONFIG_NAME }}"
+  test-something:
+    needs: print-config
+    runs-on: ubuntu-latest
+    environment: prodtest  # or whatever environment name you've configured
+    steps:
+      - name: Test something
+        run: echo "Some Var - $SOME_VAR"
+    with:
+      SOME_VAR: ${{ vars.CONFIG_NAME }}
