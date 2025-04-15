@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/vqa",
-  "version": "0.2.150-test.12",
+  "version": "0.2.150",
   "description": "OpenAPI client for @thecointech/vqa",
   "author": "OpenAPI-Generator Contributors",
   "repository": {
