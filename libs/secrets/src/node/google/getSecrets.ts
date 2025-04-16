@@ -10,9 +10,11 @@ export async function getGoogleSecret(name: SecretKeyType) {
   // `gcloud auth application-default login`
   const client = await getClient();
 
-  const projectId = globalThis.__tc_projectId;
+  if (!globalThis.__tc_project) {
+    throw new Error("Google client not initialized");
+  }
   const [accessResponse] = await client.accessSecretVersion({
-    name: `projects/${projectId}/secrets/${name}/versions/latest`,
+    name: `projects/${globalThis.__tc_project}/secrets/${name}/versions/latest`,
   });
   const r = accessResponse.payload?.data?.toString();
   if (!r) {

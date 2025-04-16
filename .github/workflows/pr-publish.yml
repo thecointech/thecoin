@@ -1,10 +1,12 @@
-name: Publish Everything
+name: Publish Everything Base
 
 on:
-  pull_request:
-    branches: [ publish/* ]
-    types:
-      - closed
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        description: 'Environment to deploy to (prodtest, prodbeta, prod)'
 
 # Cancel any in-progress job or run
 concurrency:
@@ -12,62 +14,52 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  get-config:
-    if: github.event.pull_request.merged == true
+  validate-environment:
     runs-on: ubuntu-latest
-    outputs:
-      config_name: ${{ steps.set-config.outputs.config_name }}
+    environment: ${{ inputs.environment }}
     steps:
-      - id: set-config
+      - name: Validate environment
         run: |
-          BASE="${{ github.base_ref }}"
-          CONFIG=${BASE#publish/}
-          echo "config_name=$CONFIG" >> "$GITHUB_OUTPUT"
-          echo "Config name extracted from $BASE: $CONFIG"
-
-  print_config:
-    runs-on: ubuntu-latest
-    needs: get-config
-    steps:
-      - name: Print Config
-        run: |
-          echo " --- Config name: ${{ needs.get-config.outputs.config_name }}"
+          if [ "${{ inputs.environment }}" != "prodtest" ] && [ "${{ inputs.environment }}" != "prodbeta" ] && [ "${{ inputs.environment }}" != "prod" ]; then
+            echo "::error::Unknown environment: ${{ inputs.environment }}"
+            exit 1
+          fi
 
   build:
-    needs: get-config
     uses: ./.github/workflows/action-build.yml
 
   publish-packages:
     permissions:
       contents: write  # For git operations and version bumps
       packages: write  # For package publishing
-    needs: build # TODO: Revert back to test
+    needs: build
     uses: ./.github/workflows/action-publish-packages.yml
-    secrets: inherit
+    with:
+      environment: ${{ inputs.environment }}
 
   publish-docker:
-    needs: [get-config, publish-packages]
+    needs: publish-packages
     uses: ./.github/workflows/action-publish-docker.yml
-    with:
-      config_name: ${{ needs.get-config.outputs.config_name }}
-      commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
     secrets: inherit
+    with:
+      environment: ${{ inputs.environment }}
+      COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
 
   publish-services:
-    needs: [get-config, publish-packages]
+    needs: publish-packages
+    secrets: inherit
     uses: ./.github/workflows/action-publish-services.yml
     with:
-      config_name: ${{ needs.get-config.outputs.config_name }}
-      commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
-    secrets: inherit
+      environment: ${{ inputs.environment }}
+      COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
 
   publish-sites:
-    needs: [get-config, publish-packages]
+    needs: publish-packages
+    secrets: inherit
     uses: ./.github/workflows/action-publish-sites.yml
     with:
-      config_name: ${{ needs.get-config.outputs.config_name }}
-      commit_sha: ${{ needs.publish-packages.outputs.latest_sha }}
-    secrets: inherit
+      environment: ${{ inputs.environment }}
+      COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
 
   merge-to-dev:
     runs-on: ubuntu-latest
@@ -80,6 +72,11 @@ jobs:
         run: |
           git config user.name 'GitHub Actions Bot'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git fetch origin ${{ github.event.pull_request.head.ref || github.ref_name }}
-          git merge origin/${{ github.event.pull_request.head.ref || github.ref_name }} -m "chore: merge ${{ github.event.pull_request.head.ref || github.ref_name }} changes to dev"
+          git fetch origin ${{ github.base_ref }}
+          git merge origin/${{ github.base_ref }} -m "chore: merge ${{ github.base_ref }} changes to dev"
           git push origin dev
+
+  cleanup:
+    needs: [publish-services, publish-sites, publish-docker]
+    uses: ./.github/workflows/action-cleanup-old-packages.yml
+    secrets: inherit

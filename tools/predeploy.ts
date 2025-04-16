@@ -81,6 +81,7 @@ export async function copyEnvVarsLocal(outYamlFile: string, additionalVars: Reco
     .filter(([key]) => !(key.startsWith('WALLET_') && !key.includes('_ADDRESS')))
     .filter(([key]) => !key.startsWith('CERAMIC_'))
     .filter(([key]) => !key.startsWith('GITHUB_'))
+    .filter(([key]) => !key.startsWith('PRIVATE_'))
     .filter(([key]) => !key.endsWith('_SERVICE_ACCOUNT'))
     .filter(([key]) => key !== 'STORAGE_PATH' && key != 'TC_LOG_FOLDER' && !key.startsWith('USERDATA_INSTRUCTION'))
     .map(([key, val]) => {

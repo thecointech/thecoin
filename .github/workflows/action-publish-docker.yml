@@ -3,14 +3,14 @@ name: Build and Push Docker Images
 on:
   workflow_call:
     inputs:
-      commit_sha:
+      COMMIT_SHA:
         required: true
         type: string
         description: 'Commit SHA to build from'
-      config_name:
+      environment:
         required: true
         type: string
-        description: 'Config name for environment-specific tags'
+        description: 'Environment to deploy to (prodtest, prodbeta, prod)'
 
 env:
   REGISTRY: ghcr.io
@@ -20,19 +20,18 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    # permissions:
-    #   contents: read
-    #   packages: write
-    #   attestations: write
-    #   id-token: write
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    environment: ${{ inputs.environment }}
 
     steps:
-      - name: Output Inputs
-        run: echo "${{ toJSON(inputs) }}"
 
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.commit_sha }}
+          ref: ${{ inputs.COMMIT_SHA }}
 
       - run: corepack enable
 
@@ -65,8 +64,8 @@ jobs:
           flavor: |
             latest=false
           tags: |
-            type=raw,value=${{ inputs.config_name }}-latest
-            type=raw,value=${{ inputs.config_name }}-{{sha}}
+            type=raw,value=${{ vars.CONFIG_NAME }}-latest
+            type=raw,value=${{ vars.CONFIG_NAME }}-{{sha}}
             type=sha,format=long
 
       # - name: Extract metadata for VQA Service
@@ -83,7 +82,7 @@ jobs:
         working-directory: ./apps/tx-processor
         env:
           GH_PACKAGES_READ: ${{ secrets.GH_PACKAGES_READ }}
-          CONFIG_NAME: ${{ inputs.config_name }}
+          CONFIG_NAME: ${{ vars.CONFIG_NAME }}
 
       - name: Build and push tx-processor
         uses: docker/build-push-action@v5
@@ -91,8 +90,11 @@ jobs:
           context: ./apps/tx-processor
           file: ./apps/tx-processor/docker/Dockerfile
           push: true
+          platforms: linux/amd64
           tags: ${{ steps.meta-tx.outputs.tags }}
           labels: ${{ steps.meta-tx.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       # TODO: vqa-service is only run locally for now
       # - name: Prep vqa-service

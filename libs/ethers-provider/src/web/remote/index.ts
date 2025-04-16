@@ -17,7 +17,6 @@ export class Erc20Provider extends EtherscanProvider {
     const chainId = process.env.DEPLOY_POLYGON_NETWORK_ID;
 
     if (!network || !apiKey || !chainId) {
-      // NOTE!  Check that POLYGONSCAN_API_KEY has been loaded
       throw new Error("Cannot use Provider without network & key");
     }
     if (network == "matic-amoy") {

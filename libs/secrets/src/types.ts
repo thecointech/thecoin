@@ -40,27 +40,33 @@ export enum SecretKey {
   SignerTestDemoAccountPwd = "SignerTestDemoAccountPwd",
 }
 
+export enum SecretKeyOnline {
+  BlockpassApiKey = "BlockpassApiKey",
+  BlockpassWebhookSecret = "BlockpassWebhookSecret",
+
+  FinhubApiKey = "FinhubApiKey",
+  GCloudImageStorageBucket = "GCloudImageStorageBucket",
+  InfuraProjectId = "InfuraProjectId",
+
+  MailjetApiKey = "MailjetApiKey",
+  MailjetApiSecret = "MailjetApiSecret",
+
+  TradierApiKey = "TradierApiKey",
+}
+
 export enum SecretKeyGoogle {
   // Used by broker
   BrokerGDriveClientId = 'BrokerGDriveClientId',
   BrokerGDriveClientSecret = 'BrokerGDriveClientSecret',
 
-  BlockpassApiKey = "BlockpassApiKey",
-  BlockpassWebhookSecret = "BlockpassWebhookSecret",
-  GCloudImageStorageBucket = "GCloudImageStorageBucket",
 
   WALLET_BrokerTransferAssistant_KEY = "WALLET_BrokerTransferAssistant_KEY",
 
   // Used by rates
   WALLET_OracleUpdater_KEY = "WALLET_OracleUpdater_KEY",
 
-  FinhubApiKey = "FinhubApiKey",
-  TradierApiKey = "TradierApiKey",
-
-  // Used by both
-  MailjetApiKey = "MailjetApiKey",
-  MailjetApiSecret = "MailjetApiSecret",
-  InfuraProjectId = "InfuraProjectId",
+  // Convoluted, but in GAE we pull the token from SecretsManager
+  BitwardenAccessToken = "BitwardenAccessToken",
 }
 
-export type SecretKeyType = keyof typeof SecretKey | keyof typeof SecretKeyGoogle;
+export type SecretKeyType = keyof typeof SecretKey | keyof typeof SecretKeyOnline | keyof typeof SecretKeyGoogle;

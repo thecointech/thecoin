@@ -11,6 +11,8 @@ import { getBuyETransferAction, eTransferProcessor as DepositProcessor } from '@
 import { AnyTransfer } from '@thecointech/types';
 import { isUberTransfer } from '@thecointech/utilities/UberTransfer'
 
+type DatedAction = AnyAction & { executeDate: number };
+
 export async function processTransfers(tcCore: TheCoin, bank: RbcApi) {
   log.debug('Processing All Transfers');
 
@@ -46,7 +48,7 @@ async function fetchTransfers() {
 }
 
 
-export async function processActions(allActions: AnyAction[], tcCore: TheCoin, bank: RbcApi) {
+export async function processActions(allActions: DatedAction[], tcCore: TheCoin, bank: RbcApi) {
   const r: AnyActionContainer[] = [];
 
   const usersWithFailedTxs = new Set<string>();
@@ -54,7 +56,7 @@ export async function processActions(allActions: AnyAction[], tcCore: TheCoin, b
   // TODO!  https://github.com/thecointech/thecoin/issues/558
   for (const action of allActions) {
     if (usersWithFailedTxs.has(action.address)) {
-      log.debug({ initialId: action.data.initialId, address: action.address }, "Skipping {initialId} for {address} due to prior failure");
+      log.debug({ initialId: action.data.initialId, date: action.executeDate, address: action.address }, "Skipping {initialId} for {address} due to prior failure");
       continue;
     }
     try {
@@ -65,11 +67,19 @@ export async function processActions(allActions: AnyAction[], tcCore: TheCoin, b
       // If the last transition resulted in an error, mark the
       // user as having a failed transaction
       const state = getCurrentState(executed);
-      if (state.name == 'error' || state.name == 'requestManual') {
+      if (state.name == 'error' || state.name == 'requestManual' || state.delta.error) {
+        log.error(
+          { initialId: action.data.initialId, type: action.type, err: state.delta.error, address: action.address },
+          'Detected error in action {type} from {address}'
+        );
         // Always process deposits.
         if (action.type !== 'Buy') {
           usersWithFailedTxs.add(action.address);
         }
+      }
+      else {
+        log.trace({ initialId: action.data.initialId, type: action.type, address: action.address },
+          'Finished processing action {type} from {address}');
       }
     }
     catch (err: any) {
@@ -83,29 +93,21 @@ export async function processActions(allActions: AnyAction[], tcCore: TheCoin, b
 }
 
 
-async function processAction(action: AnyAction, tcCore: TheCoin, bank: RbcApi) {
+async function processAction(action: DatedAction, tcCore: TheCoin, bank: RbcApi) {
+  log.debug({ initialId: action.data.initialId, date: action.executeDate, address: action.address }, "Processing {type} from {date}: {initialId}");
   if (isType(action, 'Bill')) {
-    log.debug({ initialId: action.data.initialId }, "Processing Bill: {initialId}");
     const ex = BillProcessor(action.data.initial.transfer, tcCore, bank);
     return await ex.execute(null, action);
   }
   else if (isType(action, "Plugin")) {
-    log.debug({ initialId: action.data.initialId }, "Processing Plugin: {initialId}");
     const ex = PluginProcessor(tcCore);
     return await ex.execute(null, action);
   }
   else if (isType(action, "Sell")) {
-    log.debug({ initialId: action.data.initialId }, "Processing Withdrawal: {initialId}");
     const ex = WithdrawalProcessor(tcCore, bank);
     return await ex.execute(null, action);
   }
   else if (isType(action, "Buy")) {
-    if (action.history.length == 0) {
-      log.info({ initialId: action.data.initialId }, "Processing Deposit: {initialId}");
-    }
-    else {
-      log.info({ initialId: action.data.initialId }, "Resuming Deposit: {initialId}");
-    }
     const ex = DepositProcessor(tcCore, bank);
     return await ex.execute(action.data.initial.raw, action);
   }

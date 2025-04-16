@@ -3,11 +3,11 @@ name: Deploy to sites
 on:
   workflow_call:
     inputs:
-      config_name:
+      environment:
         required: true
         type: string
         description: 'Environment to build for (e.g., prodtest, prod)'
-      commit_sha:
+      COMMIT_SHA:
         required: true
         type: string
         description: 'Commit SHA to build from'
@@ -19,10 +19,11 @@ env:
 jobs:
   deploy_live_website:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.commit_sha }}
+          ref: ${{ inputs.COMMIT_SHA }}
 
       - run: corepack enable
 
@@ -47,12 +48,12 @@ jobs:
         run: yarn build
         working-directory: ./apps/site-landing
         env:
-          CONFIG_NAME: ${{ inputs.config_name }}
+          CONFIG_NAME: ${{ vars.CONFIG_NAME }}
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          firebaseServiceAccount: "${{ secrets.GCP_SA_BROKER_KEY }}"
-          projectId: tccc-testing
+          firebaseServiceAccount: "${{ secrets.GCP_SA_SITES_KEY }}"
+          projectId: "${{ vars.CONFIG_NAME }}"
           channelId: live
           entryPoint: ./apps/site-landing
 
@@ -60,12 +61,12 @@ jobs:
         run: yarn build
         working-directory: ./apps/site-app
         env:
-          CONFIG_NAME: ${{ inputs.config_name }}
+          CONFIG_NAME: ${{ vars.CONFIG_NAME }}
           PolygonscanApiKey: ${{ secrets.POLYGONSCAN_API_KEY }}
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          firebaseServiceAccount: "${{ secrets.GCP_SA_BROKER_KEY }}"
-          projectId: tccc-testing
+          firebaseServiceAccount: "${{ secrets.GCP_SA_SITES_KEY }}"
+          projectId: "${{ vars.CONFIG_NAME }}"
           channelId: live
           entryPoint: ./apps/site-app

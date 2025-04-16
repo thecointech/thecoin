@@ -11,7 +11,7 @@ const mockClient = {
 };
 
 // Mock the client module
-jest.unstable_mockModule('./client', () => ({
+jest.unstable_mockModule('./bitwarden/client', () => ({
   getClient: jest.fn<any>().mockResolvedValue(mockClient)
 }));
 

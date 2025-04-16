@@ -42,7 +42,10 @@ jobs:
 
     - name: Build
       env:
-         # Fix OOM in build admin
+        # Bypass maven search:
+        # https://github.com/thecointech/thecoin/issues/691
+        OPENAPI_GENERATOR_CLI_SEARCH_URL: DEFAULT
+        # Fix OOM in build admin
         NODE_OPTIONS: "--max-old-space-size=6144"
       run: yarn build
 

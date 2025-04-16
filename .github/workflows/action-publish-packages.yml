@@ -2,6 +2,11 @@ name: Publish NPM Packages
 
 on:
   workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        description: 'Environment to deploy to (prodtest, prodbeta, prod)'
 
 env:
   YARN_CHECKSUM_BEHAVIOR: ignore
@@ -15,6 +20,7 @@ jobs:
       packages: write  # For package publishing
     outputs:
       latest_sha: ${{ steps.get_sha.outputs.sha }}
+    environment: ${{ inputs.environment }}
 
     steps:
       - uses: actions/checkout@v4
@@ -48,12 +54,15 @@ jobs:
 
       - name: Version and Publish
         run: |
-          if [ "${{ github.base_ref }}" = "publish/prodtest" ]; then
+          if [ "${{ vars.CONFIG_NAME }}" = "prodtest" ]; then
             yarn lerna version --conventional-commits --conventional-prerelease --preid test --yes
-          elif [ "${{ github.base_ref }}" = "publish/prodbeta" ]; then
+          elif [ "${{ vars.CONFIG_NAME }}" = "prodbeta" ]; then
             yarn lerna version --conventional-commits --conventional-prerelease --preid beta --yes
-          else
+          elif [ "${{ vars.CONFIG_NAME }}" = "prod" ]; then
             yarn lerna version --conventional-commits --conventional-graduate --yes
+          else
+            echo "::error::Unknown environment: ${{ vars.CONFIG_NAME }}"
+            exit 1
           fi
           yarn lerna publish from-git --yes
         env:

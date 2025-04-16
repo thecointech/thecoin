@@ -3,11 +3,11 @@ name: Deploy to Google App Engine
 on:
   workflow_call:
     inputs:
-      config_name:
+      environment:
         required: true
         type: string
-        description: 'Environment to deploy to (e.g., prodtest, prod)'
-      commit_sha:
+        description: 'Environment to deploy to (prodtest, prodbeta, prod)'
+      COMMIT_SHA:
         required: true
         type: string
         description: 'Commit SHA to build from'
@@ -19,11 +19,11 @@ env:
 jobs:
   deploy-rates:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.config_name }}
+    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.commit_sha }}
+          ref: ${{ inputs.COMMIT_SHA }}
 
       - run: corepack enable
 
@@ -42,9 +42,9 @@ jobs:
           name: build-artifacts
 
       - name: Generate env file
-        run: yarn run-env ./deploy.ts
+        run: yarn run-env ./predeploy.ts
         env:
-          CONFIG_NAME: ${{ inputs.config_name }}
+          CONFIG_NAME: ${{ vars.CONFIG_NAME }}
           GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
         working-directory: ./apps/rates-service
 
@@ -56,16 +56,19 @@ jobs:
       - id: deploy-rates
         uses: google-github-actions/deploy-appengine@v2
         with:
-          project_id: ${{ secrets.GCP_RATES_PROJECT_KEY }}
+          project_id: ${{ vars.GCP_RATES_PROJECT_ID }}
+          # Allow explicit version (this enables beta version)
+          version: ${{ vars.GCP_SERVICE_VERSION }}
+          promote: ${{ vars.GCP_SERVICE_VERSION == '' }}
           working_directory: ./apps/rates-service
 
   deploy-broker:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.config_name }}
+    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.commit_sha }}
+          ref: ${{ inputs.COMMIT_SHA }}
 
       - run: corepack enable
 
@@ -84,9 +87,9 @@ jobs:
           name: build-artifacts
 
       - name: Generate env file
-        run: yarn run-env ./deploy.ts
+        run: yarn run-env ./predeploy.ts
         env:
-          CONFIG_NAME: ${{ inputs.config_name }}
+          CONFIG_NAME: ${{ vars.CONFIG_NAME }}
           GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
         working-directory: ./apps/broker-service
 
@@ -98,5 +101,8 @@ jobs:
       - id: deploy-broker
         uses: google-github-actions/deploy-appengine@v2
         with:
-          project_id: ${{ secrets.GCP_BROKER_PROJECT_KEY }}
+          project_id: ${{ vars.GCP_BROKER_PROJECT_ID }}
+          # Allow explicit version (this enables beta version)
+          version: ${{ vars.GCP_SERVICE_VERSION }}
+          promote: ${{ vars.GCP_SERVICE_VERSION == '' }}
           working_directory: ./apps/broker-service
