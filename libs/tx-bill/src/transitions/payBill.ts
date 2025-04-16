@@ -1,7 +1,7 @@
 import { getCurrentState, TransitionCallback } from "@thecointech/tx-statemachine";
 import { verifyPreTransfer } from "@thecointech/tx-statemachine/transitions";
 import { BillPayeePacket, EncryptedPacket } from '@thecointech/types';
-import { decryptTo } from "@thecointech/utilities/Encrypt";
+import { decryptTo } from "@thecointech/utilities/Decrypt";
 import { sign } from "@thecointech/utilities/SignedMessages";
 import { log } from "@thecointech/logging";
 import Decimal from 'decimal.js-light';

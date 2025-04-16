@@ -27,7 +27,7 @@ import { ALL_PERMISSIONS, buildAssignPluginRequest } from '@thecointech/contract
 import { getContract as getUberContract } from '@thecointech/contract-plugin-converter';
 
 const brokerAddress = process.env.WALLET_BrokerCAD_ADDRESS!;
-const signer = await getSigner('client1');
+const signer = await getSigner('Client1');
 const billPayment = await BuildUberAction(
   mockPayee,
   signer,

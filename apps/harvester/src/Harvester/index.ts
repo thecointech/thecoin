@@ -2,20 +2,21 @@ import { setCurrentState } from './db';
 import { log } from '@thecointech/logging';
 import { processState } from './processState';
 import { initialize } from './initialize';
-import { closeBrowser } from '../scraper/puppeteer';
+import { closeBrowser } from '@thecointech/scraper/puppeteer';
 import { DateTime } from 'luxon';
 import { getDataAsDate } from './types';
 import { PayVisaKey } from './steps/PayVisa';
 import { notifyError } from './notify';
 import { exec } from 'child_process';
+import { BackgroundTaskCallback } from '@/BackgroundTask';
 
-export async function harvest() {
+export async function harvest(callback?: BackgroundTaskCallback) {
 
   try {
 
     log.info(`Commencing Harvest`);
 
-    const { stages, state, user } = await initialize();
+    const { stages, state, user } = await initialize(callback);
 
     log.info(`Resume from last: harvesterBalance ${state.state.harvesterBalance}`);
 
@@ -30,16 +31,25 @@ export async function harvest() {
           'Skipping Harvest because {DueDate} is past {Cutoff}',
           { DueDate: state.visa.dueDate.toSQLDate(), Cutoff: cutoff.toSQLDate() }
         );
-        return;
+        return false;
       }
     }
     const nextState = await processState(stages, state, user);
+
+    if (nextState.errors) {
+      const errorSteps = Object.keys(nextState.errors).join(', ');
+      await notifyError({
+        title: 'Harvester Error',
+        message: `Something went wrong in steps: ${errorSteps}.  Please contact support.`,
+      });
+    }
 
     if (!process.env.HARVESTER_DRY_RUN) {
       await setCurrentState(nextState);
     }
 
     log.info(`Harvest complete`);
+    return true;
   }
   catch (err: unknown) {
     if (err instanceof Error) {
@@ -50,13 +60,14 @@ export async function harvest() {
     }
     const res = await notifyError({
       title: 'Harvester Error',
-      message: 'Harvesting failed.  Please contact support.',
+      message: `Harvesting failed.  Please contact support.`,
       actions: ["Start App"],
     })
     if (res == "Start App") {
       exec(process.argv0);
     }
     // throw err;
+    return false;
   }
   finally {
     await closeBrowser();

@@ -7,13 +7,13 @@ import { getProvider } from '@thecointech/ethers-provider';
 export class ElectronSigner implements Signer {
   static _ipc: IpcRenderer;
 
-  provider: Provider | null;
+  provider: Provider | null = null;
   _ident: AccountName;
 
   constructor(ident: AccountName) {
     this._ident = ident;
     // Default provider
-    this.provider = getProvider();
+    getProvider().then(p => this.provider = p);
   }
 
   invoke(fn: string, ...args: any[]) : Promise<any> {

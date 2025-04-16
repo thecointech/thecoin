@@ -5,6 +5,7 @@ import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
 import { FirestoreAdmin, Timestamp, getFirestore } from '@thecointech/firestore';
 import { toDateStr } from '../utils/date';
+import { formatEther, parseUnits, Signer } from 'ethers';
 
 
 export async function updateOracle(timestamp: number) {
@@ -12,6 +13,10 @@ export async function updateOracle(timestamp: number) {
   await guardFn(async () => {
 
     const signer = await getSigner("OracleUpdater");
+
+    // Check signer balance
+    await verifyEtherReserves(signer);
+
     const oracle = await connectOracle(signer);
 
     log.debug(
@@ -127,7 +132,7 @@ function enterCS() {
       // Check if someone else currently holds the lock
       if (startKey?.toMillis() != completeKey?.toMillis()) {
 
-        if (completeKey?.toMillis() < DateTime.now().minus({hours: 6}).toMillis()) {
+        if (startKey?.toMillis() < DateTime.now().minus({hours: 6}).toMillis()) {
           // We assume that a 6-hr gap means that someone else has crashed
           log.error("Expired lock detected, ignoring");
         }
@@ -164,4 +169,17 @@ function exitCS(guard: Timestamp) {
     { [complete_key]: guard },
     { merge: true }
   )
+}
+
+// Verify we have enough gas to run processing
+async function verifyEtherReserves(signer: Signer) {
+  const signerBalance = await signer.provider?.getBalance(signer) ?? 0n;
+  const minimumBalance = parseUnits('0.2', "ether");
+  log.debug({ Balance: formatEther(signerBalance) }, "Updating with eth reserves: {Balance}")
+  if (signerBalance < minimumBalance) {
+    log.error(
+      { Balance: formatEther(signerBalance), MinimumBalance: formatEther(minimumBalance), Signer: 'OracleUpdater' },
+      `Signer {Signer} ether balance too low {Balance} < {MinimumBalance}`
+    );
+  }
 }

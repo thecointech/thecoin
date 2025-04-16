@@ -8,7 +8,7 @@ import { connect } from '@thecointech/contract-base/connect';
 
 async function cancelXfer() {
 
-  const provider = getProvider();
+  const provider = await getProvider();
   const fees = await provider.getFeeData();
   const gasPrice  = Math.floor(fees!.gasPrice!.toNumber() * 2);
   console.log("Fees: " + gasPrice / 1000000000);

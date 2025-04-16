@@ -40,6 +40,7 @@ export class TheCoin implements MockedCoin {
   mintCoins = () => genReceipt();
   burnCoins = () => genReceipt();
   balanceOf = makeFn((_: AddressLike) => 995000000n, "view");
+  pl_balanceOf = makeFn((_: AddressLike) => 995000000n, "view");
   exactTransfer = makeFn(
     async (to: AddressLike, value: BigNumberish, _timestamp: BigNumberish) => await setLastTx(this.signer!, to, value),
     "nonpayable"

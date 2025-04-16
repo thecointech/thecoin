@@ -1,0 +1,54 @@
+
+
+import os from 'node:os';
+import path from 'node:path';
+import { rootFolder } from './rootFolder';
+import { existsSync } from 'node:fs';
+import { copy } from 'fs-extra';
+import { log } from '@thecointech/logging';
+
+
+export function getUserDataDir() {
+  return path.join(rootFolder(), 'chrome_userdata');
+}
+
+
+function getChromeProfilePath() {
+  const platform = os.platform();
+
+  switch (platform) {
+    case 'win32': // Windows
+      return path.join(process.env.LOCALAPPDATA!, 'Google', 'Chrome', 'User Data');
+    case 'darwin': // macOS
+      return path.join(os.homedir(), 'Library', 'Application Support', 'Google', 'Chrome');
+    case 'linux': // Linux
+      return path.join(os.homedir(), '.config', 'google-chrome'); // Or ~/.chromium, check both
+    default:
+      throw new Error(`Unsupported platform: ${platform}`);
+  }
+}
+
+export async function maybeCopyProfile() {
+  const userDataDir = getUserDataDir();
+  if (!existsSync(userDataDir)) {
+    // Get the users existing profile (if one exists)
+    const chromeProfilePath = getChromeProfilePath();
+    if (existsSync(chromeProfilePath)) {
+
+      // Copy all profiles
+      try {
+        log.debug(`Copying Chrome profiles`);
+        await copy(chromeProfilePath, userDataDir, { dereference: false });
+        log.debug(`Copy Chrome profile complete`);
+      }
+      catch (e) {
+        log.error(e, `Failed to copy Chrome profile`);
+        throw e;
+      }
+    }
+    else {
+      log.warn('No existing Chrome profile found');
+    }
+
+  }
+}

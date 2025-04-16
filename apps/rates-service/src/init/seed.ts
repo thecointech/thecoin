@@ -13,7 +13,7 @@ import { fileURLToPath } from 'url';
 import { getLatestStored, setRate } from '../internals/rates/db';
 import { CoinRate, FxRates } from '../internals/rates/types';
 import { update } from '../internals/rates/UpdateDb';
-import { getLatest, initLatest, updateLatest } from '../internals/rates/latest';
+import { getLatest, updateLatest } from '../internals/rates/latest';
 
 export async function seed() {
   log.trace('--- Seeding DB ---');
@@ -41,7 +41,11 @@ export async function seed() {
   await seedRates(from, validityInterval);
 
   // warm up our cache of latest data.
-  await initLatest();
+  // -- NOTE -- this doesn't work in testing,
+  // the mocked DB does not order results so
+  // getLatestStored returns the wrong results...
+  // Test in dev:live etc then perhaps remove this line
+  // await initLatest();
 
   // Triggering an update ensures the oracle is updated
   // before we re-enable logging
@@ -142,16 +146,15 @@ export async function seedWithRandomRates(from: DateTime, validityInterval: Dura
   // have historical data, or we have nothing on start (because in memory).
   // On devlive, we either have historical, or the 'latest' query works
   const latest = getLatest('Coin') ?? await getLatestStored('Coin');
-  const msValidityInterval = validityInterval.as('milliseconds');
-  const now = Date.now();
+  const now = DateTime.now();
   let rate = latest?.buy ?? 1;
-  for (
-    let ts = latest?.validTill || from.toMillis();
-    ts < now;
-    ts += msValidityInterval) {
+  let validFrom = DateTime.fromMillis(latest?.validFrom || from.toMillis());
+
+  while (validFrom < now) {
+    const validTill = validFrom.plus(validityInterval);
     const validity = {
-      validFrom: ts,
-      validTill: ts + msValidityInterval,
+      validFrom: validFrom.toMillis(),
+      validTill: validTill.toMillis(),
     };
     // Max variation per day is 1%
     rate += Math.random() / 100;
@@ -174,6 +177,8 @@ export async function seedWithRandomRates(from: DateTime, validityInterval: Dura
 
     updateLatest('Coin', coin);
     updateLatest('FxRates', fxRate);
+
+    validFrom = validTill;
   }
 }
 

@@ -1,5 +1,5 @@
 import type {BuildQueryURLArgs, Client} from "@prismicio/client";
-import data from './data.json' assert {type: "json"};
+import data from './data.json' with { type: "json" }
 import { PrismicDocument, Query } from '@prismicio/types';
 
 class MockClient implements Pick<Client<PrismicDocument>, "query"|"getByUID"> {

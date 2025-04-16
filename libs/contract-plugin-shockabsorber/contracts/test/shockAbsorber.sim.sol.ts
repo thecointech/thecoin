@@ -1,7 +1,7 @@
 import hre from 'hardhat';
 import '@nomicfoundation/hardhat-ethers';
 import { createAndInitOracle, setOracleValueRepeat } from '@thecointech/contract-oracle/testHelpers.ts';
-import { initAccounts, createAndInitTheCoin } from '@thecointech/contract-core/testHelpers.ts';
+import { getSigners, createAndInitTheCoin } from '@thecointech/contract-core/testHelpers.ts';
 import { ShockAbsorber } from '../../src';
 import { yearInMs, toCoin } from './shockAbsorber.common'
 import type { SpxCadOracle } from '@thecointech/contract-oracle';
@@ -47,12 +47,12 @@ export class AbsorberSol {
     // Reset network prior to any testing
     await hre.network.provider.send("hardhat_reset")
 
-    const { tcCore, absorber, client1, Owner, oracle } = await setupLive(initFiat, blockTime);
-    this.user = client1.address;
+    const { tcCore, absorber, Client1, Owner, oracle } = await setupLive(initFiat, blockTime);
+    this.user = Client1.address;
     this.owner = Owner.address;
     this.absorber = absorber;
     this.tcCore = tcCore;
-    this.tcUser = tcCore.connect(client1);
+    this.tcUser = tcCore.connect(Client1);
 
     this.oracle = {
       contract: oracle,
@@ -171,28 +171,28 @@ export async function setupAbsorber(tcCoreAddress?: AddressLike, oracleAddress?:
 }
 
 export async function createAndInitAbsorber(blockTime?: number) {
-  const { Owner, client1, OracleUpdater } = initAccounts(await hre.ethers.getSigners());
+  const { Owner, Client1, OracleUpdater } = await getSigners();
   const tcCore = await createAndInitTheCoin(Owner);
   const oracle = await createAndInitOracle(OracleUpdater, 100, blockTime);
   const {absorber} = await setupAbsorber(tcCore, oracle);
-  return { absorber, tcCore, oracle, client1, Owner };
+  return { absorber, tcCore, oracle, Client1, Owner };
 }
 
 async function setupLive(initFiat: number, blockTime?: number) {
-  const { Owner, client1, oracle, tcCore, absorber } = await createAndInitAbsorber(blockTime);
+  const { Owner, Client1, oracle, tcCore, absorber } = await createAndInitAbsorber(blockTime);
 
     // Mint a ridiculously large amount
   await tcCore.mintCoins(10e12, Owner.address, Date.now());
 
   // Create plugin & assign user
   const initCoin = toCoin(initFiat, 100);
-  await tcCore.transfer(client1.address, initCoin);
+  await tcCore.transfer(Client1.address, initCoin);
 
-    const request = await buildAssignPluginRequest(client1, absorber, ALL_PERMISSIONS);
+    const request = await buildAssignPluginRequest(Client1, absorber, ALL_PERMISSIONS);
   await assignPlugin(tcCore, request);
 
   // absorber needs funds - start with $100K
   await tcCore.transfer(absorber, toCoin(100_000, 100));
 
-  return { absorber, client1, oracle, tcCore, Owner };
+  return { absorber, Client1, oracle, tcCore, Owner };
 }

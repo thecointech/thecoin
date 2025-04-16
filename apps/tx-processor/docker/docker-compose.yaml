@@ -1,0 +1,22 @@
+services:
+  tx-processor:
+    image: ghcr.io/thecointech/thecoin/tx-processor:${CONFIG_NAME:-prod}-latest
+    pull_policy: always
+    platform: linux/amd64
+    environment:
+      - CONFIG_NAME=${CONFIG_NAME:-prod}
+    volumes:
+      # Persistent runtime data
+      - type: volume
+        source: tx-processor-data
+        target: /data
+      # Secrets from host machine (read-only)
+      - type: bind
+        source: ${THECOIN_SECRETS?THECOIN_SECRETS environment variable is required}
+        target: /secrets
+        read_only: true
+    restart: "no"
+
+volumes:
+  tx-processor-data:
+    name: tx-processor-data-${CONFIG_NAME:-prod}

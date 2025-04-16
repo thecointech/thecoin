@@ -43,13 +43,11 @@ it ('can override balance', async () => {
   expect(payDelta).toEqual({});
 
   // Check that ClearVisa recognizes the override
-  r?.visa.history.push({
+  r!.visa.history = [{
     date: now,
-    description: 'asdf',
-    credit: new currency(1400),
-    balance: new currency(1400),
-  })
-  const clearDelta = await new ClearPendingVisa().process(r!);
+    values: [currency(1400)],
+  }]
+  const clearDelta = await new ClearPendingVisa().process(r, {} as any);
   expect(clearDelta.toPayVisa).toBeUndefined();
   expect(clearDelta.toPayVisaDate).toBeUndefined();
 })
@@ -60,20 +58,16 @@ const sample: HarvestData = {
     balance: new currency(100),
     dueDate: DateTime.now(),
     dueAmount: new currency(100),
-    history: [
-      {
-        date: DateTime.now(),
-        description: 'asdf',
-        credit: new currency(100),
-        balance: new currency(100),
-      },
-      {
-        date: DateTime.now(),
-        description: 'asdf',
-        debit: new currency(100),
-        balance: new currency(100),
-      }
-    ],
+    // txs: [
+    //   {
+    //     date: DateTime.now(),
+    //     values: [currency(100), currency(100)],
+    //   },
+    //   {
+    //     date: DateTime.now(),
+    //     values: [currency(100), currency(100)],
+    //   }
+    // ],
   },
   chq: {
     balance: new currency(100),

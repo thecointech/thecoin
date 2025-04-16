@@ -13,7 +13,7 @@ if (!process.env.CONFIG_NAME?.startsWith('prod')) {
 
 const network = hre.config.defaultNetwork;
 const contract = await getContract();
-const provider = getProvider();
+const provider = await getProvider();
 const contractAddress = await contract.getAddress();
 
 // Make 5 attempts to verify.  This allows time for

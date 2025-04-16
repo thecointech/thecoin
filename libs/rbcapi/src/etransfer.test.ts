@@ -9,9 +9,9 @@ import { closeBrowser } from './scraper';
 // So ya probably want to leave it disabled except for manual runs.
 describe("Live tests on live account", () => {
 
-  beforeAll(() => {
+  beforeAll(async () => {
     // Will init mocked store
-    ApiAction.initCredentials();
+    await ApiAction.initCredentials();
     RbcStore.initialize();
   });
 

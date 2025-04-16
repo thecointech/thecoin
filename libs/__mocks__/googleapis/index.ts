@@ -1,5 +1,5 @@
-import emaillist from './emails.list.json' assert {type: "json"};
-import emailget from './emails.get.json' assert {type: "json"};
+import emaillist from './emails.list.json' with { type: "json" }
+import emailget from './emails.get.json' with { type: "json" }
 import { gmail_v1, drive_v3 } from "googleapis";
 import { wallets } from '../wallets';
 import os from 'node:os';

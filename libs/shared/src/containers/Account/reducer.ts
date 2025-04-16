@@ -1,5 +1,5 @@
 import { InitialCoinBlock, ConnectContract, TheCoin } from '@thecointech/contract-core';
-import { Signer, Wallet } from 'ethers';
+import { Signer, Wallet, type Provider } from 'ethers';
 import { call, delay, select, StrictEffect } from "@redux-saga/core/effects";
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
 import { buildSagas } from './actions';
@@ -34,8 +34,9 @@ function AccountReducer(address: string, initialState: AccountState) {
       this.draftState.name = name;
     }
 
-    *setSigner(signer: Signer) {
-      const connected = signer.connect(getProvider());
+    *setSigner(signer: Signer): Generator<StrictEffect, void, Provider> {
+      const provider = yield call(getProvider);
+      const connected = signer.connect(provider);
       yield this.storeValues({ signer: connected });
       yield delay(10);
       yield this.sendValues(this.actions.connect);
@@ -197,6 +198,7 @@ function AccountReducer(address: string, initialState: AccountState) {
       });
 
       // Ensure we have fx value for each tx in this list
+      log.trace({count: newHistory.length}, "Updating {count} FX values for new history");
       for (var i = 0; i < newHistory.length; i++) {
         yield this.sendValues(FxRateReducer.actions.fetchRateAtDate, newHistory[i].date.toJSDate());
       }

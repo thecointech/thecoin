@@ -1,5 +1,5 @@
 import { log } from "@thecointech/logging";
-import { decryptTo } from "@thecointech/utilities/Encrypt";
+import { decryptTo } from "@thecointech/utilities/Decrypt";
 import { isPacketValid } from '@thecointech/utilities/VerifiedSale';
 import { getCurrentState, TypedActionContainer } from "@thecointech/tx-statemachine";
 import { EncryptedPacket, ETransferPacket } from "@thecointech/types";

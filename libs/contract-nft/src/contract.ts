@@ -9,7 +9,7 @@ import { TheGreenNFTL2, TheGreenNFTL2__factory } from './codegen';
 
 const getContractAddress = async (network: Network) => {
   const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME
-  const deployment = await import(`./deployed/${config_env}-${network.toLowerCase()}.json`, { assert: { type: 'json' } });
+  const deployment = await import(`./deployed/${config_env}-${network.toLowerCase()}.json`, { with: { type: 'json' } });
 
   if (!deployment) {
     throw new Error('Cannot create contract: missing deployment');
@@ -24,7 +24,7 @@ declare module globalThis {
 export async function getContract(network: Network = "POLYGON") {
   globalThis.__contractNFT ??= TheGreenNFTL2__factory.connect(
     await getContractAddress(network),
-    getProvider()
+    await getProvider()
   );
   return globalThis.__contractNFT!;
 }

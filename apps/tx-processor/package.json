@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-processor",
-  "version": "0.2.129",
+  "version": "0.2.150",
   "private": true,
   "type": "module",
   "description": "The Coin: A command-line app for completing transactions",
@@ -17,9 +17,10 @@
     "dev:live": "run -T cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn dev",
     "prod": "run -T cross-env CONFIG_NAME=prod yarn start",
-    "start": "run -T cross-env CONFIG_NAME=prod yarn run-env ./build/main.js",
+    "start": "yarn run-env ./build/main.js",
     "test": "run :jest",
-    "test:summary": "jest --coverage > ./coverage/summary.txt"
+    "test:summary": "jest --coverage > ./coverage/summary.txt",
+    "build:docker": "run -T cross-env CONFIG_NAME=prodtest yarn run-env ./docker/build-docker.ts"
   },
   "files": [
     "build/**/*"
@@ -29,15 +30,16 @@
     ".": "./build/index.js"
   },
   "dependencies": {
-    "@thecointech/logging": "^0.2.129",
-    "@thecointech/setenv": "^0.2.129",
-    "@thecointech/tx-bill": "^0.2.129",
-    "@thecointech/tx-deposit": "^0.2.129",
-    "@thecointech/tx-etransfer": "^0.2.129",
-    "@thecointech/tx-plugins": "^0.2.129",
+    "@thecointech/logging": "^0.2.150",
+    "@thecointech/rbcapi": "^0.2.150",
+    "@thecointech/setenv": "^0.2.150",
+    "@thecointech/tx-bill": "^0.2.150",
+    "@thecointech/tx-deposit": "^0.2.150",
+    "@thecointech/tx-etransfer": "^0.2.150",
+    "@thecointech/tx-plugins": "^0.2.150",
     "open": "^8.2.1"
   },
   "devDependencies": {
-    "@thecointech/site-app": "^0.2.129"
+    "@thecointech/site-app": "^0.2.150"
   }
 }

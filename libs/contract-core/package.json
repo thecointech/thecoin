@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-core",
-  "version": "0.2.129",
+  "version": "0.2.150",
   "description": "The Coin: Solidity contract for TheCoin currency",
   "type": "module",
   "keywords": [
@@ -19,7 +19,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
     "build": "run -T run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
     "build:src": "run -T tsc -b",
@@ -66,16 +66,16 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "^0.2.129",
-    "@thecointech/contract-oracle": "^0.2.129",
-    "@thecointech/contract-tools": "^0.2.129",
-    "@thecointech/setenv": "^0.2.129"
+    "@thecointech/async": "^0.2.150",
+    "@thecointech/contract-oracle": "^0.2.150",
+    "@thecointech/contract-tools": "^0.2.150",
+    "@thecointech/setenv": "^0.2.150"
   },
   "dependencies": {
     "@solidity-parser/parser": "^0.14.5",
-    "@thecointech/contract-base": "^0.2.129",
-    "@thecointech/contract-plugins": "^0.2.129",
-    "@thecointech/fx-rates": "^0.2.129"
+    "@thecointech/contract-base": "^0.2.150",
+    "@thecointech/contract-plugins": "^0.2.150",
+    "@thecointech/fx-rates": "^0.2.150"
   },
-  "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
+  "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

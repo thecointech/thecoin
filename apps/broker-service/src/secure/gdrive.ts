@@ -1,23 +1,27 @@
 import { google, drive_v3 } from 'googleapis';
 import { GoogleFileIdent, GoogleStoreAccount, GoogleToken, GoogleWalletItem } from '@thecointech/types';
 import { log } from '@thecointech/logging';
+import { getSecret } from '@thecointech/secrets';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.appdata'];
-const buildAuth = (clientUri: string) => {
+const buildAuth = async (clientUri: string) => {
   if (!process.env.BROKER_GDRIVE_CLIENT_URIS?.split(';').includes(clientUri)) {
     log.error({ Uri: clientUri }, 'Invalid ClientURI passed: {Uri}')
     throw new Error('Cannot Login to GDrive');
   }
+
+  const clientID = await getSecret('BrokerGDriveClientId');
+  const clientSecret = await getSecret('BrokerGDriveClientSecret');
   return new google.auth.OAuth2(
-    process.env.BROKER_GDRIVE_CLIENT_ID,
-    process.env.BROKER_GDRIVE_CLIENT_SECRET,
+    clientID,
+    clientSecret,
     clientUri
   );
 }
 
 async function loginDrive(clientUri: string, authToken: GoogleToken) {
-  const auth = buildAuth(clientUri);
+  const auth = await buildAuth(clientUri);
   const res = await auth.getToken(authToken.token);
   if (!res || !res.tokens) {
     throw new Error("Could not retrieve token: " + JSON.stringify(res));
@@ -26,8 +30,8 @@ async function loginDrive(clientUri: string, authToken: GoogleToken) {
   return google.drive({ version: 'v3', auth });
 }
 
-export function getAuthUrl(clientUri: string) {
-  const auth = buildAuth(clientUri);
+export async function getAuthUrl(clientUri: string) {
+  const auth = await buildAuth(clientUri);
   return auth.generateAuthUrl({
     access_type: 'online',
     scope: SCOPES,
@@ -110,3 +114,5 @@ export async function fetchWallets(clientUri: string, request: GoogleToken): Pro
   const all = Promise.all(fetchArray);
   return all;
 }
+
+

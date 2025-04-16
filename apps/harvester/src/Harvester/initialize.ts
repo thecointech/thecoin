@@ -3,9 +3,10 @@ import { hydrateProcessor, getWallet, getCreditDetails } from './config';
 import { getCurrentState } from './db';
 import { getChequingData, getVisaData } from './fetchData';
 import { HarvestData } from './types';
-import { replay } from '../scraper/replay';
+import { replay } from '@thecointech/scraper/replay';
+import { BackgroundTaskCallback } from '@/BackgroundTask';
 
-export async function initialize() {
+export async function initialize(callback?: BackgroundTaskCallback) {
 
   // Initialize
   const stages = await hydrateProcessor();
@@ -29,9 +30,11 @@ export async function initialize() {
   }
 
   // Initialize data (do we want anything from last state?)
-  const lastTxDate = lastRun?.visa.history.slice(-1)?.[0]?.date;
-  const chq = await getChequingData();
-  const visa = await getVisaData(lastTxDate)
+  // Sub 1 week to ensure payments posted after last run are all counted
+  const lastTxDate = lastRun?.date.minus({ week: 1 });
+  // TODO: We need to group these under a parent ID
+  const chq = await getChequingData(callback);
+  const visa = await getVisaData(lastTxDate, callback)
   let state: HarvestData = {
     chq,
     visa,

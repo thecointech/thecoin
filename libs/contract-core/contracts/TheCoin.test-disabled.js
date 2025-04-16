@@ -14,7 +14,7 @@ try {
 
     // Create a wallet to sign the hash with
     const ethersClient = new ethers.Wallet('0x0123456789012345678901234567890123456789012345678901234567890123');
-    const [acOwner, acTheCoin, acTCManager, acMinter, acPolice, client1, client2, client3, ...acRest] = accounts;
+    const [acOwner, acTheCoin, acTCManager, acMinter, acPolice, Client1, Client2, client3, ...acRest] = accounts;
     //const acTCManager = accounts[2];
     //const acMinter = accounts[3];
     // , acPolice, client, ...acRest] = accounts;
@@ -82,21 +82,21 @@ try {
       const now = new Date().valueOf();
 
       const eclient = ethersClient.address;
-      await proxy.methods.coinPurchase(client1, purchaseAmount, 0, now).send({ from: acTheCoin });
+      await proxy.methods.coinPurchase(Client1, purchaseAmount, 0, now).send({ from: acTheCoin });
 
-      const startbal1 = await proxy.methods.balanceOf(client1).call();
-      const startbal2 = await proxy.methods.balanceOf(client2).call();
+      const startbal1 = await proxy.methods.balanceOf(Client1).call();
+      const startbal2 = await proxy.methods.balanceOf(Client2).call();
       parseInt(startbal1).should.eq(purchaseAmount);
       parseInt(startbal2).should.eq(0);
 
       const xferAmount = 12345;
-      const xferCost = await proxy.methods.transfer(client2, xferAmount).estimateGas({from: client1});
+      const xferCost = await proxy.methods.transfer(Client2, xferAmount).estimateGas({from: Client1});
       console.log("Transfer gas cost: ", xferCost);
 
-      await proxy.methods.transfer(client2, xferAmount).send({from: client1});
+      await proxy.methods.transfer(Client2, xferAmount).send({from: Client1});
 
-      const endbal1 = await proxy.methods.balanceOf(client1).call();
-      const endbal2 = await proxy.methods.balanceOf(client2).call();
+      const endbal1 = await proxy.methods.balanceOf(Client1).call();
+      const endbal2 = await proxy.methods.balanceOf(Client2).call();
       parseInt(endbal1).should.eq(startbal1 - xferAmount);
       parseInt(endbal2).should.eq(xferAmount);
     });
@@ -105,16 +105,16 @@ try {
 
       const eclient = ethersClient.address;
       const startbal = await proxy.methods.balanceOf(eclient).call();
-      const startbal1 = await proxy.methods.balanceOf(client1).call();
-      const startbal2 = await proxy.methods.balanceOf(client2).call();
+      const startbal1 = await proxy.methods.balanceOf(Client1).call();
+      const startbal2 = await proxy.methods.balanceOf(Client2).call();
 
       const timestamp = Math.round(new Date().valueOf() / 1000);
       // Compare the various hashes
-      const certHash = web3.utils.soliditySha3(eclient, client1, value, fee, timestamp);
-      const contractHash = await proxy.methods.buildMessage(eclient, client1, value, fee, timestamp).call();
+      const certHash = web3.utils.soliditySha3(eclient, Client1, value, fee, timestamp);
+      const contractHash = await proxy.methods.buildMessage(eclient, Client1, value, fee, timestamp).call();
       const ethersHash = ethers.utils.solidityKeccak256(
         ["address", "address", "uint256", "uint256", "uint256"],
-        [eclient, client1, value, fee, timestamp]
+        [eclient, Client1, value, fee, timestamp]
       );
 
       contractHash.should.eq(certHash);
@@ -125,19 +125,19 @@ try {
       let signature = await ethersClient.signMessage(messageHashBytes);
 
       // Check the signer matches what contract calculates
-      const recoveredSigner = await proxy.methods.recoverSigner(eclient, client1, value, fee, timestamp, signature).call();
+      const recoveredSigner = await proxy.methods.recoverSigner(eclient, Client1, value, fee, timestamp, signature).call();
       recoveredSigner.should.eq(eclient);
 
-      let gasAmount = await proxy.methods.certifiedTransfer(eclient, client1, value, fee, timestamp, signature)
+      let gasAmount = await proxy.methods.certifiedTransfer(eclient, Client1, value, fee, timestamp, signature)
                                          .estimateGas({gas:5000000, from:eclient})
 
       console.log("Cert Xfer gas amount: ", gasAmount);
 
-      await proxy.methods.certifiedTransfer(eclient, client1, value, fee, timestamp, signature).send({ from: client2, gas: 200000 });
+      await proxy.methods.certifiedTransfer(eclient, Client1, value, fee, timestamp, signature).send({ from: Client2, gas: 200000 });
 
       const endbal = await proxy.methods.balanceOf(eclient).call();
-      const endbal1 = await proxy.methods.balanceOf(client1).call();
-      const endbal2 = await proxy.methods.balanceOf(client2).call();
+      const endbal1 = await proxy.methods.balanceOf(Client1).call();
+      const endbal2 = await proxy.methods.balanceOf(Client2).call();
 
       parseInt(endbal1).should.eq(parseInt(startbal1) + value);
       parseInt(endbal2).should.eq(parseInt(startbal2) + fee);
@@ -171,8 +171,8 @@ try {
       await doCertXfer(proxy, value, fee);
 
       const ebal = await proxy.methods.balanceOf(eclient).call();
-      const bal1 = await proxy.methods.balanceOf(client1).call();
-      const bal2 = await proxy.methods.balanceOf(client2).call();
+      const bal1 = await proxy.methods.balanceOf(Client1).call();
+      const bal2 = await proxy.methods.balanceOf(Client2).call();
 
       parseInt(bal1).should.eq(value * 2);
       parseInt(bal2).should.eq(fee * 2);

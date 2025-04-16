@@ -9,7 +9,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
 import ErrorOverlayPlugin from './error-overlay-shim.cjs';
 
-import baseOptions from './webpack.base.mjs';
+import { getBaseConfig } from './webpack.base.mjs';
 import signerOptions from './webpack.signers.mjs';
 import getMocks from "@thecointech/setenv/webpack";
 
@@ -75,9 +75,11 @@ if (process.env.SETTINGS !== 'live') {
   )
 }
 
-export default merge(
-  getMocks(process.env),
-  devOptions,
-  signerOptions,
-  baseOptions,
-)
+export async function getDevConfig(secrets) {
+  return merge(
+    getMocks(process.env),
+    devOptions,
+    signerOptions,
+    await getBaseConfig(secrets),
+  )
+}

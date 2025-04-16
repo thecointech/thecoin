@@ -4,27 +4,30 @@ import { Link, useLocation } from 'react-router-dom'
 import { Routes } from './app.routes'
 import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
 import styles from './app.module.less'
-import { BrowserDownloadState, BrowserReducer } from './Browser/reducer';
 import { useEffect } from 'react';
+import { BackgroundTaskReducer } from './BackgroundTask/reducer';
 
 export const App = () => {
   FxRateReducer.useStore();
-  BrowserReducer.useStore();
+  BackgroundTaskReducer.useStore();
+
   const location = useLocation();
   const openLogs = async () => {
     await window.scraper.openLogsFolder()
   }
 
-  const browserApi = BrowserReducer.useApi();
+  const backgroundTaskApi = BackgroundTaskReducer.useApi();
+
   useEffect(() => {
-    window.scraper.onBrowserDownloadProgress((progress: BrowserDownloadState) => {
-      browserApi.setDownloadState(progress);
+    window.scraper.onBackgroundTaskProgress(progress => {
+      console.log(JSON.stringify(progress));
+      backgroundTaskApi.setTaskProgress(progress);
     })
   }, [])
 
   return (
     <div className={styles.app}>
-      <div>
+      <div className={styles.menu}>
         <Menu pointing secondary vertical size="small">
           <Menu.Item header>TheCoin - Harvester</Menu.Item>
           <Menu.Item
@@ -44,6 +47,12 @@ export const App = () => {
             active={location.pathname.startsWith('/account')}
             as={Link}
             to='/account'
+          />
+          <Menu.Item
+            name='Agent'
+            active={location.pathname.startsWith('/agent')}
+            as={Link}
+            to='/agent'
           />
           <Menu.Item
             name='Training'
@@ -68,9 +77,9 @@ export const App = () => {
             onClick={openLogs}
           />
         </Menu>
-        {location.pathname}
+        {/* {location.pathname} */}
       </div>
-      <div>
+      <div className={styles.content}>
         <Routes />
       </div>
     </div>

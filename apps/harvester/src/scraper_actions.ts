@@ -1,7 +1,11 @@
 import type { HarvestConfig, Mnemonic } from './types';
-import type {ActionTypes, ValueResult, ValueType} from "./scraper/types";
+import type { ValueResult, ValueType} from "@thecointech/scraper/types";
 import type { CreditDetails } from './Harvester/types';
 import type { StoredData } from './Harvester/db_translate';
+import { ActionType } from './Harvester/scraper';
+import { BackgroundTaskCallback } from './BackgroundTask/types';
+import type { OptionPacket, QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
+import type { AutoConfigParams } from './Harvester/agent';
 
 export type Result<T> = {
   error?: string;
@@ -9,25 +13,36 @@ export type Result<T> = {
 }
 
 export type ScraperBridgeApi = {
-  installBrowser(): Promise<void>;
   hasInstalledBrowser(): Promise<Result<boolean>>;
   hasCompatibleBrowser(): Promise<Result<boolean>>;
-  onBrowserDownloadProgress: (value: any) => void;
+
+  // Trigger download of browser/similarity pipeline
+  downloadLibraries(): Promise<Result<boolean>>;
+
+  // Generic update pathway for all long-running actions
+  onBackgroundTaskProgress: (progress: BackgroundTaskCallback) => void;
+
+  // Run the automatic configurator for the given action on the appropriate url
+  autoProcess: (params: AutoConfigParams) => Promise<Result<boolean>>;
+
+  // Validate an action
+  validateAction(actionName: ActionType, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,
+
+
+  onAskQuestion: (callback: (question: QuestionPacket|OptionPacket) => void) => void;
+  replyQuestion: (response: ResponsePacket) => Promise<Result<boolean>>;
 
   // Declare a `readFile` function that will return a promise. This promise
   // will contain the data of the file read from the main process.
-  warmup: (url: string) => Promise<Result<boolean>>,
+  warmup: (url: string) => Promise<Result<boolean>>;
 
-  start: (actionName: ActionTypes, url: string, dynamicValues?: string[]) => Promise<Result<boolean>>,
+  start: (actionName: ActionType, url: string, dynamicInputs?: string[]) => Promise<Result<boolean>>;
 
   learnValue: (valueName: string, valueType: ValueType) => Promise<Result<ValueResult>>,
   setDynamicInput: (name: string, value: string) => Promise<Result<string>>,
 
   // Finish Recording
-  finishAction: (actionName: ActionTypes) => Promise<Result<boolean>>,
-
-  // A test of an action
-  testAction(actionName: ActionTypes, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,
+  finishAction: () => Promise<Result<boolean>>,
 
   setWalletMnemomic(mnemonic: Mnemonic): Promise<Result<boolean>>,
   getWalletAddress(): Promise<Result<string|null>>,
@@ -38,7 +53,7 @@ export type ScraperBridgeApi = {
   getHarvestConfig(): Promise<Result<HarvestConfig|undefined>>,
   setHarvestConfig(config: HarvestConfig): Promise<Result<boolean>>,
 
-  runHarvester(headless?: boolean): Promise<Result<void>>,
+  runHarvester(headless?: boolean): Promise<Result<boolean>>,
   getCurrentState(): Promise<Result<StoredData>>,
 
   exportResults(): Promise<Result<string>>
@@ -48,23 +63,32 @@ export type ScraperBridgeApi = {
   getArgv() : Promise<Result<Record<string, any>>>,
 
   allowOverrides(): Promise<Result<boolean>>,
-  setOverrides(balance: number, pendingAmt: number|null, pendingDate: string|null|undefined): Promise<Result<boolean>>
+  setOverrides(balance: number, pendingAmt: number|null, pendingDate: string|null|undefined): Promise<Result<boolean>>,
+
+  // Import a scraper script configuration
+  importScraperScript(config: any): Promise<Result<boolean>>;
 }
 
 
 export const actions = {
-  installBrowser: "browser:installBrowser",
   hasInstalledBrowser: "browser:hasInstalledBrowser",
   hasCompatibleBrowser: "browser:hasCompatibleBrowser",
-  browserDownloadProgress: "browser:browserDownloadProgress",
+
+  onBackgroundTaskProgress: 'scraper:onBackgroundTaskProgress',
+
+  downloadLibraries: 'scraper:downloadLibraries',
+
+  autoProcess: 'scraper:autoProcess',
+  validateAction: 'scraper:validateAction',
+
+  onAskQuestion: 'scraper:onAskQuestion',
+  replyQuestion: 'scraper:replyQuestion',
 
   warmup: 'scraper:warmup',
   start: 'scraper:start',
   learnValue: 'scraper:learnValue',
   setDynamicInput: 'scraper:setDynamicInput',
   finishAction: 'scraper:finishAction',
-
-  testAction: 'scraper.testAction',
 
   // Not really scraper, but meh
   setWalletMnemomic: 'scraper:setWalletMnemomic',
@@ -88,5 +112,6 @@ export const actions = {
 
   allowOverrides: 'scraper:allowOverrides',
   setOverrides: 'scraper:setOverrides',
+  importScraperScript: 'scraper:importScraperScript',
 }
 export type Action = keyof typeof actions

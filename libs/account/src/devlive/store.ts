@@ -35,11 +35,11 @@ const addRemoteAccount = async (name: AccountName, active: boolean) => {
 export const getAllAccounts = async () => {
   if (Object.keys(_devWallets).length === 0) {
     _devWallets = await Browser.getAllAccounts();
-    await addRemoteAccount('client1', true);
-    await addRemoteAccount('client2', false);
-    await addRemoteAccount('uberTester', false);
-    await addRemoteAccount('saTester', false);
-    await addRemoteAccount('testDemoAccount', false);
+    await addRemoteAccount('Client1', true);
+    await addRemoteAccount('Client2', false);
+    await addRemoteAccount('UberTester', false);
+    await addRemoteAccount('SaTester', false);
+    await addRemoteAccount('TestDemoAccount', false);
   }
   return _devWallets;
 }

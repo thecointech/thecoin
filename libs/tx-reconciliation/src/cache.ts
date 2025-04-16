@@ -5,8 +5,6 @@ import { join } from "path";
 import { AllData, Reconciliations } from "./types";
 import {log} from '@thecointech/logging';
 
-// file deepcode ignore no-any: JSON processing is basically all 'any'
-
 export const cacheFullPath = (path?: string) =>
   path ?? process.env["USERDATA_CACHE_PATH"] ?? "/temp/UserData/Cache";
 const DATA_CACHE_NAME = 'data.cache.json';
@@ -18,7 +16,6 @@ export const writeReconciledCache = (data: Reconciliations, cacheName?: string, 
   writeCache(data, cacheName ?? RECONCILED_CACHE_NAME, path);
 
 function writeCache(data: AllData|Reconciliations, cacheName: string, path?: string) {
-  //const sanitized = sanitize(data);
   const cachePath = mkCachePath(path);
   const filePath = join(cachePath, cacheName);
   writeFileSync(

@@ -1,9 +1,9 @@
-import { BlockTag, Filter, AbstractProvider, type LogParams, type Log, zeroPadValue } from 'ethers';
+import { BlockTag, Filter, AbstractProvider, Transaction, type LogParams, type Log, zeroPadValue } from 'ethers';
 import { ERC20Response } from '../erc20response';
-import transferFrom from './logs-transfer-from.json' assert { type: 'json' };
-import transferTo from './logs-transfer-to.json' assert { type: 'json' };
-import exactFrom from './logs-exact-from.json' assert { type: 'json' };
-import exactTo from './logs-exact-to.json' assert { type: 'json' };
+import transferFrom from './logs-transfer-from.json' with { type: 'json' };
+import transferTo from './logs-transfer-to.json' with { type: 'json' };
+import exactFrom from './logs-exact-from.json' with { type: 'json' };
+import exactTo from './logs-exact-to.json' with { type: 'json' };
 import { getSourceCode } from '../plugins_devlive';
 
 export class Erc20Provider extends AbstractProvider {
@@ -19,6 +19,31 @@ export class Erc20Provider extends AbstractProvider {
 
   async getBalance(): Promise<bigint> {
     return 100_000_000_000_000_000_000n; // 100Eth
+  }
+
+  // Implement fns to allow sending mocked txs (not currently used)
+  txs: Record<string, number> = {};
+  override async getTransactionCount(address: string): Promise<number> {
+    return this.txs[address] || 0;
+  }
+  override async broadcastTransaction(signedTx: string) {
+    const tx = Transaction.from(signedTx)
+    const address = tx.from!;
+    this.txs[address] = (this.txs[address] || 0) + 1;
+    return Promise.resolve<any>("0x" + "00".repeat(64));
+  }
+  override async getNetwork() {
+    return Promise.resolve<any>({ chainId: 99999, name: "mocked" });
+  }
+  override async getFeeData(): Promise<any> {
+    return {
+      maxFeePerGas: 100n,
+      maxPriorityFeePerGas: 100n,
+      gasPrice: 100n,
+    }
+  }
+  override async estimateGas(): Promise<bigint> {
+    return 100_000n;
   }
 
   //
@@ -94,4 +119,4 @@ async function getRemapping(clientAddress?: string) : Promise<Record<string, str
   }
 }
 
-export const getProvider = () => new Erc20Provider()
+export const getProvider = () => Promise.resolve(new Erc20Provider())

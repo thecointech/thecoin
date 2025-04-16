@@ -6,12 +6,19 @@ import express, {
 import bodyParser from "body-parser";
 import { RegisterRoutes } from './routes/routes';
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from './api/swagger.json' assert {type: "json"};
+import swaggerDocument from './api/swagger.json' with { type: "json" }
 import { init } from './init';
 import cors from 'cors';
 import { ValidateError } from "@tsoa/runtime";
 import { log } from "@thecointech/logging";
 import { ValidateErrorJSON } from "./types";
+import os from 'os';
+
+const version = process.env.TC_APP_VERSION ?? process.env.npm_package_version;
+const machine_name = process.env.GAE_APPLICATION ?? os.hostname();
+//@ts-expect-error TODO: add custom fields & nested types to logging
+log.fields["hostname"] = machine_name;
+log.info(`Loading App: v${version} - ${process.env.CONFIG_NAME} (${process.env.NODE_ENV})`);
 
 const app = express();
 // enable cors
@@ -56,7 +63,10 @@ export function errorHandler(
   next: NextFunction
 ): ExResponse | void {
   if (err instanceof ValidateError) {
-    log.warn(err, `Validation error on ${req.path}: ${err.fields}`);
+    log.warn(
+      { err, fields: err?.fields, path: req.path, params: req.params, body: req.body},
+      'Validation error on {path}: {fields}'
+    );
     const r: ValidateErrorJSON = {
       message: "Validation failed",
       details: err?.fields,
@@ -64,7 +74,10 @@ export function errorHandler(
     return res.status(422).json(r);
   }
   if (err instanceof Error) {
-    log.error(err, `${req.path} with Params: ${JSON.stringify(req.params)}, Body: ${JSON.stringify(req.body)}`);
+    log.error(
+      { err, path: req.path, params: req.params, body: req.body},
+      "Error on {path} with Params: {params}, Body: {body}"
+    );
     return res.status(500).json({
       message: "Internal Server Error",
     });

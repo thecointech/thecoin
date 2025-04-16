@@ -1,0 +1,108 @@
+name: Deploy to Google App Engine
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        description: 'Environment to deploy to (prodtest, prodbeta, prod)'
+      COMMIT_SHA:
+        required: true
+        type: string
+        description: 'Commit SHA to build from'
+
+# Already tested in build step
+env:
+  YARN_ENABLE_HARDENED_MODE: 0
+
+jobs:
+  deploy-rates:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.COMMIT_SHA }}
+
+      - run: corepack enable
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      - name: Generate env file
+        run: yarn run-env ./deploy.ts
+        env:
+          CONFIG_NAME: ${{ vars.CONFIG_NAME }}
+          GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
+        working-directory: ./apps/rates-service
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_RATES_KEY }}
+
+      - id: deploy-rates
+        uses: google-github-actions/deploy-appengine@v2
+        with:
+          project_id: ${{ vars.GCP_RATES_PROJECT_ID }}
+          # Allow explicit version (this enables beta version)
+          version: ${{ vars.GCP_SERVICE_VERSION }}
+          promote: ${{ vars.GCP_SERVICE_VERSION == '' }}
+          working_directory: ./apps/rates-service
+
+  deploy-broker:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.COMMIT_SHA }}
+
+      - run: corepack enable
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      - name: Generate env file
+        run: yarn run-env ./deploy.ts
+        env:
+          CONFIG_NAME: ${{ vars.CONFIG_NAME }}
+          GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
+        working-directory: ./apps/broker-service
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_BROKER_KEY }}
+
+      - id: deploy-broker
+        uses: google-github-actions/deploy-appengine@v2
+        with:
+          project_id: ${{ vars.GCP_BROKER_PROJECT_ID }}
+          # Allow explicit version (this enables beta version)
+          version: ${{ vars.GCP_SERVICE_VERSION }}
+          promote: ${{ vars.GCP_SERVICE_VERSION == '' }}
+          working_directory: ./apps/broker-service

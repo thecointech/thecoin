@@ -1,0 +1,74 @@
+name: Publish NPM Packages
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        description: 'Environment to deploy to (prodtest, prodbeta, prod)'
+
+env:
+  YARN_CHECKSUM_BEHAVIOR: ignore
+  PUPPETEER_SKIP_DOWNLOAD: true  # Skip downloading Chrome
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # For git operations and version bumps
+      packages: write  # For package publishing
+    outputs:
+      latest_sha: ${{ steps.get_sha.outputs.sha }}
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.base_ref }}
+          fetch-depth: 0  # Full history for correct versioning
+
+      - run: corepack enable
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14'
+          cache: 'yarn'
+
+      - name: Configure Git
+        run: |
+          git config user.name 'GitHub Actions Bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" > ~/.npmrc
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      - name: Version and Publish
+        run: |
+          if [ "${{ vars.CONFIG_NAME }}" = "prodtest" ]; then
+            yarn lerna version --conventional-commits --conventional-prerelease --preid test --yes
+          elif [ "${{ vars.CONFIG_NAME }}" = "prodbeta" ]; then
+            yarn lerna version --conventional-commits --conventional-prerelease --preid beta --yes
+          elif [ "${{ vars.CONFIG_NAME }}" = "prod" ]; then
+            yarn lerna version --conventional-commits --conventional-graduate --yes
+          else
+            echo "::error::Unknown environment: ${{ vars.CONFIG_NAME }}"
+            exit 1
+          fi
+          yarn lerna publish from-git --yes
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Latest Commit SHA
+        id: get_sha
+        run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT

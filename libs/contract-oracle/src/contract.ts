@@ -5,7 +5,7 @@ import type { Provider, Signer } from 'ethers';
 const getContractAddress = async () => {
 
   const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME;
-  const deployment = await import(`./deployed/${config_env}-polygon.json`, { assert: { type: 'json' } });
+  const deployment = await import(`./deployed/${config_env}-polygon.json`, { with: { type: 'json' } });
 
   if (!deployment) {
     throw new Error('Cannot create contract: missing deployment');
@@ -17,7 +17,8 @@ declare module globalThis {
   let __oracle: SpxCadOracle|undefined;
 }
 
-export async function getContract(provider: Provider = getProvider()) : Promise<SpxCadOracle> {
+export async function getContract(provider?: Provider) : Promise<SpxCadOracle> {
+  provider = provider ?? await getProvider();
   const v = globalThis.__oracle ??= SpxCadOracle__factory.connect(
     await getContractAddress(),
     provider

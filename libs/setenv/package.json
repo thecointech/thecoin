@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/setenv",
-  "version": "0.2.129",
+  "version": "0.2.150",
   "description": "TheCoin: Environment setup library",
   "type": "module",
   "keywords": [
@@ -22,16 +22,14 @@
     "run-env": "./bin/run-env.mjs"
   },
   "scripts": {
-    "build": "run -T run-p 'build:*'",
-    "build:cjs": "run -T tsc --project tsconfig.build.cjs.json && node ./postbuild.cjs",
-    "build:mjs": "run -T tsc --project tsconfig.build.mjs.json",
-    "clean": "run -T rimraf ./build && run -T rimraf ./coverage"
+    "build": "run -T tsc --project tsconfig.build.json",
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage",
+    "test": "run :jest"
   },
   "exports": {
     ".": {
-      "types": "./build/mjs/index.d.ts",
-      "import": "./build/mjs/index.js",
-      "require": "./build/cjs/index.js"
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
     },
     "./projectUrl": {
       "types": "./projectUrl/index.d.ts",
@@ -40,9 +38,9 @@
     },
     "./webpack": "./webpack/webpack.env.cjs"
   },
-  "types": "./build/mjs/index.d.ts",
+  "types": "./build/index.d.ts",
   "dependencies": {
-    "dotenv": "^10.0.0"
+    "dotenv": "^16.4.7"
   },
-  "gitHead": "bf2868141d870411ad24cf42d889dba36272052c"
+  "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }
