@@ -1,6 +1,6 @@
 {
   "npmClient": "yarn",
-  "version": "0.3.3-test.0",
+  "version": "0.3.3-test.1",
   "command": {
     "publish": {
       "conventionalCommits": true,

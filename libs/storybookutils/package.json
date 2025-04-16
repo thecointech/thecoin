@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/storybookutils",
-  "version": "0.3.3-test.0",
+  "version": "0.3.3-test.1",
   "private": true,
   "description": "The Coin: common storybook decorators",
   "type": "module",
@@ -21,6 +21,6 @@
   ],
   "main": "./build/index.js",
   "dependencies": {
-    "@thecointech/shared": "^0.3.3-test.0"
+    "@thecointech/shared": "^0.3.3-test.1"
   }
 }
