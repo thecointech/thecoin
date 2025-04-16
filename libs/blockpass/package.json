@@ -1,7 +1,7 @@
 {
   "name": "@thecointech/blockpass",
   "private": true,
-  "version": "0.2.150",
+  "version": "0.3.1",
   "description": "TheCoin: Wrapper for blockpass for web",
   "type": "module",
   "keywords": [
@@ -35,10 +35,10 @@
   },
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/shared": "^0.2.150"
+    "@thecointech/shared": "^0.3.1"
   },
   "devDependencies": {
-    "@thecointech/async": "^0.2.150",
-    "@thecointech/broker-cad": "^0.2.150"
+    "@thecointech/async": "^0.3.1",
+    "@thecointech/broker-cad": "^0.3.1"
   }
 }
