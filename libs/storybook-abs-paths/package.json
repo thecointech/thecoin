@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/storybook-abs-paths",
-  "version": "0.3.1",
+  "version": "0.3.3-test.0",
   "private": true,
   "description": "Automatically remap absolute paths for storybook inside a monorepo",
   "author": "Stephen Taylor <stephen@thecoin.io>",
