@@ -52,8 +52,8 @@ jobs:
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          firebaseServiceAccount: "${{ secrets.GCP_SA_BROKER_KEY }}"
-          target: "${{ vars.CONFIG_NAME }}"
+          firebaseServiceAccount: "${{ secrets.GCP_SA_SITES_KEY }}"
+          projectId: "${{ vars.CONFIG_NAME }}"
           channelId: live
           entryPoint: ./apps/site-landing
 
@@ -66,8 +66,7 @@ jobs:
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          firebaseServiceAccount: "${{ secrets.GCP_SA_BROKER_KEY }}"
-          target: "${{ vars.CONFIG_NAME }}"
+          firebaseServiceAccount: "${{ secrets.GCP_SA_SITES_KEY }}"
           projectId: "${{ vars.CONFIG_NAME }}"
           channelId: live
           entryPoint: ./apps/site-app

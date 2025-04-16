@@ -57,6 +57,9 @@ jobs:
         uses: google-github-actions/deploy-appengine@v2
         with:
           project_id: ${{ vars.GCP_RATES_PROJECT_ID }}
+          # Allow explicit version (this enables beta version)
+          version: ${{ vars.GCP_SERVICE_VERSION }}
+          promote: ${{ vars.GCP_SERVICE_VERSION != '' }}
           working_directory: ./apps/rates-service
 
   deploy-broker:
@@ -99,4 +102,7 @@ jobs:
         uses: google-github-actions/deploy-appengine@v2
         with:
           project_id: ${{ vars.GCP_BROKER_PROJECT_ID }}
+          # Allow explicit version (this enables beta version)
+          version: ${{ vars.GCP_SERVICE_VERSION }}
+          promote: ${{ vars.GCP_SERVICE_VERSION != '' }}
           working_directory: ./apps/broker-service
