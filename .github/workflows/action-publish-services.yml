@@ -42,7 +42,7 @@ jobs:
           name: build-artifacts
 
       - name: Generate env file
-        run: yarn run-env ./deploy.ts
+        run: yarn run-env ./predeploy.ts
         env:
           CONFIG_NAME: ${{ vars.CONFIG_NAME }}
           GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
@@ -59,7 +59,7 @@ jobs:
           project_id: ${{ vars.GCP_RATES_PROJECT_ID }}
           # Allow explicit version (this enables beta version)
           version: ${{ vars.GCP_SERVICE_VERSION }}
-          promote: ${{ vars.GCP_SERVICE_VERSION != '' }}
+          promote: ${{ vars.GCP_SERVICE_VERSION == '' }}
           working_directory: ./apps/rates-service
 
   deploy-broker:
@@ -87,7 +87,7 @@ jobs:
           name: build-artifacts
 
       - name: Generate env file
-        run: yarn run-env ./deploy.ts
+        run: yarn run-env ./predeploy.ts
         env:
           CONFIG_NAME: ${{ vars.CONFIG_NAME }}
           GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
@@ -104,5 +104,5 @@ jobs:
           project_id: ${{ vars.GCP_BROKER_PROJECT_ID }}
           # Allow explicit version (this enables beta version)
           version: ${{ vars.GCP_SERVICE_VERSION }}
-          promote: ${{ vars.GCP_SERVICE_VERSION != '' }}
+          promote: ${{ vars.GCP_SERVICE_VERSION == '' }}
           working_directory: ./apps/broker-service

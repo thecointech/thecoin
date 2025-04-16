@@ -1,22 +1,7 @@
-import { copyEnvVarsLocal, copyNpmTokenHere } from "../../tools/predeploy";
+import { gCloudDeploy, removeOldAppVersions } from '../../tools/predeploy';
+import { predeploy } from './predeploy';
 
-// await SetGCloudConfig("GCLOUD_BROKER_CONFIG");
-await copyEnvVarsLocal(
-  "app.secrets.yaml",
-  { RUNTIME_ENV: "gcloud" },
-  [
-    // Required for storing ID
-    // "BlockpassApiKey",
-    // "BlockpassWebhookSecret",
-    // "GCloudImageStorageBucket",
-    // required for emailing-on-error
-    // "MailjetApiKey",
-    // "MailjetApiSecret",
-    // Required for talking to blockchain
-    // "InfuraProjectId"
-  ]
-);
-await copyNpmTokenHere(new URL(import.meta.url));
-// await gCloudDeploy();
+await predeploy();
+await gCloudDeploy();
 // Clean-up after
-// await removeOldAppVersions();
+await removeOldAppVersions();
