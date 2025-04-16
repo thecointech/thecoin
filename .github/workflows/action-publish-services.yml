@@ -42,7 +42,7 @@ jobs:
           name: build-artifacts
 
       - name: Generate env file
-        run: yarn run-env ./deploy.ts
+        run: yarn run-env ./predeploy.ts
         env:
           CONFIG_NAME: ${{ vars.CONFIG_NAME }}
           GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
@@ -87,7 +87,7 @@ jobs:
           name: build-artifacts
 
       - name: Generate env file
-        run: yarn run-env ./deploy.ts
+        run: yarn run-env ./predeploy.ts
         env:
           CONFIG_NAME: ${{ vars.CONFIG_NAME }}
           GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
