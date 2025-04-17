@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-reconciliation",
-  "version": "0.3.3-test.1",
+  "version": "0.3.3",
   "private": true,
   "description": "The Coin: Process reconciliation between bank, blockchain, database and emails to ensure all transactions are completed appropriately",
   "type": "module",
@@ -37,13 +37,13 @@
     }
   },
   "dependencies": {
-    "@thecointech/broker-db": "^0.3.3-test.1",
-    "@thecointech/tx-blockchain": "^0.3.3-test.1",
-    "@thecointech/tx-gmail": "^0.3.3-test.1",
-    "@thecointech/utilities": "^0.3.3-test.1",
+    "@thecointech/broker-db": "^0.3.3",
+    "@thecointech/tx-blockchain": "^0.3.3",
+    "@thecointech/tx-gmail": "^0.3.3",
+    "@thecointech/utilities": "^0.3.3",
     "fastest-levenshtein": "^1.0.12"
   },
   "devDependencies": {
-    "@thecointech/bank-interface": "^0.3.3-test.1"
+    "@thecointech/bank-interface": "^0.3.3"
   }
 }
