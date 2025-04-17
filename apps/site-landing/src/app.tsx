@@ -15,17 +15,13 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import 'sanitize.css/sanitize.css';
 
-// initialize logging first
-import { log } from '@thecointech/logging';
-log.info(`Loading App: ${__VERSION__} - ${process.env.CONFIG_NAME}`);
-
 // Import root app
 import { App } from 'containers/App';
 
 // Import Language Provider
-import { LanguageProvider, Languages } from '@thecointech/shared/containers/LanguageProvider';
+import { LanguageProvider, Languages } from '@thecointech/shared/containers/LanguageProvider';
 
-import {configureLandingStore, history } from './reducers';
+import { configureLandingStore, history } from './reducers';
 
 // Import i18n messages
 import { translations } from './translations';

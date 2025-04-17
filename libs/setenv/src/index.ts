@@ -37,11 +37,16 @@ export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
     return files;
   }
 
-  // If none found, is there any in the local repo folder?
-  const repoUrl = new URL(`environments/${envName}.public.env`, baseUrl);
-  if (existsSync(repoUrl)) {
-    files.push(repoUrl);
-  }
+  const addName = (name: string) => {
+    const url = new URL(`environments/${name}.public.env`, baseUrl);
+    if (existsSync(url)) {
+      files.push(url);
+    }
+  };
+
+  // Add common, if it exists
+  addName("common");
+  addName(envName);
 
   // None found, throw
   if (files.length == 0) return files;
