@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+
+
+**Note:** Version bump only for package @thecointech/site-base
+
+
+
+
+
 ## [0.3.3-test.1](https://github.com/thecointech/thecoin/compare/v0.3.3-test.0...v0.3.3-test.1) (2025-04-16)
 
 **Note:** Version bump only for package @thecointech/site-base
