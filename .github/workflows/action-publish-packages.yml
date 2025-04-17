@@ -55,14 +55,9 @@ jobs:
       - name: Version and Publish
         run: |
           if [ "${{ vars.CONFIG_NAME }}" = "prodtest" ]; then
-            yarn lerna version --conventional-commits --conventional-prerelease --preid test --yes
-          elif [ "${{ vars.CONFIG_NAME }}" = "prodbeta" ]; then
-            yarn lerna version --conventional-commits --conventional-prerelease --preid beta --yes
-          elif [ "${{ vars.CONFIG_NAME }}" = "prod" ]; then
-            yarn lerna version --conventional-commits --conventional-graduate --yes
+            yarn lerna version --conventional-commits --include-merged-tags --conventional-prerelease --preid test --yes
           else
-            echo "::error::Unknown environment: ${{ vars.CONFIG_NAME }}"
-            exit 1
+            yarn lerna version --conventional-commits --include-merged-tags --conventional-graduate --yes
           fi
           yarn lerna publish from-git --yes
         env:
