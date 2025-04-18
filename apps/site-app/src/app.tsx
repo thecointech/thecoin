@@ -20,10 +20,6 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import 'sanitize.css/sanitize.css';
 
-// initialize logging first
-import { log } from '@thecointech/logging';
-log.info(`Loading App: ${__VERSION__} - ${process.env.CONFIG_NAME}`);
-
 // Import root app
 import { App } from 'containers/App';
 
