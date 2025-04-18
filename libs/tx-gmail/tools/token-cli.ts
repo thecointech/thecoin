@@ -22,6 +22,8 @@ async function main() {
   }
 
   process.env.CONFIG_NAME = envName;
+  process.env.CONFIG_ENV = envName.replace('beta', '');
+
   const urlKey = getUniqueUrlKey(uniqueId);
   // Do not clear this on fetch, allows for multiple attempts
   const url = await getTempSecret(urlKey, false);

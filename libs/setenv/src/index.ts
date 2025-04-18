@@ -54,7 +54,11 @@ export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
   // Beta versions share a lot with non-beta environments, so we merge them together
   if (envName.endsWith("beta")) {
     const nonBeta = getEnvFiles(envName.slice(0, -4), onlyPublic)
-    files.push(...nonBeta)
+    for (const f of nonBeta) {
+      if (!files.includes(f)) {
+        files.push(f);
+      }
+    }
   }
   return files;
 }
