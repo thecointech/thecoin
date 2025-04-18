@@ -66,7 +66,7 @@ jobs:
 
       - name: Update common.public.env
         run: |
-          node --experimental-strip-types .\tools\updateEnvVersion.ts
+          node --experimental-strip-types ./tools/updateEnvVersion.ts
           git add .
           git commit -m "chore: update version in common.public.env"
           git push
