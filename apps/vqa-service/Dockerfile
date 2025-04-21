@@ -1,10 +1,6 @@
 # Use Python 3.11 slim base image
 FROM rocm/pytorch:rocm6.2.3_ubuntu22.04_py3.10_pytorch_release_2.3.0
 
-# Define build arguments for certificate paths and API key
-ARG SSL_CERT_FILE
-ARG SSL_KEY_FILE
-ARG API_ACCESS_KEY
 
 # Set working directory
 WORKDIR /app
@@ -27,17 +23,10 @@ RUN mkdir -p /app/logs && \
 # Copy the rest of the application
 COPY . .
 
-# Copy SSL certificates only if they're provided
-
-RUN mkdir -p /app/ssl
-COPY ${SSL_CERT_FILE:-cert.pem}* /app/ssl/cert.pem
-COPY ${SSL_KEY_FILE:-key.pem}* /app/ssl/key.pem
-
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app:/app/src/transformers_modules
-ENV API_ACCESS_KEY=${API_ACCESS_KEY}
 
 # Mount point /app/.model_cache will be created automatically by Docker bind mount
 
@@ -47,9 +36,5 @@ EXPOSE 7004
 # Set the working directory
 WORKDIR /app/src
 
-# Command to run the application - conditional on SSL
-CMD if [ -f "/app/ssl/cert.pem" ]; then \
-    uvicorn main:app --host 0.0.0.0 --port 7004 --ssl-keyfile /app/ssl/key.pem --ssl-certfile /app/ssl/cert.pem; \
-    else \
-    uvicorn main:app --host 0.0.0.0 --port 7004; \
-    fi
+# Command to run the application
+CMD ["python", "bootstrap.py"]

@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/logging",
-  "version": "0.3.4",
+  "version": "0.3.5-test.0",
   "description": "The Coin: Common logging setup",
   "type": "module",
   "keywords": [
@@ -35,6 +35,7 @@
   },
   "types": "./build/log_browser.d.ts",
   "dependencies": {
+    "@google-cloud/logging-bunyan": "^5.1.0",
     "browser-bunyan": "^1.6.3",
     "bunyan": "^1.8.13",
     "bunyan-debug-stream": "^2.0.0",

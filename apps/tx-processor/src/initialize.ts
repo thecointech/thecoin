@@ -24,7 +24,11 @@ export async function initialize() {
   await ConfigStore.set("gmail.token", token);
 
   const signer = await getSigner('BrokerCAD');
-  await getSigner('BrokerTransferAssistant');
+  const bta = await getSigner('BrokerTransferAssistant');
+  if (!signer || !bta) {
+    throw new Error("Signers not loaded");
+  }
+  log.debug("Signers loaded: ", (!!bta && !!signer))
 
   const contract = await ConnectContract(signer);
   if (!contract) {
