@@ -5,7 +5,10 @@
   "private": true,
   "description": "Automatically harvest TheCoin",
   "main": ".webpack/main",
-  "type": "module",
+  "type": "commonjs",
+  "forge": {
+    "config": "forge.config.mts"
+  },
   "keywords": [],
   "author": {
     "name": "Stephen Taylor",

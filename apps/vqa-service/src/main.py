@@ -16,6 +16,7 @@ from fastapi_tweak import use_route_names_as_operation_ids
 from starlette.status import HTTP_403_FORBIDDEN
 from starlette.middleware.base import BaseHTTPMiddleware
 from monitoring import ResourceMonitoringMiddleware
+from vqa_secrets import get_secret, SecretName
 
 class KeepAliveMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
@@ -25,20 +26,19 @@ class KeepAliveMiddleware(BaseHTTPMiddleware):
         return response
 
 # API key authentication
-API_KEY = os.getenv('API_ACCESS_KEY', None)
-api_key_header = None
+api_key = get_secret(SecretName.VqaApiKey)
 dependencies = []
 
-if API_KEY is not None:
+if api_key is not None:
     api_key_header = APIKeyHeader(name="X-API-Key", auto_error=True)
 
     async def get_api_key(api_key_header: str = Security(api_key_header)):
-        if api_key_header != API_KEY:
+        if api_key_header != api_key:
             raise HTTPException(
                 status_code=HTTP_403_FORBIDDEN, detail="Invalid API key"
             )
         return api_key_header
-    
+
     dependencies = [Depends(get_api_key)]
 
 app = FastAPI(
