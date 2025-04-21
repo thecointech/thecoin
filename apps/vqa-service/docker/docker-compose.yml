@@ -1,0 +1,27 @@
+
+# NOTE: This docker-compose file can -only- be used from within the
+# WSL instance (it needs the files commented out under volumes)
+version: '3.8'
+services:
+  vqa-service:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      args:
+        - CONFIG_NAME
+    image: vqa-service:latest
+    ports:
+      - "7004:7004"
+    volumes:
+      # - ../.model_cache:/app/.model_cache
+      # - ../logs:/app/logs
+      # - /usr/lib/wsl/lib/libdxcore.so:/usr/lib/libdxcore.so
+      # - /opt/rocm/lib/libhsa-runtime64.so.1:/opt/rocm/lib/libhsa-runtime64.so.1
+      - type: bind
+        source: ${THECOIN_SECRETS}
+        target: /app/secrets
+        read_only: true
+    ipc: host
+    shm_size: 16G
+    devices:
+      - /dev/dxg:/dev/dxg
