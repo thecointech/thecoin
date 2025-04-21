@@ -94,7 +94,7 @@ export async function processActions(allActions: DatedAction[], tcCore: TheCoin,
 
 
 async function processAction(action: DatedAction, tcCore: TheCoin, bank: RbcApi) {
-  log.debug({ initialId: action.data.initialId, date: action.executeDate, address: action.address }, "Processing {type} from {date}: {initialId}");
+  log.debug({ initialId: action.data.initialId, type: action.type, date: action.executeDate, address: action.address }, "Processing {type} from {date}: {initialId}");
   if (isType(action, 'Bill')) {
     const ex = BillProcessor(action.data.initial.transfer, tcCore, bank);
     return await ex.execute(null, action);

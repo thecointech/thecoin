@@ -29,7 +29,7 @@ async function doDeposit(container: BuyActionContainer) {
   if (!bank) return { error: 'Cannot deposit fiat, no bank API present'};
 
   try {
-    const result = await depositInBank(etransfer, bank, log.trace);
+    const result = await depositInBank(etransfer, bank, log.debug);
     if (result.code != ETransferErrorCode.Success || !result.confirmation)
     {
       return { error: result.message };
