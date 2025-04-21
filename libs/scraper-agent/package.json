@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/scraper-agent",
-  "version": "0.3.5-test.0",
+  "version": "0.3.5",
   "private": true,
   "description": "TheCoin: AI Agent to automate the creation of scraping recorder scripts",
   "type": "module",
@@ -29,8 +29,8 @@
   },
   "dependencies": {
     "@thecointech/apis": "^0.3.3",
-    "@thecointech/scraper": "^0.3.5-test.0",
-    "@thecointech/utilities": "^0.3.5-test.0"
+    "@thecointech/scraper": "^0.3.5",
+    "@thecointech/utilities": "^0.3.5"
   },
   "devDependencies": {
     "@thecointech/jestutils": "^0.3.3"
