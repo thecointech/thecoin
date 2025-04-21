@@ -17,7 +17,6 @@ async function Process() {
 
 async function run() {
   try {
-    log.info('Running tx-processor');
     await Process();
     log.info('Completed running tx-processor');
   } catch (e: any) {

@@ -15,10 +15,8 @@ const require = createRequire(import.meta.url); // construct the require method
 const configName = process.env.CONFIG_NAME;
 const projectRoot = process.cwd();
 const configFile = join(projectRoot, 'tsconfig.build.json');
-const packageFile = join(projectRoot, 'package.json');
 
 const envFiles = getEnvFiles(configName);
-const version = require(packageFile).version;
 
 export async function getBaseConfig(secrets = []) {
   const loaded = await Promise.all(
@@ -77,8 +75,10 @@ export async function getBaseConfig(secrets = []) {
     },
     plugins: [
       new webpack.DefinePlugin({
-        __VERSION__: JSON.stringify(version),
         BROWSER: true,
+        // We need to pass through the LOG_NAME as it is
+        // not defined in the .env files loaded below
+        "process.env.LOG_NAME": JSON.stringify(process.env.LOG_NAME),
         // We shouldn't actually have secrets in our site,
         // move relevant code to the backend instead
         __COMPILER_REPLACE_SECRETS__: JSON.stringify(secretObj),

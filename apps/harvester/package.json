@@ -1,7 +1,7 @@
 {
   "name": "harvester",
   "productName": "harvester",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "private": true,
   "description": "Automatically harvest TheCoin",
   "main": ".webpack/main",
@@ -27,7 +27,7 @@
     "build": "run -T tsc -b",
     "test": "yarn run :jest",
     "_start:dbg": "yarn run -T cross-env NODE_ENV=development RUN_SCRAPER_HEADLESS=false HARVESTER_PROFILE_FOLDER=\"./.cache/$CONFIG_NAME\" yarn run-env $(yarn bin electron-forge) start",
-    "_make": "electron-forge make"
+    "_make": "yarn run-env $(yarn bin electron-forge) make"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.2.0",
@@ -52,19 +52,19 @@
     "pouchdb-adapter-memory": "^8.0.1"
   },
   "dependencies": {
-    "@thecointech/account": "^0.3.3",
+    "@thecointech/account": "^0.3.4",
     "@thecointech/apis": "^0.3.3",
     "@thecointech/async": "^0.3.3",
-    "@thecointech/contract-plugin-converter": "^0.3.3",
-    "@thecointech/contract-plugin-shockabsorber": "^0.3.3",
-    "@thecointech/contract-plugins": "^0.3.3",
-    "@thecointech/fx-rates": "^0.3.3",
-    "@thecointech/logging": "^0.3.3",
-    "@thecointech/scraper": "^0.3.3",
-    "@thecointech/scraper-agent": "^0.3.3",
-    "@thecointech/shared": "^0.3.3",
-    "@thecointech/signers": "^0.3.3",
-    "@thecointech/utilities": "^0.3.3",
+    "@thecointech/contract-plugin-converter": "^0.3.4",
+    "@thecointech/contract-plugin-shockabsorber": "^0.3.4",
+    "@thecointech/contract-plugins": "^0.3.4",
+    "@thecointech/fx-rates": "^0.3.4",
+    "@thecointech/logging": "^0.3.4",
+    "@thecointech/scraper": "^0.3.4",
+    "@thecointech/scraper-agent": "^0.3.4",
+    "@thecointech/shared": "^0.3.4",
+    "@thecointech/signers": "^0.3.4",
+    "@thecointech/utilities": "^0.3.4",
     "comdb": "^6.0.0-beta",
     "crontab": "^1.4.2",
     "currency.js": "^2.0.4",

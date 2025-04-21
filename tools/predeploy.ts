@@ -66,12 +66,8 @@ export function gCloudDeploy() {
 
 export async function copyEnvVarsLocal(outYamlFile: string, additionalVars: Record<string, string> = {}, additionalSecrets: SecretKeyType[] = []) {
 
-  // Get version from package.json
-  const packageJson = JSON.parse(readFileSync(`${process.cwd()}/package.json`, 'utf8'));
-
   const secrets = await Promise.all(additionalSecrets.map(key => getSecret(key)));
   const env = {
-    TC_APP_VERSION: packageJson.version,
     ...getEnvVars(),
     ...additionalVars,
     ...Object.fromEntries(secrets.map((s, i) => [additionalSecrets[i], s])),

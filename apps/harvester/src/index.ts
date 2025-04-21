@@ -46,7 +46,6 @@ if (process.env.NODE_ENV !== 'production' || process.env.CONFIG_NAME === 'prodte
 }
 
 log.info(`-----------------------------------------------------------------------------------`);
-log.info(`Started Harvester, ${process.env.CONFIG_NAME} v${__VERSION__} - ${__APP_BUILD_DATE__}`);
 log.info(`args: ${process.argv}`);
 
 // NOTE: The easiest way to pass through args is to call it like
