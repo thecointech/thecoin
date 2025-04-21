@@ -2,9 +2,10 @@ import bunyan from "bunyan";
 import { getConsoleStream } from "./consolestream";
 import { getFileStream } from "./filestream";
 import { getSeqStream } from './seqstream';
+import { getGaeStream } from "./gaestream";
 
 const getStreams = (name: string, level?: number) => {
-  const streams = [getConsoleStream(level)];
+  const streams = [];
   // Are we testing with jest?
   if (process.env.JEST_WORKER_ID === undefined) {
     // Do we have a output folder specifed?
@@ -19,6 +20,10 @@ const getStreams = (name: string, level?: number) => {
       streams.push(stream);
     }
   }
+  streams.push(process.env.GAE_ENV
+    ? getGaeStream()
+    : getConsoleStream(level)
+  );
   return streams;
 }
 

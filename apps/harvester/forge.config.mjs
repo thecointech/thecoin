@@ -6,7 +6,7 @@ import { utils } from '@electron-forge/core';
 import { WebpackPlugin } from '@electron-forge/plugin-webpack';
 import { mainConfig } from '@thecointech/electron-utils/webpack/webpack.main.config';
 import { rendererConfig } from '@thecointech/electron-utils/webpack/webpack.renderer.config';
-import { getCSP } from './config/csp.js';
+import { getCSP } from './config/csp.mjs';
 import webpack from 'webpack';
 import { getSecret } from '@thecointech/secrets';
 import path from 'path';

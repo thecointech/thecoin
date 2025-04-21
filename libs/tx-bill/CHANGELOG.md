@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.4](https://github.com/thecointech/thecoin/compare/v0.3.3...v0.3.4) (2025-04-18)
+
+**Note:** Version bump only for package @thecointech/tx-bill
+
+
+
+
+
+## [0.3.3](https://github.com/thecointech/thecoin/compare/v0.3.3-test.1...v0.3.3) (2025-04-17)
+
+**Note:** Version bump only for package @thecointech/tx-bill
+
+
+
+
+
+
+
+**Note:** Version bump only for package @thecointech/tx-bill
+
+
+
+
+
 ## [0.3.3-test.1](https://github.com/thecointech/thecoin/compare/v0.3.3-test.0...v0.3.3-test.1) (2025-04-16)
 
 **Note:** Version bump only for package @thecointech/tx-bill

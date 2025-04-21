@@ -26,6 +26,7 @@ const baseOptions: Configuration = {
     ...plugins,
     // NOTE: This is used only by
     new webpack.DefinePlugin({
+      "process.env.LOG_NAME": JSON.stringify(process.env.LOG_NAME),
       __COMPILER_REPLACE_SECRETS__: JSON.stringify({PolygonscanApiKey}),
     }),
   ],
