@@ -1,8 +1,7 @@
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync, cpSync } from 'fs';
-import { getSecret } from '@thecointech/secrets';
 
 // Verify token
-const githubToken = process.env.GH_PACKAGES_READ || (await getSecret('GithubPackageToken'));
+const githubToken = process.env.GH_PACKAGES_READ;
 if (!githubToken) {
   throw new Error('GH_PACKAGES_READ not found in environment');
 }
