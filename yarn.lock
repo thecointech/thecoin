@@ -11000,7 +11000,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/rbcapi@npm:^0.3.6, @thecointech/rbcapi@workspace:libs/rbcapi":
+"@thecointech/rbcapi@npm:^0.3.7, @thecointech/rbcapi@workspace:libs/rbcapi":
   version: 0.0.0-use.local
   resolution: "@thecointech/rbcapi@workspace:libs/rbcapi"
   dependencies:
@@ -11498,7 +11498,7 @@ __metadata:
   resolution: "@thecointech/tx-processor@workspace:apps/tx-processor"
   dependencies:
     "@thecointech/logging": "npm:^0.3.5"
-    "@thecointech/rbcapi": "npm:^0.3.6"
+    "@thecointech/rbcapi": "npm:^0.3.7"
     "@thecointech/setenv": "npm:^0.3.4"
     "@thecointech/site-app": "npm:^0.3.5"
     "@thecointech/tx-bill": "npm:^0.3.5"

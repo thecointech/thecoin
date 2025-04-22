@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-processor",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "private": true,
   "type": "module",
   "description": "The Coin: A command-line app for completing transactions",
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@thecointech/logging": "^0.3.5",
-    "@thecointech/rbcapi": "^0.3.6",
+    "@thecointech/rbcapi": "^0.3.7",
     "@thecointech/setenv": "^0.3.4",
     "@thecointech/tx-bill": "^0.3.5",
     "@thecointech/tx-deposit": "^0.3.5",
