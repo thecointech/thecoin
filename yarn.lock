@@ -11007,6 +11007,7 @@ __metadata:
     "@thecointech/bank-interface": "npm:^0.3.3"
     "@thecointech/jestutils": "npm:^0.3.3"
     "@thecointech/logging": "npm:^0.3.5"
+    "@thecointech/secrets": "npm:^0.3.3"
     "@thecointech/store": "npm:^0.3.5"
     "@thecointech/types": "npm:^0.3.3"
     "@thecointech/utilities": "npm:^0.3.5"
