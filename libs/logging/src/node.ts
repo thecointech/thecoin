@@ -27,8 +27,20 @@ const getStreams = (name: string, level?: number) => {
   return streams;
 }
 
-export const init_node = (name: string, level?: number) =>
-  bunyan.createLogger({
+export const init_node = (name: string, level?: number) => {
+  const logger = bunyan.createLogger({
     name,
     streams: getStreams(name, level),
   });
+
+  // Bind all logging methods to ensure they maintain their context
+  return {
+    ...logger,
+    trace: logger.trace.bind(logger),
+    debug: logger.debug.bind(logger),
+    info: logger.info.bind(logger),
+    warn: logger.warn.bind(logger),
+    error: logger.error.bind(logger),
+    fatal: logger.fatal.bind(logger),
+  };
+};

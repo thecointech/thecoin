@@ -15,9 +15,8 @@ export async function startPuppeteer() {
   const userDataDir = getUserDataDir();
   mkdirSync(userDataDir, { recursive: true });
 
-  const args = process.env.JEST_CI
-    ? ['--no-sandbox', '--disable-setuid-sandbox']
-    : [];
+  // We only load rbc webpage, and we do trust this
+  const args = ['--no-sandbox', '--disable-setuid-sandbox'];
 
   const expath = executablePath();
   const browser = await puppeteer.launch({

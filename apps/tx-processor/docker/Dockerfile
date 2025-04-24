@@ -1,11 +1,17 @@
 FROM node:22-slim
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     make \
     g++ \
     ca-certificates \
+    chromium \
+    xvfb \
+    libgl1-mesa-glx \
+    libx11-xcb1 \
+    wget \
+    xdg-utils \
     fonts-freefont-ttf \
     libusb-1.0-0-dev \
     pkg-config \
