@@ -16,7 +16,7 @@
     "dev": "run-env ./src/main.ts",
     "dev:live": "run -T cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn dev",
-    "prod": "run -T cross-env CONFIG_NAME=prod yarn start",
+    "prod": "run -T cross-env CONFIG_NAME=prod yarn dev",
     "start": "yarn run-env ./build/main.js",
     "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt",

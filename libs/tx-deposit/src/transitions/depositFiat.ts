@@ -69,7 +69,7 @@ async function depositInBank(etransfer: eTransferData, bank: IBank, progressCb: 
 
   const bta = await getSigner("BrokerTransferAssistant");
   const code = await getAddressShortCode(address, bta);
-  const prefix = `${name}/${recieved.toSQLDate()}`;
+  const prefix = `${name.replace(/\s+/g, "_")}/${recieved.toSQLDate()}/${DateTime.now().toISO()}`;
   const result = await bank.depositETransfer(prefix, depositUrl, code, progressCb);
   log.debug(`Deposit result: ${ETransferErrorCode[result.code]}`);
   return result;
