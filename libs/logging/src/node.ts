@@ -34,13 +34,11 @@ export const init_node = (name: string, level?: number) => {
   });
 
   // Bind all logging methods to ensure they maintain their context
-  return {
-    ...logger,
-    trace: logger.trace.bind(logger),
-    debug: logger.debug.bind(logger),
-    info: logger.info.bind(logger),
-    warn: logger.warn.bind(logger),
-    error: logger.error.bind(logger),
-    fatal: logger.fatal.bind(logger),
-  };
+  logger.trace = logger.trace.bind(logger);
+  logger.debug = logger.debug.bind(logger);
+  logger.info = logger.info.bind(logger);
+  logger.warn = logger.warn.bind(logger);
+  logger.error = logger.error.bind(logger);
+  logger.fatal = logger.fatal.bind(logger);
+  return logger;
 };
