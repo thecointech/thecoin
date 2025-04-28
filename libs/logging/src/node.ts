@@ -1,8 +1,7 @@
 import bunyan from "bunyan";
-import { getConsoleStream } from "./consolestream";
-import { getFileStream } from "./filestream";
-import { getSeqStream } from './seqstream';
-import { getGaeStream } from "./gaestream";
+import { getConsoleStream } from "./streams/consolestream";
+import { getFileStream } from "./streams/filestream";
+import { getSeqStream } from './streams/seqstream';
 
 const getStreams = (name: string, level?: number) => {
   const streams = [];
@@ -20,10 +19,7 @@ const getStreams = (name: string, level?: number) => {
       streams.push(stream);
     }
   }
-  streams.push(process.env.GAE_ENV
-    ? getGaeStream()
-    : getConsoleStream(level)
-  );
+  streams.push(getConsoleStream(level));
   return streams;
 }
 
