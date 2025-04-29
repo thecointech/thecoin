@@ -1,3 +1,4 @@
 export * from './init';
 export * from './rootFolder';
-export * from './setup';
+export * from './userProfile';
+export * from './browser';

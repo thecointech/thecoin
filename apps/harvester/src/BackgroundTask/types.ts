@@ -1,4 +1,4 @@
-export type BackgroundTaskType = "initialize" | "record" | "validate" | "replay";
+export type BackgroundTaskType = "initialize" | "record" | "validate" | "replay" | "twofaRefresh";
 
 // Base progress information shared by all task types
 export type TaskProgress = {

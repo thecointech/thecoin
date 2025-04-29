@@ -44,20 +44,24 @@ export class Agent {
       await page.maybeThrow(new Error("Failed to get to AccountsSummary"))
     }
 
-    const accounts = await processSection(AccountsSummary, page);
-    for (const account of accounts) {
-      if (account.account.account_type == "Credit") {
-        if (sectionsToSkip.includes("CreditAccountDetails")) continue;
-        await processSection(CreditAccountDetails, page, account.nav.data);
-      }
-      else if (account.account.account_type == "Chequing") {
-        if (sectionsToSkip.includes("SendETransfer")) continue;
-        await processSection(SendETransfer, page, input, account.account.account_number);
+    if (!sectionsToSkip.includes("AccountsSummary")) {
+      const accounts = await processSection(AccountsSummary, page);
+      for (const account of accounts) {
+        if (account.account.account_type == "Credit") {
+          if (sectionsToSkip.includes("CreditAccountDetails")) continue;
+          await processSection(CreditAccountDetails, page, account.nav.data);
+        }
+        else if (account.account.account_type == "Chequing") {
+          if (sectionsToSkip.includes("SendETransfer")) continue;
+          await processSection(SendETransfer, page, input, account.account.account_number);
+        }
       }
     }
 
     // Once complete, logout politely
-    await processSection(Logout, page);
+    if (!sectionsToSkip.includes("Logout")) {
+      await processSection(Logout, page);
+    }
 
     log.info(`Finished ${name}`);
 
