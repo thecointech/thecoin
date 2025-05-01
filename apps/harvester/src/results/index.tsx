@@ -110,6 +110,10 @@ export const Results = () => {
     // Trigger file selection
     input.click();
   }
+  const paymentPending = state?.state.toPayVisa
+    ? `${state.state.toPayVisa.format()} - ${state.state.toPayVisaDate?.toLocaleString(DateTime.DATETIME_SHORT)}`
+    : 'N/A'
+
   return (
     <>
       <Dimmer.Dimmable as={Segment} dimmed={running}>
@@ -121,7 +125,7 @@ export const Results = () => {
           <p>Chq Balance: {state?.chq.balance.format() ?? 'N/A'}</p>
           <p>Visa Balance: {state?.visa.balance.format() ?? 'N/A'}</p>
           <p>Harvester Balance: {state?.state.harvesterBalance?.format() ?? 'N/A'}</p>
-          <p>Visa Payment Pending: {state?.state.toPayVisa?.format() ?? 'N/A'}</p>
+          <p>Visa Payment Pending: {paymentPending}</p>
           <p>Last Run: {state?.date.toLocaleString(DateTime.DATETIME_SHORT) ?? 'N/A'}</p>
         </div>
         <div>

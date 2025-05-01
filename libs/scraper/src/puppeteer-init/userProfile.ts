@@ -4,14 +4,12 @@ import os from 'node:os';
 import path from 'node:path';
 import { rootFolder } from './rootFolder';
 import { existsSync } from 'node:fs';
-import { copy } from 'fs-extra';
+import { copy, remove } from 'fs-extra';
 import { log } from '@thecointech/logging';
-
 
 export function getUserDataDir() {
   return path.join(rootFolder(), 'chrome_userdata');
 }
-
 
 function getChromeProfilePath() {
   const platform = os.platform();
@@ -28,9 +26,14 @@ function getChromeProfilePath() {
   }
 }
 
-export async function maybeCopyProfile() {
+export async function maybeCopyProfile(force: boolean = false) {
   const userDataDir = getUserDataDir();
-  if (!existsSync(userDataDir)) {
+  const exists = existsSync(userDataDir);
+  if (!exists || force) {
+    if (exists) {
+      log.debug(`Removing existing Chrome profile`);
+      await remove(userDataDir);
+    }
     // Get the users existing profile (if one exists)
     const chromeProfilePath = getChromeProfilePath();
     if (existsSync(chromeProfilePath)) {

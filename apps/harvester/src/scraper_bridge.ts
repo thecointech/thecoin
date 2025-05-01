@@ -15,9 +15,9 @@ import { getValues, ActionType } from './Harvester/scraper';
 import { AutoConfigParams, autoConfigure } from './Harvester/agent';
 import { BackgroundTaskInfo } from './BackgroundTask';
 import { AskUserReact } from './Harvester/agent/askUser';
-import { Registry } from '@thecointech/scraper';
 import { downloadRequired } from './Download/download';
 import { getScrapingScript } from './results/getScrapingScript';
+import { twofaRefresh as doRefresh } from './Harvester/agent/twofaRefresh';
 
 
 async function guard<T>(cb: () => Promise<T>) {
@@ -65,13 +65,16 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
     return toBridge(r);
   }),
 
-  warmup: (url) => guard(async () => {
-     const instance = await Registry.create({
-      name: 'warmup',
-      context: "default",
-      headless: false,
-     }, url)
-     return !!instance;
+  twofaRefresh: (actionName, refreshProfile) => guard(async () => doRefresh(actionName, refreshProfile, onBgTaskMsg)),
+
+  warmup: (_url) => guard(async () => {
+    return false;
+    //  const instance = await Registry.create({
+    //   name: 'warmup',
+    //   context: "default",
+    //   headless: false,
+    //  }, url)
+    //  return !!instance;
   }),
 
   start: (_actionName, _url, _dynamicInputs) => guard(async () => {
@@ -163,6 +166,7 @@ export function initScraping() {
   ipcMain.handle(actions.validateAction, async (_event, actionName: ActionType, inputValues: Record<string, string>) => {
     return api.validateAction(actionName, inputValues);
   });
+  ipcMain.handle(actions.twofaRefresh, (_event, actionName: ActionType, refreshProfile: boolean) => api.twofaRefresh(actionName, refreshProfile));
 
   ipcMain.handle(actions.replyQuestion, (_event, response) => api.replyQuestion(response));
 

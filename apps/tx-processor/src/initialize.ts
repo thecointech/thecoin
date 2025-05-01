@@ -28,7 +28,6 @@ export async function initialize() {
   if (!signer || !bta) {
     throw new Error("Signers not loaded");
   }
-  log.debug("Signers loaded: ", (!!bta && !!signer))
 
   const contract = await ConnectContract(signer);
   if (!contract) {
@@ -37,7 +36,6 @@ export async function initialize() {
 
   await verifyEtherReserves(signer);
   await verifyCoinReserves(signer, contract);
-  log.debug(`Initialized contract to address: ${await contract.getAddress()}`);
 
   log.debug('Init complete');
   return contract;

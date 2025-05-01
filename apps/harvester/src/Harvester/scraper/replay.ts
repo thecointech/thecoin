@@ -1,5 +1,6 @@
 import { replay } from '@thecointech/scraper';
 import { ReplayResult } from '@thecointech/scraper/types';
+import { getReplayEvents } from '@thecointech/scraper-agent';
 import { ActionType } from './types';
 import { getEvents } from '../events';
 import { BackgroundTaskCallback } from '@/BackgroundTask';
@@ -14,10 +15,11 @@ export async function getValues(actionName: ActionType, callback?: BackgroundTas
 
   const scraperCallbacks = new ScraperCallbacks("replay", callback, [actionName]);
   const events = await getEvents(actionName);
-  if (!events?.length) {
+  const replayEvents = getReplayEvents(events, actionName);
+  if (!replayEvents?.length) {
     throw new Error(`No events found for ${actionName}`);
   }
-  const r = await replay(actionName, events, scraperCallbacks, dynamicValues, delay);
+  const r = await replay(actionName, replayEvents, scraperCallbacks, dynamicValues, delay);
   scraperCallbacks.complete(true);
   return r;
 }

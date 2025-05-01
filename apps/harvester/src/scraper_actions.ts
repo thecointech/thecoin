@@ -28,6 +28,10 @@ export type ScraperBridgeApi = {
   // Validate an action
   validateAction(actionName: ActionType, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,
 
+  // Reset 2FA without doing a full banking setup
+  // Useful if your chequing acc loses it's 2FA token
+  // but you don't want to send unnecessary etransfers
+  twofaRefresh: (actionName: ActionType, refreshProfile: boolean) => Promise<Result<boolean>>,
 
   onAskQuestion: (callback: (question: QuestionPacket|OptionPacket) => void) => void;
   replyQuestion: (response: ResponsePacket) => Promise<Result<boolean>>;
@@ -80,6 +84,8 @@ export const actions = {
 
   autoProcess: 'scraper:autoProcess',
   validateAction: 'scraper:validateAction',
+
+  twofaRefresh: 'scraper:twofaRefresh',
 
   onAskQuestion: 'scraper:onAskQuestion',
   replyQuestion: 'scraper:replyQuestion',

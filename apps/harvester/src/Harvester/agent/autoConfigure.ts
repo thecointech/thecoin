@@ -4,7 +4,6 @@ import { AskUserReact } from "./askUser";
 import { log } from "@thecointech/logging";
 import { type BackgroundTaskCallback } from "@/BackgroundTask/types";
 import { setEvents } from '../events';
-import { stripDuplicateNavigationsSection } from './stripDuplicateEvents';
 import { downloadRequired } from '@/Download/download';
 import { BankType } from '../scraper';
 import { sections } from '@thecointech/scraper-agent/processors/types';
@@ -26,7 +25,7 @@ export async function autoConfigure({ type, name, url, username, password, visib
 
   if (!username || !password) throw new Error("Username and password are required");
 
-  const inputBridge = AskUserReact.newSession(depositAddress);
+  using inputBridge = AskUserReact.newSession(depositAddress);
   inputBridge.setUsername(username);
   inputBridge.setPassword(password);
 
@@ -61,10 +60,7 @@ export async function autoConfigure({ type, name, url, username, password, visib
 }
 
 async function storeEvents(type: BankType, baseNode: EventSection) {
-  // const sectionsToKeep = getSectionsToKeep(type);
-  // const events = flatten(baseNode, sectionsToKeep);
-  const strippedNode = stripDuplicateNavigationsSection(baseNode);
-  await setEvents(type, strippedNode);
+  await setEvents(type, baseNode);
 }
 
 function getSectionsToSkip(type: BankType) : SectionName[] {

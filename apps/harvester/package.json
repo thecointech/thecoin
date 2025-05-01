@@ -7,7 +7,7 @@
   "main": ".webpack/main",
   "type": "commonjs",
   "forge": {
-    "config": "forge.config.mts"
+    "config": "forge.config.mjs"
   },
   "keywords": [],
   "author": {
@@ -30,6 +30,7 @@
     "build": "run -T tsc -b",
     "test": "yarn run :jest",
     "_start:dbg": "yarn run -T cross-env NODE_ENV=development RUN_SCRAPER_HEADLESS=false HARVESTER_PROFILE_FOLDER=\"./.cache/$CONFIG_NAME\" yarn run-env $(yarn bin electron-forge) start",
+    "_start": "yarn run-env $(yarn bin electron-forge) start",
     "_make": "yarn run-env $(yarn bin electron-forge) make"
   },
   "devDependencies": {
