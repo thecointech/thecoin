@@ -98,6 +98,8 @@ describe('Uberconverter delay tests', () => {
         errorMessage: error.message,
         data: error.data,
         transaction: error.transaction,
+        transactionHash: error.transactionHash,
+        stackTrace: error.stackTrace
       });
       throw error;
     }
