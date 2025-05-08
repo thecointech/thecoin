@@ -25,6 +25,7 @@ export async function getClient(config?: ConfigType) {
   return globalThis.__tc_secretClient;
 }
 
+const getConfigName = (config?: ConfigType) => config ?? process.env.CONFIG_ENV ?? process.env.CONFIG_NAME!;
 export async function createClient(config?: ConfigType) {
   const settings: ClientSettings = {
     apiUrl: "https://api.bitwarden.com",
@@ -43,7 +44,7 @@ export async function createClient(config?: ConfigType) {
 
   // Do we have access to the right project?
   const projects = await client.projects().list(organizationId);
-  const configName = config ?? process.env.CONFIG_ENV ?? process.env.CONFIG_NAME!;
+  const configName = getConfigName(config);
   const matching = projects.data.find(p => p.name.includes(configName));
   if (!matching) {
     const projectNames = projects.data.map(p => p.name).join(', ');
@@ -74,7 +75,7 @@ async function getBwsVars(config?: ConfigType) {
   }
 
   // Read our .env file
-  const envName = config || process.env.CONFIG_NAME || "development";
+  const envName = getConfigName(config);
   const envFileName = `bitwarden.${envName}.env`;
   const envPath = path.join(basePath, envFileName);
   if (!existsSync(envPath)) {
