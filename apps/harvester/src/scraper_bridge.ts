@@ -65,7 +65,7 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
     return toBridge(r);
   }),
 
-  twofaRefresh: (actionName, refreshProfile) => guard(async () => doRefresh(actionName, refreshProfile, onBgTaskMsg)),
+  twofaRefresh: (actionName, refreshProfile, showBrowser) => guard(async () => doRefresh(actionName, refreshProfile, showBrowser, onBgTaskMsg)),
 
   warmup: (_url) => guard(async () => {
     return false;
@@ -166,7 +166,7 @@ export function initScraping() {
   ipcMain.handle(actions.validateAction, async (_event, actionName: ActionType, inputValues: Record<string, string>) => {
     return api.validateAction(actionName, inputValues);
   });
-  ipcMain.handle(actions.twofaRefresh, (_event, actionName: ActionType, refreshProfile: boolean) => api.twofaRefresh(actionName, refreshProfile));
+  ipcMain.handle(actions.twofaRefresh, (_event, actionName: ActionType, refreshProfile: boolean, showBrowser: boolean) => api.twofaRefresh(actionName, refreshProfile, showBrowser));
 
   ipcMain.handle(actions.replyQuestion, (_event, response) => api.replyQuestion(response));
 

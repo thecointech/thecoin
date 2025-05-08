@@ -9,12 +9,13 @@ import { isSection } from "@thecointech/scraper-agent/replay/events";
 import { Agent } from "@thecointech/scraper-agent/agent";
 import { AnyEvent, InputEvent } from "@thecointech/scraper";
 import { copyProfile } from "@/Download/profile";
+import { ToggleShowBrowser } from "./toggleShowBrowser";
 
 const ProfileTask = "twofaRefresh";
 
-export async function twofaRefresh(type: ActionType, refreshProfile: boolean, callback: BackgroundTaskCallback) {
+export async function twofaRefresh(type: ActionType, refreshProfile: boolean, showBrowser: boolean, callback: BackgroundTaskCallback) {
 
-  const toProcess = ["Initial", "CookieBanner", "Landing", "Login", "TwoFA"];
+  const toProcess = ["Initial", "CookieBanner", "Landing", "Login", "TwoFA", "Logout"];
   const toSkip = sections.filter(s => !toProcess.includes(s));
   if (refreshProfile) {
     toProcess.push(ProfileTask);
@@ -28,8 +29,10 @@ export async function twofaRefresh(type: ActionType, refreshProfile: boolean, ca
   const logger = new ScraperCallbacks(ProfileTask, callback, toProcess);
 
   if (refreshProfile) {
-    await copyProfile(logger.subTaskCallback);
+    await copyProfile(logger.subTaskCallback, true);
   }
+
+  using _ = new ToggleShowBrowser(showBrowser);
 
   const baseNode = await Agent.process(ProfileTask, getUrl(events), inputBridge, logger, toSkip);
   const wasSuccess = baseNode.events.length > 0; // TODO: baseNode.events[baseNode.events.length - 1]. === "success";

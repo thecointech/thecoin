@@ -12,10 +12,11 @@ export function RefreshTwoFA() {
   const isWorking = !!recordTask && recordTask.completed !== true;
   const [accountType, setAccountType] = useState<ActionType>();
   const [refreshProfile, setRefreshProfile] = useState(true);
+  const [showBrowser, setShowBrowser] = useState(false);
   const disabled = isWorking || !accountType;
 
   const refreshTwoFA = async () => {
-    const r = await window.scraper.twofaRefresh(accountType!, refreshProfile);
+    const r = await window.scraper.twofaRefresh(accountType!, refreshProfile, showBrowser);
     if (r.error) {
       alert(r.error);
     }
@@ -37,6 +38,10 @@ export function RefreshTwoFA() {
             onChange={(_, data) => setAccountType(data.value as ActionType)}
           />
       </Form>
+      <Label>
+        Show Browser
+        <Checkbox onChange={(_, data) => setShowBrowser(!!data.checked)} checked={showBrowser} />
+      </Label>
       <Label>
         Refresh profile
         <Checkbox onChange={(_, data) => setRefreshProfile(!!data.checked)} checked={refreshProfile} />
