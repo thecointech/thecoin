@@ -16,49 +16,51 @@ function resolveModulePath(moduleSpecifier: string) {
   return new URL(moduleUrl).pathname; // Extract the pathname
 }
 
-const PolygonscanApiKey = await getSecret("PolygonscanApiKey");
-
-const baseOptions: Configuration = {
-  module: {
-    rules,
-  },
-  plugins: [
-    ...plugins,
-    // NOTE: This is used only by
-    new webpack.DefinePlugin({
-      "process.env.LOG_NAME": JSON.stringify(process.env.LOG_NAME),
-      __COMPILER_REPLACE_SECRETS__: JSON.stringify({PolygonscanApiKey}),
-    }),
-  ],
-  externals: {
-    electron: 'commonjs electron'
-  },
-  resolve: {
-    extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
-    conditionNames: [env.CONFIG_NAME!, "electron", "browser", "webpack", "import", "default"],
-    modules: [path.resolve(process.cwd(), 'src'), 'node_modules'],
-    fallback: {
-      "crypto": resolveModulePath("crypto-browserify"),
-      "stream": resolveModulePath("stream-browserify"),
-      "path": resolveModulePath("path-browserify"),
-      "http": false,
-      "fs": false,
-      "vm": false,
+const baseOptions = async () : Promise<Configuration> => {
+  const PolygonscanApiKey = await getSecret("PolygonscanApiKey");
+  return {
+    module: {
+      rules,
     },
-    // For reasons I don't understand, the babel interop helpers import
-    // the ESM version even when required.
-    alias: {
-      "@babel/runtime/helpers/interopRequireDefault": `${rootPath}/node_modules/@babel/runtime/helpers/interopRequireDefault.js`,
-      "@babel/runtime/helpers/interopRequireWildcard": `${rootPath}/node_modules/@babel/runtime/helpers/interopRequireWildcard.js`
+    plugins: [
+      ...plugins,
+      // NOTE: This is used only by
+      new webpack.DefinePlugin({
+        "process.env.LOG_NAME": JSON.stringify(process.env.LOG_NAME),
+        __COMPILER_REPLACE_SECRETS__: JSON.stringify({PolygonscanApiKey}),
+      }),
+    ],
+    externals: {
+      electron: 'commonjs electron'
     },
-  },
-  experiments: {
-    topLevelAwait: true,
-  },
+    resolve: {
+      extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
+      conditionNames: [env.CONFIG_NAME!, "electron", "browser", "webpack", "import", "default"],
+      modules: [path.resolve(process.cwd(), 'src'), 'node_modules'],
+      fallback: {
+        "crypto": resolveModulePath("crypto-browserify"),
+        "stream": resolveModulePath("stream-browserify"),
+        "path": resolveModulePath("path-browserify"),
+        "http": false,
+        "fs": false,
+        "vm": false,
+      },
+      // For reasons I don't understand, the babel interop helpers import
+      // the ESM version even when required.
+      alias: {
+        "@babel/runtime/helpers/interopRequireDefault": `${rootPath}/node_modules/@babel/runtime/helpers/interopRequireDefault.js`,
+        "@babel/runtime/helpers/interopRequireWildcard": `${rootPath}/node_modules/@babel/runtime/helpers/interopRequireWildcard.js`
+      },
+    },
+    experiments: {
+      topLevelAwait: true,
+    },
+  }
 };
 
-export const rendererConfig = merge(
+export const getRendererConfig = async (custom: Configuration = {}) => merge(
+  custom,
   getMocks(env),
-  baseOptions,
-  commonBase
+  await baseOptions(),
+  commonBase,
 );

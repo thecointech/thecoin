@@ -5,7 +5,7 @@ import { MakerDeb } from '@electron-forge/maker-deb';
 import { utils } from '@electron-forge/core';
 import { WebpackPlugin } from '@electron-forge/plugin-webpack';
 import { mainConfig } from '@thecointech/electron-utils/webpack/webpack.main.config';
-import { rendererConfig } from '@thecointech/electron-utils/webpack/webpack.renderer.config';
+import { getRendererConfig } from '@thecointech/electron-utils/webpack/webpack.renderer.config';
 import { getCSP } from './config/csp.mjs';
 import webpack from 'webpack';
 import { getSecret } from '@thecointech/secrets';
@@ -13,7 +13,6 @@ import path from 'path';
 import { writeFileSync } from 'fs';
 import ForgeExternalsPlugin from '@timfish/forge-externals-plugin';
 
-console.log("Loading Webpack");
 // Native modules are marked as external and copied manually
 // in the ForgeExternalsPlugin below.
 const nativeModules = [
@@ -25,7 +24,6 @@ const nativeModules = [
 ]
 
 const vqaApiKey = await getSecret("VqaApiKey");
-
 const mainConfigMerged = mainConfig({
   plugins: [
     new webpack.DefinePlugin({
@@ -90,7 +88,7 @@ const config = {
       devContentSecurityPolicy: getCSP(),
       mainConfig: mainConfigMerged,
       renderer: {
-        config: rendererConfig,
+        config: await getRendererConfig(),
         entryPoints: [
           {
             html: './src/index.html',

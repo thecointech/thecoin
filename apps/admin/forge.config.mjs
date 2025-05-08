@@ -5,7 +5,7 @@ import { MakerRpm } from '@electron-forge/maker-rpm';
 import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives';
 import { WebpackPlugin } from '@electron-forge/plugin-webpack';
 import { mainConfig } from '@thecointech/electron-utils/webpack/webpack.main.config';
-import { rendererConfig } from '@thecointech/electron-utils/webpack/webpack.renderer.config';
+import { getRendererConfig } from '@thecointech/electron-utils/webpack/webpack.renderer.config';
 import path from 'path';
 import { writeFileSync } from 'fs';
 
@@ -30,7 +30,7 @@ const config = {
     new WebpackPlugin({
       mainConfig: mainConfigMerged,
       renderer: {
-        config: rendererConfig,
+        config: await getRendererConfig(),
         entryPoints: [
           {
             html: './src/index.html',
