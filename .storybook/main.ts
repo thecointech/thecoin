@@ -30,6 +30,7 @@ const config: StorybookConfig = {
     const shared_loaders = await import('@thecointech/site-semantic-theme/webpack.less');
 
     const r = merge(
+      config,
       {
         module: {
           rules: [
@@ -62,8 +63,8 @@ const config: StorybookConfig = {
           },
           modules: [mocksFolder],
         },
-      },
-      config);
+        devtool: "eval-source-map",
+      });
     // Exclude our build folder from compilation.
     // This is because shared/site-base build to ES2017
     // which somehow breaks the FormatJS babel plugin.
