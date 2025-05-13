@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/logging",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "description": "The Coin: Common logging setup",
   "type": "module",
   "keywords": [

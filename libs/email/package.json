@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/email",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "description": "The Coin: auto-mailing library.  Not for external user really",
   "type": "module",
   "keywords": [
@@ -37,8 +37,8 @@
     }
   },
   "dependencies": {
-    "@thecointech/logging": "^0.3.9",
-    "@thecointech/secrets": "^0.3.3",
+    "@thecointech/logging": "^0.3.10",
+    "@thecointech/secrets": "^0.3.10",
     "node-mailjet": "^4.0.1"
   },
   "devDependencies": {
