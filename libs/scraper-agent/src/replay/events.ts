@@ -10,12 +10,16 @@ export function getReplayEvents(baseNode: EventSection, type: ActionType): AnyEv
   return stripDuplicateNavigations(events);
 }
 
-export function flatten(section: EventSection, sectionsToKeep: SectionName[]): AnyEvent[] {
+export function isSection(event: EventSection|AnyEvent): event is EventSection {
+  return 'section' in event;
+}
+
+export function flatten(section: EventSection, sectionsToKeep?: SectionName[]): AnyEvent[] {
   const events: AnyEvent[] = [];
-  const shouldKeep = sectionsToKeep.includes(section.section);
+  const shouldKeep = sectionsToKeep?.includes(section.section) ?? true;
 
   for (const event of section.events) {
-    if ('section' in event) {
+    if (isSection(event)) {
       // This is another EventSection, recurse into it
       const subEvents = flatten(event, sectionsToKeep);
       events.push(...subEvents);

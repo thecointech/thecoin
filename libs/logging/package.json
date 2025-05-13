@@ -30,6 +30,7 @@
   "exports": {
     ".": {
       "node": "./build/log_node.js",
+      "gcloud": "./build/gcloud.js",
       "default": "./build/log_browser.js"
     }
   },

@@ -4,6 +4,7 @@ import { log } from '@thecointech/logging';
 import { AuthOptions, Credentials, isCredentials } from './types';
 import { getPage } from './scraper';
 import { getSecret } from '@thecointech/secrets';
+import { DateTime } from 'luxon';
 
 ////////////////////////////////////////////////////////////////
 // API action, a single-shot action created by the API.
@@ -46,8 +47,11 @@ export class ApiAction {
     if (process.env.TC_LOG_FOLDER) {
       const base = process.env.TC_LOG_FOLDER;
       const illegalRe = /[\/\?<>\\:\*\|":]/g;
+      const now = DateTime.now();
+      const date = now.toFormat('yyyy-MM-dd');
+      const time = now.toFormat('HH-mm-ss');
       const ident = identifier.replace(illegalRe, '_');
-      this.outCache = `${base}/rbcapi/Screenshots/${ident}`;
+      this.outCache = `${base}/rbcapi/Screenshots/${date}/${time}-${ident}`;
       fs.mkdirSync(this.outCache, { recursive: true });
     }
   }
@@ -180,7 +184,7 @@ export class ApiAction {
   async clickOnText<K extends keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap>(text: string, type: K, waitElement?: string, stepName?: string) {
     const [link] = await this.findElementsWithText(type, text);
     if (!link)
-      throw (`Could not find element ${type} with text: ${text}`)
+      throw new Error(`Could not find element ${type} with text: ${text}`)
 
     await link.click();
     await this.page.waitForNavigation();

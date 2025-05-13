@@ -7,6 +7,11 @@ type BaseQuestionType = {
   sessionId: string;
   questionId: string;
 }
+
+export type ConfirmPacket = {
+  confirm: string;
+} & BaseQuestionType;
+
 export type QuestionPacket = {
   question: string;
 } & BaseQuestionType;
@@ -21,13 +26,13 @@ export type Option2DPacket = {
 } & BaseQuestionType;
 export type ResponsePacket = ({
   // Value is either the response for a question or a SelectOption
-  value: string | {
+  value: string | boolean | {
     name: string;
     option: string
   }
 }) & BaseQuestionType;
 
-export type AnyQuestionPacket = QuestionPacket | OptionPacket | Option2DPacket;
+export type AnyQuestionPacket = QuestionPacket | ConfirmPacket | OptionPacket | Option2DPacket;
 
 type DeferredPromise<T> = {
   promise: Promise<T>;
@@ -40,14 +45,14 @@ enum QuestionId {
   Password = 'password',
   Recipient = 'recipient'
 }
-export class AskUserReact implements IAskUser {
+export class AskUserReact implements IAskUser, Disposable {
   sessionID = randomUUID();
   depositAddress: string;
   responses: Record<string, DeferredPromise<any>> = {};
   static __instances: Record<string, AskUserReact> = {};
 
-  private constructor(depositAddress: string) {
-    this.depositAddress = depositAddress;
+  private constructor(depositAddress?: string) {
+    this.depositAddress = depositAddress ?? "--unused--";
     this.addDeferredResponse(QuestionId.Username);
     this.addDeferredResponse(QuestionId.Password);
     AskUserReact.__instances[this.sessionID] = this;
@@ -111,26 +116,21 @@ export class AskUserReact implements IAskUser {
   }
 
   forValue(question: string, options?: string[]): Promise<string> {
-
-    const mainWindow = getMainWindow();
-    const questionId = randomUUID();
-    const responsePromise = this.addDeferredResponse(questionId);
-    const packet: QuestionPacket = { question, sessionId: this.sessionID, questionId };
+    const packet = { question };
     if (options) {
       (packet as OptionPacket).options = options;
     }
-    mainWindow!.webContents.send(actions.onAskQuestion, packet);
-    return responsePromise;
+    return this.sendQuestion(packet)
   }
 
   selectOption(question: string, options2d: NamedOptions[]): Promise<NamedResponse> {
-    const mainWindow = getMainWindow();
-    const questionId = randomUUID();
-    const responsePromise = this.addDeferredResponse<NamedResponse>(questionId);
-    const packet: Option2DPacket = { question, options2d, sessionId: this.sessionID, questionId };
-    mainWindow!.webContents.send(actions.onAskQuestion, packet);
-    return responsePromise;
+    return this.sendQuestion<NamedResponse>({ question, options2d });
   }
+
+  forConfirm(confirm: string): Promise<boolean> {
+    return this.sendQuestion<boolean>({confirm});
+  }
+
   forUsername(): Promise<string> {
     return this.responses[QuestionId.Username].promise;
   }
@@ -142,7 +142,20 @@ export class AskUserReact implements IAskUser {
     return this.responses['recipient'].promise;
   }
 
-  static newSession(depositAddress: string) {
+
+  sendQuestion<T = string>(packet: Omit<AnyQuestionPacket, "sessionId" | "questionId">): Promise<T> {
+    const mainWindow = getMainWindow();
+    const questionId = randomUUID();
+    const responsePromise = this.addDeferredResponse<T>(questionId);
+    mainWindow!.webContents.send(actions.onAskQuestion, {
+      ...packet,
+      sessionId: this.sessionID,
+      questionId
+    });
+    return responsePromise;
+  }
+
+  static newSession(depositAddress?: string) {
     const instance = new AskUserReact(depositAddress);
     return instance;
   }
@@ -155,5 +168,9 @@ export class AskUserReact implements IAskUser {
     }
     this.__instances[id].clearUnresolved();
     delete this.__instances[id];
+  }
+
+  [Symbol.dispose]() {
+    AskUserReact.endSession(this.sessionID);
   }
 }

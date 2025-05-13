@@ -184,6 +184,8 @@ const thingsToDisplayProperties = (props: GraphHistoryProps) => {
     properties.layers!.push(RawLineLayer)
   }
   else {
+    // The default view includes the raw fiat value
+    // shown as a step line
     properties.layers!.push(StepLineLayer)
   }
   return properties;

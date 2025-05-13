@@ -4,12 +4,15 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { BackgroundTaskReducer, getTaskGroup } from '@/BackgroundTask';
 import { BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
+import { QuestionResponse } from '@/Agent/QuestionResponse';
 
 export const Browser = () => {
 
   const [hasInstalled, setHasInstalled] = useState(false);
   const tasks = BackgroundTaskReducer.useData();
   const initializeTask = getTaskGroup(tasks, 'initialize');
+
+  const isWorking = !!initializeTask && initializeTask.completed !== true;
 
   useEffect(() => {
     window.scraper.hasInstalledBrowser().then(r => setHasInstalled(r.value ?? false))
@@ -36,9 +39,10 @@ export const Browser = () => {
         Your harvester requires several libraries to function.  These can be downloaded below.
       </h4>
       <OnCompleteMessage complete={hasInstalled} />
+      <QuestionResponse isRecording={isWorking} />
       <BackgroundTaskProgressBar type="initialize" />
       <div>
-        <Button onClick={startDownload}>Download</Button>
+        <Button onClick={startDownload} disabled={isWorking} loading={isWorking}>Download</Button>
       </div>
       <div>
         <Link to="/account/login">Setup your Account</Link>
