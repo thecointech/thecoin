@@ -8,6 +8,7 @@ import { getTransactions, fetchLatestTransactions } from './transactions';
 import { depositETransfer } from './deposit';
 import { send } from './etransfer';
 import { payBill } from './bills';
+import { getBalance } from './balance';
 
 // One more forced publish
 export class RbcApi implements IBank {
@@ -16,6 +17,7 @@ export class RbcApi implements IBank {
   // specified, attempt to read the RBCAPI_CREDENTIALS environment variable
   private constructor() {}
 
+  getBalance = getBalance;
   depositETransfer = depositETransfer;
   fetchLatestTransactions = fetchLatestTransactions;
   getTransactions = getTransactions;

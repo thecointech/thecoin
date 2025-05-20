@@ -2,7 +2,7 @@
   "name": "thecoin-admin",
   "private": true,
   "productName": "thecoin-admin",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "description": "Admin: audit TheCoin system ops",
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
@@ -39,12 +39,12 @@
     "eslint-plugin-import": "^2.25.0"
   },
   "dependencies": {
-    "@thecointech/contract-core": "^0.3.9",
-    "@thecointech/shared": "^0.3.9",
-    "@thecointech/tx-bill": "^0.3.9",
-    "@thecointech/tx-deposit": "^0.3.9",
-    "@thecointech/tx-etransfer": "^0.3.9",
-    "@thecointech/tx-statemachine": "^0.3.9",
+    "@thecointech/contract-core": "^0.3.10",
+    "@thecointech/shared": "^0.3.10",
+    "@thecointech/tx-bill": "^0.3.10",
+    "@thecointech/tx-deposit": "^0.3.10",
+    "@thecointech/tx-etransfer": "^0.3.10",
+    "@thecointech/tx-statemachine": "^0.3.10",
     "electron-squirrel-startup": "^1.0.0",
     "semantic-ui-css": "^2.4.1"
   }

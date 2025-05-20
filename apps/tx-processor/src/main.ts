@@ -5,10 +5,12 @@ import { exit } from 'process';
 import { initialize, release } from './initialize';
 import { processReferrals } from './referrals';
 import { processTransfers } from './transfers';
+import { verifyBank } from './verifyBank';
 
 async function Process() {
   const contract = await initialize();
   const bank = await RbcApi.create();
+  await verifyBank(bank);
   await processTransfers(contract, bank);
   await processReferrals();
 
