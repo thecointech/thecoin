@@ -7,16 +7,16 @@ const BankLastCheckKey = "bank.lastCheck";
 export async function verifyBank(bank: RbcApi) {
   const lastCheck = await ConfigStore.get(BankLastCheckKey);
   if (lastCheck && Number(lastCheck) > Date.now() - OneDay) {
-    log.debug("Skipping Bank Check");
+    log.trace("Skipping Bank Check");
     return;
   }
 
   const balance = await bank.getBalance();
   if (balance < 3000) {
-    log.error(`Bank balance too low: ${balance}`);
+    log.error({ balance }, 'Bank balance too low: {balance}');
   }
   else {
-    log.debug(`Bank balance: ${balance}`);
+    log.debug({ balance }, 'Bank balance: {balance}');
   }
   await ConfigStore.set(BankLastCheckKey, Date.now().toString());
 }
