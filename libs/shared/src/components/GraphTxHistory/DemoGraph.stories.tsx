@@ -156,6 +156,11 @@ const DemoGraph = (args: typeof defaultArgs) => {
       data={datum}
       colors={theme.lineColors}
       theme={theme}
+      tooltip={point => {
+        return <div style={{ padding: '5px', border: '1px solid lightgray', borderRadius: '5px', backgroundColor: 'lightgray' }}>
+          Day {point.point.data.x}: ${Number(point.point.data.y).toFixed(2)}
+          </div>
+      }}
 
       // Basic properties
       enableSlices="x"
@@ -211,6 +216,10 @@ const axisProperties = (minMax: MinMax, weeks: number): Partial<LineSvgProps> =>
   // Create tick values for every week (every 7 days)
   const tickValues = Array.from({ length: weeks + 1 }, (_, i) => i * 7);
 
+  const ratio = minMax.min / (minMax.max - minMax.min);
+  const offset = 0.5 + ratio;
+  console.log(JSON.stringify(minMax), " - ratio - ", ratio, " - offset - ", offset)
+
   return {
     axisBottom: {
       format: (value) => {
@@ -221,8 +230,10 @@ const axisProperties = (minMax: MinMax, weeks: number): Partial<LineSvgProps> =>
       tickSize: 5,
       tickPadding: 5,
       renderTick: ({ x, y, value, format }) => {
+        const translateY = 72 + (1000 * ratio) - (offset * 150)
+        console.log("TranslateY:", translateY)
         return (
-          <g transform={`translate(${x},-428)`}>
+          <g transform={`translate(${x},${translateY})`}>
             <line stroke="#555555" y1={-3} y2={3} />
             <text
               textAnchor="middle"
@@ -291,7 +302,7 @@ const thingsToDisplayProperties = () => {
       'axes',
       //'lines',
       //'points',
-      "crosshair",
+      // "crosshair",
       'mesh',
       "legends",
       DashedLine,
