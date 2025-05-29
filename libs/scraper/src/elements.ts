@@ -9,8 +9,13 @@ declare global {
   interface Window {
     getElementData: (el: HTMLElement, skipSibling?: boolean) => ElementData|null;
     getCoords: (el: HTMLElement) => Coords;
+    MAX_SIBLING_DISTANCE: number;
   }
 }
+
+// How far (up/down) to look for column siblings
+const MAX_SIBLING_DISTANCE = 50;
+const BUCKET_PIXELS = 10
 
 export async function getElementForEvent(page: Page, event: ElementDataMin, timeout=30000, minScore=70, maxTop=Number.MAX_VALUE) {
 
@@ -189,6 +194,7 @@ export async function registerElementAttrFns(page: Page) {
     eval(`window.getElementText = ${fns.getElementText};`)
     eval(`window.getSiblingText = ${fns.getSiblingText};`)
     eval(`window.getCoords = ${fns.getCoords};`)
+    window.MAX_SIBLING_DISTANCE = fns.MAX_SIBLING_DISTANCE;
     window.getElementData = (el: HTMLElement, skipSibling?: boolean) => {
       const rawProps = getElementProps(el);
       if (!rawProps.selector) return null;
@@ -223,6 +229,7 @@ export async function registerElementAttrFns(page: Page) {
     getElementText: getElementText.toString(),
     getSiblingText: getSiblingText.toString(),
     getCoords: getCoords.toString(),
+    MAX_SIBLING_DISTANCE: MAX_SIBLING_DISTANCE,
   });
 }
 
@@ -367,15 +374,26 @@ function getElementText(elem: Element) {
 const getSiblingText = (elcoords: Coords, allText: Pick<ElementData, 'coords'|'nodeValue'>[]) => allText
   .filter(c => !!c.nodeValue)
   .filter(candidate => {
-    // Is this a row?
+    // Is this a row or column?
     const rowcoords = candidate.coords;
     // If it's off the edge of the page ignore it
     if (rowcoords.left < 0 || rowcoords.top < 0) return false;
     // If it's too large ignore it
     if (rowcoords.height > (elcoords.height * 3)) return false;
     // Is it centered on this node?
-    // We allow for slight offsets of generally 2/3 pixels
-    return Math.abs(rowcoords.centerY - elcoords.centerY) < 2
+    return (
+      // Is it a row?  We allow for slight offsets of generally 2/3 pixels
+      Math.abs(rowcoords.centerY - elcoords.centerY) < 2 ||
+      // Is it a column?  Check immediately above/below
+      (
+        Math.abs(rowcoords.top - elcoords.top) < MAX_SIBLING_DISTANCE && (
+          // Left-aligned
+          Math.abs(rowcoords.left - elcoords.left) < 2 ||
+          // Right-aligned
+          Math.abs((rowcoords.left + rowcoords.width) - (elcoords.left + elcoords.width)) < 2
+        )
+      )
+    )
   })
   .map(c => c.nodeValue) as string[];
 
@@ -423,7 +441,6 @@ export const getAllElements = async (frame: Page|Frame, maxTop: number, querySel
     }, [] as SearchElement[])
 }
 
-const BUCKET_PIXELS = 10
 const getBucketIdx = (coords: Coords) => Math.floor(coords.centerY / BUCKET_PIXELS);
 
 // fill out sibling text for each element in the tree.
@@ -438,6 +455,8 @@ const fillOutSiblingText = (allElements: SearchElement[]) => {
     else bucketed[idx].push(el)
   }
 
+  const maxBucketDistance = Math.floor(MAX_SIBLING_DISTANCE / BUCKET_PIXELS);
+
   // Now fill out the siblings
   for (let bidx = 0; bidx < bucketed.length; bidx++) {
     const bucket = bucketed[bidx];
@@ -445,15 +464,12 @@ const fillOutSiblingText = (allElements: SearchElement[]) => {
 
     for (let i = 0; i < bucket.length; i++) {
       const el = bucket[i];
-      const elcoords = el.data.coords;
-      const neighbours = (elcoords.centerY % BUCKET_PIXELS)  < (BUCKET_PIXELS / 2)
-        ? bucketed[bidx - 1]
-        : bucketed[bidx + 1]
 
-      const candidates = [
-        ...bucket.filter(e => e != el),
-        ...(neighbours || [])
-      ].filter(el => !!el.data.nodeValue)
+      // Get all buckets within 5 buckets of this one
+      const candidates = bucketed
+        .filter((_, i) => Math.abs(bidx - i) < maxBucketDistance)
+        .flat()
+        .filter(c => c != el)
 
       el.data.siblingText = getSiblingText(el.data.coords, candidates.map(c => c.data));
     }
