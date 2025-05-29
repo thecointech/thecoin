@@ -32,15 +32,10 @@ export class PayVisa implements ProcessingStage {
     // state.toPayVisaDate is the date of the payment, not the due date
     const lastDueDate = getDataAsDate(PayVisaKey, data.state.stepData);
 
-    // If the due amount is negative, there is nothing to pay and we skip
-    if (data.visa.dueAmount.value < 0) {
-      log.info('PayVisa: Due amount is negative, skipping payment');
-      return {};
-    }
-
     if (!lastDueDate || (data.visa.dueDate > lastDueDate)) {
 
       log.info('PayVisa: Prepping payment request');
+
       // We better pay that due amount
       const dateToPay = await getDateToPay(data.visa.dueDate, this.daysPrior);
       log.info('PayVisa: dateToPay', dateToPay.toISO());
@@ -68,6 +63,23 @@ async function sendPayment(dateToPay: DateTime, data: HarvestData, { wallet, cre
     amount: data.visa.dueAmount,
     dateToPay: dateToPay.toISO(),
   }, "PayVisa: Prepping visa payment of {amount} on {dateToPay}")
+
+  // If the due amount is negative, there is nothing to pay and we skip
+  if (data.visa.dueAmount.value < 0) {
+    log.info('PayVisa: Due amount is negative, skipping payment');
+    notify({
+      icon: 'money.png',
+      title: 'No payment required',
+      message: `Visa due balance of ${data.visa.dueAmount} is negative and does not require a payment.`,
+    })
+    return {
+      toPayVisa: currency(0),
+      toPayVisaDate: dateToPay,
+      stepData: {
+        [PayVisaKey]: data.visa.dueDate.toISO()!,
+      }
+    }
+  }
 
   const payment = await BuildUberAction(
     creditDetails,

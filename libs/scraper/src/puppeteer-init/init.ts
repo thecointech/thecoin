@@ -28,8 +28,12 @@ async function getPage(contextName = "default", headless?: boolean) {
     const { browser, contexts } = globalThis.__scraper__;
     let context = contexts[contextName];
     if (!context) {
+      log.debug(`Creating new context: ${contextName}`);
       context = await browser.createBrowserContext();
       contexts[contextName] = context;
+    }
+    else {
+      log.debug(`Using existing context: ${contextName}`);
     }
     return { browser, page: await context.newPage() };
   }
@@ -42,6 +46,12 @@ async function getPage(contextName = "default", headless?: boolean) {
     executablePath,
     userDataDir: getUserDataDir(),
     args: [
+      // TODO: Fix sandboxing on linux to resolve the following error in a better way
+      // No usable sandbox! If you are running on Ubuntu 23.10+ or another
+      // Linux distro that has disabled unprivileged user namespaces with AppArmor...
+      '--no-sandbox',
+      '--disable-setuid-sandbox'
+
       // "--disable-accelerated-2d-canvas",
       // "--disable-gpu",
       // We can safely disable site isolation as

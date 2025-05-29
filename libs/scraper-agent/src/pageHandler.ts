@@ -98,24 +98,49 @@ export class PageHandler {
   // Isolated sections require their own page
   // This is an exception for account processing
   // where we don't want to modify the current page.
+  // NOTE: If the new page fails to load, we reuse
+  // the original page and simply navigate back to the original URL
   async pushIsolatedSection(subName: SectionType) {
 
     using _ = this.eventManager.pause();
     const cachedThis = this;
-    this.recorderStack.push(await this.recorder.clone(subName));
+    const url = this.page.url();
+    const sectionPage = await this.recorder.clone(subName);
 
     // Page should be loaded, but that doesn't mean it's ready.
     // Take the extra wait here just to ensure we don't miss anything
-    await waitForValidIntent(this.page);
-    await waitPageStable(this.page);
+    const intent = await waitForValidIntent(sectionPage.page);
+    await waitPageStable(sectionPage.page);
+
+    // We only push the page if it has a valid intent
+    // This could fail if the new page fails to load
+    // (linux/tangerine remains blank for some reason)
+    if (intent) {
+      log.debug("Pushing isolated section");
+      this.recorderStack.push(sectionPage);
+    }
+    else {
+      // If the page failed to load, we just dispose of it
+      log.warn("Failed to load isolated section, disposing and continuing with main page");
+      await sectionPage[Symbol.asyncDispose]();
+    }
+
     let events: IEventSectionManager|null = this.eventManager.pushSection(subName);
     return {
       cancel: () => events?.cancel(),
       async [Symbol.asyncDispose]() {
         await events?.[Symbol.asyncDispose]()
-        await cachedThis.recorderStack.pop()![Symbol.asyncDispose]();
-        // If we've left the main page for a little too long, ensure the session isn't timing out
-        await cachedThis.checkSessionLogin();
+        if (intent) {
+          log.debug("Popping isolated section");
+          await cachedThis.recorderStack.pop()![Symbol.asyncDispose]();
+          // If we've left the main page for a little too long, ensure the session isn't timing out
+          await cachedThis.checkSessionLogin();
+        }
+        else {
+          log.debug("Not popping isolated section, navigating back to main page");
+          // we're still using the main page, navigate back to the original URL
+          await cachedThis.page.goto(url);
+        }
       }
     }
   }
