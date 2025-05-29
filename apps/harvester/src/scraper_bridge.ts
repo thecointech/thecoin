@@ -121,6 +121,20 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
     return JSON.stringify(config, null, 2);
   }),
 
+  hasUserEnabledLingering: () => guard(async () => {
+    const config = await getHarvestConfig();
+    return !!config?.isLingeringEnabled;
+  }),
+
+  enableLingeringForCurrentUser: () => guard(async () => {
+    const { enableLingeringForCurrentUser } = await import('./Harvester/schedule/linux-lingering');
+    const result = await enableLingeringForCurrentUser();
+    if (result.success) {
+      await setHarvestConfig({ isLingeringEnabled: true });
+    }
+    return result;
+  }),
+
   openLogsFolder: () => guard(async () => {
     openFolder(logsFolder);
     return true;
@@ -218,6 +232,13 @@ export function initScraping() {
   })
   ipcMain.handle(actions.exportConfig, async (_event) => {
     return api.exportConfig();
+  })
+
+  ipcMain.handle(actions.hasUserEnabledLingering, async (_event) => {
+    return api.hasUserEnabledLingering();
+  })
+  ipcMain.handle(actions.enableLingeringForCurrentUser, async (_event) => {
+    return api.enableLingeringForCurrentUser();
   })
 
   ipcMain.handle(actions.openLogsFolder, async (_event) => {

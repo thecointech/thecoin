@@ -7,12 +7,12 @@ export const CONFIG_KEY = "config";
 
 // The initial state of the App
 const stored = await window.scraper.getHarvestConfig();
-export const initialState: HarvestConfig = stored.value ?? {
-  schedule: {
+export const initialState: HarvestConfig = {
+  schedule: stored.value?.schedule ?? {
     daysToRun: defaultDays,
     timeToRun: defaultTime,
   },
-  steps: defaultSteps,
+  steps: stored.value?.steps ?? defaultSteps,
 }
 
 export class ConfigReducer extends BaseReducer<IActions, HarvestConfig>(CONFIG_KEY, initialState)
@@ -34,5 +34,15 @@ export class ConfigReducer extends BaseReducer<IActions, HarvestConfig>(CONFIG_K
   }
   clearStep(type: HarvestStepType): void {
     this.draftState.steps = removeStep(type, this.state.steps)
+  }
+
+  resetToDefault(): void {
+    this.draftState = {
+      schedule: {
+        daysToRun: defaultDays,
+        timeToRun: defaultTime,
+      },
+      steps: defaultSteps,
+    };
   }
 }

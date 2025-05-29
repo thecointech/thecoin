@@ -1,4 +1,5 @@
-import { Checkbox, Container } from 'semantic-ui-react'
+import { useEffect, useState } from 'react';
+import { Checkbox, Container, Button, Icon, Message } from 'semantic-ui-react';
 import { ConfigReducer } from './state/reducer'
 import { Info } from 'luxon';
 import { DaysArray } from '../types';
@@ -30,8 +31,51 @@ export const DaysToRun = () => {
         <DayToggle day={5} />
         <DayToggle day={6} />
       </div>
+      <EnableLingeringButton />
     </Container>
   )
+}
+
+const EnableLingeringButton = () => {
+
+  if (process.env.BUILD_OS !== "linux") {
+    return null;
+  }
+  const [enabled, setEnabled] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    window.scraper.hasUserEnabledLingering().then(res => {
+      setEnabled(!!res.value);
+    });
+  }, []);
+
+  const handleEnable = async () => {
+    setLoading(true);
+    setError(null);
+    const res = await window.scraper.enableLingeringForCurrentUser();
+    setLoading(false);
+    if (res.error) {
+      setError(res.error);
+    } else {
+      setEnabled(true);
+    }
+  };
+
+  if (enabled) {
+    return <div style={{ marginTop: 16 }}><Icon name="check circle" color="green" />Lingering enabled</div>;
+  }
+  return (
+    <div style={{ marginTop: 16 }}>
+      <div>(Optional) For best results, enable the harvester to run even after you log out.</div>
+      <div>This ensures the run is not interrupted by you logging out.</div>
+      <Button loading={loading} disabled={loading} onClick={handleEnable}>
+        Enable Lingering
+      </Button>t
+      {error && <Message negative>{error}</Message>}
+    </div>
+  );
 }
 
 type DayToggleProps = {

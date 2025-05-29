@@ -27,7 +27,10 @@ export type ConfigShape = {
 
   // If the user has a single bank, we can use
   // the same scraping config for both
-  scraping?: ScrapingConfig
+  scraping?: ScrapingConfig,
+
+  // Lingering (systemd user background)
+  isLingeringEnabled?: boolean;
 
 } & HarvestConfig;
 

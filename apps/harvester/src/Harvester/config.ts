@@ -69,6 +69,7 @@ export async function setProcessConfig(config: Partial<ConfigShape>) {
       daysToRun: config.schedule?.daysToRun ?? lastCfg?.schedule?.daysToRun ?? defaultDays,
       timeToRun: config.schedule?.timeToRun ?? lastCfg?.schedule?.timeToRun ?? defaultTime,
     },
+    isLingeringEnabled: config.isLingeringEnabled ?? lastCfg?.isLingeringEnabled,
     stateKey: config.stateKey ?? lastCfg?.stateKey,
     wallet: config.wallet ?? lastCfg?.wallet,
     creditDetails: config.creditDetails ?? lastCfg?.creditDetails,
@@ -135,13 +136,16 @@ export async function getHarvestConfig() {
     ? {
         steps: config.steps,
         schedule: config.schedule,
+        isLingeringEnabled: config.isLingeringEnabled,
       }
     : undefined;
 }
 
-export async function setHarvestConfig(config: HarvestConfig) {
-  const existing = await getHarvestConfig();
-  await setSchedule(config.schedule, existing?.schedule);
+export async function setHarvestConfig(config: Partial<HarvestConfig>) {
+  if (config.schedule) {
+    const existing = await getHarvestConfig();
+    await setSchedule(config.schedule, existing?.schedule);
+  }
   await setProcessConfig(config)
   return true;
 }
