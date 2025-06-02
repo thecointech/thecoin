@@ -139,7 +139,7 @@ export const Results = () => {
         </div>
         <div>
           <Button onClick={runImmediately}>Run Harvester Now</Button>
-          <Checkbox onClick={(_, {checked}) => setVisible(checked)} checked={visible} label="Visible" />
+          <Checkbox onClick={(_, {checked}) => setVisible(checked)} checked={visible} label="Override Visibility" />
         </div>
       </Dimmer.Dimmable>
       <BackgroundTaskProgressBar type='replay' />

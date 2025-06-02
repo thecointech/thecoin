@@ -48,8 +48,6 @@ export type HarvestSchedule = {
 export type HarvestConfig = {
   schedule: HarvestSchedule,
   steps: HarvestSteps,
-  // Remember if lingering has been enabled prior
-  isLingeringEnabled?: boolean,
 }
 
 // Until we have a proper graph, just explicitly set an order

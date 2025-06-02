@@ -25,6 +25,7 @@ export async function getIsVisible() {
   if (process.env.RUN_SCRAPER_VISIBLE === 'false') return false;
   // Least explicit is any stored values.
   if (globalThis.__visibilityCallback) return globalThis.__visibilityCallback();
+  // false defaults to the new headless mode
   return false;
 }
 

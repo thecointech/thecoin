@@ -5,6 +5,17 @@ import { log } from '@thecointech/logging';
 const exec = promisify(child_process.exec);
 const FIVE_MINS = 5 * 60 * 1000;
 
+export async function isLingeringEnabled() {
+  const user = process.env.USER; // Get the current username
+  if (!user) {
+    log.error('Could not determine current user.');
+    return false;
+  }
+  const command = `loginctl show-user ${user} -p Linger`;
+  const r = await exec(command, { timeout: FIVE_MINS });
+  return r.stdout.includes('Linger=yes');
+}
+
 export async function enableLingeringForCurrentUser() {
   const user = process.env.USER; // Get the current username
   if (!user) {

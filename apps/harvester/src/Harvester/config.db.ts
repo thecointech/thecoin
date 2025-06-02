@@ -29,8 +29,7 @@ export type ConfigShape = {
   // the same scraping config for both
   scraping?: ScrapingConfig,
 
-  // Lingering (systemd user background)
-  isLingeringEnabled?: boolean;
+  alwaysRunScraperVisible?: boolean,
 
 } & HarvestConfig;
 

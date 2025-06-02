@@ -51,7 +51,8 @@ const api : ScraperBridgeApi = {
   getHarvestConfig: () => ipcRenderer.invoke(actions.getHarvestConfig),
   setHarvestConfig: (config) => ipcRenderer.invoke(actions.setHarvestConfig, config),
 
-  runHarvester: (headless?: boolean) => ipcRenderer.invoke(actions.runHarvester, headless),
+  alwaysRunScraperVisible: (visible?: boolean) => ipcRenderer.invoke(actions.alwaysRunScraperVisible, visible),
+  runHarvester: (forceVisible?: boolean) => ipcRenderer.invoke(actions.runHarvester, forceVisible),
   getCurrentState: () => ipcRenderer.invoke(actions.getCurrentState),
 
   exportResults: () => ipcRenderer.invoke(actions.exportResults),

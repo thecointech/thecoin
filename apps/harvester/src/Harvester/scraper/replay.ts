@@ -19,7 +19,7 @@ export async function getValues(actionName: ActionType, callback?: BackgroundTas
   if (!replayEvents?.length) {
     throw new Error(`No events found for ${actionName}`);
   }
-  const r = await replay(actionName, replayEvents, scraperCallbacks, dynamicValues, delay);
+  const r = await replay({ name: actionName, delay }, replayEvents, scraperCallbacks, dynamicValues);
   scraperCallbacks.complete(true);
   return r;
 }

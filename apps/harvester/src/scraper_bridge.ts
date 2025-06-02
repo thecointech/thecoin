@@ -18,6 +18,8 @@ import { AskUserReact } from './Harvester/agent/askUser';
 import { downloadRequired } from './Download/download';
 import { getScrapingScript } from './results/getScrapingScript';
 import { twofaRefresh as doRefresh } from './Harvester/agent/twofaRefresh';
+import { enableLingeringForCurrentUser, isLingeringEnabled } from './Harvester/schedule/linux-lingering';
+import { VisibleOverride } from '@thecointech/scraper';
 
 
 async function guard<T>(cb: () => Promise<T>) {
@@ -109,9 +111,17 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
   getHarvestConfig: () => guard(() => getHarvestConfig()),
   setHarvestConfig: (config) => guard(() => setHarvestConfig(config)),
 
-  runHarvester: (headless?: boolean) => guard(() => {
-    process.env.RUN_SCRAPER_HEADLESS = headless?.toString()
+  alwaysRunScraperVisible: (visible?: boolean) => guard(async () => {
+    if (visible !== undefined) {
+      await setProcessConfig({ alwaysRunScraperVisible: visible });
+    }
+    const config = await getProcessConfig();
+    return config?.alwaysRunScraperVisible ?? false;
+  }),
+  runHarvester: (forceVisible?: boolean) => guard(() => {
+    const visible = new VisibleOverride(forceVisible);
     return harvest(onBgTaskMsg)
+      .finally(() => visible.dispose());
   }),
   getCurrentState: () => guard(() => getState()),
 
@@ -122,16 +132,12 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
   }),
 
   hasUserEnabledLingering: () => guard(async () => {
-    const config = await getHarvestConfig();
-    return !!config?.isLingeringEnabled;
+    return await isLingeringEnabled();
   }),
 
   enableLingeringForCurrentUser: () => guard(async () => {
-    const { enableLingeringForCurrentUser } = await import('./Harvester/schedule/linux-lingering');
+    // Trigger enable
     const result = await enableLingeringForCurrentUser();
-    if (result.success) {
-      await setHarvestConfig({ isLingeringEnabled: true });
-    }
     return result;
   }),
 
@@ -220,8 +226,11 @@ export function initScraping() {
     return api.setHarvestConfig(config);
   })
 
-  ipcMain.handle(actions.runHarvester, async (_event, headless?: boolean) => {
-    return api.runHarvester(headless);
+  ipcMain.handle(actions.alwaysRunScraperVisible, async (_event, visible: boolean) => {
+    return api.alwaysRunScraperVisible(visible);
+  })
+  ipcMain.handle(actions.runHarvester, async (_event) => {
+    return api.runHarvester();
   })
   ipcMain.handle(actions.getCurrentState, async (_event) => {
     return api.getCurrentState();
