@@ -3,33 +3,37 @@ import { IScraperCallbacks } from "../src/callbacks";
 import { sleep } from "@thecointech/async/sleep";
 import currency from "currency.js";
 import { DateTime } from "luxon";
+import type { ReplayOptions } from "../src/replay";
+import { replay as SrcReplay } from "../src/replay";
 
 // TODO:
 // Decide where to place mocked implementations for scraping
 // This is currently duplicated with the harvester
 // THIS DEFINITELY SHOULD BE IN SCRAPER-BANKING specialization library
-export async function replay(name: string, events: AnyEvent[], callbacks?: IScraperCallbacks, dynamicValues?: Record<string, string>, delay = 1000) {
+
+
+export const replay: typeof SrcReplay = async (options: ReplayOptions, events: AnyEvent[], callbacks?: IScraperCallbacks, dynamicValues?: Record<string, string>) => {
 
   // Progress started
-  callbacks?.onProgress?.({ step: 0, total: 1, stage: name, stepPercent: 0 });
+  callbacks?.onProgress?.({ step: 0, total: 1, stage: options.name, stepPercent: 0 });
 
   for (let i = 0; i < events.length; i++) {
-    await sleep(delay);
+    await sleep(500);
     const stepPercent = Math.round(100 * (i + 1) / events.length);
-    const continueLoop = callbacks?.onProgress?.({ step: 0, total: 1, stage: name, stepPercent, event: events[i] });
+    const continueLoop = callbacks?.onProgress?.({ step: 0, total: 1, stage: options.name, stepPercent, event: events[i] });
     if (continueLoop === false) {
       break;
     }
   }
 
   // Mock some more-or-less random return values
-  if (name == "chqBalance") {
+  if (options.name == "chqBalance") {
     const balance = (1000 + Math.random() * 500).toFixed(2);
     return {
       balance: currency(balance),
     };
   }
-  else if (name == "visaBalance") {
+  else if (options.name == "visaBalance") {
     return getEmulatedVisaData(DateTime.now());
   }
   return {

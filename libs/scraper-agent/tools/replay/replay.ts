@@ -3,13 +3,12 @@ import { getConfig } from "../config";
 import { init } from "../init";
 import { getReplayEvents } from "../../src/replay/events";
 import { readFileSync } from "fs";
-import { IScraperCallbacks, replay } from "@thecointech/scraper";
+import { IScraperCallbacks, replay, setIsVisible } from "@thecointech/scraper";
 import { maybeCloseModal } from "../../src/modal";
 
 const { baseFolder, config } = getConfig();
 await init();
 
-process.env.RUN_SCRAPER_HEADLESS = "false";
 const target = process.argv.includes("--target") ? process.argv[process.argv.indexOf("--target") + 1] : undefined;
 if (!target) {
   throw new Error("Please provide a target");
@@ -42,5 +41,6 @@ const callbacks: IScraperCallbacks = {
     return true;
   }
 }
-const r = await replay("TestReplay", replayEvents, callbacks, { amount: "10" });
+setIsVisible(async () => true);
+const r = await replay({ name: "TestReplay" }, replayEvents, callbacks, { amount: "10" });
 

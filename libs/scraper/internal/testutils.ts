@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs"
 import { type Browser } from "puppeteer"
 import { patchOnnxForJest } from "./jestPatch";
 import { IsManualRun } from '@thecointech/jestutils';
-import { newPage, setRootFolder } from "../src/puppeteer-init";
+import { newPage, setRootFolder, setIsVisible } from "../src/puppeteer-init";
 import { readdir } from 'node:fs/promises'
 import path from "node:path";
 
@@ -29,14 +29,14 @@ export const getTestPages = async (...parts: string[]) => {
           data: getTestInfo(...parts, jf),
         }))
       }
-    });  
+    });
   }
   catch (e) {
     return [];
   }
 }
 
-const RunHeadless = () => process.env.RUN_SCRAPER_HEADLESS ? process.env.RUN_SCRAPER_HEADLESS === 'false' : !IsManualRun;
+setIsVisible(async () => IsManualRun);
 setRootFolder('./.cache/test');
 
 export function useTestBrowser() {
@@ -50,7 +50,7 @@ export function useTestBrowser() {
   })
 
   const getPage = async () => {
-    const { page, browser } = await newPage("default", RunHeadless());
+    const { page, browser } = await newPage("default");
     page.setBypassCSP(true);
     _browser = browser;
     return page;

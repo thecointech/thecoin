@@ -69,7 +69,7 @@ export async function setProcessConfig(config: Partial<ConfigShape>) {
       daysToRun: config.schedule?.daysToRun ?? lastCfg?.schedule?.daysToRun ?? defaultDays,
       timeToRun: config.schedule?.timeToRun ?? lastCfg?.schedule?.timeToRun ?? defaultTime,
     },
-    isLingeringEnabled: config.isLingeringEnabled ?? lastCfg?.isLingeringEnabled,
+    alwaysRunScraperVisible: config.alwaysRunScraperVisible ?? lastCfg?.alwaysRunScraperVisible,
     stateKey: config.stateKey ?? lastCfg?.stateKey,
     wallet: config.wallet ?? lastCfg?.wallet,
     creditDetails: config.creditDetails ?? lastCfg?.creditDetails,
@@ -136,7 +136,6 @@ export async function getHarvestConfig() {
     ? {
         steps: config.steps,
         schedule: config.schedule,
-        isLingeringEnabled: config.isLingeringEnabled,
       }
     : undefined;
 }

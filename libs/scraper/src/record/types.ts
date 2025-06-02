@@ -30,8 +30,6 @@ export type RecorderOptions = {
   name: string
   // The context to run Puppeteer in
   context: string
-  // Whether to run puppeteer in headless mode
-  headless?: boolean
 
   onEvent?: (event: AnyEvent, page: Page, name: string, step: number) => Promise<void>;
 

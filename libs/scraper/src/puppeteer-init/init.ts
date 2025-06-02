@@ -6,6 +6,7 @@ import { getBrowserPath } from './browser';
 import { log } from '@thecointech/logging';
 // import { initDebuggingInfo } from './debugging';
 import { getUserDataDir } from './userProfile';
+import { getIsVisible } from './visibility';
 
 const puppeteer = addExtra(puppeteerVanilla);
 const plugins = getPlugins();
@@ -17,7 +18,7 @@ declare global {
   } | undefined;
 }
 
-async function getPage(contextName = "default", headless?: boolean) {
+async function getPage(contextName = "default") {
 
   // So... it seems that contexts are unusable because
   // they do not load cookies etc from default (thanks for
@@ -40,9 +41,9 @@ async function getPage(contextName = "default", headless?: boolean) {
 
   const executablePath = await getBrowserPath();
   log.debug(`Starting Puppeteer using executable path: ${executablePath}`);
-  const shouldBeHeadless = headless ?? process.env.RUN_SCRAPER_HEADLESS !== 'false';
+  const visible = await getIsVisible();
   const browser = await puppeteer.launch({
-    headless: shouldBeHeadless,
+    headless: !visible,
     executablePath,
     userDataDir: getUserDataDir(),
     args: [
@@ -91,9 +92,9 @@ async function getPage(contextName = "default", headless?: boolean) {
   };
 }
 
-export async function newPage(contextName?: string, headless?: boolean) {
+export async function newPage(contextName?: string) {
 
-  const { page, browser } = await getPage(contextName, headless);
+  const { page, browser } = await getPage(contextName);
   // page.setBypassCSP(true);
   // Additional settings that often help with CORS/CSP issues:
   // await page.setExtraHTTPHeaders({
