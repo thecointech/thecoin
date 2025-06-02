@@ -21,8 +21,7 @@
     "_gen:swagger": "run -T cross-env API_ACCESS_KEY=DUMMY_KEY $(yarn get-python) api/generate_swagger.py",
     "start": "run-env exec=$(yarn get-python) cwd=src bootstrap.py",
     "_test": "run-env exec=$(yarn get-python) cwd=tests query.test.py",
-    "build:dev": "run-env tools/build-docker.ts",
-    "build:prodtest": "run-env cfg=prodtest tools/build-docker.ts"
+    "build:docker": "sudo docker build -f docker/Dockerfile -t vqa-service ."
   },
   "devDependencies": {
     "@thecointech/setenv": "^0.3.4"

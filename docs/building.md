@@ -14,7 +14,7 @@ Maybe configure a maker: https://www.electronforge.io/config/makers/dmg
 - run `corepack enable`
 
 (post-install builds)
-- sqlite3 
+- sqlite3
 `sudo apt install python3-setuptools`
 
 - node-hid (this could maybe be removed on update of the npm package)
@@ -34,8 +34,10 @@ For production builds, secrets need to be enabled:
 - (AMD) Install ROCm `https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/quick-start.html`
 - Create a venv for VQA `python3 -m venv .venv`
 - Activate the venv `source .venv/bin/activate`
-- Install ROCm dependencies `pip install -r requirements.remote.txt`
-- (AMD) Install dependencies `pip install -r requirements.txt`
+- Install dependencies `pip install -r requirements.txt`
+- (AMD) Install pytorch - see `requirements.remote.txt` for versions. Currently we use builds direct from AMD (vs from Wheels).
+  - https://rocm.docs.amd.com/projects/radeon/en/latest/docs/install/native_linux/install-pytorch.html
+  - AMD publishes the Docker images, so it's better to sync to their release schedule than PyTorch's published wheels.
 
 The model needs to be explicitly downloaded before running.  This can be done with the `update_model.py` script in the tools folder.
 - Create a new access token from huggingface: https://huggingface.co/settings/tokens

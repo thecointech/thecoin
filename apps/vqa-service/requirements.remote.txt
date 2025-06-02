@@ -2,6 +2,7 @@
 #torchvision==0.18.0
 # transformers==4.47.0
 
---index-url https://download.pytorch.org/whl/rocm6.3
-torch==2.7.0+rocm6.3
-torchvision==0.22.0+rocm6.3
+# Note, this file isn't in use (yet), but store versions for reference
+[pip3] pytorch-triton-rocm==3.2.0+rocm6.4.1.git6da9e660
+[pip3] torch==2.6.0+rocm6.4.1.git1ded221d
+[pip3] torchvision==0.21.0+rocm6.4.1.git4040d51f
