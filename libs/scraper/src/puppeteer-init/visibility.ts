@@ -6,7 +6,7 @@
 // If the app has persistent storage it can use a callback
 // to provide this value to the scraper.  This is the
 // least explicit option, but it is the most flexible.
-type ScraperVisibilityCallback = () => Promise<boolean>;
+export type ScraperVisibilityCallback = () => Promise<boolean>;
 
 declare global {
   var __visibilityCallback: ScraperVisibilityCallback;

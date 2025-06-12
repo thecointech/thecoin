@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs"
 import { type Browser } from "puppeteer"
 import { patchOnnxForJest } from "./jestPatch";
 import { IsManualRun } from '@thecointech/jestutils';
-import { newPage, setRootFolder, setIsVisible } from "../src/puppeteer-init";
+import { newPage, setupScraper } from "../src/puppeteer-init";
 import { readdir } from 'node:fs/promises'
 import path from "node:path";
 
@@ -36,8 +36,10 @@ export const getTestPages = async (...parts: string[]) => {
   }
 }
 
-setIsVisible(async () => IsManualRun);
-setRootFolder('./.cache/test');
+setupScraper({
+  rootFolder: './.cache/test',
+  isVisible: async () => IsManualRun,
+});
 
 export function useTestBrowser() {
   let _browser: Browser|null = null;

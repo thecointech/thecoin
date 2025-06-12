@@ -1,10 +1,10 @@
 import { defaultDays, defaultTime, HarvestConfig, Mnemonic } from '../types';
 import { createStep } from './steps';
-import { CreditDetails } from './types';
+import type { CreditDetails } from './types';
 import { setSchedule } from './schedule';
 import { log } from '@thecointech/logging';
 import { HDNodeWallet } from 'ethers';
-import { ScrapingConfig } from './scraper';
+import type { ScrapingConfig } from './scraper';
 import { getProvider } from '@thecointech/ethers-provider';
 import { ConfigShape, ConfigKey, getConfig } from './config.db';
 

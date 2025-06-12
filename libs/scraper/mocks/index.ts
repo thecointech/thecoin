@@ -1,5 +1,6 @@
 export * from './mock_replay.ts';
-export * from '../src/puppeteer-init/rootFolder.ts'
+export * from '../src/puppeteer-init/setup.ts'
+export { VisibleOverride } from '../src/puppeteer-init/visibility';
 
 export function newPage() {
   return {
