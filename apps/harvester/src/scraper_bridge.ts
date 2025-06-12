@@ -175,7 +175,7 @@ const onBgTaskMsg = (progress: BackgroundTaskInfo) => {
   ipcMain.emit(actions.onBackgroundTaskProgress, progress);
 }
 
-export function initScraping() {
+export function initMainIPC() {
 
   ipcMain.handle(actions.hasInstalledBrowser, api.hasInstalledBrowser);
   ipcMain.handle(actions.hasCompatibleBrowser, api.hasCompatibleBrowser);

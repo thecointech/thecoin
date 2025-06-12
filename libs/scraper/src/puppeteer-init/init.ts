@@ -40,12 +40,13 @@ async function getPage(contextName = "default") {
   }
 
   const executablePath = await getBrowserPath();
-  log.debug(`Starting Puppeteer using executable path: ${executablePath}`);
   const visible = await getIsVisible();
+  const userDataDir = getUserDataDir();
+  log.debug({ executablePath, visible, userDataDir }, "Starting Puppeteer: visible={visible}, exe={executablePath}, userDataDir={userDataDir}");
   const browser = await puppeteer.launch({
     headless: !visible,
     executablePath,
-    userDataDir: getUserDataDir(),
+    userDataDir,
     args: [
       // TODO: Fix sandboxing on linux to resolve the following error in a better way
       // No usable sandbox! If you are running on Ubuntu 23.10+ or another
