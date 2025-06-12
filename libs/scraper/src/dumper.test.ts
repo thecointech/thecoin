@@ -1,6 +1,6 @@
 import { IsManualRun, describe } from "@thecointech/jestutils";
 import { Dumper } from "./dumper";
-import { newPage, closeBrowser } from "./puppeteer-init/init";
+import { newPage, closeBrowser } from "./puppeteer-init/newPage";
 import { VisibleOverride } from "./puppeteer-init/visibility";
 import path from "path";
 
