@@ -2,11 +2,17 @@
 import { BaseReducer } from '@thecointech/shared/store/immerReducer'
 import { HarvestConfig, defaultDays, DaysArray, HarvestStepType, HarvestArgs, addStep, removeStep, defaultTime, defaultSteps } from '../../types';
 import { IActions } from './types';
+import { log } from '@thecointech/logging';
 
 export const CONFIG_KEY = "config";
 
+log.info("Loading config");
 // The initial state of the App
 const stored = await window.scraper.getHarvestConfig();
+if (stored.error) {
+  log.error({error: stored.error}, "Error loading config: {error}")
+  alert("Error loading config: " + stored.error)
+}
 export const initialState: HarvestConfig = {
   schedule: stored.value?.schedule ?? {
     daysToRun: defaultDays,

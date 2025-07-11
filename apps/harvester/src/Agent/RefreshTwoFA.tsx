@@ -32,7 +32,7 @@ export function RefreshTwoFA() {
             selection
             options={[
               { key: 'chequing', text: 'Chequing', value: 'chqBalance' },
-              { key: 'credit', text: 'Credit', value: 'payVisa' },
+              { key: 'credit', text: 'Credit', value: 'visaBalance' },
             ]}
             onChange={(_, data) => setAccountType(data.value as ActionType)}
           />

@@ -3,7 +3,7 @@ import { getConfig } from "../config";
 import { init } from "../init";
 import { getReplayEvents } from "../../src/replay/events";
 import { readFileSync } from "fs";
-import { IScraperCallbacks, replay, setIsVisible } from "@thecointech/scraper";
+import { IScraperCallbacks, replay, setupScraper } from "@thecointech/scraper";
 import { maybeCloseModal } from "../../src/modal";
 
 const { baseFolder, config } = getConfig();
@@ -41,6 +41,9 @@ const callbacks: IScraperCallbacks = {
     return true;
   }
 }
-setIsVisible(async () => true);
+setupScraper({
+  rootFolder: baseFolder,
+  isVisible: async () => true
+});
 const r = await replay({ name: "TestReplay" }, replayEvents, callbacks, { amount: "10" });
 

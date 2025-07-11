@@ -1,8 +1,11 @@
 import { SubTaskProgress } from "@/BackgroundTask";
 import { AskUserReact } from "@/Harvester/agent/askUser";
 import { log } from "@thecointech/logging";
-import { exec } from "node:child_process";
+import { exec as exec_cp } from "node:child_process";
+import { promisify } from 'node:util';
 import { maybeCopyProfile } from "@thecointech/scraper/puppeteer";
+
+const exec = promisify(exec_cp);
 
 export async function copyProfile(onProgress: (info: SubTaskProgress) => void, force = false) {
 
@@ -27,10 +30,11 @@ export async function copyProfile(onProgress: (info: SubTaskProgress) => void, f
     })
     return true;
   }
-  catch (e) {
+  catch (err) {
+    log.error({err}, "Failed to copy profile");
     onProgress({
       subTaskId: "profile",
-      error: e as any,
+      error: err as any,
       completed: false
     })
     return false;
@@ -39,25 +43,42 @@ export async function copyProfile(onProgress: (info: SubTaskProgress) => void, f
 
 
 export async function isChromeRunning() {
-  let command: string;
-  if (process.platform === 'win32') {
-    command = 'tasklist';
-  } else if (process.platform === 'darwin' || process.platform === 'linux') {
-    command = 'ps aux';
-  } else {
-    log.error("Unsupported platform");
+  try {
+    switch (process.platform) {
+      case 'win32':
+        return await isChromeRunningWin();
+      case 'darwin':
+        return await isChromeRunningMac();
+      case 'linux':
+        return await isChromeRunningLinux();
+      default:
+        log.error("Unsupported platform");
+        return false;
+    }
+  }
+  catch (err) {
+    log.error({err}, "Failed to check if Chrome is running");
     return false;
   }
+}
 
-  return new Promise((resolve, reject) => {
-    exec(command, (err, stdout, _stderr) => {
-      if (err) {
-        log.error(err, 'Error listing processes');
-        return reject(err);
-      }
-      const chromeProcessRegex = /chrome\.exe|google chrome/i; // Adjust as needed
-      const isRunning = chromeProcessRegex.test(stdout);
-      resolve(isRunning);
-    });
-  });
+async function isChromeRunningWin() {
+  const r = await exec('tasklist');
+  const chromeProcessRegex = /chrome\.exe|google chrome/i;
+  const isRunning = chromeProcessRegex.test(r.stdout);
+  return isRunning;
+}
+
+async function isChromeRunningMac() {
+  const r = await exec('ps ux');
+  const chromeProcessRegex = /google chrome/i;
+  const isRunning = chromeProcessRegex.test(r.stdout);
+  return isRunning;
+}
+
+async function isChromeRunningLinux() {
+  const r = await exec('ps ux');
+  const chromeProcessRegex = /google\/chrome\/chrome\s.*--type=renderer/i;
+  const isRunning = chromeProcessRegex.test(r.stdout);
+  return isRunning;
 }

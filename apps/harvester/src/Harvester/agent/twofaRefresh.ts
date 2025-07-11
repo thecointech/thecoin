@@ -9,10 +9,13 @@ import { isSection } from "@thecointech/scraper-agent/replay/events";
 import { Agent } from "@thecointech/scraper-agent/agent";
 import { AnyEvent, InputEvent } from "@thecointech/scraper";
 import { copyProfile } from "@/Download/profile";
+import { log } from "@thecointech/logging";
 
 const ProfileTask = "twofaRefresh";
 
 export async function twofaRefresh(type: ActionType, refreshProfile: boolean, callback: BackgroundTaskCallback) {
+
+  log.info({type, refreshProfile}, "Running twofa refresh for {type} and profile {refreshProfile}");
 
   const toProcess = ["Initial", "CookieBanner", "Landing", "Login", "TwoFA"];
   const toSkip = sections.filter(s => !toProcess.includes(s));
@@ -28,7 +31,10 @@ export async function twofaRefresh(type: ActionType, refreshProfile: boolean, ca
   const logger = new ScraperCallbacks(ProfileTask, callback, toProcess);
 
   if (refreshProfile) {
-    await copyProfile(logger.subTaskCallback);
+    const wasRefreshed = await copyProfile(logger.subTaskCallback, true);
+    if (!wasRefreshed) {
+      throw new Error("Failed to refresh profile - try deleting profile manually");
+    }
   }
 
   const baseNode = await Agent.process(ProfileTask, getUrl(events), inputBridge, logger, toSkip);

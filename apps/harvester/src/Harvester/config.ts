@@ -6,17 +6,23 @@ import { log } from '@thecointech/logging';
 import { HDNodeWallet } from 'ethers';
 import type { ScrapingConfig } from './scraper';
 import { getProvider } from '@thecointech/ethers-provider';
-import { ConfigShape, ConfigKey, getConfig } from './config.db';
-
+import { ConfigShape, ConfigKey, getConfig, isPouchError } from './config.db';
 
 export async function getProcessConfig() {
+  const db = await getConfig();
   try {
-    const db = await getConfig();
     const doc = await db.get(ConfigKey, { revs_info: true, latest: true });
     return doc;
   }
   catch (err) {
-    return undefined;
+    if (isPouchError(err)) {
+      // Doc not found, this is normal on first insert
+      if (err.status === 404) {
+        return undefined;
+      }
+    }
+    log.error(err, "Error getting process config")
+    throw err;
   }
 }
 
