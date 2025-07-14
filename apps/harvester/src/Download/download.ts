@@ -1,4 +1,4 @@
-import { installChrome } from "@thecointech/scraper/puppeteer";
+import { installBrowser } from "@thecointech/scraper/puppeteer";
 import { SimilarityPipeline } from "@thecointech/scraper/similarity";
 import { log } from "@thecointech/logging";
 import { BackgroundTaskCallback, SubTaskProgress } from "@/BackgroundTask/types";
@@ -45,7 +45,7 @@ export async function downloadRequired(callback: BackgroundTaskCallback) {
 // Make sure we have a compatible browser...
 async function downloadBrowser(onProgress: (info: SubTaskProgress) => void) {
   // Download a compatible browser.
-  return installChrome((bytes, total) => {
+  return installBrowser((bytes, total) => {
     onProgress({
       subTaskId: "chrome",
       percent: (bytes / total) * 100

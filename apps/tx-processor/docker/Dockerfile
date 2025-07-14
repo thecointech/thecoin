@@ -81,7 +81,7 @@ RUN corepack enable
 RUN mkdir -p \
   /home/pptruser/Downloads \
   /app \
-  /environments \
+  /app/environments \
   /data \
   /secrets
 
@@ -92,7 +92,6 @@ RUN chown -R pptruser:pptruser /home/pptruser \
   && chown -R pptruser:pptruser /app \
   && chown -R pptruser:pptruser /data \
   && chown -R pptruser:pptruser /secrets \
-  && chown -R pptruser:pptruser /environments \
   && chmod 700 /secrets
 
 # Run everything after as non-privileged user.
@@ -114,7 +113,7 @@ WORKDIR /app
 COPY temp/package.json ./
 COPY temp/.yarnrc.yml ./
 COPY temp/yarn.lock ./
-COPY temp/environments/*.env /environments/
+COPY temp/environments/*.env /app/environments/
 
 # Install dependencies and cleanup sensitive files
 RUN yarn workspaces focus --production && \
