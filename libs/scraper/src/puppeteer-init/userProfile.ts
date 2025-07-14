@@ -6,9 +6,10 @@ import { rootFolder } from './rootFolder';
 import { existsSync } from 'node:fs';
 import { copy, remove } from 'fs-extra';
 import { log } from '@thecointech/logging';
+import { getBrowserType } from './type';
 
 export function getUserDataDir() {
-  return path.join(rootFolder(), 'chrome_userdata');
+  return path.join(rootFolder(), 'userdata', getBrowserType());
 }
 
 function getChromeProfilePath() {
@@ -27,31 +28,34 @@ function getChromeProfilePath() {
 }
 
 export async function maybeCopyProfile(force: boolean = false) {
+  const type = getBrowserType();
   const userDataDir = getUserDataDir();
   const exists = existsSync(userDataDir);
   if (!exists || force) {
     if (exists) {
-      log.debug(`Removing existing Chrome profile`);
+      log.debug({ browser: type }, `Removing existing {browser} profile`);
       await remove(userDataDir);
     }
     // Get the users existing profile (if one exists)
-    const chromeProfilePath = getChromeProfilePath();
-    if (existsSync(chromeProfilePath)) {
+    if (type == "chrome") {
+      const chromeProfilePath = getChromeProfilePath();
+      if (existsSync(chromeProfilePath)) {
 
-      // Copy all profiles
-      try {
-        log.debug(`Copying Chrome profiles`);
-        await copy(chromeProfilePath, userDataDir, { dereference: false });
-        log.debug(`Copy Chrome profile complete`);
+        // Copy all profiles
+        try {
+          log.debug(`Copying Chrome profiles`);
+          await copy(chromeProfilePath, userDataDir, { dereference: false });
+          log.debug(`Copy Chrome profile complete`);
+        }
+        catch (e) {
+          log.error(e, `Failed to copy Chrome profile`);
+          throw e;
+        }
       }
-      catch (e) {
-        log.error(e, `Failed to copy Chrome profile`);
-        throw e;
+      else {
+        log.warn('No existing Chrome profile found');
       }
     }
-    else {
-      log.warn('No existing Chrome profile found');
-    }
-
+    // TODO: Implement this for firefox
   }
 }

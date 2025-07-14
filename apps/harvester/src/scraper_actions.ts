@@ -57,7 +57,9 @@ export type ScraperBridgeApi = {
   getHarvestConfig(): Promise<Result<HarvestConfig|undefined>>,
   setHarvestConfig(config: HarvestConfig): Promise<Result<boolean>>,
 
-  runHarvester(headless?: boolean): Promise<Result<boolean>>,
+  // Set/get the alwaysRunVisible flag
+  alwaysRunScraperVisible(visible?: boolean): Promise<Result<boolean>>,
+  runHarvester(forceVisible?: boolean): Promise<Result<boolean>>,
   getCurrentState(): Promise<Result<StoredData>>,
 
   exportResults(): Promise<Result<string>>
@@ -70,9 +72,12 @@ export type ScraperBridgeApi = {
   setOverrides(balance: number, pendingAmt: number|null, pendingDate: string|null|undefined): Promise<Result<boolean>>,
 
   // Import a scraper script configuration
-  importScraperScript(config: any): Promise<Result<boolean>>;
-}
+  importScraperScript(config: any): Promise<Result<boolean>>,
 
+  // Lingering (systemd user background)
+  hasUserEnabledLingering(): Promise<Result<boolean>>;
+  enableLingeringForCurrentUser(): Promise<Result<{ success?: boolean; error?: string }>>;
+}
 
 export const actions = {
   hasInstalledBrowser: "browser:hasInstalledBrowser",
@@ -99,6 +104,8 @@ export const actions = {
   // Not really scraper, but meh
   setWalletMnemomic: 'scraper:setWalletMnemomic',
   getWalletAddress: 'scraper:getWalletAddress',
+  hasUserEnabledLingering: 'scraper:hasUserEnabledLingering',
+  enableLingeringForCurrentUser: 'scraper:enableLingeringForCurrentUser',
 
   // fuggit
   setCreditDetails: "scraper:setCreditDetails",
@@ -106,6 +113,8 @@ export const actions = {
 
   getHarvestConfig: 'scraper:getHarvestConfig',
   setHarvestConfig: 'scraper:setHarvestConfig',
+
+  alwaysRunScraperVisible: 'scraper.alwaysRunScraperVisible',
 
   runHarvester: 'scraper.runHarvester',
   getCurrentState: 'scraper.getCurrentState',

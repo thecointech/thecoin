@@ -7,7 +7,7 @@ class ExistsResponse(BaseModel):
 
 
 query_cookie_exists = (
-    "Analyze the provided screenshot of a webpage. Determine if a cookie banner is present. The cookie banner must contain a button that includes the word \"Accept\".",
+    "Analyze the provided screenshot of a webpage. Is a cookie banner is present?",
     ExistsResponse
 )
 query_cookie_accept = (

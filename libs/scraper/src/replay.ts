@@ -10,7 +10,11 @@ import { newPage } from './puppeteer-init';
 import { IScraperCallbacks } from './callbacks';
 import { DynamicValueError, ValueEventError } from './errors';
 
-export async function replay(name: string, events: AnyEvent[], callbacks?: IScraperCallbacks, dynamicValues?: Record<string, string>, delay = 1000) {
+export type ReplayOptions = {
+  name: string,
+  delay?: number,
+}
+export async function replay({ name, delay = 1000 }: ReplayOptions, events: AnyEvent[], callbacks?: IScraperCallbacks, dynamicValues?: Record<string, string>) {
 
   log.debug(`Replaying ${events?.length} events`);
 

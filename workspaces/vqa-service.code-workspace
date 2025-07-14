@@ -4,5 +4,9 @@
 			"path": "../apps/vqa-service"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.watcherExclude": {
+			"**/.venv/**": true
+		}
+	}
 }

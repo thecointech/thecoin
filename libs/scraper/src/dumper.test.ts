@@ -1,12 +1,14 @@
 import { IsManualRun, describe } from "@thecointech/jestutils";
 import { Dumper } from "./dumper";
-import { newPage, closeBrowser } from "./puppeteer-init/init";
+import { newPage, closeBrowser } from "./puppeteer-init/newPage";
+import { VisibleOverride } from "./puppeteer-init/visibility";
 import path from "path";
 
 
 describe('dumper', () => {
   it("Dumps page to folder", async () => {
-    const { page } = await newPage("default", false);
+    const _ = new VisibleOverride(true);
+    const { page } = await newPage("default");
     const dumper = new Dumper(path.join('..', 'temp', "wikipedia"), "test");
     await page.goto("https://www.wikipedia.org/");
 

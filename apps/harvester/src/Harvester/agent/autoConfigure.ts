@@ -7,6 +7,7 @@ import { setEvents } from '../events';
 import { downloadRequired } from '@/Download/download';
 import { BankType } from '../scraper';
 import { sections } from '@thecointech/scraper-agent/processors/types';
+import { VisibleOverride } from '@thecointech/scraper/puppeteer-init/visibility';
 
 export type AutoConfigParams = {
   type: BankType;
@@ -34,10 +35,8 @@ export async function autoConfigure({ type, name, url, username, password, visib
   const logger = new ScraperCallbacks("record", callback, toProcess);
 
   try {
-    const oldHeadless = process.env.RUN_SCRAPER_HEADLESS;
-    process.env.RUN_SCRAPER_HEADLESS = visible ? "false" : "true";
+    using _ = new VisibleOverride(visible)
     const baseNode = await Agent.process(name, url, inputBridge, logger, toSkip);
-    process.env.RUN_SCRAPER_HEADLESS = oldHeadless;
 
     // Ensure we have required info
     throwIfAnyMissing(baseNode, type);

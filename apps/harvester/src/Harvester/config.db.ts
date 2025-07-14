@@ -27,7 +27,9 @@ export type ConfigShape = {
 
   // If the user has a single bank, we can use
   // the same scraping config for both
-  scraping?: ScrapingConfig
+  scraping?: ScrapingConfig,
+
+  alwaysRunScraperVisible?: boolean,
 
 } & HarvestConfig;
 
@@ -35,39 +37,68 @@ export type ConfigShape = {
 // NOTE: Not sure this works with ComDB
 export const ConfigKey = "config";
 
-let __config = null as null|Promise<PouchDB.Database<ConfigShape>>;
 export function getConfig(password?: string, persist = PERSIST_DB, db_name?: string) {
-  if (!__config) {
-    __config = new Promise(async resolve => {
-
-      const db_path = getDbPath(db_name);
-      log.info(`Initializing ${process.env.NODE_ENV} config database at ${db_path}`);
-      const db = new PouchDB<ConfigShape>(db_path, {adapter: 'memory'});
-
-      if (persist) {
-        log.info(`Encrypting config DB`);
-        // initialize the config db
-        // Yes, this is a hard-coded password.
-        // Will fix ASAP with dynamically
-        // generated code (Apr 04 2023)
-        await db.setPassword(password ?? "hF,835-/=Pw\\nr6r");
-        await db.loadEncrypted();
-      }
-      else {
-        // Seed DB in development
-        await db.put({
-          _id: ConfigKey,
-          ...getSeedConfig()
-        })
-        // mock the function to propagate changes to the encrypted DB
-        db.loadDecrypted = () => Promise.resolve();
-      }
-      resolve(db);
-    })
+  if (!globalThis.__config) {
+    globalThis.__config = loadDb(password, persist, db_name);
   }
-  return __config;
+  return globalThis.__config;
 }
 
 export function getDbPath(db_name?: string) {
   return path.join(rootFolder, db_name ?? `config${dbSuffix()}.db`);
+}
+
+export interface PouchError extends Error {
+  status: number;
+  name: string;
+  message: string;
+}
+export const isPouchError = (err: unknown): err is PouchError => {
+  return err instanceof Error && 'status' in err;
+}
+
+async function loadDb(password?: string, persist = PERSIST_DB, db_name?: string) {
+
+  try {
+    const db_path = getDbPath(db_name);
+    log.info(`Initializing ${process.env.NODE_ENV} config database at ${db_path}`);
+    const db = new PouchDB<ConfigShape>(db_path, {adapter: 'memory'});
+
+    if (persist) {
+      await initEncryptedDb(db, password);
+    }
+    else {
+      await initMockDb(db);
+    }
+    return db;
+  }
+  catch (err) {
+    log.fatal(err, "Couldn't load config DB")
+    throw err;
+  }
+}
+
+async function initEncryptedDb(db: PouchDB.Database<ConfigShape>, password?: string) {
+  log.info(`Encrypting config DB`);
+  // initialize the config db
+  // Yes, this is a hard-coded password.
+  // Will fix ASAP with dynamically
+  // generated code (Apr 04 2023)
+  await db.setPassword(password ?? "hF,835-/=Pw\\nr6r");
+  await db.loadEncrypted();
+  log.info("Config DB loaded");
+}
+
+async function initMockDb(db: PouchDB.Database<ConfigShape>) {
+  // Seed DB in development
+  await db.put({
+    _id: ConfigKey,
+    ...getSeedConfig()
+  })
+  // mock the function to propagate changes to the encrypted DB
+  db.loadDecrypted = () => Promise.resolve();
+}
+
+declare global {
+  var __config: Promise<PouchDB.Database<ConfigShape>>;
 }

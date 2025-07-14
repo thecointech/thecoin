@@ -1,6 +1,7 @@
 import currency from 'currency.js';
 import { DateTime } from 'luxon';
 import { ValueType } from './types';
+import { log } from '@thecointech/logging';
 
 
 export function getValueParsing(value: string, type: ValueType) {
@@ -145,13 +146,16 @@ export function guessCurrencyFormat(value?: string) : CurrencyType|null {
   const bareCents = value.replace(/[^0-9]/g, '');
   // strip out additional spaces
   const noSpace = value.replace(/\s/g, '');
-  if (Currencies.CAD_fr(noSpace)?.format({ symbol: '', separator: '', decimal: ''}) === bareCents)
+  if (abs(Currencies.CAD_fr(noSpace))?.format({ symbol: '', separator: '', decimal: ''}) === bareCents)
     return "CAD_fr";
-  if (Currencies.CAD_en(noSpace)?.format({ symbol: '', separator: '', decimal: ''}) === bareCents)
+  if (abs(Currencies.CAD_en(noSpace))?.format({ symbol: '', separator: '', decimal: ''}) === bareCents)
     return "CAD_en";
+  log.warn({value}, "Unable to guess currency format from {value}")
   return null;
 }
 
 export function getCurrencyConverter(fmt: CurrencyType): CurrencyConverter {
   return Currencies[fmt];
 }
+
+const abs = (value?: currency) => (value && value.value < 0) ? value.multiply(-1) : value;

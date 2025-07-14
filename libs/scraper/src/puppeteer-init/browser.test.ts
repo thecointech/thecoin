@@ -1,7 +1,7 @@
 import { jest } from "@jest/globals"
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { useTestBrowser } from '../../internal/testutils';
-import { initDebuggingInfo } from './debugging';
+import { initDebuggingInfo } from '../../internal/debugging';
 
 jest.setTimeout(10 * 60 * 1000);
 

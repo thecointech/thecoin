@@ -11007,6 +11007,7 @@ __metadata:
     "@thecointech/bank-interface": "npm:^0.3.10"
     "@thecointech/jestutils": "npm:^0.3.3"
     "@thecointech/logging": "npm:^0.3.10"
+    "@thecointech/scraper": "npm:^0.3.10"
     "@thecointech/secrets": "npm:^0.3.10"
     "@thecointech/store": "npm:^0.3.10"
     "@thecointech/types": "npm:^0.3.3"
@@ -11015,9 +11016,6 @@ __metadata:
     csvtojson: "npm:^2.0.10"
     luxon: "npm:3.3.0"
     promise.any: "npm:^2.0.4"
-    puppeteer: "npm:^24.1.1"
-    puppeteer-extra: "npm:^3.3.6"
-    puppeteer-extra-plugin-stealth: "npm:^2.11.2"
   languageName: unknown
   linkType: soft
 

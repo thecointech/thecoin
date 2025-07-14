@@ -7,7 +7,7 @@ from timeit import default_timer as timer
 from singleton import get_model, get_processor
 from helpers import get_instruct_json_respose
 
-def runQueryRaw(image, prompt, max_length=200):
+def runQueryRaw(image, prompt, max_length=200) -> str:
     start = timer()
 
     processor = get_processor()

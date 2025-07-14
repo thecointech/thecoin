@@ -1,4 +1,4 @@
-import { guessCurrencyFormat, guessDateFormat } from './valueParsing';
+import { getCurrencyConverter, guessCurrencyFormat, guessDateFormat } from './valueParsing';
 
 it ("can guess date format", () => {
   expect(guessDateFormat("Mar 13, 2023")).toBe("MMM d, yy");
@@ -26,4 +26,15 @@ it ("can guess currency format", () => {
   expect(guessCurrencyFormat("123,45 $")).toBe("CAD_fr");
   expect(guessCurrencyFormat("123,45$")).toBe("CAD_fr");
   expect(guessCurrencyFormat("123.123,45$")).toBe("CAD_fr");
+
+  expect(guessCurrencyFormat("($123.45)")).toBe("CAD_en");
+  expect(guessCurrencyFormat("$(123.45)")).toBe("CAD_en");
+})
+
+
+it ("parses negative values correctly", () => {
+  const cvt = getCurrencyConverter("CAD_en");
+  expect(cvt("-123.45").value).toBe(-123.45);
+  expect(cvt("($123.45)").value).toBe(-123.45);
+  expect(cvt("$(123.45)").value).toBe(-123.45);
 })
