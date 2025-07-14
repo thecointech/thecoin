@@ -126,4 +126,6 @@ COPY build ./build
 VOLUME /data
 VOLUME /secrets
 
-CMD ["yarn", "start"]
+# Hard-code the path to run-env to avoid issues with
+# Yarn not thinking it's been installed
+CMD ["node", "node_modules/@thecointech/setenv/bin/run-env.mjs", "build/main.js"]
