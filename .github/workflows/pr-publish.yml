@@ -26,6 +26,7 @@ jobs:
           fi
 
   build:
+    needs: validate-environment
     uses: ./.github/workflows/action-build.yml
 
   publish-packages:

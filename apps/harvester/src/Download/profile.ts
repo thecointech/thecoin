@@ -10,6 +10,7 @@ const exec = promisify(exec_cp);
 export async function copyProfile(onProgress: (info: SubTaskProgress) => void, force = false) {
 
   const timestamp = Date.now().toString();
+  // TODO: Add firefox support
   if (await isChromeRunning()) {
     using askUser = AskUserReact.newSession("profile" + timestamp)
     const confirm = await askUser.forConfirm("Please close Chrome before continuing");

@@ -68,38 +68,54 @@ RUN apt-get install -y --no-install-recommends \
     libgl1-mesa-glx \
     && rm -rf /var/lib/apt/lists/*
 
-# Setup Yarn 4.x
-RUN corepack enable
-
-# Setup directory structure
-# - /app for the app itself
-# - /environments for build-time config
-# - /data for runtime persistent data
-# - /secrets for sensitive credentials
-# NOTE: if the data volume is mounted,
-#       the host needs to allow pptruser rw access to it
-RUN mkdir -p \
-  /home/pptruser/Downloads \
-  /app \
-  /environments \
-  /data \
-  /secrets
-
 # Add pptruser.
 RUN groupadd -r pptruser && useradd -u $PPTRUSER_UID -rm -g pptruser -G audio,video pptruser
 
+USER $PPTRUSER_UID
+
+WORKDIR /home/pptruser
+
+ENV DBUS_SESSION_BUS_ADDRESS=autolaunch:
+
+# Install system dependencies as root.
+USER root
+
+# Setup directory structure
+# - /thecoin for the app itself
+# - /environments for build-time config
+# - /data for runtime persistent data
+# - /secrets for sensitive credentials
+RUN mkdir -p \
+  /home/pptruser/Downloads \
+  /thecoin \
+  /thecoin/environments \
+  /data/logs \
+  /data/dbs \
+  /data/profiles \
+  /secrets
+
 RUN chown -R pptruser:pptruser /home/pptruser \
-  && chown -R pptruser:pptruser /app \
+  && chown -R pptruser:pptruser /thecoin \
   && chown -R pptruser:pptruser /data \
   && chown -R pptruser:pptruser /secrets \
-  && chown -R pptruser:pptruser /environments \
   && chmod 700 /secrets
+
+# Setup Yarn 4.x
+RUN corepack enable
 
 # Run everything after as non-privileged user.
 USER pptruser
 
-ENV DBUS_SESSION_BUS_ADDRESS=autolaunch: \
-    NODE_ENV=production \
+COPY --chown=pptruser:pptruser package.json yarn.lock .yarnrc.yml /thecoin/
+COPY --chown=pptruser:pptruser libs /thecoin/libs
+COPY --chown=pptruser:pptruser apis /thecoin/apis
+COPY --chown=pptruser:pptruser apps/tx-processor /thecoin/apps/tx-processor
+COPY --chown=pptruser:pptruser environments/*.env /thecoin/environments
+
+WORKDIR /thecoin/apps/tx-processor
+
+# Set default environment & disable typescript processing
+ENV NODE_ENV=production \
     PUPPETEER_SKIP_DOWNLOAD=true \
     TS_NODE_PROJECT=none \
     THECOIN_CONSOLE_ONLY=true \
@@ -108,23 +124,30 @@ ENV DBUS_SESSION_BUS_ADDRESS=autolaunch: \
     STORAGE_PATH=/data/dbs/ \
     THECOIN_SECRETS=/secrets
 
-WORKDIR /app
-
 # Copy workspace files
-COPY temp/package.json ./
-COPY temp/.yarnrc.yml ./
-COPY temp/yarn.lock ./
-COPY temp/environments/*.env /environments/
+# COPY temp/package.json ./
+# COPY temp/.yarnrc.yml ./
+# COPY temp/yarn.lock ./
 
 # Install dependencies and cleanup sensitive files
 RUN yarn workspaces focus --production && \
     rm -f .yarnrc.yml
 
-# Copy source code
-COPY build ./build
+
+# RUN mkdir -p /data/dbs && \
+#     mkdir -p /data/logs && \
+#     mkdir -p /data/profiles
+    # mkdir -p /secrets && \
+    # Ensure secrets directory has restricted permissions
+    # chmod 700 /secrets
+
+# Copy environment configs
+# COPY ./environments/*.env /environments/
 
 # Create volume mount points
 VOLUME /data
 VOLUME /secrets
 
+# Hard-code the path to run-env to avoid issues with
+# Yarn not thinking it's been installed
 CMD ["yarn", "start"]

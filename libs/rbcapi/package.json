@@ -43,15 +43,13 @@
   "dependencies": {
     "@thecointech/bank-interface": "^0.3.10",
     "@thecointech/logging": "^0.3.10",
+    "@thecointech/scraper": "^0.3.10",
     "@thecointech/secrets": "^0.3.10",
     "@thecointech/store": "^0.3.10",
     "@thecointech/utilities": "^0.3.10",
     "csvtojson": "^2.0.10",
     "luxon": "3.3.0",
-    "promise.any": "^2.0.4",
-    "puppeteer": "^24.1.1",
-    "puppeteer-extra": "^3.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2"
+    "promise.any": "^2.0.4"
   },
   "devDependencies": {
     "@thecointech/jestutils": "^0.3.3",

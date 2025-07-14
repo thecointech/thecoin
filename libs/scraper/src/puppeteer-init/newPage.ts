@@ -7,6 +7,7 @@ import { log } from '@thecointech/logging';
 // import { initDebuggingInfo } from './debugging';
 import { getUserDataDir } from './userProfile';
 import { getIsVisible } from './visibility';
+import { getPuppeteerType } from './type';
 
 const puppeteer = addExtra(puppeteerVanilla);
 const plugins = getPlugins();
@@ -39,12 +40,14 @@ async function getPage(contextName = "default") {
     return { browser, page: await context.newPage() };
   }
 
+  const type = getPuppeteerType();
   const executablePath = await getBrowserPath();
   const visible = await getIsVisible();
   const userDataDir = getUserDataDir();
   log.debug({ executablePath, visible, userDataDir }, "Starting Puppeteer: visible={visible}, exe={executablePath}, userDataDir={userDataDir}");
   const browser = await puppeteer.launch({
     headless: !visible,
+    browser: type,
     executablePath,
     userDataDir,
     args: [
@@ -64,8 +67,10 @@ async function getPage(contextName = "default") {
     ],
   });
 
-  for (const plugin of plugins) {
-    await plugin.onBrowser(browser);
+  if (type == "chrome") {
+    for (const plugin of plugins) {
+      await plugin.onBrowser(browser);
+    }
   }
 
   let contexts: Record<string, BrowserContext> = {
@@ -96,15 +101,11 @@ async function getPage(contextName = "default") {
 export async function newPage(contextName?: string) {
 
   const { page, browser } = await getPage(contextName);
-  // page.setBypassCSP(true);
-  // Additional settings that often help with CORS/CSP issues:
-  // await page.setExtraHTTPHeaders({
-  //   'Accept': '*/*',
-  //   'Access-Control-Allow-Origin': '*',
-  // });
 
-  for (const plugin of plugins) {
-    await plugin.onPageCreated(page);
+  if (getPuppeteerType() == "chrome") {
+    for (const plugin of plugins) {
+      await plugin.onPageCreated(page);
+    }
   }
 
   await page.setViewport({

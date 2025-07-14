@@ -9,11 +9,11 @@
 export type ScraperVisibilityCallback = () => Promise<boolean>;
 
 declare global {
-  var __visibilityCallback: ScraperVisibilityCallback;
+  var __visibilityCallback: ScraperVisibilityCallback|undefined;
   var __overrideVisible: number;
 }
 
-export function setIsVisible(callback: ScraperVisibilityCallback) {
+export function setIsVisible(callback?: ScraperVisibilityCallback) {
   globalThis.__visibilityCallback = callback;
 }
 
@@ -37,7 +37,7 @@ export class VisibleOverride implements Disposable {
   constructor(visible?: boolean) {
     this.visible = visible;
     if (this.visible) {
-      globalThis.__overrideVisible++;
+      globalThis.__overrideVisible = (globalThis.__overrideVisible ?? 0) + 1;
     }
   }
 
