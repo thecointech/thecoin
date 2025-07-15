@@ -5,23 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: FastAPI",
+            "name": "API: ProdTest",
             "type": "debugpy",
             "request": "launch",
-            "module": "uvicorn",
+            "program": "${workspaceFolder}/src/bootstrap.py",
             "cwd": "${workspaceFolder}/src",
-            "args": [
-                "main:app",
-                "--reload",
-                "--reload-exclude",
-                "transformers_modules/*",
-                "--port",
-                "7004",
-            ],
             "env": {
-                "CONFIG_NAME": "development"
-            },
-            "jinja": true
+                "CONFIG_NAME": "prodtest"
+            }
         },
         {
             "name": "Python Debugger: Current File",
