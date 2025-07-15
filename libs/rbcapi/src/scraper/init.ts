@@ -1,4 +1,4 @@
-import { setupScraper, installBrowser } from "@thecointech/scraper/puppeteer";
+import { setupScraper, installBrowser } from "@thecointech/scraper";
 import { log } from "@thecointech/logging";
 
 export async function init() {

@@ -4,8 +4,9 @@ import { ApiAction } from './action';
 import { describe } from '@thecointech/jestutils';
 import { ifSecret } from '@thecointech/secrets/jestutils';
 import { getBalance } from './balance';
+import { closeBrowser } from "./scraper";
 
-jest.setTimeout(500000);
+jest.setTimeout(1.5 * 60 * 1000);
 
 // Note, this test will send real money from a real account.
 // So ya probably want to leave it disabled except for manual runs.
@@ -17,8 +18,9 @@ describe("Check balance on live account", () => {
     RbcStore.initialize();
   });
 
-  afterAll(() => {
+  afterAll(async () => {
     RbcStore.release();
+    await closeBrowser();
   });
 
   test("Can check balance", async () => {
