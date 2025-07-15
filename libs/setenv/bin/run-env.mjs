@@ -20,6 +20,7 @@ function sliceArgs(args, name, def) {
 let args = process.argv.slice(2);
 const config = sliceArgs(args, "cfg", process.env.CONFIG_NAME ?? "development");
 let executable = sliceArgs(args, "exec", "node");
+let cwd = sliceArgs(args, "cwd", process.cwd());
 
 console.log(`--- RUNNING ${config} ENV ---`)
 
@@ -94,7 +95,7 @@ if (executable != "node") {
 const proc = spawn(
   executable,
   args,
-  { stdio: 'inherit', shell: true, cwd: process.cwd(), env }
+  { stdio: 'inherit', shell: true, cwd: cwd, env }
 )
 
 // Liberally inspired by cross-env: https://github.com/kentcdodds/cross-env/blob/master/src/index.js

@@ -1,6 +1,5 @@
 # Use Python 3.11 slim base image
-FROM rocm/pytorch:rocm6.2.3_ubuntu22.04_py3.10_pytorch_release_2.3.0
-
+FROM rocm/pytorch:rocm6.4.1_ubuntu24.04_py3.12_pytorch_release_2.6.0
 
 # Set working directory
 WORKDIR /app

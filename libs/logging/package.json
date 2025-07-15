@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/logging",
-  "version": "0.3.9-test.0",
+  "version": "0.3.10",
   "description": "The Coin: Common logging setup",
   "type": "module",
   "keywords": [
@@ -30,6 +30,7 @@
   "exports": {
     ".": {
       "node": "./build/log_node.js",
+      "gcloud": "./build/gcloud.js",
       "default": "./build/log_browser.js"
     }
   },

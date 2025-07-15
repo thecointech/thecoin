@@ -10,7 +10,7 @@ import type currency from "currency.js";
 
 // SectionName includes actions that require differentation from SectionType
 // but that do not have their own processors
-export type SectionName = SectionType | "Initial" | "Username" | "ModalDialog";
+export type SectionName = SectionType | "Initial" | "ModalDialog";
 export type EventSection = {
   section: SectionName;
   events: (AnyEvent|EventSection)[];

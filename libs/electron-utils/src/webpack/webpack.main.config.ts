@@ -25,7 +25,7 @@ export const baseOptions: Configuration = {
 };
 
 export const mainConfig = (custom: Configuration = {}) => merge(
-  custom,
+  custom, // NOTE: This must be first to ensure it's DefinePlugin runs first
   getMocks(env),
   baseOptions,
   commonBase,

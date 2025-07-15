@@ -1,8 +1,16 @@
-import { installChrome } from './browser';
-import { maybeCopyProfile } from './userProfile';
 
-export function setupScraper(progress?: (bytes: number, total: number) => void) {
-  const installation = installChrome(progress);
-  const copy = maybeCopyProfile();
-  return Promise.all([installation, copy]);
+import { setRootFolder } from "./rootFolder";
+import { setIsVisible, type ScraperVisibilityCallback } from "./visibility";
+import { Browser } from "@puppeteer/browsers";
+import { setBrowserType } from "./type";
+
+export type ScraperInitOptions = {
+  rootFolder: string;
+  isVisible?: ScraperVisibilityCallback;
+  type?: Browser;
+}
+export function setupScraper({ rootFolder, isVisible, type }: ScraperInitOptions) {
+  setRootFolder(rootFolder);
+  setIsVisible(isVisible);
+  setBrowserType(type);
 }

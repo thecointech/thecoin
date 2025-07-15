@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.10](https://github.com/thecointech/thecoin/compare/v0.3.9...v0.3.10) (2025-05-13)
+
+**Note:** Version bump only for package @thecointech/email
+
+
+
+
+
+## [0.3.9](https://github.com/thecointech/thecoin/compare/v0.3.9-test.0...v0.3.9) (2025-04-24)
+
+**Note:** Version bump only for package @thecointech/email
+
+
+
+
+
 ## [0.3.9-test.0](https://github.com/thecointech/thecoin/compare/v0.3.8...v0.3.9-test.0) (2025-04-24)
 
 **Note:** Version bump only for package @thecointech/email

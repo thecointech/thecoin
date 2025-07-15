@@ -1,13 +1,13 @@
 {
   "name": "harvester",
   "productName": "harvester",
-  "version": "0.3.9-test.0",
+  "version": "0.3.10",
   "private": true,
   "description": "Automatically harvest TheCoin",
   "main": ".webpack/main",
   "type": "commonjs",
   "forge": {
-    "config": "forge.config.mts"
+    "config": "forge.config.mjs"
   },
   "keywords": [],
   "author": {
@@ -30,6 +30,7 @@
     "build": "run -T tsc -b",
     "test": "yarn run :jest",
     "_start:dbg": "yarn run -T cross-env NODE_ENV=development RUN_SCRAPER_HEADLESS=false HARVESTER_PROFILE_FOLDER=\"./.cache/$CONFIG_NAME\" yarn run-env $(yarn bin electron-forge) start",
+    "_start": "yarn run-env $(yarn bin electron-forge) start",
     "_make": "yarn run-env $(yarn bin electron-forge) make"
   },
   "devDependencies": {
@@ -55,19 +56,19 @@
     "pouchdb-adapter-memory": "^8.0.1"
   },
   "dependencies": {
-    "@thecointech/account": "^0.3.9-test.0",
-    "@thecointech/apis": "^0.3.3",
+    "@thecointech/account": "^0.3.10",
+    "@thecointech/apis": "^0.3.10",
     "@thecointech/async": "^0.3.3",
-    "@thecointech/contract-plugin-converter": "^0.3.9-test.0",
-    "@thecointech/contract-plugin-shockabsorber": "^0.3.9-test.0",
-    "@thecointech/contract-plugins": "^0.3.9-test.0",
-    "@thecointech/fx-rates": "^0.3.9-test.0",
-    "@thecointech/logging": "^0.3.9-test.0",
-    "@thecointech/scraper": "^0.3.9-test.0",
-    "@thecointech/scraper-agent": "^0.3.9-test.0",
-    "@thecointech/shared": "^0.3.9-test.0",
-    "@thecointech/signers": "^0.3.9-test.0",
-    "@thecointech/utilities": "^0.3.9-test.0",
+    "@thecointech/contract-plugin-converter": "^0.3.10",
+    "@thecointech/contract-plugin-shockabsorber": "^0.3.10",
+    "@thecointech/contract-plugins": "^0.3.10",
+    "@thecointech/fx-rates": "^0.3.10",
+    "@thecointech/logging": "^0.3.10",
+    "@thecointech/scraper": "^0.3.10",
+    "@thecointech/scraper-agent": "^0.3.10",
+    "@thecointech/shared": "^0.3.10",
+    "@thecointech/signers": "^0.3.10",
+    "@thecointech/utilities": "^0.3.10",
     "comdb": "^6.0.0-beta",
     "crontab": "^1.4.2",
     "currency.js": "^2.0.4",

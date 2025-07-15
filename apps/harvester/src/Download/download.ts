@@ -1,10 +1,11 @@
-import { setupScraper } from "@thecointech/scraper/puppeteer-init/setup";
+import { installBrowser } from "@thecointech/scraper/puppeteer";
 import { SimilarityPipeline } from "@thecointech/scraper/similarity";
 import { log } from "@thecointech/logging";
 import { BackgroundTaskCallback, SubTaskProgress } from "@/BackgroundTask/types";
 import { rootFolder } from "@/paths";
 import path from "node:path";
 import { mkdirSync } from "node:fs";
+import { copyProfile } from "./profile";
 
 export async function downloadRequired(callback: BackgroundTaskCallback) {
 
@@ -29,8 +30,9 @@ export async function downloadRequired(callback: BackgroundTaskCallback) {
   }
 
   const browser = downloadBrowser(onProgress);
+  const profile = copyProfile(onProgress);
   const similarity = downloadSimilarity(onProgress);
-  await Promise.all([browser, similarity]);
+  await Promise.all([browser, profile, similarity]);
 
   callback({
     type: "initialize",
@@ -43,7 +45,7 @@ export async function downloadRequired(callback: BackgroundTaskCallback) {
 // Make sure we have a compatible browser...
 async function downloadBrowser(onProgress: (info: SubTaskProgress) => void) {
   // Download a compatible browser.
-  return setupScraper((bytes, total) => {
+  return installBrowser((bytes, total) => {
     onProgress({
       subTaskId: "chrome",
       percent: (bytes / total) * 100
@@ -61,6 +63,7 @@ async function downloadBrowser(onProgress: (info: SubTaskProgress) => void) {
     })
   })
 }
+
 
 function downloadSimilarity(onProgress: (info: SubTaskProgress) => void) {
   const similarityFolder = path.join(rootFolder, "similarity");

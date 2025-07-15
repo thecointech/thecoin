@@ -1,14 +1,27 @@
-import { Button, Container } from 'semantic-ui-react'
+import { Button, Checkbox, Container, Message } from 'semantic-ui-react'
 import { ConfigReducer } from './state/reducer'
 import { useHistory } from 'react-router';
+import { useEffect, useState } from 'react';
 
 export const Complete = () => {
   const navigate = useHistory();
   const data = ConfigReducer.useData();
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    window.scraper.alwaysRunScraperVisible().then(r => setVisible(r.value ?? false))
+  }, [])
+
+  const setAlwaysVisible = async (visible?: boolean) => {
+    const r = await window.scraper.alwaysRunScraperVisible(visible)
+    setVisible(r.value ?? false)
+  }
+
   const setConfig = async () => {
     await window.scraper.setHarvestConfig(data);
     navigate.push("/results");
   }
+
   return (
     <Container>
       <h4>Start the Harvester</h4>
@@ -30,6 +43,16 @@ export const Complete = () => {
       <div>
         <Button onClick={setConfig} style={{backgroundColor: 'green', color: 'white'}}>Save Config</Button>
       </div>
+      <Message info>
+
+        To see what the harvester is doing, you can force it to always run visible.<br />
+        This is useful for debugging, but not recommended for normal use.
+        <br />
+        <Checkbox
+          onClick={(_, {checked}) => setAlwaysVisible(checked)}
+          checked={visible}
+          label="Force Always run visible" />
+      </Message>
     </Container>
   )
 }

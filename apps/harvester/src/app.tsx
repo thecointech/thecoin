@@ -55,6 +55,12 @@ export const App = () => {
             to='/agent'
           />
           <Menu.Item
+            name='Reset TwoFA'
+            active={location.pathname.startsWith('/twofaRefresh')}
+            as={Link}
+            to='/twofaRefresh'
+          />
+          <Menu.Item
             name='Training'
             active={location.pathname.startsWith('/train')}
             as={Link}

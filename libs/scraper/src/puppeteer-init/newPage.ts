@@ -6,6 +6,8 @@ import { getBrowserPath } from './browser';
 import { log } from '@thecointech/logging';
 // import { initDebuggingInfo } from './debugging';
 import { getUserDataDir } from './userProfile';
+import { getIsVisible } from './visibility';
+import { getPuppeteerType } from './type';
 
 const puppeteer = addExtra(puppeteerVanilla);
 const plugins = getPlugins();
@@ -17,7 +19,7 @@ declare global {
   } | undefined;
 }
 
-async function getPage(contextName = "default", headless?: boolean) {
+async function getPage(contextName = "default") {
 
   // So... it seems that contexts are unusable because
   // they do not load cookies etc from default (thanks for
@@ -28,20 +30,33 @@ async function getPage(contextName = "default", headless?: boolean) {
     const { browser, contexts } = globalThis.__scraper__;
     let context = contexts[contextName];
     if (!context) {
+      log.debug(`Creating new context: ${contextName}`);
       context = await browser.createBrowserContext();
       contexts[contextName] = context;
+    }
+    else {
+      log.debug(`Using existing context: ${contextName}`);
     }
     return { browser, page: await context.newPage() };
   }
 
+  const type = getPuppeteerType();
   const executablePath = await getBrowserPath();
-  log.debug(`Starting Puppeteer using executable path: ${executablePath}`);
-  const shouldBeHeadless = headless ?? process.env.RUN_SCRAPER_HEADLESS !== 'false';
+  const visible = await getIsVisible();
+  const userDataDir = getUserDataDir();
+  log.debug({ executablePath, visible, userDataDir }, "Starting Puppeteer: visible={visible}, exe={executablePath}, userDataDir={userDataDir}");
   const browser = await puppeteer.launch({
-    headless: shouldBeHeadless,
+    headless: !visible,
+    browser: type,
     executablePath,
-    userDataDir: getUserDataDir(),
+    userDataDir,
     args: [
+      // TODO: Fix sandboxing on linux to resolve the following error in a better way
+      // No usable sandbox! If you are running on Ubuntu 23.10+ or another
+      // Linux distro that has disabled unprivileged user namespaces with AppArmor...
+      '--no-sandbox',
+      '--disable-setuid-sandbox'
+
       // "--disable-accelerated-2d-canvas",
       // "--disable-gpu",
       // We can safely disable site isolation as
@@ -52,8 +67,10 @@ async function getPage(contextName = "default", headless?: boolean) {
     ],
   });
 
-  for (const plugin of plugins) {
-    await plugin.onBrowser(browser);
+  if (type == "chrome") {
+    for (const plugin of plugins) {
+      await plugin.onBrowser(browser);
+    }
   }
 
   let contexts: Record<string, BrowserContext> = {
@@ -81,18 +98,14 @@ async function getPage(contextName = "default", headless?: boolean) {
   };
 }
 
-export async function newPage(contextName?: string, headless?: boolean) {
+export async function newPage(contextName?: string) {
 
-  const { page, browser } = await getPage(contextName, headless);
-  // page.setBypassCSP(true);
-  // Additional settings that often help with CORS/CSP issues:
-  // await page.setExtraHTTPHeaders({
-  //   'Accept': '*/*',
-  //   'Access-Control-Allow-Origin': '*',
-  // });
+  const { page, browser } = await getPage(contextName);
 
-  for (const plugin of plugins) {
-    await plugin.onPageCreated(page);
+  if (getPuppeteerType() == "chrome") {
+    for (const plugin of plugins) {
+      await plugin.onPageCreated(page);
+    }
   }
 
   await page.setViewport({

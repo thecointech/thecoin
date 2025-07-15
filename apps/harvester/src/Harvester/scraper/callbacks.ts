@@ -6,7 +6,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { DateTime } from "luxon";
 import { IScraperCallbacks, ScraperProgress } from "@thecointech/scraper";
 import { AnyEvent } from "@thecointech/scraper/types";
-import { BackgroundTaskType, BackgroundTaskCallback } from "@/BackgroundTask";
+import { BackgroundTaskType, BackgroundTaskCallback, SubTaskProgress } from "@/BackgroundTask";
 import { maybeCloseModal } from "@thecointech/scraper-agent/modal";
 import { notify } from "../notify";
 
@@ -37,9 +37,7 @@ export class ScraperCallbacks implements IScraperCallbacks {
     // visual indication of how much progress has been made
     if (sections && this.uiCallback) {
       for (const section of sections)
-        this.uiCallback?.({
-          parentId: this.timestamp.toString(),
-          type: this.taskType,
+        this.subTaskCallback({
           subTaskId: section,
         })
     }
@@ -74,9 +72,7 @@ export class ScraperCallbacks implements IScraperCallbacks {
   onProgress(progress: ScraperProgress) {
     const stepPercent = progress.stepPercent ?? 0;
     const totalPercent = stepPercent + ((progress.step) / progress.total);
-    this.uiCallback?.({
-      parentId: this.timestamp.toString(),
-      type: this.taskType,
+    this.subTaskCallback?.({
       subTaskId: progress.stage,
       description: progress.stage,
       percent: totalPercent,
@@ -84,6 +80,14 @@ export class ScraperCallbacks implements IScraperCallbacks {
     // TODO: Allow cancellation
     return true;
   }
+
+  subTaskCallback = (progress: SubTaskProgress) => {
+    this.uiCallback?.({
+      parentId: this.timestamp.toString(),
+      type: this.taskType,
+      ...progress,
+    })
+  };
 
   async complete(success: boolean, error?: string) {
     // Update TaskGroup

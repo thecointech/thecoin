@@ -197,9 +197,10 @@ function getSizeScore(potential: Coords, original: Coords) {
 async function getNodeValueScore(potential: ElementData, original: ElementDataMin) {
   if (potential.nodeValue && original.nodeValue) {
     // If both are $amounts, that's a pretty good sign
+    // NOTE: ($val) is valid for -ve amounts
     if (
-      original.text?.trim().match(/^\$[0-9, ]+\.\d{2}$/) &&
-      potential.text?.trim().match(/^\$[0-9, ]+\.\d{2}$/)
+      original.text?.trim().match(/^\(?\$[0-9, ]+\.\d{2}\)?$/) &&
+      potential.text?.trim().match(/^\(?\$[0-9, ]+\.\d{2}\)?$/)
     ) {
       return 0.75;
     }

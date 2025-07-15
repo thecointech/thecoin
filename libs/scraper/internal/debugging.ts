@@ -1,7 +1,7 @@
 import type { Page } from "puppeteer";
 import path from "path";
 import fs from "fs";
-import { rootFolder } from "./rootFolder";
+import { rootFolder } from "../src/puppeteer-init/rootFolder";
 
 export function initDebuggingInfo(page: Page) {
   const dbgFile = path.join(rootFolder(), 'puppeteer-debug.log');

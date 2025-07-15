@@ -28,6 +28,10 @@ export type ScraperBridgeApi = {
   // Validate an action
   validateAction(actionName: ActionType, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,
 
+  // Reset 2FA without doing a full banking setup
+  // Useful if your chequing acc loses it's 2FA token
+  // but you don't want to send unnecessary etransfers
+  twofaRefresh: (actionName: ActionType, refreshProfile: boolean) => Promise<Result<boolean>>,
 
   onAskQuestion: (callback: (question: QuestionPacket|OptionPacket) => void) => void;
   replyQuestion: (response: ResponsePacket) => Promise<Result<boolean>>;
@@ -53,7 +57,9 @@ export type ScraperBridgeApi = {
   getHarvestConfig(): Promise<Result<HarvestConfig|undefined>>,
   setHarvestConfig(config: HarvestConfig): Promise<Result<boolean>>,
 
-  runHarvester(headless?: boolean): Promise<Result<boolean>>,
+  // Set/get the alwaysRunVisible flag
+  alwaysRunScraperVisible(visible?: boolean): Promise<Result<boolean>>,
+  runHarvester(forceVisible?: boolean): Promise<Result<boolean>>,
   getCurrentState(): Promise<Result<StoredData>>,
 
   exportResults(): Promise<Result<string>>
@@ -66,9 +72,12 @@ export type ScraperBridgeApi = {
   setOverrides(balance: number, pendingAmt: number|null, pendingDate: string|null|undefined): Promise<Result<boolean>>,
 
   // Import a scraper script configuration
-  importScraperScript(config: any): Promise<Result<boolean>>;
-}
+  importScraperScript(config: any): Promise<Result<boolean>>,
 
+  // Lingering (systemd user background)
+  hasUserEnabledLingering(): Promise<Result<boolean>>;
+  enableLingeringForCurrentUser(): Promise<Result<{ success?: boolean; error?: string }>>;
+}
 
 export const actions = {
   hasInstalledBrowser: "browser:hasInstalledBrowser",
@@ -80,6 +89,8 @@ export const actions = {
 
   autoProcess: 'scraper:autoProcess',
   validateAction: 'scraper:validateAction',
+
+  twofaRefresh: 'scraper:twofaRefresh',
 
   onAskQuestion: 'scraper:onAskQuestion',
   replyQuestion: 'scraper:replyQuestion',
@@ -93,6 +104,8 @@ export const actions = {
   // Not really scraper, but meh
   setWalletMnemomic: 'scraper:setWalletMnemomic',
   getWalletAddress: 'scraper:getWalletAddress',
+  hasUserEnabledLingering: 'scraper:hasUserEnabledLingering',
+  enableLingeringForCurrentUser: 'scraper:enableLingeringForCurrentUser',
 
   // fuggit
   setCreditDetails: "scraper:setCreditDetails",
@@ -100,6 +113,8 @@ export const actions = {
 
   getHarvestConfig: 'scraper:getHarvestConfig',
   setHarvestConfig: 'scraper:setHarvestConfig',
+
+  alwaysRunScraperVisible: 'scraper.alwaysRunScraperVisible',
 
   runHarvester: 'scraper.runHarvester',
   getCurrentState: 'scraper.getCurrentState',

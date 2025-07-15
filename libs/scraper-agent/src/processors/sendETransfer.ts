@@ -32,6 +32,7 @@ export const SendETransfer = processorFn("SendETransfer", async (page: PageHandl
   for (let i = 0; i < 5; i++) {
     const priorLinks = new Set(attemptedLinks);
     await using section = await page.pushIsolatedSection("SendETransfer");
+
     try {
       await navigateToSendETransferPage(page, attemptedLinks);
       page.onProgress(10);

@@ -1,14 +1,17 @@
 services:
   tx-processor:
-    image: ghcr.io/thecointech/thecoin/tx-processor:${CONFIG_NAME:-prod}-latest
-    pull_policy: always
-    platform: linux/amd64
+    #image: ghcr.io/thecointech/thecoin/tx-processor:${CONFIG_NAME:-prod}-latest
+    #pull_policy: always
+    #platform: linux/amd64
+    image: tx-processor
     environment:
       - CONFIG_NAME=${CONFIG_NAME:-prod}
+      - ALWAYS_VERIFY_BANK=true
+      # - THECOIN_SCRAPER_BROWSER=firefox
     volumes:
       # Persistent runtime data
-      - type: volume
-        source: tx-processor-data
+      - type: bind
+        source: /var/tx-data
         target: /data
       # Secrets from host machine (read-only)
       - type: bind

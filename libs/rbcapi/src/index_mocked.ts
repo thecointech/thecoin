@@ -7,6 +7,7 @@ export function closeBrowser() {}
 
 let result = 1234;
 export class RbcApi implements IBank {
+  getBalance = () => Promise.resolve(10000);
   depositETransfer = () => {
     result += 1;
     return Promise.resolve({
