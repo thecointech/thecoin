@@ -5,19 +5,27 @@ declare global {
 }
 
 export function setBrowserType(type?: BrowserType) {
-  if (globalThis.__browserType) {
-    throw new Error("Browser type already set");
-  }
-  globalThis.__browserType = (
+  const newType = (
     type ??
     process.env.THECOIN_SCRAPER_BROWSER as BrowserType ??
     BrowserType.CHROME
   );
+  // If the type is the same, do nothing
+  if (newType == globalThis.__browserType) {
+    return;
+  }
+  // else if the type is different, throw an error
+  if (globalThis.__browserType) {
+    throw new Error("Browser type already set");
+  }
+  // Set the type
+  globalThis.__browserType = newType;
 }
 
 export function getBrowserType(): BrowserType {
   if (!globalThis.__browserType) {
-    throw new Error("Scraping not initialized, BrowserType missing");
+    // Init to default
+    setBrowserType();
   }
   return globalThis.__browserType;
 }

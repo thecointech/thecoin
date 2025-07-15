@@ -1,4 +1,4 @@
-import { newPage, closeBrowser as closeBrowser_ } from "@thecointech/scraper/puppeteer";
+import { newPage, closeBrowser as closeBrowser_ } from "@thecointech/scraper";
 
 
 async function getNewPage() {
