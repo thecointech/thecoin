@@ -10,4 +10,4 @@ describe('findConfirmationNumber', () => {
     expect(confirmationNumber).toBe(12345);
     await closeBrowser();
   })
-}, !!process.env.JEST_CI) // Disable in CI due to puppeteer download timeout
+}, !process.env.JEST_CI) // Disable in CI due to puppeteer download timeout

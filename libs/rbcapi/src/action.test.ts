@@ -10,4 +10,4 @@ describe('ApiAction', () => {
     expect(elements.length).toBe(2);
     await closeBrowser();
   })
-}, !!process.env.JEST_CI) // Disable in CI due to puppeteer download timeout
+}, !process.env.JEST_CI) // Disable in CI due to puppeteer download timeout
