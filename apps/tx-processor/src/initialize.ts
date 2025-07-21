@@ -63,7 +63,7 @@ async function verifyCoinReserves(signer: Signer, contract: TheCoin) {
     Number(balanceCoin) * weSellAt([rate], now),
     true
   );
-  await verifyMinBalance(balanceCad, 10_000, "BrokerCAD", signerAddress, "$CAD");
+  await verifyMinBalance(balanceCad, 10_000, "BrokerCAD", signerAddress, "$THE");
 }
 
 async function verifyMinBalance(Balance: number, MinimumBalance: number, Signer: string, Address: string, currency: string) {

@@ -1,7 +1,6 @@
 {
   "name": "@thecointech/scraper",
   "version": "0.3.11-test.0",
-  "private": true,
   "type": "module",
   "description": "The Coin: Automated scraper for TheCoin",
   "keywords": [
