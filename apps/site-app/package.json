@@ -58,7 +58,7 @@
     "@thecointech/site-base": "^0.3.11",
     "@thecointech/utilities": "^0.3.11",
     "card-validator": "^6.2.0",
-    "compression": "1.7.4",
+    "compression": "1.8.1",
     "connected-react-router": "^6.6.1",
     "file-saver": "^2.0.2",
     "intl": "^1.2.5",
