@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/scraper",
-  "version": "0.3.11-test.0",
+  "version": "0.3.11",
   "type": "module",
   "description": "The Coin: Automated scraper for TheCoin",
   "keywords": [
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@thecointech/async": "^0.3.3",
-    "@thecointech/logging": "^0.3.11-test.0",
+    "@thecointech/logging": "^0.3.11",
     "@web-std/file": "^3.0.3",
     "@xenova/transformers": "^2.14.0",
     "fastest-levenshtein": "^1.0.16",
