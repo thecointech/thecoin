@@ -39,7 +39,7 @@
   ],
   "main": "./build/main.js",
   "dependencies": {
-    "@pinata/sdk": "1.1.23",
+    "@pinata/sdk": "2.1.0",
     "@thecointech/contract-nft": "^0.3.11",
     "@thecointech/logging": "^0.3.11",
     "@thecointech/setenv": "^0.3.11",
