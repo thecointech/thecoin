@@ -4,7 +4,8 @@ from TestBase import TestBase
 from geo_math import BBox, get_distance
 from intent_routes import page_error
 from testdata import get_private_folder, load_image
-from etransfer_routes import best_etransfer_link, detect_etransfer_form, detect_etransfer_stage, detect_next_button, detect_to_recipient, detect_most_similar_option
+from etransfer_routes import best_etransfer_link, detect_etransfer_form, detect_etransfer_stage, detect_next_button, detect_to_recipient
+from common_routes import detect_most_similar_option
 
 # General flow
 # Find ETransfer link
@@ -22,13 +23,13 @@ from etransfer_routes import best_etransfer_link, detect_etransfer_form, detect_
 #     FILL_FORM = "FillForm"
 #     REVIEW_DETAILS = "ReviewDetails"
 #     TRANSFER_COMPLETE = "TransferComplete"
-    
+
 # typesStr = ", ".join([e.value for e in ETransferStage])
 
 # class ETransferStageResponse(BaseModel):
 #     stage: ETransferStage = Field(..., description="option")
 #     # reasoning: str = Field(..., description="explain your reasoning")
-    
+
 class TestETransfer(TestBase):
 
     # What is the action be requested of the user here?
@@ -76,14 +77,14 @@ class TestETransfer(TestBase):
                 response = await detect_to_recipient(image, gold["SelectRecipient"]["address"])
                 pointed = Point(response.position_x, response.position_y)
                 is_contained = get_distance(pointed, gold_box) == 0
-                
+
                 self.assertEqual(is_contained, True)
 
     async def test_detect_next_button(self):
         samples_folder = get_private_folder("samples", "etransfer")
         all_json = samples_folder.glob("**/*-gold.json")
         for json_file in all_json:
-            
+
             image_file_stem = json_file.name.replace("-gold.json", ".png")
             image_file = json_file.with_name(image_file_stem)
             if not image_file.exists():
@@ -121,7 +122,7 @@ class TestETransfer(TestBase):
         samples_folder = get_private_folder("samples", "etransfer")
         all_json = samples_folder.glob("**/*-gold.json")
         for json_file in all_json:
-            
+
             image_file_stem = json_file.name.replace("-gold.json", ".png")
             image_file = json_file.with_name(image_file_stem)
             if not image_file.exists():
@@ -142,7 +143,7 @@ class TestETransfer(TestBase):
         samples_folder = get_private_folder("samples")
         all_images = samples_folder.glob("**/*.png")
         for image_file in all_images:
-            
+
             # skip dbg outputs
             if ("dbg_outputs" in str(image_file)):
                 continue
@@ -162,5 +163,5 @@ class TestETransfer(TestBase):
         similarity = await detect_most_similar_option("Chequing Account: 1234567", ["Select an account", "Your Basic Chequing Account 123**** - $89.90"])
         self.assertEqual(similarity.most_similar, "Your Basic Chequing Account 123**** - $89.90")
 
-            
-        
+
+
