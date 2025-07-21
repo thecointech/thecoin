@@ -5,10 +5,12 @@ import { ConfigStore } from "@thecointech/store";
 const OneDay = 24 * 60 * 60 * 1000;
 const BankLastCheckKey = "bank.lastCheck";
 export async function verifyBank(bank: RbcApi) {
-  const lastCheck = await ConfigStore.get(BankLastCheckKey);
-  if (lastCheck && Number(lastCheck) > Date.now() - OneDay) {
-    log.debug("Skipping Bank Check");
-    return;
+  if (!process.env.ALWAYS_VERIFY_BANK) {
+    const lastCheck = await ConfigStore.get(BankLastCheckKey);
+    if (lastCheck && Number(lastCheck) > Date.now() - OneDay) {
+      log.debug("Skipping Bank Check");
+      return;
+    }
   }
 
   const balance = await bank.getBalance();

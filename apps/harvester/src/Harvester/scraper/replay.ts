@@ -11,7 +11,7 @@ export async function getValues(actionName: 'chqBalance', callback?: BackgroundT
 export async function getValues(actionName: 'visaBalance', callback?: BackgroundTaskCallback): Promise<VisaBalanceResult>;
 export async function getValues(actionName: 'chqETransfer', callback?: BackgroundTaskCallback, dynamicValues?: ETransferInput): Promise<ETransferResult>;
 export async function getValues(actionName: ActionType, callback?: BackgroundTaskCallback, dynamicValues?: Record<string, string>, delay?: number): Promise<ReplayResult>
-export async function getValues(actionName: ActionType, callback?: BackgroundTaskCallback, dynamicValues?: Record<string, string>, delay = 1000) {
+export async function getValues(actionName: ActionType, callback?: BackgroundTaskCallback, dynamicValues?: Record<string, string>, delay = 5000) {
 
   const scraperCallbacks = new ScraperCallbacks("replay", callback, [actionName]);
   const events = await getEvents(actionName);
@@ -19,7 +19,7 @@ export async function getValues(actionName: ActionType, callback?: BackgroundTas
   if (!replayEvents?.length) {
     throw new Error(`No events found for ${actionName}`);
   }
-  const r = await replay(actionName, replayEvents, scraperCallbacks, dynamicValues, delay);
+  const r = await replay({ name: actionName, delay }, replayEvents, scraperCallbacks, dynamicValues);
   scraperCallbacks.complete(true);
   return r;
 }

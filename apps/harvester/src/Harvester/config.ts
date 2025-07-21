@@ -1,22 +1,28 @@
 import { defaultDays, defaultTime, HarvestConfig, Mnemonic } from '../types';
 import { createStep } from './steps';
-import { CreditDetails } from './types';
+import type { CreditDetails } from './types';
 import { setSchedule } from './schedule';
 import { log } from '@thecointech/logging';
 import { HDNodeWallet } from 'ethers';
-import { ScrapingConfig } from './scraper';
+import type { ScrapingConfig } from './scraper';
 import { getProvider } from '@thecointech/ethers-provider';
-import { ConfigShape, ConfigKey, getConfig } from './config.db';
-
+import { ConfigShape, ConfigKey, getConfig, isPouchError } from './config.db';
 
 export async function getProcessConfig() {
+  const db = await getConfig();
   try {
-    const db = await getConfig();
     const doc = await db.get(ConfigKey, { revs_info: true, latest: true });
     return doc;
   }
   catch (err) {
-    return undefined;
+    if (isPouchError(err)) {
+      // Doc not found, this is normal on first insert
+      if (err.status === 404) {
+        return undefined;
+      }
+    }
+    log.error(err, "Error getting process config")
+    throw err;
   }
 }
 
@@ -69,6 +75,7 @@ export async function setProcessConfig(config: Partial<ConfigShape>) {
       daysToRun: config.schedule?.daysToRun ?? lastCfg?.schedule?.daysToRun ?? defaultDays,
       timeToRun: config.schedule?.timeToRun ?? lastCfg?.schedule?.timeToRun ?? defaultTime,
     },
+    alwaysRunScraperVisible: config.alwaysRunScraperVisible ?? lastCfg?.alwaysRunScraperVisible,
     stateKey: config.stateKey ?? lastCfg?.stateKey,
     wallet: config.wallet ?? lastCfg?.wallet,
     creditDetails: config.creditDetails ?? lastCfg?.creditDetails,
@@ -139,9 +146,11 @@ export async function getHarvestConfig() {
     : undefined;
 }
 
-export async function setHarvestConfig(config: HarvestConfig) {
-  const existing = await getHarvestConfig();
-  await setSchedule(config.schedule, existing?.schedule);
+export async function setHarvestConfig(config: Partial<HarvestConfig>) {
+  if (config.schedule) {
+    const existing = await getHarvestConfig();
+    await setSchedule(config.schedule, existing?.schedule);
+  }
   await setProcessConfig(config)
   return true;
 }

@@ -18,6 +18,8 @@ import { AskUserReact } from './Harvester/agent/askUser';
 import { downloadRequired } from './Download/download';
 import { getScrapingScript } from './results/getScrapingScript';
 import { twofaRefresh as doRefresh } from './Harvester/agent/twofaRefresh';
+import { enableLingeringForCurrentUser, isLingeringEnabled } from './Harvester/schedule/linux-lingering';
+import { VisibleOverride } from '@thecointech/scraper';
 
 
 async function guard<T>(cb: () => Promise<T>) {
@@ -109,9 +111,17 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
   getHarvestConfig: () => guard(() => getHarvestConfig()),
   setHarvestConfig: (config) => guard(() => setHarvestConfig(config)),
 
-  runHarvester: (headless?: boolean) => guard(() => {
-    process.env.RUN_SCRAPER_HEADLESS = headless?.toString()
+  alwaysRunScraperVisible: (visible?: boolean) => guard(async () => {
+    if (visible !== undefined) {
+      await setProcessConfig({ alwaysRunScraperVisible: visible });
+    }
+    const config = await getProcessConfig();
+    return config?.alwaysRunScraperVisible ?? false;
+  }),
+  runHarvester: (forceVisible?: boolean) => guard(() => {
+    const visible = new VisibleOverride(forceVisible);
     return harvest(onBgTaskMsg)
+      .finally(() => visible.dispose());
   }),
   getCurrentState: () => guard(() => getState()),
 
@@ -119,6 +129,16 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
   exportConfig: () => guard(async () => {
     const config = await getProcessConfig();
     return JSON.stringify(config, null, 2);
+  }),
+
+  hasUserEnabledLingering: () => guard(async () => {
+    return await isLingeringEnabled();
+  }),
+
+  enableLingeringForCurrentUser: () => guard(async () => {
+    // Trigger enable
+    const result = await enableLingeringForCurrentUser();
+    return result;
   }),
 
   openLogsFolder: () => guard(async () => {
@@ -155,7 +175,7 @@ const onBgTaskMsg = (progress: BackgroundTaskInfo) => {
   ipcMain.emit(actions.onBackgroundTaskProgress, progress);
 }
 
-export function initScraping() {
+export function initMainIPC() {
 
   ipcMain.handle(actions.hasInstalledBrowser, api.hasInstalledBrowser);
   ipcMain.handle(actions.hasCompatibleBrowser, api.hasCompatibleBrowser);
@@ -206,8 +226,11 @@ export function initScraping() {
     return api.setHarvestConfig(config);
   })
 
-  ipcMain.handle(actions.runHarvester, async (_event, headless?: boolean) => {
-    return api.runHarvester(headless);
+  ipcMain.handle(actions.alwaysRunScraperVisible, async (_event, visible: boolean) => {
+    return api.alwaysRunScraperVisible(visible);
+  })
+  ipcMain.handle(actions.runHarvester, async (_event) => {
+    return api.runHarvester();
   })
   ipcMain.handle(actions.getCurrentState, async (_event) => {
     return api.getCurrentState();
@@ -218,6 +241,13 @@ export function initScraping() {
   })
   ipcMain.handle(actions.exportConfig, async (_event) => {
     return api.exportConfig();
+  })
+
+  ipcMain.handle(actions.hasUserEnabledLingering, async (_event) => {
+    return api.hasUserEnabledLingering();
+  })
+  ipcMain.handle(actions.enableLingeringForCurrentUser, async (_event) => {
+    return api.enableLingeringForCurrentUser();
   })
 
   ipcMain.handle(actions.openLogsFolder, async (_event) => {

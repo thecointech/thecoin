@@ -1,54 +1,59 @@
 import path from "path"
-import { Browser, ChromeReleaseChannel, computeExecutablePath, computeSystemExecutablePath, detectBrowserPlatform, install, resolveBuildId } from "@puppeteer/browsers"
+import { ChromeReleaseChannel, computeExecutablePath, computeSystemExecutablePath, detectBrowserPlatform, install, resolveBuildId } from "@puppeteer/browsers"
 import os from "node:os"
 import { existsSync, promises as fs } from "node:fs"
 import { rootFolder } from "./rootFolder"
 import { log } from "@thecointech/logging"
-
-// Our process:
-// First, detect installed browsers
-// Allow user to download chrome to browserDownloadDir
-// Save path (do we need to?)
+import { getBrowserType } from "./type"
 
 const buildIdAlias = 'downloaded'
 
 const browserDownloadDir = () => path.join(rootFolder(), 'browser')
 
-export async function installChrome(progress?: (bytes: number, total: number) => void) {
+export async function installBrowser(progress?: (bytes: number, total: number) => void) {
   const existing = await getLocalBrowserPath();
 
   if (existing) {
     // It is the responsibility of the caller to delete existing
     // installations to force a re-install
-    log.info(`Chrome install found at ${existing}`)
+    log.info(
+      { browser: getBrowserType(), path: existing },
+      "{browser} install found at {path}"
+    )
     return existing;
   }
   const cacheDir = browserDownloadDir();
-  log.info(`Initiating download of Chrome to: ${cacheDir}`)
+  log.info(
+    { browser: getBrowserType(), path: cacheDir },
+    `Initiating download of {browser} to: {path}`
+  )
 
   const platform = detectBrowserPlatform();
   if (!platform) {
     throw new Error(`Cannot detect the browser platform for: ${os.platform()} (${os.arch()})`);
   }
   const buildId = await resolveBuildId(
-    Browser.CHROME,
+    getBrowserType(),
     platform,
     'stable',
   )
   const browser = await install({
-    browser: Browser.CHROME,
+    browser: getBrowserType(),
     cacheDir,
     buildId,
     buildIdAlias,
     downloadProgressCallback: progress,
   })
 
-  log.info(`Chrome installed to: ${browser.executablePath}`)
+  log.info(
+    { browser: getBrowserType(), path: browser.executablePath },
+    "{browser} installed to: {path}"
+  )
 
   return browser.executablePath
 }
 
-export async function removeChrome() {
+export async function removeBrowser() {
   const installed = await getLocalBrowserPath()
   if (installed) {
     await fs.rm(browserDownloadDir(), { recursive: true })
@@ -57,7 +62,7 @@ export async function removeChrome() {
 
 export async function getSystemBrowserPath() {
   const path = computeSystemExecutablePath({
-    browser: Browser.CHROME,
+    browser: getBrowserType(),
     channel: ChromeReleaseChannel.STABLE,
   });
   return path
@@ -65,7 +70,7 @@ export async function getSystemBrowserPath() {
 
 export async function getLocalBrowserPath() {
   const path = computeExecutablePath({
-    browser: Browser.CHROME,
+    browser: getBrowserType(),
     cacheDir: browserDownloadDir(),
     buildId: buildIdAlias,
   })

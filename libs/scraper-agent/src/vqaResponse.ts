@@ -210,7 +210,7 @@ export async function waitForValidIntent(page: Page, interval = 1000, timeout = 
       // If the page has some kind of intent, then we can stop
       if (intent != "Loading" && intent != "Blank") {
         log.info(`Detected intent: ${intent} after ${elapsedSeconds(start)} seconds`);
-        return;
+        return intent;
       }
     }
     catch (err) {
@@ -220,6 +220,7 @@ export async function waitForValidIntent(page: Page, interval = 1000, timeout = 
     await sleep(interval)
   } while (Date.now() < maxTime);
   log.error(`Valid intent not detected in ${timeout / 1000} seconds`);
+  return null;
 }
 
 export async function waitPageStable(page: Page, timeout: number = 10_000, maxPixelsChanged = MIN_PIXELS_CHANGED) {

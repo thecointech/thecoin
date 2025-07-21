@@ -96,6 +96,7 @@ export async function updateAccountNumber(inferred: AccountResponse, scraped: El
   const realAccountText = scraped.text;
   // The inferred number may be off by a few digits
   const { data: corrected } = await GetBaseApi().correctEstimate(inferredAccountNumber, realAccountText, "account number");
+  log.trace(`Corrected account number from inferred: (${inferredAccountNumber}) to (${corrected.correct_value})`);
   // This should be closer, but even it can be slightly off.  However
   // we should be close enough that a simple fuzzy-match will capture the correct value
   const { match: accountNumber } = extractFuzzyMatch(corrected.correct_value, realAccountText);

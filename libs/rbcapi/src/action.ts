@@ -5,6 +5,7 @@ import { AuthOptions, Credentials, isCredentials } from './types';
 import { getPage } from './scraper';
 import { getSecret } from '@thecointech/secrets';
 import { DateTime } from 'luxon';
+import { init } from './scraper/init';
 
 ////////////////////////////////////////////////////////////////
 // API action, a single-shot action created by the API.
@@ -44,19 +45,20 @@ export class ApiAction {
   step: number = 0;
 
   private constructor(identifier: string) {
-    if (process.env.TC_LOG_FOLDER) {
-      const base = process.env.TC_LOG_FOLDER;
+    if (process.env.THECOIN_DATA) {
+      const base = process.env.THECOIN_DATA;
       const illegalRe = /[\/\?<>\\:\*\|":]/g;
       const now = DateTime.now();
       const date = now.toFormat('yyyy-MM-dd');
       const time = now.toFormat('HH-mm-ss');
       const ident = identifier.replace(illegalRe, '_');
-      this.outCache = `${base}/rbcapi/Screenshots/${date}/${time}-${ident}`;
+      this.outCache = `${base}/scraper/Screenshots/${date}/${time}-${ident}`;
       fs.mkdirSync(this.outCache, { recursive: true });
     }
   }
 
   private async init() {
+    await init();
     this.page = await getPage();
     this.navigationPromise = this.page.waitForNavigation()
   }

@@ -51,7 +51,8 @@ const api : ScraperBridgeApi = {
   getHarvestConfig: () => ipcRenderer.invoke(actions.getHarvestConfig),
   setHarvestConfig: (config) => ipcRenderer.invoke(actions.setHarvestConfig, config),
 
-  runHarvester: (headless?: boolean) => ipcRenderer.invoke(actions.runHarvester, headless),
+  alwaysRunScraperVisible: (visible?: boolean) => ipcRenderer.invoke(actions.alwaysRunScraperVisible, visible),
+  runHarvester: (forceVisible?: boolean) => ipcRenderer.invoke(actions.runHarvester, forceVisible),
   getCurrentState: () => ipcRenderer.invoke(actions.getCurrentState),
 
   exportResults: () => ipcRenderer.invoke(actions.exportResults),
@@ -64,6 +65,9 @@ const api : ScraperBridgeApi = {
   setOverrides: (balance, pendingAmt, pendingDate) => ipcRenderer.invoke(actions.setOverrides, balance, pendingAmt, pendingDate),
 
   importScraperScript: (config) => ipcRenderer.invoke(actions.importScraperScript, config),
+
+  hasUserEnabledLingering: () => ipcRenderer.invoke(actions.hasUserEnabledLingering),
+  enableLingeringForCurrentUser: () => ipcRenderer.invoke(actions.enableLingeringForCurrentUser),
 }
 
 export const connectRenderer = () => contextBridge.exposeInMainWorld('scraper', api)

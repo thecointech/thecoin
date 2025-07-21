@@ -90,7 +90,7 @@ const config = {
       devContentSecurityPolicy: getCSP(),
       mainConfig: mainConfigMerged,
       renderer: {
-        config: rendererConfig,
+        config: rendererConfig(),
         entryPoints: [
           {
             html: './src/index.html',

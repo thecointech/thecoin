@@ -3,7 +3,7 @@ import { log } from "@thecointech/logging";
 import { getConfig } from "../config.js";
 import { Agent } from '../../src/agent.js'
 import { init } from "../init.js";
-import { maybeCopyProfile, installChrome } from "@thecointech/scraper/puppeteer";
+import { maybeCopyProfile, installBrowser } from "@thecointech/scraper/puppeteer";
 import { AskUserConsole } from './askUserConsole.js'
 import { TestSerializer } from './testSerializer.js'
 import path from "path";
@@ -19,7 +19,7 @@ const recordFolder = path.join(baseFolder, "record");
 
 await Promise.all([
   init(clean),
-  installChrome(),
+  installBrowser(),
   maybeCopyProfile(),
 ]);
 

@@ -8,6 +8,7 @@ import getMocks from '@thecointech/setenv/webpack';
 import { env, commonBase } from './webpack.common.js';
 import webpack from 'webpack';
 import { getSecret } from '@thecointech/secrets';
+import { platform } from 'os';
 
 const rootPath = path.join(process.cwd(), '../..');
 
@@ -27,6 +28,8 @@ const baseOptions: Configuration = {
     // NOTE: This is used only by
     new webpack.DefinePlugin({
       "process.env.LOG_NAME": JSON.stringify(process.env.LOG_NAME),
+      'process.env.BUILD_OS': JSON.stringify(platform()),
+
       __COMPILER_REPLACE_SECRETS__: JSON.stringify({PolygonscanApiKey}),
     }),
   ],
@@ -57,8 +60,9 @@ const baseOptions: Configuration = {
   },
 };
 
-export const rendererConfig = merge(
+export const rendererConfig = (custom: Configuration = {}) => merge(
+  custom,
   getMocks(env),
   baseOptions,
-  commonBase
+  commonBase,
 );
