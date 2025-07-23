@@ -6,31 +6,50 @@ import glob
 import shutil
 from huggingface_hub import model_info
 import re
+import argparse
 
 # Add the src directory to the Python path
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, 'src'))
 
 from model_details import get_model_details, get_project_root  # noqa: E402
+from model_details_version import MODEL_REVISION
+
 
 details = get_model_details()
-def update_all():
-    #clear_existing()
+def update_all(update_to_latest=False, dry_run=False):
+    if dry_run:
+        print("Dry run, not updating model")
 
-    # Get the current model version from hub
-    info = model_info(details.MODEL_NAME)
-    revision = info.sha
-    print(f"Downloading {details.MODEL_NAME} at revision: {revision}")
+    if not dry_run:
+        clear_existing()
 
-    update_tokenizer(revision)
-    update_model(revision)
+    revision = get_revision(update_to_latest)
+    if not dry_run:
+        update_tokenizer(revision)
+        update_model(revision)
+        copy_additional_files(revision)
 
-    copy_additional_files(revision)
+    if update_to_latest:
+        # Update MODEL_REVISION file
+        if not dry_run:
+            save_version_number(revision)
+        print(f"Updated MODEL_REVISION from {MODEL_REVISION} to: {revision}")
 
-    # Update MODEL_REVISION
-    save_version_number(revision)
-    
     print("Model converted and saved successfully")
+
+
+def get_revision(update_to_latest=False):
+    if update_to_latest:
+        # Get the current model version from hub
+        info = model_info(details.MODEL_NAME)
+        print(f"Downloading {details.MODEL_NAME} at latest revision: {info.sha}")
+        return info.sha
+    else:
+        # Use the fixed revision
+        print(f"Downloading {details.MODEL_NAME} at fixed revision: {MODEL_REVISION}")
+        return MODEL_REVISION
+
 
 def clear_existing():
     # clear existing files
@@ -74,7 +93,7 @@ def copy_additional_files(revision: str):
     version_folder = details.MODEL_CACHE_DIR / model_folder  / "snapshots" / revision
     if not version_folder.exists():
         raise Exception(f"Version {revision} not found in {details.MODEL_CACHE_DIR}")
-        
+
     for src in glob.glob(os.path.join(version_folder, "*.*")):
         # Get the filename
         filename = os.path.basename(src)
@@ -104,4 +123,12 @@ def save_version_number(revision: str):
 
 
 if __name__ == "__main__":
-    update_all()
+    parser = argparse.ArgumentParser(description='Fetch and convert model')
+    parser.add_argument('--update', action='store_true',
+                       help='Update to the latest model revision from hub')
+    parser.add_argument('--dry-run', action='store_true',
+                        help='Dry run, do not update model')
+
+    args = parser.parse_args()
+
+    update_all(update_to_latest=args.update, dry_run=args.dry_run)
