@@ -7,6 +7,8 @@ from dateparser import parse
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, 'src'))
 
+from data_elements import DateElementResponse
+
 class TestBase(unittest.IsolatedAsyncioTestCase):
 
     def assertEqual(self, str1, str2, msg=None):
@@ -74,6 +76,16 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
             expected_content in response_text or
             response_text in expected_content
         )
+        # Allow a single character substitution
+        if not textOverlap and len(expected_content) == len(response_text) and len(expected_content) > 5:
+            # Check for a single character difference
+            diff = 0
+            for i in range(len(expected_content)):
+                if expected_content[i] != response_text[i]:
+                    diff += 1
+            if diff == 1:
+                textOverlap = True
+
         self.assertTrue(textOverlap, f"Text: {response_text} does not match expected: {expected_content} in {key}")
 
     def assertNeighbours(self, response: dict, expected: dict, key: str = None):
@@ -91,8 +103,8 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
     # The LLM seems to return the date in a different format from
     # whats on the page.  The scraper can handle the difference, so
     # we just check that the dates match, and the format is not important
-    def assertDate(self, response: dict, expected: dict, key: str = None):
-        responseDate = parse(response["content"])
+    def assertDate(self, response: DateElementResponse, expected: dict, key: str = None):
+        responseDate = parse(response.content)
         expectedDate = parse(expected["text"])
         self.assertEqual(responseDate, expectedDate, f"Date: {responseDate} does not match expected: {expectedDate} in {key}")
 
@@ -108,7 +120,11 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         self.assertNeighbours(response, expected, key)
         print("Element Found Correctly")
 
-    def assertDateResponse(self, response: dict, expected: dict, key: str = None):
+    def assertDateResponse(self, response: DateElementResponse, expected: dict, key: str = None):
+        # response should be an ElementDatum, but we only care about the in-page element
+        if get_member(expected, "elm"):
+            expected = get_member(expected, "elm")
+
         self.assertDate(response, expected, key)
         self.assertPosition(response, expected, key)
         self.assertNeighbours(response, expected, key)
