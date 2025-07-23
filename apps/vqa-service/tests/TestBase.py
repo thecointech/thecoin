@@ -28,13 +28,13 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         e_posX = response.position_x
         e_posY = response.position_y
 
-        self.assertAlmostEquals(
+        self.assertAlmostEqual(
             e_posX,
             o_centerX,
             delta=max(20, o_width * 0.6),
             msg=f"X: {e_posX} does not match expected: {o_centerX} with width: {o_width} in {key}"
         )
-        self.assertAlmostEquals(
+        self.assertAlmostEqual(
             e_posY,
             o_centerY,
             delta=max(20, o_height * 0.6),
@@ -62,7 +62,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
 
         expected_content = self.get_expected_text(expected)
 
-        # We can't reliably check this, the actual scraped may result in 
+        # We can't reliably check this, the actual scraped may result in
         # elements that contain text visually but are not children in the DOM
         # For example, inputs with labels etc
         # if (expected["text"] == ""):
@@ -96,7 +96,12 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         expectedDate = parse(expected["text"])
         self.assertEqual(responseDate, expectedDate, f"Date: {responseDate} does not match expected: {expectedDate} in {key}")
 
-    def assertResponse(self, response, expected: dict, key: str = None):
+    def assertResponse(self, response, expected: object, key: str = None):
+
+        # response should be an ElementDatum, but we only care about the in-page element
+        if get_member(expected, "elm"):
+            expected = get_member(expected, "elm")
+
         if "coords" in expected:
             self.assertPosition(response, expected, key)
         self.assertContent(response, expected, key)
@@ -117,6 +122,12 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         min_posY = round(min(all_posY))
         return (max(min_posY - buffer, 0), min(max_posY + buffer, image.height))
 
+def get_member(obj, key):
+    if hasattr(obj, key):
+        return getattr(obj, key)
+    elif isinstance(obj, dict) and key in obj:
+        return obj[key]
+    return None
 
 def normalize(str: str):
     str = str.lower()

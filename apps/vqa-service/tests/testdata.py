@@ -1,10 +1,11 @@
 import json
 import os
+import glob
+import re
 from PIL import Image
-from typing import NamedTuple, TypedDict
+from typing import NamedTuple
 from dotenv import load_dotenv
 from pathlib import Path
-
 from geo_math import BBox
 
 
@@ -14,29 +15,48 @@ load_dotenv()
 MAX_HEIGHT = 1440
 
 
-class JsonDatum(TypedDict):
-    name: str
-    data: object
+class ElementDatum(NamedTuple):
+    vqa: object
+    elm: object
 
 class TestData(NamedTuple):
-    key: str
+    # The index is the index of the step in the bank/intent/*.png list
+    index: str
+    # Source is generally the name of the bank
+    source: str
+    # What part of the agent flow this is?
+    intent: str
+    # loaded image
     image: Image.Image
-    elements: JsonDatum
-    # page_type: str
+    # loaded html
+    html: str
+    # Any associated json vqa/element data
+    elements: dict[str, ElementDatum]
+
+    @property
+    def key(self):
+        return f"{self.source}-{self.intent}-{self.index}"
+
+    @property
+    def html_location(self):
+        match = re.search(r"^Content-Location:\s*(.*)$", self.html, re.MULTILINE | re.IGNORECASE)
+        if match:
+            return match.group(1).strip()
+        return None
 
 class SampleData(NamedTuple):
     key: str
     path: Path # Path to the folder containing image and json
     image: Image.Image
-    elements: list[object]
+    elements: dict[str, ElementDatum]
     parent_coords: list[BBox]
     gold: list[str]
     raw: list[str] = None
 
-class SingleTestDatum(NamedTuple):
+class SingleTestData(NamedTuple):
     key: str
     image: Image.Image
-    element: object
+    element: ElementDatum
     # page_type: str
     # element_type: str
 
@@ -56,7 +76,16 @@ def get_elements(image_file: str):
         for f in os.listdir(image_folder)
         if f.endswith(".json") and f.startswith(base_name)
     ]
-    return {get_element_type(f): load_json(f) for f in json_paths}
+    elements = {}
+    for path in json_paths:
+        filename = os.path.basename(path)
+        (element, src) = get_element_type(filename)
+        if src:
+          if element not in elements:
+              elements[element] = ElementDatum(vqa=None, elm=None)
+          elements[element] = elements[element]._replace(**{src: load_json(path)})
+    return elements
+
 
 
 def load_image(image_file: str, max_height: int = MAX_HEIGHT):
@@ -71,14 +100,28 @@ def load_image(image_file: str, max_height: int = MAX_HEIGHT):
 
     return image
 
+def load_html(image_file: str):
+    html_file = image_file.replace(".png", ".mhtml")
+    with open(html_file, "r") as f:
+        return f.read()
 
 def get_basename(image_file: str):
     return os.path.basename(image_file).split(".")[0]
 
+# Our format is /<source>/<intent>/<step>.png
+def get_source(image_file: str):
+    return os.path.dirname(image_file).split("/")[0]
+
+def get_intent(image_file: str):
+    return os.path.dirname(image_file).split("/")[1]
 
 def get_element_type(json_file: str):
-    parts = get_basename(json_file).split("-")
-    return "-".join(parts[1:])
+    basename = get_basename(json_file)
+    parts = basename.split("-")
+    src = parts[-1]
+    if (src == "elm" or src == "vqa"):
+        return ("-".join(parts[1:-1]), src)
+    return (None, None)
 
 
 # Only run tests with this key
@@ -88,32 +131,42 @@ KeyFilter = []
 #
 # TODO! Fix that test data organization strategy once and for all!
 # No tests will work because we to codify the split between samples/gold/latest (or historical whateva)
-# 
-def get_test_data(test_type: str, page_type: str, max_height: int = MAX_HEIGHT) -> dict[str, TestData]:
+#
+def get_test_data(intent_filter: str|list[str], max_height: int = MAX_HEIGHT) -> list[TestData]:
     # get the private testing folder from the environment
     test_folder = os.environ.get("PRIVATE_TESTING_PAGES", None)
     if test_folder is None:
         return []
 
-    # list all files in the folder
-    samples_folder = os.path.join(test_folder, "unit-tests", test_type, page_type)
-    image_files = [
-        os.path.join(samples_folder, f)
-        for f in os.listdir(samples_folder)
-        if f.endswith(".png")
-    ]
+    record_base = os.path.join(test_folder, "unit-tests", "record")
+    # Find all png files that have test_filter in their path somewhere
+    image_files = glob.glob(f"**/{intent_filter}/**/*.png", root_dir=record_base, recursive=True)
 
-    test_data = [TestData(get_basename(f), load_image(f, max_height), get_elements(f)) for f in image_files]
+    test_data = [
+        TestData(
+            get_basename(f),
+            get_source(f),
+            get_intent(f),
+            load_image(os.path.join(record_base, f), max_height),
+            load_html(os.path.join(record_base, f)),
+            get_elements(os.path.join(record_base, f))
+        ) for f in image_files]
+
     # In DEBUG mode, allow filtering only to a single key
     # this allows us to focus on a single target
     if (os.environ.get('DEBUGPY_RUNNING') == "true" and len(KeyFilter) > 0):
         test_data = [v for v in test_data if v.key in KeyFilter]
+    elif len(test_data) == 0:
+        raise Exception("No test data found for intent filter: " + intent_filter)
     return test_data
 
 
-def get_single_test_element(test_type: str, page_type: str, data_type: str, max_height: int = MAX_HEIGHT):
-    all_data = get_test_data(test_type, page_type, max_height)
-    return [SingleTestDatum(v.key, v.image, v.elements[data_type]) for v in all_data if data_type in v.elements]
+def get_single_test_element(filter: str, data_type: str, max_height: int = MAX_HEIGHT) -> list[SingleTestData]:
+    all_data = get_test_data(filter, max_height)
+    single = [SingleTestData(v.key, v.image, v.elements[data_type]) for v in all_data if data_type in v.elements]
+    if len(single) == 0:
+        raise Exception("No single test data found for intent filter: " + filter + " and data type: " + data_type)
+    return single
 
 
 # Doesn't belong here, perhaps need utils file
@@ -158,7 +211,7 @@ def get_sample_data(test_type: str) -> dict[str, TestData]:
             for f in target.iterdir()
             if f.name.endswith(".png")
         ]
-        
+
         images = [load_image(f) for f in image_files]
         elements = [get_elements(f) for f in image_files]
 
