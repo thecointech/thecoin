@@ -45,6 +45,9 @@ export async function maybeCopyProfile(force: boolean = false) {
         try {
           log.debug(`Copying Chrome profiles`);
           await copy(chromeProfilePath, userDataDir, { dereference: false });
+          // Clear Singletons
+          await remove(path.join(userDataDir, "SingletonLock"));
+          await remove(path.join(userDataDir, "SingletonCookie"));
           log.debug(`Copy Chrome profile complete`);
         }
         catch (e) {

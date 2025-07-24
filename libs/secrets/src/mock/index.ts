@@ -17,6 +17,8 @@ export async function getSecret(name: SecretKeyType) {
     case "UserDataInstructionKeyPrivate":
       return Promise.resolve(mock_key);
     // No keys in development mode
+    case "VqaApiKey":
+      return Promise.resolve("");
     case "VqaSslCertPublic":
       return Promise.resolve("");
     case "VqaSslCertPrivate":

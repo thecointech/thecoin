@@ -28,13 +28,13 @@ export class Agent {
     // Next, test a successful login
     const loginOutcome = await processSection(Login, page, input);
     switch(loginOutcome) {
-      case "LoginError":
-        await page.maybeThrow(new Error("Failed to login"))
-        break;
       case "TwoFactorAuth":
         await processSection(TwoFA, page, input);
         break;
+      case "LoginSuccess":
+        break;
       default:
+        await page.maybeThrow(new Error("Failed to get to LoginSuccess"));
     }
 
     // Next intent should be "AccountsSummary"
@@ -83,6 +83,10 @@ async function processSection<Args extends any[], R>(
     : page.pushSection(processor.processorName);
   try {
     page.onProgress(0);
+    // Log intent at the start of each section
+    // This could/should be used to validate progress
+    const intent = await page.getPageIntent();
+    log.debug(`With intent: ${intent}`);
     const r = await processor(page, ...args);
     page.onProgress(100);
     return r;

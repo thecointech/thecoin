@@ -7,7 +7,7 @@ import type { IAskUser, NamedOptions, NamedResponse } from "../../src/types";
 export class AskUserConsole implements IAskUser {
 
   private rlp: readline.Interface;
-  private config: Partial<BankConfig>
+  private config: Partial<BankConfig>;
 
   constructor(config: Partial<BankConfig> = {}) {
     this.config = config;

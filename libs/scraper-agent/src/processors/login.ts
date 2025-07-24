@@ -5,6 +5,7 @@ import { GetBaseApi, GetLoginApi } from "@thecointech/apis/vqa";
 import { processorFn } from "./types";
 import { enterValueIntoFound } from "@thecointech/scraper/replay";
 import { FoundElement } from "@thecointech/scraper/types";
+import { LoginFailedError } from "../errors";
 
 export const Login = processorFn("Login", async (page: PageHandler, input: IAskUser)  => {
   return await login(page, input);
@@ -145,13 +146,10 @@ async function loginOutcome(page: PageHandler) {
   log.info(" ** Login result: " + loginResult.result);
 
   if (loginResult.result == "LoginError") {
+    // most likely incorrect username/pwd
     const { data: hasError } = await GetLoginApi().detectLoginError(await page.getImage());
-    if (hasError.error_message_detected) {
-      log.warn("LoginWriter: Found error message: " + hasError.error_message);
-      // this.writeJson({
-      //   text: hasError.error_message,
-      // }, "failed");
-    }
+    log.warn(" ** Login error: " + hasError.error_message);
+    await page.maybeThrow(new LoginFailedError(hasError));
   }
   return loginResult.result;
 }

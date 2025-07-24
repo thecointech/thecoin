@@ -1,5 +1,5 @@
-import { IAskUser, User2DChoice, ChoiceText } from "./askUser";
-import { BankConfig } from "./config";
+import { IAskUser, NamedOptions, NamedResponse } from "../../src/types";
+import { BankConfig } from "../config";
 
 
 export class DummyAskUser implements IAskUser {
@@ -16,13 +16,7 @@ export class DummyAskUser implements IAskUser {
       this.password = badValues.password;
     }
   }
-  forValue(_question: string): Promise<string> {
-    throw new Error("Method not implemented.");
-  }
 
-  selectOption<T extends object>(_question: string, _options: User2DChoice<T>, _z: ChoiceText<T>): Promise<T> {
-    throw new Error("Method not implemented.");
-  }
   forUsername(): Promise<string> {
     return Promise.resolve(this.username);
   }
@@ -32,4 +26,20 @@ export class DummyAskUser implements IAskUser {
   forETransferRecipient(): Promise<string> {
     return Promise.resolve("fake_address@thecoin.io");
   }
+
+  doNotCompleteETransfer(): boolean {
+    return true;
+  }
+  selectOption(question: string, options: NamedOptions[]): Promise<NamedResponse> {
+    throw new Error("Method not implemented.");
+  }
+  expectedETransferRecipient(): Promise<string> {
+    throw new Error("Method not implemented.");
+  }
+  forValue(_question: string): Promise<string> {
+    throw new Error("Method not implemented.");
+  }
+
+
+
 }

@@ -233,7 +233,13 @@ export class PageHandler {
     // TODO: WE really need polly instead of hard-coded attempts for this
     for (let i = 0; i < 5; i++) {
       try {
-        return await _getPageIntent(this.page);
+        const intent = await _getPageIntent(this.page);
+        if (this.currentSectionName != "Initial") {
+          // The 'initial' section is the containing section,
+          // we don't care about intent in this area
+          this.logJson(this.currentSectionName, "intent-vqa", { type: intent });
+        }
+        return intent;
       }
       catch (e) {
         log.error(`Couldn't get page intent: ${e}`);
@@ -314,11 +320,9 @@ export class PageHandler {
 
   // Wrapping logging callbacks into here because I'm lazy
 
-  onNewSection() {
-    this.onProgress?.(0);
-  }
   onProgress(progress: number) {
     const currentName = this.currentSectionName;
+
     // get index of current section in Section enum
     const step = sections.indexOf(currentName as any);
     this.callbacks?.onProgress?.({

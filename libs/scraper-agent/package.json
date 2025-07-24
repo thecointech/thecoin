@@ -33,7 +33,8 @@
     "@thecointech/utilities": "^0.3.11"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.3.3"
+    "@thecointech/jestutils": "^0.3.3",
+    "@thecointech/setenv": "^0.3.11"
   },
   "files": [
     "build/**/*"

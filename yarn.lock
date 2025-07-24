@@ -11026,6 +11026,7 @@ __metadata:
     "@thecointech/apis": "npm:^0.3.10"
     "@thecointech/jestutils": "npm:^0.3.3"
     "@thecointech/scraper": "npm:^0.3.11"
+    "@thecointech/setenv": "npm:^0.3.11"
     "@thecointech/utilities": "npm:^0.3.11"
   languageName: unknown
   linkType: soft

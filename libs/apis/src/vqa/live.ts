@@ -1,21 +1,23 @@
 import { DefaultApi, LandingApi, LoginApi, TwofaApi, IntentApi, ModalApi, SummaryApi, CreditDetailsApi, EtransferApi, Configuration, ConfigurationParameters } from "@thecointech/vqa";
 import https from 'https';
-
+import { getSecret } from "@thecointech/secrets"
 
 // Create configuration object with optional certificate
 const params: ConfigurationParameters = {
   basePath: process.env.URL_SERVICE_VQA
 };
 // The API -should- be locked down available remotely
-if (process.env.VQA_API_KEY) {
-  params.apiKey = process.env.VQA_API_KEY;
+const apiKey = await getSecret("VqaApiKey")
+if (apiKey) {
+  params.apiKey = apiKey;
 }
 
 // Add certificate to config if provided
-if (process.env.VQA_SSL_CERTIFICATE) {
+const cert = await getSecret("VqaSslCertPublic")
+if (cert) {
   params.baseOptions = {
     httpsAgent: new https.Agent({
-      ca: process.env.VQA_SSL_CERTIFICATE
+      ca: cert
     })
   };
 }
