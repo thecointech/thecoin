@@ -12,14 +12,18 @@ import { _getPageIntent } from "./getPageIntent";
 
 export type AnyResponse = ElementResponse | InputElementResponse | MoneyElementResponse;
 
-export function responseToElementData(response: AnyResponse, htmlType?: string, inputType?: string): ElementDataMin {
+export function responseToElementData(response: AnyResponse, hints?: Partial<ElementDataMin>): ElementDataMin {
   const text = getContent(response);
   const width = text.length * 8;
   const height = 20; // Just guess based on avg font size
   return {
+    ...hints,
+    // Force consistent casing for comparisons
+    tagName: hints?.tagName?.toUpperCase(),
+    inputType: hints?.inputType?.toLowerCase(),
+    role: hints?.role?.toLowerCase(),
+    // Now apply response data
     estimated: true,
-    tagName: htmlType?.toUpperCase(),
-    inputType: inputType?.toLowerCase(),
     text,
     // We use a specific text-text scorer, so do not duplicate with nodeValue as that
     // may skew results and overpower the tagName/inputType scores
@@ -48,9 +52,9 @@ export const accountToElementResponse = (account: AccountResponse) => ({
 });
 
 
-export async function responseToElement(page: Page, e: AnyResponse, htmlType?: string, inputType?: string, timeout?: number): Promise<FoundElement> {
+export async function responseToElement(page: Page, e: AnyResponse, hints?: Partial<ElementDataMin>, timeout?: number): Promise<FoundElement> {
   // Try to find and click the close button
-  const elementData = responseToElementData(e, htmlType, inputType);
+  const elementData = responseToElementData(e, hints);
 
   const maxHeight = page.viewport()!.height + 100;
   // We have a lower minScore because the only data we have is text + position + neighbours

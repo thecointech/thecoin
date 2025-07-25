@@ -159,13 +159,21 @@ async function getLabelScore(potential: string|null, original: string|null|undef
   return 0;
 }
 
-function getRoleScore(potential: ElementData, original: ElementDataMin) {
-  if (!original.estimated && (potential.role || original.role)) {
-    return (potential.role == original.role)
-      ? 1
-      : -1; // Differing roles is a pretty bad sign
+export function getRoleScore(potential: ElementData, original: ElementDataMin) {
+  const matchScore = (original.role == potential.role)
+    ? 1
+    : -1;
+  // When estimating, we need both roles to get a score.
+  if (original.estimated) {
+    return (original.role && potential.role)
+      ? matchScore
+      : 0;
   }
-  return 0;
+
+  // In replay, if either has a role, they have to match
+  return (original.role || potential.role)
+    ? matchScore
+    : 0;
 }
 
 // Center score the difference between the two centers, scaled by the max

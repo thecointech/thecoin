@@ -74,7 +74,7 @@ async function login(page: PageHandler, input: IAskUser) {
 async function enterUsername(page: PageHandler, input: IAskUser, image: File) {
   const username = await input.forUsername();
   const { data: inputResponse } = await GetLoginApi().detectUsernameInput(image);
-  const element = await page.toElement(inputResponse, "username", "input", "text");
+  const element = await page.toElement(inputResponse, "username", { tagName: "input", inputType: "text" });
 
   const usernameToEnter = await getMostSimilarUsername(element.data, username);
   await enterUsernameIntoInput(page, usernameToEnter, element);
@@ -110,7 +110,7 @@ async function enterPassword(page: PageHandler, input: IAskUser, hasPassword: bo
   const api = GetLoginApi();
   // If no password input detected, it may be on the next page.
   if (!hasPassword) {
-    const clickedContinue = await page.tryClick(api, "detectContinueElement", { name: "continue", htmlType: "button" });
+    const clickedContinue = await page.tryClick(api, "detectContinueElement", { name: "continue", hints: { tagName: "button" } });
     if (!clickedContinue) {
       await page.maybeThrow(new Error("Failed to click continue"));
     }
@@ -125,8 +125,7 @@ async function enterPassword(page: PageHandler, input: IAskUser, hasPassword: bo
   const didEnter = await page.tryEnterText(api, "detectPasswordInput", {
     text: password,
     name: "password",
-    htmlType: "input",
-    inputType: "password",
+    hints: { tagName: "input", inputType: "password" },
   });
   if (!didEnter) {
     await page.maybeThrow(new Error("Failed to enter password"));
@@ -135,7 +134,7 @@ async function enterPassword(page: PageHandler, input: IAskUser, hasPassword: bo
 
 async function clickLogin(page: PageHandler) {
   const api = GetLoginApi();
-  const clickedLogin = await page.tryClick(api, "detectLoginElement", { name: "login", htmlType: "button" });
+  const clickedLogin = await page.tryClick(api, "detectLoginElement", { name: "login", hints: { tagName: "button" } });
   if (!clickedLogin) {
     await page.maybeThrow(new Error("Failed to click login"));
   }
@@ -149,7 +148,7 @@ async function loginOutcome(page: PageHandler) {
     // most likely incorrect username/pwd
     const { data: hasError } = await GetLoginApi().detectLoginError(await page.getImage());
     log.warn(" ** Login error: " + hasError.error_message);
-    await page.maybeThrow(new LoginFailedError(hasError));
+    throw new LoginFailedError(hasError);
   }
   return loginResult.result;
 }

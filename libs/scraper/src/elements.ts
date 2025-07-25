@@ -176,12 +176,8 @@ async function dbgPrintCandidate(candidate: FoundElement, event: ElementDataMin)
     return;
   }
   lastDbgPrintCandidateSelector = candidate.data.selector;
-  log.debug(`Tag: ${event.tagName} - ${candidate?.data?.tagName}`);
-  log.debug(`Selector: ${event.selector} - ${candidate?.data?.selector}`);
-  log.debug(`Text: ${event.text} - ${candidate?.data?.text}`);
-  log.debug(`Label: ${event.label} - ${candidate?.data?.label}`);
-  log.debug(`Coords: ${JSON.stringify(event.coords)} - ${JSON.stringify(candidate?.data?.coords)}`);
-  log.debug(`Siblings: ${JSON.stringify(event.siblingText)} - ${JSON.stringify(candidate?.data?.siblingText)}`);
+  const strippedElement = { score: candidate.score, components: candidate.components };
+  log.debug({ found: strippedElement, event }, "DbgPrintCandidate: {element.selector}");
 }
 
 export async function registerElementAttrFns(page: Page) {

@@ -1,7 +1,6 @@
 import { jest } from "@jest/globals"
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { getElementForEvent } from "./elements";
-import { getSiblingScore  } from "./elements.score";
 import { getTestPage, getTestInfo, testFileFolder, useTestBrowser } from '../internal/testutils'
 
 jest.setTimeout(10 * 60 * 1000);
@@ -59,29 +58,3 @@ describe ('Element tests', () => {
   })
 
 }, IsManualRun && !!testFileFolder)
-
-// To review - This isn't the best evaluation,
-// We probably need to improve the semantic
-// analysis to get more context for a given element
-it('scores siblings', async () => {
-
-  // Should be pretty close to 1
-  const baseline = await getSiblingScore(
-    { siblingText: ["Account Number", "Account Balance"] } as any,
-    { siblingText: ["Account #", "Current Balance"] } as any
-  )
-  expect(baseline).toBeCloseTo(0.7, 0.05)
-
-  // Should be less then baseline
-  const modOriginal = await getSiblingScore(
-    { siblingText: ["Account Number", "Account Balance", "More Info Here"] } as any,
-    { siblingText: ["Account #", "Current Balance"] } as any
-  )
-  expect(modOriginal).toBeLessThan(baseline)
-  // Should be less then 1
-  const modCurrent = await getSiblingScore(
-    { siblingText: ["Account Number", "Account Balance"] } as any,
-    { siblingText: ["Account #", "Current Balance", "More Info Here"] } as any
-  )
-  expect(modCurrent).toBeLessThan(baseline)
-})

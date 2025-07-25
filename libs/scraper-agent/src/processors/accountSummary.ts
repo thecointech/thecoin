@@ -87,7 +87,7 @@ async function saveAccountNavigation(page: PageHandler, account: AccountResponse
     content: `${account.account_name} ${account.account_number}`,
     neighbour_text: account.account_type
   }
-  return await page.toElement(asResponse, `navigate-${account.account_type}`, "a", undefined);
+  return await page.toElement(asResponse, `navigate-${account.account_type}`, { tagName: "a" });
 }
 
 

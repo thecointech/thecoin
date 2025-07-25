@@ -3,7 +3,7 @@ import { AnyResponse, clickElement, responseToElement, waitForValidIntent, waitP
 import { sleep } from "@thecointech/async";
 import { log } from "@thecointech/logging";
 import { enterValueIntoFound } from "@thecointech/scraper/replay";
-import { DynamicInputEvent, FoundElement, SearchElement, ValueEvent, ValueType } from "@thecointech/scraper/types";
+import { DynamicInputEvent, ElementDataMin, FoundElement, SearchElement, ValueEvent, ValueType } from "@thecointech/scraper/types";
 import { Recorder, Registry } from "@thecointech/scraper/record";
 import { getValueParsing } from "@thecointech/scraper/valueParsing";
 import { EventManager, IEventSectionManager } from "./eventManager";
@@ -25,9 +25,8 @@ type ApiFnName<T> = keyof {
 
 type InteractionOptions = {
   name: string
-  htmlType?: string
-  inputType?: string
   fullPage?: boolean
+  hints?: Partial<ElementDataMin>
 }
 
 type ClickInteractionOptions = InteractionOptions & {
@@ -150,7 +149,7 @@ export class PageHandler {
     if (sessionTimeout) {
       using _ = this.eventManager.pause();
       try {
-        const found = await this.toElement(sessionTimeout, "session-continue", "button");
+        const found = await this.toElement(sessionTimeout, "session-continue", { tagName: "button" });
         if (found) {
           await clickElement(this.page, found, true);
         }
@@ -274,18 +273,18 @@ export class PageHandler {
   }
 
   async completeInteraction(r: AnyResponse, interaction: (found: FoundElement) => Promise<boolean>, options: InteractionOptions) {
-    const found = await this.toElement(r, options.name, options.htmlType, options.inputType);
+    const found = await this.toElement(r, options.name, options.hints);
     return await interaction(found);
   }
 
-  async toElement(response: AnyResponse, eventName: string, htmlType?: string, inputType?: string) {
+  async toElement(response: AnyResponse, eventName: string, hints?: Partial<ElementDataMin>) {
     // First, record the response from the API
     this.logJson(this.currentSectionName, `${eventName}-vqa`, response);
     // Find the element in the page
-    let found = await responseToElement(this.page, response, htmlType, inputType);
+    let found = await responseToElement(this.page, response, hints);
     if (!found) {
       await this.maybeThrow(new Error("Failed to find element for " + eventName));
-      found = await responseToElement(this.page, response, htmlType, inputType);
+      found = await responseToElement(this.page, response, hints);
     }
 
     // Finally, record what we found

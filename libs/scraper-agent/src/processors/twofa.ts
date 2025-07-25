@@ -50,7 +50,7 @@ async function selectDestination(page: PageHandler, input: IAskUser) {
   const dest = await askUserForDestination(input, allOptions);
   const clickedOption = await page.completeInteraction(dest, (found) => clickElement(page.page, found), {
     name: "destination",
-    htmlType: "button",
+    hints: { tagName: "button" },
   });
   if (!clickedOption) {
     await page.maybeThrow(new Error("Failed to click destination"));
@@ -79,8 +79,7 @@ async function enterCode(page: PageHandler, input: IAskUser) {
     const didEnter = await page.tryEnterText(api, "getAuthInput", {
       text: code,
       name: "input",
-      htmlType: "input",
-      inputType: "text",
+      hints: { tagName: "input", inputType: "text" },
     });
     if (!didEnter) {
       await page.maybeThrow(new Error("Failed to enter code"));
@@ -145,8 +144,7 @@ async function clickRemember(page: PageHandler) {
     const clickedSkip = await page.tryClick(api, "getRememberInput", {
       name: "remember",
       noNavigate: true,
-      htmlType: "input",
-      inputType: "checkbox",
+      hints: { tagName: "input", inputType: "checkbox" },
       minPixelsChanged: 10, // This is a very low value because checkboxes are small
     });
     if (!clickedSkip) {
@@ -163,7 +161,7 @@ async function clickRemember(page: PageHandler) {
 
 async function clickSubmit(page: PageHandler) {
   const api = GetTwofaApi();
-  const clickedSubmit = await page.tryClick(api, "getSubmitInput", { name: "submit", htmlType: "button", inputType: "submit" });
+  const clickedSubmit = await page.tryClick(api, "getSubmitInput", { name: "submit", hints: { tagName: "button", inputType: "submit" } });
   if (!clickedSubmit) {
     await page.maybeThrow(new Error("Failed to click submit"));
   }

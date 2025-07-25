@@ -397,7 +397,7 @@ async function selectToRecipient(page: PageHandler, element: SearchElement, inpu
     const clicked = await page.completeInteraction(
       r,
       (found) => clickElement(page.page, found),
-      { name: "select-recipient" }
+      { name: "select-recipient", hints: { role: "option" } }
     );
 
     if (!clicked) {

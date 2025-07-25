@@ -13,7 +13,7 @@ async function navigateToLogin(page: PageHandler) {
   log.trace(`LandingWriter: Navigating to login`);
   const didNavigate = await page.tryClick(api, "navigateToLogin", {
     name: "login",
-    htmlType: "button"
+    hints: { tagName: "button" }
   });
   if (!didNavigate) {
     await page.maybeThrow(new Error("Failed to navigate to login"));
@@ -29,7 +29,7 @@ async function navigateToLogin(page: PageHandler) {
     // await this.updatePageName("menu");
     await page.tryClick(api, "navigateToLoginMenu", {
       name: "login",
-      htmlType: "a"
+      hints: { tagName: "a" }
     });
     page.onProgress(66);
     // It's find if this doesn't work, let's continue and hope for the best

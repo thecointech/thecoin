@@ -281,7 +281,7 @@ export async function enterValueIntoFound(page: Page, found: SearchElement, valu
     }, value);
 
     if (!optionSelected) {
-      console.warn(`Could not find option matching "${value}" in select element`);
+      log.warn(`Could not find option matching "${value}" in select element`);
       return false;
     }
     return true;

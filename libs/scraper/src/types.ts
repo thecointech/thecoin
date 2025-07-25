@@ -40,6 +40,7 @@ export type Font = {
 export type ElementData = {
   // The frames to dereference on our way to the data
   frame?: string
+  // Note: always uppercase
   tagName: string,
   // Name is not used in scoring, but is helpful
   // for grouping radio buttons together for VQA
@@ -48,8 +49,10 @@ export type ElementData = {
   // for determining the intent of an select in VQA
   options?: string[],
   // If tagName is INPUT, this will be the type
+  // Note: inputType & role are always lowercase
   inputType?: string,
   role: string|null,
+
   selector: string,
   coords: Coords,
   label: string|null,
