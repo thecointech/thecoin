@@ -12,7 +12,7 @@ export function getUserDataDir() {
   return path.join(rootFolder(), 'userdata', getBrowserType());
 }
 
-function getChromeProfilePath() {
+function getSystemChromeProfilePath() {
   const platform = os.platform();
 
   switch (platform) {
@@ -38,7 +38,7 @@ export async function maybeCopyProfile(force: boolean = false) {
     }
     // Get the users existing profile (if one exists)
     if (type == "chrome") {
-      const chromeProfilePath = getChromeProfilePath();
+      const chromeProfilePath = getSystemChromeProfilePath();
       if (existsSync(chromeProfilePath)) {
 
         // Copy all profiles
@@ -46,8 +46,7 @@ export async function maybeCopyProfile(force: boolean = false) {
           log.debug(`Copying Chrome profiles`);
           await copy(chromeProfilePath, userDataDir, { dereference: false });
           // Clear Singletons
-          await remove(path.join(userDataDir, "SingletonLock"));
-          await remove(path.join(userDataDir, "SingletonCookie"));
+          await cleanProfileLocks();
           log.debug(`Copy Chrome profile complete`);
         }
         catch (e) {
@@ -60,5 +59,15 @@ export async function maybeCopyProfile(force: boolean = false) {
       }
     }
     // TODO: Implement this for firefox
+  }
+}
+
+export async function cleanProfileLocks() {
+  const type = getBrowserType();
+  if (type == "chrome") {
+    const userDataDir = getUserDataDir();
+    await remove(path.join(userDataDir, "SingletonLock"));
+    await remove(path.join(userDataDir, "SingletonCookie"));
+    await remove(path.join(userDataDir, "SingletonSocket"));
   }
 }

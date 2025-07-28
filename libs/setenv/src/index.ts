@@ -6,9 +6,6 @@ import de from 'dotenv';
 import { expand } from './expand.js';
 
 
-const projectRoot = process.cwd();
-const LOG_NAME = basename(projectRoot);
-
 export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
   const files : URL[] = [];
 
@@ -63,6 +60,8 @@ export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
   return files;
 }
 
+const getLogName = () => process.env.LOG_NAME ?? basename(process.cwd());
+
 export function getEnvVars(cfgName?: string, onlyPublic?: boolean) : Record<string, string|undefined> {
   const files = getEnvFiles(cfgName, onlyPublic);
   const raw = files.map(file => readFileSync(file, "ascii"));
@@ -71,7 +70,7 @@ export function getEnvVars(cfgName?: string, onlyPublic?: boolean) : Record<stri
     ...ex,
     ...acc, // later files have lower priority, do not overwrite existing values
   }), {
-    LOG_NAME,
+    LOG_NAME: getLogName(),
   });
   return expand(combined);
 }
@@ -82,8 +81,6 @@ export function loadEnvVars(cfgName?: string) {
   files.forEach(path => de.config({path: fileURLToPath(path)}));
   expand(process.env);
 
-    //  Set default name for logging
-  if (!process.env.LOG_NAME) {
-    process.env.LOG_NAME = LOG_NAME;
-  }
+  // Set default name for logging
+  process.env.LOG_NAME = getLogName();
 }

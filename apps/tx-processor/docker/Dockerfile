@@ -102,6 +102,7 @@ ENV DBUS_SESSION_BUS_ADDRESS=autolaunch: \
     PUPPETEER_SKIP_DOWNLOAD=true \
     TS_NODE_PROJECT=none \
     THECOIN_CONSOLE_ONLY=true \
+    LOG_NAME=tx-processor \
     THECOIN_DATA=/data \
     TC_LOG_FOLDER=/data/logs \
     STORAGE_PATH=/data/dbs/ \
