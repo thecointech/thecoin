@@ -44,6 +44,13 @@ class TestData(NamedTuple):
             return match.group(1).strip()
         return None
 
+    @property
+    def html_title(self):
+        match = re.search(r"^Subject:\s*(.*)$", self.html, re.MULTILINE | re.IGNORECASE)
+        if match:
+            return match.group(1).strip()
+        return None
+
 class SampleData(NamedTuple):
     key: str
     path: Path # Path to the folder containing image and json
@@ -57,6 +64,7 @@ class SingleTestData(NamedTuple):
     key: str
     image: Image.Image
     element: ElementDatum
+    html_title: str
     # page_type: str
     # element_type: str
 
@@ -163,7 +171,7 @@ def get_test_data(intent_filter: str|list[str], max_height: int = MAX_HEIGHT) ->
 
 def get_single_test_element(filter: str, data_type: str, max_height: int = MAX_HEIGHT) -> list[SingleTestData]:
     all_data = get_test_data(filter, max_height)
-    single = [SingleTestData(v.key, v.image, v.elements[data_type]) for v in all_data if data_type in v.elements]
+    single = [SingleTestData(v.key, v.image, v.elements[data_type], v.html_title) for v in all_data if data_type in v.elements]
     if len(single) == 0:
         raise Exception("No single test data found for intent filter: " + filter + " and data type: " + data_type)
     return single

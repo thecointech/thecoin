@@ -85,7 +85,9 @@ export async function clickElement(page: Page, element: SearchElement, noNavigat
 
   try {
     await triggerNavigateAndWait(page, () => clickElementDirectly(page, element));
-    return true;
+    // If we clicked, we may have navigated but ended up on the same page
+    // (eg, if an error message prevents us from proceeding)
+    return await pageDidChange(page, before, minPixelsChanged);
   }
   catch (err) {
     if (err instanceof TimeoutError) {
