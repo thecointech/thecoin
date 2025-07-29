@@ -10610,6 +10610,7 @@ __metadata:
     "@thecointech/broker-cad": "npm:^0.3.3"
     "@thecointech/nft": "npm:^0.3.3"
     "@thecointech/pricing": "npm:^0.3.3"
+    "@thecointech/secrets": "npm:^0.3.11"
     "@thecointech/vqa": "npm:^0.3.10"
   languageName: unknown
   linkType: soft
