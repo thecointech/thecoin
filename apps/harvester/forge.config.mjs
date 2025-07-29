@@ -121,7 +121,7 @@ const config = {
 };
 
 // Only add in externals if packaging
-if (process.env.npm_lifecycle_event != 'dev') {
+if (process.env.npm_lifecycle_event != '_start:dbg') {
   config.plugins.push(
     //@ts-ignore
     new ForgeExternalsPlugin({
