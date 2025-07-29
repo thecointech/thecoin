@@ -13,7 +13,7 @@ export const TwoFA = processorFn("TwoFA", async (page: PageHandler, input: IAskU
 })
 
 async function complete2FA(page: PageHandler, input: IAskUser) {
-  const api = GetTwofaApi();
+  const api = await GetTwofaApi();
   const { data: action } = await api.detectActionRequired(await page.getImage());
   page.onProgress(10);
   switch (action.action) {
@@ -32,7 +32,7 @@ async function complete2FA(page: PageHandler, input: IAskUser) {
 }
 
 async function selectDestination(page: PageHandler, input: IAskUser) {
-  const api = GetTwofaApi();
+  const api = await GetTwofaApi();
   const image = await page.getImage();
   const { data: destinations } = await api.detectDestinations(image);
   page.logJson("TwoFA", "destinations-vqa", destinations);
@@ -71,11 +71,11 @@ async function updateFromPage(page: PageHandler, response: PhoneNumberElements) 
 
 async function enterCode(page: PageHandler, input: IAskUser) {
 
-  const api = GetTwofaApi();
   let code = await input.forValue("Enter the 2FA code: ");
 
   for (let i = 0; i < 5; i++) {
 
+    const api = await GetTwofaApi();
     const didEnter = await page.tryEnterText(api, "getAuthInput", {
       text: code,
       name: "input",
@@ -97,7 +97,8 @@ async function enterCode(page: PageHandler, input: IAskUser) {
       return;
     }
     // Is there an error message?
-    const { data: error } = await GetIntentApi().pageError(await page.getImage());
+    const intentApi = await GetIntentApi();
+    const { data: error } = await intentApi.pageError(await page.getImage());
     if (error.error_message_detected && error.error_message) {
       code = await input.forValue(error.error_message);
     }
@@ -140,7 +141,7 @@ async function approveInApp(page: PageHandler, input: IAskUser) {
 
 async function clickRemember(page: PageHandler) {
   try {
-    const api = GetTwofaApi();
+    const api = await GetTwofaApi();
     const clickedSkip = await page.tryClick(api, "getRememberInput", {
       name: "remember",
       noNavigate: true,
@@ -160,7 +161,7 @@ async function clickRemember(page: PageHandler) {
 }
 
 async function clickSubmit(page: PageHandler) {
-  const api = GetTwofaApi();
+  const api = await GetTwofaApi();
   const clickedSubmit = await page.tryClick(api, "getSubmitInput", { name: "submit", hints: { tagName: "button", inputType: "submit" } });
   if (!clickedSubmit) {
     await page.maybeThrow(new Error("Failed to click submit"));

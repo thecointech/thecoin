@@ -7,7 +7,8 @@ import type { Page } from "puppeteer";
 export async function _getPageIntent(page: Page) {
   const image = await _getImage(page);
   const asFile = new File([image], "screenshot.png", { type: "image/png" });
-  const { data: intent } = await GetIntentApi().pageIntent(asFile);
+  const api = await GetIntentApi();
+  const { data: intent } = await api.pageIntent(asFile);
   log.trace(`Page detected as type: ${intent.type}`);
   return intent.type;
 }

@@ -2,33 +2,34 @@ import { DefaultApi, LandingApi, LoginApi, TwofaApi, IntentApi, ModalApi, Summar
 import https from 'https';
 import { getSecret } from "@thecointech/secrets"
 
-// Create configuration object with optional certificate
-const params: ConfigurationParameters = {
-  basePath: process.env.URL_SERVICE_VQA
-};
-// The API -should- be locked down available remotely
-const apiKey = await getSecret("VqaApiKey")
-if (apiKey) {
-  params.apiKey = apiKey;
-}
+export const GetVqaBaseApi = async () => new DefaultApi(await getConfig());
+export const GetIntentApi = async () => new IntentApi(await getConfig());
+export const GetLandingApi = async () => new LandingApi(await getConfig());
+export const GetLoginApi = async () => new LoginApi(await getConfig());
+export const GetTwofaApi = async () => new TwofaApi(await getConfig());
+export const GetAccountSummaryApi = async () => new SummaryApi(await getConfig());
+export const GetCreditDetailsApi = async () => new CreditDetailsApi(await getConfig());
+export const GetETransferApi = async () => new EtransferApi(await getConfig());
+export const GetModalApi = async () => new ModalApi(await getConfig());
 
-// Add certificate to config if provided
-const cert = await getSecret("VqaSslCertPublic")
-if (cert) {
-  params.baseOptions = {
-    httpsAgent: new https.Agent({
-      ca: cert
-    })
+export const getConfig = async () => {
+  const params: ConfigurationParameters = {
+    basePath: process.env.URL_SERVICE_VQA
   };
-}
-const apiConfig = new Configuration(params);
+  // The API -should- be locked down available remotely
+  const apiKey = await getSecret("VqaApiKey")
+  if (apiKey) {
+    params.apiKey = apiKey;
+  }
 
-export const GetBaseApi = () => new DefaultApi(apiConfig);
-export const GetIntentApi = () => new IntentApi(apiConfig);
-export const GetLandingApi = () => new LandingApi(apiConfig);
-export const GetLoginApi = () => new LoginApi(apiConfig);
-export const GetTwofaApi = () => new TwofaApi(apiConfig);
-export const GetAccountSummaryApi = () => new SummaryApi(apiConfig);
-export const GetCreditDetailsApi = () => new CreditDetailsApi(apiConfig);
-export const GetETransferApi = () => new EtransferApi(apiConfig);
-export const GetModalApi = () => new ModalApi(apiConfig);
+  // Add certificate to config if provided
+  const cert = await getSecret("VqaSslCertPublic")
+  if (cert) {
+    params.baseOptions = {
+      httpsAgent: new https.Agent({
+        ca: cert
+      })
+    };
+  }
+  return new Configuration(params);
+}

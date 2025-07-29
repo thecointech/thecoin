@@ -41,13 +41,15 @@ async function navigateToAccountDetails(page: PageHandler, navData: ElementData)
 
 async function saveCurrentBalance(page: PageHandler) {
   log.trace("AccountDetailsWriter: saving current balance");
-  const { data: balance } = await GetCreditDetailsApi().currentBalance(await page.getImage());
+  const api = await GetCreditDetailsApi();
+  const { data: balance } = await api.currentBalance(await page.getImage());
   await page.pushValueEvent<VisaBalanceResult>(balance, "balance", "currency");
 }
 
 async function savePending(page: PageHandler) {
   log.trace("AccountDetailsWriter: saving pending");
-  const { data: pending } = await GetCreditDetailsApi().currentPending(await page.getImage());
+  const api = await GetCreditDetailsApi();
+  const { data: pending } = await api.currentPending(await page.getImage());
   if (pending.pending_exists) {
     await page.pushValueEvent<VisaBalanceResult>(pending.pending_element, "pending", "currency");
   }
@@ -55,12 +57,14 @@ async function savePending(page: PageHandler) {
 
 async function saveDueDate(page: PageHandler) {
   log.trace("AccountDetailsWriter: saving due date");
-  const { data: dueDate } = await GetCreditDetailsApi().currentDueDate(await page.getImage());
+  const api = await GetCreditDetailsApi();
+  const { data: dueDate } = await api.currentDueDate(await page.getImage());
   await page.pushValueEvent<VisaBalanceResult>(dueDate, "dueDate", "date");
 }
 
 async function saveDueAmount(page: PageHandler) {
   log.trace("AccountDetailsWriter: saving due amount");
-  const { data: dueAmount } = await GetCreditDetailsApi().currentDueAmount(await page.getImage());
+  const api = await GetCreditDetailsApi();
+  const { data: dueAmount } = await api.currentDueAmount(await page.getImage());
   await page.pushValueEvent<VisaBalanceResult>(dueAmount, "dueAmount", "currency");
 }

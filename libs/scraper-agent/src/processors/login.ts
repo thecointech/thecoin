@@ -1,7 +1,7 @@
 import { log } from "@thecointech/logging";
 import { PageHandler } from "../pageHandler";
 import { ElementData, IAskUser } from "../types";
-import { GetBaseApi, GetLoginApi } from "@thecointech/apis/vqa";
+import { GetVqaBaseApi, GetLoginApi } from "@thecointech/apis/vqa";
 import { processorFn } from "./types";
 import { enterValueIntoFound } from "@thecointech/scraper/replay";
 import { FoundElement } from "@thecointech/scraper/types";
@@ -15,7 +15,7 @@ async function login(page: PageHandler, input: IAskUser) {
   // We have to detect the password before entering
   // the username.  The extra data of the username
   // entered into the username field can confuse the vLLM
-  const api = GetLoginApi();
+  const api = await GetLoginApi();
   page.onProgress(10);
 
   const { data: hasPassword } = await api.detectPasswordExists(await page.getImage());
@@ -73,7 +73,8 @@ async function login(page: PageHandler, input: IAskUser) {
 // }
 async function enterUsername(page: PageHandler, input: IAskUser, image: File) {
   const username = await input.forUsername();
-  const { data: inputResponse } = await GetLoginApi().detectUsernameInput(image);
+  const api = await GetLoginApi();
+  const { data: inputResponse } = await api.detectUsernameInput(image);
   const element = await page.toElement(inputResponse, "username", { tagName: "input", inputType: "text" });
 
   const usernameToEnter = await getMostSimilarUsername(element.data, username);
@@ -83,7 +84,8 @@ async function enterUsername(page: PageHandler, input: IAskUser, image: File) {
 async function getMostSimilarUsername(element: ElementData, username: string) {
   // If this is a drop-down, are there elements that mostly match the username?
   if (element.options) {
-    const { data: similar } = await GetBaseApi().detectMostSimilarOption(username, element.options);
+    const api = await GetVqaBaseApi();
+    const { data: similar } = await api.detectMostSimilarOption(username, element.options);
     // Super-simple check - the first letter at least should match...
     if (similar.most_similar[0] == username[0]) {
       return similar.most_similar;
@@ -107,7 +109,7 @@ async function enterUsernameIntoInput(page: PageHandler, username: string, eleme
 
 async function enterPassword(page: PageHandler, input: IAskUser, hasPassword: boolean) {
   const password = await input.forPassword();
-  const api = GetLoginApi();
+  const api = await GetLoginApi();
   // If no password input detected, it may be on the next page.
   if (!hasPassword) {
     const clickedContinue = await page.tryClick(api, "detectContinueElement", { name: "continue", hints: { tagName: "button" } });
@@ -133,7 +135,7 @@ async function enterPassword(page: PageHandler, input: IAskUser, hasPassword: bo
 }
 
 async function clickLogin(page: PageHandler) {
-  const api = GetLoginApi();
+  const api = await GetLoginApi();
   const clickedLogin = await page.tryClick(api, "detectLoginElement", { name: "login", hints: { tagName: "button" } });
   if (!clickedLogin) {
     await page.maybeThrow(new Error("Failed to click login"));
@@ -141,12 +143,13 @@ async function clickLogin(page: PageHandler) {
 }
 
 async function loginOutcome(page: PageHandler) {
-  const { data: loginResult } = await GetLoginApi().detectLoginResult(await page.getImage());
+  const api = await GetLoginApi();
+  const { data: loginResult } = await api.detectLoginResult(await page.getImage());
   log.info(" ** Login result: " + loginResult.result);
 
   if (loginResult.result == "LoginError") {
     // most likely incorrect username/pwd
-    const { data: hasError } = await GetLoginApi().detectLoginError(await page.getImage());
+    const { data: hasError } = await api.detectLoginError(await page.getImage());
     log.warn(" ** Login error: " + hasError.error_message);
     throw new LoginFailedError(hasError);
   }

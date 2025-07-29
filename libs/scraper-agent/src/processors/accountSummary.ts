@@ -1,4 +1,4 @@
-import { GetAccountSummaryApi, GetBaseApi } from "@thecointech/apis/vqa";
+import { GetAccountSummaryApi, GetVqaBaseApi } from "@thecointech/apis/vqa";
 import { log } from "@thecointech/logging";
 import { accountToElementResponse, responseToElement } from "../vqaResponse";
 import { ElementData, FoundElement } from "@thecointech/scraper/types";
@@ -14,7 +14,7 @@ export const AccountsSummary = processorFn("AccountsSummary", async (page: PageH
 })
 
 async function listAccounts(page: PageHandler) {
-  const api = GetAccountSummaryApi();
+  const api = await GetAccountSummaryApi();
   // Get a list of all accounts
   const { data: accounts } = await api.listAccounts(await page.getImage());
   page.onProgress(25);
@@ -75,13 +75,15 @@ async function listAccounts(page: PageHandler) {
 
 async function saveBalanceElement(page: PageHandler, account_number: string, crop: BBox) {
   // Don't search the whole page, just the area around the account listing
-  const { data: balance } = await GetAccountSummaryApi().accountBalanceElement(account_number, await page.getImage(), crop.top, crop.bottom);
+  const api = await GetAccountSummaryApi();
+  const { data: balance } = await api.accountBalanceElement(account_number, await page.getImage(), crop.top, crop.bottom);
   await page.pushValueEvent<ChequeBalanceResult>(balance, "balance", "currency");
   // return await page.toElement(balance, "balance", undefined, undefined);
 }
 
 async function saveAccountNavigation(page: PageHandler, account: AccountResponse) {
-  const { data: nav } = await GetAccountSummaryApi().accountNavigateElement(account.account_number, await page.getImage());
+  const api = await GetAccountSummaryApi();
+  const { data: nav } = await api.accountNavigateElement(account.account_number, await page.getImage());
   const asResponse = {
     ...nav,
     content: `${account.account_name} ${account.account_number}`,
@@ -95,7 +97,8 @@ export async function updateAccountNumber(inferred: AccountResponse, scraped: El
   const inferredAccountNumber = inferred.account_number;
   const realAccountText = scraped.text;
   // The inferred number may be off by a few digits
-  const { data: corrected } = await GetBaseApi().correctEstimate(inferredAccountNumber, realAccountText, "account number");
+  const api = await GetVqaBaseApi();
+  const { data: corrected } = await api.correctEstimate(inferredAccountNumber, realAccountText, "account number");
   log.trace(`Corrected account number from inferred: (${inferredAccountNumber}) to (${corrected.correct_value})`);
   // This should be closer, but even it can be slightly off.  However
   // we should be close enough that a simple fuzzy-match will capture the correct value

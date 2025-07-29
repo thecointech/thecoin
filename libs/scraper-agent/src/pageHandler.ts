@@ -145,7 +145,8 @@ export class PageHandler {
   }
 
   async checkSessionLogin() {
-    const { data: sessionTimeout } = await GetLoginApi().detectSessionTimeoutElement(await this.getImage());
+    const api = await GetLoginApi();
+    const { data: sessionTimeout } = await api.detectSessionTimeoutElement(await this.getImage());
     if (sessionTimeout) {
       using _ = this.eventManager.pause();
       try {

@@ -23,7 +23,7 @@ async function logout(page: PageHandler) {
 
   log.info(" ** Logout");
   log.info(" ** Logout");
-  const api = GetLoginApi();
+  const api = await GetLoginApi();
 
   const didClick = await page.tryClick(api, "detectLogoutElement", { name: "logout" });
   if (!didClick) {
@@ -46,7 +46,8 @@ async function logout(page: PageHandler) {
 
   // Log the intent.  This isn't really so much as to use it as a sanity check
   // (also, it means we trigger a screenshot post-logout for the testing repo)
-  const { data: response } = await GetIntentApi().pageIntent(await page.getImage());
+  const intentApi = await GetIntentApi();
+  const { data: response } = await intentApi.pageIntent(await page.getImage());
   log.debug("Logout complete, detected type: " + response.type);
   return true;
 }

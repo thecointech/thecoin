@@ -12,8 +12,9 @@ async function closeCookieBanner(page: PageHandler) {
   log.trace(`LandingWriter: Cookie banner detected: ${detected}`);
   if (detected) {
     page.onProgress(33);
+    const api = await GetLandingApi();
     try {
-      const didClose = await page.tryClick(GetLandingApi(), "cookieBannerAccept", {
+      const didClose = await page.tryClick(api, "cookieBannerAccept", {
         noNavigate: true,
         name: "cookie-accept"
       });
@@ -39,6 +40,7 @@ async function closeCookieBanner(page: PageHandler) {
 }
 
 async function cookieBannerDetected(page: PageHandler) {
-  const { data: cookiePresent } = await GetLandingApi().cookieBannerPresent(await page.getImage());
+  const api = await GetLandingApi();
+  const { data: cookiePresent } = await api.cookieBannerPresent(await page.getImage());
   return cookiePresent.cookie_banner_detected;
 }

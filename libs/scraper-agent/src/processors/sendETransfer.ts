@@ -1,4 +1,4 @@
-import { GetBaseApi, GetETransferApi, GetIntentApi } from "@thecointech/apis/vqa";
+import { GetVqaBaseApi, GetETransferApi, GetIntentApi } from "@thecointech/apis/vqa";
 import { log } from "@thecointech/logging";
 import { clickElement } from "../vqaResponse";
 import { getAllElements } from "@thecointech/scraper/elements";
@@ -78,7 +78,7 @@ async function navigateToSendETransferPage(page: PageHandler, attemptedLinks: Se
     .map(stripUnicode)
     .filter(l => !attemptedLinks.has(l));
 
-  const api = GetETransferApi();
+  const api = await GetETransferApi();
   const { data } = await api.bestEtransferLink(linkTexts);
 
   page.logJson("SendETransfer", "best-link", {
@@ -129,7 +129,7 @@ type InputTracker = {
 async function sendETransfer(page: PageHandler, input: IAskUser, accountNumber: string) {
 
   log.trace("SendETransferWriter: sendETransfer");
-  const api = GetETransferApi();
+  const api = await GetETransferApi();
   // We don't know how many pages of steps there are, so we iterate until there is no more 'next' button
   // let step = 1;
   let hasReviewed = false;
@@ -153,7 +153,8 @@ async function sendETransfer(page: PageHandler, input: IAskUser, accountNumber: 
 
     // Check to see if there are any errors on the page
     const screenshot = await page.getImage(true);
-    const { data: hasError } = await GetIntentApi().pageError(screenshot);
+    const intentApi = await GetIntentApi();
+    const { data: hasError } = await intentApi.pageError(screenshot);
     if (hasError.error_message_detected) {
       log.error("Recieved potential error message:", hasError.error_message);
       // update name will trigger storing appropriate data
@@ -214,13 +215,14 @@ async function getCurrentStage(page: PageHandler, hasReviewed: boolean) {
   // mostly the same details and the LLM might not be able to tell the difference
   // To deal with this, we add an extra check once we've passed review.  This should
   // almost never be false, but we can't assume that.
+  const api = await GetETransferApi();
   if (hasReviewed) {
-    const { data: isComplete } = await GetETransferApi().detectEtransferComplete(title, image);
+    const { data: isComplete } = await api.detectEtransferComplete(title, image);
     if (isComplete.transfer_complete) {
       return "TransferComplete";
     }
   }
-  const { data: currentStage } = await GetETransferApi().detectEtransferStage(title, image);
+  const { data: currentStage } = await api.detectEtransferStage(title, image);
   return currentStage.stage;
 }
 
@@ -251,7 +253,7 @@ async function fillETransferDetails(page: PageHandler, input: IAskUser, tracker:
 }
 
 async function gotoNextPage(page: PageHandler, step: number) {
-  const api = GetETransferApi();
+  const api = await GetETransferApi();
   const { data: nextButton } = await api.detectNextButton(await page.getImage(true));
   if (!nextButton) {
     return false;
@@ -353,7 +355,8 @@ async function selectFromAccount(page: PageHandler, input: SearchElement, accoun
     if (!options) {
       throw new Error("Expected options to be defined");
     }
-    const { data: bestAccordingToLLM} = await GetBaseApi().detectMostSimilarOption(account, options);
+    const api = await GetVqaBaseApi();
+    const { data: bestAccordingToLLM} = await api.detectMostSimilarOption(account, options);
 
     // Now we can safely use Levenstein just in case the LLM changed some letters/punctuation
     const scored = options.map(o => distance(bestAccordingToLLM.most_similar, o));
@@ -393,7 +396,8 @@ async function selectToRecipient(page: PageHandler, element: SearchElement, inpu
   if (element.data.tagName.toUpperCase() == "INPUT" || element.data.role?.toLowerCase() == "combobox") {
     // If this is a dropdown, we have to click the option
     const image = await page.getImage();
-    const { data: r } = await GetETransferApi().detectToRecipient(recipient, image);
+    const api = await GetETransferApi();
+    const { data: r } = await api.detectToRecipient(recipient, image);
     const clicked = await page.completeInteraction(
       r,
       (found) => clickElement(page.page, found),
@@ -429,7 +433,8 @@ async function callInputTypes(image: File, inputs: SearchElement[], parentCoords
     parent_coords: asBoxes
   });
 
-  const { data : inputTypes } = await GetETransferApi().inputTypes(image, inputElements);
+  const api = await GetETransferApi();
+  const { data : inputTypes } = await api.inputTypes(image, inputElements);
   return inputTypes;
 }
 

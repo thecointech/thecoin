@@ -9,7 +9,7 @@ export const Landing = processorFn("Landing", async (page: PageHandler) => {
 
 async function navigateToLogin(page: PageHandler) {
   // Handle pages that have login elements on the front page
-  const api = GetLandingApi();
+  const api = await GetLandingApi();
   log.trace(`LandingWriter: Navigating to login`);
   const didNavigate = await page.tryClick(api, "navigateToLogin", {
     name: "login",

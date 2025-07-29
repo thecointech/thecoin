@@ -25,14 +25,16 @@ export async function maybeCloseModal(page: Page, callbacks?: IScraperCallbacks)
     callbacks?.onScreenshot?.("ModalDialog", screenshot, page);
 
     // First check if this is a modal dialog
-    const { data: intent } = await GetIntentApi().pageIntent(screenshotFile);
+    const intentApi = await GetIntentApi();
+    const { data: intent } = await intentApi.pageIntent(screenshotFile);
     log.debug(`Page detected as type: ${intent.type}`);
     if (intent.type != "ModalDialog") return false;
 
     log.debug('Modal detected, attempting to close...');
 
     // If it is a modal, find the close button
-    const { data: closeButton } = await GetModalApi().modalClose(screenshotFile);
+    const modalApi = await GetModalApi();
+    const { data: closeButton } = await modalApi.modalClose(screenshotFile);
     if (!closeButton) return false;
 
     callbacks?.logJson?.("ModalDialog", "close-vqa", closeButton);
