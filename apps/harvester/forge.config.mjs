@@ -22,6 +22,10 @@ const nativeModules = [
   'sharp',
   'puppeteer',
   'puppeteer-extra',
+  // These aren't used, but can cause warnings in
+  // the forge logger main process if included
+  '@bitwarden/sdk-napi',
+  '@google-cloud/secret-manager',
 ]
 
 const vqaApiKey = await getSecret("VqaApiKey");
