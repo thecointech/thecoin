@@ -3,7 +3,7 @@ import { Button, Message } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getErrors, useBackgroundTask } from '@/BackgroundTask';
-import { BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
+import { BackgroundTaskErrors, BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
 import { QuestionResponse } from '@/Agent/QuestionResponse';
 import { isRunning } from '@/BackgroundTask';
 
@@ -43,6 +43,7 @@ export const Browser = () => {
       {/* Allow user to confirm closing any running chrome instances */}
       <QuestionResponse enabled={installing} />
       <BackgroundTaskProgressBar type="initialize" />
+      <BackgroundTaskErrors type="initialize" />
       <div>
         <Button onClick={startDownload} disabled={installing} loading={installing}>Download</Button>
       </div>

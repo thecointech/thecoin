@@ -8,7 +8,7 @@ import { getDataAsDate } from './types';
 import { PayVisaKey } from './steps/PayVisa';
 import { notifyError } from './notify';
 import { exec } from 'child_process';
-import { BackgroundTaskCallback } from '@/BackgroundTask';
+import { BackgroundTaskCallback, getErrorMessage } from '@/BackgroundTask';
 
 export async function harvest(callback?: BackgroundTaskCallback) {
 
@@ -58,6 +58,15 @@ export async function harvest(callback?: BackgroundTaskCallback) {
     else {
       log.fatal(`Error in harvest: ${err}`);
     }
+    // For now, we have to treat "replay" as the group
+    // as we only have a single nesting of background tasks
+    callback?.({
+      id: "harvest",
+      type: "replay",
+      completed: true,
+      error: getErrorMessage(err),
+    })
+
     const res = await notifyError({
       title: 'Harvester Error',
       message: `Harvesting failed.  Please contact support.`,

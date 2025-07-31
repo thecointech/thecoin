@@ -1,6 +1,5 @@
 import { SectionName, EventSection, Agent } from '@thecointech/scraper-agent';
 import { ScraperCallbacks } from "../scraper/callbacks";
-import { AskUserReact } from "./askUser";
 import { log } from "@thecointech/logging";
 import { type BackgroundTaskCallback } from "@/BackgroundTask/types";
 import { setEvents } from '../events';
@@ -8,6 +7,8 @@ import { downloadRequired } from '@/Download/download';
 import { BankType } from '../scraper';
 import { sections } from '@thecointech/scraper-agent/processors/types';
 import { VisibleOverride } from '@thecointech/scraper/puppeteer-init/visibility';
+import { AskUserLogin } from './askUserLogin';
+import { getErrorMessage } from '@/BackgroundTask';
 
 export type AutoConfigParams = {
   type: BankType;
@@ -26,9 +27,10 @@ export async function autoConfigure({ type, name, url, username, password, visib
 
   if (!username || !password) throw new Error("Username and password are required");
 
-  using inputBridge = AskUserReact.newSession(depositAddress);
-  inputBridge.setUsername(username);
-  inputBridge.setPassword(password);
+  using inputBridge = AskUserLogin.newLoginSession({
+    username,
+    password,
+  }, depositAddress);
 
   const toSkip = getSectionsToSkip(type);
   const toProcess = sections.filter(s => !toSkip.includes(s));
@@ -47,9 +49,9 @@ export async function autoConfigure({ type, name, url, username, password, visib
 
     log.info(`Agent: Finished configuring for action: ${name}`);
   }
-  catch (e) {
-    log.error(e, `Error configuring agent for action: ${name}`);
-    const msg = e instanceof Error ? e.message : String(e);
+  catch (e: any) {
+    const msg = getErrorMessage(e);
+    log.error({ err: e }, `Error configuring agent for action: ${name}`);
     logger.complete(false, msg);
     throw e;
   }

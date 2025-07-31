@@ -1,26 +1,20 @@
 import React, { useState } from 'react';
-import { Progress, Button, Accordion, Icon, StrictAccordionTitleProps } from 'semantic-ui-react';
-import { BackgroundTaskReducer, getTaskGroup, type BackgroundTaskInfo } from '@/BackgroundTask';
+import { Button, Accordion, Icon, StrictAccordionTitleProps, Loader } from 'semantic-ui-react';
+import { type GroupAndSubTask, isRunning, useBackgroundTask } from '@/BackgroundTask';
 import { BankData} from './BankCard/data';
 import { QuestionResponse } from './QuestionResponse';
 import { LoginDetails } from './LoginDetails';
 import { BankSelect } from './BankSelect';
 import { ActionType } from '@/Harvester/scraper/types';
-import { BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
-
+import { BackgroundTaskErrors, BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
 
 export const AgentPage: React.FC = () => {
   const [chequingBank, setChequingBank] = useState<BankData>();
   const [creditBank, setCreditBank] = useState<BankData>();
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const tasks = BackgroundTaskReducer.useData();
-  // const initTask = getTaskGroup(tasks, 'initialize');
-  const recordTask = getTaskGroup(tasks, 'record');
-  const replayTask = getTaskGroup(tasks, 'replay');
-
-  const isRecording = (recordTask && recordTask.completed === undefined) ?? false;
-  const isReplaying = (replayTask && replayTask.completed === undefined) ?? false;
+  const recordTask = useBackgroundTask('record');
+  const isRecording = isRunning(recordTask);
 
   const differentBanks = chequingBank && creditBank && chequingBank.url !== creditBank.url;
   const qaIndex = differentBanks ? 4 : 3;
@@ -91,7 +85,7 @@ export const AgentPage: React.FC = () => {
             Login Details: {chequingBank?.name}
           </Accordion.Title>
           <Accordion.Content active={activeIndex === 2}>
-            <LoginDetails {...chequingBank!} type={differentBanks ? "chequing" : "both"}  isReplaying={isReplaying} />
+            <LoginDetails {...chequingBank!} type={differentBanks ? "chequing" : "both"} />
           </Accordion.Content>
           {
             (differentBanks) && (
@@ -106,7 +100,7 @@ export const AgentPage: React.FC = () => {
                   Login Details: {creditBank?.name}
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 3}>
-                  <LoginDetails {...creditBank!} type="credit" isReplaying={isReplaying} />
+                  <LoginDetails {...creditBank!} type="credit" />
                 </Accordion.Content>
               </>
             )
@@ -120,93 +114,73 @@ export const AgentPage: React.FC = () => {
             Additional Info
           </Accordion.Title>
           <Accordion.Content active={activeIndex === qaIndex}>
-            <QuestionResponse setQuestionActive={setQuestionActive} isRecording={isRecording} />
+            <QuestionResponse setQuestionActive={setQuestionActive} enabled={isRecording} />
           </Accordion.Content>
         </Accordion>
       </div>
 
       <BackgroundTaskProgressBar type="record" />
-      {/* <AgentProgressBar task={recordTask} /> */}
-      <AgentCompleted task={recordTask} type="chqBalance" />
-      <AgentCompleted task={recordTask} type="chqETransfer" />
-      <AgentCompleted task={recordTask} type="visaBalance" />
+      <BackgroundTaskErrors type='record' />
+      <ValidateTask record={recordTask} type="chqBalance" />
+      <ValidateTask record={recordTask} type="chqETransfer" />
+      <ValidateTask record={recordTask} type="visaBalance" />
       <BackgroundTaskProgressBar type="replay" />
-      {/* <AgentProgressBar task={validateTask} /> */}
     </div>
   );
 };
 
-const getBarColor = (task: BackgroundTaskInfo) => task.completed !== true ? 'blue' : 'green';
-
-// export const AgentInitProgressBar = ({tasks}: {tasks: BackgroundTaskInfo[]}) => {
-//   if (tasks.filter((t) => !t.completed).length === 0) return null;
-//   return (
-//     <>{
-//       tasks.map((task) => (
-//         <Progress
-//           key={task.item}
-//           percent={task.percent ?? 0}
-//           active={!task.completed}
-//           progress
-//           indicating
-//           success={task.completed === true}
-//           error={task.error !== undefined}
-//           color={getBarColor(task)}
-//           label={task.item}
-//       />
-//     ))
-//     }
-//     </>
-//   )
-// }
-
-export const AgentProgressBar = ({task}: {task?: BackgroundTaskInfo}) => {
-  if (!task) return null;
-  return (
-    <Progress
-      percent={Math.round(task.percent ?? 0)}
-      active={!task.completed}
-      progress
-      success={task.completed === true}
-      error={task.error !== undefined}
-      color={getBarColor(task)}
-      label={task.description}
-    />
-  )
-}
-
-type AgentCompletedProps = {
-  task?: BackgroundTaskInfo
+type ValidateTaskProps = {
+  record?: GroupAndSubTask
   type: ActionType
 }
-export const AgentCompleted = ({task, type}: AgentCompletedProps) => {
+export const ValidateTask = ({record, type}: ValidateTaskProps) => {
 
-  const [result, setResult] = useState<Record<string, string> | undefined>(undefined);
   async function validate(): Promise<void> {
-    // TODO: This should be a long-running operation that returns
-    // results in BackgroundTaskInfo
     const r = await window.scraper.validateAction(type, {});
     if (r.error) alert(r.error);
     console.log('Validation result:', r.value);
-    setResult(r.value);
   }
 
-  if (task?.error) {
-    return (
-      <div style={{ color: 'red' }}>{task.error}</div>
-    )
+  const replay = useBackgroundTask("replay");
+  // Don't do anything while recording/replaying
+  if (isRunning(record) || isRunning(replay)) {
+    return <Loader active />
   }
-  // else if (task?.completed) {
+
+  // Get our specific section
+  const ourTask = replay?.subTasks.find(t => t.subTaskId === type);
+  // If we have recorded, but our task hasn't run, show a button to validate
+  if (record && !ourTask) {
     return (
-      <>
       <div>
         Agent completed <Button onClick={validate}>Validate {type}</Button>
       </div>
-      <div color="darkgreen">
-        {result && Object.entries(result).map(([k, v]) => <div key={k}>{k}: {v}</div>)}
-      </div>
-      </>
     )
+  }
+  // If we have/are replayed, show the progress bar
+  return (
+    <>
+    <BackgroundTaskProgressBar type='replay' subTask={type} />
+    <BackgroundTaskErrors type='replay' subTask={type} />
+    </>
+  )
+    // if (ourTask?.error) {
+    //   return (
+    //     <div style={{ color: 'red' }}>{ourTask.error}</div>
+    //   )
+    // }
+  // else if (ourTask?.running) {
+  //   return <Loader active />
+  // }
+  // // else if (task?.completed) {
+  //   return (
+  //     <>
+
+  //     <div color="darkgreen">
+  //       {result && Object.entries(result).map(([k, v]) => <div key={k}>{k}: {v}</div>)}
+  //     </div>
+  //     </>
+  //   )
   // }
   // return null;
 }

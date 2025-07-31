@@ -19,7 +19,7 @@ import { downloadRequired } from './Download/download';
 import { getScrapingScript } from './results/getScrapingScript';
 import { twofaRefresh as doRefresh } from './Harvester/agent/twofaRefresh';
 import { enableLingeringForCurrentUser, isLingeringEnabled } from './Harvester/schedule/linux-lingering';
-import { VisibleOverride } from '@thecointech/scraper';
+import { Registry, VisibleOverride } from '@thecointech/scraper';
 
 
 async function guard<T>(cb: () => Promise<T>) {
@@ -70,13 +70,11 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
   twofaRefresh: (actionName, refreshProfile) => guard(async () => doRefresh(actionName, refreshProfile, onBgTaskMsg)),
 
   warmup: (_url) => guard(async () => {
-    return false;
-    //  const instance = await Registry.create({
-    //   name: 'warmup',
-    //   context: "default",
-    //   headless: false,
-    //  }, url)
-    //  return !!instance;
+    const instance = await Registry.create({
+      name: 'warmup',
+      context: "default",
+    })
+    return !!instance;
   }),
 
   start: (_actionName, _url, _dynamicInputs) => guard(async () => {

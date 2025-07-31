@@ -5,14 +5,15 @@ import { fromDb } from '../Harvester/db_translate';
 import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
 import { Result } from '../scraper_actions';
-import { BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
-// import { getScrapingScript } from './getScrapingScript';
+import { BackgroundTaskErrors, BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
+import { useBackgroundTask, isRunning } from '@/BackgroundTask';
 
 export const Results = () => {
 
-  const [running, setRunning] = useState(false);
   const [state, setState] = useState<HarvestData|undefined>();
   const [visible, setVisible] = useState<boolean>();
+  const replayTask = useBackgroundTask("replay");
+  const isReplaying = isRunning(replayTask);
 
   useEffect(() => {
     log.info("Loading state");
@@ -27,7 +28,6 @@ export const Results = () => {
     })
   }, [])
   const runImmediately = async () => {
-    setRunning(true);
     log.info("Commencing manual run");
     const r = await window.scraper.runHarvester(!visible);
     if (r.error) {
@@ -36,7 +36,6 @@ export const Results = () => {
     const state = await getCurrentState();
     log.info("Updating state");
     setState(state.value);
-    setRunning(false);
   }
 
   const exportResults = async () => {
@@ -114,10 +113,17 @@ export const Results = () => {
     ? `${state.state.toPayVisa.format()} - ${state.state.toPayVisaDate?.toLocaleString(DateTime.DATETIME_SHORT)}`
     : 'N/A'
 
+  async function launchBrowser() {
+    const r = await window.scraper.warmup("_blank");
+    if (r.error) {
+      alert("Error - please check logs:\n " + r.error);
+    }
+  }
+
   return (
     <>
-      <Dimmer.Dimmable as={Segment} dimmed={running}>
-        <Dimmer active={running} inverted>
+      <Dimmer.Dimmable as={Segment} dimmed={isReplaying}>
+        <Dimmer active={isReplaying} inverted>
           <Loader>Running</Loader>
         </Dimmer>
         <div>
@@ -127,6 +133,9 @@ export const Results = () => {
           <p>Harvester Balance: {state?.state.harvesterBalance?.format() ?? 'N/A'}</p>
           <p>Visa Payment Pending: {paymentPending}</p>
           <p>Last Run: {state?.date.toLocaleString(DateTime.DATETIME_SHORT) ?? 'N/A'}</p>
+        </div>
+        <div>
+          <Button onClick={launchBrowser}>Launch Browser</Button>
         </div>
         <div>
           <Button onClick={exportResults}>Export Results</Button>
@@ -143,6 +152,7 @@ export const Results = () => {
         </div>
       </Dimmer.Dimmable>
       <BackgroundTaskProgressBar type='replay' />
+      <BackgroundTaskErrors type='replay' />
     </>
   )
 }

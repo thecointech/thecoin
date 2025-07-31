@@ -36,18 +36,20 @@ export class BackgroundTaskReducer extends BaseReducer<IActions, InitialState>(T
 
       // Find or create subtask
       let existing = this.draftState.groups[groupIdx];
-      const taskIdx = existing.subTasks.findIndex(t => t.subTaskId === task.subTaskId);
+      const subTasks = existing.subTasks;
+      const taskIdx = subTasks.findIndex(t => t.subTaskId === task.subTaskId);
       if (taskIdx === -1) {
-        existing.subTasks.push(task);
+        subTasks.push(task);
       } else {
-        existing.subTasks[taskIdx] = task;
+        subTasks[taskIdx] = {
+          ...subTasks[taskIdx],
+          ...task,
+        };
       }
 
-      // Calculate overall percent
-      const subTasks = existing.subTasks;
-      existing.percent = subTasks.length > 0
-        ? subTasks.reduce((a, t) => a + getPercent(t) / subTasks.length, 0)
-        : 0;
+      // Calculate group percent
+      existing.percent = subTasks.reduce((a, t) => a + getPercent(t) / subTasks.length, 0)
+      console.log(`Setting: ${existing.type} - ${task.subTaskId} to ${existing.percent}`);
 
       if (task.error) {
         log.error(`Task error: ${existing.type} - ${task.subTaskId}`, task.error);
@@ -63,8 +65,8 @@ export class BackgroundTaskReducer extends BaseReducer<IActions, InitialState>(T
         });
       } else {
         this.draftState.groups[groupIdx] = {
+          ...this.state.groups[groupIdx],
           ...task,
-          subTasks: this.draftState.groups[groupIdx].subTasks,
         };
       }
     }

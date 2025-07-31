@@ -16,6 +16,7 @@ import { sections, SectionType } from "./processors/types";
 import { IScraperCallbacks } from "@thecointech/scraper";
 import { SectionName } from "./types";
 import { GetLoginApi } from "@thecointech/apis/vqa";
+import { WrappedError } from "./errors";
 
 type ApiFn = (image: File) => Promise<AxiosResponse<AnyResponse>>
 
@@ -157,6 +158,7 @@ export class PageHandler {
       }
       catch (e) {
         log.error(e, "Error clicking session timeout");
+        // Continue, as we can't be sure this error is fatal
       }
     }
   }
@@ -231,6 +233,7 @@ export class PageHandler {
 
   async getPageIntent() {
     // TODO: WE really need polly instead of hard-coded attempts for this
+    let error: unknown | undefined;
     for (let i = 0; i < 5; i++) {
       try {
         const intent = await _getPageIntent(this.page);
@@ -242,11 +245,12 @@ export class PageHandler {
         return intent;
       }
       catch (e) {
-        log.error(`Couldn't get page intent: ${e}`);
+        log.error(e, `Couldn't get page intent`);
+        error = e;
       }
       await sleep(1000);
     }
-    throw new Error("Couldn't get page intent");
+    throw new WrappedError("Couldn't get page intent", error, this.currentSectionName);
   }
 
   // Functions for interacting with the webpage

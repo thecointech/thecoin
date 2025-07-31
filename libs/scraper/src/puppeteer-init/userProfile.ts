@@ -7,6 +7,7 @@ import { existsSync } from 'node:fs';
 import { copy, remove } from 'fs-extra';
 import { log } from '@thecointech/logging';
 import { getBrowserType } from './type';
+import { isChromeRunning } from './isChromeRunning';
 
 export function getUserDataDir() {
   return path.join(rootFolder(), 'userdata', getBrowserType());
@@ -27,12 +28,24 @@ function getSystemChromeProfilePath() {
   }
 }
 
-export async function maybeCopyProfile(force: boolean = false) {
+export async function maybeCopyProfile(force: boolean = false, verifyChromeClosed?: () => Promise<boolean>) {
   const type = getBrowserType();
   const userDataDir = getUserDataDir();
   const exists = existsSync(userDataDir);
+
   if (!exists || force) {
     if (exists) {
+      // if we have a way to ask the user to close chrome, lets do so.
+      if (verifyChromeClosed) {
+        // first, see if we need to close chrome
+        if (await isChromeRunning()) {
+          // ask the user to close chrome
+          const confirm = await verifyChromeClosed();
+          if (!confirm) {
+            throw new Error("User cancelled");
+          }
+        }
+      }
       log.debug({ browser: type }, `Removing existing {browser} profile`);
       await remove(userDataDir);
     }

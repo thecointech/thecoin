@@ -6,7 +6,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { DateTime } from "luxon";
 import { IScraperCallbacks, ScraperProgress } from "@thecointech/scraper";
 import { AnyEvent } from "@thecointech/scraper/types";
-import { BackgroundTaskType, BackgroundTaskCallback, SubTaskProgress } from "@/BackgroundTask";
+import { BackgroundTaskType, BackgroundTaskCallback, SubTaskProgress, getErrorMessage } from "@/BackgroundTask";
 import { maybeCloseModal } from "@thecointech/scraper-agent/modal";
 import { notify } from "../notify";
 
@@ -61,7 +61,8 @@ export class ScraperCallbacks implements IScraperCallbacks {
       this.uiCallback?.({
         id: this.timestamp.toString(),
         type: this.taskType,
-        error: String(error),
+        completed: true,
+        error: getErrorMessage(error),
       })
       await this.dumpPage(page);
     }
@@ -91,11 +92,12 @@ export class ScraperCallbacks implements IScraperCallbacks {
 
   async complete(success: boolean, error?: string) {
     // Update TaskGroup
+    const e = error ?? (success ? undefined : "Unknown error");
     this.uiCallback?.({
       id: this.timestamp.toString(),
       type: this.taskType,
-      completed: success,
-      error,
+      completed: true,
+      error: e,
     })
   }
 

@@ -23,9 +23,6 @@ export class DummyAskUser implements IAskUser {
   forPassword(): Promise<string> {
     return Promise.resolve(this.password);
   }
-  forETransferRecipient(): Promise<string> {
-    return Promise.resolve("fake_address@thecoin.io");
-  }
 
   doNotCompleteETransfer(): boolean {
     return true;

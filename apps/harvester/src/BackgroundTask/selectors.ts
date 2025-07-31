@@ -27,7 +27,7 @@ export function isSuccess(task?: BackgroundTaskInfo): boolean|undefined {
 }
 
 export function getPercent(task: BackgroundTaskInfo): number {
-  return task.percent || isSuccess(task) ? 100 : 0;
+  return task.percent ?? (isSuccess(task) ? 100 : 0);
 }
 
 export function getErrors(task?: BackgroundTaskInfo): string[] {
