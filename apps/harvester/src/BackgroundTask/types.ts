@@ -3,10 +3,16 @@ export type BackgroundTaskType = "initialize" | "record" | "validate" | "replay"
 // Base progress information shared by all task types
 export type TaskProgress = {
   // Posted when progress is healthy & ongoing (0-100)
+  // Percent may be undefined if the task is registered
+  // but has not actually started yet
+  // A task may complete with less than 100 percent
+  // if it encounters errors
   percent?: number,
-  // Only set once complete
-  completed?: boolean,
-  // Set if there was an error
+  // Set if the task has completed
+  // This does not imply success/failure
+  completed?: true,
+  // Set if there was an error. This
+  // implies success/failure of the task
   error?: string,
 }
 

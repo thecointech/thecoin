@@ -4,6 +4,7 @@ import { log } from "@thecointech/logging";
 import { exec as exec_cp } from "node:child_process";
 import { promisify } from 'node:util';
 import { maybeCopyProfile } from "@thecointech/scraper/puppeteer";
+import { getErrorMessage } from "@/BackgroundTask/selectors";
 
 const exec = promisify(exec_cp);
 
@@ -32,11 +33,12 @@ export async function copyProfile(onProgress: (info: SubTaskProgress) => void, f
     return true;
   }
   catch (err) {
+    const message = getErrorMessage(err);
     log.error({err}, "Failed to copy profile");
     onProgress({
       subTaskId: "profile",
-      error: err as any,
-      completed: false
+      error: message,
+      completed: true
     })
     return false;
   }

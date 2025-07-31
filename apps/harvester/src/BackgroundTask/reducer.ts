@@ -1,23 +1,16 @@
 import { BaseReducer } from "@thecointech/shared/store/immerReducer";
-import { BackgroundTaskType, BackgroundTaskInfo, GroupTask, SubTask, isSubTask } from "./types";
+import { BackgroundTaskInfo, BackgroundTaskType, isSubTask } from "./types";
+import { GroupAndSubTask, initialState, InitialState } from "./initialState";
 import { log } from "@thecointech/logging";
+import { getPercent, getTaskGroup } from "./selectors";
 
 const TASKPROGRESS_KEY = "taskProgress";
-
-type GroupAndSubTask = GroupTask & {
-  subTasks: SubTask[]
-};
-type GroupTaskStore = GroupAndSubTask[];
 
 export interface IActions {
   setTaskProgress(state: BackgroundTaskInfo): void;
 }
 
-const initialState = {
-  groups: [] as GroupTaskStore,
-}
-
-export class BackgroundTaskReducer extends BaseReducer<IActions, typeof initialState>(TASKPROGRESS_KEY, initialState)
+export class BackgroundTaskReducer extends BaseReducer<IActions, InitialState>(TASKPROGRESS_KEY, initialState)
   implements IActions {
 
   setTaskProgress(task: BackgroundTaskInfo): void {
@@ -29,16 +22,17 @@ export class BackgroundTaskReducer extends BaseReducer<IActions, typeof initialS
         this.draftState.groups[groupIdx] = {
           id: task.parentId,
           type: task.type,
+          percent: 0,
           subTasks: [],
         };
       }
 
-      // Compute 'completed' status.  GroupTasks can be computed
+      // Compute 'running' status.  GroupTasks can be computed
       // because we don't know how many subtasks are operating, but
       // for subtasks that isn't a concern
-      if (task.completed === undefined && task.percent && task.percent >= 100) {
-        task.completed = true;
-      }
+      // if (task.running === undefined && task.percent && task.percent >= 100) {
+      //   task.running = false;
+      // }
 
       // Find or create subtask
       let existing = this.draftState.groups[groupIdx];
@@ -52,7 +46,7 @@ export class BackgroundTaskReducer extends BaseReducer<IActions, typeof initialS
       // Calculate overall percent
       const subTasks = existing.subTasks;
       existing.percent = subTasks.length > 0
-        ? subTasks.reduce((a, t) => a + (t.percent ?? (t.completed ? 100 : 0)), 0) / subTasks.length
+        ? subTasks.reduce((a, t) => a + getPercent(t) / subTasks.length, 0)
         : 0;
 
       if (task.error) {
@@ -77,14 +71,9 @@ export class BackgroundTaskReducer extends BaseReducer<IActions, typeof initialS
   }
 }
 
-export function getTaskGroup(store: typeof initialState, type: BackgroundTaskType): GroupAndSubTask | undefined {
-  // Always get the latest group
-  return store.groups.filter(t => t.type === type).at(-1);
+export function useBackgroundTask(type: BackgroundTaskType): GroupAndSubTask | undefined {
+  const store = BackgroundTaskReducer.useData();
+  return getTaskGroup(store, type);
 }
 
-export function getRunning(tasks: BackgroundTaskInfo[]): BackgroundTaskInfo[] {
-  return tasks.filter(t => t.completed === undefined);
-}
-export function getCompleted(tasks: BackgroundTaskInfo[]): BackgroundTaskInfo[] {
-  return tasks.filter(t => t.completed !== undefined);
-}
+

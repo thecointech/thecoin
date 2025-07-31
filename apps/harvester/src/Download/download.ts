@@ -1,7 +1,7 @@
 import { installBrowser } from "@thecointech/scraper/puppeteer";
 import { SimilarityPipeline } from "@thecointech/scraper/similarity";
 import { log } from "@thecointech/logging";
-import { BackgroundTaskCallback, SubTaskProgress } from "@/BackgroundTask/types";
+import { BackgroundTaskCallback, SubTaskProgress, getErrorMessage } from "@/BackgroundTask";
 import { rootFolder } from "@/paths";
 import path from "node:path";
 import { mkdirSync } from "node:fs";
@@ -13,15 +13,12 @@ export async function downloadRequired(callback: BackgroundTaskCallback) {
   mkdirSync(rootFolder, { recursive: true })
 
   const timestamp = Date.now().toString();
-  callback({
-    type: "initialize",
+  const groupTask = {
+    type: "initialize" as const,
     id: timestamp,
-  })
-  let allComplete = true;
+  }
+  callback(groupTask);
   const onProgress = (info: SubTaskProgress) => {
-    if (info.error) {
-      allComplete = false;
-    }
     callback({
       parentId: timestamp,
       type: "initialize",
@@ -35,9 +32,8 @@ export async function downloadRequired(callback: BackgroundTaskCallback) {
   await Promise.all([browser, profile, similarity]);
 
   callback({
-    type: "initialize",
-    id: timestamp,
-    completed: allComplete
+    ...groupTask,
+    completed: true,
   })
   log.info("Initialization complete");
 }
@@ -45,25 +41,26 @@ export async function downloadRequired(callback: BackgroundTaskCallback) {
 // Make sure we have a compatible browser...
 async function downloadBrowser(onProgress: (info: SubTaskProgress) => void) {
   // Download a compatible browser.
-  return installBrowser((bytes, total) => {
+  try {
+    await installBrowser((bytes, total) => {
+      onProgress({
+        subTaskId: "chrome",
+        percent: (bytes / total) * 100
+      })
+    })
     onProgress({
       subTaskId: "chrome",
-      percent: (bytes / total) * 100
+      completed: true,
     })
-  }).then(() => {
+  }
+  catch (e) {
     onProgress({
       subTaskId: "chrome",
-      completed: true
+      error: getErrorMessage(e),
+      completed: true,
     })
-  }).catch((e) => {
-    onProgress({
-      subTaskId: "chrome",
-      error: e,
-      completed: false
-    })
-  })
+  }
 }
-
 
 function downloadSimilarity(onProgress: (info: SubTaskProgress) => void) {
   const similarityFolder = path.join(rootFolder, "similarity");
@@ -86,7 +83,7 @@ function downloadSimilarity(onProgress: (info: SubTaskProgress) => void) {
         onProgress({
           subTaskId: progress.file,
           percent: 100,
-          completed: true
+          completed: true,
         })
         log.debug(`Download complete: ${progress.file}`);
         break;
