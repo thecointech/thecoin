@@ -62,10 +62,13 @@ async function sendPayment(dateToPay: DateTime, data: HarvestData, { wallet, cre
   log.debug({
     amount: data.visa.dueAmount,
     dateToPay: dateToPay.toISO(),
+    balance: data.visa.balance,
   }, "PayVisa: Prepping visa payment of {amount} on {dateToPay}")
 
+  let dueAmount = data.visa.dueAmount.value;
+
   // If the due amount is negative, there is nothing to pay and we skip
-  if (data.visa.dueAmount.value < 0) {
+  if (dueAmount < 0) {
     log.info('PayVisa: Due amount is negative, skipping payment');
     notify({
       icon: 'money.png',
@@ -80,12 +83,18 @@ async function sendPayment(dateToPay: DateTime, data: HarvestData, { wallet, cre
       }
     }
   }
+  else if (data.visa.balance.value < dueAmount) {
+    // This means that the user has paid off some of their balance already
+    // We don't want to pay too much so limit the payment to max at the
+    // current balance of the card.
+    dueAmount = data.visa.balance.value;
+  }
 
   const payment = await BuildUberAction(
     creditDetails,
     wallet,
     process.env.WALLET_BrokerCAD_ADDRESS!,
-    new Decimal(data.visa.dueAmount.value),
+    new Decimal(dueAmount),
     124,
     dateToPay,
   )
@@ -96,17 +105,17 @@ async function sendPayment(dateToPay: DateTime, data: HarvestData, { wallet, cre
   }
 
   const remainingBalance = (data.state.harvesterBalance ?? currency(0))
-    .subtract(data.visa.dueAmount);
+    .subtract(dueAmount);
 
   notify({
     icon: 'money.png',
     title: 'Payment Request Sent',
-    message: `Visa balance of ${data.visa.dueAmount} is scheduled to be paid ${dateToPay.toLocaleString(DateTime.DATE_MED)}.`,
+    message: `Visa balance of ${dueAmount} is scheduled to be paid ${dateToPay.toLocaleString(DateTime.DATE_MED)}.`,
   })
 
   log.info('PayVisa: Sent payment request, current balance remaining ', remainingBalance.toString());
   return {
-    toPayVisa: data.visa.dueAmount.add(data.state.toPayVisa ?? 0),
+    toPayVisa: currency(dueAmount), // override any existing value
     toPayVisaDate: dateToPay,
     stepData: {
       [PayVisaKey]: data.visa.dueDate.toISO()!,
