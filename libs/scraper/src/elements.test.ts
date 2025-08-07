@@ -46,13 +46,13 @@ describe ('Element tests', () => {
 
     // NOTE: this page is not currently present, get a copy if we need these tests again
     const sample = getTestPage("page", "sample1.html");
-    const click = getTestInfo("page", "sample1-click.json");
+    const event = getTestInfo("page", "sample1-event.json");
 
     const page = await getPage();
     await page.goto(sample);
 
     // first, navigate to the right iframe
-    const element = await getElementForEvent(page, click);
+    const element = await getElementForEvent({ page, event });
 
     expect(element).toBeTruthy();
   })

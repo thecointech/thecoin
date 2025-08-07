@@ -38,7 +38,8 @@ export async function autoConfigure({ type, name, url, username, password, visib
 
   try {
     using _ = new VisibleOverride(visible)
-    const baseNode = await Agent.process(name, url, inputBridge, logger, toSkip);
+    await using agent = await Agent.create(name, inputBridge, url, logger);
+    const baseNode = await agent.process(toSkip);
 
     // Ensure we have required info
     throwIfAnyMissing(baseNode, type);

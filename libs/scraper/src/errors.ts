@@ -1,9 +1,9 @@
-import { DynamicInputEvent, ElementDataMin, FoundElement, ValueEvent } from "./types";
+import { DynamicInputEvent, SearchElementData, FoundElement, ValueEvent } from "./types";
 
 export class ElementNotFoundError extends Error {
-  element: ElementDataMin
+  element: SearchElementData
   bestCandidate: FoundElement|null
-  constructor(element: ElementDataMin, bestCandidate: FoundElement|null) {
+  constructor(element: SearchElementData, bestCandidate: FoundElement|null) {
     super('Element not found');
     this.element = element;
     this.bestCandidate = bestCandidate;
@@ -21,7 +21,7 @@ export class PageNotInteractableError extends Error {
 export class DynamicValueError extends Error {
   event: DynamicInputEvent
   constructor(event: DynamicInputEvent) {
-    super(`Dynamic value error: ${event.dynamicName}`);
+    super(`Dynamic value error: ${event.eventName}`);
     this.event = event;
   }
 }
@@ -29,7 +29,7 @@ export class DynamicValueError extends Error {
 export class ValueEventError extends Error {
   event: ValueEvent
   constructor(event: ValueEvent) {
-    super(`Read value error: ${event.selector}`);
+    super(`Read value error: ${event.eventName}`);
     this.event = event;
   }
 }

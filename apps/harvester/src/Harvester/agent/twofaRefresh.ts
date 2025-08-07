@@ -37,7 +37,8 @@ export async function twofaRefresh(type: ActionType, refreshProfile: boolean, ca
       }
     }
 
-    const baseNode = await Agent.process(ProfileTask, getUrl(events), inputBridge, logger, toSkip);
+    await using agent = await Agent.create(ProfileTask, inputBridge, getUrl(events), logger);
+    const baseNode = await agent.process(toSkip);
     const wasSuccess = baseNode.events.length > 0; // TODO: baseNode.events[baseNode.events.length - 1]. === "success";
     logger.complete(wasSuccess);
     return true;

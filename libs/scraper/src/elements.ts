@@ -1,9 +1,10 @@
 import type { ElementHandle, Frame, Page } from 'puppeteer';
-import type { Coords, ElementData, ElementDataMin, FoundElement, SearchElement } from './types';
+import type { Coords, ElementData, SearchElementData, ElementSearchParams, FoundElement, SearchElement } from './types';
 import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
 import { scoreElement } from './elements.score';
 import { ElementNotFoundError, PageNotInteractableError } from './errors';
+import { EventBus } from './events/eventbus';
 
 declare global {
   interface Window {
@@ -17,7 +18,9 @@ declare global {
 const MAX_SIBLING_DISTANCE = 50;
 const BUCKET_PIXELS = 10
 
-export async function getElementForEvent(page: Page, event: ElementDataMin, timeout=30000, minScore=70, maxTop=Number.MAX_VALUE) {
+export async function getElementForEvent(params: ElementSearchParams) {
+
+  const { page, event, timeout = 30000, minScore = 70, maxTop = Number.MAX_VALUE } = params;
 
   const startTick = Date.now();
 
@@ -31,6 +34,8 @@ export async function getElementForEvent(page: Page, event: ElementDataMin, time
     const candidate = await getBestCandidate(candidates, event, minScore);
 
     if (candidate) {
+      // Watchers can get notified of every found element
+      await EventBus.get().emitElement(candidate, params);
       return candidate;
     }
 
@@ -47,7 +52,7 @@ export async function getElementForEvent(page: Page, event: ElementDataMin, time
   throw new ElementNotFoundError(event, bestCandidate);
 }
 
-async function fetchAllCandidates(page: Page, event: ElementDataMin, maxTop: number) {
+async function fetchAllCandidates(page: Page, event: SearchElementData, maxTop: number) {
   const candidates: FoundElement[] = [];
   const frames = page.frames();
   const nFrames = frames.length;
@@ -85,7 +90,7 @@ function maybeLogMessage(message: string) {
   }
 }
 
-async function getBestCandidate(candidates: FoundElement[], event: ElementDataMin, minScore: number) {
+async function getBestCandidate(candidates: FoundElement[], event: SearchElementData, minScore: number) {
   // Sort by score to see if any element is close enough
   const sorted = candidates.sort((a, b) => b.score - a.score);
   const candidate = sorted[0];
@@ -113,7 +118,7 @@ async function getBestCandidate(candidates: FoundElement[], event: ElementDataMi
   return null;
 }
 
-async function getCandidates(frame: Frame, event: ElementDataMin, maxTop: number, timeout=300) {
+async function getCandidates(frame: Frame, event: SearchElementData, maxTop: number, timeout=300) {
   // We are getting the occasional issue where getElementProps
   // is undefined.  This could potentially be a race condition
   // if this fn evaluates before evaluateOnNewDocument (?)
@@ -170,7 +175,7 @@ async function getCandidates(frame: Frame, event: ElementDataMin, maxTop: number
 }
 
 let lastDbgPrintCandidateSelector: string;
-async function dbgPrintCandidate(candidate: FoundElement, event: ElementDataMin) {
+async function dbgPrintCandidate(candidate: FoundElement, event: SearchElementData) {
   if (lastDbgPrintCandidateSelector == candidate.data.selector) {
     // Do not spam with lotsa logging
     return;

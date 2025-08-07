@@ -32,13 +32,13 @@ describe('TwoFA live tests', () => {
       await page.goto(test.url);
 
       for (const p of vqa.phone_numbers) {
-        const asResponse = {
+        const response = {
           content: p.phone_number,
           position_x: p.position_x,
           position_y: p.position_y,
           neighbour_text: ""
         }
-        const element = await responseToElement(page, asResponse);
+        const element = await responseToElement({ page, response });
         console.log(`${element.data.text} - ${JSON.stringify(element.data.coords)}`);
       }
     }

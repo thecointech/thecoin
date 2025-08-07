@@ -1,6 +1,6 @@
 import { log } from "@thecointech/logging";
 import { SimilarityPipeline } from "./similarity";
-import { Coords, ElementData, ElementDataMin, Font } from "./types";
+import { Coords, ElementData, SearchElementData, Font } from "./types";
 import { distance as levenshtein } from 'fastest-levenshtein';
 
 const EquivalentInputTypes = [
@@ -22,7 +22,7 @@ const EquivalentTags = [
 // This scoring function reaaaaally needs to be replaced with
 // a computed (learned) model, because manually scoring is just
 // too easy to bias to right-nows problems
-export async function scoreElement(potential: ElementData, original: ElementDataMin) {
+export async function scoreElement(potential: ElementData, original: SearchElementData) {
   const components: Record<string, number> = {
     selector:         30 * getSelectorScore(potential.selector, original.selector),
     tag:              20 * getTagScore(potential, original),
@@ -69,7 +69,7 @@ function getTagScore(potential: ElementData, original: Partial<ElementData>) {
   return 0;
 }
 
-function getInputTypeScore(potential: ElementData, original: ElementDataMin): number {
+function getInputTypeScore(potential: ElementData, original: SearchElementData): number {
   if (original.tagName !== 'INPUT' || potential.tagName !== 'INPUT') return 0;
 
   const originalType = original.inputType ?? 'text';
@@ -91,7 +91,7 @@ function getFontScore(potential: Font | undefined, original: Font | undefined) {
   )
 }
 
-function getPositionAndSizeScore(potential: ElementData, original: ElementDataMin): number {
+function getPositionAndSizeScore(potential: ElementData, original: SearchElementData): number {
   if (!potential.coords || !original.coords) return 0;
 
   const sizeScore = getSizeScore(potential.coords, original.coords);
@@ -106,7 +106,7 @@ function getPositionAndSizeScore(potential: ElementData, original: ElementDataMi
 
 //
 // Get a score based on similarity of the potential's siblings to the original
-export async function getSiblingScore(potential: ElementData, original: ElementDataMin) {
+export async function getSiblingScore(potential: ElementData, original: SearchElementData) {
   const potentialSiblings = potential.siblingText;
   const originalSiblings = original.siblingText;
   // If both have siblings
@@ -159,7 +159,7 @@ async function getLabelScore(potential: string|null, original: string|null|undef
   return 0;
 }
 
-export function getRoleScore(potential: ElementData, original: ElementDataMin) {
+export function getRoleScore(potential: ElementData, original: SearchElementData) {
   const matchScore = (original.role == potential.role)
     ? 1
     : -1;
@@ -202,7 +202,7 @@ function getSizeScore(potential: Coords, original: Coords) {
   return (scoreWidth + scoreHeight) / 2;
 }
 
-async function getNodeValueScore(potential: ElementData, original: ElementDataMin) {
+async function getNodeValueScore(potential: ElementData, original: SearchElementData) {
   if (potential.nodeValue && original.nodeValue) {
     // If both are $amounts, that's a pretty good sign
     // NOTE: ($val) is valid for -ve amounts
@@ -234,7 +234,7 @@ async function getNodeValueScore(potential: ElementData, original: ElementDataMi
 // Our text score is different from nodeValue, nodeValue is required to survive
 // website refactoring, but text is always estimated directly from the current page
 // Because of this, we prefer the levenstein distance to the similarity score
-function getEstimatedTextScore(potential: ElementData, original: ElementDataMin): number {
+function getEstimatedTextScore(potential: ElementData, original: SearchElementData): number {
   if (!original.estimated) return 0;
   if (potential.text && original.text) {
     // Strip whitespace

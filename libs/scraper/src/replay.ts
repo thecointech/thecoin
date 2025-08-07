@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
-import { ProtocolError, type Page } from 'puppeteer';
+import { type Page } from 'puppeteer';
 import { getTableData } from './table';
-import { AnyEvent, ValueEvent, ElementData, ReplayResult, SearchElement } from './types';
+import { AnyEvent, ValueEvent, ReplayResult, SearchElement, AnyElementEvent } from './types';
 import { CurrencyType, getCurrencyConverter } from './valueParsing';
 import { log } from '@thecointech/logging';
 import { getElementForEvent } from './elements';
@@ -75,7 +75,7 @@ export async function replayEvents(page: Page, name: string, events: AnyEvent[],
       }
       case 'click': {
         // If this click caused a navigation?
-        const found = await getElementForEvent(page, event);
+        const found = await getElementForEvent({ page, event });
 
         const tryClicking = async () => {
           try {
@@ -118,8 +118,8 @@ export async function replayEvents(page: Page, name: string, events: AnyEvent[],
         break;
       }
       case 'dynamicInput': {
-        log.debug(`Entering dynamicValue : ${event.dynamicName} into ${event.selector}`);
-        const value = dynamicValues?.[event.dynamicName];
+        log.debug(`Entering dynamicValue : ${event.eventName} into ${event.selector}`);
+        const value = dynamicValues?.[event.eventName];
         if (!value) {
           throw new DynamicValueError(event);
         }
@@ -156,17 +156,17 @@ export async function replayEvents(page: Page, name: string, events: AnyEvent[],
           // All good, continue
           break;
         } else {
-          log.debug({ name: event.name }, `Reading value: {name}`);
+          log.debug({ eventName: event.eventName }, `Reading value: {eventName}`);
           // The 15 second wait is to compensate for SPA
           // websites who don't have load/navigation events
           // (thanks again tangerine ya bastard!)
           const tryReadValue = async () => {
             for (let i = 0; i < 15; i++) {
               try {
-                const el = await getElementForEvent(page, event);
+                const el = await getElementForEvent({ page, event });
                 const parsed = parseValue(el.data.text, event);
                 if (parsed) {
-                  values[event.name ?? 'defaultValue'] = parsed;
+                  values[event.eventName] = parsed;
                   return true;
                 }
               }
@@ -190,7 +190,7 @@ export async function replayEvents(page: Page, name: string, events: AnyEvent[],
 
   async function processInstructions(events: AnyEvent[]) {
 
-    const onScreenshot = getOnScreenshot(callbacks);
+    // const onScreenshot = getOnScreenshot(callbacks);
     for (let i = 0; i < events.length; i++) {
       const event = events[i];
 
@@ -201,7 +201,7 @@ export async function replayEvents(page: Page, name: string, events: AnyEvent[],
         // Take a screenshot on success
         // We do this after the loop because the loading
         // delay is handled by fetching the element
-        await onScreenshot?.(page, event);
+        // await onScreenshot?.(page, event);
       }
       catch (err) {
         // On failed, lets check whats going on
@@ -240,8 +240,8 @@ export async function replayEvents(page: Page, name: string, events: AnyEvent[],
   return values;
 }
 
-export async function enterValue(page: Page, event: ElementData, value: string) {
-  const found = await getElementForEvent(page, event);
+export async function enterValue(page: Page, event: AnyElementEvent, value: string) {
+  const found = await getElementForEvent({ page, event });
   return await enterValueIntoFound(page, found, value);
 }
 
@@ -306,25 +306,25 @@ function parseValue(value: string, event: ValueEvent) {
   return value;
 }
 
-function getOnScreenshot(callbacks?: IScraperCallbacks) {
-  return callbacks?.onScreenshot
-    ? async (page: Page, event: AnyEvent) => {
-      try {
-        const screenshot = await page.screenshot({ fullPage: true, type: 'png' });
-        const asData = event as ElementData;
-        const name = `${event.type}-${asData.nodeValue || asData.label || asData.name || event.type || ""}`;
-        callbacks.onScreenshot!(name, screenshot, page)
-      }
-      catch (err) {
-        if (err instanceof ProtocolError) {
-          // This can happen if we are in the middle of a navigation event.
-          // It's not a big deal, we must miss a screenshot
-          log.warn(err, `Failed to take screenshot`);
-        }
-        else {
-          throw err;
-        }
-      }
-    }
-    : undefined;
-}
+// function getOnScreenshot(callbacks?: IScraperCallbacks) {
+//   return callbacks?.onScreenshot
+//     ? async (page: Page, event: AnyEvent) => {
+//       try {
+//         const screenshot = await page.screenshot({ fullPage: true, type: 'png' });
+//         const asData = event as ElementData;
+//         const name = `${event.type}-${asData.nodeValue || asData.label || asData.name || event.type || ""}`;
+//         callbacks.onScreenshot!(name, screenshot, page)
+//       }
+//       catch (err) {
+//         if (err instanceof ProtocolError) {
+//           // This can happen if we are in the middle of a navigation event.
+//           // It's not a big deal, we must miss a screenshot
+//           log.warn(err, `Failed to take screenshot`);
+//         }
+//         else {
+//           throw err;
+//         }
+//       }
+//     }
+//     : undefined;
+// }

@@ -1,13 +1,15 @@
-import type { Page } from 'puppeteer';
+import { type Page } from 'puppeteer';
 import { AnyEvent, InputEvent } from '../types';
 import { log } from '@thecointech/logging';
 import { RecorderOptions } from './types';
 import { Registry } from './registry';
 import { waitUntilLoadComplete } from './waitLoadComplete';
 import { sleep } from '@thecointech/async';
+import { EventEmitter } from 'node:events';
 
+type EventCallback = (event: AnyEvent, page: Page, name: string, step: number) => void;
 
-export class Recorder implements AsyncDisposable {
+export class Recorder extends EventEmitter implements AsyncDisposable {
 
   // Each new page loaded is a new step
   step = 0;
@@ -21,6 +23,13 @@ export class Recorder implements AsyncDisposable {
   private lastInputEvent: InputEvent | undefined;
   private seenEvents = new Set();
 
+  onEvent(callback: EventCallback) {
+    this.on("event", callback);
+  }
+  emitEvent(event: AnyEvent) {
+    this.emit("event", event, this.page, this.name, this.step);
+  }
+
   get name() {
     return this.options.name;
   }
@@ -29,6 +38,7 @@ export class Recorder implements AsyncDisposable {
   }
 
   constructor(options: RecorderOptions) {
+    super();
     this.options = options;
   }
 
@@ -110,6 +120,8 @@ export class Recorder implements AsyncDisposable {
         .filter(v => !!v[1]);
       this.urlToFrameName = Object.fromEntries(frames);
       break;
+    case "value":
+      throw new Error("Manual value events need to be named & re-enabled");
     case "input": {
         // Input events come in a stream, and we cache them
         // until we have the final one.
@@ -136,9 +148,8 @@ export class Recorder implements AsyncDisposable {
   }
 
   saveEvent(event: AnyEvent) {
-    // this.logEvent(event);
     this.events.push(event);
-    this.options.onEvent?.(event, this.page, this.name, this.step);
+    this.emitEvent(event);
   }
 
   isDuplicate(event: AnyEvent) {
@@ -252,15 +263,16 @@ function onNewDocument() {
           setTimeout(() => {
             __onAnyEvent({
               type: "dynamicInput",
-              dynamicName: "--UNSET--",
+              eventName: "--UNSET--",
               ...evt
             })
           }, 750);
         }
         else {
-          // Send immediately
+          // For click/value, send immediately
           __onAnyEvent({
             type: __clickAction,
+            eventName: "clicked",
             ...evt
           });
         }
@@ -295,6 +307,7 @@ function onNewDocument() {
       const target = ev.target as HTMLInputElement;
       __onAnyEvent({
         type: "input",
+        eventName: "valueChange",
         timestamp: Date.now(),
         id: crypto.randomUUID(),
         valueChange: true,
@@ -309,6 +322,7 @@ function onNewDocument() {
         if (ev.key == "Enter") {
           __onAnyEvent({
             type: "input",
+            eventName: "hitEnter",
             timestamp: Date.now(),
             id: crypto.randomUUID(),
             hitEnter: true,
@@ -319,6 +333,7 @@ function onNewDocument() {
         else {
           __onAnyEvent({
             type: "input",
+            eventName: "keyDown",
             timestamp: Date.now(),
             id: crypto.randomUUID(),
             value: (ev.target as HTMLInputElement)?.value + ev.key,

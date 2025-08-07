@@ -1,15 +1,14 @@
 
 import { log } from "@thecointech/logging";
-import { BankConfig, getConfig } from "../config.js";
+import { getConfig } from "../config.js";
 import { Agent } from '../../src/agent.js'
 import { init } from "../init.js";
-import { maybeCopyProfile, installBrowser, newPage } from "@thecointech/scraper/puppeteer";
+import { maybeCopyProfile, installBrowser } from "@thecointech/scraper/puppeteer";
 import { AskUserConsole } from './askUserConsole.js'
 import { TestSerializer } from './testSerializer.js'
 import path from "path";
 import { DateTime } from "luxon"
 import { LoginFailedError } from "../../src/errors.js";
-import { DummyAskUser } from "./dummyAskUser.js";
 import type { SectionType } from "../../src/processors/types.js";
 
 const { baseFolder, config } = getConfig();
@@ -28,22 +27,28 @@ await maybeCopyProfile(clean);
 let successful: string[] = [];
 let errored: string[] = [];
 
-async function RunFailedLogin(name: string, bankConfig: BankConfig) {
-  const askUser = new DummyAskUser(bankConfig.bad_credentials);
-  const logger = new TestSerializer({baseFolder: recordFolder + "", target: name});
+async function RunFailedLogin(agent: Agent, askUser: AskUserConsole) {
+  const url = agent.page.page.url();
+  // Don't record these events, they aren't relevant
+  using _ = agent.events.pause();
   try {
-    await Agent.process(name, bankConfig.url, askUser, logger);
+    askUser.useBadLogin = true;
+    await agent.process();
+    // We shouldn't reach here
+    throw new Error("Failed Login should throw")
   }
   catch (e) {
     const isLoginFailure = e instanceof LoginFailedError;
     // We _should_ have a login failure
     if (isLoginFailure) {
-      // If we don't have a valid password, mark this target complete
+      // Go back to the start
+      askUser.useBadLogin = false;
+      await agent.page.page.goto(url)
       return true;
     }
+    // Else, something has gone wrong, abandon ship
+    throw e;
   }
-  errored.push(name);
-  return false;
 }
 
 for (const [name, bankConfig] of Object.entries(config)) {
@@ -52,24 +57,26 @@ for (const [name, bankConfig] of Object.entries(config)) {
     continue;
   }
 
-  const didRun = testFailedLogin && await RunFailedLogin(name, bankConfig);
-
-  // If we've already run, and don't have a valid password, we've done all we can
-  if (didRun && !config[name].password) {
-    successful.push(name);
-    continue;
-  }
   try {
 
-    using askUser = new AskUserConsole(bankConfig);
     // If this is our second run, we've already done the cookie banner and login
-    const skipSections: SectionType[] = didRun ? ["Landing", "CookieBanner", "Login"] : [];
+    const skipSections: SectionType[] = [];
     const logger = new TestSerializer({baseFolder: recordFolder, target: name, skipSections});
+    using askUser = new AskUserConsole(bankConfig);
 
-    const events = await Agent.process(name, bankConfig.url, askUser, logger);
+    // We want to write out all API calls and every found element
+    await using agent = await Agent.create(name, askUser, bankConfig.url);
+
+    if (testFailedLogin) {
+      await RunFailedLogin(agent, askUser);
+      skipSections.push("Landing", "CookieBanner", "Login");
+    }
+    // If we have no password, we can't do anything else
+    if (bankConfig.password) {
+      const events = await agent.process(skipSections);
+      logger.logEvents(events);
+    }
     successful.push(name);
-
-    logger.logEvents(events);
   } catch (e) {
     errored.push(name);
   }

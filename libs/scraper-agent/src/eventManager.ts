@@ -1,7 +1,9 @@
 import { log } from "@thecointech/logging";
-import type { AnyEvent } from "@thecointech/scraper/types";
+import type { AnyEvent, DynamicInputEvent, ElementData, FoundElement, ValueEvent, ValueType } from "@thecointech/scraper/types";
 import type { Page } from "puppeteer";
 import type { EventSection, SectionName } from "./types";
+import { getValueParsing } from "@thecointech/scraper/valueParsing";
+import { bus } from "./eventbus";
 
 /**
  * A manager for events that occur during a scrape.
@@ -23,6 +25,10 @@ interface IPauser extends Disposable {
   discards: AnyEvent[];
 }
 
+// Utility type to prevent type inference
+// NOTE!  This can be removed in TS5.4 (whenever we upgrade)
+type NoInfer<T> = [T][T extends any ? 0 : never];
+
 export class EventManager {
 
   allEvents: EventSection = { section: "Initial", events: [] }
@@ -34,6 +40,38 @@ export class EventManager {
   // Manual event push.  Will push to current section, ignoring pausers.
   pushEvent(event: AnyEvent) {
     this.currentEvents?.push(event);
+  }
+
+  async pushValueEvent<T>(element: FoundElement, name: Extract<keyof NoInfer<T>, string>, type: ValueType) {
+    const event: ValueEvent = {
+      type: "value",
+      eventName: name,
+      timestamp: Date.now(),
+      id: crypto.randomUUID(),
+      ...element.data
+    };
+
+    event.parsing = (type == "table")
+      ? {
+          type: "table",
+          format: null,
+        }
+      : getValueParsing(element.data.text, type);
+
+    this.pushEvent(event);
+    return event;
+  }
+
+  pushDynamicInputEvent<T>(element: ElementData, name: Extract<keyof NoInfer<T>, string>) {
+        const event: DynamicInputEvent = {
+          type: "dynamicInput",
+          eventName: name,
+          timestamp: Date.now(),
+          id: crypto.randomUUID(),
+          ...element,
+        };
+        this.pushEvent(event);
+        return event;
   }
 
   pushSection(section: SectionName) : IEventSectionManager {
@@ -99,9 +137,11 @@ export class EventManager {
       this.section = { section, events: [] };
       this._parent.events.push(this.section);
       this._mgr.sectionStack.push(this);
+      bus().emitSection(section);
     }
     async [Symbol.asyncDispose]() {
       this._mgr.sectionStack.pop();
+      bus().emitSection(this._parent.section);
     }
     cancel() {
       this._parent.events.splice(this._parent.events.indexOf(this.section), 1);

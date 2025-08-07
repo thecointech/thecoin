@@ -6,10 +6,13 @@ import type { SectionName } from "../../src/types";
 import { isPresent } from "@thecointech/utilities/ArrayExtns";
 import { doPixelMatch } from "../../src/vqaResponse";
 import { IScraperCallbacks, ScraperProgress } from "@thecointech/scraper";
-import { AnyEvent } from "@thecointech/scraper/types";
+import { AnyEvent, ElementSearchParams, FoundElement } from "@thecointech/scraper/types";
 import { _getImage, TakeScreenshotError } from "../../src/getImage";
 import { maybeCloseModal } from "../../src/modal";
-import { LoginFailedError } from "../../src/errors";
+import { LoginFailedError } from "@/errors";
+import { ApiCallEvent, bus } from "@/eventbus";
+import { EventBus } from "@thecointech/scraper/events/eventbus";
+
 
 // How many pixels must change to consider it a new screenshot
 const MIN_PIXELS_CHANGED = 100;
@@ -33,8 +36,7 @@ export class TestSerializer implements IScraperCallbacks {
   // The bank names (constant throughout an execution)
   _target: string
 
-  _lastsection: string | undefined;
-  sectionCount = 0;
+  tracker: SectionTracker;
   _lastScreenShot: Uint8Array | Buffer | undefined;
 
   _skipSections: string[];
@@ -43,6 +45,53 @@ export class TestSerializer implements IScraperCallbacks {
     this._baseFolder = baseFolder
     this._target = target
     this._skipSections = skipSections ?? [];
+
+    bus().onApiCall(this.onApiCall);
+    bus().onSection(this.onSection);
+    EventBus.get().onElement(this.onElement);
+
+    // Init tracker to "Initial"
+    this.tracker = new SectionTracker();
+    this.tracker.setCurrentSection("Initial");
+  }
+
+  // Log every API call
+  onApiCall = async (event: ApiCallEvent) => {
+    if (this.pauseWriting()) {
+      return;
+    }
+    // Does the request include an image?
+    const args = event.request;
+    const image = args.find((arg) => arg instanceof File) as File;
+    if (image) {
+      // Save the image
+      await this.onScreenshot(Buffer.from(await image.arrayBuffer()));
+      // Remove the image from the args
+      args.splice(args.indexOf(image), 1);
+    }
+    await this.logJson(`${event.apiName}-${event.method}-vqa`, {
+      args,
+      response: event.response.data,
+      error: event.error,
+    });
+  }
+
+  onElement = async (element: FoundElement, search: ElementSearchParams) => {
+    const toStore = {
+      ...element,
+      search: {
+        ...search,
+      }
+    }
+    delete toStore.element;
+    delete toStore.search.page;
+
+    await this.logJson(`${toStore.search.event.eventName}-elm`, toStore);
+    await this.logMhtml(search.page);
+  }
+
+  onSection = async (section: SectionName) => {
+    this.tracker.setCurrentSection(section);
   }
 
   async onError(page: Page, error: unknown, event?: AnyEvent) {
@@ -75,57 +124,59 @@ export class TestSerializer implements IScraperCallbacks {
 
   onProgress(progress: ScraperProgress) {
     log.info(`Progress: ${progress.stage} - ${progress.stepPercent}%`);
-    // if we are starting a new section, reset the section count
-    // This is always called with 0 percent at the start of a new section
-    if (progress.stepPercent == 0 || progress.stage != this._lastsection) {
-      this.sectionCount = 0;
-      this._lastsection = progress.stage;
-      this._lastScreenShot = undefined;
-    }
     return true;
   }
 
-  maybeIncrementSection(section: string, screenshot: Buffer|Uint8Array) {
-    if (this._skipSections.includes(section)) {
-      return;
-    }
-
-    if (this._lastScreenShot) {
-      if(doPixelMatch(screenshot, this._lastScreenShot) > MIN_PIXELS_CHANGED) {
-        this.sectionCount++;
-      };
-    }
-    this._lastScreenShot = screenshot;
+  pauseWriting() {
+    return this.tracker.currentSection == "Initial" || this._skipSections.includes(this.tracker.currentSection);
   }
 
-  async onScreenshot(section: string, screenshot: Buffer|Uint8Array, page: Page): Promise<void> {
-    if (this._skipSections.includes(section)) {
+  maybeIncrementSection(screenshot: Buffer|Uint8Array) {
+    if (this.tracker.lastScreenshot) {
+      if(doPixelMatch(screenshot, this.tracker.lastScreenshot) > MIN_PIXELS_CHANGED) {
+        this.tracker.incrementStep();
+      };
+    }
+    this.tracker.lastScreenshot = screenshot;
+  }
+
+  async onScreenshot(screenshot: Buffer|Uint8Array, page?: Page): Promise<void> {
+    if (this.pauseWriting()) {
       return;
     }
-    this.maybeIncrementSection(section, screenshot);
+    this.maybeIncrementSection(screenshot);
 
     // Write out the buffer
-    const outScFile = this.toPath(section, `${this.sectionCount}`, "png");
+    const outScFile = this.toPath(this.tracker.currentSection, `${this.tracker.step}`, "png");
     writeFileSync(outScFile, screenshot, { encoding: "binary" });
 
     // Also try for MHTML
+    // if (page) {
+      // await this.logMhtml(page);
+    // }
+  }
+
+  async logMhtml(page: Page) {
     try {
-      const outMhtml = this.toPath(section, `${this.sectionCount}`, "mhtml");
+      const outMhtml = this.toPath(this.tracker.currentSection, `${this.tracker.step}`, "mhtml");
       const cdp = await page.createCDPSession();
       const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
       writeFileSync(outMhtml, data);
     }
     catch (e) {
-      log.error(e);
+      log.error(e, `Error taking MHTML for section ${this.tracker.currentSection}`);
       // This is a pain, but it happens - let's move on anyway
     }
   }
 
-  async logJson(section?: string, name?: string, data: any = {}): Promise<void> {
-    if (section && this._skipSections.includes(section)) {
+  async logJson(name?: string, data: any = {}): Promise<void> {
+    if (this.pauseWriting()) {
       return;
     }
-    const path = this.toPath(section, `${this.sectionCount}-${name}`, "json");
+    const filename = `${this.tracker.step}-${this.tracker.elements}-${name}`;
+    // Ensure we don't overwrite previous JSON files
+    this.tracker.incrementElement();
+    const path = this.toPath(this.tracker.currentSection, filename, "json");
     writeFileSync(path, JSON.stringify(data, null, 2));
     log.trace(`Wrote: ${path}`);
   }
@@ -167,7 +218,51 @@ export class TestSerializer implements IScraperCallbacks {
 
   async logFailedLogin(page: Page, error: LoginFailedError) {
     const image = await _getImage(page);
-    await this.onScreenshot("Login", image, page);
-    await this.logJson("Login", "error-vqa", error.vqaResponse);
+    await this.onScreenshot(image, page);
+    await this.logJson("error-vqa", error.vqaResponse);
+  }
+}
+
+
+class SectionTracker {
+  currentSection: string;
+  sectionCounters: Record<string, {
+    step: number;
+    elements: number;
+    lastScreenshot?: Uint8Array | Buffer;
+  }> = {};
+
+  get step() {
+    return this.sectionCounters[this.currentSection].step;
+  }
+  get elements() {
+    return this.sectionCounters[this.currentSection].elements;
+  }
+
+  get section() {
+    return this.sectionCounters[this.currentSection];
+  }
+
+  set lastScreenshot(screenshot: Uint8Array | Buffer) {
+    this.sectionCounters[this.currentSection].lastScreenshot = screenshot;
+  }
+
+  get lastScreenshot() {
+    return this.sectionCounters[this.currentSection].lastScreenshot;
+  }
+
+  setCurrentSection(section: string) {
+    this.currentSection = section;
+    this.sectionCounters[section] = this.sectionCounters[section] ?? {
+      step: 0,
+      elements: 0,
+    };
+  }
+  incrementStep() {
+    this.section.step++;
+    this.section.elements = 0;
+  }
+  incrementElement() {
+    this.section.elements++;
   }
 }

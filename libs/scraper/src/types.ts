@@ -1,7 +1,7 @@
 import type currency from 'currency.js';
 import type { DateTime } from 'luxon';
 import type { HistoryRow } from './table';
-import type { ElementHandle } from 'puppeteer';
+import type { ElementHandle, Page } from 'puppeteer';
 
 export type { HistoryRow };
 
@@ -42,7 +42,7 @@ export type ElementData = {
   frame?: string
   // Note: always uppercase
   tagName: string,
-  // Name is not used in scoring, but is helpful
+  // HTML name attribute.  Not used in scoring, but is helpful
   // for grouping radio buttons together for VQA
   name?: string,
   // Options are not used in scoring, but are helpful
@@ -62,13 +62,23 @@ export type ElementData = {
   nodeValue?: string|null,
   font?: Font,
   siblingText?: string[],
+}
 
+export type SearchElementData = Partial<ElementData> & {
+  // Matches eventName in AnyElementEvent
+  eventName: string
   // Set to true if we are searching for an element
   // based on estimated data (eg from VQA service)
   estimated?: boolean,
-}
+};
 
-export type ElementDataMin = Partial<ElementData>;
+export type ElementSearchParams = {
+  page: Page,
+  event: SearchElementData,
+  timeout?: number,
+  minScore?: number,
+  maxTop?: number,
+}
 
 export type SearchElement = {
   element: ElementHandle<HTMLElement>,
@@ -96,13 +106,17 @@ export type UnloadEvent = {
 } & BaseEvent;
 
 
-export type BaseEventData =  BaseEvent & ElementData;
+export type BaseEventData =  {
+  // Human name for the event.  Used
+  // by ValueEvent to name the value read from the element,
+  // and all for debugging/testing
+  eventName: string,
+} & BaseEvent & ElementData;
+
 export type ClickEvent = {
   type: "click",
   clickX: number,
   clickY: number,
-  // font: Font,
-  // text: string,
 } & BaseEventData;
 
 // Static input event.  Will be the same every run
@@ -117,16 +131,14 @@ export type InputEvent = {
 // Used for things like `amount`
 export type DynamicInputEvent = {
   type: "dynamicInput",
-  dynamicName: string,
   valueChange?: boolean,
 } & BaseEventData;
 
 // Not really an event, but something to read later
 export type ValueEvent = {
   type: "value",
-  name?: string,
   parsing?: ValueParsing
 } & BaseEventData;
 
-
-export type AnyEvent = NavigationEvent|ClickEvent|InputEvent|DynamicInputEvent|UnloadEvent|LoadEvent|ValueEvent;
+export type AnyElementEvent = ClickEvent|InputEvent|DynamicInputEvent|ValueEvent;
+export type AnyEvent = NavigationEvent|AnyElementEvent|UnloadEvent|LoadEvent;

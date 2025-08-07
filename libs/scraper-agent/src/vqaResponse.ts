@@ -1,5 +1,5 @@
 import type { AccountResponse, ElementResponse, InputElementResponse, MoneyElementResponse } from "@thecointech/vqa";
-import type { ElementDataMin, FoundElement, SearchElement } from "@thecointech/scraper/types";
+import type { ElementSearchParams, FoundElement, SearchElement, SearchElementData } from "@thecointech/scraper/types";
 import { TimeoutError, type Page } from "puppeteer";
 import { getElementForEvent } from "@thecointech/scraper/elements";
 import { waitUntilLoadComplete } from "@thecointech/scraper/record/waitLoadComplete";
@@ -11,12 +11,18 @@ import { PNG } from "pngjs";
 import { _getPageIntent } from "./getPageIntent";
 
 export type AnyResponse = ElementResponse | InputElementResponse | MoneyElementResponse;
+type ResponseSearchParams = {
+  response: AnyResponse,
+  hints?: SearchElementData,
+} & Omit<ElementSearchParams, "event">;
 
-export function responseToElementData(response: AnyResponse, hints?: Partial<ElementDataMin>): ElementDataMin {
+function responseToElementData({ response, hints }: ResponseSearchParams): SearchElementData {
   const text = getContent(response);
   const width = text.length * 8;
   const height = 20; // Just guess based on avg font size
   return {
+    // The default value, overwritten by hints
+    eventName: "--unset--",
     ...hints,
     // Force consistent casing for comparisons
     tagName: hints?.tagName?.toUpperCase(),
@@ -52,15 +58,21 @@ export const accountToElementResponse = (account: AccountResponse) => ({
 });
 
 
-export async function responseToElement(page: Page, e: AnyResponse, hints?: Partial<ElementDataMin>, timeout?: number): Promise<FoundElement> {
+export async function responseToElement(search: ResponseSearchParams): Promise<FoundElement> {
   // Try to find and click the close button
-  const elementData = responseToElementData(e, hints);
+  const elementData = responseToElementData(search);
 
-  const maxHeight = page.viewport()!.height + 100;
+  // Only look for elements that are visible (above the fold)
+  const maxTop = search.maxTop ?? search.page.viewport()!.height + 100;
   // We have a lower minScore because the only data we have is text + position + neighbours
   // Which has a maximum value of 40 (text) + 20 (position) + 20 (neighbours)
   // So basically, if there is even one things matches, then it's good enough,
-  return await getElementForEvent(page, elementData, timeout ?? 5000, 20, maxHeight);
+  return await getElementForEvent({
+    ...search,
+    maxTop,
+    event: elementData,
+    minScore: search.minScore ?? 20,
+  });
 }
 
 // 50 * 50 = 2500 which is 0.1% of the viewport.  This is a pretty small area to detect a change in a page

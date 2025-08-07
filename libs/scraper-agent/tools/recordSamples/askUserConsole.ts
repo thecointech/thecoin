@@ -9,6 +9,8 @@ export class AskUserConsole implements IAskUser {
   private rlp: readline.Interface;
   private config: Partial<BankConfig>;
 
+  useBadLogin = false;
+
   constructor(config: Partial<BankConfig> = {}) {
     this.config = config;
     // In NodeJS
@@ -22,9 +24,15 @@ export class AskUserConsole implements IAskUser {
     return true;
   }
   async forUsername(): Promise<string> {
+    if (this.useBadLogin) {
+      return this.config.bad_credentials?.username ?? "1234567812345678";
+    }
     return this.config.username!;
   }
   async forPassword(): Promise<string> {
+    if (this.useBadLogin) {
+      return this.config.bad_credentials?.password ?? "1234oIOHHS!lyL";
+    }
     return this.config.password!;
   }
 
