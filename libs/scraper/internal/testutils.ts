@@ -11,6 +11,7 @@ export const getTestPage = (...parts: string[]) => `file:///${testFileFolder}/un
 export const getTestInfo = (...parts: string[]) => JSON.parse(
   readFileSync(`${testFileFolder}/unit-tests/${parts.join('/')}`, 'utf-8')
 )
+export { patchOnnxForJest } from "./jestPatch"
 
 export const getTestPages = async (...parts: string[]) => {
   const testFolder = `${testFileFolder}/unit-tests/${parts.join('/')}`

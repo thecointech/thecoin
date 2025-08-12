@@ -33,7 +33,7 @@ list_accounts_query = (
 # json_part = get_instruct_json_respose(element_schema)
 # find_account_balance_query = f"Analyze the provided webpage. Describe the element that contains the balance for this account \"{account_number}\". {json_part}"
 
-find_account_balance_prompt = "Analyze the provided webpage. Describe the element that contains the balance for this account \"{account_number}\"."
+find_account_balance_prompt = "Analyze the provided webpage. Describe the element that contains the balance for the account \"{account_number}\"."
 def get_query_account_balance(account_number: str):
     return (
         find_account_balance_prompt.format(account_number=account_number),

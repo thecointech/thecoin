@@ -14,42 +14,174 @@ load_dotenv()
 # TODO: Make this configurable?  A larger LLM may be able to handle bigger images
 MAX_HEIGHT = 1440
 
+import os
+import json
+import glob
+from pathlib import Path
+from typing import List, Dict, Any, Optional, Callable
+from dataclasses import dataclass
+
+@dataclass
+class VqaCallData:
+    args: List[str]
+    response: Any
+
+@dataclass
+class TestElmData:
+    # This would need to match the TypeScript FoundElement type minus 'element'
+    # and include the search params minus 'page'
+    data: Dict[str, Any]
+    search: Dict[str, Any]
+
+class TestData:
+    def __init__(self, key: str, target: str, step: str,
+                 matched_folder: str, json_files: List[str]):
+        self.key = key
+        self.target = target
+        self.step = step
+        self._matched_folder = matched_folder
+        self._json_files = json_files
+        self._elm_query_counters: Dict[str, int] = {}
+        self._vqa_query_counters: Dict[str, int] = {}
+
+    def __str__(self) -> str:
+        return self.key
+
+    def image(self):
+      image_path = os.path.join(self._matched_folder, self.step + ".png")
+      with Image.open(image_path) as image:
+        image.load()
+      return image
+
+    def vqa(self, call: str) -> Optional[VqaCallData]:
+        """Get VQA call data for a specific call name"""
+        counter = self._vqa_query_counters.get(call, 0)
+        self._vqa_query_counters[call] = counter + 1
+        matching_files = [f for f in self._json_files if call in f and f.endswith("-vqa.json")]
+        if counter < len(matching_files):
+            file_path = os.path.join(self._matched_folder, matching_files[counter])
+            with open(file_path, 'r') as f:
+                data = json.load(f)
+                return VqaCallData(args=data.get('args', []), response=data.get('response', data))
+        return None
+
+    def elm(self, name: str) -> Optional[TestElmData]:
+        """Get element data for a specific element name"""
+        counter = self._elm_query_counters.get(name, 0)
+        self._elm_query_counters[name] = counter + 1
+
+        matching_files = [f for f in self._json_files if name in f and f.endswith("-elm.json")]
+        if counter < len(matching_files):
+            file_path = os.path.join(self._matched_folder, matching_files[counter])
+            with open(file_path, 'r') as f:
+                data = json.load(f)
+                return TestElmData(data=data.get('data', {}), search=data.get('search', {}))
+        return None
+
+def get_test_data(section: str, search_pattern: str, record_time: str = 'record-latest') -> List[TestData]:
+    """
+    Get test data matching the specified section and search pattern.
+
+    Args:
+        section: The section to search in (e.g., "AccountsSummary")
+        search_pattern: Pattern to match in filenames
+        record_time: Time folder to search in (default: 'record-latest')
+
+    Returns:
+        List of TestData objects
+    """
+    test_folder = os.path.join(os.environ['PRIVATE_TESTING_PAGES'], "unit-tests")
+    base_folder = os.path.join(test_folder, record_time)
+    results: List[TestData] = []
+
+    pattern = os.path.join(base_folder, "**", section, "**", f"*{search_pattern}*")
+    matched = glob.glob(pattern, recursive=True)
+
+    for match in matched:
+        matched_folder = os.path.dirname(match)
+        matched_filename = os.path.basename(match)
+        key = os.path.relpath(matched_folder, test_folder)
+
+        # Skip if we already have this key
+        if any(r.key == key for r in results):
+            continue
+
+        all_pages_and_elements = os.listdir(matched_folder)
+        step = matched_filename.split('-')[0]
+
+        # Check if PNG file exists, skip if not
+        png_file = os.path.join(matched_folder, f"{step}.png")
+        if not os.path.exists(png_file):
+            continue
+
+        # Determine target from path
+        path_bits = matched_folder.split(os.sep)
+        target = path_bits[-2] if path_bits[-1] == section else path_bits[-1]
+
+        # Get JSON files for this page
+        json_files = [f for f in all_pages_and_elements if f.startswith(step)]
+
+        results.append(TestData(
+            key=key,
+            target=target,
+            step=step,
+            matched_folder=matched_folder,
+            json_files=json_files
+        ))
+
+    return results
+
+# Example usage:
+if __name__ == "__main__":
+    # Test the function
+    test_data = get_test_data("AccountsSummary", "balance", "record-archive/2025-07-25_15-16")
+    for test in test_data:
+        print(f"Test: {test}")
+        vqa_data = test.vqa("balance")
+        if vqa_data:
+            print(f"  VQA Response: {vqa_data.response}")
+        elm_data = test.elm("account")
+        if elm_data:
+            print(f"  Element Data: {elm_data.data}")
+
+############# Old Code Below ##################3
+
 
 class ElementDatum(NamedTuple):
     vqa: object
     elm: object
 
-class TestData(NamedTuple):
-    # The index is the index of the step in the bank/intent/*.png list
-    index: str
-    # Source is generally the name of the bank
-    source: str
-    # What part of the agent flow this is?
-    intent: str
-    # loaded image
-    image: Image.Image
-    # loaded html
-    html: str
-    # Any associated json vqa/element data
-    elements: dict[str, ElementDatum]
+# class TestData(NamedTuple):
+#     # The index is the index of the step in the bank/intent/*.png list
+#     index: str
+#     # Source is generally the name of the bank
+#     source: str
+#     # What part of the agent flow this is?
+#     intent: str
+#     # loaded image
+#     image: Image.Image
+#     # loaded html
+#     html: str
+#     # Any associated json vqa/element data
+#     elements: dict[str, ElementDatum]
 
-    @property
-    def key(self):
-        return f"{self.source}-{self.intent}-{self.index}"
+#     @property
+#     def key(self):
+#         return f"{self.source}-{self.intent}-{self.index}"
 
-    @property
-    def html_location(self):
-        match = re.search(r"^Content-Location:\s*(.*)$", self.html, re.MULTILINE | re.IGNORECASE)
-        if match:
-            return match.group(1).strip()
-        return None
+#     @property
+#     def html_location(self):
+#         match = re.search(r"^Content-Location:\s*(.*)$", self.html, re.MULTILINE | re.IGNORECASE)
+#         if match:
+#             return match.group(1).strip()
+#         return None
 
-    @property
-    def html_title(self):
-        match = re.search(r"^Subject:\s*(.*)$", self.html, re.MULTILINE | re.IGNORECASE)
-        if match:
-            return match.group(1).strip()
-        return None
+#     @property
+#     def html_title(self):
+#         match = re.search(r"^Subject:\s*(.*)$", self.html, re.MULTILINE | re.IGNORECASE)
+#         if match:
+#             return match.group(1).strip()
+#         return None
 
 class SampleData(NamedTuple):
     key: str
@@ -134,39 +266,38 @@ def get_element_type(json_file: str):
 
 # Only run tests with this key
 KeyFilter = []
-# KeyFilter = ["Tangerine"]
+KeyFilter = ["Tangerine"]
 
 #
-# TODO! Fix that test data organization strategy once and for all!
-# No tests will work because we to codify the split between samples/gold/latest (or historical whateva)
+# This code duplicates getTestData.ts
 #
-def get_test_data(intent_filter: str|list[str], max_height: int = MAX_HEIGHT) -> list[TestData]:
-    # get the private testing folder from the environment
-    test_folder = os.environ.get("PRIVATE_TESTING_PAGES", None)
-    if test_folder is None:
-        return []
+# def get_test_data(intent_filter: str|list[str], max_height: int = MAX_HEIGHT) -> list[TestData]:
+#     # get the private testing folder from the environment
+#     test_folder = os.environ.get("PRIVATE_TESTING_PAGES", None)
+#     if test_folder is None:
+#         return []
 
-    record_base = os.path.join(test_folder, "unit-tests", "record")
-    # Find all png files that have test_filter in their path somewhere
-    image_files = glob.glob(f"**/{intent_filter}/**/*.png", root_dir=record_base, recursive=True)
+#     record_base = os.path.join(test_folder, "unit-tests", "record-latest")
+#     # Find all png files that have test_filter in their path somewhere
+#     image_files = glob.glob(f"**/{intent_filter}/**/*.png", root_dir=record_base, recursive=True)
 
-    test_data = [
-        TestData(
-            get_basename(f),
-            get_source(f),
-            get_intent(f),
-            load_image(os.path.join(record_base, f), max_height),
-            load_html(os.path.join(record_base, f)),
-            get_elements(os.path.join(record_base, f))
-        ) for f in image_files]
+#     test_data = [
+#         TestData(
+#             get_basename(f),
+#             get_source(f),
+#             get_intent(f),
+#             load_image(os.path.join(record_base, f), max_height),
+#             load_html(os.path.join(record_base, f)),
+#             get_elements(os.path.join(record_base, f))
+#         ) for f in image_files]
 
-    # In DEBUG mode, allow filtering only to a single key
-    # this allows us to focus on a single target
-    if (os.environ.get('DEBUGPY_RUNNING') == "true" and len(KeyFilter) > 0):
-        test_data = [v for v in test_data if v.key in KeyFilter]
-    elif len(test_data) == 0:
-        raise Exception("No test data found for intent filter: " + intent_filter)
-    return test_data
+#     # In DEBUG mode, allow filtering only to a single key
+#     # this allows us to focus on a single target
+#     if (os.environ.get('DEBUGPY_RUNNING') == "true" and len(KeyFilter) > 0):
+#         test_data = [v for v in test_data if v.key in KeyFilter]
+#     elif len(test_data) == 0:
+#         raise Exception("No test data found for intent filter: " + intent_filter)
+#     return test_data
 
 
 def get_single_test_element(filter: str, data_type: str, max_height: int = MAX_HEIGHT) -> list[SingleTestData]:

@@ -1,6 +1,9 @@
 import path from "node:path";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { ElementSearchParams, FoundElement } from "@thecointech/scraper";
+import { Agent } from "@/agent";
+import { DummyAskUser } from "../tools/recordSamples/dummyAskUser";
+import { globSync } from "glob";
 
 export type VqaCallData = {
   args: string[],
@@ -12,36 +15,54 @@ export type TestElmData = Omit<FoundElement, "element"> & {
 }
 
 export type TestData = {
+  key: string,
+  agent(): Promise<Agent>;
   target: string,
-  page: string,
-  html: string|null,
-  vqa: (name: string) => VqaCallData|null
-  elm: (name: string) => TestElmData|null
+  step: string,
+  vqa: (name: string) => VqaCallData|null,
+  elm: (name: string) => TestElmData|null,
+  toString: () => string,
 }
-export function getTestData(section: string, searchPattern: string) {
-  const latestFolder = path.join(process.env.PRIVATE_TESTING_PAGES, "unit-tests", "record-latest");
-  const targets = readdirSync(latestFolder)
+export function getTestData(section: string, searchPattern: string, recordTime = 'record-latest') {
+  const testFolder = path.join(process.env.PRIVATE_TESTING_PAGES, "unit-tests")
+  const baseFolder = path.join(testFolder, recordTime);
   const results: TestData[] = [];
-  for (const target of targets) {
-    const targetSection = path.join(latestFolder, target, section);
-    if (!existsSync(targetSection))
-      continue;
+  const pattern = `${baseFolder}/**/${section}/**/*${searchPattern}*`
+  const matched = globSync(pattern);
+  for (const match of matched) {
 
-    const allPagesAndElements = readdirSync(targetSection);
-    // find the thingy most wot looks searchy
-    const testItem = allPagesAndElements.find(f => f.includes(searchPattern))
-    // What's the page of this element?
-    const page = testItem.split('-')[0]
-    const jsonFiles = allPagesAndElements.filter(f => f.startsWith(page));
+    const matchedFolder = path.dirname(match);
+    const machedFilename = path.basename(match);
+    const key = path.relative(testFolder, matchedFolder)
+    if (results.find(r => r.key == key)) {
+      continue
+    }
+    const allPagesAndElements = readdirSync(matchedFolder);
+    const step = machedFilename.split('-')[0]
+    // If no png/etc move on, we've matched something irrelevant
+    if (!existsSync(path.join(matchedFolder, `${step}.png`))) {
+      continue;
+    }
+    const pathBits = matchedFolder.split(path.sep).reverse()
+    const target = pathBits[1] == section
+      ? pathBits[2]
+      : pathBits[1]
+
+    const jsonFiles = allPagesAndElements.filter(f => f.startsWith(step));
     const elmQueryCounters: Record<string, number> = {}
     results.push({
       target,
-      page: `${page}.png`,
-      html: existsSync(`${page}.mhtml`) ? `${page}.mhtml` : null,
+      key,
+      step,
+      agent: async () => {
+        const filename = `${matchedFolder}/${step}.mhtml`;
+        const url = `file://${filename.replace(" ", "%20")}`;
+        return Agent.create(target, new DummyAskUser(), url)
+      },
       vqa: (call: string) => {
         const f = jsonFiles.find(f => f.includes(call) && f.endsWith("-vqa.json"))
         if (f) {
-          return JSON.parse(readFileSync(path.join(targetSection, f), "utf-8"))
+          return JSON.parse(readFileSync(path.join(matchedFolder, f), "utf-8"))
         }
         return null;
       },
@@ -51,10 +72,11 @@ export function getTestData(section: string, searchPattern: string) {
         const elements = jsonFiles.filter(f => f.includes(name) && f.endsWith("-elm.json"))
         const f = elements[counter]
         if (f) {
-          return JSON.parse(readFileSync(path.join(targetSection, f), "utf-8"))
+          return JSON.parse(readFileSync(path.join(matchedFolder, f), "utf-8"))
         }
         return null;
-      }
+      },
+      toString: () => key,
     })
   }
   return results;

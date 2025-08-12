@@ -66,13 +66,11 @@ export class Recorder extends EventEmitter implements AsyncDisposable {
 
     // Close the page (if it's open)
     try {
-      console.log("Closing page...")
       await this.page.close();
       // wait for 1 second to ensure any messages get propagated through
       // It appears that the browser may not be disconnecting before the
       // next page is being created
       await sleep(1000);
-      console.log("Page closed")
     }
     catch (e) { /* probably already closed */ }
 

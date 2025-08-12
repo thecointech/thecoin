@@ -23,7 +23,7 @@ def query_most_similar(target: str, options: list[str]) -> SimilarityResponse:
         f"From this list of options: {json.dumps(options)}, which option is the most similar to this target '{target}'?",
         SimilarityResponse
     )
-    
+
 @router.post("/detect-most-similar-option")
 async def detect_most_similar_option(target: str, options: list[str]) -> SimilarityResponse:
     result = runQueryToJson(None, query_most_similar(target, options))
@@ -32,7 +32,8 @@ async def detect_most_similar_option(target: str, options: list[str]) -> Similar
 ########################
 class CorrectedResponse(BaseModel):
     correct_value: str = Field(..., description="The correct value from source")
-    
+    reasoning: str = Field(..., description="your reasoning")
+
 @router.post("/correct-estimate")
 async def correct_estimate(estimate: str, source: str, type: str="text") -> CorrectedResponse:
     r = runQueryToJson(None, (

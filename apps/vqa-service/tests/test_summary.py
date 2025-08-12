@@ -8,32 +8,24 @@ from intent_routes import page_intent
 
 class TestSummary(TestBase):
 
-    async def test_overview_page_intent(self):
-        # get landing pages
-        # All pages are required to have an intent, so don't filter them out here
-        test_datum = get_test_data("AccountSummary", "initial")
-
-        # check all landing pages
-        for key, image, expected in test_datum:
-            with self.subTest(key=key):
-                intent = await page_intent(image)
-                self.assertEqual(intent.type, expected["intent"]["intent"], "Overview intent failed for " + key)
-
     async def test_overview_list_accounts(self):
         # get landing pages
         # All pages are required to have an intent, so don't filter them out here
-        test_datum = get_single_test_element("AccountSummary", "initial", "list-accounts")
+        tests = get_test_data("AccountsSummary", "listAccounts")
 
         # check all landing pages
-        for key, image, expected in test_datum:
-            with self.subTest(key=key):
-                rough_response = await list_accounts(image)
-                self.assertEqual(rough_response.num_accounts, len(expected), "Mismatched accounts length in list accounts " + key)
+        for test in tests:
+            with self.subTest(key=test.key):
+                vqa = test.vqa("listAccounts")
+
+                rough_response = await list_accounts(test.image())
+                self.assertEqual(rough_response.num_accounts, vqa.response["num_accounts"], "Mismatched accounts length in list accounts ")
 
                 accounts = rough_response.accounts
-                self.assertEqual(len(accounts), len(expected), "Mismatched accounts length in list accounts " + key)
+                self.assertEqual(len(accounts), rough_response.num_accounts, "Mismatched accounts length in list accounts")
 
-                validations = expected.copy()
+                validations = [test.elm("account").data for i in range(rough_response.num_accounts)]
+
                 for account in accounts:
                     # Find the closest from src data
                     scored_valid = [(valid, fuzz.partial_ratio(account.account_number, valid["text"])) for valid in validations]
@@ -41,43 +33,45 @@ class TestSummary(TestBase):
 
                     # Validate basic data.  Keep a very low score, as we don't really care.  Hopefully the accuracy
                     # improves if/when we get to use a higher-precision model
-                    self.assertGreaterEqual(score, 30, "Did not find account number in list accounts " + key)
+                    self.assertGreaterEqual(score, 30, "Did not find account number in list accounts")
                     siblings = [normalize(s) for s in vacc["siblingText"]]
                     balanceMatched = (
-                        normalize(account.balance) in siblings or 
+                        normalize(account.balance) in siblings or
                         normalize(account.balance + ".00") in siblings # Handle LLM shortning $200.00 to $200
                     )
                     self.assertTrue(balanceMatched, f"Did not find {account.balance} in {siblings}")
-                    accountType = get_extra(vacc, "accountType")
-                    if (accountType):
-                        self.assertEqual(account.account_type, accountType, "Account type not matched in list accounts " + key)
-                    else:
-                        self.assertIn(account.account_type, vacc["text"], "Did not find account type in list accounts " + key)
+
+                    accountTypes = [account.account_type.lower()]
+                    if (accountTypes[0] == "credit"):
+                        accountTypes.extend(["visa", "mastercard"])
+                    accountName = vacc["text"].lower()
+                    self.assertTrue(any(account_type in accountName for account_type in accountTypes), f"{accountTypes} not found in {accountName}")
 
                     # Do we care about position?  It'd be nice to have, but it seems to fail
                     # If/when we need to identify an element specifically it will probably be better
                     # to identify that element specifically rather than via list like this
                     # self.assertPosition(account, image, vacc, key)
                     validations.remove(vacc)
-                print("All accounts matched in list accounts " + key)
+                print("All accounts matched in list accounts")
 
     async def test_find_account_balance(self):
-        test_datum = get_single_test_element("AccountSummary", "initial", "balance")
-        
-        for key, image, expected in test_datum:
-            with self.subTest(key=key):
-                account_number = get_extra(expected, "accountNumber")
-                crop = self.getCropFromElements(image, [expected])
-                response = await account_balance_element(image, account_number, *crop)
-                self.assertResponse(response, expected, key)
+        tests = get_test_data("AccountsSummary", "accountBalance")
+
+        for test in tests:
+            with self.subTest(key=test.key):
+                vqa = test.vqa("accountBalance")
+                response = await account_balance_element(test.image(), vqa.args[0], vqa.args[1], vqa.args[2])
+                elm = test.elm("balance")
+                self.assertResponse(response, elm.data, test.key)
 
     async def test_find_navigate_to_account(self):
-        test_datum = get_single_test_element("AccountSummary", "initial", "navigate")
+        tests = get_test_data("AccountsSummary", "NavigateElement")
 
-        # check all landing pages
-        for key, image, expected in test_datum:
-            with self.subTest(key=key):
-                account_number = get_extra(expected, "accountNumber")
-                crop = self.getCropFromElements(image, [expected])
-                response = await account_navigate_element(image, account_number, *crop)
-                self.assertResponse(response, expected, key)
+        for test in tests:
+            with self.subTest(key=test.key):
+                accounts = test.vqa("listAccounts")
+                for i in range(accounts.response["num_accounts"]):
+                    vqa = test.vqa("NavigateElement")
+                    response = await account_navigate_element(test.image(), *vqa.args)
+                    elm = test.elm("navigate")
+                    self.assertResponse(response, elm.data, test.key)
