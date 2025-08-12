@@ -9,6 +9,7 @@ import { TestSerializer } from './testSerializer.js'
 import path from "path";
 import { DateTime } from "luxon"
 import { LoginFailedError } from "../../src/errors.js";
+import { updateRecordLatest } from "./updateRecordLatest"
 import type { SectionType } from "../../src/processors/types.js";
 
 const { baseFolder, config } = getConfig();
@@ -18,7 +19,7 @@ const testFailedLogin = process.argv.includes("test-fail-login");
 const target = process.argv.includes("--target") ? process.argv[process.argv.indexOf("--target") + 1] : undefined;
 
 const dateSuffix = DateTime.now().toFormat("yyyy-MM-dd_HH-mm");
-const recordFolder = path.join(baseFolder, "record-" + dateSuffix);
+const recordFolder = path.join(baseFolder, "record-archive", dateSuffix);
 
 await init();
 await installBrowser();
@@ -77,6 +78,9 @@ for (const [name, bankConfig] of Object.entries(config)) {
       logger.logEvents(events);
     }
     successful.push(name);
+    // Only update latest on success...
+    updateRecordLatest(recordFolder, name);
+
   } catch (e) {
     errored.push(name);
   }

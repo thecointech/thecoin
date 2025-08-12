@@ -45,7 +45,7 @@ async function listAccounts(agent: Agent) {
     // Just use the first account (maybe later we'll store them all)
     const inferred = accounts.accounts[i];
     const scraped = allAccounts[i];
-    const accountNumber = await updateAccountNumber(inferred, scraped);
+    const accountNumber = updateAccountNumber(inferred, scraped);
 
     // Crop to just the area of the account in the list.  This is because
     // VQA needs a bit of help focusing on the account
@@ -90,16 +90,12 @@ async function saveAccountNavigation(agent: Agent, account: AccountResponse) {
 }
 
 
-export async function updateAccountNumber(inferred: AccountResponse, scraped: ElementData) {
+export function updateAccountNumber(inferred: AccountResponse, scraped: ElementData) {
   const inferredAccountNumber = inferred.account_number;
   const realAccountText = scraped.text;
-  // The inferred number may be off by a few digits
-  const api = await apis().getVqaBaseApi();
-  const { data: corrected } = await api.correctEstimate(inferredAccountNumber, realAccountText, "account number");
-  log.trace(`Corrected account number from inferred: (${inferredAccountNumber}) to (${corrected.correct_value})`);
-  // This should be closer, but even it can be slightly off.  However
-  // we should be close enough that a simple fuzzy-match will capture the correct value
-  const { match: accountNumber } = extractFuzzyMatch(corrected.correct_value, realAccountText);
+  // The inferred number may be off by a few digits, however
+  // we should be close enough that a token-based match will capture the correct value with proper formatting
+  const { match: accountNumber } = extractFuzzyMatch(inferredAccountNumber, realAccountText);
   // Update original
   log.trace(`Updating account number from inferred: (${inferredAccountNumber}) to (${accountNumber})`);
   inferred.account_number = accountNumber;

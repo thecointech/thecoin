@@ -15,6 +15,8 @@ import { waitPageStable } from "../vqaResponse";
 import { Agent } from "../agent";
 import { apis } from "../apis";
 
+import { EventBus } from "@thecointech/scraper/events/eventbus";
+
 class CannotFindLinkError extends Error {
   constructor() {
     super("Could not find link");
@@ -122,7 +124,7 @@ type InputTracker = {
   step: number
 }
 
-async function sendETransfer(agent: Agent, accountNumber: string) {
+export async function sendETransfer(agent: Agent, accountNumber: string) {
 
   log.trace("SendETransferWriter: sendETransfer");
   const api = await apis().getETransferApi();
@@ -329,11 +331,26 @@ async function fillInputs(agent: Agent, tracker: InputTracker, accountNumber: st
   return hasFilledInput;
 }
 
+async function logEvent(agent: Agent, input: SearchElement, eventName: string) {
+  // This input was not "searched" for, we got it directly from the page
+  // This means it won't get automatically picked up by the EventBus
+  // The easiest way to get around this is to manually put it on the bus
+  EventBus.get().emitElement({
+    ...input,
+    score: 100,
+    components: {},
+  }, {
+    event: {
+      eventName,
+    },
+    page: agent.page.page,
+  })
+}
+
 async function fillAmountToSend(agent: Agent, input: SearchElement, amount: number) {
-  // Do we need to do anything more than this?
   log.trace("Filling input: AmountToSend");
+  logEvent(agent, input, "AmountToSend");
   {
-    //
     using _ = agent.events.pause();
     await agent.page.dynamicInputEntry(input, amount.toString());
   }
@@ -344,8 +361,7 @@ async function fillAmountToSend(agent: Agent, input: SearchElement, amount: numb
 
 async function selectFromAccount(agent: Agent, input: SearchElement, account: string) {
   log.trace("Filling input: FromAccount");
-
-  // agent.logJson("SendETransfer", "from-account-elm", input.data);
+  logEvent(agent, input, "FromAccount");
 
   // First, check if the default is already entered
   if (input.data.tagName == "SELECT") {
@@ -380,7 +396,7 @@ async function selectFromAccount(agent: Agent, input: SearchElement, account: st
 
 async function selectToRecipient(agent: Agent, element: SearchElement) {
   log.trace("Filling input: ToRecipient");
-  // page.logJson("SendETransfer", "to-recipient-elm", element.data);
+  logEvent(agent, element, "ToRecipient");
 
   let recipient = await agent.input.expectedETransferRecipient();
 

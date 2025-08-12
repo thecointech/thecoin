@@ -12,6 +12,7 @@ import { maybeCloseModal } from "../../src/modal";
 import { LoginFailedError } from "@/errors";
 import { ApiCallEvent, bus } from "@/eventbus";
 import { EventBus } from "@thecointech/scraper/events/eventbus";
+import { TestElmData } from "../../internal/getTestData";
 
 
 // How many pixels must change to consider it a new screenshot
@@ -77,15 +78,13 @@ export class TestSerializer implements IScraperCallbacks {
   }
 
   onElement = async (element: FoundElement, search: ElementSearchParams) => {
-    const toStore = {
-      ...element,
-      search: {
-        ...search,
-      }
+    // Strip non-serializable elements
+    const { element: _e, ...toStoreElm } = element;
+    const { page: _s, ...toStoreSearch } = search;
+    const toStore: TestElmData = {
+      ...toStoreElm,
+      search: toStoreSearch
     }
-    delete toStore.element;
-    delete toStore.search.page;
-
     await this.logJson(`${toStore.search.event.eventName}-elm`, toStore);
     await this.logMhtml(search.page);
   }

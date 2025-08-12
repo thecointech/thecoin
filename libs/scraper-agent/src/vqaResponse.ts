@@ -188,7 +188,9 @@ async function tryActionAndWait<T>(page: Page, trigger: () => Promise<T>) : Prom
     // Add another wait for any further changes...
     await waitUntilLoadComplete(page);
 
-    log.info(`Navigated to: ${page.url()}`);
+    // Don't log any arguments, they aren't helpf
+    const minimalUrl = page.url().split("?")[0]
+    log.info(`Navigated to: ${minimalUrl}`);
     return r[2];
   }
   catch (err) {
@@ -241,7 +243,7 @@ export async function waitForValidIntent(page: Page, interval = 1000, timeout = 
   return null;
 }
 
-export async function waitPageStable(page: Page, timeout: number = 10_000, maxPixelsChanged = MIN_PIXELS_CHANGED) {
+export async function waitPageStable(page: Page, timeout: number = 10_000, maxPixelsChanged = 100) {
   let before = await page.screenshot();
   const start = Date.now();
   const maxTime = start + timeout;
