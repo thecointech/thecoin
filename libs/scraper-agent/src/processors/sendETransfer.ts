@@ -42,8 +42,8 @@ export const SendETransfer = processorFn("SendETransfer", async (agent: Agent, a
       return true;
     }
     catch (e) {
+      log.error(e, `Error on ETransfer attempt: ${i}`);
       section.cancel();
-      log.error(e);
 
       // Is this something that the page handler can handle?
       try {
@@ -72,6 +72,7 @@ export const SendETransfer = processorFn("SendETransfer", async (agent: Agent, a
 const stripUnicode = (str: string): string => str.replace(/[^\x00-\x7F]/g, '');
 
 async function navigateToSendETransferPage(agent: Agent, attemptedLinks: Set<string>) {
+  log.trace("Attempting navigate to Send ETransfer page");
   const allLinks = await getAllElements(agent.page.page, Number.MAX_SAFE_INTEGER, 'a');
 
   // Find the most likely link for "Send ETransfer"

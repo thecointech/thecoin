@@ -80,12 +80,12 @@ export class PageHandler implements AsyncDisposable {
     // This could fail if the new page fails to load
     // (linux/tangerine remains blank for some reason)
     if (intent) {
-      log.debug("Pushing isolated section");
+      log.debug("Pushing isolated section: " + subName);
       this.recorderStack.push(sectionPage);
       return {
         sectionPage,
         async [Symbol.asyncDispose]() {
-          log.debug("Popping isolated section");
+          log.debug("Popping isolated section: " + subName);
           // Release the new recorder/page
           await cachedThis.recorderStack.pop()![Symbol.asyncDispose]();
           // Check for session timeout

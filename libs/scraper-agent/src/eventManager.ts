@@ -129,9 +129,12 @@ export class EventManager {
 
   private static EventSectionMgr = class implements IEventSectionManager {
     section: EventSection;
+    _name: SectionName;
     _parent: EventSection;
     _mgr: EventManager;
+    _isDisposed = false;
     constructor(mgr: EventManager, section: SectionName) {
+      this._name = section;
       this._mgr = mgr;
       this._parent = mgr.currentSection;
       this.section = { section, events: [] };
@@ -140,10 +143,15 @@ export class EventManager {
       bus().emitSection(section);
     }
     async [Symbol.asyncDispose]() {
+      this._isDisposed = true;
       this._mgr.sectionStack.pop();
       bus().emitSection(this._parent.section);
     }
     cancel() {
+      if (this._isDisposed) {
+        log.error("Cancelling disposed section: " + this._name);
+        return;
+      }
       this._parent.events.splice(this._parent.events.indexOf(this.section), 1);
     }
   }
