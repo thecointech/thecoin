@@ -15,11 +15,10 @@ describe('TwoFA live tests', () => {
   it.each(tests)('correctly updates phone numbers with scraped text: %s', async (test) => {
     // Ok, can we find these things?
     await using agent = await test.agent();
-    const vqa = test.vqa("destinations");
-    const vqar = vqa!.response ?? vqa as any;
+    const vqa = test.vqa("destinations")!;
 
-    for (let i = 0; i < vqar.phones.phone_nos.length; i++) {
-      const p = vqar.phones.phone_nos[i];
+    for (let i = 0; i < vqa.response.phones.phone_nos.length; i++) {
+      const p = vqa.response.phones.phone_nos[i];
       const response = {
         content: p.phone_number,
         position_x: p.position_x,

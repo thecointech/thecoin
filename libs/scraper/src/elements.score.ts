@@ -98,7 +98,13 @@ function getPositionAndSizeScore(potential: ElementData, original: SearchElement
   const positionScore = getPositionScore(potential.coords, original.coords);
   const totalScore = original.estimated
     // In an estimated run, we score higher on position, but position mis-matches introdue a negative penalty
-    ? sizeScore + positionScore
+    ? sizeScore + (
+      positionScore < 0
+        // The penalty grows too quickly, the vLLM can miss
+        // it's mark and then this overrides other valuable info (text)
+        ? positionScore / 2
+        : positionScore
+    )
     // In a regular run, we do not penalize position changes, but rely less on the position overall
     : (Math.max(sizeScore, 0) + Math.max(positionScore, 0)) / 2;
   return totalScore;
@@ -255,9 +261,10 @@ function getEstimatedTextScore(potential: ElementData, original: SearchElementDa
     if (cleanOriginal.length < 5) {
       return Math.max(-0.5, 1 - (distance / 5));
     }
-    // For longer strings, we just
+    // For longer strings, we want to have 1 if no changes were made,
+    // down to -1 if every character was changed
     else {
-      return Math.max(-0.5, 1 - (distance / cleanOriginal.length));
+      return Math.max(-1, 1 - 2 * (distance / cleanOriginal.length));
     }
   }
   return 0;

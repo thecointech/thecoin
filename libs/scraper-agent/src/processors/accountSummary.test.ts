@@ -17,9 +17,8 @@ describe ("Correctly finds the balance element", () => {
   it.each(testData)("Finds the correct element: %s", async (test) => {
     await using agent = await test.agent();
     const vqa = test.vqa("balance");
-    const response = vqa!.response ?? vqa as any;
-    const elm = await agent.page.toElement(response, { eventName: "testing"});
-    expect(elm.data.text).toEqual(response.content);
+    const elm = await agent.page.toElement(vqa!.response!, { eventName: "testing"});
+    expect(elm.data.text).toEqual(vqa!.response!.content);
   })
 }, !!process.env.PRIVATE_TESTING_PAGES)
 

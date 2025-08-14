@@ -16,7 +16,7 @@ type ResponseSearchParams = {
   hints?: SearchElementData,
 } & Omit<ElementSearchParams, "event">;
 
-function responseToElementData({ response, hints }: ResponseSearchParams): SearchElementData {
+export function responseToElementData({ response, hints }: ResponseSearchParams): SearchElementData {
   const text = getContent(response);
   const width = text.length * 8;
   const height = 20; // Just guess based on avg font size

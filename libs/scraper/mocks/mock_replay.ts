@@ -1,4 +1,4 @@
-import { AnyEvent, HistoryRow } from "../src/types";
+import { AnyEvent, HistoryRow, ReplayResult } from "../src/types";
 import { IScraperCallbacks } from "../src/callbacks";
 import { sleep } from "@thecointech/async/sleep";
 import currency from "currency.js";
@@ -12,7 +12,7 @@ import { replay as SrcReplay } from "../src/replay";
 // THIS DEFINITELY SHOULD BE IN SCRAPER-BANKING specialization library
 
 
-export const replay: typeof SrcReplay = async (options: ReplayOptions, events: AnyEvent[], callbacks?: IScraperCallbacks, dynamicValues?: Record<string, string>) => {
+export const replay: typeof SrcReplay = async (options: ReplayOptions, events: AnyEvent[], callbacks?: IScraperCallbacks, dynamicValues?: Record<string, string>) : Promise<ReplayResult> => {
 
   // Progress started
   callbacks?.onProgress?.({ step: 0, total: 1, stage: options.name, stepPercent: 0 });
