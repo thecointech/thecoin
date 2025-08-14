@@ -17,7 +17,7 @@ describe ("Correctly finds the balance element", () => {
   it.each(testData)("Finds the correct element: %s", async (test) => {
     await using agent = await test.agent();
     const vqa = test.vqa("balance");
-    const response = vqa.response ?? vqa as any;
+    const response = vqa!.response ?? vqa as any;
     const elm = await agent.page.toElement(response, { eventName: "testing"});
     expect(elm.data.text).toEqual(response.content);
   })
@@ -28,14 +28,14 @@ describe('cached tests', () => {
   it.each(tests)(`Updates to the correct account number for: %s`, (test) => {
     const listed = test.vqa("listAccounts");
 
-    for (const inferred of listed.response.accounts) {
+    for (const inferred of listed!.response.accounts) {
       const element = test.elm("account");
 
-      const actual = updateAccountNumber(inferred, element)
+      const actual = updateAccountNumber(inferred, element!)
 
       // This is sufficient for the tests we have now, but likely will not work
       // in more complicated situations.
-      const siblings = element.siblingText.map(s => s.replaceAll(/[a-zA-Z]/g, "").trim())
+      const siblings = element?.siblingText?.map(s => s.replaceAll(/[a-zA-Z]/g, "").trim())
       expect(siblings).toContain(actual);
     }
   })

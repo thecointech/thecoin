@@ -1,12 +1,13 @@
 import { AsyncEventEmitter } from "@thecointech/scraper/events/asyncEventEmitter";
 import { SectionName } from "./types";
+import type { AxiosResponse } from "axios";
 
 export interface ApiCallEvent {
   apiName: string;
   method: string;
-  request: any;
-  response?: any;
-  error?: any;
+  request: any[];
+  response?: AxiosResponse;
+  error?: unknown;
   timestamp: number;
 }
 

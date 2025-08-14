@@ -1,5 +1,5 @@
 import path from "node:path";
-import { existsSync, rmSync, cpSync, readdirSync, mkdirSync } from "node:fs";
+import { existsSync, rmSync, cpSync, readdirSync, mkdirSync, symlinkSync, writeFileSync } from "node:fs";
 import { log } from "@thecointech/logging";
 
 export function updateRecordLatest(recordFolder: string, target: string) {
@@ -11,6 +11,9 @@ export function updateRecordLatest(recordFolder: string, target: string) {
     copySection(section, source, dest);
   }
   log.info("Updated latest record folder for: " + target);
+  // Touch a success file so we can tell which archive
+  // runs should be valid for later testing
+  writeFileSync(path.join(source, "success"), "");
 }
 
 export function copySection(section: string, source: string, dest: string) {
@@ -61,7 +64,11 @@ export function copyEntireFolder(sourceSection: string, destSection: string) {
     rmSync(destSection, { recursive: true });
   }
   catch (e) {}
-  cpSync(sourceSection, destSection, { recursive: true });
+  mkdirSync(destSection, { recursive: true });
+  const files = readdirSync(sourceSection);
+  for (const file of files) {
+    copyFile(path.join(sourceSection, file), path.join(destSection, file));
+  }
 }
 
 export function copyElementsWithFilter(sourceSection: string, destSection: string, preservedElement: string) {
@@ -95,7 +102,18 @@ export function copyElementsWithFilter(sourceSection: string, destSection: strin
   // Copy everything over, except for preserved page elements
   for (const element of sourceElements) {
     if (!element.startsWith(page)) {
-      cpSync(path.join(sourceSection, element), path.join(destSection, element));
+      copyFile(path.join(sourceSection, element), path.join(destSection, element));
     }
+  }
+}
+
+function copyFile(source: string, dest: string) {
+  if (source.endsWith(".png") || source.endsWith(".mhtml")) {
+    // Do not copy these, just make a symlink
+    const relative = path.relative(dest, source);
+    symlinkSync(relative, dest);
+  }
+  else {
+    cpSync(source, dest);
   }
 }

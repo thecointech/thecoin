@@ -28,7 +28,11 @@ export type TestData = {
   toString: () => string,
 }
 export function getTestData(section: string, searchPattern: string, recordTime = 'record-latest') {
-  const testFolder = path.join(process.env.PRIVATE_TESTING_PAGES, "unit-tests")
+  const testingFolder = process.env.PRIVATE_TESTING_PAGES;
+  if (!testingFolder) {
+    return [];
+  }
+  const testFolder = path.join(testingFolder, "unit-tests")
   const baseFolder = path.join(testFolder, recordTime);
   const results: TestData[] = [];
   const pattern = `${baseFolder}/**/${section}/**/*${searchPattern}*`

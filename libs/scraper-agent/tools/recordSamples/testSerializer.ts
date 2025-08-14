@@ -32,7 +32,7 @@ const MIN_PIXELS_CHANGED = 100;
 
 export class TestSerializer implements IScraperCallbacks, Disposable {
 
-  _baseFolder: string
+  _recordFolder: string
 
   // The bank names (constant throughout an execution)
   _target: string
@@ -42,8 +42,8 @@ export class TestSerializer implements IScraperCallbacks, Disposable {
 
   _skipSections: string[];
 
-  constructor({baseFolder, target, skipSections}: {baseFolder: string, target: string, skipSections?: string[]}) {
-    this._baseFolder = baseFolder
+  constructor({recordFolder, target, skipSections}: {recordFolder: string, target: string, skipSections?: string[]}) {
+    this._recordFolder = recordFolder
     this._target = target
     this._skipSections = skipSections ?? [];
 
@@ -78,17 +78,15 @@ export class TestSerializer implements IScraperCallbacks, Disposable {
     }
     await this.logJson(`${event.apiName}-${event.method}-vqa`, {
       args,
-      response: event.response.data,
+      response: event.response?.data,
       error: event.error,
     });
   }
 
   onElement = async (found: FoundElement, search: ElementSearchParams) => {
     // Delete things that change too much
-    const data: TestElmData = { ...found.data };
-    delete data.frame
-    const searchCopy = {...search};
-    delete searchCopy.page;
+    const { frame, ...data } = { ...found.data };
+    const { page, ...searchCopy } = {...search};
     // We split the logged data into 2, the elm
     // file is just the element data, and sch is
     // just the search data.
@@ -189,26 +187,28 @@ export class TestSerializer implements IScraperCallbacks, Disposable {
     const filename = `${this.tracker.step}-${this.tracker.elements}-${name}`;
     // Ensure we don't overwrite previous JSON files
     this.tracker.incrementElement();
-    const path = this.toPath(this.tracker.currentSection, filename, "json");
-    writeFileSync(path, JSON.stringify(data, null, 2));
-    log.trace(`Wrote: ${path}`);
+    const outFile = this.toPath(this.tracker.currentSection, filename, "json");
+    writeFileSync(outFile, JSON.stringify(data, null, 2));
+    const relativePath = path.relative(this._recordFolder, outFile);
+    log.trace(`Wrote: ${relativePath}`);
   }
 
   async logEvents(events: any={}) {
-    const path = this.toPath(undefined, "events", "json");
-    writeFileSync(path, JSON.stringify(events, null, 2));
-    log.trace(`Wrote Events: ${path}`);
+    const outFile = this.toPath(undefined, "events", "json");
+    writeFileSync(outFile, JSON.stringify(events, null, 2));
+    const relativePath = path.relative(this._recordFolder, outFile);
+    log.trace(`Wrote Events: ${relativePath}`);
   }
 
   toPath(section?: string, name?: string, extn?: string) {
-    const structure = [this._baseFolder, this._target, section]
+    const structure = [this._recordFolder, this._target, section]
     const outputFolder = path.join(...structure.filter(isPresent));
     mkdirSync(outputFolder, { recursive: true });
     const suffix = [name, extn].filter(isPresent).join(".");
     return path.join(outputFolder, suffix);
   }
 
-  async dumpError(page: Page, error: unknown, event: AnyEvent) {
+  async dumpError(page: Page, error: unknown, event?: AnyEvent) {
     const dumpFolder = this.toPath("error")
     mkdirSync(dumpFolder, { recursive: true });
 
@@ -238,7 +238,7 @@ export class TestSerializer implements IScraperCallbacks, Disposable {
 
 
 class SectionTracker {
-  currentSection: string;
+  currentSection = "Initial";
   sectionCounters: Record<string, {
     step: number;
     elements: number;
@@ -256,7 +256,7 @@ class SectionTracker {
     return this.sectionCounters[this.currentSection];
   }
 
-  set lastScreenshot(screenshot: Uint8Array | Buffer) {
+  set lastScreenshot(screenshot: Uint8Array | Buffer | undefined) {
     this.sectionCounters[this.currentSection].lastScreenshot = screenshot;
   }
 
