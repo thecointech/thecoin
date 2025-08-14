@@ -25,4 +25,7 @@ export class EventBus extends AsyncEventEmitter<EventMap> {
   async emitElement(element: FoundElement, params: ElementSearchParams) {
     await this.emitWithPromises("elementFound", element, params);
   }
+  offElement(callback: EventListeners<EventMap>["elementFound"]) {
+    this.off("elementFound", callback);
+  }
 }

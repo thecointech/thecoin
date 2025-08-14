@@ -62,6 +62,14 @@ export class AskUserConsole implements IAskUser {
   }
 
   async selectString(question: string, options: string[]): Promise<string> {
+    if (this.config.questions?.[question]) {
+      // Ensure this answer is an option
+      const answer = this.config.questions[question];
+      if (options.find(o => o == answer)) {
+        return answer;
+      }
+    }
+
     this.rlp.write(`\n${question}\n`);
     for (let i = 0; i < options.length; i++) {
       this.rlp.write(`[${i}] ${options[i]}\n`);

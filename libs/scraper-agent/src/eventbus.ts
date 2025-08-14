@@ -24,12 +24,18 @@ export class EventBus extends AsyncEventEmitter<EventMap> {
   async emitApiCall(event: ApiCallEvent) {
     await this.emitWithPromises("apiCall", event);
   }
+  offApiCall(callback: (event: ApiCallEvent) => void) {
+    this.off("apiCall", callback)
+  }
 
   onSection(callback: (event: SectionName) => void) {
     this.on("section", callback);
   }
   async emitSection(event: SectionName) {
     await this.emitWithPromises("section", event);
+  }
+  offSection(callback: (event: SectionName) => void) {
+    this.off("section", callback);
   }
 }
 

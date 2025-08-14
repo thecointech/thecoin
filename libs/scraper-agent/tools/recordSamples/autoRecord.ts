@@ -1,6 +1,6 @@
 
 import { log } from "@thecointech/logging";
-import { getConfig } from "../config.js";
+import { BankConfig, getConfig } from "../config.js";
 import { Agent } from '../../src/agent.js'
 import { init } from "../init.js";
 import { maybeCopyProfile, installBrowser } from "@thecointech/scraper/puppeteer";
@@ -11,6 +11,7 @@ import { DateTime } from "luxon"
 import { LoginFailedError } from "../../src/errors.js";
 import { updateRecordLatest } from "./updateRecordLatest"
 import type { SectionType } from "../../src/processors/types.js";
+import { DummyAskUser } from "./dummyAskUser.js";
 
 const { baseFolder, config } = getConfig();
 
@@ -28,12 +29,25 @@ await maybeCopyProfile(clean);
 let successful: string[] = [];
 let errored: string[] = [];
 
-async function RunFailedLogin(agent: Agent, askUser: AskUserConsole) {
-  const url = agent.page.page.url();
-  // Don't record these events, they aren't relevant
-  using _ = agent.events.pause();
+const failLoginTarget = (name: string) => name + "FailLogin"
+
+function addLogStream(name) {
+  log.addStream({
+    stream: new RotatingFileStream({
+      path: `${logsFolder}/harvest.log`,
+      count: 10,
+      period: "1d",
+    }),
+    level: "trace",
+  })
+  return
+}
+async function RunFailedLogin(name: string, config: BankConfig) {
+  const askUser = new DummyAskUser(config.bad_credentials);
+  const failName = failLoginTarget(name);
+  using _ = new TestSerializer({baseFolder: recordFolder, target: failName});
+  await using agent = await Agent.create(failName, askUser, config.url);
   try {
-    askUser.useBadLogin = true;
     await agent.process();
     // We shouldn't reach here
     throw new Error("Failed Login should throw")
@@ -43,8 +57,6 @@ async function RunFailedLogin(agent: Agent, askUser: AskUserConsole) {
     // We _should_ have a login failure
     if (isLoginFailure) {
       // Go back to the start
-      askUser.useBadLogin = false;
-      await agent.page.page.goto(url)
       return true;
     }
     // Else, something has gone wrong, abandon ship
@@ -59,27 +71,27 @@ for (const [name, bankConfig] of Object.entries(config)) {
   }
 
   try {
-
-    // If this is our second run, we've already done the cookie banner and login
-    const skipSections: SectionType[] = [];
-    const logger = new TestSerializer({baseFolder: recordFolder, target: name, skipSections});
-    using askUser = new AskUserConsole(bankConfig);
-
-    // We want to write out all API calls and every found element
-    await using agent = await Agent.create(name, askUser, bankConfig.url);
-
     if (testFailedLogin) {
-      await RunFailedLogin(agent, askUser);
-      skipSections.push("Landing", "CookieBanner", "Login");
+      await RunFailedLogin(name, bankConfig);
     }
     // If we have no password, we can't do anything else
     if (bankConfig.password) {
-      const events = await agent.process(skipSections);
+      using logger = new TestSerializer({baseFolder: recordFolder, target: name});
+      using askUser = new AskUserConsole(bankConfig);    // We want to write out all API calls and every found element
+      await using agent = await Agent.create(name, askUser, bankConfig.url);
+      const events = await agent.process();
       logger.logEvents(events);
+    }
+    else if (!testFailedLogin) {
+      // Do not log success if target has not processed anything
+      continue;
     }
     successful.push(name);
     // Only update latest on success...
     updateRecordLatest(recordFolder, name);
+    if (testFailedLogin) {
+      updateRecordLatest(recordFolder, failLoginTarget(name))
+    }
 
   } catch (e) {
     errored.push(name);

@@ -6,6 +6,7 @@ export type BankConfig = {
   username?: string,
   password?: string,
   to_recipient?: string,
+  questions?: Record<string, string>,
   refresh?: boolean,
   bad_credentials?: {
     username?: string,

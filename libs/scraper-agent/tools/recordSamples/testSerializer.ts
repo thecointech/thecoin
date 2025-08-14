@@ -30,7 +30,7 @@ const MIN_PIXELS_CHANGED = 100;
 //       1-etc-vqa.json
 //       ...
 
-export class TestSerializer implements IScraperCallbacks {
+export class TestSerializer implements IScraperCallbacks, Disposable {
 
   _baseFolder: string
 
@@ -54,6 +54,12 @@ export class TestSerializer implements IScraperCallbacks {
     // Init tracker to "Initial"
     this.tracker = new SectionTracker();
     this.tracker.setCurrentSection("Initial");
+  }
+
+  [Symbol.dispose]() {
+    bus().offApiCall(this.onApiCall);
+    bus().offSection(this.onSection);
+    EventBus.get().offElement(this.onElement);
   }
 
   // Log every API call
