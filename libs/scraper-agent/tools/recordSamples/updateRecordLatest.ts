@@ -1,5 +1,5 @@
 import path from "node:path";
-import { existsSync, rmSync, cpSync, readdirSync } from "node:fs";
+import { existsSync, rmSync, cpSync, readdirSync, mkdirSync } from "node:fs";
 import { log } from "@thecointech/logging";
 
 export function updateRecordLatest(recordFolder: string, target: string) {
@@ -17,6 +17,7 @@ export function copySection(section: string, source: string, dest: string) {
   const sourceSection = path.join(source, section)
   const destSection = path.join(dest, section);
   switch (section) {
+    case "events.log":
     case "events.json":
       // Do not copy events
       break;
@@ -27,10 +28,6 @@ export function copySection(section: string, source: string, dest: string) {
         copyEntireFolder(sourceSection, destSection);
       }
     }
-    break;
-  case "Login":
-    // If we have not tested failed-login, keep existing login-failed page
-    copyElementsWithFilter(sourceSection, destSection, "detectLoginError-vqa")
     break;
   case "SendETransfer":
     // Ensure we keep the "session-continue" if it is present
@@ -50,6 +47,9 @@ export function getSourceDest(recordFolder: string, target: string) {
     throw new Error("Latest folder should exist at: " + latestFolder)
   }
 
+  // Ensure target folder exists
+  mkdirSync(path.join(latestFolder, target), { recursive: true })
+
   // for each folder in record folder, copy to latest folder
   const source = path.join(recordFolder, target);
   const dest = path.join(latestFolder, target);
@@ -57,7 +57,10 @@ export function getSourceDest(recordFolder: string, target: string) {
 }
 
 export function copyEntireFolder(sourceSection: string, destSection: string) {
-  rmSync(destSection, { recursive: true });
+  try {
+    rmSync(destSection, { recursive: true });
+  }
+  catch (e) {}
   cpSync(sourceSection, destSection, { recursive: true });
 }
 
@@ -74,8 +77,11 @@ export function copyElementsWithFilter(sourceSection: string, destSection: strin
   // we need to preserve this element & it's page
   const destElements = readdirSync(destSection);
   const preservedElementDest = destElements.find(e => e.includes(preservedElement));
+  // If the destination doesn't contain the preserved element,
+  // we can simply copy over the entire folder
   if (!preservedElementDest) {
-    throw new Error(`Expected to find ${preservedElement} in dest`);
+    copyEntireFolder(sourceSection, destSection);
+    return;
   }
 
   // Otherwise, copy everything except for the preseved page/elements

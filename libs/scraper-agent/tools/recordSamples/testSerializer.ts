@@ -12,7 +12,7 @@ import { maybeCloseModal } from "../../src/modal";
 import { LoginFailedError } from "@/errors";
 import { ApiCallEvent, bus } from "@/eventbus";
 import { EventBus } from "@thecointech/scraper/events/eventbus";
-import { TestElmData } from "../../internal/getTestData";
+import { TestElmData, TestSchData } from "../../internal/getTestData";
 
 
 // How many pixels must change to consider it a new screenshot
@@ -83,15 +83,23 @@ export class TestSerializer implements IScraperCallbacks, Disposable {
     });
   }
 
-  onElement = async (element: FoundElement, search: ElementSearchParams) => {
-    // Strip non-serializable elements
-    const { element: _e, ...toStoreElm } = element;
-    const { page: _s, ...toStoreSearch } = search;
-    const toStore: TestElmData = {
-      ...toStoreElm,
-      search: toStoreSearch
+  onElement = async (found: FoundElement, search: ElementSearchParams) => {
+    // Delete things that change too much
+    const data: TestElmData = { ...found.data };
+    delete data.frame
+    const searchCopy = {...search};
+    delete searchCopy.page;
+    // We split the logged data into 2, the elm
+    // file is just the element data, and sch is
+    // just the search data.
+    const sch: TestSchData = {
+      score: found.score,
+      components: found.components,
+      search: searchCopy,
     }
-    await this.logJson(`${toStore.search.event.eventName}-elm`, toStore);
+
+    await this.logJson(`${search.event.eventName}-elm`, data);
+    await this.logJson(`${search.event.eventName}-sch`, sch);
     await this.logMhtml(search.page);
   }
 

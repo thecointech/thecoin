@@ -31,11 +31,11 @@ describe('cached tests', () => {
     for (const inferred of listed.response.accounts) {
       const element = test.elm("account");
 
-      const actual = updateAccountNumber(inferred, element.data)
+      const actual = updateAccountNumber(inferred, element)
 
       // This is sufficient for the tests we have now, but likely will not work
       // in more complicated situations.
-      const siblings = element.data.siblingText.map(s => s.replaceAll(/[a-zA-Z]/g, "").trim())
+      const siblings = element.siblingText.map(s => s.replaceAll(/[a-zA-Z]/g, "").trim())
       expect(siblings).toContain(actual);
     }
   })

@@ -208,7 +208,7 @@ export async function triggerNavigateAndWait<T>(page: Page, trigger: () => Promi
   const r = await tryActionAndWait(page, trigger);
   // Post-navigation, wait until we have some sort of idea what the page is about
   await waitForValidIntent(page);
-  // Even after we've got an intent, wait for animations to finish
+  // Even after we've got an intent, wait for loading animations to finish
   await waitPageStable(page);
   // Return whatever-this-is in case someone needs it someday
   return r;
@@ -243,22 +243,29 @@ export async function waitForValidIntent(page: Page, interval = 1000, timeout = 
   return null;
 }
 
-export async function waitPageStable(page: Page, timeout: number = 10_000, maxPixelsChanged = 100) {
+export async function waitPageStable(page: Page, timeout: number = 20_000, maxPixelsChanged = 100) {
   let before = await page.screenshot();
   const start = Date.now();
   const maxTime = start + timeout;
   do {
-    await sleep(500);
-    const after = await page.screenshot();
-    const changed = doPixelMatch(before, after);
-    // This changed test sticks to the default has-the-page-changed value
-    // for minPixelsChanged because we don't want to hang up page stability
-    // on small changes
+    // Loading animations can result in the appearance
+    // of no change if it's looped back on itself.  To reduce this
+    // risk, we take a series of screenshots and compare the total over that period
+    const screenshots = [];
+    for (let i = 0; i < 3; i++) {
+      await sleep(250);
+      const after = await page.screenshot();
+      screenshots.push(after);
+    }
+    const changed = screenshots.reduce(
+      (score, after) => score + doPixelMatch(before, after), 0
+    );
+
     if (changed < maxPixelsChanged) {
       log.debug(`Page stable,Only ${changed} < ${maxPixelsChanged} pixels changed after ${elapsedSeconds(start)} seconds`);
       return;
     }
-    before = after;
+    before = screenshots[2];
   } while (Date.now() < maxTime);
 
   log.error(`Page has not been stable for ${timeout / 1000} seconds`);

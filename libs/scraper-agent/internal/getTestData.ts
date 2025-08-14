@@ -10,7 +10,10 @@ export type VqaCallData = {
   response: any,
 }
 // See matching type
-export type TestElmData = Omit<FoundElement, "element"> & {
+export type TestElmData = FoundElement["data"]
+export type TestSchData = {
+  score: number,
+  components: any,
   search: Omit<ElementSearchParams, "page">
 }
 
@@ -21,6 +24,7 @@ export type TestData = {
   step: string,
   vqa: (name: string) => VqaCallData|null,
   elm: (name: string) => TestElmData|null,
+  sch: (name: string) => TestSchData|null,
   toString: () => string,
 }
 export function getTestData(section: string, searchPattern: string, recordTime = 'record-latest') {
@@ -70,6 +74,17 @@ export function getTestData(section: string, searchPattern: string, recordTime =
         const counter = elmQueryCounters[name] ?? 0;
         elmQueryCounters[name] = counter + 1;
         const elements = jsonFiles.filter(f => f.includes(name) && f.endsWith("-elm.json"))
+        const f = elements[counter]
+        if (f) {
+          return JSON.parse(readFileSync(path.join(matchedFolder, f), "utf-8"))
+        }
+        return null;
+      },
+      sch: (name: string) => {
+        // Note: sch is tied to "elm", so we reuse
+        // that counter (and don't increment it)
+        const counter = elmQueryCounters[name] ?? 0;
+        const elements = jsonFiles.filter(f => f.includes(name) && f.endsWith("-sch.json"))
         const f = elements[counter]
         if (f) {
           return JSON.parse(readFileSync(path.join(matchedFolder, f), "utf-8"))
