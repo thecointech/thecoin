@@ -98,13 +98,7 @@ function getPositionAndSizeScore(potential: ElementData, original: SearchElement
   const positionScore = getPositionScore(potential.coords, original.coords);
   const totalScore = original.estimated
     // In an estimated run, we score higher on position, but position mis-matches introdue a negative penalty
-    ? sizeScore + (
-      positionScore < 0
-        // The penalty grows too quickly, the vLLM can miss
-        // it's mark and then this overrides other valuable info (text)
-        ? positionScore / 2
-        : positionScore
-    )
+    ? sizeScore + positionScore
     // In a regular run, we do not penalize position changes, but rely less on the position overall
     : (Math.max(sizeScore, 0) + Math.max(positionScore, 0)) / 2;
   return totalScore;
@@ -229,6 +223,18 @@ async function getNodeValueScore(potential: ElementData, original: SearchElement
     return .25;
   }
   else if (original.estimated) {
+    // If our text matches, we return 0.25.
+    // While we mostly use the text + position score
+    // to find elements, if we aren't searching for a
+    // specific type of element we boost the node
+    // value a little so if there is a group of
+    // similar elements we'll use the one closest
+    // to the actual value.  The main purpose of this
+    // is because the siblings score can be a bit
+    // can move us off the best element.
+    if (original.text == potential.nodeValue && !original.tagName) {
+      return .25;
+    }
     // Do not penalize, as estimates can return
     // text from images or icons that aren't present in the page.
     return 0;
@@ -261,10 +267,9 @@ function getEstimatedTextScore(potential: ElementData, original: SearchElementDa
     if (cleanOriginal.length < 5) {
       return Math.max(-0.5, 1 - (distance / 5));
     }
-    // For longer strings, we want to have 1 if no changes were made,
-    // down to -1 if every character was changed
+    // For longer strings, we just
     else {
-      return Math.max(-1, 1 - 2 * (distance / cleanOriginal.length));
+      return Math.max(-0.5, 1 - (distance / cleanOriginal.length));
     }
   }
   return 0;

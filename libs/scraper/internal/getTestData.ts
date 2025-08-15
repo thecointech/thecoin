@@ -2,8 +2,9 @@ import path from "node:path";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { globSync } from "glob";
 import type { Page } from "puppeteer";
-import type { ElementSearchParams, FoundElement } from "../src/types";
+import type { ElementData, ElementSearchParams, FoundElement } from "../src/types";
 import { useTestBrowser } from "./testutils";
+import { waitPageStable } from "../src/utilities";
 
 export type VqaCallData = {
   args: string[],
@@ -40,6 +41,7 @@ export function getTestData(section: string, searchPattern: string, recordTime =
   }
   const testFolder = path.join(testingFolder, "unit-tests")
   const baseFolder = path.join(testFolder, recordTime);
+  const overrideData = getOverrideData(testFolder);
   const results: TestData[] = [];
   const pattern = `${baseFolder}/**/${section}/**/*${searchPattern}*`
   const matched = globSync(pattern);
@@ -51,6 +53,10 @@ export function getTestData(section: string, searchPattern: string, recordTime =
     const key = `${path.relative(testFolder, matchedFolder)}-${step}`
     if (results.find(r => r.key == key)) {
       continue
+    }
+    // Is this meant to be skipped?
+    if (overrideData.skip?.includes(key)) {
+      continue;
     }
     const allPagesAndElements = readdirSync(matchedFolder);
     // If no png/etc move on, we've matched something irrelevant
@@ -74,6 +80,7 @@ export function getTestData(section: string, searchPattern: string, recordTime =
         const url = `file://${filename.replace(" ", "%20")}`;
         const page = await getPage()
         await page.goto(url)
+        await waitPageStable(page);
         return page;
       },
       elements: () => jsonFiles.filter(f => f.endsWith("-elm.json")),
@@ -90,7 +97,9 @@ export function getTestData(section: string, searchPattern: string, recordTime =
         const elements = jsonFiles.filter(f => f.includes(name) && f.endsWith("-elm.json"))
         const f = elements[counter]
         if (f) {
-          return JSON.parse(readFileSync(path.join(matchedFolder, f), "utf-8"))
+          const rawJson: TestElmData = JSON.parse(readFileSync(path.join(matchedFolder, f), "utf-8"))
+          applyOverrides(overrideData, key, name, counter, rawJson);
+          return rawJson
         }
         return null;
       },
@@ -109,6 +118,36 @@ export function getTestData(section: string, searchPattern: string, recordTime =
     })
   }
   return results;
+}
+
+type OverrideElements = {
+  text?: string,
+  selector?: string
+}
+export type OverrideData = {
+  skip?: string[],
+  overrides?: Record<string, Record<string, OverrideElements[]>>
+}
+
+function applyOverrides(overrideData: OverrideData, key: string, element: string, counter: number, rawJson: ElementData) {
+  const overrides = overrideData.overrides?.[key];
+  if (overrides) {
+    const elementOverride = overrides[element]?.[counter];
+    if (elementOverride) {
+      if (elementOverride.text) rawJson.text = elementOverride.text;
+      if (elementOverride.selector) rawJson.selector = elementOverride.selector;
+    }
+  }
+}
+
+export function getOverrideData(testFolder: string): OverrideData {
+  const overrideFile = path.join(testFolder, "record-archive", "overrides.json")
+  if (existsSync(overrideFile)) {
+    const raw = readFileSync(overrideFile, "utf-8")
+    const overrideData = JSON.parse(raw);
+    return overrideData;
+  }
+  return {};
 }
 
 export const hasTestingPages = () => !!process.env.PRIVATE_TESTING_PAGES;

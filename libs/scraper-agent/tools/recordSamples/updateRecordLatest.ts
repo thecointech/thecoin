@@ -110,7 +110,7 @@ export function copyElementsWithFilter(sourceSection: string, destSection: strin
 function copyFile(source: string, dest: string) {
   if (source.endsWith(".png") || source.endsWith(".mhtml")) {
     // Do not copy these, just make a symlink
-    const relative = path.relative(dest, source);
+    const relative = path.relative(path.dirname(dest), source);
     symlinkSync(relative, dest);
   }
   else {

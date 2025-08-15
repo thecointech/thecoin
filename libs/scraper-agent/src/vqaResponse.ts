@@ -2,12 +2,11 @@ import type { AccountResponse, ElementResponse, InputElementResponse, MoneyEleme
 import type { ElementSearchParams, FoundElement, SearchElement, SearchElementData } from "@thecointech/scraper/types";
 import { TimeoutError, type Page } from "puppeteer";
 import { getElementForEvent } from "@thecointech/scraper/elements";
+import { doPixelMatch, waitPageStable } from "@thecointech/scraper/utilities";
 import { waitUntilLoadComplete } from "@thecointech/scraper/record/waitLoadComplete";
-import pixelmatch from "pixelmatch";
 import { log } from "@thecointech/logging";
 import { sleep } from "@thecointech/async";
 import { isPresent } from "@thecointech/utilities/ArrayExtns";
-import { PNG } from "pngjs";
 import { _getPageIntent } from "./getPageIntent";
 
 export type AnyResponse = ElementResponse | InputElementResponse | MoneyElementResponse;
@@ -241,45 +240,6 @@ export async function waitForValidIntent(page: Page, interval = 1000, timeout = 
   } while (Date.now() < maxTime);
   log.error(`Valid intent not detected in ${timeout / 1000} seconds`);
   return null;
-}
-
-export async function waitPageStable(page: Page, timeout: number = 20_000, maxPixelsChanged = 100) {
-  let before = await page.screenshot();
-  const start = Date.now();
-  const maxTime = start + timeout;
-  do {
-    // Loading animations can result in the appearance
-    // of no change if it's looped back on itself.  To reduce this
-    // risk, we take a series of screenshots and compare the total over that period
-    const screenshots = [];
-    for (let i = 0; i < 3; i++) {
-      await sleep(250);
-      const after = await page.screenshot();
-      screenshots.push(after);
-    }
-    const changed = screenshots.reduce(
-      (score, after) => score + doPixelMatch(before, after), 0
-    );
-
-    if (changed < maxPixelsChanged) {
-      log.debug(`Page stable,Only ${changed} < ${maxPixelsChanged} pixels changed after ${elapsedSeconds(start)} seconds`);
-      return;
-    }
-    before = screenshots[2];
-  } while (Date.now() < maxTime);
-
-  log.error(`Page has not been stable for ${timeout / 1000} seconds`);
-  throw new TimeoutError("Timed out waiting for page to be stable");
-}
-
-export function doPixelMatch(before: Uint8Array|ArrayBuffer, after: Uint8Array|ArrayBuffer) {
-  const img1 = PNG.sync.read(Buffer.from(before));
-  const img2 = PNG.sync.read(Buffer.from(after));
-  // With different size images, we cannot compute similarity so just say they are different
-  if (img1.width != img2.width || img1.height != img2.height) {
-    return img1.width * img1.height;
-  }
-  return pixelmatch(img1.data, img2.data, null, img1.width, img1.height);
 }
 
 function getContent(r: AnyResponse) {
