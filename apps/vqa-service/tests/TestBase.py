@@ -4,6 +4,8 @@ import sys
 import re
 from dateparser import parse
 
+from tests.testdata import TestElmData
+
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, 'src'))
 
@@ -11,14 +13,14 @@ from data_elements import DateElementResponse
 
 class TestBase(unittest.IsolatedAsyncioTestCase):
 
-    def assertEqual(self, str1, str2, msg=None):
+    def assertEqual(self, str1: object, str2: object, msg: str|None = None):
         # Ignore all case/space differences
         if (isinstance(str1, str) and isinstance(str2, str)):
             super().assertEqual(normalize(str1), normalize(str2), msg)
         else:
             super().assertEqual(str1, str2, msg)
 
-    def assertPosition(self, response, expected: dict, key: str = None):
+    def assertPosition(self, response: object, expected: dict[str, object]):
         o_width = expected["coords"]["width"]
         o_height = expected["coords"]["height"]
         o_left = expected["coords"]["left"]
@@ -34,13 +36,13 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
             e_posX,
             o_centerX,
             delta=max(20, o_width * 0.6),
-            msg=f"X: {e_posX} does not match expected: {o_centerX} with width: {o_width} in {key}"
+            msg=f"X: {e_posX} does not match expected: {o_centerX} with width: {o_width}"
         )
         self.assertAlmostEqual(
             e_posY,
             o_centerY,
             delta=max(20, o_height * 0.6),
-            msg=f"Y: {e_posY} does not match expected: {o_centerY} with height: {o_height} in {key}"
+            msg=f"Y: {e_posY} does not match expected: {o_centerY} with height: {o_height}"
         )
 
     def get_expected_text(self, expected: dict):
@@ -56,7 +58,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
             response_content = getattr(response, 'placeholder_text', '')
         return normalize(response_content)
 
-    def assertContent(self, response, expected: dict, key: str = None):
+    def assertContent(self, response, expected: dict):
 
         response_text = self.get_response_text(response)
         if (response_text is None):
@@ -86,9 +88,9 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
             if diff == 1:
                 textOverlap = True
 
-        self.assertTrue(textOverlap, f"Text: {response_text} does not match expected: {expected_content} in {key}")
+        self.assertTrue(textOverlap, f"Text: {response_text} does not match expected: {expected_content}")
 
-    def assertNeighbours(self, response: dict, expected: dict, key: str = None):
+    def assertNeighbours(self, response: dict, expected: dict):
         if ("neighbour_text" not in response):
             return
         # siblingText is quite restrictive, so it may not have any values
@@ -103,31 +105,26 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
     # The LLM seems to return the date in a different format from
     # whats on the page.  The scraper can handle the difference, so
     # we just check that the dates match, and the format is not important
-    def assertDate(self, response: DateElementResponse, expected: dict, key: str = None):
+    def assertDate(self, response: DateElementResponse, expected: dict):
         responseDate = parse(response.content)
         expectedDate = parse(expected["text"])
-        self.assertEqual(responseDate, expectedDate, f"Date: {responseDate} does not match expected: {expectedDate} in {key}")
+        self.assertEqual(responseDate, expectedDate, f"Date: {responseDate} does not match expected: {expectedDate}")
 
-    def assertResponse(self, response, expected: object, key: str = None):
-
-        # response should be an ElementDatum, but we only care about the in-page element
-        if get_member(expected, "elm"):
-            expected = get_member(expected, "elm")
-
-        if "coords" in expected:
-            self.assertPosition(response, expected, key)
-        self.assertContent(response, expected, key)
-        self.assertNeighbours(response, expected, key)
+    def assertResponse(self, response: object, expected: TestElmData|None):
+        self.assertIsNotNone(expected)
+        data = expected.data
+        if "coords" in data:
+            self.assertPosition(response, data)
+        self.assertContent(response, data)
+        self.assertNeighbours(response, data)
         print("Element Found Correctly")
 
-    def assertDateResponse(self, response: DateElementResponse, expected: dict, key: str = None):
-        # response should be an ElementDatum, but we only care about the in-page element
-        if get_member(expected, "elm"):
-            expected = get_member(expected, "elm")
-
-        self.assertDate(response, expected, key)
-        self.assertPosition(response, expected, key)
-        self.assertNeighbours(response, expected, key)
+    def assertDateResponse(self, response: DateElementResponse, expected: TestElmData|None):
+        self.assertIsNotNone(expected)
+        data = expected.data
+        self.assertDate(response, data)
+        self.assertPosition(response, data)
+        self.assertNeighbours(response, data)
         print("Element Found Correctly")
 
     # Processing the larger screenshot can result in errors reading small text.

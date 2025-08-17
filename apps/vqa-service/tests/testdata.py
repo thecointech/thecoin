@@ -6,7 +6,10 @@ from PIL import Image
 from typing import NamedTuple
 from dotenv import load_dotenv
 from pathlib import Path
-from geo_math import BBox
+
+from fastapi import UploadFile
+import io
+# from geo_math import BBox
 
 
 load_dotenv()
@@ -41,44 +44,106 @@ class TestData:
         self.step = step
         self._matched_folder = matched_folder
         self._json_files = json_files
-        self._elm_query_counters: Dict[str, int] = {}
-        self._vqa_query_counters: Dict[str, int] = {}
 
     def __str__(self) -> str:
         return self.key
 
-    def image(self):
-      image_path = os.path.join(self._matched_folder, self.step + ".png")
-      with Image.open(image_path) as image:
-        image.load()
-      return image
+    @property
+    def elements(self):
+      return [f for f in self._json_files if f.endswith("-elm.json")]
 
-    def vqa(self, call: str) -> Optional[VqaCallData]:
-        """Get VQA call data for a specific call name"""
-        counter = self._vqa_query_counters.get(call, 0)
-        self._vqa_query_counters[call] = counter + 1
+    @property
+    def vqas(self):
+      return [f for f in self._json_files if f.endswith("-vqa.json")]
+
+    @property
+    def html(self):
+      html_file = os.path.join(self._matched_folder, self.step + ".mhtml")
+      try:
+        with open(html_file, "r") as f:
+          return f.read()
+      except:
+        return None
+
+    @property
+    def html_location(self):
+        return self._extract_html_header(r"^Content-Location:\s*(.*)$")
+
+    @property
+    def html_title(self):
+        return self._extract_html_header(r"^Subject:\s*(.*)$")
+
+    def has_element(self, element: str):
+      return any([True for e in self.elements if element in e])
+
+    def has_vqa(self, vqa: str):
+      return any([True for v in self.vqas if vqa in v])
+
+    def image(self) -> UploadFile:
+      image_path = os.path.join(self._matched_folder, self.step + ".png")
+
+      # Read the image file as bytes
+      with open(image_path, 'rb') as f:
+        image_bytes = f.read()
+
+      # Create a BytesIO object from the image bytes
+      image_buffer = io.BytesIO(image_bytes)
+
+      # Create and return UploadFile
+      return UploadFile(
+          filename=f"{self.step}.png",
+          file=image_buffer
+      )
+
+    def vqa(self, call: str) -> VqaCallData:
+        """Get the first VQA call data for a specific call name"""
         matching_files = [f for f in self._json_files if call in f and f.endswith("-vqa.json")]
-        if counter < len(matching_files):
-            file_path = os.path.join(self._matched_folder, matching_files[counter])
+        if matching_files:
+            file_path = os.path.join(self._matched_folder, matching_files[0])
             with open(file_path, 'r') as f:
                 data = json.load(f)
                 return VqaCallData(args=data.get('args', []), response=data.get('response', data))
-        return None
+        raise ValueError(f"No VQA call data found for {call}")
 
-    def elm(self, name: str) -> Optional[TestElmData]:
-        """Get element data for a specific element name"""
-        counter = self._elm_query_counters.get(name, 0)
-        self._elm_query_counters[name] = counter + 1
-
+    def elm(self, name: str) -> TestElmData:
+        """Get the first element data for a specific element name"""
         matching_files = [f for f in self._json_files if name in f and f.endswith("-elm.json")]
-        if counter < len(matching_files):
-            file_path = os.path.join(self._matched_folder, matching_files[counter])
+        if matching_files:
+            file_path = os.path.join(self._matched_folder, matching_files[0])
             with open(file_path, 'r') as f:
                 data = json.load(f)
                 return TestElmData(data=data.get('data', {}), search=data.get('search', {}))
+        raise ValueError(f"No element data found for {name}")
+
+    def vqa_iter(self, call: str):
+        """Get an iterator over all VQA call data for a specific call name"""
+        matching_files = [f for f in self._json_files if call in f and f.endswith("-vqa.json")]
+        for filename in matching_files:
+            file_path = os.path.join(self._matched_folder, filename)
+            with open(file_path, 'r') as f:
+                data = json.load(f)
+                yield VqaCallData(args=data.get('args', []), response=data.get('response', data))
+
+    def elm_iter(self, name: str):
+        """Get an iterator over all element data for a specific element name"""
+        matching_files = [f for f in self._json_files if name in f and f.endswith("-elm.json")]
+        for filename in matching_files:
+            file_path = os.path.join(self._matched_folder, filename)
+            with open(file_path, 'r') as f:
+                data = json.load(f)
+                yield TestElmData(data=data.get('data', {}), search=data.get('search', {}))
+
+    def _extract_html_header(self, pattern: str) -> Optional[str]:
+        """Extract a header value from HTML using the given regex pattern"""
+        if not self.html:
+            return None
+        match = re.search(pattern, self.html, re.MULTILINE | re.IGNORECASE)
+        if match:
+            return match.group(1).strip()
         return None
 
-def get_test_data(section: str, search_pattern: str, record_time: str = 'record-latest') -> List[TestData]:
+
+def get_test_data(section: str, search_pattern: str="*", record_time: str = 'record-latest') -> List[TestData]:
     """
     Get test data matching the specified section and search pattern.
 
@@ -100,14 +165,14 @@ def get_test_data(section: str, search_pattern: str, record_time: str = 'record-
     for match in matched:
         matched_folder = os.path.dirname(match)
         matched_filename = os.path.basename(match)
-        key = os.path.relpath(matched_folder, test_folder)
+        step = matched_filename.split('-')[0]
+        key = f"{os.path.relpath(matched_folder, test_folder)}-{step}"
 
         # Skip if we already have this key
         if any(r.key == key for r in results):
             continue
 
         all_pages_and_elements = os.listdir(matched_folder)
-        step = matched_filename.split('-')[0]
 
         # Check if PNG file exists, skip if not
         png_file = os.path.join(matched_folder, f"{step}.png")
@@ -183,14 +248,14 @@ class ElementDatum(NamedTuple):
 #             return match.group(1).strip()
 #         return None
 
-class SampleData(NamedTuple):
-    key: str
-    path: Path # Path to the folder containing image and json
-    image: Image.Image
-    elements: dict[str, ElementDatum]
-    parent_coords: list[BBox]
-    gold: list[str]
-    raw: list[str] = None
+# class SampleData(NamedTuple):
+#     key: str
+#     path: Path # Path to the folder containing image and json
+#     image: Image.Image
+#     elements: dict[str, ElementDatum]
+#     parent_coords: list[BBox]
+#     gold: list[str]
+#     raw: list[str] = None
 
 class SingleTestData(NamedTuple):
     key: str
@@ -335,39 +400,39 @@ def get_private_folder(base_type: str, test_type: str = None) -> Path:
         args.append(test_type)
     return Path(*args)
 
-def get_sample_data(test_type: str) -> dict[str, TestData]:
-    # get the private testing folder from the environment
-    samples_folder = get_private_folder("samples", test_type)
-    if samples_folder is None:
-        return []
+# def get_sample_data(test_type: str) -> dict[str, TestData]:
+#     # get the private testing folder from the environment
+#     samples_folder = get_private_folder("samples", test_type)
+#     if samples_folder is None:
+#         return []
 
-    # list all files in the folder
-    targets = [dir for dir in samples_folder.iterdir() if dir.is_dir()]
-    sample_data = {}
-    for target in targets:
-        image_files = [
-            os.path.join(target.absolute(), f)
-            for f in target.iterdir()
-            if f.name.endswith(".png")
-        ]
+#     # list all files in the folder
+#     targets = [dir for dir in samples_folder.iterdir() if dir.is_dir()]
+#     sample_data = {}
+#     for target in targets:
+#         image_files = [
+#             os.path.join(target.absolute(), f)
+#             for f in target.iterdir()
+#             if f.name.endswith(".png")
+#         ]
 
-        images = [load_image(f) for f in image_files]
-        elements = [get_elements(f) for f in image_files]
+#         images = [load_image(f) for f in image_files]
+#         elements = [get_elements(f) for f in image_files]
 
-        inputs = [e['page-inputs'] for e in elements]
-        gold = [e['page-gold']['inputs'] for e in elements]
-        raw = [e['page-raw']['inputs'] if 'page-raw' in e else None for e in elements]
+#         inputs = [e['page-inputs'] for e in elements]
+#         gold = [e['page-gold']['inputs'] for e in elements]
+#         raw = [e['page-raw']['inputs'] if 'page-raw' in e else None for e in elements]
 
-        elements = [i["elements"] for i in inputs]
-        parent_coords = [i["parentCoords"] for i in inputs]
+#         elements = [i["elements"] for i in inputs]
+#         parent_coords = [i["parentCoords"] for i in inputs]
 
-        samples = [
-            SampleData(idx + 1, target, image, elements, [BBox.from_coords(coord) for coord in parent_coords], gold, raw)
-            for idx, (image, elements, parent_coords, gold, raw) in enumerate(zip(images, elements, parent_coords, gold, raw))
-        ]
-        sample_data[target.name] = samples
+#         samples = [
+#             SampleData(idx + 1, target, image, elements, [BBox.from_coords(coord) for coord in parent_coords], gold, raw)
+#             for idx, (image, elements, parent_coords, gold, raw) in enumerate(zip(images, elements, parent_coords, gold, raw))
+#         ]
+#         sample_data[target.name] = samples
 
-    return sample_data
+#     return sample_data
         # # In DEBUG mode, allow filtering only to a single key
         # # this allows us to focus on a single target
         # if (os.environ.get('DEBUGPY_RUNNING') == "true" and len(KeyFilter) > 0):
