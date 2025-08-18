@@ -16,8 +16,8 @@ import { mkdirSync } from "fs";
 
 const { baseFolder, config } = getConfig();
 
-const clean = process.argv.includes("clean");
-const testFailedLogin = process.argv.includes("test-fail-login");
+const clean = process.argv.includes("--clean");
+const testFailedLogin = process.argv.includes("--test-fail-login");
 const target = process.argv.includes("--target") ? process.argv[process.argv.indexOf("--target") + 1] : undefined;
 const except = process.argv.includes("--except") ? process.argv[process.argv.indexOf("--except") + 1] : undefined;
 

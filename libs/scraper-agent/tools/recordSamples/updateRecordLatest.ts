@@ -22,6 +22,7 @@ export function copySection(section: string, source: string, dest: string) {
   switch (section) {
     case "events.log":
     case "events.json":
+    case "success":
       // Do not copy events
       break;
     case "CookieBanner": {

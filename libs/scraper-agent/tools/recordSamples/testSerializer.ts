@@ -4,7 +4,7 @@ import path from "path";
 import type { Page } from "puppeteer";
 import type { SectionName } from "../../src/types";
 import { isPresent } from "@thecointech/utilities/ArrayExtns";
-import { doPixelMatch } from "../../src/vqaResponse";
+import { doPixelMatch } from "@thecointech/scraper/utilities";
 import { IScraperCallbacks, ScraperProgress } from "@thecointech/scraper";
 import { AnyEvent, ElementSearchParams, FoundElement } from "@thecointech/scraper/types";
 import { _getImage, TakeScreenshotError } from "../../src/getImage";
@@ -65,6 +65,9 @@ export class TestSerializer implements IScraperCallbacks, Disposable {
   // Log every API call
   onApiCall = async (event: ApiCallEvent) => {
     if (this.pauseWriting()) {
+      return;
+    }
+    if (this.skipWriting(event)) {
       return;
     }
     // Does the request include an image?
@@ -140,6 +143,18 @@ export class TestSerializer implements IScraperCallbacks, Disposable {
 
   pauseWriting() {
     return this.tracker.currentSection == "Initial" || this._skipSections.includes(this.tracker.currentSection);
+  }
+
+  skipWriting(event: ApiCallEvent) {
+    if (event.method == "pageIntent") {
+      // If this is the same as the last intent, skip it.
+      const response = event.response?.data as { type: string };
+      if (response.type == this.tracker.lastIntent) {
+        return true;
+      }
+      this.tracker.lastIntent = response.type;
+    }
+    return false;
   }
 
   maybeIncrementSection(screenshot: Buffer|Uint8Array) {
@@ -244,6 +259,7 @@ class SectionTracker {
     elements: number;
     lastScreenshot?: Uint8Array | Buffer;
   }> = {};
+  lastIntent?: string;
 
   get step() {
     return this.sectionCounters[this.currentSection].step;
@@ -274,6 +290,7 @@ class SectionTracker {
   incrementStep() {
     this.section.step++;
     this.section.elements = 0;
+    this.lastIntent = undefined;
   }
   incrementElement() {
     this.section.elements++;

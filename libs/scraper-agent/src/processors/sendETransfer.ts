@@ -11,7 +11,7 @@ import { distance } from 'fastest-levenshtein';
 import { getCoordsWithMargin, mapInputToParent } from "../elementUtils";
 import { ETransferInput, ETransferResult } from "../types";
 import { processorFn } from "./types";
-import { waitPageStable } from "../vqaResponse";
+import { waitPageStable } from "@thecointech/scraper/utilities";
 import { Agent } from "../agent";
 import { apis } from "../apis";
 

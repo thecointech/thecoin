@@ -1,10 +1,11 @@
 import type { AxiosResponse } from "axios";
-import { AnyResponse, clickElement, responseToElement, waitForValidIntent, waitPageStable } from "./vqaResponse";
+import { AnyResponse, clickElement, responseToElement, waitForValidIntent } from "./vqaResponse";
 import { sleep } from "@thecointech/async";
 import { log } from "@thecointech/logging";
 import { enterValueIntoFound } from "@thecointech/scraper/replay";
 import { SearchElementData, FoundElement, SearchElement } from "@thecointech/scraper/types";
 import { Recorder, Registry } from "@thecointech/scraper/record";
+import { waitPageStable } from "@thecointech/scraper/utilities";
 import { _getImage } from "./getImage";
 import { _getPageIntent } from "./getPageIntent";
 import { File } from "@web-std/file";
@@ -69,6 +70,7 @@ export class PageHandler implements AsyncDisposable {
 
   async tryCloneTab(subName: SectionType) {
     const cachedThis = this;
+    const currentIntent = await this.getPageIntent();
     const sectionPage = await this.recorder.clone(subName);
 
     // Page should be loaded, but that doesn't mean it's ready.
@@ -76,10 +78,10 @@ export class PageHandler implements AsyncDisposable {
     const intent = await waitForValidIntent(sectionPage.page);
     await waitPageStable(sectionPage.page);
 
-    // We only push the page if it has a valid intent
-    // This could fail if the new page fails to load
-    // (linux/tangerine remains blank for some reason)
-    if (intent) {
+    // We only push the page if it's intent matches
+    // the current page.  It's possible that on loading
+    // a new page the bank may require a new login
+    if (intent && intent == currentIntent) {
       log.debug("Pushing isolated section: " + subName);
       this.recorderStack.push(sectionPage);
       return {

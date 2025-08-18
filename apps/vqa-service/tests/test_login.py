@@ -2,6 +2,7 @@ import unittest
 from TestBase import TestBase
 from testdata import get_test_data
 from login_routes import (
+    detect_logout_element,
     detect_username_input,
     detect_password_exists,
     detect_password_input,
@@ -65,6 +66,13 @@ class TestLoginProcess(TestBase):
                 expected = sample.vqa("Error").response
                 self.assertEqual(response.error_message_detected, expected["error_message_detected"])
                 self.assertEqual(response.error_message, expected["error_message"])
+
+    async def test_logout_element(self):
+        samples = get_test_data("Logout", "logout")
+        for sample in samples:
+            with self.subTest(key=sample.key):
+                response = await detect_logout_element(sample.image())
+                self.assertResponse(response, sample.elm("logout"))
 
 
 if __name__ == "__main__":
