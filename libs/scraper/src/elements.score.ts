@@ -1,6 +1,7 @@
 import { log } from "@thecointech/logging";
 import { SimilarityPipeline } from "./similarity";
 import { Coords, ElementData, SearchElementData, Font } from "./types";
+import { getValueParsing, parseValue } from "./valueParsing";
 import { distance as levenshtein } from 'fastest-levenshtein';
 
 const EquivalentInputTypes = [
@@ -203,15 +204,13 @@ function getSizeScore(potential: Coords, original: Coords) {
 }
 
 async function getNodeValueScore(potential: ElementData, original: SearchElementData) {
+  if (original.parsing?.type == "currency" || original.parsing?.type == "date") {
+    // Amounts that have parsing are expected to change, so we score them
+    // on their parsing matching, rather than their actual value
+    return getValueParsingScore(potential, original);
+  }
   if (potential.nodeValue && original.nodeValue) {
-    // If both are $amounts, that's a pretty good sign
-    // NOTE: ($val) is valid for -ve amounts
-    if (
-      original.text?.trim().match(/^\(?\$[0-9, ]+\.\d{2}\)?$/) &&
-      potential.text?.trim().match(/^\(?\$[0-9, ]+\.\d{2}\)?$/)
-    ) {
-      return 0.75;
-    }
+    // Check text similarity
     const [similarity] = await SimilarityPipeline.calculateSimilarity(
       original.nodeValue,
       [potential.nodeValue]
@@ -274,3 +273,28 @@ function getEstimatedTextScore(potential: ElementData, original: SearchElementDa
   }
   return 0;
 }
+function getValueParsingScore(potential: ElementData, original: SearchElementData) {
+  if (!original.parsing) return 0;
+  if (!potential.text) return -1;
+
+  // When scoring for an estimate, we are only checking if we
+  // can convert to the requested type.
+  if (original.estimated) {
+    const guessed = getValueParsing(potential.text, original.parsing.type, true);
+    return (guessed.format)
+      // If we have a format, this means the value is of the requested type.
+      // However, we have some very relaxed parsing rules, so don't give it
+      // the full weight.
+      ? 0.75
+      // If it can't be converted, then it's most likely not a match
+      : -1;
+  }
+  else if (original.parsing.format) {
+    const parsed = parseValue(potential.text, original.parsing)
+    return (parsed)
+      ? 1
+      : -1;
+  }
+  return 0;
+}
+

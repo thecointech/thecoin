@@ -46,7 +46,13 @@ async function saveCurrentBalance(agent: Agent) {
   log.trace("AccountDetailsWriter: saving current balance");
   const api = await apis().getCreditDetailsApi();
   const { data: balance } = await api.currentBalance(await agent.page.getImage());
-  const element = await agent.page.toElement(balance, "balance");
+  const element = await agent.page.toElement(balance, {
+    eventName: "balance",
+    parsing: {
+      type: "currency",
+      format: null,
+    }
+  });
   await agent.events.pushValueEvent<VisaBalanceResult>(element, "balance", "currency");
 }
 
@@ -55,7 +61,13 @@ async function savePending(agent: Agent) {
   const api = await apis().getCreditDetailsApi();
   const { data: pending } = await api.currentPending(await agent.page.getImage());
   if (pending.pending_exists) {
-    const element = await agent.page.toElement(pending.pending_element, "pending");
+    const element = await agent.page.toElement(pending.pending_element, {
+      eventName: "pending",
+      parsing: {
+        type: "currency",
+        format: null,
+      }
+    });
     await agent.events.pushValueEvent<VisaBalanceResult>(element, "pending", "currency");
   }
 }
@@ -64,7 +76,13 @@ async function saveDueDate(agent: Agent) {
   log.trace("AccountDetailsWriter: saving due date");
   const api = await apis().getCreditDetailsApi();
   const { data: dueDate } = await api.currentDueDate(await agent.page.getImage());
-  const element = await agent.page.toElement(dueDate, "dueDate");
+  const element = await agent.page.toElement(dueDate, {
+    eventName: "dueDate",
+    parsing: {
+      type: "date",
+      format: null,
+    }
+  });
   await agent.events.pushValueEvent<VisaBalanceResult>(element, "dueDate", "date");
 }
 
@@ -72,6 +90,12 @@ async function saveDueAmount(agent: Agent) {
   log.trace("AccountDetailsWriter: saving due amount");
   const api = await apis().getCreditDetailsApi();
   const { data: dueAmount } = await api.currentDueAmount(await agent.page.getImage());
-  const element = await agent.page.toElement(dueAmount, "dueAmount");
+  const element = await agent.page.toElement(dueAmount, {
+    eventName: "dueAmount",
+    parsing: {
+      type: "currency",
+      format: null,
+    }
+  });
   await agent.events.pushValueEvent<VisaBalanceResult>(element, "dueAmount", "currency");
 }

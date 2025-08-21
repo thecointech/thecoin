@@ -70,6 +70,9 @@ export type SearchElementData = Partial<ElementData> & {
   // Set to true if we are searching for an element
   // based on estimated data (eg from VQA service)
   estimated?: boolean,
+  // If present, indicates the value is expected to
+  // parseable as the given type.
+  parsing?: ValueParsing,
 };
 
 export type ElementSearchParams = {

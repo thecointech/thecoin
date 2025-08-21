@@ -1,25 +1,42 @@
 import currency from 'currency.js';
 import { DateTime } from 'luxon';
-import { ValueType } from './types';
+import { ValueParsing, ValueType } from './types';
 import { log } from '@thecointech/logging';
 
 
-export function getValueParsing(value: string, type: ValueType) {
+export function getValueParsing(value: string, type: ValueType, noWarn?: boolean) {
   return {
     type,
-    format: getValueFormat(value, type)
+    format: getValueFormat(value, type, noWarn)
   }
 }
 
-export function getValueFormat(value: string, type: ValueType) {
+export function getValueFormat(value: string, type: ValueType, noWarn?: boolean) {
   switch(type) {
     case "date": return guessDateFormat(value);
-    case "currency": return guessCurrencyFormat(value);
+    case "currency": return guessCurrencyFormat(value, noWarn);
     default: {
       // Text does not have a format
       return null;
     }
   }
+}
+
+export function parseValue(value: string, parsing?: ValueParsing) {
+  if (value && parsing?.format) {
+    switch (parsing?.type) {
+      case "date": {
+        const d = DateTime.fromFormat(value, parsing.format);
+        if (d.isValid) return d;
+        break;
+      }
+      case "currency": {
+        const cvt = getCurrencyConverter(parsing.format as CurrencyType);
+        return cvt(value);
+      }
+    }
+  }
+  return value;
 }
 
 const StringTokens = [
@@ -140,7 +157,7 @@ const Currencies = {
 export type CurrencyType = keyof typeof Currencies;
 export type CurrencyConverter = typeof Currencies["CAD_en"];
 
-export function guessCurrencyFormat(value?: string) : CurrencyType|null {
+export function guessCurrencyFormat(value?: string, noWarn?: boolean) : CurrencyType|null {
   if (!value) return null;
   // What is the bare number here?
   const bareCents = value.replace(/[^0-9]/g, '');
@@ -150,7 +167,9 @@ export function guessCurrencyFormat(value?: string) : CurrencyType|null {
     return "CAD_fr";
   if (abs(Currencies.CAD_en(noSpace))?.format({ symbol: '', separator: '', decimal: ''}) === bareCents)
     return "CAD_en";
-  log.warn({value}, "Unable to guess currency format from {value}")
+  if (!noWarn) {
+    log.warn({value}, "Unable to guess currency format from {value}")
+  }
   return null;
 }
 

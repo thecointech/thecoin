@@ -74,7 +74,13 @@ async function saveBalanceElement(agent: Agent, account_number: string, crop: BB
   // Don't search the whole page, just the area around the account listing
   const api = await apis().getAccountSummaryApi();
   const { data: balance } = await api.accountBalanceElement(account_number, await agent.page.getImage(), crop.top, crop.bottom);
-  const element = await agent.page.toElement(balance, "balance")
+  const element = await agent.page.toElement(balance, {
+    eventName: "balance",
+    parsing: {
+      type: "currency",
+      format: null,
+    }
+  });
   await agent.events.pushValueEvent<ChequeBalanceResult>(element, "balance", "currency");
 }
 

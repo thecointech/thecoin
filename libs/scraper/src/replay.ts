@@ -1,8 +1,7 @@
-import { DateTime } from 'luxon';
 import { type Page } from 'puppeteer';
 import { getTableData } from './table';
-import { AnyEvent, ValueEvent, ReplayResult, SearchElement, AnyElementEvent } from './types';
-import { CurrencyType, getCurrencyConverter } from './valueParsing';
+import { AnyEvent, ReplayResult, SearchElement, AnyElementEvent } from './types';
+import { parseValue } from './valueParsing';
 import { log } from '@thecointech/logging';
 import { getElementForEvent } from './elements';
 import { sleep } from '@thecointech/async';
@@ -164,7 +163,7 @@ export async function replayEvents(page: Page, name: string, events: AnyEvent[],
             for (let i = 0; i < 15; i++) {
               try {
                 const el = await getElementForEvent({ page, event });
-                const parsed = parseValue(el.data.text, event);
+                const parsed = parseValue(el.data.text, event.parsing);
                 if (parsed) {
                   values[event.eventName] = parsed;
                   return true;
@@ -289,22 +288,7 @@ export async function enterValueIntoFound(page: Page, found: SearchElement, valu
   return false;
 }
 
-function parseValue(value: string, event: ValueEvent) {
-  if (value && event.parsing?.format) {
-    switch (event.parsing?.type) {
-      case "date": {
-        const d = DateTime.fromFormat(value, event.parsing.format);
-        if (d.isValid) return d;
-        break;
-      }
-      case "currency": {
-        const cvt = getCurrencyConverter(event.parsing.format as CurrencyType);
-        return cvt(value);
-      }
-    }
-  }
-  return value;
-}
+
 
 // function getOnScreenshot(callbacks?: IScraperCallbacks) {
 //   return callbacks?.onScreenshot
