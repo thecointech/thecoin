@@ -1,5 +1,5 @@
 import { log } from "@thecointech/logging";
-import { clickElement } from "../vqaResponse";
+import { clickElement } from "../interactions";
 import { getAllElements } from "@thecointech/scraper/elements";
 import { sleep } from "@thecointech/async";
 import { Coords, SearchElement } from "@thecointech/scraper/types";

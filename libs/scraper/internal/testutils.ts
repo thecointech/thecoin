@@ -1,8 +1,8 @@
-import { readFileSync } from "node:fs"
+import { readFileSync, rmSync } from "node:fs"
 import { type Browser } from "puppeteer"
 import { patchOnnxForJest } from "./jestPatch";
 import { IsManualRun } from '@thecointech/jestutils';
-import { newPage, setupScraper } from "../src/puppeteer-init";
+import { cleanProfileLocks, newPage, setupScraper } from "../src/puppeteer-init";
 import { readdir } from 'node:fs/promises'
 import path from "node:path";
 
@@ -13,6 +13,7 @@ export const getTestInfo = (...parts: string[]) => JSON.parse(
 )
 export { patchOnnxForJest } from "./jestPatch"
 export { getTestData } from "./getTestData"
+export * from "./testData"
 
 export const getTestPages = async (...parts: string[]) => {
   const testFolder = `${testFileFolder}/unit-tests/${parts.join('/')}`
@@ -44,6 +45,8 @@ setupScraper({
 });
 
 export function useTestBrowser() {
+  cleanProfileLocks();
+
   let _browser: Browser|null = null;
   beforeAll(async () => {
     patchOnnxForJest();

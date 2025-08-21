@@ -29,8 +29,37 @@ it ("can guess currency format", () => {
 
   expect(guessCurrencyFormat("($123.45)")).toBe("CAD_en");
   expect(guessCurrencyFormat("$(123.45)")).toBe("CAD_en");
-})
 
+  // Should pass - simple valid cases
+  expect(guessCurrencyFormat("$100")).toBe("CAD_en");
+  expect(guessCurrencyFormat("100$")).toBe("CAD_fr");
+  expect(guessCurrencyFormat("$5CAD")).toBe("CAD_en");
+  expect(guessCurrencyFormat("(1234.56)")).toBe("CAD_en");
+  expect(guessCurrencyFormat("$3,392.88")).toBe("CAD_en");
+
+  // Should fail - no currency indicators
+  expect(guessCurrencyFormat("Account123456789")).toBeNull();
+  expect(guessCurrencyFormat("***9949")).toBeNull();
+  expect(guessCurrencyFormat("I have 2 puppies")).toBeNull();
+  expect(guessCurrencyFormat("Call me at 555-1234")).toBeNull();
+
+  // Should fail - currency buried in long text
+  expect(guessCurrencyFormat("Chequing***4567|ChequingAccountBalance$1,234.56")).toBeNull();
+  expect(guessCurrencyFormat("This is a very long description with $5 somewhere in it")).toBeNull();
+
+  // Should fail - too many digits (phone numbers, IDs)
+  expect(guessCurrencyFormat("12345678901")).toBeNull();
+  expect(guessCurrencyFormat("$12345678901")).toBeNull();
+
+  // Should fail - no digits
+  expect(guessCurrencyFormat("$")).toBeNull();
+  expect(guessCurrencyFormat("()")).toBeNull();
+
+  // Edge cases that should pass
+  expect(guessCurrencyFormat("$0.01")).toBe("CAD_en");
+  expect(guessCurrencyFormat("$999,999.99")).toBe("CAD_en");
+  expect(guessCurrencyFormat("($0.50)")).toBe("CAD_en");
+})
 
 it ("parses negative values correctly", () => {
   const cvt = getCurrencyConverter("CAD_en");

@@ -2,7 +2,7 @@ import { ApiEventFactory } from "./eventFactory";
 import { IApiFactory } from "./interface";
 
 declare global {
-  var __tc_apiFactory: IApiFactory;
+  var __tc_apiFactory: IApiFactory|null;
 }
 
 export function apis() {
@@ -12,8 +12,8 @@ export function apis() {
   return global.__tc_apiFactory;
 }
 
-export function setApi(api: IApiFactory) {
-  if (global.__tc_apiFactory) {
+export function setApi(api: IApiFactory|null) {
+  if (api && global.__tc_apiFactory) {
     throw new Error("ApiFactory already initialized");
   }
   global.__tc_apiFactory = api;

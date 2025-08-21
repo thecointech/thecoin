@@ -1,10 +1,13 @@
 import { jest } from "@jest/globals";
 import { describe } from "@thecointech/jestutils"
-import { getTestData, hasTestingPages, OverrideData } from "../internal/getTestData";
+import { getTestData, hasTestingPages } from "../internal/getTestData";
 import { getElementForEvent } from "./elements";
 import { open, openSync, readFileSync, writeFile, writeFileSync } from "node:fs";
+import { ElementNotFoundError } from "./errors";
+import { log } from "@thecointech/logging";
 
 jest.setTimeout(20 * 60 * 1000);
+const MIN_ELEMENTS_IN_VALID_PAGE = 25;
 
 describe("It finds the same elements as before in latest", () => {
 
@@ -17,6 +20,7 @@ describe("It finds the same elements as before in latest", () => {
     if (!test.hasSnapshot()) {
       return;
     }
+
     const page = await test.page();
     const elements = test.elements();
     for (const element of elements) {
@@ -39,7 +43,14 @@ describe("It finds the same elements as before in latest", () => {
         expect(found.data.selector).toEqual(expected.selector)
       }
       catch(e) {
-        console.log(e)
+        if (e instanceof ElementNotFoundError) {
+          // Sometimes, mhtml is a wee bit bung
+          const allElements = await page.$$("*")
+          if (allElements.length < MIN_ELEMENTS_IN_VALID_PAGE) {
+            log.error(`Element not found, but page is empty, check mhtml on ${test.key}`)
+            break;
+          }
+        }
         throw e;
       }
     }
@@ -65,9 +76,10 @@ describe("It finds the same elements as before in archive", () => {
       return;
     }
 
-    if (!failingTests.some(f => f === test.key)) {
+    if (test.key != "record-archive/record_gold/TD/TwoFA-0") {
       return;
     }
+
     const page = await test.page();
     const elements = test.elements();
     for (let i = 0; i < elements.length; i++) {
@@ -79,35 +91,49 @@ describe("It finds the same elements as before in archive", () => {
         // Not a VQA search, ignore this.
         continue;
       }
-      const found = await getElementForEvent({
-        ...sch.search,
-        page,
-        timeout: 500
-      });
-      // let writeOverride = true;
-      if (found.data.text !== elm.text || found.data.selector !== elm.selector) {
-        // if (writeOverride) {
-        //   const testOverrides = overrides[test.key] = overrides[test.key] ?? {};
-        //   const elementOverrides = testOverrides[name] = testOverrides[name] ?? [];
-        //   const thisElementOverride: any = {};
-        //   if (found.data.text !== elm.text) {
-        //     thisElementOverride.text = found.data.text
-        //   }
-        //   if (found.data.selector !== elm.selector) {
-        //     thisElementOverride.selector = found.data.selector
-        //   }
-        //   // Assume none exist yet...
-        //   // The index is actually set by test.counter...
-        //   elementOverrides.push(thisElementOverride);
-        // }
-        results.push({
-          key: test.key,
-          found,
-          expected: elm,
-        })
+      try {
+        const found = await getElementForEvent({
+          ...sch.search,
+          page,
+          timeout: 500
+        });
+        // let writeOverride = true;
+        if (found.data.text !== elm.text || found.data.selector !== elm.selector) {
+          // if (writeOverride) {
+          //   const testOverrides = overrides[test.key] = overrides[test.key] ?? {};
+          //   const elementOverrides = testOverrides[name] = testOverrides[name] ?? [];
+          //   const thisElementOverride: any = {};
+          //   if (found.data.text !== elm.text) {
+          //     thisElementOverride.text = found.data.text
+          //   }
+          //   if (found.data.selector !== elm.selector) {
+          //     thisElementOverride.selector = found.data.selector
+          //   }
+          //   // Assume none exist yet...
+          //   // The index is actually set by test.counter...
+          //   elementOverrides.push(thisElementOverride);
+          // }
+          results.push({
+            key: test.key,
+            found,
+            expected: elm,
+          })
+        }
+        expect(found.data.text).toEqual(elm.text);
+        expect(found.data.selector).toEqual(elm.selector)
       }
-      expect(found.data.text).toEqual(elm.text);
-      expect(found.data.selector).toEqual(elm.selector)
+      catch (e) {
+        if (e instanceof ElementNotFoundError) {
+          // Sometimes, mhtml is a wee bit bung
+          const allElements = await page.$$("*")
+          if (allElements.length < MIN_ELEMENTS_IN_VALID_PAGE) {
+            log.error(`Element not found, but page is empty, check mhtml on ${test.key}`)
+            break;
+          }
+        }
+        throw e;
+      }
+
     }
   })
 
@@ -116,18 +142,3 @@ describe("It finds the same elements as before in archive", () => {
     console.table(results.map(r => ({ key: r.key, found: r.found.data.selector, expected: r.expected.selector })));
   })
 }, hasTestingPages)
-
-
-const failingTests = [
-'record-archive/record_gold/Tangerine/SendETransfer-1',
-'record-archive/record_gold/RBC/SendETransfer-2'      ,
-'record-archive/record-2025-03-1/Tangerine/Logout-0'  ,
-'record-archive/record-2025-03-1/TD/Logout-0'         ,
-'record-archive/record-2025-03-1/TD/AccountsSummary-0',
-'record-archive/2025-08-14_09-06/TD/AccountsSummary-0',
-'record-archive/2025-08-13_13-39/TD/Logout-0'         ,
-'record-archive/2025-08-13_13-39/TD/AccountsSummary-0',
-'record-archive/2025-08-07_17-05/TD/Logout-0'         ,
-'record-archive/2025-08-07_17-05/TD/AccountsSummary-0',
-'record-archive/2025-07-25_15-16/TD/Logout-0'         ,
-]

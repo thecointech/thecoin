@@ -70,7 +70,7 @@ async function listAccounts(agent: Agent) {
   return r;
 }
 
-async function saveBalanceElement(agent: Agent, account_number: string, crop: BBox) {
+export async function saveBalanceElement(agent: Agent, account_number: string, crop: BBox) {
   // Don't search the whole page, just the area around the account listing
   const api = await apis().getAccountSummaryApi();
   const { data: balance } = await api.accountBalanceElement(account_number, await agent.page.getImage(), crop.top, crop.bottom);

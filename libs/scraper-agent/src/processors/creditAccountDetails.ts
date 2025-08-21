@@ -1,7 +1,7 @@
 import { log } from "@thecointech/logging";
 import { ElementData, VisaBalanceResult } from "../types";
 import { getElementForEvent } from "@thecointech/scraper/elements";
-import { clickElement } from "../vqaResponse";
+import { clickElement } from "../interactions";
 import { processorFn } from "./types";
 import { Agent } from "../agent";
 import { apis } from "../apis";

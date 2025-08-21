@@ -12,7 +12,7 @@ import { maybeCloseModal } from "../../src/modal";
 import { LoginFailedError } from "@/errors";
 import { ApiCallEvent, bus } from "@/eventbus";
 import { EventBus } from "@thecointech/scraper/events/eventbus";
-import { TestElmData, TestSchData } from "../../internal/getTestData";
+import type { TestSchData } from "@thecointech/scraper/testutils";
 
 
 // How many pixels must change to consider it a new screenshot
@@ -99,7 +99,9 @@ export class TestSerializer implements IScraperCallbacks, Disposable {
       search: searchCopy,
     }
 
-    await this.logJson(`${search.event.eventName}-elm`, data);
+    // Log both JSON files with the same element number as they
+    // represent a single step in the process
+    await this.logJson(`${search.event.eventName}-elm`, data, false);
     await this.logJson(`${search.event.eventName}-sch`, sch);
     await this.logMhtml(search.page);
   }
@@ -195,13 +197,15 @@ export class TestSerializer implements IScraperCallbacks, Disposable {
     }
   }
 
-  async logJson(name?: string, data: any = {}): Promise<void> {
+  async logJson(name?: string, data: any = {}, increment: boolean = true): Promise<void> {
     if (this.pauseWriting()) {
       return;
     }
     const filename = `${this.tracker.step}-${this.tracker.elements}-${name}`;
     // Ensure we don't overwrite previous JSON files
-    this.tracker.incrementElement();
+    if (increment) {
+      this.tracker.incrementElement();
+    }
     const outFile = this.toPath(this.tracker.currentSection, filename, "json");
     writeFileSync(outFile, JSON.stringify(data, null, 2));
     const relativePath = path.relative(this._recordFolder, outFile);

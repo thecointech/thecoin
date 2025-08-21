@@ -280,7 +280,7 @@ function getValueParsingScore(potential: ElementData, original: SearchElementDat
   // When scoring for an estimate, we are only checking if we
   // can convert to the requested type.
   if (original.estimated) {
-    const guessed = getValueParsing(potential.text, original.parsing.type, true);
+    const guessed = getValueParsing(potential.text, original.parsing.type);
     return (guessed.format)
       // If we have a format, this means the value is of the requested type.
       // However, we have some very relaxed parsing rules, so don't give it

@@ -1,9 +1,11 @@
 import { jest } from "@jest/globals";
 import { getTestData } from "../../internal/getTestData";
 import { init } from "../../tools/init";
-import { updateAccountNumber } from "./accountSummary"
+import { saveBalanceElement, updateAccountNumber } from "./accountSummary"
 import { IsManualRun, describe } from '@thecointech/jestutils';
 import { patchOnnxForJest } from "@thecointech/scraper/testutils";
+import { apis } from "../apis";
+import { mockApi } from "../../internal/mockApi";
 
 jest.setTimeout(5 * 60 * 1000);
 
@@ -13,14 +15,28 @@ beforeAll(async () => {
 })
 
 describe ("Correctly finds the balance element", () => {
-  const testData = getTestData("AccountsSummary", "balance", "record-archive/2025-07-25_15-16/**/TD");
+  const testData = getTestData("AccountsSummary", "balance");
+  it.each(testData)("Finds the correct element: %s", async (test) => {
+    mockApi(test)
+    await using agent = await test.agent();
+    await saveBalanceElement(agent, "123456789", {} as any);
+    const events = agent.events.allEvents;
+    const elm: any = events.events.find((e: any) => e.eventName == "balance");
+    const original = test.sch("balance");
+    expect(elm).toBeDefined();
+    expect(elm.data.text).toEqual(original?.search.event.text);
+  })
+}, !!process.env.PRIVATE_TESTING_PAGES)
+
+describe ("Correctly finds the dueDate element", () => {
+  const testData = getTestData("CreditAccountDetails", "dueDate", "record-archive/2025-07-25_15-16/**/TD");
   it.each(testData)("Finds the correct element: %s", async (test) => {
     await using agent = await test.agent();
-    const vqa = test.vqa("balance");
+    const vqa = test.vqa("dueDate");
     const elm = await agent.page.toElement(vqa!.response!, {
       eventName: "testing",
       parsing: {
-        type: "currency",
+        type: "date",
         format: null,
       }
     });

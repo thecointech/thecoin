@@ -2,7 +2,8 @@ import { log } from "@thecointech/logging";
 import type { ElementResponse } from "@thecointech/vqa";
 import type { Page } from "puppeteer";
 import { File } from "@web-std/file";
-import { clickElement, responseToElement } from "./vqaResponse";
+import { responseToElement } from "./vqaResponse";
+import { clickElement } from "./interactions";
 import { apis } from "./apis";
 
 export async function maybeCloseModal(page: Page) {

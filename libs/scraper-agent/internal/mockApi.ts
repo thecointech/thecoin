@@ -1,23 +1,19 @@
 import { IApiFactory } from "@/apis/interface";
-import { readFileSync, readdirSync } from "fs";
-import path from "path";
 import { setApi } from "@/apis";
+import { TestDataAgent } from "./testDataAgent";
 
-export function mockApi(baseFolder: string, step = 2, element = 0) {
-  setApi(new ApiMockFactory(baseFolder, step, element));
+export function mockApi(testData: TestDataAgent) {
+  setApi(new ApiMockFactory(testData));
+  return {
+    [Symbol.dispose]: () => {
+      setApi(null);
+    }
+  }
 }
 
 export class ApiMockFactory implements IApiFactory {
 
-  constructor(baseFolder: string, step = 2, element = 0) {
-    this.baseFolder = baseFolder;
-    this.step = step;
-    this.element = element;
-  }
-
-  baseFolder: string;
-  step: number;
-  element: number;
+  constructor(private testData: TestDataAgent) {}
 
   getVqaBaseApi = () => this.wrapApi('VqaBaseApi');
   getIntentApi = () => this.wrapApi('IntentApi');
@@ -37,20 +33,25 @@ export class ApiMockFactory implements IApiFactory {
           return undefined;
         }
         const callName = prop as string;
-        const suffix = `${apiName}-${callName}-vqa.json`;
-        // Find matching file in the folder
-        const files = readdirSync(path.join(this.baseFolder))
-          .filter(f => f.endsWith(suffix));
-        // return first for now
-        const file = files[0];
-        if (file) {
-          return (...args: any[]) => {
-            const cached = readFileSync(path.join(this.baseFolder, files[0]), "utf-8");
-            // TODO: check cached args
-            const js = JSON.parse(cached);
-            return { data: js.response };
+        const vqaKey = `${apiName}-${callName}`;
+
+        // Get or create iterator for this API call
+
+        return (...args: any[]) => {
+          // We could verify the passed args vs the args in the vqa
+          // if we have multiple vqa calls and need to find the right one
+          // (not sure if this is an issue yet though)
+
+          // Get next value from iterator
+          const vqaData = this.testData.vqa(vqaKey, ...args);
+          if (vqaData) {
+            return {
+              data: vqaData.response
+            };
           }
-        }
+          // Return undefined if no mock data found
+          return undefined;
+        };
       }
     });
   }

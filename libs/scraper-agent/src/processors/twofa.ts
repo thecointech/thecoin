@@ -1,5 +1,5 @@
 import { log } from "@thecointech/logging";
-import { clickElement } from "../vqaResponse";
+import { clickElement } from "../interactions";
 import type { ElementResponse } from "../types";
 import { processorFn } from "./types";
 import { PhoneNumberElements } from "@thecointech/vqa";
@@ -17,7 +17,7 @@ async function complete2FA(agent: Agent) {
   agent.onProgress(10);
   switch (action.action) {
     case "SelectDestination":
-      return await selectDestination(agent);
+      return await selectDestinationAndEnterCode(agent);
     case "InputCode":
       return await enterCode(agent);
     case "ApproveInApp":
@@ -30,7 +30,12 @@ async function complete2FA(agent: Agent) {
   }
 }
 
-async function selectDestination(agent: Agent) {
+export async function selectDestinationAndEnterCode(agent: Agent) {
+  await selectDestination(agent);
+  await enterCode(agent);
+}
+
+export async function selectDestination(agent: Agent) {
   const api = await apis().getTwofaApi();
   const image = await agent.page.getImage();
   const { data: destinations } = await api.detectDestinations(image);
@@ -52,10 +57,9 @@ async function selectDestination(agent: Agent) {
   if (!clickedOption) {
     await agent.maybeThrow(new Error("Failed to click destination"));
   }
-  await enterCode(agent);
 }
 
-async function updateFromPage(agent: Agent, response: PhoneNumberElements) {
+export async function updateFromPage(agent: Agent, response: PhoneNumberElements) {
   const asResponse = {
     content: response.phone_number,
     position_x: response.position_x,

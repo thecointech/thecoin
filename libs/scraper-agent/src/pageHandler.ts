@@ -1,5 +1,5 @@
 import type { AxiosResponse } from "axios";
-import { AnyResponse, clickElement, responseToElement, waitForValidIntent } from "./vqaResponse";
+import { AnyResponse, responseToElement } from "./vqaResponse";
 import { sleep } from "@thecointech/async";
 import { log } from "@thecointech/logging";
 import { enterValueIntoFound } from "@thecointech/scraper/replay";
@@ -12,6 +12,7 @@ import { File } from "@web-std/file";
 import { SectionType } from "./processors/types";
 import { WrappedError } from "./errors";
 import { apis } from "./apis";
+import { clickElement, waitForValidIntent } from "./interactions";
 
 type ApiFn = (image: File) => Promise<AxiosResponse<AnyResponse>>
 
