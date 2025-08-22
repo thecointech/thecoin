@@ -1,5 +1,6 @@
-import { getSiblingScore, getRoleScore } from "./elements.score";
+import { getSiblingScore, getRoleScore, getPositionAndSizeScore, getPositionScore } from "./elements.score";
 import { patchOnnxForJest } from "../internal/jestPatch";
+import { Coords } from "./types";
 
 beforeAll(async () => {
   patchOnnxForJest();
@@ -125,4 +126,83 @@ describe('scores roles appropriately', () => {
     );
     expect(emptyStringRoles).toBe(0);
   })
+});
+
+describe('position scoring', () => {
+  const mockBounds = { width: 1920, height: 1080 };
+
+  // Helper function to create coordinates with defaults
+  const createCoords = (overrides: Partial<Coords> = {}) => {
+    const r = {
+      estimated: true,
+      coords: {
+        left: 100,
+        top: 200,
+        width: 50,
+        height: 30,
+        centerY: 215,
+        ...overrides
+      }
+    }
+    r.coords.centerY = r.coords.top + r.coords.height / 2;
+    return r as any;
+  }
+
+  it('scores perfect position match', () => {
+    const potential = createCoords();
+    const original = createCoords();
+
+    const score = getPositionAndSizeScore(potential, original, mockBounds);
+    expect(score).toBe(2.0);
+  });
+
+  it('scores nearby elements positively', () => {
+    const potential = createCoords({ left: 110, top: 210 });
+    const original = createCoords();
+
+    const score = getPositionAndSizeScore(potential, original, mockBounds);
+    expect(score).toBeCloseTo(1.5, 1); // Close elements should score well
+  });
+
+  it('gives a -0.5 score for opposite side of page', () => {
+    const potential = createCoords({ left: mockBounds.width - 50 });
+    const original = createCoords({ left: 0, top: 230 });
+
+    const score = getPositionScore(potential.coords, original.coords, mockBounds);
+    // Should be capped at -0.5 total (combined X and Y axis caps)
+    expect(score).toBeCloseTo(-0.5, 1);
+  });
+
+  it('gives close to 0 for elements that are touching', () => {
+    const potential = createCoords(); // Far right, far down
+    const original = createCoords({ left: 150, top: 130 }); // Top left
+
+    const score = getPositionScore(potential.coords, original.coords, mockBounds);
+    // Will give slight negative bias at touching elements
+    expect(score).toBeCloseTo(-0.05);
+  });
+
+  it('handles estimated mode differently than replay mode', () => {
+    const potential = createCoords({ left: 1000, top: 1000, width: 25, height: 300 });
+    const originalReplay = createCoords();
+    const originalEstimated = createCoords();
+    originalReplay.estimated = false;
+
+
+    const replayScore = getPositionAndSizeScore(potential, originalReplay, mockBounds);
+    const estimatedScore = getPositionAndSizeScore(potential, originalEstimated, mockBounds);
+
+    // Estimated mode should allow negative scores, replay mode should not
+    expect(replayScore).toBeGreaterThanOrEqual(0);
+    expect(estimatedScore).toBeLessThan(0);
+  });
+
+  it('returns 0 when coordinates are missing', () => {
+    const potential = createCoords();
+    const original = createCoords();
+    original.coords = null;
+
+    const score = getPositionAndSizeScore(potential, original, mockBounds);
+    expect(score).toBe(0);
+  });
 });

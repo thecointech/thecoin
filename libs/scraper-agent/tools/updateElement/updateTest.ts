@@ -15,7 +15,7 @@ const section = process.argv[3];
 
 await init();
 const { baseFolder } = getConfig();
-const recordFolder = path.join(baseFolder, "record-latest");
+const recordFolder = path.join(baseFolder, "latest");
 
 
 const basePath = `${recordFolder}/${target}/${section}`;

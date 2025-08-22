@@ -12,7 +12,7 @@ export type OverrideData = {
 }
 
 export function getOverrideData(testFolder: string): OverrideData {
-  const overrideFile = path.join(testFolder, "record-archive", "overrides.json")
+  const overrideFile = path.join(testFolder, "archive", "overrides.json")
   if (existsSync(overrideFile)) {
     const raw = readFileSync(overrideFile, "utf-8")
     const overrideData = JSON.parse(raw);

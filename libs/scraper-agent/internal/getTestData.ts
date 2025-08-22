@@ -9,6 +9,6 @@ jest.unstable_mockModule("../interactions", () => ({
 }));
 
 const {TestDataAgent: agentClass} = await import("./testDataAgent");
-export function getTestData(section: string, searchPattern: string, recordTime = 'record-latest'): TestDataAgent[] {
+export function getTestData(section: string, searchPattern: string, recordTime = 'latest'): TestDataAgent[] {
   return scraperGetTestData<TestDataAgent>(section, searchPattern, recordTime, agentClass);
 }

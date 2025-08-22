@@ -22,7 +22,7 @@ const target = process.argv.includes("--target") ? process.argv[process.argv.ind
 const except = process.argv.includes("--except") ? process.argv[process.argv.indexOf("--except") + 1] : undefined;
 
 const dateSuffix = DateTime.now().toFormat("yyyy-MM-dd_HH-mm");
-const recordFolder = path.join(baseFolder, "record-archive", dateSuffix);
+const recordFolder = path.join(baseFolder, "archive", dateSuffix);
 
 await init();
 await installBrowser();
@@ -96,6 +96,7 @@ for (const [name, bankConfig] of Object.entries(config)) {
     successful.push(name);
 
   } catch (e) {
+    log.error(e, `Encountered error in ${name}`);
     errored.push(name);
   }
 }

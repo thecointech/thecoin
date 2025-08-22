@@ -10,21 +10,19 @@ type TestDataConstructor<T extends TestData = TestData> = new (...args: Construc
 export function getTestData<T extends TestData>(
   section: string,
   searchPattern: string,
-  recordTime = 'record-latest',
+  recordTime = 'latest',
   constructor: TestDataConstructor<T> = TestData as any
 ): T[] {
 
   const { getPage } = useTestBrowser();
 
-  const testingFolder = process.env.PRIVATE_TESTING_PAGES;
-  if (!testingFolder) {
+  const testFolder = process.env.PRIVATE_TESTING_PAGES;
+  if (!testFolder) {
     return [];
   }
-  const testFolder = path.join(testingFolder, "unit-tests")
-  const baseFolder = path.join(testFolder, recordTime);
   const overrideData = getOverrideData(testFolder);
   const results: T[] = [];
-  const pattern = `${baseFolder}/**/${section}/**/*${searchPattern}*`
+  const pattern = `${testFolder}/**/${recordTime}/**/${section}/**/*${searchPattern}*`
   const matched = globSync(pattern);
   for (const match of matched) {
 

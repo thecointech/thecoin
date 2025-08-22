@@ -16,10 +16,10 @@ export type BankConfig = {
 export type TestConfig = Record<string, BankConfig>;
 
 export function getConfig() {
-  if (!process.env.PRIVATE_TESTING_PAGES) {
+  const baseFolder = process.env.PRIVATE_TESTING_PAGES;
+  if (!baseFolder) {
     throw new Error("PRIVATE_TESTING_PAGES is not set");
   }
-  const baseFolder = path.join(process.env.PRIVATE_TESTING_PAGES, "unit-tests");
   return {
     baseFolder,
     config: JSON.parse(

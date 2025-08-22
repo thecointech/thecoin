@@ -20,10 +20,12 @@ const EquivalentTags = [
   ['input', 'select'],
 ]
 
+export type Bounds = {width: number, height: number};
+
 // This scoring function reaaaaally needs to be replaced with
 // a computed (learned) model, because manually scoring is just
 // too easy to bias to right-nows problems
-export async function scoreElement(potential: ElementData, original: SearchElementData) {
+export async function scoreElement(potential: ElementData, original: SearchElementData, bounds: Bounds) {
   const components: Record<string, number> = {
     selector:         30 * getSelectorScore(potential.selector, original.selector),
     tag:              20 * getTagScore(potential, original),
@@ -34,7 +36,7 @@ export async function scoreElement(potential: ElementData, original: SearchEleme
     // Includes aria-label & <label>.  Is a good boost to <input> types
     label:            25 * await getLabelScore(potential.label, original.label),
     role:             20 * getRoleScore(potential, original),
-    positionAndSize:  20 * getPositionAndSizeScore(potential, original), // Can be 2 if both match perfectly
+    positionAndSize:  20 * getPositionAndSizeScore(potential, original, bounds), // Can be 2 if both match perfectly
     nodeValue:        40 * await getNodeValueScore(potential, original),
     siblings:         30 * await getSiblingScore(potential, original),
     estimatedText:    40 * getEstimatedTextScore(potential, original)
@@ -92,14 +94,15 @@ function getFontScore(potential: Font | undefined, original: Font | undefined) {
   )
 }
 
-function getPositionAndSizeScore(potential: ElementData, original: SearchElementData): number {
+export function getPositionAndSizeScore(potential: ElementData, original: SearchElementData, bounds: Bounds): number {
   if (!potential.coords || !original.coords) return 0;
 
   const sizeScore = getSizeScore(potential.coords, original.coords);
-  const positionScore = getPositionScore(potential.coords, original.coords);
+  const positionScore = getPositionScore(potential.coords, original.coords, bounds);
   const totalScore = original.estimated
     // In an estimated run, we score higher on position, but position mis-matches introdue a negative penalty
-    ? sizeScore + positionScore
+    // We drop size as the text should capture the size better than this here
+    ? positionScore
     // In a regular run, we do not penalize position changes, but rely less on the position overall
     : (Math.max(sizeScore, 0) + Math.max(positionScore, 0)) / 2;
   return totalScore;
@@ -181,7 +184,7 @@ export function getRoleScore(potential: ElementData, original: SearchElementData
 // Basically, as long as the center is within the largest bounding box, it
 // should give some points.  The score drops below zero if the center moves
 // outside the radius of the oval defined by the two boxes
-function getPositionScore(potential: Coords, original: Coords) {
+export function getPositionScore(potential: Coords, original: Coords, bounds: Bounds) {
   const originalCenterX = original.left + (original.width / 2);
   const potentialCenterX = potential.left + (potential.width / 2);
   const diffX = Math.abs(originalCenterX - potentialCenterX);
@@ -189,10 +192,25 @@ function getPositionScore(potential: Coords, original: Coords) {
 
   const maxWidth = Math.max(original.width, potential.width);
   const maxHeight = Math.max(original.height, potential.height);
-  const scoreCenterX = 1 - (diffX / (maxWidth / 2));
-  const scoreCenterY = 1 - (diffY / (maxHeight / 2));
-  return (scoreCenterX + scoreCenterY) / 2;
+
+  const scoreX = getAxisScore(diffX, bounds.width, maxWidth);
+  const scoreY = getAxisScore(diffY, bounds.height, maxHeight);
+  return (scoreX + scoreY) / 2;
 }
+
+function getAxisScore(diff: number, max: number, tolerance: number) {
+  const halfTolerance = tolerance / 2;
+  if (diff <= halfTolerance) {
+    // The element is inside the bounds.  It score goes from 0 -> 1 as it moves closer to the center
+    return 1 - (diff / halfTolerance);
+  }
+  if (diff > halfTolerance) {
+    // The element is outside the bounds.  It's score goes from 0 -> -1 as it moves further away
+    return -(diff / halfTolerance) / ((max - tolerance) / halfTolerance);
+  }
+  return 0;
+}
+
 
 // Size score is the similarity between the two boxes
 function getSizeScore(potential: Coords, original: Coords) {

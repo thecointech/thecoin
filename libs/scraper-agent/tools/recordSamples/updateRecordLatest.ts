@@ -45,7 +45,7 @@ export function copySection(section: string, source: string, dest: string) {
 }
 
 export function getSourceDest(recordFolder: string, target: string) {
-  const latestFolder = path.resolve(recordFolder, "..", "..", "record-latest");
+  const latestFolder = path.resolve(recordFolder, "..", "..", "latest");
 
   if (!existsSync(latestFolder)) {
     throw new Error("Latest folder should exist at: " + latestFolder)
@@ -83,6 +83,7 @@ export function copyElementsWithFilter(sourceSection: string, destSection: strin
   }
 
   // we need to preserve this element & it's page
+  mkdirSync(destSection, { recursive: true }); // ensure it exists
   const destElements = readdirSync(destSection);
   const preservedElementDest = destElements.find(e => e.includes(preservedElement));
   // If the destination doesn't contain the preserved element,

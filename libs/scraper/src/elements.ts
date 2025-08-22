@@ -2,7 +2,7 @@ import type { ElementHandle, Frame, Page } from 'puppeteer';
 import type { Coords, ElementData, SearchElementData, ElementSearchParams, FoundElement, SearchElement } from './types';
 import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
-import { scoreElement } from './elements.score';
+import { Bounds, scoreElement } from './elements.score';
 import { ElementNotFoundError, PageNotInteractableError } from './errors';
 import { EventBus } from './events/eventbus';
 
@@ -27,10 +27,12 @@ export async function getElementForEvent(params: ElementSearchParams) {
   const title = await page.title();
   log.info(`Searching \"${title}\" for: ${event.tagName} - ${event.text} - ${event.siblingText} - ${event.selector}`);
 
+  const bounds = await getDocumentBounds(page, maxTop);
+
   let bestCandidate: FoundElement|null = null;
   while (Date.now() < startTick + timeout) {
 
-    const candidates = await fetchAllCandidates(page, event, maxTop);
+    const candidates = await fetchAllCandidates(page, event, bounds);
     const candidate = await getBestCandidate(candidates, event, minScore);
 
     if (candidate) {
@@ -52,17 +54,18 @@ export async function getElementForEvent(params: ElementSearchParams) {
   throw new ElementNotFoundError(event, bestCandidate);
 }
 
-async function fetchAllCandidates(page: Page, event: SearchElementData, maxTop: number) {
+async function fetchAllCandidates(page: Page, event: SearchElementData, bounds: Bounds) {
   const candidates: FoundElement[] = [];
   const frames = page.frames();
   const nFrames = frames.length;
   let nErrors = 0;
+
   log.info(`Searching ${nFrames} frames`);
   const errors: unknown[] = [];
   for (const frame of frames) {
     try {
       // Get all elements in frame
-      const frameCandidates = await getCandidates(frame, event, maxTop);
+      const frameCandidates = await getCandidates(frame, event, bounds);
       candidates.push(...frameCandidates);
     }
     catch (e) {
@@ -118,7 +121,7 @@ async function getBestCandidate(candidates: FoundElement[], event: SearchElement
   return null;
 }
 
-async function getCandidates(frame: Frame, event: SearchElementData, maxTop: number, timeout=300) {
+async function getCandidates(frame: Frame, event: SearchElementData, bounds: Bounds, timeout=300) {
   // We are getting the occasional issue where getElementProps
   // is undefined.  This could potentially be a race condition
   // if this fn evaluates before evaluateOnNewDocument (?)
@@ -149,7 +152,7 @@ async function getCandidates(frame: Frame, event: SearchElementData, maxTop: num
     };
 
     messageToLogOnTimeout = "Getting elements for frame";
-    const elements = await getAllElements(frame, maxTop);
+    const elements = await getAllElements(frame, bounds.height);
     messageToLogOnTimeout = "Filling out siblings for frame with " + elements.length + " elements";
     const withSiblings = fillOutSiblingText(elements);
     messageToLogOnTimeout = "Scoring frame with " + withSiblings.length + " elements";
@@ -158,7 +161,7 @@ async function getCandidates(frame: Frame, event: SearchElementData, maxTop: num
     for (let i = 0; i < withSiblings.length; i++) {
       messageToLogOnTimeout = `Scoring element: ${i} of ${withSiblings.length}`;
       const el = withSiblings[i];
-      const score = await scoreElement(el.data, event);
+      const score = await scoreElement(el.data, event, bounds);
       // NaN can't sort, so if one slips through, ditch it.
       if (!Number.isNaN(score.score)) {
         candidates.push({
@@ -476,4 +479,24 @@ const fillOutSiblingText = (allElements: SearchElement[]) => {
     }
   }
   return bucketed.flat()
+}
+
+async function getDocumentBounds(page: Page, maxTop: number) {
+  const pageBounds = await page.evaluate(() => ({
+    // Full document dimensions including scrollable content
+    width: Math.max(
+      document.documentElement.scrollWidth,
+      document.documentElement.offsetWidth,
+      document.documentElement.clientWidth
+    ),
+    height: Math.max(
+      document.documentElement.scrollHeight,
+      document.documentElement.offsetHeight,
+      document.documentElement.clientHeight
+    )
+  }));
+  if (pageBounds.height > maxTop) {
+    pageBounds.height = maxTop;
+  }
+  return pageBounds;
 }
