@@ -153,7 +153,7 @@ describe('position scoring', () => {
     const original = createCoords();
 
     const score = getPositionAndSizeScore(potential, original, mockBounds);
-    expect(score).toBe(2.0);
+    expect(score).toBe(1.0);
   });
 
   it('scores nearby elements positively', () => {
@@ -161,7 +161,7 @@ describe('position scoring', () => {
     const original = createCoords();
 
     const score = getPositionAndSizeScore(potential, original, mockBounds);
-    expect(score).toBeCloseTo(1.5, 1); // Close elements should score well
+    expect(score).toBeCloseTo(0.5, 1); // Close elements should score well
   });
 
   it('gives a -0.5 score for opposite side of page', () => {
@@ -204,5 +204,30 @@ describe('position scoring', () => {
 
     const score = getPositionAndSizeScore(potential, original, mockBounds);
     expect(score).toBe(0);
+  });
+
+  it ('is sensible when size is close to bounds', () => {
+    // When comparing against a really large
+    const potential = createCoords({"top":20,"left":20,"height":990,"width":990});
+    const original = createCoords({"top":5,"left":5,"height":10,"width":10});
+
+    const score = getPositionAndSizeScore(potential, original, {"width":1000,"height":1000});
+    expect(score).toBeLessThan(-1);
+  })
+
+  it ('should still match if larger than bounds, but still close together', () => {
+    // When comparing against a really large
+    const potential = createCoords({"top":10,"left":10,"height":1200,"width":1200});
+
+    const score = getPositionAndSizeScore(potential, potential, {"width":1000,"height":1000});
+    expect(score).toBeCloseTo(1);
+  })
+
+  it('does not score too highly', () => {
+    const potential = createCoords({"top":913.390625,"left":0,"centerY":1555.90625,"height":1285.03125,"width":1265});
+    const original = createCoords({"top":82,"left":1066,"height":20,"width":56,"centerY":92});
+
+    const score = getPositionAndSizeScore(potential, original, {"width":1265,"height":1180});
+    expect(score).toBeLessThan(0);
   });
 });

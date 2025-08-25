@@ -29,6 +29,11 @@ export async function getElementForEvent(params: ElementSearchParams) {
 
   const bounds = await getDocumentBounds(page, maxTop);
 
+  // Force all tags to uppercase
+  if (event.tagName) {
+    event.tagName = event.tagName.toUpperCase();
+  }
+
   let bestCandidate: FoundElement|null = null;
   while (Date.now() < startTick + timeout) {
 
@@ -220,7 +225,7 @@ export async function registerElementAttrFns(page: Page) {
             nodeValue: getElementText(ps),
           }))
           .filter(ps => !!ps.nodeValue)
-        r.siblingText = getSiblingText(r.coords, potentialSiblings);
+        r.siblingText = getSiblingText(r.coords, r.text, potentialSiblings);
       }
       return r;
     }
@@ -239,7 +244,7 @@ export async function registerElementAttrFns(page: Page) {
 
 const getElementProps = (el: HTMLElement) => ({
   frame: getFrameUrl(),
-  tagName: el.tagName,
+  tagName: el.tagName?.toUpperCase(),
   name: el.getAttribute("name") ?? undefined,
   options: (el as HTMLSelectElement)?.options ? Array.from((el as HTMLSelectElement).options).map(o => o.text) : undefined,
   inputType: el.getAttribute("type") ?? undefined,
@@ -375,8 +380,13 @@ function getElementText(elem: Element) {
     .trim()
 }
 
-const getSiblingText = (elcoords: Coords, allText: Pick<ElementData, 'coords'|'nodeValue'>[]) => allText
+const getSiblingText = (elcoords: Coords, elText: string,allText: Pick<ElementData, 'coords'|'nodeValue'>[]) => allText
   .filter(c => !!c.nodeValue)
+  // Don't include siblings with exactly the same text.  This
+  // happens when a node only contains descendent children,
+  // and results in the parent node being scored higher due
+  // to double-counting the text value
+  .filter(candidate => candidate.nodeValue != elText)
   .filter(candidate => {
     // Is this a row or column?
     const rowcoords = candidate.coords;
@@ -475,7 +485,7 @@ const fillOutSiblingText = (allElements: SearchElement[]) => {
         .flat()
         .filter(c => c != el)
 
-      el.data.siblingText = getSiblingText(el.data.coords, candidates.map(c => c.data));
+      el.data.siblingText = getSiblingText(el.data.coords, el.data.text, candidates.map(c => c.data));
     }
   }
   return bucketed.flat()

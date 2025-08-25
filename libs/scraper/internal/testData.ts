@@ -88,29 +88,22 @@ export class TestData {
     return null;
   }
 
-  elm(name: string, index = 0): TestElmData | null {
-    const elements = this.jsonFiles.filter(f => f.includes(name) && f.endsWith("-elm.json"));
-    if (!elements) {
+  elm(name: string): TestElmData | null {
+    const element = this.jsonFiles.find(f => f.includes(name) && f.endsWith("-elm.json"));
+    if (!element) {
       return null;
     }
-    if (elements.length <= index) {
-      return null;
-    }
-    const element = elements[index];
+    const testName = element.match(/(.+)-elm.json/)?.[1];
     const rawJson: TestElmData = JSON.parse(readFileSync(path.join(this.matchedFolder, element), "utf-8"));
-    applyOverrides(this.overrideData, this.key, name, index, rawJson);
+    applyOverrides(this.overrideData, this.key, testName!, rawJson);
     return rawJson;
   }
 
-  sch(name: string, index = 0): TestSchData | null {
-    const searches = this.jsonFiles.filter(f => f.includes(name) && f.endsWith("-sch.json"));
-    if (!searches) {
+  sch(name: string): TestSchData | null {
+    const search = this.jsonFiles.find(f => f.includes(name) && f.endsWith("-sch.json"));
+    if (!search) {
       return null;
     }
-    if (searches.length <= index) {
-      return null;
-    }
-    const search = searches[index];
     const rawJson: TestSchData = JSON.parse(readFileSync(path.join(this.matchedFolder, search), "utf-8"));
     return rawJson;
   }

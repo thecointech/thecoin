@@ -258,7 +258,11 @@ async function gotoNextPage(agent: Agent, step: number) {
   if (!nextButton) {
     return false;
   }
-  return await agent.page.completeInteraction(nextButton, (found) => clickElement(agent.page.page, found), { hints: { eventName: `step-${step}` } });
+  return await agent.page.completeInteraction(nextButton,
+    (found) => clickElement(agent.page.page, found), {
+      hints: { eventName: `step-${step}`, tagName: "BUTTON" }
+    }
+  );
 }
 
 async function fillInputs(agent: Agent, tracker: InputTracker, accountNumber: string) {

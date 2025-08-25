@@ -15,6 +15,7 @@ export function getValueFormat(value: string, type: ValueType) {
   switch(type) {
     case "date": return guessDateFormat(value);
     case "currency": return guessCurrencyFormat(value);
+    case "phone": return guessPhoneFormat(value);
     default: {
       // Text does not have a format
       return null;
@@ -257,4 +258,35 @@ export function guessCurrencyFormat(value?: string) : CurrencyType|null {
 
 export function getCurrencyConverter(fmt: CurrencyType): CurrencyConverter {
   return Currencies[fmt];
+}
+
+
+// This phone test is very relaxed, it is currently only
+// used in estimated runs and the extracted value is not
+// used.  It's just a sanity check to make sure we don't
+// find a obviously wront element when searching numbers
+export function guessPhoneFormat(value: string) {
+  if (!value) return null;
+
+  // 1) Minimum of 2 digits
+  const digits = (value.match(/\d/g) || []).length;
+  if (digits < 2) {
+    return null;
+  }
+
+  // 2) Blacklist characters that indicate non-phone content
+  if (/[$%]/.test(value)) {
+    return null;
+  }
+
+  // Remove common phone formatting characters
+  const cleaned = value.replace(/[-.\s()+]/g, '');
+
+  // 3) Total length test - reasonable phone number range
+  if (cleaned.length < 7 || cleaned.length > 15) {
+    return null;
+  }
+
+  // Return the cleaned version preserving digits and any masking characters
+  return "(phone)";
 }

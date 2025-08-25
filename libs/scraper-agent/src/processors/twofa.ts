@@ -66,7 +66,13 @@ export async function updateFromPage(agent: Agent, response: PhoneNumberElements
     position_y: response.position_y,
     neighbour_text: ""
   }
-  const element = await agent.page.toElement(asResponse, "phone");
+  const element = await agent.page.toElement(asResponse, {
+    eventName: "phone",
+    parsing: {
+      type: "phone",
+      format: null
+    }
+  });
   return element;
 }
 

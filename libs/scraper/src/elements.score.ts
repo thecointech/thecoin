@@ -13,11 +13,11 @@ const EquivalentInputTypes = [
 
 const EquivalentTags = [
   // Interactive elements that act as buttons
-  ['button', 'a', 'input'],
+  ['BUTTON', 'A', 'INPUT'],
   // Input text elements
-  ['input', 'textarea'],
+  ['INPUT', 'TEXTAREA'],
   // Input select elements
-  ['input', 'select'],
+  ['INPUT', 'SELECT'],
 ]
 
 export type Bounds = {width: number, height: number};
@@ -35,7 +35,7 @@ export async function scoreElement(potential: ElementData, original: SearchEleme
     font:             10 * getFontScore(potential.font, original.font),
     // Includes aria-label & <label>.  Is a good boost to <input> types
     label:            25 * await getLabelScore(potential.label, original.label),
-    role:             20 * getRoleScore(potential, original),
+    role:             40 * getRoleScore(potential, original),
     positionAndSize:  20 * getPositionAndSizeScore(potential, original, bounds), // Can be 2 if both match perfectly
     nodeValue:        40 * await getNodeValueScore(potential, original),
     siblings:         30 * await getSiblingScore(potential, original),
@@ -113,6 +113,7 @@ export function getPositionAndSizeScore(potential: ElementData, original: Search
 export async function getSiblingScore(potential: ElementData, original: SearchElementData) {
   const potentialSiblings = potential.siblingText;
   const originalSiblings = original.siblingText;
+
   // If both have siblings
   if (potentialSiblings?.length && originalSiblings?.length) {
 
@@ -146,7 +147,7 @@ export async function getSiblingScore(potential: ElementData, original: SearchEl
   else if (potentialSiblings?.length == originalSiblings?.length) {
     return 0.5;
   }
-  else if (original.estimated && potentialSiblings?.length == 0) {
+  else if (original.estimated) {
     // Estimates will pick up siblings that are not precisely in-line
     // So do not penalize if the potential ones are not there.
     return 0;
@@ -198,15 +199,14 @@ export function getPositionScore(potential: Coords, original: Coords, bounds: Bo
   return (scoreX + scoreY) / 2;
 }
 
-function getAxisScore(diff: number, max: number, tolerance: number) {
-  const halfTolerance = tolerance / 2;
-  if (diff <= halfTolerance) {
+function getAxisScore(diff: number, max: number, elementSize: number) {
+  const halfSize = elementSize / 2;
+  if (diff <= halfSize) {
     // The element is inside the bounds.  It score goes from 0 -> 1 as it moves closer to the center
-    return 1 - (diff / halfTolerance);
+    return 1 - (diff / halfSize);
   }
-  if (diff > halfTolerance) {
-    // The element is outside the bounds.  It's score goes from 0 -> -1 as it moves further away
-    return -(diff / halfTolerance) / ((max - tolerance) / halfTolerance);
+  if (diff > halfSize) {
+    return -(diff / halfSize) / Math.abs((max - elementSize) / halfSize);
   }
   return 0;
 }
@@ -222,7 +222,7 @@ function getSizeScore(potential: Coords, original: Coords) {
 }
 
 async function getNodeValueScore(potential: ElementData, original: SearchElementData) {
-  if (original.parsing?.type == "currency" || original.parsing?.type == "date") {
+  if (original.parsing?.type == "currency" || original.parsing?.type == "date" || original.parsing?.type == "phone") {
     // Amounts that have parsing are expected to change, so we score them
     // on their parsing matching, rather than their actual value
     return getValueParsingScore(potential, original);

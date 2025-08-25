@@ -2,13 +2,19 @@ import { existsSync, readFileSync } from "node:fs";
 import { ElementData } from "../src/types";
 import path from "node:path";
 
-type OverrideElements = {
+export type OverrideElement = {
   text?: string,
   selector?: string
 }
+export type SkipElement = {
+  reason?: string,
+  // If elements is specified, only skip those elements
+  elements?: string[],
+}
+export type SkipElements = Record<string, SkipElement>
 export type OverrideData = {
-  skip?: string[],
-  overrides?: Record<string, Record<string, OverrideElements[]>>
+  skip?: SkipElements,
+  overrides?: Record<string, Record<string, OverrideElement>>
 }
 
 export function getOverrideData(testFolder: string): OverrideData {
@@ -21,10 +27,10 @@ export function getOverrideData(testFolder: string): OverrideData {
   return {};
 }
 
-export function applyOverrides(overrideData: OverrideData, key: string, element: string, counter: number, rawJson: ElementData) {
+export function applyOverrides(overrideData: OverrideData, key: string, element: string, rawJson: ElementData) {
   const overrides = overrideData.overrides?.[key];
   if (overrides) {
-    const elementOverride = overrides[element]?.[counter];
+    const elementOverride = overrides[element];
     if (elementOverride) {
       if (elementOverride.text) rawJson.text = elementOverride.text;
       if (elementOverride.selector) rawJson.selector = elementOverride.selector;

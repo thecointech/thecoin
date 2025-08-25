@@ -29,8 +29,7 @@ export function responseToElementData({ response, hints }: ResponseSearchParams)
     // may skew results and overpower the tagName/inputType scores
     // nodeValue: text,
     label: text,
-    // Include original text in neighbour text, LLM isn't known for being precise
-    siblingText: [getNeighbourText(response), text].filter(isPresent),
+    siblingText: [getNeighbourText(response)].filter(isPresent),
     coords: {
       top: response.position_y! - height / 2,
       left: response.position_x! - width / 2,
@@ -80,7 +79,7 @@ function getContent(r: AnyResponse) {
   return "";
 }
 
-function getNeighbourText(r: AnyResponse) {
+function getNeighbourText(r: AnyResponse): string|undefined {
   if ("neighbour_text" in r) {
     return r.neighbour_text;
   }

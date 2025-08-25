@@ -3,7 +3,7 @@ import { existsSync, readdirSync } from "node:fs";
 import { globSync } from "glob";
 import { useTestBrowser } from "./testutils";
 import { TestData } from "./testData";
-import { getOverrideData, OverrideData } from "./overrides";
+import { getOverrideData, SkipElement } from "./overrides";
 
 type TestDataConstructor<T extends TestData = TestData> = new (...args: ConstructorParameters<typeof TestData>) => T;
 
@@ -34,20 +34,22 @@ export function getTestData<T extends TestData>(
       continue
     }
     // Is this meant to be skipped?
-    if (overrideData.skip?.includes(key)) {
+    const skip = overrideData.skip?.[key];
+    if (skip && !skip.elements) {
       continue;
     }
-    const allPagesAndElements = readdirSync(matchedFolder);
     // If no png/etc move on, we've matched something irrelevant
     if (!existsSync(path.join(matchedFolder, `${step}.png`))) {
+      continue;
+    }
+    const jsonFiles = getJsonFiles(matchedFolder, step, skip);
+    if (!jsonFiles.length) {
       continue;
     }
     const pathBits = matchedFolder.split(path.sep).reverse()
     const target = pathBits[1] == section
       ? pathBits[2]
       : pathBits[1]
-
-    const jsonFiles = allPagesAndElements.filter(f => f.startsWith(step));
 
     results.push(new constructor(
       key,
@@ -60,6 +62,16 @@ export function getTestData<T extends TestData>(
     ));
   }
   return results;
+}
+
+function getJsonFiles(matchedFolder: string, step: string, skip?: SkipElement) {
+  const allPagesAndElements = readdirSync(matchedFolder);
+  let jsonFiles = allPagesAndElements.filter(f => f.startsWith(step));
+  return (skip?.elements)
+    ? jsonFiles.filter(f =>
+      skip.elements?.every(e => !f.includes(e))
+    )
+    : jsonFiles;
 }
 
 export const hasTestingPages = () => !!process.env.PRIVATE_TESTING_PAGES;

@@ -8,7 +8,7 @@ export type { HistoryRow };
 // Generic result encompasses all of the above
 export type ReplayResult = Record<string, string | DateTime | currency | HistoryRow[]>
 
-export type ValueType = "date"|"currency"|"text"|"table";
+export type ValueType = "date"|"currency"|"phone"|"text"|"table";
 
 export type ValueParsing = {
   type: ValueType,

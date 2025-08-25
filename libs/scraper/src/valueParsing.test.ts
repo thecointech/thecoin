@@ -1,4 +1,4 @@
-import { getCurrencyConverter, guessCurrencyFormat, guessDateFormat } from './valueParsing';
+import { getCurrencyConverter, guessCurrencyFormat, guessDateFormat, guessPhoneFormat } from './valueParsing';
 
 it ("can guess date format", () => {
   expect(guessDateFormat("Mar 13, 2023")).toBe("MMM d, yy");
@@ -66,4 +66,18 @@ it ("parses negative values correctly", () => {
   expect(cvt("-123.45").value).toBe(-123.45);
   expect(cvt("($123.45)").value).toBe(-123.45);
   expect(cvt("$(123.45)").value).toBe(-123.45);
+})
+
+
+it ('guesses phone format', () => {
+  expect(guessPhoneFormat("555-1234")).toBe("(phone)");
+  expect(guessPhoneFormat("+1 555-1234")).toBe("(phone)");
+  expect(guessPhoneFormat("+1 (555) 1234")).toBe("(phone)");
+  expect(guessPhoneFormat("+1 (•••) ••• - 1234")).toBe("(phone)");
+  expect(guessPhoneFormat("+1 (XXX) XXX - 1234")).toBe("(phone)");
+  expect(guessPhoneFormat("+1 (xxx) xxx - 1234")).toBe("(phone)");
+
+  expect(guessPhoneFormat("not a phone")).toBeNull();
+  expect(guessPhoneFormat("long but 1 number")).toBeNull();
+  expect(guessPhoneFormat("123")).toBeNull();
 })
