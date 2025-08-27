@@ -88,7 +88,7 @@ for (const [name, bankConfig] of Object.entries(config)) {
       updateRecordLatest(recordFolder, failLoginTarget(name))
     }
     // If we have password, run the full process
-    if (bankConfig.password) {
+    else if (bankConfig.password) {
       using askUser = new AskUserConsole(bankConfig);
       await runAgent(name, bankConfig.url, askUser);
       updateRecordLatest(recordFolder, name);
