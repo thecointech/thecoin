@@ -1,15 +1,16 @@
+from typing import Any
 import unittest
 import os
 import sys
 import re
 from dateparser import parse
 
-from tests.testdata import TestElmData
+from tests.testutils.testdata import TestElmData
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, 'src'))
 
-from data_elements import DateElementResponse
+from data_elements import DateElementResponse, ElementResponse, PositionResponse
 
 class TestBase(unittest.IsolatedAsyncioTestCase):
 
@@ -20,7 +21,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         else:
             super().assertEqual(str1, str2, msg)
 
-    def assertPosition(self, response: object, expected: dict[str, object]):
+    def assertPosition(self, response: PositionResponse, expected: dict[str, Any], tolerance: int=5):
         o_width = expected["coords"]["width"]
         o_height = expected["coords"]["height"]
         o_left = expected["coords"]["left"]
@@ -35,13 +36,13 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         self.assertAlmostEqual(
             e_posX,
             o_centerX,
-            delta=max(20, o_width * 0.6),
+            delta=max(20, tolerance + o_width * 0.6),
             msg=f"X: {e_posX} does not match expected: {o_centerX} with width: {o_width}"
         )
         self.assertAlmostEqual(
             e_posY,
             o_centerY,
-            delta=max(20, o_height * 0.6),
+            delta=max(20, tolerance + o_height * 0.6),
             msg=f"Y: {e_posY} does not match expected: {o_centerY} with height: {o_height}"
         )
 
@@ -58,7 +59,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
             response_content = getattr(response, 'placeholder_text', '')
         return normalize(response_content)
 
-    def assertContent(self, response, expected: dict):
+    def assertContent(self, response: ElementResponse, expected: dict):
 
         response_text = self.get_response_text(response)
         if (response_text is None):
@@ -90,17 +91,15 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
 
         self.assertTrue(textOverlap, f"Text: {response_text} does not match expected: {expected_content}")
 
-    def assertNeighbours(self, response: dict, expected: dict):
-        if ("neighbour_text" not in response):
-            return
+    def assertNeighbours(self, response: ElementResponse, expected: dict):
         # siblingText is quite restrictive, so it may not have any values
         # if it does, then there should be a match (except in Scotiabank)
         o_neigbours = [normalize(s) for s in expected["siblingText"]]
-        if (normalize(response["neighbour_text"]) in o_neigbours):
+        if (normalize(response.neighbour_text) in o_neigbours):
             # This can be wrong because it might pick up neighbours above/below
             # so just reassure ourselves when we do get it right :-)
             # test.assertIn(normalize(response["neighbour_text"]), o_neigbours)
-            print("Found: " + normalize(response["neighbour_text"]) + " in " + str(o_neigbours))
+            print("Found: " + normalize(response.neighbour_text) + " in " + str(o_neigbours))
 
     # The LLM seems to return the date in a different format from
     # whats on the page.  The scraper can handle the difference, so
@@ -110,21 +109,21 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         expectedDate = parse(expected["text"])
         self.assertEqual(responseDate, expectedDate, f"Date: {responseDate} does not match expected: {expectedDate}")
 
-    def assertResponse(self, response: object, expected: TestElmData|None):
+    def assertResponse(self, response: ElementResponse, expected: TestElmData|None, tolerance:int=5):
         self.assertIsNotNone(expected)
-        data = expected.data
-        if "coords" in data:
-            self.assertPosition(response, data)
-        self.assertContent(response, data)
-        self.assertNeighbours(response, data)
+        assert expected is not None  # Type narrowing for mypy/pylsp
+        if "coords" in expected:
+            self.assertPosition(response, expected, tolerance)
+        self.assertContent(response, expected)
+        self.assertNeighbours(response, expected)
         print("Element Found Correctly")
 
     def assertDateResponse(self, response: DateElementResponse, expected: TestElmData|None):
         self.assertIsNotNone(expected)
-        data = expected.data
-        self.assertDate(response, data)
-        self.assertPosition(response, data)
-        self.assertNeighbours(response, data)
+        assert expected is not None  # Type narrowing for mypy/pylsp
+        self.assertDate(response, expected)
+        self.assertPosition(response, expected)
+        self.assertNeighbours(response, expected)
         print("Element Found Correctly")
 
     # Processing the larger screenshot can result in errors reading small text.

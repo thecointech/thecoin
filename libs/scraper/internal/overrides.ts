@@ -1,10 +1,11 @@
 import { existsSync, readFileSync } from "node:fs";
-import { ElementData } from "../src/types";
+import { ElementData, Coords } from "../src/types";
 import path from "node:path";
 
 export type OverrideElement = {
   text?: string,
-  selector?: string
+  selector?: string,
+  coords?: Coords
 }
 export type SkipElement = {
   reason?: string,

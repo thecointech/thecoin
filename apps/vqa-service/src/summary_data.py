@@ -11,13 +11,11 @@ class AccountType(CaseInsensitiveEnum):
     SAVINGS = "Savings"
     CREDIT = "Credit"
 
-class AccountResponse(BaseModel):
+class AccountResponse(PositionResponse):
     account_type: AccountType
     account_name: str
     account_number: str = Field(..., description="Account number including any stars or asterisks")
     balance: str
-    position_x: float
-    position_y: float
 
 class OverviewResponse(BaseModel):
     num_accounts: int

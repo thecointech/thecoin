@@ -3,47 +3,48 @@ import os
 import glob
 import re
 from PIL import Image
-from typing import NamedTuple
+from typing import NamedTuple, List, Dict, Any, Optional, Iterator
+from typing_extensions import TypedDict
+from dataclasses import dataclass
 from dotenv import load_dotenv
 from pathlib import Path
 
 from fastapi import UploadFile
 import io
-# from geo_math import BBox
 
+from .overrides import OverrideData, SkipElement, apply_overrides, get_override_data
+# from geo_math import BBox
 
 load_dotenv()
 
 # TODO: Make this configurable?  A larger LLM may be able to handle bigger images
 MAX_HEIGHT = 1440
 
-import os
-import json
-import glob
-from pathlib import Path
-from typing import List, Dict, Any, Optional, Callable
-from dataclasses import dataclass
-
 @dataclass
 class VqaCallData:
-    args: List[str]
+    args: List[Any]
     response: Any
 
-@dataclass
-class TestElmData:
-    # This would need to match the TypeScript FoundElement type minus 'element'
-    # and include the search params minus 'page'
-    data: Dict[str, Any]
+class TestElmData(Dict[str, Any]):
+    filename: str
+    def __init__(self, filename: str, data: Dict[str, Any]):
+        self.filename = filename
+        super().__init__(data)
+
+class TestSchData(TypedDict):
+    score: float
+    components: Any
     search: Dict[str, Any]
 
 class TestData:
     def __init__(self, key: str, target: str, step: str,
-                 matched_folder: str, json_files: List[str]):
+                 matched_folder: str, json_files: List[str], override_data: Optional[OverrideData] = None):
         self.key = key
         self.target = target
         self.step = step
         self._matched_folder = matched_folder
         self._json_files = json_files
+        self._override_data: OverrideData = override_data or {}
 
     def __str__(self) -> str:
         return self.key
@@ -105,14 +106,21 @@ class TestData:
                 return VqaCallData(args=data.get('args', []), response=data.get('response', data))
         raise ValueError(f"No VQA call data found for {call}")
 
-    def elm(self, name: str) -> TestElmData:
+    def elm(self, name: str, idx: int = 0) -> TestElmData:
         """Get the first element data for a specific element name"""
         matching_files = [f for f in self._json_files if name in f and f.endswith("-elm.json")]
         if matching_files:
-            file_path = os.path.join(self._matched_folder, matching_files[0])
+            return self._get_elm(matching_files[idx])
+        raise ValueError(f"No element data found for {name}")
+
+    def sch(self, name: str, idx: int = 0) -> TestSchData:
+        """Get the first element data for a specific element name"""
+        matching_files = [f for f in self._json_files if name in f and f.endswith("-sch.json")]
+        if matching_files:
+            file_path = os.path.join(self._matched_folder, matching_files[idx])
             with open(file_path, 'r') as f:
                 data = json.load(f)
-                return TestElmData(data=data.get('data', {}), search=data.get('search', {}))
+                return TestSchData(score=data.get('score', 0.0), components=data.get('components', {}), search=data.get('search', {}))
         raise ValueError(f"No element data found for {name}")
 
     def vqa_iter(self, call: str):
@@ -128,10 +136,7 @@ class TestData:
         """Get an iterator over all element data for a specific element name"""
         matching_files = [f for f in self._json_files if name in f and f.endswith("-elm.json")]
         for filename in matching_files:
-            file_path = os.path.join(self._matched_folder, filename)
-            with open(file_path, 'r') as f:
-                data = json.load(f)
-                yield TestElmData(data=data.get('data', {}), search=data.get('search', {}))
+            yield self._get_elm(filename)
 
     def _extract_html_header(self, pattern: str) -> Optional[str]:
         """Extract a header value from HTML using the given regex pattern"""
@@ -142,27 +147,59 @@ class TestData:
             return match.group(1).strip()
         return None
 
+    def _get_elm(self, filename: str):
+        file_path = os.path.join(self._matched_folder, filename)
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+            elementName = os.path.basename(filename).split("-elm.json")[0]
+            apply_overrides(self._override_data, self.key, elementName, data)
+            return TestElmData(elementName, data)
 
-def get_test_data(section: str, search_pattern: str="*", record_time: str = 'record-latest') -> List[TestData]:
+
+def _get_json_files(matched_folder: str, step: str, skip: Optional[SkipElement] = None) -> List[str]:
+    """Get JSON files for a test, filtering out skipped elements"""
+    all_files = os.listdir(matched_folder)
+    json_files = [f for f in all_files if f.startswith(step)]
+
+    if skip:
+        # Filter out files that contain any of the skipped element names
+        skip_elements = skip.get('elements')
+        if skip_elements:
+            json_files = [f for f in json_files
+                         if not any(elem in f for elem in skip_elements)]
+
+    return json_files
+
+
+def get_test_data(section: str, search_pattern: str="*", record_time: str = 'latest') -> List[TestData]:
     """
     Get test data matching the specified section and search pattern.
 
     Args:
         section: The section to search in (e.g., "AccountsSummary")
         search_pattern: Pattern to match in filenames
-        record_time: Time folder to search in (default: 'record-latest')
+        record_time: Time folder to search in (default: 'latest')
 
     Returns:
         List of TestData objects
     """
-    test_folder = os.path.join(os.environ['PRIVATE_TESTING_PAGES'], "unit-tests")
+    test_folder = os.environ['PRIVATE_TESTING_PAGES']
     base_folder = os.path.join(test_folder, record_time)
+    override_data = get_override_data(test_folder)
     results: List[TestData] = []
 
-    pattern = os.path.join(base_folder, "**", section, "**", f"*{search_pattern}*")
-    matched = glob.glob(pattern, recursive=True)
+    patterns = [search_pattern]
+    if (search_pattern.startswith("{") and search_pattern.endswith("}")):
+        cleaned = search_pattern[1:-1]
+        patterns = cleaned.split(",")
 
-    for match in matched:
+    allMatched = []
+    for pattern in patterns:
+        pattern = os.path.join(base_folder, "**", section, "**", f"*{pattern}*")
+        matched = glob.glob(pattern, recursive=True)
+        allMatched.extend(matched)
+
+    for match in allMatched:
         matched_folder = os.path.dirname(match)
         matched_filename = os.path.basename(match)
         step = matched_filename.split('-')[0]
@@ -172,34 +209,34 @@ def get_test_data(section: str, search_pattern: str="*", record_time: str = 'rec
         if any(r.key == key for r in results):
             continue
 
-        all_pages_and_elements = os.listdir(matched_folder)
-
-        # Check if PNG file exists, skip if not
-        png_file = os.path.join(matched_folder, f"{step}.png")
-        if not os.path.exists(png_file):
+        # Check if this test should be skipped
+        skip = override_data.get('skip', {}).get(key)
+        if skip and not skip.get('elements'):
+            # Skip entire test if no specific elements are specified
             continue
 
-        # Determine target from path
+        # Check if PNG file exists (required for valid test)
+        if not os.path.exists(os.path.join(matched_folder, f"{step}.png")):
+            continue
+
+        # Get JSON files, filtering out skipped elements
+        json_files = _get_json_files(matched_folder, step, skip)
+        if not json_files:
+            continue
+
+        # Extract target from path
         path_bits = matched_folder.split(os.sep)
-        target = path_bits[-2] if path_bits[-1] == section else path_bits[-1]
+        path_bits.reverse()
+        target = path_bits[2] if path_bits[1] == section else path_bits[1]
 
-        # Get JSON files for this page
-        json_files = [f for f in all_pages_and_elements if f.startswith(step)]
-
-        results.append(TestData(
-            key=key,
-            target=target,
-            step=step,
-            matched_folder=matched_folder,
-            json_files=json_files
-        ))
+        results.append(TestData(key, target, step, matched_folder, json_files, override_data))
 
     return results
 
 # Example usage:
 if __name__ == "__main__":
     # Test the function
-    test_data = get_test_data("AccountsSummary", "balance", "record-archive/2025-07-25_15-16")
+    test_data = get_test_data("AccountsSummary", "balance", "archive/2025-07-25_15-16")
     for test in test_data:
         print(f"Test: {test}")
         vqa_data = test.vqa("balance")
@@ -207,7 +244,7 @@ if __name__ == "__main__":
             print(f"  VQA Response: {vqa_data.response}")
         elm_data = test.elm("account")
         if elm_data:
-            print(f"  Element Data: {elm_data.data}")
+            print(f"  Element Data: {elm_data}")
 
 ############# Old Code Below ##################3
 
@@ -342,7 +379,7 @@ KeyFilter = ["Tangerine"]
 #     if test_folder is None:
 #         return []
 
-#     record_base = os.path.join(test_folder, "unit-tests", "record-latest")
+#     record_base = os.path.join(test_folder, "latest")
 #     # Find all png files that have test_filter in their path somewhere
 #     image_files = glob.glob(f"**/{intent_filter}/**/*.png", root_dir=record_base, recursive=True)
 
@@ -365,12 +402,12 @@ KeyFilter = ["Tangerine"]
 #     return test_data
 
 
-def get_single_test_element(filter: str, data_type: str, max_height: int = MAX_HEIGHT) -> list[SingleTestData]:
-    all_data = get_test_data(filter, max_height)
-    single = [SingleTestData(v.key, v.image, v.elements[data_type], v.html_title) for v in all_data if data_type in v.elements]
-    if len(single) == 0:
-        raise Exception("No single test data found for intent filter: " + filter + " and data type: " + data_type)
-    return single
+# def get_single_test_element(filter: str, data_type: str, max_height: int = MAX_HEIGHT) -> list[SingleTestData]:
+#     all_data = get_test_data(filter, max_height)
+#     single = [SingleTestData(v.key, v.image, v.elements[data_type], v.html_title) for v in all_data if data_type in v.elements]
+#     if len(single) == 0:
+#         raise Exception("No single test data found for intent filter: " + filter + " and data type: " + data_type)
+#     return single
 
 
 # Doesn't belong here, perhaps need utils file
@@ -390,12 +427,12 @@ def get_nested(obj, *path, default=None):
 # TODO: Deduplicate this with get_test_data
 #
 
-def get_private_folder(base_type: str, test_type: str = None) -> Path:
+def get_private_folder(base_type: str, test_type: str|None = None) -> Path|None:
     base_folder = os.environ.get("PRIVATE_TESTING_PAGES", None)
     if base_folder is None:
         return None
 
-    args = [base_folder, "unit-tests", base_type]
+    args = [base_folder, base_type]
     if test_type is not None:
         args.append(test_type)
     return Path(*args)

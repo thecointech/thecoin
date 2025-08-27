@@ -28,9 +28,9 @@ describe("It finds the same elements as before in archive", () => {
     if (!test.hasSnapshot()) {
       return;
     }
-    // if (!toCheck.includes(test.key)) {
-    //   return;
-    // }
+    if (!toCheck.includes(test.key)) {
+      return;
+    }
     console.log("Testing: ", test.key);
 
     const page = await test.page();
@@ -66,10 +66,12 @@ describe("It finds the same elements as before in archive", () => {
             const testOverrides = overrides[test.key] = overrides[test.key] ?? {};
             const elementOverride = testOverrides[name] = testOverrides[name] ?? {};
             if (found.data.text !== elm.text) {
-              elementOverride.text = found.data.text
+              elementOverride.text = found.data.text;
+              elementOverride.coords = found.data.coords;
             }
             if (found.data.selector !== elm.selector) {
-              elementOverride.selector = found.data.selector
+              elementOverride.selector = found.data.selector;
+              elementOverride.coords = found.data.coords;
             }
           }
           results.push({
@@ -107,6 +109,7 @@ describe("It finds the same elements as before in archive", () => {
 
 
 const toCheck = [
+  'archive/2025-07-25_15-16/TD/TwoFA-0'
 // "archive/2025-07-25_15-16/Tangerine/AccountsSummary-0",
 // "archive/2025-07-25_15-16/TD/AccountsSummary-0",
 // "archive/2025-07-25_15-16/RBC/AccountsSummary-0",
