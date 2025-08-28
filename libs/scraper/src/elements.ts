@@ -223,9 +223,10 @@ export async function registerElementAttrFns(page: Page) {
             element: ps,
             coords: getCoords(ps),
             nodeValue: getElementText(ps),
+            selector: getSelector(ps)!, // note: null is tested in the filter
           }))
-          .filter(ps => !!ps.nodeValue)
-        r.siblingText = getSiblingText(r.coords, r.text, potentialSiblings);
+          .filter(ps => !!ps.nodeValue && !!ps.selector)
+        r.siblingText = getSiblingText(r, potentialSiblings);
       }
       return r;
     }
@@ -380,31 +381,30 @@ function getElementText(elem: Element) {
     .trim()
 }
 
-const getSiblingText = (elcoords: Coords, elText: string,allText: Pick<ElementData, 'coords'|'nodeValue'>[]) => allText
+const getSiblingText = (el: ElementData, allText: Pick<ElementData, 'coords'|'nodeValue'|'selector'>[]) => allText
   .filter(c => !!c.nodeValue)
-  // Don't include siblings with exactly the same text.  This
-  // happens when a node only contains descendent children,
-  // and results in the parent node being scored higher due
-  // to double-counting the text value
-  .filter(candidate => candidate.nodeValue != elText)
+  // Don't include a childs text.  That text is automatically
+  // included in the 'text' property, and it can throw things
+  // of if it's double-counted.
+  .filter(candidate => !candidate.selector?.includes(el.selector))
   .filter(candidate => {
     // Is this a row or column?
     const rowcoords = candidate.coords;
     // If it's off the edge of the page ignore it
     if (rowcoords.left < 0 || rowcoords.top < 0) return false;
     // If it's too large ignore it
-    if (rowcoords.height > (elcoords.height * 3)) return false;
+    if (rowcoords.height > (el.coords.height * 3)) return false;
     // Is it centered on this node?
     return (
       // Is it a row?  We allow for slight offsets of generally 2/3 pixels
-      Math.abs(rowcoords.centerY - elcoords.centerY) < 2 ||
+      Math.abs(rowcoords.centerY - el.coords.centerY) < 2 ||
       // Is it a column?  Check immediately above/below
       (
-        Math.abs(rowcoords.top - elcoords.top) < MAX_SIBLING_DISTANCE && (
+        Math.abs(rowcoords.top - el.coords.top) < MAX_SIBLING_DISTANCE && (
           // Left-aligned
-          Math.abs(rowcoords.left - elcoords.left) < 2 ||
+          Math.abs(rowcoords.left - el.coords.left) < 2 ||
           // Right-aligned
-          Math.abs((rowcoords.left + rowcoords.width) - (elcoords.left + elcoords.width)) < 2
+          Math.abs((rowcoords.left + rowcoords.width) - (el.coords.left + el.coords.width)) < 2
         )
       )
     )
@@ -485,7 +485,7 @@ const fillOutSiblingText = (allElements: SearchElement[]) => {
         .flat()
         .filter(c => c != el)
 
-      el.data.siblingText = getSiblingText(el.data.coords, el.data.text, candidates.map(c => c.data));
+      el.data.siblingText = getSiblingText(el.data, candidates.map(c => c.data));
     }
   }
   return bucketed.flat()

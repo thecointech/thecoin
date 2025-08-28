@@ -15,29 +15,11 @@ export const AccountsSummary = processorFn("AccountsSummary", async (agent: Agen
 
 async function listAccounts(agent: Agent) {
   const api = await apis().getAccountSummaryApi();
-  // Get a list of all accounts
   const { data: accounts } = await api.listAccounts(await agent.page.getImage());
   agent.onProgress(25);
   log.trace(`Found ${accounts.accounts.length} accounts`);
-  // Click on each account
-  const allAccounts: ElementData[] = [];
-  for (const account of accounts.accounts) {
-
-    log.trace(`Processing account: ${account.account_number} - ${account.account_type} - ${account.balance}`);
-    // Find the most likely element describing this account
-    const found = await agent.page.toElement(accountToElementResponse(account), "account");
-    agent.onProgress(25 + (50 * allAccounts.length / accounts.accounts.length));
-
-    if (found) {
-      const data = {
-        ...found.data,
-        extra: {
-          accountType: account.account_type
-        }
-      };
-      allAccounts.push(data);
-    }
-  }
+  // Get a list of all accounts
+  const allAccounts = await findAccountElements(agent, accounts.accounts);
 
   // Update inferred with the real account numbers, then save balance/navigation
   let r: { account: AccountResponse, nav: FoundElement }[] = [];
@@ -68,6 +50,29 @@ async function listAccounts(agent: Agent) {
     agent.onProgress(75 + (25 * r.length / accounts.accounts.length));
   }
   return r;
+}
+
+export async function findAccountElements(agent: Agent, accounts: AccountResponse[]) {
+  // Click on each account
+  const allAccounts: ElementData[] = [];
+  for (const account of accounts) {
+
+    log.trace(`Processing account: ${account.account_number} - ${account.account_type} - ${account.balance}`);
+    // Find the most likely element describing this account
+    const found = await agent.page.toElement(accountToElementResponse(account), "account");
+    agent.onProgress(25 + (50 * allAccounts.length / accounts.length));
+
+    if (found) {
+      const data = {
+        ...found.data,
+        extra: {
+          accountType: account.account_type
+        }
+      };
+      allAccounts.push(data);
+    }
+  }
+  return allAccounts;
 }
 
 export async function saveBalanceElement(agent: Agent, account_number: string, crop: BBox) {

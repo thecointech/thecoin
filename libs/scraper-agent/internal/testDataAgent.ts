@@ -20,14 +20,18 @@ export class TestDataAgent extends TestData {
     const answerFile = `${this.matchedFolder}/${this.step}-answers.json`;
     const askUser = new DummyAskUser({}, answerFile);
     const agent = await Agent.create(this.target, askUser, url);
-    return {
-      ...agent,
-      [Symbol.asyncDispose]: async () => {
-        serializer?.[Symbol.dispose]();
-        mockedApi[Symbol.dispose]();
-        await agent[Symbol.asyncDispose]();
-      }
-    } as Agent;
+
+    // Store the original dispose method
+    const originalDispose = agent[Symbol.asyncDispose];
+
+    // Override the dispose method to include cleanup
+    agent[Symbol.asyncDispose] = async () => {
+      serializer?.[Symbol.dispose]();
+      mockedApi[Symbol.dispose]();
+      await originalDispose.call(agent);
+    };
+
+    return agent;
   }
 
   maybeSerializer(create?: boolean) {

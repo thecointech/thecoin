@@ -1,10 +1,20 @@
 import { jest } from "@jest/globals";
 import { getTestData } from "../../internal/getTestData";
-import { saveBalanceElement, updateAccountNumber } from "./accountSummary"
+import { findAccountElements, saveBalanceElement, updateAccountNumber } from "./accountSummary"
 import { IsManualRun, describe } from '@thecointech/jestutils';
 
 jest.setTimeout(5 * 60 * 1000);
 
+
+describe ("Correctly finds the account elements", () => {
+  const testData = getTestData("AccountsSummary", "account", "latest/TD");
+  it.each(testData)("Finds the correct element: %s", async (test) => {
+    await using agent = await test.agent();
+    const accounts = test.vqa("listAccounts");
+    const allAccounts = await findAccountElements(agent, accounts!.response.accounts);
+    expect(allAccounts.length).toEqual(accounts!.response.accounts.length);
+  })
+}, !!process.env.PRIVATE_TESTING_PAGES)
 
 describe ("Correctly finds the balance element", () => {
   const testData = getTestData("AccountsSummary", "accountBalanceElement", "2025-08-21_16-37/Tangerine");

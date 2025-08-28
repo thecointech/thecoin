@@ -46,8 +46,8 @@ export const accountToElementResponse = (account: AccountResponse) => ({
   position_y: account.position_y,
   background_color: "#f0f0f0",
   font_color: "#000000",
-  neighbour_text: `${account.account_type}, ${account.balance}`,
-  content: `${account.account_type} ${account.account_name} ${account.account_number} ${account.balance}`,
+  neighbour_text: `${account.balance}`, // At a guess it should be close to the balance
+  content: `${account.account_type} ${account.account_name} ${account.account_number}`,
 });
 
 

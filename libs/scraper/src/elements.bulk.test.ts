@@ -2,36 +2,31 @@ import { jest } from "@jest/globals";
 import { describe, IsManualRun } from "@thecointech/jestutils"
 import { getTestData, hasTestingPages } from "../internal/getTestData";
 import { getElementForEvent } from "./elements";
-import { writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { ElementNotFoundError } from "./errors";
 import { log } from "@thecointech/logging";
 import path from "node:path";
 import { OverrideData } from "../internal/overrides";
+import { TestData } from "../internal/testData";
 
 jest.setTimeout(20 * 60 * 1000);
 const MIN_ELEMENTS_IN_VALID_PAGE = 25;
 
-describe("It finds the same elements as before in archive", () => {
+describe("It finds the same elements as before in archive", runTests, hasTestingPages);
 
-  // Find all element files.
+describe("It runs only the failing tests in archive", () => {
+  runTests(getLastFailing());
+}, IsManualRun)
+
+function runTests(includeFilter?: string[]) {
   const testData = getTestData("*", "elm.json", "archive");
-
-  const overridePath = path.join(process.env.PRIVATE_TESTING_PAGES, "archive", `overrides-${Date.now()}.json`);
-  const overrides: OverrideData = {
-    skip: {},
-    overrides: {},
-  };
+  const overrides = initOverrides();
+  const currentlyFailing = new Set<string>();
   const results = [];
   it.each(testData)("Finds the correct element: %s", async (test) => {
-    // It's possible that the mhtml fails to write out
-    // in these cases we cannot test searching
-    if (!test.hasSnapshot()) {
+    if (shouldSkip(test, includeFilter)) {
       return;
     }
-    if (!toCheck.includes(test.key)) {
-      return;
-    }
-    console.log("Testing: ", test.key);
 
     const page = await test.page();
     const elements = test.elements();
@@ -95,6 +90,7 @@ describe("It finds the same elements as before in archive", () => {
             break;
           }
         }
+        currentlyFailing.add(test.key);
         throw e;
       }
 
@@ -102,22 +98,32 @@ describe("It finds the same elements as before in archive", () => {
   })
 
   afterAll(() => {
+    const overridePath = path.join(process.env.PRIVATE_TESTING_PAGES, "archive", `overrides-${Date.now()}.json`);
     writeFileSync(overridePath, JSON.stringify(overrides, null, 2));
+    writeFileSync(lastFailingFile(), JSON.stringify(Array.from(currentlyFailing), null, 2));
     console.table(results.map(r => ({ key: r.key, found: r.found.data.selector, expected: r.expected.selector })));
   })
-}, hasTestingPages)
+}
 
-
-const toCheck = [
-  'archive/2025-07-25_15-16/TD/TwoFA-0'
-// "archive/2025-07-25_15-16/Tangerine/AccountsSummary-0",
-// "archive/2025-07-25_15-16/TD/AccountsSummary-0",
-// "archive/2025-07-25_15-16/RBC/AccountsSummary-0",
-// "archive/2025-03-01/Tangerine/AccountsSummary-0",
-// "archive/2025-03-01/TD/AccountsSummary-0",
-
-  // "archive/2025-08-21_16-37/TD/AccountsSummary-0",
-  // "archive/2025-07-25_15-16/TD/AccountsSummary-0",
-  // "archive/2025-03-01/Tangerine/Logout-0",
-  // "archive/2025-03-01/TD/SendETransfer-1",
-]
+// Simple helper functions
+function getLastFailing(): string[] | null {
+  if (existsSync(lastFailingFile())) {
+    return JSON.parse(readFileSync(lastFailingFile(), "utf-8"));
+  }
+  return null;
+}
+function shouldSkip(test: TestData, includeFilter?: string[]) {
+  // It's possible that the mhtml fails to write out
+  // in these cases we cannot test searching
+  return (!test.hasSnapshot()) ||
+    (includeFilter?.includes(test.key) === false);
+}
+function initOverrides(): OverrideData {
+  return {
+    skip: {},
+    overrides: {},
+  }
+}
+function lastFailingFile() {
+  return path.join(process.env.PRIVATE_TESTING_PAGES, "archive", `failing-elm.json`);
+}
