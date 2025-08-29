@@ -115,10 +115,22 @@ async function getBestCandidate(candidates: FoundElement[], event: SearchElement
     maybeLogMessage(`Found candidate with score: ${candidate?.score} (${candidate?.data?.selector}), second best: ${sorted[1]?.score}`);
     // Do we need to worry about multiple candidates?
     if (sorted[1]?.score / candidate.score > 0.9) {
-      log.warn(` ** Second best candidate has  ${sorted[1]?.score} score`);
-      dbgPrintCandidate(sorted[1], event);
-      log.info(" ** best candidate ** ");
-      dbgPrintCandidate(candidate, event);
+      // Don't print out if the two candidates are descendents of each other.
+      // If they have the same text, they are probably the same as
+      // far as we are concerned.
+      const twoCandidatesAreEquivalent = (
+        candidate.data.text == sorted[1].data.text &&
+        (
+          candidate.data.selector?.includes(sorted[1].data.selector) ||
+          sorted[1].data.selector?.includes(candidate.data.selector)
+        )
+      )
+      if (!twoCandidatesAreEquivalent) {
+        log.warn(` ** Second best candidate has  ${sorted[1]?.score} score`);
+        dbgPrintCandidate(sorted[1], event);
+        log.info(" ** best candidate ** ");
+        dbgPrintCandidate(candidate, event);
+      }
     }
     return candidate;
   }
