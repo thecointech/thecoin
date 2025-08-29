@@ -6,9 +6,8 @@ import { enterValueIntoFound } from "@thecointech/scraper/replay";
 import { SearchElementData, FoundElement, SearchElement } from "@thecointech/scraper/types";
 import { Recorder, Registry } from "@thecointech/scraper/record";
 import { waitPageStable } from "@thecointech/scraper/utilities";
-import { _getImage } from "./getImage";
+import { _getImageFile } from "./getImage";
 import { _getPageIntent } from "./getPageIntent";
-import { File } from "@web-std/file";
 import { SectionType } from "./processors/types";
 import { WrappedError } from "./errors";
 import { apis } from "./apis";
@@ -141,9 +140,7 @@ export class PageHandler implements AsyncDisposable {
   }
 
   async getImage(fullPage: boolean = false) {
-
-    const image = await _getImage(this.page, fullPage);
-    return new File([image], "screenshot.png", { type: "image/png" });
+    return await _getImageFile(this.page, fullPage);
   }
 
   async getPageIntent() {

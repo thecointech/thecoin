@@ -1,4 +1,4 @@
-import { SectionName, EventSection, Agent } from '@thecointech/scraper-agent';
+import { SectionName, EventSection, Agent, AgentSerializer } from '@thecointech/scraper-agent';
 import { ScraperCallbacks } from "../scraper/callbacks";
 import { log } from "@thecointech/logging";
 import { type BackgroundTaskCallback } from "@/BackgroundTask/types";
@@ -38,6 +38,7 @@ export async function autoConfigure({ type, name, url, username, password, visib
 
   try {
     using _ = new VisibleOverride(visible)
+    using _serializer = maybeSerializeAgentRun(logger.logsFolder, name);
     await using agent = await Agent.create(name, inputBridge, url, logger);
     const baseNode = await agent.process(toSkip);
 
@@ -100,4 +101,11 @@ function throwIfAnyMissing(baseNode: EventSection, type: BankType) {
       throw new Error("CreditAccountDetails not configured");
     }
   }
+}
+
+function maybeSerializeAgentRun(basePath: string, target: string) {
+  if (process.env['HARVESTER_VERBOSE_AGENT']) {
+    return new AgentSerializer({recordFolder: basePath, target});
+  }
+  return null;
 }

@@ -93,6 +93,18 @@ export type FoundElement = SearchElement & {
   components: Record<string, number>,
 }
 
+// Needed in AgentSerializer for logging things
+export type VqaCallData = {
+  args: string[],
+  response: any,
+}
+export type TestElmData = FoundElement["data"]
+export type TestSchData = {
+  score: number,
+  components: any,
+  search: Omit<ElementSearchParams, "page">
+}
+
 
 export type NavigationEvent = BaseEvent & {
   type: "navigation",

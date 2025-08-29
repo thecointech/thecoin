@@ -1,22 +1,10 @@
 import { existsSync, readFileSync } from "fs";
 import path from "path";
 import { Page } from "puppeteer";
-import { FoundElement, ElementSearchParams, ElementData } from "../src/types";
+import { FoundElement, ElementSearchParams, ElementData, VqaCallData, TestElmData, TestSchData } from "../src/types";
 import { waitPageStable } from "../src/utilities";
 import { OverrideData, applyOverrides } from "./overrides";
 import { isEqual } from "lodash";
-
-export type VqaCallData = {
-  args: string[],
-  response: any,
-}
-// See matching type
-export type TestElmData = FoundElement["data"]
-export type TestSchData = {
-  score: number,
-  components: any,
-  search: Omit<ElementSearchParams, "page">
-}
 
 export class TestData {
   public readonly key: string;

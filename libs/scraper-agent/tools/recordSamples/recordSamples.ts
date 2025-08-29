@@ -1,14 +1,12 @@
-import { Recorder, Registry } from "@thecointech/scraper/record";
 import { init } from "../init";
 import { getConfig } from "../config";
-import { TestSerializer } from "./testSerializer";
+import { AgentSerializer } from "@/agentSerializer";
 import { getAllElements } from "@thecointech/scraper/elements";
 import { mkdirSync } from "fs";
 import path from "path";
 import { AskUserConsole } from "./askUserConsole";
-import { PageHandler } from "../../src/pageHandler";
-import { getCoordsWithMargin, mapInputToParent } from "../../src/elementUtils";
-import { Agent } from "../../src/agent";
+import { getCoordsWithMargin, mapInputToParent } from "@/elementUtils";
+import { Agent } from "@/agent";
 
 await init();
 const { baseFolder } = getConfig();
@@ -18,7 +16,7 @@ mkdirSync(recordFolder, { recursive: true });
 
 const target = process.argv[2] ?? "Target";
 using askUser = new AskUserConsole();
-const writer = new TestSerializer({ recordFolder, target });
+const writer = new AgentSerializer({ recordFolder, target });
 await using agent = await Agent.create(target, askUser);
 const page = agent.page;
 

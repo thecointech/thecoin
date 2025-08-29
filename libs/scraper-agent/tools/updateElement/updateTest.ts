@@ -1,12 +1,7 @@
-import { TestSerializer } from "../recordSamples/testSerializer";
+import { AgentSerializer } from "@/agentSerializer";
 import path from "path";
 import { getConfig } from "../config";
-import { newPage } from "@thecointech/scraper/puppeteer";
 import { init } from "../init";
-import { PageHandler } from "../../src/pageHandler";
-// import { selectDestination } from "../../src/processors/twofa";
-import { DummyAskUser } from "../recordSamples/dummyAskUser";
-import { TwofaApi } from "@thecointech/vqa";
 import { readFileSync } from "fs";
 import { setApi } from "@/apis";
 
@@ -16,7 +11,6 @@ const section = process.argv[3];
 await init();
 const { baseFolder } = getConfig();
 const recordFolder = path.join(baseFolder, "latest");
-
 
 const basePath = `${recordFolder}/${target}/${section}`;
 const baseUrl = path.join("file://", basePath.replace(" ", "%20"));
@@ -35,7 +29,7 @@ const mockApi = {
   getDestinationElements: () => ({ data: { buttons: vqaGetDestinationElements[counter++].options } }),
 }
 setApi(mockApi as any);
-const logger = new TestSerializer({
+const logger = new AgentSerializer({
   recordFolder,
   target,
   skipSections: [],

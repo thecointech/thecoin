@@ -1,18 +1,17 @@
-
 import { log, LoggerContext } from "@thecointech/logging";
-import { BankConfig, getConfig } from "../config.js";
-import { Agent } from '../../src/agent.js'
-import { init } from "../init.js";
-import { maybeCopyProfile, installBrowser } from "@thecointech/scraper/puppeteer";
-import { AskUserConsole } from './askUserConsole.js'
-import { TestSerializer } from './testSerializer.js'
-import path from "path";
-import { DateTime } from "luxon"
-import { LoginFailedError } from "../../src/errors.js";
-import { updateRecordLatest } from "./updateRecordLatest"
-import type { IAskUser, SectionType } from "../../src/processors/types.js";
-import { DummyAskUser } from "./dummyAskUser.js";
+import { installBrowser, maybeCopyProfile } from "@thecointech/scraper/puppeteer";
 import { mkdirSync } from "fs";
+import { DateTime } from "luxon";
+import path from "path";
+import { Agent } from '@/agent.js';
+import { AgentSerializer } from '@/agentSerializer.js';
+import { LoginFailedError } from "@/errors.js";
+import type { IAskUser } from "@/processors/types.js";
+import { BankConfig, getConfig } from "../config.js";
+import { init } from "../init.js";
+import { AskUserConsole } from './askUserConsole.js';
+import { DummyAskUser } from "./dummyAskUser.js";
+import { updateRecordLatest } from "./updateRecordLatest";
 
 const { baseFolder, config } = getConfig();
 
@@ -37,7 +36,7 @@ const failLoginTarget = (name: string) => name + "FailLogin"
 async function runAgent(name: string, url: string, askUser: IAskUser) {
   const writeDir = path.join(recordFolder, name);
   mkdirSync(writeDir, { recursive: true})
-  using serializer = new TestSerializer({ recordFolder, target: name});
+  using serializer = new AgentSerializer({ recordFolder, target: name});
   using _ = new LoggerContext({
     level: "trace",
     streams: [{

@@ -101,19 +101,6 @@ export class ScraperCallbacks implements IScraperCallbacks {
     })
   }
 
-  async onScreenshot(intent: string, screenshot: Buffer | Uint8Array, _page: Page) {
-    const outScFile = path.join(this.logsFolder, `${++this.counter}-${intent}.png`);
-    writeFileSync(outScFile, screenshot, { encoding: "binary" });
-  }
-
-  logJson(intent: string, name: string, _data: any): void {
-    log.info(`[${intent}] ${name}`);
-    writeFileSync(
-      path.join(this.logsFolder, `${this.counter}-${name}.json`),
-      JSON.stringify(_data, null, 2)
-    );
-  }
-
   async dumpPage(page: Page) {
     const dumpFolder = path.join(this.logsFolder, "error");
     mkdirSync(dumpFolder, { recursive: true });

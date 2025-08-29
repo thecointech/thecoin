@@ -1,19 +1,18 @@
 import { log } from "@thecointech/logging";
-import { mkdirSync, writeFileSync } from "fs";
-import path from "path";
+import { mkdirSync, writeFileSync } from "node:fs";
+import path from "node:path";
 import type { Page } from "puppeteer";
-import type { SectionName } from "../../src/types";
+import type { SectionName } from "./types";
 import { isPresent } from "@thecointech/utilities/ArrayExtns";
 import { doPixelMatch } from "@thecointech/scraper/utilities";
-import { IScraperCallbacks, ScraperProgress } from "@thecointech/scraper";
-import { AnyEvent, ElementSearchParams, FoundElement } from "@thecointech/scraper/types";
-import { _getImage, TakeScreenshotError } from "../../src/getImage";
-import { maybeCloseModal } from "../../src/modal";
-import { LoginFailedError } from "@/errors";
-import { ApiCallEvent, bus } from "@/eventbus";
+import { _getImage, TakeScreenshotError } from "./getImage";
+import { maybeCloseModal } from "./modal";
+import { LoginFailedError } from "./errors";
+import { ApiCallEvent, bus } from "./eventbus";
 import { EventBus } from "@thecointech/scraper/events/eventbus";
-import type { TestSchData } from "@thecointech/scraper/testutils";
-
+import type { AnyEvent, ElementSearchParams, FoundElement } from "@thecointech/scraper/types";
+import type { TestSchData } from "@thecointech/scraper";
+import { File } from "@web-std/file";
 
 // How many pixels must change to consider it a new screenshot
 const MIN_PIXELS_CHANGED = 100;
@@ -23,14 +22,17 @@ const MIN_PIXELS_CHANGED = 100;
 //   section/  <-- The over-all section (eg login/sendTransfer etc)
 //       0.png <-- Every folder has a screenshot
 //       0.mhtml
-//       0-action-vqa.json  <-- VQA output
-//       0-action-elm.json  <-- Element found in scraper
+//       0-0-apiCall-vqa.json  <-- VQA output
+//       0-1-action-elm.json  <-- Element found in scraper
+//       0-1-action-sch.json  <-- Search arguments for elm
 //       1.png
 //       1.mhtml
-//       1-etc-vqa.json
+//       1-0-apiCall-vqa.json
 //       ...
 
-export class TestSerializer implements IScraperCallbacks, Disposable {
+// This class can be used to write out the full
+// execution of an agent to a folder
+export class AgentSerializer implements Disposable {
 
   _recordFolder: string
 
@@ -75,7 +77,7 @@ export class TestSerializer implements IScraperCallbacks, Disposable {
     const image = args.find((arg) => arg instanceof File) as File;
     if (image) {
       // Save the image
-      await this.onScreenshot(Buffer.from(await image.arrayBuffer()));
+      await this.logScreenshot(Buffer.from(await image.arrayBuffer()));
       // Remove the image from the args
       args.splice(args.indexOf(image), 1);
     }
@@ -138,11 +140,6 @@ export class TestSerializer implements IScraperCallbacks, Disposable {
     return false;
   }
 
-  onProgress(progress: ScraperProgress) {
-    log.info(`Progress: ${progress.stage} - ${progress.stepPercent}%`);
-    return true;
-  }
-
   pauseWriting() {
     return this.tracker.currentSection == "Initial" || this._skipSections.includes(this.tracker.currentSection);
   }
@@ -168,7 +165,7 @@ export class TestSerializer implements IScraperCallbacks, Disposable {
     this.tracker.lastScreenshot = screenshot;
   }
 
-  async onScreenshot(screenshot: Buffer|Uint8Array, page?: Page): Promise<void> {
+  async logScreenshot(screenshot: Buffer|Uint8Array): Promise<void> {
     if (this.pauseWriting()) {
       return;
     }
@@ -250,7 +247,7 @@ export class TestSerializer implements IScraperCallbacks, Disposable {
 
   async logFailedLogin(page: Page, error: LoginFailedError) {
     const image = await _getImage(page);
-    await this.onScreenshot(image, page);
+    await this.logScreenshot(image);
     await this.logJson("error-vqa", error.vqaResponse);
   }
 }

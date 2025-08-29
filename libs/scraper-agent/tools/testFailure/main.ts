@@ -3,7 +3,7 @@ import { getConfig } from "../config";
 import { readFileSync } from "node:fs";
 import { responseToElement } from "../../src/vqaResponse";
 import { init } from "../init";
-import { _getImage } from "../../src/getImage";
+import { _getImageFile } from "../../src/getImage";
 import { newPage } from "@thecointech/scraper/puppeteer";
 
 const { baseFolder } = getConfig();

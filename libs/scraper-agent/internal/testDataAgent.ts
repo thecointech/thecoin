@@ -2,7 +2,7 @@ import { TestData } from "@thecointech/scraper/testutils";
 import { Agent } from "@/agent";
 import { DummyAskUser } from "../tools/recordSamples/dummyAskUser";
 
-import { TestSerializer } from "../tools/recordSamples/testSerializer";
+import { AgentSerializer } from "@/agentSerializer";
 import { mockApi } from "./mockApi";
 import path from "path";
 import { Section } from "@/processors/types";
@@ -38,7 +38,7 @@ export class TestDataAgent extends TestData {
     if (!create) {
       return null;
     }
-    const serializer = new TestSerializer({
+    const serializer = new AgentSerializer({
       recordFolder: this.matchedFolder,
       target: this.target,
     });
