@@ -6,6 +6,7 @@ import { Registry } from './registry';
 import { sleep } from '@thecointech/async';
 import { EventEmitter } from 'node:events';
 import { waitUntilLoadComplete } from './waitLoadComplete';
+import { randomUUID } from "node:crypto";
 
 type EventCallback = (event: AnyEvent, page: Page, name: string, step: number) => void;
 
@@ -178,7 +179,7 @@ export class Recorder extends EventEmitter implements AsyncDisposable {
 
 function onNewDocument() {
 
-  __onAnyEvent({ type: "navigation", to: window.location.href, timestamp: Date.now(), id: crypto.randomUUID() });
+  __onAnyEvent({ type: "navigation", to: window.location.href, timestamp: Date.now(), id: randomUUID() });
 
   globalThis.__clickAction = "click";
   globalThis.__clickTypeFilter = undefined;
@@ -198,7 +199,7 @@ function onNewDocument() {
       __onAnyEvent({
         type: 'load',
         timestamp: Date.now(),
-        id: crypto.randomUUID()
+        id: randomUUID()
       })
     });
 
@@ -206,7 +207,7 @@ function onNewDocument() {
       __onAnyEvent({
         type: 'load',
         timestamp: Date.now(),
-        id: crypto.randomUUID(),
+        id: randomUUID(),
       })
     });
 
@@ -250,7 +251,7 @@ function onNewDocument() {
 
         const evt = {
           timestamp: Date.now(),
-          id: crypto.randomUUID(),
+          id: randomUUID(),
           clickX: ev.pageX,
           clickY: ev.pageY,
           ...data
@@ -308,7 +309,7 @@ function onNewDocument() {
         type: "input",
         eventName: "valueChange",
         timestamp: Date.now(),
-        id: crypto.randomUUID(),
+        id: randomUUID(),
         valueChange: true,
         value: target?.value,
         ...window.getElementData(target)!
@@ -323,7 +324,7 @@ function onNewDocument() {
             type: "input",
             eventName: "hitEnter",
             timestamp: Date.now(),
-            id: crypto.randomUUID(),
+            id: randomUUID(),
             hitEnter: true,
             value: (ev.target as HTMLInputElement)?.value,
             ...window.getElementData(ev.target as HTMLElement)!
@@ -334,7 +335,7 @@ function onNewDocument() {
             type: "input",
             eventName: "keyDown",
             timestamp: Date.now(),
-            id: crypto.randomUUID(),
+            id: randomUUID(),
             value: (ev.target as HTMLInputElement)?.value + ev.key,
             ...window.getElementData(ev.target as HTMLElement)!
           })

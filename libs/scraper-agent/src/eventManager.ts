@@ -4,6 +4,7 @@ import type { Page } from "puppeteer";
 import type { EventSection, SectionName } from "./types";
 import { getValueParsing } from "@thecointech/scraper/valueParsing";
 import { bus } from "./eventbus";
+import { randomUUID } from "node:crypto";
 
 /**
  * A manager for events that occur during a scrape.
@@ -54,7 +55,7 @@ export class EventManager {
       type: "value",
       eventName: name,
       timestamp: Date.now(),
-      id: crypto.randomUUID(),
+      id: randomUUID(),
       ...element.data
     };
 
@@ -74,7 +75,7 @@ export class EventManager {
           type: "dynamicInput",
           eventName: name,
           timestamp: Date.now(),
-          id: crypto.randomUUID(),
+          id: randomUUID(),
           ...element,
         };
         this.pushEvent(event);
