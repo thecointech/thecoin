@@ -61,6 +61,9 @@ export class TestData {
   elements(): string[] {
     return this.jsonFiles.filter(f => f.endsWith("-elm.json"));
   }
+  searches(): string[] {
+    return this.jsonFiles.filter(f => f.endsWith("-sch.json"));
+  }
 
   private json<T>(file: string): T {
     return JSON.parse(readFileSync(path.join(this.matchedFolder, file), "utf-8"));
@@ -88,6 +91,13 @@ export class TestData {
     return null;
   }
 
+  *vqa_iter(fnName: string): Generator<VqaCallData, void, unknown> {
+    const files = this.jsonFiles.filter(f => f.includes(fnName) && f.endsWith("-vqa.json"));
+    for (const file of files) {
+      yield this.json<VqaCallData>(file);
+    }
+  }
+
   elm(name: string): TestElmData | null {
     const element = this.jsonFiles.find(f => f.includes(name) && f.endsWith("-elm.json"));
     if (!element) {
@@ -97,6 +107,13 @@ export class TestData {
     const rawJson: TestElmData = JSON.parse(readFileSync(path.join(this.matchedFolder, element), "utf-8"));
     applyOverrides(this.overrideData, this.key, testName!, rawJson);
     return rawJson;
+  }
+
+  *elm_iter(fnName: string): Generator<TestElmData, void, unknown> {
+    const files = this.jsonFiles.filter(f => f.includes(fnName) && f.endsWith("-elm.json"));
+    for (const file of files) {
+      yield this.json<TestElmData>(file);
+    }
   }
 
   sch(name: string): TestSchData | null {

@@ -3,9 +3,9 @@ import { AnyEvent, InputEvent } from '../types';
 import { log } from '@thecointech/logging';
 import { RecorderOptions } from './types';
 import { Registry } from './registry';
-import { waitUntilLoadComplete } from './waitLoadComplete';
 import { sleep } from '@thecointech/async';
 import { EventEmitter } from 'node:events';
+import { waitUntilLoadComplete } from './waitLoadComplete';
 
 type EventCallback = (event: AnyEvent, page: Page, name: string, step: number) => void;
 
@@ -42,19 +42,19 @@ export class Recorder extends EventEmitter implements AsyncDisposable {
     this.options = options;
   }
 
-  async initialize(page: Page, url: string|undefined) {
+  async initialize(page: Page) {
     this._page = page;
 
     await page.exposeFunction('__onAnyEvent', this.eventHandler);
 
     await page.evaluateOnNewDocument(onNewDocument);
 
-    if (url && url != "about:blank") {
-      await page.goto(url, { waitUntil: "networkidle2" });
-      await waitUntilLoadComplete(page);
-    }
-
     return page;
+  }
+
+  async goto(url: string) {
+    await this.page.goto(url, { waitUntil: "networkidle2" });
+    await waitUntilLoadComplete(this.page);
   }
 
   async [Symbol.asyncDispose]() {
@@ -84,7 +84,8 @@ export class Recorder extends EventEmitter implements AsyncDisposable {
 
   async clone(subName: string) {
     const url = this.page.url();
-    const newRecorder = await Registry.create({ ...this.options, name: `${this.options.name}-${subName}` }, url);
+    const newRecorder = await Registry.create({ ...this.options, name: `${this.options.name}-${subName}` });
+    await newRecorder.goto(url);
     return newRecorder;
   }
 

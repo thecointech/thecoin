@@ -1,20 +1,39 @@
 import { jest } from "@jest/globals";
 import { getTestData } from "../../internal/getTestData";
-import { findAccountElements, saveBalanceElement, updateAccountNumber } from "./accountSummary"
-import { IsManualRun, describe } from '@thecointech/jestutils';
+import { findAccountElements, saveAccountNavigation, saveBalanceElement, updateAccountNumber } from "./accountSummary"
+import { describe } from '@thecointech/jestutils';
+import { hasTestingPages } from "@thecointech/scraper/testutils";
+import { OverviewResponse } from "@thecointech/vqa";
+
 
 jest.setTimeout(5 * 60 * 1000);
 
-
 describe ("Correctly finds the account elements", () => {
   const testData = getTestData("AccountsSummary", "account", "latest/TD");
-  it.each(testData)("Finds the correct element: %s", async (test) => {
+  it.each(testData)("For: %s", async (test) => {
     await using agent = await test.agent();
     const accounts = test.vqa("listAccounts");
     const allAccounts = await findAccountElements(agent, accounts!.response.accounts);
     expect(allAccounts.length).toEqual(accounts!.response.accounts.length);
   })
-}, !!process.env.PRIVATE_TESTING_PAGES)
+}, hasTestingPages)
+
+
+describe('Updates to the correct account number', () => {
+  const tests = getTestData("AccountsSummary", "account")
+  it.each(tests)(`For: %s`, (test) => {
+    const listed = test.vqa("listAccounts");
+    for (const inferred of listed!.response.accounts) {
+      const element = test.elm("account");
+      const actual = updateAccountNumber(inferred, element!)
+      // This is sufficient for the tests we have now, but likely will not work
+      // in more complicated situations.
+      const siblings = element?.siblingText?.map(s => s.replaceAll(/[a-zA-Z]/g, "").trim())
+      expect(siblings).toContain(actual);
+    }
+  })
+}, hasTestingPages)
+
 
 describe ("Correctly finds the balance element", () => {
   const testData = getTestData("AccountsSummary", "accountBalanceElement", "2025-08-21_16-37/Tangerine");
@@ -27,39 +46,32 @@ describe ("Correctly finds the balance element", () => {
     expect(elm).toBeDefined();
     expect(elm.data.text).toEqual(original?.search.event.text);
   })
-}, !!process.env.PRIVATE_TESTING_PAGES)
+}, hasTestingPages)
 
-describe ("Correctly finds the dueDate element", () => {
-  const testData = getTestData("CreditAccountDetails", "dueDate", "archive/2025-07-25_15-16/**/TD");
-  it.each(testData)("Finds the correct element: %s", async (test) => {
+
+describe("Correctly finds the navigation element", () => {
+  const testData = getTestData("AccountsSummary", "navigate", "latest/TD");
+  it.each(testData)("For: %s", async (test) => {
     await using agent = await test.agent();
-    const vqa = test.vqa("dueDate");
-    const elm = await agent.page.toElement(vqa!.response!, {
-      eventName: "testing",
-      parsing: {
-        type: "date",
-        format: null,
-      }
-    });
-    expect(elm.data.text).toEqual(vqa!.response!.content);
-  })
-}, !!process.env.PRIVATE_TESTING_PAGES)
-
-describe('cached tests', () => {
-  const tests = getTestData("AccountsSummary", "account")
-  it.each(tests)(`Updates to the correct account number for: %s`, (test) => {
-    const listed = test.vqa("listAccounts");
-
-    for (const inferred of listed!.response.accounts) {
-      const element = test.elm("account");
-
-      const actual = updateAccountNumber(inferred, element!)
-
-      // This is sufficient for the tests we have now, but likely will not work
-      // in more complicated situations.
-      const siblings = element?.siblingText?.map(s => s.replaceAll(/[a-zA-Z]/g, "").trim())
-      expect(siblings).toContain(actual);
+    const { response } : { response: OverviewResponse } = test.vqa("listAccounts")!;
+    const queryIter = test.vqa_iter("accountNavigateElement");
+    const elms = test.elm_iter("navigate-")
+    for (const [account, query, elm] of zip(response.accounts, [...queryIter], [...elms])) {
+      // Get the real account number
+      account!.account_number = query!.args[0]
+      const found = await saveAccountNavigation(agent, account!);
+      // expect(found.data.text).toEqual(elm!.text);
     }
   })
-}, !!process.env.PRIVATE_TESTING_PAGES)
+}, hasTestingPages)
 
+
+// Utility function to zip multiple arrays together
+function* zip<T extends readonly unknown[]>(...arrays: { [K in keyof T]: Iterable<T[K]> }): Generator<T> {
+  const iterators = arrays.map(arr => arr[Symbol.iterator]());
+  while (true) {
+    const results = iterators.map(iter => iter.next());
+    if (results.some(result => result.done)) break;
+    yield results.map(result => result.value) as unknown as T;
+  }
+}

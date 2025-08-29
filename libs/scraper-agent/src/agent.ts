@@ -24,11 +24,18 @@ export class Agent implements AsyncDisposable {
     this.page = page;
     this.input = input;
     this.callbacks = callbacks;
+
+    this.page.recorder.onEvent(this.events.onEvent);
   }
 
   static async create(name: string, input: IAskUser, bankUrl?: string, callbacks?: IScraperCallbacks) {
-    const page = await PageHandler.create(name, bankUrl ?? "");
-    return new Agent(name, input, page, callbacks);
+    const page = await PageHandler.create(name);
+    const agent = new Agent(name, input, page, callbacks);
+    if (bankUrl) {
+      // We start the process only once the recorder/agent is fully hooked up.
+      await agent.page.recorder.goto(bankUrl);
+    }
+    return agent;
   }
 
   async [Symbol.asyncDispose]() {
@@ -130,6 +137,7 @@ export class Agent implements AsyncDisposable {
     if (cloneTab) {
       // Connect clone to event manager
       cloneTab.sectionPage.onEvent(this.events.onEvent);
+      this.events.pushPageFilter(cloneTab.sectionPage.page);
     }
     const cachedAgent = this;
     const events = this.events.pushSection(subName);
@@ -142,6 +150,9 @@ export class Agent implements AsyncDisposable {
         // care about, so pause the event manager for this
         using _ = cachedAgent.events.pause();
         await cloneTab?.[Symbol.asyncDispose]();
+        if (cloneTab) {
+          cachedAgent.events.popPageFilter();
+        }
       }
     };
   }

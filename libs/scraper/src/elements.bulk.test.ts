@@ -18,16 +18,15 @@ describe("It runs only the failing tests in archive", () => {
   runTests(getLastFailing());
 }, IsManualRun)
 
-function runTests(includeFilter?: string[]) {
+function runTests(includeFilter?: IncludeFilter) {
   const testData = getTestData("*", "elm.json", "archive");
   const overrides = initOverrides();
   const currentlyFailing = new Set<string>();
   const results = [];
-  it.each(testData)("Finds the correct element: %s", async (test) => {
-    if (shouldSkip(test, includeFilter)) {
-      return;
-    }
-
+  const filtered = testData.filter(test => !shouldSkip(test, includeFilter));
+  const counter = makeCounter(filtered);
+  it.each(filtered)("Finds the correct element: %s", async (test) => {
+    counter();
     const page = await test.page();
     const elements = test.elements();
     for (let i = 0; i < elements.length; i++) {
@@ -100,30 +99,65 @@ function runTests(includeFilter?: string[]) {
   afterAll(() => {
     const overridePath = path.join(process.env.PRIVATE_TESTING_PAGES, "archive", `overrides-${Date.now()}.json`);
     writeFileSync(overridePath, JSON.stringify(overrides, null, 2));
-    writeFileSync(lastFailingFile(), JSON.stringify(Array.from(currentlyFailing), null, 2));
+    writeLastFailing(currentlyFailing);
     console.table(results.map(r => ({ key: r.key, found: r.found.data.selector, expected: r.expected.selector })));
   })
 }
 
 // Simple helper functions
-function getLastFailing(): string[] | null {
+
+type IncludeFilter = {
+  exclude: string[];
+  include: string[];
+}
+function getLastFailing(): IncludeFilter | null {
   if (existsSync(lastFailingFile())) {
     return JSON.parse(readFileSync(lastFailingFile(), "utf-8"));
   }
   return null;
 }
-function shouldSkip(test: TestData, includeFilter?: string[]) {
-  // It's possible that the mhtml fails to write out
-  // in these cases we cannot test searching
-  return (!test.hasSnapshot()) ||
-    (includeFilter?.includes(test.key) === false);
+
+function writeLastFailing(failing: Set<string>) {
+  writeFileSync(lastFailingFile(), JSON.stringify({
+    include: Array.from(failing),
+    exclude: [],
+  }, null, 2));
 }
+
+function shouldSkip(test: TestData, includeFilter?: IncludeFilter) {
+  // If missing data, just skip
+  if (!test.hasSnapshot() || test.searches().length == 0) {
+    return true;
+  }
+  if (includeFilter) {
+    return (
+      !includeFilter.include.includes(test.key) ||
+      includeFilter.exclude.includes(test.key)
+    );
+  }
+  return false
+}
+
 function initOverrides(): OverrideData {
   return {
     skip: {},
     overrides: {},
   }
 }
+
 function lastFailingFile() {
   return path.join(process.env.PRIVATE_TESTING_PAGES, "archive", `failing-elm.json`);
 }
+
+function makeCounter(filtered: TestData[]) {
+  let count = 0;
+  return () => {
+    count++;
+    if (count % 10 == 0) {
+      console.log(`Running test ${count} of ${filtered.length}`);
+    }
+    return count;
+  }
+}
+
+

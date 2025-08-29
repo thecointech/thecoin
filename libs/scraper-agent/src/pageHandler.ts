@@ -52,14 +52,13 @@ export class PageHandler implements AsyncDisposable {
     this.recorderStack = [recorder];
   }
 
-  static async create(name: string, bankUrl: string) {
+  static async create(name: string) {
     const recorder = await Registry.create({
       name,
       // Recording always happens in the "default" context
       // as it's necessary to store 2FA credentials
       context: "default",
-      // onEvent: eventManager.onEvent
-    }, bankUrl);
+    });
     return new PageHandler(recorder);
   }
 

@@ -89,7 +89,7 @@ export async function saveBalanceElement(agent: Agent, account_number: string, c
   await agent.events.pushValueEvent<ChequeBalanceResult>(element, "balance", "currency");
 }
 
-async function saveAccountNavigation(agent: Agent, account: AccountResponse) {
+export async function saveAccountNavigation(agent: Agent, account: AccountResponse) {
   const api = await apis().getAccountSummaryApi();
   const { data: nav } = await api.accountNavigateElement(account.account_number, await agent.page.getImage());
   const asResponse = {

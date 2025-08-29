@@ -30,6 +30,13 @@ interface IPauser extends Disposable {
 type NoInfer<T> = [T][T extends any ? 0 : never];
 
 export class EventManager {
+  private _eventFilters: Page[] = [];
+  pushPageFilter(page: Page) {
+    this._eventFilters.push(page);
+  }
+  popPageFilter() {
+    this._eventFilters.pop();
+  }
 
   allEvents: EventSection = { section: "Initial", events: [] }
   sectionStack: IEventSectionManager[] = [];
@@ -79,8 +86,14 @@ export class EventManager {
     return mgr;
   }
 
-  onEvent = async (event: AnyEvent, _page: Page, name: string, step: number) => {
+  onEvent = async (event: AnyEvent, page: Page, name: string, step: number) => {
     if (!this.currentEvents) throw new Error("No events list set!");
+
+    // Only listen to events from the current page
+    const filter = this._eventFilters.at(-1);
+    if (filter && filter != page) {
+      return;
+    }
 
     const pauser = this._eventPausers.at(-1);
     if (pauser) {
