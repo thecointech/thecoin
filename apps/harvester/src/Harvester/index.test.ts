@@ -2,6 +2,9 @@ import { jest } from '@jest/globals';
 import PouchDB from 'pouchdb';
 import memory from 'pouchdb-adapter-memory'
 import { Wallet } from 'ethers';
+import { DateTime } from 'luxon';
+import currency from 'currency.js';
+import type { HarvestData } from './types';
 
 PouchDB.plugin(memory)
 jest.setTimeout(30000);
@@ -49,3 +52,147 @@ it ('runs the full stack', async () => {
   const r2 = await harvest();
   expect(r2).toBe(true);
 })
+
+
+describe('shouldSkipHarvest', () => {
+
+  const createMockHarvestData = (overrides: any = {}) => ({
+    date: DateTime.now(),
+    visa: {
+      dueDate: DateTime.now().plus({ days: 10 }),
+      balance: new currency(1000),
+      dueAmount: new currency(500),
+      ...overrides.visa
+    },
+    chq: {
+      balance: new currency(2000),
+      ...overrides.chq
+    },
+    delta: [],
+    state: {
+      harvesterBalance: new currency(0),
+      stepData: {},
+      ...overrides.state
+    },
+    ...overrides
+  });
+
+  let shouldSkipHarvest: (state: HarvestData) => boolean;
+  beforeAll(async () => {
+    shouldSkipHarvest = (await import('./index')).shouldSkipHarvest;
+  })
+
+  it('should return false when lastDueDate exists', () => {
+    const mockData = createMockHarvestData({
+      state: {
+        harvesterBalance: new currency(0),
+        stepData: { 'PayVisa': DateTime.now().toISO() }
+      }
+    });
+
+    const result = shouldSkipHarvest(mockData);
+    expect(result).toBe(false);
+  });
+
+  it('should return false when harvesterBalance is not zero', () => {
+    const mockData = createMockHarvestData({
+      state: {
+        harvesterBalance: new currency(100),
+        stepData: {}
+      }
+    });
+
+    const result = shouldSkipHarvest(mockData);
+    expect(result).toBe(false);
+  });
+
+  it('should return false when due date is more than 5 days away', () => {
+    const mockData = createMockHarvestData({
+      visa: {
+        dueDate: DateTime.now().plus({ days: 10 })
+      },
+      state: {
+        harvesterBalance: new currency(0),
+        stepData: {}
+      }
+    });
+
+    const result = shouldSkipHarvest(mockData);
+    expect(result).toBe(false);
+  });
+
+  it('should return true when due date is within 5 days and conditions are met', () => {
+    const mockData = createMockHarvestData({
+      visa: {
+        dueDate: DateTime.now().plus({ days: 3 })
+      },
+      state: {
+        harvesterBalance: new currency(0),
+        stepData: {}
+      }
+    });
+
+    const result = shouldSkipHarvest(mockData);
+    expect(result).toBe(true);
+  });
+
+  it('should return true when due date is today and conditions are met', () => {
+    const mockData = createMockHarvestData({
+      visa: {
+        dueDate: DateTime.now()
+      },
+      state: {
+        harvesterBalance: new currency(0),
+        stepData: {}
+      }
+    });
+
+    const result = shouldSkipHarvest(mockData);
+    expect(result).toBe(true);
+  });
+
+  it('should return true when due date has passed and conditions are met', () => {
+    const mockData = createMockHarvestData({
+      visa: {
+        dueDate: DateTime.now().minus({ days: 1 })
+      },
+      state: {
+        harvesterBalance: new currency(0),
+        stepData: {}
+      }
+    });
+
+    const result = shouldSkipHarvest(mockData);
+    expect(result).toBe(false);
+  });
+
+  it('should handle edge case when due date is exactly 5 days away', () => {
+    const mockData = createMockHarvestData({
+      visa: {
+        dueDate: DateTime.now().plus({ days: 5 })
+      },
+      state: {
+        harvesterBalance: new currency(0),
+        stepData: {}
+      }
+    });
+
+    const result = shouldSkipHarvest(mockData);
+    expect(result).toBe(false);
+  });
+
+  it('should return false when harvesterBalance intValue is not zero', () => {
+    const mockData = createMockHarvestData({
+      visa: {
+        dueDate: DateTime.now().plus({ days: 3 })
+      },
+      state: {
+        harvesterBalance: new currency(0.01), // Small amount but not zero
+        stepData: {}
+      }
+    });
+
+    const result = shouldSkipHarvest(mockData);
+    expect(result).toBe(false);
+  });
+});

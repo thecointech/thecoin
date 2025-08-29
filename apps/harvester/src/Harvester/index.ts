@@ -4,7 +4,7 @@ import { processState } from './processState';
 import { initialize } from './initialize';
 import { closeBrowser } from '@thecointech/scraper/puppeteer';
 import { DateTime } from 'luxon';
-import { getDataAsDate } from './types';
+import { getDataAsDate, HarvestData } from './types';
 import { PayVisaKey } from './steps/PayVisa';
 import { notifyError } from './notify';
 import { exec } from 'child_process';
@@ -21,19 +21,10 @@ export async function harvest(callback?: BackgroundTaskCallback) {
     log.info(`Resume from last: harvesterBalance ${state.state.harvesterBalance}`);
 
     // Sanity check - If we have have not run prior
-    const lastDueDate = getDataAsDate(PayVisaKey, state.state.stepData);
-    if (!lastDueDate && state.state.harvesterBalance?.intValue == 0) {
-      // and are too close to the due date, there isn't much
-      // point transferring in & straight back out, so skip this run
-      const cutoff = DateTime.now().minus({ days: 5 });
-      if (state.visa.dueDate > cutoff) {
-        log.info(
-          'Skipping Harvest because {DueDate} is past {Cutoff}',
-          { DueDate: state.visa.dueDate.toSQLDate(), Cutoff: cutoff.toSQLDate() }
-        );
-        return false;
-      }
+    if (shouldSkipHarvest(state)) {
+      return false;
     }
+
     const nextState = await processState(stages, state, user);
 
     if (nextState.errors) {
@@ -81,4 +72,26 @@ export async function harvest(callback?: BackgroundTaskCallback) {
   finally {
     await closeBrowser();
   }
+}
+
+
+export function shouldSkipHarvest(state: HarvestData) {
+  const lastDueDate = getDataAsDate(PayVisaKey, state.state.stepData);
+  if (!lastDueDate && state.state.harvesterBalance?.intValue == 0) {
+    // and are too close to the due date, there isn't much
+    // point transferring in & straight back out, so skip this run
+    const dueDate = state.visa.dueDate;
+    const cutoff = dueDate.minus({ days: 5 });
+    const now = DateTime.now();
+    // However, if cutoff was in the past, we assume it's
+    // been handled, so continue
+    if (cutoff < now && dueDate > now.minus({ days: 1 })) {
+      log.info(
+        'Skipping Harvest because {DueDate} is past {Cutoff}',
+        { DueDate: dueDate.toSQLDate(), Cutoff: cutoff.toSQLDate() }
+      );
+      return true;
+    }
+  }
+  return false;
 }
