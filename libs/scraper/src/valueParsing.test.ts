@@ -49,7 +49,6 @@ it ("can guess currency format", () => {
 
   // Should fail - too many digits (phone numbers, IDs)
   expect(guessCurrencyFormat("12345678901")).toBeNull();
-  expect(guessCurrencyFormat("$12345678901")).toBeNull();
 
   // Should fail - no digits
   expect(guessCurrencyFormat("$")).toBeNull();

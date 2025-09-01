@@ -111,14 +111,18 @@ type IncludeFilter = {
   include: string[];
 }
 function getLastFailing(): IncludeFilter | null {
-  if (existsSync(lastFailingFile())) {
-    return JSON.parse(readFileSync(lastFailingFile(), "utf-8"));
+  const file = lastFailingFile();
+  if (!file) return null;
+  if (existsSync(file)) {
+    return JSON.parse(readFileSync(file, "utf-8"));
   }
   return null;
 }
 
 function writeLastFailing(failing: Set<string>) {
-  writeFileSync(lastFailingFile(), JSON.stringify({
+  const file = lastFailingFile();
+  if (!file) return;
+  writeFileSync(file, JSON.stringify({
     include: Array.from(failing),
     exclude: [],
   }, null, 2));
@@ -146,7 +150,9 @@ function initOverrides(): OverrideData {
 }
 
 function lastFailingFile() {
-  return path.join(process.env.PRIVATE_TESTING_PAGES, "archive", `failing-elm.json`);
+  return process.env.PRIVATE_TESTING_PAGES
+    ? path.join(process.env.PRIVATE_TESTING_PAGES, "archive", `failing-elm.json`)
+    : null;
 }
 
 function makeCounter(filtered: TestData[]) {

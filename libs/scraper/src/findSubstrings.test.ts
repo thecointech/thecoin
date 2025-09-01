@@ -80,7 +80,7 @@ describe("findMaximalCommonSubstrings", () => {
   })
 
   it('does great', () => {
-    const result = findMaximalCommonSubstrings("12345 12345", "22345 12345")
-    expect(result).toEqual(["2345 ", "12345"]);
+    const result = findMaximalCommonSubstrings("12345 112345", "22345 12345")
+    expect(result).toEqual(["2345 1", "2345"]);
   })
 });
