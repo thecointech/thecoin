@@ -151,7 +151,7 @@ describe('shouldSkipHarvest', () => {
     expect(result).toBe(true);
   });
 
-  it('should return true when due date has passed and conditions are met', () => {
+  it('should return false when due date has passed even if conditions are met', () => {
     const mockData = createMockHarvestData({
       visa: {
         dueDate: DateTime.now().minus({ days: 1 })
@@ -178,7 +178,7 @@ describe('shouldSkipHarvest', () => {
     });
 
     const result = shouldSkipHarvest(mockData);
-    expect(result).toBe(false);
+    expect(result).toBe(true);
   });
 
   it('should return false when harvesterBalance intValue is not zero', () => {

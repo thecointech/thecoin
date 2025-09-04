@@ -77,20 +77,25 @@ export async function harvest(callback?: BackgroundTaskCallback) {
 
 export function shouldSkipHarvest(state: HarvestData) {
   const lastDueDate = getDataAsDate(PayVisaKey, state.state.stepData);
+  // If we don't have a lastDueDate and 0 balance, we need
+  // to check if it's worth running harvester this time.
+  // If the nextDueDate is soon it may not be a good idea
+  // to transfer $ in just to transfer them back out again.
   if (!lastDueDate && state.state.harvesterBalance?.intValue == 0) {
-    // and are too close to the due date, there isn't much
-    // point transferring in & straight back out, so skip this run
-    const dueDate = state.visa.dueDate;
-    const cutoff = dueDate.minus({ days: 5 });
+
+    const nextDueDate = state.visa.dueDate;
+    const cutoff = nextDueDate.minus({ days: 5 });
     const now = DateTime.now();
-    // However, if cutoff was in the past, we assume it's
-    // been handled, so continue
-    if (cutoff < now && dueDate > now.minus({ days: 1 })) {
-      log.info(
-        'Skipping Harvest because {DueDate} is past {Cutoff}',
-        { DueDate: dueDate.toSQLDate(), Cutoff: cutoff.toSQLDate() }
-      );
-      return true;
+    // If we are past the cutoff date, we may skip
+    if (now >= cutoff) {
+      // We skip if nextDueDate has not already passed
+      if (now.minus({ days: 1 }) < nextDueDate) {
+        log.info(
+          'Skipping Harvest because {DueDate} is past {Cutoff}',
+          { DueDate: nextDueDate.toSQLDate(), Cutoff: cutoff.toSQLDate() }
+        );
+        return true;
+      }
     }
   }
   return false;

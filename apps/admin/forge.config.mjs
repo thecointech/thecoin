@@ -8,15 +8,22 @@ import { mainConfig } from '@thecointech/electron-utils/webpack/webpack.main.con
 import { rendererConfig } from '@thecointech/electron-utils/webpack/webpack.renderer.config';
 import path from 'path';
 import { writeFileSync } from 'fs';
+import webpack from 'webpack';
 
 // NOTE: This external cannot be defined in electron-utils
 // because harvester will not load (possibly because this
 // module is normally stripped there, and this forces it to
 // be included?)
 const mainConfigMerged = mainConfig({
+  plugins: [
+    new webpack.DefinePlugin({
+      ['process.env.TC_LOG_FOLDER']: JSON.stringify("false"),
+    })
+  ],
   externals: [
     '@bitwarden/sdk-napi',
-  ]
+  ],
+
 });
 
 const config = {
