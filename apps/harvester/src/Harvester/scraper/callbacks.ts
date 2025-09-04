@@ -6,7 +6,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { DateTime } from "luxon";
 import { IScraperCallbacks, ScraperProgress } from "@thecointech/scraper";
 import { AnyEvent } from "@thecointech/scraper/types";
-import { BackgroundTaskType, BackgroundTaskCallback, SubTaskProgress } from "@/BackgroundTask";
+import { BackgroundTaskType, BackgroundTaskCallback, SubTaskProgress, getErrorMessage } from "@/BackgroundTask";
 import { maybeCloseModal } from "@thecointech/scraper-agent/modal";
 import { notify } from "../notify";
 
@@ -61,7 +61,8 @@ export class ScraperCallbacks implements IScraperCallbacks {
       this.uiCallback?.({
         id: this.timestamp.toString(),
         type: this.taskType,
-        error: String(error),
+        completed: true,
+        error: getErrorMessage(error),
       })
       await this.dumpPage(page);
     }
@@ -91,25 +92,13 @@ export class ScraperCallbacks implements IScraperCallbacks {
 
   async complete(success: boolean, error?: string) {
     // Update TaskGroup
+    const e = error ?? (success ? undefined : "Unknown error");
     this.uiCallback?.({
       id: this.timestamp.toString(),
       type: this.taskType,
-      completed: success,
-      error,
+      completed: true,
+      error: e,
     })
-  }
-
-  async onScreenshot(intent: string, screenshot: Buffer | Uint8Array, _page: Page) {
-    const outScFile = path.join(this.logsFolder, `${++this.counter}-${intent}.png`);
-    writeFileSync(outScFile, screenshot, { encoding: "binary" });
-  }
-
-  logJson(intent: string, name: string, _data: any): void {
-    log.info(`[${intent}] ${name}`);
-    writeFileSync(
-      path.join(this.logsFolder, `${this.counter}-${name}.json`),
-      JSON.stringify(_data, null, 2)
-    );
   }
 
   async dumpPage(page: Page) {

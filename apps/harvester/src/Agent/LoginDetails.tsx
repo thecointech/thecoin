@@ -1,26 +1,25 @@
 import { useState } from "react";
 import { Button, Checkbox, Dimmer, Input, Loader, Segment } from "semantic-ui-react";
 import type { BankData } from "./BankCard/data";
-import { BackgroundTaskReducer, getTaskGroup } from "@/BackgroundTask/index";
+import { isRunning, useBackgroundTask } from "@/BackgroundTask/index";
 import { BankType } from "@/Harvester/scraper";
 import { log } from "@thecointech/logging";
 
 type Props = BankData & {
   type: BankType;
-  isReplaying?: boolean;
 }
-export const LoginDetails: React.FC<Props> = ({ icon, name, url, type, isReplaying }) => {
+export const LoginDetails: React.FC<Props> = ({ icon, name, url, type }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [visible, setVisible] = useState(false);
 
-  const store = BackgroundTaskReducer.useData();
-  const group = getTaskGroup(store, "record");
-  const isTaskRunning = (group && group.completed === undefined) || isReplaying;
+  const group = useBackgroundTask("record");
+  const replay = useBackgroundTask("replay");
+  const isTaskRunning = isRunning(group) || isRunning(replay);
 
   const handleSubmit = () => {
-    if (isReplaying) {
-      log.info('Cannot launch process because we are replaying');
+    if (isTaskRunning) {
+      log.info('Cannot launch process because we are recording or replaying');
       return;
     }
     // TODO: Send command to start the agent process

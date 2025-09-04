@@ -28,7 +28,7 @@ export class Registry {
     Registry.__instance = undefined;
   }
 
-  static async create(options: RecorderOptions, url?: string) {
+  static async create(options: RecorderOptions) {
     const { browser, page } = await newPage(options.context);
 
     let r = Registry.__instance ??= new Registry(browser);
@@ -37,7 +37,7 @@ export class Registry {
       return r.recorders[options.name];
     }
     const instance = new Recorder(options);
-    await instance.initialize(page, url);
+    await instance.initialize(page);
     r.recorders[options.name] = instance;
     return instance;
   }

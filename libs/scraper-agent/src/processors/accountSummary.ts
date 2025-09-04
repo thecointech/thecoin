@@ -1,35 +1,67 @@
-import { GetAccountSummaryApi, GetBaseApi } from "@thecointech/apis/vqa";
 import { log } from "@thecointech/logging";
-import { accountToElementResponse, responseToElement } from "../vqaResponse";
+import { accountToElementResponse } from "../vqaResponse";
 import { ElementData, FoundElement } from "@thecointech/scraper/types";
 import { AccountResponse, BBox } from "@thecointech/vqa";
 import { extractFuzzyMatch } from "../extractFuzzyMatch";
-import { PageHandler } from "../pageHandler";
 import { processorFn } from "./types";
 import { ChequeBalanceResult } from "../types";
+import { Agent } from "../agent";
+import { apis } from "../apis";
 
-export const AccountsSummary = processorFn("AccountsSummary", async (page: PageHandler) => {
+export const AccountsSummary = processorFn("AccountsSummary", async (agent: Agent) => {
   // Currently, we don't actually do anything, just list the accounts and move on...
-  return await listAccounts(page);
+  return await listAccounts(agent);
 })
 
-async function listAccounts(page: PageHandler) {
-  const api = GetAccountSummaryApi();
-  // Get a list of all accounts
-  const { data: accounts } = await api.listAccounts(await page.getImage());
-  page.onProgress(25);
-  page.logJson("AccountsSummary", "list-accounts-vqa", accounts);
+async function listAccounts(agent: Agent) {
+  const api = await apis().getAccountSummaryApi();
+  const { data: accounts } = await api.listAccounts(await agent.page.getImage());
+  agent.onProgress(25);
   log.trace(`Found ${accounts.accounts.length} accounts`);
+  // Get a list of all accounts
+  const allAccounts = await findAccountElements(agent, accounts.accounts);
+
+  // Update inferred with the real account numbers, then save balance/navigation
+  let r: { account: AccountResponse, nav: FoundElement }[] = [];
+  for (let i = 0; i < accounts.accounts.length; i++) {
+    // Just use the first account (maybe later we'll store them all)
+    const inferred = accounts.accounts[i];
+    const scraped = allAccounts[i];
+    const accountNumber = updateAccountNumber(inferred, scraped);
+
+    // Crop to just the area of the account in the list.  This is because
+    // VQA needs a bit of help focusing on the account
+    const viewport = agent.page.page.viewport();
+    const crop = getCropFromElements([scraped], viewport);
+    // Validate we can find the balance, as that is all some accounts need
+
+    if (inferred.account_type == "Chequing") {
+      await saveBalanceElement(agent, accountNumber, crop);
+    }
+
+    // Validate we can navigate (in case we need more)
+    const nav = await saveAccountNavigation(agent, inferred);
+    if (nav) {
+      r.push({
+        account: inferred,
+        nav
+      });
+    }
+    agent.onProgress(75 + (25 * r.length / accounts.accounts.length));
+  }
+  return r;
+}
+
+export async function findAccountElements(agent: Agent, accounts: AccountResponse[]) {
   // Click on each account
   const allAccounts: ElementData[] = [];
-  for (const account of accounts.accounts) {
+  for (const account of accounts) {
 
     log.trace(`Processing account: ${account.account_number} - ${account.account_type} - ${account.balance}`);
     // Find the most likely element describing this account
-    const found = await responseToElement(page.page, accountToElementResponse(account));
-    page.onProgress(25 + (50 * allAccounts.length / accounts.accounts.length));
+    const found = await agent.page.toElement(accountToElementResponse(account), "account");
+    agent.onProgress(25 + (50 * allAccounts.length / accounts.length));
 
-    // const found = await responseToElement(this.page, balance);
     if (found) {
       const data = {
         ...found.data,
@@ -40,66 +72,41 @@ async function listAccounts(page: PageHandler) {
       allAccounts.push(data);
     }
   }
-  page.logJson("AccountsSummary", "list-accounts-elm", allAccounts);
-
-  // Update inferred with the real account numbers, then save balance/navigation
-  let r: { account: AccountResponse, nav: FoundElement }[] = [];
-  for (let i = 0; i < accounts.accounts.length; i++) {
-    // Just use the first account (maybe later we'll store them all)
-    const inferred = accounts.accounts[i];
-    const scraped = allAccounts[i];
-    const accountNumber = await updateAccountNumber(inferred, scraped);
-
-    // Crop to just the area of the account in the list.  This is because
-    // VQA needs a bit of help focusing on the account
-    const viewport = page.page.viewport();
-    const crop = getCropFromElements([scraped], viewport);
-    // Validate we can find the balance, as that is all some accounts need
-
-    if (inferred.account_type == "Chequing") {
-      await saveBalanceElement(page, accountNumber, crop);
-    }
-
-    // Validate we can navigate (in case we need more)
-    const nav = await saveAccountNavigation(page, inferred);
-    if (nav) {
-      r.push({
-        account: inferred,
-        nav
-      });
-    }
-    page.onProgress(75 + (25 * r.length / accounts.accounts.length));
-  }
-  return r;
+  return allAccounts;
 }
 
-async function saveBalanceElement(page: PageHandler, account_number: string, crop: BBox) {
+export async function saveBalanceElement(agent: Agent, account_number: string, crop: BBox) {
   // Don't search the whole page, just the area around the account listing
-  const { data: balance } = await GetAccountSummaryApi().accountBalanceElement(account_number, await page.getImage(), crop.top, crop.bottom);
-  await page.pushValueEvent<ChequeBalanceResult>(balance, "balance", "currency");
-  // return await page.toElement(balance, "balance", undefined, undefined);
+  const api = await apis().getAccountSummaryApi();
+  const { data: balance } = await api.accountBalanceElement(account_number, await agent.page.getImage(), crop.top, crop.bottom);
+  const element = await agent.page.toElement(balance, {
+    eventName: "balance",
+    parsing: {
+      type: "currency",
+      format: null,
+    }
+  });
+  await agent.events.pushValueEvent<ChequeBalanceResult>(element, "balance", "currency");
 }
 
-async function saveAccountNavigation(page: PageHandler, account: AccountResponse) {
-  const { data: nav } = await GetAccountSummaryApi().accountNavigateElement(account.account_number, await page.getImage());
+export async function saveAccountNavigation(agent: Agent, account: AccountResponse) {
+  const api = await apis().getAccountSummaryApi();
+  const { data: nav } = await api.accountNavigateElement(account.account_number, await agent.page.getImage());
   const asResponse = {
     ...nav,
     content: `${account.account_name} ${account.account_number}`,
     neighbour_text: account.account_type
   }
-  return await page.toElement(asResponse, `navigate-${account.account_type}`, "a", undefined);
+  return await agent.page.toElement(asResponse, { eventName: "navigate-" + account.account_type, tagName: "a" });
 }
 
 
-export async function updateAccountNumber(inferred: AccountResponse, scraped: ElementData) {
+export function updateAccountNumber(inferred: AccountResponse, scraped: ElementData) {
   const inferredAccountNumber = inferred.account_number;
   const realAccountText = scraped.text;
-  // The inferred number may be off by a few digits
-  const { data: corrected } = await GetBaseApi().correctEstimate(inferredAccountNumber, realAccountText, "account number");
-  log.trace(`Corrected account number from inferred: (${inferredAccountNumber}) to (${corrected.correct_value})`);
-  // This should be closer, but even it can be slightly off.  However
-  // we should be close enough that a simple fuzzy-match will capture the correct value
-  const { match: accountNumber } = extractFuzzyMatch(corrected.correct_value, realAccountText);
+  // The inferred number may be off by a few digits, however
+  // we should be close enough that a token-based match will capture the correct value with proper formatting
+  const { match: accountNumber } = extractFuzzyMatch(inferredAccountNumber, realAccountText);
   // Update original
   log.trace(`Updating account number from inferred: (${inferredAccountNumber}) to (${accountNumber})`);
   inferred.account_number = accountNumber;

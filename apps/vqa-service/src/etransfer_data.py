@@ -15,15 +15,19 @@ query_etransfer_form_present = (
     FormPresentResponse
 )
 
-
-class ETransferLinkResponse(BaseModel):
+# the vLLM model only returns the best link
+class ETransferLink(BaseModel):
     best_link: str
     reasoning: str = Field(..., description="Reasoning for the best link")
 
-def get_find_etransfer_link_prompt(page_link_group: list[str]) -> tuple[str, ETransferLinkResponse]:
+# the response adds the interim best candidates
+class ETransferLinkResponse(ETransferLink):
+    best_candidates: list[str]
+
+def get_find_etransfer_link_prompt(page_link_group: list[str]) -> tuple[str, ETransferLink]:
     return (
         "Which one of the following links is most likely to navigate to a page for sending an interac e-transfer? " + json.dumps(page_link_group),
-        ETransferLinkResponse
+        ETransferLink
     )
 
 ###################
@@ -34,7 +38,7 @@ class ETransferStage(CaseInsensitiveEnum):
     CONFIRM_DETAILS = "ConfirmDetails"
     TRANSFER_COMPLETE = "TransferComplete"
     ERRORED = "Errored"
-    
+
 stageTypesStr = ", ".join([e.value for e in ETransferStage])
 
 class ETransferStageResponse(BaseModel):
@@ -52,7 +56,7 @@ def query_etransfer_stage(title: str) -> tuple[str, ETransferStageResponse]:
 
 ####################
 
- 
+
 class ETransferCompleteResponse(BaseModel):
     transfer_complete: bool
 
@@ -73,7 +77,7 @@ class ETransferFormPresentResponse(BaseModel):
 class HasAddRecipientButtonResponse(BaseModel):
     button_present: bool
     reasoning: str = Field(..., description="Reasoning for the form presence")
-    
+
 def query_add_recipient_present(title: str) -> tuple[str, HasAddRecipientButtonResponse]:
     return (
         f"Does this webpage; titled '{title}'; include a link or a button for adding an e-transfer recipient?",
@@ -87,7 +91,7 @@ class InputType(CaseInsensitiveEnum):
     FROM_ACCOUNT = 'FromAccount'
     # The VQA always tries to find a valid
     # response, so we need to include values
-    # for likely inputs, even if they are not used  
+    # for likely inputs, even if they are not used
     # (These should all be set prior to setup)
     SECRET_QUESTION = 'SecretQuestion'
     SECRET_ANSWER = 'SecretAnswer'
@@ -98,7 +102,7 @@ class InputType(CaseInsensitiveEnum):
     LANGUAGE = 'Language'
     DATE = 'Date'
     FREQUENCY = 'Frequency'
-    # Catch-all, 
+    # Catch-all,
     UNKNOWN = 'Unknown'
 
 # Unique input types can only have a single occurence on a page
@@ -112,7 +116,7 @@ unique_input_types = [
     # We include TO_EMAIL here just to ensure
     # we are clear between TO_RECIPIENT & TO_EMAIL
     # However, TO_PHONE is not included because
-    # (a) it can have multiple inputs, and 
+    # (a) it can have multiple inputs, and
     # (b) we don't chare
     InputType.TO_EMAIL
 ]
@@ -143,7 +147,7 @@ def query_to_recipient(recipient: str) -> ElementResponse:
 class ButtonResponse(ElementResponse):
     content: str = Field(..., description="button text")
     enabled: bool
-    
+
 class NextStepExistsResponse(BaseModel):
     next_button_visible: bool
     reasoning: str = Field(..., description="explain your reasoning")

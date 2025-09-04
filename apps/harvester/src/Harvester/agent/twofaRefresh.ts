@@ -1,4 +1,3 @@
-import { AskUserReact } from "./askUser";
 import { getEvents } from "../events";
 import { ActionType } from "../scraper";
 import { ScraperCallbacks } from "../scraper/callbacks";
@@ -10,6 +9,8 @@ import { Agent } from "@thecointech/scraper-agent/agent";
 import { AnyEvent, InputEvent } from "@thecointech/scraper";
 import { copyProfile } from "@/Download/profile";
 import { log } from "@thecointech/logging";
+import { AskUserLogin } from "./askUserLogin";
+import { getErrorMessage } from "@/BackgroundTask/selectors";
 
 const ProfileTask = "twofaRefresh";
 
@@ -22,25 +23,31 @@ export async function twofaRefresh(type: ActionType, refreshProfile: boolean, ca
   if (refreshProfile) {
     toProcess.push(ProfileTask);
   }
-
-  const events = await getEvents(type);
-  const inputBridge = AskUserReact.newSession();
-  const login = getLoginDetails(events);
-  inputBridge.setUsername(login.username);
-  inputBridge.setPassword(login.password);
   const logger = new ScraperCallbacks(ProfileTask, callback, toProcess);
 
-  if (refreshProfile) {
-    const wasRefreshed = await copyProfile(logger.subTaskCallback, true);
-    if (!wasRefreshed) {
-      throw new Error("Failed to refresh profile - try deleting profile manually");
-    }
-  }
+  try {
+    const events = await getEvents(type);
+    const login = getLoginDetails(events);
+    const inputBridge = AskUserLogin.newLoginSession(login);
 
-  const baseNode = await Agent.process(ProfileTask, getUrl(events), inputBridge, logger, toSkip);
-  const wasSuccess = baseNode.events.length > 0; // TODO: baseNode.events[baseNode.events.length - 1]. === "success";
-  logger.complete(wasSuccess);
-  return true;
+    if (refreshProfile) {
+      const wasRefreshed = await copyProfile(logger.subTaskCallback, true);
+      if (!wasRefreshed) {
+        throw new Error("Failed to refresh profile - try deleting profile manually");
+      }
+    }
+
+    await using agent = await Agent.create(ProfileTask, inputBridge, getUrl(events), logger);
+    const baseNode = await agent.process(toSkip);
+    const wasSuccess = baseNode.events.length > 0; // TODO: baseNode.events[baseNode.events.length - 1]. === "success";
+    logger.complete(wasSuccess);
+    return true;
+  }
+  catch (e) {
+    const message = getErrorMessage(e);
+    logger.complete(false, message);
+    throw e;
+  }
 }
 
 function getUrl(node: EventSection): string {

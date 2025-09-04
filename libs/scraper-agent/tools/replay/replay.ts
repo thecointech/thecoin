@@ -6,6 +6,8 @@ import { readFileSync } from "fs";
 import { IScraperCallbacks, replay, setupScraper } from "@thecointech/scraper";
 import { maybeCloseModal } from "../../src/modal";
 
+// Replay previous run events
+
 const { baseFolder, config } = getConfig();
 await init();
 

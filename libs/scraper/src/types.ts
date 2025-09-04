@@ -1,14 +1,14 @@
 import type currency from 'currency.js';
 import type { DateTime } from 'luxon';
 import type { HistoryRow } from './table';
-import type { ElementHandle } from 'puppeteer';
+import type { ElementHandle, Page } from 'puppeteer';
 
 export type { HistoryRow };
 
 // Generic result encompasses all of the above
 export type ReplayResult = Record<string, string | DateTime | currency | HistoryRow[]>
 
-export type ValueType = "date"|"currency"|"text"|"table";
+export type ValueType = "date"|"currency"|"phone"|"text"|"table";
 
 export type ValueParsing = {
   type: ValueType,
@@ -40,16 +40,19 @@ export type Font = {
 export type ElementData = {
   // The frames to dereference on our way to the data
   frame?: string
+  // Note: always uppercase
   tagName: string,
-  // Name is not used in scoring, but is helpful
+  // HTML name attribute.  Not used in scoring, but is helpful
   // for grouping radio buttons together for VQA
   name?: string,
   // Options are not used in scoring, but are helpful
   // for determining the intent of an select in VQA
   options?: string[],
   // If tagName is INPUT, this will be the type
+  // Note: inputType & role are always lowercase
   inputType?: string,
   role: string|null,
+
   selector: string,
   coords: Coords,
   label: string|null,
@@ -59,13 +62,26 @@ export type ElementData = {
   nodeValue?: string|null,
   font?: Font,
   siblingText?: string[],
+}
 
+export type SearchElementData = Partial<ElementData> & {
+  // Matches eventName in AnyElementEvent
+  eventName: string
   // Set to true if we are searching for an element
   // based on estimated data (eg from VQA service)
   estimated?: boolean,
-}
+  // If present, indicates the value is expected to
+  // parseable as the given type.
+  parsing?: ValueParsing,
+};
 
-export type ElementDataMin = Partial<ElementData>;
+export type ElementSearchParams = {
+  page: Page,
+  event: SearchElementData,
+  timeout?: number,
+  minScore?: number,
+  maxTop?: number,
+}
 
 export type SearchElement = {
   element: ElementHandle<HTMLElement>,
@@ -75,6 +91,18 @@ export type SearchElement = {
 export type FoundElement = SearchElement & {
   score: number,
   components: Record<string, number>,
+}
+
+// Needed in AgentSerializer for logging things
+export type VqaCallData = {
+  args: string[],
+  response: any,
+}
+export type TestElmData = FoundElement["data"]
+export type TestSchData = {
+  score: number,
+  components: any,
+  search: Omit<ElementSearchParams, "page">
 }
 
 
@@ -93,13 +121,17 @@ export type UnloadEvent = {
 } & BaseEvent;
 
 
-export type BaseEventData =  BaseEvent & ElementData;
+export type BaseEventData =  {
+  // Human name for the event.  Used
+  // by ValueEvent to name the value read from the element,
+  // and all for debugging/testing
+  eventName: string,
+} & BaseEvent & ElementData;
+
 export type ClickEvent = {
   type: "click",
   clickX: number,
   clickY: number,
-  // font: Font,
-  // text: string,
 } & BaseEventData;
 
 // Static input event.  Will be the same every run
@@ -114,16 +146,14 @@ export type InputEvent = {
 // Used for things like `amount`
 export type DynamicInputEvent = {
   type: "dynamicInput",
-  dynamicName: string,
   valueChange?: boolean,
 } & BaseEventData;
 
 // Not really an event, but something to read later
 export type ValueEvent = {
   type: "value",
-  name?: string,
   parsing?: ValueParsing
 } & BaseEventData;
 
-
-export type AnyEvent = NavigationEvent|ClickEvent|InputEvent|DynamicInputEvent|UnloadEvent|LoadEvent|ValueEvent;
+export type AnyElementEvent = ClickEvent|InputEvent|DynamicInputEvent|ValueEvent;
+export type AnyEvent = NavigationEvent|AnyElementEvent|UnloadEvent|LoadEvent;

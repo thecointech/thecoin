@@ -4,11 +4,11 @@ import { processState } from './processState';
 import { initialize } from './initialize';
 import { closeBrowser } from '@thecointech/scraper/puppeteer';
 import { DateTime } from 'luxon';
-import { getDataAsDate } from './types';
+import { getDataAsDate, HarvestData } from './types';
 import { PayVisaKey } from './steps/PayVisa';
 import { notifyError } from './notify';
 import { exec } from 'child_process';
-import { BackgroundTaskCallback } from '@/BackgroundTask';
+import { BackgroundTaskCallback, getErrorMessage } from '@/BackgroundTask';
 
 export async function harvest(callback?: BackgroundTaskCallback) {
 
@@ -21,19 +21,10 @@ export async function harvest(callback?: BackgroundTaskCallback) {
     log.info(`Resume from last: harvesterBalance ${state.state.harvesterBalance}`);
 
     // Sanity check - If we have have not run prior
-    const lastDueDate = getDataAsDate(PayVisaKey, state.state.stepData);
-    if (!lastDueDate && state.state.harvesterBalance?.intValue == 0) {
-      // and are too close to the due date, there isn't much
-      // point transferring in & straight back out, so skip this run
-      const cutoff = DateTime.now().minus({ days: 5 });
-      if (state.visa.dueDate > cutoff) {
-        log.info(
-          'Skipping Harvest because {DueDate} is past {Cutoff}',
-          { DueDate: state.visa.dueDate.toSQLDate(), Cutoff: cutoff.toSQLDate() }
-        );
-        return false;
-      }
+    if (shouldSkipHarvest(state)) {
+      return false;
     }
+
     const nextState = await processState(stages, state, user);
 
     if (nextState.errors) {
@@ -58,6 +49,15 @@ export async function harvest(callback?: BackgroundTaskCallback) {
     else {
       log.fatal(`Error in harvest: ${err}`);
     }
+    // For now, we have to treat "replay" as the group
+    // as we only have a single nesting of background tasks
+    callback?.({
+      id: "harvest",
+      type: "replay",
+      completed: true,
+      error: getErrorMessage(err),
+    })
+
     const res = await notifyError({
       title: 'Harvester Error',
       message: `Harvesting failed.  Please contact support.`,
@@ -72,4 +72,31 @@ export async function harvest(callback?: BackgroundTaskCallback) {
   finally {
     await closeBrowser();
   }
+}
+
+
+export function shouldSkipHarvest(state: HarvestData) {
+  const lastDueDate = getDataAsDate(PayVisaKey, state.state.stepData);
+  // If we don't have a lastDueDate and 0 balance, we need
+  // to check if it's worth running harvester this time.
+  // If the nextDueDate is soon it may not be a good idea
+  // to transfer $ in just to transfer them back out again.
+  if (!lastDueDate && state.state.harvesterBalance?.intValue == 0) {
+
+    const nextDueDate = state.visa.dueDate;
+    const cutoff = nextDueDate.minus({ days: 5 });
+    const now = DateTime.now();
+    // If we are past the cutoff date, we may skip
+    if (now >= cutoff) {
+      // We skip if nextDueDate has not already passed
+      if (now.minus({ days: 1 }) < nextDueDate) {
+        log.info(
+          'Skipping Harvest because {DueDate} is past {Cutoff}',
+          { DueDate: nextDueDate.toSQLDate(), Cutoff: cutoff.toSQLDate() }
+        );
+        return true;
+      }
+    }
+  }
+  return false;
 }

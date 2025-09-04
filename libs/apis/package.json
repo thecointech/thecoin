@@ -62,6 +62,7 @@
     "@thecointech/broker-cad": "^0.3.3",
     "@thecointech/nft": "^0.3.3",
     "@thecointech/pricing": "^0.3.3",
+    "@thecointech/secrets": "^0.3.11",
     "@thecointech/vqa": "^0.3.10"
   },
   "devDependencies": {

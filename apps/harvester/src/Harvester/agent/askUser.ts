@@ -1,6 +1,6 @@
 import { getMainWindow } from "@/mainWindow";
 import { actions } from "@/scraper_actions";
-import { IAskUser, NamedOptions, NamedResponse } from "@thecointech/scraper-agent";
+import { NamedOptions, NamedResponse } from "@thecointech/scraper-agent";
 import { randomUUID } from "crypto";
 
 type BaseQuestionType = {
@@ -40,39 +40,16 @@ type DeferredPromise<T> = {
   reject: (reason?: any) => void;
 }
 
-enum QuestionId {
-  Username = 'username',
-  Password = 'password',
-  Recipient = 'recipient'
-}
-export class AskUserReact implements IAskUser, Disposable {
+export class AskUserReact implements Disposable {
   sessionID = randomUUID();
-  depositAddress: string;
   responses: Record<string, DeferredPromise<any>> = {};
   static __instances: Record<string, AskUserReact> = {};
 
-  private constructor(depositAddress?: string) {
-    this.depositAddress = depositAddress ?? "--unused--";
-    this.addDeferredResponse(QuestionId.Username);
-    this.addDeferredResponse(QuestionId.Password);
+  protected constructor() {
+    // this.depositAddress = depositAddress ?? "--unused--";
+    // this.addDeferredResponse(QuestionId.Username);
+    // this.addDeferredResponse(QuestionId.Password);
     AskUserReact.__instances[this.sessionID] = this;
-  }
-
-  // To prevent sending a gazillion ETransfers during dev/testing
-  doNotCompleteETransfer(): boolean {
-    // Do not complete in any development build
-    if (process.env.DO_NOT_SEND_ETRANSFER) {
-      return true;
-    }
-    // Do not complete in any non-prod build
-    return (
-      process.env.CONFIG_NAME !== 'prod' &&
-      process.env.CONFIG_NAME !== 'prodbeta'
-    );
-  }
-
-  expectedETransferRecipient(): Promise<string> {
-    return Promise.resolve(this.depositAddress);
   }
 
   addDeferredResponse<T = string>(questionId: string) {
@@ -108,12 +85,6 @@ export class AskUserReact implements IAskUser, Disposable {
     }
   }
 
-  setUsername(username: string) {
-    this.responses[QuestionId.Username].resolve(username);
-  }
-  setPassword(password: string) {
-    this.responses[QuestionId.Password].resolve(password);
-  }
 
   forValue(question: string, options?: string[]): Promise<string> {
     const packet = { question };
@@ -131,18 +102,6 @@ export class AskUserReact implements IAskUser, Disposable {
     return this.sendQuestion<boolean>({confirm});
   }
 
-  forUsername(): Promise<string> {
-    return this.responses[QuestionId.Username].promise;
-  }
-  forPassword(): Promise<string> {
-    return this.responses[QuestionId.Password].promise;
-  }
-  forETransferRecipient(): Promise<string> {
-    // TODO
-    return this.responses['recipient'].promise;
-  }
-
-
   sendQuestion<T = string>(packet: Omit<AnyQuestionPacket, "sessionId" | "questionId">): Promise<T> {
     const mainWindow = getMainWindow();
     const questionId = randomUUID();
@@ -155,8 +114,8 @@ export class AskUserReact implements IAskUser, Disposable {
     return responsePromise;
   }
 
-  static newSession(depositAddress?: string) {
-    const instance = new AskUserReact(depositAddress);
+  static newSession() {
+    const instance = new AskUserReact();
     return instance;
   }
   static getSession(id: string) {

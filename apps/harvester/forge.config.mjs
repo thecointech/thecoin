@@ -22,6 +22,10 @@ const nativeModules = [
   'sharp',
   'puppeteer',
   'puppeteer-extra',
+  // These aren't used, but can cause warnings in
+  // the forge logger main process if included
+  '@bitwarden/sdk-napi',
+  '@google-cloud/secret-manager',
 ]
 
 const vqaApiKey = await getSecret("VqaApiKey");
@@ -121,7 +125,7 @@ const config = {
 };
 
 // Only add in externals if packaging
-if (process.env.npm_lifecycle_event != 'dev') {
+if (process.env.npm_lifecycle_event != '_start:dbg') {
   config.plugins.push(
     //@ts-ignore
     new ForgeExternalsPlugin({

@@ -36,7 +36,7 @@ async def detect_login_result(image: UploadFile) -> LoginResultResponse:
 
 ##############################################################################
 query_logout_element = (
-    "Describe the logout button in this page.",
+    "What is the element in this page that is the most likely to enable the user to logout.",
     ElementResponse
 )
 @router.post("/login/detect-logout-element", tags=["login"])
@@ -57,10 +57,10 @@ query_session_timeout_continue = (
 )
 @router.post("/login/detect-session-timeout-element", tags=["login"])
 async def detect_session_timeout_element(image: UploadFile) -> ElementResponse|None:
-    (image, _) = await get_image(image)
-    timeout_warning = await run_endpoint_query(image, query_session_timout_exists)
+    (loaded, _) = await get_image(image)
+    timeout_warning = await run_endpoint_query(loaded, query_session_timout_exists)
     if timeout_warning.timeout_warning_present:
-        return await run_endpoint_query(image, query_session_timeout_continue)
+        return await run_endpoint_query(loaded, query_session_timeout_continue)
     return None
 
 # Errors: TODO: Can we not create a generic endpoint for this?

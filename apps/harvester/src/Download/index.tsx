@@ -2,17 +2,16 @@ import styles from './browser.module.less'
 import { Button, Message } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { BackgroundTaskReducer, getTaskGroup } from '@/BackgroundTask';
-import { BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
+import { getErrors, useBackgroundTask } from '@/BackgroundTask';
+import { BackgroundTaskErrors, BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
 import { QuestionResponse } from '@/Agent/QuestionResponse';
+import { isRunning } from '@/BackgroundTask';
 
 export const Browser = () => {
 
   const [hasInstalled, setHasInstalled] = useState(false);
-  const tasks = BackgroundTaskReducer.useData();
-  const initializeTask = getTaskGroup(tasks, 'initialize');
-
-  const isWorking = !!initializeTask && initializeTask.completed !== true;
+  const initializeTask = useBackgroundTask('initialize');
+  const installing = isRunning(initializeTask);
 
   useEffect(() => {
     window.scraper.hasInstalledBrowser().then(r => setHasInstalled(r.value ?? false))
@@ -20,8 +19,10 @@ export const Browser = () => {
 
   // Update on complete
   useEffect(() => {
-    if (initializeTask?.completed === true) {
-      setHasInstalled(true);
+    if (initializeTask) {
+      if (!isRunning(initializeTask) && getErrors(initializeTask).length === 0) {
+        setHasInstalled(true);
+      }
     }
   }, [initializeTask])
 
@@ -39,10 +40,12 @@ export const Browser = () => {
         Your harvester requires several libraries to function.  These can be downloaded below.
       </h4>
       <OnCompleteMessage complete={hasInstalled} />
-      <QuestionResponse isRecording={isWorking} />
+      {/* Allow user to confirm closing any running chrome instances */}
+      <QuestionResponse enabled={installing} />
       <BackgroundTaskProgressBar type="initialize" />
+      <BackgroundTaskErrors type="initialize" />
       <div>
-        <Button onClick={startDownload} disabled={isWorking} loading={isWorking}>Download</Button>
+        <Button onClick={startDownload} disabled={installing} loading={installing}>Download</Button>
       </div>
       <div>
         <Link to="/account/login">Setup your Account</Link>
@@ -58,24 +61,3 @@ const OnCompleteMessage = ({ complete }: { complete: boolean }) => {
     </Message>
   ) : null;
 }
-
-// const DownloadProgress = () => {
-//   const store = BackgroundTaskReducer.useData();
-//   const initTask = getTaskGroup(store, 'initialize');
-
-//   if (!initTask) {
-//     return null;
-//   }
-//   const running = getRunning(initTask.subTasks);
-//   const message = !initTask.completed
-//     ? `Downloading... ${running.length + 1} of ${initTask.subTasks.length}`
-//     : 'Complete';
-
-//   const percent = initTask.percent ?? initTask.completed ? 100 : 0;
-
-//   return (
-//     <Progress color="green" percent={percent} active={running.length > 0}>
-//       {message}
-//     </Progress>
-//   )
-// }

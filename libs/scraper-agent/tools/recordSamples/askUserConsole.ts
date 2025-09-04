@@ -7,7 +7,9 @@ import type { IAskUser, NamedOptions, NamedResponse } from "../../src/types";
 export class AskUserConsole implements IAskUser {
 
   private rlp: readline.Interface;
-  private config: Partial<BankConfig>
+  private config: Partial<BankConfig>;
+
+  useBadLogin = false;
 
   constructor(config: Partial<BankConfig> = {}) {
     this.config = config;
@@ -22,9 +24,15 @@ export class AskUserConsole implements IAskUser {
     return true;
   }
   async forUsername(): Promise<string> {
+    if (this.useBadLogin) {
+      return this.config.bad_credentials?.username ?? "1234567812345678";
+    }
     return this.config.username!;
   }
   async forPassword(): Promise<string> {
+    if (this.useBadLogin) {
+      return this.config.bad_credentials?.password ?? "1234oIOHHS!lyL";
+    }
     return this.config.password!;
   }
 
@@ -54,6 +62,14 @@ export class AskUserConsole implements IAskUser {
   }
 
   async selectString(question: string, options: string[]): Promise<string> {
+    if (this.config.questions?.[question]) {
+      // Ensure this answer is an option
+      const answer = this.config.questions[question];
+      if (options.find(o => o == answer)) {
+        return answer;
+      }
+    }
+
     this.rlp.write(`\n${question}\n`);
     for (let i = 0; i < options.length; i++) {
       this.rlp.write(`[${i}] ${options[i]}\n`);

@@ -1,8 +1,8 @@
-import { readFileSync } from "node:fs"
+import { readFileSync, rmSync } from "node:fs"
 import { type Browser } from "puppeteer"
 import { patchOnnxForJest } from "./jestPatch";
 import { IsManualRun } from '@thecointech/jestutils';
-import { newPage, setupScraper } from "../src/puppeteer-init";
+import { cleanProfileLocks, newPage, setupScraper } from "../src/puppeteer-init";
 import { readdir } from 'node:fs/promises'
 import path from "node:path";
 
@@ -11,6 +11,9 @@ export const getTestPage = (...parts: string[]) => `file:///${testFileFolder}/un
 export const getTestInfo = (...parts: string[]) => JSON.parse(
   readFileSync(`${testFileFolder}/unit-tests/${parts.join('/')}`, 'utf-8')
 )
+export { patchOnnxForJest } from "./jestPatch"
+export { getTestData, hasTestingPages } from "./getTestData"
+export * from "./testData"
 
 export const getTestPages = async (...parts: string[]) => {
   const testFolder = `${testFileFolder}/unit-tests/${parts.join('/')}`
@@ -42,6 +45,8 @@ setupScraper({
 });
 
 export function useTestBrowser() {
+  cleanProfileLocks();
+
   let _browser: Browser|null = null;
   beforeAll(async () => {
     patchOnnxForJest();
