@@ -11,7 +11,7 @@ import { PayVisaKey } from './steps/PayVisa';
 const db_path = path.join(rootFolder, `harvester${dbSuffix()}.db`);
 
 function initState(options?: { adapter: string }) {
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.CONFIG_NAME === 'development') {
     log.info(`Initializing in-memory state database`);
     options = {
       adapter: 'memory',
