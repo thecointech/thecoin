@@ -91,7 +91,7 @@ export async function replayEvents(page: Page, name: string, events: AnyEvent[],
         if (events[i + 1]?.type == "navigation") {
           await Promise.all([
             tryClicking(),
-            page.waitForNavigation({ waitUntil: 'networkidle2' })
+            page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 60000 })
           ])
         }
         else {
