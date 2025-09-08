@@ -1,7 +1,10 @@
 ## Secret management
 
+Secrets are entirely managed via the lib/secrets package.
 
-Where secrets are stored, and how to restore them
+Our secrets are mostly stored on bitwarden, however a few GAE-specific
+secrets are stored in the Google Secrets manager.  Both versions are
+accessed through the secrets package.
 
 ### Electron: Access to BrokerDB firestore
 

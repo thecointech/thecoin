@@ -11,6 +11,7 @@ import { copyProfile } from "@/Download/profile";
 import { log } from "@thecointech/logging";
 import { AskUserLogin } from "./askUserLogin";
 import { getErrorMessage } from "@/BackgroundTask/selectors";
+import { maybeSerializeRun } from "./maybeSerializer";
 
 const ProfileTask = "twofaRefresh";
 
@@ -37,6 +38,7 @@ export async function twofaRefresh(type: ActionType, refreshProfile: boolean, ca
       }
     }
 
+    using _ = maybeSerializeRun(logger.logsFolder, type);
     await using agent = await Agent.create(ProfileTask, inputBridge, getUrl(events), logger);
     const baseNode = await agent.process(toSkip);
     const wasSuccess = baseNode.events.length > 0; // TODO: baseNode.events[baseNode.events.length - 1]. === "success";

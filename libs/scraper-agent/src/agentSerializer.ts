@@ -5,8 +5,7 @@ import type { Page } from "puppeteer";
 import type { SectionName } from "./types";
 import { isPresent } from "@thecointech/utilities/ArrayExtns";
 import { doPixelMatch } from "@thecointech/scraper/utilities";
-import { _getImage, TakeScreenshotError } from "./getImage";
-import { maybeCloseModal } from "./modal";
+import { _getImage } from "./getImage";
 import { LoginFailedError } from "./errors";
 import { ApiCallEvent, bus } from "./eventbus";
 import { EventBus } from "@thecointech/scraper/events/eventbus";
@@ -30,24 +29,30 @@ const MIN_PIXELS_CHANGED = 100;
 //       1-0-apiCall-vqa.json
 //       ...
 
+type SerializerOptions = {
+  recordFolder: string,
+  // The bank names (constant throughout an execution)
+  target: string,
+  skipSections?: string[],
+  // Used in replay - if true, we will take a screenshot
+  // on every element found
+  writeScreenshotOnElement?: boolean,
+}
 // This class can be used to write out the full
 // execution of an agent to a folder
 export class AgentSerializer implements Disposable {
 
-  _recordFolder: string
-
-  // The bank names (constant throughout an execution)
-  _target: string
-
   tracker: SectionTracker;
   _lastScreenShot: Uint8Array | Buffer | undefined;
 
-  _skipSections: string[];
+  options: SerializerOptions;
+  get recordFolder() { return this.options.recordFolder; }
+  get target() { return this.options.target; }
+  get skipSections() { return this.options.skipSections; }
+  get writeScreenshotOnElement() { return this.options.writeScreenshotOnElement; }
 
-  constructor({recordFolder, target, skipSections}: {recordFolder: string, target: string, skipSections?: string[]}) {
-    this._recordFolder = recordFolder
-    this._target = target
-    this._skipSections = skipSections ?? [];
+  constructor(options: SerializerOptions) {
+    this.options = options;
 
     bus().onApiCall(this.onApiCall);
     bus().onSection(this.onSection);
@@ -106,42 +111,24 @@ export class AgentSerializer implements Disposable {
     await this.logJson(`${search.event.eventName}-elm`, data, false);
     await this.logJson(`${search.event.eventName}-sch`, sch);
     await this.logMhtml(search.page);
+    if (this.writeScreenshotOnElement) {
+      try {
+        const image = await _getImage(search.page);
+        await this.logScreenshot(image);
+      }
+      catch (e) {
+        log.error(e, `Error taking screenshot for element ${search.event.eventName}`);
+        // Not fatal, so continue
+      }
+    }
   }
 
   onSection = async (section: SectionName) => {
     this.tracker.setCurrentSection(section);
   }
 
-  async onError(page: Page, error: unknown, event?: AnyEvent) {
-    try {
-      if (error instanceof TakeScreenshotError) {
-        log.info(`Skipping screenshot due to error: ${error.message}`);
-        return false;
-      }
-      else if (error instanceof LoginFailedError) {
-        // This is part of the test, record it, but let the
-        // error propagate
-        await this.logFailedLogin(page, error);
-        return false;
-      }
-
-      // If this is a modal, try and handle it automatically
-      const modalClosed = await maybeCloseModal(page);
-      if (modalClosed) {
-        log.info(`Modal closed`);
-        return true;
-      }
-
-      await this.dumpError(page, error, event);
-    }
-    catch (e) {
-      log.error(e, `Error dumping page in onError`);
-    }
-    return false;
-  }
-
   pauseWriting() {
-    return this.tracker.currentSection == "Initial" || this._skipSections.includes(this.tracker.currentSection);
+    return this.tracker.currentSection == "Initial" || this.skipSections?.includes(this.tracker.currentSection);
   }
 
   skipWriting(event: ApiCallEvent) {
@@ -205,19 +192,19 @@ export class AgentSerializer implements Disposable {
     }
     const outFile = this.toPath(this.tracker.currentSection, filename, "json");
     writeFileSync(outFile, JSON.stringify(data, null, 2));
-    const relativePath = path.relative(this._recordFolder, outFile);
+    const relativePath = path.relative(this.recordFolder, outFile);
     log.trace(`Wrote: ${relativePath}`);
   }
 
   async logEvents(events: any={}) {
     const outFile = this.toPath(undefined, "events", "json");
     writeFileSync(outFile, JSON.stringify(events, null, 2));
-    const relativePath = path.relative(this._recordFolder, outFile);
+    const relativePath = path.relative(this.recordFolder, outFile);
     log.trace(`Wrote Events: ${relativePath}`);
   }
 
   toPath(section?: string, name?: string, extn?: string) {
-    const structure = [this._recordFolder, this._target, section]
+    const structure = [this.recordFolder, this.target, section]
     const outputFolder = path.join(...structure.filter(isPresent));
     mkdirSync(outputFolder, { recursive: true });
     const suffix = [name, extn].filter(isPresent).join(".");
