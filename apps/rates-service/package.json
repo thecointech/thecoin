@@ -48,7 +48,6 @@
     "@thecointech/fx-rates": "^0.3.11",
     "@thecointech/logging": "^0.3.11",
     "@thecointech/market-status": "^0.3.11",
-    "@thecointech/pricing": "^0.3.3",
     "@thecointech/setenv": "^0.3.11",
     "@thecointech/signers": "^0.3.11",
     "@thecointech/utilities": "^0.3.11",

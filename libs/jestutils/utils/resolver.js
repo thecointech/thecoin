@@ -1,6 +1,8 @@
 const { existsSync } = require('fs');
 const path = require('path');
 
+// This file largely mirrors the custom resolver in ncr-ts
+
 module.exports = function (request, options) {
 
   let maybeMocked = getMockedIfExists(request, options);
@@ -14,7 +16,7 @@ module.exports = function (request, options) {
   if (stripSuffix) {
     maybeMocked = maybeMocked.slice(0, -3);
   }
-  
+
   try {
     return options.defaultResolver(maybeMocked, {
       ...options,
@@ -78,7 +80,7 @@ function getMockedIfExists(request, options) {
 // Ex: Must use import to load ES Module: C:\src\TheCoin\node_modules\pouchdb\node_modules\uuid\wrapper.mjs
 const getConditions = (conditions) =>
   conditions
-    ? ["development", ...conditions]
+    ? ["test", "development", ...conditions]
     : undefined;
 
 const getPackageFilter = (request) => {

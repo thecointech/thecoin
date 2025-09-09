@@ -1,27 +1,59 @@
-import { Progress } from "semantic-ui-react";
-import { BackgroundTaskReducer, getCompleted, getTaskGroup } from "./reducer";
+import { Message, Progress } from "semantic-ui-react";
+import { useBackgroundTask } from "./reducer";
 import { BackgroundTaskType } from "./types";
+import { getCompleted, getErrors, getPercent, isRunning } from "./selectors";
+import type { BackgroundTaskInfo } from "./types";
 
 type Props = {
-  type: BackgroundTaskType
+  type: BackgroundTaskType,
+  subTask?: string,
 }
-export const BackgroundTaskProgressBar = ({ type }: Props) => {
-  const store = BackgroundTaskReducer.useData();
-  const bgTask = getTaskGroup(store, type);
+export const BackgroundTaskProgressBar = ({ type, subTask }: Props) => {
 
+  const bgTask = useBackgroundTask(type);
   if (!bgTask) {
     return null;
   }
+  if (subTask) {
+    const task = bgTask.subTasks.find(t => t.subTaskId === subTask);
+    if (!task) {
+      return null;
+    }
+    return <BackgroundTaskProgressBarElement task={task} taskId={subTask} />
+  }
+
   const completed = getCompleted(bgTask.subTasks);
   const numCompleted = Math.min(completed.length + 1, bgTask.subTasks.length);
-  const message = !bgTask.completed
-    ? `Running task ${numCompleted} of ${bgTask.subTasks.length}`
-    : 'Complete';
+  const message = `${numCompleted} of ${bgTask.subTasks.length}`;
+  return <BackgroundTaskProgressBarElement task={bgTask} taskId={message} />
+}
 
-  const percent = bgTask.percent ?? (bgTask.completed ? 100 : 0);
+const BackgroundTaskProgressBarElement = ({ task, taskId }: { task: BackgroundTaskInfo, taskId: string }) => {
+  const message = isRunning(task)
+  ? `Running task ${taskId}`
+  : 'Complete';
+  const percent = getPercent(task);
   return (
-    <Progress color="green" percent={percent} active={!bgTask.completed}>
+    <Progress color="green" percent={percent} active={isRunning(task)}>
       {message}
     </Progress>
+  )
+}
+
+export const BackgroundTaskErrors = ({ type }: Props) => {
+  const bgTask = useBackgroundTask(type);
+  const errors = getErrors(bgTask);
+  if (errors.length === 0) {
+    return null;
+  }
+  return (
+    <Message negative>
+      <Message.Header>Errors</Message.Header>
+      <Message.List>
+        {errors.map((e, i) => (
+          <Message.Item key={i}>{e}</Message.Item>
+        ))}
+      </Message.List>
+    </Message>
   )
 }

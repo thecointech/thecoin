@@ -4,6 +4,7 @@
   "compilerOptions": {
     "rootDir": "./src",
     "baseUrl": "./src/",
+    "types": ["node", "jest"],
     "outDir": "./build",
     "tsBuildInfoFile": "./build/.buildinfo",
   },

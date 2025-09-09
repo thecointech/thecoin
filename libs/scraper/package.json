@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/scraper",
-  "version": "0.3.12-test.0",
+  "version": "0.3.12",
   "type": "module",
   "description": "The Coin: Automated scraper for TheCoin",
   "keywords": [
@@ -20,7 +20,8 @@
     "clean": "run -T rimraf ./build && run -T rimraf ./coverage",
     "test": "run :jest",
     "testFailure": "yarn run -T cross-env CONFIG_NAME=prod URL_SEQ_LOGGING=false TC_LOG_FOLDER=false run-env tools/testFailure/main.ts",
-    "recordSamples": "yarn run -T cross-env CONFIG_NAME=prod URL_SEQ_LOGGING=false TC_LOG_FOLDER=false run-env tools/recordSamples/recordSamples.ts"
+    "recordSamples": "yarn run -T cross-env CONFIG_NAME=prod URL_SEQ_LOGGING=false TC_LOG_FOLDER=false run-env tools/recordSamples/recordSamples.ts",
+    "commitSimilar": "yarn run-env internal/commitSimilar.ts"
   },
   "dependencies": {
     "@thecointech/async": "^0.3.3",
@@ -37,6 +38,7 @@
   },
   "devDependencies": {
     "@thecointech/jestutils": "^0.3.3",
+    "@thecointech/setenv": "workspace:^",
     "@types/fs-extra": "^11.0.4",
     "@types/pixelmatch": "^5.2.6",
     "@types/pngjs": "^6.0.5"

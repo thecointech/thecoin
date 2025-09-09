@@ -1,20 +1,29 @@
 from transformers import AutoModelForCausalLM, AutoProcessor, AutoConfig
 import torch
+import os
+import sys
 from logger import setup_logger
 from model_details import get_model_details
 logger = setup_logger(__name__)
 
+device_map = 'cuda'
+
+# Check if running under debugger
+is_debugging = sys.gettrace() is not None or 'pydevd' in sys.modules
+# For whatever reason, we run out of GPU memory when running under debugger
+if is_debugging:
+    device_map = 'cpu'
 
 _processor = None
 def get_processor():
     global _processor
     if _processor is None:
-        logger.info("Loading processor...")
+        logger.info(f"Loading processor on device: {device_map}")
         details = get_model_details()
         _processor = AutoProcessor.from_pretrained(
             details.converted_model_path,
             trust_remote_code=True,
-            device_map='auto',
+            device_map=device_map,
             local_files_only=True
         )
         logger.info("Processor loaded successfully")
@@ -37,7 +46,7 @@ def get_model():
             config=config,
             trust_remote_code=True,
             torch_dtype=torch.bfloat16,
-            device_map='auto',
+            device_map=device_map,
             local_files_only=True
         )
         logger.info("Converted model loaded successfully")

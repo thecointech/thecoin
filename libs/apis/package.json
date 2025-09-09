@@ -19,23 +19,24 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "build": "run -T tsc --project tsconfig.json",
-    "clean": "run -T rimraf ./build && run -T rimraf ./coverage"
+    "build": "run -T tsc -b",
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage",
+    "test": "run :jest"
   },
   "files": [
     "build/**/*"
   ],
   "exports": {
     "./broker": {
-      "development": "./build/broker/mocked/index.js",
+      "development": "./mocked/broker/index.ts",
       "default": "./build/broker/live.js"
     },
     "./pricing": {
-      "development": "./build/pricing/mocked.js",
+      "development": "./mocked/pricing.ts",
       "default": "./build/pricing/live.js"
     },
     "./nft": {
-      "development": "./build/nft/mocked.js",
+      "development": "./mocked/nft.ts",
       "default": "./build/nft/live.js"
     },
     "./vqa": {
@@ -62,7 +63,9 @@
     "@thecointech/broker-cad": "^0.3.3",
     "@thecointech/nft": "^0.3.3",
     "@thecointech/pricing": "^0.3.3",
-    "@thecointech/vqa": "^0.3.10"
+    "@thecointech/secrets": "^0.3.11",
+    "@thecointech/vqa": "^0.3.10",
+    "cockatiel": "^3.2.1"
   },
   "devDependencies": {
     "@thecointech/async": "^0.3.3"

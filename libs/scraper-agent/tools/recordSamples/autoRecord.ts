@@ -1,47 +1,101 @@
-
-import { log } from "@thecointech/logging";
-import { getConfig } from "../config.js";
-import { Agent } from '../../src/agent.js'
-import { init } from "../init.js";
-import { maybeCopyProfile, installBrowser } from "@thecointech/scraper/puppeteer";
-import { AskUserConsole } from './askUserConsole.js'
-import { TestSerializer } from './testSerializer.js'
+import { log, LoggerContext } from "@thecointech/logging";
+import { installBrowser, maybeCopyProfile } from "@thecointech/scraper/puppeteer";
+import { mkdirSync } from "fs";
+import { DateTime } from "luxon";
 import path from "path";
-
-// process.env.URL_SERVICE_VQA="http://127.0.0.1:7004";
+import { Agent } from '@/agent.js';
+import { AgentSerializer } from '@/agentSerializer.js';
+import { LoginFailedError } from "@/errors.js";
+import type { IAskUser } from "@/processors/types.js";
+import { BankConfig, getConfig } from "../config.js";
+import { init } from "../init.js";
+import { AskUserConsole } from './askUserConsole.js';
+import { DummyAskUser } from "./dummyAskUser.js";
+import { updateRecordLatest } from "./updateRecordLatest";
 
 const { baseFolder, config } = getConfig();
 
-const clean = process.argv.includes("clean");
-const testFailedLogin = process.argv.includes("test-fail-login");
+const clean = process.argv.includes("--clean");
+const testFailedLogin = process.argv.includes("--test-fail-login");
 const target = process.argv.includes("--target") ? process.argv[process.argv.indexOf("--target") + 1] : undefined;
-const recordFolder = path.join(baseFolder, "record");
+const except = process.argv.includes("--except") ? process.argv[process.argv.indexOf("--except") + 1] : undefined;
 
-await Promise.all([
-  init(clean),
-  installBrowser(),
-  maybeCopyProfile(),
-]);
+const dateSuffix = DateTime.now().toFormat("yyyy-MM-dd_HH-mm");
+const recordFolder = path.join(baseFolder, "archive", dateSuffix);
 
-process.env.RUN_SCRAPER_HEADLESS = "false";
+await init();
+await installBrowser();
+await maybeCopyProfile(clean);
+
 let successful: string[] = [];
 let errored: string[] = [];
+
+const failLoginTarget = (name: string) => name + "FailLogin"
+
+// Run the agent, serializing output to recordFolder/name
+async function runAgent(name: string, url: string, askUser: IAskUser) {
+  const writeDir = path.join(recordFolder, name);
+  mkdirSync(writeDir, { recursive: true})
+  using serializer = new AgentSerializer({ recordFolder, target: name});
+  using _ = new LoggerContext({
+    level: "trace",
+    streams: [{
+      path: path.join(writeDir, "events.log"),
+      type: "file",
+    }]
+  });
+  await using agent = await Agent.create(name, askUser, url);
+  const events = await agent.process();
+  serializer.logEvents(events);
+}
+
+async function RunFailedLogin(name: string, config: BankConfig) {
+  try {
+    const askUser = new DummyAskUser(config.bad_credentials);
+    await runAgent(failLoginTarget(name), config.url, askUser);
+    // We shouldn't reach here
+    throw new Error("Failed Login should throw")
+  }
+  catch (e) {
+    const isLoginFailure = e instanceof LoginFailedError;
+    // We _should_ have a login failure
+    if (isLoginFailure) {
+      // Go back to the start
+      return true;
+    }
+    // Else, something has gone wrong, abandon ship
+    throw e;
+  }
+}
 
 for (const [name, bankConfig] of Object.entries(config)) {
 
   if (target && target != name) {
     continue;
   }
-
-  using askUser = new AskUserConsole(bankConfig);
-  const logger = new TestSerializer({baseFolder: recordFolder, target: name});
+  if (name == except) {
+    continue;
+  }
+  // If we have nothing to test continue
+  if (!(testFailedLogin || bankConfig.password)) {
+    continue;
+  }
 
   try {
-    const events = await Agent.process(name, bankConfig.url, askUser, logger);
+    if (testFailedLogin) {
+      await RunFailedLogin(name, bankConfig);
+      updateRecordLatest(recordFolder, failLoginTarget(name))
+    }
+    // If we have password, run the full process
+    else if (bankConfig.password) {
+      using askUser = new AskUserConsole(bankConfig);
+      await runAgent(name, bankConfig.url, askUser);
+      updateRecordLatest(recordFolder, name);
+    }
     successful.push(name);
 
-    logger.logEvents(events);
   } catch (e) {
+    log.error(e, `Encountered error in ${name}`);
     errored.push(name);
   }
 }

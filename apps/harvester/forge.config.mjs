@@ -22,6 +22,10 @@ const nativeModules = [
   'sharp',
   'puppeteer',
   'puppeteer-extra',
+  // These aren't used, but can cause warnings in
+  // the forge logger main process if included
+  '@bitwarden/sdk-napi',
+  '@google-cloud/secret-manager',
 ]
 
 const vqaApiKey = await getSecret("VqaApiKey");
@@ -32,6 +36,8 @@ const mainConfigMerged = mainConfig({
       ['process.env.TC_LOG_FOLDER']: JSON.stringify("false"),
       ['process.env.URL_SEQ_LOGGING']: JSON.stringify("false"),
       ['process.env.VQA_API_KEY']: JSON.stringify(vqaApiKey),
+      // Until deployments are handled by CI override default deployed date
+      ['process.env.TC_DEPLOYED_AT']: JSON.stringify(new Date().toISOString()),
     })
   ],
   resolve: {
@@ -121,7 +127,7 @@ const config = {
 };
 
 // Only add in externals if packaging
-if (process.env.npm_lifecycle_event != 'dev') {
+if (process.env.npm_lifecycle_event != '_start:dbg') {
   config.plugins.push(
     //@ts-ignore
     new ForgeExternalsPlugin({

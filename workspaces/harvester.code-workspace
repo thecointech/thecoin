@@ -19,6 +19,10 @@
 		{
 			"name": "electron-utils",
 			"path": "../libs/electron-utils"
+		},
+    {
+			"name": "testing-pages",
+			"path": "../../private-testing-pages"
 		}
 	],
 	"settings": {

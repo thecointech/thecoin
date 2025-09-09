@@ -1,34 +1,35 @@
 import { log } from "@thecointech/logging";
-import { PageHandler } from "../pageHandler";
-import { ElementData, IAskUser } from "../types";
-import { GetBaseApi, GetLoginApi } from "@thecointech/apis/vqa";
+import { ElementData } from "../types";
 import { processorFn } from "./types";
 import { enterValueIntoFound } from "@thecointech/scraper/replay";
 import { FoundElement } from "@thecointech/scraper/types";
+import { LoginFailedError } from "../errors";
+import type { Agent } from "../agent";
+import { apis } from "../apis";
 
-export const Login = processorFn("Login", async (page: PageHandler, input: IAskUser)  => {
-  return await login(page, input);
+export const Login = processorFn("Login", async (agent: Agent)  => {
+  return await login(agent);
 })
 
-async function login(page: PageHandler, input: IAskUser) {
+async function login(agent: Agent) {
   // We have to detect the password before entering
   // the username.  The extra data of the username
   // entered into the username field can confuse the vLLM
-  const api = GetLoginApi();
-  page.onProgress(10);
+  const api = await apis().getLoginApi();
+  agent.onProgress(10);
 
-  const { data: hasPassword } = await api.detectPasswordExists(await page.getImage());
-  page.onProgress(25);
+  const { data: hasPassword } = await api.detectPasswordExists(await agent.page.getImage());
+  agent.onProgress(25);
 
   // await enterUsernameAndRemember(page, input);
-  await enterUsername(page, input, await page.getImage());
-  page.onProgress(50);
+  await enterUsername(agent);
+  agent.onProgress(50);
 
-  await enterPassword(page, input, hasPassword.password_input_detected);
-  page.onProgress(75);
+  await enterPassword(agent, hasPassword.password_input_detected);
+  agent.onProgress(75);
 
-  await clickLogin(page);
-  const outcome = await loginOutcome(page);
+  await clickLogin(agent);
+  const outcome = await loginOutcome(agent);
   return outcome;
 }
 
@@ -70,19 +71,21 @@ async function login(page: PageHandler, input: IAskUser) {
 //     }
 //   }
 // }
-async function enterUsername(page: PageHandler, input: IAskUser, image: File) {
-  const username = await input.forUsername();
-  const { data: inputResponse } = await GetLoginApi().detectUsernameInput(image);
-  const element = await page.toElement(inputResponse, "username", "input", "text");
+async function enterUsername(agent: Agent) {
+  const username = await agent.input.forUsername();
+  const api = await apis().getLoginApi();
+  const { data: inputResponse } = await api.detectUsernameInput(await agent.page.getImage());
+  const element = await agent.page.toElement(inputResponse, { eventName: "username", tagName: "input", inputType: "text" });
 
   const usernameToEnter = await getMostSimilarUsername(element.data, username);
-  await enterUsernameIntoInput(page, usernameToEnter, element);
+  await enterUsernameIntoInput(agent, usernameToEnter, element);
 }
 
 async function getMostSimilarUsername(element: ElementData, username: string) {
   // If this is a drop-down, are there elements that mostly match the username?
   if (element.options) {
-    const { data: similar } = await GetBaseApi().detectMostSimilarOption(username, element.options);
+    const api = await apis().getVqaBaseApi();
+    const { data: similar } = await api.detectMostSimilarOption(username, element.options);
     // Super-simple check - the first letter at least should match...
     if (similar.most_similar[0] == username[0]) {
       return similar.most_similar;
@@ -91,67 +94,63 @@ async function getMostSimilarUsername(element: ElementData, username: string) {
   return username;
 }
 
-async function enterUsernameIntoInput(page: PageHandler, username: string, element: FoundElement) {
+async function enterUsernameIntoInput(agent: Agent, username: string, element: FoundElement) {
   // Does the detected element already include the username?
   const pageValues = [element.data.text, element.data.nodeValue, ...(element.data.siblingText ?? [])];
   if (pageValues.map(t => t?.toLowerCase()).includes(username.toLowerCase())) {
     // Username already entered
     return;
   }
-  const didEnter = await enterValueIntoFound(page.page, element, username);
+  const didEnter = await enterValueIntoFound(agent.page.page, element, username);
   if (!didEnter) {
-    await page.maybeThrow(new Error("Failed to enter username"));
+    await agent.maybeThrow(new Error("Failed to enter username"));
   }
 }
 
-async function enterPassword(page: PageHandler, input: IAskUser, hasPassword: boolean) {
-  const password = await input.forPassword();
-  const api = GetLoginApi();
+async function enterPassword(agent: Agent, hasPassword: boolean) {
+  const password = await agent.input.forPassword();
+  const api = await apis().getLoginApi();
   // If no password input detected, it may be on the next page.
   if (!hasPassword) {
-    const clickedContinue = await page.tryClick(api, "detectContinueElement", { name: "continue", htmlType: "button" });
+    const clickedContinue = await agent.page.tryClick(api, "detectContinueElement", { hints: { eventName: "continue", tagName: "button" } });
     if (!clickedContinue) {
-      await page.maybeThrow(new Error("Failed to click continue"));
+      await agent.maybeThrow(new Error("Failed to click continue"));
     }
-    const { data: hasPassword } = await api.detectPasswordExists(await page.getImage());
+    const { data: hasPassword } = await api.detectPasswordExists(await agent.page.getImage());
     if (!hasPassword.password_input_detected) {
-      await page.maybeThrow(new Error("Failed to detect password input"));
+      await agent.maybeThrow(new Error("Failed to detect password input"));
     }
 
     // await this.updatePageName("password");
   }
 
-  const didEnter = await page.tryEnterText(api, "detectPasswordInput", {
+  const didEnter = await agent.page.tryEnterText(api, "detectPasswordInput", {
     text: password,
-    name: "password",
-    htmlType: "input",
-    inputType: "password",
+    hints: { eventName: "password", tagName: "input", inputType: "password" },
   });
   if (!didEnter) {
-    await page.maybeThrow(new Error("Failed to enter password"));
+    await agent.maybeThrow(new Error("Failed to enter password"));
   }
 }
 
-async function clickLogin(page: PageHandler) {
-  const api = GetLoginApi();
-  const clickedLogin = await page.tryClick(api, "detectLoginElement", { name: "login", htmlType: "button" });
+async function clickLogin(agent: Agent) {
+  const api = await apis().getLoginApi();
+  const clickedLogin = await agent.page.tryClick(api, "detectLoginElement", { hints: { eventName: "login", tagName: "button" } });
   if (!clickedLogin) {
-    await page.maybeThrow(new Error("Failed to click login"));
+    await agent.maybeThrow(new Error("Failed to click login"));
   }
 }
 
-async function loginOutcome(page: PageHandler) {
-  const { data: loginResult } = await GetLoginApi().detectLoginResult(await page.getImage());
+async function loginOutcome(agent: Agent) {
+  const api = await apis().getLoginApi();
+  const { data: loginResult } = await api.detectLoginResult(await agent.page.getImage());
   log.info(" ** Login result: " + loginResult.result);
 
   if (loginResult.result == "LoginError") {
-    const { data: hasError } = await GetLoginApi().detectLoginError(await page.getImage());
-    if (hasError.error_message_detected) {
-      log.warn("LoginWriter: Found error message: " + hasError.error_message);
-      // this.writeJson({
-      //   text: hasError.error_message,
-      // }, "failed");
-    }
+    // most likely incorrect username/pwd
+    const { data: hasError } = await api.detectLoginError(await agent.page.getImage());
+    log.warn(" ** Login error: " + hasError.error_message);
+    throw new LoginFailedError(hasError);
   }
   return loginResult.result;
 }

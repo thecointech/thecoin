@@ -1,5 +1,5 @@
-import { getTaskGroup, BackgroundTaskReducer } from "@/BackgroundTask";
-import { BackgroundTaskProgressBar } from "@/BackgroundTask/BackgroundTaskProgressBar";
+import { isRunning, useBackgroundTask } from "@/BackgroundTask";
+import { BackgroundTaskErrors, BackgroundTaskProgressBar } from "@/BackgroundTask/BackgroundTaskProgressBar";
 import { Button, Checkbox, Dropdown, Form, Label, Message } from "semantic-ui-react";
 import { QuestionResponse } from "@/Agent/QuestionResponse";
 import { useState } from "react";
@@ -7,12 +7,11 @@ import { ActionType } from "@/Harvester/scraper";
 
 export function RefreshTwoFA() {
 
-  const tasks = BackgroundTaskReducer.useData();
-  const recordTask = getTaskGroup(tasks, 'twofaRefresh');
-  const isWorking = !!recordTask && recordTask.completed !== true;
+  const recordTask = useBackgroundTask('twofaRefresh');
+  const isRecording = isRunning(recordTask);
   const [accountType, setAccountType] = useState<ActionType>();
   const [refreshProfile, setRefreshProfile] = useState(true);
-  const disabled = isWorking || !accountType;
+  const disabled = isRecording || !accountType;
 
   const refreshTwoFA = async () => {
     const r = await window.scraper.twofaRefresh(accountType!, refreshProfile);
@@ -45,8 +44,9 @@ export function RefreshTwoFA() {
         </Message>
       </Label>
       <Button onClick={refreshTwoFA} disabled={disabled}>Start</Button>
-      <QuestionResponse isRecording={isWorking} />
+      <QuestionResponse enabled={isRecording} />
       <BackgroundTaskProgressBar type="twofaRefresh" />
+      <BackgroundTaskErrors type="twofaRefresh" />
     </div>
   );
 }

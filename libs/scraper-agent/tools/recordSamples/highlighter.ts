@@ -1,3 +1,13 @@
+
+declare global {
+  var __highlighter: {
+    hide: () => void;
+    show: () => void;
+    render: (width: number, height: number, left: number, top: number) => void;
+    setColor: (color: string) => void;
+  };
+}
+
 // Start highlighting the element under the mouse
 export function initElementHighlight(border_size=5, color="rgba(255, 0, 0, 0.5)") {
 
