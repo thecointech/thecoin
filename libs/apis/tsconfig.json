@@ -1,11 +1,7 @@
 {
-  "extends": "../tsconfig.libs.json",
-  "compilerOptions": {
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "outDir": "./build/",
-    "tsBuildInfoFile": "./build/.buildinfo",
-    "rootDir": "./src/",
-  },
-  "include": ["src/**/*", "src/**/*.json"],
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.tests.json" },
+    { "path": "./tsconfig.build.json" },
+  ]
 }

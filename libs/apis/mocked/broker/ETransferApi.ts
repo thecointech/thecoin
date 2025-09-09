@@ -1,6 +1,6 @@
 import { CertifiedTransfer, CertifiedTransferResponse, ETransferApi as SrcApi, ETransferCodeResponse, SignedMessage } from "@thecointech/broker-cad";
 import type { AxiosResponse } from 'axios';
-import { buildResponse } from '../../axios-utils';
+import { buildResponse } from '../axios-utils';
 import { sleep } from '@thecointech/async';
 
 export class ETransferApi implements Pick<SrcApi, keyof SrcApi> {

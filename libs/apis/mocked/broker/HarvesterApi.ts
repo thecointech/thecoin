@@ -1,6 +1,6 @@
 import type { Heartbeat, HarvesterApi as SrcApi } from "@thecointech/broker-cad";
-import { buildResponse } from "../../axios-utils";
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { buildResponse } from "../axios-utils";
+import type { AxiosResponse } from 'axios';
 
 export class HarvesterApi implements Pick<SrcApi, keyof SrcApi> {
   heartbeat(): Promise<AxiosResponse<boolean, any>> {

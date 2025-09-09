@@ -1,6 +1,6 @@
 import type { UserVerifyData, UserVerificationApi as SrcApi, BlockpassPayload } from "@thecointech/broker-cad";
 import { AxiosResponse } from 'axios';
-import { buildResponse } from "../../axios-utils";
+import { buildResponse } from "../axios-utils";
 
 
 export enum StatusType // Should match SrcType exactly

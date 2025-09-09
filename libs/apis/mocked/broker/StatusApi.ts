@@ -1,5 +1,5 @@
 import type { StatusApi as SrcApi } from "@thecointech/broker-cad";
-import { buildResponse } from "../../axios-utils";
+import { buildResponse } from "../axios-utils";
 
 export class StatusApi implements Pick<SrcApi, keyof SrcApi> {
 
