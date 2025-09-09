@@ -3,10 +3,14 @@ name: Publish NPM Packages
 on:
   workflow_call:
     inputs:
-      environment:
+      CONFIG_NAME:
         required: true
         type: string
         description: 'Environment to deploy to (prodtest, prodbeta, prod)'
+    outputs:
+      latest_sha:
+        description: 'The latest commit SHA after publishing'
+        value: ${{ jobs.publish.outputs.latest_sha }}
 
 env:
   YARN_CHECKSUM_BEHAVIOR: ignore
@@ -20,7 +24,7 @@ jobs:
       packages: write  # For package publishing
     outputs:
       latest_sha: ${{ steps.get_sha.outputs.sha }}
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.CONFIG_NAME }}
 
     steps:
       - uses: actions/checkout@v4
@@ -54,7 +58,7 @@ jobs:
 
       - name: Version and Publish
         run: |
-          if [ "${{ vars.CONFIG_NAME }}" = "prodtest" ]; then
+          if [ "${{ inputs.CONFIG_NAME }}" = "prodtest" ]; then
             yarn lerna version --conventional-commits --include-merged-tags --conventional-prerelease --preid test --yes
           else
             yarn lerna version --conventional-commits --include-merged-tags --conventional-graduate --yes

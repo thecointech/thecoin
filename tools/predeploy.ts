@@ -100,8 +100,6 @@ export async function copyNpmTokenHere(folder: URL) {
   const withToken = noToken.replace('<tokenhere>', token);
   writeFileSync(new URL('.npmrc', folder), withToken);
 
-  console.log(`NPM Token: ${token.substring(0, 8)}... written to ${folder}`);
-
   return "NPM token copied here";
 }
 
