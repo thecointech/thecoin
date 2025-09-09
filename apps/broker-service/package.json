@@ -44,7 +44,6 @@
     "@thecointech/contract-plugins": "^0.3.11",
     "@thecointech/email": "^0.3.11",
     "@thecointech/logging": "^0.3.11",
-    "@thecointech/pricing": "^0.3.3",
     "@thecointech/setenv": "^0.3.11",
     "@thecointech/signers": "^0.3.11",
     "@thecointech/tx-bill": "^0.3.11",
