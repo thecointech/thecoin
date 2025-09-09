@@ -37,20 +37,6 @@ const devOptions = {
   module: {
     rules: [
       {
-        // In dev, we may import ts files directly from mocks in libraries
-        test: /\.ts(x?)$/,
-        include: /pricing/,
-        use: {
-          loader: 'ts-loader',
-          options: {
-            configFile,
-            transpileOnly: true,
-            experimentalWatchApi: true,
-            projectReferences: true,
-          },
-        },
-      },
-      {
         test: /\.js$/,
         enforce: 'pre',
         use: ['source-map-loader'],
