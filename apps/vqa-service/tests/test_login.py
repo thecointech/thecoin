@@ -1,6 +1,6 @@
 import unittest
 from TestBase import TestBase
-from testdata import get_test_data
+from testutils.testdata import get_test_data
 from login_routes import (
     detect_logout_element,
     detect_username_input,

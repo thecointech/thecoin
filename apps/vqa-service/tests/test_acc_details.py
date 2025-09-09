@@ -1,7 +1,7 @@
 from TestBase import TestBase
 import unittest
 from tests.repeat_on_failure import repeat_on_fail
-from tests.testdata import get_single_test_element, get_test_data
+from tests.testutils.testdata import get_test_data
 from intent_routes import page_intent
 from credit_details_routes import (
     current_balance,

@@ -1,5 +1,5 @@
 from TestBase import TestBase, normalize
-from testdata import get_test_data, get_single_test_element, get_extra
+from testutils.testdata import get_test_data
 from thefuzz import fuzz
 from tests.repeat_on_failure import repeat_on_fail
 from summary_routes import account_balance_element, list_accounts, account_navigate_element
@@ -60,9 +60,9 @@ class TestSummary(TestBase):
         for test in tests:
             with self.subTest(key=test.key):
                 vqa = test.vqa("accountBalance")
-                response = await account_balance_element(test.image(), vqa.args[0], vqa.args[1], vqa.args[2])
+                response = await account_balance_element(test.image(), vqa.args[0], int(vqa.args[1]), int(vqa.args[2]))
                 elm = test.elm("balance")
-                self.assertResponse(response, elm.data, test.key)
+                self.assertResponse(response, elm)
 
     async def test_find_navigate_to_account(self):
         tests = get_test_data("AccountsSummary", "NavigateElement")
@@ -74,4 +74,4 @@ class TestSummary(TestBase):
                     vqa = test.vqa("NavigateElement")
                     response = await account_navigate_element(test.image(), *vqa.args)
                     elm = test.elm("navigate")
-                    self.assertResponse(response, elm.data, test.key)
+                    self.assertResponse(response, elm)
