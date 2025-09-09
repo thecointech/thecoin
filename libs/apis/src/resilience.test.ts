@@ -61,22 +61,28 @@ describe('Resilience Testing', () => {
 
     try {
       // Make multiple calls to trigger circuit breaker
-      for (let i = 0; i < 6; i++) {
+      const circuitBreakAfter = Number(process.env.RESILIENCE_CIRCUIT_BREAK_AFTER);
+      for (let i = 0; i <= circuitBreakAfter; i++) {
         try {
           await api.getSingle(124);
         } catch (error) {
           // Expected to fail
         }
       }
+      console.log(JSON.stringify(mockError.mock.calls));
+
 
       // Circuit breaker should be open now, so calls should fail fast
       const startTime = Date.now();
       try {
-        await api.getSingle(1240, 10e100);
+        await api.getSingle(124);
       } catch (error) {
         const duration = Date.now() - startTime;
         // Should fail quickly due to circuit breaker (not wait for full retry cycle)
-        expect(duration).toBeLessThan(500); // Less than 0.5 seconds
+        expect(duration).toBeLessThan(10); // Should be near-instant
+        console.log(JSON.stringify(mockError.mock.calls));
+        const errorMessages = mockError.mock.calls.map((call) => call[1]);
+        expect(errorMessages).toContain("GAE API circuit breaker opened - service appears down");
       }
     } finally {
       override.dispose();

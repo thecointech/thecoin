@@ -22,29 +22,30 @@ export const apiRetryPolicy = retry(handleAll, {
 
 // Circuit breaker for GAE services
 export const gaeCircuitBreaker = circuitBreaker(handleAll, {
-  halfOpenAfter: Number(process.env.RESILIENCE_HALF_OPEN_AFTER ?? 60000),  // Try again after 1 minute
-  breaker: new ConsecutiveBreaker(Number(process.env.RESILIENCE_BREAKER_CONSECUTIVE ?? 5)) // Break after 5 consecutive failures
+  halfOpenAfter: Number(process.env.RESILIENCE_CIRCUIT_HALF_OPEN_AFTER ?? 60000),  // Try again after 1 minute
+  breaker: new ConsecutiveBreaker(Number(process.env.RESILIENCE_CIRCUIT_BREAK_AFTER ?? 5)) // Break after 5 consecutive failures
 });
 
 // Combined policy for GAE API calls (no timeout - let axios handle it)
 export const gaeApiPolicy = wrap(
-  apiRetryPolicy,
-  gaeCircuitBreaker
+  gaeCircuitBreaker,
+  apiRetryPolicy
 );
 
+const getError = (failure: any) => {
+  return "error" in failure ? failure.error : failure;
+}
 // Add event logging to individual policies
 apiRetryPolicy.onRetry(({ attempt, delay }) => {
   log.warn(`Retrying GAE API (attempt ${attempt}) after ${delay}ms delay`);
 });
 
-apiRetryPolicy.onGiveUp(params => {
-  ("error" in params)
-    ? log.error(params.error, "GAE API retry exceeded max attempts")
-    : log.error(params, "GAE API retry policy exceeded");
+apiRetryPolicy.onGiveUp(failure => {
+  log.error(getError(failure), "GAE API retry policy exceeded");
 });
 
-gaeCircuitBreaker.onBreak(() => {
-  log.error('GAE API circuit breaker opened - service appears down');
+gaeCircuitBreaker.onBreak(failure => {
+  log.error(getError(failure), 'GAE API circuit breaker opened - service appears down');
 });
 
 gaeCircuitBreaker.onReset(() => {
