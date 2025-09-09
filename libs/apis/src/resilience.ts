@@ -32,20 +32,17 @@ export const gaeApiPolicy = wrap(
   apiRetryPolicy
 );
 
-const getError = (failure: any) => {
-  return "error" in failure ? failure.error : failure;
-}
 // Add event logging to individual policies
 apiRetryPolicy.onRetry(({ attempt, delay }) => {
   log.warn(`Retrying GAE API (attempt ${attempt}) after ${delay}ms delay`);
 });
 
 apiRetryPolicy.onGiveUp(failure => {
-  log.error(getError(failure), "GAE API retry policy exceeded");
+  log.error(failure, "GAE API retry policy exceeded");
 });
 
 gaeCircuitBreaker.onBreak(failure => {
-  log.error(getError(failure), 'GAE API circuit breaker opened - service appears down');
+  log.error(failure, 'GAE API circuit breaker opened - service appears down');
 });
 
 gaeCircuitBreaker.onReset(() => {
@@ -57,24 +54,19 @@ gaeCircuitBreaker.onReset(() => {
  */
 export function createGaeServiceProxy<T extends object>(target: T): T {
   return new Proxy(target, {
-    get(target, prop, receiver) {
-      // axios is a getter, not a property
-      if (prop === "axios") {
-        return target[prop as keyof T];
+    get(obj, prop, receiver) {
+      const originalValue = Reflect.get(obj, prop, receiver);
+      if (prop === 'axios' || prop === 'constructor' || typeof originalValue !== 'function') {
+        return originalValue;
       }
-      const originalValue = Reflect.get(target, prop, receiver);
-
       // Only wrap functions
-      if (typeof originalValue === 'function') {
-        return function(this: any, ...args: any[]) {
-          // Wrap the function execution with resilience policy
-          // Cockatiel will handle whether the result is a promise or not
-          return gaeApiPolicy.execute(() => originalValue.apply(this, args));
-        };
-      }
-
-      // For non-function properties, return as-is
-      return originalValue;
-    }
+      return function (this: unknown, ...args: unknown[]) {
+        // Wrap the function execution with resilience policy
+        // Cockatiel will handle whether the result is a promise or not
+        return gaeApiPolicy.execute(
+          () => originalValue.apply(obj, args),
+        );
+      };
+    },
   });
 }

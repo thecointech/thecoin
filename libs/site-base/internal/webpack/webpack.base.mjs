@@ -27,10 +27,10 @@ export async function getBaseConfig(secrets = []) {
   );
   const secretObj = Object.fromEntries(loaded.map(s => [s.name, s.value]));
 
-  // When building in dev config, we include mocked files
-  const tsIncludeOpt = configName == "development"
-    ? [join(projectRoot, "src"), /libs\/.+\/mocked/]
-    : join(projectRoot, "src");
+  // When building in dev config, include mocked files across libs
+  const tsIncludeOpt = configName === 'development'
+    ? [join(projectRoot, 'src'), /[\\/]libs[\\/].+[\\/]mocked[\\/]/]
+    : join(projectRoot, 'src');
 
   return {
     externals: ['dtrace-provider', 'mv', 'os', 'source-map-support', 'secret-manager', 'http'],
