@@ -10,5 +10,5 @@ jobs:
     if: github.event.pull_request.merged == true
     uses: ./.github/workflows/pr-publish.yml
     with:
-      environment: prod
+      CONFIG_NAME: prod
     secrets: inherit

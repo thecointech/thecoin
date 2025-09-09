@@ -10,5 +10,5 @@ jobs:
     if: github.event.pull_request.merged == true
     uses: ./.github/workflows/pr-publish.yml
     with:
-      environment: prodbeta
+      CONFIG_NAME: prodbeta
     secrets: inherit

@@ -7,8 +7,13 @@ run(
   app => {
     // Serve dev:live plugins src
     app.get('/_plugins_src', (req, res) => {
-      const raw = readFileSync(pluginSrcUrl);
-      res.send(raw);
+      if (process.env.CONFIG_NAME == "dev:live") {
+        const raw = readFileSync(pluginSrcUrl);
+        res.send(raw);
+      } else {
+        // Dev mode is always "RoundNumber"
+        res.status(404).send("Not Found");
+      }
     });
   }
 );

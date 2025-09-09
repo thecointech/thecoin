@@ -7,7 +7,7 @@ on:
         required: true
         type: string
         description: 'Commit SHA to build from'
-      environment:
+      CONFIG_NAME:
         required: true
         type: string
         description: 'Environment to deploy to (prodtest, prodbeta, prod)'
@@ -25,7 +25,7 @@ jobs:
       packages: write
       attestations: write
       id-token: write
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.CONFIG_NAME }}
 
     steps:
 
@@ -64,8 +64,8 @@ jobs:
           flavor: |
             latest=false
           tags: |
-            type=raw,value=${{ vars.CONFIG_NAME }}-latest
-            type=raw,value=${{ vars.CONFIG_NAME }}-{{sha}}
+            type=raw,value=${{ inputs.CONFIG_NAME }}-latest
+            type=raw,value=${{ inputs.CONFIG_NAME }}-{{sha}}
             type=sha,format=long
 
       # - name: Extract metadata for VQA Service
@@ -82,7 +82,7 @@ jobs:
         working-directory: ./apps/tx-processor
         env:
           GH_PACKAGES_READ: ${{ secrets.GH_PACKAGES_READ }}
-          CONFIG_NAME: ${{ vars.CONFIG_NAME }}
+          CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
 
       - name: Build and push tx-processor
         uses: docker/build-push-action@v5
