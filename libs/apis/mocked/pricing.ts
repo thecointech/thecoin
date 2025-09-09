@@ -1,6 +1,6 @@
 import type { FXRate, RatesApi as IRatesApi  } from "@thecointech/pricing";
 import type { AxiosResponse } from "axios";
-import { buildResponse } from "../axios-utils";
+import { buildResponse } from "./axios-utils";
 import { DateTime } from "luxon";
 
 class RatesApi implements Pick<IRatesApi, keyof IRatesApi> {

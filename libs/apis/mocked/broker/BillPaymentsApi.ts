@@ -1,6 +1,6 @@
 import { CertifiedTransfer, CertifiedTransferResponse, BillPaymentsApi as SrcApi, UberTransferAction } from "@thecointech/broker-cad";
 import type { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { buildResponse } from '../../axios-utils';
+import { buildResponse } from '../axios-utils';
 import { sleep } from '@thecointech/async';
 
 export class BillPaymentsApi implements Pick<SrcApi, keyof SrcApi> {

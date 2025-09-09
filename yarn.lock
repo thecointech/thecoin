@@ -10612,6 +10612,7 @@ __metadata:
     "@thecointech/pricing": "npm:^0.3.3"
     "@thecointech/secrets": "npm:^0.3.11"
     "@thecointech/vqa": "npm:^0.3.10"
+    cockatiel: "npm:^3.2.1"
   languageName: unknown
   linkType: soft
 
