@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.13-test.2](https://github.com/thecointech/thecoin/compare/v0.3.13-test.1...v0.3.13-test.2) (2025-09-09)
+
+**Note:** Version bump only for package @thecointech/nft-service
+
+
+
+
+
 ## [0.3.13-test.0](https://github.com/thecointech/thecoin/compare/v0.3.12...v0.3.13-test.0) (2025-09-09)
 
 **Note:** Version bump only for package @thecointech/nft-service
