@@ -3,7 +3,7 @@ name: Deploy to sites
 on:
   workflow_call:
     inputs:
-      environment:
+      CONFIG_NAME:
         required: true
         type: string
         description: 'Environment to build for (e.g., prodtest, prod)'
@@ -19,11 +19,16 @@ env:
 jobs:
   deploy_live_website:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.CONFIG_NAME }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.COMMIT_SHA }}
+
+      - name: Validate CommitSha
+        run: |
+          echo "CommitSha: ${{ inputs.COMMIT_SHA }}"
+          echo "GithubSha: ${{ github.sha }}"
 
       - run: corepack enable
 
@@ -48,12 +53,12 @@ jobs:
         run: yarn build
         working-directory: ./apps/site-landing
         env:
-          CONFIG_NAME: ${{ vars.CONFIG_NAME }}
+          CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           firebaseServiceAccount: "${{ secrets.GCP_SA_SITES_KEY }}"
-          projectId: "${{ vars.CONFIG_NAME }}"
+          projectId: "${{ inputs.CONFIG_NAME }}"
           channelId: live
           entryPoint: ./apps/site-landing
 
@@ -61,12 +66,12 @@ jobs:
         run: yarn build
         working-directory: ./apps/site-app
         env:
-          CONFIG_NAME: ${{ vars.CONFIG_NAME }}
+          CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
           PolygonscanApiKey: ${{ secrets.POLYGONSCAN_API_KEY }}
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           firebaseServiceAccount: "${{ secrets.GCP_SA_SITES_KEY }}"
-          projectId: "${{ vars.CONFIG_NAME }}"
+          projectId: "${{ inputs.CONFIG_NAME }}"
           channelId: live
           entryPoint: ./apps/site-app
