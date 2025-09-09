@@ -71,6 +71,7 @@ jobs:
       - name: Update common.public.env
         run: |
           node --experimental-strip-types ./tools/updateEnvVersion.ts
+          yarn install --mode=skip-build
           git add .
           git commit -m "chore: update version in common.public.env"
           git push
