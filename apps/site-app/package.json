@@ -2,7 +2,7 @@
   "name": "@thecointech/site-app",
   "productName": "THECoin: Website - App",
   "private": true,
-  "version": "0.3.13-test.0",
+  "version": "0.3.13-test.1",
   "description": "THECoin: Future-proof currency",
   "type": "module",
   "repository": {

@@ -11129,7 +11129,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/site-app@npm:^0.3.13-test.0, @thecointech/site-app@workspace:apps/site-app":
+"@thecointech/site-app@npm:^0.3.13-test.1, @thecointech/site-app@workspace:apps/site-app":
   version: 0.0.0-use.local
   resolution: "@thecointech/site-app@workspace:apps/site-app"
   dependencies:
@@ -11500,7 +11500,7 @@ __metadata:
     "@thecointech/logging": "npm:^0.3.13-test.0"
     "@thecointech/rbcapi": "npm:^0.3.13-test.0"
     "@thecointech/setenv": "npm:^0.3.13-test.0"
-    "@thecointech/site-app": "npm:^0.3.13-test.0"
+    "@thecointech/site-app": "npm:^0.3.13-test.1"
     "@thecointech/tx-bill": "npm:^0.3.13-test.0"
     "@thecointech/tx-deposit": "npm:^0.3.13-test.0"
     "@thecointech/tx-etransfer": "npm:^0.3.13-test.0"
