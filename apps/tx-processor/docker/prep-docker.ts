@@ -1,4 +1,4 @@
-import { copyFileSync, mkdirSync, readFileSync, writeFileSync, cpSync, readdirSync } from 'fs';
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync, cpSync } from 'fs';
 
 // Verify token
 const githubToken = process.env.GH_PACKAGES_READ;
