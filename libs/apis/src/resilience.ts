@@ -52,11 +52,15 @@ gaeCircuitBreaker.onReset(() => {
 /**
  * Creates a proxy that automatically wraps method calls with GAE resilience policies
  */
+const blacklist: (string | symbol)[] = ["axios"];
 export function createGaeServiceProxy<T extends object>(target: T): T {
   return new Proxy(target, {
     get(obj, prop, receiver) {
       const originalValue = Reflect.get(obj, prop, receiver);
-      if (prop === 'axios' || prop === 'constructor' || typeof originalValue !== 'function') {
+      if (typeof originalValue !== 'function') {
+        return originalValue;
+      }
+      if (blacklist.includes(prop)) {
         return originalValue;
       }
       // Only wrap functions
