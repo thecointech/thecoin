@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-processor",
-  "version": "0.3.13-test.3",
+  "version": "0.3.13-test.4",
   "private": true,
   "type": "module",
   "description": "The Coin: A command-line app for completing transactions",
