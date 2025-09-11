@@ -23,9 +23,21 @@ export const Subscribe = () => {
         </h3>
       </span>
       <span className={styles.subscribeForm}>
-        <iframe data-w-type="embedded" frameBorder="0" scrolling="no" marginHeight={0} marginWidth={0} src="https://x15lr.mjt.lu/wgt/x15lr/0mkp/form?c=d2c683cc" width="100%" style={{height: 0}}></iframe>
+        <iframe
+          title="Newsletter subscription form"
+          referrerPolicy="strict-origin-when-cross-origin"
+          data-w-type="embedded"
+          src="https://x15lr.mjt.lu/wgt/x15lr/0mkp/form?c=d2c683cc"
+          width="100%"
+          style={{height: 0}}>
+        </iframe>
         <Helmet>
-          <script type="text/javascript" src="https://app.mailjet.com/pas-nc-embedded-v1.js"></script>
+          <script
+            key="mailjet-embed"
+            defer
+            type="text/javascript"
+            src="https://app.mailjet.com/pas-nc-embedded-v1.js">
+          </script>
         </Helmet>
       </span>
     </div>

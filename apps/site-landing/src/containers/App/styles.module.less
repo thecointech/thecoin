@@ -5,7 +5,7 @@
 
   display: grid;
   grid-gap: 0px;
-  grid-template-rows: .scalable(80, 90)[@result] 1fr 485px;
+  grid-template-rows: .scalable(80, 90)[@result] 1fr minmax(500px, auto);
   grid-template-columns: auto @pageGridContent auto;
   grid-template-areas:
     "lgap lefth header righth rgap"

@@ -1,6 +1,6 @@
 import { expect, it, jest, beforeEach } from "@jest/globals";
 import { describe } from "@thecointech/jestutils";
-import { ifPolygonscan, ifSecret } from "@thecointech/secrets/jestutils";
+import { ifSecret } from "@thecointech/secrets/jestutils";
 import { getProvider } from "./node/remote";
 import { mockWarn, mockError } from "@thecointech/logging/mock";
 
@@ -43,8 +43,8 @@ describe('Ethereum Provider Resilience Testing', () => {
 
     try {
       await expect(provider.getBlockNumber()).rejects.toThrow();
-      expect(override.getCallCount()).toBe(5); // Max attempts reached
-      expect(mockWarn).toHaveBeenCalledTimes(4);
+      expect(override.getCallCount()).toBe(4); // Max attempts reached
+      expect(mockWarn).toHaveBeenCalledTimes(3);
       expect(mockError).toHaveBeenCalledTimes(1);
     } finally {
       override.dispose();

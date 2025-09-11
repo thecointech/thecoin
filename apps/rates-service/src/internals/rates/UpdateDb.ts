@@ -124,16 +124,15 @@ export async function update() {
     // backoff/retry logic.  If the ensure
     // is called again it won't matter because it's already
     // up to date.
-    const r = await Promise.all([
+    const r = await Promise.allSettled([
       ensureLatestCoinRate(now),
       ensureLatestFxRate(now),
     ]);
-    if (r.includes(false)) {
+    if (r.some(r => r.status === "rejected")) {
       return false;
     }
-  }
-  catch (err: any) {
-    log.warn(err, "error in EnsureLatest");
+  } catch (err: any) {
+    log.warn(err, 'error in EnsureLatest');
     return false;
   }
 
@@ -141,9 +140,8 @@ export async function update() {
     // Once we have updated, do a matching update on Oracle
     await updateOracle(now);
     return true;
-  }
-  catch (err: any) {
-    log.warn(err, "error in UpdateOracle");
+  } catch (err: any) {
+    log.warn(err, 'error in UpdateOracle');
     return false;
   }
 }
