@@ -6,24 +6,25 @@ import { log } from '@thecointech/logging';
 import { HDNodeWallet } from 'ethers';
 import type { ScrapingConfig } from './scraper';
 import { getProvider } from '@thecointech/ethers-provider';
-import { ConfigShape, ConfigKey, getConfig, isPouchError } from './config.db';
+import { ConfigShape, ConfigKey, withConfigDatabase, isPouchError } from './config.db';
 
 export async function getProcessConfig() {
-  const db = await getConfig();
-  try {
-    const doc = await db.get(ConfigKey, { revs_info: true, latest: true });
-    return doc;
-  }
-  catch (err) {
-    if (isPouchError(err)) {
-      // Doc not found, this is normal on first insert
-      if (err.status === 404) {
-        return undefined;
-      }
+  return withConfigDatabase(async (db) => {
+    try {
+      const doc = await db.get(ConfigKey, { revs_info: true, latest: true });
+      return doc;
     }
-    log.error(err, "Error getting process config")
-    throw err;
-  }
+    catch (err) {
+      if (isPouchError(err)) {
+        // Doc not found, this is normal on first insert
+        if (err.status === 404) {
+          return undefined;
+        }
+      }
+      log.error(err, "Error getting process config")
+      throw err;
+    }
+  });
 }
 
 function cleanOriginalScraping(scraping: any) : ScrapingConfig {
@@ -65,27 +66,28 @@ function getScrapingConfig(lastCfg?: ScrapingConfig, nextCfg?: ScrapingConfig) {
 export async function setProcessConfig(config: Partial<ConfigShape>) {
   log.info("Setting config file...");
   const lastCfg = await getProcessConfig();
-  const db = await getConfig();
 
-  let scraping = getScrapingConfig(lastCfg?.scraping, config.scraping);
+  return withConfigDatabase(async (db) => {
+    let scraping = getScrapingConfig(lastCfg?.scraping, config.scraping);
 
-  await db.put({
-    steps: config.steps ?? lastCfg?.steps ?? [],
-    schedule: {
-      daysToRun: config.schedule?.daysToRun ?? lastCfg?.schedule?.daysToRun ?? defaultDays,
-      timeToRun: config.schedule?.timeToRun ?? lastCfg?.schedule?.timeToRun ?? defaultTime,
-    },
-    alwaysRunScraperVisible: config.alwaysRunScraperVisible ?? lastCfg?.alwaysRunScraperVisible,
-    stateKey: config.stateKey ?? lastCfg?.stateKey,
-    wallet: config.wallet ?? lastCfg?.wallet,
-    creditDetails: config.creditDetails ?? lastCfg?.creditDetails,
-    scraping,
-    _id: ConfigKey,
-    _rev: lastCfg?._rev,
-  })
+    await db.put({
+      steps: config.steps ?? lastCfg?.steps ?? [],
+      schedule: {
+        daysToRun: config.schedule?.daysToRun ?? lastCfg?.schedule?.daysToRun ?? defaultDays,
+        timeToRun: config.schedule?.timeToRun ?? lastCfg?.schedule?.timeToRun ?? defaultTime,
+      },
+      alwaysRunScraperVisible: config.alwaysRunScraperVisible ?? lastCfg?.alwaysRunScraperVisible,
+      stateKey: config.stateKey ?? lastCfg?.stateKey,
+      wallet: config.wallet ?? lastCfg?.wallet,
+      creditDetails: config.creditDetails ?? lastCfg?.creditDetails,
+      scraping,
+      _id: ConfigKey,
+      _rev: lastCfg?._rev,
+    })
 
-  // Load changes from the decrypted database into the encrypted one.
-  await db.loadDecrypted();
+    // Load changes from the decrypted database into the encrypted one.
+    await db.loadDecrypted();
+  });
 }
 
 export async function setWalletMnemomic(mnemonic: Mnemonic) {

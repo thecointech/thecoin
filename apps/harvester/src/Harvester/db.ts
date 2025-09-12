@@ -10,43 +10,63 @@ import { PayVisaKey } from './steps/PayVisa';
 
 const db_path = path.join(rootFolder, `harvester${dbSuffix()}.db`);
 
+// This is a good sign that these db's should
+// be split into their own package.
+declare global {
+  var __temp_state: PouchDB.Database<StoredData>;
+}
+
+
 function initState(options?: { adapter: string }) {
   if (process.env.CONFIG_NAME === 'development') {
-    log.info(`Initializing in-memory state database`);
+    // In development, we use a global variable to store the database
     options = {
       adapter: 'memory',
       ...options,
     }
+    globalThis.__temp_state ??= new pouchdb<StoredData>(db_path, options);
+    // Disable closing
+    globalThis.__temp_state['close'] = () => Promise.resolve();
+    return globalThis.__temp_state;
   }
-  else {
-    log.info(`Initializing state database at ${db_path}`);
-  }
+
   return new pouchdb<StoredData>(db_path, options);
 }
-let __harvester = null as unknown as PouchDB.Database<StoredData>;
-
-export const getDb = () => __harvester ??= initState();
+// Helper function for transient database operations
+export async function withStateDatabase<T>(
+  operation: (db: PouchDB.Database<StoredData>) => Promise<T>
+): Promise<T> {
+  const db = initState();
+  try {
+    return await operation(db);
+  } finally {
+    await db.close();
+  }
+}
 
 // We use pouchDB revisions to keep the prior state of documents
 const StateKey = "state";
 
 export async function getState() {
-  try {
-    return await getDb().get(StateKey, { revs_info: true });
-  }
-  catch (err) {
-    return undefined;
-  }
+  return withStateDatabase(async (db) => {
+    try {
+      return await db.get(StateKey, { revs_info: true });
+    }
+    catch (err) {
+      return undefined;
+    }
+  });
 }
 
 export async function setCurrentState(data: HarvestData) {
-
-  const lastState = await getState();
-  await getDb().put({
-    _id: StateKey,
-    _rev: lastState?._rev,
-    ...toDb(data),
-  })
+  return withStateDatabase(async (db) => {
+    const lastState = await getState();
+    await db.put({
+      _id: StateKey,
+      _rev: lastState?._rev,
+      ...toDb(data),
+    })
+  });
 }
 
 export async function getCurrentState() {
@@ -114,24 +134,24 @@ export async function setOverrides(balance: number, pendingAmount: number|null, 
 // Export all results as CSV string
 export async function exportResults() {
   try {
-    const db = getDb();
-    const r = await db.get("state", { revs_info: true });
-    const raw = await Promise.all(
-      r._revs_info?.map(r => db.get("state", { rev: r.rev })) ?? []
-    );
-    raw.reverse();
-    const allLines = [];
-    let priorState: any = {};
-    for (const r of raw) {
-      allLines.push(parseLine(priorState, r));
-      priorState = r.state;
-    }
-    return [
-      getHeader(),
-      ...allLines,
-    ].join('\n')
-  }
-  catch (err) {
+    return withStateDatabase(async (db) => {
+      const r = await db.get("state", { revs_info: true });
+      const raw = await Promise.all(
+        r._revs_info?.map(r => db.get("state", { rev: r.rev })) ?? []
+      );
+      raw.reverse();
+      const allLines = [];
+      let priorState: any = {};
+      for (const r of raw) {
+        allLines.push(parseLine(priorState, r));
+        priorState = r.state;
+      }
+      return [
+        getHeader(),
+        ...allLines,
+      ].join('\n')
+    })
+  } catch (err) {
     return JSON.stringify(err);
   }
 }

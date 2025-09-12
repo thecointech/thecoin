@@ -44,7 +44,5 @@ export async function initialize(callback?: BackgroundTaskCallback) {
     state: lastRun?.state ?? {},
   }
 
-
-
   return { stages, state, user };
 }

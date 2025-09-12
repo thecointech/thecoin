@@ -12,9 +12,6 @@ import { ScrapingConfig } from './scraper';
 PouchDB.plugin(memory)
 PouchDB.plugin(comdb)
 
-// Dev loads fresh every time, devlive should... reset on devlive run?
-const PERSIST_DB = process.env.CONFIG_NAME !== "development"
-
 export type ConfigShape = {
   // Store the account Mnemomic
   wallet?: Mnemonic,
@@ -37,11 +34,18 @@ export type ConfigShape = {
 // NOTE: Not sure this works with ComDB
 export const ConfigKey = "config";
 
-export function getConfig(password?: string, persist = PERSIST_DB, db_name?: string) {
-  if (!globalThis.__config) {
-    globalThis.__config = loadDb(password, persist, db_name);
+// Helper function for transient database operations
+export async function withConfigDatabase<T>(
+  operation: (db: PouchDB.Database<ConfigShape>) => Promise<T>,
+  password?: string,
+  db_name?: string
+): Promise<T> {
+  const db = await loadDb(password, db_name);
+  try {
+    return await operation(db);
+  } finally {
+    await db.close();
   }
-  return globalThis.__config;
 }
 
 export function getDbPath(db_name?: string) {
@@ -56,20 +60,28 @@ export interface PouchError extends Error {
 export const isPouchError = (err: unknown): err is PouchError => {
   return err instanceof Error && 'status' in err;
 }
+declare global {
+  var __temp_config: PouchDB.Database<ConfigShape>;
+}
 
-async function loadDb(password?: string, persist = PERSIST_DB, db_name?: string) {
+async function loadDb(password?: string, db_name?: string) {
+  const db_path = getDbPath(db_name);
+  if (process.env.CONFIG_NAME === 'development') {
+    // In development, we use a global variable to store the database
+    log.info(`Initializing in-memory config database`);
+    if (globalThis.__temp_config) {
+      return globalThis.__temp_config;
+    }
+    globalThis.__temp_config = new PouchDB<ConfigShape>(db_path, {adapter: 'memory'});
+    await initMockDb(globalThis.__temp_config);
+    // Disable closing
+    globalThis.__temp_config['close'] = () => Promise.resolve();
+    return globalThis.__temp_config;
+  }
 
   try {
-    const db_path = getDbPath(db_name);
-    log.info(`Initializing ${process.env.NODE_ENV} config database at ${db_path}`);
     const db = new PouchDB<ConfigShape>(db_path, {adapter: 'memory'});
-
-    if (persist) {
-      await initEncryptedDb(db, password);
-    }
-    else {
-      await initMockDb(db);
-    }
+    await initEncryptedDb(db, password);
     return db;
   }
   catch (err) {
