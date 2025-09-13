@@ -1,4 +1,4 @@
-import { defaultDays, defaultTime } from '../../types'
+import { defaultDays, defaultTime } from '@thecointech/store-harvester'
 import { getHarvesterExecutable, setSchedule } from './scheduler-win32'
 import { describe, IsManualRun} from '@thecointech/jestutils';
 

@@ -1,50 +1,50 @@
 import currency from 'currency.js'
 import { DateTime } from 'luxon'
 import type { Signer } from 'ethers';
-import { ChequeBalanceResult, VisaBalanceResult } from '@thecointech/scraper-agent/types';
+import type { CreditDetails, HarvestData, HarvestDelta } from '@thecointech/store-harvester';
+export type { HarvestData, HarvestDelta, CreditDetails } from '@thecointech/store-harvester';
+// export type HarvestDelta = {
+//   // The fiat balance of the harvesters
+//   // transfers in and out of the coin account
+//   harvesterBalance?: currency,
 
-export type HarvestDelta = {
-  // The fiat balance of the harvesters
-  // transfers in and out of the coin account
-  harvesterBalance?: currency,
+//   // How much to transfer to TheCoin
+//   // Should be 0 at the end of every run
+//   toETransfer?: currency,
+//   // A pending payment to the Visa
+//   // Set in the run when initiated, cleared
+//   // in a later run when it's settled
+//   toPayVisa?: currency,
+//   // When the pending payment above is scheduled to settle
+//   toPayVisaDate?: DateTime,
 
-  // How much to transfer to TheCoin
-  // Should be 0 at the end of every run
-  toETransfer?: currency,
-  // A pending payment to the Visa
-  // Set in the run when initiated, cleared
-  // in a later run when it's settled
-  toPayVisa?: currency,
-  // When the pending payment above is scheduled to settle
-  toPayVisaDate?: DateTime,
+//   stepData?: Record<string, string>,
+// }
+// export type HarvestData = {
 
-  stepData?: Record<string, string>,
-}
-export type HarvestData = {
+//   date: DateTime,
 
-  date: DateTime,
+//   visa: VisaBalanceResult,
+//   chq: ChequeBalanceResult,
 
-  visa: VisaBalanceResult,
-  chq: ChequeBalanceResult,
+//   // Delta-only changes
+//   delta: HarvestDelta[],
+//   // are cumulatively applied to state
+//   state: HarvestDelta;
 
-  // Delta-only changes
-  delta: HarvestDelta[],
-  // are cumulatively applied to state
-  state: HarvestDelta;
-
-  // Errors for the current run only (indexed by step name)
-  errors?: Record<string, string>,
-}
+//   // Errors for the current run only (indexed by step name)
+//   errors?: Record<string, string>,
+// }
 
 export type UserData = {
   creditDetails: CreditDetails;
   wallet: Signer;
 }
 
-export type CreditDetails = {
-  payee: string,
-  accountNumber: string,
-}
+// export type CreditDetails = {
+//   payee: string,
+//   accountNumber: string,
+// }
 
 export interface ProcessingStage {
   readonly name: string;

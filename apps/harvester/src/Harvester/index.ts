@@ -1,4 +1,4 @@
-import { setCurrentState } from './db';
+import { setCurrentState } from './state';
 import { log } from '@thecointech/logging';
 import { processState } from './processState';
 import { initialize } from './initialize';

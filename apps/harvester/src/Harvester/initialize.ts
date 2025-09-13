@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 import { hydrateProcessor, getWallet, getCreditDetails } from './config';
-import { getCurrentState } from './db';
+import { getCurrentState } from './state';
 import { getChequingData, getVisaData } from './fetchData';
 import { HarvestData } from './types';
 import { replay } from '@thecointech/scraper/replay';

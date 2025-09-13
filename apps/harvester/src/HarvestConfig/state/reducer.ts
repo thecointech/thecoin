@@ -1,6 +1,7 @@
 
 import { BaseReducer } from '@thecointech/shared/store/immerReducer'
-import { HarvestConfig, defaultDays, DaysArray, HarvestStepType, HarvestArgs, addStep, removeStep, defaultTime, defaultSteps } from '../../types';
+import { HarvestConfig, DaysArray, HarvestStepType, HarvestArgs, addStep, removeStep } from '../../types';
+import { defaultDays, defaultTime, defaultSteps } from '@thecointech/store-harvester';
 import { IActions } from './types';
 import { log } from '@thecointech/logging';
 

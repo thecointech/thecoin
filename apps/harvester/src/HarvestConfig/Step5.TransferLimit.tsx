@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Checkbox, Container, Input, Label, Message } from 'semantic-ui-react'
-import { HarvestStepType } from '../types';
 import { ConfigReducer } from './state/reducer';
 import { safeParseFloat } from './state/utils';
+import { HarvestStepType } from '@thecointech/store-harvester';
 
 export const TransferLimit = () => {
 

@@ -2,7 +2,7 @@ import { Container } from 'semantic-ui-react'
 import { ConfigReducer } from './state/reducer'
 import { Button } from 'semantic-ui-react'
 import equal from 'fast-deep-equal';
-import { defaultDays, defaultSteps, defaultTime } from '../types';
+import { defaultDays, defaultSteps, defaultTime } from '@thecointech/store-harvester';
 
 const defaultData = {
   schedule: {
