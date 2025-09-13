@@ -1,12 +1,15 @@
 import { log } from '@thecointech/logging';
 import { DatabaseConfig, isPouchError } from './types';
 import path from 'path';
+import type { Mutex } from '@thecointech/async';
 
 export abstract class BaseDatabase<Shape extends {}, Stored extends {}=Shape, InShape=Shape, DbConfig extends DatabaseConfig<Shape, Stored, InShape>=DatabaseConfig<Shape, Stored, InShape>> {
   protected config: DbConfig;
+  private mutex: Mutex;
 
-  constructor(config: DbConfig) {
+  constructor(config: DbConfig, mutex: Mutex) {
     this.config = config;
+    this.mutex = mutex;
   }
 
   get dbPath() {
@@ -19,13 +22,17 @@ export abstract class BaseDatabase<Shape extends {}, Stored extends {}=Shape, In
   async withDatabase<ReturnType>(
     operation: (db: PouchDB.Database<Stored>) => Promise<ReturnType>
   ): Promise<ReturnType> {
-    const db = await this.loadDb();
-    try {
-      return await operation(db);
-    } finally {
-      await db.close();
-    }
+    return this.mutex.runExclusive(async () => {
+      const db = await this.loadDb();
+      try {
+        return await operation(db);
+      } finally {
+        await db.close();
+      }
+    });
   }
+
+
 
   async get() {
     return this.withDatabase(async (db) => {

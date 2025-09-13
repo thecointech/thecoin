@@ -2,9 +2,11 @@ import { BasicDatabase } from "../store/basic";
 import { StoredData } from "./transform";
 import { HarvestData } from "./types.harvest";
 import { fromDb, toDb } from "./transform";
+import { Mutex } from "@thecointech/async";
 export { toDb, fromDb } from './transform';
 
 export class StateDatabase extends BasicDatabase<HarvestData, StoredData> {
+  static mutex = new Mutex();
   constructor(rootFolder: string) {
     super({
       rootFolder,
@@ -12,7 +14,7 @@ export class StateDatabase extends BasicDatabase<HarvestData, StoredData> {
       dbname: 'harvester',
       transformIn: toDb,
       transformOut: fromDb,
-    });
+    }, StateDatabase.mutex);
   }
 
   // Get all versions of the state.

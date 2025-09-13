@@ -6,13 +6,17 @@ import { getSeedConfig } from './config.seed';
 import { BaseDatabase } from '../src/store/base';
 import type { ConfigDatabase as SrcConfigDatabase } from '../src/config';
 import { transformIn } from '../src/config/transform';
+import { Mutex } from '@thecointech/async';
 
 PouchDB.plugin(memory);
 
 export const ConfigKey = "config";
 
+// We can extend ConfigDatabase directly, as that results in
+// inject comdb, which throws errors as it is not initialized appropriately
 export class ConfigDatabase extends BaseDatabase<ConfigShape> implements Omit<SrcConfigDatabase, "initEncryptedDb"> {
 
+  static mutex = new Mutex();
   constructor() {
     super({
       rootFolder: "in-memory",
@@ -20,7 +24,7 @@ export class ConfigDatabase extends BaseDatabase<ConfigShape> implements Omit<Sr
       key: ConfigKey,
       transformIn,
       transformOut: (data) => data,
-    });
+    }, ConfigDatabase.mutex);
   }
 
   protected async loadDb(): Promise<PouchDB.Database<ConfigShape>> {

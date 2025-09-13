@@ -1,8 +1,10 @@
+import { Mutex } from "@thecointech/async";
 import { EncryptedDatabase } from "../store/encrypted";
 import { transformIn } from "./transform";
 import { ConfigShape } from "./types";
 
 export class ConfigDatabase extends EncryptedDatabase<ConfigShape, ConfigShape, Partial<ConfigShape>> {
+  static mutex = new Mutex();
   constructor(rootFolder: string) {
     super({
       rootFolder,
@@ -11,7 +13,7 @@ export class ConfigDatabase extends EncryptedDatabase<ConfigShape, ConfigShape, 
       password: "hF,835-/=Pw\\nr6r",
       transformIn,
       transformOut: (data) => data,
-    });
+    }, ConfigDatabase.mutex);
   }
 
   // async get() {

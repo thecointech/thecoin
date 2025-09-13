@@ -5,6 +5,7 @@ import comdb from 'comdb';
 import { log } from '@thecointech/logging';
 import { BaseDatabase } from './base';
 import { DatabaseConfig } from './types';
+import type { Mutex } from '@thecointech/async';
 
 PouchDB.plugin(memory);
 PouchDB.plugin(comdb);
@@ -15,8 +16,8 @@ interface EncryptedConfig<Shape extends {}, Stored extends {}=Shape, InShape=Sha
 
 export class EncryptedDatabase<Shape extends {}, Stored extends {}=Shape, InShape=Shape> extends BaseDatabase<Shape, Stored, InShape, EncryptedConfig<Shape, Stored, InShape>> {
 
-  constructor(config: EncryptedConfig<Shape, Stored, InShape>) {
-    super(config);
+  constructor(config: EncryptedConfig<Shape, Stored, InShape>, mutex: Mutex) {
+    super(config, mutex);
   }
 
   // private getDbPath(db_name?: string): string {

@@ -17,6 +17,7 @@
     }
   },
   "dependencies": {
+    "@thecointech/async": "workspace:*",
     "@thecointech/logging": "workspace:*",
     "comdb": "^6.0.0-beta",
     "pouchdb": "^8.0.1"
