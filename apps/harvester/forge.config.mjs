@@ -29,15 +29,15 @@ const nativeModules = [
 ]
 
 const vqaApiKey = await getSecret("VqaApiKey");
-
+// Until deployments are handled by CI override default deployed date
+const deployedAt = JSON.stringify(new Date().toISOString());
 const mainConfigMerged = mainConfig({
   plugins: [
     new webpack.DefinePlugin({
       ['process.env.TC_LOG_FOLDER']: JSON.stringify("false"),
       ['process.env.URL_SEQ_LOGGING']: JSON.stringify("false"),
       ['process.env.VQA_API_KEY']: JSON.stringify(vqaApiKey),
-      // Until deployments are handled by CI override default deployed date
-      ['process.env.TC_DEPLOYED_AT']: JSON.stringify(new Date().toISOString()),
+      ['process.env.TC_DEPLOYED_AT']: deployedAt,
     })
   ],
   resolve: {
@@ -96,7 +96,13 @@ const config = {
       devContentSecurityPolicy: getCSP(),
       mainConfig: mainConfigMerged,
       renderer: {
-        config: rendererConfig(),
+        config: rendererConfig({
+          plugins: [
+            new webpack.DefinePlugin({
+              ['process.env.TC_DEPLOYED_AT']: deployedAt,
+            })
+          ],
+        }),
         entryPoints: [
           {
             html: './src/index.html',
