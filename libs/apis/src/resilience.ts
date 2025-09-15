@@ -53,8 +53,9 @@ gaeCircuitBreaker.onReset(() => {
  * Creates a proxy that automatically wraps method calls with GAE resilience policies
  */
 const blacklist: (string | symbol)[] = ['axios', 'constructor'];
+type PassThrough = (this: unknown, ...args: unknown[]) => unknown;
 export function createGaeServiceProxy<T extends object>(target: T): T {
-  const cache = new Map<PropertyKey, Function>();
+  const cache = new Map<PropertyKey, PassThrough>();
   return new Proxy(target, {
     get(obj, prop, receiver) {
       const originalValue = Reflect.get(obj, prop, receiver);

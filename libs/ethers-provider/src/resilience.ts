@@ -78,29 +78,25 @@ const nonRpcMethods = new Set<string>([
   // promise-ish traps
   'then','catch','finally',
 ]);
+
+const noRetryMethod = (prop: PropertyKey) => (
+  typeof prop === 'symbol' || typeof prop === 'string' && (prop.startsWith('_') || nonRpcMethods.has(prop))
+)
+
+type PassThrough = (this: unknown, ...args: unknown[]) => unknown;
 export function createEthProviderProxy<T extends object>(target: T): T {
-  const cache = new Map<PropertyKey, Function>();
+  const cache = new Map<PropertyKey, PassThrough>();
   return new Proxy(target, {
-    get(obj, prop, receiver) {
-      const originalValue = Reflect.get(obj, prop, receiver);
+    get(obj, prop, _receiver) {
+      const originalValue = Reflect.get(obj, prop, target);
       if (typeof originalValue !== 'function') {
         return originalValue;
       }
-      if (typeof prop === 'symbol') return originalValue;
-      if (typeof prop === 'string' && (prop.startsWith('_') || nonRpcMethods.has(prop))) {
-        return originalValue;
-      }
+
       const cached = cache.get(prop);
       if (cached) return cached;
 
-      // Only wrap functions
-      const wrapped = function (this: unknown, ...args: unknown[]) {
-        // Wrap the function execution with resilience policy
-        // Cockatiel will handle whether the result is a promise or not
-        return ethRpcPolicy.execute(
-          () => originalValue.apply(obj, args),
-        );
-      };
+      const wrapped = newMethodInstance(originalValue, obj, prop);
       cache.set(prop, wrapped);
       return wrapped;
     },
@@ -112,61 +108,17 @@ export function createEthProviderProxy<T extends object>(target: T): T {
   });
 }
 
-// export function createEthProviderProxy<T extends object>(target: T): T {
-//   return new Proxy(target, {
-//     get(target, prop, receiver) {
-//       const originalValue = Reflect.get(target, prop, receiver);
-
-//       // Wrap all functions except those explicitly blacklisted
-//       if (typeof originalValue === 'function' && !isNonRpcMethod(prop)) {
-//         return function(this: any, ...args: any[]) {
-//           // Wrap the function execution with resilience policy
-//           return ethRpcPolicy.execute(() => originalValue.apply(this, args));
-//         };
-//       }
-
-//       // For non-RPC methods, return as-is
-//       return originalValue;
-//     }
-//   });
-// }
-
-// /**
-//  * Determines if a method should NOT be wrapped with resilience (blacklist approach)
-//  */
-// function isNonRpcMethod(prop: string | symbol): boolean {
-//   if (typeof prop === 'symbol') {
-//     return true; // Don't wrap symbol methods
-//   }
-
-//   const nonRpcMethods = [
-//     // Constructor and prototype methods
-//     'constructor',
-
-//     // Property getters (not RPC calls)
-//     'projectId', 'apiKey', 'network', 'formatter', '_network',
-
-//     // Utility/helper methods (synchronous operations)
-//     'format', 'parse', '_format', '_parse',
-//     'isCommunityResource', 'detectNetwork',
-
-//     // Event-related (local operations)
-//     'on', 'off', 'emit', 'removeListener', 'removeAllListeners',
-//     'addListener', 'once', 'prependListener', 'prependOnceListener',
-
-//     // Internal state methods (synchronous)
-//     '_ready', '_start', '_waitUntilReady', 'ready',
-
-//     // Caching/local operations
-//     '_cache', '_clearCache',
-
-//     // Connection management (handled by underlying transport)
-//     'destroy', 'pause', 'resume'
-//   ];
-
-//   return nonRpcMethods.includes(prop) ||
-//          prop.startsWith('_') ||  // Private methods (usually internal/synchronous)
-//          prop === 'then' ||       // Promise methods
-//          prop === 'catch' ||
-//          prop === 'finally';
-// }
+const newMethodInstance = (originalValue: Function, obj: any, prop: PropertyKey): PassThrough => (
+  (noRetryMethod(prop))
+    // Bind the function to ensure that it is called with
+    // the correct "this" context (ie, obj).  Otherwise calls
+    // to #<method> will fail
+    ? originalValue.bind(obj)
+    // Wrap the function execution with resilience policy
+    // Cockatiel will handle whether the result is a promise or not
+    : function (this: unknown, ...args: unknown[]) {
+      return ethRpcPolicy.execute(
+        () => originalValue.apply(obj, args),
+      );
+    }
+)

@@ -128,9 +128,12 @@ export async function update() {
       ensureLatestCoinRate(now),
       ensureLatestFxRate(now),
     ]);
-    if (r.some(r => r.status === "rejected")) {
+    // Any errors or failures means backoff & try again...
+    if (r.some(r => r.status === "rejected") ||
+        r.some(r => r.status === "fulfilled" && r.value === false)) {
       return false;
     }
+    return true;
   } catch (err: any) {
     log.warn(err, 'error in EnsureLatest');
     return false;
