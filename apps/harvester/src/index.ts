@@ -47,7 +47,7 @@ log.info(`----------------------------------------------------------------------
 // NOTE: The standard initialized message does not get added to the log file,
 // because the log file stream is added after the standard logging is initialized
 log.info(
-  { args: process.argv, version: process.env.TC_APP_VERSION, config: process.env.CONFIG_NAME, deployedAt: process.env.TC_DEPLOYED_AT },
+  { args: process.argv.slice(2), version: process.env.TC_APP_VERSION, config: process.env.CONFIG_NAME, deployedAt: process.env.TC_DEPLOYED_AT },
   'Harvester logging initialized: v{version} - {config} - {deployedAt}'
 );
 

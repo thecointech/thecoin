@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Checkbox, Container, Input } from 'semantic-ui-react'
-import { HarvestStepType } from '../types';
+import { HarvestStepType } from '@thecointech/store-harvester';
 import { ConfigReducer } from './state/reducer';
 import { safeParseFloat } from './state/utils';
 

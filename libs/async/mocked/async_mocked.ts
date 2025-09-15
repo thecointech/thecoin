@@ -2,3 +2,5 @@
 export function sleep() {
   return new Promise(resolve => setTimeout(resolve, 100));
 }
+
+export { Mutex } from 'async-mutex';

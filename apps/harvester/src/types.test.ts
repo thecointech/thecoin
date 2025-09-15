@@ -1,4 +1,5 @@
-import { HarvestStepOrder, HarvestStepType, HarvestSteps, addStep, removeStep } from './types';
+import { HarvestStepOrder, HarvestSteps, addStep, removeStep } from './types';
+import { HarvestStepType } from '@thecointech/store-harvester';
 
 it ('correctly orders steps', () => {
 

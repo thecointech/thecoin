@@ -1,4 +1,4 @@
-import { defaultDays, defaultSteps, defaultTime } from "@/types";
+import { defaultDays, defaultSteps, defaultTime } from "../src";
 import { SectionName } from "@thecointech/scraper-agent/types";
 import { Wallet } from "ethers";
 

@@ -46,14 +46,12 @@
     "@thecointech/setenv": "workspace:^",
     "@timfish/forge-externals-plugin": "https://github.com/FrozenKiwi/forge-externals-plugin-monorepo",
     "@types/node-notifier": "^8.0.2",
-    "@types/pouchdb": "^6.4.0",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "electron": "28.1.3",
     "eslint": "^8.0.1",
     "eslint-plugin-import": "^2.25.0",
-    "fork-ts-checker-webpack-plugin": "^7.2.13",
-    "pouchdb-adapter-memory": "^8.0.1"
+    "fork-ts-checker-webpack-plugin": "^7.2.13"
   },
   "dependencies": {
     "@thecointech/account": "^0.3.13-test.3",
@@ -68,14 +66,13 @@
     "@thecointech/scraper-agent": "^0.3.13-test.3",
     "@thecointech/shared": "^0.3.13-test.3",
     "@thecointech/signers": "^0.3.13-test.0",
+    "@thecointech/store-harvester": "workspace:*",
     "@thecointech/utilities": "^0.3.13-test.3",
-    "comdb": "^6.0.0-beta",
     "crontab": "^1.4.2",
     "currency.js": "^2.0.4",
     "electron-context-menu": "^3.6.1",
     "electron-squirrel-startup": "^1.0.0",
     "node-notifier": "^10.0.0",
-    "pouchdb": "^8.0.1",
     "react-router-dom": "^5.1.2",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.4"
