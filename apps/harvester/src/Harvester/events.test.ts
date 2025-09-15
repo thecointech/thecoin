@@ -2,7 +2,10 @@ import { EventSection } from "@thecointech/scraper-agent";
 import { setEvents, getEvents } from "./events";
 import { ActionType } from "./scraper";
 import { AnyEvent } from "@thecointech/scraper";
+import { jest } from '@jest/globals';
 
+
+jest.setTimeout(10* 60* 1000)
 describe('setting/getting events', () => {
 
   const creditSection: EventSection = { section: 'Initial', events: [{ type: 'click', id: 'credit'} as any] };

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Button, Checkbox, Dimmer, Loader, Segment } from 'semantic-ui-react'
 import { HarvestData } from '../Harvester/types';
-import { fromDb } from '../Harvester/db_translate';
+import { fromDb } from '@thecointech/store-harvester';
 import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
 import { Result } from '../scraper_actions';

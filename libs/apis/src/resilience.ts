@@ -52,21 +52,31 @@ gaeCircuitBreaker.onReset(() => {
 /**
  * Creates a proxy that automatically wraps method calls with GAE resilience policies
  */
+const blacklist: (string | symbol)[] = ['axios', 'constructor'];
+type PassThrough = (this: unknown, ...args: unknown[]) => unknown;
 export function createGaeServiceProxy<T extends object>(target: T): T {
+  const cache = new Map<PropertyKey, PassThrough>();
   return new Proxy(target, {
     get(obj, prop, receiver) {
       const originalValue = Reflect.get(obj, prop, receiver);
-      if (prop === 'axios' || prop === 'constructor' || typeof originalValue !== 'function') {
+      // Only wrap functions
+      if (typeof originalValue !== 'function') {
         return originalValue;
       }
-      // Only wrap functions
-      return function (this: unknown, ...args: unknown[]) {
+      if (blacklist.includes(prop)) {
+        return originalValue;
+      }
+      const cached = cache.get(prop);
+      if (cached) return cached;
+      const wrapped = function (this: unknown, ...args: unknown[]) {
         // Wrap the function execution with resilience policy
         // Cockatiel will handle whether the result is a promise or not
         return gaeApiPolicy.execute(
           () => originalValue.apply(obj, args),
         );
       };
+      cache.set(prop, wrapped);
+      return wrapped;
     },
   });
 }

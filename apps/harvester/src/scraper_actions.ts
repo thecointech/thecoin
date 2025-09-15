@@ -1,7 +1,7 @@
 import type { HarvestConfig, Mnemonic } from './types';
 import type { ValueResult, ValueType} from "@thecointech/scraper/types";
 import type { CreditDetails } from './Harvester/types';
-import type { StoredData } from './Harvester/db_translate';
+import type { StoredData } from '@thecointech/store-harvester';
 import { ActionType } from './Harvester/scraper';
 import { BackgroundTaskCallback } from './BackgroundTask/types';
 import type { OptionPacket, QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';

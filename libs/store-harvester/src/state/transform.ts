@@ -1,9 +1,34 @@
 import currency from 'currency.js'
 import { DateTime } from 'luxon'
-import { HarvestData, HarvestDelta } from './types'
+import { HarvestData, HarvestDelta } from './types.harvest'
 
-export type StoredData = ReturnType<typeof toDb>;
-export const toDb = (data: HarvestData) => cleanseObject({
+export type StoredData = {
+  date: string;
+  visa: {
+    balance: string;
+    dueDate: string;
+    dueAmount: string;
+  };
+  chq: {
+    balance: string;
+  };
+  delta: Array<{
+    harvesterBalance?: string;
+    toETransfer?: string;
+    toPayVisa?: string;
+    toPayVisaDate?: string;
+    stepData?: Record<string, string>;
+  }>;
+  state: {
+    harvesterBalance?: string;
+    toETransfer?: string;
+    toPayVisa?: string;
+    toPayVisaDate?: string;
+    stepData?: Record<string, string>;
+  };
+};
+
+export const toDb = (data: HarvestData) : StoredData => cleanseObject({
   date: data.date.toISO()!,
 
   visa: toDbVisa(data.visa),
@@ -28,7 +53,7 @@ const toDbDelta = (delta: HarvestDelta) => ({
   harvesterBalance: delta.harvesterBalance?.toString(),
   toETransfer: delta.toETransfer?.toString(),
   toPayVisa: delta.toPayVisa?.toString(),
-  toPayVisaDate: delta.toPayVisaDate?.toISO(),
+  toPayVisaDate: delta.toPayVisaDate?.toISO() ?? undefined,
   stepData: delta.stepData,
 })
 

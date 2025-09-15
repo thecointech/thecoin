@@ -1,7 +1,6 @@
 import currency from 'currency.js';
 import { RoundUp } from './steps/RoundUp'
 import { TransferVisaOwing } from './steps/TransferVisaOwing'
-import { HarvestData } from './types';
 import { SendETransfer } from './steps/SendETransfer';
 import { DateTime } from 'luxon';
 import { Wallet } from 'ethers';
@@ -10,6 +9,7 @@ import { PayVisa } from './steps/PayVisa';
 import { ClearPendingVisa } from './steps/ClearPendingVisa';
 import { TransferLimit } from './steps/TransferLimit';
 import { EnsureHarvesterBalance } from './steps/EnsureHarvesterBalance';
+import { HarvestData } from './types';
 
 it ('can process on first run', async () => {
 

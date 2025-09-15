@@ -6,7 +6,7 @@ import { getHarvestConfig, getProcessConfig, getWallet, getWalletAddress, hasCre
 import { HarvestConfig, Mnemonic } from './types';
 import { CreditDetails } from './Harvester/types';
 import { spawn } from 'child_process';
-import { exportResults, getState, setOverrides } from './Harvester/db';
+import { exportResults, getRawState, setOverrides } from './Harvester/state';
 import { harvest } from './Harvester';
 import { logsFolder } from './paths';
 import { platform } from 'node:os';
@@ -121,7 +121,7 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
     return harvest(onBgTaskMsg)
       .finally(() => visible.dispose());
   }),
-  getCurrentState: () => guard(() => getState()),
+  getCurrentState: () => guard(() => getRawState()),
 
   exportResults: () => guard(() => exportResults()),
   exportConfig: () => guard(async () => {
