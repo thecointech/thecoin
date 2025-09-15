@@ -115,30 +115,38 @@ export async function ensureLatestFxRate(now: number) {
 
 
 export async function update() {
-    try {
-      const now = Date.now();
-      // Either of the below functions could throw.  We
-      // don't check them individually
-      // because our entry point implements
-      // backoff/retry logic.  If the ensure
-      // is called again it won't matter because it's already
-      // up to date.
-      const r = await Promise.all([
-        ensureLatestCoinRate(now),
-        ensureLatestFxRate(now),
-      ]);
-      if (r.includes(false)) {
-        return false;
-      }
+  const now = Date.now();
 
-      // Once we have updated, do a matching update on Oracle
-      await updateOracle(now);
-      return true;
+  try {
+    // Either of the below functions could throw.  We
+    // don't check them individually
+    // because our entry point implements
+    // backoff/retry logic.  If the ensure
+    // is called again it won't matter because it's already
+    // up to date.
+    const r = await Promise.allSettled([
+      ensureLatestCoinRate(now),
+      ensureLatestFxRate(now),
+    ]);
+    // Any errors or failures means backoff & try again...
+    if (r.some(r => r.status === "rejected") ||
+        r.some(r => r.status === "fulfilled" && r.value === false)) {
+      return false;
     }
-    catch (err: any) {
-        log.warn(err, "error in EnsureLatest");
-    }
+    return true;
+  } catch (err: any) {
+    log.warn(err, 'error in EnsureLatest');
     return false;
+  }
+
+  try {
+    // Once we have updated, do a matching update on Oracle
+    await updateOracle(now);
+    return true;
+  } catch (err: any) {
+    log.warn(err, 'error in UpdateOracle');
+    return false;
+  }
 }
 
 export async function updateRates() {

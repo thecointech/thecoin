@@ -10855,6 +10855,7 @@ __metadata:
     "@thecointech/logging": "npm:^0.3.13-test.0"
     "@thecointech/secrets": "npm:^0.3.13-test.0"
     "@thecointech/setenv": "npm:^0.3.13-test.0"
+    cockatiel: "npm:^3.2.1"
     ethers: "npm:6.12.0"
   languageName: unknown
   linkType: soft

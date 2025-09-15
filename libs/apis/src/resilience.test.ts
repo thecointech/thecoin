@@ -69,8 +69,6 @@ describe('Resilience Testing', () => {
           // Expected to fail
         }
       }
-      console.log(JSON.stringify(mockError.mock.calls));
-
 
       // Circuit breaker should be open now, so calls should fail fast
       const startTime = Date.now();
