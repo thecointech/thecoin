@@ -21,9 +21,12 @@ export class StateDatabase extends BasicDatabase<HarvestData, StoredData> {
   // Note, this will return the state in reverse chronological order
   async getAll() {
     return this.withDatabase(async (db) => {
-      const r = await db.get("state", { revs_info: true });
+      const latest = await this._raw(db);
+      if (!latest) {
+        return [];
+      }
       const raw = await Promise.all(
-        r._revs_info?.map(r => db.get("state", { rev: r.rev })) ?? []
+        latest._revs_info?.map(r => db.get("state", { rev: r.rev })) ?? []
       );
       return raw.map(fromDb);
     });

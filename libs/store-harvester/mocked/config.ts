@@ -27,7 +27,7 @@ export class ConfigDatabase extends BaseDatabase<ConfigShape> implements Omit<Sr
     }, ConfigDatabase.mutex);
   }
 
-  protected async loadDb(): Promise<PouchDB.Database<ConfigShape>> {
+  protected override async loadDb(): Promise<PouchDB.Database<ConfigShape>> {
 
     log.info(`Initializing in-memory config database`);
     if (globalThis.__temp_config) {

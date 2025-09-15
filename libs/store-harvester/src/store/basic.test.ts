@@ -1,9 +1,16 @@
+import { beforeEach, it } from '@jest/globals';
 import { BasicDatabase } from "./basic";
 import { useMockPaths } from "../../mocked/paths";
 import { Mutex } from "@thecointech/async";
 import { sleep } from "@thecointech/async/sleep";
+import { mockWarn } from "@thecointech/logging/mock";
 
 const { testDbPath } = useMockPaths();
+
+beforeEach(() => {
+  mockWarn.mockClear();
+})
+
 it('Should prevent concurrent withDatabase calls', async () => {
   const db = newDb(new Mutex());
 
@@ -53,6 +60,24 @@ it('Should prevent concurrent withDatabase calls', async () => {
   }
 })
 
+it ('does not swallow op errors', async () => {
+  const db = newDb(new Mutex());
+  const loadDb = db['loadDb'];
+  db['loadDb'] = async () => {
+    const impl = await loadDb.call(db);
+    impl['close'] = () => {
+      console.log('here')
+      return Promise.reject("close throws");
+    }
+    return impl;
+  }
+  await expect(
+    db.withDatabase(async () => {
+      throw new Error('Test error');
+    })
+  ).rejects.toThrow('Test error');
+  expect(mockWarn).toHaveBeenCalledWith('close throws', 'Error closing PouchDB instance');
+})
 
 it ('should timeout if deadlocked', async () => {
   process.env.HARVESTER_DB_TIMEOUT = '200';
@@ -78,7 +103,7 @@ it ('should timeout if deadlocked', async () => {
 
   // Clean up the long operation
   await longOperation;
-}, 5000); // Increase Jest timeout for this test
+});
 
 const newDb = (mutex: Mutex) => new BasicDatabase({
   rootFolder: testDbPath,

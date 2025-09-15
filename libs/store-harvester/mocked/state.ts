@@ -11,7 +11,7 @@ declare global {
 }
 
 export class StateDatabase extends SrcStateDatabase {
-  loadDb(): Promise<PouchDB.Database<StoredData>> {
+  protected override async loadDb(): Promise<PouchDB.Database<StoredData>> {
     globalThis.__temp_state ??= new PouchDB<StoredData>("in-memory", { adapter: 'memory' })
     // Disable closing in development
     globalThis.__temp_state['close'] = () => Promise.resolve();

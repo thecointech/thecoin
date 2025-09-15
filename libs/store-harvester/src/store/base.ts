@@ -26,10 +26,19 @@ export abstract class BaseDatabase<Shape extends {}, Stored extends {}=Shape, In
     try {
       return await this.mutex.runExclusive(async () => {
         const db = await this.loadDb();
+        let opErr: unknown;
         try {
           return await operation(db);
+        } catch (err) {
+          opErr = err;
+          throw err;
         } finally {
-          await db.close();
+          try {
+            await db.close();
+          } catch (closeErr) {
+            log.warn(closeErr, 'Error closing PouchDB instance');
+            if (!opErr) throw closeErr;
+          }
         }
       });
     } catch (err) {

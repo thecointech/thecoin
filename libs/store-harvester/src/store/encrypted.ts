@@ -20,12 +20,6 @@ export class EncryptedDatabase<Shape extends {}, Stored extends {}=Shape, InShap
     super(config, mutex);
   }
 
-  // private getDbPath(db_name?: string): string {
-  //   const suffix = this.getDbSuffix();
-  //   return path.join(this.config.rootFolder, db_name ?? `config${suffix}.db`);
-  // }
-
-
   protected async loadDb(): Promise<PouchDB.Database<Stored>> {
     try {
       const db = new PouchDB<Stored>(this.dbPath, { adapter: 'memory' });
