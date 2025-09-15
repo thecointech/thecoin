@@ -3,6 +3,8 @@ import { describe } from "@thecointech/jestutils";
 import { ifSecret } from "@thecointech/secrets/jestutils";
 import { getProvider } from "./node/remote";
 import { mockWarn, mockError } from "@thecointech/logging/mock";
+import { ethRpcCircuitBreaker } from "./resilience";
+import { CircuitState } from "cockatiel";
 
 jest.setTimeout(5 * 60 * 1000);
 
@@ -10,6 +12,8 @@ jest.setTimeout(5 * 60 * 1000);
 describe('Ethereum Provider Resilience Testing', () => {
   beforeEach(() => {
     jest.resetAllMocks();
+    //@ts-ignore - Access the internal breaker and reset its state
+    ethRpcCircuitBreaker.innerState.value = CircuitState.Closed;
   });
 
   it('handles successful RPC calls', async () => {
@@ -85,13 +89,10 @@ describe('Ethereum Provider Resilience Testing', () => {
 
       // Circuit breaker should be open now, so calls should fail fast
       const startTime = Date.now();
-      try {
-        await provider.getBlockNumber();
-      } catch (error) {
-        const duration = Date.now() - startTime;
-        // Should fail quickly due to circuit breaker (not wait for full retry cycle)
-        expect(duration).toBeLessThan(500); // Less than 0.5 seconds
-      }
+      await expect(provider.getBlockNumber()).rejects.toThrow();
+      const duration = Date.now() - startTime;
+      // Should fail quickly due to circuit breaker (not wait for full retry cycle)
+      expect(duration).toBeLessThan(500); // Less than 0.5 seconds
     } finally {
       override.dispose();
     }
@@ -108,6 +109,12 @@ describe('Ethereum Provider Resilience Testing', () => {
     // This should work without any resilience wrapping
     const projectId = provider.projectId;
     expect(projectId).toBeDefined();
+
+    // Event methods must remain sync + chainable
+    const handler = () => {};
+    const ret = await provider.on('block', handler);
+    expect(ret).toBeInstanceOf(provider.constructor); // chaining preserved
+    await provider.off('block', handler); // cleanup
   });
 }, await ifSecret("InfuraProjectId"));
 
