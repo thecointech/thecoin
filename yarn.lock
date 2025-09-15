@@ -11281,6 +11281,7 @@ __metadata:
   dependencies:
     "@thecointech/async": "npm:^0.3.3"
     "@thecointech/logging": "npm:^0.3.13-test.0"
+    "@thecointech/scraper-agent": "npm:^0.3.13-test.3"
     "@types/pouchdb": "npm:^6.4.2"
     comdb: "npm:^6.0.0-beta"
     pouchdb: "npm:^8.0.1"
