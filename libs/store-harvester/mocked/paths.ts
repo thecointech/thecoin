@@ -4,10 +4,10 @@ export function useMockPaths() {
   const now = Date.now().toString();
 
   const testDbPath = `./.cache/test${now}`;
-  beforeAll(() => {
+  beforeEach(() => {
     mkdirSync(testDbPath, { recursive: true });
   })
-  afterAll(() => {
+  afterEach(() => {
     rmSync(testDbPath, { recursive: true });
   })
 

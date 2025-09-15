@@ -36,13 +36,19 @@ export class ConfigDatabase extends BaseDatabase<ConfigShape> implements Omit<Sr
     globalThis.__temp_config = new PouchDB<ConfigShape>("in-memory", { adapter: 'memory' });
     // Disable closing in development
     globalThis.__temp_config['close'] = () => Promise.resolve();
-    await this.initMockDb();
+    await this.initMockDb(globalThis.__temp_config);
     return globalThis.__temp_config;
   }
 
-  private async initMockDb(): Promise<void> {
+  private async initMockDb(db: PouchDB.Database<ConfigShape>): Promise<void> {
     // Seed DB in development with default config
+    // Do not use the 'set' method, as the mutex
+    // is currently held by whatever called this
     const cfg = getSeedConfig();
-    await this.set(cfg)
+    const stored = this.config.transformIn(cfg);
+    await db.put({
+      ...stored,
+      _id: this.config.key,
+    });
   }
 }

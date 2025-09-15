@@ -1,6 +1,10 @@
-import { StoredData } from '../src';
+import type { StoredData } from '../src/state/types';
 import { StateDatabase as SrcStateDatabase } from '../src/state';
 import PouchDB from 'pouchdb';
+import memory from 'pouchdb-adapter-memory';
+
+// Note: multiple imports of this are not an issue
+PouchDB.plugin(memory);
 
 declare global {
   var __temp_state: PouchDB.Database<StoredData>;
