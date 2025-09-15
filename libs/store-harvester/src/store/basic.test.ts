@@ -1,16 +1,11 @@
 import { BasicDatabase } from "./basic";
 import { useMockPaths } from "../../mocked/paths";
 import { Mutex } from "@thecointech/async";
+import { sleep } from "@thecointech/async/sleep";
 
 const { testDbPath } = useMockPaths();
 it('Should prevent concurrent withDatabase calls', async () => {
-  const db = new BasicDatabase({
-    rootFolder: testDbPath,
-    dbname: 'concurrency-test',
-    key: 'test',
-    transformIn: (data) => data,
-    transformOut: (data) => data,
-  }, new Mutex());
+  const db = newDb(new Mutex());
 
   // Track the order of operations
   const operationOrder: string[] = [];
@@ -57,3 +52,38 @@ it('Should prevent concurrent withDatabase calls', async () => {
     expect(otherStarts).toHaveLength(0);
   }
 })
+
+
+it ('should timeout if deadlocked', async () => {
+  process.env.HARVESTER_DB_TIMEOUT = '200';
+  const mutex = new Mutex();
+  const db1 = newDb(mutex);
+  const db2 = newDb(mutex); // Same mutex = contention
+
+  // Start a long-running operation
+  const longOperation = db1.withDatabase(async () => {
+    await sleep(1000); // Hold mutex for 1 second
+    return "completed";
+  });
+
+  // Wait a bit to ensure first operation has acquired the mutex
+  await sleep(50);
+
+  // This should timeout waiting for the mutex
+  await expect(
+    db2.withDatabase(async () => {
+      return "should not reach here";
+    })
+  ).rejects.toThrow(/timed out/);
+
+  // Clean up the long operation
+  await longOperation;
+}, 5000); // Increase Jest timeout for this test
+
+const newDb = (mutex: Mutex) => new BasicDatabase({
+  rootFolder: testDbPath,
+  dbname: 'concurrency-test',
+  key: 'test',
+  transformIn: (data) => data,
+  transformOut: (data) => data,
+}, mutex);

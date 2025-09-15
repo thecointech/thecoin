@@ -1,15 +1,16 @@
 import { log } from '@thecointech/logging';
 import { DatabaseConfig, isPouchError } from './types';
 import path from 'path';
-import type { Mutex } from '@thecointech/async';
+import { withTimeout, E_TIMEOUT, type MutexInterface } from 'async-mutex';
 
 export abstract class BaseDatabase<Shape extends {}, Stored extends {}=Shape, InShape=Shape, DbConfig extends DatabaseConfig<Shape, Stored, InShape>=DatabaseConfig<Shape, Stored, InShape>> {
   protected config: DbConfig;
-  private mutex: Mutex;
+  private mutex: MutexInterface;
 
-  constructor(config: DbConfig, mutex: Mutex) {
+  constructor(config: DbConfig, mutex: MutexInterface) {
     this.config = config;
-    this.mutex = mutex;
+    const timeout = Number(process.env.HARVESTER_DB_TIMEOUT ?? 30 * 1000);
+    this.mutex = withTimeout(mutex, timeout);
   }
 
   get dbPath() {
@@ -22,14 +23,22 @@ export abstract class BaseDatabase<Shape extends {}, Stored extends {}=Shape, In
   async withDatabase<ReturnType>(
     operation: (db: PouchDB.Database<Stored>) => Promise<ReturnType>
   ): Promise<ReturnType> {
-    return this.mutex.runExclusive(async () => {
-      const db = await this.loadDb();
-      try {
-        return await operation(db);
-      } finally {
-        await db.close();
+    try {
+      return await this.mutex.runExclusive(async () => {
+        const db = await this.loadDb();
+        try {
+          return await operation(db);
+        } finally {
+          await db.close();
+        }
+      });
+    } catch (err) {
+      log.error(err, `Error in ${this.config.dbname} withDatabase`);
+      if (err === E_TIMEOUT) {
+        throw new Error(`Database ${this.config.dbname} ${operation.name} timed out`);
       }
-    });
+      throw err;
+    }
   }
 
 
