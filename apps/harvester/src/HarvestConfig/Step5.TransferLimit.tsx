@@ -28,7 +28,7 @@ export const TransferLimit = () => {
     else {
       api.clearStep(HarvestStepType.TransferLimit)
     }
-  }, [limit]);
+  }, [limit, api, enabled]);
 
   return (
     <Container>
