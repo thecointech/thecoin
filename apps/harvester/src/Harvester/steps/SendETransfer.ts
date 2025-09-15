@@ -6,6 +6,8 @@ import { SendFakeDeposit } from '@thecointech/email-fake-deposit';
 import { DateTime } from 'luxon';
 import { getValues } from '../scraper';
 import { ETransferResult } from '@thecointech/scraper-agent/types';
+import { sleep } from '@thecointech/async';
+import { BackgroundTaskCallback } from '@/BackgroundTask';
 
 export class SendETransfer implements ProcessingStage {
 
@@ -78,16 +80,18 @@ const getTransferAmount = (toETransfer: currency, balance: currency) => {
   return toETransfer;
 }
 
-async function sendETransfer(amount: currency, {wallet}: UserData) : Promise<ETransferResult> {
+async function sendETransfer(amount: currency, {wallet, uiCallback}: UserData) : Promise<ETransferResult> {
   if (process.env.HARVESTER_DRY_RUN) {
+    await mockUiUpdate(uiCallback);
     return {
       confirmationCode: "DRYRUN"
     }
   }
   else if (process.env.CONFIG_NAME == "prod" || process.env.CONFIG_NAME == "prodbeta") {
-    return getValues('chqETransfer', undefined, { amount: amount.toString() })
+    return getValues('chqETransfer', uiCallback, { amount: amount.toString() })
   }
   else {
+    await mockUiUpdate(uiCallback);
     // We still send in testing environments
     if (process.env.CONFIG_NAME == "prodtest" || process.env.CONFIG_NAME == "devlive") {
       const address = await wallet.getAddress();
@@ -96,5 +100,24 @@ async function sendETransfer(amount: currency, {wallet}: UserData) : Promise<ETr
     return {
       confirmationCode: "1234"
     }
+  }
+}
+
+async function mockUiUpdate(uiCallback?: BackgroundTaskCallback) {
+  if (uiCallback) {
+    for (let i = 0; i < 10; i++) {
+      uiCallback({
+        id: "chqETransfer",
+        type: "replay",
+        percent: i * 10,
+      })
+      await sleep(250);
+    }
+    uiCallback({
+      id: "chqETransfer",
+      type: "replay",
+      percent: 100,
+      completed: true,
+    })
   }
 }
