@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/scraper",
-  "version": "0.3.13-test.0",
+  "version": "0.3.13-test.5",
   "type": "module",
   "description": "The Coin: Automated scraper for TheCoin",
   "keywords": [
@@ -24,7 +24,7 @@
     "commitSimilar": "yarn run-env internal/commitSimilar.ts"
   },
   "dependencies": {
-    "@thecointech/async": "^0.3.3",
+    "@thecointech/async": "^0.3.13-test.5",
     "@thecointech/logging": "^0.3.13-test.0",
     "@web-std/file": "^3.0.3",
     "@xenova/transformers": "^2.14.0",

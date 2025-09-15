@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-statemachine",
-  "version": "0.3.13-test.3",
+  "version": "0.3.13-test.5",
   "description": "The Coin: The execution statemachine for processing coin transactions",
   "type": "module",
   "keywords": [
@@ -49,12 +49,12 @@
     }
   },
   "dependencies": {
-    "@thecointech/async": "^0.3.3",
+    "@thecointech/async": "^0.3.13-test.5",
     "@thecointech/broker-db": "^0.3.13-test.3",
-    "@thecointech/contract-core": "^0.3.13-test.3",
-    "@thecointech/contract-plugin-converter": "^0.3.13-test.3",
+    "@thecointech/contract-core": "^0.3.13-test.5",
+    "@thecointech/contract-plugin-converter": "^0.3.13-test.5",
     "@thecointech/email": "^0.3.13-test.0",
-    "@thecointech/fx-rates": "^0.3.13-test.0",
+    "@thecointech/fx-rates": "^0.3.13-test.5",
     "@thecointech/logging": "^0.3.13-test.0",
     "@thecointech/market-status": "^0.3.13-test.0",
     "@thecointech/utilities": "^0.3.13-test.3"
