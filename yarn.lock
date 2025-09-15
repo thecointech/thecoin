@@ -10909,7 +10909,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/logging@npm:^0.3.13-test.0, @thecointech/logging@workspace:*, @thecointech/logging@workspace:libs/logging":
+"@thecointech/logging@npm:^0.3.13-test.0, @thecointech/logging@workspace:libs/logging":
   version: 0.0.0-use.local
   resolution: "@thecointech/logging@workspace:libs/logging"
   dependencies:
@@ -11279,7 +11279,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/store-harvester@workspace:libs/store-harvester"
   dependencies:
-    "@thecointech/logging": "workspace:*"
+    "@thecointech/async": "npm:^0.3.3"
+    "@thecointech/logging": "npm:^0.3.13-test.0"
     "@types/pouchdb": "npm:^6.4.2"
     comdb: "npm:^6.0.0-beta"
     pouchdb: "npm:^8.0.1"
