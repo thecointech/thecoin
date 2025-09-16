@@ -19,12 +19,13 @@ export async function setScraperLogging(logging: boolean) {
 }
 
 
-export async function maybeSerializeRun(basePath: string, target: string, writeScreenshotOnElement = false) {
+export async function maybeSerializeRun(basePath: string, target: string, writeScreenshotOnElement = false, skipSections?: string[]) {
   if (await getScraperLogging()) {
     return new AgentSerializer({
       recordFolder: basePath,
       target,
       writeScreenshotOnElement,
+      skipSections,
     });
   }
   return null;

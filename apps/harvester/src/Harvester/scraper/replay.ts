@@ -1,4 +1,4 @@
-import { replay } from '@thecointech/scraper';
+import { replay } from '@thecointech/scraper/replay';
 import { ReplayResult } from '@thecointech/scraper/types';
 import { getReplayEvents } from '@thecointech/scraper-agent';
 import { ActionType } from './types';
@@ -20,7 +20,7 @@ export async function getValues(actionName: ActionType, callback?: BackgroundTas
   if (!replayEvents?.length) {
     throw new Error(`No events found for ${actionName}`);
   }
-  using _ = await maybeSerializeRun(scraperCallbacks.logsFolder, actionName, true);
+  using _ = await maybeSerializeRun(scraperCallbacks.logsFolder, actionName, true, []);
   const r = await replay({ name: actionName, delay }, replayEvents, scraperCallbacks, dynamicValues);
   scraperCallbacks.complete(true);
   return r;

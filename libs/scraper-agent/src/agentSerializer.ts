@@ -48,7 +48,8 @@ export class AgentSerializer implements Disposable {
   options: SerializerOptions;
   get recordFolder() { return this.options.recordFolder; }
   get target() { return this.options.target; }
-  get skipSections() { return this.options.skipSections; }
+  // By default, we skip the initial section
+  get skipSections() { return this.options.skipSections ?? ["Initial"]; }
   get writeScreenshotOnElement() { return this.options.writeScreenshotOnElement; }
 
   constructor(options: SerializerOptions) {
@@ -128,7 +129,7 @@ export class AgentSerializer implements Disposable {
   }
 
   pauseWriting() {
-    return this.tracker.currentSection == "Initial" || this.skipSections?.includes(this.tracker.currentSection);
+    return this.skipSections.includes(this.tracker.currentSection);
   }
 
   skipWriting(event: ApiCallEvent) {
