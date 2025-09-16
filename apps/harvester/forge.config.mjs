@@ -31,14 +31,25 @@ const nativeModules = [
 const vqaApiKey = await getSecret("VqaApiKey");
 // Until deployments are handled by CI override default deployed date
 const deployedAt = JSON.stringify(new Date().toISOString());
+
+const mainPlugins = {
+  ['process.env.TC_LOG_FOLDER']: JSON.stringify("false"),
+  ['process.env.URL_SEQ_LOGGING']: JSON.stringify("false"),
+  ['process.env.VQA_API_KEY']: JSON.stringify(vqaApiKey),
+  ['process.env.TC_DEPLOYED_AT']: deployedAt,
+}
+// Override the NODE_ENV from *.public.env files when debugging
+if (process.env.NODE_ENV === 'development') {
+  mainPlugins['process.env.NODE_ENV'] = JSON.stringify('development');
+}
+const vqaCertificate = await getSecret("VqaSslCertPublic");
+if (vqaCertificate) {
+  mainPlugins['process.env.VQA_SSL_CERTIFICATE'] = JSON.stringify(vqaCertificate);
+}
+
 const mainConfigMerged = mainConfig({
   plugins: [
-    new webpack.DefinePlugin({
-      ['process.env.TC_LOG_FOLDER']: JSON.stringify("false"),
-      ['process.env.URL_SEQ_LOGGING']: JSON.stringify("false"),
-      ['process.env.VQA_API_KEY']: JSON.stringify(vqaApiKey),
-      ['process.env.TC_DEPLOYED_AT']: deployedAt,
-    })
+    new webpack.DefinePlugin(mainPlugins),
   ],
   resolve: {
     fallback: {
@@ -54,12 +65,6 @@ const mainConfigMerged = mainConfig({
   externals: nativeModules.concat('@puppeteer/browsers'),
 })
 
-const vqaCertificate = await getSecret("VqaSslCertPublic");
-if (vqaCertificate) {
-  mainConfigMerged.plugins.push(new webpack.DefinePlugin({
-    ['process.env.VQA_SSL_CERTIFICATE']: JSON.stringify(vqaCertificate),
-  }))
-}
 
 const config = {
   buildIdentifier: process.env.CONFIG_NAME,
@@ -120,7 +125,6 @@ const config = {
   ],
   hooks: {
     postStart: async (config) => {
-      console.log("postStart executing");
       const mainPackageJsonPath = path.join(".webpack", 'main', 'package.json'); // Adjust as needed
       writeFileSync(mainPackageJsonPath, JSON.stringify({ type: 'commonjs' }, null, 2));
     },

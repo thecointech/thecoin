@@ -6,7 +6,7 @@ import { getEvents } from '../events';
 import { BackgroundTaskCallback } from '@/BackgroundTask';
 import { ScraperCallbacks } from './callbacks';
 import { ChequeBalanceResult, ETransferInput, ETransferResult, VisaBalanceResult } from '@thecointech/scraper-agent/types';
-import { maybeSerializeRun } from '../agent/maybeSerializer';
+import { maybeSerializeRun } from '../scraperLogging';
 
 export async function getValues(actionName: 'chqBalance', callback?: BackgroundTaskCallback): Promise<ChequeBalanceResult>;
 export async function getValues(actionName: 'visaBalance', callback?: BackgroundTaskCallback): Promise<VisaBalanceResult>;
@@ -20,7 +20,7 @@ export async function getValues(actionName: ActionType, callback?: BackgroundTas
   if (!replayEvents?.length) {
     throw new Error(`No events found for ${actionName}`);
   }
-  using _ = maybeSerializeRun(scraperCallbacks.logsFolder, actionName, true);
+  using _ = await maybeSerializeRun(scraperCallbacks.logsFolder, actionName, true);
   const r = await replay({ name: actionName, delay }, replayEvents, scraperCallbacks, dynamicValues);
   scraperCallbacks.complete(true);
   return r;

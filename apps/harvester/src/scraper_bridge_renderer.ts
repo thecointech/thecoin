@@ -52,6 +52,7 @@ const api : ScraperBridgeApi = {
   setHarvestConfig: (config) => ipcRenderer.invoke(actions.setHarvestConfig, config),
 
   alwaysRunScraperVisible: (visible?: boolean) => ipcRenderer.invoke(actions.alwaysRunScraperVisible, visible),
+  alwaysRunScraperLogging: (logging?: boolean) => ipcRenderer.invoke(actions.alwaysRunScraperLogging, logging),
   runHarvester: (forceVisible?: boolean) => ipcRenderer.invoke(actions.runHarvester, forceVisible),
   getCurrentState: () => ipcRenderer.invoke(actions.getCurrentState),
 

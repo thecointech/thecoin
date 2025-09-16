@@ -1,4 +1,4 @@
-import { Button, Checkbox, Container, Message } from 'semantic-ui-react'
+import { Button, Checkbox, Container, Message, Loader, Dimmer } from 'semantic-ui-react'
 import { ConfigReducer } from './state/reducer'
 import { useHistory } from 'react-router';
 import { useEffect, useState } from 'react';
@@ -7,23 +7,57 @@ export const Complete = () => {
   const navigate = useHistory();
   const data = ConfigReducer.useData();
   const [visible, setVisible] = useState(false);
+  const [logging, setLogging] = useState(false);
+  const [dimmerMessage, setDimmerMessage] = useState<string | null>(null);
+
+  const withDimmer = async <T,>(message: string, callback: () => Promise<T>): Promise<T> => {
+    setDimmerMessage(message);
+    try {
+      return await callback();
+    } finally {
+      setDimmerMessage(null);
+    }
+  };
 
   useEffect(() => {
-    window.scraper.alwaysRunScraperVisible().then(r => setVisible(r.value ?? false))
+    withDimmer("Loading...", async () => {
+      const [visibleResult, loggingResult] = await Promise.all([
+        window.scraper.alwaysRunScraperVisible(),
+        window.scraper.alwaysRunScraperLogging()
+      ]);
+      setVisible(visibleResult.value ?? false);
+      setLogging(loggingResult.value ?? false);
+    });
   }, [])
 
   const setAlwaysVisible = async (visible?: boolean) => {
-    const r = await window.scraper.alwaysRunScraperVisible(visible)
-    setVisible(r.value ?? false)
+    await withDimmer("Saving...", async () => {
+      const r = await window.scraper.alwaysRunScraperVisible(visible)
+      setVisible(r.value ?? false)
+    });
+  }
+
+  const setAlwaysLogging = async (logging?: boolean) => {
+    await withDimmer("Saving...", async () => {
+      const r = await window.scraper.alwaysRunScraperLogging(logging)
+      setLogging(r.value ?? false)
+    });
   }
 
   const setConfig = async () => {
-    await window.scraper.setHarvestConfig(data);
-    navigate.push("/results");
+    await withDimmer("Saving...", async () => {
+      await window.scraper.setHarvestConfig(data);
+      navigate.push("/results");
+    });
   }
+
+  const paused = !!dimmerMessage;
 
   return (
     <Container>
+      <Dimmer active={paused} inverted>
+        <Loader>{dimmerMessage}</Loader>
+      </Dimmer>
       <h4>Start the Harvester</h4>
       <div>
         Thats it!  Your harvester is ready to go!
@@ -41,7 +75,7 @@ export const Complete = () => {
         you'll be amazed by the results.
       </div>
       <div>
-        <Button onClick={setConfig} style={{backgroundColor: 'green', color: 'white'}}>Save Config</Button>
+        <Button onClick={setConfig} loading={paused} disabled={paused} style={{backgroundColor: 'green', color: 'white'}}>Save Config</Button>
       </div>
       <Message info>
 
@@ -51,7 +85,14 @@ export const Complete = () => {
         <Checkbox
           onClick={(_, {checked}) => setAlwaysVisible(checked)}
           checked={visible}
+          disabled={paused}
           label="Force Always run visible" />
+        <br />
+        <Checkbox
+          onClick={(_, {checked}) => setAlwaysLogging(checked)}
+          checked={logging}
+          disabled={paused}
+          label="Enable verbose logging" />
       </Message>
     </Container>
   )

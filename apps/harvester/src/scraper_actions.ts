@@ -59,6 +59,8 @@ export type ScraperBridgeApi = {
 
   // Set/get the alwaysRunVisible flag
   alwaysRunScraperVisible(visible?: boolean): Promise<Result<boolean>>,
+  // Set/get the alwaysRunLogging flag
+  alwaysRunScraperLogging(logging?: boolean): Promise<Result<boolean>>,
   runHarvester(forceVisible?: boolean): Promise<Result<boolean>>,
   getCurrentState(): Promise<Result<StoredData>>,
 
@@ -115,6 +117,7 @@ export const actions = {
   setHarvestConfig: 'scraper:setHarvestConfig',
 
   alwaysRunScraperVisible: 'scraper.alwaysRunScraperVisible',
+  alwaysRunScraperLogging: 'scraper.alwaysRunScraperLogging',
 
   runHarvester: 'scraper.runHarvester',
   getCurrentState: 'scraper.getCurrentState',
