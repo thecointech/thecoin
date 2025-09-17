@@ -123,7 +123,10 @@ export class TestData {
   }
 
   gold(name: string) {
-    const testFolder = process.env.PRIVATE_TESTING_PAGES!;
+    const testFolder = process.env.PRIVATE_TESTING_PAGES;
+    if (!testFolder) {
+      throw new Error("PRIVATE_TESTING_PAGES environment variable is not set");
+    }
     const goldFile = path.join(testFolder, "gold.json");
     if (existsSync(goldFile)) {
       const json = JSON.parse(readFileSync(goldFile, "utf-8"));
