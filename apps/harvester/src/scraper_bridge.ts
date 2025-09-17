@@ -19,6 +19,7 @@ import { downloadRequired } from './Download/download';
 import { getScrapingScript } from './results/getScrapingScript';
 import { twofaRefresh as doRefresh } from './Harvester/agent/twofaRefresh';
 import { enableLingeringForCurrentUser, isLingeringEnabled } from './Harvester/schedule/linux-lingering';
+import { getScraperLogging, setScraperLogging } from './Harvester/scraperLogging';
 import { Registry, VisibleOverride } from '@thecointech/scraper';
 
 
@@ -115,6 +116,12 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
     }
     const config = await getProcessConfig();
     return config?.alwaysRunScraperVisible ?? false;
+  }),
+  alwaysRunScraperLogging: (logging?: boolean) => guard(async () => {
+    if (logging !== undefined) {
+      await setScraperLogging(logging);
+    }
+    return await getScraperLogging();
   }),
   runHarvester: (forceVisible?: boolean) => guard(() => {
     const visible = new VisibleOverride(forceVisible);
@@ -224,8 +231,11 @@ export function initMainIPC() {
     return api.setHarvestConfig(config);
   })
 
-  ipcMain.handle(actions.alwaysRunScraperVisible, async (_event, visible: boolean) => {
+  ipcMain.handle(actions.alwaysRunScraperVisible, async (_event, visible?: boolean) => {
     return api.alwaysRunScraperVisible(visible);
+  })
+  ipcMain.handle(actions.alwaysRunScraperLogging, async (_event, logging?: boolean) => {
+    return api.alwaysRunScraperLogging(logging);
   })
   ipcMain.handle(actions.runHarvester, async (_event) => {
     return api.runHarvester();

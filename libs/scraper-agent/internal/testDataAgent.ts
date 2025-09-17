@@ -1,15 +1,19 @@
 import { TestData } from "@thecointech/scraper/testutils";
 import { Agent } from "@/agent";
-import { DummyAskUser } from "../tools/recordSamples/dummyAskUser";
-
 import { AgentSerializer } from "@/agentSerializer";
 import { mockApi } from "./mockApi";
 import path from "path";
 import { Section } from "@/processors/types";
 import { SectionName } from "@/types";
+import { AnswerCallback, MockAskUser, getAnswerFromFileIfExists } from "./mockAskUser";
 
 export class TestDataAgent extends TestData {
+
+  _agent?: Agent;
   async agent(writeElements?: boolean): Promise<Agent> {
+    if (this._agent) {
+      return this._agent;
+    }
     // Always mock API calls
     const mockedApi = mockApi(this);
     // A serializer can optionally write out data
@@ -17,8 +21,9 @@ export class TestDataAgent extends TestData {
 
     const filename = `${this.matchedFolder}/${this.step}.mhtml`;
     const url = `file://${filename.replace(" ", "%20")}`;
-    const answerFile = `${this.matchedFolder}/${this.step}-answers.json`;
-    const askUser = new DummyAskUser({}, answerFile);
+    // By default check for the existence of a file.
+    const defaultMockAnswers = getAnswerFromFileIfExists(this.matchedFolder, this.step);
+    const askUser = new MockAskUser(defaultMockAnswers);
     const agent = await Agent.create(this.target, askUser, url);
 
     // Store the original dispose method
@@ -29,9 +34,18 @@ export class TestDataAgent extends TestData {
       serializer?.[Symbol.dispose]();
       mockedApi[Symbol.dispose]();
       await originalDispose.call(agent);
+      this._agent = undefined;
     };
-
+    this._agent = agent;
     return agent;
+  }
+
+  mockInput(callback: AnswerCallback) {
+    if (!this._agent) {
+      throw new Error("Agent not created yet");
+    }
+    const askUser = this._agent.input as MockAskUser;
+    askUser.setCallback(callback);
   }
 
   maybeSerializer(create?: boolean) {
@@ -55,7 +69,9 @@ export class TestDataAgent extends TestData {
         return part as SectionName;
       }
     }
-    throw new Error("Failed to find section");
+    // When processing feature tests, we are not within
+    // a regular section, so just use "Manual" as a fallback
+    return "Manual";
   }
 }
 

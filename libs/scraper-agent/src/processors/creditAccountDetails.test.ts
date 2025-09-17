@@ -1,6 +1,7 @@
 import { getTestData } from "../../internal/getTestData";
 import { describe } from '@thecointech/jestutils';
 import { jest } from "@jest/globals";
+import { getValueParsing, parseValue } from "@thecointech/scraper/valueParsing";
 
 jest.setTimeout(5 * 60 * 1000);
 
@@ -16,6 +17,14 @@ describe ("Correctly finds the dueDate element", () => {
         format: null,
       }
     });
-    expect(elm.data.text).toEqual(vqa!.response!.content);
+
+    // Normalize dates
+    const elmParsing = getValueParsing(elm.data.text, "date");
+    const vqaParsing = getValueParsing(vqa!.response!.content, "date");
+    expect(elmParsing.format).toBeTruthy();
+    expect(vqaParsing.format).toBeTruthy();
+    const elmDate = parseValue(elm.data.text, elmParsing);
+    const vqaDate = parseValue(vqa!.response!.content, vqaParsing);
+    expect(elmDate).toEqual(vqaDate);
   })
 }, !!process.env.PRIVATE_TESTING_PAGES)

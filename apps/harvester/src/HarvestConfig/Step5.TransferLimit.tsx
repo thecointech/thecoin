@@ -10,7 +10,7 @@ export const TransferLimit = () => {
   const api = ConfigReducer.useApi();
   const xferLimit = data.steps.find(step => step.type === HarvestStepType.TransferLimit);
 
-  const [enabled, setEnabled] = useState(!!xferLimit ?? false);
+  const [enabled, setEnabled] = useState(Boolean(xferLimit));
   const [limit, setLimit] = useState(xferLimit?.args?.['limit'] ?? 2500);
   const [warning, setWarning] = useState<string>();
 
@@ -28,17 +28,17 @@ export const TransferLimit = () => {
     else {
       api.clearStep(HarvestStepType.TransferLimit)
     }
-  }, [limit, api, enabled]);
+  }, [limit, enabled]);
 
   return (
     <Container>
       <h4>Set limits on the Harvester</h4>
       <div>
-        Interac Canada sets limits on how much money can be transferred each day.  The harvester
-        needs to be able to keep within with these limits.
+        Interac Canada sets limits on how much money can be transferred each day. The harvester
+        needs to stay within these limits.
       </div>
       <div>
-        The total maximum a single person can e-Transfer each day is $3000, however you may wish
+        The maximum a single person can e‑Transfer each day is $3000; however, you may wish
         to set a lower limit in case you need to make transfers for other reasons.
       </div>
       <div>

@@ -4,6 +4,7 @@ import { findAccountElements, saveAccountNavigation, saveBalanceElement, updateA
 import { describe } from '@thecointech/jestutils';
 import { hasTestingPages } from "@thecointech/scraper/testutils";
 import { OverviewResponse } from "@thecointech/vqa";
+import type { ValueEvent } from "@thecointech/scraper";
 
 
 jest.setTimeout(5 * 60 * 1000);
@@ -28,8 +29,8 @@ describe('Updates to the correct account number', () => {
       const actual = updateAccountNumber(inferred, element!)
       // This is sufficient for the tests we have now, but likely will not work
       // in more complicated situations.
-      const siblings = element?.siblingText?.map(s => s.replaceAll(/[a-zA-Z]/g, "").trim())
-      expect(siblings).toContain(actual);
+      expect(element).toBeTruthy();
+      expect(element?.text).toContain(actual);
     }
   })
 }, hasTestingPages)
@@ -39,12 +40,19 @@ describe ("Correctly finds the balance element", () => {
   const testData = getTestData("AccountsSummary", "accountBalanceElement", "2025-08-21_16-37/Tangerine");
   it.each(testData)("Finds the correct element: %s", async (test) => {
     await using agent = await test.agent();
-    await saveBalanceElement(agent, "123456789", {} as any);
+    await saveBalanceElement(agent, "ignored", {} as any);
     const events = agent.events.allEvents;
-    const elm: any = events.events.find((e: any) => e.eventName == "balance");
+    const elm = events.events.find(
+      (e: any): e is ValueEvent => e.eventName === "balance" && e.type === "value"
+    );
     const original = test.sch("balance");
-    expect(elm).toBeDefined();
-    expect(elm.data.text).toEqual(original?.search.event.text);
+    expect(elm).toBeTruthy();
+    expect(elm).toEqual(expect.objectContaining({
+      eventName: "balance",
+      type: "value",
+      text: original?.search.event.text,
+      parsing: expect.objectContaining({ type: "currency" }),
+    }));
   })
 }, hasTestingPages)
 
@@ -58,9 +66,9 @@ describe("Correctly finds the navigation element", () => {
     const elms = test.elm_iter("navigate-")
     for (const [account, query, elm] of zip(response.accounts, [...queryIter], [...elms])) {
       // Get the real account number
-      account!.account_number = query!.args[0]
+      account!.account_number = query!.args[0] as string;
       const found = await saveAccountNavigation(agent, account!);
-      // expect(found.data.text).toEqual(elm!.text);
+      expect(found.data.text).toEqual(elm!.text); // (Not sure this is working)
     }
   })
 }, hasTestingPages)

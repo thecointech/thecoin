@@ -29,10 +29,10 @@ export class ConfigDatabase extends BaseDatabase<ConfigShape> implements Omit<Sr
 
   protected override async loadDb(): Promise<PouchDB.Database<ConfigShape>> {
 
-    log.info(`Initializing in-memory config database`);
     if (globalThis.__temp_config) {
       return globalThis.__temp_config;
     }
+    log.info(`Initializing in-memory config database`);
     globalThis.__temp_config = new PouchDB<ConfigShape>("in-memory", { adapter: 'memory' });
     // Disable closing in development
     globalThis.__temp_config['close'] = () => Promise.resolve();

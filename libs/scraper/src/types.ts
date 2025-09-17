@@ -95,7 +95,7 @@ export type FoundElement = SearchElement & {
 
 // Needed in AgentSerializer for logging things
 export type VqaCallData = {
-  args: string[],
+  args: (string|number)[],
   response: any,
 }
 export type TestElmData = FoundElement["data"]

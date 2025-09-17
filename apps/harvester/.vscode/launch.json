@@ -46,6 +46,7 @@
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
       "env": {
+        "NODE_ENV": "development",
         "HARVESTER_ALLOW_OVERRIDES": "true",
         "NOTIFY_ON_MODAL_ENCOUNTER": "true",
       }
@@ -64,6 +65,7 @@
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
       "env": {
+        "NODE_ENV": "development",
         "HARVESTER_ALLOW_OVERRIDES": "true",
         "NOTIFY_ON_MODAL_ENCOUNTER": "true",
         "DO_NOT_SEND_ETRANSFER": "true",

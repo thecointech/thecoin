@@ -3,7 +3,6 @@ import { hydrateProcessor, getWallet, getCreditDetails } from './config';
 import { getCurrentState } from './state';
 import { getChequingData, getVisaData } from './fetchData';
 import { HarvestData } from './types';
-import { replay } from '@thecointech/scraper/replay';
 import { BackgroundTaskCallback } from '@/BackgroundTask';
 
 export async function initialize(callback?: BackgroundTaskCallback) {
@@ -25,8 +24,8 @@ export async function initialize(callback?: BackgroundTaskCallback) {
 
   const user = {
     wallet,
-    replay,
     creditDetails,
+    uiCallback: callback,
   }
 
   // Initialize data (do we want anything from last state?)

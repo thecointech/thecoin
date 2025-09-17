@@ -9,7 +9,7 @@ import { sections } from '@thecointech/scraper-agent/processors/types';
 import { VisibleOverride } from '@thecointech/scraper/puppeteer-init/visibility';
 import { AskUserLogin } from './askUserLogin';
 import { getErrorMessage } from '@/BackgroundTask';
-import { maybeSerializeRun } from './maybeSerializer';
+import { maybeSerializeRun } from '../scraperLogging';
 
 export type AutoConfigParams = {
   type: BankType;
@@ -39,7 +39,7 @@ export async function autoConfigure({ type, name, url, username, password, visib
 
   try {
     using _ = new VisibleOverride(visible)
-    using _serializer = maybeSerializeRun(logger.logsFolder, name);
+    using _serializer = await maybeSerializeRun(logger.logsFolder, name);
     await using agent = await Agent.create(name, inputBridge, url, logger);
     const baseNode = await agent.process(toSkip);
 

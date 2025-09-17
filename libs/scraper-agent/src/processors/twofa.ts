@@ -36,6 +36,18 @@ export async function selectDestinationAndEnterCode(agent: Agent) {
 }
 
 export async function selectDestination(agent: Agent) {
+  const allOptions = await getDestinationOptions(agent);
+  const dest = await askUserForDestination(agent, allOptions);
+  const clickedOption = await agent.page.completeInteraction(dest,
+    (found) => clickElement(agent.page.page, found),
+    { hints: { eventName: "destination", tagName: "button" } }
+  );
+  if (!clickedOption) {
+    await agent.maybeThrow(new Error("Failed to click destination"));
+  }
+}
+
+export async function getDestinationOptions(agent: Agent) {
   const api = await apis().getTwofaApi();
   const image = await agent.page.getImage();
   const { data: destinations } = await api.detectDestinations(image);
@@ -49,14 +61,7 @@ export async function selectDestination(agent: Agent) {
       allOptions.push({ name: found.data.text, options: options.buttons });
     }
   }
-  const dest = await askUserForDestination(agent, allOptions);
-  const clickedOption = await agent.page.completeInteraction(dest,
-    (found) => clickElement(agent.page.page, found),
-    { hints: { eventName: "destination", tagName: "button" } }
-  );
-  if (!clickedOption) {
-    await agent.maybeThrow(new Error("Failed to click destination"));
-  }
+  return allOptions;
 }
 
 export async function updateFromPage(agent: Agent, response: PhoneNumberElements) {

@@ -47,6 +47,13 @@ export async function closeModal(page: Page, closeButton: ElementResponse) {
     page,
     response: closeButton,
     maxTop: Number.MAX_SAFE_INTEGER,
+    hints: {
+      eventName: "closeModal",
+      tagName: "button",
+      // Add an extra hint.  Sometimes the close button
+      // will be marked by an (X), and this may help compensate
+      label: "close",
+    }
   });
   if (!found) return false;
 

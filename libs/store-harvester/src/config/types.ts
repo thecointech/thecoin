@@ -19,6 +19,7 @@ export type ConfigShape = {
   scraping?: ScrapingConfig,
 
   alwaysRunScraperVisible?: boolean,
+  alwaysRunScraperLogging?: boolean,
 
 } & HarvestConfig;
 
