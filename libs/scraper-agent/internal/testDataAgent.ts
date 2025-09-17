@@ -55,7 +55,9 @@ export class TestDataAgent extends TestData {
         return part as SectionName;
       }
     }
-    throw new Error("Failed to find section");
+    // When processing feature tests, we are not within
+    // a regular section, so just use "Manual" as a fallback
+    return "Manual" as SectionName;
   }
 }
 

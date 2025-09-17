@@ -4,6 +4,7 @@ import { findAccountElements, saveAccountNavigation, saveBalanceElement, updateA
 import { describe } from '@thecointech/jestutils';
 import { hasTestingPages } from "@thecointech/scraper/testutils";
 import { OverviewResponse } from "@thecointech/vqa";
+import { ValueEvent } from "@thecointech/scraper";
 
 
 jest.setTimeout(5 * 60 * 1000);
@@ -28,8 +29,7 @@ describe('Updates to the correct account number', () => {
       const actual = updateAccountNumber(inferred, element!)
       // This is sufficient for the tests we have now, but likely will not work
       // in more complicated situations.
-      const siblings = element?.siblingText?.map(s => s.replaceAll(/[a-zA-Z]/g, "").trim())
-      expect(siblings).toContain(actual);
+      expect(element!.text).toContain(actual);
     }
   })
 }, hasTestingPages)
@@ -39,12 +39,12 @@ describe ("Correctly finds the balance element", () => {
   const testData = getTestData("AccountsSummary", "accountBalanceElement", "2025-08-21_16-37/Tangerine");
   it.each(testData)("Finds the correct element: %s", async (test) => {
     await using agent = await test.agent();
-    await saveBalanceElement(agent, "123456789", {} as any);
+    await saveBalanceElement(agent, "ignored", {} as any);
     const events = agent.events.allEvents;
-    const elm: any = events.events.find((e: any) => e.eventName == "balance");
+    const elm: ValueEvent = events.events.find((e: any) => e.eventName == "balance") as any;
     const original = test.sch("balance");
     expect(elm).toBeDefined();
-    expect(elm.data.text).toEqual(original?.search.event.text);
+    expect(elm!.text).toEqual(original?.search.event.text);
   })
 }, hasTestingPages)
 

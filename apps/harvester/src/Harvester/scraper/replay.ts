@@ -1,4 +1,4 @@
-import { replay } from '@thecointech/scraper/replay';
+import { replay } from '@thecointech/scraper';
 import { ReplayResult } from '@thecointech/scraper/types';
 import { getReplayEvents } from '@thecointech/scraper-agent';
 import { ActionType } from './types';
