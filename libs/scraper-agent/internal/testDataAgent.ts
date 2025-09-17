@@ -70,7 +70,7 @@ export class TestDataAgent extends TestData {
     }
     // When processing feature tests, we are not within
     // a regular section, so just use "Manual" as a fallback
-    return "Manual" as SectionName;
+    return "Manual";
   }
 }
 

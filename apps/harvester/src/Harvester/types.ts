@@ -2,7 +2,7 @@ import currency from 'currency.js'
 import { DateTime } from 'luxon'
 import type { Signer } from 'ethers';
 import type { CreditDetails, HarvestData, HarvestDelta } from '@thecointech/store-harvester';
-import { BackgroundTaskCallback } from '@/BackgroundTask';
+import type { BackgroundTaskCallback } from '@/BackgroundTask';
 export type { HarvestData, HarvestDelta, CreditDetails } from '@thecointech/store-harvester';
 
 

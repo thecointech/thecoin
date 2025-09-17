@@ -7,7 +7,7 @@ import { log } from '@thecointech/logging';
 export function setSchedule(schedule: HarvestSchedule, existing?: HarvestSchedule) {
   // Don't schedule if we're in dev mode
   if (process.env.NODE_ENV === 'development') {
-    log.info("Skipping setSchedule in dev mode");
+    log.debug("Skipping setSchedule in dev mode");
     return;
   }
 

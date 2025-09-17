@@ -4,7 +4,7 @@ import { findAccountElements, saveAccountNavigation, saveBalanceElement, updateA
 import { describe } from '@thecointech/jestutils';
 import { hasTestingPages } from "@thecointech/scraper/testutils";
 import { OverviewResponse } from "@thecointech/vqa";
-import { ValueEvent } from "@thecointech/scraper";
+import type { ValueEvent } from "@thecointech/scraper";
 
 
 jest.setTimeout(5 * 60 * 1000);
@@ -29,7 +29,8 @@ describe('Updates to the correct account number', () => {
       const actual = updateAccountNumber(inferred, element!)
       // This is sufficient for the tests we have now, but likely will not work
       // in more complicated situations.
-      expect(element!.text).toContain(actual);
+      expect(element).toBeTruthy();
+      expect(element?.text).toContain(actual);
     }
   })
 }, hasTestingPages)
@@ -41,10 +42,17 @@ describe ("Correctly finds the balance element", () => {
     await using agent = await test.agent();
     await saveBalanceElement(agent, "ignored", {} as any);
     const events = agent.events.allEvents;
-    const elm: ValueEvent = events.events.find((e: any) => e.eventName == "balance") as any;
+    const elm = events.events.find(
+      (e: any): e is ValueEvent => e.eventName === "balance" && e.type === "value"
+    );
     const original = test.sch("balance");
-    expect(elm).toBeDefined();
-    expect(elm!.text).toEqual(original?.search.event.text);
+    expect(elm).toBeTruthy();
+    expect(elm).toEqual(expect.objectContaining({
+      eventName: "balance",
+      type: "value",
+      text: original?.search.event.text,
+      parsing: expect.objectContaining({ type: "currency" }),
+    }));
   })
 }, hasTestingPages)
 

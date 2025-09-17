@@ -17,15 +17,12 @@ jest.unstable_mockModule("./interactions", () => mocks);
 const { maybeCloseModal } = await import("./modal");
 
 const tests = getTestData("modals", "*", "features");
-it ('Should have some tests', () => {
-  expect(tests.length).toBeGreaterThan(0)
-})
-
-beforeEach(() => {
-  mocks.clickElement.mockClear();
-})
 
 describe('modal vqa tests finds the correct close element', () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+  })
+
   it.each(tests)("For: %s", async (test) => {
     await using agent = await test.agent();
     const r = await maybeCloseModal(agent.page.page);

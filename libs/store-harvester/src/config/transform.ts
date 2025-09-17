@@ -2,13 +2,13 @@ import { ConfigShape } from "./types";
 import { defaultDays, defaultTime } from "./types-harvest";
 import type { ScrapingConfig } from "./types-scraper";
 
-const initConfig: ConfigShape = {
+const initConfig: ConfigShape = Object.freeze({
   steps: [],
   schedule: {
     daysToRun: defaultDays,
     timeToRun: defaultTime,
   }
-}
+});
 
 export const transformIn = (config: Partial<ConfigShape>, last?: ConfigShape) => {
 

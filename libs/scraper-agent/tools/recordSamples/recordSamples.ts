@@ -80,11 +80,12 @@ while (recordMore) {
 
         break;
       }
-    case "Quit":
+    case "Quit": {
       recordMore = false;
       const events = agent.events.allEvents;
-      writer.logEvents(events);
+      await writer.logEvents(events);
       break;
+    }
   }
 }
 console.log("All Done");

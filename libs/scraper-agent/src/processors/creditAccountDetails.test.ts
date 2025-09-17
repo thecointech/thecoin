@@ -21,8 +21,8 @@ describe ("Correctly finds the dueDate element", () => {
     // Normalize dates
     const elmParsing = getValueParsing(elm.data.text, "date");
     const vqaParsing = getValueParsing(vqa!.response!.content, "date");
-    expect(elmParsing.format).toBeDefined();
-    expect(vqaParsing.format).toBeDefined();
+    expect(elmParsing.format).toBeTruthy();
+    expect(vqaParsing.format).toBeTruthy();
     const elmDate = parseValue(elm.data.text, elmParsing);
     const vqaDate = parseValue(vqa!.response!.content, vqaParsing);
     expect(elmDate).toEqual(vqaDate);

@@ -231,10 +231,10 @@ export function initMainIPC() {
     return api.setHarvestConfig(config);
   })
 
-  ipcMain.handle(actions.alwaysRunScraperVisible, async (_event, visible: boolean) => {
+  ipcMain.handle(actions.alwaysRunScraperVisible, async (_event, visible?: boolean) => {
     return api.alwaysRunScraperVisible(visible);
   })
-  ipcMain.handle(actions.alwaysRunScraperLogging, async (_event, logging: boolean) => {
+  ipcMain.handle(actions.alwaysRunScraperLogging, async (_event, logging?: boolean) => {
     return api.alwaysRunScraperLogging(logging);
   })
   ipcMain.handle(actions.runHarvester, async (_event) => {
