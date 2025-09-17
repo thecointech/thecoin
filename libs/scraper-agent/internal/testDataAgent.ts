@@ -34,6 +34,7 @@ export class TestDataAgent extends TestData {
       serializer?.[Symbol.dispose]();
       mockedApi[Symbol.dispose]();
       await originalDispose.call(agent);
+      this._agent = undefined;
     };
     this._agent = agent;
     return agent;

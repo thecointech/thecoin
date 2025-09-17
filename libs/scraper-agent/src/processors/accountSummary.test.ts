@@ -66,9 +66,9 @@ describe("Correctly finds the navigation element", () => {
     const elms = test.elm_iter("navigate-")
     for (const [account, query, elm] of zip(response.accounts, [...queryIter], [...elms])) {
       // Get the real account number
-      account!.account_number = query!.args[0]
+      account!.account_number = query!.args[0] as string;
       const found = await saveAccountNavigation(agent, account!);
-      // expect(found.data.text).toEqual(elm!.text);
+      expect(found.data.text).toEqual(elm!.text); // (Not sure this is working)
     }
   })
 }, hasTestingPages)
