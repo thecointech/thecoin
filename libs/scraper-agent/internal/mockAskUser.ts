@@ -40,9 +40,8 @@ export class MockAskUser implements IAskUser {
   }
 }
 
-type QuestionType = "option" | "recipient" | "value";
+export type QuestionType = "option" | "recipient" | "value";
 export type AnswerCallback = (type: QuestionType, question?: string, options?: NamedOptions[]) => any;
-
 // Default is to read the answer from a file
 export const getAnswerFromFileIfExists = (matchedFolder: string, step: string) : AnswerCallback => {
   const answerFile = `${matchedFolder}/${step}-answers.json`;
