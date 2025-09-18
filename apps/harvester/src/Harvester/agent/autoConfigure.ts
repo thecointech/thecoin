@@ -1,4 +1,4 @@
-import { SectionName, EventSection, Agent } from '@thecointech/scraper-agent';
+import { type SectionName, type EventSection, Agent } from '@thecointech/scraper-agent';
 import { ScraperCallbacks } from "../scraper/callbacks";
 import { log } from "@thecointech/logging";
 import { type BackgroundTaskCallback } from "@/BackgroundTask/types";

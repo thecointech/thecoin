@@ -1,6 +1,6 @@
 
 import { getProcessConfig, setProcessConfig } from "./config";
-import { AgentSerializer, SectionName } from "@thecointech/scraper-agent";
+import { AgentSerializer, type SectionName } from "@thecointech/scraper-agent";
 
 // The scraper has a few different input points around.
 // We want the logging switch to be a single source of truth.

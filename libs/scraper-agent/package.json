@@ -42,8 +42,8 @@
   ],
   "exports": {
     ".": {
-      "development": "./build/index.js",
-      "devlive": "./build/index.js",
+      "development": "./mocked/index.ts",
+      "devlive": "./mocked/index.ts",
       "default": "./build/index.js"
     },
     "./*": "./build/*.js"
