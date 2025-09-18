@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react'
 import { Button, Checkbox, Dimmer, Loader, Segment } from 'semantic-ui-react'
 import { HarvestData } from '../Harvester/types';
 import { fromDb } from '@thecointech/store-harvester';
-import { DateTime } from 'luxon';
+import { StateDisplay } from './StateDisplay';
 import { log } from '@thecointech/logging';
 import { Result } from '../scraper_actions';
 import { BackgroundTaskErrors, BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
 import { useBackgroundTask, isRunning } from '@/BackgroundTask';
+import styles from './index.module.less';
 
 export const Results = () => {
 
@@ -109,9 +110,6 @@ export const Results = () => {
     // Trigger file selection
     input.click();
   }
-  const paymentPending = state?.state.toPayVisa
-    ? `${state.state.toPayVisa.format()} - ${state.state.toPayVisaDate?.toLocaleString(DateTime.DATETIME_SHORT)}`
-    : 'N/A'
 
   async function launchBrowser() {
     const r = await window.scraper.warmup("_blank");
@@ -121,31 +119,24 @@ export const Results = () => {
   }
 
   return (
-    <>
-      <Dimmer.Dimmable as={Segment} dimmed={isReplaying}>
+    <div id={styles.container}>
+      <Dimmer.Dimmable dimmed={isReplaying}>
         <Dimmer active={isReplaying} inverted>
           <Loader>Running</Loader>
         </Dimmer>
-        <div>
-          <h1>Current State</h1>
-          <p>Chq Balance: {state?.chq.balance.format() ?? 'N/A'}</p>
-          <p>Visa Balance: {state?.visa.balance.format() ?? 'N/A'}</p>
-          <p>Harvester Balance: {state?.state.harvesterBalance?.format() ?? 'N/A'}</p>
-          <p>Visa Payment Pending: {paymentPending}</p>
-          <p>Last Run: {state?.date.toLocaleString(DateTime.DATETIME_SHORT) ?? 'N/A'}</p>
-        </div>
-        <div>
+        <StateDisplay state={state} />
+        {/* <div>
           <Button onClick={launchBrowser}>Launch Browser</Button>
-        </div>
+        </div> */}
         <div>
           <Button onClick={exportResults}>Export Results</Button>
         </div>
-        <div>
+        {/* <div>
           <Button onClick={exportConfig}>Export Config</Button>
-        </div>
-        <div>
+        </div> */}
+        {/* <div>
           <Button onClick={importConfig}>Import Script</Button>
-        </div>
+        </div> */}
         <div>
           <Button onClick={runImmediately}>Run Harvester Now</Button>
           <Checkbox onClick={(_, {checked}) => setVisible(checked)} checked={visible} label="Override Visibility" />
@@ -153,7 +144,7 @@ export const Results = () => {
       </Dimmer.Dimmable>
       <BackgroundTaskProgressBar type='replay' />
       <BackgroundTaskErrors type='replay' />
-    </>
+    </div>
   )
 }
 

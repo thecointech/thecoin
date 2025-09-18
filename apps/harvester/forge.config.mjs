@@ -65,6 +65,19 @@ const mainConfigMerged = mainConfig({
   externals: nativeModules.concat('@puppeteer/browsers'),
 })
 
+const renderConfigMerged = rendererConfig({
+  plugins: [
+    new webpack.DefinePlugin({
+      ['process.env.TC_DEPLOYED_AT']: deployedAt,
+    })
+  ],
+  ignoreWarnings: [
+    {
+      message: /Conflicting values for 'process\.env\.TC_DEPLOYED_AT'/,
+    },
+  ],
+})
+
 
 const config = {
   buildIdentifier: process.env.CONFIG_NAME,
@@ -101,13 +114,7 @@ const config = {
       devContentSecurityPolicy: getCSP(),
       mainConfig: mainConfigMerged,
       renderer: {
-        config: rendererConfig({
-          plugins: [
-            new webpack.DefinePlugin({
-              ['process.env.TC_DEPLOYED_AT']: deployedAt,
-            })
-          ],
-        }),
+        config: renderConfigMerged,
         entryPoints: [
           {
             html: './src/index.html',
