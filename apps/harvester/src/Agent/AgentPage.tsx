@@ -7,6 +7,7 @@ import { LoginDetails } from './LoginDetails';
 import { BankSelect } from './BankSelect';
 import { ActionType } from '@/Harvester/scraper/types';
 import { BackgroundTaskErrors, BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
+import { Link } from 'react-router-dom';
 
 export const AgentPage: React.FC = () => {
   const [chequingBank, setChequingBank] = useState<BankData>();
@@ -121,10 +122,13 @@ export const AgentPage: React.FC = () => {
 
       <BackgroundTaskProgressBar type="record" />
       <BackgroundTaskErrors type='record' />
-      <ValidateTask record={recordTask} type="chqBalance" />
+      <div>
+        <Link to="/config">Finalize Harvester Settings</Link>
+      </div>
+      {/* <ValidateTask record={recordTask} type="chqBalance" />
       <ValidateTask record={recordTask} type="chqETransfer" />
       <ValidateTask record={recordTask} type="visaBalance" />
-      <BackgroundTaskProgressBar type="replay" />
+      <BackgroundTaskProgressBar type="replay" />*/}
     </div>
   );
 };

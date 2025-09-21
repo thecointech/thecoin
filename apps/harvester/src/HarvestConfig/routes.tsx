@@ -7,7 +7,7 @@ import { ChequeMinimum } from './Step4.ChequeMinimum';
 import { TransferLimit } from './Step5.TransferLimit';
 import { ProcessPercent } from './Step6.Percent';
 import { Complete } from './Step7.Complete';
-import { OverrideInitialBalance } from './Step7.OverrideInitialBalance';
+// import { OverrideInitialBalance } from './Step7.OverrideInitialBalance';
 
 export const routes = [
   {
@@ -47,13 +47,13 @@ export const routes = [
   },
 ]
 // For now, hide the overrides
-if (await window.scraper.allowOverrides()) {
-  routes.push(  {
-    component: OverrideInitialBalance,
-    title: "Overrides",
-    description: "Override",
-  })
-}
+// if (await window.scraper.allowOverrides()) {
+//   routes.push(  {
+//     component: OverrideInitialBalance,
+//     title: "Overrides",
+//     description: "Override",
+//   })
+// }
 
 export const ConfigRouter = () => (
   <Switch>

@@ -7,6 +7,7 @@ import { HarvestConfig } from './HarvestConfig';
 import { Results } from './results';
 import { AgentPage } from './Agent/AgentPage';
 import { RefreshTwoFA } from './Agent/RefreshTwoFA';
+import { Advanced } from './Advanced';
 
 export const Routes = () => (
   <Switch>
@@ -18,5 +19,6 @@ export const Routes = () => (
     <Route path='/train' component={Training} />
     <Route path='/config' component={HarvestConfig} />
     <Route path='/results' component={Results} />
+    <Route path='/advanced' component={Advanced} />
   </Switch>
 )

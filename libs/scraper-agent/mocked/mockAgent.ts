@@ -20,7 +20,20 @@ export class Agent implements AgentClass {
     }
     return {
       section: "Initial",
-      events: (["Landing", "Login", "AccountsSummary", "SendETransfer", "Logout"] as const).map(s => ({ section: s, events: [] }))
+      events: (["Login", "AccountsSummary", "CreditAccountDetails", "SendETransfer", "Logout"] as const)
+        .map((s, i) => ({
+          section: s,
+          events: [
+            // One mock event so replay can find has something to do
+            {
+              id: i.toString(),
+              type: "navigation",
+              timestamp: i,
+              to: "https://www.example.com",
+            }
+          ]
+        })
+      )
     };
   }
 

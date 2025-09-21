@@ -12,10 +12,6 @@ export const App = () => {
   BackgroundTaskReducer.useStore();
 
   const location = useLocation();
-  const openLogs = async () => {
-    await window.scraper.openLogsFolder()
-  }
-
   const backgroundTaskApi = BackgroundTaskReducer.useApi();
 
   useEffect(() => {
@@ -79,8 +75,10 @@ export const App = () => {
             to='/results'
           />
           <Menu.Item
-            name='Logs'
-            onClick={openLogs}
+            name='Advanced Settings'
+            active={location.pathname.startsWith('/advanced')}
+            as={Link}
+            to='/advanced'
           />
         </Menu>
       </div>
