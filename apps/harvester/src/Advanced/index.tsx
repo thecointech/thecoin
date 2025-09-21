@@ -144,7 +144,9 @@ export const Advanced = () => {
           checked={visible}
           disabled={paused}
           label="Force Always run visible" />
-        <Button onClick={launchBrowser}>Launch Browser</Button>
+        <div style={{ marginTop: "0.75em" }}>
+          <Button onClick={launchBrowser}>Launch Browser</Button>
+        </div>
       </Segment>
       <Segment>
         <Header size="small">Logging</Header>
@@ -157,9 +159,9 @@ export const Advanced = () => {
           checked={logging}
           disabled={paused}
           label="Enable verbose logging" />
-        <br />
-        <a onClick={openLogs}>View Logs</a>
-
+        <div style={{ marginTop: "0.75em" }}>
+          <a onClick={openLogs}>View Logs</a>
+        </div>
       </Segment>
       <Segment>
         <Header size="small">Import/Export Harvester data</Header>
