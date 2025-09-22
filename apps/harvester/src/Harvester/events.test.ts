@@ -3,13 +3,26 @@ import { setEvents, getEvents } from "./events";
 import { ActionType } from "./scraper";
 import { AnyEvent } from "@thecointech/scraper";
 import { jest } from '@jest/globals';
+import { BankEvents } from "@thecointech/store-harvester";
 
 
 jest.setTimeout(10* 60* 1000)
 describe('setting/getting events', () => {
 
-  const creditSection: EventSection = { section: 'Initial', events: [{ type: 'click', id: 'credit'} as any] };
-  const chequingSection: EventSection = { section: 'Initial', events: [{ type: 'click', id: 'chequing'} as any] };
+  const creditSection: BankEvents = {
+    name: 'abank',
+    url: 'https://credit.com',
+    username: 'credit',
+    password: 'credit',
+    events: { section: 'Initial', events: [{ type: 'click', id: 'credit'} as any] }
+  };
+  const chequingSection: BankEvents = {
+    name: 'abank',
+    url: 'https://chequing.com',
+    username: 'chequing',
+    password: 'chequing',
+    events: { section: 'Initial', events: [{ type: 'click', id: 'chequing'} as any] }
+  };
 
   const getEventArray = async (type: ActionType) => {
     const events = await getEvents(type);
@@ -25,19 +38,21 @@ describe('setting/getting events', () => {
   });
 
   it('should split both when setting chequing', async () => {
-    await setEvents("both", {} as any);
+    await setEvents("both", creditSection);
     await setEvents("chequing", chequingSection);
     const chequing = await getEventArray("chqBalance");
     expect(chequing[0].id).toEqual("chequing");
-    expect(await getEvents("visaBalance")).toEqual({});
+    const credit = await getEventArray("visaBalance");
+    expect(credit[0].id).toEqual("credit");
   });
 
   it('should split both when setting credit', async () => {
-    await setEvents("both", {} as any);
+    await setEvents("both", chequingSection );
     await setEvents("credit", creditSection);
     const credit = await getEventArray("visaBalance");
     expect(credit[0].id).toEqual("credit");
-    expect(await getEvents("chqBalance")).toEqual({});
+    const chequing = await getEventArray("chqBalance");
+    expect(chequing[0].id).toEqual("chequing");
   });
 
   it('setting both overrides initial settings', async () => {

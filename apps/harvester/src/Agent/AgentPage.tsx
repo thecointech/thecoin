@@ -5,7 +5,7 @@ import { BankData} from './BankCard/data';
 import { QuestionResponse } from './QuestionResponse';
 import { LoginDetails } from './LoginDetails';
 import { BankSelect } from './BankSelect';
-import { ActionType } from '@/Harvester/scraper/types';
+import { ActionType } from '@/Harvester/scraper';
 import { BackgroundTaskErrors, BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
 import { Link } from 'react-router-dom';
 

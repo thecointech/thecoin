@@ -1,4 +1,4 @@
-import { BankTypes, ScrapingConfig } from "../Harvester/scraper";
+import { BankTypes, ScrapingConfig } from "@thecointech/store-harvester";
 
 export function getScrapingScript(config: any) {
   const scraping: ScrapingConfig = config?.scraping;

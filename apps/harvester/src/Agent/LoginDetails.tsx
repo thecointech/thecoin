@@ -25,7 +25,7 @@ export const LoginDetails: React.FC<Props> = ({ icon, name, url, type }) => {
     // TODO: Send command to start the agent process
     log.info('Starting agent with:', url);
     // api.setAgentProgress(undefined);
-    window.scraper.autoProcess({ name, url, type, username, password, visible: false });
+    window.scraper.autoProcess({ type, config: { name, url, username, password }, visible: false });
   };
   return (
     <Segment>
