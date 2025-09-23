@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Message, Progress } from "semantic-ui-react";
 import { useBackgroundTask } from "./reducer";
 import { BackgroundTaskType } from "./types";
@@ -11,6 +12,19 @@ type Props = {
 export const BackgroundTaskProgressBar = ({ type, subTask }: Props) => {
 
   const bgTask = useBackgroundTask(type);
+
+  const [priorCompleted, setPriorCompleted] = useState<boolean | undefined>(bgTask?.completed);
+
+  useEffect(() => {
+    if (!bgTask?.completed) {
+      setPriorCompleted(false);
+    }
+  }, [bgTask]);
+
+  if (priorCompleted === true) {
+    return null;
+  }
+
   if (!bgTask) {
     return null;
   }

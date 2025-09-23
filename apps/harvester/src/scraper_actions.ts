@@ -6,6 +6,7 @@ import { ActionType } from './Harvester/scraper';
 import { BackgroundTaskCallback } from './BackgroundTask/types';
 import type { OptionPacket, QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
 import type { AutoConfigParams } from './Harvester/agent';
+import { BankConnectDetails } from './Harvester/events';
 
 export type Result<T> = {
   error?: string;
@@ -76,6 +77,9 @@ export type ScraperBridgeApi = {
   // Import a scraper script configuration
   importScraperScript(config: any): Promise<Result<boolean>>,
 
+  // Get banking connection details
+  getBankConnectDetails(): Promise<Result<BankConnectDetails>>,
+
   // Lingering (systemd user background)
   hasUserEnabledLingering(): Promise<Result<boolean>>;
   enableLingeringForCurrentUser(): Promise<Result<{ success?: boolean; error?: string }>>;
@@ -131,5 +135,6 @@ export const actions = {
   allowOverrides: 'scraper:allowOverrides',
   setOverrides: 'scraper:setOverrides',
   importScraperScript: 'scraper:importScraperScript',
+  getBankConnectDetails: 'scraper:getBankConnectDetails',
 }
 export type Action = keyof typeof actions

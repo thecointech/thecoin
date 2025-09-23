@@ -5,12 +5,12 @@ import CIBC from './CIBC.svg';
 import NationalBank from './NationalBank-EN.svg';
 import Scotia from './Scotiabank.svg';
 import Tangerine from './Tangerine.svg';
+import { BankIdent } from '@thecointech/store-harvester';
 
 export type BankData = {
-  name: string,
   icon?: string,
-  url: string
-}
+} & BankIdent
+
 export const banks: BankData[] = [
   {
     name: 'RBC',

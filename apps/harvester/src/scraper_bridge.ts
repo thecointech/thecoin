@@ -21,6 +21,7 @@ import { twofaRefresh as doRefresh } from './Harvester/agent/twofaRefresh';
 import { enableLingeringForCurrentUser, isLingeringEnabled } from './Harvester/schedule/linux-lingering';
 import { getScraperLogging, setScraperLogging } from './Harvester/scraperLogging';
 import { Registry, VisibleOverride } from '@thecointech/scraper';
+import { getBankConnectDetails } from './Harvester/events';
 
 
 async function guard<T>(cb: () => Promise<T>) {
@@ -173,6 +174,8 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
 
     return true;
   }),
+
+  getBankConnectDetails: () => guard(getBankConnectDetails),
 }
 
 const onBgTaskMsg = (progress: BackgroundTaskInfo) => {
@@ -274,6 +277,10 @@ export function initMainIPC() {
 
   ipcMain.handle(actions.importScraperScript, async (_event, config) => {
     return api.importScraperScript(config);
+  });
+
+  ipcMain.handle(actions.getBankConnectDetails, async (_event) => {
+    return api.getBankConnectDetails();
   });
 
   // Set up progress listener separately

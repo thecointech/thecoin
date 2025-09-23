@@ -40,7 +40,7 @@ export const Browser = () => {
       </h4>
       <OnCompleteMessage complete={hasInstalled} />
       {/* Allow user to confirm closing any running chrome instances */}
-      <QuestionResponse enabled={installing} />
+      <QuestionResponse backgroundTaskId="initialize" />
       <BackgroundTaskProgressBar type="initialize" />
       <BackgroundTaskErrors type="initialize" />
       <div>

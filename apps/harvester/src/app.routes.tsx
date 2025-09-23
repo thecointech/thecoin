@@ -5,7 +5,7 @@ import { Training } from './Training';
 import { Route, Switch } from 'react-router-dom';
 import { HarvestConfig } from './HarvestConfig';
 import { Results } from './results';
-import { AgentPage } from './Agent/AgentPage';
+import { BankConnect } from './Agent';
 import { RefreshTwoFA } from './Agent/RefreshTwoFA';
 import { Advanced } from './Advanced';
 
@@ -14,7 +14,7 @@ export const Routes = () => (
     <Route exact path='/' component={Home} />
     <Route path='/browser' component={Browser} />
     <Route path='/account' component={Account} />
-    <Route path='/agent' component={AgentPage} />
+    <Route path='/agent' component={BankConnect} />
     <Route path='/twofaRefresh' component={RefreshTwoFA} />
     <Route path='/train' component={Training} />
     <Route path='/config' component={HarvestConfig} />

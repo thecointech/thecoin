@@ -7,15 +7,14 @@ import { log } from "@thecointech/logging";
 
 type Props = BankData & {
   type: BankType;
+  both?: boolean;
 }
-export const LoginDetails: React.FC<Props> = ({ icon, name, url, type }) => {
+export const LoginDetails: React.FC<Props> = ({ icon, name, url, type, both }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  // const [visible, setVisible] = useState(false);
 
   const group = useBackgroundTask("record");
-  const replay = useBackgroundTask("replay");
-  const isTaskRunning = isRunning(group) || isRunning(replay);
+  const isTaskRunning = isRunning(group);
 
   const handleSubmit = () => {
     if (isTaskRunning) {
@@ -24,8 +23,8 @@ export const LoginDetails: React.FC<Props> = ({ icon, name, url, type }) => {
     }
     // TODO: Send command to start the agent process
     log.info('Starting agent with:', url);
-    // api.setAgentProgress(undefined);
-    window.scraper.autoProcess({ type, config: { name, url, username, password }, visible: false });
+    const storedType = both ? "both" : type;
+    window.scraper.autoProcess({ type: storedType, config: { name, url, username, password }, visible: false });
   };
   return (
     <Segment>
@@ -53,7 +52,6 @@ export const LoginDetails: React.FC<Props> = ({ icon, name, url, type }) => {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Enter your password..."
       />
-      {/* <Checkbox onChange={() => setVisible(!visible)} checked={visible} label='Visible' /><br /> */}
       <Button onClick={handleSubmit} loading={isTaskRunning}>Submit</Button>
   </Segment>
   )

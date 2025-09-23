@@ -3,7 +3,7 @@ import type { Agent as AgentClass } from "../src/agent";
 import type { EventManager } from "../src/eventManager";
 import type { PageHandler } from "../src/pageHandler";
 import type { NamedProcessor } from "../src/processors";
-import type { SectionType } from "../src/processors/types";
+import { SectionType, sections } from "../src/processors/types";
 import type { IAskUser, SectionName, EventSection } from "../src/types";
 import { sleep } from "@thecointech/async/sleep";
 
@@ -14,9 +14,32 @@ export class Agent implements AgentClass {
   input: IAskUser;
   callbacks?: IScraperCallbacks | undefined;
 
+  constructor(name: string, input: IAskUser, callbacks?: IScraperCallbacks | undefined) {
+    this.name = name;
+    this.input = input;
+    this.callbacks = callbacks;
+  }
+
   async process(_sectionsToSkip?: SectionName[]): Promise<EventSection> {
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 4; i++) {
       await sleep(1000);
+      this.callbacks?.onProgress?.({
+        stage: sections[i],
+        stepPercent: 100,
+        step: 1,
+        total: 1,
+      });
+    }
+    // mock getting 2fa code
+    const code = await this.input.forValue("Get 2FA Code");
+    for (let i = 0; i < 4; i++) {
+      await sleep(1000);
+      this.callbacks?.onProgress?.({
+        stage: sections[i + 4],
+        stepPercent: 100,
+        step: 1,
+        total: 1,
+      });
     }
     return {
       section: "Initial",
@@ -37,8 +60,8 @@ export class Agent implements AgentClass {
     };
   }
 
-  static create() {
-    return new Agent();
+  static create(name: string, input: IAskUser, _url: string, callbacks?: IScraperCallbacks | undefined) {
+    return new Agent(name, input, callbacks);
   }
 
   get currentSection(): SectionName {
