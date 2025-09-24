@@ -9,7 +9,7 @@ export const PathNextButton = ({path}: DefaultPathProps) => {
     const m = curr.match(/\/([0-9])$/)
     // Disable "next" button if we're on the last step
     const currentStep = parseInt(m?.[1] || "0");
-    const buttonDisplay = currentStep == path.routes.length
+    const buttonDisplay = currentStep == (path.routes.length - 1)
       ? "none"
       : undefined;
 
