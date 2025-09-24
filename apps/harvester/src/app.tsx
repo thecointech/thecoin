@@ -16,7 +16,6 @@ export const App = () => {
 
   useEffect(() => {
     window.scraper.onBackgroundTaskProgress(progress => {
-      console.log(JSON.stringify(progress));
       backgroundTaskApi.setTaskProgress(progress);
     })
   }, [])

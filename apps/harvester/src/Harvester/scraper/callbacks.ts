@@ -9,11 +9,13 @@ import { AnyEvent } from "@thecointech/scraper/types";
 import { BackgroundTaskType, BackgroundTaskCallback, SubTaskProgress, getErrorMessage } from "@/BackgroundTask";
 import { maybeCloseModal } from "@thecointech/scraper-agent/modal";
 import { notify } from "../notify";
+import crypto from "node:crypto";
 
 export class ScraperCallbacks implements IScraperCallbacks {
 
   counter = 0;
   timestamp = Date.now();
+  id = crypto.randomUUID();
   private taskType: BackgroundTaskType;
   // private actionType: string;
   private uiCallback?: BackgroundTaskCallback;
@@ -30,7 +32,7 @@ export class ScraperCallbacks implements IScraperCallbacks {
 
     // Call to initialize the task group
     this.uiCallback?.({
-      id: this.timestamp.toString(),
+      id: this.id,
       type: this.taskType,
     })
     // Initialize sub-tasks, this will give a
@@ -59,7 +61,7 @@ export class ScraperCallbacks implements IScraperCallbacks {
     }
     else {
       this.uiCallback?.({
-        id: this.timestamp.toString(),
+        id: this.id,
         type: this.taskType,
         completed: true,
         error: getErrorMessage(error),
@@ -84,7 +86,7 @@ export class ScraperCallbacks implements IScraperCallbacks {
 
   subTaskCallback = (progress: SubTaskProgress) => {
     this.uiCallback?.({
-      parentId: this.timestamp.toString(),
+      parentId: this.id,
       type: this.taskType,
       ...progress,
     })
@@ -94,7 +96,7 @@ export class ScraperCallbacks implements IScraperCallbacks {
     // Update TaskGroup
     const e = error ?? (success ? undefined : "Unknown error");
     this.uiCallback?.({
-      id: this.timestamp.toString(),
+      id: this.id,
       type: this.taskType,
       completed: true,
       error: e,

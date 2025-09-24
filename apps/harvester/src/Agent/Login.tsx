@@ -13,7 +13,6 @@ type Props = {
 const Login = ({ type, both }: Props) => {
   const data = BankConnectReducer.useData();
   const api = BankConnectReducer.useApi();
-  // const type = getProcessType("chequing", data);
   const bank = data[type];
   const bgTask = useBackgroundTask("record");
 
