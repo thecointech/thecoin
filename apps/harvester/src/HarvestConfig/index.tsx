@@ -2,6 +2,7 @@
 import { ConfigReducer } from './state/reducer';
 import { PathSteps, PathRouter, PathNextButton } from '@/SimplePath';
 import { path } from './routes';
+import { ContentSection } from '@/ContentSection';
 
 export const HarvestConfig = () => {
 
@@ -10,10 +11,10 @@ export const HarvestConfig = () => {
   return (
     <div>
       <PathSteps path={path} data={{}}/>
-      <div>
+      <ContentSection>
         <PathRouter path={path} />
         <PathNextButton path={path} />
-      </div>
+      </ContentSection>
     </div>
   )
 }

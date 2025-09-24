@@ -1,4 +1,3 @@
-import styles from './browser.module.less'
 import { Button, Message } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -6,6 +5,7 @@ import { getErrors, useBackgroundTask } from '@/BackgroundTask';
 import { BackgroundTaskErrors, BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
 import { QuestionResponse } from '@/Agent/QuestionResponse';
 import { isRunning } from '@/BackgroundTask';
+import { ContentSection } from '@/ContentSection';
 
 export const Browser = () => {
 
@@ -31,7 +31,7 @@ export const Browser = () => {
   }
 
   return (
-    <div className={styles.container} >
+    <ContentSection>
       <h2>
         Download necessary libraries
       </h2>
@@ -49,7 +49,7 @@ export const Browser = () => {
       <div>
         <Link to="/account/login">Connect your Coin Account</Link>
       </div>
-    </div>
+    </ContentSection>
   )
 }
 

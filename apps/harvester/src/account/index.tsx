@@ -4,8 +4,8 @@ import { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { getData, Key } from '../Training/data';
 import { path } from './routes'
-import styles from './index.module.less';
 import { PathNextButton, PathRouter, PathSteps } from '@/SimplePath';
+import { ContentSection } from '@/ContentSection';
 
 
 export const Account = () => {
@@ -28,8 +28,10 @@ export const Account = () => {
     <div>
       <PathSteps path={path} data={active}/>
       <div>
-        <PathRouter path={path} />
-        <PathNextButton path={path} />
+        <ContentSection>
+          <PathRouter path={path} />
+          <PathNextButton path={path} />
+        </ContentSection>
       </div>
     </div>
   )

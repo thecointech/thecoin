@@ -1,6 +1,7 @@
 import { Button } from "semantic-ui-react"
 import { useHistory, useLocation } from "react-router-dom"
 import { DefaultPathProps } from "./types"
+import styles from './NextButton.module.less';
 
 export const PathNextButton = ({path}: DefaultPathProps) => {
     const navigate = useHistory();
@@ -22,6 +23,6 @@ export const PathNextButton = ({path}: DefaultPathProps) => {
       // }
     }
   return (
-    <Button style={{display: buttonDisplay}} onClick={navigateNext}>Next</Button>
+    <Button className={styles.nextButton} style={{display: buttonDisplay}} onClick={navigateNext}>Next</Button>
   )
 }

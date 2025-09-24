@@ -7,6 +7,7 @@ import { log } from '@thecointech/logging';
 import { Result } from '../scraper_actions';
 import { BackgroundTaskErrors, BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
 import { useBackgroundTask, isRunning } from '@/BackgroundTask';
+import { ContentSection } from '@/ContentSection';
 import styles from './index.module.less';
 
 export const Results = () => {
@@ -22,7 +23,6 @@ export const Results = () => {
         alert(state.error);
       }
       else {
-        // log.info("State Received: " + JSON.stringify(state));
         setState(state.value);
       }
     })
@@ -40,9 +40,9 @@ export const Results = () => {
 
 
   return (
-    <div id={styles.container}>
-      <Dimmer.Dimmable dimmed={isReplaying}>
-        <Dimmer active={isReplaying} inverted>
+    <ContentSection>
+      <Dimmer.Dimmable dimmed={isReplaying} className={styles.resultsContainer}>
+        <Dimmer active={isReplaying}>
           <Loader>Running</Loader>
         </Dimmer>
         <StateDisplay state={state} />
@@ -52,7 +52,7 @@ export const Results = () => {
       </Dimmer.Dimmable>
       <BackgroundTaskProgressBar type='replay' />
       <BackgroundTaskErrors type='replay' />
-    </div>
+    </ContentSection>
   )
 }
 

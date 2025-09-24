@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Button, Dimmer, Input, Loader, Segment } from "semantic-ui-react";
+import { Button, Dimmer, Input, Loader } from "semantic-ui-react";
 import type { BankData } from "./BankCard/data";
 import { isRunning, useBackgroundTask } from "@/BackgroundTask/index";
 import { BankType } from "@/Harvester/scraper";
 import { log } from "@thecointech/logging";
+import styles from './LoginDetails.module.less';
 
 type Props = BankData & {
   type: BankType;
@@ -27,32 +28,34 @@ export const LoginDetails: React.FC<Props> = ({ icon, name, url, type, both }) =
     window.scraper.autoProcess({ type: storedType, config: { name, url, username, password }, visible: false });
   };
   return (
-    <Segment>
+    <div className={styles.loginContainer}>
       <Dimmer active={isTaskRunning}>
         <Loader />
       </Dimmer>
-      <p style={{ display: 'flex', alignItems: 'center' }}>
-        {
-          icon && (
-            <img style={{ width: '75px', height: '75px' }} src={icon} alt={name} />
-          )
-        }
-        Enter your login details:
-      </p>
-      <Input
-        fluid
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Enter your username..."
-      />
-      <Input
-        fluid
-        type='password'
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Enter your password..."
-      />
-      <Button onClick={handleSubmit} loading={isTaskRunning}>Submit</Button>
-  </Segment>
+      <div className={styles.userForm}>
+        <p style={{ display: 'flex', alignItems: 'center' }}>
+          {
+            icon && (
+              <img style={{ width: '75px', height: '75px' }} src={icon} alt={name} />
+            )
+          }
+          Enter your login details:
+        </p>
+        <Input
+          fluid
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Enter your username..."
+        />
+        <Input
+          fluid
+          type='password'
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter your password..."
+        />
+        <Button onClick={handleSubmit} loading={isTaskRunning}>Submit</Button>
+      </div>
+    </div>
   )
 }

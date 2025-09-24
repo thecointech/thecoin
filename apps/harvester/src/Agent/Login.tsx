@@ -5,6 +5,7 @@ import { QuestionResponse } from "./QuestionResponse";
 import { useEffect } from "react";
 import { useBackgroundTask } from '@/BackgroundTask';
 import { BackgroundTaskErrors, BackgroundTaskProgressBar } from "@/BackgroundTask/BackgroundTaskProgressBar";
+import { Link } from "react-router-dom";
 
 type Props = {
   type: BankType;
@@ -21,12 +22,21 @@ const Login = ({ type, both }: Props) => {
       api.setCompleted(type, true);
     }
   }, [bgTask]);
+
+  if (both || type === 'credit') {
+
+  }
   return (
     <div>
       <LoginDetails {...bank!} type={type} both={both}/>
       <QuestionResponse backgroundTaskId="record" />
       <BackgroundTaskProgressBar type="record" />
       <BackgroundTaskErrors type='record' />
+      {
+        both || type === 'credit' ? (
+          <Link to="/config">Configure how the harvester will run</Link>
+        ) : null
+      }
     </div>
   )
 }
