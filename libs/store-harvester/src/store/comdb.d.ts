@@ -11,6 +11,9 @@ declare namespace PouchDB {
 
     loadEncrypted(): Promise;
     loadDecrypted(): Promise;
+
+    // The on-disk encrypted database
+    _encrypted?: PouchDB.Database<Content>;
   }
 }
 
