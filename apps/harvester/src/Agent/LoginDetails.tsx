@@ -44,14 +44,14 @@ export const LoginDetails: React.FC<Props> = ({ icon, name, url, type, both }) =
         <Input
           fluid
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(_, data) => setUsername(String(data.value ?? ''))}
           placeholder="Enter your username..."
         />
         <Input
           fluid
           type='password'
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(_, data) => setPassword(String(data.value ?? ''))}
           placeholder="Enter your password..."
         />
         <Button onClick={handleSubmit} loading={isTaskRunning}>Submit</Button>
