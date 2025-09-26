@@ -15,7 +15,7 @@
     "email": "stephen.taylor.dev@gmail.com"
   },
   "scripts": {
-    "dev:harvest": "electron-forge start -- -- --harvest",
+    "dev:harvest": "yarn dev -- --harvest",
     "dev": "yarn run -T cross-env CONFIG_NAME=development yarn _start:dbg",
     "_dev:live": "yarn run -T cross-env CONFIG_NAME=devlive yarn _start:dbg",
     "prod:test": "yarn run -T cross-env CONFIG_NAME=prodtest yarn _start:dbg",
