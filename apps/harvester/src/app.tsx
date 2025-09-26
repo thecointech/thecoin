@@ -1,4 +1,4 @@
-import 'semantic-ui-css/semantic.min.css'
+import './semantic/semantic.css'
 import { Menu } from 'semantic-ui-react'
 import { Link, useLocation } from 'react-router-dom'
 import { Routes } from './app.routes'
