@@ -22,6 +22,10 @@ export const OverrideHarvesterState = ({withDimmer}: {withDimmer: DimmerCallback
   useEffect(() => {
     withDimmer("Loading...", async () => {
       const r = await window.scraper.getCurrentState();
+      if (r.error) {
+        alert("Error - please check logs:\n " + r.error);
+        return;
+      }
       const harvesterBalance = r.value?.state.harvesterBalance;
       if (harvesterBalance !== undefined) {
         setHarvesterBalance(Number(harvesterBalance));
@@ -62,7 +66,7 @@ export const OverrideHarvesterState = ({withDimmer}: {withDimmer: DimmerCallback
         Harvester Balance: ${harvesterBalance}
       </div>
       <div>
-        Your harvester tracks it's own balance within your accounts balance.  It's own balance
+        Your harvester tracks its own balance within your accounts balance.  It's own balance
         is what is used to calculate how much money is needed to cover the credit card payments.
       </div>
       <div>

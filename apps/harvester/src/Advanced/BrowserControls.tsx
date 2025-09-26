@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 export const BrowserControls = ({ withDimmer, paused }: { withDimmer: DimmerCallback, paused: boolean }) => {
 
-  const [visible, setVisible] = useState<boolean>();
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     withDimmer("Loading...", async () => {
