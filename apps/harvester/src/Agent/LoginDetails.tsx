@@ -15,7 +15,8 @@ export const LoginDetails: React.FC<Props> = ({ icon, name, url, type, both }) =
   const [password, setPassword] = useState('');
 
   const group = useBackgroundTask("record");
-  const isTaskRunning = isRunning(group);
+  const replay = useBackgroundTask("replay");
+  const isTaskRunning = isRunning(group) || isRunning(replay);
 
   const handleSubmit = () => {
     if (isTaskRunning) {

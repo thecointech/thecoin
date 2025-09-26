@@ -30,7 +30,9 @@ jest.unstable_mockModule('./config', () => ({
   getProcessConfig: jest.fn(() => {
     return {
       scraping: {
-        both: { section: "Initial", events: [{ type: 'click', id: 'credit'}] },
+        both: {
+          events: { section: "Initial", events: [{ type: 'click', id: 'credit'}] },
+        },
       }
     }
   }),

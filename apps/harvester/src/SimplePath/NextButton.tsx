@@ -1,26 +1,17 @@
 import { Button } from "semantic-ui-react"
-import { useHistory, useLocation } from "react-router-dom"
-import { DefaultPathProps } from "./types"
+import { useHistory } from "react-router-dom"
+import { DefaultPathProps, usePathIndex } from "./types"
 import styles from './NextButton.module.less';
 
 export const PathNextButton = ({path}: DefaultPathProps) => {
     const navigate = useHistory();
-    const location = useLocation();
-    const curr = location.pathname;
-    const m = curr.match(/\/([0-9])$/)
-    // Disable "next" button if we're on the last step
-    const currentStep = parseInt(m?.[1] || "0");
+    const currentStep = usePathIndex();
     const buttonDisplay = currentStep == (path.routes.length - 1)
       ? "none"
       : undefined;
 
     const navigateNext = () => {
-      // Page is last number
-      // if (m) {
-        navigate.push(`/${path.groupKey}/${currentStep + 1}`);
-      // } else {
-      //   navigate.push(`/${path.groupKey}/0`);
-      // }
+      navigate.push(`/${path.groupKey}/${currentStep + 1}`);
     }
   return (
     <Button className={styles.nextButton} style={{display: buttonDisplay}} onClick={navigateNext}>Next</Button>

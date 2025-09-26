@@ -38,7 +38,8 @@
     "@thecointech/setenv": "^0.3.13-test.0"
   },
   "files": [
-    "build/**/*"
+    "build/**/*",
+    "mocked/**/*"
   ],
   "exports": {
     ".": {

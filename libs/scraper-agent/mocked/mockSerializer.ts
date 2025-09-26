@@ -4,7 +4,11 @@ export class AgentSerializer implements Disposable {
     // No-op, this is an empty class
   }
 
+  dispose(): void {
+    // No-op
+  }
+
   [Symbol.dispose](): void {
-    return;
+    this.dispose();
   }
 }

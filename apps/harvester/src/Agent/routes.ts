@@ -4,10 +4,10 @@ import { SelectChequing } from "./SelectChequing"
 import { SelectCredit } from "./SelectCredit"
 import { BankConnectReducer } from "./state/reducer"
 import { Routes } from "../SimplePath/types"
-import { IntialState } from "./state/initialState"
+import { InitialState } from "./state/initialState"
 import { LoginChequing, LoginCredit, LoginBoth } from "./Login"
 
-export const routes: Routes<IntialState>[] = [
+export const routes: Routes<InitialState>[] = [
   {
     component: SelectChequing,
     title: "Select Chequing Bank",
@@ -40,7 +40,7 @@ export const useBankConnectPaths = () => {
 
 // In the UI we always separate the chequing and credit
 // banks, but in the process we can combine them
-const getLoginPages = (data: IntialState) => {
+const getLoginPages = (data: InitialState) => {
   if (data.chequing && data.credit && data.chequing.url === data.credit.url) {
     return [LoginElement.both];
   }
@@ -52,18 +52,18 @@ const LoginElement = {
     component: LoginChequing,
     title: "Login Chequing",
     description: "Connect your chequing account",
-    isComplete: (data: IntialState) => !!data.chequing?.completed,
+    isComplete: (data: InitialState) => !!data.chequing?.completed,
   },
   "credit": {
     component: LoginCredit,
     title: "Login Credit",
     description: "Connect your credit card account",
-    isComplete: (data: IntialState) => !!data.credit?.completed,
+    isComplete: (data: InitialState) => !!data.credit?.completed,
   },
   "both": {
     component: LoginBoth,
     title: "Login",
     description: "Connect your accounts",
-    isComplete: (data: IntialState) => !!data.chequing?.completed && !!data.credit?.completed,
+    isComplete: (data: InitialState) => !!data.chequing?.completed && !!data.credit?.completed,
   },
 }

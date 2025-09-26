@@ -57,8 +57,11 @@ export class EncryptedDatabase<Shape extends {}, Stored extends {}=Shape, InShap
     const encrypted = db._encrypted;
     const originalClose = db.close;
     db.close = async () => {
-      await encrypted?.close();
-      await originalClose.call(db);
+      try {
+        await encrypted?.close();
+      } finally {
+        await originalClose.call(db);
+      }
     }
   }
 

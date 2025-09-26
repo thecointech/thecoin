@@ -20,11 +20,13 @@ export class Agent implements AgentClass {
     this.callbacks = callbacks;
   }
 
-  async process(_sectionsToSkip?: SectionName[]): Promise<EventSection> {
-    for (let i = 0; i < 4; i++) {
+  async process(sectionsToSkip?: SectionName[]): Promise<EventSection> {
+    const sectionsToProcess = sections.filter(s => !sectionsToSkip?.includes(s));
+    const pre2faStages = sectionsToProcess.slice(0, 3);
+    for (const stage of pre2faStages) {
       await sleep(1000);
       this.callbacks?.onProgress?.({
-        stage: sections[i],
+        stage,
         stepPercent: 100,
         step: 1,
         total: 1,
@@ -32,10 +34,11 @@ export class Agent implements AgentClass {
     }
     // mock getting 2fa code
     const code = await this.input.forValue("Get 2FA Code");
-    for (let i = 0; i < 4; i++) {
+    const post2faStages = sectionsToProcess.slice(pre2faStages.length);
+    for (const stage of post2faStages) {
       await sleep(1000);
       this.callbacks?.onProgress?.({
-        stage: sections[i + 4],
+        stage,
         stepPercent: 100,
         step: 1,
         total: 1,

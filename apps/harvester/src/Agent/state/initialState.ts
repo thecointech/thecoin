@@ -9,11 +9,11 @@ import { BankType } from "./types";
 export type BankReducerType = {
   completed?: boolean;
 } & BankData;
-export type IntialState = {
+export type InitialState = {
   [K in BankType]: BankReducerType | undefined;
 }
 
-export async function getInitialState(): Promise<IntialState> {
+export async function getInitialState(): Promise<InitialState> {
   const stored = await window.scraper.getBankConnectDetails();
   if (stored.error) {
     log.error({error: stored.error}, "Error loading bank details: {error}")

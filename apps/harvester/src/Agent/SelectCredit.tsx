@@ -7,7 +7,15 @@ export const SelectCredit = () => {
   const data = BankConnectReducer.useData();
 
   const handleSetSimilar = () => {
-    api.setBank("credit", data.chequing!)
+    if (!data.chequing) {
+      alert("Chequing not configured");
+      return;
+    }
+    api.setBank("credit", {
+      name: data.chequing.name,
+      url: data.chequing.url,
+      icon: data.chequing.icon,
+    })
   }
   return (
     <div>

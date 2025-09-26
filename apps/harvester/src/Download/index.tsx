@@ -47,7 +47,7 @@ export const Browser = () => {
         <Button onClick={startDownload} disabled={installing} loading={installing}>Download</Button>
       </div>
       <div>
-        <Link to="/account/login">Connect your Coin Account</Link>
+        <Link to="/account">Connect your Coin Account</Link>
       </div>
     </ContentSection>
   )

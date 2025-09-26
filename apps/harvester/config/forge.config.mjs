@@ -80,8 +80,10 @@ const config = {
   }
 };
 
-// Only add in externals if packaging
-if (process.env.npm_lifecycle_event != '_start:dbg') {
+// Only add externals when making/package/publish (not during any start)
+const lifecycle = process.env.npm_lifecycle_event || '';
+const isPackaging = /(make|package|publish)/.test(lifecycle);
+if (isPackaging) {
   config.plugins.push(
     //@ts-ignore
     new ForgeExternalsPlugin({
@@ -90,7 +92,5 @@ if (process.env.npm_lifecycle_event != '_start:dbg') {
     })
   )
 }
-
-console.log("Finished")
 
 export default config;

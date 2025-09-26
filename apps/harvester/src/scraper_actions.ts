@@ -6,7 +6,7 @@ import { ActionType } from './Harvester/scraper';
 import { BackgroundTaskCallback } from './BackgroundTask/types';
 import type { OptionPacket, QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
 import type { AutoConfigParams } from './Harvester/agent';
-import { BankConnectDetails } from './Harvester/events';
+import type { BankConnectDetails } from './Harvester/events';
 
 export type Result<T> = {
   error?: string;
@@ -34,7 +34,7 @@ export type ScraperBridgeApi = {
   // but you don't want to send unnecessary etransfers
   twofaRefresh: (actionName: ActionType, refreshProfile: boolean) => Promise<Result<boolean>>,
 
-  onAskQuestion: (callback: (question: QuestionPacket|OptionPacket) => void) => void;
+  onAskQuestion: (callback: (question: QuestionPacket|OptionPacket) => void) => () => void;
   replyQuestion: (response: ResponsePacket) => Promise<Result<boolean>>;
 
   // Declare a `readFile` function that will return a promise. This promise

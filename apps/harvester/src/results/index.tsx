@@ -47,7 +47,9 @@ export const Results = () => {
         </Dimmer>
         <StateDisplay state={state} />
         <div>
-          <Button onClick={runImmediately}>Run Harvester Now</Button>
+          <Button onClick={runImmediately} disabled={isReplaying}>
+            Run Harvester Now
+          </Button>
         </div>
       </Dimmer.Dimmable>
       <BackgroundTaskProgressBar type='replay' />

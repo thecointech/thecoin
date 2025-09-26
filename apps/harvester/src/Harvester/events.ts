@@ -28,7 +28,7 @@ export async function getEvents(type: ActionType) {
   return bankConfig.events;
 }
 
-export type BankConnectDetails = Record<BankType, BankIdent>;
+export type BankConnectDetails = Partial<Record<BankType, BankIdent>>;
 
 export async function getBankConnectDetails(): Promise<BankConnectDetails|undefined> {
   const config = await getProcessConfig();

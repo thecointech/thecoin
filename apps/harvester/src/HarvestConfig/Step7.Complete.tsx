@@ -20,8 +20,8 @@ export const Complete = () => {
   const setConfig = async () => {
     await withDimmer("Saving...", async () => {
       await window.scraper.setHarvestConfig(data);
-      navigate.push("/results");
     });
+    navigate.push("/results");
   }
 
   const paused = !!dimmerMessage;

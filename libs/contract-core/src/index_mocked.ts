@@ -37,7 +37,7 @@ export class TheCoin implements MockedCoin {
   constructor(signer?: Signer) {
     this.signer = signer;
   }
-  getAddress = () => Promise.resolve("0x123");
+  getAddress = () => Promise.resolve("0x0000000000000000000000000000000000000123");
   mintCoins = () => genReceipt();
   burnCoins = () => genReceipt();
   balanceOf = makeFn((_: AddressLike) => 995000000n, "view");

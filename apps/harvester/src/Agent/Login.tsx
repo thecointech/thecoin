@@ -23,9 +23,6 @@ const Login = ({ type, both }: Props) => {
     }
   }, [bgTask]);
 
-  if (both || type === 'credit') {
-
-  }
   return (
     <div>
       <LoginDetails {...bank!} type={type} both={both}/>

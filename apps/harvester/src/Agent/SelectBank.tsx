@@ -1,6 +1,6 @@
 import { BankCard, CustomBankCard } from "./BankCard/BankCard"
 import { BankData, banks } from "./BankCard/data"
-import { useLocation } from "react-router"
+import { useLocation } from "react-router-dom"
 import { BankConnectReducer } from "./state/reducer"
 import { BankType } from "./state/types"
 
