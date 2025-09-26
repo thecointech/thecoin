@@ -1,8 +1,12 @@
 import { getEnvVars, loadEnvVars } from "./index.js"
 
+const ORIGINAL_ENV = process.env;
 beforeEach(() => {
-  process.env = {};
-})
+  process.env = ORIGINAL_ENV;
+});
+afterAll(() => {
+  process.env = ORIGINAL_ENV;
+});
 
 it("correctly expands variables when read", () => {
   const env = getEnvVars("development");
