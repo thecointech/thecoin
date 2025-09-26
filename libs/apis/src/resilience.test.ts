@@ -1,19 +1,21 @@
 import { describe, expect, it, jest, beforeEach, afterEach } from "@jest/globals";
 import { GetRatesApi } from "./pricing/live";
-import { loadEnvVars } from "@thecointech/setenv";
+import { getEnvVars } from "@thecointech/setenv";
 import { AxiosRequestConfig } from "axios";
 import { mockWarn, mockError } from "@thecointech/logging/mock";
 
 jest.setTimeout(5 * 60 * 1000);
 
-
 describe('Resilience Testing', () => {
   beforeEach(() => {
-    loadEnvVars("prodtest");
+
     jest.resetAllMocks();
   });
 
   it('handles successful API calls', async () => {
+    // Add the correct URL to allow this call to succeed
+    const env = getEnvVars("prodtest");
+    process.env.URL_SERVICE_RATES = env.URL_SERVICE_RATES
     const api = GetRatesApi();
     const rate = await api.getSingle(124);
     expect(rate).toBeDefined();
