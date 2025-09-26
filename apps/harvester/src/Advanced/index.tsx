@@ -1,30 +1,39 @@
 import { useState } from 'react'
 import { Dimmer, Header, Loader, Segment, SegmentGroup } from 'semantic-ui-react'
-import { ExportResults } from './exportResults';
-import { LoggingOptions } from './loggingOptions';
+import { ExportResults } from './ExportResults';
+import { LoggingOptions } from './LoggingOptions';
 import { DimmerCallback } from './types';
 import { BrowserControls } from './BrowserControls';
 import styles from './index.module.less';
+import { ExportConfig } from './ExportConfig';
+import { OverrideHarvesterState } from './OverrideHarvesterState';
+
 
 export const Advanced = () => {
 
-  const [dimmerMessage, setDimmerMessage] = useState<string | null>(null);
+  const [dimmerMessage, setDimmerMessage] = useState({message: "", count: 0});
 
   const withDimmer: DimmerCallback = async (message, callback) => {
-    setDimmerMessage(message);
+    setDimmerMessage((prev) => ({
+      message,
+      count: prev.count + 1,
+    }));
     try {
       await callback();
     } finally {
-      setDimmerMessage(null);
+      setDimmerMessage((prev) => ({
+        message: prev.message,
+        count: prev.count - 1,
+      }));
     }
   };
 
-  const paused = !!dimmerMessage;
+  const paused = !!dimmerMessage?.count;
 
   return (
     <SegmentGroup compact className={styles.container}>
       <Dimmer active={paused}>
-        <Loader>{dimmerMessage}</Loader>
+        <Loader>{dimmerMessage.message}</Loader>
       </Dimmer>
       <Segment>
         <Header size="small">Browser Controls</Header>
@@ -35,8 +44,16 @@ export const Advanced = () => {
         <LoggingOptions withDimmer={withDimmer} paused={paused}/>
       </Segment>
       <Segment>
-        <Header size="small">Import/Export Harvester data</Header>
+        <Header size="small">Export Harvester data</Header>
         <ExportResults />
+      </Segment>
+      <Segment>
+        <Header size="small">Import/Export Harvester config</Header>
+        <ExportConfig  withDimmer={withDimmer} />
+      </Segment>
+      <Segment>
+        <Header size="small">Override Harvester balance</Header>
+        <OverrideHarvesterState  withDimmer={withDimmer} />
       </Segment>
     </SegmentGroup>
   )

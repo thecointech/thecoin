@@ -14,8 +14,13 @@ export class BankConnectReducer extends BaseReducer<IActions, IntialState>(CONFI
       this.draftState[type] = bank;
     }
     setCompleted(type: BankType, completed: boolean): void {
+      const curr = this.state[type];
+      if (!curr) {
+        alert("Bank not initialized");
+        return;
+      };
       this.draftState[type] = {
-        ...this.state[type]!,
+        ...curr,
         completed
       }
     }

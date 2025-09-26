@@ -12,9 +12,6 @@ export const StateDisplay = ({ state }: StateDisplayProps) => {
     ? `${state.state.toPayVisa.format()} - ${state.state.toPayVisaDate?.toLocaleString(DateTime.DATETIME_SHORT)}`
     : 'No runs yet';
 
-  const s = styles?.container;
-  console.log(s);
-
   return (
     <Card fluid id={styles.container}>
       <Card.Header className={styles.header}>Run: {state?.date.toLocaleString(DateTime.DATETIME_SHORT) ?? 'N/A'}</Card.Header>
