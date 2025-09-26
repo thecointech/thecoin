@@ -30,8 +30,9 @@ export const Results = () => {
   const runImmediately = async () => {
     log.info("Commencing manual run");
     const r = await window.scraper.runHarvester();
-    if (r.error) {
+    if (r.error || r.value === "error") {
       alert("Error - please check logs:\n " + r.error);
+      return;
     }
     const state = await getCurrentState();
     log.info("Updating state");

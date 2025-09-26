@@ -9,9 +9,10 @@ export const ExportConfig = ({withDimmer}: {withDimmer: DimmerCallback}) => {
       const r = await window.scraper.exportConfig();
       if (r.error) {
         alert("Error - please check logs:\n " + r.error);
+        return;
       }
       const a = window.document.createElement('a');
-      a.href = window.URL.createObjectURL(new Blob([r.value ?? 'no values'], { type: 'text/csv' }));
+      a.href = window.URL.createObjectURL(new Blob([r.value ?? 'no values'], { type: 'application/json' }));
       a.download = 'config.json';
 
       // Append anchor to body.

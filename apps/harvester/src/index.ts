@@ -61,7 +61,7 @@ initMain();
 if (hasArgument("--harvest")) {
   const r = await harvest();
   app.quit();
-  process.exit(r ? 0 : 1);
+  process.exit(r === "error" ? 1 : 0);
 }
 
 if (hasArgument("--notify")) {

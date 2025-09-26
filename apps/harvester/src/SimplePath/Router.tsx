@@ -1,4 +1,4 @@
-import { Route, Switch } from "react-router"
+import { Route, Switch } from "react-router-dom"
 import { DefaultPathProps } from "./types"
 
 export const PathRouter = ({path}: DefaultPathProps) => {

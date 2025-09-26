@@ -25,7 +25,9 @@ export function getScrapingScript(config: any): ScrapingConfig {
 }
 
 const verifyBankEvents = (source: any, key: string) : BankEvents => {
-  // Does this config have an 'events' property?
+  if (!source || typeof source !== "object") {
+    throw new Error(`Invalid script format: ${key} is missing events`);
+  }
   if (!(
     source.hasOwnProperty('name') &&
     source.hasOwnProperty('url') &&

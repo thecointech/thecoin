@@ -9,6 +9,9 @@
   "config": {
     "forge": "config/forge.config.mjs"
   },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "keywords": [],
   "author": {
     "name": "Stephen Taylor",

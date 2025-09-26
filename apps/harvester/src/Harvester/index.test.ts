@@ -49,10 +49,10 @@ it ('runs the full stack', async () => {
   const { harvest } = await import('./index');
 
   const r1 = await harvest();
-  expect(r1).toBe(true);
+  expect(r1).toBe("success");
   // and again
   const r2 = await harvest();
-  expect(r2).toBe(true);
+  expect(r2).toBe("success");
 })
 
 

@@ -62,7 +62,7 @@ export type ScraperBridgeApi = {
   alwaysRunScraperVisible(visible?: boolean): Promise<Result<boolean>>,
   // Set/get the alwaysRunLogging flag
   alwaysRunScraperLogging(logging?: boolean): Promise<Result<boolean>>,
-  runHarvester(forceVisible?: boolean): Promise<Result<boolean>>,
+  runHarvester(forceVisible?: boolean): Promise<Result<string>>,
   getCurrentState(): Promise<Result<StoredData>>,
 
   exportResults(): Promise<Result<string>>

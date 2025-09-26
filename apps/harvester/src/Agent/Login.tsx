@@ -18,14 +18,24 @@ const Login = ({ type, both }: Props) => {
   const bgTask = useBackgroundTask("record");
 
   useEffect(() => {
-    if (bgTask?.completed) {
+    if (!bgTask?.completed) return;
+
+    if (both) {
+      api.setCompleted('chequing', true);
+      api.setCompleted('credit', true);
+    }
+    else {
       api.setCompleted(type, true);
     }
-  }, [bgTask]);
+  }, [bgTask, api, both, type]);
+
+  if (!bank) {
+    return <div>ERROR: Bank type not found or selected: {type}</div>
+  }
 
   return (
     <div>
-      <LoginDetails {...bank!} type={type} both={both}/>
+      <LoginDetails {...bank} type={type} both={both}/>
       <QuestionResponse backgroundTaskId="record" />
       <BackgroundTaskProgressBar type="record" />
       <BackgroundTaskErrors type='record' />

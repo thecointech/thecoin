@@ -8,14 +8,22 @@ export const BrowserControls = ({ withDimmer, paused }: { withDimmer: DimmerCall
 
   useEffect(() => {
     withDimmer("Loading...", async () => {
-      const visibleResult = await window.scraper.alwaysRunScraperVisible();
-      setVisible(visibleResult.value ?? false);
+      const r = await window.scraper.alwaysRunScraperVisible();
+      if (r.error) {
+        alert("Error - please check logs:\n " + r.error);
+        return;
+      }
+      setVisible(r.value ?? false);
     });
   }, [])
 
   const setAlwaysVisible = async (visible?: boolean) => {
     await withDimmer("Saving...", async () => {
       const r = await window.scraper.alwaysRunScraperVisible(visible)
+      if (r.error) {
+        alert("Error - please check logs:\n " + r.error);
+        return;
+      }
       setVisible(r.value ?? false)
     });
   }

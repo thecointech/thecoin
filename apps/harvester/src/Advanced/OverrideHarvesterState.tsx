@@ -23,7 +23,7 @@ export const OverrideHarvesterState = ({withDimmer}: {withDimmer: DimmerCallback
     withDimmer("Loading...", async () => {
       const r = await window.scraper.getCurrentState();
       const harvesterBalance = r.value?.state.harvesterBalance;
-      if (harvesterBalance) {
+      if (harvesterBalance !== undefined) {
         setHarvesterBalance(Number(harvesterBalance));
       }
     });
@@ -41,7 +41,10 @@ export const OverrideHarvesterState = ({withDimmer}: {withDimmer: DimmerCallback
   const onApplyBalance = () => {
     if (overrideBalance !== undefined) {
       withDimmer("Saving...", async () => {
-        await window.scraper.setOverrides(overrideBalance, pendingAmount, pendingDate?.toISO())
+        const r = await window.scraper.setOverrides(overrideBalance, pendingAmount, pendingDate?.toISO())
+        if (r.error) {
+          alert("Error - please check logs:\n " + r.error);
+        }
       })
     }
     else {

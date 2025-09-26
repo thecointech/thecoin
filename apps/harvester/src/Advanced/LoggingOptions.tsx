@@ -10,6 +10,10 @@ export const LoggingOptions = ({ withDimmer, paused }: { withDimmer: DimmerCallb
     useEffect(() => {
       withDimmer("Loading...", async () => {
         const r = await window.scraper.alwaysRunScraperLogging()
+        if (r.error) {
+          alert("Error - please check logs:\n " + r.error);
+          return;
+        }
         setLogging(r.value ?? false);
       });
     }, [])
@@ -17,6 +21,10 @@ export const LoggingOptions = ({ withDimmer, paused }: { withDimmer: DimmerCallb
   const setAlwaysLogging = async (logging?: boolean) => {
     await withDimmer("Saving...", async () => {
       const r = await window.scraper.alwaysRunScraperLogging(logging)
+      if (r.error) {
+        alert("Error - please check logs:\n " + r.error);
+        return;
+      }
       setLogging(r.value ?? false)
     });
   }
