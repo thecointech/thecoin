@@ -1,10 +1,10 @@
-import { SectionName, EventSection, Agent } from '@thecointech/scraper-agent';
+import { type SectionName, type EventSection, Agent } from '@thecointech/scraper-agent';
 import { ScraperCallbacks } from "../scraper/callbacks";
 import { log } from "@thecointech/logging";
 import { type BackgroundTaskCallback } from "@/BackgroundTask/types";
 import { setEvents } from '../events';
 import { downloadRequired } from '@/Download/download';
-import { BankType } from '../scraper';
+import { BankConfig, BankType } from '../scraper';
 import { sections } from '@thecointech/scraper-agent/processors/types';
 import { VisibleOverride } from '@thecointech/scraper/puppeteer-init/visibility';
 import { AskUserLogin } from './askUserLogin';
@@ -13,18 +13,17 @@ import { maybeSerializeRun } from '../scraperLogging';
 
 export type AutoConfigParams = {
   type: BankType;
-  name: string;
-  url: string;
-  username: string;
-  password: string;
+  config: BankConfig;
   visible: boolean;
 }
 
-export async function autoConfigure({ type, name, url, username, password, visible }: AutoConfigParams, depositAddress: string, callback: BackgroundTaskCallback) {
+export async function autoConfigure({ type, config, visible }: AutoConfigParams, depositAddress: string, callback: BackgroundTaskCallback) {
 
   log.info(`Agent: Starting configuration for action: autoConfigure`);
   // This should do nothing, but call it anyway
   await downloadRequired(callback);
+
+  const { username, password, name, url } = config;
 
   if (!username || !password) throw new Error("Username and password are required");
 
@@ -46,7 +45,7 @@ export async function autoConfigure({ type, name, url, username, password, visib
     // Ensure we have required info
     throwIfAnyMissing(baseNode, type);
 
-    await storeEvents(type, baseNode);
+    await storeEvents(type, config, baseNode);
 
     logger.complete(true);
 
@@ -63,8 +62,11 @@ export async function autoConfigure({ type, name, url, username, password, visib
   return true;
 }
 
-async function storeEvents(type: BankType, baseNode: EventSection) {
-  await setEvents(type, baseNode);
+async function storeEvents(type: BankType, config: BankConfig, baseNode: EventSection) {
+  await setEvents(type, {
+    ...config,
+    events: baseNode
+  });
 }
 
 function getSectionsToSkip(type: BankType) : SectionName[] {

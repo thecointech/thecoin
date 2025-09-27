@@ -1,35 +1,29 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import type { AnyQuestionPacket } from "@/Harvester/agent/askUser";
 import { Button, Dimmer, Input, Loader, Segment, Select } from "semantic-ui-react";
 import { NamedResponse } from "@thecointech/scraper-agent/types";
+import { useBackgroundTask } from "@/BackgroundTask";
+import type { BackgroundTaskType } from "@/BackgroundTask/types";
+import { isRunning } from "@/BackgroundTask/selectors";
 
 export const QuestionResponse: React.FC<{
-  setQuestionActive?: () => void;
-  enabled?: boolean;
-}> = ({ setQuestionActive, enabled }) => {
+  backgroundTaskId: BackgroundTaskType;
+}> = ({ backgroundTaskId }) => {
 
   const [question, setQuestion] = useState<AnyQuestionPacket | undefined>()
   const [answer, setAnswer] = useState<string|NamedResponse>('')
   const [hasSubmitted, setHasSubmitted] = useState(false)
-  const setQuestionActiveRef = useRef(setQuestionActive);
+  const bgTask = useBackgroundTask(backgroundTaskId);
+
+  const taskRunning = isRunning(bgTask);
 
   useEffect(() => {
-    setQuestionActiveRef.current = setQuestionActive;
-  }, [setQuestionActive]);
-
-  useEffect(() => {
-    window.scraper.onAskQuestion((question: AnyQuestionPacket) => {
+    const release = window.scraper.onAskQuestion((question: AnyQuestionPacket) => {
       setQuestion(question);
-      setQuestionActiveRef.current?.();
       setHasSubmitted(false);
     })
+    return release;
   }, []);
-
-  useEffect(() => {
-    if (!enabled) {
-      setQuestion(undefined);
-    }
-  }, [enabled])
 
   const onReply = async (answer: string|NamedResponse|boolean) => {
     const r = await window.scraper.replyQuestion({
@@ -46,7 +40,8 @@ export const QuestionResponse: React.FC<{
   const onConfirm = () => onReply(true)
   const onCancel = () => onReply(false)
 
-  if (!question) return null;
+  if (!taskRunning || !question) return null;
+
   if ("options" in question) {
     return (
       <Segment>

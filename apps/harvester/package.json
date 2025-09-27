@@ -6,8 +6,11 @@
   "description": "Automatically harvest TheCoin",
   "main": ".webpack/main",
   "type": "commonjs",
-  "forge": {
-    "config": "forge.config.mjs"
+  "config": {
+    "forge": "config/forge.config.mjs"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   },
   "keywords": [],
   "author": {
@@ -15,13 +18,14 @@
     "email": "stephen.taylor.dev@gmail.com"
   },
   "scripts": {
-    "dev:harvest": "electron-forge start -- -- --harvest",
+    "dev:harvest": "yarn dev -- --harvest",
     "dev": "yarn run -T cross-env CONFIG_NAME=development yarn _start:dbg",
     "_dev:live": "yarn run -T cross-env CONFIG_NAME=devlive yarn _start:dbg",
     "prod:test": "yarn run -T cross-env CONFIG_NAME=prodtest yarn _start:dbg",
     "prod:beta": "yarn run -T cross-env CONFIG_NAME=prodbeta yarn _start:dbg",
     "prod": "yarn run -T cross-env CONFIG_NAME=prod yarn _start:dbg",
     "package": "electron-forge package",
+    "make:dev": "yarn run -T cross-env CONFIG_NAME=development yarn _make",
     "make:prod": "yarn run -T cross-env CONFIG_NAME=prodbeta yarn _make",
     "make:prodtest": "yarn run -T cross-env CONFIG_NAME=prodtest yarn _make",
     "make:validation": "yarn run -T cross-env CONFIG_NAME=prodbeta NOTIFY_ON_MODAL_ENCOUNTER=true yarn _make",

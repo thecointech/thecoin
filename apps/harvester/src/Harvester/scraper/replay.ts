@@ -1,7 +1,7 @@
 import { replay } from '@thecointech/scraper';
 import { ReplayResult } from '@thecointech/scraper/types';
 import { getReplayEvents } from '@thecointech/scraper-agent';
-import { ActionType } from './types';
+import { ActionType } from '@/Harvester/scraper';
 import { getEvents } from '../events';
 import { BackgroundTaskCallback } from '@/BackgroundTask';
 import { ScraperCallbacks } from './callbacks';

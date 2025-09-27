@@ -59,9 +59,9 @@ const hasArgument = (arg: string) => !!process.argv.find(op => op.includes(arg))
 initMain();
 
 if (hasArgument("--harvest")) {
-  await harvest();
+  const r = await harvest();
   app.quit();
-  process.exit(0);
+  process.exit(r === "error" ? 1 : 0);
 }
 
 if (hasArgument("--notify")) {

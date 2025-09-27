@@ -22,29 +22,35 @@ export function getSeedConfig() {
     },
     scraping: {
       both: {
-        section: 'Initial' as SectionName,
-        events: [{
-          type: "navigation",
-          to: "https://www.test.com",
-          } as any]
-          .concat(
-            Array.from({ length: 10 }, (_, index) => ({
-            type: 'click',
-            id: `event-${index}`
-          })))
-          .concat([{
-            section: "Login",
-            events: [
-            {
-              type: "input",
-              value: "username",
-            },
-            {
-              type: "input",
-              value: "password",
-            }
-          ]
-        }])
+        name: "both",
+        url: "https://www.test.com",
+        username: "username",
+        password: "password",
+        events: {
+          section: 'Initial' as SectionName,
+          events: [{
+            type: "navigation",
+            to: "https://www.test.com",
+            } as any]
+            .concat(
+              Array.from({ length: 10 }, (_, index) => ({
+              type: 'click',
+              id: `event-${index}`
+            })))
+            .concat([{
+              section: "Login",
+              events: [
+              {
+                type: "input",
+                value: "username",
+              },
+              {
+                type: "input",
+                value: "password",
+              }
+            ]
+          }])
+        }
       }
     }
   }

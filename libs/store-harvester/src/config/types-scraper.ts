@@ -4,9 +4,22 @@ export enum BankTypes { credit = 'credit', chequing = 'chequing', both = 'both' 
 export type BankType = keyof typeof BankTypes;
 export type ActionType = 'visaBalance'|'chqBalance'|'chqETransfer';
 
+export type BankIdent = {
+  name: string,
+  url: string,
+}
+export type BankConfig = {
+  username: string
+  password: string,
+} & BankIdent;
+
+export type BankEvents = {
+  events: EventSection,
+} & BankConfig;
+
 export type ScrapingConfig = {
-    [BankTypes.credit]?: EventSection,
-    [BankTypes.chequing]?: EventSection
+    [BankTypes.credit]?: BankEvents,
+    [BankTypes.chequing]?: BankEvents
   } | {
-    [BankTypes.both]: EventSection
+    [BankTypes.both]: BankEvents
   }

@@ -44,7 +44,7 @@ export function RefreshTwoFA() {
         </Message>
       </Label>
       <Button onClick={refreshTwoFA} disabled={disabled}>Start</Button>
-      <QuestionResponse enabled={isRecording} />
+      <QuestionResponse backgroundTaskId="twofaRefresh" />
       <BackgroundTaskProgressBar type="twofaRefresh" />
       <BackgroundTaskErrors type="twofaRefresh" />
     </div>

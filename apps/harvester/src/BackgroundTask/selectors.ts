@@ -11,7 +11,10 @@ export const getErrorMessage = (e: any) => {
 
 export function getTaskGroup(store: InitialState, type: BackgroundTaskType): GroupAndSubTask | undefined {
   // Always get the latest group
-  return store.groups.filter(t => t.type === type).at(-1);
+  return store.groups
+    .filter(t => t.type === type)
+    .sort((a, b) => a.timestamp - b.timestamp)
+    .at(-1);
 }
 
 export function hasSubTasks(task?: BackgroundTaskInfo): task is GroupAndSubTask {

@@ -114,7 +114,7 @@ export const Plugins = () => {
         This can take up to an hour, in the meantime lets setup
         your harvester AI.
         <br />
-        <Link to="/train">Setup Training</Link>
+        <Link to="/agent">Connect your bank accounts</Link>
       </Message>
     </Container>
   );

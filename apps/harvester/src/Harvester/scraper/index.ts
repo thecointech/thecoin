@@ -1,2 +1,2 @@
 export * from './replay';
-export * from './types';
+export type { ScrapingConfig, ActionType, BankType, BankConfig } from '@thecointech/store-harvester';

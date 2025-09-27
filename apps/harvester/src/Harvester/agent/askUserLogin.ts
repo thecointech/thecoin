@@ -1,5 +1,5 @@
 import { AskUserReact } from "./askUser";
-import { IAskUser } from "@thecointech/scraper-agent";
+import type { IAskUser } from "@thecointech/scraper-agent";
 
 type Login = {
   username: string,

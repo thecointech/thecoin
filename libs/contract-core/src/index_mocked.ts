@@ -24,7 +24,7 @@ const setLastTx = async (from: AddressLike, to: AddressLike, value: BigNumberish
   return genReceipt()
 }
 
-type MockedCoin = Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugins'|'exactTransfer' | 'balanceOf' | 'certifiedTransfer'>
+type MockedCoin = Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugins'|'exactTransfer' | 'balanceOf' | 'certifiedTransfer'|'getAddress'>
 
 const makeFn = <
 A extends Array<any> = Array<any>,
@@ -37,6 +37,7 @@ export class TheCoin implements MockedCoin {
   constructor(signer?: Signer) {
     this.signer = signer;
   }
+  getAddress = () => Promise.resolve("0x0000000000000000000000000000000000000123");
   mintCoins = () => genReceipt();
   burnCoins = () => genReceipt();
   balanceOf = makeFn((_: AddressLike) => 995000000n, "view");

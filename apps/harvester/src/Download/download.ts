@@ -6,21 +6,22 @@ import { rootFolder } from "@/paths";
 import path from "node:path";
 import { mkdirSync } from "node:fs";
 import { copyProfile } from "./profile";
+import crypto from "node:crypto";
 
 export async function downloadRequired(callback: BackgroundTaskCallback) {
 
   log.info("Initialization: fetching required files");
   mkdirSync(rootFolder, { recursive: true })
 
-  const timestamp = Date.now().toString();
+  const id = crypto.randomUUID();
   const groupTask = {
     type: "initialize" as const,
-    id: timestamp,
+    id,
   }
   callback(groupTask);
   const onProgress = (info: SubTaskProgress) => {
     callback({
-      parentId: timestamp,
+      parentId: id,
       type: "initialize",
       ...info
     })

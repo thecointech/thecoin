@@ -1,19 +1,47 @@
-import { BankTypes, ScrapingConfig } from "../Harvester/scraper";
+import { BankEvents, ScrapingConfig } from "@thecointech/store-harvester";
 
-export function getScrapingScript(config: any) {
-  const scraping: ScrapingConfig = config?.scraping;
-  if (!scraping) {
+export function getScrapingScript(config: any): ScrapingConfig {
+  const scrapingImport = config?.scraping;
+  if (!scrapingImport) {
     throw new Error('Invalid config: missing config');
   }
-  let foundSomething = false;
-  for (const key in scraping) {
-    if (!BankTypes.hasOwnProperty(key)) {
-      throw new Error(`Invalid script format: ${key} is not recognized`);
-    }
-    foundSomething = true;
+  let r: ScrapingConfig;
+
+  if ('both' in scrapingImport) {
+    r = {
+      both: verifyBankEvents(scrapingImport['both'], 'both')
+    };
   }
-  if (!foundSomething) {
-    throw new Error('Invalid script: missing any valid banktype');
+  else if ('credit' in scrapingImport && 'chequing' in scrapingImport) {
+    r = {
+      credit: verifyBankEvents(scrapingImport['credit'], 'credit'),
+      chequing: verifyBankEvents(scrapingImport['chequing'], 'chequing')
+    };
   }
-  return scraping;
+  else {
+    throw new Error('Invalid config: missing both or credit and chequing');
+  }
+  return r;
+}
+
+const verifyBankEvents = (source: any, key: string) : BankEvents => {
+  if (!source || typeof source !== "object") {
+    throw new Error(`Invalid script format: ${key} is missing events`);
+  }
+  if (!(
+    source.hasOwnProperty('name') &&
+    source.hasOwnProperty('url') &&
+    source.hasOwnProperty('events') &&
+    source.hasOwnProperty('username') &&
+    source.hasOwnProperty('password')
+  )) {
+    throw new Error(`Invalid script format: ${key} is missing events`);
+  }
+  return {
+    events: source.events,
+    name: source.name,
+    url: source.url,
+    username: source.username,
+    password: source.password,
+  }
 }

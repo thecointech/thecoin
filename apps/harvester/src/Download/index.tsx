@@ -1,4 +1,3 @@
-import styles from './browser.module.less'
 import { Button, Message } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -6,6 +5,7 @@ import { getErrors, useBackgroundTask } from '@/BackgroundTask';
 import { BackgroundTaskErrors, BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
 import { QuestionResponse } from '@/Agent/QuestionResponse';
 import { isRunning } from '@/BackgroundTask';
+import { ContentSection } from '@/ContentSection';
 
 export const Browser = () => {
 
@@ -26,13 +26,12 @@ export const Browser = () => {
     }
   }, [initializeTask])
 
-  // const browserApi = BrowserReducer.useApi();
   const startDownload = () => {
     window.scraper.downloadLibraries();
   }
 
   return (
-    <div className={styles.container} >
+    <ContentSection>
       <h2>
         Download necessary libraries
       </h2>
@@ -41,16 +40,16 @@ export const Browser = () => {
       </h4>
       <OnCompleteMessage complete={hasInstalled} />
       {/* Allow user to confirm closing any running chrome instances */}
-      <QuestionResponse enabled={installing} />
+      <QuestionResponse backgroundTaskId="initialize" />
       <BackgroundTaskProgressBar type="initialize" />
       <BackgroundTaskErrors type="initialize" />
       <div>
         <Button onClick={startDownload} disabled={installing} loading={installing}>Download</Button>
       </div>
       <div>
-        <Link to="/account/login">Setup your Account</Link>
+        <Link to="/account">Connect your Coin Account</Link>
       </div>
-    </div>
+    </ContentSection>
   )
 }
 

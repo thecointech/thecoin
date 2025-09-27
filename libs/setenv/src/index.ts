@@ -5,15 +5,10 @@ import { fileURLToPath } from 'url';
 import de from 'dotenv';
 import { expand } from './expand.js';
 
-
 export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
   const files : URL[] = [];
 
-  const envName = cfgName || process.env.CONFIG_NAME || (
-    process.env.NODE_ENV == "production"
-      ? "prod"
-      : "development"
-  );
+  const envName = getConfigName(cfgName);
 
   // Load any system-local definitions
   if (!onlyPublic && process.env.THECOIN_SECRETS) {
@@ -41,8 +36,8 @@ export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
     }
   };
 
-  // Add common, if it exists
-  addName("common");
+  // First add the environment file as it has
+  // higher specificity than common
   addName(envName);
 
   // None found, throw
@@ -51,16 +46,15 @@ export function getEnvFiles(cfgName?: string, onlyPublic?: boolean) {
   // Beta versions share a lot with non-beta environments, so we merge them together
   if (envName.endsWith("beta")) {
     const nonBeta = getEnvFiles(envName.slice(0, -4), onlyPublic)
-    for (const f of nonBeta) {
-      if (!files.includes(f)) {
-        files.push(f);
-      }
+    for (const nb of nonBeta) {
+      files.push(nb);
     }
+  } else {
+    // Finally, add common (this should be last always)
+    addName("common");
   }
   return files;
 }
-
-const getLogName = () => process.env.LOG_NAME ?? basename(process.cwd());
 
 export function getEnvVars(cfgName?: string, onlyPublic?: boolean) : Record<string, string|undefined> {
   const files = getEnvFiles(cfgName, onlyPublic);
@@ -70,12 +64,19 @@ export function getEnvVars(cfgName?: string, onlyPublic?: boolean) : Record<stri
     ...ex,
     ...acc, // later files have lower priority, do not overwrite existing values
   }), {
+    // NOTE: This will override any LOG_NAME set in the environment files
     LOG_NAME: getLogName(),
   });
-  return expand(combined);
+  const r = expand(combined);
+  return r;
 }
 
 export function loadEnvVars(cfgName?: string) {
+  // Sanity check - no conflicting loads please
+  if (process.env.CONFIG_NAME && cfgName && process.env.CONFIG_NAME != cfgName) {
+    throw new Error(`Cannot load environment ${cfgName} when CONFIG_NAME is set to ${process.env.CONFIG_NAME}`);
+  }
+
   // Load all environment files.
   const files = getEnvFiles(cfgName);
   files.forEach(path => de.config({path: fileURLToPath(path)}));
@@ -84,3 +85,12 @@ export function loadEnvVars(cfgName?: string) {
   // Set default name for logging
   process.env.LOG_NAME = getLogName();
 }
+
+const getLogName = () => process.env.LOG_NAME ?? basename(process.cwd());
+const getConfigName = (cfgName?: string) => (
+  cfgName || process.env.CONFIG_NAME || (
+    process.env.NODE_ENV == "production"
+      ? "prod"
+      : "development"
+  )
+)

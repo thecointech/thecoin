@@ -1,13 +1,11 @@
-import { Button, Checkbox, Container, Message, Loader, Dimmer } from 'semantic-ui-react'
+import { Button, Container, Loader, Dimmer } from 'semantic-ui-react'
 import { ConfigReducer } from './state/reducer'
 import { useHistory } from 'react-router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export const Complete = () => {
   const navigate = useHistory();
   const data = ConfigReducer.useData();
-  const [visible, setVisible] = useState(false);
-  const [logging, setLogging] = useState(false);
   const [dimmerMessage, setDimmerMessage] = useState<string | null>(null);
 
   const withDimmer = async <T,>(message: string, callback: () => Promise<T>): Promise<T> => {
@@ -19,36 +17,11 @@ export const Complete = () => {
     }
   };
 
-  useEffect(() => {
-    withDimmer("Loading...", async () => {
-      const [visibleResult, loggingResult] = await Promise.all([
-        window.scraper.alwaysRunScraperVisible(),
-        window.scraper.alwaysRunScraperLogging()
-      ]);
-      setVisible(visibleResult.value ?? false);
-      setLogging(loggingResult.value ?? false);
-    });
-  }, [])
-
-  const setAlwaysVisible = async (visible?: boolean) => {
-    await withDimmer("Saving...", async () => {
-      const r = await window.scraper.alwaysRunScraperVisible(visible)
-      setVisible(r.value ?? false)
-    });
-  }
-
-  const setAlwaysLogging = async (logging?: boolean) => {
-    await withDimmer("Saving...", async () => {
-      const r = await window.scraper.alwaysRunScraperLogging(logging)
-      setLogging(r.value ?? false)
-    });
-  }
-
   const setConfig = async () => {
     await withDimmer("Saving...", async () => {
       await window.scraper.setHarvestConfig(data);
-      navigate.push("/results");
     });
+    navigate.push("/results");
   }
 
   const paused = !!dimmerMessage;
@@ -77,23 +50,6 @@ export const Complete = () => {
       <div>
         <Button onClick={setConfig} loading={paused} disabled={paused} style={{backgroundColor: 'green', color: 'white'}}>Save Config</Button>
       </div>
-      <Message info>
-
-        To see what the harvester is doing, you can force it to always run visible.<br />
-        This is useful for debugging, but not recommended for normal use.
-        <br />
-        <Checkbox
-          onClick={(_, {checked}) => setAlwaysVisible(checked)}
-          checked={visible}
-          disabled={paused}
-          label="Force Always run visible" />
-        <br />
-        <Checkbox
-          onClick={(_, {checked}) => setAlwaysLogging(checked)}
-          checked={logging}
-          disabled={paused}
-          label="Enable verbose logging" />
-      </Message>
     </Container>
   )
 }

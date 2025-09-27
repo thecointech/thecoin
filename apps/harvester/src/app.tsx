@@ -12,15 +12,10 @@ export const App = () => {
   BackgroundTaskReducer.useStore();
 
   const location = useLocation();
-  const openLogs = async () => {
-    await window.scraper.openLogsFolder()
-  }
-
   const backgroundTaskApi = BackgroundTaskReducer.useApi();
 
   useEffect(() => {
     window.scraper.onBackgroundTaskProgress(progress => {
-      console.log(JSON.stringify(progress));
       backgroundTaskApi.setTaskProgress(progress);
     })
   }, [])
@@ -31,59 +26,60 @@ export const App = () => {
         <Menu pointing secondary vertical size="small">
           <Menu.Item header>TheCoin - Harvester</Menu.Item>
           <Menu.Item
-            name='home'
+            name='Welcome'
             active={location.pathname === '/'}
             as={Link}
             to='/'
           />
           <Menu.Item
-            name='Setup'
+            name='Get Started'
             active={location.pathname.startsWith('/browser')}
             as={Link}
             to='/browser'
           />
           <Menu.Item
-            name='Account'
+            name='Connect Coin Account'
             active={location.pathname.startsWith('/account')}
             as={Link}
             to='/account'
           />
           <Menu.Item
-            name='Agent'
+            name='Connect Bank Account'
             active={location.pathname.startsWith('/agent')}
             as={Link}
             to='/agent'
           />
-          <Menu.Item
+          {/*<Menu.Item
             name='Reset TwoFA'
             active={location.pathname.startsWith('/twofaRefresh')}
             as={Link}
             to='/twofaRefresh'
           />
-          <Menu.Item
+           <Menu.Item
             name='Training'
             active={location.pathname.startsWith('/train')}
             as={Link}
             to='/train'
-          />
+          /> */}
           <Menu.Item
-            name='Config'
+            name='Transfer Settings'
             active={location.pathname.startsWith('/config')}
             as={Link}
             to='/config'
           />
           <Menu.Item
-            name='Results'
+            name='My Dashboard'
             active={location.pathname.startsWith('/results')}
             as={Link}
             to='/results'
           />
           <Menu.Item
-            name='Logs'
-            onClick={openLogs}
+            name='Advanced Settings'
+            active={location.pathname.startsWith('/advanced')}
+            as={Link}
+            to='/advanced'
           />
         </Menu>
-        {/* {location.pathname} */}
       </div>
       <div className={styles.content}>
         <Routes />

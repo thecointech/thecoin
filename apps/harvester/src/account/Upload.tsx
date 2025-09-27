@@ -19,7 +19,7 @@ export const Upload = () => {
     // store new account
     setData(Key.wallet, JSON.stringify(data));
     api.addAccount(data.name, data.wallet.address, data.wallet);
-    navigate.push('/account/login');
+    navigate.push('/account/1');
   }
   return (
     <div>

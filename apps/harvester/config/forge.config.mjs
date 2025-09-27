@@ -4,67 +4,17 @@ import { MakerZIP } from '@electron-forge/maker-zip';
 import { MakerDeb } from '@electron-forge/maker-deb';
 import { utils } from '@electron-forge/core';
 import { WebpackPlugin } from '@electron-forge/plugin-webpack';
-import { mainConfig } from '@thecointech/electron-utils/webpack/webpack.main.config';
-import { rendererConfig } from '@thecointech/electron-utils/webpack/webpack.renderer.config';
-import { getCSP } from './config/csp.mjs';
-import webpack from 'webpack';
-import { getSecret } from '@thecointech/secrets';
 import path from 'path';
 import { writeFileSync } from 'fs';
 import ForgeExternalsPlugin from '@timfish/forge-externals-plugin';
+import { getCSP } from './csp.mjs';
+import { getRendererConfig } from './webpack.renderer.mjs';
+import { nativeModules, getMainConfig } from './webpack.main.mjs';
 
-console.log("Loading Webpack");
-// Native modules are marked as external and copied manually
-// in the ForgeExternalsPlugin below.
-const nativeModules = [
-  'leveldown',
-  'onnxruntime-node',
-  'sharp',
-  'puppeteer',
-  'puppeteer-extra',
-  // These aren't used, but can cause warnings in
-  // the forge logger main process if included
-  '@bitwarden/sdk-napi',
-  '@google-cloud/secret-manager',
-]
 
-const vqaApiKey = await getSecret("VqaApiKey");
-// Until deployments are handled by CI override default deployed date
 const deployedAt = JSON.stringify(new Date().toISOString());
-
-const mainPlugins = {
-  ['process.env.TC_LOG_FOLDER']: JSON.stringify("false"),
-  ['process.env.URL_SEQ_LOGGING']: JSON.stringify("false"),
-  ['process.env.VQA_API_KEY']: JSON.stringify(vqaApiKey),
-  ['process.env.TC_DEPLOYED_AT']: deployedAt,
-}
-// Override the NODE_ENV from *.public.env files when debugging
-if (process.env.NODE_ENV === 'development') {
-  mainPlugins['process.env.NODE_ENV'] = JSON.stringify('development');
-}
-const vqaCertificate = await getSecret("VqaSslCertPublic");
-if (vqaCertificate) {
-  mainPlugins['process.env.VQA_SSL_CERTIFICATE'] = JSON.stringify(vqaCertificate);
-}
-
-const mainConfigMerged = mainConfig({
-  plugins: [
-    new webpack.DefinePlugin(mainPlugins),
-  ],
-  resolve: {
-    fallback: {
-      'bufferutil': false,
-      'utf-8-validate': false,
-    }
-  },
-  // The @puppeteer/browsers library will be copied
-  // (as a dendency of puppeteer), however passing it
-  // expressly results in errors being thrown.  We
-  // avoid adding it to nativeModules array, but still
-  // pass it here so webpack doesn't try and include it.
-  externals: nativeModules.concat('@puppeteer/browsers'),
-})
-
+const renderConfig = getRendererConfig(deployedAt);
+const mainConfig = await getMainConfig(deployedAt);
 
 const config = {
   buildIdentifier: process.env.CONFIG_NAME,
@@ -99,15 +49,9 @@ const config = {
     // new AutoUnpackNativesPlugin({}),
     new WebpackPlugin({
       devContentSecurityPolicy: getCSP(),
-      mainConfig: mainConfigMerged,
+      mainConfig: mainConfig,
       renderer: {
-        config: rendererConfig({
-          plugins: [
-            new webpack.DefinePlugin({
-              ['process.env.TC_DEPLOYED_AT']: deployedAt,
-            })
-          ],
-        }),
+        config: renderConfig,
         entryPoints: [
           {
             html: './src/index.html',
@@ -136,8 +80,10 @@ const config = {
   }
 };
 
-// Only add in externals if packaging
-if (process.env.npm_lifecycle_event != '_start:dbg') {
+// Only add externals when making/package/publish (not during any start)
+const lifecycle = process.env.npm_lifecycle_event || '';
+const isPackaging = /(make|package|publish)/.test(lifecycle);
+if (isPackaging) {
   config.plugins.push(
     //@ts-ignore
     new ForgeExternalsPlugin({
@@ -146,7 +92,5 @@ if (process.env.npm_lifecycle_event != '_start:dbg') {
     })
   )
 }
-
-console.log("Finished")
 
 export default config;

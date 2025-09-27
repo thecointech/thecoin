@@ -6,6 +6,7 @@ import { ActionType } from './Harvester/scraper';
 import { BackgroundTaskCallback } from './BackgroundTask/types';
 import type { OptionPacket, QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
 import type { AutoConfigParams } from './Harvester/agent';
+import type { BankConnectDetails } from './Harvester/events';
 
 export type Result<T> = {
   error?: string;
@@ -33,7 +34,7 @@ export type ScraperBridgeApi = {
   // but you don't want to send unnecessary etransfers
   twofaRefresh: (actionName: ActionType, refreshProfile: boolean) => Promise<Result<boolean>>,
 
-  onAskQuestion: (callback: (question: QuestionPacket|OptionPacket) => void) => void;
+  onAskQuestion: (callback: (question: QuestionPacket|OptionPacket) => void) => () => void;
   replyQuestion: (response: ResponsePacket) => Promise<Result<boolean>>;
 
   // Declare a `readFile` function that will return a promise. This promise
@@ -61,7 +62,7 @@ export type ScraperBridgeApi = {
   alwaysRunScraperVisible(visible?: boolean): Promise<Result<boolean>>,
   // Set/get the alwaysRunLogging flag
   alwaysRunScraperLogging(logging?: boolean): Promise<Result<boolean>>,
-  runHarvester(forceVisible?: boolean): Promise<Result<boolean>>,
+  runHarvester(forceVisible?: boolean): Promise<Result<string>>,
   getCurrentState(): Promise<Result<StoredData>>,
 
   exportResults(): Promise<Result<string>>
@@ -70,11 +71,13 @@ export type ScraperBridgeApi = {
   openLogsFolder(): Promise<Result<boolean>>,
   getArgv() : Promise<Result<Record<string, any>>>,
 
-  allowOverrides(): Promise<Result<boolean>>,
   setOverrides(balance: number, pendingAmt: number|null, pendingDate: string|null|undefined): Promise<Result<boolean>>,
 
   // Import a scraper script configuration
   importScraperScript(config: any): Promise<Result<boolean>>,
+
+  // Get banking connection details
+  getBankConnectDetails(): Promise<Result<BankConnectDetails>>,
 
   // Lingering (systemd user background)
   hasUserEnabledLingering(): Promise<Result<boolean>>;
@@ -128,8 +131,8 @@ export const actions = {
   openLogsFolder: 'scraper:openLogsFolder',
   getArgv: 'scraper:getArgv',
 
-  allowOverrides: 'scraper:allowOverrides',
   setOverrides: 'scraper:setOverrides',
   importScraperScript: 'scraper:importScraperScript',
+  getBankConnectDetails: 'scraper:getBankConnectDetails',
 }
 export type Action = keyof typeof actions
