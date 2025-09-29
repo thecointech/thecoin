@@ -101,7 +101,7 @@ export function dbSuffix() {
   }
   // We may run production builds in development mode, and
   // in these cases we don't want use the actual production DB
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'development' || process.env.CONFIG_NAME === 'development') {
     return '.dev';
   }
   else if (process.env.CONFIG_NAME === 'prodtest') {
