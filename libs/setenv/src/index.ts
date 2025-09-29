@@ -72,6 +72,11 @@ export function getEnvVars(cfgName?: string, onlyPublic?: boolean) : Record<stri
 }
 
 export function loadEnvVars(cfgName?: string) {
+  // Sanity check - no conflicting loads please
+  if (process.env.CONFIG_NAME && cfgName && process.env.CONFIG_NAME != cfgName) {
+    throw new Error(`Cannot load environment ${cfgName} when CONFIG_NAME is set to ${process.env.CONFIG_NAME}`);
+  }
+
   // Load all environment files.
   const files = getEnvFiles(cfgName);
   files.forEach(path => de.config({path: fileURLToPath(path)}));

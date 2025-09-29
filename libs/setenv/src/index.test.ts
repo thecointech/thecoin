@@ -2,7 +2,7 @@ import { getEnvVars, loadEnvVars } from "./index.js"
 
 const ORIGINAL_ENV = process.env;
 beforeEach(() => {
-  process.env = ORIGINAL_ENV;
+  process.env = {};
 });
 afterAll(() => {
   process.env = ORIGINAL_ENV;
