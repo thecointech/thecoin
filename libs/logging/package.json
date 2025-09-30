@@ -29,6 +29,7 @@
   ],
   "exports": {
     ".": {
+      "types": "./build/log_browser.d.ts",
       "test": "./mock/index.ts",
       "node": "./build/log_node.js",
       "gcloud": "./build/gcloud.js",

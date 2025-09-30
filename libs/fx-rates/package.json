@@ -26,8 +26,9 @@
   "files": [
     "build/**/*"
   ],
-  "exports": "./build/index.js",
-  "types": "build/index.d.ts",
+  "exports": {
+    ".": "./build/index.js"
+  },
   "dependencies": {
     "@thecointech/apis": "^0.3.13-test.5",
     "@thecointech/logging": "^0.3.13-test.0"
