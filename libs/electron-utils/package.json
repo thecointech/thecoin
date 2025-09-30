@@ -27,16 +27,6 @@
     "./webpack/*": "./build/webpack/*.js",
     "./types/*": "./build/types/*.d.ts"
   },
-  "typesVersions": {
-    "*": {
-      "webpack/*": [
-        "./build/webpack/*.d.ts"
-      ],
-      "types/*": [
-        "./build/types/*.d.ts"
-      ]
-    }
-  },
   "devDependencies": {
     "@thecointech/secrets": "^0.3.13-test.0",
     "@thecointech/setenv": "^0.3.13-test.0",

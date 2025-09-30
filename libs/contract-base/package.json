@@ -30,16 +30,6 @@
     ".": "./build/index.js",
     "./*": "./build/*.js"
   },
-  "typesVersions": {
-    "*": {
-      "build/index.d.ts": [
-        "build/index.d.ts"
-      ],
-      "*": [
-        "build/*.d.ts"
-      ]
-    }
-  },
   "dependencies": {
     "@thecointech/signers": "^0.3.13-test.5",
     "@thecointech/utilities": "^0.3.13-test.3"

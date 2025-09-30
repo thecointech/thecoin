@@ -27,26 +27,10 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
     "./transitions": "./build/transitions/index.js",
     "./transitions/*": "./build/transitions/*.js"
-  },
-  "types": "./build/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "build/index.d.ts": [
-        "build/index.d.ts"
-      ],
-      "build/transitions/*": [
-        "build/transitions/*.d.ts"
-      ],
-      "*": [
-        "build/*.d.ts",
-        "build/*/index.d.ts"
-      ]
-    }
   },
   "dependencies": {
     "@thecointech/async": "^0.3.13-test.5",

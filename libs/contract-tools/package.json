@@ -17,7 +17,7 @@
     "directory": "libs/contract-tools"
   },
   "scripts": {
-    "_clean NOTE: THIS KEEPS FAILING DUE TO HARDHAT CONFIG(?)": "rimraf ./build",
+    "clean": "run -T rimraf ./build",
     "build": "run -T tsc",
     "emulator": "hardhat --config ./src/hardhat.config.ts node --port 9545"
   },
@@ -25,13 +25,6 @@
     "./hardhat.config": "./build/hardhat.config.js",
     "./writeContract": "./build/writeContract.js",
     "./mockContractUtils": "./build/mockContractUtils.js"
-  },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "build/*.d.ts"
-      ]
-    }
   },
   "dependencies": {
     "@thecointech/signers": "^0.3.13-test.5"

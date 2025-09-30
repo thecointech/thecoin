@@ -25,10 +25,6 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
-  "exports": {
-    ".": "./build/index.js"
-  },
   "dependencies": {
     "@thecointech/logging": "^0.3.13-test.0",
     "@thecointech/rbcapi": "^0.3.13-test.5",

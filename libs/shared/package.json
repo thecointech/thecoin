@@ -29,25 +29,12 @@
   "files": [
     "./build/**/*"
   ],
-  "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
     "./*": [
       "./build/*.js",
       "./build/*/index.js"
     ]
-  },
-  "types": "./build/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "build/index.d.ts": [
-        "build/index.d.ts"
-      ],
-      "*": [
-        "build/*.d.ts",
-        "build/*/index.d.ts"
-      ]
-    }
   },
   "dependencies": {
     "@nivo/bar": "0.81.0",

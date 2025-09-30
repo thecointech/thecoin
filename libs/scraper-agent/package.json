@@ -48,13 +48,5 @@
       "default": "./build/index.js"
     },
     "./*": "./build/*.js"
-  },
-  "types": "./build/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "*": [
-        "build/*.d.ts"
-      ]
-    }
   }
 }
