@@ -36,14 +36,6 @@
     },
     "./mock": "./mock/index.ts"
   },
-  "types": "./build/log_browser.d.ts",
-  "typesVersions": {
-    "*": {
-      "mock": [
-        "./mock/index.ts"
-      ]
-    }
-  },
   "dependencies": {
     "@google-cloud/logging-bunyan": "^5.1.0",
     "browser-bunyan": "^1.6.3",

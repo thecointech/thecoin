@@ -43,22 +43,6 @@
       "default": "./build/vqa/live.js"
     }
   },
-  "typesVersions": {
-    "*": {
-      "broker": [
-        "./build/broker/live.d.ts"
-      ],
-      "pricing": [
-        "./build/pricing/live.d.ts"
-      ],
-      "nft": [
-        "./build/nft/live.d.ts"
-      ],
-      "vqa": [
-        "./build/vqa/live.d.ts"
-      ]
-    }
-  },
   "dependencies": {
     "@thecointech/broker-cad": "^0.3.3",
     "@thecointech/nft": "^0.3.3",

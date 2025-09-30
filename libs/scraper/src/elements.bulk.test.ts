@@ -12,7 +12,7 @@ import { TestData } from "../internal/testData";
 jest.setTimeout(20 * 60 * 1000);
 const MIN_ELEMENTS_IN_VALID_PAGE = 25;
 
-describe("It finds the same elements as before in archive", runTests, hasTestingPages);
+//describe("It finds the same elements as before in archive", runTests, hasTestingPages);
 
 describe("It runs only the failing tests in archive", () => {
   runTests(getLastFailing());

@@ -31,12 +31,5 @@
     "./config": "./utils/base.config.js",
     "./styleMock": "./utils/styleMock.js",
     "./*": "./build/*.js"
-  },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "build/*.d.ts"
-      ]
-    }
   }
 }

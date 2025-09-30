@@ -43,17 +43,6 @@
       "./build/*/index.js"
     ]
   },
-  "typesVersions": {
-    "*": {
-      "build/index.d.ts": [
-        "build/index.d.ts"
-      ],
-      "*": [
-        "build/*.d.ts",
-        "build/*/index.d.ts"
-      ]
-    }
-  },
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.4.1",
     "@thecointech/apis": "^0.3.13-test.5",

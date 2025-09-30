@@ -27,9 +27,9 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/node/remote.js",
   "exports": {
     ".": {
+      "types": "./build/index.d.ts",
       "node": {
         "development": "./build/node/mocked.js",
         "devlive": "./build/node/local.js",
@@ -42,11 +42,13 @@
       }
     },
     "./infura": {
+      "types": "./build/node/remote.d.ts",
       "development": "./build/node/mocked.js",
       "devlive": "./build/node/local.js",
       "default": "./build/node/remote.js"
     },
     "./Erc20Provider": {
+      "types": "./build/web/remote/index.d.ts",
       "development": {
         "node": "./build/node/mocked.js",
         "default": "./build/web/mocked/index.js"
@@ -55,20 +57,6 @@
       "default": "./build/web/remote/index.js"
     },
     "./Erc20Provider/web": "./build/web/remote/index.js"
-  },
-  "types": "./build/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "Erc20Provider": [
-        "build/web/remote/index.d.ts"
-      ],
-      "Erc20Provider/web": [
-        "build/web/remote/index.d.ts"
-      ],
-      "infura": [
-        "build/node/remote.d.ts"
-      ]
-    }
   },
   "dependencies": {
     "@thecointech/logging": "^0.3.13-test.0",

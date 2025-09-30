@@ -28,16 +28,15 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
   "exports": {
     ".": {
+      "types": "./build/index_common.d.ts",
       "development": "./build/index_mocked.js",
       "devlive": "./build/index_emulator.js",
       "browser": "./build/index_browser.js",
       "node": "./build/index_node.js"
     }
   },
-  "types": "./build/index_common.d.ts",
   "dependencies": {
     "@google-cloud/firestore": "6.0.0",
     "@thecointech/logging": "^0.3.13-test.0",

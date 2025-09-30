@@ -3,10 +3,7 @@
   "version": "0.3.13-test.5",
   "description": "TheCoin: Account definition & storage",
   "type": "module",
-  "keywords": [
-    "TheCoin",
-    "S&P500"
-  ],
+  "keywords": ["TheCoin"],
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
   "license": "GPL-3.0-or-later",
@@ -19,9 +16,9 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
+    "prepublishOnly": "run -T rimraf ./build/.buildinfo",
     "build": "run -T tsc -b",
-    "clean": "rimraf ./build && rimraf ./coverage",
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage",
     "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
@@ -36,17 +33,6 @@
       "default": "./build/store.js"
     },
     "./*": "./build/*.js"
-  },
-  "types": "./build/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "build/index.d.ts": [
-        "build/index.d.ts"
-      ],
-      "*": [
-        "build/*.d.ts"
-      ]
-    }
   },
   "dependencies": {
     "@thecointech/contract-core": "^0.3.13-test.5",

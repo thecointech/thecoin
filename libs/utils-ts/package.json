@@ -28,22 +28,9 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
     "./*": "./build/*.js"
-  },
-  "types": "./build/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "build/index.d.ts": [
-        "build/index.d.ts"
-      ],
-      "*": [
-        "build/*.d.ts",
-        "build/*/index.d.ts"
-      ]
-    }
   },
   "dependencies": {
     "@thecointech/logging": "^0.3.13-test.0",

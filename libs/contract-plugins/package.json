@@ -36,17 +36,6 @@
     "./*": "./build/*.js",
     ".": "./build/index.js"
   },
-  "types": "./build/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "writePlugin": [
-        "./internal/writePlugin.ts"
-      ],
-      "*": [
-        "build/*.d.ts"
-      ]
-    }
-  },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
     "@thecointech/async": "^0.3.13-test.5",
