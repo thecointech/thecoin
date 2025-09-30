@@ -16,6 +16,7 @@ export const commonBase: Partial<webpack.Configuration> = {
         path: fileURLToPath(p),
         ignoreStub: true,
         expand: true,
+        systemvars: true,
       })),
   ],
   resolve: {
