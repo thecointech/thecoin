@@ -25,7 +25,9 @@
   "files": [
     "build/**/*"
   ],
-  "exports": "./build/index.js",
+  "exports": {
+    ".": "./build/index.js"
+  },
   "dependencies": {
     "@thecointech/bank-interface": "^0.3.10",
     "@thecointech/tx-gmail": "^0.3.13-test.3",
