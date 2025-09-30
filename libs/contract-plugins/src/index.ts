@@ -20,6 +20,6 @@ export async function getPluginDetails(tcCore: IPluggable, user: AddressLike) : 
     return Promise.all(details)
   } catch (e) {
     log.error(e, "Failed to get plugin details");
-    return [];
+    throw e;
   }
 }

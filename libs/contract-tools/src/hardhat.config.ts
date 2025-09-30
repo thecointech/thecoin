@@ -1,13 +1,5 @@
 import type { HardhatUserConfig } from "hardhat/config";
-import "@typechain/hardhat";
-import "@nomicfoundation/hardhat-ethers";
-import "@nomicfoundation/hardhat-verify";
-import '@openzeppelin/hardhat-upgrades';
-import { getNetworks } from './hardhat.network';
-
-// Did we specify a network?
-const networkIdx = process.argv.findIndex(arg => arg === "--network");
-const defaultNetwork = networkIdx === -1 ? process.env.HARDHAT_NETWORK : process.argv[networkIdx + 1];
+import { getNetworks } from "./hardhat.network.js";
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -19,38 +11,7 @@ const config: HardhatUserConfig = {
       }
     }
   },
-  paths: {
-    artifacts: "./src/codegen",
-    root: process.cwd(),
-    cache: `${process.cwd()}/.hardhat/cache`,
-  },
-  typechain: {
-    outDir: "src/codegen"
-  },
-  defaultNetwork,
-  networks: getNetworks(),
-  etherscan: {
-    // apiKey: defaultNetwork == "polygon"
-    //   ? process.env.POLYGONSCAN_API_KEY
-    //   : process.env.ETHERSCAN_API_KEY,
-    apiKey: {
-      polygon: process.env.POLYGONSCAN_API_KEY!,
-    }
-  },
-}
-
-// Add support for polygonAmoy verification
-if (process.env.CONFIG_NAME === "prodtest") {
-  config.etherscan!.customChains = [
-    {
-      network: "polygon",
-      chainId: 80002,
-      urls: {
-        apiURL: "https://api-amoy.polygonscan.com/api",
-        browserURL: "https://amoy.polygonscan.com"
-      },
-    }
-  ]
-}
+  networks: await getNetworks(),
+};
 
 export default config;
