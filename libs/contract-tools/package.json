@@ -2,7 +2,6 @@
   "name": "@thecointech/contract-tools",
   "version": "0.3.13-test.5",
   "private": true,
-  "type": "module",
   "description": "TheCoin: Build & deploy tools for our smart contracts",
   "keywords": [
     "TheCoin",
