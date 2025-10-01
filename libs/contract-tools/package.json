@@ -2,7 +2,6 @@
   "name": "@thecointech/contract-tools",
   "version": "0.3.13-test.5",
   "private": true,
-  "type": "module",
   "description": "TheCoin: Build & deploy tools for our smart contracts",
   "keywords": [
     "TheCoin",
@@ -27,9 +26,13 @@
     "./mockContractUtils": "./build/mockContractUtils.js"
   },
   "dependencies": {
-    "@thecointech/signers": "^0.3.13-test.5"
-  },
-  "devDependencies": {
-    "hardhat": "^3.0.6"
+    "@nomicfoundation/hardhat-ethers": "^3.0.5",
+    "@nomicfoundation/hardhat-verify": "^2.0.6",
+    "@openzeppelin/hardhat-upgrades": "^3.1.0",
+    "@thecointech/signers": "^0.3.13-test.5",
+    "@typechain/ethers-v6": "^0.5.1",
+    "@typechain/hardhat": "^9.1.0",
+    "hardhat": "^2.22.19",
+    "typechain": "^8.3.2"
   }
 }
