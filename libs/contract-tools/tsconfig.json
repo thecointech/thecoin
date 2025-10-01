@@ -4,8 +4,7 @@
     "rootDir": "./src",
     "baseUrl": "./src/",
     "outDir": "./build",
-    "tsBuildInfoFile": "./build/.buildinfo",
-    "moduleResolution": "node16"
+    "tsBuildInfoFile": "./build/.buildinfo"
   },
   "include": ["./src/*.ts"],
 }
