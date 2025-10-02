@@ -3,9 +3,6 @@ const path = require('path');
 const getTool = (name) => path.join(__dirname, name);
 const mocks = path.join(__dirname, '../../__mocks__');
 
-// Map ws to a repo-wide compat shim to satisfy both default and named exports under ESM
-const wsCompat = path.join(mocks, './ws-compat.ts');
-
 module.exports = {
   preset: 'ts-jest/presets/default-esm',
   verbose: true,
@@ -38,8 +35,7 @@ module.exports = {
   moduleNameMapper: {
     "@thecointech/site-semantic-theme/variables": getTool('mockLessVars.mjs'),
     '\\.(css|less|svg)$': getTool('styleMock'),
-    "^@/(.*)$": "<rootDir>/src/$1",
-    '^ws$': wsCompat,
+    "^@/(.*)$": "<rootDir>/src/$1"
   },
 
   roots: [
