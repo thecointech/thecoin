@@ -64,7 +64,6 @@
     "test": "lerna run test --",
     "test-single": "yarn node --experimental-vm-modules $(yarn bin jest) ",
     "storybook": "storybook dev -p 6006",
-    "dedup": "yarn yarn-deduplicate -s fewer",
     "check-changes": "git diff-index --patch-with-stat HEAD && git diff-index --quiet HEAD -- "
   },
   "dependencies": {
@@ -188,8 +187,7 @@
     "webpack-dev-server": "4.2.0",
     "webpack-hot-middleware": "2.25.0",
     "webpack-merge": "5.8.0",
-    "webpack-pwa-manifest": "4.3.0",
-    "yarn-deduplicate": "^3.1.0"
+    "webpack-pwa-manifest": "4.3.0"
   },
   "packageManager": "yarn@4.0.2"
 }

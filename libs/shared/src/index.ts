@@ -12,6 +12,7 @@ export { PageSidebar } from './containers/PageSidebar';
 export { TransactionList } from './containers/TransactionList';
 export { UploadWallet } from './containers/UploadWallet';
 export type { UploadData } from './containers/UploadWallet';
+export { LanguageProvider, type Locale } from './containers/LanguageProvider';
 
 export { usePromiseSubscription } from './utils/usePromiseSubscription';
 export { useScript } from './useScript';

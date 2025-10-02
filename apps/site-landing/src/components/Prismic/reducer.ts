@@ -6,7 +6,7 @@ import { call } from "@redux-saga/core/effects";
 import { log } from '@thecointech/logging'
 import type { ApplicationRootState } from 'types'
 import type { PrismicDocument } from '@prismicio/types'
-import type { Locale } from '@thecointech/shared/containers/LanguageProvider'
+import type { Locale } from '@thecointech/shared'
 
 const apiEndpoint = process.env.PRISMIC_API_ENDPOINT as string;
 const client = createClient(apiEndpoint);
