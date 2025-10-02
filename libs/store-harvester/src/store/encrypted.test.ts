@@ -4,7 +4,8 @@ import { jest } from "@jest/globals";
 import { useMockPaths } from "../../mocked/paths";
 import { exec } from 'child_process';
 
-jest.setTimeout(15000);
+// test seems to take a long time when running in parallel with other tests.
+jest.setTimeout(60000);
 
 const { getDbProps } = useMockPaths();
 
@@ -22,13 +23,13 @@ it ('The encrypted db correctly releases its handles', async () => {
   const encryptedDbPath = `${db.dbPath}-encrypted/LOCK`;
   expect(await isOpen(encryptedDbPath)).toBe(false);
 
-  const allDocs = await db.withDatabase(async () => {
+  await db.withDatabase(async () => {
     expect(await isOpen(encryptedDbPath)).toBe(true);
   });
   expect(await isOpen(encryptedDbPath)).toBe(false);
 
   // Double-check
-  const cfg1 = await db.withDatabase(async (db) => {
+  await db.withDatabase(async (db) => {
     expect(await isOpen(encryptedDbPath)).toBe(true);
   });
   expect(await isOpen(encryptedDbPath)).toBe(false);
