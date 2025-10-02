@@ -20,7 +20,7 @@ const tests = getTestData("modals", "*", "features");
 
 describe('modal vqa tests finds the correct close element', () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   })
 
   it.each(tests)("For: %s", async (test) => {
