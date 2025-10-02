@@ -6,16 +6,12 @@ import { exec } from 'child_process';
 
 jest.setTimeout(15000);
 
-const { testDbPath } = useMockPaths();
+const { getDbProps } = useMockPaths();
 
 it ('The encrypted db correctly releases its handles', async () => {
 
   const db = new EncryptedDatabase({
-    rootFolder: testDbPath,
-    dbname: "test-handle",
-    key: "test",
-    transformIn: (data) => data,
-    transformOut: (data) => data,
+    ...getDbProps(),
     password: "1234",
   }, new Mutex());
 
@@ -23,7 +19,7 @@ it ('The encrypted db correctly releases its handles', async () => {
   await db.set({
     test: "test",
   });
-  const encryptedDbPath = `${process.cwd()}/${db.dbPath}-encrypted/LOCK`;
+  const encryptedDbPath = `${db.dbPath}-encrypted/LOCK`;
   expect(await isOpen(encryptedDbPath)).toBe(false);
 
   const allDocs = await db.withDatabase(async () => {
