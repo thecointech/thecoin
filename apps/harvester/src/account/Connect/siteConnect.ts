@@ -3,7 +3,7 @@ import { AddressInfo } from 'net';
 import { randomBytes } from 'crypto';
 import { URL } from 'url';
 import { shell } from 'electron';
-import { setWalletMnemomic } from '../Harvester/config';
+import { setWalletMnemomic } from '../../Harvester/config';
 import { parse } from './parse';
 import { validate } from './validate';
 import { bad, ok } from './returnValues';

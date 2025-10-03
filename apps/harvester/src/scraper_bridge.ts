@@ -22,7 +22,7 @@ import { enableLingeringForCurrentUser, isLingeringEnabled } from './Harvester/s
 import { getScraperLogging, setScraperLogging } from './Harvester/scraperLogging';
 import { Registry, VisibleOverride } from '@thecointech/scraper';
 import { getBankConnectDetails } from './Harvester/events';
-import { cancelGetWalletFromSite, getWalletFromSite } from './Wallet/siteConnect';
+import { cancelGetWalletFromSite, getWalletFromSite } from './account/Connect/siteConnect';
 
 
 async function guard<T>(cb: () => Promise<T>) {
