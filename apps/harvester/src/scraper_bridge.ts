@@ -22,6 +22,7 @@ import { enableLingeringForCurrentUser, isLingeringEnabled } from './Harvester/s
 import { getScraperLogging, setScraperLogging } from './Harvester/scraperLogging';
 import { Registry, VisibleOverride } from '@thecointech/scraper';
 import { getBankConnectDetails } from './Harvester/events';
+import { cancelGetWalletFromSite, getWalletFromSite } from './Wallet/siteConnect';
 
 
 async function guard<T>(cb: () => Promise<T>) {
@@ -175,6 +176,10 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
   }),
 
   getBankConnectDetails: () => guard(getBankConnectDetails),
+
+  // Wallet connect from site-app
+  getWalletFromSite: (timeoutMs?: number) => guard(async () => getWalletFromSite(timeoutMs)),
+  cancelGetWalletFromSite: () => guard(async () => cancelGetWalletFromSite()),
 }
 
 const onBgTaskMsg = (progress: BackgroundTaskInfo) => {
@@ -277,6 +282,14 @@ export function initMainIPC() {
 
   ipcMain.handle(actions.getBankConnectDetails, async (_event) => {
     return api.getBankConnectDetails();
+  });
+
+  // Wallet connect from site-app
+  ipcMain.handle(actions.getWalletFromSite, async (_event, timeoutMs?: number) => {
+    return api.getWalletFromSite(timeoutMs);
+  });
+  ipcMain.handle(actions.cancelGetWalletFromSite, async (_event) => {
+    return api.cancelGetWalletFromSite();
   });
 
   // Set up progress listener separately

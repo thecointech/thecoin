@@ -33,7 +33,7 @@
     "lint": "eslint --ext .ts,.tsx .",
     "build": "run -T tsc -b",
     "test": "yarn run :jest",
-    "_start:dbg": "yarn run -T cross-env NODE_ENV=development RUN_SCRAPER_HEADLESS=false HARVESTER_PROFILE_FOLDER=\"./.cache/$CONFIG_NAME\" yarn run-env $(yarn bin electron-forge) start",
+    "_start:dbg": "yarn run -T cross-env NODE_ENV=development RUN_SCRAPER_HEADLESS=false HARVESTER_PROFILE_FOLDER=\"./.cache/$CONFIG_NAME\" ELECTRON_DISABLE_SANDBOX=true yarn run-env $(yarn bin electron-forge) start",
     "_start": "yarn run-env $(yarn bin electron-forge) start",
     "_make": "yarn run-env $(yarn bin electron-forge) make"
   },

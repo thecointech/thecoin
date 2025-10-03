@@ -82,6 +82,10 @@ export type ScraperBridgeApi = {
   // Lingering (systemd user background)
   hasUserEnabledLingering(): Promise<Result<boolean>>;
   enableLingeringForCurrentUser(): Promise<Result<{ success?: boolean; error?: string }>>;
+
+  // Wallet connect from site-app
+  getWalletFromSite(timeoutMs?: number): Promise<Result<boolean>>;
+  cancelGetWalletFromSite(): Promise<Result<boolean>>;
 }
 
 export const actions = {
@@ -134,5 +138,9 @@ export const actions = {
   setOverrides: 'scraper:setOverrides',
   importScraperScript: 'scraper:importScraperScript',
   getBankConnectDetails: 'scraper:getBankConnectDetails',
+
+  // Wallet connect from site-app
+  getWalletFromSite: 'scraper:getWalletFromSite',
+  cancelGetWalletFromSite: 'scraper:cancelGetWalletFromSite',
 }
 export type Action = keyof typeof actions

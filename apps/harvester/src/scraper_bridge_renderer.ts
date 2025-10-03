@@ -72,6 +72,10 @@ const api : ScraperBridgeApi = {
 
   hasUserEnabledLingering: () => ipcRenderer.invoke(actions.hasUserEnabledLingering),
   enableLingeringForCurrentUser: () => ipcRenderer.invoke(actions.enableLingeringForCurrentUser),
+
+  // Wallet connect from site-app
+  getWalletFromSite: (timeoutMs?: number) => ipcRenderer.invoke(actions.getWalletFromSite, timeoutMs),
+  cancelGetWalletFromSite: () => ipcRenderer.invoke(actions.cancelGetWalletFromSite),
 }
 
 export const connectRenderer = () => contextBridge.exposeInMainWorld('scraper', api)

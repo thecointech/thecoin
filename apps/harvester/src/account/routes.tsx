@@ -4,7 +4,7 @@ import { Plugins } from './Plugins';
 import { Upload } from './Upload';
 import { getContract as getUberContract } from '@thecointech/contract-plugin-converter';
 import { getData, Key } from '@/Training/data';
-
+import { Connect } from './Connect';
 
 const converter = await getUberContract();
 const converterAddress = await converter.getAddress();
@@ -12,6 +12,12 @@ const converterAddress = await converter.getAddress();
 export const groupKey = "account";
 
 export const routes = [
+  {
+    component: Connect,
+    title: "Connect",
+    description: "Connect to TheCoin",
+    isComplete: (data?: AccountState) => !!data?.signer,
+  },
   {
     component: Upload,
     title: "Load Account",
