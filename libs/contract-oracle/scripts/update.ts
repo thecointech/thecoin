@@ -12,4 +12,5 @@ const balance = await existing.runner.provider.getBalance(address);
 log.debug(`Begin Upgrade: ${address} - ${balance}`);
 const Oracle = await hre.ethers.getContractFactory('SpxCadOracle', owner);
 const oracle = await hre.upgrades.upgradeProxy(existingAddress, Oracle);
-log.info(`Updated Oracle at ${oracle.address}`);
+const oracleAddress = await oracle.getAddress();
+log.info(`Updated Oracle at ${oracleAddress}`);

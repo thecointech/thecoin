@@ -32,7 +32,7 @@
     "gcp-build": ""
   },
   "engines": {
-    "node": "18.x.x"
+    "node": "22.x.x"
   },
   "files": [
     "build/**/*"

@@ -88,7 +88,12 @@ export async function getBaseConfig(secrets = []) {
         // move relevant code to the backend instead
         __COMPILER_REPLACE_SECRETS__: JSON.stringify(secretObj),
       }),
-      ...envFiles.map(path => new Dotenv({ path, ignoreStub: true })),
+      ...envFiles.map(path => new Dotenv({
+        path,
+        ignoreStub: true,
+        expand: true,
+        systemvars: true,
+      })),
 
       new ForkTsCheckerWebpackPlugin({
         typescript: {
