@@ -19,7 +19,11 @@ const getSigner = (name: AccountName) =>
     return wallet.connect(provider);
   });
 
-type SignerFn = Exclude<keyof Signer, "provider"|"_isSigner">;
+// Only allow method names from Signer (exclude non-function properties)
+type SignerFn = {
+  [K in keyof Signer]-?: Signer[K] extends (...args: any[]) => any ? K : never
+}[keyof Signer];
+
 //
 // Running in node process in electron
 export function bridge(ipc: IpcMain) {
@@ -29,7 +33,7 @@ export function bridge(ipc: IpcMain) {
     const signer = await getSigner(signerName);
     if (typeof signer[func] != 'function')
       throw new Error(`Unknown function requested: ${signerName}):${func}`);
-    //@ts-ignore - I can't figure out how to get TS to like this line
-    return signer[func].apply(signer, args);
+    const method = signer[func] as (this: Signer, ...a: any[]) => any;
+    return method.apply(signer, args);
   });
 }

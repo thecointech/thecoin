@@ -34,12 +34,12 @@
   },
   "dependencies": {
     "@nomicfoundation/hardhat-ethers": "^3.1.0",
-    "@nomicfoundation/hardhat-verify": "^2.0.6",
+    "@nomicfoundation/hardhat-verify": "^2.0.14",
     "@openzeppelin/hardhat-upgrades": "^3.9.1",
     "@thecointech/signers": "^0.3.13-test.5",
     "@typechain/ethers-v6": "^0.5.1",
     "@typechain/hardhat": "^9.1.0",
-    "hardhat": "^2.22.19",
+    "hardhat": "^2.24.1",
     "typechain": "^8.3.2"
   }
 }
