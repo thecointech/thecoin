@@ -1,5 +1,5 @@
 import type { IpcRenderer } from '@thecointech/electron-utils/types/ipc';
-import type { Signer,BlockTag, FeeData, Provider, TransactionRequest, TransactionResponse, BytesLike, TransactionLike, TypedDataDomain, TypedDataField } from "ethers";
+import type { Signer,BlockTag, FeeData, Provider, TransactionRequest, TransactionResponse, BytesLike, TransactionLike, TypedDataDomain, TypedDataField, Authorization, AuthorizationRequest } from "ethers";
 import type { AccountName } from '../names';
 import { SIGNER_CHANNEL } from './types';
 import { getProvider } from '@thecointech/ethers-provider';
@@ -20,6 +20,12 @@ export class ElectronSigner implements Signer {
     return ElectronSigner._ipc.invoke(SIGNER_CHANNEL, this._ident, fn, args);
   }
 
+  populateAuthorization(auth: AuthorizationRequest): Promise<AuthorizationRequest> {
+    return this.invoke('populateAuthorization', auth);
+  }
+  authorize(authorization: AuthorizationRequest): Promise<Authorization> {
+    return this.invoke('authorize', authorization);
+  }
   getNonce(blockTag?: BlockTag | undefined): Promise<number> {
     return this.invoke('getNonce', blockTag);
   }

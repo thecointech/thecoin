@@ -1,4 +1,4 @@
-import { toHuman, toHumanDecimal } from "@thecointech/utilities";
+import { toHuman, toHumanDecimal } from "@thecointech/utilities/Conversion";
 import { fiatChange } from "../../containers/Account/profit";
 import { DateTime } from "luxon";
 import { weSellAt } from '@thecointech/fx-rates';

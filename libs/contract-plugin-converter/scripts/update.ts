@@ -10,4 +10,5 @@ const existing = await getContract();
 
 const UberConverter = await hre.ethers.getContractFactory('UberConverter', owner);
 const uberConverter = await hre.upgrades.upgradeProxy(existing, UberConverter);
-log.info(`Updated UberConverter at ${uberConverter.address}`);
+const uberConverterAddress = await uberConverter.getAddress();
+log.info(`Updated UberConverter at ${uberConverterAddress}`);

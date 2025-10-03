@@ -28,8 +28,8 @@ export async function getMainConfig(deployedAt) {
     ['process.env.TC_DEPLOYED_AT']: deployedAt,
   }
   // Override the NODE_ENV from *.public.env files when debugging
-  if (process.env.NODE_ENV === 'development') {
-    mainPlugins['process.env.NODE_ENV'] = JSON.stringify('development');
+  if (process.env.NODE_ENV) {
+    mainPlugins['process.env.NODE_ENV'] = JSON.stringify(process.env.NODE_ENV);
   }
   const vqaCertificate = await getSecret("VqaSslCertPublic");
   if (vqaCertificate) {

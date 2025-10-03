@@ -10,7 +10,7 @@
     "forge": "config/forge.config.mjs"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "keywords": [],
   "author": {
@@ -25,7 +25,7 @@
     "prod:beta": "yarn run -T cross-env CONFIG_NAME=prodbeta yarn _start:dbg",
     "prod": "yarn run -T cross-env CONFIG_NAME=prod yarn _start:dbg",
     "package": "electron-forge package",
-    "make:dev": "yarn run -T cross-env CONFIG_NAME=development yarn _make",
+    "make:dev": "yarn run -T cross-env NODE_ENV=production CONFIG_NAME=development yarn _make",
     "make:prod": "yarn run -T cross-env CONFIG_NAME=prodbeta yarn _make",
     "make:prodtest": "yarn run -T cross-env CONFIG_NAME=prodtest yarn _make",
     "make:validation": "yarn run -T cross-env CONFIG_NAME=prodbeta NOTIFY_ON_MODAL_ENCOUNTER=true yarn _make",
