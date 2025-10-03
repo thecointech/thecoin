@@ -6,8 +6,10 @@ import { shell } from 'electron';
 import { setWalletMnemomic } from '../../../Harvester/config';
 import { parse } from './parse';
 import { validate } from './validate';
-import { bad, ok } from './returnValues';
+import { bad, okFile } from './returnValues';
+import { resolve } from 'path';
 import { ValidationError } from './errors';
+import { getAsset } from '@/Harvester/notify';
 
 // Current in-flight server so we can support cancel
 let currentServer: Server | null = null;
@@ -154,7 +156,9 @@ export async function getWalletFromSite(timeoutMs = 5 * 60_000): Promise<boolean
 
       // TODO: Persist encrypted walletFile, but in a way that is friendly to sign-in
 
-      ok(res, 'Received');
+      // Serve a static HTML page confirming success
+      const successPath = getAsset('success.html');
+      okFile(res, successPath!);
 
       // Resolve success and teardown
       if (currentResolve) currentResolve(true);
