@@ -1,29 +1,34 @@
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap, AccountMapState } from '@thecointech/shared/containers/AccountMap';
 import { log } from '@thecointech/logging';
+import { bridgeBrowser } from '@thecointech/electron-signer';
 
-// declare let window: Window & {
-//   ipcRenderer: Pick<IpcRenderer, "invoke">
-// };
+export async function initialAccounts(): Promise<AccountMapState> {
+  // // open IPC bridge to node process.
+  // const existing = await window.scraper.getCoinAccountDetails();
+  // if (existing.value?.address) {
+  //   // const account = Account(existing.value.address);
 
-// async function buildMapEntry(name: AccountName) {
-//   const signer = await getSigner(name);
-//   const address = NormalizeAddress(await signer.getAddress());
-//   const account = buildNewAccount(name, address, signer);
-//   account.contract = await ConnectContract(signer);
-//   account.idx = await connectIDX(signer);
-//   return { [address]: account };
-// }
+  //   const signer = new ElectronSigner(existing.value.address);
+  //   const account = buildNewAccount(existing.value.name, existing.value.address, signer);
 
-export async function initialAccounts() {
-  // open IPC bridge to node process.
-  return {
-    active: null,
-    map: {}
-  }
+  //   return {
+  //     active: existing.value.address,
+  //     map: {
+  //       [existing.value.address]: account,
+  //     }
+  //   }
+  // }
+  // else {
+    return {
+      active: null,
+      map: {}
+    }
+  // }
 }
 export const initAccounts = async () => {
   log.debug('loading initial accounts');
-  // bridge(window.ipcRenderer);
   const initial = await initialAccounts();
   AccountMap.initialize(initial);
+
+  bridgeBrowser();
 }

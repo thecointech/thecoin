@@ -6,11 +6,14 @@ import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
 import styles from './app.module.less'
 import { useEffect } from 'react';
 import { BackgroundTaskReducer } from './BackgroundTask/reducer';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap/reducer';
+import { ElectronSigner } from '@thecointech/electron-signer';
 
 export const App = () => {
   FxRateReducer.useStore();
   BackgroundTaskReducer.useStore();
 
+  const accountApi = AccountMap.useApi()
   const location = useLocation();
   const backgroundTaskApi = BackgroundTaskReducer.useApi();
 
@@ -18,6 +21,14 @@ export const App = () => {
     window.scraper.onBackgroundTaskProgress(progress => {
       backgroundTaskApi.setTaskProgress(progress);
     })
+
+    window.scraper.getCoinAccountDetails().then(res => {
+      if (res.value?.address) {
+        const signer = new ElectronSigner(res.value.address);
+        accountApi.addAccount(res.value.name, res.value.address, signer);
+        accountApi.setActiveAccount(res.value.address);
+      }
+    });
   }, [])
 
   return (

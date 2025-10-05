@@ -19,9 +19,12 @@ export async function mockServer(service: ConnectService) {
   const wallet = Wallet.createRandom();
   const encrypted = await wallet.encrypt("password");
   log.info({address: wallet.address}, "Creating new development wallet");
-  await setCoinAccount({
+  const details = {
     address: wallet.address,
     name: "Development Wallet",
+  }
+  await setCoinAccount({
+    ...details,
     encrypted,
     mnemonic: {
       phrase: wallet.mnemonic!.phrase,
@@ -31,4 +34,6 @@ export async function mockServer(service: ConnectService) {
   })
 
   service.cb({ completed: true, percent: 100 });
+
+  return details
 }

@@ -84,7 +84,7 @@ export type ScraperBridgeApi = {
   enableLingeringForCurrentUser(): Promise<Result<{ success?: boolean; error?: string }>>;
 
   // Wallet connect from site-app
-  loadWalletFromSite(timeoutMs?: number): Promise<Result<boolean>>;
+  loadWalletFromSite(timeoutMs?: number): Promise<Result<CoinAccountDetails>>;
   cancelloadWalletFromSite(): Promise<Result<boolean>>;
 }
 

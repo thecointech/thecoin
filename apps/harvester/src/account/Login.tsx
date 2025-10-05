@@ -49,6 +49,6 @@ const LoginAccount = ({account}: {account: AccountState}) => {
   }, [account?.contract])
 
   return complete
-    ? <Redirect to={`/${groupKey}/2`} />
+    ? <Redirect to={`/${groupKey}/1`} />
     : <LoginUI account={account} />
 }

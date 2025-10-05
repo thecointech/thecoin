@@ -11,6 +11,7 @@ import { getAsset } from '@/Harvester/notify';
 import { mockServer } from './mock';
 import { BackgroundTaskCallback } from '@/BackgroundTask';
 import { startService, resetService } from './state';
+import { CoinAccountDetails } from '@thecointech/store-harvester';
 export { resetService } from './state';
 
 function readBody(req: IncomingMessage): Promise<string> {
@@ -29,7 +30,7 @@ function readBody(req: IncomingMessage): Promise<string> {
   });
 }
 
-export async function loadWalletFromSite(callback: BackgroundTaskCallback, timeoutMs = 5 * 60_000): Promise<boolean> {
+export async function loadWalletFromSite(callback: BackgroundTaskCallback, timeoutMs = 5 * 60_000): Promise<CoinAccountDetails|undefined> {
   // Ensure only one active session
   if (globalThis.ConnectService) {
     globalThis.ConnectService.reject?.(new Error('Cancelled'));
@@ -39,8 +40,7 @@ export async function loadWalletFromSite(callback: BackgroundTaskCallback, timeo
   const service = startService(callback);
 
   if (process.env.CONFIG_NAME === 'development') {
-    await mockServer(service);
-    return true;
+    return await mockServer(service);
   }
 
   service.server = createServer(async (req, res) => {
@@ -86,7 +86,10 @@ export async function loadWalletFromSite(callback: BackgroundTaskCallback, timeo
       okFile(res, successPath!);
 
       // Resolve success and teardown
-      service.resolve?.(true);
+      service.resolve?.({
+        address: validated.address,
+        name: validated.name,
+      });
       resetService({ completed: true, percent: 100 });
     } catch (err) {
       if (err instanceof ValidationError) {
@@ -119,7 +122,7 @@ export async function loadWalletFromSite(callback: BackgroundTaskCallback, timeo
   await shell.openExternal(consentUrl);
 
   // Timeout and cleanup
-  const p = new Promise<boolean>((resolve, reject) => {
+  const p = new Promise<CoinAccountDetails>((resolve, reject) => {
     service!.resolve = resolve;
     service!.reject = reject;
     service!.timeout = setTimeout(() => {

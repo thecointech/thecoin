@@ -1,4 +1,5 @@
 import type { TaskProgress, BackgroundTaskCallback } from "@/BackgroundTask";
+import type { CoinAccountDetails } from "@thecointech/store-harvester";
 import { randomBytes } from "crypto";
 import type { Server } from "http";
 
@@ -8,7 +9,7 @@ export type ConnectService = {
   cb: ProgressCallback,
   state: string,
   server?: Server,
-  resolve?: ((v: boolean) => void),
+  resolve?: ((v: CoinAccountDetails) => void),
   reject?: ((e: Error) => void),
   timeout?: NodeJS.Timeout,
 };

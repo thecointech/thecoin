@@ -27,7 +27,7 @@ const Login = ({ type, both }: Props) => {
     else {
       api.setCompleted(type, true);
     }
-  }, [bgTask, api, both, type]);
+  }, [bgTask, both, type]);
 
   if (!bank) {
     return <div>ERROR: Bank type not found or selected: {type}</div>

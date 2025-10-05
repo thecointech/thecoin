@@ -25,7 +25,7 @@ const plugin = {
     description: "Add functionality required",
     isComplete: (data?: AccountState) => (
       !!data?.plugins?.some(p => p.address === converterAddress) ||
-      (!!data?.address && !!getData(Key.pluginCnvrtRequested))
+      (!!data?.address && data?.address == getData(Key.pluginCnvrtRequested))
     )
 }
 

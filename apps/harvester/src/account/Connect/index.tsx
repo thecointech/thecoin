@@ -1,48 +1,58 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./index.module.less";
-import { Button, Header, Message } from "semantic-ui-react";
+import { Button, Dimmer, Header, Loader, Message } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { BackgroundTaskErrors, BackgroundTaskProgressBar } from "@/BackgroundTask/BackgroundTaskProgressBar";
 import { groupKey } from "../routes";
-// import { ContentSection } from '@/ContentSection';
+import { AccountMap } from "@thecointech/shared/containers/AccountMap/reducer";
+import { ElectronSigner } from "@thecointech/electron-signer";
+
+type State = "connecting" | "connected" | "failed";
+type ConnectCB = (state: State) => void;
 
 export const Connect = () => {
-  const [address, setAddress] = useState<string | null>();
 
-  useEffect(() => {
-    window.scraper.getCoinAccountDetails().then(res => {
-      if (res.error) {
-        alert(res.error);
-      } else if (res.value) {
-        setAddress(res.value.address);
-      }
-    });
-  }, []);
+  const [state, setState] = useState<State>();
+  const onConnection: ConnectCB = (state) => {
+    setState(state);
+  }
+  const connecting = state === "connecting";
 
   return (
     <div className={styles.connectContainer}>
-      <DoConnect onConnectionComplete={() => window.location.reload()} />
-      <HasAddress address={address} />
-      <Link to={`/${groupKey}/2/?manual=true`}>Or load your account manually</Link>
+      <Dimmer active={connecting}>
+        <Loader>Use your browser to connect to your Coin account...</Loader>
+      </Dimmer>
+      <DoConnect onConnection={onConnection} state={state} />
+      <HasAddress />
+      <Link to={`/${groupKey}/1/?manual=true`}>Or load your account manually</Link>
     </div>
   );
 };
 
-const DoConnect = ({ onConnectionComplete }: { onConnectionComplete?: () => void }) => {
-  const [connecting, setConnecting] = useState(false);
+const DoConnect = ({ onConnection, state }: { onConnection: ConnectCB, state: State|undefined }) => {
+  // const [connecting, setConnecting] = useState(false);
+
+  const accountApi = AccountMap.useApi();
+  const existing = AccountMap.useAsArray();
 
   const connect = () => {
-    setConnecting(true);
+    onConnection("connecting");
     window.scraper.loadWalletFromSite().then(res => {
       if (res.error) {
         alert(res.error);
-        setConnecting(false);
+        onConnection("failed");
       } else {
-        setConnecting(false);
-        onConnectionComplete?.();
+        onConnection("connected");
+        if (res.value?.address) {
+          existing.forEach(accountApi.deleteAccount);
+          accountApi.addAccount(res.value?.name, res.value?.address, new ElectronSigner(res.value.address));
+          accountApi.setActiveAccount(res.value?.address);
+        }
       }
     });
   };
+  const connecting = state === "connecting";
 
   return (
     <>
@@ -60,13 +70,16 @@ const DoConnect = ({ onConnectionComplete }: { onConnectionComplete?: () => void
         your wallet. Your private keys never leave your device.
       </Message>
 
-      <div>
-        <Button
-          onClick={connect}
-          disabled={connecting}
-        >
+      <div className={styles.connectButtons}>
+        <div>
+          <Button
+            onClick={connect}
+            disabled={connecting}
+            loading={connecting}
+          >
           {connecting ? "Connecting..." : "Connect Wallet"}
         </Button>
+        </div>
         <BackgroundTaskProgressBar type="connect" />
         <BackgroundTaskErrors type="connect" />
       </div>
@@ -74,11 +87,13 @@ const DoConnect = ({ onConnectionComplete }: { onConnectionComplete?: () => void
   );
 };
 
-const HasAddress = ({ address }: { address?: string | null }) => {
+const HasAddress = () => {
+  const active = AccountMap.useActive();
+  const address = active?.address;
   const isConnected = !!address;
 
   return (
-    <Message info={!isConnected} success={isConnected}>
+    <Message warning={!isConnected} success={isConnected}>
       <div className={styles.statusContent}>
         <div>
         <span className={styles.statusTitle}>
@@ -90,7 +105,7 @@ const HasAddress = ({ address }: { address?: string | null }) => {
         </div>
         {isConnected ? (
           <div className={styles.statusAddress}>
-            Harvester is connected to: {address}
+            {active?.name} - {address}
           </div>
         ) : (
           <div>

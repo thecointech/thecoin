@@ -1,8 +1,4 @@
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
-// import { UploadData } from '@thecointech/shared/containers/UploadWallet';
-import { useEffect } from 'react'
-// import { useHistory } from 'react-router-dom'
-// import { getData, Key } from '../Training/data';
 import { useAccountPath } from './routes'
 import { PathNextButton, PathRouter, PathSteps } from '@/SimplePath';
 import { ContentSection } from '@/ContentSection';
@@ -10,24 +6,11 @@ import { ContentSection } from '@/ContentSection';
 
 export const Account = () => {
 
-  const active = AccountMap.useActive();
-  const api = AccountMap.useApi();
-
   const path = useAccountPath();
-
-
-  useEffect(() => {
-    window.scraper.getCoinAccountDetails().then(res => {
-      if (res.error) {
-        alert(res.error);
-      } else {
-        if (res.value) {
-          api.addAccount(res.value.name, res.value.address, {} as any);
-          api.setActiveAccount(res.value.address);
-        }
-      }
-    });
-  }, []);
+  const accounts = AccountMap.useData();
+  // Don't call useActive directly, as it will always
+  // return an account if it can (even if active is set to null)
+  const active = accounts.map[accounts.active ?? ""];
 
   return (
     <div>
