@@ -23,10 +23,12 @@ const plugin = {
     component: Plugins,
     title: "Plugins",
     description: "Add functionality required",
-    isComplete: (data?: AccountState) => (
-      !!data?.plugins?.some(p => p.address === converterAddress) ||
-      (!!data?.address && data?.address == getData(Key.pluginCnvrtRequested))
-    )
+    isComplete: (data?: AccountState) => {
+      return (
+        !!data?.plugins?.some(p => p.address === converterAddress) ||
+        (!!data?.address && data?.address == getData(Key.pluginCnvrtRequested))
+      )
+    }
 }
 
 const manualRoutes = [

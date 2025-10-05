@@ -36,6 +36,7 @@ const statusText = (hasPlugin: boolean, requestSent: boolean) => {
 
 export const Plugins = () => {
   const active = AccountMap.useActive();
+  const api = AccountMap.useApi();
   const [requestSent, setRequestSent] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
@@ -75,6 +76,10 @@ export const Plugins = () => {
     }
     setRequestSent(true);
     setIsSending(false);
+    // Trigger refresh of path.  setData does not trigger a re-render,
+    // so this just sets 'something has changed' on the base SimplePath
+    api.setActiveAccount(null);
+    api.setActiveAccount(active.address);
   }
 
   const canInstallPlugins = requestSent || isSending || (hasConverter && hasShockAbsorber);
