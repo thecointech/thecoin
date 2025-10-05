@@ -2,8 +2,8 @@ import { BrowserWindow, ipcMain } from 'electron';
 import { ValueType } from '@thecointech/scraper/types';
 import { actions, ScraperBridgeApi } from './scraper_actions';
 import { toBridge } from './scraper_bridge_conversions';
-import { getHarvestConfig, getProcessConfig, getWallet, getWalletAddress, hasCreditDetails, setCreditDetails, setHarvestConfig, setProcessConfig, setWalletMnemomic } from './Harvester/config';
-import { HarvestConfig, Mnemonic } from './types';
+import { getHarvestConfig, getProcessConfig, getWallet, setCoinAccount, getCoinAccountDetails, hasCreditDetails, setCreditDetails, setHarvestConfig, setProcessConfig } from './Harvester/config';
+import { CoinAccount, HarvestConfig } from './types';
 import { CreditDetails } from './Harvester/types';
 import { spawn } from 'child_process';
 import { exportResults, getRawState, setOverrides } from './Harvester/state';
@@ -22,7 +22,7 @@ import { enableLingeringForCurrentUser, isLingeringEnabled } from './Harvester/s
 import { getScraperLogging, setScraperLogging } from './Harvester/scraperLogging';
 import { Registry, VisibleOverride } from '@thecointech/scraper';
 import { getBankConnectDetails } from './Harvester/events';
-import { cancelGetWalletFromSite, getWalletFromSite } from './account/Connect/server';
+import { resetService, loadWalletFromSite } from './account/Connect/server';
 
 
 async function guard<T>(cb: () => Promise<T>) {
@@ -103,8 +103,8 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
   }),
   finishAction: () => guard(async () => true /*Recorder.release()*/ ),
 
-  setWalletMnemomic: (mnemonic) => guard(() => setWalletMnemomic(mnemonic)),
-  getWalletAddress: () => guard(() => getWalletAddress()),
+  setCoinAccount: (coinAccount) => guard(() => setCoinAccount(coinAccount)),
+  getCoinAccountDetails: () => guard(() => getCoinAccountDetails()),
 
   setCreditDetails: (details) => guard(() => setCreditDetails(details)),
   hasCreditDetails: () => guard(() => hasCreditDetails()),
@@ -178,8 +178,8 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
   getBankConnectDetails: () => guard(getBankConnectDetails),
 
   // Wallet connect from site-app
-  getWalletFromSite: (timeoutMs?: number) => guard(async () => getWalletFromSite(timeoutMs)),
-  cancelGetWalletFromSite: () => guard(async () => cancelGetWalletFromSite()),
+  loadWalletFromSite: (timeoutMs?: number) => guard(async () => loadWalletFromSite(onBgTaskMsg, timeoutMs)),
+  cancelloadWalletFromSite: () => guard(async () => resetService()),
 }
 
 const onBgTaskMsg = (progress: BackgroundTaskInfo) => {
@@ -217,11 +217,11 @@ export function initMainIPC() {
     return api.finishAction();
   })
 
-  ipcMain.handle(actions.setWalletMnemomic, async (_event, mnemonic: Mnemonic) => {
-    return api.setWalletMnemomic(mnemonic);
+  ipcMain.handle(actions.setCoinAccount, async (_event, coinAccount: CoinAccount) => {
+    return api.setCoinAccount(coinAccount);
   })
-  ipcMain.handle(actions.getWalletAddress, async (_event) => {
-    return api.getWalletAddress();
+  ipcMain.handle(actions.getCoinAccountDetails, async (_event) => {
+    return api.getCoinAccountDetails();
   })
 
   ipcMain.handle(actions.hasCreditDetails, async (_event) => {
@@ -285,11 +285,11 @@ export function initMainIPC() {
   });
 
   // Wallet connect from site-app
-  ipcMain.handle(actions.getWalletFromSite, async (_event, timeoutMs?: number) => {
-    return api.getWalletFromSite(timeoutMs);
+  ipcMain.handle(actions.loadWalletFromSite, async (_event, timeoutMs?: number) => {
+    return api.loadWalletFromSite(timeoutMs);
   });
-  ipcMain.handle(actions.cancelGetWalletFromSite, async (_event) => {
-    return api.cancelGetWalletFromSite();
+  ipcMain.handle(actions.cancelloadWalletFromSite, async (_event) => {
+    return api.cancelloadWalletFromSite();
   });
 
   // Set up progress listener separately

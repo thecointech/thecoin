@@ -19,21 +19,21 @@ export const Training = () => {
 
   // Ensure we have a valid account in the scraper
   useEffect(() => {
-    window.scraper.getWalletAddress().then(result => {
+    window.scraper.getCoinAccountDetails().then(result => {
       // main-world has an address
       if (result.value) {
         // Check that it matches our render-world wallet
         if (stored) {
           const uploaded = JSON.parse(stored);
           const renderAddress = NormalizeAddress(uploaded.wallet.address)
-          const mainAddress = NormalizeAddress(result.value);
+          const mainAddress = NormalizeAddress(result.value.address);
           if (mainAddress != renderAddress) {
             alert("WARNING: Scraper wallet does not match loaded wallet, login to update scraper");
             navigate.push("/account/login");
           }
         }
       }
-      setAddress(result.value);
+      setAddress(result.value?.address);
     })
   }, [])
 

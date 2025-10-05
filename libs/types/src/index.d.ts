@@ -116,6 +116,7 @@ export type ConnectionValues = {
   siteOrigin: string;
   timestamp: string;
   address: string;
+  name: string;
   walletFile: string;
   phrase: string;
   path: string;

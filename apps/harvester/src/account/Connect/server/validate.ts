@@ -5,7 +5,7 @@ import { NormalizeAddress, IsValidAddress } from "@thecointech/utilities/Address
 
 export function validate(payload: any, currentState: string): ConnectionValues {
 
-  const { state, siteOrigin, address, timestamp, phrase, path, locale, walletFile } = payload as ConnectionValues;
+  const { state, siteOrigin, address, timestamp, phrase, path, locale, name, walletFile } = payload as ConnectionValues;
   if (!state || state !== currentState) {
     throw new ValidationError('Invalid state body');
   }
@@ -42,6 +42,7 @@ export function validate(payload: any, currentState: string): ConnectionValues {
   return {
     state,
     siteOrigin,
+    name,
     address,
     timestamp,
     phrase,

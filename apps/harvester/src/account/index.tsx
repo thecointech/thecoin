@@ -1,27 +1,32 @@
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
-import { UploadData } from '@thecointech/shared/containers/UploadWallet';
+// import { UploadData } from '@thecointech/shared/containers/UploadWallet';
 import { useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
-import { getData, Key } from '../Training/data';
-import { path } from './routes'
+// import { useHistory } from 'react-router-dom'
+// import { getData, Key } from '../Training/data';
+import { useAccountPath } from './routes'
 import { PathNextButton, PathRouter, PathSteps } from '@/SimplePath';
 import { ContentSection } from '@/ContentSection';
 
 
 export const Account = () => {
 
-  const navigation = useHistory();
   const active = AccountMap.useActive();
   const api = AccountMap.useApi();
-  const stored = getData(Key.wallet);
+
+  const path = useAccountPath();
+
 
   useEffect(() => {
-    if (!active && stored) {
-      const storedWallet = JSON.parse(stored) as UploadData;
-      api.addAccount(storedWallet.name, storedWallet.wallet.address, storedWallet.wallet);
-      api.setActiveAccount(storedWallet.wallet.address);
-      navigation.push('/account/1');
-    }
+    window.scraper.getCoinAccountDetails().then(res => {
+      if (res.error) {
+        alert(res.error);
+      } else {
+        if (res.value) {
+          api.addAccount(res.value.name, res.value.address, {} as any);
+          api.setActiveAccount(res.value.address);
+        }
+      }
+    });
   }, []);
 
   return (
