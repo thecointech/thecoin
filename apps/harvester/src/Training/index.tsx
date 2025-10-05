@@ -1,41 +1,18 @@
 
 import { Button, Message, Step } from 'semantic-ui-react'
-import { useEffect, useState } from 'react';
 import { TrainingRouter } from './routes';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { getData, Key } from './data';
-import { NormalizeAddress } from '@thecointech/utilities';
 import { TrainingReducer } from './state/reducer';
 import styles from './index.module.less';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 
 export const Training = () => {
-  const [address, setAddress] = useState<string|null|undefined>(undefined);
-  const stored = getData(Key.wallet);
   const navigate = useHistory();
   const location = useLocation();
+  const active = AccountMap.useActive();
 
   TrainingReducer.useStore();
   const data = TrainingReducer.useData();
-
-  // Ensure we have a valid account in the scraper
-  useEffect(() => {
-    window.scraper.getCoinAccountDetails().then(result => {
-      // main-world has an address
-      if (result.value) {
-        // Check that it matches our render-world wallet
-        if (stored) {
-          const uploaded = JSON.parse(stored);
-          const renderAddress = NormalizeAddress(uploaded.wallet.address)
-          const mainAddress = NormalizeAddress(result.value.address);
-          if (mainAddress != renderAddress) {
-            alert("WARNING: Scraper wallet does not match loaded wallet, login to update scraper");
-            navigate.push("/account/login");
-          }
-        }
-      }
-      setAddress(result.value?.address);
-    })
-  }, [])
 
   const page0Complete = isUrl(data.chequing.url) && isUrl(data.visa.url);
   const cdComplete = data.hasCreditDetails;
@@ -111,7 +88,7 @@ export const Training = () => {
           disabled={!page4Complete}
           pathname={location.pathname} />
       </Step.Group>
-      <Message warning hidden={address !== null}>
+      <Message warning hidden={!!active?.address}>
         There is no account loaded yet.  It is highly recommended to setup
         your account before training your scraper.<br />
         <Link to="/account/upload">Upload an Account</Link>

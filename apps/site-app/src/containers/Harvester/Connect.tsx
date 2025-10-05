@@ -70,6 +70,7 @@ export const HarvesterConnect: React.FC = () => {
       siteOrigin: window.location.origin,
       timestamp: new Date().toISOString(),
       address: active.address,
+      name: active.name,
       walletFile: walletFile!,
       ...mnemonic!,
     };
