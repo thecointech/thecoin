@@ -82,9 +82,12 @@ export async function loadWalletFromSite(callback: BackgroundTaskCallback, timeo
       // TODO: Persist encrypted walletFile, but in a way that is friendly to sign-in
 
       // Serve a static HTML page confirming success
+      // Serve a static HTML page confirming success
       const successPath = getAsset('success.html');
-      okFile(res, successPath!);
-
+      if (!successPath) {
+        throw new Error('Success page asset not found');
+      }
+      okFile(res, successPath);
       // Resolve success and teardown
       service.resolve?.({
         address: validated.address,
