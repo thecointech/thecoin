@@ -6,13 +6,15 @@ import type { NamedProcessor } from "../src/processors";
 import { SectionType, sections } from "../src/processors/types";
 import type { IAskUser, SectionName, EventSection } from "../src/types";
 import { sleep } from "@thecointech/async/sleep";
+import { AccountResponse } from "@thecointech/vqa";
 
 export class Agent implements AgentClass {
   name: string;
-  events: EventManager;
-  page: PageHandler;
   input: IAskUser;
   callbacks?: IScraperCallbacks | undefined;
+  // Unused properties
+  events!: EventManager;
+  page!: PageHandler;
 
   constructor(name: string, input: IAskUser, callbacks?: IScraperCallbacks | undefined) {
     this.name = name;
@@ -20,7 +22,7 @@ export class Agent implements AgentClass {
     this.callbacks = callbacks;
   }
 
-  async process(sectionsToSkip?: SectionName[]): Promise<EventSection> {
+  async process(sectionsToSkip?: SectionName[]) {
     const sectionsToProcess = sections.filter(s => !sectionsToSkip?.includes(s));
     const pre2faStages = sectionsToProcess.slice(0, 3);
     for (const stage of pre2faStages) {
@@ -45,22 +47,13 @@ export class Agent implements AgentClass {
       });
     }
     return {
-      section: "Initial",
-      events: (["Login", "AccountsSummary", "CreditAccountDetails", "SendETransfer", "Logout"] as const)
-        .map((s, i) => ({
-          section: s,
-          events: [
-            // One mock event so replay can find has something to do
-            {
-              id: i.toString(),
-              type: "navigation",
-              timestamp: i,
-              to: "https://www.example.com",
-            }
-          ]
-        })
-      )
-    };
+      events: this.mockEventsResponse(),
+      accounts: this.mockAccountResponse(),
+    }
+  }
+
+  async processAccounts() {
+    return [];
   }
 
   static create(name: string, input: IAskUser, _url: string, callbacks?: IScraperCallbacks | undefined) {
@@ -85,5 +78,51 @@ export class Agent implements AgentClass {
 
   async [Symbol.asyncDispose]() {
     return;
+  }
+
+
+  mockAccountResponse(sectionsToSkip?: SectionName[]): AccountResponse[] {
+    const r = [];
+    if (!sectionsToSkip?.includes("SendETransfer")) {
+      r.push({
+        account_type: "Chequing" as const,
+        account_name: `${this.name} Chequing`,
+        account_number: "123456789",
+        balance: "100",
+        position_x: 0,
+        position_y: 0,
+      })
+    }
+    if (!sectionsToSkip?.includes("CreditAccountDetails")) {
+      r.push({
+        account_type: "Credit" as const,
+        account_name: `${this.name} Credit`,
+        account_number: "1234 56** **** **89",
+        balance: "100",
+        position_x: 0,
+        position_y: 0,
+      })
+    }
+    return r;
+  }
+
+  mockEventsResponse(): EventSection {
+    return {
+      section: "Initial",
+      events: (["Login", "AccountsSummary", "CreditAccountDetails", "SendETransfer", "Logout"] as const)
+        .map((s, i) => ({
+          section: s,
+          events: [
+            // One mock event so replay can find has something to do
+            {
+              id: i.toString(),
+              type: "navigation",
+              timestamp: i,
+              to: "https://www.example.com",
+            }
+          ]
+        })
+      )
+    }
   }
 }

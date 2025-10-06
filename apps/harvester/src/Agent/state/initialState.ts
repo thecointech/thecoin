@@ -2,12 +2,12 @@ import { log } from "@thecointech/logging";
 import { banks } from "../BankCard/data";
 import { BankData } from "../BankCard/data";
 import { BankIdent } from "@thecointech/store-harvester";
-import { BankType } from "./types";
-
+import { AccountResult, BankType } from "./types";
 
 
 export type BankReducerType = {
   completed?: boolean;
+  results?: AccountResult[]; // JSON data from scraper
 } & BankData;
 export type InitialState = {
   [K in BankType]: BankReducerType | undefined;

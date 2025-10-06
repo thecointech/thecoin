@@ -1,6 +1,6 @@
 
 import { BaseReducer } from '@thecointech/shared/store/immerReducer'
-import type { BankType, IActions } from './types';
+import type { AccountResult, BankType, IActions } from './types';
 import { BankData } from '../BankCard/data';
 import { getInitialState, InitialState } from './initialState';
 
@@ -13,7 +13,7 @@ export class BankConnectReducer extends BaseReducer<IActions, InitialState>(CONF
     setBank(type: BankType, bank: BankData): void {
       this.draftState[type] = bank;
     }
-    setCompleted(type: BankType, completed: boolean): void {
+    setCompleted(type: BankType, completed: boolean, results?: AccountResult[]): void {
       const curr = this.state[type];
       if (!curr) {
         alert("Bank not initialized");
@@ -21,7 +21,8 @@ export class BankConnectReducer extends BaseReducer<IActions, InitialState>(CONF
       };
       this.draftState[type] = {
         ...curr,
-        completed
+        completed,
+        results
       }
     }
 }

@@ -40,21 +40,21 @@ export async function autoConfigure({ type, config, visible }: AutoConfigParams,
     using _ = new VisibleOverride(visible)
     using _serializer = await maybeSerializeRun(logger.logsFolder, name);
     await using agent = await Agent.create(name, inputBridge, url, logger);
-    const baseNode = await agent.process(toSkip);
+    const { events, accounts } = await agent.process(toSkip);
 
     // Ensure we have required info
-    throwIfAnyMissing(baseNode, type);
+    throwIfAnyMissing(events, type);
 
-    await storeEvents(type, config, baseNode);
+    await storeEvents(type, config, events);
 
-    logger.complete(true);
+    logger.complete({ result: JSON.stringify(accounts) });
 
     log.info(`Agent: Finished configuring for action: ${name}`);
   }
   catch (e: any) {
     const msg = getErrorMessage(e);
     log.error({ err: e }, `Error configuring agent for action: ${name}`);
-    logger.complete(false, msg);
+    logger.complete({ error: msg });
     throw e;
   }
 
