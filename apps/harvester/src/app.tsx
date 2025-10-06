@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { BackgroundTaskReducer } from './BackgroundTask/reducer';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap/reducer';
 import { ElectronSigner } from '@thecointech/electron-signer';
+import { AccountInitializer } from './account/AccountInitializer';
 
 export const App = () => {
   FxRateReducer.useStore();
@@ -16,6 +17,8 @@ export const App = () => {
   const accountApi = AccountMap.useApi()
   const location = useLocation();
   const backgroundTaskApi = BackgroundTaskReducer.useApi();
+
+  const activeAddress = AccountMap.useData().active;
 
   useEffect(() => {
     window.scraper.onBackgroundTaskProgress(progress => {
@@ -95,6 +98,7 @@ export const App = () => {
       <div className={styles.content}>
         <Routes />
       </div>
+      {activeAddress && <AccountInitializer address={activeAddress} />}
     </div>
   )
 }

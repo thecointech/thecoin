@@ -61,7 +61,7 @@ export const OverrideHarvesterState = ({withDimmer}: {withDimmer: DimmerCallback
   return (
     <Container>
       <div>
-        Total Balance: ${accountBalance}
+        Available Balance: ${accountBalance}
         <br />
         Harvester Balance: ${harvesterBalance}
       </div>
@@ -70,21 +70,22 @@ export const OverrideHarvesterState = ({withDimmer}: {withDimmer: DimmerCallback
         is what is used to calculate how much money is needed to cover the credit card payments.
       </div>
       <div>
-        <Input placeholder="Amount" value={overrideBalance} onChange={(_, {value}) =>
+        <Input placeholder="Amount" value={overrideBalance ?? 0} onChange={(_, {value}) =>
           setOverrideBalance(
             Math.min(safeParseFloat(value), accountBalance ?? 0)
           )
         }/>
         <br />
-        <Input placeholder="Pending Payment" value={pendingAmount} onChange={(_, {value}) =>
+        <Input placeholder="Pending Payment" value={pendingAmount ?? 0} onChange={(_, {value}) =>
           setPendingAmount(
             Math.min(safeParseFloat(value), accountBalance ?? 0)
           )
         }/>
         <input type="datetime-local"
-          value={dateFormatted}
+          value={dateFormatted ?? ""}
           onChange={value => setPendingDate(DateTime.fromISO(value.target.value))}
         />
+        <br />
         <Button onClick={onApplyBalance} disabled={overrideBalance === undefined}>
           Apply
         </Button>

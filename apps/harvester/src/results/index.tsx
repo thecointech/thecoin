@@ -31,7 +31,9 @@ export const Results = () => {
     log.info("Commencing manual run");
     const r = await window.scraper.runHarvester();
     if (r.error || r.value === "error") {
-      alert("Error - please check logs:\n " + r.error);
+      let message = "Error - please check logs";
+      if (r.error) message += `: ${r.error}`;
+      alert(message);
       return;
     }
     const state = await getCurrentState();
