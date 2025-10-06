@@ -112,7 +112,13 @@ export async function loadWalletFromSite(callback: BackgroundTaskCallback, timeo
   });
 
 
-  const { port } = service.server.address() as AddressInfo;
+  // Validate that we have a TCP AddressInfo before destructuring
+  const address = service.server.address();
+  if (!address || typeof address === 'string') {
+    await resetService({ error: 'Failed to bind server' });
+    throw new Error('Failed to bind server to TCP address');
+  }
+  const { port } = address;
 
   // Build consent URL from env
   const base = process.env.URL_SITE_APP || '';
