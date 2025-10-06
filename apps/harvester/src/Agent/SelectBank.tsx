@@ -1,6 +1,5 @@
 import { BankCard, CustomBankCard } from "./BankCard/BankCard"
 import { BankData, banks } from "./BankCard/data"
-import { useLocation } from "react-router-dom"
 import { BankConnectReducer } from "./state/reducer"
 import { BankType } from "./state/types"
 
@@ -28,11 +27,5 @@ export const SelectBank = ({ type }: Props) => {
         <CustomBankCard isSelected={data[type]?.name === "Custom"} onClick={handleSetBank} />
       </div>
     </>
-  )
-}
-export const DummyStep = () => {
-  const location = useLocation();
-  return (
-    <div>dummy {location.pathname}</div>
   )
 }

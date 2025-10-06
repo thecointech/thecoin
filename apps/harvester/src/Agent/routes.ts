@@ -6,6 +6,7 @@ import { BankConnectReducer } from "./state/reducer"
 import { Routes } from "../SimplePath/types"
 import { InitialState } from "./state/initialState"
 import { LoginChequing, LoginCredit, LoginBoth } from "./Login"
+import { VerifyAccounts } from "./VerifyAccounts/VerifyAccounts"
 
 export const routes: Routes<InitialState>[] = [
   {
@@ -22,6 +23,13 @@ export const routes: Routes<InitialState>[] = [
   },
 ]
 
+export const verifyAccountsRoute: Routes<InitialState> = {
+  component: VerifyAccounts,
+  title: "Verify Accounts",
+  description: "Verify your accounts",
+  isComplete: (data) => !!data.chequing?.completed && !!data.credit?.completed,
+}
+
 export const path = {
   groupKey: "agent",
   routes,
@@ -34,6 +42,7 @@ export const useBankConnectPaths = () => {
     ...path,
   }
   r.routes = r.routes.concat(getLoginPages(data));
+  r.routes.push(verifyAccountsRoute);
   return r;
 }
 
