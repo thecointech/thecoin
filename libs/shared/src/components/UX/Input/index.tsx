@@ -15,6 +15,8 @@ export const UxInput = (props: BaseProps) => {
     resetToDefault,
     forceValidate,
 
+    transformDisplayValue,
+
     placeholder,
     tooltip,
     type
@@ -70,6 +72,9 @@ export const UxInput = (props: BaseProps) => {
     borderColor: LessVars.errorBorderColor,
   }
 
+  const transformV = transformDisplayValue?.toValue ?? (v => v);
+  const transformD = transformDisplayValue?.toDisplay ?? (v => v);
+
   return (
     <Form.Field className={`${formClassName} ${props.className}`} >
       <MaybeLabel label={props.intlLabel} />
@@ -82,9 +87,9 @@ export const UxInput = (props: BaseProps) => {
       />
       <span ref={contextRef}>
         <Input
-          onChange={(_, { value }) => localChange(value)}
+          onChange={(_, { value }) => localChange(transformV(value))}
           onBlur={onBlur}
-          value={value}
+          value={transformD(value)}
           placeholder={placeholder ? intl.formatMessage(placeholder) : ''}
           type={type}
           data-tooltip={tt}

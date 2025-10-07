@@ -1,7 +1,7 @@
 import { BankEvents, BankIdent } from "@thecointech/store-harvester";
 import { getProcessConfig, setProcessConfig } from "./config";
 import { ActionType, BankType } from "./scraper";
-
+import { ProcessAccount } from "@thecointech/scraper-agent/types";
 
 export async function setEvents(type: BankType, config: BankEvents) {
   await setProcessConfig({
@@ -28,19 +28,21 @@ export async function getEvents(type: ActionType) {
   return bankConfig.events;
 }
 
-export type BankConnectDetails = Partial<Record<BankType, BankIdent>>;
+export type BankConnectDetails = BankIdent & { accounts: ProcessAccount[] };
+export type BankConnectMap = Partial<Record<BankType, BankConnectDetails>>;
 
-export async function getBankConnectDetails(): Promise<BankConnectDetails|undefined> {
+export async function getBankConnectDetails(): Promise<BankConnectMap|undefined> {
   const config = await getProcessConfig();
   if (config?.scraping) {
     // Handle both single bank (both) and separate banks (credit/chequing)
     return Object.entries(config.scraping).reduce((acc, [key, value]) => {
       acc[key as BankType] = {
         name: value.name,
-        url: value.url
+        url: value.url,
+        accounts: value.accounts
       };
       return acc;
-    }, {} as BankConnectDetails);
+    }, {} as BankConnectMap);
   }
   return undefined;
 }

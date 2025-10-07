@@ -1,5 +1,5 @@
 import { DropdownItemProps } from 'semantic-ui-react';
-import { number } from 'card-validator';
+import { number as cardValidatorNumber } from 'card-validator';
 import { defineMessages } from 'react-intl';
 import type { MessageWithValues } from '@thecointech/shared/types';
 
@@ -34,7 +34,7 @@ function visa(val: string) {
   if (n!==n || val.length !== 16)
     return translations.invalidVisaChars
 
-	const r = number(val);
+	const r = cardValidatorNumber(val);
   return (r.isValid && !!r.card && r.card.type === 'visa')
     ? null
     : translations.invalidVisaAccount
@@ -57,7 +57,8 @@ function numeric(max: number) {
   }
 }
 
-export function findPayee(value: string): Validatable|undefined {
+export type LegalPayeeName = typeof payees[number]['value'];
+export function findPayee(value: string) {
   const item = payees.find(item => item.value === value)
   return item;
 }
@@ -70,7 +71,7 @@ export function validate(name?: string, value?: string) : MessageWithValues|null
   return payee?.validate(value) ?? null;
 }
 
-export const payees: ValidatedItemProps[] = [
+export const payees = [
 	{ validate: visa, text: "BEST BUY REWARD ZONE VISA", value: "BEST BUY REWARD ZONE VISA" },
 	{ validate: visa, text: "CANADA POST VISA CARD", value: "CANADA POST VISA CARD" },
 	{ validate: visa, text: "CANADIAN WESTERN BK VISA COLLABRIA", value: "CANADIAN WESTERN BK VISA COLLABRIA" },
@@ -112,5 +113,5 @@ export const payees: ValidatedItemProps[] = [
   { validate: numeric(14), text: "MANITOBA HYDRO", value: "MANITOBA HYDRO - 14 DIGIT ACCT" },
   { validate: numeric(9), text: "FIDO", value: "FIDO" },
   { validate: numeric(11), text: "ENERGIR", value: "ENERGIR" }
-];
+] as const satisfies readonly ValidatedItemProps[];
 

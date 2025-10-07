@@ -97,7 +97,7 @@ export class Agent implements AgentClass {
       r.push({
         account_type: "Credit" as const,
         account_name: `${this.name} Credit`,
-        account_number: "1234 56** **** **89",
+        account_number: "4111 11** **** **11",
         balance: "100",
         position_x: 0,
         position_y: 0,

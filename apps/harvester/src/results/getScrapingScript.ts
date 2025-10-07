@@ -33,12 +33,14 @@ const verifyBankEvents = (source: any, key: string) : BankEvents => {
     source.hasOwnProperty('url') &&
     source.hasOwnProperty('events') &&
     source.hasOwnProperty('username') &&
-    source.hasOwnProperty('password')
+    source.hasOwnProperty('password') &&
+    source.hasOwnProperty('accounts')
   )) {
     throw new Error(`Invalid script format: ${key} is missing events`);
   }
   return {
     events: source.events,
+    accounts: source.accounts,
     name: source.name,
     url: source.url,
     username: source.username,

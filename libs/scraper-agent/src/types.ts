@@ -72,3 +72,9 @@ export type ETransferResult = {
 export type ETransferInput = {
   amount: string,
 }
+
+export type ProcessAccount = Omit<AccountResponse, "position_x" | "position_y">;
+export type ProcessResults = {
+  events: EventSection,
+  accounts: ProcessAccount[];
+}

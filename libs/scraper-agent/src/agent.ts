@@ -1,4 +1,4 @@
-import { IAskUser, SectionName } from './types';
+import { IAskUser, ProcessAccount, ProcessResults, SectionName } from './types';
 import { log } from '@thecointech/logging';
 import { PageHandler } from './pageHandler';
 import { closeBrowser, IScraperCallbacks } from '@thecointech/scraper';
@@ -43,7 +43,7 @@ export class Agent implements AsyncDisposable {
     await closeBrowser();
   }
 
-  async process(sectionsToSkip: SectionName[] = []) {
+  async process(sectionsToSkip: SectionName[] = []) : Promise<ProcessResults> {
 
     log.info(`Processing ${this.name}`);
 
@@ -106,7 +106,12 @@ export class Agent implements AsyncDisposable {
           await this.processSection(SendETransfer, account.account.account_number);
         }
       }
-      return accounts.map(account => account.account);
+      return accounts.map<ProcessAccount>(account => ({
+        account_name: account.account.account_name,
+        account_number: account.account.account_number,
+        account_type: account.account.account_type,
+        balance: account.account.balance,
+      }));
     }
     return [];
   }

@@ -1,4 +1,4 @@
-import { type SectionName, type EventSection, Agent } from '@thecointech/scraper-agent';
+import { type SectionName, type EventSection, Agent, ProcessResults } from '@thecointech/scraper-agent';
 import { ScraperCallbacks } from "../scraper/callbacks";
 import { log } from "@thecointech/logging";
 import { type BackgroundTaskCallback } from "@/BackgroundTask/types";
@@ -40,14 +40,14 @@ export async function autoConfigure({ type, config, visible }: AutoConfigParams,
     using _ = new VisibleOverride(visible)
     using _serializer = await maybeSerializeRun(logger.logsFolder, name);
     await using agent = await Agent.create(name, inputBridge, url, logger);
-    const { events, accounts } = await agent.process(toSkip);
+    const results = await agent.process(toSkip);
 
     // Ensure we have required info
-    throwIfAnyMissing(events, type);
+    throwIfAnyMissing(results.events, type);
 
-    await storeEvents(type, config, events);
+    await storeEvents(type, config, results);
 
-    logger.complete({ result: JSON.stringify(accounts) });
+    logger.complete({ result: JSON.stringify(results.accounts) });
 
     log.info(`Agent: Finished configuring for action: ${name}`);
   }
@@ -62,10 +62,10 @@ export async function autoConfigure({ type, config, visible }: AutoConfigParams,
   return true;
 }
 
-async function storeEvents(type: BankType, config: BankConfig, baseNode: EventSection) {
+async function storeEvents(type: BankType, config: BankConfig, results: ProcessResults) {
   await setEvents(type, {
     ...config,
-    events: baseNode
+    ...results,
   });
 }
 

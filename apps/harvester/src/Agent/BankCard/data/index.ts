@@ -48,3 +48,5 @@ export const banks: BankData[] = [
     url: 'https://www.tangerine.ca/'
   }
 ]
+
+export type SupportedBanks = typeof banks[number]['name'];

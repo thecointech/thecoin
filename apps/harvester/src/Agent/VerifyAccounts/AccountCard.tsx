@@ -1,8 +1,8 @@
-import { AccountResult } from "../state/types";
+import type { ProcessAccount } from "@thecointech/scraper-agent/types";
 import styles from "./AccountCard.module.less";
 
 interface AccountCardProps {
-  account: AccountResult;
+  account: ProcessAccount;
   isSelected?: boolean;
   isSelectable?: boolean;
   onClick?: () => void;
