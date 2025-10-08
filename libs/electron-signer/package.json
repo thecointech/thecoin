@@ -42,5 +42,12 @@
         "./build/index.d.ts"
       ]
     }
+  },
+  "dependencies": {
+    "@thecointech/logging": "workspace:^",
+    "@thecointech/ethers-provider": "workspace:^"
+  },
+  "devDependencies": {
+    "@thecointech/electron-utils": "^0.3.13-test.0"
   }
 }

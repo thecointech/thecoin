@@ -12312,15 +12312,6 @@ __metadata:
 "@thecointech/electron-signer@workspace:libs/electron-signer":
   version: 0.0.0-use.local
   resolution: "@thecointech/electron-signer@workspace:libs/electron-signer"
-  dependencies:
-    "@thecointech/secrets": "npm:^0.3.13-test.0"
-    "@thecointech/setenv": "npm:^0.3.13-test.0"
-    "@vercel/webpack-asset-relocator-loader": "npm:1.7.3"
-    css-loader: "npm:^6.0.0"
-    fork-ts-checker-webpack-plugin: "npm:^7.2.13"
-    node-loader: "npm:^2.1.0"
-    style-loader: "npm:^3.0.0"
-    ts-loader: "npm:^9.2.2"
   languageName: unknown
   linkType: soft
 
