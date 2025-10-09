@@ -26,7 +26,7 @@ const plugin = {
     isComplete: (data?: AccountState) => {
       return (
         !!data?.plugins?.some(p => p.address === converterAddress) ||
-        (!!data?.address && data?.address == getData(Key.pluginCnvrtRequested))
+        (!!data?.address && NormalizeAddress(data.address) === NormalizeAddress(getData(Key.pluginCnvrtRequested)))
       )
     }
 }
