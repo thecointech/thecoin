@@ -24,19 +24,20 @@ export function validate(payload: any, currentState: string): ConnectionValues {
     throw new ValidationError('Unexpected site origin');
   }
 
-  // Validate account payload: exactly one active account via either mnemonic or walletFile
+  // Validate account payload: exactly one active account
   if (!(phrase && path && locale)) {
-    // Try to create wallet to validate
-    const wallet = HDNodeWallet.fromPhrase(phrase, undefined, path);
-    if (NormalizeAddress(wallet.address) !== NormalizeAddress(address)) {
-      throw new ValidationError('Address does not match mnemonic');
-    }
+    throw new ValidationError('Missing mnemonic');
   }
 
-  if (!walletFile) {
-    if (!isKeystoreJson(walletFile)) {
-      throw new ValidationError('Invalid wallet file');
-    }
+  // Try to create wallet to validate it matches address
+  const wallet = HDNodeWallet.fromPhrase(phrase, undefined, path);
+  if (NormalizeAddress(wallet.address) !== NormalizeAddress(address)) {
+    throw new ValidationError('Address does not match mnemonic');
+  }
+
+  // Require matching walletfile too
+  if (!isKeystoreJson(walletFile)) {
+    throw new ValidationError('Invalid wallet file');
   }
 
   return {

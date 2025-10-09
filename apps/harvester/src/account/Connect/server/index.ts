@@ -40,7 +40,11 @@ export async function loadWalletFromSite(callback: BackgroundTaskCallback, timeo
   const service = startService(callback);
 
   if (process.env.CONFIG_NAME === 'development') {
-    return await mockServer(service);
+    try {
+      return await mockServer(service);
+    } finally {
+      await resetService();
+    }
   }
 
   service.server = createServer(async (req, res) => {
@@ -82,9 +86,12 @@ export async function loadWalletFromSite(callback: BackgroundTaskCallback, timeo
       // TODO: Persist encrypted walletFile, but in a way that is friendly to sign-in
 
       // Serve a static HTML page confirming success
+      // Serve a static HTML page confirming success
       const successPath = getAsset('success.html');
-      okFile(res, successPath!);
-
+      if (!successPath) {
+        throw new Error('Success page asset not found');
+      }
+      okFile(res, successPath);
       // Resolve success and teardown
       service.resolve?.({
         address: validated.address,
@@ -109,7 +116,13 @@ export async function loadWalletFromSite(callback: BackgroundTaskCallback, timeo
   });
 
 
-  const { port } = service.server.address() as AddressInfo;
+  // Validate that we have a TCP AddressInfo before destructuring
+  const address = service.server.address();
+  if (!address || typeof address === 'string') {
+    await resetService({ error: 'Failed to bind server' });
+    throw new Error('Failed to bind server to TCP address');
+  }
+  const { port } = address;
 
   // Build consent URL from env
   const base = process.env.URL_SITE_APP || '';

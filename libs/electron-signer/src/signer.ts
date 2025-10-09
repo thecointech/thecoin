@@ -3,7 +3,7 @@ import type { Signer,BlockTag, FeeData, Provider, TransactionRequest, Transactio
 import { getProvider } from '@thecointech/ethers-provider';
 
 export class ElectronSigner implements Signer {
-  static _ipc: Invoker;
+  static _ipc: Invoker|null = null;
 
   provider: Provider | null = null;
   _signerId: string;
@@ -11,11 +11,16 @@ export class ElectronSigner implements Signer {
   constructor(signerId: string) {
     this._signerId = signerId;
     // Default provider
-    getProvider().then(p => this.provider = p);
+    getProvider()
+      .then(p => this.provider = p)
+      .catch(err => console.error('Failed to initialize provider:', err));
   }
 
-  invoke(fn: string, ...args: any[]) : Promise<any> {
-    return ElectronSigner._ipc.invoke(this._signerId, fn, args);
+  invoke(fn: string, ...args: any[]): Promise<any> {
+    if (!ElectronSigner._ipc) {
+      throw new Error('ElectronSigner: invoke: ipcSigner not found.  Ensure preload is called');
+    }
+    return ElectronSigner._ipc.invoke(this._signerId, fn, ...args);
   }
 
   populateAuthorization(auth: AuthorizationRequest): Promise<AuthorizationRequest> {
@@ -45,7 +50,7 @@ export class ElectronSigner implements Signer {
   connect(): Signer {
     throw new Error('Cannot re-connect Electron signer.');
   }
-  getBalance(): Promise<BigInt> {
+  getBalance(): Promise<bigint> {
     return this.invoke('getBalance');
   }
   getTransactionCount(blockTag?: BlockTag): Promise<number> {
@@ -63,7 +68,7 @@ export class ElectronSigner implements Signer {
   getChainId(): Promise<number> {
     return this.invoke('getChainId');
   }
-  getGasPrice(): Promise<BigInt> {
+  getGasPrice(): Promise<bigint> {
     return this.invoke('getGasPrice');
   }
   getFeeData(): Promise<FeeData> {

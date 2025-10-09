@@ -3,6 +3,7 @@ import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { useHistory } from 'react-router-dom';
 import { useEffect } from "react";
 import { useRef } from "react";
+import { log } from "@thecointech/logging";
 
 export const Upload = () => {
 
@@ -13,16 +14,22 @@ export const Upload = () => {
   const navigate = useHistory();
 
   useEffect(() => {
+    // Remove the active account.  This is so the
+    // "plugins" tab does not mark as complete (
+    // from the current account)
     const existingAddress = active?.address;
     api.setActiveAccount(null);
     hasUploaded.current = false;
     return () => {
       if (existingAddress && !hasUploaded.current) {
+        // If we haven't uploaded a new account,
+        // restore the active account
         try {
           api.setActiveAccount(existingAddress);
         }
-        // this will happen if the
-        catch {}
+        catch (e) {
+          log.warn(e, "Failed to restore active account");
+        }
       }
     }
   }, []);

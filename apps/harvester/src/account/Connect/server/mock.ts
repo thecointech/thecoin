@@ -12,7 +12,7 @@ export async function mockServer(service: ConnectService) {
   await sleep(2000);
   service.cb({percent: 90});
 
-  if (Math.random() % 3 == 0) {
+  if (Math.random() < 0.33) {
     service.cb({ error: "Mocking some kind of error" });
     return;
   }

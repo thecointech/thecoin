@@ -23,6 +23,6 @@ export const AccountInitializer = ({ address }: AccountInitializerProps) => {
         api.connect();
       }
     }
-  }, [address, data.contract])
+  }, [data.signer, data.contract])
   return null;
 }
