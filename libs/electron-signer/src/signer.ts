@@ -16,11 +16,11 @@ export class ElectronSigner implements Signer {
       .catch(err => console.error('Failed to initialize provider:', err));
   }
 
-  invoke(fn: string, ...args: any[]) : Promise<any> {
+  invoke(fn: string, ...args: any[]): Promise<any> {
     if (!ElectronSigner._ipc) {
       throw new Error('ElectronSigner: invoke: ipcSigner not found.  Ensure preload is called');
     }
-    return ElectronSigner._ipc.invoke(this._signerId, fn, args);
+    return ElectronSigner._ipc.invoke(this._signerId, fn, ...args);
   }
 
   populateAuthorization(auth: AuthorizationRequest): Promise<AuthorizationRequest> {

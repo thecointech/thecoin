@@ -21,23 +21,27 @@ export const StateDisplay = ({ state }: StateDisplayProps) => {
 
   const [cadBalance, setCadBalance] = useState<currency|null>(null);
   useEffect(() => {
-    console.log("Starting load: ", active?.balance)
+const [cadBalance, setCadBalance] = useState<currency|null>(null);
+useEffect(() => {
     if (!active?.balance || active.balance < 0) {
-      console.log("No balance")
       setLoading(false);
       return;
     }
-    console.log("Loading rate")
     setLoading(true);
-    fetchRate().then(async rate => {
-      console.log("Rate loaded")
-      if (rate && active?.balance) {
-        const balance = active?.balance ?? 0;
-        const cadBalance = toHuman(rate.buy * balance * rate.fxRate, true);
-        setCadBalance(currency(cadBalance));
-      }
-      setLoading(false);
-    });
+    fetchRate()
+      .then(async rate => {
+        if (rate && active?.balance) {
+          const balance = active?.balance ?? 0;
+          const cadBalance = toHuman(rate.buy * balance * rate.fxRate, true);
+          setCadBalance(currency(cadBalance));
+        }
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Failed to fetch rate:', error);
+        setCadBalance(null);
+        setLoading(false);
+      });
   }, [active?.balance])
   return (
     <Card fluid id={styles.container}>

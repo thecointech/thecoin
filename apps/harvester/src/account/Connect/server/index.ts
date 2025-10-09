@@ -40,7 +40,11 @@ export async function loadWalletFromSite(callback: BackgroundTaskCallback, timeo
   const service = startService(callback);
 
   if (process.env.CONFIG_NAME === 'development') {
-    return await mockServer(service);
+    try {
+      return await mockServer(service);
+    } finally {
+      await resetService();
+    }
   }
 
   service.server = createServer(async (req, res) => {
