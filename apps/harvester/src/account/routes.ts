@@ -46,10 +46,6 @@ const manualRoutes = [
   },
 ]
 
-// export const path: Path<AccountState> = {
-//   groupKey,
-//   routes,
-// }
 
 
 export const useAccountPath = () : Path<AccountState|undefined> => {
