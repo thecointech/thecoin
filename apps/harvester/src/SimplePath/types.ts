@@ -19,7 +19,7 @@ export type DefaultPathProps<T = never> = {
 export function usePathIndex() {
   const location = useLocation();
   const curr = location.pathname;
-  const m = curr.match(/\/(\d+)$/)
+  const m = curr.match(/\/(\d+)\/?$/)
   // Disable "next" button if we're on the last step
   return parseInt(m?.[1] || "0");
 }

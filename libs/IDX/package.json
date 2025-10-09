@@ -28,6 +28,7 @@
     "graphql": "yarn run-env ./scripts/run-graphql.ts",
     "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
+    "dev:live": "run -T cross-env CONFIG_NAME=devlive yarn bootstrap",
     "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
     "bootstrap": "yarn _deploy && yarn build"

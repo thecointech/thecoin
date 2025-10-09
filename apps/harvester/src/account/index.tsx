@@ -1,28 +1,16 @@
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
-import { UploadData } from '@thecointech/shared/containers/UploadWallet';
-import { useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
-import { getData, Key } from '../Training/data';
-import { path } from './routes'
+import { useAccountPath } from './routes'
 import { PathNextButton, PathRouter, PathSteps } from '@/SimplePath';
 import { ContentSection } from '@/ContentSection';
 
 
 export const Account = () => {
 
-  const navigation = useHistory();
-  const active = AccountMap.useActive();
-  const api = AccountMap.useApi();
-  const stored = getData(Key.wallet);
-
-  useEffect(() => {
-    if (!active && stored) {
-      const storedWallet = JSON.parse(stored) as UploadData;
-      api.addAccount(storedWallet.name, storedWallet.wallet.address, storedWallet.wallet);
-      api.setActiveAccount(storedWallet.wallet.address);
-      navigation.push('/account/1');
-    }
-  }, []);
+  const path = useAccountPath();
+  const accounts = AccountMap.useData();
+  // Don't call useActive directly, as it will always
+  // return an account if it can (even if active is set to null)
+  const active = accounts.map[accounts.active ?? ""];
 
   return (
     <div>

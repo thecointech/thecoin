@@ -61,7 +61,7 @@ export const notify = <T extends string[]>(props: {
   })
 }
 
-const getAsset = (assetName?: string) => {
+export const getAsset = (assetName?: string) => {
   if (!assetName) return;
   return (process.env.NODE_ENV === 'development')
     ? fileURLToPath(new URL(`../../assets/${assetName}`, import.meta.url))

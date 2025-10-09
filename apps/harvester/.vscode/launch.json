@@ -23,7 +23,7 @@
       "type": "node",
       "request": "launch",
       "runtimeArgs": [
-        "dev:live"
+        "_dev:live"
       ],
       "runtimeExecutable": "yarn",
       "skipFiles": [

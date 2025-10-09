@@ -1,12 +1,9 @@
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
-import { Button, Checkbox, Container, Message, Segment } from 'semantic-ui-react';
+import { Button, Checkbox, Container, Header, Message, Segment } from 'semantic-ui-react';
 import { ALL_PERMISSIONS, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 import { getContract as getUberContract } from '@thecointech/contract-plugin-converter';
 import { getContract as getShockAbsorberContract } from '@thecointech/contract-plugin-shockabsorber';
 import { GetPluginsApi } from '@thecointech/apis/broker';
-import { useFxRates } from '@thecointech/shared/containers/FxRate';
-import { getFxRate } from '@thecointech/fx-rates';
-import { toHuman } from "@thecointech/utilities";
 import { sleep } from "@thecointech/async";
 import { getData, Key, setData } from '../Training/data';
 import { Link } from 'react-router-dom';
@@ -39,6 +36,7 @@ const statusText = (hasPlugin: boolean, requestSent: boolean) => {
 
 export const Plugins = () => {
   const active = AccountMap.useActive();
+  const api = AccountMap.useApi();
   const [requestSent, setRequestSent] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
@@ -54,13 +52,11 @@ export const Plugins = () => {
     })()
   }, [active?.plugins]);
 
-  const { rates } = useFxRates();
-  const { buy, fxRate } = getFxRate(rates, 0);
-  const balance = active?.balance ?? 0;
-  const cadBalance = toHuman(buy * balance * fxRate, true);
+  const cnvrtRequestedAddress = getData(Key.pluginCnvrtRequested);
+  const absrbRequestedAddress = getData(Key.pluginAbsrbRequested);
 
-  const cnvrtRequested = getData(Key.pluginCnvrtRequested);
-  const absrbRequested = getData(Key.pluginAbsrbRequested);
+  const cnvrtRequested = cnvrtRequestedAddress === active?.address;
+  const absrbRequested = absrbRequestedAddress === active?.address;
 
 
   const onInstallPlugins = async () => {
@@ -70,24 +66,27 @@ export const Plugins = () => {
     setIsSending(true);
     if (!cnvrtRequested && !hasConverter) {
       await sendAssignRequest(active.signer, converter);
-      setData(Key.pluginCnvrtRequested, "true");
+      setData(Key.pluginCnvrtRequested, active.address);
     }
     // ensure the timestamp increases...
     await sleep(250);
     if (!absrbRequested && !hasShockAbsorber) {
       await sendAssignRequest(active.signer, shockAbsorber);
-      setData(Key.pluginAbsrbRequested, "true");
+      setData(Key.pluginAbsrbRequested, active.address);
     }
     setRequestSent(true);
     setIsSending(false);
+    // Trigger refresh of path.  setData does not trigger a re-render,
+    // so this just sets 'something has changed' on the base SimplePath
+    api.setActiveAccount(null);
+    api.setActiveAccount(active.address);
   }
 
   const canInstallPlugins = requestSent || isSending || (hasConverter && hasShockAbsorber);
 
   return (
     <Container>
-      <h1>Plugins</h1>
-      <h4>Balance: ${cadBalance}</h4>
+      <Header size="small">Plugins</Header>
       <Segment>
         In order for the harvester to work,
         you need to have at least the Converter

@@ -38,13 +38,17 @@ const LoginAccount = ({account}: {account: AccountState}) => {
       path: hdWallet.path!,
       locale: hdWallet.mnemonic!.wordlist!.locale,
     }
-    window.scraper.setWalletMnemomic(mnemonic)
+    window.scraper.setCoinAccount({
+      mnemonic,
+      name: account.name,
+      address: account.address,
+    })
       .then(() => {
         setComplete(true)
       });
   }, [account?.contract])
 
   return complete
-    ? <Redirect to={`/${groupKey}/2`} />
+    ? <Redirect to={`/${groupKey}/1`} />
     : <LoginUI account={account} />
 }

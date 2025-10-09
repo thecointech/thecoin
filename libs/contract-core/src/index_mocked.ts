@@ -3,7 +3,7 @@ import { AddressLike, BigNumberish, Signer, resolveAddress } from 'ethers'
 import { sleep } from '@thecointech/async'
 import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
 import { PluginAndPermissionsStructOutput } from './codegen/contracts/TheCoinL1';
-import { StateMutability, TypedContractMethod } from './codegen/common';
+import { StateMutability, TypedContractEvent, TypedContractMethod, TypedDeferredTopicFilter, TypedEventLog } from './codegen/common';
 import { genReceipt } from '@thecointech/contract-tools/mockContractUtils';
 export * from './constants';
 
@@ -24,7 +24,7 @@ const setLastTx = async (from: AddressLike, to: AddressLike, value: BigNumberish
   return genReceipt()
 }
 
-type MockedCoin = Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugins'|'exactTransfer' | 'balanceOf' | 'certifiedTransfer'|'getAddress'>
+type MockedCoin = Pick<Src.TheCoin, 'uberTransfer'|'getUsersPlugins'|'exactTransfer'|'balanceOf'|'certifiedTransfer'|'getAddress'|'connect'|'queryFilter'>
 
 const makeFn = <
 A extends Array<any> = Array<any>,
@@ -38,6 +38,10 @@ export class TheCoin implements MockedCoin {
     this.signer = signer;
   }
   getAddress = () => Promise.resolve("0x0000000000000000000000000000000000000123");
+  connect = () => this as any as Src.TheCoin;
+  queryFilter() {
+    return Promise.resolve([]);
+  }
   mintCoins = () => genReceipt();
   burnCoins = () => genReceipt();
   balanceOf = makeFn((_: AddressLike) => 995000000n, "view");

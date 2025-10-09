@@ -6,7 +6,8 @@ export * from "./types-steps";
 
 export type ConfigShape = {
   // Store the account Mnemomic
-  wallet?: Mnemonic,
+  // wallet?: Mnemonic,
+  coinAccount?: CoinAccount,
   // Store a constant key for the account state DB
   // This key should be derived from wallet mnemonic
   stateKey?: string,
@@ -28,6 +29,15 @@ export interface Mnemonic {
   readonly path: string;
   readonly locale: string;
 };
+
+export type CoinAccountDetails = {
+  readonly address: string;
+  readonly name: string;
+}
+export type CoinAccount = {
+  mnemonic?: Mnemonic;
+  encrypted?: string;
+} & CoinAccountDetails
 
 export type CreditDetails = {
   payee: string,

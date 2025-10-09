@@ -44,8 +44,8 @@ const api : ScraperBridgeApi = {
   finishAction: () => ipcRenderer.invoke(actions.finishAction),
 
 
-  setWalletMnemomic: (mnemonic) => ipcRenderer.invoke(actions.setWalletMnemomic, mnemonic),
-  getWalletAddress: () => ipcRenderer.invoke(actions.getWalletAddress),
+  setCoinAccount: (coinAccount) => ipcRenderer.invoke(actions.setCoinAccount, coinAccount),
+  getCoinAccountDetails: () => ipcRenderer.invoke(actions.getCoinAccountDetails),
 
   hasCreditDetails: () => ipcRenderer.invoke(actions.hasCreditDetails),
   setCreditDetails: (details) => ipcRenderer.invoke(actions.setCreditDetails, details),
@@ -72,6 +72,10 @@ const api : ScraperBridgeApi = {
 
   hasUserEnabledLingering: () => ipcRenderer.invoke(actions.hasUserEnabledLingering),
   enableLingeringForCurrentUser: () => ipcRenderer.invoke(actions.enableLingeringForCurrentUser),
+
+  // Wallet connect from site-app
+  loadWalletFromSite: (timeoutMs?: number) => ipcRenderer.invoke(actions.loadWalletFromSite, timeoutMs),
+  cancelloadWalletFromSite: () => ipcRenderer.invoke(actions.cancelloadWalletFromSite),
 }
 
 export const connectRenderer = () => contextBridge.exposeInMainWorld('scraper', api)
