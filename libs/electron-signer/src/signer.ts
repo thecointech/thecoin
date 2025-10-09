@@ -14,8 +14,8 @@ export class ElectronSigner implements Signer {
     getProvider().then(p => this.provider = p);
   }
 
-  invoke(fn: string, ...args: any[]) : Promise<any> {
-    return ElectronSigner._ipc.invoke(this._signerId, fn, args);
+  invoke(fn: string, ...args: any[]): Promise<any> {
+    return ElectronSigner._ipc.invoke(this._signerId, fn, ...args);
   }
 
   populateAuthorization(auth: AuthorizationRequest): Promise<AuthorizationRequest> {
