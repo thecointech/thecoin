@@ -20,10 +20,5 @@ export function initMain() {
       return wallet;
     }
     return undefined;
-  }, [
-    // TODO: can we safely whitelist everything here?
-    "getAddress",
-    "estimateGas",
-    "estimateGas"
-  ]);
+  }, true);
 }
