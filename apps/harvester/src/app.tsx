@@ -25,13 +25,17 @@ export const App = () => {
       backgroundTaskApi.setTaskProgress(progress);
     })
 
-    window.scraper.getCoinAccountDetails().then(res => {
-      if (res.value?.address) {
-        const signer = new ElectronSigner(res.value.address);
-        accountApi.addAccount(res.value.name, res.value.address, signer);
-        accountApi.setActiveAccount(res.value.address);
-      }
-    });
+    window.scraper.getCoinAccountDetails()
+      .then(res => {
+        if (res.value?.address) {
+          const signer = new ElectronSigner(res.value.address);
+          accountApi.addAccount(res.value.name, res.value.address, signer);
+          accountApi.setActiveAccount(res.value.address);
+        }
+      })
+      .catch(error => {
+        console.error('Failed to get coin account details:', error);
+      });
   }, [])
 
   return (
