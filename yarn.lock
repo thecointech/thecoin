@@ -12312,6 +12312,10 @@ __metadata:
 "@thecointech/electron-signer@workspace:libs/electron-signer":
   version: 0.0.0-use.local
   resolution: "@thecointech/electron-signer@workspace:libs/electron-signer"
+  dependencies:
+    "@thecointech/electron-utils": "npm:^0.3.13-test.0"
+    "@thecointech/ethers-provider": "workspace:^"
+    "@thecointech/logging": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -12350,7 +12354,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/ethers-provider@npm:^0.3.13-test.5, @thecointech/ethers-provider@workspace:libs/ethers-provider":
+"@thecointech/ethers-provider@npm:^0.3.13-test.5, @thecointech/ethers-provider@workspace:^, @thecointech/ethers-provider@workspace:libs/ethers-provider":
   version: 0.0.0-use.local
   resolution: "@thecointech/ethers-provider@workspace:libs/ethers-provider"
   dependencies:
@@ -12410,7 +12414,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/logging@npm:^0.3.13-test.0, @thecointech/logging@workspace:libs/logging":
+"@thecointech/logging@npm:^0.3.13-test.0, @thecointech/logging@workspace:^, @thecointech/logging@workspace:libs/logging":
   version: 0.0.0-use.local
   resolution: "@thecointech/logging@workspace:libs/logging"
   dependencies:

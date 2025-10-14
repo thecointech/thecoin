@@ -44,8 +44,8 @@
     }
   },
   "dependencies": {
-    "@thecointech/logging": "workspace:^",
-    "@thecointech/ethers-provider": "workspace:^"
+    "@thecointech/ethers-provider": "workspace:^",
+    "@thecointech/logging": "workspace:^"
   },
   "devDependencies": {
     "@thecointech/electron-utils": "^0.3.13-test.0"
