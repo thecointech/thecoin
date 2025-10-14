@@ -2,7 +2,7 @@ import { RateKey, CombinedRates, CoinRate, FxRates, RateTypes } from "./types";
 import { getLatest } from "./latest";
 import { CurrencyCode, validFor } from "@thecointech/fx-rates";
 import { getRate } from "./db";
-import { update } from "./UpdateDb";
+import { updateRates } from "./UpdateDb";
 import { log } from "@thecointech/logging";
 export { updateRates } from './UpdateDb'
 
@@ -32,13 +32,15 @@ async function getRates<K extends RateKey>(key: K, timestamp: number) : Promise<
 
   // Finally, if something has gone really wrong with our updates, try forcing it.
   // This shouldn't happen, it is most likely an error condition.
-  log.warn(
+  log.error(
     { FxKey: key, Timestamp: timestamp },
     "Could not find {FxKey} for {Timestamp}, forcing update",
   );
 
-  const updated = await update();
+  const updated = await updateRates();
   if (updated) {
+    // Try again.  This won't loop because once
+    // it succeeds the second call will be false.
     return await getRates(key, timestamp);
   }
   // Nothing doing, return null

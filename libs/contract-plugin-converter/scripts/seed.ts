@@ -24,7 +24,6 @@ async function main() {
 
   const converter = await getContract();
   const bcCore = await ConnectContract(brokerCad);
-  const tcCore = await ConnectContract(theCoin);
   const ownConvert = connect(owner, converter);
 
   // In DevLive, we assign the converter to UberTester
