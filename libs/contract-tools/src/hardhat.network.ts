@@ -1,6 +1,6 @@
-import type { Network } from '@thecointech/ethers-provider';
+// import type { Network } from '@thecointech/ethers-provider';
 
-function getLiveNetwork(_type: Network) {
+function getLiveNetwork(_type: string) {
   // Our providers are source-of-truth for connections to the blockchain
   // TODO: Revert to using providers if/when HardHat allows ESM modules for config files.
   // NOTE: These URLs won't work, they should be Infura urls similar to https://hardhat.org/hardhat-runner/docs/config
