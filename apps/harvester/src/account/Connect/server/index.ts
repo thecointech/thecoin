@@ -1,5 +1,4 @@
 import { createServer, IncomingMessage } from 'http';
-import { AddressInfo } from 'net';
 import { URL } from 'url';
 import { shell } from 'electron';
 import { setCoinAccount } from '@/Harvester/config';

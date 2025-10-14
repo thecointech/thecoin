@@ -21,8 +21,6 @@ export const StateDisplay = ({ state }: StateDisplayProps) => {
 
   const [cadBalance, setCadBalance] = useState<currency|null>(null);
   useEffect(() => {
-const [cadBalance, setCadBalance] = useState<currency|null>(null);
-useEffect(() => {
     if (!active?.balance || active.balance < 0) {
       setLoading(false);
       return;

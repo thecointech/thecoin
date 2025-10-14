@@ -80,7 +80,6 @@ describe('Resilience Testing', () => {
         const duration = Date.now() - startTime;
         // Should fail quickly due to circuit breaker (not wait for full retry cycle)
         expect(duration).toBeLessThan(10); // Should be near-instant
-        console.log(JSON.stringify(mockError.mock.calls));
         const errorMessages = mockError.mock.calls.map((call) => call[1]);
         expect(errorMessages).toContain("GAE API circuit breaker opened - service appears down");
       }

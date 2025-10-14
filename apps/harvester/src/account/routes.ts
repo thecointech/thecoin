@@ -7,6 +7,7 @@ import { getData, Key } from '@/Training/data';
 import { Connect } from './Connect';
 import { useLocation } from 'react-router';
 import { Path } from '@/SimplePath/types';
+import { NormalizeAddress } from '@thecointech/utilities/Address';
 
 const converter = await getUberContract();
 const converterAddress = await converter.getAddress();
@@ -26,7 +27,9 @@ const plugin = {
     isComplete: (data?: AccountState) => {
       return (
         !!data?.plugins?.some(p => p.address === converterAddress) ||
-        (!!data?.address && NormalizeAddress(data.address) === NormalizeAddress(getData(Key.pluginCnvrtRequested)))
+        (!!data?.address && (
+          NormalizeAddress(data.address) === getData(Key.pluginCnvrtRequested)
+        ))
       )
     }
 }
