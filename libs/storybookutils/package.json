@@ -19,7 +19,9 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
+  "exports": {
+    ".": "./build/index.js"
+  },
   "dependencies": {
     "@thecointech/shared": "^0.3.13-test.5"
   }

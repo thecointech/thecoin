@@ -29,20 +29,13 @@
   ],
   "exports": {
     ".": {
+      "types": "./build/log_browser.d.ts",
       "test": "./mock/index.ts",
       "node": "./build/log_node.js",
       "gcloud": "./build/gcloud.js",
       "default": "./build/log_browser.js"
     },
     "./mock": "./mock/index.ts"
-  },
-  "types": "./build/log_browser.d.ts",
-  "typesVersions": {
-    "*": {
-      "mock": [
-        "./mock/index.ts"
-      ]
-    }
   },
   "dependencies": {
     "@google-cloud/logging-bunyan": "^5.1.0",

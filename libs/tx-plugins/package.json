@@ -26,9 +26,9 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
-  "exports": "./build/index.js",
-  "types": "./build/index.d.ts",
+  "exports": {
+    ".": "./build/index.js"
+  },
   "dependencies": {
     "@thecointech/contract-plugins": "^0.3.13-test.5",
     "@thecointech/tx-statemachine": "^0.3.13-test.5"

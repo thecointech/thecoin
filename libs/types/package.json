@@ -19,11 +19,8 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./src/index.d.ts",
-  "exports": {
-    ".": "./src/index.d.ts",
-    "./": "./src/"
-  },
+  "exports": "./src/index.d.ts",
+  "types": "./src/index.d.ts",
   "devDependencies": {
     "@manifoldco/swagger-to-ts": "^1.6.1",
     "js-yaml": "^3.13.0"

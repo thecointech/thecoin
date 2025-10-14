@@ -21,13 +21,6 @@
     "./semantic.less": "./src/semantic.less",
     "./variables": "./src/variables.js"
   },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "src/*"
-      ]
-    }
-  },
   "dependencies": {
     "fontsource-abril-fatface": "3.1.5",
     "fontsource-montserrat": "3.1.5"

@@ -44,14 +44,13 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
   "exports": {
     ".": {
+      "types": "./build/index.d.ts",
       "development": "./build/index_mocked.js",
       "default": "./build/index.js"
     }
   },
-  "types": "./build/index.d.ts",
   "devDependencies": {
     "@openzeppelin/contracts": "^4.5.0",
     "@thecointech/contract-core": "^0.3.13-test.5",

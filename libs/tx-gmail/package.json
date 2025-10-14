@@ -30,12 +30,12 @@
   ],
   "exports": {
     ".": {
+      "types": "./build/index_common.d.ts",
       "development": "./build/index_mocked.js",
       "electron": "./build/index_electron.js",
       "node": "./build/index_node.js"
     }
   },
-  "types": "./build/index_common.d.ts",
   "dependencies": {
     "@thecointech/utilities": "^0.3.13-test.3",
     "currency.js": "^2.0.4",

@@ -6,7 +6,7 @@
     "target": "ES2022",
     "lib": ["dom", "ES2022"],
     "esModuleInterop": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "skipLibCheck": true,
     "resolveJsonModule": true,
   }

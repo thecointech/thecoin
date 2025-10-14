@@ -1,4 +1,3 @@
-import { Mutex } from "@thecointech/async/*";
 import { mkdirSync, rmSync } from "node:fs";
 import { URL } from "node:url";
 

@@ -27,7 +27,6 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
   "exports": {
     ".": {
       "electron": "./build/index_mocked.js",
