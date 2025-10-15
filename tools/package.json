@@ -6,7 +6,7 @@
   "scripts": {
     "dump-firestore": "run-env cfg=devlive ./dumpFirestore.ts",
     "cancel-tx": "run-env cfg=prod ./transactions/cancelTx.ts",
-    "pullRates": "cross-env URL_SEQ_LOGGING=false run-env cfg=prodtest ./pullRates.ts",
+    "pullRates": "cross-env URL_SEQ_LOGGING=false LOG_NAME=PullRates run-env cfg=prodtest ./pullRates.ts",
     "initDemoAccount": "run-env cfg=prodtest ./initDemoAccount.ts"
   },
   "devDependencies": {
