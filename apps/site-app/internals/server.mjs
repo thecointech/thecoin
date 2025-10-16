@@ -7,7 +7,8 @@ run(
   app => {
     // Serve dev:live plugins src
     app.get('/_plugins_src', (req, res) => {
-      if (process.env.CONFIG_NAME == "dev:live") {
+      console.log("Recieved request for plugins src");
+      if (process.env.CONFIG_NAME == "devlive") {
         const raw = readFileSync(pluginSrcUrl);
         res.send(raw);
       } else {

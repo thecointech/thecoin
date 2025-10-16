@@ -3,13 +3,26 @@ import { AccountMap } from './map';
 import { isRemote } from '@thecointech/signers';
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities/Address';
 
-const ThrowIfNotValid = (data: any) => {
-  if (data.privateKey || !IsValidAddress(data.address))
-    throw new Error("Cannot store unencrypted wallet")
+const ThrowIfNotValid = async (signer: any) => {
+  if (typeof signer !== 'object') {
+    throw new Error("Cannot store wallet, signer is not object")
+  }
+  // A valid storage must have:
+  // - An address
+  // - Version3
+  // This may be a little bit too strict, as it's more strict than isKeystoreJson
+  const valid = (
+    signer.version == 3 &&
+    signer.address &&
+    IsValidAddress(signer.address)
+  );
+  if (!valid) {
+    throw new Error("Cannot store wallet, invalid parameters for encrypted wallet")
+  }
 }
 
-export function storeAccount(account: AccountState) {
-  ThrowIfNotValid(account.signer);
+export async function storeAccount(account: AccountState) {
+  await ThrowIfNotValid(account.signer);
 
   // Strip the contract from the account.
   let { contract, ...toStore } = account;

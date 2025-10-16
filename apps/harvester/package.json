@@ -21,6 +21,7 @@
     "dev:harvest": "yarn dev -- --harvest",
     "dev": "yarn run -T cross-env CONFIG_NAME=development yarn _start:dbg",
     "_dev:live": "yarn run -T cross-env CONFIG_NAME=devlive yarn _start:dbg",
+    "dev:live:finalize": "yarn run -T rimraf .cache/devlive",
     "prod:test": "yarn run -T cross-env CONFIG_NAME=prodtest yarn _start:dbg",
     "prod:beta": "yarn run -T cross-env CONFIG_NAME=prodbeta yarn _start:dbg",
     "prod": "yarn run -T cross-env CONFIG_NAME=prod yarn _start:dbg",
