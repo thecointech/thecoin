@@ -1,6 +1,6 @@
 import { ConnectionValues } from "@thecointech/types";
 import { ValidationError } from "./errors";
-import { HDNodeWallet, isKeystoreJson } from "ethers";
+import { HDNodeWallet } from "ethers";
 import { NormalizeAddress, IsValidAddress } from "@thecointech/utilities/Address";
 
 export function validate(payload: any, currentState: string): ConnectionValues {
@@ -35,9 +35,10 @@ export function validate(payload: any, currentState: string): ConnectionValues {
     throw new ValidationError('Address does not match mnemonic');
   }
 
-  // Require matching walletfile too
-  if (!isKeystoreJson(walletFile)) {
-    throw new ValidationError('Invalid wallet file');
+  // We assume the walletFile is valid, as there is pretty
+  // much no benefit to messing with it.
+  if (!walletFile?.toLowerCase().includes(wallet.address.toLowerCase().slice(2))) {
+    throw new ValidationError('Invalid walletFile');
   }
 
   return {

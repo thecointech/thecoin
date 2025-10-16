@@ -23,17 +23,10 @@ export function parse(raw: string, ct?: string) {
     return JSON.parse(raw);
   } else if (ct === 'application/x-www-form-urlencoded') {
     const payload = parseForm(raw);
-    // walletFile may be JSON-stringified
-    if (payload.walletFile) {
-      try { payload.walletFile = JSON.parse(payload.walletFile); } catch {}
-    }
     return payload;
   } else if (!ct) {
     // Some browsers may omit content-type for form posts
     const payload = parseForm(raw);
-    if (payload.walletFile) {
-      try { payload.walletFile = JSON.parse(payload.walletFile); } catch {}
-    }
     return payload;
   }
   throw new ParseError('Unsupported Media Type');
