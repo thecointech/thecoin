@@ -47,8 +47,8 @@ export class Agent implements AgentClass {
       });
     }
     return {
-      events: this.mockEventsResponse(),
-      accounts: this.mockAccountResponse(),
+      events: this.mockEventsResponse(sectionsToSkip),
+      accounts: this.mockAccountResponse(sectionsToSkip),
     }
   }
 
@@ -114,10 +114,11 @@ export class Agent implements AgentClass {
     return r;
   }
 
-  mockEventsResponse(): EventSection {
+  mockEventsResponse(sectionsToSkip?: SectionName[]): EventSection {
     return {
       section: "Initial",
       events: (["Login", "AccountsSummary", "CreditAccountDetails", "SendETransfer", "Logout"] as const)
+        .filter(s => !sectionsToSkip?.includes(s))
         .map((s, i) => ({
           section: s,
           events: [

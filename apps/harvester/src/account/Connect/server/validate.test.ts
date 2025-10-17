@@ -6,10 +6,10 @@ it ('should validate', () => {
     const wallet = Wallet.createRandom();
     const v: ConnectionValues = {
         address: wallet.address,
-        locale: wallet.mnemonic!.wordlist!.locale,  
+        locale: wallet.mnemonic!.wordlist!.locale,
         path: wallet.path!,
         phrase: wallet.mnemonic!.phrase,
-        siteOrigin: "http://localhost:3000",
+        siteOrigin: process.env.URL_SITE_APP || 'required',
         state: "state",
         timestamp: Date.now().toString(),
         name: "name",
