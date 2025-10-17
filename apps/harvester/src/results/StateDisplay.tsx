@@ -1,4 +1,4 @@
-import { Grid, Card, Loader, Icon } from 'semantic-ui-react'
+import { Grid, Card, Loader, Icon, Popup } from 'semantic-ui-react'
 import { HarvestData } from '../Harvester/types';
 import { DateTime } from 'luxon';
 import styles from './StateDisplay.module.less';
@@ -107,8 +107,6 @@ export const StateDisplay = ({ state }: StateDisplayProps) => {
     </Card>
   )
 }
-
-import { Popup } from 'semantic-ui-react';
 
 const InfoTooltip = ({ eTransferred }: { eTransferred: currency }) => {
   return eTransferred.value == 0 ? null : (
