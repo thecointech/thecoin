@@ -1,4 +1,4 @@
-import { Grid, Card, Loader } from 'semantic-ui-react'
+import { Grid, Card, Loader, Icon } from 'semantic-ui-react'
 import { HarvestData } from '../Harvester/types';
 import { DateTime } from 'luxon';
 import styles from './StateDisplay.module.less';
@@ -75,7 +75,9 @@ export const StateDisplay = ({ state }: StateDisplayProps) => {
               {(loading)
                 ? <Loader active/>
                 : cadBalance?.format() ?? 'N/A'
-              }</Grid.Column>
+              }
+              <InfoTooltip eTransferred={eTransferred} />
+            </Grid.Column>
           </Grid.Row>
           <Grid.Row>
             <Grid.Column className={styles.column}>Harvester Balance:</Grid.Column>
@@ -96,5 +98,18 @@ export const StateDisplay = ({ state }: StateDisplayProps) => {
         </Grid>
       </Card.Content>
     </Card>
+  )
+}
+
+import { Popup } from 'semantic-ui-react';
+
+const InfoTooltip = ({ eTransferred }: { eTransferred: currency }) => {
+  return eTransferred.value == 0 ? null : (
+    <span style={{ marginLeft: '0.5rem' }}>
+      <Popup
+        content={`The available balance includes ${eTransferred.format()} transferred this run, which may not be deposited yet.`}
+        trigger={<Icon name="info circle" />}
+      />
+    </span>
   )
 }
