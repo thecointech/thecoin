@@ -95,12 +95,14 @@ export async function getManyRates(ts: number[]) : Promise<CombinedRates[]> {
     return r;
 
   // We don't want to fetch duplicates, so lets ensure we return a minimal amount
-  const sorted = ts.sort();
+  // sort numerically without mutating input
+  const sorted = [...ts].sort((a, b) => a - b);
+
   // Only process timestamp requests here: skip 0 and below
   let lastExpired = 1;
-  for (const ts of sorted)
+  for (const t of sorted)
   {
-    lastExpired = await maybeInsert(ts, lastExpired, r);
+    lastExpired = await maybeInsert(t, lastExpired, r);
   }
   // If we have requested latest (0), then now add it now.  This is because our
   // prior iteration relies on each ts increasing, and our sorting breaks that;
