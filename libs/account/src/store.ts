@@ -24,7 +24,7 @@ const ThrowIfNotEncrypted = (signer: any) => {
   }
 };
 
-export async function storeAccount(account: AccountState) {
+export function storeAccount(account: AccountState) {
 
   // Strip the contract from the account.
   let { contract, ...toStore } = account;
