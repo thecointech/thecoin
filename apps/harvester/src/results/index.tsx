@@ -20,14 +20,18 @@ export const Results = () => {
   useEffect(() => {
     log.info("Loading state");
     getCurrentState().then(state => {
-      setLoading(false);
       if (state.error) {
         alert(state.error);
       }
       else {
         setState(state.value);
       }
-    })
+    }).catch(e => {
+      log.error(e, "Error loading state");
+      alert("Error loading state");
+    }).finally(() => {
+      setLoading(false);
+    });
   }, [])
   const runImmediately = async () => {
     log.info("Commencing manual run");
