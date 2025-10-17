@@ -45,7 +45,8 @@ export const VerifyAccounts = ({banks}: InitialState) => {
     setCorrectedCardNumber("");
   };
 
-  const cardNumError = payee.validate(creditAccount.account_number.replace(/\D/g, ''));
+  const rawAccNumber = creditAccount.account_number.replace(/\D/g, '');
+  const cardNumError = payee.validate(rawAccNumber);
 
   const saveAccounts = async () => {
     if (cardNumError) {
@@ -55,7 +56,7 @@ export const VerifyAccounts = ({banks}: InitialState) => {
       }
     }
 
-    const accountNumber = correctedCardNumber || creditAccount.account_number;
+    const accountNumber = correctedCardNumber || rawAccNumber;
     const r = await window.scraper.setCreditDetails({
       payee: payee.value,
       accountNumber,
