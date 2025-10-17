@@ -135,7 +135,7 @@ export function getMockSendTime(now: DateTime) {
   // increment the counter so we don't recieve emails at exactly the
   // same ms.  This is only for a single execution of the app, but
   // that should be sufficient for devlive
-  const marketOpen = now.set({ hour: 10, minute: 30 + counter++ });
+  const marketOpen = now.set({ hour: 10, minute: 30 }).plus({ minutes: counter++ });
   let daysSinceOpen = Math.max(now.weekday - 5, 0);
   if (daysSinceOpen == 0 && now.hour < 10) {
     daysSinceOpen = now.weekday == 1 ? 3 : 1;

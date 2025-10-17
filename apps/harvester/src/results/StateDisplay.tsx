@@ -55,13 +55,14 @@ export const StateDisplay = ({ state }: StateDisplayProps) => {
           const cadBalance = currency(initBalance).add(eTransferred);
           setCadBalance(cadBalance);
         }
-        setLoading(false);
       })
       .catch(error => {
         console.error('Failed to fetch rate:', error);
         setCadBalance(null);
+      })
+      .finally(() => {
         setLoading(false);
-      });
+      })
   }, [state?.coin, state?.date, eTransferred])
 
   return (

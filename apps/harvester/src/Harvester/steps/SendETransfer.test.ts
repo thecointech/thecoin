@@ -96,4 +96,10 @@ it ('mocks a decent send time', async () => {
   expect(m6.weekday).toEqual(1);
   expect(m6.hour).toEqual(10);
   expect(m6 > mondayMorning).toBeTruthy();
+
+  const fridayEvening = fridayMorning.set({ hour: 18 })
+  const m7 = getMockSendTime(fridayEvening)
+  expect(m7.weekday).toEqual(5);
+  expect(m7.hour).toEqual(10);
+  expect(m7 > fridayMorning).toBeTruthy();
 })
