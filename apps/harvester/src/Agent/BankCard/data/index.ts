@@ -11,7 +11,7 @@ export type BankData = {
   icon?: string,
 } & BankIdent
 
-export const banks: BankData[] = [
+export const banks = [
   {
     name: 'RBC',
     icon: RBC,
@@ -47,6 +47,6 @@ export const banks: BankData[] = [
     icon: Tangerine,
     url: 'https://www.tangerine.ca/'
   }
-]
+] as const satisfies readonly BankData[];
 
 export type SupportedBanks = typeof banks[number]['name'];

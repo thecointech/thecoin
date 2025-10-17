@@ -46,7 +46,11 @@ export const AccountCard = ({ account, isSelected, isSelectable, onClick }: Acco
 
         <div className={styles.detailRow}>
           <label>Balance</label>
-          <div className={styles.balance}>${parseFloat(account.balance).toFixed(2)}</div>
+          <div className={styles.balance}>
+            {isNaN(parseFloat(account.balance))
+              ? account.balance
+              : `$${parseFloat(account.balance).toFixed(2)}`}
+          </div>
         </div>
       </div>
     </div>

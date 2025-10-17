@@ -4,53 +4,24 @@ import type { InitialState } from "../state/initialState";
 import { BankConnectReducer } from "../state/reducer";
 import { NoAccounts } from "./NoAccounts";
 import { CreditCardCorrection } from "./UpdateCardNumber";
-import { AccountCard, isMasked } from "./AccountCard";
+import { AccountCard } from "./AccountCard";
 import { Link } from "react-router-dom";
 import { Button } from "semantic-ui-react";
 import { SupportedBanks } from "../BankCard/data";
 import { findPayee, LegalPayeeName } from "@thecointech/site-app/src/containers/Accounts/BillPayments/payees";
 
 export const VerifyAccounts = ({banks}: InitialState) => {
-  // const bankConnect = state;
   const api = BankConnectReducer.useApi();
   const [forceValidate, setForceValidate] = useState(false);
 
-
-  // const [creditNumber, setCreditNumber] = useState<string>("");
-  // const [overrideCreditNumber, setOverrideCreditNumber] = useState<string>();
-
   const chequingAccounts = banks.chequing?.accounts?.filter(a => a.account_type === 'Chequing') || [];
   const creditAccounts = banks.credit?.accounts?.filter(a => a.account_type === 'Credit') || [];
-
-  // const chequingAccounts = [
-  //   {
-  //     account_name: "Chequing",
-  //     account_number: "1234567890",
-  //     account_type: "Chequing" as const,
-  //     balance: "150.00",
-  //   },
-  // ]
-  // const creditAccounts = [
-  //   {
-  //     account_name: "My Credit Card",
-  //     account_number: "1234 56** **** **56",
-  //     account_type: "Credit" as const,
-  //     balance: "125.00",
-  //   },
-  //   {
-  //     account_name: "My Other Credit Card",
-  //     account_number: "1234 5678 9012 3456",
-  //     account_type: "Credit" as const,
-  //     balance: "125.00",
-  //   },
-  // ]
 
   const chequingAccount = chequingAccounts[0];
   const [selectedCreditIndex, setSelectedCreditIndex] = useState(0);
   const creditAccount = creditAccounts[selectedCreditIndex];
 
   const [correctedCardNumber, setCorrectedCardNumber] = useState<string>("");
-  const [cardNumberError, setCardNumberError] = useState<string>("");
 
   const hasNoAccounts = !chequingAccount && !creditAccount;
 
@@ -72,52 +43,18 @@ export const VerifyAccounts = ({banks}: InitialState) => {
   const handleCreditAccountSelect = (index: number) => {
     setSelectedCreditIndex(index);
     setCorrectedCardNumber("");
-    setCardNumberError("");
   };
 
-  // const handleCardNumberChange = (value: string) => {
-  //   // Remove any non-digit characters
-  //   const cleaned = value.replace(/\D/g, '');
-  //   setCorrectedCardNumber(cleaned);
-
-  //   // Validate
-  //   if (cleaned.length === 0) {
-  //     setCardNumberError("");
-  //   } else {
-  //     const errorMessage = payee.validate(cleaned);
-  //     if (errorMessage) {
-  //       const message = errorMessage.defaultMessage;
-  //       setCardNumberError(intl.formatMessage(message));
-  //     } else {
-  //       setCardNumberError("");
-  //     }
-  //   }
-  // };
+  const cardNumError = payee.validate(creditAccount.account_number.replace(/\D/g, ''));
 
   const saveAccounts = async () => {
-    setForceValidate(true);
-    if (!correctedCardNumber) {
-      return;
-    }
-    if (cardNumberError) {
-      const confirm = window.confirm(`The card number you provided is invalid: \n${cardNumberError}\nAre you sure you want to continue?`);
-      if (!confirm) return;
-    }
-
-    if (!correctedCardNumber) {
-      const accountNumberDigits = creditAccount.account_number.replace(/\D/g, '');
-      if (accountNumberDigits.length < 15) {
-        setCardNumberError("Masked card number detected.  Please enter the full card number.")
+    if (cardNumError) {
+      setForceValidate(true);
+      if (!correctedCardNumber) {
         return;
       }
-      else {
-        const errorMessage = payee.validate(accountNumberDigits);
-        if (errorMessage) {
-          setCardNumberError(errorMessage.defaultMessage as string);
-          return;
-        }
-      }
     }
+
     const accountNumber = correctedCardNumber || creditAccount.account_number;
     const r = await window.scraper.setCreditDetails({
       payee: payee.value,
@@ -129,6 +66,7 @@ export const VerifyAccounts = ({banks}: InitialState) => {
     }
     api.setStored();
   }
+
 
   return (
     <div className={styles.container}>
@@ -173,7 +111,7 @@ export const VerifyAccounts = ({banks}: InitialState) => {
 
             <AccountCard account={creditAccount} />
 
-            {isMasked(creditAccount.account_number) && (
+            {cardNumError && (
               <CreditCardCorrection
                 forceValidate={forceValidate}
                 originalNumber={creditAccount.account_number.replace(/\s/g, '')}

@@ -101,6 +101,14 @@ export class Agent implements AgentClass {
         balance: "100",
         position_x: 0,
         position_y: 0,
+      },
+      {
+        account_type: "Credit" as const,
+        account_name: `${this.name} Other Credit`,
+        account_number: "4111 1111 1111 1111",
+        balance: "100",
+        position_x: 0,
+        position_y: 0,
       })
     }
     return r;
