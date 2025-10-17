@@ -41,7 +41,8 @@ export async function twofaRefresh(type: ActionType, refreshProfile: boolean, ca
     await using agent = await Agent.create(ProfileTask, inputBridge, getUrl(events), logger);
     const result = await agent.process(toSkip);
     const wasSuccess = result.events.events.find(e => isSection(e) && e.section === "TwoFA");
-    logger.complete({ result: wasSuccess ? "true" : "false" });
+    const error = wasSuccess ? undefined : "TwoFA not found in processed events";
+    logger.complete({ result: wasSuccess ? "true" : "false", error });
     return true;
   }
   catch (e) {
