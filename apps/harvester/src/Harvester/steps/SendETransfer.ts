@@ -95,8 +95,10 @@ async function sendETransfer(amount: currency, {wallet, uiCallback}: UserData) :
     // We still send in testing environments
     if (process.env.CONFIG_NAME == "prodtest" || process.env.CONFIG_NAME == "devlive") {
       const address = await wallet.getAddress();
-      // Only send while the market is open
-      const sendTime = getMockSendTime()
+      // Make dev-live responsive, only send while the market is open
+      const sendTime = (process.env.CONFIG_NAME == "devlive")
+        ? getMockSendTime(DateTime.now())
+        : DateTime.now();
       await SendFakeDeposit(address, amount.value, sendTime);
     }
     return {
@@ -125,12 +127,8 @@ async function mockUiUpdate(uiCallback?: BackgroundTaskCallback) {
 }
 
 let counter = 0;
-function getMockSendTime() {
-  const now = DateTime.now();
-  // In devlive it's annoying to wait for market open
-  if (process.env.CONFIG_NAME !== "devlive") {
-    return now;
-  }
+export function getMockSendTime(now: DateTime) {
+  // If now is during market hours, use it.
   if (now.weekday < 5 && now.hour > 10 && now.hour < 16) {
     return now;
   }
@@ -138,9 +136,9 @@ function getMockSendTime() {
   // same ms.  This is only for a single execution of the app, but
   // that should be sufficient for devlive
   const marketOpen = now.set({ hour: 10, minute: 30 + counter++ });
-  const daysSinceOpen = (
-    Math.max(now.weekday - 5, 0) + // go to before the weekend
-    (now.hour < 10 ? 1 : 0) // add an additional before opening
-  );
+  let daysSinceOpen = Math.max(now.weekday - 5, 0);
+  if (daysSinceOpen == 0 && now.hour < 10) {
+    daysSinceOpen = now.weekday == 1 ? 3 : 1;
+  }
   return marketOpen.minus({ day: daysSinceOpen });
 }
