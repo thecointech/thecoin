@@ -65,7 +65,7 @@
     "@thecointech/contract-plugin-converter": "^0.3.13-test.5",
     "@thecointech/contract-plugin-shockabsorber": "^0.3.13-test.5",
     "@thecointech/contract-plugins": "^0.3.13-test.5",
-    "@thecointech/electron-signer": "^0.3.13-test.5",
+    "@thecointech/electron-signer": "workspace:*",
     "@thecointech/fx-rates": "^0.3.13-test.5",
     "@thecointech/logging": "^0.3.13-test.0",
     "@thecointech/scraper": "^0.3.13-test.5",

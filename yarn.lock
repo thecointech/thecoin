@@ -12309,7 +12309,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/electron-signer@workspace:libs/electron-signer":
+"@thecointech/electron-signer@workspace:*, @thecointech/electron-signer@workspace:libs/electron-signer":
   version: 0.0.0-use.local
   resolution: "@thecointech/electron-signer@workspace:libs/electron-signer"
   dependencies:
@@ -12630,6 +12630,7 @@ __metadata:
   dependencies:
     "@ethers-ext/signer-ledger": "npm:^6.0.0-beta.1"
     "@ledgerhq/hw-transport-node-hid": "npm:^6.28.6"
+    "@thecointech/electron-signer": "workspace:*"
     "@thecointech/electron-utils": "npm:^0.3.13-test.0"
     "@thecointech/ethers-provider": "npm:^0.3.13-test.5"
     "@thecointech/logging": "npm:^0.3.13-test.0"
@@ -26753,6 +26754,7 @@ __metadata:
     "@thecointech/contract-plugin-converter": "npm:^0.3.13-test.5"
     "@thecointech/contract-plugin-shockabsorber": "npm:^0.3.13-test.5"
     "@thecointech/contract-plugins": "npm:^0.3.13-test.5"
+    "@thecointech/electron-signer": "workspace:*"
     "@thecointech/fx-rates": "npm:^0.3.13-test.5"
     "@thecointech/jestutils": "npm:^0.3.13-test.0"
     "@thecointech/logging": "npm:^0.3.13-test.0"
