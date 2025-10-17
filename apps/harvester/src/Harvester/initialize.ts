@@ -4,11 +4,16 @@ import { getCurrentState } from './state';
 import { getChequingData, getVisaData } from './fetchData';
 import { HarvestData } from './types';
 import { BackgroundTaskCallback } from '@/BackgroundTask';
+import { GetContract } from '@thecointech/contract-core';
 
 export async function initialize(callback?: BackgroundTaskCallback) {
 
   // Initialize
   const stages = await hydrateProcessor();
+  if (stages.length == 0) {
+    throw new Error('Harvester not configured');
+  }
+
   const lastRun = await getCurrentState();
 
   // Ensure we have a wallet, otherwise we can't run
@@ -34,9 +39,12 @@ export async function initialize(callback?: BackgroundTaskCallback) {
   // TODO: We need to group these under a parent ID
   const chq = await getChequingData(callback);
   const visa = await getVisaData(lastTxDate, callback)
+  const tcCore = await GetContract(wallet.provider!);
+  const coin = await tcCore.balanceOf(wallet.address);
   let state: HarvestData = {
     chq,
     visa,
+    coin,
     date: DateTime.now(),
 
     delta: [],

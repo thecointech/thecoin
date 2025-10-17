@@ -19,7 +19,7 @@ export const initialState: HarvestConfig = {
     daysToRun: defaultDays,
     timeToRun: defaultTime,
   },
-  steps: stored.value?.steps ?? defaultSteps,
+  steps: stored.value?.steps?.length ? stored.value.steps : defaultSteps,
 }
 
 export class ConfigReducer extends BaseReducer<IActions, HarvestConfig>(CONFIG_KEY, initialState)
