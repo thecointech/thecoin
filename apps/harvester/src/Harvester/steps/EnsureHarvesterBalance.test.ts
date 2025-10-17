@@ -27,6 +27,7 @@ describe('EnsureHarvesterBalance', () => {
     date: testDate,
     visa: {} as any,
     chq: {} as any,
+    coin: BigInt(100*1e6),
     delta: [],
     state: {
       harvesterBalance

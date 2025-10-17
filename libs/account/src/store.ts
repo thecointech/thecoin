@@ -3,7 +3,7 @@ import { AccountMap } from './map';
 import { isRemote } from '@thecointech/signers';
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities/Address';
 
-const ThrowIfNotValid = async (signer: any) => {
+const ThrowIfNotEncrypted = async (signer: any) => {
   if (typeof signer !== 'object') {
     throw new Error("Cannot store wallet, signer is not object")
   }
@@ -22,7 +22,6 @@ const ThrowIfNotValid = async (signer: any) => {
 }
 
 export async function storeAccount(account: AccountState) {
-  await ThrowIfNotValid(account.signer);
 
   // Strip the contract from the account.
   let { contract, ...toStore } = account;
@@ -33,6 +32,10 @@ export async function storeAccount(account: AccountState) {
     toStore.signer = {
       _isRemote: true,
     } as any;
+  }
+  else {
+    // Ensure local accounts are encrypted
+    await ThrowIfNotEncrypted(toStore.signer);
   }
   // And that's it - write to local storage
   localStorage[address] = JSON.stringify(toStore);

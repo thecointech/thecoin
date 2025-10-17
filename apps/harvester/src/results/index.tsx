@@ -15,10 +15,12 @@ export const Results = () => {
   const [state, setState] = useState<HarvestData|undefined>();
   const replayTask = useBackgroundTask("replay");
   const isReplaying = isRunning(replayTask);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     log.info("Loading state");
     getCurrentState().then(state => {
+      setLoading(false);
       if (state.error) {
         alert(state.error);
       }
@@ -44,13 +46,13 @@ export const Results = () => {
 
   return (
     <ContentSection>
-      <Dimmer.Dimmable dimmed={isReplaying} className={styles.resultsContainer}>
-        <Dimmer active={isReplaying}>
+      <Dimmer.Dimmable dimmed={isReplaying || loading} className={styles.resultsContainer}>
+        <Dimmer active={isReplaying || loading}>
           <Loader>Running</Loader>
         </Dimmer>
         <StateDisplay state={state} />
         <div>
-          <Button onClick={runImmediately} disabled={isReplaying}>
+          <Button onClick={runImmediately} disabled={isReplaying || loading}>
             Run Harvester Now
           </Button>
         </div>
