@@ -40,8 +40,8 @@ export async function twofaRefresh(type: ActionType, refreshProfile: boolean, ca
     using _ = await maybeSerializeRun(logger.logsFolder, type);
     await using agent = await Agent.create(ProfileTask, inputBridge, getUrl(events), logger);
     const result = await agent.process(toSkip);
-    const wasSuccess = result.events.events.length > 0;
-    logger.complete({ result: wasSuccess.toString() });
+    const wasSuccess = result.events.events.find(e => isSection(e) && e.section === "TwoFA");
+    logger.complete({ result: wasSuccess ? "true" : "false" });
     return true;
   }
   catch (e) {
