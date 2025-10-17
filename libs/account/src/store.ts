@@ -5,21 +5,21 @@ import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities/Address
 
 const ThrowIfNotEncrypted = async (signer: any) => {
   if (typeof signer !== 'object') {
-    throw new Error("Cannot store wallet, signer is not object")
+    throw new Error("Cannot store wallet, signer is not object");
   }
   // A valid storage must have:
   // - An address
   // - Version3
   // This may be a little bit too strict, as it's more strict than isKeystoreJson
   const valid = (
-    signer.version == 3 &&
-    signer.address &&
-    IsValidAddress(signer.address)
+    signer.version === 3
+    && signer.address
+    && IsValidAddress(signer.address)
   );
   if (!valid) {
-    throw new Error("Cannot store wallet, invalid parameters for encrypted wallet")
+    throw new Error("Cannot store wallet, invalid parameters for encrypted wallet");
   }
-}
+};
 
 export async function storeAccount(account: AccountState) {
 
