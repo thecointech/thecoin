@@ -61,7 +61,7 @@ export async function hydrateProcessor() {
 
 export async function setCreditDetails(creditDetails: CreditDetails) {
   await db.set({creditDetails})
-  log.debug(`Set credit details: XX${creditDetails.accountNumber.slice(-2)}`)
+  log.debug(`Set credit details`)
   return true;
 }
 

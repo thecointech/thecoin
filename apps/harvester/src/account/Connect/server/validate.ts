@@ -56,8 +56,8 @@ export function validate(payload: any, currentState: string): ConnectionValues {
 
 
 function isFresh(timestamp: string, skewMs = 5 * 60_000) {
-  if (Number.isNaN(timestamp)) return false;
   const t = Number(timestamp);
+  if (Number.isNaN(t)) return false;
   const now = Date.now();
   return Math.abs(now - t) <= skewMs;
 }

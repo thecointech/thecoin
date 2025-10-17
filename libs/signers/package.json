@@ -63,6 +63,7 @@
   "dependencies": {
     "@ethers-ext/signer-ledger": "^6.0.0-beta.1",
     "@ledgerhq/hw-transport-node-hid": "^6.28.6",
+    "@thecointech/electron-signer": "^0.3.13-test.5",
     "@thecointech/ethers-provider": "^0.3.13-test.5",
     "@thecointech/logging": "^0.3.13-test.0",
     "@thecointech/secrets": "^0.3.13-test.0"

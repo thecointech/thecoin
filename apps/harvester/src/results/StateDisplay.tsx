@@ -109,12 +109,12 @@ export const StateDisplay = ({ state }: StateDisplayProps) => {
 }
 
 const InfoTooltip = ({ eTransferred }: { eTransferred: currency }) => {
-  return eTransferred.value == 0 ? null : (
-    <span style={{ marginLeft: '0.5rem' }}>
-      <Popup
-        content={`The available balance includes ${eTransferred.format()} transferred this run, which may not be deposited yet.`}
-        trigger={<Icon name="info circle" />}
-      />
-    </span>
-  )
+  return !eTransferred.value
+    ? null
+    : (<span style={{ marginLeft: '0.5rem' }}>
+        <Popup
+          content={`The available balance includes ${eTransferred.format()} transferred this run, which may not be deposited yet.`}
+          trigger={<Icon name="info circle" />}
+        />
+      </span>)
 }
