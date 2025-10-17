@@ -46,24 +46,6 @@
     "dev:live:finalize": {
       "dependsOn": ["^dev:live:finalize"]
     },
-    "clean": {
-      "cache": true
-    },
-    "package": {
-      "cache": true
-    },
-    "make": {
-      "cache": true
-    },
-    "publish": {
-      "cache": true
-    },
-    "deploy": {
-      "cache": true
-    },
-    "deploy:rebuild": {
-      "cache": true
-    },
     "build:semantic": {
       "cache": true
     },

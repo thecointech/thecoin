@@ -174,7 +174,7 @@ export async function updateRates() {
       const updated = await update();
       if (updated) return true;
     } catch (err: any) {
-      errors.push(err);
+      errors.push(err instanceof Error ? err : new Error(String(err)));
       log.warn(err, `Update attempt ${i + 1}/5 failed`);
     }
   }
