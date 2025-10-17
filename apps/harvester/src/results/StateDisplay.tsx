@@ -43,6 +43,7 @@ export const StateDisplay = ({ state }: StateDisplayProps) => {
       setCadBalance(eTransferred);
       return;
     }
+    let cancelled = false;
     setLoading(true);
     fetchRate(state.date.toJSDate())
       .then(async rate => {
@@ -53,16 +54,21 @@ export const StateDisplay = ({ state }: StateDisplayProps) => {
           // amount.  This isn't strictly true, as it's not deposited (yet),
           // but it makes more sense to the user to see the expected balance
           const cadBalance = currency(initBalance).add(eTransferred);
-          setCadBalance(cadBalance);
+          if (!cancelled) {
+            setCadBalance(cadBalance);
+          }
         }
       })
       .catch(error => {
         console.error('Failed to fetch rate:', error);
-        setCadBalance(null);
+        if (!cancelled) {
+          setCadBalance(null);
+        }
       })
       .finally(() => {
         setLoading(false);
       })
+      return () => { cancelled = true; }
   }, [state?.coin, state?.date, eTransferred])
 
   return (

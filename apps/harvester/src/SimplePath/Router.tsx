@@ -8,7 +8,7 @@ function PathRouter(props: { path: Path<{}> }): JSX.Element;
 // Implementation
 function PathRouter<T>({path, data}: { path: Path<T>, data?: T }): JSX.Element {
   const componentProps = (data ?? {}) as any;
-  
+
   return (
     <Switch>
       {
@@ -19,14 +19,14 @@ function PathRouter<T>({path, data}: { path: Path<T>, data?: T }): JSX.Element {
               key={i}
               path={`/${path.groupKey}/${i}`}
               exact
-              render={() => <Component {...componentProps} />}
+              render={(props) => <Component {...componentProps} {...props} />}
             />
           );
         })
       }
-      <Route key="default" render={() => {
+      <Route key="default" render={(props) => {
         const Component = path.routes[0].component;
-        return <Component {...componentProps} />;
+        return <Component {...componentProps} {...props} />;
       }} />
     </Switch>
   )

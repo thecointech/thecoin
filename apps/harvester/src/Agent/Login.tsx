@@ -1,6 +1,6 @@
 import { LoginDetails } from "./LoginDetails"
 import { BankConnectReducer } from "./state/reducer"
-import { BankType } from "./state/types";
+import { RendererBankType } from "./state/types";
 import { QuestionResponse } from "./QuestionResponse";
 import { useEffect, useState } from "react";
 import { useBackgroundTask } from '@/BackgroundTask';
@@ -10,7 +10,7 @@ import { log } from "@thecointech/logging";
 import { Icon, Message } from "semantic-ui-react";
 
 type Props = {
-  type: BankType;
+  type: RendererBankType;
   both?: boolean;
 }
 const Login = ({ type, both }: Props) => {

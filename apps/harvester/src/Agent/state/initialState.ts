@@ -1,7 +1,7 @@
 import { log } from "@thecointech/logging";
 import { banks } from "../BankCard/data";
 import type { BankData } from "../BankCard/data";
-import type { BankType } from "./types";
+import type { RendererBankType } from "./types";
 import type { ProcessAccount } from "@thecointech/scraper-agent/types";
 import type { BankConnectDetails } from "@/Harvester/events";
 
@@ -11,7 +11,7 @@ export type BankReducerType = {
   accounts?: ProcessAccount[]; // JSON data from scraper
 } & BankData;
 export type InitialState = {
-  banks: { [K in BankType]: BankReducerType | undefined };
+  banks: { [K in RendererBankType]: BankReducerType | undefined };
   stored?: boolean;
 }
 

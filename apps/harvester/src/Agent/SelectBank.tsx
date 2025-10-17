@@ -1,11 +1,11 @@
 import { BankCard, CustomBankCard } from "./BankCard/BankCard"
 import { BankData, banks } from "./BankCard/data"
 import { BankConnectReducer } from "./state/reducer"
-import { BankType } from "./state/types"
+import { RendererBankType } from "./state/types"
 import type { BankReducerType } from "./state/initialState"
 
 type Props = {
-  type: BankType
+  type: RendererBankType
   selected?: BankReducerType
 }
 
