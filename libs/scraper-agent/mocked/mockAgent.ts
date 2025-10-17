@@ -82,19 +82,19 @@ export class Agent implements AgentClass {
 
 
   mockAccountResponse(sectionsToSkip?: SectionName[]): AccountResponse[] {
-    const r = [];
-    if (!sectionsToSkip?.includes("SendETransfer")) {
-      r.push({
+    if (sectionsToSkip?.includes("AccountsSummary")) {
+      return [];
+    }
+    return [
+      {
         account_type: "Chequing" as const,
         account_name: `${this.name} Chequing`,
         account_number: "123456789",
         balance: "100",
         position_x: 0,
         position_y: 0,
-      })
-    }
-    if (!sectionsToSkip?.includes("CreditAccountDetails")) {
-      r.push({
+      },
+      {
         account_type: "Credit" as const,
         account_name: `${this.name} Credit`,
         account_number: "4111 11** **** **11",
@@ -109,9 +109,8 @@ export class Agent implements AgentClass {
         balance: "100",
         position_x: 0,
         position_y: 0,
-      })
-    }
-    return r;
+      }
+    ];
   }
 
   mockEventsResponse(sectionsToSkip?: SectionName[]): EventSection {
