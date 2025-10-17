@@ -34,6 +34,10 @@ const Login = ({ type, both }: Props) => {
     if (!bgTask?.completed) return;
 
     const results = parseResults(bgTask.result);
+    if (!results) {
+      alert("Agent run yielded no results");
+      return;
+    }
     if (both) {
       api.setCompleted('chequing', true, results);
       api.setCompleted('credit', true, results);
