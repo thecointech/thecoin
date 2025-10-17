@@ -20,6 +20,12 @@ export type AutoConfigParams = {
 export async function autoConfigure({ type, config, visible }: AutoConfigParams, depositAddress: string, callback: BackgroundTaskCallback) {
 
   log.info(`Agent: Starting configuration for action: autoConfigure`);
+
+  // Create the logger quickly, as that triggers the background task/loading screen
+  const toSkip = getSectionsToSkip(type);
+  const toProcess = sections.filter(s => !toSkip.includes(s));
+  const logger = new ScraperCallbacks("record", callback, toProcess);
+
   // This should do nothing, but call it anyway
   await downloadRequired(callback);
 
@@ -31,10 +37,6 @@ export async function autoConfigure({ type, config, visible }: AutoConfigParams,
     username,
     password,
   }, depositAddress);
-
-  const toSkip = getSectionsToSkip(type);
-  const toProcess = sections.filter(s => !toSkip.includes(s));
-  const logger = new ScraperCallbacks("record", callback, toProcess);
 
   try {
     using _ = new VisibleOverride(visible)

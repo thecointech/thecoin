@@ -185,7 +185,7 @@ export const VerifyAccounts = ({banks}: InitialState) => {
         )}
       </div>
       <div className={styles.footer}>
-        <Button onClick={saveAccounts} disabled={correctedCardNumber.length === 0}>Store Accounts</Button>
+        <Button onClick={saveAccounts} disabled={forceValidate && correctedCardNumber.length === 0}>Store Accounts</Button>
         <Link to="/config">Configure how the harvester will run</Link>
       </div>
     </div>
