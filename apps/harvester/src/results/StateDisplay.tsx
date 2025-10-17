@@ -66,7 +66,9 @@ export const StateDisplay = ({ state }: StateDisplayProps) => {
         }
       })
       .finally(() => {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       })
       return () => { cancelled = true; }
   }, [state?.coin, state?.date, eTransferred])

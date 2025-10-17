@@ -41,17 +41,10 @@
         "prod": "./build/index_prod.js"
       }
     },
-    "./electron": {
-      "browser": "./build/electron/bridge_browser.js",
-      "node": "./build/electron/bridge_node.js"
-    },
     "./cache": "./build/cache.js"
   },
   "typesVersions": {
     "*": {
-      "electron": [
-        "build/electron/bridge_browser.d.ts"
-      ],
       "cache": [
         "build/cache.d.ts"
       ],
