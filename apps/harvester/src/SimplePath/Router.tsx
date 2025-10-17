@@ -7,7 +7,7 @@ function PathRouter<T>(props: { path: Path<T>, data: T }): JSX.Element;
 function PathRouter(props: { path: Path<{}> }): JSX.Element;
 // Implementation
 function PathRouter<T>({path, data}: { path: Path<T>, data?: T }): JSX.Element {
-  const componentProps = (data ?? {}) as any;
+  const componentProps = (data ?? {}) as T;
 
   return (
     <Switch>

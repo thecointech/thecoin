@@ -63,5 +63,5 @@ function formatAccountNumber(number: string): string {
 }
 
 export function isMasked(accountNumber: string): boolean {
-  return accountNumber.includes('*') || accountNumber.includes('X');
+  return accountNumber.includes('*') || /x/i.test(accountNumber);
 }
