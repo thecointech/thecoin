@@ -67,16 +67,25 @@ export class TestData {
     if (files.length == 1 || cleanArgs.length == 0) {
       return this.json<VqaCallData>(files[0]);
     }
-    const argsEqual = (callArgs: any[]) => {
-      return callArgs.every((arg, i) => arg === cleanArgs[i]);
+    const argScore = (callArgs: any[]) => {
+      return callArgs.reduce((score, arg, i) => score + scoreArgs(arg, cleanArgs[i]), 0);
     }
-    for (const f of files) {
+
+    // Some pixel values can vary slightly from the original
+    // We assume that one of them matches, so just take the best
+    const scored = files.map(f => {
       const call = this.json<VqaCallData>(f);
-      if (call.args && argsEqual(call.args)) {
-        return call;
-      }
+      return {
+        call,
+        score: argScore(call.args)
+      };
+    });
+    const best = scored.reduce((best, call) => call.score < best.score ? call : best);
+    // Don't allow too much drift...
+    if (best.score > 100) {
+      throw new Error("Failed to find matching VQA call");
     }
-    return null;
+    return best.call;
   }
 
   *vqa_iter(fnName: string): Generator<VqaCallData, void, unknown> {
@@ -113,6 +122,19 @@ export class TestData {
     return rawJson;
   }
 
+  gold(name: string) {
+    const testFolder = process.env.PRIVATE_TESTING_PAGES;
+    if (!testFolder) {
+      throw new Error("PRIVATE_TESTING_PAGES environment variable is not set");
+    }
+    const goldFile = path.join(testFolder, "gold.json");
+    if (existsSync(goldFile)) {
+      const json = JSON.parse(readFileSync(goldFile, "utf-8"));
+      return json[name];
+    }
+    return null;
+  }
+
   toString(): string {
     return this.key;
   }
@@ -139,5 +161,22 @@ export class TestData {
       this.overrideData,
       this.getPage
     );
+  }
+}
+
+function scoreArgs(arg: any, clean: any) {
+  if (arg === clean) return 0;
+
+  switch(typeof arg) {
+    case "string":
+      // Allow white-space to be trimmed, but this must match
+      return arg.trim() == clean.trim() ? 0 : Infinity;
+    case "number":
+      // Allow numbers to vary slightly, as the cached
+      // page can differ from the original slightly
+      return Math.abs(Number(arg) - Number(clean));
+    default:
+      // All other types are not allowed to be different
+      return Infinity;
   }
 }

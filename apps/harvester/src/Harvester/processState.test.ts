@@ -47,6 +47,7 @@ const getData = () : HarvestData => ({
     dueAmount: currency(100),
     dueDate: DateTime.now().plus({ weeks: 1 }),
   },
+  coin: BigInt(100*1e6),
   date: DateTime.now(),
 
   state: {

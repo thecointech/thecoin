@@ -21,14 +21,17 @@ export type HarvestDelta = {
 }
 export type HarvestData = {
 
+  // When the run commences
   date: DateTime,
 
+  // starting balances
   visa: VisaBalanceResult,
   chq: ChequeBalanceResult,
+  coin: bigint,
 
-  // Delta-only changes
+  // Delta-only changes applied this session
   delta: HarvestDelta[],
-  // are cumulatively applied to state
+  // The final state after applying delta
   state: HarvestDelta;
 
   // Errors for the current run only (indexed by step name)

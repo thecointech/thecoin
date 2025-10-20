@@ -4,13 +4,8 @@ import { NormalizeAddress } from '@thecointech/utilities';
 import { ConnectContract } from '@thecointech/contract-core';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { log } from '@thecointech/logging';
-import { bridge } from '@thecointech/signers/electron';
+import { bridgeBrowser } from '@thecointech/electron-signer';
 import { getComposeDB } from '@thecointech/idx';
-import type { IpcRenderer } from 'electron';
-
-declare let window: Window & {
-  ipcRenderer: Pick<IpcRenderer, "invoke">
-};
 
 async function buildMapEntry(name: AccountName) {
   const signer = await getSigner(name);
@@ -33,7 +28,7 @@ export async function initialAccounts() {
 }
 export const initAccounts = async () => {
   log.debug('loading initial accounts');
-  bridge(window.ipcRenderer);
+  bridgeBrowser();
   const initial = await initialAccounts();
   AccountMap.initialize(initial);
 }

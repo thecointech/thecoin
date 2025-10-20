@@ -1,20 +1,30 @@
 import { Login as LoginUI } from "@thecointech/shared/containers/Login";
-import { Account, AccountState } from '@thecointech/shared/containers/Account';
 import { Redirect } from 'react-router';
 import { useEffect, useState } from 'react';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { isLocal } from '@thecointech/signers';
 import { BaseWallet, HDNodeWallet } from "ethers";
+import { groupKey } from './routes';
+import { Account } from "@thecointech/shared/containers/Account";
+import type { AccountState } from '@thecointech/account';
 
-export const Login = ({account}: {account: AccountState}) => {
-  // Start the account store (redux etc)
-  const [complete, setComplete] = useState(false);
-  Account(account.address).useStore();
+export const Login = () => {
+  // Basic guard component ensures we have an active account
+  // We split into two to ensure we follow the rules of hooks
+  // (we can't call Account.useStore() without a valid account)
   const active = AccountMap.useActive();
+  return active
+    ? <LoginAccount account={active} />
+    : <Redirect to={`/${groupKey}`} />
+}
+
+const LoginAccount = ({account}: {account: AccountState}) => {
+  Account(account.address).useStore();
+  const [complete, setComplete] = useState(false);
 
   useEffect(() => {
-    if (!active?.contract) return;
-    const {signer} = active;
+    if (!account?.contract) return;
+    const {signer} = account;
     if (!isLocal(signer)) {
       alert("Using harvester with remote accounts is not currently supported.  Ping me for details");
       throw new Error("Cannot continue, must give up...");
@@ -28,14 +38,17 @@ export const Login = ({account}: {account: AccountState}) => {
       path: hdWallet.path!,
       locale: hdWallet.mnemonic!.wordlist!.locale,
     }
-    window.scraper.setWalletMnemomic(mnemonic)
+    window.scraper.setCoinAccount({
+      mnemonic,
+      name: account.name,
+      address: account.address,
+    })
       .then(() => {
         setComplete(true)
       });
-  }, [active?.contract])
-
+  }, [account?.contract])
 
   return complete
-    ? <Redirect to="/account/plugins" />
+    ? <Redirect to={`/${groupKey}/1`} />
     : <LoginUI account={account} />
 }

@@ -9,6 +9,9 @@
   "license": "GPL-3.0-or-later",
   "main": ".webpack/main",
   "type": "commonjs",
+  "config": {
+    "forge": "config/forge.config.mjs"
+  },
   "scripts": {
     "build": "run -T tsc -b",
     "dev": "yarn _start:dbg",

@@ -2,21 +2,26 @@ import { ConfigShape } from "./types";
 import { defaultDays, defaultTime } from "./types-harvest";
 import type { ScrapingConfig } from "./types-scraper";
 
+const initConfig: ConfigShape = Object.freeze({
+  steps: [],
+  schedule: {
+    daysToRun: defaultDays,
+    timeToRun: defaultTime,
+  }
+});
 
 export const transformIn = (config: Partial<ConfigShape>, last?: ConfigShape) => {
 
   let scraping = getScrapingConfig(last?.scraping, config.scraping);
-
+  const prior = last ?? initConfig;
   return {
-    steps: config.steps ?? last?.steps ?? [],
+    ...prior,
+    ...config,
+    // Manual overrides
     schedule: {
-      daysToRun: config.schedule?.daysToRun ?? last?.schedule?.daysToRun ?? defaultDays,
-      timeToRun: config.schedule?.timeToRun ?? last?.schedule?.timeToRun ?? defaultTime,
+      ...prior.schedule,
+      ...config.schedule,
     },
-    alwaysRunScraperVisible: config.alwaysRunScraperVisible ?? last?.alwaysRunScraperVisible,
-    stateKey: config.stateKey ?? last?.stateKey,
-    wallet: config.wallet ?? last?.wallet,
-    creditDetails: config.creditDetails ?? last?.creditDetails,
     scraping,
   }
 };

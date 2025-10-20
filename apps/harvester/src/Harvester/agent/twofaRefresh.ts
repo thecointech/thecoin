@@ -2,16 +2,15 @@ import { getEvents } from "../events";
 import { ActionType } from "../scraper";
 import { ScraperCallbacks } from "../scraper/callbacks";
 import { BackgroundTaskCallback } from "@/BackgroundTask";
-import { EventSection, SectionName } from "@thecointech/scraper-agent/types";
+import { Agent, type EventSection, type SectionName } from "@thecointech/scraper-agent";
 import { sections } from '@thecointech/scraper-agent/processors/types';
 import { isSection } from "@thecointech/scraper-agent/replay/events";
-import { Agent } from "@thecointech/scraper-agent/agent";
 import { AnyEvent, InputEvent } from "@thecointech/scraper";
 import { copyProfile } from "@/Download/profile";
 import { log } from "@thecointech/logging";
 import { AskUserLogin } from "./askUserLogin";
 import { getErrorMessage } from "@/BackgroundTask/selectors";
-import { maybeSerializeRun } from "./maybeSerializer";
+import { maybeSerializeRun } from "../scraperLogging";
 
 const ProfileTask = "twofaRefresh";
 
@@ -38,16 +37,17 @@ export async function twofaRefresh(type: ActionType, refreshProfile: boolean, ca
       }
     }
 
-    using _ = maybeSerializeRun(logger.logsFolder, type);
+    using _ = await maybeSerializeRun(logger.logsFolder, type);
     await using agent = await Agent.create(ProfileTask, inputBridge, getUrl(events), logger);
-    const baseNode = await agent.process(toSkip);
-    const wasSuccess = baseNode.events.length > 0; // TODO: baseNode.events[baseNode.events.length - 1]. === "success";
-    logger.complete(wasSuccess);
+    const result = await agent.process(toSkip);
+    const wasSuccess = result.events.events.find(e => isSection(e) && e.section === "TwoFA");
+    const error = wasSuccess ? undefined : "TwoFA not found in processed events";
+    logger.complete({ result: wasSuccess ? "true" : "false", error });
     return true;
   }
   catch (e) {
     const message = getErrorMessage(e);
-    logger.complete(false, message);
+    logger.complete({ error: message });
     throw e;
   }
 }

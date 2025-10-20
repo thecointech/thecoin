@@ -33,7 +33,7 @@ type SerializerOptions = {
   recordFolder: string,
   // The bank names (constant throughout an execution)
   target: string,
-  skipSections?: string[],
+  skipSections?: SectionName[],
   // Used in replay - if true, we will take a screenshot
   // on every element found
   writeScreenshotOnElement?: boolean,
@@ -48,7 +48,8 @@ export class AgentSerializer implements Disposable {
   options: SerializerOptions;
   get recordFolder() { return this.options.recordFolder; }
   get target() { return this.options.target; }
-  get skipSections() { return this.options.skipSections; }
+  // By default, we skip the initial section
+  get skipSections() { return this.options.skipSections ?? ["Initial"]; }
   get writeScreenshotOnElement() { return this.options.writeScreenshotOnElement; }
 
   constructor(options: SerializerOptions) {
@@ -128,7 +129,7 @@ export class AgentSerializer implements Disposable {
   }
 
   pauseWriting() {
-    return this.tracker.currentSection == "Initial" || this.skipSections?.includes(this.tracker.currentSection);
+    return this.skipSections.includes(this.tracker.currentSection);
   }
 
   skipWriting(event: ApiCallEvent) {
@@ -241,34 +242,37 @@ export class AgentSerializer implements Disposable {
 
 
 class SectionTracker {
-  currentSection = "Initial";
-  sectionCounters: Record<string, {
+  currentSection: SectionName = "Initial";
+  sectionCounters: Partial<Record<SectionName, {
     step: number;
     elements: number;
     lastScreenshot?: Uint8Array | Buffer;
-  }> = {};
+  }>> = {};
   lastIntent?: string;
 
   get step() {
-    return this.sectionCounters[this.currentSection].step;
+    return this.sectionCounters[this.currentSection]?.step ?? 0;
   }
   get elements() {
-    return this.sectionCounters[this.currentSection].elements;
+    return this.sectionCounters[this.currentSection]?.elements ?? 0;
   }
 
   get section() {
-    return this.sectionCounters[this.currentSection];
+    return this.sectionCounters[this.currentSection]!;
   }
 
   set lastScreenshot(screenshot: Uint8Array | Buffer | undefined) {
-    this.sectionCounters[this.currentSection].lastScreenshot = screenshot;
+    const section = this.sectionCounters[this.currentSection];
+    if (section) {
+      section.lastScreenshot = screenshot;
+    }
   }
 
   get lastScreenshot() {
-    return this.sectionCounters[this.currentSection].lastScreenshot;
+    return this.sectionCounters[this.currentSection]?.lastScreenshot;
   }
 
-  setCurrentSection(section: string) {
+  setCurrentSection(section: SectionName) {
     this.currentSection = section;
     this.sectionCounters[section] = this.sectionCounters[section] ?? {
       step: 0,
@@ -276,11 +280,17 @@ class SectionTracker {
     };
   }
   incrementStep() {
-    this.section.step++;
-    this.section.elements = 0;
+    const section = this.sectionCounters[this.currentSection];
+    if (section) {
+      section.step++;
+      section.elements = 0;
+    }
     this.lastIntent = undefined;
   }
   incrementElement() {
-    this.section.elements++;
+    const section = this.sectionCounters[this.currentSection];
+    if (section) {
+      section.elements++;
+    }
   }
 }

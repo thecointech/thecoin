@@ -95,9 +95,13 @@ export abstract class BaseDatabase<Shape extends {}, Stored extends {}=Shape, In
 
 
 export function dbSuffix() {
+  // Allow debugging the app vs a live DB
+  if (process.env.CONFIG_ENV === 'prod' && process.env.HARVESTER_DEBUG_LIVE === 'true') {
+    return '';
+  }
   // We may run production builds in development mode, and
   // in these cases we don't want use the actual production DB
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'development' || process.env.CONFIG_NAME === 'development') {
     return '.dev';
   }
   else if (process.env.CONFIG_NAME === 'prodtest') {

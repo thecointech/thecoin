@@ -1,2 +1,2 @@
-export type { toDb, StoredData } from "./transform";
+export type { StoredData } from "./transform";
 export type { HarvestData, HarvestDelta } from "./types.harvest";

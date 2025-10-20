@@ -1,11 +1,12 @@
-import type { HarvestConfig, Mnemonic } from './types';
+import type { HarvestConfig } from './types';
 import type { ValueResult, ValueType} from "@thecointech/scraper/types";
 import type { CreditDetails } from './Harvester/types';
-import type { StoredData } from '@thecointech/store-harvester';
+import type { CoinAccount, CoinAccountDetails, StoredData } from '@thecointech/store-harvester';
 import { ActionType } from './Harvester/scraper';
 import { BackgroundTaskCallback } from './BackgroundTask/types';
 import type { OptionPacket, QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
 import type { AutoConfigParams } from './Harvester/agent';
+import type { BankConnectMap } from './Harvester/events';
 
 export type Result<T> = {
   error?: string;
@@ -33,7 +34,7 @@ export type ScraperBridgeApi = {
   // but you don't want to send unnecessary etransfers
   twofaRefresh: (actionName: ActionType, refreshProfile: boolean) => Promise<Result<boolean>>,
 
-  onAskQuestion: (callback: (question: QuestionPacket|OptionPacket) => void) => void;
+  onAskQuestion: (callback: (question: QuestionPacket|OptionPacket) => void) => () => void;
   replyQuestion: (response: ResponsePacket) => Promise<Result<boolean>>;
 
   // Declare a `readFile` function that will return a promise. This promise
@@ -48,8 +49,8 @@ export type ScraperBridgeApi = {
   // Finish Recording
   finishAction: () => Promise<Result<boolean>>,
 
-  setWalletMnemomic(mnemonic: Mnemonic): Promise<Result<boolean>>,
-  getWalletAddress(): Promise<Result<string|null>>,
+  setCoinAccount(coinAccount: CoinAccount): Promise<Result<boolean>>,
+  getCoinAccountDetails(): Promise<Result<CoinAccountDetails|null>>,
 
   hasCreditDetails(): Promise<Result<boolean>>,
   setCreditDetails(details: CreditDetails): Promise<Result<boolean>>,
@@ -59,7 +60,9 @@ export type ScraperBridgeApi = {
 
   // Set/get the alwaysRunVisible flag
   alwaysRunScraperVisible(visible?: boolean): Promise<Result<boolean>>,
-  runHarvester(forceVisible?: boolean): Promise<Result<boolean>>,
+  // Set/get the alwaysRunLogging flag
+  alwaysRunScraperLogging(logging?: boolean): Promise<Result<boolean>>,
+  runHarvester(forceVisible?: boolean): Promise<Result<string>>,
   getCurrentState(): Promise<Result<StoredData>>,
 
   exportResults(): Promise<Result<string>>
@@ -68,15 +71,21 @@ export type ScraperBridgeApi = {
   openLogsFolder(): Promise<Result<boolean>>,
   getArgv() : Promise<Result<Record<string, any>>>,
 
-  allowOverrides(): Promise<Result<boolean>>,
   setOverrides(balance: number, pendingAmt: number|null, pendingDate: string|null|undefined): Promise<Result<boolean>>,
 
   // Import a scraper script configuration
   importScraperScript(config: any): Promise<Result<boolean>>,
 
+  // Get banking connection details
+  getBankConnectDetails(): Promise<Result<BankConnectMap>>,
+
   // Lingering (systemd user background)
   hasUserEnabledLingering(): Promise<Result<boolean>>;
   enableLingeringForCurrentUser(): Promise<Result<{ success?: boolean; error?: string }>>;
+
+  // Wallet connect from site-app
+  loadWalletFromSite(timeoutMs?: number): Promise<Result<CoinAccountDetails>>;
+  cancelloadWalletFromSite(): Promise<Result<boolean>>;
 }
 
 export const actions = {
@@ -102,8 +111,8 @@ export const actions = {
   finishAction: 'scraper:finishAction',
 
   // Not really scraper, but meh
-  setWalletMnemomic: 'scraper:setWalletMnemomic',
-  getWalletAddress: 'scraper:getWalletAddress',
+  setCoinAccount: 'scraper:setCoinAccount',
+  getCoinAccountDetails: 'scraper:getCoinAccountDetails',
   hasUserEnabledLingering: 'scraper:hasUserEnabledLingering',
   enableLingeringForCurrentUser: 'scraper:enableLingeringForCurrentUser',
 
@@ -115,6 +124,7 @@ export const actions = {
   setHarvestConfig: 'scraper:setHarvestConfig',
 
   alwaysRunScraperVisible: 'scraper.alwaysRunScraperVisible',
+  alwaysRunScraperLogging: 'scraper.alwaysRunScraperLogging',
 
   runHarvester: 'scraper.runHarvester',
   getCurrentState: 'scraper.getCurrentState',
@@ -125,8 +135,12 @@ export const actions = {
   openLogsFolder: 'scraper:openLogsFolder',
   getArgv: 'scraper:getArgv',
 
-  allowOverrides: 'scraper:allowOverrides',
   setOverrides: 'scraper:setOverrides',
   importScraperScript: 'scraper:importScraperScript',
+  getBankConnectDetails: 'scraper:getBankConnectDetails',
+
+  // Wallet connect from site-app
+  loadWalletFromSite: 'scraper:loadWalletFromSite',
+  cancelloadWalletFromSite: 'scraper:cancelloadWalletFromSite',
 }
 export type Action = keyof typeof actions

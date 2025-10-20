@@ -1,0 +1,77 @@
+.cardNumberEdit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.maskedWarning {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  color: #856404;
+
+  .icon {
+    font-size: 1.25rem;
+  }
+}
+
+
+.cardNumberInput {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  input {
+    flex: 1;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-family: 'Courier New', monospace;
+    border: 2px solid #ced4da;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    &.invalid {
+      border-color: #dc3545;
+    }
+
+    &.valid {
+      border-color: #28a745;
+    }
+  }
+
+  .validateIcon {
+    font-size: 1.5rem;
+
+    &.valid {
+      color: #28a745;
+    }
+
+    &.invalid {
+      color: #dc3545;
+    }
+  }
+}
+
+.errorText {
+  font-size: 0.875rem;
+  color: #dc3545;
+  margin-top: 0.25rem;
+}
+
+.helpText {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-top: 0.25rem;
+  font-style: italic;
+}

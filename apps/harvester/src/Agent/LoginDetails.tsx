@@ -1,17 +1,19 @@
 import { useState } from "react";
-import { Button, Checkbox, Dimmer, Input, Loader, Segment } from "semantic-ui-react";
+import { Button, Dimmer, Input, Loader } from "semantic-ui-react";
 import type { BankData } from "./BankCard/data";
 import { isRunning, useBackgroundTask } from "@/BackgroundTask/index";
 import { BankType } from "@/Harvester/scraper";
 import { log } from "@thecointech/logging";
+import styles from './LoginDetails.module.less';
 
 type Props = BankData & {
   type: BankType;
+  both?: boolean;
+  disabled?: boolean;
 }
-export const LoginDetails: React.FC<Props> = ({ icon, name, url, type }) => {
+export const LoginDetails: React.FC<Props> = ({ icon, name, url, type, both, disabled }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [visible, setVisible] = useState(false);
 
   const group = useBackgroundTask("record");
   const replay = useBackgroundTask("replay");
@@ -24,37 +26,38 @@ export const LoginDetails: React.FC<Props> = ({ icon, name, url, type }) => {
     }
     // TODO: Send command to start the agent process
     log.info('Starting agent with:', url);
-    // api.setAgentProgress(undefined);
-    window.scraper.autoProcess({ name, url, type, username, password, visible });
+    const storedType = both ? "both" : type;
+    window.scraper.autoProcess({ type: storedType, config: { name, url, username, password }, visible: false });
   };
   return (
-    <Segment>
+    <div className={styles.loginContainer}>
       <Dimmer active={isTaskRunning}>
         <Loader />
       </Dimmer>
-      <p style={{ display: 'flex', alignItems: 'center' }}>
-        {
-          icon && (
-            <img style={{ width: '75px', height: '75px' }} src={icon} alt={name} />
-          )
-        }
-        Enter your login details:
-      </p>
-      <Input
-        fluid
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Enter your username..."
-      />
-      <Input
-        fluid
-        type='password'
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Enter your password..."
-      />
-      <Checkbox onChange={() => setVisible(!visible)} checked={visible} label='Visible' /><br />
-      <Button onClick={handleSubmit} loading={isTaskRunning}>Submit</Button>
-  </Segment>
+      <div className={styles.userForm}>
+        <p style={{ display: 'flex', alignItems: 'center' }}>
+          {
+            icon && (
+              <img style={{ width: '75px', height: '75px' }} src={icon} alt={name} />
+            )
+          }
+          Enter your login details:
+        </p>
+        <Input
+          fluid
+          value={username}
+          onChange={(_, data) => setUsername(String(data.value ?? ''))}
+          placeholder="Enter your username..."
+        />
+        <Input
+          fluid
+          type='password'
+          value={password}
+          onChange={(_, data) => setPassword(String(data.value ?? ''))}
+          placeholder="Enter your password..."
+        />
+        <Button onClick={handleSubmit} loading={isTaskRunning} disabled={disabled}>Submit</Button>
+      </div>
+    </div>
   )
 }

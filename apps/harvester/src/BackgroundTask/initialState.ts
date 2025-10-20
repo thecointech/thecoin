@@ -1,6 +1,7 @@
 import { GroupTask, SubTask } from "./types";
 
 export type GroupAndSubTask = GroupTask & {
+  timestamp: number,
   subTasks: SubTask[]
 };
 type GroupTaskStore = GroupAndSubTask[];

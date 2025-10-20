@@ -29,10 +29,10 @@ export class ConfigDatabase extends BaseDatabase<ConfigShape> implements Omit<Sr
 
   protected override async loadDb(): Promise<PouchDB.Database<ConfigShape>> {
 
-    log.info(`Initializing in-memory config database`);
     if (globalThis.__temp_config) {
       return globalThis.__temp_config;
     }
+    log.info(`Initializing in-memory config database`);
     globalThis.__temp_config = new PouchDB<ConfigShape>("in-memory", { adapter: 'memory' });
     // Disable closing in development
     globalThis.__temp_config['close'] = () => Promise.resolve();
@@ -44,11 +44,11 @@ export class ConfigDatabase extends BaseDatabase<ConfigShape> implements Omit<Sr
     // Seed DB in development with default config
     // Do not use the 'set' method, as the mutex
     // is currently held by whatever called this
-    const cfg = getSeedConfig();
-    const stored = this.config.transformIn(cfg);
-    await db.put({
-      ...stored,
-      _id: this.config.key,
-    });
+    // const cfg = getSeedConfig();
+    // const stored = this.config.transformIn(cfg);
+    // await db.put({
+    //   ...stored,
+    //   _id: this.config.key,
+    // });
   }
 }

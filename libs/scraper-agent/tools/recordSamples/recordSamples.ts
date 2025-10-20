@@ -16,7 +16,7 @@ mkdirSync(recordFolder, { recursive: true });
 
 const target = process.argv[2] ?? "Target";
 using askUser = new AskUserConsole();
-const writer = new AgentSerializer({ recordFolder, target });
+const writer = new AgentSerializer({ recordFolder, target, skipSections: [] });
 await using agent = await Agent.create(target, askUser);
 const page = agent.page;
 
@@ -80,9 +80,12 @@ while (recordMore) {
 
         break;
       }
-    case "Quit":
+    case "Quit": {
       recordMore = false;
+      const events = agent.events.allEvents;
+      await writer.logEvents(events);
       break;
+    }
   }
 }
 console.log("All Done");

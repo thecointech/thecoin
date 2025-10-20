@@ -6,7 +6,7 @@ const mockAuth = {
 const mockBitwardenClient = jest.fn().mockImplementation(() => ({
   auth: () => mockAuth,
   projects: () => ({
-    list: jest.fn<any>().mockResolvedValue({ data: [{ name: "test"}] })
+    list: jest.fn<any>().mockResolvedValue({ data: [{ name: "development"}] })
   }),
   secrets: () => ({
     list: jest.fn<any>().mockResolvedValue({ data: [] })
@@ -34,7 +34,7 @@ describe("verify created client", () => {
     process.env = {
       ...originalEnv,
       THECOIN_SECRETS: ".",
-      CONFIG_NAME: "test"
+      CONFIG_NAME: "development"
     };
     global.__tc_secretClient = undefined;
     mockAuth.loginAccessToken.mockClear();

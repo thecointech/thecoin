@@ -35,6 +35,10 @@ export type BaseProps<T=string> = {
 
   defaultValue?: T;
   resetToDefault?: number;
+  transformDisplayValue?: {
+    toDisplay: (value: string) => string;
+    toValue: (value: string) => string;
+  };
   name?: string;
   forceValidate?: boolean;
   readOnly?: boolean;

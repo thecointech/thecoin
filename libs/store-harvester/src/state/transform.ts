@@ -12,6 +12,7 @@ export type StoredData = {
   chq: {
     balance: string;
   };
+  coin: string;
   delta: Array<{
     harvesterBalance?: string;
     toETransfer?: string;
@@ -33,6 +34,7 @@ export const toDb = (data: HarvestData) : StoredData => cleanseObject({
 
   visa: toDbVisa(data.visa),
   chq: toDbChequing(data.chq),
+  coin: data.coin.toString(),
 
   delta: data.delta.map(toDbDelta),
   state: toDbDelta(data.state),
@@ -71,6 +73,7 @@ export const fromDb = (data: StoredData) : HarvestData => ({
   date: DateTime.fromISO(data.date),
   visa: fromDbVisa(data.visa),
   chq: fromDbChequing(data.chq),
+  coin: BigInt(data.coin),
   delta: data.delta.map(fromDbDelta),
   state: fromDbDelta(data.state),
 })

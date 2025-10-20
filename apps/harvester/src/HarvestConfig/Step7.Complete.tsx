@@ -1,29 +1,36 @@
-import { Button, Checkbox, Container, Message } from 'semantic-ui-react'
+import { Button, Container, Loader, Dimmer } from 'semantic-ui-react'
 import { ConfigReducer } from './state/reducer'
 import { useHistory } from 'react-router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export const Complete = () => {
   const navigate = useHistory();
   const data = ConfigReducer.useData();
-  const [visible, setVisible] = useState(false);
+  const [dimmerMessage, setDimmerMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    window.scraper.alwaysRunScraperVisible().then(r => setVisible(r.value ?? false))
-  }, [])
-
-  const setAlwaysVisible = async (visible?: boolean) => {
-    const r = await window.scraper.alwaysRunScraperVisible(visible)
-    setVisible(r.value ?? false)
-  }
+  const withDimmer = async <T,>(message: string, callback: () => Promise<T>): Promise<T> => {
+    setDimmerMessage(message);
+    try {
+      return await callback();
+    } finally {
+      setDimmerMessage(null);
+    }
+  };
 
   const setConfig = async () => {
-    await window.scraper.setHarvestConfig(data);
+    await withDimmer("Saving...", async () => {
+      await window.scraper.setHarvestConfig(data);
+    });
     navigate.push("/results");
   }
 
+  const paused = !!dimmerMessage;
+
   return (
     <Container>
+      <Dimmer active={paused} inverted>
+        <Loader>{dimmerMessage}</Loader>
+      </Dimmer>
       <h4>Start the Harvester</h4>
       <div>
         Thats it!  Your harvester is ready to go!
@@ -41,18 +48,8 @@ export const Complete = () => {
         you'll be amazed by the results.
       </div>
       <div>
-        <Button onClick={setConfig} style={{backgroundColor: 'green', color: 'white'}}>Save Config</Button>
+        <Button onClick={setConfig} loading={paused} disabled={paused} style={{backgroundColor: 'green', color: 'white'}}>Save Config</Button>
       </div>
-      <Message info>
-
-        To see what the harvester is doing, you can force it to always run visible.<br />
-        This is useful for debugging, but not recommended for normal use.
-        <br />
-        <Checkbox
-          onClick={(_, {checked}) => setAlwaysVisible(checked)}
-          checked={visible}
-          label="Force Always run visible" />
-      </Message>
     </Container>
   )
 }

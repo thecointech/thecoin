@@ -6,23 +6,36 @@ import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
 import styles from './app.module.less'
 import { useEffect } from 'react';
 import { BackgroundTaskReducer } from './BackgroundTask/reducer';
+import { AccountMap } from '@thecointech/shared/containers/AccountMap/reducer';
+import { ElectronSigner } from '@thecointech/electron-signer';
+import { AccountInitializer } from './account/AccountInitializer';
 
 export const App = () => {
   FxRateReducer.useStore();
   BackgroundTaskReducer.useStore();
 
+  const accountApi = AccountMap.useApi()
   const location = useLocation();
-  const openLogs = async () => {
-    await window.scraper.openLogsFolder()
-  }
-
   const backgroundTaskApi = BackgroundTaskReducer.useApi();
+
+  const activeAddress = AccountMap.useData().active;
 
   useEffect(() => {
     window.scraper.onBackgroundTaskProgress(progress => {
-      console.log(JSON.stringify(progress));
       backgroundTaskApi.setTaskProgress(progress);
     })
+
+    window.scraper.getCoinAccountDetails()
+      .then(res => {
+        if (res.value?.address) {
+          const signer = new ElectronSigner(res.value.address);
+          accountApi.addAccount(res.value.name, res.value.address, signer);
+          accountApi.setActiveAccount(res.value.address);
+        }
+      })
+      .catch(error => {
+        console.error('Failed to get coin account details:', error);
+      });
   }, [])
 
   return (
@@ -31,63 +44,65 @@ export const App = () => {
         <Menu pointing secondary vertical size="small">
           <Menu.Item header>TheCoin - Harvester</Menu.Item>
           <Menu.Item
-            name='home'
+            name='Welcome'
             active={location.pathname === '/'}
             as={Link}
             to='/'
           />
           <Menu.Item
-            name='Setup'
+            name='Get Started'
             active={location.pathname.startsWith('/browser')}
             as={Link}
             to='/browser'
           />
           <Menu.Item
-            name='Account'
+            name='Connect Coin Account'
             active={location.pathname.startsWith('/account')}
             as={Link}
             to='/account'
           />
           <Menu.Item
-            name='Agent'
+            name='Connect Bank Account'
             active={location.pathname.startsWith('/agent')}
             as={Link}
             to='/agent'
           />
-          <Menu.Item
+          {/*<Menu.Item
             name='Reset TwoFA'
             active={location.pathname.startsWith('/twofaRefresh')}
             as={Link}
             to='/twofaRefresh'
           />
-          <Menu.Item
+           <Menu.Item
             name='Training'
             active={location.pathname.startsWith('/train')}
             as={Link}
             to='/train'
-          />
+          /> */}
           <Menu.Item
-            name='Config'
+            name='Transfer Settings'
             active={location.pathname.startsWith('/config')}
             as={Link}
             to='/config'
           />
           <Menu.Item
-            name='Results'
+            name='My Dashboard'
             active={location.pathname.startsWith('/results')}
             as={Link}
             to='/results'
           />
           <Menu.Item
-            name='Logs'
-            onClick={openLogs}
+            name='Advanced Settings'
+            active={location.pathname.startsWith('/advanced')}
+            as={Link}
+            to='/advanced'
           />
         </Menu>
-        {/* {location.pathname} */}
       </div>
       <div className={styles.content}>
         <Routes />
       </div>
+      {activeAddress && <AccountInitializer address={activeAddress} />}
     </div>
   )
 }

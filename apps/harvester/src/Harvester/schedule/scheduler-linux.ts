@@ -12,6 +12,9 @@ const SystemdUserDir = `${homedir()}/.config/systemd/user`;
 const ServicePath = `${SystemdUserDir}/${ServiceName}`;
 const TimerPath = `${SystemdUserDir}/${TimerName}`;
 
+// Manual run via:
+// systemctl --user start thecoin-harvest.service
+
 export async function setSchedule(schedule: HarvestSchedule, _existing?: HarvestSchedule) {
   log.info(`Creating systemd schedule: ${JSON.stringify(schedule)}`);
   try {
@@ -60,6 +63,9 @@ Description=TheCoin Harvester Scheduled Job
 [Service]
 Type=simple${xvfbConfig}
 ExecStart=${process.execPath} --harvest
+RuntimeMaxSec=21600
+TimeoutStopSec=30
+KillMode=mixed
 `; // Add more options as needed
 }
 

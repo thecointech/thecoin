@@ -10,5 +10,5 @@
     }
   },
   "include": ["src/**/*", "src/**/*.json"],
-  "exclude": ["**/*.test.*", "**/__mocks__/**", "**/*.stories.*"],
+  "exclude": ["**/*.test.*", "**/__mocks__/**", "**/*.stories.*"]
 }
