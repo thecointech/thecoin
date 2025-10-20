@@ -1,14 +1,14 @@
 import 'semantic-ui-css/semantic.min.css'
 import { Menu } from 'semantic-ui-react'
 import { Link, useLocation } from 'react-router-dom'
-import { Routes } from './app.routes'
+import { Routes } from './routes'
 import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
 import styles from './app.module.less'
 import { useEffect } from 'react';
-import { BackgroundTaskReducer } from './BackgroundTask/reducer';
+import { BackgroundTaskReducer } from '../BackgroundTask/reducer';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap/reducer';
 import { ElectronSigner } from '@thecointech/electron-signer';
-import { AccountInitializer } from './account/AccountInitializer';
+import { AccountInitializer } from '../account/AccountInitializer';
 
 export const App = () => {
   FxRateReducer.useStore();
