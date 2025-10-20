@@ -1,11 +1,11 @@
 import { Button, Message } from 'semantic-ui-react'
-import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getErrors, useBackgroundTask } from '@/BackgroundTask';
 import { BackgroundTaskErrors, BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
 import { QuestionResponse } from '@/Agent/QuestionResponse';
 import { isRunning } from '@/BackgroundTask';
 import { ContentSection } from '@/ContentSection';
+import { NextButton } from '@/NextButton';
 
 export const Browser = () => {
 
@@ -31,6 +31,7 @@ export const Browser = () => {
   }
 
   return (
+    <>
     <ContentSection>
       <h2>
         Download necessary libraries
@@ -46,10 +47,9 @@ export const Browser = () => {
       <div>
         <Button onClick={startDownload} disabled={installing} loading={installing}>Download</Button>
       </div>
-      <div>
-        <Link to="/account">Connect your Coin Account</Link>
-      </div>
     </ContentSection>
+    <NextButton to="/account" content="Connect your Coin Account" />
+    </>
   )
 }
 
