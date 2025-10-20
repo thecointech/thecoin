@@ -46,13 +46,17 @@ export class Agent implements AgentClass {
         total: 1,
       });
     }
+    let accounts = await this.processAccounts(sectionsToSkip);
     return {
       events: this.mockEventsResponse(sectionsToSkip),
-      accounts: this.mockAccountResponse(sectionsToSkip),
+      accounts,
     }
   }
 
-  async processAccounts() {
+  async processAccounts(sectionsToSkip?: SectionName[]) {
+    if (!sectionsToSkip?.includes("AccountsSummary")) {
+      return this.mockAccountResponse();
+    }
     return [];
   }
 
@@ -81,10 +85,7 @@ export class Agent implements AgentClass {
   }
 
 
-  mockAccountResponse(sectionsToSkip?: SectionName[]): AccountResponse[] {
-    if (sectionsToSkip?.includes("AccountsSummary")) {
-      return [];
-    }
+  mockAccountResponse(): AccountResponse[] {
     return [
       {
         account_type: "Chequing" as const,
