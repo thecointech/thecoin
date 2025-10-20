@@ -43,7 +43,7 @@
     "dev:live:data": "cd tools && yarn pullRates",
     "dev:live:projects": "yarn wait-port 9377 && yarn lerna run dev:live --stream --no-bail",
     "dev:live:finalize": "yarn wait-port 7001 && yarn lerna run dev:live:finalize --stream --no-bail",
-    "dev:live": "cross-env CONFIG_NAME=devlive run-p emulators 'dev:live:*'",
+    "dev:live": "cross-env CONFIG_NAME=devlive TC_DEVLIVE_LOGGING_ROOT=$INIT_CWD run-p emulators 'dev:live:*'",
     "deploy:prodtest": "cross-env CONFIG_NAME=prodtest yarn _deploy",
     "deploy:prodbeta": "cross-env CONFIG_NAME=prodbeta yarn _deploy",
     "deploy:prod": "cross-env CONFIG_NAME=prod yarn _deploy",
