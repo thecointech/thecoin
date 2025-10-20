@@ -5,6 +5,7 @@ import { log } from "@thecointech/logging";
 import { bridgeNode } from "@thecointech/electron-signer";
 import { ipcMain } from 'electron';
 import { getWallet } from "./Harvester/config";
+import { NormalizeAddress } from "@thecointech/utilities";
 // Initialize main process configurations
 
 export function initMain() {
@@ -16,14 +17,9 @@ export function initMain() {
 
   bridgeNode(ipcMain, async (signerId) => {
     const wallet = await getWallet();
-    if (wallet?.address === signerId) {
+    if (wallet && NormalizeAddress(wallet.address) === NormalizeAddress(signerId)) {
       return wallet;
     }
     return undefined;
-  }, [
-    // TODO: can we safely whitelist everything here?
-    "getAddress",
-    "estimateGas",
-    "estimateGas"
-  ]);
+  }, true);
 }

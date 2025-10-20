@@ -43,8 +43,7 @@
     "js-base64": "^3.7.6"
   },
   "devDependencies": {
-    "@thecointech/electron-utils": "^0.3.13-test.0",
-    "@thecointech/setenv": "^0.3.13-test.0"
+    "@thecointech/electron-utils": "^0.3.13-test.0"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

@@ -1,4 +1,4 @@
-import { IAskUser, SectionName } from './types';
+import { IAskUser, ProcessAccount, ProcessResults, SectionName } from './types';
 import { log } from '@thecointech/logging';
 import { PageHandler } from './pageHandler';
 import { closeBrowser, IScraperCallbacks } from '@thecointech/scraper';
@@ -43,7 +43,7 @@ export class Agent implements AsyncDisposable {
     await closeBrowser();
   }
 
-  async process(sectionsToSkip: SectionName[] = []) {
+  async process(sectionsToSkip: SectionName[] = []) : Promise<ProcessResults> {
 
     log.info(`Processing ${this.name}`);
 
@@ -79,6 +79,21 @@ export class Agent implements AsyncDisposable {
       await this.maybeThrow(new Error("Failed to get to AccountsSummary"))
     }
 
+    let accounts = await this.processAccounts(sectionsToSkip);
+
+    // Once complete, logout politely
+    if (!sectionsToSkip.includes("Logout")) {
+      await this.processSection(Logout);
+    }
+
+    log.info(`Finished ${this.name}`);
+    return {
+      events: this.events.allEvents,
+      accounts,
+    }
+  }
+
+  async processAccounts(sectionsToSkip: SectionName[]) {
     if (!sectionsToSkip.includes("AccountsSummary")) {
       const accounts = await this.processSection(AccountsSummary);
       for (const account of accounts) {
@@ -91,16 +106,16 @@ export class Agent implements AsyncDisposable {
           await this.processSection(SendETransfer, account.account.account_number);
         }
       }
+      return accounts.map<ProcessAccount>(account => ({
+        account_name: account.account.account_name,
+        account_number: account.account.account_number,
+        account_type: account.account.account_type,
+        balance: account.account.balance,
+      }));
     }
-
-    // Once complete, logout politely
-    if (!sectionsToSkip.includes("Logout")) {
-      await this.processSection(Logout);
-    }
-
-    log.info(`Finished ${this.name}`);
-    return this.events.allEvents;
+    return [];
   }
+
 
   async processSection<Args extends any[], R>(
     processor: NamedProcessor<Args, R>,

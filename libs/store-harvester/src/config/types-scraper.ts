@@ -1,4 +1,4 @@
-import type { EventSection } from "@thecointech/scraper-agent/types";
+import type { ProcessResults } from "@thecointech/scraper-agent/types";
 
 export enum BankTypes { credit = 'credit', chequing = 'chequing', both = 'both' }
 export type BankType = keyof typeof BankTypes;
@@ -13,9 +13,7 @@ export type BankConfig = {
   password: string,
 } & BankIdent;
 
-export type BankEvents = {
-  events: EventSection,
-} & BankConfig;
+export type BankEvents = ProcessResults & BankConfig;
 
 export type ScrapingConfig = {
     [BankTypes.credit]?: BankEvents,

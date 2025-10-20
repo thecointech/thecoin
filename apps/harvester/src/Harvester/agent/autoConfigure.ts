@@ -1,4 +1,4 @@
-import { type SectionName, type EventSection, Agent } from '@thecointech/scraper-agent';
+import { type SectionName, type EventSection, Agent, ProcessResults } from '@thecointech/scraper-agent';
 import { ScraperCallbacks } from "../scraper/callbacks";
 import { log } from "@thecointech/logging";
 import { type BackgroundTaskCallback } from "@/BackgroundTask/types";
@@ -20,6 +20,12 @@ export type AutoConfigParams = {
 export async function autoConfigure({ type, config, visible }: AutoConfigParams, depositAddress: string, callback: BackgroundTaskCallback) {
 
   log.info(`Agent: Starting configuration for action: autoConfigure`);
+
+  // Create the logger quickly, as that triggers the background task/loading screen
+  const toSkip = getSectionsToSkip(type);
+  const toProcess = sections.filter(s => !toSkip.includes(s));
+  const logger = new ScraperCallbacks("record", callback, toProcess);
+
   // This should do nothing, but call it anyway
   await downloadRequired(callback);
 
@@ -32,29 +38,25 @@ export async function autoConfigure({ type, config, visible }: AutoConfigParams,
     password,
   }, depositAddress);
 
-  const toSkip = getSectionsToSkip(type);
-  const toProcess = sections.filter(s => !toSkip.includes(s));
-  const logger = new ScraperCallbacks("record", callback, toProcess);
-
   try {
     using _ = new VisibleOverride(visible)
     using _serializer = await maybeSerializeRun(logger.logsFolder, name);
     await using agent = await Agent.create(name, inputBridge, url, logger);
-    const baseNode = await agent.process(toSkip);
+    const results = await agent.process(toSkip);
 
     // Ensure we have required info
-    throwIfAnyMissing(baseNode, type);
+    throwIfAnyMissing(results.events, type);
 
-    await storeEvents(type, config, baseNode);
+    await storeEvents(type, config, results);
 
-    logger.complete(true);
+    logger.complete({ result: JSON.stringify(results.accounts) });
 
     log.info(`Agent: Finished configuring for action: ${name}`);
   }
   catch (e: any) {
     const msg = getErrorMessage(e);
     log.error({ err: e }, `Error configuring agent for action: ${name}`);
-    logger.complete(false, msg);
+    logger.complete({ error: msg });
     throw e;
   }
 
@@ -62,10 +64,10 @@ export async function autoConfigure({ type, config, visible }: AutoConfigParams,
   return true;
 }
 
-async function storeEvents(type: BankType, config: BankConfig, baseNode: EventSection) {
+async function storeEvents(type: BankType, config: BankConfig, results: ProcessResults) {
   await setEvents(type, {
     ...config,
-    events: baseNode
+    ...results,
   });
 }
 

@@ -14,15 +14,15 @@ type SignerFn = {
 
 //
 // Running in node process in electron
-export function bridgeNode(ipc: IpcMain, getSigner: GetSignerCallback, fnWhitelist?: SignerFn[]) {
+export function bridgeNode(ipc: IpcMain, getSigner: GetSignerCallback, logFunctionCalls?: boolean) {
   log.debug("Initializing signers IPC:handle...");
   // Listen for incoming requests
-  ipc.handle(SIGNER_CHANNEL, async (_event, signerId: string, func: SignerFn, args: any[]) => {
+  ipc.handle(SIGNER_CHANNEL, async (_event, signerId: string, func: SignerFn, ...args: any[]) => {
     // In some contexts (e.g. harvester) we don't want to expose the full
     // suite of functions to the renderer process
-    if (fnWhitelist) {
+    if (logFunctionCalls) {
       // throw new Error(`Unknown function requested: ${signerId}):${func}`);
-      log.warn(`function requested: ${signerId}):${func}`);
+      log.info(`function requested: ${signerId}):${func}`);
     }
     const signer = await getSigner(signerId);
     if (!signer) {

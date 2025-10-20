@@ -9,8 +9,9 @@ import styles from './LoginDetails.module.less';
 type Props = BankData & {
   type: BankType;
   both?: boolean;
+  disabled?: boolean;
 }
-export const LoginDetails: React.FC<Props> = ({ icon, name, url, type, both }) => {
+export const LoginDetails: React.FC<Props> = ({ icon, name, url, type, both, disabled }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -55,7 +56,7 @@ export const LoginDetails: React.FC<Props> = ({ icon, name, url, type, both }) =
           onChange={(_, data) => setPassword(String(data.value ?? ''))}
           placeholder="Enter your password..."
         />
-        <Button onClick={handleSubmit} loading={isTaskRunning}>Submit</Button>
+        <Button onClick={handleSubmit} loading={isTaskRunning} disabled={disabled}>Submit</Button>
       </div>
     </div>
   )

@@ -1,9 +1,9 @@
 import { getAndCacheSigner } from '../cache';
-import { ElectronSigner } from './signer';
 import type { AccountName } from '../names';
+import { ElectronSigner } from '@thecointech/electron-signer';
 
 //
-// Running in browser on GAE
+// Running in node process in electron
 export * from '../names';
 export const getSigner = (name: AccountName) =>
   getAndCacheSigner(name, () => new ElectronSigner(name));

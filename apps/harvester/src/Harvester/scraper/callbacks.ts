@@ -92,13 +92,14 @@ export class ScraperCallbacks implements IScraperCallbacks {
     })
   };
 
-  async complete(success: boolean, error?: string) {
+  async complete({ result, error }: { result?: string, error?: string }) {
     // Update TaskGroup
-    const e = error ?? (success ? undefined : "Unknown error");
+    const e = error ?? (!!result ? undefined : "Unknown error");
     this.uiCallback?.({
       id: this.id,
       type: this.taskType,
       completed: true,
+      result,
       error: e,
     })
   }

@@ -12309,18 +12309,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/electron-signer@workspace:libs/electron-signer":
+"@thecointech/electron-signer@workspace:*, @thecointech/electron-signer@workspace:libs/electron-signer":
   version: 0.0.0-use.local
   resolution: "@thecointech/electron-signer@workspace:libs/electron-signer"
   dependencies:
-    "@thecointech/secrets": "npm:^0.3.13-test.0"
-    "@thecointech/setenv": "npm:^0.3.13-test.0"
-    "@vercel/webpack-asset-relocator-loader": "npm:1.7.3"
-    css-loader: "npm:^6.0.0"
-    fork-ts-checker-webpack-plugin: "npm:^7.2.13"
-    node-loader: "npm:^2.1.0"
-    style-loader: "npm:^3.0.0"
-    ts-loader: "npm:^9.2.2"
+    "@thecointech/electron-utils": "npm:^0.3.13-test.0"
+    "@thecointech/ethers-provider": "workspace:^"
+    "@thecointech/logging": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -12359,7 +12354,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/ethers-provider@npm:^0.3.13-test.5, @thecointech/ethers-provider@workspace:libs/ethers-provider":
+"@thecointech/ethers-provider@npm:^0.3.13-test.5, @thecointech/ethers-provider@workspace:^, @thecointech/ethers-provider@workspace:libs/ethers-provider":
   version: 0.0.0-use.local
   resolution: "@thecointech/ethers-provider@workspace:libs/ethers-provider"
   dependencies:
@@ -12419,7 +12414,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/logging@npm:^0.3.13-test.0, @thecointech/logging@workspace:libs/logging":
+"@thecointech/logging@npm:^0.3.13-test.0, @thecointech/logging@workspace:^, @thecointech/logging@workspace:libs/logging":
   version: 0.0.0-use.local
   resolution: "@thecointech/logging@workspace:libs/logging"
   dependencies:
@@ -12635,6 +12630,7 @@ __metadata:
   dependencies:
     "@ethers-ext/signer-ledger": "npm:^6.0.0-beta.1"
     "@ledgerhq/hw-transport-node-hid": "npm:^6.28.6"
+    "@thecointech/electron-signer": "workspace:*"
     "@thecointech/electron-utils": "npm:^0.3.13-test.0"
     "@thecointech/ethers-provider": "npm:^0.3.13-test.5"
     "@thecointech/logging": "npm:^0.3.13-test.0"
@@ -13002,7 +12998,6 @@ __metadata:
   resolution: "@thecointech/tx-gmail@workspace:libs/tx-gmail"
   dependencies:
     "@thecointech/electron-utils": "npm:^0.3.13-test.0"
-    "@thecointech/setenv": "npm:^0.3.13-test.0"
     "@thecointech/utilities": "npm:^0.3.13-test.3"
     currency.js: "npm:^2.0.4"
     googleapis: "npm:^129.0.0"
@@ -26758,6 +26753,7 @@ __metadata:
     "@thecointech/contract-plugin-converter": "npm:^0.3.13-test.5"
     "@thecointech/contract-plugin-shockabsorber": "npm:^0.3.13-test.5"
     "@thecointech/contract-plugins": "npm:^0.3.13-test.5"
+    "@thecointech/electron-signer": "workspace:*"
     "@thecointech/fx-rates": "npm:^0.3.13-test.5"
     "@thecointech/jestutils": "npm:^0.3.13-test.0"
     "@thecointech/logging": "npm:^0.3.13-test.0"

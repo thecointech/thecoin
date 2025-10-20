@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom"
 import { DefaultPathProps, usePathIndex } from "./types"
 import styles from './NextButton.module.less';
 
-export const PathNextButton = ({path}: DefaultPathProps) => {
+export const PathNextButton = <T,>({path}: DefaultPathProps<T>) => {
     const navigate = useHistory();
     const currentStep = usePathIndex();
     const buttonDisplay = currentStep == (path.routes.length - 1)

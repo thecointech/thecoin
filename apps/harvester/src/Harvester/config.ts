@@ -61,6 +61,7 @@ export async function hydrateProcessor() {
 
 export async function setCreditDetails(creditDetails: CreditDetails) {
   await db.set({creditDetails})
+  log.debug(`Set credit details`)
   return true;
 }
 

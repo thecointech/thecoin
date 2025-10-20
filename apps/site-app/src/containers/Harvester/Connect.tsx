@@ -68,7 +68,7 @@ export const HarvesterConnect: React.FC = () => {
     const fields: ConnectionValues = {
       state,
       siteOrigin: window.location.origin,
-      timestamp: new Date().toISOString(),
+      timestamp: Date.now().toString(),
       address: active.address,
       name: active.name,
       walletFile: walletFile!,

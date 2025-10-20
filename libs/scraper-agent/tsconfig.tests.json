@@ -6,5 +6,5 @@
     },
     "strict": true,
   },
-  "include": ["**/*.test.*", "tools/**/*.ts", "internal/*.*", "**/*.stories.*", ],
+  "include": ["**/*.test.*", "tools/**/*.ts", "internal/*.*", "**/*.stories.*", "./mocked/**/*.*"],
 }

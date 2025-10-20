@@ -22,6 +22,6 @@ export async function getValues(actionName: ActionType, callback?: BackgroundTas
   }
   using _ = await maybeSerializeRun(scraperCallbacks.logsFolder, actionName, true, []);
   const r = await replay({ name: actionName, delay }, replayEvents, scraperCallbacks, dynamicValues);
-  scraperCallbacks.complete(true);
+  scraperCallbacks.complete({ result: JSON.stringify(r) });
   return r;
 }

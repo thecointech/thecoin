@@ -1,6 +1,6 @@
 import { jest } from "@jest/globals";
 import { getTestData } from "../../internal/getTestData";
-import { findAccountElements, saveAccountNavigation, saveBalanceElement, updateAccountNumber } from "./accountSummary"
+import { findAccountElements, saveAccountNavigation, saveBalanceElement, validateAccountNumberAgainstSource } from "./accountSummary"
 import { describe } from '@thecointech/jestutils';
 import { hasTestingPages } from "@thecointech/scraper/testutils";
 import { OverviewResponse } from "@thecointech/vqa";
@@ -26,7 +26,7 @@ describe('Updates to the correct account number', () => {
     const listed = test.vqa("listAccounts");
     for (const inferred of listed!.response.accounts) {
       const element = test.elm("account");
-      const actual = updateAccountNumber(inferred, element!)
+      const actual = validateAccountNumberAgainstSource(inferred.account_number, element!)
       // This is sufficient for the tests we have now, but likely will not work
       // in more complicated situations.
       expect(element).toBeTruthy();

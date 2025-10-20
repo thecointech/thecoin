@@ -1,17 +1,17 @@
 import { BankCard, CustomBankCard } from "./BankCard/BankCard"
 import { BankData, banks } from "./BankCard/data"
-import { useLocation } from "react-router-dom"
 import { BankConnectReducer } from "./state/reducer"
-import { BankType } from "./state/types"
+import { RendererBankType } from "./state/types"
+import type { BankReducerType } from "./state/initialState"
 
 type Props = {
-  type: BankType
+  type: RendererBankType
+  selected?: BankReducerType
 }
 
-export const SelectBank = ({ type }: Props) => {
+export const SelectBank = ({ type, selected }: Props) => {
 
   const api = BankConnectReducer.useApi();
-  const data = BankConnectReducer.useData();
   const handleSetBank = (bank: BankData) => {
     api.setBank(type, bank)
   }
@@ -22,17 +22,11 @@ export const SelectBank = ({ type }: Props) => {
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
         {
           banks.map((bank, i) => (
-            <BankCard key={i} {...bank} isSelected={bank.name === data[type]?.name} onClick={handleSetBank} />
+            <BankCard key={i} {...bank} isSelected={bank.name === selected?.name} onClick={handleSetBank} />
           ))
         }
-        <CustomBankCard isSelected={data[type]?.name === "Custom"} onClick={handleSetBank} />
+        <CustomBankCard isSelected={selected?.name === "Custom"} onClick={handleSetBank} />
       </div>
     </>
-  )
-}
-export const DummyStep = () => {
-  const location = useLocation();
-  return (
-    <div>dummy {location.pathname}</div>
   )
 }

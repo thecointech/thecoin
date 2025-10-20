@@ -17,7 +17,7 @@ export const Account = () => {
       <PathSteps path={path} data={active}/>
       <div>
         <ContentSection>
-          <PathRouter path={path} />
+          <PathRouter path={path} data={active} />
           <PathNextButton path={path} />
         </ContentSection>
       </div>

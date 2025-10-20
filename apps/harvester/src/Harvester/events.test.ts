@@ -14,6 +14,7 @@ describe('setting/getting events', () => {
     url: 'https://credit.com',
     username: 'credit',
     password: 'credit',
+    accounts: [],
     events: { section: 'Initial', events: [{ type: 'click', id: 'credit'} as any] }
   };
   const chequingSection: BankEvents = {
@@ -21,6 +22,7 @@ describe('setting/getting events', () => {
     url: 'https://chequing.com',
     username: 'chequing',
     password: 'chequing',
+    accounts: [],
     events: { section: 'Initial', events: [{ type: 'click', id: 'chequing'} as any] }
   };
 

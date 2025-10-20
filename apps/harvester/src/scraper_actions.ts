@@ -6,7 +6,7 @@ import { ActionType } from './Harvester/scraper';
 import { BackgroundTaskCallback } from './BackgroundTask/types';
 import type { OptionPacket, QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
 import type { AutoConfigParams } from './Harvester/agent';
-import type { BankConnectDetails } from './Harvester/events';
+import type { BankConnectMap } from './Harvester/events';
 
 export type Result<T> = {
   error?: string;
@@ -77,7 +77,7 @@ export type ScraperBridgeApi = {
   importScraperScript(config: any): Promise<Result<boolean>>,
 
   // Get banking connection details
-  getBankConnectDetails(): Promise<Result<BankConnectDetails>>,
+  getBankConnectDetails(): Promise<Result<BankConnectMap>>,
 
   // Lingering (systemd user background)
   hasUserEnabledLingering(): Promise<Result<boolean>>;
