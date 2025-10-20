@@ -4,11 +4,12 @@ import { getCSP } from './csp';
 import { ipcMain } from 'electron';
 import { log } from '@thecointech/logging';
 import gmail from '@thecointech/tx-gmail';
-import * as signers from '@thecointech/signers/electron';
 import contextMenu from 'electron-context-menu';
 // We need to pull in environment vars to load signers
 import { getEnvVars } from '@thecointech/setenv';
 import { getFirebaseConfig } from './firebaseConfig';
+import { bridgeNode } from '@thecointech/electron-signer';
+import { type AccountName, getSigner } from '@thecointech/signers';
 
 const vars = getEnvVars();
 process.env = {
@@ -79,7 +80,7 @@ app.whenReady()
 .then(() => {
   // Initialize node-side tx-gmail
   gmail.bridge(ipcMain);
-  signers.bridge(ipcMain);
+  bridgeNode(ipcMain, (id: string) => getSigner(id as AccountName));
 
   // Set up secrets handler
   ipcMain.handle('getFirebaseConfig', async (_event) => {
