@@ -14,7 +14,7 @@ type SignerFn = {
 
 //
 // Running in node process in electron
-export function bridgeNode(ipc: IpcMain, getSigner: GetSignerCallback, logFunctionCalls?: boolean) {
+export function bridgeElectronSigner(ipc: IpcMain, getSigner: GetSignerCallback, logFunctionCalls?: boolean) {
   log.debug("Initializing signers IPC:handle...");
   // Listen for incoming requests
   ipc.handle(SIGNER_CHANNEL, async (_event, signerId: string, func: SignerFn, ...args: any[]) => {

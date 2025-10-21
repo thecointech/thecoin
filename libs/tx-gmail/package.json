@@ -30,12 +30,33 @@
   ],
   "exports": {
     ".": {
-      "development": "./build/index_mocked.js",
-      "electron": "./build/index_electron.js",
-      "node": "./build/index_node.js"
+      "types": "./build/index.d.ts",
+      "electron": "./build/electron/index.js",
+      "default": "./build/index.js"
+    },
+    "./bridge": {
+      "types": "./build/electron/bridgeTxGmail.d.ts",
+      "default": "./build/electron/bridgeTxGmail.js"
+    },
+    "./preload": {
+      "types": "./build/electron/preload.d.ts",
+      "default": "./build/electron/preload.js"
     }
   },
-  "types": "./build/index_common.d.ts",
+  "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "build/index.d.ts": [
+        "build/index.d.ts"
+      ],
+      "preload": [
+        "build/electron/preload.d.ts"
+      ],
+      "bridge": [
+        "build/electron/bridgeTxGmail.d.ts"
+      ]
+    }
+  },
   "dependencies": {
     "@thecointech/utilities": "^0.4.0-test.0",
     "currency.js": "^2.0.4",

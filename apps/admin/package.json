@@ -22,7 +22,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts .",
-    "_start:dbg": "yarn run -T cross-env NODE_ENV=development yarn run-env $(yarn bin electron-forge) start"
+    "_start:dbg": "yarn run -T cross-env NODE_ENV=development ELECTRON_DISABLE_SANDBOX=1 yarn run-env $(yarn bin electron-forge) start"
   },
   "keywords": [],
   "devDependencies": {
