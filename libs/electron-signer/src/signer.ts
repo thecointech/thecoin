@@ -25,9 +25,6 @@ export class ElectronSigner implements Signer {
   }
 
   invoke(fn: string, ...args: any[]): Promise<any> {
-    if (!ElectronSigner._ipc) {
-      throw new Error('ElectronSigner: invoke: ipcSigner not found.  Ensure preload is called');
-    }
     return ElectronSigner._ipc.invoke(this._signerId, fn, ...args);
   }
 

@@ -27,16 +27,16 @@ export async function getSecret(name: SecretKeyType) {
       // Used by devlive for self-hosted ceramic
       return Promise.resolve("e663239643ed99d36a29bd048717c4e2b4be6c5629b997cae6de6184bf4e92a1")
     case "TxGmailClient":
-      {
-        // tx-gmail:authConfig needs a parsable value
-        const r = { Id: "mock", Secret: "mock", Uri: "mock", ListenerPort: 12345 };
-        return Promise.resolve(JSON.stringify(r));
-      }
+    {
+      // tx-gmail:authConfig needs a parsable value
+      const r = { Id: "mock", Secret: "mock", Uri: "mock", ListenerPort: 12345 };
+      return Promise.resolve(JSON.stringify(r));
+    }
     case "FirebaseConfig":
-      {
-        const r = { ApiKey: "mock", AuthDomain: "mock", ProjectId: "mock" };
-        return Promise.resolve(JSON.stringify(r));
-      }
+    {
+      const r = { ApiKey: "mock", AuthDomain: "mock", ProjectId: "mock" };
+      return Promise.resolve(JSON.stringify(r));
+    }
     default:
       return Promise.resolve(`mock-${name}`);
   }

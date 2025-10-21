@@ -5,7 +5,7 @@ export const getConsoleStream = (level?: number) : Stream => {
 
   // On devlive, this gives nice relative paths.  Everywhere else, it's process.cwd()
   const basepath = process.env.TC_DEVLIVE_LOGGING_ROOT || process.cwd();
-  return   {
+  return {
     level: level ?? 'trace',
     stream: debug_stream({
       basepath,

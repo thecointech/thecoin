@@ -1,4 +1,3 @@
-
 export const messages = {
   INITIALIZE: "initialize",
   QUERY_ETRANSFERS: "queryETransfers",
