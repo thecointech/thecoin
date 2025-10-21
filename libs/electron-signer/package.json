@@ -28,6 +28,10 @@
       "types": "./build/index.d.ts",
       "default": "./build/index.js"
     },
+    "./bridge": {
+      "types": "./build/bridge.d.ts",
+      "default": "./build/bridge.js"
+    },
     "./preload": {
       "types": "./build/preload.d.ts",
       "default": "./build/preload.js"
@@ -37,6 +41,9 @@
     "*": {
       "preload": [
         "./build/preload.d.ts"
+      ],
+      "bridge": [
+        "./build/bridge.d.ts"
       ],
       "*": [
         "./build/index.d.ts"
