@@ -35,15 +35,6 @@ function getCredentials(token?: string) {
       log.warn({ err }, "initialize: invalid token JSON");
       return null;
     }
-
-    // const credentials =  JSON.parse(token);
-    // return credentials;
-    // if (credentials.expiry_date > Date.now()) {
-    //   return credentials;
-    // }
-    // else {
-    //   log.warn("Token expired, requesting new token");
-    // }
   }
   return null;
 }

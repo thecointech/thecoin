@@ -3,4 +3,4 @@ export const messages = {
   QUERY_ETRANSFERS: "queryETransfers",
   QUERY_NEW_DEPOSITS: "queryNewDepositEmails",
   SET_LABEL: "setLabel",
-}
+} as const
