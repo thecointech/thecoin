@@ -4,7 +4,6 @@ import { NormalizeAddress } from '@thecointech/utilities';
 import { ConnectContract } from '@thecointech/contract-core';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { log } from '@thecointech/logging';
-import { bridgeBrowser } from '@thecointech/electron-signer';
 import { getComposeDB } from '@thecointech/idx';
 
 async function buildMapEntry(name: AccountName) {
@@ -28,7 +27,6 @@ export async function initialAccounts() {
 }
 export const initAccounts = async () => {
   log.debug('loading initial accounts');
-  bridgeBrowser();
   const initial = await initialAccounts();
   AccountMap.initialize(initial);
 }

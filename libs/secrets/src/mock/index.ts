@@ -32,6 +32,11 @@ export async function getSecret(name: SecretKeyType) {
         const r = { Id: "mock", Secret: "mock", Uri: "mock", ListenerPort: 12345 };
         return Promise.resolve(JSON.stringify(r));
       }
+    case "FirebaseConfig":
+      {
+        const r = { ApiKey: "mock", AuthDomain: "mock", ProjectId: "mock" };
+        return Promise.resolve(JSON.stringify(r));
+      }
     default:
       return Promise.resolve(`mock-${name}`);
   }

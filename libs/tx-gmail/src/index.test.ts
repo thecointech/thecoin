@@ -1,14 +1,10 @@
 import { jest } from '@jest/globals';
-import fns from './index_mocked';
 import { queryNewDepositEmails } from './query'
-
-beforeAll(async () => {
-  const timeout = 30 * 60 * 1000;
-  jest.setTimeout(timeout);
-  await fns.initialize();
-});
+import { initializeApi } from './fetch'
 
 it('Can fetch new emails (mocked)', async () => {
+  await initializeApi({} as any);
+
   const deposits = await queryNewDepositEmails();
   expect(deposits).not.toBeUndefined();
   // ensure these are all test emails;

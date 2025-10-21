@@ -22,6 +22,7 @@ const mainConfigMerged = mainConfig({
   ],
   externals: [
     '@bitwarden/sdk-napi',
+    'usb',
   ],
 
 });
@@ -55,7 +56,6 @@ const config = {
   ],
   hooks: {
     postStart: async (config) => {
-      console.log("postStart executing");
       const mainPackageJsonPath = path.join(".webpack", 'main', 'package.json'); // Adjust as needed
       writeFileSync(mainPackageJsonPath, JSON.stringify({ type: 'commonjs' }, null, 2));
     },
