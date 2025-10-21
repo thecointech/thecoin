@@ -2,10 +2,10 @@ import { jest } from '@jest/globals';
 import { init } from '@thecointech/firestore';
 import { ConnectContract } from '@thecointech/contract-core';
 import { ETransferErrorCode } from '@thecointech/bank-interface';
-import gmail from '@thecointech/tx-gmail';
 import { getSigner } from '@thecointech/signers';
 import { BuyActionContainer } from '@thecointech/tx-statemachine';
 import { mockError } from '@thecointech/logging/mock';
+import { initialize } from '@thecointech/tx-gmail';
 
 jest.setTimeout(900000);
 
@@ -38,7 +38,7 @@ const { getCurrentState } = await import('@thecointech/tx-statemachine');
 it("Can complete deposits", async () => {
 
   init({});
-  await gmail.initialize();
+  await initialize(JSON.stringify({ refresh_token: "", access_token: "", expiry_date: 0 }));
 
   const brokerCad = await getSigner("BrokerCAD");
   const theContract = await ConnectContract(brokerCad);
