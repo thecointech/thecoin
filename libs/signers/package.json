@@ -30,7 +30,6 @@
     ".": {
       "development": "./build/index_mocked.js",
       "devlive": "./build/index_devlive.js",
-      "electron": "./build/electron/index.js",
       "browser": {
         "default": "./build/names.js"
       },
