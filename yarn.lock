@@ -12630,7 +12630,6 @@ __metadata:
   dependencies:
     "@ethers-ext/signer-ledger": "npm:^6.0.0-beta.1"
     "@ledgerhq/hw-transport-node-hid": "npm:^6.28.6"
-    "@thecointech/electron-signer": "workspace:*"
     "@thecointech/electron-utils": "npm:^0.4.0-test.1"
     "@thecointech/ethers-provider": "npm:^0.4.0-test.1"
     "@thecointech/logging": "npm:^0.4.0-test.1"
@@ -43279,6 +43278,7 @@ __metadata:
     "@electron-forge/plugin-auto-unpack-natives": "npm:^7.2.0"
     "@electron-forge/plugin-webpack": "npm:^7.2.0"
     "@thecointech/contract-core": "npm:^0.4.0-test.1"
+    "@thecointech/electron-signer": "workspace:*"
     "@thecointech/setenv": "workspace:^"
     "@thecointech/shared": "npm:^0.4.0-test.1"
     "@thecointech/tx-bill": "npm:^0.4.0-test.1"
