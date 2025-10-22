@@ -38,7 +38,7 @@ const { getCurrentState } = await import('@thecointech/tx-statemachine');
 it("Can complete deposits", async () => {
 
   init({});
-  await initialize(JSON.stringify({ refresh_token: "", access_token: "", expiry_date: 0 }));
+  await initialize("{}");
 
   const brokerCad = await getSigner("BrokerCAD");
   const theContract = await ConnectContract(brokerCad);
