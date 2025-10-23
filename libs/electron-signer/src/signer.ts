@@ -2,8 +2,16 @@ import type { Invoker } from './types';
 import type { Signer,BlockTag, FeeData, Provider, TransactionRequest, TransactionResponse, BytesLike, TransactionLike, TypedDataDomain, TypedDataField, Authorization, AuthorizationRequest } from "ethers";
 import { getProvider } from '@thecointech/ethers-provider';
 
+declare let window: Window & {
+  ipcSigner: Invoker;
+};
+// Critical failure, stop the app
+if (!window.ipcSigner) {
+  throw new Error('ElectronSigner: bridgeBrowser: ipcSigner not found.  Ensure preload is called');
+}
+
 export class ElectronSigner implements Signer {
-  static _ipc: Invoker|null = null;
+  static _ipc: Invoker = window.ipcSigner;
 
   provider: Provider | null = null;
   _signerId: string;

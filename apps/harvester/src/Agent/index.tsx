@@ -14,7 +14,7 @@ export const BankConnect = () => {
       <PathSteps path={paths} data={data} />
       <ContentSection className={styles.container}>
         <PathRouter path={paths} data={data} />
-        <PathNextButton path={paths} />
+        {/* <PathNextButton path={paths} /> */}
       </ContentSection>
     </div>
   )

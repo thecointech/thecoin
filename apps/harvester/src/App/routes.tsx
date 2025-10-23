@@ -1,5 +1,5 @@
 import { Home } from '../home';
-import { Browser } from '../Download';
+import { Browser } from '../GetStarted';
 import { Account } from '../account';
 import { Training } from '../Training';
 import { Route, Switch } from 'react-router-dom';

@@ -1,11 +1,11 @@
-import { Button, Message } from 'semantic-ui-react'
+import { Header, Message } from 'semantic-ui-react'
 import { useEffect, useState } from 'react';
 import { getErrors, useBackgroundTask } from '@/BackgroundTask';
 import { BackgroundTaskErrors, BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
 import { QuestionResponse } from '@/Agent/QuestionResponse';
 import { isRunning } from '@/BackgroundTask';
 import { ContentSection } from '@/ContentSection';
-import { NextButton } from '@/NextButton';
+import { ActionButton } from '@/ContentSection/Action';
 
 export const Browser = () => {
 
@@ -31,25 +31,29 @@ export const Browser = () => {
   }
 
   return (
-    <>
     <ContentSection>
-      <h2>
-        Download necessary libraries
-      </h2>
-      <h4>
+      <Header size="small">Download necessary libraries</Header>
+      <p>
         Your harvester requires several libraries to function.  These can be downloaded below.
-      </h4>
+      </p>
+      <ActionButton
+        onClick={startDownload}
+        disabled={installing}
+        loading={installing}
+        content="Download"
+      />
       <OnCompleteMessage complete={hasInstalled} />
       {/* Allow user to confirm closing any running chrome instances */}
       <QuestionResponse backgroundTaskId="initialize" />
       <BackgroundTaskProgressBar type="initialize" />
       <BackgroundTaskErrors type="initialize" />
-      <div>
-        <Button onClick={startDownload} disabled={installing} loading={installing}>Download</Button>
-      </div>
+
+      <ContentSection.Next
+        to="/account"
+        content="Connect your Coin Account"
+        disabled={!hasInstalled}
+      />
     </ContentSection>
-    <NextButton to="/account" content="Connect your Coin Account" />
-    </>
   )
 }
 

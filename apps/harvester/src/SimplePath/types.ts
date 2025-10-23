@@ -1,9 +1,10 @@
 import { useLocation } from "react-router"
+import type { RouteComponentProps } from "react-router-dom"
 
 export type Routes<T = never> = {
   title: string
   description: string
-  component: React.ComponentType<T>
+  component: React.ComponentType<T & RouteComponentProps>
   isComplete?: (data: T) => boolean
 }
 

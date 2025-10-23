@@ -5,12 +5,13 @@ import { BankConnectReducer } from "../state/reducer";
 import { NoAccounts } from "./NoAccounts";
 import { CreditCardCorrection } from "./UpdateCardNumber";
 import { AccountCard } from "./AccountCard";
-import { Link } from "react-router-dom";
-import { Button } from "semantic-ui-react";
+import { Message } from "semantic-ui-react";
 import { SupportedBanks } from "../BankCard/data";
 import { findPayee, LegalPayeeName } from "@thecointech/site-app/src/containers/Accounts/BillPayments/payees";
+import { ActionButton } from "@/ContentSection/Action";
+import { NextButton } from "@/ContentSection/Next";
 
-export const VerifyAccounts = ({banks}: InitialState) => {
+export const VerifyAccounts = ({banks, stored}: InitialState) => {
   const api = BankConnectReducer.useApi();
   const [forceValidate, setForceValidate] = useState(false);
 
@@ -68,9 +69,14 @@ export const VerifyAccounts = ({banks}: InitialState) => {
     api.setStored();
   }
 
+  const isValid = () => {
+    setForceValidate(true);
+    return !!stored;
+  }
+  const cardNumValid = !cardNumError || !!correctedCardNumber;
 
   return (
-    <div className={styles.container}>
+    <div className={styles.verifyAccountsContainer}>
       <div className={styles.header}>
         <h2>Verify Your Accounts</h2>
         <p>
@@ -123,14 +129,42 @@ export const VerifyAccounts = ({banks}: InitialState) => {
           </div>
         )}
       </div>
-      <div className={styles.footer}>
-        <Button onClick={saveAccounts} disabled={forceValidate && correctedCardNumber.length === 0}>Store Accounts</Button>
-        <Link to="/config">Configure how the harvester will run</Link>
-      </div>
+      <VerifyAccountsMessage forceValidate={forceValidate} isStored={stored} cardNumValid={cardNumValid} />
+      <ActionButton onClick={saveAccounts} disabled={forceValidate && !cardNumValid}>Store Accounts</ActionButton>
+
+      <NextButton onValid={isValid} content="Transfer Settings" to="/config" />
     </div>
   );
 };
 
+const VerifyAccountsMessage = ({ forceValidate, isStored, cardNumValid }: { forceValidate: boolean, isStored?: boolean, cardNumValid?: boolean }) => {
+  if (forceValidate) {
+    if (!cardNumValid) {
+      return (
+        <Message warning>
+          <strong>⚠️ Masked Number Detected:</strong> The credit card number is partially hidden.
+          Please enter the complete number for bill payments.
+        </Message>
+      )
+    }
+    else if (!isStored) {
+      return (
+        <Message>
+          Once account details are verified, please store them before continuing
+        </Message>
+      )
+    }
+  }
+
+  if (isStored) {
+    return (
+      <Message success>
+        Account details stored successfully
+      </Message>
+    )
+  }
+  return null;
+}
 
 
 

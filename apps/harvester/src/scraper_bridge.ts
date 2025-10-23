@@ -15,7 +15,7 @@ import { getValues, ActionType } from './Harvester/scraper';
 import { AutoConfigParams, autoConfigure } from './Harvester/agent';
 import { BackgroundTaskInfo } from './BackgroundTask';
 import { AskUserReact } from './Harvester/agent/askUser';
-import { downloadRequired } from './Download/download';
+import { downloadRequired } from './GetStarted/download';
 import { getScrapingScript } from './results/getScrapingScript';
 import { twofaRefresh as doRefresh } from './Harvester/agent/twofaRefresh';
 import { enableLingeringForCurrentUser, isLingeringEnabled } from './Harvester/schedule/linux-lingering';

@@ -72,11 +72,6 @@ const config = {
       const mainPackageJsonPath = path.join(".webpack", 'main', 'package.json'); // Adjust as needed
       writeFileSync(mainPackageJsonPath, JSON.stringify({ type: 'commonjs' }, null, 2));
     },
-    // preStart: async (config) => {
-    //   console.log("preStart executing");
-    //   const mainPackageJsonPath = path.join(".webpack", 'main', 'package.json'); // Adjust as needed
-    //   writeFileSync(mainPackageJsonPath, JSON.stringify({ type: 'commonjs' }, null, 2));
-    // }
   }
 };
 
