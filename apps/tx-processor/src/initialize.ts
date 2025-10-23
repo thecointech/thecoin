@@ -1,7 +1,7 @@
 import { log } from "@thecointech/logging";
 import { getFirestore, init as FirestoreInit } from '@thecointech/firestore';
 import { RbcStore, closeBrowser } from "@thecointech/rbcapi";
-import gmail from '@thecointech/tx-gmail';
+import { initialize as initializeGmail } from '@thecointech/tx-gmail';
 import { ConfigStore } from "@thecointech/store";
 import { getSigner } from '@thecointech/signers';
 import { ConnectContract, TheCoin } from '@thecointech/contract-core';
@@ -20,7 +20,7 @@ export async function initialize() {
   ConfigStore.initialize();
 
   let token = await ConfigStore.get("gmail.token");
-  token = await gmail.initialize(token);
+  token = await initializeGmail(token);
   await ConfigStore.set("gmail.token", token);
 
   const signer = await getSigner('BrokerCAD');

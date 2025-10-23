@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/electron-signer",
-  "version": "0.3.13-test.0",
+  "version": "0.4.0-test.1",
   "description": "The Coin: IPC-enabled signer for use in electron",
   "private": true,
   "keywords": [
@@ -28,6 +28,10 @@
       "types": "./build/index.d.ts",
       "default": "./build/index.js"
     },
+    "./bridge": {
+      "types": "./build/bridge.d.ts",
+      "default": "./build/bridge.js"
+    },
     "./preload": {
       "types": "./build/preload.d.ts",
       "default": "./build/preload.js"
@@ -37,6 +41,9 @@
     "*": {
       "preload": [
         "./build/preload.d.ts"
+      ],
+      "bridge": [
+        "./build/bridge.d.ts"
       ],
       "*": [
         "./build/index.d.ts"
@@ -48,6 +55,6 @@
     "@thecointech/logging": "workspace:^"
   },
   "devDependencies": {
-    "@thecointech/electron-utils": "^0.3.13-test.0"
+    "@thecointech/electron-utils": "^0.4.0-test.1"
   }
 }

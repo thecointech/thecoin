@@ -5,9 +5,9 @@ import { getProvider } from '@thecointech/ethers-provider';
 declare let window: Window & {
   ipcSigner: Invoker;
 };
-// Critical failure, stop the app
+
 if (!window.ipcSigner) {
-  throw new Error('ElectronSigner: bridgeBrowser: ipcSigner not found.  Ensure preload is called');
+  throw new Error('ElectronSigner: ipcSigner not found.  Ensure preload is called');
 }
 
 export class ElectronSigner implements Signer {
@@ -25,9 +25,6 @@ export class ElectronSigner implements Signer {
   }
 
   invoke(fn: string, ...args: any[]): Promise<any> {
-    if (!ElectronSigner._ipc) {
-      throw new Error('ElectronSigner: invoke: ipcSigner not found.  Ensure preload is called');
-    }
     return ElectronSigner._ipc.invoke(this._signerId, fn, ...args);
   }
 

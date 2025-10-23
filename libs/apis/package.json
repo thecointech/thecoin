@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/apis",
-  "version": "0.3.13-test.5",
+  "version": "0.4.0-test.1",
   "description": "TheCoin: Simple wrappers for swagger-generated APIs ensures correct URL",
   "type": "module",
   "keywords": [
@@ -63,7 +63,7 @@
     "@thecointech/broker-cad": "^0.3.3",
     "@thecointech/nft": "^0.3.3",
     "@thecointech/pricing": "^0.3.3",
-    "@thecointech/secrets": "^0.3.13-test.0",
+    "@thecointech/secrets": "^0.4.0-test.1",
     "@thecointech/vqa": "^0.3.10",
     "cockatiel": "^3.2.1"
   },
