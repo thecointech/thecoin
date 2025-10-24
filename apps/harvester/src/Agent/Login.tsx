@@ -8,6 +8,8 @@ import { BackgroundTaskErrors, BackgroundTaskProgressBar } from "@/BackgroundTas
 import type { AccountResponse } from "@thecointech/vqa";
 import { log } from "@thecointech/logging";
 import { Icon, Message } from "semantic-ui-react";
+import { PathNextButton } from "@/SimplePath";
+import { BankReducerType } from "./state/initialState";
 
 type Props = {
   type: RendererBankType;
@@ -19,6 +21,7 @@ const Login = ({ type, both }: Props) => {
   const bank = data.banks[type];
   const bgTask = useBackgroundTask("record");
   const [hasDetails, setHasDetails] = useState<boolean>();
+  const [forceValid, setForceValid] = useState(false);
 
   useEffect(() => {
     window.scraper.getCoinAccountDetails()
@@ -53,6 +56,11 @@ const Login = ({ type, both }: Props) => {
 
   const missingDetails = hasDetails === false;
 
+  const isValid = () => {
+    setForceValid(true);
+    return !!bank.completed;
+  }
+
   return (
     <div>
       {
@@ -67,6 +75,8 @@ const Login = ({ type, both }: Props) => {
       <QuestionResponse backgroundTaskId="record" />
       <BackgroundTaskProgressBar type="record" />
       <BackgroundTaskErrors type='record' />
+      <LoginResults forceValid={forceValid} bank={bank} />
+      <PathNextButton onValid={isValid} />
     </div>
   )
 }
@@ -100,4 +110,25 @@ const parseResults = (result?: string) => {
     log.error({ err: e }, "Error parsing results");
     return;
   }
+}
+
+const LoginResults = ({ forceValid, bank }: { forceValid: boolean, bank: BankReducerType }) => {
+  if (bank.completed) {
+    return (
+      <Message success>
+        <p>Bank account connected successfully!</p>
+        {bank.accounts?.map((account) => (
+          <p key={account.account_number}> - {account.account_name}</p>
+        ))}
+      </Message>
+    )
+  }
+  if (forceValid) {
+    return (
+      <Message warning>
+        <p>Please connect your bank account to continue.</p>
+      </Message>
+    )
+  }
+  return null;
 }

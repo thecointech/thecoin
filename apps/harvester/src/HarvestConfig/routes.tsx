@@ -7,6 +7,9 @@ import { TransferLimit } from './Step5.TransferLimit';
 import { ProcessPercent } from './Step6.Percent';
 import { Complete } from './Step7.Complete';
 
+
+export const groupKey = "config";
+
 export const routes = [
   {
     component: Intro,
@@ -51,6 +54,6 @@ export const routes = [
 ]
 
 export const path = {
-  groupKey: "config",
+  groupKey,
   routes,
 }

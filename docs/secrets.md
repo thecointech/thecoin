@@ -8,6 +8,18 @@ accessed through the secrets package.
 
 Less sensitive secrets are stored in Bitwardens `{config-name}-online` projects.  These can be read by online services & github deployments.
 
+Bitwarden access can be from 3 different methods:
+1. Environment variables
+  - `BWS_*` env variables are defined in environment
+  - Used by VQA-service(?), GitHub Actions
+2. Google Secrets Manager
+  - Single secret is defined with full JSON object
+  - Used by broker/rates-service on GAE Only
+3. Env Files
+  - `.env` files contain variables matching `BWS_*`
+  - `.env` files are loaded from `THECOIN_SECRETS` environment variable
+  - Used by tx-processor, local development
+
 ### Electron: Access to BrokerDB firestore
 
 Go to firebase => project overview => * => project settings => General => Your Apps

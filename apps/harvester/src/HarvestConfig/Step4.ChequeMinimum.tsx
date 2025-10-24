@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Checkbox, Container, Input, Label } from 'semantic-ui-react'
+import { Checkbox, Container, Input, Label, Header } from 'semantic-ui-react'
 import { ConfigReducer } from './state/reducer';
 import { safeParseFloat } from './state/utils';
 import { HarvestStepType } from '@thecointech/store-harvester';
@@ -26,7 +26,7 @@ export const ChequeMinimum = () => {
 
   return (
     <Container>
-      <h4>Set limits on the Harvester</h4>
+      <Header size="small">Set limits on the Harvester</Header>
       <div>
         The harvester is designed to make your life better.  However, sometimes there just isn't enough
         cash to go around.  For those months, it's a good idea to give it limits.
