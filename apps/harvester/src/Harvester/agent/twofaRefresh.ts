@@ -1,15 +1,16 @@
-import { AskUserReact } from "./askUser";
 import { getEvents } from "../events";
 import { ActionType } from "../scraper";
 import { ScraperCallbacks } from "../scraper/callbacks";
 import { BackgroundTaskCallback } from "@/BackgroundTask";
-import { EventSection, SectionName } from "@thecointech/scraper-agent/types";
+import { Agent, type EventSection, type SectionName } from "@thecointech/scraper-agent";
 import { sections } from '@thecointech/scraper-agent/processors/types';
 import { isSection } from "@thecointech/scraper-agent/replay/events";
-import { Agent } from "@thecointech/scraper-agent/agent";
 import { AnyEvent, InputEvent } from "@thecointech/scraper";
-import { copyProfile } from "@/Download/profile";
+import { copyProfile } from "@/GetStarted/profile";
 import { log } from "@thecointech/logging";
+import { AskUserLogin } from "./askUserLogin";
+import { getErrorMessage } from "@/BackgroundTask/selectors";
+import { maybeSerializeRun } from "../scraperLogging";
 
 const ProfileTask = "twofaRefresh";
 
@@ -22,25 +23,33 @@ export async function twofaRefresh(type: ActionType, refreshProfile: boolean, ca
   if (refreshProfile) {
     toProcess.push(ProfileTask);
   }
-
-  const events = await getEvents(type);
-  const inputBridge = AskUserReact.newSession();
-  const login = getLoginDetails(events);
-  inputBridge.setUsername(login.username);
-  inputBridge.setPassword(login.password);
   const logger = new ScraperCallbacks(ProfileTask, callback, toProcess);
 
-  if (refreshProfile) {
-    const wasRefreshed = await copyProfile(logger.subTaskCallback, true);
-    if (!wasRefreshed) {
-      throw new Error("Failed to refresh profile - try deleting profile manually");
-    }
-  }
+  try {
+    const events = await getEvents(type);
+    const login = getLoginDetails(events);
+    const inputBridge = AskUserLogin.newLoginSession(login);
 
-  const baseNode = await Agent.process(ProfileTask, getUrl(events), inputBridge, logger, toSkip);
-  const wasSuccess = baseNode.events.length > 0; // TODO: baseNode.events[baseNode.events.length - 1]. === "success";
-  logger.complete(wasSuccess);
-  return true;
+    if (refreshProfile) {
+      const wasRefreshed = await copyProfile(logger.subTaskCallback, true);
+      if (!wasRefreshed) {
+        throw new Error("Failed to refresh profile - try deleting profile manually");
+      }
+    }
+
+    using _ = await maybeSerializeRun(logger.logsFolder, type);
+    await using agent = await Agent.create(ProfileTask, inputBridge, getUrl(events), logger);
+    const result = await agent.process(toSkip);
+    const wasSuccess = result.events.events.find(e => isSection(e) && e.section === "TwoFA");
+    const error = wasSuccess ? undefined : "TwoFA not found in processed events";
+    logger.complete({ result: wasSuccess ? "true" : "false", error });
+    return true;
+  }
+  catch (e) {
+    const message = getErrorMessage(e);
+    logger.complete({ error: message });
+    throw e;
+  }
 }
 
 function getUrl(node: EventSection): string {

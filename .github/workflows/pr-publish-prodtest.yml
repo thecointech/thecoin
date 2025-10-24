@@ -9,5 +9,5 @@ jobs:
   publish:
     uses: ./.github/workflows/pr-publish.yml
     with:
-      environment: prodtest
+      CONFIG_NAME: prodtest
     secrets: inherit

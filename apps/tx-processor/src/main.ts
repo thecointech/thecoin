@@ -6,6 +6,7 @@ import { initialize, release } from './initialize';
 import { processReferrals } from './referrals';
 import { processTransfers } from './transfers';
 import { verifyBank } from './verifyBank';
+import { sleep } from '@thecointech/async';
 
 async function Process() {
   const contract = await initialize();
@@ -28,7 +29,7 @@ async function run() {
   } finally {
     await release();
     // I have been unable to figure out why we still have handles open
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await sleep(5000);
     exit(0);
   }
 }

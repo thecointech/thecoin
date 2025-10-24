@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/broker-service",
-  "version": "0.3.11",
+  "version": "0.4.0-test.3",
   "private": true,
   "type": "module",
   "description": "TheCoin simple broker services.  This sample API is an example of how to setup the simplest low-volume exchange, when combined with the included server code, without external dependencies",
@@ -31,7 +31,7 @@
     "gcp-build": ""
   },
   "engines": {
-    "node": "18.x.x"
+    "node": "22.x.x"
   },
   "files": [
     "build/**/*"
@@ -39,17 +39,16 @@
   "main": "./build/main.js",
   "dependencies": {
     "@google-cloud/storage": "^7.7.0",
-    "@thecointech/async": "^0.3.3",
-    "@thecointech/contract-core": "^0.3.11",
-    "@thecointech/contract-plugins": "^0.3.11",
-    "@thecointech/email": "^0.3.11",
-    "@thecointech/logging": "^0.3.11",
-    "@thecointech/pricing": "^0.3.3",
-    "@thecointech/setenv": "^0.3.11",
-    "@thecointech/signers": "^0.3.11",
-    "@thecointech/tx-bill": "^0.3.11",
-    "@thecointech/tx-etransfer": "^0.3.11",
-    "@thecointech/utilities": "^0.3.11",
+    "@thecointech/async": "^0.3.13-test.5",
+    "@thecointech/contract-core": "^0.4.0-test.3",
+    "@thecointech/contract-plugins": "^0.4.0-test.3",
+    "@thecointech/email": "^0.4.0-test.3",
+    "@thecointech/logging": "^0.4.0-test.1",
+    "@thecointech/setenv": "^0.4.0-test.0",
+    "@thecointech/signers": "^0.4.0-test.3",
+    "@thecointech/tx-bill": "^0.4.0-test.3",
+    "@thecointech/tx-etransfer": "^0.4.0-test.3",
+    "@thecointech/utilities": "^0.4.0-test.3",
     "@tsoa/runtime": "6.2.0",
     "axios": "1.6.5",
     "cors": "^2.8.5",

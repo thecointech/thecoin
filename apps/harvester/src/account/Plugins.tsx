@@ -1,17 +1,15 @@
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
-import { Button, Checkbox, Container, Message, Segment } from 'semantic-ui-react';
+import { Checkbox, Container, Header, Message } from 'semantic-ui-react';
 import { ALL_PERMISSIONS, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 import { getContract as getUberContract } from '@thecointech/contract-plugin-converter';
 import { getContract as getShockAbsorberContract } from '@thecointech/contract-plugin-shockabsorber';
 import { GetPluginsApi } from '@thecointech/apis/broker';
-import { useFxRates } from '@thecointech/shared/containers/FxRate';
-import { getFxRate } from '@thecointech/fx-rates';
-import { toHuman } from "@thecointech/utilities";
 import { sleep } from "@thecointech/async";
 import { getData, Key, setData } from '../Training/data';
-import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import type { AddressLike, Signer } from 'ethers';
+import { ActionButton } from '@/ContentSection/Action';
+import { NextButton } from '@/ContentSection/Next';
 
 const converter = await getUberContract();
 const shockAbsorber = await getShockAbsorberContract();
@@ -39,11 +37,14 @@ const statusText = (hasPlugin: boolean, requestSent: boolean) => {
 
 export const Plugins = () => {
   const active = AccountMap.useActive();
+  const api = AccountMap.useApi();
   const [requestSent, setRequestSent] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
   const [hasConverter, setHasConverter] = useState(false);
   const [hasShockAbsorber, setHasShockAbsorber] = useState(false);
+
+  const [forceValid, setForceValid] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -54,13 +55,11 @@ export const Plugins = () => {
     })()
   }, [active?.plugins]);
 
-  const { rates } = useFxRates();
-  const { buy, fxRate } = getFxRate(rates, 0);
-  const balance = active?.balance ?? 0;
-  const cadBalance = toHuman(buy * balance * fxRate, true);
+  const cnvrtRequestedAddress = getData(Key.pluginCnvrtRequested);
+  const absrbRequestedAddress = getData(Key.pluginAbsrbRequested);
 
-  const cnvrtRequested = getData(Key.pluginCnvrtRequested);
-  const absrbRequested = getData(Key.pluginAbsrbRequested);
+  const cnvrtRequested = cnvrtRequestedAddress === active?.address;
+  const absrbRequested = absrbRequestedAddress === active?.address;
 
 
   const onInstallPlugins = async () => {
@@ -70,31 +69,39 @@ export const Plugins = () => {
     setIsSending(true);
     if (!cnvrtRequested && !hasConverter) {
       await sendAssignRequest(active.signer, converter);
-      setData(Key.pluginCnvrtRequested, "true");
+      setData(Key.pluginCnvrtRequested, active.address);
     }
     // ensure the timestamp increases...
     await sleep(250);
     if (!absrbRequested && !hasShockAbsorber) {
       await sendAssignRequest(active.signer, shockAbsorber);
-      setData(Key.pluginAbsrbRequested, "true");
+      setData(Key.pluginAbsrbRequested, active.address);
     }
     setRequestSent(true);
     setIsSending(false);
+    // Trigger refresh of path.  setData does not trigger a re-render,
+    // so this just sets 'something has changed' on the base SimplePath
+    api.setActiveAccount(null);
+    api.setActiveAccount(active.address);
   }
 
   const canInstallPlugins = requestSent || isSending || (hasConverter && hasShockAbsorber);
 
+  const isValid = () => {
+    setForceValid(true);
+    return hasConverter || cnvrtRequested;
+  };
+
   return (
     <Container>
-      <h1>Plugins</h1>
-      <h4>Balance: ${cadBalance}</h4>
-      <Segment>
+      <Header size="small">Plugins</Header>
+      <p>
         In order for the harvester to work,
         you need to have at least the Converter
         plugin installed. It is highly recommended to
         install the ShockAbsorber to protect against
         market downturns as well.
-      </Segment>
+      </p>
       <div>
         <div>
           <Checkbox disabled defaultChecked label='UberConverter (required)' />
@@ -105,17 +112,41 @@ export const Plugins = () => {
           {statusText(hasShockAbsorber, !!absrbRequested)}
         </div>
       </div>
-      <div>
+      {/* <p style={{ fontSize: "small" }}>
         You have {active?.plugins.length} plugins installed
-      </div>
-      <Button onClick={onInstallPlugins} loading={isSending} disabled={canInstallPlugins}>Install</Button>
-      <Message hidden={!requestSent}>
+      </p> */}
+      <ActionButton onClick={onInstallPlugins} loading={isSending} disabled={canInstallPlugins}>Install</ActionButton>
+      <PluginMessage requestSent={requestSent} forceValid={forceValid} hasConverter={hasConverter} />
+      <NextButton to="/agent" content="Connect Bank Account" onValid={isValid} />
+    </Container>
+  );
+}
+
+
+const PluginMessage = ({requestSent, forceValid, hasConverter}: {requestSent: boolean, forceValid: boolean, hasConverter: boolean}) => {
+  if (requestSent) {
+    return (
+      <Message>
         Your selected plugins are in the process of being installed.
         This can take up to an hour, in the meantime lets setup
         your harvester AI.
-        <br />
-        <Link to="/train">Setup Training</Link>
       </Message>
-    </Container>
-  );
+    );
+  }
+  if (hasConverter) {
+    return (
+      <Message success>
+        Your harvester is ready to go!
+      </Message>
+    );
+  }
+  if (forceValid) {
+    return (
+      <Message warning>
+        The converter plugin is required for the harvester to function. <br />The converter plugin enables delayed
+        bill payments, which the harvester uses to ensure bills are paid at the correct time.
+      </Message>
+    );
+  }
+  return null;
 }

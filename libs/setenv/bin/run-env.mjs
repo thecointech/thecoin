@@ -53,11 +53,12 @@ const findTsConfig = async () => {
 }
 
 const TS_NODE_PROJECT = process.env.TS_NODE_PROJECT ?? await findTsConfig();
+const { CONFIG_NAME, ...rest } = process.env;
 const env = {
   NODE_NO_WARNINGS: 1,
   TS_NODE_PROJECT,
   ...getEnvVars(config),
-  ...process.env,
+  ...rest,
 }
 
 const loader = args.find(arg => arg.endsWith('.ts'))

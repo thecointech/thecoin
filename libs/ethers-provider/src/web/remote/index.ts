@@ -1,4 +1,4 @@
-import { BlockTag, EtherscanPlugin, EtherscanProvider, LogParams, Network } from 'ethers'
+import { BlockTag, EtherscanProvider, LogParams } from 'ethers'
 import type { PerformActionFilter, PerformActionRequest, Signer } from 'ethers'
 import { format } from '../erc20response';
 import { getSecret } from '@thecointech/secrets';
@@ -14,21 +14,12 @@ export class Erc20Provider extends EtherscanProvider {
   constructor(apiKey: string) {
     // For now we exclusively use the polygon network
     const network = process.env.DEPLOY_POLYGON_NETWORK;
-    const chainId = process.env.DEPLOY_POLYGON_NETWORK_ID;
+    // const chainId = process.env.DEPLOY_POLYGON_NETWORK_ID;
 
-    if (!network || !apiKey || !chainId) {
+    if (!network || !apiKey) {
       throw new Error("Cannot use Provider without network & key");
     }
-    if (network == "matic-amoy") {
-      const override = new Network(network, BigInt(chainId))
-      override.attachPlugin(
-        new EtherscanPlugin("https://api-amoy.polygonscan.com")
-      )
-      super(override, apiKey);
-    }
-    else {
-      super(network, apiKey);
-    }
+    super(network, apiKey);
   }
 
   async getERC20History(args: {address?: string, contractAddress?: string, fromBlock?: BlockTag, toBlock?: BlockTag}) {

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Checkbox, Container, Button, Icon, Message } from 'semantic-ui-react';
+import { Checkbox, Container, Button, Icon, Message, Header } from 'semantic-ui-react';
 import { ConfigReducer } from './state/reducer'
 import { Info } from 'luxon';
-import { DaysArray } from '../types';
+import { DaysArray } from '@thecointech/store-harvester';
 
 export const DaysToRun = () => {
 
@@ -11,7 +11,7 @@ export const DaysToRun = () => {
 
   return (
     <Container>
-      <h4>Schedule the days the harvester runs on</h4>
+      <Header size="small">Schedule the days the harvester runs on</Header>
       <div>The harvester works best when it can cover the amount spent on your visa card quickly</div>
       <div>
         However, if you have limits on the number of e-transfers you can spend, or simply

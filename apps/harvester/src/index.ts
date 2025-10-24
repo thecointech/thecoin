@@ -44,7 +44,12 @@ if (process.env.NODE_ENV !== 'production' || process.env.CONFIG_NAME === 'prodte
 }
 
 log.info(`-----------------------------------------------------------------------------------`);
-log.info(`args: ${process.argv}`);
+// NOTE: The standard initialized message does not get added to the log file,
+// because the log file stream is added after the standard logging is initialized
+log.info(
+  { args: process.argv.slice(2), version: process.env.TC_APP_VERSION, config: process.env.CONFIG_NAME, deployedAt: process.env.TC_DEPLOYED_AT },
+  'Harvester logging initialized: v{version} - {config} - {deployedAt}'
+);
 
 // NOTE: The easiest way to pass through args is to call it like
 // <root>harvester.exe --process-start-args="--harvest"
@@ -54,9 +59,9 @@ const hasArgument = (arg: string) => !!process.argv.find(op => op.includes(arg))
 initMain();
 
 if (hasArgument("--harvest")) {
-  await harvest();
+  const r = await harvest();
   app.quit();
-  process.exit(0);
+  process.exit(r === "error" ? 1 : 0);
 }
 
 if (hasArgument("--notify")) {

@@ -1,0 +1,38 @@
+import { AgentSerializer } from "@/agentSerializer";
+import path from "path";
+import { getConfig } from "../config";
+import { init } from "../init";
+import { readFileSync } from "fs";
+import { setApi } from "@/apis";
+
+const target = process.argv[2];
+const section = process.argv[3];
+
+await init();
+const { baseFolder } = getConfig();
+const recordFolder = path.join(baseFolder, "latest");
+
+const basePath = `${recordFolder}/${target}/${section}`;
+const baseUrl = path.join("file://", basePath.replace(" ", "%20"));
+const pageUrl = path.join(baseUrl, "0.mhtml");
+
+// const handler = await PageHandler.create(target, pageUrl, logger);
+// handler.pushSection("TwoFA")
+// const askUser = new DummyAskUser();
+
+const vqaDetectDestinations = JSON.parse(readFileSync(path.join(basePath, "0-destinations-vqa.json"), "ascii"));
+const vqaGetDestinationElements = JSON.parse(readFileSync(path.join(basePath, "0-destinations-elm.json"), "ascii"));
+
+let counter = 0;
+const mockApi = {
+  detectDestinations: () => ({ data: vqaDetectDestinations }),
+  getDestinationElements: () => ({ data: { buttons: vqaGetDestinationElements[counter++].options } }),
+}
+setApi(mockApi as any);
+const logger = new AgentSerializer({
+  recordFolder,
+  target,
+  skipSections: [],
+});
+
+// await selectDestination(handler, askUser, mockApi as any);

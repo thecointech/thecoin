@@ -3,6 +3,8 @@
  * Do not make direct changes to the file.
  */
 
+import type { DateTime } from "luxon";
+
 export interface SignedMessage {
   message: string;
   signature: string;
@@ -107,4 +109,16 @@ export type RemovePluginRequest = {
   index: number;
   signedAt: DateTime;
   signature: string;
+}
+
+export type ConnectionValues = {
+  state: string;
+  siteOrigin: string;
+  timestamp: string;
+  address: string;
+  name: string;
+  walletFile: string;
+  phrase: string;
+  path: string;
+  locale: string;
 }

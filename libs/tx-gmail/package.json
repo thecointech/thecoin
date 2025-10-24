@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-gmail",
-  "version": "0.3.11",
+  "version": "0.4.0-test.3",
   "description": "The Coin: Fetch e-transfer emails from GMail and convert to tx",
   "type": "module",
   "keywords": [
@@ -30,21 +30,41 @@
   ],
   "exports": {
     ".": {
-      "development": "./build/index_mocked.js",
-      "electron": "./build/index_electron.js",
-      "node": "./build/index_node.js"
+      "types": "./build/index.d.ts",
+      "electron": "./build/electron/index.js",
+      "default": "./build/index.js"
+    },
+    "./bridge": {
+      "types": "./build/electron/bridgeTxGmail.d.ts",
+      "default": "./build/electron/bridgeTxGmail.js"
+    },
+    "./preload": {
+      "types": "./build/electron/preload.d.ts",
+      "default": "./build/electron/preload.js"
     }
   },
-  "types": "./build/index_common.d.ts",
+  "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "build/index.d.ts": [
+        "build/index.d.ts"
+      ],
+      "preload": [
+        "build/electron/preload.d.ts"
+      ],
+      "bridge": [
+        "build/electron/bridgeTxGmail.d.ts"
+      ]
+    }
+  },
   "dependencies": {
-    "@thecointech/utilities": "^0.3.11",
+    "@thecointech/utilities": "^0.4.0-test.3",
     "currency.js": "^2.0.4",
     "googleapis": "^129.0.0",
     "js-base64": "^3.7.6"
   },
   "devDependencies": {
-    "@thecointech/electron-utils": "^0.3.11",
-    "@thecointech/setenv": "^0.3.11"
+    "@thecointech/electron-utils": "^0.4.0-test.3"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

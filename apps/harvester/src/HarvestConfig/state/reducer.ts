@@ -1,6 +1,7 @@
 
 import { BaseReducer } from '@thecointech/shared/store/immerReducer'
-import { HarvestConfig, defaultDays, DaysArray, HarvestStepType, HarvestArgs, addStep, removeStep, defaultTime, defaultSteps } from '../../types';
+import { HarvestConfig, DaysArray, HarvestStepType, HarvestArgs, addStep, removeStep } from '../../types';
+import { defaultDays, defaultTime, defaultSteps } from '@thecointech/store-harvester';
 import { IActions } from './types';
 import { log } from '@thecointech/logging';
 
@@ -18,7 +19,7 @@ export const initialState: HarvestConfig = {
     daysToRun: defaultDays,
     timeToRun: defaultTime,
   },
-  steps: stored.value?.steps ?? defaultSteps,
+  steps: stored.value?.steps?.length ? stored.value.steps : defaultSteps,
 }
 
 export class ConfigReducer extends BaseReducer<IActions, HarvestConfig>(CONFIG_KEY, initialState)

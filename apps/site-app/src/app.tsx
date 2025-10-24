@@ -1,5 +1,5 @@
 /**
- * app.js
+ * app.tsx
  *
  * This is the entry file for the application, only setup and boilerplate
  * code.

@@ -49,6 +49,7 @@ module.exports = {
   globalSetup: getTool('globalSetup.js'),
   // local setup initializes logging etc
   setupFiles: [
+    getTool('setupEnv.js'),
     getTool('testSetup.js'),
     getTool('mockLocalStorage.js'),
     getTool('setupLuxon.mjs'),

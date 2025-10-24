@@ -1,0 +1,30 @@
+{
+  "name": "@thecointech/store-harvester",
+  "version": "0.4.0-test.3",
+  "private": true,
+  "type": "module",
+  "description": "Data storage for TheCoin Harvester",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "run -T tsc -b",
+    "clean": "run -T rimraf build",
+    "test": "run :jest"
+  },
+  "exports": {
+    ".": {
+      "development": "./mocked/index.ts",
+      "default": "./build/index.js"
+    }
+  },
+  "dependencies": {
+    "@thecointech/async": "^0.3.13-test.5",
+    "@thecointech/logging": "^0.4.0-test.1",
+    "@thecointech/scraper-agent": "^0.4.0-test.3",
+    "comdb": "^6.0.0-beta",
+    "pouchdb": "^8.0.1"
+  },
+  "devDependencies": {
+    "@types/pouchdb": "^6.4.2",
+    "pouchdb-adapter-memory": "^8.0.1"
+  }
+}

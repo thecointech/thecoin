@@ -1,4 +1,4 @@
-import type { PageHandler } from "../pageHandler";
+import type { Agent } from "../agent";
 import type { IAskUser } from "../types";
 export type { IAskUser };
 
@@ -15,7 +15,7 @@ export enum Section {
 export type SectionType = keyof typeof Section;
 export const sections = Object.values(Section).filter(v => typeof v === 'string') as SectionType[];
 
-export type Processor<Args extends any[], R> = (page: PageHandler, ...args: Args) => Promise<R>;
+export type Processor<Args extends any[], R> = (agent: Agent, ...args: Args) => Promise<R>;
 export interface NamedProcessor<Args extends any[], R> extends Processor<Args, R> {
   processorName: SectionType,
   isolated?: boolean

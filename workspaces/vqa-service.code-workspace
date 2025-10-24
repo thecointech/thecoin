@@ -2,6 +2,10 @@
 	"folders": [
 		{
 			"path": "../apps/vqa-service"
+		},
+    {
+			"name": "testing-pages",
+			"path": "../../private-testing-pages"
 		}
 	],
 	"settings": {

@@ -5,6 +5,34 @@
     "version": "0.2.0",
     "configurations": [
       {
+        "name": "Admin - Development",
+        "request": "launch",
+        "runtimeArgs": [
+          "dev"
+        ],
+        "runtimeExecutable": "yarn",
+        "skipFiles": [
+          "<node_internals>/**"
+        ],
+        "type": "node",
+        "cwd": "${workspaceFolder}",
+        "console": "integratedTerminal"
+      },
+      {
+        "name": "Admin - ProdTest",
+        "request": "launch",
+        "runtimeArgs": [
+          "prod:test"
+        ],
+        "runtimeExecutable": "yarn",
+        "skipFiles": [
+          "<node_internals>/**"
+        ],
+        "type": "node",
+        "cwd": "${workspaceFolder}",
+        "console": "integratedTerminal"
+      },
+      {
         "name": "Admin - Prod",
         "request": "launch",
         "runtimeArgs": [

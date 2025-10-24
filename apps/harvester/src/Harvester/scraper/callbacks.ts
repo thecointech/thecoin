@@ -6,14 +6,16 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { DateTime } from "luxon";
 import { IScraperCallbacks, ScraperProgress } from "@thecointech/scraper";
 import { AnyEvent } from "@thecointech/scraper/types";
-import { BackgroundTaskType, BackgroundTaskCallback, SubTaskProgress } from "@/BackgroundTask";
+import { BackgroundTaskType, BackgroundTaskCallback, SubTaskProgress, getErrorMessage } from "@/BackgroundTask";
 import { maybeCloseModal } from "@thecointech/scraper-agent/modal";
 import { notify } from "../notify";
+import crypto from "node:crypto";
 
 export class ScraperCallbacks implements IScraperCallbacks {
 
   counter = 0;
   timestamp = Date.now();
+  id = crypto.randomUUID();
   private taskType: BackgroundTaskType;
   // private actionType: string;
   private uiCallback?: BackgroundTaskCallback;
@@ -30,7 +32,7 @@ export class ScraperCallbacks implements IScraperCallbacks {
 
     // Call to initialize the task group
     this.uiCallback?.({
-      id: this.timestamp.toString(),
+      id: this.id,
       type: this.taskType,
     })
     // Initialize sub-tasks, this will give a
@@ -59,9 +61,10 @@ export class ScraperCallbacks implements IScraperCallbacks {
     }
     else {
       this.uiCallback?.({
-        id: this.timestamp.toString(),
+        id: this.id,
         type: this.taskType,
-        error: String(error),
+        completed: true,
+        error: getErrorMessage(error),
       })
       await this.dumpPage(page);
     }
@@ -83,33 +86,22 @@ export class ScraperCallbacks implements IScraperCallbacks {
 
   subTaskCallback = (progress: SubTaskProgress) => {
     this.uiCallback?.({
-      parentId: this.timestamp.toString(),
+      parentId: this.id,
       type: this.taskType,
       ...progress,
     })
   };
 
-  async complete(success: boolean, error?: string) {
+  async complete({ result, error }: { result?: string, error?: string }) {
     // Update TaskGroup
+    const e = error ?? (!!result ? undefined : "Unknown error");
     this.uiCallback?.({
-      id: this.timestamp.toString(),
+      id: this.id,
       type: this.taskType,
-      completed: success,
-      error,
+      completed: true,
+      result,
+      error: e,
     })
-  }
-
-  async onScreenshot(intent: string, screenshot: Buffer | Uint8Array, _page: Page) {
-    const outScFile = path.join(this.logsFolder, `${++this.counter}-${intent}.png`);
-    writeFileSync(outScFile, screenshot, { encoding: "binary" });
-  }
-
-  logJson(intent: string, name: string, _data: any): void {
-    log.info(`[${intent}] ${name}`);
-    writeFileSync(
-      path.join(this.logsFolder, `${this.counter}-${name}.json`),
-      JSON.stringify(_data, null, 2)
-    );
   }
 
   async dumpPage(page: Page) {

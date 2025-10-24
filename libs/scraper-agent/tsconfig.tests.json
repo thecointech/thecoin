@@ -1,4 +1,10 @@
 {
   "extends": "../../tsconfig.tests.json",
-  "include": ["**/*.test.*", "scripts/**.ts", "internal/*.*", "**/*.stories.*", "**/hardhat.d.ts"],
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "strict": true,
+  },
+  "include": ["**/*.test.*", "tools/**/*.ts", "internal/*.*", "**/*.stories.*", "./mocked/**/*.*"],
 }

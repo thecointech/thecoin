@@ -4,8 +4,7 @@ import { getPlugins } from './plugins';
 import { registerElementAttrFns } from '../elements';
 import { getBrowserPath } from './browser';
 import { log } from '@thecointech/logging';
-// import { initDebuggingInfo } from './debugging';
-import { getUserDataDir } from './userProfile';
+import { cleanProfileLocks, getUserDataDir } from './userProfile';
 import { getIsVisible } from './visibility';
 import { getPuppeteerType } from './type';
 
@@ -139,4 +138,7 @@ export async function closeBrowser() {
     await globalThis.__scraper__.browser.close();
     globalThis.__scraper__ = undefined
   }
+  // Force-delete singleton locks.  If the browser fails to close
+  // for some reason, this will ensure the next run can start cleanly.
+  await cleanProfileLocks();
 }

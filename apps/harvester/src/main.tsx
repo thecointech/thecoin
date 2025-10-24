@@ -6,7 +6,7 @@ import { LanguageProvider } from '@thecointech/shared/containers/LanguageProvide
 import translations from "@thecointech/shared/translations";
 import { history } from '@thecointech/shared/store';
 import { Provider } from 'react-redux';
-import { App } from './app';
+import { App } from './App';
 import { initialize } from './init';
 
 // const router = createHashRouter(appRoutes);
