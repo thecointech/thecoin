@@ -43,7 +43,12 @@ const config = {
         format: 'ULMO'
       }
     },
-    new MakerZIP({}, ['darwin']), /*new MakerRpm({}),*/ new MakerDeb({})
+    new MakerZIP({}, ['darwin']), /*new MakerRpm({}),*/
+    new MakerDeb({
+      options: {
+        icon: 'assets/appicon.png',
+      }
+    })
   ],
   plugins: [
     // new AutoUnpackNativesPlugin({}),
