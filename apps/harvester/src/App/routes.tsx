@@ -1,13 +1,13 @@
-import { Home } from './home';
-import { Browser } from './Download';
-import { Account } from './account';
-import { Training } from './Training';
+import { Home } from '../home';
+import { Browser } from '../GetStarted';
+import { Account } from '../account';
+import { Training } from '../Training';
 import { Route, Switch } from 'react-router-dom';
-import { HarvestConfig } from './HarvestConfig';
-import { Results } from './results';
-import { BankConnect } from './Agent';
-import { RefreshTwoFA } from './Agent/RefreshTwoFA';
-import { Advanced } from './Advanced';
+import { HarvestConfig } from '../HarvestConfig';
+import { Results } from '../results';
+import { BankConnect } from '../Agent';
+import { RefreshTwoFA } from '../Agent/RefreshTwoFA';
+import { Advanced } from '../Advanced';
 
 export const Routes = () => (
   <Switch>

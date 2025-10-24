@@ -1,4 +1,4 @@
-import { PathNextButton, PathRouter, PathSteps } from '../SimplePath'
+import { PathRouter, PathSteps } from '../SimplePath'
 import { BankConnectReducer } from './state/reducer'
 import { useBankConnectPaths } from './routes'
 import { ContentSection } from '@/ContentSection';
@@ -14,7 +14,6 @@ export const BankConnect = () => {
       <PathSteps path={paths} data={data} />
       <ContentSection className={styles.container}>
         <PathRouter path={paths} data={data} />
-        <PathNextButton path={paths} />
       </ContentSection>
     </div>
   )

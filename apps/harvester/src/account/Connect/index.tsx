@@ -1,111 +1,110 @@
 import { useState } from "react";
 import styles from "./index.module.less";
-import { Button, Dimmer, Header, Loader, Message } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Dimmer, Header, Loader, Message } from "semantic-ui-react";
 import { BackgroundTaskErrors, BackgroundTaskProgressBar } from "@/BackgroundTask/BackgroundTaskProgressBar";
 import { groupKey } from "../routes";
 import { AccountMap } from "@thecointech/shared/containers/AccountMap/reducer";
 import { ElectronSigner } from "@thecointech/electron-signer";
+import { ContentSection } from "@/ContentSection";
+import { PathNextButton } from "@/SimplePath";
+import type { AccountState } from "@thecointech/account";
+import { log } from "@thecointech/logging";
 
 type State = "connecting" | "connected" | "failed";
-type ConnectCB = (state: State) => void;
 
-export const Connect = () => {
+export const Connect = (props: AccountState) => {
 
   const [state, setState] = useState<State>();
-  const onConnection: ConnectCB = (state) => {
-    setState(state);
-  }
+  const [forceCheck, setForceCheck] = useState(false);
+  const accountApi = AccountMap.useApi();
+  const existing = AccountMap.useAsArray();
+  const address = props.address;
+  const isConnected = !!address;
+
   const connecting = state === "connecting";
+
+  const connect = () => {
+    setState("connecting");
+    window.scraper.loadWalletFromSite().then(res => {
+      if (res.error) {
+        // NOTE: errors are automatically displayed in BackgroundTaskErrors
+        log.error(res.error)
+        setState("failed");
+      } else {
+        setState("connected");
+        if (res.value?.address) {
+          existing.forEach(addr => accountApi.deleteAccount(addr));
+          accountApi.addAccount(res.value?.name, res.value?.address, new ElectronSigner(res.value.address));
+          accountApi.setActiveAccount(res.value?.address);
+        }
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      setState("failed");
+    });
+  };
+
+  const checkValid = () => {
+    setForceCheck(true);
+    return state === "connected" || isConnected;
+  };
 
   return (
     <div className={styles.connectContainer}>
       <Dimmer active={connecting}>
         <Loader>Use your browser to connect to your Coin account...</Loader>
       </Dimmer>
-      <DoConnect onConnection={onConnection} state={state} />
-      <HasAddress />
-      <Link to={`/${groupKey}/1/?manual=true`}>Or load your account manually</Link>
+      <InfoElements />
+      <ContentSection.Action
+        onClick={connect}
+        disabled={connecting}
+        loading={connecting}
+        content="Connect Wallet"
+      />
+      <div className={styles.connectProgress}>
+        <BackgroundTaskProgressBar type="connect" />
+        <BackgroundTaskErrors type="connect" />
+      </div>
+      <ConnectionResult forceCheck={forceCheck} {...props} />
+      <ContentSection.Alternate to={`/${groupKey}/1/?manual=true`} content="Or load your account manually" />
+      <PathNextButton onValid={checkValid} />
     </div>
   );
 };
 
-const DoConnect = ({ onConnection, state }: { onConnection: ConnectCB, state: State|undefined }) => {
-  // const [connecting, setConnecting] = useState(false);
+const InfoElements = () => (
+  <>
+    <Header size="small">Connect Your Account</Header>
+    <p>
+      Connect the Harvester to your Coin account. <br />
+      This is necessary for the Harvester to interact
+      with your account and automate bill payments.
+    </p>
+    <Message info>
+      <strong>Note:</strong> This will open a secure connection dialog to authenticate
+      your wallet. Your private keys never leave your device.
+    </Message>
+  </>
+)
 
-  const accountApi = AccountMap.useApi();
-  const existing = AccountMap.useAsArray();
-
-  const connect = () => {
-    onConnection("connecting");
-    window.scraper.loadWalletFromSite().then(res => {
-      if (res.error) {
-        alert(res.error);
-        onConnection("failed");
-      } else {
-        onConnection("connected");
-        if (res.value?.address) {
-          existing.forEach(accountApi.deleteAccount);
-          accountApi.addAccount(res.value?.name, res.value?.address, new ElectronSigner(res.value.address));
-          accountApi.setActiveAccount(res.value?.address);
-        }
-      }
-    });
-  };
-  const connecting = state === "connecting";
-
+const ConnectionResult = (props: { forceCheck: boolean } & AccountState) => {
+  const success = !!props.address;
+  const visible = props.forceCheck || success;
   return (
-    <>
-      <div>
-        <Header size="small">Connect Your Account</Header>
-        <p>
-          Connect the Harvester to your Coin account. <br />
-          This is necessary for the Harvester to interact
-          with your account and automate bill payments.
-        </p>
-      </div>
-
-      <Message info>
-        <strong>Note:</strong> This will open a secure connection dialog to authenticate
-        your wallet. Your private keys never leave your device.
-      </Message>
-
-      <div className={styles.connectButtons}>
-        <div>
-          <Button
-            onClick={connect}
-            disabled={connecting}
-            loading={connecting}
-          >
-          {connecting ? "Connecting..." : "Connect Wallet"}
-        </Button>
-        </div>
-        <BackgroundTaskProgressBar type="connect" />
-        <BackgroundTaskErrors type="connect" />
-      </div>
-    </>
-  );
-};
-
-const HasAddress = () => {
-  const active = AccountMap.useActive();
-  const address = active?.address;
-  const isConnected = !!address;
-
-  return (
-    <Message warning={!isConnected} success={isConnected}>
+    <Message warning={!success} success={success} hidden={!visible}>
       <div className={styles.statusContent}>
         <div>
         <span className={styles.statusTitle}>
-          {isConnected ? "Connected" : "Not Connected"}
+          {success ? "Connected" : "Not Connected"}
         </span>
         <span className={styles.statusIcon}>
-          {isConnected ? "✓" : "⚠"}
+          {success ? "✓" : "⚠"}
         </span>
         </div>
-        {isConnected ? (
+        {success ? (
           <div className={styles.statusAddress}>
-            {active?.name} - {address}
+            {props.name} - {props.address}
           </div>
         ) : (
           <div>

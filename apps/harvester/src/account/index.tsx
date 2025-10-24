@@ -1,6 +1,6 @@
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { useAccountPath } from './routes'
-import { PathNextButton, PathRouter, PathSteps } from '@/SimplePath';
+import { PathRouter, PathSteps } from '@/SimplePath';
 import { ContentSection } from '@/ContentSection';
 
 
@@ -18,7 +18,7 @@ export const Account = () => {
       <div>
         <ContentSection>
           <PathRouter path={path} data={active} />
-          <PathNextButton path={path} />
+          {/* <ContentSection.Next to="" content="Next" /> */}
         </ContentSection>
       </div>
     </div>

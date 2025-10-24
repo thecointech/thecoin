@@ -6,7 +6,7 @@ import { Agent, type EventSection, type SectionName } from "@thecointech/scraper
 import { sections } from '@thecointech/scraper-agent/processors/types';
 import { isSection } from "@thecointech/scraper-agent/replay/events";
 import { AnyEvent, InputEvent } from "@thecointech/scraper";
-import { copyProfile } from "@/Download/profile";
+import { copyProfile } from "@/GetStarted/profile";
 import { log } from "@thecointech/logging";
 import { AskUserLogin } from "./askUserLogin";
 import { getErrorMessage } from "@/BackgroundTask/selectors";

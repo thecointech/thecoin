@@ -43,7 +43,12 @@ const config = {
         format: 'ULMO'
       }
     },
-    new MakerZIP({}, ['darwin']), /*new MakerRpm({}),*/ new MakerDeb({})
+    new MakerZIP({}, ['darwin']), /*new MakerRpm({}),*/
+    new MakerDeb({
+      options: {
+        icon: 'assets/appicon.png',
+      }
+    })
   ],
   plugins: [
     // new AutoUnpackNativesPlugin({}),
@@ -72,11 +77,6 @@ const config = {
       const mainPackageJsonPath = path.join(".webpack", 'main', 'package.json'); // Adjust as needed
       writeFileSync(mainPackageJsonPath, JSON.stringify({ type: 'commonjs' }, null, 2));
     },
-    // preStart: async (config) => {
-    //   console.log("preStart executing");
-    //   const mainPackageJsonPath = path.join(".webpack", 'main', 'package.json'); // Adjust as needed
-    //   writeFileSync(mainPackageJsonPath, JSON.stringify({ type: 'commonjs' }, null, 2));
-    // }
   }
 };
 
