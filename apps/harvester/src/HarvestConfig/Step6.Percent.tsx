@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Checkbox, Container, Input, Label } from 'semantic-ui-react'
+import { Checkbox, Container, Input, Label, Header } from 'semantic-ui-react'
 import { ConfigReducer } from './state/reducer';
 import { safeParseFloat } from './state/utils';
 import { HarvestStepType } from '@thecointech/store-harvester';
-import { Header } from 'semantic-ui-react';
 
 export const ProcessPercent = () => {
 

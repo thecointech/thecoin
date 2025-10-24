@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Checkbox, Container, Input } from 'semantic-ui-react'
+import { Checkbox, Container, Input, Header } from 'semantic-ui-react'
 import { HarvestStepType } from '@thecointech/store-harvester';
 import { ConfigReducer } from './state/reducer';
 import { safeParseFloat } from './state/utils';
-import { Header } from 'semantic-ui-react';
 
 export const TopUp = () => {
   const data = ConfigReducer.useData();

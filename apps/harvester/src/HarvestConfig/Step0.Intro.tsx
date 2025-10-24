@@ -1,26 +1,18 @@
 import { Container, Header } from 'semantic-ui-react'
 import { ConfigReducer } from './state/reducer'
-import { defaultDays, defaultSteps, defaultTime } from '@thecointech/store-harvester';
 import { ActionButton } from '@/ContentSection/Action';
-import { useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { groupKey, routes } from './routes';
 
-const defaultData = {
-  schedule: {
-    daysToRun: defaultDays,
-    timeToRun: defaultTime,
-  },
-  steps: defaultSteps,
-}
 export const Intro = () => {
 
-  const location = useLocation();
+  const history = useHistory();
 
   const api = ConfigReducer.useApi();
 
   const setUseDefaults = () => {
     api.resetToDefault();
-    location.pathname = `/${groupKey}/${routes.length - 1}`;
+    history.push(`/${groupKey}/${routes.length - 1}`);
   }
   return (
     <Container>

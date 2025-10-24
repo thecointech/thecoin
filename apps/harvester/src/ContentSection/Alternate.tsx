@@ -3,12 +3,12 @@ import { useEffect } from 'react'
 import { useContentSectionContext } from './context'
 import { Link } from 'react-router-dom'
 
-type ActionButtonProps = {
+type AlternateLinkProps = {
   content: string;
   to: string;
 }
 
-export const AlternateLink = ({ to, content }: ActionButtonProps) => {
+export const AlternateLink = ({ to, content }: AlternateLinkProps) => {
   const { alternatePortalTarget, setHasAlternate } = useContentSectionContext();
 
   // Notify parent when button mounts/unmounts

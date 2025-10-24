@@ -6,13 +6,12 @@ import { groupKey } from "../routes";
 import { AccountMap } from "@thecointech/shared/containers/AccountMap/reducer";
 import { ElectronSigner } from "@thecointech/electron-signer";
 import { ContentSection } from "@/ContentSection";
-import { RouteComponentProps } from "react-router";
 import { PathNextButton } from "@/SimplePath";
 import type { AccountState } from "@thecointech/account";
 
 type State = "connecting" | "connected" | "failed";
 
-export const Connect = (props: RouteComponentProps & AccountState) => {
+export const Connect = (props: AccountState) => {
 
   const [state, setState] = useState<State>();
   const [forceCheck, setForceCheck] = useState(false);
@@ -32,7 +31,7 @@ export const Connect = (props: RouteComponentProps & AccountState) => {
       } else {
         setState("connected");
         if (res.value?.address) {
-          existing.forEach(accountApi.deleteAccount);
+          existing.forEach(addr => accountApi.deleteAccount(addr));
           accountApi.addAccount(res.value?.name, res.value?.address, new ElectronSigner(res.value.address));
           accountApi.setActiveAccount(res.value?.address);
         }

@@ -12,7 +12,7 @@ export const ContentSectionContext = createContext<ContentSectionContextType | n
 export const useContentSectionContext = () => {
   const context = useContext(ContentSectionContext);
   if (!context) {
-    throw new Error('ContentSection.Action and ContentSection.Next must be used within a ContentSection');
+    throw new Error('ContentSection.Action, ContentSection.Alternate, and ContentSection.Next must be used within a ContentSection');
   }
   return context;
 };

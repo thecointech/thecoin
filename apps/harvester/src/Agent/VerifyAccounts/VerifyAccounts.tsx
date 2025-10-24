@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import styles from "./VerifyAccounts.module.less";
 import type { InitialState } from "../state/initialState";
 import { BankConnectReducer } from "../state/reducer";
@@ -24,8 +24,7 @@ export const VerifyAccounts = ({banks, stored}: InitialState) => {
 
   const [correctedCardNumber, setCorrectedCardNumber] = useState<string>("");
 
-  const hasNoAccounts = !chequingAccount && !creditAccount;
-
+  const hasNoAccounts = !chequingAccount || !creditAccount;
   if (hasNoAccounts) {
     return <NoAccounts />;
   }
@@ -69,10 +68,10 @@ export const VerifyAccounts = ({banks, stored}: InitialState) => {
     api.setStored();
   }
 
-  const isValid = () => {
+  const isValid = useCallback(() => {
     setForceValidate(true);
     return !!stored;
-  }
+  }, [stored]);
   const cardNumValid = !cardNumError || !!correctedCardNumber;
 
   return (

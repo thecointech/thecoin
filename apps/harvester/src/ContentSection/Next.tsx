@@ -1,12 +1,12 @@
 import { createPortal } from 'react-dom'
-import { useEffect } from 'react'
+import { useEffect, type ReactNode } from 'react'
 import { Link } from "react-router-dom"
 import { Button } from "semantic-ui-react"
 import { useContentSectionContext } from './context'
 
 type NextButtonProps = {
   to: string;
-  content: string;
+  content: ReactNode;
   disabled?: boolean;
   loading?: boolean;
   onValid?: () => boolean;
@@ -25,7 +25,11 @@ export const NextButton = ({ to, content, disabled, loading, onValid }: NextButt
     return null;
   }
   const onClick = onValid ? (event: React.MouseEvent) => {
-    if (!onValid()) {
+    if (disabled) {
+      event.preventDefault();
+      return;
+    }
+    if (onValid && !onValid()) {
       event.preventDefault();
     }
   } : undefined;

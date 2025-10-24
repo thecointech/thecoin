@@ -1,9 +1,6 @@
-// import { Button } from "semantic-ui-react"
-// import { useHistory } from "react-router-dom"
 import { usePathIndex } from "./types"
 import { NextButton } from "../ContentSection/Next";
-import { useRouteMatch } from "react-router";
-// import styles from './NextButton.module.less';
+import { useLocation } from "react-router-dom";
 
 interface PathNextButtonProps {
   onValid?: () => boolean;
@@ -11,8 +8,8 @@ interface PathNextButtonProps {
 
 export const PathNextButton = (props: PathNextButtonProps) => {
   const currentStep = usePathIndex();
-  const match = useRouteMatch();
-  const groupKey = match.path.split("/")[1];
+  const location = useLocation();
+  const groupKey = location.pathname.split("/")[1];
 
   return (
     <NextButton to={`/${groupKey}/${currentStep + 1}`} content="Next" onValid={props.onValid} />

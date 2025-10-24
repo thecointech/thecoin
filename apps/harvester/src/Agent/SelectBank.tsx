@@ -36,7 +36,7 @@ export const SelectBank = ({ type, selected }: Props) => {
         }
         <CustomBankCard isSelected={selected?.name === "Custom"} onClick={handleSetBank} />
       </div>
-      <SelectBankMessage forceValid={forceValid && !selected} type={type} />
+      <SelectBankMessage forceValid={forceValid} selected={!!selected} type={type} />
       <PathNextButton onValid={isValid} />
 
     </>
@@ -44,8 +44,8 @@ export const SelectBank = ({ type, selected }: Props) => {
 }
 
 
-export const SelectBankMessage = ({ forceValid, type }: { forceValid: boolean, type: RendererBankType }) => {
-  if (forceValid) {
+export const SelectBankMessage = ({ forceValid, selected, type }: { forceValid: boolean, selected: boolean, type: RendererBankType }) => {
+  if (forceValid && !selected) {
     return (
       <Message warning>
         <p>Select the bank with the {type} account to connect:</p>

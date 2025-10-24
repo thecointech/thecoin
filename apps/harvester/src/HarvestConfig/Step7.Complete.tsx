@@ -1,4 +1,4 @@
-import { Button, Container, Loader, Dimmer, Header } from 'semantic-ui-react'
+import { Container, Loader, Dimmer, Header } from 'semantic-ui-react'
 import { ConfigReducer } from './state/reducer'
 import { useHistory } from 'react-router';
 import { useState } from 'react';
@@ -49,8 +49,7 @@ export const Complete = () => {
         much to see for a while.  You'll be getting richer slowly though, and in a few years
         you'll be amazed by the results.
       </div>
-      <br />
-      <ActionButton onClick={setConfig} loading={paused} disabled={paused} id={styles.saveButton}>Save Config</ActionButton>
+      <ActionButton onClick={setConfig} loading={paused} disabled={paused} className={styles.saveButton}>Save Config</ActionButton>
     </Container>
   )
 }
