@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/email-fake-deposit",
-  "version": "0.4.0-test.1",
+  "version": "0.4.0-test.3",
   "private": true,
   "description": "The Coin: Fake deposits for devlive & prodtest",
   "type": "module",
@@ -33,7 +33,7 @@
   },
   "types": "./build/devlive.d.ts",
   "dependencies": {
-    "@thecointech/email": "^0.4.0-test.1"
+    "@thecointech/email": "^0.4.0-test.3"
   },
   "devDependencies": {
     "@thecointech/setenv": "^0.4.0-test.0"
