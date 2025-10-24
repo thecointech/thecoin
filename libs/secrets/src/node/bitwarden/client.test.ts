@@ -22,7 +22,7 @@ jest.unstable_mockModule('@bitwarden/sdk-napi', () => ({
 }));
 jest.unstable_mockModule('fs', () => ({
   existsSync: jest.fn<any>().mockReturnValue(true),
-  readFileSync: jest.fn<any>().mockReturnValue(`ORGANIZATION_ID=${expectedOrgId}\nBWS_ACCESS_TOKEN=${expectedAccessToken}\nBWS_STATE_FILE=${expectedStateFile}`)
+  readFileSync: jest.fn<any>().mockReturnValue(`BWS_ORGANIZATION_ID=${expectedOrgId}\nBWS_ACCESS_TOKEN=${expectedAccessToken}\nBWS_STATE_FILE=${expectedStateFile}`)
 }));
 
 const { getClient } = await import('./client');
