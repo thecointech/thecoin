@@ -1,7 +1,9 @@
-import { Button, Container, Loader, Dimmer } from 'semantic-ui-react'
+import { Button, Container, Loader, Dimmer, Header } from 'semantic-ui-react'
 import { ConfigReducer } from './state/reducer'
 import { useHistory } from 'react-router';
 import { useState } from 'react';
+import styles from './Step7.module.less';
+import { ActionButton } from '@/ContentSection/Action';
 
 export const Complete = () => {
   const navigate = useHistory();
@@ -31,7 +33,7 @@ export const Complete = () => {
       <Dimmer active={paused} inverted>
         <Loader>{dimmerMessage}</Loader>
       </Dimmer>
-      <h4>Start the Harvester</h4>
+      <Header size="small">Start the Harvester</Header>
       <div>
         Thats it!  Your harvester is ready to go!
       </div>
@@ -47,9 +49,8 @@ export const Complete = () => {
         much to see for a while.  You'll be getting richer slowly though, and in a few years
         you'll be amazed by the results.
       </div>
-      <div>
-        <Button onClick={setConfig} loading={paused} disabled={paused} style={{backgroundColor: 'green', color: 'white'}}>Save Config</Button>
-      </div>
+      <br />
+      <ActionButton onClick={setConfig} loading={paused} disabled={paused} id={styles.saveButton}>Save Config</ActionButton>
     </Container>
   )
 }

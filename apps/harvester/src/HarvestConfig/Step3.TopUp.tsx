@@ -3,6 +3,7 @@ import { Checkbox, Container, Input } from 'semantic-ui-react'
 import { HarvestStepType } from '@thecointech/store-harvester';
 import { ConfigReducer } from './state/reducer';
 import { safeParseFloat } from './state/utils';
+import { Header } from 'semantic-ui-react';
 
 export const TopUp = () => {
   const data = ConfigReducer.useData();
@@ -25,7 +26,7 @@ export const TopUp = () => {
 
   return (
     <Container>
-      <h4>Would you like to make optional top-ups</h4>
+      <Header size="small">Would you like to make optional top-ups</Header>
       <div>
         Sometimes saving is easiest if it happens automatically.
       </div>
