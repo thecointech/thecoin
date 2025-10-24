@@ -6,6 +6,8 @@ Our secrets are mostly stored on bitwarden, however a few GAE-specific
 secrets are stored in the Google Secrets manager.  Both versions are
 accessed through the secrets package.
 
+Less sensitive secrets are stored in Bitwardens `{config-name}-online` projects.  These can be read by online services & github deployments.
+
 ### Electron: Access to BrokerDB firestore
 
 Go to firebase => project overview => * => project settings => General => Your Apps

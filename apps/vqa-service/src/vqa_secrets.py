@@ -50,6 +50,6 @@ def get_secrets() -> dict[str, str]:
       )
       # Attempt to authenticate with the Secrets Manager Access Token
       client.auth().login_access_token(env["BWS_ACCESS_TOKEN"], env["BWS_STATE_FILE"])
-      secrets = client.secrets().sync(env['ORGANIZATION_ID'], None).data.secrets
+      secrets = client.secrets().sync(env['BWS_ORGANIZATION_ID'], None).data.secrets
       _secrets = dict((s.key, s.value) for s in secrets)
   return _secrets
