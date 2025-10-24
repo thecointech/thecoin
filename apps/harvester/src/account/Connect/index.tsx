@@ -8,6 +8,7 @@ import { ElectronSigner } from "@thecointech/electron-signer";
 import { ContentSection } from "@/ContentSection";
 import { PathNextButton } from "@/SimplePath";
 import type { AccountState } from "@thecointech/account";
+import { log } from "@thecointech/logging";
 
 type State = "connecting" | "connected" | "failed";
 
@@ -26,7 +27,8 @@ export const Connect = (props: AccountState) => {
     setState("connecting");
     window.scraper.loadWalletFromSite().then(res => {
       if (res.error) {
-        alert(res.error);
+        // NOTE: errors are automatically displayed in BackgroundTaskErrors
+        log.error(res.error)
         setState("failed");
       } else {
         setState("connected");

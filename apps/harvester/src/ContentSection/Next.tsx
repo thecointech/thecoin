@@ -29,7 +29,7 @@ export const NextButton = ({ to, content, disabled, loading, onValid }: NextButt
       event.preventDefault();
       return;
     }
-    if (onValid && !onValid()) {
+    if (!onValid()) {
       event.preventDefault();
     }
   } : undefined;
