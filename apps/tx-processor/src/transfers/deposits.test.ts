@@ -1,31 +1,28 @@
 import { jest } from '@jest/globals';
 import { init } from '@thecointech/firestore';
 import { ConnectContract } from '@thecointech/contract-core';
-// import { ETransferErrorCode, RbcApi } from '@thecointech/rbcapi';
 import { ETransferErrorCode } from '@thecointech/bank-interface';
-import gmail from '@thecointech/tx-gmail';
 import { getSigner } from '@thecointech/signers';
 import { BuyActionContainer } from '@thecointech/tx-statemachine';
+import { mockError } from '@thecointech/logging/mock';
+import { initialize } from '@thecointech/tx-gmail';
 
 jest.setTimeout(900000);
-const errors: string[] = [];
-jest.unstable_mockModule('@thecointech/logging', () => ({
-  log: {
-    debug: jest.fn(),
-    info: jest.fn(),
-    trace: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn((args: Record<string, string>, msg: string) => {
-      errors.push(
-        msg
-          .replace(/{state}/g, args.state)
-          .replace(/{error}/g, args.error)
-          .replace(/{message}/g, args.message)
-          .replace(/{transition}/g, args.transition)
-        )
-    }),
-  }
-}));
+
+// Helper function to extract error messages from mock calls
+const getErrorMessages = () => {
+  return mockError.mock.calls.map(([args, msg]) => {
+    if (typeof args === 'object' && args && typeof msg === 'string') {
+      const logArgs = args as Record<string, string>;
+      return msg
+        .replace(/{state}/g, logArgs.state || '')
+        .replace(/{error}/g, logArgs.error || '')
+        .replace(/{message}/g, logArgs.message || '')
+        .replace(/{transition}/g, logArgs.transition || '');
+    }
+    return String(args); // fallback for different call patterns
+  });
+};
 
 class mockRbcApi {
   depositETransfer = jest.fn()
@@ -41,7 +38,7 @@ const { getCurrentState } = await import('@thecointech/tx-statemachine');
 it("Can complete deposits", async () => {
 
   init({});
-  await gmail.initialize();
+  await initialize("{}");
 
   const brokerCad = await getSigner("BrokerCAD");
   const theContract = await ConnectContract(brokerCad);
@@ -60,7 +57,7 @@ it("Can complete deposits", async () => {
   // We have 1 success, 3 failures
   const results = deposits.map(getCurrentState);
   expect(results.map(r => r.name)).toEqual(['complete', 'error', 'error', 'error'])
-  expect(errors).toEqual([
+  expect(getErrorMessages()).toEqual([
     "Error on depositReady => depositFiat: Already Deposited",
     "Detected error in action {type} from {address}",
     "Error on depositReady => depositFiat: This transfer was cancelled",

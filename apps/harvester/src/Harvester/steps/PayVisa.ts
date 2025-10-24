@@ -33,7 +33,9 @@ export class PayVisa implements ProcessingStage {
     const lastDueDate = getDataAsDate(PayVisaKey, data.state.stepData);
 
     if (!lastDueDate || (data.visa.dueDate > lastDueDate)) {
+
       log.info('PayVisa: Prepping payment request');
+
       // We better pay that due amount
       const dateToPay = await getDateToPay(data.visa.dueDate, this.daysPrior);
       log.info('PayVisa: dateToPay', dateToPay.toISO());
@@ -57,32 +59,63 @@ export class PayVisa implements ProcessingStage {
 async function sendPayment(dateToPay: DateTime, data: HarvestData, { wallet, creditDetails }: UserData) {
   // Send payment request
   // transfer visa dueAmount on dateToPay
+  log.debug({
+    amount: data.visa.dueAmount,
+    dateToPay: dateToPay.toISO(),
+    balance: data.visa.balance,
+  }, "PayVisa: Prepping visa payment of {amount} on {dateToPay}")
+
+  let dueAmount = data.visa.dueAmount.value;
+
+  // If the due amount is negative, there is nothing to pay and we skip
+  if (dueAmount < 0) {
+    log.info('PayVisa: Due amount is negative, skipping payment');
+    notify({
+      icon: 'money.png',
+      title: 'No payment required',
+      message: `Visa due balance of ${data.visa.dueAmount} is negative and does not require a payment.`,
+    })
+    return {
+      toPayVisa: currency(0),
+      toPayVisaDate: dateToPay,
+      stepData: {
+        [PayVisaKey]: data.visa.dueDate.toISO()!,
+      }
+    }
+  }
+  else if (data.visa.balance.value < dueAmount) {
+    // This means that the user has paid off some of their balance already
+    // We don't want to pay too much so limit the payment to max at the
+    // current balance of the card.
+    dueAmount = data.visa.balance.value;
+  }
+
   const payment = await BuildUberAction(
     creditDetails,
     wallet,
     process.env.WALLET_BrokerCAD_ADDRESS!,
-    new Decimal(data.visa.dueAmount.value),
+    new Decimal(dueAmount),
     124,
     dateToPay,
   )
   const r = await sendVisaPayment(payment);
   if (r.status !== 200) {
-    log.error("Error on uberBillPayment: ", r.data?.message);
+    log.error("PayVisa: Error on uberBillPayment: ", r.data?.message);
     throw new Error(`PayVisa: Error on SendVisaPayment, Status: ${r.status}`)
   }
 
   const remainingBalance = (data.state.harvesterBalance ?? currency(0))
-    .subtract(data.visa.dueAmount);
+    .subtract(dueAmount);
 
   notify({
     icon: 'money.png',
     title: 'Payment Request Sent',
-    message: `Visa balance of ${data.visa.dueAmount} is scheduled to be paid ${dateToPay.toLocaleString(DateTime.DATE_MED)}.`,
+    message: `Visa balance of ${dueAmount} is scheduled to be paid ${dateToPay.toLocaleString(DateTime.DATE_MED)}.`,
   })
 
-  log.info('Sent payment request, current balance remaining ', remainingBalance.toString());
+  log.info('PayVisa: Sent payment request, current balance remaining ', remainingBalance.toString());
   return {
-    toPayVisa: data.visa.dueAmount.add(data.state.toPayVisa ?? 0),
+    toPayVisa: currency(dueAmount), // override any existing value
     toPayVisaDate: dateToPay,
     stepData: {
       [PayVisaKey]: data.visa.dueDate.toISO()!,
@@ -139,5 +172,6 @@ async function sendVisaPayment(payment: UberTransferAction) {
   // transfer visa dueAmount on dateToPay
   const api = GetBillPaymentsApi();
   const r = await api.uberBillPayment(payment);
+  log.debug({hash: r.data.hash}, "Payment sent - {hash}");
   return r;
 }

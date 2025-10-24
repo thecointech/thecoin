@@ -10,7 +10,7 @@ import type currency from "currency.js";
 
 // SectionName includes actions that require differentation from SectionType
 // but that do not have their own processors
-export type SectionName = SectionType | "Initial" | "Username" | "ModalDialog";
+export type SectionName = SectionType | "Initial" | "ModalDialog" | "Manual";
 export type EventSection = {
   section: SectionName;
   events: (AnyEvent|EventSection)[];
@@ -71,4 +71,10 @@ export type ETransferResult = {
 
 export type ETransferInput = {
   amount: string,
+}
+
+export type ProcessAccount = Omit<AccountResponse, "position_x" | "position_y">;
+export type ProcessResults = {
+  events: EventSection,
+  accounts: ProcessAccount[];
 }

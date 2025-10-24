@@ -1,4 +1,3 @@
-
 import { jest } from '@jest/globals';
 import { init } from '@thecointech/firestore';
 import { ConnectContract } from '@thecointech/contract-core';
@@ -19,9 +18,8 @@ jest.unstable_mockModule('@thecointech/utilities/Decrypt', () => ({
 }));
 
 jest.unstable_mockModule('@thecointech/tx-gmail', () => ({
-  default: {
-    queryNewDepositEmails: jest.fn().mockReturnValue([])
-  }
+  queryNewDepositEmails: jest.fn().mockReturnValue([]),
+  setETransferLabel: jest.fn(),
 }));
 
 const { processTransfers } = await import('.');

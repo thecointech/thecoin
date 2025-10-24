@@ -5,6 +5,10 @@
 			"path": "../apps/harvester"
 		},
 		{
+			"name": "store-harvester",
+			"path": "../libs/store-harvester"
+		},
+		{
 			"name": "scraper-agent",
 			"path": "../libs/scraper-agent"
 		},
@@ -19,6 +23,10 @@
 		{
 			"name": "electron-utils",
 			"path": "../libs/electron-utils"
+		},
+		{
+			"name": "testing-pages",
+			"path": "../../private-testing-pages"
 		}
 	],
 	"settings": {

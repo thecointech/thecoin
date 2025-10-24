@@ -14,7 +14,9 @@ export const commonBase: Partial<webpack.Configuration> = {
   plugins: [
     ...envFiles.map(p => new Dotenv({
         path: fileURLToPath(p),
-        ignoreStub: true
+        ignoreStub: true,
+        expand: true,
+        systemvars: true,
       })),
   ],
   resolve: {

@@ -1,0 +1,50 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Admin - Development",
+        "request": "launch",
+        "runtimeArgs": [
+          "dev"
+        ],
+        "runtimeExecutable": "yarn",
+        "skipFiles": [
+          "<node_internals>/**"
+        ],
+        "type": "node",
+        "cwd": "${workspaceFolder}",
+        "console": "integratedTerminal"
+      },
+      {
+        "name": "Admin - ProdTest",
+        "request": "launch",
+        "runtimeArgs": [
+          "prod:test"
+        ],
+        "runtimeExecutable": "yarn",
+        "skipFiles": [
+          "<node_internals>/**"
+        ],
+        "type": "node",
+        "cwd": "${workspaceFolder}",
+        "console": "integratedTerminal"
+      },
+      {
+        "name": "Admin - Prod",
+        "request": "launch",
+        "runtimeArgs": [
+          "prod"
+        ],
+        "runtimeExecutable": "yarn",
+        "skipFiles": [
+          "<node_internals>/**"
+        ],
+        "type": "node",
+        "cwd": "${workspaceFolder}",
+        "console": "integratedTerminal"
+      },
+    ]
+}

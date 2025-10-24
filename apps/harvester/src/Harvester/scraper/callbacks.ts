@@ -6,14 +6,16 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { DateTime } from "luxon";
 import { IScraperCallbacks, ScraperProgress } from "@thecointech/scraper";
 import { AnyEvent } from "@thecointech/scraper/types";
-import { BackgroundTaskType, BackgroundTaskCallback } from "@/BackgroundTask";
+import { BackgroundTaskType, BackgroundTaskCallback, SubTaskProgress, getErrorMessage } from "@/BackgroundTask";
 import { maybeCloseModal } from "@thecointech/scraper-agent/modal";
 import { notify } from "../notify";
+import crypto from "node:crypto";
 
 export class ScraperCallbacks implements IScraperCallbacks {
 
   counter = 0;
   timestamp = Date.now();
+  id = crypto.randomUUID();
   private taskType: BackgroundTaskType;
   // private actionType: string;
   private uiCallback?: BackgroundTaskCallback;
@@ -30,16 +32,14 @@ export class ScraperCallbacks implements IScraperCallbacks {
 
     // Call to initialize the task group
     this.uiCallback?.({
-      id: this.timestamp.toString(),
+      id: this.id,
       type: this.taskType,
     })
     // Initialize sub-tasks, this will give a
     // visual indication of how much progress has been made
     if (sections && this.uiCallback) {
       for (const section of sections)
-        this.uiCallback?.({
-          parentId: this.timestamp.toString(),
-          type: this.taskType,
+        this.subTaskCallback({
           subTaskId: section,
         })
     }
@@ -61,9 +61,10 @@ export class ScraperCallbacks implements IScraperCallbacks {
     }
     else {
       this.uiCallback?.({
-        id: this.timestamp.toString(),
+        id: this.id,
         type: this.taskType,
-        error: String(error),
+        completed: true,
+        error: getErrorMessage(error),
       })
       await this.dumpPage(page);
     }
@@ -74,9 +75,7 @@ export class ScraperCallbacks implements IScraperCallbacks {
   onProgress(progress: ScraperProgress) {
     const stepPercent = progress.stepPercent ?? 0;
     const totalPercent = stepPercent + ((progress.step) / progress.total);
-    this.uiCallback?.({
-      parentId: this.timestamp.toString(),
-      type: this.taskType,
+    this.subTaskCallback?.({
       subTaskId: progress.stage,
       description: progress.stage,
       percent: totalPercent,
@@ -85,27 +84,24 @@ export class ScraperCallbacks implements IScraperCallbacks {
     return true;
   }
 
-  async complete(success: boolean, error?: string) {
-    // Update TaskGroup
+  subTaskCallback = (progress: SubTaskProgress) => {
     this.uiCallback?.({
-      id: this.timestamp.toString(),
+      parentId: this.id,
       type: this.taskType,
-      completed: success,
-      error,
+      ...progress,
     })
-  }
+  };
 
-  async onScreenshot(intent: string, screenshot: Buffer | Uint8Array, _page: Page) {
-    const outScFile = path.join(this.logsFolder, `${++this.counter}-${intent}.png`);
-    writeFileSync(outScFile, screenshot, { encoding: "binary" });
-  }
-
-  logJson(intent: string, name: string, _data: any): void {
-    log.info(`[${intent}] ${name}`);
-    writeFileSync(
-      path.join(this.logsFolder, `${this.counter}-${name}.json`),
-      JSON.stringify(_data, null, 2)
-    );
+  async complete({ result, error }: { result?: string, error?: string }) {
+    // Update TaskGroup
+    const e = error ?? (!!result ? undefined : "Unknown error");
+    this.uiCallback?.({
+      id: this.id,
+      type: this.taskType,
+      completed: true,
+      result,
+      error: e,
+    })
   }
 
   async dumpPage(page: Page) {

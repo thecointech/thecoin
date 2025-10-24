@@ -1,4 +1,3 @@
-import type { Page } from "puppeteer";
 import type { AnyEvent, ValueResult, ValueType } from "../types";
 
 // types injected into window
@@ -30,10 +29,6 @@ export type RecorderOptions = {
   name: string
   // The context to run Puppeteer in
   context: string
-  // Whether to run puppeteer in headless mode
-  headless?: boolean
-
-  onEvent?: (event: AnyEvent, page: Page, name: string, step: number) => Promise<void>;
 
   // A callback to run when scraping is complete
   onComplete?: (events: AnyEvent[]) => Promise<void>

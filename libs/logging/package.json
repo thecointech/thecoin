@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/logging",
-  "version": "0.3.4",
+  "version": "0.4.0",
   "description": "The Coin: Common logging setup",
   "type": "module",
   "keywords": [
@@ -20,7 +20,7 @@
   },
   "scripts": {
     "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
-    "build": "run -T tsc",
+    "build": "run -T tsc -b",
     "clean": "run -T rimraf ./build && run -T rimraf ./coverage",
     "test": "run :jest"
   },
@@ -29,20 +29,31 @@
   ],
   "exports": {
     ".": {
+      "test": "./mock/index.ts",
       "node": "./build/log_node.js",
+      "gcloud": "./build/gcloud.js",
       "default": "./build/log_browser.js"
-    }
+    },
+    "./mock": "./mock/index.ts"
   },
   "types": "./build/log_browser.d.ts",
+  "typesVersions": {
+    "*": {
+      "mock": [
+        "./mock/index.ts"
+      ]
+    }
+  },
   "dependencies": {
+    "@google-cloud/logging-bunyan": "^5.1.0",
     "browser-bunyan": "^1.6.3",
     "bunyan": "^1.8.13",
     "bunyan-debug-stream": "^2.0.0",
     "bunyan-seq": "^1.0.0"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.3.3",
-    "@thecointech/setenv": "^0.3.4",
+    "@thecointech/jestutils": "^0.4.0",
+    "@thecointech/setenv": "^0.4.0",
     "@types/bunyan": "^1.8.6"
   },
   "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"

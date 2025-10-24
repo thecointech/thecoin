@@ -3,10 +3,10 @@ name: Publish Everything Base
 on:
   workflow_call:
     inputs:
-      environment:
+      CONFIG_NAME:
         required: true
         type: string
-        description: 'Environment to deploy to (prodtest, prodbeta, prod)'
+        description: 'configName to deploy to (prodtest, prodbeta, prod)'
 
 # Cancel any in-progress job or run
 concurrency:
@@ -14,18 +14,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  validate-environment:
+  validate-configName:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.CONFIG_NAME }}
     steps:
-      - name: Validate environment
+      - name: Validate configName
         run: |
-          if [ "${{ inputs.environment }}" != "prodtest" ] && [ "${{ inputs.environment }}" != "prodbeta" ] && [ "${{ inputs.environment }}" != "prod" ]; then
-            echo "::error::Unknown environment: ${{ inputs.environment }}"
+          if [ "${{ inputs.CONFIG_NAME }}" != "prodtest" ] && [ "${{ inputs.CONFIG_NAME }}" != "prodbeta" ] && [ "${{ inputs.CONFIG_NAME }}" != "prod" ]; then
+            echo "::error::Unknown configName: ${{ inputs.CONFIG_NAME }}"
             exit 1
           fi
 
   build:
+    needs: validate-configName
     uses: ./.github/workflows/action-build.yml
 
   publish-packages:
@@ -35,14 +36,14 @@ jobs:
     needs: build
     uses: ./.github/workflows/action-publish-packages.yml
     with:
-      environment: ${{ inputs.environment }}
+      CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
 
   publish-docker:
     needs: publish-packages
     uses: ./.github/workflows/action-publish-docker.yml
     secrets: inherit
     with:
-      environment: ${{ inputs.environment }}
+      CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
       COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
 
   publish-services:
@@ -50,7 +51,7 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/action-publish-services.yml
     with:
-      environment: ${{ inputs.environment }}
+      CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
       COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
 
   publish-sites:
@@ -58,7 +59,7 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/action-publish-sites.yml
     with:
-      environment: ${{ inputs.environment }}
+      CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
       COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
 
   merge-to-dev:

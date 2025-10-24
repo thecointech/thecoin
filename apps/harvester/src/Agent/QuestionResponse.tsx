@@ -1,37 +1,31 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import type { AnyQuestionPacket } from "@/Harvester/agent/askUser";
 import { Button, Dimmer, Input, Loader, Segment, Select } from "semantic-ui-react";
 import { NamedResponse } from "@thecointech/scraper-agent/types";
+import { useBackgroundTask } from "@/BackgroundTask";
+import type { BackgroundTaskType } from "@/BackgroundTask/types";
+import { isRunning } from "@/BackgroundTask/selectors";
 
 export const QuestionResponse: React.FC<{
-  setQuestionActive: () => void;
-  isRecording: boolean;
-}> = ({ setQuestionActive, isRecording }) => {
+  backgroundTaskId: BackgroundTaskType;
+}> = ({ backgroundTaskId }) => {
 
   const [question, setQuestion] = useState<AnyQuestionPacket | undefined>()
   const [answer, setAnswer] = useState<string|NamedResponse>('')
   const [hasSubmitted, setHasSubmitted] = useState(false)
-  const setQuestionActiveRef = useRef(setQuestionActive);
+  const bgTask = useBackgroundTask(backgroundTaskId);
+
+  const taskRunning = isRunning(bgTask);
 
   useEffect(() => {
-    setQuestionActiveRef.current = setQuestionActive;
-  }, [setQuestionActive]);
-
-  useEffect(() => {
-    window.scraper.onAskQuestion((question: AnyQuestionPacket) => {
+    const release = window.scraper.onAskQuestion((question: AnyQuestionPacket) => {
       setQuestion(question);
-      setQuestionActiveRef.current();
       setHasSubmitted(false);
     })
+    return release;
   }, []);
 
-  useEffect(() => {
-    if (!isRecording) {
-      setQuestion(undefined);
-    }
-  }, [isRecording])
-
-  const onSubmit = async () => {
+  const onReply = async (answer: string|NamedResponse|boolean) => {
     const r = await window.scraper.replyQuestion({
       ...question!,
       value: answer
@@ -42,8 +36,12 @@ export const QuestionResponse: React.FC<{
     }
     setHasSubmitted(true);
   }
+  const onSubmit = () => onReply(answer)
+  const onConfirm = () => onReply(true)
+  const onCancel = () => onReply(false)
 
-  if (!question) return null;
+  if (!taskRunning || !question) return null;
+
   if ("options" in question) {
     return (
       <Segment>
@@ -84,6 +82,18 @@ export const QuestionResponse: React.FC<{
       </Segment>
     )
   }
+  else if ("confirm" in question) {
+    return (
+      <Segment>
+        <Dimmer active={hasSubmitted}>
+          <Loader />
+        </Dimmer>
+        <div>{question.confirm}</div>
+        <Button color='green' onClick={onConfirm} content='Confirm' />
+        <Button onClick={onCancel} content='Cancel' />
+      </Segment>
+    )
+  }
   else {
     return (
       <Segment>
@@ -96,25 +106,4 @@ export const QuestionResponse: React.FC<{
       </Segment>
     )
   }
-  // return question.options ? (
-  //   <Segment>
-  //     <Dimmer active={hasSubmitted}>
-  //       <Loader />
-  //     </Dimmer>
-  //     <div>{question.question}</div>
-  //     <Input value={answer} onChange={e => setAnswer(e.target.value)} />
-  //     <Button color='green' onClick={onSubmit} content='Submit' />
-  // </Segment>
-  // ) : (
-  //   <Segment>
-  //     <Dimmer active={hasSubmitted}>
-  //       <Loader />
-  //     </Dimmer>
-  //     <div>{question.question}</div>
-  //     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-  //       <Select options={question.options.map((o,idx) => ({ key: idx, text: o, value: o }))} value={answer} onChange={(_, data) => setAnswer(data.value as string)} />
-  //       <Button color='green' onClick={onSubmit} content='Submit' />
-  //     </div>
-  //   </Segment>
-  // )
 }

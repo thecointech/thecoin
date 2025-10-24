@@ -6,6 +6,7 @@
     // moving to fully-specified files
     "module": "NodeNext",
     "moduleResolution": "nodenext",
+    "isolatedModules": true,
   },
   "include": ["**/*.test.*", "scripts/**.ts", "internal/*.*", "**/*.stories.*"],
 }

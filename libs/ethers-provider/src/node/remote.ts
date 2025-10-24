@@ -1,6 +1,7 @@
 import { InfuraProvider } from "ethers";
 import { Network } from '../types';
 import { getSecret } from '@thecointech/secrets';
+import { createEthProviderProxy } from '../resilience';
 
 function getInfuraNetwork(deployTo: Network) {
   if (deployTo !== "POLYGON") throw new Error("Fix multi-network support");
@@ -27,6 +28,10 @@ export const getProvider = async (deployTo: Network = "POLYGON") => {
   const network = getInfuraNetwork(deployTo)
   if (!network)
     throw new Error("Missing deploy network, cannot connect to blockchain");
-  return new InfuraProvider(network, await getProjectId());
+  
+  const provider = new InfuraProvider(network, await getProjectId());
+  
+  // Wrap the provider with resilience policies
+  return createEthProviderProxy(provider);
 }
 

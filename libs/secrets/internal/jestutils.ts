@@ -16,7 +16,7 @@ export const ifSecrets = async (secrets: SecretKeyType[], config: ConfigType = "
     throw e;
   }
   for (const secret of secrets) {
-    const loaded = await getSecret(secret);
+    const loaded = await getSecret(secret, config);
     if (!globalThis.__loadedSecrets) {
       globalThis.__loadedSecrets = {};
       // Also load the environment for this config

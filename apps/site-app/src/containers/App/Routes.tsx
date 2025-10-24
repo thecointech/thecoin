@@ -8,6 +8,7 @@ import { GAuth } from '@thecointech/site-base/containers/AddAccount/Storage/GDri
 import { AddAccount } from '@thecointech/site-base/containers/AddAccount';
 import { Congratulations } from '@thecointech/site-base/containers/AddAccount/Congratulations';
 import { HomePage } from '../HomePage';
+import { HarvesterConnect } from '../Harvester/Connect';
 
 export const AppRoutes = {
   auth: {
@@ -16,6 +17,7 @@ export const AppRoutes = {
     makePayments: MakePayments,
     settings: Settings,
     contact: ContactUs,
+    'harvester/connect': HarvesterConnect,
   },
   open: {
     gauth: GAuth,

@@ -18,6 +18,9 @@
                 "--port",
                 "7004",
             ],
+            "env": {
+                "CONFIG_NAME": "development"
+            },
             "jinja": true
         },
         {
@@ -26,6 +29,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
+            "justMyCode": false
         },
     ]
 }

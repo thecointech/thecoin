@@ -1,7 +1,7 @@
 import { log } from "@thecointech/logging";
 import { getFirestore, init as FirestoreInit } from '@thecointech/firestore';
 import { RbcStore, closeBrowser } from "@thecointech/rbcapi";
-import gmail from '@thecointech/tx-gmail';
+import { initialize as initializeGmail } from '@thecointech/tx-gmail';
 import { ConfigStore } from "@thecointech/store";
 import { getSigner } from '@thecointech/signers';
 import { ConnectContract, TheCoin } from '@thecointech/contract-core';
@@ -20,11 +20,14 @@ export async function initialize() {
   ConfigStore.initialize();
 
   let token = await ConfigStore.get("gmail.token");
-  token = await gmail.initialize(token);
+  token = await initializeGmail(token);
   await ConfigStore.set("gmail.token", token);
 
   const signer = await getSigner('BrokerCAD');
-  await getSigner('BrokerTransferAssistant');
+  const bta = await getSigner('BrokerTransferAssistant');
+  if (!signer || !bta) {
+    throw new Error("Signers not loaded");
+  }
 
   const contract = await ConnectContract(signer);
   if (!contract) {
@@ -33,7 +36,6 @@ export async function initialize() {
 
   await verifyEtherReserves(signer);
   await verifyCoinReserves(signer, contract);
-  log.debug(`Initialized contract to address: ${await contract.getAddress()}`);
 
   log.debug('Init complete');
   return contract;
@@ -61,7 +63,7 @@ async function verifyCoinReserves(signer: Signer, contract: TheCoin) {
     Number(balanceCoin) * weSellAt([rate], now),
     true
   );
-  await verifyMinBalance(balanceCad, 10_000, "BrokerCAD", signerAddress, "$CAD");
+  await verifyMinBalance(balanceCad, 10_000, "BrokerCAD", signerAddress, "$THE");
 }
 
 async function verifyMinBalance(Balance: number, MinimumBalance: number, Signer: string, Address: string, currency: string) {

@@ -1,13 +1,12 @@
-import { _getImage } from "./getImage";
+import { _getImageFile } from "./getImage";
 import { log } from "@thecointech/logging";
-import { GetIntentApi } from "@thecointech/apis/vqa";
-import { File } from "@web-std/file";
 import type { Page } from "puppeteer";
+import { apis } from "./apis";
 
 export async function _getPageIntent(page: Page) {
-  const image = await _getImage(page);
-  const asFile = new File([image], "screenshot.png", { type: "image/png" });
-  const { data: intent } = await GetIntentApi().pageIntent(asFile);
+  const image = await _getImageFile(page);
+  const api = await apis().getIntentApi();
+  const { data: intent } = await api.pageIntent(image);
   log.trace(`Page detected as type: ${intent.type}`);
   return intent.type;
 }

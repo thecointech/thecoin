@@ -1,6 +1,7 @@
 import { log } from "@thecointech/logging";
 import { SimilarityPipeline } from "./similarity";
-import { Coords, ElementData, ElementDataMin, Font } from "./types";
+import { Coords, ElementData, SearchElementData, Font } from "./types";
+import { getValueParsing, parseValue } from "./valueParsing";
 import { distance as levenshtein } from 'fastest-levenshtein';
 
 const EquivalentInputTypes = [
@@ -12,17 +13,19 @@ const EquivalentInputTypes = [
 
 const EquivalentTags = [
   // Interactive elements that act as buttons
-  ['button', 'a', 'input'],
+  ['BUTTON', 'A', 'INPUT'],
   // Input text elements
-  ['input', 'textarea'],
+  ['INPUT', 'TEXTAREA'],
   // Input select elements
-  ['input', 'select'],
+  ['INPUT', 'SELECT'],
 ]
+
+export type Bounds = {width: number, height: number};
 
 // This scoring function reaaaaally needs to be replaced with
 // a computed (learned) model, because manually scoring is just
 // too easy to bias to right-nows problems
-export async function scoreElement(potential: ElementData, original: ElementDataMin) {
+export async function scoreElement(potential: ElementData, original: SearchElementData, bounds: Bounds) {
   const components: Record<string, number> = {
     selector:         30 * getSelectorScore(potential.selector, original.selector),
     tag:              20 * getTagScore(potential, original),
@@ -32,8 +35,8 @@ export async function scoreElement(potential: ElementData, original: ElementData
     font:             10 * getFontScore(potential.font, original.font),
     // Includes aria-label & <label>.  Is a good boost to <input> types
     label:            25 * await getLabelScore(potential.label, original.label),
-    role:             20 * getRoleScore(potential, original),
-    positionAndSize:  20 * getPositionAndSizeScore(potential, original), // Can be 2 if both match perfectly
+    role:             40 * getRoleScore(potential, original),
+    positionAndSize:  20 * getPositionAndSizeScore(potential, original, bounds), // Can be 2 if both match perfectly
     nodeValue:        40 * await getNodeValueScore(potential, original),
     siblings:         30 * await getSiblingScore(potential, original),
     estimatedText:    40 * getEstimatedTextScore(potential, original)
@@ -69,7 +72,7 @@ function getTagScore(potential: ElementData, original: Partial<ElementData>) {
   return 0;
 }
 
-function getInputTypeScore(potential: ElementData, original: ElementDataMin): number {
+function getInputTypeScore(potential: ElementData, original: SearchElementData): number {
   if (original.tagName !== 'INPUT' || potential.tagName !== 'INPUT') return 0;
 
   const originalType = original.inputType ?? 'text';
@@ -91,14 +94,15 @@ function getFontScore(potential: Font | undefined, original: Font | undefined) {
   )
 }
 
-function getPositionAndSizeScore(potential: ElementData, original: ElementDataMin): number {
+export function getPositionAndSizeScore(potential: ElementData, original: SearchElementData, bounds: Bounds): number {
   if (!potential.coords || !original.coords) return 0;
 
   const sizeScore = getSizeScore(potential.coords, original.coords);
-  const positionScore = getPositionScore(potential.coords, original.coords);
+  const positionScore = getPositionScore(potential.coords, original.coords, bounds);
   const totalScore = original.estimated
     // In an estimated run, we score higher on position, but position mis-matches introdue a negative penalty
-    ? sizeScore + positionScore
+    // We drop size as the text should capture the size better than this here
+    ? positionScore
     // In a regular run, we do not penalize position changes, but rely less on the position overall
     : (Math.max(sizeScore, 0) + Math.max(positionScore, 0)) / 2;
   return totalScore;
@@ -106,9 +110,10 @@ function getPositionAndSizeScore(potential: ElementData, original: ElementDataMi
 
 //
 // Get a score based on similarity of the potential's siblings to the original
-export async function getSiblingScore(potential: ElementData, original: ElementDataMin) {
+export async function getSiblingScore(potential: ElementData, original: SearchElementData) {
   const potentialSiblings = potential.siblingText;
   const originalSiblings = original.siblingText;
+
   // If both have siblings
   if (potentialSiblings?.length && originalSiblings?.length) {
 
@@ -142,7 +147,7 @@ export async function getSiblingScore(potential: ElementData, original: ElementD
   else if (potentialSiblings?.length == originalSiblings?.length) {
     return 0.5;
   }
-  else if (original.estimated && potentialSiblings?.length == 0) {
+  else if (original.estimated) {
     // Estimates will pick up siblings that are not precisely in-line
     // So do not penalize if the potential ones are not there.
     return 0;
@@ -159,20 +164,28 @@ async function getLabelScore(potential: string|null, original: string|null|undef
   return 0;
 }
 
-function getRoleScore(potential: ElementData, original: ElementDataMin) {
-  if (!original.estimated && (potential.role || original.role)) {
-    return (potential.role == original.role)
-      ? 1
-      : -1; // Differing roles is a pretty bad sign
+export function getRoleScore(potential: ElementData, original: SearchElementData) {
+  const matchScore = (original.role == potential.role)
+    ? 1
+    : -1;
+  // When estimating, we need both roles to get a score.
+  if (original.estimated) {
+    return (original.role && potential.role)
+      ? matchScore
+      : 0;
   }
-  return 0;
+
+  // In replay, if either has a role, they have to match
+  return (original.role || potential.role)
+    ? matchScore
+    : 0;
 }
 
 // Center score the difference between the two centers, scaled by the max
 // Basically, as long as the center is within the largest bounding box, it
 // should give some points.  The score drops below zero if the center moves
 // outside the radius of the oval defined by the two boxes
-function getPositionScore(potential: Coords, original: Coords) {
+export function getPositionScore(potential: Coords, original: Coords, bounds: Bounds) {
   const originalCenterX = original.left + (original.width / 2);
   const potentialCenterX = potential.left + (potential.width / 2);
   const diffX = Math.abs(originalCenterX - potentialCenterX);
@@ -180,10 +193,24 @@ function getPositionScore(potential: Coords, original: Coords) {
 
   const maxWidth = Math.max(original.width, potential.width);
   const maxHeight = Math.max(original.height, potential.height);
-  const scoreCenterX = 1 - (diffX / (maxWidth / 2));
-  const scoreCenterY = 1 - (diffY / (maxHeight / 2));
-  return (scoreCenterX + scoreCenterY) / 2;
+
+  const scoreX = getAxisScore(diffX, bounds.width, maxWidth);
+  const scoreY = getAxisScore(diffY, bounds.height, maxHeight);
+  return (scoreX + scoreY) / 2;
 }
+
+function getAxisScore(diff: number, max: number, elementSize: number) {
+  const halfSize = elementSize / 2;
+  if (diff <= halfSize) {
+    // The element is inside the bounds.  It score goes from 0 -> 1 as it moves closer to the center
+    return 1 - (diff / halfSize);
+  }
+  if (diff > halfSize) {
+    return -(diff / halfSize) / Math.abs((max - elementSize) / halfSize);
+  }
+  return 0;
+}
+
 
 // Size score is the similarity between the two boxes
 function getSizeScore(potential: Coords, original: Coords) {
@@ -194,15 +221,14 @@ function getSizeScore(potential: Coords, original: Coords) {
   return (scoreWidth + scoreHeight) / 2;
 }
 
-async function getNodeValueScore(potential: ElementData, original: ElementDataMin) {
+async function getNodeValueScore(potential: ElementData, original: SearchElementData) {
+  if (original.parsing?.type == "currency" || original.parsing?.type == "date" || original.parsing?.type == "phone") {
+    // Amounts that have parsing are expected to change, so we score them
+    // on their parsing matching, rather than their actual value
+    return getValueParsingScore(potential, original);
+  }
   if (potential.nodeValue && original.nodeValue) {
-    // If both are $amounts, that's a pretty good sign
-    if (
-      original.text?.trim().match(/^\$[0-9, ]+\.\d{2}$/) &&
-      potential.text?.trim().match(/^\$[0-9, ]+\.\d{2}$/)
-    ) {
-      return 0.75;
-    }
+    // Check text similarity
     const [similarity] = await SimilarityPipeline.calculateSimilarity(
       original.nodeValue,
       [potential.nodeValue]
@@ -214,6 +240,18 @@ async function getNodeValueScore(potential: ElementData, original: ElementDataMi
     return .25;
   }
   else if (original.estimated) {
+    // If our text matches, we return 0.25.
+    // While we mostly use the text + position score
+    // to find elements, if we aren't searching for a
+    // specific type of element we boost the node
+    // value a little so if there is a group of
+    // similar elements we'll use the one closest
+    // to the actual value.  The main purpose of this
+    // is because the siblings score can be a bit
+    // can move us off the best element.
+    if (original.text == potential.nodeValue && !original.tagName) {
+      return .25;
+    }
     // Do not penalize, as estimates can return
     // text from images or icons that aren't present in the page.
     return 0;
@@ -225,7 +263,7 @@ async function getNodeValueScore(potential: ElementData, original: ElementDataMi
 // Our text score is different from nodeValue, nodeValue is required to survive
 // website refactoring, but text is always estimated directly from the current page
 // Because of this, we prefer the levenstein distance to the similarity score
-function getEstimatedTextScore(potential: ElementData, original: ElementDataMin): number {
+function getEstimatedTextScore(potential: ElementData, original: SearchElementData): number {
   if (!original.estimated) return 0;
   if (potential.text && original.text) {
     // Strip whitespace
@@ -253,3 +291,28 @@ function getEstimatedTextScore(potential: ElementData, original: ElementDataMin)
   }
   return 0;
 }
+function getValueParsingScore(potential: ElementData, original: SearchElementData) {
+  if (!original.parsing) return 0;
+  if (!potential.text) return -1;
+
+  // When scoring for an estimate, we are only checking if we
+  // can convert to the requested type.
+  if (original.estimated) {
+    const guessed = getValueParsing(potential.text, original.parsing.type);
+    return (guessed.format)
+      // If we have a format, this means the value is of the requested type.
+      // However, we have some very relaxed parsing rules, so don't give it
+      // the full weight.
+      ? 0.75
+      // If it can't be converted, then it's most likely not a match
+      : -1;
+  }
+  else if (original.parsing.format) {
+    const parsed = parseValue(potential.text, original.parsing)
+    return (parsed)
+      ? 1
+      : -1;
+  }
+  return 0;
+}
+

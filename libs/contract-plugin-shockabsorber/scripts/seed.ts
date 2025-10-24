@@ -9,6 +9,7 @@ import { fetchRate, weSellAt } from '@thecointech/fx-rates';
 import { toCoinDecimal } from '@thecointech/utilities';
 import Decimal from 'decimal.js-light';
 import { getOverrideFees } from '@thecointech/contract-base/overrides';
+import { getContract as getOracle } from '@thecointech/contract-oracle';
 
 log.debug('Seeding ShockAbsorber');
 async function main() {
@@ -29,18 +30,40 @@ async function main() {
   await bcCore.exactTransfer(shockAbsorber, coin.toNumber(), now.getTime());
 
   if (process.env.CONFIG_NAME == 'devlive') {
+    // Find the 3-month period where the price has dropped the most since inception
+    const ts = await findLargestDrop();
     const tester = await getSigner("SaTester");
-    const ts = DateTime.fromObject({
-      year: 2023,
-      month: 7,
-      day: 31,
-      hour: 10
-    })
     const request = await buildAssignPluginRequest(tester, shockAbsorber, ALL_PERMISSIONS, ts);
     await assignPlugin(bcCore, request);
 
     await bcCore.exactTransfer(tester, 200e6, ts.toMillis());
   }
+}
+
+async function findLargestDrop() {
+  const oracle = await getOracle();
+  const rates = await oracle.getRates();
+  const interval = await oracle.BLOCK_TIME();
+  const initialTimestamp = await oracle.INITIAL_TIMESTAMP();
+  const OneWeek = (7 * 24 * 60 * 60 * 1000) / Number(interval);
+  const ThreeMonths = (90 * 24 * 60 * 60 * 1000) / Number(interval);
+  let maxDrop = 0n;
+  let maxDropIndex = 0;
+  for (let i = 0; i < rates.length; i += OneWeek) {
+    const rate = rates[i];
+    if (i + ThreeMonths > rates.length) break;
+    const nextRate = rates[i + ThreeMonths];
+    if (nextRate < rate) {
+      const drop = rate - nextRate;
+      if (drop > maxDrop) {
+        maxDrop = drop;
+        maxDropIndex = i;
+      }
+    }
+  }
+  return DateTime.fromMillis(
+    Number(initialTimestamp) + (maxDropIndex * Number(interval))
+  );
 }
 
 main();

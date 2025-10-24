@@ -1,46 +1,50 @@
 import { jest } from "@jest/globals"
-import { describe, IsManualRun } from '@thecointech/jestutils';
-import { getTestPages, useTestBrowser } from "@thecointech/scraper/testutils"
-import { responseToElement } from "../vqaResponse";
+import { describe } from '@thecointech/jestutils';
+import { getTestData } from "../../internal/getTestData";
+import { getDestinationOptions } from "./twofa";
+import { hasTestingPages } from "@thecointech/scraper/testutils";
 
-const {getPage} = useTestBrowser()
-jest.setTimeout(3 * 60 * 1000);
+jest.setTimeout(30 * 60 * 1000);
 
-describe('TwoFA live tests', () => {
-  it ('correctly updates phone numbers with scraped text', async () => {
+describe('TwoFA destination tests', () => {
+  const tests = getTestData("TwoFA", "destination", "**/TD");
 
-    const tests = await getTestPages("record", "TwoFA", "TD");
-    for (const test of tests) {
-      const vqa = {
-        "num_phone_numbers": 2,
-        "phone_numbers": [
-          {
-            "phone_number": "+1 (111) 123-4567",
-            "position_x": 397,
-            "position_y": 319
-          },
-          {
-            "phone_number": "+1 (111) 987-6543",
-            "position_x": 394,
-            "position_y": 400
-          }
-        ]
-      }
-
-      // Ok, can we find these things?
-      const page = await getPage();
-      await page.goto(test.url);
-
-      for (const p of vqa.phone_numbers) {
-        const asResponse = {
-          content: p.phone_number,
-          position_x: p.position_x,
-          position_y: p.position_y,
-          neighbour_text: ""
-        }
-        const element = await responseToElement(page, asResponse);
-        console.log(`${element.data.text} - ${JSON.stringify(element.data.coords)}`);
+  it.each(tests)('correctly finds the destinations: %s', async (test) => {
+    await using agent = await test.agent();
+    const destinations = await getDestinationOptions(agent);
+    const gold = test.gold("phone_nos");
+    for (const d of destinations) {
+      const goldp = gold[d.name];
+      expect(goldp).toBeTruthy();
+      expect(goldp).toHaveLength(d.options.length);
+      for (const o of d.options) {
+        expect(goldp).toContainEqual(o.content);
       }
     }
   })
-}, IsManualRun)
+  // it.each(tests)('correctly selects the destination: %s', async (test) => {
+  //   // if (skip) {
+  //   //   skip = false;
+  //   //   return;
+  //   // }
+  //   // Ok, can we find these things?
+  //   await using agent = await test.agent();
+
+  //   const selected = test.elm("destination");
+  //   expect(selected).toBeTruthy();
+  //   test.mockInput((type, question, options) => {
+  //     expect(type).toBe("option");
+  //     return { group: 0, option: 0 };
+  //   });
+
+  //   await selectDestination(agent);
+
+
+  //   // for (let i = 0; i < vqa.response.phones.phone_nos.length; i++) {
+  //   //   const found = await updateFromPage(agent, vqa.response.phones.phone_nos[i]);
+  //   //   const goldPhone = verify[i].name;
+  //   //   // expect(found.data.text).toEqual(goldPhone);
+  //   // }
+  // })
+}, hasTestingPages)
+

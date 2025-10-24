@@ -26,6 +26,7 @@ it ('Tops up appropriately', async () => {
       balance: currency(500),
     },
     delta: [],
+    date: DateTime.now(),
     state: {
       toETransfer,
       stepData: priorState?.state.stepData,

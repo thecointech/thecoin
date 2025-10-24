@@ -20,6 +20,7 @@ function sliceArgs(args, name, def) {
 let args = process.argv.slice(2);
 const config = sliceArgs(args, "cfg", process.env.CONFIG_NAME ?? "development");
 let executable = sliceArgs(args, "exec", "node");
+let cwd = sliceArgs(args, "cwd", process.cwd());
 
 console.log(`--- RUNNING ${config} ENV ---`)
 
@@ -52,11 +53,12 @@ const findTsConfig = async () => {
 }
 
 const TS_NODE_PROJECT = process.env.TS_NODE_PROJECT ?? await findTsConfig();
+const { CONFIG_NAME, ...rest } = process.env;
 const env = {
   NODE_NO_WARNINGS: 1,
   TS_NODE_PROJECT,
   ...getEnvVars(config),
-  ...process.env,
+  ...rest,
 }
 
 const loader = args.find(arg => arg.endsWith('.ts'))
@@ -94,7 +96,7 @@ if (executable != "node") {
 const proc = spawn(
   executable,
   args,
-  { stdio: 'inherit', shell: true, cwd: process.cwd(), env }
+  { stdio: 'inherit', shell: true, cwd: cwd, env }
 )
 
 // Liberally inspired by cross-env: https://github.com/kentcdodds/cross-env/blob/master/src/index.js

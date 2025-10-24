@@ -60,8 +60,8 @@ it ("correctly converts UberTransfer", async () => {
   expect(postRun?.coin?.eq(0)).toBeTruthy();
   expect(postRun?.fiat?.gt(0)).toBeTruthy();
 
-  expect(getSingle).toBeCalledTimes(1);
-  expect(getSingle).toBeCalledWith(124, xferAt.toMillis());
+  expect(getSingle).toHaveBeenCalledTimes(1);
+  expect(getSingle).toHaveBeenCalledWith(124, xferAt.toMillis());
 })
 
 
@@ -88,8 +88,8 @@ it ("correctly converts CertifiedTransfer", async () => {
   expect(postRun?.fiat?.gt(0)).toBeTruthy();
 
   const mondayMorning = now.plus({days: 1}).set({ hour: 9, minute: 32, second: 0 });
-  expect(getSingle).toBeCalledTimes(1);
-  expect(getSingle).toBeCalledWith(124, mondayMorning.toMillis());
+  expect(getSingle).toHaveBeenCalledTimes(1);
+  expect(getSingle).toHaveBeenCalledWith(124, mondayMorning.toMillis());
 })
 
 // Data

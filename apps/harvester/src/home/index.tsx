@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom'
-import styles from './index.module.less'
+import { ContentSection } from '@/ContentSection'
 import { Button } from 'semantic-ui-react'
+import styles from './index.module.less'
 
 export const Home = () => {
   return (
-    <div className={styles.container} >
+    <ContentSection className={styles.container}>
       <h2>
         Introducing The Harvester
       </h2>
@@ -23,8 +24,6 @@ export const Home = () => {
         You just need to give it more time.
       </h4>
       <Button as={Link} to="/browser" primary>Get Started</Button>
-        {/* <Link to="/browser">Get Started</Link> */}
-      {/* </div> */}
-    </div>
+    </ContentSection>
   )
 }

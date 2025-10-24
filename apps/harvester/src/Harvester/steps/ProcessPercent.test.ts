@@ -25,6 +25,7 @@ it ('correctly reduces transfer amounts', async () => {
       dueDate: DateTime.now().plus({ weeks: 1 }),
       history: [],
     },
+    coin: BigInt(100*1e6),
     date: DateTime.now(),
 
     state: {

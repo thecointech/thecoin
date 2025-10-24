@@ -12,5 +12,8 @@
     "python.testing.pytestEnabled": false,
     "python.testing.unittestEnabled": true,
     "debugpy.showPythonInlineValues": true,
-    "editor.defaultFormatter": "charliermarsh.ruff"
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "python.testing.pytestArgs": [
+        "-s"
+    ]
 }

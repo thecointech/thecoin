@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Checkbox, Container, Input, Label } from 'semantic-ui-react'
-import { HarvestStepType } from '../types';
+import { Checkbox, Container, Input, Label, Header } from 'semantic-ui-react'
 import { ConfigReducer } from './state/reducer';
 import { safeParseFloat } from './state/utils';
+import { HarvestStepType } from '@thecointech/store-harvester';
 
 export const ProcessPercent = () => {
 
@@ -26,7 +26,7 @@ export const ProcessPercent = () => {
 
   return (
     <Container>
-      <h4>What percentage of your visa balance do you want to handle?</h4>
+      <Header size="small">What percentage of your visa balance do you want to handle?</Header>
       <div>
         While you will get the best results if the harvester is running at 100%, you may be more comfortable
         starting out with it hanlding a smaller percentage of your visa balance.
