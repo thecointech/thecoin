@@ -213,8 +213,10 @@ export async function registerElementAttrFns(page: Page) {
     eval(`window.getFontData = ${fns.getFontData};`)
     eval(`window.getLabelData = ${fns.getLabelData};`)
     eval(`window.getElementText = ${fns.getElementText};`)
+    eval(`window.getNodeValue = ${fns.getNodeValue};`)
     eval(`window.getSiblingText = ${fns.getSiblingText};`)
     eval(`window.getCoords = ${fns.getCoords};`)
+    eval(`window.isVisuallyHidden = ${fns.isVisuallyHidden};`)
     window.MAX_SIBLING_DISTANCE = fns.MAX_SIBLING_DISTANCE;
     window.getElementData = (el: HTMLElement, skipSibling?: boolean) => {
       const rawProps = getElementProps(el);
@@ -225,16 +227,12 @@ export async function registerElementAttrFns(page: Page) {
         const potentialSiblings = Array.from(allNodes)
           .filter(ps => (
             ps != el &&
-            //@ts-ignore
-            ps.checkVisibility({
-              checkOpacity: true,  // Check CSS opacity property too
-              checkVisibilityCSS: true // Check CSS visibility property too
-            })
+            !isVisuallyHidden(ps)
           ))
           .map(ps => ({
             element: ps,
             coords: getCoords(ps),
-            nodeValue: getElementText(ps),
+            nodeValue: getNodeValue(ps),
             selector: getSelector(ps)!, // note: null is tested in the filter
           }))
           .filter(ps => !!ps.nodeValue && !!ps.selector)
@@ -249,11 +247,31 @@ export async function registerElementAttrFns(page: Page) {
     getFontData: getFontData.toString(),
     getLabelData: getLabelData.toString(),
     getElementText: getElementText.toString(),
+    getNodeValue: getNodeValue.toString(),
     getSiblingText: getSiblingText.toString(),
     getCoords: getCoords.toString(),
+    isVisuallyHidden: isVisuallyHidden.toString(),
     MAX_SIBLING_DISTANCE: MAX_SIBLING_DISTANCE,
   });
 }
+
+
+const isVisuallyHidden = (el: Element) => {
+  if (!(el instanceof HTMLElement)) return true;
+  if (!el.checkVisibility({
+    checkOpacity: true,  // Check CSS opacity property too
+    checkVisibilityCSS: true // Check CSS visibility property too
+  })) {
+    return true;
+  }
+  const styles = getComputedStyle(el);
+
+  // Check for common "visually-hidden" patterns
+  const hasClipping = styles.clip !== 'auto' || styles.clipPath !== 'none';
+  const isTiny = (parseFloat(styles.height) <= 1 && parseFloat(styles.width) <= 1);
+  return (hasClipping && isTiny);
+}
+
 
 const getElementProps = (el: HTMLElement) => ({
   frame: getFrameUrl(),
@@ -268,8 +286,12 @@ const getElementProps = (el: HTMLElement) => ({
   label: getLabelData(el),
   // Placeholder text gets picked up by the VQA service, so we
   // need to include it here (as it's most like a text descendent)
-  text: el.innerText + (el.getAttribute("placeholder") || ""),
-  nodeValue: getElementText(el),
+  text: getElementText(el),
+  nodeValue: getNodeValue(el),
+  // Add a reference to the parent element.  This allows
+  // us to treat children of buttons etc as the button itself.
+  parentSelector: el.parentElement ? getSelector(el.parentElement) : null,
+  parentTagName: el.parentElement?.tagName?.toUpperCase(),
 })
 
 const getFrameUrl = () => {
@@ -371,7 +393,12 @@ export function getLabelData(elem: Element) {
   return _getLabelData(elem)
 }
 
-function getElementText(elem: Element) {
+function getElementText(el: HTMLElement) {
+  const s = el.innerText.replace(/\s+/g, ' ') + (el.getAttribute("placeholder") || "")
+  return s.trim();
+}
+
+function getNodeValue(elem: Element) {
   // Don't forget to include any CSS-defined content
   const getCssContent = (prop: string) => {
     const content = window.getComputedStyle(elem, "::" + prop).content

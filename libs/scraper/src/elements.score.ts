@@ -3,22 +3,9 @@ import { SimilarityPipeline } from "./similarity";
 import { Coords, ElementData, SearchElementData, Font } from "./types";
 import { getValueParsing, parseValue } from "./valueParsing";
 import { distance as levenshtein } from 'fastest-levenshtein';
+import { getTagScore } from "./elements.score.tag";
+import { getInputTypeScore } from "./elements.score.input";
 
-const EquivalentInputTypes = [
-  // All of the following attributes tend to show up looking the same on the page
-  ['text', 'date', 'datetime', 'datetime-local', 'email', 'month', 'number', 'search', 'tel', 'time', 'url', 'week'],
-  ['checkbox', 'radio'],
-  ['submit', 'reset', 'button'],
-]
-
-const EquivalentTags = [
-  // Interactive elements that act as buttons
-  ['BUTTON', 'A', 'INPUT'],
-  // Input text elements
-  ['INPUT', 'TEXTAREA'],
-  // Input select elements
-  ['INPUT', 'SELECT'],
-]
 
 export type Bounds = {width: number, height: number};
 
@@ -57,33 +44,6 @@ function getSelectorScore(potential: string, original: string | undefined) {
   return potential == original ? 1 : 0;
 }
 
-// Tags aren't great filters, even for things like buttons
-function getTagScore(potential: ElementData, original: Partial<ElementData>) {
-  if (potential.tagName == original.tagName) {
-    return 1;
-  } else {
-    // Some kinds of elemements can be interchangeable
-    if (EquivalentTags.find(t => t.includes(original.tagName!) && t.includes(potential.tagName!))) {
-      // We could also score input[button] higher etc, but that's getting a bit too complicated,
-      // and shouldn't be necessary.  Instead we will transition to a learned model soon
-      return 0.5;
-    }
-  }
-  return 0;
-}
-
-function getInputTypeScore(potential: ElementData, original: SearchElementData): number {
-  if (original.tagName !== 'INPUT' || potential.tagName !== 'INPUT') return 0;
-
-  const originalType = original.inputType ?? 'text';
-  const potentialType = potential.inputType ?? 'text';
-
-  if (potentialType === originalType) return 1;
-  if (EquivalentInputTypes.find(t => t.includes(potentialType) && t.includes(originalType))) {
-    return 0.5;
-  }
-  return 0;
-}
 
 function getFontScore(potential: Font | undefined, original: Font | undefined) {
   return (

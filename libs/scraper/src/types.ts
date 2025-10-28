@@ -62,6 +62,10 @@ export type ElementData = {
   nodeValue?: string|null,
   font?: Font,
   siblingText?: string[],
+
+  // Reference to parent element
+  parentSelector?: string|null,
+  parentTagName?: string,
 }
 
 export type SearchElementData = Partial<ElementData> & {
