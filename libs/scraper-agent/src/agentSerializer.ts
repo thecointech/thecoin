@@ -111,7 +111,6 @@ export class AgentSerializer implements Disposable {
     // represent a single step in the process
     await this.logJson(`${search.event.eventName}-elm`, data, false);
     await this.logJson(`${search.event.eventName}-sch`, sch);
-    await this.logMhtml(search.page);
     if (this.writeScreenshotOnElement) {
       try {
         const image = await _getImage(search.page);
@@ -122,6 +121,8 @@ export class AgentSerializer implements Disposable {
         // Not fatal, so continue
       }
     }
+    // Log after screenshot, as that may increment the step.
+    await this.logMhtml(search.page);
   }
 
   onSection = async (section: SectionName) => {

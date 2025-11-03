@@ -145,8 +145,15 @@ export function guessDateFormat(value?: string, locale?: string) {
 const convert = (value: string|undefined, options: currency.Options) => {
   if (!value) return undefined;
   const r = currency(value, options);
-  // Ignore 0 values (probably incompatible string)
-  if (r.intValue === 0 || Number.isNaN(r.value)) return undefined;
+  // Do we have a number?
+  if (Number.isNaN(r.value)) return undefined;
+  // If the number is 0, then it must contain only "0" as it's digits
+  if (r.intValue === 0) {
+    const digits = value.match(/\d/g);
+    if (digits?.length == 0 || digits?.some(d => d !== "0")) {
+      return undefined;
+    }
+  }
   return r;
 }
 

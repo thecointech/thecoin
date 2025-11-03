@@ -1,4 +1,3 @@
-import { readFileSync } from "node:fs"
 import { type Browser } from "puppeteer"
 import { patchOnnxForJest } from "./jestPatch";
 import { IsManualRun } from '@thecointech/jestutils';

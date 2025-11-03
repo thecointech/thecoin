@@ -1,10 +1,11 @@
 import { existsSync, readFileSync } from "fs";
 import path from "path";
 import { Page } from "puppeteer";
-import { FoundElement, ElementSearchParams, ElementData, VqaCallData, TestElmData, TestSchData } from "../src/types";
+import { VqaCallData, TestElmData, TestSchData } from "../src/types";
 import { waitPageStable } from "../src/utilities";
 import { OverrideData, applyOverrides } from "./overrides";
-import { isEqual } from "lodash";
+import { log } from "@thecointech/logging";
+import open from 'open';
 
 export class TestData {
   public readonly key: string;
@@ -37,13 +38,30 @@ export class TestData {
     return existsSync(path.join(this.matchedFolder, `${this.step}.mhtml`));
   }
 
+  _page: Page | null = null;
   async page(): Promise<Page> {
+    if (this._page) {
+      return this._page;
+    }
     const filename = `${this.matchedFolder}/${this.step}.mhtml`;
     const url = `file://${filename.replace(" ", "%20")}`;
-    const page = await this.getPage();
-    await page.goto(url);
-    await waitPageStable(page);
-    return page;
+    this._page = await this.getPage();
+    await this._page.goto(url);
+    await waitPageStable(this._page);
+    return this._page;
+  }
+
+  png(): void {
+    const filename = `${this.matchedFolder}/${this.step}.png`;
+    if (!existsSync(filename)) {
+      log.error(`PNG file not found: ${filename}`);
+    }
+    else {
+      // Fire-and-forget - don't await so it opens immediately
+      open(filename)
+        .then(proc => proc.unref())
+        .catch(err => log.error('Failed to open image:', err));
+    }
   }
 
   elements(): string[] {

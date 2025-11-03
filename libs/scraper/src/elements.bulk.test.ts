@@ -12,87 +12,96 @@ import { TestData } from "../internal/testData";
 jest.setTimeout(20 * 60 * 1000);
 const MIN_ELEMENTS_IN_VALID_PAGE = 25;
 
-describe("It finds the same elements as before in archive", runTests, hasTestingPages);
+describe("It finds the same elements as before in archive", runTests, hasTestingPages && !IsManualRun);
 
 describe("It runs only the failing tests in archive", () => {
   runTests(getLastFailing());
 }, IsManualRun)
 
 function runTests(includeFilter?: IncludeFilter) {
+
+  // Even if skipped above this function still runs to list the tests
+  // We don't want hundreds of skipped tests to show up in our results, so return early
+  if (!includeFilter && IsManualRun) {
+    return;
+  }
   const testData = getTestData("*", "elm.json", "archive");
   const overrides = initOverrides();
   const currentlyFailing = new Set<string>();
   const results = [];
-  const filtered = testData.filter(test => !shouldSkip(test, includeFilter));
-  const counter = makeCounter(filtered);
-  it.each(filtered)("Finds the correct element: %s", async (test) => {
-    counter();
-    const page = await test.page();
-    const elements = test.elements();
-    for (let i = 0; i < elements.length; i++) {
-      const element = elements[i];
+  const filteredTests = testData.filter(test => !shouldSkip(test, includeFilter));
+  const allElements = filteredTests
+    .flatMap(test => test.elements().map(element => {
       const name = element.match(/(.+)-elm.json/)?.[1];
+      return { test, element, name };
+    }))
+  const [filteredElements, skippedElements] = allElements
+    .reduce(([filtered, skipped], { test, element, name }) => {
       const sch = test.sch(name);
-      const elm = test.elm(name);
-      if (!sch) {
-        // console.error("No schema for ", test.key, name);
-        const skipElements = overrides.skip[test.key] ?? {
-          reason: "No schema",
-          elements: [],
-        };
-        skipElements.elements.push(name);
-        overrides.skip[test.key] = skipElements;
-        continue;
+      if (sch?.search.event.estimated) {
+        filtered.push({ testKey: test.key, test, element, name });
       }
-      if (!sch?.search.event.estimated) {
-        // Not a VQA search, ignore this.
-        continue;
+      else {
+        skipped.push(`${test.key} - ${name}`);
       }
-      try {
-        const found = await getElementForEvent({
-          ...sch.search,
-          page,
-          timeout: 500
-        });
-        let writeOverride = true;
-        if (found.data.text !== elm.text || found.data.selector !== elm.selector) {
-          if (writeOverride) {
-            const testOverrides = overrides[test.key] = overrides[test.key] ?? {};
-            const elementOverride = testOverrides[name] = testOverrides[name] ?? {};
-            if (found.data.text !== elm.text) {
-              elementOverride.text = found.data.text;
-              elementOverride.coords = found.data.coords;
-            }
-            if (found.data.selector !== elm.selector) {
-              elementOverride.selector = found.data.selector;
-              elementOverride.coords = found.data.coords;
-            }
-          }
-          results.push({
-            key: test.key,
-            found,
-            expected: elm,
-          })
-        }
-        expect(found.data.text).toEqual(elm.text);
-        expect(found.data.selector).toEqual(elm.selector)
-      }
-      catch (e) {
-        if (e instanceof ElementNotFoundError) {
-          // Sometimes, mhtml is a wee bit bung
-          const allElements = await page.$$("*")
-          if (allElements.length < MIN_ELEMENTS_IN_VALID_PAGE) {
-            log.error(`Element not found, but page is empty, check mhtml on ${test.key}`)
-            overrides.skip[test.key] = {
-              reason: "Page is empty",
-            };
-            break;
-          }
-        }
-        currentlyFailing.add(test.key);
-        throw e;
-      }
+      return [filtered, skipped];
+    }, [[], []]);
 
+  console.log(`Found ${filteredElements.length} elements to test, skipping ${skippedElements.length}`);
+  // Let us know how many elements we skipped
+  it.skip.each(skippedElements)("non-vqa element: %s", (name) => {});
+
+  const counter = makeCounter(filteredElements);
+  it.each(filteredElements)("Finds the correct element: $testKey - $name", async ({ testKey, test, name }) => {
+    counter(results);
+    const page = await test.page();
+    const sch = test.sch(name);
+    const elm = test.elm(name);
+    try {
+      const found = await getElementForEvent({
+        ...sch.search,
+        page,
+        timeout: 500
+      });
+      let writeOverride = true;
+      const expText = elm.text.replace(/\s+/g, " ").trim();
+
+      if (found.data.text !== expText || found.data.selector !== elm.selector) {
+        if (writeOverride) {
+          const testOverrides = overrides[test.key] = overrides[test.key] ?? {};
+          const elementOverride = testOverrides[name] = testOverrides[name] ?? {};
+          if (found.data.text !== elm.text) {
+            elementOverride.text = found.data.text;
+            elementOverride.coords = found.data.coords;
+          }
+          if (found.data.selector !== elm.selector) {
+            elementOverride.selector = found.data.selector;
+            elementOverride.coords = found.data.coords;
+          }
+        }
+        results.push({
+          key: test.key,
+          found,
+          expected: elm,
+        })
+      }
+      expect(found.data.text).toEqual(expText);
+      expect(found.data.selector).toEqual(elm.selector)
+    }
+    catch (e) {
+      if (e instanceof ElementNotFoundError) {
+        // Sometimes, mhtml is a wee bit bung
+        const allElements = await page.$$("*")
+        if (allElements.length < MIN_ELEMENTS_IN_VALID_PAGE) {
+          log.error(`Element not found, but page is empty, check mhtml on ${test.key}`)
+          overrides.skip[test.key] = {
+            reason: "Page is empty",
+          };
+          return;
+        }
+      }
+      currentlyFailing.add(test.key);
+      throw e;
     }
   })
 
@@ -155,12 +164,12 @@ function lastFailingFile() {
     : null;
 }
 
-function makeCounter(filtered: TestData[]) {
+function makeCounter(filtered: { test: TestData, element: string }[]) {
   let count = 0;
-  return () => {
+  return (results: any[]) => {
     count++;
     if (count % 10 == 0) {
-      console.log(`Running test ${count} of ${filtered.length}`);
+      console.log(`Running test ${count} (failed ${results.length}) of ${filtered.length}`);
     }
     return count;
   }

@@ -66,7 +66,7 @@ export function getTestData<T extends TestData>(
 
 function getJsonFiles(matchedFolder: string, step: string, skip?: SkipElement) {
   const allPagesAndElements = readdirSync(matchedFolder);
-  let jsonFiles = allPagesAndElements.filter(f => f.startsWith(step));
+  let jsonFiles = allPagesAndElements.filter(f => f.startsWith(`${step}-`));
   return (skip?.elements)
     ? jsonFiles.filter(f =>
       skip.elements?.every(e => !f.includes(e))
