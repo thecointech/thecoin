@@ -1,5 +1,5 @@
-import { AnyEvent, HistoryRow, ReplayResult } from "../src/types";
-import { IScraperCallbacks } from "../src/callbacks";
+import type { AnyEvent, HistoryRow, ReplayResult } from "../src/types";
+import type { IScraperCallbacks } from "../src/callbacks";
 import { sleep } from "@thecointech/async/sleep";
 import currency from "currency.js";
 import { DateTime } from "luxon";

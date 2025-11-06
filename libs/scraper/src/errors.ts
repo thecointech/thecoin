@@ -1,4 +1,4 @@
-import { DynamicInputEvent, SearchElementData, FoundElement, ValueEvent } from "./types";
+import type { DynamicInputEvent, SearchElementData, FoundElement, ValueEvent } from "./types";
 
 export class ElementNotFoundError extends Error {
   element: SearchElementData

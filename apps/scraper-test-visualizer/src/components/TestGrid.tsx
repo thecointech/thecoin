@@ -1,14 +1,16 @@
 import React from 'react';
 import { Card } from 'semantic-ui-react';
 import type { TestInfo } from '../testInfo';
+import { useFilteredTests } from '../state/reducer';
 
 interface TestGridProps {
-  tests: TestInfo[];
-  failingTests: Set<string>;
+  // tests: TestInfo[];
+  // failingTests: Set<string>;
   onTestClick: (test: TestInfo) => void;
 }
 
-const TestGrid: React.FC<TestGridProps> = ({ tests, onTestClick }) => {
+const TestGrid: React.FC<TestGridProps> = ({ onTestClick }) => {
+  const tests = useFilteredTests();
   return (
     <div className="test-grid">
       {tests.map((test) => {
@@ -19,7 +21,7 @@ const TestGrid: React.FC<TestGridProps> = ({ tests, onTestClick }) => {
 
         return (
           <Card
-            key={test.key}
+            key={`${test.key}-${test.element}`}
             className={test.isFailing ? 'failing' : ''}
             onClick={() => onTestClick(test)}
             style={{ cursor: 'pointer' }}

@@ -2,7 +2,7 @@ import type { ElementHandle, Frame, Page } from 'puppeteer';
 import type { Coords, ElementData, SearchElementData, ElementSearchParams, FoundElement, SearchElement } from './types';
 import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
-import { Bounds, scoreElement } from './elements.score';
+import { type Bounds, scoreElement } from './elements.score';
 import { ElementNotFoundError, PageNotInteractableError } from './errors';
 import { EventBus } from './events/eventbus';
 

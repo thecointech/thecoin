@@ -1,4 +1,4 @@
-import { AsyncEventEmitter, EventListeners } from "./asyncEventEmitter";
+import { AsyncEventEmitter, type EventListeners } from "./asyncEventEmitter";
 import type { ElementSearchParams, FoundElement } from "../types";
 
 type EventMap = {

@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
-import { Page, } from 'puppeteer';
-import { ElementData } from './types';
-import { CurrencyType, getCurrencyConverter, guessCurrencyFormat, guessDateFormat } from './valueParsing';
+import type { Page } from 'puppeteer';
+import type { ElementData } from './types';
+import { type CurrencyType, getCurrencyConverter, guessCurrencyFormat, guessDateFormat } from './valueParsing';
 import { getAllElements } from './elements';
 import currency from 'currency.js';
 

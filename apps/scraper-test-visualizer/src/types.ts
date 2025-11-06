@@ -1,35 +1,25 @@
-export interface TestGroup {
-  timestamp: number;
-  files: {
-    blank?: string;
-    found?: string;
-    original?: string;
-  };
-}
-
-// export type SectionTests = {
-//   section: string;
-//   elements: string[];
-// }
-// export type TargetTests = {
-//   target: string;
-//   sections: SectionTests[];
-// }
-// export interface AllTests {
-//   date: string;
-//   targets: TargetTests[];
-// }
+import type { TestElmData, TestSchData } from "@thecointech/scraper";
+import type { OverrideElement } from "@thecointech/scraper-testing/getTestData";
 
 // Basic test data
 export type Test = {
-  folder: string; // Relative to 'archive' folder
-  step: number;
+  key: string;
   element: string;
-
-  // date: string;
-  // target: string;
-  // section: string;
 }
+
+export type TestSnapshot = {
+  time: number;
+  result: TestElmData;
+}
+
+// Result of a single test
+export type TestResult = {
+  original: TestElmData | null;
+  search: TestSchData | null;
+  override: OverrideElement | null;
+  snapshot: TestSnapshot[];
+}
+
 
 // export interface TestInfo {
 //   name: string;

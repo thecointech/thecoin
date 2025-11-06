@@ -1,12 +1,12 @@
-import { type Page } from 'puppeteer';
+import type { Page } from 'puppeteer';
 import { getTableData } from './table';
-import { AnyEvent, ReplayResult, SearchElement, AnyElementEvent } from './types';
+import type { AnyEvent, ReplayResult, SearchElement, AnyElementEvent } from './types';
 import { parseValue } from './valueParsing';
 import { log } from '@thecointech/logging';
 import { getElementForEvent } from './elements';
 import { sleep } from '@thecointech/async';
 import { newPage } from './puppeteer-init';
-import { IScraperCallbacks } from './callbacks';
+import type { IScraperCallbacks } from './callbacks';
 import { DynamicValueError, ValueEventError } from './errors';
 
 export type ReplayOptions = {

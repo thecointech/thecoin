@@ -7,7 +7,7 @@ import args from './argv.mjs';
 import { port } from './port.mjs';
 import { setup } from './middlewares/frontendMiddleware.mjs';
 
-export async function run(secrets, clientSetup)
+export async function run(secrets: string[], clientSetup: (app: express.Application) => void)
 {
   const app = express();
 
@@ -46,6 +46,7 @@ export async function run(secrets, clientSetup)
   });
 
   // Start your app.
+  //@ts-ignore
   app.listen(port, host, async err => {
     if (err) {
       return logger.error(err.message);

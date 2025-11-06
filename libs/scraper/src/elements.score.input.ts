@@ -1,4 +1,4 @@
-import { ElementData, SearchElementData } from "./types";
+import type { ElementData, SearchElementData } from "./types";
 
 
 const EquivalentInputTypes = [
