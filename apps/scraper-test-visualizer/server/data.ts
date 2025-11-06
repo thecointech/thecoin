@@ -1,7 +1,7 @@
 
 import path from 'node:path';
 import type { Test, TestResult } from '../src/types';
-import { getTestData, type TestData } from '@thecointech/scraper-testing/getTestData';
+import { getTestData, type TestData } from '@thecointech/scraper-testing';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import type { TestElmData } from '@thecointech/scraper';
 

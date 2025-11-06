@@ -39,7 +39,7 @@ export function getTestData<T extends TestData>(
     if (isNaN(step)) {
       throw new Error(`Invalid step: ${machedFilename}`);
     }
-    const key = `${path.relative(testFolder, matchedFolder).replaceAll(path.sep, '-')}-${step}`
+    const key = `${path.relative(testFolder, matchedFolder).replaceAll(path.sep, ':')}:${step}`
     if (results.find(r => r.key == key)) {
       continue
     }

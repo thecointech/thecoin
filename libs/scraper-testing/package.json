@@ -34,15 +34,15 @@
     "build/**/*"
   ],
   "exports": {
-    "./getTestData": {
-      "node": "./build/getTestData.node.js"
+    ".": {
+      "node": "./build/index.js"
     }
   },
-  "types": "build/getTestData.node.d.ts",
+  "types": "build/index.d.ts",
   "typesVersions": {
     "*": {
       "getTestData": [
-        "build/getTestData.node.d.ts"
+        "build/index.d.ts"
       ]
     }
   }

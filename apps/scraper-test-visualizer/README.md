@@ -59,7 +59,7 @@ The app reads test data from the `PRIVATE_TESTING_PAGES` directory structure:
   - `{timestamp}-2-found.png` - Found element highlighted in red
   - `{timestamp}-3-original.png` - Expected element highlighted in blue
 - `archive/overrides-{timestamp}.json` - Override data from test runs
-- `archive/failing-elm.json` - List of currently failing tests
+- `archive/failing.json` - List of currently failing tests
 
 ## Architecture
 

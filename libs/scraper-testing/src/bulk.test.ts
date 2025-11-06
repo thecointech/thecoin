@@ -1,6 +1,6 @@
 import { jest } from "@jest/globals";
 import { describe, IsManualRun } from "@thecointech/jestutils"
-import { getTestData, hasTestingPages } from "@thecointech/scraper-testing/getTestData";
+import { getTestData, hasTestingPages } from "@thecointech/scraper-testing";
 import { getElementForEvent } from "@thecointech/scraper/elements";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { log } from "@thecointech/logging";
@@ -8,6 +8,7 @@ import path from "node:path";
 import { OverrideData } from "./overrides";
 import type { TestData } from "./testData";
 import { ElementSearchParams, FoundElement, ElementNotFoundError } from "@thecointech/scraper";
+import { getLastFailing, writeLastFailing } from './failing';
 
 jest.setTimeout(20 * 60 * 1000);
 const MIN_ELEMENTS_IN_VALID_PAGE = 25;
@@ -20,7 +21,7 @@ describe("It runs only the failing tests in archive", () => {
   runTests(getLastFailing());
 }, IsManualRun)
 
-function runTests(includeFilter?: IncludeFilter) {
+function runTests(includeFilter?: string[]) {
 
   // Even if skipped above this function still runs to list the tests
   // We don't want hundreds of skipped tests to show up in our results, so return early
@@ -126,55 +127,11 @@ function runTests(includeFilter?: IncludeFilter) {
   })
 }
 
-// Simple helper functions
-
-type IncludeFilter = {
-  exclude: string[];
-  include: string[];
-}
-function getLastFailing(): IncludeFilter | null {
-  const file = lastFailingFile();
-  if (!file) return null;
-  if (existsSync(file)) {
-    return JSON.parse(readFileSync(file, "utf-8"));
-  }
-  return null;
-}
-
-function writeLastFailing(failing: Set<string>) {
-  const file = lastFailingFile();
-  if (!file) return;
-  writeFileSync(file, JSON.stringify({
-    include: Array.from(failing),
-    exclude: [],
-  }, null, 2));
-}
-
-function shouldSkip(test: TestData, includeFilter?: IncludeFilter) {
-  // If missing data, just skip
-  if (!test.hasSnapshot() || test.searches().length == 0) {
-    return true;
-  }
-  if (includeFilter) {
-    return (
-      !includeFilter.include.includes(test.key) ||
-      includeFilter.exclude.includes(test.key)
-    );
-  }
-  return false
-}
-
 function initOverrides(): OverrideData {
   return {
     skip: {},
     overrides: {},
   }
-}
-
-function lastFailingFile() {
-  return process.env.PRIVATE_TESTING_PAGES
-    ? path.join(process.env.PRIVATE_TESTING_PAGES, "archive", `failing-elm.json`)
-    : null;
 }
 
 function makeCounter(filtered: { test: TestData, element: string }[]) {

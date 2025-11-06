@@ -29,7 +29,7 @@ export const Initializer = () => {
       const failingResponse = await fetch('/api/failing');
       if (failingResponse.ok) {
         const failingData = await failingResponse.json();
-        actions.setFailingTests(new Set(failingData.include || []));
+        actions.setFailingTests(new Set(failingData));
       }
 
       // // Load details for each test

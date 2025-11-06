@@ -3,6 +3,7 @@ import { join, extname } from 'node:path';
 import { getTests, getTestResults, getTestImagePath } from './data';
 import { getTestPath } from './paths';
 import { run } from "@thecointech/site-base/internal/server";
+import { getLastFailing } from '@thecointech/scraper-testing';
 
 const testingPages = getTestPath();
 
@@ -56,12 +57,8 @@ run(
   // API: Get failing tests
   app.get('/api/failing', (req, res) => {
     try {
-      const failingPath = join(testingPages, 'archive', 'failing-elm.json');
-      if (!existsSync(failingPath)) {
-        return res.json({ include: [], exclude: [] });
-      }
-      const data = JSON.parse(readFileSync(failingPath, 'utf-8'));
-      return res.json(data);
+      const failing = getLastFailing();
+      return res.json(failing);
     } catch (error) {
       console.error('Failed to read failing tests:', error);
       return res.status(500).json({ error: 'Failed to read failing tests' });
