@@ -1,0 +1,57 @@
+.testViewer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+.header {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 1rem;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  overflow: auto;
+  padding: 1rem;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.imageColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+
+  h4 {
+    color: white;
+    margin: 0;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    background: white;
+  }
+}
+
+.timestampSelector {
+  margin: 1rem 0;
+}

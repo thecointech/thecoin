@@ -1,6 +1,7 @@
 import React from 'react';
 import { Statistic } from 'semantic-ui-react';
 import type { Test } from '../types';
+import styles from './StatsBar.module.less';
 
 interface StatsBarProps {
   tests: Test[];
@@ -14,7 +15,7 @@ const StatsBar: React.FC<StatsBarProps> = ({ tests, failingTests }) => {
   // const totalRuns = tests.reduce((sum, test) => sum + test.groups.length, 0);
 
   return (
-    <div className="stats-bar">
+    <div className={styles.statsBar}>
       <Statistic size="small">
         <Statistic.Value>{totalTests}</Statistic.Value>
         <Statistic.Label>Total Tests</Statistic.Label>

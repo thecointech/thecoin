@@ -19,3 +19,4 @@ import { configureStore, history } from '@thecointech/shared/store';
 }
 
 export const configureAppStore = () => configureStore(createReducer);
+export { history };

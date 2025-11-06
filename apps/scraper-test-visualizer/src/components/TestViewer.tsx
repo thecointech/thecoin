@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Icon, Loader, Message, Accordion, Table, Label, Segment, Header, Grid } from 'semantic-ui-react';
 import type { TestInfo } from '../testInfo';
 import type { TestResult, TestSnapshot } from '../types';
+import styles from './TestViewer.module.less';
 
 interface TestViewerProps {
   test: TestInfo;
@@ -130,8 +131,8 @@ export const TestViewer: React.FC<TestViewerProps> = ({ test, onClose }) => {
   };
 
   return (
-    <div className="image-viewer">
-      <div className="image-viewer-header">
+    <div className={styles.testViewer}>
+      <div className={styles.header}>
         <div>
           <h2 style={{ margin: 0 }}>
             {test.key} / {test.element}
@@ -147,7 +148,7 @@ export const TestViewer: React.FC<TestViewerProps> = ({ test, onClose }) => {
         </Button>
       </div>
 
-      <div className="image-viewer-content" style={{ overflowY: 'auto', padding: '1rem' }}>
+      <div className={styles.content} style={{ overflowY: 'auto', padding: '1rem' }}>
         {loading && (
           <Segment>
             <Loader active inline="centered">Loading test results...</Loader>
@@ -170,7 +171,7 @@ export const TestViewer: React.FC<TestViewerProps> = ({ test, onClose }) => {
                   <img
                     src={`/api/image/${test.key}`}
                     alt={`Screenshot for ${test.key}`}
-                    style={{ maxWidth: '100%', border: '1px solid #ddd' }}
+                    style={{ maxWidth: '300px', border: '1px solid #ddd' }}
                     onError={(e) => {
                       (e.target as HTMLImageElement).style.display = 'none';
                       (e.target as HTMLImageElement).parentElement!.innerHTML += '<p>Image not available</p>';
