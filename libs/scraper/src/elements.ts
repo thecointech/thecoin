@@ -18,7 +18,9 @@ declare global {
 const MAX_SIBLING_DISTANCE = 50;
 const BUCKET_PIXELS = 10
 
-export async function getElementForEvent(params: ElementSearchParams) {
+type ElementFoundCallback = (candidate: FoundElement, params: ElementSearchParams, candidates: FoundElement[]) => Promise<void>;
+
+export async function getElementForEvent(params: ElementSearchParams, onFound: ElementFoundCallback = notifyElementFound) {
 
   const { page, event, timeout = 30000, minScore = 70, maxTop = Number.MAX_VALUE } = params;
 
@@ -41,8 +43,7 @@ export async function getElementForEvent(params: ElementSearchParams) {
     const candidate = await getBestCandidate(candidates, event, minScore);
 
     if (candidate) {
-      // Watchers can get notified of every found element
-      await EventBus.get().emitElement(candidate, params);
+      await onFound(candidate, params, candidates);
       return candidate;
     }
 
@@ -57,6 +58,11 @@ export async function getElementForEvent(params: ElementSearchParams) {
 
   // Not found, throw
   throw new ElementNotFoundError(event, bestCandidate);
+}
+
+async function notifyElementFound(candidate: FoundElement, params: ElementSearchParams) {
+  // Watchers can get notified of every found element
+  await EventBus.get().emitElement(candidate, params);
 }
 
 async function fetchAllCandidates(page: Page, event: SearchElementData, bounds: Bounds) {

@@ -1,20 +1,27 @@
 import path from "node:path";
 import { existsSync, readdirSync } from "node:fs";
 import { globSync } from "glob";
-import { useTestBrowser } from "./testutils";
 import { TestData } from "./testData";
 import { getOverrideData, SkipElement } from "./overrides";
+import type { Page } from "puppeteer";
+import { newPage } from "@thecointech/scraper";
 
-type TestDataConstructor<T extends TestData = TestData> = new (...args: ConstructorParameters<typeof TestData>) => T;
+export type TestDataConstructor<T extends TestData = TestData> = new (...args: ConstructorParameters<typeof TestData>) => T;
 
 export function getTestData<T extends TestData>(
   section: string,
   searchPattern: string,
   recordTime = 'latest',
-  constructor: TestDataConstructor<T> = TestData as any
+  constructor: TestDataConstructor<T> = TestData as any,
+  getPage: () => Promise<Page>
 ): T[] {
 
-  const { getPage } = useTestBrowser();
+  if (!getPage) {
+    getPage = async () => {
+      const { page } = await newPage("default");
+      return page;
+    }
+  }
 
   const testFolder = process.env.PRIVATE_TESTING_PAGES;
   if (!testFolder) {
@@ -28,7 +35,10 @@ export function getTestData<T extends TestData>(
 
     const matchedFolder = path.dirname(match);
     const machedFilename = path.basename(match);
-    const step = machedFilename.split('-')[0]
+    const step = parseInt(machedFilename.split('-')[0]);
+    if (isNaN(step)) {
+      throw new Error(`Invalid step: ${machedFilename}`);
+    }
     const key = `${path.relative(testFolder, matchedFolder)}-${step}`
     if (results.find(r => r.key == key)) {
       continue
@@ -64,7 +74,7 @@ export function getTestData<T extends TestData>(
   return results;
 }
 
-function getJsonFiles(matchedFolder: string, step: string, skip?: SkipElement) {
+function getJsonFiles(matchedFolder: string, step: number, skip?: SkipElement) {
   const allPagesAndElements = readdirSync(matchedFolder);
   let jsonFiles = allPagesAndElements.filter(f => f.startsWith(`${step}-`));
   return (skip?.elements)

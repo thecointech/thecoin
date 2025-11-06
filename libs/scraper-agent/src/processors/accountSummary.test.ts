@@ -2,7 +2,7 @@ import { jest } from "@jest/globals";
 import { getTestData } from "../../internal/getTestData";
 import { findAccountElements, saveAccountNavigation, saveBalanceElement, validateAccountNumberAgainstSource } from "./accountSummary"
 import { describe } from '@thecointech/jestutils';
-import { hasTestingPages } from "@thecointech/scraper/testutils";
+import { hasTestingPages } from "@thecointech/scraper-testing/getTestData";
 import { OverviewResponse } from "@thecointech/vqa";
 import type { ValueEvent } from "@thecointech/scraper";
 
@@ -26,11 +26,11 @@ describe('Updates to the correct account number', () => {
     const listed = test.vqa("listAccounts");
     for (const inferred of listed!.response.accounts) {
       const element = test.elm("account");
-      const actual = validateAccountNumberAgainstSource(inferred.account_number, element!)
+      const actual = validateAccountNumberAgainstSource(inferred.account_number, element!.data)
       // This is sufficient for the tests we have now, but likely will not work
       // in more complicated situations.
       expect(element).toBeTruthy();
-      expect(element?.text).toContain(actual);
+      expect(element?.data.text).toContain(actual);
     }
   })
 }, hasTestingPages)
@@ -50,7 +50,7 @@ describe ("Correctly finds the balance element", () => {
     expect(elm).toEqual(expect.objectContaining({
       eventName: "balance",
       type: "value",
-      text: original?.search.event.text,
+      text: original?.event.text,
       parsing: expect.objectContaining({ type: "currency" }),
     }));
   })
@@ -68,7 +68,7 @@ describe("Correctly finds the navigation element", () => {
       // Get the real account number
       account!.account_number = query!.args[0] as string;
       const found = await saveAccountNavigation(agent, account!);
-      expect(found.data.text).toEqual(elm!.text); // (Not sure this is working)
+      expect(found.data.text).toEqual(elm!.data.text); // (Not sure this is working)
     }
   })
 }, hasTestingPages)

@@ -1,16 +1,16 @@
 import { existsSync, readFileSync } from "fs";
 import path from "path";
-import { Page } from "puppeteer";
-import { VqaCallData, TestElmData, TestSchData } from "../src/types";
-import { waitPageStable } from "../src/utilities";
-import { OverrideData, applyOverrides } from "./overrides";
+import type { Page } from "puppeteer";
+import type { VqaCallData, TestElmData, TestSchData } from "@thecointech/scraper";
+// import { waitPageStable } from "../src/utilities";
+import { OverrideData } from "./overrides";
 import { log } from "@thecointech/logging";
 import open from 'open';
 
 export class TestData {
   public readonly key: string;
   public readonly target: string;
-  public readonly step: string;
+  public readonly step: number;
   public readonly matchedFolder: string;
   protected readonly jsonFiles: string[];
   private readonly overrideData: OverrideData;
@@ -19,7 +19,7 @@ export class TestData {
   constructor(
     key: string,
     target: string,
-    step: string,
+    step: number,
     matchedFolder: string,
     jsonFiles: string[],
     overrideData: OverrideData,
@@ -47,7 +47,7 @@ export class TestData {
     const url = `file://${filename.replace(" ", "%20")}`;
     this._page = await this.getPage();
     await this._page.goto(url);
-    await waitPageStable(this._page);
+    // await waitPageStable(this._page);
     return this._page;
   }
 
@@ -113,14 +113,20 @@ export class TestData {
     }
   }
 
-  elm(name: string): TestElmData | null {
+  elm(name: string, withOverride=true): TestElmData | null {
     const element = this.jsonFiles.find(f => f.includes(name) && f.endsWith("-elm.json"));
     if (!element) {
       return null;
     }
     const testName = element.match(/(.+)-elm.json/)?.[1];
-    const rawJson: TestElmData = JSON.parse(readFileSync(path.join(this.matchedFolder, element), "utf-8"));
-    applyOverrides(this.overrideData, this.key, testName!, rawJson);
+    const rawJson: TestElmData = this.json<TestElmData>(element);
+    if (withOverride) {
+      const elementOverride = this.override(testName!);
+      if (elementOverride) {
+        if (elementOverride.text) rawJson.data.text = elementOverride.text;
+        if (elementOverride.selector) rawJson.data.selector = elementOverride.selector;
+      }
+    }
     return rawJson;
   }
 
@@ -136,7 +142,7 @@ export class TestData {
     if (!search) {
       return null;
     }
-    const rawJson: TestSchData = JSON.parse(readFileSync(path.join(this.matchedFolder, search), "utf-8"));
+    const rawJson: TestSchData = this.json<TestSchData>(search);
     return rawJson;
   }
 
@@ -153,6 +159,17 @@ export class TestData {
     return null;
   }
 
+  override(element: string) {
+    const overrides = this.overrideData.overrides?.[this.key];
+    if (overrides) {
+      const elementOverride = overrides[element];
+      if (elementOverride) {
+        return elementOverride;
+      }
+    }
+    return null;
+  }
+
   toString(): string {
     return this.key;
   }
@@ -163,7 +180,7 @@ export class TestData {
     constructor: new (
       key: string,
       target: string,
-      step: string,
+      step: number,
       matchedFolder: string,
       jsonFiles: string[],
       overrideData: OverrideData,

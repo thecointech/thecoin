@@ -1,11 +1,7 @@
 import { type Browser } from "puppeteer"
-import { patchOnnxForJest } from "./jestPatch";
+import { patchOnnxForJest } from "@thecointech/scraper/jestPatch";
 import { IsManualRun } from '@thecointech/jestutils';
-import { cleanProfileLocks, newPage, setupScraper } from "../src/puppeteer-init";
-
-export { patchOnnxForJest } from "./jestPatch"
-export { getTestData, hasTestingPages } from "./getTestData"
-export * from "./testData"
+import { cleanProfileLocks, newPage, setupScraper } from "@thecointech/scraper/puppeteer";
 
 setupScraper({
   rootFolder: './.cache/test',

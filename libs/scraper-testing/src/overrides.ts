@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from "node:fs";
-import { ElementData, Coords } from "../src/types";
+import type { Coords } from "@thecointech/scraper";
 import path from "node:path";
 
 export type OverrideElement = {
@@ -26,15 +26,4 @@ export function getOverrideData(testFolder: string): OverrideData {
     return overrideData;
   }
   return {};
-}
-
-export function applyOverrides(overrideData: OverrideData, key: string, element: string, rawJson: ElementData) {
-  const overrides = overrideData.overrides?.[key];
-  if (overrides) {
-    const elementOverride = overrides[element];
-    if (elementOverride) {
-      if (elementOverride.text) rawJson.text = elementOverride.text;
-      if (elementOverride.selector) rawJson.selector = elementOverride.selector;
-    }
-  }
 }

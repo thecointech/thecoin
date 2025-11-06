@@ -2,7 +2,7 @@
 import { jest } from "@jest/globals"
 import { describe } from '@thecointech/jestutils';
 import { getTestData } from "../internal/getTestData";
-import { hasTestingPages } from "@thecointech/scraper/testutils";
+import { hasTestingPages } from "@thecointech/scraper-testing/getTestData";
 import type { Page } from "puppeteer";
 import type { FoundElement } from "@thecointech/scraper/types";
 
@@ -30,7 +30,7 @@ describe('modal vqa tests finds the correct close element', () => {
     expect(mocks.clickElement).toHaveBeenCalled();
     const found = mocks.clickElement.mock.calls[0][1];
     const elm = test.elm("closeModal");
-    expect(found.data.selector).toEqual(elm?.selector);
+    expect(found.data.selector).toEqual(elm?.data.selector);
   })
 }, hasTestingPages)
 
