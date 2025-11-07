@@ -1,15 +1,10 @@
 import React from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { TestViewer } from '../components/TestViewer';
+import { TestViewer } from '../components/TestViewer/TestViewer';
 import { TestInfo } from '../testInfo';
 
 export const TestViewerPage: React.FC = () => {
   const { key, element } = useParams<{ key: string; element: string }>();
-  const history = useHistory();
-
-  const handleClose = () => {
-    history.push('/');
-  };
 
   // Create a TestInfo object from the URL params
   const test = new TestInfo({
@@ -17,5 +12,5 @@ export const TestViewerPage: React.FC = () => {
     element: decodeURIComponent(element),
   });
 
-  return <TestViewer test={test} onClose={handleClose} />;
+  return <TestViewer test={test} />;
 };

@@ -120,6 +120,12 @@ export class TestData {
     }
     const testName = element.match(/(.+)-elm.json/)?.[1];
     const rawJson: TestElmData = this.json<TestElmData>(element);
+    // Clean up spaces in text, older test files did not clean
+    // before writing...
+    if (rawJson.data.text) {
+      rawJson.data.text = rawJson.data.text.replace(/\s+/g, " ").trim();
+    }
+
     if (withOverride) {
       const elementOverride = this.override(testName!);
       if (elementOverride) {

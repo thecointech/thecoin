@@ -64,13 +64,12 @@ function runTests(includeFilter?: string[]) {
         saveSnapshot(test, name, timestamp, elm, candidate, candidates);
       }
       const found = await getElementForEvent({
-        ...sch.search,
+        ...sch,
         page,
         timeout: 500
       }, onFound);
 
-      const expText = elm.text.replace(/\s+/g, " ").trim();
-      expect(found.data.text).toEqual(expText);
+      expect(found.data.text).toEqual(elm.text);
       expect(found.data.selector).toEqual(elm.selector)
     }
     catch (e) {

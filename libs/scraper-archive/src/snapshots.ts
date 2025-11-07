@@ -2,8 +2,7 @@ import type { TestData } from "./testData";
 import type { FoundElement } from "@thecointech/scraper-types";
 import path from "node:path";
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
-import type { TestElmData } from "./types";
-
+import type { TestElmData, SnapshotData } from "./types";
 
 const SNAPSHOT_FOLDER = "__snapshots__";
 export function saveSnapshot(test: TestData, element: string, timestamp: number, original: TestElmData, found: FoundElement, candidates: FoundElement[]) {
@@ -23,7 +22,7 @@ export function saveSnapshot(test: TestData, element: string, timestamp: number,
   //  - found element
   //  - expected results (if not found)
   //  - top 10 candidates
-function getWriteData(original: TestElmData, found: FoundElement, candidates: FoundElement[]) {
+function getWriteData(original: TestElmData, found: FoundElement, candidates: FoundElement[]): SnapshotData {
   const matched = candidates.find(c => (
     c.data.selector == original.data.selector &&
     c.data.text == original.data.text

@@ -1,5 +1,4 @@
-import type { TestElmData, TestSchData } from "@thecointech/scraper";
-import type { OverrideElement } from "@thecointech/scraper-testing/getTestData";
+import type { OverrideElement, TestElmData, TestSchData, SnapshotData } from "@thecointech/scraper-archive";
 
 // Basic test data
 export type Test = {
@@ -9,7 +8,7 @@ export type Test = {
 
 export type TestSnapshot = {
   time: number;
-  result: TestElmData;
+  result: SnapshotData;
 }
 
 // Result of a single test

@@ -1,6 +1,6 @@
 import { BaseReducer } from '@thecointech/shared/store/immerReducer';
 import { initialState, type InitialState, type FilterType } from './initialState';
-import type { TestInfo } from '../testInfo';
+import { TestInfo } from '../testInfo';
 
 export const TESTS_KEY = "tests";
 
@@ -34,6 +34,7 @@ export class TestsReducer extends BaseReducer<IActions, InitialState>(TESTS_KEY,
 
   setFailingTests(failingTests: Set<string>): void {
     this.draftState.failingTests = failingTests;
+    TestInfo.failingTests = failingTests;
   }
 
   setFilter(filter: FilterType): void {

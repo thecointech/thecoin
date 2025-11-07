@@ -1,9 +1,9 @@
 
 import path from 'node:path';
 import type { Test, TestResult } from '../src/types';
-import { getTestData, type TestData } from '@thecointech/scraper-testing';
+import { getTestData } from './getTestData';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import type { TestElmData } from '@thecointech/scraper';
+import type { SnapshotData, TestData, TestElmData } from '@thecointech/scraper-archive';
 
 declare global {
   var allTests: TestData[];
@@ -79,7 +79,7 @@ function getTestSnapshotResults(test: TestData, element: string) {
       const runResult = JSON.parse(readFileSync(runPath, 'utf-8'))
       return {
         time: runTime,
-        result: runResult as TestElmData,
+        result: runResult as SnapshotData,
       }
   })
   return runs.sort((a, b) => a.time - b.time)

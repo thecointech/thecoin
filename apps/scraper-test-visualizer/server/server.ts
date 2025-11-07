@@ -3,7 +3,7 @@ import { join, extname } from 'node:path';
 import { getTests, getTestResults, getTestImagePath } from './data';
 import { getTestPath } from './paths';
 import { run } from "@thecointech/site-base/internal/server";
-import { getLastFailing } from '@thecointech/scraper-testing';
+import { getLastFailing } from '@thecointech/scraper-archive';
 
 const testingPages = getTestPath();
 

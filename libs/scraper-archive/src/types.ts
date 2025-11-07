@@ -11,3 +11,9 @@ export type TestSchData = {
   response?: any,
   hints?: SearchElementData,
 } & Omit<ElementSearchParams, "page">;
+
+export type SnapshotData = {
+  found: FoundElement,
+  match?: FoundElement,
+  top: FoundElement[],
+}
