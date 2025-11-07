@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'connected-react-router';
+import 'semantic-ui-css/semantic.css'
 import './index.css'
 import App from './Home/App'
 import { configureAppStore, history } from './store';
