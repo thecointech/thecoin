@@ -2,7 +2,7 @@ import { jest } from "@jest/globals"
 import { describe } from '@thecointech/jestutils';
 import { getTestData } from "../../internal/getTestData";
 import { getDestinationOptions } from "./twofa";
-import { hasTestingPages } from "@thecointech/scraper-testing/getTestData";
+import { hasTestingPages } from "@thecointech/scraper-archive/getTestData";
 
 jest.setTimeout(30 * 60 * 1000);
 

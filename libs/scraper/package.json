@@ -55,7 +55,7 @@
     },
     "./puppeteer": "./build/puppeteer-init/index.js",
     "./record": "./build/record/index.js",
-    "./jestPatch": "./internal/jestPatch.ts",
+    "./testutils": "./internal/testutils.ts",
     "./*": "./build/*.js"
   },
   "typesVersions": {
@@ -66,8 +66,8 @@
       "record": [
         "build/record/index.d.ts"
       ],
-      "jestPatch": [
-        "internal/jestPatch.ts"
+      "testutils": [
+        "internal/testutils.ts"
       ],
       "*": [
         "build/*.d.ts"

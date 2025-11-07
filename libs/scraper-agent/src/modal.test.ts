@@ -2,7 +2,7 @@
 import { jest } from "@jest/globals"
 import { describe } from '@thecointech/jestutils';
 import { getTestData } from "../internal/getTestData";
-import { hasTestingPages } from "@thecointech/scraper-testing/getTestData";
+import { hasTestingPages } from "@thecointech/scraper-archive/getTestData";
 import type { Page } from "puppeteer";
 import type { FoundElement } from "@thecointech/scraper/types";
 

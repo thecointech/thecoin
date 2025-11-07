@@ -9,8 +9,8 @@ import { _getImage } from "./getImage";
 import { LoginFailedError } from "./errors";
 import { ApiCallEvent, bus } from "./eventbus";
 import { EventBus } from "@thecointech/scraper/events/eventbus";
-import type { AnyEvent, ElementSearchParams, FoundElement, TestElmData } from "@thecointech/scraper/types";
-import type { TestSchData } from "@thecointech/scraper";
+import type { AnyEvent, ElementSearchParams, FoundElement } from "@thecointech/scraper/types";
+import type { TestElmData, TestSchData } from "@thecointech/scraper-archive";
 import { File } from "@web-std/file";
 
 // How many pixels must change to consider it a new screenshot

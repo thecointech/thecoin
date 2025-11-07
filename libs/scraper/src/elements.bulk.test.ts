@@ -1,133 +1,132 @@
-// import { jest } from "@jest/globals";
-// import { describe, IsManualRun } from "@thecointech/jestutils"
-// import { getTestData, hasTestingPages } from "../internal/getTestData";
-// import { getElementForEvent } from "./elements";
-// import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-// import { ElementNotFoundError } from "./errors";
-// import { log } from "@thecointech/logging";
-// import path from "node:path";
-// import { OverrideData } from "../internal/overrides";
-// import { TestData } from "@thecointech/scraper-testing";
-// import { ElementSearchParams, FoundElement } from "./types";
+import { jest } from "@jest/globals";
+import { describe, IsManualRun } from "@thecointech/jestutils"
+import { getTestData } from "../internal/getTestData";
+import { getElementForEvent } from "./elements";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { ElementNotFoundError } from "./errors";
+import { log } from "@thecointech/logging";
+import path from "node:path";
+import { type OverrideData, type TestData, getLastFailing, hasTestingPages, shouldSkip, writeLastFailing } from "@thecointech/scraper-archive";
+import type { ElementSearchParams, FoundElement } from "./types";
 
-// jest.setTimeout(20 * 60 * 1000);
-// const MIN_ELEMENTS_IN_VALID_PAGE = 25;
+jest.setTimeout(20 * 60 * 1000);
+const MIN_ELEMENTS_IN_VALID_PAGE = 25;
 
-// describe("It finds the same elements as before in archive", () => {
-//   runTests();
-// }, hasTestingPages);
+describe("It finds the same elements as before in archive", () => {
+  runTests();
+}, hasTestingPages);
 
-// describe("It runs only the failing tests in archive", () => {
-//   runTests(getLastFailing());
-// }, IsManualRun)
+describe("It runs only the failing tests in archive", () => {
+  runTests(getLastFailing());
+}, IsManualRun)
 
-// function runTests(includeFilter?: IncludeFilter) {
+function runTests(includeFilter?: string[]) {
 
-//   // Even if skipped above this function still runs to list the tests
-//   // We don't want hundreds of skipped tests to show up in our results, so return early
-//   if (!includeFilter && IsManualRun) {
-//     return;
-//   }
-//   const testData = getTestData("*", "elm.json", "archive");
-//   const overrides = initOverrides();
-//   const currentlyFailing = new Set<string>();
-//   const results = [];
-//   const filteredTests = testData.filter(test => !shouldSkip(test, includeFilter));
-//   const allElements = filteredTests
-//     .flatMap(test => test.elements().map(element => {
-//       const name = element.match(/(.+)-elm.json/)?.[1];
-//       return { test, element, name };
-//     }))
-//   const [filteredElements, skippedElements] = allElements
-//     .reduce(([filtered, skipped], { test, element, name }) => {
-//       const sch = test.sch(name);
-//       if (sch?.search.event.estimated) {
-//         filtered.push({ testKey: test.key, test, element, name });
-//       }
-//       else {
-//         skipped.push(`${test.key} - ${name}`);
-//       }
-//       return [filtered, skipped];
-//     }, [[], []]);
+  // Even if skipped above this function still runs to list the tests
+  // We don't want hundreds of skipped tests to show up in our results, so return early
+  if (!includeFilter && IsManualRun) {
+    return;
+  }
+  const testData = getTestData("*", "elm.json", "archive");
+  const overrides = initOverrides();
+  const currentlyFailing = new Set<string>();
+  const results = [];
+  const filteredTests = testData.filter(test => !shouldSkip(test, includeFilter));
+  const allElements = filteredTests
+    .flatMap(test => test.elements().map(element => {
+      const name = element.match(/(.+)-elm.json/)?.[1];
+      return { test, element, name };
+    }))
+  const [filteredElements, skippedElements] = allElements
+    .reduce(([filtered, skipped], { test, element, name }) => {
+      const sch = test.sch(name);
+      if (sch?.search.event.estimated) {
+        filtered.push({ testKey: test.key, test, element, name });
+      }
+      else {
+        skipped.push(`${test.key} - ${name}`);
+      }
+      return [filtered, skipped];
+    }, [[], []]);
 
-//   console.log(`Found ${filteredElements.length} elements to test, skipping ${skippedElements.length}`);
-//   // Let us know how many elements we skipped
-//   it.skip.each(skippedElements)("non-vqa element: %s", (name) => {});
+  console.log(`Found ${filteredElements.length} elements to test, skipping ${skippedElements.length}`);
+  // Let us know how many elements we skipped
+  it.skip.each(skippedElements)("non-vqa element: %s", (name) => {});
 
-//   const counter = makeCounter(filteredElements);
-//   it.each(filteredElements)("Finds the correct element: $testKey - $name", async ({ testKey, test, name }) => {
-//     counter(results);
-//     const page = await test.page();
-//     const sch = test.sch(name);
-//     const elm = test.elm(name);
-//     // const now = IsManualRun ? undefined : Date.now();
-//     // const folder = path.join(process.env.PRIVATE_TESTING_PAGES, "debugging", name);
-//     // if (!existsSync(folder)) {
-//     //   mkdirSync(folder, { recursive: true });
-//     // }
-//     const onFound = async (candidate: FoundElement, params: ElementSearchParams, candidates: FoundElement[]) => {
-//       // TODO: Write out debugging info for candidates if they do not match.
-//     }
-//     try {
-//       const found = await getElementForEvent({
-//         ...sch.search,
-//         page,
-//         timeout: 500
-//       }, onFound);
-//       let writeOverride = true;
-//       const expText = elm.text.replace(/\s+/g, " ").trim();
+  const counter = makeCounter(filteredElements);
+  it.each(filteredElements)("Finds the correct element: $testKey - $name", async ({ testKey, test, name }) => {
+    counter(results);
+    const page = await test.page();
+    const sch = test.sch(name);
+    const elm = test.elm(name);
+    // const now = IsManualRun ? undefined : Date.now();
+    // const folder = path.join(process.env.PRIVATE_TESTING_PAGES, "debugging", name);
+    // if (!existsSync(folder)) {
+    //   mkdirSync(folder, { recursive: true });
+    // }
+    const onFound = async (candidate: FoundElement, params: ElementSearchParams, candidates: FoundElement[]) => {
+      // TODO: Write out debugging info for candidates if they do not match.
+    }
+    try {
+      const found = await getElementForEvent({
+        ...sch.search,
+        page,
+        timeout: 500
+      }, onFound);
+      let writeOverride = true;
+      const expText = elm.text.replace(/\s+/g, " ").trim();
 
-//       if (found.data.text !== expText || found.data.selector !== elm.selector) {
-//         if (writeOverride) {
-//           const testOverrides = overrides[test.key] = overrides[test.key] ?? {};
-//           const elementOverride = testOverrides[name] = testOverrides[name] ?? {};
-//           if (found.data.text !== elm.text) {
-//             elementOverride.text = found.data.text;
-//             elementOverride.coords = found.data.coords;
-//           }
-//           if (found.data.selector !== elm.selector) {
-//             elementOverride.selector = found.data.selector;
-//             elementOverride.coords = found.data.coords;
-//           }
-//         }
-//         results.push({
-//           key: test.key,
-//           found,
-//           expected: elm,
-//         })
-//       }
+      if (found.data.text !== expText || found.data.selector !== elm.selector) {
+        if (writeOverride) {
+          const testOverrides = overrides[test.key] = overrides[test.key] ?? {};
+          const elementOverride = testOverrides[name] = testOverrides[name] ?? {};
+          if (found.data.text !== elm.text) {
+            elementOverride.text = found.data.text;
+            elementOverride.coords = found.data.coords;
+          }
+          if (found.data.selector !== elm.selector) {
+            elementOverride.selector = found.data.selector;
+            elementOverride.coords = found.data.coords;
+          }
+        }
+        results.push({
+          key: test.key,
+          found,
+          expected: elm,
+        })
+      }
 
-//       // await writeDebugging(test, found, name, now, folder);
+      // await writeDebugging(test, found, name, now, folder);
 
-//       expect(found.data.text).toEqual(expText);
-//       expect(found.data.selector).toEqual(elm.selector)
-//     }
-//     catch (e) {
-//       if (e instanceof ElementNotFoundError) {
-//         // Sometimes, mhtml is a wee bit bung
-//         const allElements = await page.$$("*")
-//         if (allElements.length < MIN_ELEMENTS_IN_VALID_PAGE) {
-//           log.error(`Element not found, but page is empty, check mhtml on ${test.key}`)
-//           overrides.skip[test.key] = {
-//             reason: "Page is empty",
-//           };
-//           return;
-//         }
-//       }
-//       currentlyFailing.add(test.key);
-//       throw e;
-//     }
-//   })
+      expect(found.data.text).toEqual(expText);
+      expect(found.data.selector).toEqual(elm.selector)
+    }
+    catch (e) {
+      if (e instanceof ElementNotFoundError) {
+        // Sometimes, mhtml is a wee bit bung
+        const allElements = await page.$$("*")
+        if (allElements.length < MIN_ELEMENTS_IN_VALID_PAGE) {
+          log.error(`Element not found, but page is empty, check mhtml on ${test.key}`)
+          overrides.skip[test.key] = {
+            reason: "Page is empty",
+          };
+          return;
+        }
+      }
+      currentlyFailing.add(test.key);
+      throw e;
+    }
+  })
 
-//   afterAll(() => {
-//     const overridePath = path.join(process.env.PRIVATE_TESTING_PAGES, "archive", `overrides-${Date.now()}.json`);
-//     writeFileSync(overridePath, JSON.stringify(overrides, null, 2));
-//     writeLastFailing(currentlyFailing);
-//     console.table(results.map(r => ({ key: r.key, found: r.found.data.selector, expected: r.expected.selector })));
-//   })
-// }
+  afterAll(() => {
+    const overridePath = path.join(process.env.PRIVATE_TESTING_PAGES, "archive", `overrides-${Date.now()}.json`);
+    writeFileSync(overridePath, JSON.stringify(overrides, null, 2));
+    writeLastFailing(currentlyFailing);
+    console.table(results.map(r => ({ key: r.key, found: r.found.data.selector, expected: r.expected.selector })));
+  })
+}
 
-// // Simple helper functions
+// Simple helper functions
 
 // type IncludeFilter = {
 //   exclude: string[];
@@ -165,12 +164,12 @@
 //   return false
 // }
 
-// function initOverrides(): OverrideData {
-//   return {
-//     skip: {},
-//     overrides: {},
-//   }
-// }
+function initOverrides(): OverrideData {
+  return {
+    skip: {},
+    overrides: {},
+  }
+}
 
 // function lastFailingFile() {
 //   return process.env.PRIVATE_TESTING_PAGES
@@ -178,16 +177,16 @@
 //     : null;
 // }
 
-// function makeCounter(filtered: { test: TestData, element: string }[]) {
-//   let count = 0;
-//   return (results: any[]) => {
-//     count++;
-//     if (count % 10 == 0) {
-//       console.log(`Running test ${count} (failed ${results.length}) of ${filtered.length}`);
-//     }
-//     return count;
-//   }
-// }
+function makeCounter(filtered: { test: TestData, element: string }[]) {
+  let count = 0;
+  return (results: any[]) => {
+    count++;
+    if (count % 10 == 0) {
+      console.log(`Running test ${count} (failed ${results.length}) of ${filtered.length}`);
+    }
+    return count;
+  }
+}
 
 
 // async function writeDebugging(test: TestData, found: FoundElement, name: string, now?: number, folder?: string) {
