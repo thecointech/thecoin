@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "fs";
 import path from "path";
 import type { Page } from "puppeteer";
-import type { VqaCallData, TestElmData, TestSchData } from "@thecointech/scraper";
+import type { VqaCallData, TestElmData, TestSchData } from "./types";
 // import { waitPageStable } from "../src/utilities";
 import { OverrideData } from "./overrides";
 import { log } from "@thecointech/logging";

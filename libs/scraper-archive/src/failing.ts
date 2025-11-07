@@ -2,6 +2,7 @@
 
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import type { TestData } from "./testData";
 
 export function getLastFailing(): string[] | null {
   const file = lastFailingFile();
@@ -25,16 +26,13 @@ function lastFailingFile() {
 }
 
 
-// function shouldSkip(test: TestData, includeFilter?: IncludeFilter) {
-//   // If missing data, just skip
-//   if (!test.hasSnapshot() || test.searches().length == 0) {
-//     return true;
-//   }
-//   if (includeFilter) {
-//     return (
-//       !includeFilter.include.includes(test.key) ||
-//       includeFilter.exclude.includes(test.key)
-//     );
-//   }
-//   return false
-// }
+export function shouldSkip(test: TestData, includeFilter?: string[]) {
+  // If missing data, just skip
+  if (!test.hasSnapshot() || test.searches().length == 0) {
+    return true;
+  }
+  if (includeFilter) {
+    return !includeFilter.includes(test.key);
+  }
+  return false
+}

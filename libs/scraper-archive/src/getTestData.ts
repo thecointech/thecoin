@@ -4,7 +4,6 @@ import { globSync } from "glob";
 import { TestData } from "./testData";
 import { getOverrideData, SkipElement } from "./overrides";
 import type { Page } from "puppeteer";
-import { newPage } from "@thecointech/scraper";
 
 export type TestDataConstructor<T extends TestData = TestData> = new (...args: ConstructorParameters<typeof TestData>) => T;
 
@@ -15,13 +14,6 @@ export function getTestData<T extends TestData>(
   constructor: TestDataConstructor<T> = TestData as any,
   getPage: () => Promise<Page>
 ): T[] {
-
-  if (!getPage) {
-    getPage = async () => {
-      const { page } = await newPage("default");
-      return page;
-    }
-  }
 
   const testFolder = process.env.PRIVATE_TESTING_PAGES;
   if (!testFolder) {

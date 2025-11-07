@@ -42,7 +42,10 @@ export class TestsReducer extends BaseReducer<IActions, InitialState>(TESTS_KEY,
 }
 
 export function useFilteredTests() {
-  const { tests, filter } = TestsReducer.useData();
-  if (filter === 'all') return tests;
-  return tests.filter(test => filter === 'failing' ? test.isFailing : !test.isFailing);
+  const { tests, filter, failingTests } = TestsReducer.useData();
+  switch(filter) {
+    case 'all': return tests;
+    case 'failing': return tests.filter(test => failingTests.has(test.key));
+    case 'passing': return tests.filter(test => !failingTests.has(test.key));
+  }
 }

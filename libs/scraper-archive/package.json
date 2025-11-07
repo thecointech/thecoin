@@ -1,9 +1,9 @@
 {
-  "name": "@thecointech/scraper-testing",
+  "name": "@thecointech/scraper-archive",
   "version": "0.4.0",
   "private": true,
   "type": "module",
-  "description": "The Coin: Testing utilities for scraper",
+  "description": "The Coin: Utilities for working with testing pages in the archive",
   "keywords": [
     "TheCoin",
     "puppeteer"
@@ -14,7 +14,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thecointech/thecoin.git",
-    "directory": "libs/scraper-testing"
+    "directory": "libs/scraper-archive"
   },
   "scripts": {
     "build": "run -T tsc -b",
@@ -34,16 +34,7 @@
     "build/**/*"
   ],
   "exports": {
-    ".": {
-      "node": "./build/index.js"
-    }
+    ".": "./build/index.js"
   },
-  "types": "build/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "getTestData": [
-        "build/index.d.ts"
-      ]
-    }
-  }
+  "types": "build/index.d.ts"
 }
