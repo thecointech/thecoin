@@ -1,3 +1,4 @@
+import type { FoundElement, SearchElementData, ElementSearchParams } from "@thecointech/scraper-types";
 
 // Needed in AgentSerializer for logging things
 export type VqaCallData = {
@@ -5,8 +6,8 @@ export type VqaCallData = {
   response: any,
 }
 
-export type TestElmData = any; //Omit<FoundElement, "element">;
-export type TestSchData = any; // {
-//   response?: any,
-//   hints?: SearchElementData,
-// } & Omit<ElementSearchParams, "page">;
+export type TestElmData = Omit<FoundElement, "element">;
+export type TestSchData = {
+  response?: any,
+  hints?: SearchElementData,
+} & Omit<ElementSearchParams, "page">;

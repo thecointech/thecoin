@@ -1,8 +1,8 @@
 // Simple helper functions
 
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import path from "node:path";
 import type { TestData } from "./testData";
+import { tests } from "./paths";
 
 export function getLastFailing(): string[] | null {
   const file = lastFailingFile();
@@ -20,9 +20,12 @@ export function writeLastFailing(failing: Set<string>) {
 }
 
 function lastFailingFile() {
-  return process.env.PRIVATE_TESTING_PAGES
-    ? path.join(process.env.PRIVATE_TESTING_PAGES, "archive", `failing.json`)
-    : null;
+  try {
+    return tests("archive", "failing.json")
+  }
+  catch (e) {
+    return null;
+  }
 }
 
 

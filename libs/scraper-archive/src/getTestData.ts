@@ -4,6 +4,7 @@ import { globSync } from "glob";
 import { TestData } from "./testData";
 import { getOverrideData, SkipElement } from "./overrides";
 import type { Page } from "puppeteer";
+import { tests } from "./paths";
 
 export type TestDataConstructor<T extends TestData = TestData> = new (...args: ConstructorParameters<typeof TestData>) => T;
 
@@ -15,11 +16,11 @@ export function getTestData<T extends TestData>(
   getPage: () => Promise<Page>
 ): T[] {
 
-  const testFolder = process.env.PRIVATE_TESTING_PAGES;
+  const testFolder = tests();
   if (!testFolder) {
     return [];
   }
-  const overrideData = getOverrideData(testFolder);
+  const overrideData = getOverrideData();
   const results: T[] = [];
   const pattern = `${testFolder}/**/${recordTime}/**/${section}/**/*${searchPattern}*`
   const matched = globSync(pattern);

@@ -1,4 +1,4 @@
-import type { DynamicInputEvent, SearchElementData, FoundElement, ValueEvent } from "./types";
+import type { DynamicInputEvent, SearchElementData, FoundElement, ValueEvent } from "@thecointech/scraper-types";
 
 export class ElementNotFoundError extends Error {
   element: SearchElementData

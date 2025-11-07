@@ -1,6 +1,6 @@
 import { getSiblingScore, getRoleScore, getPositionAndSizeScore, getPositionScore } from "./elements.score";
 import { patchOnnxForJest } from "../internal/jestPatch";
-import { Coords } from "./types";
+import type { Coords } from "@thecointech/scraper-types";
 
 beforeAll(async () => {
   patchOnnxForJest();

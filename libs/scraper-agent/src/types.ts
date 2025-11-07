@@ -1,5 +1,5 @@
 import type { AccountResponse } from "@thecointech/vqa";
-import type { AnyEvent, ElementData, HistoryRow } from "@thecointech/scraper/types";
+import type { AnyEvent, ElementData, HistoryRow } from "@thecointech/scraper-types";
 import type { Recorder } from "@thecointech/scraper/record";
 import type { EventManager } from "./eventManager";
 import type { SectionType } from "./processors/types";

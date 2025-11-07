@@ -1,4 +1,4 @@
-import { getTestData } from "../../internal/getTestData";
+import { getTestData, hasTestingPages } from "../../internal/getTestData";
 import { describe } from '@thecointech/jestutils';
 import { jest } from "@jest/globals";
 import { getValueParsing, parseValue } from "@thecointech/scraper/valueParsing";
@@ -27,4 +27,4 @@ describe ("Correctly finds the dueDate element", () => {
     const vqaDate = parseValue(vqa!.response!.content, vqaParsing);
     expect(elmDate).toEqual(vqaDate);
   })
-}, !!process.env.PRIVATE_TESTING_PAGES)
+}, hasTestingPages())

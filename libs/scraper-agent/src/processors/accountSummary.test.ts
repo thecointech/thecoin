@@ -1,8 +1,7 @@
 import { jest } from "@jest/globals";
-import { getTestData } from "../../internal/getTestData";
+import { getTestData, hasTestingPages } from "../../internal/getTestData";
 import { findAccountElements, saveAccountNavigation, saveBalanceElement, validateAccountNumberAgainstSource } from "./accountSummary"
 import { describe } from '@thecointech/jestutils';
-import { hasTestingPages } from "@thecointech/scraper-archive/getTestData";
 import { OverviewResponse } from "@thecointech/vqa";
 import type { ValueEvent } from "@thecointech/scraper";
 

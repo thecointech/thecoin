@@ -1,11 +1,11 @@
 import { log } from "@thecointech/logging";
 import { accountToElementResponse } from "../vqaResponse";
-import { ElementData, FoundElement } from "@thecointech/scraper/types";
-import { AccountResponse, BBox } from "@thecointech/vqa";
+import type { ElementData, FoundElement } from "@thecointech/scraper-types";
+import type { AccountResponse, BBox } from "@thecointech/vqa";
 import { extractFuzzyMatch } from "../extractFuzzyMatch";
 import { processorFn } from "./types";
-import { ChequeBalanceResult } from "../types";
-import { Agent } from "../agent";
+import type { ChequeBalanceResult } from "../types";
+import type { Agent } from "../agent";
 import { apis } from "../apis";
 
 export const AccountsSummary = processorFn("AccountsSummary", async (agent: Agent) => {

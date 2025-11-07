@@ -1,10 +1,9 @@
 
 import { jest } from "@jest/globals"
 import { describe } from '@thecointech/jestutils';
-import { getTestData } from "../internal/getTestData";
-import { hasTestingPages } from "@thecointech/scraper-archive/getTestData";
+import { getTestData, hasTestingPages } from "../internal/getTestData";
 import type { Page } from "puppeteer";
-import type { FoundElement } from "@thecointech/scraper/types";
+import type { FoundElement } from "@thecointech/scraper-types";
 
 jest.setTimeout(3 * 60 * 1000);
 

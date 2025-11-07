@@ -1,6 +1,6 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import type { Coords } from "@thecointech/scraper";
-import path from "node:path";
+import { tests } from "./paths";
 
 export type OverrideElement = {
   text?: string,
@@ -18,8 +18,8 @@ export type OverrideData = {
   overrides?: Record<string, Record<string, OverrideElement>>
 }
 
-export function getOverrideData(testFolder: string): OverrideData {
-  const overrideFile = path.join(testFolder, "archive", "overrides.json")
+export function getOverrideData(): OverrideData {
+  const overrideFile = tests("archive", "overrides.json")
   if (existsSync(overrideFile)) {
     const raw = readFileSync(overrideFile, "utf-8")
     const overrideData = JSON.parse(raw);
@@ -27,3 +27,9 @@ export function getOverrideData(testFolder: string): OverrideData {
   }
   return {};
 }
+
+export function writeOverrideData(overrides: OverrideData) {
+  const overridePath = tests("archive", `overrides-${Date.now()}.json`);
+  writeFileSync(overridePath, JSON.stringify(overrides, null, 2));
+}
+

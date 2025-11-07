@@ -1,6 +1,6 @@
 import currency from 'currency.js';
 import { DateTime } from 'luxon';
-import type { ValueParsing, ValueType } from './types';
+import type { ValueParsing, ValueType } from '@thecointech/scraper-types';
 import { findMaximalCommonSubstrings } from './findSubstrings';
 
 

@@ -12539,6 +12539,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@thecointech/scraper-archive@workspace:^, @thecointech/scraper-archive@workspace:libs/scraper-archive":
+  version: 0.0.0-use.local
+  resolution: "@thecointech/scraper-archive@workspace:libs/scraper-archive"
+  dependencies:
+    "@thecointech/jestutils": "npm:^0.4.0"
+    "@thecointech/logging": "workspace:^"
+    "@thecointech/scraper": "workspace:^"
+    "@thecointech/setenv": "workspace:^"
+    open: "npm:^8.4.0"
+  languageName: unknown
+  linkType: soft
+
 "@thecointech/scraper-test-visualizer@workspace:apps/scraper-test-visualizer":
   version: 0.0.0-use.local
   resolution: "@thecointech/scraper-test-visualizer@workspace:apps/scraper-test-visualizer"
@@ -12549,15 +12561,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/scraper-testing@workspace:libs/scraper-testing":
+"@thecointech/scraper-types@workspace:libs/scraper-types":
   version: 0.0.0-use.local
-  resolution: "@thecointech/scraper-testing@workspace:libs/scraper-testing"
-  dependencies:
-    "@thecointech/jestutils": "npm:^0.4.0"
-    "@thecointech/logging": "workspace:^"
-    "@thecointech/scraper": "workspace:^"
-    "@thecointech/setenv": "workspace:^"
-    open: "npm:^8.4.0"
+  resolution: "@thecointech/scraper-types@workspace:libs/scraper-types"
   languageName: unknown
   linkType: soft
 
@@ -12568,6 +12574,7 @@ __metadata:
     "@thecointech/async": "npm:^0.4.0"
     "@thecointech/jestutils": "npm:^0.4.0"
     "@thecointech/logging": "npm:^0.4.0"
+    "@thecointech/scraper-archive": "workspace:^"
     "@thecointech/setenv": "workspace:^"
     "@types/fs-extra": "npm:^11.0.4"
     "@types/pixelmatch": "npm:^5.2.6"

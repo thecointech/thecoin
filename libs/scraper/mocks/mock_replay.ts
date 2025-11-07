@@ -1,4 +1,4 @@
-import type { AnyEvent, HistoryRow, ReplayResult } from "../src/types";
+import type { AnyEvent, HistoryRow, ReplayResult } from "@thecointech/scraper-types";
 import type { IScraperCallbacks } from "../src/callbacks";
 import { sleep } from "@thecointech/async/sleep";
 import currency from "currency.js";

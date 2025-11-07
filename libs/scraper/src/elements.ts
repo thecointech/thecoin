@@ -1,5 +1,5 @@
 import type { ElementHandle, Frame, Page } from 'puppeteer';
-import type { Coords, ElementData, SearchElementData, ElementSearchParams, FoundElement, SearchElement } from './types';
+import type { Coords, ElementData, SearchElementData, ElementSearchParams, FoundElement, SearchElement } from '@thecointech/scraper-types';
 import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
 import { type Bounds, scoreElement } from './elements.score';

@@ -1,5 +1,5 @@
 import type { Page } from "puppeteer";
-import type { AnyEvent } from "./types";
+import type { AnyEvent } from "@thecointech/scraper-types";
 
 export type ScraperProgress = {
   stage: string, // Name of the step

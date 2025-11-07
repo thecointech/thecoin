@@ -2,7 +2,7 @@ import { jest } from "@jest/globals";
 import { IsManualRun, describe } from "@thecointech/jestutils";
 import events from './replay.test.json';
 import { patchOnnxForJest } from '../internal/jestPatch';
-import { AnyEvent } from "./types";
+import type { AnyEvent } from "@thecointech/scraper-types";
 import { replay } from "./replay";
 
 patchOnnxForJest();

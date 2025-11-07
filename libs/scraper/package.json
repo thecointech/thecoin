@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@thecointech/jestutils": "^0.4.0",
+    "@thecointech/scraper-archive": "workspace:^",
     "@thecointech/setenv": "workspace:^",
     "@types/fs-extra": "^11.0.4",
     "@types/pixelmatch": "^5.2.6",

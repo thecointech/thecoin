@@ -1,6 +1,6 @@
 import type { Page } from 'puppeteer';
 import { getTableData } from './table';
-import type { AnyEvent, ReplayResult, SearchElement, AnyElementEvent } from './types';
+import type { AnyEvent, ReplayResult, SearchElement, AnyElementEvent } from '@thecointech/scraper-types';
 import { parseValue } from './valueParsing';
 import { log } from '@thecointech/logging';
 import { getElementForEvent } from './elements';
