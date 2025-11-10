@@ -27,12 +27,16 @@ export function getTests(): Test[] {
   return r;
 }
 
-export function getTestResults(key: string, element: string): TestResult {
+export function getTest(key: string, element: string): TestData {
   const test = global.allTests.find(test => test.key === key)
   if (!test) {
     throw new Error(`Test ${key} not found`)
   }
+  return test
+}
 
+export function getTestResults(key: string, element: string): TestResult {
+  const test = getTest(key, element)
   return {
     original: getTestOriginalResult(test, element),
     search: getTestSearch(test, element),
@@ -42,10 +46,7 @@ export function getTestResults(key: string, element: string): TestResult {
 }
 
 export function getTestImagePath(key: string) {
-  const test = global.allTests.find(test => test.key === key)
-  if (!test) {
-    throw new Error(`Test ${key} not found`)
-  }
+  const test = getTest(key, "")
   return path.join(test.matchedFolder, `${test.step}.png`)
 }
 

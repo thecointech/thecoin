@@ -4,6 +4,7 @@ import { getTests, getTestResults, getTestImagePath } from './data';
 import { getTestPath } from './paths';
 import { run } from "@thecointech/site-base/internal/server";
 import { getLastFailing } from '@thecointech/scraper-archive';
+import { updateTest } from './update';
 
 const testingPages = getTestPath();
 
@@ -62,6 +63,17 @@ run(
     } catch (error) {
       console.error('Failed to read failing tests:', error);
       return res.status(500).json({ error: 'Failed to read failing tests' });
+    }
+  });
+
+  app.get('/api/update/:key/:element', async (req, res) => {
+    try {
+      const { key, element } = req.params;
+      const results = await updateTest(key, element);
+      res.json({ success: results });
+    } catch (error) {
+      console.error('Failed to run test:', error);
+      res.status(500).json({ error: 'Failed to run test' });
     }
   });
 })

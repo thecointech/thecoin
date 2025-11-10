@@ -1,70 +1,103 @@
-import React from 'react';
-import { Segment, Header, Table, Label } from 'semantic-ui-react';
+import React, { useState } from 'react';
+import { Table, Icon } from 'semantic-ui-react';
 import type { TestElmData } from '@thecointech/scraper-archive';
+import { ElementDataCell } from './ElementDataCell';
 
 interface ElementDataProps {
-  element: TestElmData;
-  title: string;
+  tests: {
+    element: TestElmData;
+    title: string;
+  }[]
 }
 
 const SkipProperties = [
   'frame',
   'parentSelector',
   'parentTagName',
+  'font',
 ]
 
-export const ElementData: React.FC<ElementDataProps> = ({ element, title }) => {
-  if (!element) return null;
+function getUniqueKeys(sources: any[], skipKeys?: string[]): Set<string> {
+  return sources.reduce((acc, source) => {
+    Object.entries(source).forEach(([key, value]) => {
+      if (value) {
+        if (!skipKeys?.includes(key)) {
+          acc.add(key);
+        }
+      }
+    });
+    return acc;
+  }, new Set<string>());
+}
 
-  const { data, score, components } = element;
+export const ElementData: React.FC<ElementDataProps> = ({ tests }) => {
+  const [componentsExpanded, setComponentsExpanded] = useState(false);
+
+  if (!tests?.length) return null;
+
+  // Collect all unique component keys
+  const dataKeys = getUniqueKeys(tests.map(test => test.element.data), SkipProperties);
+  const componentKeys = getUniqueKeys(tests.map(test => test.element.components));
+
+  const originalElement = tests[0]?.element;
+
   return (
     <Table celled compact size="small">
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Property</Table.HeaderCell>
+          {tests.map((test, index) => (
+            <Table.HeaderCell key={index}>{test.title}</Table.HeaderCell>
+          ))}
+        </Table.Row>
+      </Table.Header>
       <Table.Body>
-        <Table.Row key="score">
-          <Table.Cell><strong>Score</strong></Table.Cell>
-          <Table.Cell>{score.toFixed(4)}</Table.Cell>
-        </Table.Row>
-        <Table.Row key="components">
-          <Table.Cell><strong>Components</strong></Table.Cell>
+        <Table.Row
+          style={{ cursor: 'pointer' }}
+          onClick={() => setComponentsExpanded(!componentsExpanded)}
+        >
           <Table.Cell>
-            {Object.entries(components as object)
-              .filter(([_, v]) => v)
-              .map(([k, v]) => (
-                <Label key={k} size="small">
-                  {k}: {typeof v === 'number' ? v.toFixed(2) : String(v)}
-                </Label>
-              ))}
+            <Icon name={componentsExpanded ? 'caret down' : 'caret right'} />
+            <strong>Score</strong>
           </Table.Cell>
+          {tests.map((test, index) => (
+            <ElementDataCell
+              key={index}
+              value={test.element.score}
+              original={originalElement?.score}
+            />
+          ))}
         </Table.Row>
-        {Object.entries(data).map(([key, value]) => {
-          if (SkipProperties.includes(key)) return null;
-          if (key === 'coords' && typeof value === 'object') {
-            return (
-              <Table.Row key={key}>
-                <Table.Cell><strong>{key}</strong></Table.Cell>
-                <Table.Cell>
-                  {Object.entries(value as object).map(([k, v]) => (
-                    <div key={k}>{k}: {String(v.toFixed(2))}</div>
-                  ))}
-                </Table.Cell>
-              </Table.Row>
-            );
-          }
-          if (Array.isArray(value)) {
-            return (
-              <Table.Row key={key}>
-                <Table.Cell><strong>{key}</strong></Table.Cell>
-                <Table.Cell>{value.join(', ')}</Table.Cell>
-              </Table.Row>
-            );
-          }
-          return (
-            <Table.Row key={key}>
-              <Table.Cell width={4}><strong>{key}</strong></Table.Cell>
-              <Table.Cell>{String(value)}</Table.Cell>
-            </Table.Row>
-          );
-        })}
+        {/* Render component rows after score */}
+        {componentsExpanded && Array.from(componentKeys).map((key, index) => (
+          <Table.Row key={`component-${key}`}>
+            <Table.Cell style={{ paddingLeft: '2rem' }}>
+              <em>{key}</em>
+            </Table.Cell>
+            {tests.map((test, index) => (
+              <ElementDataCell
+                key={index}
+                value={test.element.components[key]}
+                original={originalElement?.components[key]}
+              />
+            ))}
+          </Table.Row>
+        ))}
+        {/* Render data rows */}
+        {Array.from(dataKeys).map((key, index) => (
+          <Table.Row key={`data-${key}`}>
+            <Table.Cell>
+              <strong>{key}</strong>
+            </Table.Cell>
+            {tests.map((test, index) => (
+              <ElementDataCell
+                key={index}
+                value={test.element.data[key]}
+                original={originalElement?.data[key]}
+              />
+            ))}
+          </Table.Row>
+        ))}
       </Table.Body>
     </Table>
   );
