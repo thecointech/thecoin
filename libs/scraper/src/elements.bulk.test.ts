@@ -28,16 +28,12 @@ function runTests(includeFilter?: string[]) {
   const currentlyFailing = new Set<string>();
   const results = [];
   const filteredTests = testData.filter(test => !shouldSkip(test, includeFilter));
-  const allElements = filteredTests
-    .flatMap(test => test.elements().map(element => {
-      const name = element.match(/(.+)-elm.json/)?.[1];
-      return { test, element, name };
-    }))
+  const allElements = filteredTests.flatMap(t => t.names().map(name => ({ test: t, name })))
   const [filteredElements, skippedElements] = allElements
-    .reduce(([filtered, skipped], { test, element, name }) => {
+    .reduce(([filtered, skipped], { test, name }) => {
       const sch = test.sch(name);
       if (sch?.event.estimated) {
-        filtered.push({ testKey: test.key, test, element, name });
+        filtered.push({ testKey: test.key, test, name });
       }
       else {
         skipped.push(`${test.key} - ${name}`);

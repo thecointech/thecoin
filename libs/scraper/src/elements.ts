@@ -1,8 +1,8 @@
 import type { ElementHandle, Frame, Page } from 'puppeteer';
-import type { Coords, ElementData, SearchElementData, ElementSearchParams, FoundElement, SearchElement } from '@thecointech/scraper-types';
+import type { Coords, ElementData, SearchElementData, ElementSearchParams, FoundElement, SearchElement, Bounds, ScoreElement } from '@thecointech/scraper-types';
 import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
-import { type Bounds, scoreElement } from './elements.score';
+import { scoreElement } from './elements.score';
 import { ElementNotFoundError, PageNotInteractableError } from './errors';
 import { EventBus } from './events/eventbus';
 
@@ -39,15 +39,16 @@ export async function getElementForEvent(params: ElementSearchParams, onFound: E
   let bestCandidate: FoundElement|null = null;
   while (Date.now() < startTick + timeout) {
 
-    const candidates = await fetchAllCandidates(page, event, bounds);
-    const candidate = await getBestCandidate(candidates, event, minScore);
+    const allCandidates = await fetchAllCandidates(page, bounds);
+    const scoredCandidates = await scoreAllCandidates(allCandidates, event, bounds);
+    const candidate = await getBestCandidate(scoredCandidates, event, minScore);
 
     if (candidate) {
-      await onFound(candidate, params, candidates);
+      await onFound(candidate, params, scoredCandidates);
       return candidate;
     }
 
-    const thisRunsBest = candidates[0]
+    const thisRunsBest = scoredCandidates[0]
     if (thisRunsBest && thisRunsBest.score > (bestCandidate?.score ?? 0)) {
       bestCandidate = thisRunsBest;
     }
@@ -65,8 +66,8 @@ async function notifyElementFound(candidate: FoundElement, params: ElementSearch
   await EventBus.get().emitElement(candidate, params);
 }
 
-async function fetchAllCandidates(page: Page, event: SearchElementData, bounds: Bounds) {
-  const candidates: FoundElement[] = [];
+export async function fetchAllCandidates(page: Page, bounds: Bounds) {
+  const candidates: SearchElement[] = [];
   const frames = page.frames();
   const nFrames = frames.length;
   let nErrors = 0;
@@ -76,7 +77,7 @@ async function fetchAllCandidates(page: Page, event: SearchElementData, bounds: 
   for (const frame of frames) {
     try {
       // Get all elements in frame
-      const frameCandidates = await getCandidates(frame, event, bounds);
+      const frameCandidates = await getCandidates(frame, bounds);
       candidates.push(...frameCandidates);
     }
     catch (e) {
@@ -96,6 +97,22 @@ async function fetchAllCandidates(page: Page, event: SearchElementData, bounds: 
   return candidates;
 }
 
+export async function scoreAllCandidates<T extends { data: ElementData }>(candidates: T[], event: SearchElementData, bounds: Bounds) {
+  const r: (T & ScoreElement)[] = [];
+  for (let i = 0; i < candidates.length; i++) {
+    const el = candidates[i];
+    const score = await scoreElement(el.data, event, bounds);
+    // NaN can't sort, so if one slips through, ditch it.
+    if (!Number.isNaN(score.score)) {
+      r.push({
+        ...el,
+        ...score
+      })
+    }
+  }
+  return r;
+}
+
 let lastDbgLogMessage: string;
 function maybeLogMessage(message: string) {
   if (lastDbgLogMessage != message) {
@@ -104,7 +121,7 @@ function maybeLogMessage(message: string) {
   }
 }
 
-async function getBestCandidate(candidates: FoundElement[], event: SearchElementData, minScore: number) {
+export async function getBestCandidate(candidates: FoundElement[], event: SearchElementData, minScore: number) {
   // Sort by score to see if any element is close enough
   const sorted = candidates.sort((a, b) => b.score - a.score);
   const candidate = sorted[0];
@@ -144,7 +161,7 @@ async function getBestCandidate(candidates: FoundElement[], event: SearchElement
   return null;
 }
 
-async function getCandidates(frame: Frame, event: SearchElementData, bounds: Bounds, timeout=300) {
+async function getCandidates(frame: Frame, bounds: Bounds, timeout=300) {
   // We are getting the occasional issue where getElementProps
   // is undefined.  This could potentially be a race condition
   // if this fn evaluates before evaluateOnNewDocument (?)
@@ -180,20 +197,7 @@ async function getCandidates(frame: Frame, event: SearchElementData, bounds: Bou
     const withSiblings = fillOutSiblingText(elements);
     messageToLogOnTimeout = "Scoring frame with " + withSiblings.length + " elements";
 
-    const candidates: FoundElement[] = [];
-    for (let i = 0; i < withSiblings.length; i++) {
-      messageToLogOnTimeout = `Scoring element: ${i} of ${withSiblings.length}`;
-      const el = withSiblings[i];
-      const score = await scoreElement(el.data, event, bounds);
-      // NaN can't sort, so if one slips through, ditch it.
-      if (!Number.isNaN(score.score)) {
-        candidates.push({
-          ...el,
-          ...score
-        })
-      }
-    }
-    return candidates;
+    return withSiblings;
   }
   finally {
     clearInterval(intervalLogger);
@@ -536,7 +540,7 @@ const fillOutSiblingText = (allElements: SearchElement[]) => {
   return bucketed.flat()
 }
 
-async function getDocumentBounds(page: Page, maxTop: number) {
+export async function getDocumentBounds(page: Page, maxTop: number) {
   const pageBounds = await page.evaluate(() => ({
     // Full document dimensions including scrollable content
     width: Math.max(

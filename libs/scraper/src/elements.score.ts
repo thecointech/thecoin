@@ -1,13 +1,10 @@
 import { log } from "@thecointech/logging";
 import { SimilarityPipeline } from "./similarity";
-import type { Coords, ElementData, SearchElementData, Font } from "@thecointech/scraper-types";
+import type { Coords, ElementData, SearchElementData, Font, Bounds } from "@thecointech/scraper-types";
 import { getValueParsing, parseValue } from "./valueParsing";
 import { distance as levenshtein } from 'fastest-levenshtein';
 import { getTagScore } from "./elements.score.tag";
 import { getInputTypeScore } from "./elements.score.input";
-
-
-export type Bounds = {width: number, height: number};
 
 // This scoring function reaaaaally needs to be replaced with
 // a computed (learned) model, because manually scoring is just

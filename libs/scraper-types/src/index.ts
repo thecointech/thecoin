@@ -12,3 +12,7 @@ export type HistoryRow = {
 
 // Generic result encompasses all of the above
 export type ReplayResult = Record<string, string | DateTime | currency | HistoryRow[]>
+
+// Bounds we searched within the page
+export type Bounds = {width: number, height: number};
+

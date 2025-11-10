@@ -70,6 +70,9 @@ export class TestData {
   searches(): string[] {
     return this.jsonFiles.filter(f => f.endsWith("-sch.json"));
   }
+  names(): string[] {
+    return this.elements().map(f => f.match(/(.+)-elm.json/)?.[1]!);
+  }
 
   private json<T>(file: string): T {
     return JSON.parse(readFileSync(path.join(this.matchedFolder, file), "utf-8"));

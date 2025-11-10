@@ -7,9 +7,15 @@ interface SearchParametersProps {
 }
 
 export const SearchParameters: React.FC<SearchParametersProps> = ({ search }) => {
+  if (!search) {
+    return <Segment>
+      <Header size='small'>Search Parameters</Header>
+      <p>No search parameters found</p>
+    </Segment>
+  };
   return (
     <Segment>
-      <Header as="h4">Search Parameters</Header>
+      <Header size="small">Search Parameters</Header>
       <Table celled compact size="small">
         <Table.Body>
           {Object.entries(search).map(([key, value]) => {
