@@ -69,13 +69,13 @@ export function getSnapshots(folder: string, element: string, limit=100): Snapsh
   const runFiles = readdirSync(runFolder)
   const runs = runFiles
     .map(run => run.match(`${element}-elm-(\\d+)\\.json`))
-    .filter(run => run !== null)
+    .filter(run => run)
     // sort by time, most recent first
-    .sort((a, b) => parseInt(b![1]) - parseInt(a[1]))
+    .sort((a, b) => parseInt(b![1]) - parseInt(a![1]))
     .slice(0, limit)
     .map(run => {
-      const runPath = path.join(runFolder, run[0])
-      const runTime = parseInt(run[1])
+      const runPath = path.join(runFolder, run![0])
+      const runTime = parseInt(run![1])
       return {
         timestamp: new Date(runTime),
         filename: runPath,

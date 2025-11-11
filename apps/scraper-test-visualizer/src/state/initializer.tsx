@@ -6,7 +6,6 @@ import { TestInfo } from "../testInfo";
 export const Initializer = () => {
   // Initialize Redux store for tests
   TestsReducer.useStore();
-
   // Get actions and data from Redux
   const actions = TestsReducer.useApi();
 

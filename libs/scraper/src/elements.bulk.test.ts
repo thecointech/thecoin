@@ -26,7 +26,7 @@ describe("It runs only the failing tests in archive", () => {
 }, IsManualRun)
 
 function runTests(tests: { testKey: string, test: TestData, name: string }[]) {
-  const results = [];
+  const results: { testKey: string, test: TestData, name: string, found: FoundElement, expected: FoundElement }[] = [];
   const timestamp = new Date();
 
   console.log(`Found ${tests.length} elements to test`);
@@ -67,7 +67,7 @@ function runTests(tests: { testKey: string, test: TestData, name: string }[]) {
   })
 
   afterAll(() => {
-    console.table(results.map(r => ({ key: r.testKey, name: r.name, found: r.found.data.selector, expected: r.expected.selector })));
+    console.table(results.map(r => ({ key: r.testKey, name: r.name, found: r.found.data.selector, expected: r.expected.data.selector })));
   })
 }
 

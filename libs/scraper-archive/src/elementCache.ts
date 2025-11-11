@@ -1,7 +1,7 @@
 import { TestData } from "./testData";
 import { writeFileSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { ElementData, Bounds } from "@thecointech/scraper";
+import type { ElementData, Bounds } from "@thecointech/scraper-types";
 
 // Allow caching all element data for a page.
 // This allows quicker iteration & testing on

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { TestViewer } from '../components/TestViewer/TestViewer';
 import { TestInfo } from '../testInfo';
 

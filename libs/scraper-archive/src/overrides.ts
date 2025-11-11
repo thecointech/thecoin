@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import type { Coords } from "@thecointech/scraper";
+import type { Coords } from "@thecointech/scraper-types";
 import { tests } from "./paths";
 
 export type OverrideElement = {

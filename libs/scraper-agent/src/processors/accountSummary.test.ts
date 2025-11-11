@@ -25,7 +25,7 @@ describe('Updates to the correct account number', () => {
     const listed = test.vqa("listAccounts");
     for (const inferred of listed!.response.accounts) {
       const element = test.elm("account");
-      const actual = validateAccountNumberAgainstSource(inferred.account_number, element!.data)
+      const actual = validateAccountNumberAgainstSource(inferred.account_number, element!.data);
       // This is sufficient for the tests we have now, but likely will not work
       // in more complicated situations.
       expect(element).toBeTruthy();

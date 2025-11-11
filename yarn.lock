@@ -12555,6 +12555,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/scraper-test-visualizer@workspace:apps/scraper-test-visualizer"
   dependencies:
+    "@thecointech/scraper": "workspace:^"
+    "@thecointech/scraper-archive": "workspace:^"
     "@thecointech/setenv": "workspace:^"
     semantic-ui-css: "npm:^2.5.0"
     semantic-ui-react: "npm:^2.1.5"

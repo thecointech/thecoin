@@ -9,7 +9,6 @@ export class TestInfo {
     this.basic = basic;
   }
 
-  get step() { return this.basic.key.split("-").slice(-1)[0]; }
   get element() { return this.basic.element; }
   get key() { return this.basic.key; }
 

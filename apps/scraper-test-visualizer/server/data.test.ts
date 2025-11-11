@@ -8,7 +8,7 @@ it ('Correctly gets all tests', () => {
 
 
 it ('Correctly gets test results', () => {
-  const test = getTests()[100];
+  const test = getTests()[99];
   const results = getTestResults(test.key, test.element);
   expect(results.original).toBeTruthy();
   expect(results.snapshot.length).toBeGreaterThan(0);
