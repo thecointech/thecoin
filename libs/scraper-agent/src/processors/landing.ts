@@ -18,8 +18,9 @@ export async function navigateToLogin(agent: Agent) {
   // Are we on a login page or did we just open a menu?
   let intent = await agent.page.getPageIntent();
   agent.onProgress(50);
-  if (intent == "MenuSelect"
-    || (intent == "Landing" && agent.page.page.url() == originalUrl)
+  if (intent === "MenuSelect"
+    || (intent === "Landing" && agent.page.page.url() === originalUrl)
+  ) {
   ) {
     intent = await navigateToLoginMenu(agent);
   }
