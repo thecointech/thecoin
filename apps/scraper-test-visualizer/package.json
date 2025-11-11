@@ -17,6 +17,7 @@
   "dependencies": {
     "@thecointech/scraper": "workspace:^",
     "@thecointech/scraper-archive": "workspace:^",
+    "@thecointech/shared": "workspace:^",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.5"
   },

@@ -10,10 +10,10 @@ setupScraper({
 });
 
 export function useTestBrowser() {
-  cleanProfileLocks();
 
   let _browser: Browser|null = null;
   beforeAll(async () => {
+    await cleanProfileLocks();
     patchOnnxForJest();
   })
 

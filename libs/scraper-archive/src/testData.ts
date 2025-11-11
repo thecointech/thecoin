@@ -235,8 +235,6 @@ function isElementPassing(test: TestData, name: string) {
   }
   const snapshot = getSnapshot(meta);
   if (snapshot?.found?.data === undefined) {
-    const t2 = getSnapshot(meta);
-    console.log("Snapshot not found for", test.key, name, t2);
     return false;
   }
   return (

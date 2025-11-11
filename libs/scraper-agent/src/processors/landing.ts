@@ -21,12 +21,11 @@ export async function navigateToLogin(agent: Agent) {
   if (intent === "MenuSelect"
     || (intent === "Landing" && agent.page.page.url() === originalUrl)
   ) {
-  ) {
     intent = await navigateToLoginMenu(agent);
   }
 
   // We should now be on the login page
-  if (intent != "Login") {
+  if (intent !== "Login") {
     await agent.maybeThrow(new Error("Failed to navigate to login page"));
   }
 }

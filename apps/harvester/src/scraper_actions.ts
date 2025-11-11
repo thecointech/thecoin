@@ -1,5 +1,5 @@
 import type { HarvestConfig } from './types';
-import type { ValueResult, ValueType} from "@thecointech/scraper/types";
+import type { ValueResult, ValueType} from "@thecointech/scraper-types";
 import type { CreditDetails } from './Harvester/types';
 import type { CoinAccount, CoinAccountDetails, StoredData } from '@thecointech/store-harvester';
 import { ActionType } from './Harvester/scraper';

@@ -104,7 +104,8 @@ function filterElmTestsForSearchValues(test: TestData, jsonFilesRef: string[]) {
         return;
       }
       // If no search data, remove entirely from jsonFiles
-      for (const f of jsonFilesRef.filter(f => !f.includes(name))) {
+      const filesToDrop = jsonFilesRef.filter(f => f.includes(name));
+      for (const f of filesToDrop) {
         jsonFilesRef.splice(jsonFilesRef.indexOf(f), 1);
       }
     });

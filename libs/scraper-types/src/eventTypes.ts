@@ -6,12 +6,12 @@ export type BaseEvent = {
   id: string,
 }
 
-export type NavigationEvent = BaseEvent & {
+export type NavigationEvent = {
   type: "navigation",
   to: string,
-};
+} & BaseEvent;
 
-export type LoadEvent = BaseEvent & {
+export type LoadEvent = {
   type: "load",
 } & BaseEvent;
 
