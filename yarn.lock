@@ -12558,6 +12558,7 @@ __metadata:
     "@thecointech/scraper": "workspace:^"
     "@thecointech/scraper-archive": "workspace:^"
     "@thecointech/setenv": "workspace:^"
+    "@thecointech/shared": "workspace:^"
     semantic-ui-css: "npm:^2.5.0"
     semantic-ui-react: "npm:^2.1.5"
   languageName: unknown
@@ -12623,7 +12624,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/shared@npm:^0.4.0, @thecointech/shared@workspace:libs/shared":
+"@thecointech/shared@npm:^0.4.0, @thecointech/shared@workspace:^, @thecointech/shared@workspace:libs/shared":
   version: 0.0.0-use.local
   resolution: "@thecointech/shared@workspace:libs/shared"
   dependencies:
