@@ -6,6 +6,11 @@ export type Test = {
   element: string;
 }
 
+export type FailingTest = {
+  key: string;
+  element: string;
+}
+
 export type TestSnapshot = {
   time: number;
   result: SnapshotData;

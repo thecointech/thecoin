@@ -31,10 +31,10 @@
     "open": "^8.4.0"
   },
   "files": [
-    "build/**/*"
+    "src/**/*"
   ],
   "exports": {
-    ".": "./build/index.js"
+    ".": "./src/index.ts"
   },
-  "types": "build/index.d.ts"
+  "types": "src/index.ts"
 }

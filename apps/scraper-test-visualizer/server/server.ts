@@ -1,12 +1,8 @@
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
-import { join, extname } from 'node:path';
-import { getTests, getTestResults, getTestImagePath } from './data';
-import { getTestPath } from './paths';
+import { existsSync } from 'node:fs';
+import { getTests, getTestResults, getTestImagePath, getTest, getFailing } from './data';
+import { getTestPath, openFolderInBrowser } from './paths';
 import { run } from "@thecointech/site-base/internal/server";
-import { getLastFailing } from '@thecointech/scraper-archive';
-import { updateTest } from './update';
-
-const testingPages = getTestPath();
+import { updateTest, applyOverrideFromSnapshot } from './update';
 
 run(
   [],
@@ -58,7 +54,7 @@ run(
   // API: Get failing tests
   app.get('/api/failing', (req, res) => {
     try {
-      const failing = getLastFailing();
+      const failing = getFailing();
       return res.json(failing);
     } catch (error) {
       console.error('Failed to read failing tests:', error);
@@ -76,5 +72,49 @@ run(
       res.status(500).json({ error: 'Failed to run test' });
     }
   });
-})
 
+  app.post('/api/open-folder/:key', async (req, res) => {
+    try {
+      const { key } = req.params;
+      const test = getTest(key);
+      const folderPath = test.matchedFolder;
+      await openFolderInBrowser(folderPath);
+      res.json({ success: true, path: folderPath });
+    } catch (error) {
+      console.error('Failed to open folder:', error);
+      res.status(500).json({
+        error: 'Failed to open folder',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
+  app.post('/api/apply-override/:key/:element', async (req, res) => {
+    try {
+      const { key, element } = req.params;
+      const test = getTest(key);
+      const result = await applyOverrideFromSnapshot(test, element);
+
+      if (result.success) {
+        // Clear the cache so next call to getTests will reload with new overrides
+        delete global.allTests;
+        res.json({
+          success: true,
+          changes: result.changes,
+          message: 'Override applied successfully'
+        });
+      } else {
+        res.json({
+          success: false,
+          message: 'No changes detected between original and latest snapshot'
+        });
+      }
+    } catch (error) {
+      console.error('Failed to apply override:', error);
+      res.status(500).json({
+        error: 'Failed to apply override',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+})

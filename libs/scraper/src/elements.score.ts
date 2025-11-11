@@ -142,28 +142,42 @@ export function getRoleScore(potential: ElementData, original: SearchElementData
 // Basically, as long as the center is within the largest bounding box, it
 // should give some points.  The score drops below zero if the center moves
 // outside the radius of the oval defined by the two boxes
+
+// Score the overlap of the two boxes.  The score is 1 when the boxes centers
+// are exactly aligned.  It drops to 0.5 when the smaller of the two boxes
+// outside edges no longer contain the center, and drops to 0 when both
+// box boundaries are touching.  It then reaches -1 at boundary distance
+// away.
 export function getPositionScore(potential: Coords, original: Coords, bounds: Bounds) {
   const originalCenterX = original.left + (original.width / 2);
   const potentialCenterX = potential.left + (potential.width / 2);
   const diffX = Math.abs(originalCenterX - potentialCenterX);
   const diffY = Math.abs(original.centerY - potential.centerY);
 
-  const maxWidth = Math.max(original.width, potential.width);
-  const maxHeight = Math.max(original.height, potential.height);
+  const maxX = Math.max(original.width, potential.width) / 2;
+  const maxY = Math.max(original.height, potential.height) / 2;
 
-  const scoreX = getAxisScore(diffX, bounds.width, maxWidth);
-  const scoreY = getAxisScore(diffY, bounds.height, maxHeight);
+  const minX = Math.min(original.width, potential.width) / 2;
+  const minY = Math.min(original.height, potential.height) / 2;
+
+  const scoreX = getAxisScore(diffX, bounds.width, minX, maxX);
+  const scoreY = getAxisScore(diffY, bounds.height, minY, maxY);
   return (scoreX + scoreY) / 2;
 }
 
-function getAxisScore(diff: number, max: number, elementSize: number) {
-  const halfSize = elementSize / 2;
-  if (diff <= halfSize) {
-    // The element is inside the bounds.  It score goes from 0 -> 1 as it moves closer to the center
-    return 1 - (diff / halfSize);
+function getAxisScore(diff: number, max: number, boxMin: number, boxMax: number) {
+
+  // Boxes overlap the center
+  if (diff < boxMin) {
+    return 1 - (0.5 * (diff / boxMin));
   }
-  if (diff > halfSize) {
-    return -(diff / halfSize) / Math.abs((max - elementSize) / halfSize);
+  // Boxes overlap, but both centers are not within the overlap
+  if (diff < boxMax) {
+    return 0.5 * (diff / boxMax);
+  }
+  // Boxes do not overlap
+  if (diff > boxMax) {
+    return -(diff / boxMax) / Math.abs((max - boxMax) / boxMax);
   }
   return 0;
 }

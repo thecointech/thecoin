@@ -2,6 +2,7 @@ import { type Browser } from "puppeteer"
 import { patchOnnxForJest } from "./jestPatch";
 import { IsManualRun } from '@thecointech/jestutils';
 import { cleanProfileLocks, newPage, setupScraper } from "../src/puppeteer-init";
+import { gotoPage } from "./gotoPage";
 
 setupScraper({
   rootFolder: './.cache/test',
@@ -20,10 +21,10 @@ export function useTestBrowser() {
     await _browser?.close();
   })
 
-  const getPage = async () => {
+  const getPage = async (url: string) => {
     const { page, browser } = await newPage("default");
-    page.setBypassCSP(true);
     _browser = browser;
+    await gotoPage(page, url);
     return page;
   }
   return { getPage }

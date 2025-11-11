@@ -7,6 +7,7 @@ interface ElementDataProps {
   tests: {
     element: TestElmData;
     title: string;
+    color: string;
   }[]
 }
 
@@ -47,7 +48,7 @@ export const ElementData: React.FC<ElementDataProps> = ({ tests }) => {
         <Table.Row>
           <Table.HeaderCell>Property</Table.HeaderCell>
           {tests.map((test, index) => (
-            <Table.HeaderCell key={index}>{test.title}</Table.HeaderCell>
+            <Table.HeaderCell style={{ borderBottom: "2px solid " + test.color }} key={index}>{test.title}</Table.HeaderCell>
           ))}
         </Table.Row>
       </Table.Header>

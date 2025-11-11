@@ -1,7 +1,6 @@
 // Simple helper functions
 
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import type { TestData } from "./testData";
 import { tests } from "./paths";
 
 export function getLastFailing(): string[] | null {
@@ -26,16 +25,4 @@ function lastFailingFile() {
   catch (e) {
     return null;
   }
-}
-
-
-export function shouldSkip(test: TestData, includeFilter?: string[]) {
-  // If missing data, just skip
-  if (!test.hasSnapshot() || test.searches().length == 0) {
-    return true;
-  }
-  if (includeFilter) {
-    return !includeFilter.includes(test.key);
-  }
-  return false
 }

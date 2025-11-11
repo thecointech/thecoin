@@ -1,10 +1,9 @@
-import type { Test } from "./types";
-import { TestsReducer } from "./state/reducer";
+import type { FailingTest, Test } from "./types";
 
 export class TestInfo {
   basic: Test;
 
-  static failingTests: Set<string> = new Set();
+  static failingTests: FailingTest[] = [];
 
   constructor(basic: Test) {
     this.basic = basic;
@@ -15,6 +14,6 @@ export class TestInfo {
   get key() { return this.basic.key; }
 
   get isFailing() {
-    return TestInfo.failingTests.has(this.key);
+    return TestInfo.failingTests.some(f => f.key === this.key && f.element === this.element);
   }
 }

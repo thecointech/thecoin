@@ -13,7 +13,7 @@ export type TestSchData = {
 } & Omit<ElementSearchParams, "page">;
 
 export type SnapshotData = {
-  found: FoundElement,
-  match?: FoundElement,
-  top: FoundElement[],
+  found: TestElmData,
+  match?: TestElmData,
+  top: TestElmData[],
 }

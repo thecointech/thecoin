@@ -57,6 +57,7 @@
     "./puppeteer": "./build/puppeteer-init/index.js",
     "./record": "./build/record/index.js",
     "./testutils": "./internal/testutils.ts",
+    "./gotoPage": "./internal/gotoPage.ts",
     "./*": "./build/*.js"
   },
   "typesVersions": {
@@ -69,6 +70,9 @@
       ],
       "testutils": [
         "internal/testutils.ts"
+      ],
+      "gotoPage": [
+        "internal/gotoPage.ts"
       ],
       "*": [
         "build/*.d.ts"

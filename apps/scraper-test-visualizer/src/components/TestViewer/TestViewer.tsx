@@ -6,10 +6,12 @@ import styles from './TestViewer.module.less';
 import { TestLoading } from './TestLoading';
 import { TestError } from './TestError';
 import { TestHeader } from './TestHeader';
-import { CoordBox, TestScreenshot } from './TestScreenshot';
+import { TestScreenshot } from './TestScreenshot';
 import { OverrideData } from './OverrideData';
 import { ElementData } from './ElementData';
 import { SearchParameters } from './SearchParameters';
+import { colors, names } from './colors';
+import { TestsReducer } from '../../state/reducer';
 
 interface TestViewerProps {
   test: TestInfo;
@@ -21,8 +23,7 @@ export const TestViewer: React.FC<TestViewerProps> = ({ test }) => {
   const [error, setError] = useState<string | null>(null);
 
   const [selectedSnapshot, setSelectedSnapshot] = useState<number | null>(null);
-
-  const [baseCoordBoxes, setBaseCoordBoxes] = useState<CoordBox[]>([]);
+  const actions = TestsReducer.useApi();
 
   const fetchTestResults = async () => {
     setLoading(true);
@@ -34,18 +35,6 @@ export const TestViewer: React.FC<TestViewerProps> = ({ test }) => {
       }
       const data = await response.json();
       setTestResult(data);
-
-      const boxes: CoordBox[] = [{
-        coords: data.original.data.coords,
-        color: 'blue'
-      }];
-      if (data.search?.event?.coords) {
-        boxes.push({
-          coords: data.search.event.coords,
-          color: 'green'
-        });
-      }
-      setBaseCoordBoxes(boxes);
       if (data.snapshot.length > 0) {
         setSelectedSnapshot(0);
       }
@@ -63,35 +52,36 @@ export const TestViewer: React.FC<TestViewerProps> = ({ test }) => {
     setSelectedSnapshot(snapshotIndex);
   };
 
-  const snapshot = testResult?.snapshot[selectedSnapshot];
-  const boxes = snapshot
-    ? baseCoordBoxes.concat({
-      coords: snapshot.result.found.data.coords,
-      color: 'orange'
-    })
-    : baseCoordBoxes;
-
-  const getTestsToShow = () => {
-    const r = [
-      {
-        element: testResult.original,
-        title: 'Original'
-      }
-    ]
+  const getSnapshotElements = () => {
+    const snapshot = testResult?.snapshot[selectedSnapshot];
+    const r = [testResult.original];
     if (snapshot) {
-      r.push({
-        element: snapshot.result.found,
-        title: `Found (${new Date(snapshot.time).toLocaleString()})`
-      })
+      r.push(snapshot.result.found);
       if (snapshot.result.match) {
-        r.push({
-          element: snapshot.result.match,
-          title: `Match (${new Date(snapshot.time).toLocaleString()})`
-        })
+        if (snapshot.result.found.data.selector !== testResult.original.data.selector) {
+          r.push(snapshot.result.match);
+        }
       }
     }
-    return r
+    return r;
   }
+
+  const getBoxesToDraw = () => {
+    const r = [];
+    if (testResult?.search?.event?.coords) {
+      r.push({
+        coords: testResult?.search?.event?.coords,
+        color: 'red',
+      });
+    }
+    r.push(...getSnapshotElements().map((s, i) => ({ coords: s.data.coords, color: colors[i] })));
+    return r;
+  }
+  const getTestsToShow = () => getSnapshotElements().map((s, i) => ({
+    element: s,
+    title: names[i],
+    color: colors[i]
+  }));
 
   async function updateTest(key: string, element: string): Promise<void> {
     setLoading(true);
@@ -104,6 +94,51 @@ export const TestViewer: React.FC<TestViewerProps> = ({ test }) => {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function openTestFolder(key: string): Promise<void> {
+    try {
+      const response = await fetch(`/api/open-folder/${key}`, {
+        method: 'POST',
+      });
+      const result = await response.json();
+      if (!result.success) {
+        console.error('Failed to open folder:', result.message);
+      }
+    } catch (error) {
+      console.error('Failed to open folder:', error);
+    }
+  }
+
+  async function applyOverride(key: string, element: string): Promise<void> {
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/apply-override/${key}/${element}`, {
+        method: 'POST',
+      });
+      const result = await response.json();
+
+      if (result.success) {
+        console.log('Override applied:', result.changes);
+
+        // Reload failing tests
+        const failingResponse = await fetch('/api/failing');
+        if (failingResponse.ok) {
+          const failingData = await failingResponse.json();
+          actions.setFailingTests(failingData);
+        }
+
+        // Refresh test results to show new override
+        await fetchTestResults();
+      } else {
+        console.log('No override needed:', result.message);
+      }
+    } catch (error) {
+      console.error('Failed to apply override:', error);
+      setError(error instanceof Error ? error.message : 'Failed to apply override');
     } finally {
       setLoading(false);
     }
@@ -124,15 +159,23 @@ export const TestViewer: React.FC<TestViewerProps> = ({ test }) => {
                 <TestScreenshot
                   testKey={test.key}
                   position={testResult.search?.response}
-                  coordBoxes={boxes}
+                  coordBoxes={getBoxesToDraw()}
                 />
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
               <Grid.Column width={16}>
+
                 <Button
                   onClick={() => updateTest(test.key, test.element)}
                 >Update</Button>
+                <Button
+                  color="blue"
+                  onClick={() => applyOverride(test.key, test.element)}
+                >Override</Button>
+                <Button
+                  onClick={() => openTestFolder(test.key)}
+                >Open Folder</Button>
                 <Dropdown
                   options={testResult.snapshot.map((snapshot, index) => ({
                     key: index,

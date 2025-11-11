@@ -1,6 +1,7 @@
 import { BaseReducer } from '@thecointech/shared/store/immerReducer';
 import { initialState, type InitialState, type FilterType } from './initialState';
 import { TestInfo } from '../testInfo';
+import { FailingTest } from '../types';
 
 export const TESTS_KEY = "tests";
 
@@ -9,7 +10,7 @@ export interface IActions {
   setLoading(loading: boolean): void;
   setError(error: string | null): void;
   setSelectedTest(test: TestInfo | null): void;
-  setFailingTests(failingTests: Set<string>): void;
+  setFailingTests(failingTests: FailingTest[]): void;
   setFilter(filter: FilterType): void;
 }
 
@@ -32,7 +33,7 @@ export class TestsReducer extends BaseReducer<IActions, InitialState>(TESTS_KEY,
     this.draftState.selectedTest = test;
   }
 
-  setFailingTests(failingTests: Set<string>): void {
+  setFailingTests(failingTests: FailingTest[]): void {
     this.draftState.failingTests = failingTests;
     TestInfo.failingTests = failingTests;
   }
@@ -46,7 +47,7 @@ export function useFilteredTests() {
   const { tests, filter, failingTests } = TestsReducer.useData();
   switch(filter) {
     case 'all': return tests;
-    case 'failing': return tests.filter(test => failingTests.has(test.key));
-    case 'passing': return tests.filter(test => !failingTests.has(test.key));
+    case 'failing': return tests.filter(test => failingTests.some(f => f.key === test.key && f.element === test.element));
+    case 'passing': return tests.filter(test => !failingTests.some(f => f.key === test.key && f.element === test.element));
   }
 }

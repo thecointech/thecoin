@@ -28,8 +28,8 @@ export function getOverrideData(): OverrideData {
   return {};
 }
 
-export function writeOverrideData(overrides: OverrideData) {
-  const overridePath = tests("archive", `overrides-${Date.now()}.json`);
+export function writeOverrideData(overrides: OverrideData, mainFile?: boolean) {
+  const overridePath = tests("archive", mainFile ? "overrides.json" : `overrides-${Date.now()}.json`);
   writeFileSync(overridePath, JSON.stringify(overrides, null, 2));
 }
 

@@ -1,17 +1,17 @@
 import React from 'react';
 import { Statistic } from 'semantic-ui-react';
-import type { Test } from '../types';
+import type { FailingTest, Test } from '../types';
 import { TestsReducer } from '../state/reducer';
 import styles from './StatsBar.module.less';
 
 interface StatsBarProps {
   tests: Test[];
-  failingTests: Set<string>;
+  failingTests: FailingTest[];
 }
 
 const StatsBar: React.FC<StatsBarProps> = ({ tests, failingTests }) => {
   const totalTests = tests.length;
-  const failingCount = failingTests.size;
+  const failingCount = failingTests.length;
   const passingCount = totalTests - failingCount;
   const actions = TestsReducer.useApi();
   // const totalRuns = tests.reduce((sum, test) => sum + test.groups.length, 0);

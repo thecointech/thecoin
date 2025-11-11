@@ -1,25 +1,28 @@
 
 import path from 'node:path';
-import type { Test, TestResult } from '../src/types';
+import type { FailingTest, Test, TestResult } from '../src/types';
 import { getTestData } from './getTestData';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import type { SnapshotData, TestData, TestElmData } from '@thecointech/scraper-archive';
+import { getSnapshot, getSnapshots, type SnapshotData, type TestData } from '@thecointech/scraper-archive';
 
 declare global {
   var allTests: TestData[];
 }
 
-export function getTests(): Test[] {
+export function getAllTests() {
   if (!global.allTests) {
     global.allTests = getTestData("*", "elm.json", "archive");
   }
-  const r = global.allTests.flatMap(test => {
-    const elements = test.elements()
+  return global.allTests;
+}
+export function getTests(): Test[] {
+  const r = getAllTests().flatMap(test => {
+    const elements = test.names()
     return elements.map(element => {
       return {
         key: test.key,
         step: test.step,
-        element: element.replace("-elm.json", ""),
+        element: element,
       }
     })
   })
@@ -27,16 +30,28 @@ export function getTests(): Test[] {
   return r;
 }
 
-export function getTest(key: string, element: string): TestData {
-  const test = global.allTests.find(test => test.key === key)
+export function getTest(key: string): TestData {
+  const test = getAllTests().find(test => test.key === key)
   if (!test) {
     throw new Error(`Test ${key} not found`)
   }
   return test
 }
 
+export function getFailing(): FailingTest[] {
+  const failing = getAllTests().flatMap(test => {
+    const failing = test.failing;
+    if (!failing.length) return [];
+    return failing.map(f => ({
+      key: test.key,
+      element: f,
+    }))
+  })
+  return failing
+}
+
 export function getTestResults(key: string, element: string): TestResult {
-  const test = getTest(key, element)
+  const test = getTest(key)
   return {
     original: getTestOriginalResult(test, element),
     search: getTestSearch(test, element),
@@ -46,7 +61,7 @@ export function getTestResults(key: string, element: string): TestResult {
 }
 
 export function getTestImagePath(key: string) {
-  const test = getTest(key, "")
+  const test = getTest(key)
   return path.join(test.matchedFolder, `${test.step}.png`)
 }
 
@@ -57,7 +72,7 @@ function getElementOverride(test: TestData, element: string) {
 
 function getTestOriginalResult(test: TestData, element: string) {
 
-  const original = test.elm(element, false)
+  const original = test.elm(element)
   if (!original) {
     throw new Error(`Element ${element} not found`)
   }
@@ -65,25 +80,11 @@ function getTestOriginalResult(test: TestData, element: string) {
 }
 
 function getTestSnapshotResults(test: TestData, element: string) {
-  // Get results of subsequent runs
-  const runFolder = path.join(test.matchedFolder, "__snapshots__")
-  if (!existsSync(runFolder)) {
-    return []
-  }
-  const runFiles = readdirSync(runFolder)
-  const runs = runFiles
-    .map(run => run.match(`${element}-elm-(\\d+)\\.json`))
-    .filter(run => run !== null)
-    .map(run => {
-      const runPath = path.join(runFolder, run[0])
-      const runTime = parseInt(run[1])
-      const runResult = JSON.parse(readFileSync(runPath, 'utf-8'))
-      return {
-        time: runTime,
-        result: runResult as SnapshotData,
-      }
-  })
-  return runs.sort((a, b) => a.time - b.time)
+  const snapshots = getSnapshots(test.matchedFolder, element)
+  return snapshots.map(snapshot => ({
+    time: snapshot.timestamp.getTime(),
+    result: getSnapshot(snapshot),
+  }))
 }
 function getTestSearch(test: TestData, element: string) {
   return test.sch(element)
