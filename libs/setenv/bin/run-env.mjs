@@ -69,7 +69,8 @@ const loader = args.find(arg => arg.endsWith('.ts'))
 // Always attach experimental loader
 // NOTE: -es-module-specifier-resolution is no longer supported by node,
 // but is required by ts-node to correctly resolve imports
-env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --experimental-transform-types --loader=${loader} --es-module-specifier-resolution=node`;
+// env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --experimental-transform-types --loader=${loader} --es-module-specifier-resolution=node`;
+env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --loader=${loader} --es-module-specifier-resolution=node`;
 
 // If this is yarn script?
 if (executable != "node") {
@@ -91,6 +92,10 @@ if (executable != "node") {
       }
     }
   }
+}
+// Electron doesn't support this flag, but everyone else needs it.
+else if (!env.ELECTRON_DISABLE_SANDBOX) {
+  env.NODE_OPTIONS = `${env.NODE_OPTIONS ?? ""} --experimental-transform-types`;
 }
 
 const proc = spawn(

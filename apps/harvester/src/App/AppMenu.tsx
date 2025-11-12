@@ -5,7 +5,6 @@ import type { Location } from 'history'
 
 export const AppMenu = ({location}: {location: Location}) => (
   <Menu pointing secondary vertical size="small">
-    <Menu.Item header>TheCoin - Harvester</Menu.Item>
     <Menu.Item
       name='Welcome'
       active={location.pathname === '/'}
