@@ -93,7 +93,7 @@ if (executable != "node") {
     }
   }
 }
-// Electron doesn't support this flag, but everyone else needs it.
+// Electron doesn't support transform-types flag, but everyone else needs it.
 else if (!env.ELECTRON_DISABLE_SANDBOX) {
   env.NODE_OPTIONS = `${env.NODE_OPTIONS ?? ""} --experimental-transform-types`;
 }

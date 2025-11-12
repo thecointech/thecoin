@@ -43,7 +43,7 @@ export const NextButton = ({ to, content, disabled, loading, onValid }: NextButt
       loading={loading}
       onClick={onClick}
     >
-      {content}
+      Next
     </Button>,
     nextPortalTarget
   );
