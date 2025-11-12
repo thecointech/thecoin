@@ -18,8 +18,7 @@
   },
   "scripts": {
     "build": "run -T tsc -b",
-    "clean": "run -T rimraf ./build && run -T rimraf ./coverage",
-    "test": "run :jest"
+    "clean": "run -T rimraf ./build"
   },
   "dependencies": {
     "@thecointech/logging": "workspace:^",

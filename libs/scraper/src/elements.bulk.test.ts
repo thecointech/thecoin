@@ -3,33 +3,31 @@ import { describe, IsManualRun } from "@thecointech/jestutils"
 import { getTestData } from "../internal/getTestData";
 import { getElementForEvent } from "./elements";
 import { ElementNotFoundError } from "./errors";
-import { type TestData, saveSnapshot, type TestElmData } from "@thecointech/scraper-archive";
+import { type TestData, saveSnapshot, type TestElmData, hasTestingPages } from "@thecointech/scraper-archive";
 import type { ElementSearchParams, FoundElement } from "@thecointech/scraper-types";
 
 jest.setTimeout(20 * 60 * 1000);
 const MIN_ELEMENTS_IN_VALID_PAGE = 25;
 
-// describe("It finds the same elements as before in archive", () => {
-//   if (IsManualRun) {
-//     return;
-//   }
-//   const testData = getTestData("*", "elm.json", "archive");
-//   const tests = testData.flatMap(t => t.elements().map(e => ({ testKey: t.key, test: t, name: e })))
-//   runTests(tests);
-// }, hasTestingPages);
-
-type TestId = {
-  testKey: string;
-  name: string;
-}
+describe("It finds the same elements as before in archive", () => {
+  const testData = getTestData("*", "elm.json", "archive");
+  const tests = testData.flatMap(t => t.elements().map(e => ({ testKey: t.key, test: t, name: e })))
+  runTests(tests);
+}, hasTestingPages() && !IsManualRun);
 
 describe("It runs only the failing tests in archive", () => {
   const testData = getTestData("*", "elm.json", "archive");
   const failing = testData.flatMap(t => t.failing.map(f => ({ testKey: t.key, test: t, name: f })))
   runTests(failing);
-}, IsManualRun)
+}, hasTestingPages() && IsManualRun)
 
-function runTests(tests: { testKey: string, test: TestData, name: string }[]) {
+type TestId = {
+  testKey: string;
+  test: TestData;
+  name: string;
+}
+
+function runTests(tests: TestId[]) {
   const failed: TestId[] = [];
   const timestamp = new Date();
 
@@ -66,7 +64,7 @@ function runTests(tests: { testKey: string, test: TestData, name: string }[]) {
           return;
         }
       }
-      failed.push({ testKey, name });
+      failed.push({ testKey, test, name });
       throw e;
     }
   })
