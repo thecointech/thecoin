@@ -40,6 +40,8 @@ function runTests(tests: TestId[]) {
       const page = await test.page();
       const sch = test.sch(name);
       const elm = test.elm(name);
+      expect(elm).toBeDefined();
+      expect(sch).toBeDefined();
 
       const onFound = async (candidate: FoundElement, _params: ElementSearchParams, candidates: FoundElement[]) => {
         // Write out the snapshot...

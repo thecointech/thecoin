@@ -412,7 +412,9 @@ export function getLabelData(elem: Element) {
 }
 
 function getElementText(el: HTMLElement) {
-  const s = el.innerText.replace(/\s+/g, ' ') + (el.getAttribute("placeholder") || "")
+  const base = el.innerText.replace(/\s+/g, ' ');
+  const placeholder = el.getAttribute("placeholder") || "";
+  const s = placeholder ? `${base} ${placeholder}` : base;
   return s.trim();
 }
 
@@ -434,7 +436,7 @@ function getNodeValue(elem: Element) {
   const allContent = [priorContent, ...nodeContent, postContent].filter(c => !!c)
   return allContent
     .join(" ")
-    .replace(/\s+/, ' ')
+    .replace(/\s+/g, ' ')
     .trim()
 }
 

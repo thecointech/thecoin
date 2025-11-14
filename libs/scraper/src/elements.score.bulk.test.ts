@@ -26,7 +26,8 @@ function runTests(tests: { testKey: string, test: TestData, name: string }[]) {
     counter.start();
     const sch = test.sch(name);
     const elm = test.elm(name);
-    if (!sch) return;
+    expect(elm).toBeDefined();
+    expect(sch).toBeDefined();
 
     const cache = readElementCache(test);
     if (!cache) {

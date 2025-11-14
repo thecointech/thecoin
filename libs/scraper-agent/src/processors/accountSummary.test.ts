@@ -89,11 +89,11 @@ describe("Correctly finds the navigation element", () => {
     const found = await saveAccountNavigation(agent, account!);
 
     // Double check this is within an "A" tag
-    const findAnchorLink = (elm: TestElmData): boolean => {
-      if (elm.data.tagName == "A") {
+    const findAnchorLink = (test: TestElmData): boolean => {
+      if (test.data.tagName == "A") {
         return true;
       }
-      const parent = candidates?.find((c) => c.data.selector == elm.data.parentSelector);
+      const parent = candidates?.find((c) => c.data.selector == test.data.parentSelector);
       if (!parent) {
         return false;
       }

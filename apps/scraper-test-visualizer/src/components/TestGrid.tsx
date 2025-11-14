@@ -30,7 +30,7 @@ const TestGrid: React.FC<TestGridProps> = () => {
         return (
           <Card
             key={`${test.key}-${test.element}`}
-            className={test.isFailing ? 'failing' : ''}
+            className={test.isFailing ? styles.failing : ''}
             onClick={() => handleTestClick(test)}
             style={{ cursor: 'pointer' }}
           >

@@ -51,9 +51,6 @@ export function getTestData<T extends TestData>(
 
     // Ensure we have actual data to test as well.
     const jsonFiles = getJsonFiles(matchedFolder, step, skip);
-    if (skip) {
-      jsonFiles.filter(f => skip.elements?.every(e => !f.includes(e)));
-    }
     if (!jsonFiles.length) {
       continue;
     }
