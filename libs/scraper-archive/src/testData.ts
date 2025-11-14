@@ -125,8 +125,8 @@ export class TestData {
     if (withOverride) {
       const elementOverride = this.override(testName!);
       if (elementOverride) {
-        if (elementOverride.text) rawJson.data.text = elementOverride.text;
-        if (elementOverride.selector) rawJson.data.selector = elementOverride.selector;
+        if (elementOverride.text !== undefined) rawJson.data.text = elementOverride.text;
+        if (elementOverride.selector !== undefined) rawJson.data.selector = elementOverride.selector;
       }
     }
 
@@ -141,7 +141,7 @@ export class TestData {
   *elm_iter(fnName: string): Generator<TestElmData, void, unknown> {
     const files = this.jsonFiles.filter(f => f.includes(fnName) && f.endsWith("-elm.json"));
     for (const file of files) {
-      yield this.json<TestElmData>(file);
+      yield this.elm(file)!;
     }
   }
 

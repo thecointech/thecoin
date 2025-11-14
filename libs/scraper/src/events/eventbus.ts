@@ -2,7 +2,7 @@ import { AsyncEventEmitter, type EventListeners } from "./asyncEventEmitter";
 import type { ElementSearchParams, FoundElement } from "@thecointech/scraper-types";
 
 type EventMap = {
-  "elementFound": [element: FoundElement, params: ElementSearchParams]
+  "elementFound": [element: FoundElement, params: ElementSearchParams, candidates?: FoundElement[]]
 }
 export class EventBus extends AsyncEventEmitter<EventMap> {
   static instance: EventBus;
@@ -22,8 +22,8 @@ export class EventBus extends AsyncEventEmitter<EventMap> {
   onElement(callback: EventListeners<EventMap>["elementFound"]) {
     this.on("elementFound", callback);
   }
-  async emitElement(element: FoundElement, params: ElementSearchParams) {
-    await this.emitWithPromises("elementFound", element, params);
+  async emitElement(element: FoundElement, params: ElementSearchParams, candidates: FoundElement[]) {
+    await this.emitWithPromises("elementFound", element, params, candidates);
   }
   offElement(callback: EventListeners<EventMap>["elementFound"]) {
     this.off("elementFound", callback);

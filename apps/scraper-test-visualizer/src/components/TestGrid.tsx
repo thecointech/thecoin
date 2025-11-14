@@ -45,6 +45,7 @@ const TestGrid: React.FC<TestGridProps> = () => {
               </Card.Meta>
               <Card.Description>
                 <div style={{ marginTop: '0.5rem' }}>
+                  <div><strong>Key:</strong> {test.key}</div>
                   <div><strong>Test runs:</strong> {runCount}</div>
                   <div><strong>Latest:</strong> {latestDate}</div>
                 </div>

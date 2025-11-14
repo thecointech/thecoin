@@ -27,7 +27,7 @@ export const TestHeader: React.FC<TestHeaderProps> = ({ test }) => {
           </Label>
         )}
       </div>
-      <Button icon onClick={onClose} inverted>
+      <Button icon onClick={onClose}>
         <Icon name="close" /> Close
       </Button>
     </div>
