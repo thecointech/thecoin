@@ -131,7 +131,7 @@ export const VerifyAccounts = ({banks, stored}: InitialState) => {
       <VerifyAccountsMessage forceValidate={forceValidate} isStored={stored} cardNumValid={cardNumValid} />
       <ActionButton onClick={saveAccounts} disabled={forceValidate && !cardNumValid}>Store Accounts</ActionButton>
 
-      <NextButton onValid={isValid} content="Transfer Settings" to="/config" />
+      <NextButton onValid={isValid} to="/config" />
     </div>
   );
 };

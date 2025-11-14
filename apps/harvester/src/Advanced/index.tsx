@@ -6,7 +6,7 @@ import { DimmerCallback } from './types';
 import { BrowserControls } from './BrowserControls';
 import styles from './index.module.less';
 import { ExportConfig } from './ExportConfig';
-import { OverrideHarvesterState } from './OverrideHarvesterState';
+// import { OverrideHarvesterState } from './OverrideHarvesterState';
 
 
 export const Advanced = () => {
@@ -51,10 +51,10 @@ export const Advanced = () => {
         <Header size="small">Import/Export Harvester config</Header>
         <ExportConfig  withDimmer={withDimmer} />
       </Segment>
-      <Segment>
+      {/* <Segment>
         <Header size="small">Override Harvester balance</Header>
         <OverrideHarvesterState  withDimmer={withDimmer} />
-      </Segment>
+      </Segment> */}
     </SegmentGroup>
   )
 }

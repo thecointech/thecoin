@@ -7,6 +7,7 @@ import { BackgroundTaskCallback } from './BackgroundTask/types';
 import type { OptionPacket, QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
 import type { AutoConfigParams } from './Harvester/agent';
 import type { BankConnectMap } from './Harvester/events';
+import type { WebsiteEndpoints } from './openExternal';
 
 export type Result<T> = {
   error?: string;
@@ -69,6 +70,7 @@ export type ScraperBridgeApi = {
   exportConfig(): Promise<Result<string>>
 
   openLogsFolder(): Promise<Result<boolean>>,
+  openWebsiteUrl(type: WebsiteEndpoints): Promise<Result<boolean>>,
   getArgv() : Promise<Result<Record<string, any>>>,
 
   setOverrides(balance: number, pendingAmt: number|null, pendingDate: string|null|undefined): Promise<Result<boolean>>,
@@ -133,6 +135,7 @@ export const actions = {
   exportConfig: 'scraper:exportConfig',
 
   openLogsFolder: 'scraper:openLogsFolder',
+  openWebsiteUrl: 'scraper:openWebsiteUrl',
   getArgv: 'scraper:getArgv',
 
   setOverrides: 'scraper:setOverrides',

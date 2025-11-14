@@ -1,18 +1,17 @@
 import { createPortal } from 'react-dom'
-import { useEffect, type ReactNode } from 'react'
+import { useEffect } from 'react'
 import { Link } from "react-router-dom"
 import { Button } from "semantic-ui-react"
 import { useContentSectionContext } from './context'
 
 type NextButtonProps = {
   to: string;
-  content: ReactNode;
   disabled?: boolean;
   loading?: boolean;
   onValid?: () => boolean;
 }
 
-export const NextButton = ({ to, content, disabled, loading, onValid }: NextButtonProps) => {
+export const NextButton = ({ to, disabled, loading, onValid }: NextButtonProps) => {
   const { nextPortalTarget, setHasNext } = useContentSectionContext();
 
   // Notify parent when button mounts/unmounts

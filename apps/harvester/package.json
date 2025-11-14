@@ -79,6 +79,7 @@
     "electron-context-menu": "^3.6.1",
     "electron-squirrel-startup": "^1.0.0",
     "node-notifier": "^10.0.0",
+    "open": "^8.4.0",
     "react-router-dom": "^5.1.2",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.4"
