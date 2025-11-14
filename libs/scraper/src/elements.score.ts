@@ -9,22 +9,28 @@ import { getInputTypeScore } from "./elements.score.input";
 // This scoring function reaaaaally needs to be replaced with
 // a computed (learned) model, because manually scoring is just
 // too easy to bias to right-nows problems
-export async function scoreElement(potential: ElementData, original: SearchElementData, bounds: Bounds) {
+export async function scoreElement(potential: ElementData, original: SearchElementData, bounds: Bounds, selectorIndex?: Map<string, ElementData>) {
   const components: Record<string, number> = {
     selector:         30 * getSelectorScore(potential.selector, original.selector),
-    tag:              20 * getTagScore(potential, original),
+    tag:              20 * getTagScore(potential, original, selectorIndex),
     // Input type can be very important, as it doubles for a decent tag filter
     inputType:        50 * getInputTypeScore(potential, original),
     // Mostly useless, fonts are all over the place
     font:             10 * getFontScore(potential.font, original.font),
     // Includes aria-label & <label>.  Is a good boost to <input> types
     label:            25 * await getLabelScore(potential.label, original.label),
-    role:             40 * getRoleScore(potential, original),
+    role:             40 * getRoleScore(potential, original, selectorIndex),
     positionAndSize:  20 * getPositionAndSizeScore(potential, original, bounds), // Can be 2 if both match perfectly
     nodeValue:        40 * await getNodeValueScore(potential, original),
     siblings:         30 * await getSiblingScore(potential, original),
     estimatedText:    40 * getEstimatedTextScore(potential, original)
   };
+
+  if (original.estimated) {
+    // If we're estimating, we want to boost the tag score,
+    // They are only included when required for an action
+    components.tag *= 2;
+  }
 
   // max score is 195
   const score = Object.values(components).reduce((sum, score) => sum + score, 0);
@@ -121,15 +127,32 @@ async function getLabelScore(potential: string|null, original: string|null|undef
   return 0;
 }
 
-export function getRoleScore(potential: ElementData, original: SearchElementData) {
+export function getRoleScore(potential: ElementData, original: SearchElementData, selectorIndex?: Map<string, ElementData>) {
   const matchScore = (original.role == potential.role)
     ? 1
     : -1;
   // When estimating, we need both roles to get a score.
   if (original.estimated) {
-    return (original.role && potential.role)
-      ? matchScore
-      : 0;
+    // Direct match
+    if (original.role && potential.role) {
+      return matchScore;
+    }
+
+    // Check ancestor roles if index available
+    if (original.role && selectorIndex) {
+      let current = potential;
+      while (current.parentSelector) {
+        const parent = selectorIndex.get(current.parentSelector);
+        if (!parent) break;
+
+        if (parent.role === original.role) {
+          return 0.5;
+        }
+        current = parent;
+      }
+    }
+
+    return 0;
   }
 
   // In replay, if either has a role, they have to match
@@ -286,4 +309,3 @@ function getValueParsingScore(potential: ElementData, original: SearchElementDat
   }
   return 0;
 }
-

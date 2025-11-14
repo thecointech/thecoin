@@ -26,6 +26,9 @@ export type ElementData = {
   // If tagName is INPUT, this will be the type
   // Note: inputType & role are always lowercase
   inputType?: string,
+  // If tagName is LABEL, this will be the for attribute
+  for?: string,
+
   role: string|null,
 
   selector: string,

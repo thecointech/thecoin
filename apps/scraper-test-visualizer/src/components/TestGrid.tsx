@@ -5,13 +5,8 @@ import type { TestInfo } from '../testInfo';
 import { useFilteredTests } from '../state/reducer';
 import styles from './TestGrid.module.less';
 
-interface TestGridProps {
-  // tests: TestInfo[];
-  // failingTests: Set<string>;
-  // onTestClick: (test: TestInfo) => void;
-}
 
-const TestGrid: React.FC<TestGridProps> = () => {
+const TestGrid = () => {
   const tests = useFilteredTests();
   const history = useHistory();
 
@@ -30,7 +25,7 @@ const TestGrid: React.FC<TestGridProps> = () => {
         return (
           <Card
             key={`${test.key}-${test.element}`}
-            className={test.isFailing ? 'failing' : ''}
+            className={test.isFailing ? styles.failing : ''}
             onClick={() => handleTestClick(test)}
             style={{ cursor: 'pointer' }}
           >
@@ -45,6 +40,7 @@ const TestGrid: React.FC<TestGridProps> = () => {
               </Card.Meta>
               <Card.Description>
                 <div style={{ marginTop: '0.5rem' }}>
+                  <div><strong>Key:</strong> {test.key}</div>
                   <div><strong>Test runs:</strong> {runCount}</div>
                   <div><strong>Latest:</strong> {latestDate}</div>
                 </div>

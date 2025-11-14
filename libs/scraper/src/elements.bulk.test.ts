@@ -11,9 +11,9 @@ const MIN_ELEMENTS_IN_VALID_PAGE = 25;
 
 describe("It finds the same elements as before in archive", () => {
   const testData = getTestData("*", "elm.json", "archive");
-  const tests = testData.flatMap(t => t.elements().map(e => ({ testKey: t.key, test: t, name: e })))
+  const tests = testData.flatMap(t => t.names().map(e => ({ testKey: t.key, test: t, name: e })))
   runTests(tests);
-}, hasTestingPages() && !IsManualRun);
+}, hasTestingPages() && (!IsManualRun || process.argv.includes("It finds the same elements as before in archive")));
 
 describe("It runs only the failing tests in archive", () => {
   const testData = getTestData("*", "elm.json", "archive");
@@ -40,6 +40,8 @@ function runTests(tests: TestId[]) {
       const page = await test.page();
       const sch = test.sch(name);
       const elm = test.elm(name);
+      expect(elm).toBeDefined();
+      expect(sch).toBeDefined();
 
       const onFound = async (candidate: FoundElement, _params: ElementSearchParams, candidates: FoundElement[]) => {
         // Write out the snapshot...

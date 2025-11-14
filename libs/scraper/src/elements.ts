@@ -61,9 +61,9 @@ export async function getElementForEvent(params: ElementSearchParams, onFound: E
   throw new ElementNotFoundError(event, bestCandidate);
 }
 
-async function notifyElementFound(candidate: FoundElement, params: ElementSearchParams) {
+async function notifyElementFound(candidate: FoundElement, params: ElementSearchParams, candidates: FoundElement[]) {
   // Watchers can get notified of every found element
-  await EventBus.get().emitElement(candidate, params);
+  await EventBus.get().emitElement(candidate, params, candidates);
 }
 
 export async function fetchAllCandidates(page: Page, bounds: Bounds) {
@@ -98,10 +98,17 @@ export async function fetchAllCandidates(page: Page, bounds: Bounds) {
 }
 
 export async function scoreAllCandidates<T extends { data: ElementData }>(candidates: T[], event: SearchElementData, bounds: Bounds) {
+  // Build selector index for efficient parent lookups
+  // const selectorIndex = undefined;
+
+  const selectorIndex = new Map<string, ElementData>(
+    candidates.map(c => [c.data.selector, c.data])
+  );
+
   const r: (T & ScoreElement)[] = [];
   for (let i = 0; i < candidates.length; i++) {
     const el = candidates[i];
-    const score = await scoreElement(el.data, event, bounds);
+    const score = await scoreElement(el.data, event, bounds, selectorIndex);
     // NaN can't sort, so if one slips through, ditch it.
     if (!Number.isNaN(score.score)) {
       r.push({
@@ -289,6 +296,7 @@ const getElementProps = (el: HTMLElement) => ({
   name: el.getAttribute("name") ?? undefined,
   options: (el as HTMLSelectElement)?.options ? Array.from((el as HTMLSelectElement).options).map(o => o.text) : undefined,
   inputType: el.getAttribute("type") ?? undefined,
+  for: el.getAttribute("for") ?? undefined,
   role: el.getAttribute("role"),
   selector: getSelector(el),
   coords: getCoords(el),
@@ -404,7 +412,9 @@ export function getLabelData(elem: Element) {
 }
 
 function getElementText(el: HTMLElement) {
-  const s = el.innerText.replace(/\s+/g, ' ') + (el.getAttribute("placeholder") || "")
+  const base = el.innerText.replace(/\s+/g, ' ');
+  const placeholder = el.getAttribute("placeholder") || "";
+  const s = placeholder ? `${base} ${placeholder}` : base;
   return s.trim();
 }
 
@@ -426,7 +436,7 @@ function getNodeValue(elem: Element) {
   const allContent = [priorContent, ...nodeContent, postContent].filter(c => !!c)
   return allContent
     .join(" ")
-    .replace(/\s+/, ' ')
+    .replace(/\s+/g, ' ')
     .trim()
 }
 
@@ -471,10 +481,16 @@ export const getAllElements = async (frame: Page|Frame, maxTop: number, querySel
         // due the `instanceof HTMLElement` check, but HTLM & body are not
         !["HTML", "BODY"].includes(el.tagName) &&
         //@ts-ignore
-        el.checkVisibility({
-          checkOpacity: true,  // Check CSS opacity property too
-          checkVisibilityCSS: true // Check CSS visibility property too
-        })
+        (
+          // Always include inputs, even a hidden
+          // input helps with scoring as it can be
+          // pointed to by another element.
+          el.tagName.toUpperCase() == "INPUT" ||
+          el.checkVisibility({
+            checkOpacity: true,  // Check CSS opacity property too
+            checkVisibilityCSS: true // Check CSS visibility property too
+          })
+        )
       ) ? getElementProps?.(el)
         : null
     ),

@@ -29,7 +29,7 @@ export function getTestData<T extends TestData>(
     const matchedFolder = path.dirname(match);
     const machedFilename = path.basename(match);
     const step = parseInt(machedFilename.split('-')[0]);
-    if (isNaN(step)) {
+    if (Number.isNaN(step)) {
       throw new Error(`Invalid step: ${machedFilename}`);
     }
     const key = `${path.relative(testFolder, matchedFolder).replaceAll(path.sep, ':')}:${step}`
@@ -51,9 +51,6 @@ export function getTestData<T extends TestData>(
 
     // Ensure we have actual data to test as well.
     const jsonFiles = getJsonFiles(matchedFolder, step, skip);
-    if (skip) {
-      jsonFiles.filter(f => skip.elements?.every(e => !f.includes(e)));
-    }
     if (!jsonFiles.length) {
       continue;
     }

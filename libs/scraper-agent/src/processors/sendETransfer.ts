@@ -349,7 +349,7 @@ async function logEvent(agent: Agent, input: SearchElement, eventName: string) {
       eventName,
     },
     page: agent.page.page,
-  })
+  }, [])
 }
 
 async function fillAmountToSend(agent: Agent, input: SearchElement, amount: number) {

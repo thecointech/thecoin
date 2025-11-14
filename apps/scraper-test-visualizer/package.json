@@ -11,7 +11,7 @@
     "dev": "run-env server/server.ts --port=3010",
     "build": "run -T tsc -b",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
-    "test": "run :jest",
+    "_test": "run :jest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

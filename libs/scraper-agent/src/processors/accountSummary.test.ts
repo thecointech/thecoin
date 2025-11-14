@@ -4,6 +4,8 @@ import { findAccountElements, saveAccountNavigation, saveBalanceElement, validat
 import { describe } from '@thecointech/jestutils';
 import { OverviewResponse } from "@thecointech/vqa";
 import type { ValueEvent } from "@thecointech/scraper";
+import { EventBus } from "@thecointech/scraper/events/eventbus";
+import { TestElmData } from "@thecointech/scraper-archive";
 
 
 jest.setTimeout(5 * 60 * 1000);
@@ -57,18 +59,49 @@ describe ("Correctly finds the balance element", () => {
 
 
 describe("Correctly finds the navigation element", () => {
-  const testData = getTestData("AccountsSummary", "navigate", "latest/TD");
-  it.each(testData)("For: %s", async (test) => {
-    await using agent = await test.agent();
+  const testData = getTestData("AccountsSummary", "navigate", "latest");
+  let candidates: TestElmData[]|undefined;
+  EventBus.get().onElement((_elm, _params, all) => {
+    candidates = all;
+  })
+
+  const tests = testData.flatMap(test => {
     const { response } : { response: OverviewResponse } = test.vqa("listAccounts")!;
-    const queryIter = test.vqa_iter("accountNavigateElement");
-    const elms = test.elm_iter("navigate-")
-    for (const [account, query, elm] of zip(response.accounts, [...queryIter], [...elms])) {
-      // Get the real account number
-      account!.account_number = query!.args[0] as string;
-      const found = await saveAccountNavigation(agent, account!);
-      expect(found.data.text).toEqual(elm!.data.text); // (Not sure this is working)
+    const queryIter = Array.from(test.vqa_iter("accountNavigateElement"));
+    const elms = Array.from(test.elm_iter("navigate-"))
+    return response.accounts.map((account, i) => {
+      return {
+        key: test.key,
+        account,
+        elm: elms[i],
+        query: queryIter[i],
+        name: account.account_name,
+        test,
+      }
+    })
+  })
+
+
+  it.each(tests)("For: $key - $name", async ({key, name, account, query, elm, test}) => {
+    await using agent = await test.agent();
+    // Get the real account number
+    account!.account_number = query!.args[0] as string;
+    const found = await saveAccountNavigation(agent, account!);
+
+    // Double check this is within an "A" tag
+    const findAnchorLink = (test: TestElmData): boolean => {
+      if (test.data.tagName == "A") {
+        return true;
+      }
+      const parent = candidates?.find((c) => c.data.selector == test.data.parentSelector);
+      if (!parent) {
+        return false;
+      }
+      return findAnchorLink(parent!);
     }
+    expect(findAnchorLink(found)).toBeTruthy()
+    expect(found.data.text).toEqual(elm.data.text);
+    expect(found.data.selector).toEqual(elm.data.selector);
   })
 }, hasTestingPages)
 

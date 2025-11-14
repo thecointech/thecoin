@@ -25,6 +25,14 @@ export const TestViewer: React.FC<TestViewerProps> = ({ test }) => {
   const [selectedSnapshot, setSelectedSnapshot] = useState<number | null>(null);
   const actions = TestsReducer.useApi();
 
+  const updateFailing = async () => {
+    const failingResponse = await fetch('/api/failing');
+    if (failingResponse.ok) {
+      const failingData = await failingResponse.json();
+      actions.setFailingTests(failingData);
+    }
+  }
+
   const fetchTestResults = async () => {
     setLoading(true);
     setError(null);
@@ -91,6 +99,7 @@ export const TestViewer: React.FC<TestViewerProps> = ({ test }) => {
       console.log(result);
       if (result.success) {
         await fetchTestResults();
+        await updateFailing();
       }
     } catch (error) {
       console.error(error);
@@ -125,12 +134,7 @@ export const TestViewer: React.FC<TestViewerProps> = ({ test }) => {
         console.log('Override applied:', result.changes);
 
         // Reload failing tests
-        const failingResponse = await fetch('/api/failing');
-        if (failingResponse.ok) {
-          const failingData = await failingResponse.json();
-          actions.setFailingTests(failingData);
-        }
-
+        await updateFailing();
         // Refresh test results to show new override
         await fetchTestResults();
       } else {
