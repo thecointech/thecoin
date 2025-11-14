@@ -2,7 +2,7 @@ import { AsyncEventEmitter, type EventListeners } from "./asyncEventEmitter";
 import type { ElementSearchParams, FoundElement } from "@thecointech/scraper-types";
 
 type EventMap = {
-  "elementFound": [element: FoundElement, params: ElementSearchParams, candidates?: FoundElement[]]
+  "elementFound": [element: FoundElement, params: ElementSearchParams, candidates: FoundElement[]]
 }
 export class EventBus extends AsyncEventEmitter<EventMap> {
   static instance: EventBus;
