@@ -5,13 +5,8 @@ import type { TestInfo } from '../testInfo';
 import { useFilteredTests } from '../state/reducer';
 import styles from './TestGrid.module.less';
 
-interface TestGridProps {
-  // tests: TestInfo[];
-  // failingTests: Set<string>;
-  // onTestClick: (test: TestInfo) => void;
-}
 
-const TestGrid: React.FC<TestGridProps> = () => {
+const TestGrid = () => {
   const tests = useFilteredTests();
   const history = useHistory();
 

@@ -29,7 +29,7 @@ export function getTestData<T extends TestData>(
     const matchedFolder = path.dirname(match);
     const machedFilename = path.basename(match);
     const step = parseInt(machedFilename.split('-')[0]);
-    if (isNaN(step)) {
+    if (Number.isNaN(step)) {
       throw new Error(`Invalid step: ${machedFilename}`);
     }
     const key = `${path.relative(testFolder, matchedFolder).replaceAll(path.sep, ':')}:${step}`
