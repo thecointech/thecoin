@@ -1,28 +1,29 @@
 import { existsSync, readFileSync } from "fs";
 import path from "path";
-import { Page } from "puppeteer";
-import { FoundElement, ElementSearchParams, ElementData, VqaCallData, TestElmData, TestSchData } from "../src/types";
-import { waitPageStable } from "../src/utilities";
-import { OverrideData, applyOverrides } from "./overrides";
-import { isEqual } from "lodash";
+import type { Page } from "puppeteer";
+import type { VqaCallData, TestElmData, TestSchData } from "./types";
+import type { OverrideData } from "./overrides";
+import { log } from "@thecointech/logging";
+import open from 'open';
+import { getSnapshot, getSnapshots, type SnapshotMeta } from "./snapshots";
 
 export class TestData {
   public readonly key: string;
   public readonly target: string;
-  public readonly step: string;
+  public readonly step: number;
   public readonly matchedFolder: string;
   protected readonly jsonFiles: string[];
   private readonly overrideData: OverrideData;
-  private readonly getPage: () => Promise<Page>;
+  private readonly getPage: (url: string) => Promise<Page>;
 
   constructor(
     key: string,
     target: string,
-    step: string,
+    step: number,
     matchedFolder: string,
     jsonFiles: string[],
     overrideData: OverrideData,
-    getPage: () => Promise<Page>
+    getPage: (url: string) => Promise<Page>
   ) {
     this.key = key;
     this.target = target;
@@ -33,17 +34,32 @@ export class TestData {
     this.getPage = getPage;
   }
 
-  hasSnapshot(): boolean {
-    return existsSync(path.join(this.matchedFolder, `${this.step}.mhtml`));
-  }
-
+  _page: Page | null = null;
   async page(): Promise<Page> {
+    if (this._page) {
+      return this._page;
+    }
     const filename = `${this.matchedFolder}/${this.step}.mhtml`;
     const url = `file://${filename.replace(" ", "%20")}`;
-    const page = await this.getPage();
-    await page.goto(url);
-    await waitPageStable(page);
-    return page;
+    this._page = await this.getPage(url);
+    return this._page;
+  }
+
+  get failing() {
+    return this.names().filter(name => !isElementPassing(this, name));
+  }
+
+  png(): void {
+    const filename = `${this.matchedFolder}/${this.step}.png`;
+    if (!existsSync(filename)) {
+      log.error(`PNG file not found: ${filename}`);
+    }
+    else {
+      // Fire-and-forget - don't await so it opens immediately
+      open(filename)
+        .then(proc => proc.unref())
+        .catch(err => log.error('Failed to open image:', err));
+    }
   }
 
   elements(): string[] {
@@ -51,6 +67,9 @@ export class TestData {
   }
   searches(): string[] {
     return this.jsonFiles.filter(f => f.endsWith("-sch.json"));
+  }
+  names(): string[] {
+    return this.elements().map(f => f.match(/(.+)-elm.json/)?.[1]!);
   }
 
   private json<T>(file: string): T {
@@ -95,21 +114,34 @@ export class TestData {
     }
   }
 
-  elm(name: string): TestElmData | null {
+  elm(name: string, withOverride=true): TestElmData | null {
     const element = this.jsonFiles.find(f => f.includes(name) && f.endsWith("-elm.json"));
     if (!element) {
       return null;
     }
     const testName = element.match(/(.+)-elm.json/)?.[1];
-    const rawJson: TestElmData = JSON.parse(readFileSync(path.join(this.matchedFolder, element), "utf-8"));
-    applyOverrides(this.overrideData, this.key, testName!, rawJson);
+    const rawJson: TestElmData = this.json<TestElmData>(element);
+
+    if (withOverride) {
+      const elementOverride = this.override(testName!);
+      if (elementOverride) {
+        if (elementOverride.text !== undefined) rawJson.data.text = elementOverride.text;
+        if (elementOverride.selector !== undefined) rawJson.data.selector = elementOverride.selector;
+      }
+    }
+
+    // Clean up spaces in text, older test files did not clean
+    // before writing...
+    if (rawJson.data.text) {
+      rawJson.data.text = rawJson.data.text.replace(/\s+/g, " ").trim();
+    }
     return rawJson;
   }
 
   *elm_iter(fnName: string): Generator<TestElmData, void, unknown> {
     const files = this.jsonFiles.filter(f => f.includes(fnName) && f.endsWith("-elm.json"));
     for (const file of files) {
-      yield this.json<TestElmData>(file);
+      yield this.elm(file)!;
     }
   }
 
@@ -118,8 +150,12 @@ export class TestData {
     if (!search) {
       return null;
     }
-    const rawJson: TestSchData = JSON.parse(readFileSync(path.join(this.matchedFolder, search), "utf-8"));
+    const rawJson: TestSchData = this.json<TestSchData>(search);
     return rawJson;
+  }
+
+  snapshots(name: string, limit: number = 1): SnapshotMeta[] {
+    return getSnapshots(this.matchedFolder, name, limit);
   }
 
   gold(name: string) {
@@ -135,6 +171,17 @@ export class TestData {
     return null;
   }
 
+  override(element: string) {
+    const overrides = this.overrideData.overrides?.[this.key];
+    if (overrides) {
+      const elementOverride = overrides[element];
+      if (elementOverride) {
+        return elementOverride;
+      }
+    }
+    return null;
+  }
+
   toString(): string {
     return this.key;
   }
@@ -145,11 +192,11 @@ export class TestData {
     constructor: new (
       key: string,
       target: string,
-      step: string,
+      step: number,
       matchedFolder: string,
       jsonFiles: string[],
       overrideData: OverrideData,
-      getPage: () => Promise<Page>
+      getPage: (url: string) => Promise<Page>
     ) => T
   ): T {
     return new constructor(
@@ -180,3 +227,19 @@ function scoreArgs(arg: any, clean: any) {
       return Infinity;
   }
 }
+function isElementPassing(test: TestData, name: string) {
+  const elm = test.elm(name);
+  const meta = test.snapshots(name)[0];
+  if (!meta) {
+    return true;
+  }
+  const snapshot = getSnapshot(meta);
+  if (snapshot?.found?.data === undefined) {
+    return false;
+  }
+  return (
+    elm?.data.text == snapshot.found.data.text &&
+    elm?.data.selector == snapshot.found.data.selector
+  );
+}
+

@@ -1,8 +1,8 @@
 import type { ElementHandle, Frame, Page } from 'puppeteer';
-import type { Coords, ElementData, SearchElementData, ElementSearchParams, FoundElement, SearchElement } from './types';
+import type { Coords, ElementData, SearchElementData, ElementSearchParams, FoundElement, SearchElement, Bounds, ScoreElement } from '@thecointech/scraper-types';
 import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
-import { Bounds, scoreElement } from './elements.score';
+import { scoreElement } from './elements.score';
 import { ElementNotFoundError, PageNotInteractableError } from './errors';
 import { EventBus } from './events/eventbus';
 
@@ -18,7 +18,9 @@ declare global {
 const MAX_SIBLING_DISTANCE = 50;
 const BUCKET_PIXELS = 10
 
-export async function getElementForEvent(params: ElementSearchParams) {
+type ElementFoundCallback = (candidate: FoundElement, params: ElementSearchParams, candidates: FoundElement[]) => Promise<void>;
+
+export async function getElementForEvent(params: ElementSearchParams, onFound: ElementFoundCallback = notifyElementFound) {
 
   const { page, event, timeout = 30000, minScore = 70, maxTop = Number.MAX_VALUE } = params;
 
@@ -37,16 +39,16 @@ export async function getElementForEvent(params: ElementSearchParams) {
   let bestCandidate: FoundElement|null = null;
   while (Date.now() < startTick + timeout) {
 
-    const candidates = await fetchAllCandidates(page, event, bounds);
-    const candidate = await getBestCandidate(candidates, event, minScore);
+    const allCandidates = await fetchAllCandidates(page, bounds);
+    const scoredCandidates = await scoreAllCandidates(allCandidates, event, bounds);
+    const candidate = await getBestCandidate(scoredCandidates, event, minScore);
 
     if (candidate) {
-      // Watchers can get notified of every found element
-      await EventBus.get().emitElement(candidate, params);
+      await onFound(candidate, params, scoredCandidates);
       return candidate;
     }
 
-    const thisRunsBest = candidates[0]
+    const thisRunsBest = scoredCandidates[0]
     if (thisRunsBest && thisRunsBest.score > (bestCandidate?.score ?? 0)) {
       bestCandidate = thisRunsBest;
     }
@@ -59,8 +61,13 @@ export async function getElementForEvent(params: ElementSearchParams) {
   throw new ElementNotFoundError(event, bestCandidate);
 }
 
-async function fetchAllCandidates(page: Page, event: SearchElementData, bounds: Bounds) {
-  const candidates: FoundElement[] = [];
+async function notifyElementFound(candidate: FoundElement, params: ElementSearchParams, candidates: FoundElement[]) {
+  // Watchers can get notified of every found element
+  await EventBus.get().emitElement(candidate, params, candidates);
+}
+
+export async function fetchAllCandidates(page: Page, bounds: Bounds) {
+  const candidates: SearchElement[] = [];
   const frames = page.frames();
   const nFrames = frames.length;
   let nErrors = 0;
@@ -70,7 +77,7 @@ async function fetchAllCandidates(page: Page, event: SearchElementData, bounds: 
   for (const frame of frames) {
     try {
       // Get all elements in frame
-      const frameCandidates = await getCandidates(frame, event, bounds);
+      const frameCandidates = await getCandidates(frame, bounds);
       candidates.push(...frameCandidates);
     }
     catch (e) {
@@ -90,6 +97,29 @@ async function fetchAllCandidates(page: Page, event: SearchElementData, bounds: 
   return candidates;
 }
 
+export async function scoreAllCandidates<T extends { data: ElementData }>(candidates: T[], event: SearchElementData, bounds: Bounds) {
+  // Build selector index for efficient parent lookups
+  // const selectorIndex = undefined;
+
+  const selectorIndex = new Map<string, ElementData>(
+    candidates.map(c => [c.data.selector, c.data])
+  );
+
+  const r: (T & ScoreElement)[] = [];
+  for (let i = 0; i < candidates.length; i++) {
+    const el = candidates[i];
+    const score = await scoreElement(el.data, event, bounds, selectorIndex);
+    // NaN can't sort, so if one slips through, ditch it.
+    if (!Number.isNaN(score.score)) {
+      r.push({
+        ...el,
+        ...score
+      })
+    }
+  }
+  return r;
+}
+
 let lastDbgLogMessage: string;
 function maybeLogMessage(message: string) {
   if (lastDbgLogMessage != message) {
@@ -98,7 +128,7 @@ function maybeLogMessage(message: string) {
   }
 }
 
-async function getBestCandidate(candidates: FoundElement[], event: SearchElementData, minScore: number) {
+export async function getBestCandidate(candidates: FoundElement[], event: SearchElementData, minScore: number) {
   // Sort by score to see if any element is close enough
   const sorted = candidates.sort((a, b) => b.score - a.score);
   const candidate = sorted[0];
@@ -138,7 +168,7 @@ async function getBestCandidate(candidates: FoundElement[], event: SearchElement
   return null;
 }
 
-async function getCandidates(frame: Frame, event: SearchElementData, bounds: Bounds, timeout=300) {
+async function getCandidates(frame: Frame, bounds: Bounds, timeout=300) {
   // We are getting the occasional issue where getElementProps
   // is undefined.  This could potentially be a race condition
   // if this fn evaluates before evaluateOnNewDocument (?)
@@ -174,20 +204,7 @@ async function getCandidates(frame: Frame, event: SearchElementData, bounds: Bou
     const withSiblings = fillOutSiblingText(elements);
     messageToLogOnTimeout = "Scoring frame with " + withSiblings.length + " elements";
 
-    const candidates: FoundElement[] = [];
-    for (let i = 0; i < withSiblings.length; i++) {
-      messageToLogOnTimeout = `Scoring element: ${i} of ${withSiblings.length}`;
-      const el = withSiblings[i];
-      const score = await scoreElement(el.data, event, bounds);
-      // NaN can't sort, so if one slips through, ditch it.
-      if (!Number.isNaN(score.score)) {
-        candidates.push({
-          ...el,
-          ...score
-        })
-      }
-    }
-    return candidates;
+    return withSiblings;
   }
   finally {
     clearInterval(intervalLogger);
@@ -213,8 +230,10 @@ export async function registerElementAttrFns(page: Page) {
     eval(`window.getFontData = ${fns.getFontData};`)
     eval(`window.getLabelData = ${fns.getLabelData};`)
     eval(`window.getElementText = ${fns.getElementText};`)
+    eval(`window.getNodeValue = ${fns.getNodeValue};`)
     eval(`window.getSiblingText = ${fns.getSiblingText};`)
     eval(`window.getCoords = ${fns.getCoords};`)
+    eval(`window.isVisuallyHidden = ${fns.isVisuallyHidden};`)
     window.MAX_SIBLING_DISTANCE = fns.MAX_SIBLING_DISTANCE;
     window.getElementData = (el: HTMLElement, skipSibling?: boolean) => {
       const rawProps = getElementProps(el);
@@ -225,16 +244,12 @@ export async function registerElementAttrFns(page: Page) {
         const potentialSiblings = Array.from(allNodes)
           .filter(ps => (
             ps != el &&
-            //@ts-ignore
-            ps.checkVisibility({
-              checkOpacity: true,  // Check CSS opacity property too
-              checkVisibilityCSS: true // Check CSS visibility property too
-            })
+            !isVisuallyHidden(ps)
           ))
           .map(ps => ({
             element: ps,
             coords: getCoords(ps),
-            nodeValue: getElementText(ps),
+            nodeValue: getNodeValue(ps),
             selector: getSelector(ps)!, // note: null is tested in the filter
           }))
           .filter(ps => !!ps.nodeValue && !!ps.selector)
@@ -249,11 +264,31 @@ export async function registerElementAttrFns(page: Page) {
     getFontData: getFontData.toString(),
     getLabelData: getLabelData.toString(),
     getElementText: getElementText.toString(),
+    getNodeValue: getNodeValue.toString(),
     getSiblingText: getSiblingText.toString(),
     getCoords: getCoords.toString(),
+    isVisuallyHidden: isVisuallyHidden.toString(),
     MAX_SIBLING_DISTANCE: MAX_SIBLING_DISTANCE,
   });
 }
+
+
+const isVisuallyHidden = (el: Element) => {
+  if (!(el instanceof HTMLElement)) return true;
+  if (!el.checkVisibility({
+    checkOpacity: true,  // Check CSS opacity property too
+    checkVisibilityCSS: true // Check CSS visibility property too
+  })) {
+    return true;
+  }
+  const styles = getComputedStyle(el);
+
+  // Check for common "visually-hidden" patterns
+  const hasClipping = styles.clip !== 'auto' || styles.clipPath !== 'none';
+  const isTiny = (parseFloat(styles.height) <= 1 && parseFloat(styles.width) <= 1);
+  return (hasClipping && isTiny);
+}
+
 
 const getElementProps = (el: HTMLElement) => ({
   frame: getFrameUrl(),
@@ -261,6 +296,7 @@ const getElementProps = (el: HTMLElement) => ({
   name: el.getAttribute("name") ?? undefined,
   options: (el as HTMLSelectElement)?.options ? Array.from((el as HTMLSelectElement).options).map(o => o.text) : undefined,
   inputType: el.getAttribute("type") ?? undefined,
+  for: el.getAttribute("for") ?? undefined,
   role: el.getAttribute("role"),
   selector: getSelector(el),
   coords: getCoords(el),
@@ -268,8 +304,12 @@ const getElementProps = (el: HTMLElement) => ({
   label: getLabelData(el),
   // Placeholder text gets picked up by the VQA service, so we
   // need to include it here (as it's most like a text descendent)
-  text: el.innerText + (el.getAttribute("placeholder") || ""),
-  nodeValue: getElementText(el),
+  text: getElementText(el),
+  nodeValue: getNodeValue(el),
+  // Add a reference to the parent element.  This allows
+  // us to treat children of buttons etc as the button itself.
+  parentSelector: el.parentElement ? getSelector(el.parentElement) : null,
+  parentTagName: el.parentElement?.tagName?.toUpperCase(),
 })
 
 const getFrameUrl = () => {
@@ -371,7 +411,14 @@ export function getLabelData(elem: Element) {
   return _getLabelData(elem)
 }
 
-function getElementText(elem: Element) {
+function getElementText(el: HTMLElement) {
+  const base = el.innerText.replace(/\s+/g, ' ');
+  const placeholder = el.getAttribute("placeholder") || "";
+  const s = placeholder ? `${base} ${placeholder}` : base;
+  return s.trim();
+}
+
+function getNodeValue(elem: Element) {
   // Don't forget to include any CSS-defined content
   const getCssContent = (prop: string) => {
     const content = window.getComputedStyle(elem, "::" + prop).content
@@ -389,7 +436,7 @@ function getElementText(elem: Element) {
   const allContent = [priorContent, ...nodeContent, postContent].filter(c => !!c)
   return allContent
     .join(" ")
-    .replace(/\s+/, ' ')
+    .replace(/\s+/g, ' ')
     .trim()
 }
 
@@ -434,10 +481,16 @@ export const getAllElements = async (frame: Page|Frame, maxTop: number, querySel
         // due the `instanceof HTMLElement` check, but HTLM & body are not
         !["HTML", "BODY"].includes(el.tagName) &&
         //@ts-ignore
-        el.checkVisibility({
-          checkOpacity: true,  // Check CSS opacity property too
-          checkVisibilityCSS: true // Check CSS visibility property too
-        })
+        (
+          // Always include inputs, even a hidden
+          // input helps with scoring as it can be
+          // pointed to by another element.
+          el.tagName.toUpperCase() == "INPUT" ||
+          el.checkVisibility({
+            checkOpacity: true,  // Check CSS opacity property too
+            checkVisibilityCSS: true // Check CSS visibility property too
+          })
+        )
       ) ? getElementProps?.(el)
         : null
     ),
@@ -503,7 +556,7 @@ const fillOutSiblingText = (allElements: SearchElement[]) => {
   return bucketed.flat()
 }
 
-async function getDocumentBounds(page: Page, maxTop: number) {
+export async function getDocumentBounds(page: Page, maxTop: number) {
   const pageBounds = await page.evaluate(() => ({
     // Full document dimensions including scrollable content
     width: Math.max(

@@ -1,14 +1,14 @@
 import type { AxiosResponse } from "axios";
-import { AnyResponse, responseToElement } from "./vqaResponse";
+import { type AnyResponse, responseToElement } from "./vqaResponse";
 import { sleep } from "@thecointech/async";
 import { log } from "@thecointech/logging";
 import { enterValueIntoFound } from "@thecointech/scraper/replay";
-import { SearchElementData, FoundElement, SearchElement } from "@thecointech/scraper/types";
-import { Recorder, Registry } from "@thecointech/scraper/record";
+import type { SearchElementData, FoundElement, SearchElement } from "@thecointech/scraper-types";
+import { type Recorder, Registry } from "@thecointech/scraper/record";
 import { waitPageStable } from "@thecointech/scraper/utilities";
 import { _getImageFile } from "./getImage";
 import { _getPageIntent } from "./getPageIntent";
-import { SectionType } from "./processors/types";
+import type { SectionType } from "./processors/types";
 import { WrappedError } from "./errors";
 import { apis } from "./apis";
 import { clickElement, waitForValidIntent } from "./interactions";

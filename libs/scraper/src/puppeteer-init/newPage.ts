@@ -54,7 +54,8 @@ async function getPage(contextName = "default") {
       // No usable sandbox! If you are running on Ubuntu 23.10+ or another
       // Linux distro that has disabled unprivileged user namespaces with AppArmor...
       '--no-sandbox',
-      '--disable-setuid-sandbox'
+      '--disable-setuid-sandbox',
+      '--hide-scrollbars',
 
       // "--disable-accelerated-2d-canvas",
       // "--disable-gpu",

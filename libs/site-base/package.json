@@ -35,7 +35,7 @@
   ],
   "exports": {
     ".": "./build/index.js",
-    "./internal/server": "./internal/server/index.mjs",
+    "./internal/server": "./internal/server/index.ts",
     "./internal/build": "./internal/build.ts",
     "./jest.config": "./jest.config.js",
     "./*": [
@@ -47,6 +47,9 @@
     "*": {
       "build/index.d.ts": [
         "build/index.d.ts"
+      ],
+      "internal/server": [
+        "internal/server/index.ts"
       ],
       "*": [
         "build/*.d.ts",

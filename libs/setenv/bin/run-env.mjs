@@ -36,7 +36,7 @@ const findTsConfig = async () => {
 
     if (configs.length > 0) {
       // Look for build config first
-      const buildConfig = configs.find(f => f.includes('build'));
+      const buildConfig = configs.find(f => f.includes('build') || f.includes('app'));
       // Return full path to the config file
       const configFile = buildConfig ?? configs[0];
       return resolve(currentDir, configFile);
@@ -69,7 +69,7 @@ const loader = args.find(arg => arg.endsWith('.ts'))
 // Always attach experimental loader
 // NOTE: -es-module-specifier-resolution is no longer supported by node,
 // but is required by ts-node to correctly resolve imports
-env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --loader=${loader} --es-module-specifier-resolution=node`;
+env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --experimental-transform-types --loader=${loader} --es-module-specifier-resolution=node`;
 
 // If this is yarn script?
 if (executable != "node") {

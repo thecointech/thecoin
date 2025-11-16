@@ -1,7 +1,7 @@
 import { type Page } from 'puppeteer';
-import { AnyEvent, InputEvent } from '../types';
+import type { AnyEvent, InputEvent } from '@thecointech/scraper-types';
 import { log } from '@thecointech/logging';
-import { RecorderOptions } from './types';
+import type { RecorderOptions } from './types';
 import { Registry } from './registry';
 import { sleep } from '@thecointech/async';
 import { EventEmitter } from 'node:events';

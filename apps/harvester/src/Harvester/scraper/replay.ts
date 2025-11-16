@@ -1,5 +1,5 @@
 import { replay } from '@thecointech/scraper';
-import { ReplayResult } from '@thecointech/scraper/types';
+import type { ReplayResult } from '@thecointech/scraper-types';
 import { getReplayEvents } from '@thecointech/scraper-agent';
 import { ActionType } from '@/Harvester/scraper';
 import { getEvents } from '../events';

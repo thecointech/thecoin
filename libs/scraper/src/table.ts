@@ -1,14 +1,9 @@
 import { DateTime } from 'luxon';
-import { Page, } from 'puppeteer';
-import { ElementData } from './types';
-import { CurrencyType, getCurrencyConverter, guessCurrencyFormat, guessDateFormat } from './valueParsing';
+import type { Page } from 'puppeteer';
+import { type CurrencyType, getCurrencyConverter, guessCurrencyFormat, guessDateFormat } from './valueParsing';
 import { getAllElements } from './elements';
 import currency from 'currency.js';
-
-export type HistoryRow = {
-  date: DateTime;
-  values: (currency | undefined)[];
-}
+import type { HistoryRow, ElementData } from '@thecointech/scraper-types';
 
 export async function getTableData(page: Page) {
   const rawText = await getTextNodeData(page);

@@ -1,0 +1,27 @@
+{
+  "name": "@thecointech/scraper-test-visualizer",
+  "productName": "Scraper Test Visualizer",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Visual tool for viewing scraper element test results",
+  "author": "Stephen Taylor",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "dev": "run-env server/server.ts --port=3010",
+    "build": "run -T tsc -b",
+    "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
+    "_test": "run :jest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@thecointech/scraper": "workspace:^",
+    "@thecointech/scraper-archive": "workspace:^",
+    "@thecointech/shared": "workspace:^",
+    "semantic-ui-css": "^2.5.0",
+    "semantic-ui-react": "^2.1.5"
+  },
+  "devDependencies": {
+    "@thecointech/setenv": "workspace:^"
+  }
+}

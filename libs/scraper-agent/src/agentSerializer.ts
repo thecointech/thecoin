@@ -9,8 +9,8 @@ import { _getImage } from "./getImage";
 import { LoginFailedError } from "./errors";
 import { ApiCallEvent, bus } from "./eventbus";
 import { EventBus } from "@thecointech/scraper/events/eventbus";
-import type { AnyEvent, ElementSearchParams, FoundElement } from "@thecointech/scraper/types";
-import type { TestSchData } from "@thecointech/scraper";
+import type { AnyEvent, ElementSearchParams, FoundElement } from "@thecointech/scraper-types";
+import type { TestElmData, TestSchData } from "@thecointech/scraper-archive";
 import { File } from "@web-std/file";
 
 // How many pixels must change to consider it a new screenshot
@@ -96,22 +96,23 @@ export class AgentSerializer implements Disposable {
 
   onElement = async (found: FoundElement, search: ElementSearchParams) => {
     // Delete things that change too much
-    const { frame, ...data } = { ...found.data };
-    const { page, ...searchCopy } = {...search};
+    const { score, components, data } = found;
+    const { frame, ...elmData } = data;
+    const { page, ...searchCopy } = search;
     // We split the logged data into 2, the elm
     // file is just the element data, and sch is
     // just the search data.
-    const sch: TestSchData = {
-      score: found.score,
-      components: found.components,
-      search: searchCopy,
-    }
+    const sch: TestSchData = searchCopy;
+    const elm: TestElmData = {
+      data: elmData,
+      score,
+      components,
+    };
 
     // Log both JSON files with the same element number as they
     // represent a single step in the process
-    await this.logJson(`${search.event.eventName}-elm`, data, false);
+    await this.logJson(`${search.event.eventName}-elm`, elm, false);
     await this.logJson(`${search.event.eventName}-sch`, sch);
-    await this.logMhtml(search.page);
     if (this.writeScreenshotOnElement) {
       try {
         const image = await _getImage(search.page);
@@ -122,6 +123,8 @@ export class AgentSerializer implements Disposable {
         // Not fatal, so continue
       }
     }
+    // Log after screenshot, as that may increment the step.
+    await this.logMhtml(search.page);
   }
 
   onSection = async (section: SectionName) => {

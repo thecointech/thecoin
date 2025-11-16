@@ -2,9 +2,9 @@ import { log } from "@thecointech/logging";
 import { clickElement } from "../interactions";
 import { getAllElements } from "@thecointech/scraper/elements";
 import { sleep } from "@thecointech/async";
-import { Coords, SearchElement } from "@thecointech/scraper/types";
+import type { Coords, SearchElement } from "@thecointech/scraper-types";
 import { enterValueIntoFound } from "@thecointech/scraper/replay";
-import { BBox } from "@thecointech/vqa";
+import type { BBox } from "@thecointech/vqa";
 // Use regular levenshtein, not the modified version
 // in this case insertions are bad
 import { distance } from 'fastest-levenshtein';
@@ -349,7 +349,7 @@ async function logEvent(agent: Agent, input: SearchElement, eventName: string) {
       eventName,
     },
     page: agent.page.page,
-  })
+  }, [])
 }
 
 async function fillAmountToSend(agent: Agent, input: SearchElement, amount: number) {
