@@ -15,6 +15,10 @@ const deployedAt = JSON.stringify(new Date().toISOString());
 const renderConfig = getRendererConfig(deployedAt);
 const mainConfig = await getMainConfig(deployedAt);
 
+const suffix = process.env.CONFIG_NAME === 'prod'
+  ? ''
+  : ` - ${process.env.CONFIG_NAME}`;
+
 const config = {
   buildIdentifier: process.env.CONFIG_NAME,
   packagerConfig: {
@@ -55,9 +59,9 @@ const config = {
     new MakerDeb({
       options: {
         icon: 'assets/appicon.png',
-        name: `harvester-${process.env.CONFIG_NAME == 'prod' ? '' : process.env.CONFIG_NAME}`,
-        productName: 'Harvester',
-        genericName: 'Harvester',
+        name: `harvester${suffix.replace(' ', '')}`,
+        productName: `Harvester${suffix}`,
+        genericName: `Harvester${suffix}`,
         categories: ['Utility'],
       }
     })
