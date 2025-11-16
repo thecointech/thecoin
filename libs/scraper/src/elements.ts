@@ -486,10 +486,7 @@ export const getAllElements = async (frame: Page|Frame, maxTop: number, querySel
           // input helps with scoring as it can be
           // pointed to by another element.
           el.tagName.toUpperCase() == "INPUT" ||
-          el.checkVisibility({
-            checkOpacity: true,  // Check CSS opacity property too
-            checkVisibilityCSS: true // Check CSS visibility property too
-          })
+          !isVisuallyHidden(el)
         )
       ) ? getElementProps?.(el)
         : null

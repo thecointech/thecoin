@@ -12,11 +12,11 @@ describe("It scores the correct element the highest in archive", () => {
   runTests(tests);
 }, hasTestingPages());
 
-// describe("It scores the correct element the highest in archive (only the failing tests)", () => {
-//   const testData = getTestData("*", "elm.json", "archive");
-//   const failing = testData.flatMap(t => t.failing.map(f => ({ testKey: t.key, test: t, name: f })))
-//   runTests(failing);
-// }, hasTestingPages() && IsManualRun)
+describe("It scores the correct element the highest in archive (only the failing tests)", () => {
+  const testData = getTestData("*", "elm.json", "archive");
+  const failing = testData.flatMap(t => t.failing.map(f => ({ testKey: t.key, test: t, name: f })))
+  runTests(failing);
+}, hasTestingPages() && IsManualRun)
 
 function runTests(tests: { testKey: string, test: TestData, name: string }[]) {
 
@@ -26,20 +26,28 @@ function runTests(tests: { testKey: string, test: TestData, name: string }[]) {
     counter.start();
     const sch = test.sch(name);
     const elm = test.elm(name);
-    expect(elm).toBeDefined();
-    expect(sch).toBeDefined();
+    try {
+      expect(elm).toBeDefined();
+      expect(sch).toBeDefined();
 
-    const cache = readElementCache(test);
-    if (!cache) {
-      throw new Error("No cache found for " + test.key);
+      const cache = readElementCache(test);
+      if (!cache) {
+        throw new Error("No cache found for " + test.key);
+      }
+      const candidates = cache.candidates.map(c => ({ data: c }));
+      const scoredElements = await scoreAllCandidates(candidates, sch.event, cache.bounds);
+      const sorted = scoredElements.sort((a, b) => b.score - a.score);
+      const found = sorted[0];
+      expect(found.data.text).toEqual(elm.data.text);
+      expect(found.data.selector).toEqual(elm.data.selector);
     }
-    const candidates = cache.candidates.map(c => ({ data: c }));
-    const scoredElements = await scoreAllCandidates(candidates, sch.event, cache.bounds);
-    const sorted = scoredElements.sort((a, b) => b.score - a.score);
-    const best = sorted[0];
-    expect(best.data.text).toEqual(elm.data.text);
-    expect(best.data.selector).toEqual(elm.data.selector);
-    counter.end();
+    catch (e) {
+      console.error(e);
+      throw e;
+    }
+    finally {
+      counter.end();
+    }
   })
 }
 
