@@ -30,7 +30,7 @@ for (let i = 0; i < tests.length; i++) {
   const { test, name } = tests[i];
   if (i % 10 == 0 && i > 0) {
     console.log(`Processing ${i} of ${tests.length} (${failed.length} failed)`)
-    const estTimeRemain = (Date.now() - timestamp.getTime()) / (i + 1) * (tests.length - i);
+    const estTimeRemain = (Date.now() - timestamp.getTime()) / i * (tests.length - i);
     const estTimeRemainMessage = estTimeRemain > 60_000
       ? `${(estTimeRemain / 60_000).toFixed(2)} minutes`
       : `${(estTimeRemain / 1000).toFixed(2)} seconds`;
