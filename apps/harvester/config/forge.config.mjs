@@ -27,8 +27,6 @@ const config = {
     //   unpack: './node_modules/node-notifier/**/*'
     // },
     productName: "TheCoin - Harvester",
-    // name: "iamHarvester",
-    // executableName: "iamHarvester3",
     icon: 'assets/appicon',
     appBundleId: utils.fromBuildIdentifier({
       prod: 'com.TheCoin.Harvester',
@@ -59,7 +57,8 @@ const config = {
     new MakerDeb({
       options: {
         icon: 'assets/appicon.png',
-        name: `harvester${suffix.replace(' ', '')}`,
+        name: `harvester${suffix.replaceAll(' ', '')}`,
+        homepage: process.env.URL_SITE_LANDING,
         productName: `Harvester${suffix}`,
         genericName: `Harvester${suffix}`,
         categories: ['Utility'],

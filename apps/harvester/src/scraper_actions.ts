@@ -2,12 +2,13 @@ import type { HarvestConfig } from './types';
 import type { ValueResult, ValueType} from "@thecointech/scraper-types";
 import type { CreditDetails } from './Harvester/types';
 import type { CoinAccount, CoinAccountDetails, StoredData } from '@thecointech/store-harvester';
-import { ActionType } from './Harvester/scraper';
-import { BackgroundTaskCallback } from './BackgroundTask/types';
+import type { ActionType } from './Harvester/scraper';
+import type { BackgroundTaskCallback } from './BackgroundTask/types';
 import type { OptionPacket, QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
 import type { AutoConfigParams } from './Harvester/agent';
 import type { BankConnectMap } from './Harvester/events';
 import type { WebsiteEndpoints } from './openExternal';
+import type { RendererBankType } from './Agent/state/types';
 
 export type Result<T> = {
   error?: string;
@@ -33,7 +34,7 @@ export type ScraperBridgeApi = {
   // Reset 2FA without doing a full banking setup
   // Useful if your chequing acc loses it's 2FA token
   // but you don't want to send unnecessary etransfers
-  twofaRefresh: (actionName: ActionType, refreshProfile: boolean) => Promise<Result<boolean>>,
+  twofaRefresh: (actionName: RendererBankType) => Promise<Result<boolean>>,
 
   onAskQuestion: (callback: (question: QuestionPacket|OptionPacket) => void) => () => void;
   replyQuestion: (response: ResponsePacket) => Promise<Result<boolean>>;

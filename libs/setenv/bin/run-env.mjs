@@ -94,7 +94,7 @@ if (executable != "node") {
   }
 }
 // Electron doesn't support transform-types flag, but everyone else needs it.
-else if (!env.ELECTRON_DISABLE_SANDBOX) {
+else if (!env.ELECTRON_DISABLE_SANDBOX && !process.env.HARVESTER_DEBUG_LIVE) {
   env.NODE_OPTIONS = `${env.NODE_OPTIONS ?? ""} --experimental-transform-types`;
 }
 

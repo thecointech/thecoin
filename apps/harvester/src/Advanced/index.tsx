@@ -6,6 +6,7 @@ import { DimmerCallback } from './types';
 import { BrowserControls } from './BrowserControls';
 import styles from './index.module.less';
 import { ExportConfig } from './ExportConfig';
+import { RefreshTwoFA } from './RefreshTwoFA';
 // import { OverrideHarvesterState } from './OverrideHarvesterState';
 
 
@@ -42,6 +43,10 @@ export const Advanced = () => {
       <Segment>
         <Header size="small">Logging</Header>
         <LoggingOptions withDimmer={withDimmer} paused={paused}/>
+      </Segment>
+      <Segment>
+        <Header size="small">Refresh Two-Factor Authentication</Header>
+        <RefreshTwoFA paused={paused}/>
       </Segment>
       <Segment>
         <Header size="small">Export Harvester data</Header>
