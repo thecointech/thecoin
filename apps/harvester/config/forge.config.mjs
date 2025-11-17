@@ -11,10 +11,13 @@ import { getCSP } from './csp.mjs';
 import { getRendererConfig } from './webpack.renderer.mjs';
 import { nativeModules, getMainConfig } from './webpack.main.mjs';
 
-
 const deployedAt = JSON.stringify(new Date().toISOString());
 const renderConfig = getRendererConfig(deployedAt);
 const mainConfig = await getMainConfig(deployedAt);
+
+const suffix = process.env.CONFIG_NAME === 'prod'
+  ? ''
+  : ` - ${process.env.CONFIG_NAME}`;
 
 const config = {
   buildIdentifier: process.env.CONFIG_NAME,
@@ -23,8 +26,17 @@ const config = {
     // asar: {
     //   unpack: './node_modules/node-notifier/**/*'
     // },
+    productName: "TheCoin - Harvester",
+    // name: "iamHarvester",
+    // executableName: "iamHarvester3",
     icon: 'assets/appicon',
-    appBundleId: utils.fromBuildIdentifier({ beta: 'com.beta.harvester', prod: 'com.harvester' }),
+    appBundleId: utils.fromBuildIdentifier({
+      prod: 'com.TheCoin.Harvester',
+      prodbeta: 'com.TheCoin.Harvester', // This is the same as prod so you can't install both beta/prod
+      prodtest: "com.TheCoin.Harvester.test",
+      development: "com.TheCoin.Harvester.dev"
+    }),
+    artifactName: `harvester-${process.env.CONFIG_NAME}-{version}-{arch}.{ext}`,
     // extraResource: [
     //   // Include our assets outside of the asar
     //   // file so we can reference them by absolute path
@@ -47,6 +59,10 @@ const config = {
     new MakerDeb({
       options: {
         icon: 'assets/appicon.png',
+        name: `harvester${suffix.replace(' ', '')}`,
+        productName: `Harvester${suffix}`,
+        genericName: `Harvester${suffix}`,
+        categories: ['Utility'],
       }
     })
   ],

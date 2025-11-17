@@ -21,5 +21,5 @@ export function initMain() {
       return wallet;
     }
     return undefined;
-  }, true);
+  }, false);
 }

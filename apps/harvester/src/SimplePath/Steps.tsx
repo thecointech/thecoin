@@ -1,15 +1,31 @@
 import { Step } from "semantic-ui-react"
 import { DefaultPathProps, usePathIndex } from "./types"
 import { Link } from "react-router-dom"
+import styles from "./Steps.module.less"
+import { useEffect, useRef } from "react"
+import React from "react"
 
 type PathStepsProps<T = never> = DefaultPathProps<T> & {
   data: T
 }
 export const PathSteps = <T = never>({path, data}: PathStepsProps<T>) => {
   const idx = usePathIndex();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const activeStepRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (activeStepRef.current && containerRef.current) {
+      activeStepRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center'
+      });
+    }
+  }, [idx]);
+
   return (
-    <div>
-      <Step.Group ordered>
+    <div className={styles.stepsContainer} ref={containerRef}>
+      <Step.Group ordered unstackable>
         {
           path.routes.map((r, i) => (
             <PathStep
@@ -19,6 +35,7 @@ export const PathSteps = <T = never>({path, data}: PathStepsProps<T>) => {
               isCompleted={r.isComplete}
               to={`/${path.groupKey}/${i}`}
               active={idx === i}
+              stepRef={idx === i ? activeStepRef : null}
               data={data} />
           ))
         }
@@ -33,15 +50,17 @@ type PathStepProps<T = never> = {
   isCompleted?: (data: T) => boolean
   to: string
   active: boolean
-  // disabled?: boolean
+  stepRef?: React.RefObject<HTMLDivElement>|null
   data: T
 }
 
-const PathStep = <T = never>(p: PathStepProps<T>) => (
-  <Step as={Link} to={p.to} completed={p.isCompleted?.(p.data)} active={p.active}>
-    <Step.Content>
-      <Step.Title>{p.title}</Step.Title>
-      <Step.Description>{p.description}</Step.Description>
-    </Step.Content>
-  </Step>
+const PathStep = <T = never>({ title, description, isCompleted, to, active, stepRef, data }: PathStepProps<T>) => (
+    <Step as={Link} to={to} completed={isCompleted?.(data)} active={active}>
+      <Step.Content>
+        <div ref={stepRef}>
+          <Step.Title>{title}</Step.Title>
+          <Step.Description>{description}</Step.Description>
+        </div>
+      </Step.Content>
+    </Step>
 )

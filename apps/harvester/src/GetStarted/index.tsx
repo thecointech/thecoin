@@ -50,7 +50,6 @@ export const Browser = () => {
 
       <ContentSection.Next
         to="/account"
-        content="Connect your Coin Account"
         disabled={!hasInstalled}
       />
     </ContentSection>

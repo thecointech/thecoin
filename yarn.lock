@@ -26807,6 +26807,7 @@ __metadata:
     eslint-plugin-import: "npm:^2.25.0"
     fork-ts-checker-webpack-plugin: "npm:^7.2.13"
     node-notifier: "npm:^10.0.0"
+    open: "npm:^8.4.0"
     react-router-dom: "npm:^5.1.2"
     semantic-ui-css: "npm:^2.5.0"
     semantic-ui-react: "npm:^2.1.4"
