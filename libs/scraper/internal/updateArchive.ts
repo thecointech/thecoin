@@ -45,7 +45,7 @@ async function processAll() {
 
 function logProgress(i: number, tests: any[], failed: TestID[]) {
   console.log(`Processing ${i} of ${tests.length} (${failed.length} failed)`);
-  const estTimeRemain = (Date.now() - timestamp.getTime()) / (i + 1) * (tests.length - i);
+  const estTimeRemain = (Date.now() - timestamp.getTime()) / i * (tests.length - i);
   const estTimeRemainMessage = estTimeRemain > 60000
     ? `${(estTimeRemain / 60000).toFixed(2)} minutes`
     : `${(estTimeRemain / 1000).toFixed(2)} seconds`;
@@ -90,3 +90,5 @@ async function updateTest(test: TestData, name: string) {
     throw new Error(`Found different selector for ${test.key} - ${name}`);
   }
 }
+
+await processAll();

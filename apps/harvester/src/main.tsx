@@ -13,7 +13,7 @@ import { initialize } from './init';
 
 // Set the document title based on the channel
 const channel = process.env.CONFIG_NAME;
-const channelSuffix = channel && channel !== 'prod' ? ` [${channel.toUpperCase()} - ${process.env.TC_DEPLOYED_AT}]` : '';
+const channelSuffix = channel && channel !== 'prod' ? ` [${channel.toUpperCase()} - ${process.env.TC_DEPLOYED_AT || 'unknown'}]` : '';
 document.title = `TheCoin - Harvester${channelSuffix}`;
 
 const store = await initialize()
