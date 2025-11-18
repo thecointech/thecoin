@@ -37,7 +37,7 @@ export async function twofaRefresh(type: RendererBankType, callback: BackgroundT
     const wasSuccess = result.events.events.find(e => isSection(e) && e.section === "TwoFA");
     const error = wasSuccess ? undefined : "TwoFA not found in processed events";
     logger.complete({ result: wasSuccess ? "true" : "false", error });
-    return true;
+    return !!wasSuccess;
   }
   catch (e) {
     const message = getErrorMessage(e);

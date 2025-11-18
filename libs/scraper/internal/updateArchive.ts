@@ -21,7 +21,7 @@ async function processAll() {
   const failed: TestID[] = [];
   for (let i = 0; i < tests.length; i++) {
     const { test, name } = tests[i];
-    if (i % 10 == 0 && i > 0) {
+    if (i % 10 === 0 && i > 0) {
       logProgress(i, tests, failed);
     }
     try {
@@ -45,7 +45,8 @@ async function processAll() {
 
 function logProgress(i: number, tests: any[], failed: TestID[]) {
   console.log(`Processing ${i} of ${tests.length} (${failed.length} failed)`);
-  const estTimeRemain = (Date.now() - timestamp.getTime()) / i * (tests.length - i);
+  const elapsed = Date.now() - timestamp.getTime();
+  const estTimeRemain = (tests.length - i) * (elapsed / i);
   const estTimeRemainMessage = estTimeRemain > 60000
     ? `${(estTimeRemain / 60000).toFixed(2)} minutes`
     : `${(estTimeRemain / 1000).toFixed(2)} seconds`;
@@ -84,7 +85,7 @@ async function updateTest(test: TestData, name: string) {
   const found = await getElementForEvent({
     ...sch,
     page,
-    timeout: 500
+    timeout: 1000
   }, onFound);
   if (found.data.selector !== elm.data.selector) {
     throw new Error(`Found different selector for ${test.key} - ${name}`);

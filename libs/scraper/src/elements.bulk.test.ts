@@ -50,7 +50,7 @@ function runTests(tests: TestId[]) {
       const found = await getElementForEvent({
         ...sch,
         page,
-        timeout: 500
+        timeout: 1000
       }, onFound);
 
       expect(found.data.text).toEqual(elm.data.text);

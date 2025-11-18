@@ -21,7 +21,7 @@ export async function updateTest(key: string, element: string) {
   const found = await getElementForEvent({
     ...sch,
     page,
-    timeout: 500
+    timeout: 1000
   }, onFound);
 
   return (
