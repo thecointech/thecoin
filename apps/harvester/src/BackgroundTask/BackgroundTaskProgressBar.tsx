@@ -37,8 +37,8 @@ export const BackgroundTaskProgressBar = ({ type, subTask }: Props) => {
   }
 
   const completed = getCompleted(bgTask.subTasks);
-  const numCompleted = Math.min(completed.length + 1, bgTask.subTasks.length);
-  const message = `${numCompleted} of ${bgTask.subTasks.length}`;
+  const numCompleted = Math.min(completed.length, bgTask.subTasks.length);
+  const message = `${1 + bgTask.subTasks.length - numCompleted} of ${bgTask.subTasks.length}`;
   return <BackgroundTaskProgressBarElement task={bgTask} taskId={message} />
 }
 

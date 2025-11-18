@@ -24,7 +24,11 @@ export async function autoConfigure({ type, config, visible }: AutoConfigParams,
   // Create the logger quickly, as that triggers the background task/loading screen
   const toSkip = getSectionsToSkip(type);
   const toProcess = sections.filter(s => !toSkip.includes(s));
-  const logger = new ScraperCallbacks("record", callback, toProcess);
+  const logger = new ScraperCallbacks({
+    taskType: "record",
+    uiCallback: callback,
+    sections: toProcess,
+  });
 
   // This should do nothing, but call it anyway
   await downloadRequired(callback);

@@ -8,7 +8,9 @@
       "name": "App - Development",
       "request": "launch",
       "runtimeArgs": [
-        "dev"
+        "dev",
+        "--",
+        "--start-initialized"
       ],
       "runtimeExecutable": "yarn",
       "skipFiles": [

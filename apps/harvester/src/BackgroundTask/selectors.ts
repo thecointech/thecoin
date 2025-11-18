@@ -22,7 +22,9 @@ export function hasSubTasks(task?: BackgroundTaskInfo): task is GroupAndSubTask 
 }
 
 export function isRunning(task?: BackgroundTaskInfo): boolean {
-  return task && !task.completed || false;
+  // Task is complete either if marked complete or if percent reached 100
+  // If it is failed it is complete but percent < 100
+  return !!(task && (!task.completed && (task.percent ?? 0) < 100));
 }
 
 export function isSuccess(task?: BackgroundTaskInfo): boolean|undefined {

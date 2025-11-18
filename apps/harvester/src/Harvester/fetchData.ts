@@ -1,10 +1,10 @@
 import { DateTime } from 'luxon';
 import currency from 'currency.js';
 import { getValues } from './scraper';
-import { BackgroundTaskCallback } from '@/BackgroundTask';
+import { ScraperCallbacks } from './scraper/callbacks';
 import { ChequeBalanceResult, VisaBalanceResult } from '@thecointech/scraper-agent/types';
 
-export async function getChequingData(callback?: BackgroundTaskCallback) : Promise<ChequeBalanceResult> {
+export async function getChequingData(callback: ScraperCallbacks) : Promise<ChequeBalanceResult> {
   if (process.env.HARVESTER_OVERRIDE_CHQ_BALANCE) {
     return {
       balance: currency(process.env.HARVESTER_OVERRIDE_CHQ_BALANCE),
@@ -24,7 +24,7 @@ export async function getChequingData(callback?: BackgroundTaskCallback) : Promi
   }
 }
 
-export async function getVisaData(lastTxDate?: DateTime, callback?: BackgroundTaskCallback) : Promise<VisaBalanceResult> {
+export async function getVisaData(callback: ScraperCallbacks, lastTxDate?: DateTime) : Promise<VisaBalanceResult> {
   if (process.env.HARVESTER_OVERRIDE_VISA_BALANCE) {
     const data = JSON.parse(process.env.HARVESTER_OVERRIDE_VISA_BALANCE);
     return {

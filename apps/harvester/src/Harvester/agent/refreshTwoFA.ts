@@ -19,7 +19,11 @@ export async function twofaRefresh(type: RendererBankType, callback: BackgroundT
   const toProcess = ["Initial", "CookieBanner", "Landing", "Login", "TwoFA"];
   const toSkip = sections.filter(s => !toProcess.includes(s));
 
-  const logger = new ScraperCallbacks(ProfileTask, callback, toProcess);
+  const logger = new ScraperCallbacks({
+    taskType: ProfileTask,
+    uiCallback: callback,
+    sections: toProcess,
+  });
 
   try {
     const config = await getBankConfig(type);

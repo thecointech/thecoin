@@ -15,6 +15,11 @@ const TimerPath = `${SystemdUserDir}/${TimerName}`;
 // Manual run via:
 // systemctl --user start thecoin-harvest.service
 
+// Check if the timer is active and when it will run next
+// systemctl --user status thecoin-harvest.timer
+
+// List all timers and see when it last/next triggers
+// systemctl --user list-timers thecoin-harvest.timer
 export async function setSchedule(schedule: HarvestSchedule, _existing?: HarvestSchedule) {
   log.info(`Creating systemd schedule: ${JSON.stringify(schedule)}`);
   try {

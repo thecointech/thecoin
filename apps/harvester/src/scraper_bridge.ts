@@ -9,7 +9,7 @@ import { exportResults, getRawState, setOverrides } from './Harvester/state';
 import { harvest } from './Harvester';
 import { logsFolder } from './paths';
 import { getLocalBrowserPath, getSystemBrowserPath } from '@thecointech/scraper/puppeteer-init/browser';
-import { getValues, ActionType } from './Harvester/scraper';
+import { ActionType } from './Harvester/scraper';
 import { AutoConfigParams, autoConfigure } from './Harvester/agent';
 import { BackgroundTaskInfo } from './BackgroundTask';
 import { AskUserReact } from './Harvester/agent/askUser';
@@ -63,9 +63,9 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
     return true;
   }),
 
-  validateAction: (actionName, inputValues) => guard(async () => {
-    const r = await getValues(actionName, onBgTaskMsg, inputValues)
-    return toBridge(r);
+  validateAction: (_actionName, _inputValues) => guard(async () => {
+    // const r = await getValues(actionName, onBgTaskMsg, inputValues)
+    return toBridge({});
   }),
 
   twofaRefresh: (actionName) => guard(async () => doRefresh(actionName, onBgTaskMsg)),

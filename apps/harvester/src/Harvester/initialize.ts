@@ -2,11 +2,11 @@ import { DateTime } from 'luxon';
 import { hydrateProcessor, getWallet, getCreditDetails } from './config';
 import { getCurrentState } from './state';
 import { getChequingData, getVisaData } from './fetchData';
-import { HarvestData } from './types';
-import { BackgroundTaskCallback } from '@/BackgroundTask';
+import type { HarvestData, UserData } from './types';
+import type { ScraperCallbacks } from './scraper/callbacks';
 import { GetContract } from '@thecointech/contract-core';
 
-export async function initialize(callback?: BackgroundTaskCallback) {
+export async function initialize(callback: ScraperCallbacks) {
 
   // Initialize
   const stages = await hydrateProcessor();
@@ -27,10 +27,10 @@ export async function initialize(callback?: BackgroundTaskCallback) {
     throw new Error("Cannot pay bill: Account Details not set");
   }
 
-  const user = {
+  const user: UserData = {
     wallet,
     creditDetails,
-    uiCallback: callback,
+    callback: callback,
   }
 
   // Initialize data (do we want anything from last state?)
@@ -38,7 +38,7 @@ export async function initialize(callback?: BackgroundTaskCallback) {
   const lastTxDate = lastRun?.date.minus({ week: 1 });
   // TODO: We need to group these under a parent ID
   const chq = await getChequingData(callback);
-  const visa = await getVisaData(lastTxDate, callback)
+  const visa = await getVisaData(callback, lastTxDate)
   const tcCore = await GetContract(wallet.provider!);
   const coin = await tcCore.balanceOf(wallet.address);
   let state: HarvestData = {

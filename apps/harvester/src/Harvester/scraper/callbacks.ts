@@ -1,5 +1,5 @@
 import { log } from "@thecointech/logging";
-import { Page } from "puppeteer";
+import type { Page } from "puppeteer";
 import { rootFolder } from "@/paths";
 import path from "node:path";
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -10,11 +10,19 @@ import { BackgroundTaskType, BackgroundTaskCallback, SubTaskProgress, getErrorMe
 import { maybeCloseModal } from "@thecointech/scraper-agent/modal";
 import { notify } from "../notify";
 import crypto from "node:crypto";
+import type { EventSection } from "@thecointech/scraper-agent/types";
+
+export type CallbackOptions = {
+  taskType: BackgroundTaskType;
+  uiCallback?: BackgroundTaskCallback;
+  sections?: string[];
+  timestamp?: number;
+};
 
 export class ScraperCallbacks implements IScraperCallbacks {
 
   counter = 0;
-  timestamp = Date.now();
+  timestamp: number;
   id = crypto.randomUUID();
   private taskType: BackgroundTaskType;
   // private actionType: string;
@@ -24,27 +32,41 @@ export class ScraperCallbacks implements IScraperCallbacks {
     return path.join(rootFolder, "logs", sessionId);
   }
 
-  constructor(taskType: BackgroundTaskType, uiCallback?: BackgroundTaskCallback, sections?: string[]) {
+  constructor(options: CallbackOptions) {
     // this.actionType = actionType;
-    this.taskType = taskType;
-    this.uiCallback = uiCallback;
+    this.taskType = options.taskType;
+    this.uiCallback = options.uiCallback;
+    this.timestamp = options.timestamp ?? Date.now();
     mkdirSync(this.logsFolder, { recursive: true })
 
     // Call to initialize the task group
-    this.uiCallback?.({
-      id: this.id,
-      type: this.taskType,
-    })
-    // Initialize sub-tasks, this will give a
-    // visual indication of how much progress has been made
-    if (sections && this.uiCallback) {
-      for (const section of sections)
-        this.subTaskCallback({
-          subTaskId: section,
-        })
+    if (this.uiCallback) {
+      this.uiCallback({
+        id: this.id,
+        type: this.taskType,
+      })
+      // Initialize sub-tasks, this will give a
+      // visual indication of how much progress has been made
+      if (options.sections) {
+        for (const section of options.sections)
+          this.subTaskCallback({
+            subTaskId: section,
+          })
+      }
     }
   }
 
+  events: EventSection|undefined;
+  currentSubTask: string|undefined;
+  setSubTaskEvents(subTask: string, events: EventSection) {
+    this.events = events;
+    this.currentSubTask = subTask;
+    this.subTaskCallback({
+      subTaskId: subTask,
+      description: subTask,
+      percent: 0,
+    })
+  }
 
   async onError(page: Page, error: unknown, _event?: AnyEvent) {
     log.error(error, "Error in replay");
@@ -60,12 +82,13 @@ export class ScraperCallbacks implements IScraperCallbacks {
       }
     }
     else {
-      this.uiCallback?.({
-        id: this.id,
-        type: this.taskType,
-        completed: true,
-        error: getErrorMessage(error),
-      })
+      if (this.currentSubTask) {
+        this.subTaskCallback?.({
+          subTaskId: this.currentSubTask,
+          completed: true,
+          error: getErrorMessage(error),
+        })
+      }
       await this.dumpPage(page);
     }
     return didClose;
@@ -76,7 +99,7 @@ export class ScraperCallbacks implements IScraperCallbacks {
     const stepPercent = progress.stepPercent ?? 0;
     const totalPercent = stepPercent + ((progress.step) / progress.total);
     this.subTaskCallback?.({
-      subTaskId: progress.stage,
+      subTaskId: this.currentSubTask ?? progress.stage,
       description: progress.stage,
       percent: totalPercent,
     })

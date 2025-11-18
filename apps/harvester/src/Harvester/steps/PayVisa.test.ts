@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import currency from 'currency.js';
-import { Wallet } from 'ethers';
 import { getDateFromPrior, PayVisa } from './PayVisa';
+import { mockUser } from '../../../internal/mockUser';
 
 it ("calculates dateToPay correctly", async () => {
   // A Monday
@@ -68,12 +68,5 @@ const mockData = (dueInWeeks: number) => ({
     },
     state: {},
   } as any,
-  user: {
-    wallet: Wallet.createRandom(),
-    replay: null as any,
-    creditDetails: {
-      payee: 'payee',
-      accountNumber: "12345"
-    }
-  }
+  user: mockUser(),
 })
