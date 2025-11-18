@@ -48,7 +48,7 @@ export class Agent implements AgentClass {
     }
     let accounts = await this.processAccounts(sectionsToSkip);
     return {
-      events: this.mockEventsResponse(sectionsToSkip),
+      events: this.mockEventsResponse(sectionsToProcess),
       accounts,
     }
   }
@@ -114,11 +114,10 @@ export class Agent implements AgentClass {
     ];
   }
 
-  mockEventsResponse(sectionsToSkip?: SectionName[]): EventSection {
+  mockEventsResponse(sectionsToProcess: SectionName[]): EventSection {
     return {
       section: "Initial",
-      events: (["Login", "AccountsSummary", "CreditAccountDetails", "SendETransfer", "Logout"] as const)
-        .filter(s => !sectionsToSkip?.includes(s))
+      events: sectionsToProcess
         .map((s, i) => ({
           section: s,
           events: [

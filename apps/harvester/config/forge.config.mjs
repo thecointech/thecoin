@@ -15,7 +15,7 @@ const deployedAt = JSON.stringify(new Date().toISOString());
 const renderConfig = getRendererConfig(deployedAt);
 const mainConfig = await getMainConfig(deployedAt);
 
-const suffix = process.env.CONFIG_NAME === 'prod'
+const suffix = process.env.CONFIG_ENV === 'prod'
   ? ''
   : ` - ${process.env.CONFIG_NAME}`;
 
@@ -27,8 +27,6 @@ const config = {
     //   unpack: './node_modules/node-notifier/**/*'
     // },
     productName: "TheCoin - Harvester",
-    // name: "iamHarvester",
-    // executableName: "iamHarvester3",
     icon: 'assets/appicon',
     appBundleId: utils.fromBuildIdentifier({
       prod: 'com.TheCoin.Harvester',
@@ -59,7 +57,8 @@ const config = {
     new MakerDeb({
       options: {
         icon: 'assets/appicon.png',
-        name: `harvester${suffix.replace(' ', '')}`,
+        name: `harvester${suffix.replaceAll(' ', '')}`,
+        homepage: process.env.URL_SITE_LANDING,
         productName: `Harvester${suffix}`,
         genericName: `Harvester${suffix}`,
         categories: ['Utility'],
