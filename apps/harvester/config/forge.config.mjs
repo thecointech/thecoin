@@ -15,7 +15,7 @@ const deployedAt = JSON.stringify(new Date().toISOString());
 const renderConfig = getRendererConfig(deployedAt);
 const mainConfig = await getMainConfig(deployedAt);
 
-const suffix = process.env.CONFIG_NAME === 'prod'
+const suffix = process.env.CONFIG_ENV === 'prod'
   ? ''
   : ` - ${process.env.CONFIG_NAME}`;
 

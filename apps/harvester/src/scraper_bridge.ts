@@ -71,6 +71,7 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
   twofaRefresh: (actionName) => guard(async () => doRefresh(actionName, onBgTaskMsg)),
 
   warmup: (_url) => guard(async () => {
+    using _ = new VisibleOverride(true);
     const instance = await Registry.create({
       name: 'warmup',
       context: "default",
