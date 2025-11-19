@@ -49,7 +49,7 @@ export function getErrors(task?: BackgroundTaskInfo): string[] {
   return errors;
 }
 
-export function getCompleted(tasks: BackgroundTaskInfo[]): BackgroundTaskInfo[] {
+export function getRunning(tasks: BackgroundTaskInfo[]): BackgroundTaskInfo[] {
   return tasks.filter(isRunning);
 }
 
