@@ -201,7 +201,9 @@ export async function replayEvents(page: Page, name: string, events: AnyEvent[],
         }
         else {
           log.info(` - Error handled, index ${i} updated to ${wasHandled}`);
-          i = wasHandled;
+          // Decrement the index.  When this loop continues,
+          // the i++ will move back to the index returned
+          i = wasHandled - 1;
         }
       }
 

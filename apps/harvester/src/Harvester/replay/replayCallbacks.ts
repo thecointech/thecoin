@@ -31,13 +31,15 @@ export class HarvesterReplayCallbacks extends TaskSessionBase implements IReplay
   }
 
   onProgress(progress: ScraperProgress) {
-    const stepPercent = progress.stepPercent ?? 0;
-    const totalPercent = stepPercent + ((progress.step) / progress.total);
-    this.subTaskCallback?.({
-      subTaskId: this.currentSubTask!,
-      description: progress.stage,
-      percent: totalPercent,
-    })
+    if (this.currentSubTask) {
+      const stepPercent = progress.stepPercent ?? 0;
+      const totalPercent = stepPercent + ((progress.step) / (progress.total || 1));
+      this.subTaskCallback?.({
+        subTaskId: this.currentSubTask,
+        description: progress.stage,
+        percent: totalPercent,
+      })
+    }
     return true;
   }
 
