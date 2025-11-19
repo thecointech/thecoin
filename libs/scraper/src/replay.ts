@@ -6,31 +6,25 @@ import { log } from '@thecointech/logging';
 import { getElementForEvent } from './elements';
 import { sleep } from '@thecointech/async';
 import { newPage } from './puppeteer-init';
-import type { IScraperCallbacks } from './callbacks';
+import type { IReplayCallbacks } from './callbacks';
 import { DynamicValueError, ValueEventError } from './errors';
 
 export type ReplayOptions = {
   name: string,
   delay?: number,
 }
-export async function replay({ name, delay = 1000 }: ReplayOptions, events: AnyEvent[], callbacks?: IScraperCallbacks, dynamicValues?: Record<string, string>) {
+export async function replay({ name, delay = 1000 }: ReplayOptions, events: AnyEvent[], callbacks?: IReplayCallbacks, dynamicValues?: Record<string, string>) {
 
   log.debug(`Replaying ${events?.length} events`);
 
   // Progress started
   callbacks?.onProgress?.({ step: 0, total: 1, stage: name, stepPercent: 0 });
 
-  // Every replay should execute from within it's own context.
   const { page, browser } = await newPage(name);
 
   try {
     const r = await replayEvents(page, name, events, callbacks, dynamicValues, delay);
     return r;
-  }
-  catch (err) {
-    await callbacks?.onError?.(page, err);
-    // We don't have a return value, so just rethrow
-    throw err
   }
   finally {
     await page.close();
@@ -38,10 +32,9 @@ export async function replay({ name, delay = 1000 }: ReplayOptions, events: AnyE
   }
 }
 
-export async function replayEvents(page: Page, name: string, events: AnyEvent[], callbacks?: IScraperCallbacks, dynamicValues?: Record<string, string>, delay = 1000) {
+export async function replayEvents(page: Page, name: string, events: AnyEvent[], callbacks?: IReplayCallbacks, dynamicValues?: Record<string, string>, delay = 1000) {
 
   const values: ReplayResult = {}
-  // const values: Record<string, string | DateTime | currency | HistoryRow[]> = {}
 
   // Security: limit this session to a single domain.
   // TODO: This triggers on safe routes, disable until we have a better view
@@ -120,7 +113,7 @@ export async function replayEvents(page: Page, name: string, events: AnyEvent[],
         log.debug(`Entering dynamicValue : ${event.eventName} into ${event.selector}`);
         const value = dynamicValues?.[event.eventName];
         if (!value) {
-          throw new DynamicValueError(event);
+          throw new DynamicValueError(event, dynamicValues);
         }
 
         await enterValue(page, event, value);
@@ -189,33 +182,26 @@ export async function replayEvents(page: Page, name: string, events: AnyEvent[],
 
   async function processInstructions(events: AnyEvent[]) {
 
-    // const onScreenshot = getOnScreenshot(callbacks);
     for (let i = 0; i < events.length; i++) {
       const event = events[i];
 
-      // TODO: We're going to need to refactor this
       try {
         await processEvent(event, i);
-
-        // Take a screenshot on success
-        // We do this after the loop because the loading
-        // delay is handled by fetching the element
-        // await onScreenshot?.(page, event);
       }
       catch (err) {
         // On failed, lets check whats going on
         log.error(err, `Failed to process event: ${event.type} - ${event.id}`);
 
-        // For now, the only error handling we can do is to check if we can close a modal
-        const wasHandled = await callbacks?.onError?.(page, err, event);
-        if (wasHandled) {
-          // If it worked, take another crack
-          await processEvent(event, i)
-          log.info(` - Resolved Modal, continue processing`);
+        // attempt to handle the error
+        const wasHandled = await callbacks?.onError?.(
+          { page, err, event, events, values }
+        );
+        if (wasHandled === undefined) {
+          throw err;
         }
         else {
-          // If it didn't work, throw
-          throw err
+          log.info(` - Error handled, index ${i} updated to ${wasHandled}`);
+          i = wasHandled;
         }
       }
 
@@ -229,12 +215,7 @@ export async function replayEvents(page: Page, name: string, events: AnyEvent[],
 
   await processInstructions(events)
 
-  // remove history (personal info) from logged info (TODO: remove this line entirely)
-  const { history, ...sanitize } = values;
-  log.debug(`We got values: ${JSON.stringify({
-    ...sanitize,
-    history: `${(history as any)?.length ?? 0} rows`
-  })}`);
+  log.debug(`-- Replay completed`);
 
   return values;
 }
@@ -287,28 +268,3 @@ export async function enterValueIntoFound(page: Page, found: SearchElement, valu
   }
   return false;
 }
-
-
-
-// function getOnScreenshot(callbacks?: IScraperCallbacks) {
-//   return callbacks?.onScreenshot
-//     ? async (page: Page, event: AnyEvent) => {
-//       try {
-//         const screenshot = await page.screenshot({ fullPage: true, type: 'png' });
-//         const asData = event as ElementData;
-//         const name = `${event.type}-${asData.nodeValue || asData.label || asData.name || event.type || ""}`;
-//         callbacks.onScreenshot!(name, screenshot, page)
-//       }
-//       catch (err) {
-//         if (err instanceof ProtocolError) {
-//           // This can happen if we are in the middle of a navigation event.
-//           // It's not a big deal, we must miss a screenshot
-//           log.warn(err, `Failed to take screenshot`);
-//         }
-//         else {
-//           throw err;
-//         }
-//       }
-//     }
-//     : undefined;
-// }

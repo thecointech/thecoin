@@ -1,12 +1,10 @@
 import currency from 'currency.js';
 import { getMockSendTime, SendETransfer } from './SendETransfer'
-import type { UserData } from '../types';
 import { mockLog } from '../../../internal/mockLog';
 import { DateTime } from 'luxon';
+import { mockUser } from '../../../internal/mockUser';
 
-const user = {
-  replay: () => Promise.resolve({ confirm: "1234" }),
-} as any as UserData;
+const user = mockUser();
 
 it ('will send an e-transfer', async () => {
   const sender = new SendETransfer();

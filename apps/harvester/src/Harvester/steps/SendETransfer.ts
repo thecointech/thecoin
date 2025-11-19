@@ -4,7 +4,7 @@ import currency from 'currency.js';
 import { notify, notifyError } from '../notify';
 import { SendFakeDeposit } from '@thecointech/email-fake-deposit';
 import { DateTime } from 'luxon';
-import { getValues } from '../scraper';
+import { getValues } from '../replay';
 import { ETransferResult } from '@thecointech/scraper-agent/types';
 
 export class SendETransfer implements ProcessingStage {

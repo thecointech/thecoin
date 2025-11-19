@@ -7,13 +7,13 @@ import { DateTime } from 'luxon';
 import { getDataAsDate, HarvestData } from './types';
 import { PayVisaKey } from './steps/PayVisa';
 import { notifyError } from './notify';
-import { ScraperCallbacks } from './scraper/callbacks';
+import { HarvesterReplayCallbacks } from './replay/replayCallbacks';
 import { BackgroundTaskCallback, getErrorMessage } from '@/BackgroundTask';
 
 type Result = "success" | "error" | "skip";
 export async function harvest(uiCallback?: BackgroundTaskCallback): Promise<Result> {
 
-  const callback = new ScraperCallbacks({
+  await using callback = new HarvesterReplayCallbacks({
     uiCallback,
     timestamp: Date.now(),
     taskType: "replay",
@@ -48,6 +48,9 @@ export async function harvest(uiCallback?: BackgroundTaskCallback): Promise<Resu
     }
 
     log.info(`Harvest complete`);
+    callback.complete({
+      result: "success",
+    });
     return "success";
   }
   catch (err: unknown) {

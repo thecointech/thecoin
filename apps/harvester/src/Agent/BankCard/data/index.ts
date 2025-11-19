@@ -40,7 +40,7 @@ export const banks = [
   {
     name: 'Scotiabank',
     icon: Scotia,
-    url: 'https://www.scotiabank.com/'
+    url: 'https://www.scotiabank.com/ca/en/personal.html'
   },
   {
     name: 'Tangerine',

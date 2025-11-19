@@ -3,10 +3,10 @@ import { hydrateProcessor, getWallet, getCreditDetails } from './config';
 import { getCurrentState } from './state';
 import { getChequingData, getVisaData } from './fetchData';
 import type { HarvestData, UserData } from './types';
-import type { ScraperCallbacks } from './scraper/callbacks';
+import type { HarvesterReplayCallbacks } from './replay/replayCallbacks';
 import { GetContract } from '@thecointech/contract-core';
 
-export async function initialize(callback: ScraperCallbacks) {
+export async function initialize(callback: HarvesterReplayCallbacks) {
 
   // Initialize
   const stages = await hydrateProcessor();

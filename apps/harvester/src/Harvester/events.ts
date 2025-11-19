@@ -1,6 +1,6 @@
 import { BankEvents, BankIdent } from "@thecointech/store-harvester";
 import { getProcessConfig, setProcessConfig } from "./config";
-import { ActionType, BankType } from "./scraper";
+import { ActionType, BankType } from "./replay";
 import { ProcessAccount } from "@thecointech/scraper-agent/types";
 import type { RendererBankType } from "@/Agent/state/types";
 

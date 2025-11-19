@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Dimmer, Input, Loader } from "semantic-ui-react";
 import type { BankData } from "./BankCard/data";
 import { isRunning, useBackgroundTask } from "@/BackgroundTask/index";
-import { BankType } from "@/Harvester/scraper";
+import { BankType } from "@/Harvester/replay";
 import { log } from "@thecointech/logging";
 import styles from './LoginDetails.module.less';
 

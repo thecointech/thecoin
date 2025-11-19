@@ -2,7 +2,7 @@ import currency from 'currency.js'
 import { DateTime } from 'luxon'
 import type { Signer } from 'ethers';
 import type { CreditDetails, HarvestData, HarvestDelta } from '@thecointech/store-harvester';
-import type { ScraperCallbacks } from './scraper/callbacks';
+import type { HarvesterReplayCallbacks } from './replay/replayCallbacks';
 export type { HarvestData, HarvestDelta, CreditDetails } from '@thecointech/store-harvester';
 
 
@@ -10,7 +10,7 @@ export type UserData = {
   creditDetails: CreditDetails;
   wallet: Signer;
   // Callback handles errors (& ui updates if run in foreground)
-  callback: ScraperCallbacks;
+  callback: HarvesterReplayCallbacks;
 }
 
 export interface ProcessingStage {

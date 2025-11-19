@@ -1,6 +1,6 @@
 import { EventSection } from "@thecointech/scraper-agent";
 import { setEvents, getEvents } from "./events";
-import { ActionType } from "./scraper";
+import { ActionType } from "./replay";
 import { AnyEvent } from "@thecointech/scraper";
 import { jest } from '@jest/globals';
 import { BankEvents } from "@thecointech/store-harvester";
