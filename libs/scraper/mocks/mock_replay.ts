@@ -17,8 +17,10 @@ export const replay: typeof SrcReplay = async (options: ReplayOptions, events: A
   // Progress started
   callbacks?.onProgress?.({ step: 0, total: 1, stage: options.name, stepPercent: 0 });
 
+  const sleepLength = process.env.RUNTIME_ENV == "test" ? 10 : 500;
+
   for (let i = 0; i < events.length; i++) {
-    await sleep(500);
+    await sleep(sleepLength);
     const stepPercent = Math.round(100 * (i + 1) / events.length);
     const continueLoop = callbacks?.onProgress?.({ step: 0, total: 1, stage: options.name, stepPercent, event: events[i] });
     if (continueLoop === false) {

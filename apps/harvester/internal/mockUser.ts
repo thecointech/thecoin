@@ -11,6 +11,7 @@ export function mockUser() : UserData {
     callback: {
       subTaskCallback: () => {},
       taskCallback: () => {},
+      setSubTaskEvents: () => {},
     } as any
   }
 }
