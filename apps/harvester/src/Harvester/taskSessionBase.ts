@@ -98,6 +98,6 @@ export class TaskSessionBase implements AsyncDisposable {
 
   async dumpError(page: Page, error?: unknown) {
     const serializer = await this.serializer;
-    serializer?.dumpError(page, error);
+    await serializer?.dumpError(page, error);
   }
 }

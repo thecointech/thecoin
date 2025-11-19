@@ -1,9 +1,7 @@
-export type { ScrapingConfig, ActionType, BankType, BankConfig } from '@thecointech/store-harvester';
-
 import { replay } from '@thecointech/scraper';
 import type { ReplayResult } from '@thecointech/scraper-types';
 import { getReplayEvents } from '@thecointech/scraper-agent';
-import { ActionType } from '@/Harvester/replay';
+import type { ActionType } from '@thecointech/store-harvester';
 import { getEvents } from '../events';
 import type { HarvesterReplayCallbacks } from './replayCallbacks';
 import { ChequeBalanceResult, ETransferInput, ETransferResult, VisaBalanceResult } from '@thecointech/scraper-agent/types';

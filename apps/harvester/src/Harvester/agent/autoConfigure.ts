@@ -3,7 +3,7 @@ import { log } from "@thecointech/logging";
 import { type BackgroundTaskCallback } from "@/BackgroundTask/types";
 import { setEvents } from '../events';
 import { downloadRequired } from '@/GetStarted/download';
-import { BankConfig, BankType } from '../replay';
+import type { BankConfig, BankType } from '@thecointech/store-harvester';
 import { sections } from '@thecointech/scraper-agent/processors/types';
 import { VisibleOverride } from '@thecointech/scraper/puppeteer-init/visibility';
 import { AskUserLogin } from './askUserLogin';

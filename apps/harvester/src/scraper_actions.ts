@@ -1,8 +1,7 @@
 import type { HarvestConfig } from './types';
 import type { ValueResult, ValueType} from "@thecointech/scraper-types";
 import type { CreditDetails } from './Harvester/types';
-import type { CoinAccount, CoinAccountDetails, StoredData } from '@thecointech/store-harvester';
-import type { ActionType } from './Harvester/replay';
+import type { CoinAccount, CoinAccountDetails, StoredData, ActionType } from '@thecointech/store-harvester';
 import type { BackgroundTaskCallback } from './BackgroundTask/types';
 import type { OptionPacket, QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
 import type { AutoConfigParams } from './Harvester/agent';

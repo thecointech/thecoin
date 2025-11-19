@@ -99,23 +99,6 @@ async function sendETransfer(amount: currency, {wallet, callback}: UserData) : P
   return r
 }
 
-// async function mockUiUpdate(callback?: ScraperCallbacks) {
-//   if (callback) {
-//     for (let i = 0; i < 10; i++) {
-//       callback.subTaskCallback({
-//         subTaskId: "chqETransfer",
-//         percent: i * 10,
-//       })
-//       await sleep(250);
-//     }
-//     callback.subTaskCallback({
-//       subTaskId: "chqETransfer",
-//       percent: 100,
-//       completed: true,
-//     })
-//   }
-// }
-
 let counter = 0;
 export function getMockSendTime(now: DateTime) {
   // If now is during market hours, use it.

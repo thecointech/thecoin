@@ -1,9 +1,8 @@
 import { EventSection } from "@thecointech/scraper-agent";
 import { setEvents, getEvents } from "./events";
-import { ActionType } from "./replay";
-import { AnyEvent } from "@thecointech/scraper";
+import type { AnyEvent } from "@thecointech/scraper";
 import { jest } from '@jest/globals';
-import { BankEvents } from "@thecointech/store-harvester";
+import type { BankEvents, ActionType } from "@thecointech/store-harvester";
 
 
 jest.setTimeout(10* 60* 1000)

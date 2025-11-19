@@ -23,7 +23,7 @@ const replayEvents = getReplayEvents(allEvents, "chqETransfer");
 let _hasSetDynamicInput = false;
 const callbacks: IReplayCallbacks = {
 
-  onError: async (params) => {
+  onError: async (_params) => {
     // if (await maybeCloseModal(page)) {
     //   return true;
     // }

@@ -46,6 +46,7 @@ export class HarvesterReplayCallbacks extends TaskSessionBase implements IReplay
     log.error(params.err, "Error in replay");
     if (!this.events) {
       log.error("No events set, nothing to handle");
+      await this.dumpError(params.page, params.err);
       return undefined;
     }
 

@@ -1,6 +1,6 @@
 import type { UserData } from '../src/Harvester/types';
 import { Wallet } from 'ethers';
-
+import type { HarvesterReplayCallbacks } from '@/Harvester/replay/replayCallbacks';
 export function mockUser() : UserData {
   return {
     wallet: Wallet.createRandom(),
@@ -12,6 +12,6 @@ export function mockUser() : UserData {
       subTaskCallback: () => {},
       taskCallback: () => {},
       setSubTaskEvents: () => {},
-    } as any
+    } as Partial<HarvesterReplayCallbacks> as HarvesterReplayCallbacks,
   }
 }

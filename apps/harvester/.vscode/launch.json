@@ -9,8 +9,8 @@
       "request": "launch",
       "runtimeArgs": [
         "dev",
-        "--",
-        "--start-initialized"
+        // "--", // Add "--clean-start" to skip seeding dev db
+        // "--clean-start"
       ],
       "runtimeExecutable": "yarn",
       "skipFiles": [

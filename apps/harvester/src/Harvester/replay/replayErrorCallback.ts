@@ -50,8 +50,16 @@ export async function replayErrorCallback({page, err, event, events}: ReplayErro
           message: "Closed Modal on page: " + page.url(),
         })
       }
-      // Re-run this event
-      return events.indexOf(event) - 1;
+      // Re-run this event.  The replay will assign the
+      // returned value to "i", the increment it.  To
+      // replay the same event we need to return the prior index
+      const failingEvent = events.indexOf(event) - 1;
+      if (failingEvent < 0) {
+        // This also should never happen
+        log.error({event: event, err: err}, "Failed to find event in replay");
+        return undefined;
+      }
+      return failingEvent - 1;
     }
 
     // If we aren't sure what's gone wrong,
