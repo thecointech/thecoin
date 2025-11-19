@@ -149,7 +149,7 @@ export class PageHandler implements AsyncDisposable {
         return intent;
       }
       catch (e) {
-        log.warn(`Couldn't get page intent, attempt ${i+1} of 5`);
+        log.warn(`Couldn't get page intent, attempt ${i + 1} of 5`);
         error = e;
       }
       await sleep(1000);
