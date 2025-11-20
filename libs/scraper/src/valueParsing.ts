@@ -165,12 +165,12 @@ const Currencies = {
 export type CurrencyType = keyof typeof Currencies;
 export type CurrencyConverter = typeof Currencies["CAD_en"];
 
-export function guessCurrencyFormat(value?: string) : CurrencyType|null {
-  if (!value) return null;
+export function getCurrencyCandidateValue(value?: string) {
+  if (!value) return false;
 
   const digitCount = (value.match(/\d/g) || []).length;
   // Earliest test, must have at least one digit
-  if (digitCount == 0) return null;
+  if (digitCount == 0) return false;
 
 
   // Pre-validation: must contain currency indicators
@@ -181,7 +181,7 @@ export function guessCurrencyFormat(value?: string) : CurrencyType|null {
 
   // Must have at least one currency indicator
   if (!hasCurrencySymbol && !hasDecimalPattern && !hasThousandsSeparator && !hasParentheses) {
-    return null;
+    return false;
   }
 
   // If we don't explicitly have a currency symbol, then discard values
@@ -190,7 +190,7 @@ export function guessCurrencyFormat(value?: string) : CurrencyType|null {
     // Sanity check: we'll probably work with most accounts even if they
     // don't explicitly have a currency symbol anywhere
     if (digitCount > 6) {
-      return null;
+      return false;
     }
   }
 
@@ -200,7 +200,7 @@ export function guessCurrencyFormat(value?: string) : CurrencyType|null {
   const match = value.match(currencyPattern);
 
   if (!match) {
-    return null;
+    return false;
   }
 
   const candidateValue = match[0].trim();
@@ -216,11 +216,11 @@ export function guessCurrencyFormat(value?: string) : CurrencyType|null {
       // acceptable characters can be a lot higher
       // eg $5CAD has a lot of non-numeric characters
       if (lengthRatio < 0.4) {
-        return null;
+        return false;
       }
     }
     if (lengthRatio < 0.6) {
-      return null;
+      return false;
     }
   }
 
@@ -228,8 +228,23 @@ export function guessCurrencyFormat(value?: string) : CurrencyType|null {
   // Allow reasonable currency formatting characters
   const cleanedForValidation = candidateValue.replace(/[\d\$€£¥₹,.'()\s-]/g, '');
   if (cleanedForValidation.length > 3) { // Allow for currency code (CAD)
+    return false;
+  }
+
+  return candidateValue;
+}
+
+
+export function guessCurrencyFormat(value?: string) : CurrencyType|null {
+
+  // Get the potential currency string
+  const candidateValue = getCurrencyCandidateValue(value);
+  if (!candidateValue) {
     return null;
   }
+
+  // We most probably have a currency here, now we need to figure
+  // out how it's formatted (eg FR vs EN) in order to parse it correctly
 
   // What is the bare number here?
   const bareNumber = candidateValue.replace(/[^0-9,.$]/g, '');
@@ -264,14 +279,24 @@ export function guessCurrencyFormat(value?: string) : CurrencyType|null {
 }
 
 export function getCurrencyConverter(fmt: CurrencyType): CurrencyConverter {
-  return Currencies[fmt];
+  return (value?: string) => {
+    // Ensure that it's a currency
+    // Otherwise pretty much any string will pass.
+    const candidateValue = getCurrencyCandidateValue(value);
+    if (!candidateValue) {
+      return undefined;
+    }
+    // Return the parsed value
+    const converter = Currencies[fmt];
+    return converter(value);
+  }
 }
 
 
 // This phone test is very relaxed, it is currently only
 // used in estimated runs and the extracted value is not
 // used.  It's just a sanity check to make sure we don't
-// find a obviously wront element when searching numbers
+// find a obviously wrong element when searching numbers
 export function guessPhoneFormat(value: string) {
   if (!value) return null;
 
