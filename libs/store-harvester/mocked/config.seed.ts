@@ -1,7 +1,8 @@
 import { sections } from "@thecointech/scraper-agent/processors/types";
 import { ConfigShape, defaultDays, defaultSteps, defaultTime } from "../src";
-import { SectionName } from "@thecointech/scraper-agent/types";
 import { Wallet } from "ethers";
+import type { SectionName } from "@thecointech/scraper-agent/types";
+import type { AnyEvent } from "@thecointech/scraper-types";
 
 // Used in development to get a usable app without annoying setup
 export function getSeedConfig() {
@@ -56,10 +57,11 @@ const mockEvents = () => {
     {
       type: "navigation",
       to: "https://www.test.com",
+      id: "event-0"
     },
     {
       type: 'click',
-      id: `event-${0}`
+      id: "event-1"
     }
-  ] as any
+  ] as AnyEvent[]
 }

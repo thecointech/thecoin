@@ -21,11 +21,9 @@
   ],
   "main": "./src/index.d.ts",
   "exports": {
-    ".": "./src/index.d.ts",
-    "./": "./src/"
+    ".": "./src/index.d.ts"
   },
   "devDependencies": {
-    "@manifoldco/swagger-to-ts": "^1.6.1",
-    "js-yaml": "^3.13.0"
+    "@manifoldco/swagger-to-ts": "^1.6.1"
   }
 }

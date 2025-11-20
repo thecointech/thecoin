@@ -12458,7 +12458,6 @@ __metadata:
     express: "npm:^4.17.1"
     helmet: "npm:^4.6.0"
     image-type: "npm:^5.0.0"
-    js-yaml: "npm:^3.13.1"
     luxon: "npm:3.3.0"
     multer: "npm:^1.4.2"
     swagger-tools: "npm:^0.10.4"
@@ -12501,7 +12500,6 @@ __metadata:
     axios: "npm:1.6.5"
     cors: "npm:^2.8.5"
     express: "npm:^4.17.1"
-    js-yaml: "npm:^3.13.1"
     luxon: "npm:3.3.0"
     swagger-tools: "npm:^0.10.4"
     swagger-ui-express: "npm:^4.2.0"
@@ -12603,14 +12601,6 @@ __metadata:
     "@google-cloud/secret-manager": "npm:^6.0.1"
     "@thecointech/jestutils": "npm:^0.4.0"
     dotenv: "npm:^16.4.7"
-  languageName: unknown
-  linkType: soft
-
-"@thecointech/service-tapcap-supplier@workspace:apps/tapcap-supplier":
-  version: 0.0.0-use.local
-  resolution: "@thecointech/service-tapcap-supplier@workspace:apps/tapcap-supplier"
-  dependencies:
-    "@thecointech/pricing": "npm:^0.4.0"
   languageName: unknown
   linkType: soft
 
@@ -13098,7 +13088,6 @@ __metadata:
   resolution: "@thecointech/types@workspace:libs/types"
   dependencies:
     "@manifoldco/swagger-to-ts": "npm:^1.6.1"
-    js-yaml: "npm:^3.13.0"
   languageName: unknown
   linkType: soft
 
@@ -30441,7 +30430,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^3.10.0, js-yaml@npm:^3.11.0, js-yaml@npm:^3.13.0, js-yaml@npm:^3.13.1, js-yaml@npm:^3.14.1, js-yaml@npm:^3.3.1":
+"js-yaml@npm:^3.10.0, js-yaml@npm:^3.11.0, js-yaml@npm:^3.13.1, js-yaml@npm:^3.14.1, js-yaml@npm:^3.3.1":
   version: 3.14.1
   resolution: "js-yaml@npm:3.14.1"
   dependencies:
