@@ -20,9 +20,11 @@ export class PageNotInteractableError extends Error {
 
 export class DynamicValueError extends Error {
   event: DynamicInputEvent
-  constructor(event: DynamicInputEvent) {
+  values?: Record<string, string>
+  constructor(event: DynamicInputEvent, values?: Record<string, string>) {
     super(`Dynamic value error: ${event.eventName}`);
     this.event = event;
+    this.values = values;
   }
 }
 

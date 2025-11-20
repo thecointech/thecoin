@@ -1,8 +1,7 @@
-import { BankEvents, BankIdent } from "@thecointech/store-harvester";
-import { getProcessConfig, setProcessConfig } from "./config";
-import { ActionType, BankType } from "./scraper";
-import { ProcessAccount } from "@thecointech/scraper-agent/types";
+import type { BankEvents, BankIdent, ActionType, BankType } from "@thecointech/store-harvester";
+import type { ProcessAccount } from "@thecointech/scraper-agent/types";
 import type { RendererBankType } from "@/Agent/state/types";
+import { getProcessConfig, setProcessConfig } from "./config";
 
 export async function setEvents(type: BankType, config: BankEvents) {
   await setProcessConfig({

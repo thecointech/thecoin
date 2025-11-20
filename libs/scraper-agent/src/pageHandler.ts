@@ -35,10 +35,7 @@ type InputInteractionOptions = InteractionOptions & {
 
 export class PageHandler implements AsyncDisposable {
 
-  // name: string;
   recorderStack: Recorder[]
-  // eventManager: EventManager
-  // callbacks?: IScraperCallbacks
 
   get recorder() {
     return this.recorderStack.at(-1)!
@@ -149,15 +146,10 @@ export class PageHandler implements AsyncDisposable {
     for (let i = 0; i < 5; i++) {
       try {
         const intent = await _getPageIntent(this.page);
-        // if (this.currentSectionName != "Initial") {
-        //   // The 'initial' section is the containing section,
-        //   // we don't care about intent in this area
-        //   this.logJson(this.currentSectionName, "intent-vqa", { type: intent });
-        // }
         return intent;
       }
       catch (e) {
-        log.error(e, `Couldn't get page intent`);
+        log.warn(`Couldn't get page intent, attempt ${i + 1} of 5`);
         error = e;
       }
       await sleep(1000);

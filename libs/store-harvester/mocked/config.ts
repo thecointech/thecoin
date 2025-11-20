@@ -44,11 +44,13 @@ export class ConfigDatabase extends BaseDatabase<ConfigShape> implements Omit<Sr
     // Seed DB in development with default config
     // Do not use the 'set' method, as the mutex
     // is currently held by whatever called this
-    // const cfg = getSeedConfig();
-    // const stored = this.config.transformIn(cfg);
-    // await db.put({
-    //   ...stored,
-    //   _id: this.config.key,
-    // });
+    if (!process.argv.includes("--clean-start")) {
+      const cfg = getSeedConfig();
+      const stored = this.config.transformIn(cfg);
+      await db.put({
+        ...stored,
+        _id: this.config.key,
+      });
+    }
   }
 }

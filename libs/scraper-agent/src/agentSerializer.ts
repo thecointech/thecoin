@@ -29,7 +29,7 @@ const MIN_PIXELS_CHANGED = 100;
 //       1-0-apiCall-vqa.json
 //       ...
 
-type SerializerOptions = {
+export type SerializerOptions = {
   recordFolder: string,
   // The bank names (constant throughout an execution)
   target: string,
@@ -68,6 +68,13 @@ export class AgentSerializer implements Disposable {
     bus().offApiCall(this.onApiCall);
     bus().offSection(this.onSection);
     EventBus.get().offElement(this.onElement);
+  }
+
+  // This is used in replay because a single
+  // serializer is used for the entire session
+  updateTarget(target: string) {
+    this.options.target = target;
+    this.tracker.setCurrentSection("Initial");
   }
 
   // Log every API call

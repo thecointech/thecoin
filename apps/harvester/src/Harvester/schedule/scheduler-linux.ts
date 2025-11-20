@@ -15,8 +15,27 @@ const TimerPath = `${SystemdUserDir}/${TimerName}`;
 // Manual run via:
 // systemctl --user start thecoin-harvest.service
 
+// Check if the timer is active and when it will run next
+// systemctl --user status thecoin-harvest.timer
+
+// List all timers and see when it last/next triggers
+// systemctl --user list-timers thecoin-harvest.timer
 export async function setSchedule(schedule: HarvestSchedule, _existing?: HarvestSchedule) {
   log.info(`Creating systemd schedule: ${JSON.stringify(schedule)}`);
+  // Disable and stop the timer if it exists
+  try {
+    execSync(`systemctl --user disable --now ${TimerName}`);
+  } catch (e) {
+    // Ignore if timer wasn't enabled; log others for diagnostics
+    log.debug(e, 'Ignoring error while disabling existing systemd timer');
+  }
+
+  // Just in case someone only wants to run manually.
+  if (schedule.daysToRun.every(d => !d)) {
+    log.info('No days selected, not creating schedule');
+    return;
+  }
+
   try {
     // Ensure systemd user dir exists
     mkdirSync(SystemdUserDir, { recursive: true });
@@ -32,13 +51,6 @@ export async function setSchedule(schedule: HarvestSchedule, _existing?: Harvest
 
     // Reload systemd user units
     execSync('systemctl --user daemon-reload');
-
-    // Disable and stop the timer if it exists
-    try {
-      execSync(`systemctl --user disable --now ${TimerName}`);
-    } catch (e) {
-      // Ignore if timer wasn't enabled
-    }
 
     // Enable and start the timer
     execSync(`systemctl --user enable --now ${TimerName}`);
@@ -88,12 +100,27 @@ export function getSystemdOnCalendar(schedule: HarvestSchedule): string {
   // schedule.daysToRun: boolean[7] where 0=Sunday
   // schedule.timeToRun: 'HH:MM'
   const [hour, minute] = schedule.timeToRun.split(':');
+  const hourNumber = parseInt(hour);
+  const minuteNumber = parseInt(minute);
+  if (
+    !Number.isInteger(hourNumber)
+    || !Number.isInteger(minuteNumber)
+    || hourNumber < 0 || hourNumber > 23 || minuteNumber < 0 || minuteNumber > 59
+  ) {
+    throw new Error(`Invalid time values: ${hour}:${minute}`);
+  }
+
   const days = schedule.daysToRun
     .map((enabled, idx) => enabled ? idx : null)
     .filter(idx => idx !== null) as number[];
-  if (days.length === 0) return `*-${hour}:${minute}`; // fallback: every day
+
+  // We should have already bailed if no days are selected
+  if (days.length === 0) {
+    throw new Error('No days selected');
+  }
+
   // systemd: 0=Sun, 1=Mon, ..., 6=Sat
   const dayMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const dayStr = days.map(d => dayMap[d]).join(',');
-  return `${dayStr} *-*-* ${hour}:${minute}:00`;
+  return `${dayStr} *-*-* ${hourNumber}:${minuteNumber}:00`;
 }

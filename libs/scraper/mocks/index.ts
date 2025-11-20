@@ -7,6 +7,7 @@ import { installBrowser as installBrowserOriginal } from "../src/puppeteer-init/
 import { projectUrl } from "@thecointech/setenv/projectUrl";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { rootFolder, setRootFolder } from '../src/puppeteer-init/rootFolder';
+export { ElementNotFoundError, DynamicValueError } from "../src/errors";
 
 type BrowserConnection = {
   endpoint: string;

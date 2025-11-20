@@ -7,11 +7,18 @@ import { DateTime } from 'luxon';
 import { getDataAsDate, HarvestData } from './types';
 import { PayVisaKey } from './steps/PayVisa';
 import { notifyError } from './notify';
-// import { exec } from 'child_process';
+import { HarvesterReplayCallbacks } from './replay/replayCallbacks';
 import { BackgroundTaskCallback, getErrorMessage } from '@/BackgroundTask';
 
 type Result = "success" | "error" | "skip";
-export async function harvest(callback?: BackgroundTaskCallback): Promise<Result> {
+export async function harvest(uiCallback?: BackgroundTaskCallback): Promise<Result> {
+
+  await using callback = new HarvesterReplayCallbacks({
+    uiCallback,
+    timestamp: Date.now(),
+    taskType: "replay",
+    sections: ["chqBalance", "visaBalance", "chqETransfer"],
+  });
 
   try {
 
@@ -41,6 +48,9 @@ export async function harvest(callback?: BackgroundTaskCallback): Promise<Result
     }
 
     log.info(`Harvest complete`);
+    callback.complete({
+      result: "success",
+    });
     return "success";
   }
   catch (err: unknown) {
@@ -50,12 +60,8 @@ export async function harvest(callback?: BackgroundTaskCallback): Promise<Result
     else {
       log.fatal(`Error in harvest: ${err}`);
     }
-    // For now, we have to treat "replay" as the group
-    // as we only have a single nesting of background tasks
-    callback?.({
-      id: "harvest",
-      type: "replay",
-      completed: true,
+
+    callback.complete({
       error: getErrorMessage(err),
     })
 

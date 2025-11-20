@@ -9,9 +9,9 @@ import { exportResults, getRawState, setOverrides } from './Harvester/state';
 import { harvest } from './Harvester';
 import { logsFolder } from './paths';
 import { getLocalBrowserPath, getSystemBrowserPath } from '@thecointech/scraper/puppeteer-init/browser';
-import { getValues, ActionType } from './Harvester/scraper';
+import type { ActionType } from '@thecointech/store-harvester';
 import { AutoConfigParams, autoConfigure } from './Harvester/agent';
-import { BackgroundTaskInfo } from './BackgroundTask';
+import type { BackgroundTaskInfo } from './BackgroundTask';
 import { AskUserReact } from './Harvester/agent/askUser';
 import { downloadRequired } from './GetStarted/download';
 import { getScrapingScript } from './results/getScrapingScript';
@@ -63,9 +63,10 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
     return true;
   }),
 
-  validateAction: (actionName, inputValues) => guard(async () => {
-    const r = await getValues(actionName, onBgTaskMsg, inputValues)
-    return toBridge(r);
+  validateAction: (_actionName, _inputValues) => guard(async () => {
+    throw new Error("Currently disabled - re-enable for manual setup");
+    // const r = await getValues(actionName, onBgTaskMsg, inputValues)
+    //return toBridge(r);
   }),
 
   twofaRefresh: (actionName) => guard(async () => doRefresh(actionName, onBgTaskMsg)),
