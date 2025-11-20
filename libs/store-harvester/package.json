@@ -21,6 +21,7 @@
     "@thecointech/logging": "^0.4.0",
     "@thecointech/scraper-agent": "^0.4.0",
     "comdb": "^6.0.0-beta",
+    "luxon": "3.3.0",
     "pouchdb": "^8.0.1"
   },
   "devDependencies": {

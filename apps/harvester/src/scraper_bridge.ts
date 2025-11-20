@@ -1,7 +1,6 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import type { ValueType } from '@thecointech/scraper-types';
 import { actions, ScraperBridgeApi } from './scraper_actions';
-import { toBridge } from './scraper_bridge_conversions';
 import { getHarvestConfig, getProcessConfig, getWallet, setCoinAccount, getCoinAccountDetails, hasCreditDetails, setCreditDetails, setHarvestConfig, setProcessConfig } from './Harvester/config';
 import { CoinAccount, HarvestConfig } from './types';
 import { CreditDetails } from './Harvester/types';
