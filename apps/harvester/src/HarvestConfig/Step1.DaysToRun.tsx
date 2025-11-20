@@ -71,7 +71,7 @@ const EnableLingeringButton = () => {
       <div>This ensures the run is not interrupted by you logging out.</div>
       <Button loading={loading} disabled={loading} onClick={handleEnable}>
         Enable Lingering
-      </Button>t
+      </Button>
       {error && <Message negative>{error}</Message>}
     </div>
   );

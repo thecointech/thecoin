@@ -29,13 +29,11 @@ export async function setSchedule(schedule: HarvestSchedule) {
     const filepath = `${tmpdir()}/${tmpName}.xml`;
     log.debug(`Writing temp file: ${filepath}`);
     writeFileSync(filepath, xml);
-    let success = false;
     const r = execSync(`schtasks /create /tn ${TaskName} /xml ${filepath}`);
     log.info(r.toString());
     log.debug(`Removing temp file: ${filepath}`);
     unlinkSync(filepath);
     log.info(`Schedule set`);
-    return success;
   }
   catch (err) {
     if (err instanceof Error) {

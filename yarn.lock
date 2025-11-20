@@ -12812,6 +12812,7 @@ __metadata:
     "@thecointech/scraper-agent": "npm:^0.4.0"
     "@types/pouchdb": "npm:^6.4.2"
     comdb: "npm:^6.0.0-beta"
+    luxon: "npm:3.3.0"
     pouchdb: "npm:^8.0.1"
     pouchdb-adapter-memory: "npm:^8.0.1"
   languageName: unknown

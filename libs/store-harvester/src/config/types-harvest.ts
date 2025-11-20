@@ -33,7 +33,7 @@ export const luxonInfo = (
 
 export const toDayNames = (days: DaysArray, ...args: Parameters<typeof Info.weekdays>) => days
   .map((d, idx) => d ? luxonInfo(idx as DayOfWeek, ...args) : null)
-  .filter(d => !!d);
+  .filter((d): d is string => !!d);
 
 export const defaultTime = "08:00";
 
