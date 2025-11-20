@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Checkbox, Container, Button, Icon, Message, Header } from 'semantic-ui-react';
 import { ConfigReducer } from './state/reducer'
-import { Info } from 'luxon';
 import { DaysArray, luxonInfo } from '@thecointech/store-harvester';
 
 export const DaysToRun = () => {
