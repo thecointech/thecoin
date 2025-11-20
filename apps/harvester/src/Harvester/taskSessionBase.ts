@@ -14,7 +14,7 @@ export type CallbackOptions = {
   timestamp?: number;
 };
 
-export class TaskSessionBase implements AsyncDisposable {
+export class TaskSessionBase implements Disposable {
 
   counter = 0;
   timestamp: number;
@@ -23,26 +23,26 @@ export class TaskSessionBase implements AsyncDisposable {
   private taskType: BackgroundTaskType;
   private uiCallback?: BackgroundTaskCallback;
   // Logging progress for analysis.
-  private serializerOptions: SerializerOptions;
-  private serializer: Promise<AgentSerializer | null>;
+  private serializerOptions!: SerializerOptions;
+  private _serializerPromise: Promise<AgentSerializer | null>;
+  private serializer!: AgentSerializer | null;
 
   get logsFolder() {
     const sessionId = DateTime.fromMillis(this.timestamp).toSQL()!.replaceAll(":", "-");
     return path.join(rootFolder, "logs", sessionId);
   }
 
-  constructor(options: CallbackOptions, serializerOptions?: Partial<SerializerOptions>) {
+  protected constructor(options: CallbackOptions, serializerOptions?: Partial<SerializerOptions>) {
     this.taskType = options.taskType;
     this.uiCallback = options.uiCallback;
     this.timestamp = options.timestamp ?? Date.now();
 
-    // Initialize the serializer
     this.serializerOptions = {
       recordFolder: this.logsFolder,
       target: this.taskType,
       ...serializerOptions,
     };
-    this.serializer = maybeSerializeRun(this.serializerOptions);
+    this._serializerPromise = maybeSerializeRun(this.serializerOptions);
 
     // Call to initialize the task group
     if (this.uiCallback) {
@@ -64,9 +64,21 @@ export class TaskSessionBase implements AsyncDisposable {
     }
   }
 
-  async [Symbol.asyncDispose]() {
-    const serializer = await this.serializer;
-    serializer?.[Symbol.dispose]();
+  static async create<T extends new (...args: any[]) => TaskSessionBase>(
+    this: T,
+    ...args: ConstructorParameters<T>
+  ): Promise<InstanceType<T>> {
+    const r = new this(...args) as InstanceType<T>;
+    await r.initSerializer();
+    return r;
+  }
+
+  private async initSerializer() {
+    this.serializer = await this._serializerPromise;
+  }
+
+  async [Symbol.dispose]() {
+    this.serializer?.[Symbol.dispose]();
   }
 
   subTaskCallback = (progress: SubTaskProgress) => {
@@ -97,7 +109,6 @@ export class TaskSessionBase implements AsyncDisposable {
   }
 
   async dumpError(page: Page, error?: unknown) {
-    const serializer = await this.serializer;
-    await serializer?.dumpError(page, error);
+    await this.serializer?.dumpError(page, error);
   }
 }

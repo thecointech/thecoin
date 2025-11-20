@@ -13,7 +13,7 @@ import { BackgroundTaskCallback, getErrorMessage } from '@/BackgroundTask';
 type Result = "success" | "error" | "skip";
 export async function harvest(uiCallback?: BackgroundTaskCallback): Promise<Result> {
 
-  await using callback = new HarvesterReplayCallbacks({
+  await using callback = await HarvesterReplayCallbacks.create({
     uiCallback,
     timestamp: Date.now(),
     taskType: "replay",

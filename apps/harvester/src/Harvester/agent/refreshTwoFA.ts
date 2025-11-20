@@ -24,7 +24,7 @@ export async function twofaRefresh(type: RendererBankType, callback: BackgroundT
     throw new Error("No bank config found");
   }
 
-  await using logger = new AgentCallbacks({
+  await using logger = await AgentCallbacks.create({
     taskType: TwoFARefreshTask,
     uiCallback: callback,
     sections: toProcess,

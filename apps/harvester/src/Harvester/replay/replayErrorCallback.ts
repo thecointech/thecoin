@@ -1,6 +1,6 @@
 import { maybeCloseModal } from "@thecointech/scraper-agent/modal";
 import { notify, notifyError } from "../notify";
-import type { Page } from "puppeteer";
+import { TimeoutError, type Page } from "puppeteer";
 import type { AnyEvent } from "@thecointech/scraper-types";
 import type { ReplayErrorParams } from "@thecointech/scraper";
 import { EventSection, SectionName } from "@thecointech/scraper-agent/types";
@@ -19,26 +19,28 @@ export async function replayErrorCallback({page, err, event, events}: ReplayErro
     return undefined;
   }
 
+  // Major issues on replay:
+  // - Modal
+  // - TwoFA
+  // - Unknown redirect
+
   if (err instanceof ElementNotFoundError) {
-
-    // Major issues on replay:
-    // - Modal
-    // - TwoFA
-    // - Unknown redirect
-
     // On failed 2FA, we think we're in AccountSummary
     // but we are actually on the TwoFA page.
-    if (section.section === "AccountsSummary") {
-      const inTwoFA = await isPageInTwoFA(page, root);
-      if (inTwoFA) {
-        notifyError({
-          title: 'Bank connection error',
-          message: "TwoFA error: please refresh the token in the app",
-        })
-        return undefined;
-      }
+    const inTwoFA = await isPageInTwoFA(page, root);
+    if (inTwoFA) {
+      notifyError({
+        title: 'Bank connection error',
+        message: "TwoFA error: please refresh the token in the app",
+      })
+      return undefined;
     }
+  }
 
+  // If we are looking for something, or if we've failed to navigate
+  let runThisAnyway = false;
+  runThisAnyway = true;
+  if (err instanceof TimeoutError || err instanceof ElementNotFoundError || runThisAnyway) {
     // Our only AI-enabled option is to close any modal
     const didClose = await maybeCloseModal(page);
     if (didClose) {
@@ -53,15 +55,15 @@ export async function replayErrorCallback({page, err, event, events}: ReplayErro
       // Re-run this event.
       return events.indexOf(event);
     }
+  }
 
-    // If we aren't sure what's gone wrong,
-    // but we are in the logout section,
-    // We ignore the problem and continue.
-    if (section.section === "Logout") {
-      // We have failed to logout.  This is bad, but not a deal-breaker.
-      log.warn(err, "Failed to logout");
-      return events.length;
-    }
+  // If we aren't sure what's gone wrong,
+  // but we are in the logout section,
+  // We ignore the problem and continue.
+  if (section.section === "Logout") {
+    // We have failed to logout.  This is bad, but not a deal-breaker.
+    log.warn(err, "Failed to logout");
+    return events.length;
   }
 
   // No way to handle this error

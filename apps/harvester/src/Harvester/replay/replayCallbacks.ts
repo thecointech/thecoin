@@ -14,6 +14,7 @@ export class HarvesterReplayCallbacks extends TaskSessionBase implements IReplay
   constructor(options: CallbackOptions) {
     super(options, {
       writeScreenshotOnElement: true,
+      skipSections: [],
     });
   }
 
