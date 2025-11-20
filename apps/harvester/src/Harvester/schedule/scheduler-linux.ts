@@ -26,7 +26,8 @@ export async function setSchedule(schedule: HarvestSchedule, _existing?: Harvest
   try {
     execSync(`systemctl --user disable --now ${TimerName}`);
   } catch (e) {
-    // Ignore if timer wasn't enabled
+    // Ignore if timer wasn't enabled; log others for diagnostics
+    log.debug(e, 'Ignoring error while disabling existing systemd timer');
   }
 
   // Just in case someone only wants to run manually.
@@ -101,9 +102,14 @@ export function getSystemdOnCalendar(schedule: HarvestSchedule): string {
   const [hour, minute] = schedule.timeToRun.split(':');
   const hourNumber = parseInt(hour);
   const minuteNumber = parseInt(minute);
-  if (hourNumber < 0 || hourNumber > 23 || minuteNumber < 0 || minuteNumber > 59) {
+  if (
+    !Number.isInteger(hourNumber)
+    || !Number.isInteger(minuteNumber)
+    || hourNumber < 0 || hourNumber > 23 || minuteNumber < 0 || minuteNumber > 59
+  ) {
     throw new Error(`Invalid time values: ${hour}:${minute}`);
   }
+
   const days = schedule.daysToRun
     .map((enabled, idx) => enabled ? idx : null)
     .filter(idx => idx !== null) as number[];

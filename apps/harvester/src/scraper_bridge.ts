@@ -64,8 +64,9 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
   }),
 
   validateAction: (_actionName, _inputValues) => guard(async () => {
+    throw new Error("Currently disabled - re-enable for manual setup");
     // const r = await getValues(actionName, onBgTaskMsg, inputValues)
-    return toBridge({});
+    //return toBridge(r);
   }),
 
   twofaRefresh: (actionName) => guard(async () => doRefresh(actionName, onBgTaskMsg)),

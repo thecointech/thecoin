@@ -89,6 +89,7 @@ async function isPageInTwoFA(page: Page, root: EventSection) {
         return Boolean(matched);
       }
       catch (e) {
+        // Ignore - we return false below if element not found
       }
     }
   }
