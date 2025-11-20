@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
 import { writeFileSync, mkdirSync } from 'fs';
 import { homedir } from 'os';
-import { HarvestSchedule } from '../../types';
+import { HarvestSchedule, toDayNames } from '@thecointech/store-harvester';
 import { log } from '@thecointech/logging';
 import { getScraperVisible } from '../scraperVisible';
 
@@ -20,7 +20,7 @@ const TimerPath = `${SystemdUserDir}/${TimerName}`;
 
 // List all timers and see when it last/next triggers
 // systemctl --user list-timers thecoin-harvest.timer
-export async function setSchedule(schedule: HarvestSchedule, _existing?: HarvestSchedule) {
+export async function setSchedule(schedule: HarvestSchedule) {
   log.info(`Creating systemd schedule: ${JSON.stringify(schedule)}`);
   // Disable and stop the timer if it exists
   try {
@@ -96,7 +96,7 @@ WantedBy=timers.target
 
 // Converts HarvestSchedule to systemd OnCalendar format
 export function getSystemdOnCalendar(schedule: HarvestSchedule): string {
-  // schedule.daysToRun: boolean[7] where 0=Sunday
+  // schedule.daysToRun: boolean[7] where 0=Sunday (JS Date.getDay() style)
   // schedule.timeToRun: 'HH:MM'
   const [hour, minute] = schedule.timeToRun.split(':');
   const hourNumber = parseInt(hour);
@@ -104,17 +104,11 @@ export function getSystemdOnCalendar(schedule: HarvestSchedule): string {
   if (hourNumber < 0 || hourNumber > 23 || minuteNumber < 0 || minuteNumber > 59) {
     throw new Error(`Invalid time values: ${hour}:${minute}`);
   }
-  const days = schedule.daysToRun
-    .map((enabled, idx) => enabled ? idx : null)
-    .filter(idx => idx !== null) as number[];
+  const days = toDayNames(schedule.daysToRun, "short", { locale: "en" });
 
   // We should have already bailed if no days are selected
   if (days.length === 0) {
     throw new Error('No days selected');
   }
-
-  // systemd: 0=Sun, 1=Mon, ..., 6=Sat
-  const dayMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const dayStr = days.map(d => dayMap[d]).join(',');
-  return `${dayStr} *-*-* ${hourNumber}:${minuteNumber}:00`;
+  return `${days.join(',')} *-*-* ${hourNumber}:${minuteNumber}:00`;
 }
