@@ -1,5 +1,5 @@
 import { maybeCloseModal } from "@thecointech/scraper-agent/modal";
-import { notify, notifyError } from "../notify";
+import { notify, notifyError } from "@/notify";
 import { TimeoutError, type Page } from "puppeteer";
 import type { AnyEvent } from "@thecointech/scraper-types";
 import type { ReplayErrorParams } from "@thecointech/scraper";

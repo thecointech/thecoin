@@ -6,7 +6,7 @@ import { closeBrowser } from '@thecointech/scraper/puppeteer';
 import { DateTime } from 'luxon';
 import { getDataAsDate, HarvestData } from './types';
 import { PayVisaKey } from './steps/PayVisa';
-import { notifyError } from './notify';
+import { notifyError } from '@/notify';
 import { HarvesterReplayCallbacks } from './replay/replayCallbacks';
 import { BackgroundTaskCallback, getErrorMessage } from '@/BackgroundTask';
 

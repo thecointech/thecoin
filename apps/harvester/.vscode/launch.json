@@ -101,6 +101,24 @@
       }
     },
     {
+      "name": "App - Ask Input",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": [
+        "_start",
+        "-- --ask-input"
+      ],
+      "runtimeExecutable": "yarn",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "env": {
+        "ELECTRON_DISABLE_SANDBOX": "true",
+      }
+    },
+    {
       "type": "node",
       "request": "launch",
       "name": "Harvest - Live",

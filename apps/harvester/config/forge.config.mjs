@@ -35,11 +35,11 @@ const config = {
       development: "com.TheCoin.Harvester.dev"
     }),
     artifactName: `harvester-${process.env.CONFIG_NAME}-{version}-{arch}.{ext}`,
-    // extraResource: [
-    //   // Include our assets outside of the asar
-    //   // file so we can reference them by absolute path
-    //   './assets'
-    // ],
+    extraResource: [
+      // Include our assets outside of the asar
+      // file so we can reference them by absolute path
+      './assets'
+    ],
   },
   rebuildConfig: {},
   makers: [

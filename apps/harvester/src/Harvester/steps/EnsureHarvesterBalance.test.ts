@@ -5,14 +5,14 @@ import { DateTime } from 'luxon';
 import { processState } from '../processState';
 import { mockUser } from '../../../internal/mockUser';
 
-jest.unstable_mockModule('../notify', () => ({
+jest.unstable_mockModule('@/notify', () => ({
   notify: jest.fn(),
 }));
 jest.unstable_mockModule('./utils', () => ({
   getBalance: jest.fn(),
 }))
 
-const notify = await import('../notify');
+const notify = await import('@/notify');
 const utils = await import('./utils');
 const { EnsureHarvesterBalance } = await import('./EnsureHarvesterBalance')
 const { ClearPendingVisa } = await import('./ClearPendingVisa')
