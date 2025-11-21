@@ -49,7 +49,7 @@ export class HarvesterReplayCallbacks extends TaskSessionBase implements IReplay
     log.error(params.err, "Error in replay");
     if (!this.events) {
       log.error("No events set, nothing to handle");
-      await this.dumpError(params.page, params.err);
+      await this.dumpError(params.replay.page, params.err);
       return undefined;
     }
 
@@ -63,7 +63,7 @@ export class HarvesterReplayCallbacks extends TaskSessionBase implements IReplay
           error: getErrorMessage(params.err),
         })
       }
-      await this.dumpError(params.page, params.err);
+      await this.dumpError(params.replay.page, params.err);
     }
     return handled;
   }

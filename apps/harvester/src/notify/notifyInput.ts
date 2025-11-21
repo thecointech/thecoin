@@ -12,7 +12,7 @@ import { DisplayContext } from "./displayContext";
  * @param timeoutSeconds - Timeout in seconds (default: 300 = 5 minutes)
  * @returns The user's input, or null if cancelled/timeout
  */
-export async function askForInput(prompt: string, timeoutSeconds: number = 300): Promise<string | null> {
+export async function notifyInput(prompt: string, timeoutSeconds: number = 300): Promise<string | null> {
   // Skip during tests unless explicitly enabled
   if (process.env.JEST_WORKER_ID && !process.env.TEST_ASK_INPUT) {
     return Promise.resolve(null);

@@ -6,20 +6,20 @@ import { getEvents } from '../events';
 import type { HarvesterReplayCallbacks } from './replayCallbacks';
 import { ChequeBalanceResult, ETransferInput, ETransferResult, VisaBalanceResult } from '@thecointech/scraper-agent/types';
 
-export async function getValues(actionName: 'chqBalance', callback: HarvesterReplayCallbacks): Promise<ChequeBalanceResult>;
-export async function getValues(actionName: 'visaBalance', callback: HarvesterReplayCallbacks): Promise<VisaBalanceResult>;
-export async function getValues(actionName: 'chqETransfer', callback: HarvesterReplayCallbacks, dynamicValues?: ETransferInput): Promise<ETransferResult>;
-export async function getValues(actionName: ActionType, callback: HarvesterReplayCallbacks, dynamicValues?: Record<string, string>, delay?: number): Promise<ReplayResult>
-export async function getValues(actionName: ActionType, callback: HarvesterReplayCallbacks, dynamicValues?: Record<string, string>, delay = 5000) {
+export async function getValues(actionName: 'chqBalance', callbacks: HarvesterReplayCallbacks): Promise<ChequeBalanceResult>;
+export async function getValues(actionName: 'visaBalance', callbacks: HarvesterReplayCallbacks): Promise<VisaBalanceResult>;
+export async function getValues(actionName: 'chqETransfer', callbacks: HarvesterReplayCallbacks, dynamicValues?: ETransferInput): Promise<ETransferResult>;
+export async function getValues(actionName: ActionType, callbacks: HarvesterReplayCallbacks, dynamicValues?: Record<string, string>, delay?: number): Promise<ReplayResult>
+export async function getValues(actionName: ActionType, callbacks: HarvesterReplayCallbacks, dynamicValues?: Record<string, string>, delay = 5000) {
 
-  const events = await getEvents(actionName);
-  callback.setSubTaskEvents(actionName, events);
-  const replayEvents = getReplayEvents(events, actionName);
-  if (!replayEvents?.length) {
+  const rootSection = await getEvents(actionName);
+  callbacks.setSubTaskEvents(actionName, rootSection);
+  const events = getReplayEvents(rootSection, actionName);
+  if (!events?.length) {
     throw new Error(`No events found for ${actionName}`);
   }
-  const r = await replay({ name: actionName, delay }, replayEvents, callback, dynamicValues);
-  callback.subTaskCallback({
+  const r = await replay({ name: actionName, events, delay, callbacks, dynamicValues});
+  callbacks.subTaskCallback({
     subTaskId: actionName,
     completed: true,
     percent: 100,

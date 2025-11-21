@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import type { Page } from 'puppeteer';
-import { type CurrencyType, getCurrencyConverter, guessCurrencyFormat, guessDateFormat } from './valueParsing';
-import { getAllElements } from './elements';
+import { type CurrencyType, getCurrencyConverter, guessCurrencyFormat, guessDateFormat } from '../valueParsing';
+import { getAllElements } from '../elements';
 import currency from 'currency.js';
 import type { HistoryRow, ElementData } from '@thecointech/scraper-types';
 

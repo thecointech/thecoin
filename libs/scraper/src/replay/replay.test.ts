@@ -1,26 +1,13 @@
 import { jest } from "@jest/globals";
 import { IsManualRun, describe } from "@thecointech/jestutils";
 import events from './replay.test.json';
-import { patchOnnxForJest } from '../internal/jestPatch';
 import type { AnyEvent } from "@thecointech/scraper-types";
-import { replay } from "./replay";
+import { replay } from ".";
+import { useTestBrowser } from "../../internal/useTestBrowser";
 
-patchOnnxForJest();
 jest.setTimeout(5 * 60 * 1000);
 
-// jest.unstable_mockModule('../Harvester/config', () => {
-//   return {
-//     getEvents: () => events
-//   }
-// })
-
-// const paths = {
-//   logsFolder: path.join('..', 'temp', "logs"),
-//   outFolder: path.join('..', 'temp', "out"),
-// }
-// jest.unstable_mockModule('../paths', () => {
-//   return paths
-// })
+const { getPage } = useTestBrowser();
 
 describe("needs more tests!", () => {
 
@@ -37,11 +24,9 @@ describe("needs more tests!", () => {
       height: 100,
       width: 100,
     }
-    process.env.HARVESTER_SAVE_DUMP = "true";
-    // const { replay } = await import('./replay');
 
     // This should throw, because the selector is no longer valid
-    await expect(replay({ name: "test" }, events as AnyEvent[])).rejects.toThrow();
+    await expect(replay({ name: "test", events: events as AnyEvent[] })).rejects.toThrow();
     // On throw, we should have written out the page
   })
 

@@ -5,7 +5,7 @@ import { log } from '@thecointech/logging';
 import { RotatingFileStream } from 'bunyan';
 import { logsFolder } from './paths';
 import { mkdirSync } from 'fs';
-import { askForInput, notify } from './notify';
+import { notifyInput, notify } from './notify';
 import { setMainWindow } from './mainWindow';
 import { initMain } from './initMain';
 import { initMainIPC } from './scraper_bridge';
@@ -80,7 +80,7 @@ if (hasArgument("--notify")) {
 }
 
 if (hasArgument("--ask-input")) {
-  const r2 = await askForInput("Enter your 2FA code:");
+  const r2 = await notifyInput("Enter your 2FA code:");
   log.info("Test Result: ", r2)
   await new Promise(resolve => setTimeout(resolve, 100)); // Give logs time to flush
   app.quit();
