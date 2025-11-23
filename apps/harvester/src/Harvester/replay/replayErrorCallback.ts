@@ -193,7 +193,7 @@ async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection) {
           }
         }
         else {
-          throw new Error("Code not recieved, or timed out")
+          throw new Error("Code not received, or timed out")
         }
       }
       const eventNavigates = () => {
