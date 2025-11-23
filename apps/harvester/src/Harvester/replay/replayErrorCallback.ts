@@ -4,7 +4,7 @@ import { TimeoutError, type Page } from "puppeteer";
 import type { AnyEvent } from "@thecointech/scraper-types";
 import type { Replay, ReplayErrorParams } from "@thecointech/scraper";
 import { EventSection, SectionName } from "@thecointech/scraper-agent/types";
-import { isSection } from "@thecointech/scraper-agent/replay/events";
+import { flatten, isSection } from "@thecointech/scraper-agent/replay/events";
 import { ElementNotFoundError, processEvent } from "@thecointech/scraper";
 import { log } from "@thecointech/logging";
 import { getElementForEvent } from "@thecointech/scraper/elements";
@@ -17,6 +17,8 @@ export async function replayErrorCallback({replay, err, event}: ReplayErrorParam
     return undefined;
   }
 
+  log.info("Running replay error callback");
+
   // Major issues on replay:
   // - Modal
   // - TwoFA
@@ -24,16 +26,42 @@ export async function replayErrorCallback({replay, err, event}: ReplayErrorParam
   const { page, events } = replay;
 
   if (err instanceof ElementNotFoundError) {
+    log.info("Testing for 2FA page");
     // On failed 2FA, we think we're in AccountSummary
     // but we are actually on the TwoFA page.
-    const inTwoFA = await isPageInTwoFA(page, root);
+    const inTwoFA = await isPageInSection(page, root, "TwoFA");
     if (inTwoFA) {
-      await attemptEnterTwoFA(replay, inTwoFA.twoFaSection);
-      notifyError({
-        title: 'Bank connection error',
-        message: "TwoFA error: please refresh the token in the app",
-      })
-      return undefined;
+      log.info("Page is in TwoFA section");
+      try {
+        await attemptEnterTwoFA(replay, inTwoFA.section);
+        // Our assumption is that if we do not throw, we should
+        // be able to continue with the rest of the replay.
+        const success = await isPageInSection(page, root, "AccountsSummary");
+        if (success) {
+          log.info("Page is in AccountsSummary section");
+          // If success, go back to the first AccountsSummary event.
+          const accountsSummarySection = findSectionByName("AccountsSummary", root);
+          if (accountsSummarySection) {
+            const events = flatten(accountsSummarySection, ["AccountsSummary"]);
+            const firstEvent = events.find(e => !isSection(e)) as AnyEvent;
+            log.info("Found AccountsSummary event: " + firstEvent.type);
+            const idx = events.indexOf(firstEvent);
+            log.info("Found AccountsSummary event index: " + idx);
+            return idx;
+          }
+          else {
+            throw new Error("Failed to find AccountsSummary section");
+          }
+        }
+      }
+      catch (e) {
+        log.error(e, "Failed to enter 2FA");
+        notifyError({
+          title: 'Bank connection error',
+          message: "TwoFA error: please refresh the token in the app",
+        })
+        return undefined;
+      }
     }
   }
 
@@ -100,25 +128,25 @@ function findSectionByName(search: SectionName, section: EventSection) : EventSe
   return null;
 }
 
-async function isPageInTwoFA(page: Page, root: EventSection) {
-  const twoFaSection = findSectionByName("TwoFA", root);
-  if (twoFaSection) {
+async function isPageInSection(page: Page, root: EventSection, sectionName: SectionName) {
+  const section = findSectionByName(sectionName, root);
+  if (section) {
     // The easiest way to tell is to search for the first element
-    const events = twoFaSection.events.filter(e => !isSection(e)) as AnyEvent[];
-    const firstInteraction = events.find(e => (e.type === "input" || e.type === "click"));
+    const events = flatten(section, [sectionName]);
+    const firstElement = events.find(e => (e.type === "input" || e.type === "click" || e.type == "value"));
 
     // Search for the first click/input we do in the TwoFA section
-    if (firstInteraction) {
+    if (firstElement) {
       try {
         const matched = await getElementForEvent({
           page,
           timeout: 1000,
           event: {
-            ...firstInteraction,
+            ...firstElement,
             eventName: "testInTwoFA",
           }
         }, async () => {});
-        return { twoFaSection, matched };
+        return { section, matched };
       }
       catch (e) {
         // Ignore - we return false below if element not found
@@ -130,11 +158,11 @@ async function isPageInTwoFA(page: Page, root: EventSection) {
 
 // NOTE: Counter starts at 1 because processEvent
 // will trigger a navigation on i == 0
-async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection, counter = 1) {
+async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection) {
   // We don't want to recurse back into here.  If things go
   // wrong, we want to fail and let the user fix it.
   const { callbacks, ...noCallbacks } = replay;
-
+  log.info(`Enter refresh TwoFA token attempt with ${twoFaSection.events.length} events`);
 
   // Process all the events until we reach an input
   // If the user was required to click a destination first,
@@ -149,11 +177,12 @@ async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection, cou
       // This is a nested section, it should be more 2FA, but
       // if it's not, we should just skip it.
       if (event.section === "TwoFA") {
-        counter = await attemptEnterTwoFA(replay, event, counter);
+        await attemptEnterTwoFA(replay, event);
       }
     }
     else {
       if (event.type == "input") {
+        log.info(`Found input event ${i} - ${event.eventName}`);
         // Replace the value with the user's input
         const code = await notifyInput("Your harvester needs a 2FA code to continue.  Please enter it now.");
         if (code) {
@@ -162,6 +191,9 @@ async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection, cou
             value: code,
           }
         }
+        else {
+          throw new Error("Code not recieved, or timed out")
+        }
       }
       const eventNavigates = () => {
         return (
@@ -169,10 +201,10 @@ async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection, cou
           (twoFaSection.events[i+1] as AnyEvent).type == "navigation"
         );
       }
+      log.info(`Processing event ${i} - ${event.type}`);
       await processEvent(noCallbacks, event, eventNavigates);
-      counter++;
     }
-
   }
-  return counter;
+  log.info("Finished processing 2FA events");
 }
+

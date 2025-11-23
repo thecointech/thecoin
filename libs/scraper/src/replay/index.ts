@@ -199,32 +199,13 @@ export async function processEvent({ page, dynamicValues, values, delay=1000 }: 
         break;
       } else {
         log.debug({ eventName: event.eventName }, `Reading value: {eventName}`);
-        // The 15 second wait is to compensate for SPA
-        // websites who don't have load/navigation events
-        // (thanks again tangerine ya bastard!)
-        const tryReadValue = async () => {
-          for (let i = 0; i < 15; i++) {
-            try {
-              const el = await getElementForEvent({ page, event });
-              const parsed = parseValue(el.data.text, event.parsing);
-              if (parsed) {
-                values[event.eventName] = parsed;
-                return true;
-              }
-            }
-            catch (e) {
-              log.error(`Couldn't read value: ${event.selector} - ${e}`);
-            }
-            await sleep(1000);
-          }
-          return false;
+        const el = await getElementForEvent({ page, event });
+        const parsed = parseValue(el.data.text, event.parsing);
+        if (parsed) {
+          values[event.eventName] = parsed;
+          break;
         }
-        if (!await tryReadValue()) {
-          // Couldn't read value
-          throw new ValueEventError(event)
-        }
-        // All good, continue
-        break;
+        throw new ValueEventError(event)
       }
     }
   }

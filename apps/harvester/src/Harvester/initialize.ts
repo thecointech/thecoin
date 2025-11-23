@@ -36,8 +36,8 @@ export async function initialize(callback: HarvesterReplayCallbacks) {
   // Initialize data (do we want anything from last state?)
   // Sub 1 week to ensure payments posted after last run are all counted
   const lastTxDate = lastRun?.date.minus({ week: 1 });
-  const visa = await getVisaData(callback, lastTxDate);
   const chq = await getChequingData(callback);
+  const visa = await getVisaData(callback, lastTxDate);
   const tcCore = await GetContract(wallet.provider!);
   const coin = await tcCore.balanceOf(wallet.address);
   let state: HarvestData = {
