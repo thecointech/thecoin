@@ -30,6 +30,7 @@
     ".": {
       "development": "./build/index_mocked.js",
       "devlive": "./build/index_devlive.js",
+      "electron": "./build/index_electron.js",
       "browser": {
         "default": "./build/names.js"
       },
@@ -57,7 +58,8 @@
     "@ledgerhq/hw-transport-node-hid": "^6.28.6",
     "@thecointech/ethers-provider": "^0.4.0",
     "@thecointech/logging": "^0.4.0",
-    "@thecointech/secrets": "^0.4.0"
+    "@thecointech/secrets": "^0.4.0",
+    "@thecointech/electron-signer": "^0.4.0"
   },
   "devDependencies": {
     "@thecointech/electron-utils": "^0.4.0"
