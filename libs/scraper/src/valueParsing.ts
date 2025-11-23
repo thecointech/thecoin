@@ -219,7 +219,7 @@ export function getCurrencyCandidateValue(value?: string) {
         return false;
       }
     }
-    if (lengthRatio < 0.6) {
+    else if (lengthRatio < 0.6) {
       return false;
     }
   }
@@ -288,7 +288,7 @@ export function getCurrencyConverter(fmt: CurrencyType): CurrencyConverter {
     }
     // Return the parsed value
     const converter = Currencies[fmt];
-    return converter(value);
+    return converter(candidateValue);
   }
 }
 

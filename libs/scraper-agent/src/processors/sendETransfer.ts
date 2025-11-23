@@ -3,7 +3,7 @@ import { clickElement } from "../interactions";
 import { getAllElements } from "@thecointech/scraper/elements";
 import { sleep } from "@thecointech/async";
 import type { Coords, SearchElement } from "@thecointech/scraper-types";
-import { enterValueIntoFound } from "@thecointech/scraper/replay";
+import { enterValueIntoFound } from "@thecointech/scraper";
 import type { BBox } from "@thecointech/vqa";
 // Use regular levenshtein, not the modified version
 // in this case insertions are bad

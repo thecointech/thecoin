@@ -42,10 +42,13 @@ export async function replayErrorCallback({replay, err, event}: ReplayErrorParam
           // If success, go back to the first AccountsSummary event.
           const accountsSummarySection = findSectionByName("AccountsSummary", root);
           if (accountsSummarySection) {
-            const events = flatten(accountsSummarySection, ["AccountsSummary"]);
-            const firstEvent = events.find(e => !isSection(e)) as AnyEvent;
+            const sectionEvents = flatten(accountsSummarySection, ["AccountsSummary"]);
+            const firstEvent = sectionEvents.find(e => !isSection(e)) as AnyEvent;
+            if (!firstEvent) {
+              throw new Error("Failed to find first AccountsSummary event");
+            }
             log.info("Found AccountsSummary event: " + firstEvent.type);
-            const idx = events.indexOf(firstEvent);
+            const idx = events.findIndex(i => i.id == firstEvent.id);
             log.info("Found AccountsSummary event index: " + idx);
             return idx;
           }
@@ -66,9 +69,7 @@ export async function replayErrorCallback({replay, err, event}: ReplayErrorParam
   }
 
   // If we are looking for something, or if we've failed to navigate
-  let runThisAnyway = false;
-  runThisAnyway = true;
-  if (err instanceof TimeoutError || err instanceof ElementNotFoundError || runThisAnyway) {
+  if (err instanceof TimeoutError || err instanceof ElementNotFoundError) {
     // Our only AI-enabled option is to close any modal
     const didClose = await maybeCloseModal(page);
     if (didClose) {
@@ -196,9 +197,14 @@ async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection) {
         }
       }
       const eventNavigates = () => {
+        const next = twoFaSection.events[i + 1] as AnyEvent | undefined;
+        // We assume our last event in 2FA is a form submission.
+        // That should -always- trigger a navigation.
+        if (!next) return true;
+        // Otherwise, check our next event is a navigation
         return (
           (event as AnyEvent).type != "navigation" &&
-          (twoFaSection.events[i+1] as AnyEvent).type == "navigation"
+          next.type == "navigation"
         );
       }
       log.info(`Processing event ${i} - ${event.type}`);

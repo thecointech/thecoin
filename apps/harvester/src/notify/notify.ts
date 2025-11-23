@@ -47,7 +47,7 @@ function notify_default(props: Notification) : Promise<void> {
     }, (err, _response, _metadata) => {
       if (err) {
         log.error(err);
-        reject(err);
+        return reject(err);
       }
       resolve();
     });
@@ -70,7 +70,7 @@ function notify_linux(props: Notification, isError?: boolean) : Promise<void> {
     } as NotifySend.Notification, (err, _response, _metadata) => {
       if (err) {
         log.error(err);
-        reject(err);
+        return reject(err);
       }
       // Resolve immediately, linux doesn't support
       // actions/replies via this interface

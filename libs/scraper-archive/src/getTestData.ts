@@ -101,7 +101,7 @@ function filterElmTestsForSearchValues(test: TestData, jsonFilesRef: string[]) {
   // any that don't have a valid search event.
   test.names().forEach(name => {
       const sch = test.sch(name);
-      if (sch?.event) {
+      if (sch?.event?.estimated) {
         return;
       }
       // If no search data, remove entirely from jsonFiles

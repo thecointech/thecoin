@@ -65,7 +65,7 @@ export async function processEvents(replay: Replay) {
       const eventNavigates = () => {
         return i == 0 || (
           event.type != "navigation" &&
-          replay.events[i+1].type == "navigation"
+          replay.events[i + 1]?.type == "navigation"
         );
       }
       await processEvent(replay, event, eventNavigates);
@@ -198,7 +198,7 @@ export async function processEvent({ page, dynamicValues, values, delay=1000 }: 
         // All good, continue
         break;
       } else {
-        log.debug({ eventName: event.eventName }, `Reading value: {eventName}`);
+        log.debug({ eventName: event.eventName }, "Reading value: {eventName}");
         const el = await getElementForEvent({ page, event });
         const parsed = parseValue(el.data.text, event.parsing);
         if (parsed) {

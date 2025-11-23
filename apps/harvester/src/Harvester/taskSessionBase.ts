@@ -77,7 +77,7 @@ export class TaskSessionBase implements Disposable {
     this.serializer = await this._serializerPromise;
   }
 
-  async [Symbol.dispose]() {
+  [Symbol.dispose]() {
     this.serializer?.[Symbol.dispose]();
   }
 
