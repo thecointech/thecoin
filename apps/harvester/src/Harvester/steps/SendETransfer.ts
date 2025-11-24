@@ -1,7 +1,7 @@
 import { log } from '@thecointech/logging';
 import type { HarvestData, ProcessingStage, UserData } from '../types';
 import currency from 'currency.js';
-import { notify, notifyError } from '../notify';
+import { notify, notifyError } from '@/notify';
 import { SendFakeDeposit } from '@thecointech/email-fake-deposit';
 import { DateTime } from 'luxon';
 import { getValues } from '../replay';

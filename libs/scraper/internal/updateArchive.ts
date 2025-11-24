@@ -5,6 +5,13 @@ import { getElementForEvent, getDocumentBounds } from "../src/elements";
 import type { FoundElement, ElementSearchParams } from "@thecointech/scraper-types";
 import { log } from "@thecointech/logging";
 
+// Run through the archive folder
+// Exercise getElementForEvent to test
+// VQA -> pageElement,
+// optionally updating
+//  - cache (single file caches elements on the page)
+//  - snapshots (file-per-run scored elements over time)
+
 // Parse command-line arguments
 const args = process.argv.slice(2);
 const doWriteSnapshot = args.includes('--snapshot');

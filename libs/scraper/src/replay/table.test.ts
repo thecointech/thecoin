@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer"
 import { jest } from "@jest/globals"
-import { registerElementAttrFns } from "./elements";
+import { registerElementAttrFns } from "../elements";
 import { getRawTxData, getTableData } from "./table";
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { sleep } from "@thecointech/async";

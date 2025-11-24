@@ -1,5 +1,5 @@
 import path from "node:path";
-import { existsSync, readdirSync } from "node:fs";
+import { existsSync, readdirSync, lstatSync } from "node:fs";
 import { globSync } from "glob";
 import { TestData } from "./testData";
 import { getOverrideData, type SkipElement } from "./overrides";
@@ -15,16 +15,20 @@ export function getTestData<T extends TestData>(
   constructor: TestDataConstructor<T> = TestData as any,
   getPage: (url: string) => Promise<Page>
 ): T[] {
-
-  const testFolder = tests();
-  if (!testFolder) {
+  // Private tests don't exist in CI
+  if (process.env.JEST_CI) {
     return [];
   }
+  const testFolder = tests();
   const overrideData = getOverrideData();
   const results: T[] = [];
   const pattern = `${testFolder}/**/${recordTime}/**/${section}/**/*${searchPattern}*`
   const matched = globSync(pattern);
   for (const match of matched) {
+    // Ignore folders
+    if (lstatSync(match).isDirectory()) {
+      continue;
+    }
 
     const matchedFolder = path.dirname(match);
     const machedFilename = path.basename(match);
@@ -97,7 +101,7 @@ function filterElmTestsForSearchValues(test: TestData, jsonFilesRef: string[]) {
   // any that don't have a valid search event.
   test.names().forEach(name => {
       const sch = test.sch(name);
-      if (sch?.event.estimated) {
+      if (sch?.event?.estimated) {
         return;
       }
       // If no search data, remove entirely from jsonFiles

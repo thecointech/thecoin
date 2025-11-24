@@ -46,5 +46,5 @@ setupScraper({
   rootFolder: baseFolder,
   isVisible: async () => true
 });
-const r = await replay({ name: "TestReplay" }, replayEvents, callbacks, { amount: "10" });
+const r = await replay({ name: "TestReplay", events: replayEvents, callbacks, dynamicValues: { amount: "10" } });
 

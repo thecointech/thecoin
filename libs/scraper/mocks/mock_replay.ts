@@ -1,5 +1,4 @@
 import type { AnyEvent, HistoryRow, ReplayResult } from "@thecointech/scraper-types";
-import type { IReplayCallbacks } from "../src/callbacks";
 import { sleep } from "@thecointech/async/sleep";
 import currency from "currency.js";
 import { DateTime } from "luxon";
@@ -12,30 +11,30 @@ import { replay as SrcReplay } from "../src/replay";
 // THIS DEFINITELY SHOULD BE IN SCRAPER-BANKING specialization library
 
 
-export const replay: typeof SrcReplay = async (options: ReplayOptions, events: AnyEvent[], callbacks?: IReplayCallbacks, dynamicValues?: Record<string, string>) : Promise<ReplayResult> => {
+export const replay: typeof SrcReplay = async ({name, events, callbacks}: ReplayOptions) : Promise<ReplayResult> => {
 
   // Progress started
-  callbacks?.onProgress?.({ step: 0, total: 1, stage: options.name, stepPercent: 0 });
+  callbacks?.onProgress?.({ step: 0, total: 1, stage: name, stepPercent: 0 });
 
   const sleepLength = process.env.RUNTIME_ENV == "test" ? 10 : 500;
 
   for (let i = 0; i < events.length; i++) {
     await sleep(sleepLength);
     const stepPercent = Math.round(100 * (i + 1) / events.length);
-    const continueLoop = callbacks?.onProgress?.({ step: 0, total: 1, stage: options.name, stepPercent, event: events[i] });
+    const continueLoop = callbacks?.onProgress?.({ step: 0, total: 1, stage: name, stepPercent, event: events[i] });
     if (continueLoop === false) {
       break;
     }
   }
 
   // Mock some more-or-less random return values
-  if (options.name == "chqBalance") {
+  if (name == "chqBalance") {
     const balance = (1000 + Math.random() * 500).toFixed(2);
     return {
       balance: currency(balance),
     };
   }
-  else if (options.name == "visaBalance") {
+  else if (name == "visaBalance") {
     return getEmulatedVisaData(DateTime.now());
   }
   return {

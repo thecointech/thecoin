@@ -2,7 +2,7 @@ import { AgentErrorParams, IAgentCallbacks } from "@thecointech/scraper-agent/ty
 import { CallbackOptions, TaskSessionBase } from "../taskSessionBase";
 import { log } from "@thecointech/logging";
 import { maybeCloseModal } from "@thecointech/scraper-agent/modal";
-import { notify } from "../notify";
+import { notify } from "@/notify";
 import { ScraperProgress } from "@thecointech/scraper";
 
 

@@ -5,6 +5,7 @@ import { closeBrowser } from '@thecointech/scraper';
 import { AccountsSummary, CookieBanner, CreditAccountDetails, Landing, Login, NamedProcessor, TwoFA, SendETransfer, Logout } from './processors';
 import { EventManager } from './eventManager';
 import { sections, SectionType } from './processors/types';
+import { apis } from './apis';
 
 export class Agent implements AsyncDisposable {
 
@@ -46,6 +47,9 @@ export class Agent implements AsyncDisposable {
   async process(sectionsToSkip: SectionName[] = []) : Promise<ProcessResults> {
 
     log.info(`Processing ${this.name}`);
+
+    // Verify VQA API is running
+    await warmupVqaApi();
 
     // First, clear out cookie banner
     await this.processSection(CookieBanner);
@@ -210,3 +214,15 @@ export class Agent implements AsyncDisposable {
   }
 }
 
+async function warmupVqaApi() {
+  try {
+    // test that the vqa api is warm
+    const api = await apis().getVqaBaseApi();
+    await api.warmup();
+  }
+  catch (e) {
+    log.warn(e, "Failed to warm up VQA API");
+    // If we can't warm up the VQA API, we can't continue
+    throw e;
+  }
+}

@@ -29,7 +29,7 @@ export async function autoConfigure({ type, config, visible }: AutoConfigParams,
   // Create the logger quickly, as that triggers the background task/loading screen
   const toSkip = getSectionsToSkip(type);
   const toProcess = sections.filter(s => !toSkip.includes(s));
-  await using logger = new AgentCallbacks({
+  await using logger = await AgentCallbacks.create({
     taskType: "record",
     uiCallback: callback,
     sections: toProcess,

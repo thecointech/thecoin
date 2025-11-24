@@ -116,22 +116,27 @@ export class AgentSerializer implements Disposable {
       components,
     };
 
-    // Log both JSON files with the same element number as they
-    // represent a single step in the process
-    await this.logJson(`${search.event.eventName}-elm`, elm, false);
-    await this.logJson(`${search.event.eventName}-sch`, sch);
+    // Write the screenshot first if requested.
+    // Doing so may increment the step, and
+    // the elements need the current step.
     if (this.writeScreenshotOnElement) {
       try {
         const image = await _getImage(search.page);
         await this.logScreenshot(image);
+
+        // Log after screenshot, as that may increment the step.
+        await this.logMhtml(search.page);
       }
       catch (e) {
         log.error(e, `Error taking screenshot for element ${search.event.eventName}`);
         // Not fatal, so continue
       }
     }
-    // Log after screenshot, as that may increment the step.
-    await this.logMhtml(search.page);
+
+    // Log both JSON files with the same element number as they
+    // represent a single step in the process
+    await this.logJson(`${search.event.eventName}-elm`, elm, false);
+    await this.logJson(`${search.event.eventName}-sch`, sch);
   }
 
   onSection = async (section: SectionName) => {

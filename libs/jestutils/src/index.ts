@@ -12,9 +12,7 @@ type AllowRun = boolean | (() => boolean);
 const skippable_describe = async (name: number | string | Function, fn: () => void | Promise<void>, allowRun?: AllowRun) => {
 
   if (allowRun === false || (typeof allowRun === 'function' && allowRun() === false)) {
-    return old_describe.skip(name, () => {
-      it.skip('skipped due to allowRun condition', () => {});
-    });
+    return old_describe.skip(name, fn)
   }
   return old_describe(name, fn)
 }

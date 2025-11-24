@@ -8,6 +8,8 @@ import { projectUrl } from "@thecointech/setenv/projectUrl";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { rootFolder, setRootFolder } from '../src/puppeteer-init/rootFolder';
 export { ElementNotFoundError, DynamicValueError } from "../src/errors";
+export { Registry } from "../src/record/registry";
+export { enterValueIntoFound } from "../src/replay";
 
 type BrowserConnection = {
   endpoint: string;
