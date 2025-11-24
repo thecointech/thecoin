@@ -8,13 +8,13 @@ export class Erc20Provider extends BaseProvider {
     const baseUrl = getBaseUrl()
     switch (name) {
       case "ShockAbsorber": {
-        return readFileSync(new URL("contract-plugin-shockabsorber/contracts/ShockAbsorber.sol", baseUrl), 'utf-8')
+        return readFileSync(new URL("libs/contract-plugin-shockabsorber/contracts/ShockAbsorber.sol", baseUrl), 'utf-8')
       }
       case "UberConverter": {
-        return readFileSync(new URL("contract-plugin-converter/contracts/UberConverter.sol", baseUrl), 'utf-8')
+        return readFileSync(new URL("libs/contract-plugin-converter/contracts/UberConverter.sol", baseUrl), 'utf-8')
       }
       case "RoundNumber": {
-        return readFileSync(new URL("contract-plugin-roundnumber/contracts/RoundNumber.sol", baseUrl), 'utf-8')
+        return readFileSync(new URL("libs/contract-plugin-roundnumber/contracts/RoundNumber.sol", baseUrl), 'utf-8')
       }
     }
     throw new Error(`Unknown contract: ${name}`);
@@ -32,5 +32,3 @@ function getBaseUrl() {
   }
   return new URL("../..", baseUrl);
 }
-
-export const getProvider = () => Promise.resolve(new Erc20Provider())

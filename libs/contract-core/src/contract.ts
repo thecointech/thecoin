@@ -30,7 +30,7 @@ export async function GetContract(provider?: Provider) : Promise<TheCoin> {
   );
   // Security check - we should -never- try to create a contract with different
   // networks, but just in case...
-  if (process.env.NODE_ENV == "development" || process.env.IS_TESTING) {
+  if (process.env.NODE_ENV == "development" || process.env.RUNTIME_ENV == "test") {
     const running = await v.runner?.provider?.getNetwork();
     const passed = await provider.getNetwork();
     if (running?.chainId != passed.chainId) {
