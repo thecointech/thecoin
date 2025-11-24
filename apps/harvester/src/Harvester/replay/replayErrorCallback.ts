@@ -143,8 +143,6 @@ async function isPageInSection(page: Page, root: EventSection, sectionName: Sect
   return null;
 }
 
-// NOTE: Counter starts at 1 because processEvent
-// will trigger a navigation on i == 0
 async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection) {
   // We don't want to recurse back into here.  If things go
   // wrong, we want to fail and let the user fix it.
@@ -193,7 +191,7 @@ async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection) {
           next.type == "navigation"
         );
       }
-      log.info(`Processing event ${i} - ${event.type}`);
+      log.info(`2FA - Processing event ${i} - ${event.type}`);
       await processEvent(noCallbacks, event, eventNavigates);
     }
   }
