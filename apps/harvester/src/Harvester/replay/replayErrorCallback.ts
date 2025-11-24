@@ -120,9 +120,9 @@ async function isPageInSection(page: Page, root: EventSection, sectionName: Sect
   if (section) {
     // The easiest way to tell is to search for the first element
     const events = flatten(section, [sectionName]);
-    const firstElement = events.find(e => (e.type === "input" || e.type === "click" || e.type == "value"));
 
-    // Search for the first click/input we do in the TwoFA section
+    // Search for the first page interaction we do in the section
+    const firstElement = events.find(e => (e.type === "input" || e.type === "click" || e.type == "value"));
     if (firstElement) {
       try {
         const matched = await getElementForEvent({
@@ -130,7 +130,7 @@ async function isPageInSection(page: Page, root: EventSection, sectionName: Sect
           timeout: 1000,
           event: {
             ...firstElement,
-            eventName: "testInTwoFA",
+            eventName: "isIn" + sectionName,
           }
         }, async () => {});
         return { section, matched };
@@ -154,7 +154,6 @@ async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection) {
   // the code will be sent to that destination again
   // (unless the account has changed, in which case
   // we'll fail and the user can fix this in the app)
-  // for ( event of twoFaSection.events) {
   for (let i = 0; i < twoFaSection.events.length; i++) {
     let event = twoFaSection.events[i];
 
