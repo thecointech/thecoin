@@ -32,3 +32,5 @@ function getBaseUrl() {
   }
   return new URL("../..", baseUrl);
 }
+
+export const getProvider = () => Promise.resolve(new Erc20Provider())
