@@ -40,21 +40,7 @@ export async function replayErrorCallback({replay, err, event}: ReplayErrorParam
         if (success) {
           log.info("Page is in AccountsSummary section");
           // If success, go back to the first AccountsSummary event.
-          const accountsSummarySection = findSectionByName("AccountsSummary", root);
-          if (accountsSummarySection) {
-            const sectionEvents = flatten(accountsSummarySection, ["AccountsSummary"]);
-            const firstEvent = sectionEvents.find(e => !isSection(e)) as AnyEvent;
-            if (!firstEvent) {
-              throw new Error("Failed to find first AccountsSummary event");
-            }
-            log.info("Found AccountsSummary event: " + firstEvent.type);
-            const idx = events.findIndex(i => i.id == firstEvent.id);
-            log.info("Found AccountsSummary event index: " + idx);
-            return idx;
-          }
-          else {
-            throw new Error("Failed to find AccountsSummary section");
-          }
+          return findFirstAccountsSummaryEvent(events, root);
         }
       }
       catch (e) {
@@ -214,3 +200,21 @@ async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection) {
   log.info("Finished processing 2FA events");
 }
 
+async function findFirstAccountsSummaryEvent(events: AnyEvent[], root: EventSection) {
+  const accountsSummarySection = findSectionByName("AccountsSummary", root);
+  if (!accountsSummarySection) {
+    throw new Error("Failed to find AccountsSummary section");
+  }
+  const sectionEvents = flatten(accountsSummarySection, ["AccountsSummary"]);
+  const firstEvent = sectionEvents.find(e => !isSection(e)) as AnyEvent;
+  if (!firstEvent) {
+    throw new Error("Failed to find first AccountsSummary event");
+  }
+  log.info("Found AccountsSummary event: " + firstEvent.type);
+  const idx = events.findIndex(i => i.id == firstEvent.id);
+  if (idx === -1) {
+    throw new Error("Failed to map AccountsSummary event to replay index");
+  }
+  log.info("Found AccountsSummary event index: " + idx);
+  return idx;
+}
