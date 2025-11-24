@@ -15,11 +15,11 @@ export function getTestData<T extends TestData>(
   constructor: TestDataConstructor<T> = TestData as any,
   getPage: (url: string) => Promise<Page>
 ): T[] {
-
-  const testFolder = tests();
-  if (!testFolder) {
+  // Private tests don't exist in CI
+  if (process.env.JEST_CI) {
     return [];
   }
+  const testFolder = tests();
   const overrideData = getOverrideData();
   const results: T[] = [];
   const pattern = `${testFolder}/**/${recordTime}/**/${section}/**/*${searchPattern}*`

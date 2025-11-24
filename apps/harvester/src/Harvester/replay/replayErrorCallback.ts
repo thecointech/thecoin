@@ -40,21 +40,7 @@ export async function replayErrorCallback({replay, err, event}: ReplayErrorParam
         if (success) {
           log.info("Page is in AccountsSummary section");
           // If success, go back to the first AccountsSummary event.
-          const accountsSummarySection = findSectionByName("AccountsSummary", root);
-          if (accountsSummarySection) {
-            const sectionEvents = flatten(accountsSummarySection, ["AccountsSummary"]);
-            const firstEvent = sectionEvents.find(e => !isSection(e)) as AnyEvent;
-            if (!firstEvent) {
-              throw new Error("Failed to find first AccountsSummary event");
-            }
-            log.info("Found AccountsSummary event: " + firstEvent.type);
-            const idx = events.findIndex(i => i.id == firstEvent.id);
-            log.info("Found AccountsSummary event index: " + idx);
-            return idx;
-          }
-          else {
-            throw new Error("Failed to find AccountsSummary section");
-          }
+          return findFirstAccountsSummaryEvent(events, root);
         }
       }
       catch (e) {
@@ -134,9 +120,9 @@ async function isPageInSection(page: Page, root: EventSection, sectionName: Sect
   if (section) {
     // The easiest way to tell is to search for the first element
     const events = flatten(section, [sectionName]);
-    const firstElement = events.find(e => (e.type === "input" || e.type === "click" || e.type == "value"));
 
-    // Search for the first click/input we do in the TwoFA section
+    // Search for the first page interaction we do in the section
+    const firstElement = events.find(e => (e.type === "input" || e.type === "click" || e.type == "value"));
     if (firstElement) {
       try {
         const matched = await getElementForEvent({
@@ -144,7 +130,7 @@ async function isPageInSection(page: Page, root: EventSection, sectionName: Sect
           timeout: 1000,
           event: {
             ...firstElement,
-            eventName: "testInTwoFA",
+            eventName: "isIn" + sectionName,
           }
         }, async () => {});
         return { section, matched };
@@ -157,8 +143,6 @@ async function isPageInSection(page: Page, root: EventSection, sectionName: Sect
   return null;
 }
 
-// NOTE: Counter starts at 1 because processEvent
-// will trigger a navigation on i == 0
 async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection) {
   // We don't want to recurse back into here.  If things go
   // wrong, we want to fail and let the user fix it.
@@ -170,7 +154,6 @@ async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection) {
   // the code will be sent to that destination again
   // (unless the account has changed, in which case
   // we'll fail and the user can fix this in the app)
-  // for ( event of twoFaSection.events) {
   for (let i = 0; i < twoFaSection.events.length; i++) {
     let event = twoFaSection.events[i];
 
@@ -207,10 +190,28 @@ async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection) {
           next.type == "navigation"
         );
       }
-      log.info(`Processing event ${i} - ${event.type}`);
+      log.info(`2FA - Processing event ${i} - ${event.type}`);
       await processEvent(noCallbacks, event, eventNavigates);
     }
   }
   log.info("Finished processing 2FA events");
 }
 
+function findFirstAccountsSummaryEvent(events: AnyEvent[], root: EventSection) {
+  const accountsSummarySection = findSectionByName("AccountsSummary", root);
+  if (!accountsSummarySection) {
+    throw new Error("Failed to find AccountsSummary section");
+  }
+  const sectionEvents = flatten(accountsSummarySection, ["AccountsSummary"]);
+  const firstEvent = sectionEvents.find(e => !isSection(e)) as AnyEvent;
+  if (!firstEvent) {
+    throw new Error("Failed to find first AccountsSummary event");
+  }
+  log.info("Found AccountsSummary event: " + firstEvent.type);
+  const idx = events.findIndex(i => i.id == firstEvent.id);
+  if (idx === -1) {
+    throw new Error("Failed to map AccountsSummary event to replay index");
+  }
+  log.info("Found AccountsSummary event index: " + idx);
+  return idx;
+}
