@@ -76,7 +76,7 @@ export namespace google {
 
         async get(opts: { id: string }) {
           return (process.env.CONFIG_NAME === "devlive")
-            ? getDevLiveEmails().find((e: any) => e.id === opts.id)
+            ? { data: getDevLiveEmails().find((e: any) => e.id === opts.id) }
             : emailget.find(e => e.data.id === opts.id);
         },
 
