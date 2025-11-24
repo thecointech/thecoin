@@ -12309,7 +12309,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/electron-signer@workspace:*, @thecointech/electron-signer@workspace:libs/electron-signer":
+"@thecointech/electron-signer@npm:^0.4.0, @thecointech/electron-signer@workspace:*, @thecointech/electron-signer@workspace:libs/electron-signer":
   version: 0.0.0-use.local
   resolution: "@thecointech/electron-signer@workspace:libs/electron-signer"
   dependencies:
@@ -12653,6 +12653,7 @@ __metadata:
   dependencies:
     "@ethers-ext/signer-ledger": "npm:^6.0.0-beta.1"
     "@ledgerhq/hw-transport-node-hid": "npm:^6.28.6"
+    "@thecointech/electron-signer": "npm:^0.4.0"
     "@thecointech/electron-utils": "npm:^0.4.0"
     "@thecointech/ethers-provider": "npm:^0.4.0"
     "@thecointech/logging": "npm:^0.4.0"
