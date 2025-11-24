@@ -2,7 +2,6 @@
   "name": "@thecointech/electron-signer",
   "version": "0.4.0",
   "description": "The Coin: IPC-enabled signer for use in electron",
-  "private": true,
   "keywords": [
     "TheCoin",
     "electron"
