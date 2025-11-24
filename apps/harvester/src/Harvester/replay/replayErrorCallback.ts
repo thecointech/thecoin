@@ -197,7 +197,7 @@ async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection) {
   log.info("Finished processing 2FA events");
 }
 
-async function findFirstAccountsSummaryEvent(events: AnyEvent[], root: EventSection) {
+function findFirstAccountsSummaryEvent(events: AnyEvent[], root: EventSection) {
   const accountsSummarySection = findSectionByName("AccountsSummary", root);
   if (!accountsSummarySection) {
     throw new Error("Failed to find AccountsSummary section");
