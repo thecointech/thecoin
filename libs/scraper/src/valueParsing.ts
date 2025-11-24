@@ -196,7 +196,7 @@ export function getCurrencyCandidateValue(value?: string) {
 
   // Extract potential currency portion using regex
   // Match patterns like: $123.45, (123.45), 123,45$, $100, etc.
-  const currencyPattern = /(?:[\$€£¥₹(CAD]|\s)*[\d,.']+(?:[\$€£¥₹)CAD]|\s)*/;
+  const currencyPattern = /(?:[-\$€£¥₹(CAD]|\s)*[\d,.']+(?:[\$€£¥₹)CAD]|\s)*/;
   const match = value.match(currencyPattern);
 
   if (!match) {
