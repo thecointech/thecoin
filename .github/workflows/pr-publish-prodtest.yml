@@ -1,0 +1,13 @@
+name: Publish to Prodtest
+
+on:
+  pull_request:
+    branches: [ publish/prodtest ]
+    types: [ closed ]
+
+jobs:
+  publish:
+    uses: ./.github/workflows/pr-publish.yml
+    with:
+      CONFIG_NAME: prodtest
+    secrets: inherit

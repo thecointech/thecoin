@@ -15,7 +15,7 @@ if (process.env.CONFIG_NAME !== "devlive") throw new Error("Not Sufficiently Tes
 
 log.debug("Seeding Converter");
 async function main() {
-  const tester = await getSigner("uberTester");
+  const tester = await getSigner("UberTester");
   const theCoin = await getSigner("TheCoin");
   const owner = await getSigner("Owner");
   const brokerCad = await getSigner("BrokerCAD");
@@ -24,10 +24,9 @@ async function main() {
 
   const converter = await getContract();
   const bcCore = await ConnectContract(brokerCad);
-  const tcCore = await ConnectContract(theCoin);
   const ownConvert = connect(owner, converter);
 
-  // In DevLive, we assign the converter to uberTester
+  // In DevLive, we assign the converter to UberTester
   const request = await buildAssignPluginRequest(tester, converter, ALL_PERMISSIONS);
   await assignPlugin(bcCore, request);
 

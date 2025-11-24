@@ -1,48 +1,26 @@
 
 import { BaseReducer } from '@thecointech/shared/store/immerReducer'
-import { HarvestConfig, defaultDays, DaysArray, HarvestStepType, HarvestArgs, addStep, removeStep, defaultTime } from '../../types';
+import { HarvestConfig, DaysArray, HarvestStepType, HarvestArgs, addStep, removeStep } from '../../types';
+import { defaultDays, defaultTime, defaultSteps } from '@thecointech/store-harvester';
 import { IActions } from './types';
+import { log } from '@thecointech/logging';
 
 export const CONFIG_KEY = "config";
 
+log.info("Loading config");
 // The initial state of the App
 const stored = await window.scraper.getHarvestConfig();
-export const initialState: HarvestConfig = stored.value ?? {
-  schedule: {
+if (stored.error) {
+  log.error({error: stored.error}, "Error loading config: {error}")
+  alert("Error loading config: " + stored.error)
+}
+export const initialState: HarvestConfig = {
+  schedule: stored.value?.schedule ?? {
     daysToRun: defaultDays,
     timeToRun: defaultTime,
   },
-  steps: [
-    {
-      type: HarvestStepType.ClearPendingVisa,
-    },
-    {
-      type: HarvestStepType.TransferVisaOwing,
-    },
-    {
-      type: HarvestStepType.RoundUp,
-      args: {
-        roundPoint: 100,
-      },
-    },
-    {
-      type: HarvestStepType.ChequeMinimum,
-      args: {
-        limit: 200,
-      },
-    },
-    {
-      type: HarvestStepType.TransferLimit,
-      args: {
-        limit: 2500,
-      },
-    },
-    { type: HarvestStepType.SendETransfer },
-    { type: HarvestStepType.PayVisa },
-    // Heartbeat so we can be certain the harvester is alive when remote
-    { type: HarvestStepType.Heartbeat },
-  ]
-};
+  steps: stored.value?.steps?.length ? stored.value.steps : defaultSteps,
+}
 
 export class ConfigReducer extends BaseReducer<IActions, HarvestConfig>(CONFIG_KEY, initialState)
   implements IActions {
@@ -63,5 +41,15 @@ export class ConfigReducer extends BaseReducer<IActions, HarvestConfig>(CONFIG_K
   }
   clearStep(type: HarvestStepType): void {
     this.draftState.steps = removeStep(type, this.state.steps)
+  }
+
+  resetToDefault(): void {
+    this.draftState = {
+      schedule: {
+        daysToRun: defaultDays,
+        timeToRun: defaultTime,
+      },
+      steps: defaultSteps,
+    };
   }
 }

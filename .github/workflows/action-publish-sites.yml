@@ -1,0 +1,78 @@
+name: Deploy to sites
+
+on:
+  workflow_call:
+    inputs:
+      CONFIG_NAME:
+        required: true
+        type: string
+        description: 'Environment to build for (e.g., prodtest, prod)'
+      COMMIT_SHA:
+        required: true
+        type: string
+        description: 'Commit SHA to build from'
+
+# Already tested in build step
+env:
+  YARN_ENABLE_HARDENED_MODE: 0
+
+jobs:
+  deploy_live_website:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.CONFIG_NAME }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.COMMIT_SHA }}
+
+      - name: Validate CommitSha
+        run: |
+          echo "CommitSha: ${{ inputs.COMMIT_SHA }}"
+          echo "GithubSha: ${{ github.sha }}"
+
+      - run: corepack enable
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14'
+          cache: 'yarn'
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Ensure ts-patch
+        run: yarn postinstall
+
+      - name: rebuild site-landing
+        run: yarn build
+        working-directory: ./apps/site-landing
+        env:
+          CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
+
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          firebaseServiceAccount: "${{ secrets.GCP_SA_SITES_KEY }}"
+          projectId: "${{ inputs.CONFIG_NAME }}"
+          channelId: live
+          entryPoint: ./apps/site-landing
+
+      - name: rebuild site-app
+        run: yarn build
+        working-directory: ./apps/site-app
+        env:
+          CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
+          BWS_ACCESS_TOKEN: ${{ secrets.BWS_ACCESS_TOKEN }}
+          BWS_ORGANIZATION_ID: ${{ secrets.BWS_ORGANIZATION_ID }}
+
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          firebaseServiceAccount: "${{ secrets.GCP_SA_SITES_KEY }}"
+          projectId: "${{ inputs.CONFIG_NAME }}"
+          channelId: live
+          entryPoint: ./apps/site-app

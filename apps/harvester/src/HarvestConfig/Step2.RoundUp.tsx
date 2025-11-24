@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Checkbox, Container, Input } from 'semantic-ui-react'
-import { HarvestStepType } from '../types';
+import { Checkbox, Container, Input, Header } from 'semantic-ui-react'
+import { HarvestStepType } from '@thecointech/store-harvester';
 import { ConfigReducer } from './state/reducer';
 import { safeParseFloat } from './state/utils';
 
@@ -25,7 +25,7 @@ export const RoundUp = () => {
 
   return (
     <Container>
-      <h4>How much should the Harvester transfer?</h4>
+      <Header size="small">How much should the Harvester transfer?</Header>
       <div>
         Rounding up is a great way to boost earnings, especially if the harvester doesn't run frequently.
         Visa does not post transactions immediately, and without rounding up, your earning balance will always

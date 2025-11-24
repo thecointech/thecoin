@@ -16,15 +16,15 @@ export enum AccountId {
   // Locks down ceramic access
   CeramicValidator,
   // NOTE: The following accounts for testing only!
-  client1,
-  client2,
-  uberTester,
-  saTester, // ShockAbsorber Tester
+  Client1,
+  Client2,
+  UberTester,
+  SaTester, // ShockAbsorber Tester
 
   // A full testing account, published to test.thecoin.io
   // Opens Jan1 2022.  1/2 testing, 1/2 demo account
   // Includes harvester, uberConverter, and shockabsorber
-  testDemoAccount,
+  TestDemoAccount,
 };
 
 export type AccountName = keyof typeof AccountId;

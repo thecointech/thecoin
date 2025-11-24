@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
-import stock from './fetch.test.stock.json' assert {type: "json"};
-import fx from './fetch.test.fx.json' assert {type: "json"};
+import stock from './fetch.test.stock.json' with { type: "json" }
+import fx from './fetch.test.fx.json' with { type: "json" }
 
 export default {
   get: jest.fn((url: String) => {

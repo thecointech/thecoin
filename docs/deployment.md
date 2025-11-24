@@ -1,12 +1,33 @@
 TheCoin is (currently) a series of micro-services connected together.
 
+# NOTE - this is mostly obsolete now, as we use Github actions for most of the deployment
+# We keep this for reference in case we need to do a manual deploy
+
 ## System setup require prior to deployment
+
+First steps:
+install python (currently 3.11)
+install node (currently v22)
+  run `corepack enable`
+install gcloud CLI and `gcloud auth login`
+use tools/deploy/create-deployer.sh: Generate service accounts for deploying to GAE, one for rates-service & one for broker-cad.  Run the script from outside the repository as it will cache service account files in a local/relative folder.  (Note, changes do take time to propagate, give it 5 mins)
+
+The account for broker-service should be named `tccc-{testing|something}`, this name is detected to add the firestore deployment capability for the websites
+
+NOTE:  Rather than add more env variables to find the service accounts, we have hardcoded the service account locations to be:
+ - The directory structure should be
+  - <deploy-root>
+    - env (private env variables)
+    - service-accounts
+    - prod|prodtest (where the deployments run from)
+
+setup yarn for publishing Github packages:
+  Login to Github, create a new PAT with 'write:packages' permission
+  Save the PAT to ~/.npmrc (note: don't rely on an LLM for file format)
 
 Our system is built to be deployed on Google App Engine (GAE).  The services are deployed as standard environment on GAE, and the websites are deployed to Firebase Hosting.
 
 Each deployment app (rates/broker/site/nft) needs a GAE configuration for each environment (test/beta|prod).  The GAE configuration is used to set the deployment target for all the apps, deploying at the same time. See https://medium.com/google-cloud/how-to-use-multiple-accounts-with-gcloud-848fdb53a39a for how to create new configs.
-
-You also need to login to firebase.  Navigate to root folder and run `yarn firebase login`
 
 #### Caveate BETA|PROD:
 Our BETA services (rates/broker) are assigned a specific version to differentiate them from prod.  Unfortunately, we cannot specify a version using configs on GAE.   The beta environments are deployed to prod and the version is specified within the `deploy.ts` deployment scripts.
@@ -88,6 +109,13 @@ The GAE apps need an .npmrc file co-located with the app to allow installing fro
 These files are then ignored, so we do not have any files committed into Git that could at any point have our secrets exposed.
 
 ## Environment Vars
+
+Secrets are stored in Bitwarden
+Env vars are stored in <root>/environments
+The local machine should have a THECOIN_SECRETS environment variable
+pointing to where it can find the bitwarden key file
+
+THE FOLLOWING IS NO LONGER TRUE ---
 
 -All- configuration information is stored in env files. The location of the .env files is under a folder specified in the environment variable THECOIN_ENVIRONMENTS.  We also store example (spec) .env files under the folder `<root>/environments`.  When loading a .env file, we first query the external location, then the git folder for the file.  It should (may) be possible to do some actions (eg - build and test vs published data) by loading the git folder, but for publishing the engineer will need to fill in all the approriate keys etc.
 

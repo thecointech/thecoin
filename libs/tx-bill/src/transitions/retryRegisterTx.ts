@@ -1,4 +1,5 @@
 import { makeTransition } from "@thecointech/tx-statemachine";
+import { log } from '@thecointech/logging';
 
 //
 // Something has gone wrong, we can re-try automatically
@@ -18,9 +19,11 @@ export const retryRegisterTx = makeTransition("retryRegisterTx", async (action) 
   // But we have minimum back-off time
   const minsSinceError = errors[0].delta.created.diffNow().as("minutes");
   if (minsSinceError > -15) { // NOTE: -15 is 15 minutes ago
+    log.debug({ initialId: action.action.data.initialId }, "Waiting before retrying transaction");
     return null;
   }
 
+  log.info({ initialId: action.action.data.initialId }, "Retrying transaction");
   // Ok - we can re-try.
   return {
     error: ''

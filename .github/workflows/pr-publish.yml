@@ -1,0 +1,83 @@
+name: Publish Everything Base
+
+on:
+  workflow_call:
+    inputs:
+      CONFIG_NAME:
+        required: true
+        type: string
+        description: 'configName to deploy to (prodtest, prodbeta, prod)'
+
+# Cancel any in-progress job or run
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-configName:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.CONFIG_NAME }}
+    steps:
+      - name: Validate configName
+        run: |
+          if [ "${{ inputs.CONFIG_NAME }}" != "prodtest" ] && [ "${{ inputs.CONFIG_NAME }}" != "prodbeta" ] && [ "${{ inputs.CONFIG_NAME }}" != "prod" ]; then
+            echo "::error::Unknown configName: ${{ inputs.CONFIG_NAME }}"
+            exit 1
+          fi
+
+  build:
+    needs: validate-configName
+    uses: ./.github/workflows/action-build.yml
+
+  publish-packages:
+    permissions:
+      contents: write  # For git operations and version bumps
+      packages: write  # For package publishing
+    needs: build
+    uses: ./.github/workflows/action-publish-packages.yml
+    with:
+      CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
+
+  publish-docker:
+    needs: publish-packages
+    uses: ./.github/workflows/action-publish-docker.yml
+    secrets: inherit
+    with:
+      CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
+      COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
+
+  publish-services:
+    needs: publish-packages
+    secrets: inherit
+    uses: ./.github/workflows/action-publish-services.yml
+    with:
+      CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
+      COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
+
+  publish-sites:
+    needs: publish-packages
+    secrets: inherit
+    uses: ./.github/workflows/action-publish-sites.yml
+    with:
+      CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
+      COMMIT_SHA: ${{ needs.publish-packages.outputs.latest_sha }}
+
+  merge-to-dev:
+    runs-on: ubuntu-latest
+    needs: [publish-services, publish-sites, publish-docker]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev
+      - name: Merge changes
+        run: |
+          git config user.name 'GitHub Actions Bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin ${{ github.base_ref }}
+          git merge origin/${{ github.base_ref }} -m "chore: merge ${{ github.base_ref }} changes to dev"
+          git push origin dev
+
+  cleanup:
+    needs: [publish-services, publish-sites, publish-docker]
+    uses: ./.github/workflows/action-cleanup-old-packages.yml
+    secrets: inherit

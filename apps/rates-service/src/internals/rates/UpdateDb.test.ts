@@ -4,7 +4,7 @@ import { validFor } from "@thecointech/fx-rates";
 import { init } from "@thecointech/firestore";
 import { CoinRate, CoinUpdateInterval } from "./types";
 import { updateLatest, getLatest, clearLatest } from "./latest";
-import { log } from "@thecointech/logging";
+import { mockWarn } from "@thecointech/logging/mock";
 
 // The oracle will try and update itself, and that's not really useful here.
 jest.unstable_mockModule("../oracle", () => ({
@@ -19,9 +19,6 @@ var now = 1593696900000;
 const sixHrs = 6 * 60 * 60 * 1000;
 jest.setTimeout(30000);
 
-log.warn = jest.fn<any>();
-log.error = jest.fn<any>();
-
 beforeEach(async () => {
   await init({});
   clearLatest();
@@ -35,7 +32,7 @@ it('can update Coin rates', async () => {
   // this should log errors because it will update multiple
   // so we change the console warn/error fn's to keep output clean
   await ensureLatestCoinRate(now + sixHrs);
-  expect(log.warn).toHaveBeenCalled();
+  expect(mockWarn).toHaveBeenCalled();
 
   // Do we have latest cache updated?
   // There should have been something returned

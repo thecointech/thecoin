@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import currency from 'currency.js';
-import { Wallet } from 'ethers';
 import { getDateFromPrior, PayVisa } from './PayVisa';
+import { mockUser } from '../../../internal/mockUser';
 
 it ("calculates dateToPay correctly", async () => {
   // A Monday
@@ -25,6 +25,7 @@ it ('triggers a new payment when necessary', async () => {
 
   // we have a new due date, pay the visa again
   state.visa = {
+    balance: currency(200),
     dueDate: DateTime.now().plus({ weeks: 2 }),
     dueAmount: new currency(125),
   };
@@ -50,20 +51,22 @@ it ('it sends immediately for the past', async () => {
   expect(delta.toPayVisaDate?.toMillis()).toBeGreaterThanOrEqual(now);
 })
 
+it ('does not send more than the current balance', async () => {
+  const payVisa = new PayVisa();
+  const { state, user } = mockData(1);
+  state.visa.balance = currency(50);
+  const delta = await payVisa.process(state, user);
+  expect(delta.toPayVisa).toEqual(currency(50));
+})
+
 const mockData = (dueInWeeks: number) => ({
   state: {
     visa: {
+      balance: currency(200),
       dueDate: DateTime.now().plus({ weeks: dueInWeeks }),
       dueAmount: new currency(100),
     },
     state: {},
   } as any,
-  user: {
-    wallet: Wallet.createRandom(),
-    replay: null as any,
-    creditDetails: {
-      payee: 'payee',
-      accountNumber: "12345"
-    }
-  }
+  user: mockUser(),
 })

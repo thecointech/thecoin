@@ -1,6 +1,6 @@
-import { DaysArray, HarvestSchedule } from '../../types';
+import { DaysArray, HarvestSchedule, toDayNames } from '@thecointech/store-harvester';
 import { log } from '@thecointech/logging';
-import { DateTime, Info } from 'luxon';
+import { DateTime } from 'luxon';
 import crypto from 'crypto';
 import { tmpdir } from 'os';
 import { unlinkSync, writeFileSync } from 'fs';
@@ -9,7 +9,7 @@ import path from 'path';
 import fs from 'fs';
 
 const TaskName = "thecoin-harvest";
-export async function setSchedule(schedule: HarvestSchedule, _existing?: HarvestSchedule) {
+export async function setSchedule(schedule: HarvestSchedule) {
 
   log.info(`Creating schedule: ${JSON.stringify(schedule)}`);
 
@@ -29,13 +29,11 @@ export async function setSchedule(schedule: HarvestSchedule, _existing?: Harvest
     const filepath = `${tmpdir()}/${tmpName}.xml`;
     log.debug(`Writing temp file: ${filepath}`);
     writeFileSync(filepath, xml);
-    let success = false;
     const r = execSync(`schtasks /create /tn ${TaskName} /xml ${filepath}`);
     log.info(r.toString());
     log.debug(`Removing temp file: ${filepath}`);
     unlinkSync(filepath);
     log.info(`Schedule set`);
-    return success;
   }
   catch (err) {
     if (err instanceof Error) {
@@ -56,10 +54,8 @@ export const getHarvesterExecutable = (argv0: string) => {
     : currentExecutable;
 }
 
-const generateXml = (schedule: DaysArray, timeToRun: string) => {
-  const daysToRun = schedule
-    .map((d, idx) => d ? Info.weekdays('long')[idx] : null)
-    .filter(d => !!d)
+export const generateXml = (schedule: DaysArray, timeToRun: string) => {
+  const daysToRun = toDayNames(schedule, "long", { locale: "en" });
 
   return `<?xml version="1.0" encoding="UTF-16"?>
   <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">

@@ -1,0 +1,155 @@
+import { log } from "@thecointech/logging";
+import { processorFn } from "./types";
+import { enterValueIntoFound } from "@thecointech/scraper";
+import type { FoundElement, ElementData } from "@thecointech/scraper-types";
+import { LoginFailedError } from "../errors";
+import type { Agent } from "../agent";
+import { apis } from "../apis";
+
+export const Login = processorFn("Login", async (agent: Agent)  => {
+  return await login(agent);
+})
+
+async function login(agent: Agent) {
+  // We have to detect the password before entering
+  // the username.  The extra data of the username
+  // entered into the username field can confuse the vLLM
+  const api = await apis().getLoginApi();
+  agent.onProgress(10);
+
+  const { data: hasPassword } = await api.detectPasswordExists(await agent.page.getImage());
+  agent.onProgress(25);
+
+  // await enterUsernameAndRemember(page, input);
+  await enterUsername(agent);
+  agent.onProgress(50);
+
+  await enterPassword(agent, hasPassword.password_input_detected);
+  agent.onProgress(75);
+
+  await clickLogin(agent);
+  const outcome = await loginOutcome(agent);
+  return outcome;
+}
+
+// This was implemented as an experiment when struggling to bypass 2FA
+// However, it hasn't been successful, and complicates the login process.
+// Remove it for now, perhaps bring it back on day so leaving the comments
+
+// async function enterUsernameAndRemember(page: PageHandler, input: IAskUser) {
+//   // We keep this in it's own section,
+//   // as on replay it shouldn't be necessary
+//   // (the username field should already be filled in)
+//   await using _ = page.pushSection("Username");
+
+//   // First, has "remember me" been checked?
+//   const image = await page.getImage();
+//   const { data: rememberResponse } = await GetTwofaApi().getRememberInput(image);
+
+//   try {
+//     // Even if "remember me" is checked, we still attempt to enter a username
+//     // This should handle false-positives as well
+//     await enterUsername(page, input, image);
+
+//     if (!rememberResponse.is_checked) {
+//       const found = await page.toElement(rememberResponse, "remember", "input", "checkbox");
+//       const clickedRemember = await clickElement(page.page, found, true, 10);
+//       if (!clickedRemember) {
+//         // It's possible that there is no remember checkbox
+//         log.warn("Failed to click remember");
+//       }
+//     }
+//   }
+//   catch (e) {
+//     // If "remember me" was checked, then it could be a non-issue failure
+//     if (rememberResponse.is_checked) {
+//       log.warn("Failed to enter username, but remember me was checked - continuing");
+//     }
+//     else {
+//       throw e;
+//     }
+//   }
+// }
+async function enterUsername(agent: Agent) {
+  const username = await agent.input.forUsername();
+  const api = await apis().getLoginApi();
+  const { data: inputResponse } = await api.detectUsernameInput(await agent.page.getImage());
+  const element = await agent.page.toElement(inputResponse, { eventName: "username", tagName: "input", inputType: "text" });
+
+  const usernameToEnter = await getMostSimilarUsername(element.data, username);
+  await enterUsernameIntoInput(agent, usernameToEnter, element);
+}
+
+async function getMostSimilarUsername(element: ElementData, username: string) {
+  // If this is a drop-down, are there elements that mostly match the username?
+  if (element.options) {
+    const api = await apis().getVqaBaseApi();
+    const { data: similar } = await api.detectMostSimilarOption(username, element.options);
+    // Super-simple check - the first letter at least should match...
+    if (similar.most_similar[0] == username[0]) {
+      return similar.most_similar;
+    }
+  }
+  return username;
+}
+
+async function enterUsernameIntoInput(agent: Agent, username: string, element: FoundElement) {
+  // Does the detected element already include the username?
+  const pageValues = [element.data.text, element.data.nodeValue, ...(element.data.siblingText ?? [])];
+  if (pageValues.map(t => t?.toLowerCase()).includes(username.toLowerCase())) {
+    // Username already entered
+    return;
+  }
+  const didEnter = await enterValueIntoFound(agent.page.page, element, username);
+  if (!didEnter) {
+    await agent.maybeThrow(new Error("Failed to enter username"));
+  }
+}
+
+async function enterPassword(agent: Agent, hasPassword: boolean) {
+  const password = await agent.input.forPassword();
+  const api = await apis().getLoginApi();
+  // If no password input detected, it may be on the next page.
+  if (!hasPassword) {
+    const clickedContinue = await agent.page.tryClick(api, "detectContinueElement", { hints: { eventName: "continue", tagName: "button" } });
+    if (!clickedContinue) {
+      await agent.maybeThrow(new Error("Failed to click continue"));
+    }
+    const { data: hasPassword } = await api.detectPasswordExists(await agent.page.getImage());
+    if (!hasPassword.password_input_detected) {
+      await agent.maybeThrow(new Error("Failed to detect password input"));
+    }
+
+    // await this.updatePageName("password");
+  }
+
+  const didEnter = await agent.page.tryEnterText(api, "detectPasswordInput", {
+    text: password,
+    hints: { eventName: "password", tagName: "input", inputType: "password" },
+  });
+  if (!didEnter) {
+    await agent.maybeThrow(new Error("Failed to enter password"));
+  }
+}
+
+async function clickLogin(agent: Agent) {
+  const api = await apis().getLoginApi();
+  const clickedLogin = await agent.page.tryClick(api, "detectLoginElement", { hints: { eventName: "login", tagName: "button" } });
+  if (!clickedLogin) {
+    await agent.maybeThrow(new Error("Failed to click login"));
+  }
+}
+
+async function loginOutcome(agent: Agent) {
+  const api = await apis().getLoginApi();
+  const { data: loginResult } = await api.detectLoginResult(await agent.page.getImage());
+  log.info(" ** Login result: " + loginResult.result);
+
+  if (loginResult.result == "LoginError") {
+    // most likely incorrect username/pwd
+    const { data: hasError } = await api.detectLoginError(await agent.page.getImage());
+    log.warn(" ** Login error: " + hasError.error_message);
+    throw new LoginFailedError(hasError);
+  }
+  return loginResult.result;
+}

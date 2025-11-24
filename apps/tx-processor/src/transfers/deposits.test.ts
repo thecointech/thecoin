@@ -1,40 +1,48 @@
 import { jest } from '@jest/globals';
 import { init } from '@thecointech/firestore';
 import { ConnectContract } from '@thecointech/contract-core';
-import { ETransferErrorCode, RbcApi } from '@thecointech/rbcapi';
-import gmail from '@thecointech/tx-gmail';
+import { ETransferErrorCode } from '@thecointech/bank-interface';
 import { getSigner } from '@thecointech/signers';
 import { BuyActionContainer } from '@thecointech/tx-statemachine';
+import { mockError } from '@thecointech/logging/mock';
+import { initialize } from '@thecointech/tx-gmail';
 
 jest.setTimeout(900000);
-const errors: string[] = [];
-jest.unstable_mockModule('@thecointech/logging', () => ({
-  log: {
-    debug: jest.fn(),
-    info: jest.fn(),
-    trace: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn((args: Record<string, string>, msg: string) => {
-      errors.push(
-        msg
-          .replace(/{state}/g, args.state)
-          .replace(/{error}/g, args.error)
-          .replace(/{transition}/g, args.transition)
-        )
-    }),
-  }
+
+// Helper function to extract error messages from mock calls
+const getErrorMessages = () => {
+  return mockError.mock.calls.map(([args, msg]) => {
+    if (typeof args === 'object' && args && typeof msg === 'string') {
+      const logArgs = args as Record<string, string>;
+      return msg
+        .replace(/{state}/g, logArgs.state || '')
+        .replace(/{error}/g, logArgs.error || '')
+        .replace(/{message}/g, logArgs.message || '')
+        .replace(/{transition}/g, logArgs.transition || '');
+    }
+    return String(args); // fallback for different call patterns
+  });
+};
+
+class mockRbcApi {
+  depositETransfer = jest.fn()
+  static create = () => Promise.resolve(new mockRbcApi())
+}
+jest.unstable_mockModule('@thecointech/rbcapi', () => ({
+  RbcApi: mockRbcApi
 }));
+const { RbcApi } = await import('@thecointech/rbcapi');
 const { processTransfers } = await import('.')
 const { getCurrentState } = await import('@thecointech/tx-statemachine');
 
 it("Can complete deposits", async () => {
 
   init({});
-  await gmail.initialize();
+  await initialize("{}");
 
   const brokerCad = await getSigner("BrokerCAD");
   const theContract = await ConnectContract(brokerCad);
-  const bank = new RbcApi();
+  const bank = await RbcApi.create();
 
   // We have 5 deposits, and
   setupReturnValues(bank)
@@ -49,10 +57,13 @@ it("Can complete deposits", async () => {
   // We have 1 success, 3 failures
   const results = deposits.map(getCurrentState);
   expect(results.map(r => r.name)).toEqual(['complete', 'error', 'error', 'error'])
-  expect(errors).toEqual([
-    "Error on depositReady => depositFiat for {initialId}: Already Deposited",
-    "Error on depositReady => depositFiat for {initialId}: This transfer was cancelled",
-    "Error on depositReady => depositFiat for {initialId}: This transfer cannot be processed",
+  expect(getErrorMessages()).toEqual([
+    "Error on depositReady => depositFiat: Already Deposited",
+    "Detected error in action {type} from {address}",
+    "Error on depositReady => depositFiat: This transfer was cancelled",
+    "Detected error in action {type} from {address}",
+    "Error on depositReady => depositFiat: This transfer cannot be processed",
+    "Detected error in action {type} from {address}",
   ])
 
   // If passed, balance is 0
@@ -81,8 +92,8 @@ it("Can complete deposits", async () => {
   }
 })
 
-function setupReturnValues(bank: RbcApi) {
-  const mockDeposit = bank.depositETransfer as jest.Mock;
+function setupReturnValues(bank: any) {
+  const mockDeposit = bank.depositETransfer;
   mockDeposit
     .mockReturnValueOnce(
       {

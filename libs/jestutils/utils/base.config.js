@@ -35,6 +35,7 @@ module.exports = {
   moduleNameMapper: {
     "@thecointech/site-semantic-theme/variables": getTool('mockLessVars.mjs'),
     '\\.(css|less|svg)$': getTool('styleMock'),
+    "^@/(.*)$": "<rootDir>/src/$1"
   },
 
   roots: [
@@ -48,6 +49,7 @@ module.exports = {
   globalSetup: getTool('globalSetup.js'),
   // local setup initializes logging etc
   setupFiles: [
+    getTool('setupEnv.js'),
     getTool('testSetup.js'),
     getTool('mockLocalStorage.js'),
     getTool('setupLuxon.mjs'),

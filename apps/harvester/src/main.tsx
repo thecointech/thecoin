@@ -6,10 +6,15 @@ import { LanguageProvider } from '@thecointech/shared/containers/LanguageProvide
 import translations from "@thecointech/shared/translations";
 import { history } from '@thecointech/shared/store';
 import { Provider } from 'react-redux';
-import { App } from './app';
+import { App } from './App';
 import { initialize } from './init';
 
 // const router = createHashRouter(appRoutes);
+
+// Set the document title based on the channel
+const channel = process.env.CONFIG_NAME;
+const channelSuffix = channel && channel !== 'prod' ? ` [${channel.toUpperCase()} - ${process.env.TC_DEPLOYED_AT || 'unknown'}]` : '';
+document.title = `TheCoin - Harvester${channelSuffix}`;
 
 const store = await initialize()
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

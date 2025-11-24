@@ -18,4 +18,3 @@
   "include": ["src/**/*", "src/**/*.json", "./declarations/*.*"],
   "exclude": ["**/*.test.*", "**/tests/**", "**/__mocks__/**", "**/*.stories.*"]
 }
-

@@ -1,9 +1,9 @@
 import type { Configuration } from 'webpack';
-import merge from 'webpack-merge';
+import { merge } from 'webpack-merge';
 //@ts-ignore
 import getMocks from '@thecointech/setenv/webpack';
-import { rules } from './webpack.rules';
-import { env, commonPlugins } from './webpack.common';
+import { rules } from './webpack.rules.js';
+import { env, commonBase } from './webpack.common.js';
 
 export const baseOptions: Configuration = {
   /**
@@ -17,16 +17,16 @@ export const baseOptions: Configuration = {
   },
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
-    conditionNames: [env.CONFIG_NAME, "node", "import", "default"],
+    conditionNames: [env.CONFIG_NAME!, "node", "import", "default"],
   },
-  plugins: commonPlugins,
   experiments: {
     topLevelAwait: true,
   },
 };
 
 export const mainConfig = (custom: Configuration = {}) => merge(
-  custom,
-  getMocks(env), 
+  custom, // NOTE: This must be first to ensure it's DefinePlugin runs first
+  getMocks(env),
   baseOptions,
+  commonBase,
 );

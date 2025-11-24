@@ -18,7 +18,7 @@ init({});
 log.level(100)
 const brokerCad = await getSigner("BrokerCAD");
 const theContract = await ConnectContract(brokerCad);
-const bank = new RbcApi();
+const bank = await RbcApi.create();
 const user = Wallet.createRandom();
 
 it("does not continue processing user with failed transactions", async () => {
@@ -36,8 +36,8 @@ it("does not continue processing user with failed transactions", async () => {
   const billAction = await getBillAction(xfer);
 
   const actions = [
-    billAction,
-    billAction,
+    { ...billAction, executeDate: 1 },
+    { ...billAction, executeDate: 2 },
   ];
   const r = await processActions(actions, theContract, bank);
   expect(r.length).toEqual(1);
@@ -52,8 +52,8 @@ it ("continues if deposits have issues", async () => {
   } as any)
 
   const actions = [
-    action,
-    action,
+    { ...action, executeDate: 1 },
+    { ...action, executeDate: 2 },
   ];
   const r = await processActions(actions, theContract, bank);
   expect(r.length).toEqual(2);

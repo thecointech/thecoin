@@ -1,13 +1,11 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { RegisterRoutes } from './routes/routes';
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from './api/swagger.json' assert {type: "json"};
+import swaggerDocument from './api/swagger.json' with {type: "json"};
 import { init } from './init';
 import cors from 'cors';
 import { SendMail } from '@thecointech/email';
 import { log } from '@thecointech/logging';
-
-log.info(`Loading App: v${process.env.TC_APP_VERSION ?? process.env.npm_package_version} - ${process.env.CONFIG_NAME} (${process.env.NODE_ENV})`);
 
 const app = express();
 // enable cors

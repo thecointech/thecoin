@@ -38,6 +38,7 @@ export const Mint = () => {
       debugger; // NOTE: THIS SHOULD BE IN MS, NOT SECONDS
       const { contract } = account;
       const brokerAddress = process.env.WALLET_BrokerCAD_ADDRESS!;
+      throw new Error("Whats going on here");
       const tx = await contract!.mintCoins(toMint, brokerAddress, DateTime.now().toSeconds());
       setTxHash(tx.hash);
       await tx.wait();

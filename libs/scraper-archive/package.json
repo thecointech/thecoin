@@ -1,0 +1,39 @@
+{
+  "name": "@thecointech/scraper-archive",
+  "version": "0.4.0",
+  "private": true,
+  "type": "module",
+  "description": "The Coin: Utilities for working with testing pages in the archive",
+  "keywords": [
+    "TheCoin",
+    "puppeteer"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/scraper-archive"
+  },
+  "scripts": {
+    "build": "run -T tsc -b",
+    "clean": "run -T rimraf ./build"
+  },
+  "dependencies": {
+    "@thecointech/logging": "workspace:^",
+    "@thecointech/scraper": "workspace:^"
+  },
+  "devDependencies": {
+    "@thecointech/jestutils": "^0.4.0",
+    "@thecointech/setenv": "workspace:^",
+    "open": "^8.4.0"
+  },
+  "files": [
+    "src/**/*"
+  ],
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "src/index.ts"
+}

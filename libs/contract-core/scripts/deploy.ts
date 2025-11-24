@@ -5,7 +5,6 @@ import { log } from '@thecointech/logging';
 import { getArguments } from './arguments';
 import '@nomicfoundation/hardhat-ethers';
 import '@openzeppelin/hardhat-upgrades';
-import { getProvider } from '@thecointech/ethers-provider';
 
 async function main() {
 
