@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0-test.0](https://github.com/thecointech/thecoin/compare/v0.4.0...v0.5.0-test.0) (2025-11-25)
+
+
+### Bug Fixes
+
+* apps/rates-service/package.json to reduce vulnerabilities ([6e77aa6](https://github.com/thecointech/thecoin/commit/6e77aa64d0f3271d28c7313569c6802ae17dcd32))
+* libs/rbcapi/package.json to reduce vulnerabilities ([523b0a1](https://github.com/thecointech/thecoin/commit/523b0a198ff91e04abb46886a10b78da29b81f20))
+
+
+### Features
+
+* implement 2FA replay handling with section-based navigation and error recovery ([241dd84](https://github.com/thecointech/thecoin/commit/241dd846cb053fc9413e5fd1da56c41f4838a86b))
+
+
+
+
+
 # [0.4.0](https://github.com/thecointech/thecoin/compare/v0.4.0-test.3...v0.4.0) (2025-10-24)
 
 **Note:** Version bump only for package @thecointech/the-coin
