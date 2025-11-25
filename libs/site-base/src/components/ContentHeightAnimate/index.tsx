@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { type PropsWithChildren } from 'react';
 import AnimateHeight from 'react-animate-height';
 import { useSelector } from 'react-redux';
 import { LessVars } from '@thecointech/site-semantic-theme/variables';
 import { selectContent } from '../ContentHeightMeasure/selector';
 import styles from './styles.module.less';
 
-export const ContentHeightAnimate: React.FC = (props)=> {
+export const ContentHeightAnimate = (props: PropsWithChildren<{}>) => {
 
   const mainHeightDivStyle = useSelector(selectContent);
   return (

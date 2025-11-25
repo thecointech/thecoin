@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { type PropsWithChildren } from 'react';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { LessVars } from '@thecointech/site-semantic-theme/variables';
 import styles from './styles.module.less';
@@ -10,7 +10,7 @@ const classStyles = {
   exitActive: styles.fadeExitActive,
 };
 
-export const ContentFader: React.FC = (props) => {
+export const ContentFader = (props: PropsWithChildren<{}>) => {
   const location = useLocation();
   return (
     <TransitionGroup className={styles.fadeBase}>

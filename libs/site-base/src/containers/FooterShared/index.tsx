@@ -27,6 +27,7 @@ const translate = defineMessages({
 type Props = {
   background?: string;
   id?: string;
+  children?: React.ReactNode;
 }
 export const FooterShared: React.FC<Props> = ({ children, background, id }) => (
   <>

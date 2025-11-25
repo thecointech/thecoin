@@ -1,9 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, type PropsWithChildren } from 'react';
 import Measure, { ContentRect } from 'react-measure';
 import { HeightMeasureReducer } from './reducer';
 
-
-export const ContentHeightMeasure: React.FC = (props) => {
+export const ContentHeightMeasure = ({ children }: PropsWithChildren<{}>) => {
   const [timestamp] = useState(new Date().getTime());
   HeightMeasureReducer.useStore();
   const actions = HeightMeasureReducer.useApi();
@@ -15,7 +14,7 @@ export const ContentHeightMeasure: React.FC = (props) => {
 
   return (
     <Measure bounds onResize={onContentSized}>
-      {({ measureRef }) => <div ref={measureRef}>{props.children}</div>}
+      {({ measureRef }) => <div ref={measureRef}>{children}</div>}
     </Measure>
   );
 }
