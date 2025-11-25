@@ -2,13 +2,10 @@
  * Create the store with dynamic reducers
  */
 
-import { routerMiddleware } from 'connected-react-router';
 import { createInjectorsEnhancer } from 'redux-injectors';
 import reduxSaga from '@redux-saga/core';
-import { history } from './history';
 import { createStore, compose, applyMiddleware, ReducersMapObject, Reducer, StoreEnhancer } from 'redux';
 import { ApplicationBaseState } from '../types';
-export { history };
 
 //@ts-ignore weird-o hack to get jest to run this file with no complaints.
 // unfortunately jest resolves the CJS version of this file, and somehow
@@ -23,10 +20,8 @@ export function configureStore(createReducer: reducerFn, initialState?: Applicat
   const sagaMiddleware = createSagaMiddleware(reduxSagaMonitorOptions);
   const { run: runSaga } = sagaMiddleware;
 
-  // Create the store with two middlewares
-  // 1. sagaMiddleware: Makes redux-sagas work
-  // 2. routerMiddleware: Syncs the location/URL path to the state
-  const middlewares = [sagaMiddleware, routerMiddleware(history)];
+  // Create the store with saga middleware
+  const middlewares = [sagaMiddleware];
 
   const enhancers = [
     applyMiddleware(...middlewares),

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route, RouteProps, Switch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router';
 import { isLocal } from '@thecointech/signers';
 import { defineMessage, FormattedMessage } from 'react-intl';
 import { AccountMap } from '../AccountMap';
@@ -12,7 +12,7 @@ const waitingForWeb3 = defineMessage({
 });
 
 // An authorized route is one that requires the use of an unlocked account
-export const AuthRoute = (routeProps: RouteProps) => {
+export const AuthRoute = ({ element }: { element: React.ReactElement }) => {
   const account = AccountMap.useActive();
 
   // If no account, suggest adding one (?)
@@ -21,7 +21,7 @@ export const AuthRoute = (routeProps: RouteProps) => {
   // but in practice the rule is not violated Because
   // the redirect means there will be no additional renders
   if (!account) {
-    return <Redirect to='/addAccount' />
+    return <Navigate to='/addAccount' replace />
   }
 
   // Inject reducers/sagas.
@@ -41,29 +41,27 @@ export const AuthRoute = (routeProps: RouteProps) => {
     }
   }
 
-  return (
-    <Route {...routeProps} />
-  )
+  return element;
 }
 
 type AuthSwitchProps = {
   auth?: Record<string, React.ComponentType>,
   open?: Record<string, React.ComponentType>,
-  fallback?: React.ComponentType,
+  Fallback?: React.ComponentType,
   path: string,
 };
 
-export const AuthSwitch = ({ path, auth, open, fallback }: AuthSwitchProps) => {
+export const AuthSwitch = ({ path, auth, open, Fallback }: AuthSwitchProps) => {
   const trimmed = path.endsWith('/') ? path.slice(0, -1) : path;
   return (
-    <Switch>
+    <Routes>
       {open ? Object.entries(open).map(
-        ([key, component]) => <Route key={key} path={`${trimmed}/${key}`} component={component} />
+        ([key, Component]) => <Route key={key} path={`${trimmed}/${key}`} element={<Component />} />
       ) : null}
       {auth ? Object.entries(auth).map(
-        ([key, component]) => <AuthRoute key={key} path={`${trimmed}/${key}`} component={component} />
+        ([key, Component]) => <Route key={key} path={`${trimmed}/${key}`} element={<AuthRoute element={<Component />} />} />
       ) : null}
-      {fallback ? <Route component={fallback} /> : null}
-    </Switch>
+      {Fallback ? <Route path="*" element={<Fallback />} /> : null}
+    </Routes>
   )
 }
