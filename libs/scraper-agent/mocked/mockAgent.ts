@@ -1,22 +1,21 @@
-import type { IScraperCallbacks } from "@thecointech/scraper";
 import type { Agent as AgentClass } from "../src/agent";
 import type { EventManager } from "../src/eventManager";
 import type { PageHandler } from "../src/pageHandler";
 import type { NamedProcessor } from "../src/processors";
 import { SectionType, sections } from "../src/processors/types";
-import type { IAskUser, SectionName, EventSection } from "../src/types";
+import type { IAskUser, SectionName, EventSection, IAgentCallbacks } from "../src/types";
 import { sleep } from "@thecointech/async/sleep";
 import { AccountResponse } from "@thecointech/vqa";
 
 export class Agent implements AgentClass {
   name: string;
   input: IAskUser;
-  callbacks?: IScraperCallbacks | undefined;
+  callbacks?: IAgentCallbacks | undefined;
   // Unused properties
   events!: EventManager;
   page!: PageHandler;
 
-  constructor(name: string, input: IAskUser, callbacks?: IScraperCallbacks | undefined) {
+  constructor(name: string, input: IAskUser, callbacks?: IAgentCallbacks | undefined) {
     this.name = name;
     this.input = input;
     this.callbacks = callbacks;
@@ -48,7 +47,7 @@ export class Agent implements AgentClass {
     }
     let accounts = await this.processAccounts(sectionsToSkip);
     return {
-      events: this.mockEventsResponse(sectionsToSkip),
+      events: this.mockEventsResponse(sectionsToProcess),
       accounts,
     }
   }
@@ -60,7 +59,7 @@ export class Agent implements AgentClass {
     return [];
   }
 
-  static create(name: string, input: IAskUser, _url: string, callbacks?: IScraperCallbacks | undefined) {
+  static create(name: string, input: IAskUser, _url: string, callbacks?: IAgentCallbacks | undefined) {
     return new Agent(name, input, callbacks);
   }
 
@@ -114,11 +113,10 @@ export class Agent implements AgentClass {
     ];
   }
 
-  mockEventsResponse(sectionsToSkip?: SectionName[]): EventSection {
+  mockEventsResponse(sectionsToProcess: SectionName[]): EventSection {
     return {
       section: "Initial",
-      events: (["Login", "AccountsSummary", "CreditAccountDetails", "SendETransfer", "Logout"] as const)
-        .filter(s => !sectionsToSkip?.includes(s))
+      events: sectionsToProcess
         .map((s, i) => ({
           section: s,
           events: [

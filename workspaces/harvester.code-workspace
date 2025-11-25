@@ -17,6 +17,10 @@
 			"path": "../libs/scraper"
 		},
 		{
+			"name": "scraper-archive",
+			"path": "../libs/scraper-archive"
+		},
+		{
 			"name": "vqa-service",
 			"path": "../apps/vqa-service"
 		},

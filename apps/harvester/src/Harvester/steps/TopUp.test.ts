@@ -5,14 +5,12 @@ import { SendETransfer } from './SendETransfer';
 import { processState } from '../processState';
 import { DateTime } from 'luxon';
 import { UserData } from '../types';
+import { mockUser } from '../../../internal/mockUser';
 
-jest.useFakeTimers();
 
 it ('Tops up appropriately', async () => {
 
-  const user = {
-    replay: () => Promise.resolve({ confirm: "1234" }),
-  } as any as UserData;
+  const user = mockUser();
 
   const stages = [
     new TopUp({
@@ -48,7 +46,13 @@ it ('Tops up appropriately', async () => {
   expect(state3.delta[0]).toEqual({});
 
   // A month has passed, another top up is due
-  jest.setSystemTime(DateTime.now().plus({ months: 1, days: 1 }).toJSDate());
+  // NOTE: FakeTimers will break pouchdb by default,
+  // so ensure we limit to just the date
+  jest.useFakeTimers({
+    now: DateTime.now().plus({ months: 1, days: 1 }).toJSDate(),
+    advanceTimers: true,
+    doNotFake: ['setTimeout', 'setInterval', 'queueMicrotask'],
+  });
   const state4 = await processState(stages, getState(currency(100), state3), user);
   expect(state4.delta[0].toETransfer).toEqual(currency(110));
   expect(state2.state.harvesterBalance).toEqual(currency(100));

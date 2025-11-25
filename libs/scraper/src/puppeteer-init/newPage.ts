@@ -49,12 +49,22 @@ async function getPage(contextName = "default") {
     browser: type,
     executablePath,
     userDataDir,
+    ignoreDefaultArgs: ['--enable-automation'],
     args: [
       // TODO: Fix sandboxing on linux to resolve the following error in a better way
       // No usable sandbox! If you are running on Ubuntu 23.10+ or another
       // Linux distro that has disabled unprivileged user namespaces with AppArmor...
       '--no-sandbox',
-      '--disable-setuid-sandbox'
+      '--disable-setuid-sandbox',
+      '--hide-scrollbars',
+
+      // Disable automation detection features
+      '--disable-blink-features=AutomationControlled',
+      '--disable-features=IsolateOrigins,site-per-process',
+
+      // Make browser appear more like a normal user
+      '--disable-infobars',
+      '--disable-dev-shm-usage',
 
       // "--disable-accelerated-2d-canvas",
       // "--disable-gpu",

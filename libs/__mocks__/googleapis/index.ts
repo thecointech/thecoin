@@ -32,6 +32,11 @@ export namespace google {
   }
 
   const emailCacheFile = os.tmpdir() + "/devlive-email.json";
+  const getDevLiveEmails = () => (
+    fs.existsSync(emailCacheFile)
+      ? JSON.parse(fs.readFileSync(emailCacheFile, "utf8"))
+      : []
+  )
 
   class GmailMocked {
     users = {
@@ -60,34 +65,23 @@ export namespace google {
 
       messages: {
         async list() {
-          if (!fs.existsSync(emailCacheFile)) {
-            return emaillist;
-          }
-          // read the file
-          const raw = fs.readFileSync(emailCacheFile, "utf8");
-          // as JSON
-          const json = JSON.parse(raw);
-          return {
-            data: {
-              messages: json
+          return (process.env.CONFIG_NAME === "devlive")
+            ? {
+              data: {
+                messages: getDevLiveEmails()
+              }
             }
-          }
+            : emaillist;
         },
 
         async get(opts: { id: string }) {
-          if (!fs.existsSync(emailCacheFile)) {
-            return emailget.find(e => e.data.id === opts.id);
-          }
-          // read the file
-          const raw = fs.readFileSync(emailCacheFile, "utf8");
-          // as JSON
-          const json = JSON.parse(raw);
-          return {
-            data: json.find((e: any) => e.id === opts.id)
-          }
+          return (process.env.CONFIG_NAME === "devlive")
+            ? { data: getDevLiveEmails().find((e: any) => e.id === opts.id) }
+            : emailget.find(e => e.data.id === opts.id);
         },
 
         async modify(opts: gmail_v1.Params$Resource$Users$Messages$Modify) {
+          // Not yet supported in dev-live
           const labelIds = opts.requestBody?.addLabelIds as string[]
           emailget
             .find(e => e.data.id === opts.id)

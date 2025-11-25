@@ -7,36 +7,51 @@ export const Landing = processorFn("Landing", async (agent: Agent) => {
   await navigateToLogin(agent)
 })
 
-async function navigateToLogin(agent: Agent) {
+export async function navigateToLogin(agent: Agent) {
   // Handle pages that have login elements on the front page
+  log.trace(`LandingWriter: Navigating to login`);
+  const originalUrl = agent.page.page.url();
+
+  await tryNavigateToLoginMenu(agent);
+  agent.onProgress(33);
+
+  // Are we on a login page or did we just open a menu?
+  let intent = await agent.page.getPageIntent();
+  agent.onProgress(50);
+  if (intent === "MenuSelect"
+    || (intent === "Landing" && agent.page.page.url() === originalUrl)
+  ) {
+    intent = await navigateToLoginMenu(agent);
+  }
+
+  // We should now be on the login page
+  if (intent !== "Login") {
+    await agent.maybeThrow(new Error("Failed to navigate to login page"));
+  }
+}
+
+export async function tryNavigateToLoginMenu(agent: Agent) {
   const api = await apis().getLandingApi();
   log.trace(`LandingWriter: Navigating to login`);
   const didNavigate = await agent.page.tryClick(api, "navigateToLogin", {
     hints: { eventName: "login", tagName: "button" }
   });
   if (!didNavigate) {
-    await agent.maybeThrow(new Error("Failed to navigate to login"));
-  }
-  agent.onProgress(33);
-
-  // Are we on a login page or did we just open a menu?
-  let intent = await agent.page.getPageIntent();
-  agent.onProgress(50);
-  if (intent == "MenuSelect") {
-    // Now, if we are still on the landing page, it may mean that there
-    // is a menu open.  Try and find the login link (again) and click it
-    await agent.page.tryClick(api, "navigateToLoginMenu", {
-      hints: { eventName: "login-menu", tagName: "a" }
-    });
-    agent.onProgress(66);
-    // It's fine if this doesn't work, let's continue and hope for the best
-
-    // Final check
-    intent = await agent.page.getPageIntent();
-  }
-
-  // We should now be on the login page
-  if (intent != "Login") {
-    await agent.maybeThrow(new Error("Failed to navigate to login page"));
+    await agent.maybeThrow(new Error("Failed to click login button"));
   }
 }
+
+export async function navigateToLoginMenu(agent: Agent) {
+  // Now, if we are still on the landing page, it may mean that there
+  // is a menu open.  Try and find the login link (again) and click it
+  const api = await apis().getLandingApi();
+  await agent.page.tryClick(api, "navigateToLoginMenu", {
+    hints: { eventName: "login-menu", tagName: "a" }
+  });
+  agent.onProgress(66);
+  // It's fine if this doesn't work, let's continue and hope for the best
+
+  // Final check
+  return await agent.page.getPageIntent();
+}
+

@@ -1,10 +1,9 @@
 
 import { jest } from "@jest/globals"
 import { describe } from '@thecointech/jestutils';
-import { getTestData } from "../internal/getTestData";
-import { hasTestingPages } from "@thecointech/scraper/testutils";
+import { getTestData, hasTestingPages } from "../internal/getTestData";
 import type { Page } from "puppeteer";
-import type { FoundElement } from "@thecointech/scraper/types";
+import type { FoundElement } from "@thecointech/scraper-types";
 
 jest.setTimeout(3 * 60 * 1000);
 
@@ -16,13 +15,12 @@ jest.unstable_mockModule("./interactions", () => mocks);
 
 const { maybeCloseModal } = await import("./modal");
 
-const tests = getTestData("modals", "*", "features");
-
 describe('modal vqa tests finds the correct close element', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   })
 
+  const tests = getTestData("modals", "*", "features");
   it.each(tests)("For: %s", async (test) => {
     await using agent = await test.agent();
     const r = await maybeCloseModal(agent.page.page);
@@ -30,7 +28,7 @@ describe('modal vqa tests finds the correct close element', () => {
     expect(mocks.clickElement).toHaveBeenCalled();
     const found = mocks.clickElement.mock.calls[0][1];
     const elm = test.elm("closeModal");
-    expect(found.data.selector).toEqual(elm?.selector);
+    expect(found.data.selector).toEqual(elm?.data.selector);
   })
 }, hasTestingPages)
 

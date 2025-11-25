@@ -1,5 +1,5 @@
 import { log } from "@thecointech/logging";
-import type { AnyEvent, DynamicInputEvent, ElementData, FoundElement, ValueEvent, ValueType } from "@thecointech/scraper/types";
+import type { AnyEvent, DynamicInputEvent, ElementData, FoundElement, ValueEvent, ValueType } from "@thecointech/scraper-types";
 import type { Page } from "puppeteer";
 import type { EventSection, SectionName } from "./types";
 import { getValueParsing } from "@thecointech/scraper/valueParsing";

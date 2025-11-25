@@ -1,46 +1,36 @@
 import { log } from "@thecointech/logging";
 import { SimilarityPipeline } from "./similarity";
-import { Coords, ElementData, SearchElementData, Font } from "./types";
+import type { Coords, ElementData, SearchElementData, Font, Bounds } from "@thecointech/scraper-types";
 import { getValueParsing, parseValue } from "./valueParsing";
 import { distance as levenshtein } from 'fastest-levenshtein';
-
-const EquivalentInputTypes = [
-  // All of the following attributes tend to show up looking the same on the page
-  ['text', 'date', 'datetime', 'datetime-local', 'email', 'month', 'number', 'search', 'tel', 'time', 'url', 'week'],
-  ['checkbox', 'radio'],
-  ['submit', 'reset', 'button'],
-]
-
-const EquivalentTags = [
-  // Interactive elements that act as buttons
-  ['BUTTON', 'A', 'INPUT'],
-  // Input text elements
-  ['INPUT', 'TEXTAREA'],
-  // Input select elements
-  ['INPUT', 'SELECT'],
-]
-
-export type Bounds = {width: number, height: number};
+import { getTagScore } from "./elements.score.tag";
+import { getInputTypeScore } from "./elements.score.input";
 
 // This scoring function reaaaaally needs to be replaced with
 // a computed (learned) model, because manually scoring is just
 // too easy to bias to right-nows problems
-export async function scoreElement(potential: ElementData, original: SearchElementData, bounds: Bounds) {
+export async function scoreElement(potential: ElementData, original: SearchElementData, bounds: Bounds, selectorIndex?: Map<string, ElementData>) {
   const components: Record<string, number> = {
     selector:         30 * getSelectorScore(potential.selector, original.selector),
-    tag:              20 * getTagScore(potential, original),
+    tag:              20 * getTagScore(potential, original, selectorIndex),
     // Input type can be very important, as it doubles for a decent tag filter
     inputType:        50 * getInputTypeScore(potential, original),
     // Mostly useless, fonts are all over the place
     font:             10 * getFontScore(potential.font, original.font),
     // Includes aria-label & <label>.  Is a good boost to <input> types
     label:            25 * await getLabelScore(potential.label, original.label),
-    role:             40 * getRoleScore(potential, original),
+    role:             40 * getRoleScore(potential, original, selectorIndex),
     positionAndSize:  20 * getPositionAndSizeScore(potential, original, bounds), // Can be 2 if both match perfectly
     nodeValue:        40 * await getNodeValueScore(potential, original),
     siblings:         30 * await getSiblingScore(potential, original),
     estimatedText:    40 * getEstimatedTextScore(potential, original)
   };
+
+  if (original.estimated) {
+    // If we're estimating, we want to boost the tag score,
+    // They are only included when required for an action
+    components.tag *= 2;
+  }
 
   // max score is 195
   const score = Object.values(components).reduce((sum, score) => sum + score, 0);
@@ -57,33 +47,6 @@ function getSelectorScore(potential: string, original: string | undefined) {
   return potential == original ? 1 : 0;
 }
 
-// Tags aren't great filters, even for things like buttons
-function getTagScore(potential: ElementData, original: Partial<ElementData>) {
-  if (potential.tagName == original.tagName) {
-    return 1;
-  } else {
-    // Some kinds of elemements can be interchangeable
-    if (EquivalentTags.find(t => t.includes(original.tagName!) && t.includes(potential.tagName!))) {
-      // We could also score input[button] higher etc, but that's getting a bit too complicated,
-      // and shouldn't be necessary.  Instead we will transition to a learned model soon
-      return 0.5;
-    }
-  }
-  return 0;
-}
-
-function getInputTypeScore(potential: ElementData, original: SearchElementData): number {
-  if (original.tagName !== 'INPUT' || potential.tagName !== 'INPUT') return 0;
-
-  const originalType = original.inputType ?? 'text';
-  const potentialType = potential.inputType ?? 'text';
-
-  if (potentialType === originalType) return 1;
-  if (EquivalentInputTypes.find(t => t.includes(potentialType) && t.includes(originalType))) {
-    return 0.5;
-  }
-  return 0;
-}
 
 function getFontScore(potential: Font | undefined, original: Font | undefined) {
   return (
@@ -164,15 +127,32 @@ async function getLabelScore(potential: string|null, original: string|null|undef
   return 0;
 }
 
-export function getRoleScore(potential: ElementData, original: SearchElementData) {
+export function getRoleScore(potential: ElementData, original: SearchElementData, selectorIndex?: Map<string, ElementData>) {
   const matchScore = (original.role == potential.role)
     ? 1
     : -1;
   // When estimating, we need both roles to get a score.
   if (original.estimated) {
-    return (original.role && potential.role)
-      ? matchScore
-      : 0;
+    // Direct match
+    if (original.role && potential.role) {
+      return matchScore;
+    }
+
+    // Check ancestor roles if index available
+    if (original.role && selectorIndex) {
+      let current = potential;
+      while (current.parentSelector) {
+        const parent = selectorIndex.get(current.parentSelector);
+        if (!parent) break;
+
+        if (parent.role === original.role) {
+          return 0.5;
+        }
+        current = parent;
+      }
+    }
+
+    return 0;
   }
 
   // In replay, if either has a role, they have to match
@@ -185,28 +165,42 @@ export function getRoleScore(potential: ElementData, original: SearchElementData
 // Basically, as long as the center is within the largest bounding box, it
 // should give some points.  The score drops below zero if the center moves
 // outside the radius of the oval defined by the two boxes
+
+// Score the overlap of the two boxes.  The score is 1 when the boxes centers
+// are exactly aligned.  It drops to 0.5 when the smaller of the two boxes
+// outside edges no longer contain the center, and drops to 0 when both
+// box boundaries are touching.  It then reaches -1 at boundary distance
+// away.
 export function getPositionScore(potential: Coords, original: Coords, bounds: Bounds) {
   const originalCenterX = original.left + (original.width / 2);
   const potentialCenterX = potential.left + (potential.width / 2);
   const diffX = Math.abs(originalCenterX - potentialCenterX);
   const diffY = Math.abs(original.centerY - potential.centerY);
 
-  const maxWidth = Math.max(original.width, potential.width);
-  const maxHeight = Math.max(original.height, potential.height);
+  const maxX = Math.max(original.width, potential.width) / 2;
+  const maxY = Math.max(original.height, potential.height) / 2;
 
-  const scoreX = getAxisScore(diffX, bounds.width, maxWidth);
-  const scoreY = getAxisScore(diffY, bounds.height, maxHeight);
+  const minX = Math.min(original.width, potential.width) / 2;
+  const minY = Math.min(original.height, potential.height) / 2;
+
+  const scoreX = getAxisScore(diffX, bounds.width, minX, maxX);
+  const scoreY = getAxisScore(diffY, bounds.height, minY, maxY);
   return (scoreX + scoreY) / 2;
 }
 
-function getAxisScore(diff: number, max: number, elementSize: number) {
-  const halfSize = elementSize / 2;
-  if (diff <= halfSize) {
-    // The element is inside the bounds.  It score goes from 0 -> 1 as it moves closer to the center
-    return 1 - (diff / halfSize);
+function getAxisScore(diff: number, max: number, boxMin: number, boxMax: number) {
+
+  // Boxes overlap the center
+  if (diff < boxMin) {
+    return 1 - (0.5 * (diff / boxMin));
   }
-  if (diff > halfSize) {
-    return -(diff / halfSize) / Math.abs((max - elementSize) / halfSize);
+  // Boxes overlap, but both centers are not within the overlap
+  if (diff < boxMax) {
+    return 0.5 * (diff / boxMax);
+  }
+  // Boxes do not overlap
+  if (diff > boxMax) {
+    return -(diff / boxMax) / Math.abs((max - boxMax) / boxMax);
   }
   return 0;
 }
@@ -315,4 +309,3 @@ function getValueParsingScore(potential: ElementData, original: SearchElementDat
   }
   return 0;
 }
-
