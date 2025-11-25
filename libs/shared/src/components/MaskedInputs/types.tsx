@@ -1,4 +1,5 @@
 import { AccountDetails } from '@thecointech/account';
+import type { JSX } from 'react';
 
 export type MaskedUxProps ={
     intlLabel: JSX.Element,

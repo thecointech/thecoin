@@ -1,5 +1,5 @@
 import { createMedia } from "@artsy/fresnel";
-import React from "react";
+import React, { type PropsWithChildren } from "react";
 import { Segment } from "semantic-ui-react";
 
 export const breakpointsValues = {
@@ -18,12 +18,12 @@ export const mediaStyles = appMedia.createMediaStyle();
 
 export const { Media, MediaContextProvider } = appMedia;
 
-export const MobileSegment : React.FC = (props) =>
-  <Segment as={Media} at="mobile">{props.children}</Segment>;
+export const MobileSegment = ({children}: PropsWithChildren<{}>) =>
+  <Segment as={Media} at="mobile">{children}</Segment>;
 
 type Props = {
   className?: string;
 }
-export const GreaterThanMobileSegment : React.FC<Props> = (props) =>
-  <Segment as={Media} className={props.className} greaterThan="mobile">{props.children}</Segment>;
+export const GreaterThanMobileSegment = ({children, className}: PropsWithChildren<Props>) =>
+  <Segment as={Media} className={className} greaterThan="mobile">{children}</Segment>;
 

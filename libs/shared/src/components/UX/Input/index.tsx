@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Form, Label, Input, Popup } from 'semantic-ui-react';
 import { FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 import { BaseProps } from '../types';
@@ -65,7 +65,7 @@ export const UxInput = (props: BaseProps) => {
     ? isValid ? 'success' : 'error'
     : ''
 
-  const contextRef = createRef<HTMLSpanElement>();
+  const contextRef = useRef<HTMLSpanElement>(null);
   const styleError = {
     color: LessVars.errorColor,
     borderColor: LessVars.errorBorderColor,
@@ -78,7 +78,7 @@ export const UxInput = (props: BaseProps) => {
     <Form.Field className={`${formClassName} ${props.className}`} >
       <MaybeLabel label={props.intlLabel} />
       <Popup
-        context={contextRef}
+        context={contextRef.current ?? undefined}
         position='top right'
         content={errorMessage ? <FormattedMessage {...errorMessage} /> : undefined}
         open={showingError}

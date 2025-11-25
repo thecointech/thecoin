@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { type PropsWithChildren, useState } from 'react';
 import { Clipboard } from 'ts-clipboard';
 import { Icon, Popup } from 'semantic-ui-react';
 import styles from './styles.module.less';
@@ -18,7 +18,7 @@ const translate = defineMessages({
       description:"base.copyToClipboard.messageSuccess: Success message for the button for the copy to clipboard tool"}});
 
 
-export const CopyToClipboard: FunctionComponent<Props> = (props) => {
+export const CopyToClipboard = (props: PropsWithChildren<Props>) => {
 
   const intl = useIntl();
   const [open, setOpen] = useState(false)

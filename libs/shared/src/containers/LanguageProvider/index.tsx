@@ -6,7 +6,7 @@
  * IntlProvider component and i18n messages (loaded from `src/translations`)
  */
 
-import React from 'react';
+import React, { type PropsWithChildren } from 'react';
 import { useSelector } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import { selectLocale } from './selector';
@@ -17,20 +17,19 @@ export * from './types';
 
 export interface Props {
   languages: Languages;
-  children?: React.ReactNode;
 }
 
-export function LanguageProvider(props : Props) {
+export function LanguageProvider({children, languages}: PropsWithChildren<Props>) {
   LanguageProviderReducer.useStore();
   const { locale } = useSelector(selectLocale);
   return (
     <IntlProvider
       locale={locale}
       key={locale}
-      messages={props.languages[locale]}
+      messages={languages[locale]}
       defaultLocale="en"
     >
-      {React.Children.only(props.children)}
+      {React.Children.only(children)}
     </IntlProvider>
   );
 }
