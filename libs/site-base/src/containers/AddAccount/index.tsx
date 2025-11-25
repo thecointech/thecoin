@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router';
 
 import { Create as ConnectCreate } from './Connect/Create';
 import { Existing as ConnectExist } from './Connect/Existing';
@@ -18,17 +18,17 @@ export const AddAccount = () => {
   const url = "/addAccount";// TODO
   return (
     <div className={styles.addAccountWrapper}>
-      <Switch>
-        <Route path={`${url}/upload`} component={FromJson} />
-        <Route path={`${url}/generate/intro`} component={Intro} />
-        <Route path={`${url}/generate`} component={Generate} />
-        <Route path={`${url}/connect/exist`} component={ConnectExist} />
-        <Route path={`${url}/connect/create`} component={ConnectCreate} />
-        <Route path={`${url}/restore/list`} component={RestoreList} />
-        <Route path={`${url}/restore`} component={Restore} />
-        <Route path={`${url}/store`} component={Store} />
-        <Route render={() => <CreateExistingSwitch url={`${url}/`} />} />
-      </Switch>
+      <Routes>
+        <Route path={`${url}/upload`} element={<FromJson />} />
+        <Route path={`${url}/generate/intro`} element={<Intro />} />
+        <Route path={`${url}/generate`} element={<Generate />} />
+        <Route path={`${url}/connect/exist`} element={<ConnectExist />} />
+        <Route path={`${url}/connect/create`} element={<ConnectCreate />} />
+        <Route path={`${url}/restore/list`} element={<RestoreList />} />
+        <Route path={`${url}/restore`} element={<Restore />} />
+        <Route path={`${url}/store`} element={<Store />} />
+        <Route element={<CreateExistingSwitch url={`${url}/`} />} />
+      </Routes>
     </div>
   );
 }

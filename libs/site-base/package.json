@@ -63,7 +63,6 @@
     "@thecointech/shared": "^0.5.0-test.0",
     "@thecointech/site-semantic-theme": "^0.4.0",
     "@thecointech/utilities": "^0.5.0-test.0",
-    "connected-react-router": "^6.6.1",
     "intl": "^1.2.5",
     "react-animate-height": "^3.0.4",
     "react-ga": "^2.7.0",

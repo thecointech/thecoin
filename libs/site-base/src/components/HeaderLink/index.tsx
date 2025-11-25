@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, NavLinkProps } from 'react-router-dom';
+import { NavLink, NavLinkProps } from 'react-router';
 import { Menu } from 'semantic-ui-react';
 import styles from './styles.module.less';
 

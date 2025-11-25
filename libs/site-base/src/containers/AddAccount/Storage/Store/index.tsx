@@ -2,7 +2,7 @@ import React from "react";
 import { Header, Grid, Container } from "semantic-ui-react";
 import { defineMessage, FormattedMessage } from "react-intl";
 import { MaybeMessage } from "../../../../components/MaybeMessage";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { AccountMap } from "@thecointech/shared/containers/AccountMap";
 import { OfflineStore } from "../Offline/Store";
 

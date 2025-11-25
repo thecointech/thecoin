@@ -1,6 +1,6 @@
 import React from "react";
 import { Dropdown, DropdownItemProps } from "semantic-ui-react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router";
 import { AccountMap } from "@thecointech/shared/containers/AccountMap";
 import { getAvatarLink } from '@thecointech/shared/components/Avatars';
 import { FormattedMessage, useIntl } from 'react-intl';

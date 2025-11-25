@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header, Divider } from 'semantic-ui-react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router';
 import styles from './styles.module.less';
 import { Decoration } from '../Decoration';
 import { defineMessages, FormattedMessage } from 'react-intl';
