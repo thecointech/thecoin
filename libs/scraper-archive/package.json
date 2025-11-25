@@ -21,8 +21,7 @@
     "clean": "run -T rimraf ./build"
   },
   "dependencies": {
-    "@thecointech/logging": "workspace:^",
-    "@thecointech/scraper": "workspace:^"
+    "@thecointech/logging": "workspace:^"
   },
   "devDependencies": {
     "@thecointech/jestutils": "^0.4.0",

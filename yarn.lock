@@ -12543,7 +12543,6 @@ __metadata:
   dependencies:
     "@thecointech/jestutils": "npm:^0.4.0"
     "@thecointech/logging": "workspace:^"
-    "@thecointech/scraper": "workspace:^"
     "@thecointech/setenv": "workspace:^"
     open: "npm:^8.4.0"
   languageName: unknown
