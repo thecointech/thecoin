@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { Prismic } from "components/Prismic";
 import { Header, Icon } from "semantic-ui-react";
 import { selectLocale } from "@thecointech/shared/containers/LanguageProvider/selector";
-import { RouteComponentProps, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router";
 import { DateTime } from "luxon";
 import { defineMessages, FormattedMessage } from "react-intl";
 import { NotFoundPage } from '@thecointech/shared/containers/NotFoundPage';
@@ -17,19 +17,19 @@ const translations = defineMessages({
   }
 });
 
-export const Article = (props: RouteComponentProps<{articleId: string}>) => {
+export const Article = () => {
   const prismic = Prismic.useData();
   const actions = Prismic.useApi();
   const { locale } = useSelector(selectLocale);
-  let history = useHistory();
+  const navigate = useNavigate();
+  const { articleId } = useParams<{articleId: string}>();
 
   const articles = prismic[locale].articles;
-  const { articleId } = props.match.params;
-  const articleData = articles.get(articleId);
+  const articleData = articleId ? articles.get(articleId) : undefined;
 
   // If we haven't fetched this article yet, do so now.
   useEffect(() => {
-    if (!articleData) {
+    if (articleId && !articleData) {
       actions.fetchDoc(articleId, locale);
     }
   }, [articleId, locale]);
@@ -38,7 +38,7 @@ export const Article = (props: RouteComponentProps<{articleId: string}>) => {
   return articleData
     ? <>
         <div className={styles.containerArticle} key={articleData.id}>
-          <div className={` ${styles.backLink} x6spaceBefore`}><a onClick={() => history.goBack()}><Icon name="arrow left" /><FormattedMessage {...translations.backLink} /></a></div>
+          <div className={` ${styles.backLink} x6spaceBefore`}><a onClick={() => navigate(-1)}><Icon name="arrow left" /><FormattedMessage {...translations.backLink} /></a></div>
           { articleData.data.image_before_title.url ? <img src={articleData.data.image_before_title.url} alt={articleData.data.image_before_title.alt} /> : undefined }
           <Header as={"h2"} className="x6spaceBefore">
             <PrismicText field={articleData.data.title} />

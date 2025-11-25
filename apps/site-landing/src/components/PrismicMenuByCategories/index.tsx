@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { List, Rail, SemanticFLOATS } from "semantic-ui-react";
 import { GreaterThanMobileSegment, MobileSegment } from "@thecointech/shared/components/ResponsiveTool";
 

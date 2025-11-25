@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Switch, Route } from 'react-router-dom';
+import { Routes as RRoutes, Route } from 'react-router';
 import { HomePage } from 'containers/HomePage/index';
 import { NotFoundPage } from '@thecointech/shared/containers/NotFoundPage';
 import { Healthier } from 'containers/Healthier';
@@ -14,18 +14,18 @@ import { Privacy } from 'containers/Privacy';
 import { ApplyBeta } from '../ApplyBeta';
 
 export const Routes = () =>
-  <Switch>
-    <Route path="/" exact component={HomePage} />
-    <Route path="/learn" component={Learn} />
-    <Route path="/healthier" component={Healthier} />
-    <Route path="/wedomore" component={WeDoMore} />
-    <Route path="/compare" component={Compare} />
-    <Route path="/help" component={HelpDocs} />
-    <Route path="/blog" component={Blog} />
-    <Route path="/faq/:category?" component={HelpDocs} />
-    <Route path="/tos" component={TOS} />
-    <Route path="/applyBeta" component={ApplyBeta} />
-    <Route path="/privacy" component={Privacy} />
-    <Route component={NotFoundPage} />
-  </Switch>
+  <RRoutes>
+    <Route path="/" element={HomePage} />
+    <Route path="/learn" element={Learn} />
+    <Route path="/healthier" element={Healthier} />
+    <Route path="/wedomore" element={WeDoMore} />
+    <Route path="/compare" element={Compare} />
+    <Route path="/help" element={HelpDocs} />
+    <Route path="/blog" element={Blog} />
+    <Route path="/faq/:category?" element={HelpDocs} />
+    <Route path="/tos" element={TOS} />
+    <Route path="/applyBeta" element={ApplyBeta} />
+    <Route path="/privacy" element={Privacy} />
+    <Route element={NotFoundPage} />
+  </RRoutes>
 

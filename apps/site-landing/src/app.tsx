@@ -12,7 +12,6 @@ import 'react-app-polyfill/stable';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
 import 'sanitize.css/sanitize.css';
 
 // Import root app
@@ -21,7 +20,7 @@ import { App } from 'containers/App';
 // Import Language Provider
 import { LanguageProvider, Languages } from '@thecointech/shared/containers/LanguageProvider';
 
-import { configureLandingStore, history } from './reducers';
+import { configureLandingStore } from './reducers';
 
 // Import i18n messages
 import { translations } from './translations';
@@ -43,9 +42,7 @@ const render = (languages: Languages, Component = App) => {
     // tslint:disable-next-line:jsx-wrap-multiline
     <Provider store={store}>
       <LanguageProvider languages={languages}>
-        <ConnectedRouter history={history}>
-          <Component />
-        </ConnectedRouter>
+        <Component />
       </LanguageProvider>
     </Provider>,
     MOUNT_NODE,

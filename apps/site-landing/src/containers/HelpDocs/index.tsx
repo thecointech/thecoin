@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { Prismic, FAQDocument, } from "components/Prismic";
 import { ApplicationRootState } from "types";
 import { useSelector } from "react-redux";
-import { RouteComponentProps } from "react-router";
 import { selectLocale } from '@thecointech/shared/containers/LanguageProvider/selector';
 import styles from "./styles.module.less";
 import { Header } from 'semantic-ui-react';
@@ -10,6 +9,7 @@ import { FaqItem } from './FaqItem';
 import { Decoration } from '../../components/Decoration';
 import { CategoryMenu } from '../../components/PrismicMenuByCategories';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { useParams } from 'react-router';
 
 const translations = defineMessages({
   title : {
@@ -18,7 +18,7 @@ const translations = defineMessages({
   });
 
 
-const HelpDocsInternal = (props: RouteComponentProps<{category: string|undefined}>) => {
+export const HelpDocs = () => {
   const actions = Prismic.useApi();
   const docs = useSelector((s: ApplicationRootState) => s.documents);
   const { locale } = useSelector(selectLocale);
@@ -26,7 +26,7 @@ const HelpDocsInternal = (props: RouteComponentProps<{category: string|undefined
     actions.fetchAllDocs(locale);
   }, [locale]);
 
-  const { category } = props.match.params;
+  const { category } = useParams<{category: string|undefined}>();
   const allFaqs = [...docs[locale].faqs.values()];
   const categories = buildCategories(allFaqs);
   const faqs = allFaqs.filter(faq => {
@@ -49,11 +49,6 @@ const HelpDocsInternal = (props: RouteComponentProps<{category: string|undefined
       <Decoration />
     </>
   );
-}
-
-// https://github.com/react-boilerplate/redux-injectors/issues/16
-export const HelpDocs = (props: RouteComponentProps<{category: string|undefined}>) => {
-  return <HelpDocsInternal {...props} /> // The rest of the code
 }
 
 export function buildCategories(faqs: FAQDocument[]) {

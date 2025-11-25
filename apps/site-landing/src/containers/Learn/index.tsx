@@ -1,19 +1,15 @@
 import * as React from 'react';
 
-import { Switch, Route, RouteComponentProps } from 'react-router-dom';
+import { Routes, Route } from 'react-router';
 import { Returns } from 'containers/ReturnProfile';
 import { Healthier } from 'containers/Healthier';
 
-type Props = RouteComponentProps;
-
-export const Learn: React.FunctionComponent<Props> = (props: Props) => {
-  const { match } = props;
-  const { url } = match;
+export const Learn: React.FunctionComponent = () => {
 
   return (
-    <Switch location={props.location}>
-      <Route path={`${url}/calculator`} component={Returns} />
-      <Route component={Healthier} />
-    </Switch>
+    <Routes>
+      <Route path={"calculator"} element={<Returns />} />
+      <Route element={<Healthier />} />
+    </Routes>
   );
 };

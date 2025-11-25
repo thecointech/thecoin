@@ -6,7 +6,7 @@ import { selectLocale } from '@thecointech/shared/containers/LanguageProvider/se
 import { CategoryMenu } from "components/PrismicMenuByCategories";
 import { Decoration } from "components/Decoration";
 import { ArticleItem } from "./ArticleItem";
-import { RouteComponentProps } from 'react-router';
+import { useParams } from 'react-router';
 import { Prismic } from '../../components/Prismic/reducer';
 import styles from "./styles.module.less";
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -18,17 +18,17 @@ const translations = defineMessages({
   });
 
 
-export const ArticleList = ({ match }: RouteComponentProps<{ category?: string }>) => {
+export const ArticleList = () => {
   const { locale } = useSelector(selectLocale);
   const prismic = Prismic.useData();
   const actions = Prismic.useApi();
+  const { category } = useParams<{category: string}>();
   useEffect(() => {
     actions.fetchAllDocs(locale);
   }, [locale]);
 
   const allArticles = [...prismic[locale].articles.values()];
   const categories = buildCategories(allArticles);
-  const { category } = match.params;
 
   const articles = category
     ? allArticles.filter(article => article.data.categories.find(c => c.category === category))
