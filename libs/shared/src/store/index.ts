@@ -6,6 +6,7 @@ import { createInjectorsEnhancer } from 'redux-injectors';
 import reduxSaga from '@redux-saga/core';
 import { createStore, compose, applyMiddleware, ReducersMapObject, Reducer, StoreEnhancer } from 'redux';
 import { ApplicationBaseState } from '../types';
+import { getCreateReducer } from './reducers';
 
 //@ts-ignore weird-o hack to get jest to run this file with no complaints.
 // unfortunately jest resolves the CJS version of this file, and somehow
@@ -13,7 +14,7 @@ import { ApplicationBaseState } from '../types';
 const createSagaMiddleware: typeof reduxSaga = reduxSaga.default ?? reduxSaga;
 
 type reducerFn = (injectedReducers?: ReducersMapObject) => Reducer;
-export function configureStore(createReducer: reducerFn, initialState?: ApplicationBaseState) {
+export function configureStore(createReducer: reducerFn = getCreateReducer(), initialState?: ApplicationBaseState) {
   const reduxSagaMonitorOptions = {};
 
 
@@ -37,14 +38,6 @@ export function configureStore(createReducer: reducerFn, initialState?: Applicat
     initialState,
     doCompose(...enhancers) as StoreEnhancer
    )
-
-  // Make reducers hot reloadable, see http://mxs.is/googmo
-  /* istanbul ignore next */
-  // if (module.hot) {
-  //   module.hot.accept('./reducers', () => {
-  //     forceReducerReload(store);
-  //   });
-  // }
 
   return store;
 }

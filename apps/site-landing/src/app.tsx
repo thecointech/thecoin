@@ -14,8 +14,7 @@ import 'sanitize.css/sanitize.css';
 
 // Import Language Provider
 import { LanguageProvider, Languages } from '@thecointech/shared/containers/LanguageProvider';
-
-import { configureLandingStore } from './reducers';
+import { configureStore } from '@thecointech/shared/store';
 import { routes } from './containers/App/Routes';
 import { createHashRouter } from 'react-router';
 
@@ -31,7 +30,7 @@ if (process.env.CONFIG_NAME === 'prodtest') {
 }
 
 // Create redux store with history
-const store = configureLandingStore();
+const store = configureStore();
 const MOUNT_NODE = document.getElementById('app') as HTMLElement;
 const root = createRoot(MOUNT_NODE);
 

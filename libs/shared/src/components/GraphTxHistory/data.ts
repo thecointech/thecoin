@@ -74,7 +74,7 @@ export function getAccountSerie(data: GraphHistoryProps, rates: FXRate[], ratesA
     const finalFiat = toHumanDecimal(balanceMod.mul(exRate));
     const rawFiat = toHumanDecimal(new Decimal(balance).mul(exRate));
     accountValuesDatum.push({
-      x: date.toISODate(),
+      x: date.toISODate()!,
       y: finalFiat.toNumber(),
       raw: rawFiat.toNumber(),
       costBasis,

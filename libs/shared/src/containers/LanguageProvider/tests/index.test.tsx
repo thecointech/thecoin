@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import { Provider } from 'react-redux';
 import { configureStore } from '../../../store';
 import { Languages } from '../types';
-import { createReducer } from '../../../store/reducers';
 import { LanguageProvider } from '../index';
 
 const TestId = 'some.id'
@@ -24,7 +23,7 @@ describe('LanguageProvider', () => {
   let store: AppStore;
 
   beforeEach(() => {
-    store = configureStore(createReducer);
+    store = configureStore();
   });
 
   it('should render the default language messages', () => {
