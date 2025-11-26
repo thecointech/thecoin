@@ -1,26 +1,51 @@
 import React, { type PropsWithChildren } from 'react';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import { LessVars } from '@thecointech/site-semantic-theme/variables';
+import { SwitchTransition, CSSTransition } from 'react-transition-group';
 import styles from './styles.module.less';
-import { useLocation } from 'react-router';
+import { useLocation, useOutlet } from 'react-router';
 
 const classStyles = {
-  enter: styles.fadeEnter,
+  enter : styles.fadeEnter,
   enterActive: styles.fadeEnterActive,
+  exit: styles.fadeExit,
   exitActive: styles.fadeExitActive,
 };
 
-export const ContentFader = (props: PropsWithChildren<{}>) => {
+export const ContentFader = (_props: PropsWithChildren<{}>) => {
   const location = useLocation();
+
+  // Use pathname as key since HashRouter doesn't always have location.key
+  const transitionKey = location.key || location.pathname;
+  const currentOutlet = useOutlet()
+
+  // Store refs for each unique transition key
+  const nodeRefs = React.useRef<Map<string, React.RefObject<HTMLDivElement|null>>>(new Map());
+
+  // Get or create a ref for this specific key
+  const getNodeRef = (key: string) => {
+    if (!nodeRefs.current.has(key)) {
+      nodeRefs.current.set(key, React.createRef<HTMLDivElement>());
+    }
+    return nodeRefs.current.get(key)!;
+  };
+
+  console.log("Key: ", transitionKey);
+  console.log("Outlet: ", currentOutlet);
+
   return (
-    <TransitionGroup className={styles.fadeBase}>
+    <SwitchTransition>
       <CSSTransition
-        key={location.key}
+        key={transitionKey}
+        nodeRef={getNodeRef(transitionKey)}
         classNames={classStyles}
-        timeout={LessVars.pageTransitionDuration}
+        timeout={1000}
+        unmountOnExit
       >
-        {props.children}
+        {(_state) => (
+          <div ref={getNodeRef(transitionKey)} className={styles.fadeContainer}>
+            {currentOutlet}
+          </div>
+        )}
       </CSSTransition>
-    </TransitionGroup>
+    </SwitchTransition>
   );
 }

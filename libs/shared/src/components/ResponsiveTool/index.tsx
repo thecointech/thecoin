@@ -11,12 +11,10 @@ export const breakpointsValues = {
 };
 
 
-export const appMedia = createMedia({
+export const { Media, MediaContextProvider, createMediaStyle } = createMedia({
     breakpoints: breakpointsValues
   });
-export const mediaStyles = appMedia.createMediaStyle();
-
-export const { Media, MediaContextProvider } = appMedia;
+export const mediaStyles = createMediaStyle();
 
 export const MobileSegment = ({children}: PropsWithChildren<{}>) =>
   <Segment as={Media} at="mobile">{children}</Segment>;

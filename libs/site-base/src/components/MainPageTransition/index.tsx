@@ -1,12 +1,8 @@
 import React, { type PropsWithChildren } from 'react';
-import { ContentHeightMeasure } from '../ContentHeightMeasure';
-import { ContentFader } from '../ContentFader';
-import { ContentHeightAnimate } from '../ContentHeightAnimate';
+import styles from './styles.module.less';
 
 export const MainPageTransition = (props: PropsWithChildren<{}>) => (
-  <ContentHeightAnimate>
-    <ContentFader>
-      <ContentHeightMeasure>{props.children}</ContentHeightMeasure>
-    </ContentFader>
-  </ContentHeightAnimate>
+  <div className={styles.mainContent}>
+    {props.children}
+  </div>
 );

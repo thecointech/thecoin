@@ -1,7 +1,7 @@
 import React from 'react';
-import { NavLink, NavLinkProps } from 'react-router';
 import { Menu } from 'semantic-ui-react';
 import styles from './styles.module.less';
+import { type NavLinkProps, NavLink } from '@thecointech/shared';
 
 interface Props {
   as?: any;
@@ -9,7 +9,7 @@ interface Props {
   children?: React.ReactNode;
 }
 
-export const HeaderLink = <TProps extends Props = NavLinkProps&Props>({children, className='', as=NavLink, ...rest}: TProps) => (
+export const HeaderLink = <TProps extends Props = NavLinkProps & Props>({ children, className = '', as = NavLink, ...rest }: TProps) => (
   <Menu.Item
     as={as}
     className={`${styles.headerLink} ${className}`}
@@ -18,3 +18,4 @@ export const HeaderLink = <TProps extends Props = NavLinkProps&Props>({children,
     {children}
   </Menu.Item>
 );
+

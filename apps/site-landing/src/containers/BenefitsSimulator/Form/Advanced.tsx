@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { type PropsWithChildren, useState } from 'react';
 import { RangeFieldAndScale } from '../../../components/RangeFieldAndScale';
 import { defineMessages, FormattedMessage, MessageDescriptor } from 'react-intl';
 import { Props } from './types';
@@ -235,7 +235,7 @@ type GroupProps<T> = {
 type PeriodicalProps = GroupProps<PeriodicalParams> & {
   tooltips: typeof tooltips["income"],
 }
-const PeriodicalGroup: React.FC<PeriodicalProps> = ({ tooltips, title, index, params, setParams, activeIndexState, children }) => {
+const PeriodicalGroup = ({ tooltips, title, index, params, setParams, activeIndexState, children }: PropsWithChildren<PeriodicalProps>) => {
 
   const setNamedValue = (name: keyof PeriodicalParams) =>
     (val: any) => setParams({

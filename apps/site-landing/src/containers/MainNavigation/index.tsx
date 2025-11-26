@@ -58,9 +58,9 @@ export const MainNavigation = () => {
 
 const LeftMenuItems = () => (
   <Menu text className={styles.leftMenu}>
-      <a href="#/" className={styles.logoLink}>
+      <NavLink to="/" className={styles.logoLink} viewTransition>
         <div className={styles.logo} />
-      </a>
+      </NavLink>
     {Object.entries(menuItems).map(([key, msg]) =>
       <HeaderLink key={key} to={`/${key}`} className="onlyBigScreen">
         <FormattedMessage {...msg}>

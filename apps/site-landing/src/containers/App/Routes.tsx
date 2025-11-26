@@ -1,6 +1,5 @@
-import * as React from 'react';
-
-import { Routes as RRoutes, Route } from 'react-router';
+import React from 'react';
+import type { RouteObject } from 'react-router';
 import { HomePage } from 'containers/HomePage/index';
 import { NotFoundPage } from '@thecointech/shared/containers/NotFoundPage';
 import { Healthier } from 'containers/Healthier';
@@ -12,20 +11,25 @@ import { Blog } from 'containers/Blog';
 import { TOS } from 'containers/TOS';
 import { Privacy } from 'containers/Privacy';
 import { ApplyBeta } from '../ApplyBeta';
+import { App } from '.';
 
-export const Routes = () =>
-  <RRoutes>
-    <Route path="/" element={HomePage} />
-    <Route path="/learn" element={Learn} />
-    <Route path="/healthier" element={Healthier} />
-    <Route path="/wedomore" element={WeDoMore} />
-    <Route path="/compare" element={Compare} />
-    <Route path="/help" element={HelpDocs} />
-    <Route path="/blog" element={Blog} />
-    <Route path="/faq/:category?" element={HelpDocs} />
-    <Route path="/tos" element={TOS} />
-    <Route path="/applyBeta" element={ApplyBeta} />
-    <Route path="/privacy" element={Privacy} />
-    <Route element={NotFoundPage} />
-  </RRoutes>
-
+export const routes = [
+  {
+    path: '/',
+    element: <App />,
+    children: [
+      { index: true, element: <HomePage /> },
+      { path: 'learn/*', element: <Learn /> },
+      { path: 'healthier', element: <Healthier /> },
+      { path: 'wedomore', element: <WeDoMore /> },
+      { path: 'compare', element: <Compare /> },
+      { path: 'help', element: <HelpDocs /> },
+      { path: 'blog/*', element: <Blog /> },
+      { path: 'faq/:category?', element: <HelpDocs /> },
+      { path: 'tos', element: <TOS /> },
+      { path: 'applyBeta', element: <ApplyBeta /> },
+      { path: 'privacy', element: <Privacy /> },
+      { path: '*', element: <NotFoundPage /> },
+    ]
+  }
+] satisfies RouteObject[];

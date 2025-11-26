@@ -1,16 +1,16 @@
-import * as React from 'react';
+import React, { type PropsWithChildren } from 'react';
 import { Button, ButtonProps } from 'semantic-ui-react';
 
 
-export const ButtonPrimary : React.FC<ButtonProps> = (args) =>{
+export const ButtonPrimary = ({ children, ...args }: PropsWithChildren<ButtonProps>) =>{
   return (
     <Button {...args} color='red'>
-      {args.children}
+      {children}
     </Button>
   );
 }
 
-export const ButtonSecondary : React.FC<ButtonProps> = (args) =>{
+export const ButtonSecondary = ({ children, ...args }: PropsWithChildren<ButtonProps>) =>{
   return (
     <Button {...args} inverted color='olive'>
       {args.children}
@@ -18,7 +18,7 @@ export const ButtonSecondary : React.FC<ButtonProps> = (args) =>{
   );
 }
 
-export const ButtonTertiary : React.FC<ButtonProps> = (args) =>{
+export const ButtonTertiary = ({ children, ...args }: PropsWithChildren<ButtonProps>) =>{
   return (
     <Button {...args} color='teal'>
       {args.children}

@@ -18,7 +18,7 @@
   },
   "scripts": {
     "test": "run :jest",
-    "clean": "rimraf ./build",
+    "clean": "run -T rimraf ./build",
     "build": "run -T run-s build:i18n build:src build:link",
     "build:src": "run -T tsc -b tsconfig.build.json",
     "build:link": "node ../../tools/link-assets.mjs",
@@ -50,6 +50,7 @@
     }
   },
   "dependencies": {
+    "@artsy/fresnel": "^8.4.0",
     "@nivo/bar": "0.81.0",
     "@nivo/core": "0.81.0",
     "@nivo/line": "0.81.0",

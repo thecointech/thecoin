@@ -9,7 +9,11 @@
  * Merges the main reducer with the router state and dynamically injected reducers
  */
 function createReducer(injectedReducers?: ReducersMapObject): Reducer {
+  // combineReducers requires at least one reducer, so we provide a dummy one
+  const rootReducer = (state = {}) => state;
+
   return combineReducers({
+    root: rootReducer,
     ...injectedReducers,
   });
 }
