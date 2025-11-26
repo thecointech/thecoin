@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid, Header } from "semantic-ui-react";
-import { Link } from "react-router";
+import { Link } from "@thecointech/shared";
 import { defineMessages, FormattedMessage } from "react-intl";
 import { PrismicRichText, PrismicText } from "@prismicio/react";
 import type { PrismicDocument } from '@prismicio/types';
