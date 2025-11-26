@@ -6,7 +6,7 @@ import type { SidebarLink } from '@thecointech/shared/containers/PageSidebar/typ
 import { defineMessages, useIntl } from 'react-intl';
 import { isLocal } from '@thecointech/signers';
 
-import { AppRoutes } from '../App/Routes';
+import { routes } from '../App/Routes';
 import { useLocation } from 'react-router';
 
 const translations = defineMessages({
@@ -42,36 +42,37 @@ const translations = defineMessages({
 
 // To ensure links are safe, we re-use
 // the keys from the routes object.
-type AuthKey = keyof typeof AppRoutes.auth;
-type AuthKeys = {
-  [index in AuthKey]: string
-}
-const authRoutes = Object
-  .keys(AppRoutes.auth)
-  .reduce(
-    (obj, k) => { obj[k as AuthKey] = k; return obj },
-    {} as AuthKeys
-  );
+type AuthenticatedRouteArray = typeof routes[0]['children'][0]['children'];
+type ExtractPathKeys<T> = T extends (infer U)[] // Infer the array element type U
+  ? U extends { path: infer P } // If U has a 'path' property, infer its type P
+    ? P // If yes, return P (the path string)
+    : never // If no (like for { index: true }), discard it
+  : never;
+type AuthPathKey = ExtractPathKeys<AuthenticatedRouteArray>;
+type AuthPrefixedPath = "/" | `/${AuthPathKey}`;
 
-const sidebarLinks: SidebarLink[] = [
+type AuthSidebarLink = Omit<SidebarLink, 'to'> & {
+  to: AuthPrefixedPath;
+}
+const sidebarLinks: AuthSidebarLink[] = [
   {
     name: translations.home,
-    to: `/${authRoutes.home}`,
+    to: `/`,
     icon: "home"
   },
   {
     name: translations.transferin,
-    to: `/${authRoutes.transferIn}`,
+    to: `/transferIn`,
     icon: "arrow circle up"
   },
   {
     name: translations.makepayments,
-    to: `/${authRoutes.makePayments}`,
+    to: `/makePayments`,
     icon: "arrow circle right"
   },
   {
     name: translations.settings,
-    to: `/${authRoutes.settings}`,
+    to: `/settings`,
     icon: "setting"
   },
   {
@@ -119,7 +120,7 @@ export function useSidebar() {
     );
     // Do not show sidebar if on open route
     if (showSidebar) {
-      const openRoutes = Object.keys(AppRoutes.open);
+      const openRoutes = Object.values(routes).slice(1).map(r => r.path);
       const pathStarts = location.pathname.slice(1);
       showSidebar = !(pathStarts && openRoutes.find(r => pathStarts.startsWith(r)));
     }

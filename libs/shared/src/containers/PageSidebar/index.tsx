@@ -13,7 +13,7 @@ export type Props = {
   direction?: "left" | "top" | "right" | "bottom";
 }
 
-export const PageSidebar: React.FC<Props> = (props) => {
+export const PageSidebar = (props: Props) => {
   const { inverted } = props;
   const state = SidebarItemsReducer.useData();
 

@@ -10,8 +10,10 @@ import { AppContainer } from "components/AppContainers";
 import { isPresent } from "@thecointech/utilities";
 
 const theme: Theme = {
-  fontSize: 10,
-  textColor: "#FFF", // LessVar does not include built-in vars, unfortunately
+  text: {
+    fontSize: 10,
+    fill: "#FFF",
+  },
   lineColors: [
     LessVars.theCoinPrimaryGreenNeutral,
     LessVars.theCoinPrimaryGreenPale

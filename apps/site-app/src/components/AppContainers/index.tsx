@@ -1,4 +1,4 @@
-import React from "react";
+import React, { type PropsWithChildren } from "react";
 import styles from './styles.module.less';
 
 type AppContainerProps = {
@@ -6,15 +6,15 @@ type AppContainerProps = {
   id?: string
 }
 
-export const AppContainer : React.FC<AppContainerProps> = (props) =>
+export const AppContainer = (props: PropsWithChildren<AppContainerProps>) =>
   <div id={ `${props.id}` } className={ `${styles.appContainer} ${props.className}` }>{props.children}</div>;
 
-export const AppContainerWithShadow : React.FC<AppContainerProps> = (props) =>
+export const AppContainerWithShadow = (props: PropsWithChildren<AppContainerProps>) =>
   <div id={ `${props.id}` } className={ `${styles.appContainer} ${styles.appContainerPadding} ${styles.appShadow} ${props.className}` }>{props.children}</div>;
 
-export const AppContainerWithShadowWithoutPadding : React.FC<AppContainerProps> = (props) =>
+export const AppContainerWithShadowWithoutPadding = (props: PropsWithChildren<AppContainerProps>) =>
   <div id={ `${props.id}` } className={ `${styles.appContainer} ${styles.appShadow} ${props.className ?? ''}` }>{props.children}</div>;
 
-export const AppContainerForTabs : React.FC<AppContainerProps> = (props) =>
+export const AppContainerForTabs = (props: PropsWithChildren<AppContainerProps>) =>
   <div id={ `${props.id}` } className={ `${styles.appContainer} ${styles.appContainerPadding} ${styles.topRightFlat}` }>{props.children}</div>;
 

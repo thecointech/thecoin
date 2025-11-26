@@ -4,7 +4,7 @@ import type { Transaction } from '@thecointech/tx-blockchain';
 import type { DateTime } from 'luxon';
 import type { PluginBalanceMod } from '@thecointech/contract-plugins';
 import type { TooltipWidget, TxDatum, LineProps, TxSeries } from "./types";
-import type { Theme as NivoTheme } from "@nivo/theming";
+import type { PartialTheme as PartialNivoTheme } from "@nivo/theming";
 import { linearGradientDef } from "@nivo/core";
 import { StepLineLayer } from "./StepLineLayer";
 import { RawLineLayer } from './RawLineLayer';
@@ -18,7 +18,7 @@ import styles from './styles.module.less';
 export type Theme = {
   lineColors?: [string, string],
   dotColor: string,
-} & Partial<NivoTheme>;
+} & PartialNivoTheme;
 
 export type GraphHistoryProps = {
   plugins: PluginBalanceMod[],
