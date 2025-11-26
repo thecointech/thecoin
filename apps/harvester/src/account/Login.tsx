@@ -7,6 +7,7 @@ import { BaseWallet, HDNodeWallet } from "ethers";
 import { groupKey } from './routes';
 import { Account } from "@thecointech/shared/containers/Account";
 import type { AccountState } from '@thecointech/account';
+import { toCoinAccount } from "./convert";
 
 export const Login = () => {
   // Basic guard component ensures we have an active account
@@ -33,16 +34,8 @@ const LoginAccount = ({account}: {account: AccountState}) => {
     // pass the unlocked account to scraper.  This will
     // need some hard-core protection in time...
     const hdWallet = signer as BaseWallet as HDNodeWallet;
-    const mnemonic = {
-      phrase: hdWallet.mnemonic!.phrase,
-      path: hdWallet.path!,
-      locale: hdWallet.mnemonic!.wordlist!.locale,
-    }
-    window.scraper.setCoinAccount({
-      mnemonic,
-      name: account.name,
-      address: account.address,
-    })
+    const coinAccount = toCoinAccount(hdWallet, account.name);
+    window.scraper.setCoinAccount(coinAccount)
       .then(() => {
         setComplete(true)
       });

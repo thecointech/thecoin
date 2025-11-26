@@ -47,6 +47,12 @@ export const Results = () => {
     setState(state.value);
   }
 
+  const openWebsiteUrl = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    await window.scraper.openWebsiteUrl("account");
+    return false;
+  }
+
 
   return (
     <ContentSection>
@@ -55,8 +61,13 @@ export const Results = () => {
           <Loader>Running</Loader>
         </Dimmer>
         <StateDisplay state={state} />
+        <div className={styles.viewHistoryLink}>
+          <a href="#" onClick={openWebsiteUrl}>
+            View your full account history on TheCoin →
+          </a>
+        </div>
         <div>
-          <Button onClick={runImmediately} disabled={isReplaying || loading}>
+          <Button primary onClick={runImmediately} disabled={isReplaying || loading}>
             Run Harvester Now
           </Button>
         </div>

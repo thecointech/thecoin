@@ -1,17 +1,18 @@
 import { jest } from '@jest/globals'
-import { HarvestData, UserData } from '../types';
+import { HarvestData } from '../types';
 import currency from 'currency.js';
 import { DateTime } from 'luxon';
 import { processState } from '../processState';
+import { mockUser } from '../../../internal/mockUser';
 
-jest.unstable_mockModule('../notify', () => ({
+jest.unstable_mockModule('@/notify', () => ({
   notify: jest.fn(),
 }));
 jest.unstable_mockModule('./utils', () => ({
   getBalance: jest.fn(),
 }))
 
-const notify = await import('../notify');
+const notify = await import('@/notify');
 const utils = await import('./utils');
 const { EnsureHarvesterBalance } = await import('./EnsureHarvesterBalance')
 const { ClearPendingVisa } = await import('./ClearPendingVisa')
@@ -34,13 +35,7 @@ describe('EnsureHarvesterBalance', () => {
     }
   });
 
-  const testUser: UserData = {
-    creditDetails: {
-      payee: 'Test User',
-      accountNumber: '12345'
-    },
-    wallet: {} as any
-  };
+  const testUser = mockUser();
 
   beforeEach(() => {
     jest.clearAllMocks();

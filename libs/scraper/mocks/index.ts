@@ -7,6 +7,9 @@ import { installBrowser as installBrowserOriginal } from "../src/puppeteer-init/
 import { projectUrl } from "@thecointech/setenv/projectUrl";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { rootFolder, setRootFolder } from '../src/puppeteer-init/rootFolder';
+export { ElementNotFoundError, DynamicValueError } from "../src/errors";
+export { Registry } from "../src/record/registry";
+export { enterValueIntoFound } from "../src/replay";
 
 type BrowserConnection = {
   endpoint: string;
@@ -49,9 +52,13 @@ export async function newPage() {
   return { page, browser };
 }
 
+// Replay functions do nothing in mocks
 export async function replayEvents() {
   return {}
 }
+
+export async function processEvents() {}
+export async function processEvent() {}
 
 export async function closeBrowser() {
   const info = getConnection();

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button, Dimmer, Input, Loader } from "semantic-ui-react";
 import type { BankData } from "./BankCard/data";
+import type { BankType } from "@thecointech/store-harvester";
 import { isRunning, useBackgroundTask } from "@/BackgroundTask/index";
-import { BankType } from "@/Harvester/scraper";
 import { log } from "@thecointech/logging";
 import styles from './LoginDetails.module.less';
 

@@ -8,7 +8,9 @@
       "name": "App - Development",
       "request": "launch",
       "runtimeArgs": [
-        "dev"
+        "dev",
+        // "--", // Add "--clean-start" to skip seeding dev db
+        // "--clean-start"
       ],
       "runtimeExecutable": "yarn",
       "skipFiles": [
@@ -165,5 +167,24 @@
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal"
     },
+    {
+      "type": "node",
+      "name": "vscode-jest-tests.v2",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "yarn",
+      "smartStep": false,
+      "args": [
+        "test",
+        "--watchAll=false",
+        "--testNamePattern",
+        "${jest.testNamePattern}",
+        "--runTestsByPath",
+        "${jest.testFile}"
+      ],
+      "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }"
+    }
   ]
 }

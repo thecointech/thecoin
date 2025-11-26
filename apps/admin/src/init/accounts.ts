@@ -1,4 +1,4 @@
-import { AccountName, getSigner } from '@thecointech/signers';
+import { getSigner, type AccountName } from '@thecointech/signers';
 import { buildNewAccount } from '@thecointech/account';
 import { NormalizeAddress } from '@thecointech/utilities';
 import { ConnectContract } from '@thecointech/contract-core';

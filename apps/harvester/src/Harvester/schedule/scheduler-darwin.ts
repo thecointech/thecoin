@@ -8,7 +8,7 @@ const TaskName = 'com.thecoin.harvester';
 const PlistPath = `~/Library/LaunchAgents/${TaskName}.plist`;
 
 
-export async function setSchedule(schedule: HarvestSchedule, _existing?: HarvestSchedule) {
+export async function setSchedule(schedule: HarvestSchedule) {
   log.info(`Creating schedule: ${JSON.stringify(schedule)}`);
 
   try {

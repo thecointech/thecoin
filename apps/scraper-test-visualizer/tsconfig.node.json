@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.apps.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./build/tsconfig.node.tsbuildinfo",
+    "noEmit": true,
+    "strict": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+  },
+  "include": ["server/*.ts"],
+  "exclude": ["**/*.test.*", "**/__mocks__/**", "**/*.stories.*"]
+}

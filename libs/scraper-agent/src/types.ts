@@ -1,5 +1,5 @@
 import type { AccountResponse } from "@thecointech/vqa";
-import type { AnyEvent, ElementData, HistoryRow } from "@thecointech/scraper/types";
+import type { AnyEvent, ElementData, HistoryRow } from "@thecointech/scraper-types";
 import type { Recorder } from "@thecointech/scraper/record";
 import type { EventManager } from "./eventManager";
 import type { SectionType } from "./processors/types";
@@ -7,6 +7,8 @@ import type { DateTime } from "luxon";
 export type { ElementResponse } from "@thecointech/vqa";
 export type { ElementData };
 import type currency from "currency.js";
+import type { ScraperProgressCallback } from "@thecointech/scraper";
+import type { Page } from "puppeteer";
 
 // SectionName includes actions that require differentation from SectionType
 // but that do not have their own processors
@@ -36,6 +38,22 @@ export interface IAskUser {
   forPassword(): Promise<string>;
 
   expectedETransferRecipient(): Promise<string>;
+}
+
+export type AgentErrorParams = {
+  // The page being processed
+  page: Page,
+  // The caught exception
+  err: unknown,
+  // The section we are currently processing
+  section: SectionName,
+}
+// Attempt to handle an error.  If the error was handled gracefully,
+// return true to continue processing.
+export type AgentErrorCallback = (params: AgentErrorParams) => Promise<boolean>;
+export interface IAgentCallbacks {
+  onProgress?: ScraperProgressCallback;
+  onError?: AgentErrorCallback;
 }
 
 export type AccountSummary = AccountResponse & {

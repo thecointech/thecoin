@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"name": "scraper-test-visualizer",
+			"path": "../apps/scraper-test-visualizer"
+		},
+		{
+			"name": "scraper-agent",
+			"path": "../libs/scraper-agent"
+		},
+		{
+			"name": "scraper",
+			"path": "../libs/scraper"
+		},
+		{
+			"name": "scraper-archive",
+			"path": "../libs/scraper-archive"
+		},
+		{
+			"name": "private-testing-pages",
+			"path": "../../private-testing-pages"
+		}
+	],
+	"settings": {}
+}

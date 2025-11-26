@@ -1,5 +1,5 @@
 import type { AccountResponse, ElementResponse, InputElementResponse, MoneyElementResponse } from "@thecointech/vqa";
-import type { ElementSearchParams, FoundElement, SearchElementData } from "@thecointech/scraper/types";
+import type { ElementSearchParams, FoundElement, SearchElementData } from "@thecointech/scraper-types";
 import { getElementForEvent } from "@thecointech/scraper/elements";
 import { isPresent } from "@thecointech/utilities/ArrayExtns";
 import { _getPageIntent } from "./getPageIntent";

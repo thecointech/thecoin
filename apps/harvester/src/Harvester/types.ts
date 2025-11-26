@@ -2,15 +2,15 @@ import currency from 'currency.js'
 import { DateTime } from 'luxon'
 import type { Signer } from 'ethers';
 import type { CreditDetails, HarvestData, HarvestDelta } from '@thecointech/store-harvester';
-import type { BackgroundTaskCallback } from '@/BackgroundTask';
+import type { HarvesterReplayCallbacks } from './replay/replayCallbacks';
 export type { HarvestData, HarvestDelta, CreditDetails } from '@thecointech/store-harvester';
 
 
 export type UserData = {
   creditDetails: CreditDetails;
   wallet: Signer;
-  // Callback for UI updates, undefined when run in background
-  uiCallback?: BackgroundTaskCallback;
+  // Callback handles errors (& ui updates if run in foreground)
+  callback: HarvesterReplayCallbacks;
 }
 
 export interface ProcessingStage {

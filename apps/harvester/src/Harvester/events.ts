@@ -1,7 +1,7 @@
-import { BankEvents, BankIdent } from "@thecointech/store-harvester";
+import type { BankEvents, BankIdent, ActionType, BankType } from "@thecointech/store-harvester";
+import type { ProcessAccount } from "@thecointech/scraper-agent/types";
+import type { RendererBankType } from "@/Agent/state/types";
 import { getProcessConfig, setProcessConfig } from "./config";
-import { ActionType, BankType } from "./scraper";
-import { ProcessAccount } from "@thecointech/scraper-agent/types";
 
 export async function setEvents(type: BankType, config: BankEvents) {
   await setProcessConfig({
@@ -11,16 +11,17 @@ export async function setEvents(type: BankType, config: BankEvents) {
   })
 }
 
-export async function getEvents(type: ActionType) {
-
+export async function getBankConfig(type: RendererBankType) {
   const config = await getProcessConfig();
-  if (!config?.scraping)  {
-    throw new Error(`No scraping config found`);
-  }
-  const scrapingSource = type == 'visaBalance' ? 'credit' : 'chequing';
-  const bankConfig = ('both' in config.scraping)
+  if (!config?.scraping) return null;
+  return ('both' in config.scraping)
     ? config.scraping.both
-    : config.scraping[scrapingSource];
+    : config.scraping[type];
+}
+
+export async function getEvents(type: ActionType) {
+  const scrapingSource = type == 'visaBalance' ? 'credit' : 'chequing';
+  const bankConfig = await getBankConfig(scrapingSource);
 
   if (!bankConfig?.events) {
     throw new Error(`No events found for ${type}`);

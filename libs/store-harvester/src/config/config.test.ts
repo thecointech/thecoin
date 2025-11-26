@@ -2,7 +2,6 @@ import { jest } from '@jest/globals';
 import { ConfigDatabase } from './index';
 import { useMockPaths } from '../../mocked/paths';
 import { ConfigShape } from './types';
-import path from 'node:path';
 
 jest.setTimeout(60000);
 

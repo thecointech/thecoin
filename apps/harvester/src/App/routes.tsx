@@ -6,7 +6,6 @@ import { Route, Switch } from 'react-router-dom';
 import { HarvestConfig } from '../HarvestConfig';
 import { Results } from '../results';
 import { BankConnect } from '../Agent';
-import { RefreshTwoFA } from '../Agent/RefreshTwoFA';
 import { Advanced } from '../Advanced';
 
 export const Routes = () => (
@@ -15,7 +14,6 @@ export const Routes = () => (
     <Route path='/browser' component={Browser} />
     <Route path='/account' component={Account} />
     <Route path='/agent' component={BankConnect} />
-    <Route path='/twofaRefresh' component={RefreshTwoFA} />
     <Route path='/train' component={Training} />
     <Route path='/config' component={HarvestConfig} />
     <Route path='/results' component={Results} />

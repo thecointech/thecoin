@@ -1,8 +1,7 @@
 {
   "name": "@thecointech/electron-signer",
-  "version": "0.4.0",
+  "version": "0.5.0-test.0",
   "description": "The Coin: IPC-enabled signer for use in electron",
-  "private": true,
   "keywords": [
     "TheCoin",
     "electron"
@@ -55,6 +54,6 @@
     "@thecointech/logging": "workspace:^"
   },
   "devDependencies": {
-    "@thecointech/electron-utils": "^0.4.0"
+    "@thecointech/electron-utils": "^0.5.0-test.0"
   }
 }

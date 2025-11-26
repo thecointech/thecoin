@@ -85,8 +85,7 @@ export async function getHarvestConfig() {
 
 export async function setHarvestConfig(config: Partial<HarvestConfig>) {
   if (config.schedule) {
-    const existing = await getHarvestConfig();
-    await setSchedule(config.schedule, existing?.schedule);
+    await setSchedule(config.schedule);
   }
   await setProcessConfig(config)
   return true;
