@@ -1,5 +1,5 @@
 import { Login as LoginUI } from "@thecointech/shared/containers/Login";
-import { Redirect } from 'react-router';
+import { Navigate } from 'react-router';
 import { useEffect, useState } from 'react';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { isLocal } from '@thecointech/signers';
@@ -8,6 +8,7 @@ import { groupKey } from './routes';
 import { Account } from "@thecointech/shared/containers/Account";
 import type { AccountState } from '@thecointech/account';
 import { toCoinAccount } from "./convert";
+import { useSimplePathContext } from "@/SimplePath";
 
 export const Login = () => {
   // Basic guard component ensures we have an active account
@@ -16,7 +17,7 @@ export const Login = () => {
   const active = AccountMap.useActive();
   return active
     ? <LoginAccount account={active} />
-    : <Redirect to={`/${groupKey}`} />
+    : <Navigate to={`/${groupKey}`} />
 }
 
 const LoginAccount = ({account}: {account: AccountState}) => {
@@ -41,7 +42,12 @@ const LoginAccount = ({account}: {account: AccountState}) => {
       });
   }, [account?.contract])
 
+  const context = useSimplePathContext();
+  context.onValidate = () => {
+    return !!account?.contract;
+  }
+
   return complete
-    ? <Redirect to={`/${groupKey}/1`} />
+    ? <Navigate to={`/${groupKey}/plugins`} />
     : <LoginUI account={account} />
 }

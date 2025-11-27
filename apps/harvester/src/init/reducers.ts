@@ -3,8 +3,7 @@
  */
 
 import { combineReducers, Reducer, ReducersMapObject } from 'redux';
-import { connectRouter } from 'connected-react-router';
-import { configureStore, history } from '@thecointech/shared/store';
+import { configureStore } from '@thecointech/shared/store';
 import { buildAccountStoreReducer } from '@thecointech/shared/containers/AccountMap/reducer';
 
 
@@ -15,7 +14,6 @@ import { buildAccountStoreReducer } from '@thecointech/shared/containers/Account
   // TODO: add the appropriate accounts from .env accounts
   const { accountStoreReducer, rest } = buildAccountStoreReducer(injectedReducers);
   return combineReducers({
-    router: connectRouter(history) as Reducer,
     accounts: accountStoreReducer,
     ...rest,
   });

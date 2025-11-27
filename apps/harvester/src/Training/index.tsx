@@ -1,13 +1,13 @@
 
 import { Button, Message, Step } from 'semantic-ui-react'
-import { TrainingRouter } from './routes';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation, Outlet } from 'react-router';
 import { TrainingReducer } from './state/reducer';
 import styles from './index.module.less';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+export { routes } from './routes'
 
 export const Training = () => {
-  const navigate = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   const active = AccountMap.useActive();
 
@@ -27,10 +27,10 @@ export const Training = () => {
     const m = curr.match(/\/step([0-9])$/)
     const pageNumber = m ? parseInt(m[1]) : 0;
     if (pageNumber == 6) {
-      navigate.push("/config/step0");
+      navigate("/config/step0");
     }
     else {
-      navigate.push("/train/step" + (pageNumber + 1));
+      navigate("/train/step" + (pageNumber + 1));
     }
   }
 
@@ -94,8 +94,7 @@ export const Training = () => {
         <Link to="/account/upload">Upload an Account</Link>
       </Message>
       <div className={styles.container}>
-        <TrainingRouter />
-
+        <Outlet />
         <Button onClick={nextPage}>Next</Button>
       </div>
     </div>

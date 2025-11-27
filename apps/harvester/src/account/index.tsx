@@ -1,8 +1,7 @@
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { useAccountPath } from './routes'
-import { PathRouter, PathSteps } from '@/SimplePath';
-import { ContentSection } from '@/ContentSection';
-
+import { SimplePath } from '@/SimplePath';
+export { path } from './routes';
 
 export const Account = () => {
 
@@ -12,15 +11,5 @@ export const Account = () => {
   // return an account if it can (even if active is set to null)
   const active = accounts.map[accounts.active ?? ""];
 
-  return (
-    <div>
-      <PathSteps path={path} data={active}/>
-      <div>
-        <ContentSection>
-          <PathRouter path={path} data={active} />
-          {/* <ContentSection.Next to="" content="Next" /> */}
-        </ContentSection>
-      </div>
-    </div>
-  )
+  return <SimplePath path={path} data={active} />
 }
