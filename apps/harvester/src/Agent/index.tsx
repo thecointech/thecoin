@@ -1,7 +1,7 @@
-// import { PathRouter, PathSteps } from '../SimplePath'
 import { BankConnectReducer } from './state/reducer'
 import { useBankConnectPaths } from './routes'
 import { SimplePath } from '@/SimplePath';
+export { path } from './routes';
 
 export const BankConnect = () => {
   BankConnectReducer.useStore();

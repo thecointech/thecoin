@@ -4,7 +4,7 @@ import { Account, path as accountPath } from '../account';
 import { Training, routes as trainingRoutes } from '../Training';
 import { HarvestConfig, path as harvestConfigPath } from '../HarvestConfig';
 import { Results } from '../results';
-import { BankConnect } from '../Agent';
+import { BankConnect, path as bankConnectPath } from '../Agent';
 import { Advanced } from '../Advanced';
 import { App } from '.';
 import type { RouteObject } from 'react-router';
@@ -22,8 +22,12 @@ export const routes = [
         children: toReactRouterRoutes(accountPath.routes),
         element: <Account />
       },
-      { path: 'agent', element: <BankConnect /> },
-      { path: 'config',
+      {
+        path: 'agent',
+        children: toReactRouterRoutes(bankConnectPath.routes),
+        element: <BankConnect /> },
+      {
+        path: 'config',
         children: toReactRouterRoutes(harvestConfigPath.routes),
         element: <HarvestConfig /> },
       { path: 'results', element: <Results /> },
