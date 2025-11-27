@@ -71,7 +71,9 @@ export const Purchase = () => {
         <li>
           <div className={styles.line}></div>
           <FormattedMessage {...translations.generate} /><br />
-          <ButtonTertiary onClick={generateRecipient}><FormattedMessage {...translations.buttonGenerate} /></ButtonTertiary>
+          <ButtonTertiary onClick={generateRecipient}>
+            <FormattedMessage {...translations.buttonGenerate} />
+          </ButtonTertiary>
         </li>
         <li>
           <div className={styles.line}></div>

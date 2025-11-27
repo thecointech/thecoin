@@ -13,7 +13,7 @@ export const ButtonPrimary = ({ children, ...args }: PropsWithChildren<ButtonPro
 export const ButtonSecondary = ({ children, ...args }: PropsWithChildren<ButtonProps>) =>{
   return (
     <Button {...args} inverted color='olive'>
-      {args.children}
+      {children}
     </Button>
   );
 }
@@ -21,7 +21,7 @@ export const ButtonSecondary = ({ children, ...args }: PropsWithChildren<ButtonP
 export const ButtonTertiary = ({ children, ...args }: PropsWithChildren<ButtonProps>) =>{
   return (
     <Button {...args} color='teal'>
-      {args.children}
+      {children}
     </Button>
   );
 }

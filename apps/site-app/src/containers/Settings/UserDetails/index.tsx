@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { AccountMap } from '@thecointech/shared/containers/AccountMap';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { AccountVerify } from '../Verified';
@@ -19,21 +19,43 @@ const translations = defineMessages({
       description: 'app.settings.userDetails.address: Label for the info for the tab User details in the setting page in the app'},
 });
 
+const POLLING_INTERVAL = 5 * 60 * 1000;
+
 export const UserDetails = () => {
   const { address, details, name} = AccountMap.useActive() ?? DefaultAccountValues;
   const accountApi = Account(address).useApi();
-
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const detailsRef = useRef(details);
   // Allow for manually forcing a re-verify of an account
   const forceVerify = window.location.hash == "#/settings?forceVerify=true";
 
   // Should we check for latest?
-  React.useEffect(() => {
-    // Keep checking until the referral code turns up.
-    if (forceVerify || (details.status && !details.referralCode)) {
-      accountApi.checkKycStatus(forceVerify);
-    }
-  }, [details.status, details.referralCode]);
+  useEffect(() => {
+    // Execute the check immediately on mount/re-run
+    accountApi.checkKycStatus(forceVerify);
+  }, [forceVerify]);
 
+  useEffect(() => {
+    detailsRef.current = details;
+  }, [details]);
+
+  useEffect(() => {
+    if (timeoutRef.current) {
+      return;
+    }
+    if (detailsRef.current.status && !detailsRef.current.referralCode) {
+      timeoutRef.current = setTimeout(() => {
+        // Recursively call startPolling after the interval
+        accountApi.checkKycStatus(forceVerify);
+      }, POLLING_INTERVAL);
+    }
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    }
+  }, [details]);
 
   return (
     <React.Fragment>

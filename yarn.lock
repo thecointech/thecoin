@@ -12686,6 +12686,7 @@ __metadata:
     "@thecointech/fx-rates": "npm:^0.5.0-test.0"
     "@thecointech/logging": "npm:^0.5.0-test.0"
     "@thecointech/site-semantic-theme": "npm:^0.4.0"
+    "@thecointech/storybookutils": "npm:^0.5.0-test.0"
     "@thecointech/tx-blockchain": "npm:^0.5.0-test.0"
     "@thecointech/types": "npm:^0.5.0-test.0"
     "@thecointech/utilities": "npm:^0.5.0-test.0"
@@ -12699,9 +12700,7 @@ __metadata:
     immer-reducer: "npm:^0.7.11"
     react-dates: "npm:21.8.0"
     react-dropzone: "npm:12.0.4"
-    react-input-mask: "npm:2.0.4"
     react-router: "npm:^7.9.6"
-    react-with-direction: "npm:^1.3.1"
     redux-injectors: "https://github.com/FrozenKiwi/redux-injectors#6209c56b7c2508e002b669010ad3c0d5e0bab9eb"
     ts-clipboard: "npm:^1.0.17"
   languageName: unknown
@@ -12735,7 +12734,7 @@ __metadata:
     "@types/file-saver": "npm:^2.0.1"
     "@types/papaparse": "npm:^5.0.3"
     "@types/qrcode.react": "npm:1.0.1"
-    "@types/react-test-renderer": "npm:^16.9.0"
+    "@types/react-test-renderer": "npm:19.1.0"
     "@types/systemjs": "npm:0.20.6"
     card-validator: "npm:^6.2.0"
     compression: "npm:1.7.4"
@@ -12751,7 +12750,7 @@ __metadata:
     react-confetti: "npm:^6.0.0"
     react-ga: "npm:^2.7.0"
     react-semantic-ui-range: "npm:^0.7.0"
-    react-test-renderer: "npm:16.8.6"
+    react-test-renderer: "npm:19.2.0"
     reselect: "npm:4.0.0"
     sanitize.css: "npm:10.0.0"
     whatwg-fetch: "npm:3.0.0"
@@ -12893,7 +12892,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/storybookutils@workspace:libs/storybookutils":
+"@thecointech/storybookutils@npm:^0.5.0-test.0, @thecointech/storybookutils@workspace:libs/storybookutils":
   version: 0.0.0-use.local
   resolution: "@thecointech/storybookutils@workspace:libs/storybookutils"
   dependencies:
@@ -14712,6 +14711,15 @@ __metadata:
   dependencies:
     "@types/react": "npm:*"
   checksum: d23b87705e1d814186832db6417daa04cb6f9f255d676546ed2613f22e15dff959aaff952c5b25fedd70d8da599e83b0adbde3e36c449df4632bc317189ac876
+  languageName: node
+  linkType: hard
+
+"@types/react-test-renderer@npm:19.1.0":
+  version: 19.1.0
+  resolution: "@types/react-test-renderer@npm:19.1.0"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 799654e430df10aeaf267d71507fb64ec151359ead7e3774111bfd4abce7e0911dba461811195c06c22a6d17496ea92537d3185320ff4112fe29954cad1b9152
   languageName: node
   linkType: hard
 
@@ -38859,19 +38867,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-input-mask@npm:2.0.4":
-  version: 2.0.4
-  resolution: "react-input-mask@npm:2.0.4"
-  dependencies:
-    invariant: "npm:^2.2.4"
-    warning: "npm:^4.0.2"
-  peerDependencies:
-    react: ">=0.14.0"
-    react-dom: ">=0.14.0"
-  checksum: 89fc110a99e79ee3fa3f63696d5d46ab8889c653b33c0e50c6b24d70b715e1c8d475b8637ceb9e0f4fcacec5e39f653156faef4f5f06972886c4b1e643f66a82
-  languageName: node
-  linkType: hard
-
 "react-intl@npm:^6.0.4":
   version: 6.6.1
   resolution: "react-intl@npm:6.6.1"
@@ -38928,6 +38923,13 @@ __metadata:
   version: 18.3.1
   resolution: "react-is@npm:18.3.1"
   checksum: f2f1e60010c683479e74c63f96b09fb41603527cd131a9959e2aee1e5a8b0caf270b365e5ca77d4a6b18aae659b60a86150bb3979073528877029b35aecd2072
+  languageName: node
+  linkType: hard
+
+"react-is@npm:^19.2.0":
+  version: 19.2.0
+  resolution: "react-is@npm:19.2.0"
+  checksum: a63cb346aeced8ac0e671b0f9b33720d2906de02a066ca067075d871a5d4c64cdb328f495baf9b5842d5868c0d5edd1ce18465a7358b52f4b6aa983479c9bfa2
   languageName: node
   linkType: hard
 
@@ -39139,6 +39141,18 @@ __metadata:
   peerDependencies:
     react: ^16.0.0
   checksum: 51eea5ce0b3d070ff5e61e6e957de1b0101094297a8b3079f4a69226d7f606ef1c8211daed3c9b726aab1a87eddbce0ff205af8971dbb913ed114c09b772d23e
+  languageName: node
+  linkType: hard
+
+"react-test-renderer@npm:19.2.0":
+  version: 19.2.0
+  resolution: "react-test-renderer@npm:19.2.0"
+  dependencies:
+    react-is: "npm:^19.2.0"
+    scheduler: "npm:^0.27.0"
+  peerDependencies:
+    react: ^19.2.0
+  checksum: cc116b908489316f06881bf7392c5fad4b5f66be42d2f04788f4179a19e86674d54f1006b33fe9eba28bde6edb4cb38764ab75b416f28d02e0182c5552c97551
   languageName: node
   linkType: hard
 
