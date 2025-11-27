@@ -51,6 +51,8 @@ export const UxInput = (props: BaseProps) => {
   // Reset to default value either if requested, or if defaultValue changes
   useEffect(() => {
     localChange(defaultValue ?? "")
+      .then(() => setErrorMessage(null))
+      .catch(() => setErrorMessage(null))
   }, [defaultValue, resetToDefault])
 
   const isValid = !errorMessage;
