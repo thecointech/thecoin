@@ -1,18 +1,21 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
 import { Provider } from 'react-redux'
-import { ConnectedRouter } from 'connected-react-router';
 import 'semantic-ui-css/semantic.css'
 import './index.css'
-import App from './Home/App'
-import { configureAppStore, history } from './store';
+import { configureStore } from '@thecointech/shared/store';
+import { createHashRouter } from 'react-router';
+import { routes } from './Routes';
+import { RouterProvider } from 'react-router';
+import { createRoot } from 'react-dom/client';
 
-const store = configureAppStore();
-ReactDOM.render(
+const MOUNT_NODE = document.getElementById('app') as HTMLElement;
+const root = createRoot(MOUNT_NODE);
+
+const store = configureStore();
+root.render(
   <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <App />
-    </ConnectedRouter>
+    <RouterProvider router={
+      createHashRouter(routes)
+    } />
   </Provider>,
-  document.getElementById('app')!
 )
