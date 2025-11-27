@@ -14,7 +14,7 @@ if (window.location.pathname === "/gauth") {
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { RouterProvider } from 'react-router';
+import { RouterProvider, createHashRouter } from 'react-router';
 import 'sanitize.css/sanitize.css';
 
 // Import Language Provider
@@ -23,7 +23,6 @@ import { LanguageProvider, Languages } from '@thecointech/shared/containers/Lang
 import { configureAppStore } from './reducers';
 import { routes } from './containers/App/Routes';
 import { translations } from './translations';
-import { createHashRouter } from 'react-router';
 
 // Create redux store with history
 const store = configureAppStore();

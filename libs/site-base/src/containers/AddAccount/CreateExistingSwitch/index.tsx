@@ -6,10 +6,6 @@ import { Decoration } from '../Decoration';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { ButtonPrimary, ButtonSecondary } from '../../../components/Buttons';
 
-type Props = {
-  url: string
-}
-
 const translations = defineMessages({
   aboveTheTitle : {
       defaultMessage: 'First Step',
@@ -31,8 +27,7 @@ const translations = defineMessages({
       description: 'app.account.create.ethereum: link redirect people to connect their existing eth account'}
 });
 
-export const CreateExistingSwitch = (props: Props) => {
-  const {url} = props;
+export const CreateExistingSwitch = () => {
   return (
     <>
       <div id={ `${styles.buttonsContainer}` }>
@@ -42,20 +37,20 @@ export const CreateExistingSwitch = (props: Props) => {
         <Header as="h1" className={` x12spaceAfter`}>
           <FormattedMessage {...translations.title} />
         </Header>
-        <ButtonPrimary as={NavLink} to={`${url}generate/intro`} className={styles.button}>
+        <ButtonPrimary as={NavLink} to="./generate/intro" className={styles.button}>
           <FormattedMessage {...translations.buttonNewAccount} />
         </ButtonPrimary>
         <Divider horizontal>Or</Divider>
-        <ButtonSecondary as={NavLink} to={`${url}restore/`} className={styles.button}>
+        <ButtonSecondary as={NavLink} to="./restore/" className={styles.button}>
           <FormattedMessage {...translations.buttonAccount} />
         </ButtonSecondary>
         <div className={`x8spaceBefore`}>
-            <Link className={styles.linkEthereum} to={`${url}connect/create`}>
+            <Link className={styles.linkEthereum} to="./connect/create">
               <FormattedMessage {...translations.ethereumNewAccount} />
             </Link>
         </div>
         <div>
-            <Link className={styles.linkEthereum} to={`${url}connect/exist`}>
+            <Link className={styles.linkEthereum} to="./connect/exist">
               <FormattedMessage {...translations.ethereumExistingAccount} />
             </Link>
         </div>

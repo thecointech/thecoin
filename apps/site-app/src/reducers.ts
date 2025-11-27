@@ -2,8 +2,8 @@
  * Combine all reducers in this file and export the combined reducers.
  */
 
- import { combineReducers, Reducer, ReducersMapObject } from 'redux';
- import { configureStore } from '@thecointech/shared/store';
+import { combineReducers, Reducer, ReducersMapObject } from 'redux';
+import { configureStore } from '@thecointech/shared/store';
 import { buildAccountStoreReducer } from '@thecointech/shared/containers/AccountMap';
 
 /**

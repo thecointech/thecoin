@@ -6,7 +6,7 @@ import type { SidebarLink } from '@thecointech/shared/containers/PageSidebar/typ
 import { defineMessages, useIntl } from 'react-intl';
 import { isLocal } from '@thecointech/signers';
 
-import { routes } from '../App/Routes';
+import { getOpenRoutes, type AuthPathKey } from '../App/Routes';
 import { useLocation } from 'react-router';
 
 const translations = defineMessages({
@@ -42,13 +42,7 @@ const translations = defineMessages({
 
 // To ensure links are safe, we re-use
 // the keys from the routes object.
-type AuthenticatedRouteArray = typeof routes[0]['children'][0]['children'];
-type ExtractPathKeys<T> = T extends (infer U)[] // Infer the array element type U
-  ? U extends { path: infer P } // If U has a 'path' property, infer its type P
-    ? P // If yes, return P (the path string)
-    : never // If no (like for { index: true }), discard it
-  : never;
-type AuthPathKey = ExtractPathKeys<AuthenticatedRouteArray>;
+
 type AuthPrefixedPath = "/" | `/${AuthPathKey}`;
 
 type AuthSidebarLink = Omit<SidebarLink, 'to'> & {
@@ -120,7 +114,7 @@ export function useSidebar() {
     );
     // Do not show sidebar if on open route
     if (showSidebar) {
-      const openRoutes = Object.values(routes).slice(1).map(r => r.path);
+      const openRoutes = getOpenRoutes();
       const pathStarts = location.pathname.slice(1);
       showSidebar = !(pathStarts && openRoutes.find(r => pathStarts.startsWith(r)));
     }

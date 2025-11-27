@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { UxInput } from "@thecointech/shared/components/UX/Input";
 import { defineMessages } from "react-intl";
 import { AccountMap } from "@thecointech/shared/containers/AccountMap";
-import { AccountState } from '@thecointech/account';
 
 const translations = defineMessages({
   placeholder : {
@@ -32,10 +31,16 @@ export const NameInput = (props: Props) => {
 
   const { setName, ...rest } = props;
   const accounts = AccountMap.useAsArray();
+  const accountNames = accounts.map(a => a.name);
+
+  const onValidate = useCallback(
+    (value: string) => validateName(value, accountNames),
+    accountNames
+  );
   return (
     <UxInput
       onValue={setName}
-      onValidate={(value) => validateName(value, accounts)}
+      onValidate={onValidate}
       intlLabel={translations.labelName}
       placeholder={translations.placeholder}
       tooltip={translations.tooltip}
@@ -46,10 +51,10 @@ export const NameInput = (props: Props) => {
 
 
 // Validate our inputs
-const validateName = (value: string, accounts: AccountState[]) =>  {
+const validateName = (value: string, accountNames: string[]) =>  {
   return value.length === 0
       ? translations.errorNameTooShort
-      : accounts.find(account => account.name === value)
+      : accountNames.find(accountName => accountName === value)
         ? translations.errorNameDuplicate
         : null;
 

@@ -46,8 +46,7 @@ export const Generate = () => {
   ////////////////////////////////
   // Callback to actually generate the account
   const accountsApi = AccountMap.useApi();
-  const onGenerate = async (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
+  const onGenerate = async () => {
     if (!(password && referral && name)) {
       setForceValidate(true);
       return false;

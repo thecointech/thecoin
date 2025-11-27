@@ -48,6 +48,14 @@ export const UxInput = (props: BaseProps) => {
     }
   }, [forceValidate])
 
+  // Ensure that if the if the validation function
+  // is updated, we revalidate the current value
+  useEffect(() => {
+    if (value && value != defaultValue) {
+      localChange(value)
+    }
+  }, [onValidate])
+
   // Reset to default value either if requested, or if defaultValue changes
   useEffect(() => {
     localChange(defaultValue ?? "")

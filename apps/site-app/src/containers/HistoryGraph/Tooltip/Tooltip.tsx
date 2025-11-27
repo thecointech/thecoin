@@ -34,6 +34,7 @@ export const Tooltip = ({point}: TooltipProps) => {
             year="2-digit"
             month="short"
             day="2-digit"
+            // @ts-ignore
             value={data.x as Date}
           />
         </Table.Cell>
