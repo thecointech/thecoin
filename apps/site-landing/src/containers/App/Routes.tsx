@@ -5,13 +5,13 @@ import { NotFoundPage } from '@thecointech/shared/containers/NotFoundPage';
 import { Healthier } from 'containers/Healthier';
 import { WeDoMore } from 'containers/WeDoMore';
 import { Compare } from 'containers/BenefitsSimulator';
-import { Learn } from 'containers/Learn';
 import { HelpDocs } from 'containers/HelpDocs';
 import { blogRoutes } from 'containers/Blog';
 import { TOS } from 'containers/TOS';
 import { Privacy } from 'containers/Privacy';
 import { ApplyBeta } from '../ApplyBeta';
 import { App } from '.';
+// import { Returns } from 'containers/ReturnProfile';
 
 export const routes = [
   {
@@ -19,7 +19,6 @@ export const routes = [
     element: <App />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: 'learn/*', element: <Learn /> },
       { path: 'healthier', element: <Healthier /> },
       { path: 'wedomore', element: <WeDoMore /> },
       { path: 'compare', element: <Compare /> },
@@ -29,6 +28,7 @@ export const routes = [
       { path: 'tos', element: <TOS /> },
       { path: 'applyBeta', element: <ApplyBeta /> },
       { path: 'privacy', element: <Privacy /> },
+      //{ path: 'returns', element: <Returns /> },
       { path: '*', element: <NotFoundPage /> },
     ]
   }

@@ -6,7 +6,7 @@
  */
 
 // Import all the third party stuff
-import * as React from 'react';
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router';
