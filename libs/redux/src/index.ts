@@ -9,7 +9,7 @@ import { getCreateReducer } from './reducers';
 // Ideally, all references to redux should be through this package
 export { Provider } from 'react-redux';
 export { combineReducers, type ReducersMapObject, type Reducer, type StoreEnhancer, type PreloadedState } from 'redux';
-export { BaseReducer } from './immerReducer';
+export { BaseReducer, SagaReducer } from './immerReducer';
 
 //@ts-ignore weird-o hack to get jest to run this file with no complaints.
 // unfortunately jest resolves the CJS version of this file, and somehow

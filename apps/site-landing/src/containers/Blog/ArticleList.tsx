@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Header, SemanticFLOATS } from "semantic-ui-react";
 import { ArticleDocument } from "components/Prismic/types";
 import { useSelector } from "react-redux";
-import { selectLocale } from '@thecointech/redux-intl/selector';
+import { selectLocale } from '@thecointech/redux-intl';
 import { CategoryMenu } from "components/PrismicMenuByCategories";
 import { Decoration } from "components/Decoration";
 import { ArticleItem } from "./ArticleItem";

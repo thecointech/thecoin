@@ -12,7 +12,7 @@ import { MainNavigation } from 'containers/MainNavigation';
 import { Footer } from 'components/Footer';
 import { MainPageTransition } from '@thecointech/site-base/components/MainPageTransition';
 import { Prismic } from 'components/Prismic/reducer';
-import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
+import { MediaContextProvider, mediaStyles } from '@thecointech/media-context';
 import { Outlet, ScrollRestoration } from 'react-router';
 
 // Either import CSS or LESS;
