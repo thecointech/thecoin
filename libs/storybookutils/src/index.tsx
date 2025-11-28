@@ -1,20 +1,22 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { configureStore } from '@thecointech/shared/store';
-import { ApplicationBaseState } from '@thecointech/shared/types';
+import { configureStore } from '@thecointech/redux';
+// import { ApplicationBaseState } from '@thecointech/shared/types';
 import { combineReducers, ReducersMapObject } from 'redux';
-import { buildAccountStoreReducer, AccountMapState, AccountMap } from '@thecointech/shared/containers/AccountMap';
-import { LanguageProviderReducer } from '@thecointech/shared/containers/LanguageProvider/reducer';
-import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
+import { buildAccountStoreReducer, AccountMapState, AccountMap } from '@thecointech/redux-accounts';
+import { LanguageProviderReducer } from '@thecointech/redux-intl';
+import { MediaContextProvider, mediaStyles } from '@thecointech/media-context';
 import { getAllAccounts, getInitialAddress } from '@thecointech/account/store';
 
 const accounts = await getAllAccounts();
 
-export function withStore<T extends ApplicationBaseState>(initialState?: Partial<T>) {
+type StorybookBaseState = {}
+
+export function withStore<T extends StorybookBaseState>(initialState?: Partial<T>) {
   const createReducer = (injectedReducers?: ReducersMapObject) =>
     injectedReducers
       ? combineReducers({...injectedReducers})
-      : (state: ApplicationBaseState) => state ?? initialState;
+      : (state: StorybookBaseState) => state ?? initialState;
   const store = configureStore(createReducer, initialState as any);
   return (Story: React.ElementType) => <Provider store={store}><Story /></Provider>
 }

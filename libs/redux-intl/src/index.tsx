@@ -14,6 +14,7 @@ import { Languages } from './types';
 import { LanguageProviderReducer } from './reducer';
 
 export * from './reducer';
+export * from './selector';
 export type * from './types';
 
 export interface Props {
