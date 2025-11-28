@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Story, Meta } from '@storybook/react';
+import React, { useState } from 'react'
+import { StoryFn, Meta } from '@storybook/react-webpack5';
 import { UxNumeric } from '.';
 import { Button, Form } from 'semantic-ui-react';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 
 export default {
   title: 'shared/UX/Numeric',
@@ -23,7 +23,7 @@ export default {
 
 const makeIntl = (el: string) => ({ id: el, defaultMessage: el })
 const onValue = action("on-value");
-export const Numeric: Story = (args) => {
+export const Numeric: StoryFn = (args) => {
   const [validate, setValidate] = useState(false);
   const onValidate = (n: number|undefined) => {
     return n && n % 2 ? makeIntl(`${n} is not even`) : null;

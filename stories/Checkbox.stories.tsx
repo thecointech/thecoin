@@ -1,5 +1,5 @@
 import React from 'react';
-import { Story, Meta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react-webpack5';
 import { Checkbox, StrictCheckboxProps } from 'semantic-ui-react'
 
 export default {
@@ -11,7 +11,7 @@ export default {
   }
 } as Meta;
 
-const Template: Story<StrictCheckboxProps> = (args) => <Checkbox {...args} />;
+const Template: StoryFn<StrictCheckboxProps> = (args) => <Checkbox {...args} />;
 
 export const Basic = Template.bind({});
 Basic.args = {

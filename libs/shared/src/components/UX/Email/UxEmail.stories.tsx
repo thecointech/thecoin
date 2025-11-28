@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Story, Meta } from '@storybook/react';
+import React, { useState } from 'react'
+import { StoryFn, Meta } from '@storybook/react-webpack5';
 import { UxEmail } from '.';
 import { Button, Form } from 'semantic-ui-react';
 
@@ -9,8 +9,8 @@ export default {
 } as Meta;
 
 
-const Template: Story = () => {
-  const [value, setValue] = useState<MaybeString>("");
+const Template: StoryFn = () => {
+  const [value, setValue] = useState<string>("");
   const [validate, setValidate] = useState(false);
 
   return (

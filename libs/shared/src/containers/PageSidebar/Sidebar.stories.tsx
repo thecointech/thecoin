@@ -1,6 +1,6 @@
 import "@thecointech/site-semantic-theme/semantic.less"
 import React from 'react';
-import { Meta } from '@storybook/react';
+import { Meta } from '@storybook/react-webpack5';
 import { PageSidebar } from '.';
 import { withStore, withReducer } from '@thecointech/storybookutils';
 import ConstantSidebarItems from './Sidebar.stories.data.json';

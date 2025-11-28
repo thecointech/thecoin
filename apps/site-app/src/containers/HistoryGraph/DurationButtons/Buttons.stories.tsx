@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Story, Meta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react-webpack5';
 import { DurationButtons, Duration } from '.';
 
 export default {
@@ -15,7 +15,7 @@ export default {
   },
 } as Meta;
 
-const template: Story<{text: string}> = () => {
+const template: StoryFn<{text: string}> = () => {
   const [duration, setDuration] = useState(31 as Duration)
   return <DurationButtons duration={duration} setDuration={setDuration} />;
 }

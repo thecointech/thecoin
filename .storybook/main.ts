@@ -1,6 +1,6 @@
 import type { StorybookConfig } from '@storybook/react-webpack5';
 import path from 'path';
-import { DefinePlugin, RuleSetRule } from 'webpack';
+import webpack from 'webpack';
 import { AbsolutePathRemapper } from '@thecointech/storybook-abs-paths';
 import { merge } from "webpack-merge";
 
@@ -11,9 +11,7 @@ const getAbsolutePath = (packageName: string) =>
   path.dirname(require.resolve(path.join(packageName, 'package.json')));
 
 const config: StorybookConfig = {
-
   stories: [
-    "../stories/**/*.stories.mdx",
     "../stories/**/*.stories.@(ts|tsx)",
     "../libs/*/!(node_modules)/**/*.stories.@(js|jsx|ts|tsx)",
     "../apps/*/!(node_modules)/**/*.stories.@(js|jsx|ts|tsx)",
@@ -21,8 +19,9 @@ const config: StorybookConfig = {
 
   addons: [
     getAbsolutePath("@storybook/addon-links"),
-    getAbsolutePath("@storybook/addon-essentials"),
-    getAbsolutePath("storybook-addon-intl"),
+    getAbsolutePath("storybook-react-intl"),
+    getAbsolutePath("@storybook/addon-webpack5-compiler-babel"),
+    getAbsolutePath("@storybook/addon-docs")
   ],
 
   webpackFinal: async (config) => {
@@ -44,7 +43,7 @@ const config: StorybookConfig = {
           ]
         },
         plugins: [
-          new DefinePlugin({ // Log Everything
+          new webpack.DefinePlugin({ // Log Everything
             "process.env.LOG_NAME": JSON.stringify("Storybook"),
             "process.env.LOG_LEVEL": 0,
             "BROWSER": true,
@@ -70,7 +69,7 @@ const config: StorybookConfig = {
     //@ts-ignore
     const babelRule = r.module?.rules?.find(rule => rule?.include?.includes?.(rootFolder));
     if (babelRule) {
-      (babelRule as RuleSetRule).exclude = /(node_modules)|(build)/
+      (babelRule as webpack.RuleSetRule).exclude = /(node_modules)|(build)/
     }
     return r;
   },
@@ -80,8 +79,10 @@ const config: StorybookConfig = {
     options: {}
   },
 
-  docs: {
-    autodocs: true
+  docs: {},
+
+  typescript: {
+    reactDocgen: "react-docgen-typescript"
   }
 }
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Story, Meta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react-webpack5';
 import { UxScoredPassword } from '.';
 import { Button, Form } from 'semantic-ui-react';
 
@@ -8,7 +8,7 @@ export default {
   component: UxScoredPassword,
 } as Meta;
 
-const Template: Story = () => {
+const Template: StoryFn = () => {
   const [value, setValue] = useState<MaybeString>("");
   const [validate, setValidate] = useState(false);
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Story, Meta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react-webpack5';
 import { Tooltip as GraphTooltip, TooltipProps } from './Tooltip';
 import sampleData from './Tooltip.stories.data.json';
 import { DateTime } from 'luxon';
@@ -11,7 +11,7 @@ export default {
 } as Meta;
 
 // Data scraped from live graph
-const tooltip: Story<TooltipProps> = (props) => (
+const tooltip: StoryFn<TooltipProps> = (props) => (
   // wrap in absolute div to mimic graph behaviour
   <div style={{position: 'absolute'}}>
     <GraphTooltip {...props} />

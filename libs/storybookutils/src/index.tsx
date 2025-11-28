@@ -18,7 +18,7 @@ export function withStore<T extends StorybookBaseState>(initialState?: Partial<T
       ? combineReducers({...injectedReducers})
       : (state: StorybookBaseState) => state ?? initialState;
   const store = configureStore(createReducer, initialState as any);
-  return (Story: React.ElementType) => <Provider store={store}><Story /></Provider>
+  return (StoryFn: React.ElementType) => <Provider store={store}><StoryFn /></Provider>
 }
 
 export function withAccounts(initialState?: AccountMapState) {
@@ -35,22 +35,22 @@ export function withAccounts(initialState?: AccountMapState) {
     });
   }
   const store = configureStore(createReducer);
-  return (Story: React.ElementType) => <Provider store={store}><Story /></Provider>
+  return (StoryFn: React.ElementType) => <Provider store={store}><StoryFn /></Provider>
 }
 
 // Generic reducer decorator
 export function withReducer(reducer: { useStore: () => any }) {
-  return (Story: React.ElementType) => {
+  return (StoryFn: React.ElementType) => {
     reducer.useStore();
-    return <Story />
+    return <StoryFn />
   }
 }
 
 // Dedicated LP decorator is used in a few places
 export const withLanguageProvider = withReducer(LanguageProviderReducer);
 
-export const withMediaContext = (Story: React.ElementType) =>
+export const withMediaContext = (StoryFn: React.ElementType) =>
   <MediaContextProvider>
     <style>{mediaStyles}</style>
-    <Story />
+    <StoryFn />
   </MediaContextProvider>
