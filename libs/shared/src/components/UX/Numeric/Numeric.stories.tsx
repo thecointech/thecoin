@@ -3,6 +3,7 @@ import { StoryFn, Meta } from '@storybook/react-webpack5';
 import { UxNumeric } from '.';
 import { Button, Form } from 'semantic-ui-react';
 import { action } from 'storybook/actions';
+import { languageDecorator } from '../../../../internal/languageDecorator';
 
 export default {
   title: 'shared/UX/Numeric',
@@ -19,6 +20,7 @@ export default {
       },
     },
   },
+  decorators: languageDecorator
 } as Meta;
 
 const makeIntl = (el: string) => ({ id: el, defaultMessage: el })

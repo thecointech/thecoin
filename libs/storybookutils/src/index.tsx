@@ -4,7 +4,7 @@ import { configureStore } from '@thecointech/redux';
 // import { ApplicationBaseState } from '@thecointech/shared/types';
 import { combineReducers, ReducersMapObject } from 'redux';
 import { buildAccountStoreReducer, AccountMapState, AccountMap } from '@thecointech/redux-accounts';
-import { LanguageProviderReducer } from '@thecointech/redux-intl';
+import { LanguageProvider, LanguageProviderReducer, Languages } from '@thecointech/redux-intl';
 import { MediaContextProvider, mediaStyles } from '@thecointech/media-context';
 import { getAllAccounts, getInitialAddress } from '@thecointech/account/store';
 
@@ -47,7 +47,16 @@ export function withReducer(reducer: { useStore: () => any }) {
 }
 
 // Dedicated LP decorator is used in a few places
-export const withLanguageProvider = withReducer(LanguageProviderReducer);
+export const withLanguageProvider = (languages: Languages) => {
+  return (StoryFn: React.ElementType) => {
+    LanguageProviderReducer.useStore();
+    return (
+      <LanguageProvider languages={languages}>
+        <StoryFn />
+      </LanguageProvider>
+    );
+  };
+};
 
 export const withMediaContext = (StoryFn: React.ElementType) =>
   <MediaContextProvider>

@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import { StoryFn, Meta } from '@storybook/react-webpack5';
 import { UxEmail } from '.';
 import { Button, Form } from 'semantic-ui-react';
+import { languageDecorator } from '../../../../internal/languageDecorator';
 
 export default {
   title: 'shared/UX/Email',
   component: UxEmail,
+  decorators: languageDecorator
 } as Meta;
 
 

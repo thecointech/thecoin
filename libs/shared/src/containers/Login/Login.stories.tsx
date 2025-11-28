@@ -1,12 +1,16 @@
 import React from 'react';
 import { Login as Component } from '.';
-import { withAccounts } from '@thecointech/storybookutils';
+import { withAccounts, withLanguageProvider } from '@thecointech/storybookutils';
 import { AccountMap } from '@thecointech/redux-accounts';
+import translations from '../../translations';
 
 export default {
   title: "Shared/Login",
   component: Component,
-  decorators: [withAccounts()],
+  decorators: [
+    withLanguageProvider(translations),
+    withAccounts(),
+  ],
   args: {
     pwd: "TestAccNoT"
   }
