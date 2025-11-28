@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/redux",
-  "version": "0.5.0-test.0",
+  "version": "0.5.0",
   "private": true,
   "description": "TheCoin: Shared redux utilities",
   "type": "module",

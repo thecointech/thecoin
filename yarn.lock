@@ -10502,13 +10502,13 @@ __metadata:
   dependencies:
     "@openzeppelin/contracts-upgradeable": "npm:^4.5.2"
     "@solidity-parser/parser": "npm:^0.20.2"
-    "@thecointech/async": "npm:^0.4.0"
-    "@thecointech/contract-base": "npm:^0.5.0-test.0"
-    "@thecointech/contract-oracle": "npm:^0.5.0-test.0"
-    "@thecointech/contract-plugins": "npm:^0.5.0-test.0"
-    "@thecointech/contract-tools": "npm:^0.5.0-test.0"
-    "@thecointech/fx-rates": "npm:^0.5.0-test.0"
-    "@thecointech/setenv": "npm:^0.5.0-test.0"
+    "@thecointech/async": "npm:^0.5.0"
+    "@thecointech/contract-base": "npm:^0.5.0"
+    "@thecointech/contract-oracle": "npm:^0.5.0"
+    "@thecointech/contract-plugins": "npm:^0.5.0"
+    "@thecointech/contract-tools": "npm:^0.5.0"
+    "@thecointech/fx-rates": "npm:^0.5.0"
+    "@thecointech/setenv": "npm:^0.5.0"
   languageName: unknown
   linkType: soft
 
@@ -10743,7 +10743,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/media-context@npm:^0.5.0-test.0, @thecointech/media-context@workspace:libs/media-context":
+"@thecointech/media-context@npm:^0.5.0, @thecointech/media-context@workspace:libs/media-context":
   version: 0.0.0-use.local
   resolution: "@thecointech/media-context@workspace:libs/media-context"
   dependencies:
@@ -10836,27 +10836,27 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/redux-accounts@npm:^0.5.0-test.0, @thecointech/redux-accounts@workspace:libs/redux-accounts":
+"@thecointech/redux-accounts@npm:^0.5.0, @thecointech/redux-accounts@workspace:libs/redux-accounts":
   version: 0.0.0-use.local
   resolution: "@thecointech/redux-accounts@workspace:libs/redux-accounts"
   dependencies:
-    "@thecointech/account": "npm:^0.5.0-test.0"
-    "@thecointech/logging": "npm:^0.5.0-test.0"
-    "@thecointech/redux": "npm:^0.5.0-test.0"
-    "@thecointech/signers": "npm:^0.5.0-test.0"
-    "@thecointech/utilities": "npm:^0.5.0-test.0"
+    "@thecointech/account": "npm:^0.5.0"
+    "@thecointech/logging": "npm:^0.5.0"
+    "@thecointech/redux": "npm:^0.5.0"
+    "@thecointech/signers": "npm:^0.5.0"
+    "@thecointech/utilities": "npm:^0.5.0"
   languageName: unknown
   linkType: soft
 
-"@thecointech/redux-intl@npm:^0.5.0-test.0, @thecointech/redux-intl@workspace:libs/redux-intl":
+"@thecointech/redux-intl@npm:^0.5.0, @thecointech/redux-intl@workspace:libs/redux-intl":
   version: 0.0.0-use.local
   resolution: "@thecointech/redux-intl@workspace:libs/redux-intl"
   dependencies:
-    "@thecointech/redux": "npm:^0.5.0-test.0"
+    "@thecointech/redux": "npm:^0.5.0"
   languageName: unknown
   linkType: soft
 
-"@thecointech/redux@npm:^0.5.0-test.0, @thecointech/redux@workspace:libs/redux":
+"@thecointech/redux@npm:^0.5.0, @thecointech/redux@workspace:libs/redux":
   version: 0.0.0-use.local
   resolution: "@thecointech/redux@workspace:libs/redux"
   dependencies:
@@ -10869,7 +10869,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/scraper-agent@npm:^0.5.0-test.0, @thecointech/scraper-agent@workspace:libs/scraper-agent":
+"@thecointech/scraper-agent@npm:^0.5.0, @thecointech/scraper-agent@workspace:libs/scraper-agent":
   version: 0.0.0-use.local
   resolution: "@thecointech/scraper-agent@workspace:libs/scraper-agent"
   dependencies:
@@ -10966,20 +10966,20 @@ __metadata:
     "@nivo/core": "npm:0.99.0"
     "@nivo/line": "npm:0.99.0"
     "@nivo/tooltip": "npm:0.99.0"
-    "@thecointech/account": "npm:^0.5.0-test.0"
-    "@thecointech/apis": "npm:^0.5.0-test.0"
-    "@thecointech/contract-core": "npm:^0.5.0-test.0"
-    "@thecointech/fx-rates": "npm:^0.5.0-test.0"
-    "@thecointech/logging": "npm:^0.5.0-test.0"
-    "@thecointech/redux": "npm:^0.5.0-test.0"
-    "@thecointech/redux-accounts": "npm:^0.5.0-test.0"
-    "@thecointech/redux-intl": "npm:^0.5.0-test.0"
-    "@thecointech/signers": "npm:^0.5.0-test.0"
-    "@thecointech/site-semantic-theme": "npm:^0.4.0"
-    "@thecointech/storybookutils": "npm:^0.5.0-test.0"
-    "@thecointech/tx-blockchain": "npm:^0.5.0-test.0"
-    "@thecointech/types": "npm:^0.5.0-test.0"
-    "@thecointech/utilities": "npm:^0.5.0-test.0"
+    "@thecointech/account": "npm:^0.5.0"
+    "@thecointech/apis": "npm:^0.5.0"
+    "@thecointech/contract-core": "npm:^0.5.0"
+    "@thecointech/fx-rates": "npm:^0.5.0"
+    "@thecointech/logging": "npm:^0.5.0"
+    "@thecointech/redux": "npm:^0.5.0"
+    "@thecointech/redux-accounts": "npm:^0.5.0"
+    "@thecointech/redux-intl": "npm:^0.5.0"
+    "@thecointech/signers": "npm:^0.5.0"
+    "@thecointech/site-semantic-theme": "npm:^0.5.0"
+    "@thecointech/storybookutils": "npm:^0.5.0"
+    "@thecointech/tx-blockchain": "npm:^0.5.0"
+    "@thecointech/types": "npm:^0.5.0"
+    "@thecointech/utilities": "npm:^0.5.0"
     "@types/d3-scale-chromatic": "npm:^2.0.0"
     "@types/d3-shape": "npm:^2.0.0"
     "@types/history": "npm:^4.7.3"
@@ -11010,11 +11010,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/site-app@workspace:apps/site-app"
   dependencies:
-    "@thecointech/blockpass": "npm:^0.5.0-test.0"
-    "@thecointech/setenv": "npm:^0.5.0-test.0"
-    "@thecointech/shared": "npm:^0.5.0-test.0"
-    "@thecointech/site-base": "npm:^0.5.0-test.0"
-    "@thecointech/utilities": "npm:^0.5.0-test.0"
+    "@thecointech/blockpass": "npm:^0.5.0"
+    "@thecointech/setenv": "npm:^0.5.0"
+    "@thecointech/shared": "npm:^0.5.0"
+    "@thecointech/site-base": "npm:^0.5.0"
+    "@thecointech/utilities": "npm:^0.5.0"
     "@types/card-validator": "npm:^4.1.0"
     "@types/expect": "npm:1.20.4"
     "@types/file-saver": "npm:^2.0.1"
@@ -11178,14 +11178,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/storybookutils@npm:^0.5.0-test.0, @thecointech/storybookutils@workspace:libs/storybookutils":
+"@thecointech/storybookutils@npm:^0.5.0, @thecointech/storybookutils@workspace:libs/storybookutils":
   version: 0.0.0-use.local
   resolution: "@thecointech/storybookutils@workspace:libs/storybookutils"
   dependencies:
-    "@thecointech/media-context": "npm:^0.5.0-test.0"
-    "@thecointech/redux": "npm:^0.5.0-test.0"
-    "@thecointech/redux-accounts": "npm:^0.5.0-test.0"
-    "@thecointech/redux-intl": "npm:^0.5.0-test.0"
+    "@thecointech/media-context": "npm:^0.5.0"
+    "@thecointech/redux": "npm:^0.5.0"
+    "@thecointech/redux-accounts": "npm:^0.5.0"
+    "@thecointech/redux-intl": "npm:^0.5.0"
   languageName: unknown
   linkType: soft
 
