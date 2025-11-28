@@ -12723,11 +12723,14 @@ __metadata:
     "@nivo/line": "npm:0.99.0"
     "@nivo/tooltip": "npm:0.99.0"
     "@thecointech/account": "npm:^0.5.0-test.0"
+    "@thecointech/apis": "npm:^0.5.0-test.0"
+    "@thecointech/contract-core": "npm:^0.5.0-test.0"
     "@thecointech/fx-rates": "npm:^0.5.0-test.0"
     "@thecointech/logging": "npm:^0.5.0-test.0"
     "@thecointech/redux": "npm:^0.5.0-test.0"
     "@thecointech/redux-accounts": "npm:^0.5.0-test.0"
     "@thecointech/redux-intl": "npm:^0.5.0-test.0"
+    "@thecointech/signers": "npm:^0.5.0-test.0"
     "@thecointech/site-semantic-theme": "npm:^0.4.0"
     "@thecointech/storybookutils": "npm:^0.5.0-test.0"
     "@thecointech/tx-blockchain": "npm:^0.5.0-test.0"
@@ -12736,9 +12739,7 @@ __metadata:
     "@types/d3-scale-chromatic": "npm:^2.0.0"
     "@types/d3-shape": "npm:^2.0.0"
     "@types/history": "npm:^4.7.3"
-    "@types/hoist-non-react-statics": "npm:^3.3.1"
     "@types/react-dates": "npm:21.8.0"
-    hoist-non-react-statics: "npm:^3.3.1"
     immer-reducer: "npm:^0.7.11"
     react-dates: "npm:21.8.0"
     react-dropzone: "npm:12.0.4"
@@ -27122,7 +27123,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^3.2.1, hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.1, hoist-non-react-statics@npm:^3.3.2":
+"hoist-non-react-statics@npm:^3.2.1, hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.2":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:

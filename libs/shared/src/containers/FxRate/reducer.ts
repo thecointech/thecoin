@@ -1,6 +1,6 @@
 import { call, fork, take, delay, takeEvery, Effect } from "@redux-saga/core/effects";
-import { SagaReducer, buildSaga, SagaBuilder } from '../../store/immerReducer';
-import { sendValues } from '../../store/sagas';
+import { SagaReducer, buildSaga, SagaBuilder } from '@thecointech/redux/immerReducer';
+import { sendValues } from '@thecointech/redux/sagas';
 import { fetchRate, FXRate } from '@thecointech/fx-rates';
 import type { ApplicationBaseState } from '../../types';
 import type { FxRatesState, IFxRates } from './types';

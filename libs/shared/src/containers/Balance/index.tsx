@@ -5,7 +5,7 @@ import { getFxRate } from "@thecointech/fx-rates";
 import { TransactionList } from "../TransactionList";
 import { calculateProfit } from "../Account/profit";
 import { useFxRates } from "../FxRate/selectors";
-import { AccountMap } from '../AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { Account } from '../Account';
 import styles from "./styles.module.less";
 import { DateTime } from "luxon";

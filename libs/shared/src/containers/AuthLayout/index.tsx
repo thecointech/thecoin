@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router';
 import { isLocal } from '@thecointech/signers';
 import { defineMessage, FormattedMessage } from 'react-intl';
-import { AccountMap } from '../AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { Login } from '../Login';
 import { Account } from '../Account';
 

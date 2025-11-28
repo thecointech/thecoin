@@ -50,24 +50,26 @@
     }
   },
   "dependencies": {
-    "@artsy/fresnel": "^8.4.0",
     "@nivo/bar": "0.99.0",
     "@nivo/core": "0.99.0",
     "@nivo/line": "0.99.0",
     "@nivo/tooltip": "0.99.0",
     "@thecointech/account": "^0.5.0-test.0",
+    "@thecointech/apis": "^0.5.0-test.0",
+    "@thecointech/contract-core": "^0.5.0-test.0",
     "@thecointech/fx-rates": "^0.5.0-test.0",
     "@thecointech/logging": "^0.5.0-test.0",
+    "@thecointech/redux": "^0.5.0-test.0",
+    "@thecointech/redux-accounts": "^0.5.0-test.0",
+    "@thecointech/redux-intl": "^0.5.0-test.0",
+    "@thecointech/signers": "^0.5.0-test.0",
     "@thecointech/site-semantic-theme": "^0.4.0",
     "@thecointech/tx-blockchain": "^0.5.0-test.0",
     "@thecointech/utilities": "^0.5.0-test.0",
-    "history": "4.9.0",
-    "hoist-non-react-statics": "^3.3.1",
     "immer-reducer": "^0.7.11",
     "react-dates": "21.8.0",
     "react-dropzone": "12.0.4",
     "react-router": "^7.9.6",
-    "redux-injectors": "https://github.com/FrozenKiwi/redux-injectors#6209c56b7c2508e002b669010ad3c0d5e0bab9eb",
     "ts-clipboard": "^1.0.17"
   },
   "devDependencies": {
@@ -77,7 +79,6 @@
     "@types/d3-scale-chromatic": "^2.0.0",
     "@types/d3-shape": "^2.0.0",
     "@types/history": "^4.7.3",
-    "@types/hoist-non-react-statics": "^3.3.1",
     "@types/react-dates": "21.8.0"
   }
 }

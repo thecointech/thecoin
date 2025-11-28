@@ -1,7 +1,7 @@
 import React from 'react';
 import { Login as Component } from '.';
 import { withAccounts } from '@thecointech/storybookutils';
-import { AccountMap } from '../AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 
 export default {
   title: "Shared/Login",
