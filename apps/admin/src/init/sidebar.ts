@@ -1,6 +1,5 @@
 
 import { AccountId } from '@thecointech/signers';
-import { RUrl } from '@thecointech/utilities/RUrl';
 import { defineMessage, defineMessages } from 'react-intl';
 import { routesTheCoin } from '../containers/TheCoinAccount/Routes';
 import { routesBrokerCAD } from '../containers/BrokerCAD/Routes';
@@ -23,7 +22,7 @@ const messages = defineMessages({
 const buildSubMenu = (id: AccountId, routes: typeof routesTheCoin|typeof routesBrokerCAD) =>
     routes.map(el => ({
       name: messages[el.path],
-      to: new RUrl(`/${id}/${el.path}`)
+      to: `/${id}/${el.path}`
     }))
 
 const state : Partial<SidebarState> = {

@@ -3,7 +3,7 @@ import { Button, Message, Step } from 'semantic-ui-react'
 import { Link, useNavigate, useLocation, Outlet } from 'react-router';
 import { TrainingReducer } from './state/reducer';
 import styles from './index.module.less';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 export { routes } from './routes'
 
 export const Training = () => {

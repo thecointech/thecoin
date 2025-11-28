@@ -1,9 +1,7 @@
 import React, { useCallback } from "react";
 import { Dropdown, DropdownProps } from "semantic-ui-react";
 import { useSelector } from "react-redux";
-import { LanguageProviderReducer } from "@thecointech/shared/containers/LanguageProvider/reducer";
-import { selectLocale } from '@thecointech/shared/containers/LanguageProvider/selector';
-import { Locale } from "@thecointech/shared/containers/LanguageProvider/types";
+import { LanguageProviderReducer, type Locale, selectLocale } from "@thecointech/redux-intl";
 import styles from './styles.module.less';
 
 const options = [

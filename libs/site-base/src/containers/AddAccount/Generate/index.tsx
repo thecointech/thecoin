@@ -8,7 +8,7 @@ import { NameInput } from '../NewBaseClass/NameInput';
 import { UxScoredPassword } from '@thecointech/shared/components/UX/ScoredPassword';
 import { Decoration } from '../Decoration';
 import { ButtonPrimary } from '../../../components/Buttons';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import styles from './styles.module.less';
 import { CompleteInit } from '../CompleteInit';
 

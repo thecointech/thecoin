@@ -3,7 +3,7 @@ import styles from "./index.module.less";
 import { Dimmer, Header, Loader, Message } from "semantic-ui-react";
 import { BackgroundTaskErrors, BackgroundTaskProgressBar } from "@/BackgroundTask/BackgroundTaskProgressBar";
 import { groupKey } from "../routes";
-import { AccountMap } from "@thecointech/shared/containers/AccountMap/reducer";
+import { AccountMap } from "@thecointech/redux-accounts";
 import { ElectronSigner } from "@thecointech/electron-signer";
 import { ContentSection } from "@/ContentSection";
 import type { AccountState } from "@thecointech/account";

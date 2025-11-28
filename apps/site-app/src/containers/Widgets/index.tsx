@@ -1,4 +1,4 @@
-import { AccountMap } from '@thecointech/shared/containers/AccountMap'
+import { AccountMap } from '@thecointech/redux-accounts'
 import React, { PropsWithChildren } from 'react';
 import { useLocation } from 'react-router';
 import { AppContainerWithShadowWithoutPadding } from '../../components/AppContainers';

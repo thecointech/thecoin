@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { UxInput } from "@thecointech/shared/components/UX/Input";
 import { defineMessages } from "react-intl";
-import { AccountMap } from "@thecointech/shared/containers/AccountMap";
+import { AccountMap } from "@thecointech/redux-accounts";
 
 const translations = defineMessages({
   placeholder : {

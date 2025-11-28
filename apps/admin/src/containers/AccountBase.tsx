@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { AccountId } from '@thecointech/signers';
 import { Account } from '@thecointech/shared/containers/Account';
 import { Outlet } from 'react-router';

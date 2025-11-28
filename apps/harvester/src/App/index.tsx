@@ -3,7 +3,7 @@ import { useLocation, Outlet } from 'react-router'
 import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
 import { useEffect } from 'react';
 import { BackgroundTaskReducer } from '../BackgroundTask/reducer';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap/reducer';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { ElectronSigner } from '@thecointech/electron-signer';
 import { AccountInitializer } from '../account/AccountInitializer';
 import { AppMenu } from './AppMenu';

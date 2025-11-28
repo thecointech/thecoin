@@ -1,5 +1,5 @@
 import React from "react";
-import { AccountMap } from "@thecointech/shared/containers/AccountMap";
+import { AccountMap } from "@thecointech/redux-accounts";
 import { GraphTxHistory, Theme } from '@thecointech/shared/components/GraphTxHistory'
 import { LessVars } from "@thecointech/site-semantic-theme/variables";
 import { DateTime } from "luxon";

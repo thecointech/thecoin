@@ -1,5 +1,5 @@
 import { UploadWallet, UploadData } from "@thecointech/shared/containers/UploadWallet";
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { useNavigate } from 'react-router';
 import { useEffect } from "react";
 import { useRef } from "react";

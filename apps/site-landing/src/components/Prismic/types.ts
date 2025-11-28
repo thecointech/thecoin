@@ -1,5 +1,5 @@
 import type { RichTextField, PrismicDocument } from '@prismicio/types';
-import type { Locale } from '@thecointech/shared/containers/LanguageProvider/types'
+import type { Locale } from '@thecointech/redux-intl/types'
 
 export type RenderableType = {
   type: string;

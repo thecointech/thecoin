@@ -1,4 +1,4 @@
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { useAccountPath } from './routes'
 import { SimplePath } from '@/SimplePath';
 export { path } from './routes';

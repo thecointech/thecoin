@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
-import { Provider } from 'react-redux';
-import { LanguageProvider } from '@thecointech/shared/containers/LanguageProvider';
+import { Provider } from '@thecointech/redux';
+import { LanguageProvider } from '@thecointech/redux-intl';
 import { translations } from './translations';
 import { initialize } from './init';
 import { routes } from './containers/App/Routes';

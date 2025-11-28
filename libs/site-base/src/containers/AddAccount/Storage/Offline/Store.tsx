@@ -4,7 +4,7 @@ import { getStoredAccountData } from '@thecointech/account/store';
 import { defineMessage, FormattedMessage } from 'react-intl';
 import { isLocal } from '@thecointech/signers';
 import { ButtonSecondary } from '../../../../components/Buttons';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { Account } from '@thecointech/shared/containers/Account';
 import { ProviderChoice } from '../ProviderChoice';
 import icon from "./images/download.svg";

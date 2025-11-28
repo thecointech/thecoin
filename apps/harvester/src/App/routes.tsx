@@ -54,16 +54,3 @@ function toReactRouterRoutes(path: Routes[]): RouteObject[] {
   } as RouteObject)
   return r;
 }
-
-// export const Routes = () => (
-//   <Switch>
-//     <Route exact path='/' component={Home} />
-//     <Route path='/browser' component={Browser} />
-//     <Route path='/account' component={Account} />
-//     <Route path='/agent' component={BankConnect} />
-//     <Route path='/train' component={Training} />
-//     <Route path='/config' component={HarvestConfig} />
-//     <Route path='/results' component={Results} />
-//     <Route path='/advanced' component={Advanced} />
-//   </Switch>
-// )

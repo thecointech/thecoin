@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { getUrlParameterByName } from '../../../../utils/localState'
+import { getUrlParameterByName } from '@thecointech/utilities/urls';
 import { GoogleWalletItem } from '@thecointech/types';
 import { GetSecureApi } from '@thecointech/apis/broker';
 import { log } from '@thecointech/logging';
 import { ButtonProps, List } from 'semantic-ui-react';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { AccountState } from '@thecointech/account';
 import { isPresent, NormalizeAddress } from '@thecointech/utilities';
 import { Wallet } from 'ethers';

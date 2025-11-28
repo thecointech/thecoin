@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { AccountVerify } from '../Verified';
 import { Avatars } from '@thecointech/shared/components/Avatars';

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Prismic, FAQDocument, } from "components/Prismic";
 import { ApplicationRootState } from "types";
 import { useSelector } from "react-redux";
-import { selectLocale } from '@thecointech/shared/containers/LanguageProvider/selector';
+import { selectLocale } from '@thecointech/redux-intl/selector';
 import styles from "./styles.module.less";
 import { Header } from 'semantic-ui-react';
 import { FaqItem } from './FaqItem';

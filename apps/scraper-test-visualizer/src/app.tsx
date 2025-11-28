@@ -2,7 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux'
 import 'semantic-ui-css/semantic.css'
 import './index.css'
-import { configureStore } from '@thecointech/shared/store';
+import { configureStore } from '@thecointech/redux';
 import { createHashRouter } from 'react-router';
 import { routes } from './Routes';
 import { RouterProvider } from 'react-router';

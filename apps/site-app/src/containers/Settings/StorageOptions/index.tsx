@@ -3,7 +3,7 @@ import { Download } from '@thecointech/site-base/containers/AddAccount/Storage/O
 import { Checkbox, Container, Dimmer, Header, Loader } from "semantic-ui-react"
 import { isLocal } from '@thecointech/signers';
 import { useGoogleStore } from '@thecointech/site-base/containers/AddAccount/Storage/GDrive';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { defineMessage, FormattedMessage } from 'react-intl';
 import styles from './styles.module.less';
 import google from './images/icon_google_drive_small.svg';

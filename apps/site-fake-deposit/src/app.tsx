@@ -11,12 +11,12 @@ import { Provider } from 'react-redux';
 import 'sanitize.css/sanitize.css';
 
 // Import Language Provider
-import { LanguageProvider, Languages } from '@thecointech/shared/containers/LanguageProvider';
+import { LanguageProvider, Languages } from '@thecointech/redux-intl';
 import { translations } from './translations';
 import { Page } from './Page';
 
 // Create redux store with history
-import { configureStore } from '@thecointech/shared/store';
+import { configureStore } from '@thecointech/redux';
 const store = configureStore();
 
 const MOUNT_NODE = document.getElementById('app') as HTMLElement;

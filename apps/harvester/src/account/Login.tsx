@@ -1,7 +1,7 @@
 import { Login as LoginUI } from "@thecointech/shared/containers/Login";
 import { Navigate } from 'react-router';
 import { useEffect, useState } from 'react';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { isLocal } from '@thecointech/signers';
 import { BaseWallet, HDNodeWallet } from "ethers";
 import { groupKey } from './routes';

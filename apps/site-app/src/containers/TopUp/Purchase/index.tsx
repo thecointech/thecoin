@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { GetSignedMessage } from '@thecointech/utilities/SignedMessages';
 import { ETransferModal } from './eTransferModal';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';

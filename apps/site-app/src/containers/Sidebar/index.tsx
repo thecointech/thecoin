@@ -1,6 +1,6 @@
 import React from 'react';
 import { getAvatarLink } from '@thecointech/shared/components/Avatars';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar/reducer';
 import type { SidebarLink } from '@thecointech/shared/containers/PageSidebar/types';
 import { defineMessages, useIntl } from 'react-intl';

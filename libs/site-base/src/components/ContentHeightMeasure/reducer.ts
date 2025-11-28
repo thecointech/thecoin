@@ -1,5 +1,5 @@
 
-import { BaseReducer } from '@thecointech/shared/store/immerReducer'
+import { BaseReducer } from '@thecointech/redux'
 import { ContentState, IActions } from './types';
 import { SiteBaseStore } from '../../SiteBaseStore';
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { Account } from '@thecointech/shared/containers/Account';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { defineMessages, FormattedMessage } from 'react-intl';

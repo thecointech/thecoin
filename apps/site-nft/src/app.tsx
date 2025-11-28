@@ -21,7 +21,7 @@ import { routes } from './components/Routes';
 import { createHashRouter } from 'react-router';
 
 // Import Language Provider
-import { LanguageProvider, Languages } from '@thecointech/shared/containers/LanguageProvider';
+import { LanguageProvider, Languages } from '@thecointech/redux-intl';
 import { configureAppStore } from './reducers';
 import { translations } from './translations';
 

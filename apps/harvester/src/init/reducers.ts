@@ -3,8 +3,8 @@
  */
 
 import { combineReducers, Reducer, ReducersMapObject } from 'redux';
-import { configureStore } from '@thecointech/shared/store';
-import { buildAccountStoreReducer } from '@thecointech/shared/containers/AccountMap/reducer';
+import { configureStore } from '@thecointech/redux';
+import { buildAccountStoreReducer } from '@thecointech/redux-accounts';
 
 
 /**

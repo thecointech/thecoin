@@ -3,8 +3,8 @@
  */
 
 import { combineReducers, Reducer, ReducersMapObject } from 'redux';
-import { configureStore } from '@thecointech/shared/store';
-import { buildAccountStoreReducer } from '@thecointech/shared/containers/AccountMap';
+import { configureStore } from '@thecointech/redux';
+import { buildAccountStoreReducer } from '@thecointech/redux-accounts';
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers

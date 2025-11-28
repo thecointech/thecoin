@@ -4,7 +4,7 @@ import { PrismicText, PrismicRichText } from '@prismicio/react';
 import { useSelector } from "react-redux";
 import { Prismic } from "components/Prismic";
 import { Header, Icon } from "semantic-ui-react";
-import { selectLocale } from "@thecointech/shared/containers/LanguageProvider/selector";
+import { selectLocale } from "@thecointech/redux-intl/selector";
 import { useParams, useNavigate } from "react-router";
 import { DateTime } from "luxon";
 import { defineMessages, FormattedMessage } from "react-intl";

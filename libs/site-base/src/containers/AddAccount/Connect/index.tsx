@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import { ConnectWeb3 } from '@thecointech/shared/containers/Account/Web3';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { WarnIfDisabled } from './WarnIfDisabled';
 import { NameInput } from '../NewBaseClass/NameInput';

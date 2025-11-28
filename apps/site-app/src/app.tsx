@@ -18,7 +18,7 @@ import { RouterProvider, createHashRouter } from 'react-router';
 import 'sanitize.css/sanitize.css';
 
 // Import Language Provider
-import { LanguageProvider, Languages } from '@thecointech/shared/containers/LanguageProvider';
+import { LanguageProvider, Languages } from '@thecointech/redux-intl';
 
 import { configureAppStore } from './reducers';
 import { routes } from './containers/App/Routes';

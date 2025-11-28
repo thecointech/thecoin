@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AccountDetails } from '@thecointech/account';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { getHistory, ComposeClient } from '@thecointech/idx';
 import { Header, Input, List } from 'semantic-ui-react';

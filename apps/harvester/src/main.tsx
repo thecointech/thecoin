@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import { LanguageProvider } from '@thecointech/shared/containers/LanguageProvider';
+import { LanguageProvider } from '@thecointech/redux-intl';
 import translations from "@thecointech/shared/translations";
 import { Provider } from 'react-redux';
 import { initialize } from './init';

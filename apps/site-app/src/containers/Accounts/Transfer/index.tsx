@@ -4,7 +4,7 @@ import { BuildVerifiedXfer } from '@thecointech/utilities/VerifiedTransfer';
 import { GetStatusApi, GetDirectTransferApi } from '@thecointech/apis/broker';
 import { weBuyAt } from '@thecointech/fx-rates';
 import { useState } from 'react';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { TransferWidget } from './TransferWidget';
 import { log } from '@thecointech/logging';
