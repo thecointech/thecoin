@@ -2,7 +2,7 @@ import { ImmerReducer, createReducerFunction, createActionCreators, ImmerReducer
 import { put, select, SelectEffect, takeLatest } from "@redux-saga/core/effects";
 import { Action, bindActionCreators, Reducer } from "redux";
 import { useDispatch, useSelector } from 'react-redux';
-import { useInjectReducer, useInjectSaga } from 'redux-injectors';
+import * as reduxInjectors from 'redux-injectors';
 import type { Saga } from '@redux-saga/core';
 
 //
@@ -77,7 +77,7 @@ export function BaseReducer<U, T>(key: string, initialState: T) {
     // Default init takes care of circumstances where
     // there is no need for explicit initialization
     if (!BaseReducer._reducer) r.initialize.call(this);
-    useInjectReducer({ key, reducer: BaseReducer._reducer });
+    reduxInjectors.useInjectReducer({ key, reducer: BaseReducer._reducer });
   }
   r.useApi = () => bindActionCreators(BaseReducer._actions, useDispatch());
   r.useData = () => useSelector(r.derived.selector);
@@ -179,7 +179,7 @@ export function SagaReducer<U, T>(key: string, initialState: T, sagas: SagaBuild
   const superUseStore = Super.useStore;
   Super.useStore = function() {
     superUseStore.call(this);
-    useInjectSaga({ key, saga: SagaReducer.rootSaga});
+    reduxInjectors.useInjectSaga({ key, saga: SagaReducer.rootSaga});
   }
 
   return SagaReducer;

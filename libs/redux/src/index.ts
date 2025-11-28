@@ -2,7 +2,7 @@
  * Create the store with dynamic reducers
  */
 
-import { createInjectorsEnhancer } from 'redux-injectors';
+import * as reduxInjectors from 'redux-injectors';
 import reduxSaga from '@redux-saga/core';
 import { createStore, compose, applyMiddleware, ReducersMapObject, Reducer, StoreEnhancer, PreloadedState } from 'redux';
 import { getCreateReducer } from './reducers';
@@ -29,7 +29,7 @@ export function configureStore<T extends Record<string, any>>(createReducer: red
 
   const enhancers = [
     applyMiddleware(...middlewares),
-    createInjectorsEnhancer({
+    reduxInjectors.createInjectorsEnhancer({
       createReducer,
       runSaga,
     }),
