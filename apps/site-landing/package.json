@@ -70,12 +70,10 @@
     "@thecointech/site-semantic-theme": "^0.5.0",
     "@types/papaparse": "^5.0.3",
     "@types/react-helmet": "^6.1.5",
-    "@types/react-test-renderer": "^16.9.0",
     "coveralls": "3.0.4",
     "node-plop": "0.19.0",
     "plop": "2.4.0",
     "react-app-polyfill": "1.0.1",
-    "react-test-renderer": "16.8.6",
     "xlsx": "^0.17.5"
   }
 }
