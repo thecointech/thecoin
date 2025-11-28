@@ -2,7 +2,7 @@
   "name": "@thecointech/site-base",
   "productName": "THECoin: Website - Base",
   "private": true,
-  "version": "0.5.0-test.0",
+  "version": "0.5.0",
   "description": "THECoin: Future-proof currency",
   "type": "module",
   "repository": {
@@ -59,10 +59,10 @@
   },
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.4.1",
-    "@thecointech/apis": "^0.5.0-test.0",
-    "@thecointech/shared": "^0.5.0-test.0",
-    "@thecointech/site-semantic-theme": "^0.4.0",
-    "@thecointech/utilities": "^0.5.0-test.0",
+    "@thecointech/apis": "^0.5.0",
+    "@thecointech/shared": "^0.5.0",
+    "@thecointech/site-semantic-theme": "^0.5.0",
+    "@thecointech/utilities": "^0.5.0",
     "intl": "^1.2.5",
     "react-animate-height": "^3.0.4",
     "react-ga": "^2.7.0",
@@ -73,7 +73,7 @@
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
-    "@thecointech/setenv": "^0.5.0-test.0",
+    "@thecointech/setenv": "^0.5.0",
     "@types/dotenv-webpack": "^7.0.3",
     "@types/intl": "^1.2.0",
     "@types/react-measure": "^2.0.5",
