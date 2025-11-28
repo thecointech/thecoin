@@ -11,7 +11,7 @@ const channel = process.env.CONFIG_NAME;
 const channelSuffix = channel && channel !== 'prod' ? ` [${channel.toUpperCase()} - ${process.env.TC_DEPLOYED_AT || 'unknown'}]` : '';
 document.title = `TheCoin - Harvester${channelSuffix}`;
 
-const MOUNT_NODE = document.getElementById('root') as HTMLElement;
+const MOUNT_NODE = document.getElementById('app') as HTMLElement;
 const root = createRoot(MOUNT_NODE);
 const store = await initialize()
 

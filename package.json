@@ -114,7 +114,6 @@
     "@types/prop-types": "15.7.1",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
-    "@types/react-input-mask": "2.0.4",
     "@types/redux-devtools": "3.0.47",
     "@types/url-join": "^4.0.0",
     "@types/webpack": "^5",

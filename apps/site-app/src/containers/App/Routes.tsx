@@ -36,7 +36,6 @@ export const routes = [
         path: 'addAccount',
         children: AddAccountRoutes,
       },
-
     ]
   },
   {

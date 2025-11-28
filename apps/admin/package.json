@@ -1,7 +1,7 @@
 {
   "name": "thecoin-admin",
   "private": true,
-  "productName": "thecoin-admin",
+  "productName": "TheCoin - Admin",
   "version": "0.5.0-test.0",
   "description": "Admin: audit TheCoin system ops",
   "author": "Stephen Taylor <stephen@thecoin.io>",
