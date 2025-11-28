@@ -2291,7 +2291,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.10.4, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.17.2, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.2.0, @babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.3, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.7, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.10.4, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.17.2, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.2.0, @babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.3, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.7, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
   version: 7.23.8
   resolution: "@babel/runtime@npm:7.23.8"
   dependencies:
@@ -12499,6 +12499,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@thecointech/media-context@npm:^0.5.0-test.0, @thecointech/media-context@workspace:libs/media-context":
+  version: 0.0.0-use.local
+  resolution: "@thecointech/media-context@workspace:libs/media-context"
+  dependencies:
+    "@artsy/fresnel": "npm:^8.4.0"
+  languageName: unknown
+  linkType: soft
+
 "@thecointech/nft-service@workspace:apps/nft-service":
   version: 0.0.0-use.local
   resolution: "@thecointech/nft-service@workspace:apps/nft-service"
@@ -12581,6 +12589,39 @@ __metadata:
     csvtojson: "npm:^2.0.13"
     luxon: "npm:3.3.0"
     promise.any: "npm:^2.0.4"
+  languageName: unknown
+  linkType: soft
+
+"@thecointech/redux-accounts@npm:^0.5.0-test.0, @thecointech/redux-accounts@workspace:libs/redux-accounts":
+  version: 0.0.0-use.local
+  resolution: "@thecointech/redux-accounts@workspace:libs/redux-accounts"
+  dependencies:
+    "@thecointech/account": "npm:^0.5.0-test.0"
+    "@thecointech/logging": "npm:^0.5.0-test.0"
+    "@thecointech/redux": "npm:^0.5.0-test.0"
+    "@thecointech/signers": "npm:^0.5.0-test.0"
+    "@thecointech/utilities": "npm:^0.5.0-test.0"
+  languageName: unknown
+  linkType: soft
+
+"@thecointech/redux-intl@npm:^0.5.0-test.0, @thecointech/redux-intl@workspace:libs/redux-intl":
+  version: 0.0.0-use.local
+  resolution: "@thecointech/redux-intl@workspace:libs/redux-intl"
+  dependencies:
+    "@thecointech/redux": "npm:^0.5.0-test.0"
+  languageName: unknown
+  linkType: soft
+
+"@thecointech/redux@npm:^0.5.0-test.0, @thecointech/redux@workspace:libs/redux":
+  version: 0.0.0-use.local
+  resolution: "@thecointech/redux@workspace:libs/redux"
+  dependencies:
+    "@types/redux-devtools": "npm:3.0.47"
+    react-redux: "npm:^9.2.0"
+    redux: "npm:^4.0.5"
+    redux-devtools-extension: "npm:2.13.8"
+    redux-injectors: "https://github.com/FrozenKiwi/redux-injectors#6209c56b7c2508e002b669010ad3c0d5e0bab9eb"
+    redux-saga: "npm:^1.1.3"
   languageName: unknown
   linkType: soft
 
@@ -12676,7 +12717,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/shared@workspace:libs/shared"
   dependencies:
-    "@artsy/fresnel": "npm:^8.4.0"
     "@babel/runtime": "npm:^7.7.7"
     "@nivo/bar": "npm:0.99.0"
     "@nivo/core": "npm:0.99.0"
@@ -12685,6 +12725,9 @@ __metadata:
     "@thecointech/account": "npm:^0.5.0-test.0"
     "@thecointech/fx-rates": "npm:^0.5.0-test.0"
     "@thecointech/logging": "npm:^0.5.0-test.0"
+    "@thecointech/redux": "npm:^0.5.0-test.0"
+    "@thecointech/redux-accounts": "npm:^0.5.0-test.0"
+    "@thecointech/redux-intl": "npm:^0.5.0-test.0"
     "@thecointech/site-semantic-theme": "npm:^0.4.0"
     "@thecointech/storybookutils": "npm:^0.5.0-test.0"
     "@thecointech/tx-blockchain": "npm:^0.5.0-test.0"
@@ -12695,13 +12738,11 @@ __metadata:
     "@types/history": "npm:^4.7.3"
     "@types/hoist-non-react-statics": "npm:^3.3.1"
     "@types/react-dates": "npm:21.8.0"
-    history: "npm:4.9.0"
     hoist-non-react-statics: "npm:^3.3.1"
     immer-reducer: "npm:^0.7.11"
     react-dates: "npm:21.8.0"
     react-dropzone: "npm:12.0.4"
     react-router: "npm:^7.9.6"
-    redux-injectors: "https://github.com/FrozenKiwi/redux-injectors#6209c56b7c2508e002b669010ad3c0d5e0bab9eb"
     ts-clipboard: "npm:^1.0.17"
   languageName: unknown
   linkType: soft
@@ -12896,7 +12937,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/storybookutils@workspace:libs/storybookutils"
   dependencies:
-    "@thecointech/shared": "npm:^0.5.0-test.0"
+    "@thecointech/media-context": "npm:^0.5.0-test.0"
+    "@thecointech/redux": "npm:^0.5.0-test.0"
+    "@thecointech/redux-accounts": "npm:^0.5.0-test.0"
+    "@thecointech/redux-intl": "npm:^0.5.0-test.0"
   languageName: unknown
   linkType: soft
 
@@ -12930,8 +12974,6 @@ __metadata:
     "@types/prop-types": "npm:15.7.1"
     "@types/react": "npm:19.2.7"
     "@types/react-dom": "npm:19.2.3"
-    "@types/react-input-mask": "npm:2.0.4"
-    "@types/redux-devtools": "npm:3.0.47"
     "@types/url-join": "npm:^4.0.0"
     "@types/webpack": "npm:^5"
     "@typescript-eslint/eslint-plugin": "npm:^5.0.0"
@@ -12955,7 +12997,6 @@ __metadata:
     eslint-plugin-jsx-a11y: "npm:6.4.1"
     eslint-plugin-react: "npm:7.24.0"
     eslint-plugin-react-hooks: "npm:4.2.0"
-    eslint-plugin-redux-saga: "npm:1.2.1"
     eslint-plugin-storybook: "npm:^0.5.12"
     ethers: "npm:6.15.0"
     file-loader: "npm:^6.2.0"
@@ -12986,11 +13027,7 @@ __metadata:
     react: "npm:19.2.0"
     react-dom: "npm:19.2.0"
     react-intl: "npm:^6.0.4"
-    react-redux: "npm:^9.2.0"
     realpath: "npm:^1.1.0"
-    redux: "npm:^4.0.5"
-    redux-devtools-extension: "npm:2.13.8"
-    redux-saga: "npm:^1.1.3"
     rimraf: "npm:5.0.5"
     semantic-ui-react: "npm:3.0.0-beta.2"
     source-map-loader: "npm:^1.1.3"
@@ -14684,15 +14721,6 @@ __metadata:
   dependencies:
     "@types/react": "npm:*"
   checksum: f7b3bb2151d992a108ae46fed876fb9c8119108397d9a01d150c5642782997542c8b3c52e742b56e8689b7dbfa62ca9cfc76aa7e05dec4e60c652f7ef53fa783
-  languageName: node
-  linkType: hard
-
-"@types/react-input-mask@npm:2.0.4":
-  version: 2.0.4
-  resolution: "@types/react-input-mask@npm:2.0.4"
-  dependencies:
-    "@types/react": "npm:*"
-  checksum: 95d25bea36c5ca7dc2d0d1933dc9ec384e2e2e7bde50311a951e2abe28d236c6f957cd722c2674fafe2a7923d156324f93b59bb88fa74ca89d217f70636aec7b
   languageName: node
   linkType: hard
 
@@ -23123,16 +23151,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-redux-saga@npm:1.2.1":
-  version: 1.2.1
-  resolution: "eslint-plugin-redux-saga@npm:1.2.1"
-  peerDependencies:
-    eslint: ">= 6.7.0"
-    redux-saga: ">= 0.11.1 < 1 || >= 1.0.0"
-  checksum: 19d3abaa53f0af63b3b9c55e85639103a99691d01d5b9ac53d594fc65c9f2f92e4e981ffebdeece93a6c5c19ac7ddcadb994987243628fe5d56ae48c91a05543
-  languageName: node
-  linkType: hard
-
 "eslint-plugin-storybook@npm:^0.5.12":
   version: 0.5.13
   resolution: "eslint-plugin-storybook@npm:0.5.13"
@@ -27090,20 +27108,6 @@ __metadata:
   version: 1.0.0
   resolution: "hexoid@npm:1.0.0"
   checksum: 9c45e8ba676b9eb88455631ebceec4c829a8374a583410dc735472ab9808bf11339fcd074633c3fa30e420901b894d8a92ffd5e2e21eddd41149546e05a91f69
-  languageName: node
-  linkType: hard
-
-"history@npm:4.9.0":
-  version: 4.9.0
-  resolution: "history@npm:4.9.0"
-  dependencies:
-    "@babel/runtime": "npm:^7.1.2"
-    loose-envify: "npm:^1.2.0"
-    resolve-pathname: "npm:^2.2.0"
-    tiny-invariant: "npm:^1.0.2"
-    tiny-warning: "npm:^1.0.0"
-    value-equal: "npm:^0.4.0"
-  checksum: 13dc48daf20a5220556340233fc8d08404b819c3cf19565c91294dc1ceab7c2f81c4829881c607d4988dfbf52f29ddd5c5a0cbbc73eb7d08e2fa57352addf6a7
   languageName: node
   linkType: hard
 
@@ -32590,7 +32594,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0, loose-envify@npm:^1.2.0, loose-envify@npm:^1.4.0":
+"loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
   dependencies:
@@ -40092,13 +40096,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve-pathname@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "resolve-pathname@npm:2.2.0"
-  checksum: f3ab7549f5b76fcf18048e14afdb4d8a6b255ba61af97e1e051212d8051294ca327badeccb680a738f332b5220d52e31cbe35ecdc4cf05db926d04aec019049e
-  languageName: node
-  linkType: hard
-
 "resolve-url@npm:^0.2.1":
   version: 0.2.1
   resolution: "resolve-url@npm:0.2.1"
@@ -43377,7 +43374,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tiny-invariant@npm:^1.0.2, tiny-invariant@npm:^1.3.1":
+"tiny-invariant@npm:^1.3.1":
   version: 1.3.1
   resolution: "tiny-invariant@npm:1.3.1"
   checksum: 5b87c1d52847d9452b60d0dcb77011b459044e0361ca8253bfe7b43d6288106e12af926adb709a6fc28900e3864349b91dad9a4ac93c39aa15f360b26c2ff4db
@@ -43395,13 +43392,6 @@ __metadata:
     nan: "npm:^2.13.2"
     node-gyp: "npm:latest"
   checksum: b47ceada38f6fa65190906e8a98b58d1584b0640383f04db8196a7098c726e926cfba6271a53e97d98d4c67e2b364618d7b3d7e402f63e44f0e07a4aca82ac8b
-  languageName: node
-  linkType: hard
-
-"tiny-warning@npm:^1.0.0":
-  version: 1.0.3
-  resolution: "tiny-warning@npm:1.0.3"
-  checksum: ef8531f581b30342f29670cb41ca248001c6fd7975ce22122bd59b8d62b4fc84ad4207ee7faa95cde982fa3357cd8f4be650142abc22805538c3b1392d7084fa
   languageName: node
   linkType: hard
 
@@ -45398,13 +45388,6 @@ __metadata:
   version: 13.11.0
   resolution: "validator@npm:13.11.0"
   checksum: 0107da3add5a4ebc6391dac103c55f6d8ed055bbcc29a4c9cbf89eacfc39ba102a5618c470bdc33c6487d30847771a892134a8c791f06ef0962dd4b7a60ae0f5
-  languageName: node
-  linkType: hard
-
-"value-equal@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "value-equal@npm:0.4.0"
-  checksum: 037926d35304e026c985a5cb9fad101e0dd5dc3258964ac6c0ff4f97662e7650fd42197acb46ff04fd84797f6728a90d591d84ee5cad44b18b78d67de28ffd9b
   languageName: node
   linkType: hard
 
