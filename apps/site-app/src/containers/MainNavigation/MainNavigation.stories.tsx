@@ -21,12 +21,12 @@ SidebarItemsReducer.initialize({
     header: null,
     links: [
       {
-        "name": { "id": 2, "defaultMessage": "Home" },
+        "name": { "id": "2", "defaultMessage": "Home" },
         "to": "/",
         "icon": "home"
       },
       {
-        "name": { "id": 3, "defaultMessage": "Top up Balance" },
+        "name": { "id": "3", "defaultMessage": "Top up Balance" },
         "to": "/balance",
         "icon": "arrow circle up"
       },
