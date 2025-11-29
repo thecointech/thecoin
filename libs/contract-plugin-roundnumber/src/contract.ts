@@ -1,5 +1,5 @@
-import { Provider } from 'ethers';
-import { RoundNumber, RoundNumber__factory } from './codegen';
+import type { Provider } from 'ethers';
+import { type RoundNumber, RoundNumber__factory } from './codegen';
 import { getProvider } from '@thecointech/ethers-provider';
 
 const getContractAddress = async () => {

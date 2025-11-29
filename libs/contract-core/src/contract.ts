@@ -1,5 +1,5 @@
-import { Provider } from 'ethers';
-import { TheCoin, TheCoin__factory } from './codegen';
+import type { Provider } from 'ethers';
+import { type TheCoin, TheCoin__factory } from './codegen';
 import { getProvider } from '@thecointech/ethers-provider';
 
 //
