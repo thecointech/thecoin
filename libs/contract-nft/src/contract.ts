@@ -17,8 +17,8 @@ const getContractAddress = async (network: Network) => {
   return deployment.default.contract;
 }
 
-declare module globalThis {
-  let __contractNFT: TheGreenNFTL2 | undefined;
+declare global {
+  var __contractNFT: TheGreenNFTL2 | undefined;
 }
 
 export async function getContract(network: Network = "POLYGON") {

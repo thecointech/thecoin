@@ -18,8 +18,8 @@ export const getContractAddress = async () : Promise<string> => {
   return deployment.default.contract;
 }
 
-declare module globalThis {
-  let __contract: TheCoin|undefined;
+declare global {
+  var __contract: TheCoin|undefined;
 }
 
 export async function GetContract(provider?: Provider) : Promise<TheCoin> {

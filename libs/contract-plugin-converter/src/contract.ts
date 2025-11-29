@@ -14,8 +14,8 @@ const getContractAddress = async () => {
   return deployment.default.contract;
 }
 
-declare module globalThis {
-  let __uberConverter: UberConverter|undefined;
+declare global {
+  var __uberConverter: UberConverter|undefined;
 }
 
 export async function getContract(provider?: Provider) : Promise<UberConverter> {

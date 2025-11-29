@@ -13,8 +13,8 @@ const getContractAddress = async () => {
   return deployment.default.contract;
 }
 
-declare module globalThis {
-  let __roundnumber: RoundNumber|undefined;
+declare global {
+  var __roundnumber: RoundNumber|undefined;
 }
 
 export async function getContract(provider?: Provider) : Promise<RoundNumber> {
