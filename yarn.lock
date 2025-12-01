@@ -11036,7 +11036,6 @@ __metadata:
     react-confetti: "npm:^6.0.0"
     react-ga: "npm:^2.7.0"
     react-semantic-ui-range: "npm:^0.7.0"
-    reselect: "npm:4.0.0"
     sanitize.css: "npm:10.0.0"
     whatwg-fetch: "npm:3.0.0"
   languageName: unknown
@@ -37239,13 +37238,6 @@ __metadata:
   dependencies:
     pe-library: "npm:^1.0.1"
   checksum: d9ec8fc3900f3bf8fe818260149fdd6180b45d42f08d8bdf098a7a841d995363f44fd2d633948889e300a3ad8e7860b2d92fff9afcdcea21999994f5f526ffb0
-  languageName: node
-  linkType: hard
-
-"reselect@npm:4.0.0":
-  version: 4.0.0
-  resolution: "reselect@npm:4.0.0"
-  checksum: b5957ad2a8fa1ad0c6510da6bd199511eee8bb0ea9278ca67a6f92d8b968ca632b46955a4332de19cc983325123c5cdc88e5887c8fc5b0d4b5938d1807cc3882
   languageName: node
   linkType: hard
 
