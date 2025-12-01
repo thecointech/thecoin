@@ -4,6 +4,7 @@ import { Action, bindActionCreators, Reducer } from "redux";
 import { useDispatch, useSelector } from 'react-redux';
 import * as reduxInjectors from 'redux-injectors';
 import type { Saga } from '@redux-saga/core';
+import type { Draft } from "immer";
 
 //
 // Duplicating the ActionsType from ImmerReducer.  This
@@ -102,10 +103,23 @@ export function buildSaga<IActions, State>(sagaReducer: SagaInterface<IActions, 
     const reducerImp = new sagaReducer.derived(state, state);
     //@ts-ignore
     const fn = reducerImp[fnName].bind(reducerImp);
-    if (Array.isArray(action.payload))
-      yield* fn(...action.payload);
-    else
+
+    // If we have an array, the fn expects either multiple
+    // parameters, or an array as a single parameter
+    if (Array.isArray(action.payload)) {
+      if (fn.length == 1) {
+        // We assume that any function with a single parameter
+        // is designed to receive an array as a single parameter
+        yield* fn(action.payload);
+      } else {
+        // Otherwise we expect multiple parameters and should be spread
+        yield* fn(...action.payload);
+      }
+    }
+    else {
+      // Just pass on through
       yield* fn(action.payload);
+    }
   }
 
   return saga;
@@ -123,8 +137,7 @@ export function SagaReducer<U, T>(key: string, initialState: T, sagas: SagaBuild
   const SagaReducer = class SagaReducer extends Super {
 
     ///////////////////////////////////////////////////////////////////////////////////
-    //
-    // The following functions ease working with saga's
+    // SendValues can be used by one saga to trigger another reducer action.
     sendValues(command: Action, values?: any) {
       return put({
         type: command.type,
@@ -132,17 +145,19 @@ export function SagaReducer<U, T>(key: string, initialState: T, sagas: SagaBuild
       });
     }
 
-    storeValues(values: Partial<T>) {
-      // deepcode ignore UsageOfUndefinedReturnValue: This actually works with the crazy creation code below
+    // Store values specializes sendValues to specifically update the store
+    storeValues(values: Partial<T> | ((draft: Draft<T>, state: Readonly<T>) => void)) {
       return this.sendValues(this.actions.updateWithValues, values)
     }
 
-    // Exposed as an
-    updateWithValues(newState: Partial<T>) {
-      this.draftState = {
-        ...this.draftState,
-        ...newState
-      };
+    // Common update function for sagas to update the store
+    updateWithValues(newState: Partial<T> | ((draft: Draft<T>, state: Readonly<T>) => void)) {
+      if (typeof newState === "function") {
+        newState(this.draftState, this.state);
+      }
+      else {
+        this.draftState = {...this.draftState, ...newState}
+      }
     }
 
     static rootSaga: any;

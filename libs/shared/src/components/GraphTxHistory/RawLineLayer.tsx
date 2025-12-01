@@ -4,7 +4,7 @@ import React from "react";
 import { TxDatum, TxSeries } from "./types";
 
 export const RawLineLayer = ({ colors, series, xScale, yScale }: LineCustomSvgLayerProps<TxSeries>) => {
-  const lineGenerator = line<[string, number]>()
+  const lineGenerator = line<[Date, number]>()
     .x(dat => xScale(dat[0]))
     .y(dat => yScale(Math.max(dat[1], 0)))
     .curve(curveMonotoneX)
@@ -12,7 +12,7 @@ export const RawLineLayer = ({ colors, series, xScale, yScale }: LineCustomSvgLa
   const [lineColor] = colors as string[];
   const datum = series[0].data.map(d => d.data as TxDatum);
   const stepDatum = datum.map(d => [d.x, d.raw]);
-  const d =  lineGenerator(stepDatum as Array<[string, number]>) ?? undefined;
+  const d =  lineGenerator(stepDatum as Array<[Date, number]>) ?? undefined;
 
   return (
     <>

@@ -64,7 +64,7 @@ export const GraphTxHistory = (props: GraphHistoryProps) => {
 const useCalcLimitedFetchSerie = (props: GraphHistoryProps) => {
 
   const [datum, setDatum] = useState([] as TxDatum[]);
-  const {rates, fetching} = useFxRates();
+  const {rates, inFlight} = useFxRates();
   const ratesApi = FxRateReducer.useApi();
 
   // Run once on page load.  Pass in ratesApi to allow querying missing rates
@@ -82,7 +82,7 @@ const useCalcLimitedFetchSerie = (props: GraphHistoryProps) => {
     }
   }, [rates.length]);
 
-  return fetching > 0
+  return inFlight.length > 0
     ? []
     : datum;
 }

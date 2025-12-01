@@ -199,9 +199,8 @@ function AccountReducer(address: string, initialState: AccountState) {
 
       // Ensure we have fx value for each tx in this list
       log.trace({count: newHistory.length}, "Updating {count} FX values for new history");
-      for (var i = 0; i < newHistory.length; i++) {
-        yield this.sendValues(FxRateReducer.actions.fetchRateAtDate, newHistory[i].date.toJSDate());
-      }
+      const txDates = newHistory.map(tx => tx.date.toJSDate());
+      yield this.sendValues(FxRateReducer.actions.fetchRatesForDates, txDates);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////

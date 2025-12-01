@@ -4,7 +4,7 @@ import React from "react";
 import type { TxDatum, TxSeries } from "./types";
 
 export const StepLineLayer = ({ colors, series, xScale, yScale }: LineCustomSvgLayerProps<TxSeries>) => {
-  const lineGenerator = line<[string, number]>()
+  const lineGenerator = line<[Date, number]>()
     .x(dat => xScale(dat[0]))
     .y(dat => yScale(Math.max(dat[1], 0)))
     .curve(curveStepAfter)
@@ -12,7 +12,7 @@ export const StepLineLayer = ({ colors, series, xScale, yScale }: LineCustomSvgL
   const [lineColor, dotColor] = colors as string[];
   const datum = series[0].data.map(d => d.data as TxDatum);
   const stepDatum = datum.map(d => [d.x, d.costBasis]);
-  const d =  lineGenerator(stepDatum as Array<[string, number]>) ?? undefined;
+  const d =  lineGenerator(stepDatum as Array<[Date, number]>) ?? undefined;
 
   return (
     <>
@@ -29,8 +29,8 @@ export const StepLineLayer = ({ colors, series, xScale, yScale }: LineCustomSvgL
         .map((d, idx)=> (
         <circle
           key={idx}
-          cx={xScale(d.x!)}
-          cy={yScale(d.y!)}
+          cx={xScale(d.x)}
+          cy={yScale(d.y)}
           r={4}
           fill="white"
           strokeWidth={2}

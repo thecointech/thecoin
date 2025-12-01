@@ -1,5 +1,5 @@
 import { type AnyAction, getIncompleteActions, isType } from '@thecointech/broker-db';
-import { TheCoin } from '@thecointech/contract-core';
+import type { TheCoin } from '@thecointech/contract-core';
 import type { RbcApi } from '@thecointech/rbcapi';
 import { Processor as BillProcessor } from '@thecointech/tx-bill';
 import { Processor as PluginProcessor } from '@thecointech/tx-plugins';
