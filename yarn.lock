@@ -10845,6 +10845,7 @@ __metadata:
     "@thecointech/redux": "npm:^0.5.0"
     "@thecointech/signers": "npm:^0.5.0"
     "@thecointech/utilities": "npm:^0.5.0"
+    reselect: "npm:5.1.1"
   languageName: unknown
   linkType: soft
 
@@ -11066,7 +11067,6 @@ __metadata:
     react-ga: "npm:^2.7.0"
     react-measure: "npm:^2.3.0"
     react-transition-group: "npm:^4.4.5"
-    reselect: "npm:4.0.0"
     sanitize.css: "npm:10.0.0"
     zxcvbn: "npm:^4.4.2"
   languageName: unknown
@@ -17441,7 +17441,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clsx@npm:^1.1.1":
+"clsx@npm:1.2.1":
   version: 1.2.1
   resolution: "clsx@npm:1.2.1"
   checksum: 34dead8bee24f5e96f6e7937d711978380647e936a22e76380290e35486afd8634966ce300fc4b74a32f3762c7d4c0303f442c3e259f4ce02374eb0c82834f27
@@ -37246,6 +37246,13 @@ __metadata:
   version: 4.0.0
   resolution: "reselect@npm:4.0.0"
   checksum: b5957ad2a8fa1ad0c6510da6bd199511eee8bb0ea9278ca67a6f92d8b968ca632b46955a4332de19cc983325123c5cdc88e5887c8fc5b0d4b5938d1807cc3882
+  languageName: node
+  linkType: hard
+
+"reselect@npm:5.1.1":
+  version: 5.1.1
+  resolution: "reselect@npm:5.1.1"
+  checksum: 219c30da122980f61853db3aebd173524a2accd4b3baec770e3d51941426c87648a125ca08d8c57daa6b8b086f2fdd2703cb035dd6231db98cdbe1176a71f489
   languageName: node
   linkType: hard
 

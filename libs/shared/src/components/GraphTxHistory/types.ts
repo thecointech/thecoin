@@ -1,9 +1,8 @@
 import type { LineSvgProps, Point, PointTooltipProps} from "@nivo/line";
 import type { Transaction } from "@thecointech/tx-blockchain";
-//import { FXRate } from "containers/FxRate/types";
 
 export interface TxDatum {
-  x: string;
+  x: Date;
   y: number;  // Y is the final value,
   raw: number; // raw is the balance prior to plugins
   costBasis: number;

@@ -68,7 +68,6 @@
     "react-ga": "^2.7.0",
     "react-measure": "^2.3.0",
     "react-transition-group": "^4.4.5",
-    "reselect": "4.0.0",
     "sanitize.css": "10.0.0",
     "zxcvbn": "^4.4.2"
   },

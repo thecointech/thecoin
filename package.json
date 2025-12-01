@@ -19,7 +19,8 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "@types/react": "19.2.7",
-    "yargs": "17.7.2"
+    "yargs": "17.7.2",
+    "clsx": "1.2.1"
   },
   "scripts": {
     "postinstall": "ts-patch install -s && lerna run postinstall",

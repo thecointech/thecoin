@@ -42,7 +42,7 @@ const template: StoryFn<typeof defaultArgs> = (args) => {
   const withFxRates = withStore({
     fxRates: {
       rates: genFxRates(args),
-      fetching: 0,
+      inFlight: [],
     }
   })
   const txs = genTxs(args);

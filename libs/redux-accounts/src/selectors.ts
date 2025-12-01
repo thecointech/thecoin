@@ -1,9 +1,15 @@
 import type { AccountState } from '@thecointech/account';
 import type { AccountMapStore } from './types';
+import { createSelector } from 'reselect';
 
-// Select array of all accounts
-export const selectAccountArray = (state: AccountMapStore) =>
-  Object.values<AccountState>(state.accounts.map)
+// Select the accounts map
+const selectAccountsMap = (state: AccountMapStore) => state.accounts.map;
+
+// Select array of all accounts - memoized to prevent unnecessary re-renders
+export const selectAccountArray = createSelector(
+  [selectAccountsMap],
+  (accountsMap) => Object.values<AccountState>(accountsMap)
+);
 
 // Select the active account
 export const activeAccountSelector = (state: AccountMapStore) : AccountState|undefined => {
