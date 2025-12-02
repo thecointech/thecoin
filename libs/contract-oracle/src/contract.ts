@@ -13,8 +13,8 @@ const getContractAddress = async () => {
   return deployment.default.contract;
 }
 
-declare module globalThis {
-  let __oracle: SpxCadOracle|undefined;
+declare global {
+  var __oracle: SpxCadOracle|undefined;
 }
 
 export async function getContract(provider?: Provider) : Promise<SpxCadOracle> {

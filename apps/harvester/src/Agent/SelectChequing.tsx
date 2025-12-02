@@ -1,7 +1,8 @@
 import { SelectBank } from "./SelectBank"
-import type { InitialState } from "./state/initialState"
+import { BankConnectReducer } from "./state/reducer"
 
-export const SelectChequing = ({ banks }: InitialState) => {
+export const SelectChequing = () => {
+  const { banks } = BankConnectReducer.useData();
   return (
     <div>
       <SelectBank type="chequing" selected={banks.chequing} />

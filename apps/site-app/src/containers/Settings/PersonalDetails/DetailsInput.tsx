@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { UxInput, ValidateCB, BaseProps } from '@thecointech/shared/components/UX';
 import { defineMessage, FormattedMessage } from 'react-intl';
 import { Icon } from 'semantic-ui-react';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import styles from './styles.module.less';
 import { detailStrings } from './translations';
 

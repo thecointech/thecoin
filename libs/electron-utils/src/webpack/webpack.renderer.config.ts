@@ -43,7 +43,8 @@ const baseOptions: Configuration = {
     fallback: {
       "crypto": resolveModulePath("crypto-browserify"),
       "stream": resolveModulePath("stream-browserify"),
-      "path": resolveModulePath("path-browserify"),
+      "path": false,
+      "assert": false,
       "http": false,
       "fs": false,
       "vm": false,

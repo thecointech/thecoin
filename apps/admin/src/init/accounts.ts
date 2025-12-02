@@ -2,7 +2,7 @@ import { getSigner, type AccountName } from '@thecointech/signers';
 import { buildNewAccount } from '@thecointech/account';
 import { NormalizeAddress } from '@thecointech/utilities';
 import { ConnectContract } from '@thecointech/contract-core';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { log } from '@thecointech/logging';
 import { getComposeDB } from '@thecointech/idx';
 

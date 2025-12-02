@@ -1,4 +1,4 @@
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { Checkbox, Container, Header, Message } from 'semantic-ui-react';
 import { ALL_PERMISSIONS, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 import { getContract as getUberContract } from '@thecointech/contract-plugin-converter';

@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "@thecointech/shared";
 import { List, Rail, SemanticFLOATS } from "semantic-ui-react";
-import { GreaterThanMobileSegment, MobileSegment } from "@thecointech/shared/components/ResponsiveTool";
+import { GreaterThanMobileSegment, MobileSegment } from "@thecointech/media-context";
 
 type Props = {
   categories: string[],

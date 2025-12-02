@@ -4,12 +4,12 @@ import { RbcStore, closeBrowser } from "@thecointech/rbcapi";
 import { initialize as initializeGmail } from '@thecointech/tx-gmail';
 import { ConfigStore } from "@thecointech/store";
 import { getSigner } from '@thecointech/signers';
-import { ConnectContract, TheCoin } from '@thecointech/contract-core';
+import { ConnectContract, type TheCoin } from '@thecointech/contract-core';
 import { SendMail } from "@thecointech/email";
 import { weSellAt, fetchRate } from '@thecointech/fx-rates';
 import { toHuman } from "@thecointech/utilities";
 import { sleep } from '@thecointech/async';
-import { Signer, formatEther } from "ethers";
+import { type Signer, formatEther } from "ethers";
 
 export async function initialize() {
   log.debug(' --- Initializing processing --- ');

@@ -17,13 +17,18 @@ module.exports = function (request, options) {
     maybeMocked = maybeMocked.slice(0, -3);
   }
 
+  if (options.conditions?.includes("browser")) {
+    maybeMocked = applyBrowserRemapping(maybeMocked, options.basedir);
+  }
+
   try {
-    return options.defaultResolver(maybeMocked, {
+    const r = options.defaultResolver(maybeMocked, {
       ...options,
       conditions: getConditions(options.conditions),
       packageFilter: getPackageFilter(request),
       moduleDirectories: getModuleDirectories(request),
     })
+    return r;
   } catch (e) {
     const isOurModule = request.startsWith("@thecointech");
     if (isOurModule) {
@@ -81,7 +86,7 @@ function getMockedIfExists(request, options) {
 const getConditions = (conditions) =>
   conditions
     ? ["test", "development", ...conditions]
-    : undefined;
+    : ["test", "development"];
 
 const getPackageFilter = (request) => {
     // Map the module field to exports except
@@ -94,7 +99,7 @@ const getPackageFilter = (request) => {
 
   // Opt-in to modularization
   const packagesToModularize = [
-    "react-dropzone",
+    // "react-dropzone",
     "@prismicio/react",
   ]
   return packagesToModularize.find(p => request.startsWith(p))
@@ -122,4 +127,67 @@ function mapModuleFieldToExports (pkg, pkgDir) {
     }
   }
   return pkg
+}
+
+// Apply browser field remapping from package.json
+// e.g., when code inside ethers imports "./lib.esm/providers/ws.js"
+// it should be remapped to "./lib.esm/providers/ws-browser.js" based on ethers' browser field
+function applyBrowserRemapping(request, basedir) {
+  // Only process relative imports
+  if (!request.startsWith('./')) {
+    return request;
+  }
+
+  // Walk up directory tree to find package.json with browser field
+  let currentDir = basedir;
+  const root = path.parse(currentDir).root;
+
+  while (currentDir !== root) {
+    const packageJsonPath = path.join(currentDir, 'package.json');
+
+    if (existsSync(packageJsonPath)) {
+      try {
+        const packageJson = require(packageJsonPath);
+
+        // Stop at thecoin monorepo root or workspace boundaries
+        if (packageJson.workspaces || packageJson.name === '@thecointech/thecoin') {
+          break;
+        }
+
+        if (packageJson.browser && typeof packageJson.browser === 'object') {
+          // Get the package root directory
+          const packageRoot = path.dirname(packageJsonPath);
+
+          // Calculate the path from package root to the current basedir
+          const relativeDir = path.relative(packageRoot, basedir);
+
+          // Combine with the request to get the full path from package root
+          const fullPath = path.join(relativeDir, request);
+
+          // Normalize to use forward slashes and ensure it starts with ./
+          const normalizedPath = './' + fullPath.split(path.sep).join('/');
+
+          // Check if this path is in the browser remapping
+          if (packageJson.browser[normalizedPath]) {
+            const browserPath = packageJson.browser[normalizedPath];
+            // If mapped to false, return original (means "exclude from browser")
+            if (browserPath === false) {
+              return request;
+            }
+
+            // Calculate the relative path from basedir to the browser alternative
+            const browserFullPath = path.join(packageRoot, browserPath.startsWith('./') ? browserPath.slice(2) : browserPath);
+            const browserRelative = path.relative(basedir, browserFullPath);
+            return './' + browserRelative.split(path.sep).join('/');
+          }
+        }
+      } catch (e) {
+        // Failed to read/parse package.json, continue
+      }
+    }
+
+    currentDir = path.dirname(currentDir);
+  }
+
+  return request;
 }

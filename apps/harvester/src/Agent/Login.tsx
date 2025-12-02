@@ -8,8 +8,8 @@ import { BackgroundTaskErrors, BackgroundTaskProgressBar } from "@/BackgroundTas
 import type { AccountResponse } from "@thecointech/vqa";
 import { log } from "@thecointech/logging";
 import { Icon, Message } from "semantic-ui-react";
-import { PathNextButton } from "@/SimplePath";
 import { BankReducerType } from "./state/initialState";
+import { useSimplePathContext } from "@/SimplePath";
 
 type Props = {
   type: RendererBankType;
@@ -56,7 +56,8 @@ const Login = ({ type, both }: Props) => {
 
   const missingDetails = hasDetails === false;
 
-  const isValid = () => {
+  const context = useSimplePathContext();
+  context.onValidate = () => {
     setForceValid(true);
     return !!bank.completed;
   }
@@ -76,7 +77,6 @@ const Login = ({ type, both }: Props) => {
       <BackgroundTaskProgressBar type="record" />
       <BackgroundTaskErrors type='record' />
       <LoginResults forceValid={forceValid} bank={bank} />
-      <PathNextButton onValid={isValid} />
     </div>
   )
 }

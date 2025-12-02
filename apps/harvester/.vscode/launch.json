@@ -10,7 +10,7 @@
       "runtimeArgs": [
         "dev",
         // "--", // Add "--clean-start" to skip seeding dev db
-        // "--clean-start"
+        "-- --clean-start"
       ],
       "runtimeExecutable": "yarn",
       "skipFiles": [

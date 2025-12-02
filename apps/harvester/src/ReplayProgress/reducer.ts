@@ -1,4 +1,4 @@
-import { BaseReducer } from "@thecointech/shared/store/immerReducer";
+import { BaseReducer } from "@thecointech/redux";
 // import type { ReplayProgress } from "@thecointech/scraper";
 
 const REPLAYPROGRESS_KEY = "replayProgress";

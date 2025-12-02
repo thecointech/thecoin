@@ -1,5 +1,5 @@
 import React from 'react';
-import { Story, Meta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react-webpack5';
 
 import { CreateAccountSmall } from '../HomePage/createAccountSmall';
 import { CreateAccountBanner, TypeCreateAccountBanner } from '.';
@@ -17,11 +17,11 @@ const Template = () => <CreateAccountSmall />;
 const TemplateBigPeople = () => <CreateAccountBanner Type={ TypeCreateAccountBanner.People } />;
 const TemplateBigPlant = () => <CreateAccountBanner Type={ TypeCreateAccountBanner.Plants } />;
 
-export const Small: Story<ProviderProps<AnyAction>> = Template.bind({});
+export const Small: StoryFn<ProviderProps<AnyAction>> = Template.bind({});
 Small.args = {};
 
-export const BigPeople: Story<ProviderProps<AnyAction>> = TemplateBigPeople.bind({});
+export const BigPeople: StoryFn<ProviderProps<AnyAction>> = TemplateBigPeople.bind({});
 BigPeople.args = {};
 
-export const BigPlants: Story<ProviderProps<AnyAction>> = TemplateBigPlant.bind({});
+export const BigPlants: StoryFn<ProviderProps<AnyAction>> = TemplateBigPlant.bind({});
 BigPlants.args = {};

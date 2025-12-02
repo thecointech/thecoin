@@ -1,9 +1,9 @@
-import { Routes } from './Routes';
 import { Segment, Sidebar } from 'semantic-ui-react';
 import { PageSidebar } from '@thecointech/shared/containers/PageSidebar';
 import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
 import styles from './styles.module.less';
 import { SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar/reducer';
+import { Outlet } from 'react-router';
 
 import 'semantic-ui-css/semantic.min.css'
 
@@ -15,7 +15,7 @@ export const App = () => {
     <Sidebar.Pushable as={Segment} id={styles.mainPageContainer}>
       <PageSidebar inverted width='thin' />
       <Sidebar.Pusher className={styles.minHeight}>
-          <Routes />
+          <Outlet />
       </Sidebar.Pusher>
     </Sidebar.Pushable>
   );

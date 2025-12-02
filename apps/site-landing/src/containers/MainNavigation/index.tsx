@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon, Menu, SemanticICONS } from 'semantic-ui-react';
 import { defineMessage, defineMessages, FormattedMessage } from 'react-intl';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router';
 import { HeaderLink } from '@thecointech/site-base/components/HeaderLink';
 import { LanguageSwitcher } from '@thecointech/site-base/containers/LanguageSwitcher';
 import { CreateAccountButton } from '../../components/AppLinks/CreateAccount';
@@ -58,9 +58,9 @@ export const MainNavigation = () => {
 
 const LeftMenuItems = () => (
   <Menu text className={styles.leftMenu}>
-      <a href="#/" className={styles.logoLink}>
+      <NavLink to="/" className={styles.logoLink} viewTransition>
         <div className={styles.logo} />
-      </a>
+      </NavLink>
     {Object.entries(menuItems).map(([key, msg]) =>
       <HeaderLink key={key} to={`/${key}`} className="onlyBigScreen">
         <FormattedMessage {...msg}>

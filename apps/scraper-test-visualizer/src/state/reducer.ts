@@ -1,4 +1,4 @@
-import { BaseReducer } from '@thecointech/shared/store/immerReducer';
+import { BaseReducer } from '@thecointech/redux';
 import { initialState, type InitialState, type FilterType } from './initialState';
 import { TestInfo } from '../testInfo';
 import { FailingTest } from '../types';

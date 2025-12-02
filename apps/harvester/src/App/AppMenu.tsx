@@ -1,6 +1,6 @@
 
 import { Menu } from 'semantic-ui-react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import type { Location } from 'history'
 
 export const AppMenu = ({location}: {location: Location}) => (

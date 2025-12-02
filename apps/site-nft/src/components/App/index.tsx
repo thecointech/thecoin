@@ -11,8 +11,8 @@ import * as React from 'react';
 import { MainNavigation } from '../MainNavigation';
 import { Footer } from 'components/Footer';
 import { MainPageTransition } from '@thecointech/site-base/components/MainPageTransition';
-import { Routes } from '../Routes';
 import { init } from './init'
+import { Outlet } from 'react-router';
 
 // Either import CSS or LESS;
 // - LESS is slower, but offers on-save hot-reload
@@ -30,7 +30,7 @@ export const App = () => {
       <div className={styles.contentContainer}>
         <MainPageTransition>
           <section id={styles.mainContent}>
-            <Routes />
+            <Outlet />
           </section>
         </MainPageTransition>
       </div>

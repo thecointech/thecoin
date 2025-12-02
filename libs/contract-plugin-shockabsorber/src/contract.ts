@@ -15,8 +15,8 @@ const getContractAddress = async () => {
 }
 
 
-declare module globalThis {
-  let __shockAbsorber: ShockAbsorber|undefined;
+declare global {
+  var __shockAbsorber: ShockAbsorber|undefined;
 }
 
 export async function getContract(provider?: Provider) : Promise<ShockAbsorber> {

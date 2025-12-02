@@ -10,7 +10,7 @@ import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import messages from './messages';
 import { getCurrentState } from '@thecointech/tx-statemachine';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { Account } from '@thecointech/shared/containers/Account';
 
 const typeOptions = ["deposit", "other"].map(k => ({

@@ -33,8 +33,7 @@
     },
     "./projectUrl": {
       "types": "./projectUrl/index.d.ts",
-      "import": "./projectUrl/index.mjs",
-      "require": "./projectUrl/index.cjs"
+      "default": "./projectUrl/index.mjs"
     },
     "./webpack": "./webpack/webpack.env.cjs"
   },

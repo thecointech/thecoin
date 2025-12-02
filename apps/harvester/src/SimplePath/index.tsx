@@ -1,5 +1,6 @@
-export { PathSteps } from "./Steps";
-export { PathRouter } from "./Router";
-export { PathNextButton } from "./NextButton";
+export { PathNextButton } from './NextButton'
+export { SimplePath } from './SimplePath'
+export { SimplePathContext, useSimplePathContext } from './SimplePathContext'
+export type { Path } from './types'
 
 

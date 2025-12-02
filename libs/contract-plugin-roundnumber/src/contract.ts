@@ -1,5 +1,5 @@
-import { Provider } from 'ethers';
-import { RoundNumber, RoundNumber__factory } from './codegen';
+import type { Provider } from 'ethers';
+import { type RoundNumber, RoundNumber__factory } from './codegen';
 import { getProvider } from '@thecointech/ethers-provider';
 
 const getContractAddress = async () => {
@@ -13,8 +13,8 @@ const getContractAddress = async () => {
   return deployment.default.contract;
 }
 
-declare module globalThis {
-  let __roundnumber: RoundNumber|undefined;
+declare global {
+  var __roundnumber: RoundNumber|undefined;
 }
 
 export async function getContract(provider?: Provider) : Promise<RoundNumber> {
