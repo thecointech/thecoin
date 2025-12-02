@@ -1,6 +1,6 @@
 import { getProvider, Network } from '@thecointech/ethers-provider';
 import { TheGreenNFTL2, TheGreenNFTL2__factory } from './codegen';
-
+import { defineContractBaseSingleton } from '@thecointech/contract-base';
 // const getAbi = (network: Network) => {
 //   return network == "POLYGON"
 //     ? TheGreenNFT2Spec.abi
@@ -17,14 +17,9 @@ const getContractAddress = async (network: Network) => {
   return deployment.default.contract;
 }
 
-declare global {
-  var __contractNFT: TheGreenNFTL2 | undefined;
-}
-
-export async function getContract(network: Network = "POLYGON") {
-  globalThis.__contractNFT ??= TheGreenNFTL2__factory.connect(
+export const ContractNFT = defineContractBaseSingleton<TheGreenNFTL2, [Network]>('__nft', async (network: Network) => {
+  return TheGreenNFTL2__factory.connect(
     await getContractAddress(network),
     await getProvider()
-  );
-  return globalThis.__contractNFT!;
-}
+  )
+});

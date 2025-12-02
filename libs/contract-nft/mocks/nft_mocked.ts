@@ -1,18 +1,18 @@
-import { AddressLike, ContractTransaction, resolveAddress } from 'ethers';
+import { AddressLike, resolveAddress } from 'ethers';
 import { BigNumberish } from 'ethers';
-import type { TheGreenNFT } from '.';
-import { StateMutability, TypedContractMethod } from './codegen/common';
+import type { TheGreenNFT } from '../src';
+import { StateMutability, TypedContractMethod } from '../src/codegen/common';
 import { genReceipt } from '@thecointech/contract-tools/mockContractUtils';
+import { defineContractBaseSingleton } from '@thecointech/contract-base/singleton';
 
-export * from "./gassless";
-export * from "./tokenCodes";
+export * from "../src/gassless";
+export * from "../src/tokenCodes";
 
 const makeFn = <
 A extends Array<any> = Array<any>,
 R = any,
 S extends StateMutability = "payable"
 >(r: (...a: A) => R, _s?: S) => r as any as TypedContractMethod<A, [Awaited<R>], S>;
-
 
 class MockNFT implements Pick<TheGreenNFT, "balanceOf"|"claimToken"> {
   tokens: string[] = [];
@@ -28,11 +28,7 @@ class MockNFT implements Pick<TheGreenNFT, "balanceOf"|"claimToken"> {
   }, "nonpayable")
 }
 
-export function getContract() {
-  return Promise.resolve(new MockNFT());
-}
-
-
-export function connectNFT() {
-  return Promise.resolve(new MockNFT());
-}
+export const ContractNFT = defineContractBaseSingleton<TheGreenNFT>(
+  '__nft',
+  async () => new MockNFT() as any,
+);

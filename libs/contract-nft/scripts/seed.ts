@@ -1,6 +1,6 @@
 import hre from 'hardhat';
 import { getSigner } from '@thecointech/signers';
-import { connectNFT } from '../src/connect';
+import { ContractNFT } from '../src/contract';
 import { getTokenClaimCode, getTokenClaimSig } from '../src/tokenCodes';
 import { writeFileSync } from 'fs';
 import { log } from '@thecointech/logging';
@@ -14,7 +14,7 @@ if (!mintTestTokens)
 log.info("Minting test tokens");
 const minter = await getSigner("NFTMinter");
 const minterAddress = await minter.getAddress();
-const nft = await connectNFT(minter);
+const nft = await ContractNFT.connect(minter);
 
 // Mint 10 NFT's from 10-20 and print out a claim code for each
 const ids = [0];

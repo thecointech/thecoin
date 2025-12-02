@@ -1,7 +1,6 @@
-import type { Provider } from 'ethers';
 import type { UberConverter } from './codegen/contracts/UberConverter';
-import { getProvider } from '@thecointech/ethers-provider';
 import { UberConverter__factory } from './codegen';
+import { defineContractSingleton } from '@thecointech/contract-base';
 
 const getContractAddress = async () => {
 
@@ -14,14 +13,8 @@ const getContractAddress = async () => {
   return deployment.default.contract;
 }
 
-declare global {
-  var __uberConverter: UberConverter|undefined;
-}
-
-export async function getContract(provider?: Provider) : Promise<UberConverter> {
-  provider = provider ?? (await getProvider());
-  return globalThis.__uberConverter ??= UberConverter__factory.connect(
-    await getContractAddress(),
-    provider
-  )
-}
+export const ContractConverter = defineContractSingleton<UberConverter>(
+  '__converter',
+  getContractAddress,
+  UberConverter__factory
+);

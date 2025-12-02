@@ -41,6 +41,7 @@
     }
   },
   "dependencies": {
+    "@thecointech/ethers-provider": "^0.5.0",
     "@thecointech/signers": "^0.5.0",
     "@thecointech/utilities": "^0.5.0"
   },

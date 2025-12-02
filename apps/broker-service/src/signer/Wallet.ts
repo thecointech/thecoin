@@ -1,6 +1,6 @@
 
 import { getSigner } from '@thecointech/signers';
-import { ConnectContract } from '@thecointech/contract-core';
+import { ContractCore } from '@thecointech/contract-core';
 import { SendMail } from '@thecointech/email';
 import { log } from '@thecointech/logging';
 import { ManagedNonceSigner } from './ManagedNonceSigner';
@@ -10,7 +10,7 @@ const walletName = 'BrokerTransferAssistant';
 export const GetWallet = () => getSigner(walletName);
 export const GetContract = async () => {
   const signer = await getNonceSafeSigner();
-  return await ConnectContract(signer);
+  return await ContractCore.connect(signer);
 }
 
 // let signerPromise: Promise<Signer> | null = null;

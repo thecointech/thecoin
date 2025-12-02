@@ -1,4 +1,4 @@
-import { InitialCoinBlock, ConnectContract, TheCoin } from '@thecointech/contract-core';
+import { InitialCoinBlock, ContractCore, type TheCoin } from '@thecointech/contract-core';
 import { Signer, Wallet, type Provider } from 'ethers';
 import { call, delay, select, StrictEffect } from "@redux-saga/core/effects";
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
@@ -48,7 +48,7 @@ function AccountReducer(address: string, initialState: AccountState) {
 
       const { signer } = this.state;
       // Connect to the contract
-      const contract = yield call(ConnectContract, signer);
+      const contract = yield call(ContractCore.connect, signer);
       const plugins = yield call(getPluginDetails, contract, signer);
       // store the contract prior to trying update history.
       yield this.storeValues({ contract, plugins });

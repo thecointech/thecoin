@@ -1,4 +1,4 @@
-import { connectOracle } from '../src';
+import { ContractOracle } from '../src';
 import { log } from '@thecointech/logging';
 import { getSigner } from '@thecointech/signers';
 import hre from 'hardhat';
@@ -8,7 +8,7 @@ import hre from 'hardhat';
 
 const updater = await getSigner("OracleUpdater")
 const newOwner = await getSigner("OracleOwner");
-const existing = await connectOracle(updater);
+const existing = await ContractOracle.connect(updater);
 const newOwnerAddress = await newOwner.getAddress();
 
 const updaterRole = await existing.UPDATER_ROLE();
@@ -20,7 +20,7 @@ const updaterRole = await existing.UPDATER_ROLE();
 // await existing.transferOwnership(newOwnerAddress);
 
 // Ensure still updater
-const underNewOwner = await connectOracle(newOwner);
+const underNewOwner = await ContractOracle.connect(newOwner);
 const hasRole = await existing.hasRole(updaterRole, updater.getAddress());
 if (!hasRole) {
   await underNewOwner.grantRole(updaterRole, updater.getAddress());

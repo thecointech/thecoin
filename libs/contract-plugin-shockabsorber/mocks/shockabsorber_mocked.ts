@@ -1,4 +1,5 @@
-import * as Src from '.';
+import * as Src from '../src';
+import { defineContractBaseSingleton } from '@thecointech/contract-base';
 
 export class ShockAbsorber implements Pick<Src.ShockAbsorber, 'preWithdraw'|'getAddress'> {
 
@@ -10,5 +11,7 @@ export class ShockAbsorber implements Pick<Src.ShockAbsorber, 'preWithdraw'|'get
   }) as any
 }
 
-export const getContract: typeof Src.getContract = () => new ShockAbsorber() as any;
-export const connectConverter: typeof Src.connectShockAbsorber = () => new ShockAbsorber() as any;
+export const ContractShockAbsorber = defineContractBaseSingleton<Src.ShockAbsorber>(
+  '__shockabsorber',
+  async () => new ShockAbsorber() as any,
+)

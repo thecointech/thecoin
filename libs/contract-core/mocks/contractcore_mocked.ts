@@ -1,11 +1,13 @@
-import * as Src from '.';
+import * as Src from '../src';
 import { AddressLike, BigNumberish, Signer, resolveAddress } from 'ethers'
 import { sleep } from '@thecointech/async'
 import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
-import { PluginAndPermissionsStructOutput } from './codegen/contracts/TheCoinL1';
-import { StateMutability, TypedContractEvent, TypedContractMethod, TypedDeferredTopicFilter, TypedEventLog } from './codegen/common';
+import { PluginAndPermissionsStructOutput } from '../src/codegen/contracts/TheCoinL1';
+import { StateMutability, TypedContractMethod } from '../src/codegen/common';
 import { genReceipt } from '@thecointech/contract-tools/mockContractUtils';
-export * from './constants';
+import { defineContractBaseSingleton } from '@thecointech/contract-base/singleton';
+import { augmentContract } from '../src/augmentContract';
+export * from '../src/constants';
 
 let lastTx = undefined as undefined| {
   confirmations: number,
@@ -31,14 +33,17 @@ A extends Array<any> = Array<any>,
 R = any,
 S extends StateMutability = "payable"
 >(r: (...a: A) => R, _s?: S) => r as any as TypedContractMethod<A, [Awaited<R>], S>;
-export class TheCoin implements MockedCoin {
+class TheCoinImp implements MockedCoin {
 
   signer?: Signer;
   constructor(signer?: Signer) {
     this.signer = signer;
   }
   getAddress = () => Promise.resolve("0x0000000000000000000000000000000000000123");
-  connect = () => this as any as Src.TheCoin;
+  connect = (signer: Signer) => {
+    this.signer = signer;
+    return this as any;
+  }
   queryFilter() {
     return Promise.resolve([]);
   }
@@ -124,6 +129,11 @@ export class TheCoin implements MockedCoin {
   }
 }
 
-export const GetContract: typeof Src.GetContract = () => new TheCoin() as any;
-export const ConnectContract: typeof Src.ConnectContract = (signer: Signer) => new TheCoin(signer) as any;
+export const _core = defineContractBaseSingleton<Src.TheCoin>(
+  "__theCoin",
+  async () => new TheCoinImp() as unknown as Src.TheCoin
+)
+
+export const ContractCore = augmentContract(_core);
+
 export const InitialCoinBlock = 0;

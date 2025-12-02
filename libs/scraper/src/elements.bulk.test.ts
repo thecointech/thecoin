@@ -9,12 +9,14 @@ import type { ElementSearchParams, FoundElement } from "@thecointech/scraper-typ
 jest.setTimeout(20 * 60 * 1000);
 const MIN_ELEMENTS_IN_VALID_PAGE = 25;
 
+// Test all & update elements, requires env set
 describe("It finds the same elements as before in archive", () => {
   const testData = getTestData("*", "elm.json", "archive");
   const tests = testData.flatMap(t => t.names().map(e => ({ testKey: t.key, test: t, name: e })))
   runTests(tests);
-}, hasTestingPages() && (!IsManualRun || process.argv.includes("It finds the same elements as before in archive")));
+}, hasTestingPages() && !!process.env.SCRAPER_UPDATE_PRIVATE_TESTS);
 
+// Only run from debug command in VSCode
 describe("It runs only the failing tests in archive", () => {
   const testData = getTestData("*", "elm.json", "archive");
   const failing = testData.flatMap(t => t.failing.map(f => ({ testKey: t.key, test: t, name: f })))

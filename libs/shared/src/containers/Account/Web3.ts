@@ -1,9 +1,9 @@
 import { BrowserProvider } from 'ethers';
-import { GetContract } from '@thecointech/contract-core';
+import { ContractCore } from '@thecointech/contract-core';
 import { getWeb3Type } from '../../utils/detection';
 
 async function AddTheCoin(ethereum: any) {
-  const contract = await GetContract();
+  const contract = await ContractCore.get();
   const tokenAddress = await contract.getAddress()
   const tokenSymbol = 'THE'
   const tokenDecimals = 6

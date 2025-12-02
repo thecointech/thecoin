@@ -1,6 +1,7 @@
-import * as Src from '.';
+import * as Src from '../src';
 import { genReceipt } from '@thecointech/contract-tools/mockContractUtils';
-import { StateMutability, TypedContractMethod } from './codegen/common';
+import { StateMutability, TypedContractMethod } from '../src/codegen/common';
+import { defineContractBaseSingleton } from '@thecointech/contract-base/singleton';
 
 const makeFn = <
 A extends Array<any> = Array<any>,
@@ -17,7 +18,9 @@ export class UberConverter implements Pick<Src.UberConverter, 'processPending'|'
   genReceipt = genReceipt;
   getAddress = () => Promise.resolve(this.address);
   processPending = (() => this.genReceipt('c')) as any
+  connect = () => this
 }
 
-export const getContract: typeof Src.getContract = () => new UberConverter() as any;
-export const connectConverter: typeof Src.connectConverter = () => new UberConverter() as any;
+export const ContractConverter: typeof Src.ContractConverter = defineContractBaseSingleton<Src.UberConverter>('__core', async () => {
+  return new UberConverter() as any
+})

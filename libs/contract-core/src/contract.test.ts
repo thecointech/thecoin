@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { GetContract } from './contract';
+import { ContractCore } from './contract';
 import { describe } from '@thecointech/jestutils';
 import { NormalizeAddress } from '@thecointech/utilities';
 import { ifPolygonscan } from '@thecointech/secrets/jestutils';
@@ -12,7 +12,7 @@ describe('Testing provider', () => {
   it ('can fetch logs', async () => {
 
     const provider = await getProvider();
-    const contract = await GetContract(provider);
+    const contract = await ContractCore.get();
 
     const address = NormalizeAddress(process.env.WALLET_BrokerCAD_ADDRESS);
     const contractAddress = await contract.getAddress();

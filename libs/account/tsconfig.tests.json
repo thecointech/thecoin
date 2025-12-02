@@ -1,4 +1,9 @@
 {
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
   "extends": "../../tsconfig.tests.json",
-  "include": ["**/*.test.*", "scripts/**.ts", "internal/*.*", "**/*.stories.*"],
+  "include": ["**/*.test.*", "scripts/**.ts", "internal/*.*", "mocks/**/*.*", "**/*.stories.*"],
 }

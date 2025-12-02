@@ -4,7 +4,7 @@ import { getCurrentState } from './state';
 import { getChequingData, getVisaData } from './fetchData';
 import type { HarvestData, UserData } from './types';
 import type { HarvesterReplayCallbacks } from './replay/replayCallbacks';
-import { GetContract } from '@thecointech/contract-core';
+import { ContractCore } from '@thecointech/contract-core';
 
 export async function initialize(callback: HarvesterReplayCallbacks) {
 
@@ -38,7 +38,7 @@ export async function initialize(callback: HarvesterReplayCallbacks) {
   const lastTxDate = lastRun?.date.minus({ week: 1 });
   const chq = await getChequingData(callback);
   const visa = await getVisaData(callback, lastTxDate);
-  const tcCore = await GetContract(wallet.provider!);
+  const tcCore = await ContractCore.get();
   const coin = await tcCore.balanceOf(wallet.address);
   let state: HarvestData = {
     chq,

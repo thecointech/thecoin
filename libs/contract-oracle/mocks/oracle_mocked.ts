@@ -1,10 +1,11 @@
 import { last } from '@thecointech/utilities';
 import { DateTime } from 'luxon';
-import type { AddressLike, BigNumberish, ContractTransaction } from 'ethers';
-import type { SpxCadOracle as Src } from './codegen/contracts/SpxCadOracle';
-import type { StateMutability, TypedContractMethod } from './codegen/common';
+import type { AddressLike, BigNumberish } from 'ethers';
+import type { SpxCadOracle as Src } from '../src/codegen/contracts/SpxCadOracle';
+import type { StateMutability, TypedContractMethod } from '../src/codegen/common';
+import { defineContractBaseSingleton } from '@thecointech/contract-base/singleton';
 
-export * from './update';
+export * from '../src/update';
 
 const makeFn = <
 A extends Array<any> = Array<any>,
@@ -100,5 +101,7 @@ export class SpxCadOracleMocked implements Pick<Src, 'INITIAL_TIMESTAMP' | 'BLOC
   decimals = makeFn(() => 8n, "view");
 }
 
-export const getContract = () => new SpxCadOracleMocked() as unknown as Src;
-export const connectOracle = getContract;
+export const ContractOracle = defineContractBaseSingleton<Src>(
+  '__oracle',
+  async () => new SpxCadOracleMocked() as any,
+);
