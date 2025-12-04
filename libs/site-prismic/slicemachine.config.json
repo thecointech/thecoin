@@ -3,5 +3,5 @@
         "./src/slices"
     ],
     "adapter": "@slicemachine/adapter-next",
-    "repositoryName": "thecointech"
+    "repositoryName": "tutorial-test-blog"
 }
