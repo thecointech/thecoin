@@ -9,7 +9,7 @@ import type { ElementSearchParams, FoundElement } from "@thecointech/scraper-typ
 jest.setTimeout(20 * 60 * 1000);
 const MIN_ELEMENTS_IN_VALID_PAGE = 25;
 
-// Test all & update elements, requires env set
+// Test all & update elements, requires PRIVATE_TESTING_PAGES & SCRAPER_UPDATE_PRIVATE_TESTS env variables set
 describe("It finds the same elements as before in archive", () => {
   const testData = getTestData("*", "elm.json", "archive");
   const tests = testData.flatMap(t => t.names().map(e => ({ testKey: t.key, test: t, name: e })))
@@ -17,6 +17,8 @@ describe("It finds the same elements as before in archive", () => {
 }, hasTestingPages() && !!process.env.SCRAPER_UPDATE_PRIVATE_TESTS);
 
 // Only run from debug command in VSCode
+// NOTE: This will update the archive with the latest elements
+// This is so as we fix failing tests, we re-run this until it passes with 0 tests
 describe("It runs only the failing tests in archive", () => {
   const testData = getTestData("*", "elm.json", "archive");
   const failing = testData.flatMap(t => t.failing.map(f => ({ testKey: t.key, test: t, name: f })))

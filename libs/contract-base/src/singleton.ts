@@ -4,8 +4,8 @@ import { getProvider } from "@thecointech/ethers-provider";
 import type { BaseContract } from "ethers";
 
 export type ContractSingletonManager<T, Args extends any[]> =
-  SingletonManager<T, Args> & {
-    connect: (signer: Signer, ...args: Args) => T;
+  SingletonManager<Promise<T>, Args> & {
+    connect: (signer: Signer, ...args: Args) => Promise<T>;
   };
 
 type ContractFactory<T extends BaseContract> = {
@@ -16,7 +16,7 @@ type AddressFn = () => Promise<string>;
 export function defineContractBaseSingleton<T extends BaseContract, Args extends any[] = []>(
   name: string,
   create: (...args: Args) => Promise<T>,
-) : ContractSingletonManager<Promise<T>, Args> {
+) : ContractSingletonManager<T, Args> {
   const base = defineSingleton<Promise<T>, Args>(name, create);
   const connectExtn = {
     connect: async (signer: Signer, ...args: Args) => {
@@ -34,7 +34,7 @@ export function defineContractSingleton<T extends BaseContract, Args extends any
   name: string,
   address: string | AddressFn,
   factory: ContractFactory<T>,
-) : ContractSingletonManager<Promise<T>, Args> {
+) : ContractSingletonManager<T, Args> {
   const create = async () => {
     return factory.connect(
       address instanceof Function

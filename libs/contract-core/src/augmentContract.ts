@@ -4,7 +4,7 @@ import type { Signer } from "ethers";
 import type { AccountName } from "@thecointech/signers";
 import type { ContractSingletonManager } from "@thecointech/contract-base";
 
-export function augmentContract(_core: ContractSingletonManager<Promise<TheCoin>, []>) {
+export function augmentContract(_core: ContractSingletonManager<TheCoin, []>) {
   return {
     ..._core,
     connect: async (signer: AccountName|Signer) => {

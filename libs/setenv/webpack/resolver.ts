@@ -27,6 +27,10 @@ export class DynamicAliasPlugin {
 
 const projectRoot = (context: string): string => {
   const basePath = path.join(context, "..");
+  // Prevent infinite recursion at filesystem root
+  if (basePath === context) {
+    throw new Error(`Could not find package.json starting from ${context}`);
+  }
   if (existsSync(path.join(basePath, "package.json"))) {
     return basePath;
   }

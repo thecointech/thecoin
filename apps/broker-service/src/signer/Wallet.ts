@@ -1,4 +1,3 @@
-
 import { getSigner } from '@thecointech/signers';
 import { ContractCore } from '@thecointech/contract-core';
 import { SendMail } from '@thecointech/email';
@@ -19,7 +18,7 @@ async function getNonceSafeSigner() {
     // signerPromise = new Promise<Signer>(async resolve => {
       const signer = await GetWallet();
       // The NonceManager is not recognized as a wallet,
-      // and the ConnectContract call checks other signers
+      // and the ContractCore.connect call checks other signers
       // are connected to the same network as the contract
       // const connected = process.env.CONFIG_NAME === "devlive"
       //   ? signer

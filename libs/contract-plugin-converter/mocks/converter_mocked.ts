@@ -21,6 +21,6 @@ export class UberConverter implements Pick<Src.UberConverter, 'processPending'|'
   connect = () => this
 }
 
-export const ContractConverter: typeof Src.ContractConverter = defineContractBaseSingleton<Src.UberConverter>('__core', async () => {
+export const ContractConverter: typeof Src.ContractConverter = defineContractBaseSingleton<Src.UberConverter>('__converter', async () => {
   return new UberConverter() as any
 })
