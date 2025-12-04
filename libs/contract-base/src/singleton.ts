@@ -34,13 +34,13 @@ export function defineContractSingleton<T extends BaseContract, Args extends any
   name: string,
   address: string | AddressFn,
   factory: ContractFactory<T>,
-) : ContractSingletonManager<T, Args> {
-  const create = async () => {
+) : ContractSingletonManager<T, [...Args, Provider?]> {
+  const create = async (...args: [...Args, Provider?]) => {
     return factory.connect(
       address instanceof Function
         ? await address()
         : address,
-      await getProvider());
+      args.pop() ?? await getProvider());
   }
-  return defineContractBaseSingleton<T, Args>(name, create);
+  return defineContractBaseSingleton<T, [...Args, Provider?]>(name, create);
 }

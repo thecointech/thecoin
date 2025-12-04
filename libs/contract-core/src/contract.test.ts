@@ -12,7 +12,7 @@ describe('Testing provider', () => {
   it ('can fetch logs', async () => {
 
     const provider = await getProvider();
-    const contract = await ContractCore.get();
+    const contract = await ContractCore.get(provider);
 
     const address = NormalizeAddress(process.env.WALLET_BrokerCAD_ADDRESS);
     const contractAddress = await contract.getAddress();
