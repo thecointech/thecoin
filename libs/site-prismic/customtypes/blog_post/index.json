@@ -1,0 +1,92 @@
+{
+    "id": "blog_post",
+    "label": "Blog Post",
+    "format": "custom",
+    "repeatable": true,
+    "status": true,
+    "json": {
+        "Main": {
+            "uid": {
+                "type": "UID",
+                "config": {
+                    "label": "URL Slug",
+                    "placeholder": "my-blog-post"
+                }
+            },
+            "title": {
+                "type": "StructuredText",
+                "config": {
+                    "label": "Title",
+                    "placeholder": "Blog post title",
+                    "single": "heading1"
+                }
+            },
+            "publication_date": {
+                "type": "Date",
+                "config": {
+                    "label": "Publication Date"
+                }
+            },
+            "featured_image": {
+                "type": "Image",
+                "config": {
+                    "label": "Featured Image",
+                    "constraint": {},
+                    "thumbnails": [
+                        {
+                            "name": "thumbnail",
+                            "width": 400,
+                            "height": 300
+                        }
+                    ]
+                }
+            },
+            "excerpt": {
+                "type": "StructuredText",
+                "config": {
+                    "label": "Excerpt",
+                    "placeholder": "Brief description of the post...",
+                    "single": "paragraph"
+                }
+            },
+            "content": {
+                "type": "StructuredText",
+                "config": {
+                    "label": "Content",
+                    "placeholder": "Write your blog post content here...",
+                    "multi": "paragraph,heading2,heading3,heading4,strong,em,hyperlink,image,embed,list-item,o-list-item,preformatted"
+                }
+            },
+            "author": {
+                "type": "Text",
+                "config": {
+                    "label": "Author",
+                    "placeholder": "Author name"
+                }
+            },
+            "slices": {
+                "type": "Slices",
+                "fieldset": "Slice Zone",
+                "config": {
+                    "choices": {}
+                }
+            }
+        },
+        "SEO & Metadata": {
+            "meta_title": {
+                "type": "Text",
+                "config": {
+                    "label": "Meta Title",
+                    "placeholder": "Optional SEO title"
+                }
+            },
+            "meta_description": {
+                "type": "Text",
+                "config": {
+                    "label": "Meta Description",
+                    "placeholder": "Optional meta description"
+                }
+            }
+        }
+    }
+}

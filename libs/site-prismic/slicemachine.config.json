@@ -1,0 +1,7 @@
+{
+    "libraries": [
+        "./src/slices"
+    ],
+    "adapter": "@slicemachine/adapter-next",
+    "repositoryName": "thecointech"
+}
