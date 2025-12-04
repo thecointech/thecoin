@@ -18,7 +18,7 @@
 // filepath.  The code output keeps the "@/file.ts" import,
 // and the resolver.js does the work of finding it's path
 
-const tsjest = require('ts-jest');
+const tsJest = require('ts-jest');
 
 // This map will cache transformer instances by configuration hash/key,
 // which is safer in complex Jest environments.
@@ -32,7 +32,7 @@ function createTransformer(config) {
     return transformerCache.get(configKey);
   }
 
-  const tsJestInstance = tsjest.default.createTransformer(config);
+  const tsJestInstance = tsJest.default.createTransformer(config);
 
   // This custom transfomer somehow prevents full path resolution
   // effectively this is simply type-stripping through ts-jest
