@@ -8,9 +8,6 @@
 // Define the shape of the basic singleton manager
 export type SingletonManager<T, Args extends any[]> = {
   get: (...args: Args) => T;
-  // NOTE: It is only possible to set
-  // the default (no-args) singleton
-  set: (v: T) => void;
   reset: () => void;
 };
 
@@ -36,13 +33,6 @@ export function defineSingleton<T, Args extends any[] = []>(
       }
       keys.add(key);
       return gt[key]!;
-    },
-    set: (v: T) => {
-      if (gt[name]) {
-        throw new Error(`Singleton ${name} already set`);
-      }
-      keys.add(name);
-      gt[name] = v;
     },
     reset: () => {
       for (const key of keys) {
