@@ -1,9 +1,10 @@
 import { jest, expect, it } from "@jest/globals";
 import { defineSingleton } from "./singleton";
-import type { Signer, Provider } from "ethers";
-import { HDNodeWallet } from "ethers";
-import { getProvider } from "@thecointech/ethers-provider";
+import { HDNodeWallet, EtherscanProvider, type Signer } from "ethers";
 
+beforeEach(() => {
+  jest.resetAllMocks();
+})
 it ('appropriately handles signer arguments', async () => {
   const create = jest.fn((signer?: Signer) => Promise.resolve({signer}))
   const SignerArgTest = defineSingleton('__test', create);
@@ -24,16 +25,18 @@ it ('appropriately handles signer arguments', async () => {
   const instance3 = await SignerArgTest.get(signer3);
   expect(instance3.signer).toBe(signer3);
   expect(create).toHaveBeenCalledTimes(3);
+  SignerArgTest.reset();
 })
 
 it ('appropriately handles provider arguments', async () => {
-  const create = jest.fn((provider?: Provider) => Promise.resolve({provider}))
+  const create = jest.fn((provider?: EtherscanProvider) => Promise.resolve({provider}))
   const ProviderArgTest = defineSingleton('__test', create);
 
   const instance = await ProviderArgTest.get();
   expect(instance.provider).toBeUndefined();
+  expect(create).toHaveBeenCalledTimes(1);
 
-  const provider1 = await getProvider();
+  const provider1 = await new EtherscanProvider();
   const instance1 = await ProviderArgTest.get(provider1);
   expect(instance1.provider).toBe(provider1);
   expect(create).toHaveBeenCalledTimes(2);
@@ -45,6 +48,7 @@ it ('appropriately handles provider arguments', async () => {
   const instance3 = await ProviderArgTest.get();
   expect(instance3.provider).toBeUndefined();
   expect(create).toHaveBeenCalledTimes(2);
+  ProviderArgTest.reset();
 
   // mocked providers are always equivalent, so further tests aren't useful.
 })

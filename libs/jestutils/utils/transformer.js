@@ -8,7 +8,7 @@
 //   src/file.ts -> "export const fn = 1"
 //   tsconfig -> "paths": { "@/*": ["./src/*"] }
 // In regular node/ts-node land, this code works
-// because the file utils/foot.ts is compiled against
+// because the file utils/foo.ts is compiled against
 // the tsconfig at it's root.  However, in ts-jest,
 // only a single tsconfig is used, so file foo.ts is
 // compiled against the tsconfig at the root of packageA,
@@ -34,13 +34,16 @@ function createTransformer(config) {
 
   const tsJestInstance = tsJest.default.createTransformer(config);
 
-  // This custom transfomer somehow prevents full path resolution
+  // This custom transformer somehow prevents full path resolution
   // effectively this is simply type-stripping through ts-jest
   const customTransformer = {
     process: function (src, filename, transformOptions) {
       // console.log("Processing: ", filename);
       const result = tsJestInstance.process(src, filename, transformOptions);
       return result;
+    },
+    getCacheKey: function (...args) {
+      return tsJestInstance.getCacheKey?.(...args);
     },
   };
 
