@@ -16,7 +16,7 @@ module.exports = {
       getTool('transformer.js'),
       {
         useESM: true,
-        tsconfig: "/home/staylor/src/thecoin/libs/store/tsconfig.tests.json",
+        tsconfig: "tsconfig.tests.json",
         astTransformers: {
           before: [
             {
