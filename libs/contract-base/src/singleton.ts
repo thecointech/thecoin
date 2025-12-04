@@ -5,7 +5,7 @@ import type { BaseContract } from "ethers";
 
 export type ContractSingletonManager<T, Args extends any[]> =
   SingletonManager<T, Args> & {
-    connect: (signer: Signer) => T;
+    connect: (signer: Signer, ...args: Args) => T;
   };
 
 type ContractFactory<T extends BaseContract> = {
@@ -17,10 +17,10 @@ export function defineContractBaseSingleton<T extends BaseContract, Args extends
   name: string,
   create: (...args: Args) => Promise<T>,
 ) : ContractSingletonManager<Promise<T>, Args> {
-  const base = defineSingleton<Promise<T>>(name, create);
+  const base = defineSingleton<Promise<T>, Args>(name, create);
   const connectExtn = {
-    connect: async (signer: Signer) => {
-      const c = await base.get();
+    connect: async (signer: Signer, ...args: Args) => {
+      const c = await base.get(...args);
       return c.connect(signer) as T;
     }
   }
@@ -42,5 +42,5 @@ export function defineContractSingleton<T extends BaseContract, Args extends any
         : address,
       await getProvider());
   }
-  return defineContractBaseSingleton(name, create);
+  return defineContractBaseSingleton<T, Args>(name, create);
 }

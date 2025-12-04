@@ -25,7 +25,7 @@ export class DynamicAliasPlugin {
 }
 
 
-const projectRoot = (context: string) => {
+const projectRoot = (context: string): string => {
   const basePath = path.join(context, "..");
   if (existsSync(path.join(basePath, "package.json"))) {
     return basePath;

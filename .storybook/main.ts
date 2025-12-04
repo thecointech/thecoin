@@ -4,9 +4,8 @@ import webpack from 'webpack';
 import { AbsolutePathRemapper } from '@thecointech/storybook-abs-paths';
 import { merge } from "webpack-merge";
 import { getEnvVars, projectRoot as getProjectRoot } from '@thecointech/setenv';
-import getMocks from '@thecointech/setenv/webpack';
-import { DynamicAliasPlugin } from './resolver';
-import { existsSync } from 'fs';
+import { getMocks } from '@thecointech/setenv/webpack';
+import { DynamicAliasPlugin } from '@thecointech/setenv/webpack';
 
 const rootFolder = path.join(__dirname, '..');
 const mocksFolder = path.join(rootFolder, 'libs', '__mocks__');

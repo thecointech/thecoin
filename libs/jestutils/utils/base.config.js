@@ -8,11 +8,15 @@ module.exports = {
   verbose: true,
   testTimeout: 15 * 1000,
   transform: {
-    "^.+\\.tsx?$": [
-      "ts-jest",
+    "\\.m?tsx?$": [
+      // NOTE: Our custom transformer disables type checking
+      // Leaving it this way because tests are way faster,
+      // but if this proves an issue with DX, remove
+      // transformer and all instances of "@/*"
+      getTool('transfomer.js'),
       {
         useESM: true,
-        tsconfig: "tsconfig.tests.json",
+        tsconfig: "/home/staylor/src/thecoin/libs/store/tsconfig.tests.json",
         astTransformers: {
           before: [
             {
@@ -28,6 +32,9 @@ module.exports = {
       },
     ],
   },
+  transformIgnorePatterns: [
+    "/node_modules/",
+  ],
 
   // By default, we add the 'src' folder to jest
   moduleDirectories: [mocks, '<rootDir>/src', 'node_modules'],
@@ -35,7 +42,6 @@ module.exports = {
   moduleNameMapper: {
     "@thecointech/site-semantic-theme/variables": getTool('mockLessVars.mjs'),
     '\\.(css|less|svg)$': getTool('styleMock'),
-    "^@/(.*)$": "<rootDir>/src/$1"
   },
 
   roots: [

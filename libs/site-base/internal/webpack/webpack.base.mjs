@@ -8,6 +8,7 @@ import webpack from 'webpack';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import { semantic_less_loader, css_module_loader } from '@thecointech/site-semantic-theme/webpack.less';
 import Dotenv from 'dotenv-webpack';
+import { DynamicAliasPlugin } from '@thecointech/setenv/webpack';
 
 import { createRequire } from "module"; // Bring in the ability to create the 'require' method
 const require = createRequire(import.meta.url); // construct the require method
@@ -27,11 +28,6 @@ export async function getBaseConfig(secrets = []) {
   );
   const secretObj = Object.fromEntries(loaded.map(s => [s.name, s.value]));
 
-  // When building in dev config, include mocked files across libs
-  const tsIncludeOpt = configName === 'development'
-    ? [join(projectRoot, 'src'), /[\\/]libs[\\/].+[\\/]mocked[\\/]/]
-    : join(projectRoot, 'src');
-
   return {
     externals: ['dtrace-provider', 'mv', 'os', 'source-map-support', 'secret-manager', 'http'],
     output: {
@@ -42,7 +38,6 @@ export async function getBaseConfig(secrets = []) {
       rules: [
         {
           test: /\.ts(x?)$/,
-          include: tsIncludeOpt,
           use: {
             loader: 'ts-loader',
             options: {
@@ -123,7 +118,10 @@ export async function getBaseConfig(secrets = []) {
         "vm": false,
         "fs": false,
         "path": false,
-      }
+      },
+      plugins: [
+        new DynamicAliasPlugin(),
+      ],
     },
     target: 'web',
     performance: {},

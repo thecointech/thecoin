@@ -1,9 +1,10 @@
-const { resolve } = require('path');
+import { resolve } from 'path';
+import { fileURLToPath } from 'url';
 
 //
 // Mocking packages for webpack (used by sites & admin)
 //
-const mocksFolder = resolve(__dirname, '../../__mocks__/');
+const mocksFolder = fileURLToPath(new URL("../../__mocks__", import.meta.url));
 
 // Typescript compilation on __mocks__ folder
 const compileMocks = {
@@ -44,7 +45,7 @@ const liveMocks = {
   }
 }
 
-function getMocks(cfgName) {
+export function getMockedProjects(cfgName: string|undefined) {
   switch (cfgName) {
     case 'development': {
       console.log(" *** Injecting all webpack mocks");
@@ -61,11 +62,12 @@ function getMocks(cfgName) {
   }
 }
 
-module.exports = function({CONFIG_NAME, NODE_ENV}) {
-  return (NODE_ENV === 'production')
+
+export function getMocks(env: Record<string, string|undefined>) {
+  return (env.NODE_ENV === 'production')
     ? {}
     : {
         module: compileMocks,
-        ...getMocks(CONFIG_NAME),
+        ...getMockedProjects(env.CONFIG_NAME),
       }
 }
