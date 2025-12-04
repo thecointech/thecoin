@@ -1,7 +1,6 @@
 import type { Configuration } from 'webpack';
 import { merge } from 'webpack-merge';
-//@ts-ignore
-import getMocks from '@thecointech/setenv/webpack';
+import { getMocks } from '@thecointech/setenv/webpack';
 import { rules } from './webpack.rules.js';
 import { env, commonBase } from './webpack.common.js';
 

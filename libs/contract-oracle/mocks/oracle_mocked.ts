@@ -37,6 +37,8 @@ export class SpxCadOracleMocked implements Pick<Src, 'INITIAL_TIMESTAMP' | 'BLOC
     }
   }
 
+  connect = () => this;
+
   initialize = makeFn((_updater: AddressLike, initialTimestamp: BigNumberish, blockTime: BigNumberish) => {
     this.initialTimestamp = BigInt(initialTimestamp);
     this.blockTime = BigInt(blockTime);
