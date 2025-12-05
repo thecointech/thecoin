@@ -38,13 +38,12 @@
     "@thecointech/setenv": "^0.5.0"
   },
   "files": [
-    "build/**/*",
-    "mocked/**/*"
+    "build/**/*"
   ],
   "exports": {
     ".": {
-      "development": "./mocked/index.ts",
-      "devlive": "./mocked/index.ts",
+      "development": "./mocks/index.ts",
+      "devlive": "./mocks/index.ts",
       "default": "./build/index.js"
     },
     "./*": "./build/*.js"

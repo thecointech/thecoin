@@ -44,7 +44,7 @@
   ],
   "exports": {
     ".": {
-      "development": "./build/shockabsorber_mocked.js",
+      "development": "./mocks/shockabsorber_mocked.ts",
       "electron": "./build/index.js",
       "default": "./build/index.js"
     }
