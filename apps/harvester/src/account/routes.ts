@@ -2,7 +2,7 @@ import { AccountState } from '@thecointech/account';
 import { Login } from './Login';
 import { Plugins } from './Plugins';
 import { Upload } from './Upload';
-import { getContract as getUberContract } from '@thecointech/contract-plugin-converter';
+import { ContractConverter } from '@thecointech/contract-plugin-converter';
 import { getData, Key } from '@/Training/data';
 import { Connect } from './Connect';
 import { useLocation } from 'react-router';
@@ -10,7 +10,7 @@ import { useLocation } from 'react-router';
 import { NormalizeAddress } from '@thecointech/utilities/Address';
 import { Path, Routes } from '@/SimplePath/types';
 
-const converter = await getUberContract();
+const converter = await ContractConverter.get();
 const converterAddress = await converter.getAddress();
 
 export const groupKey = "account";

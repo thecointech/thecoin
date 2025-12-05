@@ -11,3 +11,11 @@ process.env.LOG_LEVEL = 40
 // These are needed by packages like react-router but aren't included in jsdom
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
+
+// jest.setup.js
+
+// Check if window object exists (prevents errors if running in a non-jsdom environment)
+if (typeof window !== 'undefined') {
+  // Mock the missing function on the window object
+  window.scrollTo = jest.fn();
+}

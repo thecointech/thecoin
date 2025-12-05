@@ -3,8 +3,7 @@ import { rules } from './webpack.rules.js';
 import { plugins } from './webpack.plugins.js';
 import path from 'path';
 import { merge } from 'webpack-merge';
-//@ts-ignore (TODO: convert setenv to typescript/module)
-import getMocks from '@thecointech/setenv/webpack';
+import { getMocks } from '@thecointech/setenv/webpack';
 import { env, commonBase } from './webpack.common.js';
 import webpack from 'webpack';
 import { getSecret } from '@thecointech/secrets';

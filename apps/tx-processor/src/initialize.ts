@@ -4,7 +4,7 @@ import { RbcStore, closeBrowser } from "@thecointech/rbcapi";
 import { initialize as initializeGmail } from '@thecointech/tx-gmail';
 import { ConfigStore } from "@thecointech/store";
 import { getSigner } from '@thecointech/signers';
-import { ConnectContract, type TheCoin } from '@thecointech/contract-core';
+import { ContractCore, type TheCoin } from '@thecointech/contract-core';
 import { SendMail } from "@thecointech/email";
 import { weSellAt, fetchRate } from '@thecointech/fx-rates';
 import { toHuman } from "@thecointech/utilities";
@@ -29,7 +29,7 @@ export async function initialize() {
     throw new Error("Signers not loaded");
   }
 
-  const contract = await ConnectContract(signer);
+  const contract = await ContractCore.connect(signer);
   if (!contract) {
     throw new Error("Couldn't initialize contract")
   }

@@ -1,5 +1,5 @@
 import hre from 'hardhat';
-import { GetContract } from '../src';
+import { ContractCore } from '../src';
 import { sleep } from '@thecointech/async';
 import { log } from '@thecointech/logging';
 import { exit } from 'process';
@@ -11,7 +11,7 @@ if (!process.env.CONFIG_NAME?.startsWith('prod'))
   exit(0);
 
 const network = hre.config.defaultNetwork;
-const contract = await GetContract();
+const contract = await ContractCore.get();
 const provider = await getProvider();
 const contractAddress = await contract.getAddress();
 

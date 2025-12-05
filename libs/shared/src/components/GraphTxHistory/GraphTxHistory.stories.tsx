@@ -7,7 +7,7 @@ import { withStore, withReducer } from '@thecointech/storybookutils';
 import { FXRate, FxRateReducer } from '../../containers/FxRate';
 import { toCoin } from '@thecointech/utilities'
 import Decimal from 'decimal.js-light';
-import { COIN_EXP } from '@thecointech/contract-core';
+import { COIN_EXP } from '@thecointech/contract-base';
 import { getFxRate } from '@thecointech/fx-rates';
 import { PluginBalanceMod } from '@thecointech/contract-plugins/types';
 

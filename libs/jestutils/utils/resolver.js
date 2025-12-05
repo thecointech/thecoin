@@ -21,6 +21,10 @@ module.exports = function (request, options) {
     maybeMocked = applyBrowserRemapping(maybeMocked, options.basedir);
   }
 
+  if (request.startsWith("@/")) {
+    maybeMocked = applySrcRemapping(maybeMocked, options.basedir)
+  }
+
   try {
     const r = options.defaultResolver(maybeMocked, {
       ...options,
@@ -190,4 +194,27 @@ function applyBrowserRemapping(request, basedir) {
   }
 
   return request;
+}
+
+
+const getSrcDir = (folder) => {
+  let baseDir = path.join(folder, '..');
+  while (
+    // The first package we come to is package root
+    !existsSync(path.join(baseDir, 'package.json')) ||
+    // Unless it is in a 'src' directory (ie, harvester)
+    path.basename(baseDir) === "src"
+  ) {
+    baseDir = path.join(baseDir, '..');
+    if (baseDir.length < 7) {
+      throw new Error(`Could not find root package.json in ${folder}`);
+    }
+  }
+  return path.join(baseDir, 'src');
+}
+
+// Remap "@/dir/filename" to "<root>/src/dir/filename"
+function applySrcRemapping(request, basedir) {
+  const srcDir = getSrcDir(basedir);
+  return path.join(srcDir, request.slice(2));
 }

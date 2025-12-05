@@ -11,7 +11,7 @@ import ErrorOverlayPlugin from './error-overlay-shim.cjs';
 
 import { getBaseConfig } from './webpack.base.mjs';
 import signerOptions from './webpack.signers.mjs';
-import getMocks from "@thecointech/setenv/webpack";
+import { getMocks } from "@thecointech/setenv/webpack";
 
 const devOptions = {
   mode: 'development',

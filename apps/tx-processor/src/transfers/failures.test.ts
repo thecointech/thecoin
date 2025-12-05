@@ -1,10 +1,8 @@
 import { jest } from '@jest/globals';
-import { processActions, processTransfers } from '.';
-import { getSigner } from '@thecointech/signers';
-import { ConnectContract } from '@thecointech/contract-core';
+import { processActions } from '.';
+import { ContractCore } from '@thecointech/contract-core';
 import { RbcApi } from '@thecointech/rbcapi';
 import { DateTime } from 'luxon';
-import { TxActionType } from '@thecointech/broker-db';
 import { init } from '@thecointech/firestore';
 import { getBuyETransferAction } from '@thecointech/tx-deposit';
 import Decimal from 'decimal.js-light';
@@ -16,8 +14,7 @@ jest.setTimeout(900000);
 
 init({});
 log.level(100)
-const brokerCad = await getSigner("BrokerCAD");
-const theContract = await ConnectContract(brokerCad);
+const theContract = await ContractCore.connect("BrokerCAD");
 const bank = await RbcApi.create();
 const user = Wallet.createRandom();
 

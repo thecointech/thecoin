@@ -48,8 +48,7 @@
     "./contract": "./build/index.js",
     "./testHelpers.ts": "./internal/testHelpers.ts",
     ".": {
-      "development": "./build/index_mocked.js",
-      "electron": "./build/index.js",
+      "development": "./mocks/contractcore_mocked.ts",
       "default": "./build/index.js"
     }
   },

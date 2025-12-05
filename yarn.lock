@@ -10491,6 +10491,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/contract-base@workspace:libs/contract-base"
   dependencies:
+    "@thecointech/ethers-provider": "npm:^0.5.0"
     "@thecointech/signers": "npm:^0.5.0"
     "@thecointech/utilities": "npm:^0.5.0"
   languageName: unknown
@@ -11311,6 +11312,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-bill@workspace:libs/tx-bill"
   dependencies:
+    "@thecointech/contract-core": "npm:^0.5.0"
     "@thecointech/tx-statemachine": "npm:^0.5.0"
   languageName: unknown
   linkType: soft

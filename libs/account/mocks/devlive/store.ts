@@ -1,12 +1,12 @@
 import { StatusType } from '@thecointech/broker-cad';
-import { ConnectContract } from '@thecointech/contract-core';
+import { ContractCore } from '@thecointech/contract-core';
 import { getPluginDetails } from '@thecointech/contract-plugins';
 import { getComposeDB } from '@thecointech/idx';
 import { getSigner, AccountName } from '@thecointech/signers';
 import { NormalizeAddress } from '@thecointech/utilities/Address';
-import { AccountState, buildNewAccount } from '../state';
-import * as Browser from '../store';
-import { AccountMap } from '../map';
+import { AccountState, buildNewAccount } from '@/state';
+import * as Browser from '@/store';
+import type { AccountMap } from '@/map';
 import { Wallet } from 'ethers';
 
 let _devWallets: AccountMap = {};
@@ -16,7 +16,7 @@ const addRemoteAccount = async (name: AccountName, active: boolean) => {
   console.log("Adding devlive account");
   const signer = await getSigner(name);
   const address = NormalizeAddress(await signer.getAddress());
-  const contract = await ConnectContract(signer);
+  const contract = await ContractCore.connect(signer);
   const plugins = await getPluginDetails(contract, address);
 
   _devWallets[address] = {

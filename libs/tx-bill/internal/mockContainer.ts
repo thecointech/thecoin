@@ -1,4 +1,4 @@
-import { ConnectContract } from "@thecointech/contract-core";
+import { ContractCore } from "@thecointech/contract-core";
 import { RbcApi } from "@thecointech/rbcapi";
 import { getSigner } from "@thecointech/signers";
 import { StateSnapshot, TypedActionContainer } from "@thecointech/tx-statemachine";
@@ -38,8 +38,6 @@ export const getMockContainer = async (date: DateTime) : Promise<TypedActionCont
       date,
     }
   }] as StateSnapshot<States>[],
-  contract:  await ConnectContract(
-    await getSigner("BrokerTransferAssistant")
-  ),
+  contract:  await ContractCore.connect("BrokerTransferAssistant"),
   bank: await RbcApi.create(),
 })
