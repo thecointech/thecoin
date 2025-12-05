@@ -5,8 +5,9 @@ import { getOverrideFees } from '@thecointech/contract-base';
 
 async function setPluginMgr() {
   const broker = await getSigner("BrokerCAD");
+  const theCoin = await getSigner("TheCoin");
   const brokerAddress = await broker.getAddress();
-  const tcCore = await ContractCore.connect("TheCoin");
+  const tcCore = await ContractCore.connect(theCoin);
 
   const overrides = await getOverrideFees(tcCore.runner.provider);
   const r = await tcCore.grantRole(PLUGINMGR_ROLE, brokerAddress, overrides);
