@@ -149,6 +149,8 @@ async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection) {
   const { callbacks, ...noCallbacks } = replay;
   log.info(`Enter refresh TwoFA token attempt with ${twoFaSection.events.length} events`);
 
+  let hasEnteredInput = false;
+
   // Process all the events until we reach an input
   // If the user was required to click a destination first,
   // the code will be sent to that destination again
@@ -165,7 +167,11 @@ async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection) {
       }
     }
     else {
-      if (event.type == "input") {
+      // We need to enter a single input.  However, there may be multiple
+      // inputs if the checkbox was clicked.  We can't filter on the inputs
+      // type as it could be any random thing (eg 'tel'), so try to avoid
+      // checkbox, don't do it twice (scraping should always do input first)
+      if (event.type == "input" && event.inputType != "checkbox" && !hasEnteredInput) {
         log.info(`Found input event ${i} - ${event.eventName}`);
         // Replace the value with the user's input
         const code = await notifyInput("Your harvester needs a 2FA code to continue.  Please enter it now.");
@@ -178,6 +184,7 @@ async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection) {
         else {
           throw new Error("Code not received, or timed out")
         }
+        hasEnteredInput = true;
       }
       const eventNavigates = () => {
         const next = twoFaSection.events[i + 1] as AnyEvent | undefined;
@@ -197,7 +204,7 @@ async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection) {
   log.info("Finished processing 2FA events");
 }
 
-function findFirstAccountsSummaryEvent(events: AnyEvent[], root: EventSection) {
+export function findFirstAccountsSummaryEvent(events: AnyEvent[], root: EventSection) {
   const accountsSummarySection = findSectionByName("AccountsSummary", root);
   if (!accountsSummarySection) {
     throw new Error("Failed to find AccountsSummary section");
