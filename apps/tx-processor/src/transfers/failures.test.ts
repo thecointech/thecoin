@@ -10,11 +10,13 @@ import { Wallet } from 'ethers';
 import { getBillAction } from '@thecointech/tx-bill';
 import { BuildVerifiedBillPayment } from '@thecointech/utilities/VerifiedBillPayment';
 import { log } from '@thecointech/logging';
+import { getSigner } from '@thecointech/signers';
 jest.setTimeout(900000);
 
 init({});
 log.level(100)
-const theContract = await ContractCore.connect("BrokerCAD");
+const signer = await getSigner("BrokerCAD");
+const theContract = await ContractCore.connect(signer);
 const bank = await RbcApi.create();
 const user = Wallet.createRandom();
 
