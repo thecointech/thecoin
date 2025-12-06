@@ -189,14 +189,12 @@ async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection) {
       }
       const eventNavigates = () => {
         const next = twoFaSection.events[i + 1] as AnyEvent | undefined;
-        // We assume our last event in 2FA is a form submission.
-        // That should -always- trigger a navigation.
-        if (!next) return true;
-        // Otherwise, check our next event is a navigation
-        return (
-          (event as AnyEvent).type != "navigation" &&
-          next.type == "navigation"
-        );
+
+        // We only care about actions that trigger a navigation,
+        // if already navigating, we don't want to navigate again
+        const currentType = (event as AnyEvent).type;
+        if (currentType == "navigation") return false;
+        return (next?.type == "navigation");
       }
       log.info(`2FA - Processing event ${i} - ${event.type}`);
       await processEvent(noCallbacks, event, eventNavigates);
