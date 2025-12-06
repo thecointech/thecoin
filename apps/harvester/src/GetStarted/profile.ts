@@ -1,4 +1,4 @@
-import { BackgroundTaskCallback, SubTaskProgress, TaskProgress } from "@/BackgroundTask";
+import { BackgroundTaskCallback, SubTaskProgress } from "@/BackgroundTask";
 import { AskUserReact } from "@/Harvester/agent/askUser";
 import { log } from "@thecointech/logging";
 import { maybeCopyProfile } from "@thecointech/scraper/puppeteer";

@@ -19,6 +19,7 @@ export const QuestionResponse = ({ mountNode }: QuestionResponseProps) => {
   useEffect(() => {
     const release = window.scraper.onAskQuestion((question: AnyQuestionPacket) => {
       setQuestions(questions => [...questions, question]);
+      setAnswer('');
     })
     return release;
   }, []);
