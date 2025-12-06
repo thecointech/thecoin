@@ -37,11 +37,12 @@ export async function replayErrorCallback({replay, err, event}: ReplayErrorParam
         // Our assumption is that if we do not throw, we should
         // be able to continue with the rest of the replay.
         const success = await isPageInSection(page, root, "AccountsSummary");
-        if (success) {
-          log.info("Page is in AccountsSummary section");
-          // If success, go back to the first AccountsSummary event.
-          return findFirstAccountsSummaryEvent(events, root);
+        if (!success) {
+          throw new Error("Attempted to enter 2FA, but failed to enter AccountsSummary");
         }
+        log.info("Page is in AccountsSummary section");
+        // If success, go back to the first AccountsSummary event.
+        return findFirstAccountsSummaryEvent(events, root);
       }
       catch (e) {
         log.error(e, "Failed to enter 2FA");
