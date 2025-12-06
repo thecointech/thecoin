@@ -5,12 +5,13 @@ import { COIN_EXP, ContractCore } from '../../src';
 import {assignRoles} from './assignRoles';
 
 const theCoin = await getSigner("TheCoin");
+const minter = await getSigner("Minter");
 const brokerCAD = await getSigner("BrokerCAD");
 const Client1 = await getSigner("Client1");
 const Client2 = await getSigner("Client2");
 
-const tcCore = await ContractCore.connect("TheCoin");
-const mtCore = await ContractCore.connect("Minter");
+const tcCore = await ContractCore.connect(theCoin);
+const mtCore = await ContractCore.connect(minter);
 
 export async function randomDistribution() {
 

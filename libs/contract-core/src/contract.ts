@@ -1,8 +1,5 @@
 import { type TheCoin as TcContract, TheCoin__factory } from './codegen';
 import { defineContractSingleton } from '@thecointech/contract-base';
-import { getSigner, type AccountName } from '@thecointech/signers';
-import type { Signer } from 'ethers';
-import { augmentContract } from './augmentContract';
 
 //
 // Ensure your .env specifies where this contract was deployed at
@@ -20,10 +17,8 @@ export const getContractAddress = async () : Promise<string> => {
   return deployment.default.contract;
 }
 
-const _core = defineContractSingleton<TcContract>(
+export const ContractCore = defineContractSingleton<TcContract>(
   '__theCoin',
   getContractAddress,
   TheCoin__factory
 );
-
-export const ContractCore = augmentContract(_core);
