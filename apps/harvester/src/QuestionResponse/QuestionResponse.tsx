@@ -34,6 +34,7 @@ export const QuestionResponse = ({ mountNode }: QuestionResponseProps) => {
     if (r.error) alert(r.error);
     if (r.value) {
       setQuestions(questions => questions.filter(q => q.questionId !== question.questionId));
+      setAnswer(undefined);
     }
   }
 
@@ -145,7 +146,7 @@ type QuestionInputProps = QuestionAnswerableProps & {
 const QuestionInput = ({ question, answer, setAnswer, onReply }: QuestionInputProps) => (
   <>
     <div>{question.question}</div>
-    <Input value={answer} onChange={e => setAnswer(e.target.value)} />
+    <Input value={answer ?? ''} onChange={e => setAnswer(e.target.value)} />
     <SubmitRow answer={answer} onReply={onReply} />
   </>
 )
