@@ -55,8 +55,6 @@
     ]
   },
   "dependencies": {
-    "@prismicio/client": "^6.6.2",
-    "@prismicio/react": "^2.4.3",
     "@thecointech/shared": "^0.5.0",
     "@thecointech/site-base": "^0.5.0",
     "@thecointech/utilities": "^0.5.0",

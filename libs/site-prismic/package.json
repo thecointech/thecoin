@@ -12,10 +12,11 @@
     "author": "Stephen Taylor",
     "license": "GPL-3.0-or-later",
     "scripts": {
-        "dev": "next dev --port 3010",
+        "dev": "run -T run-p start:website start:slicemachine",
         "build": "next build",
-        "start": "next start",
-        "slicemachine": "start-slicemachine"
+        "_start": "next start",
+        "start:website": "next dev --port 3010",
+        "start:slicemachine": "start-slicemachine"
     },
     "exports": {
         "./slices": "./src/slices/index.ts",
@@ -36,21 +37,15 @@
         }
     },
     "dependencies": {
-        "@prismicio/client": "^7.3.1",
-        "react": "19.2.0",
-        "react-dom": "19.2.0",
+        "@prismicio/client": "^7.21.0",
         "semantic-ui-react": "3.0.0-beta.2"
     },
     "devDependencies": {
-        "@prismicio/next": "^1.5.0",
-        "@prismicio/react": "^2.8.0",
-        "next": "^14.2.0",
-        "@slicemachine/adapter-next": "^0.3.36",
+        "@prismicio/next": "^2.0.2",
+        "@prismicio/react": "^3.2.2",
+        "@slicemachine/adapter-next": "^0.3.89",
         "@thecointech/site-semantic-theme": "^0.5.0",
-        "@types/node": "22.13.10",
-        "@types/react": "19.2.7",
-        "@types/react-dom": "19.2.3",
-        "slice-machine-ui": "^2.2.0",
-        "typescript": "^5.3.3"
+        "next": "^14.2.0",
+        "slice-machine-ui": "^2.20.2"
     }
 }

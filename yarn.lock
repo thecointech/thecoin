@@ -5014,15 +5014,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@formatjs/intl-localematcher@npm:^0.5.2":
-  version: 0.5.10
-  resolution: "@formatjs/intl-localematcher@npm:0.5.10"
-  dependencies:
-    tslib: "npm:2"
-  checksum: 362ec83aca9382165be575f1cefa477478339e6fead8ca8866185ce6e58427ea1487a811b12c73d1bcfa99fd4db0c24543b35c823451839f585576bfccb8c9cc
-  languageName: node
-  linkType: hard
-
 "@formatjs/intl-pluralrules@npm:^1.4.1":
   version: 1.5.9
   resolution: "@formatjs/intl-pluralrules@npm:1.5.9"
@@ -8979,17 +8970,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prismicio/client@npm:^6.6.2":
-  version: 6.9.0
-  resolution: "@prismicio/client@npm:6.9.0"
-  dependencies:
-    "@prismicio/helpers": "npm:^2.3.8"
-    "@prismicio/types": "npm:^0.2.7"
-  checksum: 090be11e166f9c7a882d77397b220e63b053835d1086eb4873c66bbb5b9d15baa89ab487838f69c3dd15189c2b8eba0ac56f3696a13d116640d4e86b91eea2af
-  languageName: node
-  linkType: hard
-
-"@prismicio/client@npm:^7.1.0, @prismicio/client@npm:^7.3.1":
+"@prismicio/client@npm:^7.1.0, @prismicio/client@npm:^7.21.0":
   version: 7.21.0
   resolution: "@prismicio/client@npm:7.21.0"
   dependencies:
@@ -9016,17 +8997,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prismicio/helpers@npm:^2.3.8":
-  version: 2.3.9
-  resolution: "@prismicio/helpers@npm:2.3.9"
-  dependencies:
-    "@prismicio/richtext": "npm:^2.1.4"
-    "@prismicio/types": "npm:^0.2.7"
-    imgix-url-builder: "npm:^0.0.3"
-  checksum: 111aba8dcb0b057dd07908d9d93b48dd40c3c82e2b80a25dfb31f4e61b62ffe65246e9c1e75e74712fb25c74262b07aa4fbf35e33baff7c6075df0babcdd14ef
-  languageName: node
-  linkType: hard
-
 "@prismicio/mocks@npm:2.14.0":
   version: 2.14.0
   resolution: "@prismicio/mocks@npm:2.14.0"
@@ -9045,51 +9015,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prismicio/next@npm:^1.5.0":
-  version: 1.7.2
-  resolution: "@prismicio/next@npm:1.7.2"
+"@prismicio/next@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "@prismicio/next@npm:2.0.2"
   dependencies:
-    "@formatjs/intl-localematcher": "npm:^0.5.2"
-    imgix-url-builder: "npm:^0.0.4"
-    negotiator: "npm:^0.6.3"
+    imgix-url-builder: "npm:^0.0.5"
   peerDependencies:
-    "@prismicio/client": ^6 || ^7
-    next: ^13.4.5 || ^14 || ^15.0.0-rc.0
-    react: ^18 || ^19.0.0-rc.0
-  checksum: 0acecb34771a0b6710567be535a12c07ff6a4c772ef43a8c15b9e1610a30fb15a2a895bee50915c1adb87805df54624aae6ed0604b2ff240b0512b9338bcccb0
+    "@prismicio/client": ^7
+    next: ^13.4.5 || ^14 || ^15 || ^16.0.0-beta.0
+    react: ^18 || ^19
+  checksum: 711337207bc9b90f6c8cd56e0eef7331550bfa7d0ff53b42710e71a3a2eaf8e335480aad05ec78412c7efb6aa03fffad1f955fca547691d012e9992c0a36600b
   languageName: node
   linkType: hard
 
-"@prismicio/react@npm:^2.4.3":
-  version: 2.7.3
-  resolution: "@prismicio/react@npm:2.7.3"
+"@prismicio/react@npm:^3.2.2":
+  version: 3.2.2
+  resolution: "@prismicio/react@npm:3.2.2"
   dependencies:
-    "@prismicio/richtext": "npm:^2.1.5"
+    esm-env: "npm:^1.2.2"
   peerDependencies:
-    "@prismicio/client": ^6 || ^7
-    react: ^18
-  checksum: f026de95ba087c52aa0ebf93d8553d75d2f82aa8eebe7d0b2c75f949a251cc5d1a9e899cb77a745f3d469ef743966e355e1fcd77f5d2947db9ae57e073555279
-  languageName: node
-  linkType: hard
-
-"@prismicio/react@npm:^2.8.0":
-  version: 2.9.2
-  resolution: "@prismicio/react@npm:2.9.2"
-  dependencies:
-    "@prismicio/richtext": "npm:^2.1.5"
-  peerDependencies:
-    "@prismicio/client": ^6 || ^7
-    react: ^18 || ^19.0.0-rc.0
-  checksum: 584d1f8dc11a5d90bad0b1d6276f28b7256e1966760b6b59adeea38620d921220ab19b15346821d7fdf21cc457393aa05382823b1b257d7cc01c7ca3fef35a14
-  languageName: node
-  linkType: hard
-
-"@prismicio/richtext@npm:^2.1.4, @prismicio/richtext@npm:^2.1.5":
-  version: 2.1.5
-  resolution: "@prismicio/richtext@npm:2.1.5"
-  dependencies:
-    "@prismicio/types": "npm:^0.2.7"
-  checksum: dd6559b85db5825f05267ebbae9a28a7d0354c72d4c2887336e24ed9e336c0aad9d03aedae56073398fd3c24d3c75ef5fd3a41f4b79f0b3af29363400c47e6ce
+    "@prismicio/client": ^7
+    react: ^18 || ^19
+  checksum: 9345272d736456662dd2a2b9d083d978259987061af8b0303ead37cb8c4d7b79d23436b8b72cfb506f962c0afcd2fef4bcbbb8b17f04835dfb9d3ef7996356b1
   languageName: node
   linkType: hard
 
@@ -9133,13 +9080,6 @@ __metadata:
     io-ts: ^2.2.16
     io-ts-types: ^0.5.16
   checksum: f4a67b43fac4df6ed840ff7d55dcf983ec00468663c735de48a73211a0ac6caac7493140a3393942459c6462f38f401e0e56808d31608cad89e7be60a50ae38d
-  languageName: node
-  linkType: hard
-
-"@prismicio/types@npm:^0.2.7":
-  version: 0.2.8
-  resolution: "@prismicio/types@npm:0.2.8"
-  checksum: dc1c734179ea339bf418f92195131467eb08f453d37cd13a16b2182bef55ab99aec2001338e1ddfc8bdb10a2428e002ddea697cd0de1ac35a3e6b34bd26715ea
   languageName: node
   linkType: hard
 
@@ -9765,13 +9705,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@slicemachine/adapter-next@npm:^0.3.36":
-  version: 0.3.88
-  resolution: "@slicemachine/adapter-next@npm:0.3.88"
+"@slicemachine/adapter-next@npm:^0.3.89":
+  version: 0.3.89
+  resolution: "@slicemachine/adapter-next@npm:0.3.89"
   dependencies:
     "@prismicio/simulator": "npm:^0.1.4"
     "@prismicio/types-internal": "npm:3.11.2"
-    "@slicemachine/plugin-kit": "npm:0.4.86"
+    "@slicemachine/plugin-kit": "npm:0.4.87"
     common-tags: "npm:^1.8.2"
     fp-ts: "npm:^2.13.1"
     io-ts: "npm:^2.2.20"
@@ -9783,13 +9723,13 @@ __metadata:
   peerDependencies:
     next: ^11 || ^12 || ^13 || ^14 || ^15 || ^16.0.0-beta.0
     react: ^17 || ^18 || ^19.0.0-rc.0
-  checksum: 62bb1259481c7cb28e4c3249b20f6b03b0ae19bf7f5c0474fa6312df7e1c1206bf56abfd9b909347bc91ab9747ee4cca2436a3dbb3a3ed4d05a8dd5450f4790b
+  checksum: 833b154aaf7f076abb0391c7435e013d822524d5f84581ce37341c1e12ff20f3442d07eb84687eda13a18067064a70ab32b176279040062e8659e93183ca7cf1
   languageName: node
   linkType: hard
 
-"@slicemachine/manager@npm:0.26.1":
-  version: 0.26.1
-  resolution: "@slicemachine/manager@npm:0.26.1"
+"@slicemachine/manager@npm:0.26.2":
+  version: 0.26.2
+  resolution: "@slicemachine/manager@npm:0.26.2"
   dependencies:
     "@antfu/ni": "npm:^0.20.0"
     "@anthropic-ai/claude-agent-sdk": "npm:0.1.37"
@@ -9798,7 +9738,7 @@ __metadata:
     "@prismicio/mocks": "npm:2.14.0"
     "@prismicio/types-internal": "npm:3.11.2"
     "@segment/analytics-node": "npm:^2.1.2"
-    "@slicemachine/plugin-kit": "npm:0.4.86"
+    "@slicemachine/plugin-kit": "npm:0.4.87"
     cookie: "npm:^1.0.1"
     cors: "npm:^2.8.5"
     execa: "npm:^7.1.1"
@@ -9823,13 +9763,13 @@ __metadata:
   peerDependenciesMeta:
     msw:
       optional: true
-  checksum: f059b63d1c57996bc04ab782408bf52f3802fbdcc23591517d4f60327f84e1e3aee621aedb5a48ce0aed72b8b322055757c06a26a8f79b1b05cd61f6a1c6c2a8
+  checksum: 84961d55f7d12d48e560a34aba066a69fe47cec17ac173d20a02b466fbcd850ca2cdd4145ddeaf06d09246a0d2fd0af48836b31b5985e2a0edced2fd7e048a70
   languageName: node
   linkType: hard
 
-"@slicemachine/plugin-kit@npm:0.4.86":
-  version: 0.4.86
-  resolution: "@slicemachine/plugin-kit@npm:0.4.86"
+"@slicemachine/plugin-kit@npm:0.4.87":
+  version: 0.4.87
+  resolution: "@slicemachine/plugin-kit@npm:0.4.87"
   dependencies:
     "@prismicio/client": "npm:7.17.0"
     common-tags: "npm:^1.8.2"
@@ -9842,7 +9782,7 @@ __metadata:
     p-limit: "npm:^4.0.0"
     prettier: "npm:^3.0.3"
     prismic-ts-codegen: "npm:0.1.27"
-  checksum: e601b200cb509158ba7ed3c00ac7f40e273d47e6e93a2b33f56d9807216f5795ff9648e35c4e1124a30d02e9abb9cc5ce2bb6a4ff88e16553fc61b419c6e338f
+  checksum: 6dac774fe58d69dcb504fcff9086875ec8e3201fcbfcd365bb01784ace93dfd0633072c4f8029493a00be0a3209157a94dc455718904e072ade3236d3f3d303e
   languageName: node
   linkType: hard
 
@@ -11599,8 +11539,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/site-landing@workspace:apps/site-landing"
   dependencies:
-    "@prismicio/client": "npm:^6.6.2"
-    "@prismicio/react": "npm:^2.4.3"
     "@thecointech/setenv": "npm:^0.5.0"
     "@thecointech/shared": "npm:^0.5.0"
     "@thecointech/site-base": "npm:^0.5.0"
@@ -11646,20 +11584,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/site-prismic@workspace:libs/site-prismic"
   dependencies:
-    "@prismicio/client": "npm:^7.3.1"
-    "@prismicio/next": "npm:^1.5.0"
-    "@prismicio/react": "npm:^2.8.0"
-    "@slicemachine/adapter-next": "npm:^0.3.36"
+    "@prismicio/client": "npm:^7.21.0"
+    "@prismicio/next": "npm:^2.0.2"
+    "@prismicio/react": "npm:^3.2.2"
+    "@slicemachine/adapter-next": "npm:^0.3.89"
     "@thecointech/site-semantic-theme": "npm:^0.5.0"
-    "@types/node": "npm:22.13.10"
-    "@types/react": "npm:19.2.7"
-    "@types/react-dom": "npm:19.2.3"
     next: "npm:^14.2.0"
-    react: "npm:19.2.0"
-    react-dom: "npm:19.2.0"
     semantic-ui-react: "npm:3.0.0-beta.2"
-    slice-machine-ui: "npm:^2.2.0"
-    typescript: "npm:^5.3.3"
+    slice-machine-ui: "npm:^2.20.2"
   languageName: unknown
   linkType: soft
 
@@ -21992,6 +21924,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"esm-env@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "esm-env@npm:1.2.2"
+  checksum: 3d25c973f2fd69c25ffff29c964399cea573fe10795ecc1d26f6f957ce0483d3254e1cceddb34bf3296a0d7b0f1d53a28992f064ba509dfe6366751e752c4166
+  languageName: node
+  linkType: hard
+
 "esm@npm:^3.2.25":
   version: 3.2.25
   resolution: "esm@npm:3.2.25"
@@ -26611,20 +26550,6 @@ __metadata:
     p-pipe: "npm:^3.0.0"
     replace-ext: "npm:^1.0.0"
   checksum: 13e5de25fe1275d05a948b745b5cc8ca472f69bec895baf32e96e61bbd9c98a065f14a5de8f178ce426e2466780360dbddc9f6024664f3afa551d6390733c40e
-  languageName: node
-  linkType: hard
-
-"imgix-url-builder@npm:^0.0.3":
-  version: 0.0.3
-  resolution: "imgix-url-builder@npm:0.0.3"
-  checksum: 558395bb98f3a1c6340eb7cb3571d75624fe3d06ab687f92d461c59bbb7acdc16f1fa33d43c872e281a395d6b01404550e61465bb2a6a56a6f78b10bea7400a0
-  languageName: node
-  linkType: hard
-
-"imgix-url-builder@npm:^0.0.4":
-  version: 0.0.4
-  resolution: "imgix-url-builder@npm:0.0.4"
-  checksum: 0245fc466c2a7bf88fb0eb865b462e436948ad76c7ec83c7a2a4935f162d2a913544d6393017d5751e61b8b463865cd265735966f425d6090c996b86c05f9722
   languageName: node
   linkType: hard
 
@@ -40014,15 +39939,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"slice-machine-ui@npm:^2.2.0":
-  version: 2.20.1
-  resolution: "slice-machine-ui@npm:2.20.1"
+"slice-machine-ui@npm:^2.20.2":
+  version: 2.20.2
+  resolution: "slice-machine-ui@npm:2.20.2"
   dependencies:
-    "@slicemachine/manager": "npm:0.26.1"
-    start-slicemachine: "npm:0.12.66"
+    "@slicemachine/manager": "npm:0.26.2"
+    start-slicemachine: "npm:0.12.67"
   bin:
     start-slicemachine: ./bin/start-slicemachine.cjs
-  checksum: 49a4eaf6f6f726e5122f7447c1807f37c7cf406f8c69abe1741ed7eef7f93b26a4638974159d29e2575317ec68392a4e3c1b567678801ff312e8a8120f06e151
+  checksum: c23194903e6b3097ebec18c47b7bfb81a616b8781438ed19d8df39a21813476b6d79451743bad014897886abb4ee5203dbf351e3e27092b97cdf318ca4ce3058
   languageName: node
   linkType: hard
 
@@ -40538,13 +40463,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"start-slicemachine@npm:0.12.66":
-  version: 0.12.66
-  resolution: "start-slicemachine@npm:0.12.66"
+"start-slicemachine@npm:0.12.67":
+  version: 0.12.67
+  resolution: "start-slicemachine@npm:0.12.67"
   dependencies:
     "@prismicio/mocks": "npm:2.14.0"
     "@prismicio/types-internal": "npm:3.11.2"
-    "@slicemachine/manager": "npm:0.26.1"
+    "@slicemachine/manager": "npm:0.26.2"
     body-parser: "npm:^1.20.3"
     chalk: "npm:^4.1.2"
     cors: "npm:^2.8.5"
@@ -40561,7 +40486,7 @@ __metadata:
     serve-static: "npm:^1.15.0"
   bin:
     start-slicemachine: ./bin/start-slicemachine.js
-  checksum: 660e63b312283301af519ae3f53e31ba58f242bc5fe74003b110649a1c72619727493f44263ffd23edb429c7925da65fec77b9e814634690710f0c808b2b7782
+  checksum: b39bfa7964f26a3ffbbfd0bde6a6a2cfc61a4558a2c6a0b2d87a413615b0dcc30ec400ff23acdd9c4b07a3034ce8abc00845a2ecd65b4101412bcfe5baab82ae
   languageName: node
   linkType: hard
 
@@ -42631,17 +42556,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2, tslib@npm:2.8.1, tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.3.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0, tslib@npm:^2.4.1, tslib@npm:^2.5.0, tslib@npm:^2.5.2, tslib@npm:^2.6.2, tslib@npm:^2.7.0":
-  version: 2.8.1
-  resolution: "tslib@npm:2.8.1"
-  checksum: 9c4759110a19c53f992d9aae23aac5ced636e99887b51b9e61def52611732872ff7668757d4e4c61f19691e36f4da981cd9485e869b4a7408d689f6bf1f14e62
-  languageName: node
-  linkType: hard
-
 "tslib@npm:2.7.0":
   version: 2.7.0
   resolution: "tslib@npm:2.7.0"
   checksum: 469e1d5bf1af585742128827000711efa61010b699cb040ab1800bcd3ccdd37f63ec30642c9e07c4439c1db6e46345582614275daca3e0f4abae29b0083f04a6
+  languageName: node
+  linkType: hard
+
+"tslib@npm:2.8.1, tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.3.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0, tslib@npm:^2.4.1, tslib@npm:^2.5.0, tslib@npm:^2.5.2, tslib@npm:^2.6.2, tslib@npm:^2.7.0":
+  version: 2.8.1
+  resolution: "tslib@npm:2.8.1"
+  checksum: 9c4759110a19c53f992d9aae23aac5ced636e99887b51b9e61def52611732872ff7668757d4e4c61f19691e36f4da981cd9485e869b4a7408d689f6bf1f14e62
   languageName: node
   linkType: hard
 
