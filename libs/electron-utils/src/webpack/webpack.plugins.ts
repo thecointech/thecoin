@@ -1,6 +1,6 @@
 import webpack from 'webpack';
 // import type IForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import { configFile } from './webpack.common.js';
+import { configFile } from './webpack.common.ts';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';

@@ -6,7 +6,6 @@ import { PluginAndPermissionsStructOutput } from '../src/codegen/contracts/TheCo
 import { StateMutability, TypedContractMethod } from '../src/codegen/common';
 import { genReceipt } from '@thecointech/contract-tools/mockContractUtils';
 import { defineContractBaseSingleton } from '@thecointech/contract-base/singleton';
-import { augmentContract } from '../src/augmentContract';
 export * from '../src/constants';
 
 let lastTx = undefined as undefined| {
@@ -129,11 +128,9 @@ class TheCoinImp implements MockedCoin {
   }
 }
 
-export const _core = defineContractBaseSingleton<Src.TheCoin>(
+export const ContractCore = defineContractBaseSingleton<Src.TheCoin>(
   "__theCoin",
   async () => new TheCoinImp() as unknown as Src.TheCoin
 )
-
-export const ContractCore = augmentContract(_core);
 
 export const InitialCoinBlock = 0;

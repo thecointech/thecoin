@@ -13,10 +13,10 @@ module.exports = {
       // Leaving it this way because tests are way faster,
       // but if this proves an issue with DX, remove
       // transformer and all instances of "@/*"
-      getTool('transfomer.js'),
+      getTool('transformer.js'),
       {
         useESM: true,
-        tsconfig: "/home/staylor/src/thecoin/libs/store/tsconfig.tests.json",
+        tsconfig: "tsconfig.tests.json",
         astTransformers: {
           before: [
             {

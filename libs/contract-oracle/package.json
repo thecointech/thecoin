@@ -50,7 +50,7 @@
   "exports": {
     "./testHelpers.ts": "./internal/testHelpers.ts",
     ".": {
-      "development": "./build/index_mocked.js",
+      "development": "./mocks/oracle_mocked.ts",
       "electron": "./build/index.js",
       "default": "./build/index.js"
     }

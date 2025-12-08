@@ -3,7 +3,7 @@ import path from 'path';
 import webpack from 'webpack';
 import { AbsolutePathRemapper } from '@thecointech/storybook-abs-paths';
 import { merge } from "webpack-merge";
-import { getEnvVars, projectRoot as getProjectRoot } from '@thecointech/setenv';
+import { getEnvVars } from '@thecointech/setenv';
 import { getMocks } from '@thecointech/setenv/webpack';
 import { DynamicAliasPlugin } from '@thecointech/setenv/webpack';
 

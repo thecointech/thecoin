@@ -5,15 +5,9 @@
 // declare global - different imports (when tests can import a
 // packages build & src directories) create conflicting types.
 
-// NOTE: There is currently no facility to reset the
-// singleton (eg, for tests).  This will be addressed later.
-
 // Define the shape of the basic singleton manager
 export type SingletonManager<T, Args extends any[]> = {
   get: (...args: Args) => T;
-  // NOTE: It is only possible to set
-  // the default (no-args) singleton
-  set: (v: T) => void;
   reset: () => void;
 };
 
@@ -26,10 +20,10 @@ export function defineSingleton<T, Args extends any[] = []>(
     [key: string]: T|undefined;
   }
   const keys = new Set<string>();
-  const getKey = (...args: Args) => 
-    args.length > 0 
-      ? name + JSON.stringify(args) 
-      : name;
+  const getKey = (...args: Args) =>
+    "__singleton__" + name + (args.length > 0
+      ? JSON.stringify(args)
+      : "");
 
   return {
     get: (...args: Args) : T => {
@@ -39,13 +33,6 @@ export function defineSingleton<T, Args extends any[] = []>(
       }
       keys.add(key);
       return gt[key]!;
-    },
-    set: (v: T) => {
-      if (gt[name]) {
-        throw new Error(`Singleton ${name} already set`);
-      }
-      keys.add(name);
-      gt[name] = v;
     },
     reset: () => {
       for (const key of keys) {

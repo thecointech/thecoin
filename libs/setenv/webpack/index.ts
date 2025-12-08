@@ -1,2 +1,2 @@
-export * from "./mocks";
-export * from "./resolver";
+export * from "./mocks.ts";
+export * from "./resolver.ts";
