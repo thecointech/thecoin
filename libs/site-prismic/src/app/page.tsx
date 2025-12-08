@@ -1,25 +1,70 @@
+// ./src/app/page.tsx
+
+import { Metadata } from "next";
+
+import { SliceZone } from "@prismicio/react";
+import * as prismic from "@prismicio/client";
+
 import { createClient } from "@/prismicio";
+import { components } from "@/slices";
+import { PostCard } from "@/components/PostCard";
+import { Navigation } from "@/components/Navigation";
 
-export default async function Home() {
-    // Initialize client (will be used for slice previews)
-    createClient();
+/**
+ * This component renders your homepage.
+ *
+ * Use Next's generateMetadata function to render page metadata.
+ *
+ * Use the SliceZone to render the content of the page.
+ */
 
-    // This is a placeholder page - Slice Machine previews will be the main use
-    return (
-        <main style={{ padding: "2rem", fontFamily: "system-ui" }}>
-            <h1>TheCoin Prismic Content Library</h1>
-            <p>
-                This library provides Slice Machine support for visual content editing.
-            </p>
-            <p>
-                Run <code>yarn slicemachine</code> to launch the Slice Machine UI.
-            </p>
-            <h2>Available Commands</h2>
-            <ul>
-                <li><code>yarn dev</code> - Start Next.js dev server (for slice previews)</li>
-                <li><code>yarn slicemachine</code> - Launch Slice Machine UI</li>
-                <li><code>yarn build</code> - Build for production</li>
-            </ul>
-        </main>
-    );
+export async function generateMetadata(): Promise<Metadata> {
+  const client = createClient();
+  const home = await client.getByUID("page", "home");
+
+  return {
+    title: prismic.asText(home.data.title),
+    description: home.data.meta_description,
+    openGraph: {
+      title: home.data.meta_title || undefined,
+      images: [
+        {
+          url: home.data.meta_image.url || "",
+        },
+      ],
+    },
+  };
+}
+
+export default async function Index() {
+  // The client queries content from the Prismic API
+  const client = createClient();
+
+  // Fetch the content of the home page from Prismic
+  const home = await client.getByUID("page", "home");
+
+  // Get all of the blog_post documents created on Prismic ordered by publication date
+  const posts = await client.getAllByType("blog_post", {
+    orderings: [
+      { field: "my.blog_post.publication_date", direction: "desc" },
+      { field: "document.first_publication_date", direction: "desc" },
+    ],
+  });
+
+  return (
+    <>
+      <Navigation client={client} />
+
+      <SliceZone slices={home.data.slices} components={components} />
+
+      {/* Map over each of the blog posts created and display a `PostCard` for it */}
+      <section className="grid grid-cols-1 gap-8 max-w-3xl w-full">
+        {posts.map((post) => (
+          <PostCard key={post.id} post={post} />
+        ))}
+      </section>
+
+      <Navigation client={client} />
+    </>
+  );
 }

@@ -1,7 +1,9 @@
 {
-    "libraries": [
-        "./src/slices"
-    ],
-    "adapter": "@slicemachine/adapter-next",
-    "repositoryName": "tutorial-test-blog"
+  "libraries": [
+    "./src/slices"
+  ],
+  "adapter": "@slicemachine/adapter-next",
+  "repositoryName": "thecointech",
+  "localSliceSimulatorURL": "http://localhost:3000/slice-simulator",
+  "apiEndpoint": ""
 }

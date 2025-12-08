@@ -1,32 +1,15 @@
-import React from "react";
-import { Content } from "@prismicio/client";
-import { PrismicRichText, SliceComponentProps } from "@prismicio/react";
-import { Container, Segment } from "semantic-ui-react";
+// ./src/slices/RichText/index.tsx
 
-/**
- * Props for `RichText`.
- */
-export type RichTextProps = SliceComponentProps<Content.RichTextSlice>;
+import type { Content } from "@prismicio/client";
+import { SliceComponentProps } from "@prismicio/react";
+import { RichText } from "@/components/RichText";
 
-/**
- * Component for "RichText" Slices.
- * 
- * This component renders rich text content using semantic-ui-react
- * for consistent styling with the main site-landing application.
- */
-const RichText = ({ slice }: RichTextProps): React.JSX.Element => {
-    return (
-        <Segment
-            as="section"
-            basic
-            data-slice-type={slice.slice_type}
-            data-slice-variation={slice.variation}
-        >
-            <Container text>
-                <PrismicRichText field={slice.primary.content} />
-            </Container>
-        </Segment>
-    );
-};
+type RichTextProps = SliceComponentProps<Content.RichTextSlice>;
 
-export default RichText;
+export default function RichTextSlice({ slice }: RichTextProps) {
+  return (
+    <section className="flex flex-col gap-2">
+      <RichText field={slice.primary.content} />
+    </section>
+  );
+}
