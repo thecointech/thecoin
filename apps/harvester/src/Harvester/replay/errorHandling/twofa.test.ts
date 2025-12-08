@@ -1,7 +1,7 @@
 
 import { getReplayEvents } from "@thecointech/scraper-agent/replay/events";
-import { findNextEventAfterTwoFA } from "./replayErrorCallback";
-import { getEvents } from "../events";
+import { findNextEventAfterTwoFA } from "./twofa";
+import { getEvents } from "../../events";
 import type { NavigationEvent } from "@thecointech/scraper-types";
 
 it('Finds the correct TwoFA continue event for chequing balance', async () => {
