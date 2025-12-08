@@ -93,6 +93,7 @@
       "env": {
         "NODE_ENV": "development",
         "CONFIG_NAME": "prodbeta",
+        "ELECTRON_DISABLE_SANDBOX": "true",
         "HARVESTER_DEBUG_LIVE": "true",
         "HARVESTER_ENABLE_CONFIG_EXPORT": "true",
         "HARVESTER_ALLOW_OVERRIDES": "true",

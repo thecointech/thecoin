@@ -41,9 +41,7 @@ export async function replayErrorCallback({replay, err, event}: ReplayErrorParam
           throw new Error("Attempted to enter 2FA, but failed to enter AccountsSummary");
         }
         log.info("Page is in AccountsSummary section");
-        const lastLoginEvent = findLastLoginEvent(events, root);
-        // We want to continue from the next event, so go to login + 1
-        return lastLoginEvent + 1;
+        return findNextEventAfterTwoFA(events, root);
       }
       catch (e) {
         log.error(e, "Failed to enter 2FA");
@@ -202,6 +200,15 @@ async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection) {
     }
   }
   log.info("Finished processing 2FA events");
+}
+
+// Find the index of the event to continue on after completing 2FA.
+// The `events` array does not include 2FA, but we know it always
+// comes after a login, so we continue with login + 1.
+export function findNextEventAfterTwoFA(events: AnyEvent[], root: EventSection) {
+  const lastLoginEvent = findLastLoginEvent(events, root);
+  // We want to continue from the next event, so go to login + 1
+  return lastLoginEvent + 1;
 }
 
 export function findLastLoginEvent(events: AnyEvent[], root: EventSection) {
