@@ -13,12 +13,12 @@ type QuestionResponseProps = {
 export const QuestionResponse = ({ mountNode }: QuestionResponseProps) => {
 
   const [questions, setQuestions] = useState<AnyQuestionPacket[]>([])
-  const [answer, setAnswer] = useState<string|NamedResponse>('')
+  const [answer, setAnswer] = useState<string|NamedResponse>()
 
   useEffect(() => {
     const release = window.scraper.onAskQuestion((question: AnyQuestionPacket) => {
       setQuestions(questions => [...questions, question]);
-      setAnswer('');
+      setAnswer(undefined);
     })
     return release;
   }, []);
@@ -50,22 +50,22 @@ export const QuestionResponse = ({ mountNode }: QuestionResponseProps) => {
 
 type QuestionContentProps = {
   question: AnyQuestionPacket;
-  answer: string|NamedResponse;
+  answer: string|NamedResponse|undefined;
   setAnswer: (answer: string|NamedResponse) => void;
   onReply: (answer: string|NamedResponse|boolean) => void;
 }
 const QuestionContent = ({ question, answer, setAnswer, onReply }: QuestionContentProps) => {
   if ("options" in question) {
-    return <QuestionOptions question={question} answer={answer as string} setAnswer={setAnswer} onReply={onReply} />
+    return <QuestionOptions question={question} answer={answer as string|undefined} setAnswer={setAnswer} onReply={onReply} />
   }
   else if ("options2d" in question) {
-    return <QuestionOptions2D question={question} answer={answer as NamedResponse} setAnswer={setAnswer} onReply={onReply} />
+    return <QuestionOptions2D question={question} answer={answer as NamedResponse|undefined} setAnswer={setAnswer} onReply={onReply} />
   }
   else if ("confirm" in question) {
     return <QuestionConfirm question={question} onReply={onReply} />
   }
   else {
-    return <QuestionInput question={question} answer={answer as string} setAnswer={setAnswer} onReply={onReply} />
+    return <QuestionInput question={question} answer={answer as string|undefined} setAnswer={setAnswer} onReply={onReply} />
   }
 }
 
@@ -77,7 +77,7 @@ type QuestionAnswerableProps = QuestionBaseProps & {
 }
 type QuestionOptionsProps = QuestionAnswerableProps & {
   question: OptionPacket;
-  answer: string;
+  answer: string|undefined;
 }
 const QuestionOptions = ({ question, answer, onReply, setAnswer }: QuestionOptionsProps) => (
   <>
@@ -95,7 +95,7 @@ const QuestionOptions = ({ question, answer, onReply, setAnswer }: QuestionOptio
 
 type QuestionOptions2DProps = QuestionAnswerableProps & {
   question: Option2DPacket;
-  answer: NamedResponse;
+  answer: NamedResponse|undefined;
 }
 const QuestionOptions2D = ({ question, answer, setAnswer, onReply }: QuestionOptions2DProps) => (
   <div className={styles.options2d}>
@@ -140,7 +140,7 @@ const QuestionConfirm = ({ question, onReply }: QuestionConfirmProps) => {
 
 type QuestionInputProps = QuestionAnswerableProps & {
   question: QuestionPacket;
-  answer: string;
+  answer: string|undefined;
 }
 const QuestionInput = ({ question, answer, setAnswer, onReply }: QuestionInputProps) => (
   <>
@@ -151,11 +151,11 @@ const QuestionInput = ({ question, answer, setAnswer, onReply }: QuestionInputPr
 )
 
 
-const SubmitRow = ({ answer, onReply }: { answer: string|NamedResponse, onReply: (answer: string|NamedResponse|boolean) => void }) =>
+const SubmitRow = ({ answer, onReply }: { answer: string|NamedResponse|undefined, onReply: (answer: string|NamedResponse|boolean) => void }) =>
   <div className={styles.submitRow}>
     <SubmitButton answer={answer} onReply={onReply} />
   </div>
 
-const SubmitButton = ({ answer, onReply }: { answer: string|NamedResponse, onReply: (answer: string|NamedResponse|boolean) => void }) => (
-  <Button primary disabled={!answer} onClick={() => onReply(answer)} content='Submit' />
+const SubmitButton = ({ answer, onReply }: { answer: string|NamedResponse|undefined, onReply: (answer: string|NamedResponse|boolean) => void }) => (
+  <Button primary disabled={!answer} onClick={() => onReply(answer!)} content='Submit' />
 )

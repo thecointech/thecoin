@@ -30,10 +30,12 @@ export type ScraperBridgeApi = {
   // Validate an action
   validateAction(actionName: ActionType, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,
 
+  // Refresh the profile, deletes existing and copies
+  // users system profile (if present).
+  profileRefresh: () => Promise<Result<boolean>>,
   // Reset 2FA without doing a full banking setup
   // Useful if your chequing acc loses it's 2FA token
   // but you don't want to send unnecessary etransfers
-  profileRefresh: () => Promise<Result<boolean>>,
   twofaRefresh: (actionName: RendererBankType) => Promise<Result<boolean>>,
 
   onAskQuestion: (callback: (question: QuestionPacket|OptionPacket) => void) => () => void;
