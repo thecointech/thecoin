@@ -16,7 +16,7 @@ export const scraperMock = {
     },
     replyQuestion: (question: any) => {
         console.log("replyQuestion", question)
-        return { value: true }
+        return Promise.resolve({ value: true });
     },
 
     // 3. This is the new, exposed function used to TRIGGER the event

@@ -109,7 +109,7 @@ const QuestionOptions2D = ({ question, answer, setAnswer, onReply }: QuestionOpt
               <span key={idx} className={styles.cell}>
                 <Button
                   size="small" compact toggle
-                  active={((answer as any)?.name === row.name && (answer as any)?.option === col)}
+                  active={answer?.name === row.name && answer?.option === col}
                   onClick={() => setAnswer({ name: row.name, option: col })}>{col}</Button>
               </span>
             ))

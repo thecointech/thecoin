@@ -36,7 +36,7 @@ export const OptionsSelect: Story = {
   args: {
     question: {
       questionId: 'test',
-      question: 'Select an Options',
+      question: 'Select an Option',
       options: ['Option 1', 'Option 2'],
     }
   },
@@ -46,7 +46,7 @@ export const Options2DSelect: Story = {
   args: {
     question: {
       questionId: 'test',
-      question: 'Select an Options',
+      question: 'Select an Option',
       options2d: [
         { name: 'Option 1', options: ['Option 1', 'Option 2'] },
         { name: 'Option 2', options: ['Option 1', 'Option 2'] },
