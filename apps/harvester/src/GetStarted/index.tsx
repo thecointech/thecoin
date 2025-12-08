@@ -2,7 +2,6 @@ import { Header, Message } from 'semantic-ui-react'
 import { useEffect, useState } from 'react';
 import { getErrors, useBackgroundTask } from '@/BackgroundTask';
 import { BackgroundTaskErrors, BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
-import { QuestionResponse } from '@/Agent/QuestionResponse';
 import { isRunning } from '@/BackgroundTask';
 import { ContentSection } from '@/ContentSection';
 import { ActionButton } from '@/ContentSection/Action';
@@ -43,8 +42,6 @@ export const Browser = () => {
         content="Download"
       />
       <OnCompleteMessage complete={hasInstalled} />
-      {/* Allow user to confirm closing any running chrome instances */}
-      <QuestionResponse backgroundTaskId="initialize" />
       <BackgroundTaskProgressBar type="initialize" />
       <BackgroundTaskErrors type="initialize" />
 

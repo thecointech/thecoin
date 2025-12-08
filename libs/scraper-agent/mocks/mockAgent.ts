@@ -34,7 +34,7 @@ export class Agent implements AgentClass {
       });
     }
     // mock getting 2fa code
-    const code = await this.input.forValue("Get 2FA Code");
+    await mockGetting2faCode(this.input);
     const post2faStages = sectionsToProcess.slice(pre2faStages.length);
     for (const stage of post2faStages) {
       await sleep(1000);
@@ -133,3 +133,21 @@ export class Agent implements AgentClass {
     }
   }
 }
+
+// Allow overriding to force select or not
+// (this is to compensate for not getting
+// around to setting up Storybook here)
+let overrideSelect: boolean | undefined = undefined;
+async function mockGetting2faCode(input: IAskUser) {
+  // 1 out of 3 times, pretend we have to select a destinations
+  let doSelect = (overrideSelect ?? Math.random() < 1/3);
+  if (doSelect) {
+    await input.selectOption("Select where to send your 2FA code", [
+      { name: "Phone", options: ["(123) 456-7890", "(098) 765-4321"] },
+      { name: "Email", options: ["mocked_user@example.com", "mocked_user2@example.com"] },
+    ]);
+  }
+  const code = await input.forValue("Enter your 2FA Code");
+  return code;
+}
+

@@ -8,6 +8,7 @@ import { ElectronSigner } from '@thecointech/electron-signer';
 import { AccountInitializer } from '../account/AccountInitializer';
 import { AppMenu } from './AppMenu';
 import styles from './index.module.less'
+import { QuestionResponse } from '@/QuestionResponse/QuestionResponse';
 
 
 export const App = () => {
@@ -47,6 +48,7 @@ export const App = () => {
         <Outlet />
       </div>
       {activeAddress && <AccountInitializer address={activeAddress} />}
+      <QuestionResponse />
     </div>
   )
 }

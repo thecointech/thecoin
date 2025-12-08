@@ -2,8 +2,8 @@ import type { IReplayCallbacks, ReplayErrorParams, ScraperProgress } from "@thec
 import { type CallbackOptions, TaskSessionBase } from "../taskSessionBase";
 import type { EventSection } from "@thecointech/scraper-agent/types";
 import { log } from "@thecointech/logging";
-import { replayErrorCallback } from "./replayErrorCallback";
 import { getErrorMessage } from "@/BackgroundTask";
+import { replayErrorHandling } from "./errorHandling";
 
 
 export class HarvesterReplayCallbacks extends TaskSessionBase implements IReplayCallbacks {
@@ -53,7 +53,7 @@ export class HarvesterReplayCallbacks extends TaskSessionBase implements IReplay
       return undefined;
     }
 
-    const handled = await replayErrorCallback(params, this.events);
+    const handled = await replayErrorHandling(params, this.events);
     if (handled === undefined) {
       // We failed to handle the error
       if (this.currentSubTask) {
