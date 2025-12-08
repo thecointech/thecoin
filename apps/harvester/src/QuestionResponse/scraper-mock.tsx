@@ -1,5 +1,5 @@
-// src/mocks/scraper-mock.ts
 import React from 'react';
+import type { StoryContext } from '@storybook/react';
 
 // A simple map to hold all registered callbacks
 const callbacks: Set<Function> = new Set();
@@ -32,7 +32,6 @@ if (typeof window !== 'undefined') {
     window.scraper = scraperMock;
 }
 
-import type { StoryContext } from '@storybook/react';
 export const triggerAskQuestion = scraperMock.triggerAskQuestion;
 
 export const withAskQuestion = (StoryFn: React.ElementType, context: StoryContext) => {

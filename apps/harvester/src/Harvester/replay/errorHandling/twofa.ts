@@ -105,7 +105,7 @@ export function findLastLoginEvent(events: AnyEvent[], root: EventSection) {
     throw new Error("Failed to find Login section");
   }
   const loginEvents = flatten(loginSection, ["Login"]);
-  const lastEvent = loginEvents.toReversed().find(e => !isSection(e)) as AnyEvent;
+  const lastEvent = [...loginEvents].reverse().find(e => !isSection(e)) as AnyEvent;
   if (!lastEvent) {
     throw new Error("Failed to find last Login event");
   }

@@ -222,10 +222,7 @@ export async function enterValueIntoFound(page: Page, found: SearchElement, valu
     if (found.data.inputType == "checkbox") {
       // We assume value == true, but just in case some future
       // scenario requires unchecking, guess the results.
-      const nodeChecked = Boolean(
-        value === undefined || // If we have no value, assume on.
-        (value != "off" && value != "false") // check against some possible falsy values
-      );
+      const nodeChecked = value !== "off" && value !== "false";
       await page.evaluate((el, rendererChecked) => (el as HTMLInputElement).checked = rendererChecked, found.element, nodeChecked);
     }
     else {

@@ -6,10 +6,10 @@ import "semantic-ui-css/semantic.min.css"
 
 
 const QuestionResponseWithSize = () => {
-  const ourRoot = useRef<HTMLDivElement>(null);
+  const [mountNode, setMountNode] = React.useState<HTMLDivElement | null>(null);
   return (
-    <div ref={ourRoot} style={{ width: '400px', height: '600px' }}>
-      <QuestionResponse mountNode={ourRoot.current} />
+    <div ref={setMountNode} style={{ width: '400px', height: '600px' }}>
+      <QuestionResponse mountNode={mountNode} />
     </div>
   )
 }

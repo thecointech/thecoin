@@ -198,7 +198,7 @@ export function initMainIPC() {
     return api.validateAction(actionName, inputValues);
   });
 
-  ipcMain.handle(actions.profileRefresh, (_event, actionName) => api.profileRefresh(actionName));
+  ipcMain.handle(actions.profileRefresh, (_event) => api.profileRefresh());
   ipcMain.handle(actions.twofaRefresh, (_event, actionName) => api.twofaRefresh(actionName));
 
   ipcMain.handle(actions.replyQuestion, (_event, response) => api.replyQuestion(response));

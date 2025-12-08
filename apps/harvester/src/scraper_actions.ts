@@ -33,7 +33,7 @@ export type ScraperBridgeApi = {
   // Reset 2FA without doing a full banking setup
   // Useful if your chequing acc loses it's 2FA token
   // but you don't want to send unnecessary etransfers
-  profileRefresh: (actionName: RendererBankType) => Promise<Result<boolean>>,
+  profileRefresh: () => Promise<Result<boolean>>,
   twofaRefresh: (actionName: RendererBankType) => Promise<Result<boolean>>,
 
   onAskQuestion: (callback: (question: QuestionPacket|OptionPacket) => void) => () => void;

@@ -8,7 +8,7 @@ it('Finds the correct TwoFA continue event for chequing balance', async () => {
   const chequingRoot = await getEvents("chqBalance");
   const balanceEvents = getReplayEvents(chequingRoot, "chqBalance");
   const balanceIdx = findNextEventAfterTwoFA(balanceEvents, chequingRoot);
-  expect(balanceIdx).toBeTruthy();
+  expect(balanceIdx).toBeGreaterThan(0);
   const event = balanceEvents[balanceIdx] as NavigationEvent;
   expect(event.type).toBe("navigation");
   expect(event.to).toContain("AccountsSummary");
@@ -18,7 +18,7 @@ it('Finds the correct TwoFA continue event for eTransfer', async () => {
   const chequingRoot = await getEvents("chqBalance");
   const sendEvents = getReplayEvents(chequingRoot, "chqETransfer");
   const sendIdx = findNextEventAfterTwoFA(sendEvents, chequingRoot);
-  expect(sendIdx).toBeTruthy();
+  expect(sendIdx).toBeGreaterThan(0);
   const event = sendEvents[sendIdx] as NavigationEvent;
   expect(event.type).toBe("navigation");
   expect(event.to).toContain("SendETransfer");
@@ -28,8 +28,8 @@ it('Finds the correct TwoFA continue event for credit balance', async () => {
   const creditRoot = await getEvents("visaBalance");
   const creditEvents = getReplayEvents(creditRoot, "visaBalance");
   const creditIdx = findNextEventAfterTwoFA(creditEvents, creditRoot);
-  expect(creditIdx).toBeTruthy();
+  expect(creditIdx).toBeGreaterThan(0);
   const event = creditEvents[creditIdx] as NavigationEvent;
   expect(event.type).toBe("navigation");
   expect(event.to).toContain("CreditAccountDetails");
-})
+});

@@ -23,7 +23,7 @@ export const QuestionResponse = ({ mountNode }: QuestionResponseProps) => {
     return release;
   }, []);
 
-  if (questions.length == 0) return null;
+  if (questions.length === 0) return null;
   const question = questions[0];
 
   const onReply = async (answer: string|NamedResponse|boolean) => {
@@ -33,7 +33,7 @@ export const QuestionResponse = ({ mountNode }: QuestionResponseProps) => {
     });
     if (r.error) alert(r.error);
     if (r.value) {
-      setQuestions(questions => questions.filter(q => q.questionId != question.questionId));
+      setQuestions(questions => questions.filter(q => q.questionId !== question.questionId));
     }
   }
 
