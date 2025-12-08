@@ -1,7 +1,6 @@
 import { LoginDetails } from "./LoginDetails"
 import { BankConnectReducer } from "./state/reducer"
 import { RendererBankType } from "./state/types";
-import { QuestionResponse } from "./QuestionResponse";
 import { useEffect, useState } from "react";
 import { useBackgroundTask } from '@/BackgroundTask';
 import { BackgroundTaskErrors, BackgroundTaskProgressBar } from "@/BackgroundTask/BackgroundTaskProgressBar";
@@ -73,7 +72,6 @@ const Login = ({ type, both }: Props) => {
         )
       }
       <LoginDetails {...bank} type={type} both={both} disabled={missingDetails}/>
-      <QuestionResponse backgroundTaskId="record" />
       <BackgroundTaskProgressBar type="record" />
       <BackgroundTaskErrors type='record' />
       <LoginResults forceValid={forceValid} bank={bank} />
