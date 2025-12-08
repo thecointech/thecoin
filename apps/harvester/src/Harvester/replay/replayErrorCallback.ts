@@ -41,8 +41,9 @@ export async function replayErrorCallback({replay, err, event}: ReplayErrorParam
           throw new Error("Attempted to enter 2FA, but failed to enter AccountsSummary");
         }
         log.info("Page is in AccountsSummary section");
-        // If success, go back to the first AccountsSummary event.
-        return findFirstAccountsSummaryEvent(events, root);
+        const lastLoginEvent = findLastLoginEvent(events, root);
+        // We want to continue from the next event, so go to login + 1
+        return lastLoginEvent + 1;
       }
       catch (e) {
         log.error(e, "Failed to enter 2FA");
@@ -203,21 +204,26 @@ async function attemptEnterTwoFA(replay: Replay, twoFaSection: EventSection) {
   log.info("Finished processing 2FA events");
 }
 
-export function findFirstAccountsSummaryEvent(events: AnyEvent[], root: EventSection) {
-  const accountsSummarySection = findSectionByName("AccountsSummary", root);
-  if (!accountsSummarySection) {
-    throw new Error("Failed to find AccountsSummary section");
+export function findLastLoginEvent(events: AnyEvent[], root: EventSection) {
+  const loginSection = findSectionByName("Login", root);
+  if (!loginSection) {
+    throw new Error("Failed to find Login section");
   }
-  const sectionEvents = flatten(accountsSummarySection, ["AccountsSummary"]);
-  const firstEvent = sectionEvents.find(e => !isSection(e)) as AnyEvent;
-  if (!firstEvent) {
-    throw new Error("Failed to find first AccountsSummary event");
+  const loginEvents = flatten(loginSection, ["Login"]);
+  const lastEvent = loginEvents.toReversed().find(e => !isSection(e)) as AnyEvent;
+  if (!lastEvent) {
+    throw new Error("Failed to find last Login event");
   }
-  log.info("Found AccountsSummary event: " + firstEvent.type);
-  const idx = events.findIndex(i => i.id == firstEvent.id);
+  log.info({
+    event: lastEvent,
+  }, "Found Login event: {event.id}");
+  const idx = events.findIndex(i => i.id == lastEvent.id);
   if (idx === -1) {
-    throw new Error("Failed to map AccountsSummary event to replay index");
+    log.error({
+      events: events.map(e => e.id),
+    }, "Failed to map Login event to replay index");
+    throw new Error("Failed to map Login event to replay index");
   }
-  log.info("Found AccountsSummary event index: " + idx);
+  log.info("Found Login event index: " + idx);
   return idx;
 }
