@@ -1,4 +1,3 @@
-import React from "react";
 import { useEffect, useState } from "react";
 import type { AnyQuestionPacket, ConfirmPacket, Option2DPacket, OptionPacket, QuestionPacket } from "@/Harvester/agent/askUser";
 import { Button, Input, Select } from "semantic-ui-react";
