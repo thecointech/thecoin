@@ -14,10 +14,14 @@ export const PostCard = ({
 
   return (
     <PrismicLink document={post}>
-      <PrismicNextImage
-        field={getImage(post)}
-        sizes="100vw"
-      />
+      {
+        getImage(post) && (
+          <PrismicNextImage
+            field={getImage(post)}
+            sizes="100vw"
+          />
+        )
+      }
       <div>
         <div>
           <p>

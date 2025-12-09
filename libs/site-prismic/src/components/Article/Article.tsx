@@ -26,7 +26,7 @@ export const Article = ({document}: ArticleProps) => {
         <FormattedMessage {...translations.backLink} />
       </a>
     </div> */}
-    { document.data.image_before_title.url
+    { document.data.image_before_title?.url
       ? <img src={document.data.image_before_title.url} alt={document.data.image_before_title.alt ?? ""} />
       : undefined
     }
