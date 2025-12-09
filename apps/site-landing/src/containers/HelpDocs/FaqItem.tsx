@@ -1,9 +1,10 @@
 import React from "react";
-import { FAQDocument } from "components/Prismic/types";
 import { Header } from "semantic-ui-react";
 import { PrismicRichText } from '@prismicio/react';
+import type { FaqDocument } from "@thecointech/site-prismic/types";
 
-export const FaqItem = ({ data }: FAQDocument) =>
+// TODO: Move into site-prismic
+export const FaqItem = ({ data }: FaqDocument) =>
   <div className={"x6spaceBefore x6spaceAfter"}>
     <PrismicRichText
       field={data.question}

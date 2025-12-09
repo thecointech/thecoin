@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Prismic, FAQDocument, } from "components/Prismic";
+import { Prismic } from "components/Prismic";
 import { ApplicationRootState } from "types";
 import { useSelector } from "react-redux";
 import { selectLocale } from '@thecointech/redux-intl';
@@ -10,6 +10,7 @@ import { Decoration } from '../../components/Decoration';
 import { CategoryMenu } from '../../components/PrismicMenuByCategories';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router';
+import type { FaqDocument } from "@thecointech/site-prismic/types";
 
 const translations = defineMessages({
   title : {
@@ -27,7 +28,9 @@ export const HelpDocs = () => {
   }, [locale]);
 
   const { category } = useParams<{category: string|undefined}>();
-  const allFaqs = [...docs[locale].faqs.values()];
+  const allFaqs = docs[locale].faqs
+    ? [...docs[locale].faqs.values()]
+    : [];
   const categories = buildCategories(allFaqs);
   const faqs = allFaqs.filter(faq => {
     return category
@@ -51,8 +54,8 @@ export const HelpDocs = () => {
   );
 }
 
-export function buildCategories(faqs: FAQDocument[]) {
+export function buildCategories(faqs: FaqDocument[]) {
   return Array.from(
-    new Set(faqs.map(faq => faq.data.category))
+    new Set(faqs.map(faq => faq.data.category ?? "Default"))
   )
 }

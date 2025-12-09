@@ -1,0 +1,115 @@
+{
+  "format": "custom",
+  "id": "article",
+  "label": "Article",
+  "repeatable": true,
+  "status": true,
+  "json": {
+    "Main": {
+      "uid": {
+        "type": "UID",
+        "config": {
+          "label": "article-id",
+          "placeholder": "Article ID"
+        }
+      },
+      "thumbnail": {
+        "type": "Image",
+        "config": {
+          "constraint": {
+            "width": 370,
+            "height": 240
+          },
+          "thumbnails": [],
+          "label": "Thumbnail"
+        }
+      },
+      "image_before_title": {
+        "type": "Image",
+        "config": {
+          "constraint": {
+            "width": 779,
+            "height": 432
+          },
+          "thumbnails": [],
+          "label": "Image before title"
+        }
+      },
+      "title": {
+        "type": "StructuredText",
+        "config": {
+          "single": "heading2",
+          "label": "Title"
+        }
+      },
+      "publication_date": {
+        "type": "Date",
+        "config": {
+          "label": "Publication Date"
+        }
+      },
+      "short_content": {
+        "type": "StructuredText",
+        "config": {
+          "single": "paragraph",
+          "label": "Short Content"
+        }
+      },
+      "content": {
+        "type": "StructuredText",
+        "config": {
+          "multi": "paragraph,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item",
+          "allowTargetBlank": true,
+          "label": "Content"
+        }
+      },
+      "categories": {
+        "type": "Group",
+        "config": {
+          "fields": {
+            "category": {
+              "type": "Select",
+              "config": {
+                "options": [
+                  "Investing",
+                  "Global Warming",
+                  "Security",
+                  "Finance"
+                ],
+                "label": "Category"
+              }
+            }
+          },
+          "label": "Categories"
+        }
+      }
+    },
+    "SEO & Metadata": {
+      "meta_title": {
+        "type": "Text",
+        "config": {
+          "label": "Meta Title",
+          "placeholder": ""
+        }
+      },
+      "meta_description": {
+        "type": "Text",
+        "config": {
+          "label": "Meta Description",
+          "placeholder": ""
+        }
+      },
+      "meta_image": {
+        "type": "Image",
+        "config": {
+          "label": "Meta Image",
+          "constraint": {
+            "width": 512,
+            "height": 512
+          },
+          "thumbnails": []
+        }
+      }
+    }
+  }
+}
