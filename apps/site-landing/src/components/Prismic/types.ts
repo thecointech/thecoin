@@ -1,4 +1,3 @@
-// import type { RichTextField, PrismicDocument } from '@prismicio/types';
 import type { Locale } from '@thecointech/redux-intl'
 import type { ArticleDocument, FaqDocument } from '@thecointech/site-prismic/types';
 

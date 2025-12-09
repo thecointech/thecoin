@@ -71,10 +71,10 @@ export class Prismic extends SagaReducer<IActions, PrismicState>(DOCUMENTS_KEY, 
       }
       results
         .filter(item => item.type === 'faq')
-        .forEach(item => newState.faqs.set(item.uid!, item as FaqDocument));
+        .forEach(item => newState.faqs.set(item.uid, item as FaqDocument));
       results
         .filter(item => item.type === 'article')
-        .forEach(item => newState.articles.set(item.uid!, item as ArticleDocument))
+        .forEach(item => newState.articles.set(item.uid, item as ArticleDocument))
       yield this.storeValues({
         [locale]: newState
       })

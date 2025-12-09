@@ -1,5 +1,3 @@
-// ./src/app/blog/[uid]/page.tsx
-
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 

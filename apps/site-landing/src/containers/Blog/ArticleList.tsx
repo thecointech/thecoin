@@ -58,7 +58,7 @@ export function buildCategories(articles: ArticleDocument[]) {
       articles
         .map(article => article.data.categories)
         .reduce((acc, category) => acc.concat(
-          category.map(c => c.category ?? "")
+          category.map(c => c.category ?? "Default")
         ), [] as string[])
     )
   )

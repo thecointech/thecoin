@@ -1,5 +1,3 @@
-// ./src/app/blog/[uid]/page.tsx
-
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -37,17 +35,11 @@ export async function generateMetadata({
 export default async function Page({ params }: { params: Params }) {
   const client = createClient();
 
-  // Fetch the current blog post page being displayed by the UID of the page
   const { uid } = await params;
   const page = await client
     .getByUID("faq", uid)
     .catch(() => notFound());
 
-  /**
-   * Fetch all of the blog posts in Prismic (max 2), excluding the current one, and ordered by publication date.
-   *
-   * We use this data to display our "recommended posts" section at the end of the blog post
-   */
   const posts = await client.getAllByType("faq", {
     predicates: [prismic.filter.not("my.faq.uid", uid)],
     orderings: [
@@ -64,7 +56,6 @@ export default async function Page({ params }: { params: Params }) {
     <div>
       <Navigation client={client} />
 
-      {/* Display the "hero" section of the blog post */}
       <Card fluid>
         <CardHeader>
           <RichText field={question} />
@@ -74,10 +65,6 @@ export default async function Page({ params }: { params: Params }) {
         </CardContent>
       </Card>
 
-      {/* Display the content of the blog post */}
-      {/* <SliceZone slices={slices} components={components} /> */}
-
-      {/* Display the Recommended Posts section using the posts we requested earlier */}
       <h4>Recommended FAQs</h4>
       <List>
         {posts.map((post) => (
@@ -94,15 +81,7 @@ export default async function Page({ params }: { params: Params }) {
 
 export async function generateStaticParams() {
   const client = createClient();
-
-  /**
-   * Query all Documents from the API, except the homepage.
-   */
   const pages = await client.getAllByType("faq");
-
-  /**
-   * Define a path for every Document.
-   */
   return pages.map((page) => {
     return { uid: page.uid };
   });

@@ -17,7 +17,7 @@ class MockClient implements Pick<Client, "getByUID"|"getAllByType"> {
   }
   getAllByType(documentType: string) {
     return Promise.resolve(
-      getData(documentType).filter(r => r.type === documentType) as any
+      getData(documentType) as any
     );
   }
 }
