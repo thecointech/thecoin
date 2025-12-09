@@ -13,7 +13,8 @@ export type ArticleProps = {
 }
 export const Article = ({document}: ArticleProps) => {
   const locale = "en"; // TODO
-  const date = DateTime.fromFormat(document.data.publication_date || "", "yyyy-mm-dd", {})
+  console.log(document.data.publication_date)
+  const date = DateTime.fromSQL(document.data.publication_date || "")
     .setLocale(locale)
     .toLocaleString(DateTime.DATE_HUGE);
 
