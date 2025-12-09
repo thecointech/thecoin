@@ -24,6 +24,7 @@ const Hero = ({ slice }: HeroProps) => {
         field={slice.primary.image}
         sizes="100vw"
         className="w-full max-w-[100px] max-h-full rounded-md object-cover"
+        alt=""
       />
       <div className="flex flex-col gap-2">
         <h1 className="font-bold text-4xl">

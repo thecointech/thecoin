@@ -9,14 +9,14 @@ import type { JSX } from "react";
 export const PostCard = ({
   post,
 }: {
-  post: Content.BlogPostDocument;
+  post: Content.BlogPostDocument|Content.ArticleDocument;
 }): JSX.Element => {
   const { data } = post;
 
   return (
     <PrismicLink document={post} className="grid grid-cols-2 gap-10">
       <PrismicNextImage
-        field={data.featured_image}
+        field={getImage(post)}
         sizes="100vw"
         className="w-full max-w-sm max-h-60 rounded-xl object-cover"
       />
@@ -31,9 +31,26 @@ export const PostCard = ({
             </h2>
           </div>
         </div>
-        <RichText field={data.description} />
+        <RichText field={getDescription(post)} />
       </div>
       <div className="border-b border-solid border-gray-200 w-full col-span-2" />
     </PrismicLink>
   );
 };
+
+const getImage = (post: Content.BlogPostDocument|Content.ArticleDocument) => {
+  if (post.type === "blog_post") {
+    return post.data.featured_image;
+  } else {
+    return post.data.image_before_title;
+  }
+};
+
+const getDescription = (post: Content.BlogPostDocument|Content.ArticleDocument) => {
+  if (post.type === "blog_post") {
+    return post.data.description;
+  } else {
+    return post.data.short_content;
+  }
+};
+

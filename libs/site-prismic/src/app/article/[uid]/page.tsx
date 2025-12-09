@@ -3,11 +3,10 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { SliceZone } from "@prismicio/react";
+import { PrismicRichText } from "@prismicio/react";
 import * as prismic from "@prismicio/client";
 
 import { createClient } from "@/prismicio";
-import { components } from "@/slices";
 import { PrismicNextImage } from "@prismicio/next";
 import { PostCard } from "@/components/PostCard";
 import { RichText } from "@/components/RichText";
@@ -27,17 +26,17 @@ export async function generateMetadata({
   const client = createClient();
   const { uid } = await params;
   const page = await client
-    .getByUID("blog_post", uid)
+    .getByUID("article", uid)
     .catch(() => notFound());
 
   return {
     title: prismic.asText(page.data.title),
-    description: page.data.meta_description,
+    description: prismic.asText(page.data.short_content),
     openGraph: {
       title: page.data.meta_title || undefined,
       images: [
         {
-          url: page.data.meta_image.url || "",
+          url: page.data.meta_image?.url || "",
         },
       ],
     },
@@ -47,10 +46,10 @@ export async function generateMetadata({
 export default async function Page({ params }: { params: Params }) {
   const client = createClient();
 
-  const { uid } = await params;
   // Fetch the current blog post page being displayed by the UID of the page
+  const { uid } = await params;
   const page = await client
-    .getByUID("blog_post", uid)
+    .getByUID("article", uid)
     .catch(() => notFound());
 
   /**
@@ -58,17 +57,17 @@ export default async function Page({ params }: { params: Params }) {
    *
    * We use this data to display our "recommended posts" section at the end of the blog post
    */
-  const posts = await client.getAllByType("blog_post", {
-    predicates: [prismic.filter.not("my.blog_post.uid", uid)],
+  const posts = await client.getAllByType("article", {
+    predicates: [prismic.filter.not("my.article.uid", uid)],
     orderings: [
-      { field: "my.blog_post.publication_date", direction: "desc" },
+      { field: "my.article.publication_date", direction: "desc" },
       { field: "document.first_publication_date", direction: "desc" },
     ],
     limit: 2,
   });
 
   // Destructure out the content of the current page
-  const { slices, title, publication_date, description, featured_image } =
+  const { title, publication_date, short_content, image_before_title, content } =
     page.data;
 
   return (
@@ -87,18 +86,19 @@ export default async function Page({ params }: { params: Params }) {
             </div>
           </div>
           <div className="text-center">
-            <RichText field={description} />
+            <RichText field={short_content} />
           </div>
         </div>
         <PrismicNextImage
-          field={featured_image}
+          field={image_before_title}
           sizes="100vw"
           className="w-full max-w-3xl max-h-96 rounded-xl object-cover"
         />
+        <PrismicRichText field={content} />
       </section>
 
       {/* Display the content of the blog post */}
-      <SliceZone slices={slices} components={components} />
+      {/* <SliceZone slices={slices} components={components} /> */}
 
       {/* Display the Recommended Posts section using the posts we requested earlier */}
       <h2 className="font-bold text-3xl">Recommended Posts</h2>

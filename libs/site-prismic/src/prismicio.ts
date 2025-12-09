@@ -22,6 +22,10 @@ const routes: Route[] = [
     type: "blog_post",
     path: "/blog/:uid",
   },
+  {
+    type: "article",
+    path: "/article/:uid",
+  }
 ];
 
 /**

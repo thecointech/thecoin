@@ -45,6 +45,13 @@
           "placeholder": ""
         }
       },
+      "timestamp": {
+        "type": "Timestamp",
+        "config": {
+          "label": "timestamp",
+          "placeholder": ""
+        }
+      },
       "slices": {
         "type": "Slices",
         "fieldset": "Slice Zone",
