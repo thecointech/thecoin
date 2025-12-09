@@ -13,7 +13,7 @@ const client = createClient(apiEndpoint);
 const DOCUMENTS_KEY: keyof ApplicationRootState = "documents";
 
 const getOptions = (locale: string) => ({ lang : `${locale}-ca` })
-const getByUId = (id: string, locale: string) => client.getByUID('article', id, getOptions(locale));
+const getByUID = (id: string, locale: string) => client.getByUID('article', id, getOptions(locale));
 async function fetchData(locale: string) {
   const articles = await client.getAllByType('article', getOptions(locale))
   const faqs = await client.getAllByType('faq', getOptions(locale))
@@ -42,7 +42,7 @@ export class Prismic extends SagaReducer<IActions, PrismicState>(DOCUMENTS_KEY, 
       return;
 
     log.trace(`Fetching Single Prismic Doc: ${uid}`);
-    const result = (yield call(getByUId, uid, locale)) as ArticleDocument;
+    const result = (yield call(getByUID, uid, locale)) as ArticleDocument;
     log.trace(`Fetched: ${!!result}`);
     if (result) {
       yield this.storeValues({
