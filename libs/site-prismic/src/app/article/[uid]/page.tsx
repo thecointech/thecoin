@@ -42,18 +42,12 @@ export async function generateMetadata({
 export default async function Page({ params }: { params: Params }) {
   const client = createClient();
 
-  // Fetch the current blog post page being displayed by the UID of the page
   const { uid } = await params;
   const page = await client
     .getByUID("article", uid)
     .catch(() => notFound());
 
-  /**
-   * Fetch all of the blog posts in Prismic (max 2), excluding the current one, and ordered by publication date.
-   *
-   * We use this data to display our "recommended posts" section at the end of the blog post
-   */
-  const posts = await client.getAllByType("article", {
+    const posts = await client.getAllByType("article", {
     predicates: [prismic.filter.not("my.article.uid", uid)],
     orderings: [
       { field: "my.article.publication_date", direction: "desc" },
@@ -65,13 +59,7 @@ export default async function Page({ params }: { params: Params }) {
   return (
     <div>
       <Navigation client={client} />
-
-      {/* Display the "hero" section of the blog post */}
       <Article document={page} />
-      {/* Display the content of the blog post */}
-      {/* <SliceZone slices={slices} components={components} /> */}
-
-      {/* Display the Recommended Posts section using the posts we requested earlier */}
       <h2>Recommended Posts</h2>
       <section>
         {posts.map((post) => (

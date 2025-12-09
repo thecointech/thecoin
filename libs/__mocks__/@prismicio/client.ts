@@ -28,7 +28,7 @@ const getData = (documentType: string) => {
     case "faq":
       return faqs as SharedType[];
     default:
-      return [];
+      throw new Error(`Unsupported Prismic document type in mock: ${documentType}`);
   }
 }
 
