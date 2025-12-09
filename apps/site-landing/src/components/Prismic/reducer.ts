@@ -1,12 +1,11 @@
-
 import { createClient } from '@prismicio/client'
 import { SagaReducer } from '@thecointech/redux'
-import { ArticleDocument, FAQDocument, IActions, PrismicState } from './types'
+import { IActions, PrismicState } from './types'
 import { call } from "@redux-saga/core/effects";
 import { log } from '@thecointech/logging'
 import type { ApplicationRootState } from 'types'
-import type { PrismicDocument } from '@prismicio/types'
 import type { Locale } from '@thecointech/redux-intl'
+import type { ArticleDocument, FaqDocument } from '@thecointech/site-prismic/types';
 
 const apiEndpoint = process.env.PRISMIC_API_ENDPOINT as string;
 const client = createClient(apiEndpoint);
@@ -16,19 +15,20 @@ const DOCUMENTS_KEY: keyof ApplicationRootState = "documents";
 const getOptions = (locale: string) => ({ lang : `${locale}-ca` })
 const getByUId = (id: string, locale: string) => client.getByUID('article', id, getOptions(locale));
 async function fetchData(locale: string) {
-  const response = await client.query('', getOptions(locale))
-  return response.results;
+  const articles = await client.getAllByType('article', getOptions(locale))
+  const faqs = await client.getAllByType('faq', getOptions(locale))
+  return [...articles, ...faqs];
 }
 
 const initialState: PrismicState = {
   en: {
     fullyLoaded: false,
-    faqs: new Map<string, FAQDocument>(),
+    faqs: new Map<string, FaqDocument>(),
     articles: new Map<string, ArticleDocument>(),
   },
   fr: {
     fullyLoaded: false,
-    faqs: new Map<string, FAQDocument>(),
+    faqs: new Map<string, FaqDocument>(),
     articles: new Map<string, ArticleDocument>(),
   }
 }
@@ -61,7 +61,7 @@ export class Prismic extends SagaReducer<IActions, PrismicState>(DOCUMENTS_KEY, 
       return;
     }
     log.trace(`Fetching Prismic docs for locale: ${locale}`);
-    const results = (yield call(fetchData, locale)) as PrismicDocument[];
+    const results = (yield call(fetchData, locale)) as Awaited<ReturnType<typeof fetchData>>;
     log.trace(`Fetched: ${!!results}`);
     if (results) {
       const newState = {
@@ -71,7 +71,7 @@ export class Prismic extends SagaReducer<IActions, PrismicState>(DOCUMENTS_KEY, 
       }
       results
         .filter(item => item.type === 'faq')
-        .forEach(item => newState.faqs.set(item.uid!, item as FAQDocument));
+        .forEach(item => newState.faqs.set(item.uid!, item as FaqDocument));
       results
         .filter(item => item.type === 'article')
         .forEach(item => newState.articles.set(item.uid!, item as ArticleDocument))
@@ -81,4 +81,3 @@ export class Prismic extends SagaReducer<IActions, PrismicState>(DOCUMENTS_KEY, 
     }
   };
 }
-

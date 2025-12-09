@@ -3,14 +3,12 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { PrismicRichText } from "@prismicio/react";
 import * as prismic from "@prismicio/client";
 
 import { createClient } from "@/prismicio";
-import { PrismicNextImage } from "@prismicio/next";
 import { PostCard } from "@/components/PostCard";
-import { RichText } from "@/components/RichText";
 import { Navigation } from "@/components/Navigation";
+import { Article } from "@/components/Article/Article";
 
 type Params = Promise<{ uid: string }>;
 
@@ -66,37 +64,12 @@ export default async function Page({ params }: { params: Params }) {
     limit: 2,
   });
 
-  // Destructure out the content of the current page
-  const { title, publication_date, short_content, image_before_title, content } =
-    page.data;
-
   return (
     <div>
       <Navigation client={client} />
 
       {/* Display the "hero" section of the blog post */}
-      <section>
-        <div>
-          <div>
-            <p>
-              {new Date(publication_date || "").toLocaleDateString()}
-            </p>
-            <div>
-              <RichText field={title} />
-            </div>
-          </div>
-          <div>
-            <RichText field={short_content} />
-          </div>
-        </div>
-        <PrismicNextImage
-          field={image_before_title}
-          sizes="100vw"
-
-        />
-        <PrismicRichText field={content} />
-      </section>
-
+      <Article document={page} />
       {/* Display the content of the blog post */}
       {/* <SliceZone slices={slices} components={components} /> */}
 

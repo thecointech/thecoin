@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Header, SemanticFLOATS } from "semantic-ui-react";
-import { ArticleDocument } from "components/Prismic/types";
 import { useSelector } from "react-redux";
 import { selectLocale } from '@thecointech/redux-intl';
 import { CategoryMenu } from "components/PrismicMenuByCategories";
@@ -10,6 +9,7 @@ import { useParams } from 'react-router';
 import { Prismic } from '../../components/Prismic/reducer';
 import styles from "./styles.module.less";
 import { defineMessages, FormattedMessage } from 'react-intl';
+import type { ArticleDocument } from "@thecointech/site-prismic/types";
 
 const translations = defineMessages({
   title : {
@@ -52,13 +52,13 @@ export const ArticleList = () => {
   )
 }
 
-export function buildCategories(faqs: ArticleDocument[]) {
+export function buildCategories(articles: ArticleDocument[]) {
   return Array.from(
     new Set(
-      faqs
-        .map(faq => faq.data.categories)
+      articles
+        .map(article => article.data.categories)
         .reduce((acc, category) => acc.concat(
-          category.map(c => c.category)
+          category.map(c => c.category ?? "")
         ), [] as string[])
     )
   )
