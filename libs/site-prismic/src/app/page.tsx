@@ -44,9 +44,15 @@ export default async function Index() {
   const home = await client.getByUID("page", "home");
 
   // Get all of the blog_post documents created on Prismic ordered by publication date
-  const posts = await client.getAllByType("article", {
+  const articles = await client.getAllByType("article", {
     orderings: [
       { field: "my.article.publication_date", direction: "desc" },
+      { field: "document.first_publication_date", direction: "desc" },
+    ],
+  });
+
+  const faqs = await client.getAllByType("faq", {
+    orderings: [
       { field: "document.first_publication_date", direction: "desc" },
     ],
   });
@@ -58,9 +64,14 @@ export default async function Index() {
       <SliceZone slices={home.data.slices} components={components} />
 
       {/* Map over each of the blog posts created and display a `PostCard` for it */}
-      <section className="grid grid-cols-1 gap-8 max-w-3xl w-full">
-        {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
+      <section>
+        {articles.map((article) => (
+          <PostCard key={article.id} post={article} />
+        ))}
+      </section>
+      <section>
+        {faqs.map((faq) => (
+          <PostCard key={faq.id} post={faq} />
         ))}
       </section>
 

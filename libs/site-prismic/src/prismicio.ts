@@ -25,6 +25,10 @@ const routes: Route[] = [
   {
     type: "article",
     path: "/article/:uid",
+  },
+  {
+    type: "faq",
+    path: "/faq/:uid",
   }
 ];
 
