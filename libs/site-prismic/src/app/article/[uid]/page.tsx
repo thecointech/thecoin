@@ -119,7 +119,7 @@ export async function generateStaticParams() {
   /**
    * Query all Documents from the API, except the homepage.
    */
-  const pages = await client.getAllByType("blog_post");
+  const pages = await client.getAllByType("article");
 
   /**
    * Define a path for every Document.

@@ -8,6 +8,7 @@ export const richTextComponents: JSXMapSerializer = {
     if (node.data.label === 'codespan') {
       return <code>{children}</code>;
     }
+    return children;
   },
   heading1: ({ children }) => (
     <h1 className="font-bold text-4xl">{children}</h1>

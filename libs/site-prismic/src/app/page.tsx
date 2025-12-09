@@ -44,9 +44,9 @@ export default async function Index() {
   const home = await client.getByUID("page", "home");
 
   // Get all of the blog_post documents created on Prismic ordered by publication date
-  const posts = await client.getAllByType("blog_post", {
+  const posts = await client.getAllByType("article", {
     orderings: [
-      { field: "my.blog_post.publication_date", direction: "desc" },
+      { field: "my.article.publication_date", direction: "desc" },
       { field: "document.first_publication_date", direction: "desc" },
     ],
   });

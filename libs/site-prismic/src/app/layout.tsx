@@ -2,7 +2,7 @@ import { PrismicPreview } from "@prismicio/next";
 import { repositoryName } from '@/prismicio';
 import type { Metadata } from "next";
 
-// import "../semantic/semantic.css";
+import "../semantic/semantic.css";
 
 export const metadata: Metadata = {
   title: "TheCoin Prismic Content",
