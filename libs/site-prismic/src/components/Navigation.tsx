@@ -12,7 +12,7 @@ export const Navigation = async ({
   const navigation = await client.getSingle("navigation");
 
   return (
-    <nav className="font-bold text-xl self-center">
+    <nav>
       <ul>
         {isFilled.group(navigation.data.menu_items) &&
           navigation.data.menu_items.map((item) => {

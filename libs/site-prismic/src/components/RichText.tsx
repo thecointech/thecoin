@@ -11,13 +11,13 @@ export const richTextComponents: JSXMapSerializer = {
     return children;
   },
   heading1: ({ children }) => (
-    <h1 className="font-bold text-4xl">{children}</h1>
+    <h1>{children}</h1>
   ),
-  heading2: ({ children }) => <h2 className="font-bold text-xl">{children}</h2>,
-  heading3: ({ children }) => <h3 className="font-bold text-lg">{children}</h3>,
+  heading2: ({ children }) => <h2>{children}</h2>,
+  heading3: ({ children }) => <h3>{children}</h3>,
   paragraph: ({ children }) => <p>{children}</p>,
   hyperlink: ({ children, node }) => (
-    <PrismicLink field={node.data} className="font-bold underline">{children}</PrismicLink>
+    <PrismicLink field={node.data}>{children}</PrismicLink>
   ),
 };
 
