@@ -86,6 +86,8 @@ export interface ArticleDocumentDataCategoriesItem {
   >;
 }
 
+type ArticleDocumentDataSlicesSlice = RichTextSlice;
+
 /**
  * Content for Article documents
  */
@@ -165,9 +167,18 @@ interface ArticleDocumentData {
    * - **Tab**: Main
    * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
    */
-  categories: prismic.GroupField<
-    Simplify<ArticleDocumentDataCategoriesItem>
-  >; /**
+  categories: prismic.GroupField<Simplify<ArticleDocumentDataCategoriesItem>>;
+
+  /**
+   * Slice Zone field in *Article*
+   *
+   * - **Field Type**: Slice Zone
+   * - **Placeholder**: *None*
+   * - **API ID Path**: article.slices[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/slices
+   */
+  slices: prismic.SliceZone<ArticleDocumentDataSlicesSlice>; /**
    * Meta Title field in *Article*
    *
    * - **Field Type**: Text
@@ -673,6 +684,7 @@ declare module "@prismicio/client" {
       ArticleDocument,
       ArticleDocumentData,
       ArticleDocumentDataCategoriesItem,
+      ArticleDocumentDataSlicesSlice,
       BlogPostDocument,
       BlogPostDocumentData,
       BlogPostDocumentDataSlicesSlice,

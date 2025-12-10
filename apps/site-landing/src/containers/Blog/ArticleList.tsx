@@ -36,7 +36,6 @@ export const ArticleList = () => {
   return (
     <>
       <div className={styles.containerArticle}>
-        <CategoryMenu categories={categories} idForMenu={styles.menuArticle} railPosition={"left" as SemanticFLOATS} pathBeforeTheId="/blog/category/" />
         <Header as="h2" className={"x10spaceBefore"}>
           <Header.Content>
             {category
@@ -45,6 +44,7 @@ export const ArticleList = () => {
             }
           </Header.Content>
         </Header>
+        <CategoryMenu categories={categories} idForMenu={styles.menuArticle} railPosition={"left"} pathBeforeTheId="/blog/category/" />
         {articles.map(article => (<ArticleItem key={article.id} {...article} />))}
       </div>
       <Decoration />

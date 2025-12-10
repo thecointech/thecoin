@@ -23,7 +23,7 @@ export const CategoryMenu = ({ categories, idForMenu, railPosition, pathBeforeTh
       <GreaterThanMobileSegment>
         <Rail position={railPosition}>
           <div id={idForMenu}>
-            <List divided relaxed size={"massive"} className={"x10spaceBefore x8spaceAfter"}>
+            <List divided relaxed size={"massive"} className={"x2spaceBefore"}>
               {categories.map((entry, index) => (displayEntry(index, entry, pathBeforeTheId)))}
             </List>
           </div>
