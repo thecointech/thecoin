@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Header, SemanticFLOATS } from "semantic-ui-react";
+import { Header } from "semantic-ui-react";
 import { useSelector } from "react-redux";
 import { selectLocale } from '@thecointech/redux-intl';
 import { CategoryMenu } from "components/PrismicMenuByCategories";

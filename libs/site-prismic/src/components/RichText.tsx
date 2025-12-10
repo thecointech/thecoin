@@ -1,5 +1,4 @@
-// ./src/components/RichText.tsx
-
+import React from 'react';
 import { RichTextField } from '@prismicio/client';
 import { JSXMapSerializer, PrismicRichText, PrismicLink } from '@prismicio/react';
 

@@ -93,7 +93,18 @@ export async function getBaseConfig(secrets = []) {
       new ForkTsCheckerWebpackPlugin({
         typescript: {
           configFile,
-        }
+        },
+        // Only type-check files in the current project, not external packages
+        issue: {
+          include: [
+            { file: '**/src/**/*' },
+          ],
+          exclude: [
+            { file: '**/node_modules/**' },
+            { file: '**/*.spec.ts' },
+            { file: '**/*.test.ts' },
+          ],
+        },
       }),
       new webpack.ProvidePlugin({
         process: 'process/browser',

@@ -1,11 +1,10 @@
-
 import React from "react";
 import { Header } from "semantic-ui-react";
 import styles from "./Article.module.css";
 import { PrismicText, PrismicRichText, SliceZone } from "@prismicio/react";
 import { DateTime } from "luxon";
-import { Content } from "@prismicio/client";
-import { components } from "@/slices";
+import type { Content } from "@prismicio/client";
+import { components } from "@/slices/index.webpack";
 
 export type ArticleProps = {
   document: Content.ArticleDocument;
