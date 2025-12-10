@@ -7,7 +7,8 @@ export default {
   component: Checkbox,
   argTypes: {
     error: { control: "boolean" },
-    disabled: { control: "boolean" }
+    disabled: { control: "boolean" },
+    toggle: { control: "boolean" },
   }
 } as Meta;
 
@@ -18,4 +19,5 @@ Basic.args = {
   label: "Checkbox label",
   error: false,
   disabled: false,
+  toggle: false,
 };
