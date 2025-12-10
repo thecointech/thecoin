@@ -2,18 +2,21 @@
 import React from "react";
 import { Header } from "semantic-ui-react";
 import styles from "./Article.module.css";
-import { PrismicText, PrismicRichText } from "@prismicio/react";
+import { PrismicText, PrismicRichText, SliceZone } from "@prismicio/react";
 import { DateTime } from "luxon";
 import { Content } from "@prismicio/client";
+import { components } from "@/slices";
 
 export type ArticleProps = {
   document: Content.ArticleDocument;
 }
 export const Article = ({document}: ArticleProps) => {
   const locale = "en";
-  const date = DateTime.fromSQL(document.data.publication_date || "")
-    .setLocale(locale)
-    .toLocaleString(DateTime.DATE_HUGE);
+  const date = document.data.publication_date
+    ? DateTime.fromSQL(document.data.publication_date)
+      .setLocale(locale)
+      .toLocaleString(DateTime.DATE_HUGE)
+    : "";
 
   return (
     <div className={styles.containerArticle} key={document.id}>
@@ -26,6 +29,7 @@ export const Article = ({document}: ArticleProps) => {
     </Header>
     <p>{date}</p>
     <PrismicRichText field={document.data.content} />
+    <SliceZone slices={document.data.slices} components={components} />
   </div>
   )
 }
