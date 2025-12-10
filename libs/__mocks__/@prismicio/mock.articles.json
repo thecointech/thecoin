@@ -2,9 +2,9 @@
   {
     "id": "YX7TFBIAACQAmkcP",
     "uid": "climate-portfolio-offset-gsm2486",
-    "url": null,
+    "url": "/article/climate-portfolio-offset-gsm2486",
     "type": "article",
-    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aThJ4xEAACkA7U9Q&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YX7TFBIAACQAmkcP%22%29+%5D%5D",
+    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aTiXxxEAACwA7cNX&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YX7TFBIAACQAmkcP%22%29+%5D%5D",
     "tags": [],
     "first_publication_date": "2022-03-27T13:48:28+0000",
     "last_publication_date": "2022-03-27T13:48:28+0000",
@@ -68,18 +68,21 @@
         {
           "category": "Global Warming"
         }
-      ]
+      ],
+      "meta_title": null,
+      "meta_description": null,
+      "meta_image": {}
     }
   },
   {
     "id": "YX7R-BIAACEAmkVq",
     "uid": "african-biogas-carbon-programme-carbon-offset---gsm8582",
-    "url": null,
+    "url": "/article/african-biogas-carbon-programme-carbon-offset---gsm8582",
     "type": "article",
-    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aThJ4xEAACkA7U9Q&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YX7R-BIAACEAmkVq%22%29+%5D%5D",
+    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aTiXxxEAACwA7cNX&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YX7R-BIAACEAmkVq%22%29+%5D%5D",
     "tags": [],
     "first_publication_date": "2022-03-27T13:45:09+0000",
-    "last_publication_date": "2022-03-27T13:45:09+0000",
+    "last_publication_date": "2025-12-09T21:42:31+0000",
     "slugs": [
       "african-biogas-carbon-programme-carbon-offset"
     ],
@@ -87,8 +90,38 @@
     "lang": "en-ca",
     "alternate_languages": [],
     "data": {
-      "thumbnail": {},
-      "image_before_title": {},
+      "thumbnail": {
+        "dimensions": {
+          "width": 370,
+          "height": 240
+        },
+        "alt": null,
+        "copyright": null,
+        "url": "https://images.prismic.io/thecointech/aTiXjHNYClf9n_WY_Program-RE.jpg?auto=format,compress&rect=251,0,1418,920&w=370&h=240",
+        "id": "aTiXjHNYClf9n_WY",
+        "edit": {
+          "x": 251,
+          "y": 0,
+          "zoom": 1,
+          "background": "transparent"
+        }
+      },
+      "image_before_title": {
+        "dimensions": {
+          "width": 779,
+          "height": 432
+        },
+        "alt": null,
+        "copyright": null,
+        "url": "https://images.prismic.io/thecointech/aTiW5HNYClf9n_Vs_05biogas_nakuru.jpg?auto=format,compress&rect=24,0,893,495&w=779&h=432",
+        "id": "aTiW5HNYClf9n_Vs",
+        "edit": {
+          "x": 24,
+          "y": 0,
+          "zoom": 1,
+          "background": "transparent"
+        }
+      },
       "title": [
         {
           "type": "heading2",
@@ -140,15 +173,18 @@
         {
           "category": "Global Warming"
         }
-      ]
+      ],
+      "meta_title": null,
+      "meta_description": null,
+      "meta_image": {}
     }
   },
   {
     "id": "Yj9_cBIAACQAdp4Q",
     "uid": "think-investing-is-only-for-the-wealthy--think-again",
-    "url": null,
+    "url": "/article/think-investing-is-only-for-the-wealthy--think-again",
     "type": "article",
-    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aThJ4xEAACkA7U9Q&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22Yj9_cBIAACQAdp4Q%22%29+%5D%5D",
+    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aTiXxxEAACwA7cNX&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22Yj9_cBIAACQAdp4Q%22%29+%5D%5D",
     "tags": [],
     "first_publication_date": "2022-03-26T21:02:52+0000",
     "last_publication_date": "2022-03-26T21:17:15+0000",
@@ -297,15 +333,18 @@
         {
           "category": "Investing"
         }
-      ]
+      ],
+      "meta_title": null,
+      "meta_description": null,
+      "meta_image": {}
     }
   },
   {
     "id": "YX7SyBIAACMAmkab",
     "uid": "turkey-wind-project-carbon-offset-gsm5722",
-    "url": null,
+    "url": "/article/turkey-wind-project-carbon-offset-gsm5722",
     "type": "article",
-    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aThJ4xEAACkA7U9Q&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YX7SyBIAACMAmkab%22%29+%5D%5D",
+    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aTiXxxEAACwA7cNX&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YX7SyBIAACMAmkab%22%29+%5D%5D",
     "tags": [],
     "first_publication_date": "2022-03-27T13:46:45+0000",
     "last_publication_date": "2022-03-27T13:46:45+0000",
@@ -359,15 +398,18 @@
         {
           "category": "Global Warming"
         }
-      ]
+      ],
+      "meta_title": null,
+      "meta_description": null,
+      "meta_image": {}
     }
   },
   {
     "id": "YXcU6BEAACEAWGSD",
     "uid": "start-now",
-    "url": null,
+    "url": "/article/start-now",
     "type": "article",
-    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aThJ4xEAACkA7U9Q&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YXcU6BEAACEAWGSD%22%29+%5D%5D",
+    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aTiXxxEAACwA7cNX&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YXcU6BEAACEAWGSD%22%29+%5D%5D",
     "tags": [
       "Main Page"
     ],
@@ -438,15 +480,18 @@
         {
           "category": "Investing"
         }
-      ]
+      ],
+      "meta_title": null,
+      "meta_description": null,
+      "meta_image": {}
     }
   },
   {
     "id": "YXgxdxEAACIAXOvN",
     "uid": "keep-your-profits",
-    "url": null,
+    "url": "/article/keep-your-profits",
     "type": "article",
-    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aThJ4xEAACkA7U9Q&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YXgxdxEAACIAXOvN%22%29+%5D%5D",
+    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aTiXxxEAACwA7cNX&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YXgxdxEAACIAXOvN%22%29+%5D%5D",
     "tags": [
       "Main Page"
     ],
@@ -535,7 +580,10 @@
         {
           "category": "Finance"
         }
-      ]
+      ],
+      "meta_title": null,
+      "meta_description": null,
+      "meta_image": {}
     }
   }
 ]

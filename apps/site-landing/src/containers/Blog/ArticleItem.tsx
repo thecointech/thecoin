@@ -20,8 +20,8 @@ export const ArticleItem = ({ uid, data }: ArticleDocument) => {
         <Grid.Row>
           <Grid.Column>
             {
-              data.thumbnail
-                ? <img src={ data.thumbnail.url ?? "" } alt={data.thumbnail.alt ?? ""} />
+              data.thumbnail?.url
+                ? <img src={ data.thumbnail.url } alt={data.thumbnail.alt ?? ""} />
                 : undefined
             }
           </Grid.Column>
