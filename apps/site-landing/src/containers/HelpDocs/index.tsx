@@ -9,14 +9,15 @@ import { FaqItem } from './FaqItem';
 import { Decoration } from '../../components/Decoration';
 import { CategoryMenu } from '../../components/PrismicMenuByCategories';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { useParams } from 'react-router';
+import { useSearchParams } from 'react-router';
 import type { FaqDocument } from "@thecointech/site-prismic/types";
 
 const translations = defineMessages({
-  title : {
-      defaultMessage: 'FAQ',
-      description: 'site.helpDocs.title: title for the FAQ page'}
-  });
+  title: {
+    defaultMessage: 'FAQ',
+    description: 'site.helpDocs.title: title for the FAQ page'
+  },
+});
 
 
 export const HelpDocs = () => {
@@ -27,14 +28,17 @@ export const HelpDocs = () => {
     actions.fetchAllDocs(locale);
   }, [locale]);
 
-  const { category } = useParams<{category: string|undefined}>();
+  // Get selected categories from URL
+  const [searchParams] = useSearchParams();
+  const selectedCategories = new Set(searchParams.getAll('category'));
+
   const allFaqs = docs[locale].faqs
     ? [...docs[locale].faqs.values()]
     : [];
   const categories = buildCategories(allFaqs);
   const faqs = allFaqs.filter(faq => {
-    return category
-      ? faq.data.category == category
+    return selectedCategories.size > 0
+      ? !faq.data.category || selectedCategories.has(faq.data.category)
       : faq.data.show_on_faq_home
   })
 
@@ -44,7 +48,7 @@ export const HelpDocs = () => {
         <CategoryMenu categories={categories} idForMenu={styles.menuFaq} railPosition={"right"} pathBeforeTheId="/faq/" />
         <Header as="h2" className={"x10spaceBefore"}>
           <Header.Content>
-            {category ?? <FormattedMessage {...translations.title} />}
+            <FormattedMessage {...translations.title} />
           </Header.Content>
         </Header>
         {faqs.map(faq => (<FaqItem key={faq.id} {...faq} />))}

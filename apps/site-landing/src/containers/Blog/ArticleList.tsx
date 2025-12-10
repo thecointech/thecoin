@@ -5,7 +5,7 @@ import { selectLocale } from '@thecointech/redux-intl';
 import { CategoryMenu } from "components/PrismicMenuByCategories";
 import { Decoration } from "components/Decoration";
 import { ArticleItem } from "./ArticleItem";
-import { useParams } from 'react-router';
+import { useParams, useSearchParams } from 'react-router';
 import { Prismic } from '../../components/Prismic/reducer';
 import styles from "./styles.module.less";
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -22,16 +22,22 @@ export const ArticleList = () => {
   const { locale } = useSelector(selectLocale);
   const prismic = Prismic.useData();
   const actions = Prismic.useApi();
+
+  // Get selected categories from URL
   const { category } = useParams<{category: string}>();
   useEffect(() => {
     actions.fetchAllDocs(locale);
   }, [locale]);
 
+  // Get selected categories from URL
+  const [searchParams] = useSearchParams();
+  const selectedCategories = new Set(searchParams.getAll('category'));
+
   const allArticles = [...prismic[locale].articles.values()];
   const categories = buildCategories(allArticles);
 
-  const articles = category
-    ? allArticles.filter(article => article.data.categories.find(c => c.category === category))
+  const articles = selectedCategories.size > 0
+    ? allArticles.filter(article => article.data.categories.find(c => !c.category || selectedCategories.has(c.category)))
     : allArticles;
   return (
     <>

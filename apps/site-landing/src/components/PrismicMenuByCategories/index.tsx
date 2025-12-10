@@ -1,7 +1,8 @@
 import React from "react";
-import { Link } from "@thecointech/shared";
-import { List, Rail, SemanticFLOATS } from "semantic-ui-react";
+import { Checkbox, Label, List, Rail, SemanticFLOATS } from "semantic-ui-react";
 import { GreaterThanMobileSegment, MobileSegment } from "@thecointech/media-context";
+import { useSearchParams } from "react-router";
+import styles from "./index.module.less";
 
 type Props = {
   categories: string[],
@@ -10,13 +11,8 @@ type Props = {
   pathBeforeTheId: string
 }
 
-function displayEntry(index: number, name: string, pathBeforeTheId: string) {
-  return <List.Item key={index}>
-    <Link to={pathBeforeTheId + name}>{name}</Link>
-  </List.Item>
-}
+export const CategoryMenu = ({ categories, idForMenu, railPosition }: Props) => {
 
-export const CategoryMenu = ({ categories, idForMenu, railPosition, pathBeforeTheId }: Props) => {
   categories.sort();
   return (
     <>
@@ -24,7 +20,7 @@ export const CategoryMenu = ({ categories, idForMenu, railPosition, pathBeforeTh
         <Rail position={railPosition}>
           <div id={idForMenu}>
             <List divided relaxed size={"massive"} className={"x2spaceBefore"}>
-              {categories.map((entry, index) => (displayEntry(index, entry, pathBeforeTheId)))}
+              {categories.map((entry, index) => <CategoryMenuEntry key={index} name={entry} />)}
             </List>
           </div>
         </Rail>
@@ -33,10 +29,51 @@ export const CategoryMenu = ({ categories, idForMenu, railPosition, pathBeforeTh
       <MobileSegment>
         <div id={idForMenu}>
           <List divided relaxed size={"massive"} className={"x10spaceBefore x8spaceAfter"}>
-            {categories.map((entry, index) => (displayEntry(index, entry, pathBeforeTheId)))}
+            {categories.map((entry, index) => <CategoryMenuEntry key={index} name={entry} />)}
           </List>
         </div>
       </MobileSegment>
     </>
-  )
-}
+  );
+};
+
+
+const CategoryMenuEntry = ({ name }: { name: string }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Get selected categories from URL
+  const selectedCategories = new Set(searchParams.getAll('category'));
+
+  const handleToggle = (category: string) => {
+    const newSelected = new Set(selectedCategories);
+    if (newSelected.has(category)) {
+      newSelected.delete(category);
+    } else {
+      newSelected.add(category);
+    }
+
+    // Update URL search params
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete('category'); // Clear all category params
+    newSelected.forEach(cat => newParams.append('category', cat));
+    setSearchParams(newParams);
+  };
+
+  const isChecked = (
+    selectedCategories.size === 0 ||
+    selectedCategories.has(name)
+  );
+
+  return (
+    <List.Item>
+      <label className={styles.categoryRow} style={{ cursor: 'pointer', width: '100%' }}>
+        <Label>{name}</Label>
+        <Checkbox
+          className={styles.categoryCB}
+          checked={isChecked}
+          onChange={() => handleToggle(name)}
+        />
+      </label>
+  </List.Item>
+  );
+};

@@ -430,6 +430,10 @@
     "defaultMessage": "Blog",
     "description": "site.blog.title: Title for the In-depth blog page"
   },
+  "xcoc1q": {
+    "defaultMessage": "Blog",
+    "description": "site.MainNavigation.blog: Blog Link"
+  },
   "xoodDX": {
     "defaultMessage": "FAQ",
     "description": "site.helpDocs.title: title for the FAQ page"
