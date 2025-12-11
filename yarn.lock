@@ -11067,6 +11067,8 @@ __metadata:
 "@thecointech/--mocks--@workspace:libs/__mocks__":
   version: 0.0.0-use.local
   resolution: "@thecointech/--mocks--@workspace:libs/__mocks__"
+  dependencies:
+    "@thecointech/setenv": "npm:^0.5.0"
   languageName: unknown
   linkType: soft
 

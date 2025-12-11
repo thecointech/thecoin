@@ -1,5 +1,5 @@
 {
-  "format": "custom",
+  "format": "page",
   "id": "article",
   "label": "Article",
   "repeatable": true,
@@ -51,16 +51,19 @@
       "short_content": {
         "type": "StructuredText",
         "config": {
-          "single": "paragraph",
-          "label": "Short Content"
+          "label": "Short Content",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "single": "paragraph,strong,em"
         }
       },
       "content": {
         "type": "StructuredText",
         "config": {
-          "multi": "paragraph,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item",
+          "label": "Content",
+          "placeholder": "",
           "allowTargetBlank": true,
-          "label": "Content"
+          "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
         }
       },
       "categories": {
@@ -81,6 +84,17 @@
             }
           },
           "label": "Categories"
+        }
+      },
+      "slices": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "rich_text": {
+              "type": "SharedSlice"
+            }
+          }
         }
       }
     },

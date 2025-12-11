@@ -1,10 +1,10 @@
 import {
   createClient as baseCreateClient,
-  ClientConfig,
-  Route,
+  type ClientConfig,
+  type Route,
 } from "@prismicio/client";
 import { enableAutoPreviews } from "@prismicio/next";
-import sm from "../slicemachine.config.json";
+import sm from "../slicemachine.config.json" with { type: "json" };
 
 /**
  * The project's Prismic repository name.
@@ -38,7 +38,7 @@ const routes: Route[] = [
  *
  * @param config - Configuration for the Prismic client.
  */
-export function createClient(config: ClientConfig = {}) {
+export function createClient(config: ClientConfig = {}, isWebsite = true) {
   const client = baseCreateClient(sm.apiEndpoint || repositoryName, {
     routes,
     fetchOptions:
@@ -48,7 +48,9 @@ export function createClient(config: ClientConfig = {}) {
     ...config,
   });
 
-  enableAutoPreviews({ client });
+  if (isWebsite) {
+    enableAutoPreviews({ client });
+  }
 
   return client;
 }

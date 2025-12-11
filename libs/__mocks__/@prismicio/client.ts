@@ -10,23 +10,29 @@ export * from "../../../node_modules/@prismicio/client/dist/index.js";
 // NOTE: Not yet updated to match the latest API
 type SharedType = typeof articles[number]|typeof faqs[number];
 class MockClient implements Pick<Client, "getByUID"|"getAllByType"> {
-  getByUID(documentType: string, uid: string) {
+  getByUID(documentType: string, uid: string, options?: {lang?: string}) {
     return Promise.resolve(
-      getData(documentType).find(r => r.uid === uid) as any
+      getData(documentType, options?.lang).find(r => r.uid === uid) as any
     );
   }
-  getAllByType(documentType: string) {
+  getAllByType(documentType: string, options?: {lang?: string}) {
     return Promise.resolve(
-      getData(documentType) as any
+      getData(documentType, options?.lang) as any
     );
   }
 }
-const getData = (documentType: string) => {
+
+const filterData = (data: SharedType[], lang = "en-ca") =>
+  lang == '*'
+    ? data
+    : data.filter(r => r.lang === lang);
+
+const getData = (documentType: string, lang = "en-ca") => {
   switch (documentType) {
     case "article":
-      return articles as SharedType[];
+      return filterData(articles as SharedType[], lang);
     case "faq":
-      return faqs as SharedType[];
+      return filterData(faqs as SharedType[], lang);
     default:
       throw new Error(`Unsupported Prismic document type in mock: ${documentType}`);
   }

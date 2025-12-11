@@ -15,9 +15,19 @@ const DOCUMENTS_KEY: keyof ApplicationRootState = "documents";
 const getOptions = (locale: string) => ({ lang : `${locale}-ca` })
 const getByUID = (id: string, locale: string) => client.getByUID('article', id, getOptions(locale));
 async function fetchData(locale: string) {
-  const articles = await client.getAllByType('article', getOptions(locale))
-  const faqs = await client.getAllByType('faq', getOptions(locale))
-  return [...articles, ...faqs];
+  try {
+    const articles = await client.getAllByType('article', getOptions(locale))
+    const faqs = await client.getAllByType('faq', getOptions(locale))
+    return [...articles, ...faqs];
+  }
+  catch (e) {
+    // TODO: Use polly & proper error handling
+    // If anything goes wrong, don't return anything.  This at least
+    // allows the user to click on the page and we'll try again
+    alert(`Failed to fetch Prismic docs for locale: ${locale}`);
+    log.error(`Failed to fetch Prismic docs for locale: ${locale}`, e);
+    return null;
+  }
 }
 
 const initialState: PrismicState = {
