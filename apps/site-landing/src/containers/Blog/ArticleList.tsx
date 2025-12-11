@@ -5,7 +5,7 @@ import { selectLocale } from '@thecointech/redux-intl';
 import { CategoryMenu } from "components/PrismicMenuByCategories";
 import { Decoration } from "components/Decoration";
 import { ArticleItem } from "./ArticleItem";
-import { useParams, useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router';
 import { Prismic } from '../../components/Prismic/reducer';
 import styles from "./styles.module.less";
 import { defineMessages, FormattedMessage } from 'react-intl';
