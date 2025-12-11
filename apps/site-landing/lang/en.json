@@ -43,6 +43,10 @@
     "defaultMessage": "Keep Your Profits",
     "description": "site.homepage.wealthier.profits.title: The title for the profits for the homepage wealthier"
   },
+  "2cToSS": {
+    "defaultMessage": "FAQs",
+    "description": "site.helpDocs.title: title for the FAQ page"
+  },
   "2e2bPv": {
     "defaultMessage": "Credit Spending:",
     "description": "Simulator: parameters for credit-based spending"
@@ -433,10 +437,6 @@
   "xcoc1q": {
     "defaultMessage": "Blog",
     "description": "site.MainNavigation.blog: Blog Link"
-  },
-  "xoodDX": {
-    "defaultMessage": "FAQ",
-    "description": "site.helpDocs.title: title for the FAQ page"
   },
   "yqcj84": {
     "defaultMessage": "How Anyone Can Get Rich Slow",

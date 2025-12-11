@@ -50,7 +50,7 @@ export const HelpDocs = () => {
             <FormattedMessage {...translations.title} />
           </Header.Content>
         </Header>
-        <CategoryMenu categories={categories} idForMenu={styles.menuFaq} railPosition={"right"} pathBeforeTheId="/faq/" />
+        <CategoryMenu categories={categories} idForMenu={styles.menuFaq} railPosition={"right"} />
         {faqs.map(faq => (<FAQSlice key={faq.id} document={faq} />))}
       </div>
       <Decoration />
