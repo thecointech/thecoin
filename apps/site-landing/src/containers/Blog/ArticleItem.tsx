@@ -34,7 +34,11 @@ export const ArticleItem = ({ uid, data }: ArticleDocument) => {
           <Grid.Column>
             {
               data.thumbnail?.url
-                ? <img src={ data.thumbnail.url } alt={data.thumbnail.alt ?? ""} />
+                ? <img
+                    src={ data.thumbnail.url }
+                    alt={data.thumbnail.alt ?? ""}
+                    loading="lazy"
+                  />
                 : undefined
             }
           </Grid.Column>
