@@ -22,7 +22,12 @@ export const ArticleItem = ({ uid, data }: ArticleDocument) => {
       role="link"
       onClick={() => navigate(url)}
       tabIndex={0}
-      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && navigate(url)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          navigate(url);
+        }
+      }}
     >
       <Grid stackable columns='equal' className={`${styles.articleLineContainer}`}>
         <Grid.Row>
