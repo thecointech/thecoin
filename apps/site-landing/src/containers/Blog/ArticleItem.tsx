@@ -18,7 +18,13 @@ export const ArticleItem = ({ uid, data }: ArticleDocument) => {
   const url = `/blog/${uid}`;
   const navigate = useNavigate();
   return (
-    <div className={`${styles.articleLine}`} onClick={() => navigate(url)}>
+    <div
+      className={`${styles.articleLine}`}
+      role="link"
+      onClick={() => navigate(url)}
+      tabIndex={0}
+      onKeyUp={(e) => e.key === 'Enter' && navigate(url)}
+    >
       <Grid stackable columns='equal' className={`${styles.articleLineContainer}`}>
         <Grid.Row>
           <Grid.Column>
@@ -35,7 +41,7 @@ export const ArticleItem = ({ uid, data }: ArticleDocument) => {
               </Header>
               <RichText field={data.short_content || data.content} />
             </div>
-            <Link to={url}><FormattedMessage {...translations.link} /></Link>
+            <div className={styles.link}><FormattedMessage {...translations.link} /></div>
           </Grid.Column>
         </Grid.Row>
       </Grid>

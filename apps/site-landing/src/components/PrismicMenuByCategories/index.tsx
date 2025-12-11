@@ -8,19 +8,18 @@ type Props = {
   categories: string[],
   idForMenu: string,
   railPosition: SemanticFLOATS,
-  pathBeforeTheId: string
 }
 
 export const CategoryMenu = ({ categories, idForMenu, railPosition }: Props) => {
 
-  categories.sort();
+  const sortedCategories = [...categories].sort();
   return (
     <>
       <GreaterThanMobileSegment>
         <Rail position={railPosition}>
           <div id={idForMenu}>
             <List divided relaxed size={"massive"} className={"x2spaceBefore"}>
-              {categories.map((entry, index) => <CategoryMenuEntry key={index} name={entry} />)}
+              {sortedCategories.map((entry, index) => <CategoryMenuEntry key={index} name={entry} />)}
             </List>
           </div>
         </Rail>
@@ -29,7 +28,7 @@ export const CategoryMenu = ({ categories, idForMenu, railPosition }: Props) => 
       <MobileSegment>
         <div id={idForMenu}>
           <List divided relaxed size={"massive"} className={"x10spaceBefore x8spaceAfter"}>
-            {categories.map((entry, index) => <CategoryMenuEntry key={index} name={entry} />)}
+            {sortedCategories.map((entry, index) => <CategoryMenuEntry key={index} name={entry} />)}
           </List>
         </div>
       </MobileSegment>

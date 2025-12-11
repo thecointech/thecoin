@@ -23,8 +23,6 @@ export const ArticleList = () => {
   const prismic = Prismic.useData();
   const actions = Prismic.useApi();
 
-  // Get selected categories from URL
-  const { category } = useParams<{category: string}>();
   useEffect(() => {
     actions.fetchAllDocs(locale);
   }, [locale]);
@@ -44,13 +42,10 @@ export const ArticleList = () => {
       <div className={styles.containerArticle}>
         <Header as="h2" className={"x10spaceBefore"}>
           <Header.Content>
-            {category
-              ? category
-              : <FormattedMessage {...translations.title} />
-            }
+            <FormattedMessage {...translations.title} />
           </Header.Content>
         </Header>
-        <CategoryMenu categories={categories} idForMenu={styles.menuArticle} railPosition={"left"} pathBeforeTheId="/blog/category/" />
+        <CategoryMenu categories={categories} idForMenu={styles.menuArticle} railPosition={"left"} />
         {articles.map(article => (<ArticleItem key={article.id} {...article} />))}
       </div>
       <Decoration />
