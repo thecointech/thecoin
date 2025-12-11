@@ -71,6 +71,13 @@ exports[`<App /> should render and match the snapshot 1`] = `
         <a
           class="item undefined onlyBigScreen"
           data-discover="true"
+          href="/blog"
+        >
+          Blog
+        </a>
+        <a
+          class="item undefined onlyBigScreen"
+          data-discover="true"
           href="/help"
         >
           Help
