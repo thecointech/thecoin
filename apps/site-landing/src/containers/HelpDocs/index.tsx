@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { selectLocale } from '@thecointech/redux-intl';
 import styles from "./styles.module.less";
 import { Header } from 'semantic-ui-react';
-import { FaqItem } from './FaqItem';
+import { FAQ as FAQSlice} from '@thecointech/site-prismic/components'
 import { Decoration } from '../../components/Decoration';
 import { CategoryMenu } from '../../components/PrismicMenuByCategories';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -14,7 +14,7 @@ import type { FaqDocument } from "@thecointech/site-prismic/types";
 
 const translations = defineMessages({
   title: {
-    defaultMessage: 'FAQ',
+    defaultMessage: 'FAQs',
     description: 'site.helpDocs.title: title for the FAQ page'
   },
 });
@@ -45,13 +45,13 @@ export const HelpDocs = () => {
   return (
     <>
       <div className={styles.containerFaq}>
-        <CategoryMenu categories={categories} idForMenu={styles.menuFaq} railPosition={"right"} pathBeforeTheId="/faq/" />
         <Header as="h2" className={"x10spaceBefore"}>
           <Header.Content>
             <FormattedMessage {...translations.title} />
           </Header.Content>
         </Header>
-        {faqs.map(faq => (<FaqItem key={faq.id} {...faq} />))}
+        <CategoryMenu categories={categories} idForMenu={styles.menuFaq} railPosition={"right"} pathBeforeTheId="/faq/" />
+        {faqs.map(faq => (<FAQSlice key={faq.id} document={faq} />))}
       </div>
       <Decoration />
     </>

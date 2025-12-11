@@ -43,7 +43,7 @@ export const Article = () => {
               <FormattedMessage {...translations.backLink} />
             </a>
           </div>
-          <ArticleSlice document={articleData} />
+          <ArticleSlice document={articleData} locale={locale}/>
         </div>
       </>
     : <NotFoundPage />

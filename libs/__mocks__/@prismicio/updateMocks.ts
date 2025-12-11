@@ -5,7 +5,9 @@ const client = createClient({}, false);
 const articles = await client.getAllByType("article")
 const faqs = await client.getAllByType("faq")
 
-writeFileSync("./@prismicio/mock.articles.json", JSON.stringify(articles, null, 2))
-writeFileSync("./@prismicio/mock.faqs.json", JSON.stringify(faqs, null, 2))
+const cleanedArticles = articles.map(article => ({...article, href: undefined}))
+const cleanedFaqs = faqs.map(faq => ({...faq, href: undefined}))
+writeFileSync("./@prismicio/mock.articles.json", JSON.stringify(cleanedArticles, null, 2))
+writeFileSync("./@prismicio/mock.faqs.json", JSON.stringify(cleanedFaqs, null, 2))
 
 

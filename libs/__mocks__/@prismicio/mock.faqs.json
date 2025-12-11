@@ -4,10 +4,9 @@
     "uid": "why-use-thecoin",
     "url": "/faq/why-use-thecoin",
     "type": "faq",
-    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aTiXxxEAACwA7cNX&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YLbGzBAAACQA1Ha2%22%29+%5D%5D",
     "tags": [],
     "first_publication_date": "2021-06-01T23:46:24+0000",
-    "last_publication_date": "2021-10-27T20:07:19+0000",
+    "last_publication_date": "2025-12-11T16:10:22+0000",
     "slugs": [
       "why-use-thecoin"
     ],
@@ -25,9 +24,10 @@
       "show_on_faq_home": true,
       "question": [
         {
-          "type": "heading1",
+          "type": "heading4",
           "text": "Why use TheCoin?",
-          "spans": []
+          "spans": [],
+          "direction": "ltr"
         }
       ],
       "answer": [
@@ -44,14 +44,11 @@
     "uid": "who-are-we",
     "url": "/faq/who-are-we",
     "type": "faq",
-    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aTiXxxEAACwA7cNX&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YLV43xAAACMAzpiq%22%29+%5D%5D",
     "tags": [],
     "first_publication_date": "2021-06-01T00:01:53+0000",
-    "last_publication_date": "2021-10-27T20:07:00+0000",
+    "last_publication_date": "2025-12-11T16:10:04+0000",
     "slugs": [
-      "who-are-we",
-      "test-account-security",
-      "test"
+      "who-are-we"
     ],
     "linked_documents": [],
     "lang": "en-ca",
@@ -67,9 +64,10 @@
       "show_on_faq_home": true,
       "question": [
         {
-          "type": "heading1",
+          "type": "heading4",
           "text": "Who are we?",
-          "spans": []
+          "spans": [],
+          "direction": "ltr"
         }
       ],
       "answer": [
@@ -82,184 +80,13 @@
     }
   },
   {
-    "id": "YLv1EBMAACQAE1_1",
-    "uid": "make-a-difference",
-    "url": "/faq/make-a-difference",
-    "type": "faq",
-    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aTiXxxEAACwA7cNX&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YLv1EBMAACQAE1_1%22%29+%5D%5D",
-    "tags": [],
-    "first_publication_date": "2021-06-05T22:05:23+0000",
-    "last_publication_date": "2021-10-27T20:07:51+0000",
-    "slugs": [
-      "why-do-you-think-youre-making-a-difference-on-climate-change"
-    ],
-    "linked_documents": [],
-    "lang": "en-ca",
-    "alternate_languages": [
-      {
-        "id": "YLwByhMAACMAE5g-",
-        "type": "faq",
-        "lang": "fr-ca"
-      }
-    ],
-    "data": {
-      "category": "Climate Change",
-      "show_on_faq_home": false,
-      "question": [
-        {
-          "type": "heading1",
-          "text": "Why do you think you’re making a difference on Climate Change?",
-          "spans": []
-        }
-      ],
-      "answer": [
-        {
-          "type": "paragraph",
-          "text": "First up, it’s pretty simple math.  In the last 3 months, we offset 66 tonnes of CO2.  That’s a big offset - big enough to reduce all our clients' emissions to be in line with the Paris Accord.  Or for a more visual impact - on a yearly basis each one of our members took 5 cars off the road.",
-          "spans": []
-        },
-        {
-          "type": "paragraph",
-          "text": "On a larger scale though - we believe this is important because it changes the math of Climate Change.  At the heart of the crisis is the problem that any sacrifice is personal.  At its core, it can be summed up with ",
-          "spans": []
-        },
-        {
-          "type": "paragraph",
-          "text": "“Why should I? Nobody else is doing it”",
-          "spans": []
-        },
-        {
-          "type": "paragraph",
-          "text": "TheCoin is designed to change this math.  The benefit is personal - if you have an account, you are the one who stands to win as your savings grow.  It doesn’t need everyone else to jump in for you to benefit, you’ll win no matter what the rest of the world does.",
-          "spans": []
-        },
-        {
-          "type": "paragraph",
-          "text": "For the biggest challenge our world has ever seen, we need to start moving on a solution, and TheCoin gives you a way to do that. All while giving yourself some serious extra moolah.  ",
-          "spans": []
-        },
-        {
-          "type": "paragraph",
-          "text": "We are extremely proud of this combo… and we hope you are too!",
-          "spans": []
-        }
-      ]
-    }
-  },
-  {
-    "id": "YLvFkRMAACQAEo1X",
-    "uid": "how-does-it-work",
-    "url": "/faq/how-does-it-work",
-    "type": "faq",
-    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aTiXxxEAACwA7cNX&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YLvFkRMAACQAEo1X%22%29+%5D%5D",
-    "tags": [],
-    "first_publication_date": "2021-06-05T18:42:29+0000",
-    "last_publication_date": "2021-10-27T20:06:44+0000",
-    "slugs": [
-      "how-does-it-work"
-    ],
-    "linked_documents": [],
-    "lang": "en-ca",
-    "alternate_languages": [],
-    "data": {
-      "category": "About TheCoin",
-      "show_on_faq_home": false,
-      "question": [
-        {
-          "type": "heading1",
-          "text": "How Does It work?",
-          "spans": []
-        }
-      ],
-      "answer": [
-        {
-          "type": "paragraph",
-          "text": "You simply open an account online with The Coin and transfer money in from your bank.  We invest this money into the stock market using a time-tested, effective and simple strategy endorsed by Nobel prize winners and the world’s most successful investors.  Over time, your investments go up in value.  Whenever you want to spend your money, we exchange the desired dollar amount back to Canadian dollars and complete the transaction on your behalf.",
-          "spans": []
-        }
-      ]
-    }
-  },
-  {
-    "id": "YLvHuxMAACIAEpb5",
-    "uid": "how-users-protected",
-    "url": "/faq/how-users-protected",
-    "type": "faq",
-    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aTiXxxEAACwA7cNX&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YLvHuxMAACIAEpb5%22%29+%5D%5D",
-    "tags": [],
-    "first_publication_date": "2021-06-05T18:51:43+0000",
-    "last_publication_date": "2021-10-27T20:07:36+0000",
-    "slugs": [
-      "how-are-users-protected",
-      "how-much-will-my-money-grow"
-    ],
-    "linked_documents": [],
-    "lang": "en-ca",
-    "alternate_languages": [
-      {
-        "id": "YLw6dhMAACQAFJET",
-        "type": "faq",
-        "lang": "fr-ca"
-      }
-    ],
-    "data": {
-      "category": "Account Security",
-      "show_on_faq_home": false,
-      "question": [
-        {
-          "type": "heading1",
-          "text": "How are users protected?",
-          "spans": []
-        }
-      ],
-      "answer": [
-        {
-          "type": "paragraph",
-          "text": "We take security very seriously. Very very seriously. So seriously, people are warned before we arrive at parties to not ask us about it...",
-          "spans": []
-        },
-        {
-          "type": "paragraph",
-          "text": "Don't believe us? Check out just how far we go...",
-          "spans": []
-        },
-        {
-          "type": "paragraph",
-          "text": "We employ a multi-layered approach to ensure your account has complete security.",
-          "spans": []
-        },
-        {
-          "type": "paragraph",
-          "text": "First, your account and it's value are secured on the blockchain, meaning that the same security that protects over $17 trillion of assets also protects your account. This security is, in practical terms, unhackable.",
-          "spans": []
-        },
-        {
-          "type": "paragraph",
-          "text": "Second, for the data we absolutely must store - and there is some - it’s stored by Google. Instead of trying to create our own security (and risking getting it wrong) - we pay Google to do it for us. And we trust google to do that well. But - data breaches do happen, and big companies do occasionally make mistakes. So...",
-          "spans": []
-        },
-        {
-          "type": "paragraph",
-          "text": "Third, we have adopted a unique method for storing the key to your assets that means we never store the actual account details. Unlike other financial institutions, our setup means that even if Google's servers were hacked, and the bad guys could do whatever they wanted to our databases - they -still- wouldn't be able to access your account (they'd make a mess to our internal accounting though, so we're pretty determined to keep them out).",
-          "spans": []
-        },
-        {
-          "type": "paragraph",
-          "text": "Fourth: We actively watch our clients accounts for strange activity, and because of our unique designs we have some pretty good methods for catching it. After all, our best protections can't stop someone's laptop getting stolen. In these cases, we are building an automatic fail-safe, which will automatically trigger to keep your funds completely safe.",
-          "spans": []
-        }
-      ]
-    }
-  },
-  {
     "id": "YLrHiBMAACQADiDn",
     "uid": "financial-accountability",
     "url": "/faq/financial-accountability",
     "type": "faq",
-    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aTiXxxEAACwA7cNX&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YLrHiBMAACQADiDn%22%29+%5D%5D",
     "tags": [],
     "first_publication_date": "2021-06-05T00:38:36+0000",
-    "last_publication_date": "2021-10-27T20:06:05+0000",
+    "last_publication_date": "2025-12-11T16:02:58+0000",
     "slugs": [
       "if-you-are-a-non-profit-where-does-the-money-go"
     ],
@@ -278,9 +105,10 @@
       "show_on_faq_home": false,
       "question": [
         {
-          "type": "heading1",
+          "type": "heading4",
           "text": "If you are a non-profit, where does the money go?",
-          "spans": []
+          "spans": [],
+          "direction": "ltr"
         }
       ],
       "answer": [
@@ -293,14 +121,84 @@
     }
   },
   {
+    "id": "YLv1EBMAACQAE1_1",
+    "uid": "make-a-difference",
+    "url": "/faq/make-a-difference",
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-05T22:05:23+0000",
+    "last_publication_date": "2025-12-11T15:58:27+0000",
+    "slugs": [
+      "why-do-you-think-youre-making-a-difference-on-climate-change"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [
+      {
+        "id": "YLwByhMAACMAE5g-",
+        "type": "faq",
+        "lang": "fr-ca"
+      }
+    ],
+    "data": {
+      "category": "Climate Change",
+      "show_on_faq_home": true,
+      "question": [
+        {
+          "type": "heading4",
+          "text": "Why do you think you’re making a difference on Climate Change?",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "First up, it’s pretty simple math.  In the last 3 months, we offset 66 tonnes of CO2.  That’s a big offset - big enough to reduce all our clients' emissions to be in line with the Paris Accord.  Or for a more visual impact - on a yearly basis each one of our members took 5 cars off the road.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "On a larger scale though - we believe this is important because it changes the math of Climate Change.  At the heart of the crisis is the problem that any sacrifice is personal.  At its core, it can be summed up with ",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "“Why should I? Nobody else is doing it”",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "TheCoin is designed to change this math.  The benefit is personal - if you have an account, you are the one who stands to win as your savings grow.  It doesn’t need everyone else to jump in for you to benefit, you’ll win no matter what the rest of the world does.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "For the biggest challenge our world has ever seen, we need to start moving on a solution, and TheCoin gives you a way to do that. All while giving yourself some serious extra moolah.  ",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "We are extremely proud of this combo… and we hope you are too!",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ]
+    }
+  },
+  {
     "id": "YLv1bRMAACMAE2GO",
     "uid": "why-not-alternatives",
     "url": "/faq/why-not-alternatives",
     "type": "faq",
-    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aTiXxxEAACwA7cNX&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YLv1bRMAACMAE2GO%22%29+%5D%5D",
     "tags": [],
     "first_publication_date": "2021-06-05T22:06:40+0000",
-    "last_publication_date": "2021-10-27T20:05:11+0000",
+    "last_publication_date": "2025-12-11T16:00:51+0000",
     "slugs": [
       "why-dont-you-invest-in-goldpropertystock-xother"
     ],
@@ -318,9 +216,10 @@
       "show_on_faq_home": false,
       "question": [
         {
-          "type": "heading1",
-          "text": "Why don’t you invest in gold/property/stock X/other?",
-          "spans": []
+          "type": "heading4",
+          "text": "Why don’t you invest in gold/property/stock X/other? ",
+          "spans": [],
+          "direction": "ltr"
         }
       ],
       "answer": [
@@ -337,10 +236,9 @@
     "uid": "account-safety",
     "url": "/faq/account-safety",
     "type": "faq",
-    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aTiXxxEAACwA7cNX&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YLvOTRMAACIAErQd%22%29+%5D%5D",
     "tags": [],
     "first_publication_date": "2021-06-05T19:19:55+0000",
-    "last_publication_date": "2021-10-27T20:05:29+0000",
+    "last_publication_date": "2025-12-11T16:01:11+0000",
     "slugs": [
       "are-you-just-as-safe-as-a-regular-bank"
     ],
@@ -358,9 +256,10 @@
       "show_on_faq_home": false,
       "question": [
         {
-          "type": "heading1",
+          "type": "heading4",
           "text": "Are you just as safe as a regular bank?",
-          "spans": []
+          "spans": [],
+          "direction": "ltr"
         }
       ],
       "answer": [
@@ -407,10 +306,9 @@
     "uid": "about-thecoin",
     "url": "/faq/about-thecoin",
     "type": "faq",
-    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aTiXxxEAACwA7cNX&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YLbGdhAAACMA1HUv%22%29+%5D%5D",
     "tags": [],
     "first_publication_date": "2021-06-01T23:44:58+0000",
-    "last_publication_date": "2021-10-27T20:06:23+0000",
+    "last_publication_date": "2025-12-11T16:09:10+0000",
     "slugs": [
       "what-is-thecoin"
     ],
@@ -428,26 +326,147 @@
       "show_on_faq_home": true,
       "question": [
         {
-          "type": "heading1",
+          "type": "heading4",
           "text": "What is TheCoin?",
-          "spans": []
+          "spans": [],
+          "direction": "ltr"
         }
       ],
       "answer": [
         {
           "type": "paragraph",
           "text": "TheCoin is a digital wallet that holds the digital currency of TheCoin. This acts as a chequing, savings and investment account in one. TheCoin currency itself is what is known as a stablecoin, meaning it avoids the volatility and uncertainty of other digital currencies.",
-          "spans": []
+          "spans": [],
+          "direction": "ltr"
         },
         {
           "type": "paragraph",
-          "text": "",
-          "spans": []
+          "text": "What is a stablecoin, you may ask? It is a digital currency whose value is “pegged” (tied to) another asset or assets with its own intrinsic value, much like the gold standard of yesteryear.  Stablecoins are different to normal cryptocurrencies, there is no \"mining\" so we don't have the insane energy waste that traditional cryptocurrencies have.",
+          "spans": [],
+          "direction": "ltr"
         },
         {
           "type": "paragraph",
-          "text": "What is a stablecoin, you may ask? It is a digital currency whose value is “pegged” (tied to) another asset or assets with its own intrinsic value, much like the gold standard of yesteryear.",
+          "text": "The value of a stablecoin is also, as the name implies, stable.  This is because it represents something of actual value.  Imagine, for a second, that something terrible happened tomorrow, and 10% of Bitcoins holders tried to sell, all at once.  The price of Bitcoin would crater, because there is nothing giving bitcoin value other than the next person who wants to buy it!",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "Stablecoins are different.  If every single person who held TheCoin wanted to sell (which did happen in the early days), and you were the only person left holding... your account balance wouldn't move.  We would have to sell a bunch of assets to pay out the people who left, but your assets would still be there, still growing.",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLvFkRMAACQAEo1X",
+    "uid": "how-does-it-work",
+    "url": "/faq/how-does-it-work",
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-05T18:42:29+0000",
+    "last_publication_date": "2025-12-11T16:09:44+0000",
+    "slugs": [
+      "how-does-it-work"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [],
+    "data": {
+      "category": "About TheCoin",
+      "show_on_faq_home": false,
+      "question": [
+        {
+          "type": "heading4",
+          "text": "How Does It work?",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "You simply open an account online with The Coin and transfer money in from your bank.  We invest this money into the stock market using a time-tested, effective and simple strategy endorsed by Nobel prize winners and the world’s most successful investors.  Over time, your investments go up in value.  Whenever you want to spend your money, we exchange the desired dollar amount back to Canadian dollars and complete the transaction on your behalf.",
           "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLvHuxMAACIAEpb5",
+    "uid": "how-users-protected",
+    "url": "/faq/how-users-protected",
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-05T18:51:43+0000",
+    "last_publication_date": "2025-12-11T15:59:55+0000",
+    "slugs": [
+      "how-are-users-protected"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [
+      {
+        "id": "YLw6dhMAACQAFJET",
+        "type": "faq",
+        "lang": "fr-ca"
+      }
+    ],
+    "data": {
+      "category": "Account Security",
+      "show_on_faq_home": false,
+      "question": [
+        {
+          "type": "heading4",
+          "text": "How are users protected? ",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "We take security very seriously. Very very seriously. So seriously, people are warned before we arrive at parties to not ask us about it...",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "Don't believe us? Check out just how far we go...",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "We employ a multi-layered approach to ensure your account has complete security.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "First, your account and it's value are secured on the blockchain, meaning that the same security that protects over $17 trillion of assets also protects your account. This security is, in practical terms, unhackable.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "Second, for the data we absolutely must store - and there is some - it’s stored by Google. Instead of trying to create our own security (and risking getting it wrong) - we pay Google to do it for us. And we trust google to do that well. But - data breaches do happen, and big companies do occasionally make mistakes. So...",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "Third, we have adopted a unique method for storing the key to your assets that means we never store the actual account details. Unlike other financial institutions, our setup means that even if Google's servers were hacked, and the bad guys could do whatever they wanted to our databases - they -still- wouldn't be able to access your account (they'd make a mess to our internal accounting though, so we're pretty determined to keep them out).",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "Fourth: We actively watch our clients accounts for strange activity, and because of our unique designs we have some pretty good methods for catching it. After all, our best protections can't stop someone's laptop getting stolen. In these cases, we are building an automatic fail-safe, which will automatically trigger to keep your funds completely safe.",
+          "spans": [],
+          "direction": "ltr"
         }
       ]
     }
@@ -457,10 +476,9 @@
     "uid": "how-much-growth",
     "url": "/faq/how-much-growth",
     "type": "faq",
-    "href": "https://thecointech.cdn.prismic.io/api/v2/documents/search?ref=aTiXxxEAACwA7cNX&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YLu7VRMAACMAEl-z%22%29+%5D%5D",
     "tags": [],
     "first_publication_date": "2021-06-05T17:58:49+0000",
-    "last_publication_date": "2021-10-27T20:05:46+0000",
+    "last_publication_date": "2025-12-11T16:02:27+0000",
     "slugs": [
       "how-much-will-my-money-grow"
     ],
@@ -478,21 +496,24 @@
       "show_on_faq_home": false,
       "question": [
         {
-          "type": "heading1",
+          "type": "heading4",
           "text": "How much will my money grow?",
-          "spans": []
+          "spans": [],
+          "direction": "ltr"
         }
       ],
       "answer": [
         {
           "type": "paragraph",
           "text": "Your money will grow alongside the stock market, meaning that on any given day, it can increase or decrease.  While we can’t promise a return on any single day, over the long term our investment strategy returns an average of 9.5% per year.  It’s even better when you work it out relative to regular interest.  When the bank pays you interest, it’s counted as income – and this means that you lose a big slice of it to the government immediately.  Our accounts use capital gains, which have many advantages to grow their value.  One is that it’s only charged ½ as much tax, so 9.5% in capital gains is the same as about 15% in bank interest.  On top of this, you only pay capital gains when you spend your money – which means your growth can be tax-free.",
-          "spans": []
+          "spans": [],
+          "direction": "ltr"
         },
         {
           "type": "paragraph",
           "text": "In concrete terms, you can expect your account size to double roughly every 7.5 years. If you started with $2000 on the day you were born, and didn't touch it for the next 65 years, you can reasonably expect around $1 million to be in your account at retirement. Of course, as you grow, we hope you can start saving a bit more, but that cool $million will certainly make retirement a lot easier.",
-          "spans": []
+          "spans": [],
+          "direction": "ltr"
         }
       ]
     }

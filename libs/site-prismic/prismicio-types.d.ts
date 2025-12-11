@@ -386,7 +386,7 @@ interface FaqDocumentData {
    * Question field in *FAQ*
    *
    * - **Field Type**: Rich Text
-   * - **Placeholder**: *None*
+   * - **Placeholder**: A frequently asked question
    * - **API ID Path**: faq.question
    * - **Tab**: Main
    * - **Documentation**: https://prismic.io/docs/fields/rich-text
