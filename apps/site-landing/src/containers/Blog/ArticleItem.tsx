@@ -2,9 +2,11 @@ import React from "react";
 import { Grid, Header } from "semantic-ui-react";
 import { Link } from "@thecointech/shared";
 import { defineMessages, FormattedMessage } from "react-intl";
-import { PrismicRichText, PrismicText } from "@prismicio/react";
+import { PrismicText } from "@prismicio/react";
 import styles from "./styles.module.less";
 import type { ArticleDocument } from "@thecointech/site-prismic/types";
+import { useNavigate } from "react-router";
+import { RichText } from "@thecointech/site-prismic/components";
 
 const translations = defineMessages({
   link : {
@@ -14,8 +16,9 @@ const translations = defineMessages({
 
 export const ArticleItem = ({ uid, data }: ArticleDocument) => {
   const url = `/blog/${uid}`;
+  const navigate = useNavigate();
   return (
-    <div className={`${styles.articleLine} x6spaceBefore x6spaceAfter`} >
+    <div className={`${styles.articleLine}`} onClick={() => navigate(url)}>
       <Grid stackable columns='equal' className={`${styles.articleLineContainer}`}>
         <Grid.Row>
           <Grid.Column>
@@ -30,7 +33,7 @@ export const ArticleItem = ({ uid, data }: ArticleDocument) => {
               <Header as={"h4"}>
                 <PrismicText field={data.title} />
               </Header>
-              <PrismicRichText field={data.content} />
+              <RichText field={data.short_content || data.content} />
             </div>
             <Link to={url}><FormattedMessage {...translations.link} /></Link>
           </Grid.Column>

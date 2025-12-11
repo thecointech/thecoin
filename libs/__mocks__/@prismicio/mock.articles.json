@@ -81,9 +81,9 @@
     "type": "article",
     "tags": [],
     "first_publication_date": "2022-03-27T13:45:09+0000",
-    "last_publication_date": "2025-12-09T21:42:31+0000",
+    "last_publication_date": "2025-12-11T16:34:20+0000",
     "slugs": [
-      "african-biogas-carbon-programme-carbon-offset"
+      "african-biogas-carbon-offset"
     ],
     "linked_documents": [],
     "lang": "en-ca",
@@ -124,16 +124,18 @@
       "title": [
         {
           "type": "heading2",
-          "text": "African Biogas Carbon Programme Carbon Offset",
-          "spans": []
+          "text": "African Biogas Carbon Offset",
+          "spans": [],
+          "direction": "ltr"
         }
       ],
       "publication_date": "2021-10-31",
       "short_content": [
         {
           "type": "paragraph",
-          "text": "African Biogas Carbon Programme Carbon Offset procured by TheCoin",
-          "spans": []
+          "text": "Learn how even better cooking facitilities is good for everyone",
+          "spans": [],
+          "direction": "ltr"
         }
       ],
       "content": [
