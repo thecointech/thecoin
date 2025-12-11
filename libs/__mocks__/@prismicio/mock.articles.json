@@ -81,7 +81,7 @@
     "type": "article",
     "tags": [],
     "first_publication_date": "2022-03-27T13:45:09+0000",
-    "last_publication_date": "2025-12-11T16:34:20+0000",
+    "last_publication_date": "2025-12-11T16:43:40+0000",
     "slugs": [
       "african-biogas-carbon-offset"
     ],
@@ -133,7 +133,7 @@
       "short_content": [
         {
           "type": "paragraph",
-          "text": "Learn how even better cooking facitilities is good for everyone",
+          "text": "Learn how even better cooking facilities is good for everyone",
           "spans": [],
           "direction": "ltr"
         }
@@ -398,6 +398,298 @@
       "categories": [
         {
           "category": "Global Warming"
+        }
+      ],
+      "slices": [],
+      "meta_title": null,
+      "meta_description": null,
+      "meta_image": {}
+    }
+  },
+  {
+    "id": "YnBqSREAACIAwvbR",
+    "uid": "think-investing-is-only-for-the-wealthy--think-again",
+    "url": "/article/think-investing-is-only-for-the-wealthy--think-again",
+    "type": "article",
+    "tags": [],
+    "first_publication_date": "2022-07-06T21:37:55+0000",
+    "last_publication_date": "2022-07-06T21:37:55+0000",
+    "slugs": [
+      "comment-generer-100-000--avec-thecoin",
+      "how-to-hack-100k-with-thecoin"
+    ],
+    "linked_documents": [],
+    "lang": "fr-ca",
+    "alternate_languages": [
+      {
+        "id": "Yj9_cBIAACQAdp4Q",
+        "type": "article",
+        "lang": "en-ca",
+        "uid": "think-investing-is-only-for-the-wealthy--think-again"
+      }
+    ],
+    "data": {
+      "thumbnail": {},
+      "image_before_title": {},
+      "title": [
+        {
+          "type": "heading2",
+          "text": "Comment générer 100 000 $ avec TheCoin",
+          "spans": []
+        }
+      ],
+      "publication_date": "2022-03-26",
+      "short_content": [
+        {
+          "type": "paragraph",
+          "text": "Vous pensez que l'investissement est réservé aux riches ? Détrompez-vous - voici une technique simple pour générer de l'argent  sans mettre de côté un seul centime !",
+          "spans": []
+        }
+      ],
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Lorsque les gens entendent parler d'investissement, beaucoup d'entre nous se ferment. L'investissement se fait dans notre compte REER ou pour des personnes qui ont plus d'argent qu'elles n'en ont besoin. C'est la raison pour laquelle nous avons conçu TheCoin pour tout le monde. Nous ne résoudrons pas le changement climatique si seuls les riches peuvent se permettre la solution.",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "Nous vous montrerons comment, même une personne sans épargne, peut augmenter ses revenus en toute sécurité et efficacement avec TheCoin. Cette technique utilise seulement l'argent que vous dépensez. Vous compenserez une grande partie de votre empreinte carbone, mais plus important encore, vous pourrez générer des centaines de milliers de dollars au cours de votre vie.",
+          "spans": [
+            {
+              "start": 0,
+              "end": 370,
+              "type": "strong"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Tout ce dont vous avez besoin :\n1) Une cartes Visa assorties d’une remise en argent.\n2) Un compte TheCoin.",
+          "spans": [
+            {
+              "start": 88,
+              "end": 105,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://thecoin.io/#/addAccount/",
+                "target": "_blank"
+              }
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Cette technique exploite la période de grâce sans intérêt offerte par la plupart des cartes Visa pour créer un solde avec TheCoin. Lorsque vous faites des achats avec votre Visa, vous bénéficiez d'un court laps de temps pour rembourser le prix d'achat sans intérêts. La plupart des cartes ont un cycle de facturation de 4 semaines. Les achats sont comptés à la fin du cycle de facturation pour calculer le montant dû. Vous disposez alors de trois semaines pour régler la totalité de la somme due. Si vous faites cela, aucun intérêt n'est facturé sur la carte.",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "Le cycle de facturation combiné et la date d'échéance signifient que vous avez jusqu'à 7 semaines pendant lesquelles vos achats ne génèrent aucun intérêt. En même temps, vous avez gagné l'argent nécessaire pour rembourser la carte de crédit. Cet argent est généralement déposé dans votre compte bancaire et ne fait rien d'utile. Vous pouvez conserver cet argent dans votre compte TheCoin et le regarder fructifier à la place.",
+          "spans": [
+            {
+              "start": 0,
+              "end": 425,
+              "type": "strong"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Sept semaines, ce n'est pas long, certainement pas assez long pour faire une différence significative dans votre vie. La puissance de cette technique vient du fait que vous répéterez ce processus toutes les quatre semaines pour le reste de votre vie. Vous n'investissez pas pendant sept semaines - ce petit montant peut rester investi pendant des décennies. Un petit montant investi sur une longue période -peut- changer votre vie. Pour démontrer comment, utilisons un exemple.",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "Amy a 23 ans. Elle n'est pas une personne qui gagne beaucoup d'argent ou qui dépense beaucoup. Amy n'a pas d'économies et ne gagne que suffisamment chaque semaine pour couvrir les 100 $ qu'elle dépense en épicerie et en sorties nocturnes. Elle vient d'apprendre l'existence de TheCoin et a décidé qu'il était temps de faire travailler son argent pour elle. Elle ne peut absolument pas se permettre de perdre de l'argent, alors elle crée son compte avec la protection ShockAbsorber maximale de 50%. Ce niveau de protection la protégera des récessions, même uniques, en alimentant son compte en cas de baisse du marché boursier. Après avoir reçu sa visa remise en argent, elle est prête à commencer.",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "La première semaine, Amy met ses 100 $ de dépenses sur sa carte Visa. En même temps, elle dépose ses 100 $ de gains dans TheCoin. Son solde net est toujours de 0 $ - elle doit 100 $ à Visa et a 100 $ sur son compte. Amy dépense encore 100 $ la semaine suivante et dépose 100 $ sur son compte de pièces. Son solde net est toujours de 0 $; elle doit maintenant 200 $ à Visa et a 200 $ avec TheCoin. Les semaines 3 et 4 répètent le schéma, et à la fin de la semaine 4, Visa calcule sa facture de 400 $, due dans 3 semaines. Cependant, au lieu de payer immédiatement, Amy utilise la fonction de paiement automatique TheCoin pour payer le dernier jour possible.",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "Payer en retard n'apporte rien dans un compte bancaire ordinaire, mais cela fait une différence significative lorsque votre solde augmente lui-même. Pour Amy, même si son solde net continue d'être de 0 $, la cinquième semaine, son compte TheCoin passe à 500 $, et à la fin de la semaine sept, il est passé à 700 $. À la fin de la semaine sept, sa facture Visa est automatiquement payée et elle commence la semaine 8 avec 300 $ sur son compte. À la fin de la semaine 8, Visa calcule sa prochaine facture de 400 $, avec trois semaines pour la payer. Amy continue de gagner et de dépenser jusqu'à la date d'échéance. À la semaine 11, Amy a de nouveau 700 $ en banque avant de payer les 400 $. Le cycle se répète.",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "Grâce à cette technique, le solde d'Amy avec TheCoin reste entre 300 $ à sa date de facturation et 700 $ à sa date d'échéance. Son solde moyen est de 500 $, et elle gagne et dépense 5 200 $ chaque année. Un compte TheCoin de base augmentera, en moyenne, d'environ 9 % sur une année. Cependant, le ShockAbsorber d'Amy utilise les premiers 6 % de ce bénéfice pour la protéger des krachs boursiers. Cela signifie que ses gains réels seront un peu inférieurs ; 9 % - 6 % est de 3 %, soit environ 15 $. Sa Visa remise en argent fait un peu mieux, déposant 52 $ sur son compte à la fin de sa première année pour une économie supplémentaire totale de 67 $.",
+          "spans": [
+            {
+              "start": 203,
+              "end": 281,
+              "type": "strong"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Bien qu'il semble que le compte TheCoin ne fasse pas grand-chose pour aider, il devient plus intéressant dans les années suivantes. Amy met immédiatement ses 52 $ sur son compte TheCoin (ses 15 $ sont déjà là) et continue sa vie comme d'habitude. Ces 67 $ supplémentaires représentent des économies, elle ne les ajoute donc pas à son ShockAbsorber. Même si le marché baisse, elle ne le dépense pas de toute façon, alors elle peut le laisser croître. Maintenant, son compte gagne 15 $ sur les 500 $ de base et 6 $ supplémentaires sur ses économies pour un total de 21 $. Avec 52 $ supplémentaires de sa carte de remise en argent, elle a maintenant 140 $ d'économies supplémentaires.",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "Même avec ces humbles débuts, Amy est sur la voie d'une véritable richesse. Après trois ans, son compte TheCoin augmente de 15 $ + 13 $ supplémentaires pour une économie totale de 220 $. Après quatre ans, son compte augmente de 15 $ + 20 $ pour une épargne totale de 306 $. Au moment où Amy atteint l'âge de 30 ans, elle dispose de 616 $ d'économies supplémentaires et son compte de pièces augmente plus rapidement que la carte de remboursement.",
+          "spans": [
+            {
+              "start": 0,
+              "end": 445,
+              "type": "strong"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Au fur et à mesure qu'elle continue sa vie, le compte d'Amy ne cesse de croître. En supposant qu'elle prenne sa retraite à 65 ans, Amy aura 30 000 $ supplémentaires, mais cela ne s'arrête pas là. Le compte d'Amy continuera de croître tout au long de sa retraite à mesure qu'elle gagne et dépense pour générer des revenus à vie de plus de 100 000 $.",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "Tout cela, sans changer son style de vie. Merci Visa !",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "Il y a un autre aspect à cette histoire, et il est beaucoup plus critique. Au cours de la première année d'Amy avec TheCoin, elle a aussi compensé 1,7 tonne de CO2. 1,7 tonne, c'est plus de CO2 éliminé que ce qui provient de votre voiture. À 30 ans, Amy a éliminé 4,5 tonnes de CO2 de l'atmosphère chaque année. Après 33 ans, elle est officiellement négative en carbone. Au cours de sa vie, elle a retiré beaucoup plus de carbone de l'atmosphère qu'elle n'en a mis.",
+          "spans": [
+            {
+              "start": 0,
+              "end": 465,
+              "type": "strong"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "De petits décisions peuvent avoir des conséquences énormes. Amy n'a rien fait d'extraordinaire. Elle n'a pas économisé d'argent ni changé son mode de vie. Sa seule différence était un petit choix fait à un jeune âge. Elle a commencé à utiliser TheCoin comme compte de dépenses. A part ça, tout est pareil. Cependant, ce petit moment a entraîné un changement sismique dans sa vie. Elle a atteint des niveaux de richesse qu'elle n'aurait jamais pu atteindre autrement. Elle l'a fait avec un risque quasi nul. Et, elle a fait sa part pour la crise climatique, une lutte dont nous faisons tous partie.",
+          "spans": [
+            {
+              "start": 467,
+              "end": 597,
+              "type": "strong"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "1) Bien sûr, ce scénario est irréalistes. Par exemple, Amy dépenserait presque certainement une partie de ses économies avant la retraite. Il est également improbable qu'elle puisse vivre toute sa vie avec 100 $ par semaine, l'inflation rendra cela impossible dans quelques années. L'exemple est là pour montrer la différence qu'un compte TheCoin pourrai faire.",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "2) Cet article utilise également un taux constant de rendement de 9 %. Dans le monde réel, les choses sont beaucoup plus compliquées, mais cela peut être une bonne chose. Vous pouvez voir ce qui arriverait à Amy si elle essayait cela dans le monde réel avec notre simulateur - y compris ses meilleurs et pires scénarios. Nous vous encourageons à jouer avec le simulateur pour voir comment se déroulerai un scénario plus similaire au vôtre.",
+          "spans": [
+            {
+              "start": 360,
+              "end": 370,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://thecoin.io/#/compare?sim=%7B%22adjustForInflation%22%3Afalse%2C%22maxOffsetPercentage%22%3A0.0175%2C%22initialBalance%22%3A0%2C%22income%22%3A%7B%22weekly%22%3A100%2C%22monthly%22%3A0%2C%22yearly%22%3A0%7D%2C%22cash%22%3A%7B%22weekly%22%3A0%2C%22monthly%22%3A0%2C%22yearly%22%3A0%7D%2C%22credit%22%3A%7B%22weekly%22%3A100%2C%22monthly%22%3A0%2C%22yearly%22%3A0%2C%22billingCycle%22%3A4%2C%22graceWeeks%22%3A3%2C%22cashBackRate%22%3A0.01%2C%22interestRate%22%3A0.25%7D%2C%22shockAbsorber%22%3A%7B%22cushionDown%22%3A0.4%2C%22cushionUp%22%3A0.05444444444444444%2C%22maximumProtected%22%3A500%2C%22trailingMonths%22%3A0%7D%2C%22years%22%3A60%7D",
+                "target": "_blank"
+              }
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "3) Il est important de noter qu'Amy n'a payé aucun intérêt pendant toute cette période. Au moment où vous vous trompez, Visa vous claque joyeusement avec des taux d'intérêt si élevés qu'ils annulent toute cette technique. Nous ne sommes pas là pour aider Visa à gagner de l'argent, donc notre application automatise le processus de paiement du solde dû exactement au bon moment.",
+          "spans": []
+        }
+      ],
+      "categories": [
+        {
+          "category": "Finance"
+        },
+        {
+          "category": "Investing"
+        }
+      ],
+      "slices": [],
+      "meta_title": null,
+      "meta_description": null,
+      "meta_image": {}
+    }
+  },
+  {
+    "id": "YXcmwREAACIAWK8Y",
+    "uid": "start-now",
+    "url": "/article/start-now",
+    "type": "article",
+    "tags": [
+      "Main Page"
+    ],
+    "first_publication_date": "2021-10-27T19:27:57+0000",
+    "last_publication_date": "2021-10-27T20:03:45+0000",
+    "slugs": [
+      "commence-maintenant",
+      "start-now"
+    ],
+    "linked_documents": [],
+    "lang": "fr-ca",
+    "alternate_languages": [
+      {
+        "id": "YXcU6BEAACEAWGSD",
+        "type": "article",
+        "lang": "en-ca",
+        "uid": "start-now"
+      }
+    ],
+    "data": {
+      "thumbnail": {},
+      "image_before_title": {},
+      "title": [
+        {
+          "type": "heading2",
+          "text": "Commence Maintenant",
+          "spans": []
+        }
+      ],
+      "publication_date": "2021-11-01",
+      "short_content": [
+        {
+          "type": "paragraph",
+          "text": "Ouis Ouis, comment c'est possible gagner les plus gros possible?",
+          "spans": []
+        }
+      ],
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Non non, ca faire rein.  There is one trick to investing that outshines all others.  The one \"hack\" that isn't a hack at all, but pretty much guaranteed to work.  The one thing everyone says you should do, but nobody does.",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "It is simple.  Get Started!",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "For a simple example, which one do you think is better?\nSaving $100 each month, starting at 20?\nSaving $500 each month, starting at 35?",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "Yup, you guessed it, in todays rat-race it's actually the turtles who come out on top.  You don't need to make a huge income to have a huge balance, you just need to know a few tricks and you'll smash the best wall-street performance metrics.",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "Time is the biggest multiplier possible. ",
+          "spans": []
+        }
+      ],
+      "categories": [
+        {
+          "category": "Investing"
+        },
+        {
+          "category": "Finance"
         }
       ],
       "slices": [],
