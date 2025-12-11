@@ -1,6 +1,5 @@
 import React from "react";
 import { Grid, Header } from "semantic-ui-react";
-import { Link } from "@thecointech/shared";
 import { defineMessages, FormattedMessage } from "react-intl";
 import { PrismicText } from "@prismicio/react";
 import styles from "./styles.module.less";
@@ -23,7 +22,7 @@ export const ArticleItem = ({ uid, data }: ArticleDocument) => {
       role="link"
       onClick={() => navigate(url)}
       tabIndex={0}
-      onKeyUp={(e) => e.key === 'Enter' && navigate(url)}
+      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && navigate(url)}
     >
       <Grid stackable columns='equal' className={`${styles.articleLineContainer}`}>
         <Grid.Row>

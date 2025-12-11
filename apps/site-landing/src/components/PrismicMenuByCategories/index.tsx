@@ -19,7 +19,7 @@ export const CategoryMenu = ({ categories, idForMenu, railPosition }: Props) => 
         <Rail position={railPosition}>
           <div id={idForMenu}>
             <List divided relaxed size={"massive"} className={"x2spaceBefore"}>
-              {sortedCategories.map((entry, index) => <CategoryMenuEntry key={index} name={entry} />)}
+              {sortedCategories.map((entry) => <CategoryMenuEntry key={entry} name={entry} />)}
             </List>
           </div>
         </Rail>
@@ -28,7 +28,7 @@ export const CategoryMenu = ({ categories, idForMenu, railPosition }: Props) => 
       <MobileSegment>
         <div id={idForMenu}>
           <List divided relaxed size={"massive"} className={"x10spaceBefore x8spaceAfter"}>
-            {sortedCategories.map((entry, index) => <CategoryMenuEntry key={index} name={entry} />)}
+            {sortedCategories.map((entry) => <CategoryMenuEntry key={entry} name={entry} />)}
           </List>
         </div>
       </MobileSegment>
@@ -65,7 +65,7 @@ const CategoryMenuEntry = ({ name }: { name: string }) => {
 
   return (
     <List.Item>
-      <label className={styles.categoryRow} style={{ cursor: 'pointer', width: '100%' }}>
+      <label className={styles.categoryRow}>
         <Label>{name}</Label>
         <Checkbox
           className={styles.categoryCB}
