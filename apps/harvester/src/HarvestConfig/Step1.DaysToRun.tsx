@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Checkbox, Container, Button, Icon, Message, Header } from 'semantic-ui-react';
 import { ConfigReducer } from './state/reducer'
-import { Info } from 'luxon';
-import { DaysArray } from '@thecointech/store-harvester';
+import { DaysArray, luxonInfo } from '@thecointech/store-harvester';
 
 export const DaysToRun = () => {
 
@@ -72,7 +71,7 @@ const EnableLingeringButton = () => {
       <div>This ensures the run is not interrupted by you logging out.</div>
       <Button loading={loading} disabled={loading} onClick={handleEnable}>
         Enable Lingering
-      </Button>t
+      </Button>
       {error && <Message negative>{error}</Message>}
     </div>
   );
@@ -89,7 +88,7 @@ const DayToggle = ({day} : DayToggleProps) => {
       <Checkbox
         toggle
         checked={schedule.daysToRun[day]}
-        label={Info.weekdays()[day]}
+        label={luxonInfo(day)}
         onChange={(_, { checked }) => {
           const v = [...schedule.daysToRun] as DaysArray;
           v[day] = !!checked;

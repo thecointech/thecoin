@@ -1,12 +1,13 @@
 import type { HarvestConfig } from './types';
-import type { ValueResult, ValueType} from "@thecointech/scraper/types";
+import type { ValueResult, ValueType} from "@thecointech/scraper-types";
 import type { CreditDetails } from './Harvester/types';
-import type { CoinAccount, CoinAccountDetails, StoredData } from '@thecointech/store-harvester';
-import { ActionType } from './Harvester/scraper';
-import { BackgroundTaskCallback } from './BackgroundTask/types';
+import type { CoinAccount, CoinAccountDetails, StoredData, ActionType } from '@thecointech/store-harvester';
+import type { BackgroundTaskCallback } from './BackgroundTask/types';
 import type { OptionPacket, QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
 import type { AutoConfigParams } from './Harvester/agent';
 import type { BankConnectMap } from './Harvester/events';
+import type { WebsiteEndpoints } from './openExternal';
+import type { RendererBankType } from './Agent/state/types';
 
 export type Result<T> = {
   error?: string;
@@ -32,7 +33,7 @@ export type ScraperBridgeApi = {
   // Reset 2FA without doing a full banking setup
   // Useful if your chequing acc loses it's 2FA token
   // but you don't want to send unnecessary etransfers
-  twofaRefresh: (actionName: ActionType, refreshProfile: boolean) => Promise<Result<boolean>>,
+  twofaRefresh: (actionName: RendererBankType) => Promise<Result<boolean>>,
 
   onAskQuestion: (callback: (question: QuestionPacket|OptionPacket) => void) => () => void;
   replyQuestion: (response: ResponsePacket) => Promise<Result<boolean>>;
@@ -69,6 +70,7 @@ export type ScraperBridgeApi = {
   exportConfig(): Promise<Result<string>>
 
   openLogsFolder(): Promise<Result<boolean>>,
+  openWebsiteUrl(type: WebsiteEndpoints): Promise<Result<boolean>>,
   getArgv() : Promise<Result<Record<string, any>>>,
 
   setOverrides(balance: number, pendingAmt: number|null, pendingDate: string|null|undefined): Promise<Result<boolean>>,
@@ -133,6 +135,7 @@ export const actions = {
   exportConfig: 'scraper:exportConfig',
 
   openLogsFolder: 'scraper:openLogsFolder',
+  openWebsiteUrl: 'scraper:openWebsiteUrl',
   getArgv: 'scraper:getArgv',
 
   setOverrides: 'scraper:setOverrides',

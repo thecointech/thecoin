@@ -3,6 +3,7 @@ import { log } from "@thecointech/logging";
 import { Wallet } from "ethers";
 import { setCoinAccount } from "@/Harvester/config";
 import { ConnectService } from "./state";
+import { toCoinAccount } from "@/account/convert";
 
 export async function mockServer(service: ConnectService) {
   // Wait for 3 seconds, then mock it
@@ -19,21 +20,16 @@ export async function mockServer(service: ConnectService) {
   const wallet = Wallet.createRandom();
   const encrypted = await wallet.encrypt("password");
   log.info({address: wallet.address}, "Creating new development wallet");
-  const details = {
-    address: wallet.address,
-    name: "Development Wallet",
-  }
+  const coinAccount = toCoinAccount(wallet, "Development Wallet");
   await setCoinAccount({
-    ...details,
+    ...coinAccount,
     encrypted,
-    mnemonic: {
-      phrase: wallet.mnemonic!.phrase,
-      path: wallet.path!,
-      locale: wallet.mnemonic!.wordlist!.locale,
-    },
   })
 
   service.cb({ completed: true, percent: 100 });
 
-  return details
+  return {
+    address: wallet.address,
+    name: "Development Wallet",
+  }
 }

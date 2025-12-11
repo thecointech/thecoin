@@ -27,7 +27,7 @@ const api : ScraperBridgeApi = {
   //   ipcRenderer.on(actions.onAgentProgress, (_event, value) => callback(value))
   // },
 
-  twofaRefresh: (actionName, refreshProfile) => ipcRenderer.invoke(actions.twofaRefresh, actionName, refreshProfile),
+  twofaRefresh: (actionName) => ipcRenderer.invoke(actions.twofaRefresh, actionName),
 
   onAskQuestion: (callback) => {
     const _cb = (_event: any, value: any) => callback(value)
@@ -62,6 +62,7 @@ const api : ScraperBridgeApi = {
   exportConfig: () => ipcRenderer.invoke(actions.exportConfig),
 
   openLogsFolder: () => ipcRenderer.invoke(actions.openLogsFolder),
+  openWebsiteUrl: (type) => ipcRenderer.invoke(actions.openWebsiteUrl, type),
   getArgv: () => ipcRenderer.invoke(actions.getArgv),
 
   setOverrides: (balance, pendingAmt, pendingDate) => ipcRenderer.invoke(actions.setOverrides, balance, pendingAmt, pendingDate),

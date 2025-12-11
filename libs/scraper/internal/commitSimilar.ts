@@ -1,7 +1,5 @@
 import { execSync } from 'child_process';
-import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
-import type { ElementData } from '../src/types';
 import { findMaximalCommonSubstrings } from '../src/findSubstrings';
 
 const PRIVATE_TESTING_PAGES = process.env.PRIVATE_TESTING_PAGES;

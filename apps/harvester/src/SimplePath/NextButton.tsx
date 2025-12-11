@@ -12,6 +12,6 @@ export const PathNextButton = (props: PathNextButtonProps) => {
   const groupKey = location.pathname.split("/")[1];
 
   return (
-    <NextButton to={`/${groupKey}/${currentStep + 1}`} content="Next" onValid={props.onValid} />
+    <NextButton to={`/${groupKey}/${currentStep + 1}`} onValid={props.onValid} />
   )
 }

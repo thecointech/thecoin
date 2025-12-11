@@ -4,7 +4,7 @@ import { log } from "@thecointech/logging";
 import pixelmatch from "pixelmatch";
 import { PNG } from "pngjs";
 
-export async function waitPageStable(page: Page, timeout: number = 20_000, maxPixelsChanged = 100) {
+export async function waitPageStable(page: Page, timeout: number = 20_000, maxPixelsChanged = 100, pollingInterval=250) {
   let before = await page.screenshot();
   const start = Date.now();
   log.trace(`Waiting for page to be stable for ${timeout / 1000} seconds`);
@@ -16,7 +16,7 @@ export async function waitPageStable(page: Page, timeout: number = 20_000, maxPi
     const pixelsChanged = [];
     let after: Uint8Array;
     for (let i = 0; i < 3; i++) {
-      await sleep(250);
+      await sleep(pollingInterval);
       after = await page.screenshot();
       const changed = doPixelMatch(before, after);
       pixelsChanged.push(changed);

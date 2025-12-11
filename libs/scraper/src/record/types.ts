@@ -1,4 +1,4 @@
-import type { AnyEvent, ValueResult, ValueType } from "../types";
+import type { AnyEvent, ValueResult, ValueType } from "@thecointech/scraper-types";
 
 // types injected into window
 declare global {

@@ -36,7 +36,7 @@ const failLoginTarget = (name: string) => name + "FailLogin"
 async function runAgent(name: string, url: string, askUser: IAskUser) {
   const writeDir = path.join(recordFolder, name);
   mkdirSync(writeDir, { recursive: true})
-  using serializer = new AgentSerializer({ recordFolder, target: name});
+  using serializer = new AgentSerializer({ recordFolder, target: name, writeScreenshotOnElement: true });
   using _ = new LoggerContext({
     level: "trace",
     streams: [{

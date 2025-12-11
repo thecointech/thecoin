@@ -117,7 +117,7 @@ export const Plugins = () => {
       </p> */}
       <ActionButton onClick={onInstallPlugins} loading={isSending} disabled={canInstallPlugins}>Install</ActionButton>
       <PluginMessage requestSent={requestSent} forceValid={forceValid} hasConverter={hasConverter} />
-      <NextButton to="/agent" content="Connect Bank Account" onValid={isValid} />
+      <NextButton to="/agent" onValid={isValid} />
     </Container>
   );
 }

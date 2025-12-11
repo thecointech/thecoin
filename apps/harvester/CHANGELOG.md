@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/thecointech/thecoin/compare/v0.5.0-test.0...v0.5.0) (2025-11-26)
+
+**Note:** Version bump only for package harvester
+
+
+
+
+
+# [0.5.0-test.0](https://github.com/thecointech/thecoin/compare/v0.4.0...v0.5.0-test.0) (2025-11-25)
+
+
+### Features
+
+* implement 2FA replay handling with section-based navigation and error recovery ([241dd84](https://github.com/thecointech/thecoin/commit/241dd846cb053fc9413e5fd1da56c41f4838a86b))
+
+
+
+
+
 # [0.4.0](https://github.com/thecointech/thecoin/compare/v0.4.0-test.3...v0.4.0) (2025-10-24)
 
 **Note:** Version bump only for package harvester
