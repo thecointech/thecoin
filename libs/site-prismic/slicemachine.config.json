@@ -4,6 +4,6 @@
   ],
   "adapter": "@slicemachine/adapter-next",
   "repositoryName": "thecointech",
-  "localSliceSimulatorURL": "http://localhost:3000/slice-simulator",
+  "localSliceSimulatorURL": "http://localhost:3010/slice-simulator",
   "apiEndpoint": ""
 }

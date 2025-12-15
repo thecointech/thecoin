@@ -1,9 +1,8 @@
-// ./src/slices/Hero/index.tsx
-
+import React from "react";
 import { Content } from "@prismicio/client";
 import { SliceComponentProps, PrismicText } from "@prismicio/react";
 import { RichText } from "@/components/RichText";
-import { PrismicNextImage } from "@prismicio/next";
+// import { PrismicNextImage } from "@prismicio/next";
 
 /**
  * Props for `Hero`.
@@ -20,12 +19,12 @@ const Hero = ({ slice }: HeroProps) => {
       data-slice-type={slice.slice_type}
       data-slice-variation={slice.variation}
     >
-      <PrismicNextImage
+      {/* <PrismicNextImage
         field={slice.primary.image}
         sizes="100vw"
 
         alt=""
-      />
+      /> */}
       <div>
         <h1>
           <PrismicText field={slice.primary.title} />
