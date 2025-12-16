@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 import { Wallet } from 'ethers';
-import { BROKER_ROLE, GetContract, MINTER_ROLE, MRFREEZE_ROLE, PLUGINMGR_ROLE, THECOIN_ROLE } from '@thecointech/contract-core'
+import { BROKER_ROLE, ContractCore, MINTER_ROLE, MRFREEZE_ROLE, PLUGINMGR_ROLE, THECOIN_ROLE } from '@thecointech/contract-core'
 import { AccountId } from '@thecointech/signers';
 
 // Used to read back the mnemonic so we can deploy nicely.
@@ -19,7 +19,7 @@ async function readMnemonic(name: string) {
   console.log(`WALLET_${name}_KEY=${decrypted.privateKey}`);
 }
 
-const contract = await GetContract();
+const contract = await ContractCore.get();
 async function getRoles(name: string, role: string) {
   const numRoles = await contract.getRoleMemberCount(role);
   console.log(`${name} has ${numRoles} members`);

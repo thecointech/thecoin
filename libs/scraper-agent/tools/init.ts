@@ -1,11 +1,15 @@
 import { existsSync, rmSync } from "fs";
-import { setRootFolder } from "@thecointech/scraper/puppeteer-init/rootFolder";
+import { setupScraper, getUserDataDir } from "@thecointech/scraper/puppeteer";
 import { SimilarityPipeline } from "@thecointech/scraper/similarity";
 import path from "path";
+import { log } from "@thecointech/logging";
+import { fileURLToPath } from "url";
 
-export async function init(cleanRun?: boolean) {
-  const tempDir = "./.cache";
-  setRootFolder(tempDir);
+export async function init() {
+  // fix temp dir to project root
+  const filename = fileURLToPath(import.meta.url);
+  const tempDir = path.join(path.dirname(filename), "..", ".cache");
+  setupScraper({ rootFolder: tempDir, isVisible: async () => true });
   let lastLogMessage = 0;
   let logPeriod = 3000;
   await SimilarityPipeline.init(tempDir, (progress) => {
@@ -25,19 +29,11 @@ export async function init(cleanRun?: boolean) {
         // console.log(`Downloading: ${progress.file}`);
         break;
       case "ready":
-        console.log(`Similarity pipeline ready`);
+        log.info(`Similarity pipeline ready`);
         break;
       default:
         console.log(progress);
         break;
     }
   });
-
-  if (cleanRun) {
-    // Remove existing chrome data so we start fresh (eg, with cookie banners)
-    const chromeData = path.join(tempDir, "chrome_data");
-    if (existsSync(chromeData)) {
-      rmSync(chromeData, { recursive: true, force: true });
-    }
-  }
 }

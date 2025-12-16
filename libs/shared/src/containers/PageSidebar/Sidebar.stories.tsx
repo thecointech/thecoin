@@ -1,13 +1,14 @@
 import "@thecointech/site-semantic-theme/semantic.less"
 import React from 'react';
-import { Meta } from '@storybook/react';
+import { Meta } from '@storybook/react-webpack5';
 import { PageSidebar } from '.';
-import { withStore, withReducer } from '@thecointech/storybookutils';
+import { withStore, withReducer, withLanguageProvider } from '@thecointech/storybookutils';
 import ConstantSidebarItems from './Sidebar.stories.data.json';
 import { SemanticICONS } from 'semantic-ui-react';
 import { SidebarItemsReducer } from './reducer';
 import { ApplicationBaseState } from '../../types';
 import { SidebarState } from './types';
+import translations from "../../translations";
 
 const header = ConstantSidebarItems.header;
 const links = ConstantSidebarItems.links.map(l => ({
@@ -38,6 +39,7 @@ export default {
     }
   },
   decorators: [
+    withLanguageProvider(translations),
     withReducer(SidebarItemsReducer),
     withStore<SidebarStore>({
       sidebar: {

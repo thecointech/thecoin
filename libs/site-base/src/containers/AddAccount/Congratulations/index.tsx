@@ -1,6 +1,6 @@
 import React from "react"
 import { defineMessages, FormattedMessage } from "react-intl"
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { Header, Container, Grid } from "semantic-ui-react";
 import Confetti from 'react-confetti';
 import styles from './styles.module.less';

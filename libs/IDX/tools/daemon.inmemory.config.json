@@ -31,7 +31,7 @@
     "mode": "fs"
   },
   "indexing": {
-    "db": "sqlite://./.ceramic/indexing.sqlite",
+    "db": "sqlite:///tmp/ceramic/indexing.sqlite",
     "allow-queries-before-historical-sync": true,
     "models": []
   }

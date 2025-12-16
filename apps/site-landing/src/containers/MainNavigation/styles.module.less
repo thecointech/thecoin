@@ -1,7 +1,6 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
 .background {
-  background-color : @white;
   grid-row-start   : header;
   grid-row-end     : header;
   grid-column-start: lgap;
@@ -9,6 +8,7 @@
 
   border-bottom: 1px solid fade(@theCoinPrimaryGreenPale, 20%);
   box-shadow   : 0px 4px 4px 0px #00000040;
+  z-index: 100;
 }
 
 #mainMenu {
@@ -16,6 +16,7 @@
   display        : flex;
   justify-content: space-between;
   align-items    : center;
+  z-index        : 101;
 
   >* {
     >* {

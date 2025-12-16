@@ -1,11 +1,14 @@
 import React from "react";
 import { Sidebar, Menu, MenuItem, Divider, Icon } from "semantic-ui-react";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 import { SidebarLink, SidebarState } from "./types";
 import { SidebarItemsReducer } from './reducer';
 import styles from "./styles.module.less";
 import { SidebarHeader } from './SidebarHeader';
 import { FormattedMessage } from 'react-intl';
+
+export * from './types';
+export * from './reducer';
 
 export type Props = {
   inverted?: boolean;
@@ -13,7 +16,7 @@ export type Props = {
   direction?: "left" | "top" | "right" | "bottom";
 }
 
-export const PageSidebar: React.FC<Props> = (props) => {
+export const PageSidebar = (props: Props) => {
   const { inverted } = props;
   const state = SidebarItemsReducer.useData();
 
@@ -74,7 +77,6 @@ const MenuLink = (item: SidebarLink) => {
     <React.Fragment key={`Fragment${url}`}>
       <MenuItem
         as={NavLink}
-        exact={true}
         key={url}
         to={url}
       >

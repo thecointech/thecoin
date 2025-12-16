@@ -1,9 +1,9 @@
 import { getSigner } from '@thecointech/signers';
-import { connectNFT } from '@thecointech/contract-nft';
+import { ContractNFT } from '@thecointech/contract-nft';
 
 export async function getContract() {
   const signer = await getSigner("BrokerTransferAssistant");
-  return connectNFT(signer);
+  return ContractNFT.connect(signer);
 }
 
 export async function getMinterAddress() {

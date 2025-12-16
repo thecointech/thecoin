@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Header, Grid, Container, List } from "semantic-ui-react";
 import { defineMessages, FormattedMessage } from "react-intl";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 import styles from './styles.module.less';
 import { Decoration } from "../../Decoration";

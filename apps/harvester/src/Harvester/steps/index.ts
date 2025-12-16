@@ -1,4 +1,3 @@
-import { HarvestStep, HarvestStepType } from '../../types';
 import { ProcessingStage } from '../types';
 import { ClearPendingVisa } from './ClearPendingVisa';
 import { Heartbeat } from './Heartbeat';
@@ -12,6 +11,7 @@ import { TransferLimit } from './TransferLimit';
 import { TransferVisaOwing } from './TransferVisaOwing';
 import { ProcessPercent } from './ProcessPercent';
 import { EnsureHarvesterBalance } from './EnsureHarvesterBalance';
+import { HarvestStep, HarvestStepType } from '@thecointech/store-harvester';
 
 export const createStep = (step: HarvestStep) : ProcessingStage => {
   switch (step.type) {

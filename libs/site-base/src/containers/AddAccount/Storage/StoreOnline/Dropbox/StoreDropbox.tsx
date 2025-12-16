@@ -1,11 +1,11 @@
-import React from "react";
+import React, { type PropsWithChildren } from "react";
 
-export const StoreDropbox : React.FC = (props) => {
+export const StoreDropbox = ({ children }: PropsWithChildren<{}>) => {
 
     return (
       <>
         <a>
-            {props.children}
+            {children}
         </a>
       </>
     );

@@ -1,62 +1,81 @@
+import { findMaximalCommonSubstrings } from "@thecointech/scraper/findSubstrings";
 
-// Modified Levenshtein that doesn't penalize insertions in the middle of the string
-export function modifiedLevenshtein(source: string, target: string): number {
-  const sourceLen = source.length;
-  const targetLen = target.length;
+//
+// Search text string for query, extracting the most likely
+// account number matching query.  This splits into word tokens,
+// fuzzy-matches the token group vs query, and will then
+// penalize non-numbers remaining in the token group.
+export function extractFuzzyMatch(query: string, text: string) {
+  // Split text into tokens while preserving delimiters
+  const tokens = text.split(/(\s+)/).filter(token => token.length > 0);
 
-  // Create a matrix of distances
-  const matrix: number[][] = Array(sourceLen + 1).fill(null)
-    .map(() => Array(targetLen + 1).fill(0));
+  let bestScore = 0;
+  let bestMatch = '';
 
-  // Initialize first row and column
-  for (let i = 0; i <= sourceLen; i++) matrix[i][0] = i;
-  for (let j = 0; j <= targetLen; j++) matrix[0][j] = j;
+  // Try all possible token groupings starting from each position
+  for (let startIdx = 0; startIdx < tokens.length; startIdx++) {
+    let currentGroup = '';
 
-  for (let i = 1; i <= sourceLen; i++) {
-    for (let j = 1; j <= targetLen; j++) {
-      if (source[i - 1] === target[j - 1]) {
-        // Characters match
-        matrix[i][j] = matrix[i - 1][j - 1];
-      } else {
-        // Calculate costs for different operations
-        const substitutionCost = matrix[i - 1][j - 1] + 1;
-        const deletionCost = matrix[i - 1][j] + 1;
-        // Only penalize insertions at the edges
-        const insertionCost = matrix[i][j - 1] + (
-          j === 1 || j === targetLen ? 1 : 0
-        );
+    // Build progressively longer token groups
+    for (let endIdx = startIdx; endIdx < tokens.length; endIdx++) {
+      currentGroup += tokens[endIdx];
 
-        matrix[i][j] = Math.min(
-          substitutionCost,
-          deletionCost,
-          insertionCost
-        );
+      // Stop if group becomes much longer than query (with some buffer)
+      const maxLength = Math.max(query.length * 1.5, query.length + 10);
+      if (currentGroup.length > maxLength) {
+        break;
+      }
+
+      // Skip very short groups unless they're close to query length
+      if (currentGroup.length < Math.max(3, query.length * 0.5)) {
+        continue;
+      }
+
+      // const distance = levenshtein(query, currentGroup);
+
+      // Calculate account number "likeness" score
+      const accountLikeness = calculateAccountLikeness(query, currentGroup);
+
+      if (accountLikeness > bestScore) {
+        bestScore = accountLikeness;
+        // bestDistance = distance;
+        bestMatch = currentGroup;
       }
     }
   }
 
-  return matrix[sourceLen][targetLen];
+  // Convert distance to a similarity score (0-100)
+  const maxScore = 10 + query.length * 3;
+  const score = Math.max(0, 100 - (bestScore * 100 / maxScore));
+  return { score, match: bestMatch.trim() };
 }
 
-export function extractFuzzyMatch(query: string, text: string, windowSize=5) {
-  let bestDistance = Infinity;
-  let bestMatch = '';
+// Calculate how "account number-like" a string is
+function calculateAccountLikeness(query: string, str: string): number {
+  let score = 0;
 
-  // Try different window sizes to account for potential extra characters
-  const minWindowSize = Math.max(query.length - windowSize, 3);
-  const maxWindowSize = Math.min(query.length + windowSize, text.length);
-  for (let thisWindowSize = minWindowSize; thisWindowSize <= maxWindowSize; thisWindowSize++) {
-      for (let i = 0; i <= text.length - thisWindowSize; i++) {
-          const sample = text.substring(i, i + thisWindowSize);
-          const dist = modifiedLevenshtein(query, sample);
-          // Only update if distance is lower, or equal distance but shorter length
-          if (dist < bestDistance || (dist === bestDistance && sample.length < bestMatch.length)) {
-              bestDistance = dist;
-              bestMatch = sample;
-          }
-      }
+  // Find all maximal common substrings between query and str
+  const commonSubstrings = findMaximalCommonSubstrings(query, str);
+  const totalCommonLength = commonSubstrings.reduce((sum, substr) => sum + substr.length, 0);
+
+  // Award points for common substring length
+  score += totalCommonLength * 3;
+
+  // Remove matched substrings from str
+  let remainingStr = str;
+  for (const substr of commonSubstrings) {
+    remainingStr = remainingStr.replace(substr, '');
   }
-  // Convert distance to a similarity score (0-100)
-  const score = Math.max(0, 100 - (bestDistance * 100 / query.length));
-  return { score, match: bestMatch };
+
+  // Penalize letters (except common masking like X)
+  const badChars = remainingStr.split('').filter(c => /[a-zA-Z]/.test(c) && c !== 'X').length;
+  score -= badChars * 3;
+
+  // Bonus for starting with digits or asterisks
+  if (/^[0-9*]/.test(str)) score += 5;
+
+  // Bonus for ending with digits
+  if (/[0-9]$/.test(str)) score += 5;
+
+  return score;
 }

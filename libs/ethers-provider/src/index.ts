@@ -1,6 +1,7 @@
 import type { JsonRpcProvider } from 'ethers';
 import type { Network } from './types';
 export type { Network } from './types';
+export { InvalidContractError } from './errors';
 
 //
 // Declare a prototype that matches the getProvider implementation in each wassname provider

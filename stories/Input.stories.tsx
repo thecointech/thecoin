@@ -1,5 +1,5 @@
 import React from 'react';
-import { Story, Meta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react-webpack5';
 import { Input, InputProps } from './Input';
 
 export default {
@@ -10,7 +10,7 @@ export default {
   }
 } as Meta;
 
-const Template: Story<InputProps> = (args) => <Input {...args} />;
+const Template: StoryFn<InputProps> = (args) => <Input {...args} />;
 
 export const Basic = Template.bind({});
 Basic.args = {

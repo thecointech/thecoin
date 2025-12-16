@@ -1,6 +1,6 @@
 
 import type { ApplicationRootState } from 'types'
-import { BaseReducer } from '@thecointech/shared/store/immerReducer';
+import { BaseReducer } from '@thecointech/redux';
 import { BenefitsState, IActions } from './types';
 import { CoinReturns } from './simulator';
 import { AreaDatum } from '../AreaGraph/types';

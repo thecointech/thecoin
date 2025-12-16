@@ -20,7 +20,7 @@ it('can insert rates', async function () {
   await setRate("Coin", rate);
 
   // Was anything written?
-  expect(mockSet).toBeCalledWith(
+  expect(mockSet).toHaveBeenCalledWith(
       expect.objectContaining(toDbType(rate)),
       {"merge": false}
     )

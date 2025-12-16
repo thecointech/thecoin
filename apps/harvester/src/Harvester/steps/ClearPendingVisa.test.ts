@@ -5,10 +5,10 @@ import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
 import { Wallet } from 'ethers';
 
-jest.unstable_mockModule('../notify', () => ({
+jest.unstable_mockModule('@/notify', () => ({
   notify: jest.fn(),
 }));
-const notify = await import('../notify');
+const notify = await import('@/notify');
 const { ClearPendingVisa } = await import('./ClearPendingVisa')
 it ('clearsPending using visa history', async () => {
 

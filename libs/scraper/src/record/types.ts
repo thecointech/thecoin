@@ -1,5 +1,4 @@
-import type { Page } from "puppeteer";
-import type { AnyEvent, ValueResult, ValueType } from "../types";
+import type { AnyEvent, ValueResult, ValueType } from "@thecointech/scraper-types";
 
 // types injected into window
 declare global {
@@ -30,8 +29,6 @@ export type RecorderOptions = {
   name: string
   // The context to run Puppeteer in
   context: string
-
-  onEvent?: (event: AnyEvent, page: Page, name: string, step: number) => Promise<void>;
 
   // A callback to run when scraping is complete
   onComplete?: (events: AnyEvent[]) => Promise<void>

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Story, Meta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react-webpack5';
 import { UxAddress } from '.';
 import { Button, Form } from 'semantic-ui-react';
+import { languageDecorator } from '../../../../internal/languageDecorator';
 
 export default {
   title: 'shared/UX/Address',
   component: UxAddress,
+    decorators: languageDecorator
 } as Meta;
 
 const defaultArgs = {
@@ -14,7 +16,7 @@ const defaultArgs = {
 };
 
 const makeIntl = (el: string, args: any) => ({ id: el, defaultMessage: args[el] })
-const Template: Story<typeof defaultArgs> = (args) => {
+const Template: StoryFn<typeof defaultArgs> = (args) => {
   const [value, setValue] = useState<MaybeString>("");
   const [validate, setValidate] = useState(false);
 

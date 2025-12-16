@@ -1,5 +1,5 @@
 import React from 'react';
-import { Meta } from '@storybook/react';
+import { Meta } from '@storybook/react-webpack5';
 import { Footer as Component } from '.';
 import styles from '../../containers/App/styles.module.less';
 

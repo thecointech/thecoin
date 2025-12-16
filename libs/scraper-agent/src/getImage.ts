@@ -2,6 +2,7 @@
 import type { Page } from "puppeteer";
 import { sleep } from "@thecointech/async";
 import { log } from "@thecointech/logging";
+import { File } from "@web-std/file";
 
 export class TakeScreenshotError extends Error {
   constructor(message: string) {
@@ -29,6 +30,11 @@ export async function _getImage(page: Page, fullPage: boolean = false, path?: st
     }
   }
   throw new Error("Could not take screenshot");
+}
+
+export async function _getImageFile(page: Page, fullPage: boolean = false, retries = 3) {
+  const image = await _getImage(page, fullPage, undefined, retries);
+  return new File([image], "screenshot.png", { type: "image/png" });
 }
 
 async function resizeViewportForPage(page: Page) {

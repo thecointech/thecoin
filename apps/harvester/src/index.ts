@@ -5,7 +5,7 @@ import { log } from '@thecointech/logging';
 import { RotatingFileStream } from 'bunyan';
 import { logsFolder } from './paths';
 import { mkdirSync } from 'fs';
-import { notifyError } from './Harvester/notify';
+import { notifyInput, notify } from './notify';
 import { setMainWindow } from './mainWindow';
 import { initMain } from './initMain';
 import { initMainIPC } from './scraper_bridge';
@@ -44,7 +44,14 @@ if (process.env.NODE_ENV !== 'production' || process.env.CONFIG_NAME === 'prodte
 }
 
 log.info(`-----------------------------------------------------------------------------------`);
-log.info(`args: ${process.argv}`);
+// NOTE: The standard initialized message does not get added to the log file,
+// because the log file stream is added after the standard logging is initialized
+log.info(
+  { args: process.argv.slice(2), version: process.env.TC_APP_VERSION, config: process.env.CONFIG_NAME, deployedAt: process.env.TC_DEPLOYED_AT },
+  'Harvester logging initialized: v{version} - {config} - {deployedAt}'
+);
+
+log.info("Resources path: ", process.resourcesPath);
 
 // NOTE: The easiest way to pass through args is to call it like
 // <root>harvester.exe --process-start-args="--harvest"
@@ -54,18 +61,28 @@ const hasArgument = (arg: string) => !!process.argv.find(op => op.includes(arg))
 initMain();
 
 if (hasArgument("--harvest")) {
-  await harvest();
+  const r = await harvest();
+  app.quit();
+  process.exit(r === "error" ? 1 : 0);
+}
+
+if (hasArgument("--notify")) {
+  const icon = process.argv.find(op => op.includes("--icon"))?.split("=")[1];
+  const r = await notify({
+    title: "Test Title",
+    message: "I am a message",
+    icon: icon ?? "money.png",
+    // actions: ["Click Me!"],
+  })
+  log.info("Test Result: ", r)
   app.quit();
   process.exit(0);
 }
 
-if (hasArgument("--notify")) {
-  const r = await notifyError({
-    title: "test",
-    message: "test",
-    actions: ["test"],
-  })
-  log.info("Test Result: ", r)
+if (hasArgument("--ask-input")) {
+  const r2 = await notifyInput("Enter your 2FA code:");
+  log.info("Test Result: ", r2)
+  await new Promise(resolve => setTimeout(resolve, 100)); // Give logs time to flush
   app.quit();
   process.exit(0);
 }
@@ -73,7 +90,7 @@ if (hasArgument("--notify")) {
 // If our first run, patch our windows shortcut
 if (hasArgument("--squirrel-firstrun")) {
   if (process.platform === 'win32') {
-    const { fixToastButtonsOnWindows } = await import('./Harvester/notify.patch');
+    const { fixToastButtonsOnWindows } = await import('./notify/notify.patch');
     fixToastButtonsOnWindows(app, shell);
   }
 }

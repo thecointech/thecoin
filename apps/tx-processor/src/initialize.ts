@@ -1,15 +1,15 @@
 import { log } from "@thecointech/logging";
 import { getFirestore, init as FirestoreInit } from '@thecointech/firestore';
 import { RbcStore, closeBrowser } from "@thecointech/rbcapi";
-import gmail from '@thecointech/tx-gmail';
+import { initialize as initializeGmail } from '@thecointech/tx-gmail';
 import { ConfigStore } from "@thecointech/store";
 import { getSigner } from '@thecointech/signers';
-import { ConnectContract, TheCoin } from '@thecointech/contract-core';
+import { ContractCore, type TheCoin } from '@thecointech/contract-core';
 import { SendMail } from "@thecointech/email";
 import { weSellAt, fetchRate } from '@thecointech/fx-rates';
 import { toHuman } from "@thecointech/utilities";
 import { sleep } from '@thecointech/async';
-import { Signer, formatEther } from "ethers";
+import { type Signer, formatEther } from "ethers";
 
 export async function initialize() {
   log.debug(' --- Initializing processing --- ');
@@ -20,7 +20,7 @@ export async function initialize() {
   ConfigStore.initialize();
 
   let token = await ConfigStore.get("gmail.token");
-  token = await gmail.initialize(token);
+  token = await initializeGmail(token);
   await ConfigStore.set("gmail.token", token);
 
   const signer = await getSigner('BrokerCAD');
@@ -29,7 +29,7 @@ export async function initialize() {
     throw new Error("Signers not loaded");
   }
 
-  const contract = await ConnectContract(signer);
+  const contract = await ContractCore.connect(signer);
   if (!contract) {
     throw new Error("Couldn't initialize contract")
   }

@@ -4,7 +4,7 @@ import { TransactionList } from "../TransactionList";
 import { useFxRates } from "../FxRate/selectors";
 import { defineMessages, FormattedMessage } from "react-intl";
 import styles from './styles.module.less';
-import { AccountMap } from '../AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { Account } from '../Account';
 import { DateTime } from 'luxon';
 

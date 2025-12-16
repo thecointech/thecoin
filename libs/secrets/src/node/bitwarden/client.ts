@@ -56,11 +56,11 @@ export async function createClient(config?: ConfigType) {
 
 async function getBwsVars(config?: ConfigType) {
   // Is the key an environment variable?
-  if (process.env.BWS_ACCESS_TOKEN && process.env.ORGANIZATION_ID) {
+  if (process.env.BWS_ACCESS_TOKEN && process.env.BWS_ORGANIZATION_ID) {
     return {
       accessToken: process.env.BWS_ACCESS_TOKEN,
       stateFile: process.env.BWS_STATE_FILE,
-      organizationId: process.env.ORGANIZATION_ID,
+      organizationId: process.env.BWS_ORGANIZATION_ID,
     };
   }
 
@@ -87,6 +87,6 @@ async function getBwsVars(config?: ConfigType) {
   return {
     accessToken: parsed.BWS_ACCESS_TOKEN,
     stateFile: parsed.BWS_STATE_FILE,
-    organizationId: parsed.ORGANIZATION_ID,
+    organizationId: parsed.BWS_ORGANIZATION_ID,
   };
 }
