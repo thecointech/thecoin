@@ -1,8 +1,8 @@
 import { getSigner } from '@thecointech/signers';
-import { ConnectContract } from '@thecointech/contract-core';
+import { ContractCore } from '@thecointech/contract-core';
 import { ALL_PERMISSIONS, assignPlugin, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 import { log } from '@thecointech/logging';
-import { getContract } from '../src/contract';
+import { ContractRoundNumber } from '../src/contract';
 import { DateTime } from 'luxon';
 
 async function main() {
@@ -13,8 +13,8 @@ async function main() {
   const Client2 = await getSigner("Client2");
   const theCoin = await getSigner("TheCoin");
   const brokerCad = await getSigner("BrokerCAD");
-  const tcCore = await ConnectContract(theCoin);
-  const bcCore = await ConnectContract(brokerCad);
+  const tcCore = await ContractCore.connect(theCoin);
+  const bcCore = await ContractCore.connect(brokerCad);
   const clientAddr = await Client2.getAddress();
   const existingPlugins = await tcCore.getUsersPlugins(clientAddr);
 
@@ -22,7 +22,7 @@ async function main() {
 
     log.debug("Seeding RoundNumber");
 
-    const deployed = await getContract();
+    const deployed = await ContractRoundNumber.get();
     const request = await buildAssignPluginRequest(Client2, deployed, ALL_PERMISSIONS);
     const assigned = await assignPlugin(bcCore, request);
     await assigned.wait();

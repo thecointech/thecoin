@@ -1,22 +1,21 @@
 import { getSigner } from '@thecointech/signers';
-import { ConnectContract } from '@thecointech/contract-core';
+import { ContractCore } from '@thecointech/contract-core';
 import { ALL_PERMISSIONS, assignPlugin, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 import { log } from '@thecointech/logging';
-import { getContract } from '@thecointech/contract-plugin-shockabsorber';
+import { ContractShockAbsorber } from '@thecointech/contract-plugin-shockabsorber';
 import { DateTime } from 'luxon';
-import { getProvider } from '@thecointech/ethers-provider';
 import { fetchRate, weSellAt } from '@thecointech/fx-rates';
 import { toCoinDecimal } from '@thecointech/utilities';
 import Decimal from 'decimal.js-light';
 import { getOverrideFees } from '@thecointech/contract-base/overrides';
-import { getContract as getOracle } from '@thecointech/contract-oracle';
+import { ContractOracle } from '@thecointech/contract-oracle';
 
 log.debug('Seeding ShockAbsorber');
 async function main() {
   // BrokerCAD directly owns this contract (and associated benefits)
   const brokerCAD = await getSigner("BrokerCAD");
-  const shockAbsorber = await getContract();
-  const bcCore = await ConnectContract(brokerCAD);
+  const shockAbsorber = await ContractShockAbsorber.get();
+  const bcCore = await ContractCore.connect(brokerCAD);
 
   // Once deployed, the contract is going to need a bit of funding
   // Transfer $10,000 worth from BrokerCAD immediately.
@@ -41,7 +40,7 @@ async function main() {
 }
 
 async function findLargestDrop() {
-  const oracle = await getOracle();
+  const oracle = await ContractOracle.get();
   const rates = await oracle.getRates();
   const interval = await oracle.BLOCK_TIME();
   const initialTimestamp = await oracle.INITIAL_TIMESTAMP();

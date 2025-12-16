@@ -35,7 +35,7 @@
       "types": "./projectUrl/index.d.ts",
       "default": "./projectUrl/index.mjs"
     },
-    "./webpack": "./webpack/webpack.env.cjs"
+    "./webpack": "./webpack/index.ts"
   },
   "types": "./build/index.d.ts",
   "dependencies": {

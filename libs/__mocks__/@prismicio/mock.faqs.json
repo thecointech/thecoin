@@ -1,0 +1,963 @@
+[
+  {
+    "id": "YLbGzBAAACQA1Ha2",
+    "uid": "why-use-thecoin",
+    "url": "/faq/why-use-thecoin",
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-01T23:46:24+0000",
+    "last_publication_date": "2025-12-11T16:10:22+0000",
+    "slugs": [
+      "why-use-thecoin"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [
+      {
+        "id": "YLv2vhMAACMAE2dr",
+        "type": "faq",
+        "lang": "fr-ca",
+        "uid": "why-use-thecoin"
+      }
+    ],
+    "data": {
+      "category": "About TheCoin",
+      "show_on_faq_home": true,
+      "question": [
+        {
+          "type": "heading4",
+          "text": "Why use TheCoin?",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "Because you benefit, not a bank, not a financier, but YOU benefit.  TheCoin is expected to grow alongside the value of the S&P500, whose performance can be tracked as ever upwards from the beginning of its foundation back in 1957 – that is over 62 years of constant growth!  The 2019 year start to end grew by about 30% in value. Compare that to any “high-interest” savings account any bank has to offer, and the “why” becomes apparent.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLV43xAAACMAzpiq",
+    "uid": "who-are-we",
+    "url": "/faq/who-are-we",
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-01T00:01:53+0000",
+    "last_publication_date": "2025-12-11T16:10:04+0000",
+    "slugs": [
+      "who-are-we"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [
+      {
+        "id": "YLbI8xAAACUA1IBW",
+        "type": "faq",
+        "lang": "fr-ca",
+        "uid": "who-are-we"
+      }
+    ],
+    "data": {
+      "category": "About TheCoin",
+      "show_on_faq_home": true,
+      "question": [
+        {
+          "type": "heading4",
+          "text": "Who are we?",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "We are the FinTech (financial technology) company that created TheCoin.  We have incorporated ourselves as a not for profit corporation, meaning we use our profits to “do good”.  Our cause is counteracting climate change. Our mission is to work toward a better future for you financially and for you globally.  We are you, so we are doing this for us, too!",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLrHiBMAACQADiDn",
+    "uid": "financial-accountability",
+    "url": "/faq/financial-accountability",
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-05T00:38:36+0000",
+    "last_publication_date": "2025-12-11T16:02:58+0000",
+    "slugs": [
+      "if-you-are-a-non-profit-where-does-the-money-go"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [
+      {
+        "id": "YXmm_RIAACEAg6Xq",
+        "type": "faq",
+        "lang": "fr-ca",
+        "uid": "financial-accountability"
+      }
+    ],
+    "data": {
+      "category": "About TheCoin",
+      "show_on_faq_home": false,
+      "question": [
+        {
+          "type": "heading4",
+          "text": "If you are a non-profit, where does the money go?",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "About one quarter of the fee’s charged are needed for operating expenses, while the other three quarters goes to our primary mission; fighting climate change by funding clean energy projects.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLv1EBMAACQAE1_1",
+    "uid": "make-a-difference",
+    "url": "/faq/make-a-difference",
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-05T22:05:23+0000",
+    "last_publication_date": "2025-12-11T15:58:27+0000",
+    "slugs": [
+      "why-do-you-think-youre-making-a-difference-on-climate-change"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [
+      {
+        "id": "YLwByhMAACMAE5g-",
+        "type": "faq",
+        "lang": "fr-ca"
+      }
+    ],
+    "data": {
+      "category": "Climate Change",
+      "show_on_faq_home": true,
+      "question": [
+        {
+          "type": "heading4",
+          "text": "Why do you think you’re making a difference on Climate Change?",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "First up, it’s pretty simple math.  In the last 3 months, we offset 66 tonnes of CO2.  That’s a big offset - big enough to reduce all our clients' emissions to be in line with the Paris Accord.  Or for a more visual impact - on a yearly basis each one of our members took 5 cars off the road.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "On a larger scale though - we believe this is important because it changes the math of Climate Change.  At the heart of the crisis is the problem that any sacrifice is personal.  At its core, it can be summed up with ",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "“Why should I? Nobody else is doing it”",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "TheCoin is designed to change this math.  The benefit is personal - if you have an account, you are the one who stands to win as your savings grow.  It doesn’t need everyone else to jump in for you to benefit, you’ll win no matter what the rest of the world does.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "For the biggest challenge our world has ever seen, we need to start moving on a solution, and TheCoin gives you a way to do that. All while giving yourself some serious extra moolah.  ",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "We are extremely proud of this combo… and we hope you are too!",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLbI8xAAACUA1IBW",
+    "uid": "who-are-we",
+    "url": "/faq/who-are-we",
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-01T23:55:37+0000",
+    "last_publication_date": "2025-12-11T17:29:38+0000",
+    "slugs": [
+      "qui-sommes-nous"
+    ],
+    "linked_documents": [],
+    "lang": "fr-ca",
+    "alternate_languages": [
+      {
+        "id": "YLV43xAAACMAzpiq",
+        "type": "faq",
+        "lang": "en-ca",
+        "uid": "who-are-we"
+      }
+    ],
+    "data": {
+      "category": "About TheCoin",
+      "show_on_faq_home": true,
+      "question": [
+        {
+          "type": "heading4",
+          "text": "Qui sommes nous?",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "Nous sommes la société FinTech (technologie financière) à l'origine de TheCoin. Nous sommes une association à but non lucratif, ce qui signifie que nous utilisons nos bénéfices pour des actions solidaires. Notre cause : la lutte contre le changement climatique. Notre mission est de contribuer à un avenir meilleur pour vous, financièrement et pour le monde entier. Nous sommes comme vous, et nous agissons pour nous-mêmes!",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLv1bRMAACMAE2GO",
+    "uid": "why-not-alternatives",
+    "url": "/faq/why-not-alternatives",
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-05T22:06:40+0000",
+    "last_publication_date": "2025-12-11T16:00:51+0000",
+    "slugs": [
+      "why-dont-you-invest-in-goldpropertystock-xother"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [
+      {
+        "id": "YLwO8RMAACIAE9I3",
+        "type": "faq",
+        "lang": "fr-ca"
+      }
+    ],
+    "data": {
+      "category": "Investing & Taxes",
+      "show_on_faq_home": false,
+      "question": [
+        {
+          "type": "heading4",
+          "text": "Why don’t you invest in gold/property/stock X/other? ",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "Because the stock market is the best and most secure long-term investment.  If something else was better, that’s what we would choose.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLvOTRMAACIAErQd",
+    "uid": "account-safety",
+    "url": "/faq/account-safety",
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-05T19:19:55+0000",
+    "last_publication_date": "2025-12-11T16:01:11+0000",
+    "slugs": [
+      "are-you-just-as-safe-as-a-regular-bank"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [
+      {
+        "id": "YLwTQRMAACIAE-Ux",
+        "type": "faq",
+        "lang": "fr-ca"
+      }
+    ],
+    "data": {
+      "category": "Account Security",
+      "show_on_faq_home": false,
+      "question": [
+        {
+          "type": "heading4",
+          "text": "Are you just as safe as a regular bank?",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "So in this case, the simple answer is \"Yes\". Everyone who deals with money is required, by law, to not lose any of it, and someone keeps watch over us to make sure we follow the rules.  We have to follow the standard regulations that every company that deals with money has to follow - watching for suspicious transactions, doing frequent internal audits, tracking every transaction to ensure it goes to the right person, and other such jobs.",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "However, because we are a non-profit, we have additional requirements that nobody else has. We are required by law to have a regular audit from an outside company, and to be completely transparent with our clients. Anyone who wants to can check our books to make sure every single penny goes to who it's supposed to.",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "We suspect if banks followed these rules, the rates of financial fraud in Canada would go way, way down. But we wouldn't suggest asking to see your banks books - there is a reason they don't want them public!",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "So this is a good start, but we are... well, we're pretty obsessed. So, we go way, way further. We run a live audit that ensures that - at every single minute of every day - everything is checks out. This is all done by our in-house software - because software never gets tired, never misses a transaction, and never does anything it hasn’t been told to.",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "At some points we still do have to have humans involved though, because even our software could have flaws.  We keep super-strict limits on who can access any account though, and our auditors are watching these people closer than anyone.  If something were to ever happen, we would know about it immediately, and know exactly who to talk to.",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "Why do we do all this?  Well, for one, an upstart company like ours has a lot to prove.  If we let through the rates of fraud and malpractice that happens at a regular bank, we’d be out of business in a heart-beat.  It’s more than this though.  All this waste and loss doesn’t need to happen.  It costs us $10 billion annually - that’s $350 for every Canadian, every single year.  If your 30 years old, it’s cost you over $10000 by now.  The tools exist to combat it, what’s missing is the willpower.  Some loopholes are just a legacy of old technology and processes, but sometimes the loopholes are more of a feature because closing them would impact some of the banks biggest money-makers.",
+          "spans": []
+        },
+        {
+          "type": "paragraph",
+          "text": "We utterly refuse to compromise on any aspect of our business - we would never trade your security for profit.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLbGdhAAACMA1HUv",
+    "uid": "about-thecoin",
+    "url": "/faq/about-thecoin",
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-01T23:44:58+0000",
+    "last_publication_date": "2025-12-11T16:09:10+0000",
+    "slugs": [
+      "what-is-thecoin"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [
+      {
+        "id": "YLbPkhAAACUA1J2b",
+        "type": "faq",
+        "lang": "fr-ca"
+      }
+    ],
+    "data": {
+      "category": "About TheCoin",
+      "show_on_faq_home": true,
+      "question": [
+        {
+          "type": "heading4",
+          "text": "What is TheCoin?",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "TheCoin is a digital wallet that holds the digital currency of TheCoin. This acts as a chequing, savings and investment account in one. TheCoin currency itself is what is known as a stablecoin, meaning it avoids the volatility and uncertainty of other digital currencies.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "What is a stablecoin, you may ask? It is a digital currency whose value is “pegged” (tied to) another asset or assets with its own intrinsic value, much like the gold standard of yesteryear.  Stablecoins are different to normal cryptocurrencies, there is no \"mining\" so we don't have the insane energy waste that traditional cryptocurrencies have.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "The value of a stablecoin is also, as the name implies, stable.  This is because it represents something of actual value.  Imagine, for a second, that something terrible happened tomorrow, and 10% of Bitcoins holders tried to sell, all at once.  The price of Bitcoin would crater, because there is nothing giving bitcoin value other than the next person who wants to buy it!",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "Stablecoins are different.  If every single person who held TheCoin wanted to sell (which did happen in the early days), and you were the only person left holding... your account balance wouldn't move.  We would have to sell a bunch of assets to pay out the people who left, but your assets would still be there, still growing.",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLvFkRMAACQAEo1X",
+    "uid": "how-does-it-work",
+    "url": "/faq/how-does-it-work",
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-05T18:42:29+0000",
+    "last_publication_date": "2025-12-11T16:09:44+0000",
+    "slugs": [
+      "how-does-it-work"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [
+      {
+        "id": "YXmmcxIAACMAg6OG",
+        "type": "faq",
+        "lang": "fr-ca",
+        "uid": "how-does-it-work"
+      }
+    ],
+    "data": {
+      "category": "About TheCoin",
+      "show_on_faq_home": false,
+      "question": [
+        {
+          "type": "heading4",
+          "text": "How Does It work?",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "You simply open an account online with The Coin and transfer money in from your bank.  We invest this money into the stock market using a time-tested, effective and simple strategy endorsed by Nobel prize winners and the world’s most successful investors.  Over time, your investments go up in value.  Whenever you want to spend your money, we exchange the desired dollar amount back to Canadian dollars and complete the transaction on your behalf.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YXmmcxIAACMAg6OG",
+    "uid": "how-does-it-work",
+    "url": "/faq/how-does-it-work",
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2025-12-11T17:20:25+0000",
+    "last_publication_date": "2025-12-11T17:22:54+0000",
+    "slugs": [
+      "comment-ca-marche"
+    ],
+    "linked_documents": [],
+    "lang": "fr-ca",
+    "alternate_languages": [
+      {
+        "id": "YLvFkRMAACQAEo1X",
+        "type": "faq",
+        "lang": "en-ca",
+        "uid": "how-does-it-work"
+      }
+    ],
+    "data": {
+      "category": "About TheCoin",
+      "show_on_faq_home": false,
+      "question": [
+        {
+          "type": "heading4",
+          "text": "Comment ça marche?",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "Il vous suffit d'ouvrir un compte en ligne chez The Coin et d'y transférer de l'argent depuis votre banque. Nous investissons cet argent en bourse grâce à une stratégie éprouvée, efficace et simple, approuvée par des lauréats du prix Nobel et les investisseurs les plus performants au monde. Au fil du temps, vos investissements prennent de la valeur. Lorsque vous souhaitez dépenser votre argent, nous convertissons le montant désiré en dollars canadiens et effectuons la transaction pour vous.",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLv2vhMAACMAE2dr",
+    "uid": "why-use-thecoin",
+    "url": "/faq/why-use-thecoin",
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-05T22:12:18+0000",
+    "last_publication_date": "2025-12-11T17:27:40+0000",
+    "slugs": [
+      "pourquoi-thecoin"
+    ],
+    "linked_documents": [],
+    "lang": "fr-ca",
+    "alternate_languages": [
+      {
+        "id": "YLbGzBAAACQA1Ha2",
+        "type": "faq",
+        "lang": "en-ca",
+        "uid": "why-use-thecoin"
+      }
+    ],
+    "data": {
+      "category": "About TheCoin",
+      "show_on_faq_home": true,
+      "question": [
+        {
+          "type": "heading4",
+          "text": "Pourquoi TheCoin?",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "Parce que vous recevez les bénéfices, pas d'intermédiaires qui prends vos gains.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLvHuxMAACIAEpb5",
+    "uid": "how-users-protected",
+    "url": "/faq/how-users-protected",
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-05T18:51:43+0000",
+    "last_publication_date": "2025-12-11T15:59:55+0000",
+    "slugs": [
+      "how-are-users-protected"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [
+      {
+        "id": "YLw6dhMAACQAFJET",
+        "type": "faq",
+        "lang": "fr-ca"
+      }
+    ],
+    "data": {
+      "category": "Account Security",
+      "show_on_faq_home": false,
+      "question": [
+        {
+          "type": "heading4",
+          "text": "How are users protected? ",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "We take security very seriously. Very very seriously. So seriously, people are warned before we arrive at parties to not ask us about it...",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "Don't believe us? Check out just how far we go...",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "We employ a multi-layered approach to ensure your account has complete security.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "First, your account and it's value are secured on the blockchain, meaning that the same security that protects over $17 trillion of assets also protects your account. This security is, in practical terms, unhackable.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "Second, for the data we absolutely must store - and there is some - it’s stored by Google. Instead of trying to create our own security (and risking getting it wrong) - we pay Google to do it for us. And we trust google to do that well. But - data breaches do happen, and big companies do occasionally make mistakes. So...",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "Third, we have adopted a unique method for storing the key to your assets that means we never store the actual account details. Unlike other financial institutions, our setup means that even if Google's servers were hacked, and the bad guys could do whatever they wanted to our databases - they -still- wouldn't be able to access your account (they'd make a mess to our internal accounting though, so we're pretty determined to keep them out).",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "Fourth: We actively watch our clients accounts for strange activity, and because of our unique designs we have some pretty good methods for catching it. After all, our best protections can't stop someone's laptop getting stolen. In these cases, we are building an automatic fail-safe, which will automatically trigger to keep your funds completely safe.",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLu7VRMAACMAEl-z",
+    "uid": "how-much-growth",
+    "url": "/faq/how-much-growth",
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-05T17:58:49+0000",
+    "last_publication_date": "2025-12-11T16:02:27+0000",
+    "slugs": [
+      "how-much-will-my-money-grow"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [
+      {
+        "id": "YLw7jBMAACQAFJXg",
+        "type": "faq",
+        "lang": "fr-ca"
+      }
+    ],
+    "data": {
+      "category": "Growth",
+      "show_on_faq_home": false,
+      "question": [
+        {
+          "type": "heading4",
+          "text": "How much will my money grow?",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "Your money will grow alongside the stock market, meaning that on any given day, it can increase or decrease.  While we can’t promise a return on any single day, over the long term our investment strategy returns an average of 9.5% per year.  It’s even better when you work it out relative to regular interest.  When the bank pays you interest, it’s counted as income – and this means that you lose a big slice of it to the government immediately.  Our accounts use capital gains, which have many advantages to grow their value.  One is that it’s only charged ½ as much tax, so 9.5% in capital gains is the same as about 15% in bank interest.  On top of this, you only pay capital gains when you spend your money – which means your growth can be tax-free.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "In concrete terms, you can expect your account size to double roughly every 7.5 years. If you started with $2000 on the day you were born, and didn't touch it for the next 65 years, you can reasonably expect around $1 million to be in your account at retirement. Of course, as you grow, we hope you can start saving a bit more, but that cool $million will certainly make retirement a lot easier.",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ]
+    }
+  },
+  {
+    "id": "YXmm_RIAACEAg6Xq",
+    "uid": "financial-accountability",
+    "url": "/faq/financial-accountability",
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-10-27T19:28:55+0000",
+    "last_publication_date": "2021-10-27T19:28:55+0000",
+    "slugs": [
+      "if-you-are-a-non-profit-where-does-the-money-go",
+      "0---about-thecoin"
+    ],
+    "linked_documents": [],
+    "lang": "fr-ca",
+    "alternate_languages": [
+      {
+        "id": "YLrHiBMAACQADiDn",
+        "type": "faq",
+        "lang": "en-ca",
+        "uid": "financial-accountability"
+      }
+    ],
+    "data": {
+      "category": "0 - About TheCoin",
+      "show_on_faq_home": false,
+      "question": [
+        {
+          "type": "heading1",
+          "text": "If you are a non-profit, where does the money go?",
+          "spans": []
+        }
+      ],
+      "answer": []
+    }
+  },
+  {
+    "id": "YLw7jBMAACQAFJXg",
+    "uid": null,
+    "url": null,
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-06T03:05:51+0000",
+    "last_publication_date": "2021-06-06T03:05:51+0000",
+    "slugs": [
+      "combien-vais-je-gagner-"
+    ],
+    "linked_documents": [],
+    "lang": "fr-ca",
+    "alternate_languages": [
+      {
+        "id": "YLu7VRMAACMAEl-z",
+        "type": "faq",
+        "lang": "en-ca",
+        "uid": "how-much-growth"
+      }
+    ],
+    "data": {
+      "category": null,
+      "show_on_faq_home": false,
+      "question": [
+        {
+          "type": "heading1",
+          "text": "Combien vais-je gagner ?",
+          "spans": []
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "Votre argent prend de la valeur en même temps de la bourse, ce qui veux dire que tous les jours il peut prendre de la valeur ou en perdre.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLbPkhAAACUA1J2b",
+    "uid": null,
+    "url": null,
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-02T00:23:50+0000",
+    "last_publication_date": "2021-06-03T23:50:26+0000",
+    "slugs": [
+      "cest-quoi-thecoin-"
+    ],
+    "linked_documents": [],
+    "lang": "fr-ca",
+    "alternate_languages": [
+      {
+        "id": "YLbGdhAAACMA1HUv",
+        "type": "faq",
+        "lang": "en-ca",
+        "uid": "about-thecoin"
+      }
+    ],
+    "data": {
+      "category": "Account Security",
+      "show_on_faq_home": true,
+      "question": [
+        {
+          "type": "heading1",
+          "text": "C'est quoi TheCoin ?",
+          "spans": []
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "dadfew",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLv2VRMAACIAE2WP",
+    "uid": null,
+    "url": null,
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-05T22:10:34+0000",
+    "last_publication_date": "2021-06-05T22:10:34+0000",
+    "slugs": [
+      "comment-ca-marche-"
+    ],
+    "linked_documents": [],
+    "lang": "fr-ca",
+    "alternate_languages": [],
+    "data": {
+      "category": null,
+      "show_on_faq_home": false,
+      "question": [
+        {
+          "type": "heading1",
+          "text": "Comment ça marche ?",
+          "spans": []
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "Vous créé un compte et vous pouvez transférer vos dollars canadiens immédiatement. ",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLw6dhMAACQAFJET",
+    "uid": null,
+    "url": null,
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-06T03:01:13+0000",
+    "last_publication_date": "2021-06-06T03:01:13+0000",
+    "slugs": [
+      "comment-sont-proteges-les-utilisateurs-"
+    ],
+    "linked_documents": [],
+    "lang": "fr-ca",
+    "alternate_languages": [
+      {
+        "id": "YLvHuxMAACIAEpb5",
+        "type": "faq",
+        "lang": "en-ca",
+        "uid": "how-users-protected"
+      }
+    ],
+    "data": {
+      "category": null,
+      "show_on_faq_home": false,
+      "question": [
+        {
+          "type": "heading1",
+          "text": "Comment sont protégés les utilisateurs ?",
+          "spans": []
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "Nous utilisons une approche à plusieurs niveaux pour garantir une sécurité totale de votre compte.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLwByhMAACMAE5g-",
+    "uid": null,
+    "url": null,
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-05T22:59:26+0000",
+    "last_publication_date": "2021-06-05T22:59:26+0000",
+    "slugs": [
+      "comment-savez-vous-que-vous-faites-une-difference-sur-le-changement-climatique-"
+    ],
+    "linked_documents": [],
+    "lang": "fr-ca",
+    "alternate_languages": [
+      {
+        "id": "YLv1EBMAACQAE1_1",
+        "type": "faq",
+        "lang": "en-ca",
+        "uid": "make-a-difference"
+      }
+    ],
+    "data": {
+      "category": null,
+      "show_on_faq_home": false,
+      "question": [
+        {
+          "type": "heading1",
+          "text": "Comment savez-vous que vous faites une différence sur le changement climatique ?",
+          "spans": []
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "Dans les trois derniers mois nous avons compenser 66 tonnes de CO2. C'est assez pour réduire les émissions de tous nos clients selon l'accord de Paris. Vous voulez un exemple plus visuel : chaque année, chacun de nos membres participe a enlever 5 voitures des routes.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLwO8RMAACIAE9I3",
+    "uid": null,
+    "url": null,
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-05T23:55:32+0000",
+    "last_publication_date": "2021-06-05T23:55:32+0000",
+    "slugs": [
+      "pourquoi-ninvestissez-vous-pas-dans-lor--limmobilier--...-"
+    ],
+    "linked_documents": [],
+    "lang": "fr-ca",
+    "alternate_languages": [
+      {
+        "id": "YLv1bRMAACMAE2GO",
+        "type": "faq",
+        "lang": "en-ca",
+        "uid": "why-not-alternatives"
+      }
+    ],
+    "data": {
+      "category": null,
+      "show_on_faq_home": false,
+      "question": [
+        {
+          "type": "heading1",
+          "text": "Pourquoi n'investissez-vous pas dans l'or / l'immobilier / ... ?",
+          "spans": []
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "La bourse est le meilleur et plus sure option sur le long terme. S'il y avait une meilleur option cela serai notre choix. ",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YLwTQRMAACIAE-Ux",
+    "uid": null,
+    "url": null,
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-06T00:13:56+0000",
+    "last_publication_date": "2021-06-06T00:13:56+0000",
+    "slugs": [
+      "etes-vous-aussi-securitaire-quune-banque-conventionnelle-"
+    ],
+    "linked_documents": [],
+    "lang": "fr-ca",
+    "alternate_languages": [
+      {
+        "id": "YLvOTRMAACIAErQd",
+        "type": "faq",
+        "lang": "en-ca",
+        "uid": "account-safety"
+      }
+    ],
+    "data": {
+      "category": null,
+      "show_on_faq_home": false,
+      "question": [
+        {
+          "type": "heading1",
+          "text": "Êtes-vous aussi sécuritaire qu'une banque conventionnelle ?",
+          "spans": []
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "La réponse est \"oui\". Toutes les institutions financières sont requis par la loi de la traçabilité de l'argent. Nous suivons les standards de la régulation que toutes les entreprises responsable d'argent doivent suivre: faire des audits régulièrement, traçer toutes les transaction et faire en sorte qu'elle arrivent à bon port et signaler les transactions frauduleuses.",
+          "spans": []
+        }
+      ]
+    }
+  }
+]

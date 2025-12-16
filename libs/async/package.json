@@ -22,7 +22,7 @@
   },
   "exports": {
     ".": {
-      "development": "./mocked/async_mocked.ts",
+      "development": "./mocks/async_mocked.ts",
       "default": "./build/index.js"
     },
     "./sleep": "./build/index.js"

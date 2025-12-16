@@ -68,6 +68,7 @@ export async function processEvents(replay: Replay) {
           replay.events[i + 1]?.type == "navigation"
         );
       }
+      log.info(` - Processing event(${i}/${replay.events.length}): ${event.type} - ${event.id}`);
       await processEvent(replay, event, eventNavigates);
     }
     catch (err) {
@@ -98,7 +99,6 @@ export async function processEvents(replay: Replay) {
 }
 
 export async function processEvent({ page, dynamicValues, values, delay=1000 }: Replay, event: AnyEvent, eventNavigates: () => boolean) {
-  log.info(` - Processing event: ${event.type} - ${event.id}`);
 
   // Keep a slight delay on events, time is not a priority here
   await sleep(delay);
@@ -219,10 +219,18 @@ export async function enterValue(page: Page, event: AnyElementEvent, value: stri
 export async function enterValueIntoFound(page: Page, found: SearchElement, value: string) {
   await found.element.focus();
   if (found.data.tagName == "INPUT" || found.data.tagName == "TEXTAREA") {
-    // clear existing value
-    await page.evaluate(el => (el as HTMLInputElement).value = "", found.element);
-    // Simulate typing to mimic input actions
-    await page.keyboard.type(value, { delay: 20 });
+    if (found.data.inputType == "checkbox") {
+      // We assume value == true, but just in case some future
+      // scenario requires unchecking, guess the results.
+      const nodeChecked = value !== "off" && value !== "false";
+      await page.evaluate((el, rendererChecked) => (el as HTMLInputElement).checked = rendererChecked, found.element, nodeChecked);
+    }
+    else {
+      // clear existing value
+      await page.evaluate(el => (el as HTMLInputElement).value = "", found.element);
+      // Simulate typing to mimic input actions
+      await page.keyboard.type(value, { delay: 20 });
+    }
     return true;
   }
   else if (found.data.tagName == "SELECT") {

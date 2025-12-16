@@ -1,6 +1,5 @@
 import { getSigner, type AccountName } from '@thecointech/signers';
 import { log } from '@thecointech/logging';
-import { connect } from '@thecointech/contract-base/connect';
 import { MINTER_ROLE, MRFREEZE_ROLE, BROKER_ROLE, PLUGINMGR_ROLE, THECOIN_ROLE } from "../../src/constants";
 import type { TheCoin } from '../../src/codegen';
 
@@ -25,7 +24,7 @@ async function setupRole(tcCore: TheCoin, role: string, name: AccountName) {
 
 export async function assignRoles(contract: TheCoin) {
   const theCoin = await getSigner("TheCoin");
-  const tcCore = connect(theCoin, contract);
+  const tcCore = contract.connect(theCoin);
   log.trace('Assigning roles...');
   const address = await theCoin.getAddress();
   const isValid = await tcCore.hasRole(THECOIN_ROLE, address);

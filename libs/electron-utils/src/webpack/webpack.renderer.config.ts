@@ -1,11 +1,10 @@
 import type { Configuration } from 'webpack';
-import { rules } from './webpack.rules.js';
-import { plugins } from './webpack.plugins.js';
+import { rules } from './webpack.rules.ts';
+import { plugins } from './webpack.plugins.ts';
 import path from 'path';
 import { merge } from 'webpack-merge';
-//@ts-ignore (TODO: convert setenv to typescript/module)
-import getMocks from '@thecointech/setenv/webpack';
-import { env, commonBase } from './webpack.common.js';
+import { getMocks } from '@thecointech/setenv/webpack';
+import { env, commonBase } from './webpack.common.ts';
 import webpack from 'webpack';
 import { getSecret } from '@thecointech/secrets';
 import { platform } from 'os';
@@ -30,7 +29,7 @@ const baseOptions: Configuration = {
       "process.env.LOG_NAME": JSON.stringify(process.env.LOG_NAME),
       'process.env.BUILD_OS': JSON.stringify(platform()),
 
-      __COMPILER_REPLACE_SECRETS__: JSON.stringify({PolygonscanApiKey}),
+      __COMPILER_REPLACE_SECRETS__: JSON.stringify({ PolygonscanApiKey }),
     }),
   ],
   externals: {

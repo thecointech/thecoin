@@ -2,7 +2,7 @@ import { jest } from '@jest/globals';
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { updateRates } from './update';
 import { createOracle } from '../internal/testHelpers';
-import { SpxCadOracleMocked } from './index_mocked';
+import { SpxCadOracleMocked } from '../mocks/oracle_mocked';
 import hre from 'hardhat';
 import '@nomicfoundation/hardhat-ethers';
 import { DateTime } from 'luxon';

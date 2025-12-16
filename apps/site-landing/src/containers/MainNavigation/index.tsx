@@ -24,6 +24,11 @@ const menuItems = defineMessages({
     description: 'site.MainNavigation.yourbenefits: Title for the Your benefits entry in the menu',
     icon: "arrow up",
   },
+  blog: {
+    defaultMessage: 'Blog',
+    description: 'site.MainNavigation.blog: Blog Link',
+    icon: "newspaper"
+  },
   help: {
     defaultMessage: 'Help',
     description: 'site.MainNavigation.faq: Help Link',

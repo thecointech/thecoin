@@ -1,11 +1,11 @@
 import { makeTransition  } from '../makeTransition';
 import { TransitionCallback, getCurrentState } from '../types';
 import { verifyPreTransfer } from './verifyPreTransfer';
-import { connectConverter } from '@thecointech/contract-plugin-converter';
 import { toDelta } from './coinUtils';
 import { log } from '@thecointech/logging';
 import { isCertTransfer } from '@thecointech/utilities/VerifiedTransfer';
 import { getSigner } from '@thecointech/signers';
+import { ContractConverter } from '@thecointech/contract-plugin-converter';
 
 // this deposit can operate on both bill & sell types.
 type BSActionTypes = "Bill"|"Sell";
@@ -20,7 +20,7 @@ const doClearPending: TransitionCallback<BSActionTypes> = async (container) => {
   // It doesn't matter who the signer is, the function is public
   // (they just need to have some $$$ available)
   const signer = await getSigner("BrokerCAD");
-  const uc = await connectConverter(signer);
+  const uc = await ContractConverter.connect(signer);
 
   const request = container.action.data.initial;
   // Certified transfer should not end up here!

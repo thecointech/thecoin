@@ -28,15 +28,15 @@
   ],
   "exports": {
     "./broker": {
-      "development": "./mocked/broker/index.ts",
+      "development": "./mocks/broker/index.ts",
       "default": "./build/broker/live.js"
     },
     "./pricing": {
-      "development": "./mocked/pricing.ts",
+      "development": "./mocks/pricing.ts",
       "default": "./build/pricing/live.js"
     },
     "./nft": {
-      "development": "./mocked/nft.ts",
+      "development": "./mocks/nft.ts",
       "default": "./build/nft/live.js"
     },
     "./vqa": {

@@ -1,6 +1,5 @@
-import type { Provider } from 'ethers';
-import { type TheCoin, TheCoin__factory } from './codegen';
-import { getProvider } from '@thecointech/ethers-provider';
+import { type TheCoin as TcContract, TheCoin__factory } from './codegen';
+import { defineContractSingleton } from '@thecointech/contract-base';
 
 //
 // Ensure your .env specifies where this contract was deployed at
@@ -18,24 +17,8 @@ export const getContractAddress = async () : Promise<string> => {
   return deployment.default.contract;
 }
 
-declare global {
-  var __contract: TheCoin|undefined;
-}
-
-export async function GetContract(provider?: Provider) : Promise<TheCoin> {
-  provider = provider ?? await getProvider();
-  const v = globalThis.__contract ??= TheCoin__factory.connect(
-    await getContractAddress(),
-    provider
-  );
-  // Security check - we should -never- try to create a contract with different
-  // networks, but just in case...
-  if (process.env.NODE_ENV == "development" || process.env.RUNTIME_ENV == "test") {
-    const running = await v.runner?.provider?.getNetwork();
-    const passed = await provider.getNetwork();
-    if (running?.chainId != passed.chainId) {
-      throw new Error("Mismatched network");
-    }
-  }
-  return v;
-}
+export const ContractCore = defineContractSingleton<TcContract>(
+  '__theCoin',
+  getContractAddress,
+  TheCoin__factory
+);

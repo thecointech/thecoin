@@ -7,6 +7,13 @@
     "module": "NodeNext",
     "moduleResolution": "nodenext",
     "isolatedModules": true,
+    "allowImportingTsExtensions": true,
   },
-  "include": ["**/*.test.*", "scripts/**.ts", "internal/*.*", "**/*.stories.*"],
+  "include": [
+    "**/*.test.*",
+    "webpack/**.ts",
+    "scripts/**.ts",
+    "internal/*.*",
+    "**/*.stories.*"
+  ],
 }
