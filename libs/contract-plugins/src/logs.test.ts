@@ -19,12 +19,17 @@ describe('Live data fetches', () => {
     }
     const address = "0x70da7D05Ee936E583A5165c62A1DEd3Cb0A07C82"; // Converter-Prod
     const user = "0xCA8EEA33826F9ADA044D58CAC4869D0A6B4E90E4";
-    const fromBlock = 0;
+    const initBlock = Number(prodVars.INITIAL_COIN_BLOCK);
     const provider = await getProvider();
-    const r = await getPluginLogs(address, user, provider, fromBlock);
-    expect(r.length).toBeGreaterThan(1);
-    const r2 = await getPluginLogs(address, user, provider, 44132093);
-    expect(r.length - r2.length).toBe(1);
+    const afterFirstTx = 44767897 + 1;
+    const after8thTx = 58296048;
+    // verify toBlock is working
+    const r = await getPluginLogs(address, user, provider, initBlock, after8thTx);
+    expect(r.length).toEqual(8);
+
+    // verify fromBlock is working (2 logs in the first tx)
+    const r2 = await getPluginLogs(address, user, provider, afterFirstTx, after8thTx);
+    expect(r2.length).toEqual(6);
   })
 }, await ifPolygonscan("prod"));
 
