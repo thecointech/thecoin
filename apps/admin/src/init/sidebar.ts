@@ -3,8 +3,7 @@ import { AccountId } from '@thecointech/signers';
 import { defineMessage, defineMessages } from 'react-intl';
 import { routesTheCoin } from '../containers/TheCoinAccount/Routes';
 import { routesBrokerCAD } from '../containers/BrokerCAD/Routes';
-import { SidebarState } from '@thecointech/shared/containers/PageSidebar/types';
-import { SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar/reducer';
+import { SidebarState, SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar';
 
 const messages = defineMessages({
   balance: { defaultMessage: "Balance", description: "Title for the balance entry in the menu" },
