@@ -1,5 +1,5 @@
 import { log } from '@thecointech/logging';
-import { SpxCadOracle } from './codegen';
+import type { SpxCadOracle } from './codegen';
 import { getOverrideFees } from '@thecointech/contract-base';
 // import { DateTime, Duration } from 'luxon';
 
@@ -26,7 +26,7 @@ export async function updateRates(oracle: SpxCadOracle, till: number, rateFactor
 
   // Not an application error, but we should never be this far out of date
   const hoursToUpdate = (till - from) / ONE_HR;
-  if (hoursToUpdate > 24 && !process.env.JEST_WORKER_ID) {
+  if (hoursToUpdate > 24 && process.env.RUNTIME_ENV !== "test") {
     log.warn({hours: hoursToUpdate}, "Oracle is {hours}hrs out-of-date");
   }
 

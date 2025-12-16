@@ -52,6 +52,7 @@ const getSample = (date?: DateTime): HarvestData => ({
   chq: {
     balance: new currency(100),
   },
+  coin: BigInt(100*1e6),
   delta: [
     {
       harvesterBalance: new currency(100),

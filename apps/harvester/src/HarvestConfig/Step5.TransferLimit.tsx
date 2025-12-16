@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Checkbox, Container, Input, Label, Message } from 'semantic-ui-react'
+import { Checkbox, Container, Input, Label, Message, Header } from 'semantic-ui-react'
 import { ConfigReducer } from './state/reducer';
 import { safeParseFloat } from './state/utils';
 import { HarvestStepType } from '@thecointech/store-harvester';
@@ -32,7 +32,7 @@ export const TransferLimit = () => {
 
   return (
     <Container>
-      <h4>Set limits on the Harvester</h4>
+      <Header size="small">Set limits on the Harvester</Header>
       <div>
         Interac Canada sets limits on how much money can be transferred each day. The harvester
         needs to stay within these limits.

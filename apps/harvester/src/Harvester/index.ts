@@ -6,11 +6,19 @@ import { closeBrowser } from '@thecointech/scraper/puppeteer';
 import { DateTime } from 'luxon';
 import { getDataAsDate, HarvestData } from './types';
 import { PayVisaKey } from './steps/PayVisa';
-import { notifyError } from './notify';
-import { exec } from 'child_process';
+import { notifyError } from '@/notify';
+import { HarvesterReplayCallbacks } from './replay/replayCallbacks';
 import { BackgroundTaskCallback, getErrorMessage } from '@/BackgroundTask';
 
-export async function harvest(callback?: BackgroundTaskCallback) {
+type Result = "success" | "error" | "skip";
+export async function harvest(uiCallback?: BackgroundTaskCallback): Promise<Result> {
+
+  await using callback = await HarvesterReplayCallbacks.create({
+    uiCallback,
+    timestamp: Date.now(),
+    taskType: "replay",
+    sections: ["chqBalance", "visaBalance", "chqETransfer"],
+  });
 
   try {
 
@@ -22,7 +30,7 @@ export async function harvest(callback?: BackgroundTaskCallback) {
 
     // Sanity check - If we have have not run prior
     if (shouldSkipHarvest(state)) {
-      return false;
+      return "skip";
     }
 
     const nextState = await processState(stages, state, user);
@@ -40,7 +48,10 @@ export async function harvest(callback?: BackgroundTaskCallback) {
     }
 
     log.info(`Harvest complete`);
-    return true;
+    callback.complete({
+      result: "success",
+    });
+    return "success";
   }
   catch (err: unknown) {
     if (err instanceof Error) {
@@ -49,25 +60,22 @@ export async function harvest(callback?: BackgroundTaskCallback) {
     else {
       log.fatal(`Error in harvest: ${err}`);
     }
-    // For now, we have to treat "replay" as the group
-    // as we only have a single nesting of background tasks
-    callback?.({
-      id: "harvest",
-      type: "replay",
-      completed: true,
+
+    callback.complete({
       error: getErrorMessage(err),
     })
 
-    const res = await notifyError({
+    await notifyError({
       title: 'Harvester Error',
       message: `Harvesting failed.  Please contact support.`,
-      actions: ["Start App"],
+      // TODO: Re-enable buttons (this currently hangs on linux)
+      // actions: ["Start App"],
     })
-    if (res == "Start App") {
-      exec(process.argv0);
-    }
+    // if (res == "Start App") {
+    //   exec(process.argv0);
+    // }
     // throw err;
-    return false;
+    return "error";
   }
   finally {
     await closeBrowser();

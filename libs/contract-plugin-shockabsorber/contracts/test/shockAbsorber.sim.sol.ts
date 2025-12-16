@@ -2,14 +2,14 @@ import hre from 'hardhat';
 import '@nomicfoundation/hardhat-ethers';
 import { createAndInitOracle, setOracleValueRepeat } from '@thecointech/contract-oracle/testHelpers.ts';
 import { getSigners, createAndInitTheCoin } from '@thecointech/contract-core/testHelpers.ts';
-import { ShockAbsorber } from '../../src';
+import type { ShockAbsorber } from '../../src';
 import { yearInMs, toCoin } from './shockAbsorber.common'
 import type { SpxCadOracle } from '@thecointech/contract-oracle';
 import { time } from "@nomicfoundation/hardhat-network-helpers";
 import { ALL_PERMISSIONS, assignPlugin, buildAssignPluginRequest } from '@thecointech/contract-plugins';
-import { TheCoin } from '@thecointech/contract-core';
+import type { TheCoin } from '@thecointech/contract-core';
 import { Duration } from 'luxon';
-import { AddressLike } from 'ethers';
+import type { AddressLike } from 'ethers';
 
 export class AbsorberSol {
   user: string;
@@ -78,7 +78,7 @@ export class AbsorberSol {
     const balance = await this.tcCore.balanceOf(this.user);
     this.coinCurrent = Number(balance);
     const lastBlock = await hre.ethers.provider.getBlock("latest");
-    this.timeMs = (lastBlock.timestamp * 1000) - this.initMs;
+    this.timeMs = (lastBlock!.timestamp * 1000) - this.initMs;
   }
 
   async setRate(rate: number, timeInMs: number) {
@@ -164,7 +164,7 @@ export class AbsorberSol {
 
 export async function setupAbsorber(tcCoreAddress?: AddressLike, oracleAddress?: AddressLike) {
   const ShockAbsorber = await hre.ethers.getContractFactory('ShockAbsorber');
-  const absorber = await ShockAbsorber.deploy();
+  const absorber: ShockAbsorber = (await ShockAbsorber.deploy()) as unknown as ShockAbsorber;
   const zeroAddress = '0x0000000000000000000000000000000000000000';
   await absorber.initialize(tcCoreAddress ?? zeroAddress, oracleAddress ?? zeroAddress);
   return { absorber };

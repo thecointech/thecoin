@@ -1,4 +1,4 @@
-import { BaseReducer } from "@thecointech/shared/store/immerReducer";
+import { BaseReducer } from "@thecointech/redux";
 import { BackgroundTaskInfo, BackgroundTaskType, isSubTask } from "./types";
 import { GroupAndSubTask, initialState, InitialState } from "./initialState";
 import { log } from "@thecointech/logging";
@@ -20,6 +20,7 @@ export class BackgroundTaskReducer extends BaseReducer<IActions, InitialState>(T
         // Create new group if not found
         groupIdx = this.draftState.groups.length;
         this.draftState.groups[groupIdx] = {
+          timestamp: Date.now(),
           id: task.parentId,
           type: task.type,
           percent: 0,
@@ -49,7 +50,6 @@ export class BackgroundTaskReducer extends BaseReducer<IActions, InitialState>(T
 
       // Calculate group percent
       existing.percent = subTasks.reduce((a, t) => a + getPercent(t) / subTasks.length, 0)
-      console.log(`Setting: ${existing.type} - ${task.subTaskId} to ${existing.percent}`);
 
       if (task.error) {
         log.error(`Task error: ${existing.type} - ${task.subTaskId}`, task.error);
@@ -60,10 +60,14 @@ export class BackgroundTaskReducer extends BaseReducer<IActions, InitialState>(T
       if (groupIdx === -1) {
         log.info(`Task started: ${task.type} - ${task.id}`);
         this.draftState.groups.push({
+          timestamp: Date.now(),
           ...task,
           subTasks: [],
         });
       } else {
+        if (task.completed) {
+          log.info(`Task completed: ${task.type} - ${task.id}`);
+        }
         this.draftState.groups[groupIdx] = {
           ...this.state.groups[groupIdx],
           ...task,

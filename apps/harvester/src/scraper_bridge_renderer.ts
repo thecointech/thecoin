@@ -27,10 +27,13 @@ const api : ScraperBridgeApi = {
   //   ipcRenderer.on(actions.onAgentProgress, (_event, value) => callback(value))
   // },
 
-  twofaRefresh: (actionName, refreshProfile) => ipcRenderer.invoke(actions.twofaRefresh, actionName, refreshProfile),
+  profileRefresh: () => ipcRenderer.invoke(actions.profileRefresh),
+  twofaRefresh: (actionName) => ipcRenderer.invoke(actions.twofaRefresh, actionName),
 
   onAskQuestion: (callback) => {
-    ipcRenderer.on(actions.onAskQuestion, (_event, value) => callback(value))
+    const _cb = (_event: any, value: any) => callback(value)
+    const r = ipcRenderer.on(actions.onAskQuestion, _cb)
+    return () => r.off(actions.onAskQuestion, _cb)
   },
   replyQuestion: (packet) => ipcRenderer.invoke(actions.replyQuestion, packet),
 
@@ -42,8 +45,8 @@ const api : ScraperBridgeApi = {
   finishAction: () => ipcRenderer.invoke(actions.finishAction),
 
 
-  setWalletMnemomic: (mnemonic) => ipcRenderer.invoke(actions.setWalletMnemomic, mnemonic),
-  getWalletAddress: () => ipcRenderer.invoke(actions.getWalletAddress),
+  setCoinAccount: (coinAccount) => ipcRenderer.invoke(actions.setCoinAccount, coinAccount),
+  getCoinAccountDetails: () => ipcRenderer.invoke(actions.getCoinAccountDetails),
 
   hasCreditDetails: () => ipcRenderer.invoke(actions.hasCreditDetails),
   setCreditDetails: (details) => ipcRenderer.invoke(actions.setCreditDetails, details),
@@ -60,15 +63,21 @@ const api : ScraperBridgeApi = {
   exportConfig: () => ipcRenderer.invoke(actions.exportConfig),
 
   openLogsFolder: () => ipcRenderer.invoke(actions.openLogsFolder),
+  openWebsiteUrl: (type) => ipcRenderer.invoke(actions.openWebsiteUrl, type),
   getArgv: () => ipcRenderer.invoke(actions.getArgv),
 
-  allowOverrides: () => ipcRenderer.invoke(actions.allowOverrides),
   setOverrides: (balance, pendingAmt, pendingDate) => ipcRenderer.invoke(actions.setOverrides, balance, pendingAmt, pendingDate),
 
   importScraperScript: (config) => ipcRenderer.invoke(actions.importScraperScript, config),
 
+  getBankConnectDetails: () => ipcRenderer.invoke(actions.getBankConnectDetails),
+
   hasUserEnabledLingering: () => ipcRenderer.invoke(actions.hasUserEnabledLingering),
   enableLingeringForCurrentUser: () => ipcRenderer.invoke(actions.enableLingeringForCurrentUser),
+
+  // Wallet connect from site-app
+  loadWalletFromSite: (timeoutMs?: number) => ipcRenderer.invoke(actions.loadWalletFromSite, timeoutMs),
+  cancelloadWalletFromSite: () => ipcRenderer.invoke(actions.cancelloadWalletFromSite),
 }
 
 export const connectRenderer = () => contextBridge.exposeInMainWorld('scraper', api)

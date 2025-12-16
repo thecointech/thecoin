@@ -1,4 +1,4 @@
-export type BackgroundTaskType = "initialize" | "record" | "validate" | "replay" | "twofaRefresh";
+export type BackgroundTaskType = "initialize" | "record" | "validate" | "replay" | "twofaRefresh" | "connect";
 
 // Base progress information shared by all task types
 export type TaskProgress = {
@@ -14,6 +14,10 @@ export type TaskProgress = {
   // Set if there was an error. This
   // implies success/failure of the task
   error?: string,
+
+  // May be set if the task completed successfully
+  // A missing result does not imply error
+  result?: string,
 }
 
 // A group task that can contain subtasks

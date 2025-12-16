@@ -1,10 +1,11 @@
-import { IAskUser, SectionName } from './types';
+import type { IAgentCallbacks, IAskUser, ProcessAccount, ProcessResults, SectionName } from './types';
 import { log } from '@thecointech/logging';
 import { PageHandler } from './pageHandler';
-import { closeBrowser, IScraperCallbacks } from '@thecointech/scraper';
+import { closeBrowser } from '@thecointech/scraper';
 import { AccountsSummary, CookieBanner, CreditAccountDetails, Landing, Login, NamedProcessor, TwoFA, SendETransfer, Logout } from './processors';
 import { EventManager } from './eventManager';
 import { sections, SectionType } from './processors/types';
+import { apis } from './apis';
 
 export class Agent implements AsyncDisposable {
 
@@ -12,13 +13,13 @@ export class Agent implements AsyncDisposable {
   events: EventManager;
   page: PageHandler;
   input: IAskUser;
-  callbacks?: IScraperCallbacks;
+  callbacks?: IAgentCallbacks;
 
   get currentSection() {
     return this.events.currentSection.section;
   }
 
-  private constructor(name: string, input: IAskUser, page: PageHandler, callbacks?: IScraperCallbacks) {
+  private constructor(name: string, input: IAskUser, page: PageHandler, callbacks?: IAgentCallbacks) {
     this.name = name;
     this.events = new EventManager();
     this.page = page;
@@ -28,7 +29,7 @@ export class Agent implements AsyncDisposable {
     this.page.recorder.onEvent(this.events.onEvent);
   }
 
-  static async create(name: string, input: IAskUser, bankUrl?: string, callbacks?: IScraperCallbacks) {
+  static async create(name: string, input: IAskUser, bankUrl?: string, callbacks?: IAgentCallbacks) {
     const page = await PageHandler.create(name);
     const agent = new Agent(name, input, page, callbacks);
     if (bankUrl) {
@@ -43,9 +44,12 @@ export class Agent implements AsyncDisposable {
     await closeBrowser();
   }
 
-  async process(sectionsToSkip: SectionName[] = []) {
+  async process(sectionsToSkip: SectionName[] = []) : Promise<ProcessResults> {
 
     log.info(`Processing ${this.name}`);
+
+    // Verify VQA API is running
+    await warmupVqaApi();
 
     // First, clear out cookie banner
     await this.processSection(CookieBanner);
@@ -79,6 +83,21 @@ export class Agent implements AsyncDisposable {
       await this.maybeThrow(new Error("Failed to get to AccountsSummary"))
     }
 
+    let accounts = await this.processAccounts(sectionsToSkip);
+
+    // Once complete, logout politely
+    if (!sectionsToSkip.includes("Logout")) {
+      await this.processSection(Logout);
+    }
+
+    log.info(`Finished ${this.name}`);
+    return {
+      events: this.events.allEvents,
+      accounts,
+    }
+  }
+
+  async processAccounts(sectionsToSkip: SectionName[]) {
     if (!sectionsToSkip.includes("AccountsSummary")) {
       const accounts = await this.processSection(AccountsSummary);
       for (const account of accounts) {
@@ -91,16 +110,16 @@ export class Agent implements AsyncDisposable {
           await this.processSection(SendETransfer, account.account.account_number);
         }
       }
+      return accounts.map<ProcessAccount>(account => ({
+        account_name: account.account.account_name,
+        account_number: account.account.account_number,
+        account_type: account.account.account_type,
+        balance: account.account.balance,
+      }));
     }
-
-    // Once complete, logout politely
-    if (!sectionsToSkip.includes("Logout")) {
-      await this.processSection(Logout);
-    }
-
-    log.info(`Finished ${this.name}`);
-    return this.events.allEvents;
+    return [];
   }
+
 
   async processSection<Args extends any[], R>(
     processor: NamedProcessor<Args, R>,
@@ -170,7 +189,11 @@ export class Agent implements AsyncDisposable {
 
     // Do not record these actions (perhaps should have an error section instead?)
     using _ = this.events.pause();
-    const wasHandled = await this.callbacks?.onError?.(this.page.page, err);
+    const wasHandled = await this.callbacks?.onError?.({
+      page: this.page.page,
+      err,
+      section: this.currentSection,
+    });
 
     log.info(` - Error handled: ${wasHandled}`);
     // if not, throw the original error
@@ -191,3 +214,15 @@ export class Agent implements AsyncDisposable {
   }
 }
 
+async function warmupVqaApi() {
+  try {
+    // test that the vqa api is warm
+    const api = await apis().getVqaBaseApi();
+    await api.warmup();
+  }
+  catch (e) {
+    log.warn(e, "Failed to warm up VQA API");
+    // If we can't warm up the VQA API, we can't continue
+    throw e;
+  }
+}

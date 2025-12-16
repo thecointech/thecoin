@@ -1,4 +1,4 @@
-import { getContract } from '../src';
+import { ContractOracle } from '../src';
 import { DateTime, Duration } from 'luxon';
 import { log } from '@thecointech/logging';
 import { fetchRate, weBuyAt, weSellAt } from '@thecointech/fx-rates';
@@ -8,7 +8,7 @@ import { updateRates } from '../src/update';
 // ----------------------------------------------------------------
 // This simple script compares the value stored in Oracle vs
 // the value in the database.
-const oracle = await getContract();
+const oracle = await ContractOracle.get();
 
 // From start till now, verify that we have (mostly) the same values
 const INITIAL_TIMESTAMP = (await oracle.INITIAL_TIMESTAMP());

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Story } from '@storybook/react';
+import { StoryFn } from '@storybook/react-webpack5';
 import { RangeFieldAndScale } from '.';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 import { UxNumericType } from '@thecointech/shared';
 
 const meta = {
@@ -27,7 +27,7 @@ const meta = {
 
 export default meta;
 const onChange = action("on-change");
-export const Slider: Story<typeof meta["args"]> = ({ label, ...rest }) => (
+export const Slider: StoryFn<typeof meta["args"]> = ({ label, ...rest }) => (
   <div style={{ width: '500px' }}>
     <RangeFieldAndScale
       {...rest}

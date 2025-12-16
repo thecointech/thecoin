@@ -35,7 +35,7 @@ export class EncryptedDatabase<Shape extends {}, Stored extends {}=Shape, InShap
           `Database path: ${this.dbPath}`;
 
         log.fatal({
-          error: err,
+          err,
           dbPath: this.dbPath,
           suggestion: "Close other harvester instances"
         }, errorMessage);
@@ -53,6 +53,16 @@ export class EncryptedDatabase<Shape extends {}, Stored extends {}=Shape, InShap
   private async initEncryptedDb(db: PouchDB.Database<Stored>, password?: string): Promise<void> {
     await db.setPassword(password ?? "hF,835-/=Pw\\nr6r");
     await db.loadEncrypted();
+
+    const encrypted = db._encrypted;
+    const originalClose = db.close;
+    db.close = async () => {
+      try {
+        await encrypted?.close();
+      } finally {
+        await originalClose.call(db);
+      }
+    }
   }
 
   async set(data: InShape): Promise<void> {

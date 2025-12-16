@@ -1,0 +1,59 @@
+{
+  "name": "@thecointech/electron-signer",
+  "version": "0.5.0",
+  "description": "The Coin: IPC-enabled signer for use in electron",
+  "keywords": [
+    "TheCoin",
+    "electron"
+  ],
+  "type": "module",
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/electron-signer"
+  },
+  "scripts": {
+    "build": "run -T tsc",
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    },
+    "./bridge": {
+      "types": "./build/bridge.d.ts",
+      "default": "./build/bridge.js"
+    },
+    "./preload": {
+      "types": "./build/preload.d.ts",
+      "default": "./build/preload.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "preload": [
+        "./build/preload.d.ts"
+      ],
+      "bridge": [
+        "./build/bridge.d.ts"
+      ],
+      "*": [
+        "./build/index.d.ts"
+      ]
+    }
+  },
+  "dependencies": {
+    "@thecointech/ethers-provider": "workspace:^",
+    "@thecointech/logging": "workspace:^"
+  },
+  "devDependencies": {
+    "@thecointech/electron-utils": "^0.5.0"
+  }
+}

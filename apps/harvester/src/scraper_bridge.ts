@@ -1,27 +1,27 @@
 import { BrowserWindow, ipcMain } from 'electron';
-import { ValueType } from '@thecointech/scraper/types';
+import type { ValueType } from '@thecointech/scraper-types';
 import { actions, ScraperBridgeApi } from './scraper_actions';
-import { toBridge } from './scraper_bridge_conversions';
-import { getHarvestConfig, getProcessConfig, getWallet, getWalletAddress, hasCreditDetails, setCreditDetails, setHarvestConfig, setProcessConfig, setWalletMnemomic } from './Harvester/config';
-import { HarvestConfig, Mnemonic } from './types';
+import { getHarvestConfig, getProcessConfig, getWallet, setCoinAccount, getCoinAccountDetails, hasCreditDetails, setCreditDetails, setHarvestConfig, setProcessConfig } from './Harvester/config';
+import { CoinAccount, HarvestConfig } from './types';
 import { CreditDetails } from './Harvester/types';
-import { spawn } from 'child_process';
 import { exportResults, getRawState, setOverrides } from './Harvester/state';
 import { harvest } from './Harvester';
 import { logsFolder } from './paths';
-import { platform } from 'node:os';
 import { getLocalBrowserPath, getSystemBrowserPath } from '@thecointech/scraper/puppeteer-init/browser';
-import { getValues, ActionType } from './Harvester/scraper';
+import type { ActionType } from '@thecointech/store-harvester';
 import { AutoConfigParams, autoConfigure } from './Harvester/agent';
-import { BackgroundTaskInfo } from './BackgroundTask';
+import type { BackgroundTaskInfo } from './BackgroundTask';
 import { AskUserReact } from './Harvester/agent/askUser';
-import { downloadRequired } from './Download/download';
+import { downloadRequired } from './GetStarted/download';
 import { getScrapingScript } from './results/getScrapingScript';
-import { twofaRefresh as doRefresh } from './Harvester/agent/twofaRefresh';
+import { profileRefresh } from './GetStarted/profile';
+import { twofaRefresh as doRefresh } from './Harvester/agent/refreshTwoFA';
 import { enableLingeringForCurrentUser, isLingeringEnabled } from './Harvester/schedule/linux-lingering';
 import { getScraperLogging, setScraperLogging } from './Harvester/scraperLogging';
 import { Registry, VisibleOverride } from '@thecointech/scraper';
-
+import { getBankConnectDetails } from './Harvester/events';
+import { resetService, loadWalletFromSite } from './account/Connect/server';
+import { openLogsFolder, openWebsiteUrl, type WebsiteEndpoints } from './openExternal';
 
 async function guard<T>(cb: () => Promise<T>) {
   try {
@@ -63,14 +63,17 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
     return true;
   }),
 
-  validateAction: (actionName, inputValues) => guard(async () => {
-    const r = await getValues(actionName, onBgTaskMsg, inputValues)
-    return toBridge(r);
+  validateAction: (_actionName, _inputValues) => guard(async () => {
+    throw new Error("Currently disabled - re-enable for manual setup");
+    // const r = await getValues(actionName, onBgTaskMsg, inputValues)
+    //return toBridge(r);
   }),
 
-  twofaRefresh: (actionName, refreshProfile) => guard(async () => doRefresh(actionName, refreshProfile, onBgTaskMsg)),
+  profileRefresh: () => guard(async () => profileRefresh(onBgTaskMsg)),
+  twofaRefresh: (actionName) => guard(async () => doRefresh(actionName, onBgTaskMsg)),
 
   warmup: (_url) => guard(async () => {
+    using _ = new VisibleOverride(true);
     const instance = await Registry.create({
       name: 'warmup',
       context: "default",
@@ -101,8 +104,8 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
   }),
   finishAction: () => guard(async () => true /*Recorder.release()*/ ),
 
-  setWalletMnemomic: (mnemonic) => guard(() => setWalletMnemomic(mnemonic)),
-  getWalletAddress: () => guard(() => getWalletAddress()),
+  setCoinAccount: (coinAccount) => guard(() => setCoinAccount(coinAccount)),
+  getCoinAccountDetails: () => guard(() => getCoinAccountDetails()),
 
   setCreditDetails: (details) => guard(() => setCreditDetails(details)),
   hasCreditDetails: () => guard(() => hasCreditDetails()),
@@ -146,10 +149,8 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
     return result;
   }),
 
-  openLogsFolder: () => guard(async () => {
-    openFolder(logsFolder);
-    return true;
-  }),
+  openLogsFolder: () => guard(openLogsFolder),
+  openWebsiteUrl: (type) => guard(() => openWebsiteUrl(type)),
   getArgv: () => guard(() => Promise.resolve({
     argv: process.argv,
     broker: process.env.WALLET_BrokerCAD_ADDRESS,
@@ -160,7 +161,6 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
     logsFolder,
   })),
 
-  allowOverrides: () => guard(() => Promise.resolve(process.env.HARVESTER_ALLOW_OVERRIDES === "true")),
   setOverrides: (balance, pendingAmt, pendingDate) => guard(() => setOverrides(balance, pendingAmt, pendingDate)),
 
   importScraperScript: (config) => guard(async () => {
@@ -173,6 +173,12 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
 
     return true;
   }),
+
+  getBankConnectDetails: () => guard(getBankConnectDetails),
+
+  // Wallet connect from site-app
+  loadWalletFromSite: (timeoutMs?: number) => guard(async () => loadWalletFromSite(onBgTaskMsg, timeoutMs)),
+  cancelloadWalletFromSite: () => guard(async () => resetService()),
 }
 
 const onBgTaskMsg = (progress: BackgroundTaskInfo) => {
@@ -191,7 +197,9 @@ export function initMainIPC() {
   ipcMain.handle(actions.validateAction, async (_event, actionName: ActionType, inputValues: Record<string, string>) => {
     return api.validateAction(actionName, inputValues);
   });
-  ipcMain.handle(actions.twofaRefresh, (_event, actionName: ActionType, refreshProfile: boolean) => api.twofaRefresh(actionName, refreshProfile));
+
+  ipcMain.handle(actions.profileRefresh, (_event) => api.profileRefresh());
+  ipcMain.handle(actions.twofaRefresh, (_event, actionName) => api.twofaRefresh(actionName));
 
   ipcMain.handle(actions.replyQuestion, (_event, response) => api.replyQuestion(response));
 
@@ -210,11 +218,11 @@ export function initMainIPC() {
     return api.finishAction();
   })
 
-  ipcMain.handle(actions.setWalletMnemomic, async (_event, mnemonic: Mnemonic) => {
-    return api.setWalletMnemomic(mnemonic);
+  ipcMain.handle(actions.setCoinAccount, async (_event, coinAccount: CoinAccount) => {
+    return api.setCoinAccount(coinAccount);
   })
-  ipcMain.handle(actions.getWalletAddress, async (_event) => {
-    return api.getWalletAddress();
+  ipcMain.handle(actions.getCoinAccountDetails, async (_event) => {
+    return api.getCoinAccountDetails();
   })
 
   ipcMain.handle(actions.hasCreditDetails, async (_event) => {
@@ -261,19 +269,31 @@ export function initMainIPC() {
   ipcMain.handle(actions.openLogsFolder, async (_event) => {
     return api.openLogsFolder();
   })
+  ipcMain.handle(actions.openWebsiteUrl, async (_event, type: WebsiteEndpoints) => {
+    return api.openWebsiteUrl(type);
+  })
   ipcMain.handle(actions.getArgv, async (_event) => {
     return api.getArgv();
   })
 
-  ipcMain.handle(actions.allowOverrides, async (_event) => {
-    return api.allowOverrides();
-  })
   ipcMain.handle(actions.setOverrides, async (_event, balance: number, pendingAmt: number|null, pendingDate: string|null) => {
     return api.setOverrides(balance, pendingAmt, pendingDate);
   })
 
   ipcMain.handle(actions.importScraperScript, async (_event, config) => {
     return api.importScraperScript(config);
+  });
+
+  ipcMain.handle(actions.getBankConnectDetails, async (_event) => {
+    return api.getBankConnectDetails();
+  });
+
+  // Wallet connect from site-app
+  ipcMain.handle(actions.loadWalletFromSite, async (_event, timeoutMs?: number) => {
+    return api.loadWalletFromSite(timeoutMs);
+  });
+  ipcMain.handle(actions.cancelloadWalletFromSite, async (_event) => {
+    return api.cancelloadWalletFromSite();
   });
 
   // Set up progress listener separately
@@ -285,16 +305,6 @@ export function initMainIPC() {
       }
     });
   });
-}
-
-const openFolder = (path: string) => {
-  let explorer = '';
-  switch (platform()) {
-      case "win32": explorer = "explorer"; break;
-      case "linux": explorer = "xdg-open"; break;
-      case "darwin": explorer = "open"; break;
-  }
-  spawn(explorer, [path], { detached: true }).unref();
 }
 
 // NOTE!  This is used in multiple places, deduplicate it at some point

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { defineMessage } from 'react-intl';
 import { UxPassword } from '../Password';
 import { ensureZxcvbn, getScore } from './score';
@@ -23,7 +23,7 @@ export const UxScoredPassword = (props: Props) => {
     ensureZxcvbn()
   })
 
-  const onValidate: ValidateCB = (value) => {
+  const onValidate: ValidateCB = useCallback((value) => {
     const stats = getScore(value);
     setStats(stats);
     if (stats) {
@@ -45,7 +45,7 @@ export const UxScoredPassword = (props: Props) => {
       }
     }
     return null;
-  }
+  }, [setStats, setTooltip, setValid]);
 
   return (
     <>

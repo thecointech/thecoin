@@ -2,5 +2,7 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 
 import { connectRenderer } from "./scraper_bridge_renderer";
+import { preloadElectronSigner } from "@thecointech/electron-signer/preload";
 
 connectRenderer();
+preloadElectronSigner();

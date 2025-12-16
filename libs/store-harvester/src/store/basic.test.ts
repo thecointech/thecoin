@@ -5,13 +5,13 @@ import { Mutex } from "@thecointech/async";
 import { sleep } from "@thecointech/async/sleep";
 import { mockWarn } from "@thecointech/logging/mock";
 
-const { testDbPath } = useMockPaths();
-
 beforeEach(() => {
   mockWarn.mockClear();
 })
+const { getDbProps } = useMockPaths();
 
 it('Should prevent concurrent withDatabase calls', async () => {
+
   const db = newDb(new Mutex());
 
   // Track the order of operations
@@ -66,7 +66,6 @@ it ('does not swallow op errors', async () => {
   db['loadDb'] = async () => {
     const impl = await loadDb.call(db);
     impl['close'] = () => {
-      console.log('here')
       return Promise.reject("close throws");
     }
     return impl;
@@ -82,8 +81,9 @@ it ('does not swallow op errors', async () => {
 it ('should timeout if deadlocked', async () => {
   process.env.HARVESTER_DB_TIMEOUT = '200';
   const mutex = new Mutex();
-  const db1 = newDb(mutex);
-  const db2 = newDb(mutex); // Same mutex = contention
+  const suffix = crypto.randomUUID();
+  const db1 = newDb(mutex, suffix);
+  const db2 = newDb(mutex, suffix); // Same mutex = contention
 
   // Start a long-running operation
   const longOperation = db1.withDatabase(async () => {
@@ -105,10 +105,4 @@ it ('should timeout if deadlocked', async () => {
   await longOperation;
 });
 
-const newDb = (mutex: Mutex) => new BasicDatabase({
-  rootFolder: testDbPath,
-  dbname: 'concurrency-test',
-  key: 'test',
-  transformIn: (data) => data,
-  transformOut: (data) => data,
-}, mutex);
+const newDb = (mutex: Mutex, nameSuffix="") => new BasicDatabase(getDbProps(nameSuffix), mutex);

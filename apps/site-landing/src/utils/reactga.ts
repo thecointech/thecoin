@@ -1,5 +1,4 @@
 import ReactGA from 'react-ga';
-import {history} from '@thecointech/shared/store/history';
 
 
 function recordLocation(location: { pathname: string }) {
@@ -13,6 +12,8 @@ export function initTracking() {
 
     // Record initial location (not caught by the listen)
     recordLocation(window.location);
-    history.listen(recordLocation);
+    // TODO: This code is miles out-of-date.
+    // Reimplement from scratch
+    // history.listen(recordLocation);
   }
 }

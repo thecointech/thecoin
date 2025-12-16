@@ -1,4 +1,3 @@
-import { RUrl } from '@thecointech/utilities/RUrl';
 import { MessageDescriptor } from 'react-intl';
 import { SemanticICONS } from 'semantic-ui-react';
 import { SidebarHeader } from './SidebarHeader';
@@ -16,7 +15,7 @@ export type SidebarHeader = {
 }
 export type SidebarLink = {
   name: MessageDescriptor;
-  to: string | RUrl | boolean;
+  to: string | boolean;
   subItems?: SidebarLink[];
   icon?: SemanticICONS;
 }

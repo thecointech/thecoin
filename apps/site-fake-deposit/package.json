@@ -3,7 +3,7 @@
   "productName": "THECoin: Website - Test Deposit",
   "private": true,
   "type": "module",
-  "version": "0.3.13-test.5",
+  "version": "0.5.0",
   "description": "THECoin: simple email generator to trigger deposits on testnet",
   "repository": {
     "type": "git",
@@ -12,24 +12,24 @@
   "author": "Stephen Taylor",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "_build": "run -T run-s build:src build:semantic build:i18n",
-    "build:src": "run-env exec=webpack --config ../../libs/site-base/internal/webpack/webpack.prod.mjs --progress",
-    "build:semantic": "node ./internals/buildSemantic.mjs",
-    "build:i18n": "run-s extract compile",
+    "_build": "run -T run-s prebuild build:src",
+    "build:src": "run-env ./internals/build.ts",
+    "prebuild": "run -T run-p 'prebuild:*'",
+    "prebuild:semantic": "node ./internals/buildSemantic.mjs",
+    "prebuild:i18n": "run-s extract compile",
     "clean": "run-p 'clean:*'",
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
-    "clean:analyze": "rimraf stats.json",
     "_deploy": "yarn run-env ./deploy.ts",
-    "dev": "yarn node internals/server.cjs --port=3004",
+    "dev": "run-env internals/server.mjs --port=3004",
     "extract": "run -T formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
     "compile": "run -T formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json"
   },
   "dependencies": {
-    "@thecointech/email-fake-deposit": "^0.3.13-test.0",
-    "@thecointech/site-base": "^0.3.13-test.5"
+    "@thecointech/email-fake-deposit": "^0.5.0",
+    "@thecointech/site-base": "^0.5.0"
   },
   "devDependencies": {
-    "@thecointech/setenv": "^0.3.13-test.0"
+    "@thecointech/setenv": "^0.5.0"
   }
 }

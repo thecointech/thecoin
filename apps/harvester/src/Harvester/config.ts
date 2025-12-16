@@ -5,7 +5,7 @@ import { HDNodeWallet } from 'ethers';
 import { getProvider } from '@thecointech/ethers-provider';
 import { rootFolder } from '../paths';
 import { ConfigDatabase } from '@thecointech/store-harvester';
-import type { HarvestConfig, Mnemonic, ConfigShape, CreditDetails } from '@thecointech/store-harvester';
+import type { HarvestConfig, CoinAccount, ConfigShape, CreditDetails } from '@thecointech/store-harvester';
 
 
 const db = new ConfigDatabase(rootFolder);
@@ -19,25 +19,31 @@ export async function getProcessConfig(): Promise<ConfigShape|undefined> {
   return await db.get();
 }
 
-export async function setWalletMnemomic(mnemonic: Mnemonic) {
+export async function setCoinAccount(coinAccount: CoinAccount) {
   await db.set({
-    wallet: mnemonic,
+    coinAccount,
   })
   return true;
 }
 
+export async function getCoinAccountDetails() {
+  const cfg = await db.get();
+  if (!cfg?.coinAccount) {
+    return null;
+  }
+  return {
+    address: cfg.coinAccount.address,
+    name: cfg.coinAccount.name,
+  }
+}
+
 export async function getWallet() {
   const cfg = await db.get();
-  if (cfg?.wallet) {
-    const wallet = HDNodeWallet.fromPhrase(cfg.wallet.phrase, undefined, cfg.wallet.path);
+  if (cfg?.coinAccount?.mnemonic) {
+    const wallet = HDNodeWallet.fromPhrase(cfg.coinAccount.mnemonic.phrase, undefined, cfg.coinAccount.mnemonic.path);
     return wallet.connect(await getProvider());
   }
   return null;
-}
-
-export async function getWalletAddress() {
-  const wallet = await getWallet();
-  return wallet?.address ?? null;
 }
 
 export async function hydrateProcessor() {
@@ -55,6 +61,7 @@ export async function hydrateProcessor() {
 
 export async function setCreditDetails(creditDetails: CreditDetails) {
   await db.set({creditDetails})
+  log.debug(`Set credit details`)
   return true;
 }
 
@@ -78,8 +85,7 @@ export async function getHarvestConfig() {
 
 export async function setHarvestConfig(config: Partial<HarvestConfig>) {
   if (config.schedule) {
-    const existing = await getHarvestConfig();
-    await setSchedule(config.schedule, existing?.schedule);
+    await setSchedule(config.schedule);
   }
   await setProcessConfig(config)
   return true;

@@ -1,5 +1,5 @@
 import hre from 'hardhat';
-import { getContract } from '../src';
+import { ContractNFT } from '../src/contract';
 import { getArguments } from './arguments';
 import { sleep } from '@thecointech/async';
 import type { Network } from '@thecointech/contract-base';
@@ -11,7 +11,7 @@ if (!process.env.CONFIG_NAME?.startsWith('prod'))
   exit(0);
 
 const network = hre.config.defaultNetwork;
-const contract = await getContract(network.toUpperCase() as Network);
+const contract = await ContractNFT.get(network.toUpperCase() as Network);
 const contractAddress = await contract.getAddress();
 // Make 5 attempts to verify.  This allows time for
 // contract to be picked up by etherscan

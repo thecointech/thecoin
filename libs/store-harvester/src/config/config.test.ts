@@ -5,32 +5,33 @@ import { ConfigShape } from './types';
 
 jest.setTimeout(60000);
 
-const { testDbPath, now } = useMockPaths();
+const { testDbPath } = useMockPaths();
+const randomId = crypto.randomUUID();
 const cgfData : Partial<ConfigShape> = {
   creditDetails: {
     payee: 'wallet',
-    accountNumber: now,
+    accountNumber: randomId,
   }
 };
 
 describe('config db tests', () => {
   it ('Can round-trip data', async () => {
     // Get current
-    const db = new ConfigDatabase(testDbPath);
+    const db = newDb();
     await db.set(cgfData);
     const cfg2 = await db.get();
-    expect (cfg2?.creditDetails?.accountNumber).toEqual(now);
+    expect (cfg2?.creditDetails?.accountNumber).toEqual(randomId);
   })
 
   it ('Can update data', async () => {
-    const db = new ConfigDatabase(testDbPath);
+    const db = newDb();
     await db.set(cgfData);
     await db.set({
       alwaysRunScraperVisible: true,
     });
     const cfg2 = await db.get();
     expect (cfg2?.alwaysRunScraperVisible).toEqual(true);
-    expect (cfg2?.creditDetails?.accountNumber).toEqual(now);
+    expect (cfg2?.creditDetails?.accountNumber).toEqual(randomId);
 
     for (let i = 0; i < 10; i++) {
       await db.set({
@@ -41,3 +42,5 @@ describe('config db tests', () => {
     }
   })
 })
+
+const newDb = () => new ConfigDatabase(testDbPath);

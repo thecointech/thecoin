@@ -13,7 +13,7 @@ import { UxInput } from '@thecointech/shared/components/UX/Input';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { FilterPayee } from './FilterPayee';
 import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import type { MessageWithValues } from '@thecointech/shared/types';
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
@@ -238,7 +238,7 @@ export const BillPayments = () => {
           fluid
           search
           selection
-          options={payees}
+          options={[...payees]}
           onChange={(_, data) => setPayee(data.value as string)}
         />
         <UxInput

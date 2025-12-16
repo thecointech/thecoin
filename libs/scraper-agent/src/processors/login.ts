@@ -1,8 +1,7 @@
 import { log } from "@thecointech/logging";
-import { ElementData } from "../types";
 import { processorFn } from "./types";
-import { enterValueIntoFound } from "@thecointech/scraper/replay";
-import { FoundElement } from "@thecointech/scraper/types";
+import { enterValueIntoFound } from "@thecointech/scraper";
+import type { FoundElement, ElementData } from "@thecointech/scraper-types";
 import { LoginFailedError } from "../errors";
 import type { Agent } from "../agent";
 import { apis } from "../apis";

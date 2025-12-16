@@ -5,7 +5,7 @@ import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
 import currency from 'currency.js';
 import { log } from '@thecointech/logging';
-import { notify } from '../notify';
+import { notify } from '@/notify';
 import type { UberTransferAction } from '@thecointech/types';
 
 export const PayVisaKey = "PayVisa";

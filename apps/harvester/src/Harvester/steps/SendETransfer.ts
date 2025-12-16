@@ -1,13 +1,11 @@
 import { log } from '@thecointech/logging';
 import type { HarvestData, ProcessingStage, UserData } from '../types';
 import currency from 'currency.js';
-import { notify, notifyError } from '../notify';
+import { notify, notifyError } from '@/notify';
 import { SendFakeDeposit } from '@thecointech/email-fake-deposit';
 import { DateTime } from 'luxon';
-import { getValues } from '../scraper';
+import { getValues } from '../replay';
 import { ETransferResult } from '@thecointech/scraper-agent/types';
-import { sleep } from '@thecointech/async';
-import { BackgroundTaskCallback } from '@/BackgroundTask';
 
 export class SendETransfer implements ProcessingStage {
 
@@ -80,44 +78,40 @@ const getTransferAmount = (toETransfer: currency, balance: currency) => {
   return toETransfer;
 }
 
-async function sendETransfer(amount: currency, {wallet, uiCallback}: UserData) : Promise<ETransferResult> {
+async function sendETransfer(amount: currency, {wallet, callback}: UserData) : Promise<ETransferResult> {
   if (process.env.HARVESTER_DRY_RUN) {
-    await mockUiUpdate(uiCallback);
+    // await mockUiUpdate(callback);
     return {
       confirmationCode: "DRYRUN"
     }
   }
-  else if (process.env.CONFIG_NAME == "prod" || process.env.CONFIG_NAME == "prodbeta") {
-    return getValues('chqETransfer', uiCallback, { amount: amount.toString() })
+  const r = await getValues('chqETransfer', callback, { amount: amount.toString() })
+
+  // In testing environments we send the fake deposit
+  if (process.env.CONFIG_NAME == "prodtest" || process.env.CONFIG_NAME == "devlive") {
+    const address = await wallet.getAddress();
+    // Make dev-live responsive, only send while the market is open
+    const sendTime = (process.env.CONFIG_NAME == "devlive")
+      ? getMockSendTime(DateTime.now())
+      : DateTime.now();
+    await SendFakeDeposit(address, amount.value, sendTime);
   }
-  else {
-    await mockUiUpdate(uiCallback);
-    // We still send in testing environments
-    if (process.env.CONFIG_NAME == "prodtest" || process.env.CONFIG_NAME == "devlive") {
-      const address = await wallet.getAddress();
-      await SendFakeDeposit(address, amount.value, DateTime.now());
-    }
-    return {
-      confirmationCode: "1234"
-    }
-  }
+  return r
 }
 
-async function mockUiUpdate(uiCallback?: BackgroundTaskCallback) {
-  if (uiCallback) {
-    for (let i = 0; i < 10; i++) {
-      uiCallback({
-        id: "chqETransfer",
-        type: "replay",
-        percent: i * 10,
-      })
-      await sleep(250);
-    }
-    uiCallback({
-      id: "chqETransfer",
-      type: "replay",
-      percent: 100,
-      completed: true,
-    })
+let counter = 0;
+export function getMockSendTime(now: DateTime) {
+  // If now is during market hours, use it.
+  if (now.weekday < 5 && now.hour > 10 && now.hour < 16) {
+    return now;
   }
+  // increment the counter so we don't recieve emails at exactly the
+  // same ms.  This is only for a single execution of the app, but
+  // that should be sufficient for devlive
+  const marketOpen = now.set({ hour: 10, minute: 30 }).plus({ minutes: counter++ });
+  let daysSinceOpen = Math.max(now.weekday - 5, 0);
+  if (daysSinceOpen == 0 && now.hour < 10) {
+    daysSinceOpen = now.weekday == 1 ? 3 : 1;
+  }
+  return marketOpen.minus({ day: daysSinceOpen });
 }

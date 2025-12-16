@@ -1,4 +1,4 @@
-import type { SearchElement } from "@thecointech/scraper/types";
+import type { SearchElement } from "@thecointech/scraper-types";
 import { TimeoutError, type Page } from "puppeteer";
 import { doPixelMatch, waitPageStable } from "@thecointech/scraper/utilities";
 import { waitUntilLoadComplete } from "@thecointech/scraper/record/waitLoadComplete";

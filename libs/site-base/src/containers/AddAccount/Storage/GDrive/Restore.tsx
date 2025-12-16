@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { defineMessage } from 'react-intl';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router';
 import { useGoogle } from './useGoogle';
 import { ProviderChoice } from '../ProviderChoice';
 import icon from './images/google.svg'
@@ -11,7 +11,7 @@ export const GDriveRestore = () => {
   const [token, setToken] = useState(undefined as MaybeString);
   const [loading, doTransmit] = useGoogle()
   return token
-    ? <Redirect to={`/addAccount/restore/list?token=${token}`} />
+    ? <Navigate to={`/addAccount/restore/list?token=${token}`} />
     : <ProviderChoice
         onClick={() => doTransmit(setToken)}
         loading={loading}

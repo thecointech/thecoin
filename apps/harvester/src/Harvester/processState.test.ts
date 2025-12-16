@@ -10,10 +10,12 @@ import { ClearPendingVisa } from './steps/ClearPendingVisa';
 import { TransferLimit } from './steps/TransferLimit';
 import { EnsureHarvesterBalance } from './steps/EnsureHarvesterBalance';
 import { HarvestData } from './types';
+import { mockUser } from '../../internal/mockUser';
 
 it ('can process on first run', async () => {
 
-  const state: HarvestData = getData();
+  const state = getData();
+  const user = mockUser();
   const nextState = await processState(stages, state, user);
 
   expect(nextState.delta.length).toEqual(stages.length);
@@ -24,7 +26,8 @@ it ('can process on first run', async () => {
 })
 
 it ("correctly handles a negative due amount", async () => {
-  let state: HarvestData = getData();
+  let state = getData();
+  const user = mockUser();
   // No money sent on negative due amount
   state.visa.dueAmount = currency(-100);
   const nextState = await processState(stages, state, user);
@@ -47,6 +50,7 @@ const getData = () : HarvestData => ({
     dueAmount: currency(100),
     dueDate: DateTime.now().plus({ weeks: 1 }),
   },
+  coin: BigInt(100*1e6),
   date: DateTime.now(),
 
   state: {
@@ -66,10 +70,3 @@ const stages = [
   new SendETransfer(),
   new PayVisa(),
 ];
-const user = {
-  wallet: Wallet.createRandom(),
-  creditDetails: {
-    payee: 'payee',
-    accountNumber: "12345"
-  }
-}

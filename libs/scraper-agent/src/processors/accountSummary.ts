@@ -1,11 +1,11 @@
 import { log } from "@thecointech/logging";
 import { accountToElementResponse } from "../vqaResponse";
-import { ElementData, FoundElement } from "@thecointech/scraper/types";
-import { AccountResponse, BBox } from "@thecointech/vqa";
+import type { ElementData, FoundElement } from "@thecointech/scraper-types";
+import type { AccountResponse, BBox } from "@thecointech/vqa";
 import { extractFuzzyMatch } from "../extractFuzzyMatch";
 import { processorFn } from "./types";
-import { ChequeBalanceResult } from "../types";
-import { Agent } from "../agent";
+import type { ChequeBalanceResult } from "../types";
+import type { Agent } from "../agent";
 import { apis } from "../apis";
 
 export const AccountsSummary = processorFn("AccountsSummary", async (agent: Agent) => {
@@ -27,7 +27,8 @@ async function listAccounts(agent: Agent) {
     // Just use the first account (maybe later we'll store them all)
     const inferred = accounts.accounts[i];
     const scraped = allAccounts[i];
-    const accountNumber = updateAccountNumber(inferred, scraped);
+    const accountNumber = validateAccountNumberAgainstSource(inferred.account_number, scraped);
+    inferred.account_number = accountNumber;
 
     // Crop to just the area of the account in the list.  This is because
     // VQA needs a bit of help focusing on the account
@@ -101,15 +102,13 @@ export async function saveAccountNavigation(agent: Agent, account: AccountRespon
 }
 
 
-export function updateAccountNumber(inferred: AccountResponse, scraped: ElementData) {
-  const inferredAccountNumber = inferred.account_number;
+export function validateAccountNumberAgainstSource(inferredAccountNumber: string, scraped: ElementData) {
   const realAccountText = scraped.text;
   // The inferred number may be off by a few digits, however
   // we should be close enough that a token-based match will capture the correct value with proper formatting
   const { match: accountNumber } = extractFuzzyMatch(inferredAccountNumber, realAccountText);
   // Update original
   log.trace(`Updating account number from inferred: (${inferredAccountNumber}) to (${accountNumber})`);
-  inferred.account_number = accountNumber;
   return accountNumber;
 }
 

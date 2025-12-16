@@ -2,7 +2,7 @@ import { DateTime } from 'luxon';
 import { HarvestData, ProcessingStage, UserData } from '../types';
 import currency from 'currency.js';
 import { log } from '@thecointech/logging';
-import { notify } from '../notify';
+import { notify } from '@/notify';
 import { getBalance } from './utils';
 
 //

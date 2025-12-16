@@ -1,5 +1,5 @@
 import React from 'react';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { Account, IActions } from '@thecointech/shared/containers/Account';
 import { defineMessage } from 'react-intl';
 import { completeStore } from './googleUtils';
