@@ -3,7 +3,7 @@ import { exit } from "process";
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { spawn, exec as exec_cb } from 'child_process';
 import { promisify } from 'util';
-import { getSecret } from "@thecointech/secrets";
+import { getSecret, type SecretKeyType } from "@thecointech/secrets";
 import { join } from 'path';
 
 const exec = promisify(exec_cb);
