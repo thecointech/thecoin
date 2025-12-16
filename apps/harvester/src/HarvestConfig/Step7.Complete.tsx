@@ -1,30 +1,39 @@
-import { Button, Checkbox, Container, Message } from 'semantic-ui-react'
+import { Container, Loader, Dimmer, Header } from 'semantic-ui-react'
 import { ConfigReducer } from './state/reducer'
-import { useHistory } from 'react-router';
-import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { useState } from 'react';
+import styles from './Step7.module.less';
+import { ActionButton } from '@/ContentSection/Action';
 
 export const Complete = () => {
-  const navigate = useHistory();
+  const navigate = useNavigate();
   const data = ConfigReducer.useData();
-  const [visible, setVisible] = useState(false);
+  const [dimmerMessage, setDimmerMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    window.scraper.alwaysRunScraperVisible().then(r => setVisible(r.value ?? false))
-  }, [])
-
-  const setAlwaysVisible = async (visible?: boolean) => {
-    const r = await window.scraper.alwaysRunScraperVisible(visible)
-    setVisible(r.value ?? false)
-  }
+  const withDimmer = async <T,>(message: string, callback: () => Promise<T>): Promise<T> => {
+    setDimmerMessage(message);
+    try {
+      return await callback();
+    } finally {
+      setDimmerMessage(null);
+    }
+  };
 
   const setConfig = async () => {
-    await window.scraper.setHarvestConfig(data);
-    navigate.push("/results");
+    await withDimmer("Saving...", async () => {
+      await window.scraper.setHarvestConfig(data);
+    });
+    navigate("/results");
   }
+
+  const paused = !!dimmerMessage;
 
   return (
     <Container>
-      <h4>Start the Harvester</h4>
+      <Dimmer active={paused} inverted>
+        <Loader>{dimmerMessage}</Loader>
+      </Dimmer>
+      <Header size="small">Start the Harvester</Header>
       <div>
         Thats it!  Your harvester is ready to go!
       </div>
@@ -40,19 +49,7 @@ export const Complete = () => {
         much to see for a while.  You'll be getting richer slowly though, and in a few years
         you'll be amazed by the results.
       </div>
-      <div>
-        <Button onClick={setConfig} style={{backgroundColor: 'green', color: 'white'}}>Save Config</Button>
-      </div>
-      <Message info>
-
-        To see what the harvester is doing, you can force it to always run visible.<br />
-        This is useful for debugging, but not recommended for normal use.
-        <br />
-        <Checkbox
-          onClick={(_, {checked}) => setAlwaysVisible(checked)}
-          checked={visible}
-          label="Force Always run visible" />
-      </Message>
+      <ActionButton onClick={setConfig} loading={paused} disabled={paused} className={styles.saveButton}>Save Config</ActionButton>
     </Container>
   )
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Story, Meta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react-webpack5';
 import { Visual } from './Visual/index';
 import { options } from './Widget';
 import { defineMessage } from 'react-intl';
@@ -35,7 +35,7 @@ export default {
 } as Meta;
 
 
-export const Impact: Story<typeof args> = (args) => {
+export const Impact: StoryFn<typeof args> = (args) => {
   const selectedOption = options[args.itemChosen] ? options[args.itemChosen] : options[0];
   return (
     <div id={appstyles.app}>

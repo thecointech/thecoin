@@ -1,5 +1,5 @@
 import React from "react";
-import { TxDatum } from "@thecointech/shared/components/GraphTxHistory/types";
+import type { TxDatum } from "@thecointech/shared/components/GraphTxHistory";
 import styles from './styles.module.less';
 import { Table } from "semantic-ui-react";
 import { Currency } from "@thecointech/site-base/components/Currency";
@@ -34,6 +34,7 @@ export const Tooltip = ({point}: TooltipProps) => {
             year="2-digit"
             month="short"
             day="2-digit"
+            // @ts-ignore
             value={data.x as Date}
           />
         </Table.Cell>

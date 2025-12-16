@@ -3,7 +3,7 @@
  */
 
  import { combineReducers, Reducer, ReducersMapObject } from 'redux';
- import { configureStore } from '@thecointech/shared/store';
+ import { configureStore } from '@thecointech/redux';
 
 function createReducer(injectedReducers?: ReducersMapObject): Reducer {
   return combineReducers({...injectedReducers});

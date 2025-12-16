@@ -6,7 +6,7 @@ import { HeaderLink } from '@thecointech/site-base/components/HeaderLink';
 import { LanguageSwitcher } from '@thecointech/site-base/containers/LanguageSwitcher';
 import Logo from './logoAndName.svg';
 import styles from './styles.module.less';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router';
 
 const menuItems = defineMessages({
   "": { defaultMessage: "Home", description: "MainNav Home page link" },

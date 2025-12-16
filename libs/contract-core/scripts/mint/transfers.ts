@@ -1,8 +1,7 @@
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
 import { getGasPrice } from './pricing';
-import { GetContract } from '../../src';
-import { getProvider } from '@thecointech/ethers-provider/Erc20Provider';
+import { ContractCore } from '../../src';
 import { getContract } from './contract';
 import type { Decimal } from 'decimal.js-light';
 import { loadAndMergeHistory } from '@thecointech/tx-blockchain';
@@ -59,7 +58,7 @@ export async function runCloneTransfer(from: string, to: string, value: number, 
 }
 
 async function hasAlreadyHappened(from: string, to: string, value: number, date: DateTime) {
-  const contract = await GetContract();
+  const contract = await ContractCore.get();
   const history = await loadAndMergeHistory(0, contract, from);
   const fromn = NormalizeAddress(from);
   const ton = NormalizeAddress(to);

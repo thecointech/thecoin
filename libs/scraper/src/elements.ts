@@ -1,9 +1,10 @@
 import type { ElementHandle, Frame, Page } from 'puppeteer';
-import type { Coords, ElementData, ElementDataMin, FoundElement, SearchElement } from './types';
+import type { Coords, ElementData, SearchElementData, ElementSearchParams, FoundElement, SearchElement, Bounds, ScoreElement } from '@thecointech/scraper-types';
 import { log } from '@thecointech/logging';
 import { sleep } from '@thecointech/async';
 import { scoreElement } from './elements.score';
 import { ElementNotFoundError, PageNotInteractableError } from './errors';
+import { EventBus } from './events/eventbus';
 
 declare global {
   interface Window {
@@ -17,24 +18,37 @@ declare global {
 const MAX_SIBLING_DISTANCE = 50;
 const BUCKET_PIXELS = 10
 
-export async function getElementForEvent(page: Page, event: ElementDataMin, timeout=30000, minScore=70, maxTop=Number.MAX_VALUE) {
+type ElementFoundCallback = (candidate: FoundElement, params: ElementSearchParams, candidates: FoundElement[]) => Promise<void>;
+
+export async function getElementForEvent(params: ElementSearchParams, onFound: ElementFoundCallback = notifyElementFound) {
+
+  const { page, event, timeout = 30000, minScore = 70, maxTop = Number.MAX_VALUE } = params;
 
   const startTick = Date.now();
 
   const title = await page.title();
   log.info(`Searching \"${title}\" for: ${event.tagName} - ${event.text} - ${event.siblingText} - ${event.selector}`);
 
+  const bounds = await getDocumentBounds(page, maxTop);
+
+  // Force all tags to uppercase
+  if (event.tagName) {
+    event.tagName = event.tagName.toUpperCase();
+  }
+
   let bestCandidate: FoundElement|null = null;
   while (Date.now() < startTick + timeout) {
 
-    const candidates = await fetchAllCandidates(page, event, maxTop);
-    const candidate = await getBestCandidate(candidates, event, minScore);
+    const allCandidates = await fetchAllCandidates(page, bounds);
+    const scoredCandidates = await scoreAllCandidates(allCandidates, event, bounds);
+    const candidate = await getBestCandidate(scoredCandidates, event, minScore);
 
     if (candidate) {
+      await onFound(candidate, params, scoredCandidates);
       return candidate;
     }
 
-    const thisRunsBest = candidates[0]
+    const thisRunsBest = scoredCandidates[0]
     if (thisRunsBest && thisRunsBest.score > (bestCandidate?.score ?? 0)) {
       bestCandidate = thisRunsBest;
     }
@@ -47,17 +61,23 @@ export async function getElementForEvent(page: Page, event: ElementDataMin, time
   throw new ElementNotFoundError(event, bestCandidate);
 }
 
-async function fetchAllCandidates(page: Page, event: ElementDataMin, maxTop: number) {
-  const candidates: FoundElement[] = [];
+async function notifyElementFound(candidate: FoundElement, params: ElementSearchParams, candidates: FoundElement[]) {
+  // Watchers can get notified of every found element
+  await EventBus.get().emitElement(candidate, params, candidates);
+}
+
+export async function fetchAllCandidates(page: Page, bounds: Bounds) {
+  const candidates: SearchElement[] = [];
   const frames = page.frames();
   const nFrames = frames.length;
   let nErrors = 0;
+
   log.info(`Searching ${nFrames} frames`);
   const errors: unknown[] = [];
   for (const frame of frames) {
     try {
       // Get all elements in frame
-      const frameCandidates = await getCandidates(frame, event, maxTop);
+      const frameCandidates = await getCandidates(frame, bounds);
       candidates.push(...frameCandidates);
     }
     catch (e) {
@@ -77,6 +97,29 @@ async function fetchAllCandidates(page: Page, event: ElementDataMin, maxTop: num
   return candidates;
 }
 
+export async function scoreAllCandidates<T extends { data: ElementData }>(candidates: T[], event: SearchElementData, bounds: Bounds) {
+  // Build selector index for efficient parent lookups
+  // const selectorIndex = undefined;
+
+  const selectorIndex = new Map<string, ElementData>(
+    candidates.map(c => [c.data.selector, c.data])
+  );
+
+  const r: (T & ScoreElement)[] = [];
+  for (let i = 0; i < candidates.length; i++) {
+    const el = candidates[i];
+    const score = await scoreElement(el.data, event, bounds, selectorIndex);
+    // NaN can't sort, so if one slips through, ditch it.
+    if (!Number.isNaN(score.score)) {
+      r.push({
+        ...el,
+        ...score
+      })
+    }
+  }
+  return r;
+}
+
 let lastDbgLogMessage: string;
 function maybeLogMessage(message: string) {
   if (lastDbgLogMessage != message) {
@@ -85,7 +128,7 @@ function maybeLogMessage(message: string) {
   }
 }
 
-async function getBestCandidate(candidates: FoundElement[], event: ElementDataMin, minScore: number) {
+export async function getBestCandidate(candidates: FoundElement[], event: SearchElementData, minScore: number) {
   // Sort by score to see if any element is close enough
   const sorted = candidates.sort((a, b) => b.score - a.score);
   const candidate = sorted[0];
@@ -102,10 +145,22 @@ async function getBestCandidate(candidates: FoundElement[], event: ElementDataMi
     maybeLogMessage(`Found candidate with score: ${candidate?.score} (${candidate?.data?.selector}), second best: ${sorted[1]?.score}`);
     // Do we need to worry about multiple candidates?
     if (sorted[1]?.score / candidate.score > 0.9) {
-      log.warn(` ** Second best candidate has  ${sorted[1]?.score} score`);
-      dbgPrintCandidate(sorted[1], event);
-      log.info(" ** best candidate ** ");
-      dbgPrintCandidate(candidate, event);
+      // Don't print out if the two candidates are descendents of each other.
+      // If they have the same text, they are probably the same as
+      // far as we are concerned.
+      const twoCandidatesAreEquivalent = (
+        candidate.data.text == sorted[1].data.text &&
+        (
+          candidate.data.selector?.includes(sorted[1].data.selector) ||
+          sorted[1].data.selector?.includes(candidate.data.selector)
+        )
+      )
+      if (!twoCandidatesAreEquivalent) {
+        log.warn(` ** Second best candidate has  ${sorted[1]?.score} score`);
+        dbgPrintCandidate(sorted[1], event);
+        log.info(" ** best candidate ** ");
+        dbgPrintCandidate(candidate, event);
+      }
     }
     return candidate;
   }
@@ -113,7 +168,7 @@ async function getBestCandidate(candidates: FoundElement[], event: ElementDataMi
   return null;
 }
 
-async function getCandidates(frame: Frame, event: ElementDataMin, maxTop: number, timeout=300) {
+async function getCandidates(frame: Frame, bounds: Bounds, timeout=300) {
   // We are getting the occasional issue where getElementProps
   // is undefined.  This could potentially be a race condition
   // if this fn evaluates before evaluateOnNewDocument (?)
@@ -144,25 +199,12 @@ async function getCandidates(frame: Frame, event: ElementDataMin, maxTop: number
     };
 
     messageToLogOnTimeout = "Getting elements for frame";
-    const elements = await getAllElements(frame, maxTop);
+    const elements = await getAllElements(frame, bounds.height);
     messageToLogOnTimeout = "Filling out siblings for frame with " + elements.length + " elements";
     const withSiblings = fillOutSiblingText(elements);
     messageToLogOnTimeout = "Scoring frame with " + withSiblings.length + " elements";
 
-    const candidates: FoundElement[] = [];
-    for (let i = 0; i < withSiblings.length; i++) {
-      messageToLogOnTimeout = `Scoring element: ${i} of ${withSiblings.length}`;
-      const el = withSiblings[i];
-      const score = await scoreElement(el.data, event);
-      // NaN can't sort, so if one slips through, ditch it.
-      if (!Number.isNaN(score.score)) {
-        candidates.push({
-          ...el,
-          ...score
-        })
-      }
-    }
-    return candidates;
+    return withSiblings;
   }
   finally {
     clearInterval(intervalLogger);
@@ -170,18 +212,14 @@ async function getCandidates(frame: Frame, event: ElementDataMin, maxTop: number
 }
 
 let lastDbgPrintCandidateSelector: string;
-async function dbgPrintCandidate(candidate: FoundElement, event: ElementDataMin) {
+async function dbgPrintCandidate(candidate: FoundElement, event: SearchElementData) {
   if (lastDbgPrintCandidateSelector == candidate.data.selector) {
     // Do not spam with lotsa logging
     return;
   }
   lastDbgPrintCandidateSelector = candidate.data.selector;
-  log.debug(`Tag: ${event.tagName} - ${candidate?.data?.tagName}`);
-  log.debug(`Selector: ${event.selector} - ${candidate?.data?.selector}`);
-  log.debug(`Text: ${event.text} - ${candidate?.data?.text}`);
-  log.debug(`Label: ${event.label} - ${candidate?.data?.label}`);
-  log.debug(`Coords: ${JSON.stringify(event.coords)} - ${JSON.stringify(candidate?.data?.coords)}`);
-  log.debug(`Siblings: ${JSON.stringify(event.siblingText)} - ${JSON.stringify(candidate?.data?.siblingText)}`);
+  const strippedElement = { score: candidate.score, components: candidate.components };
+  log.debug({ found: strippedElement, event }, "DbgPrintCandidate: {element.selector}");
 }
 
 export async function registerElementAttrFns(page: Page) {
@@ -192,8 +230,10 @@ export async function registerElementAttrFns(page: Page) {
     eval(`window.getFontData = ${fns.getFontData};`)
     eval(`window.getLabelData = ${fns.getLabelData};`)
     eval(`window.getElementText = ${fns.getElementText};`)
+    eval(`window.getNodeValue = ${fns.getNodeValue};`)
     eval(`window.getSiblingText = ${fns.getSiblingText};`)
     eval(`window.getCoords = ${fns.getCoords};`)
+    eval(`window.isVisuallyHidden = ${fns.isVisuallyHidden};`)
     window.MAX_SIBLING_DISTANCE = fns.MAX_SIBLING_DISTANCE;
     window.getElementData = (el: HTMLElement, skipSibling?: boolean) => {
       const rawProps = getElementProps(el);
@@ -204,19 +244,16 @@ export async function registerElementAttrFns(page: Page) {
         const potentialSiblings = Array.from(allNodes)
           .filter(ps => (
             ps != el &&
-            //@ts-ignore
-            ps.checkVisibility({
-              checkOpacity: true,  // Check CSS opacity property too
-              checkVisibilityCSS: true // Check CSS visibility property too
-            })
+            !isVisuallyHidden(ps)
           ))
           .map(ps => ({
             element: ps,
             coords: getCoords(ps),
-            nodeValue: getElementText(ps),
+            nodeValue: getNodeValue(ps),
+            selector: getSelector(ps)!, // note: null is tested in the filter
           }))
-          .filter(ps => !!ps.nodeValue)
-        r.siblingText = getSiblingText(r.coords, potentialSiblings);
+          .filter(ps => !!ps.nodeValue && !!ps.selector)
+        r.siblingText = getSiblingText(r, potentialSiblings);
       }
       return r;
     }
@@ -227,18 +264,39 @@ export async function registerElementAttrFns(page: Page) {
     getFontData: getFontData.toString(),
     getLabelData: getLabelData.toString(),
     getElementText: getElementText.toString(),
+    getNodeValue: getNodeValue.toString(),
     getSiblingText: getSiblingText.toString(),
     getCoords: getCoords.toString(),
+    isVisuallyHidden: isVisuallyHidden.toString(),
     MAX_SIBLING_DISTANCE: MAX_SIBLING_DISTANCE,
   });
 }
 
+
+const isVisuallyHidden = (el: Element) => {
+  if (!(el instanceof HTMLElement)) return true;
+  if (!el.checkVisibility({
+    checkOpacity: true,  // Check CSS opacity property too
+    checkVisibilityCSS: true // Check CSS visibility property too
+  })) {
+    return true;
+  }
+  const styles = getComputedStyle(el);
+
+  // Check for common "visually-hidden" patterns
+  const hasClipping = styles.clip !== 'auto' || styles.clipPath !== 'none';
+  const isTiny = (parseFloat(styles.height) <= 1 && parseFloat(styles.width) <= 1);
+  return (hasClipping && isTiny);
+}
+
+
 const getElementProps = (el: HTMLElement) => ({
   frame: getFrameUrl(),
-  tagName: el.tagName,
+  tagName: el.tagName?.toUpperCase(),
   name: el.getAttribute("name") ?? undefined,
   options: (el as HTMLSelectElement)?.options ? Array.from((el as HTMLSelectElement).options).map(o => o.text) : undefined,
   inputType: el.getAttribute("type") ?? undefined,
+  for: el.getAttribute("for") ?? undefined,
   role: el.getAttribute("role"),
   selector: getSelector(el),
   coords: getCoords(el),
@@ -246,8 +304,12 @@ const getElementProps = (el: HTMLElement) => ({
   label: getLabelData(el),
   // Placeholder text gets picked up by the VQA service, so we
   // need to include it here (as it's most like a text descendent)
-  text: el.innerText + (el.getAttribute("placeholder") || ""),
-  nodeValue: getElementText(el),
+  text: getElementText(el),
+  nodeValue: getNodeValue(el),
+  // Add a reference to the parent element.  This allows
+  // us to treat children of buttons etc as the button itself.
+  parentSelector: el.parentElement ? getSelector(el.parentElement) : null,
+  parentTagName: el.parentElement?.tagName?.toUpperCase(),
 })
 
 const getFrameUrl = () => {
@@ -349,7 +411,14 @@ export function getLabelData(elem: Element) {
   return _getLabelData(elem)
 }
 
-function getElementText(elem: Element) {
+function getElementText(el: HTMLElement) {
+  const base = el.innerText.replace(/\s+/g, ' ');
+  const placeholder = el.getAttribute("placeholder") || "";
+  const s = placeholder ? `${base} ${placeholder}` : base;
+  return s.trim();
+}
+
+function getNodeValue(elem: Element) {
   // Don't forget to include any CSS-defined content
   const getCssContent = (prop: string) => {
     const content = window.getComputedStyle(elem, "::" + prop).content
@@ -367,30 +436,34 @@ function getElementText(elem: Element) {
   const allContent = [priorContent, ...nodeContent, postContent].filter(c => !!c)
   return allContent
     .join(" ")
-    .replace(/\s+/, ' ')
+    .replace(/\s+/g, ' ')
     .trim()
 }
 
-const getSiblingText = (elcoords: Coords, allText: Pick<ElementData, 'coords'|'nodeValue'>[]) => allText
+const getSiblingText = (el: ElementData, allText: Pick<ElementData, 'coords'|'nodeValue'|'selector'>[]) => allText
   .filter(c => !!c.nodeValue)
+  // Don't include a childs text.  That text is automatically
+  // included in the 'text' property, and it can throw things
+  // of if it's double-counted.
+  .filter(candidate => !candidate.selector?.includes(el.selector))
   .filter(candidate => {
     // Is this a row or column?
     const rowcoords = candidate.coords;
     // If it's off the edge of the page ignore it
     if (rowcoords.left < 0 || rowcoords.top < 0) return false;
     // If it's too large ignore it
-    if (rowcoords.height > (elcoords.height * 3)) return false;
+    if (rowcoords.height > (el.coords.height * 3)) return false;
     // Is it centered on this node?
     return (
       // Is it a row?  We allow for slight offsets of generally 2/3 pixels
-      Math.abs(rowcoords.centerY - elcoords.centerY) < 2 ||
+      Math.abs(rowcoords.centerY - el.coords.centerY) < 2 ||
       // Is it a column?  Check immediately above/below
       (
-        Math.abs(rowcoords.top - elcoords.top) < MAX_SIBLING_DISTANCE && (
+        Math.abs(rowcoords.top - el.coords.top) < MAX_SIBLING_DISTANCE && (
           // Left-aligned
-          Math.abs(rowcoords.left - elcoords.left) < 2 ||
+          Math.abs(rowcoords.left - el.coords.left) < 2 ||
           // Right-aligned
-          Math.abs((rowcoords.left + rowcoords.width) - (elcoords.left + elcoords.width)) < 2
+          Math.abs((rowcoords.left + rowcoords.width) - (el.coords.left + el.coords.width)) < 2
         )
       )
     )
@@ -408,10 +481,13 @@ export const getAllElements = async (frame: Page|Frame, maxTop: number, querySel
         // due the `instanceof HTMLElement` check, but HTLM & body are not
         !["HTML", "BODY"].includes(el.tagName) &&
         //@ts-ignore
-        el.checkVisibility({
-          checkOpacity: true,  // Check CSS opacity property too
-          checkVisibilityCSS: true // Check CSS visibility property too
-        })
+        (
+          // Always include inputs, even a hidden
+          // input helps with scoring as it can be
+          // pointed to by another element.
+          el.tagName.toUpperCase() == "INPUT" ||
+          !isVisuallyHidden(el)
+        )
       ) ? getElementProps?.(el)
         : null
     ),
@@ -471,8 +547,28 @@ const fillOutSiblingText = (allElements: SearchElement[]) => {
         .flat()
         .filter(c => c != el)
 
-      el.data.siblingText = getSiblingText(el.data.coords, candidates.map(c => c.data));
+      el.data.siblingText = getSiblingText(el.data, candidates.map(c => c.data));
     }
   }
   return bucketed.flat()
+}
+
+export async function getDocumentBounds(page: Page, maxTop: number) {
+  const pageBounds = await page.evaluate(() => ({
+    // Full document dimensions including scrollable content
+    width: Math.max(
+      document.documentElement.scrollWidth,
+      document.documentElement.offsetWidth,
+      document.documentElement.clientWidth
+    ),
+    height: Math.max(
+      document.documentElement.scrollHeight,
+      document.documentElement.offsetHeight,
+      document.documentElement.clientHeight
+    )
+  }));
+  if (pageBounds.height > maxTop) {
+    pageBounds.height = maxTop;
+  }
+  return pageBounds;
 }

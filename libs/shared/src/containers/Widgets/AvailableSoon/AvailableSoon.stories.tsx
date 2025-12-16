@@ -1,10 +1,12 @@
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
 import { AvailableSoon } from './';
+import { languageDecorator } from '../../../../internal/languageDecorator';
 
 export default {
   title: "Shared/Availablesoon",
   component: AvailableSoon,
+  decorators: languageDecorator
 };
 
 const Sample = ({width, height} : {width: number, height: number}) => (

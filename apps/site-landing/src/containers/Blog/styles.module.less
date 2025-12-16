@@ -1,79 +1,93 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
-.backLink{
-    a{
-        cursor: pointer;
-        border-bottom: none;
-    }
+.backLink {
+  a {
+    cursor: pointer;
+    border-bottom: none;
+  }
 }
 
-.containerArticle{
-    width: 50%;
-    max-width: 600px;
-    margin-left: 30%;
-    a {
-        text-align: right;
-    }
-    img{
-        max-width: 100%;
-    }
+.containerArticle {
+  width: 50%;
+  max-width: 600px;
+  margin-left: 30%;
+
+  img {
+    max-width: 100%;
+  }
 }
 
 .articleLine {
-    height: 250px;
-    .articleLineContainer{
-        width: 100%;
-    }
-    img, div{
-        display: block;
-    } 
-    .text{
-        height: 145px;
-        --max-lines: 3;
-        position: relative;
-        max-height: calc(var(--lh) * var(--max-lines));
-        overflow: hidden;
-        padding-right: 1rem; /* space for ellipsis */
-    }
-    .text::before {
-        position: absolute;
-        content: "";
-        inset-block-end: 0; /* "bottom" */
-        inset-inline-end: 0; /* "right" */
-      }
-      .text::after {
-        content: "";
-        position: absolute;
-        inset-inline-end: 0; /* "right" */
-        width: 1rem;
-        height: 1rem;
-        background: white;
-      }
+  margin-bottom: 2rem;
+  cursor: pointer;
+
+  .articleLineContainer {
+    width: 100%;
+  }
+
+  img,
+  div {
+    display: block;
+  }
+
+  .link {
+    color: @primaryColor1;
+    cursor: pointer;
+  }
+  .text {
+    height: 145px;
+    --max-lines: 3;
+    position: relative;
+    max-height: calc(var(--lh) * var(--max-lines));
+    overflow: hidden;
+    padding-right: 1rem;
+    /* space for ellipsis */
+  }
+
+  .text::before {
+    position: absolute;
+    content: "";
+    inset-block-end: 0;
+    /* "bottom" */
+    inset-inline-end: 0;
+    /* "right" */
+  }
+
+  .text::after {
+    content: "";
+    position: absolute;
+    inset-inline-end: 0;
+    /* "right" */
+    width: 1rem;
+    height: 1rem;
+    background: white;
+  }
 }
 
-#menuArticle{
-    a {
-        color: @theCoinPaletteGreen5;
-        text-transform: none;
-        padding-bottom: 0px;
-        border-bottom: none;
-        font-size: @fontSize;
-        padding: 5px;
-        width: 100%;
-        display: block;
-    }
+#menuArticle {
+  a {
+    color: @theCoinPaletteGreen5;
+    text-transform: none;
+    border-bottom: none;
+    font-size: @fontSize;
+    padding: 5px;
+    width: 100%;
+    display: block;
+  }
 }
 
 .smallerThanDesktop({
 
-    .articleLine {
-        height: auto;
+  .articleLine {
+    height: auto;
+  }
+
+  .containerArticle {
+    width: 100%;
+    margin: auto;
+
+    a {
+      text-align: center;
     }
-    .containerArticle{
-        width: 100%;
-        margin: auto;
-        a {
-            text-align: center;
-        }
-    }
-  });
+  }
+});

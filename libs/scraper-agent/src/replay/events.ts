@@ -1,4 +1,4 @@
-import type { AnyEvent } from "@thecointech/scraper/types";
+import type { AnyEvent } from "@thecointech/scraper-types";
 import type { EventSection, SectionName } from "../types";
 
 

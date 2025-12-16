@@ -22,21 +22,3 @@ describe('scheduler-linux pure logic', () => {
     expect(cal).toBe('Mon,Thu *-*-* 23:59:00');
   });
 });
-
-// it ('calculates a cron schedule', () => {
-//     const s = getCronSchedule({
-//         daysToRun: [false, true, false, false, true, false, false],
-//         timeToRun: '23:59'
-//     });
-//     expect(s).toEqual('59 23 * * 1,4')
-// })
-
-// Do not run this test in CI
-// if (process.platform === 'linux') {
-//     it('creates a new job', async () => {
-//         await setSchedule({
-//             daysToRun: [false, true, false, false, true, false, false],
-//             timeToRun: '23:59'
-//         });
-//     })
-// }

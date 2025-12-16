@@ -1,4 +1,4 @@
-import { formatTranslations } from "@thecointech/shared/containers/LanguageProvider/initialize"
+import { formatTranslations } from "@thecointech/redux-intl"
 import en from './en.json';
 import fr from './fr.json';
 import shared from "@thecointech/shared/translations";

@@ -1,0 +1,10 @@
+
+.containerArticle{
+    margin-top: 2rem;
+    a {
+        text-align: right;
+    }
+    img{
+        max-width: 100%;
+    }
+}

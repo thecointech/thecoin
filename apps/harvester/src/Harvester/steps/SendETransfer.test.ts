@@ -1,11 +1,10 @@
 import currency from 'currency.js';
-import { SendETransfer } from './SendETransfer'
-import type { UserData } from '../types';
+import { getMockSendTime, SendETransfer } from './SendETransfer'
 import { mockLog } from '../../../internal/mockLog';
+import { DateTime } from 'luxon';
+import { mockUser } from '../../../internal/mockUser';
 
-const user = {
-  replay: () => Promise.resolve({ confirm: "1234" }),
-} as any as UserData;
+const user = mockUser();
 
 it ('will send an e-transfer', async () => {
   const sender = new SendETransfer();
@@ -55,4 +54,50 @@ it ('will not send more than chq balance', async () => {
   expect(msgs).toContain("Insufficient chq balance, need 200.00, got 100.00");
   expect(d.harvesterBalance).toEqual(currency(95))
   expect(d.toETransfer).toBeUndefined();
+})
+
+it ('mocks a decent send time', async () => {
+  const sundayMorning = DateTime.now().set({weekday: 7, hour: 7, minute: 0})
+  const m1 = getMockSendTime(sundayMorning)
+  expect(m1.weekday).toEqual(5);
+  expect(m1.hour).toEqual(10);
+  expect(m1 < sundayMorning).toBeTruthy();
+
+  const mondayMorning = sundayMorning.plus({ day: 1 })
+  const m2 = getMockSendTime(mondayMorning)
+  expect(m2.weekday).toEqual(5);
+  expect(m2.hour).toEqual(10);
+  expect(m2 < sundayMorning).toBeTruthy();
+
+  const fridayMorning = sundayMorning.plus({ day: 5 })
+  const m3 = getMockSendTime(fridayMorning)
+  expect(m3.weekday).toEqual(4);
+  expect(m3.hour).toEqual(10);
+  expect(m3 < fridayMorning).toBeTruthy();
+  expect(m3 > mondayMorning).toBeTruthy();
+
+  const saturdayMorning = sundayMorning.plus({ day: 6 })
+  const m4 = getMockSendTime(saturdayMorning)
+  expect(m4.weekday).toEqual(5);
+  expect(m4.hour).toEqual(10);
+  expect(m4 < saturdayMorning).toBeTruthy();
+  expect(m4 > fridayMorning).toBeTruthy();
+
+  const sundayEvening = sundayMorning.set({ hour: 18 })
+  const m5 = getMockSendTime(sundayEvening)
+  expect(m5.weekday).toEqual(5);
+  expect(m5.hour).toEqual(10);
+  expect(m5 < sundayMorning).toBeTruthy();
+
+  const mondayEvening = mondayMorning.set({ hour: 18 })
+  const m6 = getMockSendTime(mondayEvening)
+  expect(m6.weekday).toEqual(1);
+  expect(m6.hour).toEqual(10);
+  expect(m6 > mondayMorning).toBeTruthy();
+
+  const fridayEvening = fridayMorning.set({ hour: 18 })
+  const m7 = getMockSendTime(fridayEvening)
+  expect(m7.weekday).toEqual(5);
+  expect(m7.hour).toEqual(10);
+  expect(m7 > fridayMorning).toBeTruthy();
 })

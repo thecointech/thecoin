@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { getUrlParameterByName } from '../../../../utils/localState';
+import { getUrlParameterByName } from '@thecointech/utilities/urls';
 import { IWindow } from './googleUtils';
 import { NoTabStoreList } from './NoTabStoreList';
 

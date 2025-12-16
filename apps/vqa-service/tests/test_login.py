@@ -1,7 +1,8 @@
+import unittest
 from TestBase import TestBase
-from testdata import get_test_data, get_single_test_element
-from intent_routes import page_intent
+from testutils.testdata import get_test_data
 from login_routes import (
+    detect_logout_element,
     detect_username_input,
     detect_password_exists,
     detect_password_input,
@@ -14,72 +15,64 @@ from tests.repeat_on_failure import repeat_on_fail
 
 class TestLoginProcess(TestBase):
 
-    # All initial pages must pass intent
-    async def test_intent(self):
-        test_data = get_test_data("login", "initial")
-        for key, image, _ in test_data:
-            with self.subTest(key=key):
-                response = await page_intent(image)
-                self.assertEqual(response.type, "login", f"Login intent failed for {key}")
-
-    @repeat_on_fail
     async def test_detect_username_input(self):
-        test_data = get_single_test_element("login", "initial", "username")
-        for key, image, expected in test_data:
-            with self.subTest(key=key):
-                response = await detect_username_input(image)
-                self.assertResponse(response, expected, key)
-    
+        samples = get_test_data("Login", "username")
+        for sample in samples:
+            with self.subTest(key=sample.key):
+                response = await detect_username_input(sample.image())
+                self.assertResponse(response, sample.elm("username"))
+
     # All pages must be able to detect if password is present
     async def test_detect_password_exists(self):
-        test_data = (
-            ("initial", get_test_data("login", "initial")),
-            ("password", get_test_data("login", "password"))
-        )
-        for (base, test_data) in test_data:
-            for key, image, expected in test_data:
-                with self.subTest(base=base, key=key):
-                    response = await detect_password_exists(image)
-                    exists = "password" in expected
-                    self.assertEqual(response.password_input_detected, exists, 
-                                  f"Password exists failed for {key}")
+        samples = get_test_data("Login")
+        no_loading = [s for s in samples if
+            not s.has_vqa("pageIntent") or s.vqa("pageIntent").response["type"] not in ["Loading", "Blank"]
+        ]
+        for sample in no_loading:
+            matching_pages = [s for s in samples if s.html and s.html_location == sample.html_location]
+            with self.subTest(key=sample.key):
+                response = await detect_password_exists(sample.image())
+                exists = any(s.has_element("password") for s in matching_pages)
+                self.assertEqual(response.password_input_detected, exists,
+                                  f"Password exists failed for {sample.key}")
 
     # What is the password input?
-    @repeat_on_fail
     async def test_detect_password_input(self):
-        test_data = (
-            ("initial", get_test_data("login", "initial")),
-            ("password", get_test_data("login", "password"))
-        )
-        for (base, test_data) in test_data:
-            for key, image, expected in test_data:
-                if "password" in expected:
-                    with self.subTest(base=base, key=key):
-                        response = await detect_password_input(image)
-                        self.assertResponse(response, expected["password"], key)
+        samples = get_test_data("Login", "password")
+        for sample in samples:
+            with self.subTest(key=sample.key):
+                response = await detect_password_input(sample.image())
+                self.assertResponse(response, sample.elm("password"))
 
-    @repeat_on_fail
     async def test_detect_continue_button(self):
-        test_data = get_single_test_element("login", "initial", "continue")
-        for key, image, expected in test_data:
-            with self.subTest(key=key):
-                response = await detect_continue_element(image)
-                self.assertResponse(response, expected, key)
+        samples = get_test_data("Login", "continue")
+        for sample in samples:
+            with self.subTest(key=sample.key):
+                response = await detect_continue_element(sample.image())
+                self.assertResponse(response, sample.elm("continue"))
 
-    @repeat_on_fail
     async def test_detect_login_button(self):
-        test_data = get_single_test_element("login", "password", "login")
-        for key, image, expected in test_data:
-            with self.subTest(key=key):
-                response = await detect_login_element(image)
-                self.assertResponse(response, expected, key)
+        samples = get_test_data("Login", "login")
+        for sample in samples:
+            with self.subTest(key=sample.key):
+                response = await detect_login_element(sample.image())
+                self.assertResponse(response, sample.elm("login"))
 
     async def test_detect_login_error(self):
-        test_data = get_single_test_element("login", "error", "error")
-        for key, image, expected in test_data:
-            with self.subTest(key=key):
-                response = await detect_login_error(image)
-                self.assertResponse(response, expected, key)
+        samples = get_test_data("Login", "detectLoginError")
+        for sample in samples:
+            with self.subTest(key=sample.key):
+                response = await detect_login_error(sample.image())
+                expected = sample.vqa("Error").response
+                self.assertEqual(response.error_message_detected, expected["error_message_detected"])
+                self.assertEqual(response.error_message, expected["error_message"])
+
+    async def test_logout_element(self):
+        samples = get_test_data("Logout", "logout")
+        for sample in samples:
+            with self.subTest(key=sample.key):
+                response = await detect_logout_element(sample.image())
+                self.assertResponse(response, sample.elm("logout"))
 
 
 if __name__ == "__main__":

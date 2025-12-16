@@ -1,8 +1,8 @@
 import React from 'react';
-import { Story } from '@storybook/react';
+import { StoryFn } from '@storybook/react-webpack5';
 import { AreaGraph as Component } from '.';
 import { CoinReturns } from '../BenefitsSimulator/simulator';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 
 const meta = {
   title: 'Landing/Benefits/Area',
@@ -20,7 +20,7 @@ const meta = {
 }
 type Props = typeof meta.args;
 const onClick = action("on-click");
-export const Area: Story<Props> = (props) => {
+export const Area: StoryFn<Props> = (props) => {
   return (
     <div style={{ width: "600px", height: "400px" }}>
       <Component maxGraphPoints={props.numPoints} data={generateData(props)} onClick={onClick} />

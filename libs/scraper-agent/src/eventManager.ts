@@ -1,7 +1,10 @@
 import { log } from "@thecointech/logging";
-import type { AnyEvent } from "@thecointech/scraper/types";
+import type { AnyEvent, DynamicInputEvent, ElementData, FoundElement, ValueEvent, ValueType } from "@thecointech/scraper-types";
 import type { Page } from "puppeteer";
 import type { EventSection, SectionName } from "./types";
+import { getValueParsing } from "@thecointech/scraper/valueParsing";
+import { bus } from "./eventbus";
+import { randomUUID } from "node:crypto";
 
 /**
  * A manager for events that occur during a scrape.
@@ -23,7 +26,18 @@ interface IPauser extends Disposable {
   discards: AnyEvent[];
 }
 
+// Utility type to prevent type inference
+// NOTE!  This can be removed in TS5.4 (whenever we upgrade)
+type NoInfer<T> = [T][T extends any ? 0 : never];
+
 export class EventManager {
+  private _eventFilters: Page[] = [];
+  pushPageFilter(page: Page) {
+    this._eventFilters.push(page);
+  }
+  popPageFilter() {
+    this._eventFilters.pop();
+  }
 
   allEvents: EventSection = { section: "Initial", events: [] }
   sectionStack: IEventSectionManager[] = [];
@@ -36,13 +50,51 @@ export class EventManager {
     this.currentEvents?.push(event);
   }
 
+  async pushValueEvent<T>(element: FoundElement, name: Extract<keyof NoInfer<T>, string>, type: ValueType) {
+    const event: ValueEvent = {
+      type: "value",
+      eventName: name,
+      timestamp: Date.now(),
+      id: randomUUID(),
+      ...element.data
+    };
+
+    event.parsing = (type == "table")
+      ? {
+          type: "table",
+          format: null,
+        }
+      : getValueParsing(element.data.text, type);
+
+    this.pushEvent(event);
+    return event;
+  }
+
+  pushDynamicInputEvent<T>(element: ElementData, name: Extract<keyof NoInfer<T>, string>) {
+        const event: DynamicInputEvent = {
+          type: "dynamicInput",
+          eventName: name,
+          timestamp: Date.now(),
+          id: randomUUID(),
+          ...element,
+        };
+        this.pushEvent(event);
+        return event;
+  }
+
   pushSection(section: SectionName) : IEventSectionManager {
     const mgr = new EventManager.EventSectionMgr(this, section);
     return mgr;
   }
 
-  onEvent = async (event: AnyEvent, _page: Page, name: string, step: number) => {
+  onEvent = async (event: AnyEvent, page: Page, name: string, step: number) => {
     if (!this.currentEvents) throw new Error("No events list set!");
+
+    // Only listen to events from the current page
+    const filter = this._eventFilters.at(-1);
+    if (filter && filter != page) {
+      return;
+    }
 
     const pauser = this._eventPausers.at(-1);
     if (pauser) {
@@ -91,19 +143,29 @@ export class EventManager {
 
   private static EventSectionMgr = class implements IEventSectionManager {
     section: EventSection;
+    _name: SectionName;
     _parent: EventSection;
     _mgr: EventManager;
+    _isDisposed = false;
     constructor(mgr: EventManager, section: SectionName) {
+      this._name = section;
       this._mgr = mgr;
       this._parent = mgr.currentSection;
       this.section = { section, events: [] };
       this._parent.events.push(this.section);
       this._mgr.sectionStack.push(this);
+      bus().emitSection(section);
     }
     async [Symbol.asyncDispose]() {
+      this._isDisposed = true;
       this._mgr.sectionStack.pop();
+      bus().emitSection(this._parent.section);
     }
     cancel() {
+      if (this._isDisposed) {
+        log.error("Cancelling disposed section: " + this._name);
+        return;
+      }
       this._parent.events.splice(this._parent.events.indexOf(this.section), 1);
     }
   }

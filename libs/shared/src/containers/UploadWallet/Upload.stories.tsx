@@ -1,11 +1,13 @@
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 import { IsValidAddress } from '@thecointech/utilities';
 import React from 'react';
 import { UploadWallet as Component } from '.';
+import { languageDecorator } from '../../../internal/languageDecorator';
 
 export default {
   title: "Shared/Upload",
   component: Component,
+  decorators: languageDecorator
 }
 
 const onValidateAction = action("onValidate");

@@ -3,6 +3,105 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/thecointech/thecoin/compare/v0.5.0-test.0...v0.5.0) (2025-11-26)
+
+**Note:** Version bump only for package @thecointech/rbcapi
+
+
+
+
+
+# [0.5.0-test.0](https://github.com/thecointech/thecoin/compare/v0.4.0...v0.5.0-test.0) (2025-11-25)
+
+
+### Bug Fixes
+
+* libs/rbcapi/package.json to reduce vulnerabilities ([523b0a1](https://github.com/thecointech/thecoin/commit/523b0a198ff91e04abb46886a10b78da29b81f20))
+
+
+
+
+
+# [0.4.0](https://github.com/thecointech/thecoin/compare/v0.4.0-test.3...v0.4.0) (2025-10-24)
+
+**Note:** Version bump only for package @thecointech/rbcapi
+
+
+
+
+
+# [0.4.0-test.3](https://github.com/thecointech/thecoin/compare/v0.4.0-test.2...v0.4.0-test.3) (2025-10-24)
+
+**Note:** Version bump only for package @thecointech/rbcapi
+
+
+
+
+
+# [0.4.0-test.1](https://github.com/thecointech/thecoin/compare/v0.4.0-test.0...v0.4.0-test.1) (2025-10-21)
+
+**Note:** Version bump only for package @thecointech/rbcapi
+
+
+
+
+
+# [0.4.0-test.0](https://github.com/thecointech/thecoin/compare/v0.3.13-test.5...v0.4.0-test.0) (2025-10-20)
+
+**Note:** Version bump only for package @thecointech/rbcapi
+
+
+
+
+
+## [0.3.13-test.5](https://github.com/thecointech/thecoin/compare/v0.3.13-test.4...v0.3.13-test.5) (2025-09-15)
+
+**Note:** Version bump only for package @thecointech/rbcapi
+
+
+
+
+
+## [0.3.13-test.3](https://github.com/thecointech/thecoin/compare/v0.3.13-test.2...v0.3.13-test.3) (2025-09-09)
+
+**Note:** Version bump only for package @thecointech/rbcapi
+
+
+
+
+
+## [0.3.13-test.2](https://github.com/thecointech/thecoin/compare/v0.3.13-test.1...v0.3.13-test.2) (2025-09-09)
+
+**Note:** Version bump only for package @thecointech/rbcapi
+
+
+
+
+
+## [0.3.13-test.0](https://github.com/thecointech/thecoin/compare/v0.3.12...v0.3.13-test.0) (2025-09-09)
+
+**Note:** Version bump only for package @thecointech/rbcapi
+
+
+
+
+
+## [0.3.12](https://github.com/thecointech/thecoin/compare/v0.3.12-test.0...v0.3.12) (2025-07-21)
+
+**Note:** Version bump only for package @thecointech/rbcapi
+
+
+
+
+
+## [0.3.12-test.0](https://github.com/thecointech/thecoin/compare/v0.3.11...v0.3.12-test.0) (2025-07-21)
+
+**Note:** Version bump only for package @thecointech/rbcapi
+
+
+
+
+
 ## [0.3.11](https://github.com/thecointech/thecoin/compare/v0.3.11-test.0...v0.3.11) (2025-07-21)
 
 **Note:** Version bump only for package @thecointech/rbcapi

@@ -1,6 +1,7 @@
 export { DateRangeSelect } from './components/DateRangeSelect';
 export { DualFxInput } from './components/DualFxInput';
 export * from './components/UX';
+export * from './components/Links';
 
 // Export all react containers
 export { Balance } from './containers/Balance';

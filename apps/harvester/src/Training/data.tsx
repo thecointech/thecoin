@@ -2,7 +2,7 @@ export enum Key {
   chequing="chequing",
   visa = "visa",
 
-  wallet = "wallet",
+  // wallet = "wallet",
   pluginCnvrtRequested = "pluginCnvrtRequested",
   pluginAbsrbRequested = "pluginAbsrbRequested",
 }

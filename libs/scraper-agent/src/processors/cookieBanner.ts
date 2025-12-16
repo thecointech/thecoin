@@ -1,44 +1,41 @@
-import { GetLandingApi } from "@thecointech/apis/vqa";
 import { log } from "@thecointech/logging";
-import { PageHandler } from "../pageHandler";
 import { processorFn } from "./types";
+import type { Agent } from "../agent";
+import { apis } from "../apis";
 
-export const CookieBanner = processorFn("CookieBanner", async (page: PageHandler) => {
-  await closeCookieBanner(page);
+export const CookieBanner = processorFn("CookieBanner", async (agent: Agent) => {
+  await closeCookieBanner(agent);
 })
 
-async function closeCookieBanner(page: PageHandler) {
-  const detected = await cookieBannerDetected(page)
+async function closeCookieBanner(agent: Agent) {
+  const detected = await cookieBannerDetected(agent)
   log.trace(`LandingWriter: Cookie banner detected: ${detected}`);
+  agent.onProgress(33);
+
   if (detected) {
-    page.onProgress(33);
+    const api = await apis().getLandingApi();
     try {
-      const didClose = await page.tryClick(GetLandingApi(), "cookieBannerAccept", {
+      const didClose = await agent.page.tryClick(api, "cookieBannerAccept", {
         noNavigate: true,
-        name: "cookie-accept"
+        hints: { eventName: "cookie-accept" }
       });
-      if (didClose) {
-        // Reload the page seems to clean up some lost interactions (?)
-        // await sleep(500);
-        // await this.page.reload({ waitUntil: "networkidle2" });
-        // await this.waitForPageLoaded();
-        // await this.updatePageName("no-cookie");
-      }
+      log.trace(`LandingWriter: Cookie banner closed: ${didClose}`);
     }
     catch (err) {
-      log.warn(`LandingWriter: Failed to close cookie banner: ${err}`);
+      log.warn(err, `LandingWriter: Failed to close cookie banner`);
     }
-    page.onProgress(66);
-  }
+    agent.onProgress(66);
 
-  // Being pedantic, did this work?
-  if (await cookieBannerDetected(page)) {
-    log.warn("LandingWriter: VQA still sees a cookie banner");
-    // Not a big deal, could be a fake-positive
+    // Being pedantic, did this work?
+    if (await cookieBannerDetected(agent)) {
+      log.warn("LandingWriter: VQA still sees a cookie banner");
+      // Not a big deal, could be a fake-positive
+    }
   }
 }
 
-async function cookieBannerDetected(page: PageHandler) {
-  const { data: cookiePresent } = await GetLandingApi().cookieBannerPresent(await page.getImage());
+async function cookieBannerDetected(agent: Agent) {
+  const api = await apis().getLandingApi();
+  const { data: cookiePresent } = await api.cookieBannerPresent(await agent.page.getImage());
   return cookiePresent.cookie_banner_detected;
 }
