@@ -5022,15 +5022,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@google-cloud/firestore@npm:6.0.0":
-  version: 6.0.0
-  resolution: "@google-cloud/firestore@npm:6.0.0"
+"@google-cloud/firestore@npm:7.0.0":
+  version: 7.0.0
+  resolution: "@google-cloud/firestore@npm:7.0.0"
   dependencies:
     fast-deep-equal: "npm:^3.1.1"
     functional-red-black-tree: "npm:^1.0.1"
-    google-gax: "npm:^3.0.1"
-    protobufjs: "npm:^7.0.0"
-  checksum: d1d93ebdb143aa7f699c20898d976cdcdba7e1bb09077c5914401ef50229e2b6ff2e2565e82e9f234a1fdfac7052279029d6422dbcbe11a83501af50bf8fe289
+    google-gax: "npm:^4.0.4"
+    protobufjs: "npm:^7.2.5"
+  checksum: 5019c6800efe41047b174e4259701c66b05d3d36384944a111bae6afc1419e8d872a1445cab19f53bdb7d4662276f149521b4ada7e6ff9731b9650c8b90a9549
   languageName: node
   linkType: hard
 
@@ -11340,7 +11340,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/firestore@workspace:libs/firestore"
   dependencies:
-    "@google-cloud/firestore": "npm:6.0.0"
+    "@google-cloud/firestore": "npm:7.0.0"
     "@thecointech/jestutils": "npm:^0.5.0"
     "@thecointech/logging": "npm:^0.5.0"
     "@thecointech/secrets": "npm:^0.5.0"
@@ -11430,7 +11430,7 @@ __metadata:
     "@tsoa/runtime": "npm:6.2.0"
     "@types/multer": "npm:^1.4.5"
     "@types/swagger-ui-express": "npm:^4.1.1"
-    axios: "npm:1.6.5"
+    axios: "npm:1.12.0"
     cors: "npm:^2.8.5"
     express: "npm:^4.22.0"
     helmet: "npm:^4.6.0"
@@ -12124,7 +12124,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/vqa@workspace:apis/vqa/ts"
   dependencies:
-    axios: "npm:^1.6.5"
+    axios: "npm:1.12.0"
   languageName: unknown
   linkType: soft
 
@@ -25113,7 +25113,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"google-gax@npm:^3.0.1, google-gax@npm:^3.6.1":
+"google-gax@npm:^3.6.1":
   version: 3.6.1
   resolution: "google-gax@npm:3.6.1"
   dependencies:
@@ -25156,6 +25156,26 @@ __metadata:
     retry-request: "npm:^7.0.0"
     uuid: "npm:^9.0.1"
   checksum: 371d855fad00fe5957587ac8b16f27b0e8dbd91e5a05e1f501f57b9f0042171951b8b777e0e73af990203ce3b7a19e02aaeeb32125482b1222be11787c19dbdb
+  languageName: node
+  linkType: hard
+
+"google-gax@npm:^4.0.4":
+  version: 4.6.1
+  resolution: "google-gax@npm:4.6.1"
+  dependencies:
+    "@grpc/grpc-js": "npm:^1.10.9"
+    "@grpc/proto-loader": "npm:^0.7.13"
+    "@types/long": "npm:^4.0.0"
+    abort-controller: "npm:^3.0.0"
+    duplexify: "npm:^4.0.0"
+    google-auth-library: "npm:^9.3.0"
+    node-fetch: "npm:^2.7.0"
+    object-hash: "npm:^3.0.0"
+    proto3-json-serializer: "npm:^2.0.2"
+    protobufjs: "npm:^7.3.2"
+    retry-request: "npm:^7.0.0"
+    uuid: "npm:^9.0.1"
+  checksum: 740e47beb1def74d3e0074f8582fd919423f6c261b8cfa1c6a6c1c5bf9d8b92a11f1afe07eb1eea2fda7f4b6603c836f9427ed3cfa4c04ae97eb00db7c291400
   languageName: node
   linkType: hard
 
