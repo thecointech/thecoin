@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { CreateAccountBanner, TypeCreateAccountBanner } from '../CreateAccountBanner';
-import { GreaterThanMobileSegment, MobileSegment, breakpointsValues } from '@thecointech/shared/components/ResponsiveTool';
+import { GreaterThanMobileSegment, MobileSegment, breakpointsValues } from '@thecointech/media-context';
 
 import { Grid, Header, StrictGridColumnProps } from 'semantic-ui-react';
 import { ColumnWithTwoTitles } from './ColumnWithTwoTitles';

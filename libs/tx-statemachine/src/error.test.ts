@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals'
-import { GetContract } from '@thecointech/contract-core';
+import { ContractCore } from '@thecointech/contract-core';
 import { getFirestore } from "@thecointech/firestore";
 import { init } from '@thecointech/firestore';
 import Decimal from 'decimal.js-light';
@@ -59,7 +59,7 @@ const graph : StateGraph<States, ActionType> = {
 it("Error replay is handled appropriately", async () => {
 
   init({})
-  const contract = await GetContract();
+  const contract = await ContractCore.get();
   const processor = new FSM.StateMachineProcessor(graph, contract, null);
 
   const action: BuyAction = {

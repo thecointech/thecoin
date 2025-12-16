@@ -1,5 +1,5 @@
 import React from 'react';
-import { Meta } from '@storybook/react';
+import { Meta } from '@storybook/react-webpack5';
 import { OptionToggles as Component } from '.';
 import { Options } from '../types';
 

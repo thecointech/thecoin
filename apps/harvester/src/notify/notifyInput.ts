@@ -15,7 +15,7 @@ import { DisplayContext } from "./displayContext";
 export async function notifyInput(prompt: string, timeoutSeconds: number = 300): Promise<string | null> {
   // Skip during tests unless explicitly enabled
   if (process.env.RUNTIME_ENV === "test" && !process.env.TEST_ASK_INPUT) {
-    return Promise.resolve(null);
+    return Promise.resolve("1234");
   }
 
   using _ = new DisplayContext();

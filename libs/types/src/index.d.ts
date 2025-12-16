@@ -122,3 +122,10 @@ export type ConnectionValues = {
   path: string;
   locale: string;
 }
+
+
+export type Value<T, AllowedPrimitives = any> = T extends AllowedPrimitives ? T : RecursivePartial<T, AllowedPrimitives>;
+export type RecursivePartial<T, AllowedPrimitives = any> = {
+  [P in keyof T]?:
+  T[P] extends Array<infer U> ? Array<Value<U, AllowedPrimitives>> : Value<T[P], AllowedPrimitives>;
+};

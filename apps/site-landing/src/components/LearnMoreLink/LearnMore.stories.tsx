@@ -1,6 +1,6 @@
 import React from 'react';
 import { LearnMoreLink } from '.';
-import { Meta } from '@storybook/react';
+import { Meta } from '@storybook/react-webpack5';
 
 const meta: Meta = {
   title: "Base/LearnMore",

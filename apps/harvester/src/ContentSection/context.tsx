@@ -1,5 +1,10 @@
 import { createContext, useContext } from 'react';
 
+// The ContentSection context is used to allow
+// content to define their next/action/alternate
+// buttons, but the rendering is hoisted
+// into the ContentSection.footer.
+
 type ContentSectionContextType = {
   alternatePortalTarget: HTMLElement | null;
   nextPortalTarget: HTMLElement | null;

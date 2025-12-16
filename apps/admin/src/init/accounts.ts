@@ -1,8 +1,8 @@
 import { getSigner, type AccountName } from '@thecointech/signers';
 import { buildNewAccount } from '@thecointech/account';
 import { NormalizeAddress } from '@thecointech/utilities';
-import { ConnectContract } from '@thecointech/contract-core';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { ContractCore } from '@thecointech/contract-core';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { log } from '@thecointech/logging';
 import { getComposeDB } from '@thecointech/idx';
 
@@ -10,7 +10,7 @@ async function buildMapEntry(name: AccountName) {
   const signer = await getSigner(name);
   const address = NormalizeAddress(await signer.getAddress());
   const account = buildNewAccount(name, address, signer);
-  account.contract = await ConnectContract(signer);
+  account.contract = await ContractCore.connect(signer);
   account.idx = await getComposeDB(signer);
   return { [address]: account };
 }

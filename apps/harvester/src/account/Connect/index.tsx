@@ -3,22 +3,22 @@ import styles from "./index.module.less";
 import { Dimmer, Header, Loader, Message } from "semantic-ui-react";
 import { BackgroundTaskErrors, BackgroundTaskProgressBar } from "@/BackgroundTask/BackgroundTaskProgressBar";
 import { groupKey } from "../routes";
-import { AccountMap } from "@thecointech/shared/containers/AccountMap/reducer";
+import { AccountMap } from "@thecointech/redux-accounts";
 import { ElectronSigner } from "@thecointech/electron-signer";
 import { ContentSection } from "@/ContentSection";
-import { PathNextButton } from "@/SimplePath";
 import type { AccountState } from "@thecointech/account";
 import { log } from "@thecointech/logging";
-
+import { useSimplePathContext } from "@/SimplePath";
 type State = "connecting" | "connected" | "failed";
 
-export const Connect = (props: AccountState) => {
+export const Connect = () => {
 
+  const context = useSimplePathContext<AccountState>();
   const [state, setState] = useState<State>();
   const [forceCheck, setForceCheck] = useState(false);
   const accountApi = AccountMap.useApi();
   const existing = AccountMap.useAsArray();
-  const address = props.address;
+  const address = context.data?.address;
   const isConnected = !!address;
 
   const connecting = state === "connecting";
@@ -45,7 +45,7 @@ export const Connect = (props: AccountState) => {
     });
   };
 
-  const checkValid = () => {
+  context.onValidate = () => {
     setForceCheck(true);
     return state === "connected" || isConnected;
   };
@@ -66,9 +66,9 @@ export const Connect = (props: AccountState) => {
         <BackgroundTaskProgressBar type="connect" />
         <BackgroundTaskErrors type="connect" />
       </div>
-      <ConnectionResult forceCheck={forceCheck} {...props} />
-      <ContentSection.Alternate to={`/${groupKey}/1/?manual=true`} content="Or load your account manually" />
-      <PathNextButton onValid={checkValid} />
+      <ConnectionResult forceCheck={forceCheck} {...context.data} />
+      <ContentSection.Alternate to={`/${groupKey}/upload/?manual=true`} content="Or load your account manually" />
+      {/* <PathNextButton onValid={checkValid} /> */}
     </div>
   );
 };
@@ -88,7 +88,7 @@ const InfoElements = () => (
   </>
 )
 
-const ConnectionResult = (props: { forceCheck: boolean } & AccountState) => {
+const ConnectionResult = (props: { forceCheck: boolean } & Partial<AccountState>) => {
   const success = !!props.address;
   const visible = props.forceCheck || success;
   return (

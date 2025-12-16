@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-core",
-  "version": "0.5.0-test.0",
+  "version": "0.5.0",
   "description": "The Coin: Solidity contract for TheCoin currency",
   "type": "module",
   "keywords": [
@@ -48,8 +48,7 @@
     "./contract": "./build/index.js",
     "./testHelpers.ts": "./internal/testHelpers.ts",
     ".": {
-      "development": "./build/index_mocked.js",
-      "electron": "./build/index.js",
+      "development": "./mocks/contractcore_mocked.ts",
       "default": "./build/index.js"
     }
   },
@@ -66,16 +65,16 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "^0.4.0",
-    "@thecointech/contract-oracle": "^0.5.0-test.0",
-    "@thecointech/contract-tools": "^0.5.0-test.0",
-    "@thecointech/setenv": "^0.5.0-test.0"
+    "@thecointech/async": "^0.5.0",
+    "@thecointech/contract-oracle": "^0.5.0",
+    "@thecointech/contract-tools": "^0.5.0",
+    "@thecointech/setenv": "^0.5.0"
   },
   "dependencies": {
-    "@solidity-parser/parser": "^0.14.5",
-    "@thecointech/contract-base": "^0.5.0-test.0",
-    "@thecointech/contract-plugins": "^0.5.0-test.0",
-    "@thecointech/fx-rates": "^0.5.0-test.0"
+    "@solidity-parser/parser": "^0.20.2",
+    "@thecointech/contract-base": "^0.5.0",
+    "@thecointech/contract-plugins": "^0.5.0",
+    "@thecointech/fx-rates": "^0.5.0"
   },
   "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

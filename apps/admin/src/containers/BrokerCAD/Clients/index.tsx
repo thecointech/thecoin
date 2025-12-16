@@ -1,4 +1,4 @@
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { ClientSelect } from './ClientSelect';
 import { getAllUserData } from './data';
 

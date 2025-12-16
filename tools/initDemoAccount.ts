@@ -1,9 +1,9 @@
 import { getSigner } from "@thecointech/signers";
 import { DateTime, Duration } from "luxon";
 import { GetPluginsApi, GetBillPaymentsApi } from '@thecointech/apis/broker';
-import { GetContract } from '@thecointech/contract-core';
-import { getContract as getUberContract } from '@thecointech/contract-plugin-converter';
-import { getContract as getShockAbsorberContract } from '@thecointech/contract-plugin-shockabsorber';
+import { ContractCore } from '@thecointech/contract-core';
+import { ContractConverter } from '@thecointech/contract-plugin-converter';
+import { ContractShockAbsorber } from '@thecointech/contract-plugin-shockabsorber';
 import { ALL_PERMISSIONS, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 import { BuildUberAction } from '@thecointech/utilities/UberAction';
 import Decimal from 'decimal.js-light';
@@ -27,7 +27,7 @@ const monthsToRun = 100;
 // Init/Demo account
 // Starting from Jan 1 2022
 // Send a deposit email to
-const tcCore = await GetContract();
+const tcCore = await ContractCore.get();
 const signer = await getSigner("TestDemoAccount");
 const testAddress = await signer.getAddress();
 if (testAddress != process.env.WALLET_TestDemoAccount_ADDRESS) {
@@ -92,8 +92,8 @@ if (plugins.length == 0) {
       signedAt: request.signedAt.toMillis(),
     });
   }
-  const converter = await getUberContract();
-  const shockAbsorber = await getShockAbsorberContract();
+  const converter = await ContractConverter.get();
+  const shockAbsorber = await ContractShockAbsorber.get();
 
   await assignPlugin(converter, 10);
   await assignPlugin(shockAbsorber, 5);

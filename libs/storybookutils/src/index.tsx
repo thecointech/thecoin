@@ -1,22 +1,24 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { configureStore } from '@thecointech/shared/store';
-import { ApplicationBaseState } from '@thecointech/shared/types';
+import { configureStore } from '@thecointech/redux';
+// import { ApplicationBaseState } from '@thecointech/shared/types';
 import { combineReducers, ReducersMapObject } from 'redux';
-import { buildAccountStoreReducer, AccountMapState, AccountMap } from '@thecointech/shared/containers/AccountMap';
-import { LanguageProviderReducer } from '@thecointech/shared/containers/LanguageProvider/reducer';
-import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
+import { buildAccountStoreReducer, AccountMapState, AccountMap } from '@thecointech/redux-accounts';
+import { LanguageProvider, LanguageProviderReducer, Languages } from '@thecointech/redux-intl';
+import { MediaContextProvider, mediaStyles } from '@thecointech/media-context';
 import { getAllAccounts, getInitialAddress } from '@thecointech/account/store';
 
 const accounts = await getAllAccounts();
 
-export function withStore<T extends ApplicationBaseState>(initialState?: Partial<T>) {
+type StorybookBaseState = {}
+
+export function withStore<T extends StorybookBaseState>(initialState?: Partial<T>) {
   const createReducer = (injectedReducers?: ReducersMapObject) =>
     injectedReducers
       ? combineReducers({...injectedReducers})
-      : (state: ApplicationBaseState) => state ?? initialState;
+      : (state: StorybookBaseState) => state ?? initialState;
   const store = configureStore(createReducer, initialState as any);
-  return (Story: React.ElementType) => <Provider store={store}><Story /></Provider>
+  return (StoryFn: React.ElementType) => <Provider store={store}><StoryFn /></Provider>
 }
 
 export function withAccounts(initialState?: AccountMapState) {
@@ -33,22 +35,31 @@ export function withAccounts(initialState?: AccountMapState) {
     });
   }
   const store = configureStore(createReducer);
-  return (Story: React.ElementType) => <Provider store={store}><Story /></Provider>
+  return (StoryFn: React.ElementType) => <Provider store={store}><StoryFn /></Provider>
 }
 
 // Generic reducer decorator
 export function withReducer(reducer: { useStore: () => any }) {
-  return (Story: React.ElementType) => {
+  return (StoryFn: React.ElementType) => {
     reducer.useStore();
-    return <Story />
+    return <StoryFn />
   }
 }
 
 // Dedicated LP decorator is used in a few places
-export const withLanguageProvider = withReducer(LanguageProviderReducer);
+export const withLanguageProvider = (languages: Languages) => {
+  return (StoryFn: React.ElementType) => {
+    LanguageProviderReducer.useStore();
+    return (
+      <LanguageProvider languages={languages}>
+        <StoryFn />
+      </LanguageProvider>
+    );
+  };
+};
 
-export const withMediaContext = (Story: React.ElementType) =>
+export const withMediaContext = (StoryFn: React.ElementType) =>
   <MediaContextProvider>
     <style>{mediaStyles}</style>
-    <Story />
+    <StoryFn />
   </MediaContextProvider>

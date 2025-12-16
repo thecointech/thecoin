@@ -1,8 +1,8 @@
 import { GetStatusApi, StatusType, GetUserVerificationApi, UserVerifyData } from '@thecointech/apis/broker';
 import { call, put } from "@redux-saga/core/effects";
-import { ActionsType, BaseSagaInterface } from '../../store/immerReducer';
 import { GetSignedMessage } from '@thecointech/utilities/SignedMessages';
 import { log } from '@thecointech/logging';
+import type { ActionsType, BaseSagaInterface } from '@thecointech/redux/immerReducer';
 import type { SagaIterator } from '@redux-saga/core';
 import type { Signer } from 'ethers';
 import type { IActions } from '../Account/types';

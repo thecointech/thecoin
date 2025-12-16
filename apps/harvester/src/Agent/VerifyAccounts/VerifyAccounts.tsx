@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
 import styles from "./VerifyAccounts.module.less";
-import type { InitialState } from "../state/initialState";
 import { BankConnectReducer } from "../state/reducer";
 import { NoAccounts } from "./NoAccounts";
 import { CreditCardCorrection } from "./UpdateCardNumber";
@@ -11,8 +10,9 @@ import { findPayee, LegalPayeeName } from "@thecointech/site-app/src/containers/
 import { ActionButton } from "@/ContentSection/Action";
 import { NextButton } from "@/ContentSection/Next";
 
-export const VerifyAccounts = ({banks, stored}: InitialState) => {
+export const VerifyAccounts = () => {
   const api = BankConnectReducer.useApi();
+  const { banks, stored } = BankConnectReducer.useData();
   const [forceValidate, setForceValidate] = useState(false);
 
   const chequingAccounts = banks.chequing?.accounts?.filter(a => a.account_type === 'Chequing') || [];

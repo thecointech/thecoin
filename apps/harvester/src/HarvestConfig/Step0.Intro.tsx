@@ -1,18 +1,18 @@
 import { Container, Header } from 'semantic-ui-react'
 import { ConfigReducer } from './state/reducer'
 import { ActionButton } from '@/ContentSection/Action';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { groupKey, routes } from './routes';
 
 export const Intro = () => {
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const api = ConfigReducer.useApi();
 
   const setUseDefaults = () => {
     api.resetToDefault();
-    history.push(`/${groupKey}/${routes.length - 1}`);
+    navigate(`/${groupKey}/${routes.length - 1}`);
   }
   return (
     <Container>

@@ -7,17 +7,15 @@
  *
  */
 
-import * as React from 'react';
-import { Ref } from 'semantic-ui-react';
-import {MainNavigation} from 'containers/MainNavigation';
+import React, { useRef } from 'react';
+import { Outlet } from 'react-router';
+import { MainNavigation } from 'containers/MainNavigation';
 import { Footer } from 'components/Footer';
 import { MainPageTransition } from '@thecointech/site-base/components/MainPageTransition';
 import { FxRateReducer } from '@thecointech/shared/containers/FxRate/reducer';
-import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
-import { createRef } from 'react';
+import { MediaContextProvider, mediaStyles } from '@thecointech/media-context';
 import { useSidebar } from '../Sidebar';
 import { init } from './init'
-import { Routes } from './Routes';
 import { Sidebar } from '../Sidebar/Sidebar';
 
 // Either import CSS or LESS;
@@ -26,14 +24,15 @@ import { Sidebar } from '../Sidebar/Sidebar';
 //import '../../semantic/semantic.css';
 import '@thecointech/site-semantic-theme/semantic.less';
 import styles from './styles.module.less';
-import { WidgetWrapper, BalanceAndProfit, ClimateImpact} from '../Widgets'
+import { WidgetWrapper, BalanceAndProfit, ClimateImpact } from '../Widgets'
 
 await init();
 
 export const App = () => {
   FxRateReducer.useStore();
   useSidebar()
-  const contextRef = createRef<HTMLDivElement>();
+  // const contextRef = createRef<HTMLDivElement>();
+  const contextRef = useRef<HTMLDivElement>(null);
 
   return (
     <MediaContextProvider>
@@ -46,11 +45,9 @@ export const App = () => {
 
         <div className={styles.contentContainer}>
           <MainPageTransition>
-            <Ref innerRef={contextRef}>
-              <section id={styles.mainContent} className={styles.pageMainInner}>
-                <Routes />
-              </section>
-            </Ref>
+            <section ref={contextRef} id={styles.mainContent} className={styles.pageMainInner}>
+              <Outlet />
+            </section>
           </MainPageTransition>
         </div>
 

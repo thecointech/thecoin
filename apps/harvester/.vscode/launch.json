@@ -10,7 +10,7 @@
       "runtimeArgs": [
         "dev",
         // "--", // Add "--clean-start" to skip seeding dev db
-        // "--clean-start"
+        "-- --clean-start"
       ],
       "runtimeExecutable": "yarn",
       "skipFiles": [
@@ -93,6 +93,8 @@
       "env": {
         "NODE_ENV": "development",
         "CONFIG_NAME": "prodbeta",
+        // Required as "yarn _start" does not include this flag
+        "ELECTRON_DISABLE_SANDBOX": "true",
         "HARVESTER_DEBUG_LIVE": "true",
         "HARVESTER_ENABLE_CONFIG_EXPORT": "true",
         "HARVESTER_ALLOW_OVERRIDES": "true",
