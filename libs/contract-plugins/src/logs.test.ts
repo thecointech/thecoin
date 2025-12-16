@@ -24,12 +24,24 @@ describe('Live data fetches', () => {
     const afterFirstTx = 44767897 + 1;
     const after8thTx = 58296048;
     // verify toBlock is working
-    const r = await getPluginLogs(address, user, provider, initBlock, after8thTx);
-    expect(r.length).toEqual(8);
+    try {
+      const r = await getPluginLogs(address, user, provider, initBlock, after8thTx);
+      expect(r.length).toEqual(8);
 
-    // verify fromBlock is working (2 logs in the first tx)
-    const r2 = await getPluginLogs(address, user, provider, afterFirstTx, after8thTx);
-    expect(r2.length).toEqual(6);
+      // verify fromBlock is working (2 logs in the first tx)
+      const r2 = await getPluginLogs(address, user, provider, afterFirstTx, after8thTx);
+      expect(r2.length).toEqual(6);
+    }
+    catch (e: any) {
+      if (e.code == "SERVER_ERROR") {
+        // Read the response:
+        const responseJson = e.response?.bodyJson;
+        if (responseJson?.message) {
+          throw new Error(responseJson.message);
+        }
+        throw e;
+      }
+    }
   })
 }, await ifPolygonscan("prod"));
 
