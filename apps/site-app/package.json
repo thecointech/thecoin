@@ -59,7 +59,7 @@
     "@thecointech/site-base": "^0.5.0",
     "@thecointech/utilities": "^0.5.0",
     "card-validator": "^6.2.0",
-    "compression": "1.7.4",
+    "compression": "^1.8.1",
     "file-saver": "^2.0.2",
     "intl": "^1.2.5",
     "ip": "1.1.5",
