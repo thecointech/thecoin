@@ -7,7 +7,7 @@ import { LanguageSwitcher } from '@thecointech/site-base/containers/LanguageSwit
 import { NavLink } from '@thecointech/shared';
 import styles from './styles.module.less';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
-import { SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar/reducer';
+import { SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar';
 
 const menuItems = defineMessages({
   home: {

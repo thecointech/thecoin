@@ -1,6 +1,6 @@
-import { getProvider } from '@thecointech/ethers-provider';
-import { SpxCadOracle__factory, type SpxCadOracle } from './codegen';
-import type { Provider, Signer } from 'ethers';
+import { type SpxCadOracle, SpxCadOracle__factory } from './codegen';
+import type { Signer } from 'ethers';
+import { defineContractSingleton } from '@thecointech/contract-base';
 
 const getContractAddress = async () => {
 
@@ -13,18 +13,13 @@ const getContractAddress = async () => {
   return deployment.default.contract;
 }
 
-declare global {
-  var __oracle: SpxCadOracle|undefined;
-}
 
-export async function getContract(provider?: Provider) : Promise<SpxCadOracle> {
-  provider = provider ?? await getProvider();
-  const v = globalThis.__oracle ??= SpxCadOracle__factory.connect(
-    await getContractAddress(),
-    provider
-  )
-  return v
-}
+
+export const ContractOracle = defineContractSingleton<SpxCadOracle>(
+  '__oracle',
+  getContractAddress,
+  SpxCadOracle__factory
+);
 
 // Expose the factory here to allow easier testing elsewhere...
 export const getOracleFactory = (signer: Signer) => new SpxCadOracle__factory().connect(signer);

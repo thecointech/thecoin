@@ -27,8 +27,8 @@
   "exports": {
     ".": "./build/index.js",
     "./store": {
-      "development": "./build/development/store.js",
-      "devlive": "./build/devlive/store.js",
+      "development": "./mocks/development/store.ts",
+      "devlive": "./mocks/devlive/store.ts",
       "default": "./build/store.js"
     },
     "./*": "./build/*.js"

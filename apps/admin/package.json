@@ -14,6 +14,7 @@
   },
   "scripts": {
     "build": "run -T tsc -b",
+    "clean": "run -T rimraf ./build",
     "dev": "yarn _start:dbg",
     "_dev:live": "run -T cross-env CONFIG_NAME=devlive yarn _start:dbg",
     "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn _start:dbg",

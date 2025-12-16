@@ -1,8 +1,7 @@
 import { Segment, Sidebar } from 'semantic-ui-react';
-import { PageSidebar } from '@thecointech/shared/containers/PageSidebar';
+import { PageSidebar, SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar';
 import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
 import styles from './styles.module.less';
-import { SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar/reducer';
 import { Outlet } from 'react-router';
 
 import 'semantic-ui-css/semantic.min.css'

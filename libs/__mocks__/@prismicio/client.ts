@@ -1,16 +1,43 @@
-import type {BuildQueryURLArgs, Client} from "@prismicio/client";
-import data from './data.json' with { type: "json" }
-import { PrismicDocument, Query } from '@prismicio/types';
+import type {Client} from "@prismicio/client";
+import faqs from './mock.faqs.json' with { type: "json" }
+import articles from './mock.articles.json' with { type: "json" }
 
-class MockClient implements Pick<Client<PrismicDocument>, "query"|"getByUID"> {
-  query<TDocument extends PrismicDocument<Record<string, any>, string, string>>(predicates: string | string[], params?: (Partial<Omit<BuildQueryURLArgs, 'predicates'>> & { signal?: { aborted: any; addEventListener: any; removeEventListener: any; dispatchEvent: any; onabort: any; } | undefined; }) | undefined): Promise<Query<TDocument>> {
-    return Promise.resolve(data as any)
-  }
-  getByUID<TDocument extends PrismicDocument<Record<string, any>, string, string>, TDocumentType extends TDocument['type'] = TDocument['type']>(documentType: TDocumentType, uid: string, params?: (Partial<BuildQueryURLArgs> & { signal?: { aborted: any; addEventListener: any; removeEventListener: any; dispatchEvent: any; onabort: any; } | undefined; }) | undefined): Promise<Extract<TDocument, { type: TDocumentType; }> extends never ? TDocument : Extract<TDocument, { type: TDocumentType; }>> {
+// Re-export everything from the actual module by importing it directly
+// This works because we're in a __mocks__ directory, so we need to explicitly
+// reach into node_modules to get the real package
+export * from "../../../node_modules/@prismicio/client/dist/index.js";
+
+// NOTE: Not yet updated to match the latest API
+type SharedType = typeof articles[number]|typeof faqs[number];
+class MockClient implements Pick<Client, "getByUID"|"getAllByType"> {
+  getByUID(documentType: string, uid: string, options?: {lang?: string}) {
     return Promise.resolve(
-      data.results.find(r => r.uid === uid) as any
+      getData(documentType, options?.lang).find(r => r.uid === uid) as any
+    );
+  }
+  getAllByType(documentType: string, options?: {lang?: string}) {
+    return Promise.resolve(
+      getData(documentType, options?.lang) as any
     );
   }
 }
 
-export const createClient = () => new MockClient();
+const filterData = (data: SharedType[], lang = "en-ca") =>
+  lang == '*'
+    ? data
+    : data.filter(r => r.lang === lang);
+
+const getData = (documentType: string, lang = "en-ca") => {
+  switch (documentType) {
+    case "article":
+      return filterData(articles as SharedType[], lang);
+    case "faq":
+      return filterData(faqs as SharedType[], lang);
+    default:
+      throw new Error(`Unsupported Prismic document type in mock: ${documentType}`);
+  }
+}
+
+export function createClient() {
+  return new MockClient() as unknown as Client;
+}

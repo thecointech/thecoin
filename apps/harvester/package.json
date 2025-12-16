@@ -4,7 +4,7 @@
   "private": true,
   "description": "Automatically harvest TheCoin",
   "main": ".webpack/main",
-  "type": "commonjs",
+  "type": "module",
   "config": {
     "forge": "config/forge.config.mjs"
   },

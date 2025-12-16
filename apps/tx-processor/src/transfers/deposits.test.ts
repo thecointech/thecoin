@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { init } from '@thecointech/firestore';
-import { ConnectContract } from '@thecointech/contract-core';
+import { ContractCore } from '@thecointech/contract-core';
 import { ETransferErrorCode } from '@thecointech/bank-interface';
 import { getSigner } from '@thecointech/signers';
 import { BuyActionContainer } from '@thecointech/tx-statemachine';
@@ -41,7 +41,7 @@ it("Can complete deposits", async () => {
   await initialize("{}");
 
   const brokerCad = await getSigner("BrokerCAD");
-  const theContract = await ConnectContract(brokerCad);
+  const theContract = await ContractCore.connect(brokerCad);
   const bank = await RbcApi.create();
 
   // We have 5 deposits, and

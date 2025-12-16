@@ -1,6 +1,5 @@
-
 import { getSigner } from '@thecointech/signers';
-import { ConnectContract } from '@thecointech/contract-core';
+import { ContractCore } from '@thecointech/contract-core';
 import { SendMail } from '@thecointech/email';
 import { log } from '@thecointech/logging';
 import { ManagedNonceSigner } from './ManagedNonceSigner';
@@ -10,7 +9,7 @@ const walletName = 'BrokerTransferAssistant';
 export const GetWallet = () => getSigner(walletName);
 export const GetContract = async () => {
   const signer = await getNonceSafeSigner();
-  return await ConnectContract(signer);
+  return await ContractCore.connect(signer);
 }
 
 // let signerPromise: Promise<Signer> | null = null;
@@ -19,7 +18,7 @@ async function getNonceSafeSigner() {
     // signerPromise = new Promise<Signer>(async resolve => {
       const signer = await GetWallet();
       // The NonceManager is not recognized as a wallet,
-      // and the ConnectContract call checks other signers
+      // and the ContractCore.connect call checks other signers
       // are connected to the same network as the contract
       // const connected = process.env.CONFIG_NAME === "devlive"
       //   ? signer

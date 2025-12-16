@@ -1,20 +1,20 @@
 import hre from 'hardhat';
 import { getSigner } from '@thecointech/signers';
-import { connectNFT } from '../src/connect';
+import { ContractNFT } from '../src/contract';
 import { getTokenClaimCode, getTokenClaimSig } from '../src/tokenCodes';
 import { writeFileSync } from 'fs';
 import { log } from '@thecointech/logging';
 
-const network = "polygon"; //hre.network.name;
+const network = "POLYGON"; //hre.network.name;
 const config = process.env.CONFIG_NAME ?? "development";
-const mintTestTokens = config === 'devlive' || (network == 'polygon' || config === 'prodtest');
+const mintTestTokens = config === 'devlive' || (network == 'POLYGON' || config === 'prodtest');
 if (!mintTestTokens)
   process.exit(0);
 
 log.info("Minting test tokens");
 const minter = await getSigner("NFTMinter");
 const minterAddress = await minter.getAddress();
-const nft = await connectNFT(minter);
+const nft = await ContractNFT.connect(minter, network);
 
 // Mint 10 NFT's from 10-20 and print out a claim code for each
 const ids = [0];

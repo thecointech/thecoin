@@ -12,7 +12,7 @@ import { Outlet } from 'react-router';
 import { MainNavigation } from 'containers/MainNavigation';
 import { Footer } from 'components/Footer';
 import { MainPageTransition } from '@thecointech/site-base/components/MainPageTransition';
-import { FxRateReducer } from '@thecointech/shared/containers/FxRate/reducer';
+import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
 import { MediaContextProvider, mediaStyles } from '@thecointech/media-context';
 import { useSidebar } from '../Sidebar';
 import { init } from './init'

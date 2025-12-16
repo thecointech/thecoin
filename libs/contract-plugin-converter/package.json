@@ -44,7 +44,7 @@
   ],
   "exports": {
     ".": {
-      "development": "./build/converter_mocked.js",
+      "development": "./mocks/converter_mocked.ts",
       "electron": "./build/index.js",
       "default": "./build/index.js"
     }

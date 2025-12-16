@@ -1,10 +1,11 @@
 import React from "react";
 import { Grid, Header } from "semantic-ui-react";
-import { Link } from "@thecointech/shared";
 import { defineMessages, FormattedMessage } from "react-intl";
-import { PrismicRichText, PrismicText } from "@prismicio/react";
-import type { PrismicDocument } from '@prismicio/types';
+import { PrismicText } from "@prismicio/react";
 import styles from "./styles.module.less";
+import type { ArticleDocument } from "@thecointech/site-prismic/types";
+import { useNavigate } from "react-router";
+import { RichText } from "@thecointech/site-prismic/components";
 
 const translations = defineMessages({
   link : {
@@ -12,23 +13,43 @@ const translations = defineMessages({
       description: 'site.blog.articleLink: Link to access article page in blog'}
   });
 
-export const ArticleItem = ({ uid, data }: PrismicDocument) => {
+export const ArticleItem = ({ uid, data }: ArticleDocument) => {
   const url = `/blog/${uid}`;
+  const navigate = useNavigate();
   return (
-    <div className={`${styles.articleLine} x6spaceBefore x6spaceAfter`} >
+    <div
+      className={`${styles.articleLine}`}
+      role="link"
+      onClick={() => navigate(url)}
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          navigate(url);
+        }
+      }}
+    >
       <Grid stackable columns='equal' className={`${styles.articleLineContainer}`}>
         <Grid.Row>
           <Grid.Column>
-            <img src={ data.thumbnail.url} alt={data.thumbnail.alt} />
+            {
+              data.thumbnail?.url
+                ? <img
+                    src={ data.thumbnail.url }
+                    alt={data.thumbnail.alt ?? ""}
+                    loading="lazy"
+                  />
+                : undefined
+            }
           </Grid.Column>
           <Grid.Column>
             <div className={`${styles.text}`}>
               <Header as={"h4"}>
                 <PrismicText field={data.title} />
               </Header>
-              <PrismicRichText field={data.content} />
+              <RichText field={data.short_content || data.content} />
             </div>
-            <Link to={url}><FormattedMessage {...translations.link} /></Link>
+            <div className={styles.link}><FormattedMessage {...translations.link} /></div>
           </Grid.Column>
         </Grid.Row>
       </Grid>

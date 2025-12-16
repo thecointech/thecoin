@@ -21,19 +21,19 @@
     "clean": "run -T rimraf ./build && run -T rimraf ./coverage"
   },
   "files": [
-    "build/**/*"
+    "src/**/*"
   ],
   "exports": {
-    "./webpack/*": "./build/webpack/*.js",
-    "./types/*": "./build/types/*.d.ts"
+    "./webpack/*": "./src/webpack/*.ts",
+    "./types/*": "./src/types/*.ts"
   },
   "typesVersions": {
     "*": {
       "webpack/*": [
-        "./build/webpack/*.d.ts"
+        "./src/webpack/*.ts"
       ],
       "types/*": [
-        "./build/types/*.d.ts"
+        "./src/types/*.ts"
       ]
     }
   },

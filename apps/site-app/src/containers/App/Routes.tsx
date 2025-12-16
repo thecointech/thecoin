@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate, type RouteObject } from 'react-router';
 import { AuthLayout } from '@thecointech/shared/containers/AuthLayout';
-import { GAuth } from '@thecointech/site-base/containers/AddAccount/Storage/GDrive/gauth';
+import { GAuth } from '@thecointech/site-base/containers/AddAccount/Storage/GDrive';
 import { routes as AddAccountRoutes } from '@thecointech/site-base/containers/AddAccount';
 import { Congratulations } from '@thecointech/site-base/containers/AddAccount/Congratulations';
 import { MakePayments } from '../MakePayments';
