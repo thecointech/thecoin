@@ -38,10 +38,7 @@
     "./internal/server": "./internal/server/index.ts",
     "./internal/build": "./internal/build.ts",
     "./jest.config": "./jest.config.js",
-    "./*": [
-      "./build/*.js",
-      "./build/*/index.js"
-    ]
+    "./*": "./build/*/index.js"
   },
   "typesVersions": {
     "*": {
@@ -52,8 +49,7 @@
         "internal/server/index.ts"
       ],
       "*": [
-        "build/*.d.ts",
-        "build/*/index.d.ts"
+        "./build/*/index.d.ts"
       ]
     }
   },

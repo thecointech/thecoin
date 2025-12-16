@@ -48,7 +48,7 @@
     "@tsoa/runtime": "6.2.0",
     "axios": "1.6.5",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
+    "express": "^4.22.0",
     "helmet": "^4.6.0",
     "image-type": "^5.0.0",
     "luxon": "3.3.0",

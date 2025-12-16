@@ -54,7 +54,8 @@
       "devlive": "./build/web/local/index.js",
       "default": "./build/web/remote/index.js"
     },
-    "./Erc20Provider/web": "./build/web/remote/index.js"
+    "./Erc20Provider/web": "./build/web/remote/index.js",
+    "./errors": "./build/errors.js"
   },
   "types": "./build/index.d.ts",
   "typesVersions": {
@@ -67,6 +68,9 @@
       ],
       "infura": [
         "build/node/remote.d.ts"
+      ],
+      "errors": [
+        "build/errors.d.ts"
       ]
     }
   },

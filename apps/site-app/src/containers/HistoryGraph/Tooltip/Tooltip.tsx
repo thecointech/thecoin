@@ -1,5 +1,5 @@
 import React from "react";
-import { TxDatum } from "@thecointech/shared/components/GraphTxHistory/types";
+import type { TxDatum } from "@thecointech/shared/components/GraphTxHistory";
 import styles from './styles.module.less';
 import { Table } from "semantic-ui-react";
 import { Currency } from "@thecointech/site-base/components/Currency";
