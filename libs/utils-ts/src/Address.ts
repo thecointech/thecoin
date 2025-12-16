@@ -3,6 +3,7 @@ import base32 from 'base32';
 import { sign } from "./SignedMessages";
 import { solidityPackedKeccak256, type Signer, getBytes, isAddress } from 'ethers';
 
+
 export function IsValidAddress(address: string) {
 	return /^(0x)?[a-fA-F0-9]{40}$/.test(address);
 }

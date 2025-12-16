@@ -167,6 +167,10 @@
     "defaultMessage": "An ethereum address",
     "description": "shared.uxaddress.address.error: Error Message for the address field in make a payment / coin transfer"
   },
+  "qwUyC1": {
+    "defaultMessage": "YYYY-MM-DD",
+    "description": "Default placeholder for date feild"
+  },
   "r8PHp4": {
     "defaultMessage": "Recent Operations",
     "description": "shared.balance.title: Title for the congratulations page"
@@ -195,6 +199,10 @@
     "defaultMessage": "Hide Password",
     "description": "Label for toggle hiding password in input"
   },
+  "wORPLv": {
+    "defaultMessage": "Date",
+    "description": "Default label for date field"
+  },
   "y+kks9": {
     "defaultMessage": "strong",
     "description": "Password complexity indicator"
@@ -206,6 +214,10 @@
   "yrJmTB": {
     "defaultMessage": "Wallet Password",
     "description": "shared.login.placeholder.wallet: PLaceholder for the Passford field in the create account form"
+  },
+  "zUx4wR": {
+    "defaultMessage": "Dates must be in the format YYYY-MM-DD",
+    "description": "Default placeholder for date feild"
   },
   "zlzBIp": {
     "defaultMessage": "Must be larger than {min}",

@@ -1,8 +1,11 @@
 import type { StorybookConfig } from '@storybook/react-webpack5';
 import path from 'path';
-import { DefinePlugin, RuleSetRule } from 'webpack';
+import webpack from 'webpack';
 import { AbsolutePathRemapper } from '@thecointech/storybook-abs-paths';
 import { merge } from "webpack-merge";
+import { getEnvVars } from '@thecointech/setenv';
+import { getMocks } from '@thecointech/setenv/webpack';
+import { DynamicAliasPlugin } from '@thecointech/setenv/webpack';
 
 const rootFolder = path.join(__dirname, '..');
 const mocksFolder = path.join(rootFolder, 'libs', '__mocks__');
@@ -10,10 +13,16 @@ const mocksFolder = path.join(rootFolder, 'libs', '__mocks__');
 const getAbsolutePath = (packageName: string) =>
   path.dirname(require.resolve(path.join(packageName, 'package.json')));
 
-const config: StorybookConfig = {
+const envVarsRaw = {
+  ...getEnvVars("development"),
+  LOG_LEVEL: 0,
+  LOG_NAME: "storybook",
+  WALLET_CeramicValidator_DID: "did:ethr:0x1234567890123456789012345678901234567890",
+}
+const envVars = Object.entries(envVarsRaw).map(([k, v]) => [`process.env.${k}`, JSON.stringify(v)]);
 
+const config: StorybookConfig = {
   stories: [
-    "../stories/**/*.stories.mdx",
     "../stories/**/*.stories.@(ts|tsx)",
     "../libs/*/!(node_modules)/**/*.stories.@(js|jsx|ts|tsx)",
     "../apps/*/!(node_modules)/**/*.stories.@(js|jsx|ts|tsx)",
@@ -21,15 +30,25 @@ const config: StorybookConfig = {
 
   addons: [
     getAbsolutePath("@storybook/addon-links"),
-    getAbsolutePath("@storybook/addon-essentials"),
-    getAbsolutePath("storybook-addon-intl"),
+    getAbsolutePath("storybook-react-intl"),
+    getAbsolutePath("@storybook/addon-webpack5-compiler-babel"),
+    getAbsolutePath("@storybook/addon-docs")
   ],
 
   webpackFinal: async (config) => {
     //@ts-ignore
     const shared_loaders = await import('@thecointech/site-semantic-theme/webpack.less');
 
+    // test imports jest-specific code, eg mocks
+    if (config.resolve?.conditionNames) {
+      config.resolve.conditionNames = config.resolve.conditionNames.filter(name => name != 'test');
+    }
+
     const r = merge(
+      getMocks({
+        CONFIG_NAME: "development",
+        NODE_ENV: "development",
+      }),
       {
         module: {
           rules: [
@@ -44,12 +63,11 @@ const config: StorybookConfig = {
           ]
         },
         plugins: [
-          new DefinePlugin({ // Log Everything
-            "process.env.LOG_NAME": JSON.stringify("Storybook"),
-            "process.env.LOG_LEVEL": 0,
+          new webpack.DefinePlugin({ // Log Everything
+            ...Object.fromEntries(envVars),
             "BROWSER": true,
           }),
-          new AbsolutePathRemapper()
+          new AbsolutePathRemapper(),
         ],
         experiments: {
           topLevelAwait: true,
@@ -59,8 +77,11 @@ const config: StorybookConfig = {
             "fs": false,
             "path": false,
             "http": false,
+            "@jest/globals": false,
           },
           modules: [mocksFolder],
+          conditionNames: ['development', 'browser', 'import', 'default'],
+          plugins: [new DynamicAliasPlugin()],
         },
       },
       config);
@@ -70,7 +91,7 @@ const config: StorybookConfig = {
     //@ts-ignore
     const babelRule = r.module?.rules?.find(rule => rule?.include?.includes?.(rootFolder));
     if (babelRule) {
-      (babelRule as RuleSetRule).exclude = /(node_modules)|(build)/
+      (babelRule as webpack.RuleSetRule).exclude = /(node_modules)|(build)|(\.(test|spec)\.(ts|tsx|js|jsx)$)/
     }
     return r;
   },
@@ -80,8 +101,10 @@ const config: StorybookConfig = {
     options: {}
   },
 
-  docs: {
-    autodocs: true
+  docs: {},
+
+  typescript: {
+    reactDocgen: "react-docgen-typescript"
   }
 }
 

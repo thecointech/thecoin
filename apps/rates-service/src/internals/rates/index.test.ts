@@ -1,9 +1,8 @@
 
-import { CoinRate } from "./types";
+import { CoinRate, FXRate } from "./types";
 import { updateLatest } from "./latest";
 import { getCombinedRates } from '.';
 import { log } from '@thecointech/logging';
-import { FXRate } from '@thecointech/pricing';
 
 it('can get combined rates', async () => {
   // disable logging

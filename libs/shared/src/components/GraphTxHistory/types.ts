@@ -1,8 +1,8 @@
-import { Datum, Point, PointTooltipProps} from "@nivo/line";
-import { Transaction } from "@thecointech/tx-blockchain";
-//import { FXRate } from "containers/FxRate/types";
+import type { LineSvgProps, Point, PointTooltipProps} from "@nivo/line";
+import type { Transaction } from "@thecointech/tx-blockchain";
 
-export interface TxDatum extends Datum {
+export interface TxDatum {
+  x: Date;
   y: number;  // Y is the final value,
   raw: number; // raw is the balance prior to plugins
   costBasis: number;
@@ -10,11 +10,19 @@ export interface TxDatum extends Datum {
   txs: Transaction[],
 }
 
-type PointData = Point["data"];
-interface TxPoint extends Point {
+export type TxSeries = {
+  id: string,
+  data: TxDatum[]
+}
+
+export type LineProps = LineSvgProps<TxSeries>;
+
+
+type PointData = Point<TxSeries>["data"];
+interface TxPoint extends Point<TxSeries> {
   data: PointData & TxDatum;
 }
-export interface TooltipWidgetProps extends PointTooltipProps {
+export interface TooltipWidgetProps extends PointTooltipProps<TxSeries> {
   point: TxPoint
 }
 

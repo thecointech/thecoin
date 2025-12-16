@@ -10,7 +10,7 @@ import type { BaseASTNode, ContractDefinition, FunctionDefinition, StateVariable
 import type { ContractState, PluginBalanceMod } from './types';
 import { getPluginLogs, updateState } from './logs';
 import { log } from '@thecointech/logging';
-import { AddressLike } from 'ethers';
+import type { AddressLike } from 'ethers';
 
 const RETURN_KEY = "__$return";
 

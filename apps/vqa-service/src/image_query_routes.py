@@ -24,11 +24,11 @@ async def process_image_query(image: UploadFile, prompt: str, json_description: 
         if (json_description):
             prompt = f"{prompt} {request_json} {json_description}"
         response = runQueryRaw(qimage, prompt, 1000)
-        if (json_description):
-            response = tryConvertToJSON(response)
-            position_to_pixels(response, crop)
-            return JSONResponse(content=response)
-        else:
+        try:
+            asJson = tryConvertToJSON(response)
+            position_to_pixels(asJson, crop)
+            return JSONResponse(content=asJson)
+        except:
             return JSONResponse(content=dict(result=response))
 
     except Exception as e:

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 import styles from './styles.module.less';
 import { Grid } from 'semantic-ui-react';
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Story, Meta } from '@storybook/react';
-import { DurationButtons, Duration } from '.';
+import { StoryFn, Meta } from '@storybook/react-webpack5';
+import { DurationButtons } from '.';
+import { DateTime } from 'luxon';
 
 export default {
   title: 'App/DurationButtons',
@@ -15,9 +16,10 @@ export default {
   },
 } as Meta;
 
-const template: Story<{text: string}> = () => {
-  const [duration, setDuration] = useState(31 as Duration)
-  return <DurationButtons duration={duration} setDuration={setDuration} />;
+const template: StoryFn<{text: string}> = () => {
+  const [fromDate, setFromDate] = useState(DateTime.local());
+  const [toDate, setToDate] = useState(DateTime.local());
+  return <DurationButtons fromDate={[fromDate, setFromDate]} toDate={[toDate, setToDate]} />;
 }
 
 export const Default = template.bind({});

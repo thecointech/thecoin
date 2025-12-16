@@ -5,12 +5,12 @@ import io
 # as the isinstance check will fail with this type
 from starlette.datastructures import UploadFile
 from query import runQueryToJson
-from typing import TypeVar, Union
+from typing import TypeVar, Union, Type
 from geo_math import BBox
 
 T = TypeVar('T')
 # type QueryData = tuple[str, Type[T]] # Can we update to Python 3.12?
-async def run_endpoint_query(image: Union[UploadFile, Image.Image], data: tuple[str, T], crop: BBox = None) -> T:
+async def run_endpoint_query(image: Union[UploadFile, Image.Image], data: tuple[str, Type[T]], crop: BBox|None = None) -> T:
 
     (image, crop) = await get_image(image, crop)
     # Run query with PIL Image
@@ -28,7 +28,7 @@ async def run_endpoint_query(image: Union[UploadFile, Image.Image], data: tuple[
         raise e
 
 
-async def get_image(image: Union[UploadFile, Image.Image], crop: BBox=None) -> tuple[Image.Image, BBox]:
+async def get_image(image: Union[UploadFile, Image.Image], crop: BBox|None=None) -> tuple[Image.Image, BBox]:
         # If image is UploadFile, convert to PIL Image
     if isinstance(image, UploadFile):
         # read image data
@@ -36,7 +36,7 @@ async def get_image(image: Union[UploadFile, Image.Image], crop: BBox=None) -> t
         image = Image.open(io.BytesIO(image_data))
 
     (left, top, right, bottom) = (0, 0, image.width, image.height)
-    
+
         # If crop is provided, crop the image
     if crop is not None:
         left = crop.left

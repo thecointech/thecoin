@@ -26,10 +26,19 @@ const f = async () => {
       globalVars: modifyVars,
     })
 
+
+    const fixedCss = css
+      // Fix semantic-ui-less bug: replace invalid :ActiveHover pseudo-class with :active:hover
+      // see https://github.com/Semantic-Org/Semantic-UI/issues/5908
+      .replace(/:ActiveHover/g, ':active:hover')
+      // Fix semantic-ui-less bug: remove invalid descendant selectors after pseudo-elements
+      // Pseudo-elements cannot have descendant selectors
+      .replace(/(\[data-tooltip\]\[data-inverted\]:after) \.header \{/g, '$1 {');
+
     if (!fs.existsSync(outputFolder))
       fs.mkdirSync(outputFolder);
 
-    fs.writeFileSync(outputFilename, css);
+    fs.writeFileSync(outputFilename, fixedCss);
     console.log("CSS written to " + outputFilename);
 
     // Copy other files
@@ -49,5 +58,3 @@ const f = async () => {
   }
 };
 f();
-
-

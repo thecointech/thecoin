@@ -1,5 +1,5 @@
 import React from 'react';
-import { Story, Meta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react-webpack5';
 
 import { Input, InputProps } from 'semantic-ui-react';
 import "@thecointech/site-semantic-theme/semantic.less"
@@ -14,7 +14,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story<InputProps> = (args) => <Input {...args} />;
+const Template: StoryFn<InputProps> = (args) => <Input {...args} />;
 
 export const InputField = Template.bind({});
 InputField.args = {

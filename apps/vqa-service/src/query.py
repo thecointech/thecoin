@@ -4,8 +4,11 @@ from transformers import GenerationConfig
 import json
 import re
 from timeit import default_timer as timer
-from singleton import get_model, get_processor
+from singleton import get_model, get_processor, device_map
 from helpers import get_instruct_json_respose
+from logger import setup_logger
+
+logger = setup_logger(__name__)
 
 def runQueryRaw(image, prompt, max_length=200) -> str:
     start = timer()
@@ -29,7 +32,7 @@ def runQueryRaw(image, prompt, max_length=200) -> str:
         if image is not None:
             inputs["images"] = inputs["images"].to(torch.bfloat16)
 
-        with torch.autocast(device_type="cuda", enabled=True, dtype=torch.bfloat16):
+        with torch.autocast(device_type=device_map, enabled=True, dtype=torch.bfloat16):
             output = model.generate_from_batch(
                 inputs,
                 GenerationConfig(max_new_tokens=max_length, stop_strings="<|endoftext|>"),
@@ -68,6 +71,14 @@ def runQueryToJson(image: Image, query_data: tuple[str, type], max_length=200):
 
 def tryConvertToJSON(response):
     # Parse the generated text as JSON
+
+    # First, try and work through the weird bug that injects "!"
+    # characters throughout the response.
+    # if (torch.__version__.startswith("2.6.0+rocm6.4.1")):
+    #     response = re.sub(r'\"\!([a-zA-Z0-9_]+)\":', '"\\1":', response)
+    # else:
+    #     logger.warning("UNTESTED TORCH VERSION: " + torch.__version__ + " - not filtering tokens")
+
     try:
         return json.loads(response)
     except json.JSONDecodeError as e:

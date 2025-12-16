@@ -1,14 +1,14 @@
-import { AnyAction, getIncompleteActions, isType } from '@thecointech/broker-db';
-import { TheCoin } from '@thecointech/contract-core';
-import { RbcApi } from '@thecointech/rbcapi';
+import { type AnyAction, getIncompleteActions, isType } from '@thecointech/broker-db';
+import type { TheCoin } from '@thecointech/contract-core';
+import type { RbcApi } from '@thecointech/rbcapi';
 import { Processor as BillProcessor } from '@thecointech/tx-bill';
 import { Processor as PluginProcessor } from '@thecointech/tx-plugins';
 import { Processor as WithdrawalProcessor } from '@thecointech/tx-etransfer';
-import { AnyActionContainer, getCurrentState } from '@thecointech/tx-statemachine';
+import { queryNewDepositEmails } from '@thecointech/tx-gmail';
+import { type AnyActionContainer, getCurrentState } from '@thecointech/tx-statemachine';
 import { log } from '@thecointech/logging';
-import gmail from '@thecointech/tx-gmail';
 import { getBuyETransferAction, eTransferProcessor as DepositProcessor } from '@thecointech/tx-deposit';
-import { AnyTransfer } from '@thecointech/types';
+import type { AnyTransfer } from '@thecointech/types';
 import { isUberTransfer } from '@thecointech/utilities/UberTransfer'
 
 type DatedAction = AnyAction & { executeDate: number };
@@ -46,7 +46,6 @@ async function fetchTransfers() {
   allActions.sort((a, b) => a.executeDate - b.executeDate);
   return allActions;
 }
-
 
 export async function processActions(allActions: DatedAction[], tcCore: TheCoin, bank: RbcApi) {
   const r: AnyActionContainer[] = [];
@@ -120,7 +119,7 @@ async function processAction(action: DatedAction, tcCore: TheCoin, bank: RbcApi)
 async function getAllPurchaseActions() {
   let incomplete = await getIncompleteActions("Buy");
 
-  const raw = await gmail.queryNewDepositEmails();
+  const raw = await queryNewDepositEmails();
 
   let purchases = [];
 
