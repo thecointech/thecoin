@@ -8,7 +8,9 @@
       "name": "App - Development",
       "request": "launch",
       "runtimeArgs": [
-        "dev"
+        "dev",
+        // "--", // Add "--clean-start" to skip seeding dev db
+        "-- --clean-start"
       ],
       "runtimeExecutable": "yarn",
       "skipFiles": [
@@ -23,7 +25,7 @@
       "type": "node",
       "request": "launch",
       "runtimeArgs": [
-        "dev:live"
+        "_dev:live"
       ],
       "runtimeExecutable": "yarn",
       "skipFiles": [
@@ -46,6 +48,7 @@
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
       "env": {
+        "NODE_ENV": "development",
         "HARVESTER_ALLOW_OVERRIDES": "true",
         "NOTIFY_ON_MODAL_ENCOUNTER": "true",
       }
@@ -64,12 +67,14 @@
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
       "env": {
+        "NODE_ENV": "development",
         "HARVESTER_ALLOW_OVERRIDES": "true",
         "NOTIFY_ON_MODAL_ENCOUNTER": "true",
         "DO_NOT_SEND_ETRANSFER": "true",
-        // "HARVESTER_DRY_RUN": "true",
-        // "HARVESTER_OVERRIDE_CHQ_BALANCE": "9000",
-        // "HARVESTER_OVERRIDE_VISA_BALANCE": "{\"balance\":\"7699.11\",\"dueDate\":\"2024-04-12T00:00:00.000-05:00\",\"dueAmount\":\"4986.59\",\"history\":[]}",
+        "HARVESTER_VERBOSE_AGENT": "true",
+        "HARVESTER_DRY_RUN": "true",
+        "HARVESTER_OVERRIDE_CHQ_BALANCE": "9000",
+        "HARVESTER_OVERRIDE_VISA_BALANCE": "{\"balance\":\"7699.11\",\"dueDate\":\"2024-04-12T00:00:00.000-05:00\",\"dueAmount\":\"4986.59\",\"history\":[]}",
       }
     },
     {
@@ -88,11 +93,13 @@
       "env": {
         "NODE_ENV": "development",
         "CONFIG_NAME": "prodbeta",
+        // Required as "yarn _start" does not include this flag
+        "ELECTRON_DISABLE_SANDBOX": "true",
+        "HARVESTER_DEBUG_LIVE": "true",
+        "HARVESTER_ENABLE_CONFIG_EXPORT": "true",
         "HARVESTER_ALLOW_OVERRIDES": "true",
         "NOTIFY_ON_MODAL_ENCOUNTER": "true",
-        // "HARVESTER_DRY_RUN": "true",
-        // "HARVESTER_OVERRIDE_CHQ_BALANCE": "9000",
-        // "HARVESTER_OVERRIDE_VISA_BALANCE": "{\"balance\":\"7699.11\",\"dueDate\":\"2024-04-12T00:00:00.000-05:00\",\"dueAmount\":\"4986.59\",\"history\":[]}",
+        "HARVESTER_VERBOSE_AGENT": "true",
       }
     },
     {
@@ -108,8 +115,6 @@
         "--harvest",
       ],
       "env": {
-        // Breakpoints don't seem to be hit on startup, but the `debugger` statement does
-        "BREAK_ON_STARTUP": "true",
         "NODE_ENV": "development",
         // "RUN_SCRAPER_HEADLESS": "false",
         "CONFIG_NAME": "prodbeta",
@@ -136,11 +141,8 @@
         "--harvest",
       ],
       "env": {
-        // Breakpoints don't seem to be hit on startup, but the `debugger` statement does
-        "BREAK_ON_STARTUP": "true",
         "RUN_SCRAPER_HEADLESS": "false",
         "CONFIG_NAME": "prodtest",
-
         "HARVESTER_DRY_RUN": "true",
       },
 
@@ -160,7 +162,6 @@
         "--harvest",
       ],
       "env": {
-        "BREAK_ON_STARTUP": "true",
         "HARVESTER_PROFILE_FOLDER": "${workspaceFolder}/profile",
         "CONFIG_NAME": "devlive",
       },
@@ -168,5 +169,24 @@
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal"
     },
+    {
+      "type": "node",
+      "name": "vscode-jest-tests.v2",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "yarn",
+      "smartStep": false,
+      "args": [
+        "test",
+        "--watchAll=false",
+        "--testNamePattern",
+        "${jest.testNamePattern}",
+        "--runTestsByPath",
+        "${jest.testFile}"
+      ],
+      "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }"
+    }
   ]
 }

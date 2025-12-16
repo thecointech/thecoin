@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connectNFT } from '@thecointech/contract-nft';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { log } from '@thecointech/logging';
 import { defineMessage, useIntl } from 'react-intl';
 import { Select } from 'semantic-ui-react';

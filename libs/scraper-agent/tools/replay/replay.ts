@@ -3,8 +3,9 @@ import { getConfig } from "../config";
 import { init } from "../init";
 import { getReplayEvents } from "../../src/replay/events";
 import { readFileSync } from "fs";
-import { IScraperCallbacks, replay, setupScraper } from "@thecointech/scraper";
-import { maybeCloseModal } from "../../src/modal";
+import { IReplayCallbacks, replay, setupScraper } from "@thecointech/scraper";
+
+// Replay previous run events
 
 const { baseFolder, config } = getConfig();
 await init();
@@ -20,14 +21,14 @@ const allEvents = JSON.parse(replayScript);
 const replayEvents = getReplayEvents(allEvents, "chqETransfer");
 
 let _hasSetDynamicInput = false;
-const callbacks: IScraperCallbacks = {
+const callbacks: IReplayCallbacks = {
 
-  onError: async (page, err) => {
-    if (await maybeCloseModal(page)) {
-      return true;
-    }
+  onError: async (_params) => {
+    // if (await maybeCloseModal(page)) {
+    //   return true;
+    // }
     // log.error(err);
-    return false;
+    return undefined;
   },
   onProgress: (progress) => {
     // log.info(`Progress: ${progress.stage} - ${progress.stepPercent}%`);
@@ -45,5 +46,5 @@ setupScraper({
   rootFolder: baseFolder,
   isVisible: async () => true
 });
-const r = await replay({ name: "TestReplay" }, replayEvents, callbacks, { amount: "10" });
+const r = await replay({ name: "TestReplay", events: replayEvents, callbacks, dynamicValues: { amount: "10" } });
 

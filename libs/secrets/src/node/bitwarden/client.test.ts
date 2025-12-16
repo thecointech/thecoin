@@ -6,7 +6,7 @@ const mockAuth = {
 const mockBitwardenClient = jest.fn().mockImplementation(() => ({
   auth: () => mockAuth,
   projects: () => ({
-    list: jest.fn<any>().mockResolvedValue({ data: [{ name: "test"}] })
+    list: jest.fn<any>().mockResolvedValue({ data: [{ name: "development"}] })
   }),
   secrets: () => ({
     list: jest.fn<any>().mockResolvedValue({ data: [] })
@@ -22,7 +22,7 @@ jest.unstable_mockModule('@bitwarden/sdk-napi', () => ({
 }));
 jest.unstable_mockModule('fs', () => ({
   existsSync: jest.fn<any>().mockReturnValue(true),
-  readFileSync: jest.fn<any>().mockReturnValue(`ORGANIZATION_ID=${expectedOrgId}\nBWS_ACCESS_TOKEN=${expectedAccessToken}\nBWS_STATE_FILE=${expectedStateFile}`)
+  readFileSync: jest.fn<any>().mockReturnValue(`BWS_ORGANIZATION_ID=${expectedOrgId}\nBWS_ACCESS_TOKEN=${expectedAccessToken}\nBWS_STATE_FILE=${expectedStateFile}`)
 }));
 
 const { getClient } = await import('./client');
@@ -34,7 +34,7 @@ describe("verify created client", () => {
     process.env = {
       ...originalEnv,
       THECOIN_SECRETS: ".",
-      CONFIG_NAME: "test"
+      CONFIG_NAME: "development"
     };
     global.__tc_secretClient = undefined;
     mockAuth.loginAccessToken.mockClear();

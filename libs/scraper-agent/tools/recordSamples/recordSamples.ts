@@ -1,13 +1,12 @@
-import { Recorder, Registry } from "@thecointech/scraper/record";
 import { init } from "../init";
 import { getConfig } from "../config";
-import { TestSerializer } from "./testSerializer";
+import { AgentSerializer } from "@/agentSerializer";
 import { getAllElements } from "@thecointech/scraper/elements";
 import { mkdirSync } from "fs";
 import path from "path";
 import { AskUserConsole } from "./askUserConsole";
-import { PageHandler } from "../../src/pageHandler";
-import { getCoordsWithMargin, mapInputToParent } from "../../src/elementUtils";
+import { getCoordsWithMargin, mapInputToParent } from "@/elementUtils";
+import { Agent } from "@/agent";
 
 await init();
 const { baseFolder } = getConfig();
@@ -17,18 +16,9 @@ mkdirSync(recordFolder, { recursive: true });
 
 const target = process.argv[2] ?? "Target";
 using askUser = new AskUserConsole();
-
-let numScreenshots = 1;
-const writer = new TestSerializer({ baseFolder, target });
-
-await using page = await PageHandler.create(target, "", writer);
-// const newSC = async (hint: string) => {
-//   writer.source = (numScreenshots++).toString() + (hint ? `-${hint}` : "");
-//   await writer.writeScreenshot(page, testState, true);
-// }
-// const writeJson = async (data: any, name: string) => {
-//   writer.writeJson(data, { ...testState, name });
-// }
+const writer = new AgentSerializer({ recordFolder, target, skipSections: [] });
+await using agent = await Agent.create(target, askUser);
+const page = agent.page;
 
 let recordMore = true;
 while (recordMore) {
@@ -59,7 +49,7 @@ while (recordMore) {
         const intent = await page.getPageIntent();
         // Save out the inferred intent when loading the page
         // (This may be different from the stated intent)
-        writer.logJson(undefined, "intent", {
+        writer.logJson("intent", {
           intent,
           title: page.title(),
         });
@@ -67,7 +57,7 @@ while (recordMore) {
       }
     case "DumpLinks":
       const allLinks = await page.page.$$eval('a', (links) => links.map((link) => link.innerText));
-      writer.logJson(undefined, "links", allLinks);
+      writer.logJson("links", allLinks);
       break;
     case "HighlightInputs":
       {
@@ -79,20 +69,23 @@ while (recordMore) {
         // const parentData = await page.evaluate(getCoordsWithMargin, ...parents);
         const parentCoords = await Promise.all(parents.map(p => page.page.evaluate(getCoordsWithMargin, p)));
         const intent = await page.getPageIntent();
-        writer.logJson("sample", "inputs", {
+        writer.logJson("inputs", {
           elements: inputs.map(i => i.data),
           parentCoords,
         });
-        writer.logJson("sample", "intent", {
+        writer.logJson("intent", {
           title: await page.title(),
           intent,
         });
 
         break;
       }
-    case "Quit":
+    case "Quit": {
       recordMore = false;
+      const events = agent.events.allEvents;
+      await writer.logEvents(events);
       break;
+    }
   }
 }
 console.log("All Done");

@@ -25,6 +25,10 @@ function getBaseUrl() {
   let baseUrl = new URL(import.meta.url);
   while (!baseUrl.pathname.toLowerCase().endsWith('ethers-provider/')) {
     baseUrl = new URL('..', baseUrl);
+    // validity check - on windows root path is /c:/
+    if (baseUrl.pathname.length <= 4) {
+      throw new Error('Could not find ethers-provider');
+    }
   }
   return new URL("../..", baseUrl);
 }

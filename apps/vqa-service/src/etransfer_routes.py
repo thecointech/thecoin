@@ -12,12 +12,19 @@ router = APIRouter()
 
 @router.post("/best-etransfer-link", tags=["etransfer"])
 async def best_etransfer_link(links: list[str]) -> ETransferLinkResponse:
+    # Remove empty strings/duplicates
     cleaned_links = [link for link in set([p.replace("\n", " ").strip() for p in links]) if link]
+    # Running our links through `set` seems to randomize the string order
+    # This means we get different sets, thus potentially different
+    # results when running the VQA multiple times, which makes testing
+    # unstable.  Sort the links to ensure we get the same results every time
+    cleaned_links.sort()
 
     # Our VQA seems to struggle with long lists
     # segment links into max bucket of size 10
     bucket_size = 10
     reasoning = "redacted"
+    best_candidates = []
     while (len(cleaned_links) > 1):
         page_link_groups = [cleaned_links[i:i + bucket_size] for i in range(0, len(cleaned_links), bucket_size)]
         best_links = []
@@ -25,10 +32,10 @@ async def best_etransfer_link(links: list[str]) -> ETransferLinkResponse:
             result = runQueryToJson(None, get_find_etransfer_link_prompt(page_link_group))
             best_links.append(result['best_link'])
             reasoning = result['reasoning']
-
+            best_candidates.append(result['best_link'])
         cleaned_links = best_links
 
-    return ETransferLinkResponse(best_link=cleaned_links[0], reasoning=reasoning)
+    return ETransferLinkResponse(best_link=cleaned_links[0], reasoning=reasoning, best_candidates=best_candidates)
 
 
 @router.post("/detect-etransfer-stage", tags=["etransfer"])
@@ -59,10 +66,10 @@ class InputData(BaseModel):
 
 # class InputElements(BaseModel):
 #     inputs: list[InputData]
-    
-@router.post("/detect-input-types", tags=["etransfer"]) 
+
+@router.post("/detect-input-types", tags=["etransfer"])
 async def input_types(
-    image: UploadFile, 
+    image: UploadFile,
     input_elements: str = Form(...)
 ) -> list[InputType]:
 

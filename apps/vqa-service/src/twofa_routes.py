@@ -13,17 +13,17 @@ async def detect_action_required(image: UploadFile) -> TwoFactorActionRequiredRe
 
 @router.post("/twofa/detect-destinations", tags=["twofa"])
 async def detect_destinations(image: UploadFile) -> TwoFactorDestinationsResponse:
-    (image, _) = await get_image(image)
-    emails = await run_endpoint_query(image, query_2fa_email_destinations)
-    phones = await run_endpoint_query(image, query_2fa_phone_destinations)
+    (readImage, _) = await get_image(image)
+    emails = await run_endpoint_query(readImage, query_2fa_email_destinations)
+    phones = await run_endpoint_query(readImage, query_2fa_phone_destinations)
     return TwoFactorDestinationsResponse(phones=phones, emails=emails)
 
 @router.post("/twofa/get-destination-elements", tags=["twofa"])
 async def get_destination_elements(image: UploadFile, phone: str, top: float, left: float, width: float, height: float) -> TwoFactorElementsResponse:
     query = get_2fa_elements_for_phone(phone)
     box = BBox(left=left, top=top, right=left+width, bottom=top+height)
-    (image, _) = await get_image(image)
-    highlighted_image = overlay_image(image, [box])
+    (readImage, _) = await get_image(image)
+    highlighted_image = overlay_image(readImage, [box])
     return await run_endpoint_query(highlighted_image, query)
 
 @router.post("/twofa/get-auth-input", tags=["twofa"])

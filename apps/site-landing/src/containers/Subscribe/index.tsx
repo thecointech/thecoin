@@ -23,9 +23,21 @@ export const Subscribe = () => {
         </h3>
       </span>
       <span className={styles.subscribeForm}>
-        <iframe className="mj-w-res-iframe" frameBorder="0" scrolling="no" marginHeight={0} marginWidth={0} src="https://app.mailjet.com/widget/iframe/3TFt/MhQ" width="100%"></iframe>
+        <iframe
+          title="Newsletter subscription form"
+          referrerPolicy="strict-origin-when-cross-origin"
+          data-w-type="embedded"
+          src="https://x15lr.mjt.lu/wgt/x15lr/0mkp/form?c=d2c683cc"
+          width="100%"
+          style={{height: 0}}
+        />
         <Helmet>
-          <script type="text/javascript" src="https://app.mailjet.com/statics/js/iframeResizer.min.js"></script>
+          <script
+            key="mailjet-embed"
+            defer
+            type="text/javascript"
+            src="https://app.mailjet.com/pas-nc-embedded-v1.js"
+          />
         </Helmet>
       </span>
     </div>

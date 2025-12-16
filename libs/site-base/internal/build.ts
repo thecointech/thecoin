@@ -7,11 +7,13 @@ export async function build(secrets: SecretKeyType[]=[]) {
   const config = await getProdConfig(secrets);
   const compiler = webpack(config);
 
-  // Add progress plugin
-  new webpack.ProgressPlugin({
-    activeModules: true,
-    entries: true,
-  }).apply(compiler);
+  // Add progress plugin only in non-CI environments
+  if (!process.env.CI) {
+    new webpack.ProgressPlugin({
+      activeModules: true,
+      entries: true,
+    }).apply(compiler);
+  }
 
   // Run the compilation
   compiler.run((err, stats) => {

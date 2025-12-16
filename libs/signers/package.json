@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/signers",
-  "version": "0.3.11",
+  "version": "0.5.0",
   "description": "The Coin: centralized access for built-in signers.  Not for external use",
   "type": "module",
   "keywords": [
@@ -30,7 +30,7 @@
     ".": {
       "development": "./build/index_mocked.js",
       "devlive": "./build/index_devlive.js",
-      "electron": "./build/electron/index.js",
+      "electron": "./build/index_electron.js",
       "browser": {
         "default": "./build/names.js"
       },
@@ -41,17 +41,10 @@
         "prod": "./build/index_prod.js"
       }
     },
-    "./electron": {
-      "browser": "./build/electron/bridge_browser.js",
-      "node": "./build/electron/bridge_node.js"
-    },
     "./cache": "./build/cache.js"
   },
   "typesVersions": {
     "*": {
-      "electron": [
-        "build/electron/bridge_browser.d.ts"
-      ],
       "cache": [
         "build/cache.d.ts"
       ],
@@ -63,12 +56,13 @@
   "dependencies": {
     "@ethers-ext/signer-ledger": "^6.0.0-beta.1",
     "@ledgerhq/hw-transport-node-hid": "^6.28.6",
-    "@thecointech/ethers-provider": "^0.3.11",
-    "@thecointech/logging": "^0.3.11",
-    "@thecointech/secrets": "^0.3.11"
+    "@thecointech/electron-signer": "^0.5.0",
+    "@thecointech/ethers-provider": "^0.5.0",
+    "@thecointech/logging": "^0.5.0",
+    "@thecointech/secrets": "^0.5.0"
   },
   "devDependencies": {
-    "@thecointech/electron-utils": "^0.3.11"
+    "@thecointech/electron-utils": "^0.5.0"
   },
   "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

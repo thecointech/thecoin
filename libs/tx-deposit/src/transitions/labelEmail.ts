@@ -1,5 +1,5 @@
 import { log } from "@thecointech/logging";
-import gmail, { Labels } from "@thecointech/tx-gmail";
+import { setETransferLabel, type Labels } from "@thecointech/tx-gmail";
 import { BuyActionContainer, makeTransition } from "@thecointech/tx-statemachine";
 
 export const labelEmailETransfer = makeTransition<"Buy">("labelEmailETransfer", (container) =>
@@ -21,7 +21,7 @@ async function labelEmail(container: BuyActionContainer, label: Labels) {
       "Could not mark eTransfer {initialId} with eTransfer tag, missing raw data");
     return { meta: 'Tag not set' };
   }
-  await gmail.setETransferLabel(id, label);
+  await setETransferLabel(id, label);
   // No need to add anything else, all necessary data is auto-added
   return {};
 }

@@ -12,7 +12,7 @@ export const StatsArea = () => {
   const { hovered, results, percentile } = BenefitsReducer.useData();
   const selected = hovered ?? last(results);
 
-  const data = getTableData(selected?.values, percentile);
+  const data = getTableData(selected?.values!, percentile);
   const maybeFiat = (s?: SimulationState) => s ? netFiat(s) : null;
 
   return (

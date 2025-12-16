@@ -1,5 +1,5 @@
 import React from 'react';
-import { Story, Meta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react-webpack5';
 
 import { Font, FontProps } from './Font';
 
@@ -11,7 +11,7 @@ export default {
   }
 } as Meta;
 
-const Template: Story<FontProps> = (args) => <Font {...args} />;
+const Template: StoryFn<FontProps> = (args) => <Font {...args} />;
 
 export const Basic = Template.bind({});
 Basic.args = {

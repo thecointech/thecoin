@@ -31,7 +31,7 @@ For production builds, secrets need to be enabled:
 
 ### VQA Service
 
-- (AMD) Install ROCm `https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/quick-start.html`
+- (AMD) Install ROCm `https://rocm.docs.amd.com/projects/radeon/en/latest/docs/install/native_linux/install-radeon.html`
 - Create a venv for VQA `python3 -m venv .venv`
 - Activate the venv `source .venv/bin/activate`
 - Install dependencies `pip install -r requirements.txt`

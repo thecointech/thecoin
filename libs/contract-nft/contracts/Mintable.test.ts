@@ -1,7 +1,7 @@
 import hre from 'hardhat';
 import { jest } from '@jest/globals';
 import { getTokenClaimCode, getTokenClaimSig } from '../src/tokenCodes';
-import type { TheGreenNFTL2 } from '../src/codegen';
+import type { TheGreenNFT } from '../src';
 import '@nomicfoundation/hardhat-ethers';
 import { EventLog } from 'ethers';
 
@@ -45,7 +45,7 @@ it("Can claim tokens", async () => {
   expect(owner).toEqual(users[1].address);
 })
 
-const mintTokens = (nft: TheGreenNFTL2, count: number) => nft.bulkMinting(Array.from({length: count}, (_, idx) => idx), 2022);
+const mintTokens = (nft: TheGreenNFT, count: number) => nft.bulkMinting(Array.from({length: count}, (_, idx) => idx), 2022);
 const getContract = async () => {
   const NFT = await hre.ethers.getContractFactory("TheGreenNFTL2", minter);
   return await NFT.deploy(minter.address, minter.address);

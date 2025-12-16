@@ -3,8 +3,8 @@ import { ProcessPercent } from './ProcessPercent';
 import { TransferVisaOwing } from './TransferVisaOwing';
 import { PayVisa } from './PayVisa';
 import { DateTime } from 'luxon';
-import { Wallet } from 'ethers';
 import { processState } from '../processState';
+import { mockUser } from '../../../internal/mockUser';
 
 
 it ('correctly reduces transfer amounts', async () => {
@@ -25,6 +25,7 @@ it ('correctly reduces transfer amounts', async () => {
       dueDate: DateTime.now().plus({ weeks: 1 }),
       history: [],
     },
+    coin: BigInt(100*1e6),
     date: DateTime.now(),
 
     state: {
@@ -32,14 +33,7 @@ it ('correctly reduces transfer amounts', async () => {
     },
     delta: []
   }
-  const user = {
-    wallet: Wallet.createRandom(),
-    replay: (() => Promise.resolve({ confirm: "1234" })) as any,
-    creditDetails: {
-      payee: 'payee',
-      accountNumber: "12345"
-    }
-  }
+  const user = mockUser();
 
   const nextState = await processState(stages, state, user);
 

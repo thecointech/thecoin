@@ -1,6 +1,10 @@
 
 #
 # THIS DOCKER COMPOSE FILE IS UNUSED
+# docker gives trash results, possibly due to the mismatch in ROCm versions
+# ROCm 6.4.1 isn't supported on current Ubuntu 24.04 kernel, but
+# Docker container for ROCm 6.4.2 isn't released yet
+# For now, just use the host system
 #
 
 # NOTE: This docker-compose file can -only- be used from within the

@@ -1,12 +1,12 @@
 import { log } from "@thecointech/logging";
-import { PageHandler } from "../pageHandler";
-import { GetIntentApi, GetLoginApi } from "@thecointech/apis/vqa";
 import { processorFn } from "./types";
+import { Agent } from "../agent";
+import { apis } from "../apis";
 
-export const Logout = processorFn("Logout", async (page: PageHandler)  => {
-  await using mgr = page.pushSection("Logout");
+export const Logout = processorFn("Logout", async (agent: Agent)  => {
+  await using mgr = agent.events.pushSection("Logout");
   try {
-    return await logout(page);
+    return await logout(agent);
   }
   catch (err) {
     // Logging out is nice, but not essential.  If it fails for any reason,
@@ -17,25 +17,24 @@ export const Logout = processorFn("Logout", async (page: PageHandler)  => {
   return false;
 })
 
-async function logout(page: PageHandler) {
+async function logout(agent: Agent) {
 
-  const currUrl = page.page.url();
+  const currUrl = agent.page.page.url();
 
   log.info(" ** Logout");
-  log.info(" ** Logout");
-  const api = GetLoginApi();
+  const api = await apis().getLoginApi();
 
-  const didClick = await page.tryClick(api, "detectLogoutElement", { name: "logout" });
+  const didClick = await agent.page.tryClick(api, "detectLogoutElement", "logout");
   if (!didClick) {
-    await page.maybeThrow(new Error("Failed to click logout"));
+    await agent.maybeThrow(new Error("Failed to click logout"));
   }
 
-  if (!didLogOut(page, currUrl)) {
+  if (!didLogOut(agent, currUrl)) {
     // If we are still logged in, try clicking again
     try {
-      const clickedAgain = await page.tryClick(api, "detectLogoutElement", { name: "logout-menu" });
+      const clickedAgain = await agent.page.tryClick(api, "detectLogoutElement", "logout-menu");
       if (!clickedAgain) {
-        await page.maybeThrow(new Error("Failed to click logout again"));
+        await agent.maybeThrow(new Error("Failed to click logout again"));
       }
     }
     catch (err) {
@@ -46,13 +45,14 @@ async function logout(page: PageHandler) {
 
   // Log the intent.  This isn't really so much as to use it as a sanity check
   // (also, it means we trigger a screenshot post-logout for the testing repo)
-  const { data: response } = await GetIntentApi().pageIntent(await page.getImage());
+  const intentApi = await apis().getIntentApi();
+  const { data: response } = await intentApi.pageIntent(await agent.page.getImage());
   log.debug("Logout complete, detected type: " + response.type);
   return true;
 }
 
-function didLogOut(page: PageHandler, currUrl: string) {
-  const newUrl = page.page.url();
+function didLogOut(agent: Agent, currUrl: string) {
+  const newUrl = agent.page.page.url();
   // If the URL doesn't update we assume the logout isn't complete
   if (newUrl === currUrl) {
     return false;
@@ -62,14 +62,4 @@ function didLogOut(page: PageHandler, currUrl: string) {
   // If it has changed, then we can assume we are logged out,
   // if not, we cannot assume we have no matter what the detected intent
   return true;
-  // // If the page did up
-  // const { data: response } = await GetIntentApi().pageIntent(await page.getImage());
-  // const intent = response.type;
-  // const loggedInPages: PageType[] = [
-  //   "AccountsSummary",
-  //   "CreditAccountDetails",
-  //   "PayBill",
-  //   "SendTransfer",
-  //   "MenuSelect",
-  // ];
 }

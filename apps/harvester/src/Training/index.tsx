@@ -1,41 +1,18 @@
 
 import { Button, Message, Step } from 'semantic-ui-react'
-import { useEffect, useState } from 'react';
-import { TrainingRouter } from './routes';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import { getData, Key } from './data';
-import { NormalizeAddress } from '@thecointech/utilities';
+import { Link, useNavigate, useLocation, Outlet } from 'react-router';
 import { TrainingReducer } from './state/reducer';
 import styles from './index.module.less';
+import { AccountMap } from '@thecointech/redux-accounts';
+export { routes } from './routes'
 
 export const Training = () => {
-  const [address, setAddress] = useState<string|null|undefined>(undefined);
-  const stored = getData(Key.wallet);
-  const navigate = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
+  const active = AccountMap.useActive();
 
   TrainingReducer.useStore();
   const data = TrainingReducer.useData();
-
-  // Ensure we have a valid account in the scraper
-  useEffect(() => {
-    window.scraper.getWalletAddress().then(result => {
-      // main-world has an address
-      if (result.value) {
-        // Check that it matches our render-world wallet
-        if (stored) {
-          const uploaded = JSON.parse(stored);
-          const renderAddress = NormalizeAddress(uploaded.wallet.address)
-          const mainAddress = NormalizeAddress(result.value);
-          if (mainAddress != renderAddress) {
-            alert("WARNING: Scraper wallet does not match loaded wallet, login to update scraper");
-            navigate.push("/account/login");
-          }
-        }
-      }
-      setAddress(result.value);
-    })
-  }, [])
 
   const page0Complete = isUrl(data.chequing.url) && isUrl(data.visa.url);
   const cdComplete = data.hasCreditDetails;
@@ -50,10 +27,10 @@ export const Training = () => {
     const m = curr.match(/\/step([0-9])$/)
     const pageNumber = m ? parseInt(m[1]) : 0;
     if (pageNumber == 6) {
-      navigate.push("/config/step0");
+      navigate("/config/step0");
     }
     else {
-      navigate.push("/train/step" + (pageNumber + 1));
+      navigate("/train/step" + (pageNumber + 1));
     }
   }
 
@@ -111,14 +88,13 @@ export const Training = () => {
           disabled={!page4Complete}
           pathname={location.pathname} />
       </Step.Group>
-      <Message warning hidden={address !== null}>
+      <Message warning hidden={!!active?.address}>
         There is no account loaded yet.  It is highly recommended to setup
         your account before training your scraper.<br />
         <Link to="/account/upload">Upload an Account</Link>
       </Message>
       <div className={styles.container}>
-        <TrainingRouter />
-
+        <Outlet />
         <Button onClick={nextPage}>Next</Button>
       </div>
     </div>

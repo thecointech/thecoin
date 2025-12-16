@@ -1,5 +1,8 @@
 TheCoin is (currently) a series of micro-services connected together.
 
+# NOTE - this is mostly obsolete now, as we use Github actions for most of the deployment
+# We keep this for reference in case we need to do a manual deploy
+
 ## System setup require prior to deployment
 
 First steps:

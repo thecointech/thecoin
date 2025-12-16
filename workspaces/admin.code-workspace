@@ -42,6 +42,9 @@
     },
     {
       "path": "../libs/signers"
+    },
+    {
+      "path": "../libs/electron-utils"
     }
   ],
   "settings": {

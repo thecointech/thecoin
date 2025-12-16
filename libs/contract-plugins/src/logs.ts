@@ -4,7 +4,7 @@ import { ContractState } from './types';
 import { isDefined, last, NormalizeAddress } from '@thecointech/utilities';
 import type { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
 import { BasePlugin__factory } from './codegen';
-import { AddressLike } from 'ethers';
+import type { AddressLike } from 'ethers';
 
 type BaseLogs = {
   timestamp: DateTime,
@@ -13,10 +13,10 @@ type BaseLogs = {
   amnt: Decimal
 }
 
-export async function getPluginLogs(address: string, user: AddressLike, provider: Erc20Provider, fromBlock: number) : Promise<BaseLogs[]> {
+export async function getPluginLogs(address: string, user: AddressLike, provider: Erc20Provider, fromBlock: number, toBlock: number|string="latest") : Promise<BaseLogs[]> {
   const contract = BasePlugin__factory.connect(address, provider);
   const filter = contract.filters.ValueChanged(user);
-  const logs = await contract.queryFilter(filter, fromBlock);
+  const logs = await contract.queryFilter(filter, fromBlock, toBlock);
 
   return logs
     .map(log => log?.args)

@@ -1,10 +1,10 @@
-import { InitialCoinBlock, ConnectContract, TheCoin } from '@thecointech/contract-core';
+import { InitialCoinBlock, ContractCore, type TheCoin } from '@thecointech/contract-core';
 import { Signer, Wallet, type Provider } from 'ethers';
 import { call, delay, select, StrictEffect } from "@redux-saga/core/effects";
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
 import { buildSagas } from './actions';
 import { FxRateReducer } from '../../containers/FxRate/reducer';
-import { SagaReducer } from '../../store/immerReducer';
+import { SagaReducer } from '@thecointech/redux/immerReducer';
 import { isLocal } from '@thecointech/signers';
 import { loadAndMergeHistory, calculateTxBalances, mergeTransactions, Transaction } from '@thecointech/tx-blockchain';
 import { getComposeDB } from '@thecointech/idx';
@@ -15,7 +15,7 @@ import { log } from '@thecointech/logging';
 import { checkCurrentStatus } from './BlockpassKYC';
 import { StatusType } from '@thecointech/broker-cad';
 import type { SagaIterator } from '@redux-saga/core';
-import type { AccountMapStore } from '../AccountMap';
+import type { AccountMapStore } from '@thecointech/redux-accounts';
 import type { DecryptCallback, IActions } from './types';
 import type { Dictionary } from 'lodash';
 import { getPluginDetails } from '@thecointech/contract-plugins';
@@ -48,7 +48,7 @@ function AccountReducer(address: string, initialState: AccountState) {
 
       const { signer } = this.state;
       // Connect to the contract
-      const contract = yield call(ConnectContract, signer);
+      const contract = yield call(ContractCore.connect, signer);
       const plugins = yield call(getPluginDetails, contract, signer);
       // store the contract prior to trying update history.
       yield this.storeValues({ contract, plugins });
@@ -199,9 +199,8 @@ function AccountReducer(address: string, initialState: AccountState) {
 
       // Ensure we have fx value for each tx in this list
       log.trace({count: newHistory.length}, "Updating {count} FX values for new history");
-      for (var i = 0; i < newHistory.length; i++) {
-        yield this.sendValues(FxRateReducer.actions.fetchRateAtDate, newHistory[i].date.toJSDate());
-      }
+      const txDates = newHistory.map(tx => tx.date.toJSDate());
+      yield this.sendValues(FxRateReducer.actions.fetchRatesForDates, txDates);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
