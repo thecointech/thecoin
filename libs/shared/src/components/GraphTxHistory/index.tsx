@@ -14,6 +14,8 @@ import { useFxRates, FxRateReducer } from "../../containers/FxRate";
 import Decimal from 'decimal.js-light';
 import styles from './styles.module.less';
 
+export type * from "./types";
+
 // Easy access to theme definition
 export type Theme = {
   lineColors?: [string, string],
