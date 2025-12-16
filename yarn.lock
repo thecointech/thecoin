@@ -11435,7 +11435,7 @@ __metadata:
     helmet: "npm:^4.6.0"
     image-type: "npm:^5.0.0"
     luxon: "npm:3.3.0"
-    multer: "npm:^1.4.2"
+    multer: "npm:^2.0.2"
     swagger-tools: "npm:^0.10.4"
     swagger-ui-express: "npm:^4.2.0"
   languageName: unknown
@@ -32709,7 +32709,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"multer@npm:^1.1.0, multer@npm:^1.4.2":
+"multer@npm:^1.1.0":
   version: 1.4.4
   resolution: "multer@npm:1.4.4"
   dependencies:
@@ -32722,6 +32722,21 @@ __metadata:
     type-is: "npm:^1.6.4"
     xtend: "npm:^4.0.0"
   checksum: ae7505b440b833bffe4d4b712659fc880b3a3735db1190745e738138b069b2344d0d17e3985c93f0aee287d795572dbb7a90af31ec33bd1293cbf90366934b7b
+  languageName: node
+  linkType: hard
+
+"multer@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "multer@npm:2.0.2"
+  dependencies:
+    append-field: "npm:^1.0.0"
+    busboy: "npm:^1.6.0"
+    concat-stream: "npm:^2.0.0"
+    mkdirp: "npm:^0.5.6"
+    object-assign: "npm:^4.1.1"
+    type-is: "npm:^1.6.18"
+    xtend: "npm:^4.0.2"
+  checksum: d3b99dd0512169bbabf15440e1bbb3ecdc000b761e5a3e4aaca40b5e5e213c6cdcc9b7dffebaa601b7691a84f6876aa87e0173ffcc47139253793cf5657819eb
   languageName: node
   linkType: hard
 
@@ -42853,7 +42868,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-is@npm:^1.6.4, type-is@npm:~1.6.15, type-is@npm:~1.6.18":
+"type-is@npm:^1.6.18, type-is@npm:^1.6.4, type-is@npm:~1.6.15, type-is@npm:~1.6.18":
   version: 1.6.18
   resolution: "type-is@npm:1.6.18"
   dependencies:
