@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-plugin-converter",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "The Coin: Converter allows changing a transactions time and currency",
   "type": "module",
   "keywords": [
@@ -44,7 +44,7 @@
   ],
   "exports": {
     ".": {
-      "development": "./build/converter_mocked.js",
+      "development": "./mocks/converter_mocked.ts",
       "electron": "./build/index.js",
       "default": "./build/index.js"
     }
@@ -52,14 +52,14 @@
   "types": "./build/index.d.ts",
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "^0.4.0",
-    "@thecointech/contract-core": "^0.4.0",
-    "@thecointech/contract-tools": "^0.4.0",
-    "@thecointech/setenv": "^0.4.0"
+    "@thecointech/async": "^0.5.0",
+    "@thecointech/contract-core": "^0.5.0",
+    "@thecointech/contract-tools": "^0.5.0",
+    "@thecointech/setenv": "^0.5.0"
   },
   "dependencies": {
-    "@thecointech/contract-oracle": "^0.4.0",
-    "@thecointech/contract-plugins": "^0.4.0"
+    "@thecointech/contract-oracle": "^0.5.0",
+    "@thecointech/contract-plugins": "^0.5.0"
   },
   "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

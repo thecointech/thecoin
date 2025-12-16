@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { ActionType, BuyAction } from '@thecointech/broker-db';
-import { GetContract } from '@thecointech/contract-core';
+import { ContractCore } from '@thecointech/contract-core';
 import { getFirestore } from "@thecointech/firestore";
 import { init } from '@thecointech/firestore';
 import Decimal from 'decimal.js-light';
@@ -63,7 +63,7 @@ it("Pauses and resumes running a processing graph on an action", async () => {
   // const spyOnRunTransitions = jest.spyOn(Transactions, 'storeTransition');
   // const spyOnLogError = jest.spyOn(log, 'error');
   init({})
-  const contract = await GetContract();
+  const contract = await ContractCore.get();
   const processor = new FSM.StateMachineProcessor(graph, contract, null);
 
   const action: BuyAction = {

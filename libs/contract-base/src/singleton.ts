@@ -1,0 +1,46 @@
+import type { Provider, Signer } from "ethers";
+import { defineSingleton, type SingletonManager } from "@thecointech/utilities/singleton";
+import { getProvider } from "@thecointech/ethers-provider";
+import type { BaseContract } from "ethers";
+
+export type ContractSingletonManager<T, Args extends any[]> =
+  SingletonManager<Promise<T>, Args> & {
+    connect: (signer: Signer, ...args: Args) => Promise<T>;
+  };
+
+type ContractFactory<T extends BaseContract> = {
+  connect: (address: string, providerOrSigner: Provider | Signer) => T;
+}
+type AddressFn = () => Promise<string>;
+
+export function defineContractBaseSingleton<T extends BaseContract, Args extends any[] = []>(
+  name: string,
+  create: (...args: Args) => Promise<T>,
+) : ContractSingletonManager<T, Args> {
+  const base = defineSingleton<Promise<T>, Args>(name, create);
+  const connectExtn = {
+    connect: async (signer: Signer, ...args: Args) => {
+      const c = await base.get(...args);
+      return c.connect(signer) as T;
+    }
+  }
+  return {
+    ...base,
+    ...connectExtn,
+  }
+}
+
+export function defineContractSingleton<T extends BaseContract, Args extends any[] = []>(
+  name: string,
+  address: string | AddressFn,
+  factory: ContractFactory<T>,
+) : ContractSingletonManager<T, [...Args, Provider?]> {
+  const create = async (...args: [...Args, Provider?]) => {
+    return factory.connect(
+      address instanceof Function
+        ? await address()
+        : address,
+      args.pop() ?? await getProvider());
+  }
+  return defineContractBaseSingleton<T, [...Args, Provider?]>(name, create);
+}

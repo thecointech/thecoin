@@ -11,10 +11,13 @@ import { getCSP } from './csp.mjs';
 import { getRendererConfig } from './webpack.renderer.mjs';
 import { nativeModules, getMainConfig } from './webpack.main.mjs';
 
-
 const deployedAt = JSON.stringify(new Date().toISOString());
 const renderConfig = getRendererConfig(deployedAt);
 const mainConfig = await getMainConfig(deployedAt);
+
+const suffix = process.env.CONFIG_ENV === 'prod'
+  ? ''
+  : ` - ${process.env.CONFIG_NAME}`;
 
 const config = {
   buildIdentifier: process.env.CONFIG_NAME,
@@ -23,13 +26,20 @@ const config = {
     // asar: {
     //   unpack: './node_modules/node-notifier/**/*'
     // },
+    productName: "TheCoin - Harvester",
     icon: 'assets/appicon',
-    appBundleId: utils.fromBuildIdentifier({ beta: 'com.beta.harvester', prod: 'com.harvester' }),
-    // extraResource: [
-    //   // Include our assets outside of the asar
-    //   // file so we can reference them by absolute path
-    //   './assets'
-    // ],
+    appBundleId: utils.fromBuildIdentifier({
+      prod: 'com.TheCoin.Harvester',
+      prodbeta: 'com.TheCoin.Harvester', // This is the same as prod so you can't install both beta/prod
+      prodtest: "com.TheCoin.Harvester.test",
+      development: "com.TheCoin.Harvester.dev"
+    }),
+    artifactName: `harvester-${process.env.CONFIG_NAME}-{version}-{arch}.{ext}`,
+    extraResource: [
+      // Include our assets outside of the asar
+      // file so we can reference them by absolute path
+      './assets'
+    ],
   },
   rebuildConfig: {},
   makers: [
@@ -47,6 +57,11 @@ const config = {
     new MakerDeb({
       options: {
         icon: 'assets/appicon.png',
+        name: `harvester${suffix.replaceAll(' ', '')}`,
+        homepage: process.env.URL_SITE_LANDING,
+        productName: `Harvester${suffix}`,
+        genericName: `Harvester${suffix}`,
+        categories: ['Utility'],
       }
     })
   ],
@@ -73,6 +88,14 @@ const config = {
     }),
   ],
   hooks: {
+    // Our compiled code is output as commonjs
+    readPackageJson: async (_config, packageJson) => {
+      packageJson.type = "commonjs";
+    },
+
+    // When running directly, our package.json
+    // says we are "module", override to commonjs
+    // (the above hook does not apply when running)
     postStart: async (config) => {
       const mainPackageJsonPath = path.join(".webpack", 'main', 'package.json'); // Adjust as needed
       writeFileSync(mainPackageJsonPath, JSON.stringify({ type: 'commonjs' }, null, 2));

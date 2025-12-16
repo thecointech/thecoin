@@ -4,7 +4,7 @@ import { writePlugin } from '@thecointech/contract-plugins/writePlugin';
 import { log } from '@thecointech/logging';
 import '@nomicfoundation/hardhat-ethers';
 import '@openzeppelin/hardhat-upgrades';
-import { getContract as getOracle } from "@thecointech/contract-oracle"
+import { ContractOracle } from "@thecointech/contract-oracle"
 
 async function main() {
 
@@ -13,7 +13,7 @@ async function main() {
 
   const owner = await getSigner("Owner");
 
-  const oracle = await getOracle();
+  const oracle = await ContractOracle.get();
   const RoundNumber = await hre.ethers.getContractFactory("RoundNumber", owner);
   const roundNumber = await RoundNumber.deploy(oracle);
   const roundNumberAddress = await roundNumber.getAddress();

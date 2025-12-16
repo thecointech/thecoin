@@ -1,7 +1,7 @@
 import { HarvestData, ProcessingStage, UserData } from '../types';
 import { log } from '@thecointech/logging';
 import { getBalance } from './utils';
-import { notify } from '../notify';
+import { notify } from '@/notify';
 import currency from 'currency.js';
 
 // Ensure the harvester balance is not lower than the last run

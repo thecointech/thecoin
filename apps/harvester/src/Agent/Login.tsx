@@ -1,15 +1,14 @@
 import { LoginDetails } from "./LoginDetails"
 import { BankConnectReducer } from "./state/reducer"
 import { RendererBankType } from "./state/types";
-import { QuestionResponse } from "./QuestionResponse";
 import { useEffect, useState } from "react";
 import { useBackgroundTask } from '@/BackgroundTask';
 import { BackgroundTaskErrors, BackgroundTaskProgressBar } from "@/BackgroundTask/BackgroundTaskProgressBar";
 import type { AccountResponse } from "@thecointech/vqa";
 import { log } from "@thecointech/logging";
 import { Icon, Message } from "semantic-ui-react";
-import { PathNextButton } from "@/SimplePath";
 import { BankReducerType } from "./state/initialState";
+import { useSimplePathContext } from "@/SimplePath";
 
 type Props = {
   type: RendererBankType;
@@ -56,7 +55,8 @@ const Login = ({ type, both }: Props) => {
 
   const missingDetails = hasDetails === false;
 
-  const isValid = () => {
+  const context = useSimplePathContext();
+  context.onValidate = () => {
     setForceValid(true);
     return !!bank.completed;
   }
@@ -72,11 +72,9 @@ const Login = ({ type, both }: Props) => {
         )
       }
       <LoginDetails {...bank} type={type} both={both} disabled={missingDetails}/>
-      <QuestionResponse backgroundTaskId="record" />
       <BackgroundTaskProgressBar type="record" />
       <BackgroundTaskErrors type='record' />
       <LoginResults forceValid={forceValid} bank={bank} />
-      <PathNextButton onValid={isValid} />
     </div>
   )
 }

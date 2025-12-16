@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Message, Progress } from "semantic-ui-react";
 import { useBackgroundTask } from "./reducer";
 import { BackgroundTaskType } from "./types";
-import { getCompleted, getErrors, getPercent, isRunning } from "./selectors";
+import { getRunning, getErrors, getPercent, isRunning } from "./selectors";
 import type { BackgroundTaskInfo } from "./types";
 
 type Props = {
@@ -36,9 +36,9 @@ export const BackgroundTaskProgressBar = ({ type, subTask }: Props) => {
     return <BackgroundTaskProgressBarElement task={task} taskId={subTask} />
   }
 
-  const completed = getCompleted(bgTask.subTasks);
-  const numCompleted = Math.min(completed.length + 1, bgTask.subTasks.length);
-  const message = `${numCompleted} of ${bgTask.subTasks.length}`;
+  const running = getRunning(bgTask.subTasks);
+  const numRunning = Math.min(running.length, bgTask.subTasks.length);
+  const message = `${1 + bgTask.subTasks.length - numRunning} of ${bgTask.subTasks.length}`;
   return <BackgroundTaskProgressBarElement task={bgTask} taskId={message} />
 }
 

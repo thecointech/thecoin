@@ -6,7 +6,7 @@ import { parse } from './parse';
 import { validate } from './validate';
 import { bad, okFile } from './returnValues';
 import { ValidationError } from './errors';
-import { getAsset } from '@/Harvester/notify';
+import { getAsset } from '@/notify';
 import { mockServer } from './mock';
 import { BackgroundTaskCallback } from '@/BackgroundTask';
 import { startService, resetService } from './state';

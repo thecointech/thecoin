@@ -1,4 +1,4 @@
-import { TestData } from "@thecointech/scraper/testutils";
+import { TestData } from "@thecointech/scraper-archive";
 import { Agent } from "@/agent";
 import { AgentSerializer } from "@/agentSerializer";
 import { mockApi } from "./mockApi";

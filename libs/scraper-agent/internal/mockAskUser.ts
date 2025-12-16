@@ -43,7 +43,7 @@ export class MockAskUser implements IAskUser {
 export type QuestionType = "option" | "recipient" | "value";
 export type AnswerCallback = (type: QuestionType, question?: string, options?: NamedOptions[]) => any;
 // Default is to read the answer from a file
-export const getAnswerFromFileIfExists = (matchedFolder: string, step: string) : AnswerCallback => {
+export const getAnswerFromFileIfExists = (matchedFolder: string, step: number) : AnswerCallback => {
   const answerFile = `${matchedFolder}/${step}-answers.json`;
   if (fs.existsSync(answerFile)) {
     return (type: QuestionType) => {

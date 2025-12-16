@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom'
 import { useEffect } from 'react'
 import { useContentSectionContext } from './context'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 type AlternateLinkProps = {
   content: string;

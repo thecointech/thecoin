@@ -1,15 +1,14 @@
 import { type SectionName, type EventSection, Agent, ProcessResults } from '@thecointech/scraper-agent';
-import { ScraperCallbacks } from "../scraper/callbacks";
 import { log } from "@thecointech/logging";
 import { type BackgroundTaskCallback } from "@/BackgroundTask/types";
 import { setEvents } from '../events';
 import { downloadRequired } from '@/GetStarted/download';
-import { BankConfig, BankType } from '../scraper';
+import type { BankConfig, BankType } from '@thecointech/store-harvester';
 import { sections } from '@thecointech/scraper-agent/processors/types';
 import { VisibleOverride } from '@thecointech/scraper/puppeteer-init/visibility';
 import { AskUserLogin } from './askUserLogin';
 import { getErrorMessage } from '@/BackgroundTask';
-import { maybeSerializeRun } from '../scraperLogging';
+import { AgentCallbacks } from './agentCallbacks';
 
 export type AutoConfigParams = {
   type: BankType;
@@ -21,17 +20,21 @@ export async function autoConfigure({ type, config, visible }: AutoConfigParams,
 
   log.info(`Agent: Starting configuration for action: autoConfigure`);
 
-  // Create the logger quickly, as that triggers the background task/loading screen
-  const toSkip = getSectionsToSkip(type);
-  const toProcess = sections.filter(s => !toSkip.includes(s));
-  const logger = new ScraperCallbacks("record", callback, toProcess);
-
   // This should do nothing, but call it anyway
   await downloadRequired(callback);
 
   const { username, password, name, url } = config;
-
   if (!username || !password) throw new Error("Username and password are required");
+
+  // Create the logger quickly, as that triggers the background task/loading screen
+  const toSkip = getSectionsToSkip(type);
+  const toProcess = sections.filter(s => !toSkip.includes(s));
+  await using logger = await AgentCallbacks.create({
+    taskType: "record",
+    uiCallback: callback,
+    sections: toProcess,
+    target: `${name}-runAgent`,
+  });
 
   using inputBridge = AskUserLogin.newLoginSession({
     username,
@@ -40,7 +43,6 @@ export async function autoConfigure({ type, config, visible }: AutoConfigParams,
 
   try {
     using _ = new VisibleOverride(visible)
-    using _serializer = await maybeSerializeRun(logger.logsFolder, name);
     await using agent = await Agent.create(name, inputBridge, url, logger);
     const results = await agent.process(toSkip);
 
@@ -55,7 +57,7 @@ export async function autoConfigure({ type, config, visible }: AutoConfigParams,
   }
   catch (e: any) {
     const msg = getErrorMessage(e);
-    log.error({ err: e }, `Error configuring agent for action: ${name}`);
+    log.error(e, `Error configuring agent for action: ${name}`);
     logger.complete({ error: msg });
     throw e;
   }

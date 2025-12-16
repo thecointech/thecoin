@@ -1,12 +1,12 @@
 import { Container, Loader, Dimmer, Header } from 'semantic-ui-react'
 import { ConfigReducer } from './state/reducer'
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useState } from 'react';
 import styles from './Step7.module.less';
 import { ActionButton } from '@/ContentSection/Action';
 
 export const Complete = () => {
-  const navigate = useHistory();
+  const navigate = useNavigate();
   const data = ConfigReducer.useData();
   const [dimmerMessage, setDimmerMessage] = useState<string | null>(null);
 
@@ -23,7 +23,7 @@ export const Complete = () => {
     await withDimmer("Saving...", async () => {
       await window.scraper.setHarvestConfig(data);
     });
-    navigate.push("/results");
+    navigate("/results");
   }
 
   const paused = !!dimmerMessage;

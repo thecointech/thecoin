@@ -1,5 +1,5 @@
 
-import { BaseReducer } from '@thecointech/shared/store/immerReducer'
+import { BaseReducer } from '@thecointech/redux'
 import { log } from '@thecointech/logging';
 import { getInitialState, type InitialState } from './initialState';
 import type { RendererBankType, IActions } from './types';

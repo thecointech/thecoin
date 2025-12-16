@@ -1,8 +1,8 @@
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { Checkbox, Container, Header, Message } from 'semantic-ui-react';
 import { ALL_PERMISSIONS, buildAssignPluginRequest } from '@thecointech/contract-plugins';
-import { getContract as getUberContract } from '@thecointech/contract-plugin-converter';
-import { getContract as getShockAbsorberContract } from '@thecointech/contract-plugin-shockabsorber';
+import { ContractConverter } from '@thecointech/contract-plugin-converter';
+import { ContractShockAbsorber } from '@thecointech/contract-plugin-shockabsorber';
 import { GetPluginsApi } from '@thecointech/apis/broker';
 import { sleep } from "@thecointech/async";
 import { getData, Key, setData } from '../Training/data';
@@ -11,8 +11,8 @@ import type { AddressLike, Signer } from 'ethers';
 import { ActionButton } from '@/ContentSection/Action';
 import { NextButton } from '@/ContentSection/Next';
 
-const converter = await getUberContract();
-const shockAbsorber = await getShockAbsorberContract();
+const converter = await ContractConverter.get();
+const shockAbsorber = await ContractShockAbsorber.get();
 
 const sendAssignRequest = async (signer: Signer, pluginAddress: AddressLike) =>  {
   const api = GetPluginsApi();
@@ -117,7 +117,7 @@ export const Plugins = () => {
       </p> */}
       <ActionButton onClick={onInstallPlugins} loading={isSending} disabled={canInstallPlugins}>Install</ActionButton>
       <PluginMessage requestSent={requestSent} forceValid={forceValid} hasConverter={hasConverter} />
-      <NextButton to="/agent" content="Connect Bank Account" onValid={isValid} />
+      <NextButton to="/agent" onValid={isValid} />
     </Container>
   );
 }

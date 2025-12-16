@@ -1,17 +1,22 @@
-import { usePathIndex } from "./types"
 import { NextButton } from "../ContentSection/Next";
-import { useLocation } from "react-router-dom";
+import { useSimplePathContext } from "./SimplePathContext";
+import { usePathIndex } from "./types";
 
 interface PathNextButtonProps {
-  onValid?: () => boolean;
+  onValidate?: () => boolean;
 }
 
 export const PathNextButton = (props: PathNextButtonProps) => {
-  const currentStep = usePathIndex();
-  const location = useLocation();
-  const groupKey = location.pathname.split("/")[1];
+  const { path, onValidate } = useSimplePathContext();
+  if (!path) {
+    throw new Error("PathNextButton must be used within a ContentSection");
+  }
+  const index = usePathIndex(path);
+  const next = path.routes[index + 1];
 
-  return (
-    <NextButton to={`/${groupKey}/${currentStep + 1}`} content="Next" onValid={props.onValid} />
-  )
+  const onValid = props.onValidate ?? onValidate;
+
+  return next
+    ? <NextButton to={`/${path.groupKey}/${next.path}`} onValid={onValid} />
+    : null
 }

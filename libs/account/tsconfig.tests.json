@@ -1,4 +1,7 @@
 {
   "extends": "../../tsconfig.tests.json",
-  "include": ["**/*.test.*", "scripts/**.ts", "internal/*.*", "**/*.stories.*"],
+  "compilerOptions": {
+    "baseUrl": "./",
+  },
+  "include": ["**/*.test.*", "scripts/**.ts", "internal/*.*", "mocks/**/*.*", "**/*.stories.*"],
 }

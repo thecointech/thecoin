@@ -1,4 +1,4 @@
-import { AccountMap, AccountMapState } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap, AccountMapState } from '@thecointech/redux-accounts';
 import { log } from '@thecointech/logging';
 
 export async function initialAccounts(): Promise<AccountMapState> {

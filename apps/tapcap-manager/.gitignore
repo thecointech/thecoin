@@ -1,8 +1,0 @@
-Service/node_modules/
-Service/.vscode/
-ClientJS/node_modules/
-Service/.vs/
-Service/tapcap/secret.json
-tapcap-admin/client/.vscode/launch.json
-tapcap-admin/node_modules/
-tapcap-admin/server/node_modules/

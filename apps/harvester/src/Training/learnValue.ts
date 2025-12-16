@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ValueType } from '@thecointech/scraper/types';
+import type { ValueType } from '@thecointech/scraper-types';
 
 export const useLearnValue = (valueName: string, valueType: ValueType) : [string, () => Promise<boolean>, boolean] => {
   const [value, setValue] = useState('');

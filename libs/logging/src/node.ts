@@ -7,7 +7,7 @@ import { createLoggerProxy } from "./loggerContext";
 const getStreams = (name: string, level?: number) => {
   const streams = [];
   // Are we testing with jest?
-  if (process.env.JEST_WORKER_ID === undefined) {
+  if (process.env.RUNTIME_ENV !== "test") {
     // Do we have a output folder specifed?
     if (process.env.TC_LOG_FOLDER && process.env.TC_LOG_FOLDER !== 'false')
     {

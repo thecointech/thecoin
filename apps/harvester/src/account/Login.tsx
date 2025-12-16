@@ -1,12 +1,14 @@
 import { Login as LoginUI } from "@thecointech/shared/containers/Login";
-import { Redirect } from 'react-router';
+import { Navigate } from 'react-router';
 import { useEffect, useState } from 'react';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { isLocal } from '@thecointech/signers';
 import { BaseWallet, HDNodeWallet } from "ethers";
 import { groupKey } from './routes';
 import { Account } from "@thecointech/shared/containers/Account";
 import type { AccountState } from '@thecointech/account';
+import { toCoinAccount } from "./convert";
+import { useSimplePathContext } from "@/SimplePath";
 
 export const Login = () => {
   // Basic guard component ensures we have an active account
@@ -15,7 +17,7 @@ export const Login = () => {
   const active = AccountMap.useActive();
   return active
     ? <LoginAccount account={active} />
-    : <Redirect to={`/${groupKey}`} />
+    : <Navigate to={`/${groupKey}`} />
 }
 
 const LoginAccount = ({account}: {account: AccountState}) => {
@@ -33,22 +35,19 @@ const LoginAccount = ({account}: {account: AccountState}) => {
     // pass the unlocked account to scraper.  This will
     // need some hard-core protection in time...
     const hdWallet = signer as BaseWallet as HDNodeWallet;
-    const mnemonic = {
-      phrase: hdWallet.mnemonic!.phrase,
-      path: hdWallet.path!,
-      locale: hdWallet.mnemonic!.wordlist!.locale,
-    }
-    window.scraper.setCoinAccount({
-      mnemonic,
-      name: account.name,
-      address: account.address,
-    })
+    const coinAccount = toCoinAccount(hdWallet, account.name);
+    window.scraper.setCoinAccount(coinAccount)
       .then(() => {
         setComplete(true)
       });
   }, [account?.contract])
 
+  const context = useSimplePathContext();
+  context.onValidate = () => {
+    return !!account?.contract;
+  }
+
   return complete
-    ? <Redirect to={`/${groupKey}/1`} />
+    ? <Navigate to={`/${groupKey}/plugins`} />
     : <LoginUI account={account} />
 }

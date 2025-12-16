@@ -36,7 +36,7 @@ const findTsConfig = async () => {
 
     if (configs.length > 0) {
       // Look for build config first
-      const buildConfig = configs.find(f => f.includes('build'));
+      const buildConfig = configs.find(f => f.includes('build') || f.includes('app'));
       // Return full path to the config file
       const configFile = buildConfig ?? configs[0];
       return resolve(currentDir, configFile);
@@ -61,15 +61,35 @@ const env = {
   ...rest,
 }
 
-const loader = args.find(arg => arg.endsWith('.ts'))
-  ? new URL("ncr-ts.mjs", import.meta.url)
-  : new URL("ncr-js.mjs", import.meta.url);
-// const loader = new URL("ncr-ts.mjs", import.meta.url)
+const nodeArgs = [];
+if (args.find(arg => arg.endsWith('.ts'))) {
+  // We have 3 kinds of scripts to run:
+  // basic nodejs scripts (eg email-fake-deposit)
+  //  - these can't use ts-node, as it keeps crashing
+  // service scripts (eg rates-service)
+  //  - these can only use ts-node due to experimental decorators
+  // electron apps (eg harvester)
+  //  - these can use raw nodejs, but cannot use experimental-transform-types
 
-// Always attach experimental loader
-// NOTE: -es-module-specifier-resolution is no longer supported by node,
-// but is required by ts-node to correctly resolve imports
-env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} --loader=${loader} --es-module-specifier-resolution=node`;
+  const isService = TS_NODE_PROJECT?.includes("-service/");
+  const isElectron = env.ELECTRON_DISABLE_SANDBOX || process.env.HARVESTER_DEBUG_LIVE;
+
+  // only service uses ts-node
+  if (isService) nodeArgs.push("--loader=ts-node/esm");
+  // everybody uses our custom loader
+  nodeArgs.push(`--loader=${new URL("ncr-ts.mjs", import.meta.url).href}`);
+  // NOTE: -es-module-specifier-resolution is no longer supported by node,
+  // but is required by ts-node to correctly resolve imports
+  if (isService) nodeArgs.push("--es-module-specifier-resolution=node")
+  if (!isElectron && !isService) {
+    nodeArgs.push("--experimental-transform-types");
+  }
+}
+else {
+  nodeArgs.push(`--loader=${new URL("ncr-js.mjs", import.meta.url).href}`);
+}
+
+env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} ${nodeArgs.join(" ")}`;
 
 // If this is yarn script?
 if (executable != "node") {
@@ -92,6 +112,10 @@ if (executable != "node") {
     }
   }
 }
+// Electron doesn't support transform-types flag, but everyone else needs it.
+// else if (!env.ELECTRON_DISABLE_SANDBOX && !process.env.HARVESTER_DEBUG_LIVE) {
+//   env.NODE_OPTIONS = `${env.NODE_OPTIONS ?? ""} --experimental-transform-types`;
+// }
 
 const proc = spawn(
   executable,

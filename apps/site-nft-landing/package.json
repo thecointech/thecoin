@@ -2,7 +2,7 @@
   "name": "@thecointech/site-nft-landing",
   "productName": "THECoin: NFT Landing  ",
   "private": true,
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "THECoin NFT: some neat tagline",
   "author": "Stephen Taylor",
   "license": "GPL-3.0-or-later",

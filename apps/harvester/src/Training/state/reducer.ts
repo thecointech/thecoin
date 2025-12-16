@@ -1,5 +1,5 @@
 
-import { BaseReducer } from '@thecointech/shared/store/immerReducer'
+import { BaseReducer } from '@thecointech/redux'
 import { TrainingState, IActions, BankKey, DataKey } from './types';
 
 export const TRAINING_KEY = "training";

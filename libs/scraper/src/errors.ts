@@ -1,4 +1,4 @@
-import { DynamicInputEvent, SearchElementData, FoundElement, ValueEvent } from "./types";
+import type { DynamicInputEvent, SearchElementData, FoundElement, ValueEvent } from "@thecointech/scraper-types";
 
 export class ElementNotFoundError extends Error {
   element: SearchElementData
@@ -20,9 +20,11 @@ export class PageNotInteractableError extends Error {
 
 export class DynamicValueError extends Error {
   event: DynamicInputEvent
-  constructor(event: DynamicInputEvent) {
+  values?: Record<string, string>
+  constructor(event: DynamicInputEvent, values?: Record<string, string>) {
     super(`Dynamic value error: ${event.eventName}`);
     this.event = event;
+    this.values = values;
   }
 }
 

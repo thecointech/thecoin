@@ -9,5 +9,8 @@
     "moduleResolution": "Node",
     "skipLibCheck": true,
     "resolveJsonModule": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   }
 }

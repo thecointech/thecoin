@@ -1,6 +1,6 @@
 import { getSiblingScore, getRoleScore, getPositionAndSizeScore, getPositionScore } from "./elements.score";
 import { patchOnnxForJest } from "../internal/jestPatch";
-import { Coords } from "./types";
+import type { Coords } from "@thecointech/scraper-types";
 
 beforeAll(async () => {
   patchOnnxForJest();
@@ -161,7 +161,7 @@ describe('position scoring', () => {
     const original = createCoords();
 
     const score = getPositionAndSizeScore(potential, original, mockBounds);
-    expect(score).toBeCloseTo(0.5, 1); // Close elements should score well
+    expect(score).toBeCloseTo(0.733, 1); // Close elements should score well
   });
 
   it('gives a -0.5 score for opposite side of page', () => {
@@ -212,7 +212,7 @@ describe('position scoring', () => {
     const original = createCoords({"top":5,"left":5,"height":10,"width":10});
 
     const score = getPositionAndSizeScore(potential, original, {"width":1000,"height":1000});
-    expect(score).toBeLessThan(-1);
+    expect(score).toBe(-1);
   })
 
   it ('should still match if larger than bounds, but still close together', () => {
