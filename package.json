@@ -15,7 +15,7 @@
   "resolutions": {
     "clone-deep": "4.0.1",
     "@graphql-tools/executor": "0.0.20",
-    "axios": "1.6.5",
+    "axios": "1.12.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "@types/react": "19.2.7",
@@ -69,7 +69,7 @@
     "check-changes": "git diff-index --patch-with-stat HEAD && git diff-index --quiet HEAD -- "
   },
   "dependencies": {
-    "axios": "1.6.5",
+    "axios": "1.12.0",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
     "ethers": "6.15.0",
