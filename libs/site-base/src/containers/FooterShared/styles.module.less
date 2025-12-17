@@ -1,19 +1,32 @@
 @import "~@thecointech/site-semantic-theme/variables.less";
 
+
+// TODO: De-duplicate the transitions below
+// footer {
+//   /* This name tells the browser to track this specific element's
+//     position and size across the page load. */
+//   view-transition-name: site-footer;
+// }
+
+.footerContainer {
+  grid-area: footer;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  view-transition-name: site-footer-container;
+}
+
 .background {
   background-color : @secondaryColor;
   grid-row-start   : footer;
   grid-row-end     : footer;
   grid-column-start: lgap;
   grid-column-end  : rgap;
+
+  view-transition-name: site-footer-content;
 }
 
-.footerContainer {
-  grid-area       : footer;
-  display: flex;
-  flex-direction : column;
-  height : 100%;
-}
 
 .footerContent {
   flex-grow: 1;

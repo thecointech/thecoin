@@ -1,9 +1,10 @@
-import { DefinePlugin, ProvidePlugin } from 'webpack';
-import type IForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import { commonPlugins, configFile } from './webpack.common';
+import webpack from 'webpack';
+// import type IForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import { configFile } from './webpack.common.ts';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const ForkTsCheckerWebpackPlugin: typeof IForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+// const ForkTsCheckerWebpackPlugin: typeof IForkTsCheckerWebpackPlugin = require();
 
 export const plugins = [
   new ForkTsCheckerWebpackPlugin({
@@ -12,14 +13,13 @@ export const plugins = [
       configFile,
     }
   }),
-  new ProvidePlugin({
+  new webpack.ProvidePlugin({
     process: 'process/browser',
   }),
-  new ProvidePlugin({
+  new webpack.ProvidePlugin({
     Buffer: ['buffer', 'Buffer'],
   }),
-  new DefinePlugin({
+  new webpack.DefinePlugin({
     BROWSER: true,
   }),
-  ...commonPlugins
 ];

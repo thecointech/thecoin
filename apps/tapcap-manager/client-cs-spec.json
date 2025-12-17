@@ -1,5 +1,0 @@
-{
-    "packageName" : "TapCapManager.Client",
-    "targetFramework": "v5.0",
-    "netCoreProjectFile": true
-}

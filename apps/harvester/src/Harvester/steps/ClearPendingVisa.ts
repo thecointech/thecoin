@@ -2,10 +2,8 @@ import { DateTime } from 'luxon';
 import { HarvestData, ProcessingStage, UserData } from '../types';
 import currency from 'currency.js';
 import { log } from '@thecointech/logging';
-import { notify } from '../notify';
-import { ConnectContract } from '@thecointech/contract-core';
-import { fetchRate, weSellAt } from '@thecointech/fx-rates';
-import { toHuman } from '@thecointech/utilities';
+import { notify } from '@/notify';
+import { getBalance } from './utils';
 
 //
 // Detect when a visa payment has cleared and reduce the harvester balance to match
@@ -18,11 +16,10 @@ export class ClearPendingVisa implements ProcessingStage {
     let pending = data.state.toPayVisa;
     let pendingDate = data.state.toPayVisaDate;
     let harvesterBalance = data.state.harvesterBalance ?? currency(0);
-    if (pending && pendingDate && pending.intValue != 0) {
+    if (pending && pendingDate) {
 
       // If we are before pendingDate, check that there is sufficient balance
-      const now = DateTime.now();
-      if (now < pendingDate) {
+      if (data.date < pendingDate) {
         await notifyIfInsufficientBalance(pending, user);
       }
 
@@ -32,11 +29,13 @@ export class ClearPendingVisa implements ProcessingStage {
         harvesterBalance = harvesterBalance.subtract(pending);
         log.info(`TransferVisaOwing: Pending payment ${pending} settled, new balance: ${harvesterBalance}`);
 
-        notify({
-          title: 'Scheduled Payment Completed',
-          message: `Your payment of ${pending.format()} has been settled.`,
-          icon: "money.png",
-        })
+        if (pending.intValue != 0) {
+          notify({
+            title: 'Scheduled Payment Completed',
+            message: `Your payment of ${pending.format()} has been settled.`,
+            icon: "money.png",
+          })
+        }
 
         pending = undefined;
         pendingDate = undefined;
@@ -55,9 +54,14 @@ export class ClearPendingVisa implements ProcessingStage {
 function lastPaymentSettled(data: HarvestData, pending: currency, pendingDate: DateTime) : boolean {
 
   // It's impossible to settle before the date
-  if (DateTime.now() < pendingDate) {
+  if (data.date < pendingDate) {
     log.info(`TransferVisaOwing: Cannot settle before ${pendingDate.toISODate()}!`);
     return false;
+  }
+
+  if (pending.intValue == 0) {
+    log.info(`TransferVisaOwing: Pending payment is 0, no settlement required`);
+    return true;
   }
 
   // The date has passed, is there a matching credit amount?
@@ -73,7 +77,7 @@ function lastPaymentSettled(data: HarvestData, pending: currency, pendingDate: D
 
   // If it's been 6 days, it's probably settled and we must have missed it
   // Send a warning though so it can be checked
-  if (pendingDate < DateTime.now().minus({ days: 6 })) {
+  if (pendingDate < data.date.minus({ days: 6 })) {
     log.warn(`TransferVisaOwing: 6 days since pendingDate, assuming ${pending} settled`);
     return true;
   }
@@ -82,19 +86,6 @@ function lastPaymentSettled(data: HarvestData, pending: currency, pendingDate: D
   return  false;
 }
 
-async function getBalance(user: UserData) {
-  const tcCore = await ConnectContract(user.wallet);
-  const address = await user.wallet.getAddress();
-  const balance = await tcCore.pl_balanceOf(address);
-  // What does this balance turn into?
-  const rate = await fetchRate();
-  return rate
-    ? toHuman(
-        Number(balance) * weSellAt([rate], new Date(rate.validFrom)),
-        true
-      )
-    : undefined;
-}
 
 async function notifyIfInsufficientBalance(pending: currency, user: UserData) {
   try {
@@ -108,7 +99,7 @@ async function notifyIfInsufficientBalance(pending: currency, user: UserData) {
     }
   }
   catch (err) {
-    log.warn(err, `ClearPendingVisa: Could not verify balance`);
+    log.error(err, `ClearPendingVisa: Could not verify balance`);
     // Hopefully not a big deal, continue as normal
   }
 }

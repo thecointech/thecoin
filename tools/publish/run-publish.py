@@ -7,6 +7,7 @@ import shutil
 import stat
 import time
 import logging
+from datetime import datetime, timedelta
 
 config_name = "prodtest"
 os.environ["CONFIG_NAME"] = config_name
@@ -33,44 +34,42 @@ if (config_name != base.name):
     logger.error("Mismatched config: " + config_name + " != " + base.name)
     exit(1)
 
-deploy = base / 'current'
-old_deploy = base / 'old'
-new_deploy = base / 'new'
-temp_deploy = base / 'temp'
+date_format = "%Y-%m-%d_%H-%M"
+now = datetime.now()
+date_str = now.strftime(date_format)
 
-if not os.environ.get('THECOIN_ENVIRONMENTS'):
-    home = Path.home()
-    tc_env = home / 'thecoin' / 'env'
-    logger.info(f"Setting default evironment location: {tc_env}")
-    os.putenv('THECOIN_ENVIRONMENTS', tc_env)
+new_deploy = base / date_str
+temp_deploy = base / 'temp'
+current_deploy_link = base / "current_deploy.txt"
+keep_count = 2 # Keep the 2 most recent deployments (not including todays)
+
+logger.info("Creating new version at: " + str(new_deploy))
+
+env_path = os.environ.get('THECOIN_SECRETS')
+if not env_path or not Path(env_path).exists():
+    logger.error(f"Cannot deploy, environment \"{env_path}\" does not exist")
+    exit(1)
 
 #
 # Check out new deploy and merge in latest dev
 def checkout():
   logger.info(f"Deploying to {new_deploy}")
 
-  # check no existing checkout
-  if new_deploy.exists():
-      logger.error("warning: existing installation found")
-      shutil.rmtree(new_deploy, onerror=remove_readonly)
-      input("Press Enter to continue...")
-      #exit(1)
-  else:
-    # First, create a new checkout,
-    new_deploy.mkdir(parents=True, exist_ok=True)
-    os.chdir(new_deploy)
-    os.system('git clone https://github.com/thecointech/thecoin.git .') # Cloning
+  # First, create a new checkout,
+  new_deploy.mkdir(parents=True, exist_ok=True)
+  os.chdir(new_deploy)
+  os.system('git clone https://github.com/thecointech/thecoin.git .') # Cloning
 
-    # switch to publish/Test
-    os.system(f'git checkout publish/{config_name}')
+  # switch to publish/Test
+  os.system(f'git checkout publish/{config_name}')
 
-    # Merge in latest changes
-    success = os.system('git merge origin/dev --no-ff --no-edit')
-    if success != 0:
-        logger.error("Merge Failed")
-        exit(1)
+  # Merge in latest changes
+  success = os.system('git merge origin/dev --no-ff --no-edit')
+  if success != 0:
+      logger.error("Merge Failed")
+      exit(1)
 
-    logger.info("Checkout Complete")
+  logger.info("Checkout Complete")
   return True
 
 #
@@ -102,6 +101,18 @@ def buildAndDeploy():
   logger.info(f"Deploy Success: {success}")
   return True
 
+#
+# Update bookmark so subsequent runs use latest deployment
+def updateCurrentPath():
+  # Create the Zsh script
+  with open(current_deploy_link, "w") as f:
+      f.write(f"{new_deploy}\n")
+
+  # Make the script executable
+  # os.chmod(current_deploy_link, 0o755)  # Equivalent to chmod +x
+
+  print(f"Deployed version path written to {current_deploy_link}")
+
 # Remove read-only access error
 def remove_readonly(func, path, excinfo):
     os.chmod(path, stat.S_IWRITE)
@@ -119,30 +130,38 @@ def keep_trying(action):
   exit(1)
 
 #
-#  Replace current with new, and remove old
-def renameAndComplete():
-  # Try to run a publish
-  def remove_old():
-    if Path(old_deploy).exists():
-        logger.info("delete old deploy");
-        shutil.rmtree(old_deploy, onerror=remove_readonly)
+#  Remove older deployments, leaving keep_count most recent
+def removeOld():
 
-  def move_current():
-    if Path(deploy).exists():
-      logger.info("move current to old");
-      os.rename(deploy, old_deploy)
+  subfolders = [folder for folder in base.iterdir() if folder.is_dir()]
 
-  def move_new():
-    logger.info("move new to current")
-    os.rename(new_deploy, deploy)
-    # Re-run yarn so windows updates the soft-links
-    os.chdir(deploy)
-    os.system('yarn');
+  # Filter subfolders based on time format and extract datetime
+  one_day_ago = now - timedelta(days=1)
+  filtered_subfolders = []
+  for folder in subfolders:
+      try:
+          folder_datetime = datetime.strptime(folder.name, date_format)
+          if folder_datetime < one_day_ago:
+            filtered_subfolders.append((folder, folder_datetime))
+      except ValueError:
+          # Skip folders that don't match the time format
+          pass
 
-  os.chdir(base)
-  keep_trying(remove_old)
-  keep_trying(move_current)
-  keep_trying(move_new)
+  # Sort subfolders by datetime, most recent first
+  filtered_subfolders.sort(key=lambda x: x[1], reverse=True)
+
+  if len(filtered_subfolders) <= keep_count:
+    logger.info(f"There are {len(filtered_subfolders)} valid subfolders older than 1 day, which is less than or equal to the keep_count ({keep_count}). Nothing to delete.")
+    return
+
+  # Delete older subfolders
+  for folder, folder_datetime in filtered_subfolders[keep_count:]:
+      try:
+        logger.info("delete old deploy: " + str(path));
+        shutil.rmtree(str(ofolder), onerror=remove_readonly)
+        print(f"Deleted folder: {folder}")
+      except Exception as e:
+        print(f"Error deleting folder {folder}: {e}")
 
 #
 # On complete, create temp checkout to  merge
@@ -163,7 +182,7 @@ def mergeBackIntoDev():
   if success != 0:
     logger.error("Merge Failed")
     exit(1)
-    
+
   # push changes back
   os.system('git push')
   # cleanup
@@ -174,7 +193,8 @@ try:
   logger.info("Ready...")
   checkout()
   buildAndDeploy()
-  renameAndComplete()
+  updateCurrentPath()
+  removeOld()
   # do this last, as it isn't particularily important if it fails
   mergeBackIntoDev()
 

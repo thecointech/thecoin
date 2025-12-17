@@ -8,7 +8,7 @@
 // import { TransferList } from 'containers/TransferList/TransferList';
 // import { AddSettlementDate } from '@thecointech/tx-processing/base/utils';
 // import { DepositRenderer } from './DepositRenderer';
-// import { useActiveAccount } from '@thecointech/shared/containers/AccountMap';
+// import { useActiveAccount } from '@thecointech/redux-accounts';
 // import { useAccountApi } from '@thecointech/shared/containers/Account';
 // import { RbcApi, ETransferErrorCode } from '@thecointech/rbcapi';
 // import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';

@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.tests.json",
+  "compilerOptions": {
+    // This package is responsible for starting the node processes that other packages use
+    // This means that it can't use the custom file resolution we are using elsewhere to avoid
+    // moving to fully-specified files
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "isolatedModules": true,
+    "allowImportingTsExtensions": true,
+  },
+  "include": [
+    "**/*.test.*",
+    "webpack/**.ts",
+    "scripts/**.ts",
+    "internal/*.*",
+    "**/*.stories.*"
+  ],
+}

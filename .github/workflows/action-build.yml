@@ -1,0 +1,67 @@
+# This workflow will do a clean install of node dependencies, build the source code
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Build
+
+on:
+  workflow_call:
+
+env:
+  YARN_CHECKSUM_BEHAVIOR: ignore
+  PUPPETEER_SKIP_DOWNLOAD: true  # Skip downloading Chrome
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Run start date
+      run: echo "Started at $(date +'%Y-%m-%dT%H:%M:%S')"
+
+    - uses: actions/checkout@v4
+
+    # Java required for OpenAPI client generation
+    - uses: actions/setup-java@v2
+      with:
+        distribution: 'zulu'
+        java-version: '11'
+        java-package: jre
+
+    - run: corepack enable
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.19'
+        cache: 'yarn'
+
+    - name: Install dependencies
+      run: yarn install --immutable --mode=skip-build
+
+    - name: Ensure ts-patch
+      run: yarn postinstall
+
+    - name: Build
+      env:
+        # Bypass maven search:
+        # https://github.com/thecointech/thecoin/issues/691
+        OPENAPI_GENERATOR_CLI_SEARCH_URL: DEFAULT
+        # Fix OOM in build admin
+        NODE_OPTIONS: "--max-old-space-size=6144"
+      run: yarn build
+
+    # Upload build artifacts for test and docker jobs
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifacts
+        path: |
+          apps/**/translations/*.json
+          apps/*/build/
+          libs/*/build/
+          apis/**/dist/
+          libs/contract-*/src/codegen/**
+          apps/tx-processor/docker/
+        retention-days: 1
+
+    - name: Build Completed
+      run: echo "Build completed at $(date +'%Y-%m-%dT%H:%M:%S')"

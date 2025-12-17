@@ -1,5 +1,5 @@
 import React from 'react';
-import { Meta } from '@storybook/react';
+import { Meta } from '@storybook/react-webpack5';
 import { MainNavigation } from '.';
 import { withAccounts, withLanguageProvider, withMediaContext } from '@thecointech/storybookutils';
 

@@ -11,9 +11,6 @@ import { initGmail } from './gmail';
 export async function initialize() {
 
   try {
-    // initialize logging first
-    log.info(`Loading App: ${__VERSION__} - ${process.env.CONFIG_NAME}`);
-
     ConfigStore.initialize();
 
     initSidebar();

@@ -2,6 +2,7 @@ import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
 import axios from 'axios';
 import type { Calendar, TradierResponse } from './types';
+import { getSecret } from '@thecointech/secrets'
 import {
   ExponentialBackoff,
   retry,
@@ -15,10 +16,10 @@ const ENDPOINT = 'https://sandbox.tradier.com/v1/markets/calendar';
 const _cache = new Map<string, Calendar>();
 
 async function queryCalendar(url: string, signal?: AbortSignal) {
-
+  const apiKey = await getSecret("TradierApiKey")
   const r = await axios.get<TradierResponse>(url, {
     headers: {
-      Authorization: process.env.TRADIER_API_KEY!,
+      Authorization: apiKey,
       Accept: 'application/json'
     },
     signal

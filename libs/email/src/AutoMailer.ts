@@ -1,11 +1,10 @@
 import Mailjet from "node-mailjet";
 import { log } from '@thecointech/logging';
+import { getSecret } from '@thecointech/secrets';
 
 async function getClient() {
-  const key = process.env.MAILJET_API_KEY;
-  const secret = process.env.MAILJET_API_SECRET;
-  if (!key || !secret)
-    throw new Error('Cannot create MailJet without setting MAILJET_API_KEY/MAILJET_API_SECRET')
+  const key = await getSecret('MailjetApiKey');
+  const secret = await getSecret('MailjetApiSecret');
   return new Mailjet({ apiKey: key, apiSecret: secret});
 }
 

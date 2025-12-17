@@ -1,10 +1,14 @@
 import {translations} from '@thecointech/site-landing/src/translations'
 
-const getMessages = (locale) => translations[locale];
+const locales = ['en', 'fr'];
 
-export const intl = {
-  locales: ['en', 'fr'],
+const messages = locales.reduce((acc, lang) => ({
+  ...acc,
+  [lang]: translations[lang],
+}), {});
+
+export const reactIntl = {
   defaultLocale: 'en',
-  getMessages,
-}
-
+  locales,
+  messages,
+};

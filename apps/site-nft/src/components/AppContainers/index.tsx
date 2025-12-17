@@ -1,4 +1,4 @@
-import React from "react";
+import React, { type PropsWithChildren } from "react";
 import styles from './styles.module.less';
 
 type AppContainerProps = {
@@ -7,7 +7,7 @@ type AppContainerProps = {
   noPadding?: boolean,
 }
 
-export const AppContainer : React.FC<AppContainerProps> = (props) =>
+export const AppContainer = (props: PropsWithChildren<AppContainerProps>) =>
   <div className={ `
     ${styles.appContainer}
     ${props.className}

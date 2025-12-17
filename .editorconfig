@@ -14,6 +14,10 @@ curly_bracket_next_line = true
 indent_brace_style = Allman
 spaces_around_brackets = inside
 
+[*.py]
+indent_style = space
+indent_size = 4
+
 [*.cs]
 indent_style = tab
 indent_size = 4

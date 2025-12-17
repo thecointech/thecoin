@@ -1,0 +1,3775 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "VQA Service API",
+    "description": "A simple API for Visual Question Answering",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/warmup": {
+      "get": {
+        "summary": "Warmup",
+        "operationId": "warmup",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/detect-most-similar-option": {
+      "post": {
+        "summary": "Detect Most Similar Option",
+        "operationId": "detect-most-similar-option",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "target",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Target"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "title": "Options"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimilarityResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/correct-estimate": {
+      "post": {
+        "summary": "Correct Estimate",
+        "operationId": "correct-estimate",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "estimate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Estimate"
+            }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Source"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "text",
+              "title": "Type"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CorrectedResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/landing/cookie-banner-present": {
+      "post": {
+        "tags": [
+          "landing"
+        ],
+        "summary": "Cookie Banner Present",
+        "operationId": "cookie-banner-present",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_cookie_banner_present_landing_cookie_banner_present_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExistsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/landing/cookie-banner-accept": {
+      "post": {
+        "tags": [
+          "landing"
+        ],
+        "summary": "Cookie Banner Accept",
+        "operationId": "cookie-banner-accept",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_cookie_banner_accept_landing_cookie_banner_accept_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ElementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/landing/navigate-to-login": {
+      "post": {
+        "tags": [
+          "landing"
+        ],
+        "summary": "Navigate To Login",
+        "operationId": "navigate-to-login",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_navigate_to_login_landing_navigate_to_login_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ElementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/landing/navigate-to-login-menu": {
+      "post": {
+        "tags": [
+          "landing"
+        ],
+        "summary": "Navigate To Login Menu",
+        "operationId": "navigate-to-login-menu",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_navigate_to_login_menu_landing_navigate_to_login_menu_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ElementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/page-intent": {
+      "post": {
+        "tags": [
+          "intent"
+        ],
+        "summary": "Page Intent",
+        "operationId": "page-intent",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_page_intent_page_intent_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/page-error": {
+      "post": {
+        "tags": [
+          "intent"
+        ],
+        "summary": "Page Error",
+        "operationId": "page-error",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_page_error_page_error_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetectErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/login/detect-username-input": {
+      "post": {
+        "tags": [
+          "login"
+        ],
+        "summary": "Detect Username Input",
+        "operationId": "detect-username-input",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_detect_username_input_login_detect_username_input_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InputElementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/login/detect-password-exists": {
+      "post": {
+        "tags": [
+          "login"
+        ],
+        "summary": "Detect Password Exists",
+        "operationId": "detect-password-exists",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_detect_password_exists_login_detect_password_exists_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PasswordDetectedResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/login/detect-password-input": {
+      "post": {
+        "tags": [
+          "login"
+        ],
+        "summary": "Detect Password Input",
+        "operationId": "detect-password-input",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_detect_password_input_login_detect_password_input_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InputElementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/login/detect-continue-element": {
+      "post": {
+        "tags": [
+          "login"
+        ],
+        "summary": "Detect Continue Element",
+        "operationId": "detect-continue-element",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_detect_continue_element_login_detect_continue_element_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ElementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/login/detect-login-element": {
+      "post": {
+        "tags": [
+          "login"
+        ],
+        "summary": "Detect Login Element",
+        "operationId": "detect-login-element",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_detect_login_element_login_detect_login_element_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ElementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/login/detect-login-error": {
+      "post": {
+        "tags": [
+          "login"
+        ],
+        "summary": "Detect Login Error",
+        "operationId": "detect-login-error",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_detect_login_error_login_detect_login_error_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/login/detect-login-result": {
+      "post": {
+        "tags": [
+          "login"
+        ],
+        "summary": "Detect Login Result",
+        "operationId": "detect-login-result",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_detect_login_result_login_detect_login_result_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResultResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/login/detect-logout-element": {
+      "post": {
+        "tags": [
+          "login"
+        ],
+        "summary": "Detect Logout Element",
+        "operationId": "detect-logout-element",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_detect_logout_element_login_detect_logout_element_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ElementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/login/detect-session-timeout-element": {
+      "post": {
+        "tags": [
+          "login"
+        ],
+        "summary": "Detect Session Timeout Element",
+        "operationId": "detect-session-timeout-element",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_detect_session_timeout_element_login_detect_session_timeout_element_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ElementResponse"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Detect Session Timeout Element Login Detect Session Timeout Element Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/twofa/detect-action-required": {
+      "post": {
+        "tags": [
+          "twofa"
+        ],
+        "summary": "Detect Action Required",
+        "operationId": "detect-action-required",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_detect_action_required_twofa_detect_action_required_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TwoFactorActionRequiredResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/twofa/detect-destinations": {
+      "post": {
+        "tags": [
+          "twofa"
+        ],
+        "summary": "Detect Destinations",
+        "operationId": "detect-destinations",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_detect_destinations_twofa_detect_destinations_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TwoFactorDestinationsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/twofa/get-destination-elements": {
+      "post": {
+        "tags": [
+          "twofa"
+        ],
+        "summary": "Get Destination Elements",
+        "operationId": "get-destination-elements",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "phone",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Phone"
+            }
+          },
+          {
+            "name": "top",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "title": "Top"
+            }
+          },
+          {
+            "name": "left",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "title": "Left"
+            }
+          },
+          {
+            "name": "width",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "title": "Width"
+            }
+          },
+          {
+            "name": "height",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "title": "Height"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_get_destination_elements_twofa_get_destination_elements_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TwoFactorElementsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/twofa/get-auth-input": {
+      "post": {
+        "tags": [
+          "twofa"
+        ],
+        "summary": "Get Auth Input",
+        "operationId": "get-auth-input",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_get_auth_input_twofa_get_auth_input_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ElementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/twofa/get-remember-input": {
+      "post": {
+        "tags": [
+          "twofa"
+        ],
+        "summary": "Get Remember Input",
+        "operationId": "get-remember-input",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_get_remember_input_twofa_get_remember_input_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RememberMeElementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/twofa/get-submit-input": {
+      "post": {
+        "tags": [
+          "twofa"
+        ],
+        "summary": "Get Submit Input",
+        "operationId": "get-submit-input",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_get_submit_input_twofa_get_submit_input_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ElementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/summary/account-balance-element": {
+      "post": {
+        "tags": [
+          "summary"
+        ],
+        "summary": "Account Balance Element",
+        "operationId": "account-balance-element",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "account_number",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Account Number"
+            }
+          },
+          {
+            "name": "crop_top",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Crop Top"
+            }
+          },
+          {
+            "name": "crop_bottom",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Crop Bottom"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_account_balance_element_summary_account_balance_element_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoneyElementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/summary/list-accounts": {
+      "post": {
+        "tags": [
+          "summary"
+        ],
+        "summary": "List Accounts",
+        "operationId": "list-accounts",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_list_accounts_summary_list_accounts_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OverviewResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/summary/account-navigate-element": {
+      "post": {
+        "tags": [
+          "summary"
+        ],
+        "summary": "Account Navigate Element",
+        "operationId": "account-navigate-element",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "account_number",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Account Number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_account_navigate_element_summary_account_navigate_element_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PositionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/credit-details/current-balance": {
+      "post": {
+        "tags": [
+          "credit-details"
+        ],
+        "summary": "Current Balance",
+        "operationId": "current-balance",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_current_balance_credit_details_current_balance_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoneyElementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/credit-details/current-pending": {
+      "post": {
+        "tags": [
+          "credit-details"
+        ],
+        "summary": "Current Pending",
+        "operationId": "current-pending",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_current_pending_credit_details_current_pending_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PendingBalanceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/credit-details/current-due-amount": {
+      "post": {
+        "tags": [
+          "credit-details"
+        ],
+        "summary": "Current Due Amount",
+        "operationId": "current-due-amount",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_current_due_amount_credit_details_current_due_amount_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoneyElementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/credit-details/current-due-date": {
+      "post": {
+        "tags": [
+          "credit-details"
+        ],
+        "summary": "Current Due Date",
+        "operationId": "current-due-date",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_current_due_date_credit_details_current_due_date_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DateElementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/modal-close": {
+      "post": {
+        "tags": [
+          "modal"
+        ],
+        "summary": "Modal Close",
+        "operationId": "modal-close",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_modal_close_modal_close_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ElementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/best-etransfer-link": {
+      "post": {
+        "tags": [
+          "etransfer"
+        ],
+        "summary": "Best Etransfer Link",
+        "operationId": "best-etransfer-link",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "title": "Links"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ETransferLinkResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/detect-etransfer-stage": {
+      "post": {
+        "tags": [
+          "etransfer"
+        ],
+        "summary": "Detect Etransfer Stage",
+        "operationId": "detect-etransfer-stage",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "title",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Title"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_detect_etransfer_stage_detect_etransfer_stage_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ETransferStageResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/detect-etransfer-complete": {
+      "post": {
+        "tags": [
+          "etransfer"
+        ],
+        "summary": "Detect Etransfer Complete",
+        "operationId": "detect-etransfer-complete",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "title",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Title"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_detect_etransfer_complete_detect_etransfer_complete_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ETransferCompleteResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/detect-etransfer-form": {
+      "post": {
+        "tags": [
+          "etransfer"
+        ],
+        "summary": "Detect Etransfer Form",
+        "operationId": "detect-etransfer-form",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "title",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Title"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_detect_etransfer_form_detect_etransfer_form_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ETransferFormPresentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/detect-input-types": {
+      "post": {
+        "tags": [
+          "etransfer"
+        ],
+        "summary": "Input Types",
+        "operationId": "input-types",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_input_types_detect_input_types_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/InputType"
+                  },
+                  "type": "array",
+                  "title": "Response Input Types Detect Input Types Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/detect-to-recipient": {
+      "post": {
+        "tags": [
+          "etransfer"
+        ],
+        "summary": "Detect To Recipient",
+        "operationId": "detect-to-recipient",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "recipient",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Recipient"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_detect_to_recipient_detect_to_recipient_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ElementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/detect-confirmation-code": {
+      "post": {
+        "tags": [
+          "etransfer"
+        ],
+        "summary": "Detect Confirmation Code",
+        "operationId": "detect-confirmation-code",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_detect_confirmation_code_detect_confirmation_code_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfirmationCodeResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/detect-next-button": {
+      "post": {
+        "tags": [
+          "etransfer"
+        ],
+        "summary": "Detect Next Button",
+        "operationId": "detect-next-button",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_detect_next_button_detect_next_button_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ButtonResponse"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Detect Next Button Detect Next Button Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/api/image-query": {
+      "post": {
+        "summary": "Process Image Query",
+        "operationId": "process-image-query",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "prompt",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Prompt"
+            }
+          },
+          {
+            "name": "json_description",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Json Description"
+            }
+          },
+          {
+            "name": "crop_top",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Crop Top"
+            }
+          },
+          {
+            "name": "crop_height",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Crop Height"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_process_image_query_api_image_query_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/multi-image-query": {
+      "post": {
+        "summary": "Process Multi Image Query",
+        "operationId": "process-multi-image-query",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "prompt",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Prompt"
+            }
+          },
+          {
+            "name": "json_description",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Json Description"
+            }
+          },
+          {
+            "name": "crop_top",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Crop Top"
+            }
+          },
+          {
+            "name": "crop_height",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Crop Height"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_process_multi_image_query_api_multi_image_query_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/point-image-query": {
+      "post": {
+        "summary": "Process Point Image Query",
+        "operationId": "process-point-image-query",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "prompt",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Prompt"
+            }
+          },
+          {
+            "name": "point_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 5,
+              "title": "Point Size"
+            }
+          },
+          {
+            "name": "crop_top",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Crop Top"
+            }
+          },
+          {
+            "name": "crop_bottom",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Crop Bottom"
+            }
+          },
+          {
+            "name": "crop_left",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Crop Left"
+            }
+          },
+          {
+            "name": "crop_right",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "title": "Crop Right"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_process_point_image_query_api_point_image_query_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the annotated image with points",
+            "content": {
+              "image/png": {}
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/text-query": {
+      "post": {
+        "summary": "Process Text Query",
+        "operationId": "process-text-query",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "prompt",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Prompt"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageQueryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/draw-boxes": {
+      "post": {
+        "summary": "Draw Boxes",
+        "operationId": "draw-boxes",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "top",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "title": "Top"
+            }
+          },
+          {
+            "name": "height",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "title": "Height"
+            }
+          },
+          {
+            "name": "left",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "title": "Left"
+            }
+          },
+          {
+            "name": "width",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "title": "Width"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_draw_boxes_api_draw_boxes_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the annotated image with boxes",
+            "content": {
+              "image/png": {}
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccountResponse": {
+        "properties": {
+          "account_type": {
+            "$ref": "#/components/schemas/AccountType"
+          },
+          "account_name": {
+            "type": "string",
+            "title": "Account Name"
+          },
+          "account_number": {
+            "type": "string",
+            "title": "Account Number",
+            "description": "Account number including any stars or asterisks"
+          },
+          "balance": {
+            "type": "string",
+            "title": "Balance"
+          },
+          "position_x": {
+            "type": "number",
+            "title": "Position X"
+          },
+          "position_y": {
+            "type": "number",
+            "title": "Position Y"
+          }
+        },
+        "type": "object",
+        "required": [
+          "account_type",
+          "account_name",
+          "account_number",
+          "balance",
+          "position_x",
+          "position_y"
+        ],
+        "title": "AccountResponse"
+      },
+      "AccountType": {
+        "type": "string",
+        "enum": [
+          "Chequing",
+          "Savings",
+          "Credit"
+        ],
+        "title": "AccountType"
+      },
+      "BBox": {
+        "properties": {
+          "left": {
+            "type": "number",
+            "title": "Left",
+            "default": 0.0
+          },
+          "top": {
+            "type": "number",
+            "title": "Top",
+            "default": 0.0
+          },
+          "right": {
+            "type": "number",
+            "title": "Right",
+            "default": 65536
+          },
+          "bottom": {
+            "type": "number",
+            "title": "Bottom",
+            "default": 65536
+          }
+        },
+        "type": "object",
+        "title": "BBox"
+      },
+      "Body_account_balance_element_summary_account_balance_element_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_account_balance_element_summary_account_balance_element_post"
+      },
+      "Body_account_navigate_element_summary_account_navigate_element_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_account_navigate_element_summary_account_navigate_element_post"
+      },
+      "Body_cookie_banner_accept_landing_cookie_banner_accept_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_cookie_banner_accept_landing_cookie_banner_accept_post"
+      },
+      "Body_cookie_banner_present_landing_cookie_banner_present_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_cookie_banner_present_landing_cookie_banner_present_post"
+      },
+      "Body_current_balance_credit_details_current_balance_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_current_balance_credit_details_current_balance_post"
+      },
+      "Body_current_due_amount_credit_details_current_due_amount_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_current_due_amount_credit_details_current_due_amount_post"
+      },
+      "Body_current_due_date_credit_details_current_due_date_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_current_due_date_credit_details_current_due_date_post"
+      },
+      "Body_current_pending_credit_details_current_pending_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_current_pending_credit_details_current_pending_post"
+      },
+      "Body_detect_action_required_twofa_detect_action_required_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_detect_action_required_twofa_detect_action_required_post"
+      },
+      "Body_detect_confirmation_code_detect_confirmation_code_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_detect_confirmation_code_detect_confirmation_code_post"
+      },
+      "Body_detect_continue_element_login_detect_continue_element_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_detect_continue_element_login_detect_continue_element_post"
+      },
+      "Body_detect_destinations_twofa_detect_destinations_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_detect_destinations_twofa_detect_destinations_post"
+      },
+      "Body_detect_etransfer_complete_detect_etransfer_complete_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_detect_etransfer_complete_detect_etransfer_complete_post"
+      },
+      "Body_detect_etransfer_form_detect_etransfer_form_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_detect_etransfer_form_detect_etransfer_form_post"
+      },
+      "Body_detect_etransfer_stage_detect_etransfer_stage_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_detect_etransfer_stage_detect_etransfer_stage_post"
+      },
+      "Body_detect_login_element_login_detect_login_element_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_detect_login_element_login_detect_login_element_post"
+      },
+      "Body_detect_login_error_login_detect_login_error_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_detect_login_error_login_detect_login_error_post"
+      },
+      "Body_detect_login_result_login_detect_login_result_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_detect_login_result_login_detect_login_result_post"
+      },
+      "Body_detect_logout_element_login_detect_logout_element_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_detect_logout_element_login_detect_logout_element_post"
+      },
+      "Body_detect_next_button_detect_next_button_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_detect_next_button_detect_next_button_post"
+      },
+      "Body_detect_password_exists_login_detect_password_exists_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_detect_password_exists_login_detect_password_exists_post"
+      },
+      "Body_detect_password_input_login_detect_password_input_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_detect_password_input_login_detect_password_input_post"
+      },
+      "Body_detect_session_timeout_element_login_detect_session_timeout_element_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_detect_session_timeout_element_login_detect_session_timeout_element_post"
+      },
+      "Body_detect_to_recipient_detect_to_recipient_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_detect_to_recipient_detect_to_recipient_post"
+      },
+      "Body_detect_username_input_login_detect_username_input_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_detect_username_input_login_detect_username_input_post"
+      },
+      "Body_draw_boxes_api_draw_boxes_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_draw_boxes_api_draw_boxes_post"
+      },
+      "Body_get_auth_input_twofa_get_auth_input_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_get_auth_input_twofa_get_auth_input_post"
+      },
+      "Body_get_destination_elements_twofa_get_destination_elements_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_get_destination_elements_twofa_get_destination_elements_post"
+      },
+      "Body_get_remember_input_twofa_get_remember_input_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_get_remember_input_twofa_get_remember_input_post"
+      },
+      "Body_get_submit_input_twofa_get_submit_input_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_get_submit_input_twofa_get_submit_input_post"
+      },
+      "Body_input_types_detect_input_types_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          },
+          "input_elements": {
+            "type": "string",
+            "title": "Input Elements"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image",
+          "input_elements"
+        ],
+        "title": "Body_input_types_detect_input_types_post"
+      },
+      "Body_list_accounts_summary_list_accounts_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_list_accounts_summary_list_accounts_post"
+      },
+      "Body_modal_close_modal_close_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_modal_close_modal_close_post"
+      },
+      "Body_navigate_to_login_landing_navigate_to_login_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_navigate_to_login_landing_navigate_to_login_post"
+      },
+      "Body_navigate_to_login_menu_landing_navigate_to_login_menu_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          },
+          "crop": {
+            "$ref": "#/components/schemas/BBox"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_navigate_to_login_menu_landing_navigate_to_login_menu_post"
+      },
+      "Body_page_error_page_error_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_page_error_page_error_post"
+      },
+      "Body_page_intent_page_intent_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_page_intent_page_intent_post"
+      },
+      "Body_process_image_query_api_image_query_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_process_image_query_api_image_query_post"
+      },
+      "Body_process_multi_image_query_api_multi_image_query_post": {
+        "properties": {
+          "images": {
+            "items": {
+              "type": "string",
+              "format": "binary"
+            },
+            "type": "array",
+            "title": "Images"
+          }
+        },
+        "type": "object",
+        "required": [
+          "images"
+        ],
+        "title": "Body_process_multi_image_query_api_multi_image_query_post"
+      },
+      "Body_process_point_image_query_api_point_image_query_post": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "Body_process_point_image_query_api_point_image_query_post"
+      },
+      "ButtonResponse": {
+        "properties": {
+          "position_x": {
+            "type": "number",
+            "title": "Position X"
+          },
+          "position_y": {
+            "type": "number",
+            "title": "Position Y"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content",
+            "description": "button text"
+          },
+          "neighbour_text": {
+            "type": "string",
+            "title": "Neighbour Text",
+            "description": "Text immediately beside or above the element"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          }
+        },
+        "type": "object",
+        "required": [
+          "position_x",
+          "position_y",
+          "content",
+          "neighbour_text",
+          "enabled"
+        ],
+        "title": "ButtonResponse"
+      },
+      "ConfirmationCodeResponse": {
+        "properties": {
+          "position_x": {
+            "type": "number",
+            "title": "Position X"
+          },
+          "position_y": {
+            "type": "number",
+            "title": "Position Y"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content",
+            "description": "the code that confirms successful etransfer"
+          },
+          "neighbour_text": {
+            "type": "string",
+            "title": "Neighbour Text",
+            "description": "Text immediately beside or above the element"
+          }
+        },
+        "type": "object",
+        "required": [
+          "position_x",
+          "position_y",
+          "content",
+          "neighbour_text"
+        ],
+        "title": "ConfirmationCodeResponse"
+      },
+      "CorrectedResponse": {
+        "properties": {
+          "correct_value": {
+            "type": "string",
+            "title": "Correct Value",
+            "description": "The correct value from source"
+          }
+        },
+        "type": "object",
+        "required": [
+          "correct_value"
+        ],
+        "title": "CorrectedResponse"
+      },
+      "DateElementResponse": {
+        "properties": {
+          "position_x": {
+            "type": "number",
+            "title": "Position X"
+          },
+          "position_y": {
+            "type": "number",
+            "title": "Position Y"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content",
+            "description": "date string"
+          },
+          "neighbour_text": {
+            "type": "string",
+            "title": "Neighbour Text",
+            "description": "Text immediately beside or above the element"
+          }
+        },
+        "type": "object",
+        "required": [
+          "position_x",
+          "position_y",
+          "content",
+          "neighbour_text"
+        ],
+        "title": "DateElementResponse"
+      },
+      "DetectErrorResponse": {
+        "properties": {
+          "error_message_detected": {
+            "type": "boolean",
+            "title": "Error Message Detected",
+            "description": "boolean"
+          },
+          "error_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Message",
+            "description": "Optionally contains error message only if error_message_detected is true",
+            "optional": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "error_message_detected",
+          "error_message"
+        ],
+        "title": "DetectErrorResponse"
+      },
+      "ETransferCompleteResponse": {
+        "properties": {
+          "transfer_complete": {
+            "type": "boolean",
+            "title": "Transfer Complete"
+          }
+        },
+        "type": "object",
+        "required": [
+          "transfer_complete"
+        ],
+        "title": "ETransferCompleteResponse"
+      },
+      "ETransferFormPresentResponse": {
+        "properties": {
+          "form_present": {
+            "type": "boolean",
+            "title": "Form Present"
+          }
+        },
+        "type": "object",
+        "required": [
+          "form_present"
+        ],
+        "title": "ETransferFormPresentResponse"
+      },
+      "ETransferLinkResponse": {
+        "properties": {
+          "best_link": {
+            "type": "string",
+            "title": "Best Link"
+          },
+          "reasoning": {
+            "type": "string",
+            "title": "Reasoning",
+            "description": "Reasoning for the best link"
+          }
+        },
+        "type": "object",
+        "required": [
+          "best_link",
+          "reasoning"
+        ],
+        "title": "ETransferLinkResponse"
+      },
+      "ETransferStage": {
+        "type": "string",
+        "enum": [
+          "FillForm",
+          "ReviewDetails",
+          "ConfirmDetails",
+          "TransferComplete",
+          "Errored"
+        ],
+        "title": "ETransferStage"
+      },
+      "ETransferStageResponse": {
+        "properties": {
+          "stage": {
+            "$ref": "#/components/schemas/ETransferStage",
+            "description": "option"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stage"
+        ],
+        "title": "ETransferStageResponse"
+      },
+      "ElementResponse": {
+        "properties": {
+          "position_x": {
+            "type": "number",
+            "title": "Position X"
+          },
+          "position_y": {
+            "type": "number",
+            "title": "Position Y"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content",
+            "description": "Content of the element"
+          },
+          "neighbour_text": {
+            "type": "string",
+            "title": "Neighbour Text",
+            "description": "Text immediately beside or above the element"
+          }
+        },
+        "type": "object",
+        "required": [
+          "position_x",
+          "position_y",
+          "content",
+          "neighbour_text"
+        ],
+        "title": "ElementResponse"
+      },
+      "EmailDestinations": {
+        "properties": {
+          "num_emails": {
+            "type": "integer",
+            "title": "Num Emails"
+          },
+          "emails": {
+            "items": {
+              "$ref": "#/components/schemas/EmailElements"
+            },
+            "type": "array",
+            "title": "Emails"
+          }
+        },
+        "type": "object",
+        "required": [
+          "num_emails",
+          "emails"
+        ],
+        "title": "EmailDestinations"
+      },
+      "EmailElements": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email",
+            "description": "the exact text of the email address"
+          },
+          "position_x": {
+            "type": "number",
+            "title": "Position X"
+          },
+          "position_y": {
+            "type": "number",
+            "title": "Position Y"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "position_x",
+          "position_y"
+        ],
+        "title": "EmailElements"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "error_message_detected": {
+            "type": "boolean",
+            "title": "Error Message Detected",
+            "description": "boolean"
+          },
+          "error_message": {
+            "type": "string",
+            "title": "Error Message",
+            "description": "Optionally contains error message only if error_message_detected is true",
+            "optional": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "error_message_detected",
+          "error_message"
+        ],
+        "title": "ErrorResponse"
+      },
+      "ExistsResponse": {
+        "properties": {
+          "cookie_banner_detected": {
+            "type": "boolean",
+            "title": "Cookie Banner Detected"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cookie_banner_detected"
+        ],
+        "title": "ExistsResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ImageQueryResponse": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": "The generated response to your query about the image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "ImageQueryResponse"
+      },
+      "InputElementResponse": {
+        "properties": {
+          "position_x": {
+            "type": "number",
+            "title": "Position X"
+          },
+          "position_y": {
+            "type": "number",
+            "title": "Position Y"
+          },
+          "placeholder_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Placeholder Text",
+            "description": "placeholder text inside the element or empty string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "position_x",
+          "position_y",
+          "placeholder_text"
+        ],
+        "title": "InputElementResponse"
+      },
+      "InputType": {
+        "type": "string",
+        "enum": [
+          "AmountToSend",
+          "ToRecipient",
+          "FromAccount",
+          "SecretQuestion",
+          "SecretAnswer",
+          "ToEmail",
+          "ToPhone",
+          "Language",
+          "Date",
+          "Frequency",
+          "Unknown"
+        ],
+        "title": "InputType"
+      },
+      "IntentResponse": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/PageType",
+            "description": "option"
+          }
+        },
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "title": "IntentResponse"
+      },
+      "LoginResult": {
+        "type": "string",
+        "enum": [
+          "LoginSuccess",
+          "TwoFactorAuth",
+          "LoginError",
+          "OtherError"
+        ],
+        "title": "LoginResult"
+      },
+      "LoginResultResponse": {
+        "properties": {
+          "result": {
+            "$ref": "#/components/schemas/LoginResult",
+            "description": "LoginSuccess|TwoFactorAuth|LoginError|OtherError"
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "LoginResultResponse"
+      },
+      "MoneyElementResponse": {
+        "properties": {
+          "position_x": {
+            "type": "number",
+            "title": "Position X"
+          },
+          "position_y": {
+            "type": "number",
+            "title": "Position Y"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content",
+            "description": "dollar amount as string"
+          },
+          "neighbour_text": {
+            "type": "string",
+            "title": "Neighbour Text",
+            "description": "Text immediately beside or above the element"
+          }
+        },
+        "type": "object",
+        "required": [
+          "position_x",
+          "position_y",
+          "content",
+          "neighbour_text"
+        ],
+        "title": "MoneyElementResponse"
+      },
+      "OverviewResponse": {
+        "properties": {
+          "num_accounts": {
+            "type": "integer",
+            "title": "Num Accounts"
+          },
+          "accounts": {
+            "items": {
+              "$ref": "#/components/schemas/AccountResponse"
+            },
+            "type": "array",
+            "title": "Accounts"
+          }
+        },
+        "type": "object",
+        "required": [
+          "num_accounts",
+          "accounts"
+        ],
+        "title": "OverviewResponse"
+      },
+      "PageType": {
+        "type": "string",
+        "enum": [
+          "Landing",
+          "Login",
+          "AccountsSummary",
+          "CreditAccountDetails",
+          "PayBill",
+          "SendTransfer",
+          "ModalDialog",
+          "MenuSelect",
+          "Blank",
+          "Loading"
+        ],
+        "title": "PageType"
+      },
+      "PasswordDetectedResponse": {
+        "properties": {
+          "password_input_detected": {
+            "type": "boolean",
+            "title": "Password Input Detected"
+          }
+        },
+        "type": "object",
+        "required": [
+          "password_input_detected"
+        ],
+        "title": "PasswordDetectedResponse"
+      },
+      "PendingBalanceResponse": {
+        "properties": {
+          "pending_exists": {
+            "type": "boolean",
+            "title": "Pending Exists"
+          },
+          "pending_element": {
+            "$ref": "#/components/schemas/MoneyElementResponse"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pending_exists",
+          "pending_element"
+        ],
+        "title": "PendingBalanceResponse"
+      },
+      "PhoneDestinations": {
+        "properties": {
+          "num_phone_numbers": {
+            "type": "integer",
+            "title": "Num Phone Numbers"
+          },
+          "phone_nos": {
+            "items": {
+              "$ref": "#/components/schemas/PhoneNumberElements"
+            },
+            "type": "array",
+            "title": "Phone Nos"
+          }
+        },
+        "type": "object",
+        "required": [
+          "num_phone_numbers",
+          "phone_nos"
+        ],
+        "title": "PhoneDestinations"
+      },
+      "PhoneNumberElements": {
+        "properties": {
+          "phone_number": {
+            "type": "string",
+            "title": "Phone Number",
+            "description": "the exact text of the phone number"
+          },
+          "position_x": {
+            "type": "number",
+            "title": "Position X"
+          },
+          "position_y": {
+            "type": "number",
+            "title": "Position Y"
+          }
+        },
+        "type": "object",
+        "required": [
+          "phone_number",
+          "position_x",
+          "position_y"
+        ],
+        "title": "PhoneNumberElements"
+      },
+      "PositionResponse": {
+        "properties": {
+          "position_x": {
+            "type": "number",
+            "title": "Position X"
+          },
+          "position_y": {
+            "type": "number",
+            "title": "Position Y"
+          }
+        },
+        "type": "object",
+        "required": [
+          "position_x",
+          "position_y"
+        ],
+        "title": "PositionResponse"
+      },
+      "RememberMeElementResponse": {
+        "properties": {
+          "position_x": {
+            "type": "number",
+            "title": "Position X"
+          },
+          "position_y": {
+            "type": "number",
+            "title": "Position Y"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content",
+            "description": "Content of the element"
+          },
+          "neighbour_text": {
+            "type": "string",
+            "title": "Neighbour Text",
+            "description": "Text immediately beside or above the element"
+          },
+          "is_checked": {
+            "type": "boolean",
+            "title": "Is Checked",
+            "description": "Is the checkbox checked?"
+          }
+        },
+        "type": "object",
+        "required": [
+          "position_x",
+          "position_y",
+          "content",
+          "neighbour_text",
+          "is_checked"
+        ],
+        "title": "RememberMeElementResponse"
+      },
+      "SimilarityResponse": {
+        "properties": {
+          "most_similar": {
+            "type": "string",
+            "title": "Most Similar",
+            "description": "the option most similar to the target"
+          },
+          "reasoning": {
+            "type": "string",
+            "title": "Reasoning",
+            "description": "your reasoning"
+          }
+        },
+        "type": "object",
+        "required": [
+          "most_similar",
+          "reasoning"
+        ],
+        "title": "SimilarityResponse"
+      },
+      "TwoFactorActionRequiredResponse": {
+        "properties": {
+          "action": {
+            "$ref": "#/components/schemas/TwoFactorActions",
+            "description": "option"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "The full message describing the 2-factor action required"
+          }
+        },
+        "type": "object",
+        "required": [
+          "action",
+          "message"
+        ],
+        "title": "TwoFactorActionRequiredResponse"
+      },
+      "TwoFactorActions": {
+        "type": "string",
+        "enum": [
+          "SelectDestination",
+          "InputCode",
+          "ApproveInApp",
+          "Error"
+        ],
+        "title": "TwoFactorActions"
+      },
+      "TwoFactorDestinationsResponse": {
+        "properties": {
+          "phones": {
+            "$ref": "#/components/schemas/PhoneDestinations"
+          },
+          "emails": {
+            "$ref": "#/components/schemas/EmailDestinations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "phones",
+          "emails"
+        ],
+        "title": "TwoFactorDestinationsResponse"
+      },
+      "TwoFactorElementsResponse": {
+        "properties": {
+          "buttons": {
+            "items": {
+              "$ref": "#/components/schemas/ElementResponse"
+            },
+            "type": "array",
+            "title": "Buttons"
+          }
+        },
+        "type": "object",
+        "required": [
+          "buttons"
+        ],
+        "title": "TwoFactorElementsResponse"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "APIKeyHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      }
+    }
+  }
+}

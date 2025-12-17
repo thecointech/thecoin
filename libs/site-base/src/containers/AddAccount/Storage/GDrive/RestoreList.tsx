@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { getUrlParameterByName } from '../../../../utils/localState'
+import { getUrlParameterByName } from '@thecointech/utilities/urls';
 import { GoogleWalletItem } from '@thecointech/types';
 import { GetSecureApi } from '@thecointech/apis/broker';
 import { log } from '@thecointech/logging';
 import { ButtonProps, List } from 'semantic-ui-react';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { AccountState } from '@thecointech/account';
 import { isPresent, NormalizeAddress } from '@thecointech/utilities';
 import { Wallet } from 'ethers';
 import { defineMessage, FormattedMessage } from 'react-intl';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router';
 import { PageHeader } from '../../../../components/PageHeader';
 import { ButtonPrimary } from '../../../../components/Buttons';
 import { clientUri } from './googleUtils';
@@ -67,7 +67,7 @@ export const RestoreList = ({url}: Props) => {
   ///////////////////////////////////////////////
   // If we have requested to redirect
   if (redirect) {
-    return <Redirect to={redirect} />
+    return <Navigate to={redirect} />
   }
 
   return wallets == undefined

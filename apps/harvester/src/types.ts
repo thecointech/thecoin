@@ -1,57 +1,11 @@
+import { HarvestStep, HarvestSteps, HarvestStepType } from "@thecointech/store-harvester";
 
-export interface Mnemonic {
-  readonly phrase: string;
-  readonly path: string;
-  readonly locale: string;
-};
-
-export type DaysArray = [boolean, boolean, boolean, boolean, boolean, boolean, boolean];
-export const defaultDays: DaysArray = [
-  false,
-  true,   // Tuesday
-  false,
-  false,
-  true,   // Friday
-  false,
-  false,
-]
-export const defaultTime = "08:00";
-
-export enum HarvestStepType {
-  // ReadVisaOwing,
-  ClearPendingVisa = "ClearPendingVisa",
-  ProcessPercent = "ProcessPercent",
-  TransferVisaOwing = "TransferVisaOwing",
-  RoundUp = "RoundUp",
-  TransferEverything = "TransferEverything",
-  TopUp = "TopUp",
-  ChequeMinimum = "ChequeMinimum",
-  TransferLimit = "TransferLimit",
-  SendETransfer = "SendETransfer",
-  PayVisa = "PayVisa",
-  Heartbeat = "Heartbeat",
-}
-
-export type HarvestArgs = Record<string, string|number>
-
-export type HarvestStep = {
-  type: HarvestStepType,
-  args?: HarvestArgs,
-}
-export type HarvestSteps = Array<HarvestStep>;
-
-export type HarvestSchedule = {
-  daysToRun: DaysArray,
-  timeToRun: string,
-}
-export type HarvestConfig = {
-  schedule: HarvestSchedule,
-  steps: HarvestSteps,
-}
+export type * from "@thecointech/store-harvester";
 
 // Until we have a proper graph, just explicitly set an order
 export const HarvestStepOrder = [
   HarvestStepType.ClearPendingVisa,
+  HarvestStepType.EnsureHarvesterBalance,
   HarvestStepType.ProcessPercent,
   HarvestStepType.TransferVisaOwing,
   HarvestStepType.RoundUp,

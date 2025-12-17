@@ -1,0 +1,8 @@
+{
+  "extends": "../../tsconfig.tests.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "strict": true,
+  },
+  "include": ["**/*.test.*", "tools/**/*.ts", "internal/*.*", "**/*.stories.*", "./mocked/**/*.*"],
+}

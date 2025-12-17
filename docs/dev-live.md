@@ -8,7 +8,7 @@ ethereum emulator
  - DONE contract is automatically deployed
   - DONE Random account for TheCoin/BrokerCAD/Testing
   - DONE Random transfers to TestingAccount
- - DONE 10000 coin is minted and sent to client1
+ - DONE 10000 coin is minted and sent to Client1
 
 Rates-Service:
  - DONE Connects to Firestore emulators

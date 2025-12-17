@@ -1,4 +1,3 @@
-import { HarvestStep, HarvestStepType } from '../../types';
 import { ProcessingStage } from '../types';
 import { ClearPendingVisa } from './ClearPendingVisa';
 import { Heartbeat } from './Heartbeat';
@@ -11,10 +10,13 @@ import { ChequeMinimum } from './ChequeMinimum';
 import { TransferLimit } from './TransferLimit';
 import { TransferVisaOwing } from './TransferVisaOwing';
 import { ProcessPercent } from './ProcessPercent';
+import { EnsureHarvesterBalance } from './EnsureHarvesterBalance';
+import { HarvestStep, HarvestStepType } from '@thecointech/store-harvester';
 
 export const createStep = (step: HarvestStep) : ProcessingStage => {
   switch (step.type) {
     case HarvestStepType.ClearPendingVisa: return new ClearPendingVisa();
+    case HarvestStepType.EnsureHarvesterBalance: return new EnsureHarvesterBalance();
     case HarvestStepType.ProcessPercent: return new ProcessPercent(step.args);
     case HarvestStepType.TransferVisaOwing: return new TransferVisaOwing();
     case HarvestStepType.RoundUp: return new RoundUp(step.args);

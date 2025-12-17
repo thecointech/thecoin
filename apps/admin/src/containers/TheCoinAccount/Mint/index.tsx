@@ -5,7 +5,7 @@ import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { toHuman } from '@thecointech/utilities';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap'
+import { AccountMap } from '@thecointech/redux-accounts'
 import { Account } from '@thecointech/shared/containers/Account';
 import { weSellAt } from '@thecointech/fx-rates';
 import { DateTime } from 'luxon';
@@ -38,6 +38,7 @@ export const Mint = () => {
       debugger; // NOTE: THIS SHOULD BE IN MS, NOT SECONDS
       const { contract } = account;
       const brokerAddress = process.env.WALLET_BrokerCAD_ADDRESS!;
+      throw new Error("Whats going on here");
       const tx = await contract!.mintCoins(toMint, brokerAddress, DateTime.now().toSeconds());
       setTxHash(tx.hash);
       await tx.wait();

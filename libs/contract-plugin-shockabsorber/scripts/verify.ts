@@ -4,7 +4,7 @@ import { log } from '@thecointech/logging';
 import { exit } from 'process';
 import { getProvider } from '@thecointech/ethers-provider';
 import { getImplementationAddress } from '@openzeppelin/upgrades-core';
-import { getContract } from '../src';
+import { ContractShockAbsorber } from '../src';
 
 // Don't run this script if we're not doing a prod-style deployment
 if (!process.env.CONFIG_NAME?.startsWith('prod')) {
@@ -12,8 +12,8 @@ if (!process.env.CONFIG_NAME?.startsWith('prod')) {
 }
 
 const network = hre.config.defaultNetwork;
-const contract = await getContract();
-const provider = getProvider();
+const contract = await ContractShockAbsorber.get();
+const provider = await getProvider();
 const contractAddress = await contract.getAddress();
 
 // Make 5 attempts to verify.  This allows time for

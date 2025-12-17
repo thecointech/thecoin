@@ -10,10 +10,13 @@ import { OptionToggles } from './OptionToggles';
 import { getContract } from '@thecointech/contract-nft';
 import { Options } from './types';
 import { log } from '@thecointech/logging';
-import { ImageEditorComponent } from '@toast-ui/react-image-editor';
+// NOTE: Removing to eliminate the presence of canvas
+// (it's currently breaking jsdom it fails to build, has no
+// binaries for Node22, and is an optional dependency)
+// import { ImageEditorComponent } from '@toast-ui/react-image-editor';
 import { signAndUpload } from './SignAndUpload';
 import { Button } from 'semantic-ui-react';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 
 const title = defineMessage({ defaultMessage: "Create Profile Image", description: "Title message on profile page" });
 const description = defineMessage({ defaultMessage: "Create and sign an image to show your carbon-neutral status", description: "Profile instructions" });

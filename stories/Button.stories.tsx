@@ -1,5 +1,5 @@
 import React from 'react';
-import { Story, Meta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react-webpack5';
 import { ButtonPrimary, ButtonSecondary, ButtonTertiary } from '../libs/site-base/src/components/Buttons';
 import { Button, ButtonProps } from 'semantic-ui-react';
 
@@ -15,11 +15,11 @@ export default {
   },
 } as Meta;
 
-const TemplatePrimary: Story<ButtonProps> = (args) => <ButtonPrimary {...args} />;
-const TemplateSecondary: Story<ButtonProps> = (args) => <ButtonSecondary {...args} />;
-const TemplateTertiary: Story<ButtonProps> = (args) => <ButtonTertiary {...args} />;
+const TemplatePrimary: StoryFn<ButtonProps> = (args) => <ButtonPrimary {...args} />;
+const TemplateSecondary: StoryFn<ButtonProps> = (args) => <ButtonSecondary {...args} />;
+const TemplateTertiary: StoryFn<ButtonProps> = (args) => <ButtonTertiary {...args} />;
 
-const TemplateInverted: Story<ButtonProps> = (args) => <Button inverted {...args} />;
+const TemplateInverted: StoryFn<ButtonProps> = (args) => <Button inverted {...args} />;
 
 
 export const Primary = TemplatePrimary.bind({});

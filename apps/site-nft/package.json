@@ -3,7 +3,7 @@
   "productName": "THECoin: NFT",
   "private": true,
   "type": "module",
-  "version": "0.2.135",
+  "version": "0.5.1-test.0",
   "description": "THECoin NFT: some neat tagline",
   "repository": {
     "type": "git",
@@ -15,8 +15,8 @@
   "scripts": {
     "preanalyze": "yarn clean:analyze",
     "analyze": "node ./internals/scripts/analyze.js",
-    "build": "run -T run-s build:pre build:src",
-    "build:src": "yarn run-env exec=webpack --config ../../libs/site-base/internal/webpack/webpack.prod.mjs --progress",
+    "_build": "run -T run-s build:pre build:src",
+    "build:src": "run-env ./internals/build.ts",
     "build:pre": "run -T run-p 'build:pre:*'",
     "build:pre:semantic": "node ./internals/buildSemantic.mjs",
     "build:pre:i18l": "run-s extract compile",
@@ -24,10 +24,10 @@
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",
     "clean:analyze": "rimraf stats.json",
-    "deploy:rebuild": "yarn build",
-    "deploy": "run-env ./deploy.ts",
+    "_deploy:rebuild": "yarn build",
+    "_deploy": "run-env ./deploy.ts",
     "dev": "run-env internals/server.mjs --port=3003",
-    "dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
+    "_dev:live": "cross-env CONFIG_NAME=devlive yarn dev",
     "prod:test": "cross-env CONFIG_NAME=prodtest yarn dev",
     "start": "firebase emulators:start --only hosting",
     "lint": "yarn lint:src && yarn lint:css",
@@ -35,7 +35,7 @@
     "lint:src": "eslint . --ext .js,.ts,.jsx,.tsx",
     "lint:src:fix": "eslint --fix",
     "pretest": "yarn clean:test",
-    "test": "run :jest",
+    "_test": "run :jest",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "extract": "run -T formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
@@ -51,14 +51,13 @@
     ]
   },
   "dependencies": {
-    "@thecointech/contract-nft": "^0.2.135",
-    "@thecointech/nft": "^0.2.135",
-    "@thecointech/shared": "^0.2.135",
-    "@thecointech/site-base": "^0.2.135",
-    "@toast-ui/react-image-editor": "^3.15.2",
+    "@thecointech/contract-nft": "^0.5.1-test.0",
+    "@thecointech/nft": "^0.5.0",
+    "@thecointech/shared": "^0.5.1-test.0",
+    "@thecointech/site-base": "^0.5.1-test.0",
     "exif-library": "https://github.com/FrozenKiwi/exif-library#cf25837936add5820fcc25d36e18ed1d39f79bc6"
   },
   "devDependencies": {
-    "@thecointech/setenv": "^0.2.135"
+    "@thecointech/setenv": "^0.5.1-test.0"
   }
 }

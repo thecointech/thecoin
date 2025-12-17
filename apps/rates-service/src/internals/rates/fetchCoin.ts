@@ -53,7 +53,7 @@ export function findRateFor(lastExpired: number, data: FinnhubData): CoinRate {
   // value we have.  This happens on init or if
   // potentially google services went down for several days
   if (boundary < data.t[0]) {
-    log.warn(`Out of range rates when updating from {lastExpired}`);
+    log.warn({ lastExpired }, `Out of range rates when updating from {lastExpired}`);
     return response(0);
   }
 

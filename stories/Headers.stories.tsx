@@ -1,5 +1,5 @@
 import React from 'react';
-import { Story, Meta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react-webpack5';
 
 import { Header, StrictHeaderProps } from 'semantic-ui-react';
 import "@thecointech/site-semantic-theme/semantic.less"
@@ -13,7 +13,7 @@ export default {
   }
 } as Meta;
 
-const Template: Story<StrictHeaderProps> = (args) => <Header as={args.as} >{args.content}<Header.Subheader>{args.content}</Header.Subheader></Header>;
+const Template: StoryFn<StrictHeaderProps> = (args) => <Header as={args.as} >{args.content}<Header.Subheader>{args.content}</Header.Subheader></Header>;
 
 export const H1 = Template.bind({});
 H1.args = {

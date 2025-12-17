@@ -5,4 +5,5 @@ export interface IActions {
   clearStep(type: HarvestStepType): void;
   setDaysToRun(daysToRun: DaysArray): void;
   setTimeToRun(time: string): void;
+  resetToDefault(): void;
 }

@@ -58,7 +58,7 @@ export class VerifyController extends Controller {
     log.debug({address: payload.refId, status: payload.status},
       `Recieved KYC status update {status} for address {address} with sginature: ${signature}`);
 
-    if (!checkHeader(signature, r)) {
+    if (!await checkHeader(signature, r)) {
       log.error(`HMAC Validation failed: ${signature} - ${r}`);
       this.setStatus(500);
       return;

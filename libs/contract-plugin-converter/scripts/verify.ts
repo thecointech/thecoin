@@ -1,5 +1,5 @@
 import hre from 'hardhat';
-import { getContract } from '../src';
+import { ContractConverter } from '../src';
 import { sleep } from '@thecointech/async';
 import { log } from '@thecointech/logging';
 import { exit } from 'process';
@@ -11,8 +11,8 @@ if (!process.env.CONFIG_NAME?.startsWith('prod'))
   exit(0);
 
 const network = hre.config.defaultNetwork;
-const contract = await getContract();
-const provider = getProvider();
+const contract = await ContractConverter.get();
+const provider = await getProvider();
 const contractAddress = await contract.getAddress();
 
 // Make 5 attempts to verify.  This allows time for

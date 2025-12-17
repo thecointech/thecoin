@@ -1,10 +1,17 @@
-import { Link } from 'react-router-dom'
-import styles from './index.module.less'
+import { Link } from 'react-router'
+import { ContentSection } from '@/ContentSection'
 import { Button } from 'semantic-ui-react'
+import styles from './index.module.less'
 
 export const Home = () => {
+
+  const handleOpenSimulation = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    window.scraper.openWebsiteUrl("simulation");
+  };
+
   return (
-    <div className={styles.container} >
+    <ContentSection className={styles.container}>
       <h2>
         Introducing The Harvester
       </h2>
@@ -17,14 +24,12 @@ export const Home = () => {
         relax, and let it work day in, day out to harvest money for you.
       </div>
       <h4>
-        It won't make you a millionaire overnight...
+        It won't make you rich overnight...
       </h4>
       <h4>
-        You just need to give it more time.
+        You just need to give it <a href="#" onClick={handleOpenSimulation}>more time</a>.
       </h4>
       <Button as={Link} to="/browser" primary>Get Started</Button>
-        {/* <Link to="/browser">Get Started</Link> */}
-      {/* </div> */}
-    </div>
+    </ContentSection>
   )
 }

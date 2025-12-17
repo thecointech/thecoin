@@ -6,7 +6,7 @@ import * as React from 'react';
 import { WeDoMoreMobile } from 'containers/WeDoMore/WeDoMoreMobile';
 import { CreateAccountBanner, TypeCreateAccountBanner } from 'containers/CreateAccountBanner';
 
-import { GreaterThanMobileSegment, MobileSegment } from '@thecointech/shared/components/ResponsiveTool';
+import { GreaterThanMobileSegment, MobileSegment } from '@thecointech/media-context';
 import { WeDoMoreGreaterThanMobile } from './WeDoMoreGreaterThanMobile';
 
 export function WeDoMore() {

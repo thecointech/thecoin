@@ -3,7 +3,7 @@ import { DateTime } from "luxon";
 import { Base64 } from 'js-base64';
 import fs from 'node:fs';
 import os from 'node:os';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'node:crypto';
 
 export * from './details';
 
@@ -19,7 +19,7 @@ export async function SendFakeDeposit(address: string, amount: number, date: Dat
   const existing = getExistingEmails();
   // Append new deposit data
   existing.push({
-    id: uuidv4(),
+    id: randomUUID(),
     internalDate: date.toMillis(),
     payload: {
       headers: [

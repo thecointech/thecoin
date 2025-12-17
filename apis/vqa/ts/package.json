@@ -1,0 +1,33 @@
+{
+  "name": "@thecointech/vqa",
+  "version": "0.5.0",
+  "description": "OpenAPI client for @thecointech/vqa",
+  "author": "OpenAPI-Generator Contributors",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/thecointech/thecoin.git",
+    "directory": "apis/vqa/ts"
+  },
+  "type": "module",
+  "keywords": [
+    "axios",
+    "typescript",
+    "openapi-client",
+    "openapi-generator",
+    "@thecointech/vqa"
+  ],
+  "license": "GPL-3.0-or-later",
+  "main": "./dist/esm/index.js",
+  "typings": "./dist/esm/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "run -T tsc -p tsconfig.esm.json"
+  },
+  "dependencies": {
+    "axios": "1.12.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
+}
