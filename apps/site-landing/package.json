@@ -59,7 +59,6 @@
     "@thecointech/site-base": "^0.5.1-test.0",
     "@thecointech/utilities": "^0.5.1-test.0",
     "papaparse": "^5.1.1",
-    "react-ga": "^2.7.0",
     "react-helmet": "^6.1.0",
     "react-range": "^1.10.0",
     "sanitize.css": "10.0.0"

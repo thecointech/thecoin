@@ -20,8 +20,6 @@ import { createHashRouter } from 'react-router';
 
 // Import i18n messages
 import { translations } from './translations';
-import { initTracking } from './utils/reactga';
-initTracking();
 
 // Allow Preview docs on testing site.
 import { injectPrismicPreviewScript } from './components/Prismic/inject';

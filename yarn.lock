@@ -11750,7 +11750,6 @@ __metadata:
     papaparse: "npm:^5.1.1"
     plop: "npm:2.4.0"
     react-app-polyfill: "npm:1.0.1"
-    react-ga: "npm:^2.7.0"
     react-helmet: "npm:^6.1.0"
     react-range: "npm:^1.10.0"
     sanitize.css: "npm:10.0.0"
