@@ -29,7 +29,6 @@
   "files": [
     "./build/**/*"
   ],
-  "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
     "./*": "./build/*/index.js"
@@ -62,7 +61,7 @@
     "@thecointech/site-semantic-theme": "^0.5.1-test.0",
     "@thecointech/tx-blockchain": "^0.5.1-test.0",
     "@thecointech/utilities": "^0.5.1-test.0",
-    "immer-reducer": "^0.7.11",
+    "immer-reducer": "^0.7.13",
     "react-dates": "21.8.0",
     "react-dropzone": "^14.3.8",
     "react-router": "^7.9.6",

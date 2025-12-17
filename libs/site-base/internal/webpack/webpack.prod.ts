@@ -4,11 +4,11 @@ import { merge } from "webpack-merge";
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import WebpackPwaManifest from 'webpack-pwa-manifest';
 import CompressionPlugin from 'compression-webpack-plugin';
+import { getBaseConfig } from './webpack.base.ts';
+import { signerConfig } from './webpack.signers.ts';
+import type { Configuration } from "webpack";
 
-import { getBaseConfig } from './webpack.base.mjs';
-import signerOptions from './webpack.signers.mjs';
-
-const prodOptions = {
+const prodOptions: Configuration = {
   mode: 'production',
 
   // In production, we skip all hot-reloading stuff
@@ -104,7 +104,7 @@ const prodOptions = {
 
 export async function getProdConfig(secrets) {
   return merge(
-    signerOptions,
+    signerConfig,
     prodOptions,
     await getBaseConfig(secrets),
   )

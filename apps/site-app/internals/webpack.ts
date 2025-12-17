@@ -1,12 +1,16 @@
-import { run } from "@thecointech/site-base/internal/server";
+import { getConfig } from "@thecointech/site-base/internal/webpack";
 import { readFileSync } from "node:fs";
 
 const pluginSrcUrl = new URL("../../../libs/contract-plugins/static/deployed.json", import.meta.url);
-run(
-  ["PolygonscanApiKey"],
-  app => {
-    // Serve dev:live plugins src
-    app.get('/_plugins_src', (req, res) => {
+
+const config = await getConfig(["PolygonscanApiKey"], {
+  port: 3001,
+  setupMiddlewares: (middlewares, devServer) => {
+    if (!devServer) {
+      throw new Error('webpack-dev-server is not defined');
+    }
+
+    devServer.app?.get('/_plugins_src', (req, res) => {
       console.log("Received request for plugins src");
       if (process.env.CONFIG_NAME === "devlive") {
         if (process.env.CONFIG_NAME === "devlive") {
@@ -25,5 +29,9 @@ run(
         res.status(404).send("Not Found");
       }
     });
-  }
-);
+
+    return middlewares;
+  },
+});
+
+export default config;

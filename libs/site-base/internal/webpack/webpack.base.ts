@@ -2,10 +2,11 @@
  * COMMON WEBPACK CONFIGURATION
  */
 import { getEnvFiles } from '@thecointech/setenv';
-import { getSecret } from '@thecointech/secrets';
+import { getSecret, type SecretKeyType } from '@thecointech/secrets';
 import { join, resolve as _resolve } from 'path';
-import webpack from 'webpack';
+import webpack, { type Configuration } from 'webpack';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+//@ts-ignore
 import { semantic_less_loader, css_module_loader } from '@thecointech/site-semantic-theme/webpack.less';
 import Dotenv from 'dotenv-webpack';
 import { DynamicAliasPlugin } from '@thecointech/setenv/webpack';
@@ -19,7 +20,7 @@ const configFile = join(projectRoot, 'tsconfig.build.json');
 
 const envFiles = getEnvFiles(configName);
 
-export async function getBaseConfig(secrets = []) {
+export async function getBaseConfig(secrets: SecretKeyType[] = []): Promise<Configuration> {
   const loaded = await Promise.all(
     secrets.map(async s => ({
       name: s,
@@ -67,10 +68,6 @@ export async function getBaseConfig(secrets = []) {
           // More information here https://webpack.js.org/guides/asset-modules/
           type: "asset",
         },
-        {
-          test: /\.html$/,
-          use: 'html-loader',
-        },
       ],
     },
     plugins: [
@@ -84,7 +81,7 @@ export async function getBaseConfig(secrets = []) {
         __COMPILER_REPLACE_SECRETS__: JSON.stringify(secretObj),
       }),
       ...envFiles.map(path => new Dotenv({
-        path,
+        path: path.pathname,
         ignoreStub: true,
         expand: true,
         systemvars: true,

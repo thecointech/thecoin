@@ -1,5 +1,5 @@
 import React from 'react';
-import { useScript } from '@thecointech/shared';
+import { useScript } from './useScript';
 
 declare global {
   interface Window {

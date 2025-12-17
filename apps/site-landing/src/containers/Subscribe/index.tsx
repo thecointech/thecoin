@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './styles.module.less';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const translations = defineMessages({
   description1 : {
