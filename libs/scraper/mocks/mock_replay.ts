@@ -1,20 +1,25 @@
-import { AnyEvent, HistoryRow } from "../src/types";
-import { IScraperCallbacks } from "../src/callbacks";
+import type { AnyEvent, HistoryRow, ReplayResult } from "@thecointech/scraper-types";
 import { sleep } from "@thecointech/async/sleep";
 import currency from "currency.js";
 import { DateTime } from "luxon";
+import type { ReplayOptions } from "../src/replay";
+import { replay as SrcReplay } from "../src/replay";
 
 // TODO:
 // Decide where to place mocked implementations for scraping
 // This is currently duplicated with the harvester
 // THIS DEFINITELY SHOULD BE IN SCRAPER-BANKING specialization library
-export async function replay(name: string, events: AnyEvent[], callbacks?: IScraperCallbacks, dynamicValues?: Record<string, string>, delay = 1000) {
+
+
+export const replay: typeof SrcReplay = async ({name, events, callbacks}: ReplayOptions) : Promise<ReplayResult> => {
 
   // Progress started
   callbacks?.onProgress?.({ step: 0, total: 1, stage: name, stepPercent: 0 });
 
+  const sleepLength = process.env.RUNTIME_ENV == "test" ? 10 : 500;
+
   for (let i = 0; i < events.length; i++) {
-    await sleep(delay);
+    await sleep(sleepLength);
     const stepPercent = Math.round(100 * (i + 1) / events.length);
     const continueLoop = callbacks?.onProgress?.({ step: 0, total: 1, stage: name, stepPercent, event: events[i] });
     if (continueLoop === false) {

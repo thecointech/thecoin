@@ -5,7 +5,7 @@ import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
 import { UxAddress } from '@thecointech/shared/components/UX/Address';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
-import type { ChangeCB } from '@thecointech/shared/components/UX/types';
+import type { ChangeCB } from '@thecointech/shared/components/UX';
 import type { AccountState } from '@thecointech/account';
 import type { MessageWithValues } from '@thecointech/shared/types';
 

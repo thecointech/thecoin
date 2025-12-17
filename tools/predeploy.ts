@@ -3,7 +3,7 @@ import { exit } from "process";
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { spawn, exec as exec_cb } from 'child_process';
 import { promisify } from 'util';
-import { getSecret } from "@thecointech/secrets";
+import { getSecret, type SecretKeyType } from "@thecointech/secrets";
 import { join } from 'path';
 
 const exec = promisify(exec_cb);
@@ -99,8 +99,6 @@ export async function copyNpmTokenHere(folder: URL) {
   const noToken = readFileSync(new URL('.npmrc', import.meta.url), 'utf8');
   const withToken = noToken.replace('<tokenhere>', token);
   writeFileSync(new URL('.npmrc', folder), withToken);
-
-  console.log(`NPM Token: ${token.substring(0, 8)}... written to ${folder}`);
 
   return "NPM token copied here";
 }

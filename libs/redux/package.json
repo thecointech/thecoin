@@ -1,0 +1,54 @@
+{
+  "name": "@thecointech/redux",
+  "version": "0.5.1-test.0",
+  "private": true,
+  "description": "TheCoin: Shared redux utilities",
+  "type": "module",
+  "keywords": [
+    "react-redux"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/redux"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
+    "build": "run -T tsc -b",
+    "clean": "rimraf ./build && rimraf ./coverage"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "exports": {
+    ".": "./build/index.js",
+    "./*": "./build/*.js"
+  },
+  "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "build/index.d.ts": [
+        "build/index.d.ts"
+      ],
+      "*": [
+        "build/*.d.ts"
+      ]
+    }
+  },
+  "dependencies": {
+    "react-redux": "^9.2.0",
+    "redux": "^4.0.5",
+    "redux-injectors": "https://github.com/FrozenKiwi/redux-injectors#6209c56b7c2508e002b669010ad3c0d5e0bab9eb",
+    "redux-saga": "^1.1.3"
+  },
+  "devDependencies": {
+    "@types/redux-devtools": "3.0.47",
+    "redux-devtools-extension": "2.13.8"
+  }
+}

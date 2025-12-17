@@ -1,6 +1,7 @@
 import type { MessageDescriptor } from 'react-intl';
 import type { MessageWithValues } from '../../types';
 import type { StrictInputProps } from 'semantic-ui-react';
+import type { JSX } from 'react';
 
 export type SomeOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
@@ -35,6 +36,10 @@ export type BaseProps<T=string> = {
 
   defaultValue?: T;
   resetToDefault?: number;
+  transformDisplayValue?: {
+    toDisplay: (value: string) => string;
+    toValue: (value: string) => string;
+  };
   name?: string;
   forceValidate?: boolean;
   readOnly?: boolean;

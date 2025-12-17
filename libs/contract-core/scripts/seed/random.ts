@@ -1,7 +1,7 @@
 import { log } from '@thecointech/logging';
 import { getSigner } from '@thecointech/signers';
 import { DateTime } from 'luxon';
-import { COIN_EXP, ConnectContract, GetContract } from '../../src';
+import { COIN_EXP, ContractCore } from '../../src';
 import {assignRoles} from './assignRoles';
 
 const theCoin = await getSigner("TheCoin");
@@ -10,8 +10,8 @@ const brokerCAD = await getSigner("BrokerCAD");
 const Client1 = await getSigner("Client1");
 const Client2 = await getSigner("Client2");
 
-const tcCore = await ConnectContract(theCoin);
-const mtCore = await ConnectContract(minter);
+const tcCore = await ContractCore.connect(theCoin);
+const mtCore = await ContractCore.connect(minter);
 
 export async function randomDistribution() {
 
@@ -60,7 +60,7 @@ async function seedAccount(tcAddr: string, client: string, onlyBuy=false) {
   }
 }
 
-const contract = await GetContract();
+const contract = await ContractCore.get();
 log.info(`Initializing core: ${await contract.getAddress()} with random values`);
 
 await assignRoles(contract);

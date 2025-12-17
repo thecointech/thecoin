@@ -5,7 +5,7 @@ import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { toHuman } from '@thecointech/utilities';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap'
+import { AccountMap } from '@thecointech/redux-accounts'
 import { Account } from '@thecointech/shared/containers/Account';
 import { weSellAt } from '@thecointech/fx-rates';
 import { DateTime } from 'luxon';

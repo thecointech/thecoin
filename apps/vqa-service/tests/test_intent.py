@@ -1,6 +1,6 @@
 from TestBase import TestBase
 from intent_data import PageType, IntentResponse
-from testdata import get_test_data
+from testdata import get_single_test_element
 from intent_routes import page_intent
 
 class TestIntentProcess(TestBase):
@@ -14,10 +14,9 @@ class TestIntentProcess(TestBase):
 
 
     async def test_page_intents(self):
-        test_data = get_test_data("Intents", "")
-        for key, image, expected in test_data:
-            with self.subTest(key=key):
-                # Call the endpoint directly
-                response = await page_intent(image)
-                self.assertEqual(response.type, expected["intent"]["intent"], 
-                               f"Intent mismatch for {key}")
+        samples = get_single_test_element("*", "intent")
+        for sample in samples:
+            with self.subTest(key=sample.key):
+                response = await page_intent(sample.image)
+                self.assertEqual(response.type, sample.element.vqa["intent"],
+                               f"Intent mismatch for {sample.key}")

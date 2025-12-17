@@ -3,7 +3,7 @@ name: Deploy to Google App Engine
 on:
   workflow_call:
     inputs:
-      environment:
+      CONFIG_NAME:
         required: true
         type: string
         description: 'Environment to deploy to (prodtest, prodbeta, prod)'
@@ -19,7 +19,7 @@ env:
 jobs:
   deploy-rates:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.CONFIG_NAME }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -30,7 +30,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.14'
+          node-version: '22.19'
           cache: 'yarn'
 
       - name: Install dependencies
@@ -44,7 +44,7 @@ jobs:
       - name: Generate env file
         run: yarn run-env ./predeploy.ts
         env:
-          CONFIG_NAME: ${{ vars.CONFIG_NAME }}
+          CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
           GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
         working-directory: ./apps/rates-service
 
@@ -56,6 +56,7 @@ jobs:
       - id: deploy-rates
         uses: google-github-actions/deploy-appengine@v2
         with:
+          # NOTE: These vars are defined in repo env variables.
           project_id: ${{ vars.GCP_RATES_PROJECT_ID }}
           # Allow explicit version (this enables beta version)
           version: ${{ vars.GCP_SERVICE_VERSION }}
@@ -64,7 +65,7 @@ jobs:
 
   deploy-broker:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.CONFIG_NAME }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -75,7 +76,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.14'
+          node-version: '22.19'
           cache: 'yarn'
 
       - name: Install dependencies
@@ -89,7 +90,7 @@ jobs:
       - name: Generate env file
         run: yarn run-env ./predeploy.ts
         env:
-          CONFIG_NAME: ${{ vars.CONFIG_NAME }}
+          CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
           GithubPackageToken: ${{ secrets.GH_PACKAGES_READ }}
         working-directory: ./apps/broker-service
 

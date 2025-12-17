@@ -4,7 +4,7 @@ import { defineMessages, FormattedMessage, MessageDescriptor } from "react-intl"
 import { Table } from "semantic-ui-react";
 import { Currency } from "@thecointech/site-base/components/Currency";
 import { useFxRates } from "@thecointech/shared/containers/FxRate";
-import { totalCad } from '@thecointech/shared/containers/Account/profit';
+import { totalCad } from '@thecointech/shared/containers/Account';
 
 const translations = defineMessages({
   msgTxsIn : {

@@ -1,5 +1,5 @@
 import { getAllAccounts, getInitialAddress } from '@thecointech/account/store';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { log } from '@thecointech/logging';
 
 export async function initAccounts() {

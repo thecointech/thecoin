@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/rates-service",
-  "version": "0.3.9",
+  "version": "0.5.1-test.1",
   "private": true,
   "description": "TheCoin rates service.  Publishes the official exchange rate for TheCore cryptocurrency into fiat currencies",
   "type": "module",
@@ -34,29 +34,27 @@
     "gcp-build": ""
   },
   "engines": {
-    "node": "18.x.x"
+    "node": "22.x.x"
   },
   "files": [
     "build/**/*"
   ],
   "main": "./build/main.js",
   "dependencies": {
-    "@thecointech/async": "^0.3.3",
-    "@thecointech/contract-oracle": "^0.3.9",
-    "@thecointech/email": "^0.3.9",
-    "@thecointech/firestore": "^0.3.9",
-    "@thecointech/fx-rates": "^0.3.9",
-    "@thecointech/logging": "^0.3.9",
-    "@thecointech/market-status": "^0.3.9",
-    "@thecointech/pricing": "^0.3.3",
-    "@thecointech/setenv": "^0.3.4",
-    "@thecointech/signers": "^0.3.9",
-    "@thecointech/utilities": "^0.3.9",
+    "@thecointech/async": "^0.5.1-test.0",
+    "@thecointech/contract-oracle": "^0.5.1-test.0",
+    "@thecointech/email": "^0.5.1-test.0",
+    "@thecointech/firestore": "^0.5.1-test.0",
+    "@thecointech/fx-rates": "^0.5.1-test.0",
+    "@thecointech/logging": "^0.5.1-test.0",
+    "@thecointech/market-status": "^0.5.1-test.0",
+    "@thecointech/setenv": "^0.5.1-test.0",
+    "@thecointech/signers": "^0.5.1-test.0",
+    "@thecointech/utilities": "^0.5.1-test.0",
     "@tsoa/runtime": "6.2.0",
-    "axios": "1.6.5",
+    "axios": "1.12.0",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "js-yaml": "^3.13.1",
+    "express": "^4.22.0",
     "luxon": "3.3.0",
     "swagger-tools": "^0.10.4",
     "swagger-ui-express": "^4.2.0"

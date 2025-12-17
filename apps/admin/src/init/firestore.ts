@@ -11,7 +11,6 @@ declare global {
 }
 export async function initFirestore() {
   const config = await window.secrets.getFirebaseConfig();
-  console.log(config);
   // Initialize with sample tx's in development mode
   return (process.env.CONFIG_NAME === 'development')
     ? init(sampledb)

@@ -1,9 +1,8 @@
 import type { Configuration } from 'webpack';
 import { merge } from 'webpack-merge';
-//@ts-ignore
-import getMocks from '@thecointech/setenv/webpack';
-import { rules } from './webpack.rules.js';
-import { env, commonBase } from './webpack.common.js';
+import { getMocks } from '@thecointech/setenv/webpack';
+import { rules } from './webpack.rules.ts';
+import { env, commonBase } from './webpack.common.ts';
 
 export const baseOptions: Configuration = {
   /**
@@ -25,7 +24,7 @@ export const baseOptions: Configuration = {
 };
 
 export const mainConfig = (custom: Configuration = {}) => merge(
-  custom,
+  custom, // NOTE: This must be first to ensure it's DefinePlugin runs first
   getMocks(env),
   baseOptions,
   commonBase,

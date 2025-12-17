@@ -1,5 +1,5 @@
 import React from 'react';
-import { Meta } from '@storybook/react';
+import { Meta } from '@storybook/react-webpack5';
 import { BalanceAndProfit as Component } from './Widget';
 import { withAccounts, withReducer } from '@thecointech/storybookutils';
 import { FxRateReducer } from '@thecointech/shared/containers/FxRate';

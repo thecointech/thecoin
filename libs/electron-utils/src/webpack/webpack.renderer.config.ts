@@ -1,13 +1,13 @@
 import type { Configuration } from 'webpack';
-import { rules } from './webpack.rules.js';
-import { plugins } from './webpack.plugins.js';
+import { rules } from './webpack.rules.ts';
+import { plugins } from './webpack.plugins.ts';
 import path from 'path';
 import { merge } from 'webpack-merge';
-//@ts-ignore (TODO: convert setenv to typescript/module)
-import getMocks from '@thecointech/setenv/webpack';
-import { env, commonBase } from './webpack.common.js';
+import { getMocks } from '@thecointech/setenv/webpack';
+import { env, commonBase } from './webpack.common.ts';
 import webpack from 'webpack';
 import { getSecret } from '@thecointech/secrets';
+import { platform } from 'os';
 
 const rootPath = path.join(process.cwd(), '../..');
 
@@ -27,7 +27,9 @@ const baseOptions: Configuration = {
     // NOTE: This is used only by
     new webpack.DefinePlugin({
       "process.env.LOG_NAME": JSON.stringify(process.env.LOG_NAME),
-      __COMPILER_REPLACE_SECRETS__: JSON.stringify({PolygonscanApiKey}),
+      'process.env.BUILD_OS': JSON.stringify(platform()),
+
+      __COMPILER_REPLACE_SECRETS__: JSON.stringify({ PolygonscanApiKey }),
     }),
   ],
   externals: {
@@ -40,7 +42,8 @@ const baseOptions: Configuration = {
     fallback: {
       "crypto": resolveModulePath("crypto-browserify"),
       "stream": resolveModulePath("stream-browserify"),
-      "path": resolveModulePath("path-browserify"),
+      "path": false,
+      "assert": false,
       "http": false,
       "fs": false,
       "vm": false,
@@ -57,8 +60,9 @@ const baseOptions: Configuration = {
   },
 };
 
-export const rendererConfig = merge(
+export const rendererConfig = (custom: Configuration = {}) => merge(
+  custom,
   getMocks(env),
   baseOptions,
-  commonBase
+  commonBase,
 );

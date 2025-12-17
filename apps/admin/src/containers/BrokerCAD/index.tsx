@@ -1,7 +1,7 @@
 import { AccountId } from '@thecointech/signers';
 import { AccountBase } from '../AccountBase';
-import { BrokerCADRoutes } from './Routes';
+export { routesBrokerCAD } from './Routes';
 
-export const BrokerCAD = () => <AccountBase id={AccountId.BrokerCAD} routes={BrokerCADRoutes} />
+export const BrokerCAD = () => <AccountBase id={AccountId.BrokerCAD} />
 
 

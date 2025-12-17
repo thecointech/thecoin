@@ -3,6 +3,8 @@ import type { ETransferPacket } from '@thecointech/types';
 import type { Decimal } from 'decimal.js-light';
 export interface IBank {
 
+  getBalance(): Promise<number>;
+
   //
   // Attempt to deposit eTransfer from url
   depositETransfer(prefix: string, url: string, code: string, progressCb: ProgressCallback): Promise < DepositResult >;

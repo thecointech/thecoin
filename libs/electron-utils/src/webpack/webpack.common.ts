@@ -1,8 +1,9 @@
 import webpack from 'webpack';
-import path, { join } from 'path';
+import { join } from 'path';
 import { getEnvFiles, getEnvVars } from '@thecointech/setenv';
 import Dotenv from 'dotenv-webpack';
 import { fileURLToPath } from 'url';
+import { DynamicAliasPlugin } from '@thecointech/setenv/webpack';
 
 export const configName = process.env.CONFIG_NAME ?? 'development';
 const projectRoot = process.cwd();
@@ -14,12 +15,14 @@ export const commonBase: Partial<webpack.Configuration> = {
   plugins: [
     ...envFiles.map(p => new Dotenv({
         path: fileURLToPath(p),
-        ignoreStub: true
+        ignoreStub: true,
+        expand: true,
+        systemvars: true,
       })),
   ],
   resolve: {
-    alias: {
-      '@': path.join(projectRoot, 'src'),
-    },
+    plugins: [
+      new DynamicAliasPlugin(),
+    ],
   },
 };

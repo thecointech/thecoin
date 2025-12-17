@@ -31,7 +31,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '22.14'
+        node-version: '22.19'
         cache: 'yarn'
 
     - name: Install dependencies
@@ -55,17 +55,11 @@ jobs:
       with:
         name: build-artifacts
         path: |
-          .yarn/cache
-          .yarn/install-state.gz
           apps/**/translations/*.json
           apps/*/build/
           libs/*/build/
           apis/**/dist/
           libs/contract-*/src/codegen/**
-          package.json
-          .yarnrc.yml
-          yarn.lock
-          environments/
           apps/tx-processor/docker/
         retention-days: 1
 

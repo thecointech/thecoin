@@ -26,7 +26,7 @@ describe('Live DB fetching', () => {
   it('converts to Timestamp in DB', async () => {
     const dt = DateTime.now();
     await setUserVerified(address, { statusUpdated: dt});
-    expect(spyTo).toBeCalledTimes(1);
+    expect(spyTo).toHaveBeenCalledTimes(1);
     // Double check - do we have timestamp in the DB?
     const doc = await getFirestore().doc(`User/${address}`).get();
     const ts: Timestamp = doc.data()?.verifiedDate;
@@ -37,7 +37,7 @@ describe('Live DB fetching', () => {
     const dt = DateTime.now();
     await setUserVerified(address, { statusUpdated: dt});
     const data = await getUserData(address);
-    expect(spyFrom).toBeCalledTimes(1);
+    expect(spyFrom).toHaveBeenCalledTimes(1);
     expect(data?.statusUpdated).toEqual(dt);
   })
 
