@@ -51,7 +51,7 @@
     "@thecointech/setenv": "^0.5.1-test.0",
     "@thecointech/signers": "^0.5.1-test.0",
     "@thecointech/utilities": "^0.5.1-test.0",
-    "@tsoa/runtime": "6.2.0",
+    "@tsoa/runtime": "6.6.0",
     "axios": "1.12.0",
     "cors": "^2.8.5",
     "express": "^4.22.0",
