@@ -11315,9 +11315,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/email@workspace:libs/email"
   dependencies:
-    "@thecointech/jestutils": "npm:^0.5.0"
-    "@thecointech/logging": "npm:^0.5.0"
-    "@thecointech/secrets": "npm:^0.5.0"
+    "@thecointech/jestutils": "npm:^0.5.1-test.0"
+    "@thecointech/logging": "npm:^0.5.1-test.0"
+    "@thecointech/secrets": "npm:^0.5.1-test.0"
     node-mailjet: "npm:^5.0.0"
   languageName: unknown
   linkType: soft
@@ -11340,9 +11340,9 @@ __metadata:
   resolution: "@thecointech/firestore@workspace:libs/firestore"
   dependencies:
     "@google-cloud/firestore": "npm:7.0.0"
-    "@thecointech/jestutils": "npm:^0.5.0"
-    "@thecointech/logging": "npm:^0.5.0"
-    "@thecointech/secrets": "npm:^0.5.0"
+    "@thecointech/jestutils": "npm:^0.5.1-test.0"
+    "@thecointech/logging": "npm:^0.5.1-test.0"
+    "@thecointech/secrets": "npm:^0.5.1-test.0"
     firestore-jest-mock: "https://github.com/thecointech/firestore-jest-mock#f4145e6f28c02419ec5e338a6f5a424ab189986c"
   peerDependencies:
     firebase: "*"
@@ -11421,11 +11421,11 @@ __metadata:
   resolution: "@thecointech/nft-service@workspace:apps/nft-service"
   dependencies:
     "@pinata/sdk": "npm:2.1.0"
-    "@thecointech/contract-nft": "npm:^0.5.0"
-    "@thecointech/logging": "npm:^0.5.0"
-    "@thecointech/setenv": "npm:^0.5.0"
-    "@thecointech/signers": "npm:^0.5.0"
-    "@thecointech/utilities": "npm:^0.5.0"
+    "@thecointech/contract-nft": "npm:^0.5.1-test.0"
+    "@thecointech/logging": "npm:^0.5.1-test.0"
+    "@thecointech/setenv": "npm:^0.5.1-test.0"
+    "@thecointech/signers": "npm:^0.5.1-test.0"
+    "@thecointech/utilities": "npm:^0.5.1-test.0"
     "@tsoa/runtime": "npm:6.2.0"
     "@types/multer": "npm:^1.4.5"
     "@types/swagger-ui-express": "npm:^4.1.1"
