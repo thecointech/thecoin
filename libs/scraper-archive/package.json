@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/scraper-archive",
-  "version": "0.5.0",
+  "version": "0.5.1-test.0",
   "private": true,
   "type": "module",
   "description": "The Coin: Utilities for working with testing pages in the archive",
@@ -24,7 +24,7 @@
     "@thecointech/logging": "workspace:^"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.5.0",
+    "@thecointech/jestutils": "^0.5.1-test.0",
     "@thecointech/setenv": "workspace:^",
     "open": "^8.4.0"
   },
