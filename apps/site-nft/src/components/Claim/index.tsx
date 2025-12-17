@@ -1,5 +1,5 @@
 import { log } from '@thecointech/logging';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Button, Form } from 'semantic-ui-react';

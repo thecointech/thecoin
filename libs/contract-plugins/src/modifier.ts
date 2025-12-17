@@ -1,7 +1,7 @@
 import { getFxRate, FXRate } from '@thecointech/fx-rates';
 import { COIN_EXP } from '@thecointech/contract-base';
 import { PERMISSION_BALANCE } from './constants';
-import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
+import { getProvider, type Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import parser from '@solidity-parser/parser'
@@ -10,14 +10,14 @@ import type { BaseASTNode, ContractDefinition, FunctionDefinition, StateVariable
 import type { ContractState, PluginBalanceMod } from './types';
 import { getPluginLogs, updateState } from './logs';
 import { log } from '@thecointech/logging';
-import { AddressLike } from 'ethers';
+import type { AddressLike } from 'ethers';
 
 const RETURN_KEY = "__$return";
 
 export async function getPluginModifier(user: AddressLike, {plugin, permissions}: PluginAndPermissionsStructOutput, _provider?: Erc20Provider) : Promise<PluginBalanceMod|null> {
 
   // Allow passing in a provider so we can mock it in testing
-  const provider = _provider ?? new Erc20Provider();
+  const provider = _provider ?? await getProvider();
 
   // if this doesn't modify the balance, we don't need to emulate it
   if ((permissions & PERMISSION_BALANCE) == 0n) {

@@ -5,7 +5,7 @@ body {
   padding: 2rem;
   height: 100%;
 
-  > div {
+   > #app {
     height: 100%;
   }
 }

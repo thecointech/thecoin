@@ -38,6 +38,7 @@ export const etransfer : StateGraph<States, "Buy"> = {
     next: transitionTo<States, "Buy">(deposit.labelEmailDeposited, "deposited"),
   },
   deposited: {
+    onError: transitionTo<States>(core.requestManual, "error"),
     next: transitionTo<States, "Buy">(core.toCoin, "converted"),
   },
 

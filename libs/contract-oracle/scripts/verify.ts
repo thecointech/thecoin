@@ -1,5 +1,5 @@
 import hre from 'hardhat';
-import { getContract } from '../src';
+import { ContractOracle } from '../src';
 import { sleep } from '@thecointech/async';
 import { log } from '@thecointech/logging';
 import { exit } from 'process';
@@ -11,8 +11,8 @@ if (!process.env.CONFIG_NAME?.startsWith('prod'))
   exit(0);
 
 const network = hre.config.defaultNetwork;
-const contract = await getContract();
-const provider = getProvider();
+const contract = await ContractOracle.get();
+const provider = await getProvider();
 
 // Make 5 attempts to verify.  This allows time for
 // contract to be picked up by etherscan

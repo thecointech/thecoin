@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Form, Input, Grid, Label, Header } from 'semantic-ui-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { RouteComponentProps, withRouter } from 'react-router';
+import { useNavigate } from 'react-router';
 
 import styles from './styles.module.less';
 
@@ -39,8 +39,6 @@ const translations = defineMessages({
   },
 });
 
-type Props = RouteComponentProps;
-
 const initState = {
   amount: 1000,
   age: 30,
@@ -51,13 +49,14 @@ function BuildCalculatorUrl(state: State) {
   return `/learn/calculator?age=${state.age}&amount=${state.amount}`;
 }
 
-export const TeaserClass: React.FunctionComponent<Props> = (props: Props) => {
+export const TeaserClass: React.FunctionComponent = () => {
   const [state, setState] = React.useState(initState);
+  const navigate = useNavigate();
   const showCalculate = React.useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e?.preventDefault();
       const url = BuildCalculatorUrl(state);
-      props.history.push(url);
+      navigate(url);
     },
     [],
   );
@@ -124,5 +123,3 @@ export const TeaserClass: React.FunctionComponent<Props> = (props: Props) => {
     </>
   );
 };
-
-export const Teaser = withRouter(TeaserClass);

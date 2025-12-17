@@ -11,7 +11,9 @@ const datapath = join(localdir, '..', 'src', 'containers', 'BenefitsSimulator', 
 const snpDataPath = join(datapath, 'sp500_monthly.csv');
 const fxDataPath = join(datapath, 'fx_monthly.csv');
 
-run(app => {
+run(
+  [],
+  app => {
 
   // serve CSV data needed by comparison graph
   const snpString = readFileSync(snpDataPath, 'utf8');

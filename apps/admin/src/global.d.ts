@@ -18,9 +18,5 @@ declare module '*.module.less' {
   export default classes;
 }
 
-// Filled by Webpack.
-// Version info pulled from package.json
-declare const __VERSION__: string;
-
 type MaybeString = string | undefined;
 type MaybeNumber = number | undefined;

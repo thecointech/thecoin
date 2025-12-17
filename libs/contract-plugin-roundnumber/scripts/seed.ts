@@ -1,8 +1,8 @@
 import { getSigner } from '@thecointech/signers';
-import { ConnectContract } from '@thecointech/contract-core';
+import { ContractCore } from '@thecointech/contract-core';
 import { ALL_PERMISSIONS, assignPlugin, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 import { log } from '@thecointech/logging';
-import { getContract } from '../src/contract';
+import { ContractRoundNumber } from '../src/contract';
 import { DateTime } from 'luxon';
 
 async function main() {
@@ -10,20 +10,20 @@ async function main() {
   if (process.env.CONFIG_NAME !== "devlive") return;
 
 
-  const client2 = await getSigner("client2");
+  const Client2 = await getSigner("Client2");
   const theCoin = await getSigner("TheCoin");
   const brokerCad = await getSigner("BrokerCAD");
-  const tcCore = await ConnectContract(theCoin);
-  const bcCore = await ConnectContract(brokerCad);
-  const clientAddr = await client2.getAddress();
+  const tcCore = await ContractCore.connect(theCoin);
+  const bcCore = await ContractCore.connect(brokerCad);
+  const clientAddr = await Client2.getAddress();
   const existingPlugins = await tcCore.getUsersPlugins(clientAddr);
 
   if (existingPlugins.length === 0) {
 
     log.debug("Seeding RoundNumber");
 
-    const deployed = await getContract();
-    const request = await buildAssignPluginRequest(client2, deployed, ALL_PERMISSIONS);
+    const deployed = await ContractRoundNumber.get();
+    const request = await buildAssignPluginRequest(Client2, deployed, ALL_PERMISSIONS);
     const assigned = await assignPlugin(bcCore, request);
     await assigned.wait();
 
@@ -37,7 +37,7 @@ async function main() {
       125,
     ];
     const weeksAgoSecs = (weeks: number) => Math.round(DateTime.now().minus({weeks}).toSeconds());
-    const rnUser = deployed.connect(client2);
+    const rnUser = deployed.connect(Client2);
     for (let i = 0; i < amounts.length; i++) {
       await rnUser.setRoundPoint(amounts[i], weeksAgoSecs(amounts.length - i));
     }

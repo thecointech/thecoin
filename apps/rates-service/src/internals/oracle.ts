@@ -1,10 +1,11 @@
-import { connectOracle, updateRates } from '@thecointech/contract-oracle';
+import { ContractOracle, updateRates } from '@thecointech/contract-oracle';
 import { getSigner } from '@thecointech/signers';
 import { getCombinedRates } from './rates';
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
 import { FirestoreAdmin, Timestamp, getFirestore } from '@thecointech/firestore';
 import { toDateStr } from '../utils/date';
+import { formatEther, parseUnits, Signer } from 'ethers';
 
 
 export async function updateOracle(timestamp: number) {
@@ -12,7 +13,11 @@ export async function updateOracle(timestamp: number) {
   await guardFn(async () => {
 
     const signer = await getSigner("OracleUpdater");
-    const oracle = await connectOracle(signer);
+
+    // Check signer balance
+    await verifyEtherReserves(signer);
+
+    const oracle = await ContractOracle.connect(signer);
 
     log.debug(
       {
@@ -23,11 +28,6 @@ export async function updateOracle(timestamp: number) {
 
     // Our oracle operates in milliseconds
     await updateRates(oracle, timestamp, async (ts) => {
-
-      // log.trace(
-      //   { date: toDateStr(ts) },
-      //   'Fetching rate for oracle at {date}'
-      // )
       // do we have a data for this time?
       const rates = await getCombinedRates(ts);
       if (!rates) return null;
@@ -61,7 +61,6 @@ export async function updateOracle(timestamp: number) {
 }
 
 export async function guardFn<T extends Function>(fn: T) {
-
   // Because there are multiple versions of this service running, we
   // need to ensure that there is only 1 update happening at any given time
   const guard = await enterCS();
@@ -71,38 +70,10 @@ export async function guardFn<T extends Function>(fn: T) {
     log.warn("Cannot update Oracle - someone else holds the critical section");
     return;
   }
-
-  // NOTE: KeepAlive was causing errors to be thrown
-  // when trying to re-deploy prod:test.  It is probably
-  // not valuable any other time, so we could probably just
-  // remove it.
-  // const now = DateTime.now();
-  // const maxTimeout = now.plus({ hour: 1});
-
-  // Ping our service every 5 minutes to
-  // prevent GAE from killing us prematurely
-  // let polling = setInterval(() => {
-  //   if (DateTime.now() > maxTimeout) {
-  //     clearInterval(polling);
-  //     log.error("UpdateOracle timed out");
-  //     return;
-  //   }
-  //   const myUrl = `${process.env['URL_SERVICE_RATES']}/keepAlive`;
-  //   console.log(`KeepAlive polling ${myUrl}...`);
-  //   if (!myUrl) return;
-  //   try {
-  //     Axios.get(myUrl);
-  //   }
-  //   catch(err) {
-  //     log.error(err, "KeepAlive failed");
-  //   }
-  // }, Duration.fromObject({ minutes: 5 }).toMillis())
-
   try {
     await fn();
   }
   finally {
-    // clearInterval(polling);
     await exitCS(guard);
   }
 }
@@ -164,4 +135,23 @@ function exitCS(guard: Timestamp) {
     { [complete_key]: guard },
     { merge: true }
   )
+}
+
+// Verify we have enough gas to run processing
+async function verifyEtherReserves(signer: Signer) {
+  // Calls to provider are not 100% reliable, but an error here is harmless
+  try {
+    const signerBalance = await signer.provider?.getBalance(signer) ?? 0n;
+    const minimumBalance = parseUnits('0.2', "ether");
+    log.debug({ Balance: formatEther(signerBalance) }, "Updating with eth reserves: {Balance}")
+    if (signerBalance < minimumBalance) {
+      log.error(
+        { Balance: formatEther(signerBalance), MinimumBalance: formatEther(minimumBalance), Signer: 'OracleUpdater' },
+        `Signer {Signer} ether balance too low {Balance} < {MinimumBalance}`
+      );
+    }
+  }
+  catch (err: any) {
+    log.error(err, "Failed to verify ether reserves");
+  }
 }

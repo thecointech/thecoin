@@ -1,11 +1,9 @@
 import { jest } from '@jest/globals'
 import { init } from '@thecointech/firestore';
 import { sleep } from '@thecointech/async';
-import { log } from '@thecointech/logging';
+import { mockWarn, mockError } from '@thecointech/logging/mock';
 import { guardFn } from './oracle';
 
-log.warn = jest.fn<any>();
-log.error = jest.fn<any>();
 jest.setTimeout(5 * 60 * 1000);
 
 beforeEach(() => {
@@ -30,7 +28,7 @@ it ("guardFn prevents simultaneous calls", async () => {
   await guardFn(() => new Promise((resolve) => {
     fail("Should not be called");
   }))
-  expect(log.warn).toHaveBeenCalledWith("Cannot update Oracle - someone else holds the critical section")
+  expect(mockWarn).toHaveBeenCalledWith("Cannot update Oracle - someone else holds the critical section")
 
   // Now complete the first call
   r1();
@@ -62,7 +60,7 @@ it ("guardFn times out", async () => {
   let didRun = false;
   await guardFn(async () => didRun = true);
   expect(didRun).toBe(true);
-  expect(log.error).toHaveBeenCalledWith("Expired lock detected, ignoring");
+  expect(mockError).toHaveBeenCalledWith("Expired lock detected, ignoring");
   jest.useRealTimers();
 })
 

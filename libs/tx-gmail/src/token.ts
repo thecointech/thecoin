@@ -2,6 +2,10 @@ import http from 'http';
 import { log } from '@thecointech/logging';
 import open from "open";
 import type { OAuth2Client } from 'google-auth-library';
+import { getAuthConfig } from './authConfig';
+import { getTempSecret, setTempSecret, deleteTempSecret } from '@thecointech/secrets/temp';
+import { sleep } from '@thecointech/async';
+import { randomUUID } from 'crypto';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = [
@@ -24,7 +28,39 @@ export async function getNewTokens(oAuth2Client: OAuth2Client) {
 }
 
 /** Get code to be swapped for token */
-export function getCode(url: string) {
+export async function getCode(url: string) {
+  if (process.env.THECOIN_CONSOLE_ONLY) {
+    return await getTokenBitwarden(url);
+  }
+  return await getTokenUrl(url);
+}
+
+export const getUniqueUrlKey = (id: string) => `TEMP_GMAIL_URL_${id}`
+export const getUniqueTokenKey = (id: string) => `TEMP_GMAIL_TOKEN_${id}`
+async function getTokenBitwarden(url: string) {
+  // first, generate a unique id
+  const uniqueId = randomUUID();
+  await setTempSecret(getUniqueUrlKey(uniqueId), url);
+  log.info(`Initialized token request with id: ${uniqueId}`);
+  log.info(`Please run: yarn token-cli ${process.env.CONFIG_NAME} ${uniqueId}`);
+  const pollingInterval = 5000;
+  const timeout = 5 * 60 * 1000;
+  // now, poll for the token for up to 5 minutes
+  const start = Date.now();
+  while (Date.now() - start < timeout) {
+    try {
+      await sleep(pollingInterval);
+      return await getTempSecret(getUniqueTokenKey(uniqueId));
+    } catch (e) {
+      // Ignore
+    }
+  }
+  // Clear the temp secrets
+  await deleteTempSecret(getUniqueUrlKey(uniqueId));
+  throw new Error("Timeout waiting for token");
+}
+
+export async function getTokenUrl(url: string) {
   log.debug(`Begin OAuth process: ${url}`);
   try {
     open(url);
@@ -32,13 +68,14 @@ export function getCode(url: string) {
   catch {
     log.debug(`Please go to:\n${url}`);
   }
+  const authConfig = await getAuthConfig();
 
   return new Promise<string>((resolve, reject) => {
 
     const server = http.createServer(async (req, res) => {
       if (!req.url)
         return;
-      const path = new URL(req.url, process.env.TX_GMAIL_CLIENT_URI);
+      const path = new URL(req.url, authConfig.Uri);
       if (path.pathname == '/gauth') {
         clearTimeout(serverTimeout);
         const code = path.searchParams.get('code');
@@ -52,13 +89,13 @@ export function getCode(url: string) {
         } else {
           log.debug('Auth Failed: No code present');
           res.end('Invalid code');
-          reject();
+          reject(new Error("Invalid code"));
         }
       } else {
         res.statusCode = 404;
         res.end();
       }
-    }).listen(Number(process.env.TX_GMAIL_CLIENT_LISTENER_PORT), "localhost", () => log.debug("Waiting for code"));
+    }).listen(authConfig.ListenerPort, "localhost", () => log.debug("Waiting for code"));
 
     // Give a 10 minute timeout, then throw
     const serverTimeout = setTimeout(() => {
@@ -66,5 +103,4 @@ export function getCode(url: string) {
       reject(new Error("Timeout waiting for code"));
     }, 10 * 60 * 1000);
   })
-
 }

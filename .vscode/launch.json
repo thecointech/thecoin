@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "pwa-chrome",
+      "type": "chrome",
       "request": "launch",
       "name": "Storybook: Launch Chrome",
       "url": "http://localhost:6006",
@@ -19,16 +19,30 @@
       "request": "launch",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "cwd": "${workspaceFolder}",
+      "cwd": "${fileDirname}",
       "runtimeExecutable": "yarn",
       "args": [
-        "test-single",
+        "test",
         "--runInBand",
         "--watchAll=false",
         "--testNamePattern",
         "${jest.testNamePattern}",
         "--runTestsByPath",
         "${jest.testFile}"
+      ],
+      "sourceMaps": true,
+      "smartStep": false,
+      "outFiles": [
+        "${workspaceFolder}/**/build/**/*.js",
+        "!**/node_modules/**"
+      ],
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ],
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
       ],
       "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }"
     }

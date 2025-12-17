@@ -3,7 +3,7 @@ import type { TheCoin } from '@thecointech/contract-core';
 import { DateTime } from "luxon";
 import Decimal from 'decimal.js-light';;
 import { log } from '@thecointech/logging';
-import { Erc20Provider, ERC20Response } from '@thecointech/ethers-provider/Erc20Provider';
+import { getProvider, ERC20Response } from '@thecointech/ethers-provider/Erc20Provider';
 import {NormalizeAddress} from '@thecointech/utilities';
 
 // Load account history and merge with local
@@ -31,7 +31,7 @@ export async function loadAndMergeHistory(fromBlock: number, contract: TheCoin, 
   try {
     const contractAddress = await contract.getAddress();
     // Fetching data requires etherscan (Infura limits logs length to 149)
-    const provider = new Erc20Provider();
+    const provider = await getProvider();
     const allTxs = await provider.getERC20History({address, contractAddress, fromBlock});
     const contractClean = contract.connect(provider);
 

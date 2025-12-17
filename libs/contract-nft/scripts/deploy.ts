@@ -13,7 +13,7 @@ async function main() {
 
   let owner = await getSigner("Owner");
   if (!owner.provider) {
-    const provider = getProvider(network.toUpperCase() as Network);
+    const provider = await getProvider(network.toUpperCase() as Network);
     owner = owner.connect(provider);
   }
 

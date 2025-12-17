@@ -5,10 +5,4 @@
 
 const d = require('@thecointech/jestutils/config');
 
-module.exports = {
-  ...d,
-  globals: {
-    ...d.globals,
-    __VERSION__: 'jest',
-  }
-}
+module.exports = d

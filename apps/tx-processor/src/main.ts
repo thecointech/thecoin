@@ -5,11 +5,13 @@ import { exit } from 'process';
 import { initialize, release } from './initialize';
 import { processReferrals } from './referrals';
 import { processTransfers } from './transfers';
-
+import { verifyBank } from './verifyBank';
+import { sleep } from '@thecointech/async';
 
 async function Process() {
   const contract = await initialize();
-  const bank = new RbcApi();
+  const bank = await RbcApi.create();
+  await verifyBank(bank);
   await processTransfers(contract, bank);
   await processReferrals();
 
@@ -18,7 +20,6 @@ async function Process() {
 
 async function run() {
   try {
-    log.info('Running tx-processor');
     await Process();
     log.info('Completed running tx-processor');
   } catch (e: any) {
@@ -28,7 +29,7 @@ async function run() {
   } finally {
     await release();
     // I have been unable to figure out why we still have handles open
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await sleep(5000);
     exit(0);
   }
 }

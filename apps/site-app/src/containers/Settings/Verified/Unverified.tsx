@@ -1,7 +1,7 @@
 import React from 'react';
 import { log } from '@thecointech/logging';
 import { useBlockpass } from '@thecointech/blockpass';
-import { Account } from '@thecointech/shared/containers/Account/reducer';
+import { Account } from '@thecointech/shared/containers/Account';
 import { ButtonSecondary } from '@thecointech/site-base/components/Buttons';
 import { defineMessage, FormattedMessage } from 'react-intl';
 import { AccountVerifyDisplay } from './Display';

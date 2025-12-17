@@ -1,5 +1,5 @@
 import React from 'react';
-import { Story, Meta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react-webpack5';
 import { Select, SelectProps } from 'semantic-ui-react'
 
 export default {
@@ -11,7 +11,7 @@ export default {
   }
 } as Meta;
 
-const Template: Story<SelectProps> = (args) => <Select {...args} />;
+const Template: StoryFn<SelectProps> = (args) => <Select {...args} />;
 const selectOptions = [
   { key: '1', value: '1', text: 'Option1' },
   { key: '2', value: '2', text: 'Option2' },

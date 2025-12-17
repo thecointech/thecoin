@@ -5,7 +5,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import WebpackPwaManifest from 'webpack-pwa-manifest';
 import CompressionPlugin from 'compression-webpack-plugin';
 
-import baseOptions from './webpack.base.mjs';
+import { getBaseConfig } from './webpack.base.mjs';
 import signerOptions from './webpack.signers.mjs';
 
 const prodOptions = {
@@ -102,8 +102,10 @@ const prodOptions = {
   },
 };
 
-export default merge(
-  signerOptions,
-  prodOptions,
-  baseOptions,
-);
+export async function getProdConfig(secrets) {
+  return merge(
+    signerOptions,
+    prodOptions,
+    await getBaseConfig(secrets),
+  )
+}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Dimmer, Loader, Segment } from 'semantic-ui-react';
-import { AreaDatum, AreaGraph, OnClickHandler } from '../../AreaGraph';
+import { AreaGraph, type OnClickHandler } from '../../AreaGraph';
 import { calcAllResults, CoinReturns, MarketData, SimulationParameters } from '../simulator';
 import { sleep } from '@thecointech/async';
 import { log } from '@thecointech/logging';
@@ -30,13 +30,15 @@ export const BenefitsGraph = ({ params, snpData, animate, years }: Props) => {
   const currentWeek = results.length;
   const maxWeeks = 1 + (years * 52.142);
 
-  const onClick: OnClickHandler = (p, _m) => {
+  const onClick: OnClickHandler = (pointOrSlice, _m) => {
     // We could potentially use the mouse event here
     // to figure out where on the graph was clicked,
     // to figure out exactly what ratio (probability)
     // each section would have, but I doubt anyone
     // other than me would care
-    api.setHovered(p.data as any as AreaDatum);
+    if ('data' in pointOrSlice) {
+      api.setHovered(pointOrSlice.data);
+    }
   };
 
   // If core details change, restart the sim

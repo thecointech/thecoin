@@ -1,14 +1,13 @@
-import React, { useEffect } from 'react';
-import { AuthSwitch } from '@thecointech/shared/containers/AuthRoute';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { useEffect } from 'react';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { AccountId } from '@thecointech/signers';
 import { Account } from '@thecointech/shared/containers/Account';
+import { Outlet } from 'react-router';
 
 type Props = {
-  routes: Record<string, React.ComponentType>,
   id: AccountId
 }
-export const AccountBase = ({routes, id}: Props) => {
+export const AccountBase = ({id}: Props) => {
 
   const accounts = AccountMap.useAsArray();
   const accountsApi = AccountMap.useApi();
@@ -19,5 +18,5 @@ export const AccountBase = ({routes, id}: Props) => {
     accountsApi.setActiveAccount(theCoin?.address ?? null);
   }, []);
 
-  return <AuthSwitch path={`/${id}`} auth={routes} />
+  return <Outlet />
 }

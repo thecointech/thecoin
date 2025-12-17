@@ -1,9 +1,13 @@
-import { BaseReducer } from "@thecointech/shared/store/immerReducer";
-import type { ReplayProgress } from "../scraper/types";
+import { BaseReducer } from "@thecointech/redux";
+// import type { ReplayProgress } from "@thecointech/scraper";
 
 const REPLAYPROGRESS_KEY = "replayProgress";
 
 //
+type ReplayProgress = {
+  step: number
+  total: number
+}
 export interface IActions {
   setReplayProgress(state: ReplayProgress|undefined): void;
 }

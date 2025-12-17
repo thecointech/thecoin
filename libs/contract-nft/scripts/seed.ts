@@ -1,20 +1,20 @@
 import hre from 'hardhat';
 import { getSigner } from '@thecointech/signers';
-import { connectNFT } from '../src/connect';
+import { ContractNFT } from '../src/contract';
 import { getTokenClaimCode, getTokenClaimSig } from '../src/tokenCodes';
 import { writeFileSync } from 'fs';
 import { log } from '@thecointech/logging';
 
-const network = "polygon"; //hre.network.name;
+const network = "POLYGON"; //hre.network.name;
 const config = process.env.CONFIG_NAME ?? "development";
-const mintTestTokens = config === 'devlive' || (network == 'polygon' || config === 'prodtest');
+const mintTestTokens = config === 'devlive' || (network == 'POLYGON' || config === 'prodtest');
 if (!mintTestTokens)
   process.exit(0);
 
 log.info("Minting test tokens");
 const minter = await getSigner("NFTMinter");
 const minterAddress = await minter.getAddress();
-const nft = await connectNFT(minter);
+const nft = await ContractNFT.connect(minter, network);
 
 // Mint 10 NFT's from 10-20 and print out a claim code for each
 const ids = [0];
@@ -36,12 +36,12 @@ writeFileSync(tokenFile, JSON.stringify(asJson));
 
 // In devlive simulate a token claiming
 if (config === 'devlive') {
-  log.info("Transfering test token to client1");
-  const client1 = await getSigner("client1");
+  log.info("Transfering test token to Client1");
+  const Client1 = await getSigner("Client1");
   const claimSig = getTokenClaimSig(asJson[10]);
-  const r = await nft.claimToken(10, client1, claimSig, { from: minterAddress });
+  const r = await nft.claimToken(10, Client1, claimSig, { from: minterAddress });
 
   // Double check it succeeded
   const newOwner = await nft.ownerOf(10);
-  log.info("Transferred: " + (newOwner === await client1.getAddress()))
+  log.info("Transferred: " + (newOwner === await Client1.getAddress()))
 }

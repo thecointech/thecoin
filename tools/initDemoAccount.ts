@@ -1,9 +1,9 @@
 import { getSigner } from "@thecointech/signers";
 import { DateTime, Duration } from "luxon";
 import { GetPluginsApi, GetBillPaymentsApi } from '@thecointech/apis/broker';
-import { GetContract } from '@thecointech/contract-core';
-import { getContract as getUberContract } from '@thecointech/contract-plugin-converter';
-import { getContract as getShockAbsorberContract } from '@thecointech/contract-plugin-shockabsorber';
+import { ContractCore } from '@thecointech/contract-core';
+import { ContractConverter } from '@thecointech/contract-plugin-converter';
+import { ContractShockAbsorber } from '@thecointech/contract-plugin-shockabsorber';
 import { ALL_PERMISSIONS, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 import { BuildUberAction } from '@thecointech/utilities/UberAction';
 import Decimal from 'decimal.js-light';
@@ -21,15 +21,18 @@ if (process.env.CONFIG_NAME == "devlive") {
 }
 
 /////////////////////////////////////////////
-const monthsToRun = 9999;
+const monthsToRun = 100;
 /////////////////////////////////////////////
 
 // Init/Demo account
 // Starting from Jan 1 2022
 // Send a deposit email to
-const tcCore = await GetContract();
-const signer = await getSigner("testDemoAccount");
+const tcCore = await ContractCore.get();
+const signer = await getSigner("TestDemoAccount");
 const testAddress = await signer.getAddress();
+if (testAddress != process.env.WALLET_TestDemoAccount_ADDRESS) {
+  throw new Error("Invalid demo account address!");
+}
 const brokerAddress = process.env.WALLET_BrokerCAD_ADDRESS!;
 const startDate = DateTime.fromObject({
   year: 2023,
@@ -42,7 +45,9 @@ const startDate = DateTime.fromObject({
 // Get date of last transaction
 const initBlock = parseInt(process.env.INITIAL_COIN_BLOCK ?? "0", 10);
 const tx = await loadAndMergeHistory(initBlock, tcCore, testAddress);
-const lastTxDate = tx[tx.length - 1]?.date ?? startDate;
+// We start from the last deposit transaction
+const deposits = tx.filter(tx => tx.change > 0);
+const lastTxDate = deposits[deposits.length - 1]?.date ?? startDate.minus({hour: 2});
 console.log(`Last tx: ${lastTxDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
 
 const pausedDate = lastTxDate.plus({ hour: 1});
@@ -87,8 +92,8 @@ if (plugins.length == 0) {
       signedAt: request.signedAt.toMillis(),
     });
   }
-  const converter = await getUberContract();
-  const shockAbsorber = await getShockAbsorberContract();
+  const converter = await ContractConverter.get();
+  const shockAbsorber = await ContractShockAbsorber.get();
 
   await assignPlugin(converter, 10);
   await assignPlugin(shockAbsorber, 5);
@@ -105,6 +110,11 @@ DateTime.now = () => currDate
 
 let numSent = 0;
 while (currDate < endDate) {
+
+  // It seems our email can get overloaded
+  // if (numSent >= 100) {
+  //   break;
+  // }
 
   // If we run harvester on this day?
   if (harvestRunsOnDay.includes(currDate.weekday)) {
@@ -129,8 +139,6 @@ while (currDate < endDate) {
 
       if (currDate >= pausedDate) {
 
-        console.log(`Sending BillPayment `);
-
         const dueDate = nextPayDate.plus(visaDuePeriod);
         const billPayment = await BuildUberAction(
           mockPayee,
@@ -140,6 +148,10 @@ while (currDate < endDate) {
           CurrencyCode.CAD,
           dueDate
         )
+        const signedAt = DateTime.fromMillis(billPayment.transfer.signedMillis).toLocaleString(DateTime.DATETIME_SHORT);
+        const dueAt = DateTime.fromMillis(billPayment.transfer.transferMillis).toLocaleString(DateTime.DATETIME_SHORT);
+        console.log(`Sending BillPayment: Signed ${signedAt} - Due ${dueAt}`);
+
         await payBillApi.uberBillPayment(billPayment);
       }
 

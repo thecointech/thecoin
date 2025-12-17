@@ -22,7 +22,7 @@ export const VisaBalance = () => {
 
   useEffect(() => {
     if (balance && dueAmount && dueDate && history) {
-      window.scraper.finishAction(pageAction);
+      window.scraper.finishAction();
     }
   }, [balance, dueAmount, dueDate, history])
 
@@ -35,7 +35,7 @@ export const VisaBalance = () => {
   }
   const validate = async () => {
     setValidating(true);
-    const r = await window.scraper.testAction(pageAction);
+    const r = await window.scraper.validateAction(pageAction);
     if (r.error) alert(r.error)
     if (r.value?.balance && r.value?.dueAmount && r.value?.dueDate) {
       api.setParameter('visa', 'testPassed', true);

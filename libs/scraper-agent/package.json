@@ -1,0 +1,59 @@
+{
+  "name": "@thecointech/scraper-agent",
+  "version": "0.5.1-test.0",
+  "private": true,
+  "description": "TheCoin: AI Agent to automate the creation of scraping recorder scripts",
+  "type": "module",
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/scraper-agent"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
+    "build": "run -T tsc -b",
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage",
+    "test": "run :jest --runInBand",
+    "test:summary": "jest --coverage > ./coverage/summary.txt",
+    "autoRecord:prod": "yarn _run tools/recordSamples/autoRecord.ts",
+    "testFailure": "yarn _run tools/testFailure/main.ts",
+    "recordSamples": "yarn _run tools/recordSamples/recordSamples.ts",
+    "replay:prod": "yarn _run tools/replay/replay.ts",
+    "updateElement": "yarn _run tools/updateElement/updateTest.ts",
+    "_run": "yarn run -T cross-env CONFIG_NAME=prodtest URL_SEQ_LOGGING=false TC_LOG_FOLDER=.cache/logs run-env --"
+  },
+  "dependencies": {
+    "@thecointech/apis": "^0.5.1-test.0",
+    "@thecointech/scraper": "^0.5.1-test.0",
+    "@thecointech/utilities": "^0.5.1-test.0"
+  },
+  "devDependencies": {
+    "@thecointech/jestutils": "^0.5.1-test.0",
+    "@thecointech/setenv": "^0.5.1-test.0"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "exports": {
+    ".": {
+      "development": "./mocks/index.ts",
+      "devlive": "./mocks/index.ts",
+      "default": "./build/index.js"
+    },
+    "./*": "./build/*.js"
+  },
+  "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "build/*.d.ts"
+      ]
+    }
+  }
+}

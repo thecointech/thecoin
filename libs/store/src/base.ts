@@ -4,7 +4,7 @@ import { log } from '@thecointech/logging';
 
 PouchDB.plugin(upsert);
 
-const STORAGE_PATH = process.env.STORAGE_PATH;
+export const StoragePath = () => process.env.STORAGE_PATH;
 
 // Duplicated out of PouchDB-upsert to keep types happy upstream
 type UpsertResponse = {
@@ -36,7 +36,7 @@ export function BaseStore<T extends Object>(name: string) {
       if (BaseStore.db == null) {
         const mergeopts = {
           revs_limit: 1,
-          prefix: STORAGE_PATH,
+          prefix: StoragePath(),
           ...options
         };
         log.trace(`Initialized DB ${name} at: ${mergeopts.prefix ?? 'localStorage'}`);

@@ -1,10 +1,8 @@
 import { jest } from '@jest/globals';
-import { processActions, processTransfers } from '.';
-import { getSigner } from '@thecointech/signers';
-import { ConnectContract } from '@thecointech/contract-core';
+import { processActions } from '.';
+import { ContractCore } from '@thecointech/contract-core';
 import { RbcApi } from '@thecointech/rbcapi';
 import { DateTime } from 'luxon';
-import { TxActionType } from '@thecointech/broker-db';
 import { init } from '@thecointech/firestore';
 import { getBuyETransferAction } from '@thecointech/tx-deposit';
 import Decimal from 'decimal.js-light';
@@ -12,13 +10,14 @@ import { Wallet } from 'ethers';
 import { getBillAction } from '@thecointech/tx-bill';
 import { BuildVerifiedBillPayment } from '@thecointech/utilities/VerifiedBillPayment';
 import { log } from '@thecointech/logging';
+import { getSigner } from '@thecointech/signers';
 jest.setTimeout(900000);
 
 init({});
 log.level(100)
-const brokerCad = await getSigner("BrokerCAD");
-const theContract = await ConnectContract(brokerCad);
-const bank = new RbcApi();
+const signer = await getSigner("BrokerCAD");
+const theContract = await ContractCore.connect(signer);
+const bank = await RbcApi.create();
 const user = Wallet.createRandom();
 
 it("does not continue processing user with failed transactions", async () => {
@@ -36,8 +35,8 @@ it("does not continue processing user with failed transactions", async () => {
   const billAction = await getBillAction(xfer);
 
   const actions = [
-    billAction,
-    billAction,
+    { ...billAction, executeDate: 1 },
+    { ...billAction, executeDate: 2 },
   ];
   const r = await processActions(actions, theContract, bank);
   expect(r.length).toEqual(1);
@@ -52,8 +51,8 @@ it ("continues if deposits have issues", async () => {
   } as any)
 
   const actions = [
-    action,
-    action,
+    { ...action, executeDate: 1 },
+    { ...action, executeDate: 2 },
   ];
   const r = await processActions(actions, theContract, bank);
   expect(r.length).toEqual(2);

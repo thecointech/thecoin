@@ -2,7 +2,7 @@ import { jest } from '@jest/globals';
 import { last } from '@thecointech/utilities/ArrayExtns';
 import { describe } from '@thecointech/jestutils';
 import { updateRates } from '../src/update';
-import { getContract } from '../src/index_mocked';
+import { ContractOracle } from '../mocks/oracle_mocked';
 import { getOracleFactory } from '../src';
 import hre from 'hardhat';
 import '@nomicfoundation/hardhat-ethers';
@@ -27,7 +27,7 @@ describe('Oracle Tests', () => {
     const { rates, factory } = await getRatesFactory();
     // ignore the first live rate, since there are some issues with the first day
     const initialTimestamp = rates[0].from;
-    const oracle = getContract();
+    const oracle = await ContractOracle.connect(owner);
     await oracle.initialize(owner.address, initialTimestamp, blockTime);
     const till = Math.min(last(rates).to, Date.now());
     await updateRates(oracle, till, factory);
