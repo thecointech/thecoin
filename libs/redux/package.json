@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "react-redux": "^9.2.0",
-    "redux": "^4.0.5",
+    "redux": "^5.0.0",
     "redux-injectors": "https://github.com/FrozenKiwi/redux-injectors#6209c56b7c2508e002b669010ad3c0d5e0bab9eb",
     "redux-saga": "^1.1.3"
   },
