@@ -2,7 +2,6 @@
   "extends": "../../tsconfig.tests.json",
   "compilerOptions": {
     "types": ["webpack-dev-server"],
-    "allowImportingTsExtensions": true,
   },
   "include": ["**/*.test.*", "scripts/**.ts", "internal/**/*", "**/*.stories.*", "**/hardhat.d.ts"],
 }
