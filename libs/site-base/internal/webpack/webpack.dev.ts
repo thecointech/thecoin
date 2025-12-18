@@ -9,10 +9,10 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
 // import ErrorOverlayPlugin from './error-overlay-shim.cjs';
 
-import { getBaseConfig } from './webpack.base.ts';
-import { signerConfig } from './webpack.signers.ts';
+import { getBaseConfig } from './webpack.base';
+import { signerConfig } from './webpack.signers';
 import { getMocks } from "@thecointech/setenv/webpack";
-import type { SecretKeyType } from '@thecointech/secrets/*';
+import type { SecretKeyType } from '@thecointech/secrets';
 
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import ReactRefreshTypeScript from 'react-refresh-typescript';

@@ -4,8 +4,8 @@ import { merge } from "webpack-merge";
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import WebpackPwaManifest from 'webpack-pwa-manifest';
 import CompressionPlugin from 'compression-webpack-plugin';
-import { getBaseConfig } from './webpack.base.ts';
-import { signerConfig } from './webpack.signers.ts';
+import { getBaseConfig } from './webpack.base';
+import { signerConfig } from './webpack.signers';
 import type { Configuration } from "webpack";
 
 const prodOptions: Configuration = {
