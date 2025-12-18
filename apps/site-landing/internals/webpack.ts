@@ -1,11 +1,12 @@
 import { getConfig } from "@thecointech/site-base/internal/webpack";
 import { resolve } from "node:path";
-import { readFileSync } from "node:fs";
+import { readFile } from "node:fs/promises";
+import type Server from "webpack-dev-server";
 
 const config = await getConfig([], {
   port: 3000,
-  setupMiddlewares: (middlewares, devServer) => {
-    if (!devServer) {
+  setupMiddlewares: (middlewares: Server.Middleware[], devServer: Server) => {
+    if (!devServer?.app) {
       throw new Error('webpack-dev-server is not defined');
     }
 
@@ -14,19 +15,16 @@ const config = await getConfig([], {
     const snpDataPath = resolve(datapath, 'sp500_monthly.csv');
     const fxDataPath = resolve(datapath, 'fx_monthly.csv');
 
-    try {
-      const snpString = readFileSync(snpDataPath, 'utf8');
-      const fxString = readFileSync(fxDataPath, 'utf8');
-
-      devServer.app?.get('/sp500_monthly.csv', (req, res) => {
-        res.send(snpString);
-      });
-      devServer.app?.get('/fx_monthly.csv', (req, res) => {
-        res.send(fxString);
-      });
-    } catch (e) {
-      console.warn('Could not read simulator data files. This is expected for apps that do not use it.');
-    }
+    let snpPromise: Promise<string>;
+    devServer.app.get('/sp500_monthly.csv', async (req, res) => {
+      snpPromise ??= readFile(snpDataPath, 'utf8');
+      res.send(await snpPromise);
+    });
+    let fxPromise: Promise<string>;
+    devServer.app.get('/fx_monthly.csv', async (req, res) => {
+      fxPromise ??= readFile(fxDataPath, 'utf8');
+      res.send(await fxPromise);
+    });
 
     return middlewares;
   },

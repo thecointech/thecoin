@@ -3,20 +3,23 @@ import { getFailing, getTest, getTestImagePath, getTestResults, getTests } from 
 import { existsSync } from "node:fs";
 import { applyOverrideFromSnapshot, updateTest } from "./update";
 import { openFolderInBrowser } from "./paths";
-
+import type Server from 'webpack-dev-server';
 
 const config = await getConfig([], {
   port: 3010,
-  setupMiddlewares: (middlewares, devServer) => {
+  setupMiddlewares: (middlewares, devServer: Server) => {
+    if (!devServer.app) {
+      throw new Error('devServer.app is undefined');
+    }
     // Enable CORS for development
-    devServer.app?.use((req, res, next) => {
+    devServer.app.use((req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
       next();
     });
 
     // API: List all tests
-    devServer.app?.get('/api/tests', (req, res) => {
+    devServer.app.get('/api/tests', (req, res) => {
       try {
         const allTests = getTests();
         res.json(allTests);
@@ -26,7 +29,7 @@ const config = await getConfig([], {
       }
     });
 
-    devServer.app?.get('/api/results/:key/:element', (req, res) => {
+    devServer.app.get('/api/results/:key/:element', (req, res) => {
       try {
         const { key, element } = req.params;
         const results = getTestResults(key, element);
@@ -37,7 +40,7 @@ const config = await getConfig([], {
       }
     });
 
-    devServer.app?.get('/api/image/:key', (req, res) => {
+    devServer.app.get('/api/image/:key', (req, res) => {
       try {
         const { key } = req.params;
         const imagePath = getTestImagePath(key);
@@ -52,7 +55,7 @@ const config = await getConfig([], {
     });
 
     // API: Get failing tests
-    devServer.app?.get('/api/failing', (req, res) => {
+    devServer.app.get('/api/failing', (req, res) => {
       try {
         const failing = getFailing();
         return res.json(failing);
@@ -62,7 +65,7 @@ const config = await getConfig([], {
       }
     });
 
-    devServer.app?.get('/api/update/:key/:element', async (req, res) => {
+    devServer.app.get('/api/update/:key/:element', async (req, res) => {
       try {
         const { key, element } = req.params;
         const results = await updateTest(key, element);
@@ -73,7 +76,7 @@ const config = await getConfig([], {
       }
     });
 
-    devServer.app?.post('/api/open-folder/:key', async (req, res) => {
+    devServer.app.post('/api/open-folder/:key', async (req, res) => {
       try {
         const { key } = req.params;
         const test = getTest(key);
@@ -89,7 +92,7 @@ const config = await getConfig([], {
       }
     });
 
-    devServer.app?.post('/api/apply-override/:key/:element', async (req, res) => {
+    devServer.app.post('/api/apply-override/:key/:element', async (req, res) => {
       try {
         const { key, element } = req.params;
         const test = getTest(key);
@@ -120,6 +123,5 @@ const config = await getConfig([], {
     return middlewares;
   }
 });
-
 
 export default config;
