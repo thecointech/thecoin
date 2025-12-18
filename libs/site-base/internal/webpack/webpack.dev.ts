@@ -115,6 +115,6 @@ export async function getDevConfig(secrets: SecretKeyType[] = [], overrides: Par
     getMocks(process.env),
     devOptions,
     signerConfig,
-    await getBaseConfig(secrets),
+    baseConfig,
   )
 }
