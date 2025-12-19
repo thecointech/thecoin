@@ -19,7 +19,7 @@
     "build:src:tests": "run -T tsc --project ./tsconfig.tests.json",
     "build:src:build": "URL_SEQ_LOGGING=false run-env exec=webpack --config ./internals/webpack.ts",
     "build:pre": "run -T run-p 'build:pre:*'",
-    "build:pre:semantic": "node ./internals/buildSemantic.mjs",
+    "build:pre:semantic": "run-env ./internals/buildSemantic.ts",
     "build:pre:i18n": "run -T run-s extract compile",
     "build:pre:copy": "run -T cpx \"./src/containers/BenefitsSimulator/simulator/*.csv\" ./build/",
     "clean": "run -T run-p 'clean:*'",

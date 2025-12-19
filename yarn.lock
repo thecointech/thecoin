@@ -11921,6 +11921,7 @@ __metadata:
     "@prismicio/next": "npm:^2.0.2"
     "@prismicio/react": "npm:^3.2.2"
     "@slicemachine/adapter-next": "npm:^0.3.89"
+    "@thecointech/setenv": "npm:^0.5.1-test.0"
     "@thecointech/site-semantic-theme": "npm:^0.5.1-test.0"
     next: "npm:^16.0.8"
     semantic-ui-react: "npm:3.0.0-beta.2"
@@ -12016,7 +12017,7 @@ __metadata:
     "@types/express": "npm:4.17.1"
     "@types/invariant": "npm:2.2.30"
     "@types/jest": "npm:^30.0.0"
-    "@types/less": "npm:^3.0.1"
+    "@types/less": "npm:^3.0.8"
     "@types/lodash": "npm:^4.14.170"
     "@types/luxon": "npm:3.3.0"
     "@types/node": "npm:22.13.10"
@@ -13176,10 +13177,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/less@npm:^3.0.1":
-  version: 3.0.6
-  resolution: "@types/less@npm:3.0.6"
-  checksum: 07109689295d1ce88158f52f799b71925121b2e5ae4dd58c3f23709b1e0b76e8c145f052f883bc3e06cc52d42f173706fcedbc23d9c49b6895b4cf357965d21f
+"@types/less@npm:^3.0.8":
+  version: 3.0.8
+  resolution: "@types/less@npm:3.0.8"
+  checksum: 79ed1014ccecaa060b8b2ccc8ea8cd28a62463a69e21184c13eaa08bd200ffe5149b4ecc380792a3204d8f629a328b504f2ef25a6a5974f8c512f15514e78426
   languageName: node
   linkType: hard
 

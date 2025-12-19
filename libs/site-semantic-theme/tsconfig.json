@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.libs.json",
+  "compilerOptions": {
+    "outDir": "./build/",
+    "tsBuildInfoFile": "./build/.buildinfo",
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+  },
+  "include": ["./**/*.js", "./**/*.ts"],
+  "exclude": [
+    "**/*.test.*",
+    "**/tests/**",
+    "**/__mocks__/**",
+    "**/*.stories.*"
+  ],
+}

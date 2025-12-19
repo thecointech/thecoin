@@ -15,7 +15,7 @@
         "dev": "run -T run-p start:website start:slicemachine",
         "build": "run -T run-s build:semantic build:src",
         "build:src": "next build",
-        "build:semantic": "node ./internal/buildSemantic.mjs",
+        "build:semantic": "run-env ./internal/buildSemantic.ts",
         "_start": "next start",
         "start:website": "next dev --port 3010",
         "start:slicemachine": "start-slicemachine"
@@ -50,6 +50,7 @@
         "@prismicio/next": "^2.0.2",
         "@prismicio/react": "^3.2.2",
         "@slicemachine/adapter-next": "^0.3.89",
+        "@thecointech/setenv": "^0.5.1-test.0",
         "@thecointech/site-semantic-theme": "^0.5.1-test.0",
         "next": "^16.0.8",
         "slice-machine-ui": "^2.20.2"

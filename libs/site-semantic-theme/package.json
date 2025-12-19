@@ -14,15 +14,25 @@
   },
   "author": "Stephen Taylor",
   "license": "GPL-3.0-or-later",
+  "scripts": {
+    "prebuild": "rm -rf build",
+    "build": "run -T tsc -b"
+  },
   "exports": {
-    "./build": "./internal/buildSemantic.cjs",
-    "./webpack.less": "./internal/webpack.less.cjs",
+    "./build": "./internal/buildSemantic.ts",
+    "./webpack.less": "./internal/webpack.less.ts",
     "./variables.less": "./src/variables.less",
     "./semantic.less": "./src/semantic.less",
-    "./variables": "./src/variables.js"
+    "./variables": "./src/variables.ts"
   },
   "typesVersions": {
     "*": {
+      "build": [
+        "internal/buildSemantic.ts"
+      ],
+      "webpack.less": [
+        "internal/webpack.less.ts"
+      ],
       "*": [
         "src/*"
       ]

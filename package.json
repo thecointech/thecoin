@@ -104,7 +104,7 @@
     "@types/express": "4.17.1",
     "@types/invariant": "2.2.30",
     "@types/jest": "^30.0.0",
-    "@types/less": "^3.0.1",
+    "@types/less": "^3.0.8",
     "@types/lodash": "^4.14.170",
     "@types/luxon": "3.3.0",
     "@types/node": "22.13.10",

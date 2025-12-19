@@ -6,7 +6,6 @@ import { getSecret, type SecretKeyType } from '@thecointech/secrets';
 import { join, resolve as _resolve } from 'path';
 import webpack, { type Configuration } from 'webpack';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-//@ts-ignore
 import { semantic_less_loader, css_module_loader } from '@thecointech/site-semantic-theme/webpack.less';
 import Dotenv from 'dotenv-webpack';
 import { DynamicAliasPlugin } from '@thecointech/setenv/webpack';
