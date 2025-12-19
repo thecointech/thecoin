@@ -15,7 +15,7 @@
   "author": "Stephen Taylor",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "prebuild": "rm -rf build",
+    "prebuild": "run -T rimraf build",
     "build": "run -T tsc -b"
   },
   "exports": {

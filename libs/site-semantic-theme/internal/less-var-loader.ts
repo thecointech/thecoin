@@ -1,4 +1,3 @@
-// @ts-ignore
 import lessToJs from 'less-vars-to-js';
 import camelcase from 'camelcase';
 import type { LoaderContext } from 'webpack';
@@ -25,10 +24,18 @@ export default function (this: LoaderContext<LoaderQuery>, source: string) {
   }
 
   if (resolveVariables) {
-    const followVar = (value: string): string => {
+    const followVar = (value: string, seen = new Set<string>()): string => {
+      if (value === undefined) {
+        return '';
+      }
       if (varRgx.test(value)) {
+        if (seen.has(value)) {
+          this.emitWarning(new Error(`Circular variable reference detected: ${value}`));
+          return value;
+        }
+        seen.add(value);
         // value is a variable
-        return followVar(vars[value]);
+        return followVar(vars[value], seen);
       }
       return value;
     };
@@ -49,5 +56,5 @@ export default function (this: LoaderContext<LoaderQuery>, source: string) {
     Object.entries(vars).map(([key, value]) => [transformKey(key), value])
   );
 
-  return `module.exports = ${JSON.stringify(transformedVars)};`;
+  return `export default ${JSON.stringify(transformedVars)};`;
 }

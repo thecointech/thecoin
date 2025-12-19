@@ -3,10 +3,10 @@
   "compilerOptions": {
     "outDir": "./build/",
     "tsBuildInfoFile": "./build/.buildinfo",
-    "noEmit": true,
     "allowImportingTsExtensions": true,
+    "noEmit": true,
   },
-  "include": ["./**/*.js", "./**/*.ts"],
+  "include": ["./**/*.js", "./**/*.ts", "./internal/less-vars-to-js.d.ts"],
   "exclude": [
     "**/*.test.*",
     "**/tests/**",
