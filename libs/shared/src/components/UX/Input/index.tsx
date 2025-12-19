@@ -77,8 +77,8 @@ export const UxInput = (props: BaseProps) => {
 
   const contextRef = useRef<HTMLSpanElement>(null);
   const styleError = {
-    color: LessVars.errorColor,
-    borderColor: LessVars.errorBorderColor,
+    color: LessVars.errorColor.toString(),
+    borderColor: LessVars.errorBorderColor.toString(),
   }
 
   const transformV = transformDisplayValue?.toValue ?? (v => v);
