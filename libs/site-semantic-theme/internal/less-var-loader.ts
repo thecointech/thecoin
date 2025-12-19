@@ -17,7 +17,7 @@ export default function (this: LoaderContext<LoaderQuery>, source: string) {
   const resolveVariables = query.resolveVariables !== false; // default to true
 
   const varRgx = /^@/;
-  const vars: Record<string, string> = lessToJs(source);
+  const vars = lessToJs(source);
   const keys = Object.keys(vars);
   if (!keys.length) {
     this.emitWarning(new Error('Could not find any extractable less variables!'));

@@ -1,6 +1,7 @@
 import less from 'less';
-import * as path from 'path';
-import * as fs from 'fs';
+import path from 'node:path';
+import fs from 'node:fs';
+import { globSync } from 'glob';
 import { fileURLToPath } from 'url';
 import { vars } from './vars';
 
@@ -25,7 +26,7 @@ const build = async () => {
       paths,
       rootpath: "semantic/",
       rewriteUrls: "local",
-      modifyVars,
+      globalVars: modifyVars,
     }
     const { css } = await less.render(content, options);
 
@@ -43,6 +44,17 @@ const build = async () => {
 
     fs.writeFileSync(outputFilename, fixedCss);
     console.log("CSS written to " + outputFilename);
+
+    // Copy other files
+    var files = globSync(`${semanticRoot}/**/*.{png,eot,ttf,svg,woff,woff2}`);
+    files.forEach(src => {
+      const r = path.relative(semanticRoot, src);
+      const dest = path.join(outputFolder, "semantic", r);
+      const outdir = path.dirname(dest);
+      if (!fs.existsSync(outdir))
+        fs.mkdirSync(outdir, {recursive: true})
+      fs.copyFileSync(src, dest)
+    });
   } catch (e) {
     console.error(e);
     process.exit(1);

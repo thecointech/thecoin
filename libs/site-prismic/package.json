@@ -52,6 +52,7 @@
         "@slicemachine/adapter-next": "^0.3.89",
         "@thecointech/setenv": "^0.5.1-test.0",
         "@thecointech/site-semantic-theme": "^0.5.1-test.0",
+        "glob": "^13.0.0",
         "next": "^16.0.8",
         "slice-machine-ui": "^2.20.2"
     }
