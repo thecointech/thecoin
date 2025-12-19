@@ -52,9 +52,11 @@ export default function (this: LoaderContext<LoaderQuery>, source: string) {
     return ret;
   };
 
-  const transformedVars = Object.fromEntries(
-    Object.entries(vars).map(([key, value]) => [transformKey(key), value])
-  );
+  const cleanedVars = keys.reduce((prev, key) => {
+    const val = Number(vars[key]) || vars[key];
+    prev[transformKey(key)] = val;
+    return prev;
+  }, {} as Record<string, string | number>);
 
-  return `export default ${JSON.stringify(transformedVars)};`;
+  return `export default ${JSON.stringify(cleanedVars)};`;
 }
