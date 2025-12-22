@@ -29,7 +29,7 @@ module.exports = function (request, options) {
     const r = options.defaultResolver(maybeMocked, {
       ...options,
       conditions: getConditions(options.conditions),
-      packageFilter: getPackageFilter(request),
+      mainFields: getMainFields(request),
       moduleDirectories: getModuleDirectories(request),
     })
     return r;
@@ -92,45 +92,18 @@ const getConditions = (conditions) =>
     ? ["test", "development", ...conditions]
     : ["test", "development"];
 
-const getPackageFilter = (request) => {
-    // Map the module field to exports except
-  // when importing a sub-path
-  // const couldBeModule = (
-  //   options?.conditions?.includes("import") &&
-  //   !request.includes('/') &&
-  //   !request.includes('\\')
-  // );
 
-  // Opt-in to modularization
+const getMainFields = (request) => {
+  // We want to use named imports from this
+  // package, which requires ESM.  However,
+  // by default jest-resolver does not read
+  // the "module" field in package.json
   const packagesToModularize = [
-    // "react-dropzone",
-    "@prismicio/react",
+    "react-helmet-async",
   ]
   return packagesToModularize.find(p => request.startsWith(p))
-    ? mapModuleFieldToExports
+    ? ["module", "main"]
     : undefined;
-}
-
-function mapModuleFieldToExports (pkg, pkgDir) {
-  // manually force prismic/react to be a module
-  if (pkgDir.includes(`@prismicio${path.sep}react`))
-    pkg.type = "module";
-
-  if (pkg.exports || !pkg.module)
-    return pkg;
-
-  const moduleFile = path.resolve(pkgDir, pkg.module);
-  if (existsSync(moduleFile)) {
-    // Auto-convert into module
-    pkg.type = "module";
-    pkg.exports = {
-      ".": {
-        require: pkg.main,
-        import: pkg.module,
-      },
-    }
-  }
-  return pkg
 }
 
 // Apply browser field remapping from package.json

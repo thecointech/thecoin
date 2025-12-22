@@ -31,9 +31,13 @@ module.exports = {
         },
       },
     ],
+    // Processing specifically for react-helmet-async,
+    "\\esm.js$": ["babel-jest", {
+      "plugins": ["@babel/plugin-transform-modules-commonjs"]
+    }],
   },
   transformIgnorePatterns: [
-    "/node_modules/",
+    '/node_modules/(?!react-helmet-async)/',
   ],
 
   // By default, we add the 'src' folder to jest
@@ -59,5 +63,5 @@ module.exports = {
     getTool('testSetup.js'),
     getTool('mockLocalStorage.js'),
     getTool('setupLuxon.mjs'),
-  ]
+  ],
 };
