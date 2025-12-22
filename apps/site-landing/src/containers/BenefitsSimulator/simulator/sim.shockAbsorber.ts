@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import { SimulationParameters } from './params';
 import { grossFiat, SimulationState, toCoin, toFiat } from './state';
 import { DMin, one, zero } from './sim.decimal';
-import { straddlesYear } from './time';
+import { weekContainedAnniversary } from './time';
 
 //
 //
@@ -12,7 +12,7 @@ export function applyShockAborber(start: DateTime, params: SimulationParameters,
   if (!sa.maximumProtected || state.coin.eq(0)) return;
 
   // On the anniversary, lock in any cushion & profit
-  if (straddlesYear(start, state.date)) {
+  if (weekContainedAnniversary(start, state.date)) {
     updateCushion(params, state);
   }
 
