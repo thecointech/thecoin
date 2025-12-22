@@ -10,7 +10,8 @@ import { semantic_less_loader, css_module_loader } from '@thecointech/site-seman
 import Dotenv from 'dotenv-webpack';
 import { DynamicAliasPlugin } from '@thecointech/setenv/webpack';
 
-import { createRequire } from "module"; // Bring in the ability to create the 'require' method
+import { createRequire } from "node:module"; // Bring in the ability to create the 'require' method
+import { fileURLToPath } from 'node:url';
 const require = createRequire(import.meta.url); // construct the require method
 
 const configName = process.env.CONFIG_NAME;
@@ -80,7 +81,7 @@ export async function getBaseConfig(secrets: SecretKeyType[] = []): Promise<Conf
         __COMPILER_REPLACE_SECRETS__: JSON.stringify(secretObj),
       }),
       ...envFiles.map(path => new Dotenv({
-        path: path.pathname,
+        path: fileURLToPath(path),
         ignoreStub: true,
         expand: true,
         systemvars: true,
