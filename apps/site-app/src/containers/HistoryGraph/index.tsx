@@ -15,10 +15,10 @@ const theme: Theme = {
     fill: "#FFF",
   },
   lineColors: [
-    LessVars.theCoinPrimaryGreenNeutral,
-    LessVars.theCoinPrimaryGreenPale
+    LessVars.theCoinPrimaryGreenNeutral.toString(),
+    LessVars.theCoinPrimaryGreenPale.toString()
   ],
-  dotColor: LessVars.theCoinPrimaryGreenNeutral,
+  dotColor: LessVars.theCoinPrimaryGreenNeutral.toString(),
   // axis: {
   //   domain: {
   //     line: {

@@ -4,7 +4,7 @@ import { AccountSwitcher } from '@thecointech/site-base/components/AccountSwitch
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { HeaderLink } from '@thecointech/site-base/components/HeaderLink';
 import { LanguageSwitcher } from '@thecointech/site-base/containers/LanguageSwitcher';
-import { NavLink } from '@thecointech/shared';
+import { NavLink } from '@thecointech/shared/components/Links';
 import styles from './styles.module.less';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar';

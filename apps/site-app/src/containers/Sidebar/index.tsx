@@ -5,7 +5,8 @@ import { SidebarItemsReducer, type SidebarLink } from '@thecointech/shared/conta
 import { defineMessages, useIntl } from 'react-intl';
 import { isLocal } from '@thecointech/signers';
 
-import { getOpenRoutes, type AuthPathKey } from '../App/Routes';
+import type { AuthPathKey } from '../App/Routes';
+import { getOpenRoutes } from '../App/Routes.open';
 import { useLocation } from 'react-router';
 
 const translations = defineMessages({

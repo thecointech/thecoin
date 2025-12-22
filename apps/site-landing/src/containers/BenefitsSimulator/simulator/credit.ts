@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
-import { balanceChange, SimulationState } from './state';
+import { balanceChange, grossFiat, SimulationState } from './state';
 import { straddlesMonth, straddlesYear } from './time';
-import { grossFiat, SimulationParameters } from '.';
+import type { SimulationParameters } from './params';
 import { DMin, zero } from './sim.decimal';
 
 type CreditParams = SimulationParameters['credit'];

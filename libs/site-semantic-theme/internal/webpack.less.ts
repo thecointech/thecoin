@@ -3,14 +3,15 @@
 // This file defines the LESS loaders common to our site build and
 // to our storybook webpack based at the root
 //
-const vars = require('./vars.cjs');
+import { vars } from './vars.ts';
+import type { LoaderContext } from 'webpack';
 
 // In dev mode, leave the modules classnames intact so we can debug easier
 const modules = process.env.NODE_ENV !== 'production'
   ? { localIdentName: "[name]__[local]--[hash:base64:5]" }
   : true;
 
-const css_module_loader = {
+export const css_module_loader = {
   // CSS/LESS module matching
   test: /.*\.module\.(le|c)ss$/,
   use: [
@@ -29,12 +30,12 @@ const css_module_loader = {
       loader: 'less-loader',
       options: {
         sourceMap: true,
-        lessOptions: (loaderContext) => vars(loaderContext.resourcePath),
+        lessOptions: (loaderContext: LoaderContext<{}>) => vars(loaderContext.resourcePath),
       },
     },
   ],
 };
-const semantic_less_loader = {
+export const semantic_less_loader = {
   // Explicitly process Semantics LESS files
   test: /semantic\.less$/,
   use: [
@@ -52,14 +53,8 @@ const semantic_less_loader = {
       loader: 'less-loader',
       options: {
         sourceMap: true,
-        lessOptions: (loaderContext) => vars(loaderContext.resourcePath),
+        lessOptions: (loaderContext: LoaderContext<{}>) => vars(loaderContext.resourcePath),
       },
     },
   ],
 };
-
-
-module.exports = {
-  semantic_less_loader,
-  css_module_loader,
-}

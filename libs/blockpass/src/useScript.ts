@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+// TODO: Replace this with <Helmet> async
 export type Status = "idle"|"loading"|"ready"|"error"
 // Hook
 export function useScript(src: string) {

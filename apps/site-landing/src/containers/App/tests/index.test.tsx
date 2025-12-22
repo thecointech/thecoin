@@ -5,6 +5,7 @@ import { createMemoryRouter, RouterProvider } from 'react-router';
 import { Provider } from 'react-redux';
 import { configureStore } from '@thecointech/redux';
 import { LanguageProvider } from '@thecointech/redux-intl';
+import { HelmetProvider } from 'react-helmet-async';
 
 // Mock redux hooks
 jest.unstable_mockModule('redux-injectors', () => ({
@@ -36,7 +37,9 @@ describe('<App />', () => {
     const { container } = render(
       <Provider store={store}>
         <LanguageProvider languages={{ en: {}, fr: {} }}>
-          <RouterProvider router={router} />
+          <HelmetProvider>
+            <RouterProvider router={router} />
+          </HelmetProvider>
         </LanguageProvider>
       </Provider>
     );

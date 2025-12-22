@@ -8,7 +8,7 @@
   "author": "Stephen Taylor",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "dev": "run-env server/server.ts --port=3010",
+    "dev": "run-env exec=webpack-dev-server --config ./server/webpack.ts",
     "build": "run -T tsc -b",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
     "_test": "run :jest",

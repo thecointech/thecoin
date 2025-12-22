@@ -15,4 +15,3 @@ export { UploadWallet } from './containers/UploadWallet';
 export type { UploadData } from './containers/UploadWallet';
 
 export { usePromiseSubscription } from './utils/usePromiseSubscription';
-export { useScript } from './useScript';

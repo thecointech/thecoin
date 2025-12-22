@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Header, Message } from 'semantic-ui-react';
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import styles from './styles.module.less';
 
 const translations = defineMessages({
