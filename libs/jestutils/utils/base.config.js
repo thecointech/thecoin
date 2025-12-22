@@ -32,7 +32,7 @@ module.exports = {
       },
     ],
     // Processing specifically for react-helmet-async,
-    "\\esm.js$": ["babel-jest", {
+    "\\.esm.js$": ["babel-jest", {
       "plugins": ["@babel/plugin-transform-modules-commonjs"]
     }],
   },
