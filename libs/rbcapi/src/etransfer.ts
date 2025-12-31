@@ -37,7 +37,7 @@ export async function send(prefix: string, amount: number, name:string, packet: 
   await act.clickAndNavigate('#id_btn_confirm', 'Confirm');
   //Promise.all([page.click('#id_btn_confirm'), page.waitForNavigation()]);
 
-  // This incredbily flaky selector means it's time to port RBC to the new scraper API
+  // This incredibly flaky selector means it's time to port RBC to the new scraper API
   const selector = "#layout-column-main > table > tbody > tr > td > div > section > div > div > div > table > tbody > tr > td > table > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(2) > td.bodyText"
   const innerText = await page.evaluate(() => (document.querySelector(selector) as HTMLElement).innerText);
   if (innerText)
