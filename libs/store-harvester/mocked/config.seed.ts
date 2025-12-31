@@ -58,11 +58,24 @@ const mockEvents = (name: string) => {
     {
       type: "navigation",
       to: `https://www.${name}.com`,
-      id: `event-${counter++}`
+      id: `${name}-${counter++}`
     },
     {
       type: 'click',
-      id: `event-${counter++}`
-    }
+      id: `${name}-${counter++}`
+    },
+    // Add multiple navigation events, this is more
+    // like what you'd get from a real scraper, and we
+    // need to make sure we handle it correctly
+    {
+      type: "navigation",
+      to: `https://www.${name}.com`,
+      id: `${name}-${counter++}`
+    },
+    {
+      type: "navigation",
+      to: `https://www.${name}.com`,
+      id: `${name}-${counter++}`
+    },
   ] as AnyEvent[]
 }
