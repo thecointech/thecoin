@@ -10,7 +10,7 @@ export async function send(prefix: string, amount: number, name:string, packet: 
   const { message, email, question, answer } = packet;
 
   // Navigate to old account page
-  await act.clickOnText("Current Acc", "a");
+  await act.clickOnText("Current Account", "a");
 
   await act.clickOnText("Pay Bills & Transfer Funds", "a")
   await page.type('#amount', amount.toString());
@@ -37,7 +37,9 @@ export async function send(prefix: string, amount: number, name:string, packet: 
   await act.clickAndNavigate('#id_btn_confirm', 'Confirm');
   //Promise.all([page.click('#id_btn_confirm'), page.waitForNavigation()]);
 
-  const innerText = await page.evaluate(() => (document.querySelector(':nth-child(8) > tbody > :nth-child(2) > .bodyText') as HTMLElement).innerText);
+  // This incredbily flaky selector means it's time to port RBC to the new scraper API
+  const selector = "#layout-column-main > table > tbody > tr > td > div > section > div > div > div > table > tbody > tr > td > table > tbody > tr > td > table:nth-child(7) > tbody > tr:nth-child(2) > td.bodyText"
+  const innerText = await page.evaluate(() => (document.querySelector(selector) as HTMLElement).innerText);
   if (innerText)
   {
     try {
