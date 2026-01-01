@@ -1,9 +1,9 @@
 import { notifyError, notifyInput } from "@/notify";
 import { Replay, AnyEvent, processEvent } from "@thecointech/scraper";
-import { flatten, getTrimmedEvents, isSection, stripDuplicateNavigations } from "@thecointech/scraper-agent/replay/events";
+import { getTrimmedEvents, isSection } from "@thecointech/scraper-agent/replay/events";
 import { EventSection } from "@thecointech/scraper-agent/types";
 import { log } from "@thecointech/logging";
-import { isPageInSection, findSectionByName } from "./utils";
+import { isPageInSection } from "./utils";
 import { Page } from "puppeteer";
 
 
