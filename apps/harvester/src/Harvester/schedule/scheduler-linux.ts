@@ -64,7 +64,7 @@ export async function setSchedule(schedule: HarvestSchedule) {
 }
 
 export function generateService(useXvfb: boolean = false): string {
-  const harvestCommand = `${process.execPath} --harvest`;
+  const harvestCommand = `"${process.execPath}" --harvest`;
 
   const execCommand = useXvfb
     ? `/bin/sh -c 'if [ -z "$DISPLAY" ]; then ${xvfbRun()} ${harvestCommand}; else ${harvestCommand}; fi'`
