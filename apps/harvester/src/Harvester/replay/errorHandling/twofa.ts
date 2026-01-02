@@ -1,9 +1,9 @@
 import { notifyError, notifyInput } from "@/notify";
 import { Replay, AnyEvent, processEvent } from "@thecointech/scraper";
-import { flatten, isSection } from "@thecointech/scraper-agent/replay/events";
+import { getTrimmedEvents, isSection } from "@thecointech/scraper-agent/replay/events";
 import { EventSection } from "@thecointech/scraper-agent/types";
 import { log } from "@thecointech/logging";
-import { isPageInSection, findSectionByName } from "./utils";
+import { isPageInSection } from "./utils";
 import { Page } from "puppeteer";
 
 
@@ -100,15 +100,13 @@ export function findNextEventAfterTwoFA(events: AnyEvent[], root: EventSection) 
 }
 
 export function findLastLoginEvent(events: AnyEvent[], root: EventSection) {
-  const loginSection = findSectionByName("Login", root);
-  if (!loginSection) {
-    throw new Error("Failed to find Login section");
+
+  const loginEvents = getTrimmedEvents(root, ["Login"]);
+  if (loginEvents.length === 0) {
+    throw new Error("No login events found in passed EventSection");
   }
-  const loginEvents = flatten(loginSection, ["Login"]);
-  const lastEvent = [...loginEvents].reverse().find(e => !isSection(e)) as AnyEvent;
-  if (!lastEvent) {
-    throw new Error("Failed to find last Login event");
-  }
+
+  const lastEvent = loginEvents.at(-1)!;
   log.info({
     event: lastEvent,
   }, "Found Login event: {event.id}");
