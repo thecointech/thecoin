@@ -9,10 +9,10 @@ import type { BBox } from "@thecointech/vqa";
 // in this case insertions are bad
 import { distance } from 'fastest-levenshtein';
 import { getCoordsWithMargin, mapInputToParent } from "../elementUtils";
-import { ETransferInput, ETransferResult } from "../types";
+import type { ETransferInput, ETransferResult } from "../types";
 import { processorFn } from "./types";
 import { waitPageStable } from "@thecointech/scraper/utilities";
-import { Agent } from "../agent";
+import type { Agent } from "../agent";
 import { apis } from "../apis";
 
 import { EventBus } from "@thecointech/scraper/events/eventbus";

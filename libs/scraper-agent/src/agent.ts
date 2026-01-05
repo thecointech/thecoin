@@ -2,9 +2,9 @@ import type { IAgentCallbacks, IAskUser, ProcessAccount, ProcessResults, Section
 import { log } from '@thecointech/logging';
 import { PageHandler } from './pageHandler';
 import { closeBrowser } from '@thecointech/scraper';
-import { AccountsSummary, CookieBanner, CreditAccountDetails, Landing, Login, NamedProcessor, TwoFA, SendETransfer, Logout } from './processors';
+import { AccountsSummary, CookieBanner, CreditAccountDetails, Landing, Login, type NamedProcessor, TwoFA, SendETransfer, Logout } from './processors';
 import { EventManager } from './eventManager';
-import { sections, SectionType } from './processors/types';
+import { sections, type SectionType } from './processors/types';
 import { apis } from './apis';
 
 export class Agent implements AsyncDisposable {
@@ -225,4 +225,5 @@ async function warmupVqaApi() {
     // If we can't warm up the VQA API, we can't continue
     throw e;
   }
+  log.trace("VQA API warmed up");
 }
