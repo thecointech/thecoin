@@ -10,7 +10,7 @@
     ]
   },
   "engines": {
-    "node": ">=22.19.x"
+    "node": "^24.0.0"
   },
   "resolutions": {
     "clone-deep": "4.0.1",

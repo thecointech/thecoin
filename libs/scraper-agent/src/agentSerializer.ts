@@ -7,7 +7,7 @@ import { isPresent } from "@thecointech/utilities/ArrayExtns";
 import { doPixelMatch } from "@thecointech/scraper/utilities";
 import { _getImage } from "./getImage";
 import { LoginFailedError } from "./errors";
-import { ApiCallEvent, bus } from "./eventbus";
+import { type ApiCallEvent, bus } from "./eventbus";
 import { EventBus } from "@thecointech/scraper/events/eventbus";
 import type { AnyEvent, ElementSearchParams, FoundElement } from "@thecointech/scraper-types";
 import type { TestElmData, TestSchData } from "@thecointech/scraper-archive";

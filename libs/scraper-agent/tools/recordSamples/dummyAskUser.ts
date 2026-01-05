@@ -1,5 +1,5 @@
-import { IAskUser, NamedOptions, NamedResponse } from "../../src/types";
-import { BankConfig } from "../config";
+import type { IAskUser, NamedOptions, NamedResponse } from "../../src/types";
+import type { BankConfig } from "../config";
 import fs from "node:fs";
 
 export class DummyAskUser implements IAskUser {

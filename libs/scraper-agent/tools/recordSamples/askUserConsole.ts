@@ -1,5 +1,5 @@
 import readline from 'readline/promises';
-import { BankConfig } from "../config";
+import type { BankConfig } from "../config";
 import type { IAskUser, NamedOptions, NamedResponse } from "../../src/types";
 
 

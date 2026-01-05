@@ -99,8 +99,11 @@ export function findNextEventAfterTwoFA(events: AnyEvent[], root: EventSection) 
   return lastLoginEvent + 1;
 }
 
+// Find the index of the last login event in `events` (replay).
 export function findLastLoginEvent(events: AnyEvent[], root: EventSection) {
 
+  // It is very important that the events are extracted using
+  // the same logic as initial replay events
   const loginEvents = getTrimmedEvents(root, ["Login"]);
   if (loginEvents.length === 0) {
     throw new Error("No login events found in passed EventSection");
