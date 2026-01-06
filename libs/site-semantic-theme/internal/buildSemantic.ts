@@ -44,7 +44,7 @@ fs.writeFileSync(outputFilename, fixedCss);
 console.log("CSS written to " + outputFilename);
 
 // Copy other files
-var files = globSync(`${semanticRoot}/**/*.{png,eot,ttf,svg,woff,woff2}`);
+var files = globSync(`${semanticRoot.replace(/\\/g, '/')}/**/*.{png,eot,ttf,svg,woff,woff2}`);
 files.forEach(src => {
   const r = path.relative(semanticRoot, src);
   const dest = path.join(outputFolder, "semantic", r);
