@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/apis",
-  "version": "0.2.130",
+  "version": "0.5.1-test.0",
   "description": "TheCoin: Simple wrappers for swagger-generated APIs ensures correct URL",
   "type": "module",
   "keywords": [
@@ -19,24 +19,28 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "build": "run -T tsc --project tsconfig.json",
-    "clean": "rimraf ./build && rimraf ./coverage"
+    "build": "run -T tsc -b",
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage",
+    "test": "run :jest"
   },
   "files": [
     "build/**/*"
   ],
   "exports": {
     "./broker": {
-      "development": "./build/broker/mocked/index.js",
+      "development": "./mocks/broker/index.ts",
       "default": "./build/broker/live.js"
     },
     "./pricing": {
-      "development": "./build/pricing/mocked.js",
+      "development": "./mocks/pricing.ts",
       "default": "./build/pricing/live.js"
     },
     "./nft": {
-      "development": "./build/nft/mocked.js",
+      "development": "./mocks/nft.ts",
       "default": "./build/nft/live.js"
+    },
+    "./vqa": {
+      "default": "./build/vqa/live.js"
     }
   },
   "typesVersions": {
@@ -49,16 +53,22 @@
       ],
       "nft": [
         "./build/nft/live.d.ts"
+      ],
+      "vqa": [
+        "./build/vqa/live.d.ts"
       ]
     }
   },
   "dependencies": {
-    "@thecointech/broker-cad": "^0.2.130",
-    "@thecointech/nft": "^0.2.130",
-    "@thecointech/pricing": "^0.2.130"
+    "@thecointech/broker-cad": "^0.5.0",
+    "@thecointech/nft": "^0.5.0",
+    "@thecointech/pricing": "^0.5.0",
+    "@thecointech/secrets": "^0.5.1-test.0",
+    "@thecointech/vqa": "^0.5.0",
+    "cockatiel": "^3.2.1"
   },
   "devDependencies": {
-    "@thecointech/async": "^0.2.130"
+    "@thecointech/async": "^0.5.1-test.0"
   },
-  "gitHead": "6c91d925570c1132080f3098b510a3a42180e429"
+  "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

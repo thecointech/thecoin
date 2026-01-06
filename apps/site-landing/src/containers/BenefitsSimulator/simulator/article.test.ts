@@ -1,4 +1,3 @@
-import { first } from '@thecointech/utilities';
 import { basicParams, generateData } from '../../../../internals/historical/simulation';
 import { createParams, SimulationParameters } from './params';
 import { ReturnSimulator } from './simulator';
@@ -12,7 +11,7 @@ const data = generateData(9, 0, 70, 0);
 
 const runSim = (params: SimulationParameters) => {
   const simulator = new ReturnSimulator(data, params);
-  const start = first(data).Date;
+  const start = data[0].Date;
   const end = start.plus({years: 60});
   const initial = simulator.getInitial(start);
   const final = simulator.calcStateUntil(initial, start, end);

@@ -1,10 +1,12 @@
 import { buildUberTransfer } from "./UberTransfer";
-import { encrypt, GetHash } from "./Encrypt";
+import { encrypt } from "./Encrypt";
+import { GetHash } from "./Decrypt";
 import { sign } from "./SignedMessages";
 import type { Signer } from "ethers";
 import type { BillPayeePacket, ETransferPacket, UberTransferAction } from "@thecointech/types";
 import type { DateTime } from 'luxon';
 import type Decimal from 'decimal.js-light';
+
 // TODO: Propage this throught code base (not yet done)
 export type InstructionPacket = BillPayeePacket|ETransferPacket;
 

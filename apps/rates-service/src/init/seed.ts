@@ -12,7 +12,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { getLatestStored, setRate } from '../internals/rates/db';
 import { CoinRate, FxRates } from '../internals/rates/types';
-import { update } from '../internals/rates/UpdateDb';
+import { updateRates } from '../internals/rates/UpdateDb';
 import { getLatest, updateLatest } from '../internals/rates/latest';
 
 export async function seed() {
@@ -49,12 +49,12 @@ export async function seed() {
 
   // Triggering an update ensures the oracle is updated
   // before we re-enable logging
-  await update();
+  const r = await updateRates();
 
   // re-enable logging
   oldLevels.forEach((lvl, idx) => log.levels(idx, lvl));
 
-  log.trace(`Seeding complete from ${from.toLocaleString(DateTime.DATETIME_MED)}`);
+  log.debug(`Seeding complete: ${r} from ${from.toLocaleString(DateTime.DATETIME_MED)}`);
 
   return from;
 }
@@ -146,16 +146,16 @@ export async function seedWithRandomRates(from: DateTime, validityInterval: Dura
   // have historical data, or we have nothing on start (because in memory).
   // On devlive, we either have historical, or the 'latest' query works
   const latest = getLatest('Coin') ?? await getLatestStored('Coin');
-  const msValidityInterval = validityInterval.as('milliseconds');
-  const now = Date.now();
+  const now = DateTime.now();
   let rate = latest?.buy ?? 1;
-  for (
-    let ts = latest?.validTill || from.toMillis();
-    ts < now;
-    ts += msValidityInterval) {
+  let validTill = DateTime.fromMillis(latest?.validTill || from.toMillis());
+
+  while (validTill <= now) {
+    const validFrom = validTill;
+    validTill = validFrom.plus(validityInterval);
     const validity = {
-      validFrom: ts,
-      validTill: ts + msValidityInterval,
+      validFrom: validFrom.toMillis(),
+      validTill: validTill.toMillis(),
     };
     // Max variation per day is 1%
     rate += Math.random() / 100;

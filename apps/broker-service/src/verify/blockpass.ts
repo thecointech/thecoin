@@ -1,6 +1,7 @@
 import { log } from '@thecointech/logging';
 import axios from 'axios';
 import { BlockpassData } from '../controllers/types';
+import { getSecret } from "@thecointech/secrets";
 
 const getUrl = (address: string) => `https://kyc.blockpass.org/kyc/1.0/connect/${process.env.BLOCKPASS_CLIENT_ID}/refId/${address}`
 
@@ -10,7 +11,7 @@ export async function fetchUser(address: string) {
     getUrl(address),
     {
       headers: {
-        'Authorization': process.env.BLOCKPASS_API_KEY!
+        'Authorization': await getSecret("BlockpassApiKey")
       }
     }
   );

@@ -26,11 +26,3 @@ it('can fetch fx rates', async () => {
   expect(data.quote.ZAR).toBeGreaterThan(0);
   expect(data.quote.SBD).toBeGreaterThan(0);
 })
-
-// it('will throw if cannot fetch', async () => {
-//   expect.assertions(1);
-//   const ts = Date.now();
-//   await expect(fetchNewCoinRates("throwme", ts, ts))
-//     .rejects
-//     .toThrow("Fetch failed: Unprocessable Entity : Wrong resolution. Please check the documentation for further details.");
-// })

@@ -1,7 +1,6 @@
 {
   "name": "@thecointech/tx-gmail",
-  "version": "0.2.130",
-  "private": true,
+  "version": "0.5.1-test.0",
   "description": "The Coin: Fetch e-transfer emails from GMail and convert to tx",
   "type": "module",
   "keywords": [
@@ -19,31 +18,53 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
     "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
     "test": "run :jest",
-    "test:summary": "jest --coverage > ./coverage/summary.txt"
+    "test:summary": "jest --coverage > ./coverage/summary.txt",
+    "token-cli": "run-env cfg=prod ./tools/token-cli.ts"
   },
   "files": [
     "build/**/*"
   ],
   "exports": {
     ".": {
-      "development": "./build/index_mocked.js",
-      "electron": "./build/index_electron.js",
-      "node": "./build/index_node.js"
+      "types": "./build/index.d.ts",
+      "electron": "./build/electron/index.js",
+      "default": "./build/index.js"
+    },
+    "./bridge": {
+      "types": "./build/electron/bridgeTxGmail.d.ts",
+      "default": "./build/electron/bridgeTxGmail.js"
+    },
+    "./preload": {
+      "types": "./build/electron/preload.d.ts",
+      "default": "./build/electron/preload.js"
     }
   },
-  "types": "./build/index_common.d.ts",
+  "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "build/index.d.ts": [
+        "build/index.d.ts"
+      ],
+      "preload": [
+        "build/electron/preload.d.ts"
+      ],
+      "bridge": [
+        "build/electron/bridgeTxGmail.d.ts"
+      ]
+    }
+  },
   "dependencies": {
-    "@thecointech/utilities": "^0.2.130",
+    "@thecointech/utilities": "^0.5.1-test.0",
     "currency.js": "^2.0.4",
     "googleapis": "^129.0.0",
     "js-base64": "^3.7.6"
   },
   "devDependencies": {
-    "@thecointech/electron-utils": "^0.2.130"
+    "@thecointech/electron-utils": "^0.5.1-test.0"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
 }

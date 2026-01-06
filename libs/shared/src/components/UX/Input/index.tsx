@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Form, Label, Input, Popup } from 'semantic-ui-react';
 import { FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 import { BaseProps } from '../types';
@@ -14,6 +14,8 @@ export const UxInput = (props: BaseProps) => {
     defaultValue,
     resetToDefault,
     forceValidate,
+
+    transformDisplayValue,
 
     placeholder,
     tooltip,
@@ -46,10 +48,19 @@ export const UxInput = (props: BaseProps) => {
     }
   }, [forceValidate])
 
+  // Ensure that if the if the validation function
+  // is updated, we revalidate the current value
+  useEffect(() => {
+    if (value && value != defaultValue) {
+      localChange(value)
+    }
+  }, [onValidate])
+
   // Reset to default value either if requested, or if defaultValue changes
   useEffect(() => {
-    setValue(defaultValue ?? "");
-    onValue(defaultValue);
+    localChange(defaultValue ?? "")
+      .then(() => setErrorMessage(null))
+      .catch(() => setErrorMessage(null))
   }, [defaultValue, resetToDefault])
 
   const isValid = !errorMessage;
@@ -64,17 +75,20 @@ export const UxInput = (props: BaseProps) => {
     ? isValid ? 'success' : 'error'
     : ''
 
-  const contextRef = createRef<HTMLSpanElement>();
+  const contextRef = useRef<HTMLSpanElement>(null);
   const styleError = {
-    color: LessVars.errorColor,
-    borderColor: LessVars.errorBorderColor,
+    color: LessVars.errorColor.toString(),
+    borderColor: LessVars.errorBorderColor.toString(),
   }
+
+  const transformV = transformDisplayValue?.toValue ?? (v => v);
+  const transformD = transformDisplayValue?.toDisplay ?? (v => v);
 
   return (
     <Form.Field className={`${formClassName} ${props.className}`} >
       <MaybeLabel label={props.intlLabel} />
       <Popup
-        context={contextRef}
+        context={contextRef.current ?? undefined}
         position='top right'
         content={errorMessage ? <FormattedMessage {...errorMessage} /> : undefined}
         open={showingError}
@@ -82,9 +96,9 @@ export const UxInput = (props: BaseProps) => {
       />
       <span ref={contextRef}>
         <Input
-          onChange={(_, { value }) => localChange(value)}
+          onChange={(_, { value }) => localChange(transformV(value))}
           onBlur={onBlur}
-          value={value}
+          value={transformD(value)}
           placeholder={placeholder ? intl.formatMessage(placeholder) : ''}
           type={type}
           data-tooltip={tt}

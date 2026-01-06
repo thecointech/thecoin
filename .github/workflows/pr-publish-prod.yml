@@ -1,0 +1,14 @@
+name: Publish to Production
+
+on:
+  pull_request:
+    branches: [ publish/prod ]
+    types: [ closed ]
+
+jobs:
+  publish:
+    if: github.event.pull_request.merged == true
+    uses: ./.github/workflows/pr-publish.yml
+    with:
+      CONFIG_NAME: prod
+    secrets: inherit

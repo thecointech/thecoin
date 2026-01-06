@@ -2,9 +2,9 @@ import { BlockpassData, TypedData } from '../controllers/types';
 import { Storage } from '@google-cloud/storage';
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
+import { getSecret } from "@thecointech/secrets";
 
 const storage = new Storage();
-const BucketName = process.env.GCLOUD_IMAGE_STORAGE_BUCKET;
 
 type IdentityKeys = keyof BlockpassData["identities"];
 const imageKeys : IdentityKeys[] = [
@@ -43,8 +43,9 @@ export async function uploadImage(name: string, address: string, now: DateTime, 
     encoding = "utf8"
   }
 
-  if (BucketName) {
-    const bucket = storage.bucket(BucketName);
+  const bucketName = await getSecret("GCloudImageStorageBucket");
+  if (bucketName) {
+    const bucket = storage.bucket(bucketName);
     const file = bucket.file(`${address}/${now.toString()}/${name}.png`);
 
     const buffer = Buffer.from(image.value, encoding);

@@ -5,7 +5,7 @@ import { weBuyAt } from '@thecointech/fx-rates';
 import { GetStatusApi, GetETransferApi } from '@thecointech/apis/broker';
 import { ETransferPacket } from '@thecointech/types';
 import { useState } from 'react';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import type { MessageWithValues } from '@thecointech/shared/types';
 import { log } from '@thecointech/logging';

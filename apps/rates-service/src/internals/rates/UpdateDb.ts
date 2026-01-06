@@ -114,42 +114,73 @@ export async function ensureLatestFxRate(now: number) {
 }
 
 
-export async function update() {
-    try {
-      const now = Date.now();
-      // Either of the below functions could throw.  We
-      // don't check them individually
-      // because our entry point implements
-      // backoff/retry logic.  If the ensure
-      // is called again it won't matter because it's already
-      // up to date.
-      const r = await Promise.all([
-        ensureLatestCoinRate(now),
-        ensureLatestFxRate(now),
-      ]);
-      if (r.includes(false)) {
-        return false;
-      }
+class MultipleRatesError extends Error {
+  errors: unknown[];
+  constructor(errors: unknown[]) {
+    super(`Failed to ensure latest rates: ${errors.length} error(s)`);
+    this.errors = errors;
+  }
+}
 
-      // Once we have updated, do a matching update on Oracle
-      await updateOracle(now);
-      return true;
-    }
-    catch (err: any) {
-        log.error(err);
-    }
+async function ensureLatestRates(now: number): Promise<boolean> {
+  // Either of the below functions could throw.  We
+  // don't check them individually
+  // because our entry point implements
+  // backoff/retry logic.  If the ensure
+  // is called again it won't matter because it's already
+  // up to date.
+  const r = await Promise.allSettled([
+    ensureLatestCoinRate(now),
+    ensureLatestFxRate(now),
+  ]);
+
+  // Collect any rejections to throw
+  const rejections = r.filter(r => r.status === "rejected") as PromiseRejectedResult[];
+  if (rejections.length > 0) {
+    const errors = rejections.map(r => r.reason);
+    throw new MultipleRatesError(errors);
+  }
+
+  // Check for false returns (failed updates)
+  const failures = r.filter(r => r.status === "fulfilled" && r.value === false);
+  if (failures.length > 0) {
     return false;
+  }
+  return true;
+}
+
+export async function update() {
+  const now = Date.now();
+
+  // First ensure we have latest rates in our DB
+  const updated = await ensureLatestRates(now);
+  if (!updated) return false;
+
+  // Then sync those rates to the Oracle contract
+  await updateOracle(now);
+  return true;
 }
 
 export async function updateRates() {
+  const errors: Error[] = [];
+
   for (let i = 0; i < 5; i++) {
     // incremental back-off
+    // TO FIX: This conflates two waits,
+    // waiting for values to valid, and back-off-retry
     await waitTillBuffer(i * 5000);
-    // & retry
-    if(await update())
-      return true;
+
+    try {
+      const updated = await update();
+      if (updated) return true;
+    } catch (err: any) {
+      errors.push(err instanceof Error ? err : new Error(String(err)));
+      log.warn(err, `Update attempt ${i + 1}/5 failed`);
+    }
   }
-  log.error("Failed to update rates");
+
+  // All retries exhausted - log all errors
+  log.fatal({ errors }, `Failed to update rates after 5 attempts`);
   return false;
 }
 

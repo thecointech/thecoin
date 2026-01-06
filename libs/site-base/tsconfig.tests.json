@@ -1,4 +1,7 @@
 {
   "extends": "../../tsconfig.tests.json",
-  "include": ["**/*.test.*", "scripts/**.ts", "internal/*.*", "**/*.stories.*", "**/hardhat.d.ts"],
+  "compilerOptions": {
+    "types": ["webpack-dev-server"],
+  },
+  "include": ["**/*.test.*", "scripts/**.ts", "internal/**/*", "**/*.stories.*", "**/hardhat.d.ts"],
 }

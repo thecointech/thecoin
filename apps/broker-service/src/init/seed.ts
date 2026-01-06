@@ -10,8 +10,8 @@ import { uploadUserData } from '../verify'
 //
 // When we seed the DB, we initialize the DB with 1 verified client, and 1 referred
 export async function seed() {
-  const client1 = await getSigner("client1");
-  const clientAddress = await client1.getAddress();
+  const Client1 = await getSigner("Client1");
+  const clientAddress = await Client1.getAddress();
 
   // test if seed hasn't happened yet
   if (!await getUserVerified(clientAddress)) {
@@ -45,8 +45,8 @@ async function setVerified(clientAddress: string) {
 //
 // Automatically make #acc1 refer #acc2
 async function referClient2(code: string) {
-  const client2 = await getSigner("client2");
-  const clientAddress = await client2.getAddress();
+  const Client2 = await getSigner("Client2");
+  const clientAddress = await Client2.getAddress();
   // Client2 created 1 year ago
   const ts = DateTime.now().minus({years: 1});
   await createReferree(code, clientAddress, ts)

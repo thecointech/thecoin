@@ -4,11 +4,10 @@ import { DateTime } from 'luxon';
 import { getProvider } from '@thecointech/ethers-provider';
 import { toCoin } from '@thecointech/utilities';
 import { getSigner } from '@thecointech/signers';
-import { connect } from '@thecointech/contract-base/connect';
 
 async function cancelXfer() {
 
-  const provider = getProvider();
+  const provider = await getProvider();
   const fees = await provider.getFeeData();
   const gasPrice  = Math.floor(fees!.gasPrice!.toNumber() * 2);
   console.log("Fees: " + gasPrice / 1000000000);
@@ -23,8 +22,7 @@ async function cancelXfer() {
   if (nonce < pending) {
     console.log(`Cancelling tx: ${nonce}`);
     try {
-      const connected = broker.connect(provider);
-      const tx = await connected.sendTransaction({
+      const tx = await broker.sendTransaction({
         to: address,
         value: 0,
         nonce,

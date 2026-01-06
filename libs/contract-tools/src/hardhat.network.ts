@@ -8,6 +8,16 @@ function getLiveNetwork(_type: Network) {
    ? 'https://polygon-amoy.infura.io/v3/'
    : "https://polygon-mainnet.infura.io/v3/"
 
+  // So, moving to secrets manager means we need an async
+  // load of the project ID.  Unfortunately, HardHat does not
+  // support async config files.  I'm not going to update
+  // this now, as it's possible that HardHat will gain support
+  // before we need to update any contracts
+  // (an alternative in the future could also be to add a pre-load
+  // script that loads the secrets into the environment)
+  // if (!process.env.INFURA_PROJECT_ID) {
+  //   throw new Error("Missing Infura project ID");
+  // }
   return {
     chainId: parseInt(process.env.DEPLOY_POLYGON_NETWORK_ID!),
     url: `${url}${process.env.INFURA_PROJECT_ID}`,

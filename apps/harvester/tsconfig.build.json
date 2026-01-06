@@ -4,6 +4,10 @@
     "rootDir": "./src",
     "outDir": "./build",
     "tsBuildInfoFile": "./build/.buildinfo",
+    "lib": ["es2023"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
     // "noUncheckedIndexedAccess": true, TODO: We should enable this
   },
   "include": [

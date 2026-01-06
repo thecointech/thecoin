@@ -9,13 +9,6 @@ import { log } from '@thecointech/logging';
 // to optionally seed the session with accurate
 // historical data.
 
-// If we don't have access to the Firestore, fuggetaboutit
-if (!process.env.RATES_SERVICE_ACCOUNT || !existsSync(process.env.RATES_SERVICE_ACCOUNT)) {
-  log.fatal('Requires rates firestore access config');
-  exit(0)
-}
-process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.RATES_SERVICE_ACCOUNT;
-
 // Write our output to the 'data' folder
 const outFolder = new URL("../data/", import.meta.url);
 const outFile = new URL("rates.json", outFolder);
@@ -52,7 +45,7 @@ if (!existsSync(outFolder)) {
   }
 }
 
-const firestore = await init();
+const firestore = await init({ service: 'RatesServiceAccount' });
 if (!firestore) throw new Error('Requires firestore');
 
 function validateTimes(rates: any[]) {

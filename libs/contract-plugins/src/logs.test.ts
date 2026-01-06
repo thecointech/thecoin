@@ -1,31 +1,49 @@
 import { jest } from '@jest/globals';
 import { describe } from '@thecointech/jestutils';
+import { ifPolygonscan } from '@thecointech/secrets/jestutils';
 import { getPluginLogs } from './logs';
 import { getEnvVars } from '@thecointech/setenv';
 import { getProvider } from '@thecointech/ethers-provider/Erc20Provider/web';
 
-const oldVars = {...process.env};
-const prodVars = getEnvVars("prod");
-
 jest.setTimeout(30 * 1000);
 
-// TODO: Update this test to use SpendingLimit (or something) instead
 describe('Live data fetches', () => {
+
+  const oldVars = {...process.env};
+  const prodVars = getEnvVars("prod");
+
   it ('fetches logs', async () => {
     process.env = {
       ...oldVars,
-      ...prodVars
+      ...prodVars,
     }
     const address = "0x70da7D05Ee936E583A5165c62A1DEd3Cb0A07C82"; // Converter-Prod
-    const user = "0xCA8EEA33826F9ADA044D58CAC4869D0A6B4E90E4"; // ME
-    const fromBlock = 0;
-    const provider = getProvider();
-    const r = await getPluginLogs(address, user, provider, fromBlock);
-    expect(r.length).toBeGreaterThan(1);
-    const r2 = await getPluginLogs(address, user, provider, 44132093);
-    expect(r.length - r2.length).toBe(1);
+    const user = "0xCA8EEA33826F9ADA044D58CAC4869D0A6B4E90E4";
+    const initBlock = Number(prodVars.INITIAL_COIN_BLOCK);
+    const provider = await getProvider();
+    const afterFirstTx = 44767897 + 1;
+    const after8thTx = 58296048;
+    // verify toBlock is working
+    try {
+      const r = await getPluginLogs(address, user, provider, initBlock, after8thTx);
+      expect(r.length).toEqual(8);
+
+      // verify fromBlock is working (2 logs in the first tx)
+      const r2 = await getPluginLogs(address, user, provider, afterFirstTx, after8thTx);
+      expect(r2.length).toEqual(6);
+    }
+    catch (e: any) {
+      if (e.code == "SERVER_ERROR") {
+        // Read the response:
+        const responseJson = e.response?.bodyJson;
+        if (responseJson?.message) {
+          throw new Error(responseJson.message);
+        }
+        throw e;
+      }
+    }
   })
-}, prodVars.POLYGONSCAN_API_KEY != undefined);
+}, await ifPolygonscan("prod"));
 
 // it ('fetches logs for ', async () => {
 //   const {owner, contract} = await deployContract()

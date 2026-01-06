@@ -27,11 +27,12 @@ const translate = defineMessages({
 type Props = {
   background?: string;
   id?: string;
+  children?: React.ReactNode;
 }
 export const FooterShared: React.FC<Props> = ({ children, background, id }) => (
   <>
     <div className={`${styles.background} ${background ?? ''}`} />
-    <div className={styles.footerContainer}>
+    <footer className={styles.footerContainer}>
       {children}
       <div id={id} className={styles.footerContent}>
         <div className={`${styles.textPortion} ${styles.registered}`}>
@@ -54,6 +55,6 @@ export const FooterShared: React.FC<Props> = ({ children, background, id }) => (
           <FormattedMessage tagName="span" {...translate.copyright2} />
         </div>
       </div>
-    </div>
+    </footer>
   </>
 );

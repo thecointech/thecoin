@@ -1,0 +1,10 @@
+.stepsContainer {
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  // Ensure the Step.Group doesn't wrap
+  :global(.ui.steps) {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+  }
+}

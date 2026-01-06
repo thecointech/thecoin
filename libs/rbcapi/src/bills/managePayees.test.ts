@@ -20,7 +20,7 @@ describe("Testing Payee Management", () => {
   const fakeVisaName = "testing fakevisa";
 
   beforeAll(async () => {
-    ApiAction.initCredentials();
+    await ApiAction.initCredentials();
     // Disable logging in this file
     log.level(0);
   })

@@ -9,7 +9,7 @@ global.window = {
 } as any
 
 
-const user = await getSigner("client1");
+const user = await getSigner("Client1");
 const address = await user.getAddress();
 const client = await getComposeDB(user);
 

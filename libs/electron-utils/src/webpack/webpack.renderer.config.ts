@@ -1,27 +1,49 @@
 import type { Configuration } from 'webpack';
-import { rules } from './webpack.rules';
-import { plugins } from './webpack.plugins';
+import { rules } from './webpack.rules.ts';
+import { plugins } from './webpack.plugins.ts';
 import path from 'path';
-import merge from 'webpack-merge';
-//@ts-ignore
-import getMocks from '@thecointech/setenv/webpack';
-import { env } from './webpack.common';
+import { merge } from 'webpack-merge';
+import { getMocks } from '@thecointech/setenv/webpack';
+import { env, commonBase } from './webpack.common.ts';
+import webpack from 'webpack';
+import { getSecret } from '@thecointech/secrets';
+import { platform } from 'os';
 
-const rootPath = path.join(__dirname, '../../../..');
+const rootPath = path.join(process.cwd(), '../..');
+
+function resolveModulePath(moduleSpecifier: string) {
+  const moduleUrl = import.meta.resolve(moduleSpecifier);
+  return new URL(moduleUrl).pathname; // Extract the pathname
+}
+
+const PolygonscanApiKey = await getSecret("PolygonscanApiKey");
 
 const baseOptions: Configuration = {
   module: {
     rules,
   },
-  plugins,
+  plugins: [
+    ...plugins,
+    // NOTE: This is used only by
+    new webpack.DefinePlugin({
+      "process.env.LOG_NAME": JSON.stringify(process.env.LOG_NAME),
+      'process.env.BUILD_OS': JSON.stringify(platform()),
+
+      __COMPILER_REPLACE_SECRETS__: JSON.stringify({ PolygonscanApiKey }),
+    }),
+  ],
+  externals: {
+    electron: 'commonjs electron'
+  },
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
-    conditionNames: [env.CONFIG_NAME, "electron", "browser", "webpack", "import", "default"],
+    conditionNames: [env.CONFIG_NAME!, "electron", "browser", "webpack", "import", "default"],
     modules: [path.resolve(process.cwd(), 'src'), 'node_modules'],
     fallback: {
-      "crypto": require.resolve("crypto-browserify"),
-      "stream": require.resolve("stream-browserify"),
-      "path": require.resolve("path-browserify"),
+      "crypto": resolveModulePath("crypto-browserify"),
+      "stream": resolveModulePath("stream-browserify"),
+      "path": false,
+      "assert": false,
       "http": false,
       "fs": false,
       "vm": false,
@@ -38,4 +60,9 @@ const baseOptions: Configuration = {
   },
 };
 
-export const rendererConfig = merge(getMocks(env), baseOptions);
+export const rendererConfig = (custom: Configuration = {}) => merge(
+  custom,
+  getMocks(env),
+  baseOptions,
+  commonBase,
+);

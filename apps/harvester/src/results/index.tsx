@@ -1,16 +1,21 @@
 import { useEffect, useState } from 'react'
-import { Button, Checkbox, Dimmer, Loader, Segment } from 'semantic-ui-react'
+import { Button, Dimmer, Loader } from 'semantic-ui-react'
 import { HarvestData } from '../Harvester/types';
-import { fromDb } from '../Harvester/db_translate';
-import { DateTime } from 'luxon';
+import { fromDb } from '@thecointech/store-harvester';
+import { StateDisplay } from './StateDisplay';
 import { log } from '@thecointech/logging';
 import { Result } from '../scraper_actions';
+import { BackgroundTaskErrors, BackgroundTaskProgressBar } from '@/BackgroundTask/BackgroundTaskProgressBar';
+import { useBackgroundTask, isRunning } from '@/BackgroundTask';
+import { ContentSection } from '@/ContentSection';
+import styles from './index.module.less';
 
 export const Results = () => {
 
-  const [running, setRunning] = useState(false);
   const [state, setState] = useState<HarvestData|undefined>();
-  const [visible, setVisible] = useState<boolean>();
+  const replayTask = useBackgroundTask("replay");
+  const isReplaying = isRunning(replayTask);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     log.info("Loading state");
@@ -19,84 +24,57 @@ export const Results = () => {
         alert(state.error);
       }
       else {
-        // log.info("State Received: " + JSON.stringify(state));
         setState(state.value);
       }
-    })
+    }).catch(e => {
+      log.error(e, "Error loading state");
+      alert("Error loading state");
+    }).finally(() => {
+      setLoading(false);
+    });
   }, [])
   const runImmediately = async () => {
-    setRunning(true);
     log.info("Commencing manual run");
-    const r = await window.scraper.runHarvester(!visible);
-    if (r.error) {
-      alert("Error - please check logs:\n " + r.error);
+    const r = await window.scraper.runHarvester();
+    if (r.error || r.value === "error") {
+      let message = "Error - please check logs";
+      if (r.error) message += `: ${r.error}`;
+      alert(message);
+      return;
     }
     const state = await getCurrentState();
     log.info("Updating state");
     setState(state.value);
-    setRunning(false);
   }
 
-  const exportResults = async () => {
-    const r = await window.scraper.exportResults();
-    if (r.error) {
-      alert("Error - please check logs:\n " + r.error);
-    }
-    const a = window.document.createElement('a');
-    a.href = window.URL.createObjectURL(new Blob([r.value ?? 'no values'], { type: 'text/csv' }));
-    a.download = 'results.csv';
-
-    // Append anchor to body.
-    document.body.appendChild(a);
-    a.click();
-
-    // Remove anchor from body
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(a.href);
+  const openWebsiteUrl = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    await window.scraper.openWebsiteUrl("account");
+    return false;
   }
 
-  const exportConfig = async () => {
-    const r = await window.scraper.exportConfig();
-    if (r.error) {
-      alert("Error - please check logs:\n " + r.error);
-    }
-    const a = window.document.createElement('a');
-    a.href = window.URL.createObjectURL(new Blob([r.value ?? 'no values'], { type: 'text/csv' }));
-    a.download = 'config.json';
 
-    // Append anchor to body.
-    document.body.appendChild(a);
-    a.click();
-
-    // Remove anchor from body
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(a.href);
-  }
   return (
-    <Dimmer.Dimmable as={Segment} dimmed={running}>
-      <Dimmer active={running} inverted>
-        <Loader>Running</Loader>
-      </Dimmer>
-      <div>
-        <h1>Current State</h1>
-        <p>Chq Balance: {state?.chq.balance.format() ?? 'N/A'}</p>
-        <p>Visa Balance: {state?.visa.balance.format() ?? 'N/A'}</p>
-        <p>Harvester Balance: {state?.state.harvesterBalance?.format() ?? 'N/A'}</p>
-        <p>Visa Payment Pending: {state?.state.toPayVisa?.format() ?? 'N/A'}</p>
-        <p>Last Run: {state?.date.toLocaleString(DateTime.DATETIME_SHORT) ?? 'N/A'}</p>
-      </div>
-      <div>
-        <Button onClick={exportResults}>Export Results</Button>
-      </div>
-      <div>
-        <Button onClick={exportConfig}>Export Config</Button>
-      </div>
-      <div>
-        <Button onClick={runImmediately}>Run Harvester Now</Button>
-        <Checkbox onClick={(_, {checked}) => setVisible(checked)} checked={visible} label="Visible" />
-      </div>
-    </Dimmer.Dimmable>
-
+    <ContentSection>
+      <Dimmer.Dimmable dimmed={isReplaying || loading} className={styles.resultsContainer}>
+        <Dimmer active={isReplaying || loading}>
+          <Loader>Running</Loader>
+        </Dimmer>
+        <StateDisplay state={state} />
+        <div className={styles.viewHistoryLink}>
+          <a href="#" onClick={openWebsiteUrl}>
+            View your full account history on TheCoin →
+          </a>
+        </div>
+        <div>
+          <Button primary onClick={runImmediately} disabled={isReplaying || loading}>
+            Run Harvester Now
+          </Button>
+        </div>
+      </Dimmer.Dimmable>
+      <BackgroundTaskProgressBar type='replay' />
+      <BackgroundTaskErrors type='replay' />
+    </ContentSection>
   )
 }
 

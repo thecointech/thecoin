@@ -1,5 +1,5 @@
-import { AccountMap } from '@thecointech/shared/containers/AccountMap'
-import React from 'react';
+import { AccountMap } from '@thecointech/redux-accounts'
+import React, { PropsWithChildren } from 'react';
 import { useLocation } from 'react-router';
 import { AppContainerWithShadowWithoutPadding } from '../../components/AppContainers';
 import styles from './styles.module.less';
@@ -9,7 +9,7 @@ export * from './ClimateImpact/Widget';
 type Props = {
   area: "top"|"bottom"
 }
-export const WidgetWrapper: React.FC<Props> = ({area, children}) => {
+export const WidgetWrapper = ({area, children}: PropsWithChildren<Props>) => {
   const active = AccountMap.useActive();
   const location = useLocation();
   const showWidget = active?.contract && !location.pathname.startsWith("/addAccount");

@@ -1,5 +1,4 @@
 // NodeCustomResolver
-
 import { getConditions } from "./conditions.mjs";
 import {existsSync} from 'fs'
 import {basename, dirname, extname, join} from 'path'

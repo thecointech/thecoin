@@ -9,10 +9,10 @@ The private key is stored offline to ensure it cannot be leaked from our servers
 To generate a new certificate:
 ```bash
 # Generate a new private certificate in the PEM format
-ssh-keygen -m pem -f %THECOIN_ENVIRONMENTS%/develop/DEVEL_ONLY_rsa_priv.pem
+ssh-keygen -m pem -f %THECOIN_SECRETS%/develop/DEVEL_ONLY_rsa_priv.pem
 # This will generate two files, private & public.  However, the public key
 # cannot be consumed by Crypto module directly.  Convert public key to PEM
-ssh-keygen -f %THECOIN_ENVIRONMENTS%/develop/DEVEL_ONLY_rsa_priv.pem.pub -e -m pem
+ssh-keygen -f %THECOIN_SECRETS%/develop/DEVEL_ONLY_rsa_priv.pem.pub -e -m pem
 # This outputs the public key in compatible format to the command line.
 # Copy this for the next steps
 ```

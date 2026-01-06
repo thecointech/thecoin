@@ -11,6 +11,12 @@ const secondsInYear = 365 * secondsInDay;
 const secondsInYearIgnoreDST = secondsInYear - secondsInHour;
 const secondsInWeek = 7 * secondsInDay;
 
+// We call anywhere within an hour before the anniversary
+// to be within the anniversary window, (+10 seconds for
+// any floating point drift)
+const dstAnniversaryWindowLowerBound = -(secondsInHour + 10);
+const dstAnniversaryWindowUpperBound = secondsInWeek - secondsInHour - 10;
+
 // This monthly straddles assumes calendar months.  This may
 // not always be correct, but the error is minimal
 export const straddlesMonth = (date: DateTime) => date.day <= 7;
@@ -27,7 +33,7 @@ const leapYearsBetween = (start: DateTime, date: DateTime) => {
   return leapYearsBefore(endYear) - leapYearsBefore(startYear);
 }
 
-export const straddlesYear = (start: DateTime, date: DateTime) => {
+export const weekContainedAnniversary = (start: DateTime, date: DateTime) => {
   // Don't use luxon for this, it's much too slow
   const diff = date.toSeconds() - start.toSeconds();
   if (diff < secondsInYearIgnoreDST) return false;
@@ -38,6 +44,16 @@ export const straddlesYear = (start: DateTime, date: DateTime) => {
   // has added an hour, then it won't affect the result because our test
   // (secondsInWeek) boundary is actually the day following, and adding
   // an hour is not enough to trip that.
-  const sinceAnniversary = secondsInHour + (diff % secondsInYear) - (numLeapYears * secondsInDay);
-  return sinceAnniversary >= 0 && sinceAnniversary < secondsInWeek;
+  const secondsExLeap = diff - numLeapYears * secondsInDay;
+  // You might think that using modulo would be better here.
+  // Possibly it is, but the intuitive implementation failed
+  // when DST changes were not consistent
+  // (eg start "1953-10-04T09:00:00.000-05:00")
+  const years = secondsExLeap / secondsInYear;
+  const yearsAwayFromAnniversary = years - Math.round(years);
+  const secondsAwayFromAnniversary = yearsAwayFromAnniversary * secondsInYear;
+  return (
+    secondsAwayFromAnniversary >= dstAnniversaryWindowLowerBound &&
+    secondsAwayFromAnniversary <= dstAnniversaryWindowUpperBound
+  );
 }

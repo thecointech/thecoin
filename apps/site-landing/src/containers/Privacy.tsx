@@ -8,7 +8,7 @@ export const Privacy = () => (
     <br />Your privacy is important to us
     <br />
     <br />TheCoin Collaborative Canada is located at:
-    <br />84 Railway Avenue
+    <br />88 Railway Avenue
     <br />Lundar
     <br />Canada
     <br />

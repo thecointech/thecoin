@@ -1,10 +1,10 @@
 import { AccountId } from '@thecointech/signers';
 import { Wallet } from "ethers";
-import { writeFileSync, existsSync, mkdirSync, readFile, readFileSync } from 'fs';
+import { writeFileSync, existsSync, readFile, readFileSync } from 'fs';
 import { resolve } from 'path';
 
 const password = "0nC927z!Vkka";
-const outfolder = process.env.THECOIN_ENVIRONMENTS!;
+const outfolder = process.env.THECOIN_SECRETS!;
 const environment = process.argv[2]
 const name = process.argv[3]
 const prodtestFolder = resolve(outfolder, environment);
@@ -27,6 +27,7 @@ const filepath = resolve(outputFolder, filename);
 writeFileSync(resolve(outputFolder, filename), encrypted);
 
 generatedDeets.push(`WALLET_${name}_PATH=${filepath}`)
+generatedDeets.push(`WALLET_${name}_ADDRESS=${wallet.address}`)
 generatedDeets.push(`WALLET_${name}_PWD=${password}`)
 generatedDeets.push(`WALLET_${name}_KEY=${wallet.signingKey.privateKey}`)
 

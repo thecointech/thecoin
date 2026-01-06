@@ -1,7 +1,7 @@
 import React from "react";
 import { Dropdown, DropdownItemProps } from "semantic-ui-react";
-import { NavLink, Link, useLocation } from "react-router-dom";
-import { AccountMap } from "@thecointech/shared/containers/AccountMap";
+import { NavLink, useLocation } from "react-router";
+import { AccountMap } from "@thecointech/redux-accounts";
 import { getAvatarLink } from '@thecointech/shared/components/Avatars';
 import { FormattedMessage, useIntl } from 'react-intl';
 import styles from './styles.module.less';
@@ -36,7 +36,9 @@ export const AccountSwitcher = () => {
   const trigger = activeAccount
     ? <><img src={getAvatarLink("14")} className={styles.avatars} /><span>{activeAccount.name}</span></>
     : intl.formatMessage(titleMsg)
-  const onClick = (_: unknown, data: DropdownItemProps) => accountsApi.setActiveAccount(data.address)
+  const onClick = (_: unknown, data: DropdownItemProps) => (
+    accountsApi.setActiveAccount(data.address)
+  )
   return (
     <Dropdown trigger={trigger} className={styles.dropdown} >
       <Dropdown.Menu>
@@ -70,8 +72,8 @@ const AccountItem = ({active, onClick, account}: ActiveProps) =>
         active={active}
         key={account.address}
         address={account.address}
-        text={account.name}
-        as={Link}
         onClick={onClick}
-        to="/" />
+      >
+        {account.name}
+      </Dropdown.Item>
     : null

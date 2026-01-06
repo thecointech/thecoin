@@ -4,7 +4,7 @@ import { getStoredAccountData } from '@thecointech/account/store';
 import { defineMessage, FormattedMessage } from 'react-intl';
 import { isLocal } from '@thecointech/signers';
 import { ButtonSecondary } from '../../../../components/Buttons';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { Account } from '@thecointech/shared/containers/Account';
 import { ProviderChoice } from '../ProviderChoice';
 import icon from "./images/download.svg";
@@ -23,8 +23,7 @@ export const OfflineStore = () => {
   const accountApi = Account(account.address).useApi();
 
   ////////////////////////////////
-  const onDownloadClicked = (e: React.MouseEvent<HTMLElement>) => {
-    if (e) e.preventDefault();
+  const onDownloadClicked = () => {
     onDownload(account.address);
     accountApi.setDetails({ storedOffline: true })
   }
@@ -36,8 +35,7 @@ export const OfflineStore = () => {
 
 export const Download = (props: MyProps) => {
 
-  const onClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
-    if (e) e.preventDefault();
+  const onClick = useCallback(() => {
     onDownload(props.address);
     if (props.onComplete)
       props.onComplete();

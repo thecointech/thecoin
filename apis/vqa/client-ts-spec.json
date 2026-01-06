@@ -1,0 +1,5 @@
+{
+    "supportsES6": true,
+    "npmName": "@thecointech/vqa",
+    "npmRepository": "https://npm.pkg.github.com/"
+}

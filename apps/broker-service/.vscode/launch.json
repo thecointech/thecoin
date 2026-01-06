@@ -7,7 +7,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "type": "pwa-node",
+      "type": "node",
       "port": 9232
     },
     {
@@ -20,7 +20,25 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "type": "pwa-node",
+      "type": "node",
+      "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }",
+      "resolveSourceMapLocations": [
+        "**",
+        "!**/node_modules/**"
+      ],
+      "outputCapture": "std"
+    },
+    {
+      "name": "Launch DevLive",
+      "request": "launch",
+      "runtimeArgs": [
+        "dev:live"
+      ],
+      "runtimeExecutable": "yarn",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node",
       "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }",
       "resolveSourceMapLocations": [
         "**",
@@ -38,7 +56,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "type": "pwa-node",
+      "type": "node",
       "customDescriptionGenerator": "function (def) { if (this.toString) { const _v = this.toString(); if (_v.indexOf(\"[object Object]\") < 0) return _v; } return def; }",
       "resolveSourceMapLocations": [
         "**",

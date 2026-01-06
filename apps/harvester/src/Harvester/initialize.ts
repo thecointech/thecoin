@@ -1,14 +1,19 @@
 import { DateTime } from 'luxon';
 import { hydrateProcessor, getWallet, getCreditDetails } from './config';
-import { getCurrentState } from './db';
+import { getCurrentState } from './state';
 import { getChequingData, getVisaData } from './fetchData';
-import { HarvestData } from './types';
-import { replay } from '../scraper/replay';
+import type { HarvestData, UserData } from './types';
+import type { HarvesterReplayCallbacks } from './replay/replayCallbacks';
+import { ContractCore } from '@thecointech/contract-core';
 
-export async function initialize() {
+export async function initialize(callback: HarvesterReplayCallbacks) {
 
   // Initialize
   const stages = await hydrateProcessor();
+  if (stages.length == 0) {
+    throw new Error('Harvester not configured');
+  }
+
   const lastRun = await getCurrentState();
 
   // Ensure we have a wallet, otherwise we can't run
@@ -22,26 +27,28 @@ export async function initialize() {
     throw new Error("Cannot pay bill: Account Details not set");
   }
 
-  const user = {
+  const user: UserData = {
     wallet,
-    replay,
     creditDetails,
+    callback: callback,
   }
 
   // Initialize data (do we want anything from last state?)
-  const lastTxDate = lastRun?.visa.history.slice(-1)?.[0]?.date;
-  const chq = await getChequingData();
-  const visa = await getVisaData(lastTxDate)
+  // Sub 1 week to ensure payments posted after last run are all counted
+  const lastTxDate = lastRun?.date.minus({ week: 1 });
+  const chq = await getChequingData(callback);
+  const visa = await getVisaData(callback, lastTxDate);
+  const tcCore = await ContractCore.get();
+  const coin = await tcCore.balanceOf(wallet.address);
   let state: HarvestData = {
     chq,
     visa,
+    coin,
     date: DateTime.now(),
 
     delta: [],
     state: lastRun?.state ?? {},
   }
-
-
 
   return { stages, state, user };
 }

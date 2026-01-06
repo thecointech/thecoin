@@ -1,6 +1,6 @@
 import { beforeEach, it } from '@jest/globals'
 import { calculateProfit, fiatChange, totalCad, currentValue, isNotFee } from "./profit";
-import { toHuman } from "@thecointech/utilities";
+import { toHuman } from "@thecointech/utilities/Conversion";
 import { getSimpleTransactions, SimpleRates, getExampleTransactions, ExampleRates } from "./profit.data.test";
 
 // hardcode broker/xferAssist address

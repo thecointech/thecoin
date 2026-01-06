@@ -1,0 +1,18 @@
+@import "~@thecointech/site-semantic-theme/variables.less";
+
+/* 2. SEPARATE THE CONTENT */
+.mainContent {
+  view-transition-name: page-content;
+}
+
+/* Custom Fade for the Content Only */
+::view-transition-old(page-content) {
+  animation: fade-out @pageTransitionDuration ease-in forwards;
+}
+
+::view-transition-new(page-content) {
+  animation: fade-in @pageTransitionDuration ease-in forwards;
+}
+
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }

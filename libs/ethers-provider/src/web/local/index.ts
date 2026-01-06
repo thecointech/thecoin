@@ -6,7 +6,7 @@ import { getSourceCode } from '../plugins_devlive';
 export class Erc20Provider extends JsonRpcProvider {
 
   constructor() {
-    super(`http://localhost:${process.env.DEPLOY_NETWORK_PORT}`);
+    super(`http://127.0.0.1:${process.env.DEPLOY_NETWORK_PORT}`);
     this.pollingInterval = 250;
   }
 
@@ -86,4 +86,4 @@ export class Erc20Provider extends JsonRpcProvider {
 
 const toAddress = (x: string) => x.replace(/^(0x)?0+(.{40})$/, '$1$2');
 
-export const getProvider = () => new Erc20Provider();
+export const getProvider = () => Promise.resolve(new Erc20Provider());

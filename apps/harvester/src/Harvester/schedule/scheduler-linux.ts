@@ -1,58 +1,123 @@
-import { load, type CronTab } from 'crontab';
-import { HarvestSchedule } from '../../types';
+import { execSync } from 'child_process';
+import { writeFileSync, mkdirSync } from 'fs';
+import { homedir } from 'os';
+import { HarvestSchedule, toDayNames } from '@thecointech/store-harvester';
 import { log } from '@thecointech/logging';
+import { getScraperVisible } from '../scraperVisible';
 
-const TaskName = "thecoin-harvest";
+const TaskName = 'thecoin-harvest';
+const ServiceName = `${TaskName}.service`;
+const TimerName = `${TaskName}.timer`;
+const SystemdUserDir = `${homedir()}/.config/systemd/user`;
+const ServicePath = `${SystemdUserDir}/${ServiceName}`;
+const TimerPath = `${SystemdUserDir}/${TimerName}`;
 
-export async function setSchedule(schedule: HarvestSchedule, _existing?: HarvestSchedule) {
-  
-  const cronSchedule = getCronSchedule(schedule);
-  log.info(`Creating schedule: ${cronSchedule}`);
-  
-  const crontab = await getCrontab();
-  const jobs = crontab.jobs({
-    comment: TaskName,
-  });
-  
-  if (jobs.length > 0) {
-    log.info(`Deleting existing schedule`);
-    crontab.remove(jobs[0]);
+// Manual run via:
+// systemctl --user start thecoin-harvest.service
+
+// Check if the timer is active and when it will run next
+// systemctl --user status thecoin-harvest.timer
+
+// List all timers and see when it last/next triggers
+// systemctl --user list-timers thecoin-harvest.timer
+export async function setSchedule(schedule: HarvestSchedule) {
+  log.info(`Creating systemd schedule: ${JSON.stringify(schedule)}`);
+  // Disable and stop the timer if it exists
+  try {
+    execSync(`systemctl --user disable --now ${TimerName}`);
+  } catch (e) {
+    // Ignore if timer wasn't enabled; log others for diagnostics
+    log.debug(e, 'Ignoring error while disabling existing systemd timer');
   }
 
-  const runCmd = `${process.execPath} --harvest`;
-  crontab.create(runCmd, cronSchedule, TaskName);
-  await saveCrontab(crontab);
+  // Just in case someone only wants to run manually.
+  if (schedule.daysToRun.every(d => !d)) {
+    log.info('No days selected, not creating schedule');
+    return;
+  }
 
-  log.info('Schedule updated');
+  try {
+    // Ensure systemd user dir exists
+    mkdirSync(SystemdUserDir, { recursive: true });
+
+    // Check if scraper should run visible (requiring Xvfb)
+    const scraperVisible = await getScraperVisible();
+
+    // Write service and timer files
+    const serviceContent = generateService(scraperVisible);
+    const timerContent = generateTimer(schedule);
+    writeFileSync(ServicePath, serviceContent);
+    writeFileSync(TimerPath, timerContent);
+
+    // Reload systemd user units
+    execSync('systemctl --user daemon-reload');
+
+    // Enable and start the timer
+    execSync(`systemctl --user enable --now ${TimerName}`);
+    execSync(`systemctl --user daemon-reload`);
+    execSync(`systemctl --user restart ${TimerName}`);
+    log.info('Systemd schedule updated successfully');
+  } catch (err) {
+    log.error(err, 'Failed to set systemd schedule');
+    throw err;
+  }
 }
 
-export const getCronSchedule = (schedule: HarvestSchedule) => {
-  const [hours, minutes] = schedule.timeToRun.split(':');
-  const days = schedule.daysToRun
-    .map((day, index) => day ? index : undefined)
-    .filter(day => day !== undefined)
-    .join(',');
-  return `${minutes} ${hours} * * ${days}`;
+export function generateService(useXvfb: boolean = false): string {
+  const harvestCommand = `"${process.execPath}" --harvest`;
+
+  const execCommand = useXvfb
+    ? `/bin/sh -c 'if [ -z "$DISPLAY" ]; then ${xvfbRun()} ${harvestCommand}; else ${harvestCommand}; fi'`
+    : harvestCommand;
+
+  return `
+[Unit]
+Description=TheCoin Harvester Scheduled Job
+
+[Service]
+Type=simple
+ExecStart=${execCommand}
+RuntimeMaxSec=21600
+TimeoutStopSec=30
+KillMode=mixed
+`; // Add more options as needed
 }
 
-const getCrontab = () => new Promise<CronTab>((resolve, reject) => {
-  load((err, crontab) => {
-    if (err?.message) {
-      log.error("Error loading crontab: " + err.message);
-      reject(err);
-      return;
-    }
-    resolve(crontab);
-  });
-})
+const xvfbRun = () => `/usr/bin/xvfb-run -a -s "-screen 0 1920x1080x24 -ac +extension GLX +render -noreset"`;
 
-const saveCrontab = (crontab: CronTab) => new Promise<void>((resolve, reject) => {
-  crontab.save(err => {
-    if (err?.message) {
-      log.error("Error saving crontab: " + err.message);
-      reject(err);
-      return;
-    }
-    resolve();
-  });
-})
+export function generateTimer(schedule: HarvestSchedule): string {
+  return `
+[Unit]
+Description=TheCoin Harvester Timer
+
+[Timer]
+OnCalendar=${getSystemdOnCalendar(schedule)}
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+`;
+}
+
+// Converts HarvestSchedule to systemd OnCalendar format
+export function getSystemdOnCalendar(schedule: HarvestSchedule): string {
+  // schedule.daysToRun: boolean[7] where 0=Sunday (JS Date.getDay() style)
+  // schedule.timeToRun: 'HH:MM'
+  const [hour, minute] = schedule.timeToRun.split(':');
+  const hourNumber = parseInt(hour);
+  const minuteNumber = parseInt(minute);
+  if (
+    !Number.isInteger(hourNumber)
+    || !Number.isInteger(minuteNumber)
+    || hourNumber < 0 || hourNumber > 23 || minuteNumber < 0 || minuteNumber > 59
+  ) {
+    throw new Error(`Invalid time values: ${hour}:${minute}`);
+  }
+
+  const days = toDayNames(schedule.daysToRun, "short", { locale: "en" });
+  // We should have already bailed if no days are selected
+  if (days.length === 0) {
+    throw new Error('No days selected');
+  }
+  return `${days.join(',')} *-*-* ${hourNumber}:${minuteNumber}:00`;
+}

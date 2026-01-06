@@ -2,7 +2,7 @@ import Decimal from 'decimal.js-light';
 import { getPluginModifier } from './modifier';
 import { PluginDetails } from './types';
 import { IPluggable } from './codegen/contracts/IPluggable';
-import { AddressLike } from 'ethers';
+import type { AddressLike } from 'ethers';
 export * from './constants';
 export * from './types';
 export * from './assign';
