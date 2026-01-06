@@ -1,4 +1,4 @@
-import { BaseReducer } from "@thecointech/shared/store/immerReducer";
+import { BaseReducer } from "@thecointech/redux";
 import { BackgroundTaskInfo, BackgroundTaskType, isSubTask } from "./types";
 import { GroupAndSubTask, initialState, InitialState } from "./initialState";
 import { log } from "@thecointech/logging";

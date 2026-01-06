@@ -1,9 +1,10 @@
 import { UploadWallet, UploadData } from "@thecointech/shared/containers/UploadWallet";
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
-import { useHistory } from 'react-router-dom';
+import { AccountMap } from '@thecointech/redux-accounts';
+import { useNavigate } from 'react-router';
 import { useEffect } from "react";
 import { useRef } from "react";
 import { log } from "@thecointech/logging";
+import { useSimplePathContext } from "@/SimplePath";
 
 export const Upload = () => {
 
@@ -11,7 +12,7 @@ export const Upload = () => {
   const api = AccountMap.useApi();
   const active = AccountMap.useActive();
   const existing = AccountMap.useAsArray();
-  const navigate = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Remove the active account.  This is so the
@@ -40,7 +41,12 @@ export const Upload = () => {
     api.addAccount(data.name, data.wallet.address, data.wallet);
     api.setActiveAccount(data.wallet.address);
     hasUploaded.current = true;
-    navigate.push('/account/2?manual=true');
+    navigate('/account/login?manual=true');
+  }
+
+  const context = useSimplePathContext();
+  context.onValidate = () => {
+    return !!hasUploaded.current;
   }
   return (
     <div>

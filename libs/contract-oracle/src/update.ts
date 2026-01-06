@@ -1,5 +1,5 @@
 import { log } from '@thecointech/logging';
-import { SpxCadOracle } from './codegen';
+import type { SpxCadOracle } from './codegen';
 import { getOverrideFees } from '@thecointech/contract-base';
 // import { DateTime, Duration } from 'luxon';
 

@@ -1,13 +1,16 @@
 import React from 'react'
 import { Defs } from '@nivo/core'
 import { area, curveMonotoneX } from 'd3-shape'
-import { Datum, ResponsiveLine, Serie, Layer, CustomLayerProps, DatumValue, PointMouseHandler } from '@nivo/line'
+import type { DatumValue } from '@nivo/core'
+import { ResponsiveLine, LineCustomSvgLayerProps, LineSvgLayer } from '@nivo/line'
 import { Tooltip } from './Tooltip'
+import type { AreaSeries, AreaDatum, OnClickHandler } from './types'
 
-const AreaLayer = (props: CustomLayerProps) => {
+
+const AreaLayer = (props: LineCustomSvgLayerProps<AreaSeries>) => {
   const { data, xScale, yScale } = props;
   const innerHeight: number = props.innerHeight;
-  const areaGenerator = area<Datum>()
+  const areaGenerator = area<AreaDatum>()
     .x(d => xScale(d.x as DatumValue))
     .y0(d => Math.min(innerHeight, yScale(d.lowerBound)))
     .y1(d => yScale(d.upperBound))
@@ -39,30 +42,30 @@ const AreaLayer = (props: CustomLayerProps) => {
   )
 }
 
-const layers: Layer[] = [
+const layers: LineSvgLayer<AreaSeries>[] = [
 
   'grid', 'markers', 'axes', 'areas',
   AreaLayer,
   'crosshair', 'lines', 'points', 'slices', 'mesh', 'legends',
 ]
 
-const findMaxValue = (serie: Serie[]) =>
+const findMaxValue = (serie: AreaSeries[]) =>
   serie.reduce((prev, series) =>
-    series.data?.reduce((prev: number, d: Datum) => Math.max(prev, d.upperBound), prev) ?? prev,
+    series.data?.reduce((prev, d) => Math.max(prev, d.upperBound), prev) ?? prev,
     1
   )
 
-const findMinValue = (serie: Serie[]) => {
+const findMinValue = (serie: AreaSeries[]) => {
   const r = serie.reduce((prev, series) =>
-    series.data?.reduce((prev: number, d: Datum) => Math.min(prev, d.lowerBound), prev) ?? prev,
+    series.data?.reduce((prev: number, d) => Math.min(prev, d.lowerBound), prev) ?? prev,
     0
   )
   return r;
 }
 
 type Props =  {
-  onClick: PointMouseHandler,
-  data: Serie[],
+  onClick: OnClickHandler,
+  data: AreaSeries[],
   xlegend: string,
 }
 
@@ -83,7 +86,7 @@ export const CustomGraphLayers = ({ onClick, data, xlegend }: Props) => {
       legendOffset: 30,
     }}
     axisLeft={{
-      format: (v) => `$${v}`
+      format: (v: any) => `$${v}`
     }}
     data={data}
     lineWidth={3}
@@ -94,7 +97,7 @@ export const CustomGraphLayers = ({ onClick, data, xlegend }: Props) => {
     pointSize={12}
     pointColor="white"
     pointBorderWidth={2}
-    pointBorderColor={{ from: 'serieColor' }}
+    pointBorderColor={{ from: 'seriesColor', modifiers: [] }}
 
     onClick={onClick}
     useMesh={true}

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Button, Dimmer, Dropdown, Loader, Message } from "semantic-ui-react";
 import { isRunning, useBackgroundTask } from "@/BackgroundTask";
 import { BackgroundTaskErrors, BackgroundTaskProgressBar } from "@/BackgroundTask/BackgroundTaskProgressBar";
-import { QuestionResponse } from "@/Agent/QuestionResponse";
 import { BankConnectReducer } from "@/Agent/state/reducer";
 import type { RendererBankType } from "@/Agent/state/types";
 
@@ -113,7 +112,6 @@ export const RefreshTwoFA = ({ paused }: { paused: boolean }) => {
 
       {scraperRunning && (
         <>
-          <QuestionResponse backgroundTaskId="twofaRefresh" />
           <BackgroundTaskProgressBar type="twofaRefresh" />
         </>
       )}

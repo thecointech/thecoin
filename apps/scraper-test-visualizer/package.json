@@ -3,7 +3,7 @@
   "productName": "Scraper Test Visualizer",
   "private": true,
   "type": "module",
-  "version": "0.5.0",
+  "version": "0.5.1-test.0",
   "description": "Visual tool for viewing scraper element test results",
   "author": "Stephen Taylor",
   "license": "GPL-3.0-or-later",
@@ -19,7 +19,7 @@
     "@thecointech/scraper-archive": "workspace:^",
     "@thecointech/shared": "workspace:^",
     "semantic-ui-css": "^2.5.0",
-    "semantic-ui-react": "^2.1.5"
+    "semantic-ui-react": "3.0.0-beta.2"
   },
   "devDependencies": {
     "@thecointech/setenv": "workspace:^"

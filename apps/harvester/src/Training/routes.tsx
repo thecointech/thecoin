@@ -1,4 +1,4 @@
-import { Route, Switch } from 'react-router';
+import { type RouteObject } from 'react-router';
 import { Step0 } from './Step0.Intro';
 import { CreditDetails } from './Step1.CreditDetails';
 import { Warmup } from './Step2.Warmup';
@@ -7,15 +7,14 @@ import { VisaBalance } from './Step4.VisaBalance';
 import { SendETransfer } from './Step5.SendETransfer';
 import { Complete } from './Step6.Complete';
 
-export const TrainingRouter = () => (
-  <Switch>
-    <Route path="/train/step0" component={Step0} />
-    <Route path="/train/step1" component={CreditDetails} />
-    <Route path="/train/step2" component={Warmup} />
-    <Route path="/train/step3" component={ChequingBalance} />
-    <Route path="/train/step4" component={VisaBalance} />
-    <Route path="/train/step5" component={SendETransfer} />
-    <Route path="/train/step6" component={Complete} />
-    <Route component={Step0} />
-  </Switch>
-)
+
+export const routes = [
+  { path: 'step0', element: <Step0 /> },
+  { path: 'step1', element: <CreditDetails /> },
+  { path: 'step2', element: <Warmup /> },
+  { path: 'step3', element: <ChequingBalance /> },
+  { path: 'step4', element: <VisaBalance /> },
+  { path: 'step5', element: <SendETransfer /> },
+  { path: 'step6', element: <Complete /> },
+  { path: '*', element: <Step0 /> },
+] as const satisfies RouteObject[]

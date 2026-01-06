@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/scraper-agent",
-  "version": "0.5.0",
+  "version": "0.5.1-test.0",
   "private": true,
   "description": "TheCoin: AI Agent to automate the creation of scraping recorder scripts",
   "type": "module",
@@ -29,22 +29,21 @@
     "_run": "yarn run -T cross-env CONFIG_NAME=prodtest URL_SEQ_LOGGING=false TC_LOG_FOLDER=.cache/logs run-env --"
   },
   "dependencies": {
-    "@thecointech/apis": "^0.5.0",
-    "@thecointech/scraper": "^0.5.0",
-    "@thecointech/utilities": "^0.5.0"
+    "@thecointech/apis": "^0.5.1-test.0",
+    "@thecointech/scraper": "^0.5.1-test.0",
+    "@thecointech/utilities": "^0.5.1-test.0"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.5.0",
-    "@thecointech/setenv": "^0.5.0"
+    "@thecointech/jestutils": "^0.5.1-test.0",
+    "@thecointech/setenv": "^0.5.1-test.0"
   },
   "files": [
-    "build/**/*",
-    "mocked/**/*"
+    "build/**/*"
   ],
   "exports": {
     ".": {
-      "development": "./mocked/index.ts",
-      "devlive": "./mocked/index.ts",
+      "development": "./mocks/index.ts",
+      "devlive": "./mocks/index.ts",
       "default": "./build/index.js"
     },
     "./*": "./build/*.js"

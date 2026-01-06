@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React, { type PropsWithChildren } from 'react';
 import styles from './styles.module.less';
 
-export const ContentSegment: React.FunctionComponent = (props) => (
+export const ContentSegment = ({ children }: PropsWithChildren<{}>) => (
   <div className={styles.contentSegment}>
-    {props.children}
+    {children}
   </div>
 );
 

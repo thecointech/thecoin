@@ -1,6 +1,6 @@
 import { Step } from "semantic-ui-react"
 import { DefaultPathProps, usePathIndex } from "./types"
-import { Link } from "react-router-dom"
+import { Link } from "react-router"
 import styles from "./Steps.module.less"
 import { useEffect, useRef } from "react"
 import React from "react"
@@ -9,7 +9,7 @@ type PathStepsProps<T = never> = DefaultPathProps<T> & {
   data: T
 }
 export const PathSteps = <T = never>({path, data}: PathStepsProps<T>) => {
-  const idx = usePathIndex();
+  const index = usePathIndex(path);
   const containerRef = useRef<HTMLDivElement>(null);
   const activeStepRef = useRef<HTMLDivElement>(null);
 
@@ -21,7 +21,7 @@ export const PathSteps = <T = never>({path, data}: PathStepsProps<T>) => {
         inline: 'center'
       });
     }
-  }, [idx]);
+  }, [index]);
 
   return (
     <div className={styles.stepsContainer} ref={containerRef}>
@@ -33,9 +33,9 @@ export const PathSteps = <T = never>({path, data}: PathStepsProps<T>) => {
               title={r.title}
               description={r.description}
               isCompleted={r.isComplete}
-              to={`/${path.groupKey}/${i}`}
-              active={idx === i}
-              stepRef={idx === i ? activeStepRef : null}
+              to={`/${path.groupKey}/${r.path}`}
+              active={index === i}
+              stepRef={index === i ? activeStepRef : null}
               data={data} />
           ))
         }
@@ -50,7 +50,7 @@ type PathStepProps<T = never> = {
   isCompleted?: (data: T) => boolean
   to: string
   active: boolean
-  stepRef?: React.RefObject<HTMLDivElement>|null
+  stepRef?: React.RefObject<HTMLDivElement|null>|null
   data: T
 }
 

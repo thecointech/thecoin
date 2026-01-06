@@ -30,7 +30,7 @@ function getCredentials(token?: string) {
       if (!credentials || (typeof credentials !== 'object')) return null;
 
       // Always pass in development/testing
-      if (process.env.CONFIG_NAME === "development") {
+      if (process.env.CONFIG_NAME === "development" || process.env.CONFIG_NAME === "devlive") {
         return {
           refresh_token: "",
           access_token: "",

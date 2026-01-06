@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-webpack5';
 import { BenefitsGraph as Component } from '.';
 import { createParams, MarketData } from '../simulator';
 //@ts-ignore
@@ -26,7 +26,7 @@ export default meta;
 type Props = typeof meta.args;
 
 const params = createParams({initialBalance: 1000});
-export const Graph: Story<Props> = (props) => {
+export const Graph: StoryFn<Props> = (props) => {
   const [data, setData] = useState<MarketData[]>();
 
   // Simulate market data

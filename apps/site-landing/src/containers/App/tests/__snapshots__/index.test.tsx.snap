@@ -1,18 +1,18 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<App /> should render and match the snapshot 1`] = `
-<MediaContextProvider>
+<div>
   <style>
     .fresnel-container{margin:0;padding:0;}
-@media not all and (min-width:0px) and (max-width:767px){.fresnel-at-mobile{display:none!important;}}
-@media not all and (min-width:768px) and (max-width:1023px){.fresnel-at-tablet{display:none!important;}}
-@media not all and (min-width:1024px) and (max-width:1191px){.fresnel-at-computer{display:none!important;}}
-@media not all and (min-width:1192px) and (max-width:1919px){.fresnel-at-largeScreen{display:none!important;}}
+@media not all and (min-width:0px) and (max-width:767.98px){.fresnel-at-mobile{display:none!important;}}
+@media not all and (min-width:768px) and (max-width:1023.98px){.fresnel-at-tablet{display:none!important;}}
+@media not all and (min-width:1024px) and (max-width:1191.98px){.fresnel-at-computer{display:none!important;}}
+@media not all and (min-width:1192px) and (max-width:1919.98px){.fresnel-at-largeScreen{display:none!important;}}
 @media not all and (min-width:1920px){.fresnel-at-widescreen{display:none!important;}}
-@media not all and (max-width:767px){.fresnel-lessThan-tablet{display:none!important;}}
-@media not all and (max-width:1023px){.fresnel-lessThan-computer{display:none!important;}}
-@media not all and (max-width:1191px){.fresnel-lessThan-largeScreen{display:none!important;}}
-@media not all and (max-width:1919px){.fresnel-lessThan-widescreen{display:none!important;}}
+@media not all and (max-width:767.98px){.fresnel-lessThan-tablet{display:none!important;}}
+@media not all and (max-width:1023.98px){.fresnel-lessThan-computer{display:none!important;}}
+@media not all and (max-width:1191.98px){.fresnel-lessThan-largeScreen{display:none!important;}}
+@media not all and (max-width:1919.98px){.fresnel-lessThan-widescreen{display:none!important;}}
 @media not all and (min-width:768px){.fresnel-greaterThan-mobile{display:none!important;}}
 @media not all and (min-width:1024px){.fresnel-greaterThan-tablet{display:none!important;}}
 @media not all and (min-width:1192px){.fresnel-greaterThan-computer{display:none!important;}}
@@ -22,27 +22,235 @@ exports[`<App /> should render and match the snapshot 1`] = `
 @media not all and (min-width:1024px){.fresnel-greaterThanOrEqual-computer{display:none!important;}}
 @media not all and (min-width:1192px){.fresnel-greaterThanOrEqual-largeScreen{display:none!important;}}
 @media not all and (min-width:1920px){.fresnel-greaterThanOrEqual-widescreen{display:none!important;}}
-@media not all and (min-width:0px) and (max-width:767px){.fresnel-between-mobile-tablet{display:none!important;}}
-@media not all and (min-width:0px) and (max-width:1023px){.fresnel-between-mobile-computer{display:none!important;}}
-@media not all and (min-width:0px) and (max-width:1191px){.fresnel-between-mobile-largeScreen{display:none!important;}}
-@media not all and (min-width:0px) and (max-width:1919px){.fresnel-between-mobile-widescreen{display:none!important;}}
-@media not all and (min-width:768px) and (max-width:1023px){.fresnel-between-tablet-computer{display:none!important;}}
-@media not all and (min-width:768px) and (max-width:1191px){.fresnel-between-tablet-largeScreen{display:none!important;}}
-@media not all and (min-width:768px) and (max-width:1919px){.fresnel-between-tablet-widescreen{display:none!important;}}
-@media not all and (min-width:1024px) and (max-width:1191px){.fresnel-between-computer-largeScreen{display:none!important;}}
-@media not all and (min-width:1024px) and (max-width:1919px){.fresnel-between-computer-widescreen{display:none!important;}}
-@media not all and (min-width:1192px) and (max-width:1919px){.fresnel-between-largeScreen-widescreen{display:none!important;}}
+@media not all and (min-width:0px) and (max-width:767.98px){.fresnel-between-mobile-tablet{display:none!important;}}
+@media not all and (min-width:0px) and (max-width:1023.98px){.fresnel-between-mobile-computer{display:none!important;}}
+@media not all and (min-width:0px) and (max-width:1191.98px){.fresnel-between-mobile-largeScreen{display:none!important;}}
+@media not all and (min-width:0px) and (max-width:1919.98px){.fresnel-between-mobile-widescreen{display:none!important;}}
+@media not all and (min-width:768px) and (max-width:1023.98px){.fresnel-between-tablet-computer{display:none!important;}}
+@media not all and (min-width:768px) and (max-width:1191.98px){.fresnel-between-tablet-largeScreen{display:none!important;}}
+@media not all and (min-width:768px) and (max-width:1919.98px){.fresnel-between-tablet-widescreen{display:none!important;}}
+@media not all and (min-width:1024px) and (max-width:1191.98px){.fresnel-between-computer-largeScreen{display:none!important;}}
+@media not all and (min-width:1024px) and (max-width:1919.98px){.fresnel-between-computer-widescreen{display:none!important;}}
+@media not all and (min-width:1192px) and (max-width:1919.98px){.fresnel-between-largeScreen-widescreen{display:none!important;}}
   </style>
   <div>
-    <MainNavigation />
+    <div />
     <div>
-      <MainPageTransition>
-        <section>
-          <Routes />
-        </section>
-      </MainPageTransition>
+      <div
+        class="ui text menu"
+      >
+        <a
+          aria-current="page"
+          class="active"
+          data-discover="true"
+          href="/"
+        >
+          <div />
+        </a>
+        <a
+          class="item undefined onlyBigScreen"
+          data-discover="true"
+          href="/healthier"
+        >
+          In-depth
+        </a>
+        <a
+          class="item undefined onlyBigScreen"
+          data-discover="true"
+          href="/wedomore"
+        >
+          We do more
+        </a>
+        <a
+          class="item undefined onlyBigScreen"
+          data-discover="true"
+          href="/compare"
+        >
+          Your benefits
+        </a>
+        <a
+          class="item undefined onlyBigScreen"
+          data-discover="true"
+          href="/blog"
+        >
+          Blog
+        </a>
+        <a
+          class="item undefined onlyBigScreen"
+          data-discover="true"
+          href="/help"
+        >
+          Help
+        </a>
+      </div>
+      <div
+        class="ui text menu"
+      >
+        <a
+          class="item undefined "
+          href="http://localhost:3001"
+          target="_blank"
+        >
+          LOG IN
+        </a>
+        <div
+          class="item undefined onlyBigScreen"
+        >
+          <a
+            class="ui red button"
+            href="http://localhost:3001/#/addAccount"
+            role="button"
+          >
+            Create Account
+          </a>
+        </div>
+        <div
+          class="item"
+        >
+          <div
+            aria-expanded="false"
+            class="ui compact selection dropdown"
+            role="listbox"
+            tabindex="0"
+          >
+            <div
+              aria-atomic="true"
+              aria-live="polite"
+              class="divider text"
+              role="alert"
+            >
+              EN
+            </div>
+            <i
+              aria-hidden="true"
+              class="dropdown icon"
+            />
+            <div
+              class="menu transition"
+            >
+              <div
+                aria-checked="true"
+                aria-selected="true"
+                class="active selected item"
+                role="option"
+                style="pointer-events: all;"
+              >
+                <span
+                  class="text"
+                >
+                  EN
+                </span>
+              </div>
+              <div
+                aria-checked="false"
+                aria-selected="false"
+                class="item"
+                role="option"
+                style="pointer-events: all;"
+              >
+                <span
+                  class="text"
+                >
+                  FR
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="item onlySmallScreen"
+        >
+          <i
+            aria-hidden="true"
+            class="content icon"
+          />
+        </div>
+      </div>
     </div>
-    <Footer />
+    <div>
+      <div>
+        <section>
+          <div>
+            Test Route
+          </div>
+        </section>
+      </div>
+    </div>
+    <div
+      class="undefined "
+    />
+    <footer>
+      <div>
+        <span>
+          <h3>
+            <div>
+              The future is better because of you & us.
+            </div>
+            <div>
+              Subscribe to our newsletter:
+            </div>
+          </h3>
+        </span>
+        <span>
+          <iframe
+            data-w-type="embedded"
+            referrerpolicy="strict-origin-when-cross-origin"
+            src="https://x15lr.mjt.lu/wgt/x15lr/0mkp/form?c=d2c683cc"
+            style="height: 0px;"
+            title="Newsletter subscription form"
+            width="100%"
+          />
+        </span>
+      </div>
+      <div>
+        <div
+          class="undefined undefined"
+        >
+          <span>
+            The Coin Collaborative Canada
+          </span>
+          <span>
+            is a registered non-profit
+          </span>
+        </div>
+        <div>
+          <a
+            href="https://www.facebook.com/TheCoinCollaborative/"
+            target="_blank"
+          >
+            <img
+              src="[object Object]"
+            />
+          </a>
+          <a
+            href="https://twitter.com/The_Green_NFT/"
+            target="_blank"
+          >
+            <img
+              src="[object Object]"
+            />
+          </a>
+          <a
+            href="https://www.instagram.com/thecoincollaborativecanada/"
+            target="_blank"
+          >
+            <img
+              src="[object Object]"
+            />
+          </a>
+        </div>
+        <div
+          class="undefined undefined"
+        >
+          <span>
+            © Copyright 2020. TheCoin.
+          </span>
+          <span>
+            All Rights Reserved.
+          </span>
+        </div>
+      </div>
+    </footer>
   </div>
-</MediaContextProvider>
+</div>
 `;

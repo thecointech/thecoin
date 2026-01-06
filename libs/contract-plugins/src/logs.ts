@@ -4,7 +4,7 @@ import { ContractState } from './types';
 import { isDefined, last, NormalizeAddress } from '@thecointech/utilities';
 import type { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider';
 import { BasePlugin__factory } from './codegen';
-import { AddressLike } from 'ethers';
+import type { AddressLike } from 'ethers';
 
 type BaseLogs = {
   timestamp: DateTime,

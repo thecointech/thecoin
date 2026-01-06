@@ -1,11 +1,20 @@
-import { intl } from './withIntl';
+import { reactIntl } from './withIntl';
 import { withRouter } from './withRouter';
 
+export const initialGlobals = {
+  locale: reactIntl.defaultLocale,
+  locales: {
+    en: 'English',
+    fr: 'Français',
+  },
+};
+
 export const parameters = {
-  actions: { argTypesRegex: "^on[A-Z].*" },
-  intl
-}
+  reactIntl,
+};
 
 export const decorators = [
   withRouter,
 ];
+
+export const tags = ['autodocs'];

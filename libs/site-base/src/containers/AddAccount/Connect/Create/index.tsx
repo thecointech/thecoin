@@ -2,7 +2,7 @@ import React from "react";
 import { Connect } from "../../Connect";
 import { defineMessages, FormattedMessage, useIntl } from "react-intl";
 import { Header, Container, Message } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { getWeb3Type } from "@thecointech/shared/utils/detection";
 import { Decoration } from "../../Decoration";
 import styles from '../styles.module.less';

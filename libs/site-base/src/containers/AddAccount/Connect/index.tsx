@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import { ConnectWeb3 } from '@thecointech/shared/containers/Account/Web3';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { WarnIfDisabled } from './WarnIfDisabled';
 import { NameInput } from '../NewBaseClass/NameInput';
 import { ReferralInput, registerReferral } from '../NewBaseClass/ReferralInput';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { ButtonPrimary } from '../../../components/Buttons';
 import styles from '../styles.module.less';
 
@@ -23,7 +23,7 @@ export const Connect = () => {
   const [forceValidate, setForceValidate] = useState(false);
 
   const accountsApi = AccountMap.useApi();
-  const history = useHistory();
+  const navigate = useNavigate();
   const onConnect = async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     if (!(referral && name)) {
@@ -35,7 +35,7 @@ export const Connect = () => {
       accountsApi.addAccount(name, web3.address, web3.signer);
       registerReferral(web3.address, referral);
       // We redirect directly to the now-active account
-      history.push('/');
+      navigate('/');
     }
 
     return true;
