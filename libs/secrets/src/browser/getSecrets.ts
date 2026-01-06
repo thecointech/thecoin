@@ -10,7 +10,7 @@ const secrets = __COMPILER_REPLACE_SECRETS__
 
 export async function getSecret(name: SecretKeyType, _config?: ConfigType) {
   // First, check if this secret has been added to env
-  if (secrets?.[name]) {
+  if (secrets && name in secrets) {
     return secrets[name];
   }
   throw new SecretNotFoundError(name);
