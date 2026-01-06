@@ -1,10 +1,10 @@
-import { InitialCoinBlock, ConnectContract, TheCoin } from '@thecointech/contract-core';
-import { Signer, Wallet } from 'ethers';
+import { InitialCoinBlock, ContractCore, type TheCoin } from '@thecointech/contract-core';
+import { Signer, Wallet, type Provider } from 'ethers';
 import { call, delay, select, StrictEffect } from "@redux-saga/core/effects";
 import { IsValidAddress, NormalizeAddress } from '@thecointech/utilities';
 import { buildSagas } from './actions';
 import { FxRateReducer } from '../../containers/FxRate/reducer';
-import { SagaReducer } from '../../store/immerReducer';
+import { SagaReducer } from '@thecointech/redux/immerReducer';
 import { isLocal } from '@thecointech/signers';
 import { loadAndMergeHistory, calculateTxBalances, mergeTransactions, Transaction } from '@thecointech/tx-blockchain';
 import { getComposeDB } from '@thecointech/idx';
@@ -15,10 +15,11 @@ import { log } from '@thecointech/logging';
 import { checkCurrentStatus } from './BlockpassKYC';
 import { StatusType } from '@thecointech/broker-cad';
 import type { SagaIterator } from '@redux-saga/core';
-import type { AccountMapStore } from '../AccountMap';
+import type { AccountMapStore } from '@thecointech/redux-accounts';
 import type { DecryptCallback, IActions } from './types';
 import type { Dictionary } from 'lodash';
 import { getPluginDetails } from '@thecointech/contract-plugins';
+import { getProvider } from '@thecointech/ethers-provider';
 
 const KycPollingInterval = (process.env.NODE_ENV === 'production')
   ? 5 * 60 * 1000 // 5 minutes
@@ -33,8 +34,10 @@ function AccountReducer(address: string, initialState: AccountState) {
       this.draftState.name = name;
     }
 
-    *setSigner(signer: Signer) {
-      yield this.storeValues({ signer });
+    *setSigner(signer: Signer): Generator<StrictEffect, void, Provider> {
+      const provider = yield call(getProvider);
+      const connected = signer.connect(provider);
+      yield this.storeValues({ signer: connected });
       yield delay(10);
       yield this.sendValues(this.actions.connect);
     }
@@ -45,8 +48,8 @@ function AccountReducer(address: string, initialState: AccountState) {
 
       const { signer } = this.state;
       // Connect to the contract
-      const contract = yield call(ConnectContract, signer);
-      const plugins = yield call(getPluginDetails, contract);
+      const contract = yield call(ContractCore.connect, signer);
+      const plugins = yield call(getPluginDetails, contract, signer);
       // store the contract prior to trying update history.
       yield this.storeValues({ contract, plugins });
       // Load history info by default
@@ -153,7 +156,7 @@ function AccountReducer(address: string, initialState: AccountState) {
       }
       try {
         const balance = yield call(contract.balanceOf, address);
-        yield this.storeValues({ balance: balance.toNumber() });
+        yield this.storeValues({ balance: Number(balance) });
       } catch (err: any) {
         log.error(err, "Update balance failed")
       }
@@ -172,7 +175,7 @@ function AccountReducer(address: string, initialState: AccountState) {
 
       // First, fetch the account balance toasty-fresh
       const balance = yield call(contract.balanceOf, address);
-      yield this.storeValues({ balance: balance.toNumber(), historyLoading: true });
+      yield this.storeValues({ balance: Number(balance), historyLoading: true });
 
       log.trace(`Updating from ${historyEnd ?? from} -> ${until}`);
       const oldHistory = this.state.history;
@@ -182,7 +185,8 @@ function AccountReducer(address: string, initialState: AccountState) {
       // Take current balance and use it plus Tx to reconstruct historical balances.
       calculateTxBalances(balance, newHistory);
       // Get the current block (save it so we know where we were up to in the future.)
-      const currentBlock = yield call(contract.provider.getBlockNumber.bind(contract.provider))
+      const provider = contract.runner?.provider;
+      const currentBlock = yield call(provider!.getBlockNumber.bind(provider))
 
       yield this.storeValues({
         history: mergeTransactions(oldHistory, newHistory),
@@ -194,9 +198,9 @@ function AccountReducer(address: string, initialState: AccountState) {
       });
 
       // Ensure we have fx value for each tx in this list
-      for (var i = 0; i < newHistory.length; i++) {
-        yield this.sendValues(FxRateReducer.actions.fetchRateAtDate, newHistory[i].date.toJSDate());
-      }
+      log.trace({count: newHistory.length}, "Updating {count} FX values for new history");
+      const txDates = newHistory.map(tx => tx.date.toJSDate());
+      yield this.sendValues(FxRateReducer.actions.fetchRatesForDates, txDates);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////

@@ -1,51 +1,47 @@
 import { DateTime } from 'luxon';
-import { replay } from '../scraper/replay';
-import { ChequeBalanceResult, VisaBalanceResult } from '../scraper/types';
 import currency from 'currency.js';
+import { getValues } from './replay';
+import { HarvesterReplayCallbacks } from './replay/replayCallbacks';
+import { ChequeBalanceResult, VisaBalanceResult } from '@thecointech/scraper-agent/types';
 
-export async function getChequingData() : Promise<ChequeBalanceResult> {
+export async function getChequingData(callback: HarvesterReplayCallbacks) : Promise<ChequeBalanceResult> {
+  if (process.env.HARVESTER_OVERRIDE_CHQ_BALANCE) {
+    return {
+      balance: currency(process.env.HARVESTER_OVERRIDE_CHQ_BALANCE),
+    }
+  }
   switch (process.env.CONFIG_NAME) {
-    case 'development':
-    case 'devlive':
-    case 'prodtest':
-      // Mock the values in non-prod environment
-      const balance = (500 + Math.random() * 500).toFixed(2);
-      return {
-        balance: currency(balance),
-      };
+    // case 'development':
+    // case 'devlive':
+    // case 'prodtest':
+    //   // Mock the values in non-prod environment
+    //   const balance = (1000 + Math.random() * 500).toFixed(2);
+    //   return {
+    //     balance: currency(balance),
+    //   };
     default:
-      return await replay('chqBalance');
+      return await getValues('chqBalance', callback);
   }
 }
 
-export async function getVisaData(lastTxDate?: DateTime) : Promise<VisaBalanceResult> {
-  switch (process.env.CONFIG_NAME) {
-    case 'development':
-    case 'devlive':
-    case 'prodtest':
-      const balance = (Math.random() * 500).toFixed(2);
-      const dueAmount = (Math.random() * 500).toFixed(2);
-      // ProdTest emulates a real account, so needs a workable dueDate
-      const firstRun = DateTime.fromISO('2023-04-17');
-      const weeksBetween = firstRun.diff(DateTime.now()).weeks;
-      const periods = Math.ceil(weeksBetween / 4);
-      const dueDate = firstRun.plus({ weeks: periods });
-      return {
-        balance: currency(balance),
-        dueDate,
-        dueAmount: currency(dueAmount),
-        history: []
-      };
-    default:
-      const data = await replay('visaBalance');
-      // Only keep the new transactions from history
-      const newTransactions = lastTxDate
-        ? data.history.filter(row => row.date > lastTxDate)
-        : data.history;
+export async function getVisaData(callback: HarvesterReplayCallbacks, lastTxDate?: DateTime) : Promise<VisaBalanceResult> {
+  if (process.env.HARVESTER_OVERRIDE_VISA_BALANCE) {
+    const data = JSON.parse(process.env.HARVESTER_OVERRIDE_VISA_BALANCE);
+    return {
+      balance: currency(data.balance ?? 0),
+      dueDate: DateTime.fromISO(data.dueDate),
+      dueAmount: currency(data.dueAmount),
+    }
+  }
 
-      return {
-        ...data,
-        history: newTransactions,
-      }
+  const data = await getValues('visaBalance', callback);
+  // Only keep the new transactions from history
+  const newTransactions = lastTxDate
+    ? data.history?.filter(row => row.date > lastTxDate)
+    : data.history;
+
+  return {
+    ...data,
+    history: newTransactions,
   }
 }

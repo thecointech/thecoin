@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/ethers-provider",
-  "version": "0.2.115",
+  "version": "0.5.1-test.0",
   "description": "TheCoin: A custom ethers.js provider with access to Polygon and improved Etherscan support",
   "keywords": [
     "ethereum",
@@ -19,70 +19,70 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-p build:*",
-    "_prebuild:cjs": "rimraf ./build/cjs/**.cjs",
-    "_build:cjs": "yarn tsc --project tsconfig.build.cjs.json",
-    "_postbuild:cjs": "node ./postbuild.cjs",
-    "build:mjs": "yarn tsc --project tsconfig.build.mjs.json",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
+    "build": "run -T tsc -b",
+    "test": "yarn run :jest",
     "clean": "rimraf ./build"
   },
   "files": [
     "build/**/*"
   ],
-  "main": "./build/mjs/node/remote.js",
+  "main": "./build/node/remote.js",
   "exports": {
     ".": {
       "node": {
-        "development": "./build/mjs/node/mocked.js",
-        "devlive": "./build/mjs/node/local.js",
-        "default": "./build/mjs/node/remote.js"
+        "development": "./build/node/mocked.js",
+        "devlive": "./build/node/local.js",
+        "default": "./build/node/remote.js"
       },
       "browser": {
-        "development": "./build/mjs/web/mocked/index.js",
-        "devlive": "./build/mjs/web/local/index.js",
-        "default": "./build/mjs/web/remote/index.js"
+        "development": "./build/web/mocked/index.js",
+        "devlive": "./build/web/local/index.js",
+        "default": "./build/web/remote/index.js"
       }
     },
     "./infura": {
-      "development": "./build/mjs/node/mocked.js",
-      "devlive": "./build/mjs/node/local.js",
-      "default": "./build/mjs/node/remote.js"
+      "development": "./build/node/mocked.js",
+      "devlive": "./build/node/local.js",
+      "default": "./build/node/remote.js"
     },
     "./Erc20Provider": {
       "development": {
-        "node": "./build/mjs/node/mocked.js",
-        "default": "./build/mjs/web/mocked/index.js"
+        "node": "./build/node/mocked.js",
+        "default": "./build/web/mocked/index.js"
       },
-      "devlive": "./build/mjs/web/local/index.js",
-      "default": "./build/mjs/web/remote/index.js"
+      "devlive": "./build/web/local/index.js",
+      "default": "./build/web/remote/index.js"
     },
-    "./Erc20Provider/web": "./build/mjs/web/remote/index.js"
+    "./Erc20Provider/web": "./build/web/remote/index.js",
+    "./errors": "./build/errors.js"
   },
-  "types": "./build/mjs/index.d.ts",
+  "types": "./build/index.d.ts",
   "typesVersions": {
     "*": {
       "Erc20Provider": [
-        "build/mjs/web/remote/index.d.ts"
+        "build/web/remote/index.d.ts"
       ],
       "Erc20Provider/web": [
-        "build/mjs/web/remote/index.d.ts"
+        "build/web/remote/index.d.ts"
       ],
       "infura": [
-        "build/mjs/node/remote.d.ts"
+        "build/node/remote.d.ts"
+      ],
+      "errors": [
+        "build/errors.d.ts"
       ]
     }
   },
   "dependencies": {
-    "@ethersproject/providers": "^5.7.0",
-    "@thecointech/logging": "^0.2.115"
+    "@thecointech/logging": "^0.5.1-test.0",
+    "@thecointech/secrets": "^0.5.1-test.0",
+    "cockatiel": "^3.2.1",
+    "ethers": "6.15.0"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.2.115",
-    "@thecointech/setenv": "^0.2.115",
-    "jest": "*"
+    "@thecointech/jestutils": "^0.5.1-test.0",
+    "@thecointech/setenv": "^0.5.1-test.0"
   },
-  "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
+  "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

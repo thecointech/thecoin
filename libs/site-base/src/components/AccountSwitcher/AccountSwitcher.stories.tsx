@@ -1,5 +1,5 @@
 import React from 'react';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-webpack5';
 import { AccountSwitcher as AccountSwitcherComponent } from '.';
 import { AccountState } from '@thecointech/shared/containers/Account';
 import { withAccounts } from '@thecointech/storybookutils';
@@ -9,7 +9,7 @@ export default {
   component: AccountSwitcherComponent,
 } as Meta;
 
-const Template: Story = () => <AccountSwitcherComponent />;
+const Template: StoryFn = () => <AccountSwitcherComponent />;
 
 export const NoAccounts = Template.bind({});
 NoAccounts.decorators = [

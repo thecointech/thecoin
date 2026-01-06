@@ -3,7 +3,8 @@ import { getLatestStored, getRate } from "./db";
 import { validFor } from "@thecointech/fx-rates";
 import { init } from "@thecointech/firestore";
 import { CoinRate, CoinUpdateInterval } from "./types";
-import { updateLatest, getLatest } from "./latest";
+import { updateLatest, getLatest, clearLatest } from "./latest";
+import { mockWarn } from "@thecointech/logging/mock";
 
 // The oracle will try and update itself, and that's not really useful here.
 jest.unstable_mockModule("../oracle", () => ({
@@ -16,23 +17,22 @@ const { update, ensureLatestCoinRate, ensureLatestFxRate } = await import("./Upd
 // Start 5 mins into the mocked data
 var now = 1593696900000;
 const sixHrs = 6 * 60 * 60 * 1000;
+jest.setTimeout(30000);
 
 beforeEach(async () => {
-  jest.setTimeout(30000);
+  await init({});
+  clearLatest();
+  jest.clearAllMocks();
 })
 
 it('can update Coin rates', async () => {
-  await init({});
   await initCoinLatest(now);
 
   // Update rates for 6 hours.
   // this should log errors because it will update multiple
   // so we change the console warn/error fn's to keep output clean
-  console.warn = jest.fn();
-  console.error = jest.fn();
   await ensureLatestCoinRate(now + sixHrs);
-  //expect(console.warn).toBeCalled();
-  //expect(console.error).toBeCalled();
+  expect(mockWarn).toHaveBeenCalled();
 
   // Do we have latest cache updated?
   // There should have been something returned
@@ -54,7 +54,6 @@ it('can update Coin rates', async () => {
 })
 
 it("inserts FxRates correctly", async () => {
-  await init({});
   await ensureLatestFxRate(now);
 
   // There should have been something returned
@@ -69,16 +68,10 @@ it("inserts FxRates correctly", async () => {
 });
 
 it('should return a valid rate', async () => {
-  await init({});
-
   // Mock date.now
   Date.now = jest.fn(() => now + sixHrs)
 
   await initCoinLatest(now);
-  // this should throw errors because it will update multiple
-  // so we change the console warn/error fn's to keep output clean
-  console.warn = jest.fn();
-  console.error = jest.fn();
   var didUpdate = await update();
   expect(didUpdate).toBeTruthy();
 });

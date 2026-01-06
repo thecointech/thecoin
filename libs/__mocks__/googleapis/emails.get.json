@@ -1,19 +1,5 @@
 [
   {
-    "config": {
-      "url": "https://www.googleapis.com/gmail/v1/users/me/messages/17ac461078d120ff",
-      "method": "GET",
-      "headers": {
-        "x-goog-api-client": "gdcl/3.2.1 gl-node/14.15.5 auth/5.9.2",
-        "Accept-Encoding": "gzip",
-        "User-Agent": "google-api-nodejs-client/3.2.1 (gzip)",
-        "Authorization": "Bearer ya29.a0ARrdaM8k7kiKYMIV3oordclfqxOBeoPJqrB34VKiBFySTGRW3D_WubfuCClPmrP3-0y7WDwdp5sAMcdFT7fx1myIBChj92ctWGBlSV086Zb13QH5Z3WsTQtnGnvk0T0awMo9kazMK84vRC0g0K8M7pVhxwVsgg",
-        "Accept": "application/json"
-      },
-      "params": {},
-      "retry": true,
-      "responseType": "json"
-    },
     "data": {
       "id": "17ac461078d120ff",
       "threadId": "17ac45a38e2394ff",
@@ -47,7 +33,7 @@
           },
           {
             "name": "Subject",
-            "value": "[REDIRECT:] INTERAC e-Transfer: (fake deposit) has sent you money."
+            "value": "INTERAC e-Transfer: (fake deposit) has sent you money."
           },
           {
             "name": "Date",
@@ -100,20 +86,6 @@
     }
   },
   {
-    "config": {
-      "url": "https://www.googleapis.com/gmail/v1/users/me/messages/17ac45a38e2394ff",
-      "method": "GET",
-      "headers": {
-        "x-goog-api-client": "gdcl/3.2.1 gl-node/14.15.5 auth/5.9.2",
-        "Accept-Encoding": "gzip",
-        "User-Agent": "google-api-nodejs-client/3.2.1 (gzip)",
-        "Authorization": "Bearer ya29.a0ARrdaM8k7kiKYMIV3oordclfqxOBeoPJqrB34VKiBFySTGRW3D_WubfuCClPmrP3-0y7WDwdp5sAMcdFT7fx1myIBChj92ctWGBlSV086Zb13QH5Z3WsTQtnGnvk0T0awMo9kazMK84vRC0g0K8M7pVhxwVsgg",
-        "Accept": "application/json"
-      },
-      "params": {},
-      "retry": true,
-      "responseType": "json"
-    },
     "data": {
       "id": "17ac45a38e2394ff",
       "threadId": "17ac45a38e2394ff",
@@ -147,7 +119,7 @@
           },
           {
             "name": "Subject",
-            "value": "[REDIRECT:] INTERAC e-Transfer: (fake deposit) has sent you money."
+            "value": "INTERAC e-Transfer: (fake deposit) has sent you money."
           },
           {
             "name": "Date",
@@ -200,20 +172,6 @@
     }
   },
   {
-    "config": {
-      "url": "https://www.googleapis.com/gmail/v1/users/me/messages/17ac3cfb6345ccda",
-      "method": "GET",
-      "headers": {
-        "x-goog-api-client": "gdcl/3.2.1 gl-node/14.15.5 auth/5.9.2",
-        "Accept-Encoding": "gzip",
-        "User-Agent": "google-api-nodejs-client/3.2.1 (gzip)",
-        "Authorization": "Bearer ya29.a0ARrdaM8k7kiKYMIV3oordclfqxOBeoPJqrB34VKiBFySTGRW3D_WubfuCClPmrP3-0y7WDwdp5sAMcdFT7fx1myIBChj92ctWGBlSV086Zb13QH5Z3WsTQtnGnvk0T0awMo9kazMK84vRC0g0K8M7pVhxwVsgg",
-        "Accept": "application/json"
-      },
-      "params": {},
-      "retry": true,
-      "responseType": "json"
-    },
     "data": {
       "id": "17ac3cfb6345ccda",
       "threadId": "17ac3c6a548bed36",
@@ -266,7 +224,7 @@
           },
           {
             "name": "Subject",
-            "value": "[REDIRECT:] INTERAC e-Transfer: Some Person sent you money."
+            "value": "INTERAC e-Transfer: Some Person sent you money."
           },
           {
             "name": "MIME-Version",
@@ -382,20 +340,6 @@
     }
   },
   {
-    "config": {
-      "url": "https://www.googleapis.com/gmail/v1/users/me/messages/17ac0f8026ffba26",
-      "method": "GET",
-      "headers": {
-        "x-goog-api-client": "gdcl/3.2.1 gl-node/14.15.5 auth/5.9.2",
-        "Accept-Encoding": "gzip",
-        "User-Agent": "google-api-nodejs-client/3.2.1 (gzip)",
-        "Authorization": "Bearer ya29.a0ARrdaM8k7kiKYMIV3oordclfqxOBeoPJqrB34VKiBFySTGRW3D_WubfuCClPmrP3-0y7WDwdp5sAMcdFT7fx1myIBChj92ctWGBlSV086Zb13QH5Z3WsTQtnGnvk0T0awMo9kazMK84vRC0g0K8M7pVhxwVsgg",
-        "Accept": "application/json"
-      },
-      "params": {},
-      "retry": true,
-      "responseType": "json"
-    },
     "data": {
       "id": "17ac0f8026ffba26",
       "threadId": "17ac0f8026ffba26",
@@ -430,7 +374,7 @@
           },
           {
             "name": "Subject",
-            "value": "[REDIRECT:] INTERAC e-Transfer: (fake deposit) has sent you money."
+            "value": "INTERAC e-Transfer: (fake deposit) has sent you money."
           },
           {
             "name": "Date",
@@ -456,6 +400,94 @@
         "body": {
           "size": 953,
           "data": "DQpIaSBDb2luLA0KDQpGYWtlIERlcG9zaXQgc2VudCB5b3UgYSBtb25leSB0cmFuc2ZlciBmb3IgdGhlIGFtb3VudCBvZiAkMTAuMDAgKENBRCkgLg0KDQoNCk1lc3NhZ2U6DQoNCg0KRXhwaXJ5IERhdGU6IEF1Z3VzdCAxOSwgMjAyMQ0KDQpUbyBkZXBvc2l0IHlvdXIgbW9uZXksIGNsaWNrIGhlcmU6DQpodHRwczovL2V0cmFuc2Zlci5pbnRlcmFjLmNhLzkxY2JmOWQ1LzZjMWVmNzAzYjMwZGI5NTg0NTkxZGM1OTkwMDE1ZmIyMGVmYzQwMTQyNzc2OGI5M2RiMzRkMzY5MzI3NTU2NWYNCg0KUG91ciB2b2lyIGxlcyBkPUMzPUE5dGFpbHMgZHUgVmlyZW1lbnQgSU5URVJBQyhNRCkgZW4gZnJhbj1DMz1BN2FpcywgY2xpcXVleiBzdXIgbGUgbGllbiBjaS1kZXNzb3VzOg0KaHR0cHM6Ly9ldHJhbnNmZXIuaW50ZXJhYy5jYS9mci85MWNiZjlkNS82YzFlZjcwM2IzMGRiOTU4NDU5MWRjNTk5MDAxNWZiMjBlZmM0MDE0Mjc3NjhiOTNkYjM0ZDM2OTMyNzU1NjVmDQoNCldoYXQgaWYgeW91IGNvdWxkIGRlcG9zaXQgdHJhbnNmZXJzIHdpdGhvdXQgYW5zd2VyaW5nIGFueSBxdWVzdGlvbnM_IFNpZ24gdXAgZm9yIEF1dG9kZXBvc2l0IGluIHlvdXIgb25saW5lIGJhbmtpbmcgPGhlcmU-ID1FMj04MD05MyB0aGUgc2FmZSBhbmQgY29udmVuaWVudCB3YXkgdG8gcmVjZWl2ZSBmdW5kcyBzdHJhaWdodCB0byB5b3VyIGJhbmsgYWNjb3VudC4NCg0KVGhpcyBlbWFpbCB3YXMgc2VudCB0byB5b3UgYnkgSW50ZXJhYyBDb3JwLiwgdGhlIG93bmVyIG9mIHRoZSBJTlRFUkFDIGUtVHJhbnNmZXI9QzI9QUUgc2VydmljZSwgb24gYmVoYWxmIG9mIEZha2UgRGVwb3NpdC4NCkludGVyYWMgQ29ycC4NClAuTy4gQm94IDQ1LCBUb3JvbnRvLCBPbnRhcmlvIE01SiAySjENCnd3dy5pbnRlcmFjLmNhDQoNCj1DMj1BRSBUcmFkZS1tYXJrIG9mIEludGVyYWMgQ29ycC4gIFVzZWQgdW5kZXIgbGljZW5zZS4="
+        }
+      },
+      "sizeEstimate": 9533,
+      "historyId": "6646",
+      "internalDate": "1626735116000"
+    },
+    "headers": {
+      "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"",
+      "cache-control": "private",
+      "connection": "close",
+      "content-encoding": "gzip",
+      "content-type": "application/json; charset=UTF-8",
+      "date": "Tue, 20 Jul 2021 16:20:55 GMT",
+      "server": "ESF",
+      "transfer-encoding": "chunked",
+      "vary": "Origin, X-Origin, Referer",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "x-xss-protection": "0"
+    },
+    "status": 200,
+    "statusText": "OK",
+    "request": {
+      "responseURL": "https://www.googleapis.com/gmail/v1/users/me/messages/17ac0f8026ffba26"
+    }
+  },
+  {
+    "data": {
+      "id": "17ac0f8026ffba26",
+      "threadId": "17ac0f8026ffba26",
+      "labelIds": [
+        "UNREAD",
+        "Label_6624023652717654442",
+        "IMPORTANT",
+        "CATEGORY_UPDATES",
+        "INBOX",
+        "ProdTestOverride"
+      ],
+      "snippet": "Hi Coin, Fake Deposit sent you a money transfer for the amount of $350.00 (CAD) . Message: Expiry Date: August 19, 2021 To deposit your money, click here: https://etransfer.interac.ca/91cbf9d5/",
+      "payload": {
+        "partId": "",
+        "mimeType": "text/plain",
+        "filename": "",
+        "headers": [
+          {
+            "name": "Delivered-To",
+            "value": "autodeposit@notexist.thecoin.io"
+          },
+          {
+            "name": "Received",
+            "value": "by 2002:ac2:5c4f:0:0:0:0:0 with SMTP id s15csp4416988lfp;        Mon, 19 Jul 2021 15:51:57 -0700 (PDT)"
+          },
+          {
+            "name": "From",
+            "value": "BrokerCAD Notifications <automailer@thecoin.io>"
+          },
+          {
+            "name": "To",
+            "value": "0x445758e37f47b44e05e74ee4799f3469de62a2cb@notexist.thecoin.io"
+          },
+          {
+            "name": "Subject",
+            "value": "INTERAC e-Transfer: (fake deposit) has sent you money."
+          },
+          {
+            "name": "Date",
+            "value": "Mon, 19 Jul 2021 22:51:56 +0000"
+          },
+          {
+            "name": "MIME-Version",
+            "value": "1.0"
+          },
+          {
+            "name": "Content-Type",
+            "value": "text/plain; charset=utf-8"
+          },
+          {
+            "name": "Content-Transfer-Encoding",
+            "value": "quoted-printable"
+          },
+          {
+            "name": "X-Gm-Original-To",
+            "value": "0x445758e37f47b44e05e74ee4799f3469de62a2cb@notexist.thecoin.io"
+          }
+        ],
+        "body": {
+          "size": 953,
+          "data": "CkhpIENvaW4sCgpGYWtlIERlcG9zaXQgc2VudCB5b3UgYSBtb25leSB0cmFuc2ZlciBmb3IgdGhlIGFtb3VudCBvZiAkMzUwLjAwIChDQUQpIC4KCgpNZXNzYWdlOgoKCkV4cGlyeSBEYXRlOiBNYXJjaCAyLCAyMDI0CgpUbyBkZXBvc2l0IHlvdXIgbW9uZXksIGNsaWNrIGhlcmU6Cmh0dHBzOi8vZXRyYW5zZmVyLmludGVyYWMuY2EvMTI0MTNjNjEvZmQwODJkMzMyNDkwYjg0ZGNiYzJiMmY1NGFlODZjMGYzMjg5Yzg5NTI2MGIwMDBkMDZkMTQxM2RjNTU2ZmI4ZQoKUG91ciB2b2lyIGxlcyBkPUMzPUE5dGFpbHMgZHUgVmlyZW1lbnQgSU5URVJBQyhNRCkgZW4gZnJhbj1DMz1BN2FpcywgY2xpcXVleiBzdXIgbGUgbGllbiBjaS1kZXNzb3VzOgpodHRwczovL2V0cmFuc2Zlci5pbnRlcmFjLmNhL2ZyLzEyNDEzYzYxL2ZkMDgyZDMzMjQ5MGI4NGRjYmMyYjJmNTRhZTg2YzBmMzI4OWM4OTUyNjBiMDAwZDA2ZDE0MTNkYzU1NmZiOGUKCldoYXQgaWYgeW91IGNvdWxkIGRlcG9zaXQgdHJhbnNmZXJzIHdpdGhvdXQgYW5zd2VyaW5nIGFueSBxdWVzdGlvbnM/IFNpZ24gdXAgZm9yIEF1dG9kZXBvc2l0IGluIHlvdXIgb25saW5lIGJhbmtpbmcgPGhlcmU+ID1FMj04MD05MyB0aGUgc2FmZSBhbmQgY29udmVuaWVudCB3YXkgdG8gcmVjZWl2ZSBmdW5kcyBzdHJhaWdodCB0byB5b3VyIGJhbmsgYWNjb3VudC4KClRoaXMgZW1haWwgd2FzIHNlbnQgdG8geW91IGJ5IEludGVyYWMgQ29ycC4sIHRoZSBvd25lciBvZiB0aGUgSU5URVJBQyBlLVRyYW5zZmVyPUMyPUFFIHNlcnZpY2UsIG9uIGJlaGFsZiBvZiBGYWtlIERlcG9zaXQuCkludGVyYWMgQ29ycC4KUC5PLiBCb3ggNDUsIFRvcm9udG8sIE9udGFyaW8gTTVKIDJKMQp3d3cuaW50ZXJhYy5jYQoKeyBkYXRlT3ZlcnJpZGU6ICIyMDIzLTAxLTAyVDA4OjM1OjAwLjAwMC0wNjowMCIgfQoKPUMyPUFFIFRyYWRlLW1hcmsgb2YgSW50ZXJhYyBDb3JwLiAgVXNlZCB1bmRlciBsaWNlbnNlLg=="
         }
       },
       "sizeEstimate": 9533,

@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-plugins",
-  "version": "0.2.115",
+  "version": "0.5.1-test.0",
   "description": "The Coin: Handles plugin change requests",
   "type": "module",
   "keywords": [
@@ -18,10 +18,10 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc -b tsconfig.build.json",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "_test": "yarn run-jest"
+    "_test": "run :jest"
   },
   "files": [
     "build/**/*"
@@ -30,10 +30,8 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/contract-plugins": "^0.2.115",
-    "@thecointech/tx-statemachine": "^0.2.115"
+    "@thecointech/contract-plugins": "^0.5.1-test.0",
+    "@thecointech/tx-statemachine": "^0.5.1-test.0"
   },
-  "devDependencies": {
-    "jest": "*"
-  }
+  "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

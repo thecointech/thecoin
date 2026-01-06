@@ -1,9 +1,9 @@
 import React from "react";
-import { TxDatum } from "@thecointech/shared/components/GraphTxHistory/types";
+import type { TxDatum } from "@thecointech/shared/components/GraphTxHistory";
 import styles from './styles.module.less';
 import { Table } from "semantic-ui-react";
 import { Currency } from "@thecointech/site-base/components/Currency";
-import { defineMessages, FormattedMessage } from "react-intl";
+import { defineMessages, FormattedDate, FormattedMessage } from "react-intl";
 import { TooltipTxRows } from "./TooltipTxs";
 
 // Narrow our props so our story doesn't need to pass unnecessary data.
@@ -30,10 +30,21 @@ export const Tooltip = ({point}: TooltipProps) => {
       <Table.Body>
       <Table.Row>
         <Table.Cell>
+          <FormattedDate
+            year="2-digit"
+            month="short"
+            day="2-digit"
+            // @ts-ignore
+            value={data.x as Date}
+          />
+        </Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>
             <FormattedMessage {...translations.msgProfit} />
           </Table.Cell>
         <Table.Cell>
-          <Currency value={data.y - data.costBasis} />
+          <Currency value={data.raw - data.costBasis} />
         </Table.Cell>
       </Table.Row>
       <Table.Row>

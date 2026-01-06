@@ -37,6 +37,26 @@ export function toDepositData(email: gmail_v1.Schema$Message): eTransferData | n
     return null;
   }
 
+  // PRODTEST-ONLY-CODE
+  // In prodtest we allow overriding the recieved date
+  if (process.env.CONFIG_NAME === "prodtest") {
+    const overrideDate = body.match(/{ dateOverride: "([^}]+)" }/)
+    if (overrideDate) {
+      const d = DateTime.fromISO(overrideDate[1]);
+      if (d.isValid)
+        return {
+          raw: email,
+          recieved: d,
+          id: getSourceId(url),
+          depositUrl: url.toString(),
+          address,
+          cad: new Decimal(amount),
+          ...userInfo
+        }
+    }
+  }
+  // END PRODTEST-ONLY-CODE
+
   return {
     raw: email,
     recieved: dateRecieved,
@@ -86,7 +106,7 @@ function getUserInfo(email: gmail_v1.Schema$Message) {
   };
 }
 
-const getAmount = (body: string) => getAmountAnglais(body) ?? getAmountFrancais(body);
+const getAmount = (body: string) => getAmountAnglaisNew(body) ?? getAmountAnglais(body) ?? getAmountFrancais(body);
 
 function getAmountAnglais(body: string) {
   const amountRes = /transfer for the amount of \$([0-9.,]+) \(CAD\)/.exec(body);
@@ -98,6 +118,14 @@ function getAmountFrancais(body: string) {
   const amountRes = /vous a envoyé un virement de ([ 0-9,]+) \$ \(CAD\)/.exec(body)
   return (amountRes)
     ? currency(amountRes[1], {decimal: ','}).value
+    : undefined;
+}
+// I clearly need better metrics for this...
+// Maybe time to use an LLM?
+function getAmountAnglaisNew(body: string) {
+  const amountRes = /amount: \$([0-9.,]+) \(CAD\)/i.exec(body);
+  return (amountRes)
+    ? currency(amountRes[1]).value
     : undefined;
 }
 
@@ -119,34 +147,39 @@ function getSubject(email: gmail_v1.Schema$Message) {
   // First, ignore any emails with no subject
   if (!subject)
     return null;
-  // filter an RE emails
-  if (subject.startsWith("Re: [REDIRECT:]"))
-    return null;
   // Filter expired notifications
   if (subject.endsWith("expired."))
     return null;
 
   const parsed = getSubjectAnglais(subject) ?? getSubjectFrancais(subject);
-  if (!parsed)
+  if (!parsed) {
     log.error(`Unknown deposit type: ${subject}`);
+  }
 
   return parsed;
 }
 
 function getSubjectAnglais(subject: string) {
-  const redirectHeader = "[REDIRECT:] INTERAC e-Transfer: "
-  if (!subject.endsWith("sent you money.") || !subject.startsWith(redirectHeader)) {
+  const sublower = subject.toLowerCase();
+  const redirectHeader = "interac e-transfer: "
+  const validSubject = [
+    "sent you money.",
+    "claim your deposit!"
+  ].find(s => sublower.endsWith(s))
+
+  if (!validSubject || !sublower.startsWith(redirectHeader)) {
     return null;
   }
-  return subject.substr(redirectHeader.length);
+  return subject.substring(redirectHeader.length);
 }
 
 function getSubjectFrancais(subject: string) {
-  const redirectHeader = "[REDIRECT:] Virement INTERAC"
-  if (!subject.endsWith("vous a envoyé des fonds.") || !subject.startsWith(redirectHeader)) {
+  const redirectHeader = "virement interac"
+  const sublower = subject.toLowerCase();
+  if (!sublower.endsWith("vous a envoyé des fonds.") || !sublower.startsWith(redirectHeader)) {
     return null;
   }
-  return subject.substr(redirectHeader.length);
+  return subject.substring(redirectHeader.length);
 }
 
 function getBody(email: gmail_v1.Schema$Message) {

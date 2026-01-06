@@ -1,15 +1,9 @@
 {
-  "extends": "../tsconfig.apps.json",
+  "extends": "../../tsconfig.tests.json",
   "compilerOptions": {
-    "noEmit": true,
-    "tsBuildInfoFile": "./build/.tests.buildinfo",
-
-    // "module": "Node16",
-    // "target": "ES2017",
-    // "esModuleInterop": true,
-    // "moduleResolution": "Node",
-    // "skipLibCheck": true,
-    // "resolveJsonModule": true,
+    "lib": ["es2023"],
+    "baseUrl": "./",
+    "allowImportingTsExtensions": true,
   },
-  "include": ["./*.cts", "./*.cjs", "**/*.test.*", "**/*.d.ts"],
+  "include": ["**/*.test.*", "**/*.d.ts"],
 }

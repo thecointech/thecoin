@@ -1,13 +1,12 @@
-import hre from 'hardhat';
-import { getDeploySigner } from '@thecointech/contract-tools/deploySigner';
-import { getContract } from '../src';
-import { getContract as getOracle } from '@thecointech/contract-oracle';
+import { getSigner } from '@thecointech/signers';
+import { ContractShockAbsorber } from '../src';
+import { ContractOracle } from '@thecointech/contract-oracle';
 
-const brokerCAD = await getDeploySigner("BrokerCAD");
-const shockAbsorber = await getContract();
-const contract = await getOracle();
+const brokerCAD = await getSigner("BrokerCAD");
+const shockAbsorber = await ContractShockAbsorber.get();
+const oracle = await ContractOracle.get();
 
-const r = await shockAbsorber.connect(brokerCAD).setOracle(contract.address);
+const r = await shockAbsorber.connect(brokerCAD).setOracle(oracle);
 console.log(`Updated Oracle: ${r.hash}`);
 await r.wait(2);
 console.log("Complete")

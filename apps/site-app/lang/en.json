@@ -211,6 +211,10 @@
     "defaultMessage": "Contact Us",
     "description": "app.accounts.sidebar.contact: Title for the Contact Us entry in the menu"
   },
+  "M5bAJz": {
+    "defaultMessage": "The transaction is in the queue, but processing it is taking longer than usual. Please be patient, the order will be processed shortly.",
+    "description": "app.accounts.redeem.timeout: Timeout for the make a payment page / etransfer tab"
+  },
   "MXcpIC": {
     "defaultMessage": "Payee account number",
     "description": "app.accounts.billPayments.form.payeeAccount: Label for the form the make a payment page / bill payment tab"
@@ -358,6 +362,10 @@
   "Z2m9as": {
     "defaultMessage": "Google Drive",
     "description": "Label for Google Drive in the tab Storage options in the setting page in the app"
+  },
+  "Z9xEDo": {
+    "defaultMessage": "The transaction is in the queue, but processing it is taking longer than usual. Please be patient, the order will be processed shortly.",
+    "description": "app.accounts.transfer.timeout: Direct transfer Timeout"
   },
   "ZAFu90": {
     "defaultMessage": "Processing Transfer out...",
@@ -585,6 +593,10 @@
   "yXYLrz": {
     "defaultMessage": "Base",
     "description": "app.historygraph.base: HistoryGraph tooltip - Cost Basis"
+  },
+  "yXoiCO": {
+    "defaultMessage": "The transaction is in the queue, but processing it is taking longer than usual. Please be patient, the order will be processed shortly.",
+    "description": "app.accounts.billpayment.timeout: Timeout for billpayment"
   },
   "yfANOQ": {
     "defaultMessage": "Help",

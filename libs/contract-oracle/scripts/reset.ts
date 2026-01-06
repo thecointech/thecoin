@@ -1,20 +1,22 @@
 import { getSigner } from '@thecointech/signers';
-import { connectOracle, getContract } from '../src';
-import { GetRatesApi } from '@thecointech/apis/pricing';
-import { getOverrideFees } from '@thecointech/contract-tools/deploySigner';
-import fetch from 'node-fetch';
+import { ContractOracle } from '../src';
+import { getOverrideFees } from '@thecointech/contract-base';
+import { DateTime } from 'luxon';
 
 // ----------------------------------------------------------------
 // This simple script compares the value stored in Oracle vs
 // the value in the database.
-const signer = await getSigner("OracleUpdater");
-const oracle = await connectOracle(signer);
+const signer = await getSigner("OracleOwner");
+const oracle = await ContractOracle.connect(signer);
 
-const overrides = await getOverrideFees(oracle.provider);
-const tx = await oracle.clearAllData(overrides);
+const resetTime = DateTime.fromISO('2023-06-27T12:00:00')
+console.log("Resetting Oracle to time: ")
+
+const overrides = await getOverrideFees(oracle.runner.provider);
+const tx = await oracle.resetTo(resetTime.toMillis(), overrides);
+// const tx = await oracle.clearAllData(overrides);
 
 await tx.wait(2);
-
-const r = await fetch("http://localhost:7001/api/v1/doUpdate")
-
-console.log(r)
+console.log("Done: " + tx.hash)
+// const r = await fetch("http://localhost:7001/api/v1/doUpdate")
+// console.log(r)

@@ -1,5 +1,5 @@
 # [START app_yaml]
-runtime: nodejs16
+runtime: nodejs22
 instance_class: F1
 
 # include environment variables.

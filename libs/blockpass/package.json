@@ -1,7 +1,7 @@
 {
   "name": "@thecointech/blockpass",
   "private": true,
-  "version": "0.2.115",
+  "version": "0.5.1-test.0",
   "description": "TheCoin: Wrapper for blockpass for web",
   "type": "module",
   "keywords": [
@@ -20,7 +20,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "build": "yarn tsc --project tsconfig.build.json",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage"
   },
   "files": [
@@ -35,11 +35,10 @@
   },
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/shared": "^0.2.115"
+    "@thecointech/shared": "^0.5.1-test.0"
   },
   "devDependencies": {
-    "@thecointech/async": "^0.2.115",
-    "@thecointech/broker-cad": "^0.2.115",
-    "jest": "*"
+    "@thecointech/async": "^0.5.1-test.0",
+    "@thecointech/broker-cad": "^0.5.0"
   }
 }

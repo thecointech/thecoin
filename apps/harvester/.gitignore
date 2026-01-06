@@ -88,8 +88,9 @@ typings/
 # Electron-Forge
 out/
 
-// My stuff
-myChromeSession
-output
-temp
-config-encrypted
+# My stuff
+.cache/
+
+# VQA secrets
+vqa-secrets.json
+

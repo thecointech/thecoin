@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals'
-import { GetContract } from '@thecointech/contract-core';
+import { ContractCore } from '@thecointech/contract-core';
 import { getFirestore } from "@thecointech/firestore";
 import { init } from '@thecointech/firestore';
 import Decimal from 'decimal.js-light';
@@ -9,21 +9,12 @@ import { manualOverride, manualOverrideTransition } from './transitions/manualOv
 import type { ActionType, BuyAction } from '@thecointech/broker-db';
 import * as brokerDbTxs from '@thecointech/broker-db/transaction';
 import { makeTransition } from './makeTransition';
+import { mockError } from '@thecointech/logging/mock';
 
 jest.unstable_mockModule('@thecointech/broker-db/transaction', () => {
   // const module = await import('@thecointech/broker-db/transaction');
   return Object.keys(brokerDbTxs).reduce((acc, key) => ({ ...acc, [key]: jest.fn() }), {});
 });
-jest.unstable_mockModule('@thecointech/logging', () => ({
-  log: {
-    debug: jest.fn(),
-    info: jest.fn(),
-    trace: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-  }
-}));
-const { log } = await import('@thecointech/logging');
 const Transactions = await import('@thecointech/broker-db/transaction');
 const FSM = await import('.');
 
@@ -40,10 +31,15 @@ const noop = makeTransition("noop", async () => transitionBase('noop'));
 
 // Simulate an error occuring
 let shouldError = true;
-const maybeError = makeTransition("maybeError", async () => ({
-  ...transitionBase("maybeError"),
-  ...(shouldError ? {error: "An error occurs" } : {})
-}));
+const maybeError = makeTransition("maybeError", async () => {
+  if (shouldError) {
+    return {
+      ...transitionBase("maybeError"),
+      error: "An error occurs",
+    }
+  }
+  return transitionBase("maybeError");
+});
 
 type States = "initial"|"testError"|"error"|"complete";
 
@@ -63,7 +59,7 @@ const graph : StateGraph<States, ActionType> = {
 it("Error replay is handled appropriately", async () => {
 
   init({})
-  const contract = await GetContract();
+  const contract = await ContractCore.get();
   const processor = new FSM.StateMachineProcessor(graph, contract, null);
 
   const action: BuyAction = {
@@ -89,7 +85,7 @@ it("Error replay is handled appropriately", async () => {
       // On first run, we should stop on withCoin (it has no transitions)
     // This should result in 2 transitions.
     expect(Transactions.storeTransition).toHaveBeenCalledTimes(executedTransitions);
-    expect(log.error).toHaveBeenCalledTimes(numErrors);
+    expect(mockError).toHaveBeenCalledTimes(numErrors);
 
     const result1 = getCurrentState(container);
     expect(result1.name).toEqual(expectedState);
@@ -102,24 +98,24 @@ it("Error replay is handled appropriately", async () => {
   // The first run hits error
   await runTest('error', 2, 1);
   // Replay does the same thing
-  await runTest('error', 0, 1);
+  await runTest('error', 0, 0);
 
   // Manually push a new state onto the stack
   // This is the equivalent of storeTransition in ManualOverride.tsx
   action.history.push(manualOverrideTransition("initial"));
 
   // Same error occurs, we haven't actually fixed it.
-  await runTest('error', 2, 2);
+  await runTest('error', 2, 1);
   // Fix the error
   shouldError = false;
   // Re-running changes nothing, because all entries are replayed
-  await runTest('error', 0, 2);
+  await runTest('error', 0, 0);
 
   // Manually restart again.  This time the issue is fixed.
   action.history.push(manualOverrideTransition("initial"));
 
   // Should now complete
-  const container = await runTest('complete', 2, 2);
+  const container = await runTest('complete', 2, 0);
   // 2 failure, 1 success * 3 states === a total history of 9.
   expect(container.history.length === 9)
 })

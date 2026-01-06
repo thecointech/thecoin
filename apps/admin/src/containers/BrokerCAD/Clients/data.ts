@@ -1,7 +1,7 @@
 // import { type SelfID, getLink } from '@thecointech/idx';
 import { AccountState } from '@thecointech/account';
 import { BillAction, BuyAction, getAllActions, getAllUsers, PluginAction, SellAction } from '@thecointech/broker-db';
-import gmail, { eTransferData } from '@thecointech/tx-gmail';
+import { type eTransferData, queryETransfers } from '@thecointech/tx-gmail';
 import Decimal from 'decimal.js-light';
 
 export type UserData = {
@@ -37,7 +37,7 @@ async function getUsers(emails: eTransferData[], account: AccountState) {
 }
 
 export async function getAllUserData(account: AccountState) {
-  const etransfers = await gmail.queryETransfers();
+  const etransfers = await queryETransfers();
   // Get all users logged in the database
   const users = await getUsers(etransfers, account);
 
@@ -58,7 +58,7 @@ export async function getAllUserData(account: AccountState) {
       Sell: data.Sell[user],
       Bill: data.Bill[user],
       Plugin: [],
-      balanceCoin: new Decimal(balances[idx].toNumber()),
+      balanceCoin: new Decimal(balances[idx].toString()),
       // details: details[idx] ?? {},
     }
   ]), [] as UserData[])

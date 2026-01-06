@@ -1,6 +1,6 @@
 #
 # [START app_yaml]
-runtime: nodejs16
+runtime: nodejs22
 instance_class: F4
 
 # include secrets.

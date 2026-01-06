@@ -1,9 +1,10 @@
-import emaillist from './emails.list.json' assert {type: "json"};
-import emailget from './emails.get.json' assert {type: "json"};
-import { gmail_v1, drive_v3 } from "googleapis";
+import emaillist from './emails.list.json' with { type: "json" }
+import emailget from './emails.get.json' with { type: "json" }
+import type { gmail_v1, drive_v3 } from "googleapis";
 import { wallets } from '../wallets';
+import os from 'node:os';
+import fs from 'node:fs';
 
-// file deepcode ignore no-namespace: <comment the reason here>
 export namespace google {
 
 
@@ -13,7 +14,6 @@ export namespace google {
       setCredentials = () => {
         // Ignore input, just set default
         this.credentials = {
-          //  deepcode ignore HardcodedNonCryptoSecret: Not A Secret
           access_token: "TEST_TOKEN"
         }
       }
@@ -30,6 +30,13 @@ export namespace google {
   export function drive() {
     return new DriveMocked();
   }
+
+  const emailCacheFile = os.tmpdir() + "/devlive-email.json";
+  const getDevLiveEmails = () => (
+    fs.existsSync(emailCacheFile)
+      ? JSON.parse(fs.readFileSync(emailCacheFile, "utf8"))
+      : []
+  )
 
   class GmailMocked {
     users = {
@@ -58,20 +65,33 @@ export namespace google {
 
       messages: {
         async list() {
-          return emaillist;
+          return (process.env.CONFIG_NAME === "devlive")
+            ? {
+              data: {
+                messages: getDevLiveEmails()
+              }
+            }
+            : emaillist;
         },
 
         async get(opts: { id: string }) {
-          return emailget.find(e => e.data.id === opts.id)
+          return (process.env.CONFIG_NAME === "devlive")
+            ? { data: getDevLiveEmails().find((e: any) => e.id === opts.id) }
+            : emailget.find(e => e.data.id === opts.id);
         },
 
         async modify(opts: gmail_v1.Params$Resource$Users$Messages$Modify) {
+          // Not yet supported in dev-live
           const labelIds = opts.requestBody?.addLabelIds as string[]
           emailget
             .find(e => e.data.id === opts.id)
             ?.data.labelIds.push(...labelIds)
         }
-      }
+      },
+
+      getProfile: () => ({ data: {
+        emailAddress: `autodeposit@${process.env.TX_GMAIL_DEPOSIT_DOMAIN}` }
+      }),
     }
   }
 

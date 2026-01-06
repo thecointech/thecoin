@@ -1,11 +1,10 @@
 import Mailjet from "node-mailjet";
 import { log } from '@thecointech/logging';
+import { getSecret } from '@thecointech/secrets';
 
 async function getClient() {
-  const key = process.env.MAILJET_API_KEY;
-  const secret = process.env.MAILJET_API_SECRET;
-  if (!key || !secret)
-    throw new Error('Cannot create MailJet without setting MAILJET_API_KEY/MAILJET_API_SECRET')
+  const key = await getSecret('MailjetApiKey');
+  const secret = await getSecret('MailjetApiSecret');
   return new Mailjet({ apiKey: key, apiSecret: secret});
 }
 
@@ -14,7 +13,12 @@ type MailjetResponse = {
   Messages: [ { Status: "success"|"error" } ]
 }
 
-export async function SendMail(subject: string, message: string, toEmail?: string) {
+const getSubject = (subject: string, markEnvironment: boolean) =>
+  markEnvironment
+    ? `${process.env.CONFIG_NAME}: ${subject}`
+    : subject
+
+export async function SendMail(subject: string, message: string, toEmail?: string, markEnvironment=true) {
 	const options = {
 		Messages: [
 			{
@@ -27,7 +31,7 @@ export async function SendMail(subject: string, message: string, toEmail?: strin
 						Email: toEmail ?? "stephen.taylor.dev@gmail.com",
 					},
 				],
-				Subject: `${process.env.CONFIG_NAME}: ${subject}`,
+				Subject: getSubject(subject, markEnvironment),
 				TextPart: message
 			},
 		],
@@ -36,8 +40,11 @@ export async function SendMail(subject: string, message: string, toEmail?: strin
   const mj = await getClient();
 	const response = await mj.post('send', { version: 'v3.1' }).request<MailjetResponse>(options);
 
-	// Render the index route on success
-	return response.body.Messages.every(m => m.Status == "success");
+  const failed = response.body.Messages.filter(m => m.Status != "success");
+	failed.forEach(m => {
+    log.error(`Failed sending email: ${JSON.stringify(m)}`)
+  })
+	return failed.length == 0;
 }
 
 export async function SendTemplate(to: string, template: number, variables: object)

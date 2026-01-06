@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
-import { balanceChange, SimulationState } from './state';
-import { straddlesMonth, straddlesYear } from './time';
-import { grossFiat, SimulationParameters } from '.';
+import { balanceChange, grossFiat, SimulationState } from './state';
+import { straddlesMonth, weekContainedAnniversary } from './time';
+import type { SimulationParameters } from './params';
 import { DMin, zero } from './sim.decimal';
 
 type CreditParams = SimulationParameters['credit'];
@@ -32,7 +32,7 @@ export function updateCreditBalances(params: CreditParams, start: DateTime, stat
 // Pay out yearly cash-back
 export function payOutCashback(start: DateTime, state: SimulationState) {
   // If this past week contained the anniversary, we transfer cashback to TheCoin
-  if (straddlesYear(start, state.date)) {
+  if (weekContainedAnniversary(start, state.date)) {
     balanceChange(state, state.credit.cashBackEarned);
     state.credit.cashBackEarned = zero;
   }
@@ -61,7 +61,7 @@ function updateCreditSpending(params: CreditParams, start: DateTime, { credit, d
   // If this week straddled a month ending, add month spending
   if (straddlesMonth(date)) spending = spending.add(params.monthly);
   // If this day straddled an end-of-year, add annual spending
-  if (straddlesYear(start, date)) spending = spending.add(params.yearly);
+  if (weekContainedAnniversary(start, date)) spending = spending.add(params.yearly);
   credit.cashBackEarned = credit.cashBackEarned.plus(spending.mul(params.cashBackRate));
   credit.current = credit.current.add(spending);
 }

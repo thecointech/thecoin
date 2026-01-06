@@ -1,43 +1,30 @@
+import { HarvestStep, HarvestSteps, HarvestStepType } from "@thecointech/store-harvester";
 
+export type * from "@thecointech/store-harvester";
 
-export type DaysArray = [boolean, boolean, boolean, boolean, boolean, boolean, boolean];
-export const defaultDays: DaysArray = [
-  false,
-  true,   // Tuesday
-  false,
-  false,
-  true,   // Friday
-  false,
-  false,
+// Until we have a proper graph, just explicitly set an order
+export const HarvestStepOrder = [
+  HarvestStepType.ClearPendingVisa,
+  HarvestStepType.EnsureHarvesterBalance,
+  HarvestStepType.ProcessPercent,
+  HarvestStepType.TransferVisaOwing,
+  HarvestStepType.RoundUp,
+  HarvestStepType.TransferEverything,
+  HarvestStepType.TopUp,
+  HarvestStepType.ChequeMinimum,
+  HarvestStepType.TransferLimit,
+  HarvestStepType.SendETransfer,
+  HarvestStepType.PayVisa,
+  HarvestStepType.Heartbeat,
 ]
 
-export enum HarvestStepType {
-  // ReadVisaOwing,
-  TransferVisaOwing,
-  RoundUp,
-  TransferEverything,
-  TopUp,
-  TransferLimit,
-  SendETransfer,
-  PayVisa,
-  Heartbeat,
+export function addStep(step: HarvestStep, steps: HarvestSteps) {
+  return [
+    ...removeStep(step.type, steps),
+    step,
+  ].sort((l, r) => HarvestStepOrder.indexOf(l.type) - HarvestStepOrder.indexOf(r.type));
 }
 
-export type HarvestArgs = Record<string, string|number>
-
-export type HarvestStep = {
-  type: HarvestStepType,
-  args?: HarvestArgs,
-}
-
-export type HarvestConfig = {
-  daysToRun: DaysArray,
-  steps: Array<HarvestStep|null>,
-    // HarvestStep|null, // RoundUp,
-    // HarvestStep|null, // TransferEverything,
-    // HarvestStep|null, // TopUp,
-    // HarvestStep|null, // TransferLimit,
-    // HarvestStep|null, // SendETransfer
-    // HarvestStep|null, // PayVisa
-  // ]
+export function removeStep (type: HarvestStepType, steps: HarvestSteps) {
+  return steps.filter(s => s.type !== type);
 }

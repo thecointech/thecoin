@@ -1,13 +1,10 @@
-import { Contract } from '@ethersproject/contracts';
-import { RoundNumber } from './types';
-import RoundNumberSpec from './contracts/contracts/RoundNumber.sol/RoundNumber.json' assert {type: "json"};
-import { getProvider } from '@thecointech/ethers-provider';
+import { type RoundNumber, RoundNumber__factory } from './codegen';
+import { defineContractSingleton } from '@thecointech/contract-base';
 
-const getAbi = () => RoundNumberSpec.abi;
 const getContractAddress = async () => {
 
   const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME;
-  const deployment = await import(`./deployed/${config_env}-polygon.json`, { assert: { type: 'json' } });
+  const deployment = await import(`./deployed/${config_env}-polygon.json`, { with: { type: 'json' } });
 
   if (!deployment) {
     throw new Error('Cannot create contract: missing deployment');
@@ -15,20 +12,9 @@ const getContractAddress = async () => {
   return deployment.default.contract;
 }
 
-const buildContract = async () =>
-  new Contract(
-    await getContractAddress(),
-    getAbi(),
-    getProvider()
-  ) as RoundNumber
 
-declare module globalThis {
-  let __roundnumber: RoundNumber|undefined;
-}
-
-export async function getContract() : Promise<RoundNumber> {
-  if (!globalThis.__roundnumber) {
-    globalThis.__roundnumber= await buildContract();
-  }
-  return globalThis.__roundnumber;
-}
+export const ContractRoundNumber = defineContractSingleton<RoundNumber>(
+  '__roundnumber',
+  getContractAddress,
+  RoundNumber__factory
+);

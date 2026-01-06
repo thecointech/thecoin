@@ -1,12 +1,13 @@
 import { DIDSession } from 'did-session'
 import { EthereumNodeAuth, getAccountId } from '@didtools/pkh-ethereum'
 import { ComposeClient }from '@composedb/client'
-import { Wallet } from "@ethersproject/wallet";
+import { Wallet } from "ethers";
 import { getDefintions } from '../src/definition';
-import { JsonRpcProvider } from "@ethersproject/providers";
+import { JsonRpcProvider } from "ethers";
 import { Ethers3Web3Converter } from '../src/ethers2web3';
 import { setEncrypted, loadEncrypted } from '../src/encrypted';
 import type { JWE } from 'did-jwt';
+import { getSecret } from '@thecointech/secrets'
 const provider = new JsonRpcProvider("http://127.0.0.1:9545");
 
 import { DID } from 'dids'
@@ -15,7 +16,7 @@ import { Ed25519Provider } from 'key-did-provider-ed25519'
 import { fromString } from 'uint8arrays/from-string'
 
 // can it be read by another DID
-const privateKeyHex = process.env.CERAMIC_SEED!;
+const privateKeyHex = await getSecret("CeramicSeed");
 const privateKey = fromString(privateKeyHex, 'base16')
 const otherdid = new DID({
   resolver: getResolver(),

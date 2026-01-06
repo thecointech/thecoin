@@ -1,35 +1,34 @@
-import { getContract } from '../src';
+import { ContractOracle } from '../src';
 import { DateTime, Duration } from 'luxon';
 import { log } from '@thecointech/logging';
 import { fetchRate, weBuyAt, weSellAt } from '@thecointech/fx-rates';
 import { getFirestore, Timestamp, init } from '@thecointech/firestore';
-import { BigNumber } from 'ethers';
 import { updateRates } from '../src/update';
 
 // ----------------------------------------------------------------
 // This simple script compares the value stored in Oracle vs
 // the value in the database.
-const oracle = await getContract();
+const oracle = await ContractOracle.get();
 
 // From start till now, verify that we have (mostly) the same values
-const INITIAL_TIMESTAMP = (await oracle.INITIAL_TIMESTAMP()).toNumber();
-const BLOCK_TIME = (await oracle.BLOCK_TIME()).toNumber();
-const offset = (await oracle.getOffset(INITIAL_TIMESTAMP)).toNumber();
-const start = DateTime.fromMillis(INITIAL_TIMESTAMP);
-const factor = Math.pow(10, await oracle.decimals());
+const INITIAL_TIMESTAMP = (await oracle.INITIAL_TIMESTAMP());
+const BLOCK_TIME = (await oracle.BLOCK_TIME());
+const offset = (await oracle.getOffset(INITIAL_TIMESTAMP));
+const start = DateTime.fromMillis(Number(INITIAL_TIMESTAMP));
+const factor = Math.pow(10, Number(await oracle.decimals()));
 log.debug("Initial timestamp: " + start.toLocaleString());
 const now = DateTime.now();
-const currOffset = (await oracle.getOffset(now.toMillis())).toNumber();
+const currOffset = (await oracle.getOffset(now.toMillis()));
 
 const latestRound = await oracle.latestRoundData();
-const blockIdx = latestRound[0].toNumber();
+const blockIdx = latestRound[0];
 
-const pushValidUntil = INITIAL_TIMESTAMP + (4 + blockIdx) * BLOCK_TIME;
-const maxValidUntil = 1690399925000 + (BLOCK_TIME);
+const pushValidUntil = INITIAL_TIMESTAMP + (4n + blockIdx) * BLOCK_TIME;
+const maxValidUntil = 1690399925000n + BLOCK_TIME;
 if (!(pushValidUntil <= maxValidUntil)) console.log("Too many updates")
 let orates = [];
 for (let i = 0; i < 20; i++) {
-  const rate = (await oracle.getRoundData(i))[1].toNumber();
+  const rate = (await oracle.getRoundData(i))[1];
   orates.push(rate);
 }
 
@@ -42,8 +41,8 @@ const MockOracle = {
   decimals: oracle.decimals,
   validUntil:  oracle.INITIAL_TIMESTAMP,
   BLOCK_TIME:  oracle.BLOCK_TIME,
-  lastOffsetFrom:  () => BigNumber.from(0),
-  getOffset: () => BigNumber.from(0),
+  lastOffsetFrom:  () => 0n,
+  getOffset: () => 0n,
   bulkUpdate: (r: number[]) => {
     rates.push(...r);
     return {
@@ -101,7 +100,7 @@ let firstInvalidIndex = -1;
 
 const brates = [];
 let t = start;
-let idx = 0;
+let idx = 0n;
 for (let t = start; t < now; ) {
   const db = await fetchRate(t.toJSDate());
 // for (let db of coins) {
@@ -116,23 +115,23 @@ for (let t = start; t < now; ) {
   const ooffset = await oracle.getOffset(t.toMillis());
   const bc = await oracle.getRoundFromTimestamp(t.toMillis());
 
-  brates.push(bc.toNumber());
+  brates.push(bc);
 
-  if (oidx.toNumber() != idx) {
+  if (oidx != idx) {
     console.error("Block Index is not sequential");
   }
   idx++;
 
   // Are they the same?
   const rate = db["124"] * (db.buy + db.sell) / 2;
-  const avgm = Math.round(rate * factor);
-  if (bc.toNumber() != avgm) {
+  const avgm = BigInt(Math.round(rate * factor));
+  if (bc != avgm) {
     // log.error(
-    //   { blockchain: bc.toNumber(), database: avgm },
+    //   { blockchain: bc, database: avgm },
     //   'Error validating Oracle: {blockchain} != {database}'
     // );
     if (firstInvalidIndex < 0) {
-      firstInvalidIndex = t.diff(start).as("milliseconds") / BLOCK_TIME;
+      firstInvalidIndex = t.diff(start).as("milliseconds") / Number(BLOCK_TIME);
     }
   }
   else {

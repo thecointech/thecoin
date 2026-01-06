@@ -3,6 +3,8 @@
  * Do not make direct changes to the file.
  */
 
+import type { DateTime } from "luxon";
+
 export interface SignedMessage {
   message: string;
   signature: string;
@@ -108,3 +110,22 @@ export type RemovePluginRequest = {
   signedAt: DateTime;
   signature: string;
 }
+
+export type ConnectionValues = {
+  state: string;
+  siteOrigin: string;
+  timestamp: string;
+  address: string;
+  name: string;
+  walletFile: string;
+  phrase: string;
+  path: string;
+  locale: string;
+}
+
+
+export type Value<T, AllowedPrimitives = any> = T extends AllowedPrimitives ? T : RecursivePartial<T, AllowedPrimitives>;
+export type RecursivePartial<T, AllowedPrimitives = any> = {
+  [P in keyof T]?:
+  T[P] extends Array<infer U> ? Array<Value<U, AllowedPrimitives>> : Value<T[P], AllowedPrimitives>;
+};

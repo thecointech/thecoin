@@ -1,8 +1,9 @@
 import { BuildVerifiedXfer } from "./VerifiedTransfer";
-import { encrypt, GetHash } from "./Encrypt";
+import { encrypt } from "./Encrypt";
+import { GetHash } from "./Decrypt";
 import { sign } from "./SignedMessages";
-import { verifyMessage } from '@ethersproject/wallet';
-import type { Signer } from "@ethersproject/abstract-signer";
+import { verifyMessage } from 'ethers';
+import type { Signer } from "ethers";
 import type { BillPayeePacket, ETransferPacket, CertifiedTransfer, UberTransferAction } from "@thecointech/types";
 
 // TODO: Propage this throught code base (not yet done)

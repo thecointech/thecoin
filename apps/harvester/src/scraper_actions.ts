@@ -1,8 +1,13 @@
-import { Mnemonic } from '@ethersproject/hdnode';
-import { HarvestConfig } from './types';
-import type {ActionTypes, ValueResult, ValueType} from "./scraper/types";
+import type { HarvestConfig } from './types';
+import type { ValueResult, ValueType} from "@thecointech/scraper-types";
 import type { CreditDetails } from './Harvester/types';
-import type { StoredData } from './Harvester/db_translate';
+import type { CoinAccount, CoinAccountDetails, StoredData, ActionType } from '@thecointech/store-harvester';
+import type { BackgroundTaskCallback } from './BackgroundTask/types';
+import type { OptionPacket, QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
+import type { AutoConfigParams } from './Harvester/agent';
+import type { BankConnectMap } from './Harvester/events';
+import type { WebsiteEndpoints } from './openExternal';
+import type { RendererBankType } from './Agent/state/types';
 
 export type Result<T> = {
   error?: string;
@@ -10,22 +15,46 @@ export type Result<T> = {
 }
 
 export type ScraperBridgeApi = {
+  hasInstalledBrowser(): Promise<Result<boolean>>;
+  hasCompatibleBrowser(): Promise<Result<boolean>>;
+
+  // Trigger download of browser/similarity pipeline
+  downloadLibraries(): Promise<Result<boolean>>;
+
+  // Generic update pathway for all long-running actions
+  onBackgroundTaskProgress: (progress: BackgroundTaskCallback) => void;
+
+  // Run the automatic configurator for the given action on the appropriate url
+  autoProcess: (params: AutoConfigParams) => Promise<Result<boolean>>;
+
+  // Validate an action
+  validateAction(actionName: ActionType, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,
+
+  // Refresh the profile, deletes existing and copies
+  // users system profile (if present).
+  profileRefresh: () => Promise<Result<boolean>>,
+  // Reset 2FA without doing a full banking setup
+  // Useful if your chequing acc loses it's 2FA token
+  // but you don't want to send unnecessary etransfers
+  twofaRefresh: (actionName: RendererBankType) => Promise<Result<boolean>>,
+
+  onAskQuestion: (callback: (question: QuestionPacket|OptionPacket) => void) => () => void;
+  replyQuestion: (response: ResponsePacket) => Promise<Result<boolean>>;
+
   // Declare a `readFile` function that will return a promise. This promise
   // will contain the data of the file read from the main process.
-  warmup: (url: string) => Promise<Result<boolean>>,
+  warmup: (url: string) => Promise<Result<boolean>>;
 
-  start: (actionName: ActionTypes, url: string, dynamicValues?: Record<string, string>) => Promise<Result<boolean>>,
+  start: (actionName: ActionType, url: string, dynamicInputs?: string[]) => Promise<Result<boolean>>;
 
   learnValue: (valueName: string, valueType: ValueType) => Promise<Result<ValueResult>>,
+  setDynamicInput: (name: string, value: string) => Promise<Result<string>>,
 
   // Finish Recording
-  finishAction: (actionName: ActionTypes) => Promise<Result<boolean>>,
+  finishAction: () => Promise<Result<boolean>>,
 
-  // A test of an action
-  testAction(actionName: ActionTypes, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,
-
-  setWalletMnemomic(mnemonic: Mnemonic): Promise<Result<boolean>>,
-  getWalletAddress(): Promise<Result<string|null>>,
+  setCoinAccount(coinAccount: CoinAccount): Promise<Result<boolean>>,
+  getCoinAccountDetails(): Promise<Result<CoinAccountDetails|null>>,
 
   hasCreditDetails(): Promise<Result<boolean>>,
   setCreditDetails(details: CreditDetails): Promise<Result<boolean>>,
@@ -33,25 +62,65 @@ export type ScraperBridgeApi = {
   getHarvestConfig(): Promise<Result<HarvestConfig|undefined>>,
   setHarvestConfig(config: HarvestConfig): Promise<Result<boolean>>,
 
-  runHarvester(): Promise<Result<void>>,
+  // Set/get the alwaysRunVisible flag
+  alwaysRunScraperVisible(visible?: boolean): Promise<Result<boolean>>,
+  // Set/get the alwaysRunLogging flag
+  alwaysRunScraperLogging(logging?: boolean): Promise<Result<boolean>>,
+  runHarvester(forceVisible?: boolean): Promise<Result<string>>,
   getCurrentState(): Promise<Result<StoredData>>,
 
+  exportResults(): Promise<Result<string>>
+  exportConfig(): Promise<Result<string>>
+
   openLogsFolder(): Promise<Result<boolean>>,
-  getArgv() : Promise<Result<string>>
+  openWebsiteUrl(type: WebsiteEndpoints): Promise<Result<boolean>>,
+  getArgv() : Promise<Result<Record<string, any>>>,
+
+  setOverrides(balance: number, pendingAmt: number|null, pendingDate: string|null|undefined): Promise<Result<boolean>>,
+
+  // Import a scraper script configuration
+  importScraperScript(config: any): Promise<Result<boolean>>,
+
+  // Get banking connection details
+  getBankConnectDetails(): Promise<Result<BankConnectMap>>,
+
+  // Lingering (systemd user background)
+  hasUserEnabledLingering(): Promise<Result<boolean>>;
+  enableLingeringForCurrentUser(): Promise<Result<{ success?: boolean; error?: string }>>;
+
+  // Wallet connect from site-app
+  loadWalletFromSite(timeoutMs?: number): Promise<Result<CoinAccountDetails>>;
+  cancelloadWalletFromSite(): Promise<Result<boolean>>;
 }
 
-
 export const actions = {
+  hasInstalledBrowser: "browser:hasInstalledBrowser",
+  hasCompatibleBrowser: "browser:hasCompatibleBrowser",
+
+  onBackgroundTaskProgress: 'scraper:onBackgroundTaskProgress',
+
+  downloadLibraries: 'scraper:downloadLibraries',
+
+  autoProcess: 'scraper:autoProcess',
+  validateAction: 'scraper:validateAction',
+
+  profileRefresh: 'scraper:profileRefresh',
+  twofaRefresh: 'scraper:twofaRefresh',
+
+  onAskQuestion: 'scraper:onAskQuestion',
+  replyQuestion: 'scraper:replyQuestion',
+
   warmup: 'scraper:warmup',
   start: 'scraper:start',
   learnValue: 'scraper:learnValue',
+  setDynamicInput: 'scraper:setDynamicInput',
   finishAction: 'scraper:finishAction',
 
-  testAction: 'scraper.testAction',
-
   // Not really scraper, but meh
-  setWalletMnemomic: 'scraper:setWalletMnemomic',
-  getWalletAddress: 'scraper:getWalletAddress',
+  setCoinAccount: 'scraper:setCoinAccount',
+  getCoinAccountDetails: 'scraper:getCoinAccountDetails',
+  hasUserEnabledLingering: 'scraper:hasUserEnabledLingering',
+  enableLingeringForCurrentUser: 'scraper:enableLingeringForCurrentUser',
 
   // fuggit
   setCreditDetails: "scraper:setCreditDetails",
@@ -60,10 +129,25 @@ export const actions = {
   getHarvestConfig: 'scraper:getHarvestConfig',
   setHarvestConfig: 'scraper:setHarvestConfig',
 
+  alwaysRunScraperVisible: 'scraper.alwaysRunScraperVisible',
+  alwaysRunScraperLogging: 'scraper.alwaysRunScraperLogging',
+
   runHarvester: 'scraper.runHarvester',
   getCurrentState: 'scraper.getCurrentState',
 
+  exportResults: 'scraper:exportResults',
+  exportConfig: 'scraper:exportConfig',
+
   openLogsFolder: 'scraper:openLogsFolder',
-  getArgv: 'scraper:getArgv'
+  openWebsiteUrl: 'scraper:openWebsiteUrl',
+  getArgv: 'scraper:getArgv',
+
+  setOverrides: 'scraper:setOverrides',
+  importScraperScript: 'scraper:importScraperScript',
+  getBankConnectDetails: 'scraper:getBankConnectDetails',
+
+  // Wallet connect from site-app
+  loadWalletFromSite: 'scraper:loadWalletFromSite',
+  cancelloadWalletFromSite: 'scraper:cancelloadWalletFromSite',
 }
 export type Action = keyof typeof actions

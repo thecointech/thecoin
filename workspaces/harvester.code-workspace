@@ -1,19 +1,42 @@
 {
 	"folders": [
 		{
+			"name": "harvester",
 			"path": "../apps/harvester"
 		},
 		{
-			"path": "../apps/broker-service"
+			"name": "store-harvester",
+			"path": "../libs/store-harvester"
 		},
 		{
-			"path": "../libs/shared"
+			"name": "scraper-agent",
+			"path": "../libs/scraper-agent"
 		},
 		{
-			"path": "../libs/contract-plugins"
+			"name": "scraper",
+			"path": "../libs/scraper"
+		},
+		{
+			"name": "scraper-archive",
+			"path": "../libs/scraper-archive"
+		},
+		{
+			"name": "vqa-service",
+			"path": "../apps/vqa-service"
+		},
+		{
+			"name": "electron-utils",
+			"path": "../libs/electron-utils"
+		},
+		{
+			"name": "testing-pages",
+			"path": "../../private-testing-pages"
 		}
 	],
 	"settings": {
-		"typescript.tsdk": "harvester\\node_modules\\typescript\\lib"
+		"typescript.tsdk": "harvester\\node_modules\\typescript\\lib",
+		"logViewer.watch": [
+			"${userHome}/AppData/Roaming/harvester/logs/harvest.log"
+		]
 	}
 }

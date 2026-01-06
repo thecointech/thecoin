@@ -1,22 +1,36 @@
 import { readFileSync } from 'fs';
 import { Erc20Provider as BaseProvider } from '../web/mocked';
-export { getProvider } from '../web/mocked';
+// export { getProvider } from '../web/mocked';
 
 // Add a local provider for jest
 export class Erc20Provider extends BaseProvider {
   async getSourceCode(name: string) {
-    const baseUrl = new URL('../../../..', import.meta.url);
+    const baseUrl = getBaseUrl()
     switch (name) {
       case "ShockAbsorber": {
-        return readFileSync(new URL("contract-plugin-shockabsorber/contracts/ShockAbsorber.sol", baseUrl), 'utf-8')
+        return readFileSync(new URL("libs/contract-plugin-shockabsorber/contracts/ShockAbsorber.sol", baseUrl), 'utf-8')
       }
       case "UberConverter": {
-        return readFileSync(new URL("contract-plugin-converter/contracts/UberConverter.sol", baseUrl), 'utf-8')
+        return readFileSync(new URL("libs/contract-plugin-converter/contracts/UberConverter.sol", baseUrl), 'utf-8')
       }
       case "RoundNumber": {
-        return readFileSync(new URL("contract-plugin-roundnumber/contracts/RoundNumber.sol", baseUrl), 'utf-8')
+        return readFileSync(new URL("libs/contract-plugin-roundnumber/contracts/RoundNumber.sol", baseUrl), 'utf-8')
       }
     }
     throw new Error(`Unknown contract: ${name}`);
   }
 }
+
+function getBaseUrl() {
+  let baseUrl = new URL(import.meta.url);
+  while (!baseUrl.pathname.toLowerCase().endsWith('ethers-provider/')) {
+    baseUrl = new URL('..', baseUrl);
+    // validity check - on windows root path is /c:/
+    if (baseUrl.pathname.length <= 4) {
+      throw new Error('Could not find ethers-provider');
+    }
+  }
+  return new URL("../..", baseUrl);
+}
+
+export const getProvider = () => Promise.resolve(new Erc20Provider())

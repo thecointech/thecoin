@@ -6,16 +6,16 @@ import { BuildUberAction } from '@thecointech/utilities/UberAction'
 import { BuildVerifiedAction } from '@thecointech/utilities/VerifiedAction'
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
-import { GetContract } from '@thecointech/contract-core';
+import { ContractCore } from '@thecointech/contract-core';
 import { createAction } from '@thecointech/broker-db';
 import { CertifiedTransfer, UberTransferAction } from '@thecointech/types';
 
 jest.useFakeTimers();
 const getSingle = jest.fn<(currency: number, timestamp: number) => Promise<any>>();
-jest.unstable_mockModule('@thecointech/pricing', () => ({
-  RatesApi: class {
-    getSingle = getSingle
-  }
+jest.unstable_mockModule('@thecointech/apis/pricing', () => ({
+  GetRatesApi: () => ({
+    getSingle,
+  })
 }))
 
 beforeEach(async () => {
@@ -60,8 +60,8 @@ it ("correctly converts UberTransfer", async () => {
   expect(postRun?.coin?.eq(0)).toBeTruthy();
   expect(postRun?.fiat?.gt(0)).toBeTruthy();
 
-  expect(getSingle).toBeCalledTimes(1);
-  expect(getSingle).toBeCalledWith(124, xferAt.toMillis());
+  expect(getSingle).toHaveBeenCalledTimes(1);
+  expect(getSingle).toHaveBeenCalledWith(124, xferAt.toMillis());
 })
 
 
@@ -81,21 +81,23 @@ it ("correctly converts CertifiedTransfer", async () => {
   const preRun = await toFiat(container);
   expect(preRun).toBeNull();
 
-  // processed next day
+  // processed next day (monday, at 9pm)
   jest.setSystemTime(now.plus({day: 1}).toJSDate());
   const postRun = await toFiat(container);
   expect(postRun?.coin?.eq(0)).toBeTruthy();
   expect(postRun?.fiat?.gt(0)).toBeTruthy();
 
-  expect(getSingle).toBeCalledTimes(1);
-  expect(getSingle).toBeCalledWith(124, now.toMillis());
+  const mondayMorning = now.plus({days: 1}).set({ hour: 9, minute: 32, second: 0 });
+  expect(getSingle).toHaveBeenCalledTimes(1);
+  expect(getSingle).toHaveBeenCalledWith(124, mondayMorning.toMillis());
 })
 
 // Data
 
-// Now is last wednesday
+// Now is 12pm sunday last sunday
+const now = DateTime.now().minus({ days: DateTime.now().weekday }).set({ hour: 12, minute: 0, second: 0 });
+
 const amount = new Decimal(100e6);
-const now = DateTime.now().minus({ days: (7 + 3 - DateTime.now().weekday) % 7 }).set({ hour: 12 });
 const signer = Wallet.createRandom();
 const instructions = {
   payee: "TestAccount",
@@ -113,7 +115,7 @@ const getContainer = async (sale: CertifiedTransfer | UberTransferAction) : Prom
   return {
     action,
     bank: {} as any,
-    contract: await GetContract(),
+    contract: await ContractCore.get(),
     history: [
       {
         name: "mocked",

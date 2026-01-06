@@ -1,0 +1,20 @@
+{
+  "name": "@thecointech/scraper-types",
+  "version": "0.5.0",
+  "private": true,
+  "type": "module",
+  "description": "Base types for scraper, moved here to avoid circular dependencies",
+  "keywords": [
+    "TheCoin",
+    "puppeteer"
+  ],
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/scraper-types"
+  },
+  "types": "src/index.ts"
+}

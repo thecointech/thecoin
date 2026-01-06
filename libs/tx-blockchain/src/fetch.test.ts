@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { loadAndMergeHistory } from "./fetch";
-import { GetContract, TheCoin } from '@thecointech/contract-core';
+import { ContractCore, TheCoin } from '@thecointech/contract-core';
 import { describe, IsManualRun } from '@thecointech/jestutils';
 import { initAllAddresses } from './setup.test';
 
@@ -24,7 +24,7 @@ describe("Fetch live data", () => {
 
   it('Can fetch transactions', async () => {
     jest.setTimeout(10 * 60 * 1000); // 10 mins to process this (todo: cache the data)
-    const contract = await GetContract();
+    const contract = await ContractCore.get();
     console.log("Loading out txs");
     await fetchAndTestBalance(contract);
   })

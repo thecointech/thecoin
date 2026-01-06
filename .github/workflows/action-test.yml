@@ -1,0 +1,53 @@
+name: Run Tests
+
+on:
+  workflow_call:
+
+env:
+  YARN_CHECKSUM_BEHAVIOR: ignore
+  YARN_ENABLE_HARDENED_MODE: 0
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - run: corepack enable
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.19'
+        cache: 'yarn'
+
+    - name: Install build dependencies
+      run: |
+        sudo apt-get update &&
+        sudo apt-get install -y libudev-dev libusb-1.0-0-dev libusb-dev
+
+    # Restore yarn cache from artifacts
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: build-artifacts
+
+    # - name: Restore yarn state
+    #   run: |
+    #     mkdir -p .yarn
+    #     mv .yarn/cache .yarn/install-state.gz .yarn/ || true
+
+    # This will be fast, using the cached dependencies
+    - name: Install dependencies
+      run: yarn install
+
+    # Force update of specific binaries that are needed
+    # - name: Force build
+    #   run: |
+    #     yarn add sharp --force
+
+    - name: Run tests
+      run: yarn test --ci
+      env:
+        JEST_CI: true
+        NODE_OPTIONS: --experimental-require-module --max_old_space_size=4096

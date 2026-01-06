@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Account } from '@thecointech/shared/containers/Account';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router';
 import { NormalizeAddress } from '@thecointech/utilities'
-import {Signer } from '@ethersproject/abstract-signer';
+import {Signer } from 'ethers';
 
 // Complete initialization of a new account
 // The address is passed in via query, and the
@@ -29,6 +29,6 @@ export const CompleteInit = ({signer, address, redirect}: Props) => {
   }, [])
 
   return isInitialized
-    ? <Redirect to={redirect} />
+    ? <Navigate to={redirect} />
     : <div>Completing initialization</div>
 }

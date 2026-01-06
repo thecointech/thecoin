@@ -3,6 +3,6 @@ module.exports = {
   ...defaults,
   setupFiles: [
     ...defaults.setupFiles,
-    "./jest.prodenv.cjs"
+    __dirname + "/jest.prodenv.cjs"
   ]
 }

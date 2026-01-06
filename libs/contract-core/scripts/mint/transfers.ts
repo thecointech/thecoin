@@ -1,8 +1,7 @@
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
 import { getGasPrice } from './pricing';
-import { GetContract } from '../../src';
-import { getProvider } from '@thecointech/ethers-provider/Erc20Provider';
+import { ContractCore } from '../../src';
 import { getContract } from './contract';
 import type { Decimal } from 'decimal.js-light';
 import { loadAndMergeHistory } from '@thecointech/tx-blockchain';
@@ -16,7 +15,7 @@ export async function mintCoins(value: Decimal, to: string, date: DateTime) {
     return hasHappened.txHash;
 
   const gasPrice = await getGasPrice();
-  const mtCore = await getContract("Minter");
+  const { tcCore: mtCore } = await getContract("Minter");
 
   log.trace(`Begin Mint: ${value.toString()}`);
   const waiter = await mtCore.mintCoins(value.toNumber(), to, date.toMillis(), gasPrice);
@@ -32,7 +31,7 @@ export async function burnCoins(value: Decimal, date: DateTime) {
     return hasHappened.txHash;
 
   const gasPrice = await getGasPrice();
-  const tcCore = await getContract("TheCoin");
+  const { tcCore } = await getContract("TheCoin");
 
   log.trace(`Begin Burn: ${value.toString()}`);
   const waiter = await tcCore.burnCoins(value.toNumber(), date.toMillis(), gasPrice);
@@ -48,7 +47,7 @@ export async function runCloneTransfer(from: string, to: string, value: number, 
     return hasHappened.txHash;
 
   const gasPrice = await getGasPrice();
-  const xaCore = await getContract("BrokerTransferAssistant");
+  const { tcCore: xaCore } = await getContract("BrokerTransferAssistant");
 
   log.trace(`Begin Clone: ${value.toString()}`);
   const waiter = await xaCore.runCloneTransfer(from, to, value, fee, timestamp.toMillis(), gasPrice);
@@ -59,7 +58,7 @@ export async function runCloneTransfer(from: string, to: string, value: number, 
 }
 
 async function hasAlreadyHappened(from: string, to: string, value: number, date: DateTime) {
-  const contract = await GetContract();
+  const contract = await ContractCore.get();
   const history = await loadAndMergeHistory(0, contract, from);
   const fromn = NormalizeAddress(from);
   const ton = NormalizeAddress(to);

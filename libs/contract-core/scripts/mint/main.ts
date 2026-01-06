@@ -1,4 +1,4 @@
-import data from './mint.json' assert {type: "json"};
+import data from './mint.json' with { type: "json" }
 import { DateTime, Settings } from 'luxon';
 import Decimal from 'decimal.js-light';
 import { processItems } from './process';
@@ -22,14 +22,14 @@ export async function ensureAddresses() {
 async function ensureBalance() {
   if (process.env.CONFIG_NAME == "devlive") {
     const clientAddress = data[0].originator;
-    const mtCore = await getContract("Minter");
-    if ((await mtCore.balanceOf(clientAddress)).gt(0))
+    const { tcCore: mtCore } = await getContract("Minter");
+    if ((await mtCore.balanceOf(clientAddress)) > 0n)
       return;
 
     log.info("Seeding devlive accounts");
     const v = 5367298488 * 4;
-    const tcCore = await getContract("TheCoin");
-    const tcAddress = await tcCore.signer.getAddress();
+    const { tcCore, signer } = await getContract("TheCoin");
+    const tcAddress = await signer.getAddress();
     const timestamp = DateTime.fromSQL("2017-01-01").toMillis();
     await mtCore.mintCoins(v, tcAddress, timestamp);
     await tcCore.runCloneTransfer(tcAddress, clientAddress, v, 0, timestamp);

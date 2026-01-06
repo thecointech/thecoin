@@ -13,6 +13,7 @@ type States =
   "tcWaiting" |
   "tcResult" |
   "error" |
+  "cancelled" |
   "complete";
 //"refunding" |
 //"refundReady";
@@ -37,6 +38,7 @@ export const etransfer : StateGraph<States, "Buy"> = {
     next: transitionTo<States, "Buy">(deposit.labelEmailDeposited, "deposited"),
   },
   deposited: {
+    onError: transitionTo<States>(core.requestManual, "error"),
     next: transitionTo<States, "Buy">(core.toCoin, "converted"),
   },
 
@@ -67,6 +69,9 @@ export const etransfer : StateGraph<States, "Buy"> = {
   // },
   error: {
     next: core.manualOverride,
+  },
+  cancelled: {
+    next: transitionTo<States>(core.markComplete, 'complete'),
   },
   complete: null
 }

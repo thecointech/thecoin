@@ -5,7 +5,7 @@ import { DualFxInput } from '@thecointech/shared/components/DualFxInput';
 import { UxAddress } from '@thecointech/shared/components/UX/Address';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
-import type { ChangeCB } from '@thecointech/shared/components/UX/types';
+import type { ChangeCB } from '@thecointech/shared/components/UX';
 import type { AccountState } from '@thecointech/account';
 import type { MessageWithValues } from '@thecointech/shared/types';
 
@@ -15,6 +15,7 @@ type VisualProps={
   errorHidden: boolean,
   successMessage: MessageDescriptor,
   successHidden: boolean,
+  infoMessage?: MessageDescriptor,
 
   description:MessageDescriptor,
   onValueChange: (value: number) => void,
@@ -56,6 +57,13 @@ export const TransferWidget = (props: VisualProps) => {
         <Message hidden={props.errorHidden} negative>
           <FormattedMessage {...props.errorMessage} />
         </Message>
+        {
+          props.infoMessage &&
+          <Message>
+            <FormattedMessage {...props.infoMessage} />
+          </Message>
+        }
+
 
         <DualFxInput
           onChange={props.onValueChange}

@@ -1,18 +1,16 @@
-import { Contract } from '@ethersproject/contracts';
-import { TheGreenNFT } from '.';
 import { getProvider, Network } from '@thecointech/ethers-provider';
-import TheGreenNFT1Spec from './contracts/contracts/ethereum/TheGreenNFTL1.sol/TheGreenNFTL1.json' assert {type: "json"};
-import TheGreenNFT2Spec from './contracts/contracts/polygon/TheGreenNFTL2.sol/TheGreenNFTL2.json' assert {type: "json"};
-
-const getAbi = (network: Network) => {
-  return network == "POLYGON"
-    ? TheGreenNFT2Spec.abi
-    : TheGreenNFT1Spec.abi;
-}
+import { TheGreenNFTL2, TheGreenNFTL2__factory } from './codegen';
+import { defineContractBaseSingleton } from '@thecointech/contract-base';
+import type { Provider } from 'ethers';
+// const getAbi = (network: Network) => {
+//   return network == "POLYGON"
+//     ? TheGreenNFT2Spec.abi
+//     : TheGreenNFT1Spec.abi;
+// }
 
 const getContractAddress = async (network: Network) => {
   const config_env = process.env.CONFIG_ENV ?? process.env.CONFIG_NAME
-  const deployment = await import(`./deployed/${config_env}-${network.toLowerCase()}.json`, { assert: { type: 'json' } });
+  const deployment = await import(`./deployed/${config_env}-${network.toLowerCase()}.json`, { with: { type: 'json' } });
 
   if (!deployment) {
     throw new Error('Cannot create contract: missing deployment');
@@ -20,18 +18,9 @@ const getContractAddress = async (network: Network) => {
   return deployment.default.contract;
 }
 
-const buildContract = async (network: Network) =>
-  new Contract(
+export const ContractNFT = defineContractBaseSingleton<TheGreenNFTL2, [Network?, Provider?]>('__nft', async (network="POLYGON", provider) => {
+  return TheGreenNFTL2__factory.connect(
     await getContractAddress(network),
-    getAbi(network),
-    getProvider(),
-  ) as TheGreenNFT
-
-declare module globalThis {
-  let __contractNFT: TheGreenNFT | undefined;
-}
-
-export async function getContract(network: Network = "POLYGON"): Promise<TheGreenNFT> {
-  globalThis.__contractNFT = globalThis.__contractNFT ?? await buildContract(network);
-  return globalThis.__contractNFT!;
-}
+    provider ?? await getProvider()
+  )
+});

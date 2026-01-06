@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/logging",
-  "version": "0.2.115",
+  "version": "0.5.1-test.0",
   "description": "The Coin: Common logging setup",
   "type": "module",
   "keywords": [
@@ -19,30 +19,44 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-p build:*",
-    "_build:cjs": "yarn tsc --project tsconfig.build.cjs.json",
-    "build:mjs": "yarn tsc --project tsconfig.build.mjs.json",
-    "clean": "rimraf ./build && rimraf ./coverage"
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
+    "build": "run -T tsc -b",
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage",
+    "test": "run :jest"
   },
   "files": [
     "build/**/*"
   ],
   "exports": {
     ".": {
-      "node": "./build/mjs/log_node.js",
-      "default": "./build/mjs/log_browser.js"
+      "test": "./mock/index.ts",
+      "node": "./build/log_node.js",
+      "gcloud": "./build/gcloud.js",
+      "default": "./build/log_browser.js"
+    },
+    "./mock": {
+      "test": "./mock/index.ts"
     }
   },
-  "types": "./build/mjs/log_browser.d.ts",
+  "types": "./build/log_browser.d.ts",
+  "typesVersions": {
+    "*": {
+      "mock": [
+        "./mock/index.ts"
+      ]
+    }
+  },
   "dependencies": {
+    "@google-cloud/logging-bunyan": "^5.1.0",
     "browser-bunyan": "^1.6.3",
     "bunyan": "^1.8.13",
     "bunyan-debug-stream": "^2.0.0",
     "bunyan-seq": "^1.0.0"
   },
   "devDependencies": {
+    "@thecointech/jestutils": "^0.5.1-test.0",
+    "@thecointech/setenv": "^0.5.1-test.0",
     "@types/bunyan": "^1.8.6"
   },
-  "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
+  "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

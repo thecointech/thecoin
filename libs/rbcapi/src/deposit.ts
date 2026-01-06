@@ -1,13 +1,15 @@
 import { DepositResult, ETransferErrorCode } from "@thecointech/bank-interface";
 import { ApiAction } from "./action";
 import { Page } from "puppeteer";
+import { log } from "@thecointech/logging";
 
 export async function depositETransfer(prefix: string, url: string, code: string, progressCb: (v: string) => void): Promise < DepositResult > {
 	try {
 		return await completeDeposit(prefix, url, code, progressCb);
 	}
-  catch(e) {
-		return getErrorResult(JSON.stringify(e))
+  catch(e: unknown) {
+    log.error(e, "Error depositing eTransfer");
+		return getErrorResult(e)
 	}
 }
 
@@ -74,10 +76,10 @@ async function completeDeposit(prefix: string, url: string, code: string, progre
 
 //////////////////////////////////////////////////////////////////////////
 
-async function findConfirmationNumber(page: Page)
+export async function findConfirmationNumber(page: Page)
 {
   const xpath = `//TD[contains(text(),"Confirmation Number")]/following-sibling::td`;
-  const confirmationElement = await page.$x(xpath);
+  const confirmationElement = await page.$$(`::-p-xpath(${xpath})`)
   const elements = confirmationElement.map(async ce => await page.evaluate(el => el.textContent, ce) as string);
   const contents = await Promise.all(elements);
   for (const txt of contents) {
@@ -97,8 +99,8 @@ async function findErrorResult(page: Page) {
   return getErrorResult(str);
 }
 
-function getErrorResult(mssg: string): DepositResult {
-  const match = mssg.match(/^(.+)\(([0-9]+)\)\s*$/);
+function getErrorResult(e: unknown): DepositResult {
+  const match = JSON.stringify(e).match(/^(.+)\(([0-9]+)\)\s*$/);
   if (match) {
     return {
       message: match[1],
@@ -106,8 +108,14 @@ function getErrorResult(mssg: string): DepositResult {
     }
   }
 
+  else if (e instanceof Error) {
+    return {
+      message: e.message,
+      code: ETransferErrorCode.UnknownError
+    }
+  }
   return {
-    message: ` Unknown Error: ${mssg}`,
+    message: ` Unknown Error: ${e}`,
     code: ETransferErrorCode.UnknownError
   }
 }

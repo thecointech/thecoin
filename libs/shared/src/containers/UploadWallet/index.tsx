@@ -5,7 +5,7 @@ import styles from './styles.module.less';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import {useDropzone, FileRejection} from 'react-dropzone';
 import { log } from '@thecointech/logging';
-import { Wallet } from '@ethersproject/wallet';
+import { Wallet } from 'ethers';
 
 const translate = defineMessages({
   aboveTheTitle: {
@@ -42,13 +42,13 @@ export const UploadWallet = (props: Props) => {
     getInputProps,
     isDragActive,
     fileRejections,
-  } = useDropzone({accept: '.json'});
+  } = useDropzone({accept: { 'application/json': ['.json'] }});
 
   // Alert if drag 'n drop has new invalid file
   const [rejected, setRejected] = React.useState<FileRejection[]>([]);
   if (fileRejections.length && fileRejections != rejected) {
     alert(fileRejections[0].errors[0]?.message ?? "Invalid file");
-    setRejected(fileRejections);
+    setRejected([...fileRejections]);
   }
 
   // On valid file, report to owner

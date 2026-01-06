@@ -1,14 +1,15 @@
 import React from 'react'
-import { Story, Meta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react-webpack5';
 import { GraphTxHistory, Theme } from '.';
 import { Transaction } from '@thecointech/tx-blockchain';
 import { DateTime } from 'luxon';
 import { withStore, withReducer } from '@thecointech/storybookutils';
-import { FXRate, FxRateReducer } from 'containers/FxRate';
+import { FXRate, FxRateReducer } from '../../containers/FxRate';
 import { toCoin } from '@thecointech/utilities'
 import Decimal from 'decimal.js-light';
-import { COIN_EXP, PluginBalanceMod } from '@thecointech/contract-core';
+import { COIN_EXP } from '@thecointech/contract-base';
 import { getFxRate } from '@thecointech/fx-rates';
+import { PluginBalanceMod } from '@thecointech/contract-plugins/types';
 
 export default {
   title: 'Shared/GraphTxHistory',
@@ -37,11 +38,11 @@ const defaultArgs = {
   lineColor: '#61C1B8',
 }
 
-const template: Story<typeof defaultArgs> = (args) => {
+const template: StoryFn<typeof defaultArgs> = (args) => {
   const withFxRates = withStore({
     fxRates: {
       rates: genFxRates(args),
-      fetching: 0,
+      inFlight: [],
     }
   })
   const txs = genTxs(args);
@@ -110,7 +111,7 @@ const genFxRates = ({from, to}: {from: number, to: number}) => {
       target: 124,
       validFrom: date,
       validTill: date + incr,
-    })
+    } as any)
     date = date + incr;
   }
   return r;
@@ -130,4 +131,3 @@ function getPlugins(plugins: string[]) : PluginBalanceMod[] {
     }
   })
 }
-

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useState } from 'react';
 import { FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 
@@ -62,7 +62,7 @@ export const RangeFieldAndScale = (props: Props) => {
             {...props}
           />
         )}
-        renderThumb={SliderThumb}
+        renderThumb={({ props }) => <SliderThumb {...props} />}
       />
       <div className={styles.scales}>
         <span>{minimum}</span>
@@ -78,10 +78,11 @@ type TrackProps = {
   max: number,
   min: number,
   props: any,
+  children: React.ReactNode,
 }
-const SliderTrack: React.FC<TrackProps> = ({
+const SliderTrack = ({
   props, value, max, min, children,
-}) => (
+}: TrackProps) => (
   <div
     onMouseDown={props.onMouseDown}
     onTouchStart={props.onTouchStart}
@@ -96,7 +97,7 @@ const SliderTrack: React.FC<TrackProps> = ({
       style={{
         background: getTrackBackground({
           values: [value],
-          colors: [LessVars.theCoinPaletteGreen3, '#FFFFFF1A'],
+          colors: [LessVars.theCoinPaletteGreen3.toString(), '#FFFFFF1A'],
           min,
           max,
         }),
@@ -107,7 +108,7 @@ const SliderTrack: React.FC<TrackProps> = ({
   </div>
 );
 
-const SliderThumb: React.FC<{ props: any }> = ({ props }) => (
+const SliderThumb = (props: any) => (
   <div
     {...props}
     className={styles.thumb}

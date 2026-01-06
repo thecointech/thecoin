@@ -1,12 +1,8 @@
 {
   "name": "@thecointech/account",
-  "version": "0.2.115",
+  "version": "0.5.1-test.0",
   "description": "TheCoin: Account definition & storage",
   "type": "module",
-  "keywords": [
-    "TheCoin",
-    "S&P500"
-  ],
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
   "license": "GPL-3.0-or-later",
@@ -19,11 +15,10 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc --project tsconfig.build.json",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
+    "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [
@@ -32,8 +27,8 @@
   "exports": {
     ".": "./build/index.js",
     "./store": {
-      "development": "./build/development/store.js",
-      "devlive": "./build/devlive/store.js",
+      "development": "./mocks/development/store.ts",
+      "devlive": "./mocks/devlive/store.ts",
       "default": "./build/store.js"
     },
     "./*": "./build/*.js"
@@ -50,16 +45,13 @@
     }
   },
   "dependencies": {
-    "@thecointech/contract-core": "^0.2.115",
-    "@thecointech/fx-rates": "^0.2.115",
-    "@thecointech/idx": "^0.2.115",
-    "@thecointech/logging": "^0.2.115",
-    "@thecointech/signers": "^0.2.115",
-    "@thecointech/tx-blockchain": "^0.2.115",
-    "@thecointech/utilities": "^0.2.115"
+    "@thecointech/contract-core": "^0.5.1-test.0",
+    "@thecointech/fx-rates": "^0.5.1-test.0",
+    "@thecointech/idx": "^0.5.1-test.0",
+    "@thecointech/logging": "^0.5.1-test.0",
+    "@thecointech/signers": "^0.5.1-test.0",
+    "@thecointech/tx-blockchain": "^0.5.1-test.0",
+    "@thecointech/utilities": "^0.5.1-test.0"
   },
-  "devDependencies": {
-    "jest": "*"
-  },
-  "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
+  "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

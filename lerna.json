@@ -1,10 +1,6 @@
 {
-  "packages": [
-    "apis/**/*"
-  ],
   "npmClient": "yarn",
-  "useWorkspaces": true,
-  "version": "0.2.115",
+  "version": "0.5.1-test.1",
   "command": {
     "publish": {
       "conventionalCommits": true,

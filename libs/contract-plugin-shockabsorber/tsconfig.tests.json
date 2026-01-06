@@ -1,12 +1,4 @@
 {
-  "compilerOptions": {
-    "noEmit": true,
-    "module": "ESNext",
-    "target": "ES2017",
-    "esModuleInterop": true,
-    "moduleResolution": "Node",
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-  },
-  "include": ["**/*.test.*", "scripts/**.ts", "internal/*.*", "**/*.stories.*", "**/hardhat.d.ts"],
+  "extends": "../../tsconfig.tests.json",
+  "include": ["**/*.test.*", "scripts/**.ts", "internal/*.*", "**/*.stories.*", "mocks/**.*", "**/hardhat.d.ts"],
 }

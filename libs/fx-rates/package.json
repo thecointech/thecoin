@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/fx-rates",
-  "version": "0.2.115",
+  "version": "0.5.1-test.0",
   "description": "TheCoin: Client library for fetching fx-rates",
   "type": "module",
   "keywords": [
@@ -19,8 +19,8 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc --project tsconfig.build.json",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage"
   },
   "files": [
@@ -29,11 +29,8 @@
   "exports": "./build/index.js",
   "types": "build/index.d.ts",
   "dependencies": {
-    "@thecointech/apis": "^0.2.115",
-    "@thecointech/logging": "^0.2.115"
+    "@thecointech/apis": "^0.5.1-test.0",
+    "@thecointech/logging": "^0.5.1-test.0"
   },
-  "devDependencies": {
-    "jest": "*"
-  },
-  "gitHead": "a21ed03dbbd7b1c6263fe4accee2f531e33c7acf"
+  "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

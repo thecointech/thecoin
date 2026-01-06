@@ -1,37 +1,32 @@
 import { jest } from '@jest/globals';
-import { GetContract } from './contract';
+import { ContractCore } from './contract';
 import { describe } from '@thecointech/jestutils';
-import { getEnvVars } from "@thecointech/setenv";
 import { NormalizeAddress } from '@thecointech/utilities';
-import { Erc20Provider } from '@thecointech/ethers-provider/Erc20Provider/web';
+import { ifPolygonscan } from '@thecointech/secrets/jestutils';
+import { getProvider } from '@thecointech/ethers-provider/Erc20Provider/web';
 
-const prodVars = getEnvVars('prodtest');
 jest.setTimeout(60000);
 
 describe('Testing provider', () => {
 
-  const OLD_ENV = process.env;
-  beforeEach(() => process.env = prodVars);
-  afterAll(() => process.env = OLD_ENV);
-
   it ('can fetch logs', async () => {
 
-    const contract = await GetContract();
-    const provider = new Erc20Provider();
+    const provider = await getProvider();
+    const contract = await ContractCore.get(provider);
 
-    const address = NormalizeAddress(prodVars.WALLET_BrokerCAD_ADDRESS);
-    const contractAddress = contract.address;
+    const address = NormalizeAddress(process.env.WALLET_BrokerCAD_ADDRESS);
+    const contractAddress = await contract.getAddress();
 
+    const fromBlock = parseInt(process.env.INITIAL_COIN_BLOCK);
     const allTxs = await provider.getERC20History({address, contractAddress});
-    const filter = contract.filters.ExactTransfer(null, address);
-    (filter as any).fromBlock = parseInt(prodVars.INITIAL_COIN_BLOCK);
-    const logs1 = await provider.getEtherscanLogs(filter, "and");
-    const filter2 = contract.filters.ExactTransfer(address, null);
-    (filter2 as any).fromBlock = parseInt(prodVars.INITIAL_COIN_BLOCK);
-    const logs2 = await provider.getEtherscanLogs(filter2, "and");
+    const filter = contract.filters.Transfer(null, address);
+    const logs1 = await contract.queryFilter(filter, fromBlock);
+    const filter2 = contract.filters.Transfer(address, null);
+    const logs2 = await contract.queryFilter(filter2, fromBlock);
     const logs = [...logs1, ...logs2];
 
     expect(logs.length).toEqual(allTxs.length);
+    expect(logs[0].args.value).toEqual(allTxs[0].value);
   })
 
-}, prodVars.POLYGONSCAN_API_KEY != undefined);
+}, await ifPolygonscan("prod"));

@@ -3,16 +3,15 @@ import { RbcStore } from './store';
 import { ApiAction } from './action';
 import { send } from './etransfer';
 import { describe, IsManualRun } from '@thecointech/jestutils';
-import { closeBrowser } from './puppeteer';
-
+import { closeBrowser } from './scraper';
 
 // Note, this test will send real money from a real account.
 // So ya probably want to leave it disabled except for manual runs.
 describe("Live tests on live account", () => {
 
-  beforeAll(() => {
+  beforeAll(async () => {
     // Will init mocked store
-    ApiAction.initCredentials();
+    await ApiAction.initCredentials();
     RbcStore.initialize();
   });
 

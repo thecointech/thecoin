@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/broker-db",
-  "version": "0.2.115",
+  "version": "0.5.1-test.0",
   "description": "The Coin: Access BrokerCAD Firestore DB",
   "type": "module",
   "keywords": [
@@ -19,11 +19,10 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc -b tsconfig.build.json",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
+    "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [
@@ -50,12 +49,9 @@
     }
   },
   "dependencies": {
-    "@thecointech/firestore": "^0.2.115",
-    "@thecointech/utilities": "^0.2.115",
+    "@thecointech/firestore": "^0.5.1-test.0",
+    "@thecointech/utilities": "^0.5.1-test.0",
     "fast-deep-equal": "3.1.3"
   },
-  "devDependencies": {
-    "jest": "*"
-  },
-  "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
+  "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

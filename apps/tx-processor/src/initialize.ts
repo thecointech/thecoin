@@ -1,41 +1,88 @@
 import { log } from "@thecointech/logging";
 import { getFirestore, init as FirestoreInit } from '@thecointech/firestore';
 import { RbcStore, closeBrowser } from "@thecointech/rbcapi";
-import gmail from '@thecointech/tx-gmail';
+import { initialize as initializeGmail } from '@thecointech/tx-gmail';
 import { ConfigStore } from "@thecointech/store";
 import { getSigner } from '@thecointech/signers';
-import { ConnectContract } from '@thecointech/contract-core';
+import { ContractCore, type TheCoin } from '@thecointech/contract-core';
+import { SendMail } from "@thecointech/email";
+import { weSellAt, fetchRate } from '@thecointech/fx-rates';
+import { toHuman } from "@thecointech/utilities";
+import { sleep } from '@thecointech/async';
+import { type Signer, formatEther } from "ethers";
 
 export async function initialize() {
   log.debug(' --- Initializing processing --- ');
 
-  // We have to load (and cache) signers before setting
-  // the GOOGLE_APPLICATION_CREDENTIALS env variable below
-  // to ensure prodtest loads from the right location
-  const signer = await getSigner('BrokerCAD');
-  await getSigner('BrokerTransferAssistant');
-  const address = await signer.getAddress();
-  const contract = await ConnectContract(signer);
-  if (!contract) {
-    throw new Error("Couldn't initialize contract")
-  }
-  log.debug(`Initialized contract to address: ${address}`);
-
   // Set to broker service account for Firestore Access
-  // Must be done after connecting the signer abov
-  if (process.env.BROKER_SERVICE_ACCOUNT)
-    process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.BROKER_SERVICE_ACCOUNT;
-
-  await FirestoreInit();
+  await FirestoreInit({ service: 'BrokerServiceAccount' });
   RbcStore.initialize();
   ConfigStore.initialize();
 
-  let token = await ConfigStore.get("gmail.token")
-  token = await gmail.initialize(token);
-  await ConfigStore.set("gmail.token", token)
+  let token = await ConfigStore.get("gmail.token");
+  token = await initializeGmail(token);
+  await ConfigStore.set("gmail.token", token);
+
+  const signer = await getSigner('BrokerCAD');
+  const bta = await getSigner('BrokerTransferAssistant');
+  if (!signer || !bta) {
+    throw new Error("Signers not loaded");
+  }
+
+  const contract = await ContractCore.connect(signer);
+  if (!contract) {
+    throw new Error("Couldn't initialize contract")
+  }
+
+  await verifyEtherReserves(signer);
+  await verifyCoinReserves(signer, contract);
 
   log.debug('Init complete');
   return contract;
+}
+
+// Verify we have enough gas to run processing
+async function verifyEtherReserves(signer: Signer) {
+  const signerBalance = await signer.provider?.getBalance(signer) ?? 0n;
+  const signerAddress = await signer.getAddress();
+  const balanceEth = formatEther(signerBalance);
+  await verifyMinBalance(Number(balanceEth), 0.2, "BrokerCAD", signerAddress, "ether");
+}
+
+// Verify we have enough reserves to run processing
+async function verifyCoinReserves(signer: Signer, contract: TheCoin) {
+  const signerAddress = await signer.getAddress();
+  const balanceCoin = await contract.balanceOf(signerAddress);
+  const now = new Date();
+  const rate = await fetchRate(now);
+  if (!rate?.sell || !rate?.fxRate) {
+    log.fatal("tx-processor couldn't fetch current rate");
+    return;
+  }
+  const balanceCad = toHuman(
+    Number(balanceCoin) * weSellAt([rate], now),
+    true
+  );
+  await verifyMinBalance(balanceCad, 10_000, "BrokerCAD", signerAddress, "$THE");
+}
+
+async function verifyMinBalance(Balance: number, MinimumBalance: number, Signer: string, Address: string, currency: string) {
+  log.debug({ Balance }, `Processing with ${currency} reserves: {Balance}`)
+  if (Balance < MinimumBalance) {
+    log.error(
+      { Balance, MinimumBalance, Signer, Address },
+      `Signer {Signer} ${currency} balance too low {Balance} < {MinimumBalance}`
+    );
+    await SendMail(`WARNING: Signer balance too low ${Balance}`, `${Signer} balance too low ${currency} ${Balance}\nMinimum balance required: ${MinimumBalance}`);
+    log.error(`Not enough ${currency} reserves: ${Balance}`);
+    await maybeSleep();
+  }
+}
+async function maybeSleep() {
+  if (process.env.NODE_ENV !== "development") {
+    // If anyone is watching, give them time to react
+    await sleep(10_000);
+  }
 }
 
 export async function release() {

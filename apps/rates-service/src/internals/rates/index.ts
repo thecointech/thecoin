@@ -2,7 +2,7 @@ import { RateKey, CombinedRates, CoinRate, FxRates, RateTypes } from "./types";
 import { getLatest } from "./latest";
 import { CurrencyCode, validFor } from "@thecointech/fx-rates";
 import { getRate } from "./db";
-import { update } from "./UpdateDb";
+import { updateRates } from "./UpdateDb";
 import { log } from "@thecointech/logging";
 export { updateRates } from './UpdateDb'
 
@@ -32,12 +32,16 @@ async function getRates<K extends RateKey>(key: K, timestamp: number) : Promise<
 
   // Finally, if something has gone really wrong with our updates, try forcing it.
   // This shouldn't happen, it is most likely an error condition.
-  log.warn("Could not find {FxKey} for {Timestamp}, forcing update",
-    key, timestamp);
+  log.error(
+    { FxKey: key, Timestamp: timestamp },
+    "Could not find {FxKey} for {Timestamp}, forcing update",
+  );
 
-  const updated = await update();
+  const updated = await updateRates();
   if (updated) {
-    return await getRates(key, timestamp) as any;
+    // Try again.  This won't loop because once
+    // it succeeds the second call will be false.
+    return await getRates(key, timestamp);
   }
   // Nothing doing, return null
   return null;
@@ -91,12 +95,14 @@ export async function getManyRates(ts: number[]) : Promise<CombinedRates[]> {
     return r;
 
   // We don't want to fetch duplicates, so lets ensure we return a minimal amount
-  const sorted = ts.sort();
+  // sort numerically without mutating input
+  const sorted = [...ts].sort((a, b) => a - b);
+
   // Only process timestamp requests here: skip 0 and below
   let lastExpired = 1;
-  for (const ts of sorted)
+  for (const t of sorted)
   {
-    lastExpired = await maybeInsert(ts, lastExpired, r);
+    lastExpired = await maybeInsert(t, lastExpired, r);
   }
   // If we have requested latest (0), then now add it now.  This is because our
   // prior iteration relies on each ts increasing, and our sorting breaks that;

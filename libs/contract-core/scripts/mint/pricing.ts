@@ -19,10 +19,10 @@ export const toCoin = async (rate: FXRate, fiat: Decimal, currency: CurrencyKey)
 }
 
 export async function getGasPrice() {
-  const provider = getProvider();
+  const provider = await getProvider();
   const fees = await provider.getFeeData();
-  const base = fees.maxFeePerGas!.sub(fees.maxPriorityFeePerGas!).toNumber();
-  const maxPriorityFeePerGas = Math.max(thirtyGwei, fees.maxPriorityFeePerGas!.toNumber());
+  const base = Number(fees.maxFeePerGas - fees.maxPriorityFeePerGas);
+  const maxPriorityFeePerGas = Math.max(thirtyGwei, Number(fees.maxPriorityFeePerGas));
   return {
     maxPriorityFeePerGas: maxPriorityFeePerGas,
     maxFeePerGas: maxPriorityFeePerGas + base,

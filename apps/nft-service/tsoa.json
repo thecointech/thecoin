@@ -4,13 +4,14 @@
   "controllerPathGlobs": ["./src/controllers/**/*controller.ts"],
   "spec": {
     "basePath": "/api/v1",
-    "specVersion": 2,
+    "specVersion": 3,
     "outputDirectory": "./src/api"
   },
   "routes": {
     "basePath": "/api/v1",
     "routesDir": "./src/routes",
-    "middleware": "express"
+    "middleware": "express",
+    "esm": true
   },
   "ignore": [
     "**/node_modules/**",

@@ -1,0 +1,14 @@
+name: Publish to Prodbeta
+
+on:
+  pull_request:
+    branches: [ publish/prodbeta ]
+    types: [ closed ]
+
+jobs:
+  publish:
+    if: github.event.pull_request.merged == true
+    uses: ./.github/workflows/pr-publish.yml
+    with:
+      CONFIG_NAME: prodbeta
+    secrets: inherit

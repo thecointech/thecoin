@@ -15,7 +15,6 @@ import { updateOracle } from '../oracle';
 import { toDateStr } from '../../utils/date';
 
 /////////////////////////////////////////////////////////////////////////////////
-
 //
 // Logs important info, and returns true if we should update.
 function isUpdateRequired(key: RateKey, now: number, current: RateType) {
@@ -40,16 +39,6 @@ function isUpdateRequired(key: RateKey, now: number, current: RateType) {
   return true;
 }
 
-function validateNewRate(key: RateKey, validator: boolean) {
-  // Does the new rate meaningfully update our existing latest rate?
-  if (!validator) {
-    // We require an update, but have no new data.
-    // What should we do here?
-    log.error({ FxKey: key }, "{FxKey} required update, but no new rates were found");
-    throw new Error('NoUpdatesFetched');
-  }
-}
-
 //
 // Fetch all intervening rates from latest to now,
 // set to DB and update our latest rate
@@ -58,11 +47,14 @@ export async function ensureLatestCoinRate(now: number)
   const key = "Coin";
   const current = getLatest(key);
   if (!isUpdateRequired(key, now, current))
-    return;
+    return true;
 
   // fetch any new rates from then till now
   const newRates = await fetchCoinRate(current.validTill, now);
-  validateNewRate(key, !!newRates.length);
+  if (!newRates.length) {
+    log.warn({ FxKey: key }, "{FxKey} required update, but no new rates were found");
+    return false;
+  }
   // If we are updating on time, we should only have a single rate to insert
   if (newRates.length > 1)
   {
@@ -79,6 +71,7 @@ export async function ensureLatestCoinRate(now: number)
   // Update our cache of latest rate
   updateLatest(key, newRates.pop()!)
   log.debug({ FxKey: key }, "Finished update for {FxKey}");
+  return true;
 }
 
 //
@@ -89,17 +82,19 @@ export async function ensureLatestFxRate(now: number) {
   const key = "FxRates";
   const current = getLatest(key);
   if (!isUpdateRequired(key, now, current))
-    return;
+    return true;
 
   // fetch any new rates from then till now
   const fxRates = await fetchFxRate(current.validTill, now);
-  validateNewRate(key, !!fxRates);
+  if (!fxRates) {
+    log.warn({ FxKey: key }, "{FxKey} required update, but no new rates were found");
+    return false;
+  }
 
   log.info(
     { FxKey: key, LastValid: toDateStr(current.validFrom), NextValid: toDateStr(current.validTill) },
     "Updating {FxKey} from {LastValid} to {NextValid}"
   );
-
 
   if (current.validTill < fxRates.validFrom)
   {
@@ -115,41 +110,77 @@ export async function ensureLatestFxRate(now: number) {
   // Update our cache of latest rate
   updateLatest(key, fxRates)
   log.debug({ FxKey: key }, "Finished update for {FxKey}");
+  return true;
 }
 
 
-export async function update() {
-    try {
-      const now = Date.now();
-      // Either of the below functions could throw.  We
-      // don't check them individually
-      // because our entry point implements
-      // backoff/retry logic.  If the ensure
-      // is called again it won't matter because it's already
-      // up to date.
-      await Promise.all([
-        ensureLatestCoinRate(now),
-        ensureLatestFxRate(now),
-      ]);
+class MultipleRatesError extends Error {
+  errors: unknown[];
+  constructor(errors: unknown[]) {
+    super(`Failed to ensure latest rates: ${errors.length} error(s)`);
+    this.errors = errors;
+  }
+}
 
-      // Once we have updated, do a matching update on Oracle
-      await updateOracle(now);
-      return true;
-    }
-    catch (err: any) {
-        log.error(err);
-    }
+async function ensureLatestRates(now: number): Promise<boolean> {
+  // Either of the below functions could throw.  We
+  // don't check them individually
+  // because our entry point implements
+  // backoff/retry logic.  If the ensure
+  // is called again it won't matter because it's already
+  // up to date.
+  const r = await Promise.allSettled([
+    ensureLatestCoinRate(now),
+    ensureLatestFxRate(now),
+  ]);
+
+  // Collect any rejections to throw
+  const rejections = r.filter(r => r.status === "rejected") as PromiseRejectedResult[];
+  if (rejections.length > 0) {
+    const errors = rejections.map(r => r.reason);
+    throw new MultipleRatesError(errors);
+  }
+
+  // Check for false returns (failed updates)
+  const failures = r.filter(r => r.status === "fulfilled" && r.value === false);
+  if (failures.length > 0) {
     return false;
+  }
+  return true;
+}
+
+export async function update() {
+  const now = Date.now();
+
+  // First ensure we have latest rates in our DB
+  const updated = await ensureLatestRates(now);
+  if (!updated) return false;
+
+  // Then sync those rates to the Oracle contract
+  await updateOracle(now);
+  return true;
 }
 
 export async function updateRates() {
+  const errors: Error[] = [];
+
   for (let i = 0; i < 5; i++) {
     // incremental back-off
+    // TO FIX: This conflates two waits,
+    // waiting for values to valid, and back-off-retry
     await waitTillBuffer(i * 5000);
-    // & retry
-    if(await update())
-      return true;
+
+    try {
+      const updated = await update();
+      if (updated) return true;
+    } catch (err: any) {
+      errors.push(err instanceof Error ? err : new Error(String(err)));
+      log.warn(err, `Update attempt ${i + 1}/5 failed`);
+    }
   }
+
+  // All retries exhausted - log all errors
+  log.fatal({ errors }, `Failed to update rates after 5 attempts`);
   return false;
 }
 

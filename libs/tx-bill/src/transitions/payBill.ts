@@ -1,10 +1,10 @@
 import { getCurrentState, TransitionCallback } from "@thecointech/tx-statemachine";
 import { verifyPreTransfer } from "@thecointech/tx-statemachine/transitions";
 import { BillPayeePacket, EncryptedPacket } from '@thecointech/types';
-import { decryptTo } from "@thecointech/utilities/Encrypt";
+import { decryptTo } from "@thecointech/utilities/Decrypt";
 import { sign } from "@thecointech/utilities/SignedMessages";
 import { log } from "@thecointech/logging";
-import Decimal from 'decimal.js-light';;
+import Decimal from 'decimal.js-light';
 import { getSigner } from '@thecointech/signers';
 import { DateTime } from 'luxon';
 import { makeTransition } from '@thecointech/tx-statemachine';
@@ -21,13 +21,16 @@ const doPayBill: TransitionCallback<"Bill"> = async (container) => {
   // Can we pay a bill in our current state?
   const currentState = getCurrentState(container)
   const { fiat } = currentState.data;
-  if (!fiat?.isPositive())
-    return { error: "Cannot send e-Transfer, no fiat available" };
+  if (!fiat?.isPositive()) {
+    return { error: "Cannot pay bill, no fiat available" };
+  }
 
       // If we are here without a bank API, it is an error
   // We should have stopped before doing preTransfer step
   const {bank} = container;
-  if (!bank) return { error: 'Cannot deposit fiat, no bank API present'};
+  if (!bank) {
+    return { error: 'Cannot deposit fiat, no bank API present'};
+  }
 
   // instructions must be decoded within this action in case the transition
   // is interrupted; this action is atomic and the decoded actions cannot be serialized.
@@ -42,9 +45,13 @@ const doPayBill: TransitionCallback<"Bill"> = async (container) => {
     // probably doesn't make any sense...
     container.instructions = decrypted!;
   }
-  const {address} = container.action;
+  const { address } = container.action;
   const { payee, accountNumber } = container.instructions;
   const payeeNickname = await getPayeeNickname(container.instructions);
+  log.info(
+    {initialId: container.action.data.initialId, payeeNickname},
+    "Paying Bill for {initialId} - {payeeNickname}"
+  );
   const confirmation = await bank.payBill(address, payeeNickname, payee, accountNumber, fiat);
   return confirmation
     ? {
@@ -57,20 +64,8 @@ const doPayBill: TransitionCallback<"Bill"> = async (container) => {
 
 //
 // Decrypt the actions' instruction packet
-async function decryptInstructions(packet: EncryptedPacket) {
-  // NOTE: server does not have private key, and will not pass this step
-  const privateKeyPath = process.env.USERDATA_INSTRUCTION_PK;
-  if (!privateKeyPath) return null;
-
-  const { readFileSync } = await import('fs');
-  const privateKey = readFileSync(privateKeyPath, 'utf8');
-  if (!privateKey) {
-    log.warn("Attempting to decrypt instructions, but no private key is present");
-    return null;
-  }
-
-  return decryptTo<BillPayeePacket>(privateKey, packet);
-}
+// NOTE: server does not have private key, and will not pass this step
+const decryptInstructions = (packet: EncryptedPacket) => decryptTo<BillPayeePacket>(packet);
 
 //
 // Checks bill payment for minimum viability.

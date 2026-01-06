@@ -2,7 +2,7 @@ import React from "react";
 import { Connect } from "../../Connect";
 import { defineMessages, FormattedMessage } from "react-intl";
 import { Header, Container } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { Decoration } from "../../Decoration";
 import styles from '../styles.module.less';
 import { ButtonPrimary } from "../../../../components/Buttons";

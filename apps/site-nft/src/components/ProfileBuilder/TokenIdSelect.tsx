@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connectNFT } from '@thecointech/contract-nft';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { log } from '@thecointech/logging';
 import { defineMessage, useIntl } from 'react-intl';
 import { Select } from 'semantic-ui-react';
@@ -32,12 +32,12 @@ export const TokenIdSelect = ({ tokenIds, setTokenIds }: Props) => {
         // Get all tokens
         const ids = await Promise.all(
           Array.from(
-            { length: balance.toNumber() },
+            { length: Number(balance) },
             (_, idx) => nft.tokenOfOwnerByIndex(address, idx)
           )
         )
         if (cancelled) return;
-        const ownedIds = ids.map(ids => ids.toNumber())
+        const ownedIds = ids.map(ids => Number(ids))
         log.trace(`Tokens available: ${JSON.stringify(ownedIds)}`);
         setTokenIds(ownedIds);
       }

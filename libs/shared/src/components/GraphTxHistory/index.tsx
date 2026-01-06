@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { ResponsiveLine, PointTooltip, LineSvgProps } from '@nivo/line'
-import { Transaction } from '@thecointech/tx-blockchain';
-import { DateTime } from 'luxon';
-import { PluginBalanceMod } from '@thecointech/contract-plugins';
-import { TooltipWidget, TxDatum } from "./types";
-import { Theme as NivoTheme } from "@nivo/core";
+import { LineSvgLayer, ResponsiveLine } from '@nivo/line'
+import type { Transaction } from '@thecointech/tx-blockchain';
+import type { DateTime } from 'luxon';
+import type { PluginBalanceMod } from '@thecointech/contract-plugins';
+import type { TooltipWidget, TxDatum, LineProps, TxSeries } from "./types";
+import type { PartialTheme as PartialNivoTheme } from "@nivo/theming";
 import { linearGradientDef } from "@nivo/core";
 import { StepLineLayer } from "./StepLineLayer";
+import { RawLineLayer } from './RawLineLayer';
 import { getAccountSerie } from "./data";
 import { Placeholder } from "semantic-ui-react";
 import { useFxRates, FxRateReducer } from "../../containers/FxRate";
 import Decimal from 'decimal.js-light';
 import styles from './styles.module.less';
-import { RawLineLayer } from './RawLineLayer';
+
+export type * from "./types";
 
 // Easy access to theme definition
 export type Theme = {
   lineColors?: [string, string],
   dotColor: string,
-} & NivoTheme;
+} & PartialNivoTheme;
 
 export type GraphHistoryProps = {
   plugins: PluginBalanceMod[],
@@ -45,7 +47,7 @@ export const GraphTxHistory = (props: GraphHistoryProps) => {
               data: datum
             }]}
             colors={props.theme?.lineColors}
-            tooltip={props.tooltip as PointTooltip}
+            tooltip={props.tooltip}
             theme={props.theme}
 
             // Basic properties
@@ -64,23 +66,25 @@ export const GraphTxHistory = (props: GraphHistoryProps) => {
 const useCalcLimitedFetchSerie = (props: GraphHistoryProps) => {
 
   const [datum, setDatum] = useState([] as TxDatum[]);
-  const {rates, fetching} = useFxRates();
+  const {rates, inFlight} = useFxRates();
   const ratesApi = FxRateReducer.useApi();
 
   // Run once on page load.  Pass in ratesApi to allow querying missing rates
   useEffect(() => {
     const d = getAccountSerie(props, rates, ratesApi);
     setDatum(d);
-  }, [props.from?.toMillis()]);
+  }, [props.from?.toMillis(), props.to?.toMillis()]);
 
   // On subsequent runs, do not pass in ratesApi
   // so we do not re-query the same rates
   useEffect(() => {
-    const d = getAccountSerie(props, rates);
-    setDatum(d);
+    if (rates.length != 0) {
+      const d = getAccountSerie(props, rates);
+      setDatum(d);
+    }
   }, [rates.length]);
 
-  return fetching > 0
+  return inFlight.length > 0
     ? []
     : datum;
 }
@@ -106,7 +110,7 @@ const calcMinMax = (datum: TxDatum[]) => {
 
 // ----------------------------------------------------------------
 // graph settings below
-const commonProperties: Partial<LineSvgProps> = {
+const commonProperties: Partial<LineProps> = {
   margin: { top: 0, right: 0, bottom: 20, left: 40 },
   animate: true,
   enableArea: true,
@@ -123,7 +127,7 @@ const getTickSpacing = (count: number) => {
   // Try to cap at < 15 entries
   else return `every ${Math.ceil(count / 600)} months`;
 }
-const axisProperties = (minMax: MinMax, count: number) : Partial<LineSvgProps> => ({
+const axisProperties = (minMax: MinMax, count: number) : Partial<LineProps> => ({
   xScale: {
     type: 'time',
     format: '%Y-%m-%d',
@@ -151,7 +155,7 @@ const axisProperties = (minMax: MinMax, count: number) : Partial<LineSvgProps> =
   xFormat: "time:%Y-%m-%d"
 })
 
-const colorProperties = ({min, max}: MinMax) : Partial<LineSvgProps> => ({
+const colorProperties = ({min, max}: MinMax) : Partial<LineProps> => ({
   defs: [
     linearGradientDef('gradientA', [
       { offset: 0, color: '#fff' },
@@ -161,28 +165,30 @@ const colorProperties = ({min, max}: MinMax) : Partial<LineSvgProps> => ({
   fill: [{ match: '*', id: 'gradientA' }]
 })
 
-const thingsToDisplayProperties = (props: GraphHistoryProps) => {
-  const properties: Partial<LineSvgProps> = {
-    layers: [
-      //"grid",
-      "markers",
-      "axes",
-      "areas",
-      "crosshair",
-      "lines",
-      //"slices",
-      //"points",
-      'mesh',
-      "legends",
-    ],
+const thingsToDisplayProperties = (props: GraphHistoryProps): Partial<LineProps> => {
+  const layers: LineSvgLayer<TxSeries>[] = [
+    //"grid",
+    "markers",
+    "axes",
+    "areas",
+    "crosshair",
+    "lines",
+    //"slices",
+    //"points",
+    'mesh',
+    "legends",
+  ];
+  if (props.plugins.length) {
+    layers.push(RawLineLayer)
+  }
+  else {
+    // The default view includes the raw fiat value
+    // shown as a step line
+    layers.push(StepLineLayer)
+  }
+  return {
+    layers,
     useMesh: true,
     enableSlices: false,
   };
-  if (props.plugins.length) {
-    properties.layers!.push(RawLineLayer)
-  }
-  else {
-    properties.layers!.push(StepLineLayer)
-  }
-  return properties;
 }

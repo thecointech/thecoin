@@ -1,22 +1,24 @@
-import React, { useState } from "react";
-import { AccountMap } from "@thecointech/shared/containers/AccountMap";
+import React from "react";
+import { AccountMap } from "@thecointech/redux-accounts";
 import { GraphTxHistory, Theme } from '@thecointech/shared/components/GraphTxHistory'
 import { LessVars } from "@thecointech/site-semantic-theme/variables";
 import { DateTime } from "luxon";
 import styles from './styles.module.less';
 import { Tooltip } from "./Tooltip/Tooltip";
-import { Duration, DurationButtons } from "./DurationButtons";
+import { DurationButtons } from "./DurationButtons";
 import { AppContainer } from "components/AppContainers";
 import { isPresent } from "@thecointech/utilities";
 
 const theme: Theme = {
-  fontSize: 10,
-  textColor: "#FFF", // LessVar does not include built-in vars, unfortunately
+  text: {
+    fontSize: 10,
+    fill: "#FFF",
+  },
   lineColors: [
-    LessVars.theCoinPrimaryGreenNeutral,
-    LessVars.theCoinPrimaryGreenPale
+    LessVars.theCoinPrimaryGreenNeutral.toString(),
+    LessVars.theCoinPrimaryGreenPale.toString()
   ],
-  dotColor: LessVars.theCoinPrimaryGreenNeutral,
+  dotColor: LessVars.theCoinPrimaryGreenNeutral.toString(),
   // axis: {
   //   domain: {
   //     line: {
@@ -27,27 +29,32 @@ const theme: Theme = {
   // }
 };
 
-export const HistoryGraph = () => {
-  const [duration, setDuration] = useState(Number.POSITIVE_INFINITY as Duration);
+type DateTimeState = [DateTime, (v: DateTime) => void];
+type Props = {
+  fromDate: DateTimeState,
+  toDate: DateTimeState,
+}
+
+export const HistoryGraph = (props: Props) => {
 
   const account = AccountMap.useActive();
   const txs = account?.history ?? [];
-  const from = Number.isFinite(duration)
-    ? DateTime.local().minus({days: duration})
-    : undefined;
 
   const modifiers = account?.plugins
     .map(d => d.emulator)
     .filter(isPresent)
     ?? [];
 
+  const fromDate = DateTime.max(props.fromDate[0], txs[0]?.date ?? DateTime.now().minus({month: 1}))
+
   return (
     <AppContainer className={styles.graphBackground}>
-      <DurationButtons duration={duration} setDuration={setDuration} />
+      <DurationButtons {...props} />
       <GraphTxHistory
         plugins={modifiers}
         txs={txs}
-        from={from}
+        from={fromDate}
+        to={props.toDate[0]}
         theme={theme}
         height={275}
         tooltip={Tooltip}

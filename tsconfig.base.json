@@ -8,10 +8,9 @@
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "module": "ESNext",
-    "target": "ES2017",
-    "lib": ["dom", "es2017", "ES2021.Promise"],
-    "types": ["jest", "node"],
-    "build": true,
+    "target": "ES2022",
+    "lib": ["dom", "ES2022"],
+    "types": ["node"],
 
     "pretty": true,
     "sourceMap": true,

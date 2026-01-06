@@ -1,0 +1,61 @@
+{
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "{projectRoot}/**/*",
+        "!{projectRoot}/**/*.spec.ts",
+        "!{projectRoot}/**/*.test.ts"
+      ],
+      "outputs": [
+        "{projectRoot}/./build",
+        "{projectRoot}/./dist",
+        "{projectRoot}/./src/codegen"
+      ],
+      "cache": true
+    },
+    "genapis": {
+      "inputs": [
+        "{workspaceRoot}/apis/**/*.json",
+        "{workspaceRoot}/apps/**/src/api/**/*"
+      ],
+      "outputs": [
+        "{workspaceRoot}/apis/broker/ts",
+        "{workspaceRoot}/apis/nft/ts",
+        "{workspaceRoot}/apis/rates/ts",
+        "{workspaceRoot}/apis/vqa/ts"
+      ],
+      "cache": true
+    },
+    "gen:swagger": {
+      "inputs": [
+        "{projectRoot}/src/**/*",
+        "!{projectRoot}/src/**/*.spec.ts",
+        "!{projectRoot}/src/**/*.test.ts"
+      ],
+      "outputs": ["{projectRoot}/src/api/swagger.json"],
+      "cache": true
+    },
+    "build:storybook": {
+      "outputs": ["{workspaceRoot}/storybook-static"],
+      "cache": true
+    },
+    "dev:live": {
+      "dependsOn": ["^dev:live"]
+    },
+    "dev:live:finalize": {
+      "dependsOn": ["^dev:live:finalize"]
+    },
+    "build:semantic": {
+      "cache": true
+    },
+    "build:i18n": {
+      "cache": true
+    }
+  },
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "sharedGlobals": [],
+    "production": ["default"]
+  }
+}

@@ -8,10 +8,11 @@ export * from './emulator';
 // might otherwise fail for reasons that don't indicate failure in the code
 // if the callback is false or returns false,
 const old_describe = describe;
-const skippable_describe = async (name: number | string | Function, fn: () => void | Promise<void>, allowRun?: boolean|(() => boolean)) => {
+type AllowRun = boolean | (() => boolean);
+const skippable_describe = async (name: number | string | Function, fn: () => void | Promise<void>, allowRun?: AllowRun) => {
 
   if (allowRun === false || (typeof allowRun === 'function' && allowRun() === false)) {
-    return old_describe.skip(name, fn);
+    return old_describe.skip(name, fn)
   }
   return old_describe(name, fn)
 }

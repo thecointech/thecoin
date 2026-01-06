@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/signers",
-  "version": "0.2.115",
+  "version": "0.5.1-test.0",
   "description": "The Coin: centralized access for built-in signers.  Not for external use",
   "type": "module",
   "keywords": [
@@ -18,11 +18,10 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc --project tsconfig.build.json",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
+    "build": "run -T tsc -b",
     "clean": "rimraf ./build && rimraf ./coverage",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix"
+    "test": "run :jest"
   },
   "files": [
     "build/**/*"
@@ -31,7 +30,7 @@
     ".": {
       "development": "./build/index_mocked.js",
       "devlive": "./build/index_devlive.js",
-      "electron": "./build/electron/index.js",
+      "electron": "./build/index_electron.js",
       "browser": {
         "default": "./build/names.js"
       },
@@ -42,17 +41,10 @@
         "prod": "./build/index_prod.js"
       }
     },
-    "./electron": {
-      "browser": "./build/electron/bridge_browser.js",
-      "node": "./build/electron/bridge_node.js"
-    },
     "./cache": "./build/cache.js"
   },
   "typesVersions": {
     "*": {
-      "electron": [
-        "build/electron/bridge_browser.d.ts"
-      ],
       "cache": [
         "build/cache.d.ts"
       ],
@@ -62,14 +54,15 @@
     }
   },
   "dependencies": {
-    "@google-cloud/secret-manager": "^3.5.0",
-    "@thecointech/ethers-provider": "^0.2.115",
-    "@thecointech/hardware-wallet": "^0.2.115",
-    "@thecointech/logging": "^0.2.115"
+    "@ethers-ext/signer-ledger": "^6.0.0-beta.1",
+    "@ledgerhq/hw-transport-node-hid": "^6.28.6",
+    "@thecointech/electron-signer": "^0.5.1-test.0",
+    "@thecointech/ethers-provider": "^0.5.1-test.0",
+    "@thecointech/logging": "^0.5.1-test.0",
+    "@thecointech/secrets": "^0.5.1-test.0"
   },
   "devDependencies": {
-    "@thecointech/electron-utils": "^0.2.115",
-    "jest": "*"
+    "@thecointech/electron-utils": "^0.5.1-test.0"
   },
-  "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
+  "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

@@ -1,0 +1,36 @@
+
+#
+# THIS DOCKER COMPOSE FILE IS UNUSED
+# docker gives trash results, possibly due to the mismatch in ROCm versions
+# ROCm 6.4.1 isn't supported on current Ubuntu 24.04 kernel, but
+# Docker container for ROCm 6.4.2 isn't released yet
+# For now, just use the host system
+#
+
+# NOTE: This docker-compose file can -only- be used from within the
+# WSL instance (it needs the files commented out under volumes)
+
+services:
+  vqa-service:
+    image: vqa-service:latest
+    environment:
+      - CONFIG_NAME=${CONFIG_NAME:?err}
+    ports:
+      - "7004:7004"
+    volumes:
+      # - ../.model_cache:/app/.model_cache
+      # - ../logs:/app/logs
+      # - /usr/lib/wsl/lib/libdxcore.so:/usr/lib/libdxcore.so
+      # - /opt/rocm/lib/libhsa-runtime64.so.1:/opt/rocm/lib/libhsa-runtime64.so.1
+      - type: bind
+        source: ${THECOIN_SECRETS:?err}
+        target: /secrets
+        read_only: true
+    ipc: host
+    shm_size: 16G
+    devices:
+      # - /dev/dxg:/dev/dxg -- WSL version
+      - /dev/kfd
+      - /dev/dri
+    security_opt:
+      - seccomp=unconfined

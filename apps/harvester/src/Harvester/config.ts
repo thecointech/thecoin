@@ -1,111 +1,53 @@
-import PouchDB from 'pouchdb';
-import memory from 'pouchdb-adapter-memory'
-import comdb from 'comdb';
-import { Wallet } from '@ethersproject/wallet';
-import { Mnemonic } from '@ethersproject/hdnode';
-import { defaultDays, HarvestConfig } from '../types';
 import { createStep } from './steps';
-import { CreditDetails } from './types';
-import { setSchedule } from './schedule/scheduler';
-import path from 'path';
+import { setSchedule } from './schedule';
 import { log } from '@thecointech/logging';
-import { ActionTypes, AnyEvent } from '../scraper/types';
+import { HDNodeWallet } from 'ethers';
+import { getProvider } from '@thecointech/ethers-provider';
 import { rootFolder } from '../paths';
-import { ClearPendingVisa } from './steps/ClearPendingVisa';
+import { ConfigDatabase } from '@thecointech/store-harvester';
+import type { HarvestConfig, CoinAccount, ConfigShape, CreditDetails } from '@thecointech/store-harvester';
 
-PouchDB.plugin(memory)
-PouchDB.plugin(comdb)
 
-const db_path = path.join(rootFolder, 'config.db');
-
-export type ConfigShape = {
-  // Store the account Mnemomic
-  wallet?: Mnemonic,
-  // Store a constant key for the account state DB
-  // This key should be derived from wallet mnemonic
-  stateKey?: string,
-
-  creditDetails?: CreditDetails,
-
-  scraping?: {
-    [key in ActionTypes]?: AnyEvent[];
-  },
-
-} & HarvestConfig;
-
-// We use pouchDB revisions to keep the prior state of documents
-// NOTE: Not sure this works with ComDB
-const ConfigKey = "config";
-
-let _config = null as unknown as PouchDB.Database<ConfigShape>;
-export async function initConfig(password?: string) {
-  if (!_config) {
-    _config = new PouchDB<ConfigShape>(db_path, {adapter: 'memory'});
-    log.info(`Initializing ${process.env.NODE_ENV} config database at ${db_path}`);
-    if (process.env.NODE_ENV !== "development") {
-      log.info(`Encrypting config DB`);
-      // initialize the config db
-      // Yes, this is a hard-coded password.
-      // Will fix ASAP with dynamically
-      // generated code (Apr 04 2023)
-      await _config.setPassword(password ?? "hF,835-/=Pw\\nr6r");
-      await _config.loadEncrypted();
-    }
-  }
-}
-
-export async function getProcessConfig() {
-  try {
-    return await _config.get<ConfigShape>(ConfigKey, { revs_info: true });
-  }
-  catch (err) {
-    return undefined;
-  }
-}
+const db = new ConfigDatabase(rootFolder);
 
 export async function setProcessConfig(config: Partial<ConfigShape>) {
-  await initConfig();
   log.info("Setting config file...");
-  const lastCfg = await getProcessConfig();
-  await _config.put({
-    steps: config.steps ?? lastCfg?.steps ?? [],
-    daysToRun: config.daysToRun ?? lastCfg?.daysToRun ?? defaultDays,
-    stateKey: config.stateKey ?? lastCfg?.stateKey,
-    wallet: config.wallet ?? lastCfg?.wallet,
-    creditDetails: config.creditDetails ?? lastCfg?.creditDetails,
-    scraping: {
-      ...lastCfg?.scraping,
-      ...config.scraping,
-    },
-    _id: ConfigKey,
-    _rev: lastCfg?._rev,
-  })
-  await _config.loadDecrypted();
+  await db.set(config);
 }
 
-export async function setWalletMnemomic(mnemonic: Mnemonic) {
-  // TODO: Generate state key from mnemomic
-  await setProcessConfig({
-    wallet: mnemonic,
+export async function getProcessConfig(): Promise<ConfigShape|undefined> {
+  return await db.get();
+}
+
+export async function setCoinAccount(coinAccount: CoinAccount) {
+  await db.set({
+    coinAccount,
   })
   return true;
 }
 
+export async function getCoinAccountDetails() {
+  const cfg = await db.get();
+  if (!cfg?.coinAccount) {
+    return null;
+  }
+  return {
+    address: cfg.coinAccount.address,
+    name: cfg.coinAccount.name,
+  }
+}
+
 export async function getWallet() {
-  const cfg = await getProcessConfig();
-  if (cfg?.wallet) {
-    return Wallet.fromMnemonic(cfg.wallet.phrase, cfg.wallet.path);
+  const cfg = await db.get();
+  if (cfg?.coinAccount?.mnemonic) {
+    const wallet = HDNodeWallet.fromPhrase(cfg.coinAccount.mnemonic.phrase, undefined, cfg.coinAccount.mnemonic.path);
+    return wallet.connect(await getProvider());
   }
   return null;
 }
 
-export async function getWalletAddress() {
-  const wallet = await getWallet();
-  return wallet?.address ?? null;
-}
-
 export async function hydrateProcessor() {
-  const config = await getProcessConfig();
+  const config = await db.get();
   if (!config?.steps) {
     throw new Error('No config found');
   }
@@ -114,34 +56,17 @@ export async function hydrateProcessor() {
     .filter(step => !!step)
     .map(createStep)
 
-  log.warn("HACK ALERT: Manually adding ClearPendingVisa step");
-
-  return [
-    new ClearPendingVisa(),
-    ...steps
-  ]
-}
-
-export async function setEvents(type: ActionTypes, events: AnyEvent[]) {
-  await setProcessConfig({
-    scraping: {
-      [type]: events
-    }
-  })
-}
-
-export async function getEvents(type: ActionTypes) {
-  const config = await getProcessConfig();
-  return config?.scraping?.[type];
+  return steps;
 }
 
 export async function setCreditDetails(creditDetails: CreditDetails) {
-  await setProcessConfig({creditDetails})
+  await db.set({creditDetails})
+  log.debug(`Set credit details`)
   return true;
 }
 
 export async function getCreditDetails() {
-  const config = await getProcessConfig();
+  const config = await db.get();
   return config?.creditDetails;
 }
 export async function hasCreditDetails() {
@@ -149,18 +74,19 @@ export async function hasCreditDetails() {
 }
 
 export async function getHarvestConfig() {
-  const config = await getProcessConfig();
+  const config = await db.get();
   return config?.steps
     ? {
-        steps: config?.steps,
-        daysToRun: config?.daysToRun,
+        steps: config.steps,
+        schedule: config.schedule,
       }
     : undefined;
 }
 
-export async function setHarvestConfig(config: HarvestConfig) {
-  const existing = await getHarvestConfig();
-  await setSchedule(config.daysToRun, existing?.daysToRun);
+export async function setHarvestConfig(config: Partial<HarvestConfig>) {
+  if (config.schedule) {
+    await setSchedule(config.schedule);
+  }
   await setProcessConfig(config)
   return true;
 }

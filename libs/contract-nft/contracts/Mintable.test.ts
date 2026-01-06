@@ -1,7 +1,9 @@
+import hre from 'hardhat';
 import { jest } from '@jest/globals';
 import { getTokenClaimCode, getTokenClaimSig } from '../src/tokenCodes';
-import { TheGreenNFTL2 } from '../src/types';
-import hre from 'hardhat';
+import type { TheGreenNFT } from '../src';
+import '@nomicfoundation/hardhat-ethers';
+import { EventLog } from 'ethers';
 
 const [
   owner,  // Deploys the smart contract
@@ -17,7 +19,7 @@ it("Mints tokens", async () => {
   // Create a list of tokens
   const r = await mintTokens(nft, 10);
   const receipt = await r.wait();
-  expect(receipt.events?.length).toEqual(10);
+  expect(receipt.logs?.length).toEqual(10);
 })
 
 it("Can claim tokens", async () => {
@@ -34,13 +36,16 @@ it("Can claim tokens", async () => {
     // Use it to mint
   const r = await nft.claimToken(13, users[1].address, sig);
   const receipt = await r.wait();
-  expect(receipt.events?.length).toEqual(2); // Approval & Transfer
+  const logs = receipt.logs as EventLog[]
+  expect(logs?.length).toEqual(1); // Approval & Transfer
+  expect(logs[0].eventName).toEqual("Transfer");
+  expect(logs[0].args.to).toEqual(users[1].address);
   // check ownership transfered
   const owner = await nft.ownerOf(13);
   expect(owner).toEqual(users[1].address);
 })
 
-const mintTokens = (nft: TheGreenNFTL2, count: number) => nft.bulkMinting(Array.from({length: count}, (_, idx) => idx), 2022);
+const mintTokens = (nft: TheGreenNFT, count: number) => nft.bulkMinting(Array.from({length: count}, (_, idx) => idx), 2022);
 const getContract = async () => {
   const NFT = await hre.ethers.getContractFactory("TheGreenNFTL2", minter);
   return await NFT.deploy(minter.address, minter.address);

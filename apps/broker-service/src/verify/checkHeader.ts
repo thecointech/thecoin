@@ -1,8 +1,7 @@
 import { createHmac } from 'crypto';
+import { getSecret } from "@thecointech/secrets";
 
-const secret = process.env.BLOCKPASS_WEBHOOK_SECRET ?? "secret";
-
-export function checkHeader(header: string, body: Buffer) {
+export async function checkHeader(header: string, body: Buffer) {
 
   if (process.env.NODE_ENV === 'development') {
     return true;
@@ -11,6 +10,7 @@ export function checkHeader(header: string, body: Buffer) {
   if (!header) return false;
   if (!body) return false;
 
+  const secret = await getSecret("BlockpassWebhookSecret");
   const hash = createHmac('sha256', secret)
     .update(body)
     .digest('hex');

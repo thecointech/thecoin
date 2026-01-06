@@ -8,13 +8,15 @@ import { Editor } from './Editor';
 import { TokenIdSelect } from './TokenIdSelect';
 import { OptionToggles } from './OptionToggles';
 import { getContract } from '@thecointech/contract-nft';
-import { BigNumber } from 'ethers';
 import { Options } from './types';
 import { log } from '@thecointech/logging';
-import { ImageEditorComponent } from '@toast-ui/react-image-editor';
+// NOTE: Removing to eliminate the presence of canvas
+// (it's currently breaking jsdom it fails to build, has no
+// binaries for Node22, and is an optional dependency)
+// import { ImageEditorComponent } from '@toast-ui/react-image-editor';
 import { signAndUpload } from './SignAndUpload';
 import { Button } from 'semantic-ui-react';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 
 const title = defineMessage({ defaultMessage: "Create Profile Image", description: "Title message on profile page" });
 const description = defineMessage({ defaultMessage: "Create and sign an image to show your carbon-neutral status", description: "Profile instructions" });
@@ -63,7 +65,7 @@ async function getYears(tokenIds: number[]): Promise<[number, number] | undefine
   const validBN = await Promise.all(
     tokenIds.map(id => nft.validity(id))
   );
-  const valids = validBN.map(([start, end]: [BigNumber, BigNumber]) => [start.toNumber(), end.gt(9999) ? 9999 : end.toNumber()]);
+  const valids = validBN.map(([start, end]) => [Number(start), Number(end > 9999 ? 9999 : end)] as const);
 
   // get current year, walk backwards
   // TODO: This code must be revised prior to 2024

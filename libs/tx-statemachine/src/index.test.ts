@@ -1,29 +1,21 @@
 import { jest } from '@jest/globals';
 import { ActionType, BuyAction } from '@thecointech/broker-db';
-import { GetContract } from '@thecointech/contract-core';
+import { ContractCore } from '@thecointech/contract-core';
 import { getFirestore } from "@thecointech/firestore";
 import { init } from '@thecointech/firestore';
 import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
-import { AnyActionContainer, getCurrentState, StateGraph } from './types';
+import { getCurrentState, StateGraph } from './types';
 import { manualOverride } from './transitions/manualOverride';
 import * as brokerDbTxs from '@thecointech/broker-db/transaction';
 import { makeTransition } from './makeTransition';
+import { log } from '@thecointech/logging'
+import { mockError } from '@thecointech/logging/mock';
 
 jest.unstable_mockModule('@thecointech/broker-db/transaction', () => {
   // const module = await import('@thecointech/broker-db/transaction');
   return Object.keys(brokerDbTxs).reduce((acc, key) => ({ ...acc, [key]: jest.fn() }), {});
 });
-jest.unstable_mockModule('@thecointech/logging', () => ({
-  log: {
-    debug: jest.fn(),
-    info: jest.fn(),
-    trace: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-  }
-}));
-const { log } = await import('@thecointech/logging');
 const Transactions = await import('@thecointech/broker-db/transaction');
 const FSM = await import('.');
 
@@ -71,7 +63,7 @@ it("Pauses and resumes running a processing graph on an action", async () => {
   // const spyOnRunTransitions = jest.spyOn(Transactions, 'storeTransition');
   // const spyOnLogError = jest.spyOn(log, 'error');
   init({})
-  const contract = await GetContract();
+  const contract = await ContractCore.get();
   const processor = new FSM.StateMachineProcessor(graph, contract, null);
 
   const action: BuyAction = {
@@ -102,7 +94,7 @@ it("Pauses and resumes running a processing graph on an action", async () => {
       // On first run, we should stop on withCoin (it has no transitions)
     // This should result in 2 transitions.
     expect(Transactions.storeTransition).toHaveBeenCalledTimes(executedTransitions);
-    expect(log.error).toHaveBeenCalledTimes(numErrors);
+    expect(mockError).toHaveBeenCalledTimes(numErrors);
 
     const result1 = getCurrentState(container);
     expect(result1.name).toEqual(expectedState);
@@ -129,12 +121,12 @@ it("Pauses and resumes running a processing graph on an action", async () => {
   // Simulate transition error
   graph.withCoin = { next: FSM.transitionTo<States>(makeError, "finalize") };
   await runTest('finalize', 1, 2);
-  // We still log the error,
-  await runTest('finalize', 0, 2);
+  // We still log an error because there is no error-handling
+  await runTest('finalize', 0, 1);
 
   // We can handle an error with an appropriate transition
   graph.finalize.onError = FSM.transitionTo<States>(logError, "error"),
-  await runTest('error', 1, 1);
+  await runTest('error', 1, 0);
 
   // No errors, re-run the entire thing
   graph.withCoin.next = FSM.transitionTo<States>(noop, "finalize");

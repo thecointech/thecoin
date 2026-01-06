@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-plugin-shockabsorber",
-  "version": "0.2.115",
+  "version": "0.5.1-test.0",
   "description": "The Coin: ShockAbsorber protects accounts from market moves",
   "type": "module",
   "keywords": [
@@ -19,48 +19,49 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-s build:contracts build:copy build:src",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
+    "build": "run -T run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
-    "build:src": "yarn tsc -b",
+    "build:src": "run -T tsc -b",
     "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
-    "clean": "run-p clean:*",
+    "clean": "run -T run-p 'clean:*'",
     "clean:src": "rimraf ./build",
-    "clean:contracts": "rimraf ./src/contracts && rimraf ./src/types",
-    "test": "yarn run-jest --runInBand",
-    "test:ci": "yarn run-jest-nix",
-    "dev:live": "cross-env CONFIG_NAME=devlive run-s _deploy _seed",
-    "deploy:prodtest": "cross-env CONFIG_NAME=prodtest yarn _deploy",
-    "deploy:prod": "cross-env CONFIG_NAME=prod yarn _deploy",
+    "clean:contracts": "rimraf ./src/codegen && run -T rimraf ./.hardhat",
+    "test": "run :jest",
+    "dev:live": "run -T cross-env CONFIG_NAME=devlive run-s _deploy",
+    "dev:live:finalize": "yarn _seed",
+    "deploy:prodtest": "run -T cross-env CONFIG_NAME=prodtest yarn _deploy",
+    "deploy:prod": "run -T cross-env CONFIG_NAME=prod yarn _deploy",
     "_deploy": "run-s _deploy:deploy _deploy:verify",
     "_deploy:deploy": "yarn _hardhat ./scripts/deploy.ts",
     "_deploy:verify": "yarn _hardhat ./scripts/verify.ts",
     "_seed": "yarn _hardhat ./scripts/seed.ts",
-    "_update": "yarn _hardhat ./scripts/update.ts && yarn _deploy:verify",
-    "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
+    "_update": "yarn build && yarn _hardhat ./scripts/update.ts && yarn _deploy:verify",
+    "_hardhat": "run -T cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
   },
   "files": [
     "build/**/*"
   ],
   "exports": {
     ".": {
-      "development": "./build/shockabsorber_mocked.js",
+      "development": "./mocks/shockabsorber_mocked.ts",
       "electron": "./build/index.js",
       "default": "./build/index.js"
     }
   },
   "types": "./build/index.d.ts",
   "devDependencies": {
-    "@nomicfoundation/hardhat-network-helpers": "^1.0.8",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.10",
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "^0.2.115",
-    "@thecointech/contract-core": "^0.2.115",
-    "@thecointech/contract-plugin-converter": "^0.2.115",
-    "@thecointech/contract-tools": "^0.2.115",
-    "jest": "*"
+    "@thecointech/async": "^0.5.1-test.0",
+    "@thecointech/contract-core": "^0.5.1-test.0",
+    "@thecointech/contract-plugin-converter": "^0.5.1-test.0",
+    "@thecointech/contract-tools": "^0.5.1-test.0",
+    "@thecointech/setenv": "^0.5.1-test.0"
   },
   "dependencies": {
-    "@thecointech/contract-oracle": "^0.2.115",
-    "@thecointech/contract-plugins": "^0.2.115"
-  }
+    "@thecointech/contract-oracle": "^0.5.1-test.0",
+    "@thecointech/contract-plugins": "^0.5.1-test.0"
+  },
+  "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

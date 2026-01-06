@@ -1,13 +1,14 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { Button, Popup, Icon } from "semantic-ui-react";
 import { toHuman } from "@thecointech/utilities";
 import { getFxRate } from "@thecointech/fx-rates";
 import { TransactionList } from "../TransactionList";
 import { calculateProfit } from "../Account/profit";
 import { useFxRates } from "../FxRate/selectors";
-import { AccountMap } from '../AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { Account } from '../Account';
 import styles from "./styles.module.less";
+import { DateTime } from "luxon";
 
 export const Balance = () => {
   const account = AccountMap.useActive()!;
@@ -19,6 +20,9 @@ export const Balance = () => {
   React.useEffect(() => {
     doUpdateBalance();
   }, [])
+
+  const fromDate = useState(DateTime.now().minus({year: 1}));
+  const toDate = useState(DateTime.now());
 
   const { rates } = useFxRates();
   const { buy, fxRate } = getFxRate(rates, 0);
@@ -45,6 +49,8 @@ export const Balance = () => {
 
         <TransactionList
           rates={rates}
+          fromDate={fromDate}
+          toDate={toDate}
         />
       </div>
     </React.Fragment>

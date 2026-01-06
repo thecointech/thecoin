@@ -1,16 +1,12 @@
-import { getEnvVars } from "@thecointech/setenv";
 import { DateTime } from 'luxon';
 import { SendMail, SendDepositConfirmation } from '.'
 import { describe, IsManualRun } from '@thecointech/jestutils';
-
-const prodVars = getEnvVars('prodtest');
+import { ifSecret } from '@thecointech/secrets/jestutils';
 
 // I don't want to spam myself, so only run this test if manually requested
+// NOTE: This isn't currently working, as we load the mocked secrets
+// in index (even though we check the live one here)
 describe('Manual-Only: We can send emails', () => {
-
-  const OLD_ENV = process.env;
-  beforeEach(() => process.env = prodVars);
-  afterAll(() => process.env = OLD_ENV);
 
   it("Can send an email", async () => {
     const r = await SendMail("This is a test mail", "You should be seeing this!");
@@ -38,4 +34,4 @@ describe('Manual-Only: We can send emails', () => {
     expect(confirmation).toBeTruthy();
   })
 
-}, IsManualRun && prodVars.MAILJET_API_KEY !== undefined);
+}, IsManualRun && await ifSecret('MailjetApiKey'));

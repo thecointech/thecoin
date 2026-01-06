@@ -2,13 +2,13 @@ import { RecentTransactions } from '@thecointech/shared/containers/RecentTransac
 import { BillPayments } from 'containers/Accounts/BillPayments';
 import { Redeem } from 'containers/Accounts/Redeem';
 import { Transfer } from 'containers/Accounts/Transfer';
-import * as React from 'react';
+import React, { useState } from 'react';
 import illustration from './images/icon_payment_big.svg';
 import {AppContainerForTabs, AppContainerWithShadow} from 'components/AppContainers';
-
 import { Tab } from 'semantic-ui-react';
 import { defineMessages, useIntl } from 'react-intl';
 import { PageHeader } from 'components/PageHeader';
+import { DateTime } from 'luxon';
 
 const translations = defineMessages({
   title : {
@@ -32,6 +32,10 @@ const translations = defineMessages({
 });
 
 export const MakePayments = () => {
+
+  const fromDate = useState(DateTime.now().minus({year: 1}));
+  const toDate = useState(DateTime.now());
+
   const intl = useIntl();
   const panes = [
     { menuItem: intl.formatMessage({...translations.etransfer}), render: () => <AppContainerForTabs><Redeem /></AppContainerForTabs> },
@@ -48,7 +52,7 @@ export const MakePayments = () => {
       />
       <Tab panes={panes} renderActiveOnly={true} className={ `x6spaceAfter` } />
       <AppContainerWithShadow>
-        <RecentTransactions />
+        <RecentTransactions fromDate={fromDate} toDate={toDate} />
       </AppContainerWithShadow>
     </React.Fragment>
   );

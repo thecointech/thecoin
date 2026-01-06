@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-etransfer",
-  "version": "0.2.115",
+  "version": "0.5.1-test.0",
   "description": "The Coin: A library for processing eTransfer withdrawals",
   "type": "module",
   "keywords": [
@@ -18,9 +18,10 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc -b tsconfig.build.json",
-    "clean": "rimraf ./build && rimraf ./coverage"
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
+    "build": "run -T tsc -b",
+    "clean": "rimraf ./build && rimraf ./coverage",
+    "test": "run :jest"
   },
   "files": [
     "build/**/*"
@@ -28,11 +29,10 @@
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
   "dependencies": {
-    "@thecointech/bank-interface": "^0.2.115",
-    "@thecointech/tx-statemachine": "^0.2.115"
+    "@thecointech/tx-statemachine": "^0.5.1-test.0"
   },
   "devDependencies": {
-    "jest": "*"
+    "@thecointech/bank-interface": "^0.5.1-test.0"
   },
-  "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"
+  "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

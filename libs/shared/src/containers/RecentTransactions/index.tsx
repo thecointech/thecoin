@@ -4,17 +4,22 @@ import { TransactionList } from "../TransactionList";
 import { useFxRates } from "../FxRate/selectors";
 import { defineMessages, FormattedMessage } from "react-intl";
 import styles from './styles.module.less';
-import { AccountMap } from '../AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { Account } from '../Account';
 import { DateTime } from 'luxon';
 
 const translate = defineMessages({
       title : {
-        id: "shared.balance.title",
         defaultMessage:"Recent Operations",
         description:"shared.balance.title: Title for the congratulations page"}});
 
-export const RecentTransactions = () => {
+type DateTimeState = [DateTime, (v: DateTime) => void];
+type Props = {
+  fromDate: DateTimeState,
+  toDate: DateTimeState,
+}
+
+export const RecentTransactions = ({ fromDate, toDate}: Props) => {
 
   const active = AccountMap.useActive()
   const api = Account(active!.address).useApi();
@@ -30,6 +35,8 @@ export const RecentTransactions = () => {
         <Header as="h5"><FormattedMessage {...translate.title} /></Header>
 
         <TransactionList
+          fromDate={fromDate}
+          toDate={toDate}
           rates={rates}
         />
       </div>

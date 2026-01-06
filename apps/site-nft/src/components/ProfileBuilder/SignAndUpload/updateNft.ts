@@ -37,7 +37,7 @@ export async function updateNft(tokenId: number, metadataUri: string, signer: Si
   const split = splitIpfsUri(metadataUri);
   const nft = await getContract();
   const lastUpdate = await nft.lastUpdate(tokenId);
-  const gasslessUpdate = await signGasslessUpdate(signer, tokenId, lastUpdate, split.prefix, split.digest);
+  const gasslessUpdate = await signGasslessUpdate(signer, tokenId, Number(lastUpdate), split.prefix, split.digest);
   const r = await GetNftApi().updateNftUri(gasslessUpdate);
   log.trace(`NFT Updated`);
   return r.data;

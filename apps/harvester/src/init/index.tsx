@@ -7,9 +7,6 @@ import { initAccounts } from './accounts';
 export async function initialize() {
 
   try {
-    // initialize logging first
-    log.info(`Loading App: ${__VERSION__} - ${process.env.CONFIG_NAME}`);
-
     await initAccounts();
 
     log.trace("Initialization complete");

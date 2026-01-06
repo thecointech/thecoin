@@ -20,6 +20,9 @@ const translations = defineMessages({
   successMessage : {
       defaultMessage: 'Order received.\nYou should receive the e-Transfer in 1-2 business days.',
       description: 'app.accounts.redeem.successMessage: Success Message for the make a payment page / etransfer tab'},
+  timeoutMessage: {
+        defaultMessage: 'The transaction is in the queue, but processing it is taking longer than usual. Please be patient, the order will be processed shortly.',
+        description: 'app.accounts.redeem.timeout: Timeout for the make a payment page / etransfer tab'},
   description : {
       defaultMessage: 'Email money to anyone with an interac e-Transfer.',
       description: 'app.accounts.redeem.description: Description for the make a payment page / etransfert tab'},
@@ -72,6 +75,7 @@ type VisualProps={
 
     errorHidden: boolean,
     successHidden: boolean,
+    timedout?: boolean,
 
     coinToSell: number | null,
     onValueChange: (value: number) => void,
@@ -148,6 +152,9 @@ export const RedeemWidget = (props: VisualProps) => {
         </Message>
         <Message hidden={props.errorHidden} negative>
           <FormattedMessage {...translations.errorMessage} />
+        </Message>
+        <Message hidden={!props.timedout}>
+          <FormattedMessage {...translations.timeoutMessage} />
         </Message>
 
         <DualFxInput

@@ -1,43 +1,33 @@
-import { connectOracle, updateRates } from '@thecointech/contract-oracle';
+import { ContractOracle, updateRates } from '@thecointech/contract-oracle';
 import { getSigner } from '@thecointech/signers';
 import { getCombinedRates } from './rates';
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
 import { FirestoreAdmin, Timestamp, getFirestore } from '@thecointech/firestore';
 import { toDateStr } from '../utils/date';
+import { formatEther, parseUnits, Signer } from 'ethers';
 
 
 export async function updateOracle(timestamp: number) {
 
-  // Because there are multiple versions of this service running, we
-  // need to ensure that there is only 1 update happening at any given time
-  const guard = await enterCS();
-  log.debug(`UpdateOracle acquired CS: ${guard && guard.toDate()}`);
+  await guardFn(async () => {
 
-  if (!guard) {
-    log.warn("Cannot update Oracle - someone else holds the critical section");
-    return;
-  }
-
-  try {
     const signer = await getSigner("OracleUpdater");
-    const oracle = await connectOracle(signer);
+
+    // Check signer balance
+    await verifyEtherReserves(signer);
+
+    const oracle = await ContractOracle.connect(signer);
 
     log.debug(
       {
         date: toDateStr(timestamp),
-        address: oracle.address,
       },
-      'Updating Oracle {address} at {date}'
+      'Updating Oracle at {date}'
     );
 
     // Our oracle operates in milliseconds
     await updateRates(oracle, timestamp, async (ts) => {
-
-      log.trace(
-        {date: toDateStr(ts)},
-        'Fetching rate for oracle at {date}'
-      )
       // do we have a data for this time?
       const rates = await getCombinedRates(ts);
       if (!rates) return null;
@@ -51,12 +41,15 @@ export async function updateOracle(timestamp: number) {
     })
 
     const validTo = await oracle.validUntil();
-    const validToDate = DateTime.fromMillis(validTo.toNumber());
-    if (validToDate > DateTime.now().plus({ hours: 6})) {
-      log.error(
-        { date: toDateStr(validToDate) },
-        "Oracle is too far in the future {date}"
-      );
+    const validToDate = DateTime.fromMillis(Number(validTo));
+    if (validToDate > DateTime.now().plus({ hours: 6 })) {
+      // Ignore this in develop (the duration of a rate is longer than 6h)
+      if (process.env.NODE_ENV !== "development") {
+        log.error(
+          { date: toDateStr(validToDate) },
+          "Oracle is too far in the future {date}"
+        );
+      }
     }
     else {
       log.info(
@@ -64,26 +57,58 @@ export async function updateOracle(timestamp: number) {
         'Oracle updated to {date}'
       );
     }
+  })
+}
+
+export async function guardFn<T extends Function>(fn: T) {
+  // Because there are multiple versions of this service running, we
+  // need to ensure that there is only 1 update happening at any given time
+  const guard = await enterCS();
+  log.debug(`UpdateOracle acquired CS: ${guard && guard.toDate()}`);
+
+  if (!guard) {
+    log.warn("Cannot update Oracle - someone else holds the critical section");
+    return;
+  }
+  try {
+    await fn();
   }
   finally {
     await exitCS(guard);
   }
 }
 
-
 const cs_doc = "admin/__updater_cs";
 const start_key = "started";
 const complete_key = "complete";
 function enterCS() {
-  const db: FirestoreAdmin = getFirestore() as any;
+  const db = getFirestore() as FirestoreAdmin;
   const ref = db.doc(cs_doc);
   return db.runTransaction(async t => {
     const doc = await t.get(ref);
-    // Check if someone else currently holds the lock
-    log.info(`CS state: ${JSON.stringify(doc?.data())}`)
-    if (doc.get(start_key)?.toMillis() != doc.get(complete_key)?.toMillis()) {
-      return false;
+
+    if (doc.exists) {
+      const startKey = doc.get(start_key);
+      const completeKey = doc.get(complete_key);
+      log.info(
+        { startKey: startKey?.toDate(), completeKey: completeKey?.toDate() },
+        'CS state: {startKey} {completeKey}'
+      )
+
+      // Check if someone else currently holds the lock
+      if (startKey?.toMillis() != completeKey?.toMillis()) {
+
+        if (startKey?.toMillis() < DateTime.now().minus({hours: 6}).toMillis()) {
+          // We assume that a 6-hr gap means that someone else has crashed
+          log.error("Expired lock detected, ignoring");
+        }
+        else {
+          // Someone else holds the lock & is still running, so we can't update
+          return false;
+        }
+      }
     }
+
     const timestamp = Timestamp.now();
     // Enable set for dev:live
     if (!doc.exists) {
@@ -102,6 +127,7 @@ function enterCS() {
     return timestamp;
   })
 }
+
 function exitCS(guard: Timestamp) {
   const db: FirestoreAdmin = getFirestore() as any;
   const doc = db.doc(cs_doc);
@@ -109,4 +135,23 @@ function exitCS(guard: Timestamp) {
     { [complete_key]: guard },
     { merge: true }
   )
+}
+
+// Verify we have enough gas to run processing
+async function verifyEtherReserves(signer: Signer) {
+  // Calls to provider are not 100% reliable, but an error here is harmless
+  try {
+    const signerBalance = await signer.provider?.getBalance(signer) ?? 0n;
+    const minimumBalance = parseUnits('0.2', "ether");
+    log.debug({ Balance: formatEther(signerBalance) }, "Updating with eth reserves: {Balance}")
+    if (signerBalance < minimumBalance) {
+      log.error(
+        { Balance: formatEther(signerBalance), MinimumBalance: formatEther(minimumBalance), Signer: 'OracleUpdater' },
+        `Signer {Signer} ether balance too low {Balance} < {MinimumBalance}`
+      );
+    }
+  }
+  catch (err: any) {
+    log.error(err, "Failed to verify ether reserves");
+  }
 }

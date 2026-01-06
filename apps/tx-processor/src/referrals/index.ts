@@ -26,7 +26,6 @@ export async function processReferrals() {
   log.trace(`Processed ${newlyVerified.length} referrals`);
 }
 
-
 // If the user is unique, automatically generate referral code
 export async function generateReferralCode(address: string, uniqueIdSig: string) {
 

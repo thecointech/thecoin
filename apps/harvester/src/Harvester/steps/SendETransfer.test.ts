@@ -1,25 +1,10 @@
-import { jest } from '@jest/globals';
 import currency from 'currency.js';
-import { SendETransfer } from './SendETransfer'
-import type { UserData } from '../types';
-import { log } from '@thecointech/logging';
+import { getMockSendTime, SendETransfer } from './SendETransfer'
+import { mockLog } from '../../../internal/mockLog';
+import { DateTime } from 'luxon';
+import { mockUser } from '../../../internal/mockUser';
 
-const user = {
-  replay: () => Promise.resolve({ confirm: "1234" }),
-} as any as UserData;
-
-const mockLog = () => {
-  const logStatements: string[] = [];
-  log.warn = jest.fn<(...args: any[]) => boolean>().mockImplementation((args) => {
-    logStatements.push(args);
-    return false;
-  });
-  log.info = jest.fn<(...args: any[]) => boolean>().mockImplementation((args) => {
-    logStatements.push(args);
-    return false;
-  });
-  return logStatements;
-}
+const user = mockUser();
 
 it ('will send an e-transfer', async () => {
   const sender = new SendETransfer();
@@ -71,21 +56,48 @@ it ('will not send more than chq balance', async () => {
   expect(d.toETransfer).toBeUndefined();
 })
 
+it ('mocks a decent send time', async () => {
+  const sundayMorning = DateTime.now().set({weekday: 7, hour: 7, minute: 0})
+  const m1 = getMockSendTime(sundayMorning)
+  expect(m1.weekday).toEqual(5);
+  expect(m1.hour).toEqual(10);
+  expect(m1 < sundayMorning).toBeTruthy();
 
+  const mondayMorning = sundayMorning.plus({ day: 1 })
+  const m2 = getMockSendTime(mondayMorning)
+  expect(m2.weekday).toEqual(5);
+  expect(m2.hour).toEqual(10);
+  expect(m2 < sundayMorning).toBeTruthy();
 
-it ('will not send more than e-transfers limit', async () => {
-  const msgs = mockLog();
-  const sender = new SendETransfer();
+  const fridayMorning = sundayMorning.plus({ day: 5 })
+  const m3 = getMockSendTime(fridayMorning)
+  expect(m3.weekday).toEqual(4);
+  expect(m3.hour).toEqual(10);
+  expect(m3 < fridayMorning).toBeTruthy();
+  expect(m3 > mondayMorning).toBeTruthy();
 
-  const d = await sender.process({
-    chq: {
-      balance: currency(10000),
-    },
-    state: {
-      toETransfer: currency(4000),
-    },
-  } as any, user)
-  expect(msgs[1]).toEqual("Requested e-transfer is too large: 4000.00, max 3000.00");
-  expect(d.harvesterBalance).toEqual(currency(3000))
-  expect(d.toETransfer).toBeUndefined();
+  const saturdayMorning = sundayMorning.plus({ day: 6 })
+  const m4 = getMockSendTime(saturdayMorning)
+  expect(m4.weekday).toEqual(5);
+  expect(m4.hour).toEqual(10);
+  expect(m4 < saturdayMorning).toBeTruthy();
+  expect(m4 > fridayMorning).toBeTruthy();
+
+  const sundayEvening = sundayMorning.set({ hour: 18 })
+  const m5 = getMockSendTime(sundayEvening)
+  expect(m5.weekday).toEqual(5);
+  expect(m5.hour).toEqual(10);
+  expect(m5 < sundayMorning).toBeTruthy();
+
+  const mondayEvening = mondayMorning.set({ hour: 18 })
+  const m6 = getMockSendTime(mondayEvening)
+  expect(m6.weekday).toEqual(1);
+  expect(m6.hour).toEqual(10);
+  expect(m6 > mondayMorning).toBeTruthy();
+
+  const fridayEvening = fridayMorning.set({ hour: 18 })
+  const m7 = getMockSendTime(fridayEvening)
+  expect(m7.weekday).toEqual(5);
+  expect(m7.hour).toEqual(10);
+  expect(m7 > fridayMorning).toBeTruthy();
 })

@@ -1,19 +1,32 @@
 import { Login as LoginUI } from "@thecointech/shared/containers/Login";
-import { Account, AccountState } from '@thecointech/shared/containers/Account';
-import { Redirect } from 'react-router';
+import { Navigate } from 'react-router';
 import { useEffect, useState } from 'react';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { isLocal } from '@thecointech/signers';
+import { BaseWallet, HDNodeWallet } from "ethers";
+import { groupKey } from './routes';
+import { Account } from "@thecointech/shared/containers/Account";
+import type { AccountState } from '@thecointech/account';
+import { toCoinAccount } from "./convert";
+import { useSimplePathContext } from "@/SimplePath";
 
-export const Login = ({account}: {account: AccountState}) => {
-  // Start the account store (redux etc)
-  const [complete, setComplete] = useState(false);
-  Account(account.address).useStore();
+export const Login = () => {
+  // Basic guard component ensures we have an active account
+  // We split into two to ensure we follow the rules of hooks
+  // (we can't call Account.useStore() without a valid account)
   const active = AccountMap.useActive();
+  return active
+    ? <LoginAccount account={active} />
+    : <Navigate to={`/${groupKey}`} />
+}
+
+const LoginAccount = ({account}: {account: AccountState}) => {
+  Account(account.address).useStore();
+  const [complete, setComplete] = useState(false);
 
   useEffect(() => {
-    if (!active?.contract) return;
-    const {signer} = active;
+    if (!account?.contract) return;
+    const {signer} = account;
     if (!isLocal(signer)) {
       alert("Using harvester with remote accounts is not currently supported.  Ping me for details");
       throw new Error("Cannot continue, must give up...");
@@ -21,14 +34,20 @@ export const Login = ({account}: {account: AccountState}) => {
 
     // pass the unlocked account to scraper.  This will
     // need some hard-core protection in time...
-    window.scraper.setWalletMnemomic(signer.mnemonic)
+    const hdWallet = signer as BaseWallet as HDNodeWallet;
+    const coinAccount = toCoinAccount(hdWallet, account.name);
+    window.scraper.setCoinAccount(coinAccount)
       .then(() => {
         setComplete(true)
       });
-  }, [active?.contract])
+  }, [account?.contract])
 
+  const context = useSimplePathContext();
+  context.onValidate = () => {
+    return !!account?.contract;
+  }
 
   return complete
-    ? <Redirect to="/account/plugins" />
+    ? <Navigate to={`/${groupKey}/plugins`} />
     : <LoginUI account={account} />
 }

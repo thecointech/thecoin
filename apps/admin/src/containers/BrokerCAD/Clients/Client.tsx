@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AccountDetails } from '@thecointech/account';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { getHistory, ComposeClient } from '@thecointech/idx';
 import { Header, Input, List } from 'semantic-ui-react';
@@ -8,7 +8,7 @@ import { ClientTransaction } from './ClientTransaction';
 import { UserData } from './data';
 import { toCAD } from './toCAD';
 import { buildUniqueId } from '@thecointech/utilities/Verify';
-import { verifyMessage } from '@ethersproject/wallet';
+import { verifyMessage } from 'ethers';
 import { AddressMatches } from '@thecointech/utilities/Address';
 
 export type Props = UserData;

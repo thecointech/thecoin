@@ -1,12 +1,11 @@
-
 import { createClient } from '@prismicio/client'
-import { SagaReducer } from '@thecointech/shared/store/immerReducer'
-import { ArticleDocument, FAQDocument, IActions, PrismicState } from './types'
+import { SagaReducer } from '@thecointech/redux'
+import { IActions, PrismicState } from './types'
 import { call } from "@redux-saga/core/effects";
 import { log } from '@thecointech/logging'
 import type { ApplicationRootState } from 'types'
-import type { PrismicDocument } from '@prismicio/types'
-import type { Locale } from '@thecointech/shared/containers/LanguageProvider'
+import type { Locale } from '@thecointech/redux-intl'
+import type { ArticleDocument, FaqDocument } from '@thecointech/site-prismic/types';
 
 const apiEndpoint = process.env.PRISMIC_API_ENDPOINT as string;
 const client = createClient(apiEndpoint);
@@ -14,21 +13,32 @@ const client = createClient(apiEndpoint);
 const DOCUMENTS_KEY: keyof ApplicationRootState = "documents";
 
 const getOptions = (locale: string) => ({ lang : `${locale}-ca` })
-const getByUId = (id: string, locale: string) => client.getByUID('article', id, getOptions(locale));
+const getByUID = (id: string, locale: string) => client.getByUID('article', id, getOptions(locale));
 async function fetchData(locale: string) {
-  const response = await client.query('', getOptions(locale))
-  return response.results;
+  try {
+    const articles = await client.getAllByType('article', getOptions(locale))
+    const faqs = await client.getAllByType('faq', getOptions(locale))
+    return [...articles, ...faqs];
+  }
+  catch (e) {
+    // TODO: Use polly & proper error handling
+    // If anything goes wrong, don't return anything.  This at least
+    // allows the user to click on the page and we'll try again
+    alert(`Failed to fetch Prismic docs for locale: ${locale}`);
+    log.error(`Failed to fetch Prismic docs for locale: ${locale}`, e);
+    return null;
+  }
 }
 
 const initialState: PrismicState = {
   en: {
     fullyLoaded: false,
-    faqs: new Map<string, FAQDocument>(),
+    faqs: new Map<string, FaqDocument>(),
     articles: new Map<string, ArticleDocument>(),
   },
   fr: {
     fullyLoaded: false,
-    faqs: new Map<string, FAQDocument>(),
+    faqs: new Map<string, FaqDocument>(),
     articles: new Map<string, ArticleDocument>(),
   }
 }
@@ -42,7 +52,7 @@ export class Prismic extends SagaReducer<IActions, PrismicState>(DOCUMENTS_KEY, 
       return;
 
     log.trace(`Fetching Single Prismic Doc: ${uid}`);
-    const result = (yield call(getByUId, uid, locale)) as ArticleDocument;
+    const result = (yield call(getByUID, uid, locale)) as ArticleDocument;
     log.trace(`Fetched: ${!!result}`);
     if (result) {
       yield this.storeValues({
@@ -61,7 +71,7 @@ export class Prismic extends SagaReducer<IActions, PrismicState>(DOCUMENTS_KEY, 
       return;
     }
     log.trace(`Fetching Prismic docs for locale: ${locale}`);
-    const results = (yield call(fetchData, locale)) as PrismicDocument[];
+    const results = (yield call(fetchData, locale)) as Awaited<ReturnType<typeof fetchData>>;
     log.trace(`Fetched: ${!!results}`);
     if (results) {
       const newState = {
@@ -71,14 +81,13 @@ export class Prismic extends SagaReducer<IActions, PrismicState>(DOCUMENTS_KEY, 
       }
       results
         .filter(item => item.type === 'faq')
-        .forEach(item => newState.faqs.set(item.uid!, item as FAQDocument));
+        .forEach(item => newState.faqs.set(item.uid, item as FaqDocument));
       results
         .filter(item => item.type === 'article')
-        .forEach(item => newState.articles.set(item.uid!, item as ArticleDocument))
+        .forEach(item => newState.articles.set(item.uid, item as ArticleDocument))
       yield this.storeValues({
         [locale]: newState
       })
     }
   };
 }
-

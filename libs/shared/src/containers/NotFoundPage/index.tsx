@@ -7,7 +7,7 @@
 import * as React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Header, Grid, Button } from 'semantic-ui-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router';
 import illustration from './images/illust_pagenotfound.svg'
 
 const translate = defineMessages({

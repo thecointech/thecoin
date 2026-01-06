@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/async",
-  "version": "0.2.115",
+  "version": "0.5.1-test.0",
   "description": "TheCoin: utility functions for async control",
   "type": "module",
   "keywords": [
@@ -16,16 +16,27 @@
     "directory": "libs/async"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "yarn tsc",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
+    "build": "run -T tsc",
     "clean": "rimraf ./build"
   },
   "exports": {
     ".": {
-      "development": "./build/async_mocked.js",
-      "devlive": "./build/async_mocked.js",
+      "development": "./mocks/async_mocked.ts",
       "default": "./build/index.js"
+    },
+    "./sleep": "./build/index.js"
+  },
+  "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "build/index.d.ts"
+      ]
     }
   },
-  "types": "./build/index.d.ts"
+  "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e",
+  "dependencies": {
+    "async-mutex": "^0.5.0"
+  }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/contract-plugins",
-  "version": "0.2.115",
+  "version": "0.5.1-test.0",
   "description": "The Coin: Plugin functionality for contract-core",
   "type": "module",
   "keywords": [
@@ -19,15 +19,14 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "rimraf ./build/.buildinfo",
-    "build": "run-s build:contracts build:copy build:src",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
+    "build": "run -T run-s build:contracts build:copy build:src",
     "build:contracts": "yarn _hardhat ./scripts/compile.ts",
-    "build:src": "yarn tsc -b",
-    "build:copy": "cpx \"./src/deployed/**\" ./build/deployed",
-    "clean": "rimraf ./build",
-    "test": "yarn run-jest",
-    "test:ci": "yarn run-jest-nix",
-    "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts yarn run-env"
+    "build:src": "run -T tsc -b",
+    "build:copy": "run -T cpx \"./src/deployed/**\" ./build/deployed",
+    "clean": "run -T rimraf ./build && run -T rimraf ./src/codegen && run -T rimraf ./.hardhat",
+    "test": "run :jest",
+    "_hardhat": "cross-env HARDHAT_CONFIG=hardhat.config.cts run-env"
   },
   "files": [
     "build/**/*"
@@ -50,11 +49,12 @@
   },
   "devDependencies": {
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@thecointech/async": "^0.2.115",
-    "@thecointech/contract-tools": "^0.2.115",
-    "jest": "*"
+    "@thecointech/async": "^0.5.1-test.0",
+    "@thecointech/contract-tools": "^0.5.1-test.0",
+    "@thecointech/setenv": "^0.5.1-test.0"
   },
   "dependencies": {
-    "@thecointech/contract-oracle": "^0.2.115"
-  }
+    "@thecointech/contract-oracle": "^0.5.1-test.0"
+  },
+  "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

@@ -1,0 +1,27 @@
+services:
+  tx-processor:
+    #image: ghcr.io/thecointech/thecoin/tx-processor:${CONFIG_NAME:-prod}-latest
+    #pull_policy: always
+    #platform: linux/amd64
+    image: tx-processor
+    environment:
+      - CONFIG_NAME=${CONFIG_NAME:-prod}
+      - ALWAYS_VERIFY_BANK=true # If not set, will only verify bank once per day
+      - LOG_NAME=tx-processor
+      # - THECOIN_SCRAPER_BROWSER=firefox
+    volumes:
+      # Persistent runtime data
+      # Either a bind or tx-processor-data volume
+      - type: bind
+        source: /var/tx-data
+        target: /data
+      # Secrets from host machine (read-only)
+      - type: bind
+        source: ${THECOIN_SECRETS?THECOIN_SECRETS environment variable is required}
+        target: /secrets
+        read_only: true
+    restart: "no"
+
+volumes:
+  tx-processor-data:
+    name: tx-processor-data-${CONFIG_NAME:-prod}

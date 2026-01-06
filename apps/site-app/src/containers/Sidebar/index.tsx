@@ -1,12 +1,12 @@
 import React from 'react';
 import { getAvatarLink } from '@thecointech/shared/components/Avatars';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
-import { SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar/reducer';
-import type { SidebarLink } from '@thecointech/shared/containers/PageSidebar/types';
+import { AccountMap } from '@thecointech/redux-accounts';
+import { SidebarItemsReducer, type SidebarLink } from '@thecointech/shared/containers/PageSidebar';
 import { defineMessages, useIntl } from 'react-intl';
 import { isLocal } from '@thecointech/signers';
 
-import { AppRoutes } from '../App/Routes';
+import type { AuthPathKey } from '../App/Routes';
+import { getOpenRoutes } from '../App/Routes.open';
 import { useLocation } from 'react-router';
 
 const translations = defineMessages({
@@ -42,36 +42,31 @@ const translations = defineMessages({
 
 // To ensure links are safe, we re-use
 // the keys from the routes object.
-type AuthKey = keyof typeof AppRoutes.auth;
-type AuthKeys = {
-  [index in AuthKey]: string
-}
-const authRoutes = Object
-  .keys(AppRoutes.auth)
-  .reduce(
-    (obj, k) => { obj[k as AuthKey] = k; return obj },
-    {} as AuthKeys
-  );
 
-const sidebarLinks: SidebarLink[] = [
+type AuthPrefixedPath = "/" | `/${AuthPathKey}`;
+
+type AuthSidebarLink = Omit<SidebarLink, 'to'> & {
+  to: AuthPrefixedPath;
+}
+const sidebarLinks: AuthSidebarLink[] = [
   {
     name: translations.home,
-    to: `/${authRoutes.home}`,
+    to: `/`,
     icon: "home"
   },
   {
     name: translations.transferin,
-    to: `/${authRoutes.transferIn}`,
+    to: `/transferIn`,
     icon: "arrow circle up"
   },
   {
     name: translations.makepayments,
-    to: `/${authRoutes.makePayments}`,
+    to: `/makePayments`,
     icon: "arrow circle right"
   },
   {
     name: translations.settings,
-    to: `/${authRoutes.settings}`,
+    to: `/settings`,
     icon: "setting"
   },
   {
@@ -113,13 +108,13 @@ export function useSidebar() {
     let showSidebar = !!(
       active &&
       (
-        (isLocal(active.signer) && active.signer.mnemonic) ||
+        (isLocal(active.signer) && active.signer.signingKey) ||
         (active.signer.provider)
       )
     );
     // Do not show sidebar if on open route
     if (showSidebar) {
-      const openRoutes = Object.keys(AppRoutes.open);
+      const openRoutes = getOpenRoutes();
       const pathStarts = location.pathname.slice(1);
       showSidebar = !(pathStarts && openRoutes.find(r => pathStarts.startsWith(r)));
     }

@@ -1,5 +1,4 @@
-export * from './types';
-export * from './connect';
+export * from './codegen';
 export * from './contract';
 export * from './constants';
-export type { PluginAndPermissionsStructOutput } from './types/contracts/TheCoin';
+export type { PluginAndPermissionsStructOutput } from './codegen/contracts/TheCoin';
