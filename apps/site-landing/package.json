@@ -3,7 +3,7 @@
   "productName": "THECoin: Website - Landing",
   "private": true,
   "type": "module",
-  "version": "0.5.1-test.0",
+  "version": "0.5.1",
   "description": "THECoin: Future-proof currency",
   "repository": {
     "type": "git",
@@ -55,9 +55,9 @@
     ]
   },
   "dependencies": {
-    "@thecointech/shared": "^0.5.1-test.0",
-    "@thecointech/site-base": "^0.5.1-test.0",
-    "@thecointech/utilities": "^0.5.1-test.0",
+    "@thecointech/shared": "^0.5.1",
+    "@thecointech/site-base": "^0.5.1",
+    "@thecointech/utilities": "^0.5.1",
     "papaparse": "^5.1.1",
     "react-ga": "^2.7.0",
     "react-helmet": "^6.1.0",
@@ -65,8 +65,8 @@
     "sanitize.css": "10.0.0"
   },
   "devDependencies": {
-    "@thecointech/setenv": "^0.5.1-test.0",
-    "@thecointech/site-semantic-theme": "^0.5.1-test.0",
+    "@thecointech/setenv": "^0.5.1",
+    "@thecointech/site-semantic-theme": "^0.5.1",
     "@types/papaparse": "^5.0.3",
     "@types/react-helmet": "^6.1.5",
     "coveralls": "3.0.4",

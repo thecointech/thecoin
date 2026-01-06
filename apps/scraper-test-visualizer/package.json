@@ -3,7 +3,7 @@
   "productName": "Scraper Test Visualizer",
   "private": true,
   "type": "module",
-  "version": "0.5.1-test.0",
+  "version": "0.5.1",
   "description": "Visual tool for viewing scraper element test results",
   "author": "Stephen Taylor",
   "license": "GPL-3.0-or-later",
