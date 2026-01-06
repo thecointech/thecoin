@@ -10,13 +10,14 @@ from geo_math import BBox
 
 T = TypeVar('T')
 # type QueryData = tuple[str, Type[T]] # Can we update to Python 3.12?
-async def run_endpoint_query(image: Union[UploadFile, Image.Image], data: tuple[str, Type[T]], crop: BBox|None = None) -> T:
+async def run_endpoint_query(image: Union[UploadFile, Image.Image], data: tuple[str, Type[T]], crop: BBox|None = None, max_length: int = 200) -> T:
 
     (image, crop) = await get_image(image, crop)
     # Run query with PIL Image
     response = runQueryToJson(
         image=image,
         query_data=data,
+        max_length=max_length,
     )
 
     try:
