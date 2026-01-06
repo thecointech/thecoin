@@ -49,7 +49,8 @@ files.forEach(src => {
   const r = path.relative(semanticRoot, src);
   const dest = path.join(outputFolder, "semantic", r);
   const outdir = path.dirname(dest);
-  if (!fs.existsSync(outdir))
+  if (!fs.existsSync(outdir)) {
     fs.mkdirSync(outdir, {recursive: true})
+  }
   fs.copyFileSync(src, dest)
 });
