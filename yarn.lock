@@ -5111,17 +5111,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@google-cloud/promisify@npm:<4.1.0, @google-cloud/promisify@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@google-cloud/promisify@npm:4.0.0"
+  checksum: 4332cbd923d7c6943ecdf46f187f1417c84bb9c801525cd74d719c766bfaad650f7964fb74576345f6537b6d6273a4f2992c8d79ebec6c8b8401b23d626b8dd3
+  languageName: node
+  linkType: hard
+
 "@google-cloud/promisify@npm:^2.0.0":
   version: 2.0.4
   resolution: "@google-cloud/promisify@npm:2.0.4"
   checksum: fc7d738cf1c504489ebea18d25d6278392e0bb85012db8e36a2c625917121d0a667ba37a1f90692a5142fe8d2aa5026a08d5f24825c2cabbebc015752a6d486b
-  languageName: node
-  linkType: hard
-
-"@google-cloud/promisify@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@google-cloud/promisify@npm:4.0.0"
-  checksum: 4332cbd923d7c6943ecdf46f187f1417c84bb9c801525cd74d719c766bfaad650f7964fb74576345f6537b6d6273a4f2992c8d79ebec6c8b8401b23d626b8dd3
   languageName: node
   linkType: hard
 
@@ -5158,28 +5158,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@google-cloud/storage@npm:^7.7.0":
-  version: 7.7.0
-  resolution: "@google-cloud/storage@npm:7.7.0"
+"@google-cloud/storage@npm:^7.18.0":
+  version: 7.18.0
+  resolution: "@google-cloud/storage@npm:7.18.0"
   dependencies:
     "@google-cloud/paginator": "npm:^5.0.0"
     "@google-cloud/projectify": "npm:^4.0.0"
-    "@google-cloud/promisify": "npm:^4.0.0"
+    "@google-cloud/promisify": "npm:<4.1.0"
     abort-controller: "npm:^3.0.0"
     async-retry: "npm:^1.3.3"
-    compressible: "npm:^2.0.12"
-    duplexify: "npm:^4.0.0"
-    ent: "npm:^2.2.0"
-    fast-xml-parser: "npm:^4.3.0"
+    duplexify: "npm:^4.1.3"
+    fast-xml-parser: "npm:^4.4.1"
     gaxios: "npm:^6.0.2"
-    google-auth-library: "npm:^9.0.0"
+    google-auth-library: "npm:^9.6.3"
+    html-entities: "npm:^2.5.2"
     mime: "npm:^3.0.0"
-    mime-types: "npm:^2.0.8"
     p-limit: "npm:^3.0.1"
     retry-request: "npm:^7.0.0"
     teeny-request: "npm:^9.0.0"
     uuid: "npm:^8.0.0"
-  checksum: 8fffef374b061e567e146f81b2cdb5125cc3dd9ede06fb4879b6e45a892fb2b298778a3e94d7b59a7671fde6697b3e23f1593c069cf97522c50746cd599bf7f0
+  checksum: 1879a7c60a0a23890067d0b17359da701d0504e46b8e4c0b3cdfd29dcd54fcaaddada68206d1d14fafadea86eb0a885bd8cc725c453def845f9bd9aae2cc3a85
   languageName: node
   linkType: hard
 
@@ -11289,7 +11287,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/broker-service@workspace:apps/broker-service"
   dependencies:
-    "@google-cloud/storage": "npm:^7.7.0"
+    "@google-cloud/storage": "npm:^7.18.0"
     "@thecointech/async": "npm:^0.5.1-test.0"
     "@thecointech/contract-core": "npm:^0.5.1-test.0"
     "@thecointech/contract-plugins": "npm:^0.5.1-test.0"
@@ -18635,7 +18633,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"compressible@npm:^2.0.12, compressible@npm:~2.0.16, compressible@npm:~2.0.18":
+"compressible@npm:~2.0.16, compressible@npm:~2.0.18":
   version: 2.0.18
   resolution: "compressible@npm:2.0.18"
   dependencies:
@@ -21343,13 +21341,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ent@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "ent@npm:2.2.0"
-  checksum: d12c504d93afb8b22551323f78f60f0a2660289cf2de2210bdd2fdb07ac204956da23510a7711bf48079aa0aa726e21724224de6c6289120ddcf27652b30cb17
-  languageName: node
-  linkType: hard
-
 "entities@npm:^1.1.1":
   version: 1.1.2
   resolution: "entities@npm:1.1.2"
@@ -22918,7 +22909,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-xml-parser@npm:^4.1.3, fast-xml-parser@npm:^4.3.0":
+"fast-xml-parser@npm:^4.1.3":
   version: 4.3.3
   resolution: "fast-xml-parser@npm:4.3.3"
   dependencies:
@@ -22926,6 +22917,17 @@ __metadata:
   bin:
     fxparser: src/cli/cli.js
   checksum: 420d15f315dbafac68be8a6bfa6a26c42d3e846c336a4d0c9a901f0a0903b0ab642379766fe7574d1602da2914c5d7481f78edf47c0712ab9078871e26cab296
+  languageName: node
+  linkType: hard
+
+"fast-xml-parser@npm:^4.4.1":
+  version: 4.5.3
+  resolution: "fast-xml-parser@npm:4.5.3"
+  dependencies:
+    strnum: "npm:^1.1.1"
+  bin:
+    fxparser: src/cli/cli.js
+  checksum: bf9ccadacfadc95f6e3f0e7882a380a7f219cf0a6f96575149f02cb62bf44c3b7f0daee75b8ff3847bcfd7fbcb201e402c71045936c265cf6d94b141ec4e9327
   languageName: node
   linkType: hard
 
@@ -25060,7 +25062,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"google-auth-library@npm:^9.0.0, google-auth-library@npm:^9.3.0":
+"google-auth-library@npm:^9.0.0, google-auth-library@npm:^9.3.0, google-auth-library@npm:^9.6.3":
   version: 9.15.1
   resolution: "google-auth-library@npm:9.15.1"
   dependencies:
@@ -31894,7 +31896,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mime-types@npm:^2.0.8, mime-types@npm:^2.1.12, mime-types@npm:^2.1.27, mime-types@npm:^2.1.31, mime-types@npm:^2.1.35, mime-types@npm:~2.1.17, mime-types@npm:~2.1.19, mime-types@npm:~2.1.24, mime-types@npm:~2.1.34":
+"mime-types@npm:^2.1.12, mime-types@npm:^2.1.27, mime-types@npm:^2.1.31, mime-types@npm:^2.1.35, mime-types@npm:~2.1.17, mime-types@npm:~2.1.19, mime-types@npm:~2.1.24, mime-types@npm:~2.1.34":
   version: 2.1.35
   resolution: "mime-types@npm:2.1.35"
   dependencies:
@@ -40574,6 +40576,13 @@ __metadata:
   version: 1.0.5
   resolution: "strnum@npm:1.0.5"
   checksum: 64fb8cc2effbd585a6821faa73ad97d4b553c8927e49086a162ffd2cc818787643390b89d567460a8e74300148d11ac052e21c921ef2049f2987f4b1b89a7ff1
+  languageName: node
+  linkType: hard
+
+"strnum@npm:^1.1.1":
+  version: 1.1.2
+  resolution: "strnum@npm:1.1.2"
+  checksum: a0fce2498fa3c64ce64a40dada41beb91cabe3caefa910e467dc0518ef2ebd7e4d10f8c2202a6104f1410254cae245066c0e94e2521fb4061a5cb41831952392
   languageName: node
   linkType: hard
 
