@@ -11,8 +11,8 @@ const LATEST_FOLDER = join(PRIVATE_TESTING_PAGES, 'latest');
 type GitStatusFile = { filePath: string; oldPath?: string };
 interface ChangeAnalysis {
   changed: GitStatusFile;
-  isMinimal: boolean;
-  reasons: string[];
+  minimal: string[];
+  significant?: string[];
 }
 
 // Text patterns that are expected to change (dates, currency, etc.)
@@ -36,6 +36,8 @@ function getGitStatus(): GitStatusFile[] {
     });
 
     const changedFiles: Array<GitStatusFile> = [];
+    const addedFiles: Array<GitStatusFile> = [];
+    const deletedFiles: Array<GitStatusFile> = [];
 
     const lines = output.split('\n').filter(line => line.trim());
 
@@ -69,14 +71,53 @@ function getGitStatus(): GitStatusFile[] {
         //   }
         }
       } else {
-        // Regular file changes
         if (filePath.startsWith('latest/')) {
-          changedFiles.push({filePath});
+          if (status.startsWith('D')) {
+            deletedFiles.push({filePath});
+          } else if (status.startsWith('A')) {
+            addedFiles.push({filePath});
+          } else {
+            // Regular file changes
+            changedFiles.push({filePath});
+          }
         }
       }
     }
 
-    return changedFiles;
+    // merge added/deleted back into changed
+    for (const added of addedFiles) {
+      // Get name excluding element number
+
+      const baseMatch = (str: string) => str.match(/([^0-9]+)([0-9]+)-[0-9]+([^0-9]+)$/);
+      const amatch = baseMatch(added.filePath);
+      if (amatch) {
+        // Any matching?
+        const deleted = deletedFiles.find(d => {
+          const dmatch = baseMatch(d.filePath);
+          return (dmatch &&
+            dmatch[1] === amatch[1] && // Base path
+            dmatch[3] === amatch[3] && // Action Name
+            // Allow a certain amount of drift, marginal pixel changes
+            // can trigger a new step.  We could ignore this value
+            // (ie, any name match is good enough) as the content
+            // comparison later will fail on unrelated files, but we
+            // include it on the off chance it it helps keep related
+            // files closer together later on.
+            Math.abs(Number(dmatch[2]) - Number(amatch[2])) < 3
+          );
+        });
+        if (deleted) {
+          changedFiles.push({filePath: added.filePath, oldPath: deleted.filePath});
+          deletedFiles.splice(deletedFiles.indexOf(deleted), 1);
+          continue;
+        }
+      }
+      changedFiles.push({filePath: added.filePath});
+    }
+    for (const deleted of deletedFiles) {
+      changedFiles.push({filePath: deleted.filePath});
+    }
+    return changedFiles.sort((a, b) => a.filePath.localeCompare(b.filePath));
   } catch (error) {
     console.error('Error getting git status:', error);
     return [];
@@ -88,6 +129,7 @@ function isTextChangeExpected(oldText: string, newText: string): boolean {
 
   // If there is a number/etc buried within the text that changes, we consider that equal
   const maximalCommonSubstrings = findMaximalCommonSubstrings(oldText, newText);
+  if (maximalCommonSubstrings.length === 0) return false;
   const longestCommonSubstring = maximalCommonSubstrings.reduce((a, b) => a.length > b.length ? a : b);
   // strip digits and $ from the changed text
   const oldChangedText = maximalCommonSubstrings.reduce((acc, substr) => acc.replace(substr, ''), oldText);
@@ -107,7 +149,6 @@ function isTextChangeExpected(oldText: string, newText: string): boolean {
 
   return false;
 }
-
 interface DiffChange {
   field: string;
   oldValue: string;
@@ -118,7 +159,7 @@ interface DiffChange {
 function parseGitDiff(changed: GitStatusFile): DiffChange[] {
   try {
     const command = changed.oldPath
-      ? `git diff --staged -M -- ${changed.oldPath} ${changed.filePath}`
+      ? `git diff HEAD:${changed.oldPath} ${changed.filePath}`
       : `git diff --staged -- ${changed.filePath}`;
     const diffOutput = execSync(command, {
       cwd: PRIVATE_TESTING_PAGES,
@@ -161,19 +202,21 @@ function parseGitDiff(changed: GitStatusFile): DiffChange[] {
 }
 
 function analyzeJsonChange(changed: GitStatusFile): ChangeAnalysis {
-  const reasons: string[] = [];
+  const minimal: string[] = [];
+  const significant: string[] = [];
 
   // Field categorization
   const significantFields = ['tagName', "role"];
-  const minimalFields = ['selector', 'font', 'color', 'size', 'style', 'balance', 'neighbour_text', "placeholder_text"]; // These never matter
+  const minimalFields = ['selector', 'font', 'color', 'size', 'style', 'balance', 'neighbour_text', "placeholder_text", "reasoning"]; // These never matter
   const coordFields = ['top', 'left', 'centerY', 'height', 'width', 'position_x', 'position_y']; // Allowed some variation of value
   const textFields = ['text', 'content', 'nodeValue'];
+  const scoreFields = ['score', 'positionAndSize', 'tag', 'siblings', 'estimatedText'];
 
   try {
     const changes = parseGitDiff(changed);
 
     if (changes.length === 0) {
-      return { changed, isMinimal: true, reasons: ['No parseable changes found'] };
+      return { changed, minimal: ['No parseable changes found'] };
     }
 
     for (const change of changes) {
@@ -181,13 +224,13 @@ function analyzeJsonChange(changed: GitStatusFile): ChangeAnalysis {
 
       // Check significant fields (always significant)
       if (significantFields.includes(field)) {
-        reasons.push(`${field} changed: ${oldValue} → ${newValue}`);
-        return { changed, isMinimal: false, reasons };
+        significant.push(`${field} changed: ${oldValue} → ${newValue}`);
+        continue;
       }
 
       // Check minimal fields (always minimal)
       if (minimalFields.includes(field)) {
-        reasons.push(`${field} changed: ${oldValue} → ${newValue}`);
+        minimal.push(`${field} changed: ${oldValue} → ${newValue}`);
         continue;
       }
 
@@ -199,10 +242,9 @@ function analyzeJsonChange(changed: GitStatusFile): ChangeAnalysis {
         if (!isNaN(oldNum) && !isNaN(newNum)) {
           const diff = Math.abs(newNum - oldNum);
           if (diff > 100) {
-            reasons.push(`significant coordinate change in ${field}: ${diff.toFixed(1)}px (${oldValue} → ${newValue})`);
-            return { changed, isMinimal: false, reasons };
+            significant.push(`significant coordinate change in ${field}: ${diff.toFixed(1)}px (${oldValue} → ${newValue})`);
           } else {
-            reasons.push(`minimal coordinate change in ${field}: ${diff.toFixed(1)}px`);
+            minimal.push(`minimal coordinate change in ${field}: ${diff.toFixed(1)}px`);
           }
         }
         continue;
@@ -211,25 +253,40 @@ function analyzeJsonChange(changed: GitStatusFile): ChangeAnalysis {
       // Check text changes
       if (textFields.includes(field)) {
         if (!isTextChangeExpected(oldValue, newValue)) {
-          reasons.push(`significant text (${field}) change: ${oldValue} → ${newValue}`);
-          return { changed, isMinimal: false, reasons };
+          significant.push(`significant text (${field}) change: ${oldValue} → ${newValue}`);
         } else {
-          reasons.push(`expected text (${field}) change (date/currency): ${oldValue} → ${newValue}`);
+          minimal.push(`expected text (${field}) change (date/currency): ${oldValue} → ${newValue}`);
+        }
+        continue;
+      }
+
+      if (scoreFields.includes(field)) {
+        const oldNum = parseFloat(oldValue);
+        const newNum = parseFloat(newValue);
+
+        if (!isNaN(oldNum) && !isNaN(newNum)) {
+          const diff = Math.abs(newNum - oldNum);
+          // A better score is always accepted (assuming any other major change will
+          // be caught by the other rules)
+          if (newNum < oldNum && diff > oldNum * 0.1) {
+            significant.push(`significant score change in ${field}: ${diff.toFixed(1)} (${oldValue} → ${newValue})`);
+          } else {
+            minimal.push(`minimal score change in ${field}: ${diff.toFixed(1)}`);
+          }
         }
         continue;
       }
 
       // Unknown field changes - treat as maximal by default
-      reasons.push(`field change in ${field}: ${oldValue} → ${newValue}`);
-      return { changed, isMinimal: false, reasons };
+      significant.push(`field change in ${field}: ${oldValue} → ${newValue}`);
     }
 
     // If we get here, all changes are minimal
-    return { changed, isMinimal: true, reasons };
+    return { changed, minimal, significant };
 
   } catch (error) {
     console.error(`Error analyzing ${changed.filePath}:`, error);
-    return { changed, isMinimal: false, reasons: [`Error analyzing file: ${error}`] };
+    return { changed, minimal, significant: significant.concat([`Error analyzing file: ${error}`]) };
   }
 }
 
@@ -263,21 +320,22 @@ function stageSimilarChanges(): void {
     if (change.filePath.endsWith('.json')) {
       const analysis = analyzeJsonChange(change);
 
-      if (analysis.isMinimal) {
+      if (analysis.significant.length === 0) {
         minimalFiles.push(change);
         console.log('  ✅ Minimal changes - will auto-commit');
-        console.log(`     Reasons: ${analysis.reasons.join(', ')}\n`);
+        console.log(`     Minimal: ${analysis.minimal.join(', ')}\n`);
       } else {
         significantChanges.push(analysis);
         console.log('  ❌ Significant changes - requires manual review');
-        console.log(`     Reasons: ${analysis.reasons.join(', ')}\n`);
+        console.log(`     Significant: ${analysis.significant.join(', ')}\n`);
+        console.log(`     Minimal: ${analysis.minimal.join(', ')}\n`);
       }
     } else {
       // Other file types - treat as significant
       significantChanges.push({
         changed: change,
-        isMinimal: false,
-        reasons: ['Non-JSON, non-PNG file type']
+        minimal: [],
+        significant: ['Non-JSON, non-PNG file type']
       });
       console.log('  ❌ Non-JSON/PNG file - requires manual review\n');
     }
@@ -316,7 +374,7 @@ function stageSimilarChanges(): void {
 
     significantChanges.forEach(change => {
       console.log(`📄 ${change.changed.filePath}`);
-      change.reasons.forEach(reason => {
+      change.significant.forEach(reason => {
         console.log(`   • ${reason}`);
       });
       console.log('');
