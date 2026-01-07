@@ -12,7 +12,7 @@ type GitStatusFile = { filePath: string; oldPath?: string };
 interface ChangeAnalysis {
   changed: GitStatusFile;
   minimal: string[];
-  significant?: string[];
+  significant: string[];
 }
 
 // Text patterns that are expected to change (dates, currency, etc.)
@@ -159,8 +159,8 @@ interface DiffChange {
 function parseGitDiff(changed: GitStatusFile): DiffChange[] {
   try {
     const command = changed.oldPath
-      ? `git diff HEAD:${changed.oldPath} ${changed.filePath}`
-      : `git diff --staged -- ${changed.filePath}`;
+      ? `git diff "HEAD:${changed.oldPath}" "${changed.filePath}"`
+      : `git diff --staged -- "${changed.filePath}"`;
     const diffOutput = execSync(command, {
       cwd: PRIVATE_TESTING_PAGES,
       encoding: 'utf8'
@@ -216,7 +216,7 @@ function analyzeJsonChange(changed: GitStatusFile): ChangeAnalysis {
     const changes = parseGitDiff(changed);
 
     if (changes.length === 0) {
-      return { changed, minimal: ['No parseable changes found'] };
+      return { changed, minimal: ['No parseable changes found'], significant: [] };
     }
 
     for (const change of changes) {
