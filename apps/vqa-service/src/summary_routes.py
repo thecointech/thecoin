@@ -26,7 +26,7 @@ async def account_balance_element(
 
 @router.post("/summary/list-accounts", tags=["summary"])
 async def list_accounts(image: UploadFile) -> OverviewResponse:
-    return await run_endpoint_query(image, list_accounts_query)
+    return await run_endpoint_query(image, list_accounts_query, max_length=1000)
 
 @router.post("/summary/account-navigate-element", tags=["summary"])
 async def account_navigate_element(image: UploadFile, account_number: str) -> PositionResponse:
