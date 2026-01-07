@@ -1,6 +1,6 @@
 import { GetETransferApi, GetIntentApi, GetLandingApi, GetModalApi, GetTwofaApi, GetVqaBaseApi, GetLoginApi, GetAccountSummaryApi, GetCreditDetailsApi } from "@thecointech/apis/vqa";
 import type { IApiFactory } from "./interface";
-import { ApiCallEvent, bus } from "../eventbus";
+import { type ApiCallEvent, bus } from "../eventbus";
 
 
 export class ApiEventFactory implements IApiFactory {

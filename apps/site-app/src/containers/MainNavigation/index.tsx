@@ -4,10 +4,10 @@ import { AccountSwitcher } from '@thecointech/site-base/components/AccountSwitch
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { HeaderLink } from '@thecointech/site-base/components/HeaderLink';
 import { LanguageSwitcher } from '@thecointech/site-base/containers/LanguageSwitcher';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from '@thecointech/shared/components/Links';
 import styles from './styles.module.less';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
-import { SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar/reducer';
+import { SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar';
 
 const menuItems = defineMessages({
   home: {
@@ -43,13 +43,13 @@ const LeftMenuItems = () => (
         <div className={styles.logo} />
       </a>
     </Menu.Item>
-    <HeaderLink to="/" exact className="onlyBigScreen">
+    <HeaderLink to="/" className="onlyBigScreen">
       <FormattedMessage {...menuItems.home} />
     </HeaderLink>
     <HeaderLink as="a" href={`${process.env.URL_SITE_LANDING}/#/help`}>
       <FormattedMessage {...menuItems.help} />
     </HeaderLink>
-    <HeaderLink to="/contact" exact className="onlyBigScreen">
+    <HeaderLink to="/contact" className="onlyBigScreen">
       <FormattedMessage {...menuItems.contact} />
     </HeaderLink>
   </Menu>

@@ -1,3 +1,23 @@
 /*******************************
     User Variable Overrides
 *******************************/
+
+/* Basic colors */
+
+@checkboxActiveFocusBackground: @primaryColor1;
+@checkboxActiveFocusBorderColor: @primaryColor1;
+@checkboxActiveFocusCheckColor: @white;
+
+@checkboxActiveBackground: @primaryColor1;
+@checkboxActiveBorderColor: @primaryColor1;
+@checkboxActiveCheckColor: @white;
+@labelColor: @textDarkColor;
+
+@checkboxHoverBackground: @primaryColor1Hover;
+@checkboxHoverBorderColor: @primaryColor1Hover;
+@checkboxHoverCheckColor: @white;
+@labelHoverColor: @primaryColor1Hover;
+
+/** Toggle Colors */
+@toggleOnFocusLaneColor: @theCoinPalettePaleGreen3;
+@toggleOnLaneColor: @theCoinPalettePaleGreen2;

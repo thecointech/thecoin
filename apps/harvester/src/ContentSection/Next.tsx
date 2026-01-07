@@ -1,6 +1,6 @@
 import { createPortal } from 'react-dom'
 import { useEffect } from 'react'
-import { Link } from "react-router-dom"
+import { Link } from "react-router"
 import { Button } from "semantic-ui-react"
 import { useContentSectionContext } from './context'
 

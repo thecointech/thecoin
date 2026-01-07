@@ -5,28 +5,22 @@
  * code.
  */
 
-import 'react-app-polyfill/ie11';
-import 'react-app-polyfill/stable';
-
 // Import all the third party stuff
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
+import { RouterProvider } from 'react-router';
+import { HelmetProvider } from 'react-helmet-async';
 import 'sanitize.css/sanitize.css';
 
-// Import root app
-import { App } from 'containers/App';
-
 // Import Language Provider
-import { LanguageProvider, Languages } from '@thecointech/shared/containers/LanguageProvider';
-
-import { configureLandingStore, history } from './reducers';
+import { LanguageProvider, Languages } from '@thecointech/redux-intl';
+import { configureStore } from '@thecointech/redux';
+import { routes } from './containers/App/Routes';
+import { createHashRouter } from 'react-router';
 
 // Import i18n messages
 import { translations } from './translations';
-import { initTracking } from './utils/reactga';
-initTracking();
 
 // Allow Preview docs on testing site.
 import { injectPrismicPreviewScript } from './components/Prismic/inject';
@@ -35,20 +29,21 @@ if (process.env.CONFIG_NAME === 'prodtest') {
 }
 
 // Create redux store with history
-const store = configureLandingStore();
+const store = configureStore();
 const MOUNT_NODE = document.getElementById('app') as HTMLElement;
+const root = createRoot(MOUNT_NODE);
 
-const render = (languages: Languages, Component = App) => {
-  ReactDOM.render(
-    // tslint:disable-next-line:jsx-wrap-multiline
+const render = (languages: Languages) => {
+  root.render(
     <Provider store={store}>
-      <LanguageProvider languages={languages}>
-        <ConnectedRouter history={history}>
-          <Component />
-        </ConnectedRouter>
-      </LanguageProvider>
-    </Provider>,
-    MOUNT_NODE,
+      <HelmetProvider>
+        <LanguageProvider languages={languages}>
+          <RouterProvider router={
+            createHashRouter(routes)
+          } />
+        </LanguageProvider>
+      </HelmetProvider>
+    </Provider>
   );
 };
 
@@ -56,10 +51,7 @@ const render = (languages: Languages, Component = App) => {
 declare const module: any;
 if (module.hot) {
   module.hot.accept(['./containers/App'], () => {
-    ReactDOM.unmountComponentAtNode(MOUNT_NODE);
-    // tslint:disable-next-line:max-line-length
-    const refresh = require('./containers/App').default; // https://github.com/webpack/webpack-dev-server/issues/100
-    render(translations, refresh);
+    render(translations);
   });
 }
 

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { Account } from '@thecointech/shared/containers/Account';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Form, Header } from 'semantic-ui-react';
-import { UxDate } from '@thecointech/shared/components/MaskedInputs/UxDate';
-import { UxEmail } from '@thecointech/shared/components/UX';
+import { UxDate, UxEmail } from '@thecointech/shared/components/UX';
 import { UserAddressInput, UserDetailsInput, UserPhoneInput } from './DetailsInput';
 import { detailStrings } from './translations';
 import styles from './styles.module.less';

@@ -2,17 +2,17 @@ import React from 'react';
 import { TestInfo } from '../../testInfo';
 import { Button, Icon, Label } from 'semantic-ui-react';
 import styles from './TestViewer.module.less';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 
 interface TestHeaderProps {
   test: TestInfo;
 }
 
 export const TestHeader: React.FC<TestHeaderProps> = ({ test }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const onClose = () => {
-    history.push('/');
+    navigate('/');
   };
 
   return (

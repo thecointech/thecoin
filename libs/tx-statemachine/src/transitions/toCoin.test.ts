@@ -6,7 +6,7 @@ import { BuildUberAction } from '@thecointech/utilities/UberAction'
 import { BuildVerifiedAction } from '@thecointech/utilities/VerifiedAction'
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
-import { GetContract } from '@thecointech/contract-core';
+import { ContractCore } from '@thecointech/contract-core';
 import { createAction } from '@thecointech/broker-db';
 import { CertifiedTransfer, UberTransferAction } from '@thecointech/types';
 
@@ -115,7 +115,7 @@ const getContainer = async (sale: CertifiedTransfer | UberTransferAction) : Prom
   return {
     action,
     bank: {} as any,
-    contract: await GetContract(),
+    contract: await ContractCore.get(),
     history: [
       {
         name: "mocked",

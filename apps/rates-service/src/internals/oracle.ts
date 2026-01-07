@@ -1,4 +1,4 @@
-import { connectOracle, updateRates } from '@thecointech/contract-oracle';
+import { ContractOracle, updateRates } from '@thecointech/contract-oracle';
 import { getSigner } from '@thecointech/signers';
 import { getCombinedRates } from './rates';
 import { log } from '@thecointech/logging';
@@ -17,7 +17,7 @@ export async function updateOracle(timestamp: number) {
     // Check signer balance
     await verifyEtherReserves(signer);
 
-    const oracle = await connectOracle(signer);
+    const oracle = await ContractOracle.connect(signer);
 
     log.debug(
       {

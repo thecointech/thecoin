@@ -39,10 +39,10 @@ export function getSeedConfig() {
         events: {
           section: 'Initial' as SectionName,
           events: [
-            ...mockEvents(),
+            ...mockEvents("Initial"),
             ...sections.map(s => ({
               section: s,
-              events: mockEvents()
+              events: mockEvents(s)
             }))
           ]
         }
@@ -52,16 +52,30 @@ export function getSeedConfig() {
   return r;
 }
 
-const mockEvents = () => {
+let counter = 0;
+const mockEvents = (name: string) => {
   return [
     {
       type: "navigation",
-      to: "https://www.test.com",
-      id: "event-0"
+      to: `https://www.${name}.com`,
+      id: `${name}-${counter++}`
     },
     {
       type: 'click',
-      id: "event-1"
-    }
+      id: `${name}-${counter++}`
+    },
+    // Add multiple navigation events, this is more
+    // like what you'd get from a real scraper, and we
+    // need to make sure we handle it correctly
+    {
+      type: "navigation",
+      to: `https://www.${name}.com`,
+      id: `${name}-${counter++}`
+    },
+    {
+      type: "navigation",
+      to: `https://www.${name}.com`,
+      id: `${name}-${counter++}`
+    },
   ] as AnyEvent[]
 }

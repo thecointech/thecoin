@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { useLocation } from 'react-router';
 import { HDNodeWallet } from 'ethers';
 import type { ConnectionValues } from '@thecointech/types';

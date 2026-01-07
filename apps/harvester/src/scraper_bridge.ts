@@ -14,6 +14,7 @@ import type { BackgroundTaskInfo } from './BackgroundTask';
 import { AskUserReact } from './Harvester/agent/askUser';
 import { downloadRequired } from './GetStarted/download';
 import { getScrapingScript } from './results/getScrapingScript';
+import { profileRefresh } from './GetStarted/profile';
 import { twofaRefresh as doRefresh } from './Harvester/agent/refreshTwoFA';
 import { enableLingeringForCurrentUser, isLingeringEnabled } from './Harvester/schedule/linux-lingering';
 import { getScraperLogging, setScraperLogging } from './Harvester/scraperLogging';
@@ -68,6 +69,7 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
     //return toBridge(r);
   }),
 
+  profileRefresh: () => guard(async () => profileRefresh(onBgTaskMsg)),
   twofaRefresh: (actionName) => guard(async () => doRefresh(actionName, onBgTaskMsg)),
 
   warmup: (_url) => guard(async () => {
@@ -195,6 +197,8 @@ export function initMainIPC() {
   ipcMain.handle(actions.validateAction, async (_event, actionName: ActionType, inputValues: Record<string, string>) => {
     return api.validateAction(actionName, inputValues);
   });
+
+  ipcMain.handle(actions.profileRefresh, (_event) => api.profileRefresh());
   ipcMain.handle(actions.twofaRefresh, (_event, actionName) => api.twofaRefresh(actionName));
 
   ipcMain.handle(actions.replyQuestion, (_event, response) => api.replyQuestion(response));

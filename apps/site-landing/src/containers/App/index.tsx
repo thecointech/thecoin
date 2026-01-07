@@ -7,13 +7,13 @@
  *
  */
 
-import * as React from 'react';
-import {MainNavigation} from 'containers/MainNavigation';
-import {Footer} from 'components/Footer';
+import React from 'react';
+import { MainNavigation } from 'containers/MainNavigation';
+import { Footer } from 'components/Footer';
 import { MainPageTransition } from '@thecointech/site-base/components/MainPageTransition';
-import { Routes } from './Routes';
 import { Prismic } from 'components/Prismic/reducer';
-import { MediaContextProvider, mediaStyles } from '@thecointech/shared/components/ResponsiveTool';
+import { MediaContextProvider, mediaStyles } from '@thecointech/media-context';
+import { Outlet, ScrollRestoration } from 'react-router';
 
 // Either import CSS or LESS;
 // - LESS is slower, but offers on-save hot-reload
@@ -26,21 +26,24 @@ export const App = () => {
   Prismic.useStore();
 
   return (
-    <MediaContextProvider>
-      <style>{mediaStyles}</style>
-      <div id={styles.landing} >
-        <MainNavigation />
+    <>
+      <ScrollRestoration />
+      <MediaContextProvider>
+        <style>{mediaStyles}</style>
+        <div id={styles.landing} >
+          <MainNavigation />
 
-        <div className={styles.contentContainer}>
-          <MainPageTransition>
-            <section>
-              <Routes />
-            </section>
-          </MainPageTransition>
+          <div className={styles.contentContainer}>
+            <MainPageTransition>
+              <section>
+                <Outlet />
+              </section>
+            </MainPageTransition>
+          </div>
+
+          <Footer />
         </div>
-
-        <Footer />
-      </div>
-    </MediaContextProvider>
+      </MediaContextProvider>
+    </>
   );
 }

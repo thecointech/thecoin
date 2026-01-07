@@ -6,6 +6,10 @@ export type ActionType = 'visaBalance'|'chqBalance'|'chqETransfer';
 
 export function getReplayEvents(baseNode: EventSection, type: ActionType): AnyEvent[] {
   const sectionsToKeep = getSectionsToKeep(type);
+  return getTrimmedEvents(baseNode, sectionsToKeep);
+}
+
+export function getTrimmedEvents(baseNode: EventSection, sectionsToKeep?: SectionName[]): AnyEvent[] {
   const events = flatten(baseNode, sectionsToKeep);
   return stripDuplicateNavigations(events);
 }

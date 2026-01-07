@@ -2,7 +2,7 @@ import { log } from "@thecointech/logging";
 import { clickElement } from "../interactions";
 import type { ElementResponse } from "../types";
 import { processorFn } from "./types";
-import { PhoneNumberElements } from "@thecointech/vqa";
+import type { PhoneNumberElements } from "@thecointech/vqa";
 import type { Agent } from "../agent";
 import { apis } from "../apis";
 

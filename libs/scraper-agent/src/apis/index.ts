@@ -1,5 +1,5 @@
 import { ApiEventFactory } from "./eventFactory";
-import { IApiFactory } from "./interface";
+import type { IApiFactory } from "./interface";
 
 declare global {
   var __tc_apiFactory: IApiFactory|null;

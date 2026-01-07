@@ -1,9 +1,13 @@
 {
   "name": "@thecointech/--mocks--",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "run -T tsc"
+    "build": "run -T tsc",
+    "updateMocks": "run-env cfg=prod ./@prismicio/updateMocks.ts"
+  },
+  "devDependencies": {
+    "@thecointech/setenv": "^0.5.1"
   }
 }

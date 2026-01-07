@@ -2,6 +2,8 @@ import { BlockTag, EtherscanProvider, LogParams } from 'ethers'
 import type { PerformActionFilter, PerformActionRequest, Signer } from 'ethers'
 import { format } from '../erc20response';
 import { getSecret } from '@thecointech/secrets';
+import { InvalidContractError } from '../../errors';
+import type { SrcCodeResponse } from '../../types';
 
 //
 // ATTRIBUTION:
@@ -130,14 +132,9 @@ export class Erc20Provider extends EtherscanProvider {
     if (contract.Proxy == "1") {
       return this.getSourceCode(contract.Implementation);
     }
-    const src = contract.SourceCode;
     // For some reason the returned object is invalid JSON
     // (for prodtest anyway)
-    const obj = JSON.parse(
-      (src.slice(0, 2) == '{{')
-      ? src.slice(1, -1)
-      : src
-    );
+    const obj = getInputJson(contract);
     const entries = Object.entries(obj.sources);
     const [contractSrcPair, ...rest] = entries.filter(pair => !pair[0].startsWith("@"))
     if (rest.length > 0) {
@@ -147,24 +144,28 @@ export class Erc20Provider extends EtherscanProvider {
   }
 }
 
-type SrcCodeResponse = {
-  SourceCode: string; // "
-  ContractName: string; // "DAO",
-  CompilerVersion: string; // "v0.3.1-2016-04-12-3ad5e82",
-  OptimizationUsed: string; // "1",
-  Runs: string; // "200",
-  ConstructorArguments: string;
-  EVMVersion: string; // "Default",
-  Library: string; // "",
-  LicenseType: string; // "",
-  Proxy: string; // "0",
-  Implementation: string; // "",
-  SwarmSource: string; // ""
-}
-
 export const getProvider = async () => {
   const apiKey = await getSecret("PolygonscanApiKey");
   return new Erc20Provider(apiKey);
 }
 
 export type { ERC20Response } from '../erc20response';
+
+
+function getInputJson(response: SrcCodeResponse) {
+  try {
+    return JSON.parse(
+      (response.SourceCode.slice(0, 2) == '{{')
+      ? response.SourceCode.slice(1, -1)
+      : response.SourceCode
+    );
+  }
+  catch (e) {
+    if (e instanceof SyntaxError) {
+      const error = new InvalidContractError(e, response);
+      error.cause = e;
+      throw error;
+    }
+    throw e;
+  }
+}

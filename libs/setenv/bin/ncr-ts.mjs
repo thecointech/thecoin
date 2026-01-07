@@ -45,7 +45,8 @@ export async function resolve(specifier, context, defaultResolve) {
 
   // Apply path mappings if needed
   let resolvedSpec = specOrMocked;
-  if (specOrMocked.startsWith("@/")) {
+  const isRemapped = specOrMocked.startsWith("@/");
+  if (isRemapped) {
     resolvedSpec = applyTsPaths(specOrMocked);
   }
 
@@ -57,7 +58,7 @@ export async function resolve(specifier, context, defaultResolve) {
     return await defaultResolve(resolvedSpec, modifiedContext, defaultResolve);
   } catch (err) {
     // If resolution failed and this looks like a relative/absolute path, try adding extensions
-    if (resolvedSpec.startsWith('.') || resolvedSpec.startsWith('file://')) {
+    if (isRemapped || resolvedSpec.startsWith('.') || resolvedSpec.startsWith('file://')) {
       const resolved = await tryExtensions(resolvedSpec, modifiedContext, defaultResolve);
       if (resolved) return resolved;
     }

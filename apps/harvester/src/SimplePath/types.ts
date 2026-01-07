@@ -1,9 +1,10 @@
-import { useLocation } from "react-router-dom"
+import { useLocation } from "react-router"
 
 export type Routes<T = never> = {
   title: string
+  path: string,
   description: string
-  component: React.ComponentType<T>
+  component: React.FC
   isComplete?: (data: T) => boolean
 }
 
@@ -17,10 +18,8 @@ export type DefaultPathProps<T = never> = {
   data?: T
 }
 
-export function usePathIndex() {
+export const usePathIndex = (path: Path) => {
   const location = useLocation();
-  const curr = location.pathname;
-  const m = curr.match(/\/(\d+)\/?$/)
-  // Disable "next" button if we're on the last step
-  return parseInt(m?.[1] || "0");
+  const index = path.routes.findIndex((r) => location.pathname.endsWith(r.path));
+  return index < 0 ? 0 : index;
 }

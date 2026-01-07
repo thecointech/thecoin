@@ -1,7 +1,7 @@
 import type { ModuleOptions } from 'webpack';
 //@ts-ignore
-import less_loaders from '@thecointech/site-semantic-theme/webpack.less';
-import { configFile } from './webpack.common.js';
+import { semantic_less_loader, css_module_loader } from '@thecointech/site-semantic-theme/webpack.less';
+import { configFile } from './webpack.common.ts';
 
 export const rules: Required<ModuleOptions>['rules'] = [
   // Add support for native node modules
@@ -43,9 +43,9 @@ export const rules: Required<ModuleOptions>['rules'] = [
     use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
   },
   // Explicitly process Semantics Less files.
-  less_loaders.semantic_less_loader,
+  semantic_less_loader,
   // Loaders for module files
-  less_loaders.css_module_loader,
+  css_module_loader,
   {
     test: /\.(svg|png|jpg|ttf|eot|woff2?)$/,
     type: 'asset'

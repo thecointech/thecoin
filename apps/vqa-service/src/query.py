@@ -99,7 +99,12 @@ def tryConvertToJSON(response):
             # Try finding everything in between brackets
             match = re.search(r"(\{[\w\W]*\})", cleaned)
             if match:
-                return json.loads(match.group(1))
+                try:
+                    return json.loads(match.group(1))
+                except json.JSONDecodeError:
+                    # All attempts failed, pass on to
+                    # log the error & raise an exception
+                    pass
             print("Could not parse model output as JSON: ", response)
             raise ValueError("Could not parse model output as JSON")
 

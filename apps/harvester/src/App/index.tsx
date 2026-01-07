@@ -1,14 +1,14 @@
 import 'semantic-ui-css/semantic.min.css'
-import { useLocation } from 'react-router-dom'
-import { Routes } from './routes'
+import { useLocation, Outlet } from 'react-router'
 import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
 import { useEffect } from 'react';
 import { BackgroundTaskReducer } from '../BackgroundTask/reducer';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap/reducer';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { ElectronSigner } from '@thecointech/electron-signer';
 import { AccountInitializer } from '../account/AccountInitializer';
 import { AppMenu } from './AppMenu';
 import styles from './index.module.less'
+import { QuestionResponse } from '@/QuestionResponse/QuestionResponse';
 
 
 export const App = () => {
@@ -45,9 +45,10 @@ export const App = () => {
         <AppMenu location={location}/>
       </div>
       <div className={styles.content}>
-        <Routes />
+        <Outlet />
       </div>
       {activeAddress && <AccountInitializer address={activeAddress} />}
+      <QuestionResponse />
     </div>
   )
 }

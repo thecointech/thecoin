@@ -27,6 +27,7 @@ const api : ScraperBridgeApi = {
   //   ipcRenderer.on(actions.onAgentProgress, (_event, value) => callback(value))
   // },
 
+  profileRefresh: () => ipcRenderer.invoke(actions.profileRefresh),
   twofaRefresh: (actionName) => ipcRenderer.invoke(actions.twofaRefresh, actionName),
 
   onAskQuestion: (callback) => {
