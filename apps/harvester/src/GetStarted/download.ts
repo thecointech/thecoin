@@ -28,7 +28,7 @@ export async function downloadRequired(callback: BackgroundTaskCallback) {
   }
 
   const browser = downloadBrowser(onProgress);
-  const profile = copyProfile(onProgress);
+  const profile = copyProfile(onProgress, true);
   const similarity = downloadSimilarity(onProgress);
   await Promise.all([browser, profile, similarity]);
 

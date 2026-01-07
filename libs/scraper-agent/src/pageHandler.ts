@@ -65,35 +65,65 @@ export class PageHandler implements AsyncDisposable {
 
   async tryCloneTab(subName: SectionType) {
     const cachedThis = this;
-    const currentIntent = await this.getPageIntent();
-    const sectionPage = await this.recorder.clone(subName);
+    const originalIntent = await this.getPageIntent();
+    const originalRecorder = this.recorder;
+    const originalUrl = originalRecorder.page.url();
+    const sectionRecorder = await originalRecorder.clone(subName);
 
     // Page should be loaded, but that doesn't mean it's ready.
     // Take the extra wait here just to ensure we don't miss anything
-    const intent = await waitForValidIntent(sectionPage.page);
-    await waitPageStable(sectionPage.page);
+    const intent = await waitForValidIntent(sectionRecorder.page);
+    await waitPageStable(sectionRecorder.page);
 
     // We only push the page if it's intent matches
     // the current page.  It's possible that on loading
     // a new page the bank may require a new login
-    if (intent && intent == currentIntent) {
+    if (intent && intent == originalIntent) {
       log.debug("Pushing isolated section: " + subName);
-      this.recorderStack.push(sectionPage);
+      this.recorderStack.push(sectionRecorder);
       return {
-        sectionPage,
+        sectionRecorder,
         async [Symbol.asyncDispose]() {
           log.debug("Popping isolated section: " + subName);
+          // We need to release the recorder.  This should be the
+          // isolated section recorder, but it's possible that
+          // the original page has logged out.  In this case we
+          // release the original and navigate the new page to the
+          // original URL.
+          let recorderToRelease = sectionRecorder;
+          // First, is the original page still waiting in the
+          // same place, or has it already logged out?
+          const currentUrl = originalRecorder.page.url();
+          if (originalUrl != currentUrl) {
+            log.warn("Original page has changed, releasing original recorder");
+            recorderToRelease = originalRecorder;
+            await originalRecorder.page.goto(originalUrl);
+            const nowIntent = await waitForValidIntent(originalRecorder.page);
+            await waitPageStable(originalRecorder.page);
+            if (nowIntent != originalIntent) {
+              log.error(
+                { nowIntent, originalIntent, originalUrl },
+                `Recieved intent {nowIntent} instead of {originalIntent} when navigating sectionRecorder back to {originalUrl}.
+                Continuing, but this will most likely fail.`
+              );
+            }
+          }
           // Release the new recorder/page
-          await cachedThis.recorderStack.pop()![Symbol.asyncDispose]();
-          // Check for session timeout
-          await cachedThis.checkSessionLogin();
+          cachedThis.recorderStack.splice(cachedThis.recorderStack.indexOf(recorderToRelease), 1);
+          await recorderToRelease[Symbol.asyncDispose]();
+
+          // Even if it hasn't logged out, it may have popped
+          // a dialog that we need to handle
+          if (originalUrl == currentUrl) {
+            await cachedThis.checkSessionLogin();
+          }
         }
       }
     }
     else {
       // If the page failed to load, we just dispose of it
       log.warn("Failed to load isolated section, disposing and continuing with main page");
-      await sectionPage[Symbol.asyncDispose]();
+      await sectionRecorder[Symbol.asyncDispose]();
       return null;
     }
   }

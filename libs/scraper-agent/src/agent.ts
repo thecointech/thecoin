@@ -155,8 +155,8 @@ export class Agent implements AsyncDisposable {
 
     if (cloneTab) {
       // Connect clone to event manager
-      cloneTab.sectionPage.onEvent(this.events.onEvent);
-      this.events.pushPageFilter(cloneTab.sectionPage.page);
+      cloneTab.sectionRecorder.onEvent(this.events.onEvent);
+      this.events.pushPageFilter(cloneTab.sectionRecorder.page);
     }
     const cachedAgent = this;
     const events = this.events.pushSection(subName);
