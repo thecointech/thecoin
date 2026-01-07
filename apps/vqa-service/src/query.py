@@ -101,7 +101,9 @@ def tryConvertToJSON(response):
             if match:
                 try:
                     return json.loads(match.group(1))
-                except:
+                except json.JSONDecodeError:
+                    # All attempts failed, pass on to
+                    # log the error & raise an exception
                     pass
             print("Could not parse model output as JSON: ", response)
             raise ValueError("Could not parse model output as JSON")
