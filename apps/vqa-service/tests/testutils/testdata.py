@@ -13,7 +13,6 @@ from fastapi import UploadFile
 import io
 
 from .overrides import OverrideData, SkipElement, apply_overrides, get_override_data
-# from geo_math import BBox
 
 load_dotenv()
 
@@ -25,16 +24,66 @@ class VqaCallData:
     args: List[Any]
     response: Any
 
-class TestElmData(Dict[str, Any]):
+class Coords(TypedDict):
+    top: float
+    left: float
+    centerY: float
+    height: float
+    width: float
+
+class FontData(TypedDict):
+    font: str
+    color: str
+    size: str
+    style: str
+
+class ElementData(TypedDict):
+    tagName: str
+    role: Optional[str]
+    selector: str
+    coords: Coords
+    font: FontData
+    label: str
+    text: str
+    nodeValue: str
+    parentSelector: str
+    parentTagName: str
+    siblingText: List[str]
+
+class ComponentsData(TypedDict):
+    selector: float
+    tag: float
+    inputType: float
+    font: float
+    label: float
+    role: float
+    positionAndSize: float
+    nodeValue: float
+    siblings: float
+    estimatedText: float
+
+class TestElmRawData(TypedDict):
+    data: ElementData
+    score: float
+    components: ComponentsData
+
+@dataclass
+class TestElmData:
     filename: str
-    def __init__(self, filename: str, data: Dict[str, Any]):
-        self.filename = filename
-        super().__init__(data)
+    data: ElementData
+    score: float
+    components: ComponentsData
 
 class TestSchData(TypedDict):
     score: float
     components: Any
     search: Dict[str, Any]
+
+class ElementName(TypedDict):
+    step: int
+    index: int
+    name: str
+    fullname: str
 
 class TestData:
     def __init__(self, key: str, target: str, step: str,
@@ -50,12 +99,33 @@ class TestData:
         return self.key
 
     @property
-    def elements(self):
+    def elm_files(self):
       return [f for f in self._json_files if f.endswith("-elm.json")]
 
     @property
-    def vqas(self):
+    def vqa_files(self):
       return [f for f in self._json_files if f.endswith("-vqa.json")]
+
+    @property
+    def elements(self) -> List[ElementName]:
+        """
+        Returns a list of all matching elements in the test data folder.
+        Each element is a dict with the following keys:
+        - step: the step number
+        - index: the element index
+        - name: the element name
+        - fullname: the full name of the element
+        """
+        return [
+            {
+                "step": int(match.group(1)),
+                "index": int(match.group(2)),
+                "name": match.group(3),
+                "fullname": f"{match.group(1)}-{match.group(2)}-{match.group(3)}",
+            }
+            for f in self.elm_files
+            if (match := re.match(r"(\d+)-(\d+)-(.+)-elm\.json", f))
+        ]
 
     @property
     def html(self):
@@ -74,12 +144,7 @@ class TestData:
     def html_title(self):
         return self._extract_html_header(r"^Subject:\s*(.*)$")
 
-    def has_element(self, element: str):
-      return any([True for e in self.elements if element in e])
-
-    def has_vqa(self, vqa: str):
-      return any([True for v in self.vqas if vqa in v])
-
+    @property
     def image(self) -> UploadFile:
       image_path = os.path.join(self._matched_folder, self.step + ".png")
 
@@ -96,9 +161,15 @@ class TestData:
           file=image_buffer
       )
 
+    def has_element(self, element: str):
+      return any([True for e in self.elm_files if element in e])
+
+    def has_vqa(self, vqa: str):
+      return any([True for v in self.vqa_files if vqa in v])
+
     def vqa(self, call: str) -> VqaCallData:
         """Get the first VQA call data for a specific call name"""
-        matching_files = [f for f in self._json_files if call in f and f.endswith("-vqa.json")]
+        matching_files = [f for f in self.vqa_files if call in f]
         if matching_files:
             file_path = os.path.join(self._matched_folder, matching_files[0])
             with open(file_path, 'r') as f:
@@ -106,12 +177,14 @@ class TestData:
                 return VqaCallData(args=data.get('args', []), response=data.get('response', data))
         raise ValueError(f"No VQA call data found for {call}")
 
-    def elm(self, name: str, idx: int = 0) -> TestElmData:
+    def elm(self, element: str) -> TestElmData:
         """Get the first element data for a specific element name"""
-        matching_files = [f for f in self._json_files if name in f and f.endswith("-elm.json")]
-        if matching_files:
-            return self._get_elm(matching_files[idx])
-        raise ValueError(f"No element data found for {name}")
+        matching_files = [f for f in self.elm_files if element in f]
+        if not matching_files:
+            raise FileNotFoundError(f"No element file found for '{element}' in {self.key}")
+
+        filename = os.path.join(self._matched_folder, matching_files[0])
+        return self._get_elm_data(filename)
 
     def sch(self, name: str, idx: int = 0) -> TestSchData:
         """Get the first element data for a specific element name"""
@@ -134,9 +207,9 @@ class TestData:
 
     def elm_iter(self, name: str):
         """Get an iterator over all element data for a specific element name"""
-        matching_files = [f for f in self._json_files if name in f and f.endswith("-elm.json")]
+        matching_files = [f for f in self.elm_files if name in f]
         for filename in matching_files:
-            yield self._get_elm(filename)
+            yield self._get_elm_data(os.path.join(self._matched_folder, filename))
 
     def _extract_html_header(self, pattern: str) -> Optional[str]:
         """Extract a header value from HTML using the given regex pattern"""
@@ -147,13 +220,15 @@ class TestData:
             return match.group(1).strip()
         return None
 
-    def _get_elm(self, filename: str):
-        file_path = os.path.join(self._matched_folder, filename)
-        with open(file_path, 'r') as f:
-            data = json.load(f)
-            elementName = os.path.basename(filename).split("-elm.json")[0]
-            apply_overrides(self._override_data, self.key, elementName, data)
-            return TestElmData(elementName, data)
+    def _get_elm_data(self, filename: str) -> TestElmData:
+        elementName = os.path.basename(filename).split("-elm.json")[0]
+        data: TestElmRawData = get_json_data(filename)
+        apply_overrides(self._override_data, self.key, elementName, data)
+        return TestElmData(filename, **data)
+
+def get_json_data(filename: str) -> Any:
+    with open(filename, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
 def _get_json_files(matched_folder: str, step: str, skip: Optional[SkipElement] = None) -> List[str]:
@@ -169,7 +244,6 @@ def _get_json_files(matched_folder: str, step: str, skip: Optional[SkipElement] 
                          if not any(elem in f for elem in skip_elements)]
 
     return json_files
-
 
 def get_test_data(section: str, search_pattern: str="*", record_time: str = 'latest') -> List[TestData]:
     """
@@ -470,20 +544,3 @@ def get_private_folder(base_type: str, test_type: str|None = None) -> Path|None:
 #         sample_data[target.name] = samples
 
 #     return sample_data
-        # # In DEBUG mode, allow filtering only to a single key
-        # # this allows us to focus on a single target
-        # if (os.environ.get('DEBUGPY_RUNNING') == "true" and len(KeyFilter) > 0):
-        #     test_data = [v for v in test_data if v.key in KeyFilter]
-        # return test_data
-
-        # test_data = get_test_data("samples", type)
-        # # number of tests is length of test data
-        # test_data = load_json(samples_folder + f"/{i}-page-inputs.json")
-        # test_image = load_image(samples_folder + f"/{i}-page.png", MAX_RESOLUTION)
-        # validation_data = load_json(samples_folder + f"/{i}-inputs.json")
-
-        # elements = test_data['elements']
-        # parent_coords = test_data['parentCoords']
-        # validations = validation_data['inputs']
-
-        # parent_coords = [BBox.from_coords(coord) for coord in parent_coords]

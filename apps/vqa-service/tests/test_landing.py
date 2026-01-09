@@ -2,7 +2,7 @@
 import unittest
 from TestBase import TestBase
 from geo_math import BBox
-from testdata import get_test_data, get_single_test_element
+from testutils.testdata import get_test_data, TestElmData
 from intent_routes import page_intent
 from landing_routes import (
     cookie_banner_present,
@@ -35,30 +35,30 @@ class TestLanding(TestBase):
         for test in test_datum:
             with self.subTest(key=test.key):
                 response = await cookie_banner_present(test.image)
-                self.assertEqual(response.cookie_banner_detected, "cookie-accept" in test.elements)
+                self.assertEqual(response.cookie_banner_detected, any(e["name"] == "cookie-accept" for e in test.elements))
 
     async def test_cookie_accept(self):
-        test_datum = get_single_test_element("CookieBanner", "cookie-accept")
+        test_datum = get_test_data("CookieBanner", "cookie-accept", "archive")
         for test in test_datum:
             with self.subTest(key=test.key):
                 response = await cookie_banner_accept(test.image)
-                self.assertResponse(response, test.element, test.key)
+                self.assertResponse(response, test.elm("cookie-accept"))
 
     async def test_finds_login_button(self):
-        test_datum = get_single_test_element("Landing", "login")
+        test_datum = get_test_data("Landing", "login")
         for test in test_datum:
             with self.subTest(key=test.key):
                 response = await navigate_to_login(test.image)
-                self.assertResponse(response, test.element, test.key)
+                self.assertResponse(response, test.elm("login"))
 
     async def test_finds_login_button_in_menu(self):
-        test_datum = get_single_test_element("Landing", "menu")
+        test_datum = get_test_data("Landing", "menu")
         for test in test_datum:
             with self.subTest(key=test.key):
                 intent = await page_intent(test.image)
                 self.assertEqual(intent.type, "MenuSelect", "Login intent failed for " + test.key)
                 response = await navigate_to_login_menu(test.image, BBox(bottom=770))
-                self.assertResponse(response, test.element, test.key)
+                self.assertResponse(response, test.elm("login"))
 
 
 if __name__ == "__main__":

@@ -10,7 +10,7 @@ from logger import setup_logger
 
 logger = setup_logger(__name__)
 
-def runQueryRaw(image, prompt, max_length=200) -> str:
+def runQueryRaw(image: Image|None, prompt: str, max_length=200) -> str:
     start = timer()
 
     processor = get_processor()
@@ -62,7 +62,7 @@ def runQueryRaw(image, prompt, max_length=200) -> str:
         print(f"Query took {end - start} seconds")
 
 
-def runQueryToJson(image: Image, query_data: tuple[str, type], max_length=200):
+def runQueryToJson(image: Image|None, query_data: tuple[str, type], max_length=200):
     prompt = f"{query_data[0]} {get_instruct_json_respose(query_data[1].schema())}"
 
     response = runQueryRaw(image, prompt, max_length)

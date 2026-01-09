@@ -5,7 +5,7 @@ import sys
 import re
 from dateparser import parse
 
-from tests.testutils.testdata import TestElmData
+from tests.testutils.testdata import ElementData, TestElmData
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, 'src'))
@@ -21,7 +21,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         else:
             super().assertEqual(str1, str2, msg)
 
-    def assertPosition(self, response: PositionResponse, expected: dict[str, Any], tolerance: int=5):
+    def assertPosition(self, response: PositionResponse, expected: ElementData, tolerance: int=5):
         o_width = expected["coords"]["width"]
         o_height = expected["coords"]["height"]
         o_left = expected["coords"]["left"]
@@ -46,7 +46,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
             msg=f"Y: {e_posY} does not match expected: {o_centerY} with height: {o_height}"
         )
 
-    def get_expected_text(self, expected: dict):
+    def get_expected_text(self, expected: ElementData):
         expected_content = expected.get('text', expected.get('label', ''))
         return normalize(expected_content)
 
@@ -59,7 +59,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
             response_content = getattr(response, 'placeholder_text', '')
         return normalize(response_content)
 
-    def assertContent(self, response: ElementResponse, expected: dict):
+    def assertContent(self, response: ElementResponse, expected: ElementData):
 
         response_text = self.get_response_text(response)
         if (response_text is None):
@@ -91,7 +91,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
 
         self.assertTrue(textOverlap, f"Text: {response_text} does not match expected: {expected_content}")
 
-    def assertNeighbours(self, response: ElementResponse, expected: dict):
+    def assertNeighbours(self, response: ElementResponse, expected: ElementData):
         # siblingText is quite restrictive, so it may not have any values
         # if it does, then there should be a match (except in Scotiabank)
         o_neigbours = [normalize(s) for s in expected["siblingText"]]
@@ -104,7 +104,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
     # The LLM seems to return the date in a different format from
     # whats on the page.  The scraper can handle the difference, so
     # we just check that the dates match, and the format is not important
-    def assertDate(self, response: DateElementResponse, expected: dict):
+    def assertDate(self, response: DateElementResponse, expected: ElementData):
         responseDate = parse(response.content)
         expectedDate = parse(expected["text"])
         self.assertEqual(responseDate, expectedDate, f"Date: {responseDate} does not match expected: {expectedDate}")
@@ -112,18 +112,18 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
     def assertResponse(self, response: ElementResponse, expected: TestElmData|None, tolerance:int=5):
         self.assertIsNotNone(expected)
         assert expected is not None  # Type narrowing for mypy/pylsp
-        if "coords" in expected:
-            self.assertPosition(response, expected, tolerance)
-        self.assertContent(response, expected)
-        self.assertNeighbours(response, expected)
+        if "coords" in expected.data:
+            self.assertPosition(response, expected.data, tolerance)
+        self.assertContent(response, expected.data)
+        self.assertNeighbours(response, expected.data)
         print("Element Found Correctly")
 
     def assertDateResponse(self, response: DateElementResponse, expected: TestElmData|None):
         self.assertIsNotNone(expected)
         assert expected is not None  # Type narrowing for mypy/pylsp
-        self.assertDate(response, expected)
-        self.assertPosition(response, expected)
-        self.assertNeighbours(response, expected)
+        self.assertDate(response, expected.data)
+        self.assertPosition(response, expected.data)
+        self.assertNeighbours(response, expected.data)
         print("Element Found Correctly")
 
     # Processing the larger screenshot can result in errors reading small text.

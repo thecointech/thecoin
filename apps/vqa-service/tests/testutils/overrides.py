@@ -24,7 +24,7 @@ def get_override_data(test_folder: str) -> OverrideData:
             return json.load(f)
     return {}
 
-def apply_overrides(overrideData: OverrideData, key: str, element_name: str, element_data: Dict[str, Any]):
+def apply_overrides(overrideData: OverrideData, key: str, element_name: str, element_data: TypedDict):
     """Apply overrides to element data if they exist"""
     if not overrideData or 'overrides' not in overrideData:
         return
