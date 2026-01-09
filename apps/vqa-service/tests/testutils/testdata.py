@@ -22,7 +22,7 @@ MAX_HEIGHT = 1440
 @dataclass
 class VqaCallData:
     args: List[Any]
-    response: Any
+    response: Dict[str, Any]
 
 class Coords(TypedDict):
     top: float

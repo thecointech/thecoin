@@ -5,7 +5,7 @@ import sys
 import re
 from dateparser import parse
 
-from tests.testutils.testdata import ElementData, TestElmData
+from tests.testutils.testdata import ElementData, TestElmData, get_test_data
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, 'src'))
@@ -133,6 +133,20 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         max_posY = round(max(all_posY))
         min_posY = round(min(all_posY))
         return (max(min_posY - buffer, 0), min(max_posY + buffer, image.height))
+
+
+    async def run_subtests(self, test_func, section: str, search_pattern: str="*", record_time: str = 'latest'):
+        test_datum = get_test_data(section, search_pattern, record_time)
+
+        failing_tests = []
+        for test in test_datum:
+            with self.subTest(key=test.key):
+                try:
+                    await test_func(test)
+                except Exception as e:
+                    failing_tests.append(test.key)
+                    raise e
+        return failing_tests
 
 def get_member(obj, key):
     if hasattr(obj, key):
