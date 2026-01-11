@@ -140,13 +140,14 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         self.assertNeighbours(response, expected.data)
         print("Element Found Correctly")
 
-    def assertResponse(self, response: ElementResponse, test: TestData, element: str, vqa: str|None=None, tolerance:int=5):
+    def assertResponse(self, response: PositionResponse, test: TestData, element: str, vqa: str|None=None, tolerance:int=5):
         expected = test.elm(element)
         self.assertIsNotNone(expected)
         if "coords" in expected.data:
             self.assertPosition(response, expected.data, lambda: test.vqa(vqa), tolerance)
-        self.assertContent(response, expected.data)
-        self.assertNeighbours(response, expected.data)
+        if isinstance(response, ElementResponse):
+            self.assertContent(response, expected.data)
+            self.assertNeighbours(response, expected.data)
         print("Element Found Correctly")
 
     def assertDateResponse(self, response: DateElementResponse, expected: TestElmData|None):
@@ -173,11 +174,13 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
     #             elm = test.elm(element_type)
     #             base.assertResponse(response, elm, tolerance)
 
-    async def run_subtests(self, test_func, search_pattern: str="*"):
+    async def run_subtests(self, test_func, search_pattern: str="*", skip_if: None|Callable[[TestData], bool] = lambda test: False):
         test_datum = get_test_data(self.section, search_pattern, self.record_time)
         failing_tests = []
         for test in test_datum:
             with self.subTest(key=test.key):
+                if skip_if and skip_if(test):
+                    self.skipTest(f"Skipping {test.key}")
                 try:
                     await test_func(test)
                 except Exception as e:
@@ -193,7 +196,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         element: str,
         vqa: str|None=None,
         search_pattern: str|None=None,
-        endpoint: Callable[[UploadFile], Awaitable[ElementResponse]]|None=None,
+        endpoint: Callable[[UploadFile], Awaitable[PositionResponse]]|None=None,
         test_func: Callable[[TestData], Awaitable[None]]|None=None,
         skip_if: None|Callable[[TestData], bool] = lambda test: False
     ):
