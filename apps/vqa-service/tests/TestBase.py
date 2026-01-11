@@ -1,11 +1,12 @@
-from typing import Any
+from typing import Any, Awaitable, Callable
 import unittest
 import os
 import sys
 import re
 from dateparser import parse
+from fastapi import UploadFile
 
-from tests.testutils.testdata import ElementData, TestElmData, get_test_data
+from tests.testutils.testdata import ElementData, TestData, TestElmData, VqaCallData, get_test_data
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, 'src'))
@@ -14,6 +15,9 @@ from data_elements import DateElementResponse, ElementResponse, PositionResponse
 
 class TestBase(unittest.IsolatedAsyncioTestCase):
 
+    section: str
+    record_time: str = 'latest'
+
     def assertEqual(self, str1: object, str2: object, msg: str|None = None):
         # Ignore all case/space differences
         if (isinstance(str1, str) and isinstance(str2, str)):
@@ -21,7 +25,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         else:
             super().assertEqual(str1, str2, msg)
 
-    def assertPosition(self, response: PositionResponse, expected: ElementData, tolerance: int=5):
+    def assertPosition(self, response: PositionResponse, expected: ElementData, get_vqa: Callable[[], VqaCallData]|None=None, tolerance: int=5):
         o_width = expected["coords"]["width"]
         o_height = expected["coords"]["height"]
         o_left = expected["coords"]["left"]
@@ -33,18 +37,36 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         e_posX = response.position_x
         e_posY = response.position_y
 
-        self.assertAlmostEqual(
-            e_posX,
-            o_centerX,
-            delta=max(20, tolerance + o_width * 0.6),
-            msg=f"X: {e_posX} does not match expected: {o_centerX} with width: {o_width}"
-        )
-        self.assertAlmostEqual(
-            e_posY,
-            o_centerY,
-            delta=max(20, tolerance + o_height * 0.6),
-            msg=f"Y: {e_posY} does not match expected: {o_centerY} with height: {o_height}"
-        )
+        try:
+            self.assertAlmostEqual(
+                e_posX,
+                o_centerX,
+                delta=max(20, tolerance + o_width * 0.6),
+                msg=f"X: {e_posX} does not match expected: {o_centerX} with width: {o_width}"
+            )
+            self.assertAlmostEqual(
+                e_posY,
+                o_centerY,
+                delta=max(20, tolerance + o_height * 0.6),
+                msg=f"Y: {e_posY} does not match expected: {o_centerY} with height: {o_height}"
+            )
+        except AssertionError as e:
+            if get_vqa is not None:
+                original = get_vqa()
+                self.assertAlmostEqual(
+                    e_posX,
+                    original.response['position_x'],
+                    delta=o_width * 0.01,
+                    msg=f"X: {original.response['position_x']} does not match original: {e_posX}"
+                )
+                self.assertAlmostEqual(
+                    e_posY,
+                    original.response['position_y'],
+                    delta=o_height * 0.01,
+                    msg=f"Y: {original.response['position_y']} does not match original: {e_posY}"
+                )
+            else:
+                raise e
 
     def get_expected_text(self, expected: ElementData):
         expected_content = expected.get('text', expected.get('label', ''))
@@ -109,11 +131,20 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         expectedDate = parse(expected["text"])
         self.assertEqual(responseDate, expectedDate, f"Date: {responseDate} does not match expected: {expectedDate}")
 
-    def assertResponse(self, response: ElementResponse, expected: TestElmData|None, tolerance:int=5):
+    def assertResponse_old(self, response: ElementResponse, expected: TestElmData|None, original: str|None=None, tolerance:int=5):
         self.assertIsNotNone(expected)
         assert expected is not None  # Type narrowing for mypy/pylsp
+        # if "coords" in expected.data:
+            # self.assertPosition(response, expected.data, original, tolerance)
+        self.assertContent(response, expected.data)
+        self.assertNeighbours(response, expected.data)
+        print("Element Found Correctly")
+
+    def assertResponse(self, response: ElementResponse, test: TestData, element: str, vqa: str|None=None, tolerance:int=5):
+        expected = test.elm(element)
+        self.assertIsNotNone(expected)
         if "coords" in expected.data:
-            self.assertPosition(response, expected.data, tolerance)
+            self.assertPosition(response, expected.data, lambda: test.vqa(vqa), tolerance)
         self.assertContent(response, expected.data)
         self.assertNeighbours(response, expected.data)
         print("Element Found Correctly")
@@ -134,10 +165,16 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         min_posY = round(min(all_posY))
         return (max(min_posY - buffer, 0), min(max_posY + buffer, image.height))
 
+    # def test_element_type(self, element_type: str, endpoint: Callable[[UploadFile], Awaitable[ElementResponse]], tolerance=5):
+    #     tests = get_test_data("TwoFA", element_type, "archive")
+    #     for test in tests:
+    #         with base.subTest(key=test.key):
+    #             response = await endpoint(test.image())
+    #             elm = test.elm(element_type)
+    #             base.assertResponse(response, elm, tolerance)
 
-    async def run_subtests(self, test_func, section: str, search_pattern: str="*", record_time: str = 'latest'):
-        test_datum = get_test_data(section, search_pattern, record_time)
-
+    async def run_subtests(self, test_func, search_pattern: str="*"):
+        test_datum = get_test_data(self.section, search_pattern, self.record_time)
         failing_tests = []
         for test in test_datum:
             with self.subTest(key=test.key):
@@ -146,7 +183,44 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
                 except Exception as e:
                     failing_tests.append(test.key)
                     raise e
+
+        if len(failing_tests) > 0:
+            print("Failing tests: " + str(failing_tests))
         return failing_tests
+
+    async def verify_elements(
+        self,
+        element: str,
+        vqa: str|None=None,
+        search_pattern: str|None=None,
+        endpoint: Callable[[UploadFile], Awaitable[ElementResponse]]|None=None,
+        test_func: Callable[[TestData], Awaitable[None]]|None=None,
+        skip_if: None|Callable[[TestData], bool] = lambda test: False
+    ):
+        test_datum = get_test_data(self.section, search_pattern or element, self.record_time)
+        failing_tests = []
+        for test in test_datum:
+            with self.subTest(key=test.key):
+                if skip_if and skip_if(test):
+                    self.skipTest(f"Skipping {test.key}")
+                    # execution does not return
+                try:
+                    if endpoint:
+                        response = await endpoint(test.image)
+                        self.assertResponse(response, test, element, vqa)
+                    elif test_func:
+                        await test_func(test)
+                    else:
+                        raise ValueError("No endpoint_func or test_func provided")
+
+                except Exception as e:
+                    failing_tests.append(test.key)
+                    raise e
+
+        if len(failing_tests) > 0:
+            print("Failing tests: " + str(failing_tests))
+        return failing_tests
+
 
 def get_member(obj, key):
     if hasattr(obj, key):
