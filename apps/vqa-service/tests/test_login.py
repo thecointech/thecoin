@@ -1,6 +1,6 @@
 import unittest
 from TestBase import TestBase
-from testutils.testdata import TestData, get_test_data
+from testutils.testdata import TestData
 from login_routes import (
     detect_logout_element,
     detect_username_input,
@@ -10,8 +10,6 @@ from login_routes import (
     detect_login_element,
     detect_login_error
 )
-from tests.repeat_on_failure import repeat_on_fail
-
 
 class TestLoginProcess(TestBase):
     section = "Login"

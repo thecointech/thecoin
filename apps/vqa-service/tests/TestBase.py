@@ -28,7 +28,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         else:
             super().assertEqual(str1, str2, msg)
 
-    def assertPosition(self, response: PositionResponse, expected: ElementData, get_vqa: Callable[[], VqaCallData]|None=None, tolerance: int|None=None):
+    def assertPosition(self, response: PositionResponse, expected: ElementData, get_vqa: Callable[[], PositionResponse]|None=None, tolerance: int|None=None):
         o_width = expected["coords"]["width"]
         o_height = expected["coords"]["height"]
         o_left = expected["coords"]["left"]
@@ -60,15 +60,15 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
                 original = get_vqa()
                 self.assertAlmostEqual(
                     e_posX,
-                    original.response['position_x'],
+                    original.position_x,
                     delta=o_width * 0.01,
-                    msg=f"X: {original.response['position_x']} does not match original: {e_posX}"
+                    msg=f"X: {original.position_x} does not match original: {e_posX}"
                 )
                 self.assertAlmostEqual(
                     e_posY,
-                    original.response['position_y'],
+                    original.position_y,
                     delta=o_height * 0.01,
-                    msg=f"Y: {original.response['position_y']} does not match original: {e_posY}"
+                    msg=f"Y: {original.position_y} does not match original: {e_posY}"
                 )
             else:
                 raise e
@@ -145,22 +145,22 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
     #     self.assertNeighbours(response, expected.data)
     #     print("Element Found Correctly")
 
-    def assertResponse(self, response: PositionResponse, test: TestData, element: str, vqa: str|Callable[[], VqaCallData]|None=None, tolerance:int|None=None):
+    def assertResponse(self, response: PositionResponse, test: TestData, element: str, vqa: str|Callable[[], PositionResponse]|None=None, tolerance:int|None=None):
         expected = test.elm(element)
         self.assertIsNotNone(expected)
         if "coords" in expected.data:
-            vqa_fn = vqa if isinstance(vqa, Callable) else lambda: test.vqa(vqa or "VQA Not Provided for " + element)
+            vqa_fn = vqa if isinstance(vqa, Callable) else lambda: PositionResponse(**test.vqa(vqa or "VQA Not Provided for " + element).response)
             self.assertPosition(response, expected.data, vqa_fn, tolerance)
         if isinstance(response, ElementResponse):
             self.assertContent(response, expected.data)
             self.assertNeighbours(response, expected.data)
         print("Element Found Correctly")
 
-    def assertDateResponse(self, response: DateElementResponse, expected: TestElmData|None):
+    def assertDateResponse(self, response: DateElementResponse, expected: TestElmData|None, vqa: Callable[[], PositionResponse]):
         self.assertIsNotNone(expected)
         assert expected is not None  # Type narrowing for mypy/pylsp
         self.assertDate(response, expected.data)
-        self.assertPosition(response, expected.data)
+        self.assertPosition(response, expected.data, vqa)
         self.assertNeighbours(response, expected.data)
         print("Element Found Correctly")
 
