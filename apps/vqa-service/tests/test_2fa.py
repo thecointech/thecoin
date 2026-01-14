@@ -1,12 +1,9 @@
 import re
-from typing import Awaitable, Callable, List
+from typing import Callable, List
 from TestBase import TestBase
-from data_elements import ElementResponse
-from tests.testutils.getTestData import get_test_data
 from tests.testutils.testdata import TestData
 from tests.testutils.types import TestElmData
 from twofa_data import TwoFactorActions
-from fastapi import UploadFile
 from twofa_routes import (
     detect_action_required,
     detect_destinations,
