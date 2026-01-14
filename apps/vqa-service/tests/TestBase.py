@@ -28,7 +28,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         else:
             super().assertEqual(str1, str2, msg)
 
-    def assertPosition(self, response: PositionResponse, expected: ElementData, get_vqa: Callable[[], VqaCallData]|None=None, tolerance: int=5):
+    def assertPosition(self, response: PositionResponse, expected: ElementData, get_vqa: Callable[[], VqaCallData]|None=None, tolerance: int|None=None):
         o_width = expected["coords"]["width"]
         o_height = expected["coords"]["height"]
         o_left = expected["coords"]["left"]
@@ -40,6 +40,8 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         e_posX = response.position_x
         e_posY = response.position_y
 
+        if tolerance is None:
+            tolerance = 5
         try:
             self.assertAlmostEqual(
                 e_posX,
@@ -143,7 +145,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
     #     self.assertNeighbours(response, expected.data)
     #     print("Element Found Correctly")
 
-    def assertResponse(self, response: PositionResponse, test: TestData, element: str, vqa: str|Callable[[], VqaCallData]|None=None, tolerance:int=5):
+    def assertResponse(self, response: PositionResponse, test: TestData, element: str, vqa: str|Callable[[], VqaCallData]|None=None, tolerance:int|None=None):
         expected = test.elm(element)
         self.assertIsNotNone(expected)
         if "coords" in expected.data:
@@ -202,7 +204,8 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         search_pattern: str|None=None,
         endpoint: Callable[[UploadFile], Awaitable[PositionResponse]]|None=None,
         test_func: Callable[[TestData], Awaitable[None]]|None=None,
-        skip_if: list[str]|Callable[[TestData], bool] = []
+        skip_if: list[str]|Callable[[TestData], bool] = [],
+        tolerance: int|None = None
     ):
         test_datum = get_test_data(self.section, search_pattern or element, self.record_time)
         test_name = endpoint.__name__ if endpoint else test_func.__name__ if test_func else element
@@ -216,7 +219,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
                 try:
                     if endpoint:
                         response = await endpoint(test.image)
-                        self.assertResponse(response, test, element, vqa)
+                        self.assertResponse(response, test, element, vqa, tolerance=tolerance)
                     elif test_func:
                         await test_func(test)
                     else:
