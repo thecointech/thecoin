@@ -1,3 +1,4 @@
+import json
 from typing import Any, Awaitable, Callable
 import unittest
 import os
@@ -6,7 +7,9 @@ import re
 from dateparser import parse
 from fastapi import UploadFile
 
-from tests.testutils.testdata import ElementData, TestData, TestElmData, VqaCallData, get_test_data
+from tests.testutils.getTestData import get_test_data
+from tests.testutils.testdata import TestData
+from tests.testutils.types import ElementData, TestElmData, VqaCallData
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, 'src'))
@@ -131,20 +134,20 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         expectedDate = parse(expected["text"])
         self.assertEqual(responseDate, expectedDate, f"Date: {responseDate} does not match expected: {expectedDate}")
 
-    def assertResponse_old(self, response: ElementResponse, expected: TestElmData|None, original: str|None=None, tolerance:int=5):
-        self.assertIsNotNone(expected)
-        assert expected is not None  # Type narrowing for mypy/pylsp
-        # if "coords" in expected.data:
-            # self.assertPosition(response, expected.data, original, tolerance)
-        self.assertContent(response, expected.data)
-        self.assertNeighbours(response, expected.data)
-        print("Element Found Correctly")
+    # def assertResponse_old(self, response: ElementResponse, expected: TestElmData|None, original: str|None=None, tolerance:int=5):
+    #     self.assertIsNotNone(expected)
+    #     assert expected is not None  # Type narrowing for mypy/pylsp
+    #     # if "coords" in expected.data:
+    #         # self.assertPosition(response, expected.data, original, tolerance)
+    #     self.assertContent(response, expected.data)
+    #     self.assertNeighbours(response, expected.data)
+    #     print("Element Found Correctly")
 
     def assertResponse(self, response: PositionResponse, test: TestData, element: str, vqa: str|None=None, tolerance:int=5):
         expected = test.elm(element)
         self.assertIsNotNone(expected)
         if "coords" in expected.data:
-            self.assertPosition(response, expected.data, lambda: test.vqa(vqa), tolerance)
+            self.assertPosition(response, expected.data, lambda: test.vqa(vqa or "VQA Not Provided for " + element), tolerance)
         if isinstance(response, ElementResponse):
             self.assertContent(response, expected.data)
             self.assertNeighbours(response, expected.data)
@@ -198,13 +201,15 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         search_pattern: str|None=None,
         endpoint: Callable[[UploadFile], Awaitable[PositionResponse]]|None=None,
         test_func: Callable[[TestData], Awaitable[None]]|None=None,
-        skip_if: None|Callable[[TestData], bool] = lambda test: False
+        skip_if: list[str]|Callable[[TestData], bool] = []
     ):
         test_datum = get_test_data(self.section, search_pattern or element, self.record_time)
-        failing_tests = []
+        test_name = endpoint.__name__ if endpoint else test_func.__name__ if test_func else element
+        failing_tests: list[str] = []
+        skip_filter = self.get_skip_filter(test_name, skip_if)
         for test in test_datum:
             with self.subTest(key=test.key):
-                if skip_if and skip_if(test):
+                if skip_filter and skip_filter(test):
                     self.skipTest(f"Skipping {test.key}")
                     # execution does not return
                 try:
@@ -221,9 +226,31 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
                     raise e
 
         if len(failing_tests) > 0:
+            # write failing to disk as JSON
+            with open(self.failing_name(test_name), "w") as f:
+                json.dump(failing_tests, f)
             print("Failing tests: " + str(failing_tests))
+        else:
+            # delete the file if it exists
+            if os.path.exists(self.failing_name(test_name)):
+                os.remove(self.failing_name(test_name))
+
         return failing_tests
 
+    def failing_name(self, name: str):
+        return f"failing-vqa-{self.section}-{name}.json"
+
+    def get_skip_filter(self, name: str, skip_if: list[str]|Callable[[TestData], bool]):
+        skip_fn = skip_if if isinstance(skip_if, Callable) else lambda test: test.key in skip_if
+        if (not os.path.exists(self.failing_name(name))):
+            return skip_fn
+        is_debugging = sys.gettrace() is not None or 'pydevd' in sys.modules
+        if not is_debugging:
+            return skip_fn
+        # if debugging, only run the failing tests
+        with open(self.failing_name(name), "r") as f:
+            data = json.load(f)
+            return lambda test: skip_fn(test) or test.key not in data
 
 def get_member(obj, key):
     if hasattr(obj, key):
