@@ -70,14 +70,26 @@ class TestAccountsSummary(TestBase):
         await self.verify_elements("accountBalance", test_func=test_account_balance, skip_if=self.skip_account_balance)
 
 
-    # async def test_find_navigate_to_account(self):
-    #     tests = get_test_data("AccountsSummary", "NavigateElement")
+    skip_navigate_to_account = [
+        # Marked "ignored" in the override file because it's missing it's "sch" file
+        "archive:2025-08-13_13-39:TD:AccountsSummary:0",
+    ]
+    async def test_find_navigate_to_account(self):
 
-    #     for test in tests:
-    #         with self.subTest(key=test.key):
-    #             accounts = test.vqa("listAccounts")
-    #             for i in range(accounts.response["num_accounts"]):
-    #                 vqa = test.vqa("NavigateElement")
-    #                 response = await account_navigate_element(test.image(), *vqa.args)
-    #                 elm = test.elm("navigate")
-    #                 self.assertResponse(response, elm)
+        async def test_navigate_to_account(test: TestData):
+            accounts = test.vqa("listAccounts")
+            originalVqas = test.vqa_iter("NavigateElement")
+            for vqa, account in zip(originalVqas, accounts.response["accounts"]):
+                with self.subTest(account=account["account_name"]):
+                    response = await account_navigate_element(test.image, *vqa.args)
+                    self.assertResponse(
+                        response,
+                        test,
+                        element="navigate-" + account["account_type"],
+                        vqa=lambda: vqa
+                    )
+
+        await self.verify_elements("NavigateElement",
+            test_func=test_navigate_to_account,
+            skip_if=self.skip_navigate_to_account
+        )

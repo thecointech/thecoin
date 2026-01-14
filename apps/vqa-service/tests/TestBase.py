@@ -143,11 +143,12 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
     #     self.assertNeighbours(response, expected.data)
     #     print("Element Found Correctly")
 
-    def assertResponse(self, response: PositionResponse, test: TestData, element: str, vqa: str|None=None, tolerance:int=5):
+    def assertResponse(self, response: PositionResponse, test: TestData, element: str, vqa: str|Callable[[], VqaCallData]|None=None, tolerance:int=5):
         expected = test.elm(element)
         self.assertIsNotNone(expected)
         if "coords" in expected.data:
-            self.assertPosition(response, expected.data, lambda: test.vqa(vqa or "VQA Not Provided for " + element), tolerance)
+            vqa_fn = vqa if isinstance(vqa, Callable) else lambda: test.vqa(vqa or "VQA Not Provided for " + element)
+            self.assertPosition(response, expected.data, vqa_fn, tolerance)
         if isinstance(response, ElementResponse):
             self.assertContent(response, expected.data)
             self.assertNeighbours(response, expected.data)
