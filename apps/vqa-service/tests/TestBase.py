@@ -4,7 +4,6 @@ import os
 import sys
 import re
 from dateparser import parse
-from fastapi import UploadFile
 from pydantic import BaseModel
 
 from tests.testutils.getTestData import get_test_data
@@ -190,30 +189,6 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         min_posY = round(min(all_posY))
         return (max(min_posY - buffer, 0), min(max_posY + buffer, image.height))
 
-    # def test_element_type(self, element_type: str, endpoint: Callable[[UploadFile], Awaitable[ElementResponse]], tolerance=5):
-    #     tests = get_test_data("TwoFA", element_type, "archive")
-    #     for test in tests:
-    #         with base.subTest(key=test.key):
-    #             response = await endpoint(test.image())
-    #             elm = test.elm(element_type)
-    #             base.assertResponse(response, elm, tolerance)
-
-    # async def run_subtests(self, test_func, search_pattern: str="*", skip_if: None|Callable[[TestData], bool] = lambda test: False):
-    #     test_datum = get_test_data(self.section, search_pattern, self.record_time)
-    #     failing_tests = []
-    #     for test in test_datum:
-    #         with self.subTest(key=test.key):
-    #             if skip_if and skip_if(test):
-    #                 self.skipTest(f"Skipping {test.key}")
-    #             try:
-    #                 await test_func(test)
-    #             except Exception as e:
-    #                 failing_tests.append(test.key)
-    #                 raise e
-
-    #     if len(failing_tests) > 0:
-    #         print("Failing tests: " + str(failing_tests))
-    #     return failing_tests
 
     def get_test_data(self, search_pattern: str):
         return get_test_data(self.section, search_pattern, self.record_time)
@@ -262,18 +237,6 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         tests = [(test.key, lambda t=test: test_func(t)) for test in test_datum]
         await self.run_subTests(tests, test_name, skip_if)
 
-        # with DebugFailingTests(self.section, test_name, skip_if) as tracker:
-        #     for test in test_datum:
-        #         with self.subTest(key=test.key):
-        #             if tracker.should_skip(test):
-        #                 self.skipTest(f"Skipping {test.key}")
-        #             try:
-        #                 await test_func(test)
-        #             except Exception as e:
-        #                 tracker.record_failure(test.key)
-        #                 raise e
-
-        # return tracker.failing_tests
 
     async def run_subTests(
         self,
