@@ -7,7 +7,7 @@ import { log } from "@thecointech/logging";
 import open from 'open';
 import { getSnapshot, getSnapshots, type SnapshotMeta } from "./snapshots";
 
-type ElementName = {
+export type ElementName = {
   step: number;
   index: number;
   name: string;

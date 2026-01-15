@@ -17,16 +17,11 @@ export function getAllTests() {
 }
 export function getTests(): Test[] {
   const r = getAllTests().flatMap(test => {
-    const elements = test.names()
-    return elements.map(element => {
-      return {
-        key: test.key,
-        step: test.step,
-        element: element,
-      }
-    })
+    return test.elements().map(e => ({
+      key: test.key,
+      ...e,
+    }))
   })
-
   return r;
 }
 

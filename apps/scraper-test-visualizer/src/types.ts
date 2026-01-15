@@ -1,10 +1,9 @@
-import type { OverrideElement, TestElmData, TestSchData, SnapshotData } from "@thecointech/scraper-archive";
+import type { OverrideElement, TestElmData, TestSchData, SnapshotData, ElementName } from "@thecointech/scraper-archive";
 
 // Basic test data
 export type Test = {
   key: string;
-  element: string;
-}
+} & ElementName;
 
 export type FailingTest = {
   key: string;

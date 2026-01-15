@@ -10,6 +10,7 @@ export interface InitialState {
   selectedTest: TestInfo | null;
   failingTests: FailingTest[];
   filter: FilterType;
+  filterText: string;
 }
 
 export const initialState: InitialState = {
@@ -19,4 +20,5 @@ export const initialState: InitialState = {
   selectedTest: null,
   failingTests: [],
   filter: 'all',
+  filterText: '',
 };

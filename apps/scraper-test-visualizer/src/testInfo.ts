@@ -9,7 +9,7 @@ export class TestInfo {
     this.basic = basic;
   }
 
-  get element() { return this.basic.element; }
+  get element() { return this.basic.fullname; }
   get key() { return this.basic.key; }
 
   get isFailing() {

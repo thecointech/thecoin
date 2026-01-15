@@ -1,11 +1,12 @@
 import React from 'react';
 import { Statistic } from 'semantic-ui-react';
-import type { FailingTest, Test } from '../types';
+import type { FailingTest } from '../types';
 import { TestsReducer } from '../state/reducer';
 import styles from './StatsBar.module.less';
+import type { TestInfo } from '../testInfo';
 
 interface StatsBarProps {
-  tests: Test[];
+  tests: TestInfo[];
   failingTests: FailingTest[];
 }
 
