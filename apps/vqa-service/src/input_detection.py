@@ -57,7 +57,7 @@ def calculate_group_bbox(form_bbox: BBox, parent_coords: list[BBox]) -> BBox:
 
 async def deduplicate_unique(
     return_types: list[InputType],
-    page: Image,
+    page: Image.Image,
     elements: list[object],
     parent_coords: list[BBox],
 ):

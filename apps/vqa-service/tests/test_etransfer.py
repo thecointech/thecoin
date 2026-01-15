@@ -8,7 +8,8 @@ from etransfer_routes import (
     detect_etransfer_stage,
     input_types,
     detect_next_button,
-    detect_to_recipient
+    detect_to_recipient,
+    detect_confirmation_code
 )
 from login_routes import detect_session_timeout_element
 
@@ -129,6 +130,10 @@ class TestETransfer(TestBase):
     async def test_similarity(self):
         similarity = await detect_most_similar_option("Chequing Account: 1234567", ["Select an account", "Your Basic Chequing Account 123**** - $89.90"])
         self.assertEqual(similarity.most_similar, "Your Basic Chequing Account 123**** - $89.90")
+
+
+    async def test_confirmation_code(self):
+        await self.run_subTests_Elements("confirmation", vqa="detectConfirmationCode", endpoint=detect_confirmation_code)
 
     # this is technically a method from login, but it only runs within eTransfer so test is here to
     async def test_session_timeout(self):
