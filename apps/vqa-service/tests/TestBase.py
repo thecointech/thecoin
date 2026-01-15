@@ -218,8 +218,9 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         skip_if: list[str]|Callable[[str], bool] = [],
         tolerance: int|None = None
     ):
+
         async def test_func(test: TestData):
-            args = [] if vqa is None else test.vqa(vqa).args
+            args = get_args(test, vqa)
             response = await endpoint(test.image, *args)
             self.assertResponse(response, test, element, vqa, tolerance=tolerance)
 
@@ -259,3 +260,12 @@ def normalize(str: str):
     str = str.lower()
     str = re.sub(r'[$.,-\/\s]', '', str)  # login == log in (etc)
     return str
+
+def get_args(test: TestData, vqa: str|None):
+    if vqa is None:
+        return []
+    # Not every test has a vqa, and they don't need args
+    try:
+        return test.vqa(vqa).args
+    except Exception:
+        return []

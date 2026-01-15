@@ -70,7 +70,7 @@ def get_test_data(section: str, search_pattern: str="*", record_time: str = 'lat
 def _get_json_files(matched_folder: str, step: str, skip: Optional[SkipElement] = None) -> List[str]:
     """Get JSON files for a test, filtering out skipped elements"""
     all_files = os.listdir(matched_folder)
-    json_files = [f for f in all_files if f.startswith(step)]
+    json_files = [f for f in all_files if f.startswith(step) and f.endswith(".json")]
 
     if skip:
         # Filter out files that contain any of the skipped element names

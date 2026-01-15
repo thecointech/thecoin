@@ -102,7 +102,7 @@ class TestETransfer(TestBase):
                     response = await detect_next_button(data.image)
                     assert response is not None
                     vqa_response = vqa.response
-                    self.assertResponse(response, data, "step", vqa = lambda: ButtonResponse(**vqa_response))
+                    self.assertResponse(response, data, "step", lambda vr=vqa_response: ButtonResponse(**vr))
                     vqa = None
             assert vqa is None
 
@@ -115,7 +115,7 @@ class TestETransfer(TestBase):
             # add all vqa to the list
             data_by_folder[data._matched_folder].append(data)
 
-        tests = [(folder, lambda: test_detect_next_button(data_by_folder[folder])) for folder in data_by_folder]
+        tests = [(folder, lambda f=folder: test_detect_next_button(data_by_folder[f])) for folder in data_by_folder]
         await self.run_subTests(tests, "eTransfer_detectNextButton")
 
 

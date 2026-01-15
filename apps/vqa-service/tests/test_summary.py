@@ -75,14 +75,14 @@ class TestAccountsSummary(TestBase):
         async def test_navigate_to_account(test: TestData):
             accounts = test.vqa("listAccounts")
             originalVqas = test.vqa_iter("NavigateElement")
-            for vqa, account in zip(originalVqas, accounts.response["accounts"]):
+            for vqa, account in zip(originalVqas, accounts.response["accounts"], strict=True):
                 with self.subTest(account=account["account_name"]):
                     response = await account_navigate_element(test.image, *vqa.args)
                     self.assertResponse(
                         response,
                         test,
                         element="navigate-" + account["account_type"],
-                        vqa=lambda: PositionResponse(**vqa.response)
+                        vqa=lambda vqa=vqa: PositionResponse(**vqa.response)
                     )
 
         await self.run_subTests_TestData("NavigateElement",
