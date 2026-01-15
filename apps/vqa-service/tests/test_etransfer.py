@@ -10,8 +10,9 @@ from etransfer_routes import (
     detect_next_button,
     detect_to_recipient
 )
+from login_routes import detect_session_timeout_element
+
 from common_routes import detect_most_similar_option
-from tests.testutils.dbg_only_failed import DebugFailingTests
 from tests.testutils.testdata import TestData
 
 # General flow
@@ -32,13 +33,13 @@ class TestETransfer(TestBase):
     record_time = "archive"
 
     # What is the action be requested of the user here?
-    async def test_navigate_to_transfer(self):
+    async def test_best_etransfer_link(self):
 
-        async def test_navigate_to_transfer(test: TestData):
+        async def test(test: TestData):
             original = test.vqa("bestEtransferLink")
             response = await best_etransfer_link(original.args[0])
             self.assertEqual(response.best_link, original.response["best_link"])
-        await self.run_subTests_TestData("bestEtransferLink", test_navigate_to_transfer)
+        await self.run_subTests_TestData("bestEtransferLink", test)
 
     # Test the case that failed way-back-when
     async def test_failed_links(self):
@@ -69,12 +70,14 @@ class TestETransfer(TestBase):
         #         has_form = await detect_etransfer_form(image, intent['title'])
         #         self.assertEqual(has_form.form_present, False)
 
+
     async def test_detect_input_types(self):
         async def test_input_types(test: TestData):
             original = test.vqa("inputTypes")
             response = await input_types(test.image, *original.args)
             self.assertListEqual(response, original.response) # type: ignore - this response (only) is not a dict
         await self.run_subTests_TestData("inputTypes", test_input_types)
+
 
     async def test_etransfer_recipient(self):
         await self.run_subTests_Elements("select-recipient", vqa="detectToRecipient", endpoint=detect_to_recipient)
@@ -115,7 +118,7 @@ class TestETransfer(TestBase):
         await self.run_subTests(tests, "eTransfer_detectNextButton")
 
 
-    async def test_etransfer_status(self):
+    async def test_etransfer_stage(self):
         await self.run_subTests_Vqa("detectEtransferStage", detect_etransfer_stage)
 
 
@@ -126,6 +129,10 @@ class TestETransfer(TestBase):
     async def test_similarity(self):
         similarity = await detect_most_similar_option("Chequing Account: 1234567", ["Select an account", "Your Basic Chequing Account 123**** - $89.90"])
         self.assertEqual(similarity.most_similar, "Your Basic Chequing Account 123**** - $89.90")
+
+    # this is technically a method from login, but it only runs within eTransfer so test is here to
+    async def test_session_timeout(self):
+        await self.run_subTests_Vqa("detectSessionTimeoutElement", detect_session_timeout_element)
 
 
 

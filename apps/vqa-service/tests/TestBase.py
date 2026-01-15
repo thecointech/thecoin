@@ -170,6 +170,9 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         response_dict = response.model_dump()
         # iterate through the response and original response
         for key in response_dict:
+            # Reasoning has been added over time and is not in older VQAs
+            if (key == "reasoning" and key not in original.response):
+                continue
             self.assertIn(key, original.response)
             expected = original.response[key]
             actual = response_dict[key]
@@ -219,30 +222,33 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
     async def run_subTests_Vqa(
         self,
         vqa: str,
-        endpoint: Callable[..., Awaitable[BaseModel]],
+        endpoint: Callable[..., Awaitable[BaseModel|None]],
         skip_if: list[str]|Callable[[str], bool] = [],
     ):
         async def test_func(test: TestData):
             original = test.vqa(vqa)
             response = await endpoint(test.image, *original.args)
-            self.assertVqaResponse(response, original)
+            if (response is None):
+                self.assertIsNone(original.response)
+            else:
+                self.assertVqaResponse(response, original)
 
         await self.run_subTests_TestData(vqa, test_func=test_func, skip_if=skip_if, test_name=endpoint.__name__)
 
     async def run_subTests_Elements(
         self,
         element: str,
-        vqa: str,
         endpoint: Callable[..., Awaitable[PositionResponse]],
+        vqa: str|None = None,
         skip_if: list[str]|Callable[[str], bool] = [],
         tolerance: int|None = None
     ):
         async def test_func(test: TestData):
-            original = test.vqa(vqa)
-            response = await endpoint(test.image, *original.args)
+            args = [] if vqa is None else test.vqa(vqa).args
+            response = await endpoint(test.image, *args)
             self.assertResponse(response, test, element, vqa, tolerance=tolerance)
 
-        await self.run_subTests_TestData(vqa, test_func=test_func, skip_if=skip_if, test_name=endpoint.__name__)
+        await self.run_subTests_TestData(element, test_func=test_func, skip_if=skip_if, test_name=endpoint.__name__)
 
     async def run_subTests_TestData(
         self,

@@ -32,9 +32,9 @@ class Query2faTests(TestBase):
     record_time = "archive"
 
     # What is the action be requested of the user here?
-    async def test_2fa_action_type(self):
+    async def test_action_required(self):
 
-        async def test_action_type(test: TestData):
+        async def test(test: TestData):
             response = await detect_action_required(test.image)
             expected_action = (
                 TwoFactorActions.INPUT_CODE if any(elm['name'] == "code" for elm in test.elements)
@@ -43,12 +43,12 @@ class Query2faTests(TestBase):
             )
             self.assertEqual(response.action, expected_action)
 
-        await self.verify_elements("{code,destination,approve-in-app}", test_func=test_action_type)
+        await self.run_subTests_TestData("{code,destination,approve-in-app}", test_func=test)
 
 
     # If "SelectDestination" is chosen, are there multiple options to choose from
-    async def test_2fa_select_dest(self):
-        async def test_select_dest(test: TestData):
+    async def test_detect_dest(self):
+        async def test(test: TestData):
             # Get available phone numbers
             response = await detect_destinations(test.image)
             phones = response.phones.phone_nos
@@ -67,11 +67,11 @@ class Query2faTests(TestBase):
 
                     self.assertInArray(expected_phones, assert_cb)
 
-        await self.run_subtests(test_select_dest, "destination")
+        await self.run_subTests_TestData("destination", test)
 
     # If "SelectDestination" is chosen, are there multiple options to choose from
-    async def test_2fa_detect_dest_elements(self):
-        async def test_detect_dest_elements(test: TestData):
+    async def test_detect_dest_elements(self):
+        async def test(test: TestData):
             original_responses = [t.response for t in test.vqa_iter("getDestinationElements")]
             original_buttons = [b for t in original_responses for b in t["buttons"]]
             for elm in test.elm_iter("phone"):
@@ -90,16 +90,16 @@ class Query2faTests(TestBase):
 
                         self.assertInArray(original_buttons, assert_cb)
 
-        await self.run_subtests(test_detect_dest_elements, "getDestinationElements")
+        await self.run_subTests_TestData("getDestinationElements", test)
 
-    async def test_2fa_input_element(self):
-        await self.verify_elements("code", endpoint=get_auth_input)
+    async def test_input_element(self):
+        await self.run_subTests_Elements("code", get_auth_input)
 
-    async def test_2fa_remember_element(self):
-        await self.verify_elements("remember", endpoint=get_remember_input, tolerance=30)
+    async def test_remember_element(self):
+        await self.run_subTests_Elements("remember", get_remember_input)
 
-    async def test_2fa_submit_element(self):
-        await self.verify_elements("submit", endpoint=get_submit_input)
+    async def test_submit_element(self):
+        await self.run_subTests_Elements("submit", get_submit_input, "getSubmitInput")
 
     def assertInArray(self, expected_array: List[TestElmData], callback: Callable[[TestElmData], None]) -> None:
         found = False

@@ -17,7 +17,7 @@ class TestCookieBanner(TestBase):
         'archive/2025-07-25_15-16/BMO/CookieBanner-0': False,
     }
     async def test_cookie_banner_present(self):
-        async def run_test(test):
+        async def test(test):
             response = await cookie_banner_present(test.image)
             expected = self.cookie_banner_present_overrides.get(test.key, any(e["name"] == "cookie-accept" for e in test.elements))
             if (response.cookie_banner_detected != expected):
@@ -26,23 +26,18 @@ class TestCookieBanner(TestBase):
                 vqa = test.vqa("cookieBannerPresent")
                 self.assertEqual(response.cookie_banner_detected, vqa.response["cookie_banner_detected"])
 
-        await self.run_subtests(run_test, "*")
+        await self.run_subTests_TestData("*", test_func=test)
 
     # Screenshot does not match data files
     cookie_accept_skip = ['archive/2025-07-25_15-16/BMO/CookieBanner-0']
     async def test_cookie_accept(self):
-        await self.verify_elements(
+        await self.run_subTests_Elements(
             "cookie-accept",
             endpoint=cookie_banner_accept,
             vqa= "cookieBannerAccept",
-            skip_if= lambda test: test.key in self.cookie_accept_skip
+            skip_if= lambda key: key in self.cookie_accept_skip
         )
-        # async def run_test(test):
-        #     if test.key in self.cookie_accept_skip:
-        #         return
-        #     response = await cookie_banner_accept(test.image)
-        #     self.assertResponse(response, test.elm("cookie-accept"), "cookieBannerAccept")
-        # await self.run_subtests(run_test, "cookie-accept", "archive")
+
 
 if __name__ == "__main__":
     unittest.main()

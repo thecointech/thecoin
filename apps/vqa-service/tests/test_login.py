@@ -2,7 +2,6 @@ import unittest
 from TestBase import TestBase
 from testutils.testdata import TestData
 from login_routes import (
-    detect_logout_element,
     detect_username_input,
     detect_password_exists,
     detect_password_input,
@@ -16,7 +15,7 @@ class TestLoginProcess(TestBase):
     record_time = "archive"
 
     async def test_detect_username_input(self):
-        await self.verify_elements(
+        await self.run_subTests_Elements(
             "username",
             endpoint=detect_username_input,
             vqa="detectUsernameInput"
@@ -27,15 +26,11 @@ class TestLoginProcess(TestBase):
         'archive/2026-01-02_15-11/RBC/Login-1'
     ]
     async def test_detect_password_exists(self):
-        async def detect_password(test: TestData):
-            response = await detect_password_exists(test.image)
-            original = test.vqa("detectPasswordExists").response
-            self.assertEqual(response.password_input_detected, original["password_input_detected"])
-        await self.verify_elements(
+        await self.run_subTests_Vqa(
             "detectPasswordExists",
-            test_func=detect_password,
-            skip_if=lambda test: test.key in self.skip_pwd_exists
-            )
+            endpoint=detect_password_exists,
+            skip_if=lambda key: key in self.skip_pwd_exists
+        )
 
         # The following tests all pages, however we can't reliably
         # determine if a password exists or not for pages if we
@@ -63,37 +58,22 @@ class TestLoginProcess(TestBase):
         #             exists = any(s.has_element("password") for s in matching_pages)
         #             self.assertEqual(response.password_input_detected, exists)
 
+
     # What is the password input?
     async def test_detect_password_input(self):
-        await self.verify_elements(
-            "password",
-            endpoint=detect_password_input
-        )
+        await self.run_subTests_Elements("password", detect_password_input)
+
 
     async def test_detect_continue_button(self):
-        await self.verify_elements(
-            "continue",
-            vqa="detectContinueElement",
-            endpoint=detect_continue_element
-        )
+        await self.run_subTests_Elements("continue", detect_continue_element, "detectContinueElement")
+
 
     async def test_detect_login_button(self):
-        await self.verify_elements(
-            "login",
-            vqa="detectLoginElement",
-            endpoint=detect_login_element
-        )
+        await self.run_subTests_Elements("login", detect_login_element, "detectLoginElement")
+
 
     async def test_detect_login_error(self):
-        async def test_login_error(sample: TestData):
-                response = await detect_login_error(sample.image)
-                expected = sample.vqa("Error").response
-                self.assertEqual(response.error_message_detected, expected["error_message_detected"])
-                self.assertEqual(response.error_message, expected["error_message"])
-        await self.verify_elements(
-            "detectLoginError",
-            test_func=test_login_error,
-        )
+         await self.run_subTests_Vqa("detectLoginError", detect_login_error)
 
 if __name__ == "__main__":
     unittest.main()

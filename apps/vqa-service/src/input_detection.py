@@ -9,9 +9,9 @@ from etransfer_data import InputType, InputTypeResponse, unique_input_types
 from run_endpoint_query import run_endpoint_query
 
 
-async def detect_input_types(page: Image.Image,elements: list[object], parent_coords: list[BBox]) -> list[InputType]:
+async def detect_input_types(page: Image.Image, elements: list[object], parent_coords: list[BBox]) -> list[InputType]:
     # Initialize our return values to None (should all be set by end of function)
-    return_types = [None] * len(elements)
+    return_types: list[InputType|None] = [None] * len(elements)
 
     # Group the inputs by row/radio type.  This is mostly to ensure
     # that we get consistent types for elements in the same group

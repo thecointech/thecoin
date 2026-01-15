@@ -18,12 +18,12 @@ class TestLanding(TestBase):
     record_time = "archive"
 
     async def test_finds_login_button(self):
-        await self.verify_elements(
+        await self.run_subTests_Elements(
             "login",
+            navigate_to_login,
             "navigateToLogin",
-            endpoint=navigate_to_login,
             # Gold tests are old, so skip them
-            skip_if= lambda test: 'archive/gold/' in test.key
+            skip_if= lambda key: 'archive:gold:' in key
         )
 
     # NOTE: This test doesn't have any data, possibly because
@@ -34,7 +34,7 @@ class TestLanding(TestBase):
             self.assertEqual(intent.type, "MenuSelect", "Login intent failed for " + test.key)
             response = await navigate_to_login_menu(test.image, BBox(bottom=770))
             self.assertResponse(response, test, "login")
-        await self.run_subtests(run_test, "menu")
+        await self.run_subTests_TestData("menu", run_test)
 
 
 if __name__ == "__main__":

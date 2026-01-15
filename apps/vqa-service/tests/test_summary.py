@@ -1,4 +1,5 @@
 from TestBase import TestBase, normalize
+from data_elements import PositionResponse
 from testutils.testdata import TestData
 from thefuzz import fuzz
 from summary_routes import account_balance_element, list_accounts, account_navigate_element
@@ -52,7 +53,7 @@ class TestAccountsSummary(TestBase):
                 # self.assertPosition(account, image, vacc, key)
                 validations.remove(vacc)
 
-        await self.verify_elements("listAccounts", test_func=test_list_accounts, skip_if=self.skip_accounts)
+        await self.run_subTests_TestData("listAccounts", test_func=test_list_accounts, skip_if=self.skip_accounts)
 
     skip_account_balance = [
         # These two return the position of the account name rather than the balance element.
@@ -62,12 +63,7 @@ class TestAccountsSummary(TestBase):
         'archive:2025-08-07_17-05:TD:AccountsSummary:0'
     ]
     async def test_find_account_balance(self):
-        async def test_account_balance(test: TestData):
-            vqa = test.vqa("accountBalance")
-            response = await account_balance_element(test.image, vqa.args[0], int(vqa.args[1]), int(vqa.args[2]))
-            self.assertResponse(response, test, "balance", "accountBalance")
-
-        await self.verify_elements("accountBalance", test_func=test_account_balance, skip_if=self.skip_account_balance)
+        await self.run_subTests_Elements("balance", account_balance_element, "accountBalance", skip_if=self.skip_account_balance)
 
 
     skip_navigate_to_account = [
@@ -86,10 +82,10 @@ class TestAccountsSummary(TestBase):
                         response,
                         test,
                         element="navigate-" + account["account_type"],
-                        vqa=lambda: vqa
+                        vqa=lambda: PositionResponse(**vqa.response)
                     )
 
-        await self.verify_elements("NavigateElement",
+        await self.run_subTests_TestData("NavigateElement",
             test_func=test_navigate_to_account,
             skip_if=self.skip_navigate_to_account
         )
