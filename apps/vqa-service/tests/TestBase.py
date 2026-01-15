@@ -1,15 +1,16 @@
-import json
-from typing import Any, Awaitable, Callable
+from typing import Any, Awaitable, Callable, Sequence, Tuple
 import unittest
 import os
 import sys
 import re
 from dateparser import parse
 from fastapi import UploadFile
+from pydantic import BaseModel
 
 from tests.testutils.getTestData import get_test_data
 from tests.testutils.testdata import TestData
 from tests.testutils.types import ElementData, TestElmData, VqaCallData
+from tests.testutils.dbg_only_failed import DebugFailingTests
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(parent_dir, 'src'))
@@ -164,6 +165,20 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         self.assertNeighbours(response, expected.data)
         print("Element Found Correctly")
 
+    def assertVqaResponse(self, response: BaseModel, original: VqaCallData):
+        # Convert Pydantic model to dict for comparison
+        response_dict = response.model_dump()
+        # iterate through the response and original response
+        for key in response_dict:
+            self.assertIn(key, original.response)
+            expected = original.response[key]
+            actual = response_dict[key]
+            # Compare based on type
+            if isinstance(expected, (int, float)):
+                self.assertAlmostEqual(actual, expected)
+            else:
+                self.assertEqual(actual, expected)
+
     # Processing the larger screenshot can result in errors reading small text.
     # This function will focus in on the area containing the elements (vertically only)
     def getCropFromElements(self, image, elements, buffer=200):
@@ -180,88 +195,96 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
     #             elm = test.elm(element_type)
     #             base.assertResponse(response, elm, tolerance)
 
-    async def run_subtests(self, test_func, search_pattern: str="*", skip_if: None|Callable[[TestData], bool] = lambda test: False):
-        test_datum = get_test_data(self.section, search_pattern, self.record_time)
-        failing_tests = []
-        for test in test_datum:
-            with self.subTest(key=test.key):
-                if skip_if and skip_if(test):
-                    self.skipTest(f"Skipping {test.key}")
-                try:
-                    await test_func(test)
-                except Exception as e:
-                    failing_tests.append(test.key)
-                    raise e
+    # async def run_subtests(self, test_func, search_pattern: str="*", skip_if: None|Callable[[TestData], bool] = lambda test: False):
+    #     test_datum = get_test_data(self.section, search_pattern, self.record_time)
+    #     failing_tests = []
+    #     for test in test_datum:
+    #         with self.subTest(key=test.key):
+    #             if skip_if and skip_if(test):
+    #                 self.skipTest(f"Skipping {test.key}")
+    #             try:
+    #                 await test_func(test)
+    #             except Exception as e:
+    #                 failing_tests.append(test.key)
+    #                 raise e
 
-        if len(failing_tests) > 0:
-            print("Failing tests: " + str(failing_tests))
-        return failing_tests
+    #     if len(failing_tests) > 0:
+    #         print("Failing tests: " + str(failing_tests))
+    #     return failing_tests
 
-    async def verify_elements(
+    def get_test_data(self, search_pattern: str):
+        return get_test_data(self.section, search_pattern, self.record_time)
+
+    # Run a test that compares the endpoint response vs the same response in archive
+    async def run_subTests_Vqa(
+        self,
+        vqa: str,
+        endpoint: Callable[..., Awaitable[BaseModel]],
+        skip_if: list[str]|Callable[[str], bool] = [],
+    ):
+        async def test_func(test: TestData):
+            original = test.vqa(vqa)
+            response = await endpoint(test.image, *original.args)
+            self.assertVqaResponse(response, original)
+
+        await self.run_subTests_TestData(vqa, test_func=test_func, skip_if=skip_if, test_name=endpoint.__name__)
+
+    async def run_subTests_Elements(
         self,
         element: str,
-        vqa: str|None=None,
-        search_pattern: str|None=None,
-        endpoint: Callable[[UploadFile], Awaitable[PositionResponse]]|None=None,
-        test_func: Callable[[TestData], Awaitable[None]]|None=None,
-        skip_if: list[str]|Callable[[TestData], bool] = [],
+        vqa: str,
+        endpoint: Callable[..., Awaitable[PositionResponse]],
+        skip_if: list[str]|Callable[[str], bool] = [],
         tolerance: int|None = None
     ):
-        test_datum = get_test_data(self.section, search_pattern or element, self.record_time)
-        test_name = endpoint.__name__ if endpoint else test_func.__name__ if test_func else element
-        failing_tests: list[str] = []
-        skip_filter = self.get_skip_filter(test_name, skip_if)
-        for test in test_datum:
-            with self.subTest(key=test.key):
-                if skip_filter and skip_filter(test):
-                    self.skipTest(f"Skipping {test.key}")
-                    # execution does not return
-                try:
-                    if endpoint:
-                        response = await endpoint(test.image)
-                        self.assertResponse(response, test, element, vqa, tolerance=tolerance)
-                    elif test_func:
-                        await test_func(test)
-                    else:
-                        raise ValueError("No endpoint_func or test_func provided")
+        async def test_func(test: TestData):
+            original = test.vqa(vqa)
+            response = await endpoint(test.image, *original.args)
+            self.assertResponse(response, test, element, vqa, tolerance=tolerance)
 
-                except Exception as e:
-                    failing_tests.append(test.key)
-                    raise e
+        await self.run_subTests_TestData(vqa, test_func=test_func, skip_if=skip_if, test_name=endpoint.__name__)
 
-        if len(failing_tests) > 0:
-            # write failing to disk as JSON
-            with open(self.failing_name(test_name), "w") as f:
-                json.dump(failing_tests, f)
-            print("Failing tests: " + str(failing_tests))
-        else:
-            # delete the file if it exists
-            if os.path.exists(self.failing_name(test_name)):
-                os.remove(self.failing_name(test_name))
+    async def run_subTests_TestData(
+        self,
+        search_pattern: str,
+        test_func: Callable[[TestData], Awaitable[None]],
+        skip_if: list[str]|Callable[[str], bool] = [],
+        test_name: str|None = None
+    ):
+        test_name = test_name or search_pattern
+        test_datum = self.get_test_data(search_pattern)
+        tests = [(test.key, lambda: test_func(test)) for test in test_datum]
+        await self.run_subTests(tests, test_name, skip_if)
 
-        return failing_tests
+        # with DebugFailingTests(self.section, test_name, skip_if) as tracker:
+        #     for test in test_datum:
+        #         with self.subTest(key=test.key):
+        #             if tracker.should_skip(test):
+        #                 self.skipTest(f"Skipping {test.key}")
+        #             try:
+        #                 await test_func(test)
+        #             except Exception as e:
+        #                 tracker.record_failure(test.key)
+        #                 raise e
 
-    def failing_name(self, name: str):
-        return f"failing-vqa-{self.section}-{name}.json"
+        # return tracker.failing_tests
 
-    def get_skip_filter(self, name: str, skip_if: list[str]|Callable[[TestData], bool]):
-        skip_fn = skip_if if isinstance(skip_if, Callable) else lambda test: test.key in skip_if
-        if (not os.path.exists(self.failing_name(name))):
-            return skip_fn
-        is_debugging = sys.gettrace() is not None or 'pydevd' in sys.modules
-        if not is_debugging:
-            return skip_fn
-        # if debugging, only run the failing tests
-        with open(self.failing_name(name), "r") as f:
-            data = json.load(f)
-            return lambda test: skip_fn(test) or test.key not in data
-
-def get_member(obj, key):
-    if hasattr(obj, key):
-        return getattr(obj, key)
-    elif isinstance(obj, dict) and key in obj:
-        return obj[key]
-    return None
+    async def run_subTests(
+        self,
+        tests: Sequence[Tuple[str, Callable[[], Awaitable[None]]]],
+        test_name: str,
+        skip_if: list[str]|Callable[[str], bool] = [],
+    ):
+        with DebugFailingTests(self.section, test_name, skip_if) as tracker:
+            for test in tests:
+                with self.subTest(key=test[0]):
+                    if tracker.should_skip(test[0]):
+                        self.skipTest(f"Skipping {test[0]}")
+                    try:
+                        await test[1]()
+                    except Exception as e:
+                        tracker.record_failure(test[0])
+                        raise e
 
 def normalize(str: str):
     str = str.lower()
