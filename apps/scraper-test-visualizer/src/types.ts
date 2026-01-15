@@ -5,11 +5,6 @@ export type Test = {
   key: string;
 } & ElementName;
 
-export type FailingTest = {
-  key: string;
-  element: string;
-}
-
 export type TestSnapshot = {
   time: number;
   result: SnapshotData;
@@ -23,11 +18,3 @@ export type TestResult = {
   snapshot: TestSnapshot[];
 }
 
-
-// export interface TestInfo {
-//   name: string;
-//   groups: TestGroup[];
-//   isFailing?: boolean;
-// }
-
-// export type SelectedTest = TestInfo;

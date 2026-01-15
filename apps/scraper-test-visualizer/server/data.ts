@@ -1,6 +1,6 @@
 
 import path from 'node:path';
-import type { FailingTest, Test, TestResult } from '../src/types';
+import type { Test, TestResult } from '../src/types';
 import { getTestData } from './getTestData';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { getSnapshot, getSnapshots, type SnapshotData, type TestData } from '@thecointech/scraper-archive';
@@ -33,13 +33,13 @@ export function getTest(key: string): TestData {
   return test
 }
 
-export function getFailing(): FailingTest[] {
+export function getFailing(): Test[] {
   const failing = getAllTests().flatMap(test => {
     const failing = test.failing;
     if (!failing.length) return [];
     return failing.map(f => ({
       key: test.key,
-      element: f,
+      ...f,
     }))
   })
   return failing

@@ -97,9 +97,9 @@ export class PageHandler implements AsyncDisposable {
           if (originalUrl != currentUrl) {
             log.warn("Original page has changed, releasing original recorder");
             recorderToRelease = originalRecorder;
-            await originalRecorder.page.goto(originalUrl);
-            const nowIntent = await waitForValidIntent(originalRecorder.page);
-            await waitPageStable(originalRecorder.page);
+            await sectionRecorder.page.goto(originalUrl);
+            const nowIntent = await waitForValidIntent(sectionRecorder.page);
+            await waitPageStable(sectionRecorder.page);
             if (nowIntent != originalIntent) {
               log.error(
                 { nowIntent, originalIntent, originalUrl },
