@@ -259,7 +259,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
     ):
         test_name = test_name or search_pattern
         test_datum = self.get_test_data(search_pattern)
-        tests = [(test.key, lambda: test_func(test)) for test in test_datum]
+        tests = [(test.key, lambda t=test: test_func(t)) for test in test_datum]
         await self.run_subTests(tests, test_name, skip_if)
 
         # with DebugFailingTests(self.section, test_name, skip_if) as tracker:
