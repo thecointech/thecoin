@@ -21,10 +21,10 @@ class DebugFailingTests:
                         raise e
     """
 
-    def __init__(self, section: str, test_name: str, skip_if: list[str]|Callable[[str], bool] = []):
+    def __init__(self, section: str, test_name: str, skip_if: list[str] | Callable[[str], bool] | None = None):
         self.section = section
         self.test_name = test_name
-        self.skip_if = skip_if
+        self.skip_if = skip_if if skip_if is not None else []
         self.failing_tests: list[str] = []
         self.skip_filter: Callable[[str], bool]|None = None
 
