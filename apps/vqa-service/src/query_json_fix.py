@@ -33,21 +33,6 @@ def fix_unescaped_quotes(text: str) -> str:
     Fix unescaped quotes within JSON string values.
     Pattern: "key": "value with "unescaped" quotes" should become "key": "value with \"unescaped\" quotes"
     """
-
-    # Pattern explanation:
-    # (:\s*") - captures colon, optional whitespace, and opening quote
-    # ([^"]*(?:"[^"]*)*?) - captures content that may contain quotes (non-greedy)
-    # "(\s*[,}\]]) - closing quote followed by comma, brace, bracket, or newline
-    # This targets string values between field delimiters
-    pattern = r'(:\s*")([^"\\]*(?:\\.[^"\\]*)*?)("(?=\s*[,}\]\n]))'
-
-    # More aggressive pattern for cases where quotes aren't properly closed
-    # Looks for: ": "text" more text with "quotes" here",
-    aggressive_pattern = r'(:\s*")([^"]*"[^"]*?)("(?=\s*[,}\]\n]))'
-
-    # Try to detect if we have improperly nested quotes
-    # Count quotes after ": " and before next comma/brace
-    fixed = text
     lines = text.split('\n')
     result_lines = []
 

@@ -91,26 +91,38 @@ export class PageHandler implements AsyncDisposable {
           // release the original and navigate the new page to the
           // original URL.
           let recorderToRelease = sectionRecorder;
+
           // First, is the original page still waiting in the
           // same place, or has it already logged out?
           const currentUrl = originalRecorder.page.url();
-          if (originalUrl != currentUrl) {
-            log.warn("Original page has changed, releasing original recorder");
-            recorderToRelease = originalRecorder;
-            await sectionRecorder.page.goto(originalUrl);
-            const nowIntent = await waitForValidIntent(sectionRecorder.page);
-            await waitPageStable(sectionRecorder.page);
-            if (nowIntent != originalIntent) {
-              log.error(
-                { nowIntent, originalIntent, originalUrl },
-                `Recieved intent {nowIntent} instead of {originalIntent} when navigating sectionRecorder back to {originalUrl}.
-                Continuing, but this will most likely fail.`
-              );
+          try {
+            if (originalUrl != currentUrl) {
+              log.warn("Original page has changed, releasing original recorder");
+              recorderToRelease = originalRecorder;
+              await sectionRecorder.page.goto(originalUrl);
+              const nowIntent = await waitForValidIntent(sectionRecorder.page);
+              await waitPageStable(sectionRecorder.page);
+              if (nowIntent != originalIntent) {
+                log.error(
+                  { nowIntent, originalIntent, originalUrl },
+                  `Recieved intent {nowIntent} instead of {originalIntent} when navigating sectionRecorder back to {originalUrl}.
+                  Continuing, but this will most likely fail.`
+                );
+              }
             }
           }
-          // Release the new recorder/page
-          cachedThis.recorderStack.splice(cachedThis.recorderStack.indexOf(recorderToRelease), 1);
-          await recorderToRelease[Symbol.asyncDispose]();
+          catch (e) {
+            log.error(e, "Error navigating back to original page");
+            // Continue, as we can't be sure this error is fatal
+          }
+          finally {
+            // Release the new recorder/page
+            const idx = cachedThis.recorderStack.indexOf(recorderToRelease);
+            if (idx >= 0) {
+              cachedThis.recorderStack.splice(idx, 1);
+            }
+            await recorderToRelease[Symbol.asyncDispose]();
+          }
 
           // Even if it hasn't logged out, it may have popped
           // a dialog that we need to handle

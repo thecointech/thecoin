@@ -9,7 +9,7 @@ import io
 
 from tests.testutils.types import ElementName, TestElmData, TestElmRawData, TestSchData, VqaCallData
 
-from .overrides import OverrideData, SkipElement, apply_overrides
+from .overrides import OverrideData, apply_overrides
 
 load_dotenv()
 

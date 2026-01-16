@@ -21,9 +21,9 @@ class TestCreditAccountDetails(TestBase):
     async def test_find_pending_amount(self):
         async def test_find_pending(test: TestData):
             response = await current_pending(test.image)
-            self.assertEqual(response.pending_exists, True, f"Pending exists not matched")
+            self.assertEqual(response.pending_exists, True, "Pending exists not matched")
             if response.pending_exists:
-                vqa = lambda: PositionResponse(**test.vqa("currentPending").response["pending_element"])
+                def vqa(): return PositionResponse(**test.vqa("currentPending").response["pending_element"])
                 self.assertResponse(response.pending_element, test, "pending", vqa=vqa)
         await self.run_subTests_TestData("pending", test_func=test_find_pending)
 

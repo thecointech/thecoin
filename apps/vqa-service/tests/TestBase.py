@@ -71,7 +71,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
                     msg=f"Y: {original.position_y} does not match original: {e_posY}"
                 )
             else:
-                raise e
+                raise
 
     def get_expected_text(self, expected: ElementData):
         expected_content = expected.get('text', expected.get('label', ''))
@@ -198,7 +198,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         self,
         vqa: str,
         endpoint: Callable[..., Awaitable[BaseModel|None]],
-        skip_if: list[str]|Callable[[str], bool] = [],
+        skip_if: list[str]|Callable[[str], bool]|None = None,
     ):
         async def test_func(test: TestData):
             original = test.vqa(vqa)
@@ -215,7 +215,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         element: str,
         endpoint: Callable[..., Awaitable[PositionResponse]],
         vqa: str|None = None,
-        skip_if: list[str]|Callable[[str], bool] = [],
+        skip_if: list[str]|Callable[[str], bool]|None = None,
         tolerance: int|None = None
     ):
 
@@ -230,7 +230,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         self,
         search_pattern: str,
         test_func: Callable[[TestData], Awaitable[None]],
-        skip_if: list[str]|Callable[[str], bool] = [],
+        skip_if: list[str]|Callable[[str], bool]|None = None,
         test_name: str|None = None
     ):
         test_name = test_name or search_pattern
@@ -243,7 +243,7 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
         self,
         tests: Sequence[Tuple[str, Callable[[], Awaitable[None]]]],
         test_name: str,
-        skip_if: list[str]|Callable[[str], bool] = [],
+        skip_if: list[str]|Callable[[str], bool]|None = None,
     ):
         with DebugFailingTests(self.section, test_name, skip_if) as tracker:
             for test in tests:
@@ -252,9 +252,9 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
                         self.skipTest(f"Skipping {test[0]}")
                     try:
                         await test[1]()
-                    except Exception as e:
+                    except Exception:
                         tracker.record_failure(test[0])
-                        raise e
+                        raise
 
 def normalize(str: str):
     str = str.lower()

@@ -5,11 +5,11 @@ from case_insensitive_enum import CaseInsensitiveEnum
 
 class PasswordDetectedResponse(BaseModel):
     password_input_detected: bool
+    # This is a new addition?  Try testing without it to verify what's going on...
     reasoning: str = Field(..., description="Explain why the password or pin input was detected or not detected")
 
 class ErrorResponse(BaseModel):
     error_message_detected: bool = Field(..., description="boolean")
-    error_message: str = Field(..., optional=True, description="Optionally contains error message only if error_message_detected is true")
 
 class InputElementResponse(PositionResponse):
     placeholder_text: Optional[str] = Field(..., description="placeholder text inside the element or empty string")

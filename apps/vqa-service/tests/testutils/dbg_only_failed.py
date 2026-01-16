@@ -16,9 +16,9 @@ class DebugFailingTests:
                         self.skipTest(f"Skipping {test.key}")
                     try:
                         await test_func(test)
-                    except Exception as e:
+                    except Exception:
                         tracker.record_failure(test.key)
-                        raise e
+                        raise
     """
 
     def __init__(self, section: str, test_name: str, skip_if: list[str] | Callable[[str], bool] | None = None):

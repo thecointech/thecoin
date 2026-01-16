@@ -27,13 +27,13 @@ def get_test_data(section: str, search_pattern: str="*", record_time: str = 'lat
         cleaned = search_pattern[1:-1]
         patterns = cleaned.split(",")
 
-    allMatched = []
+    all_matched = []
     for pattern in patterns:
         pattern = os.path.join(base_folder, "**", section, "**", f"*{pattern}*")
         matched = glob.glob(pattern, recursive=True)
-        allMatched.extend(matched)
+        all_matched.extend(matched)
 
-    for match in allMatched:
+    for match in all_matched:
         matched_folder = os.path.dirname(match)
         matched_filename = os.path.basename(match)
         step = matched_filename.split('-')[0]

@@ -18,6 +18,7 @@ class TestAccountsSummary(TestBase):
         # all of the accounts.  Possibly re-run scraper with generate files to fix
         "archive:2025-08-13_13-39:TD:AccountsSummary:0",
         "archive:2025-08-07_17-05:TD:AccountsSummary:0",
+        "archive:2025-07-25_15-16:TD:AccountsSummary:0",
     ]
     async def test_overview_list_accounts(self):
         async def test_list_accounts(test: TestData):

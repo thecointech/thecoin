@@ -1,6 +1,5 @@
 import unittest
 from TestBase import TestBase
-from testutils.testdata import TestData
 from login_routes import (
     detect_username_input,
     detect_password_exists,
