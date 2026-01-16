@@ -14,7 +14,7 @@ def clean_invalid_json_chars(text: str) -> str:
     cleaned = re.sub(r'=\"([\d\.]+)\"', r'": \g<1>', cleaned)
     # The model has trouble when returning None options
     # eg: {'error_message_detected': False, 'error_message': None}
-    cleaned = re.sub(r",?\s*['\"][^'\"]+['\"]: None", '', cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r",?\s*['\"][^'\"]+['\"]: None,?", '', cleaned, flags=re.IGNORECASE)
     return cleaned
 
 

@@ -78,27 +78,33 @@ def tryConvertToJSON(response):
         return json.loads(response)
     except json.JSONDecodeError as e:
 
-        # Try fixing unescaped quotes first
-        fixed_quotes = fix_unescaped_quotes(response)
-        try:
-            return json.loads(fixed_quotes)
-        except json.JSONDecodeError:
-            pass  # Continue to other fixes
-
-        cleaned = clean_invalid_json_chars(response)
-        try:
-            return json.loads(cleaned)
-        except json.JSONDecodeError as e:
-            pass  # Continue to other fixes
-
-        extracted = extract_json_text(cleaned)
+        # Try the simplest test first, this should almost certainly return the original string
+        extracted = extract_json_text(response)
         try:
             return json.loads(extracted)
         except json.JSONDecodeError as e:
             pass  # No more fixes...
 
-        print("Could not parse model output as JSON: ", response)
-        raise ValueError("Could not parse model output as JSON")
+        # This test should be very safe, as the search patterns are very specific.
+        # While it could find false positives (ie, matches within text), doing a replace
+        # will not break the valid JSON in a way that not recoverable.
+        cleaned = clean_invalid_json_chars(extracted)
+        try:
+            return json.loads(cleaned)
+        except json.JSONDecodeError as e:
+            pass  # Continue to other fixes
+
+        # Lastly, try fixing unescaped quotes.  Replacing
+        # quotes incorrectly will turn valid => invalid JSON,
+        # so we do it as a last resort.
+        fixed_quotes = fix_unescaped_quotes(cleaned)
+        try:
+            return json.loads(fixed_quotes)
+        except json.JSONDecodeError:
+            pass  # Continue to other fixes
+
+        logger.error(f"Could not parse model output as JSON: {response[:8]}...{response[-8:]}")
+        raise
 
 
 if __name__ == "__main__":
