@@ -4,6 +4,7 @@ from transformers import GenerationConfig
 import json
 import re
 from timeit import default_timer as timer
+from query_json_fix import clean_invalid_json_chars, extract_json_text, fix_unescaped_quotes
 from singleton import get_model, get_processor, device_map
 from helpers import get_instruct_json_respose
 from logger import setup_logger
@@ -69,44 +70,35 @@ def runQueryToJson(image: Image|None, query_data: tuple[str, type], max_length=2
 
     return tryConvertToJSON(response)
 
-def tryConvertToJSON(response):
-    # Parse the generated text as JSON
 
-    # First, try and work through the weird bug that injects "!"
-    # characters throughout the response.
-    # if (torch.__version__.startswith("2.6.0+rocm6.4.1")):
-    #     response = re.sub(r'\"\!([a-zA-Z0-9_]+)\":', '"\\1":', response)
-    # else:
-    #     logger.warning("UNTESTED TORCH VERSION: " + torch.__version__ + " - not filtering tokens")
+def tryConvertToJSON(response):
+    # Parse the generated text as JSON, applying various fixes if needed
 
     try:
         return json.loads(response)
     except json.JSONDecodeError as e:
-        # print("Raw Raised JSONDecodeError: ", e)
-        # we sometimes get the following invalid json output "option":="value"
-        cleaned = response.replace('":="', '": "')
-        # In longer JSON am seeing eg: "position_y="43.5",
-        cleaned = re.sub(r'=\"([\d\.]+)\"', r'": \g<1>', cleaned)
-        # The model has trouble when returning None options
-        # eg: {'error_message_detected': False, 'error_message': None}
-        cleaned = re.sub(r",?\s*['\"][^'\"]+['\"]: None", '', cleaned, flags=re.IGNORECASE)
+
+        # Try fixing unescaped quotes first
+        fixed_quotes = fix_unescaped_quotes(response)
+        try:
+            return json.loads(fixed_quotes)
+        except json.JSONDecodeError:
+            pass  # Continue to other fixes
+
+        cleaned = clean_invalid_json_chars(response)
         try:
             return json.loads(cleaned)
         except json.JSONDecodeError as e:
-            print("Cleaned Raised JSONDecodeError: ", e)
-            # If the model didn't return valid JSON, try to extract the type
+            pass  # Continue to other fixes
 
-            # Try finding everything in between brackets
-            match = re.search(r"(\{[\w\W]*\})", cleaned)
-            if match:
-                try:
-                    return json.loads(match.group(1))
-                except json.JSONDecodeError:
-                    # All attempts failed, pass on to
-                    # log the error & raise an exception
-                    pass
-            print("Could not parse model output as JSON: ", response)
-            raise ValueError("Could not parse model output as JSON")
+        extracted = extract_json_text(cleaned)
+        try:
+            return json.loads(extracted)
+        except json.JSONDecodeError as e:
+            pass  # No more fixes...
+
+        print("Could not parse model output as JSON: ", response)
+        raise ValueError("Could not parse model output as JSON")
 
 
 if __name__ == "__main__":

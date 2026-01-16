@@ -96,7 +96,7 @@ class Query2faTests(TestBase):
         await self.run_subTests_Elements("code", get_auth_input)
 
     async def test_remember_element(self):
-        await self.run_subTests_Elements("remember", get_remember_input)
+        await self.run_subTests_Elements("remember", get_remember_input, "getRememberInput")
 
     async def test_submit_element(self):
         await self.run_subTests_Elements("submit", get_submit_input, "getSubmitInput")

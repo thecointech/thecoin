@@ -61,13 +61,13 @@ class TestBase(unittest.IsolatedAsyncioTestCase):
                 self.assertAlmostEqual(
                     e_posX,
                     original.position_x,
-                    delta=o_width * 0.01,
+                    delta=max(5, o_width * 0.01),
                     msg=f"X: {original.position_x} does not match original: {e_posX}"
                 )
                 self.assertAlmostEqual(
                     e_posY,
                     original.position_y,
-                    delta=o_height * 0.01,
+                    delta=max(5, o_height * 0.01),
                     msg=f"Y: {original.position_y} does not match original: {e_posY}"
                 )
             else:

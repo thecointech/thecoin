@@ -13,7 +13,11 @@ class TestAccountsSummary(TestBase):
         # The scraper seems to have pulled in an incorrect element
         # for the credit card account here, skip until fixed there
         "archive:2025-10-24_16-34:Tangerine:AccountsSummary:0",
-        "archive:2026-01-05_15-27:Tangerine:AccountsSummary:0"
+        "archive:2026-01-05_15-27:Tangerine:AccountsSummary:0",
+        # These are missing one of the sch files, so we can't validate
+        # all of the accounts.  Possibly re-run scraper with generate files to fix
+        "archive:2025-08-13_13-39:TD:AccountsSummary:0",
+        "archive:2025-08-07_17-05:TD:AccountsSummary:0",
     ]
     async def test_overview_list_accounts(self):
         async def test_list_accounts(test: TestData):

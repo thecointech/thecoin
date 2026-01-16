@@ -95,11 +95,10 @@ class TestETransfer(TestBase):
                 # The list should be detect/step/detect/step...
                 if not vqa and data.has_vqa("detectNextButton"):
                     vqa = data.vqa("detectNextButton")
+                    response = await detect_next_button(data.image)
                     elm = None
                 # if we have a response, validate it against step
                 if vqa and not elm and data.has_element("step"):
-                    # Our images are somehow being written out outta-whack
-                    response = await detect_next_button(data.image)
                     assert response is not None
                     vqa_response = vqa.response
                     self.assertResponse(response, data, "step", lambda vr=vqa_response: ButtonResponse(**vr))
