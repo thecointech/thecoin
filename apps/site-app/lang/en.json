@@ -31,6 +31,10 @@
     "defaultMessage": "Select Payee",
     "description": "app.accounts.billPayments.payeeTxt: Label for the form the make a payment page / bill payment tab"
   },
+  "0ms9Ih": {
+    "defaultMessage": "Your card number should be 16 digits long",
+    "description": "Validation error for credit account numbers"
+  },
   "0vNzso": {
     "defaultMessage": "User Settings",
     "description": "app.settings.tabs.main: Title for the tabs the setting page in the app"
@@ -291,10 +295,6 @@
     "defaultMessage": "In",
     "description": "app.historygraph.tooltip.in: HistoryGraph tooltip - total transaction in"
   },
-  "SKISxf": {
-    "defaultMessage": "Your card number should be 16 digits long",
-    "description": "app.accounts.billPayments.invalidVisaChars: Error message for the bill payement page"
-  },
   "SlkrJd": {
     "defaultMessage": "Given Name",
     "description": "app.settings.personaldetails.name: Name field for the page setting / tab personal details in the app"
@@ -533,6 +533,10 @@
   },
   "shared.widgets.climateimpact.title": {
     "defaultMessage": "Climate Impact"
+  },
+  "t6frzD": {
+    "defaultMessage": "The given number is not a valid mastercard card",
+    "description": "app.accounts.billPayments.invalidMastercardAccount: Error message for the bill payement page"
   },
   "tHcL72": {
     "defaultMessage": "Step 2 of 3: Sending transfer command to our servers...",
