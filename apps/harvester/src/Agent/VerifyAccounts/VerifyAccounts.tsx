@@ -15,7 +15,7 @@ export const VerifyAccounts = () => {
   const api = BankConnectReducer.useApi();
   const { banks, stored } = BankConnectReducer.useData();
   const [forceValidate, setForceValidate] = useState(false);
-  const [ storedNow, setStoredNow ] = useState(false);
+  const [ storedNow, setStoredNow ] = useState<string>();
 
   const chequingAccounts = banks.chequing?.accounts?.filter(a => a.account_type === 'Chequing') || [];
   const creditAccounts = banks.credit?.accounts?.filter(a => a.account_type === 'Credit') || [];
@@ -43,6 +43,7 @@ export const VerifyAccounts = () => {
   const handleCreditAccountSelect = (index: number) => {
     setSelectedCreditIndex(index);
     setCorrectedCardNumber("");
+    setRawEditedNumber("");
   };
 
   const payee = getPayee(payeeName, creditAccount, rawEditedNumber);
@@ -93,7 +94,7 @@ export const VerifyAccounts = () => {
       return;
     }
     api.setStored();
-    setStoredNow(true);
+    setStoredNow(accountNumber);
   }
 
   const isValid = useCallback(() => {
@@ -101,6 +102,8 @@ export const VerifyAccounts = () => {
     return !!stored;
   }, [stored]);
   const cardNumValid = !cardNumError || !!correctedCardNumber;
+
+  const isStoredNow = storedNow === (correctedCardNumber || rawAccNumber);
 
   return (
     <div className={styles.verifyAccountsContainer}>
@@ -156,7 +159,7 @@ export const VerifyAccounts = () => {
           </div>
         )}
       </div>
-      <VerifyAccountsMessage forceValidate={forceValidate} payee={payee?.value} isStored={stored} storedNow={storedNow} cardNumValid={cardNumValid} />
+      <VerifyAccountsMessage forceValidate={forceValidate} payee={payee?.value} isStored={stored} storedNow={isStoredNow} cardNumValid={cardNumValid} />
       <ActionButton onClick={saveAccounts} disabled={forceValidate && !cardNumValid}>Store Accounts</ActionButton>
 
       <NextButton onValid={isValid} to="/config" />

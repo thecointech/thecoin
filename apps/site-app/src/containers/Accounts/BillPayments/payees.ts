@@ -14,7 +14,7 @@ const translations = defineMessages({
       defaultMessage: 'The given number is not a valid visa card',
       description: 'app.accounts.billPayments.invalidVisaAccount: Error message for the bill payement page'},
   invalidMastercardAccount : {
-      defaultMessage: 'The given number is not a valid mastercard card',
+      defaultMessage: 'The given number is not a valid mastercard account',
       description: 'app.accounts.billPayments.invalidMastercardAccount: Error message for the bill payement page'},
   invalidNumericLength : {
       defaultMessage: 'You have entered {len} numbers, but your account requires {max}',
