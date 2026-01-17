@@ -277,8 +277,8 @@ function toPayeeName(creditBank: string, cardType?: CardType): LegalPayeeName|un
       break;
     case 'TD':
       switch (cardType) {
-        case "mastercard": return "VISA - TORONTO DOMINION";
-        case "visa": return 'TD MASTERCARD';
+        case "mastercard": return 'TD MASTERCARD';
+        case "visa": return "VISA - TORONTO DOMINION";
       }
       break;
     case 'CIBC':
