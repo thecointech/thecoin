@@ -14,6 +14,8 @@ export class AgentCallbacks extends TaskSessionBase implements IAgentCallbacks {
   constructor(params: AgentParams) {
     super(params, {
       target: params.target,
+      // This only comes into affect if "verbose logging" is enabled
+      writeScreenshotOnElement: true,
     })
   }
 

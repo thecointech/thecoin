@@ -8,7 +8,7 @@ import { mkdirSync } from "node:fs";
 import { copyProfile } from "./profile";
 import crypto from "node:crypto";
 
-export async function downloadRequired(callback: BackgroundTaskCallback) {
+export async function downloadRequired(callback: BackgroundTaskCallback, forceCopyProfile=false) {
 
   log.info("Initialization: fetching required files");
   mkdirSync(rootFolder, { recursive: true })
@@ -28,7 +28,7 @@ export async function downloadRequired(callback: BackgroundTaskCallback) {
   }
 
   const browser = downloadBrowser(onProgress);
-  const profile = copyProfile(onProgress, true);
+  const profile = copyProfile(onProgress, forceCopyProfile);
   const similarity = downloadSimilarity(onProgress);
   await Promise.all([browser, profile, similarity]);
 

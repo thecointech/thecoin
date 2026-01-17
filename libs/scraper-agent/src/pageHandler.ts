@@ -79,12 +79,12 @@ export class PageHandler implements AsyncDisposable {
     // the current page.  It's possible that on loading
     // a new page the bank may require a new login
     if (intent && intent == originalIntent) {
-      log.debug("Pushing isolated section: " + subName);
+      log.debug("Tab cloned successfully: " + subName);
       this.recorderStack.push(sectionRecorder);
       return {
         sectionRecorder,
         async [Symbol.asyncDispose]() {
-          log.debug("Popping isolated section: " + subName);
+          log.debug("Popping cloned tab: " + subName);
           // We need to release the recorder.  This should be the
           // isolated section recorder, but it's possible that
           // the original page has logged out.  In this case we
@@ -122,7 +122,7 @@ export class PageHandler implements AsyncDisposable {
     }
     else {
       // If the page failed to load, we just dispose of it
-      log.warn("Failed to load isolated section, disposing and continuing with main page");
+      log.warn("Failed to clone tab, disposing and continuing with main page");
       await sectionRecorder[Symbol.asyncDispose]();
       return null;
     }
