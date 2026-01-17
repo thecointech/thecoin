@@ -26,7 +26,7 @@ async def run_endpoint_query(image: Union[UploadFile, Image.Image], data: tuple[
 
     except Exception as e:
         print(f" *** Error parsing response: {response} ***")
-        raise e
+        raise
 
 
 async def get_image(image: Union[UploadFile, Image.Image], crop: BBox|None=None) -> tuple[Image.Image, BBox]:
