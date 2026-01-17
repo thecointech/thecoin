@@ -99,20 +99,20 @@ function filterElmTestsForSearchValues(test: TestData, jsonFilesRef: string[]) {
 
   // Super hacky, but go through the searches & remove
   // any that don't have a valid search event.
-  test.names().forEach(name => {
-      const sch = test.sch(name);
+  test.elements().forEach(name => {
+      const sch = test.sch(name.fullname);
       if (sch?.event?.estimated) {
         return;
       }
       // If no search data, remove entirely from jsonFiles
-      const filesToDrop = jsonFilesRef.filter(f => f.includes(name));
+      const filesToDrop = jsonFilesRef.filter(f => f.includes(name.fullname));
       for (const f of filesToDrop) {
         jsonFilesRef.splice(jsonFilesRef.indexOf(f), 1);
       }
     });
 
   // If missing data, just skip
-  if (test.searches().length == 0 || test.elements().length == 0) {
+  if (test.sch_files().length == 0 || test.elm_files().length == 0) {
     return false;
   }
 

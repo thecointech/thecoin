@@ -16,8 +16,8 @@ class AccountCrop(BaseModel):
 async def account_balance_element(
     image: UploadFile,
     account_number: str,
-    crop_top: int = None,
-    crop_bottom: int = None
+    crop_top: int|None = None,
+    crop_bottom: int|None = None
 ) -> MoneyElementResponse:
     crop = None
     if all(x is not None for x in [crop_top, crop_bottom]):
