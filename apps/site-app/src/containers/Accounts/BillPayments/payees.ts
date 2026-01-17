@@ -13,6 +13,9 @@ const translations = defineMessages({
   invalidVisaAccount : {
       defaultMessage: 'The given number is not a valid visa card',
       description: 'app.accounts.billPayments.invalidVisaAccount: Error message for the bill payement page'},
+  invalidMastercardAccount : {
+      defaultMessage: 'The given number is not a valid mastercard card',
+      description: 'app.accounts.billPayments.invalidMastercardAccount: Error message for the bill payement page'},
   invalidNumericLength : {
       defaultMessage: 'You have entered {len} numbers, but your account requires {max}',
       description: 'app.accounts.billPayments.invalidNumericChars: Error message for the bill payement page'},
@@ -38,6 +41,17 @@ function visa(val: string) {
   return (r.isValid && !!r.card && r.card.type === 'visa')
     ? null
     : translations.invalidVisaAccount
+}
+
+function mastercard(val: string) {
+  var n = parseInt(val);
+  if (n!==n || val.length !== 16)
+    return translations.invalidVisaChars
+
+	const r = cardValidatorNumber(val);
+  return (r.isValid && !!r.card && r.card.type === 'mastercard')
+    ? null
+    : translations.invalidMastercardAccount
 }
 
 function numeric(max: number) {
@@ -93,17 +107,31 @@ export const payees = [
 	{ validate: visa, text: "VANCITY PREPAID VISA", value: "VANCITY PREPAID VISA" },
 	{ validate: visa, text: "VISA - BANK OF AMERICA CANADA", value: "VISA - BANK OF AMERICA CANADA" },
 	{ validate: visa, text: "VISA - CIBC", value: "VISA - CIBC" },
+  { validate: mastercard, text: "CIBC MASTERCARD", value: "CIBC MASTERCARD" },
+
 	{ validate: visa, text: "VISA - HOME TRUST", value: "VISA - HOME TRUST" },
 	{ validate: visa, text: "VISA - TORONTO DOMINION", value: "VISA - TORONTO DOMINION" },
+	{ validate: mastercard, text: "TD MASTERCARD", value: "TD MASTERCARD" },
+
 	{ validate: visa, text: "VISA ROYAL BANK", value: "VISA ROYAL BANK" },
+	{ validate: mastercard, text: "RBC ROYAL BANK MASTERCARD", value: "RBC ROYAL BANK MASTERCARD" },
+
 	{ validate: visa, text: "VISA-FIRSTLINE", value: "VISA-FIRSTLINE" },
 	{ validate: visa, text: "VISA-SCOTIABANK AND SCOTIALINE VISA", value: "VISA-SCOTIABANK AND SCOTIALINE VISA" },
-	{ validate: visa, text: "VISA-VANCITY", value: "VISA-VANCITY" },
+	{ validate: mastercard, text: "MASTERCARD - SCOTIABANK", value: "MASTERCARD - SCOTIABANK" },
+
+  { validate: visa, text: "VISA-VANCITY", value: "VISA-VANCITY" },
 	{ validate: visa, text: "VISA, DESJARDINS", value: "VISA, DESJARDINS" },
 	{ validate: visa, text: "VISA, LAURENTIAN BANK", value: "VISA, LAURENTIAN BANK" },
 	{ validate: visa, text: "WE FINANCIAL VISA PREPAID", value: "WE FINANCIAL VISA PREPAID" },
 	{ validate: visa, text: "YES PREPAID VISA CARD", value: "YES PREPAID VISA CARD" },
-	{ validate: none, text: "REVENU QUEBEC BALANCE DUE - 2018", value: "REVENU QUEBEC BALANCE DUE - 2018" },
+
+  { validate: visa, text: "BMO VISA CREDIT CARD", value: "BMO VISA CREDIT CARD" },
+	{ validate: mastercard, text: "BMO MASTERCARD", value: "BMO MASTERCARD" },
+	{ validate: mastercard, text: "TANGERINE MASTERCARD", value: "TANGERINE MASTERCARD" },
+	{ validate: mastercard, text: "NATIONAL BANK MASTERCARD", value: "NATIONAL BANK MASTERCARD" },
+
+  { validate: none, text: "REVENU QUEBEC BALANCE DUE - 2018", value: "REVENU QUEBEC BALANCE DUE - 2018" },
 	{ validate: none, text: "REVENU QUEBEC SUPPORT PAYMENTS", value: "REVENU QUEBEC SUPPORT PAYMENTS" },
 	{ validate: none, text: "REVENUE QUEBEC TAX INSTALMENT 2019", value: "REVENUE QUEBEC TAX INSTALMENT 2019" },
 	{ validate: none, text: "CRA (REVENUE) TAX AMOUNT OWING", value: "CRA (REVENUE) TAX AMOUNT OWING" },
