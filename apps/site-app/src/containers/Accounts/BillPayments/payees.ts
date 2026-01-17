@@ -7,9 +7,9 @@ const translations = defineMessages({
   missingData : {
     defaultMessage: 'Please select payee and enter account number',
     description: 'Bill payment error message when missing payee or account'},
-  invalidVisaChars : {
+  invalidCreditLength : {
       defaultMessage: 'Your card number should be 16 digits long',
-      description: 'app.accounts.billPayments.invalidVisaChars: Error message for the bill payement page'},
+      description: 'Validation error for credit account numbers'},
   invalidVisaAccount : {
       defaultMessage: 'The given number is not a valid visa card',
       description: 'app.accounts.billPayments.invalidVisaAccount: Error message for the bill payement page'},
@@ -35,7 +35,7 @@ function none(_: string) { return null; }
 function visa(val: string) {
   var n = parseInt(val);
   if (n!==n || val.length !== 16)
-    return translations.invalidVisaChars
+    return translations.invalidCreditLength
 
 	const r = cardValidatorNumber(val);
   return (r.isValid && !!r.card && r.card.type === 'visa')
@@ -46,7 +46,7 @@ function visa(val: string) {
 function mastercard(val: string) {
   var n = parseInt(val);
   if (n!==n || val.length !== 16)
-    return translations.invalidVisaChars
+    return translations.invalidCreditLength
 
 	const r = cardValidatorNumber(val);
   return (r.isValid && !!r.card && r.card.type === 'mastercard')
