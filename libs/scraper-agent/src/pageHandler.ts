@@ -99,6 +99,8 @@ export class PageHandler implements AsyncDisposable {
             if (originalUrl != currentUrl) {
               log.warn("Original page has changed, releasing original recorder");
               recorderToRelease = originalRecorder;
+              const sectionUrl = sectionRecorder.page.url();
+              log.trace({ originalUrl, sectionUrl }, "Navigating sectionRecorder back to {originalUrl}");
               await sectionRecorder.page.goto(originalUrl);
               const nowIntent = await waitForValidIntent(sectionRecorder.page);
               await waitPageStable(sectionRecorder.page);
@@ -117,6 +119,7 @@ export class PageHandler implements AsyncDisposable {
           }
           finally {
             // Release the new recorder/page
+            log.info("Releasing cloned tab: " + subName);
             const idx = cachedThis.recorderStack.indexOf(recorderToRelease);
             if (idx >= 0) {
               cachedThis.recorderStack.splice(idx, 1);
