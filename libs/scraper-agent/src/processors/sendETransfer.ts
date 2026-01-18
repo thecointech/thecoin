@@ -149,7 +149,7 @@ export async function sendETransfer(agent: Agent, accountNumber: string) {
     if (!navigated) {
       // Check if enough inputs have been filled, we actually are on the right
       // page, and something else has probably gone wrong.
-      if (tracker.toRecipient && tracker.amount && tracker.toRecipient) {
+      if (tracker.fromAccount && tracker.amount && tracker.toRecipient) {
         // We're in the right spot... try again?
         const retryNavigation = await gotoNextPage(agent, tracker.step);
         if (!retryNavigation) {
