@@ -7,6 +7,10 @@
     "defaultMessage": "Make payments",
     "description": "app.accounts.sidebar.makepayments: Title for the Make payments entry in the menu"
   },
+  "/N6akP": {
+    "defaultMessage": "The given number is not a valid mastercard account",
+    "description": "app.accounts.billPayments.invalidMastercardAccount: Error message for the bill payement page"
+  },
   "/bV15e": {
     "defaultMessage": "We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
     "description": "app.accounts.redeem.errorMessage: Error Message for the make a payment page / etransfer tab"
@@ -533,10 +537,6 @@
   },
   "shared.widgets.climateimpact.title": {
     "defaultMessage": "Climate Impact"
-  },
-  "t6frzD": {
-    "defaultMessage": "The given number is not a valid mastercard card",
-    "description": "app.accounts.billPayments.invalidMastercardAccount: Error message for the bill payement page"
   },
   "tHcL72": {
     "defaultMessage": "Step 2 of 3: Sending transfer command to our servers...",
