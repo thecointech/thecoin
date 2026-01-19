@@ -13,10 +13,10 @@ type BaseLogs = {
   amnt: Decimal
 }
 
-export async function getPluginLogs(address: string, user: AddressLike, provider: Erc20Provider, fromBlock: number) : Promise<BaseLogs[]> {
+export async function getPluginLogs(address: string, user: AddressLike, provider: Erc20Provider, fromBlock: number, toBlock: number|string="latest") : Promise<BaseLogs[]> {
   const contract = BasePlugin__factory.connect(address, provider);
   const filter = contract.filters.ValueChanged(user);
-  const logs = await contract.queryFilter(filter, fromBlock);
+  const logs = await contract.queryFilter(filter, fromBlock, toBlock);
 
   return logs
     .map(log => log?.args)

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Download } from '@thecointech/site-base/containers/AddAccount/Storage/Offline/Store';
+import { Download } from '@thecointech/site-base/containers/AddAccount/Storage/Offline';
 import { Checkbox, Container, Dimmer, Header, Loader } from "semantic-ui-react"
 import { isLocal } from '@thecointech/signers';
 import { useGoogleStore } from '@thecointech/site-base/containers/AddAccount/Storage/GDrive';

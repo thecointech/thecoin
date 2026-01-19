@@ -1,7 +1,7 @@
 import React from "react";
 import { Header, Icon } from "semantic-ui-react";
 import { useFxRates } from "@thecointech/shared/containers/FxRate";
-import { calculateProfit } from "@thecointech/shared/containers/Account/profit";
+import { calculateProfit } from "@thecointech/shared/containers/Account";
 import { AccountMap } from "@thecointech/redux-accounts";
 import { toHuman } from "@thecointech/utilities/Conversion";
 import { defineMessages, FormattedMessage } from "react-intl";

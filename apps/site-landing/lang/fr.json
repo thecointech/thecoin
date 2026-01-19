@@ -192,8 +192,8 @@
     "description": "site.blog.articleLink: Link to access article page in blog"
   },
   "U623eE": {
-    "defaultMessage": "Vos avantages",
-    "description": "site.MainNavigation.yourbenefits: Title for the Your benefits entry in the menu"
+    "defaultMessage": "Simulation",
+    "description": "site.MainNavigation.simulator: Title for the Simulation entry in the menu"
   },
   "UTXdBk": {
     "defaultMessage": "Prénom",
@@ -203,8 +203,8 @@
     "defaultMessage": "Valeur moyenne après"
   },
   "VdA9HP": {
-    "defaultMessage": "Vos avantages",
-    "description": "site.MainNavigationMobile.yourbenefits: Title for the Your benefits entry in the menu"
+    "defaultMessage": "Simulation",
+    "description": "site.MainNavigationMobile.simulator: Title for the Simulation entry in the menu"
   },
   "W8cvxr": {
     "defaultMessage": "Nous en faison plus",

@@ -2,7 +2,7 @@
   "name": "thecoin-admin",
   "private": true,
   "productName": "TheCoin - Admin",
-  "version": "0.5.1",
+  "version": "0.5.2-test.0",
   "description": "Admin: audit TheCoin system ops",
   "author": "Stephen Taylor <stephen@thecoin.io>",
   "homepage": "http://thecoin.io",
@@ -14,6 +14,7 @@
   },
   "scripts": {
     "build": "run -T tsc -b",
+    "clean": "run -T rimraf ./build",
     "dev": "yarn _start:dbg",
     "_dev:live": "run -T cross-env CONFIG_NAME=devlive yarn _start:dbg",
     "prod:test": "run -T cross-env CONFIG_NAME=prodtest yarn _start:dbg",
@@ -42,13 +43,13 @@
     "eslint-plugin-import": "^2.25.0"
   },
   "dependencies": {
-    "@thecointech/contract-core": "^0.5.1",
+    "@thecointech/contract-core": "^0.5.2-test.0",
     "@thecointech/electron-signer": "workspace:*",
-    "@thecointech/shared": "^0.5.1",
-    "@thecointech/tx-bill": "^0.5.1",
-    "@thecointech/tx-deposit": "^0.5.1",
-    "@thecointech/tx-etransfer": "^0.5.1",
-    "@thecointech/tx-statemachine": "^0.5.1",
+    "@thecointech/shared": "^0.5.2-test.0",
+    "@thecointech/tx-bill": "^0.5.2-test.0",
+    "@thecointech/tx-deposit": "^0.5.2-test.0",
+    "@thecointech/tx-etransfer": "^0.5.2-test.0",
+    "@thecointech/tx-statemachine": "^0.5.2-test.0",
     "electron-squirrel-startup": "^1.0.0",
     "semantic-ui-css": "^2.4.1"
   }

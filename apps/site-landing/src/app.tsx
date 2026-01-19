@@ -10,6 +10,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router';
+import { HelmetProvider } from 'react-helmet-async';
 import 'sanitize.css/sanitize.css';
 
 // Import Language Provider
@@ -20,8 +21,6 @@ import { createHashRouter } from 'react-router';
 
 // Import i18n messages
 import { translations } from './translations';
-import { initTracking } from './utils/reactga';
-initTracking();
 
 // Allow Preview docs on testing site.
 import { injectPrismicPreviewScript } from './components/Prismic/inject';
@@ -37,11 +36,13 @@ const root = createRoot(MOUNT_NODE);
 const render = (languages: Languages) => {
   root.render(
     <Provider store={store}>
-      <LanguageProvider languages={languages}>
-        <RouterProvider router={
-          createHashRouter(routes)
-        } />
-      </LanguageProvider>
+      <HelmetProvider>
+        <LanguageProvider languages={languages}>
+          <RouterProvider router={
+            createHashRouter(routes)
+          } />
+        </LanguageProvider>
+      </HelmetProvider>
     </Provider>
   );
 };

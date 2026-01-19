@@ -1,7 +1,7 @@
 import json
 import os
+from tests.testutils.types import TestElmRawData
 from typing import Dict, List, Optional, TypedDict, Any
-
 
 class OverrideElement(TypedDict, total=False):
     text: Optional[str]
@@ -16,6 +16,7 @@ class OverrideData(TypedDict, total=False):
     skip: Optional[Dict[str, SkipElement]]
     overrides: Optional[Dict[str, Dict[str, OverrideElement]]]
 
+
 def get_override_data(test_folder: str) -> OverrideData:
     """Load override data from overrides.json file"""
     override_file = os.path.join(test_folder, "archive", "overrides.json")
@@ -24,7 +25,7 @@ def get_override_data(test_folder: str) -> OverrideData:
             return json.load(f)
     return {}
 
-def apply_overrides(overrideData: OverrideData, key: str, element_name: str, element_data: Dict[str, Any]):
+def apply_overrides(overrideData: OverrideData, key: str, element_name: str, element_data: TestElmRawData):
     """Apply overrides to element data if they exist"""
     if not overrideData or 'overrides' not in overrideData:
         return
@@ -36,4 +37,4 @@ def apply_overrides(overrideData: OverrideData, key: str, element_name: str, ele
         element_override = overrides.get(element_name)
         if element_override:
             for key in element_override:
-                element_data[key] = element_override[key]
+                element_data["data"][key] = element_override[key]

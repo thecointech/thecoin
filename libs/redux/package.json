@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/redux",
-  "version": "0.5.1",
+  "version": "0.5.2-test.0",
   "private": true,
   "description": "TheCoin: Shared redux utilities",
   "type": "module",
@@ -21,7 +21,7 @@
   "scripts": {
     "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
     "build": "run -T tsc -b",
-    "clean": "rimraf ./build && rimraf ./coverage"
+    "clean": "yarn run -T rimraf ./build && yarn run -T rimraf ./coverage"
   },
   "files": [
     "build/**/*"
@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "react-redux": "^9.2.0",
-    "redux": "^4.0.5",
+    "redux": "^5.0.0",
     "redux-injectors": "https://github.com/FrozenKiwi/redux-injectors#6209c56b7c2508e002b669010ad3c0d5e0bab9eb",
     "redux-saga": "^1.1.3"
   },

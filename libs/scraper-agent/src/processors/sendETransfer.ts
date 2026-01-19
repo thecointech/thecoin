@@ -9,10 +9,10 @@ import type { BBox } from "@thecointech/vqa";
 // in this case insertions are bad
 import { distance } from 'fastest-levenshtein';
 import { getCoordsWithMargin, mapInputToParent } from "../elementUtils";
-import { ETransferInput, ETransferResult } from "../types";
+import type { ETransferInput, ETransferResult } from "../types";
 import { processorFn } from "./types";
 import { waitPageStable } from "@thecointech/scraper/utilities";
-import { Agent } from "../agent";
+import type { Agent } from "../agent";
 import { apis } from "../apis";
 
 import { EventBus } from "@thecointech/scraper/events/eventbus";
@@ -32,6 +32,7 @@ export class NotAnETransferPageError extends Error {
 export const SendETransfer = processorFn("SendETransfer", async (agent: Agent, accountNumber: string) => {
   let attemptedLinks = new Set<string>();
   for (let i = 0; i < 5; i++) {
+    log.info(`Attempt ${i} to send ETransfer`);
     const priorLinks = new Set(attemptedLinks);
     await using section = await agent.pushIsolatedSection("SendETransfer");
 
@@ -64,6 +65,9 @@ export const SendETransfer = processorFn("SendETransfer", async (agent: Agent, a
       }
       // Dunno, but probably best to give up
       throw e;
+    }
+    finally {
+      log.info(`Finished attempt ${i} to send ETransfer`);
     }
   }
   return false;
@@ -143,8 +147,18 @@ export async function sendETransfer(agent: Agent, accountNumber: string) {
     // Navigate to the next page
     const navigated = await gotoNextPage(agent, tracker.step);
     if (!navigated) {
-      // await this.updatePageName(`form-error`);
-      throw new NotAnETransferPageError("Failed to go to next page");
+      // Check if enough inputs have been filled, we actually are on the right
+      // page, and something else has probably gone wrong.
+      if (tracker.fromAccount && tracker.amount && tracker.toRecipient) {
+        // We're in the right spot... try again?
+        const retryNavigation = await gotoNextPage(agent, tracker.step);
+        if (!retryNavigation) {
+          throw new Error("ETransfer found, but mapping failed")
+        }
+      } else {
+        // We haven't filled inputs, we are probably on the wrong page.
+        throw new NotAnETransferPageError("Failed to go to next page");
+      }
     }
 
     // We don't know how long to go, so just increment something.  We can assume it'll be less than 10

@@ -7,6 +7,10 @@
     "defaultMessage": "Make payments",
     "description": "app.accounts.sidebar.makepayments: Title for the Make payments entry in the menu"
   },
+  "/N6akP": {
+    "defaultMessage": "The given number is not a valid mastercard account",
+    "description": "app.accounts.billPayments.invalidMastercardAccount: Error message for the bill payement page"
+  },
   "/bV15e": {
     "defaultMessage": "We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
     "description": "app.accounts.redeem.errorMessage: Error Message for the make a payment page / etransfer tab"
@@ -30,6 +34,10 @@
   "0SoFtY": {
     "defaultMessage": "Select Payee",
     "description": "app.accounts.billPayments.payeeTxt: Label for the form the make a payment page / bill payment tab"
+  },
+  "0ms9Ih": {
+    "defaultMessage": "Your card number should be 16 digits long",
+    "description": "Validation error for credit account numbers"
   },
   "0vNzso": {
     "defaultMessage": "User Settings",
@@ -290,10 +298,6 @@
   "S/Ujpm": {
     "defaultMessage": "In",
     "description": "app.historygraph.tooltip.in: HistoryGraph tooltip - total transaction in"
-  },
-  "SKISxf": {
-    "defaultMessage": "Your card number should be 16 digits long",
-    "description": "app.accounts.billPayments.invalidVisaChars: Error message for the bill payement page"
   },
   "SlkrJd": {
     "defaultMessage": "Given Name",

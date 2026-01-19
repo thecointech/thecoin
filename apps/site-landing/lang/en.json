@@ -227,10 +227,6 @@
     "defaultMessage": "Read More",
     "description": "site.blog.articleLink: Link to access article page in blog"
   },
-  "U623eE": {
-    "defaultMessage": "Your benefits",
-    "description": "site.MainNavigation.yourbenefits: Title for the Your benefits entry in the menu"
-  },
   "UJsE5n": {
     "defaultMessage": "Weekly:",
     "description": "Simulator: Weekly Income"
@@ -374,6 +370,10 @@
   "p695DK": {
     "defaultMessage": "The future is brighter",
     "description": "site.homepage.landscape.title: The title for the homepage"
+  },
+  "pOHZAH": {
+    "defaultMessage": "Simulator",
+    "description": "site.MainNavigation.simulator: Title for the Simulator entry in the menu"
   },
   "pRmrf0": {
     "defaultMessage": "Make a Difference",

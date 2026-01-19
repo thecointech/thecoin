@@ -3,7 +3,7 @@ import Decimal from 'decimal.js-light';
 import { SimulationParameters } from './params';
 import { SimulationState, zeroState, increment, balanceChange } from './state';
 import { getMarketData, MarketData } from './market';
-import { straddlesMonth, straddlesYear } from './time';
+import { straddlesMonth, weekContainedAnniversary } from './time';
 import { zero } from './sim.decimal';
 import { applyShockAborber } from './sim.shockAbsorber';
 import { payOutCashback, updateCreditBalances } from './credit';
@@ -44,7 +44,7 @@ export class ReturnSimulator {
   calcCashSpending(start: DateTime, { date }: SimulationState) {
     let spending = new Decimal(this.params.cash.weekly);
     if (straddlesMonth(date)) spending = spending.add(this.params.cash.monthly);
-    if (straddlesYear(start, date)) spending = spending.add(this.params.cash.yearly);
+    if (weekContainedAnniversary(start, date)) spending = spending.add(this.params.cash.yearly);
     return spending;
   }
 
@@ -54,7 +54,7 @@ export class ReturnSimulator {
     const { weekly, monthly, yearly } = this.params.income;
     let income = new Decimal(weekly);
     if (straddlesMonth(state.date)) income = income.add(monthly);
-    if (straddlesYear(start, state.date)) income = income.add(yearly);
+    if (weekContainedAnniversary(start, state.date)) income = income.add(yearly);
     return income;
   }
 

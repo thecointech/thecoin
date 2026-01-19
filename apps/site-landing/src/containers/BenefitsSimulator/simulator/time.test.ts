@@ -1,6 +1,6 @@
 import lodash from 'lodash';
 import { DateTime } from 'luxon';
-import { straddlesMonth, straddlesYear } from './time';
+import { straddlesMonth, weekContainedAnniversary } from './time';
 
 it('correctly straddles months', () => {
   const straddlesM = (month: number, day: number) =>
@@ -23,7 +23,7 @@ it('correctly straddles years', () => {
   {
     const start = DateTime.fromObject({year: 1981, month: 2});
     const straddlesY = (year: number, month: number, day: number) =>
-      straddlesYear(start, DateTime.fromObject({year, month, day}));
+      weekContainedAnniversary(start, DateTime.fromObject({year, month, day}));
     expect(straddlesY(1981, 2, 1)).toBeFalsy();
     expect(straddlesY(1982, 12, 31)).toBeFalsy();
     expect(straddlesY(1983, 1, 1)).toBeFalsy();
@@ -42,7 +42,7 @@ it('correctly straddles years', () => {
       const numDays = end.diff(start, "day").days;
       const allStraddles = lodash.range(0, numDays).reduce((acc, days) => {
         const d = start.plus({ days });
-        const s = straddlesYear(start, d);
+        const s = weekContainedAnniversary(start, d);
 
         // Double check using Luxon
         const diff = d.diff(start, ["years", "days"]);

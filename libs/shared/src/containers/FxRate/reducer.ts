@@ -1,6 +1,5 @@
 import { call, fork, take, delay, takeEvery, Effect } from "@redux-saga/core/effects";
-import { SagaReducer, buildSaga, SagaBuilder } from '@thecointech/redux/immerReducer';
-import { sendValues } from '@thecointech/redux/sagas';
+import { SagaReducer, buildSaga, SagaBuilder, sendValues } from '@thecointech/redux/immerReducer';
 import { fetchRate, FXRate } from '@thecointech/fx-rates';
 import type { ApplicationBaseState } from '../../types';
 import type { FxRatesState, IFxRates } from './types';
@@ -149,15 +148,15 @@ function* ensureUpdateOnExpiration() : Generator<Effect> {
   while (!endPolling) {
     // Wait until sets new update and stores values
     const rateAction = yield take(FxRateReducer.actions.updateWithValues.type);
-    const {rates} = (rateAction as ReturnType<typeof FxRateReducer.prototype.actions.updateWithValues>).payload;
-    if (!rates) {
+    const payload = (rateAction as ReturnType<typeof FxRateReducer.actions.updateWithValues>).payload;
+    if (typeof payload === 'function' || !payload.rates) {
       // If we don't have any rates, wait a bit and try again
       yield delay(100);
       continue;
     }
 
-    latest = rates.reduce((p, r) => Math.max(p, r.validTill), latest)
-    validFrom = rates.reduce((p, r) => Math.max(p, r.validFrom), validFrom)
+    latest = payload.rates.reduce((p, r) => Math.max(p, r.validTill), latest)
+    validFrom = payload.rates.reduce((p, r) => Math.max(p, r.validFrom), validFrom)
     // If the clients clock is wrong, we don't wan't to sleep too long
     // TODO: get time from the server
     const now = Math.max(Date.now(), validFrom);
@@ -167,6 +166,6 @@ function* ensureUpdateOnExpiration() : Generator<Effect> {
     console.log("Fx fetched - now sleeping mins: " + waitTime / (1000 * 60));
     yield delay(waitTime);
     // Then tell the FxRate to update
-    yield sendValues(FxRateReducer.actions.fetchRateAtDate);
+    yield sendValues(FxRateReducer.actions.fetchRateAtDate, new Date());
   }
 }

@@ -7,7 +7,7 @@ import { withStore, withLanguageProvider } from '@thecointech/storybookutils';
 import Decimal from 'decimal.js-light';
 import { translations } from '../../../translations';
 import { withReducer } from '@thecointech/storybookutils';
-import { FxRateReducer } from '@thecointech/shared/containers/FxRate/reducer';
+import { FxRateReducer } from '@thecointech/shared/containers/FxRate';
 
 export default {
   title: 'App/HistoryGraphTooltip',

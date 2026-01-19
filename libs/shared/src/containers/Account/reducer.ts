@@ -53,7 +53,7 @@ function AccountReducer(address: string, initialState: AccountState) {
       // store the contract prior to trying update history.
       yield this.storeValues({ contract, plugins });
       // Load history info by default
-      yield this.sendValues(this.actions.updateHistory, [DateTime.fromMillis(0), DateTime.now()]);
+      yield this.sendValues(this.actions.updateHistory, DateTime.fromMillis(0), DateTime.now());
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
@@ -228,7 +228,7 @@ function AccountReducer(address: string, initialState: AccountState) {
         // Ensure callback is called with 100% result so caller knows we are done
         log.trace("Account decrypted successfully");
         // Store the result
-        yield this.sendValues(this.actions.setSigner, [decrypted]);
+        yield this.sendValues(this.actions.setSigner, decrypted);
       }
       catch (error: any) {
         log.warn(error.message);

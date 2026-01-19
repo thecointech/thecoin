@@ -1,21 +1,22 @@
 import { log, LoggerContext } from "@thecointech/logging";
-import { installBrowser, maybeCopyProfile } from "@thecointech/scraper/puppeteer";
+import { installBrowser, maybeCopyProfile, removeBrowser } from "@thecointech/scraper/puppeteer";
 import { mkdirSync } from "fs";
 import { DateTime } from "luxon";
 import path from "path";
-import { Agent } from '@/agent.js';
-import { AgentSerializer } from '@/agentSerializer.js';
-import { LoginFailedError } from "@/errors.js";
-import type { IAskUser } from "@/processors/types.js";
-import { BankConfig, getConfig } from "../config.js";
-import { init } from "../init.js";
-import { AskUserConsole } from './askUserConsole.js';
-import { DummyAskUser } from "./dummyAskUser.js";
+import { Agent } from '@/agent';
+import { AgentSerializer } from '@/agentSerializer';
+import { LoginFailedError } from "@/errors";
+import type { IAskUser } from "@/processors/types";
+import { type BankConfig, getConfig } from "../config";
+import { init } from "../init";
+import { AskUserConsole } from './askUserConsole';
+import { DummyAskUser } from "./dummyAskUser";
 import { updateRecordLatest } from "./updateRecordLatest";
 
 const { baseFolder, config } = getConfig();
 
 const clean = process.argv.includes("--clean");
+const refreshBrowserInstall = process.argv.includes("--refresh-browser");
 const testFailedLogin = process.argv.includes("--test-fail-login");
 const target = process.argv.includes("--target") ? process.argv[process.argv.indexOf("--target") + 1] : undefined;
 const except = process.argv.includes("--except") ? process.argv[process.argv.indexOf("--except") + 1] : undefined;
@@ -24,6 +25,13 @@ const dateSuffix = DateTime.now().toFormat("yyyy-MM-dd_HH-mm");
 const recordFolder = path.join(baseFolder, "archive", dateSuffix);
 
 await init();
+
+if (refreshBrowserInstall) {
+  log.info("Removing existing browser install...");
+  await removeBrowser();
+  log.info("Existing version removed");
+}
+
 await installBrowser();
 await maybeCopyProfile(clean);
 

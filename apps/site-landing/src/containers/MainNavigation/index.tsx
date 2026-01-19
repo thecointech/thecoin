@@ -20,8 +20,8 @@ const menuItems = defineMessages({
     icon: "plus",
   },
   compare: {
-    defaultMessage: 'Your benefits',
-    description: 'site.MainNavigation.yourbenefits: Title for the Your benefits entry in the menu',
+    defaultMessage: 'Simulator',
+    description: 'site.MainNavigation.simulator: Title for the Simulator entry in the menu',
     icon: "arrow up",
   },
   blog: {

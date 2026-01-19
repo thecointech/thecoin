@@ -4,11 +4,11 @@
 
 import * as reduxInjectors from 'redux-injectors';
 import reduxSaga from '@redux-saga/core';
-import { createStore, compose, applyMiddleware, ReducersMapObject, Reducer, StoreEnhancer, PreloadedState } from 'redux';
+import { createStore, compose, applyMiddleware, ReducersMapObject, Reducer, StoreEnhancer } from 'redux';
 import { getCreateReducer } from './reducers';
 // Ideally, all references to redux should be through this package
 export { Provider } from 'react-redux';
-export { combineReducers, type ReducersMapObject, type Reducer, type StoreEnhancer, type PreloadedState } from 'redux';
+export { combineReducers, type ReducersMapObject, type Reducer, type StoreEnhancer } from 'redux';
 export { BaseReducer, SagaReducer } from './immerReducer';
 
 //@ts-ignore weird-o hack to get jest to run this file with no complaints.
@@ -17,7 +17,7 @@ export { BaseReducer, SagaReducer } from './immerReducer';
 const createSagaMiddleware: typeof reduxSaga = reduxSaga.default ?? reduxSaga;
 
 type reducerFn = (injectedReducers?: ReducersMapObject) => Reducer;
-export function configureStore<T extends Record<string, any>>(createReducer: reducerFn = getCreateReducer(), initialState?: PreloadedState<T>) {
+export function configureStore<T extends Record<string, any>>(createReducer: reducerFn = getCreateReducer(), initialState?: T) {
   const reduxSagaMonitorOptions = {};
 
 

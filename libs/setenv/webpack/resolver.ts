@@ -1,25 +1,27 @@
 import path from 'path';
 import { existsSync } from 'fs';
-
+import type { ResolveContext, Resolver, ResolveRequest } from 'enhanced-resolve';
 // Resolve @/ alias to src
-// Possibly should be in webpack.common.ts
+
+type Callback = (err?: null|Error, result?: ResolveRequest) => void
 
 // Custom resolver plugin for @/ alias
 export class DynamicAliasPlugin {
-  apply(resolver: any) {
+  apply(resolver: Resolver) {
     const target = resolver.ensureHook('resolve');
-    resolver.getHook('described-resolve').tapAsync('DynamicAliasPlugin', (request: any, resolveContext: any, callback: any) => {
+    resolver.getHook('described-resolve').tapAsync('DynamicAliasPlugin', (request: ResolveRequest, resolveContext: ResolveContext, callback: Callback) => {
       if (request.request && request.request.startsWith('@/')) {
-        const context = request.context?.issuer || request.path;
+        const context = (request.context as any)?.issuer || request.path;
         const root = projectRoot(context);
         const relativePath = request.request.substring(2); // Remove '@/'
         const newRequest = {
           ...request,
           request: path.join(root, 'src', relativePath)
         };
-        return resolver.doResolve(target, newRequest, null, resolveContext, callback);
+        resolver.doResolve(target, newRequest, null, resolveContext, callback);
+      } else {
+        callback();
       }
-      callback();
     });
   }
 }
