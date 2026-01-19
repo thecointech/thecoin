@@ -21,7 +21,7 @@
   "scripts": {
     "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
     "build": "run -T tsc -b",
-    "clean": "rimraf ./build && rimraf ./coverage"
+    "clean": "yarn run -T rimraf ./build && yarn run -T rimraf ./coverage"
   },
   "files": [
     "build/**/*"

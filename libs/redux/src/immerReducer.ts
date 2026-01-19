@@ -1,6 +1,6 @@
 import { ImmerReducer, createReducerFunction, createActionCreators, ImmerReducerClass, ImmerReducerState } from "immer-reducer";
-import { put, select, SelectEffect, takeLatest } from "@redux-saga/core/effects";
-import { Action, bindActionCreators, Reducer } from "redux";
+import { select, SelectEffect, takeLatest, put } from "@redux-saga/core/effects";
+import { bindActionCreators, Reducer } from "redux";
 import { useDispatch, useSelector } from 'react-redux';
 import * as reduxInjectors from 'redux-injectors';
 import type { Saga } from '@redux-saga/core';
@@ -15,8 +15,8 @@ type ArgumentsType<T> = T extends (...args: infer V) => any ? V : never;
 export interface ImmerActionCreator<ActionTypeType, Payload extends any[]> {
   readonly type: ActionTypeType;
   (...args: Payload): {
-      type: ActionTypeType;
-      payload: FirstOrAll<Payload>;
+    type: ActionTypeType;
+    payload: FirstOrAll<Payload>;
   };
 }
 
@@ -62,7 +62,7 @@ export function BaseReducer<U, T>(key: string, initialState: T) {
   }
 
   // Directly set function implementations
-  const r: typeof BaseReducer&InjectedStatics = BaseReducer as any;
+  const r = BaseReducer as typeof BaseReducer&InjectedStatics;
   r.initialize = function(state) {
     // We -want- to shadow the outer value.  By defining this fn using () =>
     // we pick up the pointer to the final implementation, rather than the base
@@ -128,8 +128,11 @@ export function buildSaga<IActions, State>(sagaReducer: SagaInterface<IActions, 
 // For saga-based reducers we add a simple 'store'
 // action.  This gives an easy way for any client to update
 // the store from async code.
+// Shared type ensures storeValues and updateWithValues have matching signatures
+export type UpdateValuesParam<T> = Partial<T> | ((draft: Draft<T>, state: Readonly<T>) => void);
+
 export interface BaseSagaInterface<T> {
-  updateWithValues(newState: Partial<T>) : void;
+  updateWithValues(newState: UpdateValuesParam<T>) : void;
 }
 
 export function SagaReducer<U, T>(key: string, initialState: T, sagas: SagaBuilder<U, T>|(keyof U)[]) {
@@ -138,20 +141,19 @@ export function SagaReducer<U, T>(key: string, initialState: T, sagas: SagaBuild
 
     ///////////////////////////////////////////////////////////////////////////////////
     // SendValues can be used by one saga to trigger another reducer action.
-    sendValues(command: Action, values?: any) {
-      return put({
-        type: command.type,
-        payload: values
-      });
+    sendValues<Args extends any[]>(command: ImmerActionCreator<string, Args>, ...values: Args) {
+      return sendValues(command, ...values);
     }
 
     // Store values specializes sendValues to specifically update the store
-    storeValues(values: Partial<T> | ((draft: Draft<T>, state: Readonly<T>) => void)) {
-      return this.sendValues(this.actions.updateWithValues, values)
+    storeValues(values: UpdateValuesParam<T>) {
+      // TypeScript cannot resolve ArgumentsType through the intersection U & BaseSagaInterface<T>
+      // but we know the types align by design (interface matches implementation)
+      return put((this.actions.updateWithValues as any)(values))
     }
 
     // Common update function for sagas to update the store
-    updateWithValues(newState: Partial<T> | ((draft: Draft<T>, state: Readonly<T>) => void)) {
+    updateWithValues(newState: UpdateValuesParam<T>) {
       if (typeof newState === "function") {
         newState(this.draftState, this.state);
       }
@@ -198,4 +200,9 @@ export function SagaReducer<U, T>(key: string, initialState: T, sagas: SagaBuild
   }
 
   return SagaReducer;
+}
+
+
+export function sendValues<Args extends any[]>(command: ImmerActionCreator<string, Args>, ...values: Args) {
+  return put(command(...values));
 }
