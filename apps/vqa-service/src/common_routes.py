@@ -18,7 +18,7 @@ class SimilarityResponse(BaseModel):
     most_similar: str = Field(..., description="the option most similar to the target")
     reasoning: str = Field(..., description="your reasoning")
 
-def query_most_similar(target: str, options: list[str]) -> SimilarityResponse:
+def query_most_similar(target: str, options: list[str]):
     return (
         f"From this list of options: {json.dumps(options)}, which option is the most similar to this target '{target}'?",
         SimilarityResponse

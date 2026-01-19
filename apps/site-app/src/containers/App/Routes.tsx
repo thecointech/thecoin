@@ -1,9 +1,6 @@
 import React from 'react';
 import { Navigate, type RouteObject } from 'react-router';
 import { AuthLayout } from '@thecointech/shared/containers/AuthLayout';
-import { GAuth } from '@thecointech/site-base/containers/AddAccount/Storage/GDrive/gauth';
-import { routes as AddAccountRoutes } from '@thecointech/site-base/containers/AddAccount';
-import { Congratulations } from '@thecointech/site-base/containers/AddAccount/Congratulations';
 import { MakePayments } from '../MakePayments';
 import { ContactUs } from '../ContactUs';
 import { Settings } from '../Settings';
@@ -11,6 +8,7 @@ import { Topup } from '../TopUp';
 import { HomePage } from '../HomePage';
 import { HarvesterConnect } from '../Harvester/Connect';
 import { App } from './index';
+import { OpenRoutes } from './Routes.open';
 
 export const routes = [
   {
@@ -29,13 +27,7 @@ export const routes = [
           { path: 'harvester/connect', element: <HarvesterConnect /> },
         ]
       },
-      // Open routes at same level
-      { path: 'gauth', element: <GAuth /> },
-      { path: 'congratulations', element: <Congratulations /> },
-      {
-        path: 'addAccount',
-        children: AddAccountRoutes,
-      },
+      ...OpenRoutes,
     ]
   },
   {
@@ -51,14 +43,3 @@ type ExtractPathKeys<T> = T extends (infer U)[] // Infer the array element type 
     : never // If no (like for { index: true }), discard it
   : never;
 export type AuthPathKey = ExtractPathKeys<AuthenticatedRouteArray>;
-
-export const getOpenRoutes = () => {
-  // All routes are under App
-  const appRoutes = routes[0].children;
-  // Authenticated routes are under AuthLayout
-  // (which does not have a path)
-  const openRoutes = Object.values(appRoutes)
-    .filter(r => 'path' in r)
-    .map(r => (r as { path: string }).path);
-  return openRoutes;
-}

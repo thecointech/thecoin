@@ -97,7 +97,7 @@ const SliderTrack = ({
       style={{
         background: getTrackBackground({
           values: [value],
-          colors: [LessVars.theCoinPaletteGreen3, '#FFFFFF1A'],
+          colors: [LessVars.theCoinPaletteGreen3.toString(), '#FFFFFF1A'],
           min,
           max,
         }),

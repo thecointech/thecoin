@@ -16,8 +16,8 @@ class AccountCrop(BaseModel):
 async def account_balance_element(
     image: UploadFile,
     account_number: str,
-    crop_top: int = None,
-    crop_bottom: int = None
+    crop_top: int|None = None,
+    crop_bottom: int|None = None
 ) -> MoneyElementResponse:
     crop = None
     if all(x is not None for x in [crop_top, crop_bottom]):
@@ -26,7 +26,7 @@ async def account_balance_element(
 
 @router.post("/summary/list-accounts", tags=["summary"])
 async def list_accounts(image: UploadFile) -> OverviewResponse:
-    return await run_endpoint_query(image, list_accounts_query)
+    return await run_endpoint_query(image, list_accounts_query, max_length=1000)
 
 @router.post("/summary/account-navigate-element", tags=["summary"])
 async def account_navigate_element(image: UploadFile, account_number: str) -> PositionResponse:

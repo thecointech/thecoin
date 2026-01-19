@@ -1,4 +1,4 @@
-import webpack from 'webpack';
+import webpack, { type Configuration } from 'webpack';
 import { getSigner } from '@thecointech/signers';
 import { getEnvVars } from '@thecointech/setenv';
 
@@ -13,7 +13,7 @@ async function getAddresses() {
   }
 }
 
-export default {
+export const signerConfig: Configuration = {
   plugins: [
     new webpack.DefinePlugin(
       // In some configurations (eg dev/devlive) we do not have
@@ -27,3 +27,4 @@ export default {
     ),
   ]
 }
+

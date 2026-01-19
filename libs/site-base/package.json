@@ -2,7 +2,7 @@
   "name": "@thecointech/site-base",
   "productName": "THECoin: Website - Base",
   "private": true,
-  "version": "0.5.1-test.0",
+  "version": "0.5.1",
   "description": "THECoin: Future-proof currency",
   "type": "module",
   "repository": {
@@ -35,53 +35,44 @@
   ],
   "exports": {
     ".": "./build/index.js",
-    "./internal/server": "./internal/server/index.ts",
-    "./internal/build": "./internal/build.ts",
-    "./jest.config": "./jest.config.js",
-    "./*": [
-      "./build/*.js",
-      "./build/*/index.js"
-    ]
+    "./internal/webpack": "./internal/webpack/index.ts",
+    "./*": "./build/*/index.js"
   },
   "typesVersions": {
     "*": {
       "build/index.d.ts": [
         "build/index.d.ts"
       ],
-      "internal/server": [
-        "internal/server/index.ts"
+      "internal/webpack": [
+        "internal/webpack/index.ts"
       ],
       "*": [
-        "build/*.d.ts",
-        "build/*/index.d.ts"
+        "./build/*/index.d.ts"
       ]
     }
   },
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.4.1",
-    "@thecointech/apis": "^0.5.1-test.0",
-    "@thecointech/shared": "^0.5.1-test.0",
-    "@thecointech/site-semantic-theme": "^0.5.1-test.0",
-    "@thecointech/utilities": "^0.5.1-test.0",
+    "@thecointech/apis": "^0.5.1",
+    "@thecointech/shared": "^0.5.1",
+    "@thecointech/site-semantic-theme": "^0.5.1",
+    "@thecointech/utilities": "^0.5.1",
     "intl": "^1.2.5",
-    "react-animate-height": "^3.0.4",
-    "react-ga": "^2.7.0",
-    "react-measure": "^2.3.0",
-    "react-transition-group": "^4.4.5",
     "sanitize.css": "10.0.0",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
-    "@thecointech/setenv": "^0.5.1-test.0",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.6.2",
+    "@thecointech/setenv": "^0.5.1",
     "@types/dotenv-webpack": "^7.0.3",
     "@types/intl": "^1.2.0",
-    "@types/react-measure": "^2.0.5",
-    "@types/react-transition-group": "^4.4.12",
     "@types/zxcvbn": "^4.4.0",
     "dotenv-webpack": "^7.0.3",
     "fontsource-abril-fatface": "3.1.5",
     "fontsource-montserrat": "3.1.5",
     "minimist": "^1.2.3",
-    "nocache": "^2.1.0"
+    "nocache": "^2.1.0",
+    "react-refresh": "^0.18.0",
+    "react-refresh-typescript": "^2.0.11"
   }
 }

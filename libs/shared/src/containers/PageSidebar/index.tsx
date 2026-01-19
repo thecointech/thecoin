@@ -7,6 +7,9 @@ import styles from "./styles.module.less";
 import { SidebarHeader } from './SidebarHeader';
 import { FormattedMessage } from 'react-intl';
 
+export * from './types';
+export * from './reducer';
+
 export type Props = {
   inverted?: boolean;
   width?: 'very thin' | 'thin' | 'wide' | 'very wide';

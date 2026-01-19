@@ -19,5 +19,5 @@ async def navigate_to_login(image: UploadFile) -> ElementResponse:
     return await run_endpoint_query(image, query_navigate_to_login)
 
 @router.post("/landing/navigate-to-login-menu", tags=["landing"])
-async def navigate_to_login_menu(image: UploadFile, crop: BBox = None) -> ElementResponse:
+async def navigate_to_login_menu(image: UploadFile, crop: BBox|None = None) -> ElementResponse:
     return await run_endpoint_query(image, query_navigate_to_login_menu, crop)

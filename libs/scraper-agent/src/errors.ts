@@ -1,4 +1,4 @@
-import { ErrorResponse } from "@thecointech/vqa";
+import type { ErrorResponse } from "@thecointech/vqa";
 
 export class LoginFailedError extends Error {
 

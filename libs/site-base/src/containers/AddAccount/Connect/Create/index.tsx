@@ -3,7 +3,7 @@ import { Connect } from "../../Connect";
 import { defineMessages, FormattedMessage, useIntl } from "react-intl";
 import { Header, Container, Message } from "semantic-ui-react";
 import { Link } from "react-router";
-import { getWeb3Type } from "@thecointech/shared/utils/detection";
+import { getWeb3Type } from "@thecointech/shared/utils";
 import { Decoration } from "../../Decoration";
 import styles from '../styles.module.less';
 import { ButtonPrimary } from "../../../../components/Buttons";

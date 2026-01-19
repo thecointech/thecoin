@@ -43,7 +43,7 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
   }),
 
   downloadLibraries: () => guard(async () => {
-    downloadRequired(onBgTaskMsg);
+    downloadRequired(onBgTaskMsg, true);
     return true;
   }),
 
