@@ -68,8 +68,7 @@ LERNA_OUTPUT=$(yarn lerna version \
 
 # Extract version from output
 # Look for lines like "lerna info versioning independent" or package version changes
-NEXT_VERSION=$(echo "$LERNA_OUTPUT" | grep -oP 'v?\d+\.\d+\.\d+(-test\.\d+)?' | head -1)
-
+NEXT_VERSION=$(echo "$LERNA_OUTPUT" | grep -Eo 'v?[0-9]+\.[0-9]+\.[0-9]+(-test\.[0-9]+)?' | head -1)
 # Clean up the dry run (restore package.json files)
 git checkout -- . 2>/dev/null || true
 git clean -fd 2>/dev/null || true
