@@ -22,8 +22,9 @@ jobs:
     steps:
       - name: Parse tag to determine environment
         id: parse
+        env:
+          TAG: ${{ github.ref_name }}
         run: |
-          TAG="${{ github.ref_name }}"
           echo "Deploying tag: $TAG"
 
           if [[ "$TAG" =~ -test\. ]]; then
@@ -78,14 +79,35 @@ jobs:
     steps:
       - name: Check package publish status
         run: |
-          if [ "${{ needs.determine-environment.outputs.is_prerelease }}" = "true" ]; then
-            if [ "${{ contains(github.ref_name, '-test.') }}" = "true" ]; then
-              echo "Test tag - packages published"
+          TEST_RESULT="${{ needs.publish-packages-test.result }}"
+          PROD_RESULT="${{ needs.publish-packages-prod.result }}"
+          IS_PRERELEASE="${{ needs.determine-environment.outputs.is_prerelease }}"
+          IS_TEST_TAG="${{ contains(github.ref_name, '-test.') }}"
+
+          echo "Package publish results:"
+          echo "  Test job: $TEST_RESULT"
+          echo "  Prod job: $PROD_RESULT"
+          echo ""
+
+          # Determine which job was required for this tag
+          if [ "$IS_PRERELEASE" = "true" ]; then
+            if [ "$IS_TEST_TAG" = "true" ]; then
+              echo "Test tag - checking test package publish"
+              if [ "$TEST_RESULT" != "success" ] && [ "$TEST_RESULT" != "skipped" ]; then
+                echo "❌ Test package publish failed: $TEST_RESULT"
+                exit 1
+              fi
+              echo "✅ Test packages published successfully"
             else
-              echo "Beta tag - reusing test packages"
+              echo "Beta tag - reusing test packages (no publish required)"
             fi
           else
-            echo "Prod tag - packages graduated"
+            echo "Prod tag - checking prod package graduation"
+            if [ "$PROD_RESULT" != "success" ] && [ "$PROD_RESULT" != "skipped" ]; then
+              echo "❌ Prod package graduation failed: $PROD_RESULT"
+              exit 1
+            fi
+            echo "✅ Packages graduated successfully"
           fi
 
   publish-docker:
