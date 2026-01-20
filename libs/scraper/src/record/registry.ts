@@ -1,7 +1,7 @@
 import type { Browser } from 'puppeteer';
+import type { RecorderOptions } from './types';
 import { newPage } from '../puppeteer-init/newPage';
 import { log } from '@thecointech/logging';
-import { RecorderOptions } from './types';
 import { Recorder } from './recorder';
 
 //

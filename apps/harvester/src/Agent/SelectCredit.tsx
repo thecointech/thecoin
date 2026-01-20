@@ -1,10 +1,12 @@
 import { Button } from "semantic-ui-react"
 import { SelectBank } from "./SelectBank"
 import { BankConnectReducer } from "./state/reducer"
-import { InitialState } from "./state/initialState"
+import { useNavigate } from "react-router"
 
-export const SelectCredit = ({ banks }: InitialState) => {
+export const SelectCredit = () => {
   const api = BankConnectReducer.useApi();
+  const { banks } = BankConnectReducer.useData();
+  const navigate = useNavigate();
 
   const handleSetSimilar = () => {
     if (!banks.chequing) {
@@ -16,6 +18,7 @@ export const SelectCredit = ({ banks }: InitialState) => {
       url: banks.chequing.url,
       icon: banks.chequing.icon,
     })
+    navigate("/agent/loginBoth");
   }
   return (
     <div>

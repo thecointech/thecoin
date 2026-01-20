@@ -64,28 +64,26 @@ export async function setSchedule(schedule: HarvestSchedule) {
 }
 
 export function generateService(useXvfb: boolean = false): string {
-  // Capture current display for fallback use
-  // Don't override DISPLAY directly - systemd user manager keeps it current
-  const currentDisplay = process.env.DISPLAY || ':0';
+  const harvestCommand = `"${process.execPath}" --harvest`;
 
-  const xvfbConfig = useXvfb ? `
-ExecStartPre=/usr/bin/Xvfb :99 -screen 0 1920x1080x24 -ac +extension GLX +render -noreset
-Environment=DISPLAY=:99
-Environment=TC_REAL_DISPLAY=${currentDisplay}` : `
-Environment=TC_REAL_DISPLAY=${currentDisplay}`;
+  const execCommand = useXvfb
+    ? `/bin/sh -c 'if [ -z "$DISPLAY" ]; then ${xvfbRun()} ${harvestCommand}; else ${harvestCommand}; fi'`
+    : harvestCommand;
 
   return `
 [Unit]
 Description=TheCoin Harvester Scheduled Job
 
 [Service]
-Type=simple${xvfbConfig}
-ExecStart=${process.execPath} --harvest
+Type=simple
+ExecStart=${execCommand}
 RuntimeMaxSec=21600
 TimeoutStopSec=30
 KillMode=mixed
 `; // Add more options as needed
 }
+
+const xvfbRun = () => `/usr/bin/xvfb-run -a -s "-screen 0 1920x1080x24 -ac +extension GLX +render -noreset"`;
 
 export function generateTimer(schedule: HarvestSchedule): string {
   return `

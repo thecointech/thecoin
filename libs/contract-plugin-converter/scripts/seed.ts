@@ -1,13 +1,12 @@
 import { getSigner } from '@thecointech/signers';
-import { ConnectContract } from '@thecointech/contract-core';
+import { ContractCore } from '@thecointech/contract-core';
 import { ALL_PERMISSIONS, assignPlugin, buildAssignPluginRequest } from '@thecointech/contract-plugins';
-import { getContract } from '@thecointech/contract-plugin-converter';
+import { ContractConverter } from '../src/contract';
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
 import { fetchRate, weSellAt } from "@thecointech/fx-rates";
 import Decimal from "decimal.js-light";
 import { toCoinDecimal } from "@thecointech/utilities";
-import { connect } from '@thecointech/contract-base/connect';
 import { sleep } from '@thecointech/async';
 
 // Assume devlive
@@ -22,9 +21,8 @@ async function main() {
   const testAddress = await tester.getAddress();
   const tcAddress = await theCoin.getAddress();
 
-  const converter = await getContract();
-  const bcCore = await ConnectContract(brokerCad);
-  const ownConvert = connect(owner, converter);
+  const converter = await ContractConverter.connect(owner);
+  const bcCore = await ContractCore.connect(brokerCad);
 
   // In DevLive, we assign the converter to UberTester
   const request = await buildAssignPluginRequest(tester, converter, ALL_PERMISSIONS);
@@ -47,10 +45,10 @@ async function main() {
     // Every 4 weeks, we allocate $400 to future visa bill
     if (i > 0 && i % 4 == 0) {
       const dueDate = now.plus({ weeks: 3 });
-      await ownConvert.seedPending(testAddress, tcAddress, 400e2, dueDate.toMillis(), now.toMillis());
+      await converter.seedPending(testAddress, tcAddress, 400e2, dueDate.toMillis(), now.toMillis());
     }
     else if (i > 3 && i % 4 == 3) {
-      await ownConvert.processPending(testAddress, tcAddress, now.toMillis());
+      await converter.processPending(testAddress, tcAddress, now.toMillis());
     }
   }
 }

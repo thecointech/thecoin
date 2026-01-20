@@ -88,6 +88,14 @@ const config = {
     }),
   ],
   hooks: {
+    // Our compiled code is output as commonjs
+    readPackageJson: async (_config, packageJson) => {
+      packageJson.type = "commonjs";
+    },
+
+    // When running directly, our package.json
+    // says we are "module", override to commonjs
+    // (the above hook does not apply when running)
     postStart: async (config) => {
       const mainPackageJsonPath = path.join(".webpack", 'main', 'package.json'); // Adjust as needed
       writeFileSync(mainPackageJsonPath, JSON.stringify({ type: 'commonjs' }, null, 2));

@@ -10,51 +10,44 @@ if (window.location.pathname === "/gauth") {
   window.location.replace(newUrl);
 }
 
-import 'react-app-polyfill/ie11';
-import 'react-app-polyfill/stable';
-
 // Import all the third party stuff
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
+import { RouterProvider } from 'react-router';
 import 'sanitize.css/sanitize.css';
 
-// Import root app
-import { App } from 'components/App';
+import { routes } from './components/Routes';
+import { createHashRouter } from 'react-router';
 
 // Import Language Provider
-import { LanguageProvider, Languages } from '@thecointech/shared/containers/LanguageProvider';
-import { configureAppStore, history } from './reducers';
+import { LanguageProvider, Languages } from '@thecointech/redux-intl';
+import { configureAppStore } from './reducers';
 import { translations } from './translations';
 
 
 // Create redux store with history
 const store = configureAppStore();
 const MOUNT_NODE = document.getElementById('app') as HTMLElement;
+const root = createRoot(MOUNT_NODE);
 
-const render = (languages: Languages, Component = App) => {
-  ReactDOM.render(
-    // tslint:disable-next-line:jsx-wrap-multiline
+const render = (languages: Languages) => {
+  root.render(
     <Provider store={store}>
       <LanguageProvider languages={languages}>
-        <ConnectedRouter history={history}>
-          <Component />
-        </ConnectedRouter>
+        <RouterProvider router={
+          createHashRouter(routes)
+        } />
       </LanguageProvider>
-    </Provider>,
-    MOUNT_NODE,
+    </Provider>
   );
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const module: any;
 if (module.hot) {
-  module.hot.accept(['./i18n', './components/App'], () => {
-    ReactDOM.unmountComponentAtNode(MOUNT_NODE);
-    // tslint:disable-next-line:max-line-length
-    const refresh = require('./components/App').default; // https://github.com/webpack/webpack-dev-server/issues/100
-    render(translations, refresh);
+  module.hot.accept(['./containers/App'], () => {
+    render(translations);
   });
 }
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { List } from 'semantic-ui-react';
-import { AccountMap } from '@thecointech/shared/containers/AccountMap';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { defineMessage, FormattedMessage, MessageDescriptor } from 'react-intl';
 import styles from './styles.module.less';
 import { PageHeader } from '../../../../components/PageHeader';

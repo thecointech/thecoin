@@ -1,0 +1,59 @@
+{
+    "name": "@thecointech/site-prismic",
+    "productName": "THECoin: Prismic Content Library",
+    "private": true,
+    "type": "module",
+    "version": "0.5.2",
+    "description": "Prismic Slice Machine library for content management",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/thecointech/thecoin.git"
+    },
+    "author": "Stephen Taylor",
+    "license": "GPL-3.0-or-later",
+    "scripts": {
+        "dev": "run -T run-p start:website start:slicemachine",
+        "build": "run -T run-s build:semantic build:src",
+        "build:src": "next build",
+        "build:semantic": "run-env ./internal/buildSemantic.ts",
+        "_start": "next start",
+        "start:website": "next dev --port 3010",
+        "start:slicemachine": "start-slicemachine"
+    },
+    "exports": {
+        "./slices": "./src/slices/index.ts",
+        "./types": "./prismicio-types.d.ts",
+        "./client": "./src/prismicio.ts",
+        "./components": "./src/components/index.ts"
+    },
+    "typesVersions": {
+        "*": {
+            "slices": [
+                "src/slices/index.ts"
+            ],
+            "types": [
+                "prismicio-types.d.ts"
+            ],
+            "client": [
+                "src/prismicio.ts"
+            ],
+            "components": [
+                "src/components/index.ts"
+            ]
+        }
+    },
+    "dependencies": {
+        "@prismicio/client": "^7.21.0",
+        "semantic-ui-react": "3.0.0-beta.2"
+    },
+    "devDependencies": {
+        "@prismicio/next": "^2.0.2",
+        "@prismicio/react": "^3.2.2",
+        "@slicemachine/adapter-next": "^0.3.89",
+        "@thecointech/setenv": "^0.5.2",
+        "@thecointech/site-semantic-theme": "^0.5.2",
+        "glob": "^13.0.0",
+        "next": "^16.0.8",
+        "slice-machine-ui": "^2.20.2"
+    }
+}

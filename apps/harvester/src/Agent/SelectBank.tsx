@@ -3,9 +3,9 @@ import { BankData, banks } from "./BankCard/data"
 import { BankConnectReducer } from "./state/reducer"
 import { RendererBankType } from "./state/types"
 import type { BankReducerType } from "./state/initialState"
-import { PathNextButton } from "@/SimplePath"
 import { Message } from "semantic-ui-react"
 import { useState } from "react"
+import { useSimplePathContext } from "@/SimplePath"
 
 type Props = {
   type: RendererBankType
@@ -24,6 +24,8 @@ export const SelectBank = ({ type, selected }: Props) => {
     setForceValid(true);
     return !!selected;
   }
+  const context = useSimplePathContext();
+  context.onValidate = isValid;
 
   return (
     <>
@@ -37,8 +39,6 @@ export const SelectBank = ({ type, selected }: Props) => {
         <CustomBankCard isSelected={selected?.name === "Custom"} onClick={handleSetBank} />
       </div>
       <SelectBankMessage forceValid={forceValid} selected={!!selected} type={type} />
-      <PathNextButton onValid={isValid} />
-
     </>
   )
 }

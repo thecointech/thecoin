@@ -1,28 +1,48 @@
 import React from 'react';
 import { jest } from '@jest/globals';
-import rtr from 'react-test-renderer/shallow';
-
-const renderer = rtr.createRenderer();
+import { render } from '@testing-library/react';
+import { createMemoryRouter, RouterProvider } from 'react-router';
+import { Provider } from 'react-redux';
+import { configureStore } from '@thecointech/redux';
+import { LanguageProvider } from '@thecointech/redux-intl';
+import { HelmetProvider } from 'react-helmet-async';
 
 // Mock redux hooks
 jest.unstable_mockModule('redux-injectors', () => ({
   useInjectSaga: jest.fn(),
   useInjectReducer: jest.fn(),
 }));
-// This import can trigger a compilation of the entire app
-// (with numerous side-effects) so we skip it entirely
-// NOTE: It only adds about 5 seconds to testing, should we keep it?
-jest.unstable_mockModule('../Routes', () => ({
-  Routes: () => <div>Router</div>
-}));
-
 
 const { App } = await import('../index');
 
 describe('<App />', () => {
   it('should render and match the snapshot', () => {
-    renderer.render(<App />);
-    const renderedOutput = renderer.getRenderOutput();
-    expect(renderedOutput).toMatchSnapshot();
+    // Create a minimal Redux store for testing
+    const store = configureStore();
+
+    // Create a data router with a single route for testing
+    const router = createMemoryRouter([
+      {
+        path: '/',
+        element: <App />,
+        children: [
+          {
+            index: true,
+            element: <div>Test Route</div>,
+          },
+        ],
+      },
+    ]);
+
+    const { container } = render(
+      <Provider store={store}>
+        <LanguageProvider languages={{ en: {}, fr: {} }}>
+          <HelmetProvider>
+            <RouterProvider router={router} />
+          </HelmetProvider>
+        </LanguageProvider>
+      </Provider>
+    );
+    expect(container).toMatchSnapshot();
   });
 });

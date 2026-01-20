@@ -1,4 +1,4 @@
-import { BaseReducer } from '../../store/immerReducer';
+import { BaseReducer } from '@thecointech/redux/immerReducer';
 import type { SidebarState, IActions, SidebarGenerator, SidebarHeader } from './types';
 import type { ApplicationBaseState } from '../../types';
 

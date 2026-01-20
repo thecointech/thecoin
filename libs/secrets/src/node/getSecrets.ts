@@ -13,8 +13,11 @@ import { getBitwardenSecret } from "./bitwarden/getSecrets";
 
 declare global {
   var __tc_secretCache: Map<SecretKeyType, string>;
+  // Secrets can be replaced by the compiler
+  // This is used by the harvester to inject secrets
+  // into the main process.
+  var __COMPILER_REPLACE_SECRETS__: Record<string, string>|undefined;
 }
-globalThis.__tc_secretCache = new Map<SecretKeyType, string>();
 
 export async function getSecret(name: SecretKeyType, config?: ConfigType) {
   // First, check if this secret has been added to env
@@ -34,3 +37,13 @@ export async function getSecret(name: SecretKeyType, config?: ConfigType) {
   globalThis.__tc_secretCache.set(name, secret);
   return secret;
 }
+
+function getInitialCache() {
+  if (typeof __COMPILER_REPLACE_SECRETS__ !== 'undefined') {
+    const definedSecrets = Object.entries(__COMPILER_REPLACE_SECRETS__)
+      .filter(([, value]) => value !== undefined) as [SecretKeyType, string][];
+    return new Map<SecretKeyType, string>(definedSecrets);
+  }
+  return new Map<SecretKeyType, string>();
+}
+globalThis.__tc_secretCache = getInitialCache();

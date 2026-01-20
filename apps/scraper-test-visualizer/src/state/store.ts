@@ -1,4 +1,4 @@
-import { configureStore } from '@thecointech/shared/store';
+import { configureStore } from '@thecointech/redux';
 import { combineReducers } from 'redux';
 import type { InitialState } from './initialState';
 

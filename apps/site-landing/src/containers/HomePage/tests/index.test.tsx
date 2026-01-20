@@ -8,6 +8,7 @@ import { render } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { HomePage } from '../index';
 import { MemoryRouter } from 'react-router';
+import { HelmetProvider } from 'react-helmet-async';
 
 jest.mock('react-redux', () => ({
   useDispatch: jest.fn(),
@@ -28,7 +29,9 @@ describe('<HomePage />', () => {
       // tslint:disable-next-line: jsx-wrap-multiline
       <IntlProvider locale="en">
         <MemoryRouter>
-          <HomePage />
+          <HelmetProvider>
+            <HomePage />
+          </HelmetProvider>
         </MemoryRouter>
       </IntlProvider>,
     );

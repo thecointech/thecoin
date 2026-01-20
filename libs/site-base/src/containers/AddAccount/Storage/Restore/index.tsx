@@ -3,7 +3,7 @@ import { Grid } from 'semantic-ui-react';
 import { defineMessage, FormattedMessage } from 'react-intl';
 import styles from './styles.module.less';
 import sharedStyles from '../styles.module.less';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Decoration } from '../../Decoration';
 import { PageHeader } from '../../../../components/PageHeader';
 import { ButtonPrimary } from '../../../../components/Buttons';

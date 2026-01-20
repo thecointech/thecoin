@@ -11,7 +11,7 @@ query_cookie_exists = (
     ExistsResponse
 )
 query_cookie_accept = (
-    "Analyze the provided webpage. Describe the button to accept cookies and continue.",
+    "Analyze the provided webpage. Describe the button to accept all cookies and continue.",
     ElementResponse
 )
 query_navigate_to_login = (

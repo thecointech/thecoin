@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/electron-utils",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "private": true,
   "description": "The Coin: shared thingies for electron apps",
   "keywords": [
@@ -21,25 +21,25 @@
     "clean": "run -T rimraf ./build && run -T rimraf ./coverage"
   },
   "files": [
-    "build/**/*"
+    "src/**/*"
   ],
   "exports": {
-    "./webpack/*": "./build/webpack/*.js",
-    "./types/*": "./build/types/*.d.ts"
+    "./webpack/*": "./src/webpack/*.ts",
+    "./types/*": "./src/types/*.ts"
   },
   "typesVersions": {
     "*": {
       "webpack/*": [
-        "./build/webpack/*.d.ts"
+        "./src/webpack/*.ts"
       ],
       "types/*": [
-        "./build/types/*.d.ts"
+        "./src/types/*.ts"
       ]
     }
   },
   "devDependencies": {
-    "@thecointech/secrets": "^0.5.0",
-    "@thecointech/setenv": "^0.5.0",
+    "@thecointech/secrets": "^0.5.2",
+    "@thecointech/setenv": "^0.5.2",
     "@vercel/webpack-asset-relocator-loader": "1.7.3",
     "css-loader": "^6.0.0",
     "fork-ts-checker-webpack-plugin": "^7.2.13",

@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import { zero } from './sim.decimal';
+import type { RecursivePartial } from '@thecointech/types';
 
 // Holds week/month/yearly actions for income/credit/cash
 export type PeriodicalParams = {
@@ -95,13 +96,8 @@ const basicPeriods = {
 
 
 type AllowedPrimitives = boolean | string | number | DateTime | Decimal; /* add any types than should be considered as a value, say, DateTimeOffset */;
-type Value<T> = T extends AllowedPrimitives ? T : RecursivePartial<T>;
-type RecursivePartial<T> = {
-  [P in keyof T]?:
-  T[P] extends Array<infer U> ? Array<Value<U>> : Value<T[P]>;
-};
 
-export type MergeSimParamaters = RecursivePartial<SimulationParameters>;
+export type MergeSimParamaters = RecursivePartial<SimulationParameters, AllowedPrimitives>;
 export const createParams = (explicit?: MergeSimParamaters): SimulationParameters => ({
   adjustForInflation: false,
   maxOffsetPercentage: 0.0175,

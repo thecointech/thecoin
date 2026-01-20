@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.2](https://github.com/thecointech/thecoin/compare/v0.5.2-test.0...v0.5.2) (2026-01-19)
+
+**Note:** Version bump only for package @thecointech/broker-service
+
+
+
+
+
+## [0.5.2-test.0](https://github.com/thecointech/thecoin/compare/v0.5.1...v0.5.2-test.0) (2026-01-19)
+
+
+### Bug Fixes
+
+* apps/broker-service/package.json to reduce vulnerabilities ([c8e7a88](https://github.com/thecointech/thecoin/commit/c8e7a884346c62f5f2d0961face1523bd273e81a))
+* apps/broker-service/package.json to reduce vulnerabilities ([35e0f12](https://github.com/thecointech/thecoin/commit/35e0f12fc70a8e1d5230e232881c21cd5647222e))
+* apps/broker-service/package.json to reduce vulnerabilities ([392fa91](https://github.com/thecointech/thecoin/commit/392fa91588fc529081e15e4d5a4200de6a174044))
+* apps/broker-service/package.json to reduce vulnerabilities ([1870c98](https://github.com/thecointech/thecoin/commit/1870c980b989387d1a48ccb622250a9b93b1a7c4))
+
+
+
+
+
+## [0.5.1](https://github.com/thecointech/thecoin/compare/v0.5.1-test.1...v0.5.1) (2026-01-06)
+
+**Note:** Version bump only for package @thecointech/broker-service
+
+
+
+
+
+## [0.5.1-test.1](https://github.com/thecointech/thecoin/compare/v0.5.1-test.0...v0.5.1-test.1) (2025-12-16)
+
+**Note:** Version bump only for package @thecointech/broker-service
+
+
+
+
+
+## [0.5.1-test.0](https://github.com/thecointech/thecoin/compare/v0.5.0...v0.5.1-test.0) (2025-12-16)
+
+**Note:** Version bump only for package @thecointech/broker-service
+
+
+
+
+
 # [0.5.0](https://github.com/thecointech/thecoin/compare/v0.5.0-test.0...v0.5.0) (2025-11-26)
 
 **Note:** Version bump only for package @thecointech/broker-service

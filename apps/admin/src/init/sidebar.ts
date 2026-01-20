@@ -1,11 +1,9 @@
 
 import { AccountId } from '@thecointech/signers';
-import { RUrl } from '@thecointech/utilities/RUrl';
 import { defineMessage, defineMessages } from 'react-intl';
-import { TheCoinRoutes } from '../containers/TheCoinAccount/Routes';
-import { BrokerCADRoutes } from '../containers/BrokerCAD/Routes';
-import { SidebarState } from '@thecointech/shared/containers/PageSidebar/types';
-import { SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar/reducer';
+import { routesTheCoin } from '../containers/TheCoinAccount/Routes';
+import { routesBrokerCAD } from '../containers/BrokerCAD/Routes';
+import { SidebarState, SidebarItemsReducer } from '@thecointech/shared/containers/PageSidebar';
 
 const messages = defineMessages({
   balance: { defaultMessage: "Balance", description: "Title for the balance entry in the menu" },
@@ -20,11 +18,10 @@ const messages = defineMessages({
   clients: { defaultMessage: "Clients", description: "Title for the Clients entry in the menu" },
 });
 
-const buildSubMenu = (id: AccountId, routes: typeof TheCoinRoutes|typeof BrokerCADRoutes) =>
-  (Object.keys(routes) as (keyof typeof routes)[])
-    .map(el => ({
-      name: messages[el],
-      to: new RUrl(`/${id}/${el}`)
+const buildSubMenu = (id: AccountId, routes: typeof routesTheCoin|typeof routesBrokerCAD) =>
+    routes.map(el => ({
+      name: messages[el.path],
+      to: `/${id}/${el.path}`
     }))
 
 const state : Partial<SidebarState> = {
@@ -34,12 +31,12 @@ const state : Partial<SidebarState> = {
       {
         name: defineMessage({ defaultMessage: "TheCoin" }),
         to: false,
-        subItems: buildSubMenu(AccountId.TheCoin, TheCoinRoutes)
+        subItems: buildSubMenu(AccountId.TheCoin, routesTheCoin)
       },
       {
         name: defineMessage({ defaultMessage: "BrokerCAD" }),
         to: false,
-        subItems: buildSubMenu(AccountId.BrokerCAD, BrokerCADRoutes)
+        subItems: buildSubMenu(AccountId.BrokerCAD, routesBrokerCAD)
       }
     ]
   }

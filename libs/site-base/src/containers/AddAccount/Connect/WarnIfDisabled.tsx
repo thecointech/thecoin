@@ -1,7 +1,7 @@
 import React from "react";
 import { defineMessages, FormattedMessage } from "react-intl";
 import { Message } from "semantic-ui-react";
-import { isWeb3Enabled } from "@thecointech/shared/utils/detection";
+import { isWeb3Enabled } from "@thecointech/shared/utils";
 
 const translations = defineMessages({
   warningHeader : {

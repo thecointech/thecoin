@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from 'semantic-ui-react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import type { TestInfo } from '../testInfo';
 import { useFilteredTests } from '../state/reducer';
 import styles from './TestGrid.module.less';
@@ -8,10 +8,10 @@ import styles from './TestGrid.module.less';
 
 const TestGrid = () => {
   const tests = useFilteredTests();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleTestClick = (test: TestInfo) => {
-    history.push(`/test/${encodeURIComponent(test.key)}/${encodeURIComponent(test.element)}`);
+    navigate(`/test/${encodeURIComponent(test.key)}/${encodeURIComponent(test.element)}`);
   };
 
   return (
@@ -40,7 +40,9 @@ const TestGrid = () => {
               </Card.Meta>
               <Card.Description>
                 <div style={{ marginTop: '0.5rem' }}>
-                  <div><strong>Key:</strong> {test.key}</div>
+                  <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <strong>Key:</strong> {test.key.split(':').slice(1).join(':') || test.key}
+                  </div>
                   <div><strong>Test runs:</strong> {runCount}</div>
                   <div><strong>Latest:</strong> {latestDate}</div>
                 </div>

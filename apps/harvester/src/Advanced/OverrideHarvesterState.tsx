@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Container, Input, Button } from 'semantic-ui-react'
-import { AccountMap } from '@thecointech/shared/containers/AccountMap/reducer';
+import { AccountMap } from '@thecointech/redux-accounts';
 import { useFxRates } from '@thecointech/shared/containers/FxRate';
 import { getFxRate } from '@thecointech/fx-rates';
 import { toHuman } from "@thecointech/utilities";

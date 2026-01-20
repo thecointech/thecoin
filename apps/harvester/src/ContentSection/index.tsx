@@ -34,7 +34,7 @@ export const ContentSection = ({ children, className }: ContentSectionProps) => 
     <ContentSectionContext.Provider value={{
       ...portalTargets,
       setHasAlternate,
-      setHasNext
+      setHasNext,
     }}>
       <div className={className ? `${styles.contentSection} ${className}` : styles.contentSection}>
         <div className={styles.contentArea}>

@@ -19,21 +19,27 @@ export const nativeModules = [
 
 export async function getMainConfig(deployedAt) {
 
-  const vqaApiKey = await getSecret("VqaApiKey");
 
   const mainPlugins = {
     ['process.env.TC_LOG_FOLDER']: JSON.stringify("false"),
     ['process.env.URL_SEQ_LOGGING']: JSON.stringify("false"),
-    ['process.env.VQA_API_KEY']: JSON.stringify(vqaApiKey),
     ['process.env.TC_DEPLOYED_AT']: deployedAt,
   }
   // Override the NODE_ENV from *.public.env files when debugging
   if (process.env.NODE_ENV) {
     mainPlugins['process.env.NODE_ENV'] = JSON.stringify(process.env.NODE_ENV);
   }
-  const vqaCertificate = await getSecret("VqaSslCertPublic");
-  if (vqaCertificate) {
-    mainPlugins['process.env.VQA_SSL_CERTIFICATE'] = JSON.stringify(vqaCertificate);
+
+  // For proper builds
+  const VqaSslCertPublic = await getSecret("VqaSslCertPublic");
+  if (VqaSslCertPublic) {
+    const VqaApiKey = await getSecret("VqaApiKey");
+    const InfuraProjectId = await getSecret("InfuraProjectId");
+    mainPlugins['__COMPILER_REPLACE_SECRETS__'] = JSON.stringify({
+      VqaApiKey,
+      InfuraProjectId,
+      VqaSslCertPublic,
+    });
   }
 
   const mainConfigMerged = mainConfig({

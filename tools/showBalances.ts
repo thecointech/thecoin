@@ -1,9 +1,9 @@
-import { GetContract } from "@thecointech/contract-core";
+import { ContractCore } from "@thecointech/contract-core";
 import { loadAndMergeHistory } from "@thecointech/tx-blockchain";
 import { fetchRate } from "@thecointech/fx-rates";
 import { toHuman } from "@thecointech/utilities";
 
-const tc = await GetContract();
+const tc = await ContractCore.get();
 const history = await loadAndMergeHistory(0, tc);
 const rate = await fetchRate();
 
