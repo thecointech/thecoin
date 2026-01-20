@@ -25,9 +25,9 @@ if [ "$CURRENT_BRANCH" != "main" ]; then
   exit 1
 fi
 
-# Ensure working tree is clean
-if ! git diff-index --quiet HEAD -- 2>/dev/null; then
-  echo -e "${RED}❌ Error: Working tree has uncommitted changes${NC}"
+# Ensure working tree is clean (including untracked files)
+if [ -n "$(git status --porcelain)" ]; then
+  echo -e "${RED}❌ Error: Working tree has uncommitted or untracked changes${NC}"
   git status --short
   exit 1
 fi
@@ -52,7 +52,7 @@ echo -e "${YELLOW}🔍 Analyzing commits to determine next version...${NC}"
 
 # Create a temporary script to capture Lerna output
 TEMP_DIR=$(mktemp -d)
-trap "rm -rf $TEMP_DIR" EXIT
+trap 'rm -rf "$TEMP_DIR"' EXIT
 
 cd "$(git rev-parse --show-toplevel)"
 
@@ -71,6 +71,13 @@ LERNA_OUTPUT=$(yarn lerna version \
 NEXT_VERSION=$(echo "$LERNA_OUTPUT" | grep -oP 'v?\d+\.\d+\.\d+(-test\.\d+)?' | head -1)
 
 # Clean up the dry run (restore package.json files)
+# Check if cleanup would remove untracked files
+if [ -n "$(git status --porcelain | grep '^??')" ]; then
+  echo -e "${YELLOW}⚠️  Warning: Untracked files detected before cleanup${NC}"
+  git status --short
+  echo -e "${RED}❌ Error: Cannot proceed with untracked files present${NC}"
+  exit 1
+fi
 git checkout -- . 2>/dev/null || true
 git clean -fd 2>/dev/null || true
 

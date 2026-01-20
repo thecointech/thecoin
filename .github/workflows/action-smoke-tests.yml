@@ -81,35 +81,37 @@ jobs:
         run: |
           echo "Testing rates-service for ${{ inputs.CONFIG_NAME }}"
           # Load environment variables and extract URL_SERVICE_RATES
-          SERVICE_URL=$(yarn run-env cfg=${{ inputs.CONFIG_NAME }} node -e "console.log(process.env.URL_SERVICE_RATES + '/status')")
+          # Using /rates/124 as health check (primary function of service)
+          SERVICE_URL=$(yarn run-env cfg=${{ inputs.CONFIG_NAME }} node -e "console.log(process.env.URL_SERVICE_RATES + '/rates/124')")
 
           echo "Checking $SERVICE_URL"
           response=$(curl -s -o /dev/null -w "%{http_code}" "$SERVICE_URL" || echo "000")
 
-          if [ "$response" = "200" ] || [ "$response" = "404" ]; then
-            echo "✅ Service is responding (HTTP $response)"
+          if [ "$response" = "200" ]; then
+            echo "✅ Rates service is healthy (HTTP $response)"
           else
-            echo "⚠️ Service returned HTTP $response (may need health endpoint)"
+            echo "❌ Rates service returned HTTP $response"
+            exit 1
           fi
         timeout-minutes: 2
-        continue-on-error: true
 
       - name: Load environment and test broker-service
         run: |
           echo "Testing broker-service for ${{ inputs.CONFIG_NAME }}"
           # Load environment variables and extract URL_SERVICE_BROKER
-          SERVICE_URL=$(yarn run-env cfg=${{ inputs.CONFIG_NAME }} node -e "console.log(process.env.URL_SERVICE_BROKER + '/rates/124')")
+          # Using /status endpoint which returns broker info
+          SERVICE_URL=$(yarn run-env cfg=${{ inputs.CONFIG_NAME }} node -e "console.log(process.env.URL_SERVICE_BROKER + '/status')")
 
           echo "Checking $SERVICE_URL"
           response=$(curl -s -o /dev/null -w "%{http_code}" "$SERVICE_URL" || echo "000")
 
-          if [ "$response" = "200" ] || [ "$response" = "404" ]; then
-            echo "✅ Service is responding (HTTP $response)"
+          if [ "$response" = "200" ]; then
+            echo "✅ Broker service is healthy (HTTP $response)"
           else
-            echo "⚠️ Service returned HTTP $response (may need health endpoint)"
+            echo "❌ Broker service returned HTTP $response"
+            exit 1
           fi
         timeout-minutes: 2
-        continue-on-error: true
 
   smoke-test-summary:
     needs: [smoke-test-sites, smoke-test-services]
