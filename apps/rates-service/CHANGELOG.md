@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.2](https://github.com/thecointech/thecoin/compare/v0.5.2-test.0...v0.5.2) (2026-01-19)
+
+**Note:** Version bump only for package @thecointech/rates-service
+
+
+
+
+
+## [0.5.2-test.0](https://github.com/thecointech/thecoin/compare/v0.5.1...v0.5.2-test.0) (2026-01-19)
+
+
+### Bug Fixes
+
+* apps/rates-service/package.json to reduce vulnerabilities ([3a717a4](https://github.com/thecointech/thecoin/commit/3a717a425cda9e1a9d6f30e916ac8a1ea490b121))
+* apps/rates-service/package.json to reduce vulnerabilities ([a39f6f2](https://github.com/thecointech/thecoin/commit/a39f6f2d87d46cf2a6229660990b0d3f4db27368))
+* apps/rates-service/package.json to reduce vulnerabilities ([0e5f4ed](https://github.com/thecointech/thecoin/commit/0e5f4edcc0764f06f7adf684beaebd5d51e7ecce))
+
+
+
+
+
 ## [0.5.1](https://github.com/thecointech/thecoin/compare/v0.5.1-test.1...v0.5.1) (2026-01-06)
 
 **Note:** Version bump only for package @thecointech/rates-service

@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/storybookutils",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "private": true,
   "description": "The Coin: common storybook decorators",
   "type": "module",
@@ -22,8 +22,8 @@
   "main": "./build/index.js",
   "dependencies": {
     "@thecointech/media-context": "^0.5.1",
-    "@thecointech/redux": "^0.5.1",
-    "@thecointech/redux-accounts": "^0.5.1",
-    "@thecointech/redux-intl": "^0.5.1"
+    "@thecointech/redux": "^0.5.2",
+    "@thecointech/redux-accounts": "^0.5.2",
+    "@thecointech/redux-intl": "^0.5.2"
   }
 }
