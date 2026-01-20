@@ -49,7 +49,7 @@ export async function listAccounts(agent: Agent) {
         nav
       });
     }
-    agent.onProgress(25 + (75 * r.length / accounts.accounts.length));
+    agent.onProgress(25 + (75 * (i + 1) / accounts.accounts.length));
   }
   return r;
 }
@@ -93,7 +93,11 @@ export async function saveAccountNavigation(agent: Agent, account: AccountRespon
 
 
 export function validateAccountNumberAgainstSource(inferredAccountNumber: string, scraped: ElementData) {
-  const realAccountText = `${scraped.text} ${scraped.siblingText?.join(" ")}`;
+  const parts = [scraped.text];
+  if (scraped.siblingText) {
+    parts.push(scraped.siblingText.join(" "));
+  }
+  const realAccountText = parts.join(" ").replace(/\s+/g, " ").trim();
   // The inferred number may be off by a few digits, however
   // we should be close enough that a token-based match will capture the correct value with proper formatting
   const { match: accountNumber } = extractFuzzyMatch(inferredAccountNumber, realAccountText);

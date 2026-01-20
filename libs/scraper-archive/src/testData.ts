@@ -141,7 +141,11 @@ export class TestData {
     if (rest.length) {
       throw new Error(`Multiple elements found for ${name}`);
     }
-    const testName = element[0].match(/(.+)-elm.json/)?.[1];
+    const matched = element.match(/(.+)-elm.json/);
+    if (!matched) {
+      throw new Error(`Failed to match element file: ${element}`);
+    }
+    const testName = matched[1];
     const rawJson: TestElmData = this.json<TestElmData>(element);
 
     if (withOverride) {

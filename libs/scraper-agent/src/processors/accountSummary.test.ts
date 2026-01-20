@@ -72,10 +72,12 @@ function* zip<T extends readonly unknown[]>(...arrays: { [K in keyof T]: Iterabl
   const iterators = arrays.map(arr => arr[Symbol.iterator]());
   while (true) {
     const results = iterators.map(iter => iter.next());
-    if (results.some(result => result.done)) break;
-    if (results.some(result => result.done)) {
+    const allDone = results.every(r => r.done);
+    const someDone = results.some(r => r.done);
+    if (someDone && !allDone) {
       throw new Error("All iterators must have the same length");
     }
+    if (allDone) break;
     yield results.map(result => result.value) as unknown as T;
   }
 }
