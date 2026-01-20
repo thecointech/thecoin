@@ -11,6 +11,11 @@ on:
         required: true
         type: string
         description: 'Environment to deploy to (prodtest, prodbeta, prod)'
+      IS_PROMOTION:
+        required: false
+        type: boolean
+        default: false
+        description: 'If true, retag existing test image instead of rebuilding'
 
 env:
   REGISTRY: ghcr.io
@@ -30,22 +35,27 @@ jobs:
     steps:
 
       - uses: actions/checkout@v4
+        if: inputs.IS_PROMOTION == false
         with:
           ref: ${{ inputs.COMMIT_SHA }}
 
       - run: corepack enable
+        if: inputs.IS_PROMOTION == false
 
       - name: Use Node.js
+        if: inputs.IS_PROMOTION == false
         uses: actions/setup-node@v4
         with:
           node-version: '22.19'
 
       - name: Download build artifacts
+        if: inputs.IS_PROMOTION == false
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
 
       - name: Set up Docker Buildx
+        if: inputs.IS_PROMOTION == false
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to GitHub Container Registry
@@ -67,6 +77,31 @@ jobs:
             type=raw,value=${{ inputs.CONFIG_NAME }}-{{sha}}
             type=sha,format=long
 
+      # For promotions, retag existing prodtest image
+      - name: Promote tx-processor image (retag)
+        if: inputs.IS_PROMOTION == true
+        run: |
+          echo "Promoting prodtest image to ${{ inputs.CONFIG_NAME }}"
+
+          # Pull the prodtest image
+          SOURCE_TAG="prodtest-${{ inputs.COMMIT_SHA }}"
+          docker pull ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${SOURCE_TAG}
+
+          # Retag for new environment
+          docker tag \
+            ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${SOURCE_TAG} \
+            ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${{ inputs.CONFIG_NAME }}-latest
+
+          docker tag \
+            ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${SOURCE_TAG} \
+            ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${{ inputs.CONFIG_NAME }}-${{ inputs.COMMIT_SHA }}
+
+          # Push new tags
+          docker push ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${{ inputs.CONFIG_NAME }}-latest
+          docker push ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${{ inputs.CONFIG_NAME }}-${{ inputs.COMMIT_SHA }}
+
+          echo "✅ Image promoted successfully"
+
       # - name: Extract metadata for VQA Service
       #   id: meta-vqa
       #   uses: docker/metadata-action@v5
@@ -77,6 +112,7 @@ jobs:
       #       type=sha,format=long
 
       - name: Prep tx-processor
+        if: inputs.IS_PROMOTION == false
         run: node --experimental-strip-types ./docker/prep-docker.ts
         working-directory: ./apps/tx-processor
         env:
@@ -84,6 +120,7 @@ jobs:
           CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
 
       - name: Build and push tx-processor
+        if: inputs.IS_PROMOTION == false
         uses: docker/build-push-action@v5
         with:
           context: ./apps/tx-processor
