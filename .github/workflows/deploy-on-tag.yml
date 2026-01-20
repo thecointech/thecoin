@@ -7,7 +7,8 @@ on:
       - 'v*.*.*-beta.*'
       - 'v*.*.*'
 
-# Cancel any in-progress deployment for the same tag
+# Prevent multiple deployments of the same tag from running simultaneously
+# but allow them to queue rather than canceling in-progress deployments
 concurrency:
   group: deploy-${{ github.ref_name }}
   cancel-in-progress: false  # Don't cancel deployments in progress
@@ -26,16 +27,16 @@ jobs:
           echo "Deploying tag: $TAG"
 
           if [[ "$TAG" =~ -test\. ]]; then
-            echo "env=prodtest" >> $GITHUB_OUTPUT
-            echo "prerelease=true" >> $GITHUB_OUTPUT
+            echo "env=prodtest" >> "$GITHUB_OUTPUT"
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
             echo "Deploying to: prodtest"
           elif [[ "$TAG" =~ -beta\. ]]; then
-            echo "env=prodbeta" >> $GITHUB_OUTPUT
-            echo "prerelease=true" >> $GITHUB_OUTPUT
+            echo "env=prodbeta" >> "$GITHUB_OUTPUT"
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
             echo "Deploying to: prodbeta"
           else
-            echo "env=prod" >> $GITHUB_OUTPUT
-            echo "prerelease=false" >> $GITHUB_OUTPUT
+            echo "env=prod" >> "$GITHUB_OUTPUT"
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
             echo "Deploying to: prod"
           fi
 

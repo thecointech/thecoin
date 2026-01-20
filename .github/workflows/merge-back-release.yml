@@ -3,8 +3,9 @@ name: Merge Release Branch Back
 on:
   push:
     tags:
-      # Trigger only on production tags (no -test or -beta suffix)
+      # Trigger on production tags, but not prerelease tags
       - 'v*.*.*'
+      - '!v*.*.*-*'
 
 # Prevent multiple runs
 concurrency:

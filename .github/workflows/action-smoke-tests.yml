@@ -114,8 +114,30 @@ jobs:
   smoke-test-summary:
     needs: [smoke-test-sites, smoke-test-services]
     runs-on: ubuntu-latest
+    if: always()
     steps:
       - name: Deployment verification complete
         run: |
           echo "✅ Smoke tests completed for ${{ inputs.CONFIG_NAME }}"
-          echo "All critical services are responding"
+
+          # Check actual results
+          SITES_RESULT="${{ needs.smoke-test-sites.result }}"
+          SERVICES_RESULT="${{ needs.smoke-test-services.result }}"
+
+          echo ""
+          echo "Results:"
+          echo "  Sites: $SITES_RESULT"
+          echo "  Services: $SERVICES_RESULT"
+          echo ""
+
+          if [ "$SITES_RESULT" = "success" ] && [ "$SERVICES_RESULT" = "success" ]; then
+            echo "✅ All critical services are responding"
+          elif [ "$SITES_RESULT" = "success" ]; then
+            echo "⚠️ Sites are up but some services may have issues (continue-on-error)"
+          elif [ "$SERVICES_RESULT" = "success" ]; then
+            echo "❌ Sites failed but services are responding"
+            exit 1
+          else
+            echo "❌ Both sites and services had issues"
+            exit 1
+          fi

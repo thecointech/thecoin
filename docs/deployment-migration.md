@@ -77,7 +77,8 @@ Phase 1: Preparation (Week 1)
 Goal: Set up parallel infrastructure without disrupting current deployments
 
 1.1 Update Lerna Configuration
-json
+
+```json
 {
   "command": {
     "version": {
@@ -90,6 +91,8 @@ json
     }
   }
 }
+```
+
 1.2 Create New Tag-Based Workflows
 New files to create:
 
@@ -115,10 +118,13 @@ Phase 2: Parallel Testing (Week 2-3)
 Goal: Test tag-based deployments alongside existing branch deployments
 
 2.1 Deploy to Test Environment via Tags
-bash
+
+```bash
 # After merging to main, create test tag manually
 git tag v0.5.3-test.0
 git push origin v0.5.3-test.0
+```
+
 This triggers new deploy-on-tag.yml workflow in parallel to existing system.
 
 2.2 Validation Checklist
@@ -130,9 +136,12 @@ Docker images pushed with correct tags
 No interference with branch-based deployments
 Smoke tests pass
 2.3 Test Rollback
-bash
+
+```bash
 # Simulate rollback by redeploying old tag
 git push origin v0.5.2-test.0:refs/tags/v0.5.2-test.0 --force
+```
+
 Verify rollback workflow works correctly.
 
 2.4 Test All Environments
@@ -155,7 +164,8 @@ Rollback plan documented
 Current production state tagged
 Team trained on new process
 3.2 Rename Branch
-bash
+
+```bash
 # Locally
 git checkout dev
 git pull origin dev
@@ -164,12 +174,15 @@ git push origin main
 git push origin --delete dev
 # Update default branch in GitHub settings
 # Update branch protection rules
+```
+
 3.3 Update All Workflows
 Update pr-dev.yml → pr-main.yml (change target branch to main)
 Keep old pr-publish-*.yml workflows but add deprecation notices
 Make tag workflows the primary deployment path
 3.4 Update Lerna to Only Allow Main
-json
+
+```json
 {
   "command": {
     "version": {
@@ -181,6 +194,8 @@ json
     }
   }
 }
+```
+
 3.5 First Production Deploy via Tags
 Merge PR to main
 Lerna auto-bumps version and creates tag
@@ -208,10 +223,13 @@ pr-publish-prod.yml
 pr-publish-prodbeta.yml
 pr-publish-prodtest.yml
 4.3 Delete Publish Branches
-bash
+
+```bash
 git push origin --delete publish/prod
 git push origin --delete publish/prodbeta
 git push origin --delete publish/prodtest
+```
+
 4.4 Update Documentation
 Remove references to publish branches
 Update deployment runbooks
@@ -249,8 +267,10 @@ Update Lerna config
 Time to rollback: 30 minutes
 
 📋 Key Workflow Changes
-New: deploy-on-tag.yml
-yaml
+
+**New: deploy-on-tag.yml**
+
+```yaml
 name: Deploy on Tag
 on:
   push:
@@ -310,8 +330,11 @@ jobs:
     secrets: inherit
     with:
       CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
-Updated: pr-main.yml (renamed from pr-dev.yml)
-yaml
+```
+
+**Updated: pr-main.yml (renamed from pr-dev.yml)**
+
+```yaml
 name: Build and Test
 on:
   pull_request:
@@ -365,27 +388,40 @@ jobs:
             --create-release github
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-🎬 Deployment Workflows After Migration
-Scenario 1: Deploy to Test Environment
-bash
+```
+
+## 🎬 Deployment Workflows After Migration
+
+**Scenario 1: Deploy to Test Environment**
+
+```bash
 # 1. Create PR, get reviewed, merge to main
 # 2. Auto-version creates tag: v1.2.3-test.0
 # 3. Tag automatically triggers deployment to prodtest
 # 4. Smoke tests run automatically
-Scenario 2: Promote Test → Beta
-bash
+```
+
+**Scenario 2: Promote Test → Beta**
+
+```bash
 # 1. Manually create beta tag from test tag
 git tag v1.2.3-beta.0 v1.2.3-test.0
 git push origin v1.2.3-beta.0
 # 2. Deployment automatically triggered to prodbeta
-Scenario 3: Promote Beta → Production
-bash
+```
+
+**Scenario 3: Promote Beta → Production**
+
+```bash
 # 1. Graduate prerelease to stable
 yarn lerna version --conventional-graduate --yes
 # This creates tag v1.2.3
 # 2. Deployment automatically triggered to prod
-Scenario 4: Hotfix
-bash
+```
+
+**Scenario 4: Hotfix**
+
+```bash
 # 1. Create hotfix branch from main
 git checkout -b hotfix/critical-bug
 # 2. Fix, test, create PR to main
@@ -393,14 +429,19 @@ git checkout -b hotfix/critical-bug
 # 4. If urgent, manually create production tag:
 git tag v1.2.4 v1.2.4-test.0
 git push origin v1.2.4
-Scenario 5: Rollback
-bash
+```
+
+**Scenario 5: Rollback**
+
+```bash
 # Simply redeploy previous production tag
 git push origin v1.2.2:refs/tags/v1.2.2 --force
 # Or create new deployment tag pointing to old commit
 git tag v1.2.5 v1.2.2
 git push origin v1.2.5
-✅ Success Criteria
+```
+
+## ✅ Success Criteria
 All deployments happen via tags
 No manual version bumping needed
 Clear deployment history in GitHub releases

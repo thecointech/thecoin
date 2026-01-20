@@ -74,7 +74,7 @@ jobs:
             latest=false
           tags: |
             type=raw,value=${{ inputs.CONFIG_NAME }}-latest
-            type=raw,value=${{ inputs.CONFIG_NAME }}-{{sha}}
+            type=raw,value=${{ inputs.CONFIG_NAME }}-${{ inputs.COMMIT_SHA }}
             type=sha,format=long
 
       # For promotions, retag existing prodtest image
