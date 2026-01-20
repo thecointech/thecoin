@@ -13,27 +13,28 @@ export const AccountsSummary = processorFn("AccountsSummary", async (agent: Agen
   return await listAccounts(agent);
 })
 
-async function listAccounts(agent: Agent) {
+export async function listAccounts(agent: Agent) {
   const api = await apis().getAccountSummaryApi();
   const { data: accounts } = await api.listAccounts(await agent.page.getImage());
   agent.onProgress(25);
   log.trace(`Found ${accounts.accounts.length} accounts`);
-  // Get a list of all accounts
-  const allAccounts = await findAccountElements(agent, accounts.accounts);
+
+  const viewport = agent.page.page.viewport();
 
   // Update inferred with the real account numbers, then save balance/navigation
   let r: { account: AccountResponse, nav: FoundElement }[] = [];
   for (let i = 0; i < accounts.accounts.length; i++) {
-    // Just use the first account (maybe later we'll store them all)
     const inferred = accounts.accounts[i];
-    const scraped = allAccounts[i];
-    const accountNumber = validateAccountNumberAgainstSource(inferred.account_number, scraped);
+    const element = await findAccountElement(agent, inferred);
+    if (!element) {
+      throw new Error(`Failed to find account element for ${inferred.account_number}`);
+    }
+    const accountNumber = validateAccountNumberAgainstSource(inferred.account_number, element);
     inferred.account_number = accountNumber;
 
     // Crop to just the area of the account in the list.  This is because
     // VQA needs a bit of help focusing on the account
-    const viewport = agent.page.page.viewport();
-    const crop = getCropFromElements([scraped], viewport);
+    const crop = getCropFromElements([element], viewport);
     // Validate we can find the balance, as that is all some accounts need
 
     if (inferred.account_type == "Chequing") {
@@ -48,32 +49,21 @@ async function listAccounts(agent: Agent) {
         nav
       });
     }
-    agent.onProgress(75 + (25 * r.length / accounts.accounts.length));
+    agent.onProgress(25 + (75 * r.length / accounts.accounts.length));
   }
   return r;
 }
 
-export async function findAccountElements(agent: Agent, accounts: AccountResponse[]) {
-  // Click on each account
-  const allAccounts: ElementData[] = [];
-  for (const account of accounts) {
-
-    log.trace(`Processing account: ${account.account_number} - ${account.account_type} - ${account.balance}`);
-    // Find the most likely element describing this account
-    const found = await agent.page.toElement(accountToElementResponse(account), "account");
-    agent.onProgress(25 + (50 * allAccounts.length / accounts.length));
-
-    if (found) {
-      const data = {
-        ...found.data,
-        extra: {
-          accountType: account.account_type
-        }
-      };
-      allAccounts.push(data);
+export async function findAccountElement(agent: Agent, account: AccountResponse) {
+  log.trace(`Processing account: ${account.account_number} - ${account.account_type} - ${account.balance}`);
+  // Find the most likely element describing this account
+  const found = await agent.page.toElement(accountToElementResponse(account), "account");
+  return {
+    ...found.data,
+    extra: {
+      accountType: account.account_type
     }
-  }
-  return allAccounts;
+  };
 }
 
 export async function saveBalanceElement(agent: Agent, account_number: string, crop: BBox) {
@@ -103,10 +93,14 @@ export async function saveAccountNavigation(agent: Agent, account: AccountRespon
 
 
 export function validateAccountNumberAgainstSource(inferredAccountNumber: string, scraped: ElementData) {
-  const realAccountText = scraped.text;
+  const realAccountText = `${scraped.text} ${scraped.siblingText?.join(" ")}`;
   // The inferred number may be off by a few digits, however
   // we should be close enough that a token-based match will capture the correct value with proper formatting
   const { match: accountNumber } = extractFuzzyMatch(inferredAccountNumber, realAccountText);
+  if (!accountNumber) {
+    log.warn(`Failed to validate account number: ${inferredAccountNumber} against ${realAccountText}`);
+    return inferredAccountNumber;
+  }
   // Update original
   log.trace(`Updating account number from inferred: (${inferredAccountNumber}) to (${accountNumber})`);
   return accountNumber;

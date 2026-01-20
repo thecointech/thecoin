@@ -1,37 +1,46 @@
 import { jest } from "@jest/globals";
 import { getTestData, hasTestingPages } from "../../internal/getTestData";
-import { findAccountElements, saveAccountNavigation, saveBalanceElement, validateAccountNumberAgainstSource } from "./accountSummary"
+import { listAccounts, saveAccountNavigation, saveBalanceElement, validateAccountNumberAgainstSource } from "./accountSummary"
 import { describe } from '@thecointech/jestutils';
 import { OverviewResponse } from "@thecointech/vqa";
 import type { ValueEvent } from "@thecointech/scraper";
 import { EventBus } from "@thecointech/scraper/events/eventbus";
 import { TestElmData } from "@thecointech/scraper-archive";
+import { mockTrace, mockWarn } from "@thecointech/logging/mock";
 
 
 jest.setTimeout(5 * 60 * 1000);
 
-describe ("Correctly finds the account elements", () => {
-  const testData = getTestData("AccountsSummary", "account", "latest/TD");
+describe ("Correctly lists accounts", () => {
+  const testData = getTestData("AccountsSummary", "account");
   it.each(testData)("For: %s", async (test) => {
     await using agent = await test.agent();
-    const accounts = test.vqa("listAccounts");
-    const allAccounts = await findAccountElements(agent, accounts!.response.accounts);
-    expect(allAccounts.length).toEqual(accounts!.response.accounts.length);
+    const allAccounts = await listAccounts(agent);
+    const original_navs = test.elm_iter("navigate");
+    for (const [account, nav] of zip(allAccounts, original_navs)) {
+      expect(nav.data.text).toEqual(account.nav.data.text);
+      expect(nav.data.selector).toEqual(account.nav.data.selector);
+    }
   })
 }, hasTestingPages)
 
 
 describe('Updates to the correct account number', () => {
-  const tests = getTestData("AccountsSummary", "account")
+  const tests = getTestData("AccountsSummary", "listAccounts", "archive")
+  beforeEach(() => {
+    jest.resetAllMocks();
+  })
   it.each(tests)(`For: %s`, (test) => {
-    const listed = test.vqa("listAccounts");
-    for (const inferred of listed!.response.accounts) {
-      const element = test.elm("account");
+    const listed = test.vqa("listAccounts")!;
+    const original_accounts = test.elm_iter("account");
+    const response: OverviewResponse = listed.response;
+    for (const [inferred, element] of zip(response.accounts, original_accounts)) {
       const actual = validateAccountNumberAgainstSource(inferred.account_number, element!.data);
       // This is sufficient for the tests we have now, but likely will not work
       // in more complicated situations.
-      expect(element).toBeTruthy();
-      expect(element?.data.text).toContain(actual);
+      expect(actual).toBeTruthy();
+      expect(mockTrace).toHaveBeenCalled();
+      expect(mockWarn).not.toHaveBeenCalled();
     }
   })
 }, hasTestingPages)
@@ -58,60 +67,15 @@ describe ("Correctly finds the balance element", () => {
 }, hasTestingPages)
 
 
-describe("Correctly finds the navigation element", () => {
-  const testData = getTestData("AccountsSummary", "navigate", "latest");
-  let candidates: TestElmData[]|undefined;
-  EventBus.get().onElement((_elm, _params, all) => {
-    candidates = all;
-  })
-
-  const tests = testData.flatMap(test => {
-    const { response } : { response: OverviewResponse } = test.vqa("listAccounts")!;
-    const queryIter = Array.from(test.vqa_iter("accountNavigateElement"));
-    const elms = Array.from(test.elm_iter("navigate-"))
-    return response.accounts.map((account, i) => {
-      return {
-        key: test.key,
-        account,
-        elm: elms[i],
-        query: queryIter[i],
-        name: account.account_name,
-        test,
-      }
-    })
-  })
-
-
-  it.each(tests)("For: $key - $name", async ({key, name, account, query, elm, test}) => {
-    await using agent = await test.agent();
-    // Get the real account number
-    account!.account_number = query!.args[0] as string;
-    const found = await saveAccountNavigation(agent, account!);
-
-    // Double check this is within an "A" tag
-    const findAnchorLink = (test: TestElmData): boolean => {
-      if (test.data.tagName == "A") {
-        return true;
-      }
-      const parent = candidates?.find((c) => c.data.selector == test.data.parentSelector);
-      if (!parent) {
-        return false;
-      }
-      return findAnchorLink(parent!);
-    }
-    expect(findAnchorLink(found)).toBeTruthy()
-    expect(found.data.text).toEqual(elm.data.text);
-    expect(found.data.selector).toEqual(elm.data.selector);
-  })
-}, hasTestingPages)
-
-
 // Utility function to zip multiple arrays together
 function* zip<T extends readonly unknown[]>(...arrays: { [K in keyof T]: Iterable<T[K]> }): Generator<T> {
   const iterators = arrays.map(arr => arr[Symbol.iterator]());
   while (true) {
     const results = iterators.map(iter => iter.next());
     if (results.some(result => result.done)) break;
+    if (results.some(result => result.done)) {
+      throw new Error("All iterators must have the same length");
+    }
     yield results.map(result => result.value) as unknown as T;
   }
 }

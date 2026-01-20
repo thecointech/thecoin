@@ -134,11 +134,14 @@ export class TestData {
   }
 
   elm(name: string, withOverride=true): TestElmData | null {
-    const element = this.jsonFiles.find(f => f.includes(name) && f.endsWith("-elm.json"));
+    const [element, ...rest] = this.elm_files().filter(f => f.includes(name));
     if (!element) {
       return null;
     }
-    const testName = element.match(/(.+)-elm.json/)?.[1];
+    if (rest.length) {
+      throw new Error(`Multiple elements found for ${name}`);
+    }
+    const testName = element[0].match(/(.+)-elm.json/)?.[1];
     const rawJson: TestElmData = this.json<TestElmData>(element);
 
     if (withOverride) {
@@ -158,7 +161,7 @@ export class TestData {
   }
 
   *elm_iter(fnName: string): Generator<TestElmData, void, unknown> {
-    const files = this.jsonFiles.filter(f => f.includes(fnName) && f.endsWith("-elm.json"));
+    const files = this.elm_files().filter(f => f.includes(fnName));
     for (const file of files) {
       yield this.elm(file)!;
     }
