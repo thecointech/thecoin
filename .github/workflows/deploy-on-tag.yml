@@ -95,7 +95,7 @@ jobs:
     with:
       CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
       COMMIT_SHA: ${{ github.sha }}
-      IS_PROMOTION: ${{ contains(github.ref_name, '-beta.') }}
+      IS_PROMOTION: ${{ !contains(github.ref_name, '-test.') }}
 
   publish-services:
     needs: [wait-for-packages, determine-environment]
