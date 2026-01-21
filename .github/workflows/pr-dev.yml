@@ -17,5 +17,3 @@ jobs:
     needs: build
     uses: ./.github/workflows/action-test.yml
 
-  # Note: Versioning now happens on release branches
-  # See release-branch.yml workflow
