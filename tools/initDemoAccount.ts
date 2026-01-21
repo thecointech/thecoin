@@ -11,7 +11,7 @@ import { CurrencyCode } from "@thecointech/fx-rates";
 import { SendFakeDeposit, emailCacheFile } from '@thecointech/email-fake-deposit';
 import { writeFileSync } from "fs";
 import { loadAndMergeHistory } from '@thecointech/tx-blockchain';
-import { AddressLike } from "ethers";
+import type { AddressLike } from "ethers";
 
 // Always delete any existing emails
 //execSync("yarn dev:live", { stdio: "inherit", cwd: "../libs/email-fake-deposit" });

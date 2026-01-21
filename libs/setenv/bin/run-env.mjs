@@ -17,6 +17,15 @@ function sliceArgs(args, name, def) {
   return def;
 }
 
+// CONFIG_NAME Precedence:
+// 1. Command line argument (cfg=...)
+// 2. Environment variable (CONFIG_NAME)
+// 3. Default "development"
+//
+// The resolved configuration name is explicitly forced into the child process environment,
+// ensuring that CLI args override any environment variables or file-based settings.
+// The .env files include a CONFIG_NAME setting but it's no longer relied on.
+
 let args = process.argv.slice(2);
 const config = sliceArgs(args, "cfg", process.env.CONFIG_NAME ?? "development");
 let executable = sliceArgs(args, "exec", "node");
@@ -53,12 +62,14 @@ const findTsConfig = async () => {
 }
 
 const TS_NODE_PROJECT = process.env.TS_NODE_PROJECT ?? await findTsConfig();
-const { CONFIG_NAME, ...rest } = process.env;
 const env = {
   NODE_NO_WARNINGS: 1,
   TS_NODE_PROJECT,
   ...getEnvVars(config),
-  ...rest,
+  ...process.env,
+  // In circumstances where we have no .env files (eg google cloud)
+  // we pass this through to ensure it is not lost.
+  CONFIG_NAME: config,
 }
 
 const nodeArgs = [];
@@ -89,7 +100,7 @@ else {
   nodeArgs.push(`--loader=${new URL("ncr-js.mjs", import.meta.url).href}`);
 }
 
-env.NODE_OPTIONS=`${env.NODE_OPTIONS ?? ""} ${nodeArgs.join(" ")}`;
+env.NODE_OPTIONS = `${env.NODE_OPTIONS ?? ""} ${nodeArgs.join(" ")}`;
 
 // If this is yarn script?
 if (executable != "node") {
