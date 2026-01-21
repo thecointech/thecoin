@@ -3,11 +3,6 @@ name: Build and Test
 on:
   pull_request:
     branches: [ dev, main ]
-  push:
-    branches:
-      - dev
-      - main
-      - '!refs/pull/*/merge'
 
 # Cancel any in-progress job or run
 concurrency:
@@ -22,5 +17,3 @@ jobs:
     needs: build
     uses: ./.github/workflows/action-test.yml
 
-  # Note: Versioning now happens on release branches
-  # See release-branch.yml workflow
