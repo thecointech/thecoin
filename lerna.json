@@ -7,21 +7,26 @@
       "message": "chore(release): publish",
       "registry": "https://npm.pkg.github.com",
       "allowBranch": [
-        "publish/*"
+        "publish/*",
+        "main",
+        "dev"
       ]
     },
     "version": {
       "noChangelog": true,
       "allowBranch": [
-        "publish/*"
+        "publish/*",
+        "main",
+        "dev"
       ],
+      "createRelease": "github",
       "ignoreChanges": [
         "**/__fixtures__/**",
         "**/__tests__/**",
         "**/*.test.*",
         "**/*.md"
       ],
-      "message": "chore(release): publish %s"
+      "message": "chore(release): publish %s [skip ci]"
     }
   }
 }

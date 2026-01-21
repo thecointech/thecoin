@@ -1,0 +1,161 @@
+name: Deploy on Tag
+
+on:
+  push:
+    tags:
+      - 'v*.*.*-test.*'
+      - 'v*.*.*-beta.*'
+      - 'v*.*.*'
+
+# Prevent multiple deployments of the same tag from running simultaneously
+# but allow them to queue rather than canceling in-progress deployments
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: false  # Don't cancel deployments in progress
+
+jobs:
+  determine-environment:
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.parse.outputs.env }}
+      is_prerelease: ${{ steps.parse.outputs.prerelease }}
+    steps:
+      - name: Parse tag to determine environment
+        id: parse
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          echo "Deploying tag: $TAG"
+
+          if [[ "$TAG" =~ -test\. ]]; then
+            echo "env=prodtest" >> "$GITHUB_OUTPUT"
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+            echo "Deploying to: prodtest"
+          elif [[ "$TAG" =~ -beta\. ]]; then
+            echo "env=prodbeta" >> "$GITHUB_OUTPUT"
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+            echo "Deploying to: prodbeta"
+          else
+            echo "env=prod" >> "$GITHUB_OUTPUT"
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+            echo "Deploying to: prod"
+          fi
+
+  build:
+    needs: determine-environment
+    uses: ./.github/workflows/action-build.yml
+
+  test:
+    needs: build
+    uses: ./.github/workflows/action-test.yml
+
+  # Publish packages only for test tags (initial publish)
+  publish-packages-test:
+    if: contains(github.ref_name, '-test.')
+    needs: test
+    permissions:
+      contents: write
+      packages: write
+    uses: ./.github/workflows/action-publish-packages.yml
+    with:
+      CONFIG_NAME: prodtest
+
+  # Graduate packages for production tags
+  publish-packages-prod:
+    if: needs.determine-environment.outputs.is_prerelease == 'false'
+    needs: [test, determine-environment]
+    permissions:
+      contents: write
+      packages: write
+    uses: ./.github/workflows/action-publish-packages.yml
+    with:
+      CONFIG_NAME: prod
+
+  # Wait for package publishing to complete before deploying
+  wait-for-packages:
+    needs: [publish-packages-test, publish-packages-prod, determine-environment]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check package publish status
+        run: |
+          TEST_RESULT="${{ needs.publish-packages-test.result }}"
+          PROD_RESULT="${{ needs.publish-packages-prod.result }}"
+          IS_PRERELEASE="${{ needs.determine-environment.outputs.is_prerelease }}"
+          IS_TEST_TAG="${{ contains(github.ref_name, '-test.') }}"
+
+          echo "Package publish results:"
+          echo "  Test job: $TEST_RESULT"
+          echo "  Prod job: $PROD_RESULT"
+          echo ""
+
+          # Determine which job was required for this tag
+          if [ "$IS_PRERELEASE" = "true" ]; then
+            if [ "$IS_TEST_TAG" = "true" ]; then
+              echo "Test tag - checking test package publish"
+              if [ "$TEST_RESULT" != "success" ] && [ "$TEST_RESULT" != "skipped" ]; then
+                echo "❌ Test package publish failed: $TEST_RESULT"
+                exit 1
+              fi
+              echo "✅ Test packages published successfully"
+            else
+              echo "Beta tag - reusing test packages (no publish required)"
+            fi
+          else
+            echo "Prod tag - checking prod package graduation"
+            if [ "$PROD_RESULT" != "success" ] && [ "$PROD_RESULT" != "skipped" ]; then
+              echo "❌ Prod package graduation failed: $PROD_RESULT"
+              exit 1
+            fi
+            echo "✅ Packages graduated successfully"
+          fi
+
+  publish-docker:
+    needs: [wait-for-packages, determine-environment]
+    uses: ./.github/workflows/action-publish-docker.yml
+    secrets: inherit
+    with:
+      CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
+      COMMIT_SHA: ${{ github.sha }}
+      IS_PROMOTION: ${{ !contains(github.ref_name, '-test.') }}
+
+  publish-services:
+    needs: [wait-for-packages, determine-environment]
+    uses: ./.github/workflows/action-publish-services.yml
+    secrets: inherit
+    with:
+      CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
+      COMMIT_SHA: ${{ github.sha }}
+
+  publish-sites:
+    needs: [wait-for-packages, determine-environment]
+    uses: ./.github/workflows/action-publish-sites.yml
+    secrets: inherit
+    with:
+      CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
+      COMMIT_SHA: ${{ github.sha }}
+
+  smoke-tests:
+    needs: [publish-services, publish-sites, determine-environment]
+    uses: ./.github/workflows/action-smoke-tests.yml
+    secrets: inherit
+    with:
+      CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
+
+  notify-success:
+    needs: [smoke-tests, determine-environment]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deployment successful
+        run: |
+          echo "✅ Successfully deployed ${{ github.ref_name }} to ${{ needs.determine-environment.outputs.environment }}"
+          echo "Tag: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Environment: ${{ needs.determine-environment.outputs.environment }}"
+
+  cleanup:
+    needs: [smoke-tests, determine-environment]
+    # Only cleanup test environments
+    if: needs.determine-environment.outputs.environment == 'prodtest'
+    uses: ./.github/workflows/action-cleanup-old-packages.yml
+    secrets: inherit

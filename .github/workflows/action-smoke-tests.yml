@@ -1,0 +1,145 @@
+name: Run Smoke Tests
+
+on:
+  workflow_call:
+    inputs:
+      CONFIG_NAME:
+        required: true
+        type: string
+        description: 'Environment to test (prodtest, prodbeta, prod)'
+
+jobs:
+  smoke-test-sites:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.CONFIG_NAME }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: corepack enable
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.19'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Load environment and test site-landing
+        run: |
+          echo "Testing site-landing for ${{ inputs.CONFIG_NAME }}"
+          # Load environment variables and extract URL_SITE_LANDING
+          URL=$(yarn run-env cfg=${{ inputs.CONFIG_NAME }} node -e "console.log(process.env.URL_SITE_LANDING)")
+
+          echo "Checking $URL"
+          response=$(curl -s -o /dev/null -w "%{http_code}" "$URL" || echo "000")
+
+          if [ "$response" = "200" ]; then
+            echo "✅ Site is up (HTTP $response)"
+          else
+            echo "❌ Site returned HTTP $response"
+            exit 1
+          fi
+        timeout-minutes: 2
+
+      - name: Load environment and test site-app
+        run: |
+          echo "Testing site-app for ${{ inputs.CONFIG_NAME }}"
+          # Load environment variables and extract URL_SITE_APP
+          URL=$(yarn run-env cfg=${{ inputs.CONFIG_NAME }} node -e "console.log(process.env.URL_SITE_APP)")
+
+          echo "Checking $URL"
+          response=$(curl -s -o /dev/null -w "%{http_code}" "$URL" || echo "000")
+
+          if [ "$response" = "200" ]; then
+            echo "✅ Site is up (HTTP $response)"
+          else
+            echo "❌ Site returned HTTP $response"
+            exit 1
+          fi
+        timeout-minutes: 2
+
+  smoke-test-services:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.CONFIG_NAME }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: corepack enable
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.19'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Load environment and test rates-service
+        run: |
+          echo "Testing rates-service for ${{ inputs.CONFIG_NAME }}"
+          # Load environment variables and extract URL_SERVICE_RATES
+          # Using /rates/124 as health check (primary function of service)
+          SERVICE_URL=$(yarn run-env cfg=${{ inputs.CONFIG_NAME }} node -e "console.log(process.env.URL_SERVICE_RATES + '/rates/124')")
+
+          echo "Checking $SERVICE_URL"
+          response=$(curl -s -o /dev/null -w "%{http_code}" "$SERVICE_URL" || echo "000")
+
+          if [ "$response" = "200" ]; then
+            echo "✅ Rates service is healthy (HTTP $response)"
+          else
+            echo "❌ Rates service returned HTTP $response"
+            exit 1
+          fi
+        timeout-minutes: 2
+
+      - name: Load environment and test broker-service
+        run: |
+          echo "Testing broker-service for ${{ inputs.CONFIG_NAME }}"
+          # Load environment variables and extract URL_SERVICE_BROKER
+          # Using /status endpoint which returns broker info
+          SERVICE_URL=$(yarn run-env cfg=${{ inputs.CONFIG_NAME }} node -e "console.log(process.env.URL_SERVICE_BROKER + '/status')")
+
+          echo "Checking $SERVICE_URL"
+          response=$(curl -s -o /dev/null -w "%{http_code}" "$SERVICE_URL" || echo "000")
+
+          if [ "$response" = "200" ]; then
+            echo "✅ Broker service is healthy (HTTP $response)"
+          else
+            echo "❌ Broker service returned HTTP $response"
+            exit 1
+          fi
+        timeout-minutes: 2
+
+  smoke-test-summary:
+    needs: [smoke-test-sites, smoke-test-services]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Deployment verification complete
+        run: |
+          echo "✅ Smoke tests completed for ${{ inputs.CONFIG_NAME }}"
+
+          # Check actual results
+          SITES_RESULT="${{ needs.smoke-test-sites.result }}"
+          SERVICES_RESULT="${{ needs.smoke-test-services.result }}"
+
+          echo ""
+          echo "Results:"
+          echo "  Sites: $SITES_RESULT"
+          echo "  Services: $SERVICES_RESULT"
+          echo ""
+
+          if [ "$SITES_RESULT" = "success" ] && [ "$SERVICES_RESULT" = "success" ]; then
+            echo "✅ All critical services are responding"
+          elif [ "$SITES_RESULT" = "success" ]; then
+            echo "⚠️ Sites are up but some services may have issues (continue-on-error)"
+          elif [ "$SERVICES_RESULT" = "success" ]; then
+            echo "❌ Sites failed but services are responding"
+            exit 1
+          else
+            echo "❌ Both sites and services had issues"
+            exit 1
+          fi
