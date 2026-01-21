@@ -34,7 +34,7 @@ describe('validateUberAction', () => {
         expect(result).toBe(true);
     });
 
-    test('should throw for old transfer in default env', async () => {
+    test('should throw for old transfer in prod env', async () => {
         const transfer = await createTransfer(oldTime);
         process.env.CONFIG_NAME = 'prod'; // Ensure strict mode
         await expect(validateUberAction(transfer)).rejects.toThrow();
