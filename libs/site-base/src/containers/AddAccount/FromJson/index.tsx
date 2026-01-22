@@ -5,6 +5,7 @@ import { UploadWallet, UploadData } from "@thecointech/shared";
 import { defineMessages, FormattedMessage } from "react-intl";
 import { Link, useNavigate } from "react-router";
 import { AccountMap } from '@thecointech/redux-accounts';
+import { useFromQuery } from '../utils';
 import styles from './styles.module.less';
 
 const translations = defineMessages({
@@ -19,10 +20,11 @@ const translations = defineMessages({
 export const FromJson = () => {
   const accountsApi = AccountMap.useApi();
   const navigate = useNavigate();
+  const redirectTarget = useFromQuery('/accounts');
 
   const onUpload = (data: UploadData) => {
     accountsApi.addAccount(data.name, data.wallet.address, data.wallet);
-    navigate("/accounts");
+    navigate(redirectTarget);
   }
 
   return (

@@ -7,11 +7,17 @@ import icon from './images/google.svg'
 
 const text = defineMessage({ defaultMessage: "Load from Google Drive", description: "Store Account: Option to store on GDrive" });
 
-export const GDriveRestore = () => {
+type Props = {
+  query: string;
+}
+
+export const GDriveRestore = ({ query }: Props) => {
   const [token, setToken] = useState(undefined as MaybeString);
-  const [loading, doTransmit] = useGoogle()
+  const [loading, doTransmit] = useGoogle();
+  const preservedQuery = query ? `&${query.slice(1)}` : '';
+
   return token
-    ? <Navigate to={`/addAccount/restore/list?token=${token}`} />
+    ? <Navigate to={`/addAccount/restore/list?token=${token}${preservedQuery}`} />
     : <ProviderChoice
         onClick={() => doTransmit(setToken)}
         loading={loading}

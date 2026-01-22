@@ -34,13 +34,14 @@ type Props = {
 export const RestoreList = ({url}: Props) => {
 
   const [wallets, setWallets] = useState(undefined as (GoogleWalletItem[]) | undefined)
-  const [redirect, setRedirect] = useState('');
   const accountsApi = AccountMap.useApi();
   const accounts = AccountMap.useAsArray();
+  const [redirect, setRedirect] = useState('');
 
   ///////////////////////////////////////////////
   // Load Wallets
   const token = getUrlParameterByName('token', url);
+
   useEffect(() => {
     if (token) {
       const api = GetSecureApi();
@@ -52,16 +53,17 @@ export const RestoreList = ({url}: Props) => {
 
   // Set wallet into local storage
   const onRestore = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, data: ButtonProps) => {
-    event?.preventDefault();
-    const loadable: LoadingWallet = data.wallet;
-    var { name, wallet, exists } = loadable;
-    if (exists) {
-      accountsApi.setActiveAccount(wallet.address);
-      setRedirect('/');
+    if (!data.value) {
+      throw new Error("Invalid button click");
     }
-    else {
-      accountsApi.addAccount(name, wallet.address, wallet);
-    }
+    const idx = data.value as number;
+    const account = parseWallets(wallets, accounts)[idx];
+    accountsApi.addAccount(account.name, account.address, account.wallet);
+
+    // Inline redirect logic (can't use useFromQuery hook here)
+    const from = new URLSearchParams(window.location.search).get('from');
+    const redirectTarget = from ? decodeURIComponent(from) : '/';
+    setRedirect(redirectTarget);
   }
 
   ///////////////////////////////////////////////

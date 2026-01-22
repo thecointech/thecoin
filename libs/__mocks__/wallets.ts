@@ -3,6 +3,7 @@ import wallet1 from './wallet1.json' with { type: "json" }
 import wallet2 from './wallet2.json' with { type: "json" }
 
 // Wallets returned by GDrive (either mocked googleapis or broker-service directly)
+// password is "password"
 export const wallets = [
   {
     id: "0",

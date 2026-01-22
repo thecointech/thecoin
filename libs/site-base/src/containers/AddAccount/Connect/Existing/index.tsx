@@ -2,7 +2,7 @@ import React from "react";
 import { Connect } from "../../Connect";
 import { defineMessages, FormattedMessage } from "react-intl";
 import { Header, Container } from "semantic-ui-react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { Decoration } from "../../Decoration";
 import styles from '../styles.module.less';
 import { ButtonPrimary } from "../../../../components/Buttons";
@@ -23,6 +23,8 @@ const translations = defineMessages({
 });
 
 export const Existing = () => {
+  const location = useLocation();
+  const preservedQuery = location.search;
 
   return (
     <Container className={styles.content}>
@@ -36,7 +38,7 @@ export const Existing = () => {
       <div className={`${styles.createAccountContent} x8spaceBefore x12spaceAfter`} >
           <FormattedMessage {...translations.explanation} />
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <ButtonPrimary as={Link} to="/addAccount/generate/intro" size='medium' >
+          <ButtonPrimary as={Link} to={`/addAccount/generate/intro${preservedQuery}`} size='medium' >
             <FormattedMessage {...translations.buttonCreateAccount} />
           </ButtonPrimary>
       </div>

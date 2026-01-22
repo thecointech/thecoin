@@ -11,6 +11,7 @@ import { ButtonPrimary } from '../../../components/Buttons';
 import { AccountMap } from '@thecointech/redux-accounts';
 import styles from './styles.module.less';
 import { CompleteInit } from '../CompleteInit';
+import { useLocation } from 'react-router';
 
 let _isCancelled = false;
 const setCancelled = () => _isCancelled = true;
@@ -35,17 +36,17 @@ const translations = defineMessages({
 
 export const Generate = () => {
 
+  const [wallet, setWallet] = useState(undefined as Wallet | undefined);
+  const [referral, setReferral] = useState(undefined as MaybeString);
   const [name, setName] = useState(undefined as MaybeString);
   const [password, setPassword] = useState(undefined as MaybeString);
-  const [referral, setReferral] = useState(undefined as MaybeString);
+  const accountsApi = AccountMap.useApi();
+
   const [progress, setProgress] = useState(undefined as MaybeNumber);
   const [forceValidate, setForceValidate] = useState(false);
-
-  const [wallet, setWallet] = useState<BaseWallet|undefined>();
-
+  const { search } = useLocation()
   ////////////////////////////////
   // Callback to actually generate the account
-  const accountsApi = AccountMap.useApi();
   const onGenerate = async () => {
     if (!(password && referral && name)) {
       setForceValidate(true);
@@ -66,8 +67,10 @@ export const Generate = () => {
 
   // Create a new component to finish initialization.  This
   // is because we cannot add additional hooks to this component to start the account
-  if (wallet)
-    return <CompleteInit signer={wallet} address={wallet.address} redirect={'/addAccount/store'} />
+  if (wallet) {
+    const nextStep = `/addAccount/store${search}`;
+    return <CompleteInit signer={wallet} address={wallet.address} redirect={nextStep} />
+  }
   ////////////////////////////////
 
   // const cbCancel = (progress && progress < 100)

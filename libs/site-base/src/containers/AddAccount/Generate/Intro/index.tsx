@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Header, Grid, Container, List } from "semantic-ui-react";
 import { defineMessages, FormattedMessage } from "react-intl";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 import styles from './styles.module.less';
 import { Decoration } from "../../Decoration";
@@ -51,6 +51,9 @@ const translations = defineMessages({
 });
 
 export const Intro = () => {
+  const location = useLocation();
+  const preservedQuery = location.search;
+
   const [passwordTextVisibility, setPasswordTextVisibility] = useState(false);
   const [accountTextVisibility, setAccountTextVisibility] = useState(false);
   return (
@@ -80,7 +83,7 @@ export const Intro = () => {
         <p className={ `x4spaceBefore` }>
           <FormattedMessage {...translations.proud} />
         </p>
-      <ButtonPrimary as={Link} to="/addAccount/generate" size="medium" className={ `x4spaceBefore` }>
+      <ButtonPrimary as={Link} to={`/addAccount/generate${preservedQuery}`} size="medium" className={ `x4spaceBefore` }>
         <FormattedMessage {...translations.buttonGo} />
       </ButtonPrimary>
       <Decoration />
