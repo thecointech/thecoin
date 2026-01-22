@@ -16,7 +16,7 @@ export function useFromQuery(fallback: string): string {
       const decoded = decodeURIComponent(from);
       const url = new URL(decoded, window.location.origin);
       if (url.origin === window.location.origin) {
-        return url.toString();
+        return decoded;
       }
     } catch {
       // keep default
