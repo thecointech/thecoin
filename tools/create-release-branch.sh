@@ -11,9 +11,25 @@ NC='\033[0m' # No Color
 
 # Parse arguments
 DRY_RUN=false
-if [ "$1" == "--dry-run" ]; then
-  DRY_RUN=true
-fi
+MANUAL_VERSION=""
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --dry-run)
+      DRY_RUN=true
+      shift
+      ;;
+    --version)
+      MANUAL_VERSION="$2"
+      shift 2
+      ;;
+    *)
+      echo -e "${RED}❌ Unknown option: $1${NC}"
+      echo "Usage: $0 [--dry-run] [--version X.Y.Z]"
+      exit 1
+      ;;
+  esac
+done
 
 echo -e "${BLUE}🚀 Release Branch Creator${NC}"
 echo ""
@@ -56,29 +72,38 @@ trap 'rm -rf "$TEMP_DIR"' EXIT
 
 cd "$(git rev-parse --show-toplevel)"
 
-# Run Lerna version in dry-run mode
-LERNA_OUTPUT=$(yarn lerna version \
-  --conventional-commits \
-  --conventional-prerelease \
-  --preid test \
-  --no-git-tag-version \
-  --no-push \
-  --yes \
-  2>&1 || true)
+# Determine version
+if [ -n "$MANUAL_VERSION" ]; then
+  echo -e "${YELLOW}📌 Using manual version: $MANUAL_VERSION${NC}"
+  NEXT_VERSION="$MANUAL_VERSION"
+else
+  echo -e "${YELLOW}🔍 Running Lerna to determine next version...${NC}"
 
-# Extract version from output
-# Look for lines like "lerna info versioning independent" or package version changes
-NEXT_VERSION=$(echo "$LERNA_OUTPUT" | grep -Eo 'v?[0-9]+\.[0-9]+\.[0-9]+(-test\.[0-9]+)?' | head -1)
-# Clean up the dry run (restore package.json files)
-# Check if cleanup would remove untracked files
-if [ -n "$(git status --porcelain | grep '^??')" ]; then
-  echo -e "${YELLOW}⚠️  Warning: Untracked files detected before cleanup${NC}"
-  git status --short
-  echo -e "${RED}❌ Error: Cannot proceed with untracked files present${NC}"
-  exit 1
+  # Run Lerna version in dry-run mode
+  LERNA_OUTPUT=$(yarn lerna version \
+    --conventional-commits \
+    --conventional-prerelease \
+    --preid test \
+    --no-git-tag-version \
+    --no-push \
+    --yes \
+    2>&1 || true)
+
+  # Extract version from output
+  # Look for lines like "lerna info versioning independent" or package version changes
+  NEXT_VERSION=$(echo "$LERNA_OUTPUT" | grep -Eo 'v?[0-9]+\.[0-9]+\.[0-9]+(-test\.[0-9]+)?' | head -1)
+
+  # Clean up the dry run (restore package.json files)
+  # Check if cleanup would remove untracked files
+  if [ -n "$(git status --porcelain | grep '^??')" ]; then
+    echo -e "${YELLOW}⚠️  Warning: Untracked files detected before cleanup${NC}"
+    git status --short
+    echo -e "${RED}❌ Error: Cannot proceed with untracked files present${NC}"
+    exit 1
+  fi
+  git checkout -- . 2>/dev/null || true
+  git clean -fd 2>/dev/null || true
 fi
-git checkout -- . 2>/dev/null || true
-git clean -fd 2>/dev/null || true
 
 if [ -z "$NEXT_VERSION" ]; then
   echo -e "${RED}❌ Error: Could not determine next version${NC}"
