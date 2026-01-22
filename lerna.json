@@ -17,7 +17,8 @@
       "allowBranch": [
         "publish/*",
         "main",
-        "dev"
+        "dev",
+        "release/*"
       ],
       "createRelease": "github",
       "ignoreChanges": [
