@@ -9,11 +9,7 @@ const text = defineMessage({
   description: "Dropbox link for the restore your account page"
 });
 
-type Props = {
-  query: string;
-}
-
-export const DropBoxRestore = ({ query: _ }: Props) =>
+export const DropBoxRestore = () =>
   <AvailableSoon>
     <ProviderChoice txt={text} imgSrc={icon} />
   </AvailableSoon>

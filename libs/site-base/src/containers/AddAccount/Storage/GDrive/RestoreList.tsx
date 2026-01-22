@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { getUrlParameterByName } from '@thecointech/utilities/urls';
+import React, { useEffect, useMemo, useState } from 'react';
 import { GoogleWalletItem } from '@thecointech/types';
 import { GetSecureApi } from '@thecointech/apis/broker';
 import { log } from '@thecointech/logging';
-import { ButtonProps, List } from 'semantic-ui-react';
+import { List } from 'semantic-ui-react';
 import { AccountMap } from '@thecointech/redux-accounts';
 import { AccountState } from '@thecointech/account';
 import { isPresent, NormalizeAddress } from '@thecointech/utilities';
 import { Wallet } from 'ethers';
 import { defineMessage, FormattedMessage } from 'react-intl';
-import { Navigate } from 'react-router';
+import { Navigate, useLocation } from 'react-router';
 import { PageHeader } from '../../../../components/PageHeader';
 import { ButtonPrimary } from '../../../../components/Buttons';
+import { useFromQuery } from '../../utils';
 import { clientUri } from './googleUtils';
 import styles from './styles.module.less';
 
@@ -21,21 +21,24 @@ const pleaseWait = defineMessage({ defaultMessage: 'Please wait; Loading Account
 const noAccounts = defineMessage({ defaultMessage: 'No accounts found', description: 'AccountsList: no accounts loaded from google' })
 const goTo = defineMessage({ defaultMessage: 'Go To This Account', description: 'AccountsList button to go to account' })
 const restore = defineMessage({ defaultMessage: 'Restore', description: 'AccountsList button to load account into site'})
-type Props = {
-  url?: string
-}
-export const RestoreList = ({url}: Props) => {
+
+export const RestoreList = () => {
 
   const [wallets, setWallets] = useState<GoogleWalletItem[]>()
   const accountsApi = AccountMap.useApi();
   const accounts = AccountMap.useAsArray();
   const [redirect, setRedirect] = useState('');
 
+  // Reuse the hook for it's hardening
+  const from = useFromQuery('/')
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+  const token = params.get('token');
+
   ///////////////////////////////////////////////
   // Load Wallets
-  const token = getUrlParameterByName('token', url);
-
   useEffect(() => {
+
     if (token) {
       const api = GetSecureApi();
       api.googleRetrieve(clientUri, { token })
@@ -44,19 +47,21 @@ export const RestoreList = ({url}: Props) => {
     }
   }, [token]);
 
-  // Set wallet into local storage
-  const onRestore = (_: React.MouseEvent<HTMLButtonElement, MouseEvent>, data: ButtonProps) => {
-    if (!data.value || wallets === undefined) {
-      throw new Error("Invalid button click");
-    }
-    const idx = data.value as number;
-    const account = parseWallets(wallets, accounts)[idx];
-    accountsApi.addAccount(account.name, account.address, account.wallet);
+  const parsed = useMemo(() => wallets
+    ? parseWallets(wallets, accounts)
+    : undefined,
+    [wallets, accounts]
+  );
 
-    // Inline redirect logic (can't use useFromQuery hook here)
-    const from = new URLSearchParams(window.location.search).get('from');
-    const redirectTarget = from ? decodeURIComponent(from) : '/';
-    setRedirect(redirectTarget);
+  // Set wallet into local storage
+  const onRestore = (wallet: ParsedWallet) => {
+    if (wallet.exists) {
+      accountsApi.setActiveAccount(wallet.address);
+      setRedirect(from);
+    }
+    else {
+      accountsApi.addAccount(wallet.name, wallet.address, wallet.wallet);
+    }
   }
 
   ///////////////////////////////////////////////
@@ -74,14 +79,14 @@ export const RestoreList = ({url}: Props) => {
           <PageHeader above={aboveTheTitle} title={title} />
           <div className={`${styles.listAccount} x10spaceAfter`}>
             <List divided verticalAlign='middle' >
-              {parseWallets(wallets, accounts)
-                .map(wallet => (
+              {
+                parsed?.map((wallet) => (
                   <List.Item key={wallet.id}>
                     <List.Content className={styles.accountRow}>
                       <div className={styles.nameWallet}>{wallet.name}</div>
                       <ButtonPrimary className={`${styles.buttonRestore} x2spaceBefore x2spaceAfter`} floated='right'
                         wallet={wallet}
-                        onClick={onRestore}
+                        onClick={() => onRestore(wallet)}
                       >
                         <FormattedMessage {...(
                           wallet.exists ? goTo : restore
@@ -89,14 +94,15 @@ export const RestoreList = ({url}: Props) => {
                       </ButtonPrimary>
                     </List.Content>
                   </List.Item>
-                )
-                )}
+                ))
+              }
             </List>
           </div>
         </>
       )
 }
 
+type ParsedWallet = ReturnType<typeof parseWallets>[number]
 const parseWallets = (wallets: GoogleWalletItem[], accounts: AccountState[]) => {
   let r = wallets.map(w => {
     if (!w.wallet) {

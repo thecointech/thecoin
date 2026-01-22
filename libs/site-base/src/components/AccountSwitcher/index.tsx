@@ -36,9 +36,7 @@ export const AccountSwitcher = () => {
   // otherwise encode current location as 'from' parameter
   const addAccountLink = location.pathname.startsWith("/addAccount")
     ? `/addAccount/${location.search}`
-    : location.search
-      ? `/addAccount/?from=${encodeURIComponent(location.pathname + location.search)}`
-      : '/addAccount/';
+    : `/addAccount/?from=${encodeURIComponent(location.pathname + location.search)}`
 
   // Build the title of the dropdown - LOGIN text or avatar and account name
   const trigger = activeAccount

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { getUrlParameterByName } from '@thecointech/utilities/urls';
 import { IWindow } from './googleUtils';
 import { NoTabStoreList } from './NoTabStoreList';
+import { useLocation } from 'react-router';
 
 const translations = defineMessages({
   tokenWaiting: {
@@ -19,10 +19,10 @@ const translations = defineMessages({
 export const GAuth = () => {
 
   const [message, setMessage] = useState(translations.tokenWaiting);
-  const [code, setCode] = useState<MaybeString>();
-
+  const [code, setCode] = useState<string>();
+  const { search } = useLocation();
   useEffect(() => {
-    const code = getUrlParameterByName('code');
+    const code = new URLSearchParams(search).get('code');
     if (code) {
       const opener = window.opener as IWindow;
       if (opener && opener.completeGauthLogin) {

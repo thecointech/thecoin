@@ -3,7 +3,7 @@ import { Grid } from 'semantic-ui-react';
 import { defineMessage, FormattedMessage } from 'react-intl';
 import styles from './styles.module.less';
 import sharedStyles from '../styles.module.less';
-import { Link, useLocation } from 'react-router';
+import { Link } from 'react-router';
 import { Decoration } from '../../Decoration';
 import { PageHeader } from '../../../../components/PageHeader';
 import { ButtonPrimary } from '../../../../components/Buttons';
@@ -39,8 +39,6 @@ const buttonCreateAccount = defineMessage({
 });
 
 export const Restore = () => {
-  const location = useLocation();
-  const query = location.search;
 
   return (
     <div className={styles.content}>
@@ -49,16 +47,16 @@ export const Restore = () => {
       <Grid stackable columns={4} id={sharedStyles.choices}>
         <Grid.Row>
           <Grid.Column>
-            <OfflineRestore query={query} />
+            <OfflineRestore />
           </Grid.Column>
           <Grid.Column>
-            <GDriveRestore query={query} />
+            <GDriveRestore />
           </Grid.Column>
           <Grid.Column>
-            <OneDriveRestore query={query} />
+            <OneDriveRestore />
           </Grid.Column>
           <Grid.Column>
-            <DropBoxRestore query={query} />
+            <DropBoxRestore />
           </Grid.Column>
         </Grid.Row>
       </Grid>

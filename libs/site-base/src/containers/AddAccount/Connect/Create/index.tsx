@@ -2,11 +2,12 @@ import React from "react";
 import { Connect } from "../../Connect";
 import { defineMessages, FormattedMessage, useIntl } from "react-intl";
 import { Header, Container, Message } from "semantic-ui-react";
-import { Link, useLocation } from "react-router";
+import { Link } from "react-router";
 import { getWeb3Type } from "@thecointech/shared/utils";
 import { Decoration } from "../../Decoration";
 import styles from '../styles.module.less';
 import { ButtonPrimary } from "../../../../components/Buttons";
+import { usePreserveQuery } from "containers/AddAccount/utils";
 
 const translations = defineMessages({
   aboveTheTitle : {
@@ -45,9 +46,8 @@ const translations = defineMessages({
 
 export const Create = () => {
   const intl = useIntl();
-  const location = useLocation();
+  const to = usePreserveQuery('/addAccount/generate/intro');
   const web3Type = getWeb3Type();
-  const preservedQuery = location.search;
 
   return (
     <Container className={styles.content}>
@@ -79,7 +79,7 @@ export const Create = () => {
       <div className={`x8spaceBefore x12spaceAfter`}>
           <FormattedMessage {...translations.explanation} />
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <ButtonPrimary as={Link} to={`/addAccount/generate/intro${preservedQuery}`} size='medium' >
+          <ButtonPrimary as={Link} to={to} size='medium' >
             <FormattedMessage {...translations.buttonCreateAccount} />
           </ButtonPrimary>
       </div>

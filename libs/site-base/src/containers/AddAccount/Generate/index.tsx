@@ -10,8 +10,8 @@ import { Decoration } from '../Decoration';
 import { ButtonPrimary } from '../../../components/Buttons';
 import { AccountMap } from '@thecointech/redux-accounts';
 import { CompleteInit } from '../CompleteInit';
-import { useLocation } from 'react-router';
 import styles from './styles.module.less';
+import { usePreserveQuery } from '../utils';
 
 let _isCancelled = false;
 const setCancelled = () => _isCancelled = true;
@@ -44,7 +44,8 @@ export const Generate = () => {
 
   const [progress, setProgress] = useState<number>();
   const [forceValidate, setForceValidate] = useState(false);
-  const { search } = useLocation()
+  const nextStep = usePreserveQuery('/addAccount/store');
+
   ////////////////////////////////
   // Callback to actually generate the account
   const onGenerate = async () => {
@@ -68,7 +69,6 @@ export const Generate = () => {
   // Create a new component to finish initialization.  This
   // is because we cannot add additional hooks to this component to start the account
   if (wallet) {
-    const nextStep = `/addAccount/store${search}`;
     return <CompleteInit signer={wallet} address={wallet.address} redirect={nextStep} />
   }
   ////////////////////////////////
