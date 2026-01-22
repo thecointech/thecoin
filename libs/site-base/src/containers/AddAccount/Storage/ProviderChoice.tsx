@@ -1,6 +1,6 @@
 import React, { type PropsWithChildren } from 'react';
 import { FormattedMessage, MessageDescriptor } from 'react-intl';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { Loader, Header, Dimmer } from 'semantic-ui-react'
 import styles from './styles.module.less';
 
@@ -13,7 +13,7 @@ type BaseProps = {
   loading?: boolean;
 } & InnerProps;
 type LinkProps = { link: string }
-type ClickProps = {onClick?: () => void}
+type ClickProps = { onClick?: () => void }
 // you can have either link or onClick, but not both
 type Props = BaseProps & (LinkProps | ClickProps);
 
@@ -31,10 +31,15 @@ export const ProviderChoice = ({ loading, ...props }: Props) =>
     }
   </div>
 
-const WithLink = ({ link, children }: PropsWithChildren<LinkProps>) =>
-  <Link to={link} >
-    {children}
-  </Link>
+const WithLink = ({ link, children }: PropsWithChildren<LinkProps>) => {
+  const { search } = useLocation();
+  const to = link.includes('?') ? (search ? `${link}&${search.slice(1)}` : link) : `${link}${search}`;
+  return (
+    <Link to={to} >
+      {children}
+    </Link>
+  )
+}
 
 const WithClick = ({ onClick, children }: PropsWithChildren<ClickProps>) =>
   <div onClick={onClick} className={styles.clickable}>

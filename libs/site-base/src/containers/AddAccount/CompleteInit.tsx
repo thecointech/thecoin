@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Account } from '@thecointech/shared/containers/Account';
-import { Navigate } from 'react-router';
+import { Navigate, useLocation } from 'react-router';
 import { NormalizeAddress } from '@thecointech/utilities'
-import {Signer } from 'ethers';
+import { Signer } from 'ethers';
 
 // Complete initialization of a new account
 // The address is passed in via query, and the
@@ -13,7 +13,7 @@ type Props = {
   address: string,
   redirect: string,
 }
-export const CompleteInit = ({signer, address, redirect}: Props) => {
+export const CompleteInit = ({ signer, address, redirect }: Props) => {
 
   // Inject reducers/sagas.
   const account = Account(NormalizeAddress(address));
@@ -28,7 +28,11 @@ export const CompleteInit = ({signer, address, redirect}: Props) => {
     }
   }, [])
 
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+  const from = params.get("from");
+
   return isInitialized
-    ? <Navigate to={redirect} />
+    ? <Navigate to={from ?? redirect} />
     : <div>Completing initialization</div>
 }

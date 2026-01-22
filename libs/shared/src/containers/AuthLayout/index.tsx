@@ -20,7 +20,7 @@ export const AuthLayout: React.FC = () => {
   if (!account) {
     // Navigate to the login/addAccount page, preserving the current path
     // in state/search so the user can return after logging in.
-    return <Navigate to={`/addAccount?from=${location.pathname}`} replace />;
+    return <Navigate to={`/addAccount?from=${encodeURIComponent(location.pathname + location.search)}`} replace />;
   }
 
   // 2. Inject Reducers/Sagas (Must be done unconditionally after the account check)

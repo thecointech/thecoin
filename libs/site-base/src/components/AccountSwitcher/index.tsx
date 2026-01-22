@@ -32,6 +32,15 @@ export const AccountSwitcher = () => {
     ? null
     : active;
 
+  // Preserve query context for harvester connection or other flows:
+  // - If already in addAccount, preserve existing query string
+  // - Otherwise, create 'from' parameter from current location
+  const addAccountLink = location.pathname.startsWith("/addAccount")
+    ? `/addAccount/${location.search}`
+    : location.search
+      ? `/addAccount/?from=${encodeURIComponent(location.pathname + location.search)}`
+      : '/addAccount/';
+
   // Build the title of the dropdown - LOGIN text or avatar and account name
   const trigger = activeAccount
     ? <><img src={getAvatarLink("14")} className={styles.avatars} /><span>{activeAccount.name}</span></>
@@ -49,11 +58,11 @@ export const AccountSwitcher = () => {
           accounts
             .sort((a, b) => a.name.localeCompare(b.name))
             .map(account => (
-              <AccountItem key={account.address} account={account} onClick={onClick} active={account.address == activeAccount?.address}/>
+              <AccountItem key={account.address} account={account} onClick={onClick} active={account.address == activeAccount?.address} />
             ))
         }
         <Dropdown.Divider />
-        <Dropdown.Item key='add' as={NavLink} to="/addAccount/">
+        <Dropdown.Item key='add' as={NavLink} to={addAccountLink}>
           <FormattedMessage {...addAccount} />
         </Dropdown.Item>
       </Dropdown.Menu>
@@ -66,14 +75,14 @@ type ActiveProps = {
   account: AccountState | undefined,
   active: boolean,
 }
-const AccountItem = ({active, onClick, account}: ActiveProps) =>
+const AccountItem = ({ active, onClick, account }: ActiveProps) =>
   account
     ? <Dropdown.Item
-        active={active}
-        key={account.address}
-        address={account.address}
-        onClick={onClick}
-      >
-        {account.name}
-      </Dropdown.Item>
+      active={active}
+      key={account.address}
+      address={account.address}
+      onClick={onClick}
+    >
+      {account.name}
+    </Dropdown.Item>
     : null

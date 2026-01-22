@@ -9,7 +9,7 @@ import { AccountState } from '@thecointech/account';
 import { isPresent, NormalizeAddress } from '@thecointech/utilities';
 import { Wallet } from 'ethers';
 import { defineMessage, FormattedMessage } from 'react-intl';
-import { Navigate } from 'react-router';
+import { Navigate, useLocation } from 'react-router';
 import { PageHeader } from '../../../../components/PageHeader';
 import { ButtonPrimary } from '../../../../components/Buttons';
 import { clientUri } from './googleUtils';
@@ -22,19 +22,20 @@ type LoadingWallet = {
   exists: boolean;
 }
 
-const aboveTheTitle = defineMessage({defaultMessage: "Restore Account", description: "The above the title text for the restore account page"});
-const title = defineMessage({defaultMessage: "Accounts in your Google Drive", description: "The main title for the restore account page"});
+const aboveTheTitle = defineMessage({ defaultMessage: "Restore Account", description: "The above the title text for the restore account page" });
+const title = defineMessage({ defaultMessage: "Accounts in your Google Drive", description: "The main title for the restore account page" });
 const pleaseWait = defineMessage({ defaultMessage: 'Please wait; Loading Accounts', description: 'Loading message when fetching wallets' })
 const noAccounts = defineMessage({ defaultMessage: 'No accounts found', description: 'AccountsList: no accounts loaded from google' })
 const goTo = defineMessage({ defaultMessage: 'Go To This Account', description: 'AccountsList button to go to account' })
-const restore = defineMessage({ defaultMessage: 'Restore', description: 'AccountsList button to load account into site'})
+const restore = defineMessage({ defaultMessage: 'Restore', description: 'AccountsList button to load account into site' })
 type Props = {
   url?: string
 }
-export const RestoreList = ({url}: Props) => {
+export const RestoreList = ({ url }: Props) => {
 
   const [wallets, setWallets] = useState(undefined as (GoogleWalletItem[]) | undefined)
   const [redirect, setRedirect] = useState('');
+  const { search } = useLocation();
   const accountsApi = AccountMap.useApi();
   const accounts = AccountMap.useAsArray();
 
@@ -45,7 +46,7 @@ export const RestoreList = ({url}: Props) => {
     if (token) {
       const api = GetSecureApi();
       api.googleRetrieve(clientUri, { token })
-        .then(({data}) => setWallets(data.wallets))
+        .then(({ data }) => setWallets(data.wallets))
         .catch((err: Error) => log.error(err, `Error fetching wallets: ${err.message}`))
     }
   }, [token]);
@@ -55,12 +56,15 @@ export const RestoreList = ({url}: Props) => {
     event?.preventDefault();
     const loadable: LoadingWallet = data.wallet;
     var { name, wallet, exists } = loadable;
+    const params = new URLSearchParams(search);
+    const from = params.get('from');
     if (exists) {
       accountsApi.setActiveAccount(wallet.address);
-      setRedirect('/');
+      setRedirect(from ?? '/');
     }
     else {
       accountsApi.addAccount(name, wallet.address, wallet);
+      if (from) setRedirect(from);
     }
   }
 
