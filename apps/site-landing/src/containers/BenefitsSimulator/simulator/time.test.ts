@@ -33,6 +33,7 @@ it('correctly straddles years', () => {
     expect(straddlesY(1983, 6, 1)).toBeFalsy();
   }
 
+  // TODO: Test 1928-02-28T00:00:00.000-05:00
   {
     // We should have 7 * 15 days straddling years in 15 years
     const randInt = (n: number) => 1 + Math.floor(Math.random() * n);
