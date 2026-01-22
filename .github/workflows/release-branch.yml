@@ -12,6 +12,8 @@ concurrency:
 
 jobs:
   build:
+    # Skip if this is Lerna's version commit (prevents duplicate runs)
+    if: "!contains(github.event.head_commit.message, 'chore(release): publish')"
     uses: ./.github/workflows/action-build.yml
 
   test:
