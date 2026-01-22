@@ -9,9 +9,9 @@ import { UxScoredPassword } from '@thecointech/shared/components/UX/ScoredPasswo
 import { Decoration } from '../Decoration';
 import { ButtonPrimary } from '../../../components/Buttons';
 import { AccountMap } from '@thecointech/redux-accounts';
-import styles from './styles.module.less';
 import { CompleteInit } from '../CompleteInit';
 import { useLocation } from 'react-router';
+import styles from './styles.module.less';
 
 let _isCancelled = false;
 const setCancelled = () => _isCancelled = true;
@@ -36,13 +36,13 @@ const translations = defineMessages({
 
 export const Generate = () => {
 
-  const [wallet, setWallet] = useState(undefined as Wallet | undefined);
-  const [referral, setReferral] = useState(undefined as MaybeString);
-  const [name, setName] = useState(undefined as MaybeString);
-  const [password, setPassword] = useState(undefined as MaybeString);
+  const [wallet, setWallet] = useState<BaseWallet>();
+  const [referral, setReferral] = useState<string>();
+  const [name, setName] = useState<string>();
+  const [password, setPassword] = useState<string>();
   const accountsApi = AccountMap.useApi();
 
-  const [progress, setProgress] = useState(undefined as MaybeNumber);
+  const [progress, setProgress] = useState<number>();
   const [forceValidate, setForceValidate] = useState(false);
   const { search } = useLocation()
   ////////////////////////////////
@@ -114,9 +114,6 @@ export const Generate = () => {
 }
 
 const generateNewWallet = async (password: string, setProgress: (v: number) => void) => {
-  // Generate a new wallet.  TODO: Detect if MetaMask is installed or active
-
-  // Generate new account
   setProgress(0);
 
   const newWallet = Wallet.createRandom();

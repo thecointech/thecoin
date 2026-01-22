@@ -15,13 +15,6 @@ import { ButtonPrimary } from '../../../../components/Buttons';
 import { clientUri } from './googleUtils';
 import styles from './styles.module.less';
 
-type LoadingWallet = {
-  wallet: Wallet;
-  name: string;
-  id: string;
-  exists: boolean;
-}
-
 const aboveTheTitle = defineMessage({defaultMessage: "Restore Account", description: "The above the title text for the restore account page"});
 const title = defineMessage({defaultMessage: "Accounts in your Google Drive", description: "The main title for the restore account page"});
 const pleaseWait = defineMessage({ defaultMessage: 'Please wait; Loading Accounts', description: 'Loading message when fetching wallets' })
@@ -33,7 +26,7 @@ type Props = {
 }
 export const RestoreList = ({url}: Props) => {
 
-  const [wallets, setWallets] = useState(undefined as (GoogleWalletItem[]) | undefined)
+  const [wallets, setWallets] = useState<GoogleWalletItem[]>()
   const accountsApi = AccountMap.useApi();
   const accounts = AccountMap.useAsArray();
   const [redirect, setRedirect] = useState('');
@@ -52,8 +45,8 @@ export const RestoreList = ({url}: Props) => {
   }, [token]);
 
   // Set wallet into local storage
-  const onRestore = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, data: ButtonProps) => {
-    if (!data.value) {
+  const onRestore = (_: React.MouseEvent<HTMLButtonElement, MouseEvent>, data: ButtonProps) => {
+    if (!data.value || wallets === undefined) {
       throw new Error("Invalid button click");
     }
     const idx = data.value as number;
@@ -116,7 +109,8 @@ const parseWallets = (wallets: GoogleWalletItem[], accounts: AccountState[]) => 
       wallet,
       exists: !!accounts.find(account => account.address === address),
       id: w.id.id,
-      name: w.id.name?.split('.wallet')[0] ?? w.id.id
+      name: w.id.name?.split('.wallet')[0] ?? w.id.id,
+      address,
     }
   });
   return r
