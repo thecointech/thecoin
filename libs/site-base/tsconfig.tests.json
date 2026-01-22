@@ -3,5 +3,5 @@
   "compilerOptions": {
     "types": ["webpack-dev-server"],
   },
-  "include": ["**/*.test.*", "scripts/**.ts", "internal/**/*", "**/*.stories.*", "**/hardhat.d.ts"],
+  "include": ["**/*.test.*", "scripts/**.ts", "internal/**/*", "**/*.stories.*", "**/hardhat.d.ts", "src/global.d.ts"],
 }

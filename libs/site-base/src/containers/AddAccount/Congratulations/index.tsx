@@ -7,6 +7,7 @@ import styles from './styles.module.less';
 import illustration from './images/illust_congrats.svg';
 import { Decoration } from "../Decoration";
 import { ButtonPrimary } from "../../../components/Buttons";
+import { useFromQuery } from "../utils";
 
 const translations = defineMessages({
     aboveTheTitle : {
@@ -24,6 +25,7 @@ const translations = defineMessages({
   });
 
 export const Congratulations = () => {
+  const from = useFromQuery('/');
   return (
     <Container>
         <div className={`${styles.content} x6spaceBefore x10spaceAfter` }>
@@ -60,7 +62,7 @@ export const Congratulations = () => {
                 </Grid.Row>
                 <Grid.Row>
                     <Grid.Column textAlign='center' verticalAlign='middle' >
-                        <ButtonPrimary as={Link} to="/" size="medium">
+                        <ButtonPrimary as={Link} to={from} size="medium">
                             <FormattedMessage {...translations.goToAccount} />
                         </ButtonPrimary>
                     </Grid.Column>

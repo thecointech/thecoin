@@ -13,7 +13,7 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "build": "run -T run-s build:i18n build:src build:link",
-    "build:src": "run -T tsc -b \"tsconfig.build.json\"",
+    "build:src": "run -T tsc -b",
     "build:link": "node ../../tools/link-assets.mjs",
     "build:i18n": "run-s extract compile",
     "clean": "run -T run-p 'clean:*'",

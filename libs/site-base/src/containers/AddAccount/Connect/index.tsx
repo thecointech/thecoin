@@ -8,6 +8,7 @@ import { NameInput } from '../NewBaseClass/NameInput';
 import { ReferralInput, registerReferral } from '../NewBaseClass/ReferralInput';
 import { useNavigate } from 'react-router';
 import { ButtonPrimary } from '../../../components/Buttons';
+import { useFromQuery } from '../utils';
 import styles from '../styles.module.less';
 
 const translations = defineMessages({
@@ -24,6 +25,8 @@ export const Connect = () => {
 
   const accountsApi = AccountMap.useApi();
   const navigate = useNavigate();
+  const redirectTarget = useFromQuery('/');
+
   const onConnect = async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     if (!(referral && name)) {
@@ -34,8 +37,7 @@ export const Connect = () => {
     if (web3) {
       accountsApi.addAccount(name, web3.address, web3.signer);
       registerReferral(web3.address, referral);
-      // We redirect directly to the now-active account
-      navigate('/');
+      navigate(redirectTarget);
     }
 
     return true;

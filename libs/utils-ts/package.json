@@ -21,7 +21,7 @@
   "scripts": {
     "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
     "build": "run -T tsc -b",
-    "clean": "rimraf ./build && rimraf ./coverage",
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage",
     "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },

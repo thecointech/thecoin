@@ -32,6 +32,12 @@ export const AccountSwitcher = () => {
     ? null
     : active;
 
+  // Preserve query context - if already in addAccount flow, keep params;
+  // otherwise encode current location as 'from' parameter
+  const addAccountLink = location.pathname.startsWith("/addAccount")
+    ? `/addAccount/${location.search}`
+    : `/addAccount/?from=${encodeURIComponent(location.pathname + location.search)}`
+
   // Build the title of the dropdown - LOGIN text or avatar and account name
   const trigger = activeAccount
     ? <><img src={getAvatarLink("14")} className={styles.avatars} /><span>{activeAccount.name}</span></>
@@ -53,7 +59,7 @@ export const AccountSwitcher = () => {
             ))
         }
         <Dropdown.Divider />
-        <Dropdown.Item key='add' as={NavLink} to="/addAccount/">
+        <Dropdown.Item key='add' as={NavLink} to={addAccountLink}>
           <FormattedMessage {...addAccount} />
         </Dropdown.Item>
       </Dropdown.Menu>

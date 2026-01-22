@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header, Divider } from 'semantic-ui-react';
-import { Link, NavLink } from 'react-router';
+import { Link, NavLink, useLocation } from 'react-router';
 import styles from './styles.module.less';
 import { Decoration } from '../Decoration';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -28,6 +28,8 @@ const translations = defineMessages({
 });
 
 export const CreateExistingSwitch = () => {
+  const { search } = useLocation();
+
   return (
     <>
       <div id={ `${styles.buttonsContainer}` }>
@@ -37,20 +39,20 @@ export const CreateExistingSwitch = () => {
         <Header as="h1" className={` x12spaceAfter`}>
           <FormattedMessage {...translations.title} />
         </Header>
-        <ButtonPrimary as={NavLink} to="./generate/intro" className={styles.button}>
+        <ButtonPrimary as={NavLink} to={`./generate/intro${search}`} className={styles.button}>
           <FormattedMessage {...translations.buttonNewAccount} />
         </ButtonPrimary>
         <Divider horizontal>Or</Divider>
-        <ButtonSecondary as={NavLink} to="./restore/" className={styles.button}>
+        <ButtonSecondary as={NavLink} to={`./restore/${search}`} className={styles.button}>
           <FormattedMessage {...translations.buttonAccount} />
         </ButtonSecondary>
         <div className={`x8spaceBefore`}>
-            <Link className={styles.linkEthereum} to="./connect/create">
+            <Link className={styles.linkEthereum} to={`./connect/create${search}`}>
               <FormattedMessage {...translations.ethereumNewAccount} />
             </Link>
         </div>
         <div>
-            <Link className={styles.linkEthereum} to="./connect/exist">
+            <Link className={styles.linkEthereum} to={`./connect/exist${search}`}>
               <FormattedMessage {...translations.ethereumExistingAccount} />
             </Link>
         </div>
