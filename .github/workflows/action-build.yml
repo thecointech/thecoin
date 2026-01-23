@@ -5,6 +5,12 @@ name: Build
 
 on:
   workflow_call:
+    inputs:
+      DOWNLOAD_METADATA:
+        description: 'Whether to download deployment metadata artifact (only exists in tag deployments)'
+        required: false
+        type: boolean
+        default: false
 
 env:
   YARN_CHECKSUM_BEHAVIOR: ignore
@@ -38,8 +44,9 @@ jobs:
       run: yarn install --immutable --mode=skip-build
 
     - name: Download deployment metadata (if available)
+      # Only exists in tag-triggered deployments (deploy-on-tag.yml)
+      if: inputs.DOWNLOAD_METADATA
       uses: actions/download-artifact@v4
-      continue-on-error: true  # Artifact won't exist for PR builds
       with:
         name: deployment-metadata
         path: environments/

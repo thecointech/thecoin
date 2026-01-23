@@ -12,9 +12,6 @@ concurrency:
 
 jobs:
   build:
-    # Skip if this is Lerna's version commit (prevents duplicate runs)
-    # IMPORTANT: This must match the message in lerna.json → command.version.message
-    if: "!contains(github.event.head_commit.message, '[skip-release-action]')"
     uses: ./.github/workflows/action-build.yml
 
   test:
@@ -63,20 +60,23 @@ jobs:
 
       - name: Version and Create Tag
         run: |
-          # Create test prerelease tag for release branch
+          # Create test prerelease tag for release branch (don't push yet)
           yarn lerna version \
             --conventional-commits \
             --conventional-prerelease \
             --preid test \
+            --no-push \
             --yes \
             --create-release github
 
-          # Update deployment metadata in the same commit
+          # Update deployment metadata and add to the version commit
           # Strip prerelease suffix: 0.5.3-test.0 → 0.5.3
           node --experimental-strip-types ./tools/updateEnvVersion.ts --strip-prerelease
           git add environments/common.public.env
           git commit --amend --no-edit
-          git push --force-with-lease
+
+          # Push commit and tag together
+          git push --follow-tags
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
 

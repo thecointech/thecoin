@@ -69,6 +69,8 @@ jobs:
   build:
     needs: [determine-environment, update-metadata]
     uses: ./.github/workflows/action-build.yml
+    with:
+      DOWNLOAD_METADATA: true
 
   test:
     needs: build
