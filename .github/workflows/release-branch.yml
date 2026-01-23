@@ -70,17 +70,15 @@ jobs:
             --preid test \
             --yes \
             --create-release github
-        env:
-          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
 
-      - name: Update deployment metadata
-        run: |
-          # Update version and timestamp in common.public.env (for local builds)
+          # Update deployment metadata in the same commit
           # Strip prerelease suffix: 0.5.3-test.0 → 0.5.3
           node --experimental-strip-types ./tools/updateEnvVersion.ts --strip-prerelease
           git add environments/common.public.env
-          git commit -m "chore: update deployment metadata [skip-release-action]"
-          git push
+          git commit --amend --no-edit
+          git push --force-with-lease
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - name: Summary
         run: |

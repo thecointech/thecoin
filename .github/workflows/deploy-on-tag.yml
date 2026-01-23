@@ -93,7 +93,10 @@ jobs:
   # Wait for package publishing to complete before deploying
   wait-for-packages:
     needs: [publish-packages-test, publish-packages-prod, determine-environment]
-    if: always()
+    # Run unless workflow was cancelled or a package publish actually failed
+    # This is needed because beta tags do not publish packages (both jobs skip)
+    # Beta reuses test packages, so we still need to proceed with deployment
+    if: ${{ always() && !cancelled() && !failure() }}
     runs-on: ubuntu-latest
     steps:
       - name: Check package publish status
@@ -131,6 +134,8 @@ jobs:
 
   publish-docker:
     needs: [wait-for-packages, determine-environment]
+    # Explicit condition needed because wait-for-packages uses if: always()
+    if: ${{ always() && !cancelled() && !failure() }}
     uses: ./.github/workflows/action-publish-docker.yml
     secrets: inherit
     with:
@@ -140,6 +145,8 @@ jobs:
 
   publish-services:
     needs: [wait-for-packages, determine-environment]
+    # Explicit condition needed because wait-for-packages uses if: always()
+    if: ${{ always() && !cancelled() && !failure() }}
     uses: ./.github/workflows/action-publish-services.yml
     secrets: inherit
     with:
@@ -148,6 +155,8 @@ jobs:
 
   publish-sites:
     needs: [wait-for-packages, determine-environment]
+    # Explicit condition needed because wait-for-packages uses if: always()
+    if: ${{ always() && !cancelled() && !failure() }}
     uses: ./.github/workflows/action-publish-sites.yml
     secrets: inherit
     with:
@@ -156,6 +165,8 @@ jobs:
 
   smoke-tests:
     needs: [publish-services, publish-sites, determine-environment]
+    # Explicit condition needed because publish-services/publish-sites use if: always()
+    if: ${{ always() && !cancelled() && !failure() }}
     uses: ./.github/workflows/action-smoke-tests.yml
     secrets: inherit
     with:
@@ -163,6 +174,8 @@ jobs:
 
   notify-success:
     needs: [smoke-tests, determine-environment]
+    # Explicit condition needed because smoke-tests uses if: always()
+    if: ${{ always() && !cancelled() && !failure() }}
     runs-on: ubuntu-latest
     steps:
       - name: Deployment successful
@@ -174,7 +187,8 @@ jobs:
 
   cleanup:
     needs: [smoke-tests, determine-environment]
-    # Only cleanup test environments
-    if: needs.determine-environment.outputs.environment == 'prodtest'
+    # Explicit condition needed because smoke-tests uses if: always()
+    # Only cleanup test environments (prodtest)
+    if: ${{ always() && !cancelled() && !failure() && needs.determine-environment.outputs.environment == 'prodtest' }}
     uses: ./.github/workflows/action-cleanup-old-packages.yml
     secrets: inherit
