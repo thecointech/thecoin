@@ -41,8 +41,33 @@ jobs:
             echo "Deploying to: prod"
           fi
 
-  build:
+  update-metadata:
     needs: determine-environment
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.19'
+
+      - name: Update deployment metadata for this environment
+        run: |
+          # Update timestamp to actual deployment time
+          # Strip prerelease suffix: 0.5.3-test.0 → 0.5.3
+          node --experimental-strip-types ./tools/updateEnvVersion.ts
+          echo "Updated to version $(grep TC_APP_VERSION environments/common.public.env | cut -d'"' -f2) at $(grep TC_DEPLOYED_AT environments/common.public.env | cut -d'"' -f2)"
+
+      - name: Upload updated metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-metadata
+          path: environments/common.public.env
+
+  build:
+    needs: [determine-environment, update-metadata]
     uses: ./.github/workflows/action-build.yml
 
   test:
@@ -54,22 +79,16 @@ jobs:
     if: contains(github.ref_name, '-test.')
     needs: test
     permissions:
-      contents: write
       packages: write
     uses: ./.github/workflows/action-publish-packages.yml
-    with:
-      CONFIG_NAME: prodtest
 
   # Graduate packages for production tags
   publish-packages-prod:
     if: needs.determine-environment.outputs.is_prerelease == 'false'
     needs: [test, determine-environment]
     permissions:
-      contents: write
       packages: write
     uses: ./.github/workflows/action-publish-packages.yml
-    with:
-      CONFIG_NAME: prod
 
   # Wait for package publishing to complete before deploying
   wait-for-packages:

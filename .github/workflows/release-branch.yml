@@ -73,6 +73,15 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
 
+      - name: Update deployment metadata
+        run: |
+          # Update version and timestamp in common.public.env (for local builds)
+          # Strip prerelease suffix: 0.5.3-test.0 → 0.5.3
+          node --experimental-strip-types ./tools/updateEnvVersion.ts --strip-prerelease
+          git add environments/common.public.env
+          git commit -m "chore: update deployment metadata [skip-release-action]"
+          git push
+
       - name: Summary
         run: |
           LATEST_TAG=$(git describe --tags --abbrev=0)

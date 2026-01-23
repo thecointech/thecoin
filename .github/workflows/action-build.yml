@@ -37,6 +37,13 @@ jobs:
     - name: Install dependencies
       run: yarn install --immutable --mode=skip-build
 
+    - name: Download deployment metadata (if available)
+      uses: actions/download-artifact@v4
+      continue-on-error: true  # Artifact won't exist for PR builds
+      with:
+        name: deployment-metadata
+        path: environments/
+
     - name: Ensure ts-patch
       run: yarn postinstall
 
