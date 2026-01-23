@@ -27,7 +27,7 @@
         "**/*.test.*",
         "**/*.md"
       ],
-      "message": "chore(release): publish %s"
+      "message": "chore(release): publish %s [skip-release-action]"
     }
   }
 }

@@ -13,7 +13,8 @@ concurrency:
 jobs:
   build:
     # Skip if this is Lerna's version commit (prevents duplicate runs)
-    if: "!contains(github.event.head_commit.message, 'chore(release): publish')"
+    # IMPORTANT: This must match the message in lerna.json → command.version.message
+    if: "!contains(github.event.head_commit.message, '[skip-release-action]')"
     uses: ./.github/workflows/action-build.yml
 
   test:
@@ -28,10 +29,17 @@ jobs:
       contents: write
       packages: write
     steps:
+      - name: Generate Token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.TAG_BOT_APP_ID }}
+          private-key: ${{ secrets.TAG_BOT_PRIVATE_KEY }}
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.generate-token.outputs.token }}
 
       - run: corepack enable
 
@@ -63,7 +71,7 @@ jobs:
             --yes \
             --create-release github
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - name: Summary
         run: |
