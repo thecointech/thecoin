@@ -13,7 +13,6 @@
       ]
     },
     "version": {
-      "noChangelog": true,
       "allowBranch": [
         "publish/*",
         "main",
