@@ -170,7 +170,7 @@ echo -e "${YELLOW}📦 Creating release branch...${NC}"
 git checkout -b "$BRANCH_NAME"
 
 echo -e "${YELLOW}⬆️  Pushing to origin...${NC}"
-git push origin "$BRANCH_NAME"
+git push -u origin "$BRANCH_NAME"
 
 echo ""
 echo -e "${GREEN}✅ Release branch created successfully!${NC}"
