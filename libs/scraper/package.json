@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/scraper",
-  "version": "0.5.2",
+  "version": "0.5.3-test.0",
   "type": "module",
   "description": "The Coin: Automated scraper for TheCoin",
   "keywords": [
@@ -24,8 +24,8 @@
     "commitSimilar": "yarn run-env internal/commitSimilar.ts"
   },
   "dependencies": {
-    "@thecointech/async": "^0.5.1",
-    "@thecointech/logging": "^0.5.2",
+    "@thecointech/async": "^0.5.3-test.0",
+    "@thecointech/logging": "^0.5.3-test.0",
     "@web-std/file": "^3.0.3",
     "@xenova/transformers": "^2.14.0",
     "fastest-levenshtein": "^1.0.16",
@@ -37,7 +37,7 @@
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.5.2",
+    "@thecointech/jestutils": "^0.5.3-test.0",
     "@thecointech/scraper-archive": "workspace:^",
     "@thecointech/setenv": "workspace:^",
     "@types/fs-extra": "^11.0.4",

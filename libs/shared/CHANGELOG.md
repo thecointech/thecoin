@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.3-test.0](https://github.com/thecointech/thecoin/compare/v0.5.2...v0.5.3-test.0) (2026-01-24)
+
+
+### Bug Fixes
+
+* Add URL preservation when restoring/creating accounts, this allows the Harvester to pull accounts even if browser does not have local copy of account ([362cc1c](https://github.com/thecointech/thecoin/commit/362cc1cd0e608966bf07659075343f3c51818873))
+
+
+
+
+
 ## [0.5.2](https://github.com/thecointech/thecoin/compare/v0.5.2-test.0...v0.5.2) (2026-01-19)
 
 **Note:** Version bump only for package @thecointech/shared

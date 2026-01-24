@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.3-test.0](https://github.com/thecointech/thecoin/compare/v0.5.2...v0.5.3-test.0) (2026-01-24)
+
+
+### Bug Fixes
+
+* Add URL preservation when restoring/creating accounts, this allows the Harvester to pull accounts even if browser does not have local copy of account ([362cc1c](https://github.com/thecointech/thecoin/commit/362cc1cd0e608966bf07659075343f3c51818873))
+* allow release branches in lerna config ([4cc2e56](https://github.com/thecointech/thecoin/commit/4cc2e562ef7b2a6021e152b0fc84ca321d0dbe56))
+* deployment now -only- versions in release-branch, and updates common.public.env where necessary ([2beeb4e](https://github.com/thecointech/thecoin/commit/2beeb4ea047e9a68f6810116241bd624b0648ce8))
+* ensure `from` parameter as-is, avoid abs path or transforms from URL ([203b1b5](https://github.com/thecointech/thecoin/commit/203b1b548a3657f3329604ed65349d8effa776bd))
+* local release branch tracks remote ([732498f](https://github.com/thecointech/thecoin/commit/732498f38a3f242a33b01570871029e1ac701da0))
+* remove [skip ci], use token properties instead to limit recursive workflow calls ([c3d546a](https://github.com/thecointech/thecoin/commit/c3d546a84f5f6d8f4153317ae6531b0765ace2ea))
+* restore dropped CONFIG_NAME from Google services ([4ad802a](https://github.com/thecointech/thecoin/commit/4ad802a59152851c23531dcbcb24cc122d48af04))
+
+
+
+
+
 ## [0.5.2](https://github.com/thecointech/thecoin/compare/v0.5.2-test.0...v0.5.2) (2026-01-19)
 
 **Note:** Version bump only for package @thecointech/the-coin

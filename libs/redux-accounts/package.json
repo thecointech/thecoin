@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/redux-accounts",
-  "version": "0.5.2",
+  "version": "0.5.3-test.0",
   "private": true,
   "description": "TheCoin: Redux reducer for accounts",
   "type": "module",
@@ -35,11 +35,11 @@
     }
   },
   "dependencies": {
-    "@thecointech/account": "^0.5.2",
-    "@thecointech/logging": "^0.5.2",
-    "@thecointech/redux": "^0.5.2",
-    "@thecointech/signers": "^0.5.2",
-    "@thecointech/utilities": "^0.5.2",
+    "@thecointech/account": "^0.5.3-test.0",
+    "@thecointech/logging": "^0.5.3-test.0",
+    "@thecointech/redux": "^0.5.3-test.0",
+    "@thecointech/signers": "^0.5.3-test.0",
+    "@thecointech/utilities": "^0.5.3-test.0",
     "reselect": "5.1.1"
   }
 }
