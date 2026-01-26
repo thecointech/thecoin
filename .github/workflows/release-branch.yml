@@ -36,7 +36,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
 
       - run: corepack enable
 
@@ -59,6 +59,8 @@ jobs:
           name: build-artifacts
 
       - name: Version
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
           # Create test prerelease tag for release branch (don't push yet)
           yarn lerna version \
@@ -68,20 +70,20 @@ jobs:
             --yes \
             --no-push \
             --create-release github
-        env:
-          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - name: Push Version Commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Push commit using GITHUB_TOKEN to avoid triggering release-branch workflow again
-          git push origin HEAD:${{ github.ref_name }}
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
 
       - name: Push Version Tags
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
           # Push tags using the App Token to trigger deploy-on-tag workflow
-          git push https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git --tags
-        env:
-          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git --tags
 
       - name: Summary
         run: |
