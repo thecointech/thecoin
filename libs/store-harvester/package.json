@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/store-harvester",
-  "version": "0.5.3-test.0",
+  "version": "0.5.3-test.1",
   "private": true,
   "type": "module",
   "description": "Data storage for TheCoin Harvester",
@@ -18,8 +18,8 @@
   },
   "dependencies": {
     "@thecointech/async": "^0.5.3-test.0",
-    "@thecointech/logging": "^0.5.3-test.0",
-    "@thecointech/scraper-agent": "^0.5.3-test.0",
+    "@thecointech/logging": "^0.5.3-test.1",
+    "@thecointech/scraper-agent": "^0.5.3-test.1",
     "comdb": "^6.0.0-beta",
     "luxon": "3.3.0",
     "pouchdb": "^8.0.1"

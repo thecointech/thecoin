@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.3-test.1](https://github.com/thecointech/thecoin/compare/v0.5.3-test.0...v0.5.3-test.1) (2026-01-30)
+
+
+### Bug Fixes
+
+* added RequestId logging & Async context logging ([e5a36a8](https://github.com/thecointech/thecoin/commit/e5a36a847b0e83f1a2e020caeed29c1172365e38))
+
+
+
+
+
 ## [0.5.3-test.0](https://github.com/thecointech/thecoin/compare/v0.5.2...v0.5.3-test.0) (2026-01-24)
 
 **Note:** Version bump only for package @thecointech/rates-service

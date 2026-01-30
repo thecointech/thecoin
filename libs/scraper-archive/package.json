@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/scraper-archive",
-  "version": "0.5.3-test.0",
+  "version": "0.5.3-test.1",
   "private": true,
   "type": "module",
   "description": "The Coin: Utilities for working with testing pages in the archive",
