@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals'
 import { BunyanLogger } from '../src/logger';
 import { createLoggerProxy } from '../src/loggerContext';
-
+import '../src/loggerContextBrowser';
 export { LoggerContext } from '../src/loggerContext'
 
 // Global mock functions that can be accessed by tests
