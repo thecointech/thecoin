@@ -1,5 +1,6 @@
 import { BunyanLogger } from './logger';
 import { init_node } from './node';
+import './loggerContextNode'; // Auto-registers via static initialization block
 export { LoggerContext } from './loggerContext'
 
 const appName = process.env.LOG_NAME ?? process.env.CONFIG_NAME ?? "dev";
