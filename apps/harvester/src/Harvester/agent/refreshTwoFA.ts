@@ -9,6 +9,7 @@ import { AskUserLogin } from "./askUserLogin";
 import { getErrorMessage } from "@/BackgroundTask/selectors";
 import type { RendererBankType } from "@/Agent/state/types";
 import { AgentCallbacks } from "./agentCallbacks";
+import { copyProfile } from "@/GetStarted/profile";
 
 const TwoFARefreshTask = "twofaRefresh";
 
@@ -30,6 +31,13 @@ export async function twofaRefresh(type: RendererBankType, callback: BackgroundT
     sections: toProcess,
     target: `${config.name}-twofaRefresh`,
   });
+
+  // Force 2fa refresh by refreshing user profile
+  const didRefresh = await copyProfile((info) => logger.subTaskCallback(info), true);
+  if (!didRefresh) {
+    logger.complete({ error: "Failed to refresh profile" });
+    return false;
+  }
 
   try {
 

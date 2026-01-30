@@ -1,4 +1,4 @@
-import { installBrowser } from "@thecointech/scraper/puppeteer";
+import { installBrowser, removeBrowser } from "@thecointech/scraper/puppeteer";
 import { SimilarityPipeline } from "@thecointech/scraper/similarity";
 import { log } from "@thecointech/logging";
 import { BackgroundTaskCallback, SubTaskProgress, getErrorMessage } from "@/BackgroundTask";
@@ -8,7 +8,7 @@ import { mkdirSync } from "node:fs";
 import { copyProfile } from "./profile";
 import crypto from "node:crypto";
 
-export async function downloadRequired(callback: BackgroundTaskCallback, forceCopyProfile=false) {
+export async function downloadRequired(callback: BackgroundTaskCallback, forceRefresh=false) {
 
   log.info("Initialization: fetching required files");
   mkdirSync(rootFolder, { recursive: true })
@@ -27,8 +27,8 @@ export async function downloadRequired(callback: BackgroundTaskCallback, forceCo
     })
   }
 
-  const browser = downloadBrowser(onProgress);
-  const profile = copyProfile(onProgress, forceCopyProfile);
+  const browser = downloadBrowser(onProgress, forceRefresh);
+  const profile = copyProfile(onProgress, forceRefresh);
   const similarity = downloadSimilarity(onProgress);
   await Promise.all([browser, profile, similarity]);
 
@@ -40,9 +40,14 @@ export async function downloadRequired(callback: BackgroundTaskCallback, forceCo
 }
 
 // Make sure we have a compatible browser...
-async function downloadBrowser(onProgress: (info: SubTaskProgress) => void) {
+async function downloadBrowser(onProgress: (info: SubTaskProgress) => void, forceReinstall=false) {
   // Download a compatible browser.
   try {
+    if (forceReinstall) {
+      log.info("Forcing browser reinstallation");
+      await removeBrowser();
+      log.info("Existing installation removed");
+    }
     await installBrowser((bytes, total) => {
       onProgress({
         subTaskId: "chrome",
