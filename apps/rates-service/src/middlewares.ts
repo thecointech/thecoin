@@ -15,7 +15,7 @@ export function errorHandler(
       message: "Internal Server Error",
     });
   }
-  next();
+  next(err);
 }
 
 // Bundle log messages per-request
@@ -23,7 +23,8 @@ export function requestIdMiddleware(_req: Request, res: Response, next: NextFunc
   const requestId = crypto.randomUUID();
   res.setHeader('X-Request-Id', requestId);
   LoggerContext.run(() => {
-    new LoggerContext({ RequestId: requestId });
+    const ctx = new LoggerContext({ RequestId: requestId });
+    res.on('finish', () => ctx.dispose());
     next();
   });
 }

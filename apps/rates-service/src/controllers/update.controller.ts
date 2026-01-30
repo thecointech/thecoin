@@ -1,24 +1,19 @@
 import { Controller, Get, Route, Response, Tags } from '@tsoa/runtime';
 import { updateRates } from '../internals/rates';
+import { log } from '@thecointech/logging';
 
 @Route('')
 @Tags('Updates')
 export class UpdateController extends Controller {
 
   /**
-   * Get rates.
-   *
+   * Trigger a rates update.
    **/
   @Get('doUpdate')
   @Response('204', 'Success')
   @Response('500', 'unknown exception')
   async doUpdate() {
-    try {
-      return await updateRates();
-    } catch (e) {
-      console.error("Details fetch failed: " + JSON.stringify(e));
-      throw e;
-    }
+    return await updateRates();
   }
 
   /**
@@ -27,6 +22,7 @@ export class UpdateController extends Controller {
   @Get('keepAlive')
   @Response('204', 'Success')
   async keepAlive() {
+    log.info("Keep alive");
     return "Ok";
   }
 }
