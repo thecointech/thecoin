@@ -7,6 +7,7 @@ import styles from './styles.module.less';
 import { Decoration } from "../../Decoration";
 import { ButtonPrimary } from "../../../../components/Buttons";
 import { ModalOperation } from "@thecointech/shared/containers/ModalOperation";
+import { usePreserveQuery } from "containers/AddAccount/utils";
 
 const translations = defineMessages({
   aboveTheTitle : {
@@ -51,6 +52,8 @@ const translations = defineMessages({
 });
 
 export const Intro = () => {
+  const nextStep = usePreserveQuery('/addAccount/generate');
+
   const [passwordTextVisibility, setPasswordTextVisibility] = useState(false);
   const [accountTextVisibility, setAccountTextVisibility] = useState(false);
   return (
@@ -80,7 +83,7 @@ export const Intro = () => {
         <p className={ `x4spaceBefore` }>
           <FormattedMessage {...translations.proud} />
         </p>
-      <ButtonPrimary as={Link} to="/addAccount/generate" size="medium" className={ `x4spaceBefore` }>
+      <ButtonPrimary as={Link} to={nextStep} size="medium" className={ `x4spaceBefore` }>
         <FormattedMessage {...translations.buttonGo} />
       </ButtonPrimary>
       <Decoration />

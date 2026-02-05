@@ -13,6 +13,7 @@ import { ButtonPrimary } from "../../../../components/Buttons";
 import { GDriveStore } from '../GDrive/Store';
 import { OneDriveStore } from '../OneDrive/Store';
 import { DropBoxStore } from '../Dropbox/Store';
+import { usePreserveQuery } from "containers/AddAccount/utils";
 
 const aboveTheTitle = defineMessage({
   defaultMessage: "Save your account",
@@ -42,6 +43,7 @@ export const Store = () => {
   // const [uploadState, setUploadState] = useState(UploadState.Waiting);
   //const [backedUp, setBackedUp] = useState(false);
   const activeAccount = AccountMap.useActive();
+  const nextStep = usePreserveQuery('/congratulations');
 
   const isBackedUp = (
     activeAccount?.details?.storedOffline ||
@@ -83,7 +85,7 @@ export const Store = () => {
         <FormattedMessage {...explainDownload} />
       </div>
 
-      <ButtonPrimary as={Link} to="/congratulations" disabled={!isBackedUp} size="medium">
+      <ButtonPrimary as={Link} to={nextStep} disabled={!isBackedUp} size="medium">
         <FormattedMessage {...congratulation} />
       </ButtonPrimary>
       <Decoration />

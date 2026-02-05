@@ -1,0 +1,97 @@
+name: Release Branch Versioning
+
+on:
+  push:
+    branches:
+      - 'release/**'
+
+# Cancel any in-progress job or run
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    uses: ./.github/workflows/action-build.yml
+
+  test:
+    needs: build
+    uses: ./.github/workflows/action-test.yml
+
+  # Version packages on release branch
+  version:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - name: Generate Token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.TAG_BOT_APP_ID }}
+          private-key: ${{ secrets.TAG_BOT_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.19'
+          cache: 'yarn'
+
+      - name: Configure Git
+        run: |
+          git config user.name 'GitHub Actions Bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      - name: Version
+        run: |
+          # Create test prerelease tag for release branch (don't push yet)
+          yarn lerna version \
+            --conventional-commits \
+            --conventional-prerelease \
+            --preid test \
+            --yes \
+            --no-push \
+            --create-release github
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+      - name: Push Version Commit
+        run: |
+          # Push commit using GITHUB_TOKEN to avoid triggering release-branch workflow again
+          git push origin HEAD:${{ github.ref_name }}
+
+      - name: Push Version Tags
+        run: |
+          # Push tags using the App Token to trigger deploy-on-tag workflow
+          git push https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git --tags
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+      - name: Summary
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+          echo "✅ Release branch versioned successfully"
+          echo ""
+          echo "📌 New version: $LATEST_TAG"
+          echo "🚀 Tag will trigger deployment to prodtest"
+          echo ""
+          echo "Next steps:"
+          echo "  1. Monitor prodtest deployment"
+          echo "  2. After testing, promote to beta/prod"
+          echo "  3. Merge release branch back to main"

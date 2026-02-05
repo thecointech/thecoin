@@ -1,20 +1,25 @@
 {
   "npmClient": "yarn",
-  "version": "0.5.2-test.0",
+  "version": "0.5.2",
   "command": {
     "publish": {
       "conventionalCommits": true,
       "message": "chore(release): publish",
       "registry": "https://npm.pkg.github.com",
       "allowBranch": [
-        "publish/*"
+        "publish/*",
+        "main",
+        "dev"
       ]
     },
     "version": {
-      "noChangelog": true,
       "allowBranch": [
-        "publish/*"
+        "publish/*",
+        "main",
+        "dev",
+        "release/*"
       ],
+      "createRelease": "github",
       "ignoreChanges": [
         "**/__fixtures__/**",
         "**/__tests__/**",

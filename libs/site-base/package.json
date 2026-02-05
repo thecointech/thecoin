@@ -2,7 +2,7 @@
   "name": "@thecointech/site-base",
   "productName": "THECoin: Website - Base",
   "private": true,
-  "version": "0.5.2-test.0",
+  "version": "0.5.2",
   "description": "THECoin: Future-proof currency",
   "type": "module",
   "repository": {
@@ -13,7 +13,7 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "build": "run -T run-s build:i18n build:src build:link",
-    "build:src": "run -T tsc -b \"tsconfig.build.json\"",
+    "build:src": "run -T tsc -b",
     "build:link": "node ../../tools/link-assets.mjs",
     "build:i18n": "run-s extract compile",
     "clean": "run -T run-p 'clean:*'",
@@ -53,17 +53,17 @@
   },
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.4.1",
-    "@thecointech/apis": "^0.5.2-test.0",
-    "@thecointech/shared": "^0.5.2-test.0",
-    "@thecointech/site-semantic-theme": "^0.5.2-test.0",
-    "@thecointech/utilities": "^0.5.2-test.0",
+    "@thecointech/apis": "^0.5.2",
+    "@thecointech/shared": "^0.5.2",
+    "@thecointech/site-semantic-theme": "^0.5.2",
+    "@thecointech/utilities": "^0.5.2",
     "intl": "^1.2.5",
     "sanitize.css": "10.0.0",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.2",
-    "@thecointech/setenv": "^0.5.2-test.0",
+    "@thecointech/setenv": "^0.5.2",
     "@types/dotenv-webpack": "^7.0.3",
     "@types/intl": "^1.2.0",
     "@types/zxcvbn": "^4.4.0",

@@ -1,0 +1,136 @@
+name: Merge Release Branch Back
+
+on:
+  push:
+    tags:
+      # Trigger on production tags, but not prerelease tags
+      - 'v*.*.*'
+      - '!v*.*.*-*'
+
+# Prevent multiple runs
+concurrency:
+  group: merge-back-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  create-merge-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Determine release branch
+        id: find-branch
+        run: |
+          TAG_NAME="${{ github.ref_name }}"
+          echo "Production tag: $TAG_NAME"
+
+          # Find which branch contains this tag
+          BRANCHES=$(git branch -r --contains $TAG_NAME | grep -E 'origin/release/v' | sed 's/.*origin\///' || true)
+
+          if [ -z "$BRANCHES" ]; then
+            echo "⚠️ No release branch found for tag $TAG_NAME"
+            echo "This might be a manual tag or the release branch was already deleted"
+            exit 0
+          fi
+
+          # Take the first matching branch
+          RELEASE_BRANCH=$(echo "$BRANCHES" | head -1)
+          echo "Found release branch: $RELEASE_BRANCH"
+          echo "branch=$RELEASE_BRANCH" >> $GITHUB_OUTPUT
+
+      - name: Check if PR already exists
+        if: steps.find-branch.outputs.branch != ''
+        id: check-pr
+        run: |
+          RELEASE_BRANCH="${{ steps.find-branch.outputs.branch }}"
+
+          # Check if PR already exists
+          EXISTING_PR=$(gh pr list \
+            --base main \
+            --head "$RELEASE_BRANCH" \
+            --state open \
+            --json number \
+            --jq '.[0].number' || echo "")
+
+          if [ -n "$EXISTING_PR" ]; then
+            echo "✓ PR already exists: #$EXISTING_PR"
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "number=$EXISTING_PR" >> $GITHUB_OUTPUT
+          else
+            echo "No existing PR found"
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Pull Request
+        if: steps.find-branch.outputs.branch != '' && steps.check-pr.outputs.exists == 'false'
+        id: create-pr
+        run: |
+          RELEASE_BRANCH="${{ steps.find-branch.outputs.branch }}"
+          TAG_NAME="${{ github.ref_name }}"
+
+          # Extract version from branch name (release/v0.6.0 -> 0.6.0)
+          VERSION=$(echo "$RELEASE_BRANCH" | sed 's/release\/v//')
+
+          # Create PR body
+          PR_BODY="## 🚀 Production Release Merge
+
+          This PR merges the release branch back to \`main\` after successful deployment to production.
+
+          **Release Details:**
+          - 📦 Version: \`$VERSION\`
+          - 🏷️ Production Tag: \`$TAG_NAME\`
+          - 🌳 Release Branch: \`$RELEASE_BRANCH\`
+
+          **What's included:**
+          - ✅ Version bumps in package.json files
+          - ✅ Updated inter-package dependencies
+          - ✅ Bug fixes made during testing (if any)
+          - ✅ Release commit: \`chore(release): publish $VERSION\`
+
+          **After merging:**
+          - [ ] Sync to dev branch: \`git checkout dev && git merge main\`
+          - [ ] Delete release branch: \`git branch -d $RELEASE_BRANCH\`
+
+          ---
+
+          *This PR was created automatically after deploying tag \`$TAG_NAME\` to production.*"
+
+          # Create the PR
+          PR_URL=$(gh pr create \
+            --base main \
+            --head "$RELEASE_BRANCH" \
+            --title "🚀 Release $VERSION - Merge back to main" \
+            --body "$PR_BODY" \
+            --label "release" \
+            --label "automerge-candidate")
+
+          echo "✅ Pull Request created: $PR_URL"
+          echo "url=$PR_URL" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Summary
+        if: steps.find-branch.outputs.branch != ''
+        run: |
+          echo "## 🔀 Release Merge PR" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.check-pr.outputs.exists }}" = "true" ]; then
+            echo "✓ PR already exists: #${{ steps.check-pr.outputs.number }}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✓ Created new PR: ${{ steps.create-pr.outputs.url }}" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Next steps:**" >> $GITHUB_STEP_SUMMARY
+          echo "1. Review and merge the PR" >> $GITHUB_STEP_SUMMARY
+          echo "2. Sync to dev: \`git checkout dev && git merge main\`" >> $GITHUB_STEP_SUMMARY
+          echo "3. Delete release branch: \`git push origin --delete ${{ steps.find-branch.outputs.branch }}\`" >> $GITHUB_STEP_SUMMARY
