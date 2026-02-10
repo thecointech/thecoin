@@ -52,6 +52,7 @@
     ".": {
       "development": "./mocks/index.ts",
       "devlive": "./mocks/index.ts",
+      "prodtest": "./mocks/index.ts",
       "default": "./build/index.js"
     },
     "./puppeteer": "./build/puppeteer-init/index.js",

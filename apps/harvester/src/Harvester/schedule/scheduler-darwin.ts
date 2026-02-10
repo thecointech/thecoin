@@ -1,11 +1,12 @@
 import { execSync } from 'child_process';
 import { writeFileSync } from 'fs';
-import { tmpdir } from 'os';
+import { homedir, tmpdir } from 'os';
 import { HarvestSchedule } from '@/types';
 import { log } from '@thecointech/logging';
 
 const TaskName = 'com.thecoin.harvester';
-const PlistPath = `~/Library/LaunchAgents/${TaskName}.plist`;
+const HomeDir = homedir();
+const PlistPath = `${HomeDir}/Library/LaunchAgents/${TaskName}.plist`;
 
 
 export async function setSchedule(schedule: HarvestSchedule) {
@@ -73,12 +74,17 @@ function generatePlist(schedule: HarvestSchedule): string {
             <integer>${day}</integer>
         </dict>`).join('')}
     </array>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key>
+        <string>${HomeDir}</string>
+    </dict>
     <key>RunAtLoad</key>
     <false/>
     <key>StandardOutPath</key>
-    <string>~/Library/Logs/${TaskName}.log</string>
+    <string>${HomeDir}/Library/Logs/${TaskName}.log</string>
     <key>StandardErrorPath</key>
-    <string>~/Library/Logs/${TaskName}.error.log</string>
+    <string>${HomeDir}/Library/Logs/${TaskName}.error.log</string>
 </dict>
 </plist>`;
 }
