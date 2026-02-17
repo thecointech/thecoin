@@ -13,6 +13,10 @@ const translations = defineMessages({
       description: 'site.blog.articleLink: Link to access article page in blog'}
   });
 
+/**
+ * ArticleItem - The small preview of an article listed
+ * in the blog page, not a whole article.
+ */
 export const ArticleItem = ({ uid, data }: ArticleDocument) => {
   const url = `/blog/${uid}`;
   const navigate = useNavigate();

@@ -11,6 +11,7 @@ import { TOS } from 'containers/TOS';
 import { Privacy } from 'containers/Privacy';
 import { ApplyBeta } from '../ApplyBeta';
 import { App } from '.';
+import { PrismicPreview } from '../PrismicPreview';
 // import { Returns } from 'containers/ReturnProfile';
 
 export const routes = [
@@ -33,3 +34,8 @@ export const routes = [
     ]
   }
 ] satisfies RouteObject[];
+
+// Only include preview route in development and prodtest environments
+if (process.env.NODE_ENV === 'development' || process.env.CONFIG_NAME === "prodtest") {
+  routes[0].children!.push({ path: 'preview', element: <PrismicPreview /> });
+}
