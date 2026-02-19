@@ -9,6 +9,14 @@
   img {
     max-width: 100%;
   }
+
+  .backLink {
+    margin-top: 2rem;
+    a {
+      cursor: pointer;
+      border-bottom: none;
+    }
+  }
 }
 
 /* Mobile responsive */

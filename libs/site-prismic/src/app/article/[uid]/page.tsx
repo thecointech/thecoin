@@ -1,13 +1,12 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-
 import * as prismic from "@prismicio/client";
-
 import { createClient } from "@/prismicio";
-import { PostCard } from "@/components/PostCard";
-import { Navigation } from "@/components/Navigation";
 import { Article } from "@/components/Article/Article";
-import { ArticleLayout } from "@/components/ArticleLayout/ArticleLayout";
+import { BlogContainer } from "@/components/BlogContainer/BlogContainer";
+import Link from "next/link";
+import styles from "./styles.module.css"
+import { Icon } from "semantic-ui-react";
 
 type Params = Promise<{ uid: string }>;
 
@@ -48,29 +47,31 @@ export default async function Page({ params }: { params: Params }) {
     .getByUID("article", uid)
     .catch(() => notFound());
 
-    const posts = await client.getAllByType("article", {
-    predicates: [prismic.filter.not("my.article.uid", uid)],
-    orderings: [
-      { field: "my.article.publication_date", direction: "desc" },
-      { field: "document.first_publication_date", direction: "desc" },
-    ],
-    limit: 2,
-  });
+  // const posts = await client.getAllByType("article", {
+  //   predicates: [prismic.filter.not("my.article.uid", uid)],
+  //   orderings: [
+  //     { field: "my.article.publication_date", direction: "desc" },
+  //     { field: "document.first_publication_date", direction: "desc" },
+  //   ],
+  //   limit: 2,
+  // });
 
   return (
     <div>
-      <Navigation client={client} />
-      <ArticleLayout>
+      <BlogContainer backLink={
+        <Link href="/" className={styles.backLink}>
+          <Icon name="arrow left" />
+          Go Back
+        </Link>
+      }>
         <Article document={page} />
-      </ArticleLayout>
-      <h2>Recommended Posts</h2>
+      </BlogContainer>
+      {/* <h2>Recommended Posts</h2>
       <section>
         {posts.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}
-      </section>
-
-      <Navigation client={client} />
+      </section> */}
     </div>
   );
 }

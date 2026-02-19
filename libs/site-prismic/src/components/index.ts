@@ -1,4 +1,4 @@
 export * from './Article/Article';
-export * from './ArticleLayout/ArticleLayout';
+export * from './BlogContainer/BlogContainer';
 export * from './FAQ/FAQ';
 export * from './RichText';

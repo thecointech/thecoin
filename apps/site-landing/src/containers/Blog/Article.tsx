@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import styles from "./styles.module.less";
 import { useSelector } from "react-redux";
 import { Prismic } from "components/Prismic";
 import { Icon } from "semantic-ui-react";
@@ -7,7 +6,7 @@ import { selectLocale } from "@thecointech/redux-intl";
 import { useParams, useNavigate } from "react-router";
 import { defineMessages, FormattedMessage } from "react-intl";
 import { NotFoundPage } from '@thecointech/shared/containers/NotFoundPage';
-import { Article as ArticleSlice, ArticleLayout } from '@thecointech/site-prismic/components';
+import { Article as ArticleSlice, BlogContainer } from '@thecointech/site-prismic/components';
 
 const translations = defineMessages({
   backLink: {
@@ -52,15 +51,14 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
   // Display
   return articleData
     ? <>
-        <ArticleLayout>
-          <div className={` ${styles.backLink} x6spaceBefore`}>
-            <a onClick={handleBack}>
-              <Icon name="arrow left" />
-              <FormattedMessage {...translations.backLink} />
-            </a>
-          </div>
+        <BlogContainer backLink={
+          <a onClick={handleBack}>
+            <Icon name="arrow left" />
+            <FormattedMessage {...translations.backLink} />
+          </a>
+        }>
           <ArticleSlice document={articleData} locale={locale}/>
-        </ArticleLayout>
+        </BlogContainer>
       </>
     : <NotFoundPage />
 }
