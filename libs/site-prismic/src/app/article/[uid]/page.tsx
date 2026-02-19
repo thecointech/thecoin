@@ -7,6 +7,7 @@ import { createClient } from "@/prismicio";
 import { PostCard } from "@/components/PostCard";
 import { Navigation } from "@/components/Navigation";
 import { Article } from "@/components/Article/Article";
+import { ArticleLayout } from "@/components/ArticleLayout/ArticleLayout";
 
 type Params = Promise<{ uid: string }>;
 
@@ -59,7 +60,9 @@ export default async function Page({ params }: { params: Params }) {
   return (
     <div>
       <Navigation client={client} />
-      <Article document={page} />
+      <ArticleLayout>
+        <Article document={page} />
+      </ArticleLayout>
       <h2>Recommended Posts</h2>
       <section>
         {posts.map((post) => (

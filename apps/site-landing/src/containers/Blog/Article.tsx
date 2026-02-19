@@ -7,7 +7,7 @@ import { selectLocale } from "@thecointech/redux-intl";
 import { useParams, useNavigate } from "react-router";
 import { defineMessages, FormattedMessage } from "react-intl";
 import { NotFoundPage } from '@thecointech/shared/containers/NotFoundPage';
-import { Article as ArticleSlice } from '@thecointech/site-prismic/components';
+import { Article as ArticleSlice, ArticleLayout } from '@thecointech/site-prismic/components';
 
 const translations = defineMessages({
   backLink: {
@@ -52,7 +52,7 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
   // Display
   return articleData
     ? <>
-        <div className={styles.containerArticle} key={articleData.id}>
+        <ArticleLayout>
           <div className={` ${styles.backLink} x6spaceBefore`}>
             <a onClick={handleBack}>
               <Icon name="arrow left" />
@@ -60,7 +60,7 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
             </a>
           </div>
           <ArticleSlice document={articleData} locale={locale}/>
-        </div>
+        </ArticleLayout>
       </>
     : <NotFoundPage />
 }
