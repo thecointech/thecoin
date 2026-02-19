@@ -9,7 +9,7 @@ import type { JSX } from "react";
 export const PostCard = ({
   post,
 }: {
-  post: Content.BlogPostDocument|Content.ArticleDocument|Content.FaqDocument;
+  post: Content.ArticleDocument|Content.FaqDocument;
 }): JSX.Element => {
 
   return (
@@ -40,7 +40,7 @@ export const PostCard = ({
   );
 };
 
-const getDate = (post: Content.BlogPostDocument|Content.ArticleDocument|Content.FaqDocument) => {
+const getDate = (post: Content.ArticleDocument|Content.FaqDocument) => {
   if (post.type === "faq") {
     return "";
   } else {
@@ -48,7 +48,7 @@ const getDate = (post: Content.BlogPostDocument|Content.ArticleDocument|Content.
   }
 }
 
-const getTitle = (post: Content.BlogPostDocument|Content.ArticleDocument|Content.FaqDocument) => {
+const getTitle = (post: Content.ArticleDocument|Content.FaqDocument) => {
   if (post.type === "faq") {
     return post.data.question;
   } else {
@@ -56,20 +56,16 @@ const getTitle = (post: Content.BlogPostDocument|Content.ArticleDocument|Content
   }
 }
 
-const getImage = (post: Content.BlogPostDocument|Content.ArticleDocument|Content.FaqDocument) => {
-  if (post.type === "blog_post") {
-    return post.data.featured_image;
-  } else if (post.type === "article") {
+const getImage = (post: Content.ArticleDocument|Content.FaqDocument) => {
+  if (post.type === "article") {
     return post.data.image_before_title;
   } else {
     return undefined;
   }
 };
 
-const getDescription = (post: Content.BlogPostDocument|Content.ArticleDocument|Content.FaqDocument) => {
-  if (post.type === "blog_post") {
-    return post.data.description;
-  } else if (post.type === "article") {
+const getDescription = (post: Content.ArticleDocument|Content.FaqDocument) => {
+  if (post.type === "article") {
     return post.data.short_content;
   } else {
     return post.data.answer;
