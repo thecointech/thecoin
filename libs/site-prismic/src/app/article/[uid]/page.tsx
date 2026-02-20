@@ -67,12 +67,16 @@ export default async function Page({ params }: { params: Params }) {
         <Related
           relatedArticles={recommendedArticles}
           title="Related Articles"
-          LinkComponent={Link}
+          LinkComponent={LinkComponent}
         />
       </BlogContainer>
     </div>
   );
 }
+
+const LinkComponent = ({ articleId, children }: { articleId: string; children: React.ReactNode }) => (
+  <Link href={`/article/${articleId}`}>{children}</Link>
+);
 
 export async function generateStaticParams() {
   const client = createClient();

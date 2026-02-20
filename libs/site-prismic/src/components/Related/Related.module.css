@@ -5,13 +5,6 @@
     background: linear-gradient(to bottom, rgba(32, 181, 141, 0.05) 0%, #ffffff 100%); /* subtle green tint */
 }
 
-.related h3 {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    color: #2B5250; /* theCoinPaletteGreen5 - dark green for text */
-    font-weight: 600;
-}
-
 .relatedGrid {
     max-width: 800px;
     margin: 0 auto;
@@ -44,14 +37,10 @@
 }
 
 .relatedGrid a {
-    text-decoration: none;
-    color: #138175; /* theCoinPaletteGreen4 - primary green for links */
     font-weight: 500;
     display: block;
-}
-
-.relatedGrid a:hover {
-    color: #20B58D; /* theCoinPaletteGreen3 - brighter green on hover */
+    width: 100%;
+    height: 100%;
 }
 
 @media only screen and (max-width: 749px) {

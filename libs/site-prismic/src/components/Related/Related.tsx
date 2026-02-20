@@ -7,7 +7,7 @@ import { Header } from "semantic-ui-react";
 type Props = {
   relatedArticles: ArticleDocument[]
   title: React.ReactNode,
-  LinkComponent: React.ComponentType<{ href: string; children: React.ReactNode }>
+  LinkComponent: React.ComponentType<{ articleId: string; children: React.ReactNode }>
 }
 
 export function Related({ title, relatedArticles, LinkComponent }: Props) {
@@ -23,7 +23,7 @@ export function Related({ title, relatedArticles, LinkComponent }: Props) {
         <ul>
           {relatedArticles.map((article) => (
             <li key={article.id}>
-              <LinkComponent href={`/article/${article.uid}`}>
+              <LinkComponent articleId={article.uid}>
                {asText(article.data.title)}
               </LinkComponent>
             </li>

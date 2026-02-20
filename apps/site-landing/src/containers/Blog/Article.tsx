@@ -49,11 +49,12 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
   }, [articleId, articleData, locale, isPreview]);
 
   // Once we have the article, load the rest so we can have "Related Articles"
+  const fullyLoaded = prismic[locale].fullyLoaded;
   useEffect(() => {
-    if (articleId && articleData && !prismic[locale].fullyLoaded) {
+    if (articleId && articleData && !fullyLoaded) {
       actions.fetchAllDocs(locale);
     }
-  }, [articleId, articleData, prismic, locale]);
+  }, [articleId, articleData, fullyLoaded, locale]);
 
   const handleBack = () => {
     if (isPreview) {
@@ -68,12 +69,6 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
     ? getRecommendedArticles(articleData, allArticles, 3)
     : [];
 
-  // Custom Link component for react-router
-  const RouterLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-    <Link to={href}>{children}</Link>
-  );
-
-  console.log(recommendedArticles.length)
   // Display
   return articleData
     ? <>
@@ -93,3 +88,8 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
       </>
     : <NotFoundPage />
 }
+
+// Custom Link component for react-router
+const RouterLink = ({ articleId, children }: { articleId: string; children: React.ReactNode }) => (
+  <Link to={`../${articleId}`}>{children}</Link>
+);
