@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync } from "fs";
 import { fileURLToPath } from "url";
 
+// This is triggered by the lerna lifecycle event "version" in root package.json
 // First, read the version from lerna.json
 const rootFolder = fileURLToPath(new URL('..', import.meta.url));
 const lernaJson = JSON.parse(readFileSync(`${rootFolder}/lerna.json`, 'utf8'));

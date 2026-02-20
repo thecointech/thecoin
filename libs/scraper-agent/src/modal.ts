@@ -1,23 +1,20 @@
 import { log } from "@thecointech/logging";
 import type { ElementResponse } from "@thecointech/vqa";
 import type { Page } from "puppeteer";
-import { File } from "@web-std/file";
 import { responseToElement } from "./vqaResponse";
 import { clickElement } from "./interactions";
 import { apis } from "./apis";
+import { _getImageFile } from "./getImage";
 
 export async function maybeCloseModal(page: Page) {
   log.info('Autodetecting modal on page...');
   try {
 
-    // Take screenshot of the page as PNG buffer
-    const screenshot = await page.screenshot({ fullPage: true, type: 'png' });
-    // Create a simple object that matches what the API expects
-    const screenshotFile = new File([screenshot], "screenshot.png", { type: "image/png" });
+    const screenshot = await _getImageFile(page);
 
     // First check if this is a modal dialog
     const intentApi = await apis().getIntentApi();
-    const { data: intent } = await intentApi.pageIntent(screenshotFile);
+    const { data: intent } = await intentApi.pageIntent(screenshot);
     log.debug(`Page detected as type: ${intent.type}`);
     if (intent.type != "ModalDialog") return false;
 
@@ -25,7 +22,7 @@ export async function maybeCloseModal(page: Page) {
 
     // If it is a modal, find the close button
     const modalApi = await apis().getModalApi();
-    const { data: closeButton } = await modalApi.modalClose(screenshotFile);
+    const { data: closeButton } = await modalApi.modalClose(screenshot);
     if (!closeButton) return false;
 
     log.debug('Close button found, attempting to click...');

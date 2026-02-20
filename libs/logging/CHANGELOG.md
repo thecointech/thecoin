@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.3-test.1](https://github.com/thecointech/thecoin/compare/v0.5.3-test.0...v0.5.3-test.1) (2026-01-30)
+
+
+### Bug Fixes
+
+* added RequestId logging & Async context logging ([e5a36a8](https://github.com/thecointech/thecoin/commit/e5a36a847b0e83f1a2e020caeed29c1172365e38))
+* facepalms ([d031a6b](https://github.com/thecointech/thecoin/commit/d031a6b36792daae58bb55c9379058302a2c37f4))
+* move initialization to common location ([1c57253](https://github.com/thecointech/thecoin/commit/1c57253fc7726b044cb3c0ca2c84c246c6b76efe))
+
+
+
+
+
+## [0.5.3-test.0](https://github.com/thecointech/thecoin/compare/v0.5.2...v0.5.3-test.0) (2026-01-24)
+
+**Note:** Version bump only for package @thecointech/logging
+
+
+
+
+
 ## [0.5.2](https://github.com/thecointech/thecoin/compare/v0.5.2-test.0...v0.5.2) (2026-01-19)
 
 **Note:** Version bump only for package @thecointech/logging

@@ -1,6 +1,7 @@
 import { PrismicPreview } from "@prismicio/next";
 import { repositoryName } from '@/prismicio';
 import type { Metadata } from "next";
+import { BrowserWarning } from "@/components/BrowserWarning";
 
 import "../semantic/semantic.css";
 
@@ -17,6 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <BrowserWarning />
         <div>
           {children}
           <PrismicPreview repositoryName={repositoryName} />

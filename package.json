@@ -21,7 +21,7 @@
     "@types/react": "19.2.7",
     "yargs": "17.7.2",
     "clsx": "1.2.1",
-    "node-gyp": "^10.3.1"
+    "node-gyp": "^12.2.0"
   },
   "scripts": {
     "version": "node ./tools/updateEnvVersion.ts --strip-prerelease && git add environments/common.public.env",
