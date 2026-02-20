@@ -56,7 +56,7 @@ export async function maybeCopyProfile(force: boolean = false, verifyChromeClose
 
         // Copy all profiles
         try {
-          log.debug(`Copying Chrome profiles`);
+          log.debug({chromeProfilePath, userDataDir}, `Copying Chrome profiles: {chromeProfilePath} -> {userDataDir}`);
           await copy(chromeProfilePath, userDataDir, { dereference: false });
           // Clear Singletons
           await cleanProfileLocks();

@@ -1,23 +1,8 @@
 import { BunyanLogger, ChildOptions } from './logger';
 
-
-// Global context stack for tracking active logger contexts
-const contextStack: LoggerContext[] = [];
-let baseLogger: BunyanLogger | null = null;
-
-/**
- * Set the base logger that will be used when no contexts are active
- */
-export function setBaseLogger(logger: BunyanLogger): void {
-  baseLogger = logger;
-}
-
-/**
- * Get the currently active logger (top of context stack or base logger)
- */
-export function getCurrentLogger(): BunyanLogger {
-  return contextStack[contextStack.length - 1]?.getLogger()
-    ?? baseLogger!;
+export interface IContextStorage {
+  getStack(): LoggerContext[];
+  run<T>(fn: () => T): T;
 }
 
 /**
@@ -26,19 +11,56 @@ export function getCurrentLogger(): BunyanLogger {
  * Implements Disposable pattern for automatic cleanup.
  */
 export class LoggerContext implements Disposable {
+  protected static storage: IContextStorage;
+  private static baseLogger: BunyanLogger;
+
   private childLogger: BunyanLogger;
   private isDisposed = false;
 
-  constructor(options: ChildOptions = {}, simple=false) {
+  /**
+   * Set the base logger that will be used when no contexts are active
+   */
+  static setBaseLogger(logger: BunyanLogger): void {
+    this.baseLogger = logger;
+  }
+
+  /**
+   * Set the storage strategy for logger contexts (e.g. to use AsyncLocalStorage in Node)
+   * Protected to ensure only subclasses can register their environment-specific storage.
+   */
+  protected static setStorage(newStorage: IContextStorage): void {
+    LoggerContext.storage = newStorage;
+  }
+
+  /**
+   * Get the currently active logger (top of context stack or base logger)
+   */
+  static getCurrentLogger(): BunyanLogger {
+    const contextStack = LoggerContext.storage.getStack();
+    return (
+      contextStack.at(-1)?.getLogger() ??
+      LoggerContext.baseLogger
+    );
+  }
+
+  constructor(options: ChildOptions = {}, simple = false) {
     // Enforce simple is correct
     if (simple && (options.stream || options.streams)) {
       simple = false
     }
     // Use Bunyan's native child() method for proper context inheritance
-    this.childLogger = getCurrentLogger().child(options, simple);
+    this.childLogger = LoggerContext.getCurrentLogger().child(options, simple);
 
     // Push this context onto the stack
-    contextStack.push(this);
+    LoggerContext.storage.getStack().push(this);
+  }
+
+  /**
+   * Run a function within a new context stack (isolated from other execution paths)
+   */
+  static run<T>(fn: () => T): T {
+    if (!this.storage) return fn();
+    return this.storage.run(fn);
   }
 
   /**
@@ -48,32 +70,31 @@ export class LoggerContext implements Disposable {
     return this.childLogger;
   }
 
-  // addStream = (...args: Parameters<BunyanLogger["addStream"]>) => this.childLogger.addStream(...args)
-
   /**
    * Get the current context stack depth
    */
   static getStackDepth(): number {
-    return contextStack.length;
+    return LoggerContext.storage.getStack().length;
   }
 
   /**
    * Get all active contexts (for debugging)
    */
   static getActiveContexts(): LoggerContext[] {
-    return [...contextStack];
+    return [...LoggerContext.storage.getStack()];
   }
 
   private _dispose(): void {
     if (this.isDisposed) return;
 
     // Remove this context from the stack
+    const contextStack = LoggerContext.storage.getStack();
     const index = contextStack.indexOf(this);
     if (index == -1) {
-      baseLogger?.error("LoggerContext disposed but not found in the stack")
+      LoggerContext.baseLogger.error("LoggerContext disposed but not found in the stack")
     }
     if (index !== -1) {
-      contextStack.splice(index, 1);
+      contextStack?.splice(index, 1);
     }
 
     this.isDisposed = true;
@@ -98,11 +119,11 @@ export class LoggerContext implements Disposable {
  * Create a logger proxy that delegates to the currently active logger
  */
 export function createLoggerProxy(baseLogger: BunyanLogger): BunyanLogger {
-  setBaseLogger(baseLogger);
+  LoggerContext.setBaseLogger(baseLogger);
 
   return new Proxy(baseLogger, {
     get(target, prop) {
-      const currentLogger = getCurrentLogger();
+      const currentLogger = LoggerContext.getCurrentLogger();
 
       // For other methods/properties, delegate to current logger if it has them,
       // otherwise fall back to base logger
