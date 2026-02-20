@@ -41,8 +41,77 @@ jobs:
             echo "Deploying to: prod"
           fi
 
-  update-metadata:
+  # Graduate packages for stable tags (v*.*.* without -test.* or -beta.*)
+  graduate-packages:
+    if: needs.determine-environment.outputs.environment == 'prod'
     needs: determine-environment
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.19'
+          cache: 'yarn'
+
+      - name: Configure Git
+        run: |
+          git config user.name 'GitHub Actions Bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      - name: Graduate Packages
+        run: |
+          # Get current stable tag
+          STABLE_TAG=${{ github.ref_name }}
+          BASE_VERSION=$(echo "$STABLE_TAG" | sed 's/^v//')
+
+          echo "🎓 Graduating packages to stable version $BASE_VERSION"
+
+          # Find the corresponding test tag
+          TEST_TAG=$(git tag --sort=-version:refname | grep "^v$BASE_VERSION-test\." | head -1)
+
+          if [ -z "$TEST_TAG" ]; then
+            echo "⚠️  No test tag found, assuming packages are already stable"
+            echo "Skipping graduation, will use current tag commit"
+          else
+            echo "📌 Found test tag: $TEST_TAG"
+            echo "Graduating packages from test to stable"
+
+            # Get the test tag's commit to use as reference
+            TEST_COMMIT=$(git rev-list -n 1 "$TEST_TAG")
+            echo "Test tag $TEST_TAG points to commit: $TEST_COMMIT"
+
+            # Graduate packages (removes prerelease suffix) from current state
+            yarn lerna version --conventional-graduate --yes
+
+            # Verify yarn.lock is consistent with updated package.json files
+            yarn install --immutable
+
+            # Move the stable tag to point to the new graduated commit
+            git tag -f "$STABLE_TAG"
+
+            # Push the graduated packages and moved tag (using GITHUB_TOKEN to avoid recursive workflow)
+            git push origin --tags
+          fi
+
+  update-metadata:
+    needs: [determine-environment, graduate-packages]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -66,15 +135,59 @@ jobs:
           name: deployment-metadata
           path: environments/common.public.env
 
+  checkout-graduated:
+    needs: [determine-environment, graduate-packages]
+    runs-on: ubuntu-latest
+    outputs:
+      commit: ${{ steps.get-commit.outputs.commit }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get Graduated Commit
+        id: get-commit
+        run: |
+          # For stable tags, get the commit from the graduated packages
+          STABLE_TAG=${{ github.ref_name }}
+          BASE_VERSION=$(echo "$STABLE_TAG" | sed 's/^v//')
+
+          if [ "${{ needs.determine-environment.outputs.environment }}" == "prod" ]; then
+            # Find the test tag that was graduated
+            TEST_TAG=$(git tag --sort=-version:refname | grep "^v$BASE_VERSION-test\." | head -1)
+
+            if [ -n "$TEST_TAG" ]; then
+              # Get the commit that Lerna created during graduation
+              # This will be the commit after the test tag with stable package versions
+              COMMIT=$(git rev-list -n 1 "$STABLE_TAG")
+              echo "commit=$COMMIT" >> "$GITHUB_OUTPUT"
+              echo "📌 Using graduated commit: $COMMIT"
+            else
+              # Fallback to current tag commit
+              COMMIT=$(git rev-list -n 1 "$STABLE_TAG")
+              echo "commit=$COMMIT" >> "$GITHUB_OUTPUT"
+              echo "⚠️  Using tag commit: $COMMIT"
+            fi
+          else
+            # For test/beta, use current tag commit
+            COMMIT=$(git rev-list -n 1 "$STABLE_TAG")
+            echo "commit=$COMMIT" >> "$GITHUB_OUTPUT"
+            echo "📌 Using tag commit: $COMMIT"
+          fi
+
   build:
-    needs: [determine-environment, update-metadata]
+    needs: [determine-environment, update-metadata, checkout-graduated]
     uses: ./.github/workflows/action-build.yml
     with:
       DOWNLOAD_METADATA: true
+      # Pass the graduated commit to the build workflow
+      COMMIT_SHA: ${{ needs.checkout-graduated.outputs.commit }}
 
   test:
     needs: build
     uses: ./.github/workflows/action-test.yml
+    with:
+      COMMIT_SHA: ${{ needs.checkout-graduated.outputs.commit }}
 
   # Publish packages only for test tags (initial publish)
   publish-packages-test:
@@ -83,6 +196,8 @@ jobs:
     permissions:
       packages: write
     uses: ./.github/workflows/action-publish-packages.yml
+    with:
+      COMMIT_SHA: ${{ needs.checkout-graduated.outputs.commit }}
 
   # Graduate packages for production tags
   publish-packages-prod:
@@ -91,6 +206,8 @@ jobs:
     permissions:
       packages: write
     uses: ./.github/workflows/action-publish-packages.yml
+    with:
+      COMMIT_SHA: ${{ needs.checkout-graduated.outputs.commit }}
 
   # Wait for package publishing to complete before deploying
   wait-for-packages:
@@ -142,7 +259,7 @@ jobs:
     secrets: inherit
     with:
       CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
-      COMMIT_SHA: ${{ github.sha }}
+      COMMIT_SHA: ${{ needs.checkout-graduated.outputs.commit }}
       IS_PROMOTION: ${{ !contains(github.ref_name, '-test.') }}
 
   publish-services:
@@ -153,7 +270,7 @@ jobs:
     secrets: inherit
     with:
       CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
-      COMMIT_SHA: ${{ github.sha }}
+      COMMIT_SHA: ${{ needs.checkout-graduated.outputs.commit }}
 
   publish-sites:
     needs: [wait-for-packages, determine-environment]
@@ -163,7 +280,7 @@ jobs:
     secrets: inherit
     with:
       CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
-      COMMIT_SHA: ${{ github.sha }}
+      COMMIT_SHA: ${{ needs.checkout-graduated.outputs.commit }}
 
   smoke-tests:
     needs: [publish-services, publish-sites, determine-environment]
