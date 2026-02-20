@@ -12,6 +12,7 @@ import { Privacy } from 'containers/Privacy';
 import { ApplyBeta } from '../ApplyBeta';
 import { App } from '.';
 // import { Returns } from 'containers/ReturnProfile';
+import { PrismicPreview } from '../PrismicPreview';
 
 export const routes = [
   {
@@ -29,13 +30,12 @@ export const routes = [
       { path: 'applyBeta', element: <ApplyBeta /> },
       { path: 'privacy', element: <Privacy /> },
       //{ path: 'returns', element: <Returns /> },
+
+      // Only include preview route in development and prodtest environments
+      ...(process.env.NODE_ENV === 'development' || process.env.CONFIG_NAME === 'prodtest'
+        ? [{ path: 'preview', element: <PrismicPreview /> }]
+        : []),
       { path: '*', element: <NotFoundPage /> },
     ]
   }
 ] satisfies RouteObject[];
-
-// Only include preview route in development and prodtest environments
-if (process.env.NODE_ENV === 'development' || process.env.CONFIG_NAME === "prodtest") {
-  const { PrismicPreview } = await import('../PrismicPreview');
-  routes[0].children!.push({ path: 'preview', element: <PrismicPreview /> });
-}
