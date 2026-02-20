@@ -22,7 +22,7 @@ class MockClient implements Pick<Client, "getByUID"|"getByID"|"getAllByType"> {
   }
   // Used for previews, might fail in dev
   getByID(documentId: string, options?: {lang?: string}): Promise<any> {
-    throw new Error("Previewing not supported in mock: " + process.env.CONFIG_NAME);
+    return Promise.reject(new Error("Previewing not supported in mock: " + process.env.CONFIG_NAME));
   }
 }
 
