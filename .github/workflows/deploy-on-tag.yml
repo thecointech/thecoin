@@ -49,6 +49,8 @@ jobs:
     permissions:
       contents: write
       packages: write
+    outputs:
+      commit: ${{ steps.graduate-packages.outputs.commit }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -70,47 +72,75 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable --mode=skip-build
 
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
-
       - name: Graduate Packages
+        id: graduate-packages
         run: |
           # Get current stable tag
-          STABLE_TAG=${{ github.ref_name }}
+          STABLE_TAG="${{ github.ref_name }}"
           BASE_VERSION=$(echo "$STABLE_TAG" | sed 's/^v//')
 
-          echo "🎓 Graduating packages to stable version $BASE_VERSION"
+          echo "🎓 Processing stable tag $STABLE_TAG"
 
-          # Find the corresponding test tag
-          TEST_TAG=$(git tag --sort=-version:refname | grep "^v$BASE_VERSION-test\." | head -1)
+          # Check if any packages have test versions (more reliable than tag searching)
+          if git grep -q "\"-test\." package.json; then
+            echo "📌 Found test versions in packages, graduating to stable"
 
-          if [ -z "$TEST_TAG" ]; then
-            echo "⚠️  No test tag found, assuming packages are already stable"
-            echo "Skipping graduation, will use current tag commit"
-          else
-            echo "📌 Found test tag: $TEST_TAG"
-            echo "Graduating packages from test to stable"
-
-            # Get the test tag's commit to use as reference
-            TEST_COMMIT=$(git rev-list -n 1 "$TEST_TAG")
-            echo "Test tag $TEST_TAG points to commit: $TEST_COMMIT"
+            # Get commit the tag currently points to
+            ORIGINAL_COMMIT=$(git rev-list -n 1 "$STABLE_TAG")
 
             # Graduate packages (removes prerelease suffix) from current state
-            yarn lerna version --conventional-graduate --yes
+            yarn lerna version --conventional-graduate --yes --no-git-tag-version
 
             # Verify yarn.lock is consistent with updated package.json files
             yarn install --immutable
 
+            # Commit the version changes (since --no-git-tag-version skips both commit and tag)
+            git add .
+            git commit -m "chore(release): graduate packages to $STABLE_TAG"
+
             # Move the stable tag to point to the new graduated commit
             git tag -f "$STABLE_TAG"
 
-            # Push the graduated packages and moved tag (using GITHUB_TOKEN to avoid recursive workflow)
+            # Get the new graduated commit SHA
+            GRADUATED_COMMIT=$(git rev-list -n 1 "$STABLE_TAG")
+
+            # Find all branches whose HEAD was exactly at the original tag commit
+            echo "🔍 Finding branches whose HEAD was at original commit $ORIGINAL_COMMIT"
+
+            # Get all branches where HEAD is exactly the original commit
+            BRANCHES=$(git for-each-ref --format='%(refname:short) %(objectname)' refs/heads/ | grep "^.* $ORIGINAL_COMMIT$" | cut -d' ' -f1)
+
+            if [ -n "$BRANCHES" ]; then
+              echo "📋 Advancing branches to new graduated commit $GRADUATED_COMMIT:"
+              echo "$BRANCHES"
+
+              # Advance each branch to the new commit
+              for BRANCH in $BRANCHES; do
+                echo "🔄 Advancing $BRANCH to new commit"
+                git push origin "$GRADUATED_COMMIT:$BRANCH"
+              done
+            else
+              echo "⚠️ No branches found with HEAD at original commit, pushing to main as fallback"
+              git push origin "$GRADUATED_COMMIT:main"
+            fi
+
+            # Push the updated tag
             git push origin --tags
+
+            # Output the graduated commit for other jobs
+            echo "commit=$GRADUATED_COMMIT" >> "$GITHUB_OUTPUT"
+            echo "✅ Graduated packages and pushed tag $STABLE_TAG"
+          else
+            echo "✅ Packages are already at stable versions - no graduation needed"
+
+            # Use current tag's commit for downstream jobs
+            CURRENT_COMMIT=$(git rev-list -n 1 "$STABLE_TAG")
+            echo "commit=$CURRENT_COMMIT" >> "$GITHUB_OUTPUT"
+            echo "� Using existing commit $CURRENT_COMMIT for $STABLE_TAG"
           fi
 
   update-metadata:
+    if: ${{ needs.graduate-packages.result == 'success' || needs.graduate-packages.result == 'skipped' }}
     needs: [determine-environment, graduate-packages]
     runs-on: ubuntu-latest
     steps:
@@ -135,79 +165,40 @@ jobs:
           name: deployment-metadata
           path: environments/common.public.env
 
-  checkout-graduated:
-    needs: [determine-environment, graduate-packages]
-    runs-on: ubuntu-latest
-    outputs:
-      commit: ${{ steps.get-commit.outputs.commit }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Get Graduated Commit
-        id: get-commit
-        run: |
-          # For stable tags, get the commit from the graduated packages
-          STABLE_TAG=${{ github.ref_name }}
-          BASE_VERSION=$(echo "$STABLE_TAG" | sed 's/^v//')
-
-          if [ "${{ needs.determine-environment.outputs.environment }}" == "prod" ]; then
-            # Find the test tag that was graduated
-            TEST_TAG=$(git tag --sort=-version:refname | grep "^v$BASE_VERSION-test\." | head -1)
-
-            if [ -n "$TEST_TAG" ]; then
-              # Get the commit that Lerna created during graduation
-              # This will be the commit after the test tag with stable package versions
-              COMMIT=$(git rev-list -n 1 "$STABLE_TAG")
-              echo "commit=$COMMIT" >> "$GITHUB_OUTPUT"
-              echo "📌 Using graduated commit: $COMMIT"
-            else
-              # Fallback to current tag commit
-              COMMIT=$(git rev-list -n 1 "$STABLE_TAG")
-              echo "commit=$COMMIT" >> "$GITHUB_OUTPUT"
-              echo "⚠️  Using tag commit: $COMMIT"
-            fi
-          else
-            # For test/beta, use current tag commit
-            COMMIT=$(git rev-list -n 1 "$STABLE_TAG")
-            echo "commit=$COMMIT" >> "$GITHUB_OUTPUT"
-            echo "📌 Using tag commit: $COMMIT"
-          fi
-
   build:
-    needs: [determine-environment, update-metadata, checkout-graduated]
+    if: ${{ needs.graduate-packages.result == 'success' || needs.graduate-packages.result == 'skipped' }}
+    needs: [determine-environment, update-metadata, graduate-packages]
     uses: ./.github/workflows/action-build.yml
     with:
       DOWNLOAD_METADATA: true
-      # Pass the graduated commit to the build workflow
-      COMMIT_SHA: ${{ needs.checkout-graduated.outputs.commit }}
+      COMMIT_SHA: ${{ needs.graduate-packages.outputs.commit }}
 
   test:
-    needs: build
+    if: ${{ needs.graduate-packages.result == 'success' || needs.graduate-packages.result == 'skipped' }}
+    needs: [build, graduate-packages]
     uses: ./.github/workflows/action-test.yml
     with:
-      COMMIT_SHA: ${{ needs.checkout-graduated.outputs.commit }}
+      COMMIT_SHA: ${{ needs.graduate-packages.outputs.commit }}
 
   # Publish packages only for test tags (initial publish)
   publish-packages-test:
-    if: contains(github.ref_name, '-test.')
-    needs: test
+    if: contains(github.ref_name, '-test.') && (needs.graduate-packages.result == 'success' || needs.graduate-packages.result == 'skipped')
+    needs: [test, graduate-packages]
     permissions:
       packages: write
     uses: ./.github/workflows/action-publish-packages.yml
     with:
-      COMMIT_SHA: ${{ needs.checkout-graduated.outputs.commit }}
+      COMMIT_SHA: ${{ needs.graduate-packages.outputs.commit }}
 
   # Graduate packages for production tags
   publish-packages-prod:
-    if: needs.determine-environment.outputs.is_prerelease == 'false'
-    needs: [test, determine-environment]
+    if: needs.determine-environment.outputs.is_prerelease == 'false' && (needs.graduate-packages.result == 'success' || needs.graduate-packages.result == 'skipped')
+    needs: [test, determine-environment, graduate-packages]
     permissions:
       packages: write
     uses: ./.github/workflows/action-publish-packages.yml
     with:
-      COMMIT_SHA: ${{ needs.checkout-graduated.outputs.commit }}
+      COMMIT_SHA: ${{ needs.graduate-packages.outputs.commit }}
 
   # Wait for package publishing to complete before deploying
   wait-for-packages:
@@ -252,35 +243,35 @@ jobs:
           fi
 
   publish-docker:
-    needs: [wait-for-packages, determine-environment]
+    needs: [wait-for-packages, determine-environment, graduate-packages]
     # Explicit condition needed because wait-for-packages uses if: always()
     if: ${{ always() && !cancelled() && !failure() }}
     uses: ./.github/workflows/action-publish-docker.yml
     secrets: inherit
     with:
       CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
-      COMMIT_SHA: ${{ needs.checkout-graduated.outputs.commit }}
+      COMMIT_SHA: ${{ needs.graduate-packages.outputs.commit }}
       IS_PROMOTION: ${{ !contains(github.ref_name, '-test.') }}
 
   publish-services:
-    needs: [wait-for-packages, determine-environment]
+    needs: [wait-for-packages, determine-environment, graduate-packages]
     # Explicit condition needed because wait-for-packages uses if: always()
     if: ${{ always() && !cancelled() && !failure() }}
     uses: ./.github/workflows/action-publish-services.yml
     secrets: inherit
     with:
       CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
-      COMMIT_SHA: ${{ needs.checkout-graduated.outputs.commit }}
+      COMMIT_SHA: ${{ needs.graduate-packages.outputs.commit }}
 
   publish-sites:
-    needs: [wait-for-packages, determine-environment]
+    needs: [wait-for-packages, determine-environment, graduate-packages]
     # Explicit condition needed because wait-for-packages uses if: always()
     if: ${{ always() && !cancelled() && !failure() }}
     uses: ./.github/workflows/action-publish-sites.yml
     secrets: inherit
     with:
       CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
-      COMMIT_SHA: ${{ needs.checkout-graduated.outputs.commit }}
+      COMMIT_SHA: ${{ needs.graduate-packages.outputs.commit }}
 
   smoke-tests:
     needs: [publish-services, publish-sites, determine-environment]
