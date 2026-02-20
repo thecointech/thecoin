@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tools",
-  "version": "0.5.3",
+  "version": "0.5.3-test.0",
   "type": "module",
   "private": true,
   "scripts": {
@@ -11,6 +11,6 @@
     "initDemoAccount": "run-env cfg=prodtest ./initDemoAccount.ts"
   },
   "devDependencies": {
-    "@thecointech/setenv": "^0.5.3"
+    "@thecointech/setenv": "^0.5.3-test.0"
   }
 }

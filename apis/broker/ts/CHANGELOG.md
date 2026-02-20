@@ -3,17 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [0.5.3](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.3) (2026-02-20)
-
-
-### Bug Fixes
-
-* apis/broker/ts/package.json to reduce vulnerabilities ([a278faa](https://github.com/thecointech/thecoin/commit/a278faaddd6c0d19b6c48c70973a70c60f9058f0))
-
-
-
-
-
 ## [0.5.3-test.0](https://github.com/thecointech/thecoin/compare/v0.5.2...v0.5.3-test.0) (2026-01-24)
 
 **Note:** Version bump only for package @thecointech/broker-cad
