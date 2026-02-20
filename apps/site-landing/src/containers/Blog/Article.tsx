@@ -16,29 +16,45 @@ const translations = defineMessages({
   }
 });
 
-export const Article = () => {
+interface ArticleProps {
+  articleId?: string;
+  isPreview?: boolean;
+}
+
+export const Article = ({ articleId: propArticleId, isPreview = false }: ArticleProps = {}) => {
   const prismic = Prismic.useData();
   const actions = Prismic.useApi();
   const { locale } = useSelector(selectLocale);
   const navigate = useNavigate();
-  const { articleId } = useParams<{articleId: string}>();
+  const { articleId: routerArticleId } = useParams<{articleId: string}>();
+
+  // Use prop articleId if provided, otherwise fall back to router param
+  const articleId = propArticleId ?? routerArticleId;
 
   const articles = prismic[locale].articles;
   const articleData = articleId ? articles.get(articleId) : undefined;
 
   // If we haven't fetched this article yet, do so now.
   useEffect(() => {
-    if (articleId && !articleData) {
+    if (articleId && !articleData && !isPreview) {
       actions.fetchDoc(articleId, locale);
     }
-  }, [articleId, locale]);
+  }, [articleId, articleData, locale, isPreview]);
+
+  const handleBack = () => {
+    if (isPreview) {
+      navigate('/blog');
+    } else {
+      navigate(-1);
+    }
+  };
 
   // Display
   return articleData
     ? <>
         <div className={styles.containerArticle} key={articleData.id}>
           <div className={` ${styles.backLink} x6spaceBefore`}>
-            <a onClick={() => navigate(-1)}>
+            <a onClick={handleBack}>
               <Icon name="arrow left" />
               <FormattedMessage {...translations.backLink} />
             </a>

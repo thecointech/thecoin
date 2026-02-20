@@ -16,7 +16,7 @@
         "build": "run -T run-s build:semantic build:src",
         "build:src": "next build",
         "build:semantic": "run-env ./internal/buildSemantic.ts",
-        "_start": "next start",
+        "_start": "next start --port 3010",
         "start:website": "next dev --port 3010",
         "start:slicemachine": "start-slicemachine"
     },
@@ -47,9 +47,9 @@
         "semantic-ui-react": "3.0.0-beta.2"
     },
     "devDependencies": {
-        "@prismicio/next": "^2.0.2",
-        "@prismicio/react": "^3.2.2",
-        "@slicemachine/adapter-next": "^0.3.89",
+        "@prismicio/next": "^2.2.1",
+        "@prismicio/react": "^3.3.0",
+        "@slicemachine/adapter-next": "^0.3.95",
         "@thecointech/setenv": "^0.5.3-test.0",
         "@thecointech/site-semantic-theme": "^0.5.3-test.0",
         "glob": "^13.0.0",

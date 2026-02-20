@@ -9403,28 +9403,30 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prismicio/next@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "@prismicio/next@npm:2.0.2"
+"@prismicio/next@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "@prismicio/next@npm:2.2.1"
   dependencies:
+    "@prismicio/simulator": "npm:^0.2.0"
     imgix-url-builder: "npm:^0.0.5"
+    lz-string: "npm:^1.5.0"
   peerDependencies:
     "@prismicio/client": ^7
-    next: ^13.4.5 || ^14 || ^15 || ^16.0.0-beta.0
+    next: ^13.4.5 || ^14 || ^15 || ^16
     react: ^18 || ^19
-  checksum: 711337207bc9b90f6c8cd56e0eef7331550bfa7d0ff53b42710e71a3a2eaf8e335480aad05ec78412c7efb6aa03fffad1f955fca547691d012e9992c0a36600b
+  checksum: a9ad059b19bb05690cd302470b2c66c85b39ae820fa5c1a0a360dbd84196b6fe85d80b86caf3d781408c201250b94423616bc59186ce694a58de328143e407dc
   languageName: node
   linkType: hard
 
-"@prismicio/react@npm:^3.2.2":
-  version: 3.2.2
-  resolution: "@prismicio/react@npm:3.2.2"
+"@prismicio/react@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@prismicio/react@npm:3.3.0"
   dependencies:
     esm-env: "npm:^1.2.2"
   peerDependencies:
     "@prismicio/client": ^7
     react: ^18 || ^19
-  checksum: 9345272d736456662dd2a2b9d083d978259987061af8b0303ead37cb8c4d7b79d23436b8b72cfb506f962c0afcd2fef4bcbbb8b17f04835dfb9d3ef7996356b1
+  checksum: 745602e3472273551c34867adf95498c129a3d7d406b78b8143e3570fe20106ebba82c2dedefcd0ee276dc5eb4c5519573d6be1d5f029b774d82091706d37413
   languageName: node
   linkType: hard
 
@@ -9436,6 +9438,15 @@ __metadata:
     "@types/statuses": "npm:^2.0.1"
     statuses: "npm:^2.0.1"
   checksum: 7b2b50dd82513b5aea202458b1b2b57435e4f862e06b19317f54b8a421c713f1d4fdd3a9d779537190c43d031d2b3472155e8304174eee8d55cd1761fb939fee
+  languageName: node
+  linkType: hard
+
+"@prismicio/simulator@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@prismicio/simulator@npm:0.2.0"
+  peerDependencies:
+    "@prismicio/client": ^7
+  checksum: 237aa19b5d95da32e01bce076312c96fe065255bcb03b7c201c3e6435686e9ede4aa9a0ed83e8a9bf9dd0605dc39d8c805cd3d846017f75b014ed67e7eb181a2
   languageName: node
   linkType: hard
 
@@ -10084,13 +10095,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@slicemachine/adapter-next@npm:^0.3.89":
-  version: 0.3.89
-  resolution: "@slicemachine/adapter-next@npm:0.3.89"
+"@slicemachine/adapter-next@npm:^0.3.95":
+  version: 0.3.95
+  resolution: "@slicemachine/adapter-next@npm:0.3.95"
   dependencies:
     "@prismicio/simulator": "npm:^0.1.4"
     "@prismicio/types-internal": "npm:3.11.2"
-    "@slicemachine/plugin-kit": "npm:0.4.87"
+    "@slicemachine/plugin-kit": "npm:0.4.93"
     common-tags: "npm:^1.8.2"
     fp-ts: "npm:^2.13.1"
     io-ts: "npm:^2.2.20"
@@ -10102,7 +10113,7 @@ __metadata:
   peerDependencies:
     next: ^11 || ^12 || ^13 || ^14 || ^15 || ^16.0.0-beta.0
     react: ^17 || ^18 || ^19.0.0-rc.0
-  checksum: 833b154aaf7f076abb0391c7435e013d822524d5f84581ce37341c1e12ff20f3442d07eb84687eda13a18067064a70ab32b176279040062e8659e93183ca7cf1
+  checksum: 7a2ae448c41bbf051b3aed2d4ec7b59bdbc56600d08f0c25c624f147d1809eb3c5a42f959b8aeb90078940c3f99bdf79fe25399e42c22d59801799063836afc3
   languageName: node
   linkType: hard
 
@@ -10162,6 +10173,25 @@ __metadata:
     prettier: "npm:^3.0.3"
     prismic-ts-codegen: "npm:0.1.27"
   checksum: 6dac774fe58d69dcb504fcff9086875ec8e3201fcbfcd365bb01784ace93dfd0633072c4f8029493a00be0a3209157a94dc455718904e072ade3236d3f3d303e
+  languageName: node
+  linkType: hard
+
+"@slicemachine/plugin-kit@npm:0.4.93":
+  version: 0.4.93
+  resolution: "@slicemachine/plugin-kit@npm:0.4.93"
+  dependencies:
+    "@prismicio/client": "npm:7.17.0"
+    common-tags: "npm:^1.8.2"
+    defu: "npm:^6.1.2"
+    dotenv: "npm:16.3.1"
+    fp-ts: "npm:^2.13.1"
+    fs-extra: "npm:11.1.1"
+    io-ts: "npm:^2.2.20"
+    io-ts-reporters: "npm:^2.0.1"
+    p-limit: "npm:^4.0.0"
+    prettier: "npm:^3.0.3"
+    prismic-ts-codegen: "npm:0.1.27"
+  checksum: 8db6048a432105663255aec421c9178d5b99fe4cd68f0c9b3546b65e9051c154aa25ab9040194fd1a2f790d36dda20c9aa2c1decc3bf2d74edf40992fc2b6280
   languageName: node
   linkType: hard
 
@@ -11943,9 +11973,9 @@ __metadata:
   resolution: "@thecointech/site-prismic@workspace:libs/site-prismic"
   dependencies:
     "@prismicio/client": "npm:^7.21.0"
-    "@prismicio/next": "npm:^2.0.2"
-    "@prismicio/react": "npm:^3.2.2"
-    "@slicemachine/adapter-next": "npm:^0.3.89"
+    "@prismicio/next": "npm:^2.2.1"
+    "@prismicio/react": "npm:^3.3.0"
+    "@slicemachine/adapter-next": "npm:^0.3.95"
     "@thecointech/setenv": "npm:^0.5.3-test.0"
     "@thecointech/site-semantic-theme": "npm:^0.5.3-test.0"
     glob: "npm:^13.0.0"

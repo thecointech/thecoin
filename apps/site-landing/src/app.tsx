@@ -22,12 +22,6 @@ import { createHashRouter } from 'react-router';
 // Import i18n messages
 import { translations } from './translations';
 
-// Allow Preview docs on testing site.
-import { injectPrismicPreviewScript } from './components/Prismic/inject';
-if (process.env.CONFIG_NAME === 'prodtest') {
-  injectPrismicPreviewScript();
-}
-
 // Create redux store with history
 const store = configureStore();
 const MOUNT_NODE = document.getElementById('app') as HTMLElement;
