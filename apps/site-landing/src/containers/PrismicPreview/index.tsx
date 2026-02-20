@@ -23,22 +23,22 @@ export const PrismicPreview: React.FC = () => {
   useEffect(() => {
     // Check if we're in preview mode
     const urlParams = new URLSearchParams(location.search);
-    const token = urlParams.get('token');
+    const urlToken = urlParams.get('token');
 
-    if (!token) {
+    if (!urlToken) {
       setError('No preview token found');
       setIsLoading(false);
       return;
     }
 
-    const documentId = urlParams.get('documentId');
-    if (!documentId) {
+    const urlDocumentId = urlParams.get('documentId');
+    if (!urlDocumentId) {
       setError('No document ID found');
       setIsLoading(false);
       return;
     }
-    setDocumentId(documentId);
-    setToken(token);
+    setDocumentId(urlDocumentId);
+    setToken(urlToken);
   }, [location.search])
 
   const handleRefresh = useCallback(async () => {
@@ -46,8 +46,8 @@ export const PrismicPreview: React.FC = () => {
 
     setIsLoading(true);
     setError(null);
+    log.trace(`Fetching document ${documentId}`);
     try {
-      console.log('Fetching document', documentId, token);
       // Add cache-busting parameter to force fresh fetch
       const result = await data.client.getByID(documentId, {
         ref: token,
@@ -56,6 +56,11 @@ export const PrismicPreview: React.FC = () => {
         }
       });
       if (result) {
+        // Previewing FAQ's is not yet supported
+        if (result.type !== 'article') {
+          setError(`Preview is only supported for article documents (got "${result.type}")`);
+          return;
+        }
         api.setDocument(result as ArticleDocument);
         setDocumentUid(result.uid);
         log.info('Preview refreshed successfully');
@@ -114,7 +119,7 @@ export const PrismicPreview: React.FC = () => {
 
   if (documentId && articleLoaded) {
     return (
-      <>
+      <div style={{ marginBottom: '2rem' }}>
         {/* Preview Badge */}
         <Container fluid style={{
           backgroundColor: '#f39c12',
@@ -153,10 +158,18 @@ export const PrismicPreview: React.FC = () => {
 
         {/* Render Article Component */}
         <Article articleId={documentUid} isPreview={true} />
-      </>
+      </div>
     );
   }
 
   // Should never get here
-  return null;
+  return (
+    <Container text style={{ paddingTop: '2rem' }}>
+      <Message warning>
+        <Message.Header>Preview state unexpected</Message.Header>
+        <p>Document loaded but not found in article store. documentUid: {documentUid}, locale: {locale}</p>
+      </Message>
+      <Button primary onClick={() => navigate('/')}>Go to Homepage</Button>
+    </Container>
+  );
 };

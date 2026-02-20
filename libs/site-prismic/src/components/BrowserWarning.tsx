@@ -7,7 +7,9 @@ export function BrowserWarning() {
 
   useEffect(() => {
     // Detect if browser is Chrome/Chromium-based
-    const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+    const isChrome = (navigator as any).userAgentData?.brands?.some(
+      (b: { brand: string }) => b.brand === 'Google Chrome' || b.brand === 'Chromium'
+    ) ?? (/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor));
 
     // Chrome is the only one I've gotten working so far
     const isCompatible = isChrome;

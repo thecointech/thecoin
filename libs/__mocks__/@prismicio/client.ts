@@ -9,7 +9,7 @@ export * from "../../../node_modules/@prismicio/client/dist/index.js";
 
 // NOTE: Not yet updated to match the latest API
 type SharedType = typeof articles[number]|typeof faqs[number];
-class MockClient implements Pick<Client, "getByUID"|"getAllByType"> {
+class MockClient implements Pick<Client, "getByUID"|"getByID"|"getAllByType"> {
   getByUID(documentType: string, uid: string, options?: {lang?: string}) {
     return Promise.resolve(
       getData(documentType, options?.lang).find(r => r.uid === uid) as any
@@ -19,6 +19,10 @@ class MockClient implements Pick<Client, "getByUID"|"getAllByType"> {
     return Promise.resolve(
       getData(documentType, options?.lang) as any
     );
+  }
+  // Used for previews, might fail in dev
+  getByID(documentId: string, options?: {lang?: string}): Promise<any> {
+    throw new Error("Previewing not supported in mock: " + process.env.CONFIG_NAME);
   }
 }
 

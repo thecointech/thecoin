@@ -39,7 +39,7 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
     if (articleId && !articleData && !isPreview) {
       actions.fetchDoc(articleId, locale);
     }
-  }, [articleId, articleData, isPreview]);
+  }, [articleId, articleData, locale, isPreview]);
 
   const handleBack = () => {
     if (isPreview) {
