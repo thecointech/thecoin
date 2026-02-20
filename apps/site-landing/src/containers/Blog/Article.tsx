@@ -6,12 +6,17 @@ import { selectLocale } from "@thecointech/redux-intl";
 import { useParams, useNavigate } from "react-router";
 import { defineMessages, FormattedMessage } from "react-intl";
 import { NotFoundPage } from '@thecointech/shared/containers/NotFoundPage';
-import { Article as ArticleSlice, BlogContainer } from '@thecointech/site-prismic/components';
+import { Article as ArticleSlice, BlogContainer, getRecommendedArticles, Related } from '@thecointech/site-prismic/components';
+import { Link } from 'react-router';
 
 const translations = defineMessages({
   backLink: {
     defaultMessage: 'Go back',
     description: 'site.blog.backLink: Link to go back from article'
+  },
+  relatedTitle: {
+    defaultMessage: 'Related Articles',
+    description: 'site.blog.relatedTitle: Title for recommended articles links section'
   }
 });
 
@@ -33,12 +38,22 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
   const articles = prismic[locale].articles;
   const articleData = articleId ? articles.get(articleId) : undefined;
 
+  // Get all articles as array for recommendations
+  const allArticles = Array.from(articles.values());
+
   // If we haven't fetched this article yet, do so now.
   useEffect(() => {
     if (articleId && !articleData && !isPreview) {
       actions.fetchDoc(articleId, locale);
     }
   }, [articleId, articleData, isPreview]);
+
+  // Once we have the article, load the rest so we can have "Related Articles"
+  useEffect(() => {
+    if (articleId && articleData && !prismic[locale].fullyLoaded) {
+      actions.fetchAllDocs(locale);
+    }
+  }, [articleId, articleData, prismic, locale]);
 
   const handleBack = () => {
     if (isPreview) {
@@ -48,6 +63,17 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
     }
   };
 
+  // Get recommended articles using shared logic
+  const recommendedArticles = articleData
+    ? getRecommendedArticles(articleData, allArticles, 3)
+    : [];
+
+  // Custom Link component for react-router
+  const RouterLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
+    <Link to={href}>{children}</Link>
+  );
+
+  console.log(recommendedArticles.length)
   // Display
   return articleData
     ? <>
@@ -58,6 +84,11 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
           </a>
         }>
           <ArticleSlice document={articleData} locale={locale}/>
+          <Related
+            relatedArticles={recommendedArticles}
+            title={<FormattedMessage {...translations.relatedTitle} />}
+            LinkComponent={RouterLink}
+          />
         </BlogContainer>
       </>
     : <NotFoundPage />

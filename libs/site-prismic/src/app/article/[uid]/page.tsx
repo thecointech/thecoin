@@ -4,6 +4,8 @@ import * as prismic from "@prismicio/client";
 import { createClient } from "@/prismicio";
 import { Article } from "@/components/Article/Article";
 import { BlogContainer } from "@/components/BlogContainer/BlogContainer";
+import { getRecommendedArticles } from "@/components/Article/recommendations";
+import { Related } from "@/components/Related/Related";
 import Link from "next/link";
 import styles from "./styles.module.css"
 import { Icon } from "semantic-ui-react";
@@ -47,14 +49,11 @@ export default async function Page({ params }: { params: Params }) {
     .getByUID("article", uid)
     .catch(() => notFound());
 
-  // const posts = await client.getAllByType("article", {
-  //   predicates: [prismic.filter.not("my.article.uid", uid)],
-  //   orderings: [
-  //     { field: "my.article.publication_date", direction: "desc" },
-  //     { field: "document.first_publication_date", direction: "desc" },
-  //   ],
-  //   limit: 2,
-  // });
+  // Fetch all articles for recommendation selection
+  const allArticles = await client.getAllByType("article");
+
+  // Get recommended articles using shared logic
+  const recommendedArticles = getRecommendedArticles(page, allArticles, 3);
 
   return (
     <div>
@@ -65,13 +64,12 @@ export default async function Page({ params }: { params: Params }) {
         </Link>
       }>
         <Article document={page} />
+        <Related
+          relatedArticles={recommendedArticles}
+          title="Related Articles"
+          LinkComponent={Link}
+        />
       </BlogContainer>
-      {/* <h2>Recommended Posts</h2>
-      <section>
-        {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
-      </section> */}
     </div>
   );
 }
