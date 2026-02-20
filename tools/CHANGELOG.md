@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.3-test.0](https://github.com/thecointech/thecoin/compare/v0.5.2...v0.5.3-test.0) (2026-01-24)
+
+
+### Bug Fixes
+
+* deployment now -only- versions in release-branch, and updates common.public.env where necessary ([2beeb4e](https://github.com/thecointech/thecoin/commit/2beeb4ea047e9a68f6810116241bd624b0648ce8))
+* local release branch tracks remote ([732498f](https://github.com/thecointech/thecoin/commit/732498f38a3f242a33b01570871029e1ac701da0))
+* restore dropped CONFIG_NAME from Google services ([4ad802a](https://github.com/thecointech/thecoin/commit/4ad802a59152851c23531dcbcb24cc122d48af04))
+
+
+
+
+
 ## [0.5.2](https://github.com/thecointech/thecoin/compare/v0.5.2-test.0...v0.5.2) (2026-01-19)
 
 **Note:** Version bump only for package @thecointech/tools

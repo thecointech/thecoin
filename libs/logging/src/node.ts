@@ -3,6 +3,7 @@ import { getConsoleStream } from "./streams/consolestream";
 import { getFileStream } from "./streams/filestream";
 import { getSeqStream } from './streams/seqstream';
 import { createLoggerProxy } from "./loggerContext";
+import './loggerContextNode'; // Auto-registers via static initialization block
 
 const getStreams = (name: string, level?: number) => {
   const streams = [];
