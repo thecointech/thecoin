@@ -1,0 +1,81 @@
+:root {
+  --thecoin-pale-green1: #8ED8D1;
+  --thecoin-pale-green2: #61C1B8;
+  --thecoin-pale-green3: #4EAEA5;
+  --thecoin-pale-green2-faded50: #61C1B8;
+  --thecoin-pale-green2-faded30: #61C1B8;
+  --thecoin-green1: #95DC8F;
+  --thecoin-green2: #60CA8E;
+  --thecoin-green3: #20B58D;
+  --thecoin-green4: #138175;
+  --thecoin-green5: #2B5250;
+  --thecoin-green6: #034B3E;
+  --thecoin-green2-faded: #60CA8E;
+  --thecoin-green4-faded: #138175;
+  --thecoin-green4-faded30: #138175;
+  --thecoin-green4-faded15: #138175;
+  --thecoin-green4-faded14: #138175;
+  --thecoin-green4-faded10: #138175;
+  --thecoin-gold1: #FDE9C2;
+  --thecoin-gold2: #FECCA1;
+  --thecoin-gold3: #FECCA1;
+  --thecoin-gold4: #FFAB2F;
+  --thecoin-red1: #F99D9E;
+  --thecoin-red2: #F18182;
+  --thecoin-red3: #E4696A;
+  --thecoin-blue1: #65A4C5;
+  --thecoin-dark-blue1: #5396E5;
+  --thecoin-dark-blue2: #4174B0;
+  --thecoin-dark-blue3: #396394;
+  --thecoin-gray1: #6F6571;
+  --thecoin-gray2: #F2F2F2;
+  --thecoin-gray3: #767676;
+  --thecoin-gray4: #6A6A6A;
+  --thecoin-gray1-faded10: #6F6571;
+  --thecoin-gray1-faded30: #6F6571;
+  --thecoin-the-coin-primary-red-pale: #F99D9E;
+  --thecoin-the-coin-primary-red-neutral: #F18182;
+  --thecoin-the-coin-primary-red-dark: #E4696A;
+  --thecoin-the-coin-primary-green-pale: #61C1B8;
+  --thecoin-the-coin-primary-green-neutral: #138175;
+  --thecoin-the-coin-primary-green-dark: #2B5250;
+  --thecoin-the-coin-secondary-green-pale: #8ED8D1;
+  --thecoin-the-coin-secondary-green-neutral: #61C1B8;
+  --thecoin-the-coin-secondary-green-dark: #4EAEA5;
+  --secondary-color: #138175;
+  --light-primary-color: #F99D9E;
+  --light-secondary-color: #8ED8D1;
+  --text-color: #2B5250;
+  --thecoin-primary-color1: #138175;
+  --thecoin-primary-color1-hover: #20B58D;
+  --thecoin-primary-color1-active: #2B5250;
+  --thecoin-primary-color2: #61C1B8;
+  --thecoin-primary-color2-hover: #8ED8D1;
+  --thecoin-primary-color2-active: #4EAEA5;
+  --text-light-color: #6F6571;
+}
+
+/* Utility classes for common colors */
+.tc-pale-green-1 { color: var(--thecoin-pale-green1); }
+.tc-pale-green-2 { color: var(--thecoin-pale-green2); }
+.tc-green-3 { color: var(--thecoin-green3); }
+.tc-green-4 { color: var(--thecoin-green4); }
+.tc-green-5 { color: var(--thecoin-green5); }
+.tc-gold-2 { color: var(--thecoin-gold2); }
+.tc-gold-4 { color: var(--thecoin-gold4); }
+.tc-red-2 { color: var(--thecoin-red2); }
+.tc-blue-1 { color: var(--thecoin-blue1); }
+.tc-gray-1 { color: var(--thecoin-gray1); }
+
+/* Utility classes for semantic colors */
+.tc-primary { color: var(--primary-color); }
+.tc-primary-hover { color: var(--primary-color-hover); }
+.tc-primary-active { color: var(--primary-color-active); }
+.tc-secondary { color: var(--secondary-color); }
+.tc-text { color: var(--text-color); }
+.tc-text-dark { color: var(--text-dark-color); }
+.tc-text-light { color: var(--text-light-color); }
+.tc-text-hovered { color: var(--hovered-text-color); }
+.tc-text-selected { color: var(--selected-text-color); }
+.tc-light-primary { color: var(--light-primary-color); }
+.tc-light-secondary { color: var(--light-secondary-color); }
