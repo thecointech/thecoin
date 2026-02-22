@@ -70,7 +70,7 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
 
       - name: Install dependencies
-        run: yarn install --immutable --mode=skip-build
+        run: yarn install --mode=skip-build
 
       - name: Graduate Packages
         id: graduate-packages
@@ -107,14 +107,17 @@ jobs:
             # Find all branches whose HEAD was exactly at the original tag commit
             echo "🔍 Finding branches whose HEAD was at original commit $ORIGINAL_COMMIT"
 
-            # Get all branches where HEAD is exactly the original commit
-            BRANCHES=$(git for-each-ref --format='%(refname:short) %(objectname)' refs/heads/ | grep "^.* $ORIGINAL_COMMIT$" | cut -d' ' -f1)
+            # Get all remote branches where HEAD is exactly the original commit
+            BRANCHES=$(git for-each-ref --format='%(refname:short) %(objectname)' refs/remotes/origin/ \
+              | grep "^origin/.* $ORIGINAL_COMMIT$" \
+              | sed 's/^origin\///' \
+              | cut -d' ' -f1)
 
             if [ -n "$BRANCHES" ]; then
               echo "📋 Advancing branches to new graduated commit $GRADUATED_COMMIT:"
               echo "$BRANCHES"
 
-              # Advance each branch to the new commit
+              # Advance each branch to the new commit (commit exists locally, Git will push it as needed)
               for BRANCH in $BRANCHES; do
                 echo "🔄 Advancing $BRANCH to new commit"
                 git push origin "$GRADUATED_COMMIT:$BRANCH"
@@ -124,8 +127,8 @@ jobs:
               git push origin "$GRADUATED_COMMIT:main"
             fi
 
-            # Push the updated tag
-            git push origin --tags
+            # Push the updated tag with safe force push
+            git push --force-with-lease origin "$STABLE_TAG"
 
             # Output the graduated commit for other jobs
             echo "commit=$GRADUATED_COMMIT" >> "$GITHUB_OUTPUT"
@@ -283,7 +286,7 @@ jobs:
       CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
 
   notify-success:
-    needs: [smoke-tests, determine-environment]
+    needs: [smoke-tests, determine-environment, graduate-packages]
     # Explicit condition needed because smoke-tests uses if: always()
     if: ${{ always() && !cancelled() && !failure() }}
     runs-on: ubuntu-latest
@@ -292,7 +295,7 @@ jobs:
         run: |
           echo "✅ Successfully deployed ${{ github.ref_name }} to ${{ needs.determine-environment.outputs.environment }}"
           echo "Tag: ${{ github.ref_name }}"
-          echo "Commit: ${{ github.sha }}"
+          echo "Commit: ${{ needs.graduate-packages.outputs.commit || github.sha }}"
           echo "Environment: ${{ needs.determine-environment.outputs.environment }}"
 
   cleanup:
