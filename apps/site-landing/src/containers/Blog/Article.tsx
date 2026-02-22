@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Prismic } from "components/Prismic";
 import { Icon } from "semantic-ui-react";
@@ -39,7 +39,7 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
   const articleData = articleId ? articles.get(articleId) : undefined;
 
   // Get all articles as array for recommendations
-  const allArticles = Array.from(articles.values());
+  const allArticles = useMemo(() => Array.from(articles.values()), [articles]);
 
   // If we haven't fetched this article yet, do so now.
   useEffect(() => {
@@ -65,15 +65,17 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
   };
 
   // Get recommended articles using shared logic
-  const recommendedArticles = articleData
-    ? getRecommendedArticles(articleData, allArticles, 3)
-    : [];
+  const recommendedArticles = useMemo(() => {
+    return articleData
+      ? getRecommendedArticles(articleData, allArticles, 3)
+      : [];
+  }, [articleData, allArticles, locale]);
 
   // Display
   return articleData
     ? <>
         <BlogContainer backLink={
-          <a onClick={handleBack}>
+          <a href="#" onClick={handleBack}>
             <Icon name="arrow left" />
             <FormattedMessage {...translations.backLink} />
           </a>
