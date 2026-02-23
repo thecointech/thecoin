@@ -59,8 +59,6 @@ export default async function Index() {
 
   return (
     <>
-      <Navigation client={client} />
-
       <SliceZone slices={home.data.slices} components={components} />
 
       {/* Map over each of the blog posts created and display a `PostCard` for it */}
