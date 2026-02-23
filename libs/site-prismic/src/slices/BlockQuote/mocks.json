@@ -1,0 +1,34 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"items": [],
+		"primary": {
+			"attribution": {
+				"__TYPE__": "FieldContent",
+				"type": "Text",
+				"value": "Steve Jobs"
+			},
+			"quotesource": {
+				"key": "11c693b2-efc8-4862-b95f-12379bf578f5",
+				"__TYPE__": "LinkContent",
+				"value": {
+					"__TYPE__": "ExternalLink",
+					"url": "https://www.stanford.edu/2012/06/15/steve-jobs-dont-settle-2005-stanford-commencement.html",
+					"text": "Stanford Commencement Address 2005"
+				}
+			},
+			"quotetext": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"content": {
+							"text": "The only way to do great work is to love what you do. If you haven't found it yet, keep looking. Don't settle."
+						},
+						"type": "heading3"
+					}
+				]
+			}
+		},
+		"variation": "default"
+	}
+]

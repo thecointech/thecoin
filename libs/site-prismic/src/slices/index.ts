@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 
 export const components = {
+  block_quote: dynamic(() => import("./BlockQuote")),
   hero: dynamic(() => import("./Hero")),
   rich_text: dynamic(() => import("./RichText")),
 };
