@@ -142,12 +142,36 @@ jobs:
             echo "� Using existing commit $CURRENT_COMMIT for $STABLE_TAG"
           fi
 
-  update-metadata:
-    if: ${{ needs.graduate-packages.result == 'success' || needs.graduate-packages.result == 'skipped' }}
+  normalize-commit:
     needs: [determine-environment, graduate-packages]
+    runs-on: ubuntu-latest
+    outputs:
+      commit: ${{ steps.resolve.outputs.commit }}
+    steps:
+      - name: Resolve authoritative commit
+        id: resolve
+        run: |
+          # Use graduate-packages output if available and job succeeded
+          if [[ "${{ needs.graduate-packages.result }}" == "success" && -n "${{ needs.graduate-packages.outputs.commit }}" ]]; then
+            COMMIT="${{ needs.graduate-packages.outputs.commit }}"
+            echo "🎓 Using graduated commit: $COMMIT"
+          else
+            # Fall back to the original commit that triggered the workflow
+            COMMIT="${{ github.sha }}"
+            echo "🏷️ Using trigger commit: $COMMIT"
+          fi
+
+          echo "commit=$COMMIT" >> "$GITHUB_OUTPUT"
+          echo "✅ Authoritative commit resolved: $COMMIT"
+
+  update-metadata:
+    if: needs.normalize-commit.result == 'success'
+    needs: [determine-environment, graduate-packages, normalize-commit]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.normalize-commit.outputs.commit }}
 
       - run: corepack enable
 
@@ -169,39 +193,39 @@ jobs:
           path: environments/common.public.env
 
   build:
-    if: ${{ needs.graduate-packages.result == 'success' || needs.graduate-packages.result == 'skipped' }}
-    needs: [determine-environment, update-metadata, graduate-packages]
+    if: ${{ needs.normalize-commit.result == 'success' }}
+    needs: [determine-environment, update-metadata, normalize-commit]
     uses: ./.github/workflows/action-build.yml
     with:
       DOWNLOAD_METADATA: true
-      COMMIT_SHA: ${{ needs.graduate-packages.outputs.commit }}
+      COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
 
   test:
-    if: ${{ needs.graduate-packages.result == 'success' || needs.graduate-packages.result == 'skipped' }}
-    needs: [build, graduate-packages]
+    if: ${{ needs.normalize-commit.result == 'success' }}
+    needs: [build, normalize-commit]
     uses: ./.github/workflows/action-test.yml
     with:
-      COMMIT_SHA: ${{ needs.graduate-packages.outputs.commit }}
+      COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
 
   # Publish packages only for test tags (initial publish)
   publish-packages-test:
-    if: contains(github.ref_name, '-test.') && (needs.graduate-packages.result == 'success' || needs.graduate-packages.result == 'skipped')
-    needs: [test, graduate-packages]
+    if: contains(github.ref_name, '-test.') && needs.normalize-commit.result == 'success'
+    needs: [test, normalize-commit]
     permissions:
       packages: write
     uses: ./.github/workflows/action-publish-packages.yml
     with:
-      COMMIT_SHA: ${{ needs.graduate-packages.outputs.commit }}
+      COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
 
   # Graduate packages for production tags
   publish-packages-prod:
-    if: needs.determine-environment.outputs.is_prerelease == 'false' && (needs.graduate-packages.result == 'success' || needs.graduate-packages.result == 'skipped')
-    needs: [test, determine-environment, graduate-packages]
+    if: needs.determine-environment.outputs.is_prerelease == 'false' && needs.normalize-commit.result == 'success'
+    needs: [test, determine-environment, normalize-commit]
     permissions:
       packages: write
     uses: ./.github/workflows/action-publish-packages.yml
     with:
-      COMMIT_SHA: ${{ needs.graduate-packages.outputs.commit }}
+      COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
 
   # Wait for package publishing to complete before deploying
   wait-for-packages:
@@ -246,35 +270,35 @@ jobs:
           fi
 
   publish-docker:
-    needs: [wait-for-packages, determine-environment, graduate-packages]
+    needs: [wait-for-packages, determine-environment, normalize-commit]
     # Explicit condition needed because wait-for-packages uses if: always()
     if: ${{ always() && !cancelled() && !failure() }}
     uses: ./.github/workflows/action-publish-docker.yml
     secrets: inherit
     with:
       CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
-      COMMIT_SHA: ${{ needs.graduate-packages.outputs.commit }}
+      COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
       IS_PROMOTION: ${{ !contains(github.ref_name, '-test.') }}
 
   publish-services:
-    needs: [wait-for-packages, determine-environment, graduate-packages]
+    needs: [wait-for-packages, determine-environment, normalize-commit]
     # Explicit condition needed because wait-for-packages uses if: always()
     if: ${{ always() && !cancelled() && !failure() }}
     uses: ./.github/workflows/action-publish-services.yml
     secrets: inherit
     with:
       CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
-      COMMIT_SHA: ${{ needs.graduate-packages.outputs.commit }}
+      COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
 
   publish-sites:
-    needs: [wait-for-packages, determine-environment, graduate-packages]
+    needs: [wait-for-packages, determine-environment, normalize-commit]
     # Explicit condition needed because wait-for-packages uses if: always()
     if: ${{ always() && !cancelled() && !failure() }}
     uses: ./.github/workflows/action-publish-sites.yml
     secrets: inherit
     with:
       CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
-      COMMIT_SHA: ${{ needs.graduate-packages.outputs.commit }}
+      COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
 
   smoke-tests:
     needs: [publish-services, publish-sites, determine-environment]
@@ -286,7 +310,7 @@ jobs:
       CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
 
   notify-success:
-    needs: [smoke-tests, determine-environment, graduate-packages]
+    needs: [smoke-tests, determine-environment, normalize-commit]
     # Explicit condition needed because smoke-tests uses if: always()
     if: ${{ always() && !cancelled() && !failure() }}
     runs-on: ubuntu-latest
@@ -295,7 +319,7 @@ jobs:
         run: |
           echo "✅ Successfully deployed ${{ github.ref_name }} to ${{ needs.determine-environment.outputs.environment }}"
           echo "Tag: ${{ github.ref_name }}"
-          echo "Commit: ${{ needs.graduate-packages.outputs.commit || github.sha }}"
+          echo "Commit: ${{ needs.normalize-commit.outputs.commit }}"
           echo "Environment: ${{ needs.determine-environment.outputs.environment }}"
 
   cleanup:
