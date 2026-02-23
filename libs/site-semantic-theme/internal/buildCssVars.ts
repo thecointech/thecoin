@@ -11,9 +11,9 @@ const extractColorVariables = () => {
   const content = fs.readFileSync(siteVarsPath, 'utf-8');
 
   // First pass: extract all color variable definitions
-  const theCoinPaletteRegex = /@theCoinPalette(\w+(?:\w*)*)\s*:\s*(.+?);/g;
-  const theCoinColorRegex = /@(theCoinPrimaryRed|theCoinPrimaryGreen|theCoinSecondaryGreen)(\w*)\s*:\s*(.+?);/g;
-  const semanticColorRegex = /@(primaryColor|textColor|secondaryColor|lightPrimaryColor|lightSecondaryColor|textLightColor|hoveredTextColor|selectedTextColor|primaryColor\d|primaryColor\dHover|primaryColor\dActive)\s*:\s*(.+?);/g;
+  const theCoinPaletteRegex = /@theCoinPalette(\w+(?:\w*)*)\s*:\s*([^;]+);/g;
+  const theCoinColorRegex = /@(theCoinPrimaryRed|theCoinPrimaryGreen|theCoinSecondaryGreen)(\w*)\s*:\s*([^;]+);/g;
+  const semanticColorRegex = /@(primaryColor|primaryColorHover|primaryColorActive|textColor|textDarkColor|secondaryColor|lightPrimaryColor|lightSecondaryColor|textLightColor|hoveredTextColor|selectedTextColor|primaryColor\d|primaryColor\dHover|primaryColor\dActive)\s*:\s*([^;]+);/g;
 
   const colors: Record<string, string> = {};
   const originalColors: Record<string, string> = {};
@@ -29,33 +29,64 @@ const extractColorVariables = () => {
   while ((match = theCoinColorRegex.exec(content)) !== null) {
     const [, prefix, suffix, value] = match;
     const fullName = prefix + suffix;
-    originalColors[fullName] = value.trim();
+    // Remove "theCoin" prefix to match resolution logic (which strips "@theCoin")
+    const normalizedKey = fullName.replace(/^theCoin/, '');
+    originalColors[normalizedKey] = value.trim();
   }
 
-  // Store semantic color variables
-  while ((match = semanticColorRegex.exec(content)) !== null) {
-    const [, name, value] = match;
-    originalColors[name] = value.trim();
+  // Store semantic color variables (only first occurrence to avoid overrides)
+  const lines = content.split('\n');
+  for (const line of lines) {
+    const match = semanticColorRegex.exec(line);
+    if (match) {
+      const [, name, value] = match;
+      // Only store if we haven't seen this variable before
+      if (!originalColors[name]) {
+        originalColors[name] = value.trim();
+      }
+    }
+    // Reset regex lastIndex for next line
+    semanticColorRegex.lastIndex = 0;
   }
 
   // Second pass: resolve variables and handle fade() functions
   for (const [name, value] of Object.entries(originalColors)) {
     let cleanValue = value;
 
-    // Handle fade() function - extract the base color and resolve it
+    // Handle fade() function - extract the base color and alpha, then create rgba
     if (cleanValue.includes('fade(')) {
-      const fadeMatch = cleanValue.match(/fade\(([^,]+),\s*\d+%\)/);
+      const fadeMatch = cleanValue.match(/fade\(([^,]+),\s*(\d+)%\)/);
       if (fadeMatch) {
         const colorRef = fadeMatch[1].trim();
+        const alphaPercent = parseInt(fadeMatch[2]);
+        const alpha = alphaPercent / 100;
+
         // Remove @ prefix if it's a variable reference
+        let baseColor = colorRef;
         if (colorRef.startsWith('@theCoinPalette')) {
           const varName = colorRef.replace('@theCoinPalette', '');
           if (originalColors[varName]) {
             const baseColorMatch = originalColors[varName].match(/#\w+/);
-            cleanValue = baseColorMatch ? baseColorMatch[0] : colorRef;
+            baseColor = baseColorMatch ? baseColorMatch[0] : colorRef;
           }
+        }
+        else if (colorRef.startsWith('@theCoin')) {
+          const varName = colorRef.replace('@theCoin', '');
+          if (originalColors[varName]) {
+            const baseColorMatch = originalColors[varName].match(/#\w+/);
+            baseColor = baseColorMatch ? baseColorMatch[0] : colorRef;
+          }
+        }
+
+        // Convert hex to rgba
+        if (baseColor.startsWith('#')) {
+          const hex = baseColor.slice(1);
+          const r = parseInt(hex.substring(0, 2), 16);
+          const g = parseInt(hex.substring(2, 4), 16);
+          const b = parseInt(hex.substring(4, 6), 16);
+          cleanValue = `rgba(${r}, ${g}, ${b}, ${alpha})`;
         } else {
-          cleanValue = colorRef;
+          cleanValue = baseColor;
         }
       }
     }
@@ -77,8 +108,18 @@ const extractColorVariables = () => {
       else if (cleanValue.startsWith('@theCoin')) {
         const varName = cleanValue.replace('@theCoin', '');
         if (originalColors[varName]) {
-          const baseColorMatch = originalColors[varName].match(/#\w+/);
-          cleanValue = baseColorMatch ? baseColorMatch[0] : cleanValue;
+          const refValue = originalColors[varName];
+          // If the referenced value is also a variable reference, resolve it recursively
+          if (refValue.startsWith('@theCoinPalette')) {
+            const refVarName = refValue.replace('@theCoinPalette', '');
+            if (originalColors[refVarName]) {
+              const baseColorMatch = originalColors[refVarName].match(/#\w+/);
+              cleanValue = baseColorMatch ? baseColorMatch[0] : cleanValue;
+            }
+          } else {
+            const baseColorMatch = refValue.match(/#\w+/);
+            cleanValue = baseColorMatch ? baseColorMatch[0] : cleanValue;
+          }
         }
       }
       // Handle other semantic color references
@@ -112,9 +153,13 @@ const extractColorVariables = () => {
     // Remove any trailing semicolons
     cleanValue = cleanValue.replace(/;$/, '');
 
-    // Only store if we have a valid color value
-    if (cleanValue && cleanValue.startsWith('#')) {
-      colors[name] = cleanValue;
+    // Only store if we have a valid color value (hex or rgba)
+    // Exclude theCoinPrimary* variables from final output - they're only for resolution
+    if (cleanValue && (cleanValue.startsWith('#') || cleanValue.startsWith('rgba('))) {
+      // Don't store theCoinPrimary* variables as CSS custom properties
+      if (!name.startsWith('PrimaryRed') && !name.startsWith('PrimaryGreen') && !name.startsWith('SecondaryGreen')) {
+        colors[name] = cleanValue;
+      }
     }
   }
 
