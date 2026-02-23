@@ -1,0 +1,5 @@
+.backLink {
+  cursor: pointer;
+  border-bottom: none;
+  display: inline-block;
+}

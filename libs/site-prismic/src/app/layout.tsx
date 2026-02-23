@@ -1,8 +1,12 @@
 import { PrismicPreview } from "@prismicio/next";
 import { repositoryName } from '@/prismicio';
 import type { Metadata } from "next";
+import { BrowserWarning } from "@/components/BrowserWarning";
+import { Header } from "@/components/Header/Header";
+import { Footer } from "@/components/Footer/Footer";
 
 import "../semantic/semantic.css";
+import styles from "./layout.module.css";
 
 export const metadata: Metadata = {
   title: "TheCoin Prismic Content",
@@ -17,8 +21,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div>
-          {children}
+        <BrowserWarning />
+        <div className={styles.container}>
+          <div className={styles.headerBackground} />
+          <div className={styles.header}>
+            <Header />
+          </div>
+
+          <main className={styles.main}>
+            {children}
+          </main>
+
+          <div className={styles.footerBackground} />
+          <div className={styles.footer}>
+            <Footer />
+          </div>
+
           <PrismicPreview repositoryName={repositoryName} />
         </div>
       </body>

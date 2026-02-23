@@ -10,6 +10,7 @@ import { Prismic } from '../../components/Prismic/reducer';
 import styles from "./styles.module.less";
 import { defineMessages, FormattedMessage } from 'react-intl';
 import type { ArticleDocument } from "@thecointech/site-prismic/types";
+import { BlogContainer } from "@thecointech/site-prismic/components";
 
 const translations = defineMessages({
   title : {
@@ -39,7 +40,7 @@ export const ArticleList = () => {
     : allArticles;
   return (
     <>
-      <div className={styles.containerArticle}>
+      <BlogContainer>
         <Header as="h2" className={"x10spaceBefore"}>
           <Header.Content>
             <FormattedMessage {...translations.title} />
@@ -47,7 +48,7 @@ export const ArticleList = () => {
         </Header>
         <CategoryMenu categories={categories} idForMenu={styles.menuArticle} railPosition={"left"} />
         {articles.map(article => (<ArticleItem key={article.id} {...article} />))}
-      </div>
+      </BlogContainer>
       <Decoration />
     </>
   )

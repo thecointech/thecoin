@@ -2,6 +2,11 @@ name: Run Tests
 
 on:
   workflow_call:
+    inputs:
+      COMMIT_SHA:
+        description: 'Specific commit to checkout (optional, defaults to current)'
+        required: false
+        type: string
 
 env:
   YARN_CHECKSUM_BEHAVIOR: ignore
@@ -12,6 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.COMMIT_SHA }}
 
     - run: corepack enable
 

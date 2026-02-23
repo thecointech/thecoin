@@ -11,6 +11,10 @@ on:
         required: false
         type: boolean
         default: false
+      COMMIT_SHA:
+        description: 'Specific commit to checkout (optional, defaults to tag commit)'
+        required: false
+        type: string
 
 env:
   YARN_CHECKSUM_BEHAVIOR: ignore
@@ -24,6 +28,8 @@ jobs:
       run: echo "Started at $(date +'%Y-%m-%dT%H:%M:%S')"
 
     - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.COMMIT_SHA }}
 
     # Java required for OpenAPI client generation
     - uses: actions/setup-java@v2
