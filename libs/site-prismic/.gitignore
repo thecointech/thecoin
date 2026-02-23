@@ -24,4 +24,4 @@ dist/
 # Slice Machine
 .slicemachine/
 next-env.d.ts
-src/thecoin-colors.css
+src/semantic/thecoin-colors.css
