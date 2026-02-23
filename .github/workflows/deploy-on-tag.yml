@@ -82,7 +82,7 @@ jobs:
           echo "🎓 Processing stable tag $STABLE_TAG"
 
           # Check if any packages have test versions (more reliable than tag searching)
-          if git grep -q "\"-test\." package.json; then
+          if git grep -q "\"version\":.*\"-test\." **/package.json; then
             echo "📌 Found test versions in packages, graduating to stable"
 
             # Get commit the tag currently points to
@@ -91,8 +91,30 @@ jobs:
             # Graduate packages (removes prerelease suffix) from current state
             yarn lerna version --conventional-graduate --yes --no-git-tag-version
 
-            # Verify yarn.lock is consistent with updated package.json files
-            yarn install --immutable
+            # Ensure all the files are up to date
+            echo "🔄 Updating lockfile after version graduation..."
+            if ! yarn install --mode=skip-build; then
+              echo "❌ Failed to update lockfile after version graduation"
+              echo "This may indicate dependency conflicts or workspace resolution issues"
+              echo "Attempting to diagnose the issue..."
+
+              # Show what changed
+              echo "📋 Changed package.json files:"
+              git status --porcelain | grep "package.json" || echo "No package.json changes detected"
+
+              # Try to get more specific error info
+              echo "🔍 Attempting detailed error analysis..."
+              yarn install --verbose --mode=skip-build 2>&1 | head -20 || true
+
+              echo ""
+              echo "💡 Possible solutions:"
+              echo "1. Check for conflicting exact version pins in workspace packages"
+              echo "2. Verify all dependencies are compatible with new versions"
+              echo "3. Consider running 'yarn install --force' if lockfile corruption suspected"
+              echo ""
+              echo "Please review the changes and retry the deployment"
+              exit 1
+            fi
 
             # Commit the version changes (since --no-git-tag-version skips both commit and tag)
             git add .
@@ -117,10 +139,19 @@ jobs:
               echo "📋 Advancing branches to new graduated commit $GRADUATED_COMMIT:"
               echo "$BRANCHES"
 
-              # Advance each branch to the new commit (commit exists locally, Git will push it as needed)
+              # Advance each branch to the new commit using atomic force-with-lease
               for BRANCH in $BRANCHES; do
                 echo "🔄 Advancing $BRANCH to new commit"
-                git push origin "$GRADUATED_COMMIT:$BRANCH"
+
+                # Use force-with-lease to ensure we're pushing over the expected commit atomically
+                if ! git push --force-with-lease="$ORIGINAL_COMMIT" origin "$GRADUATED_COMMIT:$BRANCH"; then
+                  echo "❌ Failed to advance $BRANCH - it may have been modified since tag creation"
+                  echo "Expected: $ORIGINAL_COMMIT"
+                  echo "Please check if $BRANCH has been updated and retry the deployment"
+                  exit 1
+                fi
+
+                echo "✅ Advanced $BRANCH to $GRADUATED_COMMIT"
               done
             else
               echo "⚠️ No branches found with HEAD at original commit, pushing to main as fallback"
@@ -144,6 +175,7 @@ jobs:
 
   normalize-commit:
     needs: [determine-environment, graduate-packages]
+    if: ${{ !cancelled() && !failure() }}
     runs-on: ubuntu-latest
     outputs:
       commit: ${{ steps.resolve.outputs.commit }}
