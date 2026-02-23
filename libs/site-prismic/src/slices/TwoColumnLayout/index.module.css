@@ -1,0 +1,56 @@
+@import '../../semantic/thecoin-colors.css';
+
+.two-column-layout {
+  display: flex;
+  padding: 1rem;
+  flex-direction: row;
+  width: 100%;
+  max-width: 100%;
+
+  .column {
+    min-width: 0;
+    /* Allow flex items to shrink below content size */
+    overflow: hidden;
+    /* Prevent content from overflowing */
+    padding: 0 1rem;
+    /* Add some spacing between columns */
+    box-sizing: border-box;
+
+    /* Add vertical rule between columns */
+    &:first-child {
+      border-right: 1px solid var(--thecoin-green4-faded10);
+    }
+
+    /* Handle oversized content */
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Handle text overflow */
+    * {
+      max-width: 100%;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+  }
+
+  .column50 {
+    flex: 0 0 50%;
+    width: 50%;
+    max-width: 50%;
+  }
+
+  .column33 {
+    flex: 0 0 33.333%;
+    width: 33.333%;
+    max-width: 33.333%;
+  }
+
+  .column66 {
+    flex: 0 0 66.667%;
+    width: 66.667%;
+    max-width: 66.667%;
+  }
+}

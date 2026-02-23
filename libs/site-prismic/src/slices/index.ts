@@ -6,4 +6,5 @@ export const components = {
   block_quote: dynamic(() => import("./BlockQuote")),
   hero: dynamic(() => import("./Hero")),
   rich_text: dynamic(() => import("./RichText")),
+  two_column_layout: dynamic(() => import("./TwoColumnLayout")),
 };

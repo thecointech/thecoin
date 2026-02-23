@@ -178,7 +178,7 @@ interface ArticleDocumentData {
    * - **Tab**: Main
    * - **Documentation**: https://prismic.io/docs/slices
    */
-  slices: prismic.SliceZone<ArticleDocumentDataSlicesSlice> /**
+  slices: prismic.SliceZone<ArticleDocumentDataSlicesSlice>; /**
    * Meta Title field in *Article*
    *
    * - **Field Type**: Text
@@ -186,7 +186,7 @@ interface ArticleDocumentData {
    * - **API ID Path**: article.meta_title
    * - **Tab**: SEO & Metadata
    * - **Documentation**: https://prismic.io/docs/fields/text
-   */;
+   */
   meta_title: prismic.KeyTextField;
 
   /**
@@ -225,6 +225,40 @@ export type ArticleDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<
     Simplify<ArticleDocumentData>,
     "article",
+    Lang
+  >;
+
+type ColumncontentDocumentDataSlicesSlice = never;
+
+/**
+ * Content for ColumnContent documents
+ */
+interface ColumncontentDocumentData {
+  /**
+   * `slices` field in *ColumnContent*
+   *
+   * - **Field Type**: Slice Zone
+   * - **Placeholder**: *None*
+   * - **API ID Path**: columncontent.slices[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/slices
+   */
+  slices: prismic.SliceZone<ColumncontentDocumentDataSlicesSlice>;
+}
+
+/**
+ * ColumnContent document from Prismic
+ *
+ * - **API ID**: `columncontent`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type ColumncontentDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<
+    Simplify<ColumncontentDocumentData>,
+    "columncontent",
     Lang
   >;
 
@@ -380,7 +414,7 @@ interface PageDocumentData {
    * - **Tab**: Main
    * - **Documentation**: https://prismic.io/docs/slices
    */
-  slices: prismic.SliceZone<PageDocumentDataSlicesSlice> /**
+  slices: prismic.SliceZone<PageDocumentDataSlicesSlice>; /**
    * Meta Title field in *Page*
    *
    * - **Field Type**: Text
@@ -388,7 +422,7 @@ interface PageDocumentData {
    * - **API ID Path**: page.meta_title
    * - **Tab**: SEO & Metadata
    * - **Documentation**: https://prismic.io/docs/fields/text
-   */;
+   */
   meta_title: prismic.KeyTextField;
 
   /**
@@ -428,6 +462,7 @@ export type PageDocument<Lang extends string = string> =
 
 export type AllDocumentTypes =
   | ArticleDocument
+  | ColumncontentDocument
   | FaqDocument
   | NavigationDocument
   | PageDocument;
@@ -610,6 +645,106 @@ export type RichTextSlice = prismic.SharedSlice<
   RichTextSliceVariation
 >;
 
+/**
+ * Item in *TwoColumnLayout → Default → Primary → Left Column Content*
+ */
+export interface TwoColumnLayoutSliceDefaultPrimaryLeftColumnContentItem {
+  /**
+   * Column Text field in *TwoColumnLayout → Default → Primary → Left Column Content*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: two_column_layout.default.primary.left_column_content[].column_text
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  column_text: prismic.RichTextField;
+}
+
+/**
+ * Item in *TwoColumnLayout → Default → Primary → Right Column Content*
+ */
+export interface TwoColumnLayoutSliceDefaultPrimaryRightColumnContentItem {
+  /**
+   * Column Text field in *TwoColumnLayout → Default → Primary → Right Column Content*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: two_column_layout.default.primary.right_column_content[].column_text
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  column_text: prismic.RichTextField;
+}
+
+/**
+ * Primary content in *TwoColumnLayout → Default → Primary*
+ */
+export interface TwoColumnLayoutSliceDefaultPrimary {
+  /**
+   * Layout field in *TwoColumnLayout → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **Default Value**: 50-50
+   * - **API ID Path**: two_column_layout.default.primary.layout
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  layout: prismic.SelectField<"50-50" | "33-66" | "66-33", "filled">;
+
+  /**
+   * Left Column Content field in *TwoColumnLayout → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: two_column_layout.default.primary.left_column_content[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  left_column_content: prismic.GroupField<
+    Simplify<TwoColumnLayoutSliceDefaultPrimaryLeftColumnContentItem>
+  >;
+
+  /**
+   * Right Column Content field in *TwoColumnLayout → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: two_column_layout.default.primary.right_column_content[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  right_column_content: prismic.GroupField<
+    Simplify<TwoColumnLayoutSliceDefaultPrimaryRightColumnContentItem>
+  >;
+}
+
+/**
+ * Default variation for TwoColumnLayout Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type TwoColumnLayoutSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<TwoColumnLayoutSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *TwoColumnLayout*
+ */
+type TwoColumnLayoutSliceVariation = TwoColumnLayoutSliceDefault;
+
+/**
+ * TwoColumnLayout Shared Slice
+ *
+ * - **API ID**: `two_column_layout`
+ * - **Description**: TwoColumnLayout
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type TwoColumnLayoutSlice = prismic.SharedSlice<
+  "two_column_layout",
+  TwoColumnLayoutSliceVariation
+>;
+
 declare module "@prismicio/client" {
   interface CreateClient {
     (
@@ -635,6 +770,9 @@ declare module "@prismicio/client" {
       ArticleDocumentData,
       ArticleDocumentDataCategoriesItem,
       ArticleDocumentDataSlicesSlice,
+      ColumncontentDocument,
+      ColumncontentDocumentData,
+      ColumncontentDocumentDataSlicesSlice,
       FaqDocument,
       FaqDocumentData,
       NavigationDocument,
@@ -656,6 +794,12 @@ declare module "@prismicio/client" {
       RichTextSliceDefaultPrimary,
       RichTextSliceVariation,
       RichTextSliceDefault,
+      TwoColumnLayoutSlice,
+      TwoColumnLayoutSliceDefaultPrimaryLeftColumnContentItem,
+      TwoColumnLayoutSliceDefaultPrimaryRightColumnContentItem,
+      TwoColumnLayoutSliceDefaultPrimary,
+      TwoColumnLayoutSliceVariation,
+      TwoColumnLayoutSliceDefault,
     };
   }
 }
