@@ -86,7 +86,10 @@ export interface ArticleDocumentDataCategoriesItem {
   >;
 }
 
-type ArticleDocumentDataSlicesSlice = RichTextSlice;
+type ArticleDocumentDataSlicesSlice =
+  | TwoColumnLayoutSlice
+  | BlockQuoteSlice
+  | RichTextSlice;
 
 /**
  * Content for Article documents
@@ -225,40 +228,6 @@ export type ArticleDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<
     Simplify<ArticleDocumentData>,
     "article",
-    Lang
-  >;
-
-type ColumncontentDocumentDataSlicesSlice = never;
-
-/**
- * Content for ColumnContent documents
- */
-interface ColumncontentDocumentData {
-  /**
-   * `slices` field in *ColumnContent*
-   *
-   * - **Field Type**: Slice Zone
-   * - **Placeholder**: *None*
-   * - **API ID Path**: columncontent.slices[]
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/slices
-   */
-  slices: prismic.SliceZone<ColumncontentDocumentDataSlicesSlice>;
-}
-
-/**
- * ColumnContent document from Prismic
- *
- * - **API ID**: `columncontent`
- * - **Repeatable**: `true`
- * - **Documentation**: https://prismic.io/docs/content-modeling
- *
- * @typeParam Lang - Language API ID of the document.
- */
-export type ColumncontentDocument<Lang extends string = string> =
-  prismic.PrismicDocumentWithUID<
-    Simplify<ColumncontentDocumentData>,
-    "columncontent",
     Lang
   >;
 
@@ -462,7 +431,6 @@ export type PageDocument<Lang extends string = string> =
 
 export type AllDocumentTypes =
   | ArticleDocument
-  | ColumncontentDocument
   | FaqDocument
   | NavigationDocument
   | PageDocument;
@@ -770,9 +738,6 @@ declare module "@prismicio/client" {
       ArticleDocumentData,
       ArticleDocumentDataCategoriesItem,
       ArticleDocumentDataSlicesSlice,
-      ColumncontentDocument,
-      ColumncontentDocumentData,
-      ColumncontentDocumentDataSlicesSlice,
       FaqDocument,
       FaqDocumentData,
       NavigationDocument,
