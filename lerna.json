@@ -3,7 +3,6 @@
   "version": "0.5.3-test.1",
   "command": {
     "publish": {
-      "conventionalCommits": true,
       "message": "chore(release): publish",
       "registry": "https://npm.pkg.github.com",
       "allowBranch": [
@@ -13,6 +12,7 @@
       ]
     },
     "version": {
+      "conventionalCommits": true,
       "allowBranch": [
         "publish/*",
         "main",
