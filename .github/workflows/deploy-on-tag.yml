@@ -82,7 +82,7 @@ jobs:
           echo "🎓 Processing stable tag $STABLE_TAG"
 
           # Check if any packages have test versions (more reliable than tag searching)
-          if git grep -q "\"version\":.*\"-test\." **/package.json; then
+          if git grep -q "\"version\":.*\"-test\." -- "**/package.json"; then
             echo "📌 Found test versions in packages, graduating to stable"
 
             # Get commit the tag currently points to
@@ -144,7 +144,7 @@ jobs:
                 echo "🔄 Advancing $BRANCH to new commit"
 
                 # Use force-with-lease to ensure we're pushing over the expected commit atomically
-                if ! git push --force-with-lease="$ORIGINAL_COMMIT" origin "$GRADUATED_COMMIT:$BRANCH"; then
+                if ! git push --force-with-lease="refs/heads/$BRANCH:$ORIGINAL_COMMIT" origin "$GRADUATED_COMMIT:$BRANCH"; then
                   echo "❌ Failed to advance $BRANCH - it may have been modified since tag creation"
                   echo "Expected: $ORIGINAL_COMMIT"
                   echo "Please check if $BRANCH has been updated and retry the deployment"
