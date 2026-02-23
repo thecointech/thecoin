@@ -170,7 +170,7 @@ jobs:
             # Use current tag's commit for downstream jobs
             CURRENT_COMMIT=$(git rev-list -n 1 "$STABLE_TAG")
             echo "commit=$CURRENT_COMMIT" >> "$GITHUB_OUTPUT"
-            echo "� Using existing commit $CURRENT_COMMIT for $STABLE_TAG"
+            echo "Using existing commit $CURRENT_COMMIT for $STABLE_TAG"
           fi
 
   normalize-commit:
