@@ -45,9 +45,9 @@ function generatePlist(schedule: HarvestSchedule): string {
   const { daysToRun, timeToRun } = schedule;
   const [hour, minute] = timeToRun.split(':');
 
-  // Convert days array to calendar days (0 = Sunday in our array, 1-7 in launchd)
+  // Convert days array to calendar days (0 = Sunday in both our array and launchd)
   const weekdays = daysToRun
-    .map((enabled, idx) => enabled ? ((idx + 1) % 7 || 7).toString() : null)
+    .map((enabled, idx) => enabled ? idx.toString() : null)
     .filter(Boolean)
     .join(',');
 
