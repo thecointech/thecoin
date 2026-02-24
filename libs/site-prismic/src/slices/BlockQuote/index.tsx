@@ -1,9 +1,7 @@
 import { FC } from "react";
-import { Content } from "@prismicio/client";
-import { SliceComponentProps } from "@prismicio/react";
-import { PrismicRichText } from "@prismicio/react";
+import { Content, isFilled } from "@prismicio/client";
+import { SliceComponentProps, PrismicRichText } from "@prismicio/react";
 import { PrismicNextLink } from "@prismicio/next";
-import { isFilled } from "@prismicio/client";
 import styles from './index.module.css';
 
 /**

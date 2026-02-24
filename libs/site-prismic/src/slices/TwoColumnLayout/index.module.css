@@ -31,7 +31,6 @@
     /* Handle text overflow */
     * {
       max-width: 100%;
-      word-wrap: break-word;
       overflow-wrap: break-word;
     }
   }
@@ -52,5 +51,36 @@
     flex: 0 0 66.667%;
     width: 66.667%;
     max-width: 66.667%;
+  }
+}
+
+/* Mobile responsive - stack columns on small screens */
+@media (max-width: 600px) {
+  .two-column-layout {
+    flex-direction: column;
+
+    .column,
+    .column50,
+    .column33,
+    .column66 {
+      flex: 0 0 100%;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .column {
+      /* Remove vertical border on first child, replace with horizontal border */
+      &:first-child {
+        border-right: none;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--thecoin-green4-faded10);
+      }
+
+      /* Remove bottom padding from last column to avoid extra spacing */
+      &:last-child {
+        padding-top: 1rem;
+        padding-bottom: 0;
+      }
+    }
   }
 }

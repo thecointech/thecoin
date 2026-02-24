@@ -1,8 +1,7 @@
 import { FC } from "react";
 import { Content } from "@prismicio/client";
-import { SliceComponentProps } from "@prismicio/react";
+import { SliceComponentProps, PrismicRichText } from "@prismicio/react";
 import styles from "./index.module.css";
-import { PrismicRichText } from "@prismicio/react";
 
 /**
  * Props for `TwoColumnLayout`.
