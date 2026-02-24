@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import { writeFileSync } from 'fs';
+import { writeFileSync, mkdirSync, renameSync } from 'fs';
 import { homedir, tmpdir } from 'os';
 import { HarvestSchedule } from '@/types';
 import { log } from '@thecointech/logging';
@@ -17,7 +17,7 @@ export async function setSchedule(schedule: HarvestSchedule) {
     // Unload existing schedule if it exists
     try {
       log.debug('Unloading existing schedule');
-      execSync(`launchctl unload ${PlistPath}`);
+      execSync(`launchctl unload "${PlistPath}"`);
     } catch (err) {
       // Ignore error if job doesn't exist
     }
@@ -31,9 +31,9 @@ export async function setSchedule(schedule: HarvestSchedule) {
     writeFileSync(tmpPath, plist);
 
     // Move plist to LaunchAgents directory and load it
-    execSync(`mkdir -p ${PlistDir}`);
-    execSync(`mv ${tmpPath} ${PlistPath}`);
-    execSync(`launchctl load ${PlistPath}`);
+    mkdirSync(PlistDir, { recursive: true });
+    renameSync(tmpPath, PlistPath);
+    execSync(`launchctl load "${PlistPath}"`);
 
     log.info('Schedule updated successfully');
   } catch (err) {
