@@ -6,7 +6,8 @@ import { log } from '@thecointech/logging';
 
 const TaskName = 'com.thecoin.harvester';
 const HomeDir = homedir();
-const PlistPath = `${HomeDir}/Library/LaunchAgents/${TaskName}.plist`;
+const PlistDir = `${HomeDir}/Library/LaunchAgents`;
+const PlistPath = `${PlistDir}/${TaskName}.plist`;
 
 
 export async function setSchedule(schedule: HarvestSchedule) {
@@ -30,7 +31,7 @@ export async function setSchedule(schedule: HarvestSchedule) {
     writeFileSync(tmpPath, plist);
 
     // Move plist to LaunchAgents directory and load it
-    execSync(`mkdir -p ~/Library/LaunchAgents`);
+    execSync(`mkdir -p ${PlistDir}`);
     execSync(`mv ${tmpPath} ${PlistPath}`);
     execSync(`launchctl load ${PlistPath}`);
 
@@ -47,9 +48,8 @@ function generatePlist(schedule: HarvestSchedule): string {
 
   // Convert days array to calendar days (0 = Sunday in both our array and launchd)
   const weekdays = daysToRun
-    .map((enabled, idx) => enabled ? idx.toString() : null)
-    .filter(Boolean)
-    .join(',');
+    .map((enabled, idx) => enabled ? idx : null)
+    .filter((v): v is number => v !== null)
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -64,7 +64,7 @@ function generatePlist(schedule: HarvestSchedule): string {
     </array>
     <key>StartCalendarInterval</key>
     <array>
-        ${weekdays.split(',').map(day => `
+        ${weekdays.map(day => `
         <dict>
             <key>Hour</key>
             <integer>${hour}</integer>
