@@ -1,0 +1,46 @@
+{
+  "id": "block_quote",
+  "type": "SharedSlice",
+  "name": "BlockQuote",
+  "description": "BlockQuote",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "quotetext": {
+          "type": "StructuredText",
+          "config": {
+            "label": "QuoteText",
+            "placeholder": "the text within the quotes",
+            "allowTargetBlank": false,
+            "single": "heading3"
+          }
+        },
+        "attribution": {
+          "type": "Text",
+          "config": {
+            "label": "Attribution",
+            "placeholder": "Who said the quote"
+          }
+        },
+        "quotesource": {
+          "type": "Link",
+          "config": {
+            "label": "QuoteSource",
+            "placeholder": "(Optional) Link to source if possible",
+            "select": null,
+            "allowTargetBlank": true,
+            "allowText": true,
+            "repeat": false
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

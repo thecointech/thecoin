@@ -86,7 +86,10 @@ export interface ArticleDocumentDataCategoriesItem {
   >;
 }
 
-type ArticleDocumentDataSlicesSlice = RichTextSlice;
+type ArticleDocumentDataSlicesSlice =
+  | TwoColumnLayoutSlice
+  | BlockQuoteSlice
+  | RichTextSlice;
 
 /**
  * Content for Article documents
@@ -225,126 +228,6 @@ export type ArticleDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<
     Simplify<ArticleDocumentData>,
     "article",
-    Lang
-  >;
-
-type BlogPostDocumentDataSlicesSlice = RichTextSlice;
-
-/**
- * Content for Blog Post documents
- */
-interface BlogPostDocumentData {
-  /**
-   * Title field in *Blog Post*
-   *
-   * - **Field Type**: Rich Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blog_post.title
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/fields/rich-text
-   */
-  title: prismic.RichTextField;
-
-  /**
-   * Description field in *Blog Post*
-   *
-   * - **Field Type**: Rich Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blog_post.description
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/fields/rich-text
-   */
-  description: prismic.RichTextField;
-
-  /**
-   * Featured Image field in *Blog Post*
-   *
-   * - **Field Type**: Image
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blog_post.featured_image
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/fields/image
-   */
-  featured_image: prismic.ImageField<never>;
-
-  /**
-   * Publication Date field in *Blog Post*
-   *
-   * - **Field Type**: Date
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blog_post.publication_date
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/fields/date
-   */
-  publication_date: prismic.DateField;
-
-  /**
-   * timestamp field in *Blog Post*
-   *
-   * - **Field Type**: Timestamp
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blog_post.timestamp
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/fields/timestamp
-   */
-  timestamp: prismic.TimestampField;
-
-  /**
-   * Slice Zone field in *Blog Post*
-   *
-   * - **Field Type**: Slice Zone
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blog_post.slices[]
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/slices
-   */
-  slices: prismic.SliceZone<BlogPostDocumentDataSlicesSlice>; /**
-   * Meta Title field in *Blog Post*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: A title of the page used for social media and search engines
-   * - **API ID Path**: blog_post.meta_title
-   * - **Tab**: SEO & Metadata
-   * - **Documentation**: https://prismic.io/docs/fields/text
-   */
-  meta_title: prismic.KeyTextField;
-
-  /**
-   * Meta Description field in *Blog Post*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: A brief summary of the page
-   * - **API ID Path**: blog_post.meta_description
-   * - **Tab**: SEO & Metadata
-   * - **Documentation**: https://prismic.io/docs/fields/text
-   */
-  meta_description: prismic.KeyTextField;
-
-  /**
-   * Meta Image field in *Blog Post*
-   *
-   * - **Field Type**: Image
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blog_post.meta_image
-   * - **Tab**: SEO & Metadata
-   * - **Documentation**: https://prismic.io/docs/fields/image
-   */
-  meta_image: prismic.ImageField<never>;
-}
-
-/**
- * Blog Post document from Prismic
- *
- * - **API ID**: `blog_post`
- * - **Repeatable**: `true`
- * - **Documentation**: https://prismic.io/docs/content-modeling
- *
- * @typeParam Lang - Language API ID of the document.
- */
-export type BlogPostDocument<Lang extends string = string> =
-  prismic.PrismicDocumentWithUID<
-    Simplify<BlogPostDocumentData>,
-    "blog_post",
     Lang
   >;
 
@@ -548,10 +431,80 @@ export type PageDocument<Lang extends string = string> =
 
 export type AllDocumentTypes =
   | ArticleDocument
-  | BlogPostDocument
   | FaqDocument
   | NavigationDocument
   | PageDocument;
+
+/**
+ * Primary content in *BlockQuote → Default → Primary*
+ */
+export interface BlockQuoteSliceDefaultPrimary {
+  /**
+   * QuoteText field in *BlockQuote → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: the text within the quotes
+   * - **API ID Path**: block_quote.default.primary.quotetext
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  quotetext: prismic.RichTextField;
+
+  /**
+   * Attribution field in *BlockQuote → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: Who said the quote
+   * - **API ID Path**: block_quote.default.primary.attribution
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  attribution: prismic.KeyTextField;
+
+  /**
+   * QuoteSource field in *BlockQuote → Default → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: (Optional) Link to source if possible
+   * - **API ID Path**: block_quote.default.primary.quotesource
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  quotesource: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+}
+
+/**
+ * Default variation for BlockQuote Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BlockQuoteSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<BlockQuoteSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *BlockQuote*
+ */
+type BlockQuoteSliceVariation = BlockQuoteSliceDefault;
+
+/**
+ * BlockQuote Shared Slice
+ *
+ * - **API ID**: `block_quote`
+ * - **Description**: BlockQuote
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BlockQuoteSlice = prismic.SharedSlice<
+  "block_quote",
+  BlockQuoteSliceVariation
+>;
 
 /**
  * Primary content in *Hero → Default → Primary*
@@ -660,6 +613,106 @@ export type RichTextSlice = prismic.SharedSlice<
   RichTextSliceVariation
 >;
 
+/**
+ * Item in *TwoColumnLayout → Default → Primary → Left Column Content*
+ */
+export interface TwoColumnLayoutSliceDefaultPrimaryLeftColumnContentItem {
+  /**
+   * Column Text field in *TwoColumnLayout → Default → Primary → Left Column Content*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: two_column_layout.default.primary.left_column_content[].column_text
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  column_text: prismic.RichTextField;
+}
+
+/**
+ * Item in *TwoColumnLayout → Default → Primary → Right Column Content*
+ */
+export interface TwoColumnLayoutSliceDefaultPrimaryRightColumnContentItem {
+  /**
+   * Column Text field in *TwoColumnLayout → Default → Primary → Right Column Content*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: two_column_layout.default.primary.right_column_content[].column_text
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  column_text: prismic.RichTextField;
+}
+
+/**
+ * Primary content in *TwoColumnLayout → Default → Primary*
+ */
+export interface TwoColumnLayoutSliceDefaultPrimary {
+  /**
+   * Layout field in *TwoColumnLayout → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **Default Value**: 50-50
+   * - **API ID Path**: two_column_layout.default.primary.layout
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  layout: prismic.SelectField<"50-50" | "33-66" | "66-33", "filled">;
+
+  /**
+   * Left Column Content field in *TwoColumnLayout → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: two_column_layout.default.primary.left_column_content[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  left_column_content: prismic.GroupField<
+    Simplify<TwoColumnLayoutSliceDefaultPrimaryLeftColumnContentItem>
+  >;
+
+  /**
+   * Right Column Content field in *TwoColumnLayout → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: two_column_layout.default.primary.right_column_content[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  right_column_content: prismic.GroupField<
+    Simplify<TwoColumnLayoutSliceDefaultPrimaryRightColumnContentItem>
+  >;
+}
+
+/**
+ * Default variation for TwoColumnLayout Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type TwoColumnLayoutSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<TwoColumnLayoutSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *TwoColumnLayout*
+ */
+type TwoColumnLayoutSliceVariation = TwoColumnLayoutSliceDefault;
+
+/**
+ * TwoColumnLayout Shared Slice
+ *
+ * - **API ID**: `two_column_layout`
+ * - **Description**: TwoColumnLayout
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type TwoColumnLayoutSlice = prismic.SharedSlice<
+  "two_column_layout",
+  TwoColumnLayoutSliceVariation
+>;
+
 declare module "@prismicio/client" {
   interface CreateClient {
     (
@@ -685,9 +738,6 @@ declare module "@prismicio/client" {
       ArticleDocumentData,
       ArticleDocumentDataCategoriesItem,
       ArticleDocumentDataSlicesSlice,
-      BlogPostDocument,
-      BlogPostDocumentData,
-      BlogPostDocumentDataSlicesSlice,
       FaqDocument,
       FaqDocumentData,
       NavigationDocument,
@@ -697,6 +747,10 @@ declare module "@prismicio/client" {
       PageDocumentData,
       PageDocumentDataSlicesSlice,
       AllDocumentTypes,
+      BlockQuoteSlice,
+      BlockQuoteSliceDefaultPrimary,
+      BlockQuoteSliceVariation,
+      BlockQuoteSliceDefault,
       HeroSlice,
       HeroSliceDefaultPrimary,
       HeroSliceVariation,
@@ -705,6 +759,12 @@ declare module "@prismicio/client" {
       RichTextSliceDefaultPrimary,
       RichTextSliceVariation,
       RichTextSliceDefault,
+      TwoColumnLayoutSlice,
+      TwoColumnLayoutSliceDefaultPrimaryLeftColumnContentItem,
+      TwoColumnLayoutSliceDefaultPrimaryRightColumnContentItem,
+      TwoColumnLayoutSliceDefaultPrimary,
+      TwoColumnLayoutSliceVariation,
+      TwoColumnLayoutSliceDefault,
     };
   }
 }

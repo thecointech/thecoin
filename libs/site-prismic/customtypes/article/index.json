@@ -91,6 +91,12 @@
         "fieldset": "Slice Zone",
         "config": {
           "choices": {
+            "two_column_layout": {
+              "type": "SharedSlice"
+            },
+            "block_quote": {
+              "type": "SharedSlice"
+            },
             "rich_text": {
               "type": "SharedSlice"
             }
