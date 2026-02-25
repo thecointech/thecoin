@@ -13,6 +13,34 @@ async function getAddresses() {
   }
 }
 
+
+// Helper to load TestDemoAccount wallet for prodtest builds
+async function getTestDemoAccountWallet() {
+  if (process.env.CONFIG_NAME !== 'prodtest') {
+    return {};
+  }
+
+  let walletJson = process.env.PRODTEST_TESTDEMOACCOUNT_WALLET;
+  if (!walletJson) {
+    // This should only run on a local build.
+    const signer: any = await getSigner("TestDemoAccount");
+    // Clear out any properties we don't want in the public site.
+    delete signer.privateKey;
+    delete signer.mnemonic;
+    delete signer.provider;
+    delete signer.chainCode;
+    delete signer.fingerprint;
+    delete signer.parentFingerprint;
+    // Double-stringify: first to get JSON, second to make it a string literal for DefinePlugin
+    walletJson = JSON.stringify(signer);
+  }
+  return {
+    'process.env.PRODTEST_TESTDEMOACCOUNT_WALLET': JSON.stringify(walletJson),
+  }
+}
+
+
+
 export const signerConfig: Configuration = {
   plugins: [
     new webpack.DefinePlugin(
@@ -21,9 +49,13 @@ export const signerConfig: Configuration = {
       // the live signer and get it's address directly.
       // We can't do this every time because a production address
       // may not always exist
-      getEnvVars().WALLET_BrokerCAD_ADDRESS
-        ? {}
-        : await getAddresses()
+      {
+        ...(getEnvVars().WALLET_BrokerCAD_ADDRESS
+          ? {}
+          : await getAddresses()
+        ),
+        ...(await getTestDemoAccountWallet()),
+      }
     ),
   ]
 }
