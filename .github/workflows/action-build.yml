@@ -80,6 +80,7 @@ jobs:
           libs/*/build/
           apis/**/dist/
           libs/contract-*/src/codegen/**
+          libs/site-prismic/src/semantic/
           apps/tx-processor/docker/
         retention-days: 1
 

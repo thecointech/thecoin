@@ -151,6 +151,10 @@
     "defaultMessage": "TheCoin is a revolutionary new kind of account.",
     "description": "site.homepage.createAccountSmall.title: Title / content for the small create account banner"
   },
+  "J+oK/P": {
+    "defaultMessage": "Related Articles",
+    "description": "site.blog.relatedTitle: Title for recommended articles links section"
+  },
   "J3ca41": {
     "defaultMessage": "Play"
   },
