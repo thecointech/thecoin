@@ -29,6 +29,7 @@
     "./store": {
       "development": "./mocks/development/store.ts",
       "devlive": "./mocks/devlive/store.ts",
+      "prodtest": "./mocks/prodtest/store.ts",
       "default": "./build/store.js"
     },
     "./*": "./build/*.js"
