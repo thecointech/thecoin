@@ -87,6 +87,7 @@ else
     --no-git-tag-version \
     --no-push \
     --yes \
+    --ignore-scripts \
     2>&1 || true)
 
   # Extract version from output
