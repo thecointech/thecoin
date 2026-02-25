@@ -197,7 +197,7 @@ jobs:
           echo "✅ Authoritative commit resolved: $COMMIT"
 
   update-metadata:
-    if: needs.normalize-commit.result == 'success'
+    if: ${{ !cancelled() && !failure() && needs.normalize-commit.result == 'success' }}
     needs: [determine-environment, normalize-commit]
     runs-on: ubuntu-latest
     steps:
@@ -225,7 +225,7 @@ jobs:
           path: environments/common.public.env
 
   build:
-    if: ${{ needs.normalize-commit.result == 'success' }}
+    if: ${{ !cancelled() && !failure() && needs.normalize-commit.result == 'success' }}
     needs: [determine-environment, update-metadata, normalize-commit]
     uses: ./.github/workflows/action-build.yml
     with:
@@ -233,7 +233,7 @@ jobs:
       COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
 
   test:
-    if: ${{ needs.normalize-commit.result == 'success' }}
+    if: ${{ !cancelled() && !failure() && needs.normalize-commit.result == 'success' }}
     needs: [build, normalize-commit]
     uses: ./.github/workflows/action-test.yml
     with:
@@ -241,7 +241,7 @@ jobs:
 
   # Publish packages only for test tags (initial publish)
   publish-packages-test:
-    if: contains(github.ref_name, '-test.') && needs.normalize-commit.result == 'success'
+    if: ${{ !cancelled() && !failure() && contains(github.ref_name, '-test.') && needs.normalize-commit.result == 'success' }}
     needs: [test, normalize-commit]
     permissions:
       packages: write
@@ -251,7 +251,7 @@ jobs:
 
   # Graduate packages for production tags
   publish-packages-prod:
-    if: needs.determine-environment.outputs.is_prerelease == 'false' && needs.normalize-commit.result == 'success'
+    if: ${{ !cancelled() && !failure() && needs.determine-environment.outputs.is_prerelease == 'false' && needs.normalize-commit.result == 'success' }}
     needs: [test, determine-environment, normalize-commit]
     permissions:
       packages: write
