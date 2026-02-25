@@ -26,6 +26,15 @@ export async function setSchedule(schedule: HarvestSchedule) {
     // If no days are selected, there is no schedule to set
     if (!schedule.daysToRun.some(Boolean)) {
       log.warn('No days selected for schedule');
+      // Remove persisted plist so disabled state is durable across logins
+      try {
+        unlinkSync(PlistPath);
+        log.debug('Removed persisted plist file');
+      } catch (err: any) {
+        if (err.code !== 'ENOENT') {
+          log.error('Failed to remove plist file:', err);
+        }
+      }
       return;
     }
 
