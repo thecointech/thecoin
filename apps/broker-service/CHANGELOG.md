@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.4-test.0](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.4-test.0) (2026-02-25)
+
+
+### Bug Fixes
+
+* apps/broker-service/package.json to reduce vulnerabilities ([965eb0d](https://github.com/thecointech/thecoin/commit/965eb0dbd7f001f774e70a493523541ab8749745))
+* apps/broker-service/package.json to reduce vulnerabilities ([0bafcc4](https://github.com/thecointech/thecoin/commit/0bafcc44fd19529b2e0fd4f606cca7adcb504493))
+
+
+### Reverts
+
+* Revert "chore(release): publish v0.5.3" ([69528b5](https://github.com/thecointech/thecoin/commit/69528b54d7e69bc85a1d65fcbd7ffaebff462d91))
+
+
+
+
+
 ## [0.5.3](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.3) (2026-02-20)
 
 

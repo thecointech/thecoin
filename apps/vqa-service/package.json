@@ -1,7 +1,7 @@
 {
   "name": "@thecointech/vqa-service",
   "private": true,
-  "version": "0.5.3",
+  "version": "0.5.4-test.0",
   "description": "VQA Assistant for the Harvester",
   "type": "module",
   "repository": {
@@ -24,6 +24,6 @@
     "build:docker": "sudo docker build -f docker/Dockerfile -t vqa-service ."
   },
   "devDependencies": {
-    "@thecointech/setenv": "^0.5.3"
+    "@thecointech/setenv": "^0.5.4-test.0"
   }
 }

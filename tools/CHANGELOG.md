@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.4-test.0](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.4-test.0) (2026-02-25)
+
+
+### Bug Fixes
+
+* do not increment version in branch creation ([65ab3e8](https://github.com/thecointech/thecoin/commit/65ab3e8f4b4b52e6f27bbdf224790e004660fb57))
+* extract correct version from lerna output instead of CLI version ([ffc9d5c](https://github.com/thecointech/thecoin/commit/ffc9d5c984ae5c5aada6b15263b1f436281f828f))
+
+
+### Reverts
+
+* Revert "chore(release): publish v0.5.3" ([69528b5](https://github.com/thecointech/thecoin/commit/69528b54d7e69bc85a1d65fcbd7ffaebff462d91))
+
+
+
+
+
 ## [0.5.3](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.3) (2026-02-20)
 
 

@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.4-test.0](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.4-test.0) (2026-02-25)
+
+
+### Bug Fixes
+
+* apis/broker/ts/package.json to reduce vulnerabilities ([a278faa](https://github.com/thecointech/thecoin/commit/a278faaddd6c0d19b6c48c70973a70c60f9058f0))
+* apis/nft/ts/package.json to reduce vulnerabilities ([0006e1d](https://github.com/thecointech/thecoin/commit/0006e1dd827a9708e1ad7278fc45e03ecaf69de5))
+* apis/rates/ts/package.json to reduce vulnerabilities ([813d2da](https://github.com/thecointech/thecoin/commit/813d2dae268db6347a6661f94c63baee0b1a1bb4))
+* apps/broker-service/package.json to reduce vulnerabilities ([965eb0d](https://github.com/thecointech/thecoin/commit/965eb0dbd7f001f774e70a493523541ab8749745))
+* apps/broker-service/package.json to reduce vulnerabilities ([0bafcc4](https://github.com/thecointech/thecoin/commit/0bafcc44fd19529b2e0fd4f606cca7adcb504493))
+* apps/nft-service/package.json to reduce vulnerabilities ([344e67f](https://github.com/thecointech/thecoin/commit/344e67f11c7a0dc5f077b92f5f487920ba3c2f87))
+* apps/rates-service/package.json to reduce vulnerabilities ([fbd5ca1](https://github.com/thecointech/thecoin/commit/fbd5ca171eb4469ed823ac2019d82835caa4d395))
+* do not increment version in branch creation ([65ab3e8](https://github.com/thecointech/thecoin/commit/65ab3e8f4b4b52e6f27bbdf224790e004660fb57))
+* extract correct version from lerna output instead of CLI version ([ffc9d5c](https://github.com/thecointech/thecoin/commit/ffc9d5c984ae5c5aada6b15263b1f436281f828f))
+* package.json to reduce vulnerabilities ([7a07910](https://github.com/thecointech/thecoin/commit/7a07910cdf6c6fbf9b60bdaf28b96a3b32d13d1c))
+* potential fix for harvester scheduler not running on mac, do not do full replay in prodtest ([6d19c33](https://github.com/thecointech/thecoin/commit/6d19c33a4c343ed34597d8356e657b5c150eb0b8))
+
+
+### Reverts
+
+* Revert "chore(release): publish v0.5.3" ([69528b5](https://github.com/thecointech/thecoin/commit/69528b54d7e69bc85a1d65fcbd7ffaebff462d91))
+
+
+
+
+
 ## [0.5.3](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.3) (2026-02-20)
 
 
