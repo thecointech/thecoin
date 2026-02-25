@@ -1,8 +1,9 @@
 import { execSync } from 'child_process';
-import { writeFileSync, mkdirSync, renameSync } from 'fs';
+import { writeFileSync, mkdirSync, copyFileSync, unlinkSync } from 'fs';
 import { homedir, tmpdir } from 'os';
 import { HarvestSchedule } from '@/types';
 import { log } from '@thecointech/logging';
+import { parseTime } from './common';
 
 const TaskName = 'com.thecoin.harvester';
 const HomeDir = homedir();
@@ -22,6 +23,12 @@ export async function setSchedule(schedule: HarvestSchedule) {
       // Ignore error if job doesn't exist
     }
 
+    // If no days are selected, there is no schedule to set
+    if (!schedule.daysToRun.some(Boolean)) {
+      log.warn('No days selected for schedule');
+      return;
+    }
+
     // Create new plist file
     const plist = generatePlist(schedule);
     const tmpName = `tc-sch-${Date.now()}`;
@@ -32,7 +39,15 @@ export async function setSchedule(schedule: HarvestSchedule) {
 
     // Move plist to LaunchAgents directory and load it
     mkdirSync(PlistDir, { recursive: true });
-    renameSync(tmpPath, PlistPath);
+    try {
+      copyFileSync(tmpPath, PlistPath);
+    } finally {
+      try {
+        unlinkSync(tmpPath);
+      } catch (err) {
+        log.warn('Failed to remove temp plist:', err);
+      }
+    }
     execSync(`launchctl load "${PlistPath}"`);
 
     log.info('Schedule updated successfully');
@@ -44,7 +59,7 @@ export async function setSchedule(schedule: HarvestSchedule) {
 
 function generatePlist(schedule: HarvestSchedule): string {
   const { daysToRun, timeToRun } = schedule;
-  const [hour, minute] = timeToRun.split(':');
+  const { hour, minute } = parseTime(timeToRun);
 
   // Convert days array to calendar days (0 = Sunday in both our array and launchd)
   const weekdays = daysToRun
