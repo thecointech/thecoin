@@ -198,7 +198,7 @@ jobs:
 
   update-metadata:
     if: needs.normalize-commit.result == 'success'
-    needs: [determine-environment, graduate-packages, normalize-commit]
+    needs: [determine-environment, normalize-commit]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
