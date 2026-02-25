@@ -69,7 +69,6 @@ export const Redeem = () => {
 
   const doSale = async () => {
     if (account?.readonly) {
-      setTransferMessage(translations.readonlyAccount);
       setErrorHidden(false);
       setErrorMessage(translations.readonlyAccount);
       return false;

@@ -25,6 +25,7 @@ async function getTestDemoAccountWallet() {
     // This should only run on a local build.
     const signer: any = await getSigner("TestDemoAccount");
     // Clear out any properties we don't want in the public site.
+    delete signer.privateKey;
     delete signer.mnemonic;
     delete signer.provider;
     delete signer.chainCode;

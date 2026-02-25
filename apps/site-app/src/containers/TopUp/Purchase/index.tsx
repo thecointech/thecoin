@@ -36,7 +36,7 @@ const translations = defineMessages({
     description: 'app.purchase.readonlyRecipient: Message shown when trying to generate recipient for readonly account'
   },
   readonlySecret: {
-    defaultMessage: '~none~',
+    defaultMessage: 'N/A',
     description: 'app.purchase.readonlySecret: Secret placeholder for readonly account'
   }
 });

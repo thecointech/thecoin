@@ -7,24 +7,11 @@ import { getProvider } from '@thecointech/ethers-provider';
 import { getSecret } from '@thecointech/secrets/live';
 
 export async function loadFromDisk(name: AccountName, callback?: ProgressCallback) {
-
-  const wallet = await getWallet(name, callback);
-  return wallet.connect(await getProvider());
-}
-
-async function getWallet(name: AccountName, callback?: ProgressCallback) {
-  // Allow loading from environment
-  // This is for prodtest in GH actions.
-  const privatekey = process.env[`WALLET_${name}_KEY`];
-  if (privatekey) {
-    return new Wallet(privatekey);
-  }
   const encrypted = loadEncrypted(name);
   const key = await getPassword(name);
   const wallet = await Wallet.fromEncryptedJson(encrypted, key, callback);
-  return wallet;
+  return wallet.connect(await getProvider());
 }
-
 // or from file system if name is a path.
 function loadEncrypted(name: AccountName) {
 

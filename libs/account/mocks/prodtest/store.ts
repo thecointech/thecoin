@@ -5,10 +5,6 @@ import { getProvider } from '@thecointech/ethers-provider';
 import { ContractCore } from '@thecointech/contract-core';
 import { Wallet } from 'ethers';
 // Re-export everything from Browser store except getAllAccounts
-export const {
-  getAllAccounts: _,
-  ...rest
-} = Browser;
 export * from '@/store';
 
 const testDemoAccountName = "TestDemoAccount (ReadOnly)";
@@ -18,7 +14,8 @@ export const getAllAccounts = async () => {
   // First, load any user accounts from browser localStorage
   const accounts = await Browser.getAllAccounts();
 
-  if (!accounts[testDemoAccountName]) {
+  const alreadyInjected = Object.values(accounts).some(a => a.name === testDemoAccountName);
+  if (!alreadyInjected) {
     // Inject the TestDemoAccount if available from compile-time env variable
     const privateKey = process.env.PRODTEST_TESTDEMOACCOUNT_WALLET;
 
