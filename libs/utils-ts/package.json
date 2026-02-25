@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/utilities",
-  "version": "0.5.4-test.0",
+  "version": "0.5.4-test.1",
   "description": "The Coin: Utilities shared amongst typescript-based projects",
   "type": "module",
   "keywords": [
@@ -46,15 +46,15 @@
     }
   },
   "dependencies": {
-    "@thecointech/logging": "^0.5.4-test.0",
-    "@thecointech/secrets": "^0.5.4-test.0",
+    "@thecointech/logging": "^0.5.4-test.1",
+    "@thecointech/secrets": "^0.5.4-test.1",
     "base32": "^0.0.7",
     "decimal.js-light": "^2.5.1",
     "ethers": "6.15.0"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.5.4-test.0",
-    "@thecointech/types": "^0.5.4-test.0"
+    "@thecointech/jestutils": "^0.5.4-test.1",
+    "@thecointech/types": "^0.5.4-test.1"
   },
   "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }
