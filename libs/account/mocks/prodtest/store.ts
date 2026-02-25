@@ -10,7 +10,7 @@ export const {
 } = Browser;
 export * from '@/store';
 
-const testDemoAccountName = "TestDemoAccount (Demo)";
+const testDemoAccountName = "TestDemoAccount (ReadOnly)";
 
 // Override only getAllAccounts to inject TestDemoAccount
 export const getAllAccounts = async () => {
@@ -33,6 +33,7 @@ export const getAllAccounts = async () => {
         // Create a read-only demo account with encrypted signer
         const demoAccount = buildNewAccount(testDemoAccountName, address, signer);
         demoAccount.contract = await ContractCore.get(signer.provider);
+        demoAccount.readonly = true;
 
         accounts[address] = demoAccount;
         console.log('Injected TestDemoAccount (read-only) at:', address);

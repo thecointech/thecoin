@@ -6,7 +6,6 @@ import { Avatars } from '@thecointech/shared/components/Avatars';
 import { Grid } from 'semantic-ui-react';
 import { Account } from '@thecointech/shared/containers/Account';
 import { CopyToClipboard } from '@thecointech/shared/components/CopyToClipboard';
-import { DefaultAccountValues } from '@thecointech/account';
 import { ReferralCode } from './ReferralCode';
 import styles from './styles.module.less';
 
@@ -22,7 +21,7 @@ const translations = defineMessages({
 const POLLING_INTERVAL = 5 * 60 * 1000;
 
 export const UserDetails = () => {
-  const { address, details, name} = AccountMap.useActive() ?? DefaultAccountValues;
+  const { address, name, details, readonly } = AccountMap.useActive()!;
   const accountApi = Account(address).useApi();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const detailsRef = useRef(details);
@@ -32,8 +31,10 @@ export const UserDetails = () => {
   // Should we check for latest?
   useEffect(() => {
     // Execute the check immediately on mount/re-run
-    accountApi.checkKycStatus(forceVerify);
-  }, [forceVerify]);
+    if (!readonly) {
+      accountApi.checkKycStatus(forceVerify);
+    }
+  }, [forceVerify, readonly]);
 
   useEffect(() => {
     detailsRef.current = details;
@@ -70,7 +71,7 @@ export const UserDetails = () => {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <AccountVerify details={details} address={address} forceVerify={forceVerify} />
+        <AccountVerify details={details} address={address} forceVerify={forceVerify} readonly={readonly} />
         <div className={"font-label border-top-green4 x4spaceBefore x4spaceAfter"} ><FormattedMessage {...translations.address}/></div>
         <div className={"font-big x4spaceAfter"}>
           {address} <CopyToClipboard payload={address!} />

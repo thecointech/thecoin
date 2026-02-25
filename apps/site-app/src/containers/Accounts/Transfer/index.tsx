@@ -15,6 +15,9 @@ const translations = defineMessages({
   errorMessage : {
       defaultMessage: 'We have encountered an error. Don\'t worry, your money is safe, but please still contact support@thecoin.io',
       description: 'app.accounts.transfer.errorMessage: Error Message for the make a payment page / etransfer tab'},
+  errorReadonlyAccount : {
+      defaultMessage: 'You cannot transfer from a readonly account.',
+      description: 'app.accounts.transfer.errorReadonlyAccount: Error Message for the make a payment page / etransfer tab'},
   successMessage : {
       defaultMessage: 'Order received.\nYou should receive the transfer in 1-2 business days.',
       description: 'app.accounts.transfer.successMessage: Success Message for the make a payment page / etransfer tab'},
@@ -63,6 +66,7 @@ export const Transfer = () => {
   const [successHidden, setSuccessHidden] = useState(true);
   const [errorHidden, setErrorHidden] = useState(true);
   const [infoMessage, setInfoMessage] = useState<MessageWithValues>();
+  const [errorMessage, setErrorMessage] = useState<MessageWithValues>();
 
   const account = AccountMap.useActive();
   const { rates } = useFxRates();
@@ -75,6 +79,11 @@ export const Transfer = () => {
   }
 
   const doTransfer = async () => {
+    if (account?.readonly) {
+      setErrorMessage(translations.errorReadonlyAccount);
+      setErrorHidden(false)
+      return false;
+    }
     if (!toAddress || !coinTransfer) {
       log.info("Cannot transfer: missing required field");
       return;
@@ -89,6 +98,7 @@ export const Transfer = () => {
     var { data } = await statusApi.status();
     // Check out if we have the right values
     if (!data.address) {
+      setErrorMessage(translations.errorMessage);
       setErrorHidden(false)
       return false;
     }
@@ -116,6 +126,7 @@ export const Transfer = () => {
     const response = await transferApi.transfer(transferCommand);
     if (!response.data?.hash) {
       log.error(`Error: missing response data: ${JSON.stringify(response)}`);
+      setErrorMessage(translations.errorMessage);
       setErrorHidden(false);
       return false;
     }
@@ -166,7 +177,7 @@ export const Transfer = () => {
 
   return (
     <TransferWidget
-      errorMessage={translations.errorMessage}
+      errorMessage={errorMessage}
       errorHidden={errorHidden}
       successMessage={translations.successMessage}
       successHidden={successHidden}

@@ -14,9 +14,6 @@ import { MessageWithValues } from '@thecointech/shared/types';
 
 
 const translations = defineMessages({
-  errorMessage : {
-      defaultMessage: 'We have encountered an error. Don\'t worry, your money is safe, but please still contact support@thecoin.io',
-      description: 'app.accounts.redeem.errorMessage: Error Message for the make a payment page / etransfer tab'},
   successMessage : {
       defaultMessage: 'Order received.\nYou should receive the e-Transfer in 1-2 business days.',
       description: 'app.accounts.redeem.successMessage: Success Message for the make a payment page / etransfer tab'},
@@ -96,6 +93,7 @@ type VisualProps={
     percentComplete: number,
     transferMessage: MessageWithValues,
 
+    errorMessage?: MessageWithValues,
 };
 
 const validateChars = (re: () => RegExp, minimumLength: number) => (value: string) => {
@@ -150,9 +148,11 @@ export const RedeemWidget = (props: VisualProps) => {
         <Message hidden={props.successHidden} positive>
           <FormattedMessage {...translations.successMessage} />
         </Message>
-        <Message hidden={props.errorHidden} negative>
-          <FormattedMessage {...translations.errorMessage} />
-        </Message>
+        {props.errorMessage && (
+          <Message hidden={props.errorHidden} negative>
+            <FormattedMessage {...props.errorMessage} />
+          </Message>
+        )}
         <Message hidden={!props.timedout}>
           <FormattedMessage {...translations.timeoutMessage} />
         </Message>

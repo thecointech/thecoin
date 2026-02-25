@@ -11,7 +11,7 @@ import type { MessageWithValues } from '@thecointech/shared/types';
 
 type VisualProps={
 
-  errorMessage: MessageDescriptor,
+  errorMessage?: MessageDescriptor,
   errorHidden: boolean,
   successMessage: MessageDescriptor,
   successHidden: boolean,
@@ -55,7 +55,7 @@ export const TransferWidget = (props: VisualProps) => {
           <FormattedMessage {...props.successMessage} />
         </Message>
         <Message hidden={props.errorHidden} negative>
-          <FormattedMessage {...props.errorMessage} />
+          {props.errorMessage && <FormattedMessage {...props.errorMessage} />}
         </Message>
         {
           props.infoMessage &&
