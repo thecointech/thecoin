@@ -90,8 +90,8 @@ else
     2>&1 || true)
 
   # Extract version from output
-  # Look for lines like "lerna info versioning independent" or package version changes
-  NEXT_VERSION=$(echo "$LERNA_OUTPUT" | grep -Eo 'v?[0-9]+\.[0-9]+\.[0-9]+(-test\.[0-9]+)?' | head -1)
+  # Look for package version changes like "package: 0.5.3 => 0.5.4-test.0"
+  NEXT_VERSION=$(echo "$LERNA_OUTPUT" | grep -Eo '=> [0-9]+\.[0-9]+\.[0-9]+(-test\.[0-9]+)?' | head -1 | sed 's/^=> //')
 
   # Clean up the dry run (restore package.json files)
   # Check if cleanup would remove untracked files
