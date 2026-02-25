@@ -4,4 +4,5 @@ export type PropsVerified={
   address: string;
   details: AccountDetails;
   forceVerify?: boolean;
+  readonly?: boolean;
 }

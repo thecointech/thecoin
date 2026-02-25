@@ -29,6 +29,13 @@ const translations = defineMessages({
     defaultMessage: 'Please wait, we are sending your order to our servers...',
     description: 'app.accounts.redeem.transferOutProgress: Message for the form the make a payment page / etransfert tab',
   },
+  readonlyAccount: {
+    defaultMessage: 'Cannot send transfers from readonly account',
+    description: 'app.accounts.redeem.readonlyAccount: Message for the form the make a payment page / etransfert tab',
+  },
+  errorMessage : {
+    defaultMessage: 'We have encountered an error. Don\'t worry, your money is safe, but please still contact support@thecoin.io',
+    description: 'app.accounts.redeem.errorMessage: Error Message for the make a payment page / etransfer tab'},
 });
 export const Redeem = () => {
   const [coinToSell, setCoinToSell] = useState(null as number | null);
@@ -48,6 +55,7 @@ export const Redeem = () => {
   const [successHidden, setSuccessHidden] = useState(true);
   const [errorHidden, setErrorHidden] = useState(true);
   const [timedout, setTimedOut] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<MessageWithValues>();
 
   const account = AccountMap.useActive();
   const { rates } = useFxRates();
@@ -60,6 +68,11 @@ export const Redeem = () => {
   };
 
   const doSale = async () => {
+    if (account?.readonly) {
+      setErrorHidden(false);
+      setErrorMessage(translations.readonlyAccount);
+      return false;
+    }
     if (!email || !question || !answer || !coinToSell) {
       log.info('Cannot submit: missing one of the required fields');
       return false;
@@ -78,6 +91,7 @@ export const Redeem = () => {
       // something the individual validators don't
       log.error('Packate validation failed!');
       setErrorHidden(false);
+      setErrorMessage(translations.errorMessage);
       return false;
     }
 
@@ -149,6 +163,7 @@ export const Redeem = () => {
       const results = await doSale();
       if (results) {
         setSuccessHidden(false);
+        setErrorMessage(undefined);
         resetForm();
       }
     } catch (e: any) {
@@ -186,8 +201,12 @@ export const Redeem = () => {
       transferInProgress={transferInProgress}
       percentComplete={percentComplete}
 
+      errorMessage={errorMessage}
+
       forceValidate={forceValidate}
       transferMessage={transferMessage}
     />
   );
 };
+
+export default Redeem;
