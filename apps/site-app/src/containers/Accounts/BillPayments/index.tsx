@@ -41,6 +41,10 @@ const translations = defineMessages({
     defaultMessage: 'We have encountered an error. Don\'t worry, your money is safe, but please contact support@thecoin.io and describe what happened',
     description: 'app.accounts.billPayments.form.errorForm: Message for the form the make a payment page / bill payment tab'
   },
+  errorReadonlyAccount: {
+    defaultMessage: 'Cannot send bill payments from readonly account',
+    description: 'app.accounts.billPayments.errorReadonlyAccount: Message for the form the make a payment page / bill payment tab',
+  },
   timeoutMessage: {
     defaultMessage: 'The transaction is in the queue, but processing it is taking longer than usual. Please be patient, the order will be processed shortly.',
     description: 'app.accounts.billpayment.timeout: Timeout for billpayment'},
@@ -95,6 +99,7 @@ export const BillPayments = () => {
   const [successHidden, setSuccessHidden] = useState(true);
   const [errorHidden, setErrorHidden] = useState(true);
   const [timedout, setTimedOut] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<MessageWithValues>();
 
   const asCoin = !account?.plugins?.length;
   if (!asCoin) {
@@ -113,6 +118,12 @@ export const BillPayments = () => {
 
   async function doBillPayment() {
 
+    if (account?.readonly) {
+      log.info("Cannot submit: readonly account");
+      setErrorHidden(false);
+      setErrorMessage(translations.errorReadonlyAccount);
+      return false;
+    }
     // Get our variables
     if (!coinToSell || !payee || !accountNumber) {
       log.info("Cannot submit: missing one of the required fields");
@@ -173,6 +184,7 @@ export const BillPayments = () => {
     if (!hash) {
       log.error(`Error: missing response data: ${JSON.stringify(response)}`);
       setErrorHidden(false);
+      setErrorMessage(translations.errorForm);
       return false;
     }
 
@@ -208,6 +220,7 @@ export const BillPayments = () => {
       }
     } catch (e: any) {
       log.error(`Exception on submit Bill: ${e.message}`);
+      setErrorMessage(translations.errorForm);
       setErrorHidden(false);
     }
     setDoCancel(false);
@@ -226,7 +239,7 @@ export const BillPayments = () => {
           <FormattedMessage {...translations.successForm} />
         </Message>
         <Message hidden={errorHidden} negative>
-          <FormattedMessage {...translations.errorForm} />
+          {errorMessage && <FormattedMessage {...errorMessage} />}
         </Message>
         <Message hidden={!timedout}>
           <FormattedMessage {...translations.timeoutMessage} />

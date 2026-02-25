@@ -13,6 +13,7 @@ let _initial: null|string = null;
 // least 1 unlocked wallet, and the locked TestAccNoT
 async function initDevWallets() {
   const encryptedAccount = buildNewAccount("TestAccNoT", testWallet.address, testWallet as any);
+  encryptedAccount.readonly = true;
   // We always add one encrypted wallet
   _devAccounts[encryptedAccount.address] = encryptedAccount
 
