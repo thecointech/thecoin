@@ -7,6 +7,7 @@ import CompressionPlugin from 'compression-webpack-plugin';
 import { getBaseConfig } from './webpack.base';
 import { signerConfig } from './webpack.signers';
 import type { Configuration } from "webpack";
+import type { SecretKeyType } from '@thecointech/secrets/*';
 
 const prodOptions: Configuration = {
   mode: 'production',
@@ -102,8 +103,9 @@ const prodOptions: Configuration = {
   },
 };
 
-export async function getProdConfig(secrets) {
+export async function getProdConfig(secrets: SecretKeyType[], overrides: Partial<Configuration>) {
   return merge(
+    overrides,
     signerConfig,
     prodOptions,
     await getBaseConfig(secrets),

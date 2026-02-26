@@ -159,6 +159,10 @@
     "defaultMessage": "We have encountered an error. Don't worry, your money is safe, but please still contact support@thecoin.io",
     "description": "app.accounts.transfer.errorMessage: Error Message for the make a payment page / etransfer tab"
   },
+  "GdAloC": {
+    "defaultMessage": "Cannot send bill payments from readonly account",
+    "description": "app.accounts.billPayments.errorReadonlyAccount: Message for the form the make a payment page / bill payment tab"
+  },
   "GnQEdK": {
     "defaultMessage": "City",
     "description": "app.settings.personaldetails.city: City Address field for the page setting / tab personal details in the app"
@@ -331,6 +335,10 @@
     "defaultMessage": "Please wait, we are sending your order to our servers...",
     "description": "app.accounts.transfer.transferOutProgress: transferOutProgress for the make a payment page / transfer tab"
   },
+  "UEV3fE": {
+    "defaultMessage": "You cannot transfer from a readonly account.",
+    "description": "app.accounts.transfer.errorReadonlyAccount: Error Message for the make a payment page / etransfer tab"
+  },
   "V6O1Hl": {
     "defaultMessage": "Top up balance",
     "description": "app.accounts.sidebar.transferin: Title for the transfer entry in the menu"
@@ -350,6 +358,10 @@
   "Xc4r1i": {
     "defaultMessage": "trees",
     "description": "shared.widgets.climateimpact.treesUnity: Text for the Widget Climate impact in the app"
+  },
+  "XlZD+Q": {
+    "defaultMessage": "Cannot send transfers from readonly account",
+    "description": "app.accounts.redeem.readonlyAccount: Message for the form the make a payment page / etransfert tab"
   },
   "Y0jYZ8": {
     "defaultMessage": "Step 2 of 3: Sending sell order to our servers...",
@@ -491,6 +503,10 @@
     "defaultMessage": "Send payment",
     "description": "app.accounts.billPayments.form.button: Label for the form the make a payment page / bill payment tab"
   },
+  "otiAjp": {
+    "defaultMessage": "Disabled for readonly account",
+    "description": "app.purchase.readonlyRecipient: Message shown when trying to generate recipient for readonly account"
+  },
   "pA7Igc": {
     "defaultMessage": "Coin Transfer",
     "description": "app.makepayments.tabs.anotherCoin: Title for the tabs the Make a payment page in the app"
@@ -498,6 +514,10 @@
   "pREs38": {
     "defaultMessage": "This entry needs to be at least {count} letters long",
     "description": "Error on attempted submission without completing field"
+  },
+  "pWb6hj": {
+    "defaultMessage": "N/A",
+    "description": "app.purchase.readonlySecret: Secret placeholder for readonly account"
   },
   "q0z7qW": {
     "defaultMessage": "Step 2 of 3: Sending bill payment to our servers...",
