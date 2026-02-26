@@ -69,7 +69,7 @@ jobs:
           CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
           BWS_ACCESS_TOKEN: ${{ secrets.BWS_ACCESS_TOKEN }}
           BWS_ORGANIZATION_ID: ${{ secrets.BWS_ORGANIZATION_ID }}
-          PRODTEST_TESTDEMOACCOUNT_WALLET: ${{ secrets.WALLET_TESTDEMOACCOUNT_KEY }}
+          PRODTEST_TESTDEMOACCOUNT_WALLET: ${{ vars.PRODTEST_TESTDEMOACCOUNT_WALLET }}
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
