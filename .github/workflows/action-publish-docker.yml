@@ -34,7 +34,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         if: inputs.IS_PROMOTION == false
         with:
           ref: ${{ inputs.COMMIT_SHA }}

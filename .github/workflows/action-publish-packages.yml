@@ -19,10 +19,15 @@ jobs:
       packages: write  # For package publishing
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.COMMIT_SHA }}
           fetch-tags: true
+
+      - name: Verify tags visible
+        run: |
+          echo "Tags pointing at HEAD:"
+          git tag --points-at HEAD
 
       - run: corepack enable
 
