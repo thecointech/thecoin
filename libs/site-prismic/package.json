@@ -16,8 +16,8 @@
         "build": "run -T run-s build:semantic build:src",
         "build:src": "next build",
         "build:semantic": "run-env ./internal/buildSemantic.ts",
-        "_start": "next start --port 3010",
-        "start:website": "next dev --port 3010",
+        "_start": "next start --port 3011",
+        "start:website": "next dev --port 3011",
         "start:slicemachine": "start-slicemachine"
     },
     "exports": {

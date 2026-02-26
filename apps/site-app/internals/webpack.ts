@@ -68,15 +68,7 @@ function getDevServer(): Partial<Configuration> {
 }
 
 const injectedSigner = await getTestDemoAccountWallet();
-let config;
-try {
-config = await getConfig(["PolygonscanApiKey"], {
+export default await getConfig(["PolygonscanApiKey"], {
   ...getDevServer(),
   ...injectedSigner,
 });
-console.log("Loaded config");
-} catch (error) {
-  console.error("Failed to load config:", error);
-}
-
-export default config;

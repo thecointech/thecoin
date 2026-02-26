@@ -3,7 +3,7 @@ import { NormalizeAddress } from '@thecointech/utilities/Address';
 import * as Browser from '@/store';
 import { getProvider } from '@thecointech/ethers-provider';
 import { ContractCore } from '@thecointech/contract-core';
-import { Wallet } from 'ethers';
+
 // Re-export everything from Browser store except getAllAccounts
 export * from '@/store';
 
