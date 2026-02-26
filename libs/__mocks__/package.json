@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/--mocks--",
-  "version": "0.5.4-test.1",
+  "version": "0.5.4-test.2",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,6 +8,6 @@
     "updateMocks": "run-env cfg=prod ./@prismicio/updateMocks.ts"
   },
   "devDependencies": {
-    "@thecointech/setenv": "^0.5.4-test.1"
+    "@thecointech/setenv": "^0.5.4-test.2"
   }
 }
