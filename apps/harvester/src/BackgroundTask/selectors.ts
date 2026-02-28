@@ -10,11 +10,17 @@ export const getErrorMessage = (e: any) => {
 }
 
 export function getTaskGroup(store: InitialState, type: BackgroundTaskType): GroupAndSubTask | undefined {
-  // Always get the latest group
-  return store.groups
-    .filter(t => t.type === type)
-    .sort((a, b) => a.timestamp - b.timestamp)
-    .at(-1);
+  // Always get the latest group without allocating/sorting.
+  // NOTE: filter/sort would create new arrays on each call, which can cause
+  // unstable references and render/effect loops in React.
+  let latest: GroupAndSubTask | undefined;
+  for (const g of store.groups) {
+    if (g.type !== type) continue;
+    if (!latest || g.timestamp >= latest.timestamp) {
+      latest = g;
+    }
+  }
+  return latest;
 }
 
 export function hasSubTasks(task?: BackgroundTaskInfo): task is GroupAndSubTask {

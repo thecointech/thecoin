@@ -4,12 +4,14 @@ import { useBackgroundTask } from "./reducer";
 import { BackgroundTaskType } from "./types";
 import { getRunning, getErrors, getPercent, isRunning } from "./selectors";
 import type { BackgroundTaskInfo } from "./types";
+import styles from "./BackgroundTaskProgressBar.module.css";
 
 type Props = {
   type: BackgroundTaskType,
   subTask?: string,
+  closeOnComplete?: boolean,
 }
-export const BackgroundTaskProgressBar = ({ type, subTask }: Props) => {
+export const BackgroundTaskProgressBar = ({ type, subTask, closeOnComplete }: Props) => {
 
   const bgTask = useBackgroundTask(type);
 
@@ -19,13 +21,16 @@ export const BackgroundTaskProgressBar = ({ type, subTask }: Props) => {
     if (!bgTask?.completed) {
       setPriorCompleted(false);
     }
-  }, [bgTask]);
+  }, [bgTask?.completed]);
 
   if (priorCompleted === true) {
     return null;
   }
 
   if (!bgTask) {
+    return null;
+  }
+  if (bgTask.completed && closeOnComplete) {
     return null;
   }
   if (subTask) {
@@ -45,11 +50,17 @@ export const BackgroundTaskProgressBar = ({ type, subTask }: Props) => {
 const BackgroundTaskProgressBarElement = ({ task, taskId }: { task: BackgroundTaskInfo, taskId: string }) => {
   const message = isRunning(task)
   ? `Running task ${taskId}`
-  : 'Complete';
-  const percent = getPercent(task);
+  : `Complete`;
+  const percent = Math.round(getPercent(task));
   return (
-    <Progress color="green" percent={percent} active={isRunning(task)}>
-      {message}
+    <Progress color="green" percent={percent} active={isRunning(task)} progress>
+      <span className={styles.taskName}>
+        {task.type}
+      </span>
+      &nbsp;-&nbsp;
+      <span className={styles.taskMessage}>
+        {message}
+      </span>
     </Progress>
   )
 }
