@@ -182,8 +182,13 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
 }
 
 const onBgTaskMsg = (progress: BackgroundTaskInfo) => {
-  // Use emit instead of handle for progress updates
-  ipcMain.emit(actions.onBackgroundTaskProgress, progress);
+  // broadcast updates everywhere
+  const windows = BrowserWindow.getAllWindows();
+  windows.forEach(window => {
+    if (!window.isDestroyed()) {
+      window.webContents.send(actions.onBackgroundTaskProgress, progress);
+    }
+  });
 }
 
 export function initMainIPC() {
@@ -294,16 +299,6 @@ export function initMainIPC() {
   });
   ipcMain.handle(actions.cancelloadWalletFromSite, async (_event) => {
     return api.cancelloadWalletFromSite();
-  });
-
-  // Set up progress listener separately
-  ipcMain.on(actions.onBackgroundTaskProgress, (progress) => {
-    const windows = BrowserWindow.getAllWindows();
-    windows.forEach(window => {
-      if (!window.isDestroyed()) {
-        window.webContents.send(actions.onBackgroundTaskProgress, progress);
-      }
-    });
   });
 }
 

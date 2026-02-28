@@ -14,7 +14,9 @@ const api : ScraperBridgeApi = {
   downloadLibraries: () => ipcRenderer.invoke(actions.downloadLibraries),
 
   onBackgroundTaskProgress: (callback: BackgroundTaskCallback) => {
-    ipcRenderer.on(actions.onBackgroundTaskProgress, (_event, value) => callback(value))
+    const _cb = (_event: any, value: any) => callback(value)
+    const r = ipcRenderer.on(actions.onBackgroundTaskProgress, _cb)
+    return () => r.off(actions.onBackgroundTaskProgress, _cb)
   },
   // init: () => ipcRenderer.invoke(actions.init),
   // onInitProgress: (callback) => {

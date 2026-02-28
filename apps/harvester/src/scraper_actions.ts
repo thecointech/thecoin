@@ -22,7 +22,7 @@ export type ScraperBridgeApi = {
   downloadLibraries(): Promise<Result<boolean>>;
 
   // Generic update pathway for all long-running actions
-  onBackgroundTaskProgress: (progress: BackgroundTaskCallback) => void;
+  onBackgroundTaskProgress: (progress: BackgroundTaskCallback) => () => void;
 
   // Run the automatic configurator for the given action on the appropriate url
   autoProcess: (params: AutoConfigParams) => Promise<Result<boolean>>;
