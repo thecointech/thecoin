@@ -36,7 +36,7 @@ def generate_cert(hostname: str, days: int) -> tuple[str, str]:
 
         result = subprocess.run([
             "openssl", "req", "-x509",
-            "-newkey", "rsa:2048",
+            "-newkey", "rsa:4096",
             "-keyout", key_path,
             "-out", cert_path,
             "-days", str(days),
