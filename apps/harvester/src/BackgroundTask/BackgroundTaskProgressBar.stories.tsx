@@ -89,7 +89,6 @@ export const RunningWithSubTasks: Story = {
 export const CompletedSuccess: Story = {
   args: {
     type: 'initialize',
-    alwaysDisplay: true,
   },
   decorators: [
     withReducer(BackgroundTaskReducer),
@@ -105,7 +104,6 @@ export const CompletedSuccess: Story = {
 export const CompletedError: Story = {
   args: {
     type: 'initialize',
-    alwaysDisplay: true,
   },
   decorators: [
     withReducer(BackgroundTaskReducer),
@@ -127,7 +125,6 @@ export const CloseOnComplete: Story = {
   args: {
     type: 'initialize',
     closeOnComplete: true,
-    alwaysDisplay: true,
   },
   decorators: [
     withReducer(BackgroundTaskReducer),
