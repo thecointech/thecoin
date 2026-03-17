@@ -31,7 +31,7 @@ export const BackgroundTaskProgressBar = ({ type, subTask, closeOnComplete }: Pr
     }
 
     // No task running, wait until later
-    if (!bgTask?.percent || bgTask.completed) {
+    if (!isRunning(bgTask)) {
       return;
     }
 
@@ -75,8 +75,12 @@ export const BackgroundTaskProgressBar = ({ type, subTask, closeOnComplete }: Pr
 
   const running = getRunning(bgTask.subTasks);
   const numRunning = Math.min(running.length, bgTask.subTasks.length);
+  const currentStep = Math.min(
+    bgTask.subTasks.length,
+    1 + bgTask.subTasks.length - numRunning,
+  );
   const message = bgTask.subTasks.length
-    ? `${1 + bgTask.subTasks.length - numRunning} of ${bgTask.subTasks.length}`
+    ? `${currentStep} of ${bgTask.subTasks.length}`
     : bgTask.description ?? "";
   return <BackgroundTaskProgressBarElement task={bgTask} taskId={message} />
 }
