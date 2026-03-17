@@ -110,7 +110,7 @@ export const VerifyAccounts = () => {
       <div className={styles.header}>
         <h2>Verify Your Accounts</h2>
         <p>
-          Please review the accounts found by the scraper and correct any masked credit card numbers.
+          Please review the accounts detected and update any masked credit card numbers.
         </p>
       </div>
 

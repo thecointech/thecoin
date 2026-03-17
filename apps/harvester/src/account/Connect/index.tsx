@@ -62,7 +62,7 @@ export const Connect = () => {
         loading={connecting}
         content="Connect Wallet"
       />
-      <div className={styles.connectProgress}>
+      <div>
         <BackgroundTaskProgressBar type="connect" />
         <BackgroundTaskErrors type="connect" />
       </div>
