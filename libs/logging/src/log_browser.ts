@@ -1,9 +1,16 @@
-import { BunyanLogger } from './logger';
+import type { AppLogger } from './logger';
 import { init_browser } from './browser';
 export { LoggerContext } from './loggerContext'
 
+//
+// NOTE:
+// BEFORE DOING ANY WORK IN HERE
+// https://github.com/thecointech/thecoin/issues/643
+// Switch to Pino instead
+//
+
 const appName = process.env.LOG_NAME ?? process.env.CONFIG_NAME ?? "dev";
-export const log: BunyanLogger = init_browser(appName);
+export const log: AppLogger = init_browser(appName);
 if (process.env.LOG_LEVEL !== undefined)
   log.level(Number(process.env.LOG_LEVEL));
 

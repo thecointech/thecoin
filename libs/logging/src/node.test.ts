@@ -21,18 +21,11 @@ describe('live test', () => {
     logger.info('test');
 
     // Ensure streams are flushed by closing the logger
-    await new Promise<void>((resolve) => {
-      // @ts-ignore
-      logger.streams.forEach(s => s.stream?.end?.());
-      setTimeout(resolve, 100);
-    });
+    await logger.end();
 
     const logFolder = `${vars.TC_LOG_FOLDER}/test`;
     const logFile = `${logFolder}/tc.log`;
     expect(existsSync(logFile)).toBe(true);
-
-    //@ts-ignore Close any remaining file handles
-    logger.streams.forEach(s => s.stream?.destroy?.());
 
     // delete the folder and verify
     rmSync(logFolder, { recursive: true, force: true });
