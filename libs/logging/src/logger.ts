@@ -8,6 +8,10 @@ export type BunyanLogger = Omit<BaseLogger, "child"> & {
   child: (options: any, simple?: boolean) => BunyanLogger
 };
 
+export type AppLogger = BunyanLogger & {
+  end: () => Promise<void>
+}
+
 // LogStream from browser is more limited than stream from bunyan
 type UniversalStream = {
   level?: LogLevel

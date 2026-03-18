@@ -1,9 +1,9 @@
-import { BunyanLogger } from './logger';
+import type { AppLogger } from './logger';
 import { init_node } from './node';
 export { LoggerContext } from './loggerContext'
 
 const appName = process.env.LOG_NAME ?? process.env.CONFIG_NAME ?? "dev";
-export const log: BunyanLogger = init_node(appName);
+export const log: AppLogger = init_node(appName);
 if (process.env.LOG_LEVEL !== undefined)
   log.level(Number(process.env.LOG_LEVEL));
 
