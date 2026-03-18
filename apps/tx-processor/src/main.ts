@@ -36,6 +36,7 @@ async function run() {
     catch (e) {
       log.error(e, 'Failed to release resources');
       console.error('Failed to release resources:', e);
+      exitCode = 2;
     }
     try {
       // Flush all logger streams to ensure buffered logs are sent to SEQ
@@ -47,6 +48,7 @@ async function run() {
     } catch (e) {
       // If flushing fails, log the error but still exit
       console.error('Failed to flush logger streams:', e);
+      exitCode = 2;
     }
     exit(exitCode);
   }

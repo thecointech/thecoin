@@ -84,6 +84,7 @@ it('awaits inner Writable on non-Writable wrappers (e.g. RotatingFileStream)', a
 
   const rotatingLike = {
     end() { innerStream.end(); },
+    write() { },
     stream: innerStream,
   };
 
