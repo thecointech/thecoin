@@ -1,6 +1,13 @@
 import type { createLogger as createNodeLogger, LogLevel, Serializers } from "bunyan";
 import type { createLogger as createBrowserLogger, LogStream } from "browser-bunyan";
 
+//
+// NOTE:
+// BEFORE DOING ANY WORK IN HERE
+// https://github.com/thecointech/thecoin/issues/643
+// Switch to Pino instead
+//
+
 // Our unified logger type.  Is the minimal of set of functionality offered
 type BaseLogger = ReturnType<typeof createNodeLogger> | ReturnType<typeof createBrowserLogger>;
 // Overwrite the conflicting "child" type, type-safety is enforced i the loggerContext
