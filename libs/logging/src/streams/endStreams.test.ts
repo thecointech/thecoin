@@ -68,11 +68,23 @@ it('waits for _final on Writable streams (e.g. SeqStream)', async () => {
   expect(flushed).toBe(true);
 }, 3000);
 
-it('calls end() on non-Writable streams without waiting', async () => {
-  // Simulate bunyan RotatingFileStream: a plain object with end()
-  let endCalled = false;
+it('awaits inner Writable on non-Writable wrappers (e.g. RotatingFileStream)', async () => {
+  // Simulate bunyan RotatingFileStream: a non-Writable object whose
+  // end() delegates to an inner .stream that is a proper Writable
+  let innerFlushed = false;
+  const innerStream = new Writable({
+    write(_chunk, _encoding, callback) { callback(); },
+    final(callback) {
+      setTimeout(() => {
+        innerFlushed = true;
+        callback();
+      }, 50);
+    },
+  });
+
   const rotatingLike = {
-    end() { endCalled = true; },
+    end() { innerStream.end(); },
+    stream: innerStream,
   };
 
   const logger = bunyan.createLogger({
@@ -80,10 +92,6 @@ it('calls end() on non-Writable streams without waiting', async () => {
     streams: [{ stream: rotatingLike as any, level: 'info', type: 'raw' }],
   });
 
-  const start = Date.now();
   await endStreams(logger);
-  const elapsed = Date.now() - start;
-
-  expect(endCalled).toBe(true);
-  expect(elapsed).toBeLessThan(1000);
+  expect(innerFlushed).toBe(true);
 }, 3000);
