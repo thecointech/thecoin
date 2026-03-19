@@ -1,4 +1,8 @@
 {
+  "+XBn2Z": {
+    "defaultMessage": "Construire sa richesse prend du temps. Voulez-vous commencer?",
+    "description": "site.homepage.createAccountSmall.title: Title / content for the small create account banner"
+  },
   "+yxUhg": {
     "defaultMessage": "Nous aidons à restaurer l'écosystème de la planète",
     "description": "site.wedomore.tree.description: Description for the tree photo for the We Do More page"
@@ -11,12 +15,12 @@
     "defaultMessage": "Reboisement",
     "description": "site.wedomore.tree.title: Title for the tree photo for the We Do More page"
   },
-  "0N2o+s": {
-    "defaultMessage": "Vos avantages",
-    "description": "site.homepage.advantages.benefits: Your benefits"
+  "0TW4/3": {
+    "defaultMessage": "On s'assure juste que ça paie.",
+    "description": "home page tagline part2"
   },
   "0VyBpa": {
-    "defaultMessage": "Nous pouvons le prouver",
+    "defaultMessage": "Le prouver? Nous serions ravis!",
     "description": "site.homepage.underwater.science.description: Description for the homepage underwater science subpart"
   },
   "0W1Mb5": {
@@ -26,10 +30,6 @@
   "1PFQTi": {
     "defaultMessage": "Nous en faison plus",
     "description": "site.MainNavigationMobile.wedomore: Title for the We do more entry in the menu"
-  },
-  "1jRkZO": {
-    "defaultMessage": "La terre se porte mieux",
-    "description": "site.homepage.underwater.title: Title for that homepage underwater part"
   },
   "2+ZDlf": {
     "defaultMessage": "Pays",
@@ -109,6 +109,10 @@
     "defaultMessage": "Les grandes banques retirent en moyenne 1 000 $ de profits chaque année à chaque Canadien.",
     "description": "site.healthier.majorbanks: text for the banks taking money for the Earth’s Healthier page"
   },
+  "FNj3R7": {
+    "defaultMessage": "Vos avantages",
+    "description": "site.homepage.advantages.benefits: Your benefits"
+  },
   "GM3YzV": {
     "defaultMessage": "{months} mois"
   },
@@ -118,10 +122,6 @@
   "HnvT/Q": {
     "defaultMessage": "FAQ",
     "description": "site.MainNavigationMobile.blog: Title for the Blog entry in the menu"
-  },
-  "IJP8Tt": {
-    "defaultMessage": "TheCoin est un nouveau type de compte révolutionnaire.",
-    "description": "site.homepage.createAccountSmall.title: Title / content for the small create account banner"
   },
   "J3ca41": {
     "defaultMessage": "Lire"
@@ -134,8 +134,16 @@
     "defaultMessage": "Durée :",
     "description": "site.compare.label.rangeDuration: label for range duration in the compare page"
   },
+  "JYe4KZ": {
+    "defaultMessage": "Faites ce qui compte",
+    "description": "site.homepage.underwater.difference.title: Title for the homepage underwater difference subpart"
+  },
   "JsOO1l": {
     "defaultMessage": "Si vous avez ouvert un compte à une date aléatoire à tout moment au cours des 80 dernières années, l'axe du bas montre les valeurs de compte possibles et l'axe vertical est la probabilité que vous obteniez ce retour"
+  },
+  "KM2Cx/": {
+    "defaultMessage": "Empreinte compensée",
+    "description": "site.homepage.advantages.minimum: Minimums"
   },
   "Kn2j7O": {
     "defaultMessage": "Eau propre",
@@ -152,9 +160,9 @@
     "defaultMessage": "Comparer les résultats",
     "description": "site.homepage.underwater.difference.link: Link for the homepage underwater difference subpart"
   },
-  "NtaMxG": {
-    "defaultMessage": "Votre argent rapporte toujours. Faites-le travailler pour vous.",
-    "description": "site.homepage.landscape.stickers.left.description: Description for sticker for the homepage landscape left sticker"
+  "VELvTd": {
+    "defaultMessage": "Profit moyen",
+    "description": "site.homepage.advantages.monthlyFees: Monthly Fees"
   },
   "NwufPh": {
     "defaultMessage": "Commencer",
@@ -225,10 +233,6 @@
     "defaultMessage": "En profondeur",
     "description": "site.MainNavigationMobile.indepth: Title for the In-depth entry in the menu"
   },
-  "ZiBD6K": {
-    "defaultMessage": "Frais mensuels",
-    "description": "site.homepage.advantages.monthlyFees: Monthly Fees"
-  },
   "b+5LjH": {
     "defaultMessage": "Énergie propre",
     "description": "site.wedomore.energy.title: Title for the energy photo for the We Do More page"
@@ -245,10 +249,6 @@
     "defaultMessage": "Créer un compte",
     "description": "site.MainNavigation.button,createAccount: Button to create account in app"
   },
-  "d0yXyK": {
-    "defaultMessage": "Minimum",
-    "description": "site.homepage.advantages.minimum: Minimums"
-  },
   "dP8QDa": {
     "defaultMessage": "Nous faisons plus que simplement compenser le CO2. Les projets que nous finançons sont l'étalon-or du WWF, la norme mondiale la plus élevée pour un impact maximal.",
     "description": "site.wedomore.description: Description for the We Do More page"
@@ -256,6 +256,10 @@
   "dr0Wpp": {
     "defaultMessage": "La Terre se porte mieux",
     "description": "site.healthier.title: Main title for the Earth’s Healthier page"
+  },
+  "jcOPB6": {
+    "defaultMessage": "C'est la même façon dont les riches s'enrichissent, mais à l'envers",
+    "description": "site.homepage.landscape.stickers.left.description: Description for sticker for the homepage landscape left sticker"
   },
   "eD3nRg": {
     "defaultMessage": "En savoir plus",
@@ -275,10 +279,6 @@
   },
   "feSg9K": {
     "defaultMessage": "Votre âge"
-  },
-  "hB3xnP": {
-    "defaultMessage": "Faites partie de la solution. Nous compensons le CO2 de nos clients.",
-    "description": "site.homepage.landscape.stickers.right.description: Description for sticker for the homepage landscape right sticker"
   },
   "hfXNxT": {
     "defaultMessage": "Nous serions ravis d'en savoir plus sur vous ! Pourriez-vous nous faire part de vos coordonnées ?",
@@ -315,10 +315,6 @@
     "defaultMessage": "La compensation du CO2 est efficace. Très efficace !",
     "description": "site.homepage.underwater.difference.description: Description for the homepage underwater difference subpart"
   },
-  "n0wGb/": {
-    "defaultMessage": "Profitez des avantages de la croissance des investissements pour chaque dollar avec notre compte de dépenses en ligne.",
-    "description": "site.homepage.wealthier.description: The description for the homepage wealthier"
-  },
   "p695DK": {
     "defaultMessage": "L'avenir est plus radieux",
     "description": "site.homepage.landscape.title: The title for the homepage"
@@ -326,10 +322,6 @@
   "pQMOTC": {
     "defaultMessage": "S'abonner",
     "description": "site.subscribe.button: Button for the bottom subscription part for the site"
-  },
-  "pRmrf0": {
-    "defaultMessage": "Faites une différence",
-    "description": "site.homepage.underwater.difference.title: Title for the homepage underwater difference subpart"
   },
   "q8J1XZ": {
     "defaultMessage": "L'ingrédient le plus important est le temps. Vous êtes jeune, maximisez vos bénéfices !",
@@ -339,9 +331,17 @@
     "defaultMessage": "Nous investissons les comptes de nos clients et leur donnons 90 % des bénéfices.",
     "description": "site.healthier.invest: text for the investment part for the Earth’s Healthier page"
   },
+  "qGz2kt": {
+    "defaultMessage": "On ne vous demande pas d'en faire plus.",
+    "description": "home page tagline part1"
+  },
   "qKjeDB": {
     "defaultMessage": "Qui gagne ?",
     "description": "site.homepage.wealthier.profits.link: The link for the profits for the homepage wealthier"
+  },
+  "qc2zti": {
+    "defaultMessage": "Si l'argent peut causer une crise, alors l'argent est le meilleur moyen de la résoudre.",
+    "description": "site.homepage.underwater.description: Description for the homepage underwater part1"
   },
   "quX+ke": {
     "defaultMessage": "Je veux recevoir le bulletin",
@@ -405,9 +405,17 @@
     "defaultMessage": "En profondeur",
     "description": "site.MainNavigation.indepth: Title for the In-depth entry in the menu"
   },
+  "x/m96k": {
+    "defaultMessage": "Zéro coût. Zéro risque.{br}Le temps de bâtir une meilleure vie.{br}On n'y croyait pas nous-mêmes, jusqu'à ce qu'on le construise. Voici comment ça marche.",
+    "description": "site.homepage.wealthier.description: The description for the homepage wealthier"
+  },
   "xWWo6h": {
     "defaultMessage": "Blog",
     "description": "site.blog.title: Title for the In-depth blog page"
+  },
+  "xIzK2I": {
+    "defaultMessage": "Les solutions pour le climat ont toujours existé. C'est l'argent qui manquait. C'est là qu'on intervient.",
+    "description": "site.homepage.landscape.stickers.right.description: Description for sticker for the homepage landscape right sticker"
   },
   "xoodDX": {
     "defaultMessage": "FAQ",
@@ -424,5 +432,25 @@
   "zj5EI2": {
     "defaultMessage": "Se connecter",
     "description": "site.MainNavigation.loginLink: Button to log in in app"
+  },
+  "zk7sO0": {
+    "defaultMessage": "La Terre se porte mieux",
+    "description": "site.homepage.underwater.title: Title for that homepage underwater part"
+  },
+  "B2g3Z7": {
+    "defaultMessage": "Pas une solution. Un choix. Le vôtre.",
+    "description": "the sites closing argument"
+  },
+  "avTsxJ": {
+    "defaultMessage": "Curieux d'en savoir plus?{br}On vous envoie le vrai de vrai.",
+    "description": "Footer CTA Part1"
+  },
+  "xcoc1q": {
+    "defaultMessage": "Blogue",
+    "description": "site.MainNavigation.blog: Blog Link"
+  },
+  "pOHZAH": {
+    "defaultMessage": "Simulateur",
+    "description": "site.MainNavigation.simulator: Title for the Simulator entry in the menu"
   }
 }

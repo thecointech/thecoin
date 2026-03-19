@@ -30,7 +30,7 @@ const menuItems = defineMessages({
     icon: "newspaper"
   },
   help: {
-    defaultMessage: 'Help',
+    defaultMessage: 'FAQs',
     description: 'site.MainNavigation.faq: Help Link',
     icon: "question"
   },

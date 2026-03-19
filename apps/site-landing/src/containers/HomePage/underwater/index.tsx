@@ -73,7 +73,7 @@ const items = {
 export const Healthier = () => {
 
   return (
-    <div className={styles.content}>
+    <div className={styles.content} id="healthier">
       <div className={styles.headerImage}>
         <img src={bgtop_planet} />
       </div>

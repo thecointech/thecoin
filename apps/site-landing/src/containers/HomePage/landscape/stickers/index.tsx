@@ -34,7 +34,7 @@ export const Stickers = () => {
         <p>
           <FormattedMessage {...translations.descriptionLeft} />
         </p>
-        <LearnMoreLink to="/compare"><FormattedMessage {...translations.learnMore} /></LearnMoreLink>
+        <LearnMoreLink to="#wealthier"><FormattedMessage {...translations.learnMore} /></LearnMoreLink>
       </div>
       <div className={styles.card}>
         <Header as='h4'>
@@ -43,7 +43,7 @@ export const Stickers = () => {
         <p>
           <FormattedMessage {...translations.descriptionRight} />
         </p>
-        <LearnMoreLink to="/wedomore"><FormattedMessage {...translations.learnMore} /></LearnMoreLink>
+        <LearnMoreLink to="#healthier"><FormattedMessage {...translations.learnMore} /></LearnMoreLink>
       </div>
     </div>
   );
