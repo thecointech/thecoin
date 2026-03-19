@@ -16,7 +16,7 @@ const translations = defineMessages({
     description: 'site.homepage.wealthier.title: The title for the homepage wealthier'
   },
   description: {
-    defaultMessage: 'Enjoy the benefits of investment growth on every dollar with our online spending account.',
+    defaultMessage: "Zero cost. Zero risk.{br}Time to build a better life.{br}We didn't believe it was possible until we built it. Here's how it works.",
     description: 'site.homepage.wealthier.description: The description for the homepage wealthier'
   },
 });
@@ -101,12 +101,12 @@ const items = {
 export const Wealthier = () => (
   <>
     <div className={styles.background} />
-    <div className={styles.content}>
+    <div id="wealthier" className={styles.content}>
       <div className={styles.title}>
         <Header as='h2'>
           <FormattedMessage {...translations.title} />
           <Header.Subheader className={`x5spaceBefore`}>
-            <FormattedMessage {...translations.description} />
+            <FormattedMessage {...translations.description} values={{ br: <br /> }} />
           </Header.Subheader>
         </Header>
       </div>

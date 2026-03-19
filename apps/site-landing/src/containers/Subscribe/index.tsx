@@ -5,10 +5,10 @@ import { Helmet } from "react-helmet-async";
 
 const translations = defineMessages({
   description1 : {
-    defaultMessage: 'The future is better because of you & us.',
+    defaultMessage: "Would you like to know more?",
     description: 'Footer CTA Part1'},
   description2 : {
-      defaultMessage: 'Subscribe to our newsletter:',
+      defaultMessage: 'Subscribe to get the nitty-gritty',
       description: 'Footer CTA Part2'},
 });
 

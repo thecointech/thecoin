@@ -5,7 +5,7 @@ import styles from './styles.module.less';
 import { CreateAccountButton } from '../../../components/AppLinks/CreateAccount';
 
 const title = defineMessage({
-  defaultMessage: 'TheCoin is a revolutionary new kind of account.',
+  defaultMessage: 'Building wealth takes time. Want to get started?',
   description: 'site.homepage.createAccountSmall.title: Title / content for the small create account banner',
 });
 

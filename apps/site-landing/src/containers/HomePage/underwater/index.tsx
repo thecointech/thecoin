@@ -15,14 +15,11 @@ import bgtop_planet from './images/bgtop_planet.svg';
 
 const translations = defineMessages({
   title : {
-    defaultMessage: 'Earths’ Healthier',
+    defaultMessage: 'Earth’s Healthier',
     description: 'site.homepage.underwater.title: Title for that homepage underwater part'},
-  description1 : {
-    defaultMessage: 'You can become CO2-neutral with TheCoin',
+  description : {
+    defaultMessage: 'If money can cause a crisis, then money is the best way to solve it.',
     description: 'site.homepage.underwater.description: Description for the homepage underwater part1'},
-  description2 : {
-      defaultMessage: 'as we work to offset our clients’ emissions.',
-      description: 'site.homepage.underwater.description: Description for the homepage underwater part2'},
 })
 
 const items = {
@@ -31,7 +28,7 @@ const items = {
     to: "/healthier",
     text: {
       title: defineMessage({
-        defaultMessage: 'Make a Difference',
+        defaultMessage: 'Do What Matters',
         description: 'site.homepage.underwater.difference.title: Title for the homepage underwater difference subpart'}),
       description: defineMessage({
         defaultMessage: 'Offsetting CO2 is effective. Extremely effective!',
@@ -84,8 +81,7 @@ export const Healthier = () => {
         <Header as='h2' className={styles.title}>
           <FormattedMessage {...translations.title} />
           <Header.Subheader className={`x5spaceBefore`}>
-            <FormattedMessage tagName='span' {...translations.description1} />
-            <FormattedMessage tagName='span'{...translations.description2} />
+            <FormattedMessage tagName='span' {...translations.description} />
           </Header.Subheader>
         </Header>
         <div className={styles.items} >

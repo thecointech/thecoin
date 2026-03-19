@@ -10,7 +10,7 @@ const translations = defineMessages({
       defaultMessage: 'You’re Wealthier',
       description: 'site.homepage.landscape.stickers.left.title: The title for the homepage landscape left sticker'},
     descriptionLeft : {
-      defaultMessage: 'Your money is always earning. Make it earn for you.',
+      defaultMessage: "It's the same way the rich get richer, just in reverse",
       description: 'site.homepage.landscape.stickers.left.description: Description for sticker for the homepage landscape left sticker'},
     learnMore : {
       defaultMessage: 'Learn More',
@@ -19,7 +19,7 @@ const translations = defineMessages({
       defaultMessage: 'Earth’s Healthier',
       description: 'site.homepage.landscape.stickers.right.title: The title for the homepage landscape right sticker'},
     descriptionRight : {
-      defaultMessage: 'Be part of the solution. We offset our clients’ CO2.',
+      defaultMessage: "Climate action never lacked solutions. It lacked money. That's where we come in.",
       description: 'site.homepage.landscape.stickers.right.description: Description for sticker for the homepage landscape right sticker'},
   });
 
