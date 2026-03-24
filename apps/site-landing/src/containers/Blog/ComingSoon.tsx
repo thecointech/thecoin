@@ -6,6 +6,7 @@ import styles from "./ComingSoon.module.less";
 import logo from '../MainNavigation/images/logo.svg';
 
 // (Very) temporary placeholder for blog posts that are not yet ready
+// (note, not putting translations in for that reason)
 
 export const ComingSoon = () => {
   return (

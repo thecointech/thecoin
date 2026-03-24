@@ -1,8 +1,7 @@
 
 import React from "react";
-import { FormattedMessage } from "react-intl";
 import { Icon } from "semantic-ui-react";
-import { defineMessages } from "react-intl";
+import { defineMessages, FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router";
 
 const translations = defineMessages({
@@ -15,7 +14,8 @@ const translations = defineMessages({
 export const BackButton = ({ isPreview = false }: { isPreview?: boolean }) => {
   const navigate = useNavigate();
 
-  const handleBack = () => {
+  const handleBack = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
     if (isPreview) {
       navigate('/blog');
     } else {

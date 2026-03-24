@@ -7,10 +7,6 @@
     "defaultMessage": "Nous aidons à restaurer l'écosystème de la planète",
     "description": "site.wedomore.tree.description: Description for the tree photo for the We Do More page"
   },
-  "0FXCvv": {
-    "defaultMessage": "Croissance max",
-    "description": "site.homepage.wealthier.growth.title: The title for the growth for the homepage wealthier"
-  },
   "0GZP57": {
     "defaultMessage": "Reboisement",
     "description": "site.wedomore.tree.title: Title for the tree photo for the We Do More page"
@@ -23,22 +19,6 @@
     "defaultMessage": "Le prouver? Nous serions ravis!",
     "description": "site.homepage.underwater.science.description: Description for the homepage underwater science subpart"
   },
-  "0W1Mb5": {
-    "defaultMessage": "Pourquoi accepter moins ? Notre stratégie éprouvée a les meilleurs résultats à long terme.",
-    "description": "site.homepage.wealthier.investment.description: The description for the investment for the homepage wealthier"
-  },
-  "1PFQTi": {
-    "defaultMessage": "Nous en faison plus",
-    "description": "site.MainNavigationMobile.wedomore: Title for the We do more entry in the menu"
-  },
-  "2+ZDlf": {
-    "defaultMessage": "Pays",
-    "description": "site.subscribe.confirmation.form.country: label for last name field"
-  },
-  "2E2eVK": {
-    "defaultMessage": "Gardez vos bénéfices",
-    "description": "site.homepage.wealthier.profits.title: The title for the profits for the homepage wealthier"
-  },
   "2yk0Rt": {
     "defaultMessage": "Votre compte chèques sera avec vous plus longtemps que votre épargne-retraite. Voilà à quoi cela pourrait ressembler avec nous.",
     "description": "site.compare.description: Main description for the How much will you make? graph page"
@@ -47,57 +27,21 @@
     "defaultMessage": "Nous finançons des projets d'énergie propre pour remplacer le charbon",
     "description": "site.wedomore.energy.description: Title for the energy photo for the We Do More page"
   },
-  "4DkjpT": {
-    "defaultMessage": "Il n'y a pas que le CO2. Les projets que nous finançons sont essentiels à la restauration de notre écosystème.",
-    "description": "site.homepage.underwater.trees.description: Description for the homepage underwater trees subpart"
-  },
   "4MHk2t": {
     "defaultMessage": "Nous en faison plus",
     "description": "site.wedomore.title: Title for the We Do More page"
-  },
-  "4N/YNr": {
-    "defaultMessage": "L'avenir est meilleur grâce à vous et à nous. Abonnez-vous à notre bulletin",
-    "description": "site.subscribe.description: The future is better because of you & us. Subscribe to our newsletter"
-  },
-  "4fyTGb": {
-    "defaultMessage": "Ajoutez 250 000 $ à votre retraite - sans mise de fonds.",
-    "description": "site.homepage.wealthier.growth.description: The title for the growth for the homepage wealthier"
-  },
-  "60WgI1": {
-    "defaultMessage": "Accueil",
-    "description": "site.MainNavigationMobile.home: Title for the Home entry in the menu"
-  },
-  "7bpwYe": {
-    "defaultMessage": "années",
-    "description": "site.compare.label.rangeDurationYear: label for range Duration Year field in the compare page"
-  },
-  "81qKOv": {
-    "defaultMessage": "Veuillez entrer un courriel valide",
-    "description": "site.subscribe.email.invalid: Message we give a user when the subscription failed"
-  },
-  "8WNRbJ": {
-    "defaultMessage": "Vous pouvez devenir neutre en CO2 avec TheCoin alors que nous travaillons à compenser les émissions de nos clients.",
-    "description": "site.homepage.underwater.description: Description for the homepage underwater part"
-  },
-  "8rHqL+": {
-    "defaultMessage": "Chaque dollar rapporte chaque jour. En tant qu'organisation à but non lucratif, nous souhaitons que vous conserviez cet avantages et gains.",
-    "description": "site.homepage.wealthier.profits.description: The description for the profits for the homepage wealthier"
   },
   "92T+TI": {
     "defaultMessage": "Notre mission en tant qu'organisation à but non lucratif est d'utiliser pleinement une ressource négligée pour lutter contre le changement climatique - votre compte bancaire.",
     "description": "site.healthier.description: Description underneath the title for the Earth’s Healthier page"
   },
+  "B2g3Z7": {
+    "defaultMessage": "Pas une solution. Un choix. Le vôtre.",
+    "description": "the sites closing argument"
+  },
   "B7gcLo": {
     "defaultMessage": "Mieux cultiver",
     "description": "site.wedomore.smallPlant.title: Title for the smallPlant photo for the We Do More page"
-  },
-  "Db9gTm": {
-    "defaultMessage": "En savoir plus",
-    "description": "site.homepage.landscape.stickers.right.link: Link name for sticker for the homepage landscape right sticker"
-  },
-  "F/FnXv": {
-    "defaultMessage": "Accueil",
-    "description": "site.MainNavigation.home: Title for the Home entry in the menu"
   },
   "FAWgn/": {
     "defaultMessage": "Montrez-moi le potentiel !"
@@ -118,10 +62,6 @@
   },
   "Gv2G2+": {
     "defaultMessage": "Montant de départ"
-  },
-  "HnvT/Q": {
-    "defaultMessage": "FAQ",
-    "description": "site.MainNavigationMobile.blog: Title for the Blog entry in the menu"
   },
   "J3ca41": {
     "defaultMessage": "Lire"
@@ -160,10 +100,6 @@
     "defaultMessage": "Comparer les résultats",
     "description": "site.homepage.underwater.difference.link: Link for the homepage underwater difference subpart"
   },
-  "VELvTd": {
-    "defaultMessage": "Profit moyen",
-    "description": "site.homepage.advantages.monthlyFees: Monthly Fees"
-  },
   "NwufPh": {
     "defaultMessage": "Commencer",
     "description": "site.homepage.landscape.button: Button label for the landscape"
@@ -179,40 +115,20 @@
     "defaultMessage": "Scientifiquement vérifié",
     "description": "site.homepage.underwater.science.title: Title for the homepage underwater science subpart"
   },
-  "RceNpc": {
-    "defaultMessage": "Économisez, investissez et dépensez de l'argent avec TheCoin, obtenez 100% des avantages tout en sauvant notre planète.",
-    "description": "site.homepage.landscape.description: The description for the homepage"
-  },
   "RldC0Y": {
     "defaultMessage": "Retour",
     "description": "site.blog.backLink: Link to go back from article"
-  },
-  "S/Lh3i": {
-    "defaultMessage": "Nom de famille",
-    "description": "site.subscribe.confirmation.form.lastname: label for last name field"
-  },
-  "SS292h": {
-    "defaultMessage": "FAQ",
-    "description": "site.MainNavigationMobile.faq: Title for the FAQ entry in the menu"
   },
   "Th2OVj": {
     "defaultMessage": "Lire plus",
     "description": "site.blog.articleLink: Link to access article page in blog"
   },
-  "U623eE": {
-    "defaultMessage": "Simulation",
-    "description": "site.MainNavigation.simulator: Title for the Simulation entry in the menu"
-  },
-  "UTXdBk": {
-    "defaultMessage": "Prénom",
-    "description": "site.subscribe.confirmation.form.firstname: label for first name field"
-  },
   "V0XJgr": {
     "defaultMessage": "Valeur moyenne après"
   },
-  "VdA9HP": {
-    "defaultMessage": "Simulation",
-    "description": "site.MainNavigationMobile.simulator: Title for the Simulation entry in the menu"
+  "VELvTd": {
+    "defaultMessage": "Profit moyen",
+    "description": "site.homepage.advantages.monthlyFees: Monthly Fees"
   },
   "W8cvxr": {
     "defaultMessage": "Nous en faison plus",
@@ -221,17 +137,13 @@
   "Ycz6kB": {
     "defaultMessage": "Ce graphique montre l'évolution probable de la valeur d'un compte TheCoin"
   },
-  "YpYP+S": {
-    "defaultMessage": "Abonnement",
-    "description": "site.subscribe.confirmation.aboveTheTitle: Text above the title for the 'Thank you for subscribing!' page"
-  },
   "YwCHN1": {
     "defaultMessage": "Pourquoi nous sommes si confiants",
     "description": "site.homepage.underwater.science.link: Link for the homepage underwater science subpart"
   },
-  "ZNzJYq": {
-    "defaultMessage": "En profondeur",
-    "description": "site.MainNavigationMobile.indepth: Title for the In-depth entry in the menu"
+  "avTsxJ": {
+    "defaultMessage": "Curieux d'en savoir plus?{br}On vous envoie le vrai de vrai.",
+    "description": "Footer CTA Part1"
   },
   "b+5LjH": {
     "defaultMessage": "Énergie propre",
@@ -240,10 +152,6 @@
   "b8wQuI": {
     "defaultMessage": "Ce que nous faisons",
     "description": "site.homepage.underwater.trees.link: Link for the homepage underwater trees subpart"
-  },
-  "bx4TI0": {
-    "defaultMessage": "Votre compte chèques sera avec vous plus longtemps que votre épargne-retraite. Voilà à quoi cela pourrait ressembler.",
-    "description": "site.compare.graph.description: Graph description for the How much will you make? graph page"
   },
   "cdFqR/": {
     "defaultMessage": "Créer un compte",
@@ -257,10 +165,6 @@
     "defaultMessage": "La Terre se porte mieux",
     "description": "site.healthier.title: Main title for the Earth’s Healthier page"
   },
-  "jcOPB6": {
-    "defaultMessage": "C'est la même façon dont les riches s'enrichissent, mais à l'envers",
-    "description": "site.homepage.landscape.stickers.left.description: Description for sticker for the homepage landscape left sticker"
-  },
   "eD3nRg": {
     "defaultMessage": "En savoir plus",
     "description": "site.homepage.landscape.stickers.left.link: Link name for sticker for the homepage landscape left sticker"
@@ -269,10 +173,6 @@
     "defaultMessage": "Le 1/10ème restant sert à rembourser notre dette carbone",
     "description": "site.healthier.carbon: text for the carbon debt part for the Earth’s Healthier page"
   },
-  "VVutoW": {
-    "defaultMessage": "Blog",
-    "description": "site.MainNavigation.blog: Title for the Blog entry in the menu"
-  },
   "fajUfc": {
     "defaultMessage": "Nous en faison plus",
     "description": "site.MainNavigation.wedomore: Title for the We do more entry in the menu"
@@ -280,52 +180,24 @@
   "feSg9K": {
     "defaultMessage": "Votre âge"
   },
-  "hfXNxT": {
-    "defaultMessage": "Nous serions ravis d'en savoir plus sur vous ! Pourriez-vous nous faire part de vos coordonnées ?",
-    "description": "site.subscribe.confirmation.description: Descriton for the 'Thank you for subscribing!' page"
-  },
   "iCleoo": {
     "defaultMessage": "Prévenir les dommages et l'érosion des sols et améliorer la vie des gens",
     "description": "site.wedomore.smallPlant.description: Title for the smallPlant photo for the We Do More page"
   },
-  "jJ1YVo": {
-    "defaultMessage": "Le meilleur investissement",
-    "description": "site.homepage.wealthier.investment.title: The title for the investment for the homepage wealthier"
-  },
-  "jK5Jc0": {
-    "defaultMessage": "Vos avantages",
-    "description": "site.compare.graph.title: Graph title for the How much will you make? graph page"
-  },
-  "jTYRs0": {
-    "defaultMessage": "Comparez-nous",
-    "description": "site.homepage.wealthier.investment.link: The link for the investment for the homepage wealthier"
-  },
   "jXd/F7": {
     "defaultMessage": "Étape"
   },
-  "kEiX9n": {
-    "defaultMessage": "Les avantages d'un compte-chèques, d'épargne et de placement tout en un!",
-    "description": "site.createAccountBanner.title: The benefits of a chequing, savings, and investing account all in one!"
-  },
-  "kWd+Qa": {
-    "defaultMessage": "Merci de vous être abonné !",
-    "description": "site.subscribe.confirmation.title: Title for the 'Thank you for subscribing!' page"
-  },
-  "lrlibv": {
-    "defaultMessage": "La compensation du CO2 est efficace. Très efficace !",
-    "description": "site.homepage.underwater.difference.description: Description for the homepage underwater difference subpart"
+  "jcOPB6": {
+    "defaultMessage": "C'est la même façon dont les riches s'enrichissent, mais à l'envers",
+    "description": "site.homepage.landscape.stickers.left.description: Description for sticker for the homepage landscape left sticker"
   },
   "p695DK": {
     "defaultMessage": "L'avenir est plus radieux",
     "description": "site.homepage.landscape.title: The title for the homepage"
   },
-  "pQMOTC": {
-    "defaultMessage": "S'abonner",
-    "description": "site.subscribe.button: Button for the bottom subscription part for the site"
-  },
-  "q8J1XZ": {
-    "defaultMessage": "L'ingrédient le plus important est le temps. Vous êtes jeune, maximisez vos bénéfices !",
-    "description": "site.homepage.wealthier.startnow.description: The description for the star now for the homepage wealthier"
+  "pOHZAH": {
+    "defaultMessage": "Simulateur",
+    "description": "site.MainNavigation.simulator: Title for the Simulator entry in the menu"
   },
   "qGeaPp": {
     "defaultMessage": "Nous investissons les comptes de nos clients et leur donnons 90 % des bénéfices.",
@@ -335,43 +207,8 @@
     "defaultMessage": "On ne vous demande pas d'en faire plus.",
     "description": "home page tagline part1"
   },
-  "qKjeDB": {
-    "defaultMessage": "Qui gagne ?",
-    "description": "site.homepage.wealthier.profits.link: The link for the profits for the homepage wealthier"
-  },
-  "qc2zti": {
-    "defaultMessage": "Si l'argent peut causer une crise, alors l'argent est le meilleur moyen de la résoudre.",
-    "description": "site.homepage.underwater.description: Description for the homepage underwater part1"
-  },
-  "quX+ke": {
-    "defaultMessage": "Je veux recevoir le bulletin",
-    "description": "site.subscribe.confirmation.form.subcheckbox: label for subcheckbox field"
-  },
-  "rplP0T": {
-    "defaultMessage": "Montrez-moi",
-    "description": "site.compare.button: label for the button in the compare page"
-  },
-  "site.subscribe.confirmation.button": {
-    "defaultMessage": "Mettre à jour les détails !"
-  },
   "tFFMkF": {
     "defaultMessage": "Pause"
-  },
-  "tKAFVB": {
-    "defaultMessage": "Succès : vérifier vos courriels",
-    "description": "site.subscribe.success: Message we give a user when the subscription is a success"
-  },
-  "tk3UgV": {
-    "defaultMessage": "CAD",
-    "description": "site.compare.label.rangeStartingCurrency: label for Starting Value Currency Text field in the compare page"
-  },
-  "tzKdah": {
-    "defaultMessage": "Commencer",
-    "description": "site.homepage.wealthier.startnow.title: The title for the star now for the homepage wealthier"
-  },
-  "u1YH39": {
-    "defaultMessage": "Ville",
-    "description": "site.subscribe.confirmation.form.city: label for city field"
   },
   "uGt+BZ": {
     "defaultMessage": "L'eau potable sans ébullition protège les hommes et les forêts",
@@ -381,25 +218,9 @@
     "defaultMessage": "Vous êtes plus riche",
     "description": "site.homepage.landscape.stickers.left.title: The title for the homepage landscape left sticker"
   },
-  "vMhtx9": {
-    "defaultMessage": "Courriel",
-    "description": "site.subscribe.confirmation.form.email: label for email field"
-  },
-  "w9xyw0": {
-    "defaultMessage": "Échec de l'inscription : veuillez contacter support@thecoin.io",
-    "description": "site.subscribe.error: Message we give a user when the subscription failed (already subscribed or server)"
-  },
   "wLTPa8": {
     "defaultMessage": "Combien ferez-vous ?",
     "description": "site.compare.title: Main title for the How much will you make? graph page"
-  },
-  "wPzBUV": {
-    "defaultMessage": "En savoir plus sur vos avantages",
-    "description": "site.homepage.wealthier.startnow.link: The link for the star now for the homepage wealthier"
-  },
-  "wUf7lJ": {
-    "defaultMessage": "FAQ",
-    "description": "site.MainNavigation.faq: Title for the FAQ entry in the menu"
   },
   "wwo/lO": {
     "defaultMessage": "En profondeur",
@@ -409,21 +230,17 @@
     "defaultMessage": "Zéro coût. Zéro risque.{br}Le temps de bâtir une meilleure vie.{br}On n'y croyait pas nous-mêmes, jusqu'à ce qu'on le construise. Voici comment ça marche.",
     "description": "site.homepage.wealthier.description: The description for the homepage wealthier"
   },
-  "xWWo6h": {
-    "defaultMessage": "Blog",
-    "description": "site.blog.title: Title for the In-depth blog page"
-  },
   "xIzK2I": {
     "defaultMessage": "Les solutions pour le climat ont toujours existé. C'est l'argent qui manquait. C'est là qu'on intervient.",
     "description": "site.homepage.landscape.stickers.right.description: Description for sticker for the homepage landscape right sticker"
   },
-  "xoodDX": {
-    "defaultMessage": "FAQ",
-    "description": "site.helpDocs.title: title for the FAQ page"
+  "xWWo6h": {
+    "defaultMessage": "Blog",
+    "description": "site.blog.title: Title for the In-depth blog page"
   },
-  "yZZmtI": {
-    "defaultMessage": "Valeur de départ :",
-    "description": "site.compare.label.rangeStarting: label for Starting Value in the compare page"
+  "xcoc1q": {
+    "defaultMessage": "Blogue",
+    "description": "site.MainNavigation.blog: Blog Link"
   },
   "yqcj84": {
     "defaultMessage": "Comment tout le monde peut devenir riche au fil du temps",
@@ -436,21 +253,5 @@
   "zk7sO0": {
     "defaultMessage": "La Terre se porte mieux",
     "description": "site.homepage.underwater.title: Title for that homepage underwater part"
-  },
-  "B2g3Z7": {
-    "defaultMessage": "Pas une solution. Un choix. Le vôtre.",
-    "description": "the sites closing argument"
-  },
-  "avTsxJ": {
-    "defaultMessage": "Curieux d'en savoir plus?{br}On vous envoie le vrai de vrai.",
-    "description": "Footer CTA Part1"
-  },
-  "xcoc1q": {
-    "defaultMessage": "Blogue",
-    "description": "site.MainNavigation.blog: Blog Link"
-  },
-  "pOHZAH": {
-    "defaultMessage": "Simulateur",
-    "description": "site.MainNavigation.simulator: Title for the Simulator entry in the menu"
   }
 }
