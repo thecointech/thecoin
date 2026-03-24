@@ -1,19 +1,15 @@
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Prismic } from "components/Prismic";
-import { Icon } from "semantic-ui-react";
 import { selectLocale } from "@thecointech/redux-intl";
-import { useParams, useNavigate } from "react-router";
+import { useParams } from "react-router";
 import { defineMessages, FormattedMessage } from "react-intl";
 import { NotFoundPage } from '@thecointech/shared/containers/NotFoundPage';
 import { Article as ArticleSlice, BlogContainer, getRecommendedArticles, Related } from '@thecointech/site-prismic/components';
 import { Link } from 'react-router';
+import { BackButton } from './BackButton';
 
 const translations = defineMessages({
-  backLink: {
-    defaultMessage: 'Go back',
-    description: 'site.blog.backLink: Link to go back from article'
-  },
   relatedTitle: {
     defaultMessage: 'Related Articles',
     description: 'site.blog.relatedTitle: Title for recommended articles links section'
@@ -29,7 +25,6 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
   const prismic = Prismic.useData();
   const actions = Prismic.useApi();
   const { locale } = useSelector(selectLocale);
-  const navigate = useNavigate();
   const { articleId: routerArticleId } = useParams<{articleId: string}>();
 
   // Use prop articleId if provided, otherwise fall back to router param
@@ -56,14 +51,6 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
     }
   }, [articleId, articleData, fullyLoaded, locale]);
 
-  const handleBack = () => {
-    if (isPreview) {
-      navigate('/blog');
-    } else {
-      navigate(-1);
-    }
-  };
-
   // Get recommended articles using shared logic
   const recommendedArticles = useMemo(() => {
     return articleData
@@ -75,10 +62,7 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
   return articleData
     ? <>
         <BlogContainer backLink={
-          <a href="#" onClick={handleBack}>
-            <Icon name="arrow left" />
-            <FormattedMessage {...translations.backLink} />
-          </a>
+          <BackButton isPreview={isPreview} />
         }>
           <ArticleSlice document={articleData} locale={locale}/>
           <Related

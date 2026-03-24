@@ -11,6 +11,7 @@ import { SectionItem } from '../SectionItem';
 import { defineMessage } from '@formatjs/intl';
 
 import bgtop_planet from './images/bgtop_planet.svg';
+import { FormattedMessageWithBreaks } from 'components/FormattedMessageWithBreaks';
 
 
 const translations = defineMessages({
@@ -18,7 +19,7 @@ const translations = defineMessages({
     defaultMessage: 'Earth’s Healthier',
     description: 'site.homepage.underwater.title: Title for that homepage underwater part'},
   description : {
-    defaultMessage: 'If money can cause a crisis, then money is the best way to solve it.',
+    defaultMessage: "Money is the most powerful tool we have.{br}Let's make it work for us, for a change.",
     description: 'site.homepage.underwater.description: Description for the homepage underwater part1'},
 })
 
@@ -31,7 +32,7 @@ const items = {
         defaultMessage: 'Do What Matters',
         description: 'site.homepage.underwater.difference.title: Title for the homepage underwater difference subpart'}),
       description: defineMessage({
-        defaultMessage: 'Offsetting CO2 is effective. Extremely effective!',
+        defaultMessage: 'Offsetting CO2 is effective.{br}Extremely effective.',
         description: 'site.homepage.underwater.difference.description: Description for the homepage underwater difference subpart'}),
       link: defineMessage({
         defaultMessage: 'Compare Outcomes',
@@ -61,7 +62,7 @@ const items = {
         defaultMessage: 'We Do More',
         description: 'site.homepage.underwater.trees.title: Title for the homepage underwater trees subpart'}),
       description: defineMessage({
-        defaultMessage: 'It’s not just CO2. The projects we fund are vital to restoring our ecosystem.',
+        defaultMessage: "It's more than CO2. We fund the changes we all know the world needs.",
         description: 'site.homepage.underwater.trees.description: Description for the homepage underwater trees subpart'}),
       link: defineMessage({
         defaultMessage: 'What We Do',
@@ -81,7 +82,7 @@ export const Healthier = () => {
         <Header as='h2' className={styles.title}>
           <FormattedMessage {...translations.title} />
           <Header.Subheader className={`x5spaceBefore`}>
-            <FormattedMessage tagName='span' {...translations.description} />
+            <FormattedMessageWithBreaks tagName='span' {...translations.description} />
           </Header.Subheader>
         </Header>
         <div className={styles.items} >

@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from './styles.module.less';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { Helmet } from "react-helmet-async";
+import { FormattedMessageWithBreaks } from 'components/FormattedMessageWithBreaks';
 
 const translations = defineMessages({
   description : {
@@ -16,7 +17,7 @@ export const Subscribe = () => {
     <div id={styles.subscribeBlock}>
       <span className={styles.message}>
         <h3>
-          <FormattedMessage tagName="div" {...translations.description} values={{br: <br />}} />
+          <FormattedMessageWithBreaks tagName="div" {...translations.description} />
         </h3>
       </span>
       <span className={styles.subscribeForm}>

@@ -9,6 +9,7 @@ import investment from './images/icon3_02.svg';
 import growth from './images/icon3_03.svg';
 import profits from './images/icon3_04.svg';
 import { SectionItem } from '../SectionItem';
+import { FormattedMessageWithBreaks } from 'components/FormattedMessageWithBreaks';
 
 const translations = defineMessages({
   title: {
@@ -24,36 +25,36 @@ const translations = defineMessages({
 const items = {
   startNow: {
     img: startnow,
-    to: '/blog/start-now',
+    to: '/blog/coming-soon',
     text: defineMessages({
       title: {
-        defaultMessage: 'Start Now',
+        defaultMessage: 'What does "Zero Cost" really mean?',
         description: 'site.homepage.wealthier.startnow.title: The title for the star now for the homepage wealthier'
       },
       description: {
-        defaultMessage: 'The most important ingredient is time. You’re young - maximize your benefit!',
+        defaultMessage: "No fees is easy.  Earning on $0 is hard.  Here's how we make something out of nothing.",
         description: 'site.homepage.wealthier.startnow.description: The description for the star now for the homepage wealthier'
       },
       link: {
-        defaultMessage: 'Learn Your Edge',
+        defaultMessage: 'This is our edge',
         description: 'site.homepage.wealthier.startnow.link: The link for the star now for the homepage wealthier'
       },
     })
   },
   investment: {
     img: investment,
-    to: '/compare',
+    to: '/blog/coming-soon',
     text: defineMessages({
       title: {
-        defaultMessage: 'The Best Investment',
+        defaultMessage: 'Your Safety Net',
         description: 'site.homepage.wealthier.investment.title: The title for the investment for the homepage wealthier'
       },
       description: {
-        defaultMessage: 'Why settle? Our time-tested strategy has the best long-term results.',
+        defaultMessage: "Investing is a roller-coaster. Our account protection can put the floor back under your feet.",
         description: 'site.homepage.wealthier.investment.description: The description for the investment for the homepage wealthier'
       },
       link: {
-        defaultMessage: 'Compare Us',
+        defaultMessage: 'How to sleep easy',
         description: 'site.homepage.wealthier.investment.link: The link for the investment for the homepage wealthier'
       },
     })
@@ -63,11 +64,11 @@ const items = {
     to: '/blog/think-investing-is-only-for-the-wealthy--think-again',
     text: defineMessages({
       title: {
-        defaultMessage: 'Maximum Growth',
+        defaultMessage: "It's about time",
         description: 'site.homepage.wealthier.growth.title: The title for the growth for the homepage wealthier'
       },
       description: {
-        defaultMessage: 'Add $250000 to your retirement - with no money down.',
+        defaultMessage: "You'll never stop buying groceries. That could add $250000 to your retirement.",
         description: 'site.homepage.wealthier.growth.description: The title for the growth for the homepage wealthier'
       },
       link: {
@@ -78,18 +79,18 @@ const items = {
   },
   profits: {
     img: profits,
-    to: '/healthier',
+    to: '/blog/coming-soon',
     text: defineMessages({
       title: {
-        defaultMessage: 'Keep Your Profits',
+        defaultMessage: 'We all win when you win',
         description: 'site.homepage.wealthier.profits.title: The title for the profits for the homepage wealthier'
       },
       description: {
-        defaultMessage: 'Every dollar earns every day. As a non-profit, we want you to keep that benefit.',
+        defaultMessage: "We're a non-profit focused on climate action. That's why we have to be the most selfish choice. Yes, really.",
         description: 'site.homepage.wealthier.profits.description: The description for the profits for the homepage wealthier'
       },
       link: {
-        defaultMessage: 'Who Wins?',
+        defaultMessage: "The catch? There isn't one",
         description: 'site.homepage.wealthier.profits.link: The link for the profits for the homepage wealthier'
       }
     })
@@ -106,7 +107,7 @@ export const Wealthier = () => (
         <Header as='h2'>
           <FormattedMessage {...translations.title} />
           <Header.Subheader className={`x5spaceBefore`}>
-            <FormattedMessage {...translations.description} values={{ br: <br /> }} />
+            <FormattedMessageWithBreaks {...translations.description} />
           </Header.Subheader>
         </Header>
       </div>
