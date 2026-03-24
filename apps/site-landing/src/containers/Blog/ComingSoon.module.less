@@ -1,0 +1,86 @@
+@import "~@thecointech/site-semantic-theme/variables.less";
+
+// Color variables
+@teal: #2a9d8f;
+@teal-dark: #1a6b60;
+@teal-light: #e8f5f3;
+
+// Main content container
+.main {
+  padding: 48px 24px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+// Illustration area
+.illustration {
+  width: 100%;
+  max-width: 540px;
+  height: 220px;
+  background: linear-gradient(135deg, #e8f5f3 0%, #d0eeea 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(42, 157, 143, 0.12);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(231, 111, 111, 0.08);
+  }
+}
+
+.illustrationInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.coinIcon {
+  width: 60px;
+  height: 60px;
+  opacity: 0.85;
+}
+
+.illustrationLabel {
+  font-size: 13px;
+  color: @teal;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+// Content elements
+#tag {
+  background: @theCoinPalettePaleGreen1;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+}
+

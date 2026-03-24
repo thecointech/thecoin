@@ -1,15 +1,14 @@
 import React from 'react';
 import styles from './styles.module.less';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { Helmet } from "react-helmet-async";
+import { FormattedMessageWithBreaks } from 'components/FormattedMessageWithBreaks';
 
 const translations = defineMessages({
-  description1 : {
-    defaultMessage: 'The future is better because of you & us.',
-    description: 'Footer CTA Part1'},
-  description2 : {
-      defaultMessage: 'Subscribe to our newsletter:',
-      description: 'Footer CTA Part2'},
+  description : {
+    defaultMessage: "Would you like to know more?{br}Subscribe to get the nitty-gritty",
+    description: 'Footer CTA Part1'
+  },
 });
 
 export const Subscribe = () => {
@@ -18,8 +17,7 @@ export const Subscribe = () => {
     <div id={styles.subscribeBlock}>
       <span className={styles.message}>
         <h3>
-          <FormattedMessage tagName="div" {...translations.description1} />
-          <FormattedMessage tagName="div" {...translations.description2} />
+          <FormattedMessageWithBreaks tagName="div" {...translations.description} />
         </h3>
       </span>
       <span className={styles.subscribeForm}>

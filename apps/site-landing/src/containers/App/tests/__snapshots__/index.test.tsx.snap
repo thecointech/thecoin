@@ -75,13 +75,6 @@ exports[`<App /> should render and match the snapshot 1`] = `
         >
           Blog
         </a>
-        <a
-          class="item undefined onlyBigScreen"
-          data-discover="true"
-          href="/help"
-        >
-          Help
-        </a>
       </div>
       <div
         class="ui text menu"
@@ -184,10 +177,9 @@ exports[`<App /> should render and match the snapshot 1`] = `
         <span>
           <h3>
             <div>
-              The future is better because of you & us.
-            </div>
-            <div>
-              Subscribe to our newsletter:
+              Would you like to know more?
+              <br />
+              Subscribe to get the nitty-gritty
             </div>
           </h3>
         </span>

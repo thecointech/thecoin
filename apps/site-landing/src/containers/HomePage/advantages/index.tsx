@@ -6,13 +6,13 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 
 const translations = defineMessages({
   monthlyFees : {
-      defaultMessage: 'Monthly Fees',
+      defaultMessage: 'Average profit',
       description: 'site.homepage.advantages.monthlyFees: Monthly Fees'},
   minimum : {
-      defaultMessage: 'Minimums',
+      defaultMessage: 'Footprint Offset',
       description: 'site.homepage.advantages.minimum: Minimums'},
   benefits : {
-      defaultMessage: 'Your benefits',
+      defaultMessage: 'Excuses',
       description: 'site.homepage.advantages.benefits: Your benefits'}
   });
 
@@ -23,17 +23,17 @@ export const Advantages = () => {
       <Grid columns='equal' textAlign='center' verticalAlign='middle' stackable className={styles.content}>
         <Grid.Row>
           <Grid.Column width={2}>
-            <h2>0</h2><h4>%</h4><br />
+            <h2>1200</h2><h4>$</h4><br />
             <FormattedMessage {...translations.monthlyFees} />
           </Grid.Column>
           <Grid.Column width={1} only='computer tablet'><hr className={styles.advantagesLines} /></Grid.Column>
           <Grid.Column width={2}>
-            <h2>0</h2><h4>%</h4><br />
+            <h2>50</h2><h4>%</h4><br />
             <FormattedMessage {...translations.minimum} />
           </Grid.Column>
           <Grid.Column width={1} only='computer tablet'><hr className={styles.advantagesLines} /></Grid.Column>
-          <Grid.Column width={3}>
-            <h2>100</h2><h4>%</h4><br />
+          <Grid.Column width={2}>
+            <h2>0</h2><br />
             <FormattedMessage {...translations.benefits} />
           </Grid.Column>
         </Grid.Row>

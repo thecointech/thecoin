@@ -1,4 +1,12 @@
 {
+  "+XBn2Z": {
+    "defaultMessage": "Building wealth takes time. Want to get started?",
+    "description": "site.homepage.createAccountSmall.title: Title / content for the small create account banner"
+  },
+  "+tRFfI": {
+    "defaultMessage": "Your Safety Net",
+    "description": "site.homepage.wealthier.investment.title: The title for the investment for the homepage wealthier"
+  },
   "+yxUhg": {
     "defaultMessage": "We help to restore the planet’s ecosystem",
     "description": "site.wedomore.tree.description: Description for the tree photo for the We Do More page"
@@ -7,41 +15,25 @@
     "defaultMessage": "Income:",
     "description": "Simulator: Parameters for sim income"
   },
-  "0+B/LI": {
-    "defaultMessage": "You can become CO2-neutral with TheCoin",
-    "description": "site.homepage.underwater.description: Description for the homepage underwater part1"
-  },
   "06pBO/": {
     "defaultMessage": "How many years to run the simulation for",
     "description": "sim form rangeDuration tooltip "
-  },
-  "0FXCvv": {
-    "defaultMessage": "Maximum Growth",
-    "description": "site.homepage.wealthier.growth.title: The title for the growth for the homepage wealthier"
   },
   "0GZP57": {
     "defaultMessage": "Re-forestation",
     "description": "site.wedomore.tree.title: Title for the tree photo for the We Do More page"
   },
-  "0N2o+s": {
-    "defaultMessage": "Your benefits",
-    "description": "site.homepage.advantages.benefits: Your benefits"
+  "0TW4/3": {
+    "defaultMessage": "We just make sure caring pays.",
+    "description": "home page tagline part2"
   },
   "0VyBpa": {
     "defaultMessage": "Prove it? We’d love to!",
     "description": "site.homepage.underwater.science.description: Description for the homepage underwater science subpart"
   },
-  "0W1Mb5": {
-    "defaultMessage": "Why settle? Our time-tested strategy has the best long-term results.",
-    "description": "site.homepage.wealthier.investment.description: The description for the investment for the homepage wealthier"
-  },
-  "1jRkZO": {
-    "defaultMessage": "Earths’ Healthier",
-    "description": "site.homepage.underwater.title: Title for that homepage underwater part"
-  },
-  "2E2eVK": {
-    "defaultMessage": "Keep Your Profits",
-    "description": "site.homepage.wealthier.profits.title: The title for the profits for the homepage wealthier"
+  "1eWRa0": {
+    "defaultMessage": "What does \"Zero Cost\" really mean?",
+    "description": "site.homepage.wealthier.startnow.title: The title for the star now for the homepage wealthier"
   },
   "2cToSS": {
     "defaultMessage": "FAQs",
@@ -59,25 +51,17 @@
     "defaultMessage": "Any income paid monthly, eg benefits or rent collected",
     "description": "Simulator Tooltip: Monthly Income"
   },
-  "3vm1hM": {
-    "defaultMessage": "Subscribe to our newsletter:",
-    "description": "Footer CTA Part2"
+  "3yF1Oi": {
+    "defaultMessage": "It's more than CO2. We fund the changes we all know the world needs.",
+    "description": "site.homepage.underwater.trees.description: Description for the homepage underwater trees subpart"
   },
   "43E4EL": {
     "defaultMessage": "We fund clean energy projects to replace dirty coal power",
     "description": "site.wedomore.energy.description: Title for the energy photo for the We Do More page"
   },
-  "4DkjpT": {
-    "defaultMessage": "It’s not just CO2. The projects we fund are vital to restoring our ecosystem.",
-    "description": "site.homepage.underwater.trees.description: Description for the homepage underwater trees subpart"
-  },
   "4MHk2t": {
     "defaultMessage": "We Do More",
     "description": "site.wedomore.title: Title for the We Do More page"
-  },
-  "4fyTGb": {
-    "defaultMessage": "Add $250000 to your retirement - with no money down.",
-    "description": "site.homepage.wealthier.growth.description: The title for the growth for the homepage wealthier"
   },
   "6JMQSM": {
     "defaultMessage": "What to expect from the beta.",
@@ -86,10 +70,6 @@
   "746Zaq": {
     "defaultMessage": "The maximum amount protected by the shock-absorber.{br}The smaller this is, the faster your account grows on average,{br}but the worse it will do in during down periods",
     "description": "Simulator Tooltip: shockabsorber cushion"
-  },
-  "8rHqL+": {
-    "defaultMessage": "Every dollar earns every day. As a non-profit, we want you to keep that benefit.",
-    "description": "site.homepage.wealthier.profits.description: The description for the profits for the homepage wealthier"
   },
   "92T+TI": {
     "defaultMessage": "Our non-profits mission is to fully use a neglected resource to fight climate change - your bank account.",
@@ -103,21 +83,17 @@
     "defaultMessage": "While TheCoin is fully functional, there may be superficial issues, occasional bugs, and changes in functionality.",
     "description": "Title on request access page"
   },
+  "B2g3Z7": {
+    "defaultMessage": "Not a solution. A choice. Yours.",
+    "description": "the sites closing argument"
+  },
   "B7gcLo": {
     "defaultMessage": "Better Farming",
     "description": "site.wedomore.smallPlant.title: Title for the smallPlant photo for the We Do More page"
   },
-  "Bpz5oH": {
-    "defaultMessage": "If reducing CO2 was profitable,",
-    "description": "home page tagline part1"
-  },
   "CTUhFX": {
     "defaultMessage": "Once-a-year expenses that cannot be put on a credit card",
     "description": "Simulator Tooltip: Yearly Cash"
-  },
-  "D7Hm8s": {
-    "defaultMessage": "The future is better because of you & us.",
-    "description": "Footer CTA Part1"
   },
   "DT1eLE": {
     "defaultMessage": "Cashback Rate:",
@@ -137,6 +113,14 @@
     "defaultMessage": "The major banks take an average of $1000 in profits each year from every Canadian.",
     "description": "site.healthier.majorbanks: text for the banks taking money for the Earth’s Healthier page"
   },
+  "FNj3R7": {
+    "defaultMessage": "Excuses",
+    "description": "site.homepage.advantages.benefits: Your benefits"
+  },
+  "G7r5m5": {
+    "defaultMessage": "We're a non-profit focused on climate action. That's why we have to be the most selfish choice. Yes, really.",
+    "description": "site.homepage.wealthier.profits.description: The description for the profits for the homepage wealthier"
+  },
   "GM3YzV": {
     "defaultMessage": "{months} months"
   },
@@ -146,10 +130,6 @@
   "HOyoZo": {
     "defaultMessage": "Interest Rate:",
     "description": "Simulator: How much interest is charged on credit vard if we do not pay total due"
-  },
-  "IJP8Tt": {
-    "defaultMessage": "TheCoin is a revolutionary new kind of account.",
-    "description": "site.homepage.createAccountSmall.title: Title / content for the small create account banner"
   },
   "J+oK/P": {
     "defaultMessage": "Related Articles",
@@ -166,8 +146,16 @@
     "defaultMessage": "Duration:",
     "description": "site.compare.label.rangeDuration: label for range duration in the compare page"
   },
+  "JYe4KZ": {
+    "defaultMessage": "Do What Matters",
+    "description": "site.homepage.underwater.difference.title: Title for the homepage underwater difference subpart"
+  },
   "JsOO1l": {
     "defaultMessage": "If you opened an account at a random date any time in the past 80 years, the bottom axis shows the possible account values and the vertical axis is the probablility you would get that return"
+  },
+  "KM2Cx/": {
+    "defaultMessage": "Footprint Offset",
+    "description": "site.homepage.advantages.minimum: Minimums"
   },
   "KQk9xI": {
     "defaultMessage": "How much interest is charged on{br}any overdue amounts by the credit card.",
@@ -191,10 +179,6 @@
   "NNfXRH": {
     "defaultMessage": "TheCoin is currently in a closed beta.{br} Apply for early access and help us build the best possible product",
     "description": "Title on request access page"
-  },
-  "NtaMxG": {
-    "defaultMessage": "Your money is always earning. Make it earn for you.",
-    "description": "site.homepage.landscape.stickers.left.description: Description for sticker for the homepage landscape left sticker"
   },
   "Nv5L4g": {
     "defaultMessage": "Shock Absorber:",
@@ -239,16 +223,32 @@
     "defaultMessage": "What percentage of spending does the credit card earn as cashback.",
     "description": "Simulator Tooltip: cashback"
   },
+  "UWAwev": {
+    "defaultMessage": "Offsetting CO2 is effective.{br}Extremely effective.",
+    "description": "site.homepage.underwater.difference.description: Description for the homepage underwater difference subpart"
+  },
+  "UdfZfB": {
+    "defaultMessage": "We all win when you win",
+    "description": "site.homepage.wealthier.profits.title: The title for the profits for the homepage wealthier"
+  },
   "V0XJgr": {
     "defaultMessage": "Average value after"
   },
-  "W6+t/S": {
-    "defaultMessage": "Would the climate crisis still be a crisis?",
-    "description": "home page tagline part2"
+  "VELvTd": {
+    "defaultMessage": "Average profit",
+    "description": "site.homepage.advantages.monthlyFees: Monthly Fees"
   },
   "W8cvxr": {
     "defaultMessage": "We Do More",
     "description": "site.homepage.underwater.trees.title: Title for the homepage underwater trees subpart"
+  },
+  "Wd2tkY": {
+    "defaultMessage": "This is our edge",
+    "description": "site.homepage.wealthier.startnow.link: The link for the star now for the homepage wealthier"
+  },
+  "Y+q0Hs": {
+    "defaultMessage": "No fees is easy. Earning on $0 is hard. Here's how we make something out of nothing.",
+    "description": "site.homepage.wealthier.startnow.description: The description for the star now for the homepage wealthier"
   },
   "Ycz6kB": {
     "defaultMessage": "This graph shows how The Coin account values will probably grow after"
@@ -261,9 +261,13 @@
     "defaultMessage": "Balance Protect:",
     "description": "The maximum balance to protect with shock absorber"
   },
-  "ZiBD6K": {
-    "defaultMessage": "Monthly Fees",
-    "description": "site.homepage.advantages.monthlyFees: Monthly Fees"
+  "a4g11h": {
+    "defaultMessage": "You'll never stop buying groceries. That could add $250000 to your retirement.",
+    "description": "site.homepage.wealthier.growth.description: The title for the growth for the homepage wealthier"
+  },
+  "avTsxJ": {
+    "defaultMessage": "Would you like to know more?{br}Subscribe to get the nitty-gritty",
+    "description": "Footer CTA Part1"
   },
   "b+5LjH": {
     "defaultMessage": "Clean Energy",
@@ -276,10 +280,6 @@
   "cdFqR/": {
     "defaultMessage": "Create Account",
     "description": "site.MainNavigation.button,createAccount: Button to create account in app"
-  },
-  "d0yXyK": {
-    "defaultMessage": "Minimums",
-    "description": "site.homepage.advantages.minimum: Minimums"
   },
   "dP8QDa": {
     "defaultMessage": "We do more than just offset CO2. The projects we fund are the WWF’s gold standard, the highest global standard for maximum impact.",
@@ -312,10 +312,6 @@
     "defaultMessage": "The value of the initial deposit when opening an account",
     "description": "sim form StartingValue tooltip "
   },
-  "hB3xnP": {
-    "defaultMessage": "Be part of the solution. We offset our clients’ CO2.",
-    "description": "site.homepage.landscape.stickers.right.description: Description for sticker for the homepage landscape right sticker"
-  },
   "hZATaO": {
     "defaultMessage": "Yearly:",
     "description": "Simulator: Yearly Income"
@@ -328,28 +324,20 @@
     "defaultMessage": "Prevent soil damage and erosion and improve peoples lives",
     "description": "site.wedomore.smallPlant.description: Title for the smallPlant photo for the We Do More page"
   },
-  "jJ1YVo": {
-    "defaultMessage": "The Best Investment",
-    "description": "site.homepage.wealthier.investment.title: The title for the investment for the homepage wealthier"
-  },
-  "jTYRs0": {
-    "defaultMessage": "Compare Us",
-    "description": "site.homepage.wealthier.investment.link: The link for the investment for the homepage wealthier"
-  },
   "jXd/F7": {
     "defaultMessage": "Step"
   },
-  "kEiX9n": {
-    "defaultMessage": "The benefits of a chequing, savings, and investing account all in one!",
-    "description": "site.createAccountBanner.title: The benefits of a chequing, savings, and investing account all in one!"
+  "jcOPB6": {
+    "defaultMessage": "It's the same way the rich get richer, just in reverse",
+    "description": "site.homepage.landscape.stickers.left.description: Description for sticker for the homepage landscape left sticker"
   },
-  "lrlibv": {
-    "defaultMessage": "Offsetting CO2 is effective. Extremely effective!",
-    "description": "site.homepage.underwater.difference.description: Description for the homepage underwater difference subpart"
+  "lmtofD": {
+    "defaultMessage": "It's about time",
+    "description": "site.homepage.wealthier.growth.title: The title for the growth for the homepage wealthier"
   },
-  "mLXVxC": {
-    "defaultMessage": "Help",
-    "description": "site.MainNavigation.faq: Help Link"
+  "mUqNYc": {
+    "defaultMessage": "How to sleep easy",
+    "description": "site.homepage.wealthier.investment.link: The link for the investment for the homepage wealthier"
   },
   "mmRoRq": {
     "defaultMessage": "Regular weekly earnings, eg paycheques",
@@ -359,10 +347,6 @@
     "defaultMessage": "Any weekly spending that cannot{br}be put on a credit card, eg babysitter",
     "description": "Simulator Tooltip: Weekly Cash"
   },
-  "n0wGb/": {
-    "defaultMessage": "Enjoy the benefits of investment growth on every dollar with our online spending account.",
-    "description": "site.homepage.wealthier.description: The description for the homepage wealthier"
-  },
   "nm9dX4": {
     "defaultMessage": "Once-a-year expenses that can be put on a credit card, eg vactions",
     "description": "Simulator Tooltip: Yearly Cash"
@@ -370,6 +354,10 @@
   "nuzKA2": {
     "defaultMessage": "Thank you for your interest!",
     "description": "Super-title on apply beta"
+  },
+  "oLkDty": {
+    "defaultMessage": "Money is the most powerful tool we have.{br}Let's make it work for us, for a change.",
+    "description": "site.homepage.underwater.description: Description for the homepage underwater part1"
   },
   "p695DK": {
     "defaultMessage": "The future is brighter",
@@ -379,32 +367,24 @@
     "defaultMessage": "Simulator",
     "description": "site.MainNavigation.simulator: Title for the Simulator entry in the menu"
   },
-  "pRmrf0": {
-    "defaultMessage": "Make a Difference",
-    "description": "site.homepage.underwater.difference.title: Title for the homepage underwater difference subpart"
-  },
-  "q8J1XZ": {
-    "defaultMessage": "The most important ingredient is time. You’re young - maximize your benefit!",
-    "description": "site.homepage.wealthier.startnow.description: The description for the star now for the homepage wealthier"
-  },
   "qGeaPp": {
     "defaultMessage": "We invest our clients’ accounts and give them 90% of the profit.",
     "description": "site.healthier.invest: text for the investment part for the Earth’s Healthier page"
   },
-  "qKjeDB": {
-    "defaultMessage": "Who Wins?",
+  "qGz2kt": {
+    "defaultMessage": "We don't ask you to care more.",
+    "description": "home page tagline part1"
+  },
+  "rvnCOX": {
+    "defaultMessage": "The catch? There isn't one",
     "description": "site.homepage.wealthier.profits.link: The link for the profits for the homepage wealthier"
   },
-  "t92bBR": {
-    "defaultMessage": "as we work to offset our clients’ emissions.",
-    "description": "site.homepage.underwater.description: Description for the homepage underwater part2"
+  "soHDTI": {
+    "defaultMessage": "Investing is a roller-coaster. Our account protection can put the floor back under your feet.",
+    "description": "site.homepage.wealthier.investment.description: The description for the investment for the homepage wealthier"
   },
   "tFFMkF": {
     "defaultMessage": "Pause"
-  },
-  "tzKdah": {
-    "defaultMessage": "Start Now",
-    "description": "site.homepage.wealthier.startnow.title: The title for the star now for the homepage wealthier"
   },
   "uGt+BZ": {
     "defaultMessage": "Safe drinking water without boiling protects people and forests",
@@ -422,17 +402,21 @@
     "defaultMessage": "How much will you make?",
     "description": "site.compare.title: Main title for the How much will you make? graph page"
   },
-  "wPzBUV": {
-    "defaultMessage": "Learn Your Edge",
-    "description": "site.homepage.wealthier.startnow.link: The link for the star now for the homepage wealthier"
-  },
   "wwo/lO": {
     "defaultMessage": "In-depth",
     "description": "site.MainNavigation.indepth: Title for the In-depth entry in the menu"
   },
+  "x/m96k": {
+    "defaultMessage": "Zero cost. Zero risk.{br}Time to build a better life.{br}We didn't believe it was possible until we built it. Here's how it works.",
+    "description": "site.homepage.wealthier.description: The description for the homepage wealthier"
+  },
   "x3GLcd": {
     "defaultMessage": "Shareable Link",
     "description": "site.compare.description: Link to share with whoever:"
+  },
+  "xIzK2I": {
+    "defaultMessage": "Climate action never lacked solutions. It lacked money. That's where we come in.",
+    "description": "site.homepage.landscape.stickers.right.description: Description for sticker for the homepage landscape right sticker"
   },
   "xWWo6h": {
     "defaultMessage": "Blog",
@@ -457,6 +441,10 @@
   "zj5EI2": {
     "defaultMessage": "LOG IN",
     "description": "site.MainNavigation.loginLink: Button to log in in app"
+  },
+  "zk7sO0": {
+    "defaultMessage": "Earth’s Healthier",
+    "description": "site.homepage.underwater.title: Title for that homepage underwater part"
   },
   "zoVNqc": {
     "defaultMessage": "Any monthly expenses that can be{br}put on a credit card, eg gym memberships",
