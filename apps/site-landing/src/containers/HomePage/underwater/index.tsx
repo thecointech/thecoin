@@ -26,7 +26,7 @@ const translations = defineMessages({
 const items = {
   difference: {
     img: co2,
-    to: "/healthier",
+    to: "/blog/coming-soon",
     text: {
       title: defineMessage({
         defaultMessage: 'Do What Matters',
@@ -41,7 +41,7 @@ const items = {
   },
   science: {
     img: science,
-    to: "/healthier",
+    to: "/blog/coming-soon",
     text: {
       title: defineMessage({
         defaultMessage: 'Scientifically Verified',
@@ -56,7 +56,7 @@ const items = {
   },
   trees: {
     img: trees,
-    to: "/healthier",
+    to: "/wedomore",
     text: {
       title: defineMessage({
         defaultMessage: 'We Do More',

@@ -35,10 +35,6 @@
     "defaultMessage": "What does \"Zero Cost\" really mean?",
     "description": "site.homepage.wealthier.startnow.title: The title for the star now for the homepage wealthier"
   },
-  "2E2eVK": {
-    "defaultMessage": "Keep Your Profits",
-    "description": "site.homepage.wealthier.profits.title: The title for the profits for the homepage wealthier"
-  },
   "2cToSS": {
     "defaultMessage": "FAQs",
     "description": "site.helpDocs.title: title for the FAQ page"
@@ -55,13 +51,13 @@
     "defaultMessage": "Any income paid monthly, eg benefits or rent collected",
     "description": "Simulator Tooltip: Monthly Income"
   },
+  "3yF1Oi": {
+    "defaultMessage": "It's more than CO2. We fund the changes we all know the world needs.",
+    "description": "site.homepage.underwater.trees.description: Description for the homepage underwater trees subpart"
+  },
   "43E4EL": {
     "defaultMessage": "We fund clean energy projects to replace dirty coal power",
     "description": "site.wedomore.energy.description: Title for the energy photo for the We Do More page"
-  },
-  "4DkjpT": {
-    "defaultMessage": "It’s not just CO2. The projects we fund are vital to restoring our ecosystem.",
-    "description": "site.homepage.underwater.trees.description: Description for the homepage underwater trees subpart"
   },
   "4MHk2t": {
     "defaultMessage": "We Do More",
@@ -74,10 +70,6 @@
   "746Zaq": {
     "defaultMessage": "The maximum amount protected by the shock-absorber.{br}The smaller this is, the faster your account grows on average,{br}but the worse it will do in during down periods",
     "description": "Simulator Tooltip: shockabsorber cushion"
-  },
-  "8rHqL+": {
-    "defaultMessage": "Every dollar earns every day. As a non-profit, we want you to keep that benefit.",
-    "description": "site.homepage.wealthier.profits.description: The description for the profits for the homepage wealthier"
   },
   "92T+TI": {
     "defaultMessage": "Our non-profits mission is to fully use a neglected resource to fight climate change - your bank account.",
@@ -124,6 +116,10 @@
   "FNj3R7": {
     "defaultMessage": "Excuses",
     "description": "site.homepage.advantages.benefits: Your benefits"
+  },
+  "G7r5m5": {
+    "defaultMessage": "We're a non-profit focused on climate action. That's why we have to be the most selfish choice. Yes, really.",
+    "description": "site.homepage.wealthier.profits.description: The description for the profits for the homepage wealthier"
   },
   "GM3YzV": {
     "defaultMessage": "{months} months"
@@ -226,6 +222,14 @@
   "UOSrjB": {
     "defaultMessage": "What percentage of spending does the credit card earn as cashback.",
     "description": "Simulator Tooltip: cashback"
+  },
+  "UWAwev": {
+    "defaultMessage": "Offsetting CO2 is effective.{br}Extremely effective.",
+    "description": "site.homepage.underwater.difference.description: Description for the homepage underwater difference subpart"
+  },
+  "UdfZfB": {
+    "defaultMessage": "We all win when you win",
+    "description": "site.homepage.wealthier.profits.title: The title for the profits for the homepage wealthier"
   },
   "V0XJgr": {
     "defaultMessage": "Average value after"
@@ -331,10 +335,6 @@
     "defaultMessage": "It's about time",
     "description": "site.homepage.wealthier.growth.title: The title for the growth for the homepage wealthier"
   },
-  "lrlibv": {
-    "defaultMessage": "Offsetting CO2 is effective. Extremely effective!",
-    "description": "site.homepage.underwater.difference.description: Description for the homepage underwater difference subpart"
-  },
   "mUqNYc": {
     "defaultMessage": "How to sleep easy",
     "description": "site.homepage.wealthier.investment.link: The link for the investment for the homepage wealthier"
@@ -355,6 +355,10 @@
     "defaultMessage": "Thank you for your interest!",
     "description": "Super-title on apply beta"
   },
+  "oLkDty": {
+    "defaultMessage": "Money is the most powerful tool we have.{br}Let's make it work for us, for a change.",
+    "description": "site.homepage.underwater.description: Description for the homepage underwater part1"
+  },
   "p695DK": {
     "defaultMessage": "The future is brighter",
     "description": "site.homepage.landscape.title: The title for the homepage"
@@ -371,13 +375,9 @@
     "defaultMessage": "We don't ask you to care more.",
     "description": "home page tagline part1"
   },
-  "qKjeDB": {
-    "defaultMessage": "Who Wins?",
+  "rvnCOX": {
+    "defaultMessage": "The catch? There isn't one",
     "description": "site.homepage.wealthier.profits.link: The link for the profits for the homepage wealthier"
-  },
-  "qc2zti": {
-    "defaultMessage": "If money can cause a crisis, then money is the best way to solve it.",
-    "description": "site.homepage.underwater.description: Description for the homepage underwater part1"
   },
   "soHDTI": {
     "defaultMessage": "Investing is a roller-coaster. Our account protection can put the floor back under your feet.",
