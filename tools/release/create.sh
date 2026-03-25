@@ -21,6 +21,10 @@ while [[ $# -gt 0 ]]; do
       shift
       ;;
     --version)
+      if [ -z "${2:-}" ]; then
+        echo -e "${RED}❌ Error: --version requires a value (e.g., --version 0.5.4)${NC}"
+        exit 1
+      fi
       MANUAL_VERSION="$2"
       shift 2
       ;;
@@ -88,13 +92,9 @@ else
   # Look for package version changes like "package: 0.5.3 => 0.5.4-test.0"
   NEXT_VERSION=$(echo "$LERNA_OUTPUT" | grep -Eo '=> [0-9]+\.[0-9]+\.[0-9]+(-test\.[0-9]+)?' | head -1 | sed 's/^=> //')
 
-  # Clean up the dry run (restore package.json files)
-  # Check if cleanup would remove untracked files
+  # Clean up the dry run (restore package.json files and remove Lerna artifacts)
   if [ -n "$(git status --porcelain | grep '^??')" ]; then
-    echo -e "${YELLOW}⚠️  Warning: Untracked files detected before cleanup${NC}"
-    git status --short
-    echo -e "${RED}❌ Error: Cannot proceed with untracked files present${NC}"
-    exit 1
+    echo -e "${YELLOW}⚠️  Cleaning up Lerna artifacts...${NC}"
   fi
   git checkout -- . 2>/dev/null || true
   git clean -fd 2>/dev/null || true

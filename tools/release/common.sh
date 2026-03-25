@@ -10,7 +10,15 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Ensure we're at the repo root
-cd "$(git rev-parse --show-toplevel)"
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || {
+  echo -e "${RED}❌ Error: Not inside a git repository${NC}"
+  exit 1
+}
+if [ ! -d "$REPO_ROOT" ]; then
+  echo -e "${RED}❌ Error: Repository root not found: $REPO_ROOT${NC}"
+  exit 1
+fi
+cd "$REPO_ROOT"
 
 # Ensure working tree is clean
 ensure_clean_tree() {
@@ -91,7 +99,7 @@ confirm() {
   if [ "$skip" = true ]; then
     return 0
   fi
-  read -p "$(echo -e ${YELLOW}${message} [y/N]:${NC} )" -n 1 -r
+  read -p "$(echo -e "${YELLOW}${message} [y/N]:${NC} ")" -n 1 -r
   echo ""
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     echo -e "${RED}❌ Cancelled${NC}"

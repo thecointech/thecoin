@@ -37,11 +37,12 @@ echo ""
 fetch_origin
 
 show_version_status() {
-  local base="$1"
-  local state=$(release_state "$base")
-  local test_tag=$(latest_test_tag "$base")
-  local beta_tag=$(latest_beta_tag "$base")
-  local stable=$(stable_tag "$base")
+  local base state test_tag beta_tag stable
+  base="$1"
+  state=$(release_state "$base")
+  test_tag=$(latest_test_tag "$base")
+  beta_tag=$(latest_beta_tag "$base")
+  stable=$(stable_tag "$base")
 
   local state_icon
   case "$state" in
@@ -54,20 +55,23 @@ show_version_status() {
   echo -e "${GREEN}$state_icon v$base${NC} — $state"
 
   if [ -n "$test_tag" ]; then
-    local test_commit=$(git rev-list -n 1 "$test_tag" 2>/dev/null)
-    local test_date=$(git log -1 --format='%ci' "$test_tag" 2>/dev/null | cut -d' ' -f1)
+    local test_commit test_date
+    test_commit=$(git rev-list -n 1 "$test_tag" 2>/dev/null)
+    test_date=$(git log -1 --format='%ci' "$test_tag" 2>/dev/null | cut -d' ' -f1)
     echo -e "   ${BLUE}test:${NC}   $test_tag  ($test_date, ${test_commit:0:8})"
   fi
 
   if [ -n "$beta_tag" ]; then
-    local beta_commit=$(git rev-list -n 1 "$beta_tag" 2>/dev/null)
-    local beta_date=$(git log -1 --format='%ci' "$beta_tag" 2>/dev/null | cut -d' ' -f1)
+    local beta_commit beta_date
+    beta_commit=$(git rev-list -n 1 "$beta_tag" 2>/dev/null)
+    beta_date=$(git log -1 --format='%ci' "$beta_tag" 2>/dev/null | cut -d' ' -f1)
     echo -e "   ${BLUE}beta:${NC}   $beta_tag  ($beta_date, ${beta_commit:0:8})"
   fi
 
   if [ -n "$stable" ]; then
-    local stable_commit=$(git rev-list -n 1 "$stable" 2>/dev/null)
-    local stable_date=$(git log -1 --format='%ci' "$stable" 2>/dev/null | cut -d' ' -f1)
+    local stable_commit stable_date
+    stable_commit=$(git rev-list -n 1 "$stable" 2>/dev/null)
+    stable_date=$(git log -1 --format='%ci' "$stable" 2>/dev/null | cut -d' ' -f1)
     echo -e "   ${BLUE}stable:${NC} $stable  ($stable_date, ${stable_commit:0:8})"
   fi
 
