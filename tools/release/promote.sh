@@ -201,7 +201,7 @@ if [ "$NO_PUSH" = true ]; then
   echo -e "   ${YELLOW}git tag -d $NEW_TAG${NC}"
 else
   echo -e "${YELLOW}⬆️  Pushing tag...${NC}"
-  # git push origin "$NEW_TAG"
+  git push origin "$NEW_TAG"
 
   echo ""
   echo -e "${GREEN}✅ Promoted $SOURCE_TAG → $NEW_TAG${NC}"
