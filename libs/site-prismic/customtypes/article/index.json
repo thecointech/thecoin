@@ -99,6 +99,9 @@
             },
             "rich_text": {
               "type": "SharedSlice"
+            },
+            "ccqi_score": {
+              "type": "SharedSlice"
             }
           }
         }

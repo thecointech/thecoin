@@ -1,0 +1,18 @@
+
+.pillSummary {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+.pillSummary:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.expandHint {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(0, 0, 0, 0.3);
+}
