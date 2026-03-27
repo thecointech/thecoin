@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Checkbox, Container, Input, Header } from 'semantic-ui-react'
+import { Checkbox, Container, Input, Header, Label } from 'semantic-ui-react'
 import { HarvestStepType } from '@thecointech/store-harvester';
 import { ConfigReducer } from './state/reducer';
 import { safeParseFloat } from './state/utils';
@@ -44,7 +44,10 @@ export const RoundUp = () => {
       <div>
         <Checkbox toggle label="Enable RoundUp to nearest " checked={enabled} onChange={(_, {checked}) => setEnabled(!!checked)}/>
         &nbsp;&nbsp;
-        <Input placeholder="Amount" value={roundPoint} onChange={(_, {value}) => setRoundPoint(safeParseFloat(value))}/>
+        <Input placeholder="Amount" labelPosition="left" type="number" value={roundPoint} onChange={(_, {value}) => setRoundPoint(safeParseFloat(value))}>
+          <Label basic>$</Label>
+          <input />
+        </Input>
       </div>
       {/* <div>
         Alternatively, if you're extremely agressive, you can just transfer as much as possible.
