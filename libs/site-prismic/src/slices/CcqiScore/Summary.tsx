@@ -3,13 +3,14 @@ import { ScorePill } from "./ScorePill"
 import { ccqiStructure } from './structure'
 import type { Section, SimpleData } from "./types"
 import styles from './Summary.module.css';
+import { CcqiHeader } from "./CcqiHeader";
 
 type Props = {
   data: SimpleData
   toggleExpanded: () => void;
   expanded: boolean;
 }
-export const Summary = ({ data, toggleExpanded }: Props) => {
+export const Summary = ({ data, toggleExpanded, expanded }: Props) => {
 
   return (
     <div
@@ -19,21 +20,17 @@ export const Summary = ({ data, toggleExpanded }: Props) => {
       tabIndex={0}
       onKeyDown={(e) => e.key === "Enter" && toggleExpanded()}
     >
-      <a
-        href="https://carboncreditquality.org/scores.html"
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => e.stopPropagation()}
-      >
-        CCQI Scores:
-      </a>
+      <span>
+        <CcqiHeader />
+        <Icon
+          name="dropdown"
+          className={`${styles.expandChevron} ${expanded ? styles.expanded : ""}`}
+        />
+      </span>
+
       {ccqiStructure.map((section) => (
         <SummaryScorePill key={section.key} section={section} data={data} />
       ))}
-      <div className={styles.expandHint}>
-        <Icon name="angle down" size="small" />
-      </div>
     </div>
   )
 }

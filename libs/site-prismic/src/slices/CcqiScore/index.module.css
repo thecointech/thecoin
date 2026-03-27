@@ -1,5 +1,6 @@
 .ccqiScore {
   margin: 1em 0;
+  margin-bottom: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   cursor: pointer;
@@ -13,19 +14,7 @@
   color: rgba(0, 0, 0, 0.6);
 }
 
-.pillItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25em;
-  min-width: 80px;
-  flex: 1;
+.ccqiLink {
+  font-size: smaller;
+  margin-left: 2rem;
 }
-
-.pillLabel {
-  font-size: 0.7em;
-  text-align: center;
-  line-height: 1.2;
-  color: rgba(0, 0, 0, 0.6);
-}
-

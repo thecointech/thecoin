@@ -6,6 +6,7 @@ import { SliceComponentProps } from "@prismicio/react";
 import styles from "./index.module.css";
 import { Summary } from "./Summary";
 import { Detailed } from "./Detailed";
+import { CcqiHeader } from "./CcqiHeader";
 
 export type CcqiScoreProps = SliceComponentProps<Content.CcqiScoreSlice>;
 
@@ -31,37 +32,58 @@ export const CcqiScore: FC<CcqiScoreProps> = ({ slice }) => {
 
   if (!hasScores) {
     return (
+      <>
+        <section
+          data-slice-type={slice.slice_type}
+          data-slice-variation={slice.variation}
+          className={styles.ccqiScore}
+        >
+          <div className={styles.noScores}>
+            <CcqiHeader />
+            N/A
+            {category && <span> (The CCQI does not provide scoring for the category: <i>{category}</i>)</span>}
+          </div>
+        </section>
+        <CcqiLink />
+      </>
+    );
+  }
+
+  return (
+    <>
       <section
         data-slice-type={slice.slice_type}
         data-slice-variation={slice.variation}
         className={styles.ccqiScore}
       >
-        <div className={styles.noScores}>
-          <strong>CCQI Score: N/A</strong>
-          {category && <span> (This category &mdash; {category} &mdash; does not have scoring available.)</span>}
-        </div>
+        <Summary data={data} toggleExpanded={toggleExpanded} expanded={expanded} />
+        {expanded && (
+          /* Expanded: full accordion */
+          <Detailed
+            data={data}
+            activeIndices={activeIndices}
+            onCollapse={() => setExpanded(false)}
+            onSectionClick={handleSectionClick}
+          />
+        )}
       </section>
-    );
-  }
-
-  return (
-    <section
-      data-slice-type={slice.slice_type}
-      data-slice-variation={slice.variation}
-      className={styles.ccqiScore}
-    >
-      <Summary data={data} toggleExpanded={toggleExpanded} expanded />
-      {expanded && (
-        /* Expanded: full accordion */
-        <Detailed
-          data={data}
-          activeIndices={activeIndices}
-          onCollapse={() => setExpanded(false)}
-          onSectionClick={handleSectionClick}
-        />
-      )}
-    </section>
+      <CcqiLink />
+    </>
   );
 };
+
+const CcqiLink = () => (
+  <a
+    href="https://carboncreditquality.org/scores.html"
+    target="_blank"
+    rel="noopener noreferrer"
+    onClick={(e) => e.stopPropagation()}
+    onKeyDown={(e) => e.stopPropagation()}
+    className={styles.ccqiLink}
+  >
+    What are CCQI Scores?
+  </a>
+
+)
 
 export default CcqiScore

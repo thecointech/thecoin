@@ -9,10 +9,20 @@
   background: rgba(0, 0, 0, 0.02);
 }
 
-.expandHint {
-  position: absolute;
-  bottom: 2px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: rgba(0, 0, 0, 0.3);
+.expandChevron {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  vertical-align: middle;
+  transform-origin: 50% 50%;
+  transform: rotate(-90deg);
+  transition: transform 0.1s ease;
+  margin-right: 0.5rem !important;
+}
+
+.expanded {
+  transform: rotate(0deg);
 }
