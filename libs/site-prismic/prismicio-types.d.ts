@@ -87,6 +87,7 @@ export interface ArticleDocumentDataCategoriesItem {
 }
 
 type ArticleDocumentDataSlicesSlice =
+  | CcqiCategorySlice
   | TwoColumnLayoutSlice
   | BlockQuoteSlice
   | RichTextSlice
@@ -527,6 +528,57 @@ export type BlockQuoteSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Primary content in *CcqiCategory → Default → Primary*
+ */
+export interface CcqiCategorySliceDefaultPrimary {
+  /**
+   * Category field in *CcqiCategory → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_category.default.primary.category
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  category: prismic.SelectField<
+    | "Measurability"
+    | "Additionality"
+    | "Permanence & Leakage"
+    | "Verifiability"
+    | "Social Benefits"
+  >;
+}
+
+/**
+ * Default variation for CcqiCategory Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CcqiCategorySliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<CcqiCategorySliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *CcqiCategory*
+ */
+type CcqiCategorySliceVariation = CcqiCategorySliceDefault;
+
+/**
+ * CcqiCategory Shared Slice
+ *
+ * - **API ID**: `ccqi_category`
+ * - **Description**: CcqiCategory
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CcqiCategorySlice = prismic.SharedSlice<
+  "ccqi_category",
+  CcqiCategorySliceVariation
+>;
+
+/**
  * Primary content in *CcqiScore → Default → Primary*
  */
 export interface CcqiScoreSliceDefaultPrimary {
@@ -552,6 +604,7 @@ export interface CcqiScoreSliceDefaultPrimary {
     | "Recovery of associated gas from oil fields"
     | "Solar photovoltaic power"
     | "Wind power (onshore)"
+    | "Industrial Biomass"
   >;
 
   /**
@@ -1202,6 +1255,10 @@ declare module "@prismicio/client" {
       BlockQuoteSliceDefaultPrimary,
       BlockQuoteSliceVariation,
       BlockQuoteSliceDefault,
+      CcqiCategorySlice,
+      CcqiCategorySliceDefaultPrimary,
+      CcqiCategorySliceVariation,
+      CcqiCategorySliceDefault,
       CcqiScoreSlice,
       CcqiScoreSliceDefaultPrimary,
       CcqiScoreSliceVariation,
