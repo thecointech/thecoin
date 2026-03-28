@@ -1,3 +1,4 @@
+import React from "react";
 import { Icon, Popup } from "semantic-ui-react"
 import { ScorePill } from "./ScorePill"
 import { ccqiStructure } from './structure'

@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import React, { forwardRef } from "react";
 import { Label, type StrictLabelProps, type SemanticCOLORS } from "semantic-ui-react";
 
 function formatScore(value: number | null | undefined): string {

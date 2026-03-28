@@ -1,6 +1,5 @@
 "use client";
-
-import { FC } from "react";
+import React, { type FC } from "react";
 import { Content } from "@prismicio/client";
 import { SliceComponentProps } from "@prismicio/react";
 import { Header } from "semantic-ui-react";
