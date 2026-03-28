@@ -19,7 +19,7 @@ export const Summary = ({ data, toggleExpanded, expanded }: Props) => {
       onClick={() => toggleExpanded()}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => e.key === "Enter" && toggleExpanded()}
+      onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && toggleExpanded()}
     >
       <span>
         <CcqiHeader />

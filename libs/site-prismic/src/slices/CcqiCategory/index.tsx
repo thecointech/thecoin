@@ -17,7 +17,7 @@ export type CcqiCategoryProps = SliceComponentProps<Content.CcqiCategorySlice>;
 const CcqiCategory: FC<CcqiCategoryProps> = ({ slice, slices }) => {
   const scoreData = getCcqiScoreSliceData(slices);
   const category = slice.primary.category;
-  if (category === null) return;
+  if (category === null) return null;
   const scoreKey = categoryMapping[category];
   const scoreValue = scoreKey ? (scoreData?.[scoreKey] as number | null | undefined) : null;
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { type FC, useMemo, useState } from "react";
+import React, { type FC, useCallback, useState } from "react";
 import { Content } from "@prismicio/client";
 import { SliceComponentProps } from "@prismicio/react";
 import styles from "./index.module.css";
@@ -17,7 +17,7 @@ export const CcqiScore: FC<CcqiScoreProps> = ({ slice }) => {
   const category = data.category;
   const hasScores = data.s01 != null;
 
-  const toggleExpanded = useMemo(() => () => setExpanded(old => !old), [setExpanded]);
+  const toggleExpanded = useCallback(() => setExpanded(old => !old), [setExpanded]);
   const handleSectionClick = (index: number) => {
     setActiveIndices((prev) => {
       const next = new Set(prev);
