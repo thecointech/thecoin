@@ -103,14 +103,25 @@ jobs:
 
           *This PR was created automatically after deploying tag \`$TAG_NAME\` to production.*"
 
+          # Add labels only if they already exist in the repository
+          EXISTING_LABELS=$(gh label list --limit 1000 --json name --jq '.[].name' || true)
+          LABEL_ARGS=()
+
+          for LABEL in "release" "automerge-candidate"; do
+            if echo "$EXISTING_LABELS" | grep -Fxq "$LABEL"; then
+              LABEL_ARGS+=(--label "$LABEL")
+            else
+              echo "⚠️ Label '$LABEL' not found, creating PR without it"
+            fi
+          done
+
           # Create the PR
           PR_URL=$(gh pr create \
             --base main \
             --head "$RELEASE_BRANCH" \
             --title "🚀 Release $VERSION - Merge back to main" \
             --body "$PR_BODY" \
-            --label "release" \
-            --label "automerge-candidate")
+            "${LABEL_ARGS[@]}")
 
           echo "✅ Pull Request created: $PR_URL"
           echo "url=$PR_URL" >> $GITHUB_OUTPUT
