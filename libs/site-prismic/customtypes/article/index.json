@@ -91,6 +91,9 @@
         "fieldset": "Slice Zone",
         "config": {
           "choices": {
+            "ccqi_category": {
+              "type": "SharedSlice"
+            },
             "two_column_layout": {
               "type": "SharedSlice"
             },
@@ -98,6 +101,9 @@
               "type": "SharedSlice"
             },
             "rich_text": {
+              "type": "SharedSlice"
+            },
+            "ccqi_score": {
               "type": "SharedSlice"
             }
           }

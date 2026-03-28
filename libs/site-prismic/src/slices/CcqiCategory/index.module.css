@@ -1,0 +1,7 @@
+.categoryContainer {
+  display: flex;
+}
+
+.categoryPillContainer {
+  margin-left: 1rem;
+}

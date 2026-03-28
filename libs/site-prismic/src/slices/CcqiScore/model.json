@@ -1,0 +1,264 @@
+{
+  "id": "ccqi_score",
+  "type": "SharedSlice",
+  "name": "CcqiScore",
+  "description": "CcqiScore",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "category": {
+          "type": "Select",
+          "config": {
+            "label": "Category",
+            "options": [
+              "Avoided planned deforestation",
+              "Avoided unplanned deforestation",
+              "Commercial afforestation",
+              "Efficient cookstoves",
+              "Establishment of natural forests",
+              "Household biodigesters",
+              "Improved forest management",
+              "Industrial biodigesters fed with livestock manure",
+              "Landfill gas utilization",
+              "Leak repair in natural gas transmission and distribution systems",
+              "Recovery of associated gas from oil fields",
+              "Solar photovoltaic power",
+              "Wind power (onshore)",
+              "Industrial Biomass"
+            ]
+          }
+        },
+        "s01": {
+          "type": "Number",
+          "config": {
+            "label": "(1) GHG emission impact",
+            "placeholder": ""
+          }
+        },
+        "s01a": {
+          "type": "Number",
+          "config": {
+            "label": "(1.a) Additionality"
+          }
+        },
+        "s01a1": {
+          "type": "Number",
+          "config": {
+            "label": "(1.a.1) Legal requirements"
+          }
+        },
+        "s01a2": {
+          "type": "Number",
+          "config": {
+            "label": "(1.a.2) Carbon credits timing"
+          }
+        },
+        "s01a3": {
+          "type": "Number",
+          "config": {
+            "label": "(1.a.3) Financial attract."
+          }
+        },
+        "s01a4": {
+          "type": "Number",
+          "config": {
+            "label": "(1.a.4) Barriers"
+          }
+        },
+        "s01b": {
+          "type": "Number",
+          "config": {
+            "label": "(1.b) Vulnerability"
+          }
+        },
+        "s01c": {
+          "type": "Number",
+          "config": {
+            "label": "(1.c) Quantification"
+          }
+        },
+        "s01c1": {
+          "type": "Number",
+          "config": {
+            "label": "(1.c.1) Program principles"
+          }
+        },
+        "s01c2": {
+          "type": "Number",
+          "config": {
+            "label": "(1.c.2) Quant. methodologies"
+          }
+        },
+        "s02": {
+          "type": "Number",
+          "config": {
+            "label": "(2) Avoiding double counting"
+          }
+        },
+        "s02a": {
+          "type": "Number",
+          "config": {
+            "label": "(2.a) Registry & database"
+          }
+        },
+        "s02b": {
+          "type": "Number",
+          "config": {
+            "label": "(2.b) Avoiding dbl issuance"
+          }
+        },
+        "s02b1": {
+          "type": "Number",
+          "config": {
+            "label": "(2.b.1) Due to double registration"
+          }
+        },
+        "s02b2": {
+          "type": "Number",
+          "config": {
+            "label": "(2.b.2) Indirect overlaps"
+          }
+        },
+        "s02c": {
+          "type": "Number",
+          "config": {
+            "label": "(2.c) Avoiding double use"
+          }
+        },
+        "s02d": {
+          "type": "Number",
+          "config": {
+            "label": "(2.d) Avoiding dbl claiming"
+          }
+        },
+        "s02d1": {
+          "type": "Number",
+          "config": {
+            "label": "(2.d.1) Host country NDC"
+          }
+        },
+        "s02d2": {
+          "type": "Number",
+          "config": {
+            "label": "(2.d.2) Program NDC provisions"
+          }
+        },
+        "s02d3": {
+          "type": "Number",
+          "config": {
+            "label": "(2.d.3) Domestic mitigation"
+          }
+        },
+        "s03": {
+          "type": "Number",
+          "config": {
+            "label": "(3) Non-permanence"
+          }
+        },
+        "s03a": {
+          "type": "Number",
+          "config": {
+            "label": "(3.a) Program approaches"
+          }
+        },
+        "s03a1": {
+          "type": "Number",
+          "config": {
+            "label": "(3.a.1) Reversal accounting"
+          }
+        },
+        "s03a2": {
+          "type": "Number",
+          "config": {
+            "label": "(3.a.2) Non-permanence risks"
+          }
+        },
+        "s04": {
+          "type": "Number",
+          "config": {
+            "label": "(4) Net zero transition"
+          }
+        },
+        "s05": {
+          "type": "Number",
+          "config": {
+            "label": "(5) Institutional arrange."
+          }
+        },
+        "s05a": {
+          "type": "Number",
+          "config": {
+            "label": "(5.a) Program governance"
+          }
+        },
+        "s05b": {
+          "type": "Number",
+          "config": {
+            "label": "(5.b) Transparency"
+          }
+        },
+        "s05c": {
+          "type": "Number",
+          "config": {
+            "label": "(5.c) Third-party auditing"
+          }
+        },
+        "s06": {
+          "type": "Number",
+          "config": {
+            "label": "(6) Env. & social impacts"
+          }
+        },
+        "s06a": {
+          "type": "Number",
+          "config": {
+            "label": "(6.a) Env. & social safeguards"
+          }
+        },
+        "s06b": {
+          "type": "Number",
+          "config": {
+            "label": "(6.b) Sustainable dev. impacts"
+          }
+        },
+        "s06c": {
+          "type": "Number",
+          "config": {
+            "label": "(6.c) Adaptation & resilience"
+          }
+        },
+        "s07": {
+          "type": "Number",
+          "config": {
+            "label": "(7) Host country ambition"
+          }
+        },
+        "s07a": {
+          "type": "Number",
+          "config": {
+            "label": "(7.a) Temperature commitment"
+          }
+        },
+        "s07b": {
+          "type": "Number",
+          "config": {
+            "label": "(7.b) NDC stringency"
+          }
+        },
+        "s07c": {
+          "type": "Number",
+          "config": {
+            "label": "(7.c) Enable host country NDC"
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

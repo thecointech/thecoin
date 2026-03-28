@@ -4,6 +4,7 @@ import { FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 import { BaseProps } from '../types';
 import { LessVars } from "@thecointech/site-semantic-theme/variables";
 import { MessageWithValues } from '../../../types';
+import clsx from 'clsx';
 
 export const UxInput = (props: BaseProps) => {
 
@@ -83,9 +84,10 @@ export const UxInput = (props: BaseProps) => {
 
   const transformV = transformDisplayValue?.toValue ?? (v => v);
   const transformD = transformDisplayValue?.toDisplay ?? (v => v);
+  const className = clsx(formClassName, props.className)
 
   return (
-    <Form.Field className={`${formClassName} ${props.className}`} >
+    <Form.Field className={className} >
       <MaybeLabel label={props.intlLabel} />
       <Popup
         context={contextRef.current ?? undefined}
