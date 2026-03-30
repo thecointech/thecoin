@@ -1,0 +1,41 @@
+{
+  "id": "project_details",
+  "type": "SharedSlice",
+  "name": "ProjectDetails",
+  "description": "ProjectDetails",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "offset": {
+          "type": "Link",
+          "config": {
+            "label": "Offset",
+            "placeholder": "Link to Registry Offest purchase",
+            "select": null,
+            "allowTargetBlank": true,
+            "allowText": true,
+            "repeat": false
+          }
+        },
+        "project_documents": {
+          "type": "Link",
+          "config": {
+            "label": "Project Documents",
+            "placeholder": "",
+            "select": null,
+            "allowTargetBlank": true,
+            "allowText": true,
+            "repeat": false
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

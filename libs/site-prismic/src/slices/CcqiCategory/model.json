@@ -1,0 +1,33 @@
+{
+  "id": "ccqi_category",
+  "type": "SharedSlice",
+  "name": "CcqiCategory",
+  "description": "CcqiCategory",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "category": {
+          "type": "Select",
+          "config": {
+            "label": "Category",
+            "placeholder": "",
+            "options": [
+              "Measurability",
+              "Additionality",
+              "Permanence & Leakage",
+              "Verifiability",
+              "Social Benefits"
+            ]
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

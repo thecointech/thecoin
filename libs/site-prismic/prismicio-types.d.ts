@@ -82,14 +82,22 @@ export interface ArticleDocumentDataCategoriesItem {
    * - **Documentation**: https://prismic.io/docs/fields/select
    */
   category: prismic.SelectField<
-    "Investing" | "Global Warming" | "Security" | "Finance"
+    | "Investing"
+    | "Global Warming"
+    | "Security"
+    | "Finance"
+    | "Carbon Offsets"
+    | "Impact Reports"
   >;
 }
 
 type ArticleDocumentDataSlicesSlice =
+  | ProjectDetailsSlice
+  | CcqiCategorySlice
   | TwoColumnLayoutSlice
   | BlockQuoteSlice
-  | RichTextSlice;
+  | RichTextSlice
+  | CcqiScoreSlice;
 
 /**
  * Content for Article documents
@@ -507,6 +515,488 @@ export type BlockQuoteSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Primary content in *CcqiCategory → Default → Primary*
+ */
+export interface CcqiCategorySliceDefaultPrimary {
+  /**
+   * Category field in *CcqiCategory → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_category.default.primary.category
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  category: prismic.SelectField<
+    | "Measurability"
+    | "Additionality"
+    | "Permanence & Leakage"
+    | "Verifiability"
+    | "Social Benefits"
+  >;
+}
+
+/**
+ * Default variation for CcqiCategory Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CcqiCategorySliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<CcqiCategorySliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *CcqiCategory*
+ */
+type CcqiCategorySliceVariation = CcqiCategorySliceDefault;
+
+/**
+ * CcqiCategory Shared Slice
+ *
+ * - **API ID**: `ccqi_category`
+ * - **Description**: CcqiCategory
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CcqiCategorySlice = prismic.SharedSlice<
+  "ccqi_category",
+  CcqiCategorySliceVariation
+>;
+
+/**
+ * Primary content in *CcqiScore → Default → Primary*
+ */
+export interface CcqiScoreSliceDefaultPrimary {
+  /**
+   * Category field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.category
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  category: prismic.SelectField<
+    | "Avoided planned deforestation"
+    | "Avoided unplanned deforestation"
+    | "Commercial afforestation"
+    | "Efficient cookstoves"
+    | "Establishment of natural forests"
+    | "Household biodigesters"
+    | "Improved forest management"
+    | "Industrial biodigesters fed with livestock manure"
+    | "Landfill gas utilization"
+    | "Leak repair in natural gas transmission and distribution systems"
+    | "Recovery of associated gas from oil fields"
+    | "Solar photovoltaic power"
+    | "Wind power (onshore)"
+    | "Industrial Biomass"
+    | "Distributed Solar"
+  >;
+
+  /**
+   * (1) GHG emission impact field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01: prismic.NumberField;
+
+  /**
+   * (1.a) Additionality field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01a
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01a: prismic.NumberField;
+
+  /**
+   * (1.a.1) Legal requirements field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01a1
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01a1: prismic.NumberField;
+
+  /**
+   * (1.a.2) Carbon credits timing field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01a2
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01a2: prismic.NumberField;
+
+  /**
+   * (1.a.3) Financial attract. field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01a3
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01a3: prismic.NumberField;
+
+  /**
+   * (1.a.4) Barriers field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01a4
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01a4: prismic.NumberField;
+
+  /**
+   * (1.b) Vulnerability field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01b
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01b: prismic.NumberField;
+
+  /**
+   * (1.c) Quantification field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01c
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01c: prismic.NumberField;
+
+  /**
+   * (1.c.1) Program principles field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01c1
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01c1: prismic.NumberField;
+
+  /**
+   * (1.c.2) Quant. methodologies field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01c2
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01c2: prismic.NumberField;
+
+  /**
+   * (2) Avoiding double counting field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02: prismic.NumberField;
+
+  /**
+   * (2.a) Registry & database field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02a
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02a: prismic.NumberField;
+
+  /**
+   * (2.b) Avoiding dbl issuance field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02b
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02b: prismic.NumberField;
+
+  /**
+   * (2.b.1) Due to double registration field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02b1
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02b1: prismic.NumberField;
+
+  /**
+   * (2.b.2) Indirect overlaps field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02b2
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02b2: prismic.NumberField;
+
+  /**
+   * (2.c) Avoiding double use field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02c
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02c: prismic.NumberField;
+
+  /**
+   * (2.d) Avoiding dbl claiming field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02d
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02d: prismic.NumberField;
+
+  /**
+   * (2.d.1) Host country NDC field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02d1
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02d1: prismic.NumberField;
+
+  /**
+   * (2.d.2) Program NDC provisions field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02d2
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02d2: prismic.NumberField;
+
+  /**
+   * (2.d.3) Domestic mitigation field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02d3
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02d3: prismic.NumberField;
+
+  /**
+   * (3) Non-permanence field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s03
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s03: prismic.NumberField;
+
+  /**
+   * (3.a) Program approaches field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s03a
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s03a: prismic.NumberField;
+
+  /**
+   * (3.a.1) Reversal accounting field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s03a1
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s03a1: prismic.NumberField;
+
+  /**
+   * (3.a.2) Non-permanence risks field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s03a2
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s03a2: prismic.NumberField;
+
+  /**
+   * (4) Net zero transition field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s04
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s04: prismic.NumberField;
+
+  /**
+   * (5) Institutional arrange. field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s05
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s05: prismic.NumberField;
+
+  /**
+   * (5.a) Program governance field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s05a
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s05a: prismic.NumberField;
+
+  /**
+   * (5.b) Transparency field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s05b
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s05b: prismic.NumberField;
+
+  /**
+   * (5.c) Third-party auditing field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s05c
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s05c: prismic.NumberField;
+
+  /**
+   * (6) Env. & social impacts field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s06
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s06: prismic.NumberField;
+
+  /**
+   * (6.a) Env. & social safeguards field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s06a
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s06a: prismic.NumberField;
+
+  /**
+   * (6.b) Sustainable dev. impacts field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s06b
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s06b: prismic.NumberField;
+
+  /**
+   * (6.c) Adaptation & resilience field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s06c
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s06c: prismic.NumberField;
+
+  /**
+   * (7) Host country ambition field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s07
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s07: prismic.NumberField;
+
+  /**
+   * (7.a) Temperature commitment field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s07a
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s07a: prismic.NumberField;
+
+  /**
+   * (7.b) NDC stringency field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s07b
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s07b: prismic.NumberField;
+
+  /**
+   * (7.c) Enable host country NDC field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s07c
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s07c: prismic.NumberField;
+}
+
+/**
+ * Default variation for CcqiScore Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CcqiScoreSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<CcqiScoreSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *CcqiScore*
+ */
+type CcqiScoreSliceVariation = CcqiScoreSliceDefault;
+
+/**
+ * CcqiScore Shared Slice
+ *
+ * - **API ID**: `ccqi_score`
+ * - **Description**: CcqiScore
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CcqiScoreSlice = prismic.SharedSlice<
+  "ccqi_score",
+  CcqiScoreSliceVariation
+>;
+
+/**
  * Primary content in *Hero → Default → Primary*
  */
 export interface HeroSliceDefaultPrimary {
@@ -567,6 +1057,67 @@ type HeroSliceVariation = HeroSliceDefault;
  * - **Documentation**: https://prismic.io/docs/slices
  */
 export type HeroSlice = prismic.SharedSlice<"hero", HeroSliceVariation>;
+
+/**
+ * Primary content in *ProjectDetails → Default → Primary*
+ */
+export interface ProjectDetailsSliceDefaultPrimary {
+  /**
+   * Offset field in *ProjectDetails → Default → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: Link to Registry Offest purchase
+   * - **API ID Path**: project_details.default.primary.offset
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  offset: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+
+  /**
+   * Project Documents field in *ProjectDetails → Default → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project_details.default.primary.project_documents
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  project_documents: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+}
+
+/**
+ * Default variation for ProjectDetails Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type ProjectDetailsSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<ProjectDetailsSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *ProjectDetails*
+ */
+type ProjectDetailsSliceVariation = ProjectDetailsSliceDefault;
+
+/**
+ * ProjectDetails Shared Slice
+ *
+ * - **API ID**: `project_details`
+ * - **Description**: ProjectDetails
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type ProjectDetailsSlice = prismic.SharedSlice<
+  "project_details",
+  ProjectDetailsSliceVariation
+>;
 
 /**
  * Primary content in *RichText → Default → Primary*
@@ -751,10 +1302,22 @@ declare module "@prismicio/client" {
       BlockQuoteSliceDefaultPrimary,
       BlockQuoteSliceVariation,
       BlockQuoteSliceDefault,
+      CcqiCategorySlice,
+      CcqiCategorySliceDefaultPrimary,
+      CcqiCategorySliceVariation,
+      CcqiCategorySliceDefault,
+      CcqiScoreSlice,
+      CcqiScoreSliceDefaultPrimary,
+      CcqiScoreSliceVariation,
+      CcqiScoreSliceDefault,
       HeroSlice,
       HeroSliceDefaultPrimary,
       HeroSliceVariation,
       HeroSliceDefault,
+      ProjectDetailsSlice,
+      ProjectDetailsSliceDefaultPrimary,
+      ProjectDetailsSliceVariation,
+      ProjectDetailsSliceDefault,
       RichTextSlice,
       RichTextSliceDefaultPrimary,
       RichTextSliceVariation,
