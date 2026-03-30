@@ -41,7 +41,7 @@ export const CcqiScore: FC<CcqiScoreProps> = ({ slice }) => {
           <div className={styles.noScores}>
             <CcqiHeader />
             N/A
-            {category && <span> (The CCQI does not provide scoring for the category: <i>{category}</i>)</span>}
+            {category && <span> (Scoring for "<i>{category}</i>" not yet available)</span>}
           </div>
         </section>
         <CcqiLink />

@@ -92,6 +92,7 @@ export interface ArticleDocumentDataCategoriesItem {
 }
 
 type ArticleDocumentDataSlicesSlice =
+  | CaptionedImageSlice
   | ProjectDetailsSlice
   | CcqiCategorySlice
   | TwoColumnLayoutSlice
@@ -512,6 +513,61 @@ type BlockQuoteSliceVariation = BlockQuoteSliceDefault;
 export type BlockQuoteSlice = prismic.SharedSlice<
   "block_quote",
   BlockQuoteSliceVariation
+>;
+
+/**
+ * Primary content in *CaptionedImage → Default → Primary*
+ */
+export interface CaptionedImageSliceDefaultPrimary {
+  /**
+   * image field in *CaptionedImage → Default → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: captioned_image.default.primary.image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * caption field in *CaptionedImage → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: captioned_image.default.primary.caption
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  caption: prismic.KeyTextField;
+}
+
+/**
+ * Default variation for CaptionedImage Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CaptionedImageSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<CaptionedImageSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *CaptionedImage*
+ */
+type CaptionedImageSliceVariation = CaptionedImageSliceDefault;
+
+/**
+ * CaptionedImage Shared Slice
+ *
+ * - **API ID**: `captioned_image`
+ * - **Description**: CaptionedImage
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CaptionedImageSlice = prismic.SharedSlice<
+  "captioned_image",
+  CaptionedImageSliceVariation
 >;
 
 /**
@@ -1302,6 +1358,10 @@ declare module "@prismicio/client" {
       BlockQuoteSliceDefaultPrimary,
       BlockQuoteSliceVariation,
       BlockQuoteSliceDefault,
+      CaptionedImageSlice,
+      CaptionedImageSliceDefaultPrimary,
+      CaptionedImageSliceVariation,
+      CaptionedImageSliceDefault,
       CcqiCategorySlice,
       CcqiCategorySliceDefaultPrimary,
       CcqiCategorySliceVariation,
