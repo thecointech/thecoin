@@ -82,11 +82,17 @@ export interface ArticleDocumentDataCategoriesItem {
    * - **Documentation**: https://prismic.io/docs/fields/select
    */
   category: prismic.SelectField<
-    "Investing" | "Global Warming" | "Security" | "Finance"
+    | "Investing"
+    | "Global Warming"
+    | "Security"
+    | "Finance"
+    | "Carbon Offsets"
+    | "Impact Reports"
   >;
 }
 
 type ArticleDocumentDataSlicesSlice =
+  | ProjectDetailsSlice
   | CcqiCategorySlice
   | TwoColumnLayoutSlice
   | BlockQuoteSlice
@@ -230,24 +236,6 @@ export type ArticleDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<
     Simplify<ArticleDocumentData>,
     "article",
-    Lang
-  >;
-
-interface CcqiscoreDocumentData {}
-
-/**
- * CCQIScore document from Prismic
- *
- * - **API ID**: `ccqiscore`
- * - **Repeatable**: `true`
- * - **Documentation**: https://prismic.io/docs/content-modeling
- *
- * @typeParam Lang - Language API ID of the document.
- */
-export type CcqiscoreDocument<Lang extends string = string> =
-  prismic.PrismicDocumentWithUID<
-    Simplify<CcqiscoreDocumentData>,
-    "ccqiscore",
     Lang
   >;
 
@@ -451,7 +439,6 @@ export type PageDocument<Lang extends string = string> =
 
 export type AllDocumentTypes =
   | ArticleDocument
-  | CcqiscoreDocument
   | FaqDocument
   | NavigationDocument
   | PageDocument;
@@ -605,6 +592,7 @@ export interface CcqiScoreSliceDefaultPrimary {
     | "Solar photovoltaic power"
     | "Wind power (onshore)"
     | "Industrial Biomass"
+    | "Distributed Solar"
   >;
 
   /**
@@ -1071,6 +1059,67 @@ type HeroSliceVariation = HeroSliceDefault;
 export type HeroSlice = prismic.SharedSlice<"hero", HeroSliceVariation>;
 
 /**
+ * Primary content in *ProjectDetails → Default → Primary*
+ */
+export interface ProjectDetailsSliceDefaultPrimary {
+  /**
+   * Offset field in *ProjectDetails → Default → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: Link to Registry Offest purchase
+   * - **API ID Path**: project_details.default.primary.offset
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  offset: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+
+  /**
+   * Project Documents field in *ProjectDetails → Default → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project_details.default.primary.project_documents
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  project_documents: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+}
+
+/**
+ * Default variation for ProjectDetails Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type ProjectDetailsSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<ProjectDetailsSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *ProjectDetails*
+ */
+type ProjectDetailsSliceVariation = ProjectDetailsSliceDefault;
+
+/**
+ * ProjectDetails Shared Slice
+ *
+ * - **API ID**: `project_details`
+ * - **Description**: ProjectDetails
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type ProjectDetailsSlice = prismic.SharedSlice<
+  "project_details",
+  ProjectDetailsSliceVariation
+>;
+
+/**
  * Primary content in *RichText → Default → Primary*
  */
 export interface RichTextSliceDefaultPrimary {
@@ -1240,8 +1289,6 @@ declare module "@prismicio/client" {
       ArticleDocumentData,
       ArticleDocumentDataCategoriesItem,
       ArticleDocumentDataSlicesSlice,
-      CcqiscoreDocument,
-      CcqiscoreDocumentData,
       FaqDocument,
       FaqDocumentData,
       NavigationDocument,
@@ -1267,6 +1314,10 @@ declare module "@prismicio/client" {
       HeroSliceDefaultPrimary,
       HeroSliceVariation,
       HeroSliceDefault,
+      ProjectDetailsSlice,
+      ProjectDetailsSliceDefaultPrimary,
+      ProjectDetailsSliceVariation,
+      ProjectDetailsSliceDefault,
       RichTextSlice,
       RichTextSliceDefaultPrimary,
       RichTextSliceVariation,

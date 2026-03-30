@@ -16,6 +16,7 @@
           "type": "Select",
           "config": {
             "label": "Category",
+            "placeholder": "",
             "options": [
               "Avoided planned deforestation",
               "Avoided unplanned deforestation",
@@ -30,7 +31,8 @@
               "Recovery of associated gas from oil fields",
               "Solar photovoltaic power",
               "Wind power (onshore)",
-              "Industrial Biomass"
+              "Industrial Biomass",
+              "Distributed Solar"
             ]
           }
         },

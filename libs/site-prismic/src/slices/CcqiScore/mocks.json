@@ -50,8 +50,8 @@
 			},
 			"category": {
 				"__TYPE__": "FieldContent",
-				"type": "Select",
-				"value": "Avoided planned deforestation"
+				"value": "Avoided planned deforestation",
+				"type": "Select"
 			},
 			"s04": {
 				"__TYPE__": "FieldContent",

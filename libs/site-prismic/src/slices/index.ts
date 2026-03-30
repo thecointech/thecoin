@@ -7,6 +7,7 @@ export const components = {
   ccqi_category: dynamic(() => import("./CcqiCategory")),
   ccqi_score: dynamic(() => import("./CcqiScore")),
   hero: dynamic(() => import("./Hero")),
+  project_details: dynamic(() => import("./ProjectDetails")),
   rich_text: dynamic(() => import("./RichText")),
   two_column_layout: dynamic(() => import("./TwoColumnLayout")),
 };

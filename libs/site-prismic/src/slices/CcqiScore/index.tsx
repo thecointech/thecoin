@@ -18,7 +18,7 @@ export const CcqiScore: FC<CcqiScoreProps> = ({ slice }) => {
   const hasScores = data.s01 != null;
 
   const toggleExpanded = useCallback(() => setExpanded(old => !old), [setExpanded]);
-  const handleSectionClick = (index: number) => {
+  const handleSectionClick = useCallback((index: number) => {
     setActiveIndices((prev) => {
       const next = new Set(prev);
       if (next.has(index)) {
@@ -28,7 +28,7 @@ export const CcqiScore: FC<CcqiScoreProps> = ({ slice }) => {
       }
       return next;
     });
-  };
+  }, []);
 
   if (!hasScores) {
     return (

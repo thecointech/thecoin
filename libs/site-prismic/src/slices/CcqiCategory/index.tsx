@@ -16,21 +16,24 @@ export type CcqiCategoryProps = SliceComponentProps<Content.CcqiCategorySlice>;
  */
 const CcqiCategory: FC<CcqiCategoryProps> = ({ slice, slices }) => {
   const scoreData = getCcqiScoreSliceData(slices);
+  // Do not include the "N/A" if there are no scores at all
   const category = slice.primary.category;
   if (category === null) return null;
   const scoreKey = categoryMapping[category];
   const scoreValue = scoreKey ? (scoreData?.[scoreKey] as number | null | undefined) : null;
-
+  const hasPill = scoreData?.s01 !== null;
   return (
     <section
       data-slice-type={slice.slice_type}
       data-slice-variation={slice.variation}
       className={styles.categoryContainer}
     >
-      <Header size="small">{slice.primary.category}:</Header>
-      <span className={styles.categoryPillContainer}>
-        {scoreKey && scoreValue != null ? <ScorePill value={scoreValue} /> : <span>N/A</span>}
-      </span>
+      <Header size="small" className={styles.categoryHeader}>{slice.primary.category}:</Header>
+      {hasPill &&
+        <span className={styles.categoryPillContainer}>
+          {scoreKey && scoreValue != null ? <ScorePill value={scoreValue} /> : <span>N/A</span>}
+        </span>
+      }
     </section>
   );
 };

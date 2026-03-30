@@ -73,13 +73,16 @@
             "category": {
               "type": "Select",
               "config": {
+                "label": "Category",
+                "placeholder": "",
                 "options": [
                   "Investing",
                   "Global Warming",
                   "Security",
-                  "Finance"
-                ],
-                "label": "Category"
+                  "Finance",
+                  "Carbon Offsets",
+                  "Impact Reports"
+                ]
               }
             }
           },
@@ -91,6 +94,9 @@
         "fieldset": "Slice Zone",
         "config": {
           "choices": {
+            "project_details": {
+              "type": "SharedSlice"
+            },
             "ccqi_category": {
               "type": "SharedSlice"
             },
