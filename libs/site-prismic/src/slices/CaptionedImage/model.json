@@ -21,10 +21,12 @@
           }
         },
         "caption": {
-          "type": "Text",
+          "type": "StructuredText",
           "config": {
             "label": "caption",
-            "placeholder": ""
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "single": "paragraph,preformatted,heading5,heading6,hyperlink,embed,rtl"
           }
         }
       },

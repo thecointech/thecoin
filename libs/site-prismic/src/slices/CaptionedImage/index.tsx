@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { Content } from "@prismicio/client";
 import { PrismicImage, SliceComponentProps } from "@prismicio/react";
 import styles from "./index.module.css";
+import { RichText } from "@/components";
 
 /**
  * Props for `CaptionedImage`.
@@ -13,6 +14,7 @@ export type CaptionedImageProps =
  * Component for "CaptionedImage" Slices.
  */
 const CaptionedImage: FC<CaptionedImageProps> = ({ slice }) => {
+  const hasCaption = slice.primary.caption && slice.primary.caption.length > 0;
   return (
     <section
       data-slice-type={slice.slice_type}
@@ -20,9 +22,11 @@ const CaptionedImage: FC<CaptionedImageProps> = ({ slice }) => {
       className={styles.captionedContainer}
     >
       <PrismicImage field={slice.primary.image} />
-      <div className={styles.caption}>
-        {slice.primary.caption}
-      </div>
+      {hasCaption && (
+        <div className={styles.caption}>
+          <RichText field={slice.primary.caption} />
+        </div>
+      )}
     </section>
   );
 };

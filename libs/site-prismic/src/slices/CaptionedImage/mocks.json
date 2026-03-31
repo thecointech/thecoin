@@ -27,9 +27,15 @@
 				"thumbnails": {}
 			},
 			"caption": {
-				"__TYPE__": "FieldContent",
-				"value": "tip",
-				"type": "Text"
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "paragraph",
+						"content": {
+							"text": "Eiusmod aute do aliquip nostrud fugiat."
+						}
+					}
+				]
 			}
 		},
 		"items": []

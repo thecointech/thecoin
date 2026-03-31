@@ -532,12 +532,12 @@ export interface CaptionedImageSliceDefaultPrimary {
   /**
    * caption field in *CaptionedImage → Default → Primary*
    *
-   * - **Field Type**: Text
+   * - **Field Type**: Rich Text
    * - **Placeholder**: *None*
    * - **API ID Path**: captioned_image.default.primary.caption
-   * - **Documentation**: https://prismic.io/docs/fields/text
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
    */
-  caption: prismic.KeyTextField;
+  caption: prismic.RichTextField;
 }
 
 /**

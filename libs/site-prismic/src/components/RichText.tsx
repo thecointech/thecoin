@@ -1,9 +1,9 @@
 import React from 'react';
 import { RichTextField } from '@prismicio/client';
-import { JSXMapSerializer, PrismicRichText, PrismicLink } from '@prismicio/react';
+import { RichTextComponents, PrismicRichText, PrismicLink } from '@prismicio/react';
 import { Header } from 'semantic-ui-react';
 
-const renderCo2eWithSubscript = (text: string): React.ReactNode => {
+const renderCo2WithSubscript = (text: string): React.ReactNode => {
   const parts = text.split(/(CO2)/g);
 
   if (parts.length === 1) {
@@ -26,7 +26,7 @@ const renderCo2eWithSubscript = (text: string): React.ReactNode => {
 const transformChildren = (children: React.ReactNode): React.ReactNode =>
   React.Children.map(children, (child) => {
     if (typeof child === 'string') {
-      return renderCo2eWithSubscript(child);
+      return renderCo2WithSubscript(child);
     }
 
     if (React.isValidElement(child)) {
@@ -42,7 +42,7 @@ const transformChildren = (children: React.ReactNode): React.ReactNode =>
     return child;
   });
 
-export const richTextComponents: JSXMapSerializer = {
+export const richTextComponents: RichTextComponents = {
   label: ({ node, children }) => {
     if (node.data.label === 'codespan') {
       return <code>{children}</code>;
