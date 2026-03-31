@@ -82,7 +82,7 @@ jobs:
           echo "🎓 Processing stable tag $STABLE_TAG"
 
           # Check if any packages have test versions (more reliable than tag searching)
-          if git grep -q "\"version\":.*\"-test\." -- "**/package.json"; then
+          if git grep -q -e '"version":.*-test\.' -- '**/package.json'; then
             echo "📌 Found test versions in packages, graduating to stable"
 
             # Get commit the tag currently points to

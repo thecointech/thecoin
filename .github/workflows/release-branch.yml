@@ -62,14 +62,26 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
-          # Create test prerelease tag for release branch (don't push yet)
-          yarn lerna version \
-            --conventional-commits \
-            --conventional-prerelease \
-            --preid test \
-            --yes \
-            --no-push \
-            --create-release github
+          # Extract base version from branch name (e.g., release/v0.6.0 -> 0.6.0)
+          BASE_VERSION=$(echo "${{ github.ref_name }}" | sed 's|^release/v||')
+
+          # Check if any test tags already exist for this base version
+          if git tag -l "v${BASE_VERSION}-test.*" | grep -q .; then
+            echo "📦 Existing test tags found — bumping prerelease"
+            yarn lerna version \
+              --conventional-commits \
+              --conventional-prerelease \
+              --preid test \
+              --yes \
+              --no-push \
+              --create-release github
+          else
+            echo "🚀 Initial release — versioning to v${BASE_VERSION}-test.0"
+            yarn lerna version "${BASE_VERSION}-test.0" \
+              --yes \
+              --no-push \
+              --create-release github
+          fi
 
       - name: Push Version Commit
         env:
