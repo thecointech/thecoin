@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 
 export const components = {
   block_quote: dynamic(() => import("./BlockQuote")),
+  captioned_image: dynamic(() => import("./CaptionedImage")),
   ccqi_category: dynamic(() => import("./CcqiCategory")),
   ccqi_score: dynamic(() => import("./CcqiScore")),
   hero: dynamic(() => import("./Hero")),
