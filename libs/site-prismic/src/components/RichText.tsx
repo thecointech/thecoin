@@ -58,6 +58,10 @@ export const richTextComponents: RichTextComponents = {
   heading5: ({ children }) => <Header as="h5">{transformChildren(children)}</Header>,
   heading6: ({ children }) => <Header as="h6">{transformChildren(children)}</Header>,
   paragraph: ({ children }) => <p>{transformChildren(children)}</p>,
+  list: ({ children }) => <ul>{transformChildren(children)}</ul>,
+  oList: ({ children }) => <ol>{transformChildren(children)}</ol>,
+  listItem: ({ children }) => <li>{transformChildren(children)}</li>,
+  oListItem: ({ children }) => <li>{transformChildren(children)}</li>,
   hyperlink: ({ children, node }) => (
     <PrismicLink field={node.data}>{transformChildren(children)}</PrismicLink>
   ),
