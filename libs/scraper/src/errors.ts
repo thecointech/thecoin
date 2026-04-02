@@ -1,4 +1,4 @@
-import type { DynamicInputEvent, SearchElementData, FoundElement, ValueEvent } from "@thecointech/scraper-types";
+import type { DynamicInputEvent, SearchElementData, FoundElement, ValueEvent, ElementData } from "@thecointech/scraper-types";
 
 export class ElementNotFoundError extends Error {
   element: SearchElementData
@@ -25,6 +25,16 @@ export class DynamicValueError extends Error {
     super(`Dynamic value error: ${event.eventName}`);
     this.event = event;
     this.values = values;
+  }
+}
+
+// Thrown when we cannot enter a value into an input field
+// Input is the data describing the element we found (not the original search criteria)
+export class InputValueError extends Error {
+  input: ElementData
+  constructor(input: ElementData) {
+    super(`Input value error on ${input.inputType ?? 'unknown'}: ${input.selector} - ${input.tagName}`);
+    this.input = input;
   }
 }
 
