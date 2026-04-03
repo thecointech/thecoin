@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0-test.0](https://github.com/thecointech/thecoin/compare/v0.5.4-test.2...v0.6.0-test.0) (2026-03-31)
+
+
+### Bug Fixes
+
+* show initialize progress if necessary when recording ([04e83ab](https://github.com/thecointech/thecoin/commit/04e83ab3fc17e4b6708b40762b62e43258552182))
+
+
+
+
+
 ## [0.5.4-test.2](https://github.com/thecointech/thecoin/compare/v0.5.4-test.1...v0.5.4-test.2) (2026-02-26)
 
 **Note:** Version bump only for package harvester
