@@ -150,7 +150,7 @@ jobs:
 
             # Push the release branch and updated tag
             git push origin "$RELEASE_BRANCH"
-            git push --force-with-lease origin "$STABLE_TAG"
+            git push --force origin "refs/tags/$STABLE_TAG"
 
             # Output the graduated commit for other jobs
             echo "commit=$GRADUATED_COMMIT" >> "$GITHUB_OUTPUT"
