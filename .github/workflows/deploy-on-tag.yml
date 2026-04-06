@@ -75,14 +75,22 @@ jobs:
         run: |
           TAG="${{ github.ref_name }}"
           RELEASE_BRANCH="release/${TAG}"
-          if git rev-parse --verify "origin/${RELEASE_BRANCH}" >/dev/null 2>&1; then
-            git checkout "${RELEASE_BRANCH}"
-            echo "✅ Checked out ${RELEASE_BRANCH}"
-          else
+          if ! git rev-parse --verify "origin/${RELEASE_BRANCH}" >/dev/null 2>&1; then
             echo "❌ Expected branch ${RELEASE_BRANCH} not found"
             echo "Stable tags should be created on a release branch"
             exit 1
           fi
+
+          TAG_COMMIT=$(git rev-list -n 1 "$TAG")
+          BRANCH_HEAD=$(git rev-parse "origin/${RELEASE_BRANCH}")
+          if [ "$TAG_COMMIT" != "$BRANCH_HEAD" ]; then
+            echo "❌ Release branch HEAD ($BRANCH_HEAD) differs from tag commit ($TAG_COMMIT)"
+            echo "The tag and release branch should point to the same commit"
+            exit 1
+          fi
+
+          git checkout "${RELEASE_BRANCH}"
+          echo "✅ Checked out ${RELEASE_BRANCH} at ${TAG_COMMIT}"
 
       - name: Install dependencies
         run: yarn install --mode=skip-build
