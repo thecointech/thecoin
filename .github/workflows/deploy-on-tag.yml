@@ -69,6 +69,21 @@ jobs:
           git config user.name 'GitHub Actions Bot'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
 
+      # Lerna refuses to run on a detached HEAD (ENOGIT).
+      # Check out the release branch that this tag lives on.
+      - name: Checkout release branch
+        run: |
+          TAG="${{ github.ref_name }}"
+          RELEASE_BRANCH="release/${TAG}"
+          if git rev-parse --verify "origin/${RELEASE_BRANCH}" >/dev/null 2>&1; then
+            git checkout "${RELEASE_BRANCH}"
+            echo "✅ Checked out ${RELEASE_BRANCH}"
+          else
+            echo "❌ Expected branch ${RELEASE_BRANCH} not found"
+            echo "Stable tags should be created on a release branch"
+            exit 1
+          fi
+
       - name: Install dependencies
         run: yarn install --mode=skip-build
 
@@ -85,8 +100,7 @@ jobs:
           if git grep -q -e '"version":.*-test\.' -- '**/package.json'; then
             echo "📌 Found test versions in packages, graduating to stable"
 
-            # Get commit the tag currently points to
-            ORIGINAL_COMMIT=$(git rev-list -n 1 "$STABLE_TAG")
+            RELEASE_BRANCH="release/${STABLE_TAG}"
 
             # Graduate packages (removes prerelease suffix) from current state
             yarn lerna version --conventional-graduate --yes --no-git-tag-version
@@ -126,39 +140,8 @@ jobs:
             # Get the new graduated commit SHA
             GRADUATED_COMMIT=$(git rev-list -n 1 "$STABLE_TAG")
 
-            # Find all branches whose HEAD was exactly at the original tag commit
-            echo "🔍 Finding branches whose HEAD was at original commit $ORIGINAL_COMMIT"
-
-            # Get all remote branches where HEAD is exactly the original commit
-            BRANCHES=$(git for-each-ref --format='%(refname:short) %(objectname)' refs/remotes/origin/ \
-              | grep "^origin/.* $ORIGINAL_COMMIT$" \
-              | sed 's/^origin\///' \
-              | cut -d' ' -f1)
-
-            if [ -n "$BRANCHES" ]; then
-              echo "📋 Advancing branches to new graduated commit $GRADUATED_COMMIT:"
-              echo "$BRANCHES"
-
-              # Advance each branch to the new commit using atomic force-with-lease
-              for BRANCH in $BRANCHES; do
-                echo "🔄 Advancing $BRANCH to new commit"
-
-                # Use force-with-lease to ensure we're pushing over the expected commit atomically
-                if ! git push --force-with-lease="refs/heads/$BRANCH:$ORIGINAL_COMMIT" origin "$GRADUATED_COMMIT:$BRANCH"; then
-                  echo "❌ Failed to advance $BRANCH - it may have been modified since tag creation"
-                  echo "Expected: $ORIGINAL_COMMIT"
-                  echo "Please check if $BRANCH has been updated and retry the deployment"
-                  exit 1
-                fi
-
-                echo "✅ Advanced $BRANCH to $GRADUATED_COMMIT"
-              done
-            else
-              echo "⚠️ No branches found with HEAD at original commit, pushing to main as fallback"
-              git push origin "$GRADUATED_COMMIT:main"
-            fi
-
-            # Push the updated tag with safe force push
+            # Push the release branch and updated tag
+            git push origin "$RELEASE_BRANCH"
             git push --force-with-lease origin "$STABLE_TAG"
 
             # Output the graduated commit for other jobs
