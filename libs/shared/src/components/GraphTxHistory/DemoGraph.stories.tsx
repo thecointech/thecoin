@@ -10,7 +10,7 @@ import { LessVars } from "@thecointech/site-semantic-theme/variables";
 
 // const baseDate = DateTime.now().minus({ weeks: 12 });
 
-type GraphTypes = "cash" | "credit" | "coin" | "total";
+type GraphTypes = "cash" | "credit" | "delayed" |"coin" | "total";
 const defaultArgs = {
   // from: baseDate,
   // to: DateTime.now(),
@@ -91,6 +91,17 @@ const getSerie = (type: GraphTypes, weeks: number) => {
           data: getCashValues(weeks, 3, 6, 0)
         },
       ]
+    case "delayed":
+      return [
+        {
+          id: "$Cash",
+          data: getCashDelayed(weeks, 3, 7, 100)
+        },
+        {
+          id: "$Credit",
+          data: getCreditTotals(weeks, 3, 6, 0)
+        },
+      ]
     case "coin":
       return [
         {
@@ -130,8 +141,8 @@ const getSerie = (type: GraphTypes, weeks: number) => {
 const DemoGraph = (args: typeof defaultArgs) => {
 
 
-
-  const da =getSerie(args.type, args.weeks)
+  const weeks = Math.max(1, args.weeks, Math.ceil(args.increment / 7))
+  const da =getSerie(args.type, weeks)
   if (args.includeTotal) {
     const cash = da[0].data
     da.push({
@@ -144,7 +155,8 @@ const DemoGraph = (args: typeof defaultArgs) => {
   }
   const datum = sliceDatum(da, args.increment)
 
-  const minMax = calcMinMax(datum)
+
+  const minMax = calcMinMax(datum, args.type)
   // const lastDays = datum.map(d => d.data.slice(-1)[0]?.x ?? 0)
   // const maxDay = Math.max(...lastDays)
   const theme: any = {
@@ -165,7 +177,7 @@ const DemoGraph = (args: typeof defaultArgs) => {
       // Basic properties
       enableSlices="x"
       {...commonProperties}
-      {...axisProperties(minMax, args.weeks)}
+      {...axisProperties(minMax, weeks)}
       {...colorProperties(minMax)}
       {...thingsToDisplayProperties()}
       animate={false}
@@ -186,7 +198,7 @@ export default {
     // to: { control: 'date' },
     increment: { control: 'number' },
     type: {
-      options: [ "cash", "credit", "coin", "total"],
+      options: [ "cash", "credit", "delayed", "coin", "total"],
       control: "select",
     }
   },
@@ -265,7 +277,7 @@ const axisProperties = (minMax: MinMax, weeks: number): Partial<LineSvgProps> =>
 }
 
 type MinMax = ReturnType<typeof calcMinMax>;
-const calcMinMax = (datum: Serie[]) => {
+const calcMinMax = (datum: Serie[], type: GraphTypes) => {
   const maxes = datum.map(d => Math.max(...d.data.map(d => d.y as number)));
   const mins = datum.map(d => Math.min(...d.data.map(d => d.y as number)));
   let max = Math.max(100, ...maxes);
@@ -282,6 +294,10 @@ const calcMinMax = (datum: Serie[]) => {
   const sigFigs = Math.max(new Decimal(diff).exponent(), 2)
   min = new Decimal(min).toSignificantDigits(sigFigs).toNumber();
   max = new Decimal(max).toSignificantDigits(sigFigs).toNumber();
+  if (type === "delayed") {
+    max = Math.max(max, -min);
+    min = -max;
+  }
   return {min, max};
 }
 
@@ -383,6 +399,22 @@ const getCoinValues = (weeks: number, upDay: number, downDay: number) => {
     y: d,
   }))
 }
+
+const getCashDelayed = (weeks: number, downDay: number, upDay: number, startingValue=100) => {
+  const basic = new Array(7 * weeks).fill(startingValue);
+  const data = basic.map((d, idx) => (1 + Math.floor(idx / 7)) * 100);
+  const r = data.map((d, i) => {
+    if (i < 50) return d;
+    const period = Math.ceil((i - 49) / 28);
+    return d - (period * 400);
+  });
+  // const r = data.map((d, i) => i == 0 ? d : (d - 400 * (Math.floor((i - 1) / (7 * 7)))))
+  return r.map((d, v) => ({
+    x: v,
+    y: d,
+  }))
+}
+
 
 const getCreditTotals = (weeks: number, downDay: number, upDay: number, startingValue=100) => {
   const basic = new Array(7 * weeks).fill(0);
