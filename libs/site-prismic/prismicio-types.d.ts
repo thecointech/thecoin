@@ -92,6 +92,7 @@ export interface ArticleDocumentDataCategoriesItem {
 }
 
 type ArticleDocumentDataSlicesSlice =
+  | VideoSlice
   | CaptionedImageSlice
   | ProjectDetailsSlice
   | CcqiCategorySlice
@@ -1320,6 +1321,48 @@ export type TwoColumnLayoutSlice = prismic.SharedSlice<
   TwoColumnLayoutSliceVariation
 >;
 
+/**
+ * Primary content in *Video → Default → Primary*
+ */
+export interface VideoSliceDefaultPrimary {
+  /**
+   * Video ID field in *Video → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: GUID
+   * - **API ID Path**: video.default.primary.video_id
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  video_id: prismic.KeyTextField;
+}
+
+/**
+ * Default variation for Video Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type VideoSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<VideoSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *Video*
+ */
+type VideoSliceVariation = VideoSliceDefault;
+
+/**
+ * Video Shared Slice
+ *
+ * - **API ID**: `video`
+ * - **Description**: Video
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type VideoSlice = prismic.SharedSlice<"video", VideoSliceVariation>;
+
 declare module "@prismicio/client" {
   interface CreateClient {
     (
@@ -1388,6 +1431,10 @@ declare module "@prismicio/client" {
       TwoColumnLayoutSliceDefaultPrimary,
       TwoColumnLayoutSliceVariation,
       TwoColumnLayoutSliceDefault,
+      VideoSlice,
+      VideoSliceDefaultPrimary,
+      VideoSliceVariation,
+      VideoSliceDefault,
     };
   }
 }

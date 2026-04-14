@@ -1,0 +1,14 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"video_id": {
+				"__TYPE__": "FieldContent",
+				"type": "Text",
+				"value": "20aa5f10-63ef-4461-be90-fb7015c99a1f"
+			}
+		},
+		"items": []
+	}
+]
