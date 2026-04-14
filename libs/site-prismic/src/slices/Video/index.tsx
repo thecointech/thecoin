@@ -23,7 +23,7 @@ const Video: FC<VideoProps> = ({ slice }) => {
         <iframe src={`https://player.mediadelivery.net/embed/637569/${slice.primary.video_id}?loop=false&muted=false&preload=true&responsive=true`}
           loading="lazy"
           style={{ border: '0', position: 'absolute', top: 0, height: '100%', width: '100%' }}
-          allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
+          allow="accelerometer;gyroscope;encrypted-media;picture-in-picture;"
           allowFullScreen={true}
         />
       </div>
