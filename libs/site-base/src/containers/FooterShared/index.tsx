@@ -1,8 +1,11 @@
 import React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import facebook from './images/facebook.svg';
-import twitter from './images/twitter.svg';
+// import twitter from './images/twitter.svg';
 import instagram from './images/instagram.svg';
+import bluesky from './images/bluesky.svg';
+import mastodon from './images/mastodon.svg';
+import linkedin from './images/linkedin.svg';
 import styles from './styles.module.less';
 
 const translate = defineMessages({
@@ -43,11 +46,20 @@ export const FooterShared: React.FC<Props> = ({ children, background, id }) => (
           <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
             <img src={facebook} />
           </a>
-          <a href="https://twitter.com/The_Green_NFT/" target="_blank">
+          {/* <a href="https://twitter.com/The_Green_NFT/" target="_blank">
             <img src={twitter} />
-          </a>
-          <a href="https://www.instagram.com/thecoincollaborativecanada/" target="_blank">
+          </a> */}
+          <a href="https://www.instagram.com/thecoincollaborative/" target="_blank">
             <img src={instagram} />
+          </a>
+          <a href="https://bsky.app/profile/thecoincollab.bsky.social" target="_blank">
+            <img src={bluesky} />
+          </a>
+          <a href="https://ca.linkedin.com/company/the-coin" target="_blank">
+            <img src={linkedin} />
+          </a>
+          <a href="https://mastodon.social/@thecoincollaborative" target="_blank">
+            <img src={mastodon} />
           </a>
         </div>
         <div className={`${styles.textPortion} ${styles.copyright}`}>
