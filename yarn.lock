@@ -11853,7 +11853,7 @@ __metadata:
     immer-reducer: "npm:^0.7.13"
     react-dates: "npm:21.8.0"
     react-dropzone: "npm:^14.3.8"
-    react-router: "npm:^7.9.6"
+    react-router: "npm:^7.12.0"
     ts-clipboard: "npm:^1.0.17"
   languageName: unknown
   linkType: soft
@@ -37283,9 +37283,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:^7.9.6":
-  version: 7.9.6
-  resolution: "react-router@npm:7.9.6"
+"react-router@npm:^7.12.0":
+  version: 7.14.1
+  resolution: "react-router@npm:7.14.1"
   dependencies:
     cookie: "npm:^1.0.1"
     set-cookie-parser: "npm:^2.6.0"
@@ -37295,7 +37295,7 @@ __metadata:
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 2a177bbe19021e3b8211df849ea5b3f3a4f482327e6de3341aaeaa4f1406dc9be7b675b229eefea6761e04a59a40ccaaf8188f2ee88eb2d0b2a6b6448daea368
+  checksum: 57b86accdc50b917509e4b21f821dd432807e3f62b5e978d0d5174fc7da3798ce57ce896cbf70a8ba8f6f3d53515a07021e759829908239b4eee34c804695120
   languageName: node
   linkType: hard
 
