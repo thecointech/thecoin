@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+
+
+**Note:** Version bump only for package @thecointech/scraper-agent
+
+
+
+
+
+# [0.6.0-test.0](https://github.com/thecointech/thecoin/compare/v0.5.4-test.2...v0.6.0-test.0) (2026-03-31)
+
+
+### Bug Fixes
+
+* Always log API errors.  Do not swallow prior errors or prevent execution proceeding ([b78bd5b](https://github.com/thecointech/thecoin/commit/b78bd5b79a7ea7a55dd4307f84a1c737a73a5fff))
+
+
+
+
+
 ## [0.5.4-test.2](https://github.com/thecointech/thecoin/compare/v0.5.4-test.1...v0.5.4-test.2) (2026-02-26)
 
 **Note:** Version bump only for package @thecointech/scraper-agent
