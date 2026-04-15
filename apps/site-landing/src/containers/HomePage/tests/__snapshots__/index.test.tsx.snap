@@ -284,11 +284,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
         <div
           class="sub header x5spaceBefore"
         >
-          <span>
-            Money is the most powerful tool we have.
-            <br />
-            Let's make it work for us, for a change.
-          </span>
+          Money is the most powerful tool we have.
+          <br />
+          Let's make it work for us, for a change.
         </div>
       </h2>
       <div>
