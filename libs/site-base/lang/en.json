@@ -95,6 +95,10 @@
     "defaultMessage": "We are {percentComplete}% done cooking your brand-new account.",
     "description": "app.account.create.whileCreatingHeader"
   },
+  "FEAwpQ": {
+    "defaultMessage": "© 2020",
+    "description": "Copyright phrase in footer part1"
+  },
   "GEEk5W": {
     "defaultMessage": "Store Account",
     "description": "Title for StorePage when window.open doesn't work"
@@ -107,10 +111,6 @@
     "defaultMessage": "No local accounts found",
     "description": "AccountsList: no accounts able to save to google"
   },
-  "HLXOX8": {
-    "defaultMessage": "All Rights Reserved.",
-    "description": "Copyright phrase in footer part2"
-  },
   "HOr2/E": {
     "defaultMessage": "Create your Account",
     "description": "app.account.create.form.title: Title above the main Title for the create account form page"
@@ -122,10 +122,6 @@
   "HbmGay": {
     "defaultMessage": "Thank you for completing Google Authorization: This window can now be closed.",
     "description": "app.storeOnline.google.tokenSuccess"
-  },
-  "Htp58g": {
-    "defaultMessage": "© Copyright 2020. TheCoin.",
-    "description": "Copyright phrase in footer part1"
   },
   "I5PO4z": {
     "defaultMessage": "Eight characters should be the minimum.",
@@ -361,6 +357,10 @@
   "oB6sg1": {
     "defaultMessage": "Store on Google Drive",
     "description": "Store Account: Option to store on GDrive"
+  },
+  "oBl0gO": {
+    "defaultMessage": "TheCoin Collaborative Canada",
+    "description": "Copyright phrase in footer part2"
   },
   "pJe8Es": {
     "defaultMessage": "Referral Code",
