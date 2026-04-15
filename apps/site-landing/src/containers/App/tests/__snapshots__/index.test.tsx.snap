@@ -205,26 +205,62 @@ exports[`<App /> should render and match the snapshot 1`] = `
         </div>
         <div>
           <a
+            aria-label="Facebook"
             href="https://www.facebook.com/TheCoinCollaborative/"
             target="_blank"
           >
             <img
+              alt=""
               src="[object Object]"
             />
           </a>
           <a
-            href="https://twitter.com/The_Green_NFT/"
+            aria-label="Instagram"
+            href="https://www.instagram.com/thecoincollaborative/"
             target="_blank"
           >
             <img
+              alt=""
               src="[object Object]"
             />
           </a>
           <a
-            href="https://www.instagram.com/thecoincollaborativecanada/"
+            aria-label="Bluesky"
+            href="https://bsky.app/profile/thecoincollab.bsky.social"
             target="_blank"
           >
             <img
+              alt=""
+              src="[object Object]"
+            />
+          </a>
+          <a
+            aria-label="LinkedIn"
+            href="https://ca.linkedin.com/company/the-coin"
+            target="_blank"
+          >
+            <img
+              alt=""
+              src="[object Object]"
+            />
+          </a>
+          <a
+            aria-label="Mastodon"
+            href="https://mastodon.social/@thecoincollaborative"
+            target="_blank"
+          >
+            <img
+              alt=""
+              src="[object Object]"
+            />
+          </a>
+          <a
+            aria-label="Medium"
+            href="https://medium.com/thecoin-newsletters"
+            target="_blank"
+          >
+            <img
+              alt=""
               src="[object Object]"
             />
           </a>
@@ -233,10 +269,10 @@ exports[`<App /> should render and match the snapshot 1`] = `
           class="undefined undefined"
         >
           <span>
-            © Copyright 2020. TheCoin.
+            © 2020
           </span>
           <span>
-            All Rights Reserved.
+            TheCoin Collaborative Canada
           </span>
         </div>
       </div>
