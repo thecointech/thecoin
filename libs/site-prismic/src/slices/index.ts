@@ -11,4 +11,5 @@ export const components = {
   project_details: dynamic(() => import("./ProjectDetails")),
   rich_text: dynamic(() => import("./RichText")),
   two_column_layout: dynamic(() => import("./TwoColumnLayout")),
+  video: dynamic(() => import("./Video")),
 };

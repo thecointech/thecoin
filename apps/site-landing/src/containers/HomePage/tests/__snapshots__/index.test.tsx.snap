@@ -159,7 +159,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
       <div>
         <a
           data-discover="true"
-          href="/blog/coming-soon"
+          href="/blog/what-does-zero-cost-mean"
         >
           This is our edge
           <div

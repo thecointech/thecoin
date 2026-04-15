@@ -25,7 +25,7 @@ const translations = defineMessages({
 const items = {
   startNow: {
     img: startnow,
-    to: '/blog/coming-soon',
+    to: '/blog/what-does-zero-cost-mean',
     text: defineMessages({
       title: {
         defaultMessage: 'What does "Zero Cost" really mean?',

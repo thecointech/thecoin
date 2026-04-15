@@ -94,6 +94,9 @@
         "fieldset": "Slice Zone",
         "config": {
           "choices": {
+            "video": {
+              "type": "SharedSlice"
+            },
             "captioned_image": {
               "type": "SharedSlice"
             },
