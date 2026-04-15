@@ -301,7 +301,7 @@ jobs:
     with:
       CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
       COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
-      IS_PROMOTION: ${{ !contains(github.ref_name, '-test.') }}
+      IS_PROMOTION: ${{ needs.determine-environment.outputs.environment != 'prodtest' }}
 
   publish-services:
     needs: [wait-for-packages, determine-environment, normalize-commit]
