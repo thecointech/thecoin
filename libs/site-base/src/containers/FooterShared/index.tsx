@@ -43,23 +43,23 @@ export const FooterShared: React.FC<Props> = ({ children, background, id }) => (
           <FormattedMessage tagName="span" {...translate.registered2} />
         </div>
         <div className={styles.links}>
-          <a href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
-            <img src={facebook} />
+          <a aria-label="Facebook" href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
+            <img src={facebook} alt="" />
           </a>
           {/* <a href="https://twitter.com/The_Green_NFT/" target="_blank">
             <img src={twitter} />
           </a> */}
-          <a href="https://www.instagram.com/thecoincollaborative/" target="_blank">
-            <img src={instagram} />
+          <a aria-label="Instagram" href="https://www.instagram.com/thecoincollaborative/" target="_blank">
+            <img src={instagram} alt="" />
           </a>
-          <a href="https://bsky.app/profile/thecoincollab.bsky.social" target="_blank">
-            <img src={bluesky} />
+          <a aria-label="Bluesky" href="https://bsky.app/profile/thecoincollab.bsky.social" target="_blank">
+            <img src={bluesky} alt="" />
           </a>
-          <a href="https://ca.linkedin.com/company/the-coin" target="_blank">
-            <img src={linkedin} />
+          <a aria-label="LinkedIn" href="https://ca.linkedin.com/company/the-coin" target="_blank">
+            <img src={linkedin} alt="" />
           </a>
-          <a href="https://mastodon.social/@thecoincollaborative" target="_blank">
-            <img src={mastodon} />
+          <a aria-label="Mastodon" href="https://mastodon.social/@thecoincollaborative" target="_blank">
+            <img src={mastodon} alt="" />
           </a>
         </div>
         <div className={`${styles.textPortion} ${styles.copyright}`}>
