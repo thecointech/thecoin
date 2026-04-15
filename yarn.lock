@@ -11913,14 +11913,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/site-app@npm:^0.6.1-test.0, @thecointech/site-app@workspace:apps/site-app":
+"@thecointech/site-app@npm:^0.6.1-test.1, @thecointech/site-app@workspace:apps/site-app":
   version: 0.0.0-use.local
   resolution: "@thecointech/site-app@workspace:apps/site-app"
   dependencies:
     "@thecointech/blockpass": "npm:^0.6.1-test.0"
     "@thecointech/setenv": "npm:^0.6.1-test.0"
     "@thecointech/shared": "npm:^0.6.1-test.0"
-    "@thecointech/site-base": "npm:^0.6.1-test.0"
+    "@thecointech/site-base": "npm:^0.6.1-test.1"
     "@thecointech/utilities": "npm:^0.6.1-test.0"
     "@types/card-validator": "npm:^4.1.0"
     "@types/expect": "npm:1.20.4"
@@ -11941,7 +11941,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/site-base@npm:^0.6.1-test.0, @thecointech/site-base@workspace:libs/site-base":
+"@thecointech/site-base@npm:^0.6.1-test.1, @thecointech/site-base@workspace:libs/site-base":
   version: 0.0.0-use.local
   resolution: "@thecointech/site-base@workspace:libs/site-base"
   dependencies:
@@ -11974,7 +11974,7 @@ __metadata:
   dependencies:
     "@thecointech/setenv": "npm:^0.6.1-test.0"
     "@thecointech/shared": "npm:^0.6.1-test.0"
-    "@thecointech/site-base": "npm:^0.6.1-test.0"
+    "@thecointech/site-base": "npm:^0.6.1-test.1"
     "@thecointech/site-semantic-theme": "npm:^0.6.1-test.0"
     "@thecointech/utilities": "npm:^0.6.1-test.0"
     "@types/papaparse": "npm:^5.0.3"
@@ -12004,7 +12004,7 @@ __metadata:
     "@thecointech/nft": "npm:^0.6.1-test.0"
     "@thecointech/setenv": "npm:^0.6.1-test.0"
     "@thecointech/shared": "npm:^0.6.1-test.0"
-    "@thecointech/site-base": "npm:^0.6.1-test.0"
+    "@thecointech/site-base": "npm:^0.6.1-test.1"
     exif-library: "https://github.com/FrozenKiwi/exif-library#cf25837936add5820fcc25d36e18ed1d39f79bc6"
   languageName: unknown
   linkType: soft
@@ -12044,7 +12044,7 @@ __metadata:
   dependencies:
     "@thecointech/email-fake-deposit": "npm:^0.6.1-test.0"
     "@thecointech/setenv": "npm:^0.6.1-test.0"
-    "@thecointech/site-base": "npm:^0.6.1-test.0"
+    "@thecointech/site-base": "npm:^0.6.1-test.1"
   languageName: unknown
   linkType: soft
 
@@ -12280,7 +12280,7 @@ __metadata:
     "@thecointech/logging": "npm:^0.6.1-test.0"
     "@thecointech/rbcapi": "npm:^0.6.1-test.0"
     "@thecointech/setenv": "npm:^0.6.1-test.0"
-    "@thecointech/site-app": "npm:^0.6.1-test.0"
+    "@thecointech/site-app": "npm:^0.6.1-test.1"
     "@thecointech/tx-bill": "npm:^0.6.1-test.0"
     "@thecointech/tx-deposit": "npm:^0.6.1-test.0"
     "@thecointech/tx-etransfer": "npm:^0.6.1-test.0"
