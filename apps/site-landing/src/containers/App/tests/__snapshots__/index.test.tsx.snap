@@ -176,11 +176,9 @@ exports[`<App /> should render and match the snapshot 1`] = `
       <div>
         <span>
           <h3>
-            <div>
-              Would you like to know more?
-              <br />
-              Subscribe to get the nitty-gritty
-            </div>
+            Would you like to know more?
+            <br />
+            Subscribe to get the nitty-gritty
           </h3>
         </span>
         <span>
