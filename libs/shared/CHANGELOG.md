@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.1](https://github.com/thecointech/thecoin/compare/v0.6.1-test.1...v0.6.1) (2026-04-15)
+
+**Note:** Version bump only for package @thecointech/shared
+
+
+
+
+
+## [0.6.1-test.0](https://github.com/thecointech/thecoin/compare/v0.6.0...v0.6.1-test.0) (2026-04-15)
+
+
+### Bug Fixes
+
+* libs/shared/package.json to reduce vulnerabilities ([3b2bbe6](https://github.com/thecointech/thecoin/commit/3b2bbe66f55b1a9d4b1f0bfe4bc496e29a7d78b8))
+
+
+
+
+
 
 
 **Note:** Version bump only for package @thecointech/shared
