@@ -1,6 +1,6 @@
 {
   "npmClient": "yarn",
-  "version": "0.6.0",
+  "version": "0.6.1-test.0",
   "command": {
     "publish": {
       "message": "chore(release): publish",

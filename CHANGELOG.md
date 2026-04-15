@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.1-test.0](https://github.com/thecointech/thecoin/compare/v0.6.0...v0.6.1-test.0) (2026-04-15)
+
+
+### Bug Fixes
+
+* libs/shared/package.json to reduce vulnerabilities ([3b2bbe6](https://github.com/thecointech/thecoin/commit/3b2bbe66f55b1a9d4b1f0bfe4bc496e29a7d78b8))
+* upgrade react-intl from 6.6.1 to 6.8.9 ([236c6f6](https://github.com/thecointech/thecoin/commit/236c6f68b18306213d37b1dbf2bae2185b1e6b7c))
+
+
+
+
+
 
 
 **Note:** Version bump only for package @thecointech/the-coin
