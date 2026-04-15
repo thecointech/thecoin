@@ -3,6 +3,97 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+
+
+**Note:** Version bump only for package @thecointech/logging
+
+
+
+
+
+# [0.6.0-test.0](https://github.com/thecointech/thecoin/compare/v0.5.4-test.2...v0.6.0-test.0) (2026-03-31)
+
+**Note:** Version bump only for package @thecointech/logging
+
+
+
+
+
+## [0.5.4-test.2](https://github.com/thecointech/thecoin/compare/v0.5.4-test.1...v0.5.4-test.2) (2026-02-26)
+
+**Note:** Version bump only for package @thecointech/logging
+
+
+
+
+
+## [0.5.4-test.1](https://github.com/thecointech/thecoin/compare/v0.5.4-test.0...v0.5.4-test.1) (2026-02-25)
+
+**Note:** Version bump only for package @thecointech/logging
+
+
+
+
+
+## [0.5.4-test.0](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.4-test.0) (2026-02-25)
+
+
+### Reverts
+
+* Revert "chore(release): publish v0.5.3" ([69528b5](https://github.com/thecointech/thecoin/commit/69528b54d7e69bc85a1d65fcbd7ffaebff462d91))
+
+
+
+
+
+## [0.5.3](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.3) (2026-02-20)
+
+
+### Reverts
+
+* Revert "chore(release): publish v0.5.3" ([69528b5](https://github.com/thecointech/thecoin/commit/69528b54d7e69bc85a1d65fcbd7ffaebff462d91))
+
+
+
+
+
+## [0.5.3-test.1](https://github.com/thecointech/thecoin/compare/v0.5.3-test.0...v0.5.3-test.1) (2026-01-30)
+
+
+### Bug Fixes
+
+* added RequestId logging & Async context logging ([e5a36a8](https://github.com/thecointech/thecoin/commit/e5a36a847b0e83f1a2e020caeed29c1172365e38))
+* facepalms ([d031a6b](https://github.com/thecointech/thecoin/commit/d031a6b36792daae58bb55c9379058302a2c37f4))
+* move initialization to common location ([1c57253](https://github.com/thecointech/thecoin/commit/1c57253fc7726b044cb3c0ca2c84c246c6b76efe))
+
+
+
+
+
+## [0.5.3-test.0](https://github.com/thecointech/thecoin/compare/v0.5.2...v0.5.3-test.0) (2026-01-24)
+
+**Note:** Version bump only for package @thecointech/logging
+
+
+
+
+
+## [0.5.2](https://github.com/thecointech/thecoin/compare/v0.5.2-test.0...v0.5.2) (2026-01-19)
+
+**Note:** Version bump only for package @thecointech/logging
+
+
+
+
+
+## [0.5.2-test.0](https://github.com/thecointech/thecoin/compare/v0.5.1...v0.5.2-test.0) (2026-01-19)
+
+**Note:** Version bump only for package @thecointech/logging
+
+
+
+
+
 ## [0.5.1](https://github.com/thecointech/thecoin/compare/v0.5.1-test.1...v0.5.1) (2026-01-06)
 
 **Note:** Version bump only for package @thecointech/logging

@@ -4,6 +4,7 @@ import { homedir } from 'os';
 import { HarvestSchedule, toDayNames } from '@thecointech/store-harvester';
 import { log } from '@thecointech/logging';
 import { getScraperVisible } from '../scraperVisible';
+import { parseTime } from './common';
 
 const TaskName = 'thecoin-harvest';
 const ServiceName = `${TaskName}.service`;
@@ -32,7 +33,7 @@ export async function setSchedule(schedule: HarvestSchedule) {
 
   // Just in case someone only wants to run manually.
   if (schedule.daysToRun.every(d => !d)) {
-    log.info('No days selected, not creating schedule');
+    log.warn('No days selected, not creating schedule');
     return;
   }
 
@@ -103,21 +104,12 @@ WantedBy=timers.target
 export function getSystemdOnCalendar(schedule: HarvestSchedule): string {
   // schedule.daysToRun: boolean[7] where 0=Sunday (JS Date.getDay() style)
   // schedule.timeToRun: 'HH:MM'
-  const [hour, minute] = schedule.timeToRun.split(':');
-  const hourNumber = parseInt(hour);
-  const minuteNumber = parseInt(minute);
-  if (
-    !Number.isInteger(hourNumber)
-    || !Number.isInteger(minuteNumber)
-    || hourNumber < 0 || hourNumber > 23 || minuteNumber < 0 || minuteNumber > 59
-  ) {
-    throw new Error(`Invalid time values: ${hour}:${minute}`);
-  }
+  const { hour, minute } = parseTime(schedule.timeToRun);
 
   const days = toDayNames(schedule.daysToRun, "short", { locale: "en" });
   // We should have already bailed if no days are selected
   if (days.length === 0) {
     throw new Error('No days selected');
   }
-  return `${days.join(',')} *-*-* ${hourNumber}:${minuteNumber}:00`;
+  return `${days.join(',')} *-*-* ${hour}:${minute}:00`;
 }

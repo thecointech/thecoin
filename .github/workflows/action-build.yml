@@ -5,6 +5,16 @@ name: Build
 
 on:
   workflow_call:
+    inputs:
+      DOWNLOAD_METADATA:
+        description: 'Whether to download deployment metadata artifact (only exists in tag deployments)'
+        required: false
+        type: boolean
+        default: false
+      COMMIT_SHA:
+        description: 'Specific commit to checkout (optional, defaults to tag commit)'
+        required: false
+        type: string
 
 env:
   YARN_CHECKSUM_BEHAVIOR: ignore
@@ -17,7 +27,9 @@ jobs:
     - name: Run start date
       run: echo "Started at $(date +'%Y-%m-%dT%H:%M:%S')"
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
+      with:
+        ref: ${{ inputs.COMMIT_SHA }}
 
     # Java required for OpenAPI client generation
     - uses: actions/setup-java@v2
@@ -36,6 +48,14 @@ jobs:
 
     - name: Install dependencies
       run: yarn install --immutable --mode=skip-build
+
+    - name: Download deployment metadata (if available)
+      # Only exists in tag-triggered deployments (deploy-on-tag.yml)
+      if: inputs.DOWNLOAD_METADATA
+      uses: actions/download-artifact@v4
+      with:
+        name: deployment-metadata
+        path: environments/
 
     - name: Ensure ts-patch
       run: yarn postinstall
@@ -60,6 +80,7 @@ jobs:
           libs/*/build/
           apis/**/dist/
           libs/contract-*/src/codegen/**
+          libs/site-prismic/src/semantic/
           apps/tx-processor/docker/
         retention-days: 1
 

@@ -3,6 +3,98 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+
+
+**Note:** Version bump only for package @thecointech/scraper-agent
+
+
+
+
+
+# [0.6.0-test.0](https://github.com/thecointech/thecoin/compare/v0.5.4-test.2...v0.6.0-test.0) (2026-03-31)
+
+
+### Bug Fixes
+
+* Always log API errors.  Do not swallow prior errors or prevent execution proceeding ([b78bd5b](https://github.com/thecointech/thecoin/commit/b78bd5b79a7ea7a55dd4307f84a1c737a73a5fff))
+
+
+
+
+
+## [0.5.4-test.2](https://github.com/thecointech/thecoin/compare/v0.5.4-test.1...v0.5.4-test.2) (2026-02-26)
+
+**Note:** Version bump only for package @thecointech/scraper-agent
+
+
+
+
+
+## [0.5.4-test.1](https://github.com/thecointech/thecoin/compare/v0.5.4-test.0...v0.5.4-test.1) (2026-02-25)
+
+**Note:** Version bump only for package @thecointech/scraper-agent
+
+
+
+
+
+## [0.5.4-test.0](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.4-test.0) (2026-02-25)
+
+
+### Reverts
+
+* Revert "chore(release): publish v0.5.3" ([69528b5](https://github.com/thecointech/thecoin/commit/69528b54d7e69bc85a1d65fcbd7ffaebff462d91))
+
+
+
+
+
+## [0.5.3](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.3) (2026-02-20)
+
+
+### Reverts
+
+* Revert "chore(release): publish v0.5.3" ([69528b5](https://github.com/thecointech/thecoin/commit/69528b54d7e69bc85a1d65fcbd7ffaebff462d91))
+
+
+
+
+
+## [0.5.3-test.1](https://github.com/thecointech/thecoin/compare/v0.5.3-test.0...v0.5.3-test.1) (2026-01-30)
+
+
+### Bug Fixes
+
+* Harvester profile refresh & modal detection ([965f83d](https://github.com/thecointech/thecoin/commit/965f83d431a344c8252ecb5d7fdd1107306df1ba))
+
+
+
+
+
+## [0.5.3-test.0](https://github.com/thecointech/thecoin/compare/v0.5.2...v0.5.3-test.0) (2026-01-24)
+
+**Note:** Version bump only for package @thecointech/scraper-agent
+
+
+
+
+
+## [0.5.2](https://github.com/thecointech/thecoin/compare/v0.5.2-test.0...v0.5.2) (2026-01-19)
+
+**Note:** Version bump only for package @thecointech/scraper-agent
+
+
+
+
+
+## [0.5.2-test.0](https://github.com/thecointech/thecoin/compare/v0.5.1...v0.5.2-test.0) (2026-01-19)
+
+**Note:** Version bump only for package @thecointech/scraper-agent
+
+
+
+
+
 ## [0.5.1](https://github.com/thecointech/thecoin/compare/v0.5.1-test.1...v0.5.1) (2026-01-06)
 
 **Note:** Version bump only for package @thecointech/scraper-agent

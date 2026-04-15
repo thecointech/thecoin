@@ -28,8 +28,7 @@ function isUpdateRequired(key: RateKey, now: number, current: RateType) {
   // when the new market values become available
   // and when they become our new rates.
   const remainingValidity = current.validTill - now;
-  if (remainingValidity > RateOffsetFromMarket)
-  {
+  if (remainingValidity > RateOffsetFromMarket) {
     log.debug(
       { FxKey: key, Remaining: remainingValidity },
       "Existing {FxKey} has remaining validity {Remaining}ms, no update required"
@@ -42,8 +41,7 @@ function isUpdateRequired(key: RateKey, now: number, current: RateType) {
 //
 // Fetch all intervening rates from latest to now,
 // set to DB and update our latest rate
-export async function ensureLatestCoinRate(now: number)
-{
+export async function ensureLatestCoinRate(now: number) {
   const key = "Coin";
   const current = getLatest(key);
   if (!isUpdateRequired(key, now, current))
@@ -56,8 +54,7 @@ export async function ensureLatestCoinRate(now: number)
     return false;
   }
   // If we are updating on time, we should only have a single rate to insert
-  if (newRates.length > 1)
-  {
+  if (newRates.length > 1) {
     log.warn(
       { FxKey: key, ValidFrom: toDateStr(current.validFrom), ValidTill: toDateStr(current.validTill) },
       "Multiple inserts found for {FxKey} from {ValidFrom} to {ValidTill}"
@@ -96,8 +93,7 @@ export async function ensureLatestFxRate(now: number) {
     "Updating {FxKey} from {LastValid} to {NextValid}"
   );
 
-  if (current.validTill < fxRates.validFrom)
-  {
+  if (current.validTill < fxRates.validFrom) {
     // We have a hole in our validity,
     // update the latest to extend it's validity
     // until now.
@@ -163,6 +159,8 @@ export async function update() {
 
 export async function updateRates() {
   const errors: Error[] = [];
+
+  log.info("Starting updateRates");
 
   for (let i = 0; i < 5; i++) {
     // incremental back-off

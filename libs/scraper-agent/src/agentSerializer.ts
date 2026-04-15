@@ -79,26 +79,36 @@ export class AgentSerializer implements Disposable {
 
   // Log every API call
   onApiCall = async (event: ApiCallEvent) => {
-    if (this.pauseWriting()) {
-      return;
+    try {
+      // Never skip errors
+      if (!event.error) {
+        if (this.pauseWriting()) {
+          return;
+        }
+        if (this.skipWriting(event)) {
+          return;
+        }
+      }
+
+      // Does the request include an image?
+      const args = event.request;
+      const image = args.find((arg) => arg instanceof File) as File;
+      if (image) {
+        // Save the image
+        await this.logScreenshot(Buffer.from(await image.arrayBuffer()));
+        // Remove the image from the args
+        args.splice(args.indexOf(image), 1);
+      }
+      await this.logJson(`${event.apiName}-${event.method}-vqa`, {
+        args,
+        response: event.response?.data,
+        error: event.error,
+      });
     }
-    if (this.skipWriting(event)) {
-      return;
+    catch (e) {
+      // Swallow all errors, logging should not interrupt execution
+      log.error(e, `Error logging API call ${event.apiName}-${event.method}`);
     }
-    // Does the request include an image?
-    const args = event.request;
-    const image = args.find((arg) => arg instanceof File) as File;
-    if (image) {
-      // Save the image
-      await this.logScreenshot(Buffer.from(await image.arrayBuffer()));
-      // Remove the image from the args
-      args.splice(args.indexOf(image), 1);
-    }
-    await this.logJson(`${event.apiName}-${event.method}-vqa`, {
-      args,
-      response: event.response?.data,
-      error: event.error,
-    });
   }
 
   onElement = async (found: FoundElement, search: ElementSearchParams) => {
@@ -150,11 +160,11 @@ export class AgentSerializer implements Disposable {
   skipWriting(event: ApiCallEvent) {
     if (event.method == "pageIntent") {
       // If this is the same as the last intent, skip it.
-      const response = event.response?.data as { type: string };
-      if (response.type == this.tracker.lastIntent) {
+      const response = event.response?.data as { type: string } | undefined;
+      if (response?.type == this.tracker.lastIntent) {
         return true;
       }
-      this.tracker.lastIntent = response.type;
+      this.tracker.lastIntent = response?.type;
     }
     return false;
   }

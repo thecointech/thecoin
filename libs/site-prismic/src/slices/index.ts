@@ -3,6 +3,13 @@
 import dynamic from "next/dynamic";
 
 export const components = {
+  block_quote: dynamic(() => import("./BlockQuote")),
+  captioned_image: dynamic(() => import("./CaptionedImage")),
+  ccqi_category: dynamic(() => import("./CcqiCategory")),
+  ccqi_score: dynamic(() => import("./CcqiScore")),
   hero: dynamic(() => import("./Hero")),
+  project_details: dynamic(() => import("./ProjectDetails")),
   rich_text: dynamic(() => import("./RichText")),
+  two_column_layout: dynamic(() => import("./TwoColumnLayout")),
+  video: dynamic(() => import("./Video")),
 };

@@ -29,11 +29,11 @@ const menuItems = defineMessages({
     description: 'site.MainNavigation.blog: Blog Link',
     icon: "newspaper"
   },
-  help: {
-    defaultMessage: 'Help',
-    description: 'site.MainNavigation.faq: Help Link',
-    icon: "question"
-  },
+  // help: {
+  //   defaultMessage: 'FAQs',
+  //   description: 'site.MainNavigation.faq: Help Link',
+  //   icon: "question"
+  // },
 });
 
 const loginLink = defineMessage({

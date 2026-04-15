@@ -1,15 +1,9 @@
-import type { OverrideElement, TestElmData, TestSchData, SnapshotData } from "@thecointech/scraper-archive";
+import type { OverrideElement, TestElmData, TestSchData, SnapshotData, ElementName } from "@thecointech/scraper-archive";
 
 // Basic test data
 export type Test = {
   key: string;
-  element: string;
-}
-
-export type FailingTest = {
-  key: string;
-  element: string;
-}
+} & ElementName;
 
 export type TestSnapshot = {
   time: number;
@@ -24,11 +18,3 @@ export type TestResult = {
   snapshot: TestSnapshot[];
 }
 
-
-// export interface TestInfo {
-//   name: string;
-//   groups: TestGroup[];
-//   isFailing?: boolean;
-// }
-
-// export type SelectedTest = TestInfo;

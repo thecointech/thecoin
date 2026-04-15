@@ -96,7 +96,7 @@ export class Agent implements AgentClass {
       },
       {
         account_type: "Credit" as const,
-        account_name: `${this.name} Credit`,
+        account_name: `${this.name} Visa`,
         account_number: "4111 11** **** **11",
         balance: "100",
         position_x: 0,
@@ -104,8 +104,16 @@ export class Agent implements AgentClass {
       },
       {
         account_type: "Credit" as const,
-        account_name: `${this.name} Other Credit`,
-        account_number: "4111 1111 1111 1111",
+        account_name: `${this.name} Mastercard`,
+        account_number: "5555 5555 5555 4444",
+        balance: "100",
+        position_x: 0,
+        position_y: 0,
+      },
+            {
+        account_type: "Credit" as const,
+        account_name: `${this.name} Credit Card`,
+        account_number: "**** 1234",
         balance: "100",
         position_x: 0,
         position_y: 0,

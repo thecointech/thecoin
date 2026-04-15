@@ -23,6 +23,7 @@ class PageType(CaseInsensitiveEnum):
 
 class IntentResponse(BaseModel):
     type: PageType = Field(..., description="option")
+    reasoning: str = Field(..., description="explain your reasoning")
 
 
 typesStr = ", ".join([e.value for e in PageType])

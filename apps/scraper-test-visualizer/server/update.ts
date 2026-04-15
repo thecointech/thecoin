@@ -6,6 +6,7 @@ import type { OverrideData, OverrideElement, TestData } from "@thecointech/scrap
 import { getOverrideData, writeOverrideData } from "@thecointech/scraper-archive";
 import { readFileSync } from "node:fs";
 
+// TODO: De-duplicate this with updateArchive.ts
 export async function updateTest(key: string, element: string) {
 
   const test = getTest(key);

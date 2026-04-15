@@ -4,13 +4,14 @@ from transformers import GenerationConfig
 import json
 import re
 from timeit import default_timer as timer
+from query_json_fix import clean_invalid_json_chars, extract_json_text, fix_unescaped_quotes
 from singleton import get_model, get_processor, device_map
 from helpers import get_instruct_json_respose
 from logger import setup_logger
 
 logger = setup_logger(__name__)
 
-def runQueryRaw(image, prompt, max_length=200) -> str:
+def runQueryRaw(image: Image|None, prompt: str, max_length=200) -> str:
     start = timer()
 
     processor = get_processor()
@@ -62,51 +63,48 @@ def runQueryRaw(image, prompt, max_length=200) -> str:
         print(f"Query took {end - start} seconds")
 
 
-def runQueryToJson(image: Image, query_data: tuple[str, type], max_length=200):
+def runQueryToJson(image: Image|None, query_data: tuple[str, type], max_length=200):
     prompt = f"{query_data[0]} {get_instruct_json_respose(query_data[1].schema())}"
 
     response = runQueryRaw(image, prompt, max_length)
 
     return tryConvertToJSON(response)
 
-def tryConvertToJSON(response):
-    # Parse the generated text as JSON
 
-    # First, try and work through the weird bug that injects "!"
-    # characters throughout the response.
-    # if (torch.__version__.startswith("2.6.0+rocm6.4.1")):
-    #     response = re.sub(r'\"\!([a-zA-Z0-9_]+)\":', '"\\1":', response)
-    # else:
-    #     logger.warning("UNTESTED TORCH VERSION: " + torch.__version__ + " - not filtering tokens")
+def tryConvertToJSON(response):
+    # Parse the generated text as JSON, applying various fixes if needed
 
     try:
         return json.loads(response)
     except json.JSONDecodeError as e:
-        # print("Raw Raised JSONDecodeError: ", e)
-        # we sometimes get the following invalid json output "option":="value"
-        cleaned = response.replace('":="', '": "')
-        # In longer JSON am seeing eg: "position_y="43.5",
-        cleaned = re.sub(r'=\"([\d\.]+)\"', r'": \g<1>', cleaned)
-        # The model has trouble when returning None options
-        # eg: {'error_message_detected': False, 'error_message': None}
-        cleaned = re.sub(r",?\s*['\"][^'\"]+['\"]: None", '', cleaned, flags=re.IGNORECASE)
+
+        # Try the simplest test first, this should almost certainly return the original string
+        extracted = extract_json_text(response)
+        try:
+            return json.loads(extracted)
+        except json.JSONDecodeError as e:
+            pass  # No more fixes...
+
+        # This test should be very safe, as the search patterns are very specific.
+        # While it could find false positives (ie, matches within text), doing a replace
+        # will not break the valid JSON in a way that not recoverable.
+        cleaned = clean_invalid_json_chars(extracted)
         try:
             return json.loads(cleaned)
         except json.JSONDecodeError as e:
-            print("Cleaned Raised JSONDecodeError: ", e)
-            # If the model didn't return valid JSON, try to extract the type
+            pass  # Continue to other fixes
 
-            # Try finding everything in between brackets
-            match = re.search(r"(\{[\w\W]*\})", cleaned)
-            if match:
-                try:
-                    return json.loads(match.group(1))
-                except json.JSONDecodeError:
-                    # All attempts failed, pass on to
-                    # log the error & raise an exception
-                    pass
-            print("Could not parse model output as JSON: ", response)
-            raise ValueError("Could not parse model output as JSON")
+        # Lastly, try fixing unescaped quotes.  Replacing
+        # quotes incorrectly will turn valid => invalid JSON,
+        # so we do it as a last resort.
+        fixed_quotes = fix_unescaped_quotes(cleaned)
+        try:
+            return json.loads(fixed_quotes)
+        except json.JSONDecodeError:
+            pass  # Continue to other fixes
+
+        logger.error(f"Could not parse model output as JSON: {response[:8]}...{response[-8:]}")
+        raise
 
 
 if __name__ == "__main__":

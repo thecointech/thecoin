@@ -72,6 +72,7 @@ const Login = ({ type, both }: Props) => {
         )
       }
       <LoginDetails {...bank} type={type} both={both} disabled={missingDetails}/>
+      <BackgroundTaskProgressBar type="initialize" closeOnComplete />
       <BackgroundTaskProgressBar type="record" />
       <BackgroundTaskErrors type='record' />
       <LoginResults forceValid={forceValid} bank={bank} />

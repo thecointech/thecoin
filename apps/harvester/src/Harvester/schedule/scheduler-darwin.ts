@@ -1,11 +1,14 @@
 import { execSync } from 'child_process';
-import { writeFileSync } from 'fs';
-import { tmpdir } from 'os';
+import { writeFileSync, mkdirSync, copyFileSync, unlinkSync } from 'fs';
+import { homedir, tmpdir } from 'os';
 import { HarvestSchedule } from '@/types';
 import { log } from '@thecointech/logging';
+import { parseTime } from './common';
 
 const TaskName = 'com.thecoin.harvester';
-const PlistPath = `~/Library/LaunchAgents/${TaskName}.plist`;
+const HomeDir = homedir();
+const PlistDir = `${HomeDir}/Library/LaunchAgents`;
+const PlistPath = `${PlistDir}/${TaskName}.plist`;
 
 
 export async function setSchedule(schedule: HarvestSchedule) {
@@ -15,9 +18,24 @@ export async function setSchedule(schedule: HarvestSchedule) {
     // Unload existing schedule if it exists
     try {
       log.debug('Unloading existing schedule');
-      execSync(`launchctl unload ${PlistPath}`);
+      execSync(`launchctl unload "${PlistPath}"`);
     } catch (err) {
       // Ignore error if job doesn't exist
+    }
+
+    // If no days are selected, there is no schedule to set
+    if (!schedule.daysToRun.some(Boolean)) {
+      log.warn('No days selected for schedule');
+      // Remove persisted plist so disabled state is durable across logins
+      try {
+        unlinkSync(PlistPath);
+        log.debug('Removed persisted plist file');
+      } catch (err: any) {
+        if (err.code !== 'ENOENT') {
+          log.error('Failed to remove plist file:', err);
+        }
+      }
+      return;
     }
 
     // Create new plist file
@@ -29,9 +47,17 @@ export async function setSchedule(schedule: HarvestSchedule) {
     writeFileSync(tmpPath, plist);
 
     // Move plist to LaunchAgents directory and load it
-    execSync(`mkdir -p ~/Library/LaunchAgents`);
-    execSync(`mv ${tmpPath} ${PlistPath}`);
-    execSync(`launchctl load ${PlistPath}`);
+    mkdirSync(PlistDir, { recursive: true });
+    try {
+      copyFileSync(tmpPath, PlistPath);
+    } finally {
+      try {
+        unlinkSync(tmpPath);
+      } catch (err) {
+        log.warn('Failed to remove temp plist:', err);
+      }
+    }
+    execSync(`launchctl load "${PlistPath}"`);
 
     log.info('Schedule updated successfully');
   } catch (err) {
@@ -42,13 +68,12 @@ export async function setSchedule(schedule: HarvestSchedule) {
 
 function generatePlist(schedule: HarvestSchedule): string {
   const { daysToRun, timeToRun } = schedule;
-  const [hour, minute] = timeToRun.split(':');
+  const { hour, minute } = parseTime(timeToRun);
 
-  // Convert days array to calendar days (0 = Sunday in our array, 1-7 in launchd)
+  // Convert days array to calendar days (0 = Sunday in both our array and launchd)
   const weekdays = daysToRun
-    .map((enabled, idx) => enabled ? ((idx + 1) % 7 || 7).toString() : null)
-    .filter(Boolean)
-    .join(',');
+    .map((enabled, idx) => enabled ? idx : null)
+    .filter((v): v is number => v !== null)
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -63,7 +88,7 @@ function generatePlist(schedule: HarvestSchedule): string {
     </array>
     <key>StartCalendarInterval</key>
     <array>
-        ${weekdays.split(',').map(day => `
+        ${weekdays.map(day => `
         <dict>
             <key>Hour</key>
             <integer>${hour}</integer>
@@ -73,12 +98,17 @@ function generatePlist(schedule: HarvestSchedule): string {
             <integer>${day}</integer>
         </dict>`).join('')}
     </array>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key>
+        <string>${HomeDir}</string>
+    </dict>
     <key>RunAtLoad</key>
     <false/>
     <key>StandardOutPath</key>
-    <string>~/Library/Logs/${TaskName}.log</string>
+    <string>${HomeDir}/Library/Logs/${TaskName}.log</string>
     <key>StandardErrorPath</key>
-    <string>~/Library/Logs/${TaskName}.error.log</string>
+    <string>${HomeDir}/Library/Logs/${TaskName}.error.log</string>
 </dict>
 </plist>`;
 }

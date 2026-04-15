@@ -7,6 +7,10 @@ import crypto from "node:crypto";
 
 export async function copyProfile(onProgress: (info: SubTaskProgress) => void, force = false) {
   try {
+    onProgress({
+      subTaskId: "profile",
+      percent: 0,
+    })
     await maybeCopyProfile(force, async () => {
       using askUser = AskUserReact.newSession()
       const confirm = await askUser.forConfirm("Please close Chrome before continuing");

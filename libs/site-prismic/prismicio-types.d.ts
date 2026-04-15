@@ -82,11 +82,24 @@ export interface ArticleDocumentDataCategoriesItem {
    * - **Documentation**: https://prismic.io/docs/fields/select
    */
   category: prismic.SelectField<
-    "Investing" | "Global Warming" | "Security" | "Finance"
+    | "Investing"
+    | "Global Warming"
+    | "Security"
+    | "Finance"
+    | "Carbon Offsets"
+    | "Impact Reports"
   >;
 }
 
-type ArticleDocumentDataSlicesSlice = RichTextSlice;
+type ArticleDocumentDataSlicesSlice =
+  | VideoSlice
+  | CaptionedImageSlice
+  | ProjectDetailsSlice
+  | CcqiCategorySlice
+  | TwoColumnLayoutSlice
+  | BlockQuoteSlice
+  | RichTextSlice
+  | CcqiScoreSlice;
 
 /**
  * Content for Article documents
@@ -225,126 +238,6 @@ export type ArticleDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<
     Simplify<ArticleDocumentData>,
     "article",
-    Lang
-  >;
-
-type BlogPostDocumentDataSlicesSlice = RichTextSlice;
-
-/**
- * Content for Blog Post documents
- */
-interface BlogPostDocumentData {
-  /**
-   * Title field in *Blog Post*
-   *
-   * - **Field Type**: Rich Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blog_post.title
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/fields/rich-text
-   */
-  title: prismic.RichTextField;
-
-  /**
-   * Description field in *Blog Post*
-   *
-   * - **Field Type**: Rich Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blog_post.description
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/fields/rich-text
-   */
-  description: prismic.RichTextField;
-
-  /**
-   * Featured Image field in *Blog Post*
-   *
-   * - **Field Type**: Image
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blog_post.featured_image
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/fields/image
-   */
-  featured_image: prismic.ImageField<never>;
-
-  /**
-   * Publication Date field in *Blog Post*
-   *
-   * - **Field Type**: Date
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blog_post.publication_date
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/fields/date
-   */
-  publication_date: prismic.DateField;
-
-  /**
-   * timestamp field in *Blog Post*
-   *
-   * - **Field Type**: Timestamp
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blog_post.timestamp
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/fields/timestamp
-   */
-  timestamp: prismic.TimestampField;
-
-  /**
-   * Slice Zone field in *Blog Post*
-   *
-   * - **Field Type**: Slice Zone
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blog_post.slices[]
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/slices
-   */
-  slices: prismic.SliceZone<BlogPostDocumentDataSlicesSlice>; /**
-   * Meta Title field in *Blog Post*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: A title of the page used for social media and search engines
-   * - **API ID Path**: blog_post.meta_title
-   * - **Tab**: SEO & Metadata
-   * - **Documentation**: https://prismic.io/docs/fields/text
-   */
-  meta_title: prismic.KeyTextField;
-
-  /**
-   * Meta Description field in *Blog Post*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: A brief summary of the page
-   * - **API ID Path**: blog_post.meta_description
-   * - **Tab**: SEO & Metadata
-   * - **Documentation**: https://prismic.io/docs/fields/text
-   */
-  meta_description: prismic.KeyTextField;
-
-  /**
-   * Meta Image field in *Blog Post*
-   *
-   * - **Field Type**: Image
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blog_post.meta_image
-   * - **Tab**: SEO & Metadata
-   * - **Documentation**: https://prismic.io/docs/fields/image
-   */
-  meta_image: prismic.ImageField<never>;
-}
-
-/**
- * Blog Post document from Prismic
- *
- * - **API ID**: `blog_post`
- * - **Repeatable**: `true`
- * - **Documentation**: https://prismic.io/docs/content-modeling
- *
- * @typeParam Lang - Language API ID of the document.
- */
-export type BlogPostDocument<Lang extends string = string> =
-  prismic.PrismicDocumentWithUID<
-    Simplify<BlogPostDocumentData>,
-    "blog_post",
     Lang
   >;
 
@@ -548,10 +441,617 @@ export type PageDocument<Lang extends string = string> =
 
 export type AllDocumentTypes =
   | ArticleDocument
-  | BlogPostDocument
   | FaqDocument
   | NavigationDocument
   | PageDocument;
+
+/**
+ * Primary content in *BlockQuote → Default → Primary*
+ */
+export interface BlockQuoteSliceDefaultPrimary {
+  /**
+   * QuoteText field in *BlockQuote → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: the text within the quotes
+   * - **API ID Path**: block_quote.default.primary.quotetext
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  quotetext: prismic.RichTextField;
+
+  /**
+   * Attribution field in *BlockQuote → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: Who said the quote
+   * - **API ID Path**: block_quote.default.primary.attribution
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  attribution: prismic.KeyTextField;
+
+  /**
+   * QuoteSource field in *BlockQuote → Default → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: (Optional) Link to source if possible
+   * - **API ID Path**: block_quote.default.primary.quotesource
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  quotesource: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+}
+
+/**
+ * Default variation for BlockQuote Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BlockQuoteSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<BlockQuoteSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *BlockQuote*
+ */
+type BlockQuoteSliceVariation = BlockQuoteSliceDefault;
+
+/**
+ * BlockQuote Shared Slice
+ *
+ * - **API ID**: `block_quote`
+ * - **Description**: BlockQuote
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BlockQuoteSlice = prismic.SharedSlice<
+  "block_quote",
+  BlockQuoteSliceVariation
+>;
+
+/**
+ * Primary content in *CaptionedImage → Default → Primary*
+ */
+export interface CaptionedImageSliceDefaultPrimary {
+  /**
+   * image field in *CaptionedImage → Default → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: captioned_image.default.primary.image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * caption field in *CaptionedImage → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: captioned_image.default.primary.caption
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  caption: prismic.RichTextField;
+}
+
+/**
+ * Default variation for CaptionedImage Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CaptionedImageSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<CaptionedImageSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *CaptionedImage*
+ */
+type CaptionedImageSliceVariation = CaptionedImageSliceDefault;
+
+/**
+ * CaptionedImage Shared Slice
+ *
+ * - **API ID**: `captioned_image`
+ * - **Description**: CaptionedImage
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CaptionedImageSlice = prismic.SharedSlice<
+  "captioned_image",
+  CaptionedImageSliceVariation
+>;
+
+/**
+ * Primary content in *CcqiCategory → Default → Primary*
+ */
+export interface CcqiCategorySliceDefaultPrimary {
+  /**
+   * Category field in *CcqiCategory → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_category.default.primary.category
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  category: prismic.SelectField<
+    | "Measurability"
+    | "Additionality"
+    | "Permanence & Leakage"
+    | "Verifiability"
+    | "Social Benefits"
+  >;
+}
+
+/**
+ * Default variation for CcqiCategory Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CcqiCategorySliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<CcqiCategorySliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *CcqiCategory*
+ */
+type CcqiCategorySliceVariation = CcqiCategorySliceDefault;
+
+/**
+ * CcqiCategory Shared Slice
+ *
+ * - **API ID**: `ccqi_category`
+ * - **Description**: CcqiCategory
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CcqiCategorySlice = prismic.SharedSlice<
+  "ccqi_category",
+  CcqiCategorySliceVariation
+>;
+
+/**
+ * Primary content in *CcqiScore → Default → Primary*
+ */
+export interface CcqiScoreSliceDefaultPrimary {
+  /**
+   * Category field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.category
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  category: prismic.SelectField<
+    | "Avoided planned deforestation"
+    | "Avoided unplanned deforestation"
+    | "Commercial afforestation"
+    | "Efficient cookstoves"
+    | "Establishment of natural forests"
+    | "Household biodigesters"
+    | "Improved forest management"
+    | "Industrial biodigesters fed with livestock manure"
+    | "Landfill gas utilization"
+    | "Leak repair in natural gas transmission and distribution systems"
+    | "Recovery of associated gas from oil fields"
+    | "Solar photovoltaic power"
+    | "Wind power (onshore)"
+    | "Industrial Biomass"
+    | "Distributed Solar"
+  >;
+
+  /**
+   * (1) GHG emission impact field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01: prismic.NumberField;
+
+  /**
+   * (1.a) Additionality field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01a
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01a: prismic.NumberField;
+
+  /**
+   * (1.a.1) Legal requirements field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01a1
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01a1: prismic.NumberField;
+
+  /**
+   * (1.a.2) Carbon credits timing field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01a2
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01a2: prismic.NumberField;
+
+  /**
+   * (1.a.3) Financial attract. field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01a3
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01a3: prismic.NumberField;
+
+  /**
+   * (1.a.4) Barriers field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01a4
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01a4: prismic.NumberField;
+
+  /**
+   * (1.b) Vulnerability field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01b
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01b: prismic.NumberField;
+
+  /**
+   * (1.c) Quantification field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01c
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01c: prismic.NumberField;
+
+  /**
+   * (1.c.1) Program principles field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01c1
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01c1: prismic.NumberField;
+
+  /**
+   * (1.c.2) Quant. methodologies field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s01c2
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s01c2: prismic.NumberField;
+
+  /**
+   * (2) Avoiding double counting field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02: prismic.NumberField;
+
+  /**
+   * (2.a) Registry & database field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02a
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02a: prismic.NumberField;
+
+  /**
+   * (2.b) Avoiding dbl issuance field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02b
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02b: prismic.NumberField;
+
+  /**
+   * (2.b.1) Due to double registration field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02b1
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02b1: prismic.NumberField;
+
+  /**
+   * (2.b.2) Indirect overlaps field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02b2
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02b2: prismic.NumberField;
+
+  /**
+   * (2.c) Avoiding double use field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02c
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02c: prismic.NumberField;
+
+  /**
+   * (2.d) Avoiding dbl claiming field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02d
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02d: prismic.NumberField;
+
+  /**
+   * (2.d.1) Host country NDC field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02d1
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02d1: prismic.NumberField;
+
+  /**
+   * (2.d.2) Program NDC provisions field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02d2
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02d2: prismic.NumberField;
+
+  /**
+   * (2.d.3) Domestic mitigation field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s02d3
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s02d3: prismic.NumberField;
+
+  /**
+   * (3) Non-permanence field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s03
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s03: prismic.NumberField;
+
+  /**
+   * (3.a) Program approaches field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s03a
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s03a: prismic.NumberField;
+
+  /**
+   * (3.a.1) Reversal accounting field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s03a1
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s03a1: prismic.NumberField;
+
+  /**
+   * (3.a.2) Non-permanence risks field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s03a2
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s03a2: prismic.NumberField;
+
+  /**
+   * (4) Net zero transition field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s04
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s04: prismic.NumberField;
+
+  /**
+   * (5) Institutional arrange. field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s05
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s05: prismic.NumberField;
+
+  /**
+   * (5.a) Program governance field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s05a
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s05a: prismic.NumberField;
+
+  /**
+   * (5.b) Transparency field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s05b
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s05b: prismic.NumberField;
+
+  /**
+   * (5.c) Third-party auditing field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s05c
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s05c: prismic.NumberField;
+
+  /**
+   * (6) Env. & social impacts field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s06
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s06: prismic.NumberField;
+
+  /**
+   * (6.a) Env. & social safeguards field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s06a
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s06a: prismic.NumberField;
+
+  /**
+   * (6.b) Sustainable dev. impacts field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s06b
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s06b: prismic.NumberField;
+
+  /**
+   * (6.c) Adaptation & resilience field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s06c
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s06c: prismic.NumberField;
+
+  /**
+   * (7) Host country ambition field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s07
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s07: prismic.NumberField;
+
+  /**
+   * (7.a) Temperature commitment field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s07a
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s07a: prismic.NumberField;
+
+  /**
+   * (7.b) NDC stringency field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s07b
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s07b: prismic.NumberField;
+
+  /**
+   * (7.c) Enable host country NDC field in *CcqiScore → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: ccqi_score.default.primary.s07c
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  s07c: prismic.NumberField;
+}
+
+/**
+ * Default variation for CcqiScore Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CcqiScoreSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<CcqiScoreSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *CcqiScore*
+ */
+type CcqiScoreSliceVariation = CcqiScoreSliceDefault;
+
+/**
+ * CcqiScore Shared Slice
+ *
+ * - **API ID**: `ccqi_score`
+ * - **Description**: CcqiScore
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CcqiScoreSlice = prismic.SharedSlice<
+  "ccqi_score",
+  CcqiScoreSliceVariation
+>;
 
 /**
  * Primary content in *Hero → Default → Primary*
@@ -616,6 +1116,67 @@ type HeroSliceVariation = HeroSliceDefault;
 export type HeroSlice = prismic.SharedSlice<"hero", HeroSliceVariation>;
 
 /**
+ * Primary content in *ProjectDetails → Default → Primary*
+ */
+export interface ProjectDetailsSliceDefaultPrimary {
+  /**
+   * Offset field in *ProjectDetails → Default → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: Link to Registry Offest purchase
+   * - **API ID Path**: project_details.default.primary.offset
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  offset: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+
+  /**
+   * Project Documents field in *ProjectDetails → Default → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project_details.default.primary.project_documents
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  project_documents: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+}
+
+/**
+ * Default variation for ProjectDetails Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type ProjectDetailsSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<ProjectDetailsSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *ProjectDetails*
+ */
+type ProjectDetailsSliceVariation = ProjectDetailsSliceDefault;
+
+/**
+ * ProjectDetails Shared Slice
+ *
+ * - **API ID**: `project_details`
+ * - **Description**: ProjectDetails
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type ProjectDetailsSlice = prismic.SharedSlice<
+  "project_details",
+  ProjectDetailsSliceVariation
+>;
+
+/**
  * Primary content in *RichText → Default → Primary*
  */
 export interface RichTextSliceDefaultPrimary {
@@ -660,6 +1221,148 @@ export type RichTextSlice = prismic.SharedSlice<
   RichTextSliceVariation
 >;
 
+/**
+ * Item in *TwoColumnLayout → Default → Primary → Left Column Content*
+ */
+export interface TwoColumnLayoutSliceDefaultPrimaryLeftColumnContentItem {
+  /**
+   * Column Text field in *TwoColumnLayout → Default → Primary → Left Column Content*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: two_column_layout.default.primary.left_column_content[].column_text
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  column_text: prismic.RichTextField;
+}
+
+/**
+ * Item in *TwoColumnLayout → Default → Primary → Right Column Content*
+ */
+export interface TwoColumnLayoutSliceDefaultPrimaryRightColumnContentItem {
+  /**
+   * Column Text field in *TwoColumnLayout → Default → Primary → Right Column Content*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: two_column_layout.default.primary.right_column_content[].column_text
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  column_text: prismic.RichTextField;
+}
+
+/**
+ * Primary content in *TwoColumnLayout → Default → Primary*
+ */
+export interface TwoColumnLayoutSliceDefaultPrimary {
+  /**
+   * Layout field in *TwoColumnLayout → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **Default Value**: 50-50
+   * - **API ID Path**: two_column_layout.default.primary.layout
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  layout: prismic.SelectField<"50-50" | "33-66" | "66-33", "filled">;
+
+  /**
+   * Left Column Content field in *TwoColumnLayout → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: two_column_layout.default.primary.left_column_content[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  left_column_content: prismic.GroupField<
+    Simplify<TwoColumnLayoutSliceDefaultPrimaryLeftColumnContentItem>
+  >;
+
+  /**
+   * Right Column Content field in *TwoColumnLayout → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: two_column_layout.default.primary.right_column_content[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  right_column_content: prismic.GroupField<
+    Simplify<TwoColumnLayoutSliceDefaultPrimaryRightColumnContentItem>
+  >;
+}
+
+/**
+ * Default variation for TwoColumnLayout Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type TwoColumnLayoutSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<TwoColumnLayoutSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *TwoColumnLayout*
+ */
+type TwoColumnLayoutSliceVariation = TwoColumnLayoutSliceDefault;
+
+/**
+ * TwoColumnLayout Shared Slice
+ *
+ * - **API ID**: `two_column_layout`
+ * - **Description**: TwoColumnLayout
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type TwoColumnLayoutSlice = prismic.SharedSlice<
+  "two_column_layout",
+  TwoColumnLayoutSliceVariation
+>;
+
+/**
+ * Primary content in *Video → Default → Primary*
+ */
+export interface VideoSliceDefaultPrimary {
+  /**
+   * Video ID field in *Video → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: GUID
+   * - **API ID Path**: video.default.primary.video_id
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  video_id: prismic.KeyTextField;
+}
+
+/**
+ * Default variation for Video Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type VideoSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<VideoSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *Video*
+ */
+type VideoSliceVariation = VideoSliceDefault;
+
+/**
+ * Video Shared Slice
+ *
+ * - **API ID**: `video`
+ * - **Description**: Video
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type VideoSlice = prismic.SharedSlice<"video", VideoSliceVariation>;
+
 declare module "@prismicio/client" {
   interface CreateClient {
     (
@@ -685,9 +1388,6 @@ declare module "@prismicio/client" {
       ArticleDocumentData,
       ArticleDocumentDataCategoriesItem,
       ArticleDocumentDataSlicesSlice,
-      BlogPostDocument,
-      BlogPostDocumentData,
-      BlogPostDocumentDataSlicesSlice,
       FaqDocument,
       FaqDocumentData,
       NavigationDocument,
@@ -697,14 +1397,44 @@ declare module "@prismicio/client" {
       PageDocumentData,
       PageDocumentDataSlicesSlice,
       AllDocumentTypes,
+      BlockQuoteSlice,
+      BlockQuoteSliceDefaultPrimary,
+      BlockQuoteSliceVariation,
+      BlockQuoteSliceDefault,
+      CaptionedImageSlice,
+      CaptionedImageSliceDefaultPrimary,
+      CaptionedImageSliceVariation,
+      CaptionedImageSliceDefault,
+      CcqiCategorySlice,
+      CcqiCategorySliceDefaultPrimary,
+      CcqiCategorySliceVariation,
+      CcqiCategorySliceDefault,
+      CcqiScoreSlice,
+      CcqiScoreSliceDefaultPrimary,
+      CcqiScoreSliceVariation,
+      CcqiScoreSliceDefault,
       HeroSlice,
       HeroSliceDefaultPrimary,
       HeroSliceVariation,
       HeroSliceDefault,
+      ProjectDetailsSlice,
+      ProjectDetailsSliceDefaultPrimary,
+      ProjectDetailsSliceVariation,
+      ProjectDetailsSliceDefault,
       RichTextSlice,
       RichTextSliceDefaultPrimary,
       RichTextSliceVariation,
       RichTextSliceDefault,
+      TwoColumnLayoutSlice,
+      TwoColumnLayoutSliceDefaultPrimaryLeftColumnContentItem,
+      TwoColumnLayoutSliceDefaultPrimaryRightColumnContentItem,
+      TwoColumnLayoutSliceDefaultPrimary,
+      TwoColumnLayoutSliceVariation,
+      TwoColumnLayoutSliceDefault,
+      VideoSlice,
+      VideoSliceDefaultPrimary,
+      VideoSliceVariation,
+      VideoSliceDefault,
     };
   }
 }

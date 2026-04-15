@@ -7,7 +7,7 @@ import { getElementForEvent } from '../elements';
 import { sleep } from '@thecointech/async';
 import { newPage } from '../puppeteer-init';
 import type { Replay, ReplayOptions } from './types';
-import { DynamicValueError, ValueEventError } from '../errors';
+import { DynamicValueError, InputValueError, ValueEventError } from '../errors';
 export type * from './types'
 
 
@@ -219,17 +219,35 @@ export async function enterValue(page: Page, event: AnyElementEvent, value: stri
 export async function enterValueIntoFound(page: Page, found: SearchElement, value: string) {
   await found.element.focus();
   if (found.data.tagName == "INPUT" || found.data.tagName == "TEXTAREA") {
-    if (found.data.inputType == "checkbox") {
+    if (found.data.inputType == "checkbox" || found.data.inputType == "radio") {
       // We assume value == true, but just in case some future
       // scenario requires unchecking, guess the results.
       const nodeChecked = value !== "off" && value !== "false";
-      await page.evaluate((el, rendererChecked) => (el as HTMLInputElement).checked = rendererChecked, found.element, nodeChecked);
+      await page.evaluate((el, checked) => {
+        const input = el as HTMLInputElement;
+        input.checked = checked;
+        // Dispatch events that would occur during user interaction
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+      }, found.element, nodeChecked);
+      // Verify the checked state took effect
+      const actual = await found.element.evaluate(el => (el as HTMLInputElement).checked);
+      if (actual !== nodeChecked) {
+        throw new InputValueError(found.data);
+      }
     }
     else {
       // clear existing value
       await page.evaluate(el => (el as HTMLInputElement).value = "", found.element);
+      // Ensure an input event is fired
+      await found.element.evaluate(el => el.dispatchEvent(new Event('input', { bubbles: true })));
       // Simulate typing to mimic input actions
-      await page.keyboard.type(value, { delay: 20 });
+      await page.keyboard.type(value, { delay: 10 + Math.random() * 20 });
+      // Verify the value was input
+      const currentLength = await found.element.evaluate(el => (el as HTMLInputElement).value.length);
+      if (currentLength < value.length) {
+        throw new InputValueError(found.data);
+      }
     }
     return true;
   }

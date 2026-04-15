@@ -3,7 +3,7 @@
     "productName": "THECoin: Prismic Content Library",
     "private": true,
     "type": "module",
-    "version": "0.5.1",
+    "version": "0.6.0",
     "description": "Prismic Slice Machine library for content management",
     "repository": {
         "type": "git",
@@ -16,8 +16,8 @@
         "build": "run -T run-s build:semantic build:src",
         "build:src": "next build",
         "build:semantic": "run-env ./internal/buildSemantic.ts",
-        "_start": "next start",
-        "start:website": "next dev --port 3010",
+        "_start": "next start --port 3011",
+        "start:website": "next dev --port 3011",
         "start:slicemachine": "start-slicemachine"
     },
     "exports": {
@@ -44,14 +44,16 @@
     },
     "dependencies": {
         "@prismicio/client": "^7.21.0",
-        "semantic-ui-react": "3.0.0-beta.2"
+        "semantic-ui-react": "3.0.0-beta.2",
+        "uuid": "^9.0.0"
     },
     "devDependencies": {
-        "@prismicio/next": "^2.0.2",
-        "@prismicio/react": "^3.2.2",
-        "@slicemachine/adapter-next": "^0.3.89",
-        "@thecointech/setenv": "^0.5.1",
-        "@thecointech/site-semantic-theme": "^0.5.1",
+        "@prismicio/next": "^2.2.1",
+        "@prismicio/react": "^3.3.0",
+        "@slicemachine/adapter-next": "^0.3.95",
+        "@thecointech/setenv": "^0.6.0",
+        "@thecointech/site-semantic-theme": "^0.6.0",
+        "@types/uuid": "^9.0.0",
         "glob": "^13.0.0",
         "next": "^16.0.8",
         "slice-machine-ui": "^2.20.2"

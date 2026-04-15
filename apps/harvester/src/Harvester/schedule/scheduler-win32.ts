@@ -7,6 +7,7 @@ import { unlinkSync, writeFileSync } from 'fs';
 import { execSync } from 'child_process';
 import path from 'path';
 import fs from 'fs';
+import { parseTime } from './common';
 
 const TaskName = "thecoin-harvest";
 export async function setSchedule(schedule: HarvestSchedule) {
@@ -20,6 +21,11 @@ export async function setSchedule(schedule: HarvestSchedule) {
   }
   catch (err) {
     // no worries, it's already gone
+  }
+
+  if (!schedule.daysToRun.some(Boolean)) {
+    log.warn('No days selected, not creating schedule');
+    return;
   }
 
   try {
@@ -40,7 +46,7 @@ export async function setSchedule(schedule: HarvestSchedule) {
       log.error(err, "Error setting schedule");
     }
     else {
-      log.error(`"Error setting schedule: ${err}`);
+      log.error(`Error setting schedule: ${err}`);
     }
     throw err;
   }
@@ -56,6 +62,7 @@ export const getHarvesterExecutable = (argv0: string) => {
 
 export const generateXml = (schedule: DaysArray, timeToRun: string) => {
   const daysToRun = toDayNames(schedule, "long", { locale: "en" });
+  const { hour, minute } = parseTime(timeToRun);
 
   return `<?xml version="1.0" encoding="UTF-16"?>
   <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
@@ -65,7 +72,7 @@ export const generateXml = (schedule: DaysArray, timeToRun: string) => {
     </RegistrationInfo>
     <Triggers>
       <CalendarTrigger>
-        <StartBoundary>${DateTime.now().toSQLDate()}T${timeToRun}</StartBoundary>
+        <StartBoundary>${DateTime.now().toSQLDate()}T${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00</StartBoundary>
         <Enabled>true</Enabled>
         <ScheduleByWeek>
           <DaysOfWeek>

@@ -73,13 +73,16 @@
             "category": {
               "type": "Select",
               "config": {
+                "label": "Category",
+                "placeholder": "",
                 "options": [
                   "Investing",
                   "Global Warming",
                   "Security",
-                  "Finance"
-                ],
-                "label": "Category"
+                  "Finance",
+                  "Carbon Offsets",
+                  "Impact Reports"
+                ]
               }
             }
           },
@@ -91,7 +94,28 @@
         "fieldset": "Slice Zone",
         "config": {
           "choices": {
+            "video": {
+              "type": "SharedSlice"
+            },
+            "captioned_image": {
+              "type": "SharedSlice"
+            },
+            "project_details": {
+              "type": "SharedSlice"
+            },
+            "ccqi_category": {
+              "type": "SharedSlice"
+            },
+            "two_column_layout": {
+              "type": "SharedSlice"
+            },
+            "block_quote": {
+              "type": "SharedSlice"
+            },
             "rich_text": {
+              "type": "SharedSlice"
+            },
+            "ccqi_score": {
               "type": "SharedSlice"
             }
           }

@@ -1,0 +1,354 @@
+name: Deploy on Tag
+
+on:
+  push:
+    tags:
+      - 'v*.*.*-test.*'
+      - 'v*.*.*-beta.*'
+      - 'v*.*.*'
+
+# Prevent multiple deployments of the same tag from running simultaneously
+# but allow them to queue rather than canceling in-progress deployments
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: false  # Don't cancel deployments in progress
+
+jobs:
+  determine-environment:
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.parse.outputs.env }}
+      is_prerelease: ${{ steps.parse.outputs.prerelease }}
+    steps:
+      - name: Parse tag to determine environment
+        id: parse
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          echo "Deploying tag: $TAG"
+
+          if [[ "$TAG" =~ -test\. ]]; then
+            echo "env=prodtest" >> "$GITHUB_OUTPUT"
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+            echo "Deploying to: prodtest"
+          elif [[ "$TAG" =~ -beta\. ]]; then
+            echo "env=prodbeta" >> "$GITHUB_OUTPUT"
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+            echo "Deploying to: prodbeta"
+          else
+            echo "env=prod" >> "$GITHUB_OUTPUT"
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+            echo "Deploying to: prod"
+          fi
+
+  # Graduate packages for stable tags (v*.*.* without -test.* or -beta.*)
+  graduate-packages:
+    if: needs.determine-environment.outputs.environment == 'prod'
+    needs: determine-environment
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    outputs:
+      commit: ${{ steps.graduate-packages.outputs.commit }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.19'
+          cache: 'yarn'
+
+      - name: Configure Git
+        run: |
+          git config user.name 'GitHub Actions Bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+      # Lerna refuses to run on a detached HEAD (ENOGIT).
+      # Check out the release branch that this tag lives on.
+      - name: Checkout release branch
+        run: |
+          TAG="${{ github.ref_name }}"
+          RELEASE_BRANCH="release/${TAG}"
+          if ! git rev-parse --verify "origin/${RELEASE_BRANCH}" >/dev/null 2>&1; then
+            echo "❌ Expected branch ${RELEASE_BRANCH} not found"
+            echo "Stable tags should be created on a release branch"
+            exit 1
+          fi
+
+          TAG_COMMIT=$(git rev-list -n 1 "$TAG")
+          BRANCH_HEAD=$(git rev-parse "origin/${RELEASE_BRANCH}")
+          if [ "$TAG_COMMIT" != "$BRANCH_HEAD" ]; then
+            echo "❌ Release branch HEAD ($BRANCH_HEAD) differs from tag commit ($TAG_COMMIT)"
+            echo "The tag and release branch should point to the same commit"
+            exit 1
+          fi
+
+          git checkout "${RELEASE_BRANCH}"
+          echo "✅ Checked out ${RELEASE_BRANCH} at ${TAG_COMMIT}"
+
+      - name: Install dependencies
+        run: yarn install --mode=skip-build
+
+      - name: Graduate Packages
+        id: graduate-packages
+        run: |
+          # Get current stable tag
+          STABLE_TAG="${{ github.ref_name }}"
+          BASE_VERSION=$(echo "$STABLE_TAG" | sed 's/^v//')
+
+          echo "🎓 Processing stable tag $STABLE_TAG"
+
+          # Check if any packages have test versions (more reliable than tag searching)
+          if git grep -q -e '"version":.*-test\.' -- '**/package.json'; then
+            echo "📌 Found test versions in packages, graduating to stable"
+
+            RELEASE_BRANCH="release/${STABLE_TAG}"
+
+            # Graduate packages (removes prerelease suffix) from current state
+            yarn lerna version --conventional-graduate --yes --no-git-tag-version
+
+            # Ensure all the files are up to date
+            echo "🔄 Updating lockfile after version graduation..."
+            if ! yarn install --mode=skip-build; then
+              echo "❌ Failed to update lockfile after version graduation"
+              echo "This may indicate dependency conflicts or workspace resolution issues"
+              echo "Attempting to diagnose the issue..."
+
+              # Show what changed
+              echo "📋 Changed package.json files:"
+              git status --porcelain | grep "package.json" || echo "No package.json changes detected"
+
+              # Try to get more specific error info
+              echo "🔍 Attempting detailed error analysis..."
+              yarn install --verbose --mode=skip-build 2>&1 | head -20 || true
+
+              echo ""
+              echo "💡 Possible solutions:"
+              echo "1. Check for conflicting exact version pins in workspace packages"
+              echo "2. Verify all dependencies are compatible with new versions"
+              echo "3. Consider running 'yarn install --force' if lockfile corruption suspected"
+              echo ""
+              echo "Please review the changes and retry the deployment"
+              exit 1
+            fi
+
+            # Commit the version changes (since --no-git-tag-version skips both commit and tag)
+            git add .
+            git commit -m "chore(release): graduate packages to $STABLE_TAG"
+
+            # Move the stable tag to point to the new graduated commit
+            git tag -f "$STABLE_TAG"
+
+            # Get the new graduated commit SHA
+            GRADUATED_COMMIT=$(git rev-list -n 1 "$STABLE_TAG")
+
+            # Push the release branch and updated tag
+            git push origin "$RELEASE_BRANCH"
+            git push --force origin "refs/tags/$STABLE_TAG"
+
+            # Output the graduated commit for other jobs
+            echo "commit=$GRADUATED_COMMIT" >> "$GITHUB_OUTPUT"
+            echo "✅ Graduated packages and pushed tag $STABLE_TAG"
+          else
+            echo "✅ Packages are already at stable versions - no graduation needed"
+
+            # Use current tag's commit for downstream jobs
+            CURRENT_COMMIT=$(git rev-list -n 1 "$STABLE_TAG")
+            echo "commit=$CURRENT_COMMIT" >> "$GITHUB_OUTPUT"
+            echo "Using existing commit $CURRENT_COMMIT for $STABLE_TAG"
+          fi
+
+  normalize-commit:
+    needs: [determine-environment, graduate-packages]
+    if: ${{ !cancelled() && !failure() }}
+    runs-on: ubuntu-latest
+    outputs:
+      commit: ${{ steps.resolve.outputs.commit }}
+    steps:
+      - name: Resolve authoritative commit
+        id: resolve
+        run: |
+          # Use graduate-packages output if available and job succeeded
+          if [[ "${{ needs.graduate-packages.result }}" == "success" && -n "${{ needs.graduate-packages.outputs.commit }}" ]]; then
+            COMMIT="${{ needs.graduate-packages.outputs.commit }}"
+            echo "🎓 Using graduated commit: $COMMIT"
+          else
+            # Fall back to the original commit that triggered the workflow
+            COMMIT="${{ github.sha }}"
+            echo "🏷️ Using trigger commit: $COMMIT"
+          fi
+
+          echo "commit=$COMMIT" >> "$GITHUB_OUTPUT"
+          echo "✅ Authoritative commit resolved: $COMMIT"
+
+  update-metadata:
+    if: ${{ !cancelled() && !failure() && needs.normalize-commit.result == 'success' }}
+    needs: [determine-environment, normalize-commit]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.normalize-commit.outputs.commit }}
+
+      - run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.19'
+
+      - name: Update deployment metadata for this environment
+        run: |
+          # Update timestamp to actual deployment time
+          # Strip prerelease suffix: 0.5.3-test.0 → 0.5.3
+          node --experimental-strip-types ./tools/updateEnvVersion.ts
+          echo "Updated to version $(grep TC_APP_VERSION environments/common.public.env | cut -d'"' -f2) at $(grep TC_DEPLOYED_AT environments/common.public.env | cut -d'"' -f2)"
+
+      - name: Upload updated metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-metadata
+          path: environments/common.public.env
+
+  build:
+    if: ${{ !cancelled() && !failure() && needs.normalize-commit.result == 'success' }}
+    needs: [determine-environment, update-metadata, normalize-commit]
+    uses: ./.github/workflows/action-build.yml
+    with:
+      DOWNLOAD_METADATA: true
+      COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
+
+  test:
+    if: ${{ !cancelled() && !failure() && needs.normalize-commit.result == 'success' }}
+    needs: [build, normalize-commit]
+    uses: ./.github/workflows/action-test.yml
+    with:
+      COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
+
+  # Publish packages only for test tags (initial publish)
+  publish-packages-test:
+    if: ${{ !cancelled() && !failure() && contains(github.ref_name, '-test.') && needs.normalize-commit.result == 'success' }}
+    needs: [test, normalize-commit]
+    permissions:
+      packages: write
+    uses: ./.github/workflows/action-publish-packages.yml
+    with:
+      COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
+
+  # Graduate packages for production tags
+  publish-packages-prod:
+    if: ${{ !cancelled() && !failure() && needs.determine-environment.outputs.is_prerelease == 'false' && needs.normalize-commit.result == 'success' }}
+    needs: [test, determine-environment, normalize-commit]
+    permissions:
+      packages: write
+    uses: ./.github/workflows/action-publish-packages.yml
+    with:
+      COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
+
+  # Wait for package publishing to complete before deploying
+  wait-for-packages:
+    needs: [publish-packages-test, publish-packages-prod, determine-environment]
+    # Run unless workflow was cancelled or a package publish actually failed
+    # This is needed because beta tags do not publish packages (both jobs skip)
+    # Beta reuses test packages, so we still need to proceed with deployment
+    if: ${{ always() && !cancelled() && !failure() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check package publish status
+        run: |
+          TEST_RESULT="${{ needs.publish-packages-test.result }}"
+          PROD_RESULT="${{ needs.publish-packages-prod.result }}"
+          IS_PRERELEASE="${{ needs.determine-environment.outputs.is_prerelease }}"
+          IS_TEST_TAG="${{ contains(github.ref_name, '-test.') }}"
+
+          echo "Package publish results:"
+          echo "  Test job: $TEST_RESULT"
+          echo "  Prod job: $PROD_RESULT"
+          echo ""
+
+          # Determine which job was required for this tag
+          if [ "$IS_PRERELEASE" = "true" ]; then
+            if [ "$IS_TEST_TAG" = "true" ]; then
+              echo "Test tag - checking test package publish"
+              if [ "$TEST_RESULT" != "success" ] && [ "$TEST_RESULT" != "skipped" ]; then
+                echo "❌ Test package publish failed: $TEST_RESULT"
+                exit 1
+              fi
+              echo "✅ Test packages published successfully"
+            else
+              echo "Beta tag - reusing test packages (no publish required)"
+            fi
+          else
+            echo "Prod tag - checking prod package graduation"
+            if [ "$PROD_RESULT" != "success" ] && [ "$PROD_RESULT" != "skipped" ]; then
+              echo "❌ Prod package graduation failed: $PROD_RESULT"
+              exit 1
+            fi
+            echo "✅ Packages graduated successfully"
+          fi
+
+  publish-docker:
+    needs: [wait-for-packages, determine-environment, normalize-commit]
+    # Explicit condition needed because wait-for-packages uses if: always()
+    if: ${{ always() && !cancelled() && !failure() }}
+    uses: ./.github/workflows/action-publish-docker.yml
+    secrets: inherit
+    with:
+      CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
+      COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
+      IS_PROMOTION: ${{ needs.determine-environment.outputs.environment != 'prodtest' }}
+
+  publish-services:
+    needs: [wait-for-packages, determine-environment, normalize-commit]
+    # Explicit condition needed because wait-for-packages uses if: always()
+    if: ${{ always() && !cancelled() && !failure() }}
+    uses: ./.github/workflows/action-publish-services.yml
+    secrets: inherit
+    with:
+      CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
+      COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
+
+  publish-sites:
+    needs: [wait-for-packages, determine-environment, normalize-commit]
+    # Explicit condition needed because wait-for-packages uses if: always()
+    if: ${{ always() && !cancelled() && !failure() }}
+    uses: ./.github/workflows/action-publish-sites.yml
+    secrets: inherit
+    with:
+      CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
+      COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
+
+  smoke-tests:
+    needs: [publish-services, publish-sites, determine-environment]
+    # Explicit condition needed because publish-services/publish-sites use if: always()
+    if: ${{ always() && !cancelled() && !failure() }}
+    uses: ./.github/workflows/action-smoke-tests.yml
+    secrets: inherit
+    with:
+      CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
+
+  notify-success:
+    needs: [smoke-tests, determine-environment, normalize-commit]
+    # Explicit condition needed because smoke-tests uses if: always()
+    if: ${{ always() && !cancelled() && !failure() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deployment successful
+        run: |
+          echo "✅ Successfully deployed ${{ github.ref_name }} to ${{ needs.determine-environment.outputs.environment }}"
+          echo "Tag: ${{ github.ref_name }}"
+          echo "Commit: ${{ needs.normalize-commit.outputs.commit }}"
+          echo "Environment: ${{ needs.determine-environment.outputs.environment }}"
+
+  cleanup:
+    needs: [smoke-tests, determine-environment]
+    # Explicit condition needed because smoke-tests uses if: always()
+    # Only cleanup test environments (prodtest)
+    if: ${{ always() && !cancelled() && !failure() && needs.determine-environment.outputs.environment == 'prodtest' }}
+    uses: ./.github/workflows/action-cleanup-old-packages.yml
+    secrets: inherit

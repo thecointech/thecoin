@@ -11,6 +11,8 @@
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    "declaration": false,
+    "declarationMap": false,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",

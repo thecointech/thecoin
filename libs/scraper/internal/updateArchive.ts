@@ -71,7 +71,7 @@ function getTests() {
   log.level("warn");
 
   const testData = getTestData("*", "elm.json", "archive", TestData, getPage);
-  return testData.flatMap(t => t.names().map(e => ({ test: t, name: e })))
+  return testData.flatMap(t => t.elements().map(e => ({ test: t, name: e.fullname })))
 }
 
 async function updateTest(test: TestData, name: string) {

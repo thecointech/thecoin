@@ -1,0 +1,31 @@
+.header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.logoLink {
+  cursor: pointer;
+  height: 50px;
+  display: block;
+}
+
+.logo {
+  height: 100%;
+  width: 174px;
+  background-repeat: no-repeat;
+  background-image: url('../../images/logoAndName.svg');
+  background-position: left center;
+  background-size: contain;
+  transition: opacity 0.1s ease;
+}
+
+.logo:hover {
+  opacity: 0.7;
+}
+
+@media only screen and (max-width: 749px) {
+  .logo {
+    width: 105px;
+  }
+}

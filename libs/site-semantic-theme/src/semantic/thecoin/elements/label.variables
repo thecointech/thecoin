@@ -5,9 +5,4 @@
 @textTransform: uppercase;
 @fontWeight: @bold;
 @color: @textColor;
-@backgroundColor: transparent;
-// This padding seems a little low.  Check this and come back
-@horizontalPadding: 0;
-// This padding seems a little high.  Check this and come back
-@verticalPadding: @relative10px;
 @lineHeight: 1.333;

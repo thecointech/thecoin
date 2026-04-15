@@ -30,7 +30,7 @@ async function fetchData(locale: string) {
   }
 }
 
-const initialState: PrismicState = {
+const initialState: PrismicState= {
   en: {
     fullyLoaded: false,
     faqs: new Map<string, FaqDocument>(),
@@ -40,10 +40,15 @@ const initialState: PrismicState = {
     fullyLoaded: false,
     faqs: new Map<string, FaqDocument>(),
     articles: new Map<string, ArticleDocument>(),
-  }
+  },
+  client,
 }
 
-export class Prismic extends SagaReducer<IActions, PrismicState>(DOCUMENTS_KEY, initialState, ["fetchAllDocs", "fetchDoc"]) implements IActions
+type PreviewTokenState = {
+  previewToken?: string;
+}
+
+export class Prismic extends SagaReducer<IActions, PrismicState&PreviewTokenState>(DOCUMENTS_KEY, initialState, ["fetchAllDocs", "fetchDoc"]) implements IActions
 {
   *fetchDoc(uid: string, locale: Locale): Generator<any> {
     // First, do we already have this document cached?
@@ -90,4 +95,22 @@ export class Prismic extends SagaReducer<IActions, PrismicState>(DOCUMENTS_KEY, 
       })
     }
   };
+
+  setDocument(document: ArticleDocument): void {
+    const locale = document.lang.split('-')[0] as Locale;
+    if (locale !== 'en' && locale !== 'fr') {
+      throw new Error(`Invalid locale: ${locale}`);
+    }
+
+    // Use function form to avoid Immer MapSet issue
+    // Create a completely new Map outside of Immer's tracking
+    const newArticles = new Map(this.state[locale].articles).set(document.uid, document);
+    this.draftState = {
+      ...this.state,
+      [locale]: {
+        ...this.state[locale],
+        articles: newArticles,
+      }
+    }
+  }
 }

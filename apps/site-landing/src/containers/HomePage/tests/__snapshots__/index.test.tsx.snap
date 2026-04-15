@@ -13,10 +13,10 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
           class="sub header"
         >
           <span>
-            If reducing CO2 was profitable,
+            We don't ask you to care more.
           </span>
           <span>
-            Would the climate crisis still be a crisis?
+            We just make sure caring pays.
           </span>
         </div>
       </h1>
@@ -36,11 +36,11 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
           You’re Wealthier
         </h4>
         <p>
-          Your money is always earning. Make it earn for you.
+          It's the same way the rich get richer, just in reverse
         </p>
         <a
           data-discover="true"
-          href="/compare"
+          href="/#wealthier"
         >
           Learn More
           <div
@@ -55,11 +55,11 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
           Earth’s Healthier
         </h4>
         <p>
-          Be part of the solution. We offset our clients’ CO2.
+          Climate action never lacked solutions. It lacked money. That's where we come in.
         </p>
         <a
           data-discover="true"
-          href="/wedomore"
+          href="/#healthier"
         >
           Learn More
           <div
@@ -80,13 +80,30 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
           class="two wide column"
         >
           <h2>
-            0
+            1200
+          </h2>
+          <h4>
+            $
+          </h4>
+          <br />
+          Average profit
+        </div>
+        <div
+          class="computer only tablet only one wide column"
+        >
+          <hr />
+        </div>
+        <div
+          class="two wide column"
+        >
+          <h2>
+            50
           </h2>
           <h4>
             %
           </h4>
           <br />
-          Monthly Fees
+          Footprint Offset
         </div>
         <div
           class="computer only tablet only one wide column"
@@ -99,34 +116,16 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
           <h2>
             0
           </h2>
-          <h4>
-            %
-          </h4>
           <br />
-          Minimums
-        </div>
-        <div
-          class="computer only tablet only one wide column"
-        >
-          <hr />
-        </div>
-        <div
-          class="three wide column"
-        >
-          <h2>
-            100
-          </h2>
-          <h4>
-            %
-          </h4>
-          <br />
-          Your benefits
+          Excuses
         </div>
       </div>
     </div>
   </div>
   <div />
-  <div>
+  <div
+    id="wealthier"
+  >
     <div>
       <h2
         class="ui header"
@@ -135,7 +134,11 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
         <div
           class="sub header x5spaceBefore"
         >
-          Enjoy the benefits of investment growth on every dollar with our online spending account.
+          Zero cost. Zero risk.
+          <br />
+          Time to build a better life.
+          <br />
+          We didn't believe it was possible until we built it. Here's how it works.
         </div>
       </h2>
     </div>
@@ -147,18 +150,18 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
         <h4
           class="ui header"
         >
-          Start Now
+          What does "Zero Cost" really mean?
         </h4>
         <p>
-          The most important ingredient is time. You’re young - maximize your benefit!
+          No fees is easy. Earning on $0 is hard. Here's how we make something out of nothing.
         </p>
       </div>
       <div>
         <a
           data-discover="true"
-          href="/blog/start-now"
+          href="/blog/what-does-zero-cost-mean"
         >
-          Learn Your Edge
+          This is our edge
           <div
             class="undefined x2spaceBefore"
           />
@@ -173,18 +176,18 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
         <h4
           class="ui header"
         >
-          The Best Investment
+          Your Safety Net
         </h4>
         <p>
-          Why settle? Our time-tested strategy has the best long-term results.
+          Investing is a roller-coaster. Our account protection can put the floor back under your feet.
         </p>
       </div>
       <div>
         <a
           data-discover="true"
-          href="/compare"
+          href="/blog/coming-soon"
         >
-          Compare Us
+          How to sleep easy
           <div
             class="undefined x2spaceBefore"
           />
@@ -204,10 +207,10 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
         <h4
           class="ui header"
         >
-          Maximum Growth
+          It's about time
         </h4>
         <p>
-          Add $250000 to your retirement - with no money down.
+          You'll never stop buying groceries. That could add $250000 to your retirement.
         </p>
       </div>
       <div>
@@ -230,18 +233,18 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
         <h4
           class="ui header"
         >
-          Keep Your Profits
+          We all win when you win
         </h4>
         <p>
-          Every dollar earns every day. As a non-profit, we want you to keep that benefit.
+          We're a non-profit focused on climate action. That's why we have to be the most selfish choice. Yes, really.
         </p>
       </div>
       <div>
         <a
           data-discover="true"
-          href="/healthier"
+          href="/blog/coming-soon"
         >
-          Who Wins?
+          The catch? There isn't one
           <div
             class="undefined x2spaceBefore"
           />
@@ -253,7 +256,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
     <h3
       class="ui header"
     >
-      TheCoin is a revolutionary new kind of account.
+      Building wealth takes time. Want to get started?
     </h3>
     <div>
       <a
@@ -265,7 +268,9 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
       </a>
     </div>
   </div>
-  <div>
+  <div
+    id="healthier"
+  >
     <div>
       <img
         src="[object Object]"
@@ -275,15 +280,14 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
       <h2
         class="ui header"
       >
-        Earths’ Healthier
+        Earth’s Healthier
         <div
           class="sub header x5spaceBefore"
         >
           <span>
-            You can become CO2-neutral with TheCoin
-          </span>
-          <span>
-            as we work to offset our clients’ emissions.
+            Money is the most powerful tool we have.
+            <br />
+            Let's make it work for us, for a change.
           </span>
         </div>
       </h2>
@@ -296,16 +300,18 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
             <h4
               class="ui header"
             >
-              Make a Difference
+              Do What Matters
             </h4>
             <p>
-              Offsetting CO2 is effective. Extremely effective!
+              Offsetting CO2 is effective.
+              <br />
+              Extremely effective.
             </p>
           </div>
           <div>
             <a
               data-discover="true"
-              href="/healthier"
+              href="/blog/coming-soon"
             >
               Compare Outcomes
               <div
@@ -331,7 +337,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
           <div>
             <a
               data-discover="true"
-              href="/healthier"
+              href="/blog/coming-soon"
             >
               Why We Can Be So Confident
               <div
@@ -351,13 +357,13 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
               We Do More
             </h4>
             <p>
-              It’s not just CO2. The projects we fund are vital to restoring our ecosystem.
+              It's more than CO2. We fund the changes we all know the world needs.
             </p>
           </div>
           <div>
             <a
               data-discover="true"
-              href="/healthier"
+              href="/wedomore"
             >
               What We Do
               <div
@@ -375,7 +381,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
     <h3
       class="ui header"
     >
-      The benefits of a chequing, savings, and investing account all in one!
+      Not a solution. A choice. Yours.
     </h3>
     <a
       class="ui red large button"

@@ -1,12 +1,11 @@
-import { UxInput } from "@thecointech/shared";
+import { UxInput, type ValidateCB } from "@thecointech/shared";
 import styles from "./UpdateCardNumber.module.less";
-import { validate } from "@thecointech/site-app/src/containers/Accounts/BillPayments/payees";
 
 interface CreditCardCorrectionProps {
   forceValidate: boolean;
   originalNumber: string;
-  payee: string;
   onChange: (value: string) => void;
+  onValidate: ValidateCB<string>;
 }
 
 const translations = {
@@ -16,7 +15,7 @@ const translations = {
   },
 }
 
-export const CreditCardCorrection = ({ forceValidate, payee, originalNumber, onChange }: CreditCardCorrectionProps) => {
+export const CreditCardCorrection = ({ forceValidate, originalNumber, onChange, onValidate }: CreditCardCorrectionProps) => {
   return (
     <div className={styles.cardNumberEdit}>
       <div className={styles.cardNumberInput}>
@@ -25,7 +24,7 @@ export const CreditCardCorrection = ({ forceValidate, payee, originalNumber, onC
           forceValidate={forceValidate}
           intlLabel={translations.accountNumer}
           onValue={v => onChange(v ?? '')}
-          onValidate={value => validate(payee, value)}
+          onValidate={onValidate}
         />
       </div>
     </div>

@@ -8,6 +8,7 @@ import { UxDate, UxEmail } from '@thecointech/shared/components/UX';
 import { UserAddressInput, UserDetailsInput, UserPhoneInput } from './DetailsInput';
 import { detailStrings } from './translations';
 import styles from './styles.module.less';
+import { log } from '@thecointech/logging';
 
 
 export const translations = {
@@ -52,7 +53,13 @@ export const PersonalDetails = () => {
       [name as string]: value,
     });
   };
-  const onSetDetails = () => accountApi.setDetails({ ...details });
+  const onSetDetails = () => {
+    if (account?.readonly) {
+      log.info("Cannot change details: account is readonly");
+      return;
+    }
+    accountApi.setDetails({ ...details });
+  };
 
   return (
     <div>

@@ -13,6 +13,7 @@ async function getAddresses() {
   }
 }
 
+
 export const signerConfig: Configuration = {
   plugins: [
     new webpack.DefinePlugin(
@@ -21,9 +22,12 @@ export const signerConfig: Configuration = {
       // the live signer and get it's address directly.
       // We can't do this every time because a production address
       // may not always exist
-      getEnvVars().WALLET_BrokerCAD_ADDRESS
-        ? {}
-        : await getAddresses()
+      {
+        ...(getEnvVars().WALLET_BrokerCAD_ADDRESS
+          ? {}
+          : await getAddresses()
+        ),
+      }
     ),
   ]
 }

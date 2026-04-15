@@ -9,8 +9,9 @@ import { UxScoredPassword } from '@thecointech/shared/components/UX/ScoredPasswo
 import { Decoration } from '../Decoration';
 import { ButtonPrimary } from '../../../components/Buttons';
 import { AccountMap } from '@thecointech/redux-accounts';
-import styles from './styles.module.less';
 import { CompleteInit } from '../CompleteInit';
+import styles from './styles.module.less';
+import { usePreserveQuery } from '../utils';
 
 let _isCancelled = false;
 const setCancelled = () => _isCancelled = true;
@@ -35,17 +36,18 @@ const translations = defineMessages({
 
 export const Generate = () => {
 
-  const [name, setName] = useState(undefined as MaybeString);
-  const [password, setPassword] = useState(undefined as MaybeString);
-  const [referral, setReferral] = useState(undefined as MaybeString);
-  const [progress, setProgress] = useState(undefined as MaybeNumber);
-  const [forceValidate, setForceValidate] = useState(false);
+  const [wallet, setWallet] = useState<BaseWallet>();
+  const [referral, setReferral] = useState<string>();
+  const [name, setName] = useState<string>();
+  const [password, setPassword] = useState<string>();
+  const accountsApi = AccountMap.useApi();
 
-  const [wallet, setWallet] = useState<BaseWallet|undefined>();
+  const [progress, setProgress] = useState<number>();
+  const [forceValidate, setForceValidate] = useState(false);
+  const nextStep = usePreserveQuery('/addAccount/store');
 
   ////////////////////////////////
   // Callback to actually generate the account
-  const accountsApi = AccountMap.useApi();
   const onGenerate = async () => {
     if (!(password && referral && name)) {
       setForceValidate(true);
@@ -66,8 +68,9 @@ export const Generate = () => {
 
   // Create a new component to finish initialization.  This
   // is because we cannot add additional hooks to this component to start the account
-  if (wallet)
-    return <CompleteInit signer={wallet} address={wallet.address} redirect={'/addAccount/store'} />
+  if (wallet) {
+    return <CompleteInit signer={wallet} address={wallet.address} redirect={nextStep} />
+  }
   ////////////////////////////////
 
   // const cbCancel = (progress && progress < 100)
@@ -111,9 +114,6 @@ export const Generate = () => {
 }
 
 const generateNewWallet = async (password: string, setProgress: (v: number) => void) => {
-  // Generate a new wallet.  TODO: Detect if MetaMask is installed or active
-
-  // Generate new account
   setProgress(0);
 
   const newWallet = Wallet.createRandom();

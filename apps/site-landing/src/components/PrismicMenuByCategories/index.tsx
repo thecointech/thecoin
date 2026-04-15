@@ -66,7 +66,7 @@ const CategoryMenuEntry = ({ name }: { name: string }) => {
   return (
     <List.Item>
       <label className={styles.categoryRow}>
-        <Label>{name}</Label>
+        <Label className={styles.categoryLabel}>{name}</Label>
         <Checkbox
           className={styles.categoryCB}
           checked={isChecked}

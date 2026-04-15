@@ -5,8 +5,12 @@ import { init as initSecrets } from '@thecointech/secrets';
 import { initLatest } from '../internals/rates/latest';
 import { update } from '../internals/rates/UpdateDb';
 import { seed } from './seed';
+import { LoggerContext } from '@thecointech/logging';
 
 export async function init() {
+  // Group all logs separate from main app
+  using _ = new LoggerContext({ RequestId: "init" });
+
   // Init luxon to use the right timezone
   Settings.defaultZone = 'America/New_York';
   // connect to DB

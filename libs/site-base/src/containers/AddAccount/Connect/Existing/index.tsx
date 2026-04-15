@@ -6,6 +6,7 @@ import { Link } from "react-router";
 import { Decoration } from "../../Decoration";
 import styles from '../styles.module.less';
 import { ButtonPrimary } from "../../../../components/Buttons";
+import { usePreserveQuery } from "containers/AddAccount/utils";
 
 const translations = defineMessages({
   aboveTheTitle : {
@@ -23,6 +24,7 @@ const translations = defineMessages({
 });
 
 export const Existing = () => {
+  const to = usePreserveQuery('/addAccount/generate/intro');
 
   return (
     <Container className={styles.content}>
@@ -36,7 +38,7 @@ export const Existing = () => {
       <div className={`${styles.createAccountContent} x8spaceBefore x12spaceAfter`} >
           <FormattedMessage {...translations.explanation} />
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <ButtonPrimary as={Link} to="/addAccount/generate/intro" size='medium' >
+          <ButtonPrimary as={Link} to={to} size='medium' >
             <FormattedMessage {...translations.buttonCreateAccount} />
           </ButtonPrimary>
       </div>
