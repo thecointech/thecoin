@@ -44,7 +44,8 @@
     },
     "dependencies": {
         "@prismicio/client": "^7.21.0",
-        "semantic-ui-react": "3.0.0-beta.2"
+        "semantic-ui-react": "3.0.0-beta.2",
+        "uuid": "^9.0.0"
     },
     "devDependencies": {
         "@prismicio/next": "^2.2.1",
@@ -52,6 +53,7 @@
         "@slicemachine/adapter-next": "^0.3.95",
         "@thecointech/setenv": "^0.5.4-test.2",
         "@thecointech/site-semantic-theme": "^0.5.4-test.2",
+        "@types/uuid": "^9.0.0",
         "glob": "^13.0.0",
         "next": "^16.0.8",
         "slice-machine-ui": "^2.20.2"

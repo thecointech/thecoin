@@ -1,7 +1,8 @@
 import React, { FC } from "react";
 import { Content } from "@prismicio/client";
 import { SliceComponentProps } from "@prismicio/react";
-
+import { validate } from 'uuid';
+import { Message } from 'semantic-ui-react';
 /**
  * Props for `Video`.
  */
@@ -11,8 +12,8 @@ export type VideoProps = SliceComponentProps<Content.VideoSlice>;
  * Component for "Video" Slices.
  */
 const Video: FC<VideoProps> = ({ slice }) => {
-  if (!slice.primary.video_id) {
-    return <div>Video ID is required</div>;
+  if (!validate(slice.primary.video_id ?? '')) {
+    return <Message error header="Video ID is required">Video ID {slice.primary.video_id} is invalid</Message>;
   }
   return (
     <section
