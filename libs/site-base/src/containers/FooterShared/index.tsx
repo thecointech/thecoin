@@ -6,6 +6,7 @@ import instagram from './images/instagram.svg';
 import bluesky from './images/bluesky.svg';
 import mastodon from './images/mastodon.svg';
 import linkedin from './images/linkedin.svg';
+import medium from './images/medium.svg';
 import styles from './styles.module.less';
 
 const translate = defineMessages({
@@ -18,11 +19,11 @@ const translate = defineMessages({
     description: "Registered Non profit phrase in footer part 2"
   },
   copyright1: {
-    defaultMessage: "© Copyright 2020. TheCoin.",
+    defaultMessage: "© 2020",
     description: "Copyright phrase in footer part1"
   },
   copyright2: {
-    defaultMessage: " All Rights Reserved.",
+    defaultMessage: "TheCoin Collaborative Canada",
     description: "Copyright phrase in footer part2"
   }
 });
@@ -60,6 +61,9 @@ export const FooterShared: React.FC<Props> = ({ children, background, id }) => (
           </a>
           <a aria-label="Mastodon" href="https://mastodon.social/@thecoincollaborative" target="_blank">
             <img src={mastodon} alt="" />
+          </a>
+          <a aria-label="Medium" href="https://medium.com/thecoin-newsletters" target="_blank">
+            <img src={medium} alt="" />
           </a>
         </div>
         <div className={`${styles.textPortion} ${styles.copyright}`}>
