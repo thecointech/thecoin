@@ -1,0 +1,26 @@
+
+@import '../../semantic/thecoin-colors.css';
+
+.blockQuote {
+  margin: 2rem;
+
+  .quoteText {
+    font-style: italic;
+
+    * {
+      display: inline;
+    }
+  }
+
+  .quoteSymbol {
+    display: inline;
+  }
+
+  .attribution {
+    color: var(--text-color);
+  }
+
+  .source {
+    margin-left: 0.5rem;
+  }
+}

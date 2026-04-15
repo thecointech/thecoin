@@ -3,6 +3,95 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+
+
+**Note:** Version bump only for package @thecointech/tools
+
+
+
+
+
+# [0.6.0-test.0](https://github.com/thecointech/thecoin/compare/v0.5.4-test.2...v0.6.0-test.0) (2026-03-31)
+
+**Note:** Version bump only for package @thecointech/tools
+
+
+
+
+
+## [0.5.4-test.2](https://github.com/thecointech/thecoin/compare/v0.5.4-test.1...v0.5.4-test.2) (2026-02-26)
+
+**Note:** Version bump only for package @thecointech/tools
+
+
+
+
+
+## [0.5.4-test.1](https://github.com/thecointech/thecoin/compare/v0.5.4-test.0...v0.5.4-test.1) (2026-02-25)
+
+**Note:** Version bump only for package @thecointech/tools
+
+
+
+
+
+## [0.5.4-test.0](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.4-test.0) (2026-02-25)
+
+
+### Bug Fixes
+
+* do not increment version in branch creation ([65ab3e8](https://github.com/thecointech/thecoin/commit/65ab3e8f4b4b52e6f27bbdf224790e004660fb57))
+* extract correct version from lerna output instead of CLI version ([ffc9d5c](https://github.com/thecointech/thecoin/commit/ffc9d5c984ae5c5aada6b15263b1f436281f828f))
+
+
+### Reverts
+
+* Revert "chore(release): publish v0.5.3" ([69528b5](https://github.com/thecointech/thecoin/commit/69528b54d7e69bc85a1d65fcbd7ffaebff462d91))
+
+
+
+
+
+## [0.5.3](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.3) (2026-02-20)
+
+
+### Reverts
+
+* Revert "chore(release): publish v0.5.3" ([69528b5](https://github.com/thecointech/thecoin/commit/69528b54d7e69bc85a1d65fcbd7ffaebff462d91))
+
+
+
+
+
+## [0.5.3-test.0](https://github.com/thecointech/thecoin/compare/v0.5.2...v0.5.3-test.0) (2026-01-24)
+
+
+### Bug Fixes
+
+* deployment now -only- versions in release-branch, and updates common.public.env where necessary ([2beeb4e](https://github.com/thecointech/thecoin/commit/2beeb4ea047e9a68f6810116241bd624b0648ce8))
+* local release branch tracks remote ([732498f](https://github.com/thecointech/thecoin/commit/732498f38a3f242a33b01570871029e1ac701da0))
+* restore dropped CONFIG_NAME from Google services ([4ad802a](https://github.com/thecointech/thecoin/commit/4ad802a59152851c23531dcbcb24cc122d48af04))
+
+
+
+
+
+## [0.5.2](https://github.com/thecointech/thecoin/compare/v0.5.2-test.0...v0.5.2) (2026-01-19)
+
+**Note:** Version bump only for package @thecointech/tools
+
+
+
+
+
+## [0.5.2-test.0](https://github.com/thecointech/thecoin/compare/v0.5.1...v0.5.2-test.0) (2026-01-19)
+
+**Note:** Version bump only for package @thecointech/tools
+
+
+
+
+
 ## [0.5.1](https://github.com/thecointech/thecoin/compare/v0.5.1-test.1...v0.5.1) (2026-01-06)
 
 **Note:** Version bump only for package @thecointech/tools

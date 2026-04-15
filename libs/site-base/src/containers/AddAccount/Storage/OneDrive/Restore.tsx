@@ -8,6 +8,7 @@ const text = defineMessage({
   defaultMessage: "Restore from Microsoft OneDrive",
   description: "Microsoft link for the restore your account page"
 });
+
 export const OneDriveRestore = () =>
   <AvailableSoon>
     <ProviderChoice txt={text} imgSrc={icon} />

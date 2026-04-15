@@ -7,6 +7,13 @@ import { log } from "@thecointech/logging";
 import open from 'open';
 import { getSnapshot, getSnapshots, type SnapshotMeta } from "./snapshots";
 
+export type ElementName = {
+  step: number;
+  index: number;
+  name: string;
+  fullname: string;
+}
+
 export class TestData {
   public readonly key: string;
   public readonly target: string;
@@ -46,7 +53,7 @@ export class TestData {
   }
 
   get failing() {
-    return this.names().filter(name => !isElementPassing(this, name));
+    return this.elements().filter(elm => !isElementPassing(this, elm.fullname));
   }
 
   png(): void {
@@ -62,14 +69,26 @@ export class TestData {
     }
   }
 
-  elements(): string[] {
+  elm_files(): string[] {
     return this.jsonFiles.filter(f => f.endsWith("-elm.json"));
   }
-  searches(): string[] {
+  sch_files(): string[] {
     return this.jsonFiles.filter(f => f.endsWith("-sch.json"));
   }
-  names(): string[] {
-    return this.elements().map(f => f.match(/(.+)-elm.json/)?.[1]!);
+
+  elements(): ElementName[] {
+    return this.elm_files().map(f => {
+      const matched = f.match(/([0-9]+)-([0-9]+)-(.+)-elm.json/);
+      if (!matched) {
+        throw new Error(`Failed to match element file: ${f}`);
+      }
+      return {
+        step: Number(matched[1]),
+        index: Number(matched[2]),
+        name: matched[3],
+        fullname: `${matched[1]}-${matched[2]}-${matched[3]}`,
+      }
+    });
   }
 
   private json<T>(file: string): T {
@@ -115,11 +134,18 @@ export class TestData {
   }
 
   elm(name: string, withOverride=true): TestElmData | null {
-    const element = this.jsonFiles.find(f => f.includes(name) && f.endsWith("-elm.json"));
+    const [element, ...rest] = this.elm_files().filter(f => f.includes(name));
     if (!element) {
       return null;
     }
-    const testName = element.match(/(.+)-elm.json/)?.[1];
+    if (rest.length) {
+      throw new Error(`Multiple elements found for ${name}`);
+    }
+    const matched = element.match(/(.+)-elm.json/);
+    if (!matched) {
+      throw new Error(`Failed to match element file: ${element}`);
+    }
+    const testName = matched[1];
     const rawJson: TestElmData = this.json<TestElmData>(element);
 
     if (withOverride) {
@@ -139,7 +165,7 @@ export class TestData {
   }
 
   *elm_iter(fnName: string): Generator<TestElmData, void, unknown> {
-    const files = this.jsonFiles.filter(f => f.includes(fnName) && f.endsWith("-elm.json"));
+    const files = this.elm_files().filter(f => f.includes(fnName));
     for (const file of files) {
       yield this.elm(file)!;
     }

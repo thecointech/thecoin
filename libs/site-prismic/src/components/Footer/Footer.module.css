@@ -1,0 +1,14 @@
+.footer {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 10px;
+  z-index: 100;
+}
+
+.content {
+  width: 100%;
+  padding: 20px;
+}

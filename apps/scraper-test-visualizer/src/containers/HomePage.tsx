@@ -1,12 +1,15 @@
 import React from 'react';
-import { Container, Header, Loader, Message } from 'semantic-ui-react';
+import { Container, Header, Loader, Message, Input } from 'semantic-ui-react';
 import TestGrid from '../components/TestGrid';
 import StatsBar from '../components/StatsBar';
-import { TestsReducer } from '../state/reducer';
+import { TestsReducer, useFilteredTests, useFilteredFailingTests } from '../state/reducer';
 import styles from './HomePage.module.less';
 
 export const HomePage: React.FC = () => {
-  const { tests, loading, error, failingTests } = TestsReducer.useData();
+  const { loading, error, filterText } = TestsReducer.useData();
+  const actions = TestsReducer.useApi();
+  const filteredTests = useFilteredTests();
+  const filteredFailingTests = useFilteredFailingTests();
 
   if (loading) {
     return (
@@ -36,7 +39,15 @@ export const HomePage: React.FC = () => {
         </Header.Subheader>
       </Header>
 
-      <StatsBar tests={tests} failingTests={failingTests} />
+      <Input
+        icon='search'
+        placeholder='Filter by test name...'
+        value={filterText}
+        onChange={(e) => actions.setFilterText(e.target.value)}
+        style={{ marginBottom: '1rem', width: '100%', maxWidth: '400px' }}
+      />
+
+      <StatsBar tests={filteredTests} failingTests={filteredFailingTests} />
 
       <TestGrid />
     </div>

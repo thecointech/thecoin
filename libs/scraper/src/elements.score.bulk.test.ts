@@ -8,13 +8,13 @@ jest.setTimeout(20 * 60 * 1000);
 
 describe("It scores the correct element the highest in archive", () => {
   const testData = getTestData("*", "elm.json", "archive");
-  const tests = testData.flatMap(t => t.names().map(e => ({ testKey: t.key, test: t, name: e })))
+  const tests = testData.flatMap(t => t.elements().map(e => ({ testKey: t.key, test: t, name: e.fullname })))
   runTests(tests);
 }, hasTestingPages());
 
 describe("It scores the correct element the highest in archive (only the failing tests)", () => {
   const testData = getTestData("*", "elm.json", "archive");
-  const failing = testData.flatMap(t => t.failing.map(f => ({ testKey: t.key, test: t, name: f })))
+  const failing = testData.flatMap(t => t.failing.map(e => ({ testKey: t.key, test: t, name: e.fullname })))
   runTests(failing);
 }, hasTestingPages() && IsManualRun)
 

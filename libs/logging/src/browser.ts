@@ -1,9 +1,10 @@
 import { createLogger, TRACE, INFO, DEBUG, stdSerializers } from 'browser-bunyan';
 import { ConsoleFormattedStream } from '@browser-bunyan/console-formatted-stream';
-import { BunyanLogger } from './logger';
+import { createLoggerProxy } from './loggerContext';
+import './loggerContextBrowser'; // Auto-registers via static initialization block
 
-export function init_browser(name: string): BunyanLogger {
-  return createLogger({
+export function init_browser(name: string) {
+  const logger = createLogger({
     name,
     streams: [
       {
@@ -18,4 +19,5 @@ export function init_browser(name: string): BunyanLogger {
     serializers: stdSerializers,
   });
 
+  return createLoggerProxy(logger, async () => {});
 }

@@ -1,5 +1,5 @@
 import type { TestInfo } from "../testInfo";
-import type { FailingTest } from "../types";
+import type { Test } from "../types";
 
 export type FilterType = 'all' | 'passing' | 'failing';
 
@@ -8,8 +8,9 @@ export interface InitialState {
   loading: boolean;
   error: string | null;
   selectedTest: TestInfo | null;
-  failingTests: FailingTest[];
+  failingTests: Test[];
   filter: FilterType;
+  filterText: string;
 }
 
 export const initialState: InitialState = {
@@ -19,4 +20,5 @@ export const initialState: InitialState = {
   selectedTest: null,
   failingTests: [],
   filter: 'all',
+  filterText: '',
 };

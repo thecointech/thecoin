@@ -1,0 +1,61 @@
+@import '../../semantic/thecoin-colors.css';
+
+.related {
+    margin-top: 4rem;
+    padding: 2rem 0;
+    border-top: 2px solid var(--thecoin-green3);
+    background: linear-gradient(to bottom, rgba(32, 181, 141, 0.05) 0%, #ffffff 100%);
+}
+
+.relatedGrid {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.relatedGrid ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.relatedGrid li {
+    background: white;
+    border: 1px solid rgba(19, 129, 117, 0.3); /* theCoinPaletteGreen4 faded */
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(19, 129, 117, 0.1); /* green-tinted shadow */
+}
+
+.relatedGrid li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(19, 129, 117, 0.2);
+    border-color: var(--thecoin-green4);
+    background: rgba(32, 181, 141, 0.02);
+}
+
+.relatedGrid a {
+    font-weight: 500;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+@media only screen and (max-width: 749px) {
+    .relatedGrid {
+        padding: 0 1rem;
+    }
+
+    .relatedGrid ul {
+        grid-template-columns: 1fr;
+    }
+
+    .related {
+        margin-top: 3rem;
+        padding: 1.5rem 0;
+    }
+}

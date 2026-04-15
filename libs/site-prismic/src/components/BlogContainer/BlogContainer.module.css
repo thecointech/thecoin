@@ -1,0 +1,32 @@
+/* Article layout matching site-landing centered design */
+/* TODO: Use common variables from less once less is supported in nextjs */
+
+.container {
+  width: 50%;
+  max-width: 600px;
+  margin-left: 30%;
+
+  img {
+    max-width: 100%;
+  }
+
+  .backLink {
+    margin-top: 2rem;
+    a {
+      cursor: pointer;
+      border-bottom: none;
+    }
+  }
+}
+
+/* Mobile responsive */
+@media only screen and (max-width: 749px) {
+  .container {
+    width: 100%;
+    margin: auto;
+
+    a {
+      text-align: center;
+    }
+  }
+}

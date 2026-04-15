@@ -11,30 +11,28 @@ import { SectionItem } from '../SectionItem';
 import { defineMessage } from '@formatjs/intl';
 
 import bgtop_planet from './images/bgtop_planet.svg';
+import { FormattedMessageWithBreaks } from 'components/FormattedMessageWithBreaks';
 
 
 const translations = defineMessages({
   title : {
-    defaultMessage: 'Earths’ Healthier',
+    defaultMessage: 'Earth’s Healthier',
     description: 'site.homepage.underwater.title: Title for that homepage underwater part'},
-  description1 : {
-    defaultMessage: 'You can become CO2-neutral with TheCoin',
+  description : {
+    defaultMessage: "Money is the most powerful tool we have.{br}Let's make it work for us, for a change.",
     description: 'site.homepage.underwater.description: Description for the homepage underwater part1'},
-  description2 : {
-      defaultMessage: 'as we work to offset our clients’ emissions.',
-      description: 'site.homepage.underwater.description: Description for the homepage underwater part2'},
 })
 
 const items = {
   difference: {
     img: co2,
-    to: "/healthier",
+    to: "/blog/coming-soon",
     text: {
       title: defineMessage({
-        defaultMessage: 'Make a Difference',
+        defaultMessage: 'Do What Matters',
         description: 'site.homepage.underwater.difference.title: Title for the homepage underwater difference subpart'}),
       description: defineMessage({
-        defaultMessage: 'Offsetting CO2 is effective. Extremely effective!',
+        defaultMessage: 'Offsetting CO2 is effective.{br}Extremely effective.',
         description: 'site.homepage.underwater.difference.description: Description for the homepage underwater difference subpart'}),
       link: defineMessage({
         defaultMessage: 'Compare Outcomes',
@@ -43,7 +41,7 @@ const items = {
   },
   science: {
     img: science,
-    to: "/healthier",
+    to: "/blog/coming-soon",
     text: {
       title: defineMessage({
         defaultMessage: 'Scientifically Verified',
@@ -58,13 +56,13 @@ const items = {
   },
   trees: {
     img: trees,
-    to: "/healthier",
+    to: "/wedomore",
     text: {
       title: defineMessage({
         defaultMessage: 'We Do More',
         description: 'site.homepage.underwater.trees.title: Title for the homepage underwater trees subpart'}),
       description: defineMessage({
-        defaultMessage: 'It’s not just CO2. The projects we fund are vital to restoring our ecosystem.',
+        defaultMessage: "It's more than CO2. We fund the changes we all know the world needs.",
         description: 'site.homepage.underwater.trees.description: Description for the homepage underwater trees subpart'}),
       link: defineMessage({
         defaultMessage: 'What We Do',
@@ -76,7 +74,7 @@ const items = {
 export const Healthier = () => {
 
   return (
-    <div className={styles.content}>
+    <div className={styles.content} id="healthier">
       <div className={styles.headerImage}>
         <img src={bgtop_planet} />
       </div>
@@ -84,8 +82,7 @@ export const Healthier = () => {
         <Header as='h2' className={styles.title}>
           <FormattedMessage {...translations.title} />
           <Header.Subheader className={`x5spaceBefore`}>
-            <FormattedMessage tagName='span' {...translations.description1} />
-            <FormattedMessage tagName='span'{...translations.description2} />
+            <FormattedMessageWithBreaks tagName='span' {...translations.description} />
           </Header.Subheader>
         </Header>
         <div className={styles.items} >

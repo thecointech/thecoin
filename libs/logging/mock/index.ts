@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals'
-import { BunyanLogger } from '../src/logger';
+import type { AppLogger, BunyanLogger } from '../src/logger';
 import { createLoggerProxy } from '../src/loggerContext';
-
+import '../src/loggerContextBrowser';
 export { LoggerContext } from '../src/loggerContext'
 
 // Global mock functions that can be accessed by tests
@@ -35,5 +35,6 @@ const createMockLogger = (): BunyanLogger => {
 const baseMockLogger = createMockLogger();
 
 // Create the proxy logger (same as production but with mock base)
-export const log: BunyanLogger = createLoggerProxy(baseMockLogger);
+export const mockEnd = jest.fn<() => Promise<void>>().mockResolvedValue(undefined);
+export const log: AppLogger = createLoggerProxy(baseMockLogger, mockEnd);
 

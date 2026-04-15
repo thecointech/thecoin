@@ -37,5 +37,3 @@ async def get_remember_input(image: UploadFile) -> RememberMeElementResponse:
 @router.post("/twofa/get-submit-input", tags=["twofa"])
 async def get_submit_input(image: UploadFile) -> ElementResponse:
     return await run_endpoint_query(image, query_2fa_submit_element)
-
-# Errors: TODO: Can we not create a generic endpoint for this?

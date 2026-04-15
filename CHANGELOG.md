@@ -3,6 +3,162 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+
+
+**Note:** Version bump only for package @thecointech/the-coin
+
+
+
+
+
+# [0.6.0-test.0](https://github.com/thecointech/thecoin/compare/v0.5.4-test.2...v0.6.0-test.0) (2026-03-31)
+
+
+### Bug Fixes
+
+* Always log API errors.  Do not swallow prior errors or prevent execution proceeding ([b78bd5b](https://github.com/thecointech/thecoin/commit/b78bd5b79a7ea7a55dd4307f84a1c737a73a5fff))
+* show initialize progress if necessary when recording ([04e83ab](https://github.com/thecointech/thecoin/commit/04e83ab3fc17e4b6708b40762b62e43258552182))
+
+
+
+
+
+## [0.5.4-test.2](https://github.com/thecointech/thecoin/compare/v0.5.4-test.1...v0.5.4-test.2) (2026-02-26)
+
+**Note:** Version bump only for package @thecointech/the-coin
+
+
+
+
+
+## [0.5.4-test.1](https://github.com/thecointech/thecoin/compare/v0.5.4-test.0...v0.5.4-test.1) (2026-02-25)
+
+**Note:** Version bump only for package @thecointech/the-coin
+
+
+
+
+
+## [0.5.4-test.0](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.4-test.0) (2026-02-25)
+
+
+### Bug Fixes
+
+* apis/broker/ts/package.json to reduce vulnerabilities ([a278faa](https://github.com/thecointech/thecoin/commit/a278faaddd6c0d19b6c48c70973a70c60f9058f0))
+* apis/nft/ts/package.json to reduce vulnerabilities ([0006e1d](https://github.com/thecointech/thecoin/commit/0006e1dd827a9708e1ad7278fc45e03ecaf69de5))
+* apis/rates/ts/package.json to reduce vulnerabilities ([813d2da](https://github.com/thecointech/thecoin/commit/813d2dae268db6347a6661f94c63baee0b1a1bb4))
+* apps/broker-service/package.json to reduce vulnerabilities ([965eb0d](https://github.com/thecointech/thecoin/commit/965eb0dbd7f001f774e70a493523541ab8749745))
+* apps/broker-service/package.json to reduce vulnerabilities ([0bafcc4](https://github.com/thecointech/thecoin/commit/0bafcc44fd19529b2e0fd4f606cca7adcb504493))
+* apps/nft-service/package.json to reduce vulnerabilities ([344e67f](https://github.com/thecointech/thecoin/commit/344e67f11c7a0dc5f077b92f5f487920ba3c2f87))
+* apps/rates-service/package.json to reduce vulnerabilities ([fbd5ca1](https://github.com/thecointech/thecoin/commit/fbd5ca171eb4469ed823ac2019d82835caa4d395))
+* do not increment version in branch creation ([65ab3e8](https://github.com/thecointech/thecoin/commit/65ab3e8f4b4b52e6f27bbdf224790e004660fb57))
+* extract correct version from lerna output instead of CLI version ([ffc9d5c](https://github.com/thecointech/thecoin/commit/ffc9d5c984ae5c5aada6b15263b1f436281f828f))
+* package.json to reduce vulnerabilities ([7a07910](https://github.com/thecointech/thecoin/commit/7a07910cdf6c6fbf9b60bdaf28b96a3b32d13d1c))
+* potential fix for harvester scheduler not running on mac, do not do full replay in prodtest ([6d19c33](https://github.com/thecointech/thecoin/commit/6d19c33a4c343ed34597d8356e657b5c150eb0b8))
+
+
+### Reverts
+
+* Revert "chore(release): publish v0.5.3" ([69528b5](https://github.com/thecointech/thecoin/commit/69528b54d7e69bc85a1d65fcbd7ffaebff462d91))
+
+
+
+
+
+## [0.5.3](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.3) (2026-02-20)
+
+
+### Bug Fixes
+
+* apis/broker/ts/package.json to reduce vulnerabilities ([a278faa](https://github.com/thecointech/thecoin/commit/a278faaddd6c0d19b6c48c70973a70c60f9058f0))
+* apis/nft/ts/package.json to reduce vulnerabilities ([0006e1d](https://github.com/thecointech/thecoin/commit/0006e1dd827a9708e1ad7278fc45e03ecaf69de5))
+* apis/rates/ts/package.json to reduce vulnerabilities ([813d2da](https://github.com/thecointech/thecoin/commit/813d2dae268db6347a6661f94c63baee0b1a1bb4))
+* apps/broker-service/package.json to reduce vulnerabilities ([965eb0d](https://github.com/thecointech/thecoin/commit/965eb0dbd7f001f774e70a493523541ab8749745))
+* apps/broker-service/package.json to reduce vulnerabilities ([0bafcc4](https://github.com/thecointech/thecoin/commit/0bafcc44fd19529b2e0fd4f606cca7adcb504493))
+* apps/nft-service/package.json to reduce vulnerabilities ([344e67f](https://github.com/thecointech/thecoin/commit/344e67f11c7a0dc5f077b92f5f487920ba3c2f87))
+* apps/rates-service/package.json to reduce vulnerabilities ([fbd5ca1](https://github.com/thecointech/thecoin/commit/fbd5ca171eb4469ed823ac2019d82835caa4d395))
+* package.json to reduce vulnerabilities ([7a07910](https://github.com/thecointech/thecoin/commit/7a07910cdf6c6fbf9b60bdaf28b96a3b32d13d1c))
+
+
+### Reverts
+
+* Revert "chore(release): publish v0.5.3" ([69528b5](https://github.com/thecointech/thecoin/commit/69528b54d7e69bc85a1d65fcbd7ffaebff462d91))
+
+
+
+
+
+## [0.5.3-test.1](https://github.com/thecointech/thecoin/compare/v0.5.3-test.0...v0.5.3-test.1) (2026-01-30)
+
+
+### Bug Fixes
+
+* (Hopeful) release-branch remove persist-credentials to force usage of tokens to enable starting deploy-on-tag ([94729eb](https://github.com/thecointech/thecoin/commit/94729ebe3fed6c1eb13c968f84938d9ec59ae491))
+* added RequestId logging & Async context logging ([e5a36a8](https://github.com/thecointech/thecoin/commit/e5a36a847b0e83f1a2e020caeed29c1172365e38))
+* facepalms ([d031a6b](https://github.com/thecointech/thecoin/commit/d031a6b36792daae58bb55c9379058302a2c37f4))
+* Harvester profile refresh & modal detection ([965f83d](https://github.com/thecointech/thecoin/commit/965f83d431a344c8252ecb5d7fdd1107306df1ba))
+* move initialization to common location ([1c57253](https://github.com/thecointech/thecoin/commit/1c57253fc7726b044cb3c0ca2c84c246c6b76efe))
+
+
+
+
+
+## [0.5.3-test.0](https://github.com/thecointech/thecoin/compare/v0.5.2...v0.5.3-test.0) (2026-01-24)
+
+
+### Bug Fixes
+
+* Add URL preservation when restoring/creating accounts, this allows the Harvester to pull accounts even if browser does not have local copy of account ([362cc1c](https://github.com/thecointech/thecoin/commit/362cc1cd0e608966bf07659075343f3c51818873))
+* allow release branches in lerna config ([4cc2e56](https://github.com/thecointech/thecoin/commit/4cc2e562ef7b2a6021e152b0fc84ca321d0dbe56))
+* deployment now -only- versions in release-branch, and updates common.public.env where necessary ([2beeb4e](https://github.com/thecointech/thecoin/commit/2beeb4ea047e9a68f6810116241bd624b0648ce8))
+* ensure `from` parameter as-is, avoid abs path or transforms from URL ([203b1b5](https://github.com/thecointech/thecoin/commit/203b1b548a3657f3329604ed65349d8effa776bd))
+* local release branch tracks remote ([732498f](https://github.com/thecointech/thecoin/commit/732498f38a3f242a33b01570871029e1ac701da0))
+* remove [skip ci], use token properties instead to limit recursive workflow calls ([c3d546a](https://github.com/thecointech/thecoin/commit/c3d546a84f5f6d8f4153317ae6531b0765ace2ea))
+* restore dropped CONFIG_NAME from Google services ([4ad802a](https://github.com/thecointech/thecoin/commit/4ad802a59152851c23531dcbcb24cc122d48af04))
+
+
+
+
+
+## [0.5.2](https://github.com/thecointech/thecoin/compare/v0.5.2-test.0...v0.5.2) (2026-01-19)
+
+**Note:** Version bump only for package @thecointech/the-coin
+
+
+
+
+
+## [0.5.2-test.0](https://github.com/thecointech/thecoin/compare/v0.5.1...v0.5.2-test.0) (2026-01-19)
+
+
+### Bug Fixes
+
+* apis/broker/ts/package.json to reduce vulnerabilities ([284146b](https://github.com/thecointech/thecoin/commit/284146b0ab93985ab193c17934e170daa3e895ff))
+* apis/nft/ts/package.json to reduce vulnerabilities ([e8c65bc](https://github.com/thecointech/thecoin/commit/e8c65bcc0abcb32717cf8e6e2d37ac280bce927d))
+* apis/rates/ts/package.json to reduce vulnerabilities ([361ef63](https://github.com/thecointech/thecoin/commit/361ef636c21d38cdd41f55e16e3445164a24b89a))
+* apps/broker-service/package.json to reduce vulnerabilities ([c8e7a88](https://github.com/thecointech/thecoin/commit/c8e7a884346c62f5f2d0961face1523bd273e81a))
+* apps/broker-service/package.json to reduce vulnerabilities ([35e0f12](https://github.com/thecointech/thecoin/commit/35e0f12fc70a8e1d5230e232881c21cd5647222e))
+* apps/broker-service/package.json to reduce vulnerabilities ([392fa91](https://github.com/thecointech/thecoin/commit/392fa91588fc529081e15e4d5a4200de6a174044))
+* apps/broker-service/package.json to reduce vulnerabilities ([1870c98](https://github.com/thecointech/thecoin/commit/1870c980b989387d1a48ccb622250a9b93b1a7c4))
+* apps/nft-service/package.json to reduce vulnerabilities ([657c760](https://github.com/thecointech/thecoin/commit/657c760a79b2f455f4c61d108f626fc2987bf905))
+* apps/nft-service/package.json to reduce vulnerabilities ([4cffc64](https://github.com/thecointech/thecoin/commit/4cffc6479f025de2b96416a21f4f2bb7db1f0d2b))
+* apps/nft-service/package.json to reduce vulnerabilities ([d4ac863](https://github.com/thecointech/thecoin/commit/d4ac86315a24c87a2234cc87b622b4e5302f3340))
+* apps/nft-service/package.json to reduce vulnerabilities ([fd67e6e](https://github.com/thecointech/thecoin/commit/fd67e6ea0b07e70fd3373deb9af18d7e92a5470c))
+* apps/nft-service/package.json to reduce vulnerabilities ([7e0f74f](https://github.com/thecointech/thecoin/commit/7e0f74fae57feb42f0cbd028f497e4fb7fe7ffea))
+* apps/rates-service/package.json to reduce vulnerabilities ([3a717a4](https://github.com/thecointech/thecoin/commit/3a717a425cda9e1a9d6f30e916ac8a1ea490b121))
+* apps/rates-service/package.json to reduce vulnerabilities ([a39f6f2](https://github.com/thecointech/thecoin/commit/a39f6f2d87d46cf2a6229660990b0d3f4db27368))
+* apps/rates-service/package.json to reduce vulnerabilities ([0e5f4ed](https://github.com/thecointech/thecoin/commit/0e5f4edcc0764f06f7adf684beaebd5d51e7ecce))
+* apps/site-app/package.json to reduce vulnerabilities ([87e5055](https://github.com/thecointech/thecoin/commit/87e50559daa4a591d1adbc9fbab63b10f4c7f61c))
+* apps/site-app/package.json to reduce vulnerabilities ([5e7875e](https://github.com/thecointech/thecoin/commit/5e7875ea974ca0023bd49c55a3118166168ac891))
+* libs/email/package.json to reduce vulnerabilities ([69dec81](https://github.com/thecointech/thecoin/commit/69dec81869ea35fac9b9d7dd049bbdd4cbab971e))
+* libs/firestore/package.json to reduce vulnerabilities ([f39421c](https://github.com/thecointech/thecoin/commit/f39421c2e693db55eab7c475adb350e7170642cb))
+* package.json to reduce vulnerabilities ([c30e61d](https://github.com/thecointech/thecoin/commit/c30e61dad5370deb94196c58926692a702e8e737))
+* package.json to reduce vulnerabilities ([b556cca](https://github.com/thecointech/thecoin/commit/b556ccaa95432b6503196dfc47973c3fa64450b5))
+
+
+
+
+
 ## [0.5.1](https://github.com/thecointech/thecoin/compare/v0.5.1-test.1...v0.5.1) (2026-01-06)
 
 **Note:** Version bump only for package @thecointech/the-coin

@@ -1,11 +1,20 @@
-import json
-from shapely import Point
+from collections import defaultdict
 from TestBase import TestBase
-from geo_math import BBox, get_distance
+from etransfer_data import ButtonResponse
 from intent_routes import page_error
-from testdata import get_private_folder, get_single_test_element, load_image
-from etransfer_routes import best_etransfer_link, detect_etransfer_form, detect_etransfer_stage, detect_next_button, detect_to_recipient
+from etransfer_routes import (
+    best_etransfer_link,
+    detect_etransfer_form,
+    detect_etransfer_stage,
+    input_types,
+    detect_next_button,
+    detect_to_recipient,
+    detect_confirmation_code
+)
+from login_routes import detect_session_timeout_element
+
 from common_routes import detect_most_similar_option
+from tests.testutils.testdata import TestData
 
 # General flow
 # Find ETransfer link
@@ -19,45 +28,27 @@ from common_routes import detect_most_similar_option
 # Validate selection
 #   (Click on correct select option)
 
-# class ETransferStage(CaseInsensitiveEnum):
-#     FILL_FORM = "FillForm"
-#     REVIEW_DETAILS = "ReviewDetails"
-#     TRANSFER_COMPLETE = "TransferComplete"
-
-# typesStr = ", ".join([e.value for e in ETransferStage])
-
-# class ETransferStageResponse(BaseModel):
-#     stage: ETransferStage = Field(..., description="option")
-#     # reasoning: str = Field(..., description="explain your reasoning")
-
 class TestETransfer(TestBase):
 
+    section = "SendETransfer"
+    record_time = "archive"
+
     # What is the action be requested of the user here?
-    async def test_navigate_to_transfer(self):
-        samples_folder = get_private_folder("record")
-        links_files = samples_folder.glob("**/SendETransfer/*-best-link.json")
-        for links_file in sorted(links_files):
-            step_number = links_file.name.replace("-best-link.json", "")
-            with self.subTest(key=links_file.parent.parent.name, step=step_number):
-                # gold_file = links_file.with_name(links_file.name.replace("-links.json", "-links-gold.json"))
-                # gold = json.load(open(gold_file))
+    async def test_best_etransfer_link(self):
 
-                page_links = json.load(open(links_file))
-                best_link = await best_etransfer_link(page_links["links"])
-                print(f"Best link found: {best_link.best_link}")
-                self.assertEqual(best_link.best_link, page_links["vqa"]["best_link"])
+        async def test(test: TestData):
+            original = test.vqa("bestEtransferLink")
+            response = await best_etransfer_link(original.args[0])
+            self.assertEqual(response.best_link, original.response["best_link"])
+        await self.run_subTests_TestData("bestEtransferLink", test)
 
-    # Explicit failed link
+    # Test the case that failed way-back-when
     async def test_failed_links(self):
-      best_link = await best_etransfer_link(["Transfers", "Make a Transfer", "Interac e-Transfer"])
-      self.assertEqual(best_link.best_link, "Interac e-Transfer")
+        best_link = await best_etransfer_link(["Transfers", "Make a Transfer", "Interac e-Transfer"])
+        self.assertEqual(best_link.best_link, "Interac e-Transfer")
 
     async def test_detect_etransfer_form(self):
-        samples = get_single_test_element("SendETransfer", "input-types")
-        for sample in samples:
-            with self.subTest(key=sample.key):
-                response = await detect_etransfer_form(sample.image, sample.html_title)
-                self.assertEqual(response.form_present, True)
+        await self.run_subTests_Vqa("detectEtransferForm", detect_etransfer_form)
 
         # Test negatives too (this should be moved within record)
         # Commented out for now: this test is nearly useless, as it
@@ -80,112 +71,72 @@ class TestETransfer(TestBase):
         #         has_form = await detect_etransfer_form(image, intent['title'])
         #         self.assertEqual(has_form.form_present, False)
 
+
+    async def test_detect_input_types(self):
+        async def test_input_types(test: TestData):
+            original = test.vqa("inputTypes")
+            response = await input_types(test.image, *original.args)
+            self.assertListEqual(response, original.response) # type: ignore - this response (only) is not a dict
+        await self.run_subTests_TestData("inputTypes", test_input_types)
+
+
     async def test_etransfer_recipient(self):
-        samples = get_single_test_element("SendETransfer", "to-recipient")
-        for sample in samples:
-            with self.subTest(key=sample.key):
-                response = await detect_to_recipient(sample.image, sample.html_title)
-                self.assertResponse(response, sample.element, sample.key)
+        await self.run_subTests_Elements("select-recipient", vqa="detectToRecipient", endpoint=detect_to_recipient)
 
-        # samples_folder = get_private_folder("samples", "etransfer")
-        # all_json = samples_folder.glob("**/*-gold.json")
-        # for json_file in all_json:
-        #     gold = json.load(open(json_file))
-        #     if ("SelectRecipient" in gold):
-        #         # replace -gold.json with .png
-        #         image_file_stem = json_file.name.replace("-gold.json", ".png")
-        #         image_file = json_file.with_name(image_file_stem)
-        #         image = load_image(str(image_file))
-        #         gold_box = BBox.from_coords(gold["SelectRecipient"]["coords"])
-
-        #         response = await detect_to_recipient(image, gold["SelectRecipient"]["address"])
-        #         pointed = Point(response.position_x, response.position_y)
-        #         is_contained = get_distance(pointed, gold_box) == 0
-
-        #         self.assertEqual(is_contained, True)
 
     async def test_detect_next_button(self):
-        samples_folder = get_private_folder("samples", "etransfer")
-        all_json = samples_folder.glob("**/*-gold.json")
-        for json_file in all_json:
 
-            image_file_stem = json_file.name.replace("-gold.json", ".png")
-            image_file = json_file.with_name(image_file_stem)
-            if not image_file.exists():
-                continue
+        async def test_detect_next_button(datum: list[TestData]):
+            response, vqa, elm = None, None, None
+            # sort datum by key
+            datum.sort(key=lambda x: x.key)
+            for data in datum:
+                # First, make sure there is an original query
+                # The list should be detect/step/detect/step...
+                if not vqa and data.has_vqa("detectNextButton"):
+                    vqa = data.vqa("detectNextButton")
+                    response = await detect_next_button(data.image)
+                    elm = None
+                # if we have a response, validate it against step
+                if vqa and not elm and data.has_element("step"):
+                    assert response is not None
+                    vqa_response = vqa.response
+                    self.assertResponse(response, data, "step", lambda vr=vqa_response: ButtonResponse(**vr))
+                    vqa = None
+            assert vqa is None
 
-            key = image_file.parent.name
-            step = image_file.stem
+        datas = self.get_test_data("{step,detectNextButton}")
 
-            # if (key != "Tangerine"):
-            #     continue
+        # next buttons & detections often mix up their step number
+        # so group them by folder & process all at once.
+        data_by_folder: defaultdict[str, list[TestData]] = defaultdict(list)
+        for data in datas:
+            # add all vqa to the list
+            data_by_folder[data._matched_folder].append(data)
 
-            # if (step != "4-page" and step != "6-page"):
-            #     continue
-
-            with self.subTest(key=key, step=step):
-                gold = json.load(open(json_file))
-                image = load_image(str(image_file))
-
-                detected = await detect_next_button(image)
-
-                gold_button_exists = "next_button" in gold
-                self.assertEqual(detected is not None, gold_button_exists)
-                if detected:
-                    gold = gold["next_button"]
-                    enabled = gold.get("enabled", True)
-                    self.assertEqual(detected.enabled, enabled)
-                    self.assertEqual(detected.content, gold["text"])
-                    button_bbox = BBox.from_coords(gold["coords"])
-                    pointed = Point(detected.position_x, detected.position_y)
-                    is_contained = get_distance(pointed, button_bbox) == 0
-                    self.assertTrue(is_contained)
+        tests = [(folder, lambda f=folder: test_detect_next_button(data_by_folder[f])) for folder in data_by_folder]
+        await self.run_subTests(tests, "eTransfer_detectNextButton")
 
 
-    async def test_etransfer_status(self):
-        samples_folder = get_private_folder("samples", "etransfer")
-        all_json = samples_folder.glob("**/*-gold.json")
-        for json_file in all_json:
+    async def test_etransfer_stage(self):
+        await self.run_subTests_Vqa("detectEtransferStage", detect_etransfer_stage)
 
-            image_file_stem = json_file.name.replace("-gold.json", ".png")
-            image_file = json_file.with_name(image_file_stem)
-            if not image_file.exists():
-                continue
-
-            key = image_file.parent.name
-            step = image_file.stem
-
-            with self.subTest(key=key, step=step):
-                gold = json.load(open(json_file))
-                image = load_image(str(image_file))
-
-                detected_stage = await detect_etransfer_stage(image, "Send Transfer") # NOTE: Need to fix this title
-
-                self.assertEqual(detected_stage.stage, gold['stage'])
 
     async def test_etransfer_error(self):
-        samples_folder = get_private_folder("samples")
-        all_images = samples_folder.glob("**/*.png")
-        for image_file in all_images:
-
-            # skip dbg outputs
-            if ("dbg_outputs" in str(image_file)):
-                continue
-
-            key = image_file.parent.name
-            step = image_file.stem
-
-            with self.subTest(key=key, step=step):
-                image = load_image(str(image_file))
-                detected_error = await page_error(image)
-                print(f"Detected error with key {key}: {detected_error.error_message_detected}, message: {detected_error.error_message}")
-                gold_error = "error" in key
-                self.assertEqual(detected_error.error_message_detected, gold_error)
+        await self.run_subTests_Vqa("pageError", page_error)
 
 
     async def test_similarity(self):
         similarity = await detect_most_similar_option("Chequing Account: 1234567", ["Select an account", "Your Basic Chequing Account 123**** - $89.90"])
         self.assertEqual(similarity.most_similar, "Your Basic Chequing Account 123**** - $89.90")
+
+
+    async def test_confirmation_code(self):
+        await self.run_subTests_Elements("confirmation", vqa="detectConfirmationCode", endpoint=detect_confirmation_code)
+
+    # this is technically a method from login, but it only runs within eTransfer so test is here to
+    async def test_session_timeout(self):
+        await self.run_subTests_Vqa("detectSessionTimeoutElement", detect_session_timeout_element)
 
 
 

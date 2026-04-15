@@ -5,6 +5,8 @@
   display: flex;
 
   .card {
+    display: flex;
+    flex-direction: column;
     background-color: @white;
     border-radius: 15px;
     border: 0.2px solid @theCoinPalettePaleGreen2;
@@ -14,6 +16,11 @@
 
     > h4 {
       margin-bottom: 10px;
+    }
+
+    > a:last-child {
+      margin-top: auto;
+      align-self: flex-start;
     }
   }
 

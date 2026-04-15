@@ -44,6 +44,9 @@ export type AccountState = {
   historyStartBlock?: number;
   historyEnd?: DateTime;
   historyEndBlock?: number;
+
+  // Mark account as read-only (e.g., demo accounts)
+  readonly?: boolean;
 };
 
 export const DefaultAccountValues = {

@@ -23,6 +23,10 @@
     "defaultMessage": "Sélectionnez le bénéficiaire",
     "description": "app.accounts.billPayments.payeeTxt: Label for the form the make a payment page / bill payment tab"
   },
+  "0ms9Ih": {
+    "defaultMessage": "Votre numéro de carte doit comporter 16 chiffres",
+    "description": "Validation error for credit account numbers"
+  },
   "0vNzso": {
     "defaultMessage": "Paramètres utilisateur",
     "description": "app.settings.tabs.main: Title for the tabs the setting page in the app"
@@ -246,10 +250,6 @@
   "S/Ujpm": {
     "defaultMessage": "Entrée",
     "description": "app.historygraph.tooltip.in: HistoryGraph tooltip - total transaction in"
-  },
-  "SKISxf": {
-    "defaultMessage": "Votre numéro de carte doit comporter 16 chiffres",
-    "description": "app.accounts.billPayments.invalidVisaChars: Error message for the bill payement page"
   },
   "SlkrJd": {
     "defaultMessage": "Prénom",

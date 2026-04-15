@@ -22,7 +22,7 @@ export const App = () => {
   const activeAddress = AccountMap.useData().active;
 
   useEffect(() => {
-    window.scraper.onBackgroundTaskProgress(progress => {
+    const releaseBgTaskProgress = window.scraper.onBackgroundTaskProgress(progress => {
       backgroundTaskApi.setTaskProgress(progress);
     })
 
@@ -37,6 +37,10 @@ export const App = () => {
       .catch(error => {
         console.error('Failed to get coin account details:', error);
       });
+
+    return () => {
+      releaseBgTaskProgress();
+    }
   }, [])
 
   return (

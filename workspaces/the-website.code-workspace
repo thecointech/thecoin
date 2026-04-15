@@ -13,6 +13,10 @@
       "path": "../libs/site-base"
     },
     {
+      "name": "site-prismic",
+      "path": "../libs/site-prismic"
+    },
+    {
       "name": "shared",
       "path": "../libs/shared"
     },
@@ -33,6 +37,7 @@
       "path": "../libs/contract"
     },
     {
+      "name": "contract-plugins",
       "path": "../libs/contract-plugins"
     }
   ],

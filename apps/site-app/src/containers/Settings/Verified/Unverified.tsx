@@ -23,7 +23,7 @@ const button = defineMessage({
 
 //
 // Component to show if the account is needs verification
-export const Unverified = ({address, details}: PropsVerified) => {
+export const Unverified = ({address, details, readonly}: PropsVerified) => {
 
   const accountApi = Account(address).useApi();
   const state = useBlockpass(address, details.user?.email, accountApi.checkKycStatus);
@@ -36,6 +36,7 @@ export const Unverified = ({address, details}: PropsVerified) => {
           <ButtonSecondary
             id="blockpass-kyc-connect"
             loading={state == "loading"}
+            disabled={readonly}
             onClick={() => {
               log.debug("Opening KYC Dialog");
               accountApi.initKycProcess();

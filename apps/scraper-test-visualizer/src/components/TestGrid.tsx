@@ -40,7 +40,9 @@ const TestGrid = () => {
               </Card.Meta>
               <Card.Description>
                 <div style={{ marginTop: '0.5rem' }}>
-                  <div><strong>Key:</strong> {test.key}</div>
+                  <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <strong>Key:</strong> {test.key.split(':').slice(1).join(':') || test.key}
+                  </div>
                   <div><strong>Test runs:</strong> {runCount}</div>
                   <div><strong>Latest:</strong> {latestDate}</div>
                 </div>

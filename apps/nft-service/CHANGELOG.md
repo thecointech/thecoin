@@ -3,6 +3,108 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+
+
+**Note:** Version bump only for package @thecointech/nft-service
+
+
+
+
+
+# [0.6.0-test.0](https://github.com/thecointech/thecoin/compare/v0.5.4-test.2...v0.6.0-test.0) (2026-03-31)
+
+**Note:** Version bump only for package @thecointech/nft-service
+
+
+
+
+
+## [0.5.4-test.2](https://github.com/thecointech/thecoin/compare/v0.5.4-test.1...v0.5.4-test.2) (2026-02-26)
+
+**Note:** Version bump only for package @thecointech/nft-service
+
+
+
+
+
+## [0.5.4-test.1](https://github.com/thecointech/thecoin/compare/v0.5.4-test.0...v0.5.4-test.1) (2026-02-25)
+
+**Note:** Version bump only for package @thecointech/nft-service
+
+
+
+
+
+## [0.5.4-test.0](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.4-test.0) (2026-02-25)
+
+
+### Bug Fixes
+
+* apps/nft-service/package.json to reduce vulnerabilities ([344e67f](https://github.com/thecointech/thecoin/commit/344e67f11c7a0dc5f077b92f5f487920ba3c2f87))
+
+
+### Reverts
+
+* Revert "chore(release): publish v0.5.3" ([69528b5](https://github.com/thecointech/thecoin/commit/69528b54d7e69bc85a1d65fcbd7ffaebff462d91))
+
+
+
+
+
+## [0.5.3](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.3) (2026-02-20)
+
+
+### Bug Fixes
+
+* apps/nft-service/package.json to reduce vulnerabilities ([344e67f](https://github.com/thecointech/thecoin/commit/344e67f11c7a0dc5f077b92f5f487920ba3c2f87))
+
+
+### Reverts
+
+* Revert "chore(release): publish v0.5.3" ([69528b5](https://github.com/thecointech/thecoin/commit/69528b54d7e69bc85a1d65fcbd7ffaebff462d91))
+
+
+
+
+
+## [0.5.3-test.1](https://github.com/thecointech/thecoin/compare/v0.5.3-test.0...v0.5.3-test.1) (2026-01-30)
+
+**Note:** Version bump only for package @thecointech/nft-service
+
+
+
+
+
+## [0.5.3-test.0](https://github.com/thecointech/thecoin/compare/v0.5.2...v0.5.3-test.0) (2026-01-24)
+
+**Note:** Version bump only for package @thecointech/nft-service
+
+
+
+
+
+## [0.5.2](https://github.com/thecointech/thecoin/compare/v0.5.2-test.0...v0.5.2) (2026-01-19)
+
+**Note:** Version bump only for package @thecointech/nft-service
+
+
+
+
+
+## [0.5.2-test.0](https://github.com/thecointech/thecoin/compare/v0.5.1...v0.5.2-test.0) (2026-01-19)
+
+
+### Bug Fixes
+
+* apps/nft-service/package.json to reduce vulnerabilities ([657c760](https://github.com/thecointech/thecoin/commit/657c760a79b2f455f4c61d108f626fc2987bf905))
+* apps/nft-service/package.json to reduce vulnerabilities ([d4ac863](https://github.com/thecointech/thecoin/commit/d4ac86315a24c87a2234cc87b622b4e5302f3340))
+* apps/nft-service/package.json to reduce vulnerabilities ([fd67e6e](https://github.com/thecointech/thecoin/commit/fd67e6ea0b07e70fd3373deb9af18d7e92a5470c))
+* apps/nft-service/package.json to reduce vulnerabilities ([7e0f74f](https://github.com/thecointech/thecoin/commit/7e0f74fae57feb42f0cbd028f497e4fb7fe7ffea))
+
+
+
+
+
 ## [0.5.1](https://github.com/thecointech/thecoin/compare/v0.5.1-test.1...v0.5.1) (2026-01-06)
 
 **Note:** Version bump only for package @thecointech/nft-service

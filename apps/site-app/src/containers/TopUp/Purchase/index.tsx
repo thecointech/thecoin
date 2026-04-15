@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { AccountMap } from '@thecointech/redux-accounts';
 import { GetSignedMessage } from '@thecointech/utilities/SignedMessages';
 import { ETransferModal } from './eTransferModal';
@@ -30,11 +30,20 @@ const translations = defineMessages({
   deposit: {
     defaultMessage: 'Send the amount you wish to deposit. It will be credited to your account within 2 working days.',
     description: 'app.purchase.deposit: Content for the purchase list explanation page in the app'
+  },
+  readonlyRecipient: {
+    defaultMessage: 'Disabled for readonly account',
+    description: 'app.purchase.readonlyRecipient: Message shown when trying to generate recipient for readonly account'
+  },
+  readonlySecret: {
+    defaultMessage: 'N/A',
+    description: 'app.purchase.readonlySecret: Secret placeholder for readonly account'
   }
 });
 
 export const Purchase = () => {
 
+  const intl = useIntl();
   const account = AccountMap.useActive()!;
   const [showDlg, setShowDlg] = useState(false);
   const [recipient, setRecipient] = useState('');
@@ -42,6 +51,13 @@ export const Purchase = () => {
 
   const generateRecipient = async () => {
     setShowDlg(true);
+
+    // Check if account is readonly
+    if (account.readonly) {
+      setRecipient(intl.formatMessage(translations.readonlyRecipient));
+      setSecret(intl.formatMessage(translations.readonlySecret));
+      return;
+    }
 
     // Build our request
     const { signer, address } = account;
