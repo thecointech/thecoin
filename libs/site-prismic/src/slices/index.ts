@@ -10,6 +10,7 @@ export const components = {
   hero: dynamic(() => import("./Hero")),
   project_details: dynamic(() => import("./ProjectDetails")),
   rich_text: dynamic(() => import("./RichText")),
+  table: dynamic(() => import("./Table")),
   two_column_layout: dynamic(() => import("./TwoColumnLayout")),
   video: dynamic(() => import("./Video")),
 };

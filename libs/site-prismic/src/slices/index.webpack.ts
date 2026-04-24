@@ -7,6 +7,7 @@ import BlockQuote from "./BlockQuote";
 import CcqiScore from "./CcqiScore";
 import CcqiCategory from "./CcqiCategory";
 import Video from "./Video";
+import Table from "./Table";
 
 export const components = {
   hero: Hero,
@@ -16,4 +17,5 @@ export const components = {
   ccqi_score: CcqiScore,
   ccqi_category: CcqiCategory,
   video: Video,
+  table: Table,
 };
