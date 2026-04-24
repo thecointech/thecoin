@@ -92,6 +92,7 @@ export interface ArticleDocumentDataCategoriesItem {
 }
 
 type ArticleDocumentDataSlicesSlice =
+  | TableSlice
   | VideoSlice
   | CaptionedImageSlice
   | ProjectDetailsSlice
@@ -1222,6 +1223,68 @@ export type RichTextSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Primary content in *Table → Default → Primary*
+ */
+export interface TableSliceDefaultPrimary {
+  /**
+   * Title field in *Table → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: Optional table caption
+   * - **API ID Path**: table.default.primary.title
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * Table Data field in *Table → Default → Primary*
+   *
+   * - **Field Type**: Table
+   * - **Placeholder**: *None*
+   * - **API ID Path**: table.default.primary.table_data
+   * - **Documentation**: https://prismic.io/docs/fields/table
+   */
+  table_data: prismic.TableField;
+
+  /**
+   * source field in *Table → Default → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: table.default.primary.source
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  source: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+}
+
+/**
+ * Default variation for Table Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type TableSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<TableSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *Table*
+ */
+type TableSliceVariation = TableSliceDefault;
+
+/**
+ * Table Shared Slice
+ *
+ * - **API ID**: `table`
+ * - **Description**: Table
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type TableSlice = prismic.SharedSlice<"table", TableSliceVariation>;
+
+/**
  * Item in *TwoColumnLayout → Default → Primary → Left Column Content*
  */
 export interface TwoColumnLayoutSliceDefaultPrimaryLeftColumnContentItem {
@@ -1425,6 +1488,10 @@ declare module "@prismicio/client" {
       RichTextSliceDefaultPrimary,
       RichTextSliceVariation,
       RichTextSliceDefault,
+      TableSlice,
+      TableSliceDefaultPrimary,
+      TableSliceVariation,
+      TableSliceDefault,
       TwoColumnLayoutSlice,
       TwoColumnLayoutSliceDefaultPrimaryLeftColumnContentItem,
       TwoColumnLayoutSliceDefaultPrimaryRightColumnContentItem,

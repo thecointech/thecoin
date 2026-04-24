@@ -26,7 +26,7 @@ const translations = defineMessages({
 const items = {
   difference: {
     img: co2,
-    to: "/blog/coming-soon",
+    to: "/blog/offsets-effective",
     text: {
       title: defineMessage({
         defaultMessage: 'Do What Matters',
@@ -41,7 +41,7 @@ const items = {
   },
   science: {
     img: science,
-    to: "/blog/coming-soon",
+    to: "/blog?category=Impact+Reports&category=Carbon+Offsets",
     text: {
       title: defineMessage({
         defaultMessage: 'Scientifically Verified',
