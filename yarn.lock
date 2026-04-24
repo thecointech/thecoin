@@ -12212,6 +12212,7 @@ __metadata:
   resolution: "@thecointech/tools@workspace:tools"
   dependencies:
     "@thecointech/setenv": "npm:^0.6.1"
+    cross-env: "npm:^7.0.3"
   languageName: unknown
   linkType: soft
 

@@ -25,6 +25,12 @@ abstract contract ExactDateable is Base {
     emit ExactTransfer(_msgSender(), to, amount, timestamp);
   }
 
+  // In rare cases it can be necessary to revert transfers.
+  function revertTransfer(address from, address to, uint256 amount, uint256 timestamp) public onlyTheCoin {
+    _transfer(from, to, amount);
+    emit ExactTransfer(from, to, amount, timestamp);
+  }
+
   modifier onlyBroker()
   {
     require(hasRole(BROKER_ROLE, _msgSender()), "Action requires Broker role");

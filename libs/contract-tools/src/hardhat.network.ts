@@ -18,6 +18,7 @@ function getLiveNetwork(_type: Network) {
   // if (!process.env.INFURA_PROJECT_ID) {
   //   throw new Error("Missing Infura project ID");
   // }
+  // NOTE: Hardhat is now ESM-first
   return {
     chainId: parseInt(process.env.DEPLOY_POLYGON_NETWORK_ID!),
     url: `${url}${process.env.INFURA_PROJECT_ID}`,

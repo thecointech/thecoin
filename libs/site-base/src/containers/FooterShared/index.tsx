@@ -53,7 +53,7 @@ export const FooterShared: React.FC<Props> = ({ children, background, id }) => (
           <a aria-label="Instagram" href="https://www.instagram.com/thecoincollaborative/" target="_blank">
             <img src={instagram} alt="" />
           </a>
-          <a aria-label="Bluesky" href="https://bsky.app/profile/thecoincollab.bsky.social" target="_blank">
+          <a aria-label="Bluesky" href="https://bsky.app/profile/thecoin.io" target="_blank">
             <img src={bluesky} alt="" />
           </a>
           <a aria-label="LinkedIn" href="https://ca.linkedin.com/company/the-coin" target="_blank">
