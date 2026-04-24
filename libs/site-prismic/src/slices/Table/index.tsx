@@ -23,13 +23,17 @@ const Table: FC<TableProps> = ({ slice }) => {
       data-slice-variation={slice.variation}
       className={styles.tableContainer}
     >
-      <Header size="tiny" className={styles.caption}>{slice.primary.title}</Header>
+      {
+        slice.primary.title && (
+          <Header size="tiny" className={styles.caption}>{slice.primary.title}</Header>
+        )
+      }
       <SemanticUITable>
         {data?.head && (
           <SemanticUITable.Header>
             {
-              data.head.rows.map((row, index) => (
-                <SemanticUITable.Row key={index}>
+              data.head.rows.map(row => (
+                <SemanticUITable.Row key={row.key}>
                   {
                     row.cells.map(cell => <TableCell key={cell.key} cell={cell} />)
                   }
@@ -41,8 +45,8 @@ const Table: FC<TableProps> = ({ slice }) => {
         {data?.body && (
           <SemanticUITable.Body>
             {
-              data.body.rows.map((row, index) => (
-                <SemanticUITable.Row key={index}>
+              data.body.rows.map((row) => (
+                <SemanticUITable.Row key={row.key}>
                   {
                     row.cells.map(cell => <TableCell key={cell.key} cell={cell} />)
                   }
