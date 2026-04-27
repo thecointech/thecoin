@@ -7,6 +7,10 @@ on:
         required: true
         type: string
         description: 'Environment to test (prodtest, prodbeta, prod)'
+      COMMIT_SHA:
+        required: true
+        type: string
+        description: 'Commit SHA to checkout'
 
 jobs:
   smoke-test-sites:
@@ -14,6 +18,8 @@ jobs:
     environment: ${{ inputs.CONFIG_NAME }}
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.COMMIT_SHA }}
 
       - run: corepack enable
 
@@ -44,6 +50,8 @@ jobs:
     environment: ${{ inputs.CONFIG_NAME }}
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.COMMIT_SHA }}
 
       - run: corepack enable
 

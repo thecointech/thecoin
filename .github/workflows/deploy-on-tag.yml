@@ -324,13 +324,14 @@ jobs:
       COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
 
   smoke-tests:
-    needs: [publish-services, publish-sites, determine-environment]
+    needs: [publish-services, publish-sites, determine-environment, normalize-commit]
     # Explicit condition needed because publish-services/publish-sites use if: always()
     if: ${{ always() && !cancelled() && !failure() }}
     uses: ./.github/workflows/action-smoke-tests.yml
     secrets: inherit
     with:
       CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
+      COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
 
   notify-success:
     needs: [smoke-tests, determine-environment, normalize-commit]
