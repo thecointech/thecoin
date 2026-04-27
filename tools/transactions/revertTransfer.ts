@@ -6,15 +6,20 @@ import { fetchRate } from '@thecointech/fx-rates';
 import { toCoinDecimal } from '@thecointech/utilities';
 import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
+import type { XferRequest } from './types';
 
 // Read the same transfer file used by manualTransfer.ts
 const xferPath = process.argv[2];
 if (!xferPath) {
   throw new Error("No transfer file specified");
 }
-const xferRequest = JSON.parse(readFileSync(xferPath, 'utf-8'));
+const xferRequest = JSON.parse(readFileSync(xferPath, 'utf-8')) as XferRequest;
 const signerRaw = readFileSync(xferRequest.wallet, 'utf-8');
-const signer = Wallet.fromEncryptedJsonSync(signerRaw, xferRequest.password);
+const password = await new Promise<string>(resolve => {
+  process.stdout.write('Wallet password: ');
+  process.stdin.once('data', data => resolve(data.toString().trim()));
+});
+const signer = Wallet.fromEncryptedJsonSync(signerRaw, password);
 const date = DateTime.fromSQL(xferRequest.date);
 
 const rate = await fetchRate(date.toJSDate());

@@ -44,25 +44,55 @@ export const FooterShared: React.FC<Props> = ({ children, background, id }) => (
           <FormattedMessage tagName="span" {...translate.registered2} />
         </div>
         <div className={styles.links}>
-          <a aria-label="Facebook" href="https://www.facebook.com/TheCoinCollaborative/" target="_blank">
+          <a
+            aria-label="Facebook"
+            href="https://www.facebook.com/TheCoinCollaborative/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img src={facebook} alt="" />
           </a>
-          {/* <a href="https://twitter.com/The_Green_NFT/" target="_blank">
+          {/* <a href="https://twitter.com/The_Green_NFT/" target="_blank" rel="noopener noreferrer">
             <img src={twitter} />
           </a> */}
-          <a aria-label="Instagram" href="https://www.instagram.com/thecoincollaborative/" target="_blank">
+          <a
+            aria-label="Instagram"
+            href="https://www.instagram.com/thecoincollaborative/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img src={instagram} alt="" />
           </a>
-          <a aria-label="Bluesky" href="https://bsky.app/profile/thecoin.io" target="_blank">
+          <a
+            aria-label="Bluesky"
+            href="https://bsky.app/profile/thecoin.io"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img src={bluesky} alt="" />
           </a>
-          <a aria-label="LinkedIn" href="https://ca.linkedin.com/company/the-coin" target="_blank">
+          <a
+            aria-label="LinkedIn"
+            href="https://ca.linkedin.com/company/the-coin"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img src={linkedin} alt="" />
           </a>
-          <a aria-label="Mastodon" href="https://mastodon.social/@thecoincollaborative" target="_blank">
+          <a
+            aria-label="Mastodon"
+            href="https://mastodon.social/@thecoincollaborative"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img src={mastodon} alt="" />
           </a>
-          <a aria-label="Medium" href="https://medium.com/thecoin-newsletters" target="_blank">
+          <a
+            aria-label="Medium"
+            href="https://medium.com/thecoin-newsletters"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img src={medium} alt="" />
           </a>
         </div>
