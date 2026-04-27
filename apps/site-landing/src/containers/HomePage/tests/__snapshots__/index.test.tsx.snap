@@ -309,7 +309,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
           <div>
             <a
               data-discover="true"
-              href="/blog/coming-soon"
+              href="/blog/offsets-effective"
             >
               Compare Outcomes
               <div
@@ -335,7 +335,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
           <div>
             <a
               data-discover="true"
-              href="/blog/coming-soon"
+              href="/blog?category=Impact+Reports&category=Carbon+Offsets"
             >
               Why We Can Be So Confident
               <div
