@@ -207,6 +207,7 @@ exports[`<App /> should render and match the snapshot 1`] = `
           <a
             aria-label="Facebook"
             href="https://www.facebook.com/TheCoinCollaborative/"
+            rel="noopener noreferrer"
             target="_blank"
           >
             <img
@@ -217,6 +218,7 @@ exports[`<App /> should render and match the snapshot 1`] = `
           <a
             aria-label="Instagram"
             href="https://www.instagram.com/thecoincollaborative/"
+            rel="noopener noreferrer"
             target="_blank"
           >
             <img
@@ -227,6 +229,7 @@ exports[`<App /> should render and match the snapshot 1`] = `
           <a
             aria-label="Bluesky"
             href="https://bsky.app/profile/thecoin.io"
+            rel="noopener noreferrer"
             target="_blank"
           >
             <img
@@ -237,6 +240,7 @@ exports[`<App /> should render and match the snapshot 1`] = `
           <a
             aria-label="LinkedIn"
             href="https://ca.linkedin.com/company/the-coin"
+            rel="noopener noreferrer"
             target="_blank"
           >
             <img
@@ -247,6 +251,7 @@ exports[`<App /> should render and match the snapshot 1`] = `
           <a
             aria-label="Mastodon"
             href="https://mastodon.social/@thecoincollaborative"
+            rel="noopener noreferrer"
             target="_blank"
           >
             <img
@@ -257,6 +262,7 @@ exports[`<App /> should render and match the snapshot 1`] = `
           <a
             aria-label="Medium"
             href="https://medium.com/thecoin-newsletters"
+            rel="noopener noreferrer"
             target="_blank"
           >
             <img
