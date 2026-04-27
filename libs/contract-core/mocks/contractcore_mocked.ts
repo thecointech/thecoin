@@ -1,9 +1,9 @@
 import * as Src from '../src';
-import { AddressLike, BigNumberish, Signer, resolveAddress } from 'ethers'
+import { type AddressLike, type BigNumberish, type Signer, resolveAddress } from 'ethers'
 import { sleep } from '@thecointech/async'
 import { ALL_PERMISSIONS } from '@thecointech/contract-plugins';
-import { PluginAndPermissionsStructOutput } from '../src/codegen/contracts/TheCoinL1';
-import { StateMutability, TypedContractMethod } from '../src/codegen/common';
+import type { PluginAndPermissionsStructOutput } from '../src/codegen/contracts/TheCoinL1';
+import type { StateMutability, TypedContractMethod } from '../src/codegen/common';
 import { genReceipt } from '@thecointech/contract-tools/mockContractUtils';
 import { defineContractBaseSingleton } from '@thecointech/contract-base/singleton';
 export * from '../src/constants';
