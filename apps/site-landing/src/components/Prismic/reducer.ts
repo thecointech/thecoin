@@ -8,7 +8,11 @@ import type { Locale } from '@thecointech/redux-intl'
 import type { ArticleDocument, FaqDocument } from '@thecointech/site-prismic/types';
 
 const apiEndpoint = process.env.PRISMIC_API_ENDPOINT as string;
-const client = createClient(apiEndpoint);
+const routes = [
+  { path: '/blog/:uid', type: 'article' },
+  { path: '/faqs/:uid', type: 'faq' },
+]
+const client = createClient(apiEndpoint, { routes });
 
 const DOCUMENTS_KEY: keyof ApplicationRootState = "documents";
 

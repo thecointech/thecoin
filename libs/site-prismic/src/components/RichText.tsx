@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { createContext, useContext } from 'react';
 import { RichTextField } from '@prismicio/client';
 import { RichTextComponents, PrismicRichText, PrismicLink } from '@prismicio/react';
 import { Header } from 'semantic-ui-react';
+
+type InternalLinkComponent = React.ComponentType<{ to: string; children: React.ReactNode }>;
+const InternalLinkContext = createContext<InternalLinkComponent | null>(null);
+export const InternalLinkProvider = InternalLinkContext.Provider;
 
 const renderCo2WithSubscript = (text: string): React.ReactNode => {
   const parts = text.split(/(CO2)/g);
@@ -62,9 +66,22 @@ export const richTextComponents: RichTextComponents = {
   oList: ({ children }) => <ol>{transformChildren(children)}</ol>,
   listItem: ({ children }) => <li>{transformChildren(children)}</li>,
   oListItem: ({ children }) => <li>{transformChildren(children)}</li>,
-  hyperlink: ({ children, node }) => (
-    <PrismicLink field={node.data}>{transformChildren(children)}</PrismicLink>
-  ),
+  hyperlink: ({ children, node }) => {
+    const url = node.data.url;
+    // Internal links (from route resolver) start with '/'
+    if (url && url.startsWith('/')) {
+      return <InternalLink href={url}>{transformChildren(children)}</InternalLink>;
+    }
+    return <PrismicLink field={node.data}>{transformChildren(children)}</PrismicLink>;
+  },
+};
+
+const InternalLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
+  const LinkComponent = useContext(InternalLinkContext);
+  if (LinkComponent) {
+    return <LinkComponent to={href}>{children}</LinkComponent>;
+  }
+  return <a href={href}>{children}</a>;
 };
 
 interface RichTextProps {
