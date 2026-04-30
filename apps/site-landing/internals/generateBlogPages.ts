@@ -71,10 +71,12 @@ function injectOgTags(html: string, title: string, description: string, image: s
   result = result.replace(/<meta property="og:type"[^>]*>/, '<meta property="og:type" content="article">');
   result = result.replace(/<meta name="twitter:card"[^>]*>/, `<meta name="twitter:card" content="summary_large_image">`);
 
-  // Add og:image and twitter tags if not already present
+  // Always replace og:image if image is provided
   if (image) {
-    // Insert og:image after og:type
-    if (!result.includes('og:image')) {
+    // Replace existing og:image or insert after og:type
+    if (result.includes('og:image')) {
+      result = result.replace(/<meta property="og:image"[^>]*>/, `<meta property="og:image" content="${esc(image)}">`);
+    } else {
       result = result.replace(
         /(<meta property="og:type"[^>]*>)/,
         `$1<meta property="og:image" content="${esc(image)}">`
@@ -82,13 +84,17 @@ function injectOgTags(html: string, title: string, description: string, image: s
     }
   }
 
-  // Add twitter tags if not present
-  if (!result.includes('twitter:title')) {
-    result = result.replace(
-      /(<meta name="twitter:card"[^>]*>)/,
-      `$1<meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(description)}">${image ? `<meta name="twitter:image" content="${esc(image)}">` : ''}`
-    );
-  }
+  // Always replace twitter tags
+  // Remove existing twitter:title, twitter:description, twitter:image
+  result = result.replace(/<meta name="twitter:title"[^>]*>/, '');
+  result = result.replace(/<meta name="twitter:description"[^>]*>/, '');
+  result = result.replace(/<meta name="twitter:image"[^>]*>/, '');
+
+  // Insert new twitter tags after twitter:card
+  result = result.replace(
+    /(<meta name="twitter:card"[^>]*>)/,
+    `$1<meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(description)}">${image ? `<meta name="twitter:image" content="${esc(image)}">` : ''}`
+  );
 
   // Replace the page title
   result = result.replace(/<title>[^<]*<\/title>/, `<title>${esc(title)} | TheCoin</title>`);

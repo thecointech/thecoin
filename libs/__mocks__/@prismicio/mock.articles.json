@@ -1,8 +1,2677 @@
 [
   {
+    "id": "aeuUoBIAACcAmfTx",
+    "uid": "offsets-effective",
+    "url": null,
+    "type": "article",
+    "tags": [],
+    "first_publication_date": "2026-04-29T14:31:09+0000",
+    "last_publication_date": "2026-04-29T21:42:30+0000",
+    "slugs": [
+      "in-defense-of-carbon-offsets"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [],
+    "data": {
+      "thumbnail": {
+        "dimensions": {
+          "width": 370,
+          "height": 240
+        },
+        "alt": "Image comparing costs of various climate actions, with an EV on the left at $1000 and a fuel-efficient cookstove on the right at $50",
+        "copyright": null,
+        "url": "https://images.prismic.io/thecointech/afD_z8BOoF08xZGB_OffsetComparisons.png?auto=format%2Ccompress&rect=204%2C0%2C822%2C533&w=370&h=240",
+        "id": "afD_z8BOoF08xZGB",
+        "edit": {
+          "x": 204,
+          "y": 0,
+          "zoom": 1,
+          "background": "transparent"
+        }
+      },
+      "image_before_title": {
+        "dimensions": {
+          "width": 779,
+          "height": 432
+        },
+        "alt": "Image comparing costs of various climate actions, with an EV on the left at $1000 and a fuel-efficient cookstove on the right at $50",
+        "copyright": null,
+        "url": "https://images.prismic.io/thecointech/afD_z8BOoF08xZGB_OffsetComparisons.png?auto=format%2Ccompress&rect=113%2C0%2C961%2C533&w=779&h=432",
+        "id": "afD_z8BOoF08xZGB",
+        "edit": {
+          "x": 113,
+          "y": 0,
+          "zoom": 1.0000000000000002,
+          "background": "transparent"
+        }
+      },
+      "title": [
+        {
+          "type": "heading2",
+          "text": "In Defense of Carbon Offsets",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "publication_date": "2026-04-24",
+      "short_content": [
+        {
+          "type": "paragraph",
+          "text": "Carbon offsets are terrible.  They are still the most effective tool we have.  If we truly want to tackle the climate crisis, we need to start treating them as such.",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Carbon offsets are terrible.  They are still the most effective tool we have.  If we truly want to tackle the climate crisis, we need to start treating them as such.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "When we first began researching the carbon market, we were shocked at just how cheap it was to offset a tonne of carbon, especially compared to reducing a tonne through lifestyle changes.  It’s difficult to believe that an offset can be purchased for $10 that has the same effect as quitting driving for a year.  That gap between cost and impact, it turns out, is real. The credibility failures are also real. The question is whether the second fact should cancel out the first.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "The criticisms are well founded.  The largest recent meta-study by Probst et al suggests that 84% of offsets achieve nothing.  These efficacy failures have led to offsets becoming the pariah of the environmental world and are dismissed as \"greenwashing\", \"scams\", or \"indulgences for the rich\".  I reached out to Dr Probst for clarification, and it turns out the 16% is the average achievement ratio.  The paper can make a very different case than the critics suggest.",
+          "spans": [
+            {
+              "start": 94,
+              "end": 124,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://www.nature.com/articles/s41467-024-53645-z",
+                "target": "_blank"
+              }
+            }
+          ],
+          "direction": "ltr"
+        }
+      ],
+      "categories": [
+        {
+          "category": "Carbon Offsets"
+        },
+        {
+          "category": "Global Warming"
+        }
+      ],
+      "slices": [
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "quotetext": [
+              {
+                "type": "heading3",
+                "text": "We should honestly criticize the 84% failure rate and equally recognize the 16% success rate.",
+                "spans": [],
+                "direction": "ltr"
+              }
+            ],
+            "attribution": null,
+            "quotesource": {
+              "link_type": "Any"
+            }
+          },
+          "id": "block_quote$6e729862-0ff7-449f-88c9-cf7a73032607",
+          "slice_type": "block_quote",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "paragraph",
+                "text": "Studies consistently show offsets are far less effective than claimed - either by overstating reductions or because the action would have happened anyway.  Let’s take the most damning research at face value and compare it to other recognized forms of climate action.  We find that even randomly selecting offsets, the most CO2 reduced per dollar spent - called the Marginal Abatement Costs (MAC) - is achieved through offsets.",
+                "spans": [],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "Let’s examine a simple example - choosing whether to install a natural gas furnace vs a cold-climate heat pump to see which makes the most climate sense.  We use the data from heatpumpcalculator.ca, a tool provided by the Canadian Climate Institute.  We exclude rebates but include the carbon tax for the same reason: neither changes the true cost, they just change who pays it.  To find the most effective climate action, we must look at the total cost to remove a tonne of CO2. If it takes $15,000 of society's money to install a heat pump, that is $15,000 that cannot be spent on other, more efficient climate solutions.",
+                "spans": [
+                  {
+                    "start": 176,
+                    "end": 197,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "http://heatpumpcalculator.ca",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$0fb0efd5-d15c-45bc-8226-6422450a3c1e",
+          "slice_type": "rich_text",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "title": "Heating/Cooling System Costs",
+            "table_data": {
+              "head": {
+                "rows": [
+                  {
+                    "key": "acc01f65-f6d6-47f6-b7ca-bb9ffb9d2fcc",
+                    "cells": [
+                      {
+                        "key": "701f0354-bc6b-472c-a95d-a5d7ed0e7977",
+                        "type": "header",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      },
+                      {
+                        "key": "775f7f5c-8e7c-4f8c-93ef-8d29a0c4af99",
+                        "type": "header",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "Upfront Cost",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      },
+                      {
+                        "key": "c2f99c00-7531-487d-898c-31ef6eafd7d0",
+                        "type": "header",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "Yearly Costs",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      },
+                      {
+                        "key": "e44c5d3b-d142-4d73-990a-b4bf83ee3c41",
+                        "type": "header",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "Emissions",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      },
+                      {
+                        "key": "e64b19b0-476a-4956-a8b1-87c3931de0ab",
+                        "type": "header",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "Annualized",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "body": {
+                "rows": [
+                  {
+                    "key": "163efcb0-a1c6-49bb-a1ba-03bff8686792",
+                    "cells": [
+                      {
+                        "key": "ca9b013e-3dbc-4e40-a360-b9e281c81bb4",
+                        "type": "header",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "Cold-climate Heatpump",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      },
+                      {
+                        "key": "d618ecb3-1a43-4ae7-8914-13a6c80c7c65",
+                        "type": "data",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "$17266",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      },
+                      {
+                        "key": "1c756126-3802-4c25-9722-ba3466ce8312",
+                        "type": "data",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "$1250",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      },
+                      {
+                        "key": "745c02d1-972c-4747-81f9-0e009c2fc77f",
+                        "type": "data",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "0.34",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      },
+                      {
+                        "key": "a371fa70-324b-457d-87ef-553b3f227a37",
+                        "type": "data",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "$2401.06",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "key": "c548eb04-e37c-49c6-8078-7be381675ec6",
+                    "cells": [
+                      {
+                        "key": "b3793b1b-16cc-4921-9853-5ac66d45e08d",
+                        "type": "header",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "Gas + AC",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      },
+                      {
+                        "key": "e0f76038-89ca-4a31-b8a3-c28ca7f748a7",
+                        "type": "data",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "$11529",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      },
+                      {
+                        "key": "f427f898-7e30-496a-b2c0-3ef48f3ddf24",
+                        "type": "data",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "$1591",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      },
+                      {
+                        "key": "ac31b362-a8fc-4433-a94f-8deb46317abe",
+                        "type": "data",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "4.15",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      },
+                      {
+                        "key": "575ce17e-4832-4141-a7a7-438c1de76fec",
+                        "type": "data",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "$2052.16",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "key": "bb4f1f86-7595-4434-891f-d43ea6c72842",
+                    "cells": [
+                      {
+                        "key": "eb62eefe-1b42-4e68-8b2e-d50ba4938423",
+                        "type": "header",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "Difference",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      },
+                      {
+                        "key": "0a4faff2-17e7-4a1b-a85a-42daf0c03efd",
+                        "type": "data",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      },
+                      {
+                        "key": "c278c567-bd74-4982-aef0-44acfee8d10b",
+                        "type": "data",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      },
+                      {
+                        "key": "68f22087-afeb-4569-b755-896c888b5d9b",
+                        "type": "data",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "3.81",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      },
+                      {
+                        "key": "ec5a45ba-e5ea-4dae-9ba1-5bab8b6eb6e5",
+                        "type": "data",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "text": "$348.90",
+                            "spans": [],
+                            "direction": "ltr"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "source": {
+              "link_type": "Web",
+              "key": "be18c896-61a6-4aac-85d1-151328d73644",
+              "url": "https://heatpumpcalculator.ca/results/?city=Average&building=single&building_year=1980&financing=false",
+              "target": "_blank",
+              "text": "heatpumpcalculator.ca"
+            }
+          },
+          "id": "table$5a25a045-4d22-4834-b76f-7512eedf7322",
+          "slice_type": "table",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "paragraph",
+                "text": "Using average values, annualized over the system lifetime, we find that the emissions saved are 3.81 tCO2e at a cost of $348.90 per year, giving a total cost per-tonne of $91.57.",
+                "spans": [
+                  {
+                    "start": 6,
+                    "end": 20,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://heatpumpcalculator.ca/results/?city=Average&building=single&building_year=1980&financing=false",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "Now let’s look at carbon offsets.  For our thought experiment, we assume a completely random approach to the market, meaning we simply take the market average cost of $8.50 and divide it by the achievement ratio of 16% to get an adjusted price of $53.13 per tonne.  This results in nearly twice the CO2 avoided than the heat pump for the same cost.",
+                "spans": [
+                  {
+                    "start": 167,
+                    "end": 172,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://www.sylvera.com/blog/carbon-offset-price",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "A critic might point out that the emissions avoided by the heat pump are certain, while the emissions from offsets are not.  This position discounts the same research it relies on.  If we accept the research when it claims that 84% of offsets are worthless, it is not logically consistent to reject that 16% of offsets are valuable.  Furthermore, offsets are not just tree-planting, they cover a wide range of activities and many provide the same certainty as the heat-pump.  With a little due diligence, we can do much better than random chance.  As Dr Probst says: “Of course there are some projects that have achieved what they have claimed”.  Choosing a higher-quality provider like Gold Standard, sticking to sectors with more reliable outcomes, and using tools like the Carbon Credit Quality Initiative mean we are more likely to find these projects.  This often means purchasing offsets that are more expensive initially, but that result in an even better CO2-per-dollar outcome.",
+                "spans": [
+                  {
+                    "start": 568,
+                    "end": 643,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://www.buzzsprout.com/2412056/episodes/17569072-4-dr-ben-probst-can-we-trust-carbon-offsets-evidence-from-1-billion-credits",
+                      "target": "_blank"
+                    }
+                  },
+                  {
+                    "start": 687,
+                    "end": 700,
+                    "type": "hyperlink",
+                    "data": {
+                      "id": "aZM5chIAACcAhsnE",
+                      "type": "article",
+                      "tags": [],
+                      "lang": "en-ca",
+                      "slug": "why-we-chose-gold-standard",
+                      "first_publication_date": "2026-02-16T17:46:08+0000",
+                      "last_publication_date": "2026-02-24T16:31:18+0000",
+                      "uid": "why-we-chose-gold-standard",
+                      "link_type": "Document",
+                      "isBroken": false
+                    }
+                  },
+                  {
+                    "start": 714,
+                    "end": 749,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://drawdown.org/explorer?classification=256",
+                      "target": "_blank"
+                    }
+                  },
+                  {
+                    "start": 776,
+                    "end": 808,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://carboncreditquality.org/",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "",
+                "spans": [],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$cd1c3591-36f7-4eaa-a4c6-b665f0af3115",
+          "slice_type": "rich_text",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "image": {
+              "dimensions": {
+                "width": 1500,
+                "height": 500
+              },
+              "alt": "Image shows 3 climate actions comparing their relative costs",
+              "copyright": null,
+              "url": "https://images.prismic.io/thecointech/afEZzcBOoF08xZYo_Co2MACCompared.png?auto=format,compress",
+              "id": "afEZzcBOoF08xZYo",
+              "edit": {
+                "x": 0,
+                "y": 0,
+                "zoom": 1,
+                "background": "transparent"
+              }
+            },
+            "caption": [
+              {
+                "type": "paragraph",
+                "text": "* The majority of Canadians reside in provinces with a grid emissions intensity below the CO2e cost of residential solar panels",
+                "spans": [
+                  {
+                    "start": 55,
+                    "end": 79,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://www.canada.ca/en/environment-climate-change/services/climate-change/pricing-pollution-how-it-will-work/output-based-pricing-system/federal-greenhouse-gas-offset-system/emission-factors-reference-values.html#toc6",
+                      "target": "_self"
+                    }
+                  },
+                  {
+                    "start": 90,
+                    "end": 127,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://www.moserbaersolar.com/climate-impact-analytics/solar-energys-carbon-footprint-the-true-environmental-impact-of-pv-systems/",
+                      "target": "_self"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "captioned_image$c845fdfa-96eb-4ea9-9e81-3b2eb19eebc3",
+          "slice_type": "captioned_image",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "paragraph",
+                "text": "While this may sound counterintuitive, it should be clear that it is exactly the result we would expect.  It is just incredibly unlikely that a gas furnace in Canada - which is actually fairly efficient - is going to be the most effective change in a world where people still burn kerosene for light.  The same logic applies to EV's, where the MAC can reach $1000 per tonne, and residential solar, where for most Canadians the grid is already clean enough that the abatement cost approaches infinity.  Carbon offsets are about efficiency. And whatever its flaws, a market is very good at finding it.",
+                "spans": [
+                  {
+                    "start": 276,
+                    "end": 299,
+                    "type": "hyperlink",
+                    "data": {
+                      "id": "acg6YRIAAC0A3vFP",
+                      "type": "article",
+                      "tags": [
+                        "Offset Deep-Dives"
+                      ],
+                      "lang": "en-ca",
+                      "slug": "solar-lighting-offset-review",
+                      "first_publication_date": "2026-04-03T21:37:26+0000",
+                      "last_publication_date": "2026-04-17T17:10:18+0000",
+                      "uid": "offsets-solar-lighting-2020",
+                      "link_type": "Document",
+                      "isBroken": false
+                    }
+                  },
+                  {
+                    "start": 358,
+                    "end": 373,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://carcosts.caa.ca/results/ontario/2025_hyundai_ioniq-6/2025_nissan_sentra?annual_mileage=12500&city_hwy_split=55_45&include_depreciation=true&monthly_insurance_cost=0&monthly_car_payment=0",
+                      "target": "_self"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "To be clear, we are not arguing that the best action is to install a gas furnace and use the difference to buy carbon offsets.  There are many factors that go into purchasing decisions, and this article's sole argument is about the climate impact.",
+                "spans": [],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "We should also clarify that while they are effective, offsets are not the cheapest form of climate action.  Going vegetarian, for instance, is often cited as a 'free' climate action - it saves around 0.6 tonnes of CO₂ reduces grocery bills, and improves health. But revealed preference tells a different story.  As inflation has raised the cost of meat, the average person spends $30 more per year rather than switching. This shows that an average person clearly values their meat diet more than they value $30, and we can’t simply look at the dollar amount.",
+                "spans": [
+                  {
+                    "start": 200,
+                    "end": 217,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://pubmed.ncbi.nlm.nih.gov/37474804/",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "We’re also only looking at the offsets to argue their effectiveness.  How they are used is another story entirely.  The “greenwashing” and “indulgences” criticisms aren’t about offsets at all, they focus on the purchaser's behavior.  These arguments could be entirely valid even if offsets were 100% reliable, or a purchaser can work in the best faith with flawed offsets.",
+                "spans": [],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "And finally, this isn’t to claim other forms of climate action aren’t necessary - we aren’t trying to present a false dichotomy.  However, the opportunity for offsets is enormous.  The majority of CO2e can be abated at a price below $20.  We absolutely need a pathway for these actions to happen, and right now a better one doesn’t exist.",
+                "spans": [
+                  {
+                    "start": 209,
+                    "end": 236,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://www.ipcc.ch/report/ar6/wg3/chapter/chapter-12/#:~:text=This%20potential%20(32%E2%80%9344%20GtCO,%7B12.2%2C%20Table%2012.3%7D",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "All of this leaves us in an interesting position.  The opportunity is immense and the need is even greater.  If the climate crisis is truly a crisis, then efficiency is paramount.  Why, then, are offsets so heavily criticized?  The answer is depressingly obvious - it's because we don’t want them.  Offsets are the sole climate action that has zero personal benefit.  We focused here on the climate benefit, but a heat-pump raises your house value, vegetarianism has many health benefits, you never search for parking before leaving a bus.  Yes, offsets are flawed.  They are also, by the math, the most effective tool most of us have.  The logic is clear.  What's left is a choice.",
+                "spans": [],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$625f980d-2cb9-4731-b876-7a6d4d93d226",
+          "slice_type": "rich_text",
+          "slice_label": null
+        }
+      ],
+      "meta_title": null,
+      "meta_description": null,
+      "meta_image": {}
+    }
+  },
+  {
+    "id": "acg6YRIAAC0A3vFP",
+    "uid": "offsets-solar-lighting-2020",
+    "url": null,
+    "type": "article",
+    "tags": [
+      "Offset Deep-Dives"
+    ],
+    "first_publication_date": "2026-04-03T21:37:26+0000",
+    "last_publication_date": "2026-04-17T17:10:18+0000",
+    "slugs": [
+      "solar-lighting-offset-review"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [],
+    "data": {
+      "thumbnail": {
+        "dimensions": {
+          "width": 370,
+          "height": 240
+        },
+        "alt": "A Solar Home System with LED lights",
+        "copyright": null,
+        "url": "https://images.prismic.io/thecointech/acqR-ZGXnQHGZGh3_mkopa5.jpg?auto=format,compress&rect=28,0,788,511&w=370&h=240",
+        "id": "acqR-ZGXnQHGZGh3",
+        "edit": {
+          "x": 28,
+          "y": 0,
+          "zoom": 1,
+          "background": "transparent"
+        }
+      },
+      "image_before_title": {
+        "dimensions": {
+          "width": 779,
+          "height": 432
+        },
+        "alt": "A Solar Home System with LED lights",
+        "copyright": null,
+        "url": "https://images.prismic.io/thecointech/acqR-ZGXnQHGZGh3_mkopa5.jpg?auto=format,compress&rect=0,22,843,467&w=779&h=432",
+        "id": "acqR-ZGXnQHGZGh3",
+        "edit": {
+          "x": 0,
+          "y": 22,
+          "zoom": 1,
+          "background": "transparent"
+        }
+      },
+      "title": [
+        {
+          "type": "heading2",
+          "text": "Solar Lighting Offset Review",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "publication_date": "2026-03-30",
+      "short_content": [
+        {
+          "type": "paragraph",
+          "text": "Deep-dive our solar lighting offset, and how we navigate the difficult questions of additionality in for-profit climate ventures.",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "In this project, we helped subsidize small, portable solar home systems (SHS) sold to off-grid communities in Uganda and Kenya.  These projects are attractive because they provide a very reliable way to reduce CO2.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "There was a personal attraction for me as well.  I spent my first years in a remote village without electricity.  One of my earliest memories is of my Dad marking exams by lantern light.  While it may seem romantic, the reality is that these constraints make valuable economic activity—and even basic education—incredibly difficult.",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "categories": [
+        {
+          "category": "Carbon Offsets"
+        },
+        {
+          "category": "Global Warming"
+        }
+      ],
+      "slices": [
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "image": {
+              "dimensions": {
+                "width": 972,
+                "height": 648
+              },
+              "alt": "The authors father attempts to mark exams in a room dimly lit by two kerosene lanterns, Solomon Islands, 1982",
+              "copyright": null,
+              "url": "https://images.prismic.io/thecointech/acqVQ5GXnQHGZGk4_82Kenmarkingexams.png?auto=format,compress",
+              "id": "acqVQ5GXnQHGZGk4",
+              "edit": {
+                "x": 0,
+                "y": 0,
+                "zoom": 1,
+                "background": "transparent"
+              }
+            },
+            "caption": [
+              {
+                "type": "paragraph",
+                "text": "The authors father marking exams by kerosene lantern light",
+                "spans": [],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "captioned_image$ee8f1f49-c130-4e5e-aa30-c93bcd7688e8",
+          "slice_type": "captioned_image",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "paragraph",
+                "text": "However, carbon offsetting is rarely black and white, so here is our honest take on the project's strengths and its complexities.",
+                "spans": [],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$27fcd6e9-661b-4317-a919-ffb8a00cb3e5",
+          "slice_type": "rich_text",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "category": "Distributed Solar",
+            "s01": null,
+            "s01a": null,
+            "s01a1": null,
+            "s01a2": null,
+            "s01a3": null,
+            "s01a4": null,
+            "s01b": null,
+            "s01c": null,
+            "s01c1": null,
+            "s01c2": null,
+            "s02": null,
+            "s02a": null,
+            "s02b": null,
+            "s02b1": null,
+            "s02b2": null,
+            "s02c": null,
+            "s02d": null,
+            "s02d1": null,
+            "s02d2": null,
+            "s02d3": null,
+            "s03": null,
+            "s03a": null,
+            "s03a1": null,
+            "s03a2": null,
+            "s04": null,
+            "s05": null,
+            "s05a": null,
+            "s05b": null,
+            "s05c": null,
+            "s06": null,
+            "s06a": null,
+            "s06b": null,
+            "s06c": null,
+            "s07": null,
+            "s07a": null,
+            "s07b": null,
+            "s07c": null
+          },
+          "id": "ccqi_score$5ecbcc56-ab73-4f22-853e-6b22946d1573",
+          "slice_type": "ccqi_score",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "heading3",
+                "text": "In General",
+                "spans": [],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "Replacing Kerosene lanterns with solar is “low-hanging fruit”. In remote areas, the most commonly used light source is kerosene.  Roughly 685 million people lack basic electricity access; collectively, they burn an estimated 2 to 10 billion liters of kerosene for light every year.  That results in well over 100 million tonnes of CO2e - about 2.5% of the total emissions of the United States.  However, while solar has plummeted in price, the cost of a solar home kit remains a difficult barrier to many, with a recent study showing a majority of households can only afford a subsidized system.",
+                "spans": [
+                  {
+                    "start": 84,
+                    "end": 127,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://energypedia.info/wiki/The_Reduction_of_Kerosene_Lamp_Emissions_through_Solar_Lighting",
+                      "target": "_blank"
+                    }
+                  },
+                  {
+                    "start": 138,
+                    "end": 156,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://mtr.esmap.org/",
+                      "target": "_blank"
+                    }
+                  },
+                  {
+                    "start": 225,
+                    "end": 247,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://www.brookings.edu/articles/black-carbon-and-kerosene-lighting-an-opportunity-for-rapid-action-on-climate-change-and-clean-energy-for-development/",
+                      "target": "_blank"
+                    }
+                  },
+                  {
+                    "start": 309,
+                    "end": 335,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://www.ecologic.eu/sites/default/files/publication/2014/black-carbon-and-kerosene-lamps-brief.pdf",
+                      "target": "_blank"
+                    }
+                  },
+                  {
+                    "start": 536,
+                    "end": 594,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://www.sciencedirect.com/science/article/abs/pii/S0140988323003675",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "heading3",
+                "text": "Our Project Specifically:",
+                "spans": [],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$5fd5e735-05cb-4465-9fc1-41324197f94c",
+          "slice_type": "rich_text",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "offset": {
+              "link_type": "Web",
+              "key": "b06ed750-de95-4b72-9820-b84983b9ed48",
+              "url": "https://registry.goldstandard.org/credit-blocks?q=Gold%20Standard%20Marketplace%20Order%20GSM2486%20&page=1",
+              "target": "_blank",
+              "text": "GSM2486"
+            },
+            "project_documents": {
+              "link_type": "Web",
+              "key": "1a70c485-fd82-491e-b97b-f6ed4649dbaa",
+              "url": "https://assurance-platform.goldstandard.org/project-documents/GS5314",
+              "target": "_blank",
+              "text": "GS5314 - GS5304 MKOPA Solar Lighting"
+            }
+          },
+          "id": "project_details$1474a3c7-d895-46ef-8456-db5199f317ee",
+          "slice_type": "project_details",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "category": "Measurability"
+          },
+          "id": "ccqi_category$6d98e0f6-e466-4351-acdc-38796ff22e4f",
+          "slice_type": "ccqi_category",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "paragraph",
+                "text": "There are several good studies for solar lighting specifically in Uganda and Kenya, our project's location.  A randomized controlled trial in Uganda showed that introducing solar lighting - similar to the kits we sponsored - completely replaced kerosene lanterns in 92% of the households using them.",
+                "spans": [
+                  {
+                    "start": 236,
+                    "end": 269,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9059846/",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "This provides a precise baseline; because the displaced fuel is known, we can calculate the CO2e reduction with high certainty. Since the new lighting method generates no emissions, the climate impact is a direct calculation rather than a vague estimate.",
+                "spans": [],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$3398dbed-e58d-415f-b0d9-8a215a8b8f3b",
+          "slice_type": "rich_text",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "category": "Additionality"
+          },
+          "id": "ccqi_category$04340e78-9ce8-4d22-ada1-80d0c904e3b6",
+          "slice_type": "ccqi_category",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "paragraph",
+                "text": "This is where it gets interesting. M-KOPA is a for-profit company with big-name backers like Richard Branson. Skeptics may ask: “Why do they need carbon money?” As it turns out, M-KOPA was not profitable in 2017. In fact, they only turned their first profit in 2024 after over a decade in the red. Back in 2017, their micro-financing model was still a high-risk experiment.  In fact, they were borrowing $80 million just to cover the cost of the hardware they were essentially lending to the customers. We can’t know for certain what would have happened without the carbon financing, but for a new company needing to prove its approach to creditors, it would undoubtedly have been a major positive.",
+                "spans": [
+                  {
+                    "start": 35,
+                    "end": 41,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://www.m-kopa.com/",
+                      "target": "_blank"
+                    }
+                  },
+                  {
+                    "start": 93,
+                    "end": 108,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://en.wikipedia.org/wiki/M-Kopa",
+                      "target": "_blank"
+                    }
+                  },
+                  {
+                    "start": 239,
+                    "end": 265,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://www.dabafinance.com/en/news/m-kopa-profit-2024-digital-finance-africa",
+                      "target": "_blank"
+                    }
+                  },
+                  {
+                    "start": 394,
+                    "end": 415,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://kenyanwallstreet.com/mkopa-solar-secures-us80-million-commercial-debt-funding",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$5f3bdfd2-af5a-4ddf-88b1-97b77f3e9ff9",
+          "slice_type": "rich_text",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "category": "Permanence & Leakage"
+          },
+          "id": "ccqi_category$1c8c9f7c-bb31-4e35-b9f8-43e3ee8affc2",
+          "slice_type": "ccqi_category",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "paragraph",
+                "text": "Unlike many other carbon offsets, these offsets directly reduce demand for fossil fuels, the only true climate solution.  A household only has so much need for light.  Multiple studies back this up, showing only 1 in 5 households continue to use dirty lamps once they have a solar kit.  The kerosene that is displaced is not burned later due to the household storing up demand for lighting, nor does it leak to a neighbor, the reason it was burned in the first place no longer exists.",
+                "spans": [
+                  {
+                    "start": 168,
+                    "end": 184,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://www.sciencedirect.com/science/article/pii/S0140988321002206",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$f0ecce12-ec53-4157-b33d-898b62af2881",
+          "slice_type": "rich_text",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "category": "Verifiability"
+          },
+          "id": "ccqi_category$01d8158e-96f2-4e24-bb1c-fca3b215f07d",
+          "slice_type": "ccqi_category",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "paragraph",
+                "text": "These kits include monitoring equipment to track how much they are being used.  This is important because usage is a reliable proxy for how much kerosene is being displaced.  Gold Standard also verified the project with on-site reviews of the systems, cross-checking the claims of units sold against company logbooks, inventories and purchase records.  Finally, Gold Standard interviewed 20 end users to check their experiences with the system.",
+                "spans": [
+                  {
+                    "start": 194,
+                    "end": 214,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://assurance-platform.goldstandard.org/project-documents/GS5314",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "This rigor leaves us very confident that these systems offset the amount of CO2e emissions claimed.",
+                "spans": [],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$5baa06ed-70a4-40c7-8b93-bc99dcf6cabe",
+          "slice_type": "rich_text",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "category": "Social Benefits"
+          },
+          "id": "ccqi_category$669022e8-9866-47e9-8a60-3c1be09d2ed0",
+          "slice_type": "ccqi_category",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "paragraph",
+                "text": "The benefits of substituting kerosene for solar are well established.  The light itself is far better, far safer, far healthier, and - over time - far cheaper.",
+                "spans": [
+                  {
+                    "start": 48,
+                    "end": 68,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://www.cnn.com/2012/01/10/tech/innovation/solar-powered-led-lamps/index.html",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "For our project, Gold Standard also ran a survey of 400 users a few years after the launch.  The end users were happy with the product distributed under this programme, and how it had changed their lives for the better.  Many noted they no longer have to walk miles just to charge a mobile phone or buy fuel.",
+                "spans": [],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$1401e352-ce66-44ad-95d7-50888782b6b4",
+          "slice_type": "rich_text",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "heading3",
+                "text": "Conclusion",
+                "spans": [],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "Ultimately, we are comfortable with the complexity of 'additionality' here because the results are so tangible.  To us, this is the “Better World” in action.  Our clients directly contributed to significant CO2 reductions. Even better, somewhere in Uganda and Kenya, a father is now marking exams under a steady LED bulb instead of a flickering kerosene flame.",
+                "spans": [
+                  {
+                    "start": 133,
+                    "end": 145,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://en.wikipedia.org/wiki/Joel_Pett#What_if_it's_a_big_hoax_and_we_create_a_better_world_for_nothing?_cartoon",
+                      "target": "_self"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$738eebb2-4f68-4858-a593-e54d1d5f7b09",
+          "slice_type": "rich_text",
+          "slice_label": null
+        }
+      ],
+      "meta_title": null,
+      "meta_description": null,
+      "meta_image": {}
+    }
+  },
+  {
+    "id": "acgxjRIAAC0A3uRm",
+    "uid": "offset-review-2020q1",
+    "url": null,
+    "type": "article",
+    "tags": [
+      "Offset Quaterly Report"
+    ],
+    "first_publication_date": "2026-04-03T21:36:53+0000",
+    "last_publication_date": "2026-04-03T21:36:53+0000",
+    "slugs": [
+      "2020q1--2-offset-report"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [],
+    "data": {
+      "thumbnail": {
+        "dimensions": {
+          "width": 370,
+          "height": 240
+        },
+        "alt": "TheCoin Carbon Offset Report 2020Q1 & Q2",
+        "copyright": null,
+        "url": "https://thecointech.cdn.prismic.io/thecointech/acg4MpGXnQHGZEft_thecoin-2020q1-thumbnail.svg",
+        "id": "acg4MpGXnQHGZEft",
+        "edit": {
+          "x": 0,
+          "y": 0,
+          "zoom": 1,
+          "background": "transparent"
+        }
+      },
+      "image_before_title": {
+        "dimensions": {
+          "width": 779,
+          "height": 432
+        },
+        "alt": "TheCoin Carbon Offset Report 2020Q1 & Q2",
+        "copyright": null,
+        "url": "https://thecointech.cdn.prismic.io/thecointech/acg4WJGXnQHGZEfv_thecoin-2020q1-header.svg",
+        "id": "acg4WJGXnQHGZEfv",
+        "edit": {
+          "x": 239,
+          "y": 0,
+          "zoom": 1,
+          "background": "transparent"
+        }
+      },
+      "title": [
+        {
+          "type": "heading2",
+          "text": "2020Q1 & 2: Offset Report",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "publication_date": "2026-03-28",
+      "short_content": [
+        {
+          "type": "paragraph",
+          "text": "Our first purchases, and first lessons",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "content": [
+        {
+          "type": "list-item",
+          "text": "Volume: 118 Tonnes (combined)",
+          "spans": [
+            {
+              "start": 0,
+              "end": 7,
+              "type": "strong"
+            }
+          ],
+          "direction": "ltr"
+        },
+        {
+          "type": "list-item",
+          "text": "Total Investment: $1,345 USD",
+          "spans": [
+            {
+              "start": 0,
+              "end": 17,
+              "type": "strong"
+            }
+          ],
+          "direction": "ltr"
+        },
+        {
+          "type": "list-item",
+          "text": "Purchase Record: <not listed>",
+          "spans": [
+            {
+              "start": 0,
+              "end": 16,
+              "type": "strong"
+            }
+          ],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "These offsets represented our first experience into the world of carbon markets. At the time, we were still navigating how offsets worked, so our primary strategy was simple: trust the experts at Gold Standard.",
+          "spans": [
+            {
+              "start": 175,
+              "end": 210,
+              "type": "hyperlink",
+              "data": {
+                "id": "aZM5chIAACcAhsnE",
+                "type": "article",
+                "tags": [],
+                "lang": "en-ca",
+                "slug": "why-we-chose-gold-standard",
+                "first_publication_date": "2026-02-16T17:46:08+0000",
+                "last_publication_date": "2026-02-24T16:31:18+0000",
+                "uid": "why-we-chose-gold-standard",
+                "link_type": "Document",
+                "isBroken": false
+              }
+            }
+          ],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "We opted for a “basket” purchase—a diversified collection of projects managed by Gold Standard.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "While we respect and trust the expertise of Gold Standard, purchasing a basket means we don't have individual records for each specific project funded.  Since this purchase, we've moved to individual projects, giving us full transparency into the initiatives our community is supporting.",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "categories": [
+        {
+          "category": "Impact Reports"
+        }
+      ],
+      "slices": [],
+      "meta_title": null,
+      "meta_description": null,
+      "meta_image": {}
+    }
+  },
+  {
+    "id": "ad6tNxEAACcAjE-E",
+    "uid": "what-does-zero-cost-mean",
+    "url": null,
+    "type": "article",
+    "tags": [
+      "Main Page"
+    ],
+    "first_publication_date": "2026-04-15T19:25:30+0000",
+    "last_publication_date": "2026-04-15T19:25:30+0000",
+    "slugs": [
+      "what-does-zero-cost-really-mean"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [],
+    "data": {
+      "thumbnail": {
+        "dimensions": {
+          "width": 370,
+          "height": 240
+        },
+        "alt": "An open hand with a glowing coin floating above it ",
+        "copyright": null,
+        "url": "https://images.prismic.io/thecointech/ad6yE51ZCF7ETMcI_intro-resized2.png?auto=format,compress&rect=104,0,1184,768&w=370&h=240",
+        "id": "ad6yE51ZCF7ETMcI",
+        "edit": {
+          "x": 104,
+          "y": 0,
+          "zoom": 1,
+          "background": "transparent"
+        }
+      },
+      "image_before_title": {
+        "dimensions": {
+          "width": 779,
+          "height": 432
+        },
+        "alt": "An open hand with a glowing coin floating above it ",
+        "copyright": null,
+        "url": "https://images.prismic.io/thecointech/ad6yE51ZCF7ETMcI_intro-resized2.png?auto=format%2Ccompress&rect=4%2C0%2C1385%2C768&w=779&h=432",
+        "id": "ad6yE51ZCF7ETMcI",
+        "edit": {
+          "x": 4,
+          "y": 0,
+          "zoom": 1,
+          "background": "transparent"
+        }
+      },
+      "title": [
+        {
+          "type": "heading2",
+          "text": "What does \"Zero Cost\" really mean?",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "publication_date": "2026-04-14",
+      "short_content": [
+        {
+          "type": "paragraph",
+          "text": "No fees is easy. Earning on $0 is hard. Here's how we make something out of nothing.",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Traditional investing requires money to make money.  Our goal was to create a tool that worked for as many people as possible, and to do this we instead focused on what we can do with $0.  We found a way to generate returns on an activity that all of us are doing anyway - spending money.",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "categories": [
+        {
+          "category": "Investing"
+        },
+        {
+          "category": "Finance"
+        }
+      ],
+      "slices": [
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "video_id": "20aa5f10-63ef-4461-be90-fb7015c99a1f"
+          },
+          "id": "video$787d6d41-de31-48f1-9392-43614f0f3a8c",
+          "slice_type": "video",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "paragraph",
+                "text": "Want to see this in action?  Visit the demo account to see how it’s doing today.",
+                "spans": [
+                  {
+                    "start": 0,
+                    "end": 80,
+                    "type": "em"
+                  },
+                  {
+                    "start": 29,
+                    "end": 51,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://test.app.thecoin.io",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "heading4",
+                "text": "How do the transfers happen?",
+                "spans": [],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "While you could make all the transfers yourself, it’s practically impossible to do manually with the required consistency.  To solve this we’ve created a small app to automate this process to make sure you get the best results.  If you want to understand exactly how this works, we’ve written a full explanation here.",
+                "spans": [
+                  {
+                    "start": 293,
+                    "end": 316,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "/#/blog/coming-soon",
+                      "target": "_self"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "heading4",
+                "text": "What happens when the market goes down?",
+                "spans": [],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "Bad things happen.  It would be irresponsible to provide a service like this without taking that into account.  That’s why we provide protection for when our investments drop in value.  Our unique protection, the “Shock Absorber”, makes sure your balance will never be short when the bills come due.  For peace of mind, read about it here.",
+                "spans": [
+                  {
+                    "start": 320,
+                    "end": 338,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "/#/blog/coming-soon",
+                      "target": "_self"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "heading4",
+                "text": "How much of a difference can this make?",
+                "spans": [],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "While investing can be volatile in the short term, its real impact shows up over decades.  Our demo account has only been running for a few years, and only represents a small slice of time.  Our simulator has back-tested this system on the past 80 years of market data to show the range of what you can expect over a lifetime.",
+                "spans": [
+                  {
+                    "start": 290,
+                    "end": 309,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://thecoin.io/#/compare?sim=%7B%22adjustForInflation%22%3Afalse%2C%22maxOffsetPercentage%22%3A0.0175%2C%22initialBalance%22%3A0%2C%22income%22%3A%7B%22weekly%22%3A350%2C%22monthly%22%3A0%2C%22yearly%22%3A0%7D%2C%22cash%22%3A%7B%22weekly%22%3A0%2C%22monthly%22%3A0%2C%22yearly%22%3A0%7D%2C%22credit%22%3A%7B%22weekly%22%3A350%2C%22monthly%22%3A0%2C%22yearly%22%3A0%2C%22billingCycle%22%3A4%2C%22graceWeeks%22%3A3%2C%22cashBackRate%22%3A0.01%2C%22interestRate%22%3A0.25%7D%2C%22shockAbsorber%22%3A%7B%22cushionDown%22%3A0.2%2C%22cushionUp%22%3A0.03222222222222222%2C%22maximumProtected%22%3A1400%2C%22trailingMonths%22%3A0%7D%2C%22years%22%3A40%7D",
+                      "target": "_self"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$e9604650-824c-47fc-bbd2-ae2165f6ff69",
+          "slice_type": "rich_text",
+          "slice_label": null
+        }
+      ],
+      "meta_title": null,
+      "meta_description": null,
+      "meta_image": {}
+    }
+  },
+  {
+    "id": "acw6KRIAACwA5Nvw",
+    "uid": "offsets-ceramic-firing-2020",
+    "url": null,
+    "type": "article",
+    "tags": [],
+    "first_publication_date": "2026-04-03T21:37:36+0000",
+    "last_publication_date": "2026-04-03T21:38:11+0000",
+    "slugs": [
+      "ceramic-firing-offset-review"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [],
+    "data": {
+      "thumbnail": {
+        "dimensions": {
+          "width": 370,
+          "height": 240
+        },
+        "alt": "The Caatinga biome, Brazil, showing signs of degradation",
+        "copyright": null,
+        "url": "https://images.prismic.io/thecointech/adACxZGXnQHGZQZb_Nature4.webp?auto=format%2Ccompress&rect=0%2C81%2C800%2C519&w=370&h=240",
+        "id": "adACxZGXnQHGZQZb",
+        "edit": {
+          "x": 0,
+          "y": 81,
+          "zoom": 1,
+          "background": "transparent"
+        }
+      },
+      "image_before_title": {
+        "dimensions": {
+          "width": 779,
+          "height": 432
+        },
+        "alt": "Buenos Aires Renewable Energy Project, Brazil",
+        "copyright": null,
+        "url": "https://images.prismic.io/thecointech/adADVZGXnQHGZQZh_housing1.webp?auto=format%2Ccompress&rect=0%2C49%2C800%2C444&w=779&h=432",
+        "id": "adADVZGXnQHGZQZh",
+        "edit": {
+          "x": 0,
+          "y": 49,
+          "zoom": 1,
+          "background": "transparent"
+        }
+      },
+      "title": [
+        {
+          "type": "heading2",
+          "text": "Ceramic Firing Offset Review",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "publication_date": null,
+      "short_content": [
+        {
+          "type": "paragraph",
+          "text": "A ceramic factory, a furnace upgrade, and the economics of keeping native forests standing.",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "This project involves an upgrade to a ceramic factory’s furnace in the Buenos Aires municipality of Pernambuco, Brazil, switching its primary fuel from native timber to renewable biomass (including coconut pulp and Algaroba wood). These wood types are more difficult to burn than native wood—they have lower energy density and require specialized combustion equipment—which is where the carbon financing comes in.",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "categories": [
+        {
+          "category": "Carbon Offsets"
+        },
+        {
+          "category": "Global Warming"
+        }
+      ],
+      "slices": [
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "category": "Industrial Biomass",
+            "s01": null,
+            "s01a": null,
+            "s01a1": null,
+            "s01a2": null,
+            "s01a3": null,
+            "s01a4": null,
+            "s01b": null,
+            "s01c": null,
+            "s01c1": null,
+            "s01c2": null,
+            "s02": null,
+            "s02a": null,
+            "s02b": null,
+            "s02b1": null,
+            "s02b2": null,
+            "s02c": null,
+            "s02d": null,
+            "s02d1": null,
+            "s02d2": null,
+            "s02d3": null,
+            "s03": null,
+            "s03a": null,
+            "s03a1": null,
+            "s03a2": null,
+            "s04": null,
+            "s05": null,
+            "s05a": null,
+            "s05b": null,
+            "s05c": null,
+            "s06": null,
+            "s06a": null,
+            "s06b": null,
+            "s06c": null,
+            "s07": null,
+            "s07a": null,
+            "s07b": null,
+            "s07c": null
+          },
+          "id": "ccqi_score$c1751a26-c366-407b-ba94-b9b7a5af42cc",
+          "slice_type": "ccqi_score",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "heading3",
+                "text": "In General",
+                "spans": [],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "This project involved financing a ceramic factory to upgrade its furnace to burn biomass instead of harvested forest wood.  This type of offset reduces CO2e by preventing the harvesting of long-lived trees in favor of fast-growing and quickly replenished biomass.",
+                "spans": [],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "In biomass fuel-switching projects, the main claim is that without this project the factory would keep using non-renewable biomass from unsustainable logging.  However, these kinds of projects often have unrealistic assumptions, with a large meta-study of carbon credits finding them particularly at risk of over-crediting.  So, let's dive into this project to see how it stacks up.",
+                "spans": [
+                  {
+                    "start": 242,
+                    "end": 270,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11564741/",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "heading3",
+                "text": "Our Project Specifically:",
+                "spans": [],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$dd9c64f2-3258-4dfa-b8a5-bfa51cdc2baa",
+          "slice_type": "rich_text",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "offset": {
+              "link_type": "Web",
+              "key": "bbfd6d4f-2c80-40c6-87eb-590c8765a174",
+              "url": "https://registry.goldstandard.org/credit-blocks?q=Gold%20Standard%20Marketplace%20Order%20GSM2486%20&page=1",
+              "target": "_blank",
+              "text": "GSM2486"
+            },
+            "project_documents": {
+              "link_type": "Web",
+              "key": "3ea56708-98a6-4c01-b387-2afa41c90d61",
+              "url": "https://assurance-platform.goldstandard.org/project-documents/GS2290",
+              "target": "_blank",
+              "text": "GS2290 - Buenos Aires Renewable Energy Project"
+            }
+          },
+          "id": "project_details$e83d18ad-5bf3-4c4c-a412-71045af442fb",
+          "slice_type": "project_details",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "category": "Measurability"
+          },
+          "id": "ccqi_category$53a1858f-26e8-47f8-80b6-f6578de5e6e7",
+          "slice_type": "ccqi_category",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "paragraph",
+                "text": "To calculate the CO2e saved, you must first prove what would have been burned otherwise.  The project claims:",
+                "spans": [
+                  {
+                    "start": 94,
+                    "end": 101,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://assurance-platform.goldstandard.org/project-documents/GS2290",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "\"The fuel utilized in the baseline scenario... was native wood from deforestation of the Caatinga biome... which is common practice in the region.\"",
+                "spans": [
+                  {
+                    "start": 0,
+                    "end": 147,
+                    "type": "em"
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "Independent studies confirm this, saying “the traditional bricks industry employs as primary fuel the native wood”, and specifically cite “the high costs of commercial non-forest energy”.  In other words, why pay more for worse fuel?",
+                "spans": [
+                  {
+                    "start": 42,
+                    "end": 113,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://www.sciencedirect.com/science/article/pii/S2351978915007428?fr=RR-2&rr=9cd6b5c24a624eaf",
+                      "target": "_blank"
+                    }
+                  },
+                  {
+                    "start": 139,
+                    "end": 185,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://www.sciencedirect.com/science/article/abs/pii/S0961953407002164",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "By measuring the renewable fuel consumed after the upgrade with the fuel prior, we can measure how much native forest was not consumed.  This gives a reliable indication of the emissions avoided.",
+                "spans": [],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "One Caution: The project mentions using \"wood residues\" (like sawdust) if biomass runs low. Since sawdust is already a common industrial fuel, it’s “Business as Usual” and would likely mean over-crediting.  However, as a secondary fuel source, it doesn't undermine the primary win of moving away from native forest wood.",
+                "spans": [
+                  {
+                    "start": 0,
+                    "end": 12,
+                    "type": "strong"
+                  }
+                ],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$8b14f97c-65f8-49cd-b670-fb5798368cb8",
+          "slice_type": "rich_text",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "category": "Additionality"
+          },
+          "id": "ccqi_category$d33777db-2f4b-4037-b0a4-dabaf8c528ab",
+          "slice_type": "ccqi_category",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "paragraph",
+                "text": "This project falls under the category of “renewable energy”, which often has very poor additionality.  Large-scale industrial operations simply can’t afford to rely on an unreliable funding source powered by goodwill, and in these cases the offsets are simply a cherry on top for investors.  However, this project is a rare case where “it only happens with climate finance”.",
+                "spans": [
+                  {
+                    "start": 73,
+                    "end": 100,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://files.sciencebasedtargets.org/production/files/Call-for-Evidence/290_Probst_Systematic_review_of_the_actual_emissions_reduction.pdf",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "As an existing business, we have a clear paper record of before and after.  The raw material costs are well documented in the region, and a business generally won’t purchase more expensive equipment just to burn a more expensive fuel source.",
+                "spans": [],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "Even more importantly, because the offsets cover the ongoing difference in fuel costs, we can be sure that each credit is responsible for its offset - without the offsets covering the difference in fuel costs, a rational business owner would simply go back to buying the cheaper forest wood.",
+                "spans": [],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$0b9acdd9-b810-445e-a8e3-f192d559b8ea",
+          "slice_type": "rich_text",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "category": "Permanence & Leakage"
+          },
+          "id": "ccqi_category$4a3446f3-e723-4770-a663-829769e70527",
+          "slice_type": "ccqi_category",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "paragraph",
+                "text": "Permanence is not a concern with this project, once the upgrades are installed they are going to stay where they are.  The ceramics produced not be re-fired later with a different fuel source.",
+                "spans": [],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "However, there is a strong risk of leakage.  The demand for energy is increasing and it’s possible that another factory will simply buy more native wood.  An audit of the project however found that the renewable biomass suppliers had switched their businesses from harvesting forest wood specifically because of this project.  Further, the project has influenced other factories to start purchasing renewable biomasses in an example of “good” leakage.",
+                "spans": [],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "This doesn't resolve the issue entirely, but it highlights how leakage is a systemic challenge. The answer is broader adoption of this model, not abandoning an offset that demonstrably works.",
+                "spans": [],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$956f1e81-9104-4097-98fd-021045f566ff",
+          "slice_type": "rich_text",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "category": "Verifiability"
+          },
+          "id": "ccqi_category$cdc44da5-5e65-467c-8e46-4d986fb01b63",
+          "slice_type": "ccqi_category",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "paragraph",
+                "text": "A key reason for using Gold Standard is their robust verification.  When issuing the credits, an auditor reviewed the fuel invoices and delivery records to verify it was renewable biomass.  The auditor also followed up with an on-site inspection to review the hardware usage and interviewed both the employees and a biomass supplier.",
+                "spans": [
+                  {
+                    "start": 46,
+                    "end": 65,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://assurance-platform.goldstandard.org/project-documents/GS2290",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$51916834-5a51-4c3c-8b33-eaaf97afb7e4",
+          "slice_type": "rich_text",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "category": "Social Benefits"
+          },
+          "id": "ccqi_category$10f4fc2e-25e7-4581-8860-05562362702b",
+          "slice_type": "ccqi_category",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "paragraph",
+                "text": "The Caatinga biome is one of the world's 37 major wilderness areas, one of the most biodiverse semi-arid regions in the world, and the only exclusively Brazilian biome.  It’s also one of the most heavily degraded, with desertification threatening 15% of its area.  There is very little formal protection for the ecology, and its local population lives in extreme poverty.",
+                "spans": [
+                  {
+                    "start": 235,
+                    "end": 262,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://conbio.onlinelibrary.wiley.com/doi/epdf/10.1111/j.1523-1739.2005.00703.x",
+                      "target": "_blank"
+                    }
+                  },
+                  {
+                    "start": 346,
+                    "end": 370,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://en.wikipedia.org/wiki/Caatinga#cite_ref-Conservation_6-0",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "Protecting the environment of this unique area is difficult under these circumstances, but offsets such as these can set in motion virtuous cycles.  When sustainable biomass becomes the economically rational fuel source, it creates demand for the agricultural activity that produces it — giving local communities a viable alternative to deforestation, rather than a moral argument against it.  The audit verified this, as biomass suppliers had started entirely new formal businesses specifically because of this project, improving livelihoods beyond the direct project participants.",
+                "spans": [],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$c6998d9b-f9d6-4dc0-ad84-5315a304be95",
+          "slice_type": "rich_text",
+          "slice_label": null
+        },
+        {
+          "variation": "default",
+          "version": "initial",
+          "items": [],
+          "primary": {
+            "content": [
+              {
+                "type": "heading3",
+                "text": "Conclusion",
+                "spans": [],
+                "direction": "ltr"
+              },
+              {
+                "type": "paragraph",
+                "text": "This offset does what it claims: a verified furnace upgrade, continued use of renewable fuels, and a funding mechanism that holds the economics honest.  However, deforestation continues in the region, and critics may note that the demand we helped suppress may have simply moved elsewhere.  We don’t dispute that.  The goal isn’t to declare victory, it’s to prove that the shift is possible and keep moving towards it.  These offsets show this works, and we intend to keep taking these steps until they are applied at the necessary scale.",
+                "spans": [
+                  {
+                    "start": 162,
+                    "end": 199,
+                    "type": "hyperlink",
+                    "data": {
+                      "link_type": "Web",
+                      "url": "https://brasil.mapbiomas.org/en/2023/04/28/imagens-de-satelite-revelam-os-5-municipios-que-mais-desmatam-nos-9-estados-da-caatinga/",
+                      "target": "_blank"
+                    }
+                  }
+                ],
+                "direction": "ltr"
+              }
+            ]
+          },
+          "id": "rich_text$5eedea3b-a370-45f6-be78-2a4c7ee15a5b",
+          "slice_type": "rich_text",
+          "slice_label": null
+        }
+      ],
+      "meta_title": null,
+      "meta_description": null,
+      "meta_image": {}
+    }
+  },
+  {
+    "id": "adAnXhIAACgA6qfM",
+    "uid": "quarterly-offset-report-2020-q3",
+    "url": null,
+    "type": "article",
+    "tags": [],
+    "first_publication_date": "2026-04-03T21:37:09+0000",
+    "last_publication_date": "2026-04-03T21:40:19+0000",
+    "slugs": [
+      "2020q3-offset-report"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [],
+    "data": {
+      "thumbnail": {
+        "dimensions": {
+          "width": 370,
+          "height": 240
+        },
+        "alt": "2020Q3: Offset Report",
+        "copyright": null,
+        "url": "https://thecointech.cdn.prismic.io/thecointech/adAxdpGXnQHGZQsg_thecoin-2020q3-thumbnail.svg",
+        "id": "adAxdpGXnQHGZQsg",
+        "edit": {
+          "x": 0,
+          "y": 0,
+          "zoom": 1,
+          "background": "transparent"
+        }
+      },
+      "image_before_title": {
+        "dimensions": {
+          "width": 779,
+          "height": 432
+        },
+        "alt": "2020Q3: Offset Report",
+        "copyright": null,
+        "url": "https://thecointech.cdn.prismic.io/thecointech/adAwqZGXnQHGZQse_thecoin-2020q3-header.svg",
+        "id": "adAwqZGXnQHGZQse",
+        "edit": {
+          "x": 239,
+          "y": 0,
+          "zoom": 1,
+          "background": "transparent"
+        }
+      },
+      "title": [
+        {
+          "type": "heading2",
+          "text": "2020Q3: Offset Report",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "publication_date": "2026-04-03",
+      "short_content": [
+        {
+          "type": "paragraph",
+          "text": "Our first offset deep-dives, validating our approach",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "content": [
+        {
+          "type": "list-item",
+          "text": "Volume: 47 Tonnes",
+          "spans": [
+            {
+              "start": 0,
+              "end": 7,
+              "type": "strong"
+            }
+          ],
+          "direction": "ltr"
+        },
+        {
+          "type": "list-item",
+          "text": "Total Investment: $517 USD",
+          "spans": [
+            {
+              "start": 0,
+              "end": 17,
+              "type": "strong"
+            }
+          ],
+          "direction": "ltr"
+        },
+        {
+          "type": "list-item",
+          "text": "Purchase Record: GSM2486",
+          "spans": [
+            {
+              "start": 0,
+              "end": 16,
+              "type": "strong"
+            },
+            {
+              "start": 17,
+              "end": 24,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://registry.goldstandard.org/credit-blocks?q=Gold%20Standard%20Marketplace%20Order%20GSM2486%20&page=1",
+                "target": "_blank"
+              }
+            }
+          ],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "This is the first quarter for which we have project-level documentation.  We’ve used this documentation to publish project-level reviews, increasing both our transparency and understanding.  We continued investing in a “basket” approach, believing that diversification would give us the best results overall.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "In this purchase we supported the following 5 projects:\n - Solar Lighting\n - Ceramic Firing\n - Landfill Gas Extraction (review coming soon)\n - Improved Cookstoves (2 projects in Malawi & Peru - review coming soon)",
+          "spans": [
+            {
+              "start": 59,
+              "end": 73,
+              "type": "hyperlink",
+              "data": {
+                "id": "acg6YRIAAC0A3vFP",
+                "type": "article",
+                "tags": [
+                  "Offset Deep-Dives"
+                ],
+                "lang": "en-ca",
+                "slug": "solar-lighting-offset-review",
+                "first_publication_date": "2026-04-03T21:37:26+0000",
+                "last_publication_date": "2026-04-17T17:10:18+0000",
+                "uid": "offsets-solar-lighting-2020",
+                "link_type": "Document",
+                "isBroken": false
+              }
+            },
+            {
+              "start": 77,
+              "end": 91,
+              "type": "hyperlink",
+              "data": {
+                "id": "acw6KRIAACwA5Nvw",
+                "type": "article",
+                "tags": [],
+                "lang": "en-ca",
+                "slug": "ceramic-firing-offset-review",
+                "first_publication_date": "2026-04-03T21:37:36+0000",
+                "last_publication_date": "2026-04-03T21:38:11+0000",
+                "uid": "offsets-ceramic-firing-2020",
+                "link_type": "Document",
+                "isBroken": false
+              }
+            }
+          ],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "We consider this an excellent example of the outcomes TheCoin is working to enable.  The reviews show the credits represent real reductions and meaningful co-benefits for local communities.  The cost of these offsets is far below the relative costs of many other forms of climate advocacy, validating our approach.",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "categories": [
+        {
+          "category": "Impact Reports"
+        }
+      ],
+      "slices": [],
+      "meta_title": null,
+      "meta_description": null,
+      "meta_image": {}
+    }
+  },
+  {
+    "id": "aZM5chIAACcAhsnE",
+    "uid": "why-we-chose-gold-standard",
+    "url": null,
+    "type": "article",
+    "tags": [],
+    "first_publication_date": "2026-02-16T17:46:08+0000",
+    "last_publication_date": "2026-02-24T16:31:18+0000",
+    "slugs": [
+      "why-we-chose-gold-standard"
+    ],
+    "linked_documents": [],
+    "lang": "en-ca",
+    "alternate_languages": [],
+    "data": {
+      "thumbnail": {
+        "dimensions": {
+          "width": 370,
+          "height": 240
+        },
+        "alt": "TheCoin logo and Gold Standard Logo paired with a heart",
+        "copyright": null,
+        "url": "https://images.prismic.io/thecointech/aZ3SRMFoBIGEgu7M_TheCoinxGoldStandard.png?auto=format,compress&rect=0,7,750,486&w=370&h=240",
+        "id": "aZ3SRMFoBIGEgu7M",
+        "edit": {
+          "x": 0,
+          "y": 7,
+          "zoom": 1,
+          "background": "transparent"
+        }
+      },
+      "image_before_title": {
+        "dimensions": {
+          "width": 779,
+          "height": 432
+        },
+        "alt": "TheCoin logo and Gold Standard Logo paired with a heart",
+        "copyright": null,
+        "url": "https://images.prismic.io/thecointech/aZ3SRMFoBIGEgu7M_TheCoinxGoldStandard.png?auto=format,compress&rect=0,42,750,416&w=779&h=432",
+        "id": "aZ3SRMFoBIGEgu7M",
+        "edit": {
+          "x": 0,
+          "y": 42,
+          "zoom": 1,
+          "background": "transparent"
+        }
+      },
+      "title": [
+        {
+          "type": "heading2",
+          "text": "Why we chose Gold Standard",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "publication_date": "2026-02-19",
+      "short_content": [
+        {
+          "type": "paragraph",
+          "text": "Carbon Credits suffer a crisis of confidence.  Here we discuss the first step we chose in trying to ensure the action we take is meaningful and verifiable.",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "content": [
+        {
+          "type": "heading4",
+          "text": "Ensuring Our Climate Action is Real",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "Here at TheCoin, our goal is to make climate action selfish. We thought the “selfish” part—creating a financial win for our users—would be the hardest part.",
+          "spans": [
+            {
+              "start": 52,
+              "end": 59,
+              "type": "hyperlink",
+              "data": {
+                "id": "Yj9_cBIAACQAdp4Q",
+                "type": "article",
+                "tags": [],
+                "lang": "en-ca",
+                "slug": "how-to-hack-100k-with-thecoin",
+                "first_publication_date": "2022-03-26T21:02:52+0000",
+                "last_publication_date": "2022-03-26T21:17:15+0000",
+                "uid": "think-investing-is-only-for-the-wealthy--think-again",
+                "link_type": "Document",
+                "isBroken": false
+              }
+            },
+            {
+              "start": 52,
+              "end": 59,
+              "type": "strong"
+            }
+          ],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "As it turned out, that wasn’t the biggest challenge. The real difficulty is ensuring the “climate action” part actually happens.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "When we first entered this field, we were overwhelmed. You can buy carbon credits from hundreds of different vendors at wildly different prices. Because there is very little global regulation on how this market operates, a lot of “junk” has entered the market. This complexity is exactly why carbon credits get so much flak: it is far too easy to accidentally buy credits that don't achieve anything.",
+          "spans": [
+            {
+              "start": 292,
+              "end": 323,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://youtu.be/6p8zAbFKpW0?si=z339LbLAbROrhuUY",
+                "target": "_self"
+              }
+            }
+          ],
+          "direction": "ltr"
+        },
+        {
+          "type": "heading4",
+          "text": "Simplifying the Field",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "To cut through the noise, we made a core decision: we only purchase offsets from Gold Standard.",
+          "spans": [
+            {
+              "start": 81,
+              "end": 94,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://www.goldstandard.org/",
+                "target": "_blank"
+              }
+            },
+            {
+              "start": 81,
+              "end": 94,
+              "type": "strong"
+            }
+          ],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "While there is plenty of debate regarding the flaws in the wider carbon market, Gold Standard is globally recognized as the highest-quality provider. It is frequently described as the \"go-to quality label\" because of its rigorous requirements and reputation for integrity.",
+          "spans": [
+            {
+              "start": 185,
+              "end": 204,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://www.senken.io/academy/gold-standard#1-gold-standard-carbon-in-one-page-what-it-is-and-why-dach-corporates-care-now",
+                "target": "_self"
+              }
+            },
+            {
+              "start": 247,
+              "end": 271,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://planetair.ca/en/gold-standard-best-carbon-certification/",
+                "target": "_self"
+              }
+            }
+          ],
+          "direction": "ltr"
+        },
+        {
+          "type": "heading4",
+          "text": "What is Gold Standard?",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "Gold Standard acts as both a certification standard for projects and a registry to track them.",
+          "spans": [
+            {
+              "start": 29,
+              "end": 51,
+              "type": "strong"
+            },
+            {
+              "start": 71,
+              "end": 79,
+              "type": "strong"
+            }
+          ],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "Think of them as the essential middleman. There are countless ways to reduce fossil fuel use, but many of them don't happen simply because they aren't profitable on their own. Gold Standard verifies that a project does exactly what it claims to do, then connects it with funders (like us) who can provide the financing to make it a reality.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "heading4",
+          "text": "Why Gold Standard is Different",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "We chose Gold Standard for four key reasons:",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "list-item",
+          "text": "Founded by the World Wildlife Fund (WWF): We believe that motivations matter. Gold Standard was established in 2003 by the WWF and other international NGOs. The WWF has spent decades on the difficult, often thankless task of protecting nature and its resources. While a famous name is no guarantee of success, it ensures that Gold Standard’s DNA is rooted in conservation rather than corporate “check-the-box” compliance. This is why over 80 NGOs have endorsed Gold Standard, something no other carbon registry can claim.",
+          "spans": [
+            {
+              "start": 0,
+              "end": 41,
+              "type": "strong"
+            },
+            {
+              "start": 111,
+              "end": 126,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://www.goldstandard.org/gold-standard-for-the-global-goals/our-standard",
+                "target": "_self"
+              }
+            },
+            {
+              "start": 434,
+              "end": 474,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://globalgoals.goldstandard.org/standards/PRE-GS4GG-Energy/v2.2_annex-a_0_0.pdf",
+                "target": "_blank"
+              }
+            }
+          ],
+          "direction": "ltr"
+        },
+        {
+          "type": "list-item",
+          "text": "Radical Transparency: Every time we purchase a credit, we can access the project's complete documentation. We know who is running the project, how they calculate their CO2 savings, and exactly why they need our financing. This transparency is key for us to verify the credits are reliable and beneficial to everyone involved.",
+          "spans": [
+            {
+              "start": 0,
+              "end": 21,
+              "type": "strong"
+            }
+          ],
+          "direction": "ltr"
+        },
+        {
+          "type": "list-item",
+          "text": "Third-Party Validation: Gold Standard requires independent auditors to verify a project’s goals and outcomes. This isn't just a paperwork check; it often includes physical site visits to ensure the project is delivering results year after year.",
+          "spans": [
+            {
+              "start": 0,
+              "end": 23,
+              "type": "strong"
+            }
+          ],
+          "direction": "ltr"
+        },
+        {
+          "type": "list-item",
+          "text": "A Focus on \"Co-Benefits\": For us, it isn't enough to just count carbon. Each project must demonstrate how it helps the local community. For example, you could spend $350 to capture a ton of CO2 from the air, or you could spend that same $350 to provide a solar power system for a remote community. While both help the climate, the solar system provides light, safety, and opportunity for real people. To us, that is an investment worth making on its own merits.",
+          "spans": [
+            {
+              "start": 0,
+              "end": 25,
+              "type": "strong"
+            }
+          ],
+          "direction": "ltr"
+        },
+        {
+          "type": "heading4",
+          "text": "Quality Over Quantity",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "We aren't looking for a cheap way to check a box. We choose Gold Standard because they provide the transparency and integrity needed to prove that when you use our platform, you aren’t just \"cancelling out\" your impact—you are actively participating in building that \"better world,\" regardless of the politics or the math.",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "categories": [
+        {
+          "category": "Global Warming"
+        }
+      ],
+      "slices": [],
+      "meta_title": null,
+      "meta_description": null,
+      "meta_image": {}
+    }
+  },
+  {
     "id": "YX7TFBIAACQAmkcP",
     "uid": "climate-portfolio-offset-gsm2486",
-    "url": "/article/climate-portfolio-offset-gsm2486",
+    "url": null,
     "type": "article",
     "tags": [],
     "first_publication_date": "2022-03-27T13:48:28+0000",
@@ -77,7 +2746,7 @@
   {
     "id": "YX7R-BIAACEAmkVq",
     "uid": "african-biogas-carbon-programme-carbon-offset---gsm8582",
-    "url": "/article/african-biogas-carbon-programme-carbon-offset---gsm8582",
+    "url": null,
     "type": "article",
     "tags": [],
     "first_publication_date": "2022-03-27T13:45:09+0000",
@@ -184,7 +2853,7 @@
   {
     "id": "Yj9_cBIAACQAdp4Q",
     "uid": "think-investing-is-only-for-the-wealthy--think-again",
-    "url": "/article/think-investing-is-only-for-the-wealthy--think-again",
+    "url": null,
     "type": "article",
     "tags": [],
     "first_publication_date": "2022-03-26T21:02:52+0000",
@@ -316,7 +2985,7 @@
               "type": "hyperlink",
               "data": {
                 "link_type": "Web",
-                "url": "https://thecoin.io/compare?sim=%7B%22adjustForInflation%22%3Afalse%2C%22maxOffsetPercentage%22%3A0.0175%2C%22initialBalance%22%3A0%2C%22income%22%3A%7B%22weekly%22%3A100%2C%22monthly%22%3A0%2C%22yearly%22%3A0%7D%2C%22cash%22%3A%7B%22weekly%22%3A0%2C%22monthly%22%3A0%2C%22yearly%22%3A0%7D%2C%22credit%22%3A%7B%22weekly%22%3A100%2C%22monthly%22%3A0%2C%22yearly%22%3A0%2C%22billingCycle%22%3A4%2C%22graceWeeks%22%3A3%2C%22cashBackRate%22%3A0.01%2C%22interestRate%22%3A0.25%7D%2C%22shockAbsorber%22%3A%7B%22cushionDown%22%3A0.4%2C%22cushionUp%22%3A0.05444444444444444%2C%22maximumProtected%22%3A500%2C%22trailingMonths%22%3A0%7D%2C%22years%22%3A60%7D"
+                "url": "https://thecoin.io/#/compare?sim=%7B%22adjustForInflation%22%3Afalse%2C%22maxOffsetPercentage%22%3A0.0175%2C%22initialBalance%22%3A0%2C%22income%22%3A%7B%22weekly%22%3A100%2C%22monthly%22%3A0%2C%22yearly%22%3A0%7D%2C%22cash%22%3A%7B%22weekly%22%3A0%2C%22monthly%22%3A0%2C%22yearly%22%3A0%7D%2C%22credit%22%3A%7B%22weekly%22%3A100%2C%22monthly%22%3A0%2C%22yearly%22%3A0%2C%22billingCycle%22%3A4%2C%22graceWeeks%22%3A3%2C%22cashBackRate%22%3A0.01%2C%22interestRate%22%3A0.25%7D%2C%22shockAbsorber%22%3A%7B%22cushionDown%22%3A0.4%2C%22cushionUp%22%3A0.05444444444444444%2C%22maximumProtected%22%3A500%2C%22trailingMonths%22%3A0%7D%2C%22years%22%3A60%7D"
               }
             }
           ]
@@ -344,7 +3013,7 @@
   {
     "id": "YX7SyBIAACMAmkab",
     "uid": "turkey-wind-project-carbon-offset-gsm5722",
-    "url": "/article/turkey-wind-project-carbon-offset-gsm5722",
+    "url": null,
     "type": "article",
     "tags": [],
     "first_publication_date": "2022-03-27T13:46:45+0000",
@@ -409,7 +3078,7 @@
   {
     "id": "YnBqSREAACIAwvbR",
     "uid": "think-investing-is-only-for-the-wealthy--think-again",
-    "url": "/article/think-investing-is-only-for-the-wealthy--think-again",
+    "url": null,
     "type": "article",
     "tags": [],
     "first_publication_date": "2022-07-06T21:37:55+0000",
@@ -473,7 +3142,7 @@
               "type": "hyperlink",
               "data": {
                 "link_type": "Web",
-                "url": "https://thecoin.io/addAccount/",
+                "url": "https://thecoin.io/#/addAccount/",
                 "target": "_blank"
               }
             }
@@ -589,7 +3258,7 @@
               "type": "hyperlink",
               "data": {
                 "link_type": "Web",
-                "url": "https://thecoin.io/compare?sim=%7B%22adjustForInflation%22%3Afalse%2C%22maxOffsetPercentage%22%3A0.0175%2C%22initialBalance%22%3A0%2C%22income%22%3A%7B%22weekly%22%3A100%2C%22monthly%22%3A0%2C%22yearly%22%3A0%7D%2C%22cash%22%3A%7B%22weekly%22%3A0%2C%22monthly%22%3A0%2C%22yearly%22%3A0%7D%2C%22credit%22%3A%7B%22weekly%22%3A100%2C%22monthly%22%3A0%2C%22yearly%22%3A0%2C%22billingCycle%22%3A4%2C%22graceWeeks%22%3A3%2C%22cashBackRate%22%3A0.01%2C%22interestRate%22%3A0.25%7D%2C%22shockAbsorber%22%3A%7B%22cushionDown%22%3A0.4%2C%22cushionUp%22%3A0.05444444444444444%2C%22maximumProtected%22%3A500%2C%22trailingMonths%22%3A0%7D%2C%22years%22%3A60%7D",
+                "url": "https://thecoin.io/#/compare?sim=%7B%22adjustForInflation%22%3Afalse%2C%22maxOffsetPercentage%22%3A0.0175%2C%22initialBalance%22%3A0%2C%22income%22%3A%7B%22weekly%22%3A100%2C%22monthly%22%3A0%2C%22yearly%22%3A0%7D%2C%22cash%22%3A%7B%22weekly%22%3A0%2C%22monthly%22%3A0%2C%22yearly%22%3A0%7D%2C%22credit%22%3A%7B%22weekly%22%3A100%2C%22monthly%22%3A0%2C%22yearly%22%3A0%2C%22billingCycle%22%3A4%2C%22graceWeeks%22%3A3%2C%22cashBackRate%22%3A0.01%2C%22interestRate%22%3A0.25%7D%2C%22shockAbsorber%22%3A%7B%22cushionDown%22%3A0.4%2C%22cushionUp%22%3A0.05444444444444444%2C%22maximumProtected%22%3A500%2C%22trailingMonths%22%3A0%7D%2C%22years%22%3A60%7D",
                 "target": "_blank"
               }
             }
@@ -618,7 +3287,7 @@
   {
     "id": "YXcmwREAACIAWK8Y",
     "uid": "start-now",
-    "url": "/article/start-now",
+    "url": null,
     "type": "article",
     "tags": [
       "Main Page"
@@ -701,7 +3370,7 @@
   {
     "id": "YXcU6BEAACEAWGSD",
     "uid": "start-now",
-    "url": "/article/start-now",
+    "url": null,
     "type": "article",
     "tags": [
       "Main Page"
@@ -772,106 +3441,6 @@
         },
         {
           "category": "Investing"
-        }
-      ],
-      "slices": [],
-      "meta_title": null,
-      "meta_description": null,
-      "meta_image": {}
-    }
-  },
-  {
-    "id": "YXgxdxEAACIAXOvN",
-    "uid": "keep-your-profits",
-    "url": "/article/keep-your-profits",
-    "type": "article",
-    "tags": [
-      "Main Page"
-    ],
-    "first_publication_date": "2021-10-26T16:53:34+0000",
-    "last_publication_date": "2021-10-27T20:02:59+0000",
-    "slugs": [
-      "keep-your-profits"
-    ],
-    "linked_documents": [],
-    "lang": "en-ca",
-    "alternate_languages": [],
-    "data": {
-      "thumbnail": {},
-      "image_before_title": {},
-      "title": [
-        {
-          "type": "heading2",
-          "text": "Keep Your Profits",
-          "spans": []
-        }
-      ],
-      "publication_date": "2021-11-17",
-      "short_content": [
-        {
-          "type": "paragraph",
-          "text": "Every dollar earns every day. As a non-profit, we want you to keep that benefit.",
-          "spans": []
-        }
-      ],
-      "content": [
-        {
-          "type": "paragraph",
-          "text": "TODO: I Need to write this article.",
-          "spans": []
-        },
-        {
-          "type": "paragraph",
-          "text": "It is rich  text which means you can do things like italics and other stuff.",
-          "spans": [
-            {
-              "start": 6,
-              "end": 11,
-              "type": "strong"
-            },
-            {
-              "start": 52,
-              "end": 59,
-              "type": "em"
-            }
-          ]
-        },
-        {
-          "type": "o-list-item",
-          "text": "I can write list things",
-          "spans": []
-        },
-        {
-          "type": "o-list-item",
-          "text": "etc",
-          "spans": []
-        },
-        {
-          "type": "paragraph",
-          "text": "<table>I have table stuff</table>",
-          "spans": []
-        },
-        {
-          "type": "image",
-          "url": "https://images.prismic.io/slicemachine-blank/dcea6535-f43b-49a7-8623-bf281aaf1cb2_roller-skating.png?auto=compress,format&rect=0,427,2048,683&w=300&h=100",
-          "alt": null,
-          "copyright": null,
-          "dimensions": {
-            "width": 300,
-            "height": 100
-          },
-          "id": "Xs0bIhIAACMAWMj4",
-          "edit": {
-            "x": 0,
-            "y": -62,
-            "zoom": 0.146484375,
-            "background": "#fff"
-          }
-        }
-      ],
-      "categories": [
-        {
-          "category": "Finance"
         }
       ],
       "slices": [],
