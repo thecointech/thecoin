@@ -45,6 +45,7 @@ const initialState: PrismicState= {
     faqs: new Map<string, FaqDocument>(),
     articles: new Map<string, ArticleDocument>(),
   },
+  loading: 0,
   client,
 }
 
@@ -61,14 +62,20 @@ export class Prismic extends SagaReducer<IActions, PrismicState&PreviewTokenStat
       return;
 
     log.trace(`Fetching Single Prismic Doc: ${uid}`);
-    const result = (yield call(getByUID, uid, locale)) as ArticleDocument;
-    log.trace(`Fetched: ${!!result}`);
-    if (result) {
-      yield this.storeValues({
-        [locale]: {
-          articles: new Map(cache).set(uid, result)
-        }
-      })
+    yield this.storeValues((draft, state) => draft.loading = state.loading + 1);
+    try {
+      const result = (yield call(getByUID, uid, locale)) as ArticleDocument;
+      log.trace(`Fetched: ${!!result}`);
+      if (result) {
+        yield this.storeValues({
+          [locale]: {
+            articles: new Map(cache).set(uid, result)
+          }
+        })
+      }
+    }
+    finally {
+      yield this.storeValues((draft, state) => draft.loading = state.loading - 1);
     }
   }
 
@@ -80,23 +87,29 @@ export class Prismic extends SagaReducer<IActions, PrismicState&PreviewTokenStat
       return;
     }
     log.trace(`Fetching Prismic docs for locale: ${locale}`);
+    yield this.storeValues((draft, state) => draft.loading = state.loading + 1);
+    try {
     const results = (yield call(fetchData, locale)) as Awaited<ReturnType<typeof fetchData>>;
     log.trace(`Fetched: ${!!results}`);
-    if (results) {
-      const newState = {
-        fullyLoaded: true,
-        faqs: new Map(docs.faqs),
-        articles: new Map(docs.articles),
+      if (results) {
+        const newState = {
+          fullyLoaded: true,
+          faqs: new Map(docs.faqs),
+          articles: new Map(docs.articles),
+        }
+        results
+          .filter(item => item.type === 'faq')
+          .forEach(item => newState.faqs.set(item.uid, item as FaqDocument));
+        results
+          .filter(item => item.type === 'article')
+          .forEach(item => newState.articles.set(item.uid, item as ArticleDocument))
+        yield this.storeValues({
+          [locale]: newState
+        })
       }
-      results
-        .filter(item => item.type === 'faq')
-        .forEach(item => newState.faqs.set(item.uid, item as FaqDocument));
-      results
-        .filter(item => item.type === 'article')
-        .forEach(item => newState.articles.set(item.uid, item as ArticleDocument))
-      yield this.storeValues({
-        [locale]: newState
-      })
+    }
+    finally {
+      yield this.storeValues((draft, state) => draft.loading = state.loading - 1);
     }
   };
 

@@ -6,10 +6,10 @@ import { useParams } from "react-router";
 import { defineMessages, FormattedMessage } from "react-intl";
 import { Helmet } from 'react-helmet-async';
 import { asText } from '@prismicio/client';
-import { NotFoundPage } from '@thecointech/shared/containers/NotFoundPage';
 import { Article as ArticleSlice, BlogContainer, getRecommendedArticles, Related } from '@thecointech/site-prismic/components';
 import { Link } from 'react-router';
 import { BackButton } from './BackButton';
+import { ArticleNotFoundPage } from "./ArticleNotFoundPage";
 
 const translations = defineMessages({
   relatedTitle: {
@@ -64,7 +64,7 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
   // Display
   return articleData
     ? <ArticleContent key={articleId} articleData={articleData} locale={locale} isPreview={isPreview} recommendedArticles={recommendedArticles} />
-    : <NotFoundPage />
+    : <ArticleNotFoundPage isLoading={prismic.loading > 0} />
 }
 
 // Separate component that gets remounted when articleId changes
