@@ -13,6 +13,8 @@ import { Footer } from 'components/Footer';
 import { MainPageTransition } from '@thecointech/site-base/components/MainPageTransition';
 import { Prismic } from 'components/Prismic/reducer';
 import { MediaContextProvider, mediaStyles } from '@thecointech/media-context';
+import { LinkResolverProvider } from '@thecointech/site-prismic/components';
+import type { FilledContentRelationshipField } from '@prismicio/client';
 import { Outlet, ScrollRestoration } from 'react-router';
 
 // Either import CSS or LESS;
@@ -22,12 +24,21 @@ import '../../semantic/semantic.css';
 //import '@thecointech/site-semantic-theme/semantic.less';
 import styles from './styles.module.less';
 
+const linkResolver = (doc: FilledContentRelationshipField) => {
+  switch (doc.type) {
+    case 'article': return `#/blog/${doc.uid}`;
+    case 'faq': return `#/faq/${doc.uid}`;
+    default: return '#/';
+  }
+};
+
 export const App = () => {
   Prismic.useStore();
 
   return (
     <>
       <ScrollRestoration />
+      <LinkResolverProvider value={linkResolver}>
       <MediaContextProvider>
         <style>{mediaStyles}</style>
         <div id={styles.landing} >
@@ -44,6 +55,7 @@ export const App = () => {
           <Footer />
         </div>
       </MediaContextProvider>
+      </LinkResolverProvider>
     </>
   );
 }

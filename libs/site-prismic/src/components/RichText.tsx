@@ -1,7 +1,12 @@
-import React from 'react';
-import { RichTextField } from '@prismicio/client';
+'use client';
+
+import React, { createContext, useContext } from 'react';
+import { LinkResolverFunction, RichTextField } from '@prismicio/client';
 import { RichTextComponents, PrismicRichText, PrismicLink } from '@prismicio/react';
 import { Header } from 'semantic-ui-react';
+
+const LinkResolverContext = createContext<LinkResolverFunction | undefined>(undefined);
+export const LinkResolverProvider = LinkResolverContext.Provider;
 
 const renderCo2WithSubscript = (text: string): React.ReactNode => {
   const parts = text.split(/(CO2)/g);
@@ -42,35 +47,43 @@ const transformChildren = (children: React.ReactNode): React.ReactNode =>
     return child;
   });
 
-export const richTextComponents: RichTextComponents = {
-  label: ({ node, children }) => {
-    if (node.data.label === 'codespan') {
-      return <code>{children}</code>;
-    }
-    return transformChildren(children);
-  },
-  heading1: ({ children }) => (
-    <Header as="h1">{transformChildren(children)}</Header>
-  ),
-  heading2: ({ children }) => <Header as="h2">{transformChildren(children)}</Header>,
-  heading3: ({ children }) => <Header as="h3">{transformChildren(children)}</Header>,
-  heading4: ({ children }) => <Header as="h4">{transformChildren(children)}</Header>,
-  heading5: ({ children }) => <Header as="h5">{transformChildren(children)}</Header>,
-  heading6: ({ children }) => <Header as="h6">{transformChildren(children)}</Header>,
-  paragraph: ({ children }) => <p>{transformChildren(children)}</p>,
-  list: ({ children }) => <ul>{transformChildren(children)}</ul>,
-  oList: ({ children }) => <ol>{transformChildren(children)}</ol>,
-  listItem: ({ children }) => <li>{transformChildren(children)}</li>,
-  oListItem: ({ children }) => <li>{transformChildren(children)}</li>,
-  hyperlink: ({ children, node }) => (
-    <PrismicLink field={node.data}>{transformChildren(children)}</PrismicLink>
-  ),
-};
+export function createRichTextComponents(linkResolver?: LinkResolverFunction): RichTextComponents {
+  return {
+    label: ({ node, children }) => {
+      if (node.data.label === 'codespan') {
+        return <code>{children}</code>;
+      }
+      return transformChildren(children);
+    },
+    heading1: ({ children }) => (
+      <Header as="h1">{transformChildren(children)}</Header>
+    ),
+    heading2: ({ children }) => <Header as="h2">{transformChildren(children)}</Header>,
+    heading3: ({ children }) => <Header as="h3">{transformChildren(children)}</Header>,
+    heading4: ({ children }) => <Header as="h4">{transformChildren(children)}</Header>,
+    heading5: ({ children }) => <Header as="h5">{transformChildren(children)}</Header>,
+    heading6: ({ children }) => <Header as="h6">{transformChildren(children)}</Header>,
+    paragraph: ({ children }) => <p>{transformChildren(children)}</p>,
+    list: ({ children }) => <ul>{transformChildren(children)}</ul>,
+    oList: ({ children }) => <ol>{transformChildren(children)}</ol>,
+    listItem: ({ children }) => <li>{transformChildren(children)}</li>,
+    oListItem: ({ children }) => <li>{transformChildren(children)}</li>,
+    hyperlink: ({ children, node }) => (
+      <PrismicLink field={node.data} linkResolver={linkResolver}>{transformChildren(children)}</PrismicLink>
+    ),
+  };
+}
+
+export const richTextComponents = createRichTextComponents();
 
 interface RichTextProps {
   field: RichTextField;
+  linkResolver?: LinkResolverFunction;
 }
 
-export const RichText = ({ field }: RichTextProps) => {
-  return <PrismicRichText field={field} components={richTextComponents} />;
+export const RichText = ({ field, linkResolver }: RichTextProps) => {
+  const contextResolver = useContext(LinkResolverContext);
+  const resolver = linkResolver ?? contextResolver;
+  const components = resolver ? createRichTextComponents(resolver) : richTextComponents;
+  return <PrismicRichText field={field} components={components} />;
 };
