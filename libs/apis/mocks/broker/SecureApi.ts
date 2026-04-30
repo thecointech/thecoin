@@ -28,7 +28,7 @@ export class SecureApi  implements Pick<SrcApi, keyof SrcApi> {
     await sleep(1500);
 
     return buildResponse<GoogleAuthUrl>({
-      url: `${window.location.origin}/#/gauth?code=${MockedCode}`
+      url: `${window.location.origin}/gauth?code=${MockedCode}`
     });
   }
   /**

@@ -9,7 +9,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { RouterProvider } from 'react-router';
+import { RouterProvider, createBrowserRouter } from 'react-router';
 import { HelmetProvider } from 'react-helmet-async';
 import 'sanitize.css/sanitize.css';
 
@@ -17,7 +17,6 @@ import 'sanitize.css/sanitize.css';
 import { LanguageProvider, Languages } from '@thecointech/redux-intl';
 import { configureStore } from '@thecointech/redux';
 import { routes } from './containers/App/Routes';
-import { createHashRouter } from 'react-router';
 
 // Import i18n messages
 import { translations } from './translations';
@@ -33,7 +32,7 @@ const render = (languages: Languages) => {
       <HelmetProvider>
         <LanguageProvider languages={languages}>
           <RouterProvider router={
-            createHashRouter(routes)
+            createBrowserRouter(routes)
           } />
         </LanguageProvider>
       </HelmetProvider>

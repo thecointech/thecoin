@@ -46,7 +46,7 @@ const LeftMenuItems = () => (
     <HeaderLink to="/" className="onlyBigScreen">
       <FormattedMessage {...menuItems.home} />
     </HeaderLink>
-    <HeaderLink as="a" href={`${process.env.URL_SITE_LANDING}/#/help`}>
+    <HeaderLink as="a" href={`${process.env.URL_SITE_LANDING}/help`}>
       <FormattedMessage {...menuItems.help} />
     </HeaderLink>
     <HeaderLink to="/contact" className="onlyBigScreen">

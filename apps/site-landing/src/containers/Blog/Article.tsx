@@ -4,6 +4,8 @@ import { Prismic } from "components/Prismic";
 import { selectLocale } from "@thecointech/redux-intl";
 import { useParams } from "react-router";
 import { defineMessages, FormattedMessage } from "react-intl";
+import { Helmet } from 'react-helmet-async';
+import { asText } from '@prismicio/client';
 import { NotFoundPage } from '@thecointech/shared/containers/NotFoundPage';
 import { Article as ArticleSlice, BlogContainer, getRecommendedArticles, Related } from '@thecointech/site-prismic/components';
 import { Link } from 'react-router';
@@ -58,9 +60,26 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
       : [];
   }, [articleData, allArticles, locale]);
 
+  // Build meta tag values from article data
+  const ogTitle = articleData?.data.meta_title ?? asText(articleData?.data.title) ?? '';
+  const ogDescription = articleData?.data.meta_description ?? asText(articleData?.data.short_content) ?? '';
+  const ogImage = articleData?.data.meta_image?.url || articleData?.data.thumbnail?.url || '';
+
   // Display
   return articleData
     ? <>
+        <Helmet>
+          <title>{ogTitle} | TheCoin</title>
+          <meta name="description" content={ogDescription} />
+          <meta property="og:title" content={ogTitle} />
+          <meta property="og:description" content={ogDescription} />
+          <meta property="og:type" content="article" />
+          {ogImage && <meta property="og:image" content={ogImage} />}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={ogTitle} />
+          <meta name="twitter:description" content={ogDescription} />
+          {ogImage && <meta name="twitter:image" content={ogImage} />}
+        </Helmet>
         <BlogContainer backLink={
           <BackButton isPreview={isPreview} />
         }>
