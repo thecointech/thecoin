@@ -1,3 +1,4 @@
+"use client"
 import React, { createContext, useContext } from 'react';
 import { RichTextField } from '@prismicio/client';
 import { RichTextComponents, PrismicRichText, PrismicLink } from '@prismicio/react';
