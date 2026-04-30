@@ -60,38 +60,55 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
       : [];
   }, [articleData, allArticles, locale]);
 
-  // Build meta tag values from article data
+
+  // Display
+  return articleData
+    ? <ArticleContent key={articleId} articleData={articleData} locale={locale} isPreview={isPreview} recommendedArticles={recommendedArticles} />
+    : <NotFoundPage />
+}
+
+// Separate component that gets remounted when articleId changes
+const ArticleContent = ({ articleData, locale, isPreview, recommendedArticles }: {
+  articleData: any;
+  locale: string;
+  isPreview: boolean;
+  recommendedArticles: any[];
+}) => {
+  // Scroll to top when this component mounts (overrides ScrollRestoration)
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const ogTitle = articleData?.data.meta_title ?? asText(articleData?.data.title) ?? '';
   const ogDescription = articleData?.data.meta_description ?? asText(articleData?.data.short_content) ?? '';
   const ogImage = articleData?.data.meta_image?.url || articleData?.data.thumbnail?.url || '';
 
-  // Display
-  return articleData
-    ? <>
-        <Helmet>
-          <title>{ogTitle} | TheCoin</title>
-          <meta name="description" content={ogDescription} />
-          <meta property="og:title" content={ogTitle} />
-          <meta property="og:description" content={ogDescription} />
-          <meta property="og:type" content="article" />
-          {ogImage && <meta property="og:image" content={ogImage} />}
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content={ogTitle} />
-          <meta name="twitter:description" content={ogDescription} />
-          {ogImage && <meta name="twitter:image" content={ogImage} />}
-        </Helmet>
-        <BlogContainer backLink={
-          <BackButton isPreview={isPreview} />
-        }>
-          <ArticleSlice document={articleData} locale={locale}/>
-          <Related
-            relatedArticles={recommendedArticles}
-            title={<FormattedMessage {...translations.relatedTitle} />}
-            LinkComponent={RouterLink}
-          />
-        </BlogContainer>
-      </>
-    : <NotFoundPage />
+  return (
+    <>
+      <Helmet>
+        <title>{ogTitle} | TheCoin</title>
+        <meta name="description" content={ogDescription} />
+        <meta property="og:title" content={ogTitle} />
+        <meta property="og:description" content={ogDescription} />
+        <meta property="og:type" content="article" />
+        {ogImage && <meta property="og:image" content={ogImage} />}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={ogTitle} />
+        <meta name="twitter:description" content={ogDescription} />
+        {ogImage && <meta name="twitter:image" content={ogImage} />}
+      </Helmet>
+      <BlogContainer backLink={
+        <BackButton isPreview={isPreview} />
+      }>
+        <ArticleSlice document={articleData} locale={locale}/>
+        <Related
+          relatedArticles={recommendedArticles}
+          title={<FormattedMessage {...translations.relatedTitle} />}
+          LinkComponent={RouterLink}
+        />
+      </BlogContainer>
+    </>
+  );
 }
 
 // Custom Link component for react-router
