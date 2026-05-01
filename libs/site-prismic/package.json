@@ -13,8 +13,9 @@
     "license": "GPL-3.0-or-later",
     "scripts": {
         "dev": "run -T run-p start:website start:slicemachine",
-        "build": "run -T run-s build:semantic build:src",
+        "build": "run -T run-s build:semantic build:src build:types",
         "build:src": "next build",
+        "build:types": "run -T tsc -p tsconfig.build.json",
         "build:semantic": "run-env ./internal/buildSemantic.ts",
         "_start": "next start --port 3011",
         "start:website": "next dev --port 3011",
@@ -29,7 +30,7 @@
     "typesVersions": {
         "*": {
             "slices": [
-                "src/slices/index.ts"
+                "build/slices/index.d.ts"
             ],
             "types": [
                 "prismicio-types.d.ts"
@@ -38,7 +39,7 @@
                 "src/prismicio.ts"
             ],
             "components": [
-                "src/components/index.ts"
+                "build/components/index.d.ts"
             ]
         }
     },

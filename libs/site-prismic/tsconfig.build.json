@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "incremental": true,
+    "tsBuildInfoFile": "./build/.buildinfo",
+    "outDir": "./build/",
+    "rootDir": "./src/",
+    "paths": {
+      "@/slices": ["./src/slices/index.webpack.ts"],
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": [
+    "src/components/**/*",
+    "src/slices/**/*",
+    "src/css-modules.d.ts"
+  ],
+  "exclude": ["build", "src/slices/index.ts"]
+}

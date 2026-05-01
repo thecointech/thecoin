@@ -8,6 +8,8 @@ import CcqiScore from "./CcqiScore";
 import CcqiCategory from "./CcqiCategory";
 import Video from "./Video";
 import Table from "./Table";
+import CaptionedImage from "./CaptionedImage";
+import ProjectDetails from "./ProjectDetails";
 
 export const components = {
   hero: Hero,
@@ -18,4 +20,6 @@ export const components = {
   ccqi_category: CcqiCategory,
   video: Video,
   table: Table,
+  captioned_image: CaptionedImage,
+  project_details: ProjectDetails
 };
