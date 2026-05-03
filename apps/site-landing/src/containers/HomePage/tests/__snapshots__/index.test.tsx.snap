@@ -261,7 +261,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
     <div>
       <a
         class="ui red large button"
-        href="http://localhost:3001/#/addAccount"
+        href="http://localhost:3001/addAccount"
         role="button"
       >
         Create Account
@@ -383,7 +383,7 @@ exports[`<HomePage /> should render and match the snapshot 1`] = `
     </h3>
     <a
       class="ui red large button"
-      href="http://localhost:3001/#/addAccount"
+      href="http://localhost:3001/addAccount"
       role="button"
     >
       Create Account

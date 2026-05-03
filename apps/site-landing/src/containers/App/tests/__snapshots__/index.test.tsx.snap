@@ -91,7 +91,7 @@ exports[`<App /> should render and match the snapshot 1`] = `
         >
           <a
             class="ui red button"
-            href="http://localhost:3001/#/addAccount"
+            href="http://localhost:3001/addAccount"
             role="button"
           >
             Create Account
