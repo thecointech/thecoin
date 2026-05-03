@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.3-test.0](https://github.com/thecointech/thecoin/compare/v0.6.2...v0.6.3-test.0) (2026-05-03)
+
+
+### Bug Fixes
+
+* prismic internal links ([54c5a3e](https://github.com/thecointech/thecoin/commit/54c5a3e8ad8c8686da7ee69e29e6e5185a0c86dd))
+
+
+
+
+
 ## [0.6.2](https://github.com/thecointech/thecoin/compare/v0.6.2-test.0...v0.6.2) (2026-04-29)
 
 **Note:** Version bump only for package @thecointech/site-prismic
