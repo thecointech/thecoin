@@ -5,16 +5,11 @@
  * code.
  */
 
-if (window.location.pathname === "/gauth") {
-  const newUrl = `/#${window.location.pathname}${window.location.search}`;
-  window.location.replace(newUrl);
-}
-
 // Import all the third party stuff
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { RouterProvider, createHashRouter } from 'react-router';
+import { RouterProvider, createBrowserRouter } from 'react-router';
 import 'sanitize.css/sanitize.css';
 
 // Import Language Provider
@@ -34,7 +29,7 @@ const render = (languages: Languages) => {
     <Provider store={store}>
       <LanguageProvider languages={languages}>
         <RouterProvider router={
-          createHashRouter(routes)
+          createBrowserRouter(routes)
         } />
       </LanguageProvider>
     </Provider>

@@ -109,5 +109,5 @@ function getLink(params: SimulationParameters, years: number) {
     years,
   }
 
-  return `${window.location.origin}/#/compare?sim=${encodeURIComponent(JSON.stringify(sanitized))}`;
+  return `${window.location.origin}/compare?sim=${encodeURIComponent(JSON.stringify(sanitized))}`;
 }

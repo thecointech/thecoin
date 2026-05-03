@@ -1,4 +1,4 @@
-import type { SecretKeyType } from '@thecointech/secrets/*';
+import type { SecretKeyType } from '@thecointech/secrets';
 import type webpack from 'webpack';
 import { getDevConfig } from './webpack.dev';
 import { getProdConfig } from './webpack.prod';

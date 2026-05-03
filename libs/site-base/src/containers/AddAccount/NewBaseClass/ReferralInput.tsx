@@ -56,7 +56,7 @@ export const ReferralInput = (props: Props) => {
       />
       <div className={styles.request}>
         <FormattedMessage {...translations.referralRequest1} />&nbsp;
-        <a href={`${process.env.URL_SITE_LANDING}/#/applyBeta`}>
+        <a href={`${process.env.URL_SITE_LANDING}/applyBeta`}>
           <FormattedMessage {...translations.referralRequest2} />
         </a>
       </div>

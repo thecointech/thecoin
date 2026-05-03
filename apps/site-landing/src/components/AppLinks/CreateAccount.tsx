@@ -10,7 +10,7 @@ const translations = defineMessages({
   });
 
 export const CreateAccountButton = ({ size }: { size?: SemanticSIZES }) =>
-  <ButtonPrimary as={"a"} href={`${process.env.URL_SITE_APP}/#/addAccount`} size={size}>
+  <ButtonPrimary as={"a"} href={`${process.env.URL_SITE_APP}/addAccount`} size={size}>
     <FormattedMessage {...translations.titleButton} />
   </ButtonPrimary>
 

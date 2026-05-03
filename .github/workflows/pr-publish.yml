@@ -28,6 +28,8 @@ jobs:
   build:
     needs: validate-configName
     uses: ./.github/workflows/action-build.yml
+    with:
+      CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
 
   publish-packages:
     permissions:
@@ -35,8 +37,6 @@ jobs:
       packages: write  # For package publishing
     needs: build
     uses: ./.github/workflows/action-publish-packages.yml
-    with:
-      CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
 
   publish-docker:
     needs: publish-packages

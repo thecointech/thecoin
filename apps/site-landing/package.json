@@ -14,7 +14,7 @@
   "scripts": {
     "preanalyze": "yarn clean:analyze",
     "analyze": "node ./internals/scripts/analyze.js",
-    "build": "run -T run-s build:pre build:src",
+    "build": "run -T run-s build:pre build:src build:post",
     "build:src": "run -T run-p build:src:tests build:src:build",
     "build:src:tests": "run -T tsc --project ./tsconfig.tests.json",
     "build:src:build": "URL_SEQ_LOGGING=false run-env exec=webpack --config ./internals/webpack.ts",
@@ -22,6 +22,7 @@
     "build:pre:semantic": "run-env ./internals/buildSemantic.ts",
     "build:pre:i18n": "run -T run-s extract compile",
     "build:pre:copy": "run -T cpx \"./src/containers/BenefitsSimulator/simulator/*.csv\" ./build/",
+    "build:post": "run-env ./internals/generateBlogPages.ts",
     "clean": "run -T run-p 'clean:*'",
     "clean:build": "rimraf ./build",
     "clean:test": "rimraf ./coverage",

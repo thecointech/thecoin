@@ -15,6 +15,10 @@ on:
         description: 'Specific commit to checkout (optional, defaults to tag commit)'
         required: false
         type: string
+      CONFIG_NAME:
+        description: 'Configuration name to use for build'
+        type: string
+        default: 'development'
 
 env:
   YARN_CHECKSUM_BEHAVIOR: ignore
@@ -67,6 +71,7 @@ jobs:
         OPENAPI_GENERATOR_CLI_SEARCH_URL: DEFAULT
         # Fix OOM in build admin
         NODE_OPTIONS: "--max-old-space-size=6144"
+        CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
       run: yarn build
 
     # Upload build artifacts for test and docker jobs

@@ -221,6 +221,7 @@ jobs:
     uses: ./.github/workflows/action-build.yml
     with:
       DOWNLOAD_METADATA: true
+      CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
       COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
 
   test:

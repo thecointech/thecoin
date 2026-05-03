@@ -238,6 +238,10 @@
     "defaultMessage": "Average profit",
     "description": "site.homepage.advantages.monthlyFees: Monthly Fees"
   },
+  "VoWoZw": {
+    "defaultMessage": "Loading article...",
+    "description": "site.blog.loading: Message shown while loading a blog article"
+  },
   "W8cvxr": {
     "defaultMessage": "We Do More",
     "description": "site.homepage.underwater.trees.title: Title for the homepage underwater trees subpart"

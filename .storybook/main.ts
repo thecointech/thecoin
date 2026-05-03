@@ -36,6 +36,12 @@ const config: StorybookConfig = {
   ],
 
   webpackFinal: async (config) => {
+    // Skip progress plugin in CI
+    if (process.env.CI) {
+      config.plugins = config.plugins?.filter(
+        plugin => plugin?.constructor?.name !== 'ProgressPlugin'
+      );
+    }
     //@ts-ignore
     const shared_loaders = await import('@thecointech/site-semantic-theme/webpack.less');
 

@@ -93,7 +93,7 @@ const devOptions: webpack.Configuration = {
 // We only post progress in dev mode, not dev:live
 // This is because dev:live is streaming all packages
 // at once, and the progress updates confuse the terminal
-if (process.env.SETTINGS !== 'live') {
+if (process.env.SETTINGS !== 'live' && !process.env.CI) {
   devOptions.plugins.push(
     new webpack.ProgressPlugin(),
   )

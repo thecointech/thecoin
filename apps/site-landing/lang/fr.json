@@ -253,5 +253,9 @@
   "zk7sO0": {
     "defaultMessage": "La Terre se porte mieux",
     "description": "site.homepage.underwater.title: Title for that homepage underwater part"
+  },
+  "VoWoZw": {
+    "defaultMessage": "Chargement de l'article...",
+    "description": "site.blog.loading: Message shown while loading a blog article"
   }
 }
