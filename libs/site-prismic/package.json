@@ -24,7 +24,6 @@
     "exports": {
         "./slices": "./src/slices/index.ts",
         "./types": "./prismicio-types.d.ts",
-        "./client": "./src/prismicio.ts",
         "./components": "./src/components/index.ts"
     },
     "typesVersions": {
@@ -34,9 +33,6 @@
             ],
             "types": [
                 "prismicio-types.d.ts"
-            ],
-            "client": [
-                "src/prismicio.ts"
             ],
             "components": [
                 "build/components/index.d.ts"

@@ -71,17 +71,19 @@ function injectOgTags(html: string, title: string, description: string, image: s
   result = result.replace(/<meta property="og:type"[^>]*>/, '<meta property="og:type" content="article">');
   result = result.replace(/<meta name="twitter:card"[^>]*>/, `<meta name="twitter:card" content="summary_large_image">`);
 
-  // Always replace og:image if image is provided
+  // Replace or remove og:image depending on whether image is provided
+  const ogImageRegex = /<meta property="og:image"[^>]*>/;
   if (image) {
-    // Replace existing og:image or insert after og:type
-    if (result.includes('og:image')) {
-      result = result.replace(/<meta property="og:image"[^>]*>/, `<meta property="og:image" content="${esc(image)}">`);
+    if (ogImageRegex.test(result)) {
+      result = result.replace(ogImageRegex, `<meta property="og:image" content="${esc(image)}">`);
     } else {
       result = result.replace(
         /(<meta property="og:type"[^>]*>)/,
         `$1<meta property="og:image" content="${esc(image)}">`
       );
     }
+  } else {
+    result = result.replace(ogImageRegex, '');
   }
 
   // Always replace twitter tags
