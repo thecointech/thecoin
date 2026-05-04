@@ -27,6 +27,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.CONFIG_NAME }}
     steps:
     - name: Run start date
       run: echo "Started at $(date +'%Y-%m-%dT%H:%M:%S')"
