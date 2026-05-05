@@ -219,6 +219,7 @@ jobs:
     if: ${{ !cancelled() && !failure() && needs.normalize-commit.result == 'success' }}
     needs: [determine-environment, update-metadata, normalize-commit]
     uses: ./.github/workflows/action-build.yml
+    secrets: inherit
     with:
       DOWNLOAD_METADATA: true
       CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}

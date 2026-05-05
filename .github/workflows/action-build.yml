@@ -27,6 +27,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.CONFIG_NAME }}
     steps:
     - name: Run start date
       run: echo "Started at $(date +'%Y-%m-%dT%H:%M:%S')"
@@ -72,6 +73,10 @@ jobs:
         # Fix OOM in build admin
         NODE_OPTIONS: "--max-old-space-size=6144"
         CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
+        BWS_ACCESS_TOKEN: ${{ secrets.BWS_ACCESS_TOKEN }}
+        BWS_ORGANIZATION_ID: ${{ secrets.BWS_ORGANIZATION_ID }}
+        PRODTEST_TESTDEMOACCOUNT_WALLET: ${{ vars.PRODTEST_TESTDEMOACCOUNT_WALLET }}
+
       run: yarn build
 
     # Upload build artifacts for test and docker jobs

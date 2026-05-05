@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tools",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "type": "module",
   "private": true,
   "scripts": {
@@ -13,7 +13,7 @@
     "revert": "cross-env URL_SEQ_LOGGING=false run-env cfg=prod ./transactions/revertTransfer.ts"
   },
   "devDependencies": {
-    "@thecointech/setenv": "^0.6.2",
+    "@thecointech/setenv": "^0.6.3",
     "cross-env": "^7.0.3"
   }
 }

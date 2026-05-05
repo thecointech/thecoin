@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.3](https://github.com/thecointech/thecoin/compare/v0.6.3-test.0...v0.6.3) (2026-05-05)
+
+**Note:** Version bump only for package @thecointech/the-coin
+
+
+
+
+
+## [0.6.3-test.0](https://github.com/thecointech/thecoin/compare/v0.6.2...v0.6.3-test.0) (2026-05-03)
+
+
+### Bug Fixes
+
+* build article posts to enable social previews ([b174965](https://github.com/thecointech/thecoin/commit/b17496536e007a5caae124a151ef6ec05121e6d9))
+* intermittent article scrolling behaviour, force always scroll to top when a new article is mounted. ([79e481b](https://github.com/thecointech/thecoin/commit/79e481b8f64dbeb423793d58fc30fb7ae13b246a))
+* loading page while waiting for article data ([bc7ef8d](https://github.com/thecointech/thecoin/commit/bc7ef8d52f991465ba2324861bef56eeef70324a))
+* prismic internal links ([54c5a3e](https://github.com/thecointech/thecoin/commit/54c5a3e8ad8c8686da7ee69e29e6e5185a0c86dd))
+
+
+
+
+
 ## [0.6.2](https://github.com/thecointech/thecoin/compare/v0.6.2-test.0...v0.6.2) (2026-04-29)
 
 **Note:** Version bump only for package @thecointech/the-coin
