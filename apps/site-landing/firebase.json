@@ -2,6 +2,7 @@
   "hosting": {
     "target": "landing",
     "public": "./build",
+    "trailingSlash": true,
     "ignore": [
       "firebase.json",
       "**/.*",
