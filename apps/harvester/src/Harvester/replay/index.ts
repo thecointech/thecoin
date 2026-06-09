@@ -12,14 +12,14 @@ export async function getBalances(callbacks: HarvesterReplayCallbacks, delay = 5
   if ('both' in config) {
     callbacks.setSubTaskEvents('getBalances', config.both.events);
     const r = await runReplay(['chqBalance', 'visaBalance'], config.both.events, callbacks, undefined, delay);
-    return [r as ChequeBalanceResult, r as VisaBalanceResult];
+    return [r.AccountsSummary as unknown as ChequeBalanceResult, r.CreditAccountDetails as unknown as VisaBalanceResult];
   }
   else {
     callbacks.setSubTaskEvents('chqBalance', config.chequing!.events);
     const chq = await runReplay('chqBalance', config.chequing!.events, callbacks, undefined, delay);
     callbacks.setSubTaskEvents('visaBalance', config.credit!.events);
     const visa = await runReplay('visaBalance', config.credit!.events, callbacks, undefined, delay);
-    return [chq as ChequeBalanceResult, visa as VisaBalanceResult];
+    return [chq.AccountsSummary as unknown as ChequeBalanceResult, visa.CreditAccountDetails as unknown as VisaBalanceResult];
   }
 }
 
@@ -27,7 +27,8 @@ export async function sendETransfer(callbacks: HarvesterReplayCallbacks, dynamic
   const bankEvents = await getBankConfig('chequing');
   if (!bankEvents) throw new Error('No chequing/both config found');
   callbacks.setSubTaskEvents('chqETransfer', bankEvents.events);
-  return runReplay('chqETransfer', bankEvents.events, callbacks, dynamicValues, delay) as Promise<ETransferResult>;
+  const r = await runReplay('chqETransfer', bankEvents.events, callbacks, dynamicValues, delay);
+  return r.SendETransfer as unknown as ETransferResult;
 }
 
 async function runReplay(actionName: Parameters<typeof getReplayEvents>[1], events: EventSection, callbacks: HarvesterReplayCallbacks, dynamicValues?: Record<string, string>, delay = 5000) {

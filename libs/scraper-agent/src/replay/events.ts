@@ -30,7 +30,11 @@ export function flatten(section: EventSection, sectionsToKeep?: SectionName[]): 
     }
     else if (shouldKeep) {
       // This is an AnyEvent and we want to keep events from this section
-      events.push(event);
+      // Stamp section if not already set (e.g. older recordings)
+      const toPush = event.section
+        ? event
+        : { ...event, section: section.section };
+      events.push(toPush);
     }
   }
   return events;

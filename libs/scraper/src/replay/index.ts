@@ -73,7 +73,7 @@ export async function processEvents(replay: Replay) {
     }
     catch (err) {
       // On failed, lets check whats going on
-      log.error(err, `Failed to process event: ${event.type} - ${event.id}`);
+      log.error(err, `Failed to process event: ${event.type} - ${event.id} (section: ${event.section ?? 'unknown'})`);
 
       // attempt to handle the error
       const wasHandled = await replay.callbacks?.onError?.(
@@ -180,7 +180,9 @@ export async function processEvent({ page, dynamicValues, values, delay=1000 }: 
             try {
               const value = await getTableData(page);
               if (value.length > 0) {
-                values[event.name ?? 'defaultValue'] = value;
+                const sec = event.section ?? '_';
+                values[sec] ??= {};
+                values[sec][event.eventName ?? 'defaultValue'] = value;
                 return true;
               }
             }
@@ -202,7 +204,9 @@ export async function processEvent({ page, dynamicValues, values, delay=1000 }: 
         const el = await getElementForEvent({ page, event });
         const parsed = parseValue(el.data.text, event.parsing);
         if (parsed) {
-          values[event.eventName] = parsed;
+          const sec = event.section ?? '_';
+          values[sec] ??= {};
+          values[sec][event.eventName] = parsed;
           break;
         }
         throw new ValueEventError(event)
