@@ -6,7 +6,7 @@ import { ReplayProgressBar } from '../ReplayProgress';
 
 
 
-const pageAction = "visaBalance";
+const pageAction = "visaBalance" as any;
 
 export const VisaBalance = () => {
 

@@ -4,7 +4,7 @@ import currency from 'currency.js';
 import { notify, notifyError } from '@/notify';
 import { SendFakeDeposit } from '@thecointech/email-fake-deposit';
 import { DateTime } from 'luxon';
-import { getValues } from '../replay';
+import { sendETransfer as replaySendETransfer } from '../replay';
 import { ETransferResult } from '@thecointech/scraper-agent/types';
 
 export class SendETransfer implements ProcessingStage {
@@ -85,7 +85,7 @@ async function sendETransfer(amount: currency, {wallet, callback}: UserData) : P
       confirmationCode: "DRYRUN"
     }
   }
-  const r = await getValues('chqETransfer', callback, { amount: amount.toString() })
+  const r = await replaySendETransfer(callback, { amount: amount.toString() })
 
   // In testing environments we send the fake deposit
   if (process.env.CONFIG_NAME == "prodtest" || process.env.CONFIG_NAME == "devlive") {

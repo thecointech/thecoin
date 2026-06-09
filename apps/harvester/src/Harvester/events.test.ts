@@ -2,7 +2,7 @@ import { EventSection } from "@thecointech/scraper-agent";
 import { setEvents, getEvents } from "./events";
 import type { AnyEvent } from "@thecointech/scraper";
 import { jest } from '@jest/globals';
-import type { BankEvents, ActionType } from "@thecointech/store-harvester";
+import type { BankEvents, HarvestAction } from "@thecointech/store-harvester";
 
 
 jest.setTimeout(10* 60* 1000)
@@ -25,7 +25,7 @@ describe('setting/getting events', () => {
     events: { section: 'Initial', events: [{ type: 'click', id: 'chequing'} as any] }
   };
 
-  const getEventArray = async (type: ActionType) => {
+  const getEventArray = async (type: HarvestAction) => {
     const events = await getEvents(type);
     return events.events as AnyEvent[];
   };
