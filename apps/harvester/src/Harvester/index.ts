@@ -61,13 +61,17 @@ export async function harvest(uiCallback?: BackgroundTaskCallback): Promise<Resu
       log.fatal(`Error in harvest: ${err}`);
     }
 
+    const error = getErrorMessage(err);
     callback.complete({
-      error: getErrorMessage(err),
+      error,
     })
 
+    const sectionInfo = callback.lastErrorSection
+      ? ` (section: ${callback.lastErrorSection})`
+      : '';
     await notifyError({
       title: 'Harvester Error',
-      message: `Harvesting failed.  Please contact support.`,
+      message: `Harvesting failed${sectionInfo}.\n${error}\nPlease contact support.`,
       // TODO: Re-enable buttons (this currently hangs on linux)
       // actions: ["Start App"],
     })

@@ -12,11 +12,11 @@ export async function replayErrorHandling({replay, err, event}: ReplayErrorParam
   const section = findSectionByEvent(event, root);
   if (!section) {
     // This should never happen
-    log.error({event: event, err: err}, "Failed to find section for event");
+    log.error({event: event, err: err}, `Failed to find section ${event.section} for event`);
     return undefined;
   }
 
-  log.info("Running replay error callback");
+  log.info(`Running replay error callback for section: ${section.section}`);
 
   // Major issues on replay:
   // - Modal
