@@ -170,6 +170,11 @@ export async function processEvent({ page, dynamicValues, values, delay=1000 }: 
       break;
     }
     case 'value': {
+      const setValue = (value: any) => {
+        const sec = event.section ?? '_';
+        values[sec] ??= {};
+        values[sec][event.eventName ?? 'defaultValue'] = value;
+      }
       // The 15 second wait is to compensate for SPA
       // websites who don't have load/navigation events
       // (thanks again tangerine ya bastard!)
@@ -180,9 +185,7 @@ export async function processEvent({ page, dynamicValues, values, delay=1000 }: 
             try {
               const value = await getTableData(page);
               if (value.length > 0) {
-                const sec = event.section ?? '_';
-                values[sec] ??= {};
-                values[sec][event.eventName ?? 'defaultValue'] = value;
+                setValue(value);
                 return true;
               }
             }
@@ -204,9 +207,7 @@ export async function processEvent({ page, dynamicValues, values, delay=1000 }: 
         const el = await getElementForEvent({ page, event });
         const parsed = parseValue(el.data.text, event.parsing);
         if (parsed) {
-          const sec = event.section ?? '_';
-          values[sec] ??= {};
-          values[sec][event.eventName] = parsed;
+          setValue(parsed);
           break;
         }
         throw new ValueEventError(event)

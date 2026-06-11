@@ -35,7 +35,7 @@ export class SendETransfer implements ProcessingStage {
     const toTransfer = getTransferAmount(state.toETransfer, chq.balance);
     const confirm = await sendETransfer(toTransfer, user)
 
-    if (confirm.confirmationCode) {
+    if (confirm?.confirmationCode) {
       const harvesterBalance = (state.harvesterBalance ?? currency(0))
         .add(toTransfer);
 
@@ -56,10 +56,9 @@ export class SendETransfer implements ProcessingStage {
     } else {
       log.error(`Failed to transfer ${toTransfer} to TheCoin`);
       // TODO: Handle this case
-
       notifyError({
-        title: 'E-Transfer Failed',
-        message: 'Failed to send an e-transfer.  Please contact support.',
+        title: 'E-Transfer completed but confirmation code not seen',
+        message: "An e-transfer was completed, but no confirmation code was found. The Harvester will assume this transfer failed, check your account to confirm.  If the transfer succeeded, update your Harvester to ensure it does not repeat the transfer.",
       });
     }
     return {};
@@ -78,7 +77,7 @@ const getTransferAmount = (toETransfer: currency, balance: currency) => {
   return toETransfer;
 }
 
-async function sendETransfer(amount: currency, {wallet, callback}: UserData) : Promise<ETransferResult> {
+async function sendETransfer(amount: currency, {wallet, callback}: UserData) : Promise<ETransferResult|undefined> {
   if (process.env.HARVESTER_DRY_RUN) {
     // await mockUiUpdate(callback);
     return {

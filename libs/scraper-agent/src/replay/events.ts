@@ -15,7 +15,7 @@ export function getTrimmedEvents(baseNode: EventSection, sectionsToKeep?: Sectio
 }
 
 export function isSection(event: EventSection|AnyEvent): event is EventSection {
-  return 'section' in event;
+  return 'section' in event && 'events' in event && Array.isArray(event.events);
 }
 
 export function flatten(section: EventSection, sectionsToKeep?: SectionName[]): AnyEvent[] {

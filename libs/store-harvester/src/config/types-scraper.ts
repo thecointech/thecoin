@@ -2,7 +2,6 @@ import type { ProcessResults } from "@thecointech/scraper-agent/types";
 
 export enum BankTypes { credit = 'credit', chequing = 'chequing', both = 'both' }
 export type BankType = keyof typeof BankTypes;
-// Currently only used in the manual (dead) path.
 export type HarvestAction = 'getBalances'|'chqETransfer';
 
 export type BankIdent = {
