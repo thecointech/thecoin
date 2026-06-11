@@ -51,7 +51,7 @@ async function SetFirecloudServiceAccount(envName: string) {
 // Set firebase to a profile matching the current config
 // Requires there be a matching profile defined in firebase.json
 export async function FirebaseDeploy(envName: string) {
-  await SetFirecloudServiceAccount(envName);
+  // await SetFirecloudServiceAccount(envName);
   await ShellCmd(`yarn run -T firebase use ${process.env.CONFIG_NAME}`)
   await ShellCmd("yarn run -T firebase deploy --only hosting");
 }

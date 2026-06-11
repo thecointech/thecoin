@@ -10,8 +10,10 @@ export type HistoryRow = {
   values: (currency | undefined)[];
 }
 
-// Generic result encompasses all of the above
-export type ReplayResult = Record<string, string | DateTime | currency | HistoryRow[]>
+export type ReplayValue = string | DateTime | currency | HistoryRow[]
+
+// Generic result - outer key is section name, inner key is field name
+export type ReplayResult = Record<string, Record<string, ReplayValue>>
 
 // Bounds we searched within the page
 export type Bounds = {width: number, height: number};

@@ -47,6 +47,7 @@ export class EventManager {
 
   // Manual event push.  Will push to current section, ignoring pausers.
   pushEvent(event: AnyEvent) {
+    event.section = this.currentSection.section;
     this.currentEvents?.push(event);
   }
 
@@ -117,7 +118,7 @@ export class EventManager {
     else {
       log.trace(`Event: ${event.type} @ step ${step} for ${name}`);
     }
-    this.currentEvents.push(event);
+    this.pushEvent(event)
   }
 
   private _eventPausers: IPauser[] = [];

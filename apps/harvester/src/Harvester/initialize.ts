@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { hydrateProcessor, getWallet, getCreditDetails } from './config';
 import { getCurrentState } from './state';
-import { getChequingData, getVisaData } from './fetchData';
+import { getAccountData } from './fetchData';
 import type { HarvestData, UserData } from './types';
 import type { HarvesterReplayCallbacks } from './replay/replayCallbacks';
 import { ContractCore } from '@thecointech/contract-core';
@@ -36,8 +36,7 @@ export async function initialize(callback: HarvesterReplayCallbacks) {
   // Initialize data (do we want anything from last state?)
   // Sub 1 week to ensure payments posted after last run are all counted
   const lastTxDate = lastRun?.date.minus({ week: 1 });
-  const chq = await getChequingData(callback);
-  const visa = await getVisaData(callback, lastTxDate);
+  const { chq, visa } = await getAccountData(callback, lastTxDate);
   const tcCore = await ContractCore.get();
   const coin = await tcCore.balanceOf(wallet.address);
   let state: HarvestData = {

@@ -1,7 +1,7 @@
 import type { HarvestConfig } from './types';
 import type { ValueResult, ValueType} from "@thecointech/scraper-types";
 import type { CreditDetails } from './Harvester/types';
-import type { CoinAccount, CoinAccountDetails, StoredData, ActionType } from '@thecointech/store-harvester';
+import type { CoinAccount, CoinAccountDetails, StoredData, HarvestAction } from '@thecointech/store-harvester';
 import type { BackgroundTaskCallback } from './BackgroundTask/types';
 import type { OptionPacket, QuestionPacket, ResponsePacket } from './Harvester/agent/askUser';
 import type { AutoConfigParams } from './Harvester/agent';
@@ -28,7 +28,7 @@ export type ScraperBridgeApi = {
   autoProcess: (params: AutoConfigParams) => Promise<Result<boolean>>;
 
   // Validate an action
-  validateAction(actionName: ActionType, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,
+  validateAction(actionName: HarvestAction, inputValues?: Record<string, string>): Promise<Result<Record<string, string>>>,
 
   // Refresh the profile, deletes existing and copies
   // users system profile (if present).
@@ -45,7 +45,7 @@ export type ScraperBridgeApi = {
   // will contain the data of the file read from the main process.
   warmup: (url: string) => Promise<Result<boolean>>;
 
-  start: (actionName: ActionType, url: string, dynamicInputs?: string[]) => Promise<Result<boolean>>;
+  start: (actionName: HarvestAction, url: string, dynamicInputs?: string[]) => Promise<Result<boolean>>;
 
   learnValue: (valueName: string, valueType: ValueType) => Promise<Result<ValueResult>>,
   setDynamicInput: (name: string, value: string) => Promise<Result<string>>,

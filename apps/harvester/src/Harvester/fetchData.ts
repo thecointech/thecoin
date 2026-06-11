@@ -1,47 +1,46 @@
 import { DateTime } from 'luxon';
 import currency from 'currency.js';
-import { getValues } from './replay';
+import { getBalances } from './replay';
 import { HarvesterReplayCallbacks } from './replay/replayCallbacks';
-import { ChequeBalanceResult, VisaBalanceResult } from '@thecointech/scraper-agent/types';
+import type { ChequeBalanceResult, VisaBalanceResult } from '@thecointech/scraper-agent/types';
 
-export async function getChequingData(callback: HarvesterReplayCallbacks) : Promise<ChequeBalanceResult> {
-  if (process.env.HARVESTER_OVERRIDE_CHQ_BALANCE) {
-    return {
-      balance: currency(process.env.HARVESTER_OVERRIDE_CHQ_BALANCE),
-    }
+
+type AccountData = { chq: ChequeBalanceResult, visa: VisaBalanceResult };
+export async function getAccountData(callback: HarvesterReplayCallbacks, lastTxDate?: DateTime): Promise<AccountData> {
+  const chqOverride = process.env.HARVESTER_OVERRIDE_CHQ_BALANCE ? getOverrideChqData() : undefined;
+  const visaOverride = process.env.HARVESTER_OVERRIDE_VISA_BALANCE ? getOverrideVisaData() : undefined;
+
+  if (chqOverride && visaOverride) {
+    return { chq: chqOverride, visa: visaOverride };
   }
-  switch (process.env.CONFIG_NAME) {
-    // case 'development':
-    // case 'devlive':
-    // case 'prodtest':
-    //   // Mock the values in non-prod environment
-    //   const balance = (1000 + Math.random() * 500).toFixed(2);
-    //   return {
-    //     balance: currency(balance),
-    //   };
-    default:
-      return await getValues('chqBalance', callback);
-  }
+
+  const [chqResult, visaResult] = await getBalances(callback);
+
+  const chq = chqOverride ?? chqResult;
+  const rawVisa = visaOverride ?? visaResult;
+  const newTransactions = lastTxDate
+    ? rawVisa.history?.filter(row => row.date > lastTxDate)
+    : rawVisa.history;
+  const visa = { ...rawVisa, history: newTransactions };
+
+  return { chq, visa };
 }
 
-export async function getVisaData(callback: HarvesterReplayCallbacks, lastTxDate?: DateTime) : Promise<VisaBalanceResult> {
+function getOverrideChqData(): ChequeBalanceResult {
+  if (process.env.HARVESTER_OVERRIDE_CHQ_BALANCE) {
+    return { balance: currency(process.env.HARVESTER_OVERRIDE_CHQ_BALANCE) };
+  }
+  throw new Error('No chequing override set');
+}
+
+function getOverrideVisaData(): VisaBalanceResult {
   if (process.env.HARVESTER_OVERRIDE_VISA_BALANCE) {
     const data = JSON.parse(process.env.HARVESTER_OVERRIDE_VISA_BALANCE);
     return {
       balance: currency(data.balance ?? 0),
       dueDate: DateTime.fromISO(data.dueDate),
       dueAmount: currency(data.dueAmount),
-    }
+    };
   }
-
-  const data = await getValues('visaBalance', callback);
-  // Only keep the new transactions from history
-  const newTransactions = lastTxDate
-    ? data.history?.filter(row => row.date > lastTxDate)
-    : data.history;
-
-  return {
-    ...data,
-    history: newTransactions,
-  }
+  throw new Error('No visa override set');
 }

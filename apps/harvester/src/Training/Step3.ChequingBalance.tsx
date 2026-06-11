@@ -4,7 +4,7 @@ import { TrainingReducer } from './state/reducer';
 import { useLearnValue } from './learnValue';
 import { ReplayProgressBar } from '../ReplayProgress';
 
-const pageAction = "chqBalance";
+const pageAction = "chqBalance" as any;
 
 export const ChequingBalance = () => {
 

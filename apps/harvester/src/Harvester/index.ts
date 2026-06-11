@@ -17,7 +17,7 @@ export async function harvest(uiCallback?: BackgroundTaskCallback): Promise<Resu
     uiCallback,
     timestamp: Date.now(),
     taskType: "replay",
-    sections: ["chqBalance", "visaBalance", "chqETransfer"],
+    sections: ["chqETransfer"],
   });
 
   try {

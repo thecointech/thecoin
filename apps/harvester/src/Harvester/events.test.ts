@@ -1,8 +1,8 @@
-import { EventSection } from "@thecointech/scraper-agent";
-import { setEvents, getEvents } from "./events";
+import { setEvents, getBankConfig } from "./events";
 import type { AnyEvent } from "@thecointech/scraper";
 import { jest } from '@jest/globals';
-import type { BankEvents, ActionType } from "@thecointech/store-harvester";
+import type { BankEvents } from "@thecointech/store-harvester";
+import type { ReplayAction } from "@thecointech/scraper-agent/replay/events";
 
 
 jest.setTimeout(10* 60* 1000)
@@ -25,9 +25,10 @@ describe('setting/getting events', () => {
     events: { section: 'Initial', events: [{ type: 'click', id: 'chequing'} as any] }
   };
 
-  const getEventArray = async (type: ActionType) => {
-    const events = await getEvents(type);
-    return events.events as AnyEvent[];
+  const bankTypeFor = (type: ReplayAction) => type === 'visaBalance' ? 'credit' : 'chequing' as const;
+  const getEventArray = async (type: ReplayAction) => {
+    const config = await getBankConfig(bankTypeFor(type));
+    return config!.events.events as AnyEvent[];
   };
 
   it('should set both events when both is set', async () => {

@@ -1,12 +1,15 @@
 import type { ReplayResult } from '@thecointech/scraper-types';
 
 export function toBridge(value: ReplayResult) {
+  const flat: Record<string, string> = {};
   if (value) {
-    for (const key in value) {
-      value[key] = value[key].toString()
+    for (const section in value) {
+      for (const key in value[section]) {
+        flat[key] = value[section][key].toString();
+      }
     }
   }
-  return value as Record<string, string>;
+  return flat;
 }
 
 // function fromBridge(actionName: "visaBalance", value): Promise<Result<VisaBalanceResult>>,
