@@ -12,7 +12,8 @@ export const Intro = () => {
 
   const setUseDefaults = () => {
     api.resetToDefault();
-    navigate(`/${groupKey}/${routes.length - 1}`);
+    const lastStep = routes[routes.length - 1];
+    navigate(`/${groupKey}/${lastStep.path}`);
   }
   return (
     <Container>
