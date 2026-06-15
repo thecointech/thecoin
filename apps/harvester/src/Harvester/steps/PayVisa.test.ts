@@ -59,10 +59,18 @@ it ('does not send more than the current balance', async () => {
   expect(delta.toPayVisa).toEqual(currency(50));
 })
 
-it ('skips when dueAmount is $0', async () => {
+it ('records state but sends no payment when dueAmount is $0', async () => {
   const payVisa = new PayVisa();
   const { state, user } = mockData(1);
   state.visa.dueAmount = currency(0);
+  const delta = await payVisa.process(state, user);
+  expect(delta.toPayVisa).toEqual(currency(0));
+  expect(delta.stepData?.PayVisa).toBeDefined();
+})
+
+it ('waits for window when no lastAmount recorded (new install)', async () => {
+  const payVisa = new PayVisa();
+  const { state, user } = mockData(4); // 4 weeks out — outside window, no prior stepData
   const delta = await payVisa.process(state, user);
   expect(delta).toEqual({});
 })

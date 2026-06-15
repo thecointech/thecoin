@@ -36,7 +36,9 @@ export class PayVisa implements ProcessingStage {
 
     const isNewDate = !lastDueDate || (data.visa.dueDate > lastDueDate);
     // Guard against acting on a due date that updated before the statement closed:
-    const amountChanged = data.visa.dueAmount.value !== lastAmount?.value;
+    // If we have no prior amount recorded, we can't confirm the statement has
+    // settled, so fall through to the window check only.
+    const amountChanged = lastAmount !== undefined && data.visa.dueAmount.value !== lastAmount.value;
     // Always proceed if we are within 3 weeks of the due date
     const withinPaymentWindow = data.visa.dueDate.diffNow('weeks').weeks < 3;
 
