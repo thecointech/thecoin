@@ -59,6 +59,47 @@ it ('does not send more than the current balance', async () => {
   expect(delta.toPayVisa).toEqual(currency(50));
 })
 
+it ('skips when dueAmount is $0', async () => {
+  const payVisa = new PayVisa();
+  const { state, user } = mockData(1);
+  state.visa.dueAmount = currency(0);
+  const delta = await payVisa.process(state, user);
+  expect(delta).toEqual({});
+})
+
+it ('skips when date is new but more than 3 weeks away and amount unchanged', async () => {
+  const payVisa = new PayVisa();
+  const { state, user } = mockData(4); // 4 weeks out — outside window
+  state.state.stepData = {
+    PayVisa: DateTime.now().plus({ weeks: 3 }).toISO()!,
+    PayVisaAmount: '100', // same amount as mockData default
+  };
+  const delta = await payVisa.process(state, user);
+  expect(delta).toEqual({});
+})
+
+it ('pays when date is new and amount changed, even if more than 3 weeks away', async () => {
+  const payVisa = new PayVisa();
+  const { state, user } = mockData(4); // 4 weeks out — outside window
+  state.state.stepData = {
+    PayVisa: DateTime.now().plus({ weeks: 3 }).toISO()!,
+    PayVisaAmount: '50', // different from mockData default of 100
+  };
+  const delta = await payVisa.process(state, user);
+  expect(delta.toPayVisa).toEqual(currency(100));
+})
+
+it ('pays when date is new and within 3-week window, even if amount unchanged', async () => {
+  const payVisa = new PayVisa();
+  const { state, user } = mockData(2); // 2 weeks out — inside window
+  state.state.stepData = {
+    PayVisa: DateTime.now().plus({ weeks: 1 }).toISO()!,
+    PayVisaAmount: '100', // same amount
+  };
+  const delta = await payVisa.process(state, user);
+  expect(delta.toPayVisa).toEqual(currency(100));
+})
+
 const mockData = (dueInWeeks: number) => ({
   state: {
     visa: {

@@ -9,6 +9,7 @@ import { notify } from '@/notify';
 import type { UberTransferAction } from '@thecointech/types';
 
 export const PayVisaKey = "PayVisa";
+const PayVisaAmountKey = "PayVisaAmount";
 
 export class PayVisa implements ProcessingStage {
 
@@ -27,12 +28,27 @@ export class PayVisa implements ProcessingStage {
   }
 
   async process(data: HarvestData, user: UserData) : Promise<HarvestDelta> {
+    // If the current due amount is $0, there is nothing to act on
+    if (data.visa.dueAmount.value === 0) {
+      log.info('PayVisa: Due amount is $0, skipping');
+      return {};
+    }
+
     // Do we have a new due amount?  If so, we better pay it.
     // Note, we use the date from stepData, as the date recorded as
     // state.toPayVisaDate is the date of the payment, not the due date
     const lastDueDate = getDataAsDate(PayVisaKey, data.state.stepData);
+    const lastAmount = data.state.stepData?.[PayVisaAmountKey]
+      ? Number(data.state.stepData[PayVisaAmountKey])
+      : undefined;
 
-    if (!lastDueDate || (data.visa.dueDate > lastDueDate)) {
+    const isNewDate = !lastDueDate || (data.visa.dueDate > lastDueDate);
+    // Guard against acting on a due date that updated before the statement closed:
+    const amountChanged = lastAmount === undefined || data.visa.dueAmount.value !== lastAmount;
+    // Always proceed if we are within 3 weeks of the due date
+    const withinPaymentWindow = data.visa.dueDate.diffNow('weeks').weeks < 3;
+
+    if (isNewDate && (amountChanged || withinPaymentWindow)) {
 
       log.info('PayVisa: Prepping payment request');
 
@@ -80,6 +96,7 @@ async function sendPayment(dateToPay: DateTime, data: HarvestData, { wallet, cre
       toPayVisaDate: dateToPay,
       stepData: {
         [PayVisaKey]: data.visa.dueDate.toISO()!,
+        [PayVisaAmountKey]: String(data.visa.dueAmount.value),
       }
     }
   }
@@ -119,6 +136,7 @@ async function sendPayment(dateToPay: DateTime, data: HarvestData, { wallet, cre
     toPayVisaDate: dateToPay,
     stepData: {
       [PayVisaKey]: data.visa.dueDate.toISO()!,
+      [PayVisaAmountKey]: String(data.visa.dueAmount.value),
     }
   }
 }
