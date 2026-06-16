@@ -1,4 +1,4 @@
-import { getDataAsDate, HarvestData, HarvestDelta, ProcessingStage, UserData } from '../types';
+import { getDataAsCurrency, getDataAsDate, HarvestData, HarvestDelta, ProcessingStage, UserData } from '../types';
 import { GetBillPaymentsApi, GetStatusApi } from '@thecointech/apis/broker'
 import { BuildUberAction } from '@thecointech/utilities/UberAction';
 import Decimal from 'decimal.js-light';
@@ -9,6 +9,7 @@ import { notify } from '@/notify';
 import type { UberTransferAction } from '@thecointech/types';
 
 export const PayVisaKey = "PayVisa";
+const PayVisaAmountKey = "PayVisaAmount";
 
 export class PayVisa implements ProcessingStage {
 
@@ -31,8 +32,17 @@ export class PayVisa implements ProcessingStage {
     // Note, we use the date from stepData, as the date recorded as
     // state.toPayVisaDate is the date of the payment, not the due date
     const lastDueDate = getDataAsDate(PayVisaKey, data.state.stepData);
+    const lastAmount = getDataAsCurrency(PayVisaAmountKey, data.state.stepData);
 
-    if (!lastDueDate || (data.visa.dueDate > lastDueDate)) {
+    const isNewDate = !lastDueDate || (data.visa.dueDate > lastDueDate);
+    // Guard against acting on a due date that updated before the statement closed:
+    // If we have no prior amount recorded, we can't confirm the statement has
+    // settled, so fall through to the window check only.
+    const amountChanged = lastAmount !== undefined && data.visa.dueAmount.value !== lastAmount.value;
+    // Always proceed if we are within 3 weeks of the due date
+    const withinPaymentWindow = data.visa.dueDate.diffNow('weeks').weeks < 3;
+
+    if (isNewDate && (amountChanged || withinPaymentWindow)) {
 
       log.info('PayVisa: Prepping payment request');
 
@@ -68,18 +78,19 @@ async function sendPayment(dateToPay: DateTime, data: HarvestData, { wallet, cre
   let dueAmount = data.visa.dueAmount.value;
 
   // If the due amount is negative, there is nothing to pay and we skip
-  if (dueAmount < 0) {
+  if (dueAmount <= 0) {
     log.info('PayVisa: Due amount is negative, skipping payment');
     notify({
       icon: 'money.png',
       title: 'No payment required',
-      message: `Visa due balance of ${data.visa.dueAmount} is negative and does not require a payment.`,
+      message: `Visa due balance of ${data.visa.dueAmount} does not require a payment.`,
     })
     return {
       toPayVisa: currency(0),
       toPayVisaDate: dateToPay,
       stepData: {
         [PayVisaKey]: data.visa.dueDate.toISO()!,
+        [PayVisaAmountKey]: String(data.visa.dueAmount.value),
       }
     }
   }
@@ -119,6 +130,7 @@ async function sendPayment(dateToPay: DateTime, data: HarvestData, { wallet, cre
     toPayVisaDate: dateToPay,
     stepData: {
       [PayVisaKey]: data.visa.dueDate.toISO()!,
+      [PayVisaAmountKey]: String(data.visa.dueAmount.value),
     }
   }
 }
