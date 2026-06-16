@@ -33,7 +33,6 @@ export type SerializerOptions = {
   recordFolder: string,
   // The bank names (constant throughout an execution)
   target: string,
-  skipSections?: SectionName[],
   // Used in replay - if true, we will take a screenshot
   // on every element found
   writeScreenshotOnElement?: boolean,
@@ -48,8 +47,6 @@ export class AgentSerializer implements Disposable {
   options: SerializerOptions;
   get recordFolder() { return this.options.recordFolder; }
   get target() { return this.options.target; }
-  // By default, we skip the initial section
-  get skipSections() { return this.options.skipSections ?? ["Initial"]; }
   get writeScreenshotOnElement() { return this.options.writeScreenshotOnElement; }
 
   constructor(options: SerializerOptions) {
@@ -80,14 +77,9 @@ export class AgentSerializer implements Disposable {
   // Log every API call
   onApiCall = async (event: ApiCallEvent) => {
     try {
-      // Never skip errors
-      if (!event.error) {
-        if (this.pauseWriting()) {
-          return;
-        }
-        if (this.skipWriting(event)) {
-          return;
-        }
+      // Skip duplicate intents, but still log errors
+      if (!event.error && this.skipWriting(event)) {
+        return;
       }
 
       // Does the request include an image?
@@ -153,10 +145,6 @@ export class AgentSerializer implements Disposable {
     this.tracker.setCurrentSection(section);
   }
 
-  pauseWriting() {
-    return this.skipSections.includes(this.tracker.currentSection);
-  }
-
   skipWriting(event: ApiCallEvent) {
     if (event.method == "pageIntent") {
       // If this is the same as the last intent, skip it.
@@ -179,9 +167,6 @@ export class AgentSerializer implements Disposable {
   }
 
   async logScreenshot(screenshot: Buffer|Uint8Array): Promise<void> {
-    if (this.pauseWriting()) {
-      return;
-    }
     this.maybeIncrementSection(screenshot);
 
     // Write out the buffer
@@ -208,9 +193,6 @@ export class AgentSerializer implements Disposable {
   }
 
   async logJson(name?: string, data: any = {}, increment: boolean = true): Promise<void> {
-    if (this.pauseWriting()) {
-      return;
-    }
     const filename = `${this.tracker.step}-${this.tracker.elements}-${name}`;
     // Ensure we don't overwrite previous JSON files
     if (increment) {

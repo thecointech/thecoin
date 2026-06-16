@@ -32,7 +32,6 @@ setApi(mockApi as any);
 const logger = new AgentSerializer({
   recordFolder,
   target,
-  skipSections: [],
 });
 
 // await selectDestination(handler, askUser, mockApi as any);
