@@ -180,15 +180,25 @@ export class AgentSerializer implements Disposable {
   }
 
   async logMhtml(page: Page) {
+    // Skip MHTML capture for file:// URLs - the source is already an MHTML file
+    const url = page.url();
+    if (url.startsWith("file://")) {
+      log.info(`Skipping MHTML capture for file:// URL: ${url}`);
+      return;
+    }
+    const cdp = await page.createCDPSession();
     try {
       const outMhtml = this.toPath(this.tracker.currentSection, `${this.tracker.step}`, "mhtml");
-      const cdp = await page.createCDPSession();
       const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
       writeFileSync(outMhtml, data);
+      log.info(`Wrote MHTML for section ${this.tracker.currentSection}[${this.tracker.step}]`);
     }
     catch (e) {
       log.error(e, `Error taking MHTML for section ${this.tracker.currentSection}`);
       // This is a pain, but it happens - let's move on anyway
+    }
+    finally {
+      await cdp.detach();
     }
   }
 
@@ -230,8 +240,13 @@ export class AgentSerializer implements Disposable {
     writeFileSync(path.join(dumpFolder, `error.html`), content);
     // Lastly, try for MHTML
     const cdp = await page.createCDPSession();
-    const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
-    writeFileSync(path.join(dumpFolder, `error.mhtml`), data);
+    try {
+      const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
+      writeFileSync(path.join(dumpFolder, `error.mhtml`), data);
+    }
+    finally {
+      await cdp.detach();
+    }
 
     // write the error out too, if possible
     writeFileSync(path.join(dumpFolder, `error.json`), JSON.stringify(error));
