@@ -154,11 +154,11 @@ export class Agent implements AsyncDisposable {
     log.debug("Pushing isolated section: " + subName);
     const cloneTab = await this.page.tryCloneTab(subName);
 
-    if (cloneTab) {
-      // Connect clone to event manager
-      cloneTab.sectionRecorder.onEvent(this.events.onEvent);
-      this.events.pushPageFilter(cloneTab.sectionRecorder.page);
-    }
+    // if (cloneTab) {
+    //   // Connect clone to event manager
+    //   cloneTab.recorder.onEvent(this.events.onEvent);
+    //   this.events.pushPageFilter(cloneTab.recorder.page);
+    // }
     const cachedAgent = this;
     const events = this.events.pushSection(subName);
     return {
@@ -170,9 +170,9 @@ export class Agent implements AsyncDisposable {
         // care about, so pause the event manager for this
         using _ = cachedAgent.events.pause();
         await cloneTab?.[Symbol.asyncDispose]();
-        if (cloneTab) {
-          cachedAgent.events.popPageFilter();
-        }
+        // if (cloneTab) {
+        //   cachedAgent.events.popPageFilter();
+        // }
         log.info(`Isolated section ${subName} disposed`);
       }
     };
