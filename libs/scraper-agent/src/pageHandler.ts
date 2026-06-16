@@ -34,17 +34,14 @@ type InputInteractionOptions = InteractionOptions & {
 
 export class PageHandler implements AsyncDisposable {
 
-  recorderStack: Recorder[]
+  recorder: Recorder
 
-  get recorder() {
-    return this.recorderStack.at(-1)!
-  }
   get page() {
     return this.recorder.page;
   }
 
   private constructor(recorder: Recorder) {
-    this.recorderStack = [recorder];
+    this.recorder = recorder;
   }
 
   static async create(name: string) {
@@ -58,31 +55,27 @@ export class PageHandler implements AsyncDisposable {
   }
 
   async [Symbol.asyncDispose]() {
-    for (const recorder of this.recorderStack) {
-      await recorder[Symbol.asyncDispose]();
-    }
+    await this.recorder[Symbol.asyncDispose]();
   }
 
-  async tryCloneTab(subName: SectionType) {
-    // const cachedThis = this;
+  async enterSection(subName: SectionType) {
     const originalIntent = await this.getPageIntent();
     const originalRecorder = this.recorder;
     const originalUrl = originalRecorder.page.url();
-    
-    log.debug("Entering section: " + subName);
-    // Opening/closing tabs is causing more issues than we can handle.
-    // Let's try reverting back to a single page, and hope it works
-    const sectionRecorder = originalRecorder;
 
-    return { 
+    log.debug("Entering section: " + subName);
+
+    return {
       recorder: originalRecorder,
       async [Symbol.asyncDispose]() {
         log.debug("Popping section: " + subName);
         // Go back to the original page
         try {
-          await sectionRecorder.page.goto(originalUrl);
-          const nowIntent = await waitForValidIntent(sectionRecorder.page);
-          await waitPageStable(sectionRecorder.page);
+          await originalRecorder.page.goto(originalUrl);
+          // We wait for valid intent first rather than a stable page
+          // as a blank page is stable but not where we want to be
+          const nowIntent = await waitForValidIntent(originalRecorder.page);
+          await waitPageStable(originalRecorder.page);
           if (nowIntent != originalIntent) {
             // Other options: The vLLM could probably guide us back to the main page
             // For now, just continue and hope for the best
@@ -91,6 +84,11 @@ export class PageHandler implements AsyncDisposable {
               `Recieved intent {nowIntent} instead of {originalIntent} when navigating sectionRecorder back to {originalUrl}.
               Continuing, but this will most likely fail.`
             );
+            // If we're at the same URL, we try to continue.  If we're not,
+            // assume logout or something similar has occurred
+            if (originalRecorder.page.url() != originalUrl) {
+              throw new Error(`Could not navigate back to ${originalIntent}, ended up at ${nowIntent}`);
+            }
           }
         }
         catch (e) {
@@ -99,78 +97,6 @@ export class PageHandler implements AsyncDisposable {
         }
       }
     }
-
-    // Page should be loaded, but that doesn't mean it's ready.
-    // Take the extra wait here just to ensure we don't miss anything
-    // const intent = await waitForValidIntent(sectionRecorder.page);
-    // await waitPageStable(sectionRecorder.page);
-
-    // We only push the page if it's intent matches
-    // the current page.  It's possible that on loading
-    // a new page the bank may require a new login
-    // if (intent && intent == originalIntent) {
-    //   log.debug("Tab cloned successfully: " + subName);
-    //   this.recorderStack.push(sectionRecorder);
-    //   return {
-    //     sectionRecorder,
-    //     async [Symbol.asyncDispose]() {
-    //       log.debug("Popping cloned tab: " + subName);
-    //       // We need to release the recorder.  This should be the
-    //       // isolated section recorder, but it's possible that
-    //       // the original page has logged out.  In this case we
-    //       // release the original and navigate the new page to the
-    //       // original URL.
-    //       let recorderToRelease = sectionRecorder;
-
-    //       // First, is the original page still waiting in the
-    //       // same place, or has it already logged out?
-    //       const currentUrl = originalRecorder.page.url();
-    //       try {
-    //         if (originalUrl != currentUrl) {
-    //           log.warn("Original page has changed, releasing original recorder");
-    //           recorderToRelease = originalRecorder;
-    //           const sectionUrl = sectionRecorder.page.url();
-    //           log.trace({ originalUrl, sectionUrl }, "Navigating sectionRecorder back to {originalUrl}");
-    //           await sectionRecorder.page.goto(originalUrl);
-    //           const nowIntent = await waitForValidIntent(sectionRecorder.page);
-    //           await waitPageStable(sectionRecorder.page);
-    //           if (nowIntent != originalIntent) {
-    //             log.error(
-    //               { nowIntent, originalIntent, originalUrl },
-    //               `Recieved intent {nowIntent} instead of {originalIntent} when navigating sectionRecorder back to {originalUrl}.
-    //               Continuing, but this will most likely fail.`
-    //             );
-    //           }
-    //         }
-    //       }
-    //       catch (e) {
-    //         log.error(e, "Error navigating back to original page");
-    //         // Continue, as we can't be sure this error is fatal
-    //       }
-    //       finally {
-    //         // Release the new recorder/page
-    //         log.info("Releasing cloned tab: " + subName);
-    //         const idx = cachedThis.recorderStack.indexOf(recorderToRelease);
-    //         if (idx >= 0) {
-    //           cachedThis.recorderStack.splice(idx, 1);
-    //         }
-    //         await recorderToRelease[Symbol.asyncDispose]();
-    //       }
-
-    //       // Even if it hasn't logged out, it may have popped
-    //       // a dialog that we need to handle
-    //       if (originalUrl == currentUrl) {
-    //         await cachedThis.checkSessionLogin();
-    //       }
-    //     }
-    //   }
-    // }
-    // else {
-    //   // If the page failed to load, we just dispose of it
-    //   log.warn("Failed to clone tab, disposing and continuing with main page");
-    //   await sectionRecorder[Symbol.asyncDispose]();
-    //   return null;
-    // }
   }
 
   async checkSessionLogin() {

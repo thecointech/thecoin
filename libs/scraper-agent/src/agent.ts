@@ -150,15 +150,9 @@ export class Agent implements AsyncDisposable {
   }
 
   async pushIsolatedSection(subName: SectionType) {
-    // First, get the clone:
+    // An isolated navigates back to the current page when disposed
     log.debug("Pushing isolated section: " + subName);
-    const cloneTab = await this.page.tryCloneTab(subName);
-
-    // if (cloneTab) {
-    //   // Connect clone to event manager
-    //   cloneTab.recorder.onEvent(this.events.onEvent);
-    //   this.events.pushPageFilter(cloneTab.recorder.page);
-    // }
+    const section = await this.page.enterSection(subName);
     const cachedAgent = this;
     const events = this.events.pushSection(subName);
     return {
@@ -166,13 +160,10 @@ export class Agent implements AsyncDisposable {
       cancel: () => events.cancel(),
       async [Symbol.asyncDispose]() {
         await events[Symbol.asyncDispose]();
-        // Closing the tab can trigger events that we don't
+        // Closing the section can trigger events that we don't
         // care about, so pause the event manager for this
         using _ = cachedAgent.events.pause();
-        await cloneTab?.[Symbol.asyncDispose]();
-        // if (cloneTab) {
-        //   cachedAgent.events.popPageFilter();
-        // }
+        await section[Symbol.asyncDispose]();
         log.info(`Isolated section ${subName} disposed`);
       }
     };
