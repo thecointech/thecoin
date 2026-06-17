@@ -2,8 +2,7 @@
 import path from 'node:path';
 import type { Test, TestResult } from '../src/types';
 import { getTestData } from './getTestData';
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { getSnapshot, getSnapshots, type SnapshotData, type TestData } from '@thecointech/scraper-archive';
+import { getSnapshot, getSnapshots, type TestData } from '@thecointech/scraper-archive';
 
 declare global {
   var allTests: TestData[];
@@ -50,7 +49,6 @@ export function getTestResults(key: string, element: string): TestResult {
   return {
     original: getTestOriginalResult(test, element),
     search: getTestSearch(test, element),
-    override: getElementOverride(test, element),
     snapshot: getTestSnapshotResults(test, element),
   }
 }
@@ -60,9 +58,6 @@ export function getTestImagePath(key: string) {
   return path.join(test.matchedFolder, `${test.step}.png`)
 }
 
-function getElementOverride(_test: TestData, _element: string) {
-  return null;
-}
 
 
 function getTestOriginalResult(test: TestData, element: string) {

@@ -7,7 +7,6 @@ import { TestLoading } from './TestLoading';
 import { TestError } from './TestError';
 import { TestHeader } from './TestHeader';
 import { TestScreenshot } from './TestScreenshot';
-import { OverrideData } from './OverrideData';
 import { ElementData } from './ElementData';
 import { SearchParameters } from './SearchParameters';
 import { colors, names } from './colors';
@@ -176,7 +175,7 @@ export const TestViewer: React.FC<TestViewerProps> = ({ test }) => {
                 <Button
                   color="blue"
                   onClick={() => applyOverride(test.key, test.element)}
-                >Override</Button>
+                >Apply Fix</Button>
                 <Button
                   onClick={() => openTestFolder(test.key)}
                 >Open Folder</Button>
@@ -194,7 +193,6 @@ export const TestViewer: React.FC<TestViewerProps> = ({ test }) => {
 
             <Grid.Row>
               <Grid.Column width={16}>
-                <OverrideData override={testResult.override} />
                 <ElementData
                   tests={getTestsToShow()}
                 />
