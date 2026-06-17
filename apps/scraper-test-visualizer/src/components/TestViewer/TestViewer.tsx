@@ -121,6 +121,20 @@ export const TestViewer: React.FC<TestViewerProps> = ({ test }) => {
     }
   }
 
+  async function openTestPage(key: string): Promise<void> {
+    try {
+      const response = await fetch(`/api/open-page/${key}`, {
+        method: 'POST',
+      });
+      const result = await response.json();
+      if (!result.success) {
+        console.error('Failed to open page:', result.message);
+      }
+    } catch (error) {
+      console.error('Failed to open page:', error);
+    }
+  }
+
   async function applyOverride(key: string, element: string): Promise<void> {
     setLoading(true);
     try {
@@ -179,6 +193,9 @@ export const TestViewer: React.FC<TestViewerProps> = ({ test }) => {
                 <Button
                   onClick={() => openTestFolder(test.key)}
                 >Open Folder</Button>
+                <Button
+                  onClick={() => openTestPage(test.key)}
+                >Open Page</Button>
                 <Dropdown
                   options={testResult.snapshot.map((snapshot, index) => ({
                     key: index,
