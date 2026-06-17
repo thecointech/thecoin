@@ -60,8 +60,8 @@ export function getTestImagePath(key: string) {
   return path.join(test.matchedFolder, `${test.step}.png`)
 }
 
-function getElementOverride(test: TestData, element: string) {
-  return test.override(element);
+function getElementOverride(_test: TestData, _element: string) {
+  return null;
 }
 
 

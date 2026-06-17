@@ -1,8 +1,7 @@
 import path from "node:path";
-import { existsSync, readdirSync, lstatSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, lstatSync } from "node:fs";
 import { globSync } from "glob";
 import { TestData } from "./testData";
-import { getOverrideData, type SkipElement } from "./overrides";
 import type { Page } from "puppeteer";
 import { tests } from "./paths";
 
@@ -20,7 +19,6 @@ export function getTestData<T extends TestData>(
     return [];
   }
   const testFolder = tests();
-  const overrideData = getOverrideData();
   const results: T[] = [];
   const pattern = `${testFolder}/**/${recordTime}/**/${section}/**/*${searchPattern}*`
   const matched = globSync(pattern);
@@ -41,7 +39,7 @@ export function getTestData<T extends TestData>(
       continue
     }
     // Is this meant to be skipped?
-    const skip = overrideData.skip?.[key];
+    const skip = getSkipData(matchedFolder, step);
     if (skip && !skip.elements) {
       continue;
     }
@@ -70,7 +68,6 @@ export function getTestData<T extends TestData>(
       step,
       matchedFolder,
       jsonFiles,
-      overrideData,
       getPage
     )
 
@@ -83,7 +80,20 @@ export function getTestData<T extends TestData>(
   return results;
 }
 
-function getJsonFiles(matchedFolder: string, step: number, skip?: SkipElement) {
+export type SkipData = {
+  reason?: string;
+  elements?: string[];
+}
+
+export function getSkipData(folder: string, step: number): SkipData | null {
+  const skipFile = path.join(folder, `${step}.skip.json`);
+  if (existsSync(skipFile)) {
+    return JSON.parse(readFileSync(skipFile, "utf-8"));
+  }
+  return null;
+}
+
+function getJsonFiles(matchedFolder: string, step: number, skip?: SkipData | null) {
   const allPagesAndElements = readdirSync(matchedFolder);
   let jsonFiles = allPagesAndElements.filter(f => f.startsWith(`${step}-`));
   return (skip?.elements)

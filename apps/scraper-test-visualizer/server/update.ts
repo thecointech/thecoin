@@ -43,7 +43,7 @@ export async function applyOverrideFromSnapshot(test: TestData, element: string)
   const found = snapshot.found;
 
   // Get the original element data (without overrides)
-  const original = test.elm(element, false);
+  const original = test.elm(element);
   if (!original) {
     throw new Error(`Element ${element} not found in test ${test.key}`);
   }
