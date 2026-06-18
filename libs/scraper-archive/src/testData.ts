@@ -205,7 +205,7 @@ function isElementPassing(test: TestData, name: string) {
   const elm = test.elm(name);
   const meta = test.snapshots(name)[0];
   if (!meta) {
-    return true;
+    return undefined;
   }
   const snapshot = getSnapshot(meta);
   if (snapshot?.found?.data === undefined) {
