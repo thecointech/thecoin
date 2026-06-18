@@ -99,11 +99,16 @@ async function getPage(contextName = "default") {
     globalThis.__scraper__ = undefined
   });
 
-  // On boot, return the default (blank) page
-  const [page] = await context.pages();
+  // On boot, close any existing pages.
+  const existingPages = await context.pages();
+  for (const p of existingPages.slice(1)) await p.close();
+  const page = existingPages[0] ?? await context.newPage();
+  // Navigate stale tabs to blank before handing off
+  if (page.url() !== 'about:blank') await page.goto('about:blank');
+
   return {
     browser,
-    page: page ?? (await context.newPage())
+    page
   };
 }
 
