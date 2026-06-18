@@ -81,7 +81,7 @@ export class PageHandler implements AsyncDisposable {
             // For now, just continue and hope for the best
             log.error(
               { nowIntent, originalIntent, originalUrl },
-              `Recieved intent {nowIntent} instead of {originalIntent} when navigating sectionRecorder back to {originalUrl}.
+              `Received intent {nowIntent} instead of {originalIntent} when navigating sectionRecorder back to {originalUrl}.
               Continuing, but this will most likely fail.`
             );
             // If we're at the same URL, we try to continue.  If we're not,

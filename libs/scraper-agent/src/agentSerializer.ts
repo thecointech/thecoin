@@ -179,6 +179,21 @@ export class AgentSerializer implements Disposable {
     // }
   }
 
+  private async captureMhtml(page: Page, outPath: string) {
+    const cdp = await page.createCDPSession();
+    try {
+      const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
+      writeFileSync(outPath, data);
+    }
+    catch (e) {
+      log.error(e, `Error capturing MHTML to ${outPath}`);
+      // This is a pain, but it happens - let's move on anyway
+    }
+    finally {
+      try { await cdp.detach(); } catch (e) { log.error(e, 'Error detaching CDP session'); }
+    }
+  }
+
   async logMhtml(page: Page) {
     // Skip MHTML capture for file:// URLs - the source is already an MHTML file
     const url = page.url();
@@ -186,20 +201,9 @@ export class AgentSerializer implements Disposable {
       log.info(`Skipping MHTML capture for file:// URL: ${url}`);
       return;
     }
-    const cdp = await page.createCDPSession();
-    try {
-      const outMhtml = this.toPath(this.tracker.currentSection, `${this.tracker.step}`, "mhtml");
-      const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
-      writeFileSync(outMhtml, data);
-      log.info(`Wrote MHTML for section ${this.tracker.currentSection}[${this.tracker.step}]`);
-    }
-    catch (e) {
-      log.error(e, `Error taking MHTML for section ${this.tracker.currentSection}`);
-      // This is a pain, but it happens - let's move on anyway
-    }
-    finally {
-      await cdp.detach();
-    }
+    const outMhtml = this.toPath(this.tracker.currentSection, `${this.tracker.step}`, "mhtml");
+    await this.captureMhtml(page, outMhtml);
+    log.info(`Wrote MHTML for section ${this.tracker.currentSection}[${this.tracker.step}]`);
   }
 
   async logJson(name?: string, data: any = {}, increment: boolean = true): Promise<void> {
@@ -239,14 +243,7 @@ export class AgentSerializer implements Disposable {
     const content = await page.content();
     writeFileSync(path.join(dumpFolder, `error.html`), content);
     // Lastly, try for MHTML
-    const cdp = await page.createCDPSession();
-    try {
-      const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
-      writeFileSync(path.join(dumpFolder, `error.mhtml`), data);
-    }
-    finally {
-      await cdp.detach();
-    }
+    await this.captureMhtml(page, path.join(dumpFolder, `error.mhtml`));
 
     // write the error out too, if possible
     writeFileSync(path.join(dumpFolder, `error.json`), JSON.stringify(error));
