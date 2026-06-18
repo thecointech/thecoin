@@ -32,17 +32,17 @@ export const TestHeader: React.FC<TestHeaderProps> = ({ test }) => {
   // so "next" goes to the test that now sits at that index (not index+1).
   const isInList = currentIndex >= 0;
 
-  const hasPrev = isInList ? currentIndex > 0 : filteredTests.length > 0;
-  const hasNext = isInList
-    ? currentIndex < filteredTests.length - 1
-    : filteredTests.length > 0;
-
   // lastViewedIndex is used when the current test dropped out of the list.
   // We store it so "next" picks up at the same position rather than skipping.
   const lastViewedIndex = React.useRef(0);
   if (isInList) {
     lastViewedIndex.current = currentIndex;
   }
+
+  const hasPrev = isInList ? currentIndex > 0 : (filteredTests.length > 0 && lastViewedIndex.current > 0);
+  const hasNext = isInList
+    ? currentIndex < filteredTests.length - 1
+    : filteredTests.length > 0;
 
   const onPrev = () => {
     if (!filteredTests.length) return;

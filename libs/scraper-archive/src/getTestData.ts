@@ -88,7 +88,18 @@ export type SkipData = {
 export function getSkipData(folder: string, step: number): SkipData | null {
   const skipFile = path.join(folder, `${step}.skip.json`);
   if (existsSync(skipFile)) {
-    return JSON.parse(readFileSync(skipFile, "utf-8"));
+    try {
+      const parsed = JSON.parse(readFileSync(skipFile, "utf-8"));
+      // Validate that elements is an array if present
+      if (parsed.elements !== undefined && !Array.isArray(parsed.elements)) {
+        return null;
+      }
+      return parsed;
+    } catch (e) {
+      // Don't break testing for one bad file.
+      console.error(`Error parsing skip file ${skipFile}:`, e);
+      return null;
+    }
   }
   return null;
 }

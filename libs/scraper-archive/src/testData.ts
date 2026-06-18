@@ -129,13 +129,28 @@ export class TestData {
     }
   }
 
+  elmFile(name: string): string | null {
+    // Fall back to matching by element name portion (like "closeModal")
+    const matches = this.elm_files().filter(f => f.includes(name));
+    if (matches.length === 1) return matches[0];
+
+    // Try exact match first (for fullname like "0-2-closeModal")
+    if (matches.length > 1) {
+      const exactFile = `${name}-elm.json`;
+      const exactMatch = matches.find(f => f === exactFile);
+      if (exactMatch) return exactMatch;
+      else {
+        throw new Error(`Multiple element files found for ${name}: ${matches.join(", ")}`);
+      }
+    }
+
+    return null;
+  }
+
   elm(name: string): TestElmData | null {
-    const [element, ...rest] = this.elm_files().filter(f => f.includes(name));
+    const element = this.elmFile(name);
     if (!element) {
       return null;
-    }
-    if (rest.length) {
-      throw new Error(`Multiple elements found for ${name}`);
     }
     const rawJson: TestElmData = this.json<TestElmData>(element);
 

@@ -71,7 +71,7 @@ export async function applyOverrideFromSnapshot(test: TestData, element: string)
   }
 
   // Find the elm file for this element
-  const elmFile = test.elm_files().find(f => f.includes(element));
+  const elmFile = test.elmFile(element);
   if (!elmFile) {
     throw new Error(`Elm file for ${element} not found in test ${test.key}`);
   }
