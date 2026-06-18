@@ -1,4 +1,4 @@
-import type { OverrideElement, TestElmData, TestSchData, SnapshotData, ElementName } from "@thecointech/scraper-archive";
+import type { TestElmData, TestSchData, SnapshotData, ElementName } from "@thecointech/scraper-archive";
 
 // Basic test data
 export type Test = {
@@ -14,7 +14,6 @@ export type TestSnapshot = {
 export type TestResult = {
   original: TestElmData | null;
   search: TestSchData | null;
-  override: OverrideElement | null;
   snapshot: TestSnapshot[];
 }
 

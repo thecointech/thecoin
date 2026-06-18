@@ -93,6 +93,22 @@ const config = await getConfig([], {
         }
       });
 
+      devServer.app.post('/api/open-page/:key', async (req, res) => {
+        try {
+          const { key } = req.params;
+          const test = getTest(key);
+          const mhtmlPath = `${test.matchedFolder}/${test.step}.mhtml`;
+          await openFolderInBrowser(mhtmlPath);
+          res.json({ success: true, path: mhtmlPath });
+        } catch (error) {
+          console.error('Failed to open page:', error);
+          res.status(500).json({
+            error: 'Failed to open page',
+            message: error instanceof Error ? error.message : 'Unknown error'
+          });
+        }
+      });
+
       devServer.app.post('/api/apply-override/:key/:element', async (req, res) => {
         try {
           const { key, element } = req.params;

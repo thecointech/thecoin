@@ -2,7 +2,6 @@ import { existsSync, readFileSync } from "fs";
 import path from "path";
 import type { Page } from "puppeteer";
 import type { VqaCallData, TestElmData, TestSchData } from "./types";
-import type { OverrideData } from "./overrides";
 import { log } from "@thecointech/logging";
 import open from 'open';
 import { getSnapshot, getSnapshots, type SnapshotMeta } from "./snapshots";
@@ -20,7 +19,6 @@ export class TestData {
   public readonly step: number;
   public readonly matchedFolder: string;
   protected readonly jsonFiles: string[];
-  private readonly overrideData: OverrideData;
   private readonly getPage: (url: string) => Promise<Page>;
 
   constructor(
@@ -29,7 +27,6 @@ export class TestData {
     step: number,
     matchedFolder: string,
     jsonFiles: string[],
-    overrideData: OverrideData,
     getPage: (url: string) => Promise<Page>
   ) {
     this.key = key;
@@ -37,7 +34,6 @@ export class TestData {
     this.step = step;
     this.matchedFolder = matchedFolder;
     this.jsonFiles = jsonFiles;
-    this.overrideData = overrideData;
     this.getPage = getPage;
   }
 
@@ -133,28 +129,30 @@ export class TestData {
     }
   }
 
-  elm(name: string, withOverride=true): TestElmData | null {
-    const [element, ...rest] = this.elm_files().filter(f => f.includes(name));
+  elmFile(name: string): string | null {
+    // Fall back to matching by element name portion (like "closeModal")
+    const matches = this.elm_files().filter(f => f.includes(name));
+    if (matches.length === 1) return matches[0];
+
+    // Try exact match first (for fullname like "0-2-closeModal")
+    if (matches.length > 1) {
+      const exactFile = `${name}-elm.json`;
+      const exactMatch = matches.find(f => f === exactFile);
+      if (exactMatch) return exactMatch;
+      else {
+        throw new Error(`Multiple element files found for ${name}: ${matches.join(", ")}`);
+      }
+    }
+
+    return null;
+  }
+
+  elm(name: string): TestElmData | null {
+    const element = this.elmFile(name);
     if (!element) {
       return null;
     }
-    if (rest.length) {
-      throw new Error(`Multiple elements found for ${name}`);
-    }
-    const matched = element.match(/(.+)-elm.json/);
-    if (!matched) {
-      throw new Error(`Failed to match element file: ${element}`);
-    }
-    const testName = matched[1];
     const rawJson: TestElmData = this.json<TestElmData>(element);
-
-    if (withOverride) {
-      const elementOverride = this.override(testName!);
-      if (elementOverride) {
-        if (elementOverride.text !== undefined) rawJson.data.text = elementOverride.text;
-        if (elementOverride.selector !== undefined) rawJson.data.selector = elementOverride.selector;
-      }
-    }
 
     // Clean up spaces in text, older test files did not clean
     // before writing...
@@ -197,43 +195,8 @@ export class TestData {
     return null;
   }
 
-  override(element: string) {
-    const overrides = this.overrideData.overrides?.[this.key];
-    if (overrides) {
-      const elementOverride = overrides[element];
-      if (elementOverride) {
-        return elementOverride;
-      }
-    }
-    return null;
-  }
-
   toString(): string {
     return this.key;
-  }
-
-  // Factory method to create new instances with the same parameters
-  // Useful for creating subclass instances from existing TestData
-  createInstance<T extends TestData>(
-    constructor: new (
-      key: string,
-      target: string,
-      step: number,
-      matchedFolder: string,
-      jsonFiles: string[],
-      overrideData: OverrideData,
-      getPage: (url: string) => Promise<Page>
-    ) => T
-  ): T {
-    return new constructor(
-      this.key,
-      this.target,
-      this.step,
-      this.matchedFolder,
-      this.jsonFiles,
-      this.overrideData,
-      this.getPage
-    );
   }
 }
 
@@ -257,7 +220,7 @@ function isElementPassing(test: TestData, name: string) {
   const elm = test.elm(name);
   const meta = test.snapshots(name)[0];
   if (!meta) {
-    return true;
+    return undefined;
   }
   const snapshot = getSnapshot(meta);
   if (snapshot?.found?.data === undefined) {

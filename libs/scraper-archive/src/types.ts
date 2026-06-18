@@ -17,3 +17,8 @@ export type SnapshotData = {
   match?: TestElmData,
   top: TestElmData[],
 }
+
+export type TestID = {
+  key: string;
+  name: string;
+}
