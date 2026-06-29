@@ -12,14 +12,18 @@ type States =
   "converted" |
 
   "eTransferReady" |
-  "eTransferResult" |
+  "eTransferSent" |
+  "eTransferComplete" |
+
+  "revertBegin" |
+  "revertConverted" |
+  "revertReady" |
+  "revertWaiting" |
+  "revertComplete" |
 
   "error" |
   "complete" |
   "cancelled";
-//"refunding" |
-//"refundReady";
-
 
 export const graph : StateGraph<States, "Sell"> = {
   initial: {
@@ -45,20 +49,49 @@ export const graph : StateGraph<States, "Sell"> = {
     next: transitionTo<States>(core.preTransfer, "eTransferReady"),
   },
 
+  // Before sending eTransfer
   eTransferReady: {
-    next: transitionTo<States, "Sell">(eTransfer.sendETransfer, "eTransferResult"),
+    next: transitionTo<States, "Sell">(eTransfer.sendETransfer, "eTransferSent"),
   },
-  eTransferResult: {
+  // The transfer has been sent
+  eTransferSent: {
+    // An error with sending the transfer - admin needs to figure out what went wrong here.
+    onError: transitionTo<States>(core.requestManual, "error"),
+    // wait for user to deposit it before move forward to `eTransferResult`
+    next: transitionTo<States, "Sell">(eTransfer.waitETransfer, "eTransferComplete"),
+  },
+  // Transfer has been deposited/or failed.
+  eTransferComplete: {
+    // Waiting went wrong (timed out?)
+    onError: transitionTo<States, "Sell">(eTransfer.handleWaitError, "revertBegin"),
+    // If deposited, mark complete.
+    next: transitionTo<States>(core.markComplete, "complete"),
+  },
+
+  // Revert reverse the coin transaction "only"
+  revertBegin: {
+    // handleWaitError didn't find an error it could handle, pass back to human.
+    onError: transitionTo<States>(core.requestManual, "error"),
+    // Otherwise, transfer away.
+    next: transitionTo<States, "Sell">(core.toCoin, "revertConverted"),
+  },
+  revertConverted: {
+    onError: transitionTo<States>(core.requestManual, "error"),
+    next: transitionTo<States, "Sell">(core.preTransfer, "revertReady"),
+  },
+  revertReady: {
+    onError: transitionTo<States>(core.requestManual, "error"),
+    next: transitionTo<States, "Sell">(core.sendCoin, "revertWaiting"),
+  },
+  revertWaiting: {
+    next: transitionTo<States, "Sell">(core.waitCoin, "revertComplete"),
+  },
+  revertComplete: {
     onError: transitionTo<States>(core.requestManual, "error"),
     next: transitionTo<States>(core.markComplete, "complete"),
   },
 
-  // refunding: {
-  //   next: transitionTo(noop, "complete"),
-  // },
-  // refundReady: {
-  //   next: transitionTo(noop, "complete"),
-  // },
+
   error: {
     next: core.manualOverride,
   },
