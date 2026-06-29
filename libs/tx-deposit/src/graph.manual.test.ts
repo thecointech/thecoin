@@ -4,21 +4,13 @@ import { ContractCore } from '@thecointech/contract-core';
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import { BuyAction } from '@thecointech/broker-db';
-import * as brokerDbTxs from '@thecointech/broker-db/transaction';
 import { getSigner } from '@thecointech/signers';
+import { GetRatesApi } from '@thecointech/apis/pricing';
 
 jest.useFakeTimers();
 
-const getSingle = jest.fn<(currency: number, timestamp: number) => Promise<any>>();
-jest.unstable_mockModule('@thecointech/apis/pricing', () => ({
-  GetRatesApi: () => ({
-    getSingle,
-  })
-}))
-
-jest.unstable_mockModule('@thecointech/broker-db/transaction', () =>
-  Object.keys(brokerDbTxs).reduce((acc, key) => ({ ...acc, [key]: jest.fn() }), {})
-);
+const ratesApi = GetRatesApi()
+const getSingleSpy = jest.spyOn(ratesApi, 'getSingle')
 
 // The action was created on Saturday noon (before market open)
 const createDate = DateTime.now()
@@ -27,19 +19,13 @@ const createDate = DateTime.now()
 
 // The deposit happened on sunday
 const depositDate = createDate.plus({ days: 1 });
-
 const depositAmount = new Decimal(100);
-const fxRate = 2.0; // 1 coin = $2 fiat
 
 beforeEach(async () => {
   await FirestoreInit();
   // It's currently monday at noon when we are processing this
   jest.setSystemTime(depositDate.plus({ day: 1 }).toJSDate());
-  jest.resetAllMocks();
-  getSingle.mockResolvedValue({
-    status: 200,
-    data: { fxRate: 1, sell: fxRate, buy: fxRate },
-  });
+  jest.clearAllMocks();
 });
 
 it('manual deposit uses the deposit date for conversion, not the action creation date', async () => {
@@ -72,8 +58,8 @@ it('manual deposit uses the deposit date for conversion, not the action creation
   expect(finalState.name).toBe('complete');
 
   // toCoin must have fetched the rate using the deposit date, not the action creation date.
-  expect(getSingle).toHaveBeenCalledTimes(1);
-  const [[, calledTimestamp]] = getSingle.mock.calls as [[number, number]];
+  expect(getSingleSpy).toHaveBeenCalledTimes(1);
+  const [[, calledTimestamp]] = getSingleSpy.mock.calls as [[number, number]];
 
   // nextOpenTimestamp(depositDate=Sunday) == monday morning. 
   const settledDate = DateTime.fromMillis(calledTimestamp);

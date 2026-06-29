@@ -38,7 +38,6 @@ async function doDeposit(container: BuyActionContainer) {
     return {
       fiat: new Decimal(etransfer.cad),
       meta: result.confirmation.toString(),
-      date: DateTime.now(),
     }
   }
   catch (err) {
