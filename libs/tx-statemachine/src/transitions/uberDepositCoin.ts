@@ -3,6 +3,7 @@ import { verifyPreTransfer } from "./verifyPreTransfer";
 import { TransactionResponse } from 'ethers';
 import { toDelta } from './coinUtils';
 import { log } from '@thecointech/logging';
+import { DateTime } from 'luxon';
 import { makeTransition  } from '../makeTransition';
 import type { UberTransfer } from '@thecointech/types';
 import { isCertTransfer } from '@thecointech/utilities/VerifiedTransfer';
@@ -53,6 +54,9 @@ const depositUberTransfer = async (container: TypedActionContainer<BSActionTypes
     {address: from, nonce: tx.nonce, initialId: container.action.data.initialId },
     'UberTransfer complete with nonce: {nonce}'
   );
-  return toDelta(tx);
+  return {
+    ...toDelta(tx),
+    date: DateTime.fromMillis(transferMillis),
+  };
 }
 
