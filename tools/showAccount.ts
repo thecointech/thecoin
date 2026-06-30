@@ -44,15 +44,25 @@ const rows = [] as Array<{
   change: string;
   balanceCoin: string;
   balanceCAD: string;
+  costBasis: string;
+  profit: string;
   txHash: string;
 }>;
+
+let costBasis = 0;
 for (const tx of history) {
   const rateCAD = await getRateForDate(tx.date);
+  const change = toHuman(tx.change * rateCAD, true).toFixed(2);
+  const balanceCAD = toHuman(tx.balance * rateCAD, true).toFixed(2);
+  costBasis += Number(change);
+  const profit = (Number(balanceCAD) - costBasis).toFixed(2);
   rows.push({
     date: tx.date.toFormat("yyyy-MM-dd HH:mm"),
-    change: `${toHuman(tx.change * rateCAD, true).toFixed(2)}`,
+    change: `${change}`,
     balanceCoin: `${toHuman(tx.balance, true).toFixed(2)}`,
-    balanceCAD: rateCAD > 0 ? `${toHuman(tx.balance * rateCAD, true).toFixed(2)}` : "N/A",
+    balanceCAD: balanceCAD?.toString() ?? "N/A",
+    costBasis: costBasis.toFixed(2),
+    profit: profit,
     txHash: tx.txHash,
   });
 }
