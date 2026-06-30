@@ -97,7 +97,7 @@ export function updateCoinBalance(container: AnyActionContainer, receipt: Transa
     log.error({ from: transfer.args.from, to: transfer.args.to, hash: receipt.hash },
       "Neither from nor to addresses match container address in {hash}"
     );
-    throw new Error("Neither from nor to addresses match container address in {hash}, cannot update balance");
+    throw new Error(`Neither from nor to addresses match container address in ${receipt.hash}, cannot update balance`);
   }
   return { coin: balance };
 }
