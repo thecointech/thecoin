@@ -59,7 +59,8 @@ class TheCoinImp implements MockedCoin {
     "nonpayable"
   )
   uberTransfer = makeFn(
-    async (_chainId: BigNumberish, from: AddressLike, to: AddressLike, value: BigNumberish, ..._args: any[]) => await setLastTx(from, to, value),
+    //  This function multiplies the value by 5_000 to simulate the conversion from CAD to TheCoin at xchange rate of 1 coin/$2 CAD
+    async (_chainId: BigNumberish, from: AddressLike, to: AddressLike, value: BigNumberish, ..._args: any[]) => await setLastTx(from, to, BigInt(value) * 5000n),
     "nonpayable"
   )
   // Run during testing.  Remove once deployement is secure.

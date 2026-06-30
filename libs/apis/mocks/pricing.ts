@@ -5,7 +5,7 @@ import { DateTime } from "luxon";
 
 class RatesApi implements Pick<IRatesApi, keyof IRatesApi> {
 
-  getMany(_timestamps: number[], _options?: any): Promise<AxiosResponse<FXRate[]>> {
+  getMany(): Promise<AxiosResponse<FXRate[]>> {
     throw new Error("Method not implemented.");
   }
   async getSingle(_currencyCode: number, timestamp?: number, _options?: any): Promise<AxiosResponse<FXRate>> {
@@ -23,5 +23,6 @@ class RatesApi implements Pick<IRatesApi, keyof IRatesApi> {
     } as any);
   }
 }
-
-export const GetRatesApi = () => new RatesApi();
+// Use a constant object to enable mocking/spying in tests
+const mockRates = new RatesApi()
+export const GetRatesApi = () => mockRates;

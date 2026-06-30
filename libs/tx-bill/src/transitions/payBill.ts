@@ -6,7 +6,6 @@ import { sign } from "@thecointech/utilities/SignedMessages";
 import { log } from "@thecointech/logging";
 import Decimal from 'decimal.js-light';
 import { getSigner } from '@thecointech/signers';
-import { DateTime } from 'luxon';
 import { makeTransition } from '@thecointech/tx-statemachine';
 
 //
@@ -57,7 +56,6 @@ const doPayBill: TransitionCallback<"Bill"> = async (container) => {
     ? {
         meta: confirmation.toString(),
         fiat: new Decimal(0),
-        date: DateTime.now(),
       }
     : { error: `Error Code: ${confirmation}`}
 }

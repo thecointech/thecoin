@@ -92,6 +92,58 @@ it ("correctly converts CertifiedTransfer", async () => {
   expect(getSingle).toHaveBeenCalledWith(124, mondayMorning.toMillis());
 })
 
+it ("uses state date, not action date, when converting", async () => {
+  // Simulate the revert flow: action was created at `now` but handleWaitError
+  // set state.data.date to a later date (the day the e-Transfer was returned).
+  const returnDate = now.plus({ days: 7 }); // next Sunday
+  const sale = await BuildVerifiedAction(
+    instructions,
+    signer,
+    "0x0000000000000000000000000000000000000000",
+    amount.toNumber(),
+    0,
+  );
+
+  const action = await createAction(signer.address, "Bill", {
+    initial: sale,
+    date: now,            // action was created at `now`
+    initialId: sale.signature
+  });
+
+  const container: BillActionContainer = {
+    action,
+    bank: {} as any,
+    contract: await ContractCore.get(),
+    history: [
+      {
+        name: "mocked",
+        data: {
+          coin: amount,
+          date: returnDate,  // state date has been updated to the return date
+        },
+        delta: {
+          created: now,
+          type: "mocked",
+        }
+      }
+    ],
+    instructions,
+  };
+
+  const { toFiat } = await import('./toCoin');
+  const nopass = await toFiat(container);
+  expect(nopass).toBeNull();
+
+  // Advance past the return date so conversion is allowed
+  jest.setSystemTime(returnDate.plus({ day: 1 }).toJSDate());
+  const result = await toFiat(container);
+  expect(result?.fiat?.gt(0)).toBeTruthy();
+
+  // nextOpenTimestamp(returnDate) = Monday after returnDate at 9:32am
+  const expectedOpen = returnDate.plus({ days: 1 }).set({ hour: 9, minute: 32, second: 0 });
+  expect(getSingle).toHaveBeenCalledWith(124, expectedOpen.toMillis());
+})
+
 // Data
 
 // Now is 12pm sunday last sunday
@@ -121,6 +173,7 @@ const getContainer = async (sale: CertifiedTransfer | UberTransferAction) : Prom
         name: "mocked",
         data: {
           coin: amount,
+          date: now,
         },
         delta: {
           created: now,

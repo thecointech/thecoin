@@ -81,7 +81,7 @@ const getContainer = async (value: number, balance: number, fee: number): Promis
         type: "preTransfer",
         created: now,
       },
-      data: {},
+      data: { date: now },
     }],
     instructions,
   };
