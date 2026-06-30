@@ -6,6 +6,8 @@ import Decimal from 'decimal.js-light';
 import { BuyAction } from '@thecointech/broker-db';
 import { getSigner } from '@thecointech/signers';
 import { GetRatesApi } from '@thecointech/apis/pricing';
+import { manual } from './graph.manual';
+import { StateMachineProcessor, getCurrentState } from '@thecointech/tx-statemachine';
 
 jest.useFakeTimers();
 
@@ -29,9 +31,6 @@ beforeEach(async () => {
 });
 
 it('manual deposit uses the deposit date for conversion, not the action creation date', async () => {
-  const { manual } = await import('./graph.manual');
-  const { StateMachineProcessor, getCurrentState } = await import('@thecointech/tx-statemachine');
-
   const deposit = {
     fiat: depositAmount,
     meta: 'test-deposit',

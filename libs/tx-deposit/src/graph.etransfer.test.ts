@@ -9,6 +9,8 @@ import { ETransferErrorCode } from '@thecointech/bank-interface';
 import type { eTransferData } from '@thecointech/tx-gmail';
 import { RbcApi } from '@thecointech/rbcapi';
 import { GetRatesApi } from '@thecointech/apis/pricing';
+import { etransfer } from './graph.etransfer';
+import { StateMachineProcessor, getCurrentState } from '@thecointech/tx-statemachine';
 
 jest.useFakeTimers();
 
@@ -51,9 +53,6 @@ beforeEach(async () => {
 });
 
 it('etransfer deposit uses the deposit time for conversion, not the action creation date', async () => {
-  const { etransfer } = await import('./graph.etransfer');
-  const { StateMachineProcessor, getCurrentState } = await import('@thecointech/tx-statemachine');
-
   const action: BuyAction = {
     address: userAddress,
     type: 'Buy',
@@ -108,9 +107,6 @@ it('etransfer deposit uses the deposit time for conversion, not the action creat
 });
 
 it('etransfer deposit fails gracefully when bank is unavailable', async () => {
-  const { etransfer } = await import('./graph.etransfer');
-  const { StateMachineProcessor, getCurrentState } = await import('@thecointech/tx-statemachine');
-
   depositSpy.mockResolvedValue({
     code: ETransferErrorCode.UnknownError,
     message: 'Bank API unavailable',

@@ -1,5 +1,4 @@
 import { makeTransition } from '@thecointech/tx-statemachine';
-import Decimal from 'decimal.js-light';
 
 //
 // Handle an error from waiting for an e-transfer deposit.
@@ -35,7 +34,6 @@ export const handleWaitError = makeTransition<"Sell">("handleWaitError", async (
   // Ok, this resets this transaction back to having this amount
   return {
     error: "",
-    coin: new Decimal(0),
     fiat,
     date,
   };
