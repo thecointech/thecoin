@@ -57,7 +57,6 @@ const doPayBill: TransitionCallback<"Bill"> = async (container) => {
     ? {
         meta: confirmation.toString(),
         fiat: new Decimal(0),
-        date: DateTime.now(),
       }
     : { error: `Error Code: ${confirmation}`}
 }
