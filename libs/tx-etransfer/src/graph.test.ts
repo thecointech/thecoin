@@ -20,8 +20,9 @@ const bank = await RbcApi.create();
 const sendETransferSpy = jest.spyOn(bank, 'sendETransfer');
 
 // Action created Saturday noon, 4 weeks ago
-const createDate = DateTime.now()
-  .minus({ weeks: 4, days: DateTime.now().weekday + 1 })
+const now = DateTime.now();
+const createDate = now
+  .minus({ weeks: 4, days: now.weekday + 1 })
   .set({ hour: 12, minute: 0, second: 0, millisecond: 0 });
 
 // Process on Monday afternoon
@@ -90,9 +91,7 @@ it('etransfer sell: happy path reaches complete', async () => {
 
 it('etransfer sell: returned transfer triggers revert to coin', async () => {
   // Simulate the e-transfer being returned: waitETransfer produces the "etransfer: returned" error
-  // by running to eTransferSent then injecting an error state manually via breakpoint + history
-  // Instead: we rely on the graph reaching eTransferComplete with error in history.
-  // The simplest approach: break at eTransferSent, inject error into history, then resume.
+  // Seed with history for a returned transfer (as we don't currently have an automated way to trigger this)
 
   // Revert on a Sunday.
   const revertTime = processingTime.plus({ weeks: 2, days: 6 });

@@ -28,12 +28,14 @@ async function getRateForDate(date: DateTime) {
       rate = fetched;
       fetchedRates.push(rate);
     }
+    else {
+      throw new Error(`No rate found for ${date.toFormat("yyyy-MM-dd")}`);
+    }
   }
-  return rate ? rate.sell * rate.fxRate : 0;
+  return rate.sell * rate.fxRate;
 }
 
-const currentRate = await fetchRate();
-const currentRateCAD = currentRate ? currentRate.sell * currentRate.fxRate : 0;
+const currentRateCAD = await getRateForDate(DateTime.now());
 
 calculateTxBalances(balance, history);
 
@@ -59,5 +61,5 @@ console.log(`\nAccount history for ${address} (${rows.length} transactions):\n`)
 console.table(rows);
 
 const currentBalanceCoin = toHuman(Number(balance), true);
-const currentBalanceCAD = currentRateCAD > 0 ? toHuman(Number(balance) * currentRateCAD, true) : 0;
+const currentBalanceCAD = toHuman(Number(balance) * currentRateCAD, true);
 console.log(`\nCurrent balance: ${currentBalanceCoin.toFixed(2)} Coin (${currentBalanceCAD.toFixed(2)} CAD)`);

@@ -1,9 +1,10 @@
 import { jest } from "@jest/globals";
-import { init as FirestoreInit, getFirestore } from '@thecointech/firestore';
+import { init as FirestoreInit } from '@thecointech/firestore';
 import { ContractCore } from '@thecointech/contract-core';
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
-import { BillAction } from '@thecointech/broker-db';
+import { createAction } from '@thecointech/broker-db';
+import { BuildUberAction } from '@thecointech/utilities/UberAction';
 import { getSigner } from '@thecointech/signers';
 import { GetRatesApi } from '@thecointech/apis/pricing';
 import { RbcApi } from '@thecointech/rbcapi';
@@ -11,6 +12,8 @@ import type { BillPayeePacket } from '@thecointech/types';
 import { uberGraph } from './uberGraph';
 import { StateMachineProcessor, getCurrentState } from '@thecointech/tx-statemachine';
 import { ContractConverter } from '@thecointech/contract-plugin-converter';
+import { Wallet } from "ethers";
+import { NormalizeAddress } from '@thecointech/utilities';
 
 jest.useFakeTimers();
 
@@ -30,7 +33,7 @@ const processingTime = createDate.plus({ days: 2 }).set({ hour: 14, minute: 0, s
 // UberTransfer settles Friday afternoon
 const transferTime = createDate.plus({ days: 6 })
 
-const userAddress = '0x0000000000000000000000000000000000000001';
+const user = Wallet.createRandom();
 
 const instructions: BillPayeePacket = {
   payee: 'Hydro',
@@ -45,30 +48,20 @@ beforeEach(async () => {
 it('uberGraph bill payment: happy path reaches complete', async () => {
   jest.setSystemTime(processingTime.toJSDate());
 
-  const action: BillAction = {
-    address: userAddress,
-    type: 'Bill',
-    data: {
-      initial: {
-        transfer: {
-          chainId: 1,
-          from: userAddress,
-          to: process.env.WALLET_BrokerCAD_ADDRESS!,
-          amount: 100, // $100
-          currency: 124,
-          signedMillis: createDate.toMillis(),
-          transferMillis: transferTime.toMillis(),
-          signature: '',
-        },
-        instructionPacket: { encryptedPacket: '', version: '' },
-        signature: '',
-      },
-      initialId: 'test-uber-bill-1',
-      date: createDate,
-    },
-    history: [],
-    doc: getFirestore().doc('/Bill/test-uber-bill-1') as unknown as BillAction['doc'],
-  };
+  const address = NormalizeAddress(await user.getAddress());
+  const uberAction = await BuildUberAction(
+    {} as any,
+    user,
+    process.env.WALLET_BrokerCAD_ADDRESS!,
+    new Decimal(100),
+    124,
+    transferTime
+  );
+  const action = await createAction(address, "Bill", {
+    initial: uberAction,
+    date: DateTime.now(),
+    initialId: uberAction.signature
+  })
 
   const signer = await getSigner("BrokerCAD");
   const uc = await ContractConverter.connect(signer);

@@ -54,9 +54,12 @@ const depositUberTransfer = async (container: TypedActionContainer<BSActionTypes
     {address: from, nonce: tx.nonce, initialId: container.action.data.initialId },
     'UberTransfer complete with nonce: {nonce}'
   );
-  return {
-    ...toDelta(tx),
-    date: DateTime.fromMillis(transferMillis),
-  };
+  const delta = toDelta(tx);
+  return delta.error 
+    ? delta 
+    : {
+      date: DateTime.fromMillis(transferMillis),
+      ...delta,
+    };
 }
 

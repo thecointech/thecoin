@@ -59,7 +59,7 @@ export function updateCoinBalance(container: AnyActionContainer, receipt: Transa
   // Only use the transfer from the current user to us(?)
   const legalAddresses = [
     NormalizeAddress(process.env.WALLET_BrokerCAD_ADDRESS!),
-    container.action.address,
+    NormalizeAddress(container.action.address),
   ]
   const [transfer, ...rest] = exactTransfers.filter(t => (
     legalAddresses.includes(NormalizeAddress(t?.args.from)) &&
@@ -72,8 +72,8 @@ export function updateCoinBalance(container: AnyActionContainer, receipt: Transa
     // (It is legal to have 0 transfers with UberConverter)
     if (exactTransfers.length !== 0) {
       log.error(
-        { initialId: container.action.data.initialId, hash: receipt.hash },
-        "ExactTransfer found for {initialId} in {hash}, but it does not match Broker address"
+        { hash: receipt.hash },
+        "ExactTransfer found in {hash}, but it does not match Broker address"
       );
       // We have no idea what is going on here, so hard-stop
       throw new Error("ExactTransfer not as expected");
@@ -94,9 +94,10 @@ export function updateCoinBalance(container: AnyActionContainer, receipt: Transa
     balance = balance.minus(transfer.args.amount.toString());
   }
   else {
-    log.error({ initialId: container.action.data.initialId, hash: receipt.hash },
-      "Could not find address for {initialId} in {hash}")
-    throw new Error("Missing address, cannot")
+    log.error({ from: transfer.args.from, to: transfer.args.to, hash: receipt.hash },
+      "Neither from nor to addresses match container address in {hash}"
+    );
+    throw new Error("Neither from nor to addresses match container address in {hash}, cannot update balance");
   }
   return { coin: balance };
 }

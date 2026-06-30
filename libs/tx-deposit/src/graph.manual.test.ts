@@ -22,11 +22,12 @@ const createDate = DateTime.now()
 // The deposit happened on sunday
 const depositDate = createDate.plus({ days: 1 });
 const depositAmount = new Decimal(100);
+const processingDate = depositDate.plus({ day: 1 });
 
 beforeEach(async () => {
   await FirestoreInit();
   // It's currently monday at noon when we are processing this
-  jest.setSystemTime(depositDate.plus({ day: 1 }).toJSDate());
+  jest.setSystemTime(processingDate.toJSDate());
   jest.clearAllMocks();
 });
 
@@ -43,7 +44,7 @@ it('manual deposit uses the deposit date for conversion, not the action creation
     data: {
       initial: { amount: depositAmount, type: 'other' },
       initialId: 'test-manual-1',
-      date: createDate,  // action created Sunday; deposit happened Wednesday
+      date: createDate,
     },
     history: [],
     doc: getFirestore().doc('/Buy/test-manual-1') as unknown as BuyAction['doc'],
@@ -56,7 +57,7 @@ it('manual deposit uses the deposit date for conversion, not the action creation
   const finalState = getCurrentState(container);
   expect(finalState.name).toBe('complete');
 
-  // toCoin must have fetched the rate using the deposit date, not the action creation date.
+  // toCoin must have fetched the rate using the nextOpenTimestamp (monday 9:32)
   expect(getSingleSpy).toHaveBeenCalledTimes(1);
   const [[, calledTimestamp]] = getSingleSpy.mock.calls as [[number, number]];
 

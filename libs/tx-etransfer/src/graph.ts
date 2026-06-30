@@ -57,7 +57,7 @@ export const graph : StateGraph<States, "Sell"> = {
   eTransferSent: {
     // An error with sending the transfer - admin needs to figure out what went wrong here.
     onError: transitionTo<States>(core.requestManual, "error"),
-    // wait for user to deposit it before move forward to `eTransferResult`
+    // wait for user to deposit it before move forward to `eTransferComplete`
     next: transitionTo<States, "Sell">(eTransfer.waitETransfer, "eTransferComplete"),
   },
   // Transfer has been deposited/or failed.
@@ -84,6 +84,7 @@ export const graph : StateGraph<States, "Sell"> = {
     next: transitionTo<States, "Sell">(core.sendCoin, "revertWaiting"),
   },
   revertWaiting: {
+    onError: transitionTo<States>(core.requestManual, "error"),
     next: transitionTo<States, "Sell">(core.waitCoin, "revertComplete"),
   },
   revertComplete: {
