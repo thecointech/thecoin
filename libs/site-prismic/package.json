@@ -3,7 +3,7 @@
     "productName": "THECoin: Prismic Content Library",
     "private": true,
     "type": "module",
-    "version": "0.6.4-test.0",
+    "version": "0.6.4-test.1",
     "description": "Prismic Slice Machine library for content management",
     "repository": {
         "type": "git",
@@ -48,7 +48,7 @@
         "@prismicio/next": "^2.2.1",
         "@prismicio/react": "^3.3.0",
         "@slicemachine/adapter-next": "^0.3.95",
-        "@thecointech/setenv": "^0.6.4-test.0",
+        "@thecointech/setenv": "^0.6.4-test.1",
         "@thecointech/site-semantic-theme": "^0.6.4-test.0",
         "@types/uuid": "^9.0.0",
         "glob": "^13.0.0",

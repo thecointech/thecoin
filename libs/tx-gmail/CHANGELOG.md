@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.4-test.1](https://github.com/thecointech/thecoin/compare/v0.6.4-test.0...v0.6.4-test.1) (2026-07-01)
+
+**Note:** Version bump only for package @thecointech/tx-gmail
+
+
+
+
+
 ## [0.6.4-test.0](https://github.com/thecointech/thecoin/compare/v0.6.3...v0.6.4-test.0) (2026-07-01)
 
 **Note:** Version bump only for package @thecointech/tx-gmail
