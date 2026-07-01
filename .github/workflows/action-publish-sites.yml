@@ -33,27 +33,27 @@ jobs:
       - run: corepack enable
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '22.19'
+          node-version: '24'
           cache: 'yarn'
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: build-artifacts
 
       - name: Install dependencies
         run: yarn install --immutable --mode=skip-build
 
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - uses: FirebaseExtended/action-hosting-deploy@v0.11.0
         with:
           firebaseServiceAccount: "${{ secrets.GCP_SA_SITES_KEY }}"
           projectId: "${{ inputs.CONFIG_NAME }}"
           channelId: live
           entryPoint: ./apps/site-landing
 
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - uses: FirebaseExtended/action-hosting-deploy@v0.11.0
         with:
           firebaseServiceAccount: "${{ secrets.GCP_SA_SITES_KEY }}"
           projectId: "${{ inputs.CONFIG_NAME }}"
