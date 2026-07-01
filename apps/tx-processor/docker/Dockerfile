@@ -1,4 +1,4 @@
-FROM node:24-slim
+FROM node:24-bookworm-slim
 
 # copied from puppeteer dockerfile
 # https://github.com/puppeteer/puppeteer/blob/main/docker/Dockerfile

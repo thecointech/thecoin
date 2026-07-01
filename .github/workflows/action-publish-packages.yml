@@ -35,7 +35,6 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: '24'
-          cache: 'yarn'
 
       - name: Configure npm registry
         run: echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" > ~/.npmrc
