@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.4-test.0](https://github.com/thecointech/thecoin/compare/v0.6.3...v0.6.4-test.0) (2026-07-01)
+
+
+### Bug Fixes
+
+* when loading a blog page directly, try and find the index before doing the redirect ([9292201](https://github.com/thecointech/thecoin/commit/929220153ca47c8a43774d8c15b2e727d5c40049))
+
+
+
+
+
 ## [0.6.3](https://github.com/thecointech/thecoin/compare/v0.6.3-test.0...v0.6.3) (2026-05-05)
 
 **Note:** Version bump only for package @thecointech/the-coin
