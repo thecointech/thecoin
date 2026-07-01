@@ -17,7 +17,7 @@
     "build": "run -T run-s build:pre build:src build:post",
     "build:src": "run -T run-p build:src:tests build:src:build",
     "build:src:tests": "run -T tsc --project ./tsconfig.tests.json",
-    "build:src:build": "URL_SEQ_LOGGING=false run-env exec=webpack --config ./internals/webpack.ts",
+    "build:src:build": "URL_SEQ_LOGGING=false run-env exec=webpack --config ./internals/webpack.mts",
     "build:pre": "run -T run-p 'build:pre:*'",
     "build:pre:semantic": "run-env ./internals/buildSemantic.ts",
     "build:pre:i18n": "run -T run-s extract compile",

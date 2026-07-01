@@ -35,7 +35,7 @@
   ],
   "exports": {
     ".": "./build/index.js",
-    "./internal/webpack": "./internal/webpack/index.ts",
+    "./internal/webpack": "./internal/webpack/index.mts",
     "./*": "./build/*/index.js"
   },
   "typesVersions": {
@@ -44,7 +44,7 @@
         "build/index.d.ts"
       ],
       "internal/webpack": [
-        "internal/webpack/index.ts"
+        "internal/webpack/index.mts"
       ],
       "*": [
         "./build/*/index.d.ts"

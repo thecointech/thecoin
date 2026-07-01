@@ -5,7 +5,7 @@ import { applyOverrideFromSnapshot, updateTest } from "./update";
 import { openFolderInBrowser } from "./paths";
 import type Server from 'webpack-dev-server';
 
-const config = await getConfig([], {
+export default getConfig([], {
   devServer: {
     port: 3010,
     setupMiddlewares: (middlewares, devServer: Server) => {
@@ -142,4 +142,3 @@ const config = await getConfig([], {
   }
 });
 
-export default config;
