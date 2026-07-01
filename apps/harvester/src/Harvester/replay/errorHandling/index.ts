@@ -48,8 +48,8 @@ export async function replayErrorHandling({replay, err, event}: ReplayErrorParam
           message: "Closed Modal on page: " + page.url(),
         })
       }
-      // Re-run this event.
-      return events.indexOf(event);
+      // Re-run this event.  Defensively check by ID, then by reference in case ID's are missing
+      return events.findIndex(e => e.id === event.id) ?? events.indexOf(event);
     }
   }
 
