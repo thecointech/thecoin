@@ -59,10 +59,9 @@ jobs:
 
       - run: corepack enable
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '22.19'
-          cache: 'yarn'
+          node-version: '24'
 
       - name: Configure Git
         run: |
@@ -198,9 +197,9 @@ jobs:
 
       - run: corepack enable
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '22.19'
+          node-version: '24'
 
       - name: Update deployment metadata for this environment
         run: |
@@ -210,7 +209,7 @@ jobs:
           echo "Updated to version $(grep TC_APP_VERSION environments/common.public.env | cut -d'"' -f2) at $(grep TC_DEPLOYED_AT environments/common.public.env | cut -d'"' -f2)"
 
       - name: Upload updated metadata
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: deployment-metadata
           path: environments/common.public.env
