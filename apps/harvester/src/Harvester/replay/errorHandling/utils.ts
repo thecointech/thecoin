@@ -3,6 +3,7 @@ import type { EventSection, SectionName } from "@thecointech/scraper-agent/types
 import type { Page } from "puppeteer";
 import { getElementForEvent } from "@thecointech/scraper/elements";
 import { flatten, isSection } from "@thecointech/scraper-agent/replay/events";
+import { log } from "@thecointech/logging";
 
 export function findSectionByEvent(search: AnyEvent, section: EventSection) : EventSection | null {
   if (!search) {
@@ -59,6 +60,9 @@ export async function isPageInSection(page: Page, root: EventSection, sectionNam
         // Ignore - we return false below if element not found
       }
     }
+  }
+  else {
+    log.error(`Section ${sectionName} not found in root section, cannot determine if page is in section`);
   }
   return null;
 }
