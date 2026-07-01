@@ -9,12 +9,13 @@ export function findSectionByEvent(search: AnyEvent, section: EventSection) : Ev
     return null;
   }
   for (const eventOrSection of section.events) {
-    if (eventOrSection === search) {
-      return section;
-    }
-    else if (isSection(eventOrSection)) {
+    if (isSection(eventOrSection)) {
       const r = findSectionByEvent(search, eventOrSection);
       if (r) return r;
+    }
+    // Match by id or reference (reference in case legacy events which didn't have ID's find their way in here)
+    else if (eventOrSection === search || eventOrSection.id === search.id) {
+      return section;
     }
   }
   return null;
