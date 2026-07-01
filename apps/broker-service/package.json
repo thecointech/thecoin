@@ -31,7 +31,7 @@
     "gcp-build": ""
   },
   "engines": {
-    "node": "22.x.x"
+    "node": "24.x.x"
   },
   "files": [
     "build/**/*"

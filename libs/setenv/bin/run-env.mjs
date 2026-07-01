@@ -5,7 +5,7 @@ import { spawn } from "child_process";
 import { existsSync } from 'fs';
 import { fileURLToPath } from "url";
 import { readdir } from 'fs/promises';
-import { dirname, resolve } from 'path';
+import { dirname, resolve, sep } from 'path';
 
 function sliceArgs(args, name, def) {
   const arg = args.find(a => a.startsWith(`${name}=`));
@@ -76,22 +76,23 @@ const nodeArgs = [];
 if (args.find(arg => arg.endsWith('.ts'))) {
   // We have 3 kinds of scripts to run:
   // basic nodejs scripts (eg email-fake-deposit)
-  //  - these can't use ts-node, as it keeps crashing
+  //  - these were separated from ts-node 
+  //    (since replaced by tsx), as it keeps crashing
   // service scripts (eg rates-service)
-  //  - these can only use ts-node due to experimental decorators
+  //  - these use tsx due to experimental decorators (tsoa)
   // electron apps (eg harvester)
   //  - these can use raw nodejs, but cannot use experimental-transform-types
 
-  const isService = TS_NODE_PROJECT?.includes("-service/");
+  const isService = TS_NODE_PROJECT?.includes(`-service${sep}`);
   const isElectron = env.ELECTRON_DISABLE_SANDBOX || process.env.HARVESTER_DEBUG_LIVE;
 
-  // only service uses ts-node
-  if (isService) nodeArgs.push("--loader=ts-node/esm");
+  // services use tsx for experimental decorator support (tsoa)
+  if (isService) {
+    nodeArgs.push("--import=tsx/esm");
+    env.TSX_TSCONFIG_PATH = TS_NODE_PROJECT;
+  }
   // everybody uses our custom loader
   nodeArgs.push(`--loader=${new URL("ncr-ts.mjs", import.meta.url).href}`);
-  // NOTE: -es-module-specifier-resolution is no longer supported by node,
-  // but is required by ts-node to correctly resolve imports
-  if (isService) nodeArgs.push("--es-module-specifier-resolution=node")
   if (!isElectron && !isService) {
     nodeArgs.push("--experimental-transform-types");
   }
