@@ -118,18 +118,20 @@ async function getUserAddress(hash: string) {
     throw new Error(`Transaction not found: ${hash}`);
   }
 
-  const exactTransfer = txReceipt.logs
+  const exactTransfers = txReceipt.logs
     .map(log => {
       try { return tcCore.interface.parseLog(log); }
       catch { return null; }
     })
-    .find(p => p?.name === "ExactTransfer");
+    .filter(p => p?.name === "ExactTransfer");
 
-  if (!exactTransfer) {
-    throw new Error(`No ExactTransfer event found in transaction ${hash}`);
+  if (exactTransfers.length !== 1) {
+    throw new Error(`${exactTransfers.length} ExactTransfer events found in transaction ${hash}`);
   }
+
+  const exactTransfer = exactTransfers[0];
   
-  return exactTransfer.args.from as string;
+  return exactTransfer!.args.from as string;
 }
 
 await init({ service: "BrokerServiceAccount" });

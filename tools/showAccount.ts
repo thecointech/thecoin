@@ -24,7 +24,7 @@ async function getRateForDate(date: DateTime) {
   let rate = fetchedRates.find(r => r.validFrom <= ts && r.validTill > ts);
   if (!rate) {
     const fetched = await fetchRate(date.toJSDate());
-    if (fetched) {
+    if (fetched?.fxRate) {
       rate = fetched;
       fetchedRates.push(rate);
     }
@@ -52,17 +52,17 @@ const rows = [] as Array<{
 let costBasis = 0;
 for (const tx of history) {
   const rateCAD = await getRateForDate(tx.date);
-  const change = toHuman(tx.change * rateCAD, true).toFixed(2);
-  const balanceCAD = toHuman(tx.balance * rateCAD, true).toFixed(2);
+  const change = toHuman(tx.change * rateCAD, true);
+  const balanceCAD = toHuman(tx.balance * rateCAD, true);
   costBasis += Number(change);
-  const profit = (Number(balanceCAD) - costBasis).toFixed(2);
+  const profit = (balanceCAD - costBasis);
   rows.push({
     date: tx.date.toFormat("yyyy-MM-dd HH:mm"),
-    change: `${change}`,
-    balanceCoin: `${toHuman(tx.balance, true).toFixed(2)}`,
-    balanceCAD: balanceCAD?.toString() ?? "N/A",
+    change: change.toFixed(2),
+    balanceCoin: toHuman(tx.balance, true).toFixed(2),
+    balanceCAD: balanceCAD.toFixed(2),
     costBasis: costBasis.toFixed(2),
-    profit: profit,
+    profit: profit.toFixed(2),
     txHash: tx.txHash,
   });
 }
