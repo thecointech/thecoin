@@ -62,7 +62,11 @@ export async function replayErrorHandling({replay, err, event}: ReplayErrorParam
         })
       }
       // Re-run this event.  Defensively check by ID, then by reference in case ID's are missing
-      return events.findIndex(e => e.id === event.id) ?? events.indexOf(event);
+      const index = events.findIndex(e => e.id === event.id);
+      if (index !== -1) {
+        return index;
+      }
+      return events.indexOf(event);
     }
   }
 
