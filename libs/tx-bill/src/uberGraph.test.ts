@@ -7,7 +7,7 @@ import { createAction } from '@thecointech/broker-db';
 import { BuildUberAction } from '@thecointech/utilities/UberAction';
 import { getSigner } from '@thecointech/signers';
 import { GetRatesApi } from '@thecointech/apis/pricing';
-import { RbcApi } from '@thecointech/rbcapi';
+import { BankMock } from '@thecointech/bank-interface/mocked';
 import type { BillPayeePacket } from '@thecointech/types';
 import { uberGraph } from './uberGraph';
 import { StateMachineProcessor, getCurrentState } from '@thecointech/tx-statemachine';
@@ -20,7 +20,7 @@ jest.useFakeTimers();
 const ratesApi = GetRatesApi();
 const getSingleSpy = jest.spyOn(ratesApi, 'getSingle');
 
-const bank = await RbcApi.create();
+const bank = await BankMock.create();
 const payBillSpy = jest.spyOn(bank, 'payBill');
 
 // Action created Saturday noon

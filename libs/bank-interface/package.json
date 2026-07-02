@@ -25,10 +25,23 @@
     "clean": "rimraf ./build"
   },
   "files": [
-    "build/**/*"
+    "build/**/*",
+    "mocked/**/*"
   ],
-  "exports": "./build/index.js",
-  "types": "./build/index.d.ts",
+  "exports": {
+    ".": "./build/index.js",
+    "./mocked": "./mocked/index.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "build/*"
+      ],
+      "mocked": [
+        "mocked/index.ts"
+      ]
+    }
+  },
   "devDependencies": {
     "@thecointech/types": "^0.6.3"
   }
