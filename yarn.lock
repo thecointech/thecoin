@@ -12220,6 +12220,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-bill@workspace:libs/tx-bill"
   dependencies:
+    "@thecointech/bank-interface": "npm:^0.6.3"
     "@thecointech/contract-core": "npm:^0.6.3"
     "@thecointech/tx-statemachine": "npm:^0.6.3"
   languageName: unknown
@@ -12230,6 +12231,7 @@ __metadata:
   resolution: "@thecointech/tx-blockchain@workspace:libs/tx-blockchain"
   dependencies:
     "@thecointech/contract-core": "npm:^0.6.3"
+    "@thecointech/contract-plugin-shockabsorber": "npm:^0.6.3"
     "@thecointech/utilities": "npm:^0.6.3"
   languageName: unknown
   linkType: soft

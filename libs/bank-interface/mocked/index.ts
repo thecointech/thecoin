@@ -1,11 +1,9 @@
-import { ETransferErrorCode, IBank } from "@thecointech/bank-interface";
+import type { IBank } from '../src/interface';
+import { ETransferErrorCode } from '../src/types';
 export { ETransferErrorCode };
-export { RbcStore } from './store'
-export function initBrowser() {};
-export function closeBrowser() {}
 
 let result = 1234;
-export class RbcApi implements IBank {
+export class BankMock implements IBank {
   getBalance = () => Promise.resolve(10000);
   depositETransfer = (): ReturnType<IBank["depositETransfer"]> => {
     result += 1;
@@ -21,6 +19,6 @@ export class RbcApi implements IBank {
   getTransactions = (): ReturnType<IBank["getTransactions"]> => Promise.resolve([]);
 
   static async create() {
-    return new RbcApi();
+    return new BankMock();
   }
 }

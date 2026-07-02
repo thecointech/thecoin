@@ -33,13 +33,24 @@
   ],
   "exports": {
     ".": {
-      "development": "./build/index_mocked.js",
-      "devlive": "./build/index_mocked.js",
-      "prodtest": "./build/index_mocked.js",
+      "development": "./mocked/index.ts",
+      "devlive": "./mocked/index.ts",
+      "prodtest": "./mocked/index.ts",
+      "types": "./build/index.d.ts",
       "default": "./build/index.js"
+    },
+    "./transactions": {
+      "types": "./build/transactions.d.ts",
+      "default": "./build/transactions.js"
     }
   },
-  "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "build/*"
+      ]
+    }
+  },
   "dependencies": {
     "@thecointech/bank-interface": "^0.6.3",
     "@thecointech/logging": "^0.6.3",

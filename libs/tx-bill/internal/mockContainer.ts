@@ -1,9 +1,9 @@
 import { ContractCore } from "@thecointech/contract-core";
-import { RbcApi } from "@thecointech/rbcapi";
 import { getSigner } from "@thecointech/signers";
 import { StateSnapshot, TypedActionContainer } from "@thecointech/tx-statemachine";
 import { DateTime } from "luxon";
 import { States } from "../src/uberGraph";
+import { BankMock } from "@thecointech/bank-interface/mocked";
 
 export const getMockContainer = async (date: DateTime): Promise<TypedActionContainer<"Bill">> => {
   const signer = await getSigner("BrokerTransferAssistant");
@@ -41,6 +41,6 @@ export const getMockContainer = async (date: DateTime): Promise<TypedActionConta
       }
     }] as StateSnapshot<States>[],
     contract: await ContractCore.connect(signer),
-    bank: await RbcApi.create(),
+    bank: await BankMock.create(),
   }
 }
