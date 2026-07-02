@@ -7,7 +7,7 @@ import { BuyAction } from '@thecointech/broker-db';
 import { getSigner } from '@thecointech/signers';
 import { ETransferErrorCode } from '@thecointech/bank-interface';
 import type { eTransferData } from '@thecointech/tx-gmail';
-import { RbcApi } from '@thecointech/rbcapi';
+import { BankMock } from '@thecointech/bank-interface/mocked';
 import { GetRatesApi } from '@thecointech/apis/pricing';
 import { etransfer } from './graph.etransfer';
 import { StateMachineProcessor, getCurrentState } from '@thecointech/tx-statemachine';
@@ -17,7 +17,7 @@ jest.useFakeTimers();
 const ratesApi = GetRatesApi()
 const getSingleSpy = jest.spyOn(ratesApi, 'getSingle')
 
-const bank = await RbcApi.create();
+const bank = await BankMock.create();
 const depositSpy = jest.spyOn(bank, 'depositETransfer');
 
 // e-Transfer was received on Saturday noon

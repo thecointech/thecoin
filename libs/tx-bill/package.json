@@ -33,5 +33,8 @@
     "@thecointech/contract-core": "^0.6.3",
     "@thecointech/tx-statemachine": "^0.6.3"
   },
+  "devDependencies": {
+    "@thecointech/bank-interface": "^0.6.4-test.0"
+  },
   "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

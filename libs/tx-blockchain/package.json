@@ -36,6 +36,7 @@
     }
   },
   "dependencies": {
+    "@thecointech/contract-plugin-shockabsorber": "^0.6.3",
     "@thecointech/contract-core": "^0.6.3",
     "@thecointech/utilities": "^0.6.3"
   }

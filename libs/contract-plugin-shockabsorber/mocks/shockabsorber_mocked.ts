@@ -15,3 +15,7 @@ export const ContractShockAbsorber = defineContractBaseSingleton<Src.ShockAbsorb
   '__shockabsorber',
   async () => new ShockAbsorber() as any,
 )
+
+export function getContractAddress() {
+  return "0xAB00000000000000000000000000000000000000";
+}
