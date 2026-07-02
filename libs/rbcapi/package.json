@@ -36,12 +36,12 @@
       "development": "./mocked/index.ts",
       "devlive": "./mocked/index.ts",
       "prodtest": "./mocked/index.ts",
-      "default": "./build/index.js",
-      "types": "./build/index.d.ts"
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
     },
     "./transactions": {
-      "default": "./build/transactions.js",
-      "types": "./build/transactions.d.ts"
+      "types": "./build/transactions.d.ts",
+      "default": "./build/transactions.js"
     }
   },
   "typesVersions": {

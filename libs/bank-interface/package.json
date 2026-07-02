@@ -25,7 +25,8 @@
     "clean": "rimraf ./build"
   },
   "files": [
-    "build/**/*"
+    "build/**/*",
+    "mocked/**/*"
   ],
   "exports": {
     ".": "./build/index.js",
