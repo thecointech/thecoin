@@ -21,19 +21,19 @@ const ComparisonBlock: FC<ComparisonBlockProps> = ({ slice }) => {
       data-slice-variation={slice.variation}
     >
       <div className={styles.header}>
-        <span>{slice.primary.titleleft}</span>
+        <span className={styles.titleLeft}>{slice.primary.titleleft}</span>
         <span>- vs -</span>
-        <span>{slice.primary.titleright}</span>
+        <span className={styles.titleRight}>{slice.primary.titleright}</span>
       </div>
       {
         slice.primary.elements.map((item, index) => (
           <div key={index} className={styles.element}>
-            <span className={styles.left}>
+            <div className={styles.left}>
               <RichText field={item.leftelement} />
-            </span>
-            <span className={styles.right}>
+            </div>
+            <div className={styles.right}>
               <RichText field={item.rightelement} />
-            </span>
+            </div>
           </div>
         ))
       }

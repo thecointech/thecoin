@@ -1,30 +1,44 @@
 
 .comparisonBlock {
     background-color: var(--thecoin-gray2);
-    border-bottom: 1px solid var(--thecoin-gray4);
-    /* border: 1px solid var(--thecoin-gray3); */
+    border-bottom: 1px solid var(--thecoin-gray3);
     box-shadow: 0px 2px 5px 0px var(--thecoin-gray3);
+
+    margin: 0 auto;
 
     .header {
       display: flex;
       justify-content: space-between;
-      border-bottom: 1px solid var(--thecoin-gray4);
+      border-bottom: 1px solid var(--thecoin-gray3);
       padding: 0.5rem 1rem;
+
+      .titleLeft {
+        color: var(--text-dark-color);
+      }
     }
 
     .element {
-      padding: 0.5rem 1rem;
+      padding: 0rem 1rem;
 
       .left {
         text-align: left;
+        padding-right: 1rem;
+        margin: 0.25rem 0px;
+        color: var(--text-dark-color);
       }
       .right {
         text-align: right;
+        padding-left: 1rem;
+        margin: 0.25rem 0px;
       }
       img {
         display: block;
         margin: 0 auto;
-        max-width: 100%;
+        max-width: 95%;
+      }
+      p {
+        display: inline;
+        margin: 0.5px 0rem;
       }
     }
 }
