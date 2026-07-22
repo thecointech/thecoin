@@ -92,6 +92,7 @@ export interface ArticleDocumentDataCategoriesItem {
 }
 
 type ArticleDocumentDataSlicesSlice =
+  | ComparisonBlockSlice
   | TableSlice
   | VideoSlice
   | CaptionedImageSlice
@@ -1055,6 +1056,98 @@ export type CcqiScoreSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Item in *ComparisonBlock → Default → Primary → Elements*
+ */
+export interface ComparisonBlockSliceDefaultPrimaryElementsItem {
+  /**
+   * LeftElement field in *ComparisonBlock → Default → Primary → Elements*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: comparison_block.default.primary.elements[].leftelement
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  leftelement: prismic.RichTextField;
+
+  /**
+   * RightElement field in *ComparisonBlock → Default → Primary → Elements*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: comparison_block.default.primary.elements[].rightelement
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  rightelement: prismic.RichTextField;
+}
+
+/**
+ * Primary content in *ComparisonBlock → Default → Primary*
+ */
+export interface ComparisonBlockSliceDefaultPrimary {
+  /**
+   * TItleLeft field in *ComparisonBlock → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: comparison_block.default.primary.titleleft
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  titleleft: prismic.KeyTextField;
+
+  /**
+   * TitleRight field in *ComparisonBlock → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: comparison_block.default.primary.titleright
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  titleright: prismic.KeyTextField;
+
+  /**
+   * Elements field in *ComparisonBlock → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: comparison_block.default.primary.elements[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  elements: prismic.GroupField<
+    Simplify<ComparisonBlockSliceDefaultPrimaryElementsItem>
+  >;
+}
+
+/**
+ * Default variation for ComparisonBlock Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type ComparisonBlockSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<ComparisonBlockSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *ComparisonBlock*
+ */
+type ComparisonBlockSliceVariation = ComparisonBlockSliceDefault;
+
+/**
+ * ComparisonBlock Shared Slice
+ *
+ * - **API ID**: `comparison_block`
+ * - **Description**: ComparisonBlock
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type ComparisonBlockSlice = prismic.SharedSlice<
+  "comparison_block",
+  ComparisonBlockSliceVariation
+>;
+
+/**
  * Primary content in *Hero → Default → Primary*
  */
 export interface HeroSliceDefaultPrimary {
@@ -1476,6 +1569,11 @@ declare module "@prismicio/client" {
       CcqiScoreSliceDefaultPrimary,
       CcqiScoreSliceVariation,
       CcqiScoreSliceDefault,
+      ComparisonBlockSlice,
+      ComparisonBlockSliceDefaultPrimaryElementsItem,
+      ComparisonBlockSliceDefaultPrimary,
+      ComparisonBlockSliceVariation,
+      ComparisonBlockSliceDefault,
       HeroSlice,
       HeroSliceDefaultPrimary,
       HeroSliceVariation,
