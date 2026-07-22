@@ -3,16 +3,6 @@
 		"__TYPE__": "SharedSliceContent",
 		"variation": "default",
 		"primary": {
-			"titleleft": {
-				"__TYPE__": "FieldContent",
-				"value": "feature",
-				"type": "Text"
-			},
-			"titleright": {
-				"__TYPE__": "FieldContent",
-				"value": "pale",
-				"type": "Text"
-			},
 			"elements": {
 				"__TYPE__": "GroupContentType",
 				"value": [
@@ -27,8 +17,10 @@
 										{
 											"type": "paragraph",
 											"content": {
-												"text": "Esse eu incididunt est cupidatat sint nostrud laboris elit veniam nostrud."
-											}
+												"text": "This is a left-hand element",
+												"spans": []
+											},
+											"direction": "ltr"
 										}
 									]
 								}
@@ -41,15 +33,130 @@
 										{
 											"type": "paragraph",
 											"content": {
-												"text": "Consequat incididunt eiusmod deserunt commodo pariatur occaecat eu laboris sit labore aliquip est. Incididunt laboris minim minim incididunt nulla incididunt anim duis anim enim laboris. Dolor excepteur enim aliqua aute dolor ex."
-											}
+												"text": "This is a right element",
+												"spans": [
+													{
+														"type": "hyperlink",
+														"start": 0,
+														"end": 23,
+														"data": {
+															"__TYPE__": "ExternalLink",
+															"url": "asdfsdaf",
+															"target": "_self"
+														}
+													}
+												]
+											},
+											"direction": "ltr"
 										}
 									]
 								}
 							]
 						]
+					},
+					{
+						"__TYPE__": "GroupItemContent",
+						"value": [
+							[
+								"leftelement",
+								{
+									"__TYPE__": "StructuredTextContent",
+									"value": [
+										{
+											"type": "paragraph",
+											"content": {
+												"text": "asdfasdf",
+												"spans": []
+											},
+											"direction": "ltr"
+										}
+									]
+								}
+							],
+							[
+								"rightelement",
+								{
+									"__TYPE__": "StructuredTextContent",
+									"value": [
+										{
+											"type": "paragraph",
+											"content": {
+												"text": "asdfasdfasdf",
+												"spans": []
+											},
+											"direction": "ltr"
+										}
+									]
+								}
+							]
+						],
+						"key": "dfecae04-4062-4ae0-9f70-a76a3be49ed8"
+					},
+					{
+						"__TYPE__": "GroupItemContent",
+						"value": [
+							[
+								"leftelement",
+								{
+									"__TYPE__": "StructuredTextContent",
+									"value": [
+										{
+											"type": "paragraph",
+											"content": {
+												"text": "So we do this",
+												"spans": []
+											},
+											"direction": "ltr"
+										}
+									]
+								}
+							],
+							[
+								"rightelement",
+								{
+									"__TYPE__": "StructuredTextContent",
+									"value": [
+										{
+											"type": "image",
+											"data": {
+												"provider": "imgix",
+												"url": "https://images.unsplash.com/photo-1640526316883-bf77fab51969?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMzc0NjN8MHwxfHNlYXJjaHwxMHx8c3RpY2ttYW58ZW58MHx8fHwxNzg0NzUwOTU2fDA&ixlib=rb-4.1.0&q=85&rect=1413%2C0%2C5000%2C5014&w=5000&h=5014",
+												"alt": "a black and white photo of a person in a living room",
+												"origin": {
+													"id": "LKxhRU7vOOA",
+													"url": "https://images.unsplash.com/photo-1640526316883-bf77fab51969?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMzc0NjN8MHwxfHNlYXJjaHwxMHx8c3RpY2ttYW58ZW58MHx8fHwxNzg0NzUwOTU2fDA&ixlib=rb-4.1.0&q=85",
+													"width": 7826,
+													"height": 5014
+												},
+												"width": 5000,
+												"height": 5014,
+												"edit": {
+													"background": "transparent",
+													"zoom": 1,
+													"crop": {
+														"x": 1413,
+														"y": 0
+													}
+												}
+											}
+										}
+									]
+								}
+							]
+						],
+						"key": "b47d06ff-6f12-4ea5-bd23-5d3e067a47c9"
 					}
 				]
+			},
+			"titleleft": {
+				"__TYPE__": "FieldContent",
+				"type": "Text",
+				"value": "Narrative"
+			},
+			"titleright": {
+				"__TYPE__": "FieldContent",
+				"type": "Text",
+				"value": "Reality"
 			}
 		},
 		"items": []
