@@ -23,9 +23,9 @@ jobs:
     - run: corepack enable
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
-        node-version: '22.19'
+        node-version: '24'
         cache: 'yarn'
 
     - name: Install build dependencies
@@ -35,7 +35,7 @@ jobs:
 
     # Restore yarn cache from artifacts
     - name: Download build artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v7
       with:
         name: build-artifacts
 

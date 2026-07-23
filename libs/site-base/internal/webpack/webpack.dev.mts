@@ -9,8 +9,8 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
 // import ErrorOverlayPlugin from './error-overlay-shim.cjs';
 
-import { getBaseConfig } from './webpack.base';
-import { signerConfig } from './webpack.signers';
+import { getBaseConfig } from './webpack.base.mts';
+import { signerConfig } from './webpack.signers.mts';
 import { getMocks } from "@thecointech/setenv/webpack";
 import type { SecretKeyType } from '@thecointech/secrets';
 

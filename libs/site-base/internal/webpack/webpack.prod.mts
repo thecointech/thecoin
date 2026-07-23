@@ -4,8 +4,8 @@ import { merge } from "webpack-merge";
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import WebpackPwaManifest from 'webpack-pwa-manifest';
 import CompressionPlugin from 'compression-webpack-plugin';
-import { getBaseConfig } from './webpack.base';
-import { signerConfig } from './webpack.signers';
+import { getBaseConfig } from './webpack.base.mts';
+import { signerConfig } from './webpack.signers.mts';
 import type { Configuration } from "webpack";
 import type { SecretKeyType } from '@thecointech/secrets/*';
 
