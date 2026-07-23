@@ -3,18 +3,24 @@ import type { EventSection, SectionName } from "@thecointech/scraper-agent/types
 import type { Page } from "puppeteer";
 import { getElementForEvent } from "@thecointech/scraper/elements";
 import { flatten, isSection } from "@thecointech/scraper-agent/replay/events";
+import { log } from "@thecointech/logging";
 
 export function findSectionByEvent(search: AnyEvent, section: EventSection) : EventSection | null {
   if (!search) {
     return null;
   }
   for (const eventOrSection of section.events) {
-    if (eventOrSection === search) {
-      return section;
-    }
-    else if (isSection(eventOrSection)) {
+    if (isSection(eventOrSection)) {
       const r = findSectionByEvent(search, eventOrSection);
       if (r) return r;
+    }
+    // Match by id
+    else if (eventOrSection.id && eventOrSection.id === search.id) {
+      return section;
+    }
+    // Match by reference (in case legacy events which didn't have ID's find their way in here)
+    else if (eventOrSection === search) {
+      return section;
     }
   }
   return null;
@@ -58,6 +64,9 @@ export async function isPageInSection(page: Page, root: EventSection, sectionNam
         // Ignore - we return false below if element not found
       }
     }
+  }
+  else {
+    log.error(`Section ${sectionName} not found in root section, cannot determine if page is in section`);
   }
   return null;
 }

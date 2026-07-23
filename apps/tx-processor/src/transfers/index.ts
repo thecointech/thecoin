@@ -1,6 +1,6 @@
 import { type AnyAction, getIncompleteActions, isType } from '@thecointech/broker-db';
 import type { TheCoin } from '@thecointech/contract-core';
-import type { RbcApi } from '@thecointech/rbcapi';
+import type { IBank } from '@thecointech/bank-interface';
 import { Processor as BillProcessor } from '@thecointech/tx-bill';
 import { Processor as PluginProcessor } from '@thecointech/tx-plugins';
 import { Processor as WithdrawalProcessor } from '@thecointech/tx-etransfer';
@@ -13,7 +13,7 @@ import { isUberTransfer } from '@thecointech/utilities/UberTransfer'
 
 type DatedAction = AnyAction & { executeDate: number };
 
-export async function processTransfers(tcCore: TheCoin, bank: RbcApi) {
+export async function processTransfers(tcCore: TheCoin, bank: IBank) {
   log.debug('Processing All Transfers');
 
   const allActions = await fetchTransfers();
@@ -47,7 +47,7 @@ async function fetchTransfers() {
   return allActions;
 }
 
-export async function processActions(allActions: DatedAction[], tcCore: TheCoin, bank: RbcApi) {
+export async function processActions(allActions: DatedAction[], tcCore: TheCoin, bank: IBank) {
   const r: AnyActionContainer[] = [];
 
   const usersWithFailedTxs = new Set<string>();
@@ -92,7 +92,7 @@ export async function processActions(allActions: DatedAction[], tcCore: TheCoin,
 }
 
 
-async function processAction(action: DatedAction, tcCore: TheCoin, bank: RbcApi) {
+async function processAction(action: DatedAction, tcCore: TheCoin, bank: IBank) {
   log.debug({ initialId: action.data.initialId, type: action.type, date: action.executeDate, address: action.address }, "Processing {type} from {date}: {initialId}");
   if (isType(action, 'Bill')) {
     const ex = BillProcessor(action.data.initial.transfer, tcCore, bank);

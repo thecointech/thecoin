@@ -6,7 +6,7 @@ import Decimal from 'decimal.js-light';
 import { SellAction } from '@thecointech/broker-db';
 import { getSigner } from '@thecointech/signers';
 import { GetRatesApi } from '@thecointech/apis/pricing';
-import { RbcApi } from '@thecointech/rbcapi';
+import { BankMock } from '@thecointech/bank-interface/mocked';
 import type { ETransferPacket } from '@thecointech/types';
 import { graph } from './graph';
 import { StateMachineProcessor, getCurrentState } from '@thecointech/tx-statemachine';
@@ -16,7 +16,7 @@ jest.useFakeTimers();
 const ratesApi = GetRatesApi();
 const getSingleSpy = jest.spyOn(ratesApi, 'getSingle');
 
-const bank = await RbcApi.create();
+const bank = await BankMock.create();
 const sendETransferSpy = jest.spyOn(bank, 'sendETransfer');
 
 // Action created Saturday noon, 4 weeks ago

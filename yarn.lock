@@ -11492,7 +11492,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/bank-interface@npm:^0.6.4, @thecointech/bank-interface@workspace:libs/bank-interface":
+"@thecointech/bank-interface@npm:^0.6.3, @thecointech/bank-interface@npm:^0.6.4, @thecointech/bank-interface@workspace:libs/bank-interface":
   version: 0.0.0-use.local
   resolution: "@thecointech/bank-interface@workspace:libs/bank-interface"
   dependencies:
@@ -12383,6 +12383,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/tx-bill@workspace:libs/tx-bill"
   dependencies:
+    "@thecointech/bank-interface": "npm:^0.6.3"
     "@thecointech/contract-core": "npm:^0.6.4"
     "@thecointech/tx-statemachine": "npm:^0.6.4"
   languageName: unknown
@@ -12393,6 +12394,7 @@ __metadata:
   resolution: "@thecointech/tx-blockchain@workspace:libs/tx-blockchain"
   dependencies:
     "@thecointech/contract-core": "npm:^0.6.4"
+    "@thecointech/contract-plugin-shockabsorber": "npm:^0.6.4"
     "@thecointech/utilities": "npm:^0.6.4"
   languageName: unknown
   linkType: soft
