@@ -88,6 +88,7 @@ export interface ArticleDocumentDataCategoriesItem {
     | "Finance"
     | "Carbon Offsets"
     | "Impact Reports"
+    | "Newsletter"
   >;
 }
 
