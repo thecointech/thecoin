@@ -67,8 +67,10 @@ function getDevServer(): Partial<Configuration> {
     }
 }
 
-const injectedSigner = await getTestDemoAccountWallet();
-export default await getConfig(["PolygonscanApiKey"], {
-  ...getDevServer(),
-  ...injectedSigner,
-});
+export default (async () => {
+  const injectedSigner = await getTestDemoAccountWallet();
+  return getConfig(["PolygonscanApiKey"], {
+    ...getDevServer(),
+    ...injectedSigner,
+  });
+})();

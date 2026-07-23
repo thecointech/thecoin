@@ -36,6 +36,4 @@ function getDevServer(): Partial<Configuration> {
     }
   }
 }
-const config = await getConfig([], getDevServer());
-
-export default config;
+export default getConfig([], getDevServer());

@@ -3,7 +3,7 @@
   "productName": "THECoin: Website - Landing",
   "private": true,
   "type": "module",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "THECoin: Future-proof currency",
   "repository": {
     "type": "git",
@@ -43,7 +43,6 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "extract": "run -T formatjs extract \"src/**/!(*.d|*.test).ts*\" --out-file lang/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
     "compile": "run -T formatjs compile lang/en.json --out-file src/translations/en.json && formatjs compile lang/fr.json --out-file src/translations/fr.json",
-    "run_simulation": "cross-env NODE_ENV=production ts-node -T --skip-project ./internals/main_sim.ts",
     "update_snp_data": "run-env ./internals/historical/main.ts"
   },
   "lint-staged": {
@@ -56,17 +55,17 @@
     ]
   },
   "dependencies": {
-    "@thecointech/shared": "^0.6.3",
-    "@thecointech/site-base": "^0.6.3",
-    "@thecointech/utilities": "^0.6.3",
+    "@thecointech/shared": "^0.6.4",
+    "@thecointech/site-base": "^0.6.4",
+    "@thecointech/utilities": "^0.6.4",
     "papaparse": "^5.1.1",
     "react-helmet-async": "^2.0.5",
     "react-range": "^1.10.0",
     "sanitize.css": "10.0.0"
   },
   "devDependencies": {
-    "@thecointech/setenv": "^0.6.3",
-    "@thecointech/site-semantic-theme": "^0.6.3",
+    "@thecointech/setenv": "^0.6.4",
+    "@thecointech/site-semantic-theme": "^0.6.4",
     "@types/papaparse": "^5.0.3",
     "coveralls": "3.0.4",
     "react-app-polyfill": "1.0.1",
