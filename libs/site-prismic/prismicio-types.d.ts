@@ -1086,7 +1086,7 @@ export interface ComparisonBlockSliceDefaultPrimaryElementsItem {
  */
 export interface ComparisonBlockSliceDefaultPrimary {
   /**
-   * TItleLeft field in *ComparisonBlock → Default → Primary*
+   * TitleLeft field in *ComparisonBlock → Default → Primary*
    *
    * - **Field Type**: Text
    * - **Placeholder**: *None*

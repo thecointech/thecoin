@@ -3,7 +3,6 @@
     background-color: color-mix(in srgb, var(--thecoin-gray2) 50%, white);
     border-bottom: 1px solid var(--text-dark-color);
     box-shadow: 0px 2px 5px 0px var(--thecoin-gray3);
-
     margin: 0 auto;
     margin-bottom: 2rem;
 

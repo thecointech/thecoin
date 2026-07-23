@@ -41,7 +41,7 @@
 														"end": 23,
 														"data": {
 															"__TYPE__": "ExternalLink",
-															"url": "asdfsdaf",
+															"url": "https://en.wikipedia.org/wiki/Main_Page",
 															"target": "_self"
 														}
 													}
@@ -65,7 +65,7 @@
 										{
 											"type": "paragraph",
 											"content": {
-												"text": "asdfasdf",
+												"text": "This is a left-hand element",
 												"spans": []
 											},
 											"direction": "ltr"
@@ -81,7 +81,7 @@
 										{
 											"type": "paragraph",
 											"content": {
-												"text": "asdfasdfasdf",
+												"text": "This is a right element",
 												"spans": []
 											},
 											"direction": "ltr"
@@ -89,8 +89,7 @@
 									]
 								}
 							]
-						],
-						"key": "dfecae04-4062-4ae0-9f70-a76a3be49ed8"
+						]
 					},
 					{
 						"__TYPE__": "GroupItemContent",
@@ -137,14 +136,14 @@
 														"x": 1413,
 														"y": 0
 													}
-												}
+												},
+												"credits": null
 											}
 										}
 									]
 								}
 							]
-						],
-						"key": "b47d06ff-6f12-4ea5-bd23-5d3e067a47c9"
+						]
 					}
 				]
 			},

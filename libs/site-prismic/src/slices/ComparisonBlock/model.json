@@ -15,7 +15,7 @@
         "titleleft": {
           "type": "Text",
           "config": {
-            "label": "TItleLeft",
+            "label": "TitleLeft",
             "placeholder": ""
           }
         },
