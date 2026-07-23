@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/bank-interface",
-  "version": "0.6.4",
+  "version": "0.6.5-test.0",
   "description": "The Coin: Generic banking interface.  Contains no implementation.",
   "type": "module",
   "keywords": [
@@ -43,6 +43,6 @@
     }
   },
   "devDependencies": {
-    "@thecointech/types": "^0.6.4"
+    "@thecointech/types": "^0.6.5-test.0"
   }
 }

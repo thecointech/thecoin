@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.5-test.0](https://github.com/thecointech/thecoin/compare/v0.6.4...v0.6.5-test.0) (2026-07-23)
+
+**Note:** Version bump only for package @thecointech/site-nft-landing
+
+
+
+
+
 ## [0.6.4](https://github.com/thecointech/thecoin/compare/v0.6.4-test.1...v0.6.4) (2026-07-22)
 
 **Note:** Version bump only for package @thecointech/site-nft-landing
