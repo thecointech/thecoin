@@ -1,4 +1,4 @@
-import type { AnyEvent } from "@thecointech/scraper";
+import type { AnyEvent, ClickEvent, ValueEvent, InputEvent } from "@thecointech/scraper";
 import type { EventSection, SectionName } from "@thecointech/scraper-agent/types";
 import type { Page } from "puppeteer";
 import { getElementForEvent } from "@thecointech/scraper/elements";
@@ -47,7 +47,7 @@ export async function isPageInSection(page: Page, root: EventSection, sectionNam
     const events = flatten(section, [sectionName]);
 
     // Search for the first page interaction we do in the section
-    const firstElement = events.find(e => (e.type === "input" || e.type === "click" || e.type == "value"));
+    const firstElement = events.find(isInteractionEvent);
     if (firstElement) {
       try {
         const matched = await getElementForEvent({
@@ -69,4 +69,9 @@ export async function isPageInSection(page: Page, root: EventSection, sectionNam
     log.error(`Section ${sectionName} not found in root section, cannot determine if page is in section`);
   }
   return null;
+}
+
+
+export function isInteractionEvent(event: AnyEvent): event is InputEvent | ClickEvent | ValueEvent {
+  return event.type === "input" || event.type === "click" || event.type === "value";
 }
