@@ -40,7 +40,7 @@ export function findSectionByName(search: SectionName, section: EventSection) : 
   return null;
 }
 
-export async function isPageInSection(page: Page, root: EventSection, sectionName: SectionName) {
+export async function isPageInSection(page: Page, root: EventSection, sectionName: SectionName, timeout=1000) {
   const section = findSectionByName(sectionName, root);
   if (section) {
     // The easiest way to tell is to search for the first element
@@ -52,7 +52,7 @@ export async function isPageInSection(page: Page, root: EventSection, sectionNam
       try {
         const matched = await getElementForEvent({
           page,
-          timeout: 1000,
+          timeout,
           event: {
             ...firstElement,
             eventName: "isIn" + sectionName,
