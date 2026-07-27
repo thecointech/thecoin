@@ -11,7 +11,7 @@ const navToAccounts = { type: 'navigation', id: 'nav-accounts', timestamp: 5, to
 it('finds the last interaction when the target event is an interaction', () => {
   const events = [navToLogin, loginInput, loginClick, balanceValue];
   const last = findLastInteraction(events, balanceValue);
-  expect(last).toBe(balanceValue);
+  expect(last).toBe(loginClick);
 });
 
 it('finds the previous interaction when the target event is not an interaction', () => {

@@ -88,10 +88,14 @@ export async function replayErrorHandling({replay, err, event}: ReplayErrorParam
 
 
 export function findLastInteraction(events: AnyEvent[], event: AnyEvent): AnyEvent | undefined {
+  if (!event.id) {
+    log.warn("Event has no ID, cannot find last interaction");
+    return undefined
+  }
   let index = events.findIndex(e => e.id == event.id);
   if (index < 0) {
     log.warn({id: event.id}, "Could not find event {id} in events array");
     return undefined;
   }
-  return events.slice(0, index + 1).findLast(isInteractionEvent);
+  return events.slice(0, index).findLast(isInteractionEvent);
 }
