@@ -1,4 +1,3 @@
-import { log } from '@thecointech/logging';
 import {
   getHarvesterRegistrationSigner,
   getHarvesterRunStartSigner,
@@ -14,27 +13,7 @@ import {
   startHarvesterRun as dbStartHarvesterRun,
   completeHarvesterRun as dbCompleteHarvesterRun,
 } from '@thecointech/broker-db';
-import { SignatureError } from '../errors';
-import { DateTime } from 'luxon';
-
-const FiveMins = 5 * 60 * 1000;
-
-function assertSigner(user: string, signer: string, action: string, signedAt?: DateTime) {
-  if (signer !== user) {
-    log.error({ user, signer }, `Bad request from {user} to ${action}: signer does not match {signer}`);
-    throw new SignatureError('Invalid signature');
-  }
-  if (signedAt) {
-    const now = DateTime.now();
-    if (Math.abs(now.diff(signedAt).milliseconds) > FiveMins) {
-      log.error(
-        {signedTime: signedAt, now, address: signer},
-        'Signature too old or too far in the future: {signedTime}, now: {now} - {address}'
-      )
-      throw new SignatureError('Signature too old');
-    }
-  }
-}
+import { assertSigner } from '../assertSigner';
 
 export async function recordHarvesterRegistration(request: HarvesterRegistrationRequest) {
   const signer = getHarvesterRegistrationSigner(request);
