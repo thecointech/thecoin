@@ -49,6 +49,7 @@
     }
   },
   "dependencies": {
+    "@google-cloud/firestore": "7.0.0",
     "@thecointech/firestore": "^0.6.5",
     "@thecointech/utilities": "^0.6.5",
     "fast-deep-equal": "3.1.3"
