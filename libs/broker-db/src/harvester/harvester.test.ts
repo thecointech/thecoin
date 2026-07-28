@@ -69,7 +69,6 @@ it("records a completed run and updates current status", async () => {
 
   const run = await getHarvesterRun(address, installationId, startedRun.runId);
   expect(run).toMatchObject({
-    runId: startedRun.runId,
     outcome: "succeeded",
     durationMs: 120000,
     terminalSource: "client",

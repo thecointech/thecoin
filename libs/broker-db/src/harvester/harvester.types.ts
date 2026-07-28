@@ -1,11 +1,18 @@
 import { DateTime } from "luxon";
+import type {
+  HarvesterRegistrationAction,
+  HarvesterRunTrigger,
+  HarvesterTerminalOutcome,
+  HarvesterTerminalSource,
+} from "@thecointech/harvester-monitoring";
 import { buildConverter, convertDates } from "../converter";
 
-export type HarvesterRegistrationAction = "notifyAll" | "notifyNone";
-export type HarvesterRunTrigger = "scheduled" | "manual" | "unknown";
-export type HarvesterRunOutcome = "running" | "succeeded" | "skipped" | "failed" | "abandoned";
-export type HarvesterTerminalOutcome = Exclude<HarvesterRunOutcome, "running">;
-export type HarvesterTerminalSource = "client" | "watchdog";
+export type { HarvesterRegistrationAction, HarvesterRunTrigger, HarvesterTerminalOutcome, HarvesterTerminalSource };
+
+// "running" is a DB-only state: it never appears on the wire as a signed
+// request outcome (HarvesterTerminalOutcome, from @thecointech/harvester-monitoring),
+// since a run can only be signed off as complete once it has a terminal outcome.
+export type HarvesterRunOutcome = "running" | HarvesterTerminalOutcome;
 
 // installationId/platform/architecture are stable for the life of an install.
 // appVersion is deliberately excluded here: it changes independently of a
@@ -46,7 +53,6 @@ export type HarvesterRegistration = HarvesterInstallationInfo & {
 
 export type HarvesterRun = HarvesterClientInfo & {
   schemaVersion: 1;
-  runId: string;
   trigger: HarvesterRunTrigger;
   startedAt: DateTime;
   startedAtClient?: DateTime;

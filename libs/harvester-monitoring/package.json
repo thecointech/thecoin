@@ -1,0 +1,36 @@
+{
+  "name": "@thecointech/harvester-monitoring",
+  "version": "0.6.5",
+  "description": "The Coin: utility code for connecting harvester monitoring & server db",
+  "type": "module",
+  "author": "Stephen Taylor <stephen@thecoin.io>",
+  "homepage": "http://thecoin.io",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecointech/thecoin.git",
+    "directory": "libs/harvester-monitoring"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
+    "build": "run -T tsc -b",
+    "test": "run :jest",
+    "clean": "rimraf ./build && rimraf ./coverage"
+  },
+  "files": [
+    "build/**/*"
+  ],
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "dependencies": {
+    "@thecointech/utilities": "^0.6.5",
+    "ethers": "6.15.0",
+    "luxon": "3.3.0"
+  },
+  "devDependencies": {
+    "@thecointech/jestutils": "^0.6.5"
+  }
+}

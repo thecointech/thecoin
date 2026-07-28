@@ -160,20 +160,22 @@ export async function startHarvesterRun(address: string, start: HarvesterRunStar
 
     const run: HarvesterRun = {
       schemaVersion: 1,
-      runId: runDoc.id,
       outcome: "running",
       ...start,
     };
     const statusUpdate: Partial<HarvesterStatus> = {
       ...clientInfo(start),
-      lastRunId: run.runId,
+      lastRunId: runDoc.id,
       lastStartedAt: start.startedAt,
       lastOutcome: "running",
     };
 
     transaction.set(toAdminRef(runDoc), run);
     transaction.set(toAdminRef(statusDoc), statusUpdate, { merge: true });
-    return run;
+    return {
+      ...run,
+      runId: runDoc.id,
+    };
   });
 }
 
@@ -203,14 +205,12 @@ export async function completeHarvesterRun(address: string, installationId: stri
       throw new Error(`Harvester run ${runId} cannot finish before it started`);
     }
 
-    const completedRun: HarvesterRun = {
-      ...run,
+    const completedRun: Partial<HarvesterRun> = {
       ...completion,
       durationMs: completion.finishedAt.toMillis() - run.startedAt.toMillis(),
     };
     const healthy = completion.outcome === "succeeded" || completion.outcome === "skipped";
     const statusUpdate: Partial<HarvesterStatus> = {
-      lastRunId: runId,
       lastFinishedAt: completion.finishedAt,
       lastOutcome: completion.outcome,
       ...(healthy ? { lastHealthyAt: completion.finishedAt } : {
@@ -219,8 +219,11 @@ export async function completeHarvesterRun(address: string, installationId: stri
       }),
     };
 
-    transaction.set(toAdminRef(runDoc), completedRun);
+    transaction.set(toAdminRef(runDoc), completedRun, { merge: true });
     transaction.set(toAdminRef(statusDoc), statusUpdate, { merge: true });
-    return completedRun;
+    return {
+      ...run,
+      ...completedRun,
+    };
   });
 }
