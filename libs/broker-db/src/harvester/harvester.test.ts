@@ -1,7 +1,9 @@
 import { DateTime } from "luxon";
 import { init } from "@thecointech/firestore";
+import { NormalizeAddress } from "@thecointech/utilities";
 import {
   completeHarvesterRun,
+  getAllHarvesterInstallations,
   getHarvesterInstallations,
   getHarvesterRegistrations,
   getHarvesterRun,
@@ -12,6 +14,7 @@ import {
 } from "./harvester";
 
 const address = "0xf3B7C73bec2B9A0Af7EEA1fe2f76973D6FBfE658";
+const otherAddress = "0x1234567890123456789012345678901234567890";
 const installationId = "installation-1";
 
 beforeEach(async () => {
@@ -174,4 +177,76 @@ it("isolates status between multiple installations for the same user", async () 
 
   const installations = await getHarvesterInstallations(address);
   expect(installations.map(i => i.installationId).sort()).toEqual([installationA, installationB]);
+});
+
+it("enumerates installations across every user", async () => {
+  const registeredAt = DateTime.fromISO("2026-07-27T10:00:00Z");
+
+  await recordHarvesterRegistration(address, {
+    schemaVersion: 1,
+    action: "notifyAll",
+    observedAt: registeredAt,
+    installationId,
+  });
+  const otherInstall = "installation-other";
+  await recordHarvesterRegistration(otherAddress, {
+    schemaVersion: 1,
+    action: "notifyNone",
+    observedAt: registeredAt,
+    installationId: otherInstall,
+  });
+
+  const all = await getAllHarvesterInstallations();
+  expect(all).toHaveLength(2);
+  expect(all).toEqual(expect.arrayContaining([
+    expect.objectContaining({ address: NormalizeAddress(address), installationId, notifyAction: "notifyAll" }),
+    expect.objectContaining({ address: NormalizeAddress(otherAddress), installationId: "installation-other", notifyAction: "notifyNone" }),
+  ]));
+
+  // Update otherInstall
+  await recordHarvesterRegistration(otherAddress, {
+    schemaVersion: 1,
+    action: "notifyAll",
+    observedAt: registeredAt,
+    installationId: otherInstall,
+  });
+
+  const allAfterUpdate = await getAllHarvesterInstallations();
+  expect(allAfterUpdate).toHaveLength(2);
+  expect(allAfterUpdate).toEqual(expect.arrayContaining([
+    expect.objectContaining({ address: NormalizeAddress(address), installationId, notifyAction: "notifyAll" }),
+    expect.objectContaining({ address: NormalizeAddress(otherAddress), installationId: "installation-other", notifyAction: "notifyAll" }),
+  ]));
+
+    // Do one complete run
+  const run1 = await startHarvesterRun(address, {
+    installationId,
+    trigger: "scheduled",
+    startedAt: DateTime.now(),
+  })
+  await completeHarvesterRun(address, installationId, run1.runId, {
+    outcome: "succeeded",
+    finishedAt: DateTime.now(),
+    terminalSource: "client",
+  })
+
+  // Do one failed run
+  const run2 = await startHarvesterRun(otherAddress, {
+    installationId: otherInstall,
+    trigger: "scheduled",
+    startedAt: DateTime.now(),
+  })
+  await completeHarvesterRun(otherAddress, otherInstall, run2.runId, {
+    outcome: "failed",
+    finishedAt: DateTime.now(),
+    terminalSource: "client",
+  })
+
+  const allAfterRuns = await getAllHarvesterInstallations();
+  expect(allAfterRuns).toHaveLength(2);
+  expect(allAfterRuns).toEqual(expect.arrayContaining([
+    expect.objectContaining({ address: NormalizeAddress(address), installationId, lastOutcome: "succeeded" }),
+    expect.objectContaining({ address: NormalizeAddress(otherAddress), installationId: "installation-other", lastOutcome: "failed" }),
+  ]));
+
 });

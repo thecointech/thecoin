@@ -1,5 +1,5 @@
 import { type CollectionReference, type DocumentData, type DocumentReference, getFirestore, type FirestoreAdmin } from "@thecointech/firestore";
-import type { DocumentReference as AdminDocumentReference } from "@google-cloud/firestore";
+import type { DocumentReference as AdminDocumentReference, FirestoreDataConverter as AdminFirestoreDataConverter } from "@google-cloud/firestore";
 import { getUserDoc } from "../user";
 import {
   HarvesterClientInfo,
@@ -87,6 +87,23 @@ export async function getHarvesterInstallations(address: string) {
   return [...snapshot.docs].map(doc => doc.data());
 }
 
+// Enumerates every installation across every user, for cross-account
+// monitoring (e.g. a weekly watchdog report). Uses a collection-group query
+// since installations are stored per-user; the owning address is recovered
+// from each doc's parent user document.
+export async function getAllHarvesterInstallations() {
+  const db = getFirestoreAdmin();
+  const snapshot = await db
+    .collectionGroup("Harvester")
+    .withConverter(harvesterStatusConverter as unknown as AdminFirestoreDataConverter<HarvesterStatus>)
+    .get();
+
+  return snapshot.docs.map(doc => ({
+    address: doc.ref.parent.parent!.id,
+    ...doc.data(),
+  }));
+}
+
 export async function getHarvesterRun(address: string, installationId: string, runId: string) {
   return (await getHarvesterRunDoc(address, installationId, runId).get()).data();
 }
@@ -111,16 +128,9 @@ export async function recordHarvesterRegistration(address: string, registration:
   const registrationDoc = getHarvesterRegistrationDoc(address, registration.installationId);
 
   return db.runTransaction(async transaction => {
-    const [existingRegistration, existingStatus] = await Promise.all([
-      transaction.get(toAdminRef(registrationDoc)),
-      transaction.get(toAdminRef(statusDoc)),
-    ]);
-
-    if (existingRegistration.exists) {
-      return existingRegistration.data()!;
-    }
-
+    const existingStatus = await transaction.get(toAdminRef(statusDoc));
     const existing = existingStatus.data();
+
     const status: HarvesterStatus = {
       schemaVersion: 1,
       notifyAction: registration.action,

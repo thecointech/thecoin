@@ -5,6 +5,7 @@ import { initialize, release } from './initialize';
 import { processReferrals } from './referrals';
 import { processTransfers } from './transfers';
 import { verifyBank } from './verifyBank';
+import { monitorHarvest } from './monitorHarvest';
 import { sleep } from '@thecointech/async';
 
 const STREAM_CLOSE_GRACE_PERIOD_MS = 5000;
@@ -15,6 +16,7 @@ async function Process() {
   await verifyBank(bank);
   await processTransfers(contract, bank);
   await processReferrals();
+  await monitorHarvest();
 
   log.debug('Completed processing');
 }
