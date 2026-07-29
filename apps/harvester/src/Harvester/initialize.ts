@@ -1,12 +1,13 @@
 import { DateTime } from 'luxon';
-import { hydrateProcessor, getWallet, getCreditDetails } from './config';
+import { hydrateProcessor, getCreditDetails } from './config';
 import { getCurrentState } from './state';
 import { getAccountData } from './fetchData';
 import type { HarvestData, UserData } from './types';
 import type { HarvesterReplayCallbacks } from './replay/replayCallbacks';
 import { ContractCore } from '@thecointech/contract-core';
+import type { Signer } from 'ethers';
 
-export async function initialize(callback: HarvesterReplayCallbacks) {
+export async function initialize(callback: HarvesterReplayCallbacks, wallet: Signer) {
 
   // Initialize
   const stages = await hydrateProcessor();
@@ -15,12 +16,6 @@ export async function initialize(callback: HarvesterReplayCallbacks) {
   }
 
   const lastRun = await getCurrentState();
-
-  // Ensure we have a wallet, otherwise we can't run
-  const wallet = await getWallet();
-  if (!wallet) {
-    throw new Error('No wallet found');
-  }
 
   const creditDetails = await getCreditDetails();
   if (!creditDetails) {
@@ -35,10 +30,11 @@ export async function initialize(callback: HarvesterReplayCallbacks) {
 
   // Initialize data (do we want anything from last state?)
   // Sub 1 week to ensure payments posted after last run are all counted
+  const address = await wallet.getAddress();
   const lastTxDate = lastRun?.date.minus({ week: 1 });
   const { chq, visa } = await getAccountData(callback, lastTxDate);
   const tcCore = await ContractCore.get();
-  const coin = await tcCore.balanceOf(wallet.address);
+  const coin = await tcCore.balanceOf(address);
   let state: HarvestData = {
     chq,
     visa,

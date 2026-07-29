@@ -3,15 +3,13 @@ import { getRemovePluginSigner, getAssignPluginSigner } from '@thecointech/contr
 import { log } from '@thecointech/logging';
 import { DateTime } from 'luxon';
 import type { AssignPluginRequest, RemovePluginRequest } from '@thecointech/types';
+import { assertSigner } from './assertSigner';
 
 export async function assignPlugin(request: AssignPluginRequest) {
   log.info({user: request.user, plugin: request.plugin }, 'Request from {user} to add plugin {plugin}');
 
   const signer = getAssignPluginSigner(request);
-  if (signer != request.user) {
-    log.error({user: request.user, signer }, 'Bad request from {user}: signer does not match {signer}');
-    return false;
-  }
+  assertSigner(request.user, signer, 'add plugin', request.signedAt);
 
   await createAction(signer, "Plugin", {
     initial: request,
@@ -27,10 +25,7 @@ export async function removePlugin(request: RemovePluginRequest) {
   log.info({user: request.user, plugin: request.index }, 'Request from {user} to remove plugin {plugin}');
 
   const signer = getRemovePluginSigner(request);
-  if (signer != request.user) {
-    log.error({user: request.user, signer }, 'Bad request from {user}: signer does not match {signer}');
-    return false;
-  }
+  assertSigner(request.user, signer, 'remove plugin', request.signedAt);
 
   await createAction(signer, "Plugin", {
     initial: request,

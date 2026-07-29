@@ -1,14 +1,14 @@
 import { HarvestData, ProcessingStage } from '../types';
 import { log } from '@thecointech/logging';
-import { getWallet } from '../config';
-import { GetHarvesterApi, GetStatusApi } from '@thecointech/apis/broker';
-import { GetSignedMessage } from '@thecointech/utilities/SignedMessages';
+// import { getWallet } from '../config';
+// import { GetHarvesterApi, GetStatusApi } from '@thecointech/apis/broker';
+// import { GetSignedMessage } from '@thecointech/utilities/SignedMessages';
 
 export class Heartbeat implements ProcessingStage {
 
   readonly name = 'Heartbeat';
 
-  async process(data: HarvestData) {
+  async process(_data: HarvestData) {
 
     log.info("Sending Heartbeat");
 
@@ -17,22 +17,22 @@ export class Heartbeat implements ProcessingStage {
       return {};
     }
 
-    const errors = data.errors
-      ? Object.keys(data.errors)
-      : undefined;
+    // const errors = data.errors
+    //   ? Object.keys(data.errors)
+    //   : undefined;
 
-    const wallet = await getWallet();
-    const serverTimestamp = await GetStatusApi().timestamp();
-    const signedPacket = await GetSignedMessage(
-      (errors?.join() ?? "") + serverTimestamp.data,
-      wallet!,
-    )
-    const r = await GetHarvesterApi().heartbeat({
-      timeMs: serverTimestamp.data,
-      signature: signedPacket.signature,
-      errors,
-    });
-    log.info(`Sent Heartbeat: ${r.statusText}`);
+    // const wallet = await getWallet();
+    // const serverTimestamp = await GetStatusApi().timestamp();
+    // const signedPacket = await GetSignedMessage(
+    //   (errors?.join() ?? "") + serverTimestamp.data,
+    //   wallet!,
+    // )
+    // const r = await GetHarvesterApi().heartbeat({
+    //   timeMs: serverTimestamp.data,
+    //   signature: signedPacket.signature,
+    //   errors,
+    // });
+    // log.info(`Sent Heartbeat: ${r.statusText}`);
 
 
     return {};

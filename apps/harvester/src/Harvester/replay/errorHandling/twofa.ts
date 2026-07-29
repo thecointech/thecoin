@@ -13,7 +13,11 @@ export async function handleTwoFA(page: Page, events: AnyEvent[], root: EventSec
     await attemptEnterTwoFA(replay, twoFaSection);
     // Our assumption is that if we do not throw, we should
     // be able to continue with the rest of the replay.
-    const success = await isPageInSection(page, root, "AccountsSummary");
+    // The timeout is set large because in this pathway may not include the
+    // regular waiting mechanisms - eg in recording, the vLLM helps watch
+    // for loading to complete, and in replay the system waits for the elements
+    // to become visible, so here we need to wait too.
+    const success = await isPageInSection(page, root, "AccountsSummary", 60_000);
     if (!success) {
       throw new Error("Attempted to enter 2FA, but failed to enter AccountsSummary");
     }
