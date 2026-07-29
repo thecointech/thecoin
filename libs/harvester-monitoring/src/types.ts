@@ -1,5 +1,6 @@
 import type { DateTime } from "luxon";
 
+// Harvester monitoring types
 export type HarvesterRegistrationAction = "notifyAll" | "notifyNone";
 export type HarvesterRunTrigger = "scheduled" | "manual" | "unknown";
 export type HarvesterTerminalOutcome = "succeeded" | "skipped" | "failed" | "abandoned";
@@ -12,7 +13,7 @@ type Signed = {
   signature: string;
 }
 
-export type HarvesterRegistrationRequest = Signed & {
+export type HarvesterRegistrationRequest = {
   installationId: string;
   platform?: string;
   architecture?: string;
@@ -20,7 +21,13 @@ export type HarvesterRegistrationRequest = Signed & {
   observedAt: DateTime;
 }
 
-export type HarvesterRunStartRequest = Signed & {
+export type HarvesterRegistrationRequestDTO = Omit<HarvesterRegistrationRequest, "observedAt"> & {
+  observedAt: number;
+};
+
+export type HarvesterRegistrationRequestSigned = Signed & HarvesterRegistrationRequestDTO;
+
+export type HarvesterRunStart = {
   installationId: string;
   platform?: string;
   architecture?: string;
@@ -30,7 +37,14 @@ export type HarvesterRunStartRequest = Signed & {
   startedAtClient?: DateTime;
 }
 
-export type HarvesterRunCompletionRequest = Signed & {
+export type HarvesterRunStartDTO = Omit<HarvesterRunStart, "startedAt"|"startedAtClient"> & {
+  startedAt: number;
+  startedAtClient?: number;
+};
+
+export type HarvesterRunStartSigned = Signed & HarvesterRunStartDTO;
+
+export type HarvesterRunComplete = {
   installationId: string;
   runId: string;
   outcome: HarvesterTerminalOutcome;
@@ -40,3 +54,10 @@ export type HarvesterRunCompletionRequest = Signed & {
   failureCategory?: string;
   terminalSource: HarvesterTerminalSource;
 }
+
+export type HarvesterRunCompleteDTO = Omit<HarvesterRunComplete, "finishedAt"|"finishedAtClient"> & {
+  finishedAt: number;
+  finishedAtClient?: number;
+};
+
+export type HarvesterRunCompleteSigned = Signed & HarvesterRunCompleteDTO;

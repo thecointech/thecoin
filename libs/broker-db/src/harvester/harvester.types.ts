@@ -4,7 +4,7 @@ import type {
   HarvesterRunTrigger,
   HarvesterTerminalOutcome,
   HarvesterTerminalSource,
-} from "@thecointech/harvester-monitoring";
+} from "@thecointech/harvester-monitoring/types";
 import { buildConverter, convertDates } from "../converter";
 
 export type { HarvesterRegistrationAction, HarvesterRunTrigger, HarvesterTerminalOutcome, HarvesterTerminalSource };

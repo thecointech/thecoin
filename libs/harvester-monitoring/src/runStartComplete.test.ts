@@ -1,31 +1,17 @@
 import { Wallet } from "ethers";
 import { DateTime } from "luxon";
 import {
-  buildHarvesterRegistrationRequest,
-  getHarvesterRegistrationSigner,
-  buildHarvesterRunStartRequest,
+  signHarvesterRunStart,
   getHarvesterRunStartSigner,
-  buildHarvesterRunCompletionRequest,
+  signHarvesterRunComplete,
   getHarvesterRunCompletionSigner,
-} from "./index";
+} from "./runStartComplete";
 
 const wallet = Wallet.createRandom();
 
-it("signs and verifies a registration request", async () => {
-  const request = await buildHarvesterRegistrationRequest(wallet, {
-    installationId: "installation-1",
-    platform: "linux",
-    architecture: "x64",
-    action: "notifyAll",
-    observedAt: DateTime.fromISO("2026-07-27T10:00:00Z"),
-  });
-
-  expect(getHarvesterRegistrationSigner(request)).toBe(wallet.address);
-  expect(getHarvesterRegistrationSigner({ ...request, action: "notifyNone" })).not.toBe(wallet.address);
-});
 
 it("signs and verifies a run start request", async () => {
-  const request = await buildHarvesterRunStartRequest(wallet, {
+  const request = await signHarvesterRunStart(wallet, {
     installationId: "installation-1",
     trigger: "scheduled",
     startedAt: DateTime.fromISO("2026-07-27T10:05:00Z"),
@@ -36,7 +22,7 @@ it("signs and verifies a run start request", async () => {
 });
 
 it("signs and verifies a run completion request", async () => {
-  const request = await buildHarvesterRunCompletionRequest(wallet, {
+  const request = await signHarvesterRunComplete(wallet, {
     installationId: "installation-1",
     runId: "run-1",
     outcome: "failed",

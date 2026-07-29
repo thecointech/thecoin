@@ -2,10 +2,12 @@ import { createStep } from './steps';
 import { setSchedule } from './schedule';
 import { log } from '@thecointech/logging';
 import { HDNodeWallet } from 'ethers';
+import { randomUUID } from 'node:crypto';
 import { getProvider } from '@thecointech/ethers-provider';
 import { rootFolder } from '../paths';
 import { ConfigDatabase } from '@thecointech/store-harvester';
 import type { HarvestConfig, CoinAccount, ConfigShape, CreditDetails } from '@thecointech/store-harvester';
+import { optIntoMonitoring } from './monitoring';
 
 
 const db = new ConfigDatabase(rootFolder);
@@ -35,6 +37,18 @@ export async function getCoinAccountDetails() {
     address: cfg.coinAccount.address,
     name: cfg.coinAccount.name,
   }
+}
+
+// Lazily generate (and persist) a random installation identifier.
+// Deliberately not derived from any machine-identifying information.
+export async function getOrCreateInstallationId() {
+  const cfg = await db.get();
+  if (cfg?.installationId) {
+    return cfg.installationId;
+  }
+  const installationId = randomUUID();
+  await setProcessConfig({ installationId });
+  return installationId;
 }
 
 export async function getWallet() {
@@ -84,9 +98,22 @@ export async function getHarvestConfig() {
 }
 
 export async function setHarvestConfig(config: Partial<HarvestConfig>) {
+
   if (config.schedule) {
     await setSchedule(config.schedule);
   }
-  await setProcessConfig(config)
+  await setProcessConfig(config);
+
+  // If we have a configuration with steps defined:
+  // TODO: Put `optIntoMonitoring` probably here in this config (?)
+  if (config.steps) {
+    // And we have a wallet, we assume scraping is enabled, so opt into monitoring
+    const wallet = await getWallet();
+    if (wallet) {
+      const installationId = await getOrCreateInstallationId();
+      optIntoMonitoring(wallet, installationId);
+    }
+  }
+
   return true;
 }

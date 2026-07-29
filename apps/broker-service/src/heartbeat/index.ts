@@ -4,9 +4,9 @@ import {
   getHarvesterRunCompletionSigner,
 } from '@thecointech/harvester-monitoring';
 import type {
-  HarvesterRegistrationRequest,
-  HarvesterRunStartRequest,
-  HarvesterRunCompletionRequest,
+  HarvesterRegistrationRequestSigned,
+  HarvesterRunStartSigned,
+  HarvesterRunCompleteSigned,
 } from '@thecointech/harvester-monitoring';
 import {
   recordHarvesterRegistration as dbRecordHarvesterRegistration,
@@ -14,10 +14,12 @@ import {
   completeHarvesterRun as dbCompleteHarvesterRun,
 } from '@thecointech/broker-db';
 import { assertSigner } from '../assertSigner';
+import { DateTime } from 'luxon';
 
-export async function recordHarvesterRegistration(request: HarvesterRegistrationRequest) {
+export async function recordHarvesterRegistration(request: HarvesterRegistrationRequestSigned) {
   const signer = getHarvesterRegistrationSigner(request);
-  assertSigner(request.user, signer, 'register harvester', request.observedAt);
+  const observedAt = DateTime.fromMillis(request.observedAt);
+  assertSigner(request.user, signer, 'register harvester', observedAt);
 
   return dbRecordHarvesterRegistration(signer, {
     schemaVersion: 1,
@@ -25,13 +27,19 @@ export async function recordHarvesterRegistration(request: HarvesterRegistration
     platform: request.platform,
     architecture: request.architecture,
     action: request.action,
-    observedAt: request.observedAt,
+    observedAt: observedAt,
   });
 }
 
-export async function startHarvesterRun(request: HarvesterRunStartRequest) {
+export async function startHarvesterRun(request: HarvesterRunStartSigned) {
   const signer = getHarvesterRunStartSigner(request);
-  assertSigner(request.user, signer, 'start harvester run', request.startedAt);
+  const startedAt = DateTime.fromMillis(request.startedAt);
+
+  assertSigner(request.user, signer, 'start harvester run', startedAt);
+
+  const startedAtClient = (request.startedAtClient !== undefined)
+    ? DateTime.fromMillis(request.startedAtClient)
+    : undefined;
 
   return dbStartHarvesterRun(signer, {
     installationId: request.installationId,
@@ -39,19 +47,26 @@ export async function startHarvesterRun(request: HarvesterRunStartRequest) {
     architecture: request.architecture,
     appVersion: request.appVersion,
     trigger: request.trigger,
-    startedAt: request.startedAt,
-    startedAtClient: request.startedAtClient,
+    startedAt,
+    startedAtClient,
   });
 }
 
-export async function completeHarvesterRun(request: HarvesterRunCompletionRequest) {
+export async function completeHarvesterRun(request: HarvesterRunCompleteSigned) {
   const signer = getHarvesterRunCompletionSigner(request);
-  assertSigner(request.user, signer, 'complete harvester run', request.finishedAt);
+
+  const finishedAt = DateTime.fromMillis(request.finishedAt);
+
+  assertSigner(request.user, signer, 'complete harvester run', finishedAt);
+
+  const finishedAtClient = (request.finishedAtClient !== undefined)
+    ? DateTime.fromMillis(request.finishedAtClient)
+    : undefined;
 
   return dbCompleteHarvesterRun(signer, request.installationId, request.runId, {
     outcome: request.outcome,
-    finishedAt: request.finishedAt,
-    finishedAtClient: request.finishedAtClient,
+    finishedAt,
+    finishedAtClient,
     failureStages: request.failureStages,
     failureCategory: request.failureCategory,
     terminalSource: request.terminalSource,

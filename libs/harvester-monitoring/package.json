@@ -23,8 +23,20 @@
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
-  "types": "./build/index.d.ts",
+  "exports": {
+    ".": "./build/index.js",
+    "./types": "./src/types.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "types": [
+        "src/types.ts"
+      ],
+      "*": [
+        "build/*.d.ts"
+      ]
+    }
+  },
   "dependencies": {
     "@thecointech/utilities": "^0.6.5",
     "ethers": "6.15.0",
