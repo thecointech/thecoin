@@ -65,7 +65,7 @@ export async function monitorHarvest() {
     : "";
   await SendMail(
     `${prefix}Harvester Monitor: ${unhealthy.length} installation(s) not reporting success`,
-    `There were ${healthy.length} healthy installations and ${unhealthy.length} unhealthy installations.\n\n`
+    `There were ${healthy.length} healthy installations and ${unhealthy.length} unhealthy installations in a total of ${installations.length} installations.\n\n`
       + `The following harvester installations have not had a successful (or skipped) run in the past week:\n\n${lines.join("\n")}`
   );
 
