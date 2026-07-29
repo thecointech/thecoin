@@ -42,6 +42,7 @@ jest.unstable_mockModule('./config', () => ({
     payee: 'payee',
     accountNumber: "12345"
   }),
+  getOrCreateInstallationId: jest.fn(() => "test-installation-id"),
 }));
 
 it ('runs the full stack', async () => {

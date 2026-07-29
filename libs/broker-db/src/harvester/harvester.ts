@@ -200,7 +200,10 @@ export async function completeHarvesterRun(address: string, installationId: stri
   const runDoc = getHarvesterRunDoc(address, installationId, runId);
 
   return db.runTransaction(async transaction => {
-    const runSnapshot = await transaction.get(toAdminRef(runDoc));
+    const [runSnapshot, statusSnapshot] = await Promise.all([
+      transaction.get(toAdminRef(runDoc)),
+      transaction.get(toAdminRef(statusDoc)),
+    ]);
     const run = runSnapshot.data();
     if (!run) {
       throw new Error(`Harvester run ${runId} does not exist`);
@@ -219,18 +222,26 @@ export async function completeHarvesterRun(address: string, installationId: stri
       ...completion,
       durationMs: completion.finishedAt.toMillis() - run.startedAt.toMillis(),
     };
-    const healthy = completion.outcome === "succeeded" || completion.outcome === "skipped";
-    const statusUpdate: Partial<HarvesterStatus> = {
-      lastFinishedAt: completion.finishedAt,
-      lastOutcome: completion.outcome,
-      ...(healthy ? { lastHealthyAt: completion.finishedAt } : {
-        lastFailureAt: completion.finishedAt,
-        ...(completion.failureStages !== undefined ? { lastFailureStages: completion.failureStages } : {}),
-      }),
-    };
 
     transaction.set(toAdminRef(runDoc), completedRun, { merge: true });
-    transaction.set(toAdminRef(statusDoc), statusUpdate, { merge: true });
+
+    // A newer run may have already started (and become `lastRunId`) while
+    // this one was still outstanding. In that case, don't let this stale
+    // completion clobber the status doc with older data.
+    const status = statusSnapshot.data();
+    if (status?.lastRunId === runId) {
+      const healthy = completion.outcome === "succeeded" || completion.outcome === "skipped";
+      const statusUpdate: Partial<HarvesterStatus> = {
+        lastFinishedAt: completion.finishedAt,
+        lastOutcome: completion.outcome,
+        ...(healthy ? { lastHealthyAt: completion.finishedAt } : {
+          lastFailureAt: completion.finishedAt,
+          ...(completion.failureStages !== undefined ? { lastFailureStages: completion.failureStages } : {}),
+        }),
+      };
+      transaction.set(toAdminRef(statusDoc), statusUpdate, { merge: true });
+    }
+
     return {
       ...run,
       ...completedRun,

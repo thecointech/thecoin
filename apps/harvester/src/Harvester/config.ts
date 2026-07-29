@@ -111,7 +111,7 @@ export async function setHarvestConfig(config: Partial<HarvestConfig>) {
     const wallet = await getWallet();
     if (wallet) {
       const installationId = await getOrCreateInstallationId();
-      optIntoMonitoring(wallet, installationId);
+      await optIntoMonitoring(wallet, installationId);
     }
   }
 

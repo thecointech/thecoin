@@ -7,9 +7,15 @@ import { DateTime } from "luxon";
 const OneWeek = 7 * 24 * 60 * 60 * 1000;
 const HarvesterMonitorLastCheckKey = "harvester.monitor.lastCheck";
 
-const MonitorReportPeriod = process.env.HARVESTER_MONITOR_REPORT_PERIOD
-  ? parseInt(process.env.HARVESTER_MONITOR_REPORT_PERIOD)
-  : OneWeek;
+const configuredPeriod = Number(process.env.HARVESTER_MONITOR_REPORT_PERIOD);
+const MonitorReportPeriod =
+  Number.isFinite(configuredPeriod) && configuredPeriod > 0
+    ? configuredPeriod
+    : OneWeek;
+
+// const MonitorReportPeriod = process.env.HARVESTER_MONITOR_REPORT_PERIOD
+//   ? parseInt(process.env.HARVESTER_MONITOR_REPORT_PERIOD)
+//   : OneWeek;
 
 // Weekly watchdog: if at least one run succeeded (or was legitimately
 // skipped) for an installation in the past week, it's considered healthy.
@@ -18,8 +24,9 @@ const MonitorReportPeriod = process.env.HARVESTER_MONITOR_REPORT_PERIOD
 // (once wired up) cover anything more time-sensitive.
 export async function monitorHarvest() {
   const lastCheck = await ConfigStore.get(HarvesterMonitorLastCheckKey);
-  if (lastCheck && Number(lastCheck) > Date.now() - MonitorReportPeriod) {
-    log.debug({ lastCheck: DateTime.fromMillis(Number(lastCheck)).toSQL() }, "Harvester monitor skipped: last run {lastCheck}");
+  const lastCheckMs = lastCheck ? Number(lastCheck) : NaN;
+  if (Number.isFinite(lastCheckMs) && lastCheckMs > Date.now() - MonitorReportPeriod) {
+    log.debug({ lastCheck: DateTime.fromMillis(lastCheckMs).toSQL() }, "Harvester monitor skipped: last run {lastCheck}");
     return;
   }
 

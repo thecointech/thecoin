@@ -1,4 +1,4 @@
-import { solidityPackedKeccak256, verifyMessage, getBytes, type Signer } from "ethers";
+import { AbiCoder, keccak256, verifyMessage, getBytes, type Signer } from "ethers";
 import { sign } from "@thecointech/utilities/SignedMessages";
 import type {
   HarvesterRegistrationRequest,
@@ -6,11 +6,19 @@ import type {
   HarvesterRegistrationRequestDTO,
 } from "./types";
 
+const abiCoder = AbiCoder.defaultAbiCoder();
 
 //
 // Registration
+//
+// Uses standard (non-packed) ABI encoding rather than solidityPacked*: packed
+// encoding concatenates dynamic strings with no length prefix or delimiter,
+// so adjacent string fields can collide across different field splits (e.g.
+// installationId="ab"+platform="c" packs identically to installationId="a"+
+// platform="bc"). Standard encoding includes offsets/lengths for dynamic
+// types, preserving field boundaries unambiguously.
 function getRegistrationBuffer(request: HarvesterRegistrationRequestDTO) {
-  const hash = solidityPackedKeccak256(
+  const encoded = abiCoder.encode(
     ["string", "string", "string", "string", "uint256"],
     [
       request.installationId,
@@ -20,7 +28,7 @@ function getRegistrationBuffer(request: HarvesterRegistrationRequestDTO) {
       request.observedAt,
     ]
   );
-  return getBytes(hash);
+  return getBytes(keccak256(encoded));
 }
 
 export async function signHarvesterRegistrationRequest(

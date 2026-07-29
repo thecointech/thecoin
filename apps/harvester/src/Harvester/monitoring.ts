@@ -11,19 +11,18 @@ import { DateTime } from 'luxon';
 import type { Signer } from 'ethers';
 
 export async function optIntoMonitoring(signer: Signer, installationId: string) {
-  const serverTimestamp = await GetStatusApi().timestamp();
-  const request = await signHarvesterRegistrationRequest(
-    signer,
-    {
-      observedAt: DateTime.fromMillis(serverTimestamp.data),
-      action: "notifyAll",
-      installationId,
-      architecture: process.arch,
-      platform: process.platform,
-    }
-  );
-
   try {
+    const serverTimestamp = await GetStatusApi().timestamp();
+    const request = await signHarvesterRegistrationRequest(
+      signer,
+      {
+        observedAt: DateTime.fromMillis(serverTimestamp.data),
+        action: "notifyAll",
+        installationId,
+        architecture: process.arch,
+        platform: process.platform,
+      }
+    );
     const r = await GetHarvesterApi().register(request);
     console.log('Monitoring registration successful:', r.data);
   }

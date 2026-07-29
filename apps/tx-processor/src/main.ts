@@ -16,7 +16,6 @@ async function Process() {
   await verifyBank(bank);
   await processTransfers(contract, bank);
   await processReferrals();
-  await monitorHarvest();
 
   log.debug('Completed processing');
 }
@@ -32,6 +31,16 @@ async function run() {
     log.fatal(e);
     exitCode = 1;
   } finally {
+
+    // Always try to run monitoring, it doesn't matter if it fails,
+    // but we want it to occur if possible, even if the
+    // the processing fails.
+    try {
+      await monitorHarvest();
+    } catch (e) {
+      log.error(e, 'Failed to monitor harvest');
+    }
+
     try {
       await release();
     }

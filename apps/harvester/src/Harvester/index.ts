@@ -25,7 +25,7 @@ export async function harvest(uiCallback?: BackgroundTaskCallback): Promise<Resu
 
   // Set once we have a signer, used to report the run's outcome in `finally` below
   let runId: string | undefined;
-  let signer: Signer | undefined;
+  let signer: Signer | null = null;
   let installationId: string | undefined;
   let outcome: "succeeded" | "skipped" | "failed" = "failed";
   let failureStages: string[] | undefined;
@@ -36,7 +36,7 @@ export async function harvest(uiCallback?: BackgroundTaskCallback): Promise<Resu
     log.info(`Commencing Harvest`);
 
     // Ensure we have a wallet, otherwise we can't run
-    const signer = await getWallet();
+    signer = await getWallet();
     if (!signer) {
       throw new Error('No wallet found');
     }

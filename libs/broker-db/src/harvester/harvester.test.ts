@@ -90,6 +90,58 @@ it("records a completed run and updates current status", async () => {
   expect(runs).toHaveLength(1);
 });
 
+it("does not let a stale run completion clobber status from a newer run", async () => {
+  const registeredAt = DateTime.fromISO("2026-07-27T10:00:00Z");
+  const staleStartedAt = registeredAt.plus({ minutes: 5 });
+  const newStartedAt = staleStartedAt.plus({ minutes: 10 });
+  const newFinishedAt = newStartedAt.plus({ minutes: 2 });
+  const staleFinishedAt = newFinishedAt.plus({ minutes: 1 });
+
+  await recordHarvesterRegistration(address, {
+    schemaVersion: 1,
+    action: "notifyAll",
+    observedAt: registeredAt,
+    installationId,
+  });
+
+  // A run starts but never gets its completion delivered promptly...
+  const staleRun = await startHarvesterRun(address, {
+    installationId,
+    trigger: "scheduled",
+    startedAt: staleStartedAt,
+  });
+
+  // ...meanwhile a newer run starts and completes successfully, becoming lastRunId
+  const newRun = await startHarvesterRun(address, {
+    installationId,
+    trigger: "scheduled",
+    startedAt: newStartedAt,
+  });
+  await completeHarvesterRun(address, installationId, newRun.runId, {
+    outcome: "succeeded",
+    finishedAt: newFinishedAt,
+    terminalSource: "client",
+  });
+
+  // The stale run's completion arrives late (e.g. delayed network request)
+  await completeHarvesterRun(address, installationId, staleRun.runId, {
+    outcome: "failed",
+    finishedAt: staleFinishedAt,
+    terminalSource: "client",
+  });
+
+  // The stale run itself is still recorded accurately...
+  const staleRunDoc = await getHarvesterRun(address, installationId, staleRun.runId);
+  expect(staleRunDoc?.outcome).toBe("failed");
+
+  // ...but status must still reflect the newer, healthy run
+  const status = await getHarvesterStatus(address, installationId);
+  expect(status?.lastRunId).toBe(newRun.runId);
+  expect(status?.lastOutcome).toBe("succeeded");
+  expect(status?.lastFinishedAt).toEqual(newFinishedAt);
+  expect(status?.lastHealthyAt).toEqual(newFinishedAt);
+});
+
 it("does not permit a completed run to change outcome", async () => {
   const registeredAt = DateTime.fromISO("2026-07-27T10:00:00Z");
   const startedAt = registeredAt.plus({ minutes: 5 });
