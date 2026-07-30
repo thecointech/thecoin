@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tx-bill",
-  "version": "0.6.6-test.0",
+  "version": "0.6.6-test.1",
   "description": "The Coin: A library handles bill payments",
   "type": "module",
   "keywords": [
@@ -31,7 +31,7 @@
   "types": "./build/index.d.ts",
   "dependencies": {
     "@thecointech/contract-core": "^0.6.6-test.0",
-    "@thecointech/tx-statemachine": "^0.6.6-test.0"
+    "@thecointech/tx-statemachine": "^0.6.6-test.1"
   },
   "devDependencies": {
     "@thecointech/bank-interface": "^0.6.6-test.0"
