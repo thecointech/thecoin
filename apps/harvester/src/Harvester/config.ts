@@ -6,9 +6,8 @@ import { randomUUID } from 'node:crypto';
 import { getProvider } from '@thecointech/ethers-provider';
 import { rootFolder } from '../paths';
 import { ConfigDatabase } from '@thecointech/store-harvester';
-import type { HarvestConfig, CoinAccount, ConfigShape, CreditDetails } from '@thecointech/store-harvester';
+import { HarvestConfig, CoinAccount, ConfigShape, CreditDetails, HarvestStepType } from '@thecointech/store-harvester';
 import { optIntoMonitoring } from './monitoring';
-
 
 const db = new ConfigDatabase(rootFolder);
 
@@ -60,6 +59,10 @@ export async function getWallet() {
   return null;
 }
 
+export function isDeprecated(type: HarvestStepType): boolean {
+  return type === HarvestStepType.Heartbeat;
+}
+
 export async function hydrateProcessor() {
   const config = await db.get();
   if (!config?.steps) {
@@ -68,6 +71,7 @@ export async function hydrateProcessor() {
 
   const steps = Object.values(config.steps)
     .filter(step => !!step)
+    .filter(step => !isDeprecated(step.type))
     .map(createStep)
 
   return steps;
