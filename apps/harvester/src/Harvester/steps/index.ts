@@ -1,6 +1,5 @@
 import { ProcessingStage } from '../types';
 import { ClearPendingVisa } from './ClearPendingVisa';
-import { Heartbeat } from './Heartbeat';
 import { PayVisa } from './PayVisa';
 import { RoundUp } from './RoundUp';
 import { SendETransfer } from './SendETransfer';
@@ -26,7 +25,6 @@ export const createStep = (step: HarvestStep) : ProcessingStage => {
     case HarvestStepType.PayVisa: return new PayVisa(step.args);
     case HarvestStepType.TopUp: return new TopUp(step.args);
     case HarvestStepType.SendETransfer: return new SendETransfer();
-    case HarvestStepType.Heartbeat: return new Heartbeat();
     default: throw new Error(`Unknown processing step: ${step!.type}`);
   }
 }
