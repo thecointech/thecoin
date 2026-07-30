@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/scraper-types",
-  "version": "0.6.5",
+  "version": "0.6.6-test.0",
   "private": true,
   "type": "module",
   "description": "Base types for scraper, moved here to avoid circular dependencies",
