@@ -2,9 +2,9 @@ import type { ElementSearchParams, FoundElement } from "@thecointech/scraper-typ
 import { getTest } from "./data";
 import { getElementForEvent } from "@thecointech/scraper/elements";
 import { getSnapshot, saveSnapshot } from "@thecointech/scraper-archive";
-import type { OverrideData, OverrideElement, TestData } from "@thecointech/scraper-archive";
-import { getOverrideData, writeOverrideData } from "@thecointech/scraper-archive";
-import { readFileSync } from "node:fs";
+import type { TestData, TestElmData } from "@thecointech/scraper-archive";
+import { writeFileSync } from "node:fs";
+import path from "node:path";
 
 // TODO: De-duplicate this with updateArchive.ts
 export async function updateTest(key: string, element: string) {
@@ -31,7 +31,12 @@ export async function updateTest(key: string, element: string) {
   )
 }
 
-export async function applyOverrideFromSnapshot(test: TestData, element: string): Promise<{ success: boolean, changes: OverrideElement }> {
+export type ApplyResult = {
+  success: boolean;
+  changes: Partial<Pick<TestElmData["data"], "text" | "selector" | "coords">>;
+}
+
+export async function applyOverrideFromSnapshot(test: TestData, element: string): Promise<ApplyResult> {
   // Get the latest snapshot
   const snapshots = test.snapshots(element, 1);
   if (snapshots.length === 0) {
@@ -42,14 +47,14 @@ export async function applyOverrideFromSnapshot(test: TestData, element: string)
   const snapshot = getSnapshot(snapshots[0]);
   const found = snapshot.found;
 
-  // Get the original element data (without overrides)
-  const original = test.elm(element, false);
+  // Get the original element data
+  const original = test.elm(element);
   if (!original) {
     throw new Error(`Element ${element} not found in test ${test.key}`);
   }
 
   // Determine what changed
-  const changes: OverrideElement = {};
+  const changes: ApplyResult["changes"] = {};
   if (found.data.text !== original.data.text) {
     changes.text = found.data.text;
   }
@@ -60,30 +65,19 @@ export async function applyOverrideFromSnapshot(test: TestData, element: string)
     changes.coords = found.data.coords;
   }
 
-  // Get existing overrides
-  const overrideData: OverrideData = getOverrideData();
-
-  // If nothing changed, remove the override
+  // If nothing changed, no action needed
   if (Object.keys(changes).length === 0) {
     return { success: false, changes: {} };
   }
 
-  else {
-    // Initialize overrides structure if needed
-    if (!overrideData.overrides) {
-      overrideData.overrides = {};
-    }
-    if (!overrideData.overrides[test.key]) {
-      overrideData.overrides[test.key] = {};
-    }
-
-    // Apply the override
-    overrideData.overrides[test.key][element] = changes;
-
-    // Save the overrides
-    writeOverrideData(overrideData, true);
-
-    return { success: true, changes };
+  // Find the elm file for this element
+  const elmFile = test.elmFile(element);
+  if (!elmFile) {
+    throw new Error(`Elm file for ${element} not found in test ${test.key}`);
   }
 
+  const elmPath = path.join(test.matchedFolder, elmFile);
+  writeFileSync(elmPath, JSON.stringify(found, null, 2));
+
+  return { success: true, changes };
 }

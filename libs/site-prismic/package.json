@@ -3,7 +3,7 @@
     "productName": "THECoin: Prismic Content Library",
     "private": true,
     "type": "module",
-    "version": "0.5.3",
+    "version": "0.6.5",
     "description": "Prismic Slice Machine library for content management",
     "repository": {
         "type": "git",
@@ -13,45 +13,44 @@
     "license": "GPL-3.0-or-later",
     "scripts": {
         "dev": "run -T run-p start:website start:slicemachine",
-        "build": "run -T run-s build:semantic build:src",
+        "build": "run -T run-s build:semantic build:src build:types",
         "build:src": "next build",
+        "build:types": "run -T tsc -p tsconfig.build.json",
         "build:semantic": "run-env ./internal/buildSemantic.ts",
-        "_start": "next start --port 3010",
-        "start:website": "next dev --port 3010",
+        "_start": "next start --port 3011",
+        "start:website": "next dev --port 3011",
         "start:slicemachine": "start-slicemachine"
     },
     "exports": {
         "./slices": "./src/slices/index.ts",
         "./types": "./prismicio-types.d.ts",
-        "./client": "./src/prismicio.ts",
         "./components": "./src/components/index.ts"
     },
     "typesVersions": {
         "*": {
             "slices": [
-                "src/slices/index.ts"
+                "build/slices/index.d.ts"
             ],
             "types": [
                 "prismicio-types.d.ts"
             ],
-            "client": [
-                "src/prismicio.ts"
-            ],
             "components": [
-                "src/components/index.ts"
+                "build/components/index.d.ts"
             ]
         }
     },
     "dependencies": {
         "@prismicio/client": "^7.21.0",
-        "semantic-ui-react": "3.0.0-beta.2"
+        "semantic-ui-react": "3.0.0-beta.2",
+        "uuid": "^9.0.0"
     },
     "devDependencies": {
         "@prismicio/next": "^2.2.1",
         "@prismicio/react": "^3.3.0",
         "@slicemachine/adapter-next": "^0.3.95",
-        "@thecointech/setenv": "^0.5.3",
-        "@thecointech/site-semantic-theme": "^0.5.3",
+        "@thecointech/setenv": "^0.6.5",
+        "@thecointech/site-semantic-theme": "^0.6.5",
+        "@types/uuid": "^9.0.0",
         "glob": "^13.0.0",
         "next": "^16.0.8",
         "slice-machine-ui": "^2.20.2"

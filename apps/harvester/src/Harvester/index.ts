@@ -2,6 +2,8 @@ import { setCurrentState } from './state';
 import { log } from '@thecointech/logging';
 import { processState } from './processState';
 import { initialize } from './initialize';
+import { getOrCreateInstallationId, getWallet } from './config';
+import { reportRunStart, reportRunComplete } from './monitoring';
 import { closeBrowser } from '@thecointech/scraper/puppeteer';
 import { DateTime } from 'luxon';
 import { getDataAsDate, HarvestData } from './types';
@@ -9,6 +11,7 @@ import { PayVisaKey } from './steps/PayVisa';
 import { notifyError } from '@/notify';
 import { HarvesterReplayCallbacks } from './replay/replayCallbacks';
 import { BackgroundTaskCallback, getErrorMessage } from '@/BackgroundTask';
+import type { Signer } from 'ethers';
 
 type Result = "success" | "error" | "skip";
 export async function harvest(uiCallback?: BackgroundTaskCallback): Promise<Result> {
@@ -17,29 +20,52 @@ export async function harvest(uiCallback?: BackgroundTaskCallback): Promise<Resu
     uiCallback,
     timestamp: Date.now(),
     taskType: "replay",
-    sections: ["chqBalance", "visaBalance", "chqETransfer"],
+    sections: ["chqETransfer"],
   });
+
+  // Set once we have a signer, used to report the run's outcome in `finally` below
+  let runId: string | undefined;
+  let signer: Signer | null = null;
+  let installationId: string | undefined;
+  let outcome: "succeeded" | "skipped" | "failed" = "failed";
+  let failureStages: string[] | undefined;
+  let failureCategory: string | undefined;
 
   try {
 
     log.info(`Commencing Harvest`);
 
-    const { stages, state, user } = await initialize(callback);
+    // Ensure we have a wallet, otherwise we can't run
+    signer = await getWallet();
+    if (!signer) {
+      throw new Error('No wallet found');
+    }
+
+    try {
+      installationId = await getOrCreateInstallationId();
+      runId = await reportRunStart(signer, installationId, uiCallback ? "manual" : "scheduled");
+    } catch (error) {
+      log.error(`Failed to report run start: ${getErrorMessage(error)}`);
+      // do -NOT- fail for monitoring, we can still run the harvest
+    }
+
+    const { stages, state, user } = await initialize(callback, signer);
 
     log.info(`Resume from last: harvesterBalance ${state.state.harvesterBalance}`);
 
     // Sanity check - If we have have not run prior
     if (shouldSkipHarvest(state)) {
+      outcome = "skipped";
       return "skip";
     }
 
     const nextState = await processState(stages, state, user);
 
     if (nextState.errors) {
-      const errorSteps = Object.keys(nextState.errors).join(', ');
+      failureStages = Object.keys(nextState.errors);
       await notifyError({
         title: 'Harvester Error',
-        message: `Something went wrong in steps: ${errorSteps}.  Please contact support.`,
+        message: `Something went wrong in steps: ${failureStages.join(', ')}.  Please contact support.`,
       });
     }
 
@@ -51,6 +77,8 @@ export async function harvest(uiCallback?: BackgroundTaskCallback): Promise<Resu
     callback.complete({
       result: "success",
     });
+    outcome = failureStages ? "failed" : "succeeded";
+    failureCategory = failureStages ? "step failure" : undefined;
     return "success";
   }
   catch (err: unknown) {
@@ -61,13 +89,21 @@ export async function harvest(uiCallback?: BackgroundTaskCallback): Promise<Resu
       log.fatal(`Error in harvest: ${err}`);
     }
 
+    const error = getErrorMessage(err);
     callback.complete({
-      error: getErrorMessage(err),
+      error,
     })
 
+    outcome = "failed";
+    failureCategory = error;
+    failureStages = callback.lastErrorSection ? [callback.lastErrorSection] : undefined;
+
+    const sectionInfo = callback.lastErrorSection
+      ? ` (section: ${callback.lastErrorSection})`
+      : '';
     await notifyError({
       title: 'Harvester Error',
-      message: `Harvesting failed.  Please contact support.`,
+      message: `Harvesting failed${sectionInfo}.\n${error}\nPlease contact support.`,
       // TODO: Re-enable buttons (this currently hangs on linux)
       // actions: ["Start App"],
     })
@@ -78,6 +114,18 @@ export async function harvest(uiCallback?: BackgroundTaskCallback): Promise<Resu
     return "error";
   }
   finally {
+    if (signer && installationId && runId) {
+      try {
+        await reportRunComplete(signer, installationId, runId, outcome, { failureStages, failureCategory });
+      }
+      catch (e) {
+        log.error(e, "Failed to report run completion");
+        notifyError({
+          title: 'Harvester Monitoring Error',
+          message: `Harvest ran, but failed to report run completion.\nPlease contact support.`,
+        });
+      }
+    }
     await closeBrowser();
   }
 }

@@ -3,6 +3,94 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+
+
+**Note:** Version bump only for package @thecointech/scraper-types
+
+
+
+
+
+## [0.6.5-test.0](https://github.com/thecointech/thecoin/compare/v0.6.4...v0.6.5-test.0) (2026-07-23)
+
+**Note:** Version bump only for package @thecointech/scraper-types
+
+
+
+
+
+## [0.6.4](https://github.com/thecointech/thecoin/compare/v0.6.4-test.1...v0.6.4) (2026-07-22)
+
+**Note:** Version bump only for package @thecointech/scraper-types
+
+
+
+
+
+## [0.6.4-test.0](https://github.com/thecointech/thecoin/compare/v0.6.3...v0.6.4-test.0) (2026-07-01)
+
+**Note:** Version bump only for package @thecointech/scraper-types
+
+
+
+
+
+## [0.6.3](https://github.com/thecointech/thecoin/compare/v0.6.3-test.0...v0.6.3) (2026-05-05)
+
+**Note:** Version bump only for package @thecointech/scraper-types
+
+
+
+
+
+## [0.6.3-test.0](https://github.com/thecointech/thecoin/compare/v0.6.2...v0.6.3-test.0) (2026-05-03)
+
+**Note:** Version bump only for package @thecointech/scraper-types
+
+
+
+
+
+## [0.6.2](https://github.com/thecointech/thecoin/compare/v0.6.2-test.0...v0.6.2) (2026-04-29)
+
+**Note:** Version bump only for package @thecointech/scraper-types
+
+
+
+
+
+## [0.6.2-test.0](https://github.com/thecointech/thecoin/compare/v0.6.1...v0.6.2-test.0) (2026-04-28)
+
+**Note:** Version bump only for package @thecointech/scraper-types
+
+
+
+
+
+## [0.6.1](https://github.com/thecointech/thecoin/compare/v0.6.1-test.1...v0.6.1) (2026-04-15)
+
+**Note:** Version bump only for package @thecointech/scraper-types
+
+
+
+
+
+## [0.6.1-test.0](https://github.com/thecointech/thecoin/compare/v0.6.0...v0.6.1-test.0) (2026-04-15)
+
+**Note:** Version bump only for package @thecointech/scraper-types
+
+
+
+
+
+
+
+**Note:** Version bump only for package @thecointech/scraper-types
+
+
+
+
+
 # [0.5.0](https://github.com/thecointech/thecoin/compare/v0.5.0-test.0...v0.5.0) (2025-11-26)
 
 **Note:** Version bump only for package @thecointech/scraper-types

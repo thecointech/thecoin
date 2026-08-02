@@ -1,22 +1,22 @@
 import { maybeCloseModal } from "@thecointech/scraper-agent/modal";
-import { notify } from "@/notify";
+import { notify, notifyError } from "@/notify";
 import { TimeoutError } from "puppeteer";
-import type { ReplayErrorParams } from "@thecointech/scraper";
+import type { AnyEvent, ReplayErrorParams } from "@thecointech/scraper";
 import type { EventSection } from "@thecointech/scraper-agent/types";
 import { ElementNotFoundError } from "@thecointech/scraper";
 import { log } from "@thecointech/logging";
 import { handleTwoFA } from "./twofa";
-import { isPageInSection, findSectionByEvent } from "./utils";
+import { isPageInSection, findSectionByEvent, findSectionByName, isInteractionEvent } from "./utils";
 
 export async function replayErrorHandling({replay, err, event}: ReplayErrorParams, root: EventSection): Promise<number|undefined> {
   const section = findSectionByEvent(event, root);
   if (!section) {
     // This should never happen
-    log.error({event: event, err: err}, "Failed to find section for event");
+    log.error({event: event, err: err}, `Failed to find section ${event.section} for event`);
     return undefined;
   }
 
-  log.info("Running replay error callback");
+  log.info(`Running replay error callback for section: ${section.section}`);
 
   // Major issues on replay:
   // - Modal
@@ -24,14 +24,30 @@ export async function replayErrorHandling({replay, err, event}: ReplayErrorParam
   // - Unknown redirect
   const { page, events } = replay;
 
-  if (err instanceof ElementNotFoundError) {
-    log.info("Testing for 2FA page");
-    // On failed 2FA, we think we're in AccountSummary
-    // but we are actually on the TwoFA page.
-    const inTwoFA = await isPageInSection(page, root, "TwoFA");
-    if (inTwoFA) {
-      log.info("Page is in TwoFA section");
-      return await handleTwoFA(page, events, root, replay, inTwoFA.section);
+  const lastEvent = findLastInteraction(events, event);
+  log.info({section: lastEvent?.section ?? "NOT FOUND"}, "Last interaction section: {section}");
+
+  // 2FA can interrupt login: either an element is not found because we
+  // landed on the TwoFA page, or a navigation out of Login times out.
+  // If our last interaction was within a login, (or undefined,
+  // as a failsafe) check for 2FA page and handle if found.
+  if (!lastEvent?.section || lastEvent.section === "Login") {
+    if (err instanceof ElementNotFoundError || err instanceof TimeoutError) {
+      const twoFaSection = findSectionByName("TwoFA", root);
+      if (!twoFaSection) {
+        notifyError({
+          title: "2FA Section Missing",
+          message: "A login/navigation error occurred that may be due to 2FA, but the original recording does not include a TwoFA section. Please re-record with 2FA enabled.",
+        });
+      }
+      else {
+        log.info("Testing for 2FA page");
+        const inTwoFA = await isPageInSection(page, root, "TwoFA");
+        if (inTwoFA) {
+          log.info("Page is in TwoFA section");
+          return await handleTwoFA(page, events, root, replay, inTwoFA.section);
+        }
+      }
     }
   }
 
@@ -48,7 +64,11 @@ export async function replayErrorHandling({replay, err, event}: ReplayErrorParam
           message: "Closed Modal on page: " + page.url(),
         })
       }
-      // Re-run this event.
+      // Re-run this event.  Defensively check by ID, then by reference in case ID's are missing
+      const index = events.findIndex(e => e.id === event.id);
+      if (index !== -1) {
+        return index;
+      }
       return events.indexOf(event);
     }
   }
@@ -64,4 +84,18 @@ export async function replayErrorHandling({replay, err, event}: ReplayErrorParam
 
   // No way to handle this error
   return undefined;
+}
+
+
+export function findLastInteraction(events: AnyEvent[], event: AnyEvent): AnyEvent | undefined {
+  if (!event.id) {
+    log.warn("Event has no ID, cannot find last interaction");
+    return undefined
+  }
+  let index = events.findIndex(e => e.id == event.id);
+  if (index < 0) {
+    log.warn({id: event.id}, "Could not find event {id} in events array");
+    return undefined;
+  }
+  return events.slice(0, index).findLast(isInteractionEvent);
 }

@@ -11,11 +11,11 @@ const title = defineMessage({
   description: 'site.homepage.landscape.title: The title for the homepage'
 });
 const description1 = defineMessage({
-  defaultMessage: 'If reducing CO2 was profitable,',
+  defaultMessage: "We don't ask you to care more.",
   description: 'home page tagline part1'
 });
 const description2 = defineMessage({
-  defaultMessage: 'Would the climate crisis still be a crisis?',
+  defaultMessage: "We just make sure caring pays.",
   description: 'home page tagline part2'
 });
 const button = defineMessage({

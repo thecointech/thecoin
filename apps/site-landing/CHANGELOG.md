@@ -3,6 +3,154 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+
+
+**Note:** Version bump only for package @thecointech/site-landing
+
+
+
+
+
+## [0.6.5-test.0](https://github.com/thecointech/thecoin/compare/v0.6.4...v0.6.5-test.0) (2026-07-23)
+
+**Note:** Version bump only for package @thecointech/site-landing
+
+
+
+
+
+## [0.6.4](https://github.com/thecointech/thecoin/compare/v0.6.4-test.1...v0.6.4) (2026-07-22)
+
+**Note:** Version bump only for package @thecointech/site-landing
+
+
+
+
+
+## [0.6.4-test.1](https://github.com/thecointech/thecoin/compare/v0.6.4-test.0...v0.6.4-test.1) (2026-07-01)
+
+**Note:** Version bump only for package @thecointech/site-landing
+
+
+
+
+
+## [0.6.4-test.0](https://github.com/thecointech/thecoin/compare/v0.6.3...v0.6.4-test.0) (2026-07-01)
+
+
+### Bug Fixes
+
+* when loading a blog page directly, try and find the index before doing the redirect ([9292201](https://github.com/thecointech/thecoin/commit/929220153ca47c8a43774d8c15b2e727d5c40049))
+
+
+
+
+
+## [0.6.3](https://github.com/thecointech/thecoin/compare/v0.6.3-test.0...v0.6.3) (2026-05-05)
+
+**Note:** Version bump only for package @thecointech/site-landing
+
+
+
+
+
+## [0.6.3-test.0](https://github.com/thecointech/thecoin/compare/v0.6.2...v0.6.3-test.0) (2026-05-03)
+
+
+### Bug Fixes
+
+* build article posts to enable social previews ([b174965](https://github.com/thecointech/thecoin/commit/b17496536e007a5caae124a151ef6ec05121e6d9))
+* intermittent article scrolling behaviour, force always scroll to top when a new article is mounted. ([79e481b](https://github.com/thecointech/thecoin/commit/79e481b8f64dbeb423793d58fc30fb7ae13b246a))
+* loading page while waiting for article data ([bc7ef8d](https://github.com/thecointech/thecoin/commit/bc7ef8d52f991465ba2324861bef56eeef70324a))
+* prismic internal links ([54c5a3e](https://github.com/thecointech/thecoin/commit/54c5a3e8ad8c8686da7ee69e29e6e5185a0c86dd))
+
+
+
+
+
+## [0.6.2](https://github.com/thecointech/thecoin/compare/v0.6.2-test.0...v0.6.2) (2026-04-29)
+
+**Note:** Version bump only for package @thecointech/site-landing
+
+
+
+
+
+## [0.6.2-test.0](https://github.com/thecointech/thecoin/compare/v0.6.1...v0.6.2-test.0) (2026-04-28)
+
+**Note:** Version bump only for package @thecointech/site-landing
+
+
+
+
+
+## [0.6.1](https://github.com/thecointech/thecoin/compare/v0.6.1-test.1...v0.6.1) (2026-04-15)
+
+**Note:** Version bump only for package @thecointech/site-landing
+
+
+
+
+
+## [0.6.1-test.1](https://github.com/thecointech/thecoin/compare/v0.6.1-test.0...v0.6.1-test.1) (2026-04-15)
+
+**Note:** Version bump only for package @thecointech/site-landing
+
+
+
+
+
+## [0.6.1-test.0](https://github.com/thecointech/thecoin/compare/v0.6.0...v0.6.1-test.0) (2026-04-15)
+
+**Note:** Version bump only for package @thecointech/site-landing
+
+
+
+
+
+
+
+**Note:** Version bump only for package @thecointech/site-landing
+
+
+
+
+
+# [0.6.0-test.0](https://github.com/thecointech/thecoin/compare/v0.5.4-test.2...v0.6.0-test.0) (2026-03-31)
+
+**Note:** Version bump only for package @thecointech/site-landing
+
+
+
+
+
+## [0.5.4-test.2](https://github.com/thecointech/thecoin/compare/v0.5.4-test.1...v0.5.4-test.2) (2026-02-26)
+
+**Note:** Version bump only for package @thecointech/site-landing
+
+
+
+
+
+## [0.5.4-test.1](https://github.com/thecointech/thecoin/compare/v0.5.4-test.0...v0.5.4-test.1) (2026-02-25)
+
+**Note:** Version bump only for package @thecointech/site-landing
+
+
+
+
+
+## [0.5.4-test.0](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.4-test.0) (2026-02-25)
+
+
+### Reverts
+
+* Revert "chore(release): publish v0.5.3" ([69528b5](https://github.com/thecointech/thecoin/commit/69528b54d7e69bc85a1d65fcbd7ffaebff462d91))
+
+
+
+
+
 ## [0.5.3](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.3) (2026-02-20)
 
 

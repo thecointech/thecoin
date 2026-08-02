@@ -52,22 +52,44 @@ jobs:
     outputs:
       commit: ${{ steps.graduate-packages.outputs.commit }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: corepack enable
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '22.19'
-          cache: 'yarn'
+          node-version: '24'
 
       - name: Configure Git
         run: |
           git config user.name 'GitHub Actions Bot'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+      # Lerna refuses to run on a detached HEAD (ENOGIT).
+      # Check out the release branch that this tag lives on.
+      - name: Checkout release branch
+        run: |
+          TAG="${{ github.ref_name }}"
+          RELEASE_BRANCH="release/${TAG}"
+          if ! git rev-parse --verify "origin/${RELEASE_BRANCH}" >/dev/null 2>&1; then
+            echo "❌ Expected branch ${RELEASE_BRANCH} not found"
+            echo "Stable tags should be created on a release branch"
+            exit 1
+          fi
+
+          TAG_COMMIT=$(git rev-list -n 1 "$TAG")
+          BRANCH_HEAD=$(git rev-parse "origin/${RELEASE_BRANCH}")
+          if [ "$TAG_COMMIT" != "$BRANCH_HEAD" ]; then
+            echo "❌ Release branch HEAD ($BRANCH_HEAD) differs from tag commit ($TAG_COMMIT)"
+            echo "The tag and release branch should point to the same commit"
+            exit 1
+          fi
+
+          git checkout "${RELEASE_BRANCH}"
+          echo "✅ Checked out ${RELEASE_BRANCH} at ${TAG_COMMIT}"
 
       - name: Install dependencies
         run: yarn install --mode=skip-build
@@ -82,11 +104,10 @@ jobs:
           echo "🎓 Processing stable tag $STABLE_TAG"
 
           # Check if any packages have test versions (more reliable than tag searching)
-          if git grep -q "\"version\":.*\"-test\." -- "**/package.json"; then
+          if git grep -q -e '"version":.*-test\.' -- '**/package.json'; then
             echo "📌 Found test versions in packages, graduating to stable"
 
-            # Get commit the tag currently points to
-            ORIGINAL_COMMIT=$(git rev-list -n 1 "$STABLE_TAG")
+            RELEASE_BRANCH="release/${STABLE_TAG}"
 
             # Graduate packages (removes prerelease suffix) from current state
             yarn lerna version --conventional-graduate --yes --no-git-tag-version
@@ -126,40 +147,9 @@ jobs:
             # Get the new graduated commit SHA
             GRADUATED_COMMIT=$(git rev-list -n 1 "$STABLE_TAG")
 
-            # Find all branches whose HEAD was exactly at the original tag commit
-            echo "🔍 Finding branches whose HEAD was at original commit $ORIGINAL_COMMIT"
-
-            # Get all remote branches where HEAD is exactly the original commit
-            BRANCHES=$(git for-each-ref --format='%(refname:short) %(objectname)' refs/remotes/origin/ \
-              | grep "^origin/.* $ORIGINAL_COMMIT$" \
-              | sed 's/^origin\///' \
-              | cut -d' ' -f1)
-
-            if [ -n "$BRANCHES" ]; then
-              echo "📋 Advancing branches to new graduated commit $GRADUATED_COMMIT:"
-              echo "$BRANCHES"
-
-              # Advance each branch to the new commit using atomic force-with-lease
-              for BRANCH in $BRANCHES; do
-                echo "🔄 Advancing $BRANCH to new commit"
-
-                # Use force-with-lease to ensure we're pushing over the expected commit atomically
-                if ! git push --force-with-lease="refs/heads/$BRANCH:$ORIGINAL_COMMIT" origin "$GRADUATED_COMMIT:$BRANCH"; then
-                  echo "❌ Failed to advance $BRANCH - it may have been modified since tag creation"
-                  echo "Expected: $ORIGINAL_COMMIT"
-                  echo "Please check if $BRANCH has been updated and retry the deployment"
-                  exit 1
-                fi
-
-                echo "✅ Advanced $BRANCH to $GRADUATED_COMMIT"
-              done
-            else
-              echo "⚠️ No branches found with HEAD at original commit, pushing to main as fallback"
-              git push origin "$GRADUATED_COMMIT:main"
-            fi
-
-            # Push the updated tag with safe force push
-            git push --force-with-lease origin "$STABLE_TAG"
+            # Push the release branch and updated tag
+            git push origin "$RELEASE_BRANCH"
+            git push --force origin "refs/tags/$STABLE_TAG"
 
             # Output the graduated commit for other jobs
             echo "commit=$GRADUATED_COMMIT" >> "$GITHUB_OUTPUT"
@@ -197,19 +187,19 @@ jobs:
           echo "✅ Authoritative commit resolved: $COMMIT"
 
   update-metadata:
-    if: needs.normalize-commit.result == 'success'
-    needs: [determine-environment, graduate-packages, normalize-commit]
+    if: ${{ !cancelled() && !failure() && needs.normalize-commit.result == 'success' }}
+    needs: [determine-environment, normalize-commit]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ needs.normalize-commit.outputs.commit }}
 
       - run: corepack enable
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '22.19'
+          node-version: '24'
 
       - name: Update deployment metadata for this environment
         run: |
@@ -219,21 +209,23 @@ jobs:
           echo "Updated to version $(grep TC_APP_VERSION environments/common.public.env | cut -d'"' -f2) at $(grep TC_DEPLOYED_AT environments/common.public.env | cut -d'"' -f2)"
 
       - name: Upload updated metadata
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: deployment-metadata
           path: environments/common.public.env
 
   build:
-    if: ${{ needs.normalize-commit.result == 'success' }}
+    if: ${{ !cancelled() && !failure() && needs.normalize-commit.result == 'success' }}
     needs: [determine-environment, update-metadata, normalize-commit]
     uses: ./.github/workflows/action-build.yml
+    secrets: inherit
     with:
       DOWNLOAD_METADATA: true
+      CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
       COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
 
   test:
-    if: ${{ needs.normalize-commit.result == 'success' }}
+    if: ${{ !cancelled() && !failure() && needs.normalize-commit.result == 'success' }}
     needs: [build, normalize-commit]
     uses: ./.github/workflows/action-test.yml
     with:
@@ -241,7 +233,7 @@ jobs:
 
   # Publish packages only for test tags (initial publish)
   publish-packages-test:
-    if: contains(github.ref_name, '-test.') && needs.normalize-commit.result == 'success'
+    if: ${{ !cancelled() && !failure() && contains(github.ref_name, '-test.') && needs.normalize-commit.result == 'success' }}
     needs: [test, normalize-commit]
     permissions:
       packages: write
@@ -251,7 +243,7 @@ jobs:
 
   # Graduate packages for production tags
   publish-packages-prod:
-    if: needs.determine-environment.outputs.is_prerelease == 'false' && needs.normalize-commit.result == 'success'
+    if: ${{ !cancelled() && !failure() && needs.determine-environment.outputs.is_prerelease == 'false' && needs.normalize-commit.result == 'success' }}
     needs: [test, determine-environment, normalize-commit]
     permissions:
       packages: write
@@ -310,7 +302,7 @@ jobs:
     with:
       CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
       COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
-      IS_PROMOTION: ${{ !contains(github.ref_name, '-test.') }}
+      IS_PROMOTION: ${{ needs.determine-environment.outputs.environment != 'prodtest' }}
 
   publish-services:
     needs: [wait-for-packages, determine-environment, normalize-commit]
@@ -333,13 +325,14 @@ jobs:
       COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
 
   smoke-tests:
-    needs: [publish-services, publish-sites, determine-environment]
+    needs: [publish-services, publish-sites, determine-environment, normalize-commit]
     # Explicit condition needed because publish-services/publish-sites use if: always()
     if: ${{ always() && !cancelled() && !failure() }}
     uses: ./.github/workflows/action-smoke-tests.yml
     secrets: inherit
     with:
       CONFIG_NAME: ${{ needs.determine-environment.outputs.environment }}
+      COMMIT_SHA: ${{ needs.normalize-commit.outputs.commit }}
 
   notify-success:
     needs: [smoke-tests, determine-environment, normalize-commit]

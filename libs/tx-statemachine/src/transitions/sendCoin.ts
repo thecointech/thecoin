@@ -1,12 +1,10 @@
 import { log } from "@thecointech/logging";
 import Decimal from 'decimal.js-light';;
-import { AnyActionContainer, getCurrentState, TransitionCallback } from "../types";
+import { getCurrentState, TransitionCallback } from "../types";
 import { makeTransition  } from '../makeTransition';
 import { verifyPreTransfer } from "./verifyPreTransfer";
 import { DateTime } from "luxon";
-import { toCoin } from "./toCoin";
 import { toDelta } from './coinUtils';
-import { last } from '@thecointech/utilities';
 import type { TheCoin } from '@thecointech/contract-core';
 
 //
@@ -23,8 +21,8 @@ const doSendCoin: TransitionCallback = async (container) => {
     return { error: 'Cannot send coin, state has no value' }
   }
 
-  const settledDate = findSettledDate(container);
-  var tx = await startTheTransfer(container.action.address, currentState.data.coin, settledDate, container.contract);
+  const { coin, date } = currentState.data;
+  var tx = await startTheTransfer(container.action.address, coin, date, container.contract);
 
   // We only start the transfer (do not wait for completion).
   // If completion is required add 'waitCoin' transition.
@@ -41,7 +39,3 @@ async function startTheTransfer(address: string, value: Decimal, settled: DateTi
   );
 }
 
-function findSettledDate(container: AnyActionContainer) {
-  const settlements = container.history.filter(t => t.delta.type == toCoin.transitionName);
-  return last(settlements)?.delta.date ?? container.action.data.date;
-}

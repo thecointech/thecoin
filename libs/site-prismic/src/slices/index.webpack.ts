@@ -4,10 +4,24 @@ import Hero from "./Hero";
 import RichText from "./RichText";
 import TwoColumnLayout from "./TwoColumnLayout";
 import BlockQuote from "./BlockQuote";
+import CcqiScore from "./CcqiScore";
+import CcqiCategory from "./CcqiCategory";
+import Video from "./Video";
+import Table from "./Table";
+import CaptionedImage from "./CaptionedImage";
+import ProjectDetails from "./ProjectDetails";
+import ComparisonBlock from "./ComparisonBlock";
 
 export const components = {
   hero: Hero,
   rich_text: RichText,
   two_column_layout: TwoColumnLayout,
   block_quote: BlockQuote,
+  ccqi_score: CcqiScore,
+  ccqi_category: CcqiCategory,
+  comparison_block: ComparisonBlock,
+  video: Video,
+  table: Table,
+  captioned_image: CaptionedImage,
+  project_details: ProjectDetails
 };

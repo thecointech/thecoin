@@ -1,19 +1,17 @@
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Prismic } from "components/Prismic";
-import { Icon } from "semantic-ui-react";
 import { selectLocale } from "@thecointech/redux-intl";
-import { useParams, useNavigate } from "react-router";
+import { useParams } from "react-router";
 import { defineMessages, FormattedMessage } from "react-intl";
-import { NotFoundPage } from '@thecointech/shared/containers/NotFoundPage';
+import { Helmet } from 'react-helmet-async';
+import { asText } from '@prismicio/client';
 import { Article as ArticleSlice, BlogContainer, getRecommendedArticles, Related } from '@thecointech/site-prismic/components';
 import { Link } from 'react-router';
+import { BackButton } from './BackButton';
+import { ArticleNotFoundPage } from "./ArticleNotFoundPage";
 
 const translations = defineMessages({
-  backLink: {
-    defaultMessage: 'Go back',
-    description: 'site.blog.backLink: Link to go back from article'
-  },
   relatedTitle: {
     defaultMessage: 'Related Articles',
     description: 'site.blog.relatedTitle: Title for recommended articles links section'
@@ -29,7 +27,6 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
   const prismic = Prismic.useData();
   const actions = Prismic.useApi();
   const { locale } = useSelector(selectLocale);
-  const navigate = useNavigate();
   const { articleId: routerArticleId } = useParams<{articleId: string}>();
 
   // Use prop articleId if provided, otherwise fall back to router param
@@ -56,14 +53,6 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
     }
   }, [articleId, articleData, fullyLoaded, locale]);
 
-  const handleBack = () => {
-    if (isPreview) {
-      navigate('/blog');
-    } else {
-      navigate(-1);
-    }
-  };
-
   // Get recommended articles using shared logic
   const recommendedArticles = useMemo(() => {
     return articleData
@@ -71,24 +60,55 @@ export const Article = ({ articleId: propArticleId, isPreview = false }: Article
       : [];
   }, [articleData, allArticles, locale]);
 
+
   // Display
   return articleData
-    ? <>
-        <BlogContainer backLink={
-          <a href="#" onClick={handleBack}>
-            <Icon name="arrow left" />
-            <FormattedMessage {...translations.backLink} />
-          </a>
-        }>
-          <ArticleSlice document={articleData} locale={locale}/>
-          <Related
-            relatedArticles={recommendedArticles}
-            title={<FormattedMessage {...translations.relatedTitle} />}
-            LinkComponent={RouterLink}
-          />
-        </BlogContainer>
-      </>
-    : <NotFoundPage />
+    ? <ArticleContent key={articleId} articleData={articleData} locale={locale} isPreview={isPreview} recommendedArticles={recommendedArticles} />
+    : <ArticleNotFoundPage isLoading={prismic.loading > 0} />
+}
+
+// Separate component that gets remounted when articleId changes
+const ArticleContent = ({ articleData, locale, isPreview, recommendedArticles }: {
+  articleData: any;
+  locale: string;
+  isPreview: boolean;
+  recommendedArticles: any[];
+}) => {
+  // Scroll to top when this component mounts (overrides ScrollRestoration)
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const ogTitle = articleData?.data.meta_title ?? asText(articleData?.data.title) ?? '';
+  const ogDescription = articleData?.data.meta_description ?? asText(articleData?.data.short_content) ?? '';
+  const ogImage = articleData?.data.meta_image?.url || articleData?.data.thumbnail?.url || '';
+
+  return (
+    <>
+      <Helmet>
+        <title>{ogTitle} | TheCoin</title>
+        <meta name="description" content={ogDescription} />
+        <meta property="og:title" content={ogTitle} />
+        <meta property="og:description" content={ogDescription} />
+        <meta property="og:type" content="article" />
+        {ogImage && <meta property="og:image" content={ogImage} />}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={ogTitle} />
+        <meta name="twitter:description" content={ogDescription} />
+        {ogImage && <meta name="twitter:image" content={ogImage} />}
+      </Helmet>
+      <BlogContainer backLink={
+        <BackButton isPreview={isPreview} />
+      }>
+        <ArticleSlice document={articleData} locale={locale}/>
+        <Related
+          relatedArticles={recommendedArticles}
+          title={<FormattedMessage {...translations.relatedTitle} />}
+          LinkComponent={RouterLink}
+        />
+      </BlogContainer>
+    </>
+  );
 }
 
 // Custom Link component for react-router

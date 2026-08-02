@@ -130,7 +130,7 @@ export async function loadWalletFromSite(callback: BackgroundTaskCallback, timeo
     throw new Error('URL_SITE_APP is not configured');
   }
 
-  const consentUrl = `${base.replace(/\/$/, '')}/#/harvester/connect?port=${encodeURIComponent(String(port))}&state=${encodeURIComponent(service.state!)}`;
+  const consentUrl = `${base.replace(/\/$/, '')}/harvester/connect?port=${encodeURIComponent(String(port))}&state=${encodeURIComponent(service.state!)}`;
   await shell.openExternal(consentUrl);
 
   // Timeout and cleanup

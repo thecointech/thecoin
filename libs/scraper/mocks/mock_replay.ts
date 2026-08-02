@@ -31,15 +31,26 @@ export const replay: typeof SrcReplay = async ({name, events, callbacks}: Replay
   if (name == "chqBalance") {
     const balance = (1000 + Math.random() * 500).toFixed(2);
     return {
-      balance: currency(balance),
+      AccountsSummary: { balance: currency(balance) },
     };
   }
   else if (name == "visaBalance") {
-    return getEmulatedVisaData(DateTime.now());
+    return {
+      CreditAccountDetails: getEmulatedVisaData(DateTime.now()),
+    };
   }
-  return {
-    confirmationCode: "1234",
-  };
+  else if (name == 'chqETransfer') {
+    return {
+      SendETransfer: { confirmationCode: "1234" },
+    };
+  }
+  else if (name.includes('+')) {
+    return {
+      AccountsSummary: { balance: currency((1000 + Math.random() * 500).toFixed(2)) },
+      CreditAccountDetails: getEmulatedVisaData(DateTime.now()),
+    };
+  }
+  throw new Error(`Unknown action name: ${name}`);
 }
 
 

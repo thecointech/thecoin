@@ -1,0 +1,19 @@
+.ccqiScore {
+  margin: 1em 0;
+  margin-bottom: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.noScores {
+  padding: 0.75em;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.ccqiLink {
+  font-size: smaller;
+  margin-left: 2rem;
+}

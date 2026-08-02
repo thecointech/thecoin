@@ -8,7 +8,7 @@ import { exportResults, getRawState, setOverrides } from './Harvester/state';
 import { harvest } from './Harvester';
 import { logsFolder } from './paths';
 import { getLocalBrowserPath, getSystemBrowserPath } from '@thecointech/scraper/puppeteer-init/browser';
-import type { ActionType } from '@thecointech/store-harvester';
+import type { HarvestAction } from '@thecointech/store-harvester';
 import { AutoConfigParams, autoConfigure } from './Harvester/agent';
 import type { BackgroundTaskInfo } from './BackgroundTask';
 import { AskUserReact } from './Harvester/agent/askUser';
@@ -199,7 +199,7 @@ export function initMainIPC() {
   ipcMain.handle(actions.downloadLibraries, api.downloadLibraries);
 
   ipcMain.handle(actions.autoProcess, (_event, params: AutoConfigParams) => api.autoProcess(params));
-  ipcMain.handle(actions.validateAction, async (_event, actionName: ActionType, inputValues: Record<string, string>) => {
+  ipcMain.handle(actions.validateAction, async (_event, actionName: HarvestAction, inputValues: Record<string, string>) => {
     return api.validateAction(actionName, inputValues);
   });
 
@@ -210,7 +210,7 @@ export function initMainIPC() {
 
   ipcMain.handle(actions.warmup, async (_event, url: string) => api.warmup(url));
 
-  ipcMain.handle(actions.start, async (_event, actionName: ActionType, url: string, dynamicValues?: string[]) => {
+  ipcMain.handle(actions.start, async (_event, actionName: HarvestAction, url: string, dynamicValues?: string[]) => {
     return api.start(actionName, url, dynamicValues);
   })
   ipcMain.handle(actions.learnValue, async (_event, valueName: string, valueType: ValueType) => {

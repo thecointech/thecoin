@@ -1,4 +1,4 @@
-import puppeteerVanilla, { BrowserContext, type Browser } from 'puppeteer';
+import puppeteerVanilla, { BrowserContext, Page, type Browser } from 'puppeteer';
 import { addExtra } from 'puppeteer-extra';
 import { getPlugins } from './plugins';
 import { registerElementAttrFns } from '../elements';
@@ -99,11 +99,22 @@ async function getPage(contextName = "default") {
     globalThis.__scraper__ = undefined
   });
 
-  // On boot, return the default (blank) page
-  const [page] = await context.pages();
+  // On boot, close any existing pages.
+  const [first, ...rest] = await context.pages();
+  await closeAllPages(rest);
+  const page = first ?? await context.newPage();
+  // Navigate stale tabs to blank before handing off
+  if (page.url() !== 'about:blank') {
+    try {
+      await page.goto('about:blank');
+    } catch (e) {
+      log.warn({ error: e }, 'Failed to navigate to about:blank');
+    }
+  }
+
   return {
     browser,
-    page: page ?? (await context.newPage())
+    page
   };
 }
 
@@ -151,4 +162,14 @@ export async function closeBrowser() {
   // Force-delete singleton locks.  If the browser fails to close
   // for some reason, this will ensure the next run can start cleanly.
   await cleanProfileLocks();
+}
+
+
+async function closeAllPages(extraPages: Page[]) {
+  const closeResults = await Promise.allSettled(extraPages.map(p => p.close()));
+  closeResults.forEach((r, i) => {
+    if (r.status === 'rejected') {
+      log.warn({ error: r.reason }, `Failed to close extra page index=${i + 1}`);
+    }
+  });
 }

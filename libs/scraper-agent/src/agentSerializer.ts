@@ -33,7 +33,6 @@ export type SerializerOptions = {
   recordFolder: string,
   // The bank names (constant throughout an execution)
   target: string,
-  skipSections?: SectionName[],
   // Used in replay - if true, we will take a screenshot
   // on every element found
   writeScreenshotOnElement?: boolean,
@@ -48,8 +47,6 @@ export class AgentSerializer implements Disposable {
   options: SerializerOptions;
   get recordFolder() { return this.options.recordFolder; }
   get target() { return this.options.target; }
-  // By default, we skip the initial section
-  get skipSections() { return this.options.skipSections ?? ["Initial"]; }
   get writeScreenshotOnElement() { return this.options.writeScreenshotOnElement; }
 
   constructor(options: SerializerOptions) {
@@ -80,14 +77,9 @@ export class AgentSerializer implements Disposable {
   // Log every API call
   onApiCall = async (event: ApiCallEvent) => {
     try {
-      // Never skip errors
-      if (!event.error) {
-        if (this.pauseWriting()) {
-          return;
-        }
-        if (this.skipWriting(event)) {
-          return;
-        }
+      // Skip duplicate intents, but still log errors
+      if (!event.error && this.skipWriting(event)) {
+        return;
       }
 
       // Does the request include an image?
@@ -153,10 +145,6 @@ export class AgentSerializer implements Disposable {
     this.tracker.setCurrentSection(section);
   }
 
-  pauseWriting() {
-    return this.skipSections.includes(this.tracker.currentSection);
-  }
-
   skipWriting(event: ApiCallEvent) {
     if (event.method == "pageIntent") {
       // If this is the same as the last intent, skip it.
@@ -179,9 +167,6 @@ export class AgentSerializer implements Disposable {
   }
 
   async logScreenshot(screenshot: Buffer|Uint8Array): Promise<void> {
-    if (this.pauseWriting()) {
-      return;
-    }
     this.maybeIncrementSection(screenshot);
 
     // Write out the buffer
@@ -194,23 +179,34 @@ export class AgentSerializer implements Disposable {
     // }
   }
 
-  async logMhtml(page: Page) {
+  private async captureMhtml(page: Page, outPath: string) {
+    const cdp = await page.createCDPSession();
     try {
-      const outMhtml = this.toPath(this.tracker.currentSection, `${this.tracker.step}`, "mhtml");
-      const cdp = await page.createCDPSession();
       const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
-      writeFileSync(outMhtml, data);
+      writeFileSync(outPath, data);
     }
     catch (e) {
-      log.error(e, `Error taking MHTML for section ${this.tracker.currentSection}`);
+      log.error(e, `Error capturing MHTML to ${outPath}`);
       // This is a pain, but it happens - let's move on anyway
+    }
+    finally {
+      try { await cdp.detach(); } catch (e) { log.error(e, 'Error detaching CDP session'); }
     }
   }
 
-  async logJson(name?: string, data: any = {}, increment: boolean = true): Promise<void> {
-    if (this.pauseWriting()) {
+  async logMhtml(page: Page) {
+    // Skip MHTML capture for file:// URLs - the source is already an MHTML file
+    const url = page.url();
+    if (url.startsWith("file://")) {
+      log.info(`Skipping MHTML capture for file:// URL: ${url}`);
       return;
     }
+    const outMhtml = this.toPath(this.tracker.currentSection, `${this.tracker.step}`, "mhtml");
+    await this.captureMhtml(page, outMhtml);
+    log.info(`Wrote MHTML for section ${this.tracker.currentSection}[${this.tracker.step}]`);
+  }
+
+  async logJson(name?: string, data: any = {}, increment: boolean = true): Promise<void> {
     const filename = `${this.tracker.step}-${this.tracker.elements}-${name}`;
     // Ensure we don't overwrite previous JSON files
     if (increment) {
@@ -247,9 +243,7 @@ export class AgentSerializer implements Disposable {
     const content = await page.content();
     writeFileSync(path.join(dumpFolder, `error.html`), content);
     // Lastly, try for MHTML
-    const cdp = await page.createCDPSession();
-    const { data } = await cdp.send('Page.captureSnapshot', { format: 'mhtml' });
-    writeFileSync(path.join(dumpFolder, `error.mhtml`), data);
+    await this.captureMhtml(page, path.join(dumpFolder, `error.mhtml`));
 
     // write the error out too, if possible
     writeFileSync(path.join(dumpFolder, `error.json`), JSON.stringify(error));

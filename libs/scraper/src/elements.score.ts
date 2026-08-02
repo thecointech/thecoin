@@ -272,16 +272,21 @@ function getEstimatedTextScore(potential: ElementData, original: SearchElementDa
       levenshtein(cleanOriginal + ".00", cleanPotential)
     );
 
-    // Our scoring is non-linear.  If the original length is less than 5, then
-    // even a few mis-matches can be a big penalty (eg, $0 => $0.00).  For this length, we simply lose
-    // 10% for each change made
-    if (cleanOriginal.length < 5) {
-      return Math.max(-0.5, 1 - (distance / 5));
+    // Very short strings (< 3 chars) are too ambiguous for fuzzy matching.
+    // Require exact match (after the .00 fallback distance calculation above).
+    // This prevents "x" matching "fr" while still allowing "$5" to match "$5.00".
+    if (cleanOriginal.length < 3) {
+      return distance === 0 ? 1 : -0.5;
     }
-    // For longer strings, we just
-    else {
+
+    // Short strings (3-4 chars): penalize edit distance relative to actual length.
+    // A few mismatches can be significant (e.g., "$0" vs "$0.00" has distance 3).
+    if (cleanOriginal.length < 5) {
       return Math.max(-0.5, 1 - (distance / cleanOriginal.length));
     }
+
+    // For longer strings, use edit distance relative to original length
+    return Math.max(-0.5, 1 - (distance / cleanOriginal.length));
   }
   return 0;
 }

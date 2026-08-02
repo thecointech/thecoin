@@ -1,0 +1,60 @@
+{
+  "id": "comparison_block",
+  "type": "SharedSlice",
+  "name": "ComparisonBlock",
+  "description": "ComparisonBlock",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "titleleft": {
+          "type": "Text",
+          "config": {
+            "label": "TitleLeft",
+            "placeholder": ""
+          }
+        },
+        "titleright": {
+          "type": "Text",
+          "config": {
+            "label": "TitleRight",
+            "placeholder": ""
+          }
+        },
+        "elements": {
+          "type": "Group",
+          "config": {
+            "label": "Elements",
+            "repeat": true,
+            "fields": {
+              "leftelement": {
+                "type": "StructuredText",
+                "config": {
+                  "label": "LeftElement",
+                  "placeholder": "",
+                  "allowTargetBlank": true,
+                  "single": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+                }
+              },
+              "rightelement": {
+                "type": "StructuredText",
+                "config": {
+                  "label": "RightElement",
+                  "placeholder": "",
+                  "allowTargetBlank": true,
+                  "single": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+                }
+              }
+            }
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

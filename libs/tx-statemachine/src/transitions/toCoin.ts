@@ -72,7 +72,8 @@ async function getConvertAt(date: DateTime) {
 
 async function getSettledAt(container: TypedActionContainer<XferAction>) {
   const action = container.action.data.initial;
-  const requestDate = container.action.data.date;
+  const currentState = getCurrentState(container);
+  const requestDate = currentState.data.date;
 
   if (isSellAction(action)) {
     if (isUberTransfer(action.transfer)) {

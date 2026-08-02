@@ -3,6 +3,7 @@ import { FormattedMessage, MessageDescriptor } from 'react-intl'
 import { Header } from 'semantic-ui-react'
 import { LearnMoreLink } from '../../../components/LearnMoreLink'
 import styles from './styles.module.less';
+import { FormattedMessageWithBreaks } from 'components/FormattedMessageWithBreaks';
 
 type Props = {
   img: any,
@@ -24,7 +25,7 @@ export const SectionItem = (props: Props) => (
         <FormattedMessage {...props.text.title} />
       </Header>
       <p>
-        <FormattedMessage {...props.text.description} />
+        <FormattedMessageWithBreaks {...props.text.description} />
       </p>
     </div>
     <div>

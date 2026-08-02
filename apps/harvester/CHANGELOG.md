@@ -3,6 +3,151 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+
+
+**Note:** Version bump only for package harvester
+
+
+
+
+
+## [0.6.5-test.0](https://github.com/thecointech/thecoin/compare/v0.6.4...v0.6.5-test.0) (2026-07-23)
+
+
+### Bug Fixes
+
+* defensive fix to ensure we don't run into the same issue later. ([a708110](https://github.com/thecointech/thecoin/commit/a708110f4eceafdaf44ce84a9bdcd85c8ce3a9ea))
+
+
+
+
+
+## [0.6.4](https://github.com/thecointech/thecoin/compare/v0.6.4-test.1...v0.6.4) (2026-07-22)
+
+**Note:** Version bump only for package harvester
+
+
+
+
+
+## [0.6.4-test.1](https://github.com/thecointech/thecoin/compare/v0.6.4-test.0...v0.6.4-test.1) (2026-07-01)
+
+**Note:** Version bump only for package harvester
+
+
+
+
+
+## [0.6.4-test.0](https://github.com/thecointech/thecoin/compare/v0.6.3...v0.6.4-test.0) (2026-07-01)
+
+**Note:** Version bump only for package harvester
+
+
+
+
+
+## [0.6.3](https://github.com/thecointech/thecoin/compare/v0.6.3-test.0...v0.6.3) (2026-05-05)
+
+**Note:** Version bump only for package harvester
+
+
+
+
+
+## [0.6.3-test.0](https://github.com/thecointech/thecoin/compare/v0.6.2...v0.6.3-test.0) (2026-05-03)
+
+
+### Bug Fixes
+
+* build article posts to enable social previews ([b174965](https://github.com/thecointech/thecoin/commit/b17496536e007a5caae124a151ef6ec05121e6d9))
+
+
+
+
+
+## [0.6.2](https://github.com/thecointech/thecoin/compare/v0.6.2-test.0...v0.6.2) (2026-04-29)
+
+**Note:** Version bump only for package harvester
+
+
+
+
+
+## [0.6.2-test.0](https://github.com/thecointech/thecoin/compare/v0.6.1...v0.6.2-test.0) (2026-04-28)
+
+**Note:** Version bump only for package harvester
+
+
+
+
+
+## [0.6.1](https://github.com/thecointech/thecoin/compare/v0.6.1-test.1...v0.6.1) (2026-04-15)
+
+**Note:** Version bump only for package harvester
+
+
+
+
+
+## [0.6.1-test.0](https://github.com/thecointech/thecoin/compare/v0.6.0...v0.6.1-test.0) (2026-04-15)
+
+**Note:** Version bump only for package harvester
+
+
+
+
+
+
+
+**Note:** Version bump only for package harvester
+
+
+
+
+
+# [0.6.0-test.0](https://github.com/thecointech/thecoin/compare/v0.5.4-test.2...v0.6.0-test.0) (2026-03-31)
+
+
+### Bug Fixes
+
+* show initialize progress if necessary when recording ([04e83ab](https://github.com/thecointech/thecoin/commit/04e83ab3fc17e4b6708b40762b62e43258552182))
+
+
+
+
+
+## [0.5.4-test.2](https://github.com/thecointech/thecoin/compare/v0.5.4-test.1...v0.5.4-test.2) (2026-02-26)
+
+**Note:** Version bump only for package harvester
+
+
+
+
+
+## [0.5.4-test.1](https://github.com/thecointech/thecoin/compare/v0.5.4-test.0...v0.5.4-test.1) (2026-02-25)
+
+**Note:** Version bump only for package harvester
+
+
+
+
+
+## [0.5.4-test.0](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.4-test.0) (2026-02-25)
+
+
+### Bug Fixes
+
+* potential fix for harvester scheduler not running on mac, do not do full replay in prodtest ([6d19c33](https://github.com/thecointech/thecoin/commit/6d19c33a4c343ed34597d8356e657b5c150eb0b8))
+
+
+### Reverts
+
+* Revert "chore(release): publish v0.5.3" ([69528b5](https://github.com/thecointech/thecoin/commit/69528b54d7e69bc85a1d65fcbd7ffaebff462d91))
+
+
+
+
+
 ## [0.5.3](https://github.com/thecointech/thecoin/compare/v0.5.3-test.1...v0.5.3) (2026-02-20)
 
 

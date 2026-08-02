@@ -4,9 +4,8 @@ import { isCertTransfer } from '@thecointech/utilities/VerifiedTransfer';
 // this deposit can operate on both bill & sell types.
 type BSActionTypes = "Bill"|"Sell";
 //
-// Remove from incomplete listings.
+// Wait until an uberTransaction transfer date has passed
 export const uberWaitPending = makeTransition<BSActionTypes>("uberWaitPending", async (container) => {
-  // Remove from our list of active transactions
   const request = container.action.data.initial;
   if (isCertTransfer(request.transfer)) {
     throw new Error("Cannot deposit certified transfer");

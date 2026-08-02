@@ -34,7 +34,7 @@ const routes: Route[] = [
  *
  * @param config - Configuration for the Prismic client.
  */
-export function createClient(config: ClientConfig = {}, isWebsite = true) {
+export function createClient(config: ClientConfig = {}) {
   const client = baseCreateClient(sm.apiEndpoint || repositoryName, {
     routes,
     fetchOptions:
@@ -44,9 +44,7 @@ export function createClient(config: ClientConfig = {}, isWebsite = true) {
     ...config,
   });
 
-  if (isWebsite) {
-    enableAutoPreviews({ client });
-  }
+  enableAutoPreviews({ client });
 
   return client;
 }

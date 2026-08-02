@@ -1,4 +1,4 @@
-import { getTestData, TestData, writeElementCache, saveSnapshot, writeLastFailing, type TestID } from "@thecointech/scraper-archive";
+import { getTestData, TestData, writeElementCache, saveSnapshot, type TestID } from "@thecointech/scraper-archive";
 import { closeBrowser, newPage, setupScraper } from "../src/puppeteer-init";
 import { gotoPage } from "./gotoPage";
 import { getElementForEvent, getDocumentBounds } from "../src/elements";
@@ -45,7 +45,6 @@ async function processAll() {
 
   console.log("Failed: ", failed.length);
   console.table(failed);
-  writeLastFailing(failed);
 
   await closeBrowser();
 }

@@ -14,6 +14,7 @@ export type LocaleDocuments = {
 export type PrismicState = {
   [locale in Locale]: LocaleDocuments;
 } & {
+  loading: number;
   client: Client;
 }
 

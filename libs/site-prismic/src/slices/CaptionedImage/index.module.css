@@ -1,0 +1,12 @@
+
+.captionedContainer {
+  margin-bottom: 1rem;
+  .caption {
+    text-align: center;
+    font-style: italic;
+    font-size: 0.875rem;
+    margin: 0 4rem;
+    line-height: 1rem;
+    font-weight: bold;
+  }
+}

@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/rbcapi",
-  "version": "0.5.3",
+  "version": "0.6.5",
   "description": "The Coin: A puppeteer-based API for Royal Bank of Canada",
   "type": "module",
   "keywords": [
@@ -33,27 +33,38 @@
   ],
   "exports": {
     ".": {
-      "development": "./build/index_mocked.js",
-      "devlive": "./build/index_mocked.js",
-      "prodtest": "./build/index_mocked.js",
+      "development": "./mocked/index.ts",
+      "devlive": "./mocked/index.ts",
+      "prodtest": "./mocked/index.ts",
+      "types": "./build/index.d.ts",
       "default": "./build/index.js"
+    },
+    "./transactions": {
+      "types": "./build/transactions.d.ts",
+      "default": "./build/transactions.js"
     }
   },
-  "types": "./build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "build/*"
+      ]
+    }
+  },
   "dependencies": {
-    "@thecointech/bank-interface": "^0.5.3",
-    "@thecointech/logging": "^0.5.3",
-    "@thecointech/scraper": "^0.5.3",
-    "@thecointech/secrets": "^0.5.3",
-    "@thecointech/store": "^0.5.3",
-    "@thecointech/utilities": "^0.5.3",
+    "@thecointech/bank-interface": "^0.6.5",
+    "@thecointech/logging": "^0.6.5",
+    "@thecointech/scraper": "^0.6.5",
+    "@thecointech/secrets": "^0.6.5",
+    "@thecointech/store": "^0.6.5",
+    "@thecointech/utilities": "^0.6.5",
     "csvtojson": "^2.0.13",
     "luxon": "3.3.0",
     "promise.any": "^2.0.4"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.5.3",
-    "@thecointech/types": "^0.5.3",
+    "@thecointech/jestutils": "^0.6.5",
+    "@thecointech/types": "^0.6.5",
     "@types/promise.any": "^2.0.0"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"

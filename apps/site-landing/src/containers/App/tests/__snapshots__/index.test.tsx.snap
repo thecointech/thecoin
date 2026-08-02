@@ -75,13 +75,6 @@ exports[`<App /> should render and match the snapshot 1`] = `
         >
           Blog
         </a>
-        <a
-          class="item undefined onlyBigScreen"
-          data-discover="true"
-          href="/help"
-        >
-          Help
-        </a>
       </div>
       <div
         class="ui text menu"
@@ -98,7 +91,7 @@ exports[`<App /> should render and match the snapshot 1`] = `
         >
           <a
             class="ui red button"
-            href="http://localhost:3001/#/addAccount"
+            href="http://localhost:3001/addAccount"
             role="button"
           >
             Create Account
@@ -183,12 +176,9 @@ exports[`<App /> should render and match the snapshot 1`] = `
       <div>
         <span>
           <h3>
-            <div>
-              The future is better because of you & us.
-            </div>
-            <div>
-              Subscribe to our newsletter:
-            </div>
+            Would you like to know more?
+            <br />
+            Subscribe to get the nitty-gritty
           </h3>
         </span>
         <span>
@@ -215,26 +205,68 @@ exports[`<App /> should render and match the snapshot 1`] = `
         </div>
         <div>
           <a
+            aria-label="Facebook"
             href="https://www.facebook.com/TheCoinCollaborative/"
+            rel="noopener noreferrer"
             target="_blank"
           >
             <img
+              alt=""
               src="[object Object]"
             />
           </a>
           <a
-            href="https://twitter.com/The_Green_NFT/"
+            aria-label="Instagram"
+            href="https://www.instagram.com/thecoincollaborative/"
+            rel="noopener noreferrer"
             target="_blank"
           >
             <img
+              alt=""
               src="[object Object]"
             />
           </a>
           <a
-            href="https://www.instagram.com/thecoincollaborativecanada/"
+            aria-label="Bluesky"
+            href="https://bsky.app/profile/thecoin.io"
+            rel="noopener noreferrer"
             target="_blank"
           >
             <img
+              alt=""
+              src="[object Object]"
+            />
+          </a>
+          <a
+            aria-label="LinkedIn"
+            href="https://ca.linkedin.com/company/the-coin"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <img
+              alt=""
+              src="[object Object]"
+            />
+          </a>
+          <a
+            aria-label="Mastodon"
+            href="https://mastodon.social/@thecoincollaborative"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <img
+              alt=""
+              src="[object Object]"
+            />
+          </a>
+          <a
+            aria-label="Medium"
+            href="https://medium.com/thecoin-newsletters"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <img
+              alt=""
               src="[object Object]"
             />
           </a>
@@ -243,10 +275,10 @@ exports[`<App /> should render and match the snapshot 1`] = `
           class="undefined undefined"
         >
           <span>
-            © Copyright 2020. TheCoin.
+            © 2020
           </span>
           <span>
-            All Rights Reserved.
+            TheCoin Collaborative Canada
           </span>
         </div>
       </div>

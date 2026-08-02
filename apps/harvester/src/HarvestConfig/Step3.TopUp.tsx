@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Checkbox, Container, Input, Header } from 'semantic-ui-react'
+import { Checkbox, Container, Input, Header, Label } from 'semantic-ui-react'
 import { HarvestStepType } from '@thecointech/store-harvester';
 import { ConfigReducer } from './state/reducer';
 import { safeParseFloat } from './state/utils';
@@ -38,7 +38,10 @@ export const TopUp = () => {
       </div>
       <div>
         <Checkbox toggle label="Additional Top-up" checked={enabled} onChange={(_, {checked}) => setEnabled(!!checked)}/>
-        <Input placeholder="Amount" value={topUp} onChange={(_, {value}) => setTopUp(safeParseFloat(value))}/>
+        <Input placeholder="Amount" labelPosition="left" type="number" value={topUp} onChange={(_, {value}) => setTopUp(safeParseFloat(value))}>
+          <Label basic>$</Label>
+          <input />
+        </Input>
       </div>
     </Container>
   )

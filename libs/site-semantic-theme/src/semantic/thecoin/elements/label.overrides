@@ -7,3 +7,9 @@
   line-height: @lineHeight;
   float: left;
 }
+
+// Labels inside form fields (like your Form story)
+.ui.form .field > .ui.label {
+  padding: 0.625rem 0;
+  background: transparent;
+}

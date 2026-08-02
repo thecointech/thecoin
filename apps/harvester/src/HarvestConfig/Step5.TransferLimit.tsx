@@ -42,9 +42,9 @@ export const TransferLimit = () => {
         to set a lower limit in case you need to make transfers for other reasons.
       </div>
       <div>
-      <Checkbox toggle label="Limit to" checked={enabled} onChange={(_, {checked}) => setEnabled(!!checked)}/>
+        <Checkbox toggle label="Limit to" checked={enabled} onChange={(_, { checked }) => setEnabled(!!checked)} />
         &nbsp;&nbsp;
-        <Input placeholder="Amount" labelPosition="left" type="number" value={limit} onChange={(_, {value}) => setLimit(safeParseFloat(value))}>
+        <Input placeholder="Amount" labelPosition="left" type="number" value={limit} onChange={(_, { value }) => setLimit(safeParseFloat(value))}>
           <Label basic>$</Label>
           <input />
         </Input>

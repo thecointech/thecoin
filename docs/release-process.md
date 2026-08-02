@@ -5,7 +5,7 @@ This document describes the complete release process using release branches and 
 ## 📋 Overview
 
 **Release Strategy:**
-- Development happens on `main` and `dev` branches
+- Development happens on `main` branche
 - Releases are isolated in short-lived `release/*` branches
 - Tags trigger deployments to environments
 - Version numbers are determined by conventional commits
@@ -188,17 +188,6 @@ git merge release/v0.6.0
 git push origin main
 ```
 
-### Sync to Dev
-
-After merging to main (either via PR or manually):
-
-```bash
-# Sync to dev branch
-git checkout dev
-git merge main
-git push origin dev
-```
-
 ### Cleanup
 
 ```bash
@@ -210,12 +199,11 @@ git push origin --delete release/v0.6.0
 **Why merge back:**
 - ✅ Brings version commits to main
 - ✅ Includes any bug fixes made during testing
-- ✅ Keeps main/dev in sync with production
+- ✅ Keeps main in sync with production
 - ✅ main now shows `"version": "0.6.0"` in package.json
 
 **After merge:**
 - `main` branch: version 0.6.0
-- `dev` branch: version 0.6.0
 - Next release will start from 0.6.0
 
 ## 🚨 Hotfixes
@@ -296,7 +284,7 @@ Next:    v1.0.0-test.0
 ```
 ┌─────────────────────────────────────────┐
 │ Development Phase                        │
-│ - Work on main/dev                       │
+│ - Work on main                       │
 │ - Merge features                         │
 │ - main stays at v0.5.3                   │
 └─────────────────┬───────────────────────┘
@@ -339,7 +327,6 @@ Next:    v1.0.0-test.0
 │ Merge Back (Automated PR)                │
 │ → Review PR on GitHub                    │
 │ → Merge PR to main                       │
-│ → Sync to dev: git merge main            │
 │ → Delete release branch                  │
 │ → main now at v0.6.0                     │
 └─────────────────────────────────────────┘
@@ -355,7 +342,6 @@ Next:    v1.0.0-test.0
 | Promote to beta | `git tag v0.6.0-beta.0 v0.6.0-test.X` |
 | Promote to prod | `git tag v0.6.0 v0.6.0-beta.0` |
 | Merge back | Auto-creates PR, review & merge on GitHub |
-| Sync to dev | `git checkout dev && git merge main` |
 | Delete release branch | `git push origin --delete release/v0.6.0` |
 
 ## 📝 Best Practices
@@ -368,7 +354,6 @@ Next:    v1.0.0-test.0
 - Delete release branches after merging
 
 ❌ **DON'T:**
-- Create release branches from dev (use main)
 - Manually edit version numbers in package.json
 - Skip environments (always test → beta → prod)
 - Leave old release branches unmerged

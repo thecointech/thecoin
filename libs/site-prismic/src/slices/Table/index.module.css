@@ -1,0 +1,34 @@
+
+.tableContainer {
+  margin: 2rem 0;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 0.625rem;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+}
+
+.caption {
+  margin-bottom: 0.5rem;
+  font-size: 1.1em;
+}
+
+.source {
+  font-size: 0.75em;
+  color: #666;
+  margin-left: 2rem;
+  margin-top: -1rem;
+}
+

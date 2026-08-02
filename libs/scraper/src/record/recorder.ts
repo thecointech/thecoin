@@ -106,7 +106,7 @@ export class Recorder extends EventEmitter implements AsyncDisposable {
     // log.debug("event name: " + event.type);
     switch (event.type) {
     case 'navigation':
-      if (event.to == 'about:blank') {
+      if (!event.to.startsWith('http')) {
         return;
       }
       this.step = this.step + 1;

@@ -64,7 +64,6 @@ export const BackgroundTaskProgressBar = ({ type, subTask, closeOnComplete }: Pr
   if (!shouldShow) {
     return null;
   }
-  console.log("Rendering progress bar, closeOnComplete:", closeOnComplete);
   if (subTask) {
     const task = bgTask.subTasks.find(t => t.subTaskId === subTask);
     if (!task) {

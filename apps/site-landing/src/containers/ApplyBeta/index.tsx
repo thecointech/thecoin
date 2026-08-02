@@ -3,6 +3,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { Header, Message } from 'semantic-ui-react';
 import { Helmet } from "react-helmet-async";
 import styles from './styles.module.less';
+import { FormattedMessageWithBreaks } from 'components/FormattedMessageWithBreaks';
 
 const translations = defineMessages({
   above: {
@@ -17,7 +18,6 @@ const translations = defineMessages({
     defaultMessage: "TheCoin is currently in a closed beta.{br} \
       Apply for early access and help us build the best possible product",
     description: "Title on request access page",
-    values: { br: <br /> }
   },
   whatToExpectHeader: {
     defaultMessage: "What to expect from the beta.",
@@ -49,7 +49,7 @@ export const ApplyBeta = () => {
         <FormattedMessage {...translations.title} />
       </Header>
       <p>
-        <FormattedMessage {...translations.blurb} />
+        <FormattedMessageWithBreaks {...translations.blurb} />
       </p>
       <Message>
         <Message.Header>

@@ -2,7 +2,7 @@
   {
     "id": "YLbGzBAAACQA1Ha2",
     "uid": "why-use-thecoin",
-    "url": "/faq/why-use-thecoin",
+    "url": null,
     "type": "faq",
     "tags": [],
     "first_publication_date": "2021-06-01T23:46:24+0000",
@@ -43,7 +43,7 @@
   {
     "id": "YLV43xAAACMAzpiq",
     "uid": "who-are-we",
-    "url": "/faq/who-are-we",
+    "url": null,
     "type": "faq",
     "tags": [],
     "first_publication_date": "2021-06-01T00:01:53+0000",
@@ -84,7 +84,7 @@
   {
     "id": "YLrHiBMAACQADiDn",
     "uid": "financial-accountability",
-    "url": "/faq/financial-accountability",
+    "url": null,
     "type": "faq",
     "tags": [],
     "first_publication_date": "2021-06-05T00:38:36+0000",
@@ -125,7 +125,7 @@
   {
     "id": "YLv1EBMAACQAE1_1",
     "uid": "make-a-difference",
-    "url": "/faq/make-a-difference",
+    "url": null,
     "type": "faq",
     "tags": [],
     "first_publication_date": "2021-06-05T22:05:23+0000",
@@ -196,7 +196,7 @@
   {
     "id": "YLbI8xAAACUA1IBW",
     "uid": "who-are-we",
-    "url": "/faq/who-are-we",
+    "url": null,
     "type": "faq",
     "tags": [],
     "first_publication_date": "2021-06-01T23:55:37+0000",
@@ -236,9 +236,111 @@
     }
   },
   {
+    "id": "YLbPkhAAACUA1J2b",
+    "uid": "avout-thecoin",
+    "url": null,
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-06-02T00:23:50+0000",
+    "last_publication_date": "2025-12-11T17:32:31+0000",
+    "slugs": [
+      "cest-quoi-thecoin"
+    ],
+    "linked_documents": [],
+    "lang": "fr-ca",
+    "alternate_languages": [
+      {
+        "id": "YLbGdhAAACMA1HUv",
+        "type": "faq",
+        "lang": "en-ca",
+        "uid": "about-thecoin"
+      }
+    ],
+    "data": {
+      "category": "About TheCoin",
+      "show_on_faq_home": true,
+      "question": [
+        {
+          "type": "heading4",
+          "text": "C'est quoi TheCoin?",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "TheCoin est un portefeuille numérique qui stocke la cryptomonnaie TheCoin. Il fait office de compte courant, d'épargne et d'investissement, le tout en un seul outil. La cryptomonnaie TheCoin est ce que l'on appelle un stablecoin, ce qui signifie qu'elle évite la volatilité et l'incertitude des autres cryptomonnaies.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "Qu'est-ce qu'un stablecoin, vous demandez-vous peut-être ? C'est une cryptomonnaie dont la valeur est indexée sur un ou plusieurs actifs ayant leur propre valeur intrinsèque, à l'instar de l'étalon-or d'antan. Les stablecoins diffèrent des cryptomonnaies classiques : il n'y a pas de « minage », ce qui évite le gaspillage d'énergie considérable associé aux cryptomonnaies traditionnelles.",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "La valeur d'un stablecoin est également, comme son nom l'indique, stable. En effet, elle représente une valeur réelle. Imaginez un instant qu'un événement catastrophique survienne demain et que 10% des détenteurs de Bitcoins tentent de vendre simultanément. Le prix du Bitcoin s'effondrerait, car rien ne lui confère de valeur, si ce n'est la demande!",
+          "spans": [],
+          "direction": "ltr"
+        },
+        {
+          "type": "paragraph",
+          "text": "Les stablecoins fonctionnent différemment. Si tous les détenteurs de TheCoin souhaitaient vendre (ce qui s'est produit au début), et que vous étiez le seul à en posséder encore, le solde de votre compte resterait inchangé. Nous serions obligés de vendre une partie de nos actifs pour rembourser les vendeurs, mais vos actifs resteraient disponibles et continueraient de fructifier.",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ]
+    }
+  },
+  {
+    "id": "YXmm_RIAACEAg6Xq",
+    "uid": "financial-accountability",
+    "url": null,
+    "type": "faq",
+    "tags": [],
+    "first_publication_date": "2021-10-27T19:28:55+0000",
+    "last_publication_date": "2025-12-11T17:33:47+0000",
+    "slugs": [
+      "si-vous-etes-une-organisation-a-but-non-lucratif-ou-va-largent"
+    ],
+    "linked_documents": [],
+    "lang": "fr-ca",
+    "alternate_languages": [
+      {
+        "id": "YLrHiBMAACQADiDn",
+        "type": "faq",
+        "lang": "en-ca",
+        "uid": "financial-accountability"
+      }
+    ],
+    "data": {
+      "category": "About TheCoin",
+      "show_on_faq_home": false,
+      "question": [
+        {
+          "type": "heading4",
+          "text": "Si vous êtes une organisation à but non lucratif, où va l'argent?",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ],
+      "answer": [
+        {
+          "type": "paragraph",
+          "text": "Environ un quart des frais perçus est nécessaire pour couvrir les dépenses de fonctionnement, tandis que les trois autres quarts sont consacrés à notre mission principale : lutter contre le changement climatique en finançant des projets d'énergie propre.",
+          "spans": [],
+          "direction": "ltr"
+        }
+      ]
+    }
+  },
+  {
     "id": "YLv1bRMAACMAE2GO",
     "uid": "why-not-alternatives",
-    "url": "/faq/why-not-alternatives",
+    "url": null,
     "type": "faq",
     "tags": [],
     "first_publication_date": "2021-06-05T22:06:40+0000",
@@ -278,7 +380,7 @@
   {
     "id": "YLvOTRMAACIAErQd",
     "uid": "account-safety",
-    "url": "/faq/account-safety",
+    "url": null,
     "type": "faq",
     "tags": [],
     "first_publication_date": "2021-06-05T19:19:55+0000",
@@ -348,7 +450,7 @@
   {
     "id": "YLbGdhAAACMA1HUv",
     "uid": "about-thecoin",
-    "url": "/faq/about-thecoin",
+    "url": null,
     "type": "faq",
     "tags": [],
     "first_publication_date": "2021-06-01T23:44:58+0000",
@@ -362,7 +464,8 @@
       {
         "id": "YLbPkhAAACUA1J2b",
         "type": "faq",
-        "lang": "fr-ca"
+        "lang": "fr-ca",
+        "uid": "avout-thecoin"
       }
     ],
     "data": {
@@ -407,7 +510,7 @@
   {
     "id": "YLvFkRMAACQAEo1X",
     "uid": "how-does-it-work",
-    "url": "/faq/how-does-it-work",
+    "url": null,
     "type": "faq",
     "tags": [],
     "first_publication_date": "2021-06-05T18:42:29+0000",
@@ -448,7 +551,7 @@
   {
     "id": "YXmmcxIAACMAg6OG",
     "uid": "how-does-it-work",
-    "url": "/faq/how-does-it-work",
+    "url": null,
     "type": "faq",
     "tags": [],
     "first_publication_date": "2025-12-11T17:20:25+0000",
@@ -490,7 +593,7 @@
   {
     "id": "YLv2vhMAACMAE2dr",
     "uid": "why-use-thecoin",
-    "url": "/faq/why-use-thecoin",
+    "url": null,
     "type": "faq",
     "tags": [],
     "first_publication_date": "2021-06-05T22:12:18+0000",
@@ -531,7 +634,7 @@
   {
     "id": "YLvHuxMAACIAEpb5",
     "uid": "how-users-protected",
-    "url": "/faq/how-users-protected",
+    "url": null,
     "type": "faq",
     "tags": [],
     "first_publication_date": "2021-06-05T18:51:43+0000",
@@ -608,7 +711,7 @@
   {
     "id": "YLu7VRMAACMAEl-z",
     "uid": "how-much-growth",
-    "url": "/faq/how-much-growth",
+    "url": null,
     "type": "faq",
     "tags": [],
     "first_publication_date": "2021-06-05T17:58:49+0000",
@@ -653,41 +756,6 @@
     }
   },
   {
-    "id": "YXmm_RIAACEAg6Xq",
-    "uid": "financial-accountability",
-    "url": "/faq/financial-accountability",
-    "type": "faq",
-    "tags": [],
-    "first_publication_date": "2021-10-27T19:28:55+0000",
-    "last_publication_date": "2021-10-27T19:28:55+0000",
-    "slugs": [
-      "if-you-are-a-non-profit-where-does-the-money-go",
-      "0---about-thecoin"
-    ],
-    "linked_documents": [],
-    "lang": "fr-ca",
-    "alternate_languages": [
-      {
-        "id": "YLrHiBMAACQADiDn",
-        "type": "faq",
-        "lang": "en-ca",
-        "uid": "financial-accountability"
-      }
-    ],
-    "data": {
-      "category": "0 - About TheCoin",
-      "show_on_faq_home": false,
-      "question": [
-        {
-          "type": "heading1",
-          "text": "If you are a non-profit, where does the money go?",
-          "spans": []
-        }
-      ],
-      "answer": []
-    }
-  },
-  {
     "id": "YLw7jBMAACQAFJXg",
     "uid": null,
     "url": null,
@@ -722,46 +790,6 @@
         {
           "type": "paragraph",
           "text": "Votre argent prend de la valeur en même temps de la bourse, ce qui veux dire que tous les jours il peut prendre de la valeur ou en perdre.",
-          "spans": []
-        }
-      ]
-    }
-  },
-  {
-    "id": "YLbPkhAAACUA1J2b",
-    "uid": null,
-    "url": null,
-    "type": "faq",
-    "tags": [],
-    "first_publication_date": "2021-06-02T00:23:50+0000",
-    "last_publication_date": "2021-06-03T23:50:26+0000",
-    "slugs": [
-      "cest-quoi-thecoin-"
-    ],
-    "linked_documents": [],
-    "lang": "fr-ca",
-    "alternate_languages": [
-      {
-        "id": "YLbGdhAAACMA1HUv",
-        "type": "faq",
-        "lang": "en-ca",
-        "uid": "about-thecoin"
-      }
-    ],
-    "data": {
-      "category": "Account Security",
-      "show_on_faq_home": true,
-      "question": [
-        {
-          "type": "heading1",
-          "text": "C'est quoi TheCoin ?",
-          "spans": []
-        }
-      ],
-      "answer": [
-        {
-          "type": "paragraph",
-          "text": "dadfew",
           "spans": []
         }
       ]

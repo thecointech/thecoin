@@ -7,7 +7,7 @@ import { getElementForEvent } from '../elements';
 import { sleep } from '@thecointech/async';
 import { newPage } from '../puppeteer-init';
 import type { Replay, ReplayOptions } from './types';
-import { DynamicValueError, ValueEventError } from '../errors';
+import { DynamicValueError, InputValueError, ValueEventError } from '../errors';
 export type * from './types'
 
 
@@ -73,7 +73,7 @@ export async function processEvents(replay: Replay) {
     }
     catch (err) {
       // On failed, lets check whats going on
-      log.error(err, `Failed to process event: ${event.type} - ${event.id}`);
+      log.error(err, `Failed to process event: ${event.type} - ${event.id} (section: ${event.section ?? 'unknown'})`);
 
       // attempt to handle the error
       const wasHandled = await replay.callbacks?.onError?.(
@@ -170,6 +170,11 @@ export async function processEvent({ page, dynamicValues, values, delay=1000 }: 
       break;
     }
     case 'value': {
+      const setValue = (value: any) => {
+        const sec = event.section ?? '_';
+        values[sec] ??= {};
+        values[sec][event.eventName ?? 'defaultValue'] = value;
+      }
       // The 15 second wait is to compensate for SPA
       // websites who don't have load/navigation events
       // (thanks again tangerine ya bastard!)
@@ -180,7 +185,7 @@ export async function processEvent({ page, dynamicValues, values, delay=1000 }: 
             try {
               const value = await getTableData(page);
               if (value.length > 0) {
-                values[event.name ?? 'defaultValue'] = value;
+                setValue(value);
                 return true;
               }
             }
@@ -202,7 +207,7 @@ export async function processEvent({ page, dynamicValues, values, delay=1000 }: 
         const el = await getElementForEvent({ page, event });
         const parsed = parseValue(el.data.text, event.parsing);
         if (parsed) {
-          values[event.eventName] = parsed;
+          setValue(parsed);
           break;
         }
         throw new ValueEventError(event)
@@ -219,17 +224,35 @@ export async function enterValue(page: Page, event: AnyElementEvent, value: stri
 export async function enterValueIntoFound(page: Page, found: SearchElement, value: string) {
   await found.element.focus();
   if (found.data.tagName == "INPUT" || found.data.tagName == "TEXTAREA") {
-    if (found.data.inputType == "checkbox") {
+    if (found.data.inputType == "checkbox" || found.data.inputType == "radio") {
       // We assume value == true, but just in case some future
       // scenario requires unchecking, guess the results.
       const nodeChecked = value !== "off" && value !== "false";
-      await page.evaluate((el, rendererChecked) => (el as HTMLInputElement).checked = rendererChecked, found.element, nodeChecked);
+      await page.evaluate((el, checked) => {
+        const input = el as HTMLInputElement;
+        input.checked = checked;
+        // Dispatch events that would occur during user interaction
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+      }, found.element, nodeChecked);
+      // Verify the checked state took effect
+      const actual = await found.element.evaluate(el => (el as HTMLInputElement).checked);
+      if (actual !== nodeChecked) {
+        throw new InputValueError(found.data);
+      }
     }
     else {
       // clear existing value
       await page.evaluate(el => (el as HTMLInputElement).value = "", found.element);
+      // Ensure an input event is fired
+      await found.element.evaluate(el => el.dispatchEvent(new Event('input', { bubbles: true })));
       // Simulate typing to mimic input actions
-      await page.keyboard.type(value, { delay: 20 });
+      await page.keyboard.type(value, { delay: 10 + Math.random() * 20 });
+      // Verify the value was input
+      const currentLength = await found.element.evaluate(el => (el as HTMLInputElement).value.length);
+      if (currentLength < value.length) {
+        throw new InputValueError(found.data);
+      }
     }
     return true;
   }

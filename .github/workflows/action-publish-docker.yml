@@ -34,7 +34,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         if: inputs.IS_PROMOTION == false
         with:
           ref: ${{ inputs.COMMIT_SHA }}
@@ -44,22 +44,22 @@ jobs:
 
       - name: Use Node.js
         if: inputs.IS_PROMOTION == false
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '22.19'
+          node-version: '24'
 
       - name: Download build artifacts
         if: inputs.IS_PROMOTION == false
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: build-artifacts
 
       - name: Set up Docker Buildx
         if: inputs.IS_PROMOTION == false
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -67,7 +67,7 @@ jobs:
 
       - name: Extract metadata for tx-processor
         id: meta-tx
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}
           flavor: |
@@ -77,34 +77,42 @@ jobs:
             type=raw,value=${{ inputs.CONFIG_NAME }}-${{ inputs.COMMIT_SHA }}
             type=sha,format=long
 
-      # For promotions, retag existing prodtest image
+      # For promotions, retag the previous environment's image
+      # prodtest -> prodbeta -> prod
       - name: Promote tx-processor image (retag)
         if: inputs.IS_PROMOTION == true
         run: |
-          echo "Promoting prodtest image to ${{ inputs.CONFIG_NAME }}"
+          CONFIG="${{ inputs.CONFIG_NAME }}"
+          if [ "$CONFIG" = "prodbeta" ]; then
+            SOURCE_TAG="prodtest-latest"
+          elif [ "$CONFIG" = "prod" ]; then
+            SOURCE_TAG="prodbeta-latest"
+          else
+            echo "❌ Unexpected CONFIG_NAME for promotion: $CONFIG"
+            exit 1
+          fi
 
-          # Pull the prodtest image
-          SOURCE_TAG="prodtest-${{ inputs.COMMIT_SHA }}"
-          docker pull ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${SOURCE_TAG}
+          echo "Promoting ${SOURCE_TAG} to ${CONFIG}"
 
-          # Retag for new environment
-          docker tag \
-            ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${SOURCE_TAG} \
-            ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${{ inputs.CONFIG_NAME }}-latest
+          SOURCE="${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${SOURCE_TAG}"
+          docker pull "${SOURCE}"
 
-          docker tag \
-            ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${SOURCE_TAG} \
-            ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${{ inputs.CONFIG_NAME }}-${{ inputs.COMMIT_SHA }}
+          # Retag for target environment
+          docker tag "${SOURCE}" \
+            ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${CONFIG}-latest
+
+          docker tag "${SOURCE}" \
+            ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${CONFIG}-${{ inputs.COMMIT_SHA }}
 
           # Push new tags
-          docker push ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${{ inputs.CONFIG_NAME }}-latest
-          docker push ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${{ inputs.CONFIG_NAME }}-${{ inputs.COMMIT_SHA }}
+          docker push ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${CONFIG}-latest
+          docker push ${{ env.REGISTRY }}/${{ env.TX_PROCESSOR_IMAGE }}:${CONFIG}-${{ inputs.COMMIT_SHA }}
 
-          echo "✅ Image promoted successfully"
+          echo "✅ Image promoted from ${SOURCE_TAG} to ${CONFIG}"
 
       # - name: Extract metadata for VQA Service
       #   id: meta-vqa
-      #   uses: docker/metadata-action@v5
+      #   uses: docker/metadata-action@v6
       #   with:
       #     images: ${{ env.REGISTRY }}/${{ env.VQA_SERVICE_IMAGE }}
       #     tags: |
@@ -121,7 +129,7 @@ jobs:
 
       - name: Build and push tx-processor
         if: inputs.IS_PROMOTION == false
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./apps/tx-processor
           file: ./apps/tx-processor/docker/Dockerfile
@@ -143,7 +151,7 @@ jobs:
       #     VqaApiKey: ${{ secrets.VqaApiKey }}
 
       # - name: Build and push vqa-service
-      #   uses: docker/build-push-action@v5
+      #   uses: docker/build-push-action@v6
       #   with:
       #     context: ./apps/vqa-service
       #     file: ./apps/vqa-service/Dockerfile

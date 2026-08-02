@@ -16,7 +16,7 @@ mkdirSync(recordFolder, { recursive: true });
 
 const target = process.argv[2] ?? "Target";
 using askUser = new AskUserConsole();
-const writer = new AgentSerializer({ recordFolder, target, skipSections: [] });
+const writer = new AgentSerializer({ recordFolder, target });
 await using agent = await Agent.create(target, askUser);
 const page = agent.page;
 

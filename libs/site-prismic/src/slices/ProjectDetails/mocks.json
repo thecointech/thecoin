@@ -1,0 +1,27 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"offset": {
+				"key": "efa55da3-2c6b-4b18-a5a7-6feeb769645e",
+				"__TYPE__": "LinkContent",
+				"value": {
+					"__TYPE__": "ExternalLink",
+					"url": "https://prismic.io",
+					"text": "luck"
+				}
+			},
+			"project_documents": {
+				"__TYPE__": "LinkContent",
+				"key": "d50872ef-42c0-4b82-9475-958b7ac9786e",
+				"value": {
+					"__TYPE__": "ExternalLink",
+					"url": "https://prismic.io",
+					"text": "gray"
+				}
+			}
+		},
+		"items": []
+	}
+]

@@ -20,8 +20,8 @@ export type Props = {
 }
 
 const title = defineMessage({
-  defaultMessage: 'The benefits of a chequing, savings, and investing account all in one!',
-  description: 'site.createAccountBanner.title: The benefits of a chequing, savings, and investing account all in one!'
+  defaultMessage: 'Not a solution. A choice. Yours.',
+  description: 'the sites closing argument'
 });
 
 export const CreateAccountBanner = (props: Props) => (

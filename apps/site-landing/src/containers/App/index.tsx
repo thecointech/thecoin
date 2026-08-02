@@ -13,7 +13,8 @@ import { Footer } from 'components/Footer';
 import { MainPageTransition } from '@thecointech/site-base/components/MainPageTransition';
 import { Prismic } from 'components/Prismic/reducer';
 import { MediaContextProvider, mediaStyles } from '@thecointech/media-context';
-import { Outlet, ScrollRestoration } from 'react-router';
+import { Outlet, ScrollRestoration, Link } from 'react-router';
+import { InternalLinkProvider } from '@thecointech/site-prismic/components';
 
 // Either import CSS or LESS;
 // - LESS is slower, but offers on-save hot-reload
@@ -26,7 +27,7 @@ export const App = () => {
   Prismic.useStore();
 
   return (
-    <>
+    <InternalLinkProvider value={Link}>
       <ScrollRestoration />
       <MediaContextProvider>
         <style>{mediaStyles}</style>
@@ -44,6 +45,6 @@ export const App = () => {
           <Footer />
         </div>
       </MediaContextProvider>
-    </>
+    </InternalLinkProvider>
   );
 }

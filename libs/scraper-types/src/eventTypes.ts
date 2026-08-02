@@ -4,6 +4,7 @@ import type { ValueParsing } from "./searchTypes";
 export type BaseEvent = {
   timestamp: number,
   id: string,
+  section?: string,
 }
 
 export type NavigationEvent = {

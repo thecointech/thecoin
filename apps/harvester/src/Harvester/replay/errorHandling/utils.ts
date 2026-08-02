@@ -1,20 +1,26 @@
-import type { AnyEvent } from "@thecointech/scraper";
+import type { AnyEvent, ClickEvent, ValueEvent, InputEvent } from "@thecointech/scraper";
 import type { EventSection, SectionName } from "@thecointech/scraper-agent/types";
 import type { Page } from "puppeteer";
 import { getElementForEvent } from "@thecointech/scraper/elements";
 import { flatten, isSection } from "@thecointech/scraper-agent/replay/events";
+import { log } from "@thecointech/logging";
 
 export function findSectionByEvent(search: AnyEvent, section: EventSection) : EventSection | null {
   if (!search) {
     return null;
   }
   for (const eventOrSection of section.events) {
-    if (eventOrSection === search) {
-      return section;
-    }
-    else if (isSection(eventOrSection)) {
+    if (isSection(eventOrSection)) {
       const r = findSectionByEvent(search, eventOrSection);
       if (r) return r;
+    }
+    // Match by id
+    else if (eventOrSection.id && eventOrSection.id === search.id) {
+      return section;
+    }
+    // Match by reference (in case legacy events which didn't have ID's find their way in here)
+    else if (eventOrSection === search) {
+      return section;
     }
   }
   return null;
@@ -34,19 +40,19 @@ export function findSectionByName(search: SectionName, section: EventSection) : 
   return null;
 }
 
-export async function isPageInSection(page: Page, root: EventSection, sectionName: SectionName) {
+export async function isPageInSection(page: Page, root: EventSection, sectionName: SectionName, timeout=1000) {
   const section = findSectionByName(sectionName, root);
   if (section) {
     // The easiest way to tell is to search for the first element
     const events = flatten(section, [sectionName]);
 
     // Search for the first page interaction we do in the section
-    const firstElement = events.find(e => (e.type === "input" || e.type === "click" || e.type == "value"));
+    const firstElement = events.find(isInteractionEvent);
     if (firstElement) {
       try {
         const matched = await getElementForEvent({
           page,
-          timeout: 1000,
+          timeout,
           event: {
             ...firstElement,
             eventName: "isIn" + sectionName,
@@ -59,5 +65,13 @@ export async function isPageInSection(page: Page, root: EventSection, sectionNam
       }
     }
   }
+  else {
+    log.error(`Section ${sectionName} not found in root section, cannot determine if page is in section`);
+  }
   return null;
+}
+
+
+export function isInteractionEvent(event: AnyEvent): event is InputEvent | ClickEvent | ValueEvent {
+  return event.type === "input" || event.type === "click" || event.type === "value";
 }

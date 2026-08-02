@@ -1,4 +1,4 @@
-import { BunyanLogger, ChildOptions } from './logger';
+import { AppLogger, BunyanLogger, ChildOptions } from './logger';
 
 export interface IContextStorage {
   getStack(): LoggerContext[];
@@ -115,14 +115,23 @@ export class LoggerContext implements Disposable {
   }
 }
 
+// Properties that always resolve from the base logger, not the current context
+const EndProp = 'end' as const;
+type EndFn = AppLogger[typeof EndProp];
+
 /**
  * Create a logger proxy that delegates to the currently active logger
  */
-export function createLoggerProxy(baseLogger: BunyanLogger): BunyanLogger {
+export function createLoggerProxy(baseLogger: BunyanLogger, end: EndFn): AppLogger {
   LoggerContext.setBaseLogger(baseLogger);
 
   return new Proxy(baseLogger, {
     get(target, prop) {
+      // Properties that should always resolve from the base logger
+      if (prop === EndProp) {
+        return end;
+      }
+
       const currentLogger = LoggerContext.getCurrentLogger();
 
       // For other methods/properties, delegate to current logger if it has them,
@@ -136,5 +145,5 @@ export function createLoggerProxy(baseLogger: BunyanLogger): BunyanLogger {
       const value = (target as any)[prop];
       return typeof value === 'function' ? value.bind(target) : value;
     }
-  }) as BunyanLogger;
+  }) as AppLogger;
 }

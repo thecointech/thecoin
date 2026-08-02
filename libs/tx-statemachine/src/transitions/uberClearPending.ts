@@ -32,11 +32,7 @@ const doClearPending: TransitionCallback<BSActionTypes> = async (container) => {
   // UberTransfer completed immediately.  In this case, there is no need to do anything
   const currentState = getCurrentState(container)
   if (currentState.data.coin?.isPositive()) {
-    log.error(
-      { initialId: container.action.data.initialId },
-      "Cannot clear pending, already have coin balance"
-    )
-    return {};
+    return { error: "Cannot clear pending, already have coin balance" };
   }
 
   const { from, to, transferMillis } = request.transfer;

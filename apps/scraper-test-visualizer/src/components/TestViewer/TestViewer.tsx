@@ -7,7 +7,6 @@ import { TestLoading } from './TestLoading';
 import { TestError } from './TestError';
 import { TestHeader } from './TestHeader';
 import { TestScreenshot } from './TestScreenshot';
-import { OverrideData } from './OverrideData';
 import { ElementData } from './ElementData';
 import { SearchParameters } from './SearchParameters';
 import { colors, names } from './colors';
@@ -122,6 +121,20 @@ export const TestViewer: React.FC<TestViewerProps> = ({ test }) => {
     }
   }
 
+  async function openTestPage(key: string): Promise<void> {
+    try {
+      const response = await fetch(`/api/open-page/${key}`, {
+        method: 'POST',
+      });
+      const result = await response.json();
+      if (!result.success) {
+        console.error('Failed to open page:', result.message);
+      }
+    } catch (error) {
+      console.error('Failed to open page:', error);
+    }
+  }
+
   async function applyOverride(key: string, element: string): Promise<void> {
     setLoading(true);
     try {
@@ -176,10 +189,13 @@ export const TestViewer: React.FC<TestViewerProps> = ({ test }) => {
                 <Button
                   color="blue"
                   onClick={() => applyOverride(test.key, test.element)}
-                >Override</Button>
+                >Apply Fix</Button>
                 <Button
                   onClick={() => openTestFolder(test.key)}
                 >Open Folder</Button>
+                <Button
+                  onClick={() => openTestPage(test.key)}
+                >Open Page</Button>
                 <Dropdown
                   options={testResult.snapshot.map((snapshot, index) => ({
                     key: index,
@@ -194,7 +210,6 @@ export const TestViewer: React.FC<TestViewerProps> = ({ test }) => {
 
             <Grid.Row>
               <Grid.Column width={16}>
-                <OverrideData override={testResult.override} />
                 <ElementData
                   tests={getTestsToShow()}
                 />

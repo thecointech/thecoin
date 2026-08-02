@@ -87,6 +87,12 @@ export type ETransferResult = {
   confirmationCode: string,
 }
 
+export interface SectionResultMap extends Partial<Record<SectionName, unknown>> {
+  AccountsSummary?: ChequeBalanceResult;
+  CreditAccountDetails?: VisaBalanceResult;
+  SendETransfer?: ETransferResult;
+}
+
 export type ETransferInput = {
   amount: string,
 }

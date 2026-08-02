@@ -105,7 +105,7 @@ export function transitionTo<States extends string, Type extends ActionType=Acti
 // Every graph execution starts in the initial state.
 const initialState = <States extends string>(date: DateTime): StateSnapshot<States> => ({
   name: "initial" as States,
-  data: {},
+  data: { date },
   delta: {
     type: "no prior state",
     created: date,

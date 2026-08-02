@@ -1,32 +1,28 @@
-import type { BankEvents, BankIdent, ActionType, BankType } from "@thecointech/store-harvester";
-import type { ProcessAccount } from "@thecointech/scraper-agent/types";
+import type { BankEvents, BankIdent, BankType } from "@thecointech/store-harvester";
 import type { RendererBankType } from "@/Agent/state/types";
+import type { ProcessAccount } from "@thecointech/scraper-agent/types";
 import { getProcessConfig, setProcessConfig } from "./config";
 
 export async function setEvents(type: BankType, config: BankEvents) {
   await setProcessConfig({
+    // Note: merging is handled at the DB level
     scraping: {
       [type]: config
     }
   })
 }
 
-export async function getBankConfig(type: RendererBankType) {
+export async function getScrapingConfig() {
   const config = await getProcessConfig();
-  if (!config?.scraping) return null;
+  return config?.scraping;
+}
+
+export async function getBankConfig(type: RendererBankType): Promise<BankEvents | undefined> {
+  const config = await getProcessConfig();
+  if (!config?.scraping) return undefined;
   return ('both' in config.scraping)
     ? config.scraping.both
     : config.scraping[type];
-}
-
-export async function getEvents(type: ActionType) {
-  const scrapingSource = type == 'visaBalance' ? 'credit' : 'chequing';
-  const bankConfig = await getBankConfig(scrapingSource);
-
-  if (!bankConfig?.events) {
-    throw new Error(`No events found for ${type}`);
-  }
-  return bankConfig.events;
 }
 
 export type BankConnectDetails = BankIdent & { accounts: ProcessAccount[] };

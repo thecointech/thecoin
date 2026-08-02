@@ -3,7 +3,7 @@ import { NormalizeAddress } from '@thecointech/utilities/Address';
 import * as Browser from '@/store';
 import { getProvider } from '@thecointech/ethers-provider';
 import { ContractCore } from '@thecointech/contract-core';
-import { Wallet } from 'ethers';
+
 // Re-export everything from Browser store except getAllAccounts
 export * from '@/store';
 
@@ -17,16 +17,19 @@ export const getAllAccounts = async () => {
   const alreadyInjected = Object.values(accounts).some(a => a.name === testDemoAccountName);
   if (!alreadyInjected) {
     // Inject the TestDemoAccount if available from compile-time env variable
-    const privateKey = process.env.PRODTEST_TESTDEMOACCOUNT_WALLET;
+    const walletJson = process.env.PRODTEST_TESTDEMOACCOUNT_WALLET;
 
-    if (privateKey) {
+    if (walletJson) {
       try {
         const provider = await getProvider();
-        const wallet = new Wallet(privateKey, provider);
-        const address = NormalizeAddress(await wallet.getAddress());
+        const wallet = JSON.parse(walletJson);
+        // Mock being a remote signer
+        wallet.provider = provider;
+        wallet.getAddress = () => wallet.address;
+        const address = NormalizeAddress(wallet.address);
 
         // Create a read-only demo account
-        const demoAccount = buildNewAccount(testDemoAccountName, address, wallet);
+        const demoAccount = buildNewAccount(testDemoAccountName, wallet.address, wallet);
         demoAccount.contract = await ContractCore.get(provider);
         demoAccount.readonly = true;
 

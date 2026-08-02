@@ -1,4 +1,4 @@
-import { FC } from "react";
+import React, { type FC } from "react";
 import { Content } from "@prismicio/client";
 import { SliceComponentProps, PrismicRichText } from "@prismicio/react";
 import styles from "./index.module.css";

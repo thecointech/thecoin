@@ -1,0 +1,79 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"1_ghg_emission_impact": {
+				"__TYPE__": "FieldContent",
+				"value": "17",
+				"type": "Number"
+			},
+			"1_a_additionality": {
+				"__TYPE__": "FieldContent",
+				"value": "17",
+				"type": "Number"
+			},
+			"1_a_1_legal_requirements": {
+				"__TYPE__": "FieldContent",
+				"value": "64",
+				"type": "Number"
+			},
+			"s14": {
+				"__TYPE__": "FieldContent",
+				"value": "92",
+				"type": "Number"
+			},
+			"s01": {
+				"__TYPE__": "FieldContent",
+				"type": "Number",
+				"value": "1"
+			},
+			"s01a1": {
+				"__TYPE__": "FieldContent",
+				"type": "Number",
+				"value": "3"
+			},
+			"s01a": {
+				"__TYPE__": "FieldContent",
+				"type": "Number",
+				"value": "2"
+			},
+			"s01a2": {
+				"__TYPE__": "FieldContent",
+				"type": "Number",
+				"value": "4"
+			},
+			"s02": {
+				"__TYPE__": "FieldContent",
+				"type": "Number",
+				"value": "2"
+			},
+			"category": {
+				"__TYPE__": "FieldContent",
+				"value": "Avoided planned deforestation",
+				"type": "Select"
+			},
+			"s04": {
+				"__TYPE__": "FieldContent",
+				"type": "Number",
+				"value": "4"
+			},
+			"s01a3": {
+				"__TYPE__": "FieldContent",
+				"type": "Number",
+				"value": "5"
+			},
+			"s03": {
+				"__TYPE__": "FieldContent",
+				"type": "Number",
+				"value": "3"
+			},
+			"s05": {
+				"__TYPE__": "FieldContent",
+				"type": "Number",
+				"value": "5"
+			}
+		},
+		"items": []
+	}
+]

@@ -26,4 +26,4 @@ export const getDataAsDate = (key: string, data?: Record<string, string>) =>
 export const getDataAsCurrency = (key: string, data?: Record<string, string>) =>
     data?.[key]
       ? new currency(data[key])
-      : new currency(0);
+      : undefined;

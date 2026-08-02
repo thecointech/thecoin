@@ -16,6 +16,10 @@ export type StateData = {
   hash?: string; // Most recent tx hash
   meta?: string; // Any metadata about this transition: eg confirmation numbers etc
   error?: string; // Any error data.  Could be merged into meta?
+  // The effective financial date of the action is happening on (eg settlement date, return date).
+  // Initially set to the action creation date, updated when transitions happen at
+  // a specific time (eg, conversion, transfer completion)
+  date: DateTime;
 }
 
 // The changes applied to an action
@@ -23,14 +27,12 @@ export type TransitionDelta = {
   // The date the transition was created.  May differ from
   // the applicable date of the action (eg, based on settlement dates etc)
   created: DateTime;
-  // The date the action happened.  This will be different than
-  // the created date.  For example, the recieved date for an
-  // e-transfer will be different than when the action is created.
-  // This date is primarily for reference, and not used internally
+  // The effective financial date of this transition.
+  // Optional on deltas — if omitted, the accumulated StateData.date is inherited.
   date?: DateTime;
   // The type of transition (ie, describes the effects of the transition: toCoin etc)
   type: string;
-} & StateData;
+} & Omit<StateData, 'date'>;
 
 // An action stores very little data directly.
 // Instead, it has an 'events' subcollection

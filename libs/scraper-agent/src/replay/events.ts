@@ -2,9 +2,9 @@ import type { AnyEvent } from "@thecointech/scraper-types";
 import type { EventSection, SectionName } from "../types";
 
 
-export type ActionType = 'visaBalance'|'chqBalance'|'chqETransfer';
+export type ReplayAction = 'visaBalance'|'chqBalance'|'chqETransfer';
 
-export function getReplayEvents(baseNode: EventSection, type: ActionType): AnyEvent[] {
+export function getReplayEvents(baseNode: EventSection, type: ReplayAction | ReplayAction[]): AnyEvent[] {
   const sectionsToKeep = getSectionsToKeep(type);
   return getTrimmedEvents(baseNode, sectionsToKeep);
 }
@@ -15,7 +15,7 @@ export function getTrimmedEvents(baseNode: EventSection, sectionsToKeep?: Sectio
 }
 
 export function isSection(event: EventSection|AnyEvent): event is EventSection {
-  return 'section' in event;
+  return 'section' in event && 'events' in event && Array.isArray(event.events);
 }
 
 export function flatten(section: EventSection, sectionsToKeep?: SectionName[]): AnyEvent[] {
@@ -30,7 +30,11 @@ export function flatten(section: EventSection, sectionsToKeep?: SectionName[]): 
     }
     else if (shouldKeep) {
       // This is an AnyEvent and we want to keep events from this section
-      events.push(event);
+      // Stamp section if not already set (e.g. older recordings)
+      const toPush = event.section
+        ? event
+        : { ...event, section: section.section };
+      events.push(toPush);
     }
   }
   return events;
@@ -61,18 +65,17 @@ export function stripDuplicateNavigations(events: AnyEvent[]) {
   });
 }
 
-export function getSectionsToKeep(actionType: ActionType) : SectionName[] {
-  const sectionsToKeep: SectionName[] = [];
-  switch (actionType) {
-    case "chqBalance":
-      sectionsToKeep.push("Initial", "Landing", "Login", "AccountsSummary", "Logout");
-      break;
-    case "visaBalance":
-      sectionsToKeep.push("Initial", "Landing", "Login", "CreditAccountDetails", "Logout");
-      break;
-    case "chqETransfer":
-      sectionsToKeep.push("Initial", "Landing", "Login", "SendETransfer", "Logout");
-      break;
-  }
-  return sectionsToKeep;
+const sessionSections: SectionName[] = ["Initial", "Landing", "Login"];
+const sessionEnd: SectionName[] = ["Logout"];
+
+const actionSections: Record<ReplayAction, SectionName[]> = {
+  chqBalance:   ["AccountsSummary"],
+  visaBalance:  ["CreditAccountDetails"],
+  chqETransfer: ["SendETransfer"],
+};
+
+export function getSectionsToKeep(actionType: ReplayAction | ReplayAction[]) : SectionName[] {
+  const actions = Array.isArray(actionType) ? actionType : [actionType];
+  const middle = actions.flatMap(a => actionSections[a]);
+  return [...sessionSections, ...middle, ...sessionEnd];
 }
