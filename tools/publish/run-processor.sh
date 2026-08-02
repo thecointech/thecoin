@@ -1,7 +1,11 @@
+printf 'Starting tx-processor at %s\n' "$(/bin/date)"
+CURRENT_DIR="$(dirname "$0")"
+export CONFIG_NAME=prodtest
+export THECOIN_SECRETS=${CURRENT_DIR}/env
 
-SCRIPT_DIR="$(dirname "$0")"
-CURRENT_DEPLOY_PATH=$(cat "$SCRIPT_DIR/current_deploy.txt")
-echo "Running processor on $(date) for version: $CURRENT_DEPLOY_PATH"
-
-cd $CURRENT_DEPLOY_PATH/apps/tx-processor
-yarn prod:test
+if docker compose --ansi never -f ${CURRENT_DIR}/docker-compose.yaml up; then
+  printf 'Docker app ran at %s\n' "$(/bin/date)"
+else
+  printf 'Docker app failed to start at %s\n' "$(/bin/date)"
+  exit 1
+fi

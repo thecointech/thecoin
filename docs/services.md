@@ -12,3 +12,6 @@ TO CONSIDER: Migrate to volumes, no bind mounts: for consistency
 Use systemctl to trigger runs on linux.
 Use launchd to trigger runs on macos.
 
+prodtest: currently running every 4 hours using launchd -> run-processor.sh
+prod: currently running every 1 hours using launchd -> run-processor.sh
+
