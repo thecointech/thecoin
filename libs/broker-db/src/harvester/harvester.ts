@@ -13,7 +13,6 @@ import {
   harvesterRunConverter,
   harvesterStatusConverter,
 } from "./harvester.types";
-import { log } from "@thecointech/logging";
 
 const RunsCollectionId = "Runs";
 const RegistrationsCollectionId = "Registrations";
@@ -225,15 +224,9 @@ export async function completeHarvesterRun(address: string, installationId: stri
     };
 
     // Because this is running through a transaction, we manually apply the converter.
-    try {
-      const cleaned = cleanUndefined(completedRun);
-      const fsRun = harvesterRunConverter.toFirestore(cleaned as HarvesterRun);
-      transaction.set(toAdminRef(runDoc), fsRun, { merge: true });
-    }
-    catch (err) {
-      log.error({ err }, "Failed to log harvester run completion");
-      throw err;
-    }
+    const cleaned = cleanUndefined(completedRun);
+    const fsRun = harvesterRunConverter.toFirestore(cleaned as HarvesterRun);
+    transaction.set(toAdminRef(runDoc), fsRun, { merge: true });
 
     // A newer run may have already started (and become `lastRunId`) while
     // this one was still outstanding. In that case, don't let this stale
@@ -249,15 +242,9 @@ export async function completeHarvesterRun(address: string, installationId: stri
           ...(completion.failureStages !== undefined ? { lastFailureStages: completion.failureStages } : {}),
         }),
       };
-      try {
-        const cleaned = cleanUndefined(statusUpdate);
-        const fsStatus = harvesterStatusConverter.toFirestore(cleaned as HarvesterStatus);
-        transaction.set(toAdminRef(statusDoc), fsStatus, { merge: true });
-      }
-      catch (err) {
-        log.error({ err }, "Failed to log harvester run completion status");
-        throw err;
-      }
+      const cleaned = cleanUndefined(statusUpdate);
+      const fsStatus = harvesterStatusConverter.toFirestore(cleaned as HarvesterStatus);
+      transaction.set(toAdminRef(statusDoc), fsStatus, { merge: true });
     }
 
     return {
