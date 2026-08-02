@@ -223,7 +223,10 @@ export async function completeHarvesterRun(address: string, installationId: stri
       durationMs: completion.finishedAt.toMillis() - run.startedAt.toMillis(),
     };
 
-    transaction.set(toAdminRef(runDoc), completedRun, { merge: true });
+    // Because this is running through a transaction, we manually apply the converter.
+    const cleaned = cleanUndefined(completedRun);
+    const fsRun = harvesterRunConverter.toFirestore(cleaned as HarvesterRun);
+    transaction.set(toAdminRef(runDoc), fsRun, { merge: true });
 
     // A newer run may have already started (and become `lastRunId`) while
     // this one was still outstanding. In that case, don't let this stale
@@ -239,7 +242,9 @@ export async function completeHarvesterRun(address: string, installationId: stri
           ...(completion.failureStages !== undefined ? { lastFailureStages: completion.failureStages } : {}),
         }),
       };
-      transaction.set(toAdminRef(statusDoc), statusUpdate, { merge: true });
+      const cleaned = cleanUndefined(statusUpdate);
+      const fsStatus = harvesterStatusConverter.toFirestore(cleaned as HarvesterStatus);
+      transaction.set(toAdminRef(statusDoc), fsStatus, { merge: true });
     }
 
     return {
@@ -247,4 +252,11 @@ export async function completeHarvesterRun(address: string, installationId: stri
       ...completedRun,
     };
   });
+}
+
+
+function cleanUndefined<T extends Record<string, any>>(o: T): Partial<T> {
+  return Object.fromEntries(
+    Object.entries(o).filter(([_, v]) => v !== undefined)
+  ) as Partial<T>;
 }
