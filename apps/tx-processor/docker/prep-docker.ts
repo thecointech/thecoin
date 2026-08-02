@@ -25,6 +25,7 @@ writeFileSync("./temp/package.json", JSON.stringify(packageJson, null, 2));
 const yarnConfig = {
   nodeLinker: "node-modules",
   checksumBehavior: "ignore",
+  npmMinimalAgeGate: 0,
   npmScopes: {
     thecointech: {
       npmRegistryServer: "https://npm.pkg.github.com",

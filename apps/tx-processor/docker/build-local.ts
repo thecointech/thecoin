@@ -25,18 +25,18 @@ const rootDir = join(__dirname, '../../..');
 console.log("Building Docker Image from: ", rootDir);
 
 // Build the Docker image using sudo
-// const result = spawnSync('bash', [
-//   '-c',
-//   `echo "${sudoPwd}" | sudo -S docker build -t tx-processor -f "apps/tx-processor/docker/Dockerfile_local" --rm=false .`
-// ], {
-//   stdio: 'inherit',
-//   cwd: rootDir // Run from the parent folder
-// });
+const result = spawnSync('bash', [
+  '-c',
+  `echo "${sudoPwd}" | sudo -S docker build -t tx-processor -f "apps/tx-processor/docker/Dockerfile_local" --rm=false .`
+], {
+  stdio: 'inherit',
+  cwd: rootDir // Run from the parent folder
+});
 
-// // Clean up temporary files
-// rmSync('./temp', { recursive: true, force: true });
+// Clean up temporary files
+rmSync('./temp', { recursive: true, force: true });
 
 // Check if the build was successful
-// if (result.status !== 0) {
-//   throw new Error('Failed to build Docker image');
-// }
+if (result.status !== 0) {
+  throw new Error('Failed to build Docker image');
+}
