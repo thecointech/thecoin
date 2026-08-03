@@ -1,5 +1,4 @@
 import { google } from 'googleapis';
-import type { OAuth2Client } from 'google-auth-library';
 import { getAuthConfig } from './authConfig';
 
 /**
@@ -18,8 +17,3 @@ export async function getAuthClient() {
 
   return oAuth2Client
 }
-
-export function isValid(oAuth2Client: OAuth2Client|null) {
-  return !!oAuth2Client?.credentials?.access_token;
-}
-
