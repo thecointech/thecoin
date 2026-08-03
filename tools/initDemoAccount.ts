@@ -1,6 +1,6 @@
 import { getSigner } from "@thecointech/signers";
 import { DateTime, Duration } from "luxon";
-import { GetPluginsApi, GetBillPaymentsApi } from '@thecointech/apis/broker';
+import { GetPluginsApi, GetBillPaymentsApi, GetStatusApi } from '@thecointech/apis/broker';
 import { ContractCore } from '@thecointech/contract-core';
 import { ContractConverter } from '@thecointech/contract-plugin-converter';
 import { ContractShockAbsorber } from '@thecointech/contract-plugin-shockabsorber';
@@ -19,6 +19,11 @@ import type { AddressLike } from "ethers";
 if (process.env.CONFIG_NAME == "devlive") {
   writeFileSync(emailCacheFile, "[]");
 }
+
+// First, is the server running?
+const statusApi = GetStatusApi();
+const status = await statusApi.status();
+console.log(`Server status: ${status.status}`);
 
 /////////////////////////////////////////////
 const monthsToRun = 100;
@@ -109,57 +114,62 @@ let nextPayDate = startDate.plus(visaStep);
 DateTime.now = () => currDate
 
 let numSent = 0;
-while (currDate < endDate) {
+try {
+  while (currDate < endDate) {
 
-  // It seems our email can get overloaded
-  // if (numSent >= 100) {
-  //   break;
-  // }
+    // It seems our email can get overloaded
+    // if (numSent >= 100) {
+    //   break;
+    // }
 
-  // If we run harvester on this day?
-  if (harvestRunsOnDay.includes(currDate.weekday)) {
-
-    if (currDate >= pausedDate) {
-      console.log(`Running Harvester for ${currDate.weekdayShort} ${currDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
-      numSent++;
-       // Send the transfer slightly earlier than the current date
-       // This ensures it is processed first in the tx-processor,
-       // which is important because deposits need to be present
-       // before the bill is processed if the bill is processed
-       // immediately (which in the past, it is)
-      const r = await SendFakeDeposit(testAddress, harvestSends, currDate.minus({minutes: 1}));
-      if (!r) {
-        console.log("Failed to send mail");
-        break;
-      }
-    }
-
-    // If it's time to pay our visa bills?
-    if (nextPayDate <= currDate) {
+    // If we run harvester on this day?
+    if (harvestRunsOnDay.includes(currDate.weekday)) {
 
       if (currDate >= pausedDate) {
-
-        const dueDate = nextPayDate.plus(visaDuePeriod);
-        const billPayment = await BuildUberAction(
-          mockPayee,
-          signer,
-          brokerAddress,
-          new Decimal(billTotal),
-          CurrencyCode.CAD,
-          dueDate
-        )
-        const signedAt = DateTime.fromMillis(billPayment.transfer.signedMillis).toLocaleString(DateTime.DATETIME_SHORT);
-        const dueAt = DateTime.fromMillis(billPayment.transfer.transferMillis).toLocaleString(DateTime.DATETIME_SHORT);
-        console.log(`Sending BillPayment: Signed ${signedAt} - Due ${dueAt}`);
-
-        await payBillApi.uberBillPayment(billPayment);
+        // Send the transfer slightly earlier than the current date
+        // This ensures it is processed first in the tx-processor,
+        // which is important because deposits need to be present
+        // before the bill is processed if the bill is processed
+        // immediately (which in the past, it is)
+        const r = await SendFakeDeposit(testAddress, harvestSends, currDate.minus({minutes: 1}));
+        console.log(`Ran Harvester for ${currDate.weekdayShort} ${currDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
+        if (!r) {
+          console.log("Failed to send mail");
+          break;
+        }
+        numSent++;
       }
 
-      nextPayDate = nextPayDate.plus(visaStep);
+      // If it's time to pay our visa bills?
+      if (nextPayDate <= currDate) {
+
+        if (currDate >= pausedDate) {
+
+          const dueDate = nextPayDate.plus(visaDuePeriod);
+          const billPayment = await BuildUberAction(
+            mockPayee,
+            signer,
+            brokerAddress,
+            new Decimal(billTotal),
+            CurrencyCode.CAD,
+            dueDate
+          )
+          await payBillApi.uberBillPayment(billPayment);
+
+          const signedAt = DateTime.fromMillis(billPayment.transfer.signedMillis).toLocaleString(DateTime.DATETIME_SHORT);
+          const dueAt = DateTime.fromMillis(billPayment.transfer.transferMillis).toLocaleString(DateTime.DATETIME_SHORT);
+          console.log(`Sent BillPayment: Signed ${signedAt} - Due ${dueAt}`);
+
+        }
+
+        nextPayDate = nextPayDate.plus(visaStep);
+      }
     }
+
+    currDate = currDate.plus({day: 1});
   }
-
-  currDate = currDate.plus({day: 1});
 }
-
+catch (e) {
+  console.error(e);
+}
 console.log("Sent ", numSent, " emails");

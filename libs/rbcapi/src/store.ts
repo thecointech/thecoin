@@ -1,5 +1,5 @@
 import type { BankTx } from "@thecointech/bank-interface";
-import { DateTime, DateTimeOptions } from "luxon";
+import { DateTime, type DateTimeOptions } from "luxon";
 import { BaseStore, ConfigStore } from "@thecointech/store";
 
 const lastSyncKey = 'LastSync';

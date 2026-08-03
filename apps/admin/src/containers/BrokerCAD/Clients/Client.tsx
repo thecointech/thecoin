@@ -6,6 +6,7 @@ import { getHistory, ComposeClient } from '@thecointech/idx';
 import { Header, Input, List } from 'semantic-ui-react';
 import { ClientTransaction } from './ClientTransaction';
 import { UserData } from './data';
+import styles from './Client.module.less';
 import { toCAD } from './toCAD';
 import { buildUniqueId } from '@thecointech/utilities/Verify';
 import { verifyMessage } from 'ethers';
@@ -53,7 +54,7 @@ export const Client = (props: Props) => {
       : "UNVERIFIED";
 
   return (
-    <>
+    <div className={styles.clientContainer}>
       <Header as='h4'>
         {props.address} - {toCAD(props.balanceCoin, rates.rates)}
       </Header>
@@ -72,10 +73,10 @@ export const Client = (props: Props) => {
       <div>status: {details?.status}</div>
       <div>verified: {getIsVerified(details).toString()}</div>
       <hr />
-      <List>
+      <List className={styles.transactionList}>
         {transactions.map(ClientTransaction)}
       </List>
-    </>
+    </div>
   )
 }
 
