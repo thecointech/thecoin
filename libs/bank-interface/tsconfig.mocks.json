@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.libs.json",
+  "compilerOptions": {
+    "outDir": "./mocks/.build/",
+    "tsBuildInfoFile": "./mocks/.build/.buildinfo",
+    "rootDir": "./mocks/"
+  },
+  "include": ["mocks/**/*.ts"]
+}

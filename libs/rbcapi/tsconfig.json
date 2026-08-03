@@ -3,5 +3,6 @@
   "references": [
     { "path": "./tsconfig.tests.json" },
     { "path": "./tsconfig.build.json" },
+    { "path": "./tsconfig.mocks.json" }
   ]
 }

@@ -26,11 +26,11 @@
   },
   "files": [
     "build/**/*",
-    "mocked/**/*"
+    "mocks/.build/**/*"
   ],
   "exports": {
     ".": "./build/index.js",
-    "./mocked": "./mocked/index.ts"
+    "./mocked": "./mocks/.build/index.js"
   },
   "typesVersions": {
     "*": {
@@ -38,7 +38,7 @@
         "build/*"
       ],
       "mocked": [
-        "mocked/index.ts"
+        "mocks/index.ts"
       ]
     }
   },

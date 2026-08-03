@@ -24,18 +24,19 @@
   "scripts": {
     "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
     "build": "run -T tsc -b",
-    "clean": "rimraf ./build && rimraf ./coverage",
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage && run -T rimraf ./mocks/.build",
     "test": "run :jest --runInBand --detectOpenHandles --forceExit",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [
-    "build/**/*"
+    "build/**/*",
+    "mocks/.build/**/*"
   ],
   "exports": {
     ".": {
-      "development": "./mocked/index.ts",
-      "devlive": "./mocked/index.ts",
-      "prodtest": "./mocked/index.ts",
+      "development": "./mocks/index.ts",
+      "devlive": "./mocks/index.ts",
+      "prodtest": "./mocks/.build/index.js",
       "types": "./build/index.d.ts",
       "default": "./build/index.js"
     },

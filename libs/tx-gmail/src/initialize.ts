@@ -39,10 +39,22 @@ function getCredentials(token?: string) {
       }
 
       // Minimal shape check; avoid returning junk
-      if (!('refresh_token' in credentials) && !('access_token' in credentials)) return null;
+      if (!('refresh_token' in credentials) && !('access_token' in credentials)) {
+        log.error({ credentials }, "tx-gmail: invalid credentials shape");
+        return null;
+      }
+
+      // Is the token expired?
+      if ("expiry_date" in credentials) {
+        const expires = new Date(credentials.expiry_date);
+        if (expires < new Date()) {
+          log.warn({ expires }, "tx-gmail: token expired {expires}");
+          return null;
+        }
+      }
       return credentials;
     } catch (err) {
-      log.warn({ err }, "initialize: invalid token JSON");
+      log.warn({ err }, "tx-gmail: invalid token JSON");
       return null;
     }
   }
