@@ -7,7 +7,7 @@ import { log } from '@thecointech/logging';
 export async function initialize(token?: string) {
 
   const { client, credentials } = await getAuth(token);
-  if (!credentials || !client.credentials.access_token) {
+  if (!credentials || !client?.credentials.access_token) {
     const summary = {
       hasCreds: Boolean(credentials),
       hasRefresh: Boolean((credentials as any)?.refresh_token),
@@ -40,10 +40,11 @@ async function getAuth(token?: string) {
       }
       else {
         // If no refresh is possible, ensure it is not expired
-        if (credentials.expiry_date && credentials.expiry_date < Date.now()) {
-          log.warn("tx-gmail: token is expired and cannot be refreshed");
-          return {};
+        if (credentials.expiry_date && credentials.expiry_date > Date.now()) {
+          // If it's still valid, use it.
+          return { client, credentials };
         }
+        log.warn({ expired: new Date(credentials.expiry_date) }, "tx-gmail: token expired {expired} and cannot be refreshed");
       }
     }
   }
