@@ -20,7 +20,7 @@
     "start": "yarn run-env ./build/main.js",
     "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt",
-    "build:docker": "yarn run-env cfg=prod ./docker/build-local.ts"
+    "build:docker": "./docker/build-local.sh"
   },
   "files": [
     "build/**/*"

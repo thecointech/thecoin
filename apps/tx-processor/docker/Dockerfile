@@ -106,23 +106,22 @@ ENV DBUS_SESSION_BUS_ADDRESS=autolaunch: \
     THECOIN_DATA=/data \
     TC_LOG_FOLDER=/data/logs \
     STORAGE_PATH=/data/dbs/ \
-    THECOIN_SECRETS=/secrets \
-    YARN_NPM_MINIMAL_AGE_GATE=0
+    THECOIN_SECRETS=/secrets
 
 WORKDIR /app
 
 # Copy workspace files
-COPY temp/package.json ./
-COPY temp/.yarnrc.yml ./
-COPY temp/yarn.lock ./
-COPY temp/environments/*.env /app/environments/
+COPY --chown=pptruser:pptruser package.json yarn.lock .yarnrc.yml /app/
+COPY --chown=pptruser:pptruser libs /app/libs
+COPY --chown=pptruser:pptruser apis /app/apis
+COPY --chown=pptruser:pptruser apps/tx-processor /app/apps/tx-processor
+COPY --chown=pptruser:pptruser environments/*.env /app/environments/
+
+WORKDIR /app/apps/tx-processor
 
 # Install dependencies and cleanup sensitive files
 RUN yarn workspaces focus --production && \
-    rm -f .yarnrc.yml
-
-# Copy source code
-COPY build ./build
+    rm -f /app/.yarnrc.yml
 
 # Create volume mount points
 VOLUME /data
@@ -130,4 +129,4 @@ VOLUME /secrets
 
 # Hard-code the path to run-env to avoid issues with
 # Yarn not thinking it's been installed
-CMD ["node", "node_modules/@thecointech/setenv/bin/run-env.mjs", "build/main.js"]
+CMD ["node", "../../node_modules/@thecointech/setenv/bin/run-env.mjs", "build/main.js"]
