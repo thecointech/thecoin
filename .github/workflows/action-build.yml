@@ -88,6 +88,7 @@ jobs:
           apps/**/translations/*.json
           apps/*/build/
           libs/*/build/
+          libs/*/mocks/.build/
           apis/**/dist/
           libs/contract-*/src/codegen/**
           libs/site-prismic/src/semantic/
