@@ -84,6 +84,7 @@ jobs:
       uses: actions/upload-artifact@v6
       with:
         name: build-artifacts
+        include-hidden-files: true
         path: |
           apps/**/translations/*.json
           apps/*/build/
