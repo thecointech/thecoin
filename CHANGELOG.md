@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.6-test.3](https://github.com/thecointech/thecoin/compare/v0.6.6-test.2...v0.6.6-test.3) (2026-08-04)
+
+**Note:** Version bump only for package @thecointech/the-coin
+
+
+
+
+
 ## [0.6.6-test.2](https://github.com/thecointech/thecoin/compare/v0.6.6-test.1...v0.6.6-test.2) (2026-08-02)
 
 **Note:** Version bump only for package @thecointech/the-coin
