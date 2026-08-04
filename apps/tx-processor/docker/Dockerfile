@@ -106,7 +106,8 @@ ENV DBUS_SESSION_BUS_ADDRESS=autolaunch: \
     THECOIN_DATA=/data \
     TC_LOG_FOLDER=/data/logs \
     STORAGE_PATH=/data/dbs/ \
-    THECOIN_SECRETS=/secrets
+    THECOIN_SECRETS=/secrets \
+    YARN_NPM_MINIMAL_AGE_GATE=0
 
 WORKDIR /app
 

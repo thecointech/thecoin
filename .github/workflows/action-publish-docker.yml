@@ -127,6 +127,10 @@ jobs:
           GH_PACKAGES_READ: ${{ secrets.GH_PACKAGES_READ }}
           CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
 
+      - name: Inspect generated Yarn config
+        if: inputs.IS_PROMOTION == false
+        run: cat ./apps/tx-processor/temp/.yarnrc.yml
+
       - name: Build and push tx-processor
         if: inputs.IS_PROMOTION == false
         uses: docker/build-push-action@v6

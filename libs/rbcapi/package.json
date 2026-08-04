@@ -47,6 +47,9 @@
   },
   "typesVersions": {
     "*": {
+      "transactions": [
+        "build/transactions.d.ts"
+      ],
       "*": [
         "build/*"
       ]
