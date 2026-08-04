@@ -11901,7 +11901,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thecointech/rbcapi@npm:^0.6.6-test.3, @thecointech/rbcapi@workspace:libs/rbcapi":
+"@thecointech/rbcapi@npm:^0.6.6-test.4, @thecointech/rbcapi@workspace:libs/rbcapi":
   version: 0.0.0-use.local
   resolution: "@thecointech/rbcapi@workspace:libs/rbcapi"
   dependencies:
@@ -12459,7 +12459,7 @@ __metadata:
   resolution: "@thecointech/tx-processor@workspace:apps/tx-processor"
   dependencies:
     "@thecointech/logging": "npm:^0.6.6-test.0"
-    "@thecointech/rbcapi": "npm:^0.6.6-test.3"
+    "@thecointech/rbcapi": "npm:^0.6.6-test.4"
     "@thecointech/setenv": "npm:^0.6.6-test.0"
     "@thecointech/site-app": "npm:^0.6.6-test.0"
     "@thecointech/tx-bill": "npm:^0.6.6-test.3"
