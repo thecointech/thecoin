@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "./mocks/.build/",
     "tsBuildInfoFile": "./mocks/.build/.buildinfo",
-    "rootDir": "./mocks/"
+    "rootDir": "./mocks/",
+    "baseUrl": "./mocks/"
   },
   "include": ["mocks/**/*.ts"]
 }

@@ -20,9 +20,9 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo ./mocks/.build/.buildinfo",
     "build": "run -T tsc -b tsconfig.json",
-    "clean": "rimraf ./build"
+    "clean": "run -T rimraf ./build && run -T rimraf ./mocks/.build"
   },
   "files": [
     "build/**/*",
@@ -38,7 +38,7 @@
         "build/*"
       ],
       "mocked": [
-        "mocks/index.ts"
+        "mocks/.build/index.d.ts"
       ]
     }
   },

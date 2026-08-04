@@ -28,13 +28,22 @@ async function getAuth(token?: string) {
     const credentials = getCredentials(token);
     if (credentials) {
       client.setCredentials(credentials);
-      // Validate 
-      try {
-        const refreshed = await client.refreshAccessToken();
-        return { client, credentials: refreshed.credentials };
+      if (credentials.refresh_token) {
+        // validate that the token is still value by refreshing it
+        try {
+          const refreshed = await client.refreshAccessToken();
+          return { client, credentials: refreshed.credentials };
+        }
+        catch (err) {
+          log.warn({ err }, "tx-gmail: failed to refresh token");
+        }
       }
-      catch (err) {
-        log.warn({ err }, "tx-gmail: failed to refresh token");
+      else {
+        // If no refresh is possible, ensure it is not expired
+        if (credentials.expiry_date && credentials.expiry_date < Date.now()) {
+          log.warn("tx-gmail: token is expired and cannot be refreshed");
+          return {};
+        }
       }
     }
   }
@@ -56,7 +65,7 @@ function getCredentials(token?: string) {
         return {
           refresh_token: "",
           access_token: "token",
-          expiry_date: 0,
+          expiry_date: Date.now() + 3600 * 1000, // 1 hour from now
         };
       }
 
@@ -64,7 +73,7 @@ function getCredentials(token?: string) {
       const hasRefresh = typeof credentials.refresh_token === 'string' && credentials.refresh_token.length > 0;
       const hasAccess = typeof credentials.access_token === 'string' && credentials.access_token.length > 0;
       if (!hasRefresh && !hasAccess) {
-        log.error({ credentials }, "tx-gmail: invalid credentials shape");
+        log.error({ hasRefresh, hasAccess }, "tx-gmail: invalid credentials shape");
         return null;
       }
 
