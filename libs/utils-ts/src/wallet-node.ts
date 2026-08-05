@@ -41,8 +41,15 @@ export async function decryptWallet(
         signal?.addEventListener('abort', abortHandler, { once: true });
 
         worker.on("message", (msg: WalletMessage) => {
+          if (settled) return;
           if (msg.type === 'progress') {
-            onProgress?.(msg.progress);
+            try {
+              onProgress?.(msg.progress);
+            } catch (err) {
+              settled = true;
+              cleanupSignal(abortHandler);
+              reject(err);
+            }
             return;
           }
           if (settled) return;
