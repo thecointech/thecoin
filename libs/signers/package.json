@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/signers",
-  "version": "0.6.6-test.0",
+  "version": "0.6.6-test.7",
   "description": "The Coin: centralized access for built-in signers.  Not for external use",
   "type": "module",
   "keywords": [
@@ -60,7 +60,7 @@
     "@thecointech/ethers-provider": "^0.6.6-test.0",
     "@thecointech/logging": "^0.6.6-test.0",
     "@thecointech/secrets": "^0.6.6-test.0",
-    "@thecointech/utilities": "^0.6.6-test.0"
+    "@thecointech/utilities": "^0.6.6-test.7"
   },
   "devDependencies": {
     "@thecointech/electron-utils": "^0.6.6-test.0"
