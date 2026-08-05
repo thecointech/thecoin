@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+        <key>Label</key>
+        <string>com.thecoin.txprocessor</string>
+        <key>EnvironmentVariables</key>
+                <dict>
+                        <key>PATH</key>
+                        <string>/usr/bin:/usr/local/bin</string>
+                        <key>CONFIG_NAME</key>
+                        <string>prodtest</string>
+                        <key>THECOIN_SECRETS</key>
+                        <string>{TheCoinEnvPath}/env</string>
+                </dict>
+        <key>WorkingDirectory</key>
+        <string>{TheCoinEnvPath}</string>
+
+        <key>ProgramArguments</key>
+        <array>
+                <string>/bin/zsh</string>
+                <string>-c</string>
+                <string>docker compose --ansi never -f ./docker-compose.yaml up --remove-orphans</string>
+
+        </array>
+        <key>StartCalendarInterval</key>
+        <array>
+                <dict>  
+                <key>Minute</key>
+                <integer>35</integer>
+                <key>Hour</key>
+                <integer>0</integer>
+                </dict>
+                <dict>  
+                <key>Minute</key>
+                <integer>35</integer>
+                <key>Hour</key>
+                <integer>4</integer>
+                </dict>
+                <dict>  
+                <key>Minute</key>
+                <integer>35</integer>
+                <key>Hour</key>
+                <integer>8</integer>
+                </dict>
+                <dict>  
+                <key>Minute</key>
+                <integer>35</integer>
+                <key>Hour</key>
+                <integer>12</integer>
+                </dict>
+                <dict>  
+                <key>Minute</key>
+                <integer>35</integer>
+                <key>Hour</key>
+                <integer>16</integer>
+                </dict>
+                <dict>  
+                <key>Minute</key>
+                <integer>35</integer>
+                <key>Hour</key>
+                <integer>20</integer>
+                </dict>
+        </array>
+        <key>RunAtLoad</key>
+        <true/>
+        <key>StandardOutPath</key>
+        <string>/tmp/tx_processor.stdout.log</string>
+        <key>StandardErrorPath</key>
+        <string>/tmp/tx_processor.stderr.log</string>
+</dict>
+</plist>
