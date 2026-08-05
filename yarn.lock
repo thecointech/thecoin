@@ -12088,6 +12088,7 @@ __metadata:
     "@thecointech/ethers-provider": "npm:^0.6.6-test.0"
     "@thecointech/logging": "npm:^0.6.6-test.0"
     "@thecointech/secrets": "npm:^0.6.6-test.0"
+    "@thecointech/utilities": "npm:^0.6.6-test.0"
   languageName: unknown
   linkType: soft
 
@@ -12513,6 +12514,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/utilities@workspace:libs/utils-ts"
   dependencies:
+    "@thecointech/async": "npm:^0.6.6-test.0"
     "@thecointech/jestutils": "npm:^0.6.6-test.0"
     "@thecointech/logging": "npm:^0.6.6-test.0"
     "@thecointech/secrets": "npm:^0.6.6-test.0"

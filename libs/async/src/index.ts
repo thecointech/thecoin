@@ -4,12 +4,16 @@ export function sleep(ms: number) {
 }
 
 export function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
-  return Promise.race([
-    promise,
-    new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms)
-    ),
-  ]);
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timeout = setTimeout(
+      () => reject(new Error(`${label} timed out after ${ms}ms`)),
+      ms
+    );
+  });
+  return Promise.race([promise, timeoutPromise]).finally(() => {
+    if (timeout !== undefined) clearTimeout(timeout);
+  });
 }
 
 export { Mutex } from 'async-mutex';

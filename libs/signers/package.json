@@ -59,7 +59,8 @@
     "@thecointech/electron-signer": "^0.6.6-test.0",
     "@thecointech/ethers-provider": "^0.6.6-test.0",
     "@thecointech/logging": "^0.6.6-test.0",
-    "@thecointech/secrets": "^0.6.6-test.0"
+    "@thecointech/secrets": "^0.6.6-test.0",
+    "@thecointech/utilities": "^0.6.6-test.0"
   },
   "devDependencies": {
     "@thecointech/electron-utils": "^0.6.6-test.0"
