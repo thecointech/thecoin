@@ -22,15 +22,18 @@
     "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
     "build": "run -T tsc -b",
     "clean": "run -T rimraf ./build && run -T rimraf ./coverage",
+    "pretest": "yarn build",
     "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
+    "./wallet": {
+      "node": "./build/wallet-node.js"
+    },
     "./*": "./build/*.js"
   },
   "types": "./build/index.d.ts",
@@ -39,6 +42,9 @@
       "build/index.d.ts": [
         "build/index.d.ts"
       ],
+      "wallet": [
+        "build/wallet-node.d.ts"
+      ],
       "*": [
         "build/*.d.ts",
         "build/*/index.d.ts"
@@ -46,6 +52,7 @@
     }
   },
   "dependencies": {
+    "@thecointech/async": "^0.6.6-test.0",
     "@thecointech/logging": "^0.6.6-test.0",
     "@thecointech/secrets": "^0.6.6-test.0",
     "base32": "^0.0.7",
