@@ -2,6 +2,7 @@ import { getAuthClient } from './auth';
 import { initializeApi } from './fetch';
 import { getNewTokens } from './token';
 import { log } from '@thecointech/logging';
+import { withTimeout } from '@thecointech/async';
 
 
 export async function initialize(token?: string) {
@@ -31,7 +32,11 @@ async function getAuth(token?: string) {
       if (credentials.refresh_token) {
         // validate that the token is still value by refreshing it
         try {
-          const refreshed = await client.refreshAccessToken();
+          const refreshed = await withTimeout(
+            client.refreshAccessToken(), 
+            30_000, 
+            'refreshAccessToken'
+          );
           return { client, credentials: refreshed.credentials };
         }
         catch (err) {
