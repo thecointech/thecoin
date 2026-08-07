@@ -42,7 +42,7 @@ strip_v() {
 
 # Extract base version (strip -test.N or -beta.N suffix)
 base_version() {
-  echo "$1" | sed 's/^v//' | sed 's/-\(test\|beta\)\..*//'
+  echo "$1" | sed 's/^v//;s/-test\..*//;s/-beta\..*//'
 }
 
 # Find the latest test tag for a given base version, or across all versions
