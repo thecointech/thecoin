@@ -10,7 +10,8 @@ services:
 
   tx-processor:
     depends_on:
-      - tx-processor-init
+      tx-processor-init:
+        condition: service_completed_successfully
     # for service
     #image: ghcr.io/thecointech/thecoin/tx-processor:${CONFIG_NAME:-prod}-latest
     #pull_policy: always
