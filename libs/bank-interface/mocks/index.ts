@@ -1,5 +1,4 @@
-import type { IBank } from '../src/interface';
-import { ETransferErrorCode } from '../src/types';
+import { ETransferErrorCode, type IBank } from '@thecointech/bank-interface';
 export { ETransferErrorCode };
 
 let result = 1234;

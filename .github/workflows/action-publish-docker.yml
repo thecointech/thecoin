@@ -119,19 +119,12 @@ jobs:
       #       type=ref,event=branch
       #       type=sha,format=long
 
-      - name: Prep tx-processor
-        if: inputs.IS_PROMOTION == false
-        run: node --experimental-strip-types ./docker/prep-docker.ts
-        working-directory: ./apps/tx-processor
-        env:
-          GH_PACKAGES_READ: ${{ secrets.GH_PACKAGES_READ }}
-          CONFIG_NAME: ${{ inputs.CONFIG_NAME }}
 
       - name: Build and push tx-processor
         if: inputs.IS_PROMOTION == false
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
-          context: ./apps/tx-processor
+          context: .
           file: ./apps/tx-processor/docker/Dockerfile
           push: true
           platforms: linux/amd64

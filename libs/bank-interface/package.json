@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/bank-interface",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "description": "The Coin: Generic banking interface.  Contains no implementation.",
   "type": "module",
   "keywords": [
@@ -20,17 +20,17 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo ./mocks/.build/.buildinfo",
     "build": "run -T tsc -b tsconfig.json",
-    "clean": "rimraf ./build"
+    "clean": "run -T rimraf ./build && run -T rimraf ./mocks/.build"
   },
   "files": [
     "build/**/*",
-    "mocked/**/*"
+    "mocks/.build/**/*"
   ],
   "exports": {
     ".": "./build/index.js",
-    "./mocked": "./mocked/index.ts"
+    "./mocked": "./mocks/.build/index.js"
   },
   "typesVersions": {
     "*": {
@@ -38,11 +38,11 @@
         "build/*"
       ],
       "mocked": [
-        "mocked/index.ts"
+        "mocks/.build/index.d.ts"
       ]
     }
   },
   "devDependencies": {
-    "@thecointech/types": "^0.6.5"
+    "@thecointech/types": "^0.6.6"
   }
 }

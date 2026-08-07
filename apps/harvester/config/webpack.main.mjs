@@ -10,6 +10,9 @@ export const nativeModules = [
   'sharp',
   'puppeteer',
   'puppeteer-extra',
+  // node-notifier ships terminal-notifier as a full .app bundle on macOS;
+  // webpack's asset relocator would flatten it to a bare binary, breaking it.
+  'node-notifier',
   // These aren't used, but can cause warnings in
   // the forge logger main process if included
   '@bitwarden/sdk-napi',

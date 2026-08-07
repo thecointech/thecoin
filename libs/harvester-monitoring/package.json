@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/harvester-monitoring",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "description": "The Coin: utility code for connecting harvester monitoring & server db",
   "type": "module",
   "author": "Stephen Taylor <stephen@thecoin.io>",
@@ -38,11 +38,11 @@
     }
   },
   "dependencies": {
-    "@thecointech/utilities": "^0.6.5",
+    "@thecointech/utilities": "^0.6.6",
     "ethers": "6.15.0",
     "luxon": "3.3.0"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.6.5"
+    "@thecointech/jestutils": "^0.6.6"
   }
 }

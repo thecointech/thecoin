@@ -84,10 +84,12 @@ jobs:
       uses: actions/upload-artifact@v6
       with:
         name: build-artifacts
+        include-hidden-files: true
         path: |
           apps/**/translations/*.json
           apps/*/build/
           libs/*/build/
+          libs/*/mocks/.build/
           apis/**/dist/
           libs/contract-*/src/codegen/**
           libs/site-prismic/src/semantic/
