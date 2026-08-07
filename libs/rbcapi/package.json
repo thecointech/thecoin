@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/rbcapi",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "description": "The Coin: A puppeteer-based API for Royal Bank of Canada",
   "type": "module",
   "keywords": [
@@ -22,20 +22,21 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
+    "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo ./mocks/.build/.buildinfo",
     "build": "run -T tsc -b",
-    "clean": "rimraf ./build && rimraf ./coverage",
+    "clean": "run -T rimraf ./build && run -T rimraf ./coverage && run -T rimraf ./mocks/.build",
     "test": "run :jest --runInBand --detectOpenHandles --forceExit",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [
-    "build/**/*"
+    "build/**/*",
+    "mocks/.build/**/*"
   ],
   "exports": {
     ".": {
-      "development": "./mocked/index.ts",
-      "devlive": "./mocked/index.ts",
-      "prodtest": "./mocked/index.ts",
+      "development": "./mocks/.build/index.js",
+      "devlive": "./mocks/.build/index.js",
+      "prodtest": "./mocks/.build/index.js",
       "types": "./build/index.d.ts",
       "default": "./build/index.js"
     },
@@ -46,25 +47,28 @@
   },
   "typesVersions": {
     "*": {
+      "transactions": [
+        "build/transactions.d.ts"
+      ],
       "*": [
         "build/*"
       ]
     }
   },
   "dependencies": {
-    "@thecointech/bank-interface": "^0.6.5",
-    "@thecointech/logging": "^0.6.5",
-    "@thecointech/scraper": "^0.6.5",
-    "@thecointech/secrets": "^0.6.5",
-    "@thecointech/store": "^0.6.5",
-    "@thecointech/utilities": "^0.6.5",
+    "@thecointech/bank-interface": "^0.6.6",
+    "@thecointech/logging": "^0.6.6",
+    "@thecointech/scraper": "^0.6.6",
+    "@thecointech/secrets": "^0.6.6",
+    "@thecointech/store": "^0.6.6",
+    "@thecointech/utilities": "^0.6.6",
     "csvtojson": "^2.0.13",
     "luxon": "3.3.0",
     "promise.any": "^2.0.4"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.6.5",
-    "@thecointech/types": "^0.6.5",
+    "@thecointech/jestutils": "^0.6.6",
+    "@thecointech/types": "^0.6.6",
     "@types/promise.any": "^2.0.0"
   },
   "gitHead": "bea153a75a41c0544d4a11901ccade3bfbb2536e"

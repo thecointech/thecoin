@@ -88,3 +88,7 @@ apps/harvester/root_temp
 apps/vqa-service/swagger.json
 .cache
 apps/vqa-service/experiments.txt
+
+# Ignore any mock build files
+**/mocks/.build/
+
