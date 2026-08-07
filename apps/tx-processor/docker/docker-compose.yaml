@@ -1,10 +1,22 @@
 services:
+  tx-processor-init:
+    image: alpine:latest
+    volumes:
+      - type: volume
+        source: tx-processor-data
+        target: /data
+    command: ["sh", "-c", "chown -R 10042:10042 /data && chmod -R 755 /data"]
+    restart: "no"
+
   tx-processor:
+    depends_on:
+      - tx-processor-init
     # for service
     #image: ghcr.io/thecointech/thecoin/tx-processor:${CONFIG_NAME:-prod}-latest
     #pull_policy: always
     # For local builds
     image: tx-processor
+    platform: linux/amd64
     environment:
       - CONFIG_NAME=${CONFIG_NAME:-prod}
       - LOG_NAME=tx-processor
@@ -16,9 +28,8 @@ services:
       # - THECOIN_SCRAPER_BROWSER=firefox
     volumes:
       # Persistent runtime data
-      # Either a bind or tx-processor-data volume
-      - type: bind
-        source: /var/tx-data
+      - type: volume
+        source: tx-processor-data
         target: /data
       # Secrets from host machine (read-only)
       - type: bind
