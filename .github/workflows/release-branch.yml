@@ -3,7 +3,7 @@ name: Release Branch Versioning
 on:
   push:
     branches:
-      - 'release/**'
+      - 'release/v*'
 
 # Cancel any in-progress job or run
 concurrency:
