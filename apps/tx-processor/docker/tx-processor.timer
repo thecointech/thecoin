@@ -1,0 +1,9 @@
+[Unit]
+Description=Run Tx-Processor Regularly
+
+[Timer]
+OnCalendar=*:40:00
+Unit=tx-processor.service
+
+[Install]
+WantedBy=timers.target

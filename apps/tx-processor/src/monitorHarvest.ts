@@ -13,10 +13,6 @@ const MonitorReportPeriod =
     ? configuredPeriod
     : OneWeek;
 
-// const MonitorReportPeriod = process.env.HARVESTER_MONITOR_REPORT_PERIOD
-//   ? parseInt(process.env.HARVESTER_MONITOR_REPORT_PERIOD)
-//   : OneWeek;
-
 // Weekly watchdog: if at least one run succeeded (or was legitimately
 // skipped) for an installation in the past week, it's considered healthy.
 // We deliberately don't run this more often - a single missed/failed run
