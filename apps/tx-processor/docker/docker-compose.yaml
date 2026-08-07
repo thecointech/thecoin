@@ -1,13 +1,18 @@
 services:
   tx-processor:
+    # for service
     #image: ghcr.io/thecointech/thecoin/tx-processor:${CONFIG_NAME:-prod}-latest
     #pull_policy: always
-    #platform: linux/amd64
+    # For local builds
     image: tx-processor
     environment:
       - CONFIG_NAME=${CONFIG_NAME:-prod}
-      - ALWAYS_VERIFY_BANK=true # If not set, will only verify bank once per day
       - LOG_NAME=tx-processor
+      # If set, will verify every run, (default 1 per day)
+      # Useful for forcing bank verification
+      # - ALWAYS_VERIFY_BANK=true
+      # If set, will report harvest status every <number> ms (default OneWeek)
+      # - HARVESTER_MONITOR_REPORT_PERIOD=<number>
       # - THECOIN_SCRAPER_BROWSER=firefox
     volumes:
       # Persistent runtime data
