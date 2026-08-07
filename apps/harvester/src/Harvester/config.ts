@@ -14,6 +14,7 @@ const db = new ConfigDatabase(rootFolder);
 export async function setProcessConfig(config: Partial<ConfigShape>) {
   log.info("Setting config file...");
   await db.set(config);
+  log.info("Config file set");
 }
 
 export async function getProcessConfig(): Promise<ConfigShape|undefined> {
@@ -117,6 +118,12 @@ export async function setHarvestConfig(config: Partial<HarvestConfig>) {
       const installationId = await getOrCreateInstallationId();
       await optIntoMonitoring(wallet, installationId);
     }
+    else {
+      log.debug("No wallet configured, skipping monitoring opt-in");
+    }
+  }
+  else {
+    log.debug("No steps configured, skipping monitoring opt-in");
   }
 
   return true;

@@ -24,10 +24,10 @@ export async function optIntoMonitoring(signer: Signer, installationId: string) 
       }
     );
     const r = await GetHarvesterApi().register(request);
-    console.log('Monitoring registration successful:', r.data);
+    log.debug('Monitoring registration successful:', r.data);
   }
   catch (e) {
-    console.error('Failed to register for monitoring:', e);
+    log.error(e, 'Failed to register for monitoring');
     // We need to show these errors to the user somehow...
   }
 }
