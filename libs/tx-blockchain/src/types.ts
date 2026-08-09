@@ -11,6 +11,8 @@ export type Transaction = {
   txHash: string;
   // The date this tx officially happened
   date: DateTime;
+  // Block timestamp
+  timestamp: number;
   // The date the tx was processed on the blockchain
   completed?: DateTime;
   balance: number;
