@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/utilities",
-  "version": "0.6.3",
+  "version": "0.6.6",
   "description": "The Coin: Utilities shared amongst typescript-based projects",
   "type": "module",
   "keywords": [
@@ -22,15 +22,18 @@
     "prepublishOnly": "yarn run -T rimraf ./build/.buildinfo",
     "build": "run -T tsc -b",
     "clean": "run -T rimraf ./build && run -T rimraf ./coverage",
+    "pretest": "yarn build",
     "test": "run :jest",
     "test:summary": "jest --coverage > ./coverage/summary.txt"
   },
   "files": [
     "build/**/*"
   ],
-  "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
+    "./wallet": {
+      "node": "./build/wallet-node.js"
+    },
     "./*": "./build/*.js"
   },
   "types": "./build/index.d.ts",
@@ -39,6 +42,9 @@
       "build/index.d.ts": [
         "build/index.d.ts"
       ],
+      "wallet": [
+        "build/wallet-node.d.ts"
+      ],
       "*": [
         "build/*.d.ts",
         "build/*/index.d.ts"
@@ -46,15 +52,16 @@
     }
   },
   "dependencies": {
-    "@thecointech/logging": "^0.6.3",
-    "@thecointech/secrets": "^0.6.3",
+    "@thecointech/async": "^0.6.6",
+    "@thecointech/logging": "^0.6.6",
+    "@thecointech/secrets": "^0.6.6",
     "base32": "^0.0.7",
     "decimal.js-light": "^2.5.1",
     "ethers": "6.15.0"
   },
   "devDependencies": {
-    "@thecointech/jestutils": "^0.6.3",
-    "@thecointech/types": "^0.6.3"
+    "@thecointech/jestutils": "^0.6.6",
+    "@thecointech/types": "^0.6.6"
   },
   "gitHead": "020dc77a4f35658ec7616021248b732b11c9ae0e"
 }

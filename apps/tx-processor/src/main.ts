@@ -5,6 +5,7 @@ import { initialize, release } from './initialize';
 import { processReferrals } from './referrals';
 import { processTransfers } from './transfers';
 import { verifyBank } from './verifyBank';
+import { monitorHarvest } from './monitorHarvest';
 import { sleep } from '@thecointech/async';
 
 const STREAM_CLOSE_GRACE_PERIOD_MS = 5000;
@@ -30,6 +31,16 @@ async function run() {
     log.fatal(e);
     exitCode = 1;
   } finally {
+
+    // Always try to run monitoring, it doesn't matter if it fails,
+    // but we want it to occur if possible, even if the
+    // the processing fails.
+    try {
+      await monitorHarvest();
+    } catch (e) {
+      log.error(e, 'Failed to monitor harvest');
+    }
+
     try {
       await release();
     }

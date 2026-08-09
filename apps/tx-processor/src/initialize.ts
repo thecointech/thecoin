@@ -22,17 +22,20 @@ export async function initialize() {
   let token = await ConfigStore.get("gmail.token");
   token = await initializeGmail(token);
   await ConfigStore.set("gmail.token", token);
+  log.debug("Gmail Init complete");
 
   const signer = await getSigner('BrokerCAD');
   const bta = await getSigner('BrokerTransferAssistant');
   if (!signer || !bta) {
     throw new Error("Signers not loaded");
   }
+  log.debug("Signers loaded");
 
   const contract = await ContractCore.connect(signer);
   if (!contract) {
     throw new Error("Couldn't initialize contract")
   }
+  log.debug("Contract connected");
 
   await verifyEtherReserves(signer);
   await verifyCoinReserves(signer, contract);
@@ -43,6 +46,7 @@ export async function initialize() {
 
 // Verify we have enough gas to run processing
 async function verifyEtherReserves(signer: Signer) {
+  log.debug("Verifying ether reserves");
   const signerBalance = await signer.provider?.getBalance(signer) ?? 0n;
   const signerAddress = await signer.getAddress();
   const balanceEth = formatEther(signerBalance);
@@ -51,6 +55,7 @@ async function verifyEtherReserves(signer: Signer) {
 
 // Verify we have enough reserves to run processing
 async function verifyCoinReserves(signer: Signer, contract: TheCoin) {
+  log.debug("Verifying coin reserves");
   const signerAddress = await signer.getAddress();
   const balanceCoin = await contract.balanceOf(signerAddress);
   const now = new Date();

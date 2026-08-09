@@ -5,6 +5,12 @@ export * from "./types-scraper";
 export * from "./types-steps";
 
 export type ConfigShape = {
+  // Randomly generated identifier for this installation, used only to
+  // correlate harvester-monitoring events. Generated lazily on first use;
+  // survives app reinstalls but not a full OS wipe. Deliberately not
+  // derived from any machine-identifying information (no PII).
+  installationId?: string,
+
   // Store the account Mnemomic
   // wallet?: Mnemonic,
   coinAccount?: CoinAccount,

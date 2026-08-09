@@ -12,6 +12,7 @@ import cors from 'cors';
 import { ValidateError } from "@tsoa/runtime";
 import { log } from "@thecointech/logging";
 import { ValidateErrorJSON } from "./types";
+import { SignatureError } from "./errors";
 import os from 'os';
 
 const machine_name = process.env.GAE_APPLICATION ?? os.hostname();
@@ -70,6 +71,15 @@ export function errorHandler(
       details: err?.fields,
     }
     return res.status(422).json(r);
+  }
+  if (err instanceof SignatureError) {
+    log.warn(
+      { err, path: req.path, params: req.params },
+      'Signature rejected on {path}: {err}'
+    );
+    return res.status(401).json({
+      message: err.message,
+    });
   }
   if (err instanceof Error) {
     log.error(

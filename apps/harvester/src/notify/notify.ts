@@ -82,6 +82,13 @@ function notify_linux(props: Notification, isError?: boolean) : Promise<void> {
 export const getAsset = (assetName?: string) => {
   if (!assetName) return;
   return (process.env.NODE_ENV === 'development')
-    ? fileURLToPath(new URL(`../../assets/${assetName}`, import.meta.url))
+    ? getInCodeAsset(assetName)
     : path.join(process.resourcesPath, 'assets', assetName);
+}
+
+
+function getInCodeAsset(assetName: string) {
+  const baseUrl = new URL(import.meta.url);
+  const assetPath = new URL(`../../assets/${assetName}`, baseUrl);
+  return fileURLToPath(assetPath);
 }

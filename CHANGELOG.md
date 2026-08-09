@@ -3,6 +3,127 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.6](https://github.com/thecointech/thecoin/compare/v0.6.6-beta.0...v0.6.6) (2026-08-06)
+
+**Note:** Version bump only for package @thecointech/the-coin
+
+
+
+
+
+## [0.6.6-test.7](https://github.com/thecointech/thecoin/compare/v0.6.6-test.6...v0.6.6-test.7) (2026-08-05)
+
+**Note:** Version bump only for package @thecointech/the-coin
+
+
+
+
+
+## [0.6.6-test.6](https://github.com/thecointech/thecoin/compare/v0.6.6-test.5...v0.6.6-test.6) (2026-08-05)
+
+**Note:** Version bump only for package @thecointech/the-coin
+
+
+
+
+
+## [0.6.6-test.5](https://github.com/thecointech/thecoin/compare/v0.6.6-test.4...v0.6.6-test.5) (2026-08-04)
+
+**Note:** Version bump only for package @thecointech/the-coin
+
+
+
+
+
+## [0.6.6-test.4](https://github.com/thecointech/thecoin/compare/v0.6.6-test.3...v0.6.6-test.4) (2026-08-04)
+
+**Note:** Version bump only for package @thecointech/the-coin
+
+
+
+
+
+## [0.6.6-test.3](https://github.com/thecointech/thecoin/compare/v0.6.6-test.2...v0.6.6-test.3) (2026-08-04)
+
+**Note:** Version bump only for package @thecointech/the-coin
+
+
+
+
+
+## [0.6.6-test.2](https://github.com/thecointech/thecoin/compare/v0.6.6-test.1...v0.6.6-test.2) (2026-08-02)
+
+**Note:** Version bump only for package @thecointech/the-coin
+
+
+
+
+
+## [0.6.6-test.1](https://github.com/thecointech/thecoin/compare/v0.6.6-test.0...v0.6.6-test.1) (2026-07-30)
+
+
+### Bug Fixes
+
+* harvester run completion ([0900322](https://github.com/thecointech/thecoin/commit/0900322665f8e0b7f5e545b413fdc0e5ecc37128))
+
+
+
+
+
+## [0.6.6-test.0](https://github.com/thecointech/thecoin/compare/v0.6.5...v0.6.6-test.0) (2026-07-30)
+
+**Note:** Version bump only for package @thecointech/the-coin
+
+
+
+
+
+
+
+**Note:** Version bump only for package @thecointech/the-coin
+
+
+
+
+
+## [0.6.5-test.0](https://github.com/thecointech/thecoin/compare/v0.6.4...v0.6.5-test.0) (2026-07-23)
+
+
+### Bug Fixes
+
+* defensive fix to ensure we don't run into the same issue later. ([a708110](https://github.com/thecointech/thecoin/commit/a708110f4eceafdaf44ce84a9bdcd85c8ce3a9ea))
+
+
+
+
+
+## [0.6.4](https://github.com/thecointech/thecoin/compare/v0.6.4-test.1...v0.6.4) (2026-07-22)
+
+**Note:** Version bump only for package @thecointech/the-coin
+
+
+
+
+
+## [0.6.4-test.1](https://github.com/thecointech/thecoin/compare/v0.6.4-test.0...v0.6.4-test.1) (2026-07-01)
+
+**Note:** Version bump only for package @thecointech/the-coin
+
+
+
+
+
+## [0.6.4-test.0](https://github.com/thecointech/thecoin/compare/v0.6.3...v0.6.4-test.0) (2026-07-01)
+
+
+### Bug Fixes
+
+* when loading a blog page directly, try and find the index before doing the redirect ([9292201](https://github.com/thecointech/thecoin/commit/929220153ca47c8a43774d8c15b2e727d5c40049))
+
+
+
+
+
 ## [0.6.3](https://github.com/thecointech/thecoin/compare/v0.6.3-test.0...v0.6.3) (2026-05-05)
 
 **Note:** Version bump only for package @thecointech/the-coin

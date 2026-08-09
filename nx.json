@@ -10,7 +10,8 @@
       "outputs": [
         "{projectRoot}/./build",
         "{projectRoot}/./dist",
-        "{projectRoot}/./src/codegen"
+        "{projectRoot}/./src/codegen",
+        "{projectRoot}/./mocks/.build"
       ],
       "cache": true
     },

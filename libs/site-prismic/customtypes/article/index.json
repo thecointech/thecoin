@@ -81,7 +81,8 @@
                   "Security",
                   "Finance",
                   "Carbon Offsets",
-                  "Impact Reports"
+                  "Impact Reports",
+                  "Newsletter"
                 ]
               }
             }
@@ -94,6 +95,9 @@
         "fieldset": "Slice Zone",
         "config": {
           "choices": {
+            "comparison_block": {
+              "type": "SharedSlice"
+            },
             "table": {
               "type": "SharedSlice"
             },

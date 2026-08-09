@@ -1,0 +1,37 @@
+# Git
+.git
+**/.git
+
+# Dependencies (reinstalled in image)
+node_modules
+**/node_modules
+
+# Yarn caches/state
+.yarn/cache
+.yarn/install-state.gz
+.yarn/build-state.yml
+**/.yarn/cache
+**/.yarn/install-state.gz
+**/.yarn/build-state.yml
+
+# Secrets and local environment files
+/secrets
+*.local.env
+.env
+
+# Logs and temporary files
+*.log
+tmp/
+temp/
+**/tmp/
+**/temp/
+
+# Coverage and build artifacts not needed for runtime
+coverage/
+**/coverage/
+storybook-static/
+**/storybook-static/
+
+# OS files
+.DS_Store
+Thumbs.db

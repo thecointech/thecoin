@@ -1,40 +1,74 @@
-import { setHeartbeat } from '@thecointech/broker-db/user';
-import { log } from '@thecointech/logging';
-import { GetSigner } from '@thecointech/utilities/SignedMessages';
+import {
+  getHarvesterRegistrationSigner,
+  getHarvesterRunStartSigner,
+  getHarvesterRunCompletionSigner,
+} from '@thecointech/harvester-monitoring';
+import type {
+  HarvesterRegistrationRequestSigned,
+  HarvesterRunStartSigned,
+  HarvesterRunCompleteSigned,
+} from '@thecointech/harvester-monitoring';
+import {
+  recordHarvesterRegistration as dbRecordHarvesterRegistration,
+  startHarvesterRun as dbStartHarvesterRun,
+  completeHarvesterRun as dbCompleteHarvesterRun,
+} from '@thecointech/broker-db';
+import { assertSigner } from '../assertSigner';
+import { DateTime } from 'luxon';
 
-export type Heartbeat = {
-  timeMs: number;
-  signature: string;
-  errors?: string[];
+export async function recordHarvesterRegistration(request: HarvesterRegistrationRequestSigned) {
+  const signer = getHarvesterRegistrationSigner(request);
+  const observedAt = DateTime.fromMillis(request.observedAt);
+  assertSigner(request.user, signer, 'register harvester', observedAt);
+
+  return dbRecordHarvesterRegistration(signer, {
+    schemaVersion: 1,
+    installationId: request.installationId,
+    platform: request.platform,
+    architecture: request.architecture,
+    action: request.action,
+    observedAt: observedAt,
+  });
 }
 
-const FiveMins = 5 * 60 * 1000;
+export async function startHarvesterRun(request: HarvesterRunStartSigned) {
+  const signer = getHarvesterRunStartSigner(request);
+  const startedAt = DateTime.fromMillis(request.startedAt);
 
-export async function heartbeat(request: Heartbeat) {
+  assertSigner(request.user, signer, 'start harvester run', startedAt);
 
-  const signer = await GetSigner({
-    message: (request.errors?.join() ?? "") + request.timeMs,
-    signature: request.signature,
+  const startedAtClient = (request.startedAtClient !== undefined)
+    ? DateTime.fromMillis(request.startedAtClient)
+    : undefined;
+
+  return dbStartHarvesterRun(signer, {
+    installationId: request.installationId,
+    platform: request.platform,
+    architecture: request.architecture,
+    appVersion: request.appVersion,
+    trigger: request.trigger,
+    startedAt,
+    startedAtClient,
   });
+}
 
-  const now = Date.now();
-  if (request.timeMs < (now - FiveMins)) {
-    log.error(
-      {signedTime: request.timeMs, now, address: signer},
-      'Heartbeat too old: {signedTime}, now: {now} - {address}'
-    )
-    return false;
-  }
+export async function completeHarvesterRun(request: HarvesterRunCompleteSigned) {
+  const signer = getHarvesterRunCompletionSigner(request);
 
-  if (request.errors?.length) {
-    log.error(
-      {address: signer, errors: request.errors},
-      'Heartbeat Reported Error: {address}, {errors}'
-    )
-  }
-  else {
-    log.info({address: signer}, 'Heartbeat From: {address}')
-  }
-  await setHeartbeat(signer, request.errors)
-  return true;
+  const finishedAt = DateTime.fromMillis(request.finishedAt);
+
+  assertSigner(request.user, signer, 'complete harvester run', finishedAt);
+
+  const finishedAtClient = (request.finishedAtClient !== undefined)
+    ? DateTime.fromMillis(request.finishedAtClient)
+    : undefined;
+
+  return dbCompleteHarvesterRun(signer, request.installationId, request.runId, {
+    outcome: request.outcome,
+    finishedAt,
+    finishedAtClient,
+    failureStages: request.failureStages,
+    failureCategory: request.failureCategory,
+    terminalSource: request.terminalSource,
+  });
 }

@@ -10,6 +10,7 @@ import Video from "./Video";
 import Table from "./Table";
 import CaptionedImage from "./CaptionedImage";
 import ProjectDetails from "./ProjectDetails";
+import ComparisonBlock from "./ComparisonBlock";
 
 export const components = {
   hero: Hero,
@@ -18,6 +19,7 @@ export const components = {
   block_quote: BlockQuote,
   ccqi_score: CcqiScore,
   ccqi_category: CcqiCategory,
+  comparison_block: ComparisonBlock,
   video: Video,
   table: Table,
   captioned_image: CaptionedImage,

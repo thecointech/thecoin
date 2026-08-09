@@ -18,15 +18,19 @@ export async function getBalances(callbacks: HarvesterReplayCallbacks, delay = 5
     return [r.AccountsSummary, r.CreditAccountDetails];
   }
   else {
-    callbacks.setSubTaskEvents('chqBalance', config.chequing!.events);
-    const chq = await runReplay('chqBalance', config.chequing!.events, callbacks, undefined, delay);
-    if (!chq.AccountsSummary) {
-      throw new Error('Missing required balance data in chequing config');
-    }
+    // Doing visa balance first.  In the future,
+    // the chq balance could be skipped if
+    // visa balance hasn't changed (ie -
+    // no transfer, means no need to check)
     callbacks.setSubTaskEvents('visaBalance', config.credit!.events);
     const visa = await runReplay('visaBalance', config.credit!.events, callbacks, undefined, delay);
     if (!visa.CreditAccountDetails) {
       throw new Error('Missing required balance data in credit config');
+    }
+    callbacks.setSubTaskEvents('chqBalance', config.chequing!.events);
+    const chq = await runReplay('chqBalance', config.chequing!.events, callbacks, undefined, delay);
+    if (!chq.AccountsSummary) {
+      throw new Error('Missing required balance data in chequing config');
     }
     return [chq.AccountsSummary, visa.CreditAccountDetails];
   }
