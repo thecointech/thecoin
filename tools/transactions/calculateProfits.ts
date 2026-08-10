@@ -4,13 +4,20 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { ContractCore } from "@thecointech/contract-core";
-import { calculateTxBalances, loadAndMergeHistory, Transaction } from "@thecointech/tx-blockchain";
-import { fetchRate, FXRate } from "@thecointech/fx-rates";
-import { toHuman } from "@thecointech/utilities";
+import { calculateTxBalances, loadAndMergeHistory, type Transaction } from "@thecointech/tx-blockchain";
+import { fetchRate, type FXRate } from "@thecointech/fx-rates";
+import { toHuman, toHumanDecimal } from "@thecointech/utilities";
 import { DateTime } from "luxon";
+import Decimal from 'decimal.js-light'
 
 const argv = yargs(hideBin(process.argv))
   .usage('Usage: $0 <address> --from=YY-MM --to=YY-MM')
+  .command('$0 <address>', 'Calculate ACB for an address', (yargs) => {
+    return yargs.positional('address', {
+      describe: 'Account address',
+      type: 'string',
+    });
+  })
   .option('from', {
     alias: 'f',
     describe: 'Start month (inclusive), format YY-MM',
@@ -25,7 +32,7 @@ const argv = yargs(hideBin(process.argv))
   })
   .parseSync();
 
-const address = argv._[0] as string | undefined;
+const address = argv.address as string | undefined;
 if (!address) {
   console.error("Error: address is required");
   process.exit(1);
@@ -100,17 +107,28 @@ type Row = {
 };
 
 const rows: Row[] = [];
-let acb = 0;
-let coinBalance = 0;
-let openingACB = 0;
-let openingCoin = 0;
+// ACB is cost per-coin, not for the total
+let acb = new Decimal(0);
+let coinBalance = new Decimal(0);
+let openingACB = new Decimal(0);
+let openingCoin = new Decimal(0);
 let openingSet = false;
-let periodAcquisitions = 0;
-let periodProceeds = 0;
-let periodGainLoss = 0;
+let periodAcquisitions = new Decimal(0);
+let periodProceeds = new Decimal(0);
+let periodGainLoss = new Decimal(0);
+
+const filterTxs = [
+  "0xdd789b1d0e67baa676da71f896e6ff3d91464a71e3e93f87c238ff66b8cde7c6",
+  "0xb13ca2781117842fdfa64d1c53dbd08d79315f4cb1c748d1d31ec9b28693cef0"
+]
 
 for (const tx of filteredHistory) {
   if (tx.change === 0) continue;
+
+  if (filterTxs.includes(tx.txHash)) {
+    console.log(`Filtering tx ${tx.txHash}`);
+    continue;
+  }
 
   const inPeriod = tx.date >= fromDate && tx.date <= toDate;
   if (!openingSet && inPeriod) {
@@ -120,16 +138,26 @@ for (const tx of filteredHistory) {
   }
 
   const rate = await getRate(tx.date);
-  const coinChange = toHuman(tx.change, false);
+  const coinChange = new Decimal(tx.change);
 
-  if (coinChange > 0) {
+  if (coinChange.gt(0)) {
     const rateCAD = cadRate(rate, 'sell');
-    const cost = coinChange * rateCAD;
-    acb += cost;
-    coinBalance += coinChange;
+    const cost = toHumanDecimal(coinChange.mul(rateCAD));
+    const newBalance = coinBalance.plus(coinChange);
+    if (coinBalance.lt(0)) {
+      if (newBalance.gte(0)) {
+        // We've covered our debt, so the ACB is now the cost of the new coins
+        acb = new Decimal(rateCAD);
+      }
+    }
+    else {
+      const newAcb = toHumanDecimal(acb.mul(coinBalance)).plus(cost).div(toHumanDecimal(newBalance));
+      acb = newAcb;
+    }  
+    coinBalance = newBalance;
 
     if (inPeriod) {
-      periodAcquisitions += cost;
+      periodAcquisitions = periodAcquisitions.plus(cost);
       rows.push({
         date: tx.date.toFormat('yyyy-MM-dd HH:mm'),
         type: 'Acquire',
@@ -142,19 +170,17 @@ for (const tx of filteredHistory) {
       });
     }
   } else {
-    const disposedCoin = Math.abs(coinChange);
+    const disposedCoin = coinChange.abs();
     const rateCAD = cadRate(rate, 'buy');
-    const acbPerCoin = coinBalance > 0 ? acb / coinBalance : 0;
-    const disposedACB = disposedCoin * acbPerCoin;
-    const proceeds = disposedCoin * rateCAD;
-    const gainLoss = proceeds - disposedACB;
+    const disposedACB = toHumanDecimal(acb.mul(disposedCoin));
+    const proceeds = toHumanDecimal(disposedCoin.mul(rateCAD));
+    const gainLoss = proceeds.sub(disposedACB);
 
-    acb -= disposedACB;
-    coinBalance -= disposedCoin;
+    coinBalance = coinBalance.minus(disposedCoin);
 
     if (inPeriod) {
-      periodProceeds += proceeds;
-      periodGainLoss += gainLoss;
+      periodProceeds = periodProceeds.plus(proceeds);
+      periodGainLoss = periodGainLoss.plus(gainLoss);
       rows.push({
         date: tx.date.toFormat('yyyy-MM-dd HH:mm'),
         type: 'Dispose',
@@ -163,7 +189,7 @@ for (const tx of filteredHistory) {
         cadValue: proceeds.toFixed(2),
         acbImpact: `-${disposedACB.toFixed(2)}`,
         runningACB: acb.toFixed(2),
-        runningCoin: coinBalance.toFixed(6),
+        runningCoin: toHumanDecimal(coinBalance).toString(),
       });
     }
   }
