@@ -40,6 +40,11 @@ const config = {
       // file so we can reference them by absolute path
       './assets'
     ],
+    // Windows metadata for proper app display
+    win32metadata: {
+      ProductName: `Harvester${suffix}`,   // Start Menu / shortcut name
+      FileDescription: `Harvester${suffix}`,
+    },
   },
   rebuildConfig: {},
   makers: [
