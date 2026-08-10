@@ -208,8 +208,11 @@ if (rows.length > 0) {
   console.table(rows);
 }
 
+const closingACB = rows[rows.length - 1]?.runningACB ?? openingACB;
+const closingCoin = rows[rows.length - 1]?.runningCoin ?? coinBalance.toFixed(6);
+
 console.log(`\nOpening ACB: ${openingACB.toFixed(2)} CAD (${openingCoin.toFixed(6)} coin)`);
-console.log(`Closing ACB: ${acb.toFixed(2)} CAD (${coinBalance.toFixed(6)} coin)`);
+console.log(`Closing ACB: ${closingACB} CAD (${closingCoin} coin)`);
 console.log(`Total acquisitions (cost): ${periodAcquisitions.toFixed(2)} CAD`);
 console.log(`Total dispositions (proceeds): ${periodProceeds.toFixed(2)} CAD`);
 console.log(`Net capital gain/loss: ${periodGainLoss.toFixed(2)} CAD`);

@@ -1,14 +1,13 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { ContractCore } from "@thecointech/contract-core";
-import { calculateTxBalances, loadAndMergeHistory, type Transaction } from "@thecointech/tx-blockchain";
+import { loadAndMergeHistory } from "@thecointech/tx-blockchain";
 import { fetchRate, type FXRate } from "@thecointech/fx-rates";
 import { toHuman } from "@thecointech/utilities";
 import { DateTime } from "luxon";
 import { writeFile } from 'fs/promises';
 
 const argv = yargs(hideBin(process.argv))
-  .usage('Usage: $0 <address> --from=YY-MM --to=YY-MM')
   .command('$0 <address>', 'Export transactions for an address', (yargs) => {
     return yargs.positional('address', {
       describe: 'Account address',
@@ -24,7 +23,6 @@ if (!address) {
 }
 
 const tc = await ContractCore.get();
-const currentBalance = await tc.balanceOf(address);
 const history = await loadAndMergeHistory(0, tc, address);
 
 const fetchedRates = new Map<number, FXRate>();
