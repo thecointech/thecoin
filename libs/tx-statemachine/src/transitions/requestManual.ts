@@ -1,18 +1,31 @@
 import { AnyActionContainer } from "../types";
 import { SendMail } from '@thecointech/email';
 import { makeTransition  } from '../makeTransition';
+import { log } from '@thecointech/logging';
 
 //
 // Something has gone wrong, and we can't handle it automatically.
 // Send a notification email to request manual overview.
 export const requestManual = makeTransition("requestManual", async (action) => {
   // Send an email to request manual intervention
-  await SendMail(
-    `Manual attention required: ${action.action.type}`,
-    `InitialId: ${action.action.data.initialId}\n` +
-    `Recieved: ${action.action.data.date.toSQLDate()}\n` +
-    `History:\n ${printHistory(action)}\n`
-  );
+  try {
+    const r = await SendMail(
+      `Manual attention required: ${action.action.type}`,
+      `InitialId: ${action.action.data.initialId}\n` +
+      `Recieved: ${action.action.data.date.toSQLDate()}\n` +
+      `History:\n ${printHistory(action)}\n`
+    );
+    if (!r) {
+      log.error('Failed to send manual intervention email');
+      // Returning null means keep re-trying until this action succeeds.
+      return null;
+    }
+  }
+  catch (err) {
+    log.error({ err }, 'Failed to send manual intervention email');
+    // Returning null means keep re-trying until this action succeeds.
+    return null;
+  }
 
   // Make no state changes.
   return {};

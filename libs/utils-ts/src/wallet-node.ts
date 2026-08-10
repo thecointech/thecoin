@@ -8,7 +8,7 @@ const DEFAULT_TIMEOUT_MS = 60_000;
 // The worker is loaded from the compiled build output. Run `yarn build` (or
 // `yarn test`, which has `pretest: yarn build`) before running tests.
 // (this is necessary to allow both built & un-built code -eg jest - to work)
-const workerPath = new URL('../build/wallet.worker.js', import.meta.url);
+const workerPath = new URL('../build/wallet.worker.mjs', import.meta.url);
 
 export async function decryptWallet(
   encryptedJson: string,

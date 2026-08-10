@@ -4,6 +4,7 @@ import { Client } from "./Client";
 import { FXRate, useFxRates } from "@thecointech/shared/containers/FxRate";
 import { UserData } from "./data";
 import { toCAD } from './toCAD';
+import styles from './Client.module.less';
 
 type Props = {
   fetchData: () => Promise<UserData[]>;
@@ -31,7 +32,7 @@ export const ClientSelect = ({fetchData} : Props) => {
 
   const active = users.find(u => u.address === address);
   return (
-    <>
+    <div className={styles.clientSelect}>
       <Select
         placeholder='Select Client'
         fluid
@@ -47,7 +48,7 @@ export const ClientSelect = ({fetchData} : Props) => {
           : <div>{loading ? "Loading..." : "Select a client"}</div>
       }
 
-    </>
+    </div>
   );
 }
 
