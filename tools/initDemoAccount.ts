@@ -132,11 +132,11 @@ try {
         // before the bill is processed if the bill is processed
         // immediately (which in the past, it is)
         const r = await SendFakeDeposit(testAddress, harvestSends, currDate.minus({minutes: 1}));
-        console.log(`Ran Harvester for ${currDate.weekdayShort} ${currDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
         if (!r) {
-          console.log("Failed to send mail");
+          console.error("Failed to send mail");
           break;
         }
+        console.log(`Ran Harvester for ${currDate.weekdayShort} ${currDate.toLocaleString(DateTime.DATETIME_SHORT)}`);
         numSent++;
       }
 
@@ -171,5 +171,8 @@ try {
 }
 catch (e) {
   console.error(e);
+  throw e;
 }
-console.log("Sent ", numSent, " emails");
+finally {
+  console.log("Sent ", numSent, " emails");
+}

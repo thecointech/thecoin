@@ -9,17 +9,22 @@ import { log } from '@thecointech/logging';
 export const requestManual = makeTransition("requestManual", async (action) => {
   // Send an email to request manual intervention
   try {
-    await SendMail(
+    const r = await SendMail(
       `Manual attention required: ${action.action.type}`,
       `InitialId: ${action.action.data.initialId}\n` +
       `Recieved: ${action.action.data.date.toSQLDate()}\n` +
       `History:\n ${printHistory(action)}\n`
     );
+    if (!r) {
+      log.error('Failed to send manual intervention email');
+      // Returning null means keep re-trying until this action succeeds.
+      return null;
+    }
   }
   catch (err) {
     log.error({ err }, 'Failed to send manual intervention email');
-    // Swallow this error, if it failed it will re-attempt, and
-    // throwing an error in this section is never supported.
+    // Returning null means keep re-trying until this action succeeds.
+    return null;
   }
 
   // Make no state changes.
