@@ -12419,6 +12419,7 @@ __metadata:
   dependencies:
     "@thecointech/setenv": "npm:^0.6.6"
     cross-env: "npm:^7.0.3"
+    yargs: "npm:17.7.2"
   languageName: unknown
   linkType: soft
 

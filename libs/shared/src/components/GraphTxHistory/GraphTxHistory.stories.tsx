@@ -84,6 +84,7 @@ const genTxs = ({from, to, txFrequency}: typeof defaultArgs) => {
       change: toCoin(change),
       value: new Decimal(toCoin(change)),
       date: DateTime.fromMillis(date),
+      timestamp: date,
       from: "0x12345",
       to: "0x456789",
       txHash: "0x1234567890",

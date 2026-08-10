@@ -20,7 +20,9 @@ const toTransaction = (tx: ERC20Response): Transaction => ({
   balance: 0,
   change: Number(tx.value),
   counterPartyAddress: NormalizeAddress(tx.from),
+  // Default to block timestamp, should be updated with tx timestamp in loadAndMergeHistory
   date: DateTime.fromSeconds(tx.timestamp),
+  timestamp: tx.timestamp,
   from: NormalizeAddress(tx.from),
   to: NormalizeAddress(tx.to),
   value: toDecimal(tx.value),

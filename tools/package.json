@@ -9,13 +9,16 @@
     "pullRates": "yarn _run cfg=prodtest ./pullRates.ts",
     "showBalances": "yarn _run cfg=prod ./showBalances.ts",
     "showAccount": "yarn _run cfg=prod ./showAccount.ts",
+    "export": "yarn _run cfg=prod ./transactions/export.ts",
     "initDemoAccount": "yarn _run cfg=prodtest ./initDemoAccount.ts",
     "transfer": "yarn _run cfg=prod ./transactions/manualTransfer.ts",
     "revert": "yarn _run cfg=prod ./transactions/revertTransfer.ts",
+    "calculateProfit": "yarn _run cfg=prod ./transactions/calculateProfits.ts",
     "_run": "cross-env URL_SEQ_LOGGING=false TC_LOG_FOLDER=false run-env --"
   },
   "devDependencies": {
     "@thecointech/setenv": "^0.6.6",
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "yargs": "17.7.2"
   }
 }
