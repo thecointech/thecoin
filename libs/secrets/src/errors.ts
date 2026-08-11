@@ -14,7 +14,7 @@ export class SecretClientEnvNotFound extends Error {
 
 export class SecretClientKeyNotFound extends Error {
   constructor(config: ConfigType) {
-    super(`Secret client key not found for config ${config}`);
+    super(`Secret client .env file not found for config ${config}`);
   }
 }
 
