@@ -1,6 +1,4 @@
-import { getGoogleSecret } from "./google/getSecrets";
 import { type SecretKeyType, type ConfigType, SecretKeyGoogle } from "../types";
-import { getBitwardenSecret } from "./bitwarden/getSecrets";
 
 // Note on projects
 // There is not an easy way to differentiate between
@@ -37,6 +35,16 @@ export async function getSecret(name: SecretKeyType, config?: ConfigType) {
   globalThis.__tc_secretCache.set(name, secret);
   return secret;
 }
+
+async function getGoogleSecret(name: SecretKeyType) {
+  const g = await import("./google/getSecrets");
+  return g.getGoogleSecret(name);
+}
+async function getBitwardenSecret(name: SecretKeyType, config?: ConfigType) {
+  const bw = await import("./bitwarden/getSecrets");
+  return bw.getBitwardenSecret(name, config);
+}
+
 
 function getInitialCache() {
   if (typeof __COMPILER_REPLACE_SECRETS__ !== 'undefined') {

@@ -13,10 +13,6 @@ export const nativeModules = [
   // node-notifier ships terminal-notifier as a full .app bundle on macOS;
   // webpack's asset relocator would flatten it to a bare binary, breaking it.
   'node-notifier',
-  // These aren't used, but can cause warnings in
-  // the forge logger main process if included
-  '@bitwarden/sdk-napi',
-  '@google-cloud/secret-manager',
 ]
 
 
@@ -50,6 +46,13 @@ export async function getMainConfig(deployedAt) {
       new webpack.DefinePlugin(mainPlugins),
     ],
     resolve: {
+      // Limit secrets to compiled versions only
+      conditionNames: ["strip-live-secrets"],
+      // ensure secrets are stripped from build
+      alias: {
+        '@bitwarden/sdk-napi': false,
+        '@google-cloud/secret-manager': false,
+      },
       fallback: {
         'bufferutil': false,
         'utf-8-validate': false,
