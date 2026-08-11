@@ -6,7 +6,13 @@ import path from 'path';
 import { DisplayContext } from './displayContext';
 import type NotifySend from 'node-notifier/notifiers/notifysend';
 
-export const appID = 'com.squirrel.harvester.harvester';
+// appID set to match appBundleId in forge.config.mjs
+const buildIdentifier = process.env.CONFIG_NAME ?? 'development';
+export const appID = buildIdentifier === 'prod' || buildIdentifier === 'prodbeta'
+  ? 'com.TheCoin.Harvester'
+  : buildIdentifier === 'prodtest'
+    ? 'com.TheCoin.Harvester.test'
+    : 'com.TheCoin.Harvester.dev';
 
 
 export const notifyError = (props: {
