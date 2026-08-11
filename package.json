@@ -77,7 +77,7 @@
     "ethers": "6.15.0",
     "firebase": "^8.10.1",
     "invariant": "2.2.4",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "moment": "^2.29.4",
     "prop-types": "^15.7.2",
     "query-string": "^7.0.0",
