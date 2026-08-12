@@ -56,6 +56,7 @@ const config = {
       exe: `${appName}.exe`,
       setupIcon: 'assets/appicon.ico',
     }),
+    // NOTE: THis has not (as yet) been tested to support SxS installs
     {
       name: '@electron-forge/maker-dmg',
       config: {
@@ -68,6 +69,7 @@ const config = {
       options: {
         icon: 'assets/appicon.png',
         name: appName,
+        bin: appName,
         homepage: process.env.URL_SITE_LANDING,
         productName: appTitle,
         genericName: appTitle,
