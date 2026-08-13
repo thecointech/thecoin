@@ -1,9 +1,7 @@
 import { ContractOracle } from '../src';
-import { DateTime, Duration } from 'luxon';
+import { DateTime } from 'luxon';
 import { log } from '@thecointech/logging';
-import { fetchRate, weBuyAt, weSellAt } from '@thecointech/fx-rates';
-import { getFirestore, Timestamp, init } from '@thecointech/firestore';
-import { updateRates } from '../src/update';
+import { fetchRate } from '@thecointech/fx-rates';
 
 // ----------------------------------------------------------------
 // This simple script compares the value stored in Oracle vs

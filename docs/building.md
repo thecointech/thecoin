@@ -1,17 +1,34 @@
+## All
+
+- clone
+- install the right version of NodeJS (currently v24)
+- run `corepack enable`
+
+- *NOTE* To build [production](./environments.md) builds requires [secrets](./secrets.md) to be present.  Development & devlive require no external info.
+
+## Windows
+
+Assuming a fresh machine
+ - Install required packages
+  - Install VC++ Redist `winget install --id Microsoft.VCRedist.2015+.x64 -e`
+  - Install Python `winget install --id Python.Python.3.12 -e`
+  - Install Build Tools: `winget install --id Microsoft.VisualStudio.2022.BuildTools -e --override "--wait --passive --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"`
+  - Install Java JRE (used by build:apis) `winget install --id Azul.Zulu.17.JRE -e`
+ - Enable SymLinks, by either (used by go-ipfs):
+  - Turn developer mode on (recommended)
+    - WinKey, "Settings", search for "Use developer features", turn on "Developer Mode"
+  - Always run `yarn` from an elevated prompt
+ - Reboot machine `Restart-Computer`
+ - `yarn install && yarn build`
+
 ## MacOS
 
 Make sure node-gyp is setup correctly, etc
 Remove ngrok from site-app (if it's still there)
 Delete node_modules/dtrace-provider
 
-Maybe configure a maker: https://www.electronforge.io/config/makers/dmg
-
 ## Linux
  * Note, this should be pretty much the same as the steps in the GitHub Actions build script
-
-- clone
-- install the right version of NodeJS
-- run `corepack enable`
 
 (post-install builds)
 - sqlite3
