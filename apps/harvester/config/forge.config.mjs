@@ -15,9 +15,10 @@ const deployedAt = JSON.stringify(new Date().toISOString());
 const renderConfig = getRendererConfig(deployedAt);
 const mainConfig = await getMainConfig(deployedAt);
 
-const suffix = process.env.CONFIG_ENV === 'prod'
-  ? ''
-  : ` - ${process.env.CONFIG_NAME}`;
+const buildChannel = process.env.CONFIG_NAME ?? 'development';
+const isProductionChannel = process.env.CONFIG_ENV === 'prod';
+const appName = isProductionChannel ? 'harvester' : `harvester-${buildChannel}`;
+const appTitle = isProductionChannel ? 'Harvester' : `Harvester - ${buildChannel}`;
 
 const config = {
   buildIdentifier: process.env.CONFIG_NAME,
@@ -26,7 +27,8 @@ const config = {
     // asar: {
     //   unpack: './node_modules/node-notifier/**/*'
     // },
-    productName: "TheCoin - Harvester",
+    name: appName,
+    productName: appTitle,
     icon: 'assets/appicon',
     appBundleId: utils.fromBuildIdentifier({
       prod: 'com.TheCoin.Harvester',
@@ -40,12 +42,21 @@ const config = {
       // file so we can reference them by absolute path
       './assets'
     ],
+    // Windows metadata for proper app display
+    win32metadata: {
+      ProductName: appTitle,   // Start Menu / shortcut name
+      FileDescription: appTitle,
+    },
   },
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({
+      name: appName,
+      title: appTitle,
+      exe: `${appName}.exe`,
       setupIcon: 'assets/appicon.ico',
     }),
+    // NOTE: THis has not (as yet) been tested to support SxS installs
     {
       name: '@electron-forge/maker-dmg',
       config: {
@@ -57,10 +68,11 @@ const config = {
     new MakerDeb({
       options: {
         icon: 'assets/appicon.png',
-        name: `harvester${suffix.replaceAll(' ', '')}`,
+        name: appName,
+        bin: appName,
         homepage: process.env.URL_SITE_LANDING,
-        productName: `Harvester${suffix}`,
-        genericName: `Harvester${suffix}`,
+        productName: appTitle,
+        genericName: appTitle,
         categories: ['Utility'],
       }
     })

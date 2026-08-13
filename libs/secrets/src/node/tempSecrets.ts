@@ -1,5 +1,3 @@
-import { getClient } from "./bitwarden/client";
-import { getMapping } from "./bitwarden/getSecrets";
 
 const TempProjectName = "temp_secrets";
 
@@ -57,4 +55,14 @@ export async function getTempProjectId() {
     throw new Error("Temp project not found");
   }
   return r;
+}
+
+// Lazy-load these to avoid trying to access these libraries during electron app start-up
+async function getClient() {
+  const bw = await import("./bitwarden/client");
+  return bw.getClient();
+}
+async function getMapping() {
+  const bw = await import("./bitwarden/getSecrets");
+  return bw.getMapping();
 }
