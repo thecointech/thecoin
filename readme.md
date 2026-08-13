@@ -25,7 +25,7 @@ Early stage, actively developed. Expect rough edges. Current focus is stability 
 
 ## Architecture notes
 
-- Bank connectivity is handled via a Puppeteer-based harvester, with a self-hosted 8B-parameter vLLM model used to map bank websites.
+- Bank connectivity is handled via a Puppeteer-based [harvester](./apps/harvester/), with a self-hosted 8B-parameter vLLM model used to map bank websites.
 - Storage was originally built around crypto-style anonymity: user details live in an encrypted store the transaction processor itself can't read. This is deliberate but does complicate alerting at scale, and is being revisited (see open issues).
 - Hosting is on Firebase; content is served from Prismic.
 

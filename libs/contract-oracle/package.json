@@ -70,6 +70,7 @@
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
     "@thecointech/async": "^0.6.6",
     "@thecointech/contract-tools": "^0.6.6",
+    "@thecointech/fx-rates": "^0.6.6",
     "@thecointech/jestutils": "^0.6.6",
     "@thecointech/setenv": "^0.6.6"
   },

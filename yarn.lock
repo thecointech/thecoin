@@ -11637,6 +11637,7 @@ __metadata:
     "@thecointech/async": "npm:^0.6.6"
     "@thecointech/contract-base": "npm:^0.6.6"
     "@thecointech/contract-tools": "npm:^0.6.6"
+    "@thecointech/fx-rates": "npm:^0.6.6"
     "@thecointech/jestutils": "npm:^0.6.6"
     "@thecointech/setenv": "npm:^0.6.6"
   languageName: unknown

@@ -15,9 +15,9 @@ Assuming a fresh machine
   - Install Build Tools: `winget install --id Microsoft.VisualStudio.2022.BuildTools -e --override "--wait --passive --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"`
   - Install Java JRE (used by build:apis) `winget install --id Azul.Zulu.17.JRE -e`
  - Enable SymLinks, by either (used by go-ipfs):
-  - Turn developer mode on (recommended)
-    - WinKey, "Settings", search for "Use developer features", turn on "Developer Mode"
-  - Always run `yarn` from an elevated prompt
+    - Turn developer mode on (recommended)
+      - WinKey, "Settings", search for "Use developer features", turn on "Developer Mode"
+    - Always run `yarn` from an elevated prompt
  - Reboot machine `Restart-Computer`
  - `yarn install && yarn build`
 
