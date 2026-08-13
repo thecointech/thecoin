@@ -35,4 +35,4 @@ Issues and PRs welcome. If you're touching the harvester or the encrypted storag
 
 ## License
 
-See [LICENSE](LICENSE).
+See [LICENSE](LICENSE.md).
