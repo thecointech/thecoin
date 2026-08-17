@@ -29,9 +29,6 @@ if [[ ! -d "$SRC" ]]; then
   exit 1
 fi
 
-echo "Uploading $SRC -> $DEST"
-gsutil -m rsync -r -d "$SRC" "$DEST"
-
 # prod needs no differentiator - it's the one channel users expect to find
 # under the plain "Harvester..." name.
 CHANNEL_SUFFIX=""
@@ -43,12 +40,22 @@ case "$PLATFORM" in
   *) INSTALLER_GLOB=""; STABLE_NAME="" ;;
 esac
 
+INSTALLER=""
 if [[ -n "$INSTALLER_GLOB" ]]; then
   INSTALLER=$(find "$SRC" -maxdepth 1 -iname "$INSTALLER_GLOB" -print -quit)
-  if [[ -n "$INSTALLER" ]]; then
-    echo "Publishing stable download link -> $DEST/$STABLE_NAME"
-    gsutil cp "$INSTALLER" "$DEST/$STABLE_NAME"
+  if [[ -z "$INSTALLER" ]]; then
+    echo "No installer matching $INSTALLER_GLOB found in $SRC" >&2
+    exit 1
   fi
+  echo "Found installer: $INSTALLER"
+fi
+
+echo "Uploading $SRC -> $DEST"
+gsutil -m rsync -r -d "$SRC" "$DEST"
+
+if [[ -n "$INSTALLER" ]]; then
+  echo "Publishing stable download link -> $DEST/$STABLE_NAME"
+  gsutil cp "$INSTALLER" "$DEST/$STABLE_NAME"
 fi
 
 echo "Done. Bucket contents:"

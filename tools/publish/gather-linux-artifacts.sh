@@ -13,6 +13,9 @@ DEST_ROOT="$HOME/thecoin-env/artifacts/linux"
 
 VERSION="${1:?Usage: gather-linux-artifacts.sh <version> (e.g. 0.6.6)}"
 
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/publish-common.sh"
+validate_version "$VERSION" || exit 1
+
 # development/devlive builds are never uploaded/distributed - skip them.
 EXCLUDED_CHANNELS=(development devlive)
 

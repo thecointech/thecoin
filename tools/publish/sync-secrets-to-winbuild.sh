@@ -7,6 +7,7 @@ set -euo pipefail
 VM_HOST="192.168.122.50"
 VM_USER="build"
 VM_PATH="C:/thecoin-env/secrets"
+STAGING_PATH="$VM_PATH.staging"
 
 SRC="${THECOIN_SECRETS:?THECOIN_SECRETS is not set on this host}"
 if [[ ! -d "$SRC" ]]; then
@@ -14,16 +15,23 @@ if [[ ! -d "$SRC" ]]; then
   exit 1
 fi
 
-echo "Syncing $SRC -> $VM_USER@$VM_HOST:$VM_PATH"
+echo "Syncing $SRC -> $VM_USER@$VM_HOST:$STAGING_PATH (staging)..."
 
-# (Re)create the target directory on the VM, so old/stale files don't linger
-ssh "$VM_USER@$VM_HOST" "powershell -NoProfile -Command \"Remove-Item -Recurse -Force $VM_PATH -ErrorAction SilentlyContinue; New-Item -ItemType Directory -Force -Path $VM_PATH | Out-Null\""
+# Create a fresh staging directory, leaving the existing VM_PATH untouched.
+ssh "$VM_USER@$VM_HOST" "powershell -NoProfile -Command \"\$staging='$STAGING_PATH'; if (Test-Path \$staging) { Remove-Item -Recurse -Force \$staging }; New-Item -ItemType Directory -Force -Path \$staging | Out-Null\""
 
 # Copy every file/subdir individually (including dotfiles like .env) so we
 # don't depend on scp's directory-nesting semantics.
 shopt -s dotglob nullglob
-scp -r "$SRC"/* "$VM_USER@$VM_HOST:$VM_PATH/"
+scp -r "$SRC"/* "$VM_USER@$VM_HOST:$STAGING_PATH/"
 shopt -u dotglob nullglob
+
+echo "Promoting staged secrets to $VM_PATH..."
+
+# Validate the staged copy and replace VM_PATH with the staging directory.
+# Any failure here aborts the script so stale or partial secrets are not left
+# in place.
+ssh "$VM_USER@$VM_HOST" "powershell -NoProfile -Command \"\$staging='$STAGING_PATH'; if (-not (Test-Path \$staging)) { throw \\\"Staging directory \$staging is missing after copy\\\" }; if (Test-Path '$VM_PATH') { Remove-Item -Recurse -Force '$VM_PATH' }; Move-Item \$staging '$VM_PATH'\""
 
 # Point the VM's own THECOIN_SECRETS at the copied location (persists for
 # *future* sessions only - setx doesn't affect already-open shells).
