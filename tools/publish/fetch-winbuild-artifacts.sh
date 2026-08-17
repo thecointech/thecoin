@@ -66,21 +66,29 @@ scp() { command scp -o ControlPath="$CTRL_SOCK" "${COMMON_SSH_OPTS[@]}" "$@"; }
 
 echo "Staging + zipping artifacts matching *$VERSION* (and RELEASES) under out/ on the VM..."
 scp "$LOCAL_PS1" "$VM_USER@$VM_HOST:$REMOTE_PS1"
-timeout 600 ssh "$VM_USER@$VM_HOST" "powershell -NoProfile -File $REMOTE_PS1 -Version $VERSION -OutRoot $VM_REPO/apps/harvester/out -ZipPath $REMOTE_ZIP"
+# Use the real ssh binary (not the wrapper function) so timeout can monitor
+# the actual process while still using the established control socket.
+SSH_BIN="$(type -P ssh)"
+timeout 600 "$SSH_BIN" -S "$CTRL_SOCK" "${COMMON_SSH_OPTS[@]}" "$VM_USER@$VM_HOST" "powershell -NoProfile -File $REMOTE_PS1 -Version $VERSION -OutRoot $VM_REPO/apps/harvester/out -ZipPath $REMOTE_ZIP"
 
-echo "Pulling zip back to a staging area..."
 mkdir -p "$(dirname "$DEST_ROOT")"
 STAGING_DIR=$(mktemp -d "$DEST_ROOT.staging.XXXXXX")
 TMP_ZIP="$STAGING_DIR/artifacts.zip"
+echo "Pulling zip back to $TMP_ZIP ..."
 scp "$VM_USER@$VM_HOST:$REMOTE_ZIP" "$TMP_ZIP"
-unzip -o -q "$TMP_ZIP" -d "$STAGING_DIR"
+# PowerShell's Compress-Archive writes Windows path separators, which unzip
+# warns about but still extracts correctly (exit code 1). Treat warnings as
+# success and only fail on real errors (exit code >= 2).
+echo "Extracting zip to $STAGING_DIR ..."
+unzip -o -q "$TMP_ZIP" -d "$STAGING_DIR" || [[ $? -le 1 ]]
+rm -f "$TMP_ZIP"
+TMP_ZIP=""
 
 # Only replace DEST_ROOT after both download and extraction succeed.
 echo "Promoting staging area to $DEST_ROOT..."
 rm -rf "$DEST_ROOT"
 mv "$STAGING_DIR" "$DEST_ROOT"
 STAGING_DIR=""
-TMP_ZIP=""
 
 echo "Done. Artifacts (still grouped by out/<config>/... structure):"
 find "$DEST_ROOT" -type f
