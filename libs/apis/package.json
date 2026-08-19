@@ -31,6 +31,7 @@
       "development": "./mocks/broker/index.ts",
       "default": "./build/broker/live.js"
     },
+    "./broker/mocked": "./mocks/broker/index.ts",
     "./pricing": {
       "development": "./mocks/pricing.ts",
       "default": "./build/pricing/live.js"

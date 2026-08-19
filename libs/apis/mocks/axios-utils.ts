@@ -1,4 +1,4 @@
-import type { AxiosResponse } from "axios";
+import { AxiosError, type AxiosResponse } from "axios";
 
 
 export function buildResponse<T>(data: T): AxiosResponse<T> {
@@ -9,6 +9,20 @@ export function buildResponse<T>(data: T): AxiosResponse<T> {
     headers: {} as any,
     config: {} as any,
   }
+}
+
+// Build a rejection that mimics a failed server response, so that
+// callers using `axios.isAxiosError` (e.g. UI error handling) behave
+// the same in mocks as they would against the real broker-service.
+export function buildErrorResponse<T>(status: number, data: T, message?: string): AxiosError<T> {
+  const response: AxiosResponse<T> = {
+    data: deepCopy(data),
+    status,
+    statusText: "Error",
+    headers: {} as any,
+    config: {} as any,
+  };
+  return new AxiosError(message ?? (data as any)?.message, String(status), undefined, undefined, response);
 }
 
 function deepCopy(obj: any): any {

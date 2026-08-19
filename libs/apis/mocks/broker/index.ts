@@ -20,3 +20,4 @@ export const GetPluginsApi = () => new PluginsApi();
 export const GetHarvesterApi = () => new HarvesterApi();
 
 export { StatusType } from './UserVerificationApi';
+export { setAssignPluginFailure, type AssignPluginFailure } from './PluginsApi';
