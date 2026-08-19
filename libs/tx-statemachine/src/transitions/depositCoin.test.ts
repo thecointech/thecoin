@@ -2,6 +2,7 @@ import { jest } from "@jest/globals";
 import { Wallet, ContractTransactionResponse } from 'ethers';
 import { BillActionContainer } from '../types';
 import { BuildVerifiedAction } from '@thecointech/utilities/VerifiedAction'
+import { LocalTimeSource } from '@thecointech/utilities/TimeSource'
 import { DateTime } from 'luxon';
 import { ContractCore } from '@thecointech/contract-core';
 import { createAction } from '@thecointech/broker-db';
@@ -59,6 +60,7 @@ const getContainer = async (value: number, balance: number, fee: number): Promis
     "0x0000000000000000000000000000000000000000",
     value,
     fee,
+    LocalTimeSource,
   );
 
   const action = await createAction(signer.address, "Bill", {

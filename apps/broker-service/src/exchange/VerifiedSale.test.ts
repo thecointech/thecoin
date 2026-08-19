@@ -1,6 +1,7 @@
 
 import { toHuman } from '@thecointech/utilities'
 import { BuildVerifiedSale } from '@thecointech/utilities/VerifiedSale';
+import { LocalTimeSource } from '@thecointech/utilities/TimeSource';
 import { ProcessSale } from './VerifiedSale'
 import { current } from '../status';
 import { ETransferPacket } from '@thecointech/types';
@@ -33,7 +34,7 @@ it("Submits a sale for processing", async () => {
   const curr = await current();
   const fee = curr.certifiedFee;
   const sellAmount = 100;
-  const certSale = await BuildVerifiedSale(eTransfer, wallet, curr.BrokerCAD, sellAmount, fee);
+  const certSale = await BuildVerifiedSale(eTransfer, wallet, curr.BrokerCAD, sellAmount, fee, LocalTimeSource);
   const res = await ProcessSale(certSale);
 
   expect(res).toBeTruthy();

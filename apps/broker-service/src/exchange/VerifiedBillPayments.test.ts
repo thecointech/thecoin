@@ -1,4 +1,5 @@
 import { BuildVerifiedBillPayment } from '@thecointech/utilities/VerifiedBillPayment';
+import { LocalTimeSource } from '@thecointech/utilities/TimeSource';
 import { ProcessBillPayment } from './VerifiedBillPayments'
 import { init } from '@thecointech/firestore';
 import { current } from '../status';
@@ -20,7 +21,7 @@ it("can process a bill payment", async () => {
   };
   const amount = 100;
   const curr = await current();
-  const billPayment = await BuildVerifiedBillPayment(payee, wallet, curr.BrokerCAD, amount, curr.certifiedFee);
+  const billPayment = await BuildVerifiedBillPayment(payee, wallet, curr.BrokerCAD, amount, curr.certifiedFee, LocalTimeSource);
   expect(billPayment).toBeTruthy();
   const res = await ProcessBillPayment(billPayment);
 

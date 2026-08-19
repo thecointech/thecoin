@@ -5,6 +5,7 @@ import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import { createAction } from '@thecointech/broker-db';
 import { BuildUberAction } from '@thecointech/utilities/UberAction';
+import { LocalTimeSource } from '@thecointech/utilities/TimeSource';
 import { getSigner } from '@thecointech/signers';
 import { GetRatesApi } from '@thecointech/apis/pricing';
 import { BankMock } from '@thecointech/bank-interface/mocked';
@@ -55,7 +56,8 @@ it('uberGraph bill payment: happy path reaches complete', async () => {
     process.env.WALLET_BrokerCAD_ADDRESS!,
     new Decimal(100),
     124,
-    transferTime
+    transferTime,
+    LocalTimeSource,
   );
   const action = await createAction(address, "Bill", {
     initial: uberAction,
@@ -104,7 +106,7 @@ it('uberGraph bill payment: happy path reaches complete', async () => {
   expect(processPendingSpy).toHaveBeenCalledTimes(1);
   expect(getSingleSpy).toHaveBeenCalledTimes(1);
   expect(payBillSpy).toHaveBeenCalledTimes(1);
-  
+
   const [[, calledTimestamp]] = getSingleSpy.mock.calls as [[number, number]];
   const settledDate = DateTime.fromMillis(calledTimestamp);
   expect(settledDate).toEqual(transferTime);

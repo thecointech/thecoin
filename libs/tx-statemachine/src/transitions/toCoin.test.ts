@@ -4,6 +4,7 @@ import { Wallet } from 'ethers';
 import { BillActionContainer } from '../types';
 import { BuildUberAction } from '@thecointech/utilities/UberAction'
 import { BuildVerifiedAction } from '@thecointech/utilities/VerifiedAction'
+import { LocalTimeSource } from '@thecointech/utilities/TimeSource'
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
 import { ContractCore } from '@thecointech/contract-core';
@@ -41,7 +42,8 @@ it ("correctly converts UberTransfer", async () => {
     "0x0000000000000000000000000000000000000000",
     amount,
     124,
-    xferAt
+    xferAt,
+    LocalTimeSource,
   );
 
   const container = await getContainer(sale);
@@ -73,6 +75,7 @@ it ("correctly converts CertifiedTransfer", async () => {
     "0x0000000000000000000000000000000000000000",
     amount.toNumber(),
     0,
+    LocalTimeSource,
   );
 
   const container = await getContainer(sale);
@@ -102,6 +105,7 @@ it ("uses state date, not action date, when converting", async () => {
     "0x0000000000000000000000000000000000000000",
     amount.toNumber(),
     0,
+    LocalTimeSource,
   );
 
   const action = await createAction(signer.address, "Bill", {

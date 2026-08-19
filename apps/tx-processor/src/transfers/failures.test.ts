@@ -9,6 +9,7 @@ import Decimal from 'decimal.js-light';
 import { Wallet } from 'ethers';
 import { getBillAction } from '@thecointech/tx-bill';
 import { BuildVerifiedBillPayment } from '@thecointech/utilities/VerifiedBillPayment';
+import { LocalTimeSource } from '@thecointech/utilities/TimeSource';
 import { log } from '@thecointech/logging';
 import { getSigner } from '@thecointech/signers';
 jest.setTimeout(900000);
@@ -30,7 +31,8 @@ it("does not continue processing user with failed transactions", async () => {
     user,
     process.env.WALLET_BrokerCAD_ADDRESS!,
     100,
-    0
+    0,
+    LocalTimeSource,
   );
   const billAction = await getBillAction(xfer);
 
