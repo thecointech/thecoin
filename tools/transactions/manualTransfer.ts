@@ -51,11 +51,8 @@ console.log("Remaining after all transfers:", Number(balance) - total.toNumber()
 
 // Override timestamp
 let millis = date.toMillis() + 1000;
-Date.now = () => millis;
 for (const t of transfers) {
-  // Date.now is monkey-patched above to backdate this transfer, so our
-  // TimeSource just needs to defer to it at call time.
-  const xfer = await BuildVerifiedXfer(signer, t.to, t.coin.toNumber(), 0, () => Date.now());
+  const xfer = await BuildVerifiedXfer(signer, t.to, t.coin.toNumber(), 0, () => millis);
 
   const balanceFrom = await contract.balanceOf(signer.address);
   const balanceTo = await contract.balanceOf(t.to);
