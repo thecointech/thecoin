@@ -1,6 +1,6 @@
 import { Wallet } from "ethers";
 import { buildAssignPluginRequest } from "./assign";
-import { DateTime } from "luxon";
+import { LocalTimeSource } from "@thecointech/utilities/TimeSource";
 
 it ("generates a valid assign plugin request", async () => {
   const wallet = Wallet.createRandom();
@@ -8,7 +8,7 @@ it ("generates a valid assign plugin request", async () => {
     wallet,
     wallet,
     0n,
-    DateTime.now(),
+    LocalTimeSource,
   )
   expect(typeof request.plugin).toBe("string");
 })

@@ -1,5 +1,6 @@
 import { Wallet } from "ethers";
 import { BuildVerifiedXfer, GetTransferSigner } from "./VerifiedTransfer";
+import { LocalTimeSource } from "./TimeSource";
 
 test("Verified signature matches", async () => {
 
@@ -10,7 +11,8 @@ test("Verified signature matches", async () => {
     wallet,
     wallet.address,
     value,
-    fee
+    fee,
+    LocalTimeSource
   );
 
   const { timestamp, signature } = verifiedXfer;

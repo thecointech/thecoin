@@ -3,6 +3,7 @@ import { solidityPackedKeccak256, verifyMessage, type Signer, getBytes, AddressL
 import type Decimal from 'decimal.js-light';
 import type { AnyTransfer, UberTransfer } from "@thecointech/types";
 import { DateTime } from 'luxon';
+import type { TimeSource } from "./TimeSource";
 
 function getHash(
   chainId: number,
@@ -50,10 +51,11 @@ export async function buildUberTransfer(
   amount: Decimal,
   currency: number,
   transferTime: DateTime,
+  timeSource: TimeSource,
 ) {
   // We only run on the polygon network for now...
   const chainId = parseInt(process.env.DEPLOY_POLYGON_NETWORK_ID!);
-  const signedTime = DateTime.now();
+  const signedTime = DateTime.fromMillis(await timeSource());
   const address = await from.getAddress();
   const toAddress = await resolveAddress(to);
   const transferMillis = transferTime.toMillis();
