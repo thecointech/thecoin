@@ -27,10 +27,10 @@ describe('config db tests', () => {
     const db = newDb();
     await db.set(cgfData);
     await db.set({
-      alwaysRunScraperVisible: true,
+      scraperVisibilityMode: 'offscreen',
     });
     const cfg2 = await db.get();
-    expect (cfg2?.alwaysRunScraperVisible).toEqual(true);
+    expect (cfg2?.scraperVisibilityMode).toEqual('offscreen');
     expect (cfg2?.creditDetails?.accountNumber).toEqual(randomId);
 
     for (let i = 0; i < 10; i++) {

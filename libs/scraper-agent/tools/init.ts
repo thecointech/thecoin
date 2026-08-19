@@ -1,5 +1,4 @@
-import { existsSync, rmSync } from "fs";
-import { setupScraper, getUserDataDir } from "@thecointech/scraper/puppeteer";
+import { setupScraper } from "@thecointech/scraper/puppeteer";
 import { SimilarityPipeline } from "@thecointech/scraper/similarity";
 import path from "path";
 import { log } from "@thecointech/logging";
@@ -9,7 +8,7 @@ export async function init() {
   // fix temp dir to project root
   const filename = fileURLToPath(import.meta.url);
   const tempDir = path.join(path.dirname(filename), "..", ".cache");
-  setupScraper({ rootFolder: tempDir, isVisible: async () => true });
+  setupScraper({ rootFolder: tempDir, isVisible: async () => "visible" });
   let lastLogMessage = 0;
   let logPeriod = 3000;
   await SimilarityPipeline.init(tempDir, (progress) => {

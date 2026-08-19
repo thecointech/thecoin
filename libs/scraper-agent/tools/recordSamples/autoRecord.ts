@@ -1,5 +1,5 @@
 import { log, LoggerContext } from "@thecointech/logging";
-import { installBrowser, maybeCopyProfile, removeBrowser } from "@thecointech/scraper/puppeteer";
+import { cleanExistingProfile, installBrowser, removeBrowser } from "@thecointech/scraper/puppeteer";
 import { mkdirSync } from "fs";
 import { DateTime } from "luxon";
 import path from "path";
@@ -33,7 +33,9 @@ if (refreshBrowserInstall) {
 }
 
 await installBrowser();
-await maybeCopyProfile(clean);
+if (clean) {
+  await cleanExistingProfile();
+}
 
 let successful: string[] = [];
 let errored: string[] = [];

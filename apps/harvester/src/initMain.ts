@@ -1,6 +1,6 @@
 import { setupScraper } from "@thecointech/scraper";
 import { rootFolder } from "./paths";
-import { getScraperVisible } from "./Harvester/scraperVisible";
+import { getScraperMode } from "./Harvester/scraperVisible";
 import { log } from "@thecointech/logging";
 import { bridgeElectronSigner } from "@thecointech/electron-signer/bridge";
 import { ipcMain } from 'electron';
@@ -11,7 +11,7 @@ import { NormalizeAddress } from "@thecointech/utilities";
 export function initMain() {
   setupScraper({
     rootFolder,
-    isVisible: getScraperVisible,
+    isVisible: getScraperMode,
   });
   log.info({ rootFolder }, "Main process initialized at root: {rootFolder}");
 

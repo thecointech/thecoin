@@ -3,7 +3,7 @@ import { writeFileSync, mkdirSync } from 'fs';
 import { homedir } from 'os';
 import { HarvestSchedule, toDayNames } from '@thecointech/store-harvester';
 import { log } from '@thecointech/logging';
-import { getScraperVisible } from '../scraperVisible';
+import { getScraperMode } from '../scraperVisible';
 import { parseTime } from './common';
 
 const TaskName = 'thecoin-harvest';
@@ -41,11 +41,12 @@ export async function setSchedule(schedule: HarvestSchedule) {
     // Ensure systemd user dir exists
     mkdirSync(SystemdUserDir, { recursive: true });
 
-    // Check if scraper should run visible (requiring Xvfb)
-    const scraperVisible = await getScraperVisible();
+    // Headed modes (visible/offscreen) require a display server,
+    // so wrap the job in Xvfb when the scraper is not headless
+    const scraperMode = await getScraperMode();
 
     // Write service and timer files
-    const serviceContent = generateService(scraperVisible);
+    const serviceContent = generateService(scraperMode != 'headless');
     const timerContent = generateTimer(schedule);
     writeFileSync(ServicePath, serviceContent);
     writeFileSync(TimerPath, timerContent);

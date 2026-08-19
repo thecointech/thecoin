@@ -5,7 +5,6 @@ import { setEvents } from '../events';
 import { downloadRequired } from '@/GetStarted/download';
 import type { BankConfig, BankType } from '@thecointech/store-harvester';
 import { sections } from '@thecointech/scraper-agent/processors/types';
-import { VisibleOverride } from '@thecointech/scraper/puppeteer-init/visibility';
 import { AskUserLogin } from './askUserLogin';
 import { getErrorMessage } from '@/BackgroundTask';
 import { AgentCallbacks } from './agentCallbacks';
@@ -13,10 +12,9 @@ import { AgentCallbacks } from './agentCallbacks';
 export type AutoConfigParams = {
   type: BankType;
   config: BankConfig;
-  visible: boolean;
 }
 
-export async function autoConfigure({ type, config, visible }: AutoConfigParams, depositAddress: string, callback: BackgroundTaskCallback) {
+export async function autoConfigure({ type, config }: AutoConfigParams, depositAddress: string, callback: BackgroundTaskCallback) {
 
   log.info(`Agent: Starting configuration for action: autoConfigure`);
 
@@ -42,7 +40,6 @@ export async function autoConfigure({ type, config, visible }: AutoConfigParams,
   }, depositAddress);
 
   try {
-    using _ = new VisibleOverride(visible)
     await using agent = await Agent.create(name, inputBridge, url, logger);
     const results = await agent.process(toSkip);
 

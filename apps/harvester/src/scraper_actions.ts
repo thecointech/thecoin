@@ -8,6 +8,7 @@ import type { AutoConfigParams } from './Harvester/agent';
 import type { BankConnectMap } from './Harvester/events';
 import type { WebsiteEndpoints } from './openExternal';
 import type { RendererBankType } from './Agent/state/types';
+import type { ScraperVisibility } from '@thecointech/scraper/puppeteer-init/visibility';
 
 export type Result<T> = {
   error?: string;
@@ -62,11 +63,11 @@ export type ScraperBridgeApi = {
   getHarvestConfig(): Promise<Result<HarvestConfig|undefined>>,
   setHarvestConfig(config: HarvestConfig): Promise<Result<boolean>>,
 
-  // Set/get the alwaysRunVisible flag
-  alwaysRunScraperVisible(visible?: boolean): Promise<Result<boolean>>,
+  // Set/get the scraper window mode
+  scraperVisibilityMode(mode?: ScraperVisibility): Promise<Result<ScraperVisibility>>,
   // Set/get the alwaysRunLogging flag
   alwaysRunScraperLogging(logging?: boolean): Promise<Result<boolean>>,
-  runHarvester(forceVisible?: boolean): Promise<Result<string>>,
+  runHarvester(visibility?: ScraperVisibility): Promise<Result<string>>,
   getCurrentState(): Promise<Result<StoredData>>,
 
   exportResults(): Promise<Result<string>>
@@ -129,7 +130,7 @@ export const actions = {
   getHarvestConfig: 'scraper:getHarvestConfig',
   setHarvestConfig: 'scraper:setHarvestConfig',
 
-  alwaysRunScraperVisible: 'scraper.alwaysRunScraperVisible',
+  scraperVisibilityMode: 'scraper.scraperVisibilityMode',
   alwaysRunScraperLogging: 'scraper.alwaysRunScraperLogging',
 
   runHarvester: 'scraper.runHarvester',

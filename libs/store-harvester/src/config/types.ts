@@ -25,7 +25,11 @@ export type ConfigShape = {
   // the same scraping config for both
   scraping?: ScrapingConfig,
 
-  alwaysRunScraperVisible?: boolean,
+  // Three-way scraper window mode.  'offscreen'
+  // runs a real headed browser with the window parked off-screen:
+  // near-identical fingerprint to a visible run, invisible to the user.
+  // Keep this string union in sync with ScraperVisibility in @thecointech/scraper.
+  scraperVisibilityMode?: 'headless' | 'offscreen' | 'visible',
   alwaysRunScraperLogging?: boolean,
 
 } & HarvestConfig;
