@@ -2,6 +2,7 @@ import { Signer } from 'ethers';
 import { DateTime } from 'luxon';
 import { solidityPackedKeccak256, verifyMessage, getBytes } from 'ethers';
 import { sign } from "@thecointech/utilities/SignedMessages";
+import type { TimeSource } from "@thecointech/utilities/TimeSource";
 import type { IPluggable } from './codegen/contracts';
 import type { RemovePluginRequest } from '@thecointech/types';
 // export type RemovePluginRequest = {
@@ -26,11 +27,12 @@ function getRemovePluginBuffer(request: Omit<RemovePluginRequest, 'signature'>) 
 
 export async function buildRemovePluginRequest(
   user: Signer,
-  index: number)
+  index: number,
+  timeSource: TimeSource)
 : Promise<RemovePluginRequest>
 {
   const chainId = parseInt(process.env.DEPLOY_POLYGON_NETWORK_ID ?? "-1");
-  const signedAt = DateTime.now();
+  const signedAt = DateTime.fromMillis(await timeSource());
   const address = await user.getAddress();
   var r = {
     user: address,
