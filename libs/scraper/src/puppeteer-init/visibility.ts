@@ -64,9 +64,11 @@ export class VisibleOverride implements Disposable {
   }
 
   dispose() {
-    if (this.mode) {
+    const mode = this.mode;
+    this.mode = undefined;
+    if (mode) {
       const overrides = globalThis.__overrideVisible;
-      const idx = overrides?.lastIndexOf(this.mode) ?? -1;
+      const idx = overrides?.lastIndexOf(mode) ?? -1;
       if (idx >= 0) overrides.splice(idx, 1);
     }
   }
