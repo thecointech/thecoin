@@ -4,6 +4,7 @@ import { ALL_PERMISSIONS, assignPlugin, buildAssignPluginRequest } from '@thecoi
 import { log } from '@thecointech/logging';
 import { ContractRoundNumber } from '../src/contract';
 import { DateTime } from 'luxon';
+import { LocalTimeSource } from '@thecointech/utilities/TimeSource';
 
 async function main() {
   // Only deploy this in DevLive(?)
@@ -23,7 +24,7 @@ async function main() {
     log.debug("Seeding RoundNumber");
 
     const deployed = await ContractRoundNumber.get();
-    const request = await buildAssignPluginRequest(Client2, deployed, ALL_PERMISSIONS);
+    const request = await buildAssignPluginRequest(Client2, deployed, ALL_PERMISSIONS, LocalTimeSource);
     const assigned = await assignPlugin(bcCore, request);
     await assigned.wait();
 

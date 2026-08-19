@@ -5,6 +5,7 @@ import { createAndInitOracle } from '@thecointech/contract-oracle/testHelpers.ts
 import { ALL_PERMISSIONS, assignPlugin, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 import { createAndInitTheCoin, getSigners } from '@thecointech/contract-core/testHelpers.ts';
 import { buildUberTransfer } from '@thecointech/utilities/UberTransfer';
+import { LocalTimeSource } from '@thecointech/utilities/TimeSource';
 import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
 import '@nomicfoundation/hardhat-ethers';
@@ -32,7 +33,7 @@ describe('Uberconverter current tests', () => {
     await uber.initialize(tcCore, oracle);
 
     // Assign to user, grant all permissions
-    const request = await buildAssignPluginRequest(signers.Client1, uber, ALL_PERMISSIONS);
+    const request = await buildAssignPluginRequest(signers.Client1, uber, ALL_PERMISSIONS, LocalTimeSource);
     await assignPlugin(tcCore, request);
 
     // Transfer $100 now.
@@ -42,6 +43,7 @@ describe('Uberconverter current tests', () => {
       new Decimal(100),
       124,
       DateTime.now(),
+      LocalTimeSource,
     )
     const initBalance = await tcCore.balanceOf(signers.Client1);
     const r = await tcCore.uberTransfer(

@@ -9,6 +9,7 @@ import { time } from "@nomicfoundation/hardhat-network-helpers";
 import { ALL_PERMISSIONS, assignPlugin, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 import type { TheCoin } from '@thecointech/contract-core';
 import { Duration } from 'luxon';
+import { LocalTimeSource } from '@thecointech/utilities/TimeSource';
 import type { AddressLike } from 'ethers';
 
 export class AbsorberSol {
@@ -188,7 +189,7 @@ async function setupLive(initFiat: number, blockTime?: number) {
   const initCoin = toCoin(initFiat, 100);
   await tcCore.transfer(Client1.address, initCoin);
 
-    const request = await buildAssignPluginRequest(Client1, absorber, ALL_PERMISSIONS);
+    const request = await buildAssignPluginRequest(Client1, absorber, ALL_PERMISSIONS, LocalTimeSource);
   await assignPlugin(tcCore, request);
 
   // absorber needs funds - start with $100K
