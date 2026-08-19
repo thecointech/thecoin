@@ -13,11 +13,11 @@ import { LocalTimeSource } from '@thecointech/utilities/TimeSource';
 import type { AddressLike } from 'ethers';
 
 export class AbsorberSol {
-  user: string;
-  owner: string;
-  tcCore: TheCoin;
-  tcUser: TheCoin;
-  absorber: ShockAbsorber;
+  user!: string;
+  owner!: string;
+  tcCore!: TheCoin;
+  tcUser!: TheCoin;
+  absorber!: ShockAbsorber;
   coinCurrent = 0;
   timeMs = 0;
 
@@ -32,7 +32,7 @@ export class AbsorberSol {
   maxCoverAdjust = 0;
   initMs = 0;
 
-  oracle: {
+  oracle!: {
     contract: SpxCadOracle;
     rate: number;
     validUntil: number;
