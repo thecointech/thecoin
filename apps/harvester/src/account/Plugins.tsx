@@ -3,7 +3,7 @@ import { Checkbox, CheckboxProps, Container, Header, Label, List, Message, Segme
 import { ALL_PERMISSIONS, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 import { ContractConverter } from '@thecointech/contract-plugin-converter';
 import { ContractShockAbsorber } from '@thecointech/contract-plugin-shockabsorber';
-import { GetPluginsApi } from '@thecointech/apis/broker';
+import { GetPluginsApi, ServerTimeSource } from '@thecointech/apis/broker';
 import { sleep } from "@thecointech/async";
 import { getData, Key, setData } from '../Training/data';
 import { useEffect, useState } from 'react';
@@ -23,6 +23,7 @@ const sendAssignRequest = async (signer: Signer, pluginAddress: AddressLike) => 
     signer,
     pluginAddress,
     ALL_PERMISSIONS,
+    ServerTimeSource,
   );
   await api.assignPlugin({
     ...convRequest,

@@ -1,5 +1,5 @@
 import { getDataAsCurrency, getDataAsDate, HarvestData, HarvestDelta, ProcessingStage, UserData } from '../types';
-import { GetBillPaymentsApi, GetStatusApi } from '@thecointech/apis/broker'
+import { GetBillPaymentsApi, GetStatusApi, ServerTimeSource } from '@thecointech/apis/broker'
 import { BuildUberAction } from '@thecointech/utilities/UberAction';
 import Decimal from 'decimal.js-light';
 import { DateTime } from 'luxon';
@@ -108,6 +108,7 @@ async function sendPayment(dateToPay: DateTime, data: HarvestData, { wallet, cre
     new Decimal(dueAmount),
     124,
     dateToPay,
+    ServerTimeSource,
   )
   const r = await sendVisaPayment(payment);
   if (r.status !== 200) {

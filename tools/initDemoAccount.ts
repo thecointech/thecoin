@@ -6,6 +6,7 @@ import { ContractConverter } from '@thecointech/contract-plugin-converter';
 import { ContractShockAbsorber } from '@thecointech/contract-plugin-shockabsorber';
 import { ALL_PERMISSIONS, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 import { BuildUberAction } from '@thecointech/utilities/UberAction';
+import type { TimeSource } from '@thecointech/utilities/TimeSource';
 import Decimal from 'decimal.js-light';
 import { CurrencyCode } from "@thecointech/fx-rates";
 import { SendFakeDeposit, emailCacheFile } from '@thecointech/email-fake-deposit';
@@ -75,6 +76,11 @@ const mockPayee = {
   accountNumber: "1234567890",
 }
 
+// This script fabricates historical data by monkey-patching DateTime.now
+// (see below), so our TimeSource just needs to defer to whatever DateTime.now
+// currently resolves to at call time, rather than the real clock/server.
+const fakeableNow: TimeSource = () => DateTime.now().toMillis();
+
 // First, assign plugins
 const plugins = await tcCore.getUsersPlugins(testAddress);
 console.log(`Got ${plugins.length} plugins`)
@@ -90,6 +96,7 @@ if (plugins.length == 0) {
       signer,
       plugin,
       ALL_PERMISSIONS,
+      fakeableNow,
     );
     await api.assignPlugin({
       ...request,
@@ -152,7 +159,8 @@ try {
             brokerAddress,
             new Decimal(billTotal),
             CurrencyCode.CAD,
-            dueDate
+            dueDate,
+            fakeableNow,
           )
           await payBillApi.uberBillPayment(billPayment);
 
