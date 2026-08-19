@@ -18,7 +18,9 @@ import { profileRefresh } from './GetStarted/profile';
 import { twofaRefresh as doRefresh } from './Harvester/agent/refreshTwoFA';
 import { enableLingeringForCurrentUser, isLingeringEnabled } from './Harvester/schedule/linux-lingering';
 import { getScraperLogging, setScraperLogging } from './Harvester/scraperLogging';
+import { getScraperMode, setScraperMode } from './Harvester/scraperVisible';
 import { Registry, VisibleOverride } from '@thecointech/scraper';
+import type { ScraperVisibility } from '@thecointech/scraper/puppeteer-init/visibility';
 import { getBankConnectDetails } from './Harvester/events';
 import { resetService, loadWalletFromSite } from './account/Connect/server';
 import { openLogsFolder, openWebsiteUrl, type WebsiteEndpoints } from './openExternal';
@@ -69,11 +71,11 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
     //return toBridge(r);
   }),
 
-  profileRefresh: () => guard(async () => profileRefresh(onBgTaskMsg)),
+  profileRefresh: () => guard(async () => profileRefresh()),
   twofaRefresh: (actionName) => guard(async () => doRefresh(actionName, onBgTaskMsg)),
 
   warmup: (_url) => guard(async () => {
-    using _ = new VisibleOverride(true);
+    using _ = new VisibleOverride("visible");
     const instance = await Registry.create({
       name: 'warmup',
       context: "default",
@@ -113,12 +115,11 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
   getHarvestConfig: () => guard(() => getHarvestConfig()),
   setHarvestConfig: (config) => guard(() => setHarvestConfig(config)),
 
-  alwaysRunScraperVisible: (visible?: boolean) => guard(async () => {
-    if (visible !== undefined) {
-      await setProcessConfig({ alwaysRunScraperVisible: visible });
+  scraperVisibilityMode: (mode?: ScraperVisibility) => guard(async () => {
+    if (mode !== undefined) {
+      await setScraperMode(mode);
     }
-    const config = await getProcessConfig();
-    return config?.alwaysRunScraperVisible ?? false;
+    return await getScraperMode();
   }),
   alwaysRunScraperLogging: (logging?: boolean) => guard(async () => {
     if (logging !== undefined) {
@@ -126,8 +127,8 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
     }
     return await getScraperLogging();
   }),
-  runHarvester: (forceVisible?: boolean) => guard(() => {
-    const visible = new VisibleOverride(forceVisible);
+  runHarvester: (visibility: ScraperVisibility) => guard(() => {
+    const visible = new VisibleOverride(visibility);
     return harvest(onBgTaskMsg)
       .finally(() => visible.dispose());
   }),
@@ -244,14 +245,14 @@ export function initMainIPC() {
     return api.setHarvestConfig(config);
   })
 
-  ipcMain.handle(actions.alwaysRunScraperVisible, async (_event, visible?: boolean) => {
-    return api.alwaysRunScraperVisible(visible);
+  ipcMain.handle(actions.scraperVisibilityMode, async (_event, mode?: ScraperVisibility) => {
+    return api.scraperVisibilityMode(mode);
   })
   ipcMain.handle(actions.alwaysRunScraperLogging, async (_event, logging?: boolean) => {
     return api.alwaysRunScraperLogging(logging);
   })
-  ipcMain.handle(actions.runHarvester, async (_event) => {
-    return api.runHarvester();
+  ipcMain.handle(actions.runHarvester, async (_event, visibility?: ScraperVisibility) => {
+    return api.runHarvester(visibility);
   })
   ipcMain.handle(actions.getCurrentState, async (_event) => {
     return api.getCurrentState();

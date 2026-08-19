@@ -6,7 +6,7 @@ import { gotoPage } from "./gotoPage";
 
 setupScraper({
   rootFolder: './.cache/test',
-  isVisible: async () => IsManualRun,
+  isVisible: async () => IsManualRun ? "visible" : "headless",
 });
 
 export function useTestBrowser() {

@@ -10,7 +10,7 @@ describe ('browser types', () => {
   it ('launches firefox', async () => {
     setupScraper({
       type: Browser.FIREFOX,
-      isVisible: () => Promise.resolve(true),
+      isVisible: () => Promise.resolve('visible'),
       rootFolder: "./.cache/",
     })
 

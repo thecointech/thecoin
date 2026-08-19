@@ -5,7 +5,7 @@ import { registerElementAttrFns } from '../elements';
 import { getBrowserPath } from './browser';
 import { log } from '@thecointech/logging';
 import { cleanProfileLocks, getUserDataDir } from './userProfile';
-import { getIsVisible } from './visibility';
+import { getVisibilityMode, type ScraperVisibility } from './visibility';
 import { getPuppeteerType } from './type';
 
 const puppeteer = addExtra(puppeteerVanilla);
@@ -41,11 +41,11 @@ async function getPage(contextName = "default") {
 
   const type = getPuppeteerType();
   const executablePath = await getBrowserPath();
-  const visible = await getIsVisible();
+  const mode = await getSafeVisibilityMode();
   const userDataDir = getUserDataDir();
-  log.debug({ executablePath, visible, userDataDir }, "Starting Puppeteer: visible={visible}, exe={executablePath}, userDataDir={userDataDir}");
+  log.debug({ executablePath, mode, userDataDir }, "Starting Puppeteer: mode={mode}, exe={executablePath}, userDataDir={userDataDir}");
   const browser = await puppeteer.launch({
-    headless: !visible,
+    headless: mode == 'headless',
     browser: type,
     executablePath,
     userDataDir,
@@ -73,6 +73,19 @@ async function getPage(contextName = "default") {
       // in the browser (and we only browse the banks
       // websites, which is explicitly trusted).
       // "--disable-site-isolation-trials"
+
+      ...(mode == 'offscreen' ? [
+        // Run a fully-headed browser (real GPU/compositor, near-identical
+        // fingerprint to a visible run) with the window parked off-screen
+        // so the user never sees it.
+        '--window-position=-32000,-32000',
+        // Chrome throttles occluded/off-screen windows like background tabs
+        // (pauses rAF, sets visibilityState=hidden), which would defeat the
+        // point - keep the page rendering as if it were on-screen.
+        '--disable-backgrounding-occluded-windows',
+        '--disable-renderer-backgrounding',
+        '--disable-background-timer-throttling',
+      ] : [])
     ],
   });
 
@@ -116,6 +129,22 @@ async function getPage(contextName = "default") {
     browser,
     page
   };
+}
+
+// A headed browser cannot launch without a display server.  Rather than
+// crashing, fall back to headless (eg running as a service on a linux box)
+async function getSafeVisibilityMode(): Promise<ScraperVisibility> {
+  const mode = await getVisibilityMode();
+  if (
+    mode != 'headless' &&
+    process.platform == 'linux' &&
+    !process.env.DISPLAY &&
+    !process.env.WAYLAND_DISPLAY
+  ) {
+    log.warn({ requestedMode: mode }, "No display server available: falling back to headless mode");
+    return 'headless';
+  }
+  return mode;
 }
 
 export async function newPage(contextName?: string) {

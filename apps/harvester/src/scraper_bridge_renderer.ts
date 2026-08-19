@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { actions, ScraperBridgeApi } from './scraper_actions';
 import { BackgroundTaskCallback } from './BackgroundTask/types';
+import type { ScraperVisibility } from '@thecointech/scraper/puppeteer-init/visibility';
 
 
 const api : ScraperBridgeApi = {
@@ -56,9 +57,9 @@ const api : ScraperBridgeApi = {
   getHarvestConfig: () => ipcRenderer.invoke(actions.getHarvestConfig),
   setHarvestConfig: (config) => ipcRenderer.invoke(actions.setHarvestConfig, config),
 
-  alwaysRunScraperVisible: (visible?: boolean) => ipcRenderer.invoke(actions.alwaysRunScraperVisible, visible),
+  scraperVisibilityMode: (mode?: ScraperVisibility) => ipcRenderer.invoke(actions.scraperVisibilityMode, mode),
   alwaysRunScraperLogging: (logging?: boolean) => ipcRenderer.invoke(actions.alwaysRunScraperLogging, logging),
-  runHarvester: (forceVisible?: boolean) => ipcRenderer.invoke(actions.runHarvester, forceVisible),
+  runHarvester: (visibility?: ScraperVisibility) => ipcRenderer.invoke(actions.runHarvester, visibility),
   getCurrentState: () => ipcRenderer.invoke(actions.getCurrentState),
 
   exportResults: () => ipcRenderer.invoke(actions.exportResults),

@@ -44,7 +44,7 @@ const callbacks: IReplayCallbacks = {
 }
 setupScraper({
   rootFolder: baseFolder,
-  isVisible: async () => true
+  isVisible: async () => "visible"
 });
 const r = await replay({ name: "TestReplay", events: replayEvents, callbacks, dynamicValues: { amount: "10" } });
 

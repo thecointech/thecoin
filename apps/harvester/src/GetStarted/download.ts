@@ -5,7 +5,6 @@ import { BackgroundTaskCallback, SubTaskProgress, getErrorMessage } from "@/Back
 import { rootFolder } from "@/paths";
 import path from "node:path";
 import { mkdirSync } from "node:fs";
-import { copyProfile } from "./profile";
 import crypto from "node:crypto";
 
 export async function downloadRequired(callback: BackgroundTaskCallback, forceRefresh=false) {
@@ -28,9 +27,10 @@ export async function downloadRequired(callback: BackgroundTaskCallback, forceRe
   }
 
   const browser = downloadBrowser(onProgress, forceRefresh);
-  const profile = copyProfile(onProgress, forceRefresh);
+  // Profile copy disabled: see maybeCopyProfile in @thecointech/scraper.
+  // Our own persistent userDataDir is the trust store now.
   const similarity = downloadSimilarity(onProgress);
-  await Promise.all([browser, profile, similarity]);
+  await Promise.all([browser, similarity]);
 
   callback({
     ...groupTask,

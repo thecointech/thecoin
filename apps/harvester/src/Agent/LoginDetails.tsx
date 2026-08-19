@@ -28,7 +28,7 @@ export const LoginDetails: React.FC<Props> = ({ icon, name, url, type, both, dis
     // TODO: Send command to start the agent process
     log.info('Starting agent with:', url);
     const storedType = both ? "both" : type;
-    window.scraper.autoProcess({ type: storedType, config: { name, url, username, password }, visible: false });
+    window.scraper.autoProcess({ type: storedType, config: { name, url, username, password } });
   };
   return (
     <div className={styles.loginContainer}>
