@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.7-test.0](https://github.com/thecointech/thecoin/compare/v0.6.6...v0.6.7-test.0) (2026-08-20)
+
+
+### Bug Fixes
+
+* build, update docs ([ca5f58e](https://github.com/thecointech/thecoin/commit/ca5f58e5885234bac97f4577d41281b4b9a7df5d))
+
+
+
+
+
 ## [0.6.6](https://github.com/thecointech/thecoin/compare/v0.6.6-beta.0...v0.6.6) (2026-08-06)
 
 **Note:** Version bump only for package @thecointech/contract-oracle
