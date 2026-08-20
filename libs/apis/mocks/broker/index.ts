@@ -9,6 +9,7 @@ import { UserVerificationApi } from "./UserVerificationApi";
 import { PluginsApi } from './PluginsApi';
 import { HarvesterApi } from './HarvesterApi';
 import type { TimeSource } from "@thecointech/utilities/TimeSource";
+import { createServerTimeSource } from "../../src/broker/serverTimeSource";
 
 export const GetUserVerificationApi = () => new UserVerificationApi();
 export const GetStatusApi = () => new StatusApi();
@@ -25,4 +26,7 @@ export { setAssignPluginFailure, type AssignPluginFailure } from './PluginsApi';
 
 // Mimics the real ServerTimeSource (see live.ts), but just returns local
 // time, since there's no real server clock to defer to in dev/tests.
-export const ServerTimeSource: TimeSource = async () => (await GetStatusApi().timestamp()).data;
+export const ServerTimeSource: TimeSource = createServerTimeSource(async () => {
+  const response = await GetStatusApi().timestamp();
+  return response.data;
+});
