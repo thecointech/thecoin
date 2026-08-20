@@ -116,28 +116,38 @@ describe("createServerTimeSource", () => {
     expect(result).toBe(1000);
   });
 
-  it("does not return a stale cached offset while a refresh is in flight", async () => {
+  it("coalesces calls while a refresh is in flight even after TTL expires", async () => {
     let resolveFetch: (value: number) => void;
     const fetcher = jest.fn<TimestampFetcher>().mockImplementation(
       () => new Promise((resolve) => { resolveFetch = resolve; })
     );
-    const source = createServerTimeSource(fetcher, 0);
+    const source = createServerTimeSource(fetcher, 60 * 1000);
 
+    // Establish a cached offset.
     const firstCall = source();
     resolveFetch!(1000);
-    await firstCall;
+    const firstResult = await firstCall;
+    expect(firstResult).toBe(1000);
     expect(fetcher).toHaveBeenCalledTimes(1);
 
-    // Expire TTL and start a refresh, then immediately call again.
-    advanceTime(1);
+    // Advance past TTL and start a refresh, but leave it unresolved.
+    advanceTime(60 * 1000 + 1);
     const pending = source();
-    const immediate = source();
+    expect(fetcher).toHaveBeenCalledTimes(2);
+
+    // Advance further past TTL while the refresh is still in flight.
+    advanceTime(100);
+    const coalesced = source();
 
     resolveFetch!(2000);
-    const [pendingResult, immediateResult] = await Promise.all([pending, immediate]);
+    const [pendingResult, coalescedResult] = await Promise.all([
+      pending,
+      coalesced,
+    ]);
 
+    // Only one in-flight refresh should have been started; both callers share it.
     expect(fetcher).toHaveBeenCalledTimes(2);
-    expect(pendingResult).toBe(2000);
-    expect(immediateResult).toBe(2000);
+    expect(pendingResult).toBe(1900); // request started 100ms before resolution
+    expect(coalescedResult).toBe(2000);
   });
 });

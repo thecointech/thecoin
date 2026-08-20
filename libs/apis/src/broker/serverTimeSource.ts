@@ -14,44 +14,41 @@ export function createServerTimeSource(
 ): TimeSource {
   let lastOffset: number | null = null;
   let lastFetchedAt = 0;
-  let timeOffset: Promise<number> | null = null;
+  let offsetPromise: Promise<number> | null = null;
+  let inFlight = false;
 
-  const refreshOffset = async () : Promise<number> => {
+  const refreshOffset = async (): Promise<number> => {
+    inFlight = true;
     try {
-      // Set the fetch time first, otherwise
-      // concurrent fetches will think timeOffset is expired
-      lastFetchedAt = Date.now();
-      log.trace({now: lastFetchedAt}, "Refreshing offset");
+      log.trace({ now: Date.now() }, "Refreshing offset");
       const serverTime = await fetchTimestamp();
-      // Cache the last time
+      // Only record freshness once we have a successful response.
       lastOffset = serverTime - Date.now();
+      lastFetchedAt = Date.now();
       return lastOffset;
-    }
-    catch (error) {
-      // Reset the fetch time so we will retry immediately
-      lastFetchedAt = 0;
+    } catch (error) {
       if (lastOffset !== null) {
-        // If we have succeeded in the past, use the cached offset
+        // If we have succeeded in the past, use the cached offset.
         log.warn(error, "ServerTimeSource refresh failed; using stale offset");
         return lastOffset;
-      }
-      else {
-        // Fallback to 0
+      } else {
+        // Fallback to local time.
         log.error(error, "ServerTimeSource refresh failed; falling back to local time");
         return 0;
       }
+    } finally {
+      inFlight = false;
     }
-  }
+  };
 
   return async () => {
     const now = Date.now();
     const timeSinceLastFetch = now - lastFetchedAt;
-    if (!timeOffset || timeSinceLastFetch > offsetTtlMs) {
-      timeOffset = refreshOffset();
+    if (!offsetPromise || (!inFlight && timeSinceLastFetch > offsetTtlMs)) {
+      offsetPromise = refreshOffset();
     }
 
-    return Date.now() + (await timeOffset);
+    // `offsetPromise` is guaranteed to be set here.
+    return Date.now() + (await offsetPromise);
   };
-
-
 }
