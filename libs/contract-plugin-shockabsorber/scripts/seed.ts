@@ -6,6 +6,7 @@ import { ContractShockAbsorber } from '@thecointech/contract-plugin-shockabsorbe
 import { DateTime } from 'luxon';
 import { fetchRate, weSellAt } from '@thecointech/fx-rates';
 import { toCoinDecimal } from '@thecointech/utilities';
+import { LocalTimeSource } from '@thecointech/utilities/TimeSource';
 import Decimal from 'decimal.js-light';
 import { getOverrideFees } from '@thecointech/contract-base/overrides';
 import { ContractOracle } from '@thecointech/contract-oracle';
@@ -32,7 +33,7 @@ async function main() {
     // Find the 3-month period where the price has dropped the most since inception
     const ts = await findLargestDrop();
     const tester = await getSigner("SaTester");
-    const request = await buildAssignPluginRequest(tester, shockAbsorber, ALL_PERMISSIONS, ts);
+    const request = await buildAssignPluginRequest(tester, shockAbsorber, ALL_PERMISSIONS, LocalTimeSource, ts);
     await assignPlugin(bcCore, request);
 
     await bcCore.exactTransfer(tester, 200e6, ts.toMillis());

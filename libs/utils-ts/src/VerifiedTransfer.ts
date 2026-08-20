@@ -1,6 +1,7 @@
 import { sign } from "./SignedMessages";
 import { solidityPackedKeccak256, verifyMessage, type Signer, getBytes } from 'ethers';
 import type { AnyTransfer, CertifiedTransferRequest } from "@thecointech/types";
+import type { TimeSource } from "./TimeSource";
 
 function GetHash(
   chainId: number,
@@ -45,10 +46,11 @@ export async function BuildVerifiedXfer(
   from: Signer,
   to: string,
   value: number,
-  fee: number
+  fee: number,
+  timeSource: TimeSource,
 ) {
   const chainId = parseInt(process.env.DEPLOY_POLYGON_NETWORK_ID!);
-  const timestamp = Date.now();
+  const timestamp = await timeSource();
   const address = await from.getAddress();
   const signature = await SignVerifiedXfer(chainId, from, to, value, fee, timestamp);
   const r: CertifiedTransferRequest = {

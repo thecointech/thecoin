@@ -8,7 +8,7 @@ import { weBuyAt } from '@thecointech/fx-rates';
 import { ModalOperation } from '@thecointech/shared/containers/ModalOperation';
 import { payees, validate } from './payees';
 import { BillPayeePacket } from '@thecointech/types';
-import { GetStatusApi, GetBillPaymentsApi } from '@thecointech/apis/broker';
+import { GetStatusApi, GetBillPaymentsApi, ServerTimeSource } from '@thecointech/apis/broker';
 import { UxInput } from '@thecointech/shared/components/UX/Input';
 import { ButtonTertiary } from '@thecointech/site-base/components/Buttons';
 import { FilterPayee } from './FilterPayee';
@@ -160,6 +160,7 @@ export const BillPayments = () => {
         new Decimal(coinToSell),
         124,
         DateTime.now().plus({ minutes: 3 }),
+        ServerTimeSource,
       )
       setPaymentMessage(translations.step2);
       setPercentComplete(0.25);
@@ -173,6 +174,7 @@ export const BillPayments = () => {
         data.address,
         coinToSell,
         data.certifiedFee,
+        ServerTimeSource,
       )
       setPaymentMessage(translations.step2);
       setPercentComplete(0.25);

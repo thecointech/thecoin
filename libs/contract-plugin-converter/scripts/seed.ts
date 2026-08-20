@@ -7,6 +7,7 @@ import { DateTime } from 'luxon';
 import { fetchRate, weSellAt } from "@thecointech/fx-rates";
 import Decimal from "decimal.js-light";
 import { toCoinDecimal } from "@thecointech/utilities";
+import { LocalTimeSource } from "@thecointech/utilities/TimeSource";
 import { sleep } from '@thecointech/async';
 
 // Assume devlive
@@ -25,7 +26,7 @@ async function main() {
   const bcCore = await ContractCore.connect(brokerCad);
 
   // In DevLive, we assign the converter to UberTester
-  const request = await buildAssignPluginRequest(tester, converter, ALL_PERMISSIONS);
+  const request = await buildAssignPluginRequest(tester, converter, ALL_PERMISSIONS, LocalTimeSource);
   await assignPlugin(bcCore, request);
 
   // We cannot know if the rates service has finished initializing yet

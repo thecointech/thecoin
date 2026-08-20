@@ -11505,6 +11505,7 @@ __metadata:
     "@thecointech/nft": "npm:^0.6.6"
     "@thecointech/pricing": "npm:^0.6.6"
     "@thecointech/secrets": "npm:^0.6.6"
+    "@thecointech/utilities": "npm:^0.6.6"
     "@thecointech/vqa": "npm:^0.6.6"
     cockatiel: "npm:^3.2.1"
   languageName: unknown
@@ -11696,6 +11697,7 @@ __metadata:
     "@thecointech/contract-oracle": "npm:^0.6.6"
     "@thecointech/contract-tools": "npm:^0.6.6"
     "@thecointech/setenv": "npm:^0.6.6"
+    "@thecointech/utilities": "npm:^0.6.6"
   languageName: unknown
   linkType: soft
 

@@ -1,6 +1,7 @@
 import { Wallet } from "ethers";
 import { BuildVerifiedSale } from "./VerifiedSale";
 import { getSigner } from "./VerifiedAction";
+import { LocalTimeSource } from "./TimeSource";
 import type { ETransferPacket } from "@thecointech/types";
 
 it('Can build verified sale', async () => {
@@ -13,7 +14,7 @@ it('Can build verified sale', async () => {
 	const wallet = Wallet.createRandom();
 	const value = 100000;
 	const fee = 2000;
-	const sale = await BuildVerifiedSale(eTransfer, wallet, wallet.address, value, fee);
+	const sale = await BuildVerifiedSale(eTransfer, wallet, wallet.address, value, fee, LocalTimeSource);
 
 	// verify that our email signature is valid
 	const signer = getSigner(sale);

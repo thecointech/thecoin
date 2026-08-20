@@ -1,6 +1,7 @@
 import { BuildVerifiedAction } from "./VerifiedAction";
 import type { Signer } from "ethers";
 import type { ETransferPacket, CertifiedTransfer } from "@thecointech/types";
+import type { TimeSource } from "./TimeSource";
 
 // ---------------------------------------------------------\\
 
@@ -18,7 +19,8 @@ export const BuildVerifiedSale = async (
   to: string,
   value: number,
   fee: number,
-): Promise<CertifiedTransfer> => BuildVerifiedAction(eTransfer, from, to, value, fee);
+  timeSource: TimeSource,
+): Promise<CertifiedTransfer> => BuildVerifiedAction(eTransfer, from, to, value, fee, timeSource);
 
 //
 // Checks eTransfer for minimum viability

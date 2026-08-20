@@ -12,6 +12,7 @@ import {
   HarvesterApi
 } from '@thecointech/broker-cad';
 import { createGaeServiceProxy } from "../resilience";
+import type { TimeSource } from "@thecointech/utilities/TimeSource";
 
 export const StatusType = StatusType_Import;
 // export const EventType = EventType_Import;
@@ -28,3 +29,8 @@ export const GetSecureApi = () => createGaeServiceProxy(new SecureApi(undefined,
 export const GetReferrersApi = () => createGaeServiceProxy(new ReferralsApi(undefined, BrokerCADAddress));
 export const GetPluginsApi = () => createGaeServiceProxy(new PluginsApi(undefined, BrokerCADAddress));
 export const GetHarvesterApi = () => createGaeServiceProxy(new HarvesterApi(undefined, BrokerCADAddress));
+
+// A TimeSource backed by the broker-service's clock, so signed requests are
+// timestamped consistently with whatever clock will validate them server-side
+// (see @thecointech/utilities/TimeSource for why this matters).
+export const ServerTimeSource: TimeSource = async () => (await GetStatusApi().timestamp()).data;

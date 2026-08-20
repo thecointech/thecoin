@@ -6,6 +6,7 @@ import type { Signer } from "ethers";
 import type { BillPayeePacket, ETransferPacket, UberTransferAction } from "@thecointech/types";
 import type { DateTime } from 'luxon';
 import type Decimal from 'decimal.js-light';
+import type { TimeSource } from "./TimeSource";
 
 // TODO: Propage this throught code base (not yet done)
 export type InstructionPacket = BillPayeePacket|ETransferPacket;
@@ -16,10 +17,11 @@ export async function BuildUberAction(
   to: string,
   amount: Decimal,
   currency: number,
-  transferAt: DateTime)
+  transferAt: DateTime,
+  timeSource: TimeSource)
 : Promise<UberTransferAction>
 {
-  const xfer = await buildUberTransfer(from, to, amount, currency, transferAt);
+  const xfer = await buildUberTransfer(from, to, amount, currency, transferAt, timeSource);
   const instructionPacket = encrypt(packet);
   const saleHash = GetHash(instructionPacket, xfer);
   const signature = await sign(saleHash, from);

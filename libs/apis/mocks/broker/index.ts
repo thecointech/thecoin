@@ -8,6 +8,7 @@ import { StatusApi } from './StatusApi';
 import { UserVerificationApi } from "./UserVerificationApi";
 import { PluginsApi } from './PluginsApi';
 import { HarvesterApi } from './HarvesterApi';
+import type { TimeSource } from "@thecointech/utilities/TimeSource";
 
 export const GetUserVerificationApi = () => new UserVerificationApi();
 export const GetStatusApi = () => new StatusApi();
@@ -20,3 +21,8 @@ export const GetPluginsApi = () => new PluginsApi();
 export const GetHarvesterApi = () => new HarvesterApi();
 
 export { StatusType } from './UserVerificationApi';
+export { setAssignPluginFailure, type AssignPluginFailure } from './PluginsApi';
+
+// Mimics the real ServerTimeSource (see live.ts), but just returns local
+// time, since there's no real server clock to defer to in dev/tests.
+export const ServerTimeSource: TimeSource = async () => (await GetStatusApi().timestamp()).data;

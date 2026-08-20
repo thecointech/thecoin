@@ -1,6 +1,7 @@
 import { jest } from '@jest/globals';
 import { validateUberAction } from './CertifiedActionVerify';
 import { BuildUberAction } from '@thecointech/utilities/UberAction';
+import { LocalTimeSource } from '@thecointech/utilities/TimeSource';
 import { Wallet } from 'ethers';
 import { DateTime } from 'luxon';
 import Decimal from 'decimal.js-light';
@@ -10,7 +11,7 @@ describe('validateUberAction', () => {
     // Helper to create a transfer object with minimal required fields
     const wallet = Wallet.createRandom();
     const brokerAddress = process.env.WALLET_BrokerCAD_ADDRESS!;
-    const createTransfer = (at: DateTime) => BuildUberAction({} as any, wallet, brokerAddress, new Decimal(100), 124, at);
+    const createTransfer = (at: DateTime) => BuildUberAction({} as any, wallet, brokerAddress, new Decimal(100), 124, at, LocalTimeSource);
 
     const now = DateTime.now();
     const oldTime = now.minus({ minutes: 5 });

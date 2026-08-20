@@ -2,6 +2,7 @@ import { jest } from '@jest/globals';
 import { ALL_PERMISSIONS, buildAssignPluginRequest, assignPlugin, buildRemovePluginRequest, removePlugin } from '@thecointech/contract-plugins';
 import { createAndInitTheCoin, getSigners } from '../../internal/testHelpers';
 import type { BaseContract, ContractTransactionResponse } from 'ethers';
+import { LocalTimeSource } from '@thecointech/utilities/TimeSource';
 import hre from 'hardhat';
 
 jest.setTimeout(5 * 60 * 1000);
@@ -15,7 +16,7 @@ it ('can assign plugin', async () => {
   const DebugPrint = await hre.ethers.getContractFactory("DebugPrint");
   const logger = await DebugPrint.deploy();
   const loggerAddress = await logger.getAddress();
-  const request = await buildAssignPluginRequest(signers.Client1, loggerAddress, ALL_PERMISSIONS);
+  const request = await buildAssignPluginRequest(signers.Client1, loggerAddress, ALL_PERMISSIONS, LocalTimeSource);
   const tx = await assignPlugin(tcCore, request);
   expect(tx.hash).toBeDefined();
 })
@@ -32,6 +33,9 @@ it('Calls appropriate methods on a plugin', async () => {
 
   async function expectEvent(response: ContractTransactionResponse, ...events: string[]) {
     const receipt = await response.wait();
+    if (!receipt) {
+      throw new Error("Transaction did not produce a receipt");
+    }
     const parsedLogs = receipt.logs.map(l => (
       maybeParseLog(tcCore, l)) ??
       maybeParseLog(logger, l)
@@ -43,7 +47,7 @@ it('Calls appropriate methods on a plugin', async () => {
   }
 
   // Assign to user, grant all permissions, limit user to $100
-  const request = await buildAssignPluginRequest(signers.Client1, loggerAddress, ALL_PERMISSIONS);
+  const request = await buildAssignPluginRequest(signers.Client1, loggerAddress, ALL_PERMISSIONS, LocalTimeSource);
   const tx_assign = await assignPlugin(tcCore, request);
   await expectEvent(tx_assign, "PluginAttached", "PrintAttached");
 
@@ -66,7 +70,7 @@ it('Calls appropriate methods on a plugin', async () => {
   const tx_withdraw = await tcCore.connect(signers.Client1).transfer(signers.TheCoin.address, balance);
   expectEvent(tx_withdraw, "Transfer", "PrintPreWithdraw");
 
-  const removeReq = await buildRemovePluginRequest(signers.Client1, 0);
+  const removeReq = await buildRemovePluginRequest(signers.Client1, 0, LocalTimeSource);
   const detached = await removePlugin(tcCore, removeReq);
   expectEvent(detached, "PluginDetached", "PrintDetached");
 

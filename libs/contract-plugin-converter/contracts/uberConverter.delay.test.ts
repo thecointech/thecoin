@@ -5,6 +5,7 @@ import { createAndInitOracle, setOracleValueRepeat } from '@thecointech/contract
 import { ALL_PERMISSIONS, assignPlugin, buildAssignPluginRequest } from '@thecointech/contract-plugins';
 import { createAndInitTheCoin, getSigners } from '@thecointech/contract-core/testHelpers.ts';
 import { buildUberTransfer } from '@thecointech/utilities/UberTransfer';
+import { LocalTimeSource } from '@thecointech/utilities/TimeSource';
 import Decimal from 'decimal.js-light';
 import { DateTime, Duration } from 'luxon';
 import '@nomicfoundation/hardhat-ethers';
@@ -58,7 +59,7 @@ describe('Uberconverter delay tests', () => {
     console.log("Deploy Complete")
 
     // Assign to user, grant all permissions
-    const request = await buildAssignPluginRequest(signers.Client1, uber, ALL_PERMISSIONS);
+    const request = await buildAssignPluginRequest(signers.Client1, uber, ALL_PERMISSIONS, LocalTimeSource);
     console.log("Plugin request built for Client1");
     try {
       await assignPlugin(tcCore, request);
@@ -77,6 +78,7 @@ describe('Uberconverter delay tests', () => {
       new Decimal(100),
       124,
       DateTime.now().plus(delay),
+      LocalTimeSource,
     );
 
     let receipt;

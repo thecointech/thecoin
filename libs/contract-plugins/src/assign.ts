@@ -2,6 +2,7 @@ import { AddressLike, Signer, resolveAddress } from 'ethers';
 import { DateTime } from 'luxon';
 import { solidityPackedKeccak256, verifyMessage, getBytes } from 'ethers';
 import { sign } from "@thecointech/utilities/SignedMessages";
+import type { TimeSource } from "@thecointech/utilities/TimeSource";
 import type { IPluggable } from './codegen/contracts';
 import type { AssignPluginRequest } from '@thecointech/types';
 
@@ -38,11 +39,12 @@ export async function buildAssignPluginRequest(
   user: Signer,
   plugin: AddressLike,
   permissions: bigint,
+  timeSource: TimeSource,
   timeMs?: DateTime)
 : Promise<AssignPluginRequest>
 {
   const chainId = parseInt(process.env.DEPLOY_POLYGON_NETWORK_ID ?? "-1");
-  const signedAt = DateTime.now();
+  const signedAt = DateTime.fromMillis(await timeSource());
   const address = await user.getAddress();
   var r = {
     chainId,

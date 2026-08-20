@@ -31,6 +31,7 @@
       "development": "./mocks/broker/index.ts",
       "default": "./build/broker/live.js"
     },
+    "./broker/mocked": "./mocks/broker/index.ts",
     "./pricing": {
       "development": "./mocks/pricing.ts",
       "default": "./build/pricing/live.js"
@@ -64,6 +65,7 @@
     "@thecointech/nft": "^0.6.6",
     "@thecointech/pricing": "^0.6.6",
     "@thecointech/secrets": "^0.6.6",
+    "@thecointech/utilities": "^0.6.6",
     "@thecointech/vqa": "^0.6.6",
     "cockatiel": "^3.2.1"
   },

@@ -1,4 +1,5 @@
 import { BuildUberAction } from '@thecointech/utilities/UberAction';
+import { LocalTimeSource } from '@thecointech/utilities/TimeSource';
 import { ProcessUberBillPayment } from './uberBillPayment'
 import { init } from '@thecointech/firestore';
 import { current } from '../status';
@@ -16,7 +17,7 @@ it("can process an uber bill payment", async () => {
   const wallet = Wallet.createRandom();
   const amount = new Decimal(100);
   const curr = await current();
-  const billPayment = await BuildUberAction({} as any, wallet, curr.BrokerCAD, amount, 124, DateTime.now().plus({minutes: 5}));
+  const billPayment = await BuildUberAction({} as any, wallet, curr.BrokerCAD, amount, 124, DateTime.now().plus({minutes: 5}), LocalTimeSource);
   expect(billPayment).toBeTruthy();
   const res = await ProcessUberBillPayment(billPayment);
 
