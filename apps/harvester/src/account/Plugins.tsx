@@ -57,7 +57,7 @@ const describeError = (err: unknown): string => {
     const message = (err.response.data as { message?: string } | undefined)?.message;
     if (message?.toLowerCase().includes('timestamp')) {
       return "The request was rejected due to an invalid timestamp. " +
-        "Please make sure your system date, time and timezone are set correctly (and set to update automatically), then try again.";
+        "Please try again.  If the error continues, contact support";
     }
     return message ?
       `Request failed with message: ${message}` :
@@ -94,7 +94,6 @@ export const Plugins = () => {
   // Has -this- account requested the plugins?
   const cnvrtRequested = cnvrtRequestedAddress === active?.address;
   const absrbRequested = absrbRequestedAddress === active?.address;
-
 
   const onInstallPlugins = async () => {
     if (!active) {
@@ -136,16 +135,9 @@ export const Plugins = () => {
     setAddShockAbsorber(data.checked ?? false);
   };
 
-  const canInstallPlugins = (
-    // Already installed
-    !(hasConverter && hasShockAbsorber) &&
-    (
-      // Currently installing
-      !isSending &&
-      // Not already requested
-      (!cnvrtRequested || (!absrbRequested && addShockAbsorber))
-    )
-  );
+  const needsConverter = !hasConverter && !cnvrtRequested;
+  const needsShockAbsorber = addShockAbsorber && !hasShockAbsorber && !absrbRequested;
+  const canInstallPlugins = !isSending && (needsConverter || needsShockAbsorber);
 
   const isValid = () => {
     setForceValid(true);

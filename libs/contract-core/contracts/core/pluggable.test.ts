@@ -33,6 +33,9 @@ it('Calls appropriate methods on a plugin', async () => {
 
   async function expectEvent(response: ContractTransactionResponse, ...events: string[]) {
     const receipt = await response.wait();
+    if (!receipt) {
+      throw new Error("Transaction did not produce a receipt");
+    }
     const parsedLogs = receipt.logs.map(l => (
       maybeParseLog(tcCore, l)) ??
       maybeParseLog(logger, l)
