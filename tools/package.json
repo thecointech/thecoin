@@ -1,6 +1,6 @@
 {
   "name": "@thecointech/tools",
-  "version": "0.6.7-test.2",
+  "version": "0.6.7",
   "type": "module",
   "private": true,
   "scripts": {
@@ -17,7 +17,7 @@
     "_run": "cross-env URL_SEQ_LOGGING=false TC_LOG_FOLDER=false run-env --"
   },
   "devDependencies": {
-    "@thecointech/setenv": "^0.6.7-test.0",
+    "@thecointech/setenv": "^0.6.7",
     "cross-env": "^7.0.3",
     "yargs": "17.7.2"
   }
