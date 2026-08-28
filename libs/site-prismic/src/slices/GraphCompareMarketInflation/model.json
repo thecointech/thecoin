@@ -1,0 +1,26 @@
+{
+  "id": "graph_compare_market_inflation",
+  "type": "SharedSlice",
+  "name": "GraphCompareMarketInflation",
+  "description": "GraphCompareMarketInflation",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "startingdate": {
+          "type": "Date",
+          "config": {
+            "label": "startingDate",
+            "placeholder": ""
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

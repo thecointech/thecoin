@@ -8,6 +8,7 @@ export const Header = () => {
       <Link href="/" className={styles.logoLink}>
         <div className={styles.logo} />
       </Link>
+      <Link href="/about" className={styles.aboutLink}>About</Link>
     </header>
   );
 };

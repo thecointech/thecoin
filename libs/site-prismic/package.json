@@ -40,6 +40,8 @@
         }
     },
     "dependencies": {
+        "@nivo/core": "0.99.0",
+        "@nivo/line": "0.99.0",
         "@prismicio/client": "^7.21.0",
         "semantic-ui-react": "3.0.0-beta.2",
         "uuid": "^9.0.0"

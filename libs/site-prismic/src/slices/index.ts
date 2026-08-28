@@ -8,6 +8,9 @@ export const components = {
   ccqi_category: dynamic(() => import("./CcqiCategory")),
   ccqi_score: dynamic(() => import("./CcqiScore")),
   comparison_block: dynamic(() => import("./ComparisonBlock")),
+  graph_compare_market_inflation: dynamic(
+    () => import("./GraphCompareMarketInflation"),
+  ),
   hero: dynamic(() => import("./Hero")),
   project_details: dynamic(() => import("./ProjectDetails")),
   rich_text: dynamic(() => import("./RichText")),

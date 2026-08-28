@@ -41,6 +41,33 @@
         }
       },
       "items": {}
+    },
+    {
+      "id": "noAttribution",
+      "name": "withSubText",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "quotetext": {
+          "type": "StructuredText",
+          "config": {
+            "label": "QuoteText",
+            "placeholder": "the text within the quotes",
+            "allowTargetBlank": false,
+            "single": "heading3"
+          }
+        },
+        "subtext": {
+          "type": "Text",
+          "config": {
+            "label": "SubText",
+            "placeholder": ""
+          }
+        }
+      },
+      "items": {}
     }
   ]
 }
