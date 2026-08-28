@@ -6,9 +6,11 @@ export async function assertSafeStorage() {
   if (!electron.safeStorage.isEncryptionAvailable()) {
     throw new Error('safeStorage encryption is not available on this system');
   }
-  const backend = electron.safeStorage.getSelectedStorageBackend();
-  if (backend === 'basic_text') {
-    throw new Error('safeStorage is using the basic_text backend, which provides no OS-level key protection');
+  if (process.platform === 'linux') {
+    const backend = electron.safeStorage.getSelectedStorageBackend();
+    if (backend === 'basic_text') {
+      throw new Error('safeStorage is using the basic_text backend, which provides no OS-level key protection');
+    }
   }
 }
 
