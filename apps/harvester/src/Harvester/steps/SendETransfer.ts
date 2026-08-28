@@ -77,7 +77,7 @@ const getTransferAmount = (toETransfer: currency, balance: currency) => {
   return toETransfer;
 }
 
-async function sendETransfer(amount: currency, {wallet, callback}: UserData) : Promise<ETransferResult|undefined> {
+async function sendETransfer(amount: currency, {coinDetails, callback}: UserData) : Promise<ETransferResult|undefined> {
   if (process.env.HARVESTER_DRY_RUN) {
     // await mockUiUpdate(callback);
     return {
@@ -88,7 +88,7 @@ async function sendETransfer(amount: currency, {wallet, callback}: UserData) : P
 
   // In testing environments we send the fake deposit
   if (process.env.CONFIG_NAME == "prodtest" || process.env.CONFIG_NAME == "devlive") {
-    const address = await wallet.getAddress();
+    const address = coinDetails.address;
     // Make dev-live responsive, only send while the market is open
     const sendTime = (process.env.CONFIG_NAME == "devlive")
       ? getMockSendTime(DateTime.now())

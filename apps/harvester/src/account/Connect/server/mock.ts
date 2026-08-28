@@ -1,7 +1,7 @@
 import { sleep } from "@thecointech/async/sleep";
 import { log } from "@thecointech/logging";
 import { Wallet } from "ethers";
-import { setCoinAccount } from "@/Harvester/config";
+import { setCoinAccount } from "@/Harvester/signer";
 import { ConnectService } from "./state";
 import { toCoinAccount } from "@/account/convert";
 
@@ -24,7 +24,7 @@ export async function mockServer(service: ConnectService) {
   await setCoinAccount({
     ...coinAccount,
     encrypted,
-  })
+  }, wallet.mnemonic!.phrase)
 
   service.cb({ completed: true, percent: 100 });
 
