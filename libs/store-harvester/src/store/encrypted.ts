@@ -10,8 +10,8 @@ import type { Mutex } from '@thecointech/async';
 PouchDB.plugin(memory);
 PouchDB.plugin(comdb);
 
-interface EncryptedConfig<Shape extends {}, Stored extends {}=Shape, InShape=Shape> extends DatabaseConfig<Shape, Stored, InShape> {
-  password: string;
+export interface EncryptedConfig<Shape extends {}, Stored extends {}=Shape, InShape=Shape> extends DatabaseConfig<Shape, Stored, InShape> {
+  password: string | (() => Promise<string> | string);
 }
 
 export class EncryptedDatabase<Shape extends {}, Stored extends {}=Shape, InShape=Shape> extends BaseDatabase<Shape, Stored, InShape, EncryptedConfig<Shape, Stored, InShape>> {
@@ -50,8 +50,12 @@ export class EncryptedDatabase<Shape extends {}, Stored extends {}=Shape, InShap
     }
   }
 
-  private async initEncryptedDb(db: PouchDB.Database<Stored>, password?: string): Promise<void> {
-    await db.setPassword(password ?? "hF,835-/=Pw\\nr6r");
+  private async initEncryptedDb(db: PouchDB.Database<Stored>, password: string | (() => Promise<string> | string)): Promise<void> {
+    const resolved = typeof password === 'function' ? await password() : password;
+    if (!resolved) {
+      throw new Error('A password is required to initialize the encrypted database');
+    }
+    await db.setPassword(resolved);
     await db.loadEncrypted();
 
     const encrypted = db._encrypted;

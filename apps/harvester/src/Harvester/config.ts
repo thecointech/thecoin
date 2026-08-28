@@ -5,11 +5,12 @@ import { HDNodeWallet } from 'ethers';
 import { randomUUID } from 'node:crypto';
 import { getProvider } from '@thecointech/ethers-provider';
 import { rootFolder } from '../paths';
+import { getSecureConfigPassword } from '../secureConfig';
 import { ConfigDatabase } from '@thecointech/store-harvester';
 import { HarvestConfig, CoinAccount, ConfigShape, CreditDetails, HarvestStepType } from '@thecointech/store-harvester';
 import { optIntoMonitoring } from './monitoring';
 
-const db = new ConfigDatabase(rootFolder);
+const db = new ConfigDatabase(rootFolder, getSecureConfigPassword);
 
 export async function setProcessConfig(config: Partial<ConfigShape>) {
   log.info("Setting config file...");

@@ -17,7 +17,7 @@ export const ConfigKey = "config";
 export class ConfigDatabase extends BaseDatabase<ConfigShape> implements Omit<SrcConfigDatabase, "initEncryptedDb"> {
 
   static mutex = new Mutex();
-  constructor() {
+  constructor(_rootFolder?: string, _password?: string | (() => Promise<string> | string)) {
     super({
       rootFolder: "in-memory",
       dbname: "config",

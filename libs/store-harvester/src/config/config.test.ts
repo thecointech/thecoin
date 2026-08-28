@@ -43,4 +43,4 @@ describe('config db tests', () => {
   })
 })
 
-const newDb = () => new ConfigDatabase(testDbPath);
+const newDb = () => new ConfigDatabase(testDbPath, 'test-password');
