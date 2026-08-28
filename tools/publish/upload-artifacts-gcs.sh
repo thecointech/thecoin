@@ -51,13 +51,29 @@ if [[ -n "$INSTALLER_GLOB" ]]; then
   echo "Found installer: $INSTALLER"
 fi
 
-echo "Uploading $SRC -> $DEST"
+echo " -- Uploading $SRC -> $DEST"
 gsutil -m rsync -r "$SRC" "$DEST"
+echo " -- Synchronization complete"
 
 if [[ -n "$INSTALLER" ]]; then
-  echo "Publishing stable download link -> $DEST/$STABLE_NAME"
-  gsutil cp "$INSTALLER" "$DEST/$STABLE_NAME"
+  STABLE_URI="$DEST/$STABLE_NAME"
+  echo " -- Publishing stable download link -> $STABLE_URI"
+  gsutil cp "$INSTALLER" "$STABLE_URI"
+
+  echo "Verifying stable download..."
+  LOCAL_MD5=$(openssl dgst -md5 -binary "$INSTALLER" | base64)
+  REMOTE_MD5=$(gsutil stat "$STABLE_URI" |
+    sed -n 's/^[[:space:]]*Hash (md5):[[:space:]]*//p')
+
+  if [[ -z "$REMOTE_MD5" || "$LOCAL_MD5" != "$REMOTE_MD5" ]]; then
+    echo "Stable installer verification failed" >&2
+    echo "Local MD5:  $LOCAL_MD5" >&2
+    echo "Remote MD5: ${REMOTE_MD5:-<missing>}" >&2
+    exit 1
+  fi
+
+  echo "Stable installer verified: $STABLE_URI"
 fi
 
-echo "Done. Bucket contents:"
+echo " -- Done. Bucket contents:"
 gsutil ls -r "$DEST"
