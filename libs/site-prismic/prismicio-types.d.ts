@@ -69,6 +69,72 @@ type ContentRelationshipFieldWithData<
   >;
 }[Exclude<TCustomType[number], string>["id"]];
 
+type AboutDocumentDataSlicesSlice =
+  | GraphCompareMarketInflationSlice
+  | CaptionedImageSlice
+  | RichTextSlice
+  | TwoColumnLayoutSlice
+  | BlockQuoteSlice;
+
+/**
+ * Content for About documents
+ */
+interface AboutDocumentData {
+  /**
+   * Slice Zone field in *About*
+   *
+   * - **Field Type**: Slice Zone
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.slices[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/slices
+   */
+  slices: prismic.SliceZone<AboutDocumentDataSlicesSlice>; /**
+   * Meta Title field in *About*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: A title of the page used for social media and search engines
+   * - **API ID Path**: about.meta_title
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  meta_title: prismic.KeyTextField;
+
+  /**
+   * Meta Description field in *About*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: A brief summary of the page
+   * - **API ID Path**: about.meta_description
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  meta_description: prismic.KeyTextField;
+
+  /**
+   * Meta Image field in *About*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.meta_image
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  meta_image: prismic.ImageField<never>;
+}
+
+/**
+ * About document from Prismic
+ *
+ * - **API ID**: `about`
+ * - **Repeatable**: `false`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type AboutDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithoutUID<Simplify<AboutDocumentData>, "about", Lang>;
+
 /**
  * Item in *Article → Categories*
  */
@@ -443,6 +509,7 @@ export type PageDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<PageDocumentData>, "page", Lang>;
 
 export type AllDocumentTypes =
+  | AboutDocument
   | ArticleDocument
   | FaqDocument
   | NavigationDocument
@@ -503,9 +570,49 @@ export type BlockQuoteSliceDefault = prismic.SharedSliceVariation<
 >;
 
 /**
+ * Primary content in *BlockQuote → withSubText → Primary*
+ */
+export interface BlockQuoteSliceNoAttributionPrimary {
+  /**
+   * QuoteText field in *BlockQuote → withSubText → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: the text within the quotes
+   * - **API ID Path**: block_quote.noAttribution.primary.quotetext
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  quotetext: prismic.RichTextField;
+
+  /**
+   * SubText field in *BlockQuote → withSubText → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: block_quote.noAttribution.primary.subtext
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  subtext: prismic.KeyTextField;
+}
+
+/**
+ * withSubText variation for BlockQuote Slice
+ *
+ * - **API ID**: `noAttribution`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BlockQuoteSliceNoAttribution = prismic.SharedSliceVariation<
+  "noAttribution",
+  Simplify<BlockQuoteSliceNoAttributionPrimary>,
+  never
+>;
+
+/**
  * Slice variation for *BlockQuote*
  */
-type BlockQuoteSliceVariation = BlockQuoteSliceDefault;
+type BlockQuoteSliceVariation =
+  | BlockQuoteSliceDefault
+  | BlockQuoteSliceNoAttribution;
 
 /**
  * BlockQuote Shared Slice
@@ -1149,6 +1256,53 @@ export type ComparisonBlockSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Primary content in *GraphCompareMarketInflation → Default → Primary*
+ */
+export interface GraphCompareMarketInflationSliceDefaultPrimary {
+  /**
+   * startingDate field in *GraphCompareMarketInflation → Default → Primary*
+   *
+   * - **Field Type**: Date
+   * - **Placeholder**: *None*
+   * - **API ID Path**: graph_compare_market_inflation.default.primary.startingdate
+   * - **Documentation**: https://prismic.io/docs/fields/date
+   */
+  startingdate: prismic.DateField;
+}
+
+/**
+ * Default variation for GraphCompareMarketInflation Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type GraphCompareMarketInflationSliceDefault =
+  prismic.SharedSliceVariation<
+    "default",
+    Simplify<GraphCompareMarketInflationSliceDefaultPrimary>,
+    never
+  >;
+
+/**
+ * Slice variation for *GraphCompareMarketInflation*
+ */
+type GraphCompareMarketInflationSliceVariation =
+  GraphCompareMarketInflationSliceDefault;
+
+/**
+ * GraphCompareMarketInflation Shared Slice
+ *
+ * - **API ID**: `graph_compare_market_inflation`
+ * - **Description**: GraphCompareMarketInflation
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type GraphCompareMarketInflationSlice = prismic.SharedSlice<
+  "graph_compare_market_inflation",
+  GraphCompareMarketInflationSliceVariation
+>;
+
+/**
  * Primary content in *Hero → Default → Primary*
  */
 export interface HeroSliceDefaultPrimary {
@@ -1284,6 +1438,20 @@ export interface RichTextSliceDefaultPrimary {
    * - **Documentation**: https://prismic.io/docs/fields/rich-text
    */
   content: prismic.RichTextField;
+
+  /**
+   * appearance field in *RichText → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **Default Value**: default
+   * - **API ID Path**: rich_text.default.primary.appearance
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  appearance: prismic.SelectField<
+    "default" | "highlightedSection" | "greyBackground",
+    "filled"
+  >;
 }
 
 /**
@@ -1541,6 +1709,9 @@ declare module "@prismicio/client" {
 
   namespace Content {
     export type {
+      AboutDocument,
+      AboutDocumentData,
+      AboutDocumentDataSlicesSlice,
       ArticleDocument,
       ArticleDocumentData,
       ArticleDocumentDataCategoriesItem,
@@ -1556,8 +1727,10 @@ declare module "@prismicio/client" {
       AllDocumentTypes,
       BlockQuoteSlice,
       BlockQuoteSliceDefaultPrimary,
+      BlockQuoteSliceNoAttributionPrimary,
       BlockQuoteSliceVariation,
       BlockQuoteSliceDefault,
+      BlockQuoteSliceNoAttribution,
       CaptionedImageSlice,
       CaptionedImageSliceDefaultPrimary,
       CaptionedImageSliceVariation,
@@ -1575,6 +1748,10 @@ declare module "@prismicio/client" {
       ComparisonBlockSliceDefaultPrimary,
       ComparisonBlockSliceVariation,
       ComparisonBlockSliceDefault,
+      GraphCompareMarketInflationSlice,
+      GraphCompareMarketInflationSliceDefaultPrimary,
+      GraphCompareMarketInflationSliceVariation,
+      GraphCompareMarketInflationSliceDefault,
       HeroSlice,
       HeroSliceDefaultPrimary,
       HeroSliceVariation,

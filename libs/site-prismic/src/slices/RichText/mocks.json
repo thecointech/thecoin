@@ -1,0 +1,30 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"content": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "paragraph",
+						"content": {
+							"text": "Minim aute deserunt commodo irure consequat magna dolor et ut. Enim non amet fugiat anim duis ullamco officia qui amet veniam mollit sit. Officia ipsum aliqua non voluptate labore incididunt tempor commodo dolor tempor tempor id."
+						}
+					}
+				]
+			},
+			"appearance": {
+				"__TYPE__": "FieldContent",
+				"value": "default",
+				"type": "Select"
+			}
+		},
+		"items": [
+			{
+				"__TYPE__": "GroupItemContent",
+				"value": []
+			}
+		]
+	}
+]

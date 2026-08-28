@@ -1,0 +1,18 @@
+
+.default {
+  margin-top: 1rem;
+}
+
+.greyBackground {
+  padding: 1rem;
+  background-color: #f0f0f0;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.highlightedSection {
+  margin-top: 1rem;
+  border: 1px solid var(--primary-color-active);
+  border-radius: 8px;
+  padding: 1rem;
+}

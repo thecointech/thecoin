@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 /**
  * Post-build script that generates static HTML pages for each blog article
  * with proper Open Graph meta tags for social media previews.
@@ -50,16 +52,31 @@ async function main() {
   console.log(`Generating OG pages for ${articles.size} blog articles...`);
 
   for (const [uid, meta] of articles) {
-    const html = injectOgTags(indexHtml, meta.title, meta.description, meta.image);
+    const html = injectOgTags(indexHtml, meta.title, meta.description, meta.image, 'article');
     const dir = join(buildDir, 'blog', uid);
     await mkdir(dir, { recursive: true });
     await writeFile(join(dir, 'index.html'), html);
   }
 
   console.log('Blog OG pages generated successfully.');
+
+  for (const lang of locales) {
+    const [about] = await client.getAllByType('about', { lang, limit: 1 });
+    if (!about) continue;
+
+    const title = about.data.meta_title ?? 'About TheCoin';
+    const description = about.data.meta_description ?? '';
+    const image = about.data.meta_image?.url || '';
+    const html = injectOgTags(indexHtml, title, description, image, 'website');
+    const dir = join(buildDir, 'about');
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, 'index.html'), html);
+    console.log(`About OG page generated successfully using ${lang} content.`);
+    break;
+  }
 }
 
-function injectOgTags(html: string, title: string, description: string, image: string): string {
+function injectOgTags(html: string, title: string, description: string, image: string, type: 'article' | 'website'): string {
   // Escape HTML entities in meta content
   const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -68,7 +85,7 @@ function injectOgTags(html: string, title: string, description: string, image: s
   // Replace existing OG tags
   result = result.replace(/<meta property="og:title"[^>]*>/, `<meta property="og:title" content="${esc(title)}">`);
   result = result.replace(/<meta property="og:description"[^>]*>/, `<meta property="og:description" content="${esc(description)}">`);
-  result = result.replace(/<meta property="og:type"[^>]*>/, '<meta property="og:type" content="article">');
+  result = result.replace(/<meta property="og:type"[^>]*>/, `<meta property="og:type" content="${type}">`);
   result = result.replace(/<meta name="twitter:card"[^>]*>/, `<meta name="twitter:card" content="summary_large_image">`);
 
   // Replace or remove og:image depending on whether image is provided

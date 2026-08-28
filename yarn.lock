@@ -12222,6 +12222,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thecointech/site-prismic@workspace:libs/site-prismic"
   dependencies:
+    "@nivo/core": "npm:0.99.0"
+    "@nivo/line": "npm:0.99.0"
     "@prismicio/client": "npm:^7.21.0"
     "@prismicio/next": "npm:^2.2.1"
     "@prismicio/react": "npm:^3.3.0"

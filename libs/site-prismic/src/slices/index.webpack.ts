@@ -11,6 +11,7 @@ import Table from "./Table";
 import CaptionedImage from "./CaptionedImage";
 import ProjectDetails from "./ProjectDetails";
 import ComparisonBlock from "./ComparisonBlock";
+import GraphCompareMarketInflation from "./GraphCompareMarketInflation";
 
 export const components = {
   hero: Hero,
@@ -20,6 +21,7 @@ export const components = {
   ccqi_score: CcqiScore,
   ccqi_category: CcqiCategory,
   comparison_block: ComparisonBlock,
+  graph_compare_market_inflation: GraphCompareMarketInflation,
   video: Video,
   table: Table,
   captioned_image: CaptionedImage,
