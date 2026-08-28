@@ -257,5 +257,25 @@
   "VoWoZw": {
     "defaultMessage": "Chargement de l'article...",
     "description": "site.blog.loading: Message shown while loading a blog article"
+  },
+  "Rtv6UF": {
+    "defaultMessage": "Télécharger Harvester",
+    "description": "site.download.title: title for the download page"
+  },
+  "TXXDIW": {
+    "defaultMessage": "Linux",
+    "description": "site.download.linux: Linux download button label"
+  },
+  "WmOpkw": {
+    "defaultMessage": "Windows",
+    "description": "site.download.windows: Windows download button label"
+  },
+  "gAcTes": {
+    "defaultMessage": "macOS",
+    "description": "site.download.mac: macOS download button label"
+  },
+  "nQ3m1N": {
+    "defaultMessage": "Téléchargez la dernière version du Harvester pour votre plateforme.",
+    "description": "site.download.blurb: page introduction text"
   }
 }
