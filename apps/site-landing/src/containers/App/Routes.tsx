@@ -11,6 +11,7 @@ import { About } from 'containers/About';
 import { TOS } from 'containers/TOS';
 import { Privacy } from 'containers/Privacy';
 import { ApplyBeta } from '../ApplyBeta';
+import { DownloadPage } from '../DownloadPage';
 import { App } from '.';
 // import { Returns } from 'containers/ReturnProfile';
 import { PrismicPreview } from '../PrismicPreview';
@@ -30,6 +31,7 @@ export const routes = [
       { path: 'faq/:category?', element: <HelpDocs /> },
       { path: 'tos', element: <TOS /> },
       { path: 'applyBeta', element: <ApplyBeta /> },
+      { path: 'download', element: <DownloadPage /> },
       { path: 'privacy', element: <Privacy /> },
       //{ path: 'returns', element: <Returns /> },
 

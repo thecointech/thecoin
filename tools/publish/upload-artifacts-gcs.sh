@@ -37,6 +37,7 @@ CHANNEL_SUFFIX=""
 case "$PLATFORM" in
   win32) INSTALLER_GLOB='*Setup.exe'; STABLE_NAME="Harvester${CHANNEL_SUFFIX}Setup.exe" ;;
   linux) INSTALLER_GLOB='*.deb'; STABLE_NAME="Harvester${CHANNEL_SUFFIX}.deb" ;;
+  darwin) INSTALLER_GLOB='*.dmg'; STABLE_NAME="Harvester${CHANNEL_SUFFIX}.dmg" ;;
   *) INSTALLER_GLOB=""; STABLE_NAME="" ;;
 esac
 

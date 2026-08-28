@@ -48,7 +48,7 @@ const api : ScraperBridgeApi = {
   finishAction: () => ipcRenderer.invoke(actions.finishAction),
 
 
-  setCoinAccount: (coinAccount) => ipcRenderer.invoke(actions.setCoinAccount, coinAccount),
+  setCoinAccount: (coinAccount, phrase) => ipcRenderer.invoke(actions.setCoinAccount, coinAccount, phrase),
   getCoinAccountDetails: () => ipcRenderer.invoke(actions.getCoinAccountDetails),
 
   hasCreditDetails: () => ipcRenderer.invoke(actions.hasCreditDetails),

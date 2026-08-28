@@ -1,15 +1,15 @@
 import { createStep } from './steps';
 import { setSchedule } from './schedule';
 import { log } from '@thecointech/logging';
-import { HDNodeWallet } from 'ethers';
 import { randomUUID } from 'node:crypto';
-import { getProvider } from '@thecointech/ethers-provider';
 import { rootFolder } from '../paths';
-import { ConfigDatabase } from '@thecointech/store-harvester';
-import { HarvestConfig, CoinAccount, ConfigShape, CreditDetails, HarvestStepType } from '@thecointech/store-harvester';
+import { getSecureConfigPassword } from '../secureConfig';
+import { useSigner } from './signer';
+import { CoinAccountDetails, ConfigDatabase } from '@thecointech/store-harvester';
+import { HarvestConfig, ConfigShape, CreditDetails, HarvestStepType } from '@thecointech/store-harvester';
 import { optIntoMonitoring } from './monitoring';
 
-const db = new ConfigDatabase(rootFolder);
+const db = new ConfigDatabase(rootFolder, getSecureConfigPassword);
 
 export async function setProcessConfig(config: Partial<ConfigShape>) {
   log.info("Setting config file...");
@@ -21,14 +21,7 @@ export async function getProcessConfig(): Promise<ConfigShape|undefined> {
   return await db.get();
 }
 
-export async function setCoinAccount(coinAccount: CoinAccount) {
-  await db.set({
-    coinAccount,
-  })
-  return true;
-}
-
-export async function getCoinAccountDetails() {
+export async function getCoinAccountDetails(): Promise<CoinAccountDetails|null> {
   const cfg = await db.get();
   if (!cfg?.coinAccount) {
     return null;
@@ -49,15 +42,6 @@ export async function getOrCreateInstallationId() {
   const installationId = randomUUID();
   await setProcessConfig({ installationId });
   return installationId;
-}
-
-export async function getWallet() {
-  const cfg = await db.get();
-  if (cfg?.coinAccount?.mnemonic) {
-    const wallet = HDNodeWallet.fromPhrase(cfg.coinAccount.mnemonic.phrase, undefined, cfg.coinAccount.mnemonic.path);
-    return wallet.connect(await getProvider());
-  }
-  return null;
 }
 
 export function isDeprecated(type: HarvestStepType): boolean {
@@ -112,14 +96,19 @@ export async function setHarvestConfig(config: Partial<HarvestConfig>) {
   // If we have a configuration with steps defined:
   // TODO: Put `optIntoMonitoring` probably here in this config (?)
   if (config.steps) {
-    // And we have a wallet, we assume scraping is enabled, so opt into monitoring
-    const wallet = await getWallet();
-    if (wallet) {
-      const installationId = await getOrCreateInstallationId();
-      await optIntoMonitoring(wallet, installationId);
+    try {
+      await useSigner(async (wallet) => {
+        const installationId = await getOrCreateInstallationId();
+        await optIntoMonitoring(wallet, installationId);
+      });
     }
-    else {
-      log.debug("No wallet configured, skipping monitoring opt-in");
+    catch (error) {
+      if (error instanceof Error && error.message === "Coin account not set") {
+        log.debug("No wallet configured, skipping monitoring opt-in");
+      }
+      else {
+        throw error;
+      }
     }
   }
   else {

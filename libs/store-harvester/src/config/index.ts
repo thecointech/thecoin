@@ -5,12 +5,12 @@ import { ConfigShape } from "./types";
 
 export class ConfigDatabase extends EncryptedDatabase<ConfigShape, ConfigShape, Partial<ConfigShape>> {
   static mutex = new Mutex();
-  constructor(rootFolder: string) {
+  constructor(rootFolder: string, password: string | (() => Promise<string> | string)) {
     super({
       rootFolder,
       dbname: 'config',
       key: "config",
-      password: "hF,835-/=Pw\\nr6r",
+      password,
       transformIn,
       transformOut: (data) => data,
     }, ConfigDatabase.mutex);
