@@ -70,10 +70,8 @@ export class Prismic extends SagaReducer<IActions, PrismicState&PreviewTokenStat
       const result = (yield call(getStaticPage, type, locale)) as StaticPageDocument;
       log.trace(`Fetched: ${!!result}`);
       if (result) {
-        yield this.storeValues({
-          [locale]: {
-            pages: new Map(cache).set(type, result)
-          }
+        yield this.storeValues((draft, state) => {
+          draft[locale].pages = new Map(state[locale].pages).set(type, result);
         })
       }
     }
@@ -94,10 +92,8 @@ export class Prismic extends SagaReducer<IActions, PrismicState&PreviewTokenStat
       const result = (yield call(getByUID, uid, locale)) as ArticleDocument;
       log.trace(`Fetched: ${!!result}`);
       if (result) {
-        yield this.storeValues({
-          [locale]: {
-            articles: new Map(cache).set(uid, result)
-          }
+        yield this.storeValues((draft, state) => {
+          draft[locale].articles = new Map(state[locale].articles).set(uid, result);
         })
       }
     }
@@ -119,21 +115,18 @@ export class Prismic extends SagaReducer<IActions, PrismicState&PreviewTokenStat
     const results = (yield call(fetchData, locale)) as Awaited<ReturnType<typeof fetchData>>;
     log.trace(`Fetched: ${!!results}`);
       if (results) {
-        const newState = {
-          fullyLoaded: true,
-          faqs: new Map(docs.faqs),
-          articles: new Map(docs.articles),
-        }
-        results
-          .filter(item => item.type === 'faq')
-          .forEach(item => newState.faqs.set(item.uid, item as FaqDocument));
-        results
-          .filter(item => item.type === 'article')
-          .forEach(item => newState.articles.set(item.uid, item as ArticleDocument))
         yield this.storeValues((draft, state) => {
-          draft[locale].fullyLoaded = newState.fullyLoaded;
-          draft[locale].faqs = newState.faqs;
-          draft[locale].articles = newState.articles;
+          const faqs = new Map(state[locale].faqs);
+          const articles = new Map(state[locale].articles);
+          results
+            .filter(item => item.type === 'faq')
+            .forEach(item => faqs.set(item.uid, item as FaqDocument));
+          results
+            .filter(item => item.type === 'article')
+            .forEach(item => articles.set(item.uid, item as ArticleDocument))
+          draft[locale].fullyLoaded = true;
+          draft[locale].faqs = faqs;
+          draft[locale].articles = articles;
           draft[locale].pages = new Map(state[locale].pages);
         })
       }
