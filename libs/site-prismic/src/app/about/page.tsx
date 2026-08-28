@@ -3,9 +3,11 @@ import type { Metadata } from "next";
 import { About } from "@/components/About/About";
 import { createClient } from "@/prismicio";
 
+const locale = "en-ca";
+
 export async function generateMetadata(): Promise<Metadata> {
   const client = createClient();
-  const about = await client.getSingle("about");
+  const about = await client.getSingle("about", { lang: locale });
 
   return {
     title: about.data.meta_title,
@@ -21,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function AboutPage() {
   const client = createClient();
-  const about = await client.getSingle("about");
+  const about = await client.getSingle("about", { lang: locale });
 
   return <About document={about} />;
 }

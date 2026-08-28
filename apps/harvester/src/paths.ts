@@ -11,7 +11,7 @@ function getRootFolder() {
     electron.app?.getPath('userData') ??
     path.resolve('./.cache/')
   );
-  return path.join(rootPath, process.env.CONVIG_ENV ?? 'development')
+  return path.join(rootPath, process.env.CONFIG_ENV ?? 'development')
 }
 
 export const rootFolder = getRootFolder();
