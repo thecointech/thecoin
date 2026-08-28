@@ -35,9 +35,9 @@ const chartTheme = {
 const GraphCompareMarketInflation: FC<GraphCompareMarketInflationProps> = ({
   slice,
 }) => {
-  const startDate = slice.primary.startingdate;
-  const start = new Date(startDate ?? "2001-01-01");
-  const data = getData(start);
+  const startDate = slice.primary.startingdate ?? "2001-01-01";
+  const data = getData(new Date(startDate));
+  const baseline = startDate.slice(0, 7);
   return (
     <section
       data-slice-type={slice.slice_type}
@@ -65,7 +65,7 @@ const GraphCompareMarketInflation: FC<GraphCompareMarketInflationProps> = ({
           }}
           xFormat="time:%Y-%m-%d"
           axisLeft={{
-            legend: "Value of $100 (2000 = 100)",
+            legend: `Value of $100 (${baseline} = 100)`,
             legendOffset: -50,
           }}
           colors={{ scheme: "category10" }}

@@ -12,6 +12,9 @@ const baseDates = snp.values.map((_, i) => {
 export function getData(start: Date) {
   const startString = start.toISOString().split("T")[0];
   const startIndex = baseDates.findIndex((date) => date >= startString);
+  if (startIndex < 0) {
+    throw new Error(`Start date ${startString} not found in data`);
+  }
   const dates = baseDates.slice(startIndex);
   const snpValues = snp.values.slice(startIndex);
   const cpiValues = cpi.values.slice(startIndex);

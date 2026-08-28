@@ -123,7 +123,6 @@ export class Prismic extends SagaReducer<IActions, PrismicState&PreviewTokenStat
           fullyLoaded: true,
           faqs: new Map(docs.faqs),
           articles: new Map(docs.articles),
-          pages: new Map(docs.pages),
         }
         results
           .filter(item => item.type === 'faq')
@@ -131,8 +130,11 @@ export class Prismic extends SagaReducer<IActions, PrismicState&PreviewTokenStat
         results
           .filter(item => item.type === 'article')
           .forEach(item => newState.articles.set(item.uid, item as ArticleDocument))
-        yield this.storeValues({
-          [locale]: newState
+        yield this.storeValues((draft, state) => {
+          draft[locale].fullyLoaded = newState.fullyLoaded;
+          draft[locale].faqs = newState.faqs;
+          draft[locale].articles = newState.articles;
+          draft[locale].pages = new Map(state[locale].pages);
         })
       }
     }

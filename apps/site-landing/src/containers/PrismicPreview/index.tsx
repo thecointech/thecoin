@@ -6,7 +6,7 @@ import { Prismic } from '../../components/Prismic';
 import { Article } from '../Blog/Article';
 import { About as AboutContent } from '@thecointech/site-prismic/components';
 import type { AboutDocument, ArticleDocument } from '@thecointech/site-prismic/types';
-import { LanguageProviderReducer } from '@thecointech/redux-intl';
+import { LanguageProviderReducer, type Locale } from '@thecointech/redux-intl';
 
 export const PrismicPreview: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,6 +14,7 @@ export const PrismicPreview: React.FC = () => {
   const [documentId, setDocumentId] = useState<string | null>(null);
   const [documentUid, setDocumentUid] = useState<string | null>(null);
   const [documentType, setDocumentType] = useState<'about' | 'article' | null>(null);
+  const [documentLocale, setDocumentLocale] = useState<Locale | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
   const navigate = useNavigate();
@@ -65,6 +66,7 @@ export const PrismicPreview: React.FC = () => {
         }
         api.setDocument(result as ArticleDocument | AboutDocument);
         setDocumentType(result.type);
+        setDocumentLocale(result.lang.split('-')[0] as Locale);
         setDocumentUid(result.uid);
         log.info('Preview refreshed successfully');
       }
@@ -84,7 +86,7 @@ export const PrismicPreview: React.FC = () => {
   }, [handleRefresh]);
 
   const handleExitPreview = () => {
-    navigate('/blog');
+    navigate(documentType === 'about' ? '/about' : '/blog');
   };
 
 
@@ -118,7 +120,9 @@ export const PrismicPreview: React.FC = () => {
   }
 
   const articleLoaded = documentType === 'article' && documentUid && data[locale].articles.has(documentUid);
-  const about = documentType === 'about' ? data[locale].pages.get('about') : undefined;
+  const about = documentType === 'about' && documentLocale
+    ? data[documentLocale].pages.get('about')
+    : undefined;
 
   if (documentId && (articleLoaded || about)) {
     return (
