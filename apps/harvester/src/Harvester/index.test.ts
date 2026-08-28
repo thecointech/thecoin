@@ -33,11 +33,19 @@ jest.unstable_mockModule('./config', () => ({
         both: {
           events: { section: "Initial", events: [{ type: 'click', id: 'credit'}] },
         },
-      }
+      },
+      coinAccount: {
+        mnemonic: {
+          path: "default-seeded",
+        },
+      },
     }
   }),
   setProcessConfig: jest.fn(),
-  getWallet: () => Wallet.createRandom(),
+  getCoinAccountDetails: jest.fn(() => ({
+    address: "0x1234567890123456789012345678901234567890",
+    name: "Test Account",
+  })),
   getCreditDetails: () => ({
     payee: 'payee',
     accountNumber: "12345"

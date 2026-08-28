@@ -4,7 +4,7 @@ import { getScraperMode } from "./Harvester/scraperVisible";
 import { log } from "@thecointech/logging";
 import { bridgeElectronSigner } from "@thecointech/electron-signer/bridge";
 import { ipcMain } from 'electron';
-import { getWallet } from "./Harvester/config";
+import { useSigner } from "./Harvester/signer";
 import { NormalizeAddress } from "@thecointech/utilities";
 // Initialize main process configurations
 
@@ -16,10 +16,13 @@ export function initMain() {
   log.info({ rootFolder }, "Main process initialized at root: {rootFolder}");
 
   bridgeElectronSigner(ipcMain, async (signerId) => {
-    const wallet = await getWallet();
-    if (wallet && NormalizeAddress(wallet.address) === NormalizeAddress(signerId)) {
-      return wallet;
-    }
-    return undefined;
+    const wallet = await useSigner(async (signer) => {
+      const address = await signer.getAddress();
+      if (NormalizeAddress(address) === NormalizeAddress(signerId)) {
+        return signer;
+      }
+      return undefined;
+    });
+    return wallet ?? undefined;
   }, false);
 }

@@ -1,9 +1,15 @@
 import type { UserData } from '../src/Harvester/types';
 import { Wallet } from 'ethers';
 import type { HarvesterReplayCallbacks } from '@/Harvester/replay/replayCallbacks';
+
 export function mockUser() : UserData {
+  const wallet = Wallet.createRandom();
   return {
-    wallet: Wallet.createRandom(),
+    useSigner: (cb) => cb(wallet),
+    coinDetails: {
+      address: wallet.address,
+      name: 'mock-wallet',
+    },
     creditDetails: {
       payee: 'payee',
       accountNumber: "12345"

@@ -1,14 +1,15 @@
 import currency from 'currency.js'
 import { DateTime } from 'luxon'
-import type { Signer } from 'ethers';
-import type { CreditDetails, HarvestData, HarvestDelta } from '@thecointech/store-harvester';
+import type { CoinAccountDetails, CreditDetails, HarvestData, HarvestDelta } from '@thecointech/store-harvester';
 import type { HarvesterReplayCallbacks } from './replay/replayCallbacks';
+import { Signer } from 'ethers';
 export type { HarvestData, HarvestDelta, CreditDetails } from '@thecointech/store-harvester';
 
 
 export type UserData = {
+  useSigner: <T>(cb: (signer: Signer) => Promise<T>) => Promise<T>;
+  coinDetails: CoinAccountDetails;
   creditDetails: CreditDetails;
-  wallet: Signer;
   // Callback handles errors (& ui updates if run in foreground)
   callback: HarvesterReplayCallbacks;
 }

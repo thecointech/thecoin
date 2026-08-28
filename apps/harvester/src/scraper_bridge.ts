@@ -1,7 +1,8 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import type { ValueType } from '@thecointech/scraper-types';
 import { actions, ScraperBridgeApi } from './scraper_actions';
-import { getHarvestConfig, getProcessConfig, getWallet, setCoinAccount, getCoinAccountDetails, hasCreditDetails, setCreditDetails, setHarvestConfig, setProcessConfig } from './Harvester/config';
+import { getHarvestConfig, getProcessConfig, getCoinAccountDetails, hasCreditDetails, setCreditDetails, setHarvestConfig, setProcessConfig } from './Harvester/config';
+import { setCoinAccount } from './Harvester/signer';
 import { CoinAccount, HarvestConfig } from './types';
 import { CreditDetails } from './Harvester/types';
 import { exportResults, getRawState, setOverrides } from './Harvester/state';
@@ -56,11 +57,11 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
 
   autoProcess: (params) => guard(async () => {
     // Get our coinETransferRecipient
-    let wallet = await getWallet();
-    if (!wallet) {
+    const details = await getCoinAccountDetails()
+    if (!details?.address) {
       throw new Error("Wallet not configured");
     }
-    const depositAddress = getEmailAddress(wallet.address);
+    const depositAddress = getEmailAddress(details.address);
     autoConfigure(params, depositAddress, onBgTaskMsg);
     return true;
   }),
@@ -106,7 +107,7 @@ const api: Omit<ScraperBridgeApi, "onAskQuestion"|"onBackgroundTaskProgress"|"on
   }),
   finishAction: () => guard(async () => true /*Recorder.release()*/ ),
 
-  setCoinAccount: (coinAccount) => guard(() => setCoinAccount(coinAccount)),
+  setCoinAccount: (coinAccount, phrase) => guard(() => setCoinAccount(coinAccount, phrase)),
   getCoinAccountDetails: () => guard(() => getCoinAccountDetails()),
 
   setCreditDetails: (details) => guard(() => setCreditDetails(details)),
@@ -224,8 +225,8 @@ export function initMainIPC() {
     return api.finishAction();
   })
 
-  ipcMain.handle(actions.setCoinAccount, async (_event, coinAccount: CoinAccount) => {
-    return api.setCoinAccount(coinAccount);
+  ipcMain.handle(actions.setCoinAccount, async (_event, coinAccount: CoinAccount, phrase: string) => {
+    return api.setCoinAccount(coinAccount, phrase);
   })
   ipcMain.handle(actions.getCoinAccountDetails, async (_event) => {
     return api.getCoinAccountDetails();

@@ -1,13 +1,13 @@
 import { DateTime } from 'luxon';
-import { hydrateProcessor, getCreditDetails } from './config';
+import { hydrateProcessor, getCreditDetails, getCoinAccountDetails } from './config';
 import { getCurrentState } from './state';
 import { getAccountData } from './fetchData';
 import type { HarvestData, UserData } from './types';
 import type { HarvesterReplayCallbacks } from './replay/replayCallbacks';
 import { ContractCore } from '@thecointech/contract-core';
-import type { Signer } from 'ethers';
+import { useSigner } from './signer';
 
-export async function initialize(callback: HarvesterReplayCallbacks, wallet: Signer) {
+export async function initialize(callback: HarvesterReplayCallbacks) {
 
   // Initialize
   const stages = await hydrateProcessor();
@@ -19,18 +19,23 @@ export async function initialize(callback: HarvesterReplayCallbacks, wallet: Sig
 
   const creditDetails = await getCreditDetails();
   if (!creditDetails) {
-    throw new Error("Cannot pay bill: Account Details not set");
+    throw new Error("Cannot pay bill: Credit Account Details not set");
+  }
+
+  const coinDetails = await getCoinAccountDetails();
+  if (!coinDetails) {
+    throw new Error("Cannot pay bill: Coin Account not set");
   }
 
   const user: UserData = {
-    wallet,
+    // Assume `useSigner` is usable (will not throw) due to presence of details
+    useSigner,
+    coinDetails,
     creditDetails,
     callback: callback,
   }
 
-  // Initialize data (do we want anything from last state?)
-  // Sub 1 week to ensure payments posted after last run are all counted
-  const address = await wallet.getAddress();
+  const address = coinDetails.address;
   const lastTxDate = lastRun?.date.minus({ week: 1 });
   const { chq, visa } = await getAccountData(callback, lastTxDate);
   const tcCore = await ContractCore.get();

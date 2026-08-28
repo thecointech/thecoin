@@ -9,7 +9,6 @@ export function toCoinAccount(mnemonic: HDNodeWallet, name: string): CoinAccount
     address: mnemonic.address,
     name,
     mnemonic: {
-      phrase: mnemonic.mnemonic.phrase,
       path: mnemonic.path,
       locale: mnemonic.mnemonic.wordlist.locale,
     },

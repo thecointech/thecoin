@@ -1,7 +1,7 @@
 import { createServer, IncomingMessage } from 'http';
 import { URL } from 'url';
 import { shell } from 'electron';
-import { setCoinAccount } from '@/Harvester/config';
+import { setCoinAccount } from '@/Harvester/signer';
 import { parse } from './parse';
 import { validate } from './validate';
 import { bad, okFile } from './returnValues';
@@ -71,16 +71,16 @@ export async function loadWalletFromSite(callback: BackgroundTaskCallback, timeo
 
       const validated = validate(payload, service.state);
 
-      await setCoinAccount({
+      const coinAccount = {
         encrypted: validated.walletFile,
         address: validated.address,
         name: validated.name,
         mnemonic: {
-          phrase: validated.phrase,
           path: validated.path,
           locale: validated.locale,
         },
-      })
+      };
+      await setCoinAccount(coinAccount, validated.phrase);
 
       // TODO: Persist encrypted walletFile, but in a way that is friendly to sign-in
 

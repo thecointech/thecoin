@@ -7,6 +7,7 @@ import currency from 'currency.js';
 import { log } from '@thecointech/logging';
 import { notify } from '@/notify';
 import type { UberTransferAction } from '@thecointech/types';
+import { getCreditDetails } from '../config';
 
 export const PayVisaKey = "PayVisa";
 const PayVisaAmountKey = "PayVisaAmount";
@@ -66,7 +67,7 @@ export class PayVisa implements ProcessingStage {
   }
 }
 
-async function sendPayment(dateToPay: DateTime, data: HarvestData, { wallet, creditDetails }: UserData) {
+async function sendPayment(dateToPay: DateTime, data: HarvestData, user: UserData) {
   // Send payment request
   // transfer visa dueAmount on dateToPay
   log.debug({
@@ -101,15 +102,21 @@ async function sendPayment(dateToPay: DateTime, data: HarvestData, { wallet, cre
     dueAmount = data.visa.balance.value;
   }
 
-  const payment = await BuildUberAction(
-    creditDetails,
-    wallet,
-    process.env.WALLET_BrokerCAD_ADDRESS!,
-    new Decimal(dueAmount),
-    124,
-    dateToPay,
-    ServerTimeSource,
-  )
+  const creditDetails = await getCreditDetails();
+  if (!creditDetails) {
+    throw new Error('PayVisa: Credit details not configured');
+  }
+  const payment = await user.useSigner(async (wallet) =>
+    BuildUberAction(
+      creditDetails,
+      wallet,
+      process.env.WALLET_BrokerCAD_ADDRESS!,
+      new Decimal(dueAmount),
+      124,
+      dateToPay,
+      ServerTimeSource,
+    )
+  );
   const r = await sendVisaPayment(payment);
   if (r.status !== 200) {
     log.error("PayVisa: Error on uberBillPayment: ", r.data?.message);

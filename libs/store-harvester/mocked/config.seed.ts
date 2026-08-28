@@ -6,16 +6,18 @@ import type { AnyEvent } from "@thecointech/scraper-types";
 
 // Used in development to get a usable app without annoying setup
 export function getSeedConfig() {
-  const randomWallet = Wallet.createRandom();
+  // Use a fixed wallet to enable automatically supplying one in harvester/dev
+  const seedWallet = Wallet.fromPhrase("test test test test test test test test test test test junk")
   const r: ConfigShape = {
     steps: defaultSteps,
     coinAccount: {
-      address: randomWallet.address,
+      address: seedWallet.address,
       name: "Default Dev Wallet",
       mnemonic: {
-        phrase: randomWallet.mnemonic!.phrase,
-        path: randomWallet.path!,
-        locale: randomWallet.mnemonic!.wordlist!.locale,
+        // NOTE: this is a special path that indicates the wallet was seeded
+        // and should be used in development mode
+        path: "default-seeded",
+        locale: seedWallet.mnemonic!.wordlist!.locale,
       }
     },
     schedule: {

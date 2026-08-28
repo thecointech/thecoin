@@ -35,7 +35,6 @@ export type ConfigShape = {
 } & HarvestConfig;
 
 export interface Mnemonic {
-  readonly phrase: string;
   readonly path: string;
   readonly locale: string;
 };

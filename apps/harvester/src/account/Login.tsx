@@ -36,7 +36,11 @@ const LoginAccount = ({account}: {account: AccountState}) => {
     // need some hard-core protection in time...
     const hdWallet = signer as BaseWallet as HDNodeWallet;
     const coinAccount = toCoinAccount(hdWallet, account.name);
-    window.scraper.setCoinAccount(coinAccount)
+    const phrase = hdWallet.mnemonic?.phrase;
+    if (!phrase) {
+      throw new Error("Account mnemonic not available");
+    }
+    window.scraper.setCoinAccount(coinAccount, phrase)
       .then(() => {
         setComplete(true)
       });

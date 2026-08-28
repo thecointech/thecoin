@@ -54,7 +54,7 @@ export type ScraperBridgeApi = {
   // Finish Recording
   finishAction: () => Promise<Result<boolean>>,
 
-  setCoinAccount(coinAccount: CoinAccount): Promise<Result<boolean>>,
+  setCoinAccount(coinAccount: CoinAccount, phrase: string): Promise<Result<boolean>>,
   getCoinAccountDetails(): Promise<Result<CoinAccountDetails|null>>,
 
   hasCreditDetails(): Promise<Result<boolean>>,

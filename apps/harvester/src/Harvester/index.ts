@@ -2,7 +2,8 @@ import { setCurrentState } from './state';
 import { log } from '@thecointech/logging';
 import { processState } from './processState';
 import { initialize } from './initialize';
-import { getOrCreateInstallationId, getWallet } from './config';
+import { getOrCreateInstallationId } from './config';
+import { useSigner } from './signer';
 import { reportRunStart, reportRunComplete } from './monitoring';
 import { closeBrowser } from '@thecointech/scraper/puppeteer';
 import { DateTime } from 'luxon';
@@ -11,7 +12,6 @@ import { PayVisaKey } from './steps/PayVisa';
 import { notifyError } from '@/notify';
 import { HarvesterReplayCallbacks } from './replay/replayCallbacks';
 import { BackgroundTaskCallback, getErrorMessage } from '@/BackgroundTask';
-import type { Signer } from 'ethers';
 
 type Result = "success" | "error" | "skip";
 export async function harvest(uiCallback?: BackgroundTaskCallback): Promise<Result> {
@@ -25,7 +25,6 @@ export async function harvest(uiCallback?: BackgroundTaskCallback): Promise<Resu
 
   // Set once we have a signer, used to report the run's outcome in `finally` below
   let runId: string | undefined;
-  let signer: Signer | null = null;
   let installationId: string | undefined;
   let outcome: "succeeded" | "skipped" | "failed" = "failed";
   let failureStages: string[] | undefined;
@@ -36,20 +35,17 @@ export async function harvest(uiCallback?: BackgroundTaskCallback): Promise<Resu
     log.info(`Commencing Harvest`);
 
     // Ensure we have a wallet, otherwise we can't run
-    signer = await getWallet();
-    if (!signer) {
-      throw new Error('No wallet found');
-    }
+    await useSigner(async (signer) => {
+      try {
+        installationId = await getOrCreateInstallationId();
+        runId = await reportRunStart(signer, installationId, uiCallback ? "manual" : "scheduled");
+      } catch (error) {
+        log.error(`Failed to report run start: ${getErrorMessage(error)}`);
+        // do -NOT- fail for monitoring, we can still run the harvest
+      }
+    })
 
-    try {
-      installationId = await getOrCreateInstallationId();
-      runId = await reportRunStart(signer, installationId, uiCallback ? "manual" : "scheduled");
-    } catch (error) {
-      log.error(`Failed to report run start: ${getErrorMessage(error)}`);
-      // do -NOT- fail for monitoring, we can still run the harvest
-    }
-
-    const { stages, state, user } = await initialize(callback, signer);
+    const { stages, state, user } = await initialize(callback);
 
     log.info(`Resume from last: harvesterBalance ${state.state.harvesterBalance}`);
 
@@ -114,17 +110,20 @@ export async function harvest(uiCallback?: BackgroundTaskCallback): Promise<Resu
     return "error";
   }
   finally {
-    if (signer && installationId && runId) {
-      try {
-        await reportRunComplete(signer, installationId, runId, outcome, { failureStages, failureCategory });
-      }
-      catch (e) {
-        log.error(e, "Failed to report run completion");
-        notifyError({
-          title: 'Harvester Monitoring Error',
-          message: `Harvest ran, but failed to report run completion.\nPlease contact support.`,
-        });
-      }
+    if (installationId && runId) {
+      // Only set if signer exists, so useSigner should not throw.
+      await useSigner(async (signer) => {
+        try {
+          await reportRunComplete(signer, installationId!, runId!, outcome, { failureStages, failureCategory });
+        }
+        catch (e) {
+          log.error(e, "Failed to report run completion");
+          notifyError({
+            title: 'Harvester Monitoring Error',
+            message: `Harvest ran, but failed to report run completion.\nPlease contact support.`,
+          });
+        }
+      })
     }
     await closeBrowser();
   }
