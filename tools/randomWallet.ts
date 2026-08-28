@@ -1,7 +1,7 @@
 import { Wallet } from "ethers";
 import { writeFileSync } from 'fs';
 
-const password = "0nC927z!Vkka";
+const password = "test";
 
 (async () => {
   console.log(`Generating a random wallet with password '${password}'`);

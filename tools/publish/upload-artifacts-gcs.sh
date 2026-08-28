@@ -52,7 +52,7 @@ if [[ -n "$INSTALLER_GLOB" ]]; then
 fi
 
 echo "Uploading $SRC -> $DEST"
-gsutil -m rsync -r -d "$SRC" "$DEST"
+gsutil -m rsync -r "$SRC" "$DEST"
 
 if [[ -n "$INSTALLER" ]]; then
   echo "Publishing stable download link -> $DEST/$STABLE_NAME"
