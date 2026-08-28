@@ -102,13 +102,9 @@ async function sendPayment(dateToPay: DateTime, data: HarvestData, user: UserDat
     dueAmount = data.visa.balance.value;
   }
 
-  const creditDetails = await getCreditDetails();
-  if (!creditDetails) {
-    throw new Error('PayVisa: Credit details not configured');
-  }
   const payment = await user.useSigner(async (wallet) =>
     BuildUberAction(
-      creditDetails,
+      user.creditDetails,
       wallet,
       process.env.WALLET_BrokerCAD_ADDRESS!,
       new Decimal(dueAmount),

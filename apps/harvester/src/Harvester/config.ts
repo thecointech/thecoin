@@ -96,13 +96,19 @@ export async function setHarvestConfig(config: Partial<HarvestConfig>) {
   // If we have a configuration with steps defined:
   // TODO: Put `optIntoMonitoring` probably here in this config (?)
   if (config.steps) {
-    const optedIn = await useSigner(async (wallet) => {
-      const installationId = await getOrCreateInstallationId();
-      await optIntoMonitoring(wallet, installationId);
-      return true;
-    });
-    if (!optedIn) {
-      log.debug("No wallet configured, skipping monitoring opt-in");
+    try {
+      await useSigner(async (wallet) => {
+        const installationId = await getOrCreateInstallationId();
+        await optIntoMonitoring(wallet, installationId);
+      });
+    }
+    catch (error) {
+      if (error instanceof Error && error.message === "Coin account not set") {
+        log.debug("No wallet configured, skipping monitoring opt-in");
+      }
+      else {
+        throw error;
+      }
     }
   }
   else {
